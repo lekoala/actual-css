@@ -56,6 +56,14 @@ a {
   --gap: 0.75rem;
   --shadow: 0 0.5rem 1.5rem hsl(220 30% 10% / 0.08);
   --duration: 150ms;
+
+  /* Shared icons */
+  --icon-chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%238892a4' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  --icon-check: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%238892a4' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E");
+  --icon-close: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%238892a4' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='18' y1='6' x2='6' y2='18'/%3E%3Cline x1='6' y1='6' x2='18' y2='18'/%3E%3C/svg%3E");
+
+  /* Shadow scale */
+  --shadow-popout: 0 4px 12px hsl(220 30% 10% / 0.15);
 }
 
 /* src\themes.css */
@@ -141,63 +149,6 @@ a {
   --intent-fg: var(--neutral-fg);
 }
 
-/* src\variants.css */
-/* Default variant is solid. Components consume --ui-* and map them to local variables. */
-.solid,
-:where(.btn, .badge):not(:where(.soft, .outline, .ghost, .link)),
-:where(.alert):not(:where(.solid, .outline, .ghost, .link)) {
-  --ui-bg: var(--intent, var(--neutral));
-  --ui-fg: var(--intent-fg, var(--neutral-fg));
-  --ui-border: transparent;
-}
-
-/* Alerts default to a neutral subtle surface; intent alerts map to tinted semantic variants. */
-:where(.alert):not(:where(.solid, .outline, .ghost, .link)),
-.soft {
-  --ui-bg: var(--surface-subtle);
-  --ui-border: var(--border);
-}
-
-.alert:where(.primary, .secondary, .success, .warning, .danger, .neutral):not(
-  :where(.solid, .outline, .ghost, .link)
-) {
-  --ui-fg: var(--intent);
-  --ui-border: transparent;
-}
-
-.soft {
-  --ui-fg: var(--intent, var(--text));
-}
-
-.outline {
-  --ui-bg: transparent;
-  --ui-fg: var(--intent, var(--text));
-  --ui-border: var(--intent, var(--border));
-}
-
-.ghost {
-  --ui-bg: transparent;
-  --ui-fg: var(--intent, var(--text));
-  --ui-border: transparent;
-}
-
-.link {
-  --ui-bg: transparent;
-  --ui-fg: var(--intent, var(--text));
-  --ui-border: transparent;
-}
-
-.sm {
-  --control-size: 2rem;
-  --control-pad-x: 0.75rem;
-  --control-font-size: 0.875rem;
-}
-.lg {
-  --control-size: 3rem;
-  --control-pad-x: 1.25rem;
-  --control-font-size: 1rem;
-}
-
 /* src\responsive.css */
 .stack {
   display: flex;
@@ -256,9 +207,9 @@ a {
 
 /* src\components\button.css */
 :where(.btn) {
-  --control-size: 2.5rem;
-  --control-pad-x: 1rem;
-  --control-font-size: 0.9375rem;
+  --btn-size: var(--control-size, 2.5rem);
+  --btn-pad-x: var(--control-pad-x, 1rem);
+  --btn-font-size: var(--control-font-size, 0.9375rem);
 }
 
 .btn {
@@ -270,14 +221,14 @@ a {
   align-items: center;
   justify-content: center;
   gap: 0.5em;
-  min-block-size: var(--control-size);
-  padding-inline: var(--control-pad-x);
+  min-block-size: var(--btn-size);
+  padding-inline: var(--btn-pad-x);
   border: 1px solid var(--btn-border);
   border-radius: var(--radius);
   background: var(--btn-bg);
   color: var(--btn-fg);
   font: inherit;
-  font-size: var(--control-font-size);
+  font-size: var(--btn-font-size);
   font-weight: 600;
   line-height: 1;
   text-decoration: none;
@@ -296,24 +247,14 @@ a {
 .btn:not(:where(.outline, .ghost, .link)):hover {
   box-shadow: inset 0 0 0 999px var(--hover-overlay);
 }
+.btn:not(:where(.soft, .outline, .ghost, .link)):hover {
+  box-shadow: none;
+}
 .btn:where(.outline, .ghost):hover {
   --ui-hover-bg: var(--surface-subtle);
 }
 .btn:active {
   transform: translateY(1px);
-}
-
-/* Explicit size hooks keep .btn.sm / .btn.lg correct even if import order changes. */
-.btn.sm {
-  --control-size: 2rem;
-  --control-pad-x: 0.75rem;
-  --control-font-size: 0.875rem;
-}
-
-.btn.lg {
-  --control-size: 3rem;
-  --control-pad-x: 1.25rem;
-  --control-font-size: 1rem;
 }
 
 .btn.link {
@@ -455,6 +396,21 @@ button.badge:disabled,
 .alert.outline {
   --alert-radius: var(--radius);
 }
+
+.alert:where(.primary, .secondary, .success, .warning, .danger, .neutral) a {
+  color: currentColor;
+}
+
+.alert-icon {
+  flex: 0 0 auto;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.alert-content {
+  min-inline-size: 0;
+}
+
 .alert.sm {
   --alert-pad: 0.75rem 0.875rem;
   font-size: 0.9375rem;
@@ -781,6 +737,15 @@ fieldset.field > legend {
   cursor: not-allowed;
 }
 
+.select:not([multiple], [size]) {
+  appearance: none;
+  padding-inline-end: calc(0.75rem + 1.5rem);
+  background-image: var(--icon-chevron);
+  background-position: center right 0.75rem;
+  background-size: 1rem auto;
+  background-repeat: no-repeat;
+}
+
 .input::placeholder,
 .textarea::placeholder {
   color: var(--text-subtle);
@@ -1046,12 +1011,16 @@ fieldset.field > legend {
   background: var(--intent, var(--primary));
 }
 
-/* src\components\feedback.css */
+/* src\components\avatar.css */
 .avatar {
+  --avatar-size: 2.25rem;
+  --avatar-badge-size: 0.75rem;
+  --avatar-badge-border: 2px;
+
   display: inline-grid;
   place-items: center;
-  inline-size: 2.25rem;
-  block-size: 2.25rem;
+  inline-size: var(--avatar-size);
+  block-size: var(--avatar-size);
   overflow: hidden;
   border-radius: 999px;
   background: var(--surface-subtle);
@@ -1064,35 +1033,82 @@ fieldset.field > legend {
   color: var(--intent-fg);
 }
 
+.avatar > img {
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+}
+
 .avatar.sm {
-  inline-size: 1.75rem;
-  block-size: 1.75rem;
+  --avatar-size: 1.75rem;
   font-size: 0.8125rem;
 }
+
 .avatar.lg {
-  inline-size: 3rem;
-  block-size: 3rem;
+  --avatar-size: 3rem;
   font-size: 1.125rem;
 }
 
-.toast-stack {
-  display: grid;
-  gap: 0.75rem;
+.avatar-group {
+  display: inline-flex;
 }
 
-.toast {
-  display: flex;
-  align-items: start;
-  justify-content: space-between;
-  gap: var(--gap);
-  padding: 0.85rem 1rem;
-  border: 1px solid var(--ui-border, var(--border));
-  border-radius: var(--radius-lg);
-  background: var(--ui-bg, var(--surface-raised));
-  color: var(--ui-fg, var(--text));
-  box-shadow: var(--shadow);
+.avatar-group > .avatar {
+  box-shadow: 0 0 0 2px var(--surface);
 }
 
+.avatar-group > .avatar + .avatar {
+  margin-inline-start: calc(var(--avatar-size) / -4);
+}
+
+.avatar-badge-container {
+  position: relative;
+  display: inline-block;
+}
+
+.avatar-badge-container .avatar {
+  vertical-align: middle;
+}
+
+.avatar-badge-container .avatar-badge {
+  position: absolute;
+  z-index: 1;
+  display: inline-grid;
+  place-items: center;
+  inline-size: var(--avatar-badge-size);
+  block-size: var(--avatar-badge-size);
+  border-radius: 999px;
+  background: var(--intent, var(--neutral));
+  box-shadow: 0 0 0 var(--avatar-badge-border) var(--surface);
+  color: var(--intent-fg, var(--neutral-fg));
+  font-size: calc(var(--avatar-badge-size) * 0.75);
+  font-weight: 600;
+  line-height: 1;
+}
+
+.avatar-badge-container .avatar-badge:where(.top-right, .top-left) {
+  top: calc(var(--avatar-badge-border) * -0.5);
+}
+
+.avatar-badge-container .avatar-badge:where(.bottom-right, .bottom-left) {
+  bottom: calc(var(--avatar-badge-border) * -0.5);
+}
+
+.avatar-badge-container .avatar-badge:where(.top-right, .bottom-right) {
+  right: calc(var(--avatar-badge-border) * -0.5);
+}
+
+.avatar-badge-container .avatar-badge:where(.top-left, .bottom-left) {
+  left: calc(var(--avatar-badge-border) * -0.5);
+}
+
+.avatar-badge-container .avatar-badge:not(:empty) {
+  inline-size: auto;
+  min-inline-size: var(--avatar-badge-size);
+  padding-inline: calc(var(--avatar-badge-size) * 0.25);
+}
+
+/* src\components\skeleton.css */
 .skeleton {
   display: block;
   inline-size: 100%;
@@ -1112,10 +1128,12 @@ fieldset.field > legend {
   max-inline-size: 32rem;
   block-size: 0.85rem;
 }
+
 .skeleton.title {
   max-inline-size: 18rem;
   block-size: 1.4rem;
 }
+
 .skeleton.avatar {
   inline-size: 2.25rem;
   block-size: 2.25rem;
@@ -1131,6 +1149,13 @@ fieldset.field > legend {
   }
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .skeleton {
+    animation-duration: 0.01ms;
+  }
+}
+
+/* src\components\accordion.css */
 .accordion {
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
@@ -1158,10 +1183,19 @@ fieldset.field > legend {
 }
 
 .accordion summary::after {
-  content: "▾";
+  content: "";
   flex: 0 0 auto;
-  color: var(--text-muted);
-  font-size: 0.875em;
+  inline-size: 1rem;
+  block-size: 1rem;
+  background-color: var(--text-muted);
+  -webkit-mask-image: var(--icon-chevron);
+  mask-image: var(--icon-chevron);
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-position: center;
+  mask-position: center;
   transition: transform var(--duration);
 }
 
@@ -1178,6 +1212,13 @@ fieldset.field > legend {
   padding-block-start: 0.25rem;
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .accordion summary::after {
+    transition-duration: 0.01ms;
+  }
+}
+
+/* src\components\dialog.css */
 .dialog {
   max-inline-size: min(100% - 2rem, 32rem);
   border: 1px solid var(--border);
@@ -1225,6 +1266,14 @@ fieldset.field > legend {
   }
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .dialog,
+  .dialog::backdrop {
+    transition-duration: 0.01ms;
+  }
+}
+
+/* src\components\switch.css */
 .switch {
   --switch-bg: var(--surface-subtle);
   --switch-knob: var(--surface-raised);
@@ -1285,12 +1334,8 @@ fieldset.field > legend {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .dialog,
-  .dialog::backdrop,
-  .switch::before,
-  .skeleton {
+  .switch::before {
     transition-duration: 0.01ms;
-    animation-duration: 0.01ms;
   }
 }
 
@@ -1527,8 +1572,8 @@ fieldset.field > legend {
   margin: auto;
   inline-size: 1rem;
   block-size: 1rem;
-  border: 2px solid transparent;
-  border-top-color: currentColor;
+  border: 2px solid var(--btn-fg);
+  border-inline-end-color: transparent;
   border-radius: 50%;
   animation: actual-spin 0.75s linear infinite;
 }
@@ -1537,6 +1582,74 @@ fieldset.field > legend {
   to {
     transform: rotate(360deg);
   }
+}
+
+/* src\variants.css */
+/* Default variant is solid. Components consume --ui-* and map them to local variables. */
+.solid,
+:where(.btn, .badge):not(:where(.soft, .outline, .ghost, .link)) {
+  --ui-bg: var(--intent, var(--neutral));
+  --ui-fg: var(--intent-fg, var(--neutral-fg));
+  --ui-border: transparent;
+}
+
+/* Default alert without intent: transparent with border */
+:where(.alert):not(
+  :where(
+    .primary,
+    .secondary,
+    .success,
+    .warning,
+    .danger,
+    .neutral,
+    .solid,
+    .outline,
+    .ghost,
+    .link
+  )
+) {
+  --ui-bg: transparent;
+  --ui-border: var(--border);
+  --ui-fg: var(--text);
+}
+
+/* Soft variant and alerts with intent */
+.soft,
+.alert:where(.primary, .secondary, .success, .warning, .danger, .neutral):not(
+  :where(.solid, .outline, .ghost, .link)
+) {
+  --ui-bg: var(--surface-subtle);
+  --ui-border: var(--border);
+  --ui-fg: var(--intent, var(--text));
+}
+
+.outline {
+  --ui-bg: transparent;
+  --ui-fg: var(--intent, var(--text));
+  --ui-border: var(--intent, var(--border));
+}
+
+.ghost {
+  --ui-bg: transparent;
+  --ui-fg: var(--intent, var(--text));
+  --ui-border: transparent;
+}
+
+.link {
+  --ui-bg: transparent;
+  --ui-fg: var(--intent, var(--text));
+  --ui-border: transparent;
+}
+
+.sm {
+  --control-size: 2rem;
+  --control-pad-x: 0.75rem;
+  --control-font-size: 0.875rem;
+}
+.lg {
+  --control-size: 3rem;
+  --control-pad-x: 1.25rem;
+  --control-font-size: 1rem;
 }
 
 /* src\enhancements\color-mix.css */
@@ -1557,6 +1670,10 @@ fieldset.field > legend {
     --ui-border: transparent;
   }
 
+  .btn:not(:where(.soft, .outline, .ghost, .link)):hover {
+    --ui-hover-bg: color-mix(in srgb, var(--intent, var(--neutral)) 88%, black);
+  }
+
   :where(.btn, a.badge, button.badge, a.alert, button.alert):where(.ghost, .soft):hover {
     --ui-hover-bg: color-mix(in oklch, var(--intent, var(--neutral)), transparent 88%);
   }
@@ -1575,6 +1692,87 @@ fieldset.field > legend {
 @container (min-width: 32rem) {
   .card-body.with-media {
     grid-template-columns: 12rem 1fr;
+  }
+}
+
+/* src\enhancements\base-select.css */
+/* Progressive enhancement for select with appearance: base-select.
+   Automatically applied to .select on supported browsers (Chrome/Edge 135+, Safari TP).
+   Falls back to native select styling on unsupported browsers.
+   Use .native class to opt-out even when supported. */
+@media (hover: hover) and (pointer: fine) {
+  @supports (appearance: base-select) {
+    .select:not([multiple], [size], .native) {
+      appearance: base-select;
+
+      &::picker(select) {
+        appearance: base-select;
+        color: inherit;
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        background-color: var(--surface-raised);
+        box-shadow: var(--shadow-popout);
+        max-height: min(24rem, 70dvh);
+        margin-block: 0.5rem;
+        padding: 0;
+      }
+
+      &:open {
+        border-color: var(--focus);
+        outline: 0;
+        box-shadow: 0 0 0 3px var(--focus-ring);
+      }
+
+      &::picker-icon {
+        display: none;
+      }
+    }
+
+    .select option {
+      position: relative;
+      white-space: normal;
+      padding-block: 0.5rem;
+      padding-inline: 0.75rem;
+      transition-property: color, background-color;
+      transition-duration: var(--duration);
+
+      &:not(:disabled):hover,
+      &:not(:disabled):focus-visible {
+        cursor: pointer;
+        background-color: var(--primary);
+        color: var(--primary-fg);
+        outline: none;
+      }
+
+      &:active {
+        background-color: var(--surface-subtle);
+        color: var(--text);
+      }
+
+      &::checkmark {
+        content: "";
+        display: block;
+        inline-size: 1rem;
+        block-size: 1rem;
+        background-color: currentColor;
+        -webkit-mask-image: var(--icon-check);
+        mask-image: var(--icon-check);
+        -webkit-mask-repeat: no-repeat;
+        mask-repeat: no-repeat;
+        -webkit-mask-size: contain;
+        mask-size: contain;
+        -webkit-mask-position: center;
+        mask-position: center;
+      }
+    }
+
+    .select optgroup {
+      padding-block-start: 0.5em;
+    }
+
+    .select optgroup option:first-child {
+      margin-block-start: 0.5em;
+    }
   }
 }
 

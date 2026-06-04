@@ -23,10 +23,9 @@ Optional named themes, including themes that override shape tokens, ship as sepa
 npm install
 npm run build
 npm run check
-npm run serve
 ```
 
-Open `http://127.0.0.1:4173/demo/`.
+Open `demo/index.html` in your browser.
 
 ## Visual tests
 

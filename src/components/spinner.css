@@ -58,8 +58,8 @@
   margin: auto;
   inline-size: 1rem;
   block-size: 1rem;
-  border: 2px solid transparent;
-  border-top-color: currentColor;
+  border: 2px solid var(--btn-fg);
+  border-inline-end-color: transparent;
   border-radius: 50%;
   animation: actual-spin 0.75s linear infinite;
 }

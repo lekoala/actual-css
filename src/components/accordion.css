@@ -1,0 +1,61 @@
+.accordion {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface-raised);
+}
+
+.accordion > details + details {
+  border-block-start: 1px solid var(--border);
+}
+
+.accordion summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  cursor: pointer;
+  list-style: none;
+  padding: 1rem;
+  color: var(--text);
+  font-weight: 700;
+}
+
+.accordion summary::-webkit-details-marker {
+  display: none;
+}
+
+.accordion summary::after {
+  content: "";
+  flex: 0 0 auto;
+  inline-size: 1rem;
+  block-size: 1rem;
+  background-color: var(--text-muted);
+  -webkit-mask-image: var(--icon-chevron);
+  mask-image: var(--icon-chevron);
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-position: center;
+  mask-position: center;
+  transition: transform var(--duration);
+}
+
+.accordion details[open] summary::after {
+  transform: rotate(180deg);
+}
+
+.accordion-body {
+  padding: 0 1rem 1rem;
+  color: var(--text-muted);
+}
+
+.accordion details[open] .accordion-body {
+  padding-block-start: 0.25rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .accordion summary::after {
+    transition-duration: 0.01ms;
+  }
+}

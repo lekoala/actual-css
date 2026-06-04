@@ -15,6 +15,10 @@
     --ui-border: transparent;
   }
 
+  .btn:not(:where(.soft, .outline, .ghost, .link)):hover {
+    --ui-hover-bg: color-mix(in srgb, var(--intent, var(--neutral)) 88%, black);
+  }
+
   :where(.btn, a.badge, button.badge, a.alert, button.alert):where(.ghost, .soft):hover {
     --ui-hover-bg: color-mix(in oklch, var(--intent, var(--neutral)), transparent 88%);
   }

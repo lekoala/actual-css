@@ -1,7 +1,7 @@
 :where(.btn) {
-  --control-size: 2.5rem;
-  --control-pad-x: 1rem;
-  --control-font-size: 0.9375rem;
+  --btn-size: var(--control-size, 2.5rem);
+  --btn-pad-x: var(--control-pad-x, 1rem);
+  --btn-font-size: var(--control-font-size, 0.9375rem);
 }
 
 .btn {
@@ -13,14 +13,14 @@
   align-items: center;
   justify-content: center;
   gap: 0.5em;
-  min-block-size: var(--control-size);
-  padding-inline: var(--control-pad-x);
+  min-block-size: var(--btn-size);
+  padding-inline: var(--btn-pad-x);
   border: 1px solid var(--btn-border);
   border-radius: var(--radius);
   background: var(--btn-bg);
   color: var(--btn-fg);
   font: inherit;
-  font-size: var(--control-font-size);
+  font-size: var(--btn-font-size);
   font-weight: 600;
   line-height: 1;
   text-decoration: none;
@@ -39,24 +39,14 @@
 .btn:not(:where(.outline, .ghost, .link)):hover {
   box-shadow: inset 0 0 0 999px var(--hover-overlay);
 }
+.btn:not(:where(.soft, .outline, .ghost, .link)):hover {
+  box-shadow: none;
+}
 .btn:where(.outline, .ghost):hover {
   --ui-hover-bg: var(--surface-subtle);
 }
 .btn:active {
   transform: translateY(1px);
-}
-
-/* Explicit size hooks keep .btn.sm / .btn.lg correct even if import order changes. */
-.btn.sm {
-  --control-size: 2rem;
-  --control-pad-x: 0.75rem;
-  --control-font-size: 0.875rem;
-}
-
-.btn.lg {
-  --control-size: 3rem;
-  --control-pad-x: 1.25rem;
-  --control-font-size: 1rem;
 }
 
 .btn.link {
