@@ -1,7 +1,13 @@
 /* Mild reset: useful defaults without classless magic. */
-*, *::before, *::after { box-sizing: border-box; }
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
 
-html { -webkit-text-size-adjust: 100%; }
+html {
+  -webkit-text-size-adjust: 100%;
+}
 
 body {
   margin: 0;
@@ -11,19 +17,33 @@ body {
   line-height: 1.5;
 }
 
-button, input, textarea, select { font: inherit; }
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
 
-button { border: 0; }
+button {
+  border: 0;
+}
 
-a { color: inherit; }
+a {
+  color: inherit;
+}
 
-:where(img, svg, video) { max-inline-size: 100%; block-size: auto; }
+:where(img, svg, video) {
+  max-inline-size: 100%;
+  block-size: auto;
+}
 
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation-duration: .01ms !important;
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     scroll-behavior: auto !important;
-    transition-duration: .01ms !important;
+    transition-duration: 0.01ms !important;
   }
 }

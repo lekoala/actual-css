@@ -6,14 +6,17 @@
   "private": true,
   "scripts": {
     "build": "node scripts/build.js",
-    "check": "node scripts/check-css.js",
+    "check": "npm run lint",
+    "lint": "biome check && node scripts/check-css.js",
+    "lint:fix": "biome check --write && node scripts/check-css.js",
     "test": "npm run check",
     "test:visual": "playwright test",
     "dev": "node scripts/build.js --watch",
     "serve": "npx http-server demo -p 4173 -c-1"
   },
   "devDependencies": {
-    "http-server": "^14.1.1",
-    "@playwright/test": "^1.44.0"
+    "@biomejs/biome": "^2.2.0",
+    "@playwright/test": "^1.44.0",
+    "http-server": "^14.1.1"
   }
 }

@@ -1,5 +1,5 @@
 /* Actual CSS v0.1.0 | plain CSS component framework */
-/* src/reset.css */
+/* src\reset.css */
 /* Mild reset: useful defaults without classless magic. */
 *, *::before, *::after { box-sizing: border-box; }
 
@@ -30,7 +30,7 @@ a { color: inherit; }
   }
 }
 
-/* src/tokens.css */
+/* src\tokens.css */
 :root {
   /* Intents */
   --primary: hsl(220 90% 56%);
@@ -70,7 +70,7 @@ a { color: inherit; }
   --duration: 150ms;
 }
 
-/* src/themes.css */
+/* src\themes.css */
 :root,
 [data-theme="light"] {
   color-scheme: light;
@@ -356,7 +356,7 @@ a { color: inherit; }
   }
 }
 
-/* src/intents.css */
+/* src\intents.css */
 .primary { --intent: var(--primary); --intent-fg: var(--primary-fg); }
 .secondary { --intent: var(--secondary); --intent-fg: var(--secondary-fg); }
 .success { --intent: var(--success); --intent-fg: var(--success-fg); }
@@ -364,7 +364,7 @@ a { color: inherit; }
 .danger { --intent: var(--danger); --intent-fg: var(--danger-fg); }
 .neutral { --intent: var(--neutral); --intent-fg: var(--neutral-fg); }
 
-/* src/variants.css */
+/* src\variants.css */
 /* Default variant is solid. Components consume --ui-* and map them to local variables. */
 .solid,
 :where(.btn, .badge):not(:where(.soft, .outline, .ghost, .link)),
@@ -403,7 +403,7 @@ a { color: inherit; }
 .sm { --control-size: 2rem; --control-pad-x: .75rem; --control-font-size: .875rem; }
 .lg { --control-size: 3rem; --control-pad-x: 1.25rem; --control-font-size: 1rem; }
 
-/* src/responsive.css */
+/* src\responsive.css */
 .stack {
   display: flex;
   flex-direction: column;
@@ -459,7 +459,7 @@ a { color: inherit; }
   }
 }
 
-/* src/components/button.css */
+/* src\components\button.css */
 :where(.btn) {
   --control-size: 2.5rem;
   --control-pad-x: 1rem;
@@ -541,7 +541,7 @@ a { color: inherit; }
   pointer-events: none;
 }
 
-/* src/components/badge.css */
+/* src\components\badge.css */
 .badge {
   --badge-bg: var(--ui-bg, var(--intent, var(--neutral)));
   --badge-fg: var(--ui-fg, var(--intent-fg, var(--neutral-fg)));
@@ -602,7 +602,7 @@ button.badge:disabled,
   pointer-events: none;
 }
 
-/* src/components/alert.css */
+/* src\components\alert.css */
 .alert {
   --alert-bg: var(--ui-bg, var(--surface-subtle));
   --alert-fg: var(--ui-fg, var(--text));
@@ -662,7 +662,7 @@ button.alert:disabled,
 .alert > :first-child { margin-block-start: 0; }
 .alert > :last-child { margin-block-end: 0; }
 
-/* src/components/card.css */
+/* src\components\card.css */
 .card {
   --card-pad: 1rem;
   --card-radius: var(--radius-lg);
@@ -683,6 +683,24 @@ button.alert:disabled,
 .card > :first-child { margin-block-start: 0; }
 .card > :last-child { margin-block-end: 0; }
 
+/* Card sections */
+.card-header,
+.card-body,
+.card-footer {
+  padding: var(--card-pad);
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap);
+  border-block-end: 1px solid var(--border);
+  margin-block-start: calc(var(--card-pad) * -1);
+  margin-inline: calc(var(--card-pad) * -1);
+  padding-block-start: var(--card-pad);
+  padding-inline: var(--card-pad);
+}
 
 .card-body {
   display: grid;
@@ -693,7 +711,41 @@ button.alert:disabled,
   align-items: start;
 }
 
-/* src/components/forms.css */
+.card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--gap);
+  border-block-start: 1px solid var(--border);
+  margin-block-end: calc(var(--card-pad) * -1);
+  margin-inline: calc(var(--card-pad) * -1);
+  padding-block-end: var(--card-pad);
+  padding-inline: var(--card-pad);
+}
+
+.card-media {
+  display: block;
+  inline-size: 100%;
+  block-size: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-radius: var(--card-radius);
+  margin-block-end: var(--card-pad);
+}
+
+.card-media:first-child {
+  margin-block-start: calc(var(--card-pad) * -1);
+  margin-inline: calc(var(--card-pad) * -1);
+  border-radius: var(--card-radius) var(--card-radius) 0 0;
+  inline-size: calc(100% + var(--card-pad) * 2);
+  max-inline-size: none;
+}
+
+.card.compact {
+  --card-pad: .5rem;
+}
+
+/* src\components\forms.css */
 .field {
   display: grid;
   gap: .375rem;
@@ -860,7 +912,7 @@ fieldset.field > legend {
   color: var(--text-subtle);
 }
 
-/* src/components/navigation.css */
+/* src\components\navigation.css */
 .navbar {
   display: flex;
   flex-wrap: wrap;
@@ -1008,7 +1060,7 @@ fieldset.field > legend {
   color: var(--intent, var(--primary));
 }
 
-/* src/components/data.css */
+/* src\components\data.css */
 .table-wrap {
   overflow-x: auto;
   border: 1px solid var(--border);
@@ -1097,7 +1149,7 @@ fieldset.field > legend {
 .meter::-webkit-meter-even-less-good-value { background: var(--danger); }
 .meter::-moz-meter-bar { background: var(--intent, var(--primary)); }
 
-/* src/components/feedback.css */
+/* src\components\feedback.css */
 .avatar {
   display: inline-grid;
   place-items: center;
@@ -1304,7 +1356,151 @@ fieldset.field > legend {
   }
 }
 
-/* src/enhancements/color-mix.css */
+/* src\components\join.css */
+.join {
+  display: inline-flex;
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.join > * {
+  border-radius: 0;
+  margin-inline-start: -1px;
+  position: relative;
+}
+
+.join > *:first-child {
+  margin-inline-start: 0;
+  border-start-start-radius: inherit;
+  border-end-start-radius: inherit;
+}
+
+.join > *:last-child {
+  border-start-end-radius: inherit;
+  border-end-end-radius: inherit;
+}
+
+.join > *:hover,
+.join > *:focus {
+  z-index: 1;
+}
+
+.join.vertical {
+  flex-direction: column;
+}
+
+.join.vertical > * {
+  margin-inline-start: 0;
+  margin-block-start: -1px;
+}
+
+.join.vertical > *:first-child {
+  margin-block-start: 0;
+  border-start-start-radius: inherit;
+  border-start-end-radius: inherit;
+  border-end-start-radius: 0;
+  border-end-end-radius: 0;
+}
+
+.join.vertical > *:last-child {
+  border-start-start-radius: 0;
+  border-start-end-radius: 0;
+  border-end-start-radius: inherit;
+  border-end-end-radius: inherit;
+}
+
+.join.block {
+  display: flex;
+  inline-size: 100%;
+}
+
+.join.block > * {
+  flex: 1 1 auto;
+}
+
+/* src\components\divider.css */
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-block: var(--gap);
+  color: var(--text-muted);
+  font-size: .875rem;
+  font-weight: 500;
+}
+
+.divider::before,
+.divider::after {
+  content: "";
+  flex: 1;
+  block-size: 1px;
+  background: var(--border);
+}
+
+.divider:empty::after {
+  display: none;
+}
+
+.divider.vertical {
+  flex-direction: column;
+  align-self: stretch;
+  margin-inline: var(--gap);
+  margin-block: 0;
+}
+
+.divider.vertical::before,
+.divider.vertical::after {
+  inline-size: 1px;
+  block-size: auto;
+  flex: 1;
+}
+
+/* src\components\spinner.css */
+.spinner {
+  display: inline-block;
+  inline-size: 1.5rem;
+  block-size: 1.5rem;
+  border: 2px solid var(--text-muted);
+  border-inline-end-color: transparent;
+  border-radius: 50%;
+  animation: actual-spin .75s linear infinite;
+  vertical-align: text-bottom;
+}
+
+.spinner.primary { border-color: var(--primary); border-inline-end-color: transparent; }
+.spinner.secondary { border-color: var(--secondary); border-inline-end-color: transparent; }
+.spinner.success { border-color: var(--success); border-inline-end-color: transparent; }
+.spinner.warning { border-color: var(--warning); border-inline-end-color: transparent; }
+.spinner.danger { border-color: var(--danger); border-inline-end-color: transparent; }
+.spinner.neutral { border-color: var(--neutral); border-inline-end-color: transparent; }
+
+.spinner.sm { inline-size: 1rem; block-size: 1rem; border-width: 2px; }
+.spinner.lg { inline-size: 3rem; block-size: 3rem; border-width: 3px; }
+
+.btn.loading {
+  position: relative;
+  pointer-events: none;
+  color: transparent;
+}
+
+.btn.loading::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  inline-size: 1rem;
+  block-size: 1rem;
+  border: 2px solid transparent;
+  border-top-color: currentColor;
+  border-radius: 50%;
+  animation: actual-spin .75s linear infinite;
+}
+
+@keyframes actual-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* src\enhancements\color-mix.css */
 /* Centralized modern color enhancement. Components do not duplicate this logic. */
 @supports (color: color-mix(in oklch, red, white)) {
   .soft {
@@ -1321,7 +1517,7 @@ fieldset.field > legend {
   }
 }
 
-/* src/enhancements/container.css */
+/* src\enhancements\container.css */
 /* Progressive enhancement only. Baseline remains stacked and usable. */
 .card { container-type: inline-size; }
 

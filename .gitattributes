@@ -1,0 +1,38 @@
+# Auto detect text files and normalize line endings to LF on checkout
+* text=auto eol=lf
+
+# Source files
+*.css text eol=lf
+*.js text eol=lf
+*.html text eol=lf
+*.md text eol=lf
+*.json text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+
+# Mark generated files as linguist-generated so GitHub doesn't count them
+# in language stats and hides them in diffs by default
+dist/*.css linguist-generated=true
+dist/*.min.css linguist-generated=true
+dist/*.js linguist-generated=true
+
+# Binary files
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.otf binary
+*.eot binary
+*.svg text eol=lf
+
+# npm package export-ignore
+# These files are tracked by git but excluded from npm package exports
+demo/ export-ignore
+tests/ export-ignore
+scripts/ export-ignore
+playwright.config.js export-ignore
+*.spec.js export-ignore

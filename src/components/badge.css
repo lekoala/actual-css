@@ -4,13 +4,13 @@
   --badge-border: var(--ui-border, transparent);
   --badge-radius: 999px;
   --badge-size: 1.5rem;
-  --badge-pad-x: .55rem;
-  --control-font-size: .8125rem;
+  --badge-pad-x: 0.55rem;
+  --control-font-size: 0.8125rem;
 
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: .35em;
+  gap: 0.35em;
   min-block-size: var(--badge-size);
   padding-inline: var(--badge-pad-x);
   border: 1px solid var(--badge-border);
@@ -22,12 +22,26 @@
   line-height: 1;
   text-decoration: none;
   white-space: nowrap;
-  transition: background-color var(--duration), border-color var(--duration), color var(--duration), box-shadow var(--duration);
+  transition:
+    background-color var(--duration),
+    border-color var(--duration),
+    color var(--duration),
+    box-shadow var(--duration);
 }
 
-.badge.outline { --badge-radius: var(--radius); }
-.badge.sm { --badge-size: 1.25rem; --badge-pad-x: .45rem; --control-font-size: .75rem; }
-.badge.lg { --badge-size: 1.875rem; --badge-pad-x: .7rem; --control-font-size: .875rem; }
+.badge.outline {
+  --badge-radius: var(--radius);
+}
+.badge.sm {
+  --badge-size: 1.25rem;
+  --badge-pad-x: 0.45rem;
+  --control-font-size: 0.75rem;
+}
+.badge.lg {
+  --badge-size: 1.875rem;
+  --badge-pad-x: 0.7rem;
+  --control-font-size: 0.875rem;
+}
 
 :where(a.badge, button.badge):hover {
   background: var(--ui-hover-bg, var(--badge-bg));
@@ -53,7 +67,7 @@ button.badge {
 
 button.badge:disabled,
 .badge[aria-disabled="true"] {
-  opacity: .55;
+  opacity: 0.55;
   cursor: not-allowed;
   pointer-events: none;
 }

@@ -6,7 +6,7 @@
   --alert-radius: var(--radius-lg);
 
   display: grid;
-  gap: .35rem;
+  gap: 0.35rem;
   padding: var(--alert-pad);
   border: 1px solid var(--alert-border);
   border-radius: var(--alert-radius);
@@ -20,9 +20,17 @@
   --alert-border: transparent;
 }
 
-.alert.outline { --alert-radius: var(--radius); }
-.alert.sm { --alert-pad: .75rem; font-size: .9375rem; }
-.alert.lg { --alert-pad: 1.25rem; font-size: 1.0625rem; }
+.alert.outline {
+  --alert-radius: var(--radius);
+}
+.alert.sm {
+  --alert-pad: 0.75rem;
+  font-size: 0.9375rem;
+}
+.alert.lg {
+  --alert-pad: 1.25rem;
+  font-size: 1.0625rem;
+}
 
 :where(a.alert, button.alert):hover {
   background: var(--ui-hover-bg, var(--alert-bg));
@@ -49,10 +57,14 @@ button.alert {
 
 button.alert:disabled,
 .alert[aria-disabled="true"] {
-  opacity: .55;
+  opacity: 0.55;
   cursor: not-allowed;
   pointer-events: none;
 }
 
-.alert > :first-child { margin-block-start: 0; }
-.alert > :last-child { margin-block-end: 0; }
+.alert > :first-child {
+  margin-block-start: 0;
+}
+.alert > :last-child {
+  margin-block-end: 0;
+}

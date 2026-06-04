@@ -43,7 +43,7 @@
 
 .form-row {
   display: grid;
-  gap: .5rem;
+  gap: 0.5rem;
 }
 
 @media (min-width: 48rem) {

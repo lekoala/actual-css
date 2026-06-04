@@ -33,5 +33,13 @@
   --ui-border: transparent;
 }
 
-.sm { --control-size: 2rem; --control-pad-x: .75rem; --control-font-size: .875rem; }
-.lg { --control-size: 3rem; --control-pad-x: 1.25rem; --control-font-size: 1rem; }
+.sm {
+  --control-size: 2rem;
+  --control-pad-x: 0.75rem;
+  --control-font-size: 0.875rem;
+}
+.lg {
+  --control-size: 3rem;
+  --control-pad-x: 1.25rem;
+  --control-font-size: 1rem;
+}
