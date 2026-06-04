@@ -4,12 +4,12 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Avatar — Actual CSS</title>
-  <link rel="stylesheet" href="../../dist/actual.css">
+  <link rel="stylesheet" href="../../src/actual.css">
   <link rel="stylesheet" href="../../demo/styles/demo.css">
 </head>
 <body>
   <nav class="demo-nav">
-    <a href="../index.html">← Components</a>
+    <a href="index.html">← Components</a>
     <a href="../../demo/index.html">Kitchensink</a>
   </nav>
   <main class="center">
@@ -27,12 +27,12 @@
 </div></div>
     <section class="component-section">
 <h2>Default</h2>
-<p>Default avatar with initials.</p>
+<p>Default avatar with initials. The wrapper `.avatar` contains the visual element.</p>
 <div class="example-group">
-<div class="example-render example-inline"><div class="example-item"><span class="avatar">A</span></div>
-<div class="example-item"><span class="avatar primary">B</span></div></div><div class="example-code">
-<pre><code>&lt;span class=&quot;avatar&quot;&gt;A&lt;/span&gt;
-&lt;span class=&quot;avatar primary&quot;&gt;B&lt;/span&gt;</code></pre>
+<div class="example-render example-inline"><div class="example-item"><div class="avatar"><abbr>JD</abbr></div></div>
+<div class="example-item"><div class="avatar primary"><abbr>AB</abbr></div></div></div><div class="example-code">
+<pre><code>&lt;div class=&quot;avatar&quot;&gt;&lt;abbr&gt;JD&lt;/abbr&gt;&lt;/div&gt;
+&lt;div class=&quot;avatar primary&quot;&gt;&lt;abbr&gt;AB&lt;/abbr&gt;&lt;/div&gt;</code></pre>
 </div>
 </div>
 </section>
@@ -53,18 +53,18 @@
 <h2>Colors</h2>
 <p>Intent colors.</p>
 <div class="example-group">
-<div class="example-render example-inline"><div class="example-item"><span class="avatar primary">P</span></div>
-<div class="example-item"><span class="avatar secondary">S</span></div>
-<div class="example-item"><span class="avatar success">S</span></div>
-<div class="example-item"><span class="avatar warning">W</span></div>
-<div class="example-item"><span class="avatar danger">D</span></div>
-<div class="example-item"><span class="avatar neutral">N</span></div></div><div class="example-code">
-<pre><code>&lt;span class=&quot;avatar primary&quot;&gt;P&lt;/span&gt;
-&lt;span class=&quot;avatar secondary&quot;&gt;S&lt;/span&gt;
-&lt;span class=&quot;avatar success&quot;&gt;S&lt;/span&gt;
-&lt;span class=&quot;avatar warning&quot;&gt;W&lt;/span&gt;
-&lt;span class=&quot;avatar danger&quot;&gt;D&lt;/span&gt;
-&lt;span class=&quot;avatar neutral&quot;&gt;N&lt;/span&gt;</code></pre>
+<div class="example-render example-inline"><div class="example-item"><div class="avatar primary"><abbr>JD</abbr></div></div>
+<div class="example-item"><div class="avatar secondary"><abbr>AB</abbr></div></div>
+<div class="example-item"><div class="avatar success"><abbr>MN</abbr></div></div>
+<div class="example-item"><div class="avatar warning"><abbr>KL</abbr></div></div>
+<div class="example-item"><div class="avatar danger"><abbr>XY</abbr></div></div>
+<div class="example-item"><div class="avatar neutral"><abbr>OP</abbr></div></div></div><div class="example-code">
+<pre><code>&lt;div class=&quot;avatar primary&quot;&gt;&lt;abbr&gt;JD&lt;/abbr&gt;&lt;/div&gt;
+&lt;div class=&quot;avatar secondary&quot;&gt;&lt;abbr&gt;AB&lt;/abbr&gt;&lt;/div&gt;
+&lt;div class=&quot;avatar success&quot;&gt;&lt;abbr&gt;MN&lt;/abbr&gt;&lt;/div&gt;
+&lt;div class=&quot;avatar warning&quot;&gt;&lt;abbr&gt;KL&lt;/abbr&gt;&lt;/div&gt;
+&lt;div class=&quot;avatar danger&quot;&gt;&lt;abbr&gt;XY&lt;/abbr&gt;&lt;/div&gt;
+&lt;div class=&quot;avatar neutral&quot;&gt;&lt;abbr&gt;OP&lt;/abbr&gt;&lt;/div&gt;</code></pre>
 </div>
 </div>
 </section>
@@ -72,12 +72,12 @@
 <h2>Sizes</h2>
 <p>Available sizes.</p>
 <div class="example-group">
-<div class="example-render example-inline"><div class="example-item"><span class="avatar sm">S</span></div>
-<div class="example-item"><span class="avatar">M</span></div>
-<div class="example-item"><span class="avatar lg">L</span></div></div><div class="example-code">
-<pre><code>&lt;span class=&quot;avatar sm&quot;&gt;S&lt;/span&gt;
-&lt;span class=&quot;avatar&quot;&gt;M&lt;/span&gt;
-&lt;span class=&quot;avatar lg&quot;&gt;L&lt;/span&gt;</code></pre>
+<div class="example-render example-inline"><div class="example-item"><div class="avatar sm"><abbr>JD</abbr></div></div>
+<div class="example-item"><div class="avatar"><abbr>JD</abbr></div></div>
+<div class="example-item"><div class="avatar lg"><abbr>JD</abbr></div></div></div><div class="example-code">
+<pre><code>&lt;div class=&quot;avatar sm&quot;&gt;&lt;abbr&gt;JD&lt;/abbr&gt;&lt;/div&gt;
+&lt;div class=&quot;avatar&quot;&gt;&lt;abbr&gt;JD&lt;/abbr&gt;&lt;/div&gt;
+&lt;div class=&quot;avatar lg&quot;&gt;&lt;abbr&gt;JD&lt;/abbr&gt;&lt;/div&gt;</code></pre>
 </div>
 </div>
 </section>
@@ -86,37 +86,76 @@
 <p>Overlapping avatar group.</p>
 <div class="example-group">
 <div class="example-render example-inline"><div class="example-item"><div class="avatar-group">
-<span class="avatar primary">A</span>
-<span class="avatar secondary">B</span>
-<span class="avatar success">C</span>
+<div class="avatar primary"><abbr>JD</abbr></div>
+<div class="avatar secondary"><abbr>AB</abbr></div>
+<div class="avatar success"><abbr>MN</abbr></div>
 </div></div></div><div class="example-code">
 <pre><code>&lt;div class=&quot;avatar-group&quot;&gt;
-  &lt;span class=&quot;avatar primary&quot;&gt;A&lt;/span&gt;
-  &lt;span class=&quot;avatar secondary&quot;&gt;B&lt;/span&gt;
-  &lt;span class=&quot;avatar success&quot;&gt;C&lt;/span&gt;
+  &lt;div class=&quot;avatar primary&quot;&gt;&lt;abbr&gt;JD&lt;/abbr&gt;&lt;/div&gt;
+  &lt;div class=&quot;avatar secondary&quot;&gt;&lt;abbr&gt;AB&lt;/abbr&gt;&lt;/div&gt;
+  &lt;div class=&quot;avatar success&quot;&gt;&lt;abbr&gt;MN&lt;/abbr&gt;&lt;/div&gt;
 &lt;/div&gt;</code></pre>
 </div>
 </div>
 </section>
 <section class="component-section">
 <h2>Badge</h2>
-<p>Status indicator dot. Wrap the avatar and badge in `.avatar-badge-container`.</p>
+<p>Notification badge with content.</p>
 <div class="example-group">
-<div class="example-render example-inline"><div class="example-item"><div class="avatar-badge-container">
-<span class="avatar">A</span>
-<span class="avatar-badge success bottom-right"></span>
+<div class="example-render example-inline"><div class="example-item"><div class="avatar">
+<abbr class="circle">JD</abbr>
+<span class="indicator badge success">1</span>
 </div></div>
-<div class="example-item"><div class="avatar-badge-container">
-<span class="avatar">A</span>
-<span class="avatar-badge danger top-right">1</span>
+<div class="example-item"><div class="avatar">
+<abbr class="circle">AB</abbr>
+<span class="indicator badge danger">99</span>
+</div></div>
+<div class="example-item"><div class="avatar lg">
+<abbr class="circle">MN</abbr>
+<span class="indicator badge warning">3</span>
 </div></div></div><div class="example-code">
-<pre><code>&lt;div class=&quot;avatar-badge-container&quot;&gt;
-  &lt;span class=&quot;avatar&quot;&gt;A&lt;/span&gt;
-  &lt;span class=&quot;avatar-badge success bottom-right&quot;&gt;&lt;/span&gt;
+<pre><code>&lt;div class=&quot;avatar&quot;&gt;
+  &lt;abbr class=&quot;circle&quot;&gt;JD&lt;/abbr&gt;
+  &lt;span class=&quot;indicator badge success&quot;&gt;1&lt;/span&gt;
 &lt;/div&gt;
-&lt;div class=&quot;avatar-badge-container&quot;&gt;
-  &lt;span class=&quot;avatar&quot;&gt;A&lt;/span&gt;
-  &lt;span class=&quot;avatar-badge danger top-right&quot;&gt;1&lt;/span&gt;
+&lt;div class=&quot;avatar&quot;&gt;
+  &lt;abbr class=&quot;circle&quot;&gt;AB&lt;/abbr&gt;
+  &lt;span class=&quot;indicator badge danger&quot;&gt;99&lt;/span&gt;
+&lt;/div&gt;
+&lt;div class=&quot;avatar lg&quot;&gt;
+  &lt;abbr class=&quot;circle&quot;&gt;MN&lt;/abbr&gt;
+  &lt;span class=&quot;indicator badge warning&quot;&gt;3&lt;/span&gt;
+&lt;/div&gt;</code></pre>
+</div>
+</div>
+</section>
+<section class="component-section">
+<h2>Status</h2>
+<p>Status dot at bottom-right.</p>
+<div class="example-group">
+<div class="example-render example-inline"><div class="example-item"><div class="avatar">
+<abbr class="circle">JD</abbr>
+<span class="indicator-bottom status success" aria-label="online"></span>
+</div></div>
+<div class="example-item"><div class="avatar">
+<abbr class="circle">AB</abbr>
+<span class="indicator-bottom status neutral"></span>
+</div></div>
+<div class="example-item"><div class="avatar lg">
+<abbr class="circle">MN</abbr>
+<span class="indicator-bottom status success"></span>
+</div></div></div><div class="example-code">
+<pre><code>&lt;div class=&quot;avatar&quot;&gt;
+  &lt;abbr class=&quot;circle&quot;&gt;JD&lt;/abbr&gt;
+  &lt;span class=&quot;indicator-bottom status success&quot; aria-label=&quot;online&quot;&gt;&lt;/span&gt;
+&lt;/div&gt;
+&lt;div class=&quot;avatar&quot;&gt;
+  &lt;abbr class=&quot;circle&quot;&gt;AB&lt;/abbr&gt;
+  &lt;span class=&quot;indicator-bottom status neutral&quot;&gt;&lt;/span&gt;
+&lt;/div&gt;
+&lt;div class=&quot;avatar lg&quot;&gt;
+  &lt;abbr class=&quot;circle&quot;&gt;MN&lt;/abbr&gt;
+  &lt;span class=&quot;indicator-bottom status success&quot;&gt;&lt;/span&gt;
 &lt;/div&gt;</code></pre>
 </div>
 </div>
@@ -133,7 +172,7 @@
 
   </main>
   <footer class="demo-footer">
-    <a href="../index.html">Back to components</a>
+    <a href="index.html">Back to components</a>
   </footer>
 </body>
 </html>

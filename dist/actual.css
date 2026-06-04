@@ -149,7 +149,7 @@ a {
   --intent-fg: var(--neutral-fg);
 }
 
-/* src\responsive.css */
+/* src\layout.css */
 .stack {
   display: flex;
   flex-direction: column;
@@ -176,6 +176,10 @@ a {
   grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--grid-min, 16rem)), 1fr));
 }
 
+.grid-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
 .sidebar {
   display: flex;
   flex-wrap: wrap;
@@ -193,16 +197,8 @@ a {
   min-inline-size: min(100%, var(--sidebar-content-min, 50%));
 }
 
-.form-row {
-  display: grid;
-  gap: 0.5rem;
-}
-
-@media (min-width: 48rem) {
-  .form-row {
-    grid-template-columns: 12rem 1fr;
-    align-items: center;
-  }
+.circle {
+  border-radius: 999px;
 }
 
 /* src\components\button.css */
@@ -217,6 +213,7 @@ a {
   --btn-fg: var(--ui-fg, var(--intent-fg, var(--neutral-fg)));
   --btn-border: var(--ui-border, transparent);
 
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -409,6 +406,12 @@ button.badge:disabled,
 
 .alert-content {
   min-inline-size: 0;
+}
+
+.alert-content ul,
+.alert-content ol {
+  padding-left: 0;
+  list-style-position: inside;
 }
 
 .alert.sm {
@@ -936,6 +939,10 @@ fieldset.field > legend {
   text-transform: uppercase;
 }
 
+.table tbody tr:hover {
+  background-color: var(--hover-overlay);
+}
+
 .table tr:last-child td {
   border-block-end: 0;
 }
@@ -1014,46 +1021,59 @@ fieldset.field > legend {
 /* src\components\avatar.css */
 .avatar {
   --avatar-size: 2.25rem;
-  --avatar-badge-size: 0.75rem;
-  --avatar-badge-border: 2px;
 
+  display: inline-flex;
+  position: relative;
+}
+
+/* The visual circle is the first child */
+.avatar > :first-child {
+  position: relative;
   display: inline-grid;
   place-items: center;
   inline-size: var(--avatar-size);
   block-size: var(--avatar-size);
   overflow: hidden;
-  border-radius: 999px;
+  border-radius: var(--radius);
   background: var(--surface-subtle);
   color: var(--text-muted);
   font-weight: 750;
+  flex: 0 0 auto;
 }
 
-.avatar:where(.primary, .secondary, .success, .warning, .danger, .neutral) {
-  background: var(--intent);
-  color: var(--intent-fg);
-}
-
+/* Images */
 .avatar > img {
   inline-size: 100%;
   block-size: 100%;
   object-fit: cover;
 }
 
-.avatar.sm {
-  --avatar-size: 1.75rem;
-  font-size: 0.8125rem;
+/* Intent colors */
+.avatar:where(.primary, .secondary, .success, .warning, .danger, .neutral) > :first-child {
+  background: var(--intent);
+  color: var(--intent-fg);
 }
 
+/* Sizes */
+.avatar.sm {
+  --avatar-size: 1.75rem;
+}
+.avatar.sm > :first-child {
+  font-size: 0.8125rem;
+}
 .avatar.lg {
   --avatar-size: 3rem;
+}
+.avatar.lg > :first-child {
   font-size: 1.125rem;
 }
 
+/* Groups */
 .avatar-group {
   display: inline-flex;
 }
 
-.avatar-group > .avatar {
+.avatar-group > .avatar > :first-child {
   box-shadow: 0 0 0 2px var(--surface);
 }
 
@@ -1061,51 +1081,59 @@ fieldset.field > legend {
   margin-inline-start: calc(var(--avatar-size) / -4);
 }
 
-.avatar-badge-container {
-  position: relative;
-  display: inline-block;
-}
 
-.avatar-badge-container .avatar {
-  vertical-align: middle;
-}
 
-.avatar-badge-container .avatar-badge {
+/* src\components\indicator.css */
+.indicator {
   position: absolute;
   z-index: 1;
-  display: inline-grid;
-  place-items: center;
-  inline-size: var(--avatar-badge-size);
-  block-size: var(--avatar-badge-size);
+  top: 0;
+  right: 0;
+  transform: translate(25%, -25%);
+}
+
+.indicator-bottom {
+  top: auto;
+  bottom: 0;
+  transform: translate(25%, 25%);
+}
+
+/* Circle-aware positioning */
+.circle + .indicator {
+  top: 14.64%;
+  left: 85.36%;
+  right: auto;
+  transform: translate(-50%, -50%);
+}
+
+.circle + .indicator-bottom {
+  bottom: 14.64%;
+  left: 85.36%;
+  right: auto;
+  transform: translate(-50%, -50%);
+}
+
+/* src\components\status.css */
+.status {
+  display: inline-block;
+  inline-size: 0.75rem;
+  block-size: 0.75rem;
   border-radius: 999px;
-  background: var(--intent, var(--neutral));
-  box-shadow: 0 0 0 var(--avatar-badge-border) var(--surface);
-  color: var(--intent-fg, var(--neutral-fg));
-  font-size: calc(var(--avatar-badge-size) * 0.75);
-  font-weight: 600;
-  line-height: 1;
+  background: var(--neutral);
 }
 
-.avatar-badge-container .avatar-badge:where(.top-right, .top-left) {
-  top: calc(var(--avatar-badge-border) * -0.5);
+.status:where(.primary, .secondary, .success, .warning, .danger, .neutral) {
+  background: var(--intent);
 }
 
-.avatar-badge-container .avatar-badge:where(.bottom-right, .bottom-left) {
-  bottom: calc(var(--avatar-badge-border) * -0.5);
+.status.sm {
+  inline-size: 0.5rem;
+  block-size: 0.5rem;
 }
 
-.avatar-badge-container .avatar-badge:where(.top-right, .bottom-right) {
-  right: calc(var(--avatar-badge-border) * -0.5);
-}
-
-.avatar-badge-container .avatar-badge:where(.top-left, .bottom-left) {
-  left: calc(var(--avatar-badge-border) * -0.5);
-}
-
-.avatar-badge-container .avatar-badge:not(:empty) {
-  inline-size: auto;
-  min-inline-size: var(--avatar-badge-size);
-  padding-inline: calc(var(--avatar-badge-size) * 0.25);
+.status.lg {
+  inline-size: 1rem;
+  block-size: 1rem;
 }
 
 /* src\components\skeleton.css */
@@ -1513,50 +1541,30 @@ fieldset.field > legend {
 
 /* src\components\spinner.css */
 .spinner {
+  --spinner-size: 1.5rem;
+  --spinner-border: 2px;
+
   display: inline-block;
-  inline-size: 1.5rem;
-  block-size: 1.5rem;
-  border: 2px solid var(--text-muted);
+  inline-size: var(--spinner-size);
+  block-size: var(--spinner-size);
+  border: var(--spinner-border) solid var(--text-muted);
   border-inline-end-color: transparent;
   border-radius: 50%;
   animation: actual-spin 0.75s linear infinite;
   vertical-align: text-bottom;
 }
 
-.spinner.primary {
-  border-color: var(--primary);
-  border-inline-end-color: transparent;
-}
-.spinner.secondary {
-  border-color: var(--secondary);
-  border-inline-end-color: transparent;
-}
-.spinner.success {
-  border-color: var(--success);
-  border-inline-end-color: transparent;
-}
-.spinner.warning {
-  border-color: var(--warning);
-  border-inline-end-color: transparent;
-}
-.spinner.danger {
-  border-color: var(--danger);
-  border-inline-end-color: transparent;
-}
-.spinner.neutral {
-  border-color: var(--neutral);
+.spinner:where(.primary, .secondary, .success, .warning, .danger, .neutral) {
+  border-color: var(--intent);
   border-inline-end-color: transparent;
 }
 
 .spinner.sm {
-  inline-size: 1rem;
-  block-size: 1rem;
-  border-width: 2px;
+  --spinner-size: 1rem;
 }
 .spinner.lg {
-  inline-size: 3rem;
-  block-size: 3rem;
-  border-width: 3px;
+  --spinner-size: 3rem;
+  --spinner-border: 3px;
 }
 
 .btn.loading {

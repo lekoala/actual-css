@@ -24,6 +24,10 @@
   grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--grid-min, 16rem)), 1fr));
 }
 
+.grid-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
 .sidebar {
   display: flex;
   flex-wrap: wrap;
@@ -41,14 +45,7 @@
   min-inline-size: min(100%, var(--sidebar-content-min, 50%));
 }
 
-.form-row {
-  display: grid;
-  gap: 0.5rem;
-}
-
-@media (min-width: 48rem) {
-  .form-row {
-    grid-template-columns: 12rem 1fr;
-    align-items: center;
-  }
+.circle {
+  --radius: 999px;
+  border-radius: 999px;
 }

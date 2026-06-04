@@ -17,7 +17,6 @@ Vanilla CSS, Node.js build scripts, Playwright visual regression.
 
 - Components consume `--ui-*` variables from `variants.css`, then map to local `--component-*` variables. This separates variant logic from component styling.
 - Use `:where()` for default values to keep specificity low. Override with explicit `.component.sm` rules.
-- Run `npm run check` before committing — it forbids hardcoded colors, component-specific variants (`.btn-primary`), and `!important`.
 - Never use `filter: brightness()` on transparent backgrounds (outline/ghost/link variants). Use `--hover-overlay` box-shadow for solid variants, and `--ui-hover-bg: var(--surface-subtle)` for transparent ones.
 
 ## Component Defaults
@@ -27,8 +26,15 @@ Vanilla CSS, Node.js build scripts, Playwright visual regression.
 - **Avatars:** Support intent colors (`.avatar.primary`, `.avatar.success`).
 - **Interactive elements:** Always implement `:hover`, `:focus-visible`, and `:disabled` states.
 
-## Build
+## Dev Workflow
 
-- `npm run build` — inlines all `@import` into a single `dist/actual.css`
-- `npm run check` — linting + custom CSS checks
-- `npm run test:visual` — Playwright visual regression
+Demos reference `src/` directly. No build step needed during iteration.
+
+- `npm run dev` — watch mode for markdown → demo HTML regeneration
+- `npm run build` — CI only: inlines CSS and generates `dist/` for CDN
+- `npm run check` — linting (biome)
+- `npm run check:css` — manual or CI: custom CSS checks (hardcoded colors, forbidden variants)
+- `npm run test:visual` — milestones/PRs: Playwright visual regression
+
+NEVER regenerate demos, update playwright or build dist files unless asked. Doing it on each request
+is a waste of time.

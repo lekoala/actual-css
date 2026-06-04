@@ -2,7 +2,7 @@
 @import "./tokens.css";
 @import "./themes.css";
 @import "./intents.css";
-@import "./responsive.css";
+@import "./layout.css";
 @import "./components/button.css";
 @import "./components/badge.css";
 @import "./components/alert.css";
@@ -11,6 +11,8 @@
 @import "./components/navigation.css";
 @import "./components/data.css";
 @import "./components/avatar.css";
+@import "./components/indicator.css";
+@import "./components/status.css";
 @import "./components/skeleton.css";
 @import "./components/accordion.css";
 @import "./components/dialog.css";

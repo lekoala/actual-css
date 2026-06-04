@@ -1,13 +1,19 @@
 export function generateComponentsIndex(components) {
+  const customPreviews = {
+    dialog: `<div class="card" style="padding:1.5rem;max-width:16rem;"><h3 style="margin:0 0 0.5rem;font-size:1rem;">Confirm</h3><p style="margin:0 0 1rem;font-size:0.875rem;color:var(--text-muted);">Are you sure?</p><div class="cluster" style="justify-content:flex-end;"><button class="btn neutral outline sm">Cancel</button><button class="btn danger sm">Delete</button></div></div>`
+  };
+
   const cards = components.map(c => {
-    const firstSection = c.sections?.find(s => s.examples?.length > 0);
-    const firstExample = firstSection?.examples[0];
-    let preview = '';
-    if (firstExample) {
-      if (typeof firstExample === 'string') {
-        preview = firstExample;
-      } else if (firstExample.code) {
-        preview = firstExample.code;
+    let preview = customPreviews[c.name] || '';
+    if (!preview) {
+      const firstSection = c.sections?.find(s => s.examples?.length > 0);
+      const firstExample = firstSection?.examples[0];
+      if (firstExample) {
+        if (typeof firstExample === 'string') {
+          preview = firstExample;
+        } else if (firstExample.code) {
+          preview = firstExample.code;
+        }
       }
     }
     return `<article class="component-card">
@@ -27,7 +33,7 @@ export function generateComponentsIndex(components) {
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Components — Actual CSS</title>
-  <link rel="stylesheet" href="../../dist/actual.css">
+  <link rel="stylesheet" href="../../src/actual.css">
   <link rel="stylesheet" href="../../demo/styles/demo.css">
 </head>
 <body>

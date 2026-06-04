@@ -66,9 +66,13 @@ export function parseComponentMarkdown(md) {
     // Code block with directives
     if (line.startsWith('```')) {
       // Parse directives: ```html .inline .dark
+      // Also supports chained classes: ```html .grid.grid-2
       const parts = line.trim().split(/\s+/).filter(p => p);
       // parts[0] is '```html' or '```', parts[1+] are directives
-      const directives = parts.slice(1).map(p => p.replace(/^\./, '')).filter(p => p);
+      // Split each part by '.' to handle chained classes like .grid.grid-2
+      const directives = parts.slice(1).flatMap(p => 
+        p.split('.').filter(s => s).map(s => s.replace(/^\./, ''))
+      ).filter(p => p);
       
       i++;
       const codeLines = [];

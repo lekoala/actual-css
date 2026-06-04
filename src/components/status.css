@@ -1,0 +1,21 @@
+.status {
+  display: inline-block;
+  inline-size: 0.75rem;
+  block-size: 0.75rem;
+  border-radius: 999px;
+  background: var(--neutral);
+}
+
+.status:where(.primary, .secondary, .success, .warning, .danger, .neutral) {
+  background: var(--intent);
+}
+
+.status.sm {
+  inline-size: 0.5rem;
+  block-size: 0.5rem;
+}
+
+.status.lg {
+  inline-size: 1rem;
+  block-size: 1rem;
+}

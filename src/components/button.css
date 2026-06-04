@@ -9,6 +9,7 @@
   --btn-fg: var(--ui-fg, var(--intent-fg, var(--neutral-fg)));
   --btn-border: var(--ui-border, transparent);
 
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;

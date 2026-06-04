@@ -18,11 +18,11 @@ User avatar with initials, image, or icon.
 
 ## Default
 
-Default avatar with initials.
+Default avatar with initials. The wrapper `.avatar` contains the visual element.
 
 ```html .inline
-<span class="avatar">A</span>
-<span class="avatar primary">B</span>
+<div class="avatar"><abbr>JD</abbr></div>
+<div class="avatar primary"><abbr>AB</abbr></div>
 ```
 
 ## Image
@@ -40,12 +40,12 @@ Avatar with image.
 Intent colors.
 
 ```html .inline
-<span class="avatar primary">P</span>
-<span class="avatar secondary">S</span>
-<span class="avatar success">S</span>
-<span class="avatar warning">W</span>
-<span class="avatar danger">D</span>
-<span class="avatar neutral">N</span>
+<div class="avatar primary"><abbr>JD</abbr></div>
+<div class="avatar secondary"><abbr>AB</abbr></div>
+<div class="avatar success"><abbr>MN</abbr></div>
+<div class="avatar warning"><abbr>KL</abbr></div>
+<div class="avatar danger"><abbr>XY</abbr></div>
+<div class="avatar neutral"><abbr>OP</abbr></div>
 ```
 
 ## Sizes
@@ -53,9 +53,9 @@ Intent colors.
 Available sizes.
 
 ```html .inline
-<span class="avatar sm">S</span>
-<span class="avatar">M</span>
-<span class="avatar lg">L</span>
+<div class="avatar sm"><abbr>JD</abbr></div>
+<div class="avatar"><abbr>JD</abbr></div>
+<div class="avatar lg"><abbr>JD</abbr></div>
 ```
 
 ## Group
@@ -64,24 +64,47 @@ Overlapping avatar group.
 
 ```html .inline
 <div class="avatar-group">
-  <span class="avatar primary">A</span>
-  <span class="avatar secondary">B</span>
-  <span class="avatar success">C</span>
+  <div class="avatar primary"><abbr>JD</abbr></div>
+  <div class="avatar secondary"><abbr>AB</abbr></div>
+  <div class="avatar success"><abbr>MN</abbr></div>
 </div>
 ```
 
 ## Badge
 
-Status indicator dot. Wrap the avatar and badge in `.avatar-badge-container`.
+Notification badge with content.
 
 ```html .inline
-<div class="avatar-badge-container">
-  <span class="avatar">A</span>
-  <span class="avatar-badge success bottom-right"></span>
+<div class="avatar">
+  <abbr class="circle">JD</abbr>
+  <span class="indicator badge success">1</span>
 </div>
-<div class="avatar-badge-container">
-  <span class="avatar">A</span>
-  <span class="avatar-badge danger top-right">1</span>
+<div class="avatar">
+  <abbr class="circle">AB</abbr>
+  <span class="indicator badge danger">99</span>
+</div>
+<div class="avatar lg">
+  <abbr class="circle">MN</abbr>
+  <span class="indicator badge warning">3</span>
+</div>
+```
+
+## Status
+
+Status dot at bottom-right.
+
+```html .inline
+<div class="avatar">
+  <abbr class="circle">JD</abbr>
+  <span class="indicator-bottom status success" aria-label="online"></span>
+</div>
+<div class="avatar">
+  <abbr class="circle">AB</abbr>
+  <span class="indicator-bottom status neutral"></span>
+</div>
+<div class="avatar lg">
+  <abbr class="circle">MN</abbr>
+  <span class="indicator-bottom status success"></span>
 </div>
 ```
 

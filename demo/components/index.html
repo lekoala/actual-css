@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Components — Actual CSS</title>
-  <link rel="stylesheet" href="../../dist/actual.css">
+  <link rel="stylesheet" href="../../src/actual.css">
   <link rel="stylesheet" href="../../demo/styles/demo.css">
 </head>
 <body>
@@ -14,7 +14,7 @@
   <main class="center">
     <header>
       <h1>Components</h1>
-      <p>16 components with intents, variants, and sizes.</p>
+      <p>18 components with intents, variants, and sizes.</p>
     </header>
     <div class="components-grid">
       <article class="component-card">
@@ -46,8 +46,8 @@
     </article>
 <article class="component-card">
       <div class="card-preview">
-        <span class="avatar">A</span>
-<span class="avatar primary">B</span>
+        <div class="avatar"><abbr>JD</abbr></div>
+<div class="avatar primary"><abbr>AB</abbr></div>
       </div>
       <div class="card-info">
         <h3><a href="avatar.html">Avatar</a></h3>
@@ -106,16 +106,7 @@
     </article>
 <article class="component-card">
       <div class="card-preview">
-        <dialog class="dialog" id="confirm" open>
-  <form method="dialog" class="stack">
-    <h2>Confirm</h2>
-    <p>Are you sure?</p>
-    <div class="cluster">
-      <button class="btn neutral outline" value="cancel">Cancel</button>
-      <button class="btn danger" value="delete">Delete</button>
-    </div>
-  </form>
-</dialog>
+        <div class="card" style="padding:1.5rem;max-width:16rem;"><h3 style="margin:0 0 0.5rem;font-size:1rem;">Confirm</h3><p style="margin:0 0 1rem;font-size:0.875rem;color:var(--text-muted);">Are you sure?</p><div class="cluster" style="justify-content:flex-end;"><button class="btn neutral outline sm">Cancel</button><button class="btn danger sm">Delete</button></div></div>
       </div>
       <div class="card-info">
         <h3><a href="dialog.html">Dialog</a></h3>
@@ -164,6 +155,18 @@
     </article>
 <article class="component-card">
       <div class="card-preview">
+        <div class="card" style="padding:1.5rem; position:relative;">
+  <span class="indicator badge">New</span>
+  content
+</div>
+      </div>
+      <div class="card-info">
+        <h3><a href="indicator.html">Indicator</a></h3>
+        <p>Position any element on the corner of another element.</p>
+      </div>
+    </article>
+<article class="component-card">
+      <div class="card-preview">
         <div class="join">
   <button class="btn primary" type="button">Save</button>
   <button class="btn neutral outline" type="button">Cancel</button>
@@ -207,6 +210,21 @@
       <div class="card-info">
         <h3><a href="spinner.html">Spinner</a></h3>
         <p>Inline loading indicators.</p>
+      </div>
+    </article>
+<article class="component-card">
+      <div class="card-preview">
+        <span class="status"></span>
+<span class="status primary"></span>
+<span class="status secondary"></span>
+<span class="status success"></span>
+<span class="status warning"></span>
+<span class="status danger"></span>
+<span class="status neutral"></span>
+      </div>
+      <div class="card-info">
+        <h3><a href="status.html">Status</a></h3>
+        <p>Small colored dot to show the current status of an element.</p>
       </div>
     </article>
 <article class="component-card">

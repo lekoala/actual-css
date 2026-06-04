@@ -44,6 +44,12 @@
   min-inline-size: 0;
 }
 
+.alert-content ul,
+.alert-content ol {
+  padding-left: 0;
+  list-style-position: inside;
+}
+
 .alert.sm {
   --alert-pad: 0.75rem 0.875rem;
   font-size: 0.9375rem;
