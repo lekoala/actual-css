@@ -1,0 +1,71 @@
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown > summary {
+  list-style: none;
+}
+
+.dropdown > summary::-webkit-details-marker {
+  display: none;
+}
+
+.dropdown-menu {
+  --dropdown-menu-pad: 0.35rem;
+
+  position: absolute;
+  inset-block-start: calc(100% + 0.35rem);
+  inset-inline-end: 0;
+  z-index: 20;
+  display: grid;
+  gap: 0.25rem;
+  min-inline-size: max-content;
+  margin: 0;
+  padding: var(--dropdown-menu-pad);
+  overflow: hidden;
+  background: var(--surface-raised);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  list-style: none;
+}
+
+.dropdown-menu > .btn {
+  justify-content: flex-start;
+  inline-size: 100%;
+}
+
+.join:has(.dropdown[open]) {
+  align-items: flex-start;
+  overflow: visible;
+}
+
+.dropdown[open] {
+  margin-block-end: calc(var(--dropdown-open-space, 6rem) + 0.35rem);
+}
+
+.join > .dropdown {
+  display: inline-flex;
+}
+
+.join > .dropdown > summary.btn {
+  block-size: 100%;
+  border-radius: 0;
+}
+
+.join > .dropdown:not(:first-child) > summary.btn {
+  border-start-start-radius: 0;
+  border-end-start-radius: 0;
+}
+
+.join > .dropdown:not(:last-child) > summary.btn {
+  border-start-end-radius: 0;
+  border-end-end-radius: 0;
+}
+
+.join > .dropdown:last-child > summary.btn {
+  border-start-end-radius: var(--radius);
+  border-end-end-radius: var(--radius);
+}

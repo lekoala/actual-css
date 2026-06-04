@@ -9,6 +9,14 @@ Plain CSS component framework with semantic classes, universal variants, small t
 <button class="btn primary soft">Save</button>
 ```
 
+Optional named themes, including themes that override shape tokens, ship as separate files:
+
+```html
+<link rel="stylesheet" href="dist/actual.css">
+<link rel="stylesheet" href="dist/themes/dark.css">
+<html data-theme="dark">
+```
+
 ## Install
 
 ```bash
@@ -18,7 +26,7 @@ npm run check
 npm run serve
 ```
 
-Open `http://127.0.0.1:4173`.
+Open `http://127.0.0.1:4173/demo/`.
 
 ## Visual tests
 
@@ -29,14 +37,15 @@ npm run test:visual
 
 ## Principles
 
-- One unlayered CSS file, no consumer build step.
+- One unlayered base CSS file, no consumer build step.
 - Semantic classes: `.btn.primary.soft`, not `.btn-primary`.
-- Small public token API, explicit theming with `[data-theme]`.
+- Small public token API, opt-in explicit themes with `[data-theme]`.
 - Modern CSS only as centralized progressive enhancement.
 
 ## Docs
 
-- `docs/SPEC.md` — technical specification
-- `docs/AI.md` — usage guide for AI agents
+- `docs/spec.md` — technical specification
+- `docs/ai.md` — usage guide for AI agents
 - `docs/llms.txt` — component reference
+- `docs/recipes.md` — copyable product UI recipes
 - `docs/components/` — per-component docs

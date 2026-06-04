@@ -8,6 +8,7 @@ const allowedColorFiles = new Set([
   path.join(srcDir, 'themes.css'),
   path.join(srcDir, 'enhancements', 'color-mix.css')
 ]);
+const themesDir = path.join(srcDir, 'themes');
 
 const problems = [];
 
@@ -34,7 +35,11 @@ for (const file of await walk(srcDir)) {
     problems.push(`${rel}: avoid !important outside reduced-motion reset`);
   }
 
-  if (!allowedColorFiles.has(file) && /#[0-9a-fA-F]{3,8}\b|\brgba?\(|\bhsla?\(|\boklch\(/.test(css)) {
+  if (
+    !allowedColorFiles.has(file) &&
+    !file.startsWith(themesDir + path.sep) &&
+    /#[0-9a-fA-F]{3,8}\b|\brgba?\(|\bhsla?\(|\boklch\(/.test(css)
+  ) {
     problems.push(`${rel}: hard-coded color outside token/theme/enhancement files`);
   }
 }

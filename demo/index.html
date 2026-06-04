@@ -5,6 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Actual CSS Dashboard Demo</title>
   <link rel="stylesheet" href="../dist/actual.css">
+  <link rel="stylesheet" href="../dist/themes/dark.css" data-demo-theme-swatch>
+  <link rel="stylesheet" href="../dist/themes/dim.css" data-demo-theme-swatch>
+  <link rel="stylesheet" href="../dist/themes/corporate.css" data-demo-theme-swatch>
+  <link rel="stylesheet" href="../dist/themes/forest.css" data-demo-theme-swatch>
+  <link rel="stylesheet" href="../dist/themes/ocean.css" data-demo-theme-swatch>
+  <link rel="stylesheet" href="../dist/themes/sunset.css" data-demo-theme-swatch>
+  <link rel="stylesheet" href="../dist/themes/lavender.css" data-demo-theme-swatch>
+  <link rel="stylesheet" href="../dist/themes/mono.css" data-demo-theme-swatch>
+  <link rel="stylesheet" href="../dist/themes/square.css" data-demo-theme-swatch>
   <style>
     main { padding-block: 1rem 4rem; }
     section { margin-block: 1.5rem; }
@@ -30,6 +39,14 @@
     .demo-status-head { display: flex; justify-content: space-between; gap: .75rem; }
     .demo-order-actions { justify-content: flex-end; }
     .demo-footer { padding-block: 2rem; border-block-start: 1px solid var(--border); color: var(--text-muted); }
+    :is(header, section, footer)[id] { scroll-margin-block-start: 5rem; }
+    @supports (scroll-target-group: auto) {
+      .navbar-nav { scroll-target-group: auto; }
+      .navbar-nav .nav-link:target-current {
+        color: var(--text);
+        box-shadow: inset 0 -2px 0 var(--intent, var(--primary));
+      }
+    }
   </style>
 </head>
 <body>
@@ -37,9 +54,10 @@
     <nav class="navbar demo-top" aria-label="Primary navigation">
       <a class="navbar-brand" href="#top"><span class="avatar primary">A</span>Actual CSS</a>
       <ul class="navbar-nav">
-        <li><a class="nav-link" aria-current="page" href="#dashboard">Demo</a></li>
+        <li><a class="nav-link" href="#dashboard">Demo</a></li>
         <li><a class="nav-link" href="#components">Components</a></li>
         <li><a class="nav-link" href="#forms">Forms</a></li>
+        <li><a class="nav-link" href="#recipes">Recipes</a></li>
         <li><a class="nav-link" href="#themes">Themes</a></li>
       </ul>
       <div class="demo-topbar-actions">
@@ -54,6 +72,7 @@
           <option value="sunset">Sunset</option>
           <option value="lavender">Lavender</option>
           <option value="mono">Mono</option>
+          <option value="square">Square</option>
         </select>
         <a class="btn primary sm" href="../docs/SPEC.md">Spec</a>
       </div>
@@ -290,6 +309,86 @@
       </div>
     </section>
 
+    <section id="recipes" class="stack">
+      <div>
+        <h2>Recipes</h2>
+        <p class="demo-muted">Composable product patterns built from the existing components and layout primitives.</p>
+      </div>
+
+      <div class="grid demo-main-grid">
+        <article class="card stack">
+          <header>
+            <h3>Form card</h3>
+            <p class="demo-muted">Related fields with footer actions.</p>
+          </header>
+          <label class="field">
+            <span class="label">Name</span>
+            <input class="input" type="text" value="Mila Stone">
+          </label>
+          <label class="field">
+            <span class="label">Email</span>
+            <input class="input" type="email" value="mila@example.com">
+          </label>
+          <label class="choice">
+            <input class="switch primary" type="checkbox" checked>
+            Email notifications
+          </label>
+          <footer class="cluster demo-order-actions">
+            <button class="btn neutral outline" type="button">Cancel</button>
+            <button class="btn primary" type="button">Save</button>
+          </footer>
+        </article>
+
+        <article class="card stack" style="place-items: center; text-align: center">
+          <span class="badge primary soft">Empty state</span>
+          <h3>Nothing here yet</h3>
+          <p class="demo-muted">Create your first project to start tracking work.</p>
+          <button class="btn primary" type="button">New project</button>
+        </article>
+      </div>
+
+      <div class="grid demo-stat-grid" aria-label="Recipe metrics">
+        <article class="card metric">
+          <span class="metric-label">Revenue</span>
+          <strong class="metric-value">$42,200</strong>
+          <span class="badge success soft">+12%</span>
+          <progress class="progress success" max="100" value="72">72%</progress>
+        </article>
+        <article class="card metric">
+          <span class="metric-label">Completion</span>
+          <strong class="metric-value">46%</strong>
+          <span class="badge warning soft">-2%</span>
+          <meter class="meter" min="0" max="1" low="0.3" high="0.7" optimum="1" value="0.46">46%</meter>
+        </article>
+        <article class="card metric">
+          <span class="metric-label">Tickets</span>
+          <strong class="metric-value">14</strong>
+          <span class="badge neutral soft">Open</span>
+          <progress class="progress primary" max="100" value="35">35%</progress>
+        </article>
+      </div>
+
+      <article class="card stack">
+        <div>
+          <h3>Split button</h3>
+          <p class="demo-muted">Actual CSS uses `.join` for grouped buttons, with a details dropdown for extra actions.</p>
+        </div>
+        <div class="cluster">
+          <div class="join">
+            <button class="btn primary" type="button">Save</button>
+            <details class="dropdown">
+              <summary class="btn primary outline" aria-label="More save actions">More</summary>
+              <menu class="dropdown-menu">
+                <button class="btn neutral link" type="button">Save draft</button>
+                <button class="btn neutral link" type="button">Save and publish</button>
+                <button class="btn neutral link" type="button">Duplicate</button>
+              </menu>
+            </details>
+          </div>
+        </div>
+      </article>
+    </section>
+
     <section id="themes" class="stack">
       <div>
         <h2>Themes</h2>
@@ -305,6 +404,7 @@
         <article class="card demo-swatch stack" data-theme="sunset"><h3>Sunset</h3><button class="btn primary">Action</button><span class="badge success soft">Ready</span></article>
         <article class="card demo-swatch stack" data-theme="lavender"><h3>Lavender</h3><button class="btn primary">Action</button><span class="badge success soft">Ready</span></article>
         <article class="card demo-swatch stack" data-theme="mono"><h3>Mono</h3><button class="btn primary">Action</button><span class="badge success soft">Ready</span></article>
+        <article class="card demo-swatch stack" data-theme="square"><h3>Square</h3><button class="btn primary">Action</button><span class="badge success soft">Ready</span></article>
       </div>
     </section>
 
@@ -343,9 +443,24 @@
 
   <script>
     const switcher = document.getElementById('theme-switcher');
+    const loadedThemes = new Set(['light', 'dark', 'dim', 'corporate', 'forest', 'ocean', 'sunset', 'lavender', 'mono', 'square']);
+
     switcher.addEventListener('change', () => {
-      if (switcher.value) document.documentElement.dataset.theme = switcher.value;
-      else document.documentElement.removeAttribute('data-theme');
+      const theme = switcher.value;
+      if (!theme) {
+        document.documentElement.removeAttribute('data-theme');
+        return;
+      }
+
+      if (!loadedThemes.has(theme)) {
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = `../dist/themes/${theme}.css`;
+        document.head.append(link);
+        loadedThemes.add(theme);
+      }
+
+      document.documentElement.dataset.theme = theme;
     });
   </script>
 </body>

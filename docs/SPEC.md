@@ -45,23 +45,28 @@ Foreground tokens are explicit. Automatic contrast is not the source of truth.
 Themes use `[data-theme]` and must redefine surfaces, text, borders, intents, foregrounds, and `color-scheme`.
 
 ```html
+<link rel="stylesheet" href="actual.css">
+<link rel="stylesheet" href="themes/corporate.css">
 <html data-theme="corporate">
 <section data-theme="dark">...</section>
 ```
 
 Nested themes must work.
 
-Production MVP ships these themes: `light`, `dark`, `dim`, `corporate`, `forest`, `ocean`, `sunset`, `lavender`, `mono`. More themes are allowed only if they preserve contrast, surface quality, and the small token contract.
+The base `actual.css` ships light defaults plus automatic system dark mode. Explicit named themes are separate files in `dist/themes/`: `dark`, `dim`, `corporate`, `forest`, `ocean`, `sunset`, `lavender`, `mono`, `square`. More themes are allowed only if they preserve contrast, surface quality, and the small token contract.
+
+Themes may redefine shape tokens. For example, a square theme can set `--radius`, `--radius-sm`, and `--radius-lg` to `0`.
 
 ## Dark Mode
 
 Explicit dark mode is core:
 
 ```html
+<link rel="stylesheet" href="themes/dark.css">
 <html data-theme="dark">
 ```
 
-Automatic dark mode uses `prefers-color-scheme` only when no explicit root theme is present.
+Automatic dark mode is included in `actual.css` and uses `prefers-color-scheme` only when no explicit root theme is present.
 
 `light-dark()` is not required for the MVP.
 
@@ -102,8 +107,8 @@ The scaffold includes a Playwright visual regression setup for the kitchen-sink 
 
 ## Acceptance Criteria
 
-- `dist/actual.css` works as a single linked stylesheet.
-- Theme switching works via `[data-theme]`.
+- `dist/actual.css` works as a single linked stylesheet with base light and system dark.
+- Explicit named themes work when their `dist/themes/*.css` files are loaded.
 - `.btn.primary.soft`, `.badge.primary.soft`, and `.alert.primary.soft` share the same semantic meaning.
 - Components are mobile-first.
 - Container queries are enhancement only.

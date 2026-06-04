@@ -1,0 +1,28 @@
+[data-theme="dim"] {
+  color-scheme: dark;
+
+  --primary: hsl(210 92% 70%);
+  --primary-fg: hsl(218 28% 10%);
+  --secondary: hsl(270 70% 74%);
+  --secondary-fg: hsl(270 30% 10%);
+  --success: hsl(150 56% 58%);
+  --success-fg: hsl(150 38% 9%);
+  --warning: hsl(40 92% 64%);
+  --warning-fg: hsl(35 35% 10%);
+  --danger: hsl(0 74% 68%);
+  --danger-fg: hsl(0 35% 10%);
+  --neutral: hsl(220 10% 72%);
+  --neutral-fg: hsl(220 24% 10%);
+
+  --surface: hsl(220 20% 13%);
+  --surface-raised: hsl(220 18% 16%);
+  --surface-subtle: hsl(220 16% 20%);
+  --surface-solid: hsl(0 0% 96%);
+
+  --text: hsl(220 18% 94%);
+  --text-muted: hsl(220 10% 70%);
+  --text-subtle: hsl(220 8% 58%);
+  --border: hsl(220 12% 28%);
+  --focus: var(--primary);
+  --focus-ring: hsl(210 92% 70% / 0.28);
+}

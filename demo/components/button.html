@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Button — Actual CSS</title>
+  <link rel="stylesheet" href="../../dist/actual.css">
+  <link rel="stylesheet" href="../../demo/styles/demo.css">
+</head>
+<body>
+  <nav class="demo-nav">
+    <a href="../">← Components</a>
+    <a href="../../demo/">Kitchensink</a>
+  </nav>
+  <main class="center">
+    <header class="component-header">
+      <h1>Button</h1>
+      <p>Buttons allow the user to take actions or make choices.</p>
+    </header>
+    <div class="class-reference"><div class="class-group">
+<h3>Intents</h3>
+<div class="class-list"><code>.primary</code> <code>.secondary</code> <code>.success</code> <code>.warning</code> <code>.danger</code> <code>.neutral</code></div>
+</div>
+<div class="class-group">
+<h3>Variants</h3>
+<div class="class-list"><code>.solid</code> <code>.soft</code> <code>.outline</code> <code>.ghost</code> <code>.link</code></div>
+</div>
+<div class="class-group">
+<h3>Sizes</h3>
+<div class="class-list"><code>.sm</code> <code>.lg</code></div>
+</div></div>
+    <section class="component-section">
+<h2>Default</h2>
+<p>A button with default styling.</p>
+<div class="example-group">
+<div class="example-render"><button class="btn primary">Save</button></div>
+<div class="example-code">
+<pre><code>&lt;button class=&quot;btn primary&quot;&gt;Save&lt;/button&gt;</code></pre>
+</div>
+<div class="example-render"><button class="btn neutral">Cancel</button></div>
+<div class="example-code">
+<pre><code>&lt;button class=&quot;btn neutral&quot;&gt;Cancel&lt;/button&gt;</code></pre>
+</div>
+</div>
+</section>
+<section class="component-section">
+<h2>Colors</h2>
+<p>All intent colors with default solid styling.</p>
+<div class="example-group">
+<div class="example-render"><button class="btn primary">Primary</button></div>
+<div class="example-code">
+<pre><code>&lt;button class=&quot;btn primary&quot;&gt;Primary&lt;/button&gt;</code></pre>
+</div>
+<div class="example-render"><button class="btn secondary">Secondary</button></div>
+<div class="example-code">
+<pre><code>&lt;button class=&quot;btn secondary&quot;&gt;Secondary&lt;/button&gt;</code></pre>
+</div>
+<div class="example-render"><button class="btn success">Success</button></div>
+<div class="example-code">
+<pre><code>&lt;button class=&quot;btn success&quot;&gt;Success&lt;/button&gt;</code></pre>
+</div>
+<div class="example-render"><button class="btn warning">Warning</button></div>
+<div class="example-code">
+<pre><code>&lt;button class=&quot;btn warning&quot;&gt;Warning&lt;/button&gt;</code></pre>
+</div>
+<div class="example-render"><button class="btn danger">Danger</button></div>
+<div class="example-code">
+<pre><code>&lt;button class=&quot;btn danger&quot;&gt;Danger&lt;/button&gt;</code></pre>
+</div>
+<div class="example-render"><button class="btn neutral">Neutral</button></div>
+<div class="example-code">
+<pre><code>&lt;button class=&quot;btn neutral&quot;&gt;Neutral&lt;/button&gt;</code></pre>
+</div>
+</div>
+</section>
+<section class="component-section">
+<h2>Variants</h2>
+<p>Primary intent across all variants.</p>
+<div class="example-group">
+<div class="example-render"><button class="btn primary solid">Solid</button></div>
+<div class="example-code">
+<pre><code>&lt;button class=&quot;btn primary solid&quot;&gt;Solid&lt;/button&gt;</code></pre>
+</div>
+<div class="example-render"><button class="btn primary soft">Soft</button></div>
+<div class="example-code">
+<pre><code>&lt;button class=&quot;btn primary soft&quot;&gt;Soft&lt;/button&gt;</code></pre>
+</div>
+<div class="example-render"><button class="btn primary outline">Outline</button></div>
+<div class="example-code">
+<pre><code>&lt;button class=&quot;btn primary outline&quot;&gt;Outline&lt;/button&gt;</code></pre>
+</div>
+<div class="example-render"><button class="btn primary ghost">Ghost</button></div>
+<div class="example-code">
+<pre><code>&lt;button class=&quot;btn primary ghost&quot;&gt;Ghost&lt;/button&gt;</code></pre>
+</div>
+<div class="example-render"><button class="btn primary link">Link</button></div>
+<div class="example-code">
+<pre><code>&lt;button class=&quot;btn primary link&quot;&gt;Link&lt;/button&gt;</code></pre>
+</div>
+</div>
+</section>
+<section class="component-section">
+<h2>Sizes</h2>
+<p>Available sizes.</p>
+<div class="example-group">
+<div class="example-render"><button class="btn primary sm">Small</button></div>
+<div class="example-code">
+<pre><code>&lt;button class=&quot;btn primary sm&quot;&gt;Small&lt;/button&gt;</code></pre>
+</div>
+<div class="example-render"><button class="btn primary">Default</button></div>
+<div class="example-code">
+<pre><code>&lt;button class=&quot;btn primary&quot;&gt;Default&lt;/button&gt;</code></pre>
+</div>
+<div class="example-render"><button class="btn primary lg">Large</button></div>
+<div class="example-code">
+<pre><code>&lt;button class=&quot;btn primary lg&quot;&gt;Large&lt;/button&gt;</code></pre>
+</div>
+</div>
+</section>
+<section class="component-section">
+<h2>States</h2>
+<p>Disabled and loading states.</p>
+<div class="example-group">
+<div class="example-render"><button class="btn primary" disabled>Disabled</button></div>
+<div class="example-code">
+<pre><code>&lt;button class=&quot;btn primary&quot; disabled&gt;Disabled&lt;/button&gt;</code></pre>
+</div>
+<div class="example-render"><button class="btn primary" aria-disabled="true">ARIA Disabled</button></div>
+<div class="example-code">
+<pre><code>&lt;button class=&quot;btn primary&quot; aria-disabled=&quot;true&quot;&gt;ARIA Disabled&lt;/button&gt;</code></pre>
+</div>
+<div class="example-render"><button class="btn primary loading">Loading</button></div>
+<div class="example-code">
+<pre><code>&lt;button class=&quot;btn primary loading&quot;&gt;Loading&lt;/button&gt;</code></pre>
+</div>
+</div>
+</section>
+<section class="component-section">
+<h2>With icon</h2>
+<p>Buttons with icon content.</p>
+<div class="example-group">
+<div class="example-render"><button class="btn primary">★ Favorite</button></div>
+<div class="example-code">
+<pre><code>&lt;button class=&quot;btn primary&quot;&gt;★ Favorite&lt;/button&gt;</code></pre>
+</div>
+<div class="example-render"><button class="btn primary">Save →</button></div>
+<div class="example-code">
+<pre><code>&lt;button class=&quot;btn primary&quot;&gt;Save →&lt;/button&gt;</code></pre>
+</div>
+</div>
+</section>
+    
+<section class="component-section">
+<h2>Accessibility</h2>
+<ul>
+<li>Use a real &lt;button&gt; element for actions.</li>
+<li>Use &lt;a&gt; for navigation links.</li>
+<li>Use disabled attribute or aria-disabled for inactive buttons.</li>
+</ul>
+</section>
+
+  </main>
+  <footer class="demo-footer">
+    <a href="../">Back to components</a>
+  </footer>
+</body>
+</html>

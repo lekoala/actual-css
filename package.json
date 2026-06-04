@@ -11,8 +11,9 @@
     "lint:fix": "biome check --write && node scripts/check-css.js",
     "test": "npm run check",
     "test:visual": "playwright test",
+    "test:visual:update": "playwright test --update-snapshots",
     "dev": "node scripts/build.js --watch",
-    "serve": "npx http-server demo -p 4173 -c-1"
+    "serve": "npx http-server . -p 4173 -c-1"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.2.0",
