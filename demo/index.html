@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Actual CSS Dashboard Demo</title>
+  <link rel="stylesheet" href="../dist/actual.css">
+  <style>
+    main { padding-block: 1rem 4rem; }
+    section { margin-block: 1.5rem; }
+    h1, h2, h3, h4 { line-height: 1.15; }
+    h1 { font-size: clamp(2rem, 5vw, 4rem); margin-block: .5rem; }
+    h2 { margin-block: 0 .5rem; }
+    h3, h4 { margin-block: 0; }
+    .demo-muted { color: var(--text-muted); }
+    .demo-subtle { color: var(--text-subtle); }
+    .demo-top { position: sticky; inset-block-start: .75rem; z-index: 10; backdrop-filter: blur(12px); }
+    .demo-topbar-actions { display: flex; align-items: center; justify-content: flex-end; gap: .5rem; flex-wrap: nowrap; }
+    .demo-topbar-actions > * { flex: 0 0 auto; }
+    .demo-hero { padding-block: 2rem; }
+    .demo-toolbar { justify-content: space-between; }
+    .demo-heading { display: flex; align-items: center; gap: .75rem; flex-wrap: wrap; }
+    .demo-heading h1 { margin: 0; }
+    .demo-card-title { margin: 0; }
+    .demo-stat-grid { --grid-min: 13rem; }
+    .demo-main-grid { --grid-min: 20rem; align-items: start; }
+    .demo-theme-grid { --grid-min: 12rem; }
+    .demo-swatch { min-block-size: 8rem; }
+    .demo-status-row { display: grid; gap: .35rem; }
+    .demo-status-head { display: flex; justify-content: space-between; gap: .75rem; }
+    .demo-order-actions { justify-content: flex-end; }
+    .demo-footer { padding-block: 2rem; border-block-start: 1px solid var(--border); color: var(--text-muted); }
+  </style>
+</head>
+<body>
+  <main class="center stack">
+    <nav class="navbar demo-top" aria-label="Primary navigation">
+      <a class="navbar-brand" href="#top"><span class="avatar primary">A</span>Actual CSS</a>
+      <ul class="navbar-nav">
+        <li><a class="nav-link" aria-current="page" href="#dashboard">Demo</a></li>
+        <li><a class="nav-link" href="#components">Components</a></li>
+        <li><a class="nav-link" href="#forms">Forms</a></li>
+        <li><a class="nav-link" href="#themes">Themes</a></li>
+      </ul>
+      <div class="demo-topbar-actions">
+        <select class="select sm" id="theme-switcher" aria-label="Switch theme">
+          <option value="">System</option>
+          <option value="light">Light</option>
+          <option value="dark">Dark</option>
+          <option value="dim">Dim</option>
+          <option value="corporate">Corporate</option>
+          <option value="forest">Forest</option>
+          <option value="ocean">Ocean</option>
+          <option value="sunset">Sunset</option>
+          <option value="lavender">Lavender</option>
+          <option value="mono">Mono</option>
+        </select>
+        <a class="btn primary sm" href="../docs/SPEC.md">Spec</a>
+      </div>
+    </nav>
+
+    <header id="top" class="demo-hero stack">
+      <ol class="breadcrumb" aria-label="Breadcrumb">
+        <li><a href="#top">Actual</a></li>
+        <li><a href="#dashboard">Demo</a></li>
+        <li aria-current="page">Kitchen sink</li>
+      </ol>
+      <div class="cluster demo-toolbar">
+        <div class="stack">
+          <div class="demo-heading">
+            <h1>Dashboard kitchen sink</h1>
+            <span class="badge success soft">Live v0.1.0</span>
+          </div>
+          <p class="demo-muted">A broad, Oat-style product dashboard showing navigation, metrics, tabs, tables, alerts, forms, feedback, themes, and layout primitives.</p>
+        </div>
+        <div class="cluster">
+          <label class="choice"><input class="switch primary" type="checkbox" checked> Auto-refresh</label>
+          <button class="btn neutral outline" type="button" onclick="document.getElementById('delete-dialog').showModal()">Open dialog</button>
+        </div>
+      </div>
+    </header>
+
+    <section id="dashboard" class="grid demo-stat-grid" aria-label="Key metrics">
+      <article class="card raised metric">
+        <span class="metric-label">Revenue</span>
+        <strong class="metric-value">$42,128</strong>
+        <span class="badge success soft">+12.5% vs last month</span>
+      </article>
+      <article class="card raised metric">
+        <span class="metric-label">Active users</span>
+        <strong class="metric-value">2,847</strong>
+        <span class="badge danger soft">-3.2% vs last month</span>
+      </article>
+      <article class="card raised metric">
+        <span class="metric-label">Retention</span>
+        <strong class="metric-value">83.24%</strong>
+        <span class="badge success soft">+0.8% vs last month</span>
+      </article>
+      <article class="card raised metric">
+        <span class="metric-label">Uptime</span>
+        <strong class="metric-value">99.99%</strong>
+        <span class="badge success outline">Healthy</span>
+      </article>
+    </section>
+
+    <section class="card raised stack">
+      <div class="tabs primary" role="tablist" aria-label="Dashboard views">
+        <button class="tab" type="button" role="tab" aria-selected="true">Overview</button>
+        <button class="tab" type="button" role="tab" aria-selected="false">Performance</button>
+        <button class="tab" type="button" role="tab" aria-selected="false">Reports</button>
+      </div>
+
+      <div class="grid demo-main-grid">
+        <article class="card stack">
+          <div class="cluster demo-toolbar">
+            <div>
+              <h3>Weekly traffic</h3>
+              <p class="demo-muted">Dummy operational data for component testing.</p>
+            </div>
+            <span class="badge primary soft">Live</span>
+          </div>
+          <div class="grid" style="--grid-min: 9rem">
+            <div class="metric"><span class="metric-label">Avg response</span><strong class="metric-value">142 ms</strong></div>
+            <div class="metric"><span class="metric-label">Error rate</span><strong class="metric-value">0.03%</strong></div>
+          </div>
+          <div class="stack">
+            <div class="demo-status-head"><strong>API</strong><span class="demo-muted">72%</span></div>
+            <progress class="progress primary" max="100" value="72">72%</progress>
+            <div class="demo-status-head"><strong>Workers</strong><span class="demo-muted">42%</span></div>
+            <progress class="progress success" max="100" value="42">42%</progress>
+            <div class="demo-status-head"><strong>Queue</strong><span class="demo-muted">86%</span></div>
+            <progress class="progress warning" max="100" value="86">86%</progress>
+          </div>
+        </article>
+
+        <article class="card stack">
+          <h3>Monthly summary</h3>
+          <div class="table-wrap">
+            <table class="table">
+              <thead><tr><th>Metric</th><th>Value</th><th>Change</th></tr></thead>
+              <tbody>
+                <tr><td>Page views</td><td>1,234,567</td><td><span class="badge success soft">+8%</span></td></tr>
+                <tr><td>Bounce rate</td><td>42.3%</td><td><span class="badge warning soft">+2.1%</span></td></tr>
+                <tr><td>Avg session</td><td>4m 12s</td><td><span class="badge success soft">+15s</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="grid demo-main-grid">
+      <article class="card stack">
+        <h2>Recent activity</h2>
+        <div class="stack">
+          <div class="cluster"><span class="badge primary soft">Deploy</span><div><strong>Production deploy #1847</strong><br><span class="demo-muted">2 minutes ago by Alice</span></div></div>
+          <div class="cluster"><span class="badge warning soft">Alert</span><div><strong>High memory usage on worker-3</strong><br><span class="demo-muted">18 minutes ago — auto-resolved</span></div></div>
+          <div class="cluster"><span class="badge success soft">Merge</span><div><strong>PR #392: Update auth middleware</strong><br><span class="demo-muted">1 hour ago by Bob</span></div></div>
+          <div class="cluster"><span class="badge danger soft">Incident</span><div><strong>API latency spike resolved</strong><br><span class="demo-muted">3 hours ago — duration: 4m 22s</span></div></div>
+          <div class="cluster"><span class="badge neutral soft">Config</span><div><strong>Updated rate limits</strong><br><span class="demo-muted">5 hours ago by Carol</span></div></div>
+        </div>
+      </article>
+
+      <article class="card stack">
+        <h2>Server status</h2>
+        <div class="demo-status-row">
+          <div class="demo-status-head"><strong>CPU usage</strong><span class="badge success soft">Normal</span></div>
+          <meter class="meter" min="0" max="100" low="70" high="90" optimum="35" value="42">42%</meter>
+          <span class="demo-muted">42% — 8 cores</span>
+        </div>
+        <div class="demo-status-row">
+          <div class="demo-status-head"><strong>Memory</strong><span class="badge warning soft">High</span></div>
+          <meter class="meter" min="0" max="16" low="10" high="14" optimum="8" value="12.5">12.5 GB</meter>
+          <span class="demo-muted">12.5 / 16 GB used</span>
+        </div>
+        <div class="demo-status-row"><strong>Network in</strong><span class="demo-muted">1.2 Gbps</span></div>
+        <div class="demo-status-row"><strong>Network out</strong><span class="demo-muted">840 Mbps</span></div>
+      </article>
+    </section>
+
+    <section class="card raised stack">
+      <div class="cluster demo-toolbar">
+        <div>
+          <h2>Recent orders</h2>
+          <p class="demo-muted">Tables, badges, actions, filters, and pagination.</p>
+        </div>
+        <label class="field">
+          <span class="label">Search</span>
+          <input class="input" type="search" placeholder="Order or customer">
+        </label>
+      </div>
+      <div class="cluster">
+        <button class="btn primary sm">All</button>
+        <button class="btn neutral outline sm">Pending</button>
+        <button class="btn neutral outline sm">Shipped</button>
+      </div>
+      <div class="table-wrap">
+        <table class="table">
+          <thead><tr><th>Order</th><th>Customer</th><th>Amount</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody>
+            <tr><td><code>#ORD-7291</code></td><td>Alice Johnson</td><td>$249.00</td><td><span class="badge success soft">Delivered</span></td><td><div class="cluster demo-order-actions"><a class="btn neutral link" href="#">View</a><a class="btn neutral link" href="#">Edit</a></div></td></tr>
+            <tr><td><code>#ORD-7292</code></td><td>Bob Chen</td><td>$1,450.00</td><td><span class="badge warning soft">Pending</span></td><td><div class="cluster demo-order-actions"><a class="btn neutral link" href="#">View</a><a class="btn neutral link" href="#">Edit</a></div></td></tr>
+            <tr><td><code>#ORD-7293</code></td><td>Carol Davis</td><td>$89.50</td><td><span class="badge primary soft">Processing</span></td><td><div class="cluster demo-order-actions"><a class="btn neutral link" href="#">View</a><a class="btn neutral link" href="#">Edit</a></div></td></tr>
+            <tr><td><code>#ORD-7294</code></td><td>David Park</td><td>$672.00</td><td><span class="badge secondary soft">Shipped</span></td><td><div class="cluster demo-order-actions"><a class="btn neutral link" href="#">View</a><a class="btn neutral link" href="#">Edit</a></div></td></tr>
+            <tr><td><code>#ORD-7295</code></td><td>Emma Wilson</td><td>$34.99</td><td><span class="badge danger soft">Cancelled</span></td><td><div class="cluster demo-order-actions"><a class="btn neutral link" href="#">View</a><button class="btn danger link" type="button" onclick="document.getElementById('delete-dialog').showModal()">Delete</button></div></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="cluster demo-toolbar">
+        <span class="demo-muted">Showing 1–5 of 243</span>
+        <ol class="pagination" aria-label="Pagination">
+          <li><a class="page-link" href="#">Prev</a></li>
+          <li><a class="page-link primary" aria-current="page" href="#">1</a></li>
+          <li><a class="page-link" href="#">2</a></li>
+          <li><a class="page-link" href="#">3</a></li>
+          <li><a class="page-link" href="#">Next</a></li>
+        </ol>
+      </div>
+    </section>
+
+    <section id="components" class="grid demo-main-grid">
+      <article class="card stack">
+        <h2>System notifications</h2>
+        <div class="alert primary">Info: System maintenance scheduled for Sunday 2:00 AM UTC.</div>
+        <div class="alert success">Success: All backups completed successfully.</div>
+        <div class="alert warning">Warning: SSL certificate expires in 7 days.</div>
+        <div class="alert danger">Error: Payment gateway timeout — 3 transactions affected.</div>
+      </article>
+
+      <article class="card stack">
+        <h2>Toast notifications</h2>
+        <div class="toast-stack">
+          <div class="toast success soft"><strong>Success toast</strong><span class="badge success">Done</span></div>
+          <div class="toast warning soft"><strong>Warning toast</strong><span class="badge warning">Check</span></div>
+          <div class="toast danger soft"><strong>Error toast</strong><span class="badge danger">Failed</span></div>
+          <div class="toast primary soft"><strong>Info toast</strong><span class="badge primary">New</span></div>
+        </div>
+      </article>
+
+      <article class="card stack">
+        <h2>FAQ</h2>
+        <div class="accordion">
+          <details open>
+            <summary>How do I reset my password?</summary>
+            <div class="accordion-body">Navigate to Settings → Security and click reset password. Links expire after 24 hours.</div>
+          </details>
+          <details>
+            <summary>What export formats are supported?</summary>
+            <div class="accordion-body">CSV, JSON, and XLSX are available for dashboard exports.</div>
+          </details>
+          <details>
+            <summary>Can I integrate with third-party services?</summary>
+            <div class="accordion-body">Use REST webhooks and scoped API tokens for external integrations.</div>
+          </details>
+        </div>
+      </article>
+
+      <article class="card stack">
+        <h2>Loading placeholder</h2>
+        <div class="cluster"><span class="skeleton avatar"></span><span class="skeleton title"></span></div>
+        <span class="skeleton text"></span>
+        <span class="skeleton text" style="max-inline-size: 24rem"></span>
+        <span class="skeleton text" style="max-inline-size: 16rem"></span>
+      </article>
+    </section>
+
+    <section id="forms" class="card raised stack">
+      <div>
+        <h2>Account settings</h2>
+        <p class="demo-muted">Forms, validation, switches, choices, inputs, textarea, and actions.</p>
+      </div>
+      <div class="grid demo-main-grid">
+        <label class="field"><span class="label">Full name</span><input class="input" value="Taylor Morgan"></label>
+        <label class="field danger"><span class="label">Email</span><input class="input" type="email" aria-invalid="true" value="taylor@example"><span class="help">Please enter a valid email address.</span></label>
+        <label class="field"><span class="label">Role</span><select class="select"><option>Administrator</option><option>Editor</option><option>Viewer</option></select></label>
+        <label class="field"><span class="label">Start date</span><input class="input" type="date"></label>
+        <label class="field"><span class="label">Brand color</span><input class="input" type="color" value="#3366ff"></label>
+        <label class="field"><span class="label">Notification volume</span><input class="input" type="range"></label>
+        <label class="field" style="grid-column: 1 / -1"><span class="label">Bio</span><textarea class="textarea">This entire dashboard is built with Actual CSS.</textarea></label>
+      </div>
+      <div class="grid" style="--grid-min: 16rem">
+        <fieldset class="field"><legend class="label">Theme</legend><label class="choice"><input class="radio primary" name="theme-pref" type="radio"> Light</label><label class="choice"><input class="radio primary" name="theme-pref" type="radio"> Dark</label><label class="choice"><input class="radio primary" name="theme-pref" type="radio" checked> System</label></fieldset>
+        <fieldset class="field"><legend class="label">Email preferences</legend><label class="choice"><input class="check success" type="checkbox" checked> Product updates</label><label class="choice"><input class="check success" type="checkbox"> Marketing emails</label><label class="choice"><input class="check success" type="checkbox" checked> Security alerts</label></fieldset>
+        <fieldset class="field"><legend class="label">Security</legend><label class="choice"><input class="switch primary" type="checkbox" checked> Two-factor authentication</label><label class="choice"><input class="switch secondary" type="checkbox"> API access</label></fieldset>
+      </div>
+      <div class="cluster">
+        <button class="btn primary">Save changes</button>
+        <button class="btn neutral outline">Cancel</button>
+        <button class="btn danger soft">Delete account</button>
+      </div>
+    </section>
+
+    <section id="themes" class="stack">
+      <div>
+        <h2>Themes</h2>
+        <p class="demo-muted">Themes are plain custom-property overrides and can be applied globally or locally.</p>
+      </div>
+      <div class="grid demo-theme-grid">
+        <article class="card demo-swatch stack" data-theme="light"><h3>Light</h3><button class="btn primary">Action</button><span class="badge success soft">Ready</span></article>
+        <article class="card demo-swatch stack" data-theme="dark"><h3>Dark</h3><button class="btn primary">Action</button><span class="badge success soft">Ready</span></article>
+        <article class="card demo-swatch stack" data-theme="dim"><h3>Dim</h3><button class="btn primary">Action</button><span class="badge success soft">Ready</span></article>
+        <article class="card demo-swatch stack" data-theme="corporate"><h3>Corporate</h3><button class="btn primary">Action</button><span class="badge success soft">Ready</span></article>
+        <article class="card demo-swatch stack" data-theme="forest"><h3>Forest</h3><button class="btn primary">Action</button><span class="badge success soft">Ready</span></article>
+        <article class="card demo-swatch stack" data-theme="ocean"><h3>Ocean</h3><button class="btn primary">Action</button><span class="badge success soft">Ready</span></article>
+        <article class="card demo-swatch stack" data-theme="sunset"><h3>Sunset</h3><button class="btn primary">Action</button><span class="badge success soft">Ready</span></article>
+        <article class="card demo-swatch stack" data-theme="lavender"><h3>Lavender</h3><button class="btn primary">Action</button><span class="badge success soft">Ready</span></article>
+        <article class="card demo-swatch stack" data-theme="mono"><h3>Mono</h3><button class="btn primary">Action</button><span class="badge success soft">Ready</span></article>
+      </div>
+    </section>
+
+    <section class="sidebar">
+      <aside class="card subtle stack">
+        <h2>Layout helpers</h2>
+        <p class="demo-muted">Small primitives cover common layout needs without utility soup.</p>
+        <div class="cluster"><span class="badge neutral outline">.stack</span><span class="badge neutral outline">.cluster</span><span class="badge neutral outline">.grid</span><span class="badge neutral outline">.sidebar</span><span class="badge neutral outline">.center</span></div>
+      </aside>
+      <article class="card stack">
+        <h2>Nested theme island</h2>
+        <div class="card stack" data-theme="dark">
+          <h3>Dark island inside normal content</h3>
+          <p>Nested themes redefine surface, text, border, intent, and color-scheme tokens.</p>
+          <div class="cluster"><button class="btn primary">Save</button><button class="btn neutral outline">Cancel</button></div>
+        </div>
+      </article>
+    </section>
+
+    <footer class="demo-footer cluster demo-toolbar">
+      <span>Actual CSS kitchen sink demo</span>
+      <span class="demo-subtle">Plain CSS framework scaffold</span>
+    </footer>
+  </main>
+
+  <dialog class="dialog" id="delete-dialog">
+    <form method="dialog" class="stack">
+      <h2>Confirm deletion</h2>
+      <p class="demo-muted">Are you sure you want to delete order #ORD-7295? This action cannot be undone.</p>
+      <div class="cluster demo-toolbar">
+        <button class="btn neutral outline" value="cancel">Cancel</button>
+        <button class="btn danger" value="delete">Delete order</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script>
+    const switcher = document.getElementById('theme-switcher');
+    switcher.addEventListener('change', () => {
+      if (switcher.value) document.documentElement.dataset.theme = switcher.value;
+      else document.documentElement.removeAttribute('data-theme');
+    });
+  </script>
+</body>
+</html>

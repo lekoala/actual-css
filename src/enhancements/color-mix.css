@@ -1,0 +1,15 @@
+/* Centralized modern color enhancement. Components do not duplicate this logic. */
+@supports (color: color-mix(in oklch, red, white)) {
+  .soft {
+    --ui-bg: color-mix(in oklch, var(--intent, var(--neutral)), var(--surface) 88%);
+    --ui-border: color-mix(in oklch, var(--intent, var(--neutral)), var(--surface) 65%);
+  }
+
+  :where(.btn, a.badge, button.badge, a.alert, button.alert):where(.ghost, .soft):hover {
+    --ui-hover-bg: color-mix(in oklch, var(--intent, var(--neutral)), transparent 88%);
+  }
+
+  :where(.btn, a.badge, button.badge, a.alert, button.alert).outline:hover {
+    --ui-hover-bg: color-mix(in oklch, var(--intent, var(--neutral)), transparent 92%);
+  }
+}

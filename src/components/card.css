@@ -1,0 +1,29 @@
+.card {
+  --card-pad: 1rem;
+  --card-radius: var(--radius-lg);
+
+  background: var(--surface-raised);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: var(--card-radius);
+  padding: var(--card-pad);
+}
+
+.card.raised { box-shadow: var(--shadow); }
+.card.subtle { background: var(--surface-subtle); }
+.card.solid { background: var(--surface-solid); color: var(--surface); border-color: transparent; }
+.card.sm { --card-pad: .75rem; --card-radius: var(--radius); }
+.card.lg { --card-pad: 1.5rem; --card-radius: calc(var(--radius-lg) + .25rem); }
+
+.card > :first-child { margin-block-start: 0; }
+.card > :last-child { margin-block-end: 0; }
+
+
+.card-body {
+  display: grid;
+  gap: 1rem;
+}
+
+.card-body.with-media {
+  align-items: start;
+}

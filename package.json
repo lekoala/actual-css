@@ -1,0 +1,19 @@
+{
+  "name": "actual-css",
+  "version": "0.1.0",
+  "description": "Plain CSS component framework with semantic classes, universal variants, small tokens, strong themes, and progressive enhancements.",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "build": "node scripts/build.js",
+    "check": "node scripts/check-css.js",
+    "test": "npm run check",
+    "test:visual": "playwright test",
+    "dev": "node scripts/build.js --watch",
+    "serve": "npx http-server demo -p 4173 -c-1"
+  },
+  "devDependencies": {
+    "http-server": "^14.1.1",
+    "@playwright/test": "^1.44.0"
+  }
+}

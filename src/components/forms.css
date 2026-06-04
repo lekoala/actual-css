@@ -1,0 +1,165 @@
+.field {
+  display: grid;
+  gap: .375rem;
+  color: var(--text);
+}
+
+
+fieldset.field {
+  min-inline-size: 0;
+  margin: 0;
+  padding: .875rem 1rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface-subtle);
+}
+
+fieldset.field > legend {
+  padding-inline: .375rem;
+  color: var(--text);
+  font-size: .875rem;
+  font-weight: 700;
+}
+
+.label {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.help {
+  color: var(--text-muted);
+  font-size: .875rem;
+}
+
+.input,
+.textarea,
+.select {
+  --field-border: var(--border);
+  --field-bg: var(--surface);
+  --field-fg: var(--text);
+
+  inline-size: 100%;
+  min-block-size: 2.5rem;
+  padding-inline: .75rem;
+  border: 1px solid var(--field-border);
+  border-radius: var(--radius);
+  background: var(--field-bg);
+  color: var(--field-fg);
+  outline: none;
+  transition: border-color var(--duration), box-shadow var(--duration), background-color var(--duration), color var(--duration);
+}
+
+.textarea { min-block-size: 6rem; padding-block: .65rem; resize: vertical; }
+
+.check,
+.radio {
+  --choice-border: var(--border);
+  --choice-bg: var(--surface);
+  --choice-mark: var(--primary-fg);
+
+  display: inline-grid;
+  place-content: center;
+  inline-size: 1.125em;
+  block-size: 1.125em;
+  margin: 0;
+  border: 1px solid var(--choice-border);
+  background: var(--choice-bg);
+  color: var(--choice-mark);
+  accent-color: var(--primary);
+  appearance: none;
+  cursor: pointer;
+}
+
+.check { border-radius: var(--radius-sm); }
+.radio { border-radius: 999px; }
+
+.check::before,
+.radio::before {
+  content: "";
+  transform: scale(0);
+  transition: transform var(--duration);
+}
+
+.check::before {
+  inline-size: .58em;
+  block-size: .34em;
+  border-inline-start: 2px solid currentColor;
+  border-block-end: 2px solid currentColor;
+  transform: translateY(-.06em) rotate(-45deg) scale(0);
+}
+
+.radio::before {
+  inline-size: .5em;
+  block-size: .5em;
+  border-radius: 999px;
+  background: currentColor;
+}
+
+.check:checked,
+.radio:checked {
+  --choice-border: var(--intent, var(--primary));
+  --choice-bg: var(--intent, var(--primary));
+}
+
+.check:checked::before { transform: translateY(-.06em) rotate(-45deg) scale(1); }
+.radio:checked::before { transform: scale(1); }
+
+.choice {
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.input:hover,
+.textarea:hover,
+.select:hover,
+.check:hover,
+.radio:hover {
+  --field-border: var(--text-subtle);
+  --choice-border: var(--text-subtle);
+}
+
+.input:focus-visible,
+.textarea:focus-visible,
+.select:focus-visible,
+.check:focus-visible,
+.radio:focus-visible {
+  border-color: var(--focus);
+  box-shadow: 0 0 0 3px var(--focus-ring);
+}
+
+.field.danger,
+.input[aria-invalid="true"],
+.textarea[aria-invalid="true"],
+.select[aria-invalid="true"] {
+  --field-border: var(--danger);
+}
+
+.field.danger .help { color: var(--danger); }
+
+.input:disabled,
+.textarea:disabled,
+.select:disabled,
+.check:disabled,
+.radio:disabled {
+  --field-bg: var(--surface-subtle);
+  --field-fg: var(--text-subtle);
+  --field-border: var(--border);
+  --choice-bg: var(--surface-subtle);
+  --choice-border: var(--border);
+  --choice-mark: var(--text-subtle);
+  cursor: not-allowed;
+  opacity: 1;
+}
+
+.choice:has(:disabled) {
+  color: var(--text-subtle);
+  cursor: not-allowed;
+}
+
+.input::placeholder,
+.textarea::placeholder {
+  color: var(--text-subtle);
+}

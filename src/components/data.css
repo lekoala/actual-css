@@ -1,0 +1,87 @@
+.table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface-raised);
+}
+
+.table {
+  inline-size: 100%;
+  border-collapse: collapse;
+  color: var(--text);
+  font-size: .9375rem;
+}
+
+.table th,
+.table td {
+  padding: .75rem;
+  border-block-end: 1px solid var(--border);
+  text-align: start;
+  vertical-align: middle;
+}
+
+.table th {
+  background: var(--surface-subtle);
+  color: var(--text-muted);
+  font-size: .8125rem;
+  font-weight: 750;
+  letter-spacing: .02em;
+  text-transform: uppercase;
+}
+
+.table tr:last-child td { border-block-end: 0; }
+.table code { color: var(--text); }
+
+.metric {
+  display: grid;
+  gap: .5rem;
+}
+
+.metric-label {
+  color: var(--text-muted);
+  font-size: .875rem;
+  font-weight: 650;
+}
+
+.metric-value {
+  color: var(--text);
+  font-size: clamp(1.5rem, 3vw, 2.25rem);
+  font-weight: 800;
+  letter-spacing: -.02em;
+  line-height: 1.05;
+}
+
+.metric > .badge {
+  justify-self: start;
+  margin-block-start: .15rem;
+}
+
+.metric-note {
+  color: var(--text-muted);
+  font-size: .875rem;
+}
+
+.progress,
+.meter {
+  display: block;
+  inline-size: 100%;
+  block-size: .65rem;
+  overflow: hidden;
+  border: 0;
+  border-radius: 999px;
+  background: var(--surface-subtle);
+}
+
+.progress::-webkit-progress-bar { background: var(--surface-subtle); }
+.progress::-webkit-progress-value { background: var(--intent, var(--primary)); }
+.progress::-moz-progress-bar { background: var(--intent, var(--primary)); }
+
+.meter::-webkit-meter-bar {
+  border: 0;
+  border-radius: 999px;
+  background: var(--surface-subtle);
+}
+.meter::-webkit-meter-optimum-value { background: var(--success); }
+.meter::-webkit-meter-suboptimum-value { background: var(--warning); }
+.meter::-webkit-meter-even-less-good-value { background: var(--danger); }
+.meter::-moz-meter-bar { background: var(--intent, var(--primary)); }

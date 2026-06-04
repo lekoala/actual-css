@@ -1,0 +1,58 @@
+.alert {
+  --alert-bg: var(--ui-bg, var(--surface-subtle));
+  --alert-fg: var(--ui-fg, var(--text));
+  --alert-border: var(--ui-border, var(--border));
+  --alert-pad: 1rem;
+  --alert-radius: var(--radius-lg);
+
+  display: grid;
+  gap: .35rem;
+  padding: var(--alert-pad);
+  border: 1px solid var(--alert-border);
+  border-radius: var(--alert-radius);
+  background: var(--alert-bg);
+  color: var(--alert-fg);
+}
+
+.alert.solid {
+  --alert-bg: var(--intent, var(--neutral));
+  --alert-fg: var(--intent-fg, var(--neutral-fg));
+  --alert-border: transparent;
+}
+
+.alert.outline { --alert-radius: var(--radius); }
+.alert.sm { --alert-pad: .75rem; font-size: .9375rem; }
+.alert.lg { --alert-pad: 1.25rem; font-size: 1.0625rem; }
+
+:where(a.alert, button.alert):hover {
+  background: var(--ui-hover-bg, var(--alert-bg));
+}
+
+:where(a.alert, button.alert):not(:where(.outline, .ghost, .link)):hover {
+  box-shadow: inset 0 0 0 999px var(--hover-overlay);
+}
+
+:where(a.alert, button.alert):where(.outline, .ghost):hover {
+  --ui-hover-bg: var(--surface-subtle);
+}
+
+:where(a.alert, button.alert):focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+button.alert {
+  cursor: pointer;
+  font: inherit;
+  text-align: inherit;
+}
+
+button.alert:disabled,
+.alert[aria-disabled="true"] {
+  opacity: .55;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.alert > :first-child { margin-block-start: 0; }
+.alert > :last-child { margin-block-end: 0; }

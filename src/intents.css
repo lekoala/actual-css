@@ -1,0 +1,6 @@
+.primary { --intent: var(--primary); --intent-fg: var(--primary-fg); }
+.secondary { --intent: var(--secondary); --intent-fg: var(--secondary-fg); }
+.success { --intent: var(--success); --intent-fg: var(--success-fg); }
+.warning { --intent: var(--warning); --intent-fg: var(--warning-fg); }
+.danger { --intent: var(--danger); --intent-fg: var(--danger-fg); }
+.neutral { --intent: var(--neutral); --intent-fg: var(--neutral-fg); }
