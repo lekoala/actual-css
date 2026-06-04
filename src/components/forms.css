@@ -7,17 +7,17 @@
 fieldset.field {
   min-inline-size: 0;
   margin: 0;
-  padding: 0.875rem 1rem 1rem;
+  padding: 0.75rem;
   border: 1px solid var(--border);
   border-radius: var(--radius);
   background: var(--surface-subtle);
 }
 
 fieldset.field > legend {
-  padding-inline: 0.375rem;
+  padding: 0;
   color: var(--text);
-  font-size: 0.875rem;
-  font-weight: 700;
+  font-size: 0.8125rem;
+  font-weight: 600;
 }
 
 .label {

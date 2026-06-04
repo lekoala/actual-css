@@ -63,8 +63,13 @@ export function parseComponentMarkdown(md) {
       continue;
     }
 
-    // Code block
-    if (line.startsWith('```html')) {
+    // Code block with directives
+    if (line.startsWith('```')) {
+      // Parse directives: ```html .inline .dark
+      const parts = line.trim().split(/\s+/).filter(p => p);
+      // parts[0] is '```html' or '```', parts[1+] are directives
+      const directives = parts.slice(1).map(p => p.replace(/^\./, '')).filter(p => p);
+      
       i++;
       const codeLines = [];
       while (i < lines.length && !lines[i].startsWith('```')) {
@@ -72,7 +77,10 @@ export function parseComponentMarkdown(md) {
         i++;
       }
       if (currentSection) {
-        currentSection.examples.push(codeLines.join('\n'));
+        currentSection.examples.push({
+          code: codeLines.join('\n'),
+          directives,
+        });
       }
       i++; // skip closing ```
       continue;

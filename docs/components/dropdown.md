@@ -6,7 +6,7 @@ Toggle menu for secondary actions.
 
 Dropdown with details element.
 
-```html
+```html .inline
 <div class="dropdown">
   <details>
     <summary class="btn neutral outline">Actions</summary>
@@ -22,7 +22,7 @@ Dropdown with details element.
 
 Split button with dropdown.
 
-```html
+```html .inline
 <div class="join">
   <button class="btn primary" type="button">Save</button>
   <details class="dropdown">

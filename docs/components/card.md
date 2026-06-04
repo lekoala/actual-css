@@ -18,7 +18,7 @@ Cards are used to group and display content in a way that is easily readable.
 
 A flat card with default styling.
 
-```html
+```html .list
 <article class="card">
   <h3>Title</h3>
   <p>Content goes here.</p>
@@ -29,19 +29,10 @@ A flat card with default styling.
 
 Card surface styles.
 
-```html
+```html .list
 <article class="card raised">Raised card</article>
-```
-
-```html
 <article class="card subtle">Subtle card</article>
-```
-
-```html
 <article class="card solid">Solid card</article>
-```
-
-```html
 <article class="card compact">Compact card</article>
 ```
 
@@ -49,15 +40,9 @@ Card surface styles.
 
 Available sizes.
 
-```html
+```html .list
 <article class="card sm">Small card</article>
-```
-
-```html
 <article class="card">Default card</article>
-```
-
-```html
 <article class="card lg">Large card</article>
 ```
 
@@ -65,7 +50,7 @@ Available sizes.
 
 Card with header, body, and footer.
 
-```html
+```html .list
 <article class="card">
   <header class="card-header">
     <h3>Title</h3>

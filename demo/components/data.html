@@ -25,7 +25,7 @@
 <h2>Table</h2>
 <p>Styled table with header.</p>
 <div class="example-group">
-<div class="example-render"><div class="table-wrap">
+<div class="example-render example-full"><div class="table-wrap">
   <table class="table">
     <thead>
       <tr><th>Name</th><th>Status</th></tr>
@@ -34,8 +34,7 @@
       <tr><td>Alice</td><td><span class="badge success soft">Active</span></td></tr>
     </tbody>
   </table>
-</div></div>
-<div class="example-code">
+</div></div><div class="example-code">
 <pre><code>&lt;div class=&quot;table-wrap&quot;&gt;
   &lt;table class=&quot;table&quot;&gt;
     &lt;thead&gt;
@@ -53,12 +52,11 @@
 <h2>Metric</h2>
 <p>Key metric display.</p>
 <div class="example-group">
-<div class="example-render"><div class="metric">
-  <span class="metric-label">Revenue</span>
-  <strong class="metric-value">$42,200</strong>
-  <span class="badge success soft">+12%</span>
-</div></div>
-<div class="example-code">
+<div class="example-render example-list"><div class="metric">
+<span class="metric-label">Revenue</span>
+<strong class="metric-value">$42,200</strong>
+<span class="badge success soft">+12%</span>
+</div></div><div class="example-code">
 <pre><code>&lt;div class=&quot;metric&quot;&gt;
   &lt;span class=&quot;metric-label&quot;&gt;Revenue&lt;/span&gt;
   &lt;strong class=&quot;metric-value&quot;&gt;$42,200&lt;/strong&gt;
@@ -71,13 +69,12 @@
 <h2>Progress</h2>
 <p>Progress bar with intent colors.</p>
 <div class="example-group">
-<div class="example-render"><progress class="progress primary" max="100" value="72">72%</progress></div>
-<div class="example-code">
-<pre><code>&lt;progress class=&quot;progress primary&quot; max=&quot;100&quot; value=&quot;72&quot;&gt;72%&lt;/progress&gt;</code></pre>
-</div>
-<div class="example-render"><progress class="progress success" max="100" value="42">42%</progress></div>
-<div class="example-code">
-<pre><code>&lt;progress class=&quot;progress success&quot; max=&quot;100&quot; value=&quot;42&quot;&gt;42%&lt;/progress&gt;</code></pre>
+<div class="example-render example-list"><progress class="progress primary" max="100" value="72">72%</progress>
+<progress class="progress success" max="100" value="42">42%</progress>
+<progress class="progress warning" max="100" value="86">86%</progress></div><div class="example-code">
+<pre><code>&lt;progress class=&quot;progress primary&quot; max=&quot;100&quot; value=&quot;72&quot;&gt;72%&lt;/progress&gt;
+&lt;progress class=&quot;progress success&quot; max=&quot;100&quot; value=&quot;42&quot;&gt;42%&lt;/progress&gt;
+&lt;progress class=&quot;progress warning&quot; max=&quot;100&quot; value=&quot;86&quot;&gt;86%&lt;/progress&gt;</code></pre>
 </div>
 </div>
 </section>
@@ -85,8 +82,7 @@
 <h2>Meter</h2>
 <p>Meter with value ranges.</p>
 <div class="example-group">
-<div class="example-render"><meter class="meter" min="0" max="100" low="70" high="90" optimum="35" value="42">42%</meter></div>
-<div class="example-code">
+<div class="example-render example-list"><meter class="meter" min="0" max="100" low="70" high="90" optimum="35" value="42">42%</meter></div><div class="example-code">
 <pre><code>&lt;meter class=&quot;meter&quot; min=&quot;0&quot; max=&quot;100&quot; low=&quot;70&quot; high=&quot;90&quot; optimum=&quot;35&quot; value=&quot;42&quot;&gt;42%&lt;/meter&gt;</code></pre>
 </div>
 </div>

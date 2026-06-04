@@ -20,46 +20,37 @@ Avatar, toast, skeleton, accordion, dialog, and switch.
 
 User avatar with initials.
 
-```html
+```html .inline
 <span class="avatar primary">A</span>
-```
-
-```html
 <span class="avatar success lg">B</span>
-```
-
-## Toast
-
-Toast notification.
-
-```html
-<div class="toast success soft">
-  <strong>Done</strong>
-  <span class="badge success">OK</span>
-</div>
 ```
 
 ## Skeleton
 
 Loading placeholder.
 
-```html
+```html .list
 <div class="skeleton title"></div>
-```
-
-```html
 <div class="skeleton text"></div>
+<div class="skeleton avatar"></div>
 ```
 
-```html
-<div class="skeleton avatar"></div>
+## Toast
+
+Toast notification.
+
+```html .list
+<div class="toast success soft">
+  <strong>Done</strong>
+  <span class="badge success">OK</span>
+</div>
 ```
 
 ## Accordion
 
 Collapsible content sections.
 
-```html
+```html .list
 <div class="accordion">
   <details open>
     <summary>First item</summary>
@@ -76,8 +67,8 @@ Collapsible content sections.
 
 Modal dialog.
 
-```html
-<dialog class="dialog" id="confirm">
+```html .center
+<dialog class="dialog" id="confirm" open>
   <form method="dialog" class="stack">
     <h2>Confirm</h2>
     <p>Are you sure?</p>
@@ -93,7 +84,7 @@ Modal dialog.
 
 Toggle switch.
 
-```html
+```html .list
 <label class="choice">
   <input class="switch primary" type="checkbox" checked>
   Enable notifications

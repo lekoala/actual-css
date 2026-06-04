@@ -15,7 +15,7 @@ Tables, metrics, and progress indicators.
 
 Styled table with header.
 
-```html
+```html .full
 <div class="table-wrap">
   <table class="table">
     <thead>
@@ -32,7 +32,7 @@ Styled table with header.
 
 Key metric display.
 
-```html
+```html .list
 <div class="metric">
   <span class="metric-label">Revenue</span>
   <strong class="metric-value">$42,200</strong>
@@ -44,19 +44,17 @@ Key metric display.
 
 Progress bar with intent colors.
 
-```html
+```html .list
 <progress class="progress primary" max="100" value="72">72%</progress>
-```
-
-```html
 <progress class="progress success" max="100" value="42">42%</progress>
+<progress class="progress warning" max="100" value="86">86%</progress>
 ```
 
 ## Meter
 
 Meter with value ranges.
 
-```html
+```html .list
 <meter class="meter" min="0" max="100" low="70" high="90" optimum="35" value="42">42%</meter>
 ```
 

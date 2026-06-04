@@ -1,12 +1,13 @@
 .alert {
   --alert-bg: var(--ui-bg, var(--surface-subtle));
-  --alert-fg: var(--ui-fg, var(--text));
+  --alert-fg: var(--ui-fg, var(--alert-default-fg, var(--text)));
   --alert-border: var(--ui-border, var(--border));
-  --alert-pad: 1rem;
+  --alert-pad: 1rem 1.125rem;
   --alert-radius: var(--radius-lg);
 
-  display: grid;
-  gap: 0.35rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
   padding: var(--alert-pad);
   border: 1px solid var(--alert-border);
   border-radius: var(--alert-radius);
@@ -20,15 +21,20 @@
   --alert-border: transparent;
 }
 
+.alert.soft {
+  --alert-default-fg: var(--intent, var(--text));
+  --alert-border: transparent;
+}
+
 .alert.outline {
   --alert-radius: var(--radius);
 }
 .alert.sm {
-  --alert-pad: 0.75rem;
+  --alert-pad: 0.75rem 0.875rem;
   font-size: 0.9375rem;
 }
 .alert.lg {
-  --alert-pad: 1.25rem;
+  --alert-pad: 1.25rem 1.375rem;
   font-size: 1.0625rem;
 }
 

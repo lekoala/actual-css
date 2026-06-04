@@ -1,6 +1,15 @@
 export function generateComponentsIndex(components) {
   const cards = components.map(c => {
-    const preview = c.sections?.find(s => s.examples?.length > 0)?.examples[0] || '';
+    const firstSection = c.sections?.find(s => s.examples?.length > 0);
+    const firstExample = firstSection?.examples[0];
+    let preview = '';
+    if (firstExample) {
+      if (typeof firstExample === 'string') {
+        preview = firstExample;
+      } else if (firstExample.code) {
+        preview = firstExample.code;
+      }
+    }
     return `<article class="component-card">
       <div class="card-preview">
         ${preview}

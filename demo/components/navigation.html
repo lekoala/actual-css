@@ -25,14 +25,13 @@
 <h2>Navbar</h2>
 <p>Top navigation bar.</p>
 <div class="example-group">
-<div class="example-render"><nav class="navbar" aria-label="Primary">
+<div class="example-render example-full"><nav class="navbar" aria-label="Primary">
   <a class="navbar-brand" href="#">Brand</a>
   <ul class="navbar-nav">
     <li><a class="nav-link" aria-current="page" href="#">Home</a></li>
     <li><a class="nav-link" href="#">About</a></li>
   </ul>
-</nav></div>
-<div class="example-code">
+</nav></div><div class="example-code">
 <pre><code>&lt;nav class=&quot;navbar&quot; aria-label=&quot;Primary&quot;&gt;
   &lt;a class=&quot;navbar-brand&quot; href=&quot;#&quot;&gt;Brand&lt;/a&gt;
   &lt;ul class=&quot;navbar-nav&quot;&gt;
@@ -47,12 +46,11 @@
 <h2>Breadcrumb</h2>
 <p>Navigation breadcrumbs.</p>
 <div class="example-group">
-<div class="example-render"><ol class="breadcrumb" aria-label="Breadcrumb">
+<div class="example-render example-full"><ol class="breadcrumb" aria-label="Breadcrumb">
   <li><a href="#">Home</a></li>
   <li><a href="#">Category</a></li>
   <li aria-current="page">Product</li>
-</ol></div>
-<div class="example-code">
+</ol></div><div class="example-code">
 <pre><code>&lt;ol class=&quot;breadcrumb&quot; aria-label=&quot;Breadcrumb&quot;&gt;
   &lt;li&gt;&lt;a href=&quot;#&quot;&gt;Home&lt;/a&gt;&lt;/li&gt;
   &lt;li&gt;&lt;a href=&quot;#&quot;&gt;Category&lt;/a&gt;&lt;/li&gt;
@@ -65,11 +63,10 @@
 <h2>Tabs</h2>
 <p>Tab navigation.</p>
 <div class="example-group">
-<div class="example-render"><div class="tabs primary" role="tablist">
-  <button class="tab" type="button" role="tab" aria-selected="true">Active</button>
-  <button class="tab" type="button" role="tab">Inactive</button>
-</div></div>
-<div class="example-code">
+<div class="example-render example-inline"><div class="example-item"><div class="tabs primary" role="tablist"></div>
+<div class="example-item"><button class="tab" type="button" role="tab" aria-selected="true">Active</button></div>
+<div class="example-item"><button class="tab" type="button" role="tab">Inactive</button></div>
+<div class="example-item"></div></div></div><div class="example-code">
 <pre><code>&lt;div class=&quot;tabs primary&quot; role=&quot;tablist&quot;&gt;
   &lt;button class=&quot;tab&quot; type=&quot;button&quot; role=&quot;tab&quot; aria-selected=&quot;true&quot;&gt;Active&lt;/button&gt;
   &lt;button class=&quot;tab&quot; type=&quot;button&quot; role=&quot;tab&quot;&gt;Inactive&lt;/button&gt;
@@ -78,16 +75,28 @@
 </div>
 </section>
 <section class="component-section">
+<h2>Sizes</h2>
+
+<div class="example-group">
+<div class="example-render example-inline"><div class="example-item"><button class="tab sm">Small</button></div>
+<div class="example-item"><button class="tab">Default</button></div>
+<div class="example-item"><button class="tab lg">Large</button></div></div><div class="example-code">
+<pre><code>&lt;button class=&quot;tab sm&quot;&gt;Small&lt;/button&gt;
+&lt;button class=&quot;tab&quot;&gt;Default&lt;/button&gt;
+&lt;button class=&quot;tab lg&quot;&gt;Large&lt;/button&gt;</code></pre>
+</div>
+</div>
+</section>
+<section class="component-section">
 <h2>Pagination</h2>
 <p>Page navigation.</p>
 <div class="example-group">
-<div class="example-render"><ol class="pagination" aria-label="Pagination">
-  <li><a class="page-link" href="#">Prev</a></li>
-  <li><a class="page-link" aria-current="page" href="#">1</a></li>
-  <li><a class="page-link" href="#">2</a></li>
-  <li><a class="page-link" href="#">Next</a></li>
-</ol></div>
-<div class="example-code">
+<div class="example-render example-inline"><div class="example-item"><ol class="pagination" aria-label="Pagination"></div>
+<div class="example-item"><li><a class="page-link" href="#">Prev</a></li></div>
+<div class="example-item"><li><a class="page-link" aria-current="page" href="#">1</a></li></div>
+<div class="example-item"><li><a class="page-link" href="#">2</a></li></div>
+<div class="example-item"><li><a class="page-link" href="#">Next</a></li></div>
+<div class="example-item"></ol></div></div><div class="example-code">
 <pre><code>&lt;ol class=&quot;pagination&quot; aria-label=&quot;Pagination&quot;&gt;
   &lt;li&gt;&lt;a class=&quot;page-link&quot; href=&quot;#&quot;&gt;Prev&lt;/a&gt;&lt;/li&gt;
   &lt;li&gt;&lt;a class=&quot;page-link&quot; aria-current=&quot;page&quot; href=&quot;#&quot;&gt;1&lt;/a&gt;&lt;/li&gt;
