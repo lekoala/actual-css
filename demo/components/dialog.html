@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dialog — Actual CSS</title>
+  <link rel="stylesheet" href="../../dist/actual.css">
+  <link rel="stylesheet" href="../../demo/styles/demo.css">
+</head>
+<body>
+  <nav class="demo-nav">
+    <a href="../index.html">← Components</a>
+    <a href="../../demo/index.html">Kitchensink</a>
+  </nav>
+  <main class="center">
+    <header class="component-header">
+      <h1>Dialog</h1>
+      <p>Modal dialog.</p>
+    </header>
+    
+    <section class="component-section">
+<h2>Default</h2>
+<p>Default dialog.</p>
+<div class="example-group">
+<div class="example-render example-center"><dialog class="dialog" id="confirm" open>
+  <form method="dialog" class="stack">
+    <h2>Confirm</h2>
+    <p>Are you sure?</p>
+    <div class="cluster">
+      <button class="btn neutral outline" value="cancel">Cancel</button>
+      <button class="btn danger" value="delete">Delete</button>
+    </div>
+  </form>
+</dialog></div><div class="example-code">
+<pre><code>&lt;dialog class=&quot;dialog&quot; id=&quot;confirm&quot; open&gt;
+  &lt;form method=&quot;dialog&quot; class=&quot;stack&quot;&gt;
+    &lt;h2&gt;Confirm&lt;/h2&gt;
+    &lt;p&gt;Are you sure?&lt;/p&gt;
+    &lt;div class=&quot;cluster&quot;&gt;
+      &lt;button class=&quot;btn neutral outline&quot; value=&quot;cancel&quot;&gt;Cancel&lt;/button&gt;
+      &lt;button class=&quot;btn danger&quot; value=&quot;delete&quot;&gt;Delete&lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/form&gt;
+&lt;/dialog&gt;</code></pre>
+</div>
+</div>
+</section>
+    
+<section class="component-section">
+<h2>Accessibility</h2>
+<ul>
+<li>Use `&lt;dialog&gt;` with `method=&quot;dialog&quot;` for accessible modals.</li>
+</ul>
+</section>
+
+  </main>
+  <footer class="demo-footer">
+    <a href="../index.html">Back to components</a>
+  </footer>
+</body>
+</html>

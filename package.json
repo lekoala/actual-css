@@ -12,12 +12,10 @@
     "test": "npm run check",
     "test:visual": "playwright test",
     "test:visual:update": "playwright test --update-snapshots",
-    "dev": "node scripts/build.js --watch",
-    "serve": "npx http-server . -p 4173 -c-1"
+    "dev": "node scripts/build.js --watch"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.2.0",
-    "@playwright/test": "^1.44.0",
-    "http-server": "^14.1.1"
+    "@playwright/test": "^1.44.0"
   }
 }

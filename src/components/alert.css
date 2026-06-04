@@ -29,6 +29,21 @@
 .alert.outline {
   --alert-radius: var(--radius);
 }
+
+.alert:where(.primary, .secondary, .success, .warning, .danger, .neutral) a {
+  color: currentColor;
+}
+
+.alert-icon {
+  flex: 0 0 auto;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.alert-content {
+  min-inline-size: 0;
+}
+
 .alert.sm {
   --alert-pad: 0.75rem 0.875rem;
   font-size: 0.9375rem;

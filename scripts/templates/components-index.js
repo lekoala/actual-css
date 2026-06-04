@@ -32,7 +32,7 @@ export function generateComponentsIndex(components) {
 </head>
 <body>
   <nav class="demo-nav">
-    <a href="../../demo/">← Kitchensink</a>
+    <a href="../../demo/index.html">← Kitchensink</a>
   </nav>
   <main class="center">
     <header>

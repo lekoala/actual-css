@@ -51,11 +51,14 @@ export function generateComponentPage(data, name) {
       const isSingleLine = lines.length === 1;
       const isMultiLine = lines.length > 1;
       
+      // Block elements that should be treated as single items even in inline mode
+      const blockElementStart = /^<(div|article|section|nav|fieldset|table|details|progress|meter|label|figure|dialog|article|aside|header|footer|main|form|ul|ol|dl|blockquote|pre|address|h[1-6])\b/i;
+      
       // If no directive specified, guess based on content
       if (!isInline && !isList && !isGrid && !isCenter && !isFull) {
         const firstLine = lines[0].trim();
         // Block elements get list layout
-        if (firstLine.startsWith('<div') || firstLine.startsWith('<article') || firstLine.startsWith('<section') || firstLine.startsWith('<nav') || firstLine.startsWith('<fieldset') || firstLine.startsWith('<table') || firstLine.startsWith('<details') || firstLine.startsWith('<progress') || firstLine.startsWith('<meter') || firstLine.startsWith('<label')) {
+        if (blockElementStart.test(firstLine)) {
           renderClasses.push('example-list');
         } else if (isMultiLine) {
           renderClasses.push('example-inline');
@@ -68,14 +71,53 @@ export function generateComponentPage(data, name) {
         // For list layout, render each line directly
         renderContent = lines.map(line => line.trim()).join('\n');
       } else if (isMultiLine && (isInline || renderClasses.includes('example-inline'))) {
-        // For inline layout, wrap each line in example-item
-        renderContent = lines.map(line => {
+        // For inline layout, group block elements as single items
+        const items = [];
+        let currentItem = [];
+        let inBlockElement = false;
+        let blockDepth = 0;
+        
+        for (const line of lines) {
           const trimmed = line.trim();
-          if (trimmed) {
-            return `<div class="example-item">${trimmed}</div>`;
+          if (!trimmed) continue;
+          
+          // Check if this line starts a block element
+          const isBlockStart = blockElementStart.test(trimmed);
+          
+          if (isBlockStart && !inBlockElement) {
+            // Starting a new block element
+            if (currentItem.length > 0) {
+              items.push(currentItem.join('\n'));
+              currentItem = [];
+            }
+            inBlockElement = true;
+            blockDepth = 1;
+            currentItem.push(trimmed);
+          } else if (inBlockElement) {
+            // Count opening and closing tags to track depth
+            const openTags = (trimmed.match(/<\w+[^>]*>/g) || []).length;
+            const closeTags = (trimmed.match(/<\/\w+>/g) || []).length;
+            blockDepth += openTags - closeTags;
+            currentItem.push(trimmed);
+            if (blockDepth <= 0) {
+              items.push(currentItem.join('\n'));
+              currentItem = [];
+              inBlockElement = false;
+            }
+          } else {
+            // Inline element - each line is its own item
+            if (currentItem.length > 0) {
+              items.push(currentItem.join('\n'));
+            }
+            currentItem = [trimmed];
           }
-          return '';
-        }).filter(Boolean).join('\n');
+        }
+        
+        if (currentItem.length > 0) {
+          items.push(currentItem.join('\n'));
+        }
+        
+        renderContent = items.map(item => `<div class="example-item">${item}</div>`).join('\n');
       } else {
         renderContent = code;
       }
@@ -126,8 +168,8 @@ ${data.accessibility.map(a => `<li>${escapeHtml(a)}</li>`).join('\n')}
 </head>
 <body>
   <nav class="demo-nav">
-    <a href="../">← Components</a>
-    <a href="../../demo/">Kitchensink</a>
+    <a href="../index.html">← Components</a>
+    <a href="../../demo/index.html">Kitchensink</a>
   </nav>
   <main class="center">
     <header class="component-header">
@@ -139,7 +181,7 @@ ${data.accessibility.map(a => `<li>${escapeHtml(a)}</li>`).join('\n')}
     ${accessibility}
   </main>
   <footer class="demo-footer">
-    <a href="../">Back to components</a>
+    <a href="../index.html">Back to components</a>
   </footer>
 </body>
 </html>

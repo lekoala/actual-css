@@ -9,8 +9,8 @@
 </head>
 <body>
   <nav class="demo-nav">
-    <a href="../">← Components</a>
-    <a href="../../demo/">Kitchensink</a>
+    <a href="../index.html">← Components</a>
+    <a href="../../demo/index.html">Kitchensink</a>
   </nav>
   <main class="center">
     <header class="component-header">
@@ -22,15 +22,15 @@
 <h2>Basic dropdown</h2>
 <p>Dropdown with details element.</p>
 <div class="example-group">
-<div class="example-render example-inline"><div class="example-item"><div class="dropdown"></div>
-<div class="example-item"><details></div>
-<div class="example-item"><summary class="btn neutral outline">Actions</summary></div>
-<div class="example-item"><menu class="dropdown-menu"></div>
-<div class="example-item"><button class="btn neutral link" type="button">Edit</button></div>
-<div class="example-item"><button class="btn neutral link" type="button">Delete</button></div>
-<div class="example-item"></menu></div>
-<div class="example-item"></details></div>
-<div class="example-item"></div></div></div><div class="example-code">
+<div class="example-render example-inline"><div class="example-item"><div class="dropdown">
+<details>
+<summary class="btn neutral outline">Actions</summary>
+<menu class="dropdown-menu">
+<button class="btn neutral link" type="button">Edit</button>
+<button class="btn neutral link" type="button">Delete</button>
+</menu>
+</details>
+</div></div></div><div class="example-code">
 <pre><code>&lt;div class=&quot;dropdown&quot;&gt;
   &lt;details&gt;
     &lt;summary class=&quot;btn neutral outline&quot;&gt;Actions&lt;/summary&gt;
@@ -47,15 +47,15 @@
 <h2>Inside a join</h2>
 <p>Split button with dropdown.</p>
 <div class="example-group">
-<div class="example-render example-inline"><div class="example-item"><div class="join"></div>
-<div class="example-item"><button class="btn primary" type="button">Save</button></div>
-<div class="example-item"><details class="dropdown"></div>
-<div class="example-item"><summary class="btn primary outline" aria-label="More actions">More</summary></div>
-<div class="example-item"><menu class="dropdown-menu"></div>
-<div class="example-item"><button class="btn neutral link" type="button">Save draft</button></div>
-<div class="example-item"></menu></div>
-<div class="example-item"></details></div>
-<div class="example-item"></div></div></div><div class="example-code">
+<div class="example-render example-inline"><div class="example-item"><div class="join">
+<button class="btn primary" type="button">Save</button>
+<details class="dropdown">
+<summary class="btn primary outline" aria-label="More actions">More</summary>
+<menu class="dropdown-menu">
+<button class="btn neutral link" type="button">Save draft</button>
+</menu>
+</details>
+</div></div></div><div class="example-code">
 <pre><code>&lt;div class=&quot;join&quot;&gt;
   &lt;button class=&quot;btn primary&quot; type=&quot;button&quot;&gt;Save&lt;/button&gt;
   &lt;details class=&quot;dropdown&quot;&gt;
@@ -79,7 +79,7 @@
 
   </main>
   <footer class="demo-footer">
-    <a href="../">Back to components</a>
+    <a href="../index.html">Back to components</a>
   </footer>
 </body>
 </html>

@@ -1,0 +1,45 @@
+.skeleton {
+  display: block;
+  inline-size: 100%;
+  min-block-size: 1rem;
+  border-radius: var(--radius);
+  background: linear-gradient(
+    90deg,
+    var(--surface-subtle),
+    var(--surface-raised),
+    var(--surface-subtle)
+  );
+  background-size: 200% 100%;
+  animation: actual-skeleton 1.2s ease-in-out infinite;
+}
+
+.skeleton.text {
+  max-inline-size: 32rem;
+  block-size: 0.85rem;
+}
+
+.skeleton.title {
+  max-inline-size: 18rem;
+  block-size: 1.4rem;
+}
+
+.skeleton.avatar {
+  inline-size: 2.25rem;
+  block-size: 2.25rem;
+  border-radius: 999px;
+}
+
+@keyframes actual-skeleton {
+  from {
+    background-position: 200% 0;
+  }
+  to {
+    background-position: -200% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton {
+    animation-duration: 0.01ms;
+  }
+}

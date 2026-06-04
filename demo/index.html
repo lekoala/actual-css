@@ -131,19 +131,19 @@
       <div class="grid demo-main-grid">
       <article class="card stack">
         <h2>System notifications</h2>
-        <div class="alert primary">Info: System maintenance scheduled for Sunday 2:00 AM UTC.</div>
-        <div class="alert success">Success: All backups completed successfully.</div>
-        <div class="alert warning">Warning: SSL certificate expires in 7 days.</div>
-        <div class="alert danger">Error: Payment gateway timeout — 3 transactions affected.</div>
+        <div class="alert primary"><span class="alert-icon" aria-hidden="true">i</span><span class="alert-content">System maintenance scheduled for Sunday 2:00 AM UTC.</span></div>
+        <div class="alert success"><span class="alert-icon" aria-hidden="true">✓</span><span class="alert-content">All backups completed successfully.</span></div>
+        <div class="alert warning"><span class="alert-icon" aria-hidden="true">!</span><span class="alert-content">SSL certificate expires in 7 days. <a href="#">Renew certificate</a>.</span></div>
+        <div class="alert danger"><span class="alert-icon" aria-hidden="true">!</span><span class="alert-content">Payment gateway timeout — <a href="#">3 transactions affected</a>.</span></div>
       </article>
 
       <article class="card stack">
-        <h2>Toast notifications</h2>
-        <div class="toast-stack">
-          <div class="toast success soft"><strong>Success toast</strong><span class="badge success">Done</span></div>
-          <div class="toast warning soft"><strong>Warning toast</strong><span class="badge warning">Check</span></div>
-          <div class="toast danger soft"><strong>Error toast</strong><span class="badge danger">Failed</span></div>
-          <div class="toast primary soft"><strong>Info toast</strong><span class="badge primary">New</span></div>
+        <h2>Alert notifications</h2>
+        <div class="stack">
+          <div class="alert success"><span class="alert-icon" aria-hidden="true">✓</span><span class="alert-content"><strong>Success alert</strong> All backups completed.</span></div>
+          <div class="alert warning"><span class="alert-icon" aria-hidden="true">!</span><span class="alert-content"><strong>Warning alert</strong> SSL expires in 7 days.</span></div>
+          <div class="alert danger"><span class="alert-icon" aria-hidden="true">!</span><span class="alert-content"><strong>Error alert</strong> Payment gateway timeout.</span></div>
+          <div class="alert primary"><span class="alert-icon" aria-hidden="true">i</span><span class="alert-content"><strong>Info alert</strong> System maintenance scheduled.</span></div>
         </div>
       </article>
 

@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Accordion — Actual CSS</title>
+  <link rel="stylesheet" href="../../dist/actual.css">
+  <link rel="stylesheet" href="../../demo/styles/demo.css">
+</head>
+<body>
+  <nav class="demo-nav">
+    <a href="../index.html">← Components</a>
+    <a href="../../demo/index.html">Kitchensink</a>
+  </nav>
+  <main class="center">
+    <header class="component-header">
+      <h1>Accordion</h1>
+      <p>Collapsible content sections.</p>
+    </header>
+    
+    <section class="component-section">
+<h2>Default</h2>
+<p>Default accordion.</p>
+<div class="example-group">
+<div class="example-render example-list"><div class="accordion">
+<details open>
+<summary>First item</summary>
+<div class="accordion-body">Content here.</div>
+</details>
+<details>
+<summary>Second item</summary>
+<div class="accordion-body">More content.</div>
+</details>
+</div></div><div class="example-code">
+<pre><code>&lt;div class=&quot;accordion&quot;&gt;
+  &lt;details open&gt;
+    &lt;summary&gt;First item&lt;/summary&gt;
+    &lt;div class=&quot;accordion-body&quot;&gt;Content here.&lt;/div&gt;
+  &lt;/details&gt;
+  &lt;details&gt;
+    &lt;summary&gt;Second item&lt;/summary&gt;
+    &lt;div class=&quot;accordion-body&quot;&gt;More content.&lt;/div&gt;
+  &lt;/details&gt;
+&lt;/div&gt;</code></pre>
+</div>
+</div>
+</section>
+    
+<section class="component-section">
+<h2>Accessibility</h2>
+<ul>
+<li>Use `&lt;details&gt;` for native disclosure.</li>
+</ul>
+</section>
+
+  </main>
+  <footer class="demo-footer">
+    <a href="../index.html">Back to components</a>
+  </footer>
+</body>
+</html>

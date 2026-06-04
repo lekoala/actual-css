@@ -26,24 +26,23 @@ Alerts are used for contextual messages.
 
 ## Default
 
-An alert with default soft styling.
+An alert with default border styling.
 
 ```html .list
-<div class="alert warning">Check this value.</div>
-<div class="alert danger">Payment failed.</div>
+<div class="alert">A neutral alert with default border.</div>
 ```
 
 ## Colors
 
-All intent colors with default solid styling.
+All intent colors with default soft styling.
 
 ```html .list
-<div class="alert primary">Primary alert</div>
-<div class="alert secondary">Secondary alert</div>
-<div class="alert success">Success alert</div>
-<div class="alert warning">Warning alert</div>
-<div class="alert danger">Danger alert</div>
-<div class="alert neutral">Neutral alert</div>
+<div class="alert primary"><span class="alert-icon" aria-hidden="true">i</span><span class="alert-content">Primary alert</span></div>
+<div class="alert secondary"><span class="alert-icon" aria-hidden="true">i</span><span class="alert-content">Secondary alert</span></div>
+<div class="alert success"><span class="alert-icon" aria-hidden="true">✓</span><span class="alert-content">Success alert</span></div>
+<div class="alert warning"><span class="alert-icon" aria-hidden="true">!</span><span class="alert-content">Warning alert</span></div>
+<div class="alert danger"><span class="alert-icon" aria-hidden="true">!</span><span class="alert-content">Danger alert</span></div>
+<div class="alert neutral"><span class="alert-icon" aria-hidden="true">i</span><span class="alert-content">Neutral alert</span></div>
 ```
 
 ## Variants

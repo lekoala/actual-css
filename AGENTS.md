@@ -23,7 +23,7 @@ Vanilla CSS, Node.js build scripts, Playwright visual regression.
 ## Component Defaults
 
 - **Buttons/badges:** Default to solid (filled background). 
-- **Alerts:** Default to soft (tinted background). Add `.solid` explicitly if needed.
+- **Alerts:** Default to transparent with border. Add `.soft` for tinted background or `.solid` for filled background.
 - **Avatars:** Support intent colors (`.avatar.primary`, `.avatar.success`).
 - **Interactive elements:** Always implement `:hover`, `:focus-visible`, and `:disabled` states.
 

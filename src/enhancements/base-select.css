@@ -1,0 +1,79 @@
+/* Progressive enhancement for select with appearance: base-select.
+   Automatically applied to .select on supported browsers (Chrome/Edge 135+, Safari TP).
+   Falls back to native select styling on unsupported browsers.
+   Use .native class to opt-out even when supported. */
+@media (hover: hover) and (pointer: fine) {
+  @supports (appearance: base-select) {
+    .select:not([multiple], [size], .native) {
+      appearance: base-select;
+
+      &::picker(select) {
+        appearance: base-select;
+        color: inherit;
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        background-color: var(--surface-raised);
+        box-shadow: var(--shadow-popout);
+        max-height: min(24rem, 70dvh);
+        margin-block: 0.5rem;
+        padding: 0;
+      }
+
+      &:open {
+        border-color: var(--focus);
+        outline: 0;
+        box-shadow: 0 0 0 3px var(--focus-ring);
+      }
+
+      &::picker-icon {
+        display: none;
+      }
+    }
+
+    .select option {
+      position: relative;
+      white-space: normal;
+      padding-block: 0.5rem;
+      padding-inline: 0.75rem;
+      transition-property: color, background-color;
+      transition-duration: var(--duration);
+
+      &:not(:disabled):hover,
+      &:not(:disabled):focus-visible {
+        cursor: pointer;
+        background-color: var(--primary);
+        color: var(--primary-fg);
+        outline: none;
+      }
+
+      &:active {
+        background-color: var(--surface-subtle);
+        color: var(--text);
+      }
+
+      &::checkmark {
+        content: "";
+        display: block;
+        inline-size: 1rem;
+        block-size: 1rem;
+        background-color: currentColor;
+        -webkit-mask-image: var(--icon-check);
+        mask-image: var(--icon-check);
+        -webkit-mask-repeat: no-repeat;
+        mask-repeat: no-repeat;
+        -webkit-mask-size: contain;
+        mask-size: contain;
+        -webkit-mask-position: center;
+        mask-position: center;
+      }
+    }
+
+    .select optgroup {
+      padding-block-start: 0.5em;
+    }
+
+    .select optgroup option:first-child {
+      margin-block-start: 0.5em;
+    }
+  }
+}

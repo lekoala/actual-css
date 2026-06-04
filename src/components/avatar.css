@@ -1,0 +1,95 @@
+.avatar {
+  --avatar-size: 2.25rem;
+  --avatar-badge-size: 0.75rem;
+  --avatar-badge-border: 2px;
+
+  display: inline-grid;
+  place-items: center;
+  inline-size: var(--avatar-size);
+  block-size: var(--avatar-size);
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--surface-subtle);
+  color: var(--text-muted);
+  font-weight: 750;
+}
+
+.avatar:where(.primary, .secondary, .success, .warning, .danger, .neutral) {
+  background: var(--intent);
+  color: var(--intent-fg);
+}
+
+.avatar > img {
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+}
+
+.avatar.sm {
+  --avatar-size: 1.75rem;
+  font-size: 0.8125rem;
+}
+
+.avatar.lg {
+  --avatar-size: 3rem;
+  font-size: 1.125rem;
+}
+
+.avatar-group {
+  display: inline-flex;
+}
+
+.avatar-group > .avatar {
+  box-shadow: 0 0 0 2px var(--surface);
+}
+
+.avatar-group > .avatar + .avatar {
+  margin-inline-start: calc(var(--avatar-size) / -4);
+}
+
+.avatar-badge-container {
+  position: relative;
+  display: inline-block;
+}
+
+.avatar-badge-container .avatar {
+  vertical-align: middle;
+}
+
+.avatar-badge-container .avatar-badge {
+  position: absolute;
+  z-index: 1;
+  display: inline-grid;
+  place-items: center;
+  inline-size: var(--avatar-badge-size);
+  block-size: var(--avatar-badge-size);
+  border-radius: 999px;
+  background: var(--intent, var(--neutral));
+  box-shadow: 0 0 0 var(--avatar-badge-border) var(--surface);
+  color: var(--intent-fg, var(--neutral-fg));
+  font-size: calc(var(--avatar-badge-size) * 0.75);
+  font-weight: 600;
+  line-height: 1;
+}
+
+.avatar-badge-container .avatar-badge:where(.top-right, .top-left) {
+  top: calc(var(--avatar-badge-border) * -0.5);
+}
+
+.avatar-badge-container .avatar-badge:where(.bottom-right, .bottom-left) {
+  bottom: calc(var(--avatar-badge-border) * -0.5);
+}
+
+.avatar-badge-container .avatar-badge:where(.top-right, .bottom-right) {
+  right: calc(var(--avatar-badge-border) * -0.5);
+}
+
+.avatar-badge-container .avatar-badge:where(.top-left, .bottom-left) {
+  left: calc(var(--avatar-badge-border) * -0.5);
+}
+
+.avatar-badge-container .avatar-badge:not(:empty) {
+  inline-size: auto;
+  min-inline-size: var(--avatar-badge-size);
+  padding-inline: calc(var(--avatar-badge-size) * 0.25);
+}

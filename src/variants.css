@@ -1,27 +1,38 @@
 /* Default variant is solid. Components consume --ui-* and map them to local variables. */
 .solid,
-:where(.btn, .badge):not(:where(.soft, .outline, .ghost, .link)),
-:where(.alert):not(:where(.solid, .outline, .ghost, .link)) {
+:where(.btn, .badge):not(:where(.soft, .outline, .ghost, .link)) {
   --ui-bg: var(--intent, var(--neutral));
   --ui-fg: var(--intent-fg, var(--neutral-fg));
   --ui-border: transparent;
 }
 
-/* Alerts default to a neutral subtle surface; intent alerts map to tinted semantic variants. */
-:where(.alert):not(:where(.solid, .outline, .ghost, .link)),
-.soft {
-  --ui-bg: var(--surface-subtle);
+/* Default alert without intent: transparent with border */
+:where(.alert):not(
+  :where(
+    .primary,
+    .secondary,
+    .success,
+    .warning,
+    .danger,
+    .neutral,
+    .solid,
+    .outline,
+    .ghost,
+    .link
+  )
+) {
+  --ui-bg: transparent;
   --ui-border: var(--border);
+  --ui-fg: var(--text);
 }
 
+/* Soft variant and alerts with intent */
+.soft,
 .alert:where(.primary, .secondary, .success, .warning, .danger, .neutral):not(
   :where(.solid, .outline, .ghost, .link)
 ) {
-  --ui-fg: var(--intent);
-  --ui-border: transparent;
-}
-
-.soft {
+  --ui-bg: var(--surface-subtle);
+  --ui-border: var(--border);
   --ui-fg: var(--intent, var(--text));
 }
 

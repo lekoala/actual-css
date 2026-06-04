@@ -176,6 +176,15 @@ fieldset.field > legend {
   cursor: not-allowed;
 }
 
+.select:not([multiple], [size]) {
+  appearance: none;
+  padding-inline-end: calc(0.75rem + 1.5rem);
+  background-image: var(--icon-chevron);
+  background-position: center right 0.75rem;
+  background-size: 1rem auto;
+  background-repeat: no-repeat;
+}
+
 .input::placeholder,
 .textarea::placeholder {
   color: var(--text-subtle);
