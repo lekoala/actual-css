@@ -1,0 +1,37 @@
+/* Default variant is solid. Components consume --ui-* and map them to local variables. */
+.solid,
+:where(.btn, .badge):not(:where(.soft, .outline, .ghost, .link)),
+:where(.alert):not(:where(.solid, .outline, .ghost, .link)) {
+  --ui-bg: var(--intent, var(--neutral));
+  --ui-fg: var(--intent-fg, var(--neutral-fg));
+  --ui-border: transparent;
+}
+
+/* Alerts default to soft, because solid alerts are visually heavy. */
+:where(.alert):not(:where(.solid, .outline, .ghost, .link)),
+.soft {
+  --ui-bg: var(--surface-subtle);
+  --ui-fg: var(--intent, var(--text));
+  --ui-border: var(--border);
+}
+
+.outline {
+  --ui-bg: transparent;
+  --ui-fg: var(--intent, var(--text));
+  --ui-border: var(--intent, var(--border));
+}
+
+.ghost {
+  --ui-bg: transparent;
+  --ui-fg: var(--intent, var(--text));
+  --ui-border: transparent;
+}
+
+.link {
+  --ui-bg: transparent;
+  --ui-fg: var(--intent, var(--text));
+  --ui-border: transparent;
+}
+
+.sm { --control-size: 2rem; --control-pad-x: .75rem; --control-font-size: .875rem; }
+.lg { --control-size: 3rem; --control-pad-x: 1.25rem; --control-font-size: 1rem; }

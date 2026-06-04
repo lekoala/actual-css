@@ -1,0 +1,24 @@
+# Actual CSS
+
+Actual CSS is a plain-CSS component framework.
+
+Main docs:
+- /docs/SPEC.md
+- /docs/AI.md
+- /docs/components/button.md
+- /docs/components/badge.md
+- /docs/components/alert.md
+- /docs/components/card.md
+- /docs/components/forms.md
+
+Use this class grammar:
+
+.component intent variant size
+
+Examples:
+
+<button class="btn primary soft lg">Save</button>
+<span class="badge success outline">Published</span>
+<div class="alert warning soft">Check this value</div>
+
+Do not invent classes such as `.btn-primary` or `.badge-primary`.
