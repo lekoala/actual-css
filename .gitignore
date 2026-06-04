@@ -42,6 +42,7 @@ temp/
 /test-results/
 playwright-report/
 *.png
+!/tests/visual.spec.js-snapshots/*.png
 !/test-results/*/bootswatch/*.png
 !/test-results/*/modernstrap/*.png
 
