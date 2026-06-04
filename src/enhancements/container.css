@@ -1,5 +1,7 @@
 /* Progressive enhancement only. Baseline remains stacked and usable. */
-.card { container-type: inline-size; }
+.card {
+  container-type: inline-size;
+}
 
 @container (min-width: 32rem) {
   .card-body.with-media {

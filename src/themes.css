@@ -25,8 +25,8 @@
   --text-subtle: hsl(220 8% 55%);
   --border: hsl(220 15% 88%);
   --focus: var(--primary);
-  --focus-ring: hsl(220 90% 56% / .22);
-  --hover-overlay: hsl(220 30% 10% / .04);
+  --focus-ring: hsl(220 90% 56% / 0.22);
+  --hover-overlay: hsl(220 30% 10% / 0.04);
 }
 
 [data-theme="dark"] {
@@ -55,8 +55,8 @@
   --text-subtle: hsl(220 8% 55%);
   --border: hsl(222 14% 24%);
   --focus: var(--primary);
-  --focus-ring: hsl(220 90% 66% / .28);
-  --hover-overlay: hsl(0 0% 100% / .06);
+  --focus-ring: hsl(220 90% 66% / 0.28);
+  --hover-overlay: hsl(0 0% 100% / 0.06);
 }
 
 [data-theme="corporate"] {
@@ -85,7 +85,7 @@
   --text-subtle: hsl(220 8% 55%);
   --border: hsl(220 16% 86%);
   --focus: var(--primary);
-  --focus-ring: hsl(214 82% 44% / .22);
+  --focus-ring: hsl(214 82% 44% / 0.22);
 }
 
 [data-theme="forest"] {
@@ -114,7 +114,7 @@
   --text-subtle: hsl(125 8% 50%);
   --border: hsl(105 18% 78%);
   --focus: var(--primary);
-  --focus-ring: hsl(145 45% 34% / .22);
+  --focus-ring: hsl(145 45% 34% / 0.22);
 }
 
 [data-theme="ocean"] {
@@ -143,7 +143,7 @@
   --text-subtle: hsl(205 10% 56%);
   --border: hsl(198 30% 84%);
   --focus: var(--primary);
-  --focus-ring: hsl(198 82% 42% / .22);
+  --focus-ring: hsl(198 82% 42% / 0.22);
 }
 
 [data-theme="sunset"] {
@@ -172,7 +172,7 @@
   --text-subtle: hsl(20 10% 55%);
   --border: hsl(25 38% 84%);
   --focus: var(--primary);
-  --focus-ring: hsl(16 84% 55% / .22);
+  --focus-ring: hsl(16 84% 55% / 0.22);
 }
 
 [data-theme="lavender"] {
@@ -201,7 +201,7 @@
   --text-subtle: hsl(260 10% 57%);
   --border: hsl(260 28% 85%);
   --focus: var(--primary);
-  --focus-ring: hsl(258 70% 58% / .22);
+  --focus-ring: hsl(258 70% 58% / 0.22);
 }
 
 [data-theme="mono"] {
@@ -230,7 +230,7 @@
   --text-subtle: hsl(220 5% 58%);
   --border: hsl(220 8% 84%);
   --focus: var(--primary);
-  --focus-ring: hsl(220 8% 18% / .22);
+  --focus-ring: hsl(220 8% 18% / 0.22);
 }
 
 [data-theme="dim"] {
@@ -259,7 +259,7 @@
   --text-subtle: hsl(220 8% 58%);
   --border: hsl(220 12% 28%);
   --focus: var(--primary);
-  --focus-ring: hsl(210 92% 70% / .28);
+  --focus-ring: hsl(210 92% 70% / 0.28);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -278,7 +278,7 @@
     --text-muted: hsl(220 10% 68%);
     --text-subtle: hsl(220 8% 55%);
     --border: hsl(222 14% 24%);
-    --focus-ring: hsl(220 90% 66% / .28);
-    --hover-overlay: hsl(0 0% 100% / .06);
+    --focus-ring: hsl(220 90% 66% / 0.28);
+    --hover-overlay: hsl(0 0% 100% / 0.06);
   }
 }

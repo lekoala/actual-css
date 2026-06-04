@@ -1,0 +1,50 @@
+# Dependencies
+node_modules/
+*.lock
+
+# Build output
+out/
+*.tgz
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor directories
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+npm-debug.log*
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Cache directories
+.cache/
+.eslintcache
+
+# Playwright
+/test-results/
+playwright-report/
+*.png
+!/test-results/*/bootswatch/*.png
+!/test-results/*/modernstrap/*.png
+
+# Local directories
+thirdparty
+local/

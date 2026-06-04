@@ -12,5 +12,8 @@
 @import "./components/navigation.css";
 @import "./components/data.css";
 @import "./components/feedback.css";
+@import "./components/join.css";
+@import "./components/divider.css";
+@import "./components/spinner.css";
 @import "./enhancements/color-mix.css";
 @import "./enhancements/container.css";

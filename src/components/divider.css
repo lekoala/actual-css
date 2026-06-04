@@ -1,0 +1,35 @@
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-block: var(--gap);
+  color: var(--text-muted);
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.divider::before,
+.divider::after {
+  content: "";
+  flex: 1;
+  block-size: 1px;
+  background: var(--border);
+}
+
+.divider:empty::after {
+  display: none;
+}
+
+.divider.vertical {
+  flex-direction: column;
+  align-self: stretch;
+  margin-inline: var(--gap);
+  margin-block: 0;
+}
+
+.divider.vertical::before,
+.divider.vertical::after {
+  inline-size: 1px;
+  block-size: auto;
+  flex: 1;
+}
