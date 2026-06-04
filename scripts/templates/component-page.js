@@ -27,11 +27,67 @@ export function generateComponentPage(data, name) {
 
   const sections = contentSections.map(s => {
     const examples = s.examples.map(ex => {
-      return `<div class="example-render">${ex}</div>
-<div class="example-code">
-<pre><code>${escapeHtml(ex)}</code></pre>
+      const directives = ex.directives || [];
+      const code = ex.code;
+      
+      // Determine layout based on directives
+      const isInline = directives.includes('inline') || directives.includes('row');
+      const isList = directives.includes('list') || directives.includes('stack');
+      const isGrid = directives.includes('grid');
+      const isCenter = directives.includes('center');
+      const isFull = directives.includes('full');
+      const noCode = directives.includes('no-code');
+      
+      // Build CSS classes
+      const renderClasses = ['example-render'];
+      if (isInline) renderClasses.push('example-inline');
+      if (isList) renderClasses.push('example-list');
+      if (isGrid) renderClasses.push('example-grid');
+      if (isCenter) renderClasses.push('example-center');
+      if (isFull) renderClasses.push('example-full');
+      
+      // Determine layout based on directives or content
+      const lines = code.trim().split('\n');
+      const isSingleLine = lines.length === 1;
+      const isMultiLine = lines.length > 1;
+      
+      // If no directive specified, guess based on content
+      if (!isInline && !isList && !isGrid && !isCenter && !isFull) {
+        const firstLine = lines[0].trim();
+        // Block elements get list layout
+        if (firstLine.startsWith('<div') || firstLine.startsWith('<article') || firstLine.startsWith('<section') || firstLine.startsWith('<nav') || firstLine.startsWith('<fieldset') || firstLine.startsWith('<table') || firstLine.startsWith('<details') || firstLine.startsWith('<progress') || firstLine.startsWith('<meter') || firstLine.startsWith('<label')) {
+          renderClasses.push('example-list');
+        } else if (isMultiLine) {
+          renderClasses.push('example-inline');
+        }
+      }
+      
+      // Build render content
+      let renderContent;
+      if (isMultiLine && (isList || renderClasses.includes('example-list'))) {
+        // For list layout, render each line directly
+        renderContent = lines.map(line => line.trim()).join('\n');
+      } else if (isMultiLine && (isInline || renderClasses.includes('example-inline'))) {
+        // For inline layout, wrap each line in example-item
+        renderContent = lines.map(line => {
+          const trimmed = line.trim();
+          if (trimmed) {
+            return `<div class="example-item">${trimmed}</div>`;
+          }
+          return '';
+        }).filter(Boolean).join('\n');
+      } else {
+        renderContent = code;
+      }
+      
+      const renderHtml = `<div class="${renderClasses.join(' ')}">${renderContent}</div>`;
+      const codeHtml = noCode ? '' : `<div class="example-code">
+<pre><code>${escapeHtml(code)}</code></pre>
 </div>`;
+      
+      return `${renderHtml}${codeHtml}`;
     }).join('\n');
+    
     return `<section class="component-section">
 <h2>${escapeHtml(s.title)}</h2>
 ${s.description ? `<p>${escapeHtml(s.description)}</p>` : ''}

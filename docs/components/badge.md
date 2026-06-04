@@ -28,11 +28,8 @@ Badges are used to inform the user of the status of specific data.
 
 A badge with default solid styling.
 
-```html
+```html .inline
 <span class="badge success">Published</span>
-```
-
-```html
 <span class="badge warning">Pending</span>
 ```
 
@@ -40,27 +37,12 @@ A badge with default solid styling.
 
 All intent colors with default solid styling.
 
-```html
+```html .inline
 <span class="badge primary">Primary</span>
-```
-
-```html
 <span class="badge secondary">Secondary</span>
-```
-
-```html
 <span class="badge success">Success</span>
-```
-
-```html
 <span class="badge warning">Warning</span>
-```
-
-```html
 <span class="badge danger">Danger</span>
-```
-
-```html
 <span class="badge neutral">Neutral</span>
 ```
 
@@ -68,23 +50,11 @@ All intent colors with default solid styling.
 
 Primary intent across all variants.
 
-```html
+```html .inline
 <span class="badge primary solid">Solid</span>
-```
-
-```html
 <span class="badge primary soft">Soft</span>
-```
-
-```html
 <span class="badge primary outline">Outline</span>
-```
-
-```html
 <span class="badge primary ghost">Ghost</span>
-```
-
-```html
 <span class="badge primary link">Link</span>
 ```
 
@@ -92,15 +62,9 @@ Primary intent across all variants.
 
 Available sizes.
 
-```html
+```html .inline
 <span class="badge primary sm">Small</span>
-```
-
-```html
 <span class="badge primary">Default</span>
-```
-
-```html
 <span class="badge primary lg">Large</span>
 ```
 

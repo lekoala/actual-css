@@ -29,13 +29,23 @@
 <h2>Avatar</h2>
 <p>User avatar with initials.</p>
 <div class="example-group">
-<div class="example-render"><span class="avatar primary">A</span></div>
-<div class="example-code">
-<pre><code>&lt;span class=&quot;avatar primary&quot;&gt;A&lt;/span&gt;</code></pre>
+<div class="example-render example-inline"><div class="example-item"><span class="avatar primary">A</span></div>
+<div class="example-item"><span class="avatar success lg">B</span></div></div><div class="example-code">
+<pre><code>&lt;span class=&quot;avatar primary&quot;&gt;A&lt;/span&gt;
+&lt;span class=&quot;avatar success lg&quot;&gt;B&lt;/span&gt;</code></pre>
 </div>
-<div class="example-render"><span class="avatar success lg">B</span></div>
-<div class="example-code">
-<pre><code>&lt;span class=&quot;avatar success lg&quot;&gt;B&lt;/span&gt;</code></pre>
+</div>
+</section>
+<section class="component-section">
+<h2>Skeleton</h2>
+<p>Loading placeholder.</p>
+<div class="example-group">
+<div class="example-render example-list"><div class="skeleton title"></div>
+<div class="skeleton text"></div>
+<div class="skeleton avatar"></div></div><div class="example-code">
+<pre><code>&lt;div class=&quot;skeleton title&quot;&gt;&lt;/div&gt;
+&lt;div class=&quot;skeleton text&quot;&gt;&lt;/div&gt;
+&lt;div class=&quot;skeleton avatar&quot;&gt;&lt;/div&gt;</code></pre>
 </div>
 </div>
 </section>
@@ -43,11 +53,10 @@
 <h2>Toast</h2>
 <p>Toast notification.</p>
 <div class="example-group">
-<div class="example-render"><div class="toast success soft">
-  <strong>Done</strong>
-  <span class="badge success">OK</span>
-</div></div>
-<div class="example-code">
+<div class="example-render example-list"><div class="toast success soft">
+<strong>Done</strong>
+<span class="badge success">OK</span>
+</div></div><div class="example-code">
 <pre><code>&lt;div class=&quot;toast success soft&quot;&gt;
   &lt;strong&gt;Done&lt;/strong&gt;
   &lt;span class=&quot;badge success&quot;&gt;OK&lt;/span&gt;
@@ -56,38 +65,19 @@
 </div>
 </section>
 <section class="component-section">
-<h2>Skeleton</h2>
-<p>Loading placeholder.</p>
-<div class="example-group">
-<div class="example-render"><div class="skeleton title"></div></div>
-<div class="example-code">
-<pre><code>&lt;div class=&quot;skeleton title&quot;&gt;&lt;/div&gt;</code></pre>
-</div>
-<div class="example-render"><div class="skeleton text"></div></div>
-<div class="example-code">
-<pre><code>&lt;div class=&quot;skeleton text&quot;&gt;&lt;/div&gt;</code></pre>
-</div>
-<div class="example-render"><div class="skeleton avatar"></div></div>
-<div class="example-code">
-<pre><code>&lt;div class=&quot;skeleton avatar&quot;&gt;&lt;/div&gt;</code></pre>
-</div>
-</div>
-</section>
-<section class="component-section">
 <h2>Accordion</h2>
 <p>Collapsible content sections.</p>
 <div class="example-group">
-<div class="example-render"><div class="accordion">
-  <details open>
-    <summary>First item</summary>
-    <div class="accordion-body">Content here.</div>
-  </details>
-  <details>
-    <summary>Second item</summary>
-    <div class="accordion-body">More content.</div>
-  </details>
-</div></div>
-<div class="example-code">
+<div class="example-render example-list"><div class="accordion">
+<details open>
+<summary>First item</summary>
+<div class="accordion-body">Content here.</div>
+</details>
+<details>
+<summary>Second item</summary>
+<div class="accordion-body">More content.</div>
+</details>
+</div></div><div class="example-code">
 <pre><code>&lt;div class=&quot;accordion&quot;&gt;
   &lt;details open&gt;
     &lt;summary&gt;First item&lt;/summary&gt;
@@ -105,7 +95,7 @@
 <h2>Dialog</h2>
 <p>Modal dialog.</p>
 <div class="example-group">
-<div class="example-render"><dialog class="dialog" id="confirm">
+<div class="example-render example-center"><dialog class="dialog" id="confirm" open>
   <form method="dialog" class="stack">
     <h2>Confirm</h2>
     <p>Are you sure?</p>
@@ -114,9 +104,8 @@
       <button class="btn danger" value="delete">Delete</button>
     </div>
   </form>
-</dialog></div>
-<div class="example-code">
-<pre><code>&lt;dialog class=&quot;dialog&quot; id=&quot;confirm&quot;&gt;
+</dialog></div><div class="example-code">
+<pre><code>&lt;dialog class=&quot;dialog&quot; id=&quot;confirm&quot; open&gt;
   &lt;form method=&quot;dialog&quot; class=&quot;stack&quot;&gt;
     &lt;h2&gt;Confirm&lt;/h2&gt;
     &lt;p&gt;Are you sure?&lt;/p&gt;
@@ -133,11 +122,10 @@
 <h2>Switch</h2>
 <p>Toggle switch.</p>
 <div class="example-group">
-<div class="example-render"><label class="choice">
-  <input class="switch primary" type="checkbox" checked>
-  Enable notifications
-</label></div>
-<div class="example-code">
+<div class="example-render example-list"><label class="choice">
+<input class="switch primary" type="checkbox" checked>
+Enable notifications
+</label></div><div class="example-code">
 <pre><code>&lt;label class=&quot;choice&quot;&gt;
   &lt;input class=&quot;switch primary&quot; type=&quot;checkbox&quot; checked&gt;
   Enable notifications

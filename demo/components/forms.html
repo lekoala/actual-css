@@ -25,12 +25,11 @@
 <h2>Text input</h2>
 <p>Basic text input with label.</p>
 <div class="example-group">
-<div class="example-render"><label class="field">
-  <span class="label">Email</span>
-  <input class="input" type="email" placeholder="you@example.com">
-  <span class="help">We will never share your email.</span>
-</label></div>
-<div class="example-code">
+<div class="example-render example-list"><label class="field">
+<span class="label">Email</span>
+<input class="input" type="email" placeholder="you@example.com">
+<span class="help">We will never share your email.</span>
+</label></div><div class="example-code">
 <pre><code>&lt;label class=&quot;field&quot;&gt;
   &lt;span class=&quot;label&quot;&gt;Email&lt;/span&gt;
   &lt;input class=&quot;input&quot; type=&quot;email&quot; placeholder=&quot;you@example.com&quot;&gt;
@@ -43,11 +42,10 @@
 <h2>Textarea</h2>
 <p>Multi-line text input.</p>
 <div class="example-group">
-<div class="example-render"><label class="field">
-  <span class="label">Bio</span>
-  <textarea class="textarea">Default text</textarea>
-</label></div>
-<div class="example-code">
+<div class="example-render example-list"><label class="field">
+<span class="label">Bio</span>
+<textarea class="textarea">Default text</textarea>
+</label></div><div class="example-code">
 <pre><code>&lt;label class=&quot;field&quot;&gt;
   &lt;span class=&quot;label&quot;&gt;Bio&lt;/span&gt;
   &lt;textarea class=&quot;textarea&quot;&gt;Default text&lt;/textarea&gt;
@@ -59,14 +57,13 @@
 <h2>Select</h2>
 <p>Dropdown select input.</p>
 <div class="example-group">
-<div class="example-render"><label class="field">
-  <span class="label">Role</span>
-  <select class="select">
-    <option>Admin</option>
-    <option>Editor</option>
-  </select>
-</label></div>
-<div class="example-code">
+<div class="example-render example-list"><label class="field">
+<span class="label">Role</span>
+<select class="select">
+<option>Admin</option>
+<option>Editor</option>
+</select>
+</label></div><div class="example-code">
 <pre><code>&lt;label class=&quot;field&quot;&gt;
   &lt;span class=&quot;label&quot;&gt;Role&lt;/span&gt;
   &lt;select class=&quot;select&quot;&gt;
@@ -81,11 +78,10 @@
 <h2>Checkbox</h2>
 <p>Checkbox inputs with choice wrapper.</p>
 <div class="example-group">
-<div class="example-render"><label class="choice">
-  <input class="check success" type="checkbox" checked>
-  Product updates
-</label></div>
-<div class="example-code">
+<div class="example-render example-list"><label class="choice">
+<input class="check success" type="checkbox" checked>
+Product updates
+</label></div><div class="example-code">
 <pre><code>&lt;label class=&quot;choice&quot;&gt;
   &lt;input class=&quot;check success&quot; type=&quot;checkbox&quot; checked&gt;
   Product updates
@@ -97,11 +93,10 @@
 <h2>Radio</h2>
 <p>Radio button inputs.</p>
 <div class="example-group">
-<div class="example-render"><label class="choice">
-  <input class="radio primary" name="plan" type="radio">
-  Pro
-</label></div>
-<div class="example-code">
+<div class="example-render example-list"><label class="choice">
+<input class="radio primary" name="plan" type="radio">
+Pro
+</label></div><div class="example-code">
 <pre><code>&lt;label class=&quot;choice&quot;&gt;
   &lt;input class=&quot;radio primary&quot; name=&quot;plan&quot; type=&quot;radio&quot;&gt;
   Pro
@@ -113,11 +108,10 @@
 <h2>Switch</h2>
 <p>Toggle switch.</p>
 <div class="example-group">
-<div class="example-render"><label class="choice">
-  <input class="switch primary" type="checkbox" checked>
-  Enable notifications
-</label></div>
-<div class="example-code">
+<div class="example-render example-list"><label class="choice">
+<input class="switch primary" type="checkbox" checked>
+Enable notifications
+</label></div><div class="example-code">
 <pre><code>&lt;label class=&quot;choice&quot;&gt;
   &lt;input class=&quot;switch primary&quot; type=&quot;checkbox&quot; checked&gt;
   Enable notifications
@@ -129,14 +123,13 @@
 <h2>Fieldset</h2>
 <p>Grouped form fields.</p>
 <div class="example-group">
-<div class="example-render"><fieldset class="field">
-  <legend class="label">Preferences</legend>
-  <label class="choice">
-    <input class="check" type="checkbox">
-    Option A
-  </label>
-</fieldset></div>
-<div class="example-code">
+<div class="example-render example-list"><fieldset class="field">
+<legend class="label">Preferences</legend>
+<label class="choice">
+<input class="check" type="checkbox">
+Option A
+</label>
+</fieldset></div><div class="example-code">
 <pre><code>&lt;fieldset class=&quot;field&quot;&gt;
   &lt;legend class=&quot;label&quot;&gt;Preferences&lt;/legend&gt;
   &lt;label class=&quot;choice&quot;&gt;
@@ -151,17 +144,29 @@
 <h2>Error state</h2>
 <p>Field with validation error.</p>
 <div class="example-group">
-<div class="example-render"><label class="field danger">
-  <span class="label">Email</span>
-  <input class="input" type="email" aria-invalid="true">
-  <span class="help">Enter a valid email address.</span>
-</label></div>
-<div class="example-code">
+<div class="example-render example-list"><label class="field danger">
+<span class="label">Email</span>
+<input class="input" type="email" aria-invalid="true">
+<span class="help">Enter a valid email address.</span>
+</label></div><div class="example-code">
 <pre><code>&lt;label class=&quot;field danger&quot;&gt;
   &lt;span class=&quot;label&quot;&gt;Email&lt;/span&gt;
   &lt;input class=&quot;input&quot; type=&quot;email&quot; aria-invalid=&quot;true&quot;&gt;
   &lt;span class=&quot;help&quot;&gt;Enter a valid email address.&lt;/span&gt;
 &lt;/label&gt;</code></pre>
+</div>
+</div>
+</section>
+<section class="component-section">
+<h2>Field sizes</h2>
+
+<div class="example-group">
+<div class="example-render example-list"><input class="input sm" type="text" placeholder="Small">
+<input class="input" type="text" placeholder="Default">
+<input class="input lg" type="text" placeholder="Large"></div><div class="example-code">
+<pre><code>&lt;input class=&quot;input sm&quot; type=&quot;text&quot; placeholder=&quot;Small&quot;&gt;
+&lt;input class=&quot;input&quot; type=&quot;text&quot; placeholder=&quot;Default&quot;&gt;
+&lt;input class=&quot;input lg&quot; type=&quot;text&quot; placeholder=&quot;Large&quot;&gt;</code></pre>
 </div>
 </div>
 </section>

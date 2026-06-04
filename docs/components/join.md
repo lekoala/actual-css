@@ -6,7 +6,7 @@ Group buttons and inputs with shared border-radius.
 
 Grouped buttons.
 
-```html
+```html .inline
 <div class="join">
   <button class="btn primary" type="button">Save</button>
   <button class="btn neutral outline" type="button">Cancel</button>
@@ -17,7 +17,7 @@ Grouped buttons.
 
 Stacked group.
 
-```html
+```html .list
 <div class="join vertical">
   <button class="btn primary" type="button">Top</button>
   <button class="btn neutral outline" type="button">Bottom</button>
@@ -28,7 +28,7 @@ Stacked group.
 
 Full-width group.
 
-```html
+```html .full
 <div class="join block">
   <input class="input" type="text" placeholder="Search">
   <button class="btn primary" type="button">Go</button>

@@ -28,11 +28,8 @@ Buttons allow the user to take actions or make choices.
 
 A button with default styling.
 
-```html
+```html .inline
 <button class="btn primary">Save</button>
-```
-
-```html
 <button class="btn neutral">Cancel</button>
 ```
 
@@ -40,27 +37,12 @@ A button with default styling.
 
 All intent colors with default solid styling.
 
-```html
+```html .inline
 <button class="btn primary">Primary</button>
-```
-
-```html
 <button class="btn secondary">Secondary</button>
-```
-
-```html
 <button class="btn success">Success</button>
-```
-
-```html
 <button class="btn warning">Warning</button>
-```
-
-```html
 <button class="btn danger">Danger</button>
-```
-
-```html
 <button class="btn neutral">Neutral</button>
 ```
 
@@ -68,23 +50,11 @@ All intent colors with default solid styling.
 
 Primary intent across all variants.
 
-```html
+```html .inline
 <button class="btn primary solid">Solid</button>
-```
-
-```html
 <button class="btn primary soft">Soft</button>
-```
-
-```html
 <button class="btn primary outline">Outline</button>
-```
-
-```html
 <button class="btn primary ghost">Ghost</button>
-```
-
-```html
 <button class="btn primary link">Link</button>
 ```
 
@@ -92,15 +62,9 @@ Primary intent across all variants.
 
 Available sizes.
 
-```html
+```html .inline
 <button class="btn primary sm">Small</button>
-```
-
-```html
 <button class="btn primary">Default</button>
-```
-
-```html
 <button class="btn primary lg">Large</button>
 ```
 
@@ -108,15 +72,9 @@ Available sizes.
 
 Disabled and loading states.
 
-```html
+```html .inline
 <button class="btn primary" disabled>Disabled</button>
-```
-
-```html
 <button class="btn primary" aria-disabled="true">ARIA Disabled</button>
-```
-
-```html
 <button class="btn primary loading">Loading</button>
 ```
 
@@ -124,11 +82,8 @@ Disabled and loading states.
 
 Buttons with icon content.
 
-```html
+```html .inline
 <button class="btn primary">★ Favorite</button>
-```
-
-```html
 <button class="btn primary">Save →</button>
 ```
 

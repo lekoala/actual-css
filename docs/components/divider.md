@@ -6,11 +6,8 @@ Horizontal and vertical separators.
 
 Text divider with lines.
 
-```html
+```html .list
 <div class="divider">Or</div>
-```
-
-```html
 <div class="divider"></div>
 ```
 
@@ -18,7 +15,7 @@ Text divider with lines.
 
 Vertical divider.
 
-```html
+```html .center
 <div class="divider vertical"></div>
 ```
 

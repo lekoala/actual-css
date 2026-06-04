@@ -5,6 +5,16 @@
     --ui-border: color-mix(in oklch, var(--intent, var(--neutral)), var(--surface) 65%);
   }
 
+  .alert:where(.primary, .secondary, .success, .warning, .danger, .neutral):not(
+    :where(.solid, .outline, .ghost, .link)
+  ) {
+    --ui-bg: light-dark(
+      color-mix(in srgb, var(--intent) 8%, transparent),
+      color-mix(in srgb, var(--intent) 20%, transparent)
+    );
+    --ui-border: transparent;
+  }
+
   :where(.btn, a.badge, button.badge, a.alert, button.alert):where(.ghost, .soft):hover {
     --ui-hover-bg: color-mix(in oklch, var(--intent, var(--neutral)), transparent 88%);
   }

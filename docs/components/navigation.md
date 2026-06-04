@@ -15,7 +15,7 @@ Navbar, breadcrumbs, tabs, and pagination.
 
 Top navigation bar.
 
-```html
+```html .full
 <nav class="navbar" aria-label="Primary">
   <a class="navbar-brand" href="#">Brand</a>
   <ul class="navbar-nav">
@@ -29,7 +29,7 @@ Top navigation bar.
 
 Navigation breadcrumbs.
 
-```html
+```html .full
 <ol class="breadcrumb" aria-label="Breadcrumb">
   <li><a href="#">Home</a></li>
   <li><a href="#">Category</a></li>
@@ -41,18 +41,26 @@ Navigation breadcrumbs.
 
 Tab navigation.
 
-```html
+```html .inline
 <div class="tabs primary" role="tablist">
   <button class="tab" type="button" role="tab" aria-selected="true">Active</button>
   <button class="tab" type="button" role="tab">Inactive</button>
 </div>
 ```
 
+## Sizes
+
+```html .inline
+<button class="tab sm">Small</button>
+<button class="tab">Default</button>
+<button class="tab lg">Large</button>
+```
+
 ## Pagination
 
 Page navigation.
 
-```html
+```html .inline
 <ol class="pagination" aria-label="Pagination">
   <li><a class="page-link" href="#">Prev</a></li>
   <li><a class="page-link" aria-current="page" href="#">1</a></li>

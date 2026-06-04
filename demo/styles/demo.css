@@ -95,6 +95,77 @@
   background: var(--surface-raised);
 }
 
+/* Inline/row layout - horizontal flex */
+.example-render.example-inline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+}
+
+/* List/stack layout - vertical flex */
+.example-render.example-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+/* Grid layout */
+.example-render.example-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+  gap: 1rem;
+}
+
+/* Center layout */
+.example-render.example-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 6rem;
+}
+
+/* Full width layout */
+.example-render.example-full > * {
+  width: 100%;
+}
+
+/* Example items for inline layout */
+.example-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+/* Default directive styles for block elements in list */
+.example-render.example-list > div,
+.example-render.example-list > article,
+.example-render.example-list > section,
+.example-render.example-list > nav,
+.example-render.example-list > fieldset,
+.example-render.example-list > table,
+.example-render.example-list > details,
+.example-render.example-list > progress,
+.example-render.example-list > meter,
+.example-render.example-list > label {
+  width: 100%;
+}
+
+/* Spacing between stacked items */
+.example-render.example-list > div + div,
+.example-render.example-list > article + article,
+.example-render.example-list > section + section,
+.example-render.example-list > nav + nav,
+.example-render.example-list > fieldset + fieldset,
+.example-render.example-list > table + table,
+.example-render.example-list > details + details,
+.example-render.example-list > progress + progress,
+.example-render.example-list > meter + meter,
+.example-render.example-list > label + label {
+  margin-top: 0.75rem;
+}
+
 .example-code {
   margin-block-start: 0.5rem;
 }

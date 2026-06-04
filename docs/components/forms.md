@@ -15,7 +15,7 @@ Form inputs, labels, and controls.
 
 Basic text input with label.
 
-```html
+```html .list
 <label class="field">
   <span class="label">Email</span>
   <input class="input" type="email" placeholder="you@example.com">
@@ -27,7 +27,7 @@ Basic text input with label.
 
 Multi-line text input.
 
-```html
+```html .list
 <label class="field">
   <span class="label">Bio</span>
   <textarea class="textarea">Default text</textarea>
@@ -38,7 +38,7 @@ Multi-line text input.
 
 Dropdown select input.
 
-```html
+```html .list
 <label class="field">
   <span class="label">Role</span>
   <select class="select">
@@ -52,7 +52,7 @@ Dropdown select input.
 
 Checkbox inputs with choice wrapper.
 
-```html
+```html .list
 <label class="choice">
   <input class="check success" type="checkbox" checked>
   Product updates
@@ -63,7 +63,7 @@ Checkbox inputs with choice wrapper.
 
 Radio button inputs.
 
-```html
+```html .list
 <label class="choice">
   <input class="radio primary" name="plan" type="radio">
   Pro
@@ -74,7 +74,7 @@ Radio button inputs.
 
 Toggle switch.
 
-```html
+```html .list
 <label class="choice">
   <input class="switch primary" type="checkbox" checked>
   Enable notifications
@@ -85,7 +85,7 @@ Toggle switch.
 
 Grouped form fields.
 
-```html
+```html .list
 <fieldset class="field">
   <legend class="label">Preferences</legend>
   <label class="choice">
@@ -99,12 +99,20 @@ Grouped form fields.
 
 Field with validation error.
 
-```html
+```html .list
 <label class="field danger">
   <span class="label">Email</span>
   <input class="input" type="email" aria-invalid="true">
   <span class="help">Enter a valid email address.</span>
 </label>
+```
+
+## Field sizes
+
+```html .list
+<input class="input sm" type="text" placeholder="Small">
+<input class="input" type="text" placeholder="Default">
+<input class="input lg" type="text" placeholder="Large">
 ```
 
 ## Accessibility

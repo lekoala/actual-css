@@ -20,15 +20,9 @@ Inline loading indicators.
 
 Inline spinner.
 
-```html
+```html .inline
 <span class="spinner primary"></span>
-```
-
-```html
 <span class="spinner danger sm"></span>
-```
-
-```html
 <span class="spinner neutral lg"></span>
 ```
 
@@ -36,7 +30,7 @@ Inline spinner.
 
 Button with loading state.
 
-```html
+```html .inline
 <button class="btn primary loading" type="button">Saving</button>
 ```
 

@@ -15,6 +15,7 @@
   <link rel="stylesheet" href="../dist/themes/mono.css" data-demo-theme-swatch>
   <link rel="stylesheet" href="../dist/themes/square.css" data-demo-theme-swatch>
   <style>
+    html { scroll-padding-top: 2rem; }
     main { padding-block: 1rem 4rem; }
     section { margin-block: 1.5rem; }
     h1, h2, h3, h4 { line-height: 1.15; }
@@ -54,7 +55,7 @@
     <nav class="navbar demo-top" aria-label="Primary navigation">
       <a class="navbar-brand" href="#top"><span class="avatar primary">A</span>Actual CSS</a>
       <ul class="navbar-nav">
-        <li><a class="nav-link" href="#dashboard">Demo</a></li>
+        <li><a class="nav-link" href="#dashboard">Dashboard</a></li>
         <li><a class="nav-link" href="#components">Components</a></li>
         <li><a class="nav-link" href="#forms">Forms</a></li>
         <li><a class="nav-link" href="#recipes">Recipes</a></li>
@@ -81,7 +82,7 @@
     <header id="top" class="demo-hero stack">
       <ol class="breadcrumb" aria-label="Breadcrumb">
         <li><a href="#top">Actual</a></li>
-        <li><a href="#dashboard">Demo</a></li>
+        <li><a href="#dashboard">Dashboard</a></li>
         <li aria-current="page">Kitchen sink</li>
       </ol>
       <div class="cluster demo-toolbar">
@@ -99,7 +100,9 @@
       </div>
     </header>
 
-    <section id="dashboard" class="grid demo-stat-grid" aria-label="Key metrics">
+    <section id="dashboard" class="stack">
+      <h2>Dashboard</h2>
+      <div class="grid demo-stat-grid" aria-label="Key metrics">
       <article class="card raised metric">
         <span class="metric-label">Revenue</span>
         <strong class="metric-value">$42,128</strong>
@@ -120,124 +123,12 @@
         <strong class="metric-value">99.99%</strong>
         <span class="badge success outline">Healthy</span>
       </article>
+    </div>
     </section>
 
-    <section class="card raised stack">
-      <div class="tabs primary" role="tablist" aria-label="Dashboard views">
-        <button class="tab" type="button" role="tab" aria-selected="true">Overview</button>
-        <button class="tab" type="button" role="tab" aria-selected="false">Performance</button>
-        <button class="tab" type="button" role="tab" aria-selected="false">Reports</button>
-      </div>
-
+    <section id="components" class="stack">
+      <h2>Components</h2>
       <div class="grid demo-main-grid">
-        <article class="card stack">
-          <div class="cluster demo-toolbar">
-            <div>
-              <h3>Weekly traffic</h3>
-              <p class="demo-muted">Dummy operational data for component testing.</p>
-            </div>
-            <span class="badge primary soft">Live</span>
-          </div>
-          <div class="grid" style="--grid-min: 9rem">
-            <div class="metric"><span class="metric-label">Avg response</span><strong class="metric-value">142 ms</strong></div>
-            <div class="metric"><span class="metric-label">Error rate</span><strong class="metric-value">0.03%</strong></div>
-          </div>
-          <div class="stack">
-            <div class="demo-status-head"><strong>API</strong><span class="demo-muted">72%</span></div>
-            <progress class="progress primary" max="100" value="72">72%</progress>
-            <div class="demo-status-head"><strong>Workers</strong><span class="demo-muted">42%</span></div>
-            <progress class="progress success" max="100" value="42">42%</progress>
-            <div class="demo-status-head"><strong>Queue</strong><span class="demo-muted">86%</span></div>
-            <progress class="progress warning" max="100" value="86">86%</progress>
-          </div>
-        </article>
-
-        <article class="card stack">
-          <h3>Monthly summary</h3>
-          <div class="table-wrap">
-            <table class="table">
-              <thead><tr><th>Metric</th><th>Value</th><th>Change</th></tr></thead>
-              <tbody>
-                <tr><td>Page views</td><td>1,234,567</td><td><span class="badge success soft">+8%</span></td></tr>
-                <tr><td>Bounce rate</td><td>42.3%</td><td><span class="badge warning soft">+2.1%</span></td></tr>
-                <tr><td>Avg session</td><td>4m 12s</td><td><span class="badge success soft">+15s</span></td></tr>
-              </tbody>
-            </table>
-          </div>
-        </article>
-      </div>
-    </section>
-
-    <section class="grid demo-main-grid">
-      <article class="card stack">
-        <h2>Recent activity</h2>
-        <div class="stack">
-          <div class="cluster"><span class="badge primary soft">Deploy</span><div><strong>Production deploy #1847</strong><br><span class="demo-muted">2 minutes ago by Alice</span></div></div>
-          <div class="cluster"><span class="badge warning soft">Alert</span><div><strong>High memory usage on worker-3</strong><br><span class="demo-muted">18 minutes ago — auto-resolved</span></div></div>
-          <div class="cluster"><span class="badge success soft">Merge</span><div><strong>PR #392: Update auth middleware</strong><br><span class="demo-muted">1 hour ago by Bob</span></div></div>
-          <div class="cluster"><span class="badge danger soft">Incident</span><div><strong>API latency spike resolved</strong><br><span class="demo-muted">3 hours ago — duration: 4m 22s</span></div></div>
-          <div class="cluster"><span class="badge neutral soft">Config</span><div><strong>Updated rate limits</strong><br><span class="demo-muted">5 hours ago by Carol</span></div></div>
-        </div>
-      </article>
-
-      <article class="card stack">
-        <h2>Server status</h2>
-        <div class="demo-status-row">
-          <div class="demo-status-head"><strong>CPU usage</strong><span class="badge success soft">Normal</span></div>
-          <meter class="meter" min="0" max="100" low="70" high="90" optimum="35" value="42">42%</meter>
-          <span class="demo-muted">42% — 8 cores</span>
-        </div>
-        <div class="demo-status-row">
-          <div class="demo-status-head"><strong>Memory</strong><span class="badge warning soft">High</span></div>
-          <meter class="meter" min="0" max="16" low="10" high="14" optimum="8" value="12.5">12.5 GB</meter>
-          <span class="demo-muted">12.5 / 16 GB used</span>
-        </div>
-        <div class="demo-status-row"><strong>Network in</strong><span class="demo-muted">1.2 Gbps</span></div>
-        <div class="demo-status-row"><strong>Network out</strong><span class="demo-muted">840 Mbps</span></div>
-      </article>
-    </section>
-
-    <section class="card raised stack">
-      <div class="cluster demo-toolbar">
-        <div>
-          <h2>Recent orders</h2>
-          <p class="demo-muted">Tables, badges, actions, filters, and pagination.</p>
-        </div>
-        <label class="field">
-          <span class="label">Search</span>
-          <input class="input" type="search" placeholder="Order or customer">
-        </label>
-      </div>
-      <div class="join">
-        <button class="btn primary sm" type="button">All</button>
-        <button class="btn neutral outline sm" type="button">Pending</button>
-        <button class="btn neutral outline sm" type="button">Shipped</button>
-      </div>
-      <div class="table-wrap">
-        <table class="table">
-          <thead><tr><th>Order</th><th>Customer</th><th>Amount</th><th>Status</th><th>Actions</th></tr></thead>
-          <tbody>
-            <tr><td><code>#ORD-7291</code></td><td>Alice Johnson</td><td>$249.00</td><td><span class="badge success soft">Delivered</span></td><td><div class="cluster demo-order-actions"><a class="btn neutral link" href="#">View</a><a class="btn neutral link" href="#">Edit</a></div></td></tr>
-            <tr><td><code>#ORD-7292</code></td><td>Bob Chen</td><td>$1,450.00</td><td><span class="badge warning soft">Pending</span></td><td><div class="cluster demo-order-actions"><a class="btn neutral link" href="#">View</a><a class="btn neutral link" href="#">Edit</a></div></td></tr>
-            <tr><td><code>#ORD-7293</code></td><td>Carol Davis</td><td>$89.50</td><td><span class="badge primary soft">Processing</span></td><td><div class="cluster demo-order-actions"><a class="btn neutral link" href="#">View</a><a class="btn neutral link" href="#">Edit</a></div></td></tr>
-            <tr><td><code>#ORD-7294</code></td><td>David Park</td><td>$672.00</td><td><span class="badge secondary soft">Shipped</span></td><td><div class="cluster demo-order-actions"><a class="btn neutral link" href="#">View</a><a class="btn neutral link" href="#">Edit</a></div></td></tr>
-            <tr><td><code>#ORD-7295</code></td><td>Emma Wilson</td><td>$34.99</td><td><span class="badge danger soft">Cancelled</span></td><td><div class="cluster demo-order-actions"><a class="btn neutral link" href="#">View</a><button class="btn danger link" type="button" onclick="document.getElementById('delete-dialog').showModal()">Delete</button></div></td></tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="cluster demo-toolbar">
-        <span class="demo-muted">Showing 1–5 of 243</span>
-        <ol class="pagination" aria-label="Pagination">
-          <li><a class="page-link" href="#">Prev</a></li>
-          <li><a class="page-link primary" aria-current="page" href="#">1</a></li>
-          <li><a class="page-link" href="#">2</a></li>
-          <li><a class="page-link" href="#">3</a></li>
-          <li><a class="page-link" href="#">Next</a></li>
-        </ol>
-      </div>
-    </section>
-
-    <section id="components" class="grid demo-main-grid">
       <article class="card stack">
         <h2>System notifications</h2>
         <div class="alert primary">Info: System maintenance scheduled for Sunday 2:00 AM UTC.</div>
@@ -281,14 +172,18 @@
         <span class="skeleton text" style="max-inline-size: 24rem"></span>
         <span class="skeleton text" style="max-inline-size: 16rem"></span>
       </article>
+    </div>
+    <div class="cluster" style="justify-content: center">
+      <a href="components/index.html" class="btn primary">View all components</a>
+    </div>
     </section>
 
-    <section id="forms" class="card raised stack">
-      <div>
-        <h2>Account settings</h2>
+    <section id="forms" class="stack">
+      <h2>Forms</h2>
+      <div class="card raised stack">
+        <h3>Account settings</h3>
         <p class="demo-muted">Forms, validation, switches, choices, inputs, textarea, and actions.</p>
-      </div>
-      <div class="grid demo-main-grid">
+        <div class="grid demo-main-grid">
         <label class="field"><span class="label">Full name</span><input class="input" value="Taylor Morgan"></label>
         <label class="field danger"><span class="label">Email</span><input class="input" type="email" aria-invalid="true" value="taylor@example"><span class="help">Please enter a valid email address.</span></label>
         <label class="field"><span class="label">Role</span><select class="select"><option>Administrator</option><option>Editor</option><option>Viewer</option></select></label>
@@ -307,6 +202,7 @@
         <button class="btn neutral outline">Cancel</button>
         <button class="btn danger soft">Delete account</button>
       </div>
+    </div>
     </section>
 
     <section id="recipes" class="stack">
