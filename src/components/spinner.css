@@ -1,48 +1,28 @@
 .spinner {
+  --spinner-size: 1.5rem;
+  --spinner-border: 2px;
+
   display: inline-block;
-  inline-size: 1.5rem;
-  block-size: 1.5rem;
-  border: 2px solid var(--text-muted);
+  inline-size: var(--spinner-size);
+  block-size: var(--spinner-size);
+  border: var(--spinner-border) solid var(--text-muted);
   border-inline-end-color: transparent;
   border-radius: 50%;
   animation: actual-spin 0.75s linear infinite;
   vertical-align: text-bottom;
 }
 
-.spinner.primary {
-  border-color: var(--primary);
-  border-inline-end-color: transparent;
-}
-.spinner.secondary {
-  border-color: var(--secondary);
-  border-inline-end-color: transparent;
-}
-.spinner.success {
-  border-color: var(--success);
-  border-inline-end-color: transparent;
-}
-.spinner.warning {
-  border-color: var(--warning);
-  border-inline-end-color: transparent;
-}
-.spinner.danger {
-  border-color: var(--danger);
-  border-inline-end-color: transparent;
-}
-.spinner.neutral {
-  border-color: var(--neutral);
+.spinner:where(.primary, .secondary, .success, .warning, .danger, .neutral) {
+  border-color: var(--intent);
   border-inline-end-color: transparent;
 }
 
 .spinner.sm {
-  inline-size: 1rem;
-  block-size: 1rem;
-  border-width: 2px;
+  --spinner-size: 1rem;
 }
 .spinner.lg {
-  inline-size: 3rem;
-  block-size: 3rem;
-  border-width: 3px;
+  --spinner-size: 3rem;
+  --spinner-border: 3px;
 }
 
 .btn.loading {

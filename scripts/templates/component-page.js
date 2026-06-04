@@ -46,6 +46,11 @@ export function generateComponentPage(data, name) {
       if (isCenter) renderClasses.push('example-center');
       if (isFull) renderClasses.push('example-full');
       
+      // Pass through additional non-layout directive classes
+      const layoutDirectives = ['inline', 'row', 'list', 'stack', 'grid', 'center', 'full', 'no-code'];
+      const extraClasses = directives.filter(d => !layoutDirectives.includes(d));
+      renderClasses.push(...extraClasses);
+      
       // Determine layout based on directives or content
       const lines = code.trim().split('\n');
       const isSingleLine = lines.length === 1;
@@ -91,11 +96,18 @@ export function generateComponentPage(data, name) {
               currentItem = [];
             }
             inBlockElement = true;
-            blockDepth = 1;
+            const openTags = (trimmed.match(/<\w+[^>]*?>/g) || []).length;
+            const closeTags = (trimmed.match(/<\/\w+>/g) || []).length;
+            blockDepth = openTags - closeTags;
             currentItem.push(trimmed);
+            if (blockDepth <= 0) {
+              items.push(currentItem.join('\n'));
+              currentItem = [];
+              inBlockElement = false;
+            }
           } else if (inBlockElement) {
             // Count opening and closing tags to track depth
-            const openTags = (trimmed.match(/<\w+[^>]*>/g) || []).length;
+            const openTags = (trimmed.match(/<\w+[^>]*?>/g) || []).length;
             const closeTags = (trimmed.match(/<\/\w+>/g) || []).length;
             blockDepth += openTags - closeTags;
             currentItem.push(trimmed);
@@ -163,12 +175,12 @@ ${data.accessibility.map(a => `<li>${escapeHtml(a)}</li>`).join('\n')}
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>${escapeHtml(data.title)} — Actual CSS</title>
-  <link rel="stylesheet" href="../../dist/actual.css">
+  <link rel="stylesheet" href="../../src/actual.css">
   <link rel="stylesheet" href="../../demo/styles/demo.css">
 </head>
 <body>
   <nav class="demo-nav">
-    <a href="../index.html">← Components</a>
+    <a href="index.html">← Components</a>
     <a href="../../demo/index.html">Kitchensink</a>
   </nav>
   <main class="center">
@@ -181,7 +193,7 @@ ${data.accessibility.map(a => `<li>${escapeHtml(a)}</li>`).join('\n')}
     ${accessibility}
   </main>
   <footer class="demo-footer">
-    <a href="../index.html">Back to components</a>
+    <a href="index.html">Back to components</a>
   </footer>
 </body>
 </html>

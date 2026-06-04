@@ -29,6 +29,10 @@
   text-transform: uppercase;
 }
 
+.table tbody tr:hover {
+  background-color: var(--hover-overlay);
+}
+
 .table tr:last-child td {
   border-block-end: 0;
 }

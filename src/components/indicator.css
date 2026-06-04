@@ -1,0 +1,25 @@
+.indicator,
+.indicator-bottom {
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  right: 0;
+  transform: translate(25%, -25%);
+}
+
+.indicator-bottom {
+  top: unset;
+  bottom: 0;
+  transform: translate(25%, 25%);
+}
+
+/* Circle-aware positioning */
+.circle+.indicator {
+  top: 14.64%;
+  transform: translate(-50%, -50%);
+}
+
+.circle+.indicator-bottom {
+  bottom: 14.64%;
+  transform: translate(25%, 25%);
+}

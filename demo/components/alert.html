@@ -4,12 +4,12 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Alert — Actual CSS</title>
-  <link rel="stylesheet" href="../../dist/actual.css">
+  <link rel="stylesheet" href="../../src/actual.css">
   <link rel="stylesheet" href="../../demo/styles/demo.css">
 </head>
 <body>
   <nav class="demo-nav">
-    <a href="../index.html">← Components</a>
+    <a href="index.html">← Components</a>
     <a href="../../demo/index.html">Kitchensink</a>
   </nav>
   <main class="center">
@@ -87,6 +87,53 @@
 </div>
 </div>
 </section>
+<section class="component-section">
+<h2>Guidelines</h2>
+<p>Do and Don't guidelines using alerts in a grid.</p>
+<div class="example-group">
+<div class="example-render example-grid grid-2"><div class="alert success">
+  <span class="alert-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+  <div class="alert-content">
+    <strong>Do</strong>
+    <ul>
+      <li>Use established variants and color patterns.</li>
+      <li>Use to show a status update on a piece of information.</li>
+    </ul>
+  </div>
+</div>
+<div class="alert danger">
+  <span class="alert-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span>
+  <div class="alert-content">
+    <strong>Don't</strong>
+    <ul>
+      <li>Don't make badges clickable. Use a button instead.</li>
+      <li>Don't use alternatives to existing badge variants.</li>
+    </ul>
+  </div>
+</div></div><div class="example-code">
+<pre><code>&lt;div class=&quot;alert success&quot;&gt;
+  &lt;span class=&quot;alert-icon&quot; aria-hidden=&quot;true&quot;&gt;&lt;svg xmlns=&quot;http://www.w3.org/2000/svg&quot; width=&quot;20&quot; height=&quot;20&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;3&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;&gt;&lt;polyline points=&quot;20 6 9 17 4 12&quot;/&gt;&lt;/svg&gt;&lt;/span&gt;
+  &lt;div class=&quot;alert-content&quot;&gt;
+    &lt;strong&gt;Do&lt;/strong&gt;
+    &lt;ul&gt;
+      &lt;li&gt;Use established variants and color patterns.&lt;/li&gt;
+      &lt;li&gt;Use to show a status update on a piece of information.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;alert danger&quot;&gt;
+  &lt;span class=&quot;alert-icon&quot; aria-hidden=&quot;true&quot;&gt;&lt;svg xmlns=&quot;http://www.w3.org/2000/svg&quot; width=&quot;20&quot; height=&quot;20&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;3&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;&gt;&lt;line x1=&quot;18&quot; y1=&quot;6&quot; x2=&quot;6&quot; y2=&quot;18&quot;/&gt;&lt;line x1=&quot;6&quot; y1=&quot;6&quot; x2=&quot;18&quot; y2=&quot;18&quot;/&gt;&lt;/svg&gt;&lt;/span&gt;
+  &lt;div class=&quot;alert-content&quot;&gt;
+    &lt;strong&gt;Don't&lt;/strong&gt;
+    &lt;ul&gt;
+      &lt;li&gt;Don't make badges clickable. Use a button instead.&lt;/li&gt;
+      &lt;li&gt;Don't use alternatives to existing badge variants.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+</div>
+</div>
+</section>
     
 <section class="component-section">
 <h2>Accessibility</h2>
@@ -98,7 +145,7 @@
 
   </main>
   <footer class="demo-footer">
-    <a href="../index.html">Back to components</a>
+    <a href="index.html">Back to components</a>
   </footer>
 </body>
 </html>

@@ -110,11 +110,12 @@ async function build() {
 await build();
 
 if (process.argv.includes('--watch')) {
-  const watcher = fs.watch(path.join(root, 'src'), { recursive: true });
-  console.log('Watching src/ ...');
+  const watcher = fs.watch(docsDir, { recursive: true });
+  console.log('Watching docs/components/ ...');
   for await (const event of watcher) {
-    if (event.filename?.endsWith('.css')) {
-      try { await build(); } catch (error) { console.error(error); }
+    if (event.filename?.endsWith('.md')) {
+      console.log(`\n${event.filename} changed, regenerating...`);
+      try { await buildDocs(); } catch (error) { console.error(error); }
     }
   }
 }
