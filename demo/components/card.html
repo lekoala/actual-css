@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Card — Actual CSS</title>
+  <link rel="stylesheet" href="../../dist/actual.css">
+  <link rel="stylesheet" href="../../demo/styles/demo.css">
+</head>
+<body>
+  <nav class="demo-nav">
+    <a href="../">← Components</a>
+    <a href="../../demo/">Kitchensink</a>
+  </nav>
+  <main class="center">
+    <header class="component-header">
+      <h1>Card</h1>
+      <p>Cards are used to group and display content in a way that is easily readable.</p>
+    </header>
+    <div class="class-reference"><div class="class-group">
+<h3>Variants</h3>
+<div class="class-list"><code>.raised</code> <code>.subtle</code> <code>.solid</code> <code>.compact</code></div>
+</div>
+<div class="class-group">
+<h3>Sizes</h3>
+<div class="class-list"><code>.sm</code> <code>.lg</code></div>
+</div></div>
+    <section class="component-section">
+<h2>Default</h2>
+<p>A flat card with default styling.</p>
+<div class="example-group">
+<div class="example-render"><article class="card">
+  <h3>Title</h3>
+  <p>Content goes here.</p>
+</article></div>
+<div class="example-code">
+<pre><code>&lt;article class=&quot;card&quot;&gt;
+  &lt;h3&gt;Title&lt;/h3&gt;
+  &lt;p&gt;Content goes here.&lt;/p&gt;
+&lt;/article&gt;</code></pre>
+</div>
+</div>
+</section>
+<section class="component-section">
+<h2>Variants</h2>
+<p>Card surface styles.</p>
+<div class="example-group">
+<div class="example-render"><article class="card raised">Raised card</article></div>
+<div class="example-code">
+<pre><code>&lt;article class=&quot;card raised&quot;&gt;Raised card&lt;/article&gt;</code></pre>
+</div>
+<div class="example-render"><article class="card subtle">Subtle card</article></div>
+<div class="example-code">
+<pre><code>&lt;article class=&quot;card subtle&quot;&gt;Subtle card&lt;/article&gt;</code></pre>
+</div>
+<div class="example-render"><article class="card solid">Solid card</article></div>
+<div class="example-code">
+<pre><code>&lt;article class=&quot;card solid&quot;&gt;Solid card&lt;/article&gt;</code></pre>
+</div>
+<div class="example-render"><article class="card compact">Compact card</article></div>
+<div class="example-code">
+<pre><code>&lt;article class=&quot;card compact&quot;&gt;Compact card&lt;/article&gt;</code></pre>
+</div>
+</div>
+</section>
+<section class="component-section">
+<h2>Sizes</h2>
+<p>Available sizes.</p>
+<div class="example-group">
+<div class="example-render"><article class="card sm">Small card</article></div>
+<div class="example-code">
+<pre><code>&lt;article class=&quot;card sm&quot;&gt;Small card&lt;/article&gt;</code></pre>
+</div>
+<div class="example-render"><article class="card">Default card</article></div>
+<div class="example-code">
+<pre><code>&lt;article class=&quot;card&quot;&gt;Default card&lt;/article&gt;</code></pre>
+</div>
+<div class="example-render"><article class="card lg">Large card</article></div>
+<div class="example-code">
+<pre><code>&lt;article class=&quot;card lg&quot;&gt;Large card&lt;/article&gt;</code></pre>
+</div>
+</div>
+</section>
+<section class="component-section">
+<h2>Sections</h2>
+<p>Card with header, body, and footer.</p>
+<div class="example-group">
+<div class="example-render"><article class="card">
+  <header class="card-header">
+    <h3>Title</h3>
+  </header>
+  <div class="card-body">
+    <p>Content</p>
+  </div>
+  <footer class="card-footer">
+    <button class="btn primary">Save</button>
+  </footer>
+</article></div>
+<div class="example-code">
+<pre><code>&lt;article class=&quot;card&quot;&gt;
+  &lt;header class=&quot;card-header&quot;&gt;
+    &lt;h3&gt;Title&lt;/h3&gt;
+  &lt;/header&gt;
+  &lt;div class=&quot;card-body&quot;&gt;
+    &lt;p&gt;Content&lt;/p&gt;
+  &lt;/div&gt;
+  &lt;footer class=&quot;card-footer&quot;&gt;
+    &lt;button class=&quot;btn primary&quot;&gt;Save&lt;/button&gt;
+  &lt;/footer&gt;
+&lt;/article&gt;</code></pre>
+</div>
+</div>
+</section>
+    
+<section class="component-section">
+<h2>Accessibility</h2>
+<ul>
+<li>Use &lt;article&gt; for self-contained content.</li>
+<li>Cards consume surface tokens, not intent tokens by default.</li>
+</ul>
+</section>
+
+  </main>
+  <footer class="demo-footer">
+    <a href="../">Back to components</a>
+  </footer>
+</body>
+</html>

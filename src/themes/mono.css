@@ -1,0 +1,28 @@
+[data-theme="mono"] {
+  color-scheme: light;
+
+  --primary: hsl(220 8% 18%);
+  --primary-fg: white;
+  --secondary: hsl(220 7% 34%);
+  --secondary-fg: white;
+  --success: hsl(145 42% 32%);
+  --success-fg: white;
+  --warning: hsl(40 70% 44%);
+  --warning-fg: hsl(35 35% 10%);
+  --danger: hsl(0 56% 46%);
+  --danger-fg: white;
+  --neutral: hsl(220 6% 45%);
+  --neutral-fg: white;
+
+  --surface: hsl(0 0% 99%);
+  --surface-raised: hsl(0 0% 100%);
+  --surface-subtle: hsl(220 8% 94%);
+  --surface-solid: hsl(220 8% 15%);
+
+  --text: hsl(220 8% 12%);
+  --text-muted: hsl(220 6% 42%);
+  --text-subtle: hsl(220 5% 58%);
+  --border: hsl(220 8% 84%);
+  --focus: var(--primary);
+  --focus-ring: hsl(220 8% 18% / 0.22);
+}

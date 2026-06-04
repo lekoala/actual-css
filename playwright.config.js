@@ -4,7 +4,7 @@ export default defineConfig({
   testDir: './tests',
   webServer: {
     command: 'npm run serve',
-    url: 'http://127.0.0.1:4173',
+    url: 'http://127.0.0.1:4173/demo/',
     reuseExistingServer: !process.env.CI,
     timeout: 30_000
   },

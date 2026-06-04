@@ -1,0 +1,34 @@
+/* Actual CSS v0.1.0 | plain CSS component framework */
+[data-theme="square"] {
+  color-scheme: light;
+
+  --primary: hsl(220 90% 56%);
+  --primary-fg: white;
+  --secondary: hsl(270 60% 56%);
+  --secondary-fg: white;
+  --success: hsl(145 60% 36%);
+  --success-fg: white;
+  --warning: hsl(38 92% 50%);
+  --warning-fg: hsl(35 30% 12%);
+  --danger: hsl(0 75% 55%);
+  --danger-fg: white;
+  --neutral: hsl(220 10% 42%);
+  --neutral-fg: white;
+
+  --surface: hsl(0 0% 100%);
+  --surface-raised: hsl(0 0% 100%);
+  --surface-subtle: hsl(220 20% 96%);
+  --surface-solid: hsl(222 22% 12%);
+
+  --text: hsl(222 22% 12%);
+  --text-muted: hsl(220 10% 42%);
+  --text-subtle: hsl(220 8% 55%);
+  --border: hsl(220 15% 88%);
+  --focus: var(--primary);
+  --focus-ring: hsl(220 90% 56% / 0.22);
+  --hover-overlay: hsl(220 30% 10% / 0.04);
+
+  --radius: 0;
+  --radius-sm: 0;
+  --radius-lg: 0;
+}

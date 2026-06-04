@@ -42,9 +42,11 @@ Use Actual CSS by combining one component class with optional intent, variant, a
 
 ## Themes
 
-Use `[data-theme]` globally or locally.
+Use `[data-theme]` globally or locally. Load the matching theme CSS file before using an explicit named theme.
 
 ```html
+<link rel="stylesheet" href="dist/actual.css">
+<link rel="stylesheet" href="dist/themes/corporate.css">
 <html data-theme="corporate">
 <section data-theme="dark">
   <article class="card">Nested dark island</article>
@@ -54,8 +56,11 @@ Use `[data-theme]` globally or locally.
 Available MVP themes:
 
 ```txt
-light, dark, dim, corporate, forest, ocean, sunset, lavender, mono
+base: light defaults and system dark preference in actual.css
+named files: dark, dim, corporate, forest, ocean, sunset, lavender, mono, square
 ```
+
+Themes can control shape. Use `square` or set `--radius`, `--radius-sm`, and `--radius-lg` to `0` to disable rounded corners.
 
 ## Layout Helpers
 
