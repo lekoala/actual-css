@@ -198,6 +198,7 @@ a {
 }
 
 .circle {
+  --radius: 999px;
   border-radius: 999px;
 }
 
@@ -1027,7 +1028,7 @@ fieldset.field > legend {
 }
 
 /* The visual circle is the first child */
-.avatar > :first-child {
+.avatar> :first-child {
   position: relative;
   display: inline-grid;
   place-items: center;
@@ -1042,14 +1043,14 @@ fieldset.field > legend {
 }
 
 /* Images */
-.avatar > img {
+.avatar>img {
   inline-size: 100%;
   block-size: 100%;
   object-fit: cover;
 }
 
 /* Intent colors */
-.avatar:where(.primary, .secondary, .success, .warning, .danger, .neutral) > :first-child {
+.avatar:where(.primary, .secondary, .success, .warning, .danger, .neutral)> :first-child {
   background: var(--intent);
   color: var(--intent-fg);
 }
@@ -1058,13 +1059,16 @@ fieldset.field > legend {
 .avatar.sm {
   --avatar-size: 1.75rem;
 }
-.avatar.sm > :first-child {
+
+.avatar.sm> :first-child {
   font-size: 0.8125rem;
 }
+
 .avatar.lg {
   --avatar-size: 3rem;
 }
-.avatar.lg > :first-child {
+
+.avatar.lg> :first-child {
   font-size: 1.125rem;
 }
 
@@ -1073,18 +1077,17 @@ fieldset.field > legend {
   display: inline-flex;
 }
 
-.avatar-group > .avatar > :first-child {
+.avatar-group>.avatar> :first-child {
   box-shadow: 0 0 0 2px var(--surface);
 }
 
-.avatar-group > .avatar + .avatar {
+.avatar-group>.avatar+.avatar {
   margin-inline-start: calc(var(--avatar-size) / -4);
 }
 
-
-
 /* src\components\indicator.css */
-.indicator {
+.indicator,
+.indicator-bottom {
   position: absolute;
   z-index: 1;
   top: 0;
@@ -1093,24 +1096,20 @@ fieldset.field > legend {
 }
 
 .indicator-bottom {
-  top: auto;
+  top: unset;
   bottom: 0;
   transform: translate(25%, 25%);
 }
 
 /* Circle-aware positioning */
-.circle + .indicator {
+.circle+.indicator {
   top: 14.64%;
-  left: 85.36%;
-  right: auto;
   transform: translate(-50%, -50%);
 }
 
-.circle + .indicator-bottom {
+.circle+.indicator-bottom {
   bottom: 14.64%;
-  left: 85.36%;
-  right: auto;
-  transform: translate(-50%, -50%);
+  transform: translate(25%, 25%);
 }
 
 /* src\components\status.css */

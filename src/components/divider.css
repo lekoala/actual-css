@@ -1,3 +1,10 @@
+/**
+ * Contract:
+ * - `.divider` stays a structural separator rather than a decorative accent.
+ * - Horizontal and vertical treatments stay lightweight and themeable through shared tokens.
+ * Owns: divider line layout, spacing, and label placement.
+ * Does not own: intent coloring or heavy layout behavior.
+ */
 .divider {
   display: flex;
   align-items: center;

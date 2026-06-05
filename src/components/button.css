@@ -1,3 +1,10 @@
+/**
+ * Contract:
+ * - `.btn` keeps shared intent, variant, and size behavior with a solid default.
+ * - Hover, focus-visible, and disabled states remain available across variants.
+ * Owns: button geometry, spacing, and local variable mapping.
+ * Does not own: palette values, contrast decisions, or shared variant algorithms.
+ */
 :where(.btn) {
   --btn-size: var(--control-size, 2.5rem);
   --btn-pad-x: var(--control-pad-x, 1rem);

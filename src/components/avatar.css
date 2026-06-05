@@ -1,3 +1,10 @@
+/**
+ * Contract:
+ * - `.avatar` keeps a neutral default while intent classes tint through shared intent variables.
+ * - Size changes adjust scale without changing avatar semantics.
+ * Owns: avatar geometry, size scaling, and local variable mapping.
+ * Does not own: palette values, contrast decisions, or avatar-only intent systems.
+ */
 .avatar {
   --avatar-size: 2.25rem;
 
@@ -6,7 +13,7 @@
 }
 
 /* The visual circle is the first child */
-.avatar> :first-child {
+.avatar > :first-child {
   position: relative;
   display: inline-grid;
   place-items: center;
@@ -21,14 +28,14 @@
 }
 
 /* Images */
-.avatar>img {
+.avatar > img {
   inline-size: 100%;
   block-size: 100%;
   object-fit: cover;
 }
 
 /* Intent colors */
-.avatar:where(.primary, .secondary, .success, .warning, .danger, .neutral)> :first-child {
+.avatar:where(.primary, .secondary, .success, .warning, .danger, .neutral) > :first-child {
   background: var(--intent);
   color: var(--intent-fg);
 }
@@ -38,7 +45,7 @@
   --avatar-size: 1.75rem;
 }
 
-.avatar.sm> :first-child {
+.avatar.sm > :first-child {
   font-size: 0.8125rem;
 }
 
@@ -46,7 +53,7 @@
   --avatar-size: 3rem;
 }
 
-.avatar.lg> :first-child {
+.avatar.lg > :first-child {
   font-size: 1.125rem;
 }
 
@@ -55,10 +62,10 @@
   display: inline-flex;
 }
 
-.avatar-group>.avatar> :first-child {
+.avatar-group > .avatar > :first-child {
   box-shadow: 0 0 0 2px var(--surface);
 }
 
-.avatar-group>.avatar+.avatar {
+.avatar-group > .avatar + .avatar {
   margin-inline-start: calc(var(--avatar-size) / -4);
 }

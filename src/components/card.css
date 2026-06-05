@@ -1,3 +1,10 @@
+/**
+ * Contract:
+ * - `.card` stays a surface component driven by shared surfaces, borders, radius, and spacing.
+ * - Density and elevation changes stay local to the card surface.
+ * Owns: card surface geometry, padding, and elevation modifiers.
+ * Does not own: intent colors or layout responsibilities that belong in primitives.
+ */
 .card {
   --card-pad: 1rem;
   --card-radius: var(--radius-lg);
@@ -15,7 +22,7 @@
 .card.subtle {
   background: var(--surface-subtle);
 }
-.card.solid {
+.card.inverted {
   background: var(--surface-solid);
   color: var(--surface);
   border-color: transparent;

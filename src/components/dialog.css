@@ -1,3 +1,10 @@
+/**
+ * Contract:
+ * - `.dialog` remains a surface component with clear separation from overlay behavior.
+ * - Dialog spacing, radius, and focus treatment come from shared tokens.
+ * Owns: dialog shell geometry, transitions, and local layout.
+ * Does not own: intent variants or demo-only markup dependencies.
+ */
 .dialog {
   max-inline-size: min(100% - 2rem, 32rem);
   border: 1px solid var(--border);
@@ -42,12 +49,5 @@
 @starting-style {
   .dialog[open]::backdrop {
     opacity: 0;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .dialog,
-  .dialog::backdrop {
-    transition-duration: 0.01ms;
   }
 }

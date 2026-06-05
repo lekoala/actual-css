@@ -12,3 +12,9 @@
   /* Shadow scale */
   --shadow-popout: 0 4px 12px hsl(220 30% 10% / 0.15);
 }
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration: 0.01ms;
+  }
+}

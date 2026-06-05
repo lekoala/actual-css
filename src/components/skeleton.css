@@ -1,3 +1,10 @@
+/**
+ * Contract:
+ * - Skeletons communicate loading structure without implying real content hierarchy.
+ * - Baseline skeleton styling works without enhancement files and stays theme-aware.
+ * Owns: placeholder geometry, animation, and local loading presentation.
+ * Does not own: hard-coded palette values or layout rules from mocked components.
+ */
 .skeleton {
   display: block;
   inline-size: 100%;
@@ -35,11 +42,5 @@
   }
   to {
     background-position: -200% 0;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .skeleton {
-    animation-duration: 0.01ms;
   }
 }

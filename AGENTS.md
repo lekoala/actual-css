@@ -1,40 +1,28 @@
 # Actual CSS
 
-## Stack
-Vanilla CSS, Node.js build scripts, Playwright visual regression.
+Plain CSS component framework (Node.js, Biome, Playwright). Contribute production-shaped code. Prototype scope is fine; prototype-quality code is not.
 
-## Core Architecture
+## Completion Discipline
 
-**Universal variants.** Every component uses `.component intent variant size` — e.g., `.btn.primary.soft`, `.badge.primary.soft`. Never `.btn-primary`.
+The harness decides done. Never claim success without current verification output.
+Do not run verification commands manually; the harness runs them automatically.
+Report only failures, regressions, and unverified assumptions before any success claim.
 
-**Explicit foregrounds.** We set `--primary-fg` manually, not auto-computed from OKLCH. This keeps theming simple and predictable.
+## Ceremony Budget
 
-**CSS-only.** No consumer build step. The `dist/` files are committed for CDN usage.
+- Do not introduce new persistent project artifacts unless they clearly reduce future maintenance.
+- Before adding docs, scripts, generated files, or conventions, prefer keeping the same information closer to the code or generating it from existing source.
+- Prefer deleting or consolidating ceremony when it duplicates code, docs, or architecture.
 
-**Progressive enhancement.** Modern CSS (`color-mix`, container queries) lives in `enhancements/` only. Baseline works without it.
+## Scope & Architecture
 
-## Code Conventions
+- Pick the owning layer before editing (tokens, themes, intents, variants, layout, components, enhancements, demo).
+- Treat the architectural rules in `ARCHITECTURE.md` as rule-plus-rationale constraints, not blind style laws.
+- Component-specific contracts live in the header comment of the owning CSS file. Update that local header only when ownership or invariants change.
+- Do not duplicate palette values or invent component-local intent systems. Use shared intents and variants.
+- Demo files must never be required for framework behavior. Do not modify `demo/components` or `dist/`.
+- Keep selectors low-specificity. Prefer `:where()` defaults. Avoid `!important`, ID selectors, and `filter: brightness()`.
 
-- Components consume `--ui-*` variables from `variants.css`, then map to local `--component-*` variables. This separates variant logic from component styling.
-- Use `:where()` for default values to keep specificity low. Override with explicit `.component.sm` rules.
-- Never use `filter: brightness()` on transparent backgrounds (outline/ghost/link variants). Use `--hover-overlay` box-shadow for solid variants, and `--ui-hover-bg: var(--surface-subtle)` for transparent ones.
+## Questions
 
-## Component Defaults
-
-- **Buttons/badges:** Default to solid (filled background). 
-- **Alerts:** Default to transparent with border. Add `.soft` for tinted background or `.solid` for filled background.
-- **Avatars:** Support intent colors (`.avatar.primary`, `.avatar.success`).
-- **Interactive elements:** Always implement `:hover`, `:focus-visible`, and `:disabled` states.
-
-## Dev Workflow
-
-Demos reference `src/` directly. No build step needed during iteration.
-
-- `npm run dev` — watch mode for markdown → demo HTML regeneration
-- `npm run build` — CI only: inlines CSS and generates `dist/` for CDN
-- `npm run check` — linting (biome)
-- `npm run check:css` — manual or CI: custom CSS checks (hardcoded colors, forbidden variants)
-- `npm run test:visual` — milestones/PRs: Playwright visual regression
-
-NEVER regenerate demos, update playwright or build dist files unless asked. Doing it on each request
-is a waste of time.
+Ask only when a choice affects public API, irreversible behavior, or user-visible design not resolved by the docs.

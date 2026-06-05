@@ -1,3 +1,10 @@
+/**
+ * Contract:
+ * - `.badge` uses the shared intent and variant grammar with a solid default.
+ * - Variant styling flows through shared `--ui-*` variables before mapping locally.
+ * Owns: badge geometry, inline layout, and local variable mapping.
+ * Does not own: palette values, `.badge-primary`-style APIs, or shared variant logic.
+ */
 .badge {
   --badge-bg: var(--ui-bg, var(--intent, var(--neutral)));
   --badge-fg: var(--ui-fg, var(--intent-fg, var(--neutral-fg)));

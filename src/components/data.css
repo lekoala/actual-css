@@ -1,3 +1,10 @@
+/**
+ * Contract:
+ * - Data primitives stay neutral, content-first, and readable in nested themes.
+ * - Tables, metrics, and related data UI use shared surface and text tokens.
+ * Owns: data presentation, spacing, and table-specific structure.
+ * Does not own: decorative intent tinting or demo-only layout behavior.
+ */
 .table-wrap {
   overflow-x: auto;
   border: 1px solid var(--border);

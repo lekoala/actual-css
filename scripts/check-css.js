@@ -25,20 +25,29 @@ async function walk(dir) {
 
 for (const file of await walk(srcDir)) {
   const css = await fs.readFile(file, 'utf8');
+  const cssWithoutComments = css.replace(/\/\*[\s\S]*?\*\//g, '');
   const rel = path.relative(root, file);
 
-  if (/\.btn-primary|\.badge-primary|\.alert-primary/.test(css)) {
+  if (/\.btn-primary|\.badge-primary|\.alert-primary/.test(cssWithoutComments)) {
     problems.push(`${rel}: forbidden component-specific variant class`);
   }
 
-  if (/!important/.test(css) && !/reset\.css$/.test(rel)) {
+  if (/!important/.test(cssWithoutComments) && !/reset\.css$/.test(rel)) {
     problems.push(`${rel}: avoid !important outside reduced-motion reset`);
+  }
+
+  if (/(^|[\s,{])#[A-Za-z_][\w-]*/m.test(cssWithoutComments)) {
+    problems.push(`${rel}: avoid ID selectors in framework CSS`);
+  }
+
+  if (/filter\s*:\s*brightness\(/.test(cssWithoutComments)) {
+    problems.push(`${rel}: avoid filter: brightness(); use shared hover tokens instead`);
   }
 
   if (
     !allowedColorFiles.has(file) &&
     !file.startsWith(themesDir + path.sep) &&
-    /#[0-9a-fA-F]{3,8}\b|\brgba?\(|\bhsla?\(|\boklch\(/.test(css)
+    /#[0-9a-fA-F]{3,8}\b|\brgba?\(|\bhsla?\(|\boklch\(/.test(cssWithoutComments)
   ) {
     problems.push(`${rel}: hard-coded color outside token/theme/enhancement files`);
   }

@@ -2,15 +2,6 @@
 
 Form inputs, labels, and controls.
 
-## Intents
-
-- `.primary`
-- `.secondary`
-- `.success`
-- `.warning`
-- `.danger`
-- `.neutral`
-
 ## Text input
 
 Basic text input with label.
@@ -54,7 +45,7 @@ Checkbox inputs with choice wrapper.
 
 ```html .list
 <label class="choice">
-  <input class="check success" type="checkbox" checked>
+  <input class="check" type="checkbox" checked>
   Product updates
 </label>
 ```
@@ -65,7 +56,7 @@ Radio button inputs.
 
 ```html .list
 <label class="choice">
-  <input class="radio primary" name="plan" type="radio">
+  <input class="radio" name="plan" type="radio">
   Pro
 </label>
 ```
@@ -76,7 +67,7 @@ Toggle switch.
 
 ```html .list
 <label class="choice">
-  <input class="switch primary" type="checkbox" checked>
+  <input class="switch" type="checkbox" checked>
   Enable notifications
 </label>
 ```
