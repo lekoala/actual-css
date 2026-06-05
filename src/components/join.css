@@ -1,3 +1,10 @@
+/**
+ * Contract:
+ * - `.join` composes adjacent controls into one visual group without changing child semantics.
+ * - Joined controls stay compatible with shared size and variant classes.
+ * Owns: grouped borders, inherited radii, and adjacency layout.
+ * Does not own: new component APIs or demo-specific grouping hacks.
+ */
 .join {
   display: inline-flex;
   border-radius: var(--radius);

@@ -1,3 +1,10 @@
+/**
+ * Contract:
+ * - Form controls stay neutral by default and use shared intents only for functional validation or status.
+ * - Inputs, textareas, and selects keep focus-visible and disabled states.
+ * Owns: control geometry, field layout, and local input presentation.
+ * Does not own: decorative tinting or divergent sizing outside shared control variables.
+ */
 .field {
   display: grid;
   gap: 0.375rem;

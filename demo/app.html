@@ -1,0 +1,665 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Application — Actual CSS</title>
+  <link rel="stylesheet" href="../src/actual.css">
+  <link rel="stylesheet" href="../src/themes/index.css">
+  <style>
+    /* App shell layout */
+    .app {
+      display: flex;
+      min-block-size: 100dvh;
+    }
+
+    /* Sidebar */
+    .app-sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: var(--gap);
+      inline-size: 16rem;
+      padding: 1rem;
+      border-inline-end: 1px solid var(--border);
+      background: var(--surface-raised);
+      flex-shrink: 0;
+    }
+
+    .app-sidebar-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.5rem;
+      color: var(--text);
+      font-weight: 750;
+      text-decoration: none;
+    }
+
+    .app-sidebar-nav {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .app-sidebar-nav a {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 0.75rem;
+      border-radius: var(--radius);
+      color: var(--text-muted);
+      font-weight: 600;
+      text-decoration: none;
+      font-size: 0.9375rem;
+    }
+
+    .app-sidebar-nav a:hover {
+      background: var(--surface-subtle);
+      color: var(--text);
+    }
+
+    .app-sidebar-nav a.primary,
+    .app-sidebar-nav a[aria-current="page"] {
+      color: var(--intent, var(--primary));
+    }
+
+    .app-sidebar-nav a.primary:hover,
+    .app-sidebar-nav a[aria-current="page"]:hover {
+      background: var(--surface-subtle);
+      color: var(--intent, var(--primary));
+    }
+
+    .app-sidebar-section {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .app-sidebar-heading {
+      padding-inline: 0.75rem;
+      color: var(--text-muted);
+      font-size: 0.8125rem;
+      font-weight: 650;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+    }
+
+    .app-sidebar-subnav {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      margin: 0.25rem 0 0;
+      padding: 0 0 0 1.75rem;
+      list-style: none;
+    }
+
+    .app-sidebar-subnav a {
+      display: flex;
+      align-items: center;
+      padding: 0.35rem 0.75rem;
+      border-radius: var(--radius);
+      color: var(--text-muted);
+      font-size: 0.875rem;
+      font-weight: 500;
+      text-decoration: none;
+    }
+
+    .app-sidebar-subnav a:hover {
+      background: var(--surface-subtle);
+      color: var(--text);
+    }
+
+    .app-sidebar-subnav a[aria-current="page"] {
+      background: var(--intent, var(--primary));
+      color: var(--intent-fg, var(--primary-fg));
+      font-weight: 600;
+    }
+
+    .app-sidebar-footer {
+      margin-block-start: auto;
+      padding-block-start: 1rem;
+      border-block-start: 1px solid var(--border);
+    }
+
+    /* Main area */
+    .app-main {
+      flex: 1 1 auto;
+      display: flex;
+      flex-direction: column;
+      min-block-size: 0;
+      overflow: auto;
+    }
+
+    /* Top bar */
+    .app-topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 0.75rem 1.5rem;
+      border-block-end: 1px solid var(--border);
+      background: var(--surface-raised);
+      position: sticky;
+      inset-block-start: 0;
+      z-index: 10;
+    }
+
+    .app-topbar-search {
+      position: relative;
+      flex: 0 1 24rem;
+    }
+
+    .app-topbar-search input {
+      inline-size: 100%;
+      padding-inline: 0.75rem 2.5rem;
+    }
+
+    .app-topbar-search::after {
+      content: "🔍";
+      position: absolute;
+      inset-inline-end: 0.75rem;
+      inset-block-start: 50%;
+      transform: translateY(-50%);
+      opacity: 0.5;
+      font-size: 0.875rem;
+    }
+
+    .app-topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    /* Content area */
+    .app-content {
+      padding: 1.5rem;
+      flex: 1 1 auto;
+    }
+
+    /* Page header */
+    .app-page-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-block-end: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .app-page-header h1 {
+      margin: 0;
+      font-size: 1.5rem;
+    }
+
+    /* Filter bar */
+    .app-filters {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-block-end: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    /* Table actions */
+    .app-table-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.5rem;
+      margin-block-end: 0.75rem;
+    }
+
+    /* Stats grid */
+    .app-stats {
+      --grid-min: 12rem;
+      margin-block-end: 1.5rem;
+    }
+
+    /* Toast stack positioned */
+    .app-toasts {
+      position: fixed;
+      inset-block-start: 1rem;
+      inset-inline-end: 1rem;
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      inline-size: min(100% - 2rem, 24rem);
+      pointer-events: none;
+    }
+
+    .app-toasts > * {
+      pointer-events: auto;
+    }
+
+    /* Responsive: hide sidebar on small screens */
+    @media (max-width: 48rem) {
+      .app-sidebar {
+        display: none;
+      }
+    }
+
+    /* Demo helpers */
+    .app-demo-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .app-muted {
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <!-- Sidebar -->
+    <aside class="app-sidebar">
+      <a class="app-sidebar-brand" href="#">
+        <span class="avatar primary"><abbr class="circle">AC</abbr></span>
+        <span>Actual Clinic</span>
+      </a>
+
+      <nav aria-label="Main navigation">
+        <ul class="app-sidebar-nav">
+          <li>
+            <a href="#search">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+              Search
+            </a>
+          </li>
+          <li>
+            <a href="#notifications">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+              Notifications
+              <span class="badge danger sm">12</span>
+            </a>
+          </li>
+          <li>
+            <a href="#tasks">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 11 3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+              My tasks
+            </a>
+          </li>
+        </ul>
+
+        <div class="app-sidebar-section">
+          <span class="app-sidebar-heading">Workspace</span>
+          <ul class="app-sidebar-nav">
+            <li>
+              <a href="#dashboard">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 2a7 7 0 1 0 10 10"/></svg>
+                Dashboard
+              </a>
+            </li>
+            <li>
+              <a class="primary" href="#payments">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></svg>
+                Payments
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="margin-inline-start: auto;"><path d="m6 9 6 6 6-6"/></svg>
+              </a>
+              <ul class="app-sidebar-subnav">
+                <li><a class="primary" href="#transactions" aria-current="page">All transactions</a></li>
+                <li><a href="#payments-list">Payments</a></li>
+                <li><a href="#disputes">Disputes</a></li>
+              </ul>
+            </li>
+            <li>
+              <a href="#reports">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+                Reports
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="margin-inline-start: auto;"><path d="m9 18 6-6-6-6"/></svg>
+              </a>
+            </li>
+            <li>
+              <a href="#settings">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.09a2 2 0 0 1-1-1.74v-.47a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+                Settings
+              </a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+
+      <div class="app-sidebar-footer">
+        <div class="dropdown">
+          <details>
+            <summary class="btn neutral ghost sm" style="inline-size: 100%; justify-content: flex-start;">
+              <span class="avatar sm"><abbr>LW</abbr></span>
+              <span>Laura Williams</span>
+            </summary>
+            <menu class="dropdown-menu">
+              <a class="btn neutral link" href="#profile">View profile</a>
+              <a class="btn neutral link" href="#settings">Settings</a>
+              <div class="divider" role="separator"></div>
+              <a class="btn danger link" href="#signout">Sign out</a>
+            </menu>
+          </details>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main area -->
+    <div class="app-main">
+      <!-- Top bar -->
+      <header class="app-topbar">
+        <div class="app-topbar-search">
+          <input class="input sm" type="search" placeholder="Search transactions, patients…" aria-label="Search">
+        </div>
+        <div class="app-topbar-actions">
+          <button class="btn neutral ghost sm" aria-label="Notifications">
+            <span class="status danger"></span>
+            Notifications
+          </button>
+          <div class="dropdown">
+            <details>
+              <summary class="btn neutral ghost sm" aria-label="User menu">
+                <span class="avatar sm"><abbr>LW</abbr></span>
+              </summary>
+              <menu class="dropdown-menu">
+                <a class="btn neutral link" href="#profile">View profile</a>
+                <a class="btn neutral link" href="#settings">Settings</a>
+                <div class="divider" role="separator"></div>
+                <a class="btn danger link" href="#signout">Sign out</a>
+              </menu>
+            </details>
+          </div>
+        </div>
+      </header>
+
+      <!-- Content -->
+      <main class="app-content">
+        <!-- Breadcrumb -->
+        <nav aria-label="Breadcrumb">
+          <ol class="breadcrumb">
+            <li><a href="#dashboard">Dashboard</a></li>
+            <li><a href="#payments">Payments</a></li>
+            <li aria-current="page">All transactions</li>
+          </ol>
+        </nav>
+
+        <!-- Page header -->
+        <div class="app-page-header">
+          <div>
+            <h1>All transactions</h1>
+            <p class="app-muted">Manage and review payment transactions across all clinics.</p>
+          </div>
+          <div class="cluster">
+            <button class="btn neutral outline" type="button">Export</button>
+            <button class="btn primary" type="button" onclick="document.getElementById('create-dialog').showModal()">Create new</button>
+          </div>
+        </div>
+
+        <!-- Stats -->
+        <div class="grid app-stats">
+          <article class="card metric">
+            <span class="metric-label">Total revenue</span>
+            <strong class="metric-value">€45,231</strong>
+            <span class="badge success soft">+12% this month</span>
+          </article>
+          <article class="card metric">
+            <span class="metric-label">Transactions</span>
+            <strong class="metric-value">1,284</strong>
+            <span class="badge neutral soft">98% successful</span>
+          </article>
+          <article class="card metric">
+            <span class="metric-label">Pending</span>
+            <strong class="metric-value">23</strong>
+            <span class="badge warning soft">Requires action</span>
+          </article>
+          <article class="card metric">
+            <span class="metric-label">Disputes</span>
+            <strong class="metric-value">3</strong>
+            <span class="badge danger soft">Urgent</span>
+          </article>
+        </div>
+
+        <!-- Filters -->
+        <div class="card">
+          <div class="app-filters">
+            <select class="select sm" aria-label="Filter by status">
+              <option value="">All statuses</option>
+              <option value="success">Success</option>
+              <option value="pending">Pending</option>
+              <option value="warning">Warning</option>
+              <option value="danger">Danger</option>
+            </select>
+            <select class="select sm" aria-label="Filter by method">
+              <option value="">All methods</option>
+              <option value="card">Card</option>
+              <option value="bank">Bank transfer</option>
+              <option value="cash">Cash</option>
+            </select>
+            <input class="input sm" type="date" aria-label="Filter by date">
+            <button class="btn neutral outline sm" type="button">Filter</button>
+            <button class="btn neutral ghost sm" type="button">Reset</button>
+          </div>
+        </div>
+
+        <!-- Table -->
+        <div class="card stack" style="margin-block-start: 1.5rem;">
+          <div class="app-table-actions">
+            <button class="btn neutral ghost sm" type="button">Select all</button>
+            <div class="dropdown">
+              <details>
+                <summary class="btn neutral outline sm">Bulk actions</summary>
+                <menu class="dropdown-menu">
+                  <button class="btn neutral link" type="button">Export selected</button>
+                  <button class="btn neutral link" type="button">Mark as paid</button>
+                  <div class="divider" role="separator"></div>
+                  <button class="btn danger link" type="button">Delete selected</button>
+                </menu>
+              </details>
+            </div>
+          </div>
+
+          <div class="table-wrap">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th><input class="check" type="checkbox" aria-label="Select all rows"></th>
+                  <th>Amount</th>
+                  <th>Status</th>
+                  <th>Description</th>
+                  <th>Method</th>
+                  <th>Date</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><input class="check" type="checkbox" aria-label="Select row"></td>
+                  <td><strong>350,00 €</strong></td>
+                  <td><span class="badge neutral soft">Neutral</span></td>
+                  <td>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</td>
+                  <td>Card</td>
+                  <td>20.3.2021</td>
+                  <td>
+                    <div class="dropdown">
+                      <details>
+                        <summary class="btn neutral ghost sm" aria-label="Actions">⋯</summary>
+                        <menu class="dropdown-menu">
+                          <button class="btn neutral link" type="button">View details</button>
+                          <button class="btn neutral link" type="button">Copy link</button>
+                          <div class="divider" role="separator"></div>
+                          <button class="btn neutral link" type="button">Refund</button>
+                          <button class="btn danger link" type="button">Delete</button>
+                        </menu>
+                      </details>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td><input class="check" type="checkbox" aria-label="Select row"></td>
+                  <td><strong>29,90 €</strong></td>
+                  <td><span class="badge success soft">Success</span></td>
+                  <td>Aenean commodo ligula eget dolor.</td>
+                  <td>Card</td>
+                  <td>19.3.2021</td>
+                  <td>
+                    <div class="dropdown">
+                      <details>
+                        <summary class="btn neutral ghost sm" aria-label="Actions">⋯</summary>
+                        <menu class="dropdown-menu">
+                          <button class="btn neutral link" type="button">View details</button>
+                          <button class="btn neutral link" type="button">Copy link</button>
+                          <div class="divider" role="separator"></div>
+                          <button class="btn neutral link" type="button">Refund</button>
+                          <button class="btn danger link" type="button">Delete</button>
+                        </menu>
+                      </details>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td><input class="check" type="checkbox" aria-label="Select row"></td>
+                  <td><strong>50,00 €</strong></td>
+                  <td><span class="badge warning soft">Warning</span></td>
+                  <td>Donec quam felis, ultricies nec, pellentesque eu.</td>
+                  <td>Card</td>
+                  <td>18.3.2021</td>
+                  <td>
+                    <div class="dropdown">
+                      <details>
+                        <summary class="btn neutral ghost sm" aria-label="Actions">⋯</summary>
+                        <menu class="dropdown-menu">
+                          <button class="btn neutral link" type="button">View details</button>
+                          <button class="btn neutral link" type="button">Copy link</button>
+                          <div class="divider" role="separator"></div>
+                          <button class="btn neutral link" type="button">Refund</button>
+                          <button class="btn danger link" type="button">Delete</button>
+                        </menu>
+                      </details>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td><input class="check" type="checkbox" aria-label="Select row"></td>
+                  <td><strong>1 023,00 €</strong></td>
+                  <td><span class="badge danger soft">Danger</span></td>
+                  <td>Nulla consequat massa quis enim.</td>
+                  <td>Card</td>
+                  <td>17.3.2021</td>
+                  <td>
+                    <div class="dropdown">
+                      <details>
+                        <summary class="btn neutral ghost sm" aria-label="Actions">⋯</summary>
+                        <menu class="dropdown-menu">
+                          <button class="btn neutral link" type="button">View details</button>
+                          <button class="btn neutral link" type="button">Copy link</button>
+                          <div class="divider" role="separator"></div>
+                          <button class="btn neutral link" type="button">Refund</button>
+                          <button class="btn danger link" type="button">Delete</button>
+                        </menu>
+                      </details>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td><input class="check" type="checkbox" aria-label="Select row"></td>
+                  <td><strong>150,00 €</strong></td>
+                  <td><span class="badge success soft">Success</span></td>
+                  <td>Sed consequat leo eget sodales.</td>
+                  <td>Bank transfer</td>
+                  <td>16.3.2021</td>
+                  <td>
+                    <div class="dropdown">
+                      <details>
+                        <summary class="btn neutral ghost sm" aria-label="Actions">⋯</summary>
+                        <menu class="dropdown-menu">
+                          <button class="btn neutral link" type="button">View details</button>
+                          <button class="btn neutral link" type="button">Copy link</button>
+                          <div class="divider" role="separator"></div>
+                          <button class="btn neutral link" type="button">Refund</button>
+                          <button class="btn danger link" type="button">Delete</button>
+                        </menu>
+                      </details>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Pagination -->
+          <div class="cluster" style="justify-content: space-between; flex-wrap: wrap;">
+            <span class="app-muted">Showing 1–5 of 1,284 transactions</span>
+            <nav aria-label="Table pagination">
+              <ol class="pagination">
+                <li><a class="page-link" href="#" aria-disabled="true">Prev</a></li>
+                <li><a class="page-link" aria-current="page" href="#">1</a></li>
+                <li><a class="page-link" href="#">2</a></li>
+                <li><a class="page-link" href="#">3</a></li>
+                <li><span class="app-muted">…</span></li>
+                <li><a class="page-link" href="#">257</a></li>
+                <li><a class="page-link" href="#">Next</a></li>
+              </ol>
+            </nav>
+          </div>
+        </div>
+
+        <!-- Alerts section -->
+        <div class="stack" style="margin-block-start: 1.5rem;">
+          <h2>Recent notifications</h2>
+          <div class="alert success" role="alert">
+            <span class="alert-icon" aria-hidden="true">✓</span>
+            <span class="alert-content">Payout of €12,450 has been processed successfully.</span>
+            <button class="alert-close" aria-label="Dismiss">&nbsp;</button>
+          </div>
+          <div class="alert warning" role="alert">
+            <span class="alert-icon" aria-hidden="true">!</span>
+            <span class="alert-content">3 transactions require manual review. <a href="#">Review now</a></span>
+            <button class="alert-close" aria-label="Dismiss">&nbsp;</button>
+          </div>
+          <div class="alert primary" role="alert">
+            <span class="alert-icon" aria-hidden="true">i</span>
+            <span class="alert-content">New clinic "Ocean Beach" has been added to your account.</span>
+            <button class="alert-close" aria-label="Dismiss">&nbsp;</button>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- Create transaction dialog -->
+  <dialog class="dialog" id="create-dialog">
+    <form method="dialog" class="stack">
+      <h2>Create new transaction</h2>
+      <p class="app-muted">Enter the details for the new payment transaction.</p>
+      <div class="grid" style="--grid-min: 14rem;">
+        <label class="field">
+          <span class="label">Amount</span>
+          <input class="input" type="number" placeholder="0.00" step="0.01">
+        </label>
+        <label class="field">
+          <span class="label">Method</span>
+          <select class="select">
+            <option>Card</option>
+            <option>Bank transfer</option>
+            <option>Cash</option>
+          </select>
+        </label>
+        <label class="field" style="grid-column: 1 / -1;">
+          <span class="label">Description</span>
+          <input class="input" type="text" placeholder="Transaction description">
+        </label>
+      </div>
+      <div class="cluster" style="justify-content: flex-end;">
+        <button class="btn neutral outline" value="cancel">Cancel</button>
+        <button class="btn primary" value="create">Create transaction</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script>
+    // Simple dismiss for alerts
+    document.querySelectorAll('.alert-close').forEach(btn => {
+      btn.addEventListener('click', () => {
+        btn.closest('.alert').remove();
+      });
+    });
+  </script>
+</body>
+</html>

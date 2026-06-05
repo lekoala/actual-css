@@ -1,3 +1,10 @@
+/**
+ * Contract:
+ * - `.spinner` stays a decoration component with optional shared intent tinting only.
+ * - Motion remains legible and non-blocking across themes.
+ * Owns: spinner size, stroke geometry, and local animation.
+ * Does not own: variant systems or layout behavior from consuming components.
+ */
 .spinner {
   --spinner-size: 1.5rem;
   --spinner-border: 2px;

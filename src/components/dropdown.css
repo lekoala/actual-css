@@ -1,3 +1,10 @@
+/**
+ * Contract:
+ * - Dropdown menus remain anchored and readable without demo-only helpers.
+ * - Trigger and menu states keep hover and focus-visible treatment.
+ * Owns: dropdown positioning, menu spacing, and local surface styling.
+ * Does not own: hard-coded demo positioning or component-local color systems.
+ */
 .dropdown {
   position: relative;
   display: inline-block;

@@ -1,3 +1,10 @@
+/**
+ * Contract:
+ * - Navigation primitives communicate active state without becoming decorative color systems.
+ * - Tabs, pagination, and related controls keep visible focus treatment.
+ * Owns: navigation layout, active-state presentation, and local spacing.
+ * Does not own: permanent decorative tinting or demo-specific alignment behavior.
+ */
 .navbar {
   display: flex;
   flex-wrap: wrap;

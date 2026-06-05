@@ -1,3 +1,10 @@
+/**
+ * Contract:
+ * - `.switch` remains an input control rather than a decorative toggle.
+ * - Checked, hover, focus-visible, and disabled states stay clear.
+ * Owns: switch track and knob geometry plus local state visuals.
+ * Does not own: decorative intent variants, palette values, or JavaScript-only behavior.
+ */
 .switch {
   --switch-bg: var(--surface-subtle);
   --switch-knob: var(--surface-raised);
@@ -55,10 +62,4 @@
 .switch:disabled {
   opacity: 0.55;
   cursor: not-allowed;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .switch::before {
-    transition-duration: 0.01ms;
-  }
 }

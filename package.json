@@ -7,11 +7,15 @@
   "scripts": {
     "build": "node scripts/build.js",
     "dev": "node scripts/build.js --watch",
+    "map": "node scripts/project-map.js",
     "check": "npm run lint",
     "lint": "biome check",
     "lint:fix": "biome check --write",
     "check:css": "node scripts/check-css.js",
-    "test": "npm run check && npm run check:css && npm run test:visual",
+    "test": "npm run test:contracts",
+    "test:contracts": "node --test tests/contracts/architecture.test.js tests/contracts/manifest.test.js",
+    "verify": "node scripts/verify.js",
+    "verify:ci": "node scripts/verify.js --ci",
     "test:visual": "playwright test",
     "test:visual:update": "playwright test --update-snapshots"
   },

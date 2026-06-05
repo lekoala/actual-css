@@ -2,15 +2,6 @@
 
 Navbar, breadcrumbs, tabs, and pagination.
 
-## Intents
-
-- `.primary`
-- `.secondary`
-- `.success`
-- `.warning`
-- `.danger`
-- `.neutral`
-
 ## Navbar
 
 Top navigation bar.
@@ -39,11 +30,11 @@ Navigation breadcrumbs.
 
 ## Tabs
 
-Tab navigation.
+Tab navigation. Intents apply to the active tab only.
 
 ```html .inline
-<div class="tabs primary" role="tablist">
-  <button class="tab" type="button" role="tab" aria-selected="true">Active</button>
+<div class="tabs" role="tablist">
+  <button class="tab primary" type="button" role="tab" aria-selected="true">Active</button>
   <button class="tab" type="button" role="tab">Inactive</button>
 </div>
 ```

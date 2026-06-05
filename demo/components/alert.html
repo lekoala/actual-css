@@ -134,12 +134,92 @@
 </div>
 </div>
 </section>
+<section class="component-section">
+<h2>Close / dismiss</h2>
+<p>Add an `alert-close` button at the end of the alert for dismissible toasts.</p>
+<div class="example-group">
+<div class="example-render example-list"><div class="alert success soft">
+<span class="alert-icon" aria-hidden="true">✓</span>
+<span class="alert-content">Backup completed successfully.</span>
+<button class="alert-close" aria-label="Dismiss">&nbsp;</button>
+</div>
+<div class="alert warning">
+<span class="alert-icon" aria-hidden="true">!</span>
+<span class="alert-content">SSL certificate expires in 7 days.</span>
+<button class="alert-close" aria-label="Dismiss">&nbsp;</button>
+</div>
+<div class="alert danger">
+<span class="alert-icon" aria-hidden="true">!</span>
+<span class="alert-content">Payment gateway timeout.</span>
+<button class="alert-close" aria-label="Dismiss">&nbsp;</button>
+</div></div><div class="example-code">
+<pre><code>&lt;div class=&quot;alert success soft&quot;&gt;
+  &lt;span class=&quot;alert-icon&quot; aria-hidden=&quot;true&quot;&gt;✓&lt;/span&gt;
+  &lt;span class=&quot;alert-content&quot;&gt;Backup completed successfully.&lt;/span&gt;
+  &lt;button class=&quot;alert-close&quot; aria-label=&quot;Dismiss&quot;&gt;&amp;nbsp;&lt;/button&gt;
+&lt;/div&gt;
+&lt;div class=&quot;alert warning&quot;&gt;
+  &lt;span class=&quot;alert-icon&quot; aria-hidden=&quot;true&quot;&gt;!&lt;/span&gt;
+  &lt;span class=&quot;alert-content&quot;&gt;SSL certificate expires in 7 days.&lt;/span&gt;
+  &lt;button class=&quot;alert-close&quot; aria-label=&quot;Dismiss&quot;&gt;&amp;nbsp;&lt;/button&gt;
+&lt;/div&gt;
+&lt;div class=&quot;alert danger&quot;&gt;
+  &lt;span class=&quot;alert-icon&quot; aria-hidden=&quot;true&quot;&gt;!&lt;/span&gt;
+  &lt;span class=&quot;alert-content&quot;&gt;Payment gateway timeout.&lt;/span&gt;
+  &lt;button class=&quot;alert-close&quot; aria-label=&quot;Dismiss&quot;&gt;&amp;nbsp;&lt;/button&gt;
+&lt;/div&gt;</code></pre>
+</div>
+</div>
+</section>
+<section class="component-section">
+<h2>Toast</h2>
+<p>Use `role=&quot;alert&quot;` for dynamic, dismissible toast notifications. Combine with `toast-stack` for stacked positioning.</p>
+<div class="example-group">
+<div class="example-render example-list"><div class="toast-stack">
+<div class="alert success soft" role="alert">
+<span class="alert-icon" aria-hidden="true">✓</span>
+<span class="alert-content">Order confirmed.</span>
+<button class="alert-close" aria-label="Dismiss">&nbsp;</button>
+</div>
+<div class="alert danger" role="alert">
+<span class="alert-icon" aria-hidden="true">!</span>
+<span class="alert-content">Payment failed. <a href="#">Retry</a></span>
+<button class="alert-close" aria-label="Dismiss">&nbsp;</button>
+</div>
+<div class="alert primary" role="alert">
+<span class="alert-icon" aria-hidden="true">i</span>
+<span class="alert-content">New update available.</span>
+<button class="alert-close" aria-label="Dismiss">&nbsp;</button>
+</div>
+</div></div><div class="example-code">
+<pre><code>&lt;div class=&quot;toast-stack&quot;&gt;
+  &lt;div class=&quot;alert success soft&quot; role=&quot;alert&quot;&gt;
+    &lt;span class=&quot;alert-icon&quot; aria-hidden=&quot;true&quot;&gt;✓&lt;/span&gt;
+    &lt;span class=&quot;alert-content&quot;&gt;Order confirmed.&lt;/span&gt;
+    &lt;button class=&quot;alert-close&quot; aria-label=&quot;Dismiss&quot;&gt;&amp;nbsp;&lt;/button&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;alert danger&quot; role=&quot;alert&quot;&gt;
+    &lt;span class=&quot;alert-icon&quot; aria-hidden=&quot;true&quot;&gt;!&lt;/span&gt;
+    &lt;span class=&quot;alert-content&quot;&gt;Payment failed. &lt;a href=&quot;#&quot;&gt;Retry&lt;/a&gt;&lt;/span&gt;
+    &lt;button class=&quot;alert-close&quot; aria-label=&quot;Dismiss&quot;&gt;&amp;nbsp;&lt;/button&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;alert primary&quot; role=&quot;alert&quot;&gt;
+    &lt;span class=&quot;alert-icon&quot; aria-hidden=&quot;true&quot;&gt;i&lt;/span&gt;
+    &lt;span class=&quot;alert-content&quot;&gt;New update available.&lt;/span&gt;
+    &lt;button class=&quot;alert-close&quot; aria-label=&quot;Dismiss&quot;&gt;&amp;nbsp;&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+</div>
+</div>
+</section>
     
 <section class="component-section">
 <h2>Accessibility</h2>
 <ul>
-<li>Use role=&quot;alert&quot; only for urgent dynamic messages.</li>
-<li>Do not use role=&quot;alert&quot; for static page content.</li>
+<li>Use `role=&quot;alert&quot;` only for urgent dynamic messages.</li>
+<li>Do not use `role=&quot;alert&quot;` for static page content.</li>
+<li>Add `aria-label=&quot;Dismiss&quot;` to close buttons for screen readers.</li>
+<li>The close button uses a `mask` icon for color inheritance — no visible text is needed.</li>
 </ul>
 </section>
 

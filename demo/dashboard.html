@@ -54,6 +54,7 @@
         <li><a class="nav-link" href="#themes">Themes</a></li>
       </ul>
       <div class="demo-topbar-actions">
+        <a class="btn neutral outline sm" href="app.html">Application template</a>
         <select class="select sm" id="theme-switcher" aria-label="Switch theme">
           <option value="">System</option>
           <option value="light">Light</option>
@@ -86,7 +87,7 @@
           <p class="demo-muted">A broad, Oat-style product dashboard showing navigation, metrics, tabs, tables, alerts, forms, feedback, themes, and layout primitives.</p>
         </div>
         <div class="cluster">
-          <label class="choice"><input class="switch primary" type="checkbox" checked> Auto-refresh</label>
+          <label class="choice"><input class="switch" type="checkbox" checked> Auto-refresh</label>
           <button class="btn neutral outline" type="button" onclick="document.getElementById('delete-dialog').showModal()">Open dialog</button>
         </div>
       </div>
@@ -140,19 +141,41 @@
       </article>
 
       <article class="card stack">
+        <h2>Toast notifications</h2>
+        <p class="demo-muted">Dismissible toasts with close buttons, styled as alerts.</p>
+        <div class="toast-stack">
+          <div class="alert success soft" role="alert">
+            <span class="alert-icon" aria-hidden="true">✓</span>
+            <span class="alert-content">Order confirmed — <a href="#">view details</a>.</span>
+            <button class="alert-close" aria-label="Dismiss">&nbsp;</button>
+          </div>
+          <div class="alert danger" role="alert">
+            <span class="alert-icon" aria-hidden="true">!</span>
+            <span class="alert-content">Payment failed — <a href="#">retry</a>.</span>
+            <button class="alert-close" aria-label="Dismiss">&nbsp;</button>
+          </div>
+          <div class="alert primary" role="alert">
+            <span class="alert-icon" aria-hidden="true">i</span>
+            <span class="alert-content">New update available.</span>
+            <button class="alert-close" aria-label="Dismiss">&nbsp;</button>
+          </div>
+        </div>
+      </article>
+
+      <article class="card stack">
         <h2>FAQ</h2>
         <div class="accordion">
           <details open>
             <summary>How do I reset my password?</summary>
-            <div class="accordion-body">Navigate to Settings → Security and click reset password. Links expire after 24 hours.</div>
+            <div>Navigate to Settings → Security and click reset password. Links expire after 24 hours.</div>
           </details>
           <details>
             <summary>What export formats are supported?</summary>
-            <div class="accordion-body">CSV, JSON, and XLSX are available for dashboard exports.</div>
+            <div>CSV, JSON, and XLSX are available for dashboard exports.</div>
           </details>
           <details>
             <summary>Can I integrate with third-party services?</summary>
-            <div class="accordion-body">Use REST webhooks and scoped API tokens for external integrations.</div>
+            <div>Use REST webhooks and scoped API tokens for external integrations.</div>
           </details>
         </div>
       </article>
@@ -185,9 +208,9 @@
         <label class="field" style="grid-column: 1 / -1"><span class="label">Bio</span><textarea class="textarea">This entire dashboard is built with Actual CSS.</textarea></label>
       </div>
       <div class="grid" style="--grid-min: 16rem">
-        <fieldset class="field"><legend class="label">Theme</legend><label class="choice"><input class="radio primary" name="theme-pref" type="radio"> Light</label><label class="choice"><input class="radio primary" name="theme-pref" type="radio"> Dark</label><label class="choice"><input class="radio primary" name="theme-pref" type="radio" checked> System</label></fieldset>
-        <fieldset class="field"><legend class="label">Email preferences</legend><label class="choice"><input class="check success" type="checkbox" checked> Product updates</label><label class="choice"><input class="check success" type="checkbox"> Marketing emails</label><label class="choice"><input class="check success" type="checkbox" checked> Security alerts</label></fieldset>
-        <fieldset class="field"><legend class="label">Security</legend><label class="choice"><input class="switch primary" type="checkbox" checked> Two-factor authentication</label><label class="choice"><input class="switch secondary" type="checkbox"> API access</label></fieldset>
+        <fieldset class="field"><legend class="label">Theme</legend><label class="choice"><input class="radio" name="theme-pref" type="radio"> Light</label><label class="choice"><input class="radio" name="theme-pref" type="radio"> Dark</label><label class="choice"><input class="radio" name="theme-pref" type="radio" checked> System</label></fieldset>
+        <fieldset class="field"><legend class="label">Email preferences</legend><label class="choice"><input class="check" type="checkbox" checked> Product updates</label><label class="choice"><input class="check" type="checkbox"> Marketing emails</label><label class="choice"><input class="check" type="checkbox" checked> Security alerts</label></fieldset>
+        <fieldset class="field"><legend class="label">Security</legend><label class="choice"><input class="switch" type="checkbox" checked> Two-factor authentication</label><label class="choice"><input class="switch" type="checkbox"> API access</label></fieldset>
       </div>
       <div class="cluster">
         <button class="btn primary">Save changes</button>
@@ -218,7 +241,7 @@
             <input class="input" type="email" value="mila@example.com">
           </label>
           <label class="choice">
-            <input class="switch primary" type="checkbox" checked>
+            <input class="switch" type="checkbox" checked>
             Email notifications
           </label>
           <footer class="cluster demo-order-actions">

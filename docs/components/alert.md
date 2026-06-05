@@ -94,7 +94,55 @@ Do and Don't guidelines using alerts in a grid.
 </div>
 ```
 
+## Close / dismiss
+
+Add an `alert-close` button at the end of the alert for dismissible toasts.
+
+```html .list
+<div class="alert success soft">
+  <span class="alert-icon" aria-hidden="true">✓</span>
+  <span class="alert-content">Backup completed successfully.</span>
+  <button class="alert-close" aria-label="Dismiss">&nbsp;</button>
+</div>
+<div class="alert warning">
+  <span class="alert-icon" aria-hidden="true">!</span>
+  <span class="alert-content">SSL certificate expires in 7 days.</span>
+  <button class="alert-close" aria-label="Dismiss">&nbsp;</button>
+</div>
+<div class="alert danger">
+  <span class="alert-icon" aria-hidden="true">!</span>
+  <span class="alert-content">Payment gateway timeout.</span>
+  <button class="alert-close" aria-label="Dismiss">&nbsp;</button>
+</div>
+```
+
+## Toast
+
+Use `role="alert"` for dynamic, dismissible toast notifications. Combine with `toast-stack` for stacked positioning.
+
+```html .list
+<div class="toast-stack">
+  <div class="alert success soft" role="alert">
+    <span class="alert-icon" aria-hidden="true">✓</span>
+    <span class="alert-content">Order confirmed.</span>
+    <button class="alert-close" aria-label="Dismiss">&nbsp;</button>
+  </div>
+  <div class="alert danger" role="alert">
+    <span class="alert-icon" aria-hidden="true">!</span>
+    <span class="alert-content">Payment failed. <a href="#">Retry</a></span>
+    <button class="alert-close" aria-label="Dismiss">&nbsp;</button>
+  </div>
+  <div class="alert primary" role="alert">
+    <span class="alert-icon" aria-hidden="true">i</span>
+    <span class="alert-content">New update available.</span>
+    <button class="alert-close" aria-label="Dismiss">&nbsp;</button>
+  </div>
+</div>
+```
+
 ## Accessibility
 
-- Use role="alert" only for urgent dynamic messages.
-- Do not use role="alert" for static page content.
+- Use `role="alert"` only for urgent dynamic messages.
+- Do not use `role="alert"` for static page content.
+- Add `aria-label="Dismiss"` to close buttons for screen readers.
+- The close button uses a `mask` icon for color inheritance — no visible text is needed.

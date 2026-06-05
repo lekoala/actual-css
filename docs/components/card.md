@@ -6,7 +6,7 @@ Cards are used to group and display content in a way that is easily readable.
 
 - `.raised`
 - `.subtle`
-- `.solid`
+- `.inverted`
 - `.compact`
 
 ## Sizes
@@ -32,7 +32,7 @@ Card surface styles.
 ```html .list
 <article class="card raised">Raised card</article>
 <article class="card subtle">Subtle card</article>
-<article class="card solid">Solid card</article>
+<article class="card inverted">Inverted card</article>
 <article class="card compact">Compact card</article>
 ```
 

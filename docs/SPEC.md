@@ -2,6 +2,12 @@
 
 Actual CSS is a plain-CSS component framework with semantic classes, universal variants, small tokens, strong themes, and progressive modern color.
 
+Contributor workflow is intentionally split:
+
+- `ARCHITECTURE.md` defines where a change belongs.
+- `QUALITY.md` defines how work is verified.
+- local contract headers in `src/components/*.css` hold per-component invariants.
+
 ## Contract
 
 - One official CSS file: `actual.css`.
@@ -87,6 +93,44 @@ Avoid:
 - mandatory `@layer`;
 - native nesting in distributed CSS.
 
+## Component Taxonomy
+
+Every component belongs to a category that determines its contract:
+
+| Category | Intent colors? | Standard variants? | Components |
+|---|---|---|---|
+| **Action** | Required | Required (solid default) | `btn`, `badge` |
+| **Feedback** | Required | Required (transparent default) | `alert` |
+| **Surface** | No | Surface-only modifiers | `card`, `dialog` |
+| **Input** | Validation-only | No | `input`, `textarea`, `select`, `check`, `radio`, `switch` |
+| **Navigation** | Optional (active state only) | No | `navbar`, `tabs`, `breadcrumb`, `pagination` |
+| **Data** | No | No | `table`, `metric`, `progress`, `divider` |
+| **Decoration** | Optional (tint only) | No | `avatar`, `status`, `spinner` |
+
+**Rules:**
+- If a component accepts intents, it must accept all standard variants (no partial intent support).
+- Inputs only accept intents for functional states (`.danger` for error, `.success` for valid). No decorative tinting.
+- Surface components use shape/density/elevation modifiers, never intent or variant names.
+- Navigation uses intents only for active/selected states, not for decorative coloring.
+
+## Token Layers
+
+```
+LAYER 1 — Public Theme API (consumers override these)
+  --primary, --primary-fg, --surface, --text, --radius, ...
+
+LAYER 2 — Internal Intent Mapping (framework only)
+  --intent, --intent-fg
+
+LAYER 3 — Internal Variant Contract (framework only)
+  --ui-bg, --ui-fg, --ui-border, --ui-hover-bg
+
+LAYER 4 — Component Local (framework only)
+  --btn-bg, --alert-pad, --card-radius
+```
+
+Only Layer 1 is public. Layers 2–4 are internal implementation details.
+
 ## Production MVP Components
 
 - button;
@@ -103,7 +147,12 @@ Production MVP includes a small set of layout helpers: `.center`, `.stack`, `.cl
 
 ## Testing
 
-The scaffold includes a Playwright visual regression setup for the kitchen-sink demo at desktop and mobile viewport sizes. Visual snapshots are not required for consumers, but they are part of the framework development workflow.
+The workflow is split between a fast inner loop and a full gate:
+
+- `npm run verify` runs the fast contributor loop: lint, CSS architecture guards, and contract tests.
+- `npm run verify:ci` runs the full gate: fast loop, build, and Playwright visual regression.
+
+The scaffold includes a Playwright visual regression setup for the kitchen-sink demo at desktop and mobile viewport sizes. Visual snapshots are not required for consumers, but they are part of milestone and CI verification.
 
 ## Acceptance Criteria
 
@@ -115,4 +164,5 @@ The scaffold includes a Playwright visual regression setup for the kitchen-sink 
 - Focus-visible styles are present for interactive controls.
 - Docs include AI rules and copyable examples.
 - Kitchen-sink demo covers components, states, sizes, themes, nested themes, and layout primitives.
-- Visual regression test scaffold exists and can be run with `npm run test:visual`.
+- Fast verification exists at `npm run verify`.
+- Full verification exists at `npm run verify:ci`.

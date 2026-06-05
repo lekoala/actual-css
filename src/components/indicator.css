@@ -1,3 +1,10 @@
+/**
+ * Contract:
+ * - Indicators attach to other components without taking over their layout.
+ * - Positioning stays stable across supported sizes and documented compositions.
+ * Owns: indicator offsets, placement rules, and local geometry.
+ * Does not own: standalone layout behavior, raw palette values, or demo-specific offsets.
+ */
 .indicator,
 .indicator-bottom {
   position: absolute;
@@ -14,12 +21,12 @@
 }
 
 /* Circle-aware positioning */
-.circle+.indicator {
+.circle + .indicator {
   top: 14.64%;
   transform: translate(-50%, -50%);
 }
 
-.circle+.indicator-bottom {
+.circle + .indicator-bottom {
   bottom: 14.64%;
   transform: translate(25%, 25%);
 }

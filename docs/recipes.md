@@ -42,7 +42,7 @@ Group related fields in `.card.stack`, then use a `.cluster` footer for actions.
   </label>
 
   <label class="choice">
-    <input class="switch primary" type="checkbox" checked>
+    <input class="switch" type="checkbox" checked>
     Email notifications
   </label>
 
