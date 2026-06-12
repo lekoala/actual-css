@@ -1,11 +1,15 @@
 # Typography
 
+## Overview
+
 Typography has two layers:
 
 - global defaults that make plain HTML readable without becoming classless styling
 - `.prose`, an opt-in rich-text scope for articles, documentation, markdown, CMS content, and long-form text
 
 Components should not depend on `.prose`. App screens, forms, cards, tables, and navigation should use their own component/layout rules.
+
+Best applied directly on a `article` semantic block.
 
 ## Baseline
 
@@ -222,27 +226,25 @@ Inline code and code blocks should be readable without taking over the design.
 
 ## Quotes And Media
 
-```css
-.prose blockquote {
-  padding-inline-start: 1em;
-  border-inline-start: var(--border-width) solid var(--border);
-  color: var(--text-muted);
-}
+- `blockquote` are styled automatically
+- Can be wrapped in a `figure` + `figcaption` (check with `:has`)
 
-.prose :where(img, video, canvas, svg) {
-  max-inline-size: 100%;
-  block-size: auto;
-}
-
-.prose figure {
-  margin-inline: 0;
-}
-
-.prose figcaption {
-  margin-block-start: 0.5em;
-  color: var(--text-muted);
-  font-size: 0.875em;
-}
+```html
+<figure>
+ <blockquote>
+  <p>The truth may be puzzling. It may take some work to grapple with.
+  It may be counterintuitive. It may contradict deeply held
+  prejudices. It may not be consonant with what we desperately want to
+  be true. But our preferences do not determine what's true. We have a
+  method, and that method helps us to reach not absolute truth, only
+  asymptotic approaches to the truth — never there, just closer
+  and closer, always finding vast new oceans of undiscovered
+  possibilities. Cleverly designed experiments are the key.</p>
+ </blockquote>
+ <figcaption>Carl Sagan, in "<cite>Wonder and Skepticism</cite>", from
+ the <cite>Skeptical Inquirer</cite> Volume 19, Issue 1 (January-February
+ 1995)</figcaption>
+</figure>
 ```
 
 ## Tables

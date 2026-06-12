@@ -132,6 +132,61 @@ Links:
 - https://smolcss.dev/#smol-container
 - https://every-layout.dev/layouts/center/
 
+## List
+
+- Use figure to capture as a single unit
+- `figcaption` is optional
+- Can contain complex items
+
+```html
+<figure class="list">
+    <figcaption>My favorite fruits</figcaption>    
+       <ul>
+          <li>Banana</li>
+          <li>Orange</li>
+          <li>Chocolate</li>
+       </ul>
+</figure>
+```
+
+```html
+<figure class="list">
+    <figcaption>Most played songs this week</figcaption>    
+       <ul>
+          <li>
+            <div class="avatar"><span>DL</span></div>
+            <div>
+              <div>Dio Lupa</div>
+              <div class="muted">Remaining Reason</div>
+            </div>
+            <p>
+              "Remaining Reason" became an instant hit, praised for its haunting sound and emotional depth. A viral performance brought it widespread recognition, making it one of Dio Lupa’s most iconic tracks.
+            </p>
+            <button class="btn ghost" aria-label="Play">
+              <i class="ti ti-player-play"></i>
+            </button>
+            <button class="btn ghost" aria-label="Like">
+              <i class="ti ti-heart"></i>
+            </button>
+          </li>
+          <li> 
+            <div class="avatar"><span>EB</span></div>
+            <div>
+              <div>Ellie Beilish</div>
+              <div class="muted">Bears of a fever</div>
+            </div>
+            <p>
+              "Bears of a Fever" captivated audiences with its intense energy and mysterious lyrics. Its popularity skyrocketed after fans shared it widely online, earning Ellie critical acclaim.
+            </p>
+        </li>
+       </ul>
+</figure>
+```
+
+Links:
+- https://daisyui.com/components/list/
+- https://html.spec.whatwg.org/multipage/grouping-content.html#the-li-element
+
 ## Grid
 
 Use `.grid` for responsive equal-width item grids.

@@ -4,10 +4,15 @@
   gap: var(--gap);
 }
 
+.stack > * {
+  margin: 0;
+}
+
 .cluster {
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
+  align-items: var(--cluster-align, center);
+  justify-content: var(--cluster-justify, flex-start);
   gap: var(--gap);
 }
 

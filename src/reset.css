@@ -30,7 +30,14 @@ button {
 }
 
 a {
-  color: inherit;
+  color: var(--link, var(--primary));
+  text-decoration-line: underline;
+  text-decoration-thickness: var(--link-decoration-thickness);
+  text-underline-offset: var(--link-underline-offset);
+}
+
+a:hover {
+  text-decoration-thickness: var(--link-decoration-thickness-hover);
 }
 
 :where(img, svg, video) {
