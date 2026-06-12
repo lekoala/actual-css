@@ -23,6 +23,18 @@
   line-height: var(--prose-heading-line-height);
 }
 
+@supports (text-wrap: balance) {
+  .prose :where(h1, h2, h3, h4) {
+    text-wrap: balance;
+  }
+}
+
+@supports (text-wrap: pretty) {
+  .prose :where(p, li, blockquote) {
+    text-wrap: pretty;
+  }
+}
+
 .prose > :first-child {
   margin-block-start: 0;
 }

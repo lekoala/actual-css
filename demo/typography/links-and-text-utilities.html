@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Tables — Actual CSS</title>
+  <title>Links and text utilities — Actual CSS</title>
   <link rel="stylesheet" href="../../src/actual.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
   <link rel="stylesheet" href="../../demo/styles/demo.css">
@@ -19,11 +19,11 @@
   <main class="center">
   <section class="component-section">
     <header class="component-header">
-      <h1>Tables</h1>
+      <h1>Links and text utilities</h1>
       
     </header>
         <div class="component-prose">
-      <p>Prose tables are a different concern from app data tables. Long-form content can contain a small table, but a sortable, dense, row-actionable app table belongs to the table component. The <code>.prose table</code> rule is intentionally minimal: it does not define sticky headers, selection states, row actions, or density variants.</p>
+      <p>Three logical alignment utilities exist (<code>.text-start</code>, <code>.text-center</code>, <code>.text-end</code>) because alignment is independent of typography hierarchy and is useful in many contexts. They use logical properties so they follow writing direction. <code>text-wrap</code> balance and pretty are exposed as utilities so they can be applied outside <code>.prose</code> (e.g. on a card title, a dialog description, a hero subtitle). <code>transition: all</code> is not used. Transitions target specific properties. This is a general rule, not just a typography rule.</p>
     </div>
     
   </section>

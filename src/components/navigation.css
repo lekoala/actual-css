@@ -22,7 +22,7 @@
   align-items: center;
   gap: 0.6rem;
   color: var(--text);
-  font-weight: 750;
+  font-weight: var(--font-weight-bold);
   text-decoration: none;
 }
 
@@ -43,7 +43,7 @@
   padding-inline: 0.65rem;
   border-radius: var(--radius);
   color: var(--text-muted);
-  font-weight: 600;
+  font-weight: var(--font-weight-medium);
   text-decoration: none;
 }
 
@@ -106,7 +106,7 @@
   background: transparent;
   color: var(--text-muted);
   font: inherit;
-  font-weight: 650;
+  font-weight: var(--font-weight-strong);
   text-decoration: none;
   cursor: pointer;
 }

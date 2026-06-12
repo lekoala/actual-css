@@ -20,35 +20,10 @@
   <section class="component-section">
     <header class="component-header">
       <h1>Headings</h1>
-      <p>Hierarchy from document structure, not from a large public heading scale.</p>
+      
     </header>
         <div class="component-prose">
-      <p>Headings should create hierarchy without needing a large public scale.</p>
-    </div>
-    <section class="component-section">
-      <h2>CSS</h2>
-      <div class="example-group">
-        <div class="example-code">
-          <pre><code class="language-css"><span class="token selector">.prose h1</span> <span class="token punctuation">{</span>
-  <span class="token property">font-size</span><span class="token punctuation">:</span> 2rem<span class="token punctuation">;</span>
-<span class="token punctuation">}</span>
-
-<span class="token selector">.prose h2</span> <span class="token punctuation">{</span>
-  <span class="token property">font-size</span><span class="token punctuation">:</span> 1.5rem<span class="token punctuation">;</span>
-<span class="token punctuation">}</span>
-
-<span class="token selector">.prose h3</span> <span class="token punctuation">{</span>
-  <span class="token property">font-size</span><span class="token punctuation">:</span> 1.25rem<span class="token punctuation">;</span>
-<span class="token punctuation">}</span>
-
-<span class="token selector">.prose h4</span> <span class="token punctuation">{</span>
-  <span class="token property">font-size</span><span class="token punctuation">:</span> 1.125rem<span class="token punctuation">;</span>
-<span class="token punctuation">}</span></code></pre>
-        </div>
-      </div>
-    </section>
-    <div class="component-prose">
-      <p>Use document structure for hierarchy. Do not use heading classes as visual utilities.</p>
+      <p>Headings are split between the global baseline and <code>.prose</code>. Globally, headings get a tight line-height, a color from <code>--heading</code> (or inherited), and <code>text-wrap: balance</code> where supported. They do not get a <code>font-size</code>, a <code>font-weight</code>, or margins. The reason is that a card heading, a dialog title, or a sidebar section should not be auto-magically enlarged by selector. Inside <code>.prose</code>, headings get a <code>font-weight</code> from <code>--font-weight-strong</code>, a tighter line-height from <code>--prose-heading-line-height</code>, a margin-block rhythm, and an explicit <code>text-wrap: balance</code>. The <code>h1</code> to <code>h4</code> font sizes are also scoped to <code>.prose</code> and are not exposed as a public scale. The <code>hgroup</code> element gets only structural styling: a grid layout, a gap, and a reset of internal margins. No font-size, no color, no weight. Its visual identity is the responsibility of the headings and paragraphs it contains.</p>
     </div>
     
   </section>

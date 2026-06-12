@@ -27,7 +27,7 @@ label:not(.choice):has(> input:not(:is([type="checkbox"], [type="radio"])), > te
 
 .choice,
 .form label:has(> input[type="checkbox"], > input[type="radio"]) {
-  --choice-control-offset: 0.1875em;
+  --choice-control-offset: 0.25em;
 
   display: inline-flex;
   align-items: flex-start;
@@ -36,10 +36,14 @@ label:not(.choice):has(> input:not(:is([type="checkbox"], [type="radio"])), > te
   cursor: pointer;
 }
 
-/* Optical alignment: nudge the control down by ~cap-height/8 so the
-   checkbox/radio/switch sits on the optical baseline of the first line
-   of label text, not the top of the line-box. Multi-line labels still
-   keep the control at the top thanks to align-items: flex-start. */
+/* Optical alignment: nudge the control down so the checkbox/radio/switch
+   sits visually centered with the first line of label text, not flush
+   with the top of the line-box. Default 0.25em (~4px at 16px) places
+   the control just below the cap-height, matching what Bootstrap, Material,
+   and most polished form libraries ship. Multi-line labels still keep
+   the control at the top thanks to align-items: flex-start. Override
+   per-instance via --choice-control-offset for themes with a different
+   line-height or control size. */
 .choice > :is(input[type="checkbox"], input[type="radio"]),
 .form
   label:has(> input:is([type="checkbox"], [type="radio"]))
@@ -55,7 +59,6 @@ label:not(.choice):has(> input:not(:is([type="checkbox"], [type="radio"])), > te
   padding: 0.75rem;
   border: var(--border-width) solid var(--border);
   border-radius: var(--radius);
-  background: var(--surface-subtle);
 }
 
 .field-label,
@@ -66,7 +69,8 @@ label:not(.choice):has(> input:not(:is([type="checkbox"], [type="radio"])), > te
 
 .field-group > legend,
 .form fieldset > legend {
-  padding: 0;
+  padding-block: 0;
+  padding-inline: var(--fieldset-legend-padding-inline, 0.25rem);
   font-size: 0.8125rem;
 }
 

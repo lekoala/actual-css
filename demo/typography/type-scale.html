@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Tables — Actual CSS</title>
+  <title>Type scale — Actual CSS</title>
   <link rel="stylesheet" href="../../src/actual.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
   <link rel="stylesheet" href="../../demo/styles/demo.css">
@@ -19,11 +19,11 @@
   <main class="center">
   <section class="component-section">
     <header class="component-header">
-      <h1>Tables</h1>
+      <h1>Type scale</h1>
       
     </header>
         <div class="component-prose">
-      <p>Prose tables are a different concern from app data tables. Long-form content can contain a small table, but a sortable, dense, row-actionable app table belongs to the table component. The <code>.prose table</code> rule is intentionally minimal: it does not define sticky headers, selection states, row actions, or density variants.</p>
+      <p>There is no exposed type scale. The framework exposes font weights, line heights, and the prose-specific overrides. It does not expose <code>fs-1</code> through <code>fs-7</code>, heading-level tokens, or heading-level utility classes. The reason is the same as for the baseline: a public scale is a contract, and adding it now would lock in choices before theme work and real component use tell us what is actually needed. When a scale is needed, the optional fluid module is the right place to start. A future theme can override its tokens, not invent a parallel scale in components.</p>
     </div>
     
   </section>

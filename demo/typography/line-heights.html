@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Overview — Actual CSS</title>
+  <title>Line heights — Actual CSS</title>
   <link rel="stylesheet" href="../../src/actual.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
   <link rel="stylesheet" href="../../demo/styles/demo.css">
@@ -19,17 +19,17 @@
   <main class="center">
   <section class="component-section">
     <header class="component-header">
-      <h1>Overview</h1>
-      <p>Quiet global defaults plus an opt-in prose scope for long-form content, with a separate optional module for fluid display type.</p>
+      <h1>Line heights</h1>
+      
     </header>
         <div class="component-prose">
-      <p>Typography has three layers:</p>
+      <p>The framework exposes three line-height tokens:</p>
 <ul>
-  <li>global defaults that make plain HTML readable without becoming classless CSS</li>
-  <li><code>.prose</code>, an opt-in rich-text scope for articles, documentation, markdown, CMS content, and long-form text</li>
-  <li>a small optional fluid module for display, title, and lead sizes that scale with the viewport</li>
+  <li><code>--line-height-tight</code> (1.25) — used by global headings and by display / title classes</li>
+  <li><code>--line-height</code> (1.5) — body default</li>
+  <li><code>--line-height-relaxed</code> (1.75) — used by <code>.lead</code> and <code>.text-lead</code> for intro text</li>
 </ul>
-<p>Components must not depend on <code>.prose</code>. App screens, forms, cards, tables, navigation, dashboards, and component examples should use their own component or layout rules. Use <code>.prose</code> directly on a semantic content container, usually an <code>article</code>.</p>
+<p>There is no <code>--line-height-normal</code>. It would be redundant with <code>--line-height</code>. Prose overrides line-height through <code>--prose-line-height</code> and <code>--prose-heading-line-height</code> because the readable values for long-form text are different from app UI.</p>
     </div>
     
   </section>

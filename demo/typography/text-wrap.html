@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Overview — Actual CSS</title>
+  <title>text-wrap — Actual CSS</title>
   <link rel="stylesheet" href="../../src/actual.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
   <link rel="stylesheet" href="../../demo/styles/demo.css">
@@ -19,17 +19,17 @@
   <main class="center">
   <section class="component-section">
     <header class="component-header">
-      <h1>Overview</h1>
-      <p>Quiet global defaults plus an opt-in prose scope for long-form content, with a separate optional module for fluid display type.</p>
+      <h1>text-wrap</h1>
+      
     </header>
         <div class="component-prose">
-      <p>Typography has three layers:</p>
+      <p><code>text-wrap: balance</code> and <code>text-wrap: pretty</code> are used at three levels:</p>
 <ul>
-  <li>global defaults that make plain HTML readable without becoming classless CSS</li>
-  <li><code>.prose</code>, an opt-in rich-text scope for articles, documentation, markdown, CMS content, and long-form text</li>
-  <li>a small optional fluid module for display, title, and lead sizes that scale with the viewport</li>
+  <li>global headings, where supported</li>
+  <li>inside <code>.prose</code> for headings (balance) and for paragraphs, list items, and blockquotes (pretty)</li>
+  <li>as opt-in utilities <code>.text-balance</code> and <code>.text-pretty</code> for any element outside <code>.prose</code></li>
 </ul>
-<p>Components must not depend on <code>.prose</code>. App screens, forms, cards, tables, navigation, dashboards, and component examples should use their own component or layout rules. Use <code>.prose</code> directly on a semantic content container, usually an <code>article</code>.</p>
+<p>All three are wrapped in <code>@supports</code> so that the property gracefully degrades in browsers that do not support it. There is no <code>text-align: center</code> hidden inside <code>.text-balance</code>: balance is about wrapping, not alignment.</p>
     </div>
     
   </section>

@@ -69,12 +69,6 @@ pre[class*="language-"] {
   color: var(--text-muted);
 }
 
-.token.atrule,
-.token.attr-value,
-.token.keyword {
-  color: var(--secondary);
-}
-
 .token.function,
 .token.class-name {
   color: var(--primary);

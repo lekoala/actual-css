@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Tables — Actual CSS</title>
+  <title>Small elements — Actual CSS</title>
   <link rel="stylesheet" href="../../src/actual.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
   <link rel="stylesheet" href="../../demo/styles/demo.css">
@@ -19,11 +19,11 @@
   <main class="center">
   <section class="component-section">
     <header class="component-header">
-      <h1>Tables</h1>
+      <h1>Small elements</h1>
       
     </header>
         <div class="component-prose">
-      <p>Prose tables are a different concern from app data tables. Long-form content can contain a small table, but a sortable, dense, row-actionable app table belongs to the table component. The <code>.prose table</code> rule is intentionally minimal: it does not define sticky headers, selection states, row actions, or density variants.</p>
+      <p><code>small</code> gets a smaller font size globally (<code>0.875em</code>) because it is a semantic element, not a utility. There is no <code>.small</code> class competing with the element. <code>code</code>, <code>kbd</code>, <code>samp</code>, and <code>pre</code> get the mono font family globally. Visual treatment (background, padding, radius) is left to <code>.prose</code> or to code-block components.</p>
     </div>
     
   </section>

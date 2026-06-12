@@ -288,8 +288,54 @@ Use `.sidebar` for two-column layouts where one side has a preferred width and t
 
 Tune the side width and wrapping threshold with `--sidebar-size` and `--sidebar-content-min`.
 
+### Sidebar Layout (Grid)
+
+`.sidebar-layout` is a complementary two-column primitive that uses CSS grid instead of flex. Use it when the aside should align to the top of the content (e.g. a sticky table of contents) or when the content area contains multiple sections that should stretch together.
+
+Below the 64rem breakpoint the columns stack; at and above it the aside takes `--sidebar-layout-size` and the content takes the remaining space.
+
+```html
+<div class="sidebar-layout" style="--sidebar-layout-size: 18rem">
+  <article class="stack">
+    <h1>Long-form article</h1>
+    <p>Article body that benefits from a sticky table of contents.</p>
+  </article>
+
+  <aside class="stack">
+    <h3>On this page</h3>
+    <ol class="list-reset">
+      <li><a class="link-muted" href="#section">Section</a></li>
+    </ol>
+  </aside>
+</div>
+```
+
+`.sidebar` and `.sidebar-layout` are not interchangeable. `.sidebar` is flex-based and lets the side and content grow together; `.sidebar-layout` is grid-based and locks the aside to its declared width. Pick the one that matches the role.
+
 Links:
 - https://every-layout.dev/layouts/sidebar/
+
+## Media Object
+
+> Fixed-width leading element (avatar, icon, image) paired with flexible trailing content.
+
+`.media` is the media object: a grid with `auto minmax(0, 1fr)` columns. Use it for author cards, comments, meta rows, and any composition that pairs a small leading element with a flexible content block. The trailing column takes the remaining space and never overflows.
+
+Add `.media-middle` to align the leading element to the center of the trailing content's first line. This is what you want when the trailing content is a single short string; for multi-line content, the default `align-items: start` is more comfortable.
+
+```html
+<article class="card media">
+  <span class="avatar"><abbr>AM</abbr></span>
+  <div class="stack">
+    <strong>Ada Meridian</strong>
+    <p class="muted">Senior designer working on design systems.</p>
+  </div>
+</article>
+```
+
+The media object is the underlying pattern of `.blog-author`, `.blog-comment`, and similar compositions in templates. Components can adopt it instead of repeating the grid rule.
+
+## Switcher
 
 ## Switcher
 

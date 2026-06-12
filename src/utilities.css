@@ -33,3 +33,94 @@
   --radius: 999px;
   border-radius: 999px;
 }
+
+/* Text alignment — uses logical properties so it follows writing direction. */
+.text-start {
+  text-align: start;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-end {
+  text-align: end;
+}
+
+/* text-wrap utilities: opt in for elements outside .prose. Gated on @supports
+   for consistency with the prose scope. */
+@supports (text-wrap: balance) {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+@supports (text-wrap: pretty) {
+  .text-pretty {
+    text-wrap: pretty;
+  }
+}
+
+/* Lead paragraph: a slightly larger, more relaxed reading-introduction text.
+   Non-fluid and always available — use .text-lead from the optional fluid
+   module for marketing/display surfaces. */
+.lead {
+  font-size: 1.125em;
+  line-height: var(--line-height-relaxed);
+}
+
+/* Readable content measure. Composes with .center for centering or with
+   margin-inline: auto for a one-off centered block. */
+.measure {
+  max-inline-size: var(--prose-measure);
+}
+
+/* Generic list chrome reset. Use for any list (tags, footer columns, related
+   items). For navigation lists, prefer .nav-list for semantic intent. */
+.list-reset {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Editorial eyebrow label: small, uppercase, muted typography. The base form
+   is unstyled chrome that takes its surrounding color. Add .pill for the
+   bordered rounded shape, and combine with an intent class (.primary,
+   .success, etc.) to tint the text, border, and background. */
+.eyebrow {
+  align-self: flex-start;
+  color: var(--text-muted);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.eyebrow.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  padding-inline: 0.6em;
+  padding-block: 0.25em;
+  color: var(--intent, var(--text-muted));
+  border: var(--border-width) solid
+    color-mix(in oklch, var(--intent, var(--border)) 35%, var(--border));
+  border-radius: var(--radius-full, 9999px);
+  background: color-mix(in oklch, var(--intent, transparent) 6%, var(--surface));
+}
+
+/* Link variants for chrome that should not look like prose links. Use in
+   navigation, tags, footer, tables of contents, and similar surfaces. */
+.link-plain {
+  color: inherit;
+  text-decoration: none;
+}
+
+.link-muted {
+  color: var(--text-muted);
+  text-decoration: none;
+}
+
+.link-muted:hover {
+  color: var(--text);
+}

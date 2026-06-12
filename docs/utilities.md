@@ -144,6 +144,38 @@ Use `.circle` only when an element must be perfectly round.
 
 Do not add `.rounded-sm`, `.rounded-lg`, `.square`, or `.pill` unless repeated real use proves they are needed.
 
+## Content
+
+### Measure
+
+`.measure` caps a block at a readable width using `--prose-measure`. It does not center — combine with `.center` for the common centered reading column, or with `margin-inline: auto` for a one-off centered block.
+
+Use it for any content that needs a comfortable measure: prose articles, TOC lists, form fields, callouts. Avoid using it for full-bleed surfaces.
+
+## List Helpers
+
+### List Reset
+
+`.list-reset` removes the native list chrome (margin, padding, markers) from any list. It is the generic version of `.nav-list` — use `.nav-list` when the list is a navigation list for semantic intent, and `.list-reset` for everything else (tag clouds, footer columns, related items, comment threads, embedded controls).
+
+## Editorial Labels
+
+### Eyebrow
+
+`.eyebrow` is a small editorial label: muted color, smaller size, uppercase, slight letter-spacing. It does not impose a shape by itself. Add `.pill` for a bordered rounded chip, and combine with an intent class (`.primary`, `.success`, etc.) to tint the chip's text, border, and background.
+
+The eyebrow exists because categories, kicker labels, and section markers recur across editorial surfaces, and `.badge` is the wrong shape for them. `.badge` is a status indicator; `.eyebrow` is metadata.
+
+## Link Variants
+
+### Plain
+
+`.link-plain` removes the link's underline and inherits the surrounding color. Use for chrome that is conceptually a link (a card title, a table row action, a tag, a breadcrumb segment) but should not look like prose.
+
+### Muted
+
+`.link-muted` is a `.link-plain` that starts in the muted text color and shifts to the full text color on hover. Use for navigation lists, table of contents, and other secondary navigation surfaces.
+
 ## Non-Goals
 
 > Utilities deliberately excluded to keep the surface small and intentional.
