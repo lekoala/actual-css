@@ -10,6 +10,8 @@ Layout provides a small set of composable building blocks for common page, app, 
 
 ## Tokens
 
+> Layout shares the global spacing surface and exposes a small set of gap and rhythm tokens.
+
 Layout uses the shared spacing surface.
 
 ```css
@@ -35,6 +37,8 @@ Most layout primitives should read `--gap` and allow local overrides.
 Prefer a local custom property over adding many one-off utility classes. Use inline styles only for demos, prototypes, or truly dynamic values.
 
 ## Stack
+
+> Vertical flow with consistent spacing, ideal for forms, card content, and content blocks.
 
 Use `.stack` for vertical flow with consistent spacing.
 
@@ -67,6 +71,8 @@ Links:
 
 ## Cluster
 
+> Inline groups that wrap naturally, useful for action rows, tags, and toolbars.
+
 Use `.cluster` for inline groups that wrap naturally.
 
 ```html
@@ -93,6 +99,8 @@ Links:
 - https://every-layout.dev/layouts/cluster/
 
 ## Center
+
+> Constrain readable content and center it in the viewport, with width and padding tunable per instance.
 
 Use `.center` to constrain readable page content and center it in the viewport.
 
@@ -133,6 +141,8 @@ Links:
 - https://every-layout.dev/layouts/center/
 
 ## List
+
+> Rich content lists where each item may contain multiple elements, captured as a single figure.
 
 - Use figure to capture as a single unit
 - `figcaption` is optional
@@ -189,6 +199,8 @@ Links:
 
 ## Grid
 
+> Responsive equal-width item grids with a tunable minimum item width.
+
 Use `.grid` for responsive equal-width item grids.
 
 ```html
@@ -235,6 +247,8 @@ Links:
 
 ## Sidebar
 
+> Two-column layout where one side has a preferred width and the other takes the remaining space.
+
 Use `.sidebar` for two-column layouts where one side has a preferred width and the other takes the remaining space.
 
 ```html
@@ -279,6 +293,8 @@ Links:
 
 ## Switcher
 
+> Row that becomes a column when space gets tight, useful for small sets of panels.
+
 Use `.switcher` for rows that should become columns when space gets tight.
 
 ```html
@@ -318,6 +334,8 @@ Links:
 
 ## Frame
 
+> Media container that holds a stable aspect ratio for images, video, or embeds.
+
 Use `.frame` for media that needs a stable aspect ratio.
 
 ```html
@@ -351,6 +369,8 @@ Links:
 - https://every-layout.dev/layouts/frame/
 
 ## Header And Footer
+
+> Document landmarks for top and bottom regions, composed with layout primitives.
 
 Header and footer are document landmarks, not required layout classes.
 

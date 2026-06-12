@@ -2,7 +2,7 @@
 
 ## Overview
 
-All form elements form a cohesive ensemble
+> Cohesive set of form elements that share focus styles, helpers, and validation patterns.
 
 - No floating labels
 - Use progressive enhancement for modern select elements
@@ -190,6 +190,8 @@ Links:
 - https://uiterms.com/switch/
 
 ## Validation
+
+> Inline error and success feedback that respects assistive technology and form state.
 
 Links:
 - https://daisyui.com/components/validator/

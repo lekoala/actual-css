@@ -4,6 +4,7 @@ import { fileURLToPath } from "node:url";
 import Prism from "prismjs";
 import "prismjs/components/prism-markup.js";
 import "prismjs/components/prism-css.js";
+import "prismjs/components/prism-javascript.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, "..");
@@ -100,7 +101,6 @@ function parseMarkdown(content, fallbackTitle) {
   let codeWrapperClasses = "";
   let codeLines = [];
   let proseBuffer = [];
-  let descSet = false;
   let hasH2 = false;
   let h1Title = null;
 
@@ -130,7 +130,6 @@ function parseMarkdown(content, fallbackTitle) {
       flushProse();
       if (current) sections.push(current);
       current = { title: h2Match[1].trim(), slug: slugify(h2Match[1]), items: [], desc: "", links: [] };
-      descSet = false;
       continue;
     }
 
@@ -176,6 +175,12 @@ function parseMarkdown(content, fallbackTitle) {
       continue;
     }
 
+    const descMatch = trimmed.match(/^>\s+(.+)$/);
+    if (descMatch && !current.desc) {
+      current.desc = descMatch[1].trim();
+      continue;
+    }
+
     const linkMatch = trimmed.match(/^[-*]\s+(?:(.+?):\s+)?(https?:\/\/\S+)\s*$/);
     if (linkMatch) {
       const label = linkMatch[1] || linkMatch[2];
@@ -185,12 +190,7 @@ function parseMarkdown(content, fallbackTitle) {
 
     const liMatch = trimmed.match(/^[-*]\s+(.+)$/);
     if (liMatch) {
-      if (!descSet && current) {
-        current.desc = liMatch[1];
-        descSet = true;
-      } else {
-        proseBuffer.push(trimmed);
-      }
+      proseBuffer.push(trimmed);
       continue;
     }
 
@@ -199,12 +199,7 @@ function parseMarkdown(content, fallbackTitle) {
       continue;
     }
 
-    if (!descSet && current) {
-      current.desc = trimmed;
-      descSet = true;
-    } else {
-      proseBuffer.push(trimmed);
-    }
+    proseBuffer.push(trimmed);
   }
 
   flushProse();
@@ -227,7 +222,11 @@ function parseMarkdown(content, fallbackTitle) {
 }
 
 function renderCodeBlock(block) {
-  const grammar = block.lang === "css" ? Prism.languages.css : Prism.languages.markup;
+  const grammar = block.lang === "css"
+    ? Prism.languages.css
+    : block.lang === "js" || block.lang === "javascript"
+      ? Prism.languages.javascript
+      : Prism.languages.markup;
   const highlighted = Prism.highlight(block.code, grammar, block.lang);
   const wrapperClass = block.wrapperClasses ? ` ${block.wrapperClasses}` : "";
 
@@ -240,6 +239,17 @@ function renderCodeBlock(block) {
         </div>
       </div>
     </section>`;
+  }
+
+  if (block.lang === "js" || block.lang === "javascript") {
+    return `    <section class="component-section">
+      <div class="example-group">
+        <div class="example-code">
+          <pre><code class="language-${block.lang}">${highlighted}</code></pre>
+        </div>
+      </div>
+    </section>
+    <script>try{${block.code}}catch(e){console.error(e)}</script>`;
   }
 
   return `    <section class="component-section">
@@ -321,7 +331,7 @@ function renderMainIndex(categories) {
 
   return templates.mainIndex
     .replace(/\{\{links\}\}/g, links)
-    .replace(/\{\{cssPath\}\}/g, "src");
+    .replace(/\{\{cssPath\}\}/g, "../src");
 }
 
 function extractCategoryDescription(content) {

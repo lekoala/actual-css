@@ -1,5 +1,7 @@
 ## Patterns
 
+> Small structural helpers for recurring semantic HTML shapes, between layout primitives and full components.
+
 Patterns are small structural helpers for recurring semantic HTML shapes. They sit between layout primitives and full components.
 
 They do not define page layout like `.stack`, `.cluster`, or `.grid`, and they do not provide a strong visual identity like `.alert`, `.card`, or `.btn`.

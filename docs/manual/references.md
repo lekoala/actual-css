@@ -2,6 +2,8 @@
 
 ## CSS Articles
 
+> Curated reading on modern CSS, structure, and patterns.
+
 Moving away from Tailwind, and learning to structure my CSS
 https://jvns.ca/blog/2026/05/15/moving-away-from-tailwind--and-learning-to-structure-my-css-/
 
@@ -30,6 +32,8 @@ Defensive css
 https://defensivecss.dev/
 
 ## Frameworks
+
+> Design systems and frameworks studied while shaping Actual CSS, with notes on what to take and what to avoid.
 
 ### Nord Design System
 

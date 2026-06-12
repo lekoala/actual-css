@@ -41,6 +41,8 @@ Links:
 
 ## Overflow
 
+> Explicit overflow handling for content that may exceed its container.
+
 Use `.overflow-auto` when content may overflow its container, especially tables and code-like regions.
 
 ```html
@@ -75,6 +77,8 @@ Links:
 
 ## Flex Helpers
 
+> Small flex helpers for grow behavior and other one-line needs.
+
 ### Grow
 
 Use `.grow` when one item in a flex layout should take available space without overflowing.
@@ -99,6 +103,8 @@ Use `.grow` when one item in a flex layout should take available space without o
 
 ## Text Helpers
 
+> Lightweight helpers for muted or secondary text without a full color scale.
+
 ### Muted
 
 Use `.muted` for secondary text when no semantic element already carries the meaning.
@@ -116,6 +122,8 @@ Use `.muted` for secondary text when no semantic element already carries the mea
 Do not create a full text color utility scale. Intent colors belong to components and state, not arbitrary text decoration.
 
 ## Shape Helpers
+
+> Rare shape utilities for cases that must be perfectly round or square.
 
 Shape utilities should be rare because shape is mostly theme-level.
 
@@ -137,6 +145,8 @@ Use `.circle` only when an element must be perfectly round.
 Do not add `.rounded-sm`, `.rounded-lg`, `.square`, or `.pill` unless repeated real use proves they are needed.
 
 ## Non-Goals
+
+> Utilities deliberately excluded to keep the surface small and intentional.
 
 - No margin and padding scales such as `.mt-4` or `.p-2`.
 - No display scale such as `.block`, `.flex`, `.grid`.

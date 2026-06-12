@@ -13,6 +13,8 @@ The surface stays small by keeping most tokens semantic, not component-specific.
 
 ## Public Surface
 
+> Tokens exposed as the public theming API, kept small and semantic.
+
 ### Color
 
 Intent tokens are used by `.primary`, `.secondary`, `.success`, `.warning`, `.danger`, and `.neutral`.
@@ -179,6 +181,8 @@ Only add an icon token when CSS needs the icon. Markup icons should stay in mark
 
 ## Internal Tokens
 
+> Component-local tokens allowed when they reduce duplication or make component code clearer.
+
 Internal tokens are allowed when they reduce duplication or make component code clearer.
 
 ### Variant Plumbing
@@ -213,6 +217,8 @@ Rules:
 - Promote an internal token to public only when there is a repeated, reasonable customization need.
 
 ## Theme Contract
+
+> What a theme must override to restyle the library without touching components.
 
 A theme can be complete by overriding only:
 
@@ -261,6 +267,8 @@ Dark themes should set `color-scheme: dark`. Light themes should set `color-sche
 
 ## Component Mapping
 
+> How components map global tokens to local aliases for a clear theme and variant contract.
+
 Components should map global tokens once at the top of the component and use local tokens afterwards.
 
 ```css
@@ -285,6 +293,8 @@ This makes the contract obvious:
 
 ## Non-Goals
 
+> Decisions deliberately excluded from the token surface to keep it small.
+
 - Do not expose a separate token for every selector.
 - Do not mirror Pico-style component-specific variables unless there is a clear need.
 - Do not add Tailwind-like color scales as public API.
@@ -292,6 +302,8 @@ This makes the contract obvious:
 - Do not make dark mode required for old browsers. Light mode is the fallback.
 
 ## Links
+
+> Reference reading on design tokens and theming approaches.
 
 - https://primer.style/product/primitives/
 - https://picocss.com/docs/css-variables

@@ -1,41 +1,64 @@
 /*
- * Drawer shell styling for semantic aside panels.
+ * Drawer dialog for modal side-sheets.
  *
- * Geometry, surface, spacing, and local navigation rhythm live here. Trigger
- * behavior, focus management, and page-level layout stay with the app.
+ * Uses the native dialog element for top-layer rendering, backdrop styling,
+ * Escape handling, and modal focus behavior. Opening/closing stays with the app.
  */
-.drawer {
-  inline-size: min(100%, var(--drawer-size, 18rem));
-  block-size: 100%;
-  padding: var(--space-4);
+dialog.drawer {
+  --drawer-size: 20rem;
+  --drawer-pad: var(--space-4);
+
+  inline-size: min(90vw, var(--drawer-size));
+  block-size: 100dvh;
+  max-inline-size: none;
+  max-block-size: 100dvh;
+  margin: 0;
+  padding: var(--drawer-pad);
+  border: 0;
   border-inline-end: var(--border-width) solid var(--border);
+  border-radius: 0;
   background: var(--surface-raised);
   color: var(--text);
   box-shadow: var(--shadow);
 }
 
-.drawer[hidden] {
-  display: none;
+dialog.drawer[open] {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  gap: var(--space-4);
 }
 
-.drawer nav ul {
-  display: grid;
-  gap: 0.25rem;
-  margin: 0;
-  padding: 0;
-  list-style: none;
+dialog.drawer::backdrop {
+  background: color-mix(in oklch, black, transparent 55%);
+}
+
+dialog.drawer[data-side="end"] {
+  margin-inline-start: auto;
+  margin-inline-end: 0;
+  border-inline-end: 0;
+  border-inline-start: var(--border-width) solid var(--border);
+}
+
+.drawer nav {
+  min-block-size: 0;
+  overflow-y: auto;
+}
+
+.drawer :where(.nav-list) {
+  --gap: var(--space-1);
 }
 
 .drawer a,
 .drawer summary {
   display: flex;
   align-items: center;
-  min-block-size: 2.25rem;
-  padding-inline: 0.75rem;
+  min-block-size: var(--control-size-sm);
+  padding-inline: var(--space-3);
   border-radius: var(--radius);
   color: var(--text-muted);
   font-weight: var(--font-weight-strong);
   text-decoration: none;
+  cursor: pointer;
 }
 
 .drawer a:hover,
@@ -45,6 +68,41 @@
   color: var(--text);
 }
 
-.drawer footer {
-  margin-block-start: var(--space-4);
+.drawer details > .nav-list {
+  margin-block-start: var(--space-1);
+  padding-inline-start: var(--space-3);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  dialog.drawer[open] {
+    animation: drawer-start-appear 200ms var(--ease, ease-out);
+  }
+
+  dialog.drawer[data-side="end"][open] {
+    animation-name: drawer-end-appear;
+  }
+}
+
+@keyframes drawer-start-appear {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes drawer-end-appear {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
 }
