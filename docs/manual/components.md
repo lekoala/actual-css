@@ -569,8 +569,9 @@ Links:
 - Use native `<meter class="meter">`.
 - Shares progress styling DNA.
 - Represents a scalar measurement within a known range, not task completion.
+- Use explicit bar height to avoid padding issues
 
-```html
+```html{.stack}
 <meter class="meter" value="0.8" min="0" max="1" low="0.3" high="0.7" optimum="1"></meter>
 <meter class="meter" value="0.5" min="0" max="1" low="0.3" high="0.7" optimum="1"></meter>
 <meter class="meter" value="0.2" min="0" max="1" low="0.3" high="0.7" optimum="1"></meter>
@@ -607,6 +608,7 @@ Links:
 
 Links:
 - https://oat.ink/components/#pagination
+- https://daisyui.com/components/pagination/
 - https://uiterms.com/pagination/
 
 ## Progress
@@ -617,7 +619,7 @@ Links:
 - Can be connected to a busy region with `aria-describedby`.
 - Never self-close `<progress>`.
 
-```html
+```html{.stack}
 <progress class="progress" value="60" max="100"></progress>
 <progress class="progress" value="30" max="100"></progress>
 <progress class="progress" value="90" max="100"></progress>
