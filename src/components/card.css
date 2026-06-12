@@ -5,14 +5,28 @@
  * Content anatomy and page layout remain the job of markup and layout primitives.
  */
 .card {
-  --card-pad: 1rem;
+  --card-pad: var(--space-4);
   --card-radius: var(--radius-lg);
+  --card-max-inline-size: none;
 
-  background: var(--surface-raised);
-  color: var(--text);
-  border: var(--border-width) solid var(--border);
-  border-radius: var(--card-radius);
+  max-inline-size: var(--card-max-inline-size);
   padding: var(--card-pad);
+  background: var(--ui-bg, var(--surface));
+  color: var(--ui-fg, var(--text));
+  border: var(--border-width) solid var(--ui-border, var(--border));
+  border-radius: var(--card-radius);
+}
+
+.card > * {
+  min-inline-size: 0;
+}
+
+.card > :first-child {
+  margin-block-start: 0;
+}
+
+.card > :last-child {
+  margin-block-end: 0;
 }
 
 .card.raised {
@@ -29,4 +43,40 @@
 
 .card.compact {
   --card-pad: 0.5rem;
+}
+
+/* Full-bleed children */
+.card > [data-bleed] {
+  margin-inline: calc(var(--card-pad) * -1);
+  max-inline-size: none;
+}
+
+.card > [data-bleed]:first-child {
+  margin-block-start: calc(var(--card-pad) * -1);
+  border-start-start-radius: inherit;
+  border-start-end-radius: inherit;
+}
+
+.card > [data-bleed]:last-child {
+  margin-block-end: calc(var(--card-pad) * -1);
+  border-end-start-radius: inherit;
+  border-end-end-radius: inherit;
+}
+
+/* Media bleed */
+.card > :where(img, picture, video, canvas, svg)[data-bleed] {
+  display: block;
+  inline-size: calc(100% + var(--card-pad) * 2);
+  max-inline-size: none;
+}
+
+.card > picture[data-bleed] > img {
+  display: block;
+  inline-size: 100%;
+  block-size: auto;
+}
+
+/* Padded structural bleed */
+.card > :where(header, footer, figure)[data-bleed] {
+  padding: var(--card-pad);
 }

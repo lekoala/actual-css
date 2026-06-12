@@ -1,0 +1,64 @@
+/*
+ * Base element styles for native HTML semantics.
+ *
+ * Sits between reset (browser defaults) and prose (rich content scope).
+ * These styles apply everywhere — cards, dialogs, heroes — not only in prose.
+ */
+
+body {
+  background: var(--surface);
+  color: var(--text);
+  font-family: var(--font-sans);
+  line-height: var(--line-height);
+}
+
+a {
+  color: var(--link, var(--primary));
+  text-decoration-line: underline;
+  text-decoration-thickness: var(--link-decoration-thickness);
+  text-underline-offset: var(--link-underline-offset);
+}
+
+a:hover {
+  text-decoration-thickness: var(--link-decoration-thickness-hover);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: var(--heading, var(--text));
+  font-weight: var(--font-weight-heading, 700);
+  line-height: var(--line-height-heading, 1.15);
+  text-wrap: balance;
+}
+
+/* Compact heading groups */
+hgroup {
+  display: grid;
+  gap: var(--hgroup-gap, 0.25em);
+}
+
+hgroup > * {
+  margin-block: 0;
+}
+
+hr {
+  border: 0;
+  border-block-start: var(--border-width) solid var(--border);
+  margin-block: var(--space-6);
+}
+
+code,
+kbd,
+samp,
+pre {
+  font-family: var(--font-mono);
+}
+
+::selection {
+  background: var(--selection-bg, var(--primary));
+  color: var(--selection-fg, var(--primary-fg));
+}

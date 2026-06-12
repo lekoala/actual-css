@@ -1,4 +1,5 @@
 @import "./reset.css";
+@import "./base.css";
 @import "./tokens.css";
 @import "./theme.css";
 @import "./intents.css";

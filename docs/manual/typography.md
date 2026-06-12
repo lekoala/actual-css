@@ -159,6 +159,21 @@ Headings should create hierarchy without needing a large public scale.
 
 Use document structure for hierarchy. Do not use heading classes as visual utilities.
 
+## Heading Groups
+
+Use `hgroup` when a heading has a short subtitle, tagline, or supporting paragraph.
+
+```html
+<hgroup>
+  <h3>Team</h3>
+  <p class="muted">For growing products</p>
+</hgroup>
+```
+
+`hgroup` controls its own compact internal spacing. Override the gap with `--hgroup-gap`; the default is `0.25em`.
+
+Do not use `.stack` only to space a heading and subtitle.
+
 ## Text Links
 
 Global links inherit color. `.prose` links should look like links by default.
