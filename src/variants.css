@@ -1,6 +1,7 @@
 /* Default variant is solid. Components consume --ui-* and map them to local variables. */
 .solid,
-:where(.btn, .badge):not(:where(.soft, .outline, .ghost, .link)) {
+.btn:not(:where(.soft, .outline, .ghost, .link)),
+.badge:not(:where(.soft, .outline)) {
   --ui-bg: var(--intent, var(--neutral));
   --ui-fg: var(--intent-fg, var(--neutral-fg));
   --ui-border: transparent;
@@ -8,18 +9,7 @@
 
 /* Default alert without intent: transparent with border */
 :where(.alert):not(
-  :where(
-    .primary,
-    .secondary,
-    .success,
-    .warning,
-    .danger,
-    .neutral,
-    .solid,
-    .outline,
-    .ghost,
-    .link
-  )
+  :where(.primary, .secondary, .success, .warning, .danger, .neutral, .solid, .outline, .soft)
 ) {
   --ui-bg: transparent;
   --ui-border: var(--border);
@@ -29,7 +19,7 @@
 /* Soft variant and alerts with intent */
 .soft,
 .alert:where(.primary, .secondary, .success, .warning, .danger, .neutral):not(
-  :where(.solid, .outline, .ghost, .link)
+  :where(.solid, .outline)
 ) {
   --ui-bg: var(--surface-subtle);
   --ui-border: var(--border);
@@ -42,13 +32,13 @@
   --ui-border: var(--intent, var(--border));
 }
 
-.ghost {
+.btn.ghost {
   --ui-bg: transparent;
   --ui-fg: var(--intent, var(--text));
   --ui-border: transparent;
 }
 
-.link {
+.btn.link {
   --ui-bg: transparent;
   --ui-fg: var(--intent, var(--text));
   --ui-border: transparent;
@@ -63,4 +53,35 @@
   --control-size: 3rem;
   --control-pad-x: 1.25rem;
   --control-font-size: 1rem;
+}
+
+/* Modern color enhancement. Baseline variant values above remain usable everywhere. */
+@supports (color: color-mix(in oklch, red, white)) {
+  .soft {
+    --ui-bg: color-mix(in oklch, var(--intent, var(--neutral)), var(--surface) 88%);
+    --ui-border: color-mix(in oklch, var(--intent, var(--neutral)), var(--surface) 65%);
+  }
+
+  .alert:where(.primary, .secondary, .success, .warning, .danger, .neutral):not(
+    :where(.solid, .outline)
+  ) {
+    --ui-bg: light-dark(
+      color-mix(in srgb, var(--intent) 8%, transparent),
+      color-mix(in srgb, var(--intent) 20%, transparent)
+    );
+    --ui-border: transparent;
+  }
+
+  .btn:not(:where(.soft, .outline, .ghost, .link)):hover {
+    --ui-hover-bg: color-mix(in srgb, var(--intent, var(--neutral)) 88%, black);
+  }
+
+  :where(a.badge, button.badge, a.alert, button.alert).soft:hover,
+  .btn:where(.ghost, .soft):hover {
+    --ui-hover-bg: color-mix(in oklch, var(--intent, var(--neutral)), transparent 88%);
+  }
+
+  :where(.btn, a.badge, button.badge, a.alert, button.alert).outline:hover {
+    --ui-hover-bg: color-mix(in oklch, var(--intent, var(--neutral)), transparent 92%);
+  }
 }

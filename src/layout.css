@@ -45,7 +45,31 @@
   min-inline-size: min(100%, var(--sidebar-content-min, 50%));
 }
 
-.circle {
-  --radius: 999px;
-  border-radius: 999px;
+.switcher {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap);
+}
+
+.switcher > * {
+  flex-basis: calc((var(--switcher-threshold, 40rem) - 100%) * 999);
+  flex-grow: 1;
+  min-inline-size: 0;
+}
+
+.frame {
+  overflow: hidden;
+  aspect-ratio: var(--frame-ratio, 16 / 9);
+}
+
+.frame > :where(img, video, iframe, canvas, svg) {
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+}
+
+.app-shell {
+  min-block-size: 100vh;
+  display: flex;
+  flex-direction: column;
 }

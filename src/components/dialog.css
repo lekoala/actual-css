@@ -1,17 +1,17 @@
-/**
- * Contract:
- * - `.dialog` remains a surface component with clear separation from overlay behavior.
- * - Dialog spacing, radius, and focus treatment come from shared tokens.
- * Owns: dialog shell geometry, transitions, and local layout.
- * Does not own: intent variants or demo-only markup dependencies.
+/*
+ * Dialog shell styling for native dialog elements.
+ *
+ * Spacing, radius, transitions, and focus treatment come from shared tokens.
+ * Opening behavior and intent-specific decisions stay outside this component.
  */
 .dialog {
   max-inline-size: min(100% - 2rem, 32rem);
-  border: 1px solid var(--border);
+  border: var(--border-width) solid var(--border);
   border-radius: var(--radius-lg);
   background: var(--surface-raised);
   color: var(--text);
   box-shadow: var(--shadow);
+  padding: 0;
   opacity: 0;
   transform: translateY(0.35rem) scale(0.98);
   transition:
@@ -19,6 +19,30 @@
     transform var(--duration),
     overlay var(--duration) allow-discrete,
     display var(--duration) allow-discrete;
+}
+
+.dialog > form,
+.dialog > .stack {
+  display: grid;
+  gap: var(--space-4);
+  padding: var(--space-4);
+}
+
+.dialog header > :first-child,
+.dialog footer > :first-child {
+  margin-block-start: 0;
+}
+
+.dialog header > :last-child,
+.dialog footer > :last-child {
+  margin-block-end: 0;
+}
+
+.dialog footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--gap);
 }
 
 .dialog[open] {

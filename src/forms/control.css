@@ -1,0 +1,84 @@
+/*
+ * Text controls — input, textarea, and classed equivalents.
+ *
+ * Neutral geometry and interaction states shared across all text-like
+ * controls, whether semantic (input[type=text]) or classed (.input).
+ * select, checkbox, radio, range, and file have their own files.
+ */
+.input,
+.textarea,
+.form
+  :where(input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"]), textarea) {
+  --field-border: var(--border);
+  --field-bg: var(--surface);
+  --field-fg: var(--text);
+
+  inline-size: 100%;
+  min-block-size: var(--control-size);
+  padding-inline: 0.75rem;
+  border: var(--border-width) solid var(--field-border);
+  border-radius: var(--radius);
+  background: var(--field-bg);
+  color: var(--field-fg);
+  outline: none;
+  transition:
+    border-color var(--duration),
+    box-shadow var(--duration),
+    background-color var(--duration),
+    color var(--duration);
+}
+
+.textarea,
+.form textarea {
+  min-block-size: 6rem;
+  padding-block: 0.65rem;
+  resize: vertical;
+}
+
+.input:hover,
+.textarea:hover,
+.form
+  :where(
+    input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"]),
+    textarea
+  ):hover {
+  --field-border: var(--text-subtle);
+}
+
+.input:focus-visible,
+.textarea:focus-visible,
+.form
+  :where(
+    input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"]),
+    textarea
+  ):focus-visible {
+  border-color: var(--focus);
+  box-shadow: 0 0 0 3px var(--focus-ring);
+}
+
+.field.danger,
+.input[aria-invalid="true"],
+.textarea[aria-invalid="true"],
+.form :where(input, textarea)[aria-invalid="true"] {
+  --field-border: var(--danger);
+}
+
+.input:disabled,
+.textarea:disabled,
+.form
+  :where(
+    input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"]),
+    textarea
+  ):disabled {
+  --field-bg: var(--surface-subtle);
+  --field-fg: var(--text-subtle);
+  --field-border: var(--border);
+  cursor: not-allowed;
+  opacity: 1;
+}
+
+.input::placeholder,
+.textarea::placeholder,
+.form :where(input, textarea)::placeholder {
+  color: var(--text-subtle);
+}

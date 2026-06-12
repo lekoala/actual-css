@@ -1,9 +1,8 @@
-/**
- * Contract:
- * - Navigation primitives communicate active state without becoming decorative color systems.
- * - Tabs, pagination, and related controls keep visible focus treatment.
- * Owns: navigation layout, active-state presentation, and local spacing.
- * Does not own: permanent decorative tinting or demo-specific alignment behavior.
+/*
+ * Navigation primitives for bars, breadcrumbs, pagination, and tabs.
+ *
+ * Communicates active state and preserves visible focus treatment without
+ * becoming a decorative color system.
  */
 .navbar {
   display: flex;
@@ -12,7 +11,7 @@
   justify-content: space-between;
   gap: var(--gap);
   padding: 0.75rem 1rem;
-  border: 1px solid var(--border);
+  border: var(--border-width) solid var(--border);
   border-radius: var(--radius-lg);
   background: var(--surface-raised);
   color: var(--text);
@@ -91,7 +90,10 @@
   display: flex;
   flex-wrap: wrap;
   gap: 0.35rem;
-  border-block-end: 1px solid var(--border);
+  margin: 0;
+  padding: 0;
+  border-block-end: var(--border-width) solid var(--border);
+  list-style: none;
 }
 
 .tab {
@@ -114,7 +116,7 @@
 }
 
 .tab:focus-visible {
-  outline: 2px solid var(--focus);
+  outline: calc(var(--border-width) * 2) solid var(--focus);
   outline-offset: -2px;
   border-radius: var(--radius-sm) var(--radius-sm) 0 0;
 }
@@ -135,21 +137,26 @@
   list-style: none;
 }
 
+.pagination .btn,
 .page-link {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   min-inline-size: 2.25rem;
   min-block-size: 2.25rem;
+}
+
+.page-link {
   padding-inline: 0.65rem;
-  border: 1px solid var(--border);
+  border: var(--border-width) solid var(--border);
   border-radius: var(--radius);
   background: var(--surface-raised);
   color: var(--text);
-  font-weight: 650;
+  font-weight: var(--font-weight-strong);
   text-decoration: none;
 }
 
+.pagination .btn[aria-current="page"],
 .page-link:hover,
 .page-link[aria-current="page"] {
   border-color: var(--intent, var(--primary));

@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Actual CSS Dashboard Demo</title>
+  <link rel="stylesheet" href="../../src/actual.css">
+  <link rel="stylesheet" href="../../src/themes/index.css">
+  <style>
+    html { scroll-padding-top: 2rem; }
+    main { padding-block: 1rem 4rem; }
+    section { margin-block: 1.5rem; }
+    h1, h2, h3, h4 { line-height: 1.15; }
+    h1 { font-size: clamp(2rem, 5vw, 4rem); margin-block: .5rem; }
+    h2 { margin-block: 0 .5rem; }
+    h3, h4 { margin-block: 0; }
+    .demo-muted { color: var(--text-muted); }
+    .demo-subtle { color: var(--text-subtle); }
+    .demo-top { position: sticky; inset-block-start: .75rem; z-index: 10; backdrop-filter: blur(12px); }
+    .demo-topbar-actions { display: flex; align-items: center; justify-content: flex-end; gap: .5rem; flex-wrap: nowrap; }
+    .demo-topbar-actions > * { flex: 0 0 auto; }
+    .demo-hero { padding-block: 2rem; }
+    .demo-toolbar { justify-content: space-between; }
+    .demo-heading { display: flex; align-items: center; gap: .75rem; flex-wrap: wrap; }
+    .demo-heading h1 { margin: 0; }
+    .demo-card-title { margin: 0; }
+    .demo-stat-grid { --grid-min: 13rem; }
+    .demo-main-grid { --grid-min: 20rem; align-items: start; }
+    .demo-theme-grid { --grid-min: 12rem; }
+    .demo-swatch { min-block-size: 8rem; }
+    .demo-status-row { display: grid; gap: .35rem; }
+    .demo-status-head { display: flex; justify-content: space-between; gap: .75rem; }
+    .demo-order-actions { justify-content: flex-end; }
+    .demo-footer { padding-block: 2rem; border-block-start: 1px solid var(--border); color: var(--text-muted); }
+    :is(header, section, footer)[id] { scroll-margin-block-start: 5rem; }
+    @supports (scroll-target-group: auto) {
+      .navbar-nav { scroll-target-group: auto; }
+      .navbar-nav .nav-link:target-current {
+        color: var(--text);
+        box-shadow: inset 0 -2px 0 var(--intent, var(--primary));
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="center stack">
+    <nav class="navbar demo-top" aria-label="Primary navigation">
+      <a class="navbar-brand" href="#top"><span class="avatar primary"><abbr class="circle">AC</abbr></span>Actual CSS</a>
+      <ul class="navbar-nav">
+        <li><a class="nav-link" href="#metrics">Metrics</a></li>
+      </ul>
+      <div class="demo-topbar-actions">
+        <select class="select sm" id="theme-switcher" aria-label="Switch theme">
+          <option value="">System</option>
+          <option value="light">Light</option>
+          <option value="dark">Dark</option>
+          <option value="dim">Dim</option>
+          <option value="corporate">Corporate</option>
+          <option value="forest">Forest</option>
+          <option value="ocean">Ocean</option>
+          <option value="sunset">Sunset</option>
+          <option value="lavender">Lavender</option>
+          <option value="mono">Mono</option>
+          <option value="square">Square</option>
+        </select>
+      </div>
+    </nav>
+
+    <header id="top" class="demo-hero stack">
+      <ol class="breadcrumb" aria-label="Breadcrumb">
+        <li><a href="#top">Actual</a></li>
+        <li><a href="#dashboard">Dashboard</a></li>
+        <li aria-current="page">Kitchen sink</li>
+      </ol>
+      <div class="cluster demo-toolbar">
+        <div class="stack">
+          <div class="demo-heading">
+            <h1>Dashboard kitchen sink</h1>
+            <span class="badge success soft">Live v0.1.0</span>
+          </div>
+          <p class="demo-muted">Showing various types of typical UI elements for a dashboard.</p>
+        </div>
+        <div class="cluster">
+          <label class="choice"><input class="switch" type="checkbox" checked> Auto-refresh</label>
+          <button class="btn neutral outline" type="button" onclick="document.getElementById('delete-dialog').showModal()">Open dialog</button>
+        </div>
+      </div>
+    </header>
+
+    <section id="metrics" class="stack">
+      <h2>Metrics</h2>
+      <div class="grid demo-stat-grid" aria-label="Key metrics">
+      <article class="card raised metric">
+        <span class="muted">Revenue</span>
+        <strong class="metric-value">$42,128</strong>
+        <span class="badge success soft">+12.5% vs last month</span>
+      </article>
+      <article class="card raised metric">
+        <span class="muted">Active users</span>
+        <strong class="metric-value">2,847</strong>
+        <span class="badge danger soft">-3.2% vs last month</span>
+      </article>
+      <article class="card raised metric">
+        <span class="muted">Retention</span>
+        <strong class="metric-value">83.24%</strong>
+        <span class="badge success soft">+0.8% vs last month</span>
+      </article>
+      <article class="card raised metric">
+        <span class="muted">Uptime</span>
+        <strong class="metric-value">99.99%</strong>
+        <span class="badge success outline">Healthy</span>
+      </article>
+    </div>
+    </section>
+
+    <footer class="demo-footer cluster demo-toolbar">
+      <span>Actual CSS kitchen sink demo</span>
+      <span class="demo-subtle">Plain CSS framework scaffold</span>
+    </footer>
+  </main>
+
+  <dialog class="dialog" id="delete-dialog">
+    <form method="dialog" class="stack">
+      <h2>Confirm deletion</h2>
+      <p class="demo-muted">Are you sure you want to delete order #ORD-7295? This action cannot be undone.</p>
+      <div class="cluster demo-toolbar">
+        <button class="btn neutral outline" value="cancel">Cancel</button>
+        <button class="btn danger" value="delete">Delete order</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script>
+    const switcher = document.getElementById('theme-switcher');
+    const loadedThemes = new Set(['light', 'dark', 'dim', 'corporate', 'forest', 'ocean', 'sunset', 'lavender', 'mono', 'square']);
+
+    switcher.addEventListener('change', () => {
+      const theme = switcher.value;
+      if (!theme) {
+        document.documentElement.removeAttribute('data-theme');
+        return;
+      }
+
+      if (!loadedThemes.has(theme)) {
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = `../dist/themes/${theme}.css`;
+        document.head.append(link);
+        loadedThemes.add(theme);
+      }
+
+      document.documentElement.dataset.theme = theme;
+    });
+  </script>
+</body>
+</html>

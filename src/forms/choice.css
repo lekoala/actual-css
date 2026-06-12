@@ -1,0 +1,106 @@
+/*
+ * Checkbox and radio controls.
+ *
+ * Native inputs keep their behavior while sharing custom geometry, checked,
+ * focus, and disabled states across semantic forms and classed aliases.
+ */
+.check,
+.radio,
+.form input[type="checkbox"],
+.form input[type="radio"] {
+  --choice-border: var(--border);
+  --choice-bg: var(--surface);
+  --choice-mark: var(--primary-fg);
+
+  display: inline-grid;
+  place-content: center;
+  inline-size: 1.125em;
+  block-size: 1.125em;
+  margin: 0;
+  border: var(--border-width) solid var(--choice-border);
+  background: var(--choice-bg);
+  color: var(--choice-mark);
+  accent-color: var(--primary);
+  appearance: none;
+  cursor: pointer;
+}
+
+.check,
+.form input[type="checkbox"] {
+  border-radius: var(--radius-sm);
+}
+
+.radio,
+.form input[type="radio"] {
+  border-radius: 999px;
+}
+
+.check::before,
+.radio::before,
+.form input[type="checkbox"]::before,
+.form input[type="radio"]::before {
+  content: "";
+  transform: scale(0);
+  transition: transform var(--duration);
+}
+
+.check::before,
+.form input[type="checkbox"]::before {
+  inline-size: 0.58em;
+  block-size: 0.34em;
+  border-inline-start: 2px solid currentColor;
+  border-block-end: 2px solid currentColor;
+  transform: translateY(-0.06em) rotate(-45deg) scale(0);
+}
+
+.radio::before,
+.form input[type="radio"]::before {
+  inline-size: 0.5em;
+  block-size: 0.5em;
+  border-radius: 999px;
+  background: currentColor;
+}
+
+.check:checked,
+.radio:checked,
+.form input[type="checkbox"]:checked,
+.form input[type="radio"]:checked {
+  --choice-border: var(--intent, var(--primary));
+  --choice-bg: var(--intent, var(--primary));
+}
+
+.check:checked::before,
+.form input[type="checkbox"]:checked::before {
+  transform: translateY(-0.06em) rotate(-45deg) scale(1);
+}
+
+.radio:checked::before,
+.form input[type="radio"]:checked::before {
+  transform: scale(1);
+}
+
+.check:hover,
+.radio:hover,
+.form input[type="checkbox"]:hover,
+.form input[type="radio"]:hover {
+  --choice-border: var(--text-subtle);
+}
+
+.check:focus-visible,
+.radio:focus-visible,
+.form input[type="checkbox"]:focus-visible,
+.form input[type="radio"]:focus-visible {
+  border-color: var(--focus);
+  box-shadow: 0 0 0 3px var(--focus-ring);
+}
+
+.check:disabled,
+.radio:disabled,
+.form input[type="checkbox"]:disabled,
+.form input[type="radio"]:disabled {
+  --choice-bg: var(--surface-subtle);
+  --choice-border: var(--border);
+  --choice-mark: var(--text-subtle);
+  cursor: not-allowed;
+  opacity: 1;
+}

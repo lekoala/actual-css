@@ -1,9 +1,8 @@
-/**
- * Contract:
- * - `.alert` defaults to a bordered transparent treatment and uses shared intent and variant variables.
- * - `.soft` and `.solid` change emphasis without changing alert semantics.
- * Owns: alert layout, spacing, and local variable mapping.
- * Does not own: palette values, alert-only variant systems, or duplicated intent logic.
+/*
+ * Alerts for inline feedback and status messages.
+ *
+ * Uses the shared intent and variant variables so emphasis can change without
+ * creating alert-only color rules.
  */
 .alert {
   --alert-bg: var(--ui-bg, var(--surface-subtle));
@@ -12,11 +11,8 @@
   --alert-pad: 1rem 1.125rem;
   --alert-radius: var(--radius-lg);
 
-  display: flex;
-  align-items: flex-start;
-  gap: 0.75rem;
   padding: var(--alert-pad);
-  border: 1px solid var(--alert-border);
+  border: var(--border-width) solid var(--alert-border);
   border-radius: var(--alert-radius);
   background: var(--alert-bg);
   color: var(--alert-fg);
@@ -31,23 +27,53 @@
   --alert-radius: var(--radius);
 }
 
-.alert:where(.primary, .secondary, .success, .warning, .danger, .neutral) a {
+.alert:where(.primary, .secondary, .success, .warning, .danger, .neutral) a:not(.btn) {
   color: currentColor;
 }
 
-.alert-icon {
-  flex: 0 0 auto;
-  font-weight: 700;
-  line-height: 1.4;
+.alert:has(> :first-child[aria-hidden="true"]) {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: start;
+  column-gap: 0.75rem;
+  row-gap: 0.25rem;
 }
 
-.alert-content {
+.alert > :first-child[aria-hidden="true"] {
+  display: inline-grid;
+  place-items: center;
+  grid-column: 1;
+  grid-row: 1 / span 20;
+  inline-size: 1.25em;
+  block-size: calc(1em * var(--line-height));
+  font-size: 1.25em;
+  line-height: 1;
+}
+
+.alert:has(> :first-child[aria-hidden="true"]) > :not(:first-child) {
+  grid-column: 2;
+}
+
+.alert > * {
   min-inline-size: 0;
 }
 
-.alert-content ul,
-.alert-content ol {
-  padding-left: 0;
+.alert > menu {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding: 0;
+  margin-block-start: 0.75rem;
+  list-style: none;
+}
+
+.alert > menu > li {
+  margin: 0;
+}
+
+.alert ul,
+.alert ol {
+  padding-inline-start: 0;
   list-style-position: inside;
 }
 
@@ -60,90 +86,9 @@
   font-size: 1.0625rem;
 }
 
-:where(a.alert, button.alert):hover {
-  background: var(--ui-hover-bg, var(--alert-bg));
-}
-
-:where(a.alert, button.alert):not(:where(.outline, .ghost, .link)):hover {
-  box-shadow: inset 0 0 0 999px var(--hover-overlay);
-}
-
-:where(a.alert, button.alert):where(.outline, .ghost):hover {
-  --ui-hover-bg: var(--surface-subtle);
-}
-
-:where(a.alert, button.alert):focus-visible {
-  outline: 2px solid var(--focus);
-  outline-offset: 2px;
-}
-
-button.alert {
-  cursor: pointer;
-  font: inherit;
-  text-align: inherit;
-}
-
-button.alert:disabled,
-.alert[aria-disabled="true"] {
-  opacity: 0.55;
-  cursor: not-allowed;
-  pointer-events: none;
-}
-
 .alert > :first-child {
   margin-block-start: 0;
 }
 .alert > :last-child {
   margin-block-end: 0;
-}
-
-/* Close / dismiss button — placed at the end of the alert */
-.alert-close {
-  flex: 0 0 auto;
-  align-self: flex-start;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 1.25rem;
-  height: 1.25rem;
-  padding: 0;
-  margin: 0;
-  margin-inline-start: auto;
-  border: none;
-  border-radius: var(--radius-sm);
-  background: transparent;
-  color: inherit;
-  cursor: pointer;
-  font: inherit;
-  opacity: 0.6;
-  transition: opacity var(--duration);
-}
-
-.alert-close:hover {
-  opacity: 1;
-  background: var(--hover-overlay, transparent);
-}
-
-.alert-close:focus-visible {
-  outline: 2px solid var(--focus);
-  outline-offset: 2px;
-}
-
-.alert-close::before {
-  content: "";
-  display: block;
-  width: 1rem;
-  height: 1rem;
-  background: currentColor;
-  mask: var(--icon-close, none) center / contain no-repeat;
-  -webkit-mask: var(--icon-close, none) center / contain no-repeat;
-}
-
-/* Toast — positioned for fixed/stacked display */
-.alert[role="alert"] {
-  pointer-events: auto;
-}
-
-.alert[role="alert"] .alert-close {
-  opacity: 0.7;
 }

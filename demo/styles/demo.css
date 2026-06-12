@@ -183,9 +183,8 @@
   padding: 1rem;
   background: var(--surface-subtle);
   border-radius: var(--radius-sm);
-  overflow-x: hidden;
-  white-space: pre-wrap;
-  word-break: break-all;
+  overflow-x: auto;
+  white-space: pre;
   font-size: 0.875rem;
 }
 
@@ -253,4 +252,42 @@
   max-inline-size: 72rem;
   margin-inline: auto;
   padding-inline: 1rem;
+}
+
+.accordion-demo summary::after {
+  display: none;
+}
+
+.accordion-demo-icon {
+  display: inline-grid;
+  flex: 0 0 auto;
+  place-items: center;
+  position: relative;
+  inline-size: 1.5rem;
+  block-size: 1.5rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--text-muted);
+  background: var(--surface);
+}
+
+.accordion-demo-icon::before,
+.accordion-demo-icon::after {
+  content: "";
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-start: 50%;
+  inline-size: 0.625rem;
+  block-size: 2px;
+  border-radius: 999px;
+  background: currentColor;
+  transform: translate(-50%, -50%);
+}
+
+.accordion-demo-icon::after {
+  transform: translate(-50%, -50%) rotate(90deg);
+}
+
+.accordion-demo details[open] .accordion-demo-icon::after {
+  opacity: 0;
 }

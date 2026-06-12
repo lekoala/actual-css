@@ -1,0 +1,7 @@
+/*
+ * File controls stay native and readable.
+ */
+.form input[type="file"],
+.file {
+  color: var(--text-muted);
+}

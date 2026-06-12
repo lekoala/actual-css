@@ -5,22 +5,12 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "build": "node scripts/build.js",
-    "dev": "node scripts/build.js --watch",
-    "map": "node scripts/project-map.js",
-    "check": "npm run lint",
     "lint": "biome check",
     "lint:fix": "biome check --write",
-    "check:css": "node scripts/check-css.js",
-    "test": "npm run test:contracts",
-    "test:contracts": "node --test tests/contracts/architecture.test.js tests/contracts/manifest.test.js",
-    "verify": "node scripts/verify.js",
-    "verify:ci": "node scripts/verify.js --ci",
-    "test:visual": "playwright test",
-    "test:visual:update": "playwright test --update-snapshots"
+    "build:demo": "node scripts/build-demo.js"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.2.0",
-    "@playwright/test": "^1.44.0"
+    "@biomejs/biome": "^2.4.0",
+    "prismjs": "^1.30.0"
   }
 }

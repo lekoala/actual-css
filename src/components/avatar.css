@@ -1,68 +1,78 @@
-/**
- * Contract:
- * - `.avatar` keeps a neutral default while intent classes tint through shared intent variables.
- * - Size changes adjust scale without changing avatar semantics.
- * Owns: avatar geometry, size scaling, and local variable mapping.
- * Does not own: palette values, contrast decisions, or avatar-only intent systems.
+/*
+ * Avatars for initials, images, links, and buttons.
+ *
+ * The visual box stays the same across semantic elements. Grouping and
+ * indicators compose around the avatar without changing its meaning.
  */
 .avatar {
   --avatar-size: 2.25rem;
 
-  display: inline-flex;
-  position: relative;
-}
-
-/* The visual circle is the first child */
-.avatar > :first-child {
   position: relative;
   display: inline-grid;
   place-items: center;
   inline-size: var(--avatar-size);
   block-size: var(--avatar-size);
-  overflow: hidden;
+  overflow: visible;
+  border: 0;
   border-radius: var(--radius);
   background: var(--surface-subtle);
   color: var(--text-muted);
+  font: inherit;
   font-weight: 750;
-  flex: 0 0 auto;
+  line-height: 1;
+  text-decoration: none;
+  vertical-align: middle;
 }
 
-/* Images */
-.avatar > img {
+.avatar > :first-child:not(img):not(picture) {
+  display: inline-grid;
+  place-items: center;
+  inline-size: 100%;
+  block-size: 100%;
+  overflow: hidden;
+  border-radius: inherit;
+}
+
+.avatar > img,
+.avatar > picture,
+.avatar > :first-child > img,
+.avatar > :first-child > picture {
   inline-size: 100%;
   block-size: 100%;
   object-fit: cover;
+  border-radius: inherit;
 }
 
-/* Intent colors */
-.avatar:where(.primary, .secondary, .success, .warning, .danger, .neutral) > :first-child {
+button.avatar {
+  cursor: pointer;
+}
+
+:where(a.avatar, button.avatar):focus-visible {
+  outline: calc(var(--border-width) * 2) solid var(--focus);
+  outline-offset: 2px;
+}
+
+.avatar:where(.primary, .secondary, .success, .warning, .danger, .neutral) {
   background: var(--intent);
   color: var(--intent-fg);
 }
 
-/* Sizes */
 .avatar.sm {
   --avatar-size: 1.75rem;
-}
-
-.avatar.sm > :first-child {
   font-size: 0.8125rem;
 }
 
 .avatar.lg {
   --avatar-size: 3rem;
-}
-
-.avatar.lg > :first-child {
   font-size: 1.125rem;
 }
 
-/* Groups */
 .avatar-group {
   display: inline-flex;
+  align-items: center;
 }
 
-.avatar-group > .avatar > :first-child {
+.avatar-group > .avatar {
   box-shadow: 0 0 0 2px var(--surface);
 }
 

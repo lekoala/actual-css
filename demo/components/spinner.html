@@ -1,64 +1,77 @@
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Spinner — Actual CSS</title>
   <link rel="stylesheet" href="../../src/actual.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
   <link rel="stylesheet" href="../../demo/styles/demo.css">
+  <link rel="stylesheet" href="../../demo/styles/prism.css">
 </head>
+
 <body>
   <nav class="demo-nav">
-    <a href="index.html">← Components</a>
-    <a href="../../demo/index.html">Kitchensink</a>
+    <a href="index.html">&larr; Components</a>
+    <a href="../index.html">Homepage</a>
   </nav>
   <main class="center">
+  <section class="component-section">
     <header class="component-header">
       <h1>Spinner</h1>
-      <p>Inline loading indicators.</p>
+      <p>Use `.spinner` for an inline loading indicator.</p>
     </header>
-    <div class="class-reference"><div class="class-group">
-<h3>Intents</h3>
-<div class="class-list"><code>.primary</code> <code>.secondary</code> <code>.success</code> <code>.warning</code> <code>.danger</code> <code>.neutral</code></div>
+        <section class="component-section">
+      <div class="example-group">
+        <div class="example-render">
+          <div class="cluster">
+  <span class="spinner" aria-hidden="true"></span>
+  <span class="spinner primary" aria-hidden="true"></span>
+  <span class="spinner danger lg" aria-hidden="true"></span>
 </div>
-<div class="class-group">
-<h3>Sizes</h3>
-<div class="class-list"><code>.sm</code> <code>.lg</code></div>
-</div></div>
+        </div>
+        <div class="example-code">
+          <pre><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>cluster<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>spinner<span class="token punctuation">"</span></span> <span class="token attr-name">aria-hidden</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>true<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>spinner primary<span class="token punctuation">"</span></span> <span class="token attr-name">aria-hidden</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>true<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>spinner danger lg<span class="token punctuation">"</span></span> <span class="token attr-name">aria-hidden</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>true<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span></code></pre>
+        </div>
+      </div>
+    </section>
     <section class="component-section">
-<h2>Inline</h2>
-<p>Inline spinner.</p>
-<div class="example-group">
-<div class="example-render example-inline"><div class="example-item"><span class="spinner primary"></span></div>
-<div class="example-item"><span class="spinner danger sm"></span></div>
-<div class="example-item"><span class="spinner neutral lg"></span></div></div><div class="example-code">
-<pre><code>&lt;span class=&quot;spinner primary&quot;&gt;&lt;/span&gt;
-&lt;span class=&quot;spinner danger sm&quot;&gt;&lt;/span&gt;
-&lt;span class=&quot;spinner neutral lg&quot;&gt;&lt;/span&gt;</code></pre>
-</div>
-</div>
-</section>
-<section class="component-section">
-<h2>Button loading</h2>
-<p>Button with loading state.</p>
-<div class="example-group">
-<div class="example-render example-inline"><button class="btn primary loading" type="button">Saving</button></div><div class="example-code">
-<pre><code>&lt;button class=&quot;btn primary loading&quot; type=&quot;button&quot;&gt;Saving&lt;/button&gt;</code></pre>
-</div>
-</div>
-</section>
-    
-<section class="component-section">
-<h2>Accessibility</h2>
-<ul>
-<li>Use role=&quot;status&quot; with screen-reader text for loading states.</li>
-<li>Loading buttons should be disabled.</li>
-</ul>
-</section>
+      <div class="example-group">
+        <div class="example-render">
+          <button class="btn primary" type="button" aria-busy="true" disabled>
+  <span class="spinner" aria-hidden="true"></span>
+  Loading
+</button>
 
+<div role="status">
+  <span class="spinner" aria-hidden="true"></span>
+  <span class="sr-only">Loading results</span>
+</div>
+        </div>
+        <div class="example-code">
+          <pre><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>button</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>btn primary<span class="token punctuation">"</span></span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>button<span class="token punctuation">"</span></span> <span class="token attr-name">aria-busy</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>true<span class="token punctuation">"</span></span> <span class="token attr-name">disabled</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>spinner<span class="token punctuation">"</span></span> <span class="token attr-name">aria-hidden</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>true<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span>
+  Loading
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">></span></span>
+
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">role</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>status<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>spinner<span class="token punctuation">"</span></span> <span class="token attr-name">aria-hidden</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>true<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>sr-only<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Loading results<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span></code></pre>
+        </div>
+      </div>
+    </section>
+
+  </section>
   </main>
   <footer class="demo-footer">
-    <a href="index.html">Back to components</a>
+    <a href="index.html">Back to Components</a>
   </footer>
 </body>
+
 </html>

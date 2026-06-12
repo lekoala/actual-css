@@ -1,9 +1,8 @@
-/**
- * Contract:
- * - `.divider` stays a structural separator rather than a decorative accent.
- * - Horizontal and vertical treatments stay lightweight and themeable through shared tokens.
- * Owns: divider line layout, spacing, and label placement.
- * Does not own: intent coloring or heavy layout behavior.
+/*
+ * Dividers for lightweight structural separation.
+ *
+ * Supports horizontal, vertical, and labeled treatments without becoming a
+ * decorative intent-color component.
  */
 .divider {
   display: flex;
@@ -19,7 +18,7 @@
 .divider::after {
   content: "";
   flex: 1;
-  block-size: 1px;
+  block-size: var(--border-width);
   background: var(--border);
 }
 
@@ -36,7 +35,7 @@
 
 .divider.vertical::before,
 .divider.vertical::after {
-  inline-size: 1px;
+  inline-size: var(--border-width);
   block-size: auto;
   flex: 1;
 }

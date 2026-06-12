@@ -1,106 +1,81 @@
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Badge — Actual CSS</title>
   <link rel="stylesheet" href="../../src/actual.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
   <link rel="stylesheet" href="../../demo/styles/demo.css">
+  <link rel="stylesheet" href="../../demo/styles/prism.css">
 </head>
+
 <body>
   <nav class="demo-nav">
-    <a href="index.html">← Components</a>
-    <a href="../../demo/index.html">Kitchensink</a>
+    <a href="index.html">&larr; Components</a>
+    <a href="../index.html">Homepage</a>
   </nav>
   <main class="center">
+  <section class="component-section">
     <header class="component-header">
       <h1>Badge</h1>
-      <p>Badges are used to inform the user of the status of specific data.</p>
+      <p>Supports intent colors.</p>
     </header>
-    <div class="class-reference"><div class="class-group">
-<h3>Intents</h3>
-<div class="class-list"><code>.primary</code> <code>.secondary</code> <code>.success</code> <code>.warning</code> <code>.danger</code> <code>.neutral</code></div>
-</div>
-<div class="class-group">
-<h3>Variants</h3>
-<div class="class-list"><code>.solid</code> <code>.soft</code> <code>.outline</code> <code>.ghost</code> <code>.link</code></div>
-</div>
-<div class="class-group">
-<h3>Sizes</h3>
-<div class="class-list"><code>.sm</code> <code>.lg</code></div>
-</div></div>
+        <section class="component-section">
+      <div class="example-group">
+        <div class="example-render">
+          <span class="badge">Default</span>
+<span class="badge secondary">Secondary</span>
+<span class="badge success">Success</span>
+<span class="badge warning">Warning</span>
+<span class="badge danger">Danger</span>
+<span class="badge success outline">Outline success</span>
+<span class="badge warning soft">Soft warning</span>
+        </div>
+        <div class="example-code">
+          <pre><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>badge<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Default<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>badge secondary<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Secondary<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>badge success<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Success<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>badge warning<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Warning<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>badge danger<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Danger<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>badge success outline<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Outline success<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>badge warning soft<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Soft warning<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span></code></pre>
+        </div>
+      </div>
+    </section>
     <section class="component-section">
-<h2>Default</h2>
-<p>A badge with default solid styling.</p>
-<div class="example-group">
-<div class="example-render example-inline"><div class="example-item"><span class="badge success">Published</span></div>
-<div class="example-item"><span class="badge warning">Pending</span></div></div><div class="example-code">
-<pre><code>&lt;span class=&quot;badge success&quot;&gt;Published&lt;/span&gt;
-&lt;span class=&quot;badge warning&quot;&gt;Pending&lt;/span&gt;</code></pre>
-</div>
-</div>
-</section>
-<section class="component-section">
-<h2>Colors</h2>
-<p>All intent colors with default solid styling.</p>
-<div class="example-group">
-<div class="example-render example-inline"><div class="example-item"><span class="badge primary">Primary</span></div>
-<div class="example-item"><span class="badge secondary">Secondary</span></div>
-<div class="example-item"><span class="badge success">Success</span></div>
-<div class="example-item"><span class="badge warning">Warning</span></div>
-<div class="example-item"><span class="badge danger">Danger</span></div>
-<div class="example-item"><span class="badge neutral">Neutral</span></div></div><div class="example-code">
-<pre><code>&lt;span class=&quot;badge primary&quot;&gt;Primary&lt;/span&gt;
-&lt;span class=&quot;badge secondary&quot;&gt;Secondary&lt;/span&gt;
-&lt;span class=&quot;badge success&quot;&gt;Success&lt;/span&gt;
-&lt;span class=&quot;badge warning&quot;&gt;Warning&lt;/span&gt;
-&lt;span class=&quot;badge danger&quot;&gt;Danger&lt;/span&gt;
-&lt;span class=&quot;badge neutral&quot;&gt;Neutral&lt;/span&gt;</code></pre>
-</div>
-</div>
-</section>
-<section class="component-section">
-<h2>Variants</h2>
-<p>Primary intent across all variants.</p>
-<div class="example-group">
-<div class="example-render example-inline"><div class="example-item"><span class="badge primary solid">Solid</span></div>
-<div class="example-item"><span class="badge primary soft">Soft</span></div>
-<div class="example-item"><span class="badge primary outline">Outline</span></div>
-<div class="example-item"><span class="badge primary ghost">Ghost</span></div>
-<div class="example-item"><span class="badge primary link">Link</span></div></div><div class="example-code">
-<pre><code>&lt;span class=&quot;badge primary solid&quot;&gt;Solid&lt;/span&gt;
-&lt;span class=&quot;badge primary soft&quot;&gt;Soft&lt;/span&gt;
-&lt;span class=&quot;badge primary outline&quot;&gt;Outline&lt;/span&gt;
-&lt;span class=&quot;badge primary ghost&quot;&gt;Ghost&lt;/span&gt;
-&lt;span class=&quot;badge primary link&quot;&gt;Link&lt;/span&gt;</code></pre>
-</div>
-</div>
-</section>
-<section class="component-section">
-<h2>Sizes</h2>
-<p>Available sizes.</p>
-<div class="example-group">
-<div class="example-render example-inline"><div class="example-item"><span class="badge primary sm">Small</span></div>
-<div class="example-item"><span class="badge primary">Default</span></div>
-<div class="example-item"><span class="badge primary lg">Large</span></div></div><div class="example-code">
-<pre><code>&lt;span class=&quot;badge primary sm&quot;&gt;Small&lt;/span&gt;
-&lt;span class=&quot;badge primary&quot;&gt;Default&lt;/span&gt;
-&lt;span class=&quot;badge primary lg&quot;&gt;Large&lt;/span&gt;</code></pre>
-</div>
-</div>
-</section>
-    
-<section class="component-section">
-<h2>Accessibility</h2>
-<ul>
-<li>Badges are non-interactive by default.</li>
-<li>Use alongside text for context, not as the only indicator.</li>
-</ul>
-</section>
+      <div class="example-group">
+        <div class="example-render">
+          <h2>New features <span class="badge success soft">New</span></h2>
+        </div>
+        <div class="example-code">
+          <pre><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>h2</span><span class="token punctuation">></span></span>New features <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>badge success soft<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>New<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>h2</span><span class="token punctuation">></span></span></code></pre>
+        </div>
+      </div>
+    </section>
+    <section class="component-section">
+      <div class="example-group">
+        <div class="example-render">
+          <button type="button" class="btn ghost" aria-label="Notifications">
+  <i class="ti ti-bell" aria-hidden="true"></i>
+  <span class="badge danger" aria-label="12 unread notifications">12</span>
+</button>
+        </div>
+        <div class="example-code">
+          <pre><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>button</span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>button<span class="token punctuation">"</span></span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>btn ghost<span class="token punctuation">"</span></span> <span class="token attr-name">aria-label</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>Notifications<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>i</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>ti ti-bell<span class="token punctuation">"</span></span> <span class="token attr-name">aria-hidden</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>true<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>i</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>badge danger<span class="token punctuation">"</span></span> <span class="token attr-name">aria-label</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>12 unread notifications<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>12<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">></span></span></code></pre>
+        </div>
+      </div>
+    </section>
 
+  </section>
   </main>
   <footer class="demo-footer">
-    <a href="index.html">Back to components</a>
+    <a href="index.html">Back to Components</a>
   </footer>
 </body>
+
 </html>

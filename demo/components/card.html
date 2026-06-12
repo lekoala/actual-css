@@ -1,114 +1,83 @@
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Card — Actual CSS</title>
   <link rel="stylesheet" href="../../src/actual.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
   <link rel="stylesheet" href="../../demo/styles/demo.css">
+  <link rel="stylesheet" href="../../demo/styles/prism.css">
 </head>
+
 <body>
   <nav class="demo-nav">
-    <a href="index.html">← Components</a>
-    <a href="../../demo/index.html">Kitchensink</a>
+    <a href="index.html">&larr; Components</a>
+    <a href="../index.html">Homepage</a>
   </nav>
   <main class="center">
+  <section class="component-section">
     <header class="component-header">
       <h1>Card</h1>
-      <p>Cards are used to group and display content in a way that is easily readable.</p>
+      <p>Use semantic elements.</p>
     </header>
-    <div class="class-reference"><div class="class-group">
-<h3>Variants</h3>
-<div class="class-list"><code>.raised</code> <code>.subtle</code> <code>.inverted</code> <code>.compact</code></div>
-</div>
-<div class="class-group">
-<h3>Sizes</h3>
-<div class="class-list"><code>.sm</code> <code>.lg</code></div>
-</div></div>
-    <section class="component-section">
-<h2>Default</h2>
-<p>A flat card with default styling.</p>
-<div class="example-group">
-<div class="example-render example-list"><article class="card">
-<h3>Title</h3>
-<p>Content goes here.</p>
-</article></div><div class="example-code">
-<pre><code>&lt;article class=&quot;card&quot;&gt;
-  &lt;h3&gt;Title&lt;/h3&gt;
-  &lt;p&gt;Content goes here.&lt;/p&gt;
-&lt;/article&gt;</code></pre>
-</div>
-</div>
-</section>
-<section class="component-section">
-<h2>Variants</h2>
-<p>Card surface styles.</p>
-<div class="example-group">
-<div class="example-render example-list"><article class="card raised">Raised card</article>
-<article class="card subtle">Subtle card</article>
-<article class="card inverted">Inverted card</article>
-<article class="card compact">Compact card</article></div><div class="example-code">
-<pre><code>&lt;article class=&quot;card raised&quot;&gt;Raised card&lt;/article&gt;
-&lt;article class=&quot;card subtle&quot;&gt;Subtle card&lt;/article&gt;
-&lt;article class=&quot;card inverted&quot;&gt;Inverted card&lt;/article&gt;
-&lt;article class=&quot;card compact&quot;&gt;Compact card&lt;/article&gt;</code></pre>
-</div>
-</div>
-</section>
-<section class="component-section">
-<h2>Sizes</h2>
-<p>Available sizes.</p>
-<div class="example-group">
-<div class="example-render example-list"><article class="card sm">Small card</article>
-<article class="card">Default card</article>
-<article class="card lg">Large card</article></div><div class="example-code">
-<pre><code>&lt;article class=&quot;card sm&quot;&gt;Small card&lt;/article&gt;
-&lt;article class=&quot;card&quot;&gt;Default card&lt;/article&gt;
-&lt;article class=&quot;card lg&quot;&gt;Large card&lt;/article&gt;</code></pre>
-</div>
-</div>
-</section>
-<section class="component-section">
-<h2>Sections</h2>
-<p>Card with header, body, and footer.</p>
-<div class="example-group">
-<div class="example-render example-list"><article class="card">
-<header class="card-header">
-<h3>Title</h3>
-</header>
-<div class="card-body">
-<p>Content</p>
-</div>
-<footer class="card-footer">
-<button class="btn primary">Save</button>
-</footer>
-</article></div><div class="example-code">
-<pre><code>&lt;article class=&quot;card&quot;&gt;
-  &lt;header class=&quot;card-header&quot;&gt;
-    &lt;h3&gt;Title&lt;/h3&gt;
-  &lt;/header&gt;
-  &lt;div class=&quot;card-body&quot;&gt;
-    &lt;p&gt;Content&lt;/p&gt;
-  &lt;/div&gt;
-  &lt;footer class=&quot;card-footer&quot;&gt;
-    &lt;button class=&quot;btn primary&quot;&gt;Save&lt;/button&gt;
-  &lt;/footer&gt;
-&lt;/article&gt;</code></pre>
-</div>
-</div>
-</section>
-    
-<section class="component-section">
-<h2>Accessibility</h2>
-<ul>
-<li>Use &lt;article&gt; for self-contained content.</li>
-<li>Cards consume surface tokens, not intent tokens by default.</li>
-</ul>
-</section>
+        <section class="component-section">
+      <div class="example-group">
+        <div class="example-render">
+          <article class="card">
+  <header>
+    <h3>Understanding Semantic HTML</h3>
+  </header>
 
+  <section aria-label="Summary">
+    <p>Using the right HTML tags improves both SEO and accessibility.</p>
+  </section>
+
+  <section aria-label="Tags">
+    <ul>
+      <li>HTML</li>
+      <li>Accessibility</li>
+    </ul>
+  </section>
+
+  <footer>
+    <time datetime="2026-06-12">June 12, 2026</time>
+    <button type="button" class="btn">Read more</button>
+  </footer>
+</article>
+        </div>
+        <div class="example-code">
+          <pre><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>article</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>card<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>header</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>h3</span><span class="token punctuation">></span></span>Understanding Semantic HTML<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>h3</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>header</span><span class="token punctuation">></span></span>
+
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>section</span> <span class="token attr-name">aria-label</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>Summary<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">></span></span>Using the right HTML tags improves both SEO and accessibility.<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>p</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>section</span><span class="token punctuation">></span></span>
+
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>section</span> <span class="token attr-name">aria-label</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>Tags<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>ul</span><span class="token punctuation">></span></span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>li</span><span class="token punctuation">></span></span>HTML<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>li</span><span class="token punctuation">></span></span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>li</span><span class="token punctuation">></span></span>Accessibility<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>li</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>ul</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>section</span><span class="token punctuation">></span></span>
+
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>footer</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>time</span> <span class="token attr-name">datetime</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>2026-06-12<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>June 12, 2026<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>time</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>button</span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>button<span class="token punctuation">"</span></span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>btn<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Read more<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>footer</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>article</span><span class="token punctuation">></span></span></code></pre>
+        </div>
+      </div>
+    </section>
+
+  </section>
   </main>
   <footer class="demo-footer">
-    <a href="index.html">Back to components</a>
+    <a href="index.html">Back to Components</a>
   </footer>
 </body>
+
 </html>

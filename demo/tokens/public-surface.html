@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Public Surface — Actual CSS</title>
+  <link rel="stylesheet" href="../../src/actual.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+  <link rel="stylesheet" href="../../demo/styles/demo.css">
+  <link rel="stylesheet" href="../../demo/styles/prism.css">
+</head>
+
+<body>
+  <nav class="demo-nav">
+    <a href="index.html">&larr; Tokens</a>
+    <a href="../index.html">Homepage</a>
+  </nav>
+  <main class="center">
+  <section class="component-section">
+    <header class="component-header">
+      <h1>Public Surface</h1>
+      <p>Intent tokens are used by `.primary`, `.secondary`, `.success`, `.warning`, `.danger`, and `.neutral`.</p>
+    </header>
+        <section class="component-section">
+      <h2>CSS</h2>
+      <div class="example-group">
+        <div class="example-code">
+          <pre><code class="language-css"><span class="token selector">:root</span> <span class="token punctuation">{</span>
+  <span class="token property">--primary</span><span class="token punctuation">:</span> <span class="token function">hsl</span><span class="token punctuation">(</span>220 90% 56%<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token property">--primary-fg</span><span class="token punctuation">:</span> white<span class="token punctuation">;</span>
+  <span class="token property">--secondary</span><span class="token punctuation">:</span> <span class="token function">hsl</span><span class="token punctuation">(</span>270 60% 56%<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token property">--secondary-fg</span><span class="token punctuation">:</span> white<span class="token punctuation">;</span>
+  <span class="token property">--success</span><span class="token punctuation">:</span> <span class="token function">hsl</span><span class="token punctuation">(</span>145 60% 36%<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token property">--success-fg</span><span class="token punctuation">:</span> white<span class="token punctuation">;</span>
+  <span class="token property">--warning</span><span class="token punctuation">:</span> <span class="token function">hsl</span><span class="token punctuation">(</span>38 92% 50%<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token property">--warning-fg</span><span class="token punctuation">:</span> <span class="token function">hsl</span><span class="token punctuation">(</span>35 30% 12%<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token property">--danger</span><span class="token punctuation">:</span> <span class="token function">hsl</span><span class="token punctuation">(</span>0 75% 55%<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token property">--danger-fg</span><span class="token punctuation">:</span> white<span class="token punctuation">;</span>
+  <span class="token property">--neutral</span><span class="token punctuation">:</span> <span class="token function">hsl</span><span class="token punctuation">(</span>220 10% 42%<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token property">--neutral-fg</span><span class="token punctuation">:</span> white<span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+        </div>
+      </div>
+    </section>
+    <section class="component-section">
+      <h2>CSS</h2>
+      <div class="example-group">
+        <div class="example-code">
+          <pre><code class="language-css"><span class="token selector">:root</span> <span class="token punctuation">{</span>
+  <span class="token property">--surface</span><span class="token punctuation">:</span> <span class="token function">hsl</span><span class="token punctuation">(</span>0 0% 100%<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token property">--surface-raised</span><span class="token punctuation">:</span> <span class="token function">hsl</span><span class="token punctuation">(</span>0 0% 100%<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token property">--surface-subtle</span><span class="token punctuation">:</span> <span class="token function">hsl</span><span class="token punctuation">(</span>220 20% 96%<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token property">--surface-solid</span><span class="token punctuation">:</span> <span class="token function">hsl</span><span class="token punctuation">(</span>222 22% 12%<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token property">--text</span><span class="token punctuation">:</span> <span class="token function">hsl</span><span class="token punctuation">(</span>222 22% 12%<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token property">--text-muted</span><span class="token punctuation">:</span> <span class="token function">hsl</span><span class="token punctuation">(</span>220 10% 42%<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token property">--text-subtle</span><span class="token punctuation">:</span> <span class="token function">hsl</span><span class="token punctuation">(</span>220 8% 55%<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token property">--border</span><span class="token punctuation">:</span> <span class="token function">hsl</span><span class="token punctuation">(</span>220 15% 88%<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token property">--focus</span><span class="token punctuation">:</span> <span class="token function">var</span><span class="token punctuation">(</span>--primary<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token property">--focus-ring</span><span class="token punctuation">:</span> <span class="token function">hsl</span><span class="token punctuation">(</span>220 90% 56% / 0.22<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token property">--hover-overlay</span><span class="token punctuation">:</span> <span class="token function">hsl</span><span class="token punctuation">(</span>220 30% 10% / 0.04<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+        </div>
+      </div>
+    </section>
+    <section class="component-section">
+      <h2>CSS</h2>
+      <div class="example-group">
+        <div class="example-code">
+          <pre><code class="language-css"><span class="token selector">:root</span> <span class="token punctuation">{</span>
+  <span class="token property">--radius-sm</span><span class="token punctuation">:</span> 0.25rem<span class="token punctuation">;</span>
+  <span class="token property">--radius</span><span class="token punctuation">:</span> 0.5rem<span class="token punctuation">;</span>
+  <span class="token property">--radius-lg</span><span class="token punctuation">:</span> 0.75rem<span class="token punctuation">;</span>
+  <span class="token property">--border-width</span><span class="token punctuation">:</span> 1px<span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+        </div>
+      </div>
+    </section>
+    <section class="component-section">
+      <h2>CSS</h2>
+      <div class="example-group">
+        <div class="example-code">
+          <pre><code class="language-css"><span class="token selector">:root</span> <span class="token punctuation">{</span>
+  <span class="token property">--gap</span><span class="token punctuation">:</span> 0.75rem<span class="token punctuation">;</span>
+  <span class="token property">--space-1</span><span class="token punctuation">:</span> 0.25rem<span class="token punctuation">;</span>
+  <span class="token property">--space-2</span><span class="token punctuation">:</span> 0.5rem<span class="token punctuation">;</span>
+  <span class="token property">--space-3</span><span class="token punctuation">:</span> 0.75rem<span class="token punctuation">;</span>
+  <span class="token property">--space-4</span><span class="token punctuation">:</span> 1rem<span class="token punctuation">;</span>
+  <span class="token property">--space-5</span><span class="token punctuation">:</span> 1.5rem<span class="token punctuation">;</span>
+  <span class="token property">--space-6</span><span class="token punctuation">:</span> 2rem<span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+        </div>
+      </div>
+    </section>
+    <section class="component-section">
+      <h2>CSS</h2>
+      <div class="example-group">
+        <div class="example-code">
+          <pre><code class="language-css"><span class="token selector">:root</span> <span class="token punctuation">{</span>
+  <span class="token property">--font-sans</span><span class="token punctuation">:</span> system-ui<span class="token punctuation">,</span> -apple-system<span class="token punctuation">,</span> BlinkMacSystemFont<span class="token punctuation">,</span> <span class="token string">"Segoe UI"</span><span class="token punctuation">,</span> sans-serif<span class="token punctuation">;</span>
+  <span class="token property">--font-mono</span><span class="token punctuation">:</span> ui-monospace<span class="token punctuation">,</span> SFMono-Regular<span class="token punctuation">,</span> Menlo<span class="token punctuation">,</span> Consolas<span class="token punctuation">,</span> monospace<span class="token punctuation">;</span>
+  <span class="token property">--font-body</span><span class="token punctuation">:</span> <span class="token function">var</span><span class="token punctuation">(</span>--font-sans<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token property">--font-size</span><span class="token punctuation">:</span> 1rem<span class="token punctuation">;</span>
+  <span class="token property">--line-height</span><span class="token punctuation">:</span> 1.5<span class="token punctuation">;</span>
+  <span class="token property">--font-weight</span><span class="token punctuation">:</span> 400<span class="token punctuation">;</span>
+  <span class="token property">--font-weight-strong</span><span class="token punctuation">:</span> 650<span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+        </div>
+      </div>
+    </section>
+    <section class="component-section">
+      <h2>CSS</h2>
+      <div class="example-group">
+        <div class="example-code">
+          <pre><code class="language-css"><span class="token selector">:root</span> <span class="token punctuation">{</span>
+  <span class="token property">--control-size</span><span class="token punctuation">:</span> 2.5rem<span class="token punctuation">;</span>
+  <span class="token property">--control-pad-x</span><span class="token punctuation">:</span> 1rem<span class="token punctuation">;</span>
+  <span class="token property">--control-font-size</span><span class="token punctuation">:</span> 0.9375rem<span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+        </div>
+      </div>
+    </section>
+    <section class="component-section">
+      <h2>CSS</h2>
+      <div class="example-group">
+        <div class="example-code">
+          <pre><code class="language-css"><span class="token selector">.sm</span> <span class="token punctuation">{</span>
+  <span class="token property">--control-size</span><span class="token punctuation">:</span> 2rem<span class="token punctuation">;</span>
+  <span class="token property">--control-pad-x</span><span class="token punctuation">:</span> 0.75rem<span class="token punctuation">;</span>
+  <span class="token property">--control-font-size</span><span class="token punctuation">:</span> 0.875rem<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token selector">.lg</span> <span class="token punctuation">{</span>
+  <span class="token property">--control-size</span><span class="token punctuation">:</span> 3rem<span class="token punctuation">;</span>
+  <span class="token property">--control-pad-x</span><span class="token punctuation">:</span> 1.25rem<span class="token punctuation">;</span>
+  <span class="token property">--control-font-size</span><span class="token punctuation">:</span> 1rem<span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+        </div>
+      </div>
+    </section>
+    <section class="component-section">
+      <h2>CSS</h2>
+      <div class="example-group">
+        <div class="example-code">
+          <pre><code class="language-css"><span class="token selector">:root</span> <span class="token punctuation">{</span>
+  <span class="token property">--shadow</span><span class="token punctuation">:</span> 0 0.5rem 1.5rem <span class="token function">hsl</span><span class="token punctuation">(</span>220 30% 10% / 0.08<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token property">--shadow-popout</span><span class="token punctuation">:</span> 0 0.25rem 0.75rem <span class="token function">hsl</span><span class="token punctuation">(</span>220 30% 10% / 0.15<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+        </div>
+      </div>
+    </section>
+    <section class="component-section">
+      <h2>CSS</h2>
+      <div class="example-group">
+        <div class="example-code">
+          <pre><code class="language-css"><span class="token selector">:root</span> <span class="token punctuation">{</span>
+  <span class="token property">--duration</span><span class="token punctuation">:</span> 150ms<span class="token punctuation">;</span>
+  <span class="token property">--ease</span><span class="token punctuation">:</span> ease<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token atrule"><span class="token rule">@media</span> <span class="token punctuation">(</span><span class="token property">prefers-reduced-motion</span><span class="token punctuation">:</span> reduce<span class="token punctuation">)</span></span> <span class="token punctuation">{</span>
+  <span class="token selector">:root</span> <span class="token punctuation">{</span>
+    <span class="token property">--duration</span><span class="token punctuation">:</span> 0.01ms<span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+        </div>
+      </div>
+    </section>
+    <section class="component-section">
+      <h2>CSS</h2>
+      <div class="example-group">
+        <div class="example-code">
+          <pre><code class="language-css"><span class="token selector">:root</span> <span class="token punctuation">{</span>
+  <span class="token property">--icon-chevron</span><span class="token punctuation">:</span> <span class="token url"><span class="token function">url</span><span class="token punctuation">(</span><span class="token string url">"data:image/svg+xml,..."</span><span class="token punctuation">)</span></span><span class="token punctuation">;</span>
+  <span class="token property">--icon-check</span><span class="token punctuation">:</span> <span class="token url"><span class="token function">url</span><span class="token punctuation">(</span><span class="token string url">"data:image/svg+xml,..."</span><span class="token punctuation">)</span></span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+        </div>
+      </div>
+    </section>
+
+  </section>
+  </main>
+  <footer class="demo-footer">
+    <a href="index.html">Back to Tokens</a>
+  </footer>
+</body>
+
+</html>
