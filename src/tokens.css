@@ -66,6 +66,9 @@
 
   /* Strong divider */
   --border-width-strong: 4px;
+
+  /* Layering */
+  --z-sticky: 10;
 }
 
 [data-tone="dark"] {

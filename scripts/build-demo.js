@@ -1,4 +1,4 @@
-import { readFileSync, writeFileSync, mkdirSync, readdirSync, unlinkSync } from "node:fs";
+import { readFileSync, writeFileSync, mkdirSync, readdirSync, unlinkSync, watch } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import Prism from "prismjs";
@@ -347,6 +347,7 @@ function extractCategoryDescription(content) {
     const t = line.trim();
     if (t === "" || t === "Links:" || /^[-*]\s+https?:/.test(t)) continue;
     if (/^[-*]\s+/.test(t)) return t.replace(/^[-*]\s+/, "");
+    if (t.startsWith(">")) return t.replace(/^>\s+/, "");
     return t;
   }
   return "";
@@ -392,4 +393,45 @@ function main() {
   }
 }
 
-main();
+function runBuild() {
+  try {
+    main();
+  } catch (error) {
+    console.error("Demo build failed:");
+    console.error(error);
+  }
+}
+
+function watchMode() {
+  const watchTargets = [DOCS, join(__dirname, "templates")];
+  const recursiveSupported = process.platform === "win32" || process.platform === "darwin";
+
+  let timer = null;
+  const scheduleBuild = () => {
+    if (timer) clearTimeout(timer);
+    timer = setTimeout(() => {
+      console.log("\nRebuilding demo...");
+      runBuild();
+    }, 100);
+  };
+
+  for (const target of watchTargets) {
+    watch(target, { recursive: recursiveSupported }, (_eventType, filename) => {
+      const changed = filename ? String(filename) : "unknown file";
+      console.log(`Change detected in ${changed}`);
+      scheduleBuild();
+    });
+  }
+
+  console.log("Watching demo sources for changes...");
+  for (const target of watchTargets) {
+    console.log(`  ${target}`);
+  }
+  console.log("Press Ctrl+C to stop.");
+}
+
+runBuild();
+
+if (process.argv.includes("--watch")) {
+  watchMode();
+}

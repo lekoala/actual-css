@@ -3,14 +3,20 @@
  *
  * The switch remains an input control, not a decorative toggle. Checked, hover,
  * focus-visible, and disabled states stay clear.
+ *
+ * .switch is the explicit API. input[role="switch"] inside .form is a
+ * convenience selector for hosts that prefer attribute-only markup. The two
+ * compose: when both are present, class and role get the same styles.
  */
-.switch {
+.switch,
+.form input[role="switch"] {
   --switch-bg: var(--surface-subtle);
   --switch-knob: var(--surface-raised);
 
   position: relative;
   display: inline-grid;
   align-items: center;
+  justify-content: start;
   inline-size: 2.75rem;
   block-size: 1.5rem;
   margin: 0;
@@ -21,7 +27,8 @@
   cursor: pointer;
 }
 
-.switch::before {
+.switch::before,
+.form input[role="switch"]::before {
   content: "";
   inline-size: 1.05rem;
   block-size: 1.05rem;
@@ -35,26 +42,31 @@
     box-shadow var(--duration);
 }
 
-.switch:hover:not(:disabled) {
+.switch:hover:not(:disabled),
+.form input[role="switch"]:hover:not(:disabled) {
   border-color: var(--intent, var(--primary));
 }
 
-.switch:checked {
+.switch:checked,
+.form input[role="switch"]:checked {
   --switch-bg: var(--intent, var(--primary));
   --switch-knob: var(--intent-fg, var(--primary-fg));
   border-color: var(--intent, var(--primary));
 }
 
-.switch:checked::before {
+.switch:checked::before,
+.form input[role="switch"]:checked::before {
   transform: translateX(1.2rem);
 }
 
-.switch:focus-visible {
+.switch:focus-visible,
+.form input[role="switch"]:focus-visible {
   outline: calc(var(--border-width) * 2) solid var(--focus);
   outline-offset: 2px;
 }
 
-.switch:disabled {
+.switch:disabled,
+.form input[role="switch"]:disabled {
   opacity: 0.55;
   cursor: not-allowed;
 }
