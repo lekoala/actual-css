@@ -4,69 +4,54 @@
 
 > Cohesive set of form elements that share focus styles, helpers, and validation patterns.
 
-- No floating labels
-- Use progressive enhancement for modern select elements
-- Proper focus style (preserve keyboard navigation)
-- Use `label:has` for auto grouping
-- Use flex utils for positioning
+- Native form controls are styled automatically inside `.form`.
+- Reusable classes for explicit composition: `.field`, `.field-label`, `.field-help`, `.field-error`, `.field-group`, `.choice`, `.form-actions`, `.form-actions.sticky`.
+- No floating labels.
+- Proper focus style that preserves keyboard navigation.
+- Auto grouping via `label:has()` for checkbox and radio labels.
+- Customizable select is progressive enhancement only — the native select remains the baseline.
 
 ```html
 <form class="form" novalidate>
   <div class="stack">
 
-    <p class="section-title">Personal information</p>
-
-    <!-- name — label wraps input, required -->
-    <label>
-      <span class="label-text">Full name <span class="required-mark" aria-hidden="true">*</span></span>
-      <input type="text"
-              autocomplete="name"
-              required
-              aria-required="true"
-              placeholder="Jane Doe" />
+    <label class="field">
+      <span class="field-label">Full name <span class="required-mark" aria-hidden="true">*</span></span>
+      <input type="text" autocomplete="name" required placeholder="Jane Doe" />
     </label>
 
-    <!-- email — with validation error state -->
-    <label>
-      <span class="label-text">Email address <span class="required-mark" aria-hidden="true">*</span></span>
+    <label class="field">
+      <span class="field-label">Email address <span class="required-mark" aria-hidden="true">*</span></span>
       <input type="email"
-              autocomplete="email"
-              required
-              aria-required="true"
-              aria-invalid="true"
-              aria-describedby="email-error"
-              value="jane@" />
-      <span class="error" id="email-error" role="alert">
-        <i class="ti ti-alert-circle" aria-hidden="true"></i>
+             autocomplete="email"
+             required
+             aria-invalid="true"
+             aria-describedby="email-error"
+             value="jane@" />
+      <span class="field-error" id="email-error" role="alert">
         Enter a valid email address
       </span>
     </label>
 
-    <!-- website — optional, with hint -->
-    <label>
-      <span class="label-text">Website</span>
+    <label class="field">
+      <span class="field-label">Website</span>
       <input type="url"
-              autocomplete="url"
-              aria-describedby="website-hint"
-              placeholder="https://example.com" />
-      <span class="hint" id="website-hint">Your public portfolio or personal site</span>
+             autocomplete="url"
+             aria-describedby="website-help"
+             placeholder="https://example.com" />
+      <span class="field-help" id="website-help">Your public portfolio or personal site</span>
     </label>
 
-    <!-- bio — textarea -->
-    <label>
-      <span class="label-text">Bio</span>
-      <textarea aria-describedby="bio-hint"
+    <label class="field">
+      <span class="field-label">Bio</span>
+      <textarea aria-describedby="bio-help"
                 maxlength="200"
                 placeholder="Tell us a bit about yourself…"></textarea>
-      <span class="hint" id="bio-hint">Max 200 characters. Shown on your public profile.</span>
+      <span class="field-help" id="bio-help">Max 200 characters. Shown on your public profile.</span>
     </label>
 
-    <hr class="divider" />
-    <p class="section-title">Preferences</p>
-
-    <!-- select — label wraps select -->
-    <label>
-      <span class="label-text">Language</span>
+    <label class="field">
+      <span class="field-label">Language</span>
       <select autocomplete="language">
         <option value="">Choose a language</option>
         <option value="en" selected>English</option>
@@ -76,99 +61,84 @@
       </select>
     </label>
 
-    <!-- radio group — fieldset + legend -->
-    <fieldset class="fieldset-clean">
-      <legend class="label-text">Availability</legend>
-      <div class="radio-group">
-        <label>
+    <fieldset>
+      <legend class="field-label">Availability</legend>
+      <div class="stack">
+        <label class="choice">
           <input type="radio" name="availability" value="available" checked />
-          Available for work
+          <span>Available for work</span>
         </label>
-        <label>
+        <label class="choice">
           <input type="radio" name="availability" value="open" />
-          Open to opportunities
+          <span>Open to opportunities</span>
         </label>
-        <label>
+        <label class="choice">
           <input type="radio" name="availability" value="unavailable" />
-          Not available
+          <span>Not available</span>
         </label>
       </div>
     </fieldset>
 
-    <!-- range with live value -->
-    <label>
-      <span class="label-text">Experience level</span>
-      <div class="range-row">
-        <input type="range"
-                min="0"
-                max="10"
-                value="5"
-                aria-valuetext="5 years"
-                aria-describedby="range-hint"
-                oninput="
-                  this.setAttribute('aria-valuetext', this.value + ' years');
-                  this.closest('label').querySelector('.range-value').textContent = this.value + ' yr';
-                " />
-        <span class="range-value" aria-hidden="true">5 yr</span>
-      </div>
-      <span class="hint" id="range-hint">Years of professional experience</span>
+    <label class="field">
+      <span class="field-label">Experience level</span>
+      <input type="range"
+             min="0"
+             max="10"
+             value="5"
+             aria-valuetext="5 years"
+             aria-describedby="range-help" />
+      <span class="field-help" id="range-help">Years of professional experience</span>
     </label>
 
-    <hr class="divider" />
-    <p class="section-title">Notifications</p>
-
-    <!-- switch -->
-    <label>
-      <span class="switch-label-group">
-        <span class="label-text">Email notifications</span>
-        <span class="hint">Receive updates about your account activity</span>
+    <label class="choice">
+      <input class="switch" type="checkbox" role="switch" checked />
+      <span>
+        <span class="field-label">Email notifications</span>
+        <span class="field-help">Receive updates about your account activity</span>
       </span>
-      <input type="checkbox"
-              role="switch"
-              aria-checked="true"
-              checked
-              onchange="this.setAttribute('aria-checked', this.checked)" />
     </label>
 
-    <!-- checkbox -->
-    <label>
+    <label class="choice">
       <input type="checkbox" />
       <span>
         I agree to the <a href="#">terms of service</a>
-        <span class="hint" style="display:block">Required to create an account</span>
+        <span class="field-help">Required to create an account</span>
       </span>
     </label>
 
-    <hr class="divider" />
-    <p class="section-title">Account</p>
-
-    <!-- file -->
-    <label>
-      <span class="label-text">Profile picture</span>
-      <input type="file"
-              accept="image/*"
-              aria-describedby="file-hint" />
-      <span class="hint" id="file-hint">JPG, PNG or WebP — max 2 MB</span>
+    <label class="field">
+      <span class="field-label">Profile picture</span>
+      <input type="file" accept="image/*" aria-describedby="file-help" />
+      <span class="field-help" id="file-help">JPG, PNG or WebP — max 2 MB</span>
     </label>
 
-    <!-- disabled -->
-    <label>
-      <span class="label-text">Username</span>
+    <label class="field">
+      <span class="field-label">Username</span>
       <input type="text"
-              value="janedoe"
-              disabled
-              aria-describedby="username-hint" />
-      <span class="hint" id="username-hint">Contact support to change your username</span>
+             value="janedoe"
+             disabled
+             aria-describedby="username-help" />
+      <span class="field-help" id="username-help">Contact support to change your username</span>
     </label>
 
   </div>
 
-  <div class="form-actions" style="margin-top: 2rem;">
-    <button type="button" class="btn btn-outline">Cancel</button>
-    <button type="submit" class="btn btn-primary">Save changes</button>
+  <div class="form-actions">
+    <button type="button" class="btn outline">Cancel</button>
+    <button type="submit" class="btn primary">Save changes</button>
   </div>
 </form>
 ```
+
+### Notes
+
+- `required` is enough on native inputs. `aria-required="true"` is redundant and not used in these examples.
+- `.field` is the canonical field wrapper. It works on `<label>` and `<div>`. A plain `<label>` inside `.form` whose first control is a text input, textarea, or select is auto-styled for hand-authored HTML; prefer `.field` for generated markup or non-standard wrappers.
+- `.field-label` is element-agnostic. Use it on `<span>` inside a wrapped label, on `<label for="…">` in a detached layout, or on `<legend>` inside a fieldset.
+- `.field-group` styles a `<fieldset>` outside `.form`. Inside `.form`, a bare `<fieldset>` is also styled.
+- `.choice` is the explicit choice-label API. A bare `<label>` whose first child is a checkbox or radio is auto-styled to match. The control goes first, the label group second, so multi-line labels align the control with the first line.
+- For a switch, prefer `class="switch"` plus `role="switch"`. The class is the explicit API; the attribute is recognized as a fallback so both compose.
+- `.form-actions` carries a default top margin. Override it with `--form-actions-margin-block-start`. It is class-only and may live inside or outside `<form>`. See Detached Actions below.
 
 Links:
 - https://oat.ink/components/#form
@@ -188,11 +158,352 @@ Links:
 - https://daisyui.com/components/toggle/
 - https://uiterms.com/slider/
 - https://uiterms.com/switch/
+- https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/label
+
+## Labels
+
+> The field wrapper is `.field`. Choose between a wrapped `<label>` and a detached `for`/`id` pair based on the layout.
+
+Use a **wrapped label** for simple hand-authored forms. The whole label area becomes the click target, there is no `id` noise, and the markup is harder to break.
+
+```html
+<label class="field">
+  <span class="field-label">Full name</span>
+  <input type="text" name="name" autocomplete="name" />
+</label>
+```
+
+Use **`for`/`id`** when the layout needs the label and control in different grid areas, when the markup is generated by a backend or form library, or when a single label is paired with multiple controls. `.field-label` is element-agnostic, so it works on a detached `<label>`.
+
+```html
+<div class="field">
+  <label class="field-label" for="profile-email">
+    Email address <span class="required-mark" aria-hidden="true">*</span>
+  </label>
+  <input id="profile-email"
+         name="email"
+         type="email"
+         autocomplete="email"
+         required
+         aria-describedby="profile-email-help" />
+  <span class="field-help" id="profile-email-help">
+    We only use this for account notifications.
+  </span>
+</div>
+```
+
+The mixed shape `<label for="x">…<input id="x"></label>` is allowed by the spec but rarely useful. Prefer either pure wrapped or pure `for`/`id`.
+
+Links:
+- https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/label
+
+## Detached Actions
+
+> `.form-actions` is class-only. It may live inside or outside the `<form>`. Use the native `form` attribute to connect a detached submit button to its form.
+
+The simplest case stays inside the form.
+
+```html
+<form class="form" novalidate>
+  <div class="stack">
+    <!-- fields -->
+  </div>
+
+  <div class="form-actions">
+    <button type="button" class="btn outline">Cancel</button>
+    <button type="submit" class="btn primary">Save changes</button>
+  </div>
+</form>
+```
+
+For sticky page footers, dialog footers, card footers, and split layouts, detach the actions and connect the submit button with `form="<id>"`.
+
+```html
+<form id="profile-form" class="form" novalidate>
+  <div class="stack">
+    <!-- long form fields -->
+  </div>
+</form>
+
+<footer class="form-actions">
+  <button type="button" class="btn outline">Cancel</button>
+  <button type="submit" class="btn primary" form="profile-form">
+    Save changes
+  </button>
+</footer>
+```
+
+For multiple submit intents, pair the `form` attribute with `formaction`. The form has one action; each submit button can override it.
+
+```html
+<form id="article-form"
+      class="form"
+      action="/articles/publish"
+      method="post">
+  <!-- fields -->
+</form>
+
+<div class="form-actions">
+  <button type="submit"
+          class="btn outline"
+          form="article-form"
+          formaction="/articles/draft">
+    Save draft
+  </button>
+  <button type="submit"
+          class="btn primary"
+          form="article-form">
+    Publish
+  </button>
+</div>
+```
+
+## Sticky Actions
+
+> Use `.form-actions sticky` when long forms need reachable submit actions while scrolling.
+
+### Inside the form
+
+The `<form>` is the bounding parent. The sticky stays pinned to the viewport bottom while the form is taller than the viewport, then releases when the form's bottom edge reaches it.
+
+Scroll the page to see the actions stay reachable.
+
+```html
+<form class="form" novalidate>
+  <div class="stack">
+    <label class="field">
+      <span class="field-label">Full name <span class="required-mark" aria-hidden="true">*</span></span>
+      <input type="text" autocomplete="name" required placeholder="Jane Doe" />
+    </label>
+
+    <label class="field">
+      <span class="field-label">Email <span class="required-mark" aria-hidden="true">*</span></span>
+      <input type="email" autocomplete="email" required />
+    </label>
+
+    <label class="field">
+      <span class="field-label">Phone</span>
+      <input type="tel" autocomplete="tel" />
+    </label>
+
+    <label class="field">
+      <span class="field-label">Bio</span>
+      <textarea rows="4" placeholder="Tell us about yourself…"></textarea>
+    </label>
+
+    <label class="field">
+      <span class="field-label">Website</span>
+      <input type="url" autocomplete="url" placeholder="https://example.com" />
+    </label>
+
+    <label class="field">
+      <span class="field-label">Language</span>
+      <select>
+        <option>English</option>
+        <option>Français</option>
+        <option>Deutsch</option>
+      </select>
+    </label>
+
+    <label class="field">
+      <span class="field-label">Experience level</span>
+      <input type="range" min="0" max="10" value="5" />
+    </label>
+
+    <label class="field">
+      <span class="field-label">Profile picture</span>
+      <input type="file" accept="image/*" />
+    </label>
+
+    <fieldset>
+      <legend class="field-label">Theme</legend>
+      <div class="stack">
+        <label class="choice">
+          <input type="radio" name="theme" value="light" checked />
+          <span>Light</span>
+        </label>
+        <label class="choice">
+          <input type="radio" name="theme" value="dark" />
+          <span>Dark</span>
+        </label>
+        <label class="choice">
+          <input type="radio" name="theme" value="auto" />
+          <span>System</span>
+        </label>
+      </div>
+    </fieldset>
+
+    <label class="choice">
+      <input type="checkbox" />
+      <span>Email notifications</span>
+    </label>
+  </div>
+
+  <div class="form-actions sticky">
+    <button type="button" class="btn outline">Cancel</button>
+    <button type="submit" class="btn primary">Save changes</button>
+  </div>
+</form>
+```
+
+### Detached from the form
+
+For a sticky page footer, dialog footer, or card footer, detach the actions and connect the submit button with the `form` attribute. The bounding parent becomes the wrapper that holds both the form and the actions.
+
+Scroll the page to see the detached footer stay reachable.
+
+```html
+<form id="account-form" class="form" novalidate>
+  <div class="stack">
+    <label class="field">
+      <span class="field-label">Full name <span class="required-mark" aria-hidden="true">*</span></span>
+      <input type="text" autocomplete="name" required placeholder="Jane Doe" />
+    </label>
+
+    <label class="field">
+      <span class="field-label">Email <span class="required-mark" aria-hidden="true">*</span></span>
+      <input type="email" autocomplete="email" required />
+    </label>
+
+    <label class="field">
+      <span class="field-label">Phone</span>
+      <input type="tel" autocomplete="tel" />
+    </label>
+
+    <label class="field">
+      <span class="field-label">Bio</span>
+      <textarea rows="4" placeholder="Tell us about yourself…"></textarea>
+    </label>
+
+    <label class="field">
+      <span class="field-label">Website</span>
+      <input type="url" autocomplete="url" placeholder="https://example.com" />
+    </label>
+
+    <label class="field">
+      <span class="field-label">Language</span>
+      <select>
+        <option>English</option>
+        <option>Français</option>
+        <option>Deutsch</option>
+      </select>
+    </label>
+
+    <label class="field">
+      <span class="field-label">Experience level</span>
+      <input type="range" min="0" max="10" value="5" />
+    </label>
+
+    <label class="field">
+      <span class="field-label">Profile picture</span>
+      <input type="file" accept="image/*" />
+    </label>
+
+    <fieldset>
+      <legend class="field-label">Theme</legend>
+      <div class="stack">
+        <label class="choice">
+          <input type="radio" name="theme-detached" value="light" checked />
+          <span>Light</span>
+        </label>
+        <label class="choice">
+          <input type="radio" name="theme-detached" value="dark" />
+          <span>Dark</span>
+        </label>
+        <label class="choice">
+          <input type="radio" name="theme-detached" value="auto" />
+          <span>System</span>
+        </label>
+      </div>
+    </fieldset>
+
+    <label class="choice">
+      <input type="checkbox" />
+      <span>Email notifications</span>
+    </label>
+  </div>
+</form>
+
+<footer class="form-actions sticky">
+  <button type="button" class="btn outline">Cancel</button>
+  <button type="submit" class="btn primary" form="account-form">
+    Save changes
+  </button>
+</footer>
+```
+
+Knobs:
+
+- `--z-sticky` — layering token, defaults to `10`.
+- `--form-actions-sticky-padding` — inner padding, defaults to `--space-3`.
+- `--form-actions-sticky-inline-offset` — full-bleed escape hatch for sticky actions inside padded containers. Set this on the page, not the form.
+
+```css
+.settings-page {
+  --form-actions-sticky-inline-offset: var(--space-4);
+}
+```
+
+A sticky footer can cover the last field on short pages. That is a page-layout concern, not a framework concern. Add bottom padding to the page or scroll container if needed.
+
+## Switches
+
+> Toggle controls that share a native checkbox at the markup level, with a switch visual.
+
+- The explicit API is `class="switch"`. Adding `role="switch"` is the no-class fallback and the two compose.
+- The visual state tracks the native `checked` attribute. No JavaScript is required.
+- For strict ARIA correctness, keep `aria-checked` in sync. This is an enhancement, not the baseline.
+
+```html
+<!-- Default: native state, no JS required. -->
+<input class="switch" type="checkbox" role="switch" checked />
+```
+
+```html{.js}
+<!-- Enhancement: keep aria-checked in sync. -->
+<input class="switch"
+       type="checkbox"
+       role="switch"
+       aria-checked="true"
+       checked
+       onchange="this.setAttribute('aria-checked', this.checked)" />
+```
 
 ## Validation
 
 > Inline error and success feedback that respects assistive technology and form state.
 
+- `.field-error` is the canonical error message. It is wired to `aria-invalid="true"` via the input, so the visual border and the assistive-tech announcement move together.
+- `.field-help` is the canonical helper text. It carries the description whether the field is in a danger or a success state.
+- Set `aria-invalid="true"` on the input. The `.field-error` element is linked via `aria-describedby`.
+- `role="alert"` on `.field-error` is only required when the message is inserted dynamically. Static messages do not need it.
+
+```html
+<form class="form" novalidate>
+  <div class="stack">
+    <label class="field">
+      <span class="field-label">Email</span>
+      <input type="email"
+             value="jane@"
+             aria-invalid="true"
+             aria-describedby="email-error" />
+      <span class="field-error" id="email-error" role="alert">
+        Enter a valid email address
+      </span>
+    </label>
+
+    <label class="field">
+      <span class="field-label">Username</span>
+      <input type="text" value="janedoe" aria-describedby="username-help" />
+      <span class="field-help" id="username-help">
+        Username is available.
+      </span>
+    </label>
+  </div>
+</form>
+```
+
 Links:
 - https://daisyui.com/components/validator/
 - https://getbootstrap.com/docs/5.3/forms/validation/
+- https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Reference/Roles/switch_role

@@ -3,12 +3,29 @@
  *
  * Neutral geometry and interaction states shared across all text-like
  * controls, whether semantic (input[type=text]) or classed (.input).
- * select, checkbox, radio, range, and file have their own files.
+ * select, checkbox, radio, range, switch, and file have their own files.
+ *
+ * Button-like and invisible input types are excluded so a stray
+ * <input type="submit"> inside .form never inherits field geometry.
  */
 .input,
 .textarea,
 .form
-  :where(input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"]), textarea) {
+  :where(
+    input:not(
+      [type="checkbox"],
+      [type="radio"],
+      [type="range"],
+      [type="file"],
+      [type="button"],
+      [type="submit"],
+      [type="reset"],
+      [type="image"],
+      [type="color"],
+      [type="hidden"]
+    ),
+    textarea
+  ) {
   --field-border: var(--border);
   --field-bg: var(--surface);
   --field-fg: var(--text);
@@ -35,13 +52,24 @@
   resize: vertical;
 }
 
-.input:hover,
-.textarea:hover,
+.input:hover:not(:disabled),
+.textarea:hover:not(:disabled),
 .form
   :where(
-    input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"]),
+    input:not(
+      [type="checkbox"],
+      [type="radio"],
+      [type="range"],
+      [type="file"],
+      [type="button"],
+      [type="submit"],
+      [type="reset"],
+      [type="image"],
+      [type="color"],
+      [type="hidden"]
+    ),
     textarea
-  ):hover {
+  ):hover:not(:disabled) {
   --field-border: var(--text-subtle);
 }
 
@@ -49,7 +77,18 @@
 .textarea:focus-visible,
 .form
   :where(
-    input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"]),
+    input:not(
+      [type="checkbox"],
+      [type="radio"],
+      [type="range"],
+      [type="file"],
+      [type="button"],
+      [type="submit"],
+      [type="reset"],
+      [type="image"],
+      [type="color"],
+      [type="hidden"]
+    ),
     textarea
   ):focus-visible {
   border-color: var(--focus);
@@ -67,7 +106,18 @@
 .textarea:disabled,
 .form
   :where(
-    input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"]),
+    input:not(
+      [type="checkbox"],
+      [type="radio"],
+      [type="range"],
+      [type="file"],
+      [type="button"],
+      [type="submit"],
+      [type="reset"],
+      [type="image"],
+      [type="color"],
+      [type="hidden"]
+    ),
     textarea
   ):disabled {
   --field-bg: var(--surface-subtle);

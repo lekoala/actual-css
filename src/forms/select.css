@@ -2,6 +2,11 @@
  * Select controls share text-control geometry with a CSS chevron.
  *
  * Customizable select support is progressive enhancement in this same file.
+ * The native select remains the baseline; appearance: base-select is wrapped
+ * in @supports and gated on fine pointer devices so it never blocks a layout.
+ * Add .native to a specific select to opt out of the enhancement.
+ *
+ * No layout or interaction contract may depend on appearance: base-select.
  * Arbitrary dropdown and menu behavior belongs elsewhere.
  */
 .select,
