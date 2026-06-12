@@ -8,6 +8,10 @@
   --badge-size: 1.5rem;
   --badge-pad-x: 0.55em;
   --badge-font-size: 0.8125rem;
+  --badge-bg: var(--ui-bg, var(--intent, var(--neutral)));
+  --badge-fg: var(--ui-fg, var(--intent-fg, var(--neutral-fg)));
+  --badge-border: var(--ui-border, transparent);
+  --badge-radius: 999px;
 
   display: inline-flex;
   align-items: center;

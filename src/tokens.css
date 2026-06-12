@@ -53,6 +53,18 @@
   --link-decoration-thickness: max(1px, 0.08em);
   --link-decoration-thickness-hover: max(2px, 0.12em);
   --link-underline-offset: 0.15em;
+
+  /* Typography */
+  --heading: var(--text);
+  --font-weight-heading: 700;
+  --line-height-heading: 1.15;
+
+  /* Selection */
+  --selection-bg: var(--primary);
+  --selection-fg: var(--primary-fg);
+
+  /* Strong divider */
+  --border-width-strong: 4px;
 }
 
 [data-tone="dark"] {

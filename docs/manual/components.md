@@ -357,29 +357,110 @@ Links:
 - Supports one or more content sections.
 - Should display nicely in grids with equal-height behavior.
 - Does not own page spacing.
+- Use `data-bleed` on a direct child to escape the card padding (full-width images, colored headers or footers).
 
 ```html
-<article class="card">
-  <header>
-    <h3>Understanding Semantic HTML</h3>
+<div style="max-inline-size: 32rem">
+  <article class="card stack">
+    <header>
+      <hgroup>
+        <h3>Understanding Semantic HTML</h3>
+        <p class="muted">A quick primer for new contributors</p>
+      </hgroup>
+    </header>
+
+    <p>Using the right HTML tags improves both SEO and accessibility. Lean on landmarks and live lists.</p>
+
+    <ul class="cluster" style="list-style: none; padding: 0; margin: 0; gap: 0.5rem" aria-label="Tags">
+      <li><span class="badge primary soft secondary">HTML</span></li>
+      <li><span class="badge soft primary">Accessibility</span></li>
+      <li><span class="badge outline">5 min read</span></li>
+    </ul>
+
+    <footer class="cluster" style="justify-content: space-between">
+      <time datetime="2026-06-12" class="muted">June 12, 2026</time>
+      <button type="button" class="btn outline">Read more</button>
+    </footer>
+  </article>
+</div>
+```
+
+```html
+<div style="max-inline-size: 32rem">
+  <article class="card">
+    <img data-bleed src="https://picsum.photos/seed/actual-css-card/600/300" alt="Coastal cliffs at dusk" />
+    <header>
+      <h3>Coastal cliffs at dusk</h3>
+    </header>
+    <section aria-label="Summary">
+      <p>A short caption that wraps across a few lines. The image bleeds to the card edges.</p>
+    </section>
+    <footer class="cluster">
+      <span class="badge primary soft">Photo</span>
+      <button type="button" class="btn outline">View</button>
+    </footer>
+  </article>
+</div>
+```
+
+```html
+<article class="card stack" style="--card-max-inline-size: 24rem; text-align: center">
+  <header data-bleed class="stack" style="background: var(--surface-subtle)">
+    <hgroup>
+      <h3>Team</h3>
+      <p class="muted">For growing products</p>
+    </hgroup>
+    <p>
+      <span style="font-size: 2rem; font-weight: var(--font-weight-strong); line-height: 1">$24</span>
+      <span class="muted">/ user / month</span>
+    </p>
   </header>
 
-  <section aria-label="Summary">
-    <p>Using the right HTML tags improves both SEO and accessibility.</p>
-  </section>
+  <ul class="stack" style="list-style: none; padding: 0">
+    <li>Unlimited projects</li>
+    <li>Up to 25 seats</li>
+    <li>Shared workspaces</li>
+    <li>Priority support</li>
+  </ul>
 
-  <section aria-label="Tags">
-    <ul>
-      <li>HTML</li>
-      <li>Accessibility</li>
-    </ul>
-  </section>
-
-  <footer class="cluster">
-    <time datetime="2026-06-12">June 12, 2026</time>
-    <button type="button" class="btn">Read more</button>
+  <footer data-bleed class="cluster" style="background: var(--surface-subtle); justify-content: center">
+    <a class="btn primary" href="/billing">Upgrade</a>
   </footer>
 </article>
+```
+
+```html
+<section class="grid">
+  <article class="card">
+    <header>
+      <h3>Components</h3>
+    </header>
+    <p>Buttons, alerts, dialogs — all opt-in.</p>
+    <footer class="cluster">
+      <a class="btn outline" href="components.html">Browse</a>
+    </footer>
+  </article>
+
+  <article class="card">
+    <header>
+      <h3>Layout</h3>
+    </header>
+    <p>Stack, cluster, grid, switcher, sidebar.</p>
+    <footer class="cluster">
+      <a class="btn outline" href="layout.html">Browse</a>
+    </footer>
+  </article>
+
+  <article class="card">
+    <header>
+      <h3>Patterns</h3>
+    </header>
+    <p>Actions, nav-list — small structural helpers.</p>
+    <footer class="cluster">
+      <a class="btn outline" href="patterns.html">Browse</a>
+    </footer>
+  </article>
+</section>
 ```
 
 Links:

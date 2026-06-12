@@ -176,9 +176,10 @@ function parseMarkdown(content, fallbackTitle) {
       continue;
     }
 
-    const linkMatch = trimmed.match(/^[-*]\s+(https?:\/\/\S+)\s*$/);
+    const linkMatch = trimmed.match(/^[-*]\s+(?:(.+?):\s+)?(https?:\/\/\S+)\s*$/);
     if (linkMatch) {
-      current.links.push({ url: linkMatch[1], label: linkMatch[1] });
+      const label = linkMatch[1] || linkMatch[2];
+      current.links.push({ url: linkMatch[2], label });
       continue;
     }
 
