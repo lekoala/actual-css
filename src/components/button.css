@@ -43,12 +43,15 @@
 .btn:hover {
   background: var(--ui-hover-bg, var(--btn-bg));
 }
+
 .btn:not(:where(.outline, .ghost, .link)):hover {
   box-shadow: inset 0 0 0 999px var(--hover-overlay);
 }
+
 .btn:where(.outline, .ghost):hover {
   --ui-hover-bg: var(--surface-subtle);
 }
+
 .btn:active {
   transform: translateY(1px);
 }
@@ -83,4 +86,26 @@
   opacity: 0.55;
   cursor: not-allowed;
   pointer-events: none;
+}
+
+/* Auto-detect button groups via role="group" */
+:where([role="group"]:has(> .btn + .btn)) {
+  display: inline-flex;
+  border-radius: var(--radius);
+}
+
+:where([role="group"]:has(> .btn + .btn))>.btn {
+  border-radius: 0;
+  border-inline-end: 0;
+}
+
+:where([role="group"]:has(> .btn + .btn))>.btn:first-child {
+  border-start-start-radius: inherit;
+  border-end-start-radius: inherit;
+}
+
+:where([role="group"]:has(> .btn + .btn))>.btn:last-child {
+  border-inline-end: var(--border-width) solid var(--btn-border);
+  border-start-end-radius: inherit;
+  border-end-end-radius: inherit;
 }
