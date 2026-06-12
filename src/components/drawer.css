@@ -1,0 +1,50 @@
+/*
+ * Drawer shell styling for semantic aside panels.
+ *
+ * Geometry, surface, spacing, and local navigation rhythm live here. Trigger
+ * behavior, focus management, and page-level layout stay with the app.
+ */
+.drawer {
+  inline-size: min(100%, var(--drawer-size, 18rem));
+  block-size: 100%;
+  padding: var(--space-4);
+  border-inline-end: var(--border-width) solid var(--border);
+  background: var(--surface-raised);
+  color: var(--text);
+  box-shadow: var(--shadow);
+}
+
+.drawer[hidden] {
+  display: none;
+}
+
+.drawer nav ul {
+  display: grid;
+  gap: 0.25rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.drawer a,
+.drawer summary {
+  display: flex;
+  align-items: center;
+  min-block-size: 2.25rem;
+  padding-inline: 0.75rem;
+  border-radius: var(--radius);
+  color: var(--text-muted);
+  font-weight: var(--font-weight-strong);
+  text-decoration: none;
+}
+
+.drawer a:hover,
+.drawer summary:hover,
+.drawer a[aria-current="page"] {
+  background: var(--surface-subtle);
+  color: var(--text);
+}
+
+.drawer footer {
+  margin-block-start: var(--space-4);
+}

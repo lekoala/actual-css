@@ -1,0 +1,35 @@
+/*
+ * Small, single-purpose utilities for common escape hatches.
+ *
+ * These support components and layout primitives without becoming a
+ * utility-first API or adding spacing, color, breakpoint, and display scales.
+ */
+.sr-only {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.overflow-auto {
+  overflow: auto;
+}
+
+.grow {
+  flex: 1 1 auto;
+  min-inline-size: 0;
+}
+
+.muted {
+  color: var(--text-muted);
+}
+
+.circle {
+  --radius: 999px;
+  border-radius: 999px;
+}

@@ -1,61 +1,85 @@
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Dialog — Actual CSS</title>
   <link rel="stylesheet" href="../../src/actual.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
   <link rel="stylesheet" href="../../demo/styles/demo.css">
+  <link rel="stylesheet" href="../../demo/styles/prism.css">
 </head>
+
 <body>
   <nav class="demo-nav">
-    <a href="index.html">← Components</a>
-    <a href="../../demo/index.html">Kitchensink</a>
+    <a href="index.html">&larr; Components</a>
+    <a href="../index.html">Homepage</a>
   </nav>
   <main class="center">
+  <section class="component-section">
     <header class="component-header">
       <h1>Dialog</h1>
-      <p>Modal dialog.</p>
+      <p>Use native `&lt;dialog class=&quot;dialog&quot;&gt;`.</p>
     </header>
-    
-    <section class="component-section">
-<h2>Default</h2>
-<p>Default dialog.</p>
-<div class="example-group">
-<div class="example-render example-center"><dialog class="dialog" id="confirm" open>
-  <form method="dialog" class="stack">
-    <h2>Confirm</h2>
-    <p>Are you sure?</p>
-    <div class="cluster">
-      <button class="btn neutral outline" value="cancel">Cancel</button>
-      <button class="btn danger" value="delete">Delete</button>
-    </div>
-  </form>
-</dialog></div><div class="example-code">
-<pre><code>&lt;dialog class=&quot;dialog&quot; id=&quot;confirm&quot; open&gt;
-  &lt;form method=&quot;dialog&quot; class=&quot;stack&quot;&gt;
-    &lt;h2&gt;Confirm&lt;/h2&gt;
-    &lt;p&gt;Are you sure?&lt;/p&gt;
-    &lt;div class=&quot;cluster&quot;&gt;
-      &lt;button class=&quot;btn neutral outline&quot; value=&quot;cancel&quot;&gt;Cancel&lt;/button&gt;
-      &lt;button class=&quot;btn danger&quot; value=&quot;delete&quot;&gt;Delete&lt;/button&gt;
-    &lt;/div&gt;
-  &lt;/form&gt;
-&lt;/dialog&gt;</code></pre>
-</div>
-</div>
-</section>
-    
-<section class="component-section">
-<h2>Accessibility</h2>
-<ul>
-<li>Use `&lt;dialog&gt;` with `method=&quot;dialog&quot;` for accessible modals.</li>
-</ul>
-</section>
+        <section class="component-section">
+      <div class="example-group">
+        <div class="example-render">
+          <button class="btn" type="button" commandfor="demo-dialog" command="show-modal">
+  Open dialog
+</button>
 
+<dialog class="dialog" id="demo-dialog" closedby="any">
+  <form method="dialog">
+    <header>
+      <h3>Title</h3>
+      <p>This is a dialog description.</p>
+    </header>
+
+    <div>
+      <p>Dialog content goes here. You can put any HTML inside.</p>
+      <p>Click outside or press Escape to close.</p>
+    </div>
+
+    <footer>
+      <button class="btn outline" type="button" commandfor="demo-dialog" command="close">Cancel</button>
+      <button class="btn primary" value="confirm">Confirm</button>
+    </footer>
+  </form>
+</dialog>
+        </div>
+        <div class="example-code">
+          <pre><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>button</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>btn<span class="token punctuation">"</span></span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>button<span class="token punctuation">"</span></span> <span class="token attr-name">commandfor</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>demo-dialog<span class="token punctuation">"</span></span> <span class="token attr-name">command</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>show-modal<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+  Open dialog
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">></span></span>
+
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dialog</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>dialog<span class="token punctuation">"</span></span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>demo-dialog<span class="token punctuation">"</span></span> <span class="token attr-name">closedby</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>any<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>form</span> <span class="token attr-name">method</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>dialog<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>header</span><span class="token punctuation">></span></span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>h3</span><span class="token punctuation">></span></span>Title<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>h3</span><span class="token punctuation">></span></span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">></span></span>This is a dialog description.<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>p</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>header</span><span class="token punctuation">></span></span>
+
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span><span class="token punctuation">></span></span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">></span></span>Dialog content goes here. You can put any HTML inside.<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>p</span><span class="token punctuation">></span></span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">></span></span>Click outside or press Escape to close.<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>p</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
+
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>footer</span><span class="token punctuation">></span></span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>button</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>btn outline<span class="token punctuation">"</span></span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>button<span class="token punctuation">"</span></span> <span class="token attr-name">commandfor</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>demo-dialog<span class="token punctuation">"</span></span> <span class="token attr-name">command</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>close<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Cancel<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">></span></span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>button</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>btn primary<span class="token punctuation">"</span></span> <span class="token attr-name">value</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>confirm<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Confirm<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>footer</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>form</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dialog</span><span class="token punctuation">></span></span></code></pre>
+        </div>
+      </div>
+    </section>
+
+  </section>
   </main>
   <footer class="demo-footer">
-    <a href="index.html">Back to components</a>
+    <a href="index.html">Back to Components</a>
   </footer>
 </body>
+
 </html>

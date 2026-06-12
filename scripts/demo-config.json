@@ -1,0 +1,32 @@
+[
+  {
+    "file": "components.md",
+    "name": "Components",
+    "desc": "Opt-in components with semantic HTML and a small class API."
+  },
+  {
+    "file": "forms.md",
+    "name": "Forms",
+    "desc": "Form inputs, labels, and controls."
+  },
+  {
+    "file": "layout.md",
+    "name": "Layout",
+    "desc": "Composable building blocks for page and content structure."
+  },
+  {
+    "file": "tokens.md",
+    "name": "Tokens",
+    "desc": "Public theming surface: colors, shapes, spacing, and more."
+  },
+  {
+    "file": "ui.md",
+    "name": "UI",
+    "desc": "Interactive patterns that need JavaScript or modern platform behavior."
+  },
+  {
+    "file": "utilities.md",
+    "name": "Utilities",
+    "desc": "Small escape hatches for common single-purpose needs."
+  }
+]

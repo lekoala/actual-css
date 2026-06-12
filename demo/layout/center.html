@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Center — Actual CSS</title>
+  <link rel="stylesheet" href="../../src/actual.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+  <link rel="stylesheet" href="../../demo/styles/demo.css">
+  <link rel="stylesheet" href="../../demo/styles/prism.css">
+</head>
+
+<body>
+  <nav class="demo-nav">
+    <a href="index.html">&larr; Layout</a>
+    <a href="../index.html">Homepage</a>
+  </nav>
+  <main class="center">
+  <section class="component-section">
+    <header class="component-header">
+      <h1>Center</h1>
+      <p>Use `.center` to constrain readable page content and center it in the viewport.</p>
+    </header>
+        <section class="component-section">
+      <div class="example-group">
+        <div class="example-render">
+          <main class="center stack">
+  <header class="prose">
+    <h1>Documentation</h1>
+    <p>Guides and API notes for Actual CSS.</p>
+  </header>
+  <section class="card">
+    <h2>Getting started</h2>
+    <p>Install the stylesheet and use semantic HTML.</p>
+  </section>
+</main>
+        </div>
+        <div class="example-code">
+          <pre><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>main</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>center stack<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>header</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>prose<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>h1</span><span class="token punctuation">></span></span>Documentation<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>h1</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">></span></span>Guides and API notes for Actual CSS.<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>p</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>header</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>section</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>card<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>h2</span><span class="token punctuation">></span></span>Getting started<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>h2</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">></span></span>Install the stylesheet and use semantic HTML.<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>p</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>section</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>main</span><span class="token punctuation">></span></span></code></pre>
+        </div>
+      </div>
+    </section>
+    <section class="component-section">
+      <h2>CSS</h2>
+      <div class="example-group">
+        <div class="example-code">
+          <pre><code class="language-css"><span class="token selector">.center</span> <span class="token punctuation">{</span>
+  <span class="token property">box-sizing</span><span class="token punctuation">:</span> content-box<span class="token punctuation">;</span>
+  <span class="token property">max-inline-size</span><span class="token punctuation">:</span> <span class="token function">var</span><span class="token punctuation">(</span>--center-size<span class="token punctuation">,</span> 72rem<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token property">margin-inline</span><span class="token punctuation">:</span> auto<span class="token punctuation">;</span>
+  <span class="token property">padding-inline</span><span class="token punctuation">:</span> <span class="token function">var</span><span class="token punctuation">(</span>--center-pad<span class="token punctuation">,</span> 1rem<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+        </div>
+      </div>
+    </section>
+    <section class="component-section">
+      <h2>CSS</h2>
+      <div class="example-group">
+        <div class="example-code">
+          <pre><code class="language-css"><span class="token selector">.docs-page</span> <span class="token punctuation">{</span>
+  <span class="token property">--center-size</span><span class="token punctuation">:</span> 48rem<span class="token punctuation">;</span>
+  <span class="token property">--center-pad</span><span class="token punctuation">:</span> <span class="token function">var</span><span class="token punctuation">(</span>--space-4<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+        </div>
+      </div>
+    </section>
+
+  </section>
+  </main>
+  <footer class="demo-footer">
+    <a href="index.html">Back to Layout</a>
+  </footer>
+</body>
+
+</html>

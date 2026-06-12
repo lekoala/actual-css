@@ -1,245 +1,119 @@
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Components — Actual CSS</title>
   <link rel="stylesheet" href="../../src/actual.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
   <link rel="stylesheet" href="../../demo/styles/demo.css">
+  <link rel="stylesheet" href="../../demo/styles/prism.css">
 </head>
+
 <body>
   <nav class="demo-nav">
-    <a href="../../demo/index.html">← Kitchensink</a>
+    <a href="../index.html">&larr; Homepage</a>
   </nav>
   <main class="center">
     <header>
       <h1>Components</h1>
-      <p>18 components with intents, variants, and sizes.</p>
+      <p>Opt-in components with semantic HTML and a small class API.</p>
     </header>
     <div class="components-grid">
+            <article class="component-card">
+        <div class="card-info">
+          <h3><a href="accordion.html">Accordion</a></h3>
+          <p>Use native `&lt;details&gt;` and `&lt;summary&gt;` for collapsible content.</p>
+        </div>
+      </article>
       <article class="component-card">
-      <div class="card-preview">
-        <div class="accordion">
-  <details open>
-    <summary>First item</summary>
-    <div class="accordion-body">Content here.</div>
-  </details>
-  <details>
-  <summary>Second item</summary>
-    <div class="accordion-body">More content.</div>
-  </details>
-</div>
-      </div>
-      <div class="card-info">
-        <h3><a href="accordion.html">Accordion</a></h3>
-        <p>Collapsible content sections.</p>
-      </div>
-    </article>
-<article class="component-card">
-      <div class="card-preview">
-        <div class="alert">A neutral alert with default border.</div>
-      </div>
-      <div class="card-info">
-        <h3><a href="alert.html">Alert</a></h3>
-        <p>Alerts are used for contextual messages.</p>
-      </div>
-    </article>
-<article class="component-card">
-      <div class="card-preview">
-        <div class="avatar"><abbr>JD</abbr></div>
-<div class="avatar primary"><abbr>AB</abbr></div>
-      </div>
-      <div class="card-info">
-        <h3><a href="avatar.html">Avatar</a></h3>
-        <p>User avatar with initials, image, or icon.</p>
-      </div>
-    </article>
-<article class="component-card">
-      <div class="card-preview">
-        <span class="badge success">Published</span>
-<span class="badge warning">Pending</span>
-      </div>
-      <div class="card-info">
-        <h3><a href="badge.html">Badge</a></h3>
-        <p>Badges are used to inform the user of the status of specific data.</p>
-      </div>
-    </article>
-<article class="component-card">
-      <div class="card-preview">
-        <button class="btn primary">Save</button>
-<button class="btn neutral">Cancel</button>
-      </div>
-      <div class="card-info">
-        <h3><a href="button.html">Button</a></h3>
-        <p>Buttons allow the user to take actions or make choices.</p>
-      </div>
-    </article>
-<article class="component-card">
-      <div class="card-preview">
-        <article class="card">
-  <h3>Title</h3>
-  <p>Content goes here.</p>
-</article>
-      </div>
-      <div class="card-info">
-        <h3><a href="card.html">Card</a></h3>
-        <p>Cards are used to group and display content in a way that is easily readable.</p>
-      </div>
-    </article>
-<article class="component-card">
-      <div class="card-preview">
-        <div class="table-wrap">
-  <table class="table">
-    <thead>
-      <tr><th>Name</th><th>Status</th></tr>
-    </thead>
-    <tbody>
-      <tr><td>Alice</td><td><span class="badge success soft">Active</span></td></tr>
-    </tbody>
-  </table>
-</div>
-      </div>
-      <div class="card-info">
-        <h3><a href="data.html">Data</a></h3>
-        <p>Tables, metrics, and progress indicators.</p>
-      </div>
-    </article>
-<article class="component-card">
-      <div class="card-preview">
-        <div class="card" style="padding:1.5rem;max-width:16rem;"><h3 style="margin:0 0 0.5rem;font-size:1rem;">Confirm</h3><p style="margin:0 0 1rem;font-size:0.875rem;color:var(--text-muted);">Are you sure?</p><div class="cluster" style="justify-content:flex-end;"><button class="btn neutral outline sm">Cancel</button><button class="btn danger sm">Delete</button></div></div>
-      </div>
-      <div class="card-info">
-        <h3><a href="dialog.html">Dialog</a></h3>
-        <p>Modal dialog.</p>
-      </div>
-    </article>
-<article class="component-card">
-      <div class="card-preview">
-        <div class="divider">Or</div>
-<div class="divider"></div>
-      </div>
-      <div class="card-info">
-        <h3><a href="divider.html">Divider</a></h3>
-        <p>Horizontal and vertical separators.</p>
-      </div>
-    </article>
-<article class="component-card">
-      <div class="card-preview">
-        <div class="dropdown">
-  <details>
-    <summary class="btn neutral outline">Actions</summary>
-    <menu class="dropdown-menu">
-      <button class="btn neutral link" type="button">Edit</button>
-      <button class="btn neutral link" type="button">Delete</button>
-    </menu>
-  </details>
-</div>
-      </div>
-      <div class="card-info">
-        <h3><a href="dropdown.html">Dropdown</a></h3>
-        <p>Toggle menu for secondary actions.</p>
-      </div>
-    </article>
-<article class="component-card">
-      <div class="card-preview">
-        <label class="field">
-  <span class="label">Email</span>
-  <input class="input" type="email" placeholder="you@example.com">
-  <span class="help">We will never share your email.</span>
-</label>
-      </div>
-      <div class="card-info">
-        <h3><a href="forms.html">Forms</a></h3>
-        <p>Form inputs, labels, and controls.</p>
-      </div>
-    </article>
-<article class="component-card">
-      <div class="card-preview">
-        <div class="card" style="padding:1.5rem; position:relative;">
-  <span class="indicator badge">New</span>
-  content
-</div>
-      </div>
-      <div class="card-info">
-        <h3><a href="indicator.html">Indicator</a></h3>
-        <p>Position any element on the corner of another element.</p>
-      </div>
-    </article>
-<article class="component-card">
-      <div class="card-preview">
-        <div class="join">
-  <button class="btn primary" type="button">Save</button>
-  <button class="btn neutral outline" type="button">Cancel</button>
-</div>
-      </div>
-      <div class="card-info">
-        <h3><a href="join.html">Join</a></h3>
-        <p>Group buttons and inputs with shared border-radius.</p>
-      </div>
-    </article>
-<article class="component-card">
-      <div class="card-preview">
-        <nav class="navbar" aria-label="Primary">
-  <a class="navbar-brand" href="#">Brand</a>
-  <ul class="navbar-nav">
-    <li><a class="nav-link" aria-current="page" href="#">Home</a></li>
-    <li><a class="nav-link" href="#">About</a></li>
-  </ul>
-</nav>
-      </div>
-      <div class="card-info">
-        <h3><a href="navigation.html">Navigation</a></h3>
-        <p>Navbar, breadcrumbs, tabs, and pagination.</p>
-      </div>
-    </article>
-<article class="component-card">
-      <div class="card-preview">
-        <div class="skeleton"></div>
-      </div>
-      <div class="card-info">
-        <h3><a href="skeleton.html">Skeleton</a></h3>
-        <p>Loading placeholder.</p>
-      </div>
-    </article>
-<article class="component-card">
-      <div class="card-preview">
-        <span class="spinner primary"></span>
-<span class="spinner danger sm"></span>
-<span class="spinner neutral lg"></span>
-      </div>
-      <div class="card-info">
-        <h3><a href="spinner.html">Spinner</a></h3>
-        <p>Inline loading indicators.</p>
-      </div>
-    </article>
-<article class="component-card">
-      <div class="card-preview">
-        <span class="status"></span>
-<span class="status primary"></span>
-<span class="status secondary"></span>
-<span class="status success"></span>
-<span class="status warning"></span>
-<span class="status danger"></span>
-<span class="status neutral"></span>
-      </div>
-      <div class="card-info">
-        <h3><a href="status.html">Status</a></h3>
-        <p>Small colored dot to show the current status of an element.</p>
-      </div>
-    </article>
-<article class="component-card">
-      <div class="card-preview">
-        <label class="choice">
-  <input class="switch" type="checkbox" checked>
-  Enable notifications
-</label>
-      </div>
-      <div class="card-info">
-        <h3><a href="switch.html">Switch</a></h3>
-        <p>Toggle switch.</p>
-      </div>
-    </article>
+        <div class="card-info">
+          <h3><a href="alert.html">Alert</a></h3>
+          <p>Supports intent colors.</p>
+        </div>
+      </article>
+      <article class="component-card">
+        <div class="card-info">
+          <h3><a href="avatar.html">Avatar</a></h3>
+          <p>Supports initials and images.</p>
+        </div>
+      </article>
+      <article class="component-card">
+        <div class="card-info">
+          <h3><a href="badge.html">Badge</a></h3>
+          <p>Supports intent colors.</p>
+        </div>
+      </article>
+      <article class="component-card">
+        <div class="card-info">
+          <h3><a href="breadcrumb.html">Breadcrumb</a></h3>
+          <p>Use a semantic `&lt;nav&gt;` landmark.</p>
+        </div>
+      </article>
+      <article class="component-card">
+        <div class="card-info">
+          <h3><a href="button.html">Button</a></h3>
+          <p>Use a real `&lt;button&gt;` for actions.</p>
+        </div>
+      </article>
+      <article class="component-card">
+        <div class="card-info">
+          <h3><a href="card.html">Card</a></h3>
+          <p>Use semantic elements.</p>
+        </div>
+      </article>
+      <article class="component-card">
+        <div class="card-info">
+          <h3><a href="dialog.html">Dialog</a></h3>
+          <p>Use native `&lt;dialog class=&quot;dialog&quot;&gt;`.</p>
+        </div>
+      </article>
+      <article class="component-card">
+        <div class="card-info">
+          <h3><a href="drawer.html">Drawer</a></h3>
+          <p>Use semantic `&lt;aside class=&quot;drawer&quot;&gt;`.</p>
+        </div>
+      </article>
+      <article class="component-card">
+        <div class="card-info">
+          <h3><a href="meter.html">Meter</a></h3>
+          <p>Use native `&lt;meter class=&quot;meter&quot;&gt;`.</p>
+        </div>
+      </article>
+      <article class="component-card">
+        <div class="card-info">
+          <h3><a href="pagination.html">Pagination</a></h3>
+          <p>Use a semantic `&lt;nav&gt;` landmark.</p>
+        </div>
+      </article>
+      <article class="component-card">
+        <div class="card-info">
+          <h3><a href="progress.html">Progress</a></h3>
+          <p>Use native `&lt;progress class=&quot;progress&quot;&gt;`.</p>
+        </div>
+      </article>
+      <article class="component-card">
+        <div class="card-info">
+          <h3><a href="spinner.html">Spinner</a></h3>
+          <p>Use `.spinner` for an inline loading indicator.</p>
+        </div>
+      </article>
+      <article class="component-card">
+        <div class="card-info">
+          <h3><a href="skeleton.html">Skeleton</a></h3>
+          <p>Use `.skeleton` for loading placeholders.</p>
+        </div>
+      </article>
+      <article class="component-card">
+        <div class="card-info">
+          <h3><a href="table.html">Table</a></h3>
+          <p>Use native `&lt;table class=&quot;table&quot;&gt;`.</p>
+        </div>
+      </article>
+
     </div>
   </main>
 </body>
+
 </html>

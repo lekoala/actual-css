@@ -1,0 +1,60 @@
+/*
+ * Switch controls for checkbox inputs with switch semantics.
+ *
+ * The switch remains an input control, not a decorative toggle. Checked, hover,
+ * focus-visible, and disabled states stay clear.
+ */
+.switch {
+  --switch-bg: var(--surface-subtle);
+  --switch-knob: var(--surface-raised);
+
+  position: relative;
+  display: inline-grid;
+  align-items: center;
+  inline-size: 2.75rem;
+  block-size: 1.5rem;
+  margin: 0;
+  border: var(--border-width) solid var(--border);
+  border-radius: 999px;
+  background: var(--switch-bg);
+  appearance: none;
+  cursor: pointer;
+}
+
+.switch::before {
+  content: "";
+  inline-size: 1.05rem;
+  block-size: 1.05rem;
+  margin-inline: 0.18rem;
+  border-radius: 999px;
+  background: var(--switch-knob);
+  box-shadow: var(--shadow);
+  transition:
+    transform var(--duration),
+    background-color var(--duration),
+    box-shadow var(--duration);
+}
+
+.switch:hover:not(:disabled) {
+  border-color: var(--intent, var(--primary));
+}
+
+.switch:checked {
+  --switch-bg: var(--intent, var(--primary));
+  --switch-knob: var(--intent-fg, var(--primary-fg));
+  border-color: var(--intent, var(--primary));
+}
+
+.switch:checked::before {
+  transform: translateX(1.2rem);
+}
+
+.switch:focus-visible {
+  outline: calc(var(--border-width) * 2) solid var(--focus);
+  outline-offset: 2px;
+}
+
+.switch:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}

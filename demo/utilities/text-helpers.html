@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Text Helpers — Actual CSS</title>
+  <link rel="stylesheet" href="../../src/actual.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+  <link rel="stylesheet" href="../../demo/styles/demo.css">
+  <link rel="stylesheet" href="../../demo/styles/prism.css">
+</head>
+
+<body>
+  <nav class="demo-nav">
+    <a href="index.html">&larr; Utilities</a>
+    <a href="../index.html">Homepage</a>
+  </nav>
+  <main class="center">
+  <section class="component-section">
+    <header class="component-header">
+      <h1>Text Helpers</h1>
+      <p>Use `.muted` for secondary text when no semantic element already carries the meaning.</p>
+    </header>
+        <section class="component-section">
+      <div class="example-group">
+        <div class="example-render">
+          <p class="muted">Last updated June 12, 2026.</p>
+        </div>
+        <div class="example-code">
+          <pre><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>muted<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Last updated June 12, 2026.<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>p</span><span class="token punctuation">></span></span></code></pre>
+        </div>
+      </div>
+    </section>
+    <section class="component-section">
+      <h2>CSS</h2>
+      <div class="example-group">
+        <div class="example-code">
+          <pre><code class="language-css"><span class="token selector">.muted</span> <span class="token punctuation">{</span>
+  <span class="token property">color</span><span class="token punctuation">:</span> <span class="token function">var</span><span class="token punctuation">(</span>--text-muted<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+        </div>
+      </div>
+    </section>
+
+  </section>
+  </main>
+  <footer class="demo-footer">
+    <a href="index.html">Back to Utilities</a>
+  </footer>
+</body>
+
+</html>

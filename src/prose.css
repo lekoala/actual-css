@@ -1,0 +1,128 @@
+/*
+ * Prose is the opt-in rich text scope for authored content.
+ *
+ * Global element styles stay mild so app UI is not shaped accidentally. Page
+ * layout, forms, cards, navigation, and app tables remain outside this scope.
+ */
+.prose {
+  max-inline-size: var(--prose-measure);
+  color: var(--text);
+  font-size: var(--prose-size);
+  line-height: var(--prose-line-height);
+  overflow-wrap: break-word;
+}
+
+.prose :where(p, ul, ol, blockquote, pre, table, figure) {
+  margin-block: var(--prose-flow) 0;
+}
+
+.prose :where(h1, h2, h3, h4) {
+  margin-block: 1.5em 0;
+  color: var(--text);
+  font-weight: var(--font-weight-strong);
+  line-height: var(--prose-heading-line-height);
+}
+
+.prose > :first-child {
+  margin-block-start: 0;
+}
+
+.prose h1 {
+  font-size: 2rem;
+}
+.prose h2 {
+  font-size: 1.5rem;
+}
+.prose h3 {
+  font-size: 1.25rem;
+}
+.prose h4 {
+  font-size: 1.125rem;
+}
+
+.prose a {
+  color: var(--primary);
+  text-decoration-line: underline;
+  text-decoration-thickness: 0.08em;
+  text-underline-offset: 0.18em;
+}
+
+.prose a:hover {
+  text-decoration-thickness: 0.12em;
+}
+
+.prose :where(ul, ol) {
+  padding-inline-start: 1.5em;
+}
+
+.prose li + li {
+  margin-block-start: 0.35em;
+}
+
+.prose code,
+.prose kbd {
+  border-radius: var(--radius-sm);
+  background: var(--surface-subtle);
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 0.875em;
+}
+
+.prose code {
+  padding: 0.15em 0.3em;
+}
+
+.prose pre {
+  overflow-x: auto;
+  padding: 1em;
+  border: var(--border-width) solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface-subtle);
+}
+
+.prose pre code {
+  padding: 0;
+  background: transparent;
+}
+
+.prose blockquote {
+  padding-inline-start: 1em;
+  border-inline-start: var(--border-width) solid var(--border);
+  color: var(--text-muted);
+}
+
+.prose :where(img, video, canvas, svg) {
+  max-inline-size: 100%;
+  block-size: auto;
+}
+
+.prose figure {
+  margin-inline: 0;
+}
+
+.prose figcaption {
+  margin-block-start: 0.5em;
+  color: var(--text-muted);
+  font-size: 0.875em;
+}
+
+.prose table {
+  inline-size: 100%;
+  border-collapse: collapse;
+}
+
+.prose th,
+.prose td {
+  padding: 0.5em;
+  border-block-end: var(--border-width) solid var(--border);
+  text-align: start;
+}
+
+.prose-sm {
+  --prose-size: 0.9375rem;
+}
+
+.prose-lg {
+  --prose-size: 1.125rem;
+  --prose-measure: 72ch;
+}

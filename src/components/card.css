@@ -1,9 +1,8 @@
-/**
- * Contract:
- * - `.card` stays a surface component driven by shared surfaces, borders, radius, and spacing.
- * - Density and elevation changes stay local to the card surface.
- * Owns: card surface geometry, padding, and elevation modifiers.
- * Does not own: intent colors or layout responsibilities that belong in primitives.
+/*
+ * Cards provide a neutral raised surface for grouped content.
+ *
+ * Surface, border, radius, padding, density, and elevation stay local here.
+ * Content anatomy and page layout remain the job of markup and layout primitives.
  */
 .card {
   --card-pad: 1rem;
@@ -11,7 +10,7 @@
 
   background: var(--surface-raised);
   color: var(--text);
-  border: 1px solid var(--border);
+  border: var(--border-width) solid var(--border);
   border-radius: var(--card-radius);
   padding: var(--card-pad);
 }
@@ -34,71 +33,6 @@
 .card.lg {
   --card-pad: 1.5rem;
   --card-radius: calc(var(--radius-lg) + 0.25rem);
-}
-
-.card > :first-child {
-  margin-block-start: 0;
-}
-.card > :last-child {
-  margin-block-end: 0;
-}
-
-/* Card sections */
-.card-header,
-.card-body,
-.card-footer {
-  padding: var(--card-pad);
-}
-
-.card-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--gap);
-  border-block-end: 1px solid var(--border);
-  margin-block-start: calc(var(--card-pad) * -1);
-  margin-inline: calc(var(--card-pad) * -1);
-  padding-block-start: var(--card-pad);
-  padding-inline: var(--card-pad);
-}
-
-.card-body {
-  display: grid;
-  gap: 1rem;
-}
-
-.card-body.with-media {
-  align-items: start;
-}
-
-.card-footer {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: var(--gap);
-  border-block-start: 1px solid var(--border);
-  margin-block-end: calc(var(--card-pad) * -1);
-  margin-inline: calc(var(--card-pad) * -1);
-  padding-block-end: var(--card-pad);
-  padding-inline: var(--card-pad);
-}
-
-.card-media {
-  display: block;
-  inline-size: 100%;
-  block-size: auto;
-  aspect-ratio: 16 / 9;
-  object-fit: cover;
-  border-radius: var(--card-radius);
-  margin-block-end: var(--card-pad);
-}
-
-.card-media:first-child {
-  margin-block-start: calc(var(--card-pad) * -1);
-  margin-inline: calc(var(--card-pad) * -1);
-  border-radius: var(--card-radius) var(--card-radius) 0 0;
-  inline-size: calc(100% + var(--card-pad) * 2);
-  max-inline-size: none;
 }
 
 .card.compact {

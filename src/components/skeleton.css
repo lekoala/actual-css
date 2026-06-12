@@ -1,9 +1,8 @@
-/**
- * Contract:
- * - Skeletons communicate loading structure without implying real content hierarchy.
- * - Baseline skeleton styling works without enhancement files and stays theme-aware.
- * Owns: placeholder geometry, animation, and local loading presentation.
- * Does not own: hard-coded palette values or layout rules from mocked components.
+/*
+ * Skeleton placeholders for loading states.
+ *
+ * Shows approximate loading structure without implying real content hierarchy.
+ * Geometry, animation, and color stay theme-aware.
  */
 .skeleton {
   display: block;
@@ -34,6 +33,10 @@
   inline-size: 2.25rem;
   block-size: 2.25rem;
   border-radius: 999px;
+}
+
+.skeleton.box {
+  min-block-size: 8rem;
 }
 
 @keyframes actual-skeleton {

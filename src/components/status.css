@@ -1,9 +1,8 @@
-/**
- * Contract:
- * - `.status` communicates compact state with optional shared intent tinting.
- * - Size and shape stay stable when composed inside other components.
- * Owns: status dot geometry, sizing, and local tint application.
- * Does not own: full action-style variants, palette duplication, or demo-only positioning.
+/*
+ * Status dots for compact state.
+ *
+ * Size and shape stay stable inside other components, with optional shared
+ * intent tinting and no full action-style variant API.
  */
 .status {
   display: inline-block;
