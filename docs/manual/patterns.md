@@ -129,6 +129,9 @@ Prefer an explicit pattern class.
 </nav>
 ```
 
+Links:
+- https://picocss.com/docs/nav
+
 ### Header Navigation
 
 Header navigation is usually a composition of landmarks, layout primitives, and patterns.
@@ -166,6 +169,9 @@ A project may add `.site-header` when it needs a visual shell.
   background: var(--surface);
 }
 ```
+
+Links:
+- https://daisyui.com/components/navbar/
 
 ### Side Navigation
 

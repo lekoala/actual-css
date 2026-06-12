@@ -73,43 +73,114 @@
 
 .progress,
 .meter {
+  appearance: none;
+  -webkit-appearance: none;
   display: block;
   inline-size: 100%;
-  block-size: 0.65rem;
+  height: var(--bar-height, 0.65rem);
   overflow: hidden;
   border: 0;
-  border-radius: 999px;
+  border-radius: var(--radius-full);
   background: var(--surface-subtle);
 }
 
-.progress:not([value])::-webkit-progress-value {
+.progress {
+  --progress-track: var(--surface-subtle);
+  --progress-value: var(--intent, var(--primary));
+}
+
+/* Progress */
+.progress::-webkit-progress-bar {
+  height: var(--bar-height, 0.65rem);
+  border-radius: var(--radius-full);
+  background: var(--progress-track);
+}
+
+.progress::-webkit-progress-value {
+  height: var(--bar-height, 0.65rem);
+  border-radius: var(--radius-full);
+  background: var(--progress-value);
+}
+
+.progress::-moz-progress-bar {
+  height: var(--bar-height, 0.65rem);
+  border-radius: var(--radius-full);
+  background: var(--progress-value);
+}
+
+/* Indeterminate progress */
+.progress:indeterminate {
+  background:
+    linear-gradient(
+      to right,
+      var(--progress-value) 30%,
+      var(--progress-track) 30%
+    )
+    top left / 150% 150% no-repeat,
+    var(--progress-track);
+}
+
+.progress:indeterminate::-webkit-progress-bar {
   background: transparent;
 }
 
-.progress::-webkit-progress-bar {
-  background: var(--surface-subtle);
-}
-.progress::-webkit-progress-value {
-  background: var(--intent, var(--primary));
-}
-.progress::-moz-progress-bar {
-  background: var(--intent, var(--primary));
+.progress:indeterminate::-webkit-progress-value {
+  background: transparent;
 }
 
+.progress:indeterminate::-moz-progress-bar {
+  background: transparent;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .progress:indeterminate {
+    animation: progress-indeterminate 1s linear infinite;
+  }
+
+  :where([dir="rtl"] .progress:indeterminate) {
+    animation-direction: reverse;
+  }
+}
+
+@keyframes progress-indeterminate {
+  0% {
+    background-position: 200% 0;
+  }
+
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Meter */
 .meter::-webkit-meter-bar {
+  -webkit-appearance: none;
+  height: var(--bar-height, 0.65rem);
   border: 0;
-  border-radius: 999px;
+  border-radius: var(--radius-full);
   background: var(--surface-subtle);
 }
+
 .meter::-webkit-meter-optimum-value {
+  height: var(--bar-height, 0.65rem);
+  border-radius: var(--radius-full);
   background: var(--success);
 }
+
 .meter::-webkit-meter-suboptimum-value {
+  height: var(--bar-height, 0.65rem);
+  border-radius: var(--radius-full);
   background: var(--warning);
 }
+
 .meter::-webkit-meter-even-less-good-value {
+  height: var(--bar-height, 0.65rem);
+  border-radius: var(--radius-full);
   background: var(--danger);
 }
+
 .meter::-moz-meter-bar {
+  height: var(--bar-height, 0.65rem);
+  border-radius: var(--radius-full);
   background: var(--intent, var(--primary));
 }
