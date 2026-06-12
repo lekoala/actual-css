@@ -178,13 +178,18 @@
   margin-block-start: 0.5rem;
 }
 
+.example-code {
+  overflow: hidden;
+}
+
 .example-code pre {
   margin: 0;
   padding: 1rem;
   background: var(--surface-subtle);
   border-radius: var(--radius-sm);
   overflow-x: auto;
-  white-space: pre;
+  white-space: pre-wrap;
+  word-break: break-all;
   font-size: 0.875rem;
 }
 

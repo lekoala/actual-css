@@ -1,49 +1,50 @@
 /*
  * Alerts for inline feedback and status messages.
  *
- * Uses the shared intent and variant variables so emphasis can change without
- * creating alert-only color rules.
+ * Consumes the shared --ui-* variant plumbing so emphasis can change
+ * without creating alert-only color rules.
  */
 .alert {
-  --alert-bg: var(--ui-bg, var(--surface-subtle));
-  --alert-fg: var(--ui-fg, var(--alert-default-fg, var(--text)));
-  --alert-border: var(--ui-border, var(--border));
-  --alert-pad: 1rem 1.125rem;
-  --alert-radius: var(--radius-lg);
+  --alert-padding-block: var(--space-4);
+  --alert-padding-inline: var(--space-4);
 
-  padding: var(--alert-pad);
-  border: var(--border-width) solid var(--alert-border);
-  border-radius: var(--alert-radius);
-  background: var(--alert-bg);
-  color: var(--alert-fg);
+  padding-block: var(--alert-padding-block);
+  padding-inline: var(--alert-padding-inline);
+  background: var(--ui-bg, transparent);
+  color: var(--ui-fg, var(--text));
+  border: var(--border-width) solid var(--ui-border, var(--border));
+  border-radius: var(--radius-lg);
 }
 
-.alert.soft {
-  --alert-default-fg: var(--intent, var(--text));
-  --alert-border: transparent;
+.alert > * {
+  min-inline-size: 0;
+}
+
+.alert > :first-child {
+  margin-block-start: 0;
+}
+
+.alert > :last-child {
+  margin-block-end: 0;
 }
 
 .alert.outline {
-  --alert-radius: var(--radius);
+  border-radius: var(--radius);
 }
 
-.alert:where(.primary, .secondary, .success, .warning, .danger, .neutral) a:not(.btn) {
-  color: currentColor;
-}
-
+/* Decorative leading icon */
 .alert:has(> :first-child[aria-hidden="true"]) {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
   align-items: start;
-  column-gap: 0.75rem;
-  row-gap: 0.25rem;
+  column-gap: var(--space-3);
 }
 
-.alert > :first-child[aria-hidden="true"] {
+.alert:has(> :first-child[aria-hidden="true"]) > :first-child {
+  grid-column: 1;
+  grid-row: 1 / -1;
   display: inline-grid;
   place-items: center;
-  grid-column: 1;
-  grid-row: 1 / span 20;
   inline-size: 1.25em;
   block-size: calc(1em * var(--line-height));
   font-size: 1.25em;
@@ -54,41 +55,24 @@
   grid-column: 2;
 }
 
-.alert > * {
-  min-inline-size: 0;
+/* Links */
+.alert :where(a:not(.btn)) {
+  color: inherit;
+  font-weight: var(--font-weight-strong);
 }
 
-.alert > menu {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  padding: 0;
-  margin-block-start: 0.75rem;
-  list-style: none;
+/* Actions */
+.alert > .actions {
+  margin-block-start: var(--space-3);
 }
 
-.alert > menu > li {
-  margin: 0;
-}
-
-.alert ul,
-.alert ol {
-  padding-inline-start: 0;
-  list-style-position: inside;
-}
-
+/* Sizes */
 .alert.sm {
-  --alert-pad: 0.75rem 0.875rem;
-  font-size: 0.9375rem;
-}
-.alert.lg {
-  --alert-pad: 1.25rem 1.375rem;
-  font-size: 1.0625rem;
+  --alert-padding-block: var(--space-3);
+  --alert-padding-inline: 0.875rem;
 }
 
-.alert > :first-child {
-  margin-block-start: 0;
-}
-.alert > :last-child {
-  margin-block-end: 0;
+.alert.lg {
+  --alert-padding-block: var(--space-5);
+  --alert-padding-inline: 1.375rem;
 }

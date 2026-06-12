@@ -95,42 +95,69 @@ Links:
 
 - Supports intent colors.
 - Supports longer text and lists.
-- Icons are optional and should be decorative unless they add information.
 - Links inherit alert color by default.
-- Use `<menu>` for alert action lists.
+- Use `<menu class="actions cluster">` for alert action lists.
 - Use `role="alert"` only when the alert is injected dynamically and should be announced.
 - Not a toast.
+- Could have simple or complex html content.
+- Alerts may include a decorative leading icon. Place an `aria-hidden="true"` element as the first direct child.
 
 ```html{.stack}
 <div class="alert success">
-  <strong>✓</strong> Your changes have been saved.
-  <a href="/activity">View activity</a>.
+  <strong>✓</strong> Your changes have been saved. <a href="#">View activity</a>.
 </div>
 
 <div class="alert warning" role="alert">
-  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M9.05.435c-.58-.58-1.52-.58-2.1 0L.436 6.95c-.58.58-.58 1.519 0 2.098l6.516 6.516c.58.58 1.519.58 2.098 0l6.516-6.516c.58-.58.58-1.519 0-2.098zM8 4c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995A.905.905 0 0 1 8 4m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/></svg>
-  Please review the <a href="/checks">failed checks</a> before continuing.
+  <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M9.05.435c-.58-.58-1.52-.58-2.1 0L.436 6.95c-.58.58-.58 1.519 0 2.098l6.516 6.516c.58.58 1.519.58 2.098 0l6.516-6.516c.58-.58.58-1.519 0-2.098zM8 4c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995A.905.905 0 0 1 8 4m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/></svg>
+  <div>Please review the <a href="#">failed checks</a> before continuing.</div>
 </div>
 
 <div class="alert">
-  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286m1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94"/></svg>
-  This is a default alert message.
+  <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286m1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94"/></svg>
+  <div>This is a default alert message.</div>
 </div>
 
 <div class="alert danger" role="alert">
-  <strong>Error!</strong> Something went wrong.
+  <strong>Error!</strong>
+  <div>Something went wrong.</div>
+</div>
+
+<div class="alert danger" role="alert">
+  I'm a simple error
+</div>
+
+<div class="alert danger" role="alert">
+  I'm a simple error <a href="#">with a link and no joke</a>
 </div>
 ```
 
 ```html
 <div class="alert danger soft" role="alert">
   <i class="ti ti-alert-triangle" aria-hidden="true"></i>
-  <strong>Payment failed.</strong>
-  <p>Check your billing details or try another card.</p>
-  <menu>
-    <li><a class="btn danger sm" href="/billing">Update billing</a></li>
-    <li><a href="/support">Contact support</a></li>
-  </menu>
+
+  <div class="stack">
+    <strong>Payment failed.</strong>
+    <p>Check your billing details or try another card.</p>
+
+    <menu class="actions cluster">
+      <li><a class="btn danger sm" href="/billing">Update billing</a></li>
+      <li><a href="/support">Contact support</a></li>
+    </menu>
+  </div>
+</div>
+```
+
+```html{.stack}
+<div class="alert danger sm" role="alert">
+  I'm a small error
+</div>
+
+<div class="alert danger lg" role="alert">
+  I'm a large error
+</div>
+
+<div class="alert danger outline" role="alert">
+  I'm an outline error <a href="#">with a link</a>
 </div>
 ```
 
