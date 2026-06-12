@@ -10,16 +10,17 @@
   z-index: 1;
   inset-block-start: 0;
   inset-inline-end: 0;
-  transform: translate(25%, -25%);
+  box-shadow: 0 0 0 2px var(--surface);
+  transform: translate(50%, -50%);
 }
 
 .indicator-bottom {
   inset-block-start: auto;
   inset-block-end: 0;
-  transform: translate(25%, 25%);
+  transform: translate(50%, 50%);
 }
 
-/* Circle-aware positioning */
+/* Circle-aware positioning,  (1 - 1/√2) / 2 ≈ 14.645% */
 .circle + .indicator {
   inset-block-start: 14.64%;
   transform: translate(-50%, -50%);
@@ -27,5 +28,5 @@
 
 .circle + .indicator-bottom {
   inset-block-end: 14.64%;
-  transform: translate(25%, 25%);
+  transform: translate(50%, 50%);
 }
