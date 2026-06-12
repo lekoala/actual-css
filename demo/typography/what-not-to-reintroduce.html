@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>What not to reintroduce — Actual CSS</title>
+  <link rel="stylesheet" href="../../src/actual.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+  <link rel="stylesheet" href="../../demo/styles/demo.css">
+  <link rel="stylesheet" href="../../demo/styles/prism.css">
+</head>
+
+<body>
+  <nav class="demo-nav">
+    <a href="index.html">&larr; Typography</a>
+    <a href="../index.html">Homepage</a>
+  </nav>
+  <main class="center">
+  <section class="component-section">
+    <header class="component-header">
+      <h1>What not to reintroduce</h1>
+      
+    </header>
+        <div class="component-prose">
+      <p>These are decisions that the framework has already made. Re-introducing them silently would regress the system.</p>
+<ul>
+  <li>Do not add <code>font-size</code> on global <code>h1</code> to <code>h6</code>. Headings inherit size from context (component or <code>.prose</code>).</li>
+  <li>Do not add <code>font-weight</code> on global <code>h1</code> to <code>h6</code>. Strong weight is scoped to <code>.prose</code> and to components that need it.</li>
+  <li>Do not add global <code>text-decoration: underline</code> on <code>a</code>. Links get their visual affordance from <code>.prose</code> or from their component.</li>
+  <li>Do not add <code>transition: all</code>. Transitions target specific properties.</li>
+  <li>Do not add a <code>--font-weight-light</code>. It is rarely a good default and depends on the typeface.</li>
+  <li>Do not add a <code>text-align: center</code> shortcut to <code>.text-balance</code>. Balance is about wrapping, not alignment.</li>
+  <li>Do not add RFS-style fluid type to the foundation. Fluid sizing is for display text in the optional module.</li>
+  <li>Do not add heading-level utility classes (<code>h1</code>, <code>h2</code>, …) or a public <code>fs-*</code> scale until theme work and real components prove they are needed.</li>
+  <li>Do not extend <code>.prose</code> to style cards, alerts, app tables, or navigation. Those belong to their components.</li>
+</ul>
+    </div>
+    
+  </section>
+  </main>
+  <footer class="demo-footer">
+    <a href="index.html">Back to Typography</a>
+  </footer>
+</body>
+
+</html>

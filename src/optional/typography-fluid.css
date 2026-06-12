@@ -1,0 +1,38 @@
+/*
+ * Optional fluid typography module.
+ *
+ * Not imported by actual.css. Import this file manually after actual.css when
+ * you need display, title, and lead sizes that scale with the viewport. Typical
+ * use cases: marketing pages, landing pages, hero sections, documentation
+ * homepages.
+ *
+ * Do not use this for body text, app UI, or the default prose scale. Fluid
+ * sizing is not the foundation of the typography system — it is a small opt-in
+ * surface for display text on content-heavy pages.
+ *
+ * Public API:
+ *   --fluid-display, --fluid-title, --fluid-lead  (size tokens, clamp())
+ *   .text-display, .text-title, .text-lead        (composed classes)
+ */
+:root {
+  --fluid-display: clamp(2.75rem, 4vw, 4.25rem);
+  --fluid-title: clamp(2rem, 2vw, 2.75rem);
+  --fluid-lead: clamp(1.125rem, 1vw, 1.25rem);
+}
+
+.text-display {
+  font-size: var(--fluid-display);
+  line-height: var(--line-height-tight);
+  text-wrap: balance;
+}
+
+.text-title {
+  font-size: var(--fluid-title);
+  line-height: var(--line-height-tight);
+  text-wrap: balance;
+}
+
+.text-lead {
+  font-size: var(--fluid-lead);
+  line-height: var(--line-height-relaxed);
+}

@@ -20,29 +20,11 @@
   <section class="component-section">
     <header class="component-header">
       <h1>Tables</h1>
-      <p>Simple prose tables; app data tables belong to the table component.</p>
+      
     </header>
         <div class="component-prose">
-      <p>Long-form content can contain simple prose tables, but app data tables should use the table component.</p>
+      <p>Prose tables are a different concern from app data tables. Long-form content can contain a small table, but a sortable, dense, row-actionable app table belongs to the table component. The <code>.prose table</code> rule is intentionally minimal: it does not define sticky headers, selection states, row actions, or density variants.</p>
     </div>
-    <section class="component-section">
-      <h2>CSS</h2>
-      <div class="example-group">
-        <div class="example-code">
-          <pre><code class="language-css"><span class="token selector">.prose table</span> <span class="token punctuation">{</span>
-  <span class="token property">inline-size</span><span class="token punctuation">:</span> 100%<span class="token punctuation">;</span>
-  <span class="token property">border-collapse</span><span class="token punctuation">:</span> collapse<span class="token punctuation">;</span>
-<span class="token punctuation">}</span>
-
-<span class="token selector">.prose th,
-.prose td</span> <span class="token punctuation">{</span>
-  <span class="token property">padding</span><span class="token punctuation">:</span> 0.5em<span class="token punctuation">;</span>
-  <span class="token property">border-block-end</span><span class="token punctuation">:</span> <span class="token function">var</span><span class="token punctuation">(</span>--border-width<span class="token punctuation">)</span> solid <span class="token function">var</span><span class="token punctuation">(</span>--border<span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token property">text-align</span><span class="token punctuation">:</span> start<span class="token punctuation">;</span>
-<span class="token punctuation">}</span></code></pre>
-        </div>
-      </div>
-    </section>
     
   </section>
   </main>

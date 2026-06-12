@@ -1,0 +1,812 @@
+  <!doctype html>
+  <html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Designing with quiet defaults — Actual CSS</title>
+    <link rel="stylesheet" href="../../src/actual.css">
+    <link rel="stylesheet" href="../../src/optional/typography-fluid.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+    <link rel="stylesheet" href="../../demo/styles/demo.css">
+    <style>
+      /* Layout helpers for the blog template. The framework provides components and
+        layout primitives; the page-specific composition is local to this template. */
+
+      .blog-topbar {
+        position: sticky;
+        inset-block-start: 0;
+        z-index: var(--z-sticky, 10);
+        isolation: isolate;
+        background: color-mix(in oklch, var(--surface) 88%, transparent);
+        backdrop-filter: blur(0.75rem);
+        border-block-end: var(--border-width) solid var(--border);
+      }
+
+      .blog-topbar-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--gap);
+        padding-block: 0.75rem;
+      }
+
+      .blog-topbar-nav {
+        display: flex;
+        align-items: center;
+        gap: 0.35rem;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      /* Hero */
+      .blog-hero {
+        position: relative;
+        overflow: hidden;
+        padding-block: 3rem 2rem;
+        --gap: 1.25rem;
+      }
+
+      .blog-hero-cover {
+        position: relative;
+        aspect-ratio: 21 / 9;
+        overflow: hidden;
+        border-radius: var(--radius-lg);
+        background:
+          radial-gradient(ellipse at 20% 30%, color-mix(in oklch, var(--primary) 28%, transparent), transparent 60%),
+          radial-gradient(ellipse at 80% 70%, color-mix(in oklch, var(--secondary) 24%, transparent), transparent 55%),
+          linear-gradient(135deg, color-mix(in oklch, var(--surface-subtle) 70%, var(--primary) 12%), var(--surface-subtle));
+        border: var(--border-width) solid var(--border);
+      }
+
+      .blog-hero-cover-grid {
+        position: absolute;
+        inset: 0;
+        background-image:
+          linear-gradient(to right, color-mix(in oklch, var(--text) 8%, transparent) 1px, transparent 1px),
+          linear-gradient(to bottom, color-mix(in oklch, var(--text) 8%, transparent) 1px, transparent 1px);
+        background-size: 3rem 3rem;
+        mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
+      }
+
+      .blog-hero-cover-glyph {
+        position: absolute;
+        inset-block-end: 1rem;
+        inset-inline-end: 1rem;
+        color: color-mix(in oklch, var(--text-muted) 70%, transparent);
+        font-size: 6rem;
+        line-height: 1;
+        font-weight: var(--font-weight-bold);
+      }
+
+      .blog-hero-meta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.75rem 1rem;
+        color: var(--text-muted);
+        font-size: 0.9375rem;
+      }
+
+      .blog-hero-meta .dot {
+        inline-size: 0.25rem;
+        block-size: 0.25rem;
+        border-radius: var(--radius-full, 9999px);
+        background: var(--text-subtle);
+      }
+
+    .blog-eyebrow {
+      display: inline-flex;
+      align-self: flex-start;
+      align-items: center;
+      gap: 0.5rem;
+      padding-inline: 0.6rem;
+      padding-block: 0.25rem;
+      border: var(--border-width) solid var(--border);
+      border-radius: var(--radius-full, 9999px);
+      color: var(--text-muted);
+      font-size: 0.8125rem;
+      font-weight: var(--font-weight-medium);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+      .blog-eyebrow.primary {
+        color: var(--primary);
+        border-color: color-mix(in oklch, var(--primary) 35%, var(--border));
+        background: color-mix(in oklch, var(--primary) 6%, var(--surface));
+      }
+
+      /* Article */
+      .blog-article {
+        padding-block-end: 3rem;
+      }
+
+      .blog-article-body {
+        max-inline-size: 70ch;
+        margin-inline: auto;
+      }
+
+      /* Article footer (tags, author, share) */
+      .blog-article-end {
+        max-inline-size: 70ch;
+        margin-inline: auto;
+        padding-block: 2rem;
+        border-block-start: var(--border-width) solid var(--border);
+      }
+
+      .blog-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.4rem;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      .blog-tags a {
+        display: inline-flex;
+        align-items: center;
+        padding-inline: 0.6rem;
+        padding-block: 0.25rem;
+        border-radius: var(--radius-full, 9999px);
+        color: var(--text-muted);
+        background: var(--surface-subtle);
+        font-size: 0.8125rem;
+        text-decoration: none;
+        transition: background-color var(--duration), color var(--duration);
+      }
+
+      .blog-tags a:hover {
+        color: var(--text);
+        background: color-mix(in oklch, var(--surface-subtle), var(--text) 8%);
+      }
+
+      .blog-share {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+      }
+
+      .blog-share span {
+        color: var(--text-muted);
+        font-size: 0.875rem;
+      }
+
+      /* Author card */
+      .blog-author {
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr);
+        gap: 1rem;
+        align-items: center;
+        padding: 1.25rem;
+        border: var(--border-width) solid var(--border);
+        border-radius: var(--radius-lg);
+        background: var(--surface-raised);
+      }
+
+      .blog-author-body strong {
+        display: block;
+        font-size: 1rem;
+      }
+
+      .blog-author-body p {
+        margin: 0.25rem 0 0;
+        color: var(--text-muted);
+        font-size: 0.9375rem;
+      }
+
+      /* Page grid: article + sidebar */
+      .blog-page {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        gap: 2rem;
+      }
+
+      @media (min-width: 64rem) {
+        .blog-page {
+          grid-template-columns: minmax(0, 1fr) 18rem;
+          align-items: start;
+        }
+      }
+
+      .blog-aside {
+        position: sticky;
+        inset-block-start: 4rem;
+        display: grid;
+        gap: 1.5rem;
+      }
+
+      /* Related posts */
+      .blog-related-grid {
+        display: grid;
+        gap: 1rem;
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+      }
+
+      .blog-related-card {
+        display: grid;
+        gap: 0.5rem;
+        padding: 1rem;
+        border: var(--border-width) solid var(--border);
+        border-radius: var(--radius-lg);
+        background: var(--surface-raised);
+        color: inherit;
+        text-decoration: none;
+        transition: border-color var(--duration), transform var(--duration);
+      }
+
+      .blog-related-card:hover {
+        border-color: color-mix(in oklch, var(--primary) 50%, var(--border));
+      }
+
+      .blog-related-cover {
+        aspect-ratio: 16 / 9;
+        border-radius: var(--radius);
+        background:
+          radial-gradient(ellipse at 30% 30%, color-mix(in oklch, var(--intent, var(--primary)) 30%, transparent), transparent 60%),
+          var(--surface-subtle);
+      }
+
+      .blog-related-card small {
+        color: var(--text-muted);
+      }
+
+      /* Comments */
+      .blog-comments {
+        max-inline-size: 70ch;
+        margin-inline: auto;
+        padding-block: 2rem;
+      }
+
+      .blog-comment {
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr);
+        gap: 0.75rem;
+        padding-block: 1rem;
+        border-block-end: var(--border-width) solid var(--border);
+      }
+
+      .blog-comment:last-child {
+        border-block-end: 0;
+      }
+
+      .blog-comment-head {
+        display: flex;
+        align-items: baseline;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+      }
+
+      .blog-comment-head strong {
+        color: var(--text);
+      }
+
+      .blog-comment-head time {
+        color: var(--text-muted);
+        font-size: 0.8125rem;
+      }
+
+      .blog-comment-body p {
+        margin: 0.4rem 0 0;
+        color: var(--text);
+      }
+
+      /* Newsletter card */
+      .blog-newsletter {
+        padding: 1.25rem;
+        border-radius: var(--radius-lg);
+        background: var(--surface-raised);
+        border: var(--border-width) solid var(--border);
+      }
+
+      .blog-newsletter form {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+      }
+
+      .blog-newsletter input {
+        flex: 1 1 12rem;
+      }
+
+      /* Site footer */
+      .blog-footer {
+        margin-block-start: 3rem;
+        padding-block: 2rem;
+        border-block-start: var(--border-width) solid var(--border);
+        color: var(--text-muted);
+      }
+
+      .blog-footer-inner {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
+        gap: 1.5rem;
+      }
+
+      .blog-footer h4 {
+        margin: 0 0 0.5rem;
+        color: var(--text);
+        font-size: 0.875rem;
+        font-weight: var(--font-weight-medium);
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+      }
+
+      .blog-footer ul {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        display: grid;
+        gap: 0.35rem;
+      }
+
+      .blog-footer a {
+        color: var(--text-muted);
+        text-decoration: none;
+      }
+
+      .blog-footer a:hover {
+        color: var(--text);
+        text-decoration: underline;
+        text-underline-offset: 0.2em;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Site header -->
+    <header class="blog-topbar">
+      <div class="center blog-topbar-inner">
+        <a class="navbar-brand" href="#" style="text-decoration: none; color: inherit;">
+          <span class="avatar primary"><abbr class="circle">AC</abbr></span>
+          Actual Notes
+        </a>
+        <nav aria-label="Primary">
+          <ul class="blog-topbar-nav">
+            <li><a class="nav-link" href="#articles">Articles</a></li>
+            <li><a class="nav-link" href="#topics">Topics</a></li>
+            <li><a class="nav-link" href="#about">About</a></li>
+          </ul>
+        </nav>
+        <div class="cluster">
+          <button class="btn neutral ghost sm" type="button" aria-label="Search">
+            <i class="ti ti-search" aria-hidden="true"></i>
+          </button>
+          <a class="btn primary sm" href="#newsletter">Subscribe</a>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <article class="blog-article">
+        <!-- Hero -->
+        <header class="blog-hero stack center">
+          <ol class="breadcrumb" aria-label="Breadcrumb">
+            <li><a href="#">Home</a></li>
+            <li><a href="#articles">Articles</a></li>
+            <li><a href="#design">Design</a></li>
+            <li aria-current="page">Designing with quiet defaults</li>
+          </ol>
+
+          <div class="blog-hero-cover" role="img" aria-label="Abstract cover: layered translucent grids over a soft gradient">
+            <div class="blog-hero-cover-grid" aria-hidden="true"></div>
+            <span class="blog-hero-cover-glyph" aria-hidden="true">∂</span>
+          </div>
+
+          <span class="blog-eyebrow primary">Design Systems</span>
+
+          <h1 class="text-display">Designing with quiet defaults</h1>
+          <p class="lead text-balance">
+            A typography system should improve readability without taking over app UI. The strongest defaults are the
+            ones you stop noticing.
+          </p>
+
+          <div class="blog-hero-meta">
+            <span class="avatar sm"><abbr>AM</abbr></span>
+            <span><strong style="color: var(--text);">Ada Meridian</strong> &middot; Senior designer</span>
+            <span class="dot" aria-hidden="true"></span>
+            <time datetime="2026-06-12">June 12, 2026</time>
+            <span class="dot" aria-hidden="true"></span>
+            <span>8 min read</span>
+            <span class="dot" aria-hidden="true"></span>
+            <span class="badge success soft">Typography</span>
+          </div>
+        </header>
+
+        <div class="blog-page center">
+          <div>
+            <!-- Article body -->
+            <article class="prose blog-article-body">
+              <p>
+                When a framework ships a typography system, the temptation is to make it loud: a seven-step type
+                scale, a fluid ramp, a Bootstrap-style utility for every heading level. The result is a system that
+                wants to be everywhere — and a UI that ends up shaped by accident.
+              </p>
+
+              <p>
+                The quieter choice is to make the global baseline do almost nothing. The baseline should give
+                readable defaults for plain HTML, leave the visual hierarchy to the components and the prose scope,
+                and avoid exposing more tokens than theme work has earned.
+              </p>
+
+              <h2>Why the baseline should stay mild</h2>
+              <p>
+                The first reason is reach. A global <code>h1</code> rule touches a card title in a sidebar, a dialog
+                heading, a section label in a dashboard, and a hero banner on a marketing page. If the rule says
+                <em>large</em>, every one of those becomes <em>large</em>. If the rule says <em>inherit</em>, the
+                component keeps its own design.
+              </p>
+
+              <p>
+                The second reason is rhythm. A typography system that scales every heading by viewport width is
+                great on a hero and miserable in a form. The decision to scale is a decision about surface — and
+                that decision belongs to the surface, not to the framework.
+              </p>
+
+              <figure>
+                <div class="blog-hero-cover" aria-label="Diagram: the three typography scopes" style="aspect-ratio: 16 / 9; margin-block: 0;">
+                  <div class="blog-hero-cover-grid" aria-hidden="true"></div>
+                </div>
+                <figcaption>The three scopes, from broadest to narrowest: baseline, <code>.prose</code>, optional fluid module.</figcaption>
+              </figure>
+
+              <h2>Three scopes, three jobs</h2>
+              <p>
+                A typography system stays small when it has clear boundaries. The framework this article ships
+                with uses three.
+              </p>
+              <ul>
+                <li><strong>Baseline</strong> — applies everywhere. Owns the minimum needed to make plain HTML
+                  readable: a tight line-height on headings, a <code>text-wrap: balance</code> where supported,
+                  the <code>hr</code> rule, the <code>::selection</code> rule, the code font family, the
+                  <code>small</code> font size.</li>
+                <li><strong><code>.prose</code></strong> — opt-in rich text scope. Owns the visual hierarchy of
+                  authored content: heading sizes, weights, rhythm, link affordance, list spacing, blockquote and
+                  figure treatment, and table styling for prose tables.</li>
+                <li><strong>Optional fluid module</strong> — not imported by default. Exposes
+                  <code>--fluid-display</code>, <code>--fluid-title</code>, and <code>--fluid-lead</code>, plus the
+                  composed <code>.text-display</code>, <code>.text-title</code>, and <code>.text-lead</code>
+                  classes. For landing pages, hero sections, and documentation homepages.</li>
+              </ul>
+
+              <h2>A small example</h2>
+              <p>
+                Compare a global heading reset to a scoped one. The first is loud; the second stays out of the way.
+              </p>
+
+              <pre><code>/* Loud: shapes app UI */
+  h1, h2, h3, h4, h5, h6 {
+    font-size: var(--fs-1);
+    font-weight: 700;
+    line-height: 1.15;
+    margin-block: 1.5em 0;
+  }
+
+  /* Quiet: scoped to prose, leaves app UI alone */
+  :where(h1, h2, h3, h4, h5, h6) {
+    color: var(--heading, inherit);
+    line-height: var(--line-height-tight);
+  }
+
+  @supports (text-wrap: balance) {
+    :where(h1, h2, h3, h4, h5, h6) {
+      text-wrap: balance;
+    }
+  }</code></pre>
+
+              <p>
+                The second version does two things and stops. The first version does four things and reaches into
+                every card, dialog, and table heading in the app.
+              </p>
+
+              <h2>What it means in practice</h2>
+              <p>
+                In practice, "quiet defaults" means a few concrete choices that compose well.
+              </p>
+
+              <ol>
+                <li>Global <code>a</code> inherits color. <code>.prose a</code> gets the underline. Components
+                  that need link semantics style themselves.</li>
+                <li>Global headings get a tight line-height and <code>text-wrap: balance</code> where supported —
+                  nothing more. Size and weight live in <code>.prose</code> or in the component.</li>
+                <li>The <code>hgroup</code> element is structural only: a grid, a gap, a margin reset. No
+                  font-size, no color.</li>
+                <li>No <code>transition: all</code>. Transitions target specific properties.</li>
+                <li>No <code>--font-weight-light</code>. Light weights depend on the typeface and rarely make a
+                  good default.</li>
+                <li>No <code>text-align: center</code> hidden inside <code>.text-balance</code>. Balance is about
+                  wrapping, not alignment.</li>
+              </ol>
+
+              <h2>When the rule applies</h2>
+              <p>
+                The split between scopes is not just a code organization. It maps to a recurring decision:
+                <em>is this content authored, or is it UI?</em>
+              </p>
+
+              <table>
+                <thead>
+                  <tr>
+                    <th>Surface</th>
+                    <th>Scope</th>
+                    <th>Reason</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Article, blog post, docs</td>
+                    <td><code>.prose</code></td>
+                    <td>Authored content benefits from heading hierarchy, links, lists, and figure treatment.</td>
+                  </tr>
+                  <tr>
+                    <td>Card title, dialog title</td>
+                    <td>Component</td>
+                    <td>Component owns its own typography; <code>.prose</code> would over-shape it.</td>
+                  </tr>
+                  <tr>
+                    <td>Hero banner, landing page</td>
+                    <td>Optional fluid module</td>
+                    <td>Display text should scale with the viewport — and only here.</td>
+                  </tr>
+                  <tr>
+                    <td>Nav link, breadcrumb, tab</td>
+                    <td>Component</td>
+                    <td>Link semantics are owned by the component, not by <code>.prose</code>.</td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <p>
+                The table is also a useful sanity check. If the same surface would feel right in both an app
+                shell and a marketing page, the typography probably belongs to the component, not to a global
+                rule.
+              </p>
+
+              <blockquote>
+                <p>
+                  Good defaults should be quiet, not invisible. The user feels the system when it is absent —
+                  because nothing is fighting the design.
+                </p>
+              </blockquote>
+
+              <h2>What we left out</h2>
+              <p>
+                The system above does not include a public type scale. There is no <code>fs-1</code> to
+                <code>fs-7</code>, no heading-level utility class, no <code>text-h1</code> ladder. We resisted
+                because adding a public scale is a contract, and we want theme work and real component use to
+                earn the contract before locking it in.
+              </p>
+
+              <p>
+                When a scale is needed, the optional fluid module is the right place to start. A future theme
+                can override its tokens, not invent a parallel scale inside components.
+              </p>
+
+              <h2>Closing</h2>
+              <p>
+                A typography system earns its keep by being invisible. The user does not think about the line
+                height of a heading. They do not notice the wrap balance on a paragraph. They read, they scan,
+                they move on.
+              </p>
+
+              <p>
+                The framework's job is to be the thing that lets the user do that — and to stay out of the way
+                when the component, the theme, or the page wants to do something specific. Quiet defaults is not
+                a stylistic choice. It is the surface that the rest of the system composes on.
+              </p>
+            </article>
+
+            <!-- Article end: tags + share + author -->
+            <footer class="blog-article-end">
+              <ul class="blog-tags" aria-label="Tags">
+                <li><a href="#">design</a></li>
+                <li><a href="#">typography</a></li>
+                <li><a href="#">systems</a></li>
+                <li><a href="#">css</a></li>
+              </ul>
+
+              <div class="cluster" style="justify-content: space-between; margin-block-start: 1rem; flex-wrap: wrap; gap: 1rem;">
+                <div class="blog-share">
+                  <span>Share</span>
+                  <button class="btn neutral outline sm" type="button"><i class="ti ti-brand-x" aria-hidden="true"></i> Post</button>
+                  <button class="btn neutral outline sm" type="button"><i class="ti ti-brand-linkedin" aria-hidden="true"></i> LinkedIn</button>
+                  <button class="btn neutral outline sm" type="button"><i class="ti ti-link" aria-hidden="true"></i> Copy link</button>
+                </div>
+                <button class="btn neutral ghost sm" type="button"><i class="ti ti-bookmark" aria-hidden="true"></i> Save</button>
+              </div>
+
+              <article class="blog-author" style="margin-block-start: 1.5rem;">
+                <span class="avatar lg primary"><abbr>AM</abbr></span>
+                <div class="blog-author-body">
+                  <strong>Ada Meridian</strong>
+                  <p>Senior designer working on design systems, typography, and quiet interfaces. Writes about the
+                    boring parts that make the interesting parts possible.</p>
+                  <div class="cluster" style="margin-block-start: 0.5rem;">
+                    <a class="btn neutral outline sm" href="#"><i class="ti ti-brand-github" aria-hidden="true"></i> GitHub</a>
+                    <a class="btn neutral outline sm" href="#"><i class="ti ti-rss" aria-hidden="true"></i> RSS</a>
+                  </div>
+                </div>
+              </article>
+            </footer>
+
+            <!-- Comments -->
+            <section class="blog-comments" aria-labelledby="comments-heading">
+              <hgroup>
+                <h2 id="comments-heading">3 thoughts</h2>
+                <p class="muted">Join the conversation — comments are open for two weeks.</p>
+              </hgroup>
+
+              <ol style="list-style: none; padding: 0; margin: 0;">
+                <li class="blog-comment">
+                  <span class="avatar"><abbr>JL</abbr></span>
+                  <div class="blog-comment-body">
+                    <div class="blog-comment-head">
+                      <strong>Jana Lindgren</strong>
+                      <time datetime="2026-06-13">June 13, 2026</time>
+                    </div>
+                    <p>The split between <code>.prose</code> and component-level typography is what made this click
+                      for me. We were fighting prose for a year.</p>
+                  </div>
+                </li>
+                <li class="blog-comment">
+                  <span class="avatar"><abbr>RM</abbr></span>
+                  <div class="blog-comment-body">
+                    <div class="blog-comment-head">
+                      <strong>Rin Moreau</strong>
+                      <time datetime="2026-06-14">June 14, 2026</time>
+                    </div>
+                    <p>Curious how this holds up with right-to-left content. The <code>text-wrap: balance</code>
+                      part especially.</p>
+                  </div>
+                </li>
+                <li class="blog-comment">
+                  <span class="avatar primary"><abbr>AM</abbr></span>
+                  <div class="blog-comment-body">
+                    <div class="blog-comment-head">
+                      <strong>Ada Meridian</strong>
+                      <span class="badge primary soft">Author</span>
+                      <time datetime="2026-06-14">June 14, 2026</time>
+                    </div>
+                    <p>@Rin — <code>text-wrap: balance</code> follows the inline direction by spec, so it works
+                      the same in RTL. The optional fluid module uses logical properties too. Good question.</p>
+                  </div>
+                </li>
+              </ol>
+
+              <form class="card" style="margin-block-start: 1rem;" onsubmit="event.preventDefault();">
+                <h3 style="margin: 0 0 0.5rem;">Leave a thought</h3>
+                <p class="muted" style="margin: 0 0 0.75rem;">Markdown is supported. Be kind.</p>
+                <div class="field">
+                  <label class="field-label" for="comment-body">Comment</label>
+                  <textarea class="textarea" id="comment-body" rows="4" placeholder="Share your reaction…"></textarea>
+                </div>
+                <div class="form-actions" style="margin-block-start: 0.75rem;">
+                  <button class="btn neutral outline" type="button">Preview</button>
+                  <button class="btn primary" type="submit">Post comment</button>
+                </div>
+              </form>
+            </section>
+          </div>
+
+          <!-- Sidebar -->
+          <aside class="blog-aside" aria-label="Article sidebar">
+            <section class="blog-newsletter" id="newsletter">
+              <hgroup>
+                <h3 style="margin: 0;">Stay close to the work</h3>
+                <p class="muted" style="margin: 0.25rem 0 0; font-size: 0.875rem;">A short note when something is
+                  worth reading. No tracking, no noise.</p>
+              </hgroup>
+              <form onsubmit="event.preventDefault();" style="margin-block-start: 0.75rem;">
+                <label class="field-label sr-only" for="newsletter-email">Email</label>
+                <input class="input sm" id="newsletter-email" type="email" placeholder="you@example.com" required>
+                <button class="btn primary sm" type="submit">Subscribe</button>
+              </form>
+            </section>
+
+            <section>
+              <h3 style="margin: 0 0 0.75rem; font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-muted);">
+                On this page
+              </h3>
+              <ol style="list-style: none; padding: 0; margin: 0; display: grid; gap: 0.35rem; font-size: 0.9375rem;">
+                <li><a href="#" style="color: var(--primary); text-decoration: none;">Why the baseline should stay mild</a></li>
+                <li><a href="#" style="color: var(--text-muted); text-decoration: none;">Three scopes, three jobs</a></li>
+                <li><a href="#" style="color: var(--text-muted); text-decoration: none;">A small example</a></li>
+                <li><a href="#" style="color: var(--text-muted); text-decoration: none;">What it means in practice</a></li>
+                <li><a href="#" style="color: var(--text-muted); text-decoration: none;">When the rule applies</a></li>
+                <li><a href="#" style="color: var(--text-muted); text-decoration: none;">What we left out</a></li>
+                <li><a href="#" style="color: var(--text-muted); text-decoration: none;">Closing</a></li>
+              </ol>
+            </section>
+
+            <section>
+              <h3 style="margin: 0 0 0.75rem; font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-muted);">
+                Topics
+              </h3>
+              <ul class="blog-tags" aria-label="Topics">
+                <li><a href="#">design</a></li>
+                <li><a href="#">typography</a></li>
+                <li><a href="#">systems</a></li>
+                <li><a href="#">css</a></li>
+                <li><a href="#">frameworks</a></li>
+                <li><a href="#">tokens</a></li>
+              </ul>
+            </section>
+          </aside>
+        </div>
+      </article>
+
+      <!-- Related posts -->
+      <section class="center" id="articles" aria-labelledby="related-heading" style="padding-block: 2rem 1rem;">
+        <hgroup style="margin-block-end: 1rem;">
+          <h2 id="related-heading">Related reading</h2>
+          <p class="muted">More on the quiet parts of design systems.</p>
+        </hgroup>
+
+        <div class="blog-related-grid">
+          <a class="blog-related-card" href="#">
+            <div class="blog-related-cover" aria-hidden="true"></div>
+            <span class="blog-eyebrow">Tokens</span>
+            <strong>Small surfaces, sharp contracts</strong>
+            <small>5 min read</small>
+          </a>
+          <a class="blog-related-card" href="#">
+            <div class="blog-related-cover" aria-hidden="true" style="background: radial-gradient(ellipse at 30% 30%, color-mix(in oklch, var(--secondary) 30%, transparent), transparent 60%), var(--surface-subtle);"></div>
+            <span class="blog-eyebrow">Components</span>
+            <strong>Why we stopped using a type scale</strong>
+            <small>7 min read</small>
+          </a>
+          <a class="blog-related-card" href="#">
+            <div class="blog-related-cover" aria-hidden="true" style="background: radial-gradient(ellipse at 30% 30%, color-mix(in oklch, var(--success) 30%, transparent), transparent 60%), var(--surface-subtle);"></div>
+            <span class="blog-eyebrow">Forms</span>
+            <strong>Buttons that look like buttons</strong>
+            <small>4 min read</small>
+          </a>
+          <a class="blog-related-card" href="#">
+            <div class="blog-related-cover" aria-hidden="true" style="background: radial-gradient(ellipse at 30% 30%, color-mix(in oklch, var(--warning) 30%, transparent), transparent 60%), var(--surface-subtle);"></div>
+            <span class="blog-eyebrow">Layout</span>
+            <strong>Stack, cluster, grid: the three primitives</strong>
+            <small>6 min read</small>
+          </a>
+        </div>
+      </section>
+    </main>
+
+    <!-- Site footer -->
+    <footer class="blog-footer center">
+      <div class="blog-footer-inner">
+        <div>
+          <h4>Actual Notes</h4>
+          <p style="margin: 0; font-size: 0.875rem;">A small magazine about the quiet parts of interface design.</p>
+        </div>
+        <div>
+          <h4>Read</h4>
+          <ul>
+            <li><a href="#">Latest</a></li>
+            <li><a href="#">Design</a></li>
+            <li><a href="#">Engineering</a></li>
+            <li><a href="#">Archive</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>About</h4>
+          <ul>
+            <li><a href="#">Editorial</a></li>
+            <li><a href="#">Contributors</a></li>
+            <li><a href="#">Contact</a></li>
+            <li><a href="#">RSS</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Legal</h4>
+          <ul>
+            <li><a href="#">Privacy</a></li>
+            <li><a href="#">Terms</a></li>
+            <li><a href="#">Colophon</a></li>
+          </ul>
+        </div>
+      </div>
+      <p style="margin: 1.5rem 0 0; font-size: 0.8125rem;">© 2026 Actual Notes. Set in the system font stack.</p>
+    </footer>
+  </body>
+  </html>

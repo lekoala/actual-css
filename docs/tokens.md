@@ -42,21 +42,32 @@ Surface tokens describe the canvas and elevation model. Components should prefer
 :root {
   --surface: hsl(0 0% 100%);
   --surface-raised: hsl(0 0% 100%);
-  --surface-subtle: hsl(220 20% 96%);
-  --surface-solid: hsl(222 22% 12%);
+  --surface-faint: hsl(220 20% 98%);
+  --surface-subtle: hsl(220 14% 96%);
+  --surface-solid: hsl(222 18% 12%);
 
-  --text: hsl(222 22% 12%);
-  --text-muted: hsl(220 10% 42%);
-  --text-subtle: hsl(220 8% 55%);
+  --text: hsl(222 18% 12%);
+  --text-muted: hsl(220 8% 42%);
+  --text-subtle: hsl(220 7% 58%);
 
-  --border: hsl(220 15% 88%);
+  --border: hsl(220 12% 88%);
   --focus: var(--primary);
-  --focus-ring: hsl(220 90% 56% / 0.22);
-  --hover-overlay: hsl(220 30% 10% / 0.04);
+  --focus-ring: hsl(12 10% 31% / 0.22);
+  --hover-overlay: hsl(220 20% 10% / 0.04);
 }
 ```
 
+The surface levels are: `surface` (canvas), `surface-raised` (cards, raised surfaces), `surface-faint` (the quietest background level — for soft alert areas, faint badge backgrounds, and other secondary zones), `surface-subtle` (the working subtle level — for hover overlays, form fields, table headers), and `surface-solid` (the dark inverse surface, used for accent areas).
+
+`surface-faint` is a surface level, not a text level. It is not a fourth text tier.
+
 Use `*-fg` pairs only for solid backgrounds where the component controls both foreground and background. Do not require a foreground token for every surface token.
+
+### Default theme philosophy
+
+The default theme is intentionally calm. `primary` is a near-neutral dark grey rather than a saturated brand color, `secondary` is a neutral surface rather than a colored intent, and the semantic states are desaturated. Optional themes can re-introduce vivid intent palettes on top of this foundation; the default is meant to be the adult, editorial baseline.
+
+Soft variants (`.btn.soft`, `.badge.soft`, `.alert.soft`, etc.) are generated from intent colors through `color-mix()`. A future theme may introduce explicit `--{intent}-soft*` tokens if the generated softs prove too expressive.
 
 ### Shape
 

@@ -18,10 +18,7 @@
   justify-content: center;
   gap: 0.5em;
   min-block-size: var(--btn-min-size);
-  padding-block: max(
-    var(--space-1),
-    calc((var(--btn-min-size) - 1lh) / 2)
-  );
+  padding-block: max(var(--space-1), calc((var(--btn-min-size) - 1lh) / 2));
   padding-inline: var(--btn-pad-x);
   border: var(--border-width) solid var(--btn-border);
   border-radius: var(--radius);
@@ -29,7 +26,7 @@
   color: var(--btn-fg);
   font: inherit;
   font-size: var(--btn-font-size);
-  font-weight: 600;
+  font-weight: var(--font-weight-strong);
   line-height: 1;
   text-decoration: none;
   cursor: pointer;
@@ -103,17 +100,17 @@
   border-radius: var(--radius);
 }
 
-:where([role="group"]:has(> .btn + .btn))>.btn {
+:where([role="group"]:has(> .btn + .btn)) > .btn {
   border-radius: 0;
   border-inline-end: 0;
 }
 
-:where([role="group"]:has(> .btn + .btn))>.btn:first-child {
+:where([role="group"]:has(> .btn + .btn)) > .btn:first-child {
   border-start-start-radius: inherit;
   border-end-start-radius: inherit;
 }
 
-:where([role="group"]:has(> .btn + .btn))>.btn:last-child {
+:where([role="group"]:has(> .btn + .btn)) > .btn:last-child {
   border-inline-end: var(--border-width) solid var(--btn-border);
   border-start-end-radius: inherit;
   border-end-end-radius: inherit;

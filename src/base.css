@@ -13,32 +13,29 @@ body {
 }
 
 a {
-  color: var(--link, var(--primary));
-  text-decoration-line: underline;
-  text-decoration-thickness: var(--link-decoration-thickness);
-  text-underline-offset: var(--link-underline-offset);
+  color: inherit;
 }
 
-a:hover {
-  text-decoration-thickness: var(--link-decoration-thickness-hover);
-}
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
+/* Global heading reset stays minimal: no font-size, no font-weight, no margins.
+   Headings inherit color from --heading (or currentColor via inherit fallback).
+   A tight line-height keeps multi-line headings readable; balance is opt-in
+   where it is supported. Components and .prose own the rest. */
+:where(h1, h2, h3, h4, h5, h6) {
   color: var(--heading, inherit);
-  font-weight: var(--font-weight-heading, 700);
-  line-height: var(--line-height-heading, 1.15);
-  text-wrap: balance;
+  line-height: var(--line-height-tight);
 }
 
-/* Compact heading groups */
+@supports (text-wrap: balance) {
+  :where(h1, h2, h3, h4, h5, h6) {
+    text-wrap: balance;
+  }
+}
+
+/* Compact heading groups. Structural only: display, gap, internal margin reset.
+   No font-size, color, or weight is applied here. */
 hgroup {
   display: grid;
-  gap: var(--hgroup-gap, 0.25em);
+  gap: var(--hgroup-gap);
 }
 
 hgroup > * {
@@ -56,6 +53,10 @@ kbd,
 samp,
 pre {
   font-family: var(--font-mono);
+}
+
+small {
+  font-size: 0.875em;
 }
 
 ::selection {

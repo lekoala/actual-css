@@ -24,7 +24,7 @@
   background: var(--badge-bg);
   color: var(--badge-fg);
   font-size: var(--badge-font-size);
-  font-weight: 650;
+  font-weight: var(--font-weight-strong);
   line-height: 1;
   text-decoration: none;
   white-space: nowrap;

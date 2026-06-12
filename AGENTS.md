@@ -14,5 +14,5 @@ Elegance is key.
 ## Tools
 
 - Do not lint yourself, this is done by config and use biome
-- Do not run build:dist, it waste time and tokens
-- Do not run build:demo, we have a watcher that do that for you
+- Do not run build:dist, unless you want to test if build script works (the user build it)
+- Do not run build:demo, unless you worked on the build script (we have a watcher that build it)

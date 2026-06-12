@@ -9,7 +9,7 @@ import "prismjs/components/prism-javascript.js";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, "..");
 const DEMO = join(ROOT, "demo");
-const DOCS = join(ROOT, "docs", "manual");
+const DOCS = join(ROOT, "docs");
 
 const templates = {
   page: readFileSync(join(__dirname, "templates", "page.html"), "utf8"),
@@ -374,7 +374,7 @@ function buildCategory(category) {
 
 function discoverCategories() {
   return readdirSync(DOCS)
-    .filter((f) => f.endsWith(".md"))
+    .filter((f) => f.endsWith(".md") && f.toLowerCase() !== "readme.md")
     .map((file) => {
       const name = categoryNameFromFile(file);
       const content = readFileSync(join(DOCS, file), "utf8");
