@@ -35,6 +35,13 @@
     box-shadow var(--duration);
 }
 
+.badge:empty {
+  --badge-size: 0.5rem;
+  --badge-pad-x: 0;
+  inline-size: var(--badge-size);
+  block-size: var(--badge-size);
+}
+
 .badge.outline {
   --badge-radius: var(--radius);
 }

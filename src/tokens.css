@@ -26,6 +26,7 @@
 
   /* Shape / rhythm / motion */
   --border-width: 1px;
+  --radius-full: 9999px;
   --shadow: 0 0.5rem 1.5rem hsl(220 30% 10% / 0.08);
   --shadow-popout: 0 0.25rem 0.75rem hsl(220 30% 10% / 0.15);
   --duration: 150ms;
@@ -44,6 +45,18 @@
   --link-decoration-thickness: max(1px, 0.08em);
   --link-decoration-thickness-hover: max(2px, 0.12em);
   --link-underline-offset: 0.15em;
+}
+
+[data-tone="dark"] {
+  --tone-fg: var(--color-white, white);
+  --tone-muted: color-mix(in oklch, var(--tone-fg), transparent 25%);
+  --tone-border: color-mix(in oklch, var(--tone-fg), transparent 75%);
+}
+
+[data-tone="light"] {
+  --tone-fg: var(--text);
+  --tone-muted: var(--text-muted);
+  --tone-border: var(--border);
 }
 
 @media (prefers-reduced-motion: reduce) {
