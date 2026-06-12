@@ -25,10 +25,6 @@ select {
   font: inherit;
 }
 
-button {
-  border: 0;
-}
-
 a {
   color: var(--link, var(--primary));
   text-decoration-line: underline;

@@ -78,16 +78,4 @@
   display: grid;
 }
 
-.join:has(.dropdown[open]) {
-  align-items: flex-start;
-  overflow: visible;
-}
-
-.join > .dropdown {
-  display: inline-flex;
-}
-
-.join > .dropdown > summary.btn {
-  block-size: 100%;
-  border-radius: 0;
-}
+/* TODO: Add group pattern here */

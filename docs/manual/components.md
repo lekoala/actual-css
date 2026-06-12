@@ -306,7 +306,7 @@ Links:
 - Adds button-only `.ghost` and `.link` variants.
 - Button groups use `role="group"` and are progressively enhanced with `:has()`.
 
-```html
+```html{.cluster}
 <button type="button">Unstyled</button>
 <button class="btn" type="button">Default</button>
 <button class="btn secondary" type="button">Secondary</button>
@@ -328,6 +328,14 @@ Links:
   <button class="btn outline" type="button">Center</button>
   <button class="btn soft" type="button">Right</button>
 </div>
+```
+
+```html
+<button class="btn" type="button">Default</button>
+<button class="btn sm" type="button">Small</button>
+<button class="btn lg" type="button">Large</button>
+<button class="btn" type="button"><i class="ti ti-star"></i> With an icon</button>
+<button class="btn primary loading" aria-busy="true">Save</button>
 ```
 
 Links:

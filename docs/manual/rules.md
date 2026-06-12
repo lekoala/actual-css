@@ -20,4 +20,5 @@ still be functional without it
 - CSS nesting is allowed for modern rules that share the same support baseline
 - Organize css code AS IF we are using css nesting. Related rules reads one after another and organized together. This makes
 potential migration to css nesting easy.
-- Icons could be <i> or inlined <svg>
+- Icons could be <i> or inlined <svg>.
+- Avoid transition all unless needed, try to target specific properties.
