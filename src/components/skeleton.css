@@ -5,44 +5,60 @@
  * Geometry, animation, and color stay theme-aware.
  */
 .skeleton {
+  --skeleton-size: 1rem;
+  --skeleton-width: 100%;
+  --skeleton-radius: var(--radius);
+  --skeleton-track: var(--surface-subtle);
+  --skeleton-highlight: var(--surface-raised);
+
   display: block;
-  inline-size: 100%;
-  min-block-size: 1rem;
-  border-radius: var(--radius);
-  background: linear-gradient(
-    90deg,
-    var(--surface-subtle),
-    var(--surface-raised),
-    var(--surface-subtle)
-  );
-  background-size: 200% 100%;
-  animation: actual-skeleton 1.2s ease-in-out infinite;
+  inline-size: var(--skeleton-width);
+  max-inline-size: 100%;
+  block-size: var(--skeleton-size);
+  border-radius: var(--skeleton-radius);
+  background:
+    linear-gradient(
+      90deg,
+      var(--skeleton-track),
+      var(--skeleton-highlight),
+      var(--skeleton-track)
+    )
+    0 0 / 200% 100%;
 }
 
-.skeleton.text {
-  max-inline-size: 32rem;
-  block-size: 0.85rem;
+@media (prefers-reduced-motion: no-preference) {
+  .skeleton {
+    animation: actual-skeleton 1.2s ease-in-out infinite;
+  }
 }
 
-.skeleton.title {
-  max-inline-size: 18rem;
-  block-size: 1.4rem;
+.skeleton[data-shape="text"] {
+  --skeleton-size: 0.85rem;
+  --skeleton-width: 32rem;
 }
 
-.skeleton.avatar {
-  inline-size: 2.25rem;
-  block-size: 2.25rem;
-  border-radius: 999px;
+.skeleton[data-shape="title"] {
+  --skeleton-size: 1.4rem;
+  --skeleton-width: 18rem;
 }
 
-.skeleton.box {
-  min-block-size: 8rem;
+.skeleton[data-shape="avatar"] {
+  --skeleton-size: var(--avatar-size, 2.25rem);
+  --skeleton-width: var(--skeleton-size);
+  --skeleton-radius: var(--radius-full);
+
+  flex: 0 0 auto;
+}
+
+.skeleton[data-shape="box"] {
+  --skeleton-size: 8rem;
 }
 
 @keyframes actual-skeleton {
   from {
     background-position: 200% 0;
   }
+
   to {
     background-position: -200% 0;
   }

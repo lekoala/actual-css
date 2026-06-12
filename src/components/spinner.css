@@ -1,53 +1,83 @@
 /*
  * Spinner for compact loading feedback.
  *
- * Motion stays legible and non-blocking across themes, with optional shared
- * intent tinting only.
+ * Uses currentColor so it adapts to buttons, alerts, badges, and text.
  */
 .spinner {
   --spinner-size: 1.5rem;
-  --spinner-border: 2px;
+  --spinner-width: 2px;
+  --spinner-track: currentColor;
+  --spinner-value: transparent;
 
   display: inline-block;
+  flex-shrink: 0;
   inline-size: var(--spinner-size);
   block-size: var(--spinner-size);
-  border: var(--spinner-border) solid var(--text-muted);
-  border-inline-end-color: transparent;
-  border-radius: 50%;
+  border: var(--spinner-width) solid var(--spinner-track);
+  border-inline-end-color: var(--spinner-value);
+  border-radius: var(--radius-full);
+  opacity: 0.85;
   animation: actual-spin 0.75s linear infinite;
   vertical-align: text-bottom;
 }
 
+@supports (color: color-mix(in oklch, red, white)) {
+  .spinner {
+    --spinner-track: color-mix(in oklch, currentColor, transparent 70%);
+    --spinner-value: currentColor;
+    opacity: 1;
+  }
+}
+
 .spinner:where(.primary, .secondary, .success, .warning, .danger, .neutral) {
-  border-color: var(--intent);
-  border-inline-end-color: transparent;
+  color: var(--intent);
 }
 
 .spinner.sm {
   --spinner-size: 1rem;
 }
+
 .spinner.lg {
   --spinner-size: 3rem;
-  --spinner-border: 3px;
+  --spinner-width: 3px;
 }
 
-.btn.loading {
+@media (prefers-reduced-motion: reduce) {
+  .spinner {
+    animation-duration: 1.5s;
+  }
+}
+
+/* Busy overlay: a non-button element with aria-busy="true" and a direct
+ * last-child .spinner shows that spinner as a centered overlay.
+ * Buttons keep spinners inline. */
+[aria-busy] > .spinner:last-child {
+  display: none;
+}
+
+[aria-busy="true"] > .spinner:last-child {
+  display: inline-block;
+}
+
+[aria-busy="true"]:not(.btn):has(> .spinner:last-child) {
   position: relative;
-  pointer-events: none;
-  color: transparent;
 }
 
-.btn.loading::after {
+[aria-busy="true"]:not(.btn):has(> .spinner:last-child)::before {
   content: "";
   position: absolute;
   inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+  background: color-mix(in oklch, var(--surface), transparent 20%);
+}
+
+[aria-busy="true"]:not(.btn) > .spinner:last-child {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
   margin: auto;
-  inline-size: 1rem;
-  block-size: 1rem;
-  border: 2px solid var(--btn-fg);
-  border-inline-end-color: transparent;
-  border-radius: 50%;
-  animation: actual-spin 0.75s linear infinite;
+  display: block;
 }
 
 @keyframes actual-spin {

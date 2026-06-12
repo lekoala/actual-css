@@ -58,6 +58,7 @@
   --heading: var(--text);
   --font-weight-heading: 700;
   --line-height-heading: 1.15;
+  --font-weight-bold: 800;
 
   /* Selection */
   --selection-bg: var(--primary);

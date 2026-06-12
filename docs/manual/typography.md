@@ -2,6 +2,8 @@
 
 ## Overview
 
+> Quiet global defaults plus an opt-in prose scope for long-form content.
+
 Typography has two layers:
 
 - global defaults that make plain HTML readable without becoming classless styling
@@ -12,6 +14,8 @@ Components should not depend on `.prose`. App screens, forms, cards, tables, and
 Best applied directly on a `article` semantic block.
 
 ## Baseline
+
+> Mild global typography that keeps plain HTML readable without taking over app UI.
 
 Global typography should stay mild.
 
@@ -41,6 +45,8 @@ select {
 
 ## Tokens
 
+> Typography tokens covering the baseline and the prose scope, without a large type scale.
+
 Typography tokens should cover the baseline and the `.prose` scope without creating a large type scale.
 
 ```css
@@ -65,6 +71,8 @@ Typography tokens should cover the baseline and the `.prose` scope without creat
 The public surface should stay semantic. Avoid exposing a separate token for each heading level unless real theme work proves it is needed.
 
 ## Prose
+
+> Opt-in rich-text scope for articles, documentation, and long-form content.
 
 Use `.prose` for content where element selectors are helpful and expected.
 
@@ -107,6 +115,8 @@ The `.prose` class does not own:
 
 ## Prose Rules
 
+> Scoped and predictable selectors, with low specificity via where.
+
 Keep selectors scoped and predictable.
 
 ```css
@@ -137,6 +147,8 @@ Use `:where()` to keep specificity low. Component classes inside `.prose` should
 
 ## Headings
 
+> Hierarchy from document structure, not from a large public heading scale.
+
 Headings should create hierarchy without needing a large public scale.
 
 ```css
@@ -161,6 +173,8 @@ Use document structure for hierarchy. Do not use heading classes as visual utili
 
 ## Heading Groups
 
+> Pair a heading with a subtitle or supporting paragraph using hgroup.
+
 Use `hgroup` when a heading has a short subtitle, tagline, or supporting paragraph.
 
 ```html
@@ -175,6 +189,8 @@ Use `hgroup` when a heading has a short subtitle, tagline, or supporting paragra
 Do not use `.stack` only to space a heading and subtitle.
 
 ## Text Links
+
+> Inherit color globally; let prose links look like links by default.
 
 Global links inherit color. `.prose` links should look like links by default.
 
@@ -193,6 +209,8 @@ Global links inherit color. `.prose` links should look like links by default.
 
 ## Lists
 
+> Conventional list spacing inside prose, not layout utilities.
+
 Lists inside `.prose` should be readable and conventional.
 
 ```css
@@ -208,6 +226,8 @@ Lists inside `.prose` should be readable and conventional.
 Avoid turning lists into layout utilities. Layout lists belong in components or layout docs.
 
 ## Code
+
+> Readable inline code and code blocks without taking over the design.
 
 Inline code and code blocks should be readable without taking over the design.
 
@@ -241,6 +261,8 @@ Inline code and code blocks should be readable without taking over the design.
 
 ## Quotes And Media
 
+> Styled blockquotes, with optional figure and figcaption for attribution.
+
 - `blockquote` are styled automatically
 - Can be wrapped in a `figure` + `figcaption` (check with `:has`)
 
@@ -264,6 +286,8 @@ Inline code and code blocks should be readable without taking over the design.
 
 ## Tables
 
+> Simple prose tables; app data tables belong to the table component.
+
 Long-form content can contain simple prose tables, but app data tables should use the table component.
 
 ```css
@@ -281,6 +305,8 @@ Long-form content can contain simple prose tables, but app data tables should us
 ```
 
 ## Density
+
+> Optional prose-sm and prose-lg modifiers for tighter or looser reading.
 
 Add density only when there is a clear need.
 
@@ -303,6 +329,8 @@ Add density only when there is a clear need.
 Do not create heading-size modifiers unless the first implementation cannot stay readable without them.
 
 ## Links
+
+> Reference reading on typography and web type.
 
 - https://daisyui.com/docs/layout-and-typography/
 - https://nordhealth.design/typography

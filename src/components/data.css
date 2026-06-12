@@ -4,71 +4,94 @@
  * Keeps data UI neutral, content-first, and readable in nested themes using
  * shared surface and text tokens.
  */
-.table-wrap,
-.overflow-auto:has(> .table) {
+.table-wrap {
   overflow-x: auto;
-}
-
-.table {
-  inline-size: 100%;
-  border-collapse: collapse;
   border: var(--border-width) solid var(--border);
   border-radius: var(--radius-lg);
   background: var(--surface-raised);
+}
+
+.table-wrap:focus {
+  outline: calc(var(--border-width) * 2) solid var(--focus);
+  outline-offset: 2px;
+}
+
+.table {
+  --table-min: 100%;
+  --table-cell-pad: var(--space-3);
+
+  inline-size: max(var(--table-min), 100%);
+  border-collapse: collapse;
+  background: transparent;
   color: var(--text);
-  font-size: 0.9375rem;
+  font-size: var(--font-size-md);
 }
 
 .table caption {
-  padding: 0.75rem;
+  padding: var(--table-cell-pad);
   color: var(--text-muted);
   text-align: start;
 }
 
 .table th,
 .table td {
-  padding: 0.75rem;
+  padding: var(--table-cell-pad);
   border-block-end: var(--border-width) solid var(--border);
   text-align: start;
-  vertical-align: middle;
+  vertical-align: baseline;
+}
+
+.table thead th {
+  vertical-align: bottom;
 }
 
 .table th {
-  background: var(--surface-subtle);
   color: var(--text-muted);
-  font-size: 0.8125rem;
-  font-weight: 750;
-  letter-spacing: 0.02em;
-  text-transform: uppercase;
+  font-weight: var(--font-weight-strong);
+}
+
+.table thead {
+  background: var(--surface-subtle);
 }
 
 .table tbody tr:hover {
   background-color: var(--hover-overlay);
 }
 
-.table tr:last-child td {
+.table tr:last-child>* {
   border-block-end: 0;
 }
+
+.table :where(th, td)[data-align="end"] {
+  text-align: end;
+}
+
+.table :where(th, td)[data-nowrap] {
+  white-space: nowrap;
+}
+
 .table code {
   color: var(--text);
 }
 
 .metric {
+  --metric-gap: var(--space-2);
+  --metric-value-size: 2rem;
+
   display: grid;
-  gap: 0.5rem;
+  gap: var(--metric-gap);
 }
 
-.metric-value {
+.metric> :where(data, strong) {
   color: var(--text);
-  font-size: 2rem;
-  font-weight: 800;
-  letter-spacing: 0;
+  font-size: var(--metric-value-size);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: -0.02em;
   line-height: 1.05;
 }
 
-.metric > .badge {
+.metric>.badge {
   justify-self: start;
-  margin-block-start: 0.15rem;
 }
 
 .progress,
@@ -111,12 +134,9 @@
 /* Indeterminate progress */
 .progress:indeterminate {
   background:
-    linear-gradient(
-      to right,
+    linear-gradient(to right,
       var(--progress-value) 30%,
-      var(--progress-track) 30%
-    )
-    top left / 150% 150% no-repeat,
+      var(--progress-track) 30%) top left / 150% 150% no-repeat,
     var(--progress-track);
 }
 
@@ -134,7 +154,8 @@
 
 @media (prefers-reduced-motion: no-preference) {
   .progress:indeterminate {
-    animation: progress-indeterminate 1s linear infinite;
+    animation: progress-indeterminate 2s ease-in-out infinite;
+
   }
 
   :where([dir="rtl"] .progress:indeterminate) {
@@ -145,6 +166,14 @@
 @keyframes progress-indeterminate {
   0% {
     background-position: 200% 0;
+  }
+
+  20% {
+    background-position: 100% 0;
+  }
+
+  80% {
+    background-position: -100% 0;
   }
 
   100% {

@@ -11,7 +11,11 @@ Components are opt-in and use semantic HTML with a small, predictable class API.
 - Components own only their intrinsic layout. Page spacing belongs to layout utilities.
 - ARIA roles and attributes are part of the API when they describe behavior or state.
 
+Components are presented alphabetically.
+
 ## Accordion
+
+> Collapsible regions built on native details and summary, with optional exclusive groups via the name attribute.
 
 - Use native `<details>` and `<summary>` for collapsible content.
 - Use the `name` attribute for exclusive accordions.
@@ -93,6 +97,8 @@ Links:
 
 ## Alert
 
+> Inline status messages for confirmations, warnings, and errors, with intents, icons, and action lists.
+
 - Supports intent colors.
 - Supports longer text and lists.
 - Links inherit alert color by default.
@@ -172,6 +178,8 @@ Links:
 
 ## Avatar
 
+> Initials or image representing a person or entity, composable with badge and indicator.
+
 - Supports initials and images.
 - Can be an inert element, link, or button.
 - Can be grouped with `role="group"` and `:has()`
@@ -232,6 +240,8 @@ Links:
 
 ## Badge
 
+> Compact label for counts, status, or category tags, with shared intents and variants.
+
 - Supports intent colors.
 - Supports shared variants, especially `.soft` and `.outline`.
 - Can be used inline in headings.
@@ -275,6 +285,8 @@ Links:
 
 ## Breadcrumb
 
+> Trail of links showing the current page's location in a hierarchy.
+
 - Use a semantic `<nav>` landmark.
 - Put `.breadcrumb` on the ordered list.
 - Use `aria-current="page"` for the current page.
@@ -299,6 +311,8 @@ Links:
 - https://uiterms.com/breadcrumbs/
 
 ## Button
+
+> Actions and navigation with shared intents, variants, sizes, and a loading state.
 
 - Use a real `<button>` for actions.
 - Use `<a class="btn">` for navigation.
@@ -352,6 +366,8 @@ Links:
 - Buttons: https://codepen.io/lekoalabe/pen/oNORPZP
 
 ## Card
+
+> Flexible content container with optional header, body, footer, and bleed regions.
 
 - Use semantic elements.
 - Supports one or more content sections.
@@ -463,6 +479,39 @@ Links:
 </section>
 ```
 
+```html
+<section class="grid">
+  <article class="card raised">
+    <hgroup>
+      <h3>Raised</h3>
+      <p class="muted">Elevated surface with a soft shadow.</p>
+    </hgroup>
+  </article>
+
+  <article class="card subtle">
+    <hgroup>
+      <h3>Subtle</h3>
+      <p class="muted">Lower contrast against the page surface.</p>
+    </hgroup>
+  </article>
+
+  <article class="card inverted stack">
+    <hgroup>
+      <h3>Inverted</h3>
+      <p>Dark surface for emphasis. Text inherits the light surface color.</p>
+    </hgroup>
+    <button type="button" class="btn">Action</button>
+  </article>
+
+  <article class="card compact">
+    <hgroup>
+      <h3>Compact</h3>
+      <p class="muted">Tighter padding for dense contexts.</p>
+    </hgroup>
+  </article>
+</section>
+```
+
 Links:
 - https://oat.ink/components/#card
 - https://daisyui.com/components/card/
@@ -473,6 +522,8 @@ Links:
 - https://uiterms.com/card/
 
 ## Dialog
+
+> Modal overlay for focused tasks, confirmations, or forms, built on the native dialog element.
 
 - Use native `<dialog class="dialog">`.
 - `commandfor`, `command`, and `closedby` are modern enhancements.
@@ -519,29 +570,42 @@ Links:
 
 ## Drawer
 
-- Use semantic `<aside class="drawer">`.
-- Use `aria-controls` and `aria-expanded` on the trigger.
-- Navigation drawers should expose a named navigation landmark.
-- Opening and closing state is JavaScript behavior; CSS owns the shell.
+> Modal side-sheet that overlays the page for navigation or filters.
+
+- Use `dialog.drawer` for modal side-sheets that overlay the page.
+- Use the `command="show-modal"` and `commandfor="<id>"` attributes to open the drawer without JavaScript.
+- Use `form method="dialog"` for close buttons inside the drawer.
+- Use `[data-side="end"]` for a right-side drawer.
+- Permanent desktop sidebars belong in layout, not here.
 
 ```html
 <button class="btn ghost"
         type="button"
-        aria-controls="main-drawer"
-        aria-expanded="false"
+        command="show-modal"
+        commandfor="main-drawer"
         aria-label="Open navigation">
   <i class="ti ti-menu-2" aria-hidden="true"></i>
 </button>
 
-<aside class="drawer" id="main-drawer" aria-label="Main navigation" hidden>
+<dialog class="drawer" id="main-drawer" aria-label="Main navigation">
+  <header class="cluster" style="--cluster-justify: space-between">
+    <strong>Menu</strong>
+
+    <form method="dialog">
+      <button class="btn ghost" type="submit" aria-label="Close navigation">
+        <i class="ti ti-x" aria-hidden="true"></i>
+      </button>
+    </form>
+  </header>
+
   <nav>
-    <ul>
+    <ul class="nav-list stack">
       <li><a href="#" aria-current="page">Home</a></li>
       <li><a href="#">Users</a></li>
       <li>
         <details>
           <summary>Settings</summary>
-          <ul>
+          <ul class="nav-list stack">
             <li><a href="#">General</a></li>
             <li><a href="#">Security</a></li>
             <li><a href="#">Billing</a></li>
@@ -554,7 +618,15 @@ Links:
   <footer>
     <button class="btn outline" type="button">Logout</button>
   </footer>
-</aside>
+</dialog>
+```
+
+```js
+document.querySelectorAll("dialog.drawer").forEach((dialog) => {
+  dialog.addEventListener("click", (e) => {
+    if (e.target === dialog) dialog.close();
+  });
+});
 ```
 
 Links:
@@ -565,6 +637,8 @@ Links:
 - https://uiterms.com/drawer/
 
 ## Meter
+
+> Scalar measurement within a known range, not a progress indicator.
 
 - Use native `<meter class="meter">`.
 - Shares progress styling DNA.
@@ -580,28 +654,60 @@ Links:
 Links:
 - https://oat.ink/components/#meter
 
+
+## Metric
+
+> Labeled numeric value with an optional trend indicator.
+
+- Use `<article class="metric">` for a labeled numeric value with an optional trend.
+- Use `<data value="...">` when the value is machine-readable, `<strong>` for plain text.
+- The badge or status indicator can use `.badge` for consistent intent colors.
+
+```html
+<article class="card metric">
+  <span class="muted">Revenue</span>
+  <data value="42128">$42,128</data>
+  <span class="badge success soft">+12.5% vs last month</span>
+</article>
+```
+
 ## Pagination
+
+> Navigation controls to move between pages of content.
 
 - Use a semantic `<nav>` landmark.
 - Put `.pagination` on the ordered list.
 - Use `aria-current="page"` for the current page.
+- Put `.sm` or `.lg` on `.pagination` to change the density of its controls.
+- Numeric links may use `aria-label="Page N"` for clearer screen reader output.
+- Prefer text labels for Previous and Next. Icon-only controls need an accessible name.
 - Page links can compose with `.btn` for button-like hit targets.
 
 ```html
 <nav aria-label="Pagination">
-  <ol class="pagination">
-    <li><a href="?page=2" class="btn outline sm">Previous</a></li>
-    <li>
-      <a href="?page=1" class="btn outline sm">
-        <span class="sr-only">Page </span>1
-      </a>
-    </li>
-    <li>
-      <a href="?page=3" class="btn sm" aria-current="page">
-        <span class="sr-only">Page </span>3<span class="sr-only">, current</span>
-      </a>
-    </li>
-    <li><a href="?page=4" class="btn outline sm">Next</a></li>
+  <ol class="pagination sm">
+    <li><a href="?page=2" class="btn outline" rel="prev">Previous</a></li>
+    <li><a href="?page=1" class="btn outline" aria-label="Page 1">1</a></li>
+    <li><a href="?page=2" class="btn outline" aria-label="Page 2">2</a></li>
+    <li><a href="?page=3" class="btn" aria-current="page" aria-label="Page 3">3</a></li>
+    <li><a href="?page=4" class="btn outline" aria-label="Page 4">4</a></li>
+    <li><a href="?page=5" class="btn outline" rel="next">Next</a></li>
+  </ol>
+</nav>
+```
+
+```html
+<nav aria-label="Pagination">
+  <ol class="pagination sm">
+    <li><a href="?page=1" class="btn outline" rel="prev">Previous</a></li>
+    <li><a href="?page=1" class="btn outline" aria-label="Page 1">1</a></li>
+    <li><span class="btn ghost" aria-hidden="true">…</span></li>
+    <li><a href="?page=7" class="btn outline" aria-label="Page 7">7</a></li>
+    <li><a href="?page=8" class="btn" aria-current="page" aria-label="Page 8">8</a></li>
+    <li><a href="?page=9" class="btn outline" aria-label="Page 9">9</a></li>
+    <li><span class="btn ghost" aria-hidden="true">…</span></li>
+    <li><a href="?page=20" class="btn outline" aria-label="Page 20">20</a></li>
+    <li><a href="?page=9" class="btn outline" rel="next">Next</a></li>
   </ol>
 </nav>
 ```
@@ -612,6 +718,8 @@ Links:
 - https://uiterms.com/pagination/
 
 ## Progress
+
+> Indeterminate or determinate indicator of task completion.
 
 - Use native `<progress class="progress">`.
 - Shares meter styling DNA.
@@ -641,25 +749,48 @@ Links:
 
 ## Spinner
 
-- Use `.spinner` for an inline loading indicator.
-- Use `aria-busy="true"` on the region or control that is busy.
+> Loading indicator for actions or regions that may take noticeable time.
+
+- Most actions do not need a spinner. Use `disabled` alone for fast actions or to prevent duplicate submissions.
+- Use `aria-busy="true"` with a loading label for actions that are visibly in progress.
+- Add `.spinner` only when the operation may take long enough that users need explicit loading feedback.
+- The spinner uses `currentColor`, so it adapts to its context.
 - Decorative spinners should be `aria-hidden="true"`.
 - Use `role="status"` with accessible text when the loading state needs to be announced.
+- Put a direct last-child `.spinner` inside a busy region to show a centered loading overlay. In buttons, spinners remain inline.
 
 ```html
-<div class="cluster">
-  <span class="spinner" aria-hidden="true"></span>
-  <span class="spinner primary" aria-hidden="true"></span>
-  <span class="spinner danger lg" aria-hidden="true"></span>
-</div>
+<span class="spinner"></span>
+<span class="spinner sm primary"></span>
+<span class="spinner lg danger"></span>
 ```
 
 ```html
-<button class="btn primary" type="button" aria-busy="true" disabled>
+<button class="btn primary" type="submit" aria-busy="true" disabled>
   <span class="spinner" aria-hidden="true"></span>
-  Loading
+  Saving…
 </button>
+```
 
+```html
+<article class="card" aria-busy="true" aria-label="Loading card content">
+  <hgroup>
+    <h3>Card Title</h3>
+    <p class="muted">Card description goes here.</p>
+  </hgroup>
+
+  <p>This is the card content. It can contain any HTML.</p>
+
+  <footer class="cluster">
+    <button class="btn outline" disabled>Cancel</button>
+    <button class="btn" disabled>Save</button>
+  </footer>
+
+  <span class="spinner lg" aria-hidden="true"></span>
+</article>
+```
+
+```html
 <div role="status">
   <span class="spinner" aria-hidden="true"></span>
   <span class="sr-only">Loading results</span>
@@ -673,18 +804,20 @@ Links:
 
 ## Skeleton
 
+> Placeholder shapes for content that is loading.
+
 - Use `.skeleton` for loading placeholders.
-- Use shape modifiers for common placeholder forms: `.text`, `.title`, `.avatar`, `.box`.
+- Use `data-shape` for common placeholder forms: `text`, `title`, `avatar`, `box`.
 - Put `role="status"` and accessible text on the loading region, not on every placeholder.
 - Use layout utilities for placeholder arrangement.
 
 ```html
 <article class="card" role="status" aria-label="Loading profile">
   <div class="cluster">
-    <div class="skeleton avatar" aria-hidden="true"></div>
-    <div class="stack">
-      <div class="skeleton title" aria-hidden="true"></div>
-      <div class="skeleton text" aria-hidden="true"></div>
+    <div class="skeleton" data-shape="avatar" aria-hidden="true"></div>
+    <div class="stack grow">
+      <div class="skeleton" data-shape="title" aria-hidden="true"></div>
+      <div class="skeleton" data-shape="text" aria-hidden="true"></div>
     </div>
   </div>
 </article>
@@ -696,21 +829,24 @@ Links:
 
 ## Table
 
-- Use native `<table class="table">`.
-- Supports `<caption>`.
-- Compose with `.overflow-auto` for horizontal scrolling.
+> Data table with caption and scope attributes, and an accessible scroll region for wide content.
+
+- Use native `<table class="table">` inside a `.table-wrap` for surface, border, radius, and overflow.
+- Use `<caption>`, `scope="col"`, and `scope="row"` for accessibility.
+- Use `data-align="end"` for numeric columns and `data-nowrap` for non-wrapping cells.
+- For wide tables, make the wrapper an accessible scroll region with `role="region"`, `aria-labelledby`, and `tabindex="0"`.
 - Tables stay content-first and neutral by default.
 
 ```html
-<div class="overflow-auto">
+<div class="table-wrap">
   <table class="table">
     <caption>Team members</caption>
     <thead>
       <tr>
-        <th>Name</th>
-        <th>Email</th>
-        <th>Role</th>
-        <th>Status</th>
+        <th scope="col">Name</th>
+        <th scope="col">Email</th>
+        <th scope="col">Role</th>
+        <th scope="col">Status</th>
       </tr>
     </thead>
     <tbody>
@@ -737,8 +873,44 @@ Links:
 </div>
 ```
 
+```html
+<div class="table-wrap" role="region" aria-labelledby="revenue-table" tabindex="0">
+  <table class="table" style="--table-min: 64rem">
+    <caption id="revenue-table">Revenue by month</caption>
+    <thead>
+      <tr>
+        <th scope="col">Month</th>
+        <th scope="col">Plan</th>
+        <th scope="col" data-align="end">Revenue</th>
+        <th scope="col" data-align="end">Churn</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>March 2026</td>
+        <td>Team</td>
+        <td data-align="end" data-nowrap>$42,128</td>
+        <td data-align="end" data-nowrap>1.2%</td>
+      </tr>
+      <tr>
+        <td>April 2026</td>
+        <td>Team + Business</td>
+        <td data-align="end" data-nowrap>$48,902</td>
+        <td data-align="end" data-nowrap>0.9%</td>
+      </tr>
+      <tr>
+        <td>May 2026</td>
+        <td>Team + Business</td>
+        <td data-align="end" data-nowrap>$53,470</td>
+        <td data-align="end" data-nowrap>0.7%</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+```
+
 Links:
 - https://picocss.com/docs/table
-- https://picocss.com/docs/overflow-auto
 - https://oat.ink/components/#table
 - https://getbootstrap.com/docs/5.3/content/tables/
+- https://piccalil.li/blog/styling-tables-the-modern-css-way/

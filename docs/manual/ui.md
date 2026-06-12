@@ -11,6 +11,8 @@ UI components are interactive patterns that need JavaScript or modern platform b
 
 ## Dropdown
 
+> Positioned menu attached to a trigger, with full keyboard, focus, and ARIA support.
+
 - Use `.dropdown` for the positioned root.
 - Use a button trigger for actions and disclosure.
 - JavaScript updates `aria-expanded`, `hidden`, focus, and dismissal.
@@ -98,6 +100,8 @@ Links:
 
 ## Tabs
 
+> In-place panel switcher using real tab semantics, with roving tabindex and arrow-key navigation.
+
 - Use real tab semantics when panels switch in place.
 - Use normal links and `aria-current="page"` for page navigation that only looks like tabs.
 - JavaScript owns roving `tabindex`, `aria-selected`, `hidden`, and keyboard behavior.
@@ -168,6 +172,8 @@ Links:
 
 ## Tooltip
 
+> Supplemental label for a trigger, shown on hover and focus, hidden on dismissal.
+
 - Use `aria-describedby` to connect the trigger to the tooltip.
 - Tooltips are supplemental. Do not put required information or interactive controls inside them.
 - Show on hover and focus. Hide on Escape, blur, pointer leave, or scroll when appropriate.
@@ -204,6 +210,8 @@ Links:
 - https://daisyui.com/components/tooltip/
 
 ## Scrollspy
+
+> Navigation that highlights the active section of a long page as the user scrolls.
 
 - Use regular document landmarks and anchor links.
 - JavaScript updates `aria-current="true"` or `aria-current="location"` on the active link.

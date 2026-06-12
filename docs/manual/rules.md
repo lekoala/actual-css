@@ -1,5 +1,8 @@
 # Rules
 
+Follow these rules as best as possible, but don't follow them blindly.
+If rules conflict, think about what would be best or ask the user if no decisive answer can be made.
+
 - Wide browser support (even older browsers)
 - No compile, build step (dist file is created being concatenating and remove comments)
 - No post processing - use browsers prefix when needed
@@ -21,3 +24,4 @@ still be functional without it
 - Organize css code AS IF we are using css nesting. Related rules reads one after another and organized together
 - Icons could be <i> or inlined <svg>
 - Avoid transition all unless needed, try to target specific properties
+- Use @supports positively (no @supports not)
