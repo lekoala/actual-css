@@ -246,6 +246,11 @@ Links:
   <i class="ti ti-bell" aria-hidden="true"></i>
   <span class="badge danger" aria-label="12 unread notifications">12</span>
 </button>
+
+<button type="button" class="btn ghost" aria-label="Notifications">
+  <i class="ti ti-bell" aria-hidden="true"></i>
+  <span class="badge indicator danger" aria-label="Errors!"></span>
+</button>
 ```
 
 Links:
