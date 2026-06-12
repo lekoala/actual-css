@@ -17,8 +17,7 @@ still be functional without it
 - Must be accessible by default (keyboard navigation, aria-label, hidden element, proper semantic)
 - Works everywhere, works best on modern browsers
 - Explicit color scheme
-- CSS nesting is allowed for modern rules that share the same support baseline
-- Organize css code AS IF we are using css nesting. Related rules reads one after another and organized together. This makes
-potential migration to css nesting easy.
-- Icons could be <i> or inlined <svg>.
-- Avoid transition all unless needed, try to target specific properties.
+- CSS nesting is not allowed - code must be findable as exposed in the inspector
+- Organize css code AS IF we are using css nesting. Related rules reads one after another and organized together
+- Icons could be <i> or inlined <svg>
+- Avoid transition all unless needed, try to target specific properties

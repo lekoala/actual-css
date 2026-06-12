@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lists — Actual CSS</title>
+  <link rel="stylesheet" href="../../src/actual.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+  <link rel="stylesheet" href="../../demo/styles/demo.css">
+  <link rel="stylesheet" href="../../demo/styles/prism.css">
+</head>
+
+<body>
+  <nav class="demo-nav">
+    <a href="index.html">&larr; Typography</a>
+    <a href="../index.html">Homepage</a>
+  </nav>
+  <main class="center">
+  <section class="component-section">
+    <header class="component-header">
+      <h1>Lists</h1>
+      <p>Lists inside `.prose` should be readable and conventional.</p>
+    </header>
+        <section class="component-section">
+      <h2>CSS</h2>
+      <div class="example-group">
+        <div class="example-code">
+          <pre><code class="language-css"><span class="token selector">.prose :where(ul, ol)</span> <span class="token punctuation">{</span>
+  <span class="token property">padding-inline-start</span><span class="token punctuation">:</span> 1.5em<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token selector">.prose li + li</span> <span class="token punctuation">{</span>
+  <span class="token property">margin-block-start</span><span class="token punctuation">:</span> 0.35em<span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+        </div>
+      </div>
+    </section>
+    <div class="component-prose">
+      <p>Avoid turning lists into layout utilities. Layout lists belong in components or layout docs.</p>
+    </div>
+    
+  </section>
+  </main>
+  <footer class="demo-footer">
+    <a href="index.html">Back to Typography</a>
+  </footer>
+</body>
+
+</html>

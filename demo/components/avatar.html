@@ -22,7 +22,17 @@
       <h1>Avatar</h1>
       <p>Supports initials and images.</p>
     </header>
-        <section class="component-section">
+        <div class="component-prose">
+      <ul>
+  <li>Can be an inert element, link, or button.</li>
+  <li>Can be grouped with <code>role=&quot;group&quot;</code> and <code>:has()</code></li>
+  <li>Can be combined with <code>badge</code> and <code>indicator</code>.</li>
+  <li>Does not support shape modifiers as public API. Shape is theme-level.</li>
+  <li>Sizes can be adjusted with CSS variables and optional <code>.sm</code> or <code>.lg</code>.</li>
+  <li>Background is an exposed css variable (and can use <code>data-tone</code>).</li>
+</ul>
+    </div>
+    <section class="component-section">
       <div class="example-group">
         <div class="example-render">
           <div class="avatar" role="img" aria-label="John Doe, online">
@@ -118,7 +128,14 @@
         </div>
       </div>
     </section>
-
+        <details class="demo-links">
+      <summary>Links (3)</summary>
+      <ul>
+        <li><a href="https://oat.ink/components/#avatar" rel="noopener noreferrer">https://oat.ink/components/#avatar</a></li>
+        <li><a href="https://daisyui.com/components/avatar/" rel="noopener noreferrer">https://daisyui.com/components/avatar/</a></li>
+        <li><a href="https://smolcss.dev/#smol-avatar-list" rel="noopener noreferrer">https://smolcss.dev/#smol-avatar-list</a></li>
+      </ul>
+    </details>
   </section>
   </main>
   <footer class="demo-footer">

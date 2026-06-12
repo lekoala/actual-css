@@ -13,7 +13,7 @@
 
 <body>
   <nav class="demo-nav">
-    <a href="index.html">&larr; UI</a>
+    <a href="index.html">&larr; Ui</a>
     <a href="../index.html">Homepage</a>
   </nav>
   <main class="center">
@@ -22,7 +22,15 @@
       <h1>Tabs</h1>
       <p>Use real tab semantics when panels switch in place.</p>
     </header>
-        <section class="component-section">
+        <div class="component-prose">
+      <ul>
+  <li>Use normal links and <code>aria-current=&quot;page&quot;</code> for page navigation that only looks like tabs.</li>
+  <li>JavaScript owns roving <code>tabindex</code>, <code>aria-selected</code>, <code>hidden</code>, and keyboard behavior.</li>
+  <li>Support Left/Right, Home/End, Enter/Space when activation is manual.</li>
+  <li><code>.tabs</code> styles the tab list. <code>.tab</code> styles each trigger.</li>
+</ul>
+    </div>
+    <section class="component-section">
       <div class="example-group">
         <div class="example-render">
           <div class="tabset">
@@ -132,11 +140,22 @@
         </div>
       </div>
     </section>
-
+        <details class="demo-links">
+      <summary>Links (7)</summary>
+      <ul>
+        <li><a href="https://www.makethingsaccessible.com/guides/responsive-and-accessible-tabbed-interfaces/" rel="noopener noreferrer">https://www.makethingsaccessible.com/guides/responsive-and-accessible-tabbed-interfaces/</a></li>
+        <li><a href="https://www.w3.org/WAI/ARIA/apg/patterns/tabs/" rel="noopener noreferrer">https://www.w3.org/WAI/ARIA/apg/patterns/tabs/</a></li>
+        <li><a href="https://uiterms.com/tabs/" rel="noopener noreferrer">https://uiterms.com/tabs/</a></li>
+        <li><a href="https://m3.material.io/components/tabs/accessibility" rel="noopener noreferrer">https://m3.material.io/components/tabs/accessibility</a></li>
+        <li><a href="https://css-tricks.com/pure-css-tabs-with-details-grid-and-subgrid/" rel="noopener noreferrer">https://css-tricks.com/pure-css-tabs-with-details-grid-and-subgrid/</a></li>
+        <li><a href="https://basecoatui.com/components/tabs/" rel="noopener noreferrer">https://basecoatui.com/components/tabs/</a></li>
+        <li><a href="https://daisyui.com/components/tab/" rel="noopener noreferrer">https://daisyui.com/components/tab/</a></li>
+      </ul>
+    </details>
   </section>
   </main>
   <footer class="demo-footer">
-    <a href="index.html">Back to UI</a>
+    <a href="index.html">Back to Ui</a>
   </footer>
 </body>
 

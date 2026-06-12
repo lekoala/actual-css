@@ -7,7 +7,7 @@
 .avatar {
   --avatar-size: 2.25rem;
   --avatar-radius: var(--radius-full, 9999px);
-  --avatar-font-size: 0.875rem;
+  --avatar-font-size: var(--font-size-sm);
   --avatar-bg: var(--surface-subtle);
   --avatar-fg: var(--tone-fg, var(--text-muted));
 
@@ -84,7 +84,7 @@ button.avatar {
 
 .avatar.lg {
   --avatar-size: 3rem;
-  --avatar-font-size: 1.125rem;
+  --avatar-font-size: var(--font-size-lg);
 }
 
 .avatar>.indicator,

@@ -26,14 +26,6 @@
   color: var(--surface);
   border-color: transparent;
 }
-.card.sm {
-  --card-pad: 0.75rem;
-  --card-radius: var(--radius);
-}
-.card.lg {
-  --card-pad: 1.5rem;
-  --card-radius: calc(var(--radius-lg) + 0.25rem);
-}
 
 .card.compact {
   --card-pad: 0.5rem;

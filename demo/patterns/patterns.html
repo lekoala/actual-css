@@ -22,7 +22,21 @@
       <h1>Patterns</h1>
       <p>Patterns are small structural helpers for recurring semantic HTML shapes. They sit between layout primitives and full components.</p>
     </header>
-        <section class="component-section">
+        <div class="component-prose">
+      <p>They do not define page layout like <code>.stack</code>, <code>.cluster</code>, or <code>.grid</code>, and they do not provide a strong visual identity like <code>.alert</code>, <code>.card</code>, or <code>.btn</code>. Use patterns when a semantic element needs a small amount of normalization before being composed with layout primitives or components.</p>
+<h3>Principles</h3>
+<ul>
+  <li>Layout primitives control spatial behavior.</li>
+  <li>Patterns normalize recurring semantic structures.</li>
+  <li>Components provide visual identity, states, and interaction styling.</li>
+  <li>Prefer composition over one-off component CSS.</li>
+  <li>Avoid broad element selectors such as <code>nav ul</code> or <code>.alert menu</code>.</li>
+  <li>A pattern should be useful in more than one component or context.</li>
+</ul>
+<h3>Actions</h3>
+<p>Use <code>.actions</code> for a semantic list of actions. It removes native list chrome but does not define layout. Combine it with <code>.cluster</code>, <code>.stack</code>, or another layout primitive.</p>
+    </div>
+    <section class="component-section">
       <div class="example-group">
         <div class="example-render stack">
           <menu class="actions cluster">
@@ -48,6 +62,17 @@
         </div>
       </div>
     </section>
+    <div class="component-prose">
+      <p>Use <code>.actions</code> for:</p>
+<ul>
+  <li>dialog actions</li>
+  <li>alert actions</li>
+  <li>card actions</li>
+  <li>toolbar actions</li>
+  <li>form submit/cancel groups</li>
+</ul>
+<p>Components should only add contextual spacing.</p>
+    </div>
     <section class="component-section">
       <div class="example-group">
         <div class="example-render">
@@ -72,6 +97,9 @@
         </div>
       </div>
     </section>
+    <div class="component-prose">
+      <p>Prefer composition over making each component reimplement action-list layout.</p>
+    </div>
     <section class="component-section">
       <h2>CSS</h2>
       <div class="example-group">
@@ -91,6 +119,10 @@
         </div>
       </div>
     </section>
+    <div class="component-prose">
+      <h3>Navigation List</h3>
+<p>Use <code>.nav-list</code> for a semantic list of navigation links. It removes native list chrome but does not force a direction. Combine it with layout primitives depending on context.</p>
+    </div>
     <section class="component-section">
       <div class="example-group">
         <div class="example-render stack">
@@ -131,6 +163,17 @@
         </div>
       </div>
     </section>
+    <div class="component-prose">
+      <p>Use <code>.nav-list</code> for:</p>
+<ul>
+  <li>header navigation</li>
+  <li>side navigation</li>
+  <li>footer navigation</li>
+  <li>tab-like navigation lists</li>
+  <li>documentation navigation</li>
+</ul>
+<p>Do not reset every list inside <code>nav</code>.</p>
+    </div>
     <section class="component-section">
       <h2>CSS</h2>
       <div class="example-group">
@@ -144,6 +187,9 @@
         </div>
       </div>
     </section>
+    <div class="component-prose">
+      <p>This is too broad and removes native list behavior from every navigation context, including nested documentation trees or rich content. Prefer an explicit pattern class.</p>
+    </div>
     <section class="component-section">
       <div class="example-group">
         <div class="example-render">
@@ -166,6 +212,10 @@
         </div>
       </div>
     </section>
+    <div class="component-prose">
+      <h3>Header Navigation</h3>
+<p>Header navigation is usually a composition of landmarks, layout primitives, and patterns.</p>
+    </div>
     <section class="component-section">
       <div class="example-group">
         <div class="example-render">
@@ -200,6 +250,18 @@
         </div>
       </div>
     </section>
+    <div class="component-prose">
+      <p>In this example:</p>
+<ul>
+  <li><code>header</code> provides the document landmark.</li>
+  <li><code>.center</code> constrains the content.</li>
+  <li><code>.cluster</code> arranges the brand and navigation.</li>
+  <li><code>nav</code> provides navigation semantics.</li>
+  <li><code>.nav-list</code> normalizes the navigation list.</li>
+  <li>the inner <code>.cluster</code> arranges navigation items horizontally.</li>
+</ul>
+<p>A project may add <code>.site-header</code> when it needs a visual shell.</p>
+    </div>
     <section class="component-section">
       <h2>CSS</h2>
       <div class="example-group">
@@ -211,6 +273,10 @@
         </div>
       </div>
     </section>
+    <div class="component-prose">
+      <h3>Side Navigation</h3>
+<p>Side navigation is usually a <code>.nav-list</code> composed with <code>.stack</code>.</p>
+    </div>
     <section class="component-section">
       <div class="example-group">
         <div class="example-render">
@@ -239,6 +305,9 @@
         </div>
       </div>
     </section>
+    <div class="component-prose">
+      <p>A project may add <code>.side-nav</code> only when it needs specific visual behavior such as indentation, sticky positioning, section labels, or active states.</p>
+    </div>
     <section class="component-section">
       <div class="example-group">
         <div class="example-render">
@@ -284,6 +353,10 @@
         </div>
       </div>
     </section>
+    <div class="component-prose">
+      <h3>Optional Navigation Link Styling</h3>
+<p><code>.nav-list</code> can stay purely structural. If the framework wants navigation links to have a default hit area and active state, this can be added as a lightweight visual pattern.</p>
+    </div>
     <section class="component-section">
       <h2>CSS</h2>
       <div class="example-group">
@@ -310,6 +383,11 @@
         </div>
       </div>
     </section>
+    <div class="component-prose">
+      <p>Keep this separate from layout primitives. <code>.cluster</code> and <code>.stack</code> should not style links.</p>
+<h3>Generic List</h3>
+<p>Use <code>.list</code> for rich content lists where each item may contain multiple elements.</p>
+    </div>
     <section class="component-section">
       <div class="example-group">
         <div class="example-render">
@@ -358,6 +436,17 @@
         </div>
       </div>
     </section>
+    <div class="component-prose">
+      <p><code>.list</code> is different from <code>.nav-list</code> and <code>.actions</code>.</p>
+<ul>
+  <li><code>.actions</code> is for action controls.</li>
+  <li><code>.nav-list</code> is for navigation links.</li>
+  <li><code>.list</code> is for structured content items.</li>
+</ul>
+<p>If <code>.list</code> receives visual styling, document it as a component-like pattern rather than a layout primitive.</p>
+<h3>Relationship With Layout</h3>
+<p>Patterns often compose with layout primitives.</p>
+    </div>
     <section class="component-section">
       <div class="example-group">
         <div class="example-render">
@@ -374,6 +463,9 @@
         </div>
       </div>
     </section>
+    <div class="component-prose">
+      <p>Avoid putting semantic resets into layout primitives.</p>
+    </div>
     <section class="component-section">
       <h2>CSS</h2>
       <div class="example-group">
@@ -386,6 +478,9 @@
         </div>
       </div>
     </section>
+    <div class="component-prose">
+      <p><code>.stack</code> should remain useful for real content lists where markers are expected.</p>
+    </div>
     <section class="component-section">
       <div class="example-group">
         <div class="example-render">
@@ -404,6 +499,9 @@
         </div>
       </div>
     </section>
+    <div class="component-prose">
+      <p>If list chrome should be removed, use an explicit pattern.</p>
+    </div>
     <section class="component-section">
       <div class="example-group">
         <div class="example-render">
@@ -420,6 +518,9 @@
         </div>
       </div>
     </section>
+    <div class="component-prose">
+      <h3>Recommended File</h3>
+    </div>
     <section class="component-section">
       <div class="example-group">
         <div class="example-render">
@@ -430,6 +531,9 @@
         </div>
       </div>
     </section>
+    <div class="component-prose">
+      <p>Suggested initial content:</p>
+    </div>
     <section class="component-section">
       <h2>CSS</h2>
       <div class="example-group">
@@ -451,6 +555,9 @@
         </div>
       </div>
     </section>
+    <div class="component-prose">
+      <p>Import it after tokens and layout, before components.</p>
+    </div>
     <section class="component-section">
       <h2>CSS</h2>
       <div class="example-group">
@@ -463,7 +570,10 @@
         </div>
       </div>
     </section>
-
+    <div class="component-prose">
+      <p>This lets components rely on shared structural patterns without owning their reset or layout behavior.</p>
+    </div>
+    
   </section>
   </main>
   <footer class="demo-footer">

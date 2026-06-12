@@ -45,14 +45,12 @@
 }
 
 .sm {
-  --control-size: 2rem;
-  --control-pad-x: 0.75rem;
-  --control-font-size: 0.875rem;
+  --control-size: var(--control-size-sm);
+  --control-font-size: var(--font-size-sm);
 }
 .lg {
-  --control-size: 3rem;
-  --control-pad-x: 1.25rem;
-  --control-font-size: 1rem;
+  --control-size: var(--control-size-lg);
+  --control-font-size: var(--font-size-lg);
 }
 
 /* Modern color enhancement. Baseline variant values above remain usable everywhere. */

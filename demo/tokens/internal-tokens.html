@@ -22,7 +22,22 @@
       <h1>Internal Tokens</h1>
       <p>Internal tokens are allowed when they reduce duplication or make component code clearer.</p>
     </header>
-        <section class="component-section">
+        <div class="component-prose">
+      <h3>Variant Plumbing</h3>
+<p>The shared visual variants are:</p>
+<ul>
+  <li><code>.solid</code>: full background, paired foreground. This is the default for buttons and badges.</li>
+  <li><code>.soft</code>: lightly tinted background, colored text. Good for alerts and secondary badges.</li>
+  <li><code>.outline</code>: transparent background, colored border and text.</li>
+</ul>
+<p>Buttons also support two button-only variants:</p>
+<ul>
+  <li><code>.ghost</code>: transparent button with hover affordance.</li>
+  <li><code>.link</code>: button semantics with link presentation.</li>
+</ul>
+<p>Do not force <code>.ghost</code> or <code>.link</code> onto components where the interaction model does not fit. Shared API should follow shared use.</p>
+    </div>
+    <section class="component-section">
       <h2>CSS</h2>
       <div class="example-group">
         <div class="example-code">
@@ -34,7 +49,17 @@
         </div>
       </div>
     </section>
-
+    <div class="component-prose">
+      <p>Rules:</p>
+<ul>
+  <li>Prefix internal component tokens with the component name (<code>--btn-<em></code>, <code>--alert-</em></code>, <code>--card-*</code>).</li>
+  <li>Prefix shared variant plumbing with <code>--ui-*</code>.</li>
+  <li>Keep component-specific variants in component code when they do not generalize.</li>
+  <li>Do not require users to override internal tokens for ordinary theming.</li>
+  <li>Promote an internal token to public only when there is a repeated, reasonable customization need.</li>
+</ul>
+    </div>
+    
   </section>
   </main>
   <footer class="demo-footer">

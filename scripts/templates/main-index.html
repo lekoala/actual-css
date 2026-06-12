@@ -8,14 +8,24 @@
   <link rel="stylesheet" href="{{cssPath}}/actual.css">
   <link rel="stylesheet" href="{{cssPath}}/themes/index.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+  <link rel="stylesheet" href="{{cssPath}}/demo/styles/demo.css">
+  <link rel="stylesheet" href="{{cssPath}}/demo/styles/prism.css">
 </head>
 
-<body>
-  <h1>Actual CSS</h1>
-  <h2>Demo</h2>
-  <ul>
-    {{links}}
-  </ul>
+<body class="demo-home">
+  <main class="center">
+    <header class="demo-hero">
+      <p class="demo-eyebrow">Actual CSS</p>
+      <h1>A demo catalog of every pattern, component, and token.</h1>
+      <p class="demo-lede">Pick a category to explore live examples with the markup that produces them.</p>
+    </header>
+
+    <nav class="demo-categories" aria-label="Categories">
+      <ul>
+        {{links}}
+      </ul>
+    </nav>
+  </main>
 </body>
 
 </html>

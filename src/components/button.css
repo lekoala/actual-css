@@ -4,13 +4,10 @@
  * Keeps shared intent, variant, and size behavior with a solid default. Hover,
  * focus-visible, and disabled states stay available across variants.
  */
-:where(.btn) {
-  --btn-size: var(--control-size, 2.5rem);
-  --btn-pad-x: var(--control-pad-x, 1rem);
-  --btn-font-size: var(--control-font-size, 0.9375rem);
-}
-
 .btn {
+  --btn-font-size: var(--control-font-size);
+  --btn-min-size: var(--control-size);
+  --btn-pad-x: var(--control-pad-x, 1em);
   --btn-bg: var(--ui-bg, var(--intent, var(--neutral)));
   --btn-fg: var(--ui-fg, var(--intent-fg, var(--neutral-fg)));
   --btn-border: var(--ui-border, transparent);
@@ -20,7 +17,11 @@
   align-items: center;
   justify-content: center;
   gap: 0.5em;
-  min-block-size: var(--btn-size);
+  min-block-size: var(--btn-min-size);
+  padding-block: max(
+    var(--space-1),
+    calc((var(--btn-min-size) - 1lh) / 2)
+  );
   padding-inline: var(--btn-pad-x);
   border: var(--border-width) solid var(--btn-border);
   border-radius: var(--radius);

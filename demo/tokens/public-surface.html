@@ -22,7 +22,10 @@
       <h1>Public Surface</h1>
       <p>Intent tokens are used by `.primary`, `.secondary`, `.success`, `.warning`, `.danger`, and `.neutral`.</p>
     </header>
-        <section class="component-section">
+        <div class="component-prose">
+      <h3>Color</h3>
+    </div>
+    <section class="component-section">
       <h2>CSS</h2>
       <div class="example-group">
         <div class="example-code">
@@ -43,6 +46,9 @@
         </div>
       </div>
     </section>
+    <div class="component-prose">
+      <p>Surface tokens describe the canvas and elevation model. Components should prefer these over hard-coded colors.</p>
+    </div>
     <section class="component-section">
       <h2>CSS</h2>
       <div class="example-group">
@@ -65,6 +71,11 @@
         </div>
       </div>
     </section>
+    <div class="component-prose">
+      <p>Use <code>*-fg</code> pairs only for solid backgrounds where the component controls both foreground and background. Do not require a foreground token for every surface token.</p>
+<h3>Shape</h3>
+<p>Shape is intentionally small. Components can derive local radii from these.</p>
+    </div>
     <section class="component-section">
       <h2>CSS</h2>
       <div class="example-group">
@@ -78,6 +89,11 @@
         </div>
       </div>
     </section>
+    <div class="component-prose">
+      <p>Do not create shape APIs like <code>.rounded</code>, <code>.pill</code>, or <code>.square</code> for every component. Prefer theme-level changes, for example a square theme can set all radius tokens to <code>0</code>.</p>
+<h3>Spacing</h3>
+<p>Spacing should be useful without becoming a design-token encyclopedia.</p>
+    </div>
     <section class="component-section">
       <h2>CSS</h2>
       <div class="example-group">
@@ -94,6 +110,11 @@
         </div>
       </div>
     </section>
+    <div class="component-prose">
+      <p>Use <code>em</code> for spacing that should scale with the component text size, such as button gaps and inline padding. Use <code>rem</code> for global rhythm, layouts, and fixed density.</p>
+<h3>Typography</h3>
+<p>Typography tokens should cover the document baseline and common component needs.</p>
+    </div>
     <section class="component-section">
       <h2>CSS</h2>
       <div class="example-group">
@@ -111,6 +132,11 @@
         </div>
       </div>
     </section>
+    <div class="component-prose">
+      <p>Components can use local font variables for their own mapping, but should inherit by default.</p>
+<h3>Controls</h3>
+<p>Controls share sizing so buttons, inputs, selects, and compact app UI align.</p>
+    </div>
     <section class="component-section">
       <h2>CSS</h2>
       <div class="example-group">
@@ -123,6 +149,9 @@
         </div>
       </div>
     </section>
+    <div class="component-prose">
+      <p>Size modifiers such as <code>.sm</code> and <code>.lg</code> should set these shared control tokens first. Component-specific size variables can read from them.</p>
+    </div>
     <section class="component-section">
       <h2>CSS</h2>
       <div class="example-group">
@@ -141,6 +170,10 @@
         </div>
       </div>
     </section>
+    <div class="component-prose">
+      <h3>Elevation</h3>
+<p>Use a tiny elevation surface. Components should not invent their own shadow scales.</p>
+    </div>
     <section class="component-section">
       <h2>CSS</h2>
       <div class="example-group">
@@ -152,6 +185,10 @@
         </div>
       </div>
     </section>
+    <div class="component-prose">
+      <h3>Motion</h3>
+<p>Motion tokens keep transitions consistent and easy to disable.</p>
+    </div>
     <section class="component-section">
       <h2>CSS</h2>
       <div class="example-group">
@@ -169,6 +206,10 @@
         </div>
       </div>
     </section>
+    <div class="component-prose">
+      <h3>Icons</h3>
+<p>Icons used by CSS-only controls are public tokens because users may need to replace them.</p>
+    </div>
     <section class="component-section">
       <h2>CSS</h2>
       <div class="example-group">
@@ -180,7 +221,10 @@
         </div>
       </div>
     </section>
-
+    <div class="component-prose">
+      <p>Only add an icon token when CSS needs the icon. Markup icons should stay in markup.</p>
+    </div>
+    
   </section>
   </main>
   <footer class="demo-footer">

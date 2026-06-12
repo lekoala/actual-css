@@ -10,8 +10,6 @@ const ROOT = join(__dirname, "..");
 const DEMO = join(ROOT, "demo");
 const DOCS = join(ROOT, "docs", "manual");
 
-const config = JSON.parse(readFileSync(join(__dirname, "demo-config.json"), "utf8"));
-
 const templates = {
   page: readFileSync(join(__dirname, "templates", "page.html"), "utf8"),
   index: readFileSync(join(__dirname, "templates", "index.html"), "utf8"),
@@ -33,27 +31,114 @@ function escapeHtml(str) {
     .replace(/"/g, "&quot;");
 }
 
-function parseMarkdown(content) {
+function categoryNameFromFile(file) {
+  const base = file.replace(/\.md$/, "");
+  return base
+    .split(/[-_]/)
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(" ");
+}
+
+function inlineProse(text) {
+  return text
+    .replace(/`([^`]+)`/g, (_, c) => `<code>${escapeHtml(c)}</code>`)
+    .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
+    .replace(/\*([^*]+)\*/g, "<em>$1</em>")
+    .replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_, label, url) => `<a href="${url}">${label}</a>`);
+}
+
+function renderProseBlock(lines) {
+  if (lines.length === 0) return "";
+  const trimmed = lines.map((l) => l.trim()).filter((l) => l !== "");
+  if (trimmed.length === 0) return "";
+
+  const blocks = [];
+  let current = null;
+
+  for (const line of trimmed) {
+    const h3 = line.match(/^###\s+(.+)$/);
+    const li = line.match(/^[-*]\s+(.+)$/);
+
+    if (h3) {
+      if (current) blocks.push(current);
+      current = { type: "h3", html: `<h3>${inlineProse(h3[1])}</h3>` };
+      continue;
+    }
+
+    if (li) {
+      if (!current || current.type !== "ul") {
+        if (current) blocks.push(current);
+        current = { type: "ul", html: "" };
+      }
+      current.html += `  <li>${inlineProse(li[1])}</li>\n`;
+      continue;
+    }
+
+    if (current && current.type === "p") {
+      current.html += ` ${inlineProse(line)}`;
+    } else {
+      if (current) blocks.push(current);
+      current = { type: "p", html: inlineProse(line) };
+    }
+  }
+  if (current) blocks.push(current);
+
+  return blocks
+    .map((b) => {
+      if (b.type === "ul") return `<ul>\n${b.html}</ul>`;
+      if (b.type === "h3") return b.html;
+      return `<p>${b.html}</p>`;
+    })
+    .join("\n");
+}
+
+function parseMarkdown(content, fallbackTitle) {
   const lines = content.split("\n");
   const sections = [];
   let current = null;
   let codeBlock = null;
   let codeWrapperClasses = "";
   let codeLines = [];
+  let proseBuffer = [];
+  let descSet = false;
+  let hasH2 = false;
+  let h1Title = null;
+
+  function flushProse() {
+    if (!current) {
+      proseBuffer = [];
+      return;
+    }
+    const html = renderProseBlock(proseBuffer);
+    if (html) {
+      current.items.push({ type: "prose", html });
+    }
+    proseBuffer = [];
+  }
 
   for (const line of lines) {
-    const h2Match = line.match(/^## (.+)$/);
+    const h1Match = line.match(/^#\s+(.+)$/);
+    if (h1Match && !codeBlock && !h1Title) {
+      h1Title = h1Match[1].trim();
+      continue;
+    }
+
+    const h2Match = line.match(/^##\s+(.+)$/);
 
     if (h2Match && !codeBlock) {
+      hasH2 = true;
+      flushProse();
       if (current) sections.push(current);
-      current = { title: h2Match[1], slug: slugify(h2Match[1]), blocks: [], desc: "" };
+      current = { title: h2Match[1].trim(), slug: slugify(h2Match[1]), items: [], desc: "", links: [] };
+      descSet = false;
       continue;
     }
 
     if (line.startsWith("```") && !codeBlock) {
       const match = line.match(/^```(\w+)(?:\{([^}]*)\})?\s*$/);
       const lang = match?.[1] || "html";
-      const wrapperClasses = match?.[2]?.split(/\s+/).map(c => c.replace(/^\./, "")).join(" ") || "";
+      const wrapperClasses = match?.[2]?.split(/\s+/).map((c) => c.replace(/^\./, "")).join(" ") || "";
+      flushProse();
       codeBlock = lang;
       codeWrapperClasses = wrapperClasses;
       codeLines = [];
@@ -63,7 +148,7 @@ function parseMarkdown(content) {
     if (line.startsWith("```") && codeBlock) {
       const code = codeLines.join("\n");
       if (current) {
-        current.blocks.push({ lang: codeBlock, code, wrapperClasses: codeWrapperClasses });
+        current.items.push({ lang: codeBlock, code, wrapperClasses: codeWrapperClasses });
       }
       codeBlock = null;
       codeWrapperClasses = "";
@@ -78,68 +163,129 @@ function parseMarkdown(content) {
 
     if (!current) continue;
 
-    if (line.startsWith("Links:")) continue;
-    if (line.match(/^- https?:\/\//)) continue;
-
     const trimmed = line.trim();
-    if (trimmed === "") continue;
-    if (trimmed.startsWith("### ")) continue;
 
-    if (trimmed.startsWith("- ")) {
-      if (!current.desc) current.desc = trimmed.slice(2);
+    if (trimmed === "") {
+      if (proseBuffer.length > 0 && proseBuffer[proseBuffer.length - 1] !== "") {
+        proseBuffer.push("");
+      }
       continue;
     }
 
-    if (!current.desc) {
+    if (/^Links:\s*$/.test(trimmed)) {
+      continue;
+    }
+
+    const linkMatch = trimmed.match(/^[-*]\s+(https?:\/\/\S+)\s*$/);
+    if (linkMatch) {
+      current.links.push({ url: linkMatch[1], label: linkMatch[1] });
+      continue;
+    }
+
+    const liMatch = trimmed.match(/^[-*]\s+(.+)$/);
+    if (liMatch) {
+      if (!descSet && current) {
+        current.desc = liMatch[1];
+        descSet = true;
+      } else {
+        proseBuffer.push(trimmed);
+      }
+      continue;
+    }
+
+    if (/^###\s+/.test(trimmed)) {
+      proseBuffer.push(trimmed);
+      continue;
+    }
+
+    if (!descSet && current) {
       current.desc = trimmed;
+      descSet = true;
+    } else {
+      proseBuffer.push(trimmed);
     }
   }
 
+  flushProse();
   if (current) sections.push(current);
-  return sections.filter((s) => s.blocks.length > 0);
+
+  if (!hasH2) {
+    const title = h1Title || fallbackTitle;
+    sections.push({
+      title,
+      slug: slugify(title),
+      items: proseBuffer.length > 0
+        ? [{ type: "prose", html: renderProseBlock(proseBuffer) || "" }].filter((i) => i.html)
+        : [],
+      desc: "",
+      links: [],
+    });
+  }
+
+  return sections;
 }
 
-function renderBlocks(blocks) {
-  let html = "";
-  for (const block of blocks) {
-    const grammar = block.lang === "css" ? Prism.languages.css : Prism.languages.markup;
-    const highlighted = Prism.highlight(block.code, grammar, block.lang);
-    const wrapperClass = block.wrapperClasses ? ` ${block.wrapperClasses}` : "";
+function renderCodeBlock(block) {
+  const grammar = block.lang === "css" ? Prism.languages.css : Prism.languages.markup;
+  const highlighted = Prism.highlight(block.code, grammar, block.lang);
+  const wrapperClass = block.wrapperClasses ? ` ${block.wrapperClasses}` : "";
 
-    if (block.lang === "css") {
-      html += `    <section class="component-section">\n`;
-      html += `      <h2>CSS</h2>\n`;
-      html += `      <div class="example-group">\n`;
-      html += `        <div class="example-code">\n`;
-      html += `          <pre><code class="language-${block.lang}">${highlighted}</code></pre>\n`;
-      html += `        </div>\n`;
-      html += `      </div>\n`;
-      html += `    </section>\n`;
-    } else {
-      html += `    <section class="component-section">\n`;
-      html += `      <div class="example-group">\n`;
-      html += `        <div class="example-render${wrapperClass}">\n`;
-      html += `          ${block.code}\n`;
-      html += `        </div>\n`;
-      html += `        <div class="example-code">\n`;
-      html += `          <pre><code class="language-${block.lang}">${highlighted}</code></pre>\n`;
-      html += `        </div>\n`;
-      html += `      </div>\n`;
-      html += `    </section>\n`;
-    }
+  if (block.lang === "css") {
+    return `    <section class="component-section">
+      <h2>CSS</h2>
+      <div class="example-group">
+        <div class="example-code">
+          <pre><code class="language-${block.lang}">${highlighted}</code></pre>
+        </div>
+      </div>
+    </section>`;
   }
-  return html;
+
+  return `    <section class="component-section">
+      <div class="example-group">
+        <div class="example-render${wrapperClass}">
+          ${block.code}
+        </div>
+        <div class="example-code">
+          <pre><code class="language-${block.lang}">${highlighted}</code></pre>
+        </div>
+      </div>
+    </section>`;
+}
+
+function renderItem(item) {
+  if (item.type === "prose") {
+    return `    <div class="component-prose">
+      ${item.html}
+    </div>`;
+  }
+  return renderCodeBlock(item);
+}
+
+function renderLinksAccordion(links) {
+  if (!links || links.length === 0) return "";
+  const items = links
+    .map((l) => `        <li><a href="${l.url}" rel="noopener noreferrer">${l.label}</a></li>`)
+    .join("\n");
+  return `    <details class="demo-links">
+      <summary>Links (${links.length})</summary>
+      <ul>
+${items}
+      </ul>
+    </details>`;
 }
 
 function renderPage(catName, section) {
   const desc = section.desc ? `<p>${escapeHtml(section.desc)}</p>` : "";
-  const content = renderBlocks(section.blocks);
+  const items = section.items.map(renderItem).join("\n");
+  const links = renderLinksAccordion(section.links);
 
   return templates.page
     .replace(/\{\{title\}\}/g, escapeHtml(section.title))
     .replace(/\{\{category\}\}/g, escapeHtml(catName))
     .replace(/\{\{desc\}\}/g, desc)
-    .replace(/\{\{content\}\}/g, content)
+    .replace(/\{\{content\}\}/g, items)
+    .replace(/\{\{links\}\}/g, links)
     .replace(/\{\{cssPath\}\}/g, "../../src")
     .replace(/\{\{demoCssPath\}\}/g, "../..");
 }
@@ -153,12 +299,13 @@ function renderIndex(catName, catDesc, sections) {
           <h3><a href="${section.slug}.html">${escapeHtml(section.title)}</a></h3>
           ${desc}
         </div>
-      </article>\n`;
+      </article>
+`;
   }
 
   return templates.index
     .replace(/\{\{title\}\}/g, escapeHtml(catName))
-    .replace(/\{\{desc\}\}/g, escapeHtml(catDesc))
+    .replace(/\{\{desc\}\}/g, escapeHtml(catDesc || ""))
     .replace(/\{\{cards\}\}/g, cards)
     .replace(/\{\{cssPath\}\}/g, "../../src")
     .replace(/\{\{demoCssPath\}\}/g, "../..");
@@ -167,7 +314,8 @@ function renderIndex(catName, catDesc, sections) {
 function renderMainIndex(categories) {
   let links = "";
   for (const cat of categories) {
-    links += `    <li><a href="${cat.slug}/index.html">${cat.name}</a></li>\n`;
+    links += `    <li><a href="${cat.slug}/index.html">${escapeHtml(cat.name)}</a></li>
+`;
   }
 
   return templates.mainIndex
@@ -175,9 +323,27 @@ function renderMainIndex(categories) {
     .replace(/\{\{cssPath\}\}/g, "src");
 }
 
+function extractCategoryDescription(content) {
+  const lines = content.split("\n");
+  let inCode = false;
+  for (const line of lines) {
+    if (line.startsWith("```")) {
+      inCode = !inCode;
+      continue;
+    }
+    if (inCode) continue;
+    if (line.startsWith("#")) continue;
+    const t = line.trim();
+    if (t === "" || t === "Links:" || /^[-*]\s+https?:/.test(t)) continue;
+    if (/^[-*]\s+/.test(t)) return t.replace(/^[-*]\s+/, "");
+    return t;
+  }
+  return "";
+}
+
 function buildCategory(category) {
   const md = readFileSync(join(DOCS, category.file), "utf8");
-  const sections = parseMarkdown(md);
+  const sections = parseMarkdown(md, category.name);
   const slug = slugify(category.name);
   const dir = join(DEMO, slug);
 
@@ -194,8 +360,19 @@ function buildCategory(category) {
   return { name: category.name, slug, sections };
 }
 
+function discoverCategories() {
+  return readdirSync(DOCS)
+    .filter((f) => f.endsWith(".md"))
+    .map((file) => {
+      const name = categoryNameFromFile(file);
+      const content = readFileSync(join(DOCS, file), "utf8");
+      return { file, name, desc: extractCategoryDescription(content) };
+    });
+}
+
 function main() {
-  const results = config.map((cat) => buildCategory(cat));
+  const categories = discoverCategories();
+  const results = categories.map((cat) => buildCategory(cat));
   writeFileSync(join(DEMO, "index.html"), renderMainIndex(results));
 
   console.log("Demo pages generated:");

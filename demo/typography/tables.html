@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tables — Actual CSS</title>
+  <link rel="stylesheet" href="../../src/actual.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+  <link rel="stylesheet" href="../../demo/styles/demo.css">
+  <link rel="stylesheet" href="../../demo/styles/prism.css">
+</head>
+
+<body>
+  <nav class="demo-nav">
+    <a href="index.html">&larr; Typography</a>
+    <a href="../index.html">Homepage</a>
+  </nav>
+  <main class="center">
+  <section class="component-section">
+    <header class="component-header">
+      <h1>Tables</h1>
+      <p>Long-form content can contain simple prose tables, but app data tables should use the table component.</p>
+    </header>
+        <section class="component-section">
+      <h2>CSS</h2>
+      <div class="example-group">
+        <div class="example-code">
+          <pre><code class="language-css"><span class="token selector">.prose table</span> <span class="token punctuation">{</span>
+  <span class="token property">inline-size</span><span class="token punctuation">:</span> 100%<span class="token punctuation">;</span>
+  <span class="token property">border-collapse</span><span class="token punctuation">:</span> collapse<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token selector">.prose th,
+.prose td</span> <span class="token punctuation">{</span>
+  <span class="token property">padding</span><span class="token punctuation">:</span> 0.5em<span class="token punctuation">;</span>
+  <span class="token property">border-block-end</span><span class="token punctuation">:</span> <span class="token function">var</span><span class="token punctuation">(</span>--border-width<span class="token punctuation">)</span> solid <span class="token function">var</span><span class="token punctuation">(</span>--border<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token property">text-align</span><span class="token punctuation">:</span> start<span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+        </div>
+      </div>
+    </section>
+    
+  </section>
+  </main>
+  <footer class="demo-footer">
+    <a href="index.html">Back to Typography</a>
+  </footer>
+</body>
+
+</html>
