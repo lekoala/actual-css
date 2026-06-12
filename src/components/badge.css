@@ -5,13 +5,9 @@
  * a solid default and no badge-specific color API.
  */
 .badge {
-  --badge-bg: var(--ui-bg, var(--intent, var(--neutral)));
-  --badge-fg: var(--ui-fg, var(--intent-fg, var(--neutral-fg)));
-  --badge-border: var(--ui-border, transparent);
-  --badge-radius: 999px;
   --badge-size: 1.5rem;
-  --badge-pad-x: 0.55rem;
-  --control-font-size: 0.8125rem;
+  --badge-pad-x: 0.55em;
+  --badge-font-size: 0.8125rem;
 
   display: inline-flex;
   align-items: center;
@@ -23,7 +19,7 @@
   border-radius: var(--badge-radius);
   background: var(--badge-bg);
   color: var(--badge-fg);
-  font-size: var(--control-font-size);
+  font-size: var(--badge-font-size);
   font-weight: 650;
   line-height: 1;
   text-decoration: none;
@@ -37,7 +33,7 @@
 
 .badge:empty {
   --badge-size: 0.5rem;
-  --badge-pad-x: 0;
+  padding: 0;
   border: 0;
   inline-size: var(--badge-size);
   block-size: var(--badge-size);
@@ -48,13 +44,11 @@
 }
 .badge.sm {
   --badge-size: 1.25rem;
-  --badge-pad-x: 0.45rem;
-  --control-font-size: 0.75rem;
+  --badge-font-size: 0.75rem;
 }
 .badge.lg {
   --badge-size: 1.875rem;
-  --badge-pad-x: 0.7rem;
-  --control-font-size: 0.875rem;
+  --badge-font-size: var(--font-size-sm);
 }
 
 :where(a.badge, button.badge):hover {

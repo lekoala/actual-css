@@ -13,7 +13,7 @@
 
 <body>
   <nav class="demo-nav">
-    <a href="index.html">&larr; UI</a>
+    <a href="index.html">&larr; Ui</a>
     <a href="../index.html">Homepage</a>
   </nav>
   <main class="center">
@@ -22,7 +22,16 @@
       <h1>Dropdown</h1>
       <p>Use `.dropdown` for the positioned root.</p>
     </header>
-        <section class="component-section">
+        <div class="component-prose">
+      <ul>
+  <li>Use a button trigger for actions and disclosure.</li>
+  <li>JavaScript updates <code>aria-expanded</code>, <code>hidden</code>, focus, and dismissal.</li>
+  <li>Support Escape, outside click, focus return, and keyboard navigation.</li>
+  <li>Use <code>role=&quot;menu&quot;</code> only for application action menus. Navigation lists should stay navigation lists.</li>
+  <li>Popover-based dropdowns can be a modern enhancement, not the only path.</li>
+</ul>
+    </div>
+    <section class="component-section">
       <div class="example-group">
         <div class="example-render">
           <div class="dropdown">
@@ -74,6 +83,9 @@
         </div>
       </div>
     </section>
+    <div class="component-prose">
+      <p>Navigation dropdowns are not menus in the ARIA application-menu sense.</p>
+    </div>
     <section class="component-section">
       <div class="example-group">
         <div class="example-render">
@@ -164,11 +176,20 @@
         </div>
       </div>
     </section>
-
+        <details class="demo-links">
+      <summary>Links (5)</summary>
+      <ul>
+        <li><a href="https://picocss.com/docs/dropdown" rel="noopener noreferrer">https://picocss.com/docs/dropdown</a></li>
+        <li><a href="https://oat.ink/components/#dropdown" rel="noopener noreferrer">https://oat.ink/components/#dropdown</a></li>
+        <li><a href="https://daisyui.com/components/dropdown/" rel="noopener noreferrer">https://daisyui.com/components/dropdown/</a></li>
+        <li><a href="https://www.w3.org/WAI/ARIA/apg/patterns/menu-button/" rel="noopener noreferrer">https://www.w3.org/WAI/ARIA/apg/patterns/menu-button/</a></li>
+        <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Global_attributes/popover" rel="noopener noreferrer">https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Global_attributes/popover</a></li>
+      </ul>
+    </details>
   </section>
   </main>
   <footer class="demo-footer">
-    <a href="index.html">Back to UI</a>
+    <a href="index.html">Back to Ui</a>
   </footer>
 </body>
 

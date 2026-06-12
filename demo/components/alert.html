@@ -22,7 +22,19 @@
       <h1>Alert</h1>
       <p>Supports intent colors.</p>
     </header>
-        <section class="component-section">
+        <div class="component-prose">
+      <ul>
+  <li>Supports longer text and lists.</li>
+  <li>Links inherit alert color by default.</li>
+  <li>Use <code>&lt;menu class=&quot;actions cluster&quot;&gt;</code> for alert action lists.</li>
+  <li>Use <code>role=&quot;alert&quot;</code> only when the alert is injected dynamically and should be announced.</li>
+  <li>Not a toast.</li>
+  <li>Could have simple or complex html content.</li>
+  <li>Alerts may include a decorative leading icon. Place an <code>aria-hidden=&quot;true&quot;</code> element as the first direct child.</li>
+  <li>Font-size inherits from the surrounding context. Adjust via local CSS variables for specific use cases.</li>
+</ul>
+    </div>
+    <section class="component-section">
       <div class="example-group">
         <div class="example-render stack">
           <div class="alert success">
@@ -146,7 +158,17 @@
         </div>
       </div>
     </section>
-
+        <details class="demo-links">
+      <summary>Links (6)</summary>
+      <ul>
+        <li><a href="https://oat.ink/components/#alert" rel="noopener noreferrer">https://oat.ink/components/#alert</a></li>
+        <li><a href="https://getbootstrap.com/docs/5.3/components/alerts/" rel="noopener noreferrer">https://getbootstrap.com/docs/5.3/components/alerts/</a></li>
+        <li><a href="https://playground.halfaccessible.com/aria-reference/alert-role" rel="noopener noreferrer">https://playground.halfaccessible.com/aria-reference/alert-role</a></li>
+        <li><a href="https://www.a11y-collective.com/blog/aria-alert/" rel="noopener noreferrer">https://www.a11y-collective.com/blog/aria-alert/</a></li>
+        <li><a href="https://primer.style/accessibility/patterns/accessible-notifications-and-messages/" rel="noopener noreferrer">https://primer.style/accessibility/patterns/accessible-notifications-and-messages/</a></li>
+        <li><a href="https://uiterms.com/alert/" rel="noopener noreferrer">https://uiterms.com/alert/</a></li>
+      </ul>
+    </details>
   </section>
   </main>
   <footer class="demo-footer">

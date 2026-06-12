@@ -22,7 +22,15 @@
       <h1>Theme Contract</h1>
       <p>A theme can be complete by overriding only:</p>
     </header>
-        <section class="component-section">
+        <div class="component-prose">
+      <ul>
+  <li>intent colors and foreground pairs</li>
+  <li>surface, text, border, focus, and overlay colors</li>
+  <li>radius tokens</li>
+  <li>optional shadow, motion, and typography tokens</li>
+</ul>
+    </div>
+    <section class="component-section">
       <h2>CSS</h2>
       <div class="example-group">
         <div class="example-code">
@@ -62,7 +70,10 @@
         </div>
       </div>
     </section>
-
+    <div class="component-prose">
+      <p>Dark themes should set <code>color-scheme: dark</code>. Light themes should set <code>color-scheme: light</code>.</p>
+    </div>
+    
   </section>
   </main>
   <footer class="demo-footer">

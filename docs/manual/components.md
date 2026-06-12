@@ -101,6 +101,7 @@ Links:
 - Not a toast.
 - Could have simple or complex html content.
 - Alerts may include a decorative leading icon. Place an `aria-hidden="true"` element as the first direct child.
+- Font-size inherits from the surrounding context. Adjust via local CSS variables for specific use cases.
 
 ```html{.stack}
 <div class="alert success">
@@ -374,7 +375,7 @@ Links:
     </ul>
   </section>
 
-  <footer>
+  <footer class="cluster">
     <time datetime="2026-06-12">June 12, 2026</time>
     <button type="button" class="btn">Read more</button>
   </footer>

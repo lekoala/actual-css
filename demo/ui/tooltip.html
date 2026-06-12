@@ -13,7 +13,7 @@
 
 <body>
   <nav class="demo-nav">
-    <a href="index.html">&larr; UI</a>
+    <a href="index.html">&larr; Ui</a>
     <a href="../index.html">Homepage</a>
   </nav>
   <main class="center">
@@ -22,7 +22,15 @@
       <h1>Tooltip</h1>
       <p>Use `aria-describedby` to connect the trigger to the tooltip.</p>
     </header>
-        <section class="component-section">
+        <div class="component-prose">
+      <ul>
+  <li>Tooltips are supplemental. Do not put required information or interactive controls inside them.</li>
+  <li>Show on hover and focus. Hide on Escape, blur, pointer leave, or scroll when appropriate.</li>
+  <li>JavaScript can generate tooltip elements from <code>data-tooltip</code>.</li>
+  <li>Avoid relying on the native <code>title</code> attribute as the primary implementation.</li>
+</ul>
+    </div>
+    <section class="component-section">
       <div class="example-group">
         <div class="example-render">
           <button class="btn ghost"
@@ -64,11 +72,27 @@
         </div>
       </div>
     </section>
-
+    <div class="component-prose">
+      <ul>
+  <li>Modern tooltips: https://codepen.io/lekoalabe/pen/JoPNWpX</li>
+</ul>
+    </div>
+        <details class="demo-links">
+      <summary>Links (7)</summary>
+      <ul>
+        <li><a href="https://oat.ink/components/#tooltip" rel="noopener noreferrer">https://oat.ink/components/#tooltip</a></li>
+        <li><a href="https://picocss.com/docs/tooltip" rel="noopener noreferrer">https://picocss.com/docs/tooltip</a></li>
+        <li><a href="https://uiterms.com/tooltip/" rel="noopener noreferrer">https://uiterms.com/tooltip/</a></li>
+        <li><a href="https://vispero.com/resources/using-the-html-title-attribute-updated/" rel="noopener noreferrer">https://vispero.com/resources/using-the-html-title-attribute-updated/</a></li>
+        <li><a href="https://m3.material.io/components/tooltips/overview" rel="noopener noreferrer">https://m3.material.io/components/tooltips/overview</a></li>
+        <li><a href="https://basecoatui.com/components/tooltip/" rel="noopener noreferrer">https://basecoatui.com/components/tooltip/</a></li>
+        <li><a href="https://daisyui.com/components/tooltip/" rel="noopener noreferrer">https://daisyui.com/components/tooltip/</a></li>
+      </ul>
+    </details>
   </section>
   </main>
   <footer class="demo-footer">
-    <a href="index.html">Back to UI</a>
+    <a href="index.html">Back to Ui</a>
   </footer>
 </body>
 

@@ -13,7 +13,7 @@
 
 <body>
   <nav class="demo-nav">
-    <a href="index.html">&larr; UI</a>
+    <a href="index.html">&larr; Ui</a>
     <a href="../index.html">Homepage</a>
   </nav>
   <main class="center">
@@ -22,7 +22,14 @@
       <h1>Scrollspy</h1>
       <p>Use regular document landmarks and anchor links.</p>
     </header>
-        <section class="component-section">
+        <div class="component-prose">
+      <ul>
+  <li>JavaScript updates <code>aria-current=&quot;true&quot;</code> or <code>aria-current=&quot;location&quot;</code> on the active link.</li>
+  <li>Prefer <code>IntersectionObserver</code> with a small fallback that leaves links usable.</li>
+  <li>CSS styles the current state; it should not depend on scroll JavaScript to make navigation usable.</li>
+</ul>
+    </div>
+    <section class="component-section">
       <div class="example-group">
         <div class="example-render">
           <nav class="scrollspy" aria-label="Page sections">
@@ -68,11 +75,18 @@
         </div>
       </div>
     </section>
-
+        <details class="demo-links">
+      <summary>Links (3)</summary>
+      <ul>
+        <li><a href="https://getbootstrap.com/docs/5.3/components/scrollspy/" rel="noopener noreferrer">https://getbootstrap.com/docs/5.3/components/scrollspy/</a></li>
+        <li><a href="https://una.im/scroll-target-group/" rel="noopener noreferrer">https://una.im/scroll-target-group/</a></li>
+        <li><a href="https://www.sarasoueidan.com/blog/css-scrollspy/" rel="noopener noreferrer">https://www.sarasoueidan.com/blog/css-scrollspy/</a></li>
+      </ul>
+    </details>
   </section>
   </main>
   <footer class="demo-footer">
-    <a href="index.html">Back to UI</a>
+    <a href="index.html">Back to Ui</a>
   </footer>
 </body>
 
