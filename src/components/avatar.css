@@ -6,6 +6,10 @@
  */
 .avatar {
   --avatar-size: 2.25rem;
+  --avatar-radius: var(--radius-full, 9999px);
+  --avatar-font-size: 0.875rem;
+  --avatar-bg: var(--surface-subtle);
+  --avatar-fg: var(--tone-fg, var(--text-muted));
 
   position: relative;
   display: inline-grid;
@@ -13,18 +17,22 @@
   inline-size: var(--avatar-size);
   block-size: var(--avatar-size);
   overflow: visible;
+  padding: 0;
   border: 0;
-  border-radius: var(--radius);
-  background: var(--surface-subtle);
-  color: var(--text-muted);
+  border-radius: var(--avatar-radius);
+  background: var(--avatar-bg);
+  color: var(--avatar-fg);
   font: inherit;
-  font-weight: 750;
+  font-size: var(--avatar-font-size);
+  font-weight: var(--font-weight-strong);
   line-height: 1;
   text-decoration: none;
   vertical-align: middle;
+  user-select: none;
+  flex: 0 0 auto;
 }
 
-.avatar > :first-child:not(img):not(picture) {
+.avatar> :first-child:not(:where(img, picture, .badge, .indicator)) {
   display: inline-grid;
   place-items: center;
   inline-size: 100%;
@@ -33,17 +41,29 @@
   border-radius: inherit;
 }
 
-.avatar > img,
-.avatar > picture,
-.avatar > :first-child > img,
-.avatar > :first-child > picture {
+.avatar>img,
+.avatar>picture {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  overflow: hidden;
+  border-radius: inherit;
+}
+
+.avatar>img,
+.avatar>picture>img {
   inline-size: 100%;
   block-size: 100%;
   object-fit: cover;
   border-radius: inherit;
 }
 
+.avatar>picture>img {
+  display: block;
+}
+
 button.avatar {
+  appearance: none;
   cursor: pointer;
 }
 
@@ -59,23 +79,41 @@ button.avatar {
 
 .avatar.sm {
   --avatar-size: 1.75rem;
-  font-size: 0.8125rem;
+  --avatar-font-size: 0.8125rem;
 }
 
 .avatar.lg {
   --avatar-size: 3rem;
-  font-size: 1.125rem;
+  --avatar-font-size: 1.125rem;
 }
 
-.avatar-group {
+.avatar>.indicator,
+.avatar>.badge.indicator {
+  position: absolute;
+  inset-block-end: 0;
+  inset-inline-end: 0;
+  z-index: 1;
+  box-shadow: 0 0 0 2px var(--surface);
+  transform: translate(25%, 25%);
+}
+
+/* Grouped avatars */
+:where([role="group"]:has(> .avatar + .avatar)) {
+  --avatar-group-overlap: calc(var(--avatar-size, 2.25rem) / -4);
+  --avatar-group-ring: 2px;
+
   display: inline-flex;
   align-items: center;
 }
 
-.avatar-group > .avatar {
-  box-shadow: 0 0 0 2px var(--surface);
+:where([role="group"]:has(> .avatar + .avatar))>.avatar {
+  box-shadow: 0 0 0 var(--avatar-group-ring) var(--surface);
 }
 
-.avatar-group > .avatar + .avatar {
-  margin-inline-start: calc(var(--avatar-size) / -4);
+:where([role="group"]:has(> .avatar + .avatar))>.avatar+.avatar {
+  margin-inline-start: var(--avatar-group-overlap);
+}
+
+:where([role="group"]:has(> .avatar + .avatar))>.avatar:is(:hover, :focus-visible) {
+  z-index: 1;
 }

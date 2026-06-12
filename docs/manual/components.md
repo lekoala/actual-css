@@ -173,10 +173,11 @@ Links:
 
 - Supports initials and images.
 - Can be an inert element, link, or button.
-- Can be grouped with `.avatar-group`.
+- Can be grouped with `role="group"` and `:has()`
 - Can be combined with `badge` and `indicator`.
 - Does not support shape modifiers as public API. Shape is theme-level.
 - Sizes can be adjusted with CSS variables and optional `.sm` or `.lg`.
+- Background is an exposed css variable (and can use `data-tone`).
 
 ```html
 <div class="avatar" role="img" aria-label="John Doe, online">
@@ -186,8 +187,8 @@ Links:
 ```
 
 ```html
-<a href="/profile/jane" class="avatar">
-  <img src="/avatar.svg" alt="Jane Doe" />
+<a href="#" class="avatar">
+  <img src="https://mockmind-api.uifaces.co/content/human/219.jpg" alt="Jane Doe" />
 </a>
 
 <button type="button"
@@ -195,19 +196,19 @@ Links:
         aria-haspopup="menu"
         aria-expanded="false"
         aria-label="Jane Doe, open profile menu">
-  <img src="/avatar.svg" alt="" />
+  <img src="https://mockmind-api.uifaces.co/content/human/219.jpg" alt="" />
 </button>
 ```
 
 ```html
-<div class="avatar-group" role="group" aria-label="Team members">
-  <div class="avatar" role="img" aria-label="John Doe">
+<div role="group" aria-label="Team members">
+  <div class="avatar" role="img" aria-label="John Doe" style="--avatar-bg:#E5EEE4">
     <span aria-hidden="true">JD</span>
   </div>
-  <div class="avatar" role="img" aria-label="Jane Doe">
+  <div class="avatar" role="img" aria-label="Jane Doe" style="--avatar-bg:#F6F4E8">
     <span aria-hidden="true">JD</span>
   </div>
-  <div class="avatar" aria-label="99 more team members">
+  <div class="avatar" role="img" aria-label="99 more team members" style="--avatar-bg:#744577;" data-tone="dark">
     <span aria-hidden="true">+99</span>
   </div>
 </div>
