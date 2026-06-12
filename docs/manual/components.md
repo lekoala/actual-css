@@ -184,6 +184,16 @@ Links:
   <span aria-hidden="true">JD</span>
   <span class="badge indicator success" aria-label="Online"></span>
 </div>
+
+<div class="avatar lg" role="img" aria-label="John Doe, online">
+  <span aria-hidden="true">JD</span>
+  <span class="badge indicator success" aria-label="Online"></span>
+</div>
+
+<div class="avatar sm" role="img" aria-label="John Doe, online">
+  <span aria-hidden="true">JD</span>
+  <span class="badge indicator indicator-bottom danger" aria-label="Online"></span>
+</div>
 ```
 
 ```html
@@ -247,7 +257,7 @@ Links:
   <span class="badge danger" aria-label="12 unread notifications">12</span>
 </button>
 
-<button type="button" class="btn ghost" aria-label="Notifications">
+<button type="button" class="btn secondary soft" aria-label="Notifications">
   <i class="ti ti-bell" aria-hidden="true"></i>
   <span class="badge indicator danger" aria-label="Errors!"></span>
 </button>
