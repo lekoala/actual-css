@@ -6,219 +6,104 @@
   <title>Application — Actual CSS</title>
   <link rel="stylesheet" href="../../src/actual.css">
   <link rel="stylesheet" href="../../src/themes/index.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
   <style>
-    /* App shell layout */
-    .app {
-      display: flex;
+    /* Template-local layout. Each rule papers over a known framework gap.
+     *
+     *   .app-layout / .app-layout-sidebar / .app-layout-main
+     *     -> app shell with persistent sidebar (gap: layout primitive).
+     *   .app-layout-topbar
+     *     -> sticky topbar with backdrop blur (gap: topbar pattern).
+     *   .app-layout-hamburger / .app-layout-hide-mobile
+     *     -> sidebar -> drawer handoff at 64rem (gap: responsive sidebar swap).
+     *   .app-search / .app-search-input
+     *     -> input-with-leading-icon (gap: search input).
+     *   .toast-stack
+     *     -> fixed top-end stack for dismissible .alert (gap: toast container).
+     *   .app-sidebar .nav-link / .app-sidebar .nav-link .badge
+     *     -> sidebar nav with icon + text + trailing badge (gap: side nav link).
+     *   .app-sidebar .nav-list-sub
+     *     -> indented sub-navigation (gap: sub-nav indent).
+     *   .app-sidebar details > summary
+     *     -> collapsible section with chevron rotation (gap: collapsible nav).
+     *
+     * Everything else (avatars, buttons, badges, cards, tables, dialogs,
+     * drawer, dropdowns, alerts, forms) comes straight from the framework.
+     */
+
+    .app-layout {
+      display: grid;
+      grid-template-columns: 1fr;
       min-block-size: 100dvh;
     }
 
-    /* Sidebar */
-    .app-sidebar {
-      display: flex;
+    .app-layout-sidebar {
+      display: none;
       flex-direction: column;
       gap: var(--gap);
       inline-size: 16rem;
       padding: 1rem;
-      border-inline-end: 1px solid var(--border);
+      border-inline-end: var(--border-width) solid var(--border);
       background: var(--surface-raised);
-      flex-shrink: 0;
+      overflow-y: auto;
     }
 
-    .app-sidebar-brand {
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-      padding: 0.5rem;
-      color: var(--text);
-      font-weight: 750;
-      text-decoration: none;
-    }
-
-    .app-sidebar-nav {
+    .app-layout-main {
       display: flex;
       flex-direction: column;
-      gap: 0.25rem;
-      margin: 0;
-      padding: 0;
-      list-style: none;
+      min-inline-size: 0;
+      min-block-size: 100dvh;
     }
 
-    .app-sidebar-nav a {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0.5rem 0.75rem;
-      border-radius: var(--radius);
-      color: var(--text-muted);
-      font-weight: 600;
-      text-decoration: none;
-      font-size: 0.9375rem;
-    }
-
-    .app-sidebar-nav a:hover {
-      background: var(--surface-subtle);
-      color: var(--text);
-    }
-
-    .app-sidebar-nav a.primary,
-    .app-sidebar-nav a[aria-current="page"] {
-      color: var(--intent, var(--primary));
-    }
-
-    .app-sidebar-nav a.primary:hover,
-    .app-sidebar-nav a[aria-current="page"]:hover {
-      background: var(--surface-subtle);
-      color: var(--intent, var(--primary));
-    }
-
-    .app-sidebar-section {
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-    }
-
-    .app-sidebar-heading {
-      padding-inline: 0.75rem;
-      color: var(--text-muted);
-      font-size: 0.8125rem;
-      font-weight: 650;
-      text-transform: uppercase;
-      letter-spacing: 0.02em;
-    }
-
-    .app-sidebar-subnav {
-      display: flex;
-      flex-direction: column;
-      gap: 0.25rem;
-      margin: 0.25rem 0 0;
-      padding: 0 0 0 1.75rem;
-      list-style: none;
-    }
-
-    .app-sidebar-subnav a {
-      display: flex;
-      align-items: center;
-      padding: 0.35rem 0.75rem;
-      border-radius: var(--radius);
-      color: var(--text-muted);
-      font-size: 0.875rem;
-      font-weight: 500;
-      text-decoration: none;
-    }
-
-    .app-sidebar-subnav a:hover {
-      background: var(--surface-subtle);
-      color: var(--text);
-    }
-
-    .app-sidebar-subnav a[aria-current="page"] {
-      background: var(--intent, var(--primary));
-      color: var(--intent-fg, var(--primary-fg));
-      font-weight: 600;
-    }
-
-    .app-sidebar-footer {
-      margin-block-start: auto;
-      padding-block-start: 1rem;
-      border-block-start: 1px solid var(--border);
-    }
-
-    /* Main area */
-    .app-main {
-      flex: 1 1 auto;
-      display: flex;
-      flex-direction: column;
-      min-block-size: 0;
-      overflow: auto;
-    }
-
-    /* Top bar */
-    .app-topbar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 1rem;
-      padding: 0.75rem 1.5rem;
-      border-block-end: 1px solid var(--border);
-      background: var(--surface-raised);
+    .app-layout-topbar {
       position: sticky;
       inset-block-start: 0;
-      z-index: 10;
+      z-index: var(--z-sticky, 10);
+      isolation: isolate;
+      display: flex;
+      align-items: center;
+      gap: var(--gap);
+      padding: 0.65rem 1rem;
+      border-block-end: var(--border-width) solid var(--border);
+      background: var(--surface);
     }
 
-    .app-topbar-search {
+    @supports ((backdrop-filter: blur(1rem)) or (-webkit-backdrop-filter: blur(1rem))) {
+      .app-layout-topbar {
+        background: color-mix(in oklch, var(--surface) 88%, transparent);
+        backdrop-filter: blur(0.75rem);
+        -webkit-backdrop-filter: blur(0.75rem);
+      }
+    }
+
+    .app-layout-hamburger {
+      display: inline-flex;
+    }
+
+    .app-layout-hide-mobile {
+      display: none;
+    }
+
+    .app-search {
       position: relative;
       flex: 0 1 24rem;
     }
 
-    .app-topbar-search input {
-      inline-size: 100%;
-      padding-inline: 0.75rem 2.5rem;
-    }
-
-    .app-topbar-search::after {
-      content: "🔍";
+    .app-search i {
       position: absolute;
-      inset-inline-end: 0.75rem;
       inset-block-start: 50%;
+      inset-inline-start: 0.65rem;
       transform: translateY(-50%);
-      opacity: 0.5;
-      font-size: 0.875rem;
+      color: var(--text-muted);
+      font-size: 1rem;
+      pointer-events: none;
     }
 
-    .app-topbar-actions {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
+    .app-search .app-search-input {
+      padding-inline-start: 2.25rem;
     }
 
-    /* Content area */
-    .app-content {
-      padding: 1.5rem;
-      flex: 1 1 auto;
-    }
-
-    /* Page header */
-    .app-page-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 1rem;
-      margin-block-end: 1.5rem;
-      flex-wrap: wrap;
-    }
-
-    .app-page-header h1 {
-      margin: 0;
-      font-size: 1.5rem;
-    }
-
-    /* Filter bar */
-    .app-filters {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      margin-block-end: 1.5rem;
-      flex-wrap: wrap;
-    }
-
-    /* Table actions */
-    .app-table-actions {
-      display: flex;
-      justify-content: flex-end;
-      gap: 0.5rem;
-      margin-block-end: 0.75rem;
-    }
-
-    /* Stats grid */
-    .app-stats {
-      --grid-min: 12rem;
-      margin-block-end: 1.5rem;
-    }
-
-    /* Toast stack positioned */
-    .app-toasts {
+    .toast-stack {
       position: fixed;
       inset-block-start: 1rem;
       inset-inline-end: 1rem;
@@ -230,352 +115,493 @@
       pointer-events: none;
     }
 
-    .app-toasts > * {
+    .toast-stack > * {
       pointer-events: auto;
     }
 
-    /* Responsive: hide sidebar on small screens */
-    @media (max-width: 48rem) {
-      .app-sidebar {
+    .app-sidebar .nav-link {
+      min-block-size: 2.25rem;
+      padding: 0.5rem 0.65rem;
+      gap: 0.6rem;
+      font-weight: var(--font-weight-strong);
+    }
+
+    .app-sidebar .nav-link i {
+      flex: 0 0 auto;
+      font-size: 1.125rem;
+      color: var(--text-muted);
+    }
+
+    .app-sidebar .nav-link .badge {
+      margin-inline-start: auto;
+    }
+
+    .app-sidebar .nav-link[aria-current="page"] {
+      color: var(--intent, var(--primary));
+      background: color-mix(in oklch, var(--intent, var(--primary)) 8%, transparent);
+    }
+
+    .app-sidebar .nav-link[aria-current="page"] i {
+      color: var(--intent, var(--primary));
+    }
+
+    .app-sidebar .nav-list-sub {
+      --gap: 0.15rem;
+      padding-inline-start: 1.65rem;
+      margin-block-start: 0.15rem;
+    }
+
+    .app-sidebar .nav-list-sub .nav-link {
+      font-size: 0.875rem;
+      font-weight: var(--font-weight-medium);
+      min-block-size: 1.85rem;
+      padding-block: 0.3rem;
+    }
+
+    .app-sidebar details > summary {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.5rem 0.65rem;
+      border-radius: var(--radius);
+      color: var(--text-muted);
+      font-weight: var(--font-weight-strong);
+      cursor: pointer;
+      list-style: none;
+    }
+
+    .app-sidebar details > summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .app-sidebar details > summary i:first-child {
+      font-size: 1.125rem;
+    }
+
+    .app-sidebar details > summary::after {
+      content: "";
+      inline-size: 1rem;
+      block-size: 1rem;
+      margin-inline-start: auto;
+      background-color: currentColor;
+      -webkit-mask-image: var(--icon-chevron);
+      mask-image: var(--icon-chevron);
+      -webkit-mask-repeat: no-repeat;
+      mask-repeat: no-repeat;
+      -webkit-mask-size: contain;
+      mask-size: contain;
+      -webkit-mask-position: center;
+      mask-position: center;
+      transition: transform var(--duration);
+    }
+
+    .app-sidebar details[open] > summary::after {
+      transform: rotate(180deg);
+    }
+
+    @media (min-width: 64rem) {
+      .app-layout {
+        grid-template-columns: auto 1fr;
+      }
+      .app-layout-sidebar {
+        display: flex;
+        position: sticky;
+        inset-block-start: 0;
+        block-size: 100dvh;
+      }
+      .app-layout-hamburger {
         display: none;
       }
-    }
-
-    /* Demo helpers */
-    .app-demo-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.35rem;
-    }
-
-    .app-muted {
-      color: var(--text-muted);
+      .app-layout-hide-mobile {
+        display: initial;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="app">
-    <!-- Sidebar -->
-    <aside class="app-sidebar">
-      <a class="app-sidebar-brand" href="#">
+  <div class="app-layout">
+    <!-- Sidebar (visible >= 64rem); mirrored inside the drawer for mobile. -->
+    <aside class="app-layout-sidebar app-sidebar" aria-label="Primary">
+      <a class="navbar-brand" href="#" style="text-decoration: none; color: inherit;">
         <span class="avatar primary"><abbr class="circle">AC</abbr></span>
-        <span>Actual Clinic</span>
+        Actual Clinic
       </a>
 
-      <nav aria-label="Main navigation">
-        <ul class="app-sidebar-nav">
+      <!-- Workspace switcher -->
+      <div class="dropdown">
+        <button class="btn neutral outline sm" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="workspace-menu" id="workspace-menu-trigger" style="inline-size: 100%; justify-content: space-between;">
+          <span class="cluster" style="gap: 0.5rem;">
+            <span class="avatar sm"><abbr>OC</abbr></span>
+            <span>Ocean Beach</span>
+          </span>
+          <i class="ti ti-chevron-down" aria-hidden="true"></i>
+        </button>
+        <div class="dropdown-menu" role="menu" id="workspace-menu" aria-labelledby="workspace-menu-trigger" hidden>
+          <button class="btn link" type="button" role="menuitem">
+            <span class="avatar sm primary" style="margin-inline-end: 0.5rem;"><abbr>OC</abbr></span>
+            Ocean Beach
+          </button>
+          <button class="btn link" type="button" role="menuitem">
+            <span class="avatar sm" style="margin-inline-end: 0.5rem;"><abbr>SR</abbr></span>
+            Sunset Ridge
+          </button>
+          <button class="btn link" type="button" role="menuitem">
+            <span class="avatar sm" style="margin-inline-end: 0.5rem;"><abbr>PV</abbr></span>
+            Pine Valley
+          </button>
+          <hr role="separator">
+          <button class="btn link" type="button" role="menuitem">
+            <i class="ti ti-plus" aria-hidden="true" style="margin-inline-end: 0.5rem;"></i>
+            New clinic
+          </button>
+        </div>
+      </div>
+
+      <nav aria-label="Primary">
+        <ul class="nav-list stack" style="--gap: 0.15rem;">
           <li>
-            <a href="#search">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+            <a class="nav-link" href="#search">
+              <i class="ti ti-search" aria-hidden="true"></i>
               Search
             </a>
           </li>
           <li>
-            <a href="#notifications">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+            <a class="nav-link" href="#notifications">
+              <i class="ti ti-bell" aria-hidden="true"></i>
               Notifications
               <span class="badge danger sm">12</span>
             </a>
           </li>
           <li>
-            <a href="#tasks">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 11 3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+            <a class="nav-link" href="#tasks">
+              <i class="ti ti-list-check" aria-hidden="true"></i>
               My tasks
             </a>
           </li>
         </ul>
-
-        <div class="app-sidebar-section">
-          <span class="app-sidebar-heading">Workspace</span>
-          <ul class="app-sidebar-nav">
-            <li>
-              <a href="#dashboard">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 2a7 7 0 1 0 10 10"/></svg>
-                Dashboard
-              </a>
-            </li>
-            <li>
-              <a class="primary" href="#payments">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></svg>
-                Payments
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="margin-inline-start: auto;"><path d="m6 9 6 6 6-6"/></svg>
-              </a>
-              <ul class="app-sidebar-subnav">
-                <li><a class="primary" href="#transactions" aria-current="page">All transactions</a></li>
-                <li><a href="#payments-list">Payments</a></li>
-                <li><a href="#disputes">Disputes</a></li>
-              </ul>
-            </li>
-            <li>
-              <a href="#reports">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
-                Reports
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="margin-inline-start: auto;"><path d="m9 18 6-6-6-6"/></svg>
-              </a>
-            </li>
-            <li>
-              <a href="#settings">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.09a2 2 0 0 1-1-1.74v-.47a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
-                Settings
-              </a>
-            </li>
-          </ul>
-        </div>
       </nav>
 
-      <div class="app-sidebar-footer">
-        <div class="dropdown">
-          <details>
-            <summary class="btn neutral ghost sm" style="inline-size: 100%; justify-content: flex-start;">
-              <span class="avatar sm"><abbr>LW</abbr></span>
-              <span>Laura Williams</span>
-            </summary>
-            <menu class="dropdown-menu">
-              <a class="btn neutral link" href="#profile">View profile</a>
-              <a class="btn neutral link" href="#settings">Settings</a>
-              <div class="divider" role="separator"></div>
-              <a class="btn danger link" href="#signout">Sign out</a>
-            </menu>
-          </details>
+      <div class="stack" style="--gap: 0.35rem;">
+        <span class="eyebrow">Workspace</span>
+        <ul class="nav-list stack" style="--gap: 0.15rem;">
+          <li>
+            <a class="nav-link" href="#dashboard">
+              <i class="ti ti-layout-dashboard" aria-hidden="true"></i>
+              Dashboard
+            </a>
+          </li>
+          <li>
+            <details open>
+              <summary>
+                <i class="ti ti-credit-card" aria-hidden="true"></i>
+                Payments
+              </summary>
+              <ul class="nav-list stack nav-list-sub">
+                <li><a class="nav-link" href="#transactions" aria-current="page">All transactions</a></li>
+                <li><a class="nav-link" href="#payments-list">Payments</a></li>
+                <li><a class="nav-link" href="#disputes">Disputes</a></li>
+              </ul>
+            </details>
+          </li>
+          <li>
+            <a class="nav-link" href="#reports">
+              <i class="ti ti-chart-line" aria-hidden="true"></i>
+              Reports
+            </a>
+          </li>
+          <li>
+            <a class="nav-link" href="#settings">
+              <i class="ti ti-settings" aria-hidden="true"></i>
+              Settings
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="grow"></div>
+
+      <!-- Account pinned to the bottom -->
+      <div class="dropdown">
+        <button class="btn neutral ghost sm" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="sidebar-account-menu" id="sidebar-account-trigger" style="inline-size: 100%; justify-content: flex-start;">
+          <span class="avatar sm"><abbr>LW</abbr></span>
+          <span>Laura Williams</span>
+        </button>
+        <div class="dropdown-menu" role="menu" id="sidebar-account-menu" aria-labelledby="sidebar-account-trigger" hidden>
+          <button class="btn link" type="button" role="menuitem">View profile</button>
+          <button class="btn link" type="button" role="menuitem">Settings</button>
+          <hr role="separator">
+          <button class="btn link danger" type="button" role="menuitem">Sign out</button>
         </div>
       </div>
     </aside>
 
     <!-- Main area -->
-    <div class="app-main">
-      <!-- Top bar -->
-      <header class="app-topbar">
-        <div class="app-topbar-search">
-          <input class="input sm" type="search" placeholder="Search transactions, patients…" aria-label="Search">
-        </div>
-        <div class="app-topbar-actions">
-          <button class="btn neutral ghost sm" aria-label="Notifications">
-            <span class="status danger"></span>
-            Notifications
+    <div class="app-layout-main">
+      <header class="app-layout-topbar">
+        <button class="btn neutral ghost app-layout-hamburger" type="button" commandfor="main-drawer" command="show-modal" aria-label="Open navigation">
+          <i class="ti ti-menu-2" aria-hidden="true"></i>
+        </button>
+
+        <ol class="breadcrumb app-layout-hide-mobile" aria-label="Breadcrumb">
+          <li><a href="#dashboard">Dashboard</a></li>
+          <li><a href="#payments">Payments</a></li>
+          <li aria-current="page">All transactions</li>
+        </ol>
+
+        <div class="grow"></div>
+
+        <label class="app-search app-layout-hide-mobile">
+          <i class="ti ti-search" aria-hidden="true"></i>
+          <input class="input sm app-search-input" type="search" placeholder="Search transactions, patients…" aria-label="Search">
+        </label>
+
+        <button class="btn neutral ghost sm" type="button" aria-label="Notifications" style="position: relative;">
+          <i class="ti ti-bell" aria-hidden="true"></i>
+          <span class="badge danger sm" style="position: absolute; inset-block-start: 0; inset-inline-end: 0; transform: translate(40%, -40%);">12</span>
+        </button>
+
+        <div class="dropdown app-layout-hide-mobile">
+          <button class="btn neutral ghost sm" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="help-menu" id="help-menu-trigger" aria-label="Help">
+            <i class="ti ti-help" aria-hidden="true"></i>
           </button>
-          <div class="dropdown">
-            <details>
-              <summary class="btn neutral ghost sm" aria-label="User menu">
-                <span class="avatar sm"><abbr>LW</abbr></span>
-              </summary>
-              <menu class="dropdown-menu">
-                <a class="btn neutral link" href="#profile">View profile</a>
-                <a class="btn neutral link" href="#settings">Settings</a>
-                <div class="divider" role="separator"></div>
-                <a class="btn danger link" href="#signout">Sign out</a>
-              </menu>
-            </details>
+          <div class="dropdown-menu" role="menu" id="help-menu" aria-labelledby="help-menu-trigger" hidden>
+            <a class="btn link" href="#" role="menuitem">Documentation</a>
+            <a class="btn link" href="#" role="menuitem">Keyboard shortcuts</a>
+            <a class="btn link" href="#" role="menuitem">Contact support</a>
+          </div>
+        </div>
+
+        <div class="dropdown">
+          <button class="btn neutral ghost sm" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="user-menu" id="user-menu-trigger" aria-label="Account menu">
+            <span class="avatar sm"><abbr>LW</abbr></span>
+          </button>
+          <div class="dropdown-menu" role="menu" id="user-menu" aria-labelledby="user-menu-trigger" hidden>
+            <button class="btn link" type="button" role="menuitem">View profile</button>
+            <button class="btn link" type="button" role="menuitem">Settings</button>
+            <hr role="separator">
+            <button class="btn link danger" type="button" role="menuitem">Sign out</button>
           </div>
         </div>
       </header>
 
-      <!-- Content -->
-      <main class="app-content">
-        <!-- Breadcrumb -->
-        <nav aria-label="Breadcrumb">
-          <ol class="breadcrumb">
-            <li><a href="#dashboard">Dashboard</a></li>
-            <li><a href="#payments">Payments</a></li>
-            <li aria-current="page">All transactions</li>
-          </ol>
-        </nav>
-
+      <main class="stack" style="padding: 1.5rem; gap: 1.5rem; flex: 1 1 auto;">
         <!-- Page header -->
-        <div class="app-page-header">
-          <div>
-            <h1>All transactions</h1>
-            <p class="app-muted">Manage and review payment transactions across all clinics.</p>
-          </div>
+        <div class="cluster" style="--cluster-justify: space-between; flex-wrap: wrap; gap: 1rem;">
+          <hgroup>
+            <h1 style="margin: 0;">All transactions</h1>
+            <p class="muted" style="margin: 0;">Manage and review payment transactions across all clinics.</p>
+          </hgroup>
           <div class="cluster">
-            <button class="btn neutral outline" type="button">Export</button>
-            <button class="btn primary" type="button" onclick="document.getElementById('create-dialog').showModal()">Create new</button>
+            <button class="btn neutral outline" type="button">
+              <i class="ti ti-download" aria-hidden="true"></i>
+              Export
+            </button>
+            <button class="btn primary" type="button" commandfor="create-dialog" command="show-modal">
+              <i class="ti ti-plus" aria-hidden="true"></i>
+              Create new
+            </button>
           </div>
         </div>
 
         <!-- Stats -->
-        <div class="grid app-stats">
+        <div class="grid" style="--grid-min: 14rem;" aria-label="Key metrics">
           <article class="card metric">
             <span class="muted">Total revenue</span>
-            <strong class="metric-value">€45,231</strong>
+            <data class="metric-value" value="45231">&euro;45,231</data>
             <span class="badge success soft">+12% this month</span>
           </article>
           <article class="card metric">
             <span class="muted">Transactions</span>
-            <strong class="metric-value">1,284</strong>
+            <data class="metric-value" value="1284">1,284</data>
             <span class="badge neutral soft">98% successful</span>
           </article>
           <article class="card metric">
             <span class="muted">Pending</span>
-            <strong class="metric-value">23</strong>
+            <data class="metric-value" value="23">23</data>
             <span class="badge warning soft">Requires action</span>
           </article>
           <article class="card metric">
             <span class="muted">Disputes</span>
-            <strong class="metric-value">3</strong>
+            <data class="metric-value" value="3">3</data>
             <span class="badge danger soft">Urgent</span>
           </article>
         </div>
 
-        <!-- Filters -->
-        <div class="card">
-          <div class="app-filters">
-            <select class="select sm" aria-label="Filter by status">
-              <option value="">All statuses</option>
-              <option value="success">Success</option>
-              <option value="pending">Pending</option>
-              <option value="warning">Warning</option>
-              <option value="danger">Danger</option>
-            </select>
-            <select class="select sm" aria-label="Filter by method">
-              <option value="">All methods</option>
-              <option value="card">Card</option>
-              <option value="bank">Bank transfer</option>
-              <option value="cash">Cash</option>
-            </select>
-            <input class="input sm" type="date" aria-label="Filter by date">
-            <button class="btn neutral outline sm" type="button">Filter</button>
-            <button class="btn neutral ghost sm" type="button">Reset</button>
+        <!-- Filter bar -->
+        <section class="card compact">
+          <div class="cluster" style="--cluster-justify: space-between; flex-wrap: wrap; gap: 0.5rem;">
+            <div class="cluster" style="gap: 0.5rem;">
+              <select class="select sm" aria-label="Filter by status">
+                <option value="">All statuses</option>
+                <option value="success">Success</option>
+                <option value="pending">Pending</option>
+                <option value="warning">Warning</option>
+                <option value="danger">Danger</option>
+              </select>
+              <select class="select sm" aria-label="Filter by method">
+                <option value="">All methods</option>
+                <option value="card">Card</option>
+                <option value="bank">Bank transfer</option>
+                <option value="cash">Cash</option>
+              </select>
+              <input class="input sm" type="date" aria-label="Filter by date">
+            </div>
+            <div class="cluster" style="gap: 0.5rem;">
+              <button class="btn neutral outline sm" type="button">
+                <i class="ti ti-filter" aria-hidden="true"></i>
+                Apply
+              </button>
+              <button class="btn neutral ghost sm" type="button">Reset</button>
+            </div>
           </div>
-        </div>
+        </section>
 
-        <!-- Table -->
-        <div class="card stack" style="margin-block-start: 1.5rem;">
-          <div class="app-table-actions">
-            <button class="btn neutral ghost sm" type="button">Select all</button>
-            <div class="dropdown">
-              <details>
-                <summary class="btn neutral outline sm">Bulk actions</summary>
-                <menu class="dropdown-menu">
-                  <button class="btn neutral link" type="button">Export selected</button>
-                  <button class="btn neutral link" type="button">Mark as paid</button>
-                  <div class="divider" role="separator"></div>
-                  <button class="btn danger link" type="button">Delete selected</button>
-                </menu>
-              </details>
+        <!-- Transactions card -->
+        <section class="card stack">
+          <div class="cluster" style="--cluster-justify: space-between; flex-wrap: wrap; gap: 0.5rem;">
+            <span class="muted"><strong>1,284</strong> transactions</span>
+            <div class="cluster" style="gap: 0.5rem;">
+              <label class="choice">
+                <input class="check" type="checkbox" aria-label="Select all rows">
+                Select all
+              </label>
+              <div class="dropdown">
+                <button class="btn neutral outline sm" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="bulk-menu" id="bulk-menu-trigger">
+                  Bulk actions
+                  <i class="ti ti-chevron-down" aria-hidden="true"></i>
+                </button>
+                <div class="dropdown-menu" role="menu" id="bulk-menu" aria-labelledby="bulk-menu-trigger" hidden>
+                  <button class="btn link" type="button" role="menuitem">Export selected</button>
+                  <button class="btn link" type="button" role="menuitem">Mark as paid</button>
+                  <hr role="separator">
+                  <button class="btn link danger" type="button" role="menuitem">Delete selected</button>
+                </div>
+              </div>
             </div>
           </div>
 
-          <div class="table-wrap">
+          <div class="table-wrap" role="region" aria-labelledby="transactions-table" tabindex="0">
             <table class="table">
+              <caption id="transactions-table" class="sr-only">Transactions</caption>
               <thead>
                 <tr>
-                  <th><input class="check" type="checkbox" aria-label="Select all rows"></th>
-                  <th>Amount</th>
-                  <th>Status</th>
-                  <th>Description</th>
-                  <th>Method</th>
-                  <th>Date</th>
-                  <th>Actions</th>
+                  <th scope="col" style="inline-size: 2.5rem;"><span class="sr-only">Select</span></th>
+                  <th scope="col">Amount</th>
+                  <th scope="col">Status</th>
+                  <th scope="col">Description</th>
+                  <th scope="col">Method</th>
+                  <th scope="col" data-nowrap>Date</th>
+                  <th scope="col" style="inline-size: 2.5rem;"><span class="sr-only">Actions</span></th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
                   <td><input class="check" type="checkbox" aria-label="Select row"></td>
-                  <td><strong>350,00 €</strong></td>
+                  <td><strong>350,00 &euro;</strong></td>
                   <td><span class="badge neutral soft">Neutral</span></td>
                   <td>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</td>
                   <td>Card</td>
-                  <td>20.3.2021</td>
+                  <td data-nowrap>20.3.2021</td>
                   <td>
                     <div class="dropdown">
-                      <details>
-                        <summary class="btn neutral ghost sm" aria-label="Actions">⋯</summary>
-                        <menu class="dropdown-menu">
-                          <button class="btn neutral link" type="button">View details</button>
-                          <button class="btn neutral link" type="button">Copy link</button>
-                          <div class="divider" role="separator"></div>
-                          <button class="btn neutral link" type="button">Refund</button>
-                          <button class="btn danger link" type="button">Delete</button>
-                        </menu>
-                      </details>
+                      <button class="btn neutral ghost sm" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="row-1-menu" id="row-1-trigger" aria-label="Row actions">
+                        <i class="ti ti-dots-vertical" aria-hidden="true"></i>
+                      </button>
+                      <div class="dropdown-menu" role="menu" id="row-1-menu" aria-labelledby="row-1-trigger" hidden>
+                        <button class="btn link" type="button" role="menuitem">View details</button>
+                        <button class="btn link" type="button" role="menuitem">Copy link</button>
+                        <hr role="separator">
+                        <button class="btn link" type="button" role="menuitem">Refund</button>
+                        <button class="btn link danger" type="button" role="menuitem">Delete</button>
+                      </div>
                     </div>
                   </td>
                 </tr>
                 <tr>
                   <td><input class="check" type="checkbox" aria-label="Select row"></td>
-                  <td><strong>29,90 €</strong></td>
+                  <td><strong>29,90 &euro;</strong></td>
                   <td><span class="badge success soft">Success</span></td>
                   <td>Aenean commodo ligula eget dolor.</td>
                   <td>Card</td>
-                  <td>19.3.2021</td>
+                  <td data-nowrap>19.3.2021</td>
                   <td>
                     <div class="dropdown">
-                      <details>
-                        <summary class="btn neutral ghost sm" aria-label="Actions">⋯</summary>
-                        <menu class="dropdown-menu">
-                          <button class="btn neutral link" type="button">View details</button>
-                          <button class="btn neutral link" type="button">Copy link</button>
-                          <div class="divider" role="separator"></div>
-                          <button class="btn neutral link" type="button">Refund</button>
-                          <button class="btn danger link" type="button">Delete</button>
-                        </menu>
-                      </details>
+                      <button class="btn neutral ghost sm" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="row-2-menu" id="row-2-trigger" aria-label="Row actions">
+                        <i class="ti ti-dots-vertical" aria-hidden="true"></i>
+                      </button>
+                      <div class="dropdown-menu" role="menu" id="row-2-menu" aria-labelledby="row-2-trigger" hidden>
+                        <button class="btn link" type="button" role="menuitem">View details</button>
+                        <button class="btn link" type="button" role="menuitem">Copy link</button>
+                        <hr role="separator">
+                        <button class="btn link" type="button" role="menuitem">Refund</button>
+                        <button class="btn link danger" type="button" role="menuitem">Delete</button>
+                      </div>
                     </div>
                   </td>
                 </tr>
                 <tr>
                   <td><input class="check" type="checkbox" aria-label="Select row"></td>
-                  <td><strong>50,00 €</strong></td>
+                  <td><strong>50,00 &euro;</strong></td>
                   <td><span class="badge warning soft">Warning</span></td>
                   <td>Donec quam felis, ultricies nec, pellentesque eu.</td>
                   <td>Card</td>
-                  <td>18.3.2021</td>
+                  <td data-nowrap>18.3.2021</td>
                   <td>
                     <div class="dropdown">
-                      <details>
-                        <summary class="btn neutral ghost sm" aria-label="Actions">⋯</summary>
-                        <menu class="dropdown-menu">
-                          <button class="btn neutral link" type="button">View details</button>
-                          <button class="btn neutral link" type="button">Copy link</button>
-                          <div class="divider" role="separator"></div>
-                          <button class="btn neutral link" type="button">Refund</button>
-                          <button class="btn danger link" type="button">Delete</button>
-                        </menu>
-                      </details>
+                      <button class="btn neutral ghost sm" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="row-3-menu" id="row-3-trigger" aria-label="Row actions">
+                        <i class="ti ti-dots-vertical" aria-hidden="true"></i>
+                      </button>
+                      <div class="dropdown-menu" role="menu" id="row-3-menu" aria-labelledby="row-3-trigger" hidden>
+                        <button class="btn link" type="button" role="menuitem">View details</button>
+                        <button class="btn link" type="button" role="menuitem">Copy link</button>
+                        <hr role="separator">
+                        <button class="btn link" type="button" role="menuitem">Refund</button>
+                        <button class="btn link danger" type="button" role="menuitem">Delete</button>
+                      </div>
                     </div>
                   </td>
                 </tr>
                 <tr>
                   <td><input class="check" type="checkbox" aria-label="Select row"></td>
-                  <td><strong>1 023,00 €</strong></td>
+                  <td><strong>1 023,00 &euro;</strong></td>
                   <td><span class="badge danger soft">Danger</span></td>
                   <td>Nulla consequat massa quis enim.</td>
                   <td>Card</td>
-                  <td>17.3.2021</td>
+                  <td data-nowrap>17.3.2021</td>
                   <td>
                     <div class="dropdown">
-                      <details>
-                        <summary class="btn neutral ghost sm" aria-label="Actions">⋯</summary>
-                        <menu class="dropdown-menu">
-                          <button class="btn neutral link" type="button">View details</button>
-                          <button class="btn neutral link" type="button">Copy link</button>
-                          <div class="divider" role="separator"></div>
-                          <button class="btn neutral link" type="button">Refund</button>
-                          <button class="btn danger link" type="button">Delete</button>
-                        </menu>
-                      </details>
+                      <button class="btn neutral ghost sm" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="row-4-menu" id="row-4-trigger" aria-label="Row actions">
+                        <i class="ti ti-dots-vertical" aria-hidden="true"></i>
+                      </button>
+                      <div class="dropdown-menu" role="menu" id="row-4-menu" aria-labelledby="row-4-trigger" hidden>
+                        <button class="btn link" type="button" role="menuitem">View details</button>
+                        <button class="btn link" type="button" role="menuitem">Copy link</button>
+                        <hr role="separator">
+                        <button class="btn link" type="button" role="menuitem">Refund</button>
+                        <button class="btn link danger" type="button" role="menuitem">Delete</button>
+                      </div>
                     </div>
                   </td>
                 </tr>
                 <tr>
                   <td><input class="check" type="checkbox" aria-label="Select row"></td>
-                  <td><strong>150,00 €</strong></td>
+                  <td><strong>150,00 &euro;</strong></td>
                   <td><span class="badge success soft">Success</span></td>
-                  <td>Sed consequat leo eget sodales.</td>
+                  <td>Sed consequat leo eget sodames.</td>
                   <td>Bank transfer</td>
-                  <td>16.3.2021</td>
+                  <td data-nowrap>16.3.2021</td>
                   <td>
                     <div class="dropdown">
-                      <details>
-                        <summary class="btn neutral ghost sm" aria-label="Actions">⋯</summary>
-                        <menu class="dropdown-menu">
-                          <button class="btn neutral link" type="button">View details</button>
-                          <button class="btn neutral link" type="button">Copy link</button>
-                          <div class="divider" role="separator"></div>
-                          <button class="btn neutral link" type="button">Refund</button>
-                          <button class="btn danger link" type="button">Delete</button>
-                        </menu>
-                      </details>
+                      <button class="btn neutral ghost sm" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="row-5-menu" id="row-5-trigger" aria-label="Row actions">
+                        <i class="ti ti-dots-vertical" aria-hidden="true"></i>
+                      </button>
+                      <div class="dropdown-menu" role="menu" id="row-5-menu" aria-labelledby="row-5-trigger" hidden>
+                        <button class="btn link" type="button" role="menuitem">View details</button>
+                        <button class="btn link" type="button" role="menuitem">Copy link</button>
+                        <hr role="separator">
+                        <button class="btn link" type="button" role="menuitem">Refund</button>
+                        <button class="btn link danger" type="button" role="menuitem">Delete</button>
+                      </div>
                     </div>
                   </td>
                 </tr>
@@ -583,64 +609,110 @@
             </table>
           </div>
 
-          <!-- Pagination -->
-          <div class="cluster" style="justify-content: space-between; flex-wrap: wrap;">
-            <span class="app-muted">Showing 1–5 of 1,284 transactions</span>
-            <nav aria-label="Table pagination">
+          <div class="cluster" style="--cluster-justify: space-between; flex-wrap: wrap; gap: 0.5rem;">
+            <span class="muted">Showing 1&ndash;5 of 1,284 transactions</span>
+            <nav aria-label="Pagination">
               <ol class="pagination">
                 <li><a class="page-link" href="#" aria-disabled="true">Prev</a></li>
                 <li><a class="page-link" aria-current="page" href="#">1</a></li>
                 <li><a class="page-link" href="#">2</a></li>
                 <li><a class="page-link" href="#">3</a></li>
-                <li><span class="app-muted">…</span></li>
+                <li><span class="muted">&hellip;</span></li>
                 <li><a class="page-link" href="#">257</a></li>
                 <li><a class="page-link" href="#">Next</a></li>
               </ol>
             </nav>
           </div>
-        </div>
+        </section>
 
-        <!-- Alerts section -->
-        <div class="stack" style="margin-block-start: 1.5rem;">
+        <!-- Notifications section -->
+        <section class="stack">
           <h2>Recent notifications</h2>
-          <div class="alert success" role="alert">
-            <span aria-hidden="true">✓</span>
-            <span>Payout of €12,450 has been processed successfully.</span>
-            <menu>
-              <li><button class="btn ghost sm" type="button" data-dismiss>Dismiss</button></li>
-            </menu>
+          <div class="alert success" role="status">
+            <span aria-hidden="true">&check;</span>
+            <div class="cluster" style="--cluster-justify: space-between; flex-wrap: wrap; gap: 0.5rem; flex: 1 1 auto;">
+              <span>Payout of &euro;12,450 has been processed successfully.</span>
+              <button class="btn ghost sm" type="button" data-dismiss>
+                <span class="sr-only">Dismiss</span>
+                <i class="ti ti-x" aria-hidden="true"></i>
+              </button>
+            </div>
           </div>
-          <div class="alert warning" role="alert">
+          <div class="alert warning" role="status">
             <span aria-hidden="true">!</span>
-            <span>3 transactions require manual review. <a href="#">Review now</a></span>
-            <menu>
-              <li><button class="btn ghost sm" type="button" data-dismiss>Dismiss</button></li>
-            </menu>
+            <div class="cluster" style="--cluster-justify: space-between; flex-wrap: wrap; gap: 0.5rem; flex: 1 1 auto;">
+              <span>3 transactions require manual review. <a href="#">Review now</a></span>
+              <button class="btn ghost sm" type="button" data-dismiss>
+                <span class="sr-only">Dismiss</span>
+                <i class="ti ti-x" aria-hidden="true"></i>
+              </button>
+            </div>
           </div>
-          <div class="alert primary" role="alert">
+          <div class="alert primary" role="status">
             <span aria-hidden="true">i</span>
-            <span>New clinic "Ocean Beach" has been added to your account.</span>
-            <menu>
-              <li><button class="btn ghost sm" type="button" data-dismiss>Dismiss</button></li>
-            </menu>
+            <div class="cluster" style="--cluster-justify: space-between; flex-wrap: wrap; gap: 0.5rem; flex: 1 1 auto;">
+              <span>New clinic "Ocean Beach" has been added to your account.</span>
+              <button class="btn ghost sm" type="button" data-dismiss>
+                <span class="sr-only">Dismiss</span>
+                <i class="ti ti-x" aria-hidden="true"></i>
+              </button>
+            </div>
           </div>
-        </div>
+        </section>
       </main>
     </div>
   </div>
 
+  <!-- Mobile drawer (mirrors the sidebar) -->
+  <dialog class="drawer" id="main-drawer" aria-label="Main navigation">
+    <header class="cluster" style="--cluster-justify: space-between;">
+      <strong>Menu</strong>
+      <form method="dialog">
+        <button class="btn ghost" type="submit" aria-label="Close navigation">
+          <i class="ti ti-x" aria-hidden="true"></i>
+        </button>
+      </form>
+    </header>
+    <nav>
+      <ul class="nav-list stack" style="--gap: 0.15rem;">
+        <li><a class="nav-link" href="#search"><i class="ti ti-search" aria-hidden="true"></i> Search</a></li>
+        <li><a class="nav-link" href="#notifications"><i class="ti ti-bell" aria-hidden="true"></i> Notifications <span class="badge danger sm" style="margin-inline-start: auto;">12</span></a></li>
+        <li><a class="nav-link" href="#tasks"><i class="ti ti-list-check" aria-hidden="true"></i> My tasks</a></li>
+        <li style="margin-block-start: 0.5rem;"><span class="eyebrow">Workspace</span></li>
+        <li><a class="nav-link" href="#dashboard"><i class="ti ti-layout-dashboard" aria-hidden="true"></i> Dashboard</a></li>
+        <li>
+          <details>
+            <summary><i class="ti ti-credit-card" aria-hidden="true"></i> Payments</summary>
+            <ul class="nav-list stack" style="--gap: 0.15rem; padding-inline-start: 1.65rem; margin-block-start: 0.15rem;">
+              <li><a class="nav-link" href="#transactions" aria-current="page">All transactions</a></li>
+              <li><a class="nav-link" href="#payments-list">Payments</a></li>
+              <li><a class="nav-link" href="#disputes">Disputes</a></li>
+            </ul>
+          </details>
+        </li>
+        <li><a class="nav-link" href="#reports"><i class="ti ti-chart-line" aria-hidden="true"></i> Reports</a></li>
+        <li><a class="nav-link" href="#settings"><i class="ti ti-settings" aria-hidden="true"></i> Settings</a></li>
+      </ul>
+    </nav>
+    <footer>
+      <button class="btn outline" type="button">Sign out</button>
+    </footer>
+  </dialog>
+
   <!-- Create transaction dialog -->
-  <dialog class="dialog" id="create-dialog">
+  <dialog class="dialog" id="create-dialog" closedby="any">
     <form method="dialog" class="stack">
-      <h2>Create new transaction</h2>
-      <p class="app-muted">Enter the details for the new payment transaction.</p>
+      <header>
+        <h3>Create new transaction</h3>
+        <p class="muted">Enter the details for the new payment transaction.</p>
+      </header>
       <div class="grid" style="--grid-min: 14rem;">
         <label class="field">
-          <span class="label">Amount</span>
+          <span class="field-label">Amount</span>
           <input class="input" type="number" placeholder="0.00" step="0.01">
         </label>
         <label class="field">
-          <span class="label">Method</span>
+          <span class="field-label">Method</span>
           <select class="select">
             <option>Card</option>
             <option>Bank transfer</option>
@@ -648,22 +720,80 @@
           </select>
         </label>
         <label class="field" style="grid-column: 1 / -1;">
-          <span class="label">Description</span>
+          <span class="field-label">Description</span>
           <input class="input" type="text" placeholder="Transaction description">
         </label>
       </div>
-      <div class="cluster" style="justify-content: flex-end;">
-        <button class="btn neutral outline" value="cancel">Cancel</button>
+      <footer>
+        <button class="btn neutral outline" value="cancel" formnovalidate>Cancel</button>
         <button class="btn primary" value="create">Create transaction</button>
-      </div>
+      </footer>
     </form>
   </dialog>
 
+  <!-- Toast stack: fixed top-end region for dismissible .alert (framework gap). -->
+  <div class="toast-stack" aria-live="polite" aria-atomic="false">
+    <div class="alert success" role="status">
+      <span aria-hidden="true">&check;</span>
+      <div class="cluster" style="--cluster-justify: space-between; flex-wrap: wrap; gap: 0.5rem; flex: 1 1 auto;">
+        <span>Saved. Your changes are now live.</span>
+        <button class="btn ghost sm" type="button" data-dismiss>
+          <span class="sr-only">Dismiss</span>
+          <i class="ti ti-x" aria-hidden="true"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
   <script>
-    document.querySelectorAll('[data-dismiss]').forEach(btn => {
-      btn.addEventListener('click', () => {
-        btn.closest('.alert').remove();
+    // .dropdown toggler. Framework documents the contract; this is the
+    // matching runtime: aria-expanded, hidden, Escape, outside click, focus
+    // return. Same shape can be reused by other templates and demos.
+    (function () {
+      const triggers = document.querySelectorAll('.dropdown [aria-haspopup="menu"]');
+      triggers.forEach((trigger) => {
+        const id = trigger.getAttribute('aria-controls');
+        const menu = id ? document.getElementById(id) : trigger.nextElementSibling;
+        if (!menu) return;
+
+        const close = () => {
+          trigger.setAttribute('aria-expanded', 'false');
+          menu.setAttribute('hidden', '');
+        };
+        const open = () => {
+          trigger.setAttribute('aria-expanded', 'true');
+          menu.removeAttribute('hidden');
+        };
+
+        trigger.addEventListener('click', (event) => {
+          event.stopPropagation();
+          if (trigger.getAttribute('aria-expanded') === 'true') close();
+          else open();
+        });
+
+        menu.addEventListener('click', (event) => {
+          if (event.target.closest('[role="menuitem"]')) close();
+        });
+
+        document.addEventListener('click', (event) => {
+          if (!menu.contains(event.target) && event.target !== trigger) close();
+        });
+
+        document.addEventListener('keydown', (event) => {
+          if (event.key === 'Escape' && trigger.getAttribute('aria-expanded') === 'true') {
+            close();
+            trigger.focus();
+          }
+        });
       });
+    })();
+
+    // [data-dismiss] removes the closest .alert (used by notifications and toasts).
+    document.addEventListener('click', (event) => {
+      const dismiss = event.target.closest('[data-dismiss]');
+      if (!dismiss) return;
+      const alert = dismiss.closest('.alert');
+      if (alert) alert.remove();
     });
   </script>
 </body>
