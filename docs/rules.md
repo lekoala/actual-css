@@ -3,8 +3,8 @@
 Follow these rules as best as possible, but don't follow them blindly.
 If rules conflict, think about what would be best or ask the user if no decisive answer can be made.
 
-- Wide browser support (even older browsers)
-- No compile, build step (dist file is created being concatenating and remove comments)
+- Wide browser support (even older browsers, not IE 11)
+- No compile, build step (it's just css)
 - No post processing - use browsers prefix when needed
 - Dark mode is for modern browsers only (light mode is default otherwise): allows light-dark usage (https://caniuse.com/wf-light-dark)
 - Everything is themable (colors, radius, border-width...)
@@ -25,3 +25,4 @@ still be functional without it
 - Icons could be <i> or inlined <svg>
 - Avoid transition all unless needed, try to target specific properties
 - Use @supports positively (no @supports not)
+- Each component must have a small surface and be easy to opt-out

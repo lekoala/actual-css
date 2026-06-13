@@ -87,6 +87,211 @@
       </div>
     </section>
     <div class="component-prose">
+      <h3>Fixed Columns</h3>
+      <p>Use <code>.grid-2</code>, <code>.grid-3</code>, and <code>.grid-4</code> when the column count matters more than the item minimum width. A <code>.grid-2/3/4</code> without a wrapper is a <strong>fixed grid</strong> (always at its full count); with a <code>.grid-responsive</code> wrapper, it's a <strong>responsive grid</strong> (the column count collapses on narrow wrappers).</p>
+      <p>A <code>.grid-3</code> without a wrapper is a fixed grid — always 3 cols, on any viewport:</p>
+    </div>
+    <section class="component-section">
+      <div class="example-group">
+        <div class="example-render">
+          <div class="grid-3">
+            <article class="card">
+              <h3>One</h3>
+              <p>First.</p>
+            </article>
+            <article class="card">
+              <h3>Two</h3>
+              <p>Second.</p>
+            </article>
+            <article class="card">
+              <h3>Three</h3>
+              <p>Third.</p>
+            </article>
+          </div>
+        </div>
+        <div class="example-code">
+          <pre><code class="language-html"><span class="token tag">&lt;div class="grid-3"&gt;</span>
+  <span class="token tag">&lt;article class="card"&gt;</span><span class="token tag">&lt;h3&gt;</span>One<span class="token tag">&lt;/h3&gt;</span><span class="token tag">&lt;/article&gt;</span>
+  <span class="token tag">&lt;article class="card"&gt;</span><span class="token tag">&lt;h3&gt;</span>Two<span class="token tag">&lt;/h3&gt;</span><span class="token tag">&lt;/article&gt;</span>
+  <span class="token tag">&lt;article class="card"&gt;</span><span class="token tag">&lt;h3&gt;</span>Three<span class="token tag">&lt;/h3&gt;</span><span class="token tag">&lt;/article&gt;</span>
+<span class="token tag">&lt;/div&gt;</span></code></pre>
+        </div>
+      </div>
+    </section>
+    <div class="component-prose">
+      <p>A <code>.grid-3</code> with a <code>.grid-responsive</code> wrapper is a responsive grid — the column count collapses on narrow wrappers and steps up to the full count as the wrapper widens:</p>
+    </div>
+    <section class="component-section">
+      <div class="example-group">
+        <div class="example-render">
+          <div class="grid-responsive">
+            <div class="grid-2">
+              <article class="card">
+                <h3>One</h3>
+                <p>First.</p>
+              </article>
+              <article class="card">
+                <h3>Two</h3>
+                <p>Second.</p>
+              </article>
+            </div>
+          </div>
+        </div>
+        <div class="example-code">
+          <pre><code class="language-html"><span class="token tag">&lt;div class="grid-responsive"&gt;</span>
+  <span class="token tag">&lt;div class="grid-2"&gt;</span>
+    <span class="token tag">&lt;article class="card"&gt;</span>
+      <span class="token tag">&lt;h3&gt;</span>One<span class="token tag">&lt;/h3&gt;</span>
+      <span class="token tag">&lt;p&gt;</span>First.<span class="token tag">&lt;/p&gt;</span>
+    <span class="token tag">&lt;/article&gt;</span>
+    <span class="token tag">&lt;article class="card"&gt;</span>
+      <span class="token tag">&lt;h3&gt;</span>Two<span class="token tag">&lt;/h3&gt;</span>
+      <span class="token tag">&lt;p&gt;</span>Second.<span class="token tag">&lt;/p&gt;</span>
+    <span class="token tag">&lt;/article&gt;</span>
+  <span class="token tag">&lt;/div&gt;</span>
+<span class="token tag">&lt;/div&gt;</span></code></pre>
+        </div>
+      </div>
+    </section>
+    <section class="component-section">
+      <div class="example-group">
+        <div class="example-render">
+          <div class="grid-responsive">
+            <div class="grid-3">
+              <article class="card">
+                <h3>One</h3>
+                <p>First.</p>
+              </article>
+              <article class="card">
+                <h3>Two</h3>
+                <p>Second.</p>
+              </article>
+              <article class="card">
+                <h3>Three</h3>
+                <p>Third.</p>
+              </article>
+            </div>
+          </div>
+        </div>
+        <div class="example-code">
+          <pre><code class="language-html"><span class="token tag">&lt;div class="grid-responsive"&gt;</span>
+  <span class="token tag">&lt;div class="grid-3"&gt;</span>
+    <span class="token tag">&lt;article class="card"&gt;</span><span class="token tag">&lt;h3&gt;</span>One<span class="token tag">&lt;/h3&gt;</span><span class="token tag">&lt;/article&gt;</span>
+    <span class="token tag">&lt;article class="card"&gt;</span><span class="token tag">&lt;h3&gt;</span>Two<span class="token tag">&lt;/h3&gt;</span><span class="token tag">&lt;/article&gt;</span>
+    <span class="token tag">&lt;article class="card"&gt;</span><span class="token tag">&lt;h3&gt;</span>Three<span class="token tag">&lt;/h3&gt;</span><span class="token tag">&lt;/article&gt;</span>
+  <span class="token tag">&lt;/div&gt;</span>
+<span class="token tag">&lt;/div&gt;</span></code></pre>
+        </div>
+      </div>
+    </section>
+    <section class="component-section">
+      <div class="example-group">
+        <div class="example-render">
+          <div class="grid-responsive">
+            <div class="grid-4">
+              <article class="card">
+                <h3>One</h3>
+                <p>First.</p>
+              </article>
+              <article class="card">
+                <h3>Two</h3>
+                <p>Second.</p>
+              </article>
+              <article class="card">
+                <h3>Three</h3>
+                <p>Third.</p>
+              </article>
+              <article class="card">
+                <h3>Four</h3>
+                <p>Fourth.</p>
+              </article>
+            </div>
+          </div>
+        </div>
+        <div class="example-code">
+          <pre><code class="language-html"><span class="token tag">&lt;div class="grid-responsive"&gt;</span>
+  <span class="token tag">&lt;div class="grid-4"&gt;</span>
+    <span class="token tag">&lt;article class="card"&gt;</span><span class="token tag">&lt;h3&gt;</span>One<span class="token tag">&lt;/h3&gt;</span><span class="token tag">&lt;/article&gt;</span>
+    <span class="token tag">&lt;article class="card"&gt;</span><span class="token tag">&lt;h3&gt;</span>Two<span class="token tag">&lt;/h3&gt;</span><span class="token tag">&lt;/article&gt;</span>
+    <span class="token tag">&lt;article class="card"&gt;</span><span class="token tag">&lt;h3&gt;</span>Three<span class="token tag">&lt;/h3&gt;</span><span class="token tag">&lt;/article&gt;</span>
+    <span class="token tag">&lt;article class="card"&gt;</span><span class="token tag">&lt;h3&gt;</span>Four<span class="token tag">&lt;/h3&gt;</span><span class="token tag">&lt;/article&gt;</span>
+  <span class="token tag">&lt;/div&gt;</span>
+<span class="token tag">&lt;/div&gt;</span></code></pre>
+        </div>
+      </div>
+    </section>
+    <section class="component-section">
+      <h2>CSS</h2>
+      <div class="example-group">
+        <div class="example-code">
+          <pre><code class="language-css"><span class="token selector">.grid-responsive</span> <span class="token punctuation">{</span>
+  <span class="token property">container-type</span><span class="token punctuation">:</span> inline-size<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token selector">.grid-2,
+.grid-3,
+.grid-4</span> <span class="token punctuation">{</span>
+  <span class="token property">display</span><span class="token punctuation">:</span> grid<span class="token punctuation">;</span>
+  <span class="token property">gap</span><span class="token punctuation">:</span> <span class="token function">var</span><span class="token punctuation">(</span>--gap<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token selector">.grid-2</span> <span class="token punctuation">{</span> <span class="token property">grid-template-columns</span><span class="token punctuation">:</span> <span class="token function">repeat</span><span class="token punctuation">(</span>2<span class="token punctuation">,</span> <span class="token function">minmax</span><span class="token punctuation">(</span>0<span class="token punctuation">,</span> 1fr<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+<span class="token selector">.grid-3</span> <span class="token punctuation">{</span> <span class="token property">grid-template-columns</span><span class="token punctuation">:</span> <span class="token function">repeat</span><span class="token punctuation">(</span>3<span class="token punctuation">,</span> <span class="token function">minmax</span><span class="token punctuation">(</span>0<span class="token punctuation">,</span> 1fr<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+<span class="token selector">.grid-4</span> <span class="token punctuation">{</span> <span class="token property">grid-template-columns</span><span class="token punctuation">:</span> <span class="token function">repeat</span><span class="token punctuation">(</span>4<span class="token punctuation">,</span> <span class="token function">minmax</span><span class="token punctuation">(</span>0<span class="token punctuation">,</span> 1fr<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+
+<span class="token atrule"><span class="token rule">@container</span> <span class="token punctuation">(</span><span class="token property">width</span> <span class="token punctuation">&lt;</span> 28rem<span class="token punctuation">)</span></span> <span class="token punctuation">{</span>
+  <span class="token selector">.grid-responsive .grid-2,
+.grid-responsive .grid-3,
+.grid-responsive .grid-4</span> <span class="token punctuation">{</span>
+    <span class="token property">grid-template-columns</span><span class="token punctuation">:</span> 1fr<span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token atrule"><span class="token rule">@container</span> <span class="token punctuation">(</span>28rem <span class="token punctuation">&lt;=</span> <span class="token property">width</span> <span class="token punctuation">&lt;</span> 48rem<span class="token punctuation">)</span></span> <span class="token punctuation">{</span>
+  <span class="token selector">.grid-responsive .grid-3,
+.grid-responsive .grid-4</span> <span class="token punctuation">{</span>
+    <span class="token property">grid-template-columns</span><span class="token punctuation">:</span> <span class="token function">repeat</span><span class="token punctuation">(</span>2<span class="token punctuation">,</span> <span class="token function">minmax</span><span class="token punctuation">(</span>0<span class="token punctuation">,</span> 1fr<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+        </div>
+      </div>
+    </section>
+    <div class="component-prose">
+      <p>The wrapper is the query container, so the same grid behaves differently in a narrow sidebar than in a wide main area. The intermediate 2-col step is useful for lists where the item count is divisible by both 2 and 3 (or 4) — a 12-item list reads as 12 lines, then 6 lines of 2, then 4 lines of 3 (or 3 lines of 4), depending on the grid.</p>
+      <p>Constrain the wrapper to see the 1-column collapse:</p>
+    </div>
+    <section class="component-section">
+      <div class="example-group">
+        <div class="example-render">
+          <div class="grid-responsive" style="max-inline-size: 24rem;">
+            <div class="grid-3">
+              <article class="card">
+                <h3>One</h3>
+                <p>First.</p>
+              </article>
+              <article class="card">
+                <h3>Two</h3>
+                <p>Second.</p>
+              </article>
+              <article class="card">
+                <h3>Three</h3>
+                <p>Third.</p>
+              </article>
+            </div>
+          </div>
+        </div>
+        <div class="example-code">
+          <pre><code class="language-html"><span class="token tag">&lt;div class="grid-responsive" style="max-inline-size: 24rem"&gt;</span>
+  <span class="token tag">&lt;div class="grid-3"&gt;</span>
+    <span class="token tag">&lt;article class="card"&gt;</span><span class="token tag">&lt;h3&gt;</span>One<span class="token tag">&lt;/h3&gt;</span><span class="token tag">&lt;/article&gt;</span>
+    <span class="token tag">&lt;article class="card"&gt;</span><span class="token tag">&lt;h3&gt;</span>Two<span class="token tag">&lt;/h3&gt;</span><span class="token tag">&lt;/article&gt;</span>
+    <span class="token tag">&lt;article class="card"&gt;</span><span class="token tag">&lt;h3&gt;</span>Three<span class="token tag">&lt;/h3&gt;</span><span class="token tag">&lt;/article&gt;</span>
+  <span class="token tag">&lt;/div&gt;</span>
+<span class="token tag">&lt;/div&gt;</span></code></pre>
+        </div>
+      </div>
+    </section>
+    <div class="component-prose">
       <p>Do not add <code>.row</code>, <code>.col-6</code>, <code>.offset-2</code>, or other fixed grid-system classes unless the project later proves it needs a formal grid system.</p>
     </div>
         <details class="demo-links">

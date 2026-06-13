@@ -16,3 +16,12 @@ Elegance is key.
 - Do not lint yourself, this is done by config and use biome
 - Do not run build:dist, unless you want to test if build script works (the user build it)
 - Do not run build:demo, unless you worked on the build script (we have a watcher that build it)
+- Playwright is not installed, build based on specifications
+
+No need to mention that you didn't do anything
+
+## Rules
+
+- Don't open the browser
+- Don't create file outside the project
+- Temp files can be created in tmp

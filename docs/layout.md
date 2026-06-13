@@ -236,6 +236,71 @@ Tune the minimum item width with `--grid-min`.
 }
 ```
 
+### Fixed Columns
+
+> Predictable 2/3/4-column grids. Full count by default; wrap in `.grid-responsive` to make the column count collapse on narrow wrappers.
+
+Use `.grid-2`, `.grid-3`, and `.grid-4` when the column count matters more than the item minimum width — for example, when a row should always read as "three items side by side", or when an empty cell should not stretch to fill space. Unlike `.grid`, the columns are fixed; if you have only two items in a `.grid-3`, the third cell stays empty rather than redistributing.
+
+A `.grid-2/3/4` without a wrapper is a **fixed grid** (always at its full column count); with a `.grid-responsive` wrapper, it's a **responsive grid** (the column count collapses on narrow wrappers). The wrapper is the query container; the grid itself is a plain block grid.
+
+```html
+<div class="grid-responsive">
+  <div class="grid-3">
+    <article class="card">
+      <h3>Starter</h3>
+      <p>For small projects.</p>
+    </article>
+    <article class="card">
+      <h3>Team</h3>
+      <p>For shared products.</p>
+    </article>
+    <article class="card">
+      <h3>Scale</h3>
+      <p>For larger systems.</p>
+    </article>
+  </div>
+</div>
+```
+
+```css
+.grid-responsive {
+  container-type: inline-size;
+}
+
+.grid-2,
+.grid-3,
+.grid-4 {
+  display: grid;
+  gap: var(--gap);
+}
+
+.grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.grid-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+
+@container (width < 28rem) {
+  .grid-responsive .grid-2,
+  .grid-responsive .grid-3,
+  .grid-responsive .grid-4 {
+    grid-template-columns: 1fr;
+  }
+}
+
+@container (28rem <= width < 48rem) {
+  .grid-responsive .grid-3,
+  .grid-responsive .grid-4 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+```
+
+Behavior:
+- Without `.grid-responsive`: `.grid-2` is always 2 cols, `.grid-3` is always 3 cols, `.grid-4` is always 4 cols.
+- With `.grid-responsive`: all three collapse to one column on a narrow wrapper (under 28rem). As the wrapper widens, they step back to 2 cols (28rem-48rem) and then to their full count (48rem+).
+- The intermediate 2-col step is useful for lists of items divisible by both 2 and 3 (or 4) — a 12-item list reads as 12 lines, then 6 lines of 2, then 4 lines of 3 (or 3 lines of 4), depending on the grid.
+- The wrapper is the query container, so the same class behaves differently in a narrow sidebar than in a wide main area. No viewport breakpoints are involved.
+
 Do not add `.row`, `.col-6`, `.offset-2`, or other fixed grid-system classes unless the project later proves it needs a formal grid system.
 
 Links:
@@ -386,7 +451,7 @@ Use `.frame` for media that needs a stable aspect ratio.
 
 ```html
 <figure class="frame">
-  <img src="/preview.jpg" alt="Preview of the dashboard" />
+  <img src="/preview.jpg" alt="Preview placeholder" width="1600" height="900" />
 </figure>
 ```
 
