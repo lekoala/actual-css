@@ -13,3 +13,19 @@ Document:
 - what agents or contributors must not accidentally change.
 
 If code and docs disagree, ask the user what is the expected outcome.
+
+## Docs content
+
+- tokens.md : core tokens
+- typography.md : typography
+- layout.md : layout helpers
+- patterns.md : typical app patterns
+- components.md : all components
+- utilities.md : basic utils
+- ui.md : components that requires js to work
+- components.md : all components
+
+## Other relevant files
+
+- rules.md : core rules to follow
+- references.md : inspiration and external resources
