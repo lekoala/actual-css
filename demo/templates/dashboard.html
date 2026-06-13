@@ -6,151 +6,421 @@
   <title>Actual CSS Dashboard Demo</title>
   <link rel="stylesheet" href="../../src/actual.css">
   <link rel="stylesheet" href="../../src/themes/index.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
   <style>
-    html { scroll-padding-top: 2rem; }
-    main { padding-block: 1rem 4rem; }
-    section { margin-block: 1.5rem; }
-    h1, h2, h3, h4 { line-height: 1.15; }
-    h1 { font-size: clamp(2rem, 5vw, 4rem); margin-block: .5rem; }
-    h2 { margin-block: 0 .5rem; }
-    h3, h4 { margin-block: 0; }
-    .demo-muted { color: var(--text-muted); }
-    .demo-subtle { color: var(--text-subtle); }
-    .demo-top { position: sticky; inset-block-start: .75rem; z-index: 10; backdrop-filter: blur(12px); }
-    .demo-topbar-actions { display: flex; align-items: center; justify-content: flex-end; gap: .5rem; flex-wrap: nowrap; }
-    .demo-topbar-actions > * { flex: 0 0 auto; }
-    .demo-hero { padding-block: 2rem; }
-    .demo-toolbar { justify-content: space-between; }
-    .demo-heading { display: flex; align-items: center; gap: .75rem; flex-wrap: wrap; }
-    .demo-heading h1 { margin: 0; }
-    .demo-card-title { margin: 0; }
-    .demo-stat-grid { --grid-min: 13rem; }
-    .demo-main-grid { --grid-min: 20rem; align-items: start; }
-    .demo-theme-grid { --grid-min: 12rem; }
-    .demo-swatch { min-block-size: 8rem; }
-    .demo-status-row { display: grid; gap: .35rem; }
-    .demo-status-head { display: flex; justify-content: space-between; gap: .75rem; }
-    .demo-order-actions { justify-content: flex-end; }
-    .demo-footer { padding-block: 2rem; border-block-start: 1px solid var(--border); color: var(--text-muted); }
-    :is(header, section, footer)[id] { scroll-margin-block-start: 5rem; }
-    @supports (scroll-target-group: auto) {
-      .navbar-nav { scroll-target-group: auto; }
-      .navbar-nav .nav-link:target-current {
-        color: var(--text);
-        box-shadow: inset 0 -2px 0 var(--intent, var(--primary));
+    /* Template-local rules. Each one papers over a known framework gap.
+     *   1. .dashboard-topbar (sticky, backdrop blur) -> topbar pattern.
+     *   2. .dashboard-hide-md                      -> small-screen nav swap.
+     *   3. .dashboard-hero                          -> small hero spacing.
+     * The rest of the page is composed from existing primitives
+     * (.navbar, .nav-link, .breadcrumb, .card, .metric, .grid,
+     * .sidebar-layout, .tabs, .table, .table-wrap, .pagination,
+     * .dropdown, .media, .alert, .button, .avatar).
+     */
+
+    .dashboard-topbar {
+      position: sticky;
+      inset-block-start: 0;
+      z-index: var(--z-sticky, 10);
+      isolation: isolate;
+    }
+
+    @supports ((backdrop-filter: blur(1rem)) or (-webkit-backdrop-filter: blur(1rem))) {
+      .dashboard-topbar {
+        background: color-mix(in oklch, var(--surface) 88%, transparent);
+        backdrop-filter: blur(0.75rem);
+        -webkit-backdrop-filter: blur(0.75rem);
+      }
+    }
+
+    .dashboard-hero {
+      padding-block: 1rem 0.5rem;
+    }
+
+    .dashboard-hide-md {
+      display: none;
+    }
+
+    @media (max-width: 48rem) {
+      .dashboard-hide-md {
+        display: initial;
       }
     }
   </style>
 </head>
-<body>
-  <main class="center stack">
-    <nav class="navbar demo-top" aria-label="Primary navigation">
-      <a class="navbar-brand" href="#top"><span class="avatar primary"><abbr class="circle">AC</abbr></span>Actual CSS</a>
+<body class="app-shell">
+  <!-- Topbar: brand, primary nav, theme switcher, account dropdown. -->
+  <header class="navbar dashboard-topbar">
+    <a class="navbar-brand" href="#top">
+      <span class="avatar primary"><abbr class="circle">AC</abbr></span>
+      <span class="dashboard-hide-md">Actual CSS</span>
+    </a>
+
+    <nav aria-label="Primary">
       <ul class="navbar-nav">
-        <li><a class="nav-link" href="#metrics">Metrics</a></li>
+        <li><a class="nav-link" href="#metrics" aria-current="page">Metrics</a></li>
+        <li><a class="nav-link" href="#revenue">Revenue</a></li>
+        <li><a class="nav-link" href="#activity">Activity</a></li>
+        <li><a class="nav-link" href="#quick-actions">Quick actions</a></li>
       </ul>
-      <div class="demo-topbar-actions">
-        <select class="select sm" id="theme-switcher" aria-label="Switch theme">
-          <option value="">System</option>
-          <option value="light">Light</option>
-          <option value="dark">Dark</option>
-          <option value="dim">Dim</option>
-          <option value="corporate">Corporate</option>
-          <option value="forest">Forest</option>
-          <option value="ocean">Ocean</option>
-          <option value="sunset">Sunset</option>
-          <option value="lavender">Lavender</option>
-          <option value="mono">Mono</option>
-          <option value="square">Square</option>
-        </select>
-      </div>
     </nav>
 
-    <header id="top" class="demo-hero stack">
+    <div class="cluster">
+      <select class="select sm dashboard-hide-md" id="theme-switcher" aria-label="Switch theme">
+        <option value="">System</option>
+        <option value="light">Light</option>
+        <option value="dark">Dark</option>
+        <option value="dim">Dim</option>
+        <option value="corporate">Corporate</option>
+        <option value="forest">Forest</option>
+        <option value="ocean">Ocean</option>
+        <option value="sunset">Sunset</option>
+        <option value="lavender">Lavender</option>
+        <option value="mono">Mono</option>
+        <option value="square">Square</option>
+      </select>
+
+      <div class="dropdown">
+        <button class="btn neutral ghost sm" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="account-menu" id="account-menu-trigger" aria-label="Account menu">
+          <span class="avatar sm"><abbr>LW</abbr></span>
+          <span class="dashboard-hide-md">Laura</span>
+          <i class="ti ti-chevron-down" aria-hidden="true"></i>
+        </button>
+        <div class="dropdown-menu" role="menu" id="account-menu" aria-labelledby="account-menu-trigger" hidden>
+          <button class="btn link" type="button" role="menuitem">View profile</button>
+          <button class="btn link" type="button" role="menuitem">Settings</button>
+          <button class="btn link" type="button" role="menuitem">Keyboard shortcuts</button>
+          <hr role="separator">
+          <button class="btn link danger" type="button" role="menuitem">Sign out</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="grow center stack" id="dashboard">
+    <!-- Page header / hero -->
+    <header class="dashboard-hero stack">
       <ol class="breadcrumb" aria-label="Breadcrumb">
         <li><a href="#top">Actual</a></li>
         <li><a href="#dashboard">Dashboard</a></li>
         <li aria-current="page">Kitchen sink</li>
       </ol>
-      <div class="cluster demo-toolbar">
-        <div class="stack">
-          <div class="demo-heading">
+
+      <div class="cluster" style="--cluster-justify: space-between; flex-wrap: wrap; gap: 1rem;">
+        <hgroup>
+          <div class="cluster" style="gap: 0.75rem; flex-wrap: wrap;">
             <h1>Dashboard kitchen sink</h1>
             <span class="badge success soft">Live v0.1.0</span>
           </div>
-          <p class="demo-muted">Showing various types of typical UI elements for a dashboard.</p>
-        </div>
+          <p class="muted" style="margin: 0;">Showing various types of typical UI elements for a dashboard.</p>
+        </hgroup>
+
         <div class="cluster">
-          <label class="choice"><input class="switch" type="checkbox" checked> Auto-refresh</label>
-          <button class="btn neutral outline" type="button" onclick="document.getElementById('delete-dialog').showModal()">Open dialog</button>
+          <label class="choice">
+            <input class="switch" type="checkbox" checked>
+            Auto-refresh
+          </label>
+          <button class="btn neutral outline" type="button" commandfor="delete-dialog" command="show-modal">Open dialog</button>
         </div>
       </div>
     </header>
 
+    <!-- Metrics -->
     <section id="metrics" class="stack">
       <h2>Metrics</h2>
-      <div class="grid demo-stat-grid" aria-label="Key metrics">
-      <article class="card raised metric">
-        <span class="muted">Revenue</span>
-        <strong class="metric-value">$42,128</strong>
-        <span class="badge success soft">+12.5% vs last month</span>
-      </article>
-      <article class="card raised metric">
-        <span class="muted">Active users</span>
-        <strong class="metric-value">2,847</strong>
-        <span class="badge danger soft">-3.2% vs last month</span>
-      </article>
-      <article class="card raised metric">
-        <span class="muted">Retention</span>
-        <strong class="metric-value">83.24%</strong>
-        <span class="badge success soft">+0.8% vs last month</span>
-      </article>
-      <article class="card raised metric">
-        <span class="muted">Uptime</span>
-        <strong class="metric-value">99.99%</strong>
-        <span class="badge success outline">Healthy</span>
-      </article>
-    </div>
+      <div class="grid" style="--grid-min: 13rem;" aria-label="Key metrics">
+        <article class="card raised metric">
+          <span class="muted">Revenue</span>
+          <data class="metric-value" value="42128">$42,128</data>
+          <span class="badge success soft">+12.5% vs last month</span>
+          <progress class="progress" value="72" max="100" aria-label="Revenue target progress"></progress>
+        </article>
+        <article class="card raised metric">
+          <span class="muted">Active users</span>
+          <data class="metric-value" value="2847">2,847</data>
+          <span class="badge danger soft">-3.2% vs last month</span>
+          <progress class="progress" value="38" max="100" aria-label="User growth"></progress>
+        </article>
+        <article class="card raised metric">
+          <span class="muted">Retention</span>
+          <data class="metric-value" value="83.24">83.24%</data>
+          <span class="badge success soft">+0.8% vs last month</span>
+        </article>
+        <article class="card raised metric">
+          <span class="muted">Uptime</span>
+          <data class="metric-value" value="99.99">99.99%</data>
+          <span class="badge success outline">Healthy</span>
+        </article>
+      </div>
     </section>
 
-    <footer class="demo-footer cluster demo-toolbar">
-      <span>Actual CSS kitchen sink demo</span>
-      <span class="demo-subtle">Plain CSS framework scaffold</span>
-    </footer>
+    <!-- Sidebar-layout: revenue tabs/table (main) + activity/team/maintenance (aside) -->
+    <section id="revenue" class="sidebar-layout">
+      <div class="stack">
+        <h2>Revenue</h2>
+        <ul class="tabs" role="tablist" aria-label="Revenue views">
+          <li><button class="tab" type="button" aria-selected="true" aria-current="page">By plan</button></li>
+          <li><button class="tab" type="button" aria-selected="false">By region</button></li>
+          <li><button class="tab" type="button" aria-selected="false">By channel</button></li>
+        </ul>
+
+        <div class="card stack">
+          <div class="table-wrap" role="region" aria-labelledby="revenue-table" tabindex="0">
+            <table class="table" style="--table-min: 64rem;">
+              <caption id="revenue-table" class="sr-only">Revenue by month</caption>
+              <thead>
+                <tr>
+                  <th scope="col">Month</th>
+                  <th scope="col">Plan</th>
+                  <th scope="col" data-align="end">Revenue</th>
+                  <th scope="col" data-align="end">Churn</th>
+                  <th scope="col">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>March 2026</td>
+                  <td>Team</td>
+                  <td data-align="end" data-nowrap>$42,128</td>
+                  <td data-align="end" data-nowrap>1.2%</td>
+                  <td><span class="badge success soft">Healthy</span></td>
+                </tr>
+                <tr>
+                  <td>April 2026</td>
+                  <td>Team + Business</td>
+                  <td data-align="end" data-nowrap>$48,902</td>
+                  <td data-align="end" data-nowrap>0.9%</td>
+                  <td><span class="badge success soft">Healthy</span></td>
+                </tr>
+                <tr>
+                  <td>May 2026</td>
+                  <td>Team + Business</td>
+                  <td data-align="end" data-nowrap>$53,470</td>
+                  <td data-align="end" data-nowrap>0.7%</td>
+                  <td><span class="badge warning soft">Watch</span></td>
+                </tr>
+                <tr>
+                  <td>June 2026</td>
+                  <td>Business + Enterprise</td>
+                  <td data-align="end" data-nowrap>$61,884</td>
+                  <td data-align="end" data-nowrap>0.5%</td>
+                  <td><span class="badge success soft">Healthy</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="cluster" style="--cluster-justify: space-between; flex-wrap: wrap; gap: 0.5rem;">
+            <span class="muted">Showing 4 of 12 months</span>
+            <nav aria-label="Pagination">
+              <ol class="pagination">
+                <li><a class="page-link" href="#" aria-disabled="true">Prev</a></li>
+                <li><a class="page-link" aria-current="page" href="#">1</a></li>
+                <li><a class="page-link" href="#">2</a></li>
+                <li><a class="page-link" href="#">3</a></li>
+                <li><a class="page-link" href="#">Next</a></li>
+              </ol>
+            </nav>
+          </div>
+        </div>
+      </div>
+
+      <aside class="stack" aria-label="Sidebar">
+        <!-- Recent activity -->
+        <section class="card stack">
+          <hgroup>
+            <h2 style="margin: 0; font-size: 1rem;">Recent activity</h2>
+            <p class="muted" style="margin: 0; font-size: 0.875rem;">Last 24 hours</p>
+          </hgroup>
+
+          <div class="media">
+            <span class="avatar success"><abbr>JL</abbr></span>
+            <div>
+              <div><strong>Jana Lindgren</strong> <span class="muted">deployed</span> <code>v2.4.1</code></div>
+              <small class="muted">12 min ago</small>
+            </div>
+          </div>
+          <div class="media">
+            <span class="avatar primary"><abbr>AM</abbr></span>
+            <div>
+              <div><strong>Ada Meridian</strong> <span class="muted">approved</span> a pull request</div>
+              <small class="muted">38 min ago</small>
+            </div>
+          </div>
+          <div class="media">
+            <span class="avatar warning"><abbr>RM</abbr></span>
+            <div>
+              <div><strong>Rin Moreau</strong> <span class="muted">flagged</span> a regression in checkout</div>
+              <small class="muted">1 hour ago</small>
+            </div>
+          </div>
+          <div class="media">
+            <span class="avatar"><abbr>TS</abbr></span>
+            <div>
+              <div><strong>Tomek Sava</strong> <span class="muted">resolved</span> 6 support tickets</div>
+              <small class="muted">3 hours ago</small>
+            </div>
+          </div>
+        </section>
+
+        <!-- Team online -->
+        <section class="card stack">
+          <hgroup>
+            <h2 style="margin: 0; font-size: 1rem;">Team online</h2>
+            <p class="muted" style="margin: 0; font-size: 0.875rem;">8 of 14 members</p>
+          </hgroup>
+          <div role="group" aria-label="Team members">
+            <span class="avatar primary" title="Ada Meridian"><abbr>AM</abbr></span>
+            <span class="avatar success" title="Jana Lindgren"><abbr>JL</abbr></span>
+            <span class="avatar warning" title="Rin Moreau"><abbr>RM</abbr></span>
+            <span class="avatar" title="Tomek Sava"><abbr>TS</abbr></span>
+            <span class="avatar secondary" title="Kai Aoyama"><abbr>KA</abbr></span>
+            <span class="avatar danger" title="Mira Halberg"><abbr>MH</abbr></span>
+            <span class="avatar neutral" title="Yusuf Adler"><abbr>YA</abbr></span>
+            <span class="avatar" title="Pia Vester"><abbr>PV</abbr></span>
+          </div>
+        </section>
+
+        <!-- Maintenance notice -->
+        <div class="alert primary" role="status">
+          <span aria-hidden="true">i</span>
+          <div>
+            <strong>Scheduled maintenance</strong>
+            <p style="margin: 0.25rem 0 0; font-size: 0.9375rem;">A 15-minute window is planned for Sunday, 04:00 UTC. <a href="#">Read the changelog</a>.</p>
+          </div>
+        </div>
+      </aside>
+    </section>
+
+    <!-- Quick actions -->
+    <section id="quick-actions" class="stack">
+      <h2>Quick actions</h2>
+      <div class="grid" style="--grid-min: 16rem;">
+        <a class="card subtle" href="#" style="color: inherit; text-decoration: none;">
+          <div class="media">
+            <span class="avatar primary"><i class="ti ti-rocket" aria-hidden="true"></i></span>
+            <div>
+              <strong>Deploy</strong>
+              <p class="muted" style="margin: 0; font-size: 0.9375rem;">Ship the latest changes to production.</p>
+            </div>
+          </div>
+        </a>
+        <a class="card subtle" href="#" style="color: inherit; text-decoration: none;">
+          <div class="media">
+            <span class="avatar success"><i class="ti ti-circle-check" aria-hidden="true"></i></span>
+            <div>
+              <strong>Run checks</strong>
+              <p class="muted" style="margin: 0; font-size: 0.9375rem;">Execute the full quality suite.</p>
+            </div>
+          </div>
+        </a>
+        <a class="card subtle" href="#" style="color: inherit; text-decoration: none;">
+          <div class="media">
+            <span class="avatar warning"><i class="ti ti-bell" aria-hidden="true"></i></span>
+            <div>
+              <strong>Send announcement</strong>
+              <p class="muted" style="margin: 0; font-size: 0.9375rem;">Notify all team members in one click.</p>
+            </div>
+          </div>
+        </a>
+        <a class="card subtle" href="#" style="color: inherit; text-decoration: none;">
+          <div class="media">
+            <span class="avatar secondary"><i class="ti ti-file-export" aria-hidden="true"></i></span>
+            <div>
+              <strong>Export report</strong>
+              <p class="muted" style="margin: 0; font-size: 0.9375rem;">Download a PDF summary for stakeholders.</p>
+            </div>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <!-- Activity section: a placeholder anchor that the right-rail above already previews. -->
+    <section id="activity" class="stack">
+      <h2>Activity</h2>
+      <p class="muted">Per-user activity timeline lives here. The right-rail above already previews the framework <code>.media</code> shape.</p>
+    </section>
   </main>
 
-  <dialog class="dialog" id="delete-dialog">
+  <footer class="center" style="padding-block: 2rem; border-block-start: var(--border-width) solid var(--border); color: var(--text-muted);">
+    <div class="cluster" style="--cluster-justify: space-between; flex-wrap: wrap; gap: 0.5rem;">
+      <span>Actual CSS kitchen sink demo</span>
+      <ul class="nav-list cluster" aria-label="Footer">
+        <li><a href="#metrics" style="color: inherit; text-decoration: none;">Metrics</a></li>
+        <li><a href="#revenue" style="color: inherit; text-decoration: none;">Revenue</a></li>
+        <li><a href="#activity" style="color: inherit; text-decoration: none;">Activity</a></li>
+      </ul>
+    </div>
+  </footer>
+
+  <!-- Delete confirmation dialog (invoker commands, no inline JS). -->
+  <dialog class="dialog" id="delete-dialog" closedby="any">
     <form method="dialog" class="stack">
-      <h2>Confirm deletion</h2>
-      <p class="demo-muted">Are you sure you want to delete order #ORD-7295? This action cannot be undone.</p>
-      <div class="cluster demo-toolbar">
-        <button class="btn neutral outline" value="cancel">Cancel</button>
+      <header>
+        <h3>Confirm deletion</h3>
+        <p class="muted">Are you sure you want to delete order #ORD-7295? This action cannot be undone.</p>
+      </header>
+      <footer>
+        <button class="btn neutral outline" type="button" commandfor="delete-dialog" command="close">Cancel</button>
         <button class="btn danger" value="delete">Delete order</button>
-      </div>
+      </footer>
     </form>
   </dialog>
 
   <script>
-    const switcher = document.getElementById('theme-switcher');
-    const loadedThemes = new Set(['light', 'dark', 'dim', 'corporate', 'forest', 'ocean', 'sunset', 'lavender', 'mono', 'square']);
+    // Theme switcher. src/themes/index.css already imports every theme, so
+    // flipping data-theme on <html> is the only step required.
+    (function () {
+      const switcher = document.getElementById('theme-switcher');
+      if (!switcher) return;
+      switcher.addEventListener('change', () => {
+        const value = switcher.value;
+        if (value) document.documentElement.dataset.theme = value;
+        else document.documentElement.removeAttribute('data-theme');
+      });
+    })();
 
-    switcher.addEventListener('change', () => {
-      const theme = switcher.value;
-      if (!theme) {
-        document.documentElement.removeAttribute('data-theme');
-        return;
-      }
+    // .dropdown toggler. Framework documents the contract; this is the
+    // matching runtime: aria-expanded, hidden, Escape, outside click, focus
+    // return. Same shape can be reused by other templates and demos.
+    (function () {
+      const triggers = document.querySelectorAll('.dropdown [aria-haspopup="menu"]');
+      triggers.forEach((trigger) => {
+        const id = trigger.getAttribute('aria-controls');
+        const menu = id ? document.getElementById(id) : trigger.nextElementSibling;
+        if (!menu) return;
 
-      if (!loadedThemes.has(theme)) {
-        const link = document.createElement('link');
-        link.rel = 'stylesheet';
-        link.href = `../dist/themes/${theme}.css`;
-        document.head.append(link);
-        loadedThemes.add(theme);
-      }
+        const close = () => {
+          trigger.setAttribute('aria-expanded', 'false');
+          menu.setAttribute('hidden', '');
+        };
+        const open = () => {
+          trigger.setAttribute('aria-expanded', 'true');
+          menu.removeAttribute('hidden');
+        };
 
-      document.documentElement.dataset.theme = theme;
-    });
+        trigger.addEventListener('click', (event) => {
+          event.stopPropagation();
+          if (trigger.getAttribute('aria-expanded') === 'true') close();
+          else open();
+        });
+
+        menu.addEventListener('click', (event) => {
+          if (event.target.closest('[role="menuitem"]')) close();
+        });
+
+        document.addEventListener('click', (event) => {
+          if (!menu.contains(event.target) && event.target !== trigger) close();
+        });
+
+        document.addEventListener('keydown', (event) => {
+          if (event.key === 'Escape' && trigger.getAttribute('aria-expanded') === 'true') {
+            close();
+            trigger.focus();
+          }
+        });
+      });
+    })();
   </script>
 </body>
 </html>
