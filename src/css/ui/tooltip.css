@@ -1,0 +1,64 @@
+/*
+ * Tooltip — supplemental label overlaid near a trigger.
+ *
+ * Position, placement, and arrow position are managed by JavaScript
+ * via position: fixed, left, top, data-placement, and --arrow-x.
+ */
+.tooltip {
+  --tooltip-bg: var(--surface-solid);
+  --tooltip-fg: var(--surface);
+  --tooltip-arrow-size: 5px;
+
+  z-index: 50;
+  max-inline-size: min(24rem, calc(100vi - 2rem));
+  padding: 0.25em 0.6em;
+  border-radius: var(--radius-sm);
+  background: var(--tooltip-bg);
+  color: var(--tooltip-fg);
+  font-size: 0.8125rem;
+  line-height: var(--line-height-tight);
+  pointer-events: none;
+  user-select: none;
+}
+
+/* ── Arrow — clipped triangle ──────────────────────── */
+
+.tooltip::before {
+  content: "";
+  position: absolute;
+  inline-size: calc(var(--tooltip-arrow-size) * 2);
+  block-size: var(--tooltip-arrow-size);
+  background: var(--tooltip-bg);
+}
+
+.tooltip[data-placement^="top"]::before {
+  inset-block-end: calc(-0.98 * var(--tooltip-arrow-size));
+  inset-inline-start: var(--arrow-x, 50%);
+  translate: -50% 0;
+  clip-path: polygon(50% 100%, 0 0, 100% 0);
+}
+
+.tooltip[data-placement^="bottom"]::before {
+  inset-block-start: calc(-0.98 * var(--tooltip-arrow-size));
+  inset-inline-start: var(--arrow-x, 50%);
+  translate: -50% 0;
+  clip-path: polygon(50% 0, 0 100%, 100% 100%);
+}
+
+.tooltip[data-placement^="left"]::before {
+  inset-inline-end: calc(-0.98 * var(--tooltip-arrow-size));
+  inset-block-start: 50%;
+  inline-size: var(--tooltip-arrow-size);
+  block-size: calc(var(--tooltip-arrow-size) * 2);
+  translate: 0 -50%;
+  clip-path: polygon(100% 50%, 0 0, 0 100%);
+}
+
+.tooltip[data-placement^="right"]::before {
+  inset-inline-start: calc(-0.98 * var(--tooltip-arrow-size));
+  inset-block-start: 50%;
+  inline-size: var(--tooltip-arrow-size);
+  block-size: calc(var(--tooltip-arrow-size) * 2);
+  translate: 0 -50%;
+  clip-path: polygon(0 50%, 100% 0, 100% 100%);
+}

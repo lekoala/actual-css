@@ -110,9 +110,10 @@ label:not(.choice):has(> input:not(:is([type="checkbox"], [type="radio"])), > te
   margin-block-start: var(--form-actions-margin-block-start, var(--space-5));
 }
 
-/* Opt-in sticky variant. The form-actions container owns its positioning;
-   page layout (or the consumer) handles scroll padding so the last field
-   is not covered on short pages. */
+/* Opt-in sticky variant. When the bar is not stuck (at rest) the
+   translucent surface and backdrop-blur are visually neutral. Content
+   scrolling behind the bar reveals the blur as a natural separator
+   instead of relying on a shadow. */
 .form-actions.sticky {
   position: sticky;
   inset-block-end: var(--form-actions-sticky-block-offset, 0px);
@@ -123,18 +124,17 @@ label:not(.choice):has(> input:not(:is([type="checkbox"], [type="radio"])), > te
   padding: var(--form-actions-sticky-padding, var(--space-3));
 
   border-block-start: var(--border-width) solid var(--border);
-  background: var(--surface);
-  box-shadow: var(--shadow);
+  background: color-mix(in oklch, var(--surface) 88%, transparent);
+  backdrop-filter: blur(1rem);
 }
 
-/* Progressive enhancement: translucent surface when both modern features
-   are present. Fails cleanly in browsers that only ship one. */
-@supports (
+/* Fallback for browsers without backdrop-filter + color-mix support. */
+@supports not (
     (backdrop-filter: blur(1rem)) and
     (background: color-mix(in oklch, white 50%, transparent))
   ) {
   .form-actions.sticky {
-    background: color-mix(in oklch, var(--surface) 88%, transparent);
-    backdrop-filter: blur(1rem);
+    background: var(--surface);
+    backdrop-filter: none;
   }
 }

@@ -1,0 +1,72 @@
+/*
+ * Dropdown — floating menu panel attached to a trigger.
+ *
+ * JavaScript owns positioning (position: fixed + left/top),
+ * show/hide (hidden + display), focus, and keyboard behavior.
+ * CSS owns the surfaced panel appearance and item styles.
+ */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-menu {
+  z-index: 20;
+  display: grid;
+  gap: 0.125rem;
+  min-inline-size: max-content;
+  max-inline-size: min(20rem, calc(100vi - 2rem));
+  margin: 0;
+  padding: 0.35rem;
+  border: var(--border-width) solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface-raised);
+  box-shadow: var(--shadow-popout);
+  list-style: none;
+}
+
+.dropdown-menu[hidden] {
+  display: none;
+}
+
+.dropdown-menu > button,
+.dropdown-menu > a,
+.dropdown-menu > [role="menuitem"] {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  justify-content: flex-start;
+  inline-size: 100%;
+  min-block-size: 2.25rem;
+  padding-inline: 0.65rem;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  font-weight: var(--font-weight);
+  text-decoration: none;
+  text-align: start;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.dropdown-menu > button:hover,
+.dropdown-menu > a:hover,
+.dropdown-menu > [role="menuitem"]:hover,
+.dropdown-menu > button:focus,
+.dropdown-menu > a:focus,
+.dropdown-menu > [role="menuitem"]:focus,
+.dropdown-menu > button:focus-visible,
+.dropdown-menu > a:focus-visible,
+.dropdown-menu > [role="menuitem"]:focus-visible {
+  background: var(--surface-subtle);
+}
+
+.dropdown-menu hr {
+  inline-size: 100%;
+  margin: 0;
+  margin-block: 0.25rem;
+  border: 0;
+  border-block-start: var(--border-width) solid var(--border);
+}

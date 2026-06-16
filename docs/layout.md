@@ -314,10 +314,10 @@ Links:
 
 > Two-column layout where one side has a preferred width and the other takes the remaining space.
 
-Use `.sidebar` for two-column layouts where one side has a preferred width and the other takes the remaining space.
+Use `with-sidebar` for two-column layouts where one side has a preferred width and the other takes the remaining space.
 
 ```html
-<div class="sidebar">
+<div class="with-sidebar">
   <aside>
     <nav aria-label="Settings">
       <a href="/profile" aria-current="page">Profile</a>
@@ -333,18 +333,18 @@ Use `.sidebar` for two-column layouts where one side has a preferred width and t
 ```
 
 ```css
-.sidebar {
+.with-sidebar {
   display: flex;
   flex-wrap: wrap;
   gap: var(--gap);
 }
 
-.sidebar > :first-child {
+.with-sidebar > :first-child {
   flex-basis: var(--sidebar-size, 16rem);
   flex-grow: 1;
 }
 
-.sidebar > :last-child {
+.with-sidebar > :last-child {
   flex-basis: 0;
   flex-grow: 999;
   min-inline-size: min(100%, var(--sidebar-content-min, 50%));
@@ -375,7 +375,7 @@ Below the 64rem breakpoint the columns stack; at and above it the aside takes `-
 </div>
 ```
 
-`.sidebar` and `.sidebar-layout` are not interchangeable. `.sidebar` is flex-based and lets the side and content grow together; `.sidebar-layout` is grid-based and locks the aside to its declared width. Pick the one that matches the role.
+`.with-sidebar` and `.sidebar-layout` are not interchangeable. `.with-sidebar` is flex-based and lets the side and content grow together; `.sidebar-layout` is grid-based and locks the aside to its declared width. Pick the one that matches the role.
 
 Links:
 - https://every-layout.dev/layouts/sidebar/

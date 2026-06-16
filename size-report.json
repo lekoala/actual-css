@@ -1,0 +1,157 @@
+{
+  "timestamp": "2026-06-16T21:10:15.400Z",
+  "totalRaw": 66429,
+  "totalMinified": 45751,
+  "totalBrotli": 8371,
+  "fileCount": 37,
+  "files": [
+    {
+      "file": "components/data.css",
+      "raw": 4312
+    },
+    {
+      "file": "forms/select.css",
+      "raw": 4267
+    },
+    {
+      "file": "forms/form.css",
+      "raw": 3670
+    },
+    {
+      "file": "layout.css",
+      "raw": 3539
+    },
+    {
+      "file": "utilities.css",
+      "raw": 2964
+    },
+    {
+      "file": "forms/control.css",
+      "raw": 2894
+    },
+    {
+      "file": "components/button.css",
+      "raw": 2859
+    },
+    {
+      "file": "forms/choice.css",
+      "raw": 2794
+    },
+    {
+      "file": "components/avatar.css",
+      "raw": 2689
+    },
+    {
+      "file": "tokens.css",
+      "raw": 2517
+    },
+    {
+      "file": "prose.css",
+      "raw": 2506
+    },
+    {
+      "file": "variants.css",
+      "raw": 2496
+    },
+    {
+      "file": "components/navigation.css",
+      "raw": 2397
+    },
+    {
+      "file": "components/drawer.css",
+      "raw": 2201
+    },
+    {
+      "file": "components/badge.css",
+      "raw": 2048
+    },
+    {
+      "file": "forms/switch.css",
+      "raw": 1940
+    },
+    {
+      "file": "components/spinner.css",
+      "raw": 1925
+    },
+    {
+      "file": "theme.css",
+      "raw": 1861
+    },
+    {
+      "file": "components/card.css",
+      "raw": 1846
+    },
+    {
+      "file": "components/accordion.css",
+      "raw": 1714
+    },
+    {
+      "file": "ui/dropdown.css",
+      "raw": 1589
+    },
+    {
+      "file": "components/dialog.css",
+      "raw": 1567
+    },
+    {
+      "file": "components/alert.css",
+      "raw": 1459
+    },
+    {
+      "file": "base.css",
+      "raw": 1435
+    },
+    {
+      "file": "components/skeleton.css",
+      "raw": 1376
+    },
+    {
+      "file": "ui/tab.css",
+      "raw": 1100
+    },
+    {
+      "file": "patterns.css",
+      "raw": 1004
+    },
+    {
+      "file": "components/indicator.css",
+      "raw": 742
+    },
+    {
+      "file": "reset.css",
+      "raw": 557
+    },
+    {
+      "file": "ui/tooltip.css",
+      "raw": 557
+    },
+    {
+      "file": "intents.css",
+      "raw": 453
+    },
+    {
+      "file": "actual.css",
+      "raw": 332
+    },
+    {
+      "file": "components/index.css",
+      "raw": 293
+    },
+    {
+      "file": "forms/range.css",
+      "raw": 182
+    },
+    {
+      "file": "forms/index.css",
+      "raw": 164
+    },
+    {
+      "file": "forms/file.css",
+      "raw": 114
+    },
+    {
+      "file": "ui/index.css",
+      "raw": 66
+    }
+  ]
+}
