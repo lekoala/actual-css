@@ -6,7 +6,7 @@ import { fileURLToPath } from "node:url";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, "..");
-const ENTRY = join(ROOT, "src", "actual.css");
+const ENTRY = join(ROOT, "src", "css", "actual.css");
 const DIST = join(ROOT, "dist");
 
 /*
@@ -49,10 +49,17 @@ function formatBytes(bytes) {
 }
 
 async function main() {
-  if (existsSync(DIST)) {
-    await rm(DIST, { recursive: true, force: true });
-  }
   await mkdir(DIST, { recursive: true });
+
+  // clean only CSS artifacts, leave JS bundles intact
+  if (existsSync(DIST)) {
+    const { readdir } = await import("node:fs/promises");
+    for (const f of await readdir(DIST)) {
+      if (f.startsWith("actual") && f.endsWith(".css") || f.endsWith(".css.map")) {
+        await rm(join(DIST, f), { force: true });
+      }
+    }
+  }
 
   const devPath = await build({ minify: false, naming: "actual.css" });
   const minPath = await build({ minify: true, naming: "actual.min.css" });

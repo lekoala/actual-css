@@ -27,5 +27,5 @@ If code and docs disagree, ask the user what is the expected outcome.
 
 ## Other relevant files
 
-- rules.md : core rules to follow
+- guildelines.md : core guildelines to follow
 - references.md : inspiration and external resources

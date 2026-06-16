@@ -5,7 +5,6 @@ Utilities are a small escape hatch for common single-purpose needs. They should 
 - Prefer semantic HTML, components, and layout primitives first.
 - Add utilities only when the rule is broadly useful and unlikely to become a component.
 - Keep utility names stable, boring, and few.
-- Do not add spacing, color, width, breakpoint, or state utility scales by default.
 - Utilities should use logical properties where relevant.
 
 ## Accessibility
@@ -101,6 +100,73 @@ Use `.grow` when one item in a flex layout should take available space without o
 }
 ```
 
+## Spacing Helpers
+
+> Semantic step helpers for gap, padding, and margin — the most common inline-style escape hatches.
+
+Spacing helpers use a restrained semantic scale:
+
+- `-sm` — small step, `--space-2` (0.5rem)
+- Default — standard step, `--space-4` (1rem)
+- `-lg` — large step, `--space-5` (1.5rem)
+
+All map to logical properties (`padding-block`, `margin-block-end`, etc.) for writing-direction safety.
+
+### Gap
+
+Override the default gap from layout primitives (`.stack`, `.cluster`, `.grid`):
+
+```html
+<ul class="cluster gap-sm">
+  <li><a href="/about" class="btn ghost">About</a></li>
+  <li><a href="/contact" class="btn ghost">Contact</a></li>
+</ul>
+```
+
+| Class | Maps to |
+|-------|---------|
+| `.gap-none` | `gap: 0` |
+| `.gap-sm` | `gap: var(--space-2)` |
+| `.gap-lg` | `gap: var(--space-5)` |
+
+### Padding
+
+Block (vertical) and inline (horizontal) padding:
+
+```html
+<section role="tabpanel" class="py">
+  Panel content with breathing room above and below.
+</section>
+```
+
+| Class | Maps to |
+|-------|---------|
+| `.py-sm` | `padding-block: var(--space-2)` |
+| `.py` | `padding-block: var(--space-4)` |
+| `.py-lg` | `padding-block: var(--space-5)` |
+| `.px-sm` | `padding-inline: var(--space-2)` |
+| `.px` | `padding-inline: var(--space-4)` |
+| `.px-lg` | `padding-inline: var(--space-5)` |
+
+### Margin
+
+Block-start and block-end margin for giving elements room:
+
+```html
+<h2 class="mbs">A section heading with space above</h2>
+```
+
+| Class | Maps to |
+|-------|---------|
+| `.mbs-sm` | `margin-block-start: var(--space-2)` |
+| `.mbs` | `margin-block-start: var(--space-4)` |
+| `.mbs-lg` | `margin-block-start: var(--space-5)` |
+| `.mbe-sm` | `margin-block-end: var(--space-2)` |
+| `.mbe` | `margin-block-end: var(--space-4)` |
+| `.mbe-lg` | `margin-block-end: var(--space-5)` |
+
+No `mbs-none` / `mbe-none` — use `margin: 0` via `.list-reset` for lists, or a layout primitive that already resets margins (`.stack > *`).
+
 ## Text Helpers
 
 > Lightweight helpers for muted or secondary text without a full color scale.
@@ -120,6 +186,18 @@ Use `.muted` for secondary text when no semantic element already carries the mea
 ```
 
 Do not create a full text color utility scale. Intent colors belong to components and state, not arbitrary text decoration.
+
+### Text Alignment
+
+Use `.text-start`, `.text-center`, or `.text-end` when a component or layout primitive does not already set alignment. These use logical properties so they follow the writing direction.
+
+### Text Wrap
+
+`.text-balance` and `.text-pretty` opt elements outside `.prose` into balanced or pretty text wrapping. Both are gated on `@supports` — they degrade silently in browsers that do not support the feature.
+
+### Lead
+
+`.lead` is a slightly larger, more relaxed reading-introduction paragraph (`1.125em`, `--line-height-relaxed`). Use it for introductory text in editorial surfaces. For fluid headline sizing, use `src/css/optional/typography-fluid.css`.
 
 ## Shape Helpers
 
@@ -180,11 +258,11 @@ The eyebrow exists because categories, kicker labels, and section markers recur 
 
 > Utilities deliberately excluded to keep the surface small and intentional.
 
-- No margin and padding scales such as `.mt-4` or `.p-2`.
-- No display scale such as `.block`, `.flex`, `.grid`.
-- No color scales such as `.text-primary` or `.bg-success`.
-- No breakpoint utility variants.
-- No utility variants for hover, focus, dark mode, or arbitrary selectors.
+- No display scale such as `.block`, `.flex`, `.grid` — use layout primitives.
+- No color scales such as `.text-primary` or `.bg-success` — intent colors belong to components and state.
+- No breakpoint utility variants — use container queries or layout primitives.
+- No utility variants for hover, focus, dark mode, or arbitrary selectors — use component states.
+- No full spacing scale with every step and direction — the 17 spacing helpers above cover the most common escape hatches.
 
 Links:
 - https://github.com/knadh/oat/blob/master/src/css/utilities.css

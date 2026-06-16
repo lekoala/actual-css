@@ -297,7 +297,7 @@ function renderPage(catName, section) {
     .replace(/\{\{desc\}\}/g, desc)
     .replace(/\{\{content\}\}/g, items)
     .replace(/\{\{links\}\}/g, links)
-    .replace(/\{\{cssPath\}\}/g, "../../src")
+    .replace(/\{\{cssPath\}\}/g, "../../src/css")
     .replace(/\{\{demoCssPath\}\}/g, "../..");
 }
 
@@ -318,7 +318,7 @@ function renderIndex(catName, catDesc, sections) {
     .replace(/\{\{title\}\}/g, escapeHtml(catName))
     .replace(/\{\{desc\}\}/g, escapeHtml(catDesc || ""))
     .replace(/\{\{cards\}\}/g, cards)
-    .replace(/\{\{cssPath\}\}/g, "../../src")
+    .replace(/\{\{cssPath\}\}/g, "../../src/css")
     .replace(/\{\{demoCssPath\}\}/g, "../..");
 }
 
@@ -331,7 +331,7 @@ function renderMainIndex(categories) {
 
   return templates.mainIndex
     .replace(/\{\{links\}\}/g, links)
-    .replace(/\{\{cssPath\}\}/g, "../src");
+    .replace(/\{\{cssPath\}\}/g, "../src/css");
 }
 
 function extractCategoryDescription(content) {

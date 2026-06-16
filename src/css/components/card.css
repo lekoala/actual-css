@@ -39,6 +39,7 @@
   background: var(--surface-solid);
   color: var(--surface);
   border-color: transparent;
+  --heading: var(--surface);
 }
 
 .card.compact {

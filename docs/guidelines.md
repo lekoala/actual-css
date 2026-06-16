@@ -1,7 +1,7 @@
-# Rules
+# Guidelines
 
-Follow these rules as best as possible, but don't follow them blindly.
-If rules conflict, think about what would be best or ask the user if no decisive answer can be made.
+Follow these guidelines as best as possible, but don't follow them blindly.
+If guidelines conflict, think about what would be best or ask the user if no decisive answer can be made.
 
 - Wide browser support (even older browsers, not IE 11)
 - No compile, build step (it's just css)

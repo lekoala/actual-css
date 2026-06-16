@@ -13,12 +13,19 @@ UI components are interactive patterns that need JavaScript or modern platform b
 
 > Positioned menu attached to a trigger, with full keyboard, focus, and ARIA support.
 
-- Use `.dropdown` for the positioned root.
-- Use a button trigger for actions and disclosure.
-- JavaScript updates `aria-expanded`, `hidden`, focus, and dismissal.
-- Support Escape, outside click, focus return, and keyboard navigation.
-- Use `role="menu"` only for application action menus. Navigation lists should stay navigation lists.
-- Popover-based dropdowns can be a modern enhancement, not the only path.
+Dropdown covers two distinct patterns:
+
+### App menu
+- A list of *actions* the user can take — sign out, copy, delete.
+- Items are `<button role="menuitem">`.
+- Arrow keys navigate between items. Home/End jump to first/last.
+- Uses `aria-haspopup="menu"` and `role="menu"`.
+
+### Nav panel
+- A panel of *links* to other pages — product categories, docs sections.
+- Items are regular `<a href>` links, not `role="menuitem"`.
+- No arrow-key navigation, no `role="menu"`.
+- Just a toggle with outside-click and Escape dismissal.
 
 ```html
 <div class="dropdown">
@@ -45,11 +52,9 @@ UI components are interactive patterns that need JavaScript or modern platform b
 </div>
 ```
 
-Navigation dropdowns are not menus in the ARIA application-menu sense.
-
 ```html
 <nav aria-label="Main navigation">
-  <ul>
+  <ul class="list-reset cluster">
     <li class="dropdown">
       <button class="btn ghost"
               type="button"
@@ -63,7 +68,7 @@ Navigation dropdowns are not menus in the ARIA application-menu sense.
            id="products-panel"
            aria-label="Products"
            hidden>
-        <section aria-labelledby="products-design">
+        <section aria-labelledby="products-design" class="px py-sm">
           <h3 id="products-design">Design</h3>
           <ul>
             <li><a href="/figma">Figma integration</a></li>
@@ -71,7 +76,7 @@ Navigation dropdowns are not menus in the ARIA application-menu sense.
           </ul>
         </section>
 
-        <section aria-labelledby="products-dev">
+        <section aria-labelledby="products-dev" class="px py-sm">
           <h3 id="products-dev">Development</h3>
           <ul>
             <li><a href="/components">Components</a></li>
@@ -79,14 +84,14 @@ Navigation dropdowns are not menus in the ARIA application-menu sense.
           </ul>
         </section>
 
-        <footer>
+        <footer class="px py-sm">
           <a href="/pricing" class="btn primary">See pricing</a>
         </footer>
       </div>
     </li>
 
-    <li><a href="/about">About</a></li>
-    <li><a href="/contact">Contact</a></li>
+    <li><a href="/about" class="btn ghost">About</a></li>
+    <li><a href="/contact" class="btn ghost">Contact</a></li>
   </ul>
 </nav>
 ```
@@ -139,13 +144,13 @@ Links:
     </button>
   </div>
 
-  <section role="tabpanel" id="panel-general" aria-labelledby="tab-general">
+  <section role="tabpanel" id="panel-general" aria-labelledby="tab-general" class="py">
     General content
   </section>
-  <section role="tabpanel" id="panel-security" aria-labelledby="tab-security" hidden>
+  <section role="tabpanel" id="panel-security" aria-labelledby="tab-security" hidden class="py">
     Security content
   </section>
-  <section role="tabpanel" id="panel-billing" aria-labelledby="tab-billing" hidden>
+  <section role="tabpanel" id="panel-billing" aria-labelledby="tab-billing" hidden class="py">
     Billing content
   </section>
 </div>
@@ -154,9 +159,9 @@ Links:
 ```html
 <nav aria-label="Account sections">
   <ul class="tabs">
-    <li><a class="tab primary" href="/account" aria-current="page">Profile</a></li>
-    <li><a class="tab" href="/account/security">Security</a></li>
-    <li><a class="tab" href="/account/billing">Billing</a></li>
+    <li><a class="tab primary" href="#account" aria-current="page">Profile</a></li>
+    <li><a class="tab" href="#security">Security</a></li>
+    <li><a class="tab" href="#billing">Billing</a></li>
   </ul>
 </nav>
 ```
@@ -178,6 +183,8 @@ Links:
 - Tooltips are supplemental. Do not put required information or interactive controls inside them.
 - Show on hover and focus. Hide on Escape, blur, pointer leave, or scroll when appropriate.
 - JavaScript can generate tooltip elements from `data-tooltip`.
+- Use `data-tooltip-placement` to set the preferred placement (default `top`).
+- The arrow inherits the tooltip background — custom gradients carry through automatically.
 - Avoid relying on the native `title` attribute as the primary implementation.
 
 ```html
@@ -197,6 +204,39 @@ Links:
 <button class="btn" type="button" data-tooltip="Save changes">
   Save
 </button>
+```
+
+### Positioning
+
+Set `data-tooltip-placement` to control where the tooltip appears relative to its trigger. The arrow follows the placement automatically.
+
+```html
+<p>
+  <button class="btn outline" type="button" data-tooltip="Above the button" data-tooltip-placement="top">Top</button>
+  <button class="btn outline" type="button" data-tooltip="To the right" data-tooltip-placement="right">Right</button>
+  <button class="btn outline" type="button" data-tooltip="Below the button" data-tooltip-placement="bottom">Bottom</button>
+  <button class="btn outline" type="button" data-tooltip="To the left" data-tooltip-placement="left">Left</button>
+</p>
+```
+
+### Custom styling
+
+Override `--tooltip-bg` and `--tooltip-fg` on the tooltip element to change the background and text color. The arrow picks up `background: inherit` so gradients and solid colors both work.
+
+```html
+<button class="btn primary" type="button"
+        aria-describedby="tip-grad"
+        data-tooltip-placement="right">
+  Hover for gradient
+</button>
+
+<div class="tooltip" role="tooltip" id="tip-grad" hidden
+     style="--tooltip-bg: linear-gradient(135deg, oklch(0.45 0.22 280), oklch(0.5 0.2 10));
+            --tooltip-fg: white;
+            padding: 0.4em 0.8em;
+            font-weight: var(--font-weight-medium);">
+  Custom gradient tooltip → arrow matches
+</div>
 ```
 
 Links:

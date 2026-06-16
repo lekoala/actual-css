@@ -1,0 +1,48 @@
+/*
+ * Tabs — in-place panel switcher with real tab semantics.
+ *
+ * JavaScript owns roving tabindex, aria-selected, panel visibility,
+ * and arrow-key navigation. CSS owns the tab strip appearance and
+ * active indicator.
+ */
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin: 0;
+  padding: 0;
+  border-block-end: var(--border-width) solid var(--border);
+  list-style: none;
+}
+
+.tab {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: 2.4rem;
+  padding-inline: 0.8rem;
+  border: 0;
+  border-block-end: 2px solid transparent;
+  border-radius: 0;
+  background: transparent;
+  color: var(--text-muted);
+  font: inherit;
+  font-weight: var(--font-weight-strong);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.tab:hover {
+  color: var(--text);
+}
+
+.tab:focus-visible {
+  outline: calc(var(--border-width) * 2) solid var(--focus);
+  outline-offset: -2px;
+  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+}
+
+.tab[aria-selected="true"],
+.tab[aria-current="page"] {
+  border-block-end-color: var(--intent, var(--primary));
+  color: var(--intent, var(--primary));
+}

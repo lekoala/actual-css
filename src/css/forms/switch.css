@@ -10,7 +10,7 @@
  */
 .switch,
 .form input[role="switch"] {
-  --switch-bg: var(--surface-subtle);
+  --switch-bg: var(--border);
   --switch-knob: var(--surface-raised);
 
   position: relative;
@@ -67,6 +67,8 @@
 
 .switch:disabled,
 .form input[role="switch"]:disabled {
-  opacity: 0.55;
+  --switch-knob: var(--text-subtle);
+  border-color: var(--border);
+  opacity: 1;
   cursor: not-allowed;
 }

@@ -2,7 +2,7 @@
  * Small, single-purpose utilities for common escape hatches.
  *
  * These support components and layout primitives without becoming a
- * utility-first API or adding spacing, color, breakpoint, and display scales.
+ * utility-first API.
  */
 .sr-only {
   position: absolute;
@@ -123,4 +123,64 @@
 
 .link-muted:hover {
   color: var(--text);
+}
+
+/* Spacing step helpers — semantic scale (sm / default / lg).
+   Names map to logical properties under the hood for writing-direction
+   safety. The default step uses --space-4, which matches the framework's
+   built-in padding on cards, dialogs, and form-actions. */
+
+/* Gap */
+.gap-none {
+  gap: 0;
+}
+.gap-sm {
+  gap: var(--space-2);
+}
+.gap-lg {
+  gap: var(--space-5);
+}
+
+/* Padding — block (vertical) */
+.py-sm {
+  padding-block: var(--space-2);
+}
+.py {
+  padding-block: var(--space-4);
+}
+.py-lg {
+  padding-block: var(--space-5);
+}
+
+/* Padding — inline (horizontal) */
+.px-sm {
+  padding-inline: var(--space-2);
+}
+.px {
+  padding-inline: var(--space-4);
+}
+.px-lg {
+  padding-inline: var(--space-5);
+}
+
+/* Margin — block-start */
+.mbs-sm {
+  margin-block-start: var(--space-2);
+}
+.mbs {
+  margin-block-start: var(--space-4);
+}
+.mbs-lg {
+  margin-block-start: var(--space-5);
+}
+
+/* Margin — block-end */
+.mbe-sm {
+  margin-block-end: var(--space-2);
+}
+.mbe {
+  margin-block-end: var(--space-4);
+}
+.mbe-lg {
+  margin-block-end: var(--space-5);
 }

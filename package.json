@@ -9,7 +9,9 @@
     "lint:fix": "biome check --write",
     "build:demo": "bun scripts/build-demo.js",
     "watch:demo": "bun scripts/build-demo.js --watch",
-    "build:dist": "bun scripts/build-dist.js"
+    "build:dist": "bun scripts/build-dist.js",
+    "build:js": "bun scripts/build-js.js",
+    "build:size": "bun scripts/build-size.js"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.4.0",
