@@ -40,16 +40,16 @@
 }
 
 .prose h1 {
-  font-size: 2rem;
+  font-size: var(--prose-h1);
 }
 .prose h2 {
-  font-size: 1.5rem;
+  font-size: var(--prose-h2);
 }
 .prose h3 {
-  font-size: 1.25rem;
+  font-size: var(--prose-h3);
 }
 .prose h4 {
-  font-size: 1.125rem;
+  font-size: var(--prose-h4);
 }
 
 .prose a {
@@ -132,9 +132,17 @@
 
 .prose-sm {
   --prose-size: 0.9375rem;
+  --prose-h1: 1.75rem;
+  --prose-h2: 1.375rem;
+  --prose-h3: 1.125rem;
+  --prose-h4: 1rem;
 }
 
 .prose-lg {
   --prose-size: 1.125rem;
   --prose-measure: 72ch;
+  --prose-h1: 2.25rem;
+  --prose-h2: 1.625rem;
+  --prose-h3: 1.375rem;
+  --prose-h4: 1.25rem;
 }

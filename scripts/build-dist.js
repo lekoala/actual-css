@@ -7,6 +7,7 @@ import { fileURLToPath } from "node:url";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, "..");
 const ENTRY = join(ROOT, "src", "css", "actual.css");
+const THEMES_ENTRY = join(ROOT, "src", "css", "themes", "index.css");
 const DIST = join(ROOT, "dist");
 
 /*
@@ -31,15 +32,19 @@ const targets = {
   edge: 105 << 16,
 };
 
-async function build({ minify, naming }) {
+async function build({ entry = ENTRY, minify, naming }) {
   const result = await bundle({
-    filename: ENTRY,
+    filename: entry,
     minify,
     targets,
+    sourceMap: true,
   });
 
   const outPath = join(DIST, naming);
   await writeFile(outPath, result.code);
+  if (result.map) {
+    await writeFile(`${outPath}.map`, result.map);
+  }
   return outPath;
 }
 
@@ -55,7 +60,7 @@ async function main() {
   if (existsSync(DIST)) {
     const { readdir } = await import("node:fs/promises");
     for (const f of await readdir(DIST)) {
-      if (f.startsWith("actual") && f.endsWith(".css") || f.endsWith(".css.map")) {
+      if ((f.startsWith("actual") && f.endsWith(".css")) || f.endsWith(".css.map")) {
         await rm(join(DIST, f), { force: true });
       }
     }
@@ -63,12 +68,22 @@ async function main() {
 
   const devPath = await build({ minify: false, naming: "actual.css" });
   const minPath = await build({ minify: true, naming: "actual.min.css" });
+  const themesPath = await build({
+    entry: THEMES_ENTRY,
+    minify: true,
+    naming: "actual-themes.min.css",
+  });
 
-  const [devStat, minStat] = await Promise.all([stat(devPath), stat(minPath)]);
+  const [devStat, minStat, themesStat] = await Promise.all([
+    stat(devPath),
+    stat(minPath),
+    stat(themesPath),
+  ]);
   const ratio = ((1 - minStat.size / devStat.size) * 100).toFixed(1);
 
   console.log(`Built ${devPath} (${formatBytes(devStat.size)})`);
   console.log(`Built ${minPath} (${formatBytes(minStat.size)}) — ${ratio}% smaller`);
+  console.log(`Built ${themesPath} (${formatBytes(themesStat.size)})`);
 }
 
 main();

@@ -1,7 +1,7 @@
 [data-theme="sunset"] {
-  color-scheme: light;
+  color-scheme: light dark;
 
-  --primary: hsl(16 84% 55%);
+  --primary: hsl(16 84% 43%);
   --primary-fg: white;
   --secondary: hsl(330 60% 52%);
   --secondary-fg: white;
@@ -9,7 +9,7 @@
   --success-fg: white;
   --warning: hsl(42 94% 52%);
   --warning-fg: hsl(30 35% 12%);
-  --danger: hsl(358 72% 54%);
+  --danger: hsl(358 72% 52%);
   --danger-fg: white;
   --neutral: hsl(24 12% 38%);
   --neutral-fg: white;
@@ -22,7 +22,39 @@
   --text: hsl(20 34% 14%);
   --text-muted: hsl(20 12% 42%);
   --text-subtle: hsl(20 10% 55%);
+
   --border: hsl(25 38% 84%);
   --focus: var(--primary);
-  --focus-ring: hsl(16 84% 55% / 0.22);
+  --focus-ring: hsl(16 84% 43% / 0.22);
+}
+
+@supports (color: light-dark(red, blue)) {
+  [data-theme="sunset"] {
+    --primary: light-dark(hsl(16 84% 43%), hsl(16 75% 80%));
+    --primary-fg: light-dark(white, hsl(16 30% 12%));
+    --secondary: light-dark(hsl(330 60% 52%), hsl(330 68% 80%));
+    --secondary-fg: light-dark(white, hsl(330 30% 12%));
+    --success: light-dark(hsl(142 52% 34%), hsl(142 60% 80%));
+    --success-fg: light-dark(white, hsl(142 30% 12%));
+    --warning: light-dark(hsl(42 94% 52%), hsl(42 75% 80%));
+    --warning-fg: light-dark(hsl(30 35% 12%), hsl(42 30% 12%));
+    --danger: light-dark(hsl(358 72% 52%), hsl(358 75% 80%));
+    --danger-fg: light-dark(white, hsl(358 30% 12%));
+    --neutral: light-dark(hsl(24 12% 38%), hsl(24 20% 80%));
+    --neutral-fg: light-dark(white, hsl(24 30% 12%));
+
+    --surface: light-dark(hsl(34 70% 97%), hsl(20 18% 8%));
+    --surface-raised: light-dark(hsl(30 80% 99%), hsl(20 16% 11%));
+    --surface-subtle: light-dark(hsl(28 62% 92%), hsl(20 14% 16%));
+    --surface-solid: light-dark(hsl(18 34% 18%), hsl(0 0% 96%));
+
+    --text: light-dark(hsl(20 34% 14%), hsl(0 0% 96%));
+    --text-muted: light-dark(hsl(20 12% 42%), hsl(20 8% 68%));
+    --text-subtle: light-dark(hsl(20 10% 55%), hsl(20 7% 55%));
+
+    --border: light-dark(hsl(25 38% 84%), hsl(20 12% 24%));
+    --focus-ring: light-dark(hsl(16 84% 43% / 0.22), hsl(16 75% 80% / 0.28));
+    --hover-overlay: light-dark(hsl(220 30% 10% / 0.04), hsl(0 0% 100% / 0.06));
+    --shadow-color: light-dark(220 30% 10%, 0 0% 0%);
+  }
 }

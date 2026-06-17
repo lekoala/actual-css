@@ -1,15 +1,15 @@
 [data-theme="square"] {
-  color-scheme: light;
+  color-scheme: light dark;
 
   --primary: hsl(220 90% 56%);
   --primary-fg: white;
   --secondary: hsl(270 60% 56%);
   --secondary-fg: white;
-  --success: hsl(145 60% 36%);
+  --success: hsl(145 60% 32%);
   --success-fg: white;
   --warning: hsl(38 92% 50%);
   --warning-fg: hsl(35 30% 12%);
-  --danger: hsl(0 75% 55%);
+  --danger: hsl(0 75% 51%);
   --danger-fg: white;
   --neutral: hsl(220 10% 42%);
   --neutral-fg: white;
@@ -22,6 +22,7 @@
   --text: hsl(222 22% 12%);
   --text-muted: hsl(220 10% 42%);
   --text-subtle: hsl(220 8% 55%);
+
   --border: hsl(220 15% 88%);
   --focus: var(--primary);
   --focus-ring: hsl(220 90% 56% / 0.22);
@@ -30,4 +31,35 @@
   --radius: 0;
   --radius-sm: 0;
   --radius-lg: 0;
+}
+
+@supports (color: light-dark(red, blue)) {
+  [data-theme="square"] {
+    --primary: light-dark(hsl(220 90% 56%), hsl(220 75% 80%));
+    --primary-fg: light-dark(white, hsl(220 30% 12%));
+    --secondary: light-dark(hsl(270 60% 56%), hsl(270 68% 80%));
+    --secondary-fg: light-dark(white, hsl(270 30% 12%));
+    --success: light-dark(hsl(145 60% 32%), hsl(145 68% 80%));
+    --success-fg: light-dark(white, hsl(145 30% 12%));
+    --warning: light-dark(hsl(38 92% 50%), hsl(38 75% 80%));
+    --warning-fg: light-dark(hsl(35 30% 12%), hsl(38 30% 12%));
+    --danger: light-dark(hsl(0 75% 51%), hsl(0 75% 80%));
+    --danger-fg: light-dark(white, hsl(0 30% 12%));
+    --neutral: light-dark(hsl(220 10% 42%), hsl(220 18% 80%));
+    --neutral-fg: light-dark(white, hsl(220 30% 12%));
+
+    --surface: light-dark(hsl(0 0% 100%), hsl(222 18% 8%));
+    --surface-raised: light-dark(hsl(0 0% 100%), hsl(222 16% 11%));
+    --surface-subtle: light-dark(hsl(220 20% 96%), hsl(222 14% 16%));
+    --surface-solid: light-dark(hsl(222 22% 12%), hsl(0 0% 96%));
+
+    --text: light-dark(hsl(222 22% 12%), hsl(0 0% 96%));
+    --text-muted: light-dark(hsl(220 10% 42%), hsl(222 8% 68%));
+    --text-subtle: light-dark(hsl(220 8% 55%), hsl(222 7% 55%));
+
+    --border: light-dark(hsl(220 15% 88%), hsl(222 12% 24%));
+    --focus-ring: light-dark(hsl(220 90% 56% / 0.22), hsl(220 75% 80% / 0.28));
+    --hover-overlay: light-dark(hsl(220 30% 10% / 0.04), hsl(0 0% 100% / 0.06));
+    --shadow-color: light-dark(220 30% 10%, 0 0% 0%);
+  }
 }

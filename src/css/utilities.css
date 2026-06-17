@@ -103,10 +103,18 @@
   padding-inline: 0.6em;
   padding-block: 0.25em;
   color: var(--intent, var(--text-muted));
-  border: var(--border-width) solid
-    color-mix(in oklch, var(--intent, var(--border)) 35%, var(--border));
+  border: var(--border-width) solid var(--border);
   border-radius: var(--radius-full, 9999px);
-  background: color-mix(in oklch, var(--intent, transparent) 6%, var(--surface));
+  background: var(--surface);
+}
+
+/* Tinted pill surface where color-mix is available; the flat fallback above
+    keeps a readable bordered pill everywhere else. */
+@supports (color: color-mix(in oklch, red, white)) {
+  .eyebrow.pill {
+    border-color: color-mix(in oklch, var(--intent, var(--border)) 35%, var(--border));
+    background: color-mix(in oklch, var(--intent, transparent) 6%, var(--surface));
+  }
 }
 
 /* Link variants for chrome that should not look like prose links. Use in

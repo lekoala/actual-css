@@ -11,9 +11,11 @@ import { initTabs } from "./tab.js";
 import { initTooltips } from "./tooltip.js";
 import { initScrollspy } from "./scrollspy.js";
 
-document.addEventListener("DOMContentLoaded", () => {
-  initDropdowns();
-  initTabs();
-  initTooltips();
-  initScrollspy();
-});
+if (typeof document !== "undefined") {
+  document.addEventListener("DOMContentLoaded", () => {
+    initDropdowns();
+    initTabs();
+    initTooltips();
+    initScrollspy();
+  });
+}

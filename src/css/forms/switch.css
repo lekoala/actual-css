@@ -12,12 +12,21 @@
 .form input[role="switch"] {
   --switch-bg: var(--border);
   --switch-knob: var(--surface-raised);
+  --switch-width: 2.75rem;
+  --switch-knob-size: 1.05rem;
+  --switch-knob-margin: 0.18rem;
+  --switch-travel: calc(
+    var(--switch-width) -
+    var(--switch-knob-size) -
+    2 *
+    var(--switch-knob-margin)
+  );
 
   position: relative;
   display: inline-grid;
   align-items: center;
   justify-content: start;
-  inline-size: 2.75rem;
+  inline-size: var(--switch-width);
   block-size: 1.5rem;
   margin: 0;
   border: var(--border-width) solid var(--border);
@@ -30,9 +39,9 @@
 .switch::before,
 .form input[role="switch"]::before {
   content: "";
-  inline-size: 1.05rem;
-  block-size: 1.05rem;
-  margin-inline: 0.18rem;
+  inline-size: var(--switch-knob-size);
+  block-size: var(--switch-knob-size);
+  margin-inline: var(--switch-knob-margin);
   border-radius: 999px;
   background: var(--switch-knob);
   box-shadow: var(--shadow);
@@ -56,7 +65,14 @@
 
 .switch:checked::before,
 .form input[role="switch"]:checked::before {
-  transform: translateX(1.2rem);
+  transform: translateX(var(--switch-travel));
+}
+
+/* The knob travels toward inline-end; in RTL that is leftward, so the
+    translateX sign flips. translateX is physical, not logical. */
+[dir="rtl"] .switch:checked::before,
+[dir="rtl"] .form input[role="switch"]:checked::before {
+  transform: translateX(calc(var(--switch-travel) * -1));
 }
 
 .switch:focus-visible,

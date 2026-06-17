@@ -1,7 +1,18 @@
-:root,
+:root {
+  color-scheme: light dark;
+}
+
 [data-theme="light"] {
   color-scheme: light;
+}
 
+[data-theme="dark"] {
+  color-scheme: dark;
+}
+
+/* Light fallback — also the default on browsers without light-dark() support. */
+:root,
+[data-theme="light"] {
   --primary: hsl(270 24% 32%);
   --primary-fg: hsl(0 0% 98%);
 
@@ -40,41 +51,43 @@
   --radius-lg: 0.75rem;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme]) {
-    color-scheme: dark;
+/* Auto dark mode via light-dark(). Resolves based on the element's color-scheme:
+    :root (light dark) follows the OS, [data-theme="light"] forces light,
+    [data-theme="dark"] forces dark by overriding color-scheme. */
+@supports (color: light-dark(red, blue)) {
+  :root,
+  [data-theme="light"] {
+    --primary: light-dark(hsl(270 24% 32%), hsl(270 36% 78%));
+    --primary-fg: light-dark(hsl(0 0% 98%), hsl(270 25% 12%));
 
-    --primary: hsl(270 36% 78%);
-    --primary-fg: hsl(270 25% 12%);
+    --secondary: light-dark(hsl(18 24% 36%), hsl(18 36% 68%));
+    --secondary-fg: light-dark(hsl(0 0% 98%), hsl(18 30% 12%));
 
-    --secondary: hsl(18 36% 68%);
-    --secondary-fg: hsl(18 30% 12%);
+    --success: light-dark(hsl(145 55% 32%), hsl(145 45% 58%));
+    --success-fg: light-dark(hsl(0 0% 98%), hsl(145 35% 8%));
 
-    --success: hsl(145 45% 58%);
-    --success-fg: hsl(145 35% 8%);
+    --warning: light-dark(hsl(38 76% 34%), hsl(42 78% 62%));
+    --warning-fg: light-dark(hsl(0 0% 98%), hsl(35 35% 10%));
 
-    --warning: hsl(42 78% 62%);
-    --warning-fg: hsl(35 35% 10%);
+    --danger: light-dark(hsl(2 62% 45%), hsl(2 70% 70%));
+    --danger-fg: light-dark(hsl(0 0% 98%), hsl(2 35% 10%));
 
-    --danger: hsl(2 70% 70%);
-    --danger-fg: hsl(2 35% 10%);
+    --neutral: light-dark(hsl(220 8% 42%), hsl(220 8% 72%));
+    --neutral-fg: light-dark(hsl(0 0% 98%), hsl(222 18% 10%));
 
-    --neutral: hsl(220 8% 72%);
-    --neutral-fg: hsl(222 18% 10%);
+    --surface: light-dark(hsl(0 0% 100%), hsl(222 18% 8%));
+    --surface-raised: light-dark(hsl(0 0% 100%), hsl(222 16% 11%));
+    --surface-faint: light-dark(hsl(220 20% 98%), hsl(222 14% 13%));
+    --surface-subtle: light-dark(hsl(220 14% 96%), hsl(222 14% 15%));
+    --surface-solid: light-dark(hsl(222 18% 12%), hsl(0 0% 96%));
 
-    --surface: hsl(222 18% 8%);
-    --surface-raised: hsl(222 16% 11%);
-    --surface-faint: hsl(222 14% 13%);
-    --surface-subtle: hsl(222 14% 15%);
-    --surface-solid: hsl(0 0% 96%);
+    --text: light-dark(hsl(222 18% 12%), hsl(0 0% 96%));
+    --text-muted: light-dark(hsl(220 8% 42%), hsl(220 8% 68%));
+    --text-subtle: light-dark(hsl(220 7% 58%), hsl(220 7% 55%));
 
-    --text: hsl(0 0% 96%);
-    --text-muted: hsl(220 8% 68%);
-    --text-subtle: hsl(220 7% 55%);
-
-    --border: hsl(222 12% 24%);
-    --focus: var(--primary);
-    --focus-ring: hsl(270 36% 78% / 0.28);
-    --hover-overlay: hsl(0 0% 100% / 0.06);
+    --border: light-dark(hsl(220 12% 88%), hsl(222 12% 24%));
+    --focus-ring: light-dark(hsl(258 21% 32% / 0.22), hsl(270 36% 78% / 0.28));
+    --hover-overlay: light-dark(hsl(220 20% 10% / 0.04), hsl(0 0% 100% / 0.06));
+    --shadow-color: light-dark(220 30% 10%, 0 0% 0%);
   }
 }

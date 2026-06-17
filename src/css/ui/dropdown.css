@@ -11,7 +11,7 @@
 }
 
 .dropdown-menu {
-  z-index: 20;
+  z-index: var(--z-dropdown);
   display: grid;
   gap: 0.125rem;
   min-inline-size: max-content;
@@ -69,4 +69,13 @@
   margin-block: 0.25rem;
   border: 0;
   border-block-start: var(--border-width) solid var(--border);
+}
+
+/* CSS Anchor Positioning: where supported, the JS sets position-anchor and
+    position-area inline so the browser handles flip/shift natively. This
+    default applies before the JS runs; older browsers use the JS math path. */
+@supports (anchor-name: --x) {
+  .dropdown-menu {
+    position-area: var(--anchor-area, bottom);
+  }
 }

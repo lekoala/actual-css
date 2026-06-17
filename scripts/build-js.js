@@ -33,6 +33,7 @@ async function build() {
     minify: true,
     target: "browser",
     naming: "[dir]/actual.[ext]",
+    sourcemap: "external",
   });
 
   if (!result.success) {

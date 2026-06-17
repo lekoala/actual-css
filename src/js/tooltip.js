@@ -107,19 +107,21 @@ function show(tip, ref) {
 
 const SEL = "[data-tooltip], [aria-describedby]";
 
-document.addEventListener("mouseover", (e) => {
-  const trigger = e.target.closest(SEL);
-  if (!trigger) return;
-  const tip = ensureTip(trigger);
-  if (tip) show(tip, trigger);
-});
+if (typeof document !== "undefined") {
+  document.addEventListener("mouseover", (e) => {
+    const trigger = e.target.closest(SEL);
+    if (!trigger) return;
+    const tip = ensureTip(trigger);
+    if (tip) show(tip, trigger);
+  });
 
-document.addEventListener("focusin", (e) => {
-  const trigger = e.target.closest(SEL);
-  if (!trigger) return;
-  const tip = ensureTip(trigger);
-  if (tip) show(tip, trigger);
-});
+  document.addEventListener("focusin", (e) => {
+    const trigger = e.target.closest(SEL);
+    if (!trigger) return;
+    const tip = ensureTip(trigger);
+    if (tip) show(tip, trigger);
+  });
+}
 
 export function initTooltips() {
   // lazy — nothing to scan

@@ -1,5 +1,5 @@
 [data-theme="mono"] {
-  color-scheme: light;
+  color-scheme: light dark;
 
   --primary: hsl(220 8% 18%);
   --primary-fg: white;
@@ -22,7 +22,39 @@
   --text: hsl(220 8% 12%);
   --text-muted: hsl(220 6% 42%);
   --text-subtle: hsl(220 5% 58%);
+
   --border: hsl(220 8% 84%);
   --focus: var(--primary);
   --focus-ring: hsl(220 8% 18% / 0.22);
+}
+
+@supports (color: light-dark(red, blue)) {
+  [data-theme="mono"] {
+    --primary: light-dark(hsl(220 8% 18%), hsl(220 16% 80%));
+    --primary-fg: light-dark(white, hsl(220 30% 12%));
+    --secondary: light-dark(hsl(220 7% 34%), hsl(220 15% 80%));
+    --secondary-fg: light-dark(white, hsl(220 30% 12%));
+    --success: light-dark(hsl(145 42% 32%), hsl(145 50% 80%));
+    --success-fg: light-dark(white, hsl(145 30% 12%));
+    --warning: light-dark(hsl(40 70% 44%), hsl(40 75% 80%));
+    --warning-fg: light-dark(hsl(35 35% 10%), hsl(40 30% 12%));
+    --danger: light-dark(hsl(0 56% 46%), hsl(0 64% 80%));
+    --danger-fg: light-dark(white, hsl(0 30% 12%));
+    --neutral: light-dark(hsl(220 6% 45%), hsl(220 14% 80%));
+    --neutral-fg: light-dark(white, hsl(220 30% 12%));
+
+    --surface: light-dark(hsl(0 0% 99%), hsl(0 0% 8%));
+    --surface-raised: light-dark(hsl(0 0% 100%), hsl(0 0% 11%));
+    --surface-subtle: light-dark(hsl(220 8% 94%), hsl(0 0% 16%));
+    --surface-solid: light-dark(hsl(220 8% 15%), hsl(0 0% 96%));
+
+    --text: light-dark(hsl(220 8% 12%), hsl(0 0% 96%));
+    --text-muted: light-dark(hsl(220 6% 42%), hsl(0 0% 68%));
+    --text-subtle: light-dark(hsl(220 5% 58%), hsl(0 0% 55%));
+
+    --border: light-dark(hsl(220 8% 84%), hsl(0 0% 24%));
+    --focus-ring: light-dark(hsl(220 8% 18% / 0.22), hsl(220 16% 80% / 0.28));
+    --hover-overlay: light-dark(hsl(220 30% 10% / 0.04), hsl(0 0% 100% / 0.06));
+    --shadow-color: light-dark(220 30% 10%, 0 0% 0%);
+  }
 }

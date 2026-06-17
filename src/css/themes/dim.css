@@ -25,4 +25,5 @@
   --border: hsl(220 12% 28%);
   --focus: var(--primary);
   --focus-ring: hsl(210 92% 70% / 0.28);
+  --hover-overlay: hsl(0 0% 100% / 0.06);
 }
