@@ -5,7 +5,9 @@
  * Opening behavior and intent-specific decisions stay outside this component.
  */
 .dialog {
-  max-inline-size: min(100% - 2rem, 32rem);
+  --dialog-size: 32rem;
+
+  max-inline-size: min(100% - 2rem, var(--dialog-size));
   border: var(--border-width) solid var(--border);
   border-radius: var(--radius-lg);
   background: var(--surface-raised);

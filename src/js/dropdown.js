@@ -17,26 +17,32 @@ let activeMenu = null;
 
 // ── Global: outside click & escape ─────────────────────
 
-document.addEventListener("click", (e) => {
-  for (const menu of openMenus) {
-    if (!menu.contains(e.target)) {
-      closeMenu(menu);
+if (typeof document !== "undefined") {
+  document.addEventListener("click", (e) => {
+    for (const menu of openMenus) {
+      if (!menu.contains(e.target)) {
+        closeMenu(menu);
+      }
     }
-  }
-});
+  });
 
-document.addEventListener("keydown", (e) => {
-  if (e.key === "Escape" && openMenus.size > 0) {
-    const menu = activeMenu || [...openMenus][openMenus.size - 1];
-    closeMenu(menu);
-    menu?._trigger?.focus();
-  }
-});
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && openMenus.size > 0) {
+      const menu = activeMenu || [...openMenus][openMenus.size - 1];
+      closeMenu(menu);
+      menu?._trigger?.focus();
+    }
+  });
+}
 
 // ── Open / close ───────────────────────────────────────
 
 function openMenu(menu, trigger) {
   if (menu.classList.contains("is-open")) return;
+  // Mutual exclusion: close any other open menu before opening this one.
+  for (const other of openMenus) {
+    if (other !== menu) closeMenu(other);
+  }
   menu.classList.add("is-open");
   menu.hidden = false;
   menu.style.display = "";
@@ -70,7 +76,7 @@ function closeMenu(menu) {
 // ── Keyboard nav (app-menu only) ──────────────────────
 
 function getItems(menu) {
-  return [...menu.querySelectorAll('[role="menuitem"]:not([disabled])')];
+  return [...menu.querySelectorAll('[role="menuitem"]:not([disabled]):not([aria-disabled="true"])')];
 }
 
 function navMenu(menu, dir) {

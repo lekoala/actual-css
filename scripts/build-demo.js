@@ -331,7 +331,8 @@ function renderMainIndex(categories) {
 
   return templates.mainIndex
     .replace(/\{\{links\}\}/g, links)
-    .replace(/\{\{cssPath\}\}/g, "../src/css");
+    .replace(/\{\{cssPath\}\}/g, "../src/css")
+    .replace(/\{\{demoCssPath\}\}/g, "..");
 }
 
 function extractCategoryDescription(content) {

@@ -117,24 +117,24 @@ label:not(.choice):has(> input:not(:is([type="checkbox"], [type="radio"])), > te
 .form-actions.sticky {
   position: sticky;
   inset-block-end: var(--form-actions-sticky-block-offset, 0px);
-  z-index: var(--z-sticky, 10);
+  z-index: var(--z-sticky);
   isolation: isolate;
 
   margin-inline: calc(var(--form-actions-sticky-inline-offset, 0px) * -1);
   padding: var(--form-actions-sticky-padding, var(--space-3));
 
   border-block-start: var(--border-width) solid var(--border);
-  background: color-mix(in oklch, var(--surface) 88%, transparent);
-  backdrop-filter: blur(1rem);
+  background: var(--surface);
 }
 
-/* Fallback for browsers without backdrop-filter + color-mix support. */
-@supports not (
+/* Enhanced sticky bar: translucent surface plus blur where both are supported.
+    Guidelines: use @supports positively. */
+@supports (
     (backdrop-filter: blur(1rem)) and
     (background: color-mix(in oklch, white 50%, transparent))
   ) {
   .form-actions.sticky {
-    background: var(--surface);
-    backdrop-filter: none;
+    background: color-mix(in oklch, var(--surface) 88%, transparent);
+    backdrop-filter: blur(1rem);
   }
 }

@@ -42,12 +42,6 @@
   --spinner-width: 3px;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .spinner {
-    animation-duration: 1.5s;
-  }
-}
-
 /* Busy overlay: a non-button element with aria-busy="true" and a direct
  * last-child .spinner shows that spinner as a centered overlay.
  * Buttons keep spinners inline. */
@@ -69,7 +63,13 @@
   inset: 0;
   z-index: 1;
   border-radius: inherit;
-  background: color-mix(in oklch, var(--surface), transparent 20%);
+  background: var(--surface);
+}
+
+@supports (color: color-mix(in oklch, red, white)) {
+  [aria-busy="true"]:not(.btn):has(> .spinner:last-child)::before {
+    background: color-mix(in oklch, var(--surface), transparent 20%);
+  }
 }
 
 [aria-busy="true"]:not(.btn) > .spinner:last-child {

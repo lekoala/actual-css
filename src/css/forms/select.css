@@ -40,6 +40,13 @@
   background-repeat: no-repeat;
 }
 
+/* The chevron sits on the inline-end side; flip it in RTL so it follows
+    the padding-inline-end space reserved for it. */
+[dir="rtl"] .select:not([multiple], [size]),
+[dir="rtl"] .form select:not([multiple], [size]) {
+  background-position: center left 0.75rem;
+}
+
 .select:hover,
 .form select:hover {
   --field-border: var(--text-subtle);

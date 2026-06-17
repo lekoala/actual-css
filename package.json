@@ -3,7 +3,49 @@
   "version": "0.1.0",
   "description": "Plain CSS component framework with semantic classes, universal variants, small tokens, strong themes, and progressive enhancements.",
   "type": "module",
+  "license": "MIT",
+  "author": "Thomas <thomas@lekoala.be>",
   "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://onedev.kalyptus.ovh/actual-css.git"
+  },
+  "homepage": "https://onedev.kalyptus.ovh/actual-css",
+  "bugs": {
+    "url": "https://onedev.kalyptus.ovh/actual-css/issues"
+  },
+  "keywords": [
+    "css",
+    "css-framework",
+    "component-library",
+    "semantic",
+    "accessibility",
+    "dark-mode",
+    "themable",
+    "no-build",
+    "progressive-enhancement"
+  ],
+  "exports": {
+    ".": "./dist/actual.min.css",
+    "./css": "./src/css/actual.css",
+    "./themes": "./src/css/themes/index.css",
+    "./themes/*": "./src/css/themes/*.css",
+    "./js": "./dist/actual.js",
+    "./package.json": "./package.json"
+  },
+  "main": "./dist/actual.js",
+  "sideEffects": [
+    "*.css"
+  ],
+  "files": [
+    "dist",
+    "src/css",
+    "LICENSE",
+    "README.md"
+  ],
+  "engines": {
+    "bun": ">=1.0.0"
+  },
   "scripts": {
     "lint": "biome check",
     "lint:fix": "biome check --write",

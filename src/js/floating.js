@@ -95,6 +95,14 @@ function getDocEl(doc) {
 const tracked = new Set();
 let tick = false;
 
+/* Anchor positioning (CSS Anchor Positioning API) is a progressive
+ * enhancement. Where supported, the browser handles flip/shift natively via
+ * position-area and we skip the JS coordinate math below. Older browsers
+ * fall back to the Floating-UI-style math. */
+export const supportsAnchor =
+  typeof CSS !== "undefined" && CSS.supports("anchor-name: --x");
+let anchorCounter = 0;
+
 function notify(type) {
   for (const el of tracked) {
     el.dispatchEvent(new CustomEvent("floating:reposition", { bubbles: false }));
@@ -114,13 +122,17 @@ function rafNotify(e) {
   tick = true;
 }
 
-document.addEventListener("scroll", rafNotify, { passive: true, capture: true });
-window.addEventListener("resize", rafNotify, { passive: true });
-document.addEventListener("keydown", (e) => {
-  if (e.key === "Escape" && !e.ctrlKey && !e.altKey && !e.shiftKey) {
-    notify("escape");
-  }
-});
+if (typeof document !== "undefined") {
+  document.addEventListener("scroll", rafNotify, { passive: true, capture: true });
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && !e.ctrlKey && !e.altKey && !e.shiftKey) {
+      notify("escape");
+    }
+  });
+}
+if (typeof window !== "undefined") {
+  window.addEventListener("resize", rafNotify, { passive: true });
+}
 
 /* ── Public API ────────────────────────────────────────── */
 
@@ -149,6 +161,19 @@ export function track(el) {
 export function reposition(ref, float, opts = {}) {
   if (float.style.display === "none" || float.style.visibility === "hidden")
     return;
+
+  if (supportsAnchor) {
+    if (!float._anchorWired) {
+      const name = `--anchor-${++anchorCounter}`;
+      ref.style.anchorName = name;
+      float.style.positionAnchor = name;
+      float._anchorWired = true;
+    }
+    const placement = opts.placement || "bottom-start";
+    float.style.positionArea = placement.split("-")[0];
+    float.dataset.placement = placement;
+    return;
+  }
 
   const placement = opts.placement || "bottom-start";
   const distance = opts.distance || 0;

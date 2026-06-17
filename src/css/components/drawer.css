@@ -29,7 +29,13 @@ dialog.drawer[open] {
 }
 
 dialog.drawer::backdrop {
-  background: color-mix(in oklch, black, transparent 55%);
+  background: rgba(0, 0, 0, 0.45);
+}
+
+@supports (color: color-mix(in oklch, red, white)) {
+  dialog.drawer::backdrop {
+    background: color-mix(in oklch, black, transparent 55%);
+  }
 }
 
 dialog.drawer[data-side="end"] {
@@ -68,6 +74,12 @@ dialog.drawer[data-side="end"] {
   color: var(--text);
 }
 
+.drawer a:focus-visible,
+.drawer summary:focus-visible {
+  outline: calc(var(--border-width) * 2) solid var(--focus);
+  outline-offset: 2px;
+}
+
 .drawer details > .nav-list {
   margin-block-start: var(--space-1);
   padding-inline-start: var(--space-3);
@@ -75,15 +87,15 @@ dialog.drawer[data-side="end"] {
 
 @media (prefers-reduced-motion: no-preference) {
   dialog.drawer[open] {
-    animation: drawer-start-appear 200ms var(--ease, ease-out);
+    animation: actual-drawer-start 200ms var(--ease, ease-out);
   }
 
   dialog.drawer[data-side="end"][open] {
-    animation-name: drawer-end-appear;
+    animation-name: actual-drawer-end;
   }
 }
 
-@keyframes drawer-start-appear {
+@keyframes actual-drawer-start {
   from {
     transform: translateX(-100%);
     opacity: 0;
@@ -95,7 +107,7 @@ dialog.drawer[data-side="end"] {
   }
 }
 
-@keyframes drawer-end-appear {
+@keyframes actual-drawer-end {
   from {
     transform: translateX(100%);
     opacity: 0;

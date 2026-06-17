@@ -10,7 +10,8 @@
   align-items: center;
   justify-content: space-between;
   gap: var(--gap);
-  padding: 0.75rem 1rem;
+  padding-block: 0.75rem;
+  padding-inline: 1rem;
   border: var(--border-width) solid var(--border);
   border-radius: var(--radius-lg);
   background: var(--surface-raised);
@@ -24,6 +25,12 @@
   color: var(--text);
   font-weight: var(--font-weight-bold);
   text-decoration: none;
+}
+
+.navbar-brand:focus-visible {
+  outline: calc(var(--border-width) * 2) solid var(--focus);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
 }
 
 .navbar-nav {
@@ -51,6 +58,11 @@
 .nav-link[aria-current="page"] {
   background: var(--surface-subtle);
   color: var(--text);
+}
+
+.nav-link:focus-visible {
+  outline: calc(var(--border-width) * 2) solid var(--focus);
+  outline-offset: 2px;
 }
 
 .breadcrumb {
@@ -84,6 +96,12 @@
 .breadcrumb a:hover {
   color: var(--text);
   text-decoration: underline;
+}
+
+.breadcrumb a:focus-visible {
+  outline: calc(var(--border-width) * 2) solid var(--focus);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
 }
 
 .pagination {
@@ -121,4 +139,9 @@
   border-color: var(--intent, var(--primary));
   background: var(--surface-subtle);
   color: var(--intent, var(--primary));
+}
+
+.page-link:focus-visible {
+  outline: calc(var(--border-width) * 2) solid var(--focus);
+  outline-offset: 2px;
 }

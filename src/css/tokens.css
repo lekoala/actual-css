@@ -18,6 +18,10 @@
   --prose-measure: 70ch;
   --prose-flow: 1em;
   --prose-heading-line-height: 1.2;
+  --prose-h1: 2rem;
+  --prose-h2: 1.5rem;
+  --prose-h3: 1.25rem;
+  --prose-h4: 1.125rem;
 
   /* Spacing */
   --gap: 0.75rem;
@@ -31,8 +35,9 @@
   /* Shape / rhythm / motion */
   --border-width: 1px;
   --radius-full: 9999px;
-  --shadow: 0 0.5rem 1.5rem hsl(220 30% 10% / 0.08);
-  --shadow-popout: 0 0.25rem 0.75rem hsl(220 30% 10% / 0.15);
+  --shadow-color: 220 30% 10%;
+  --shadow: 0 0.5rem 1.5rem hsl(var(--shadow-color) / 0.08);
+  --shadow-popout: 0 0.25rem 0.75rem hsl(var(--shadow-color) / 0.15);
   --duration: 150ms;
   --ease: ease;
 
@@ -66,12 +71,22 @@
 
   /* Layering */
   --z-sticky: 10;
+  --z-dropdown: 20;
+  --z-popover: 30;
+  --z-tooltip: 50;
 }
 
 [data-tone="dark"] {
   --tone-fg: var(--color-white, white);
-  --tone-muted: color-mix(in oklch, var(--tone-fg), transparent 25%);
-  --tone-border: color-mix(in oklch, var(--tone-fg), transparent 75%);
+  --tone-muted: rgba(255, 255, 255, 0.75);
+  --tone-border: rgba(255, 255, 255, 0.25);
+}
+
+@supports (color: color-mix(in oklch, red, white)) {
+  [data-tone="dark"] {
+    --tone-muted: color-mix(in oklch, var(--tone-fg), transparent 25%);
+    --tone-border: color-mix(in oklch, var(--tone-fg), transparent 75%);
+  }
 }
 
 [data-tone="light"] {

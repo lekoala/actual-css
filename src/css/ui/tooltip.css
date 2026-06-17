@@ -9,7 +9,7 @@
   --tooltip-fg: var(--surface);
   --tooltip-arrow-size: 5px;
 
-  z-index: 50;
+  z-index: var(--z-tooltip);
   max-inline-size: min(24rem, calc(100vi - 2rem));
   padding: 0.25em 0.6em;
   border-radius: var(--radius-sm);
@@ -61,4 +61,12 @@
   block-size: calc(var(--tooltip-arrow-size) * 2);
   translate: 0 -50%;
   clip-path: polygon(0 50%, 100% 0, 100% 100%);
+}
+
+/* CSS Anchor Positioning: where supported, the JS sets position-anchor and
+    position-area inline. This default applies before the JS runs. */
+@supports (anchor-name: --x) {
+  .tooltip {
+    position-area: var(--anchor-area, top);
+  }
 }

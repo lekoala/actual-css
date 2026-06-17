@@ -28,6 +28,11 @@
   font-weight: var(--font-weight-bold);
 }
 
+.accordion summary:focus-visible {
+  outline: calc(var(--border-width) * 2) solid var(--focus);
+  outline-offset: 2px;
+}
+
 .accordion summary::-webkit-details-marker {
   display: none;
 }
@@ -55,7 +60,8 @@
 }
 
 .accordion details > summary + * {
-  padding: 0 1rem 1rem 1rem;
+  padding-block: 0 1rem;
+  padding-inline: 1rem;
   color: var(--text-muted);
   margin-block: 0;
 }

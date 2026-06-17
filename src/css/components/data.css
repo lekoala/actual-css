@@ -11,7 +11,7 @@
   background: var(--surface-raised);
 }
 
-.table-wrap:focus {
+.table-wrap:focus-visible {
   outline: calc(var(--border-width) * 2) solid var(--focus);
   outline-offset: 2px;
 }
@@ -58,7 +58,7 @@
   background-color: var(--hover-overlay);
 }
 
-.table tr:last-child>* {
+.table tr:last-child > * {
   border-block-end: 0;
 }
 
@@ -82,7 +82,7 @@
   gap: var(--metric-gap);
 }
 
-.metric> :where(data, strong) {
+.metric > :where(data, strong) {
   color: var(--text);
   font-size: var(--metric-value-size);
   font-weight: var(--font-weight-bold);
@@ -90,7 +90,7 @@
   line-height: 1.05;
 }
 
-.metric>.badge {
+.metric > .badge {
   justify-self: start;
 }
 
@@ -134,9 +134,8 @@
 /* Indeterminate progress */
 .progress:indeterminate {
   background:
-    linear-gradient(to right,
-      var(--progress-value) 30%,
-      var(--progress-track) 30%) top left / 150% 150% no-repeat,
+    linear-gradient(to right, var(--progress-value) 30%, var(--progress-track) 30%) top left / 150%
+    150% no-repeat,
     var(--progress-track);
 }
 
@@ -154,8 +153,7 @@
 
 @media (prefers-reduced-motion: no-preference) {
   .progress:indeterminate {
-    animation: progress-indeterminate 2s ease-in-out infinite;
-
+    animation: actual-progress-indeterminate 2s ease-in-out infinite;
   }
 
   :where([dir="rtl"] .progress:indeterminate) {
@@ -163,7 +161,7 @@
   }
 }
 
-@keyframes progress-indeterminate {
+@keyframes actual-progress-indeterminate {
   0% {
     background-position: 200% 0;
   }
@@ -211,5 +209,4 @@
 .meter::-moz-meter-bar {
   height: var(--bar-height, 0.65rem);
   border-radius: var(--radius-full);
-  background: var(--intent, var(--primary));
 }
