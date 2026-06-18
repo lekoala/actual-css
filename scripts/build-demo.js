@@ -323,14 +323,20 @@ function renderIndex(catName, catDesc, sections) {
 }
 
 function renderMainIndex(categories) {
-  let links = "";
+  let cards = "";
   for (const cat of categories) {
-    links += `    <li><a href="${cat.slug}/index.html">${escapeHtml(cat.name)}</a></li>
+    const desc = cat.desc ? `<p>${escapeHtml(cat.desc)}</p>` : "";
+    cards += `      <article class="component-card">
+        <div class="card-info">
+          <h3><a href="${cat.slug}/index.html">${escapeHtml(cat.name)}</a></h3>
+          ${desc}
+        </div>
+      </article>
 `;
   }
 
   return templates.mainIndex
-    .replace(/\{\{links\}\}/g, links)
+    .replace(/\{\{cards\}\}/g, cards)
     .replace(/\{\{cssPath\}\}/g, "../src/css")
     .replace(/\{\{demoCssPath\}\}/g, "..");
 }
@@ -359,18 +365,20 @@ function buildCategory(category) {
   const sections = parseMarkdown(md, category.name);
   const slug = slugify(category.name);
   const dir = join(DEMO, slug);
+  const expectedFiles = new Set(["index.html", ...sections.map((section) => `${section.slug}.html`)]);
 
   mkdirSync(dir, { recursive: true });
-  for (const file of readdirSync(dir)) {
-    if (file.endsWith(".html")) unlinkSync(join(dir, file));
-  }
 
   writeFileSync(join(dir, "index.html"), renderIndex(category.name, category.desc, sections));
   for (const section of sections) {
     writeFileSync(join(dir, `${section.slug}.html`), renderPage(category.name, section));
   }
 
-  return { name: category.name, slug, sections };
+  for (const file of readdirSync(dir)) {
+    if (file.endsWith(".html") && !expectedFiles.has(file)) unlinkSync(join(dir, file));
+  }
+
+  return { name: category.name, slug, desc: category.desc, sections };
 }
 
 function discoverCategories() {

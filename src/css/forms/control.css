@@ -13,17 +13,15 @@
 .form
   :where(
     input:not(
-      [type="checkbox"],
-      [type="radio"],
-      [type="range"],
-      [type="file"],
-      [type="button"],
-      [type="submit"],
-      [type="reset"],
-      [type="image"],
-      [type="color"],
-      [type="hidden"]
-    ),
+        [type="checkbox"],
+        [type="radio"],
+        [type="range"],
+        [type="file"],
+        [type="button"],
+        [type="submit"],
+        [type="reset"],
+        [type="color"]
+      ),
     textarea
   ) {
   --field-border: var(--border);
@@ -57,17 +55,15 @@
 .form
   :where(
     input:not(
-      [type="checkbox"],
-      [type="radio"],
-      [type="range"],
-      [type="file"],
-      [type="button"],
-      [type="submit"],
-      [type="reset"],
-      [type="image"],
-      [type="color"],
-      [type="hidden"]
-    ),
+        [type="checkbox"],
+        [type="radio"],
+        [type="range"],
+        [type="file"],
+        [type="button"],
+        [type="submit"],
+        [type="reset"],
+        [type="color"]
+      ),
     textarea
   ):hover:not(:disabled) {
   --field-border: var(--text-subtle);
@@ -78,17 +74,15 @@
 .form
   :where(
     input:not(
-      [type="checkbox"],
-      [type="radio"],
-      [type="range"],
-      [type="file"],
-      [type="button"],
-      [type="submit"],
-      [type="reset"],
-      [type="image"],
-      [type="color"],
-      [type="hidden"]
-    ),
+        [type="checkbox"],
+        [type="radio"],
+        [type="range"],
+        [type="file"],
+        [type="button"],
+        [type="submit"],
+        [type="reset"],
+        [type="color"]
+      ),
     textarea
   ):focus-visible {
   border-color: var(--focus);
@@ -107,17 +101,15 @@
 .form
   :where(
     input:not(
-      [type="checkbox"],
-      [type="radio"],
-      [type="range"],
-      [type="file"],
-      [type="button"],
-      [type="submit"],
-      [type="reset"],
-      [type="image"],
-      [type="color"],
-      [type="hidden"]
-    ),
+        [type="checkbox"],
+        [type="radio"],
+        [type="range"],
+        [type="file"],
+        [type="button"],
+        [type="submit"],
+        [type="reset"],
+        [type="color"]
+      ),
     textarea
   ):disabled {
   --field-bg: var(--surface-subtle);
