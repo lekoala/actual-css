@@ -62,11 +62,3 @@
   translate: 0 -50%;
   clip-path: polygon(0 50%, 100% 0, 100% 100%);
 }
-
-/* CSS Anchor Positioning: where supported, the JS sets position-anchor and
-    position-area inline. This default applies before the JS runs. */
-@supports (anchor-name: --x) {
-  .tooltip {
-    position-area: var(--anchor-area, top);
-  }
-}

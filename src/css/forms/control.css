@@ -10,7 +10,7 @@
  */
 .input,
 .textarea,
-.form
+:is(.form, .field)
   :where(
     input:not(
         [type="checkbox"],
@@ -52,7 +52,7 @@
 
 .input:hover:not(:disabled),
 .textarea:hover:not(:disabled),
-.form
+:is(.form, .field)
   :where(
     input:not(
         [type="checkbox"],
@@ -71,7 +71,7 @@
 
 .input:focus-visible,
 .textarea:focus-visible,
-.form
+:is(.form, .field)
   :where(
     input:not(
         [type="checkbox"],
@@ -92,13 +92,13 @@
 .field.danger,
 .input[aria-invalid="true"],
 .textarea[aria-invalid="true"],
-.form :where(input, textarea)[aria-invalid="true"] {
+:is(.form, .field) :where(input, textarea)[aria-invalid="true"] {
   --field-border: var(--danger);
 }
 
 .input:disabled,
 .textarea:disabled,
-.form
+:is(.form, .field)
   :where(
     input:not(
         [type="checkbox"],
@@ -121,6 +121,6 @@
 
 .input::placeholder,
 .textarea::placeholder,
-.form :where(input, textarea)::placeholder {
+:is(.form, .field) :where(input, textarea)::placeholder {
   color: var(--text-subtle);
 }

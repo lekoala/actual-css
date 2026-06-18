@@ -681,6 +681,12 @@ small {
   text-decoration-thickness: .12em;
 }
 
+@supports (color: color-mix(in oklch, red, white)) {
+  .prose a:hover {
+    color: color-mix(in oklch, var(--primary), var(--text) 15%);
+  }
+}
+
 .prose :where(ul, ol) {
   padding-inline-start: 1.5em;
 }
@@ -2011,7 +2017,7 @@ dialog.drawer[data-side="end"] {
   }
 }
 
-.input, .textarea, .form :where(input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"], [type="button"], [type="submit"], [type="reset"], [type="color"]), textarea) {
+.input, .textarea, :is(.form, .field) :where(input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"], [type="button"], [type="submit"], [type="reset"], [type="color"]), textarea) {
   --field-border: var(--border);
   --field-bg: var(--surface);
   --field-fg: var(--text);
@@ -2035,20 +2041,20 @@ dialog.drawer[data-side="end"] {
   padding-block: .65rem;
 }
 
-.input:hover:not(:disabled), .textarea:hover:not(:disabled), .form :where(input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"], [type="button"], [type="submit"], [type="reset"], [type="color"]), textarea):hover:not(:disabled) {
+.input:hover:not(:disabled), .textarea:hover:not(:disabled), :is(.form, .field) :where(input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"], [type="button"], [type="submit"], [type="reset"], [type="color"]), textarea):hover:not(:disabled) {
   --field-border: var(--text-subtle);
 }
 
-.input:focus-visible, .textarea:focus-visible, .form :where(input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"], [type="button"], [type="submit"], [type="reset"], [type="color"]), textarea):focus-visible {
+.input:focus-visible, .textarea:focus-visible, :is(.form, .field) :where(input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"], [type="button"], [type="submit"], [type="reset"], [type="color"]), textarea):focus-visible {
   border-color: var(--focus);
   box-shadow: 0 0 0 3px var(--focus-ring);
 }
 
-.field.danger, .input[aria-invalid="true"], .textarea[aria-invalid="true"], .form :where(input, textarea)[aria-invalid="true"] {
+.field.danger, .input[aria-invalid="true"], .textarea[aria-invalid="true"], :is(.form, .field) :where(input, textarea)[aria-invalid="true"] {
   --field-border: var(--danger);
 }
 
-.input:disabled, .textarea:disabled, .form :where(input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"], [type="button"], [type="submit"], [type="reset"], [type="color"]), textarea):disabled {
+.input:disabled, .textarea:disabled, :is(.form, .field) :where(input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"], [type="button"], [type="submit"], [type="reset"], [type="color"]), textarea):disabled {
   --field-bg: var(--surface-subtle);
   --field-fg: var(--text-subtle);
   --field-border: var(--border);
@@ -2056,7 +2062,7 @@ dialog.drawer[data-side="end"] {
   opacity: 1;
 }
 
-.input::placeholder, .textarea::placeholder, .form :where(input, textarea)::placeholder {
+.input::placeholder, .textarea::placeholder, :is(.form, .field) :where(input, textarea)::placeholder {
   color: var(--text-subtle);
 }
 
@@ -2436,12 +2442,6 @@ dialog.drawer[data-side="end"] {
   margin-block: .25rem;
 }
 
-@supports (anchor-name: --x) {
-  .dropdown-menu {
-    position-area: var(--anchor-area, bottom);
-  }
-}
-
 .tabs {
   border-block-end: var(--border-width) solid var(--border);
   flex-wrap: wrap;
@@ -2538,12 +2538,6 @@ dialog.drawer[data-side="end"] {
   inset-block-start: 50%;
   inset-inline-start: calc(-.98 * var(--tooltip-arrow-size));
   translate: 0 -50%;
-}
-
-@supports (anchor-name: --x) {
-  .tooltip {
-    position-area: var(--anchor-area, top);
-  }
 }
 
 .solid, .btn:not(:where(.soft, .outline, .ghost, .link)), .badge:not(:where(.soft, .outline)) {

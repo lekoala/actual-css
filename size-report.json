@@ -1,8 +1,8 @@
 {
-  "timestamp": "2026-06-18T21:20:33.778Z",
-  "totalRaw": 73981,
-  "totalMinified": 49950,
-  "totalBrotli": 8974,
+  "timestamp": "2026-06-18T21:57:51.291Z",
+  "totalRaw": 73628,
+  "totalMinified": 49988,
+  "totalBrotli": 8949,
   "fileCount": 37,
   "files": [
     {
@@ -46,16 +46,16 @@
       "raw": 2879
     },
     {
-      "file": "forms/choice.css",
-      "raw": 2794
+      "file": "prose.css",
+      "raw": 2870
     },
     {
       "file": "forms/control.css",
-      "raw": 2786
+      "raw": 2864
     },
     {
-      "file": "prose.css",
-      "raw": 2726
+      "file": "forms/choice.css",
+      "raw": 2794
     },
     {
       "file": "components/avatar.css",
@@ -70,14 +70,6 @@
       "raw": 2466
     },
     {
-      "file": "ui/tooltip.css",
-      "raw": 2194
-    },
-    {
-      "file": "ui/dropdown.css",
-      "raw": 2071
-    },
-    {
       "file": "components/badge.css",
       "raw": 2044
     },
@@ -86,12 +78,20 @@
       "raw": 1993
     },
     {
+      "file": "ui/tooltip.css",
+      "raw": 1953
+    },
+    {
       "file": "components/accordion.css",
       "raw": 1852
     },
     {
       "file": "components/card.css",
       "raw": 1846
+    },
+    {
+      "file": "ui/dropdown.css",
+      "raw": 1737
     },
     {
       "file": "components/dialog.css",

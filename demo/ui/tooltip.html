@@ -26,7 +26,7 @@
     </header>
         <div class="component-prose">
       <ul>
-  <li>Use <code>aria-describedby</code> to connect the trigger to the tooltip.</li>
+  <li>Use <code>data-tooltip</code> on the trigger. With text (<code>data-tooltip=&quot;Help&quot;</code>), the tooltip element is generated. Empty (<code>data-tooltip</code>) marks an explicit tooltip connected via <code>aria-describedby</code>.</li>
   <li>Tooltips are supplemental. Do not put required information or interactive controls inside them.</li>
   <li>Show on hover and focus. Hide on Escape, blur, pointer leave, or scroll when appropriate.</li>
   <li>JavaScript can generate tooltip elements from <code>data-tooltip</code>.</li>
@@ -40,6 +40,7 @@
         <div class="example-render">
           <button class="btn ghost"
         type="button"
+        data-tooltip
         aria-describedby="tooltip-save"
         aria-label="Save">
   <i class="ti ti-device-floppy" aria-hidden="true"></i>
@@ -52,6 +53,7 @@
         <div class="example-code">
           <pre><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>button</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>btn ghost<span class="token punctuation">"</span></span>
         <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>button<span class="token punctuation">"</span></span>
+        <span class="token attr-name">data-tooltip</span>
         <span class="token attr-name">aria-describedby</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>tooltip-save<span class="token punctuation">"</span></span>
         <span class="token attr-name">aria-label</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>Save<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
   <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>i</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>ti ti-device-floppy<span class="token punctuation">"</span></span> <span class="token attr-name">aria-hidden</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>true<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>i</span><span class="token punctuation">></span></span>
@@ -109,6 +111,7 @@
       <div class="example-group">
         <div class="example-render">
           <button class="btn primary" type="button"
+        data-tooltip
         aria-describedby="tip-grad"
         data-tooltip-placement="right">
   Hover for gradient
@@ -124,6 +127,7 @@
         </div>
         <div class="example-code">
           <pre><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>button</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>btn primary<span class="token punctuation">"</span></span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>button<span class="token punctuation">"</span></span>
+        <span class="token attr-name">data-tooltip</span>
         <span class="token attr-name">aria-describedby</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>tip-grad<span class="token punctuation">"</span></span>
         <span class="token attr-name">data-tooltip-placement</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>right<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
   Hover for gradient
