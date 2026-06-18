@@ -70,12 +70,3 @@
   border: 0;
   border-block-start: var(--border-width) solid var(--border);
 }
-
-/* CSS Anchor Positioning: where supported, the JS sets position-anchor and
-    position-area inline so the browser handles flip/shift natively. This
-    default applies before the JS runs; older browsers use the JS math path. */
-@supports (anchor-name: --x) {
-  .dropdown-menu {
-    position-area: var(--anchor-area, bottom);
-  }
-}

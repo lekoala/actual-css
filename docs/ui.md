@@ -179,7 +179,7 @@ Links:
 
 > Supplemental label for a trigger, shown on hover and focus, hidden on dismissal.
 
-- Use `aria-describedby` to connect the trigger to the tooltip.
+- Use `data-tooltip` on the trigger. With text (`data-tooltip="Help"`), the tooltip element is generated. Empty (`data-tooltip`) marks an explicit tooltip connected via `aria-describedby`.
 - Tooltips are supplemental. Do not put required information or interactive controls inside them.
 - Show on hover and focus. Hide on Escape, blur, pointer leave, or scroll when appropriate.
 - JavaScript can generate tooltip elements from `data-tooltip`.
@@ -190,6 +190,7 @@ Links:
 ```html
 <button class="btn ghost"
         type="button"
+        data-tooltip
         aria-describedby="tooltip-save"
         aria-label="Save">
   <i class="ti ti-device-floppy" aria-hidden="true"></i>
@@ -225,6 +226,7 @@ Override `--tooltip-bg` and `--tooltip-fg` on the tooltip element to change the 
 
 ```html
 <button class="btn primary" type="button"
+        data-tooltip
         aria-describedby="tip-grad"
         data-tooltip-placement="right">
   Hover for gradient

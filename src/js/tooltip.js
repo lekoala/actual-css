@@ -2,7 +2,14 @@
  * Tooltip — supplemental label shown on hover and focus.
  *
  * Shorthand:  <button data-tooltip="Help text" data-tooltip-placement="right">
- * Explicit:   <button aria-describedby="tooltip-id"> + <div role="tooltip" id="tooltip-id" hidden>
+ * Explicit:   <button data-tooltip aria-describedby="tooltip-id">
+ *             <div role="tooltip" id="tooltip-id" hidden>Help text</div>
+ *
+ * Discovery:  [data-tooltip] only. An empty data-tooltip marks an explicit
+ *             tooltip that points at an aria-describedby target; a non-empty
+ *             data-tooltip generates the tooltip element lazily.
+ *             Plain aria-describedby (form help, error text) is never
+ *             treated as a tooltip trigger.
  *
  * Lazy:       tooltip elements are created (shorthand) or wired (explicit) on
  *             first mouseover / focusin. No page-load scan, no DOM overhead
@@ -17,16 +24,17 @@ import { track, reposition } from "./floating.js";
 
 let uid = 0;
 const tipMap = new WeakMap();
+const cleanupMap = new WeakMap();
+const generatedTips = new WeakSet();
 
 function ensureTip(trigger) {
-  const existing = tipMap.get(trigger);
-  if (existing) return existing;
+  if (tipMap.has(trigger)) return tipMap.get(trigger);
 
   let tip;
-
-  // shorthand: data-tooltip → create element lazily
   const text = trigger.getAttribute("data-tooltip");
-  if (text !== null) {
+
+  // shorthand: data-tooltip="text" → create element lazily
+  if (text) {
     uid++;
     tip = document.createElement("div");
     tip.className = "tooltip";
@@ -37,6 +45,7 @@ function ensureTip(trigger) {
     tip.style.display = "none";
     tip.style.position = "fixed";
     tip.inert = true;
+    generatedTips.add(tip);
 
     const placement = trigger.getAttribute("data-tooltip-placement");
     if (placement) tip._placement = placement;
@@ -46,12 +55,12 @@ function ensureTip(trigger) {
     trigger.setAttribute("aria-describedby", tip.id);
   }
 
-  // explicit: aria-describedby → find existing element
+  // explicit: data-tooltip (empty) + aria-describedby → find existing element
   if (!tip) {
     const tipId = trigger.getAttribute("aria-describedby");
-    if (!tipId) return null;
+    if (!tipId) { tipMap.set(trigger, null); return null; }
     tip = document.getElementById(tipId);
-    if (!tip || tip.getAttribute("role") !== "tooltip") return null;
+    if (!tip || tip.getAttribute("role") !== "tooltip") { tipMap.set(trigger, null); return null; }
     tip.hidden = true;
     tip.style.display = "none";
     tip.style.position = "fixed";
@@ -71,7 +80,7 @@ function ensureTip(trigger) {
   trigger.addEventListener("mouseleave", onHide);
   trigger.addEventListener("blur", onHide);
 
-  tip.addEventListener("floating:reposition", () => {
+  const onReposition = () => {
     if (!tip.hidden) {
       reposition(trigger, tip, {
         placement: tip._placement || "top",
@@ -80,13 +89,32 @@ function ensureTip(trigger) {
         shift: true,
       });
     }
-  });
+  };
 
+  tip.addEventListener("floating:reposition", onReposition);
   tip.addEventListener("floating:hide", onHide);
-  track(tip);
+  const untrack = track(tip);
+
+  cleanupMap.set(trigger, () => {
+    onHide();
+    trigger.removeEventListener("mouseleave", onHide);
+    trigger.removeEventListener("blur", onHide);
+    tip.removeEventListener("floating:reposition", onReposition);
+    tip.removeEventListener("floating:hide", onHide);
+    untrack();
+    if (generatedTips.has(tip)) tip.remove();
+    tipMap.delete(trigger);
+    cleanupMap.delete(trigger);
+  });
 
   tipMap.set(trigger, tip);
   return tip;
+}
+
+function cleanupTrigger(trigger) {
+  if (trigger.isConnected) return;
+  const cleanup = cleanupMap.get(trigger);
+  if (cleanup) cleanup();
 }
 
 function show(tip, ref) {
@@ -105,22 +133,34 @@ function show(tip, ref) {
 
 // ── Delegated discovery (mouseover + focusin bubble) ───
 
-const SEL = "[data-tooltip], [aria-describedby]";
+const SEL = "[data-tooltip]";
+
+function handleTriggerIntent(e) {
+  const trigger = e.target.closest?.(SEL);
+  if (!trigger) return;
+  if (e.type === "mouseover" && e.relatedTarget instanceof Node && trigger.contains(e.relatedTarget)) return;
+
+  const tip = ensureTip(trigger);
+  if (tip) show(tip, trigger);
+}
 
 if (typeof document !== "undefined") {
-  document.addEventListener("mouseover", (e) => {
-    const trigger = e.target.closest(SEL);
-    if (!trigger) return;
-    const tip = ensureTip(trigger);
-    if (tip) show(tip, trigger);
-  });
+  document.addEventListener("mouseover", handleTriggerIntent);
+  document.addEventListener("focusin", handleTriggerIntent);
 
-  document.addEventListener("focusin", (e) => {
-    const trigger = e.target.closest(SEL);
-    if (!trigger) return;
-    const tip = ensureTip(trigger);
-    if (tip) show(tip, trigger);
-  });
+  if (typeof MutationObserver !== "undefined") {
+    const observer = new MutationObserver((mutations) => {
+      for (const mutation of mutations) {
+        for (const node of mutation.removedNodes) {
+          if (!node.querySelectorAll) continue;
+          if (node.matches?.(SEL)) cleanupTrigger(node);
+          for (const trigger of node.querySelectorAll(SEL)) cleanupTrigger(trigger);
+        }
+      }
+    });
+
+    observer.observe(document.documentElement, { childList: true, subtree: true });
+  }
 }
 
 export function initTooltips() {

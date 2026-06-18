@@ -82,8 +82,14 @@ function applyOffset(coords, side, offset, rtl) {
   }
 }
 
+const supportsDirSelector =
+  typeof CSS !== "undefined" && CSS.supports("selector(:dir(rtl))");
+
 function isRTL(el) {
-  return getComputedStyle(el).direction === "rtl";
+  if (el.dir === "rtl") return true;
+  if (el.dir === "ltr") return false;
+  if (supportsDirSelector) return el.matches(":dir(rtl)");
+  return document.dir === "rtl";
 }
 
 function getDocEl(doc) {
@@ -94,14 +100,6 @@ function getDocEl(doc) {
 
 const tracked = new Set();
 let tick = false;
-
-/* Anchor positioning (CSS Anchor Positioning API) is a progressive
- * enhancement. Where supported, the browser handles flip/shift natively via
- * position-area and we skip the JS coordinate math below. Older browsers
- * fall back to the Floating-UI-style math. */
-export const supportsAnchor =
-  typeof CSS !== "undefined" && CSS.supports("anchor-name: --x");
-let anchorCounter = 0;
 
 function notify(type) {
   for (const el of tracked) {
@@ -161,19 +159,6 @@ export function track(el) {
 export function reposition(ref, float, opts = {}) {
   if (float.style.display === "none" || float.style.visibility === "hidden")
     return;
-
-  if (supportsAnchor) {
-    if (!float._anchorWired) {
-      const name = `--anchor-${++anchorCounter}`;
-      ref.style.anchorName = name;
-      float.style.positionAnchor = name;
-      float._anchorWired = true;
-    }
-    const placement = opts.placement || "bottom-start";
-    float.style.positionArea = placement.split("-")[0];
-    float.dataset.placement = placement;
-    return;
-  }
 
   const placement = opts.placement || "bottom-start";
   const distance = opts.distance || 0;
