@@ -1,101 +1,105 @@
 {
-  "timestamp": "2026-06-16T21:10:15.400Z",
-  "totalRaw": 66429,
-  "totalMinified": 45751,
-  "totalBrotli": 8371,
+  "timestamp": "2026-06-18T21:20:33.778Z",
+  "totalRaw": 73981,
+  "totalMinified": 49950,
+  "totalBrotli": 8974,
   "fileCount": 37,
   "files": [
     {
-      "file": "components/data.css",
-      "raw": 4312
-    },
-    {
       "file": "forms/select.css",
-      "raw": 4267
-    },
-    {
-      "file": "forms/form.css",
-      "raw": 3670
-    },
-    {
-      "file": "layout.css",
-      "raw": 3539
+      "raw": 4536
     },
     {
       "file": "utilities.css",
-      "raw": 2964
+      "raw": 4236
     },
     {
-      "file": "forms/control.css",
-      "raw": 2894
+      "file": "components/data.css",
+      "raw": 3842
+    },
+    {
+      "file": "forms/form.css",
+      "raw": 3689
+    },
+    {
+      "file": "layout.css",
+      "raw": 3540
+    },
+    {
+      "file": "variants.css",
+      "raw": 3403
+    },
+    {
+      "file": "tokens.css",
+      "raw": 3128
+    },
+    {
+      "file": "theme.css",
+      "raw": 2965
+    },
+    {
+      "file": "components/navigation.css",
+      "raw": 2937
     },
     {
       "file": "components/button.css",
-      "raw": 2859
+      "raw": 2879
     },
     {
       "file": "forms/choice.css",
       "raw": 2794
     },
     {
-      "file": "components/avatar.css",
-      "raw": 2689
-    },
-    {
-      "file": "tokens.css",
-      "raw": 2517
+      "file": "forms/control.css",
+      "raw": 2786
     },
     {
       "file": "prose.css",
-      "raw": 2506
+      "raw": 2726
     },
     {
-      "file": "variants.css",
-      "raw": 2496
-    },
-    {
-      "file": "components/navigation.css",
-      "raw": 2397
-    },
-    {
-      "file": "components/drawer.css",
-      "raw": 2201
-    },
-    {
-      "file": "components/badge.css",
-      "raw": 2048
+      "file": "components/avatar.css",
+      "raw": 2694
     },
     {
       "file": "forms/switch.css",
-      "raw": 1940
+      "raw": 2520
+    },
+    {
+      "file": "components/drawer.css",
+      "raw": 2466
+    },
+    {
+      "file": "ui/tooltip.css",
+      "raw": 2194
+    },
+    {
+      "file": "ui/dropdown.css",
+      "raw": 2071
+    },
+    {
+      "file": "components/badge.css",
+      "raw": 2044
     },
     {
       "file": "components/spinner.css",
-      "raw": 1925
+      "raw": 1993
     },
     {
-      "file": "theme.css",
-      "raw": 1861
+      "file": "components/accordion.css",
+      "raw": 1852
     },
     {
       "file": "components/card.css",
       "raw": 1846
     },
     {
-      "file": "components/accordion.css",
-      "raw": 1714
-    },
-    {
-      "file": "ui/dropdown.css",
-      "raw": 1589
-    },
-    {
       "file": "components/dialog.css",
-      "raw": 1567
+      "raw": 1605
     },
     {
       "file": "components/alert.css",
-      "raw": 1459
+      "raw": 1445
     },
     {
       "file": "base.css",
@@ -107,7 +111,7 @@
     },
     {
       "file": "ui/tab.css",
-      "raw": 1100
+      "raw": 1072
     },
     {
       "file": "patterns.css",
@@ -119,10 +123,6 @@
     },
     {
       "file": "reset.css",
-      "raw": 557
-    },
-    {
-      "file": "ui/tooltip.css",
       "raw": 557
     },
     {

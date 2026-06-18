@@ -2011,7 +2011,7 @@ dialog.drawer[data-side="end"] {
   }
 }
 
-.input, .textarea, .form :where(input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"], [type="button"], [type="submit"], [type="reset"], [type="image"], [type="color"], [type="hidden"]), textarea) {
+.input, .textarea, .form :where(input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"], [type="button"], [type="submit"], [type="reset"], [type="color"]), textarea) {
   --field-border: var(--border);
   --field-bg: var(--surface);
   --field-fg: var(--text);
@@ -2035,11 +2035,11 @@ dialog.drawer[data-side="end"] {
   padding-block: .65rem;
 }
 
-.input:hover:not(:disabled), .textarea:hover:not(:disabled), .form :where(input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"], [type="button"], [type="submit"], [type="reset"], [type="image"], [type="color"], [type="hidden"]), textarea):hover:not(:disabled) {
+.input:hover:not(:disabled), .textarea:hover:not(:disabled), .form :where(input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"], [type="button"], [type="submit"], [type="reset"], [type="color"]), textarea):hover:not(:disabled) {
   --field-border: var(--text-subtle);
 }
 
-.input:focus-visible, .textarea:focus-visible, .form :where(input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"], [type="button"], [type="submit"], [type="reset"], [type="image"], [type="color"], [type="hidden"]), textarea):focus-visible {
+.input:focus-visible, .textarea:focus-visible, .form :where(input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"], [type="button"], [type="submit"], [type="reset"], [type="color"]), textarea):focus-visible {
   border-color: var(--focus);
   box-shadow: 0 0 0 3px var(--focus-ring);
 }
@@ -2048,7 +2048,7 @@ dialog.drawer[data-side="end"] {
   --field-border: var(--danger);
 }
 
-.input:disabled, .textarea:disabled, .form :where(input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"], [type="button"], [type="submit"], [type="reset"], [type="image"], [type="color"], [type="hidden"]), textarea):disabled {
+.input:disabled, .textarea:disabled, .form :where(input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"], [type="button"], [type="submit"], [type="reset"], [type="color"]), textarea):disabled {
   --field-bg: var(--surface-subtle);
   --field-fg: var(--text-subtle);
   --field-border: var(--border);
