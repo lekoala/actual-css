@@ -28,8 +28,8 @@
 }
 
 .navbar-brand:focus-visible {
-  outline: calc(var(--border-width) * 2) solid var(--focus);
-  outline-offset: 2px;
+  outline: var(--focus-outline);
+  outline-offset: var(--focus-outline-offset);
   border-radius: var(--radius-sm);
 }
 
@@ -61,8 +61,8 @@
 }
 
 .nav-link:focus-visible {
-  outline: calc(var(--border-width) * 2) solid var(--focus);
-  outline-offset: 2px;
+  outline: var(--focus-outline);
+  outline-offset: var(--focus-outline-offset);
 }
 
 .breadcrumb {
@@ -99,8 +99,8 @@
 }
 
 .breadcrumb a:focus-visible {
-  outline: calc(var(--border-width) * 2) solid var(--focus);
-  outline-offset: 2px;
+  outline: var(--focus-outline);
+  outline-offset: var(--focus-outline-offset);
   border-radius: var(--radius-sm);
 }
 
@@ -142,6 +142,6 @@
 }
 
 .page-link:focus-visible {
-  outline: calc(var(--border-width) * 2) solid var(--focus);
-  outline-offset: 2px;
+  outline: var(--focus-outline);
+  outline-offset: var(--focus-outline-offset);
 }

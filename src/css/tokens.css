@@ -41,6 +41,13 @@
   --duration: 150ms;
   --ease: ease;
 
+  /* Focus ring — shared by every interactive component's :focus-visible */
+  --focus-outline: calc(var(--border-width) * 2) solid var(--focus);
+  --focus-outline-offset: 2px;
+
+  /* Progress / meter track height */
+  --bar-height: 0.65rem;
+
   /* Controls */
   --control-size-sm: 2rem;
   --control-size-md: 2.5rem;

@@ -36,7 +36,7 @@
 }
 
 .tab:focus-visible {
-  outline: calc(var(--border-width) * 2) solid var(--focus);
+  outline: var(--focus-outline);
   outline-offset: -2px;
   border-radius: var(--radius-sm) var(--radius-sm) 0 0;
 }

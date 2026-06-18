@@ -12,8 +12,8 @@
 }
 
 .table-wrap:focus-visible {
-  outline: calc(var(--border-width) * 2) solid var(--focus);
-  outline-offset: 2px;
+  outline: var(--focus-outline);
+  outline-offset: var(--focus-outline-offset);
 }
 
 .table {
@@ -80,7 +80,7 @@
   -webkit-appearance: none;
   display: block;
   inline-size: 100%;
-  height: var(--bar-height, 0.65rem);
+  height: var(--bar-height);
   overflow: hidden;
   border: 0;
   border-radius: var(--radius-full);
@@ -94,19 +94,19 @@
 
 /* Progress */
 .progress::-webkit-progress-bar {
-  height: var(--bar-height, 0.65rem);
+  height: var(--bar-height);
   border-radius: var(--radius-full);
   background: var(--progress-track);
 }
 
 .progress::-webkit-progress-value {
-  height: var(--bar-height, 0.65rem);
+  height: var(--bar-height);
   border-radius: var(--radius-full);
   background: var(--progress-value);
 }
 
 .progress::-moz-progress-bar {
-  height: var(--bar-height, 0.65rem);
+  height: var(--bar-height);
   border-radius: var(--radius-full);
   background: var(--progress-value);
 }
@@ -162,31 +162,31 @@
 /* Meter */
 .meter::-webkit-meter-bar {
   -webkit-appearance: none;
-  height: var(--bar-height, 0.65rem);
+  height: var(--bar-height);
   border: 0;
   border-radius: var(--radius-full);
   background: var(--surface-subtle);
 }
 
 .meter::-webkit-meter-optimum-value {
-  height: var(--bar-height, 0.65rem);
+  height: var(--bar-height);
   border-radius: var(--radius-full);
   background: var(--success);
 }
 
 .meter::-webkit-meter-suboptimum-value {
-  height: var(--bar-height, 0.65rem);
+  height: var(--bar-height);
   border-radius: var(--radius-full);
   background: var(--warning);
 }
 
 .meter::-webkit-meter-even-less-good-value {
-  height: var(--bar-height, 0.65rem);
+  height: var(--bar-height);
   border-radius: var(--radius-full);
   background: var(--danger);
 }
 
 .meter::-moz-meter-bar {
-  height: var(--bar-height, 0.65rem);
+  height: var(--bar-height);
   border-radius: var(--radius-full);
 }
