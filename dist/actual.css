@@ -113,6 +113,9 @@ small {
   --shadow-popout: 0 .25rem .75rem hsl(var(--shadow-color) / .15);
   --duration: .15s;
   --ease: ease;
+  --focus-outline: calc(var(--border-width) * 2) solid var(--focus);
+  --focus-outline-offset: 2px;
+  --bar-height: .65rem;
   --control-size-sm: 2rem;
   --control-size-md: 2.5rem;
   --control-size-lg: 3rem;
@@ -824,8 +827,8 @@ small {
 }
 
 .btn:focus-visible {
-  outline: calc(var(--border-width) * 2) solid var(--focus);
-  outline-offset: 2px;
+  outline: var(--focus-outline);
+  outline-offset: var(--focus-outline-offset);
 }
 
 .btn.link:focus-visible {
@@ -933,8 +936,8 @@ small {
 }
 
 :where(a.badge, button.badge):focus-visible {
-  outline: calc(var(--border-width) * 2) solid var(--focus);
-  outline-offset: 2px;
+  outline: var(--focus-outline);
+  outline-offset: var(--focus-outline-offset);
 }
 
 button.badge {
@@ -957,7 +960,6 @@ button.badge:disabled, .badge[aria-disabled="true"] {
   color: var(--ui-fg, var(--text));
   border: var(--border-width) solid var(--ui-border, var(--border));
   border-radius: var(--radius-lg);
-  font-size: inherit;
 }
 
 .alert > * {
@@ -1106,8 +1108,8 @@ button.badge:disabled, .badge[aria-disabled="true"] {
 }
 
 .navbar-brand:focus-visible {
-  outline: calc(var(--border-width) * 2) solid var(--focus);
-  outline-offset: 2px;
+  outline: var(--focus-outline);
+  outline-offset: var(--focus-outline-offset);
   border-radius: var(--radius-sm);
 }
 
@@ -1138,8 +1140,8 @@ button.badge:disabled, .badge[aria-disabled="true"] {
 }
 
 .nav-link:focus-visible {
-  outline: calc(var(--border-width) * 2) solid var(--focus);
-  outline-offset: 2px;
+  outline: var(--focus-outline);
+  outline-offset: var(--focus-outline-offset);
 }
 
 .breadcrumb {
@@ -1176,8 +1178,8 @@ button.badge:disabled, .badge[aria-disabled="true"] {
 }
 
 .breadcrumb a:focus-visible {
-  outline: calc(var(--border-width) * 2) solid var(--focus);
-  outline-offset: 2px;
+  outline: var(--focus-outline);
+  outline-offset: var(--focus-outline-offset);
   border-radius: var(--radius-sm);
 }
 
@@ -1216,8 +1218,8 @@ button.badge:disabled, .badge[aria-disabled="true"] {
 }
 
 .page-link:focus-visible {
-  outline: calc(var(--border-width) * 2) solid var(--focus);
-  outline-offset: 2px;
+  outline: var(--focus-outline);
+  outline-offset: var(--focus-outline-offset);
 }
 
 .table-wrap {
@@ -1228,8 +1230,8 @@ button.badge:disabled, .badge[aria-disabled="true"] {
 }
 
 .table-wrap:focus-visible {
-  outline: calc(var(--border-width) * 2) solid var(--focus);
-  outline-offset: 2px;
+  outline: var(--focus-outline);
+  outline-offset: var(--focus-outline-offset);
 }
 
 .table {
@@ -1288,29 +1290,10 @@ button.badge:disabled, .badge[aria-disabled="true"] {
   color: var(--text);
 }
 
-.metric {
-  --metric-gap: var(--space-2);
-  --metric-value-size: 2rem;
-  gap: var(--metric-gap);
-  display: grid;
-}
-
-.metric > :where(data, strong) {
-  color: var(--text);
-  font-size: var(--metric-value-size);
-  font-weight: var(--font-weight-bold);
-  letter-spacing: -.02em;
-  line-height: 1.05;
-}
-
-.metric > .badge {
-  justify-self: start;
-}
-
 .progress, .meter {
   appearance: none;
   inline-size: 100%;
-  height: var(--bar-height, .65rem);
+  height: var(--bar-height);
   border-radius: var(--radius-full);
   background: var(--surface-subtle);
   border: 0;
@@ -1324,19 +1307,19 @@ button.badge:disabled, .badge[aria-disabled="true"] {
 }
 
 .progress::-webkit-progress-bar {
-  height: var(--bar-height, .65rem);
+  height: var(--bar-height);
   border-radius: var(--radius-full);
   background: var(--progress-track);
 }
 
 .progress::-webkit-progress-value {
-  height: var(--bar-height, .65rem);
+  height: var(--bar-height);
   border-radius: var(--radius-full);
   background: var(--progress-value);
 }
 
 .progress::-moz-progress-bar {
-  height: var(--bar-height, .65rem);
+  height: var(--bar-height);
   border-radius: var(--radius-full);
   background: var(--progress-value);
 }
@@ -1389,32 +1372,32 @@ button.badge:disabled, .badge[aria-disabled="true"] {
 
 .meter::-webkit-meter-bar {
   -webkit-appearance: none;
-  height: var(--bar-height, .65rem);
+  height: var(--bar-height);
   border-radius: var(--radius-full);
   background: var(--surface-subtle);
   border: 0;
 }
 
 .meter::-webkit-meter-optimum-value {
-  height: var(--bar-height, .65rem);
+  height: var(--bar-height);
   border-radius: var(--radius-full);
   background: var(--success);
 }
 
 .meter::-webkit-meter-suboptimum-value {
-  height: var(--bar-height, .65rem);
+  height: var(--bar-height);
   border-radius: var(--radius-full);
   background: var(--warning);
 }
 
 .meter::-webkit-meter-even-less-good-value {
-  height: var(--bar-height, .65rem);
+  height: var(--bar-height);
   border-radius: var(--radius-full);
   background: var(--danger);
 }
 
 .meter::-moz-meter-bar {
-  height: var(--bar-height, .65rem);
+  height: var(--bar-height);
   border-radius: var(--radius-full);
 }
 
@@ -1460,7 +1443,6 @@ button.badge:disabled, .badge[aria-disabled="true"] {
   -webkit-user-select: none;
   user-select: none;
   border: 0;
-  flex: none;
   place-items: center;
   padding: 0;
   line-height: 1;
@@ -1504,8 +1486,8 @@ button.avatar {
 }
 
 :where(a.avatar, button.avatar):focus-visible {
-  outline: calc(var(--border-width) * 2) solid var(--focus);
-  outline-offset: 2px;
+  outline: var(--focus-outline);
+  outline-offset: var(--focus-outline-offset);
 }
 
 .avatar:where(.primary, .secondary, .success, .warning, .danger, .neutral) {
@@ -1629,8 +1611,8 @@ button.avatar {
 }
 
 .accordion summary:focus-visible {
-  outline: calc(var(--border-width) * 2) solid var(--focus);
-  outline-offset: 2px;
+  outline: var(--focus-outline);
+  outline-offset: var(--focus-outline-offset);
 }
 
 .accordion summary::-webkit-details-marker {
@@ -1814,8 +1796,8 @@ dialog.drawer[data-side="end"] {
 }
 
 .drawer a:focus-visible, .drawer summary:focus-visible {
-  outline: calc(var(--border-width) * 2) solid var(--focus);
-  outline-offset: 2px;
+  outline: var(--focus-outline);
+  outline-offset: var(--focus-outline-offset);
 }
 
 .drawer details > .nav-list {
@@ -2387,8 +2369,8 @@ dialog.drawer[data-side="end"] {
 }
 
 .switch:focus-visible, .form input[role="switch"]:focus-visible {
-  outline: calc(var(--border-width) * 2) solid var(--focus);
-  outline-offset: 2px;
+  outline: var(--focus-outline);
+  outline-offset: var(--focus-outline-offset);
 }
 
 .switch:disabled, .form input[role="switch"]:disabled {
@@ -2491,7 +2473,7 @@ dialog.drawer[data-side="end"] {
 }
 
 .tab:focus-visible {
-  outline: calc(var(--border-width) * 2) solid var(--focus);
+  outline: var(--focus-outline);
   outline-offset: -2px;
   border-radius: var(--radius-sm) var(--radius-sm) 0 0;
 }

@@ -29,10 +29,9 @@
   text-decoration: none;
   vertical-align: middle;
   user-select: none;
-  flex: 0 0 auto;
 }
 
-.avatar> :first-child:not(:where(img, picture, .badge, .indicator)) {
+.avatar > :first-child:not(:where(img, picture, .badge, .indicator)) {
   display: inline-grid;
   place-items: center;
   inline-size: 100%;
@@ -41,8 +40,8 @@
   border-radius: inherit;
 }
 
-.avatar>img,
-.avatar>picture {
+.avatar > img,
+.avatar > picture {
   display: block;
   inline-size: 100%;
   block-size: 100%;
@@ -50,15 +49,15 @@
   border-radius: inherit;
 }
 
-.avatar>img,
-.avatar>picture>img {
+.avatar > img,
+.avatar > picture > img {
   inline-size: 100%;
   block-size: 100%;
   object-fit: cover;
   border-radius: inherit;
 }
 
-.avatar>picture>img {
+.avatar > picture > img {
   display: block;
 }
 
@@ -68,8 +67,8 @@ button.avatar {
 }
 
 :where(a.avatar, button.avatar):focus-visible {
-  outline: calc(var(--border-width) * 2) solid var(--focus);
-  outline-offset: 2px;
+  outline: var(--focus-outline);
+  outline-offset: var(--focus-outline-offset);
 }
 
 .avatar:where(.primary, .secondary, .success, .warning, .danger, .neutral) {
@@ -87,8 +86,8 @@ button.avatar {
   --avatar-font-size: var(--font-size-lg);
 }
 
-.avatar>.indicator,
-.avatar>.badge.indicator {
+.avatar > .indicator,
+.avatar > .badge.indicator {
   position: absolute;
   inset-block-end: 14.65%;
   inset-inline-end: 14.65%;
@@ -106,14 +105,14 @@ button.avatar {
   align-items: center;
 }
 
-:where([role="group"]:has(> .avatar + .avatar))>.avatar {
+:where([role="group"]:has(> .avatar + .avatar)) > .avatar {
   box-shadow: 0 0 0 var(--avatar-group-ring) var(--surface);
 }
 
-:where([role="group"]:has(> .avatar + .avatar))>.avatar+.avatar {
+:where([role="group"]:has(> .avatar + .avatar)) > .avatar + .avatar {
   margin-inline-start: var(--avatar-group-overlap);
 }
 
-:where([role="group"]:has(> .avatar + .avatar))>.avatar:is(:hover, :focus-visible) {
+:where([role="group"]:has(> .avatar + .avatar)) > .avatar:is(:hover, :focus-visible) {
   z-index: 1;
 }

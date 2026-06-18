@@ -70,8 +70,8 @@
 }
 
 .btn:focus-visible {
-  outline: calc(var(--border-width) * 2) solid var(--focus);
-  outline-offset: 2px;
+  outline: var(--focus-outline);
+  outline-offset: var(--focus-outline-offset);
 }
 
 .btn.link:focus-visible {
