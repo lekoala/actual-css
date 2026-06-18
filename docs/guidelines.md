@@ -28,3 +28,11 @@ still be functional without it
 - Every `color-mix()` declaration needs a flat fallback outside `@supports` (older browsers drop the whole property, not just the function)
 - Prefix all `@keyframes` with `actual-` to avoid collisions with consumer code
 - Each component must have a small surface and be easy to opt-out
+
+## Interactive states 
+
+- Interactive controls must be identifiable at rest, either by their own styling or by clear surrounding context
+- Interactive states are: rest, hover, active / pressed, focus-visible, disabled, selected / current / expanded (when applicable)
+- Do not rely on hover alone to reveal interactivity
+- Do not use color alone to communicate state
+- Use structure, border, background, iconography, and spacing consistently

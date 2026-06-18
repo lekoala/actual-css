@@ -1,5 +1,5 @@
 /*
- * Data primitives for tables, metrics, and related structured content.
+ * Data primitives for tables and related structured content.
  *
  * Keeps data UI neutral, content-first, and readable in nested themes using
  * shared surface and text tokens.
@@ -72,26 +72,6 @@
 
 .table code {
   color: var(--text);
-}
-
-.metric {
-  --metric-gap: var(--space-2);
-  --metric-value-size: 2rem;
-
-  display: grid;
-  gap: var(--metric-gap);
-}
-
-.metric > :where(data, strong) {
-  color: var(--text);
-  font-size: var(--metric-value-size);
-  font-weight: var(--font-weight-bold);
-  letter-spacing: -0.02em;
-  line-height: 1.05;
-}
-
-.metric > .badge {
-  justify-self: start;
 }
 
 .progress,

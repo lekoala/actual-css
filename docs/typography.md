@@ -83,7 +83,7 @@ The framework exposes a small set of weights:
 - `--font-weight` (400) — body default
 - `--font-weight-medium` (500) — slightly heavier than body, for nav links
 - `--font-weight-strong` (650) — emphasis, prose headings, badges, tabs, table headers
-- `--font-weight-bold` (700) — the strongest weight exposed, used by the metric value, the navbar brand, and the accordion summary
+- `--font-weight-bold` (700) — the strongest weight exposed, used by the navbar brand and the accordion summary
 
 No `--font-weight-light`. Light weights depend on the typeface, are rarely a good default, and add surface area without a recurring need.
 
