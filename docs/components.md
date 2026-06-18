@@ -333,7 +333,11 @@ Links:
 <button class="btn ghost" type="button">Ghost</button>
 <a class="btn primary" href="/account">Account</a>
 <button class="btn link" type="button">Button as link</button>
-<button class="btn primary" type="button" aria-busy="true" disabled>Loading</button>
+<button class="btn primary" type="button" aria-busy="true" disabled>
+  <span class="spinner" aria-hidden="true"></span>
+  Loading
+</button>
+<button class="btn primary" type="button" aria-busy="true">In progress</button>
 <button class="btn" type="button" disabled>Disabled</button>
 ```
 
@@ -350,7 +354,10 @@ Links:
 <button class="btn sm" type="button">Small</button>
 <button class="btn lg" type="button">Large</button>
 <button class="btn" type="button"><i class="ti ti-star"></i> With an icon</button>
-<button class="btn primary loading" aria-busy="true">Save</button>
+<button class="btn primary" type="button" aria-busy="true" disabled>
+  <span class="spinner" aria-hidden="true"></span>
+  Saving…
+</button>
 ```
 
 Links:
@@ -654,22 +661,6 @@ Links:
 Links:
 - https://oat.ink/components/#meter
 
-
-## Metric
-
-> Labeled numeric value with an optional trend indicator.
-
-- Use `<article class="metric">` for a labeled numeric value with an optional trend.
-- Use `<data value="...">` when the value is machine-readable, `<strong>` for plain text.
-- The badge or status indicator can use `.badge` for consistent intent colors.
-
-```html
-<article class="card metric">
-  <span class="muted">Revenue</span>
-  <data value="42128">$42,128</data>
-  <span class="badge success soft">+12.5% vs last month</span>
-</article>
-```
 
 ## Pagination
 
