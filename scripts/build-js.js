@@ -7,7 +7,7 @@ import { existsSync } from "node:fs";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, "..");
 const DIST = join(ROOT, "dist");
-const BUILDS = join(ROOT, "builds");
+const ENTRY = join(ROOT, "src", "js", "index.js");
 
 function formatBytes(bytes) {
   if (bytes < 1024) return `${bytes} B`;
@@ -26,9 +26,8 @@ async function build() {
     }
   }
 
-  const entry = join(BUILDS, "full.js");
   const result = await Bun.build({
-    entrypoints: [entry],
+    entrypoints: [ENTRY],
     outdir: DIST,
     minify: true,
     target: "browser",
