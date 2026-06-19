@@ -34,9 +34,7 @@
     "./package.json": "./package.json"
   },
   "main": "./dist/actual.js",
-  "sideEffects": [
-    "*.css"
-  ],
+  "sideEffects": true,
   "files": [
     "dist",
     "src/css",

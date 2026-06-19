@@ -112,7 +112,7 @@ Links:
 - Use real tab semantics when panels switch in place.
 - Use normal links and `aria-current="page"` for page navigation that only looks like tabs.
 - JavaScript owns roving `tabindex`, `aria-selected`, `hidden`, and keyboard behavior.
-- Support Left/Right, Home/End, Enter/Space when activation is manual.
+- Left/Right and Home/End select tabs. Down moves focus into the selected panel.
 - `.tabs` styles the tab list. `.tab` styles each trigger.
 
 ```html
@@ -146,13 +146,13 @@ Links:
     </button>
   </div>
 
-  <section role="tabpanel" id="panel-general" aria-labelledby="tab-general" class="py">
+  <section role="tabpanel" id="panel-general" aria-labelledby="tab-general" tabindex="-1" class="py">
     General content
   </section>
-  <section role="tabpanel" id="panel-security" aria-labelledby="tab-security" hidden class="py">
+  <section role="tabpanel" id="panel-security" aria-labelledby="tab-security" tabindex="-1" hidden class="py">
     Security content
   </section>
-  <section role="tabpanel" id="panel-billing" aria-labelledby="tab-billing" hidden class="py">
+  <section role="tabpanel" id="panel-billing" aria-labelledby="tab-billing" tabindex="-1" hidden class="py">
     Billing content
   </section>
 </div>
