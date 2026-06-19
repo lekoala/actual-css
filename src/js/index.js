@@ -1,21 +1,13 @@
 /*
  * Actual CSS — JavaScript runtime.
  *
- * A single delegated event system initializes all interactive components
- * on DOMContentLoaded. Zero setup required from consumers: include the
- * CSS, include this JS, write semantic HTML with ARIA attributes.
+ * Each module self-registers via observer: importing the runtime enables
+ * all behaviors. No DOMContentLoaded ceremony, no init calls. Include
+ * the CSS, include this JS, write semantic HTML with ARIA attributes.
+ * Injected content wires automatically; removal cleans up automatically.
  */
 
-import { initDropdowns } from "./dropdown.js";
-import { initTabs } from "./tab.js";
-import { initTooltips } from "./tooltip.js";
-import { initScrollspy } from "./scrollspy.js";
-
-if (typeof document !== "undefined") {
-  document.addEventListener("DOMContentLoaded", () => {
-    initDropdowns();
-    initTabs();
-    initTooltips();
-    initScrollspy();
-  });
-}
+import "./dropdown.js";
+import "./tab.js";
+import "./tooltip.js";
+import "./scrollspy.js";

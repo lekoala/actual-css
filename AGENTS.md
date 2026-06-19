@@ -11,6 +11,8 @@ Always think about ease of maintenance and low developer burden.
 
 Elegance is key.
 
+This library has not reached 1.0 and can make as many breaking changes as required to reach the proper shape.
+
 ## Tools
 
 - Do not lint yourself, this is done by config and use biome

@@ -6,51 +6,65 @@
  *
  * Uses IntersectionObserver. Falls back gracefully: links still work
  * even if IntersectionObserver isn't available.
+ *
+ * Self-registers via observer: injected .scrollspy navs wire automatically.
+ * Cleanup is handled by disconnecting the IntersectionObserver on removal.
+ * Root-level support: a nav's link→section map is built at connect time;
+ * links added to an existing nav after connect are not picked up.
  */
 
-export function initScrollspy() {
-  if (typeof IntersectionObserver === "undefined") return;
+import observer from "./observer.js";
 
-  const navs = document.querySelectorAll(".scrollspy");
+const observers = new WeakMap();
 
-  for (const nav of navs) {
-    if (nav._ssInit) continue;
-    nav._ssInit = true;
+function setupNav(nav) {
+  const links = [...nav.querySelectorAll("a[href^='#']")];
+  if (!links.length) return;
 
-    const links = [...nav.querySelectorAll("a[href^='#']")];
-    if (!links.length) continue;
+  const sections = [];
+  for (const link of links) {
+    const id = link.getAttribute("href").slice(1);
+    const section = document.getElementById(id);
+    if (section) sections.push({ link, section });
+  }
+  if (!sections.length) return;
 
-    const sections = [];
-    for (const link of links) {
-      const id = link.getAttribute("href").slice(1);
-      const section = document.getElementById(id);
-      if (section) sections.push({ link, section });
-    }
-    if (!sections.length) continue;
+  const io = new IntersectionObserver(
+    (entries) => {
+      const visible = entries
+        .filter((e) => e.isIntersecting)
+        .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        // find the first visible section (highest in the viewport)
-        const visible = entries
-          .filter((e) => e.isIntersecting)
-          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
-
-        if (visible.length) {
-          const id = visible[0].target.id;
-          for (const { link } of sections) {
-            if (link.getAttribute("href") === `#${id}`) {
-              link.setAttribute("aria-current", "location");
-            } else {
-              link.removeAttribute("aria-current");
-            }
+      if (visible.length) {
+        const id = visible[0].target.id;
+        for (const { link } of sections) {
+          if (link.getAttribute("href") === `#${id}`) {
+            link.setAttribute("aria-current", "location");
+          } else {
+            link.removeAttribute("aria-current");
           }
         }
-      },
-      { rootMargin: "-20% 0px -70% 0px", threshold: 0 },
-    );
+      }
+    },
+    { rootMargin: "-20% 0px -70% 0px", threshold: 0 },
+  );
 
-    for (const { section } of sections) {
-      observer.observe(section);
-    }
+  for (const { section } of sections) {
+    io.observe(section);
   }
+
+  observers.set(nav, io);
+}
+
+function teardownNav(nav) {
+  const io = observers.get(nav);
+  if (io) io.disconnect();
+  observers.delete(nav);
+}
+
+if (typeof document !== "undefined" && typeof IntersectionObserver !== "undefined") {
+  observer([".scrollspy"], (nav, connected) => {
+    if (connected) setupNav(nav);
+    else teardownNav(nav);
+  });
 }

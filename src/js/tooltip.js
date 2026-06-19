@@ -162,7 +162,3 @@ if (typeof document !== "undefined") {
     observer.observe(document.documentElement, { childList: true, subtree: true });
   }
 }
-
-export function initTooltips() {
-  // lazy — nothing to scan
-}
