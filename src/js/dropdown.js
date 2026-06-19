@@ -9,7 +9,7 @@
  * Keyboard: ArrowUp/Down, Home/End, Enter (app-menu only)
  * Dismiss:  outside click, Escape with focus return
  *
- * Self-registers via observer: injected dropdowns wire automatically.
+ * Self-registers via enhance: injected dropdowns wire automatically.
  * Menu listeners + floating tracking attach lazily on first open.
  * Cleanup is handled by AbortController per trigger and per menu; open
  * state and floating.track() are released on disconnect.
@@ -17,7 +17,7 @@
 
 import { track, reposition } from "./floating.js";
 import { firstItem, lastItem, nextItem } from "./keys.js";
-import observer from "./observer.js";
+import enhance from "./enhance.js";
 
 const openMenus = new Set();
 let activeMenu = null;
@@ -292,17 +292,14 @@ function disconnectMenu(menu) {
 // ── Self-registration ──────────────────────────────────
 
 if (typeof document !== "undefined") {
-  observer(
-    ['[aria-haspopup="menu"]', ".dropdown > [aria-expanded][aria-controls]", ".dropdown-menu"],
-    (el, connected, selector) => {
-      if (selector === ".dropdown-menu") {
-        if (connected) connectMenu(el);
-        else disconnectMenu(el);
-      } else if (connected) {
-        connectTrigger(el);
-      } else {
-        disconnectTrigger(el);
-      }
+  enhance({
+    '[aria-haspopup="menu"], .dropdown > [aria-expanded][aria-controls]': (trigger) => {
+      connectTrigger(trigger);
+      return () => disconnectTrigger(trigger);
     },
-  );
+    ".dropdown-menu": (menu) => {
+      connectMenu(menu);
+      return () => disconnectMenu(menu);
+    },
+  });
 }

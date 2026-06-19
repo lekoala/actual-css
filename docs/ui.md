@@ -176,6 +176,7 @@ Links:
 - https://css-tricks.com/pure-css-tabs-with-details-grid-and-subgrid/
 - https://basecoatui.com/components/tabs/
 - https://daisyui.com/components/tab/
+- https://inclusive-components.design/tabbed-interfaces/
 
 ## Tooltip
 
