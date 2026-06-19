@@ -21,6 +21,7 @@
  */
 
 import { track, reposition } from "./floating.js";
+import enhance from "./enhance.js";
 
 let uid = 0;
 const tipMap = new WeakMap();
@@ -148,17 +149,9 @@ if (typeof document !== "undefined") {
   document.addEventListener("mouseover", handleTriggerIntent);
   document.addEventListener("focusin", handleTriggerIntent);
 
-  if (typeof MutationObserver !== "undefined") {
-    const observer = new MutationObserver((mutations) => {
-      for (const mutation of mutations) {
-        for (const node of mutation.removedNodes) {
-          if (!node.querySelectorAll) continue;
-          if (node.matches?.(SEL)) cleanupTrigger(node);
-          for (const trigger of node.querySelectorAll(SEL)) cleanupTrigger(trigger);
-        }
-      }
-    });
-
-    observer.observe(document.documentElement, { childList: true, subtree: true });
-  }
+  // No-op at connect: discovery is lazy via mouseover/focusin.
+  // Cleanup is handled by the sweep when the trigger leaves the DOM.
+  enhance({
+    [SEL]: (trigger) => () => cleanupTrigger(trigger),
+  });
 }

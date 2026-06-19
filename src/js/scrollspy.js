@@ -7,15 +7,13 @@
  * Uses IntersectionObserver. Falls back gracefully: links still work
  * even if IntersectionObserver isn't available.
  *
- * Self-registers via observer: injected .scrollspy navs wire automatically.
- * Cleanup is handled by disconnecting the IntersectionObserver on removal.
+ * Self-registers via enhance: injected .scrollspy navs wire automatically.
+ * Cleanup is the IntersectionObserver.disconnect() returned to enhance.
  * Root-level support: a nav's link→section map is built at connect time;
  * links added to an existing nav after connect are not picked up.
  */
 
-import observer from "./observer.js";
-
-const observers = new WeakMap();
+import enhance from "./enhance.js";
 
 function setupNav(nav) {
   const links = [...nav.querySelectorAll("a[href^='#']")];
@@ -53,18 +51,11 @@ function setupNav(nav) {
     io.observe(section);
   }
 
-  observers.set(nav, io);
-}
-
-function teardownNav(nav) {
-  const io = observers.get(nav);
-  if (io) io.disconnect();
-  observers.delete(nav);
+  return () => io.disconnect();
 }
 
 if (typeof document !== "undefined" && typeof IntersectionObserver !== "undefined") {
-  observer([".scrollspy"], (nav, connected) => {
-    if (connected) setupNav(nav);
-    else teardownNav(nav);
+  enhance({
+    ".scrollspy": setupNav,
   });
 }

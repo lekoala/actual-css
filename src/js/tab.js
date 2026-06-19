@@ -5,19 +5,17 @@
  * Tab:       [role="tab"]  with aria-selected, aria-controls, id, tabindex
  * Panel:     [role="tabpanel"]  with id matching aria-controls
  *
- * Keyboard:  ArrowLeft/Right, Home/End (select tab)
+ * Keyboard:  ArrowLeft/Right, Home/End (select tab, wrapping)
  *            ArrowDown (focus selected panel)
  *
- * Self-registers via observer: injected tablists wire automatically.
+ * Self-registers via enhance: injected tablists wire automatically.
  * The tab→panel map is rebuilt from the live tablist on each interaction,
  * so tabs added after connect are picked up with no extra work.
- * Cleanup is handled by AbortController per tablist.
+ * Cleanup is the AbortController.abort() returned to enhance.
  */
 
-import observer from "./observer.js";
+import enhance from "./enhance.js";
 import { firstItem, lastItem, nextItem } from "./keys.js";
-
-const controllers = new WeakMap();
 
 function tabsOf(list) {
   return [...list.querySelectorAll('[role="tab"]')];
@@ -134,17 +132,13 @@ function onClick(e) {
 }
 
 if (typeof document !== "undefined") {
-  observer(['[role="tablist"]'], (list, connected) => {
-    if (connected) {
+  enhance({
+    '[role="tablist"]': (list) => {
       const controller = new AbortController();
-      controllers.set(list, controller);
       initialize(list);
       list.addEventListener("click", onClick, { signal: controller.signal });
       list.addEventListener("keydown", onKeydown, { signal: controller.signal });
-    } else {
-      const controller = controllers.get(list);
-      if (controller) controller.abort();
-      controllers.delete(list);
-    }
+      return () => controller.abort();
+    },
   });
 }
