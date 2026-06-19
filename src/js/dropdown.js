@@ -51,13 +51,6 @@ function openMenu(menu, trigger) {
   activeMenu = menu;
   menu._trigger = trigger;
   reposition(trigger, menu, { placement: "bottom-start", distance: 4, flip: true, shift: true });
-
-  // focus first menuitem for app-menus
-  const isMenu = trigger.getAttribute("aria-haspopup") === "menu";
-  if (isMenu) {
-    const first = menu.querySelector('[role="menuitem"]');
-    requestAnimationFrame(() => first?.focus());
-  }
 }
 
 function closeMenu(menu) {
@@ -79,10 +72,20 @@ function getItems(menu) {
   return [...menu.querySelectorAll('[role="menuitem"]:not([disabled]):not([aria-disabled="true"])')];
 }
 
+function focusItem(menu, index) {
+  const items = getItems(menu);
+  if (!items.length || menu.hidden) return;
+  items[index]?.focus();
+}
+
 function navMenu(menu, dir) {
   const items = getItems(menu);
   if (!items.length) return;
   const idx = items.indexOf(document.activeElement);
+  if (idx === -1) {
+    items[dir > 0 ? 0 : items.length - 1].focus();
+    return;
+  }
   let next = idx + dir;
   if (next >= items.length) next = 0;
   if (next < 0) next = items.length - 1;
@@ -128,6 +131,47 @@ function wireTrigger(trigger, menu, isAppMenu) {
   });
 
   if (isAppMenu) {
+    trigger.addEventListener("keydown", (e) => {
+      const items = getItems(menu);
+      if (!items.length) return;
+
+      switch (e.key) {
+        case "ArrowDown":
+          e.preventDefault();
+          if (menu.hidden) openMenu(menu, trigger);
+          focusItem(menu, 0);
+          break;
+        case "ArrowUp":
+          e.preventDefault();
+          if (menu.hidden) openMenu(menu, trigger);
+          focusItem(menu, items.length - 1);
+          break;
+        case "Home":
+          e.preventDefault();
+          if (menu.hidden) openMenu(menu, trigger);
+          focusItem(menu, 0);
+          break;
+        case "End":
+          e.preventDefault();
+          if (menu.hidden) openMenu(menu, trigger);
+          focusItem(menu, items.length - 1);
+          break;
+        case "Enter":
+        case " ":
+          e.preventDefault();
+          if (menu.hidden) {
+            openMenu(menu, trigger);
+            focusItem(menu, 0);
+          } else {
+            closeMenu(menu);
+          }
+          break;
+        case "Tab":
+          if (!menu.hidden) closeMenu(menu);
+          break;
+      }
+    });
+
     menu.addEventListener("keydown", (e) => {
       const items = getItems(menu);
       if (!items.length) return;

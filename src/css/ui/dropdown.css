@@ -54,9 +54,6 @@
 .dropdown-menu > button:hover,
 .dropdown-menu > a:hover,
 .dropdown-menu > [role="menuitem"]:hover,
-.dropdown-menu > button:focus,
-.dropdown-menu > a:focus,
-.dropdown-menu > [role="menuitem"]:focus,
 .dropdown-menu > button:focus-visible,
 .dropdown-menu > a:focus-visible,
 .dropdown-menu > [role="menuitem"]:focus-visible {
