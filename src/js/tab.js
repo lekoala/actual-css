@@ -15,6 +15,7 @@
  */
 
 import observer from "./observer.js";
+import { firstItem, lastItem, nextItem } from "./keys.js";
 
 const controllers = new WeakMap();
 
@@ -43,6 +44,7 @@ function makePanelFocusable(panel) {
 }
 
 function activate(tab) {
+  if (!tab) return;
   const list = tab.closest('[role="tablist"]');
   if (!list) return;
   const tabs = tabsOf(list);
@@ -65,6 +67,7 @@ function activate(tab) {
 }
 
 function activateAndFocus(tab) {
+  if (!tab) return;
   activate(tab);
   tab.focus();
 }
@@ -83,28 +86,26 @@ function onKeydown(e) {
   if (!list) return;
 
   const tabs = tabsOf(list);
-  const idx = tabs.indexOf(tab);
-  if (idx === -1) return;
   let next;
 
   switch (e.key) {
     case "ArrowRight":
       e.preventDefault();
-      next = tabs[idx + 1];
+      next = nextItem(tabs, tab, 1, { wrap: true });
       if (next) activateAndFocus(next);
       break;
     case "ArrowLeft":
       e.preventDefault();
-      next = tabs[idx - 1];
+      next = nextItem(tabs, tab, -1, { wrap: true });
       if (next) activateAndFocus(next);
       break;
     case "Home":
       e.preventDefault();
-      activateAndFocus(tabs[0]);
+      activateAndFocus(firstItem(tabs));
       break;
     case "End":
       e.preventDefault();
-      activateAndFocus(tabs[tabs.length - 1]);
+      activateAndFocus(lastItem(tabs));
       break;
     case "ArrowDown": {
       e.preventDefault();

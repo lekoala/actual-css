@@ -16,6 +16,7 @@
  */
 
 import { track, reposition } from "./floating.js";
+import { firstItem, lastItem, nextItem } from "./keys.js";
 import observer from "./observer.js";
 
 const openMenus = new Set();
@@ -122,24 +123,20 @@ function getItems(menu) {
   return [...menu.querySelectorAll('[role="menuitem"]:not([disabled]):not([aria-disabled="true"])')];
 }
 
-function focusItem(menu, index) {
+function focusMenuItem(menu, item) {
+  if (menu.hidden) return;
+  item?.focus();
+}
+
+function menuItemAt(menu, edge) {
   const items = getItems(menu);
-  if (!items.length || menu.hidden) return;
-  items[index]?.focus();
+  return edge === "last" ? lastItem(items) : firstItem(items);
 }
 
 function navMenu(menu, dir) {
   const items = getItems(menu);
   if (!items.length) return;
-  const idx = items.indexOf(document.activeElement);
-  if (idx === -1) {
-    items[dir > 0 ? 0 : items.length - 1].focus();
-    return;
-  }
-  let next = idx + dir;
-  if (next >= items.length) next = 0;
-  if (next < 0) next = items.length - 1;
-  items[next].focus();
+  nextItem(items, document.activeElement, dir, { wrap: true })?.focus();
 }
 
 // ── Event handlers ─────────────────────────────────────
@@ -168,29 +165,29 @@ function onTriggerKeydown(e) {
     case "ArrowDown":
       e.preventDefault();
       if (menu.hidden) openMenu(menu, trigger);
-      focusItem(menu, 0);
+      focusMenuItem(menu, menuItemAt(menu, "first"));
       break;
     case "ArrowUp":
       e.preventDefault();
       if (menu.hidden) openMenu(menu, trigger);
-      focusItem(menu, items.length - 1);
+      focusMenuItem(menu, menuItemAt(menu, "last"));
       break;
     case "Home":
       e.preventDefault();
       if (menu.hidden) openMenu(menu, trigger);
-      focusItem(menu, 0);
+      focusMenuItem(menu, menuItemAt(menu, "first"));
       break;
     case "End":
       e.preventDefault();
       if (menu.hidden) openMenu(menu, trigger);
-      focusItem(menu, items.length - 1);
+      focusMenuItem(menu, menuItemAt(menu, "last"));
       break;
     case "Enter":
     case " ":
       e.preventDefault();
       if (menu.hidden) {
         openMenu(menu, trigger);
-        focusItem(menu, 0);
+        focusMenuItem(menu, menuItemAt(menu, "first"));
       } else {
         closeMenu(menu);
       }
@@ -217,11 +214,11 @@ function onMenuKeydown(e) {
       break;
     case "Home":
       e.preventDefault();
-      items[0].focus();
+      firstItem(items)?.focus();
       break;
     case "End":
       e.preventDefault();
-      items[items.length - 1].focus();
+      lastItem(items)?.focus();
       break;
     case "Tab":
       closeMenu(menu);

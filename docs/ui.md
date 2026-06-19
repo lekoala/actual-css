@@ -112,7 +112,7 @@ Links:
 - Use real tab semantics when panels switch in place.
 - Use normal links and `aria-current="page"` for page navigation that only looks like tabs.
 - JavaScript owns roving `tabindex`, `aria-selected`, `hidden`, and keyboard behavior.
-- Left/Right and Home/End select tabs. Down moves focus into the selected panel.
+- Left/Right select tabs and wrap at the ends. Home/End jump to first/last. Down moves focus into the selected panel.
 - `.tabs` styles the tab list. `.tab` styles each trigger.
 
 ```html
