@@ -102,6 +102,8 @@ Links:
 - https://daisyui.com/components/dropdown/
 - https://www.w3.org/WAI/ARIA/apg/patterns/menu-button/
 - https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Global_attributes/popover
+- https://getbootstrap.com/docs/5.3/components/dropdowns/#overview
+- https://getbootstrap.com/docs/5.3/components/popovers/#overview
 
 ## Tabs
 
