@@ -9,6 +9,7 @@
 
 import "./dropdown.js";
 import "./context-menu.js";
+import "./dialog.js";
 import "./tab.js";
 import "./tooltip.js";
 import "./scrollspy.js";

@@ -22,24 +22,27 @@
   <section class="component-section">
     <header class="component-header">
       <h1>Dialog</h1>
-      <p>Modal overlay for focused tasks, confirmations, or forms, built on the native dialog element.</p>
+      <p>Modal overlay for focused tasks, confirmations, or forms, built on the native `&lt;dialog&gt;` element.</p>
     </header>
         <div class="component-prose">
-      <ul>
-  <li>Use native <code>&lt;dialog class=&quot;dialog&quot;&gt;</code>.</li>
-  <li><code>commandfor</code>, <code>command</code>, and <code>closedby</code> are modern enhancements.</li>
-  <li>Small JavaScript helpers can provide fallback opening, closing, and return-value handling.</li>
-  <li>Dialogs must remain scrollbar aware.</li>
-</ul>
+      <p>Dialogs use the platform-native <code>&lt;dialog class=&quot;dialog&quot;&gt;</code> element. Modern browsers can open and close dialogs declaratively with <code>commandfor</code> and <code>command</code>. The optional JavaScript runtime progressively enhances dialogs with fallback triggers, animation-aware closing, backdrop dismissal, return-value handling, and scrollbar awareness.</p>
+<h3>Native-first dialog</h3>
+<p>Use <code>command=&quot;show-modal&quot;</code> to open a modal dialog. Use <code>command=&quot;request-close&quot;</code> for cancel-style buttons so close requests go through the dialog’s cancel lifecycle. This allows JavaScript to intercept the close request for exit animations. Use <code>closedby=&quot;any&quot;</code> as a modern enhancement for light dismiss. Add <code>data-dialog-dismissible</code> when using the optional JavaScript runtime so the same intent is available as a fallback.</p>
     </div>
     <section class="component-section">
       <div class="example-group">
         <div class="example-render">
-          <button class="btn" type="button" commandfor="demo-dialog" command="show-modal">
+          <button class="btn"
+        type="button"
+        commandfor="demo-dialog"
+        command="show-modal">
   Open dialog
 </button>
 
-<dialog class="dialog" id="demo-dialog" closedby="any">
+<dialog class="dialog"
+        id="demo-dialog"
+        closedby="any"
+        data-dialog-dismissible>
   <form method="dialog">
     <header>
       <h3>Title</h3>
@@ -52,18 +55,33 @@
     </div>
 
     <footer>
-      <button class="btn outline" type="button" commandfor="demo-dialog" command="close">Cancel</button>
-      <button class="btn primary" value="confirm">Confirm</button>
+      <button class="btn outline"
+              type="button"
+              commandfor="demo-dialog"
+              command="request-close">
+        Cancel
+      </button>
+
+      <button class="btn primary"
+              value="confirm">
+        Confirm
+      </button>
     </footer>
   </form>
 </dialog>
         </div>
         <div class="example-code">
-          <pre><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>button</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>btn<span class="token punctuation">"</span></span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>button<span class="token punctuation">"</span></span> <span class="token attr-name">commandfor</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>demo-dialog<span class="token punctuation">"</span></span> <span class="token attr-name">command</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>show-modal<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+          <pre><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>button</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>btn<span class="token punctuation">"</span></span>
+        <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>button<span class="token punctuation">"</span></span>
+        <span class="token attr-name">commandfor</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>demo-dialog<span class="token punctuation">"</span></span>
+        <span class="token attr-name">command</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>show-modal<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
   Open dialog
 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">></span></span>
 
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dialog</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>dialog<span class="token punctuation">"</span></span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>demo-dialog<span class="token punctuation">"</span></span> <span class="token attr-name">closedby</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>any<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dialog</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>dialog<span class="token punctuation">"</span></span>
+        <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>demo-dialog<span class="token punctuation">"</span></span>
+        <span class="token attr-name">closedby</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>any<span class="token punctuation">"</span></span>
+        <span class="token attr-name">data-dialog-dismissible</span><span class="token punctuation">></span></span>
   <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>form</span> <span class="token attr-name">method</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>dialog<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
     <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>header</span><span class="token punctuation">></span></span>
       <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>h3</span><span class="token punctuation">></span></span>Title<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>h3</span><span class="token punctuation">></span></span>
@@ -76,14 +94,196 @@
     <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
 
     <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>footer</span><span class="token punctuation">></span></span>
-      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>button</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>btn outline<span class="token punctuation">"</span></span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>button<span class="token punctuation">"</span></span> <span class="token attr-name">commandfor</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>demo-dialog<span class="token punctuation">"</span></span> <span class="token attr-name">command</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>close<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Cancel<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">></span></span>
-      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>button</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>btn primary<span class="token punctuation">"</span></span> <span class="token attr-name">value</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>confirm<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Confirm<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">></span></span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>button</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>btn outline<span class="token punctuation">"</span></span>
+              <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>button<span class="token punctuation">"</span></span>
+              <span class="token attr-name">commandfor</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>demo-dialog<span class="token punctuation">"</span></span>
+              <span class="token attr-name">command</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>request-close<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+        Cancel
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">></span></span>
+
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>button</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>btn primary<span class="token punctuation">"</span></span>
+              <span class="token attr-name">value</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>confirm<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+        Confirm
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">></span></span>
     <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>footer</span><span class="token punctuation">></span></span>
   <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>form</span><span class="token punctuation">></span></span>
 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dialog</span><span class="token punctuation">></span></span></code></pre>
         </div>
       </div>
     </section>
+    <div class="component-prose">
+      <h3>JavaScript-enhanced dialog</h3>
+<p>Use <code>data-dialog</code> when you want the framework runtime to provide fallback opening, focus restoration, scrollbar awareness, and animation-aware close handling.</p>
+    </div>
+    <section class="component-section">
+      <div class="example-group">
+        <div class="example-render">
+          <button class="btn"
+        type="button"
+        data-dialog="example-dialog">
+  Open dialog
+</button>
+
+<dialog class="dialog"
+        id="example-dialog"
+        data-dialog-dismissible>
+  <header>
+    <h3>Title</h3>
+    <p>This is a dialog description.</p>
+  </header>
+
+  <div>
+    <p>Dialog content goes here.</p>
+  </div>
+
+  <footer>
+    <button class="btn outline"
+            type="button"
+            data-dialog-close>
+      Cancel
+    </button>
+
+    <button class="btn primary"
+            type="button"
+            data-dialog-close
+            value="confirm">
+      Confirm
+    </button>
+  </footer>
+</dialog>
+        </div>
+        <div class="example-code">
+          <pre><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>button</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>btn<span class="token punctuation">"</span></span>
+        <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>button<span class="token punctuation">"</span></span>
+        <span class="token attr-name">data-dialog</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>example-dialog<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+  Open dialog
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">></span></span>
+
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dialog</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>dialog<span class="token punctuation">"</span></span>
+        <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>example-dialog<span class="token punctuation">"</span></span>
+        <span class="token attr-name">data-dialog-dismissible</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>header</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>h3</span><span class="token punctuation">></span></span>Title<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>h3</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">></span></span>This is a dialog description.<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>p</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>header</span><span class="token punctuation">></span></span>
+
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">></span></span>Dialog content goes here.<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>p</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
+
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>footer</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>button</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>btn outline<span class="token punctuation">"</span></span>
+            <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>button<span class="token punctuation">"</span></span>
+            <span class="token attr-name">data-dialog-close</span><span class="token punctuation">></span></span>
+      Cancel
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">></span></span>
+
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>button</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>btn primary<span class="token punctuation">"</span></span>
+            <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>button<span class="token punctuation">"</span></span>
+            <span class="token attr-name">data-dialog-close</span>
+            <span class="token attr-name">value</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>confirm<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+      Confirm
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>footer</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dialog</span><span class="token punctuation">></span></span></code></pre>
+        </div>
+      </div>
+    </section>
+    <div class="component-prose">
+      <h3>JavaScript options</h3>
+<p>Add options directly on the dialog element.</p>
+    </div>
+    <section class="component-section">
+      <div class="example-group">
+        <div class="example-render">
+          <dialog class="dialog"
+        id="settings-dialog"
+        data-dialog-dismissible
+        data-dialog-animate="true">
+  ...
+</dialog>
+        </div>
+        <div class="example-code">
+          <pre><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dialog</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>dialog<span class="token punctuation">"</span></span>
+        <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>settings-dialog<span class="token punctuation">"</span></span>
+        <span class="token attr-name">data-dialog-dismissible</span>
+        <span class="token attr-name">data-dialog-animate</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>true<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+  ...
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dialog</span><span class="token punctuation">></span></span></code></pre>
+        </div>
+      </div>
+    </section>
+    <div class="component-prose">
+      <p>Available options:</p>
+<ul>
+  <li><code>data-dialog-dismissible</code> enables backdrop click dismissal.</li>
+  <li><code>data-dialog-modal=&quot;false&quot;</code> opens with <code>show()</code> instead of <code>showModal()</code>.</li>
+  <li><code>data-dialog-animate=&quot;false&quot;</code> disables animation-aware closing.</li>
+</ul>
+<h3>Animation</h3>
+<p>The runtime adds <code>.is-closing</code> while a dialog is closing. The actual <code>dialog.close()</code> call is delayed until the active transition or animation completes.</p>
+    </div>
+    <section class="component-section">
+      <h2>CSS</h2>
+      <div class="example-group">
+        <div class="example-code">
+          <pre><code class="language-css"><span class="token selector">.dialog</span> <span class="token punctuation">{</span>
+  <span class="token property">opacity</span><span class="token punctuation">:</span> 0<span class="token punctuation">;</span>
+  <span class="token property">scale</span><span class="token punctuation">:</span> 0.96<span class="token punctuation">;</span>
+  <span class="token property">translate</span><span class="token punctuation">:</span> 0 0.5rem<span class="token punctuation">;</span>
+
+  <span class="token property">transition</span><span class="token punctuation">:</span>
+    opacity 160ms ease<span class="token punctuation">,</span>
+    scale 160ms ease<span class="token punctuation">,</span>
+    translate 160ms ease<span class="token punctuation">,</span>
+    display 160ms allow-discrete<span class="token punctuation">,</span>
+    overlay 160ms allow-discrete<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token selector">.dialog[open]</span> <span class="token punctuation">{</span>
+  <span class="token property">opacity</span><span class="token punctuation">:</span> 1<span class="token punctuation">;</span>
+  <span class="token property">scale</span><span class="token punctuation">:</span> 1<span class="token punctuation">;</span>
+  <span class="token property">translate</span><span class="token punctuation">:</span> 0 0<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token selector">.dialog.is-closing</span> <span class="token punctuation">{</span>
+  <span class="token property">opacity</span><span class="token punctuation">:</span> 0<span class="token punctuation">;</span>
+  <span class="token property">scale</span><span class="token punctuation">:</span> 0.96<span class="token punctuation">;</span>
+  <span class="token property">translate</span><span class="token punctuation">:</span> 0 0.5rem<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token atrule"><span class="token rule">@starting-style</span></span> <span class="token punctuation">{</span>
+  <span class="token selector">.dialog[open]</span> <span class="token punctuation">{</span>
+    <span class="token property">opacity</span><span class="token punctuation">:</span> 0<span class="token punctuation">;</span>
+    <span class="token property">scale</span><span class="token punctuation">:</span> 0.96<span class="token punctuation">;</span>
+    <span class="token property">translate</span><span class="token punctuation">:</span> 0 0.5rem<span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token selector">.dialog::backdrop</span> <span class="token punctuation">{</span>
+  <span class="token property">background</span><span class="token punctuation">:</span> <span class="token function">rgb</span><span class="token punctuation">(</span>0 0 0 / 0<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token property">transition</span><span class="token punctuation">:</span>
+    background 160ms ease<span class="token punctuation">,</span>
+    display 160ms allow-discrete<span class="token punctuation">,</span>
+    overlay 160ms allow-discrete<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token selector">.dialog[open]::backdrop</span> <span class="token punctuation">{</span>
+  <span class="token property">background</span><span class="token punctuation">:</span> <span class="token function">rgb</span><span class="token punctuation">(</span>0 0 0 / 0.45<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token atrule"><span class="token rule">@starting-style</span></span> <span class="token punctuation">{</span>
+  <span class="token selector">.dialog[open]::backdrop</span> <span class="token punctuation">{</span>
+    <span class="token property">background</span><span class="token punctuation">:</span> <span class="token function">rgb</span><span class="token punctuation">(</span>0 0 0 / 0<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+        </div>
+      </div>
+    </section>
+    <div class="component-prose">
+      <h3>Notes</h3>
+<p>Prefer native dialog behavior whenever possible. The framework runtime should not replace the platform modal system; it should only make dialogs declarative, animation-friendly, and consistent across supported browsers.</p>
+    </div>
         <details class="demo-links">
       <summary>Links (11)</summary>
       <ul>

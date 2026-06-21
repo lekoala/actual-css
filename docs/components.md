@@ -530,19 +530,32 @@ Links:
 
 ## Dialog
 
-> Modal overlay for focused tasks, confirmations, or forms, built on the native dialog element.
+> Modal overlay for focused tasks, confirmations, or forms, built on the native `<dialog>` element.
 
-- Use native `<dialog class="dialog">`.
-- `commandfor`, `command`, and `closedby` are modern enhancements.
-- Small JavaScript helpers can provide fallback opening, closing, and return-value handling.
-- Dialogs must remain scrollbar aware.
+Dialogs use the platform-native `<dialog class="dialog">` element.
+
+Modern browsers can open and close dialogs declaratively with `commandfor` and `command`. The optional JavaScript runtime progressively enhances dialogs with fallback triggers, animation-aware closing, backdrop dismissal, return-value handling, and scrollbar awareness.
+
+### Native-first dialog
+
+Use `command="show-modal"` to open a modal dialog.
+
+Use `command="request-close"` for cancel-style buttons so close requests go through the dialog’s cancel lifecycle. This allows JavaScript to intercept the close request for exit animations.
+
+Use `closedby="any"` as a modern enhancement for light dismiss. Add `data-dialog-dismissible` when using the optional JavaScript runtime so the same intent is available as a fallback.
 
 ```html
-<button class="btn" type="button" commandfor="demo-dialog" command="show-modal">
+<button class="btn"
+        type="button"
+        commandfor="demo-dialog"
+        command="show-modal">
   Open dialog
 </button>
 
-<dialog class="dialog" id="demo-dialog" closedby="any">
+<dialog class="dialog"
+        id="demo-dialog"
+        closedby="any"
+        data-dialog-dismissible>
   <form method="dialog">
     <header>
       <h3>Title</h3>
@@ -555,12 +568,132 @@ Links:
     </div>
 
     <footer>
-      <button class="btn outline" type="button" commandfor="demo-dialog" command="close">Cancel</button>
-      <button class="btn primary" value="confirm">Confirm</button>
+      <button class="btn outline"
+              type="button"
+              commandfor="demo-dialog"
+              command="request-close">
+        Cancel
+      </button>
+
+      <button class="btn primary"
+              value="confirm">
+        Confirm
+      </button>
     </footer>
   </form>
 </dialog>
 ```
+
+### JavaScript-enhanced dialog
+
+Use `data-dialog` when you want the framework runtime to provide fallback opening, focus restoration, scrollbar awareness, and animation-aware close handling.
+
+```html
+<button class="btn"
+        type="button"
+        data-dialog="example-dialog">
+  Open dialog
+</button>
+
+<dialog class="dialog"
+        id="example-dialog"
+        data-dialog-dismissible>
+  <header>
+    <h3>Title</h3>
+    <p>This is a dialog description.</p>
+  </header>
+
+  <div>
+    <p>Dialog content goes here.</p>
+  </div>
+
+  <footer>
+    <button class="btn outline"
+            type="button"
+            data-dialog-close>
+      Cancel
+    </button>
+
+    <button class="btn primary"
+            type="button"
+            data-dialog-close
+            value="confirm">
+      Confirm
+    </button>
+  </footer>
+</dialog>
+```
+
+### JavaScript options
+
+Add options directly on the dialog element.
+
+Available options:
+
+* `data-dialog-dismissible` enables backdrop click dismissal.
+* `data-dialog-modal="false"` opens with `show()` instead of `showModal()`.
+* `data-dialog-animate="false"` disables animation-aware closing.
+
+### Animation
+
+The runtime adds `.is-closing` while a dialog is closing. The actual `dialog.close()` call is delayed until the active transition or animation completes.
+
+```css
+.dialog {
+  opacity: 0;
+  scale: 0.96;
+  translate: 0 0.5rem;
+
+  transition:
+    opacity 160ms ease,
+    scale 160ms ease,
+    translate 160ms ease,
+    display 160ms allow-discrete,
+    overlay 160ms allow-discrete;
+}
+
+.dialog[open] {
+  opacity: 1;
+  scale: 1;
+  translate: 0 0;
+}
+
+.dialog.is-closing {
+  opacity: 0;
+  scale: 0.96;
+  translate: 0 0.5rem;
+}
+
+@starting-style {
+  .dialog[open] {
+    opacity: 0;
+    scale: 0.96;
+    translate: 0 0.5rem;
+  }
+}
+
+.dialog::backdrop {
+  background: rgb(0 0 0 / 0);
+  transition:
+    background 160ms ease,
+    display 160ms allow-discrete,
+    overlay 160ms allow-discrete;
+}
+
+.dialog[open]::backdrop {
+  background: rgb(0 0 0 / 0.45);
+}
+
+@starting-style {
+  .dialog[open]::backdrop {
+    background: rgb(0 0 0 / 0);
+  }
+}
+```
+
+### Notes
+
+Prefer native dialog behavior whenever possible. The framework runtime should not replace the platform modal system; it should only make dialogs declarative, animation-friendly, and consistent across supported browsers.
 
 Links:
 - https://oat.ink/components/#dialog
