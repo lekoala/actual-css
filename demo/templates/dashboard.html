@@ -12,8 +12,9 @@
      *   1. .dashboard-topbar (sticky, backdrop blur) -> topbar pattern.
      *   2. .dashboard-hide-md                      -> small-screen nav swap.
      *   3. .dashboard-hero                          -> small hero spacing.
+     *   4. .dashboard-stat / .dashboard-stat-value  -> stat card composition.
      * The rest of the page is composed from existing primitives
-     * (.navbar, .nav-link, .breadcrumb, .card, .metric, .grid,
+     * (.navbar, .nav-link, .breadcrumb, .card, .grid,
      * .sidebar-layout, .tabs, .table, .table-wrap, .pagination,
      * .dropdown, .media, .alert, .button, .avatar).
      */
@@ -35,6 +36,20 @@
 
     .dashboard-hero {
       padding-block: 1rem 0.5rem;
+    }
+
+    .dashboard-stat {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.5rem;
+    }
+
+    .dashboard-stat-value {
+      color: var(--text);
+      font-size: 1.75rem;
+      font-weight: var(--font-weight-bold);
+      line-height: 1.1;
     }
 
     .dashboard-hide-md {
@@ -129,26 +144,26 @@
     <section id="metrics" class="stack">
       <h2>Metrics</h2>
       <div class="grid" style="--grid-min: 13rem;" aria-label="Key metrics">
-        <article class="card raised metric">
+        <article class="card raised dashboard-stat">
           <span class="muted">Revenue</span>
-          <data class="metric-value" value="42128">$42,128</data>
+          <data class="dashboard-stat-value" value="42128">$42,128</data>
           <span class="badge success soft">+12.5% vs last month</span>
           <progress class="progress" value="72" max="100" aria-label="Revenue target progress"></progress>
         </article>
-        <article class="card raised metric">
+        <article class="card raised dashboard-stat">
           <span class="muted">Active users</span>
-          <data class="metric-value" value="2847">2,847</data>
+          <data class="dashboard-stat-value" value="2847">2,847</data>
           <span class="badge danger soft">-3.2% vs last month</span>
           <progress class="progress" value="38" max="100" aria-label="User growth"></progress>
         </article>
-        <article class="card raised metric">
+        <article class="card raised dashboard-stat">
           <span class="muted">Retention</span>
-          <data class="metric-value" value="83.24">83.24%</data>
+          <data class="dashboard-stat-value" value="83.24">83.24%</data>
           <span class="badge success soft">+0.8% vs last month</span>
         </article>
-        <article class="card raised metric">
+        <article class="card raised dashboard-stat">
           <span class="muted">Uptime</span>
-          <data class="metric-value" value="99.99">99.99%</data>
+          <data class="dashboard-stat-value" value="99.99">99.99%</data>
           <span class="badge success outline">Healthy</span>
         </article>
       </div>

@@ -82,6 +82,13 @@ function applyOffset(coords, side, offset, rtl) {
   }
 }
 
+function getInlineOverflow(coords, floating, minX, maxX) {
+  return (
+    Math.max(minX - coords.x, 0) +
+    Math.max(coords.x + floating.width - maxX, 0)
+  );
+}
+
 const supportsDirSelector =
   typeof CSS !== "undefined" && CSS.supports("selector(:dir(rtl))");
 
@@ -227,17 +234,37 @@ export function reposition(ref, float, opts = {}) {
     }
   }
 
+  if (axis === "x" && shift && getAlignment(current)) {
+    const minX = sx + shiftPad;
+    const maxX = cw - shiftPad;
+    const currentOverflow = getInlineOverflow(coords, floatRect, minX, maxX);
+
+    if (currentOverflow > 0) {
+      const nextAlign = getAlignment(current) === "end" ? "start" : "end";
+      const candidatePlacement = `${side}-${nextAlign}`;
+      const candidate = computeCoords(refRect, floatRect, candidatePlacement, rtl);
+      applyOffset(candidate, side, distance, rtl);
+
+      if (getInlineOverflow(candidate, floatRect, minX, maxX) < currentOverflow) {
+        current = candidatePlacement;
+        coords = candidate;
+      }
+    }
+  }
+
   // shift on x axis
   let p = 50;
   if (shift || floatRect.width > refRect.width) {
-    if (coords.x < sx) {
-      const total = coords.x - sx + shiftPad;
-      coords.x = sx - shiftPad;
-      p = 50 + (total / floatRect.width) * 100;
-    } else if (coords.x + floatRect.width > cw) {
-      const total = cw - (coords.x + floatRect.width) - shiftPad;
-      coords.x += total;
-      if (coords.x < 0) coords.x = 0;
+    const minX = sx + shiftPad;
+    const maxX = cw - floatRect.width - shiftPad;
+
+    if (coords.x < minX) {
+      const total = minX - coords.x;
+      coords.x = minX;
+      p = 50 - (total / floatRect.width) * 100;
+    } else if (coords.x > maxX) {
+      const total = maxX - coords.x;
+      coords.x = Math.max(sx, maxX);
       p = 50 + (total / floatRect.width) * 100;
     }
   }
