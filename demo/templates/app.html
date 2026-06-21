@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -18,8 +19,8 @@
      *     -> sidebar -> drawer handoff at 64rem (gap: responsive sidebar swap).
      *   .app-search / .app-search-input
      *     -> input-with-leading-icon (gap: search input).
-     *   .app-filter-controls
-     *     -> non-wrapping compact filter row (gap: toolbar group).
+     *   .app-filter-bar / .app-filter-controls / .app-filter-actions
+     *     -> responsive compact filter toolbar (gap: toolbar group).
      *   .app-stat / .app-stat-value
      *     -> compact stat card composition (gap: stat card component).
      *   .toast-stack
@@ -109,16 +110,53 @@
       padding-inline-start: 2.25rem;
     }
 
-    .app-filter-controls {
-      flex-wrap: nowrap;
-      min-inline-size: max-content;
+    .app-filter-bar {
+      --cluster-justify: space-between;
+      flex-wrap: wrap;
+      gap: 0.5rem;
     }
 
-    .app-filter-controls > :where(.select, .input) {
+    .app-filter-controls {
+      flex: 1 1 auto;
+      flex-wrap: nowrap;
+      min-inline-size: 0;
+    }
+
+    .app-filter-controls> :where(.select, .input) {
       flex: 0 0 auto;
       inline-size: auto;
       min-inline-size: 9.5rem;
       white-space: nowrap;
+    }
+
+    .app-filter-actions {
+      flex: 0 0 auto;
+    }
+
+    @media (max-width: 42rem) {
+      .app-filter-bar {
+        --cluster-justify: flex-start;
+        align-items: stretch;
+      }
+
+      .app-filter-controls,
+      .app-filter-actions {
+        inline-size: 100%;
+      }
+
+      .app-filter-controls {
+        flex-wrap: wrap;
+      }
+
+      .app-filter-controls> :where(.select, .input) {
+        flex: 1 1 10rem;
+        min-inline-size: min(100%, 9.5rem);
+      }
+
+      .app-filter-actions {
+        --cluster-justify: flex-start;
+        justify-content: flex-start;
+      }
     }
 
     .app-stat {
@@ -136,18 +174,36 @@
     }
 
     .toast-stack {
+      --toast-offset: 0.75rem;
+
       position: fixed;
-      inset-block-start: 1rem;
-      inset-inline-end: 1rem;
-      z-index: 100;
+      inset-block-start: max(var(--toast-offset), env(safe-area-inset-top));
+      inset-inline-start: max(var(--toast-offset), env(safe-area-inset-left));
+      inset-inline-end: max(var(--toast-offset), env(safe-area-inset-right));
+
+      z-index: var(--z-toast, 1000);
       display: flex;
       flex-direction: column;
       gap: 0.5rem;
-      inline-size: min(100% - 2rem, 24rem);
+
       pointer-events: none;
     }
 
-    .toast-stack > * {
+    /* Desktop / larger screens */
+    @media (min-width: 40rem) {
+      .toast-stack {
+        inset-inline-start: auto;
+        inline-size: min(24rem, calc(100vi - 2rem));
+      }
+    }
+
+    .toast {
+      pointer-events: auto;
+      min-inline-size: 0;
+      overflow-wrap: anywhere;
+    }
+
+    .toast-stack>* {
       pointer-events: auto;
     }
 
@@ -183,7 +239,7 @@
       inline-size: 100%;
     }
 
-    .app-sidebar .dropdown > [aria-haspopup="menu"] {
+    .app-sidebar .dropdown>[aria-haspopup="menu"] {
       inline-size: 100%;
     }
 
@@ -200,7 +256,7 @@
       padding-block: 0.3rem;
     }
 
-    .app-sidebar details > summary {
+    .app-sidebar details>summary {
       display: flex;
       align-items: center;
       gap: 0.6rem;
@@ -213,15 +269,15 @@
       list-style: none;
     }
 
-    .app-sidebar details > summary::-webkit-details-marker {
+    .app-sidebar details>summary::-webkit-details-marker {
       display: none;
     }
 
-    .app-sidebar details > summary i:first-child {
+    .app-sidebar details>summary i:first-child {
       font-size: 1.125rem;
     }
 
-    .app-sidebar details > summary::after {
+    .app-sidebar details>summary::after {
       content: "";
       inline-size: 1rem;
       block-size: 1rem;
@@ -238,7 +294,7 @@
       transition: transform var(--duration);
     }
 
-    .app-sidebar details[open] > summary::after {
+    .app-sidebar details[open]>summary::after {
       transform: rotate(180deg);
     }
 
@@ -246,21 +302,25 @@
       .app-layout {
         grid-template-columns: auto 1fr;
       }
+
       .app-layout-sidebar {
         display: flex;
         position: sticky;
         inset-block-start: 0;
         block-size: 100dvh;
       }
+
       .app-layout-hamburger {
         display: none;
       }
+
       .app-layout-hide-mobile {
         display: initial;
       }
     }
   </style>
 </head>
+
 <body>
   <div class="app-layout">
     <!-- Sidebar (visible >= 64rem); mirrored inside the drawer for mobile. -->
@@ -272,7 +332,8 @@
 
       <!-- Workspace switcher -->
       <div class="dropdown">
-        <button class="btn neutral outline sm" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="workspace-menu" id="workspace-menu-trigger" style="inline-size: 100%; justify-content: space-between;">
+        <button class="btn neutral outline sm" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="workspace-menu"
+          id="workspace-menu-trigger" style="inline-size: 100%; justify-content: space-between;">
           <span class="cluster" style="gap: 0.5rem;">
             <span class="avatar sm"><abbr>OC</abbr></span>
             <span>Ocean Beach</span>
@@ -365,7 +426,8 @@
 
       <!-- Account pinned to the bottom -->
       <div class="dropdown">
-        <button class="btn neutral ghost sm" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="sidebar-account-menu" id="sidebar-account-trigger" style="inline-size: 100%; justify-content: flex-start;">
+        <button class="btn neutral ghost sm" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="sidebar-account-menu"
+          id="sidebar-account-trigger" style="inline-size: 100%; justify-content: flex-start;">
           <span class="avatar sm"><abbr>LW</abbr></span>
           <span>Laura Williams</span>
         </button>
@@ -381,7 +443,8 @@
     <!-- Main area -->
     <div class="app-layout-main">
       <header class="app-layout-topbar">
-        <button class="btn neutral ghost app-layout-hamburger" type="button" commandfor="main-drawer" command="show-modal" aria-label="Open navigation">
+        <button class="btn neutral ghost app-layout-hamburger" type="button" commandfor="main-drawer" command="show-modal"
+          aria-label="Open navigation">
           <i class="ti ti-menu-2" aria-hidden="true"></i>
         </button>
 
@@ -400,11 +463,13 @@
 
         <button class="btn neutral ghost sm" type="button" aria-label="Notifications" style="position: relative;">
           <i class="ti ti-bell" aria-hidden="true"></i>
-          <span class="badge danger sm" style="position: absolute; inset-block-start: 0; inset-inline-end: 0; transform: translate(40%, -40%);">12</span>
+          <span class="badge danger sm"
+            style="position: absolute; inset-block-start: 0; inset-inline-end: 0; transform: translate(40%, -40%);">12</span>
         </button>
 
         <div class="dropdown app-layout-hide-mobile">
-          <button class="btn neutral ghost sm" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="help-menu" id="help-menu-trigger" aria-label="Help">
+          <button class="btn neutral ghost sm" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="help-menu"
+            id="help-menu-trigger" aria-label="Help">
             <i class="ti ti-help" aria-hidden="true"></i>
           </button>
           <div class="dropdown-menu" role="menu" id="help-menu" aria-labelledby="help-menu-trigger" hidden>
@@ -415,7 +480,8 @@
         </div>
 
         <div class="dropdown">
-          <button class="btn neutral ghost sm" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="user-menu" id="user-menu-trigger" aria-label="Account menu">
+          <button class="btn neutral ghost sm" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="user-menu"
+            id="user-menu-trigger" aria-label="Account menu">
             <span class="avatar sm"><abbr>LW</abbr></span>
           </button>
           <div class="dropdown-menu" role="menu" id="user-menu" aria-labelledby="user-menu-trigger" hidden>
@@ -472,7 +538,7 @@
 
         <!-- Filter bar -->
         <section class="card compact">
-          <div class="cluster" style="--cluster-justify: space-between; flex-wrap: wrap; gap: 0.5rem;">
+          <div class="cluster app-filter-bar">
             <div class="cluster app-filter-controls" style="gap: 0.5rem;">
               <select class="select sm" aria-label="Filter by status">
                 <option value="">All statuses</option>
@@ -489,7 +555,7 @@
               </select>
               <input class="input sm" type="date" aria-label="Filter by date">
             </div>
-            <div class="cluster" style="gap: 0.5rem;">
+            <div class="cluster app-filter-actions" style="gap: 0.5rem;">
               <button class="btn neutral outline sm" type="button">
                 <i class="ti ti-filter" aria-hidden="true"></i>
                 Apply
@@ -509,7 +575,8 @@
                 Select all
               </label>
               <div class="dropdown">
-                <button class="btn neutral outline sm" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="bulk-menu" id="bulk-menu-trigger">
+                <button class="btn neutral outline sm" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="bulk-menu"
+                  id="bulk-menu-trigger">
                   Bulk actions
                   <i class="ti ti-chevron-down" aria-hidden="true"></i>
                 </button>
@@ -547,7 +614,8 @@
                   <td data-nowrap>20.3.2021</td>
                   <td>
                     <div class="dropdown">
-                      <button class="btn neutral ghost sm" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="row-1-menu" id="row-1-trigger" aria-label="Row actions">
+                      <button class="btn neutral ghost sm" type="button" aria-haspopup="menu" aria-expanded="false"
+                        aria-controls="row-1-menu" id="row-1-trigger" aria-label="Row actions">
                         <i class="ti ti-dots-vertical" aria-hidden="true"></i>
                       </button>
                       <div class="dropdown-menu" role="menu" id="row-1-menu" aria-labelledby="row-1-trigger" hidden>
@@ -569,7 +637,8 @@
                   <td data-nowrap>19.3.2021</td>
                   <td>
                     <div class="dropdown">
-                      <button class="btn neutral ghost sm" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="row-2-menu" id="row-2-trigger" aria-label="Row actions">
+                      <button class="btn neutral ghost sm" type="button" aria-haspopup="menu" aria-expanded="false"
+                        aria-controls="row-2-menu" id="row-2-trigger" aria-label="Row actions">
                         <i class="ti ti-dots-vertical" aria-hidden="true"></i>
                       </button>
                       <div class="dropdown-menu" role="menu" id="row-2-menu" aria-labelledby="row-2-trigger" hidden>
@@ -591,7 +660,8 @@
                   <td data-nowrap>18.3.2021</td>
                   <td>
                     <div class="dropdown">
-                      <button class="btn neutral ghost sm" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="row-3-menu" id="row-3-trigger" aria-label="Row actions">
+                      <button class="btn neutral ghost sm" type="button" aria-haspopup="menu" aria-expanded="false"
+                        aria-controls="row-3-menu" id="row-3-trigger" aria-label="Row actions">
                         <i class="ti ti-dots-vertical" aria-hidden="true"></i>
                       </button>
                       <div class="dropdown-menu" role="menu" id="row-3-menu" aria-labelledby="row-3-trigger" hidden>
@@ -613,7 +683,8 @@
                   <td data-nowrap>17.3.2021</td>
                   <td>
                     <div class="dropdown">
-                      <button class="btn neutral ghost sm" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="row-4-menu" id="row-4-trigger" aria-label="Row actions">
+                      <button class="btn neutral ghost sm" type="button" aria-haspopup="menu" aria-expanded="false"
+                        aria-controls="row-4-menu" id="row-4-trigger" aria-label="Row actions">
                         <i class="ti ti-dots-vertical" aria-hidden="true"></i>
                       </button>
                       <div class="dropdown-menu" role="menu" id="row-4-menu" aria-labelledby="row-4-trigger" hidden>
@@ -635,7 +706,8 @@
                   <td data-nowrap>16.3.2021</td>
                   <td>
                     <div class="dropdown">
-                      <button class="btn neutral ghost sm" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="row-5-menu" id="row-5-trigger" aria-label="Row actions">
+                      <button class="btn neutral ghost sm" type="button" aria-haspopup="menu" aria-expanded="false"
+                        aria-controls="row-5-menu" id="row-5-trigger" aria-label="Row actions">
                         <i class="ti ti-dots-vertical" aria-hidden="true"></i>
                       </button>
                       <div class="dropdown-menu" role="menu" id="row-5-menu" aria-labelledby="row-5-trigger" hidden>
@@ -719,7 +791,8 @@
     <nav>
       <ul class="nav-list stack" style="--gap: 0.15rem;">
         <li><a class="nav-link" href="#search"><i class="ti ti-search" aria-hidden="true"></i> Search</a></li>
-        <li><a class="nav-link" href="#notifications"><i class="ti ti-bell" aria-hidden="true"></i> Notifications <span class="badge danger sm" style="margin-inline-start: auto;">12</span></a></li>
+        <li><a class="nav-link" href="#notifications"><i class="ti ti-bell" aria-hidden="true"></i> Notifications <span
+              class="badge danger sm" style="margin-inline-start: auto;">12</span></a></li>
         <li><a class="nav-link" href="#tasks"><i class="ti ti-list-check" aria-hidden="true"></i> My tasks</a></li>
         <li style="margin-block-start: 0.5rem;"><span class="eyebrow">Workspace</span></li>
         <li><a class="nav-link" href="#dashboard"><i class="ti ti-layout-dashboard" aria-hidden="true"></i> Dashboard</a></li>
@@ -799,4 +872,5 @@
     });
   </script>
 </body>
+
 </html>

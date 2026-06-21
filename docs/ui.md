@@ -13,16 +13,31 @@ UI components are interactive patterns that need JavaScript or modern platform b
 
 > Positioned menu attached to a trigger, with full keyboard, focus, and ARIA support.
 
-Dropdown covers two distinct patterns:
+Dropdown and context menu share one action-surface runtime:
+
+- Dropdown = a visible trigger opens a surface.
+- Context menu = right click or a keyboard context action opens that same surface.
+- Sheet = mobile presentation mode of that same surface.
+
+Use `data-surface-mobile` on the menu to control mobile behavior:
+
+- `auto` is the default. It keeps the surface anchored on desktop and switches to a bottom sheet on coarse pointers below the breakpoint.
+- `sheet` always uses the sheet presentation.
+- `anchored` always uses floating positioning.
+- `none` disables the mobile transformation.
+
+`data-surface-breakpoint` only matters for `auto`. Prefer the built-in tokens (`sm`, `md`, `lg`) and use raw pixel values only as an escape hatch, for example `data-surface-breakpoint="640"`.
+
+Dropdown still covers two distinct patterns:
 
 ### App menu
-- A list of *actions* the user can take — sign out, copy, delete.
+- A list of *actions* the user can take: sign out, copy, delete.
 - Items are `<button role="menuitem">`.
 - Arrow keys navigate between items. Home/End jump to first/last.
 - Uses `aria-haspopup="menu"` and `role="menu"`.
 
 ### Nav panel
-- A panel of *links* to other pages — product categories, docs sections.
+- A panel of *links* to other pages: product categories, docs sections.
 - Items are regular `<a href>` links, not `role="menuitem"`.
 - No arrow-key navigation, no `role="menu"`.
 - Just a toggle with outside-click and Escape dismissal.
@@ -67,6 +82,7 @@ Dropdown covers two distinct patterns:
       <div class="dropdown-menu"
            id="products-panel"
            aria-label="Products"
+           data-surface-mobile="auto"
            hidden>
         <section aria-labelledby="products-design" class="px py-sm">
           <h3 id="products-design">Design</h3>
@@ -96,11 +112,53 @@ Dropdown covers two distinct patterns:
 </nav>
 ```
 
+### Context menu
+
+The same menu can be opened from a visible button and a contextual target. Prefer shipping both so desktop users get right click and mobile users still have a discoverable trigger.
+
+Add `data-context-menu-scope` when the menu should stay inside a specific region. Empty or `self` constrains to the target itself, `parent` constrains to the parent, and a selector constrains to the closest matching ancestor or first matching element.
+
+Long press is opt-in with `data-context-menu-long-press`. Empty uses the default delay; a number sets the delay in milliseconds.
+
+```html
+<div class="card stack gap-sm"
+     data-context-menu="file-actions"
+     data-context-menu-scope="self"
+     data-context-menu-long-press
+     tabindex="0"
+     style="min-block-size: 12rem;">
+  <div class="cluster justify-between items-center">
+    <strong>File.pdf</strong>
+    <button class="btn ghost"
+            type="button"
+            aria-haspopup="menu"
+            aria-expanded="false"
+            aria-controls="file-actions"
+            id="file-actions-trigger">
+      More
+    </button>
+  </div>
+  <p class="text-sm text-muted">Right click inside the card, press the context-menu key, or long press on touch.</p>
+
+  <div class="dropdown-menu"
+       role="menu"
+       id="file-actions"
+       aria-labelledby="file-actions-trigger"
+       hidden>
+    <button class="btn link" type="button" role="menuitem">Open</button>
+    <button class="btn link" type="button" role="menuitem">Rename</button>
+    <hr role="separator" />
+    <button class="btn link danger" type="button" role="menuitem">Delete</button>
+  </div>
+</div>
+```
+
 Links:
 - https://picocss.com/docs/dropdown
 - https://oat.ink/components/#dropdown
 - https://daisyui.com/components/dropdown/
 - https://www.w3.org/WAI/ARIA/apg/patterns/menu-button/
+- https://github.com/lekoala/pure-context-menu
 - https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Global_attributes/popover
 - https://getbootstrap.com/docs/5.3/components/dropdowns/#overview
 - https://getbootstrap.com/docs/5.3/components/popovers/#overview
