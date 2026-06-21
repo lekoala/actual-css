@@ -14,7 +14,8 @@
   z-index: var(--z-dropdown);
   display: grid;
   gap: 0.125rem;
-  min-inline-size: max-content;
+  inline-size: max-content;
+  min-inline-size: min(var(--dropdown-trigger-width, 0px), min(20rem, calc(100vi - 2rem)));
   max-inline-size: min(20rem, calc(100vi - 2rem));
   margin: 0;
   padding: 0.35rem;

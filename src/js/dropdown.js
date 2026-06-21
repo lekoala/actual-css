@@ -26,6 +26,38 @@ let activeMenu = null;
 const triggerMap = new WeakMap();
 // menu -> { trigger, untrack, controller }
 const menuMap = new WeakMap();
+// menu -> { parent, next }
+const mountedMenus = new WeakMap();
+
+function mountMenu(menu, trigger) {
+  if (mountedMenus.has(menu)) return;
+  const root = trigger.closest("dialog") || trigger.ownerDocument.body;
+  const parent = menu.parentNode;
+  if (!root || !parent || parent === root) return;
+
+  mountedMenus.set(menu, { parent, next: menu.nextSibling });
+  root.append(menu);
+}
+
+function restoreMenu(menu) {
+  const mount = mountedMenus.get(menu);
+  if (!mount) return;
+
+  if (mount.parent.isConnected) {
+    const next = mount.next?.parentNode === mount.parent ? mount.next : null;
+    mount.parent.insertBefore(menu, next);
+  } else {
+    menu.remove();
+  }
+
+  mountedMenus.delete(menu);
+}
+
+function positionMenu(menu, trigger) {
+  const triggerWidth = trigger.getBoundingClientRect().width;
+  menu.style.setProperty("--dropdown-trigger-width", `${triggerWidth}px`);
+  reposition(trigger, menu, { placement: "bottom-start", distance: 4, flip: true, shift: true });
+}
 
 // ── Global: outside click & escape ─────────────────────
 
@@ -59,12 +91,7 @@ function ensureMenuWired(menu, trigger, isAppMenu) {
     "floating:reposition",
     () => {
       if (!menu.hidden) {
-        reposition(trigger, menu, {
-          placement: "bottom-start",
-          distance: 4,
-          flip: true,
-          shift: true,
-        });
+        positionMenu(menu, trigger);
       }
     },
     { signal: controller.signal },
@@ -101,7 +128,7 @@ function openMenu(menu, trigger) {
   trigger.setAttribute("aria-expanded", "true");
   openMenus.add(menu);
   activeMenu = menu;
-  reposition(trigger, menu, { placement: "bottom-start", distance: 4, flip: true, shift: true });
+  positionMenu(menu, trigger);
 }
 
 function closeMenu(menu) {
@@ -250,6 +277,7 @@ function connectTrigger(trigger) {
   const controller = new AbortController();
   triggerMap.set(trigger, { menu, controller });
 
+  mountMenu(menu, trigger);
   menu.style.position = "fixed";
   menu.hidden = true;
   menu.style.display = "none";
@@ -265,6 +293,7 @@ function disconnectTrigger(trigger) {
   if (!state) return;
   state.controller.abort();
   disconnectMenu(state.menu);
+  restoreMenu(state.menu);
   triggerMap.delete(trigger);
 }
 

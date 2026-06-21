@@ -18,10 +18,16 @@
      *     -> sidebar -> drawer handoff at 64rem (gap: responsive sidebar swap).
      *   .app-search / .app-search-input
      *     -> input-with-leading-icon (gap: search input).
+     *   .app-filter-controls
+     *     -> non-wrapping compact filter row (gap: toolbar group).
+     *   .app-stat / .app-stat-value
+     *     -> compact stat card composition (gap: stat card component).
      *   .toast-stack
      *     -> fixed top-end stack for dismissible .alert (gap: toast container).
      *   .app-sidebar .nav-link / .app-sidebar .nav-link .badge
      *     -> sidebar nav with icon + text + trailing badge (gap: side nav link).
+     *   .app-sidebar .dropdown
+     *     -> full-width sidebar dropdown triggers (gap: side nav dropdown).
      *   .app-sidebar .nav-list-sub
      *     -> indented sub-navigation (gap: sub-nav indent).
      *   .app-sidebar details > summary
@@ -103,6 +109,32 @@
       padding-inline-start: 2.25rem;
     }
 
+    .app-filter-controls {
+      flex-wrap: nowrap;
+      min-inline-size: max-content;
+    }
+
+    .app-filter-controls > :where(.select, .input) {
+      flex: 0 0 auto;
+      inline-size: auto;
+      min-inline-size: 9.5rem;
+      white-space: nowrap;
+    }
+
+    .app-stat {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.5rem;
+    }
+
+    .app-stat-value {
+      color: var(--text);
+      font-size: 1.75rem;
+      font-weight: var(--font-weight-bold);
+      line-height: 1.1;
+    }
+
     .toast-stack {
       position: fixed;
       inset-block-start: 1rem;
@@ -120,6 +152,7 @@
     }
 
     .app-sidebar .nav-link {
+      inline-size: 100%;
       min-block-size: 2.25rem;
       padding: 0.5rem 0.65rem;
       gap: 0.6rem;
@@ -145,6 +178,15 @@
       color: var(--intent, var(--primary));
     }
 
+    .app-sidebar .dropdown {
+      display: block;
+      inline-size: 100%;
+    }
+
+    .app-sidebar .dropdown > [aria-haspopup="menu"] {
+      inline-size: 100%;
+    }
+
     .app-sidebar .nav-list-sub {
       --gap: 0.15rem;
       padding-inline-start: 1.65rem;
@@ -162,6 +204,7 @@
       display: flex;
       align-items: center;
       gap: 0.6rem;
+      inline-size: 100%;
       padding: 0.5rem 0.65rem;
       border-radius: var(--radius);
       color: var(--text-muted);
@@ -405,24 +448,24 @@
 
         <!-- Stats -->
         <div class="grid" style="--grid-min: 14rem;" aria-label="Key metrics">
-          <article class="card metric">
+          <article class="card app-stat">
             <span class="muted">Total revenue</span>
-            <data class="metric-value" value="45231">&euro;45,231</data>
+            <data class="app-stat-value" value="45231">&euro;45,231</data>
             <span class="badge success soft">+12% this month</span>
           </article>
-          <article class="card metric">
+          <article class="card app-stat">
             <span class="muted">Transactions</span>
-            <data class="metric-value" value="1284">1,284</data>
+            <data class="app-stat-value" value="1284">1,284</data>
             <span class="badge neutral soft">98% successful</span>
           </article>
-          <article class="card metric">
+          <article class="card app-stat">
             <span class="muted">Pending</span>
-            <data class="metric-value" value="23">23</data>
+            <data class="app-stat-value" value="23">23</data>
             <span class="badge warning soft">Requires action</span>
           </article>
-          <article class="card metric">
+          <article class="card app-stat">
             <span class="muted">Disputes</span>
-            <data class="metric-value" value="3">3</data>
+            <data class="app-stat-value" value="3">3</data>
             <span class="badge danger soft">Urgent</span>
           </article>
         </div>
@@ -430,7 +473,7 @@
         <!-- Filter bar -->
         <section class="card compact">
           <div class="cluster" style="--cluster-justify: space-between; flex-wrap: wrap; gap: 0.5rem;">
-            <div class="cluster" style="gap: 0.5rem;">
+            <div class="cluster app-filter-controls" style="gap: 0.5rem;">
               <select class="select sm" aria-label="Filter by status">
                 <option value="">All statuses</option>
                 <option value="success">Success</option>
@@ -745,49 +788,8 @@
     </div>
   </div>
 
+  <script src="../../dist/actual.js"></script>
   <script>
-    // .dropdown toggler. Framework documents the contract; this is the
-    // matching runtime: aria-expanded, hidden, Escape, outside click, focus
-    // return. Same shape can be reused by other templates and demos.
-    (function () {
-      const triggers = document.querySelectorAll('.dropdown [aria-haspopup="menu"]');
-      triggers.forEach((trigger) => {
-        const id = trigger.getAttribute('aria-controls');
-        const menu = id ? document.getElementById(id) : trigger.nextElementSibling;
-        if (!menu) return;
-
-        const close = () => {
-          trigger.setAttribute('aria-expanded', 'false');
-          menu.setAttribute('hidden', '');
-        };
-        const open = () => {
-          trigger.setAttribute('aria-expanded', 'true');
-          menu.removeAttribute('hidden');
-        };
-
-        trigger.addEventListener('click', (event) => {
-          event.stopPropagation();
-          if (trigger.getAttribute('aria-expanded') === 'true') close();
-          else open();
-        });
-
-        menu.addEventListener('click', (event) => {
-          if (event.target.closest('[role="menuitem"]')) close();
-        });
-
-        document.addEventListener('click', (event) => {
-          if (!menu.contains(event.target) && event.target !== trigger) close();
-        });
-
-        document.addEventListener('keydown', (event) => {
-          if (event.key === 'Escape' && trigger.getAttribute('aria-expanded') === 'true') {
-            close();
-            trigger.focus();
-          }
-        });
-      });
-    })();
-
     // [data-dismiss] removes the closest .alert (used by notifications and toasts).
     document.addEventListener('click', (event) => {
       const dismiss = event.target.closest('[data-dismiss]');
