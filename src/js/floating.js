@@ -107,10 +107,16 @@ function getDocEl(doc) {
 
 const tracked = new Set();
 let tick = false;
+let pendingType = null;
 
 function notify(type) {
   for (const el of tracked) {
-    el.dispatchEvent(new CustomEvent("floating:reposition", { bubbles: false }));
+    el.dispatchEvent(
+      new CustomEvent("floating:reposition", {
+        bubbles: false,
+        detail: { type },
+      }),
+    );
     if (type === "escape") {
       el.dispatchEvent(new CustomEvent("floating:hide", { bubbles: false }));
     }
@@ -118,9 +124,12 @@ function notify(type) {
 }
 
 function rafNotify(e) {
+  pendingType = pendingType === "scroll" ? pendingType : e?.type;
   if (!tick) {
     requestAnimationFrame(() => {
-      notify();
+      const type = pendingType;
+      pendingType = null;
+      notify(type);
       tick = false;
     });
   }
@@ -275,4 +284,27 @@ export function reposition(ref, float, opts = {}) {
     left: `${coords.x}px`,
     top: `${coords.y}px`,
   });
+}
+
+export function repositionAt(x, y, float, opts = {}) {
+  const doc = float.ownerDocument;
+  const ref = {
+    ownerDocument: doc,
+    dir: doc.dir || "",
+    matches: () => false,
+    getClientRects: () => [
+      {
+        x,
+        y,
+        left: x,
+        top: y,
+        right: x,
+        bottom: y,
+        width: 0,
+        height: 0,
+      },
+    ],
+  };
+
+  reposition(ref, float, opts);
 }

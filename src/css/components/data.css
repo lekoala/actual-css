@@ -5,6 +5,9 @@
  * shared surface and text tokens.
  */
 .table-wrap {
+  inline-size: 100%;
+  max-inline-size: 100%;
+  min-inline-size: 0;
   overflow-x: auto;
   border: var(--border-width) solid var(--border);
   border-radius: var(--radius-lg);

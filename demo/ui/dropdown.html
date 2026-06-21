@@ -25,7 +25,20 @@
       <p>Positioned menu attached to a trigger, with full keyboard, focus, and ARIA support.</p>
     </header>
         <div class="component-prose">
-      <p>Dropdown covers two distinct patterns:</p>
+      <p>Dropdown and context menu now share one action-surface runtime:</p>
+<ul>
+  <li>Dropdown = a visible trigger opens a surface.</li>
+  <li>Context menu = right click or a keyboard context action opens that same surface.</li>
+  <li>Drawer/sheet = mobile presentation mode of that same surface.</li>
+</ul>
+<p>Use <code>data-surface-mobile</code> on the menu to control mobile behavior:</p>
+<ul>
+  <li><code>auto</code> keeps floating on desktop and switches to a bottom sheet on coarse pointers below the breakpoint.</li>
+  <li><code>sheet</code> always uses the sheet presentation.</li>
+  <li><code>anchored</code> always uses floating positioning.</li>
+  <li><code>none</code> disables the mobile transformation.</li>
+</ul>
+<p><code>data-surface-breakpoint</code> only matters for <code>auto</code>. Prefer <code>sm</code>, <code>md</code>, or <code>lg</code>; raw pixel values are an escape hatch. Dropdown still covers two distinct patterns:</p>
 <h3>App menu</h3>
 <ul>
   <li>A list of <em>actions</em> the user can take — sign out, copy, delete.</li>
@@ -110,6 +123,7 @@
       <div class="dropdown-menu"
            id="products-panel"
            aria-label="Products"
+           data-surface-mobile="auto"
            hidden>
         <section aria-labelledby="products-design" class="px py-sm">
           <h3 id="products-design">Design</h3>
@@ -183,13 +197,87 @@
         </div>
       </div>
     </section>
+    <div class="component-prose">
+      <h3>Context menu</h3>
+<p>The same menu can be opened from a visible button and a contextual target. Prefer shipping both so desktop users get right click and mobile users still have a discoverable trigger.</p>
+<p>Use <code>data-context-menu-scope</code> to keep a context menu inside one region. Long press is opt-in with <code>data-context-menu-long-press</code>.</p>
+    </div>
+    <section class="component-section">
+      <div class="example-group">
+        <div class="example-render">
+          <div class="card stack gap-sm"
+     data-context-menu="file-actions"
+     data-context-menu-scope="self"
+     data-context-menu-long-press
+     tabindex="0"
+     style="min-block-size: 12rem;">
+  <div class="cluster justify-between items-center">
+    <strong>File.pdf</strong>
+    <button class="btn ghost"
+            type="button"
+            aria-haspopup="menu"
+            aria-expanded="false"
+            aria-controls="file-actions"
+            id="file-actions-trigger">
+      More
+    </button>
+  </div>
+  <p class="text-sm text-muted">Right click inside the card, press the context-menu key, or long press on touch.</p>
+
+  <div class="dropdown-menu"
+       role="menu"
+       id="file-actions"
+       aria-labelledby="file-actions-trigger"
+       hidden>
+    <button class="btn link" type="button" role="menuitem">Open</button>
+    <button class="btn link" type="button" role="menuitem">Rename</button>
+    <hr role="separator" />
+    <button class="btn link danger" type="button" role="menuitem">Delete</button>
+  </div>
+</div>
+        </div>
+        <div class="example-code">
+          <pre><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>card stack gap-sm<span class="token punctuation">"</span></span>
+     data-context-menu="file-actions"
+     data-context-menu-scope="self"
+     data-context-menu-long-press
+     tabindex="0"
+     style="min-block-size: 12rem;"&gt;
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>cluster justify-between items-center<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>strong</span><span class="token punctuation">></span></span>File.pdf<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>strong</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>button</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>btn ghost<span class="token punctuation">"</span></span>
+            <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>button<span class="token punctuation">"</span></span>
+            <span class="token attr-name">aria-haspopup</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>menu<span class="token punctuation">"</span></span>
+            <span class="token attr-name">aria-expanded</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>false<span class="token punctuation">"</span></span>
+            <span class="token attr-name">aria-controls</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>file-actions<span class="token punctuation">"</span></span>
+            <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>file-actions-trigger<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+      More
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>text-sm text-muted<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Right click inside the card, press the context-menu key, or long press on touch.<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>p</span><span class="token punctuation">></span></span>
+
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>dropdown-menu<span class="token punctuation">"</span></span>
+       <span class="token attr-name">role</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>menu<span class="token punctuation">"</span></span>
+       <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>file-actions<span class="token punctuation">"</span></span>
+       <span class="token attr-name">aria-labelledby</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>file-actions-trigger<span class="token punctuation">"</span></span>
+       <span class="token attr-name">hidden</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>button</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>btn link<span class="token punctuation">"</span></span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>button<span class="token punctuation">"</span></span> <span class="token attr-name">role</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>menuitem<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Open<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>button</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>btn link<span class="token punctuation">"</span></span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>button<span class="token punctuation">"</span></span> <span class="token attr-name">role</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>menuitem<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Rename<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>hr</span> <span class="token attr-name">role</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>separator<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>button</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>btn link danger<span class="token punctuation">"</span></span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>button<span class="token punctuation">"</span></span> <span class="token attr-name">role</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>menuitem<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Delete<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span></code></pre>
+        </div>
+      </div>
+    </section>
         <details class="demo-links">
-      <summary>Links (7)</summary>
+      <summary>Links (8)</summary>
       <ul>
         <li><a href="https://picocss.com/docs/dropdown" rel="noopener noreferrer">https://picocss.com/docs/dropdown</a></li>
         <li><a href="https://oat.ink/components/#dropdown" rel="noopener noreferrer">https://oat.ink/components/#dropdown</a></li>
         <li><a href="https://daisyui.com/components/dropdown/" rel="noopener noreferrer">https://daisyui.com/components/dropdown/</a></li>
         <li><a href="https://www.w3.org/WAI/ARIA/apg/patterns/menu-button/" rel="noopener noreferrer">https://www.w3.org/WAI/ARIA/apg/patterns/menu-button/</a></li>
+        <li><a href="https://github.com/lekoala/pure-context-menu" rel="noopener noreferrer">https://github.com/lekoala/pure-context-menu</a></li>
         <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Global_attributes/popover" rel="noopener noreferrer">https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Global_attributes/popover</a></li>
         <li><a href="https://getbootstrap.com/docs/5.3/components/dropdowns/#overview" rel="noopener noreferrer">https://getbootstrap.com/docs/5.3/components/dropdowns/#overview</a></li>
         <li><a href="https://getbootstrap.com/docs/5.3/components/popovers/#overview" rel="noopener noreferrer">https://getbootstrap.com/docs/5.3/components/popovers/#overview</a></li>

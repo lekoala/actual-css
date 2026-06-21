@@ -8,6 +8,7 @@
  */
 
 import "./dropdown.js";
+import "./context-menu.js";
 import "./tab.js";
 import "./tooltip.js";
 import "./scrollspy.js";

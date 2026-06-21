@@ -29,7 +29,7 @@
   <li>Use real tab semantics when panels switch in place.</li>
   <li>Use normal links and <code>aria-current=&quot;page&quot;</code> for page navigation that only looks like tabs.</li>
   <li>JavaScript owns roving <code>tabindex</code>, <code>aria-selected</code>, <code>hidden</code>, and keyboard behavior.</li>
-  <li>Support Left/Right, Home/End, Enter/Space when activation is manual.</li>
+  <li>Left/Right select tabs and wrap at the ends. Home/End jump to first/last. Down moves focus into the selected panel.</li>
   <li><code>.tabs</code> styles the tab list. <code>.tab</code> styles each trigger.</li>
 </ul>
     </div>
@@ -66,13 +66,13 @@
     </button>
   </div>
 
-  <section role="tabpanel" id="panel-general" aria-labelledby="tab-general" class="py">
+  <section role="tabpanel" id="panel-general" aria-labelledby="tab-general" tabindex="-1" class="py">
     General content
   </section>
-  <section role="tabpanel" id="panel-security" aria-labelledby="tab-security" hidden class="py">
+  <section role="tabpanel" id="panel-security" aria-labelledby="tab-security" tabindex="-1" hidden class="py">
     Security content
   </section>
-  <section role="tabpanel" id="panel-billing" aria-labelledby="tab-billing" hidden class="py">
+  <section role="tabpanel" id="panel-billing" aria-labelledby="tab-billing" tabindex="-1" hidden class="py">
     Billing content
   </section>
 </div>
@@ -108,13 +108,13 @@
     <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">></span></span>
   <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
 
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>section</span> <span class="token attr-name">role</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>tabpanel<span class="token punctuation">"</span></span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>panel-general<span class="token punctuation">"</span></span> <span class="token attr-name">aria-labelledby</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>tab-general<span class="token punctuation">"</span></span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>py<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>section</span> <span class="token attr-name">role</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>tabpanel<span class="token punctuation">"</span></span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>panel-general<span class="token punctuation">"</span></span> <span class="token attr-name">aria-labelledby</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>tab-general<span class="token punctuation">"</span></span> <span class="token attr-name">tabindex</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>-1<span class="token punctuation">"</span></span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>py<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
     General content
   <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>section</span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>section</span> <span class="token attr-name">role</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>tabpanel<span class="token punctuation">"</span></span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>panel-security<span class="token punctuation">"</span></span> <span class="token attr-name">aria-labelledby</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>tab-security<span class="token punctuation">"</span></span> <span class="token attr-name">hidden</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>py<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>section</span> <span class="token attr-name">role</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>tabpanel<span class="token punctuation">"</span></span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>panel-security<span class="token punctuation">"</span></span> <span class="token attr-name">aria-labelledby</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>tab-security<span class="token punctuation">"</span></span> <span class="token attr-name">tabindex</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>-1<span class="token punctuation">"</span></span> <span class="token attr-name">hidden</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>py<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
     Security content
   <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>section</span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>section</span> <span class="token attr-name">role</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>tabpanel<span class="token punctuation">"</span></span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>panel-billing<span class="token punctuation">"</span></span> <span class="token attr-name">aria-labelledby</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>tab-billing<span class="token punctuation">"</span></span> <span class="token attr-name">hidden</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>py<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>section</span> <span class="token attr-name">role</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>tabpanel<span class="token punctuation">"</span></span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>panel-billing<span class="token punctuation">"</span></span> <span class="token attr-name">aria-labelledby</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>tab-billing<span class="token punctuation">"</span></span> <span class="token attr-name">tabindex</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>-1<span class="token punctuation">"</span></span> <span class="token attr-name">hidden</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>py<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
     Billing content
   <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>section</span><span class="token punctuation">></span></span>
 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span></code></pre>
@@ -144,7 +144,7 @@
       </div>
     </section>
         <details class="demo-links">
-      <summary>Links (7)</summary>
+      <summary>Links (8)</summary>
       <ul>
         <li><a href="https://www.makethingsaccessible.com/guides/responsive-and-accessible-tabbed-interfaces/" rel="noopener noreferrer">https://www.makethingsaccessible.com/guides/responsive-and-accessible-tabbed-interfaces/</a></li>
         <li><a href="https://www.w3.org/WAI/ARIA/apg/patterns/tabs/" rel="noopener noreferrer">https://www.w3.org/WAI/ARIA/apg/patterns/tabs/</a></li>
@@ -153,6 +153,7 @@
         <li><a href="https://css-tricks.com/pure-css-tabs-with-details-grid-and-subgrid/" rel="noopener noreferrer">https://css-tricks.com/pure-css-tabs-with-details-grid-and-subgrid/</a></li>
         <li><a href="https://basecoatui.com/components/tabs/" rel="noopener noreferrer">https://basecoatui.com/components/tabs/</a></li>
         <li><a href="https://daisyui.com/components/tab/" rel="noopener noreferrer">https://daisyui.com/components/tab/</a></li>
+        <li><a href="https://inclusive-components.design/tabbed-interfaces/" rel="noopener noreferrer">https://inclusive-components.design/tabbed-interfaces/</a></li>
       </ul>
     </details>
   </section>
