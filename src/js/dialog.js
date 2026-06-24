@@ -12,6 +12,13 @@
  *   Closing is routed through .is-closing when an exit animation/transition
  *   is present. The actual dialog.close() call is delayed until the animation
  *   finishes, so CSS can animate the dialog out before [open] is removed.
+ *
+ * View transitions (opt-in via data-dialog-view-transition):
+ *   When the browser supports document.startViewTransition and the user allows
+ *   motion, the dialog morphs to/from its trigger using a shared
+ *   view-transition-name. The fade/scale transition above remains the
+ *   progressive-enhancement baseline; view transitions replace it only when
+ *   a trigger pair exists and the gate passes.
  */
 
 import enhance from "./enhance.js";
@@ -56,6 +63,55 @@ function isDismissible(dialog) {
 
 function shouldAnimate(dialog) {
   return dialog.getAttribute("data-dialog-animate") !== "false";
+}
+
+function wantsViewTransition(dialog) {
+  return boolData(dialog, "data-dialog-view-transition");
+}
+
+const VT_NAME = "actual-dialog";
+
+function supportsViewTransitions(doc = document) {
+  return typeof doc.startViewTransition === "function";
+}
+
+function motionAllowed(doc = document) {
+  return !doc.defaultView?.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+}
+
+function setVtName(target, name) {
+  if (target) target.style.viewTransitionName = name;
+}
+
+function clearVtName(...targets) {
+  for (const target of targets) {
+    if (target) target.style.viewTransitionName = "";
+  }
+}
+
+function canViewTransition(dialog, trigger) {
+  const doc = dialog.ownerDocument;
+  return (
+    wantsViewTransition(dialog) &&
+    supportsViewTransitions(doc) &&
+    motionAllowed(doc) &&
+    trigger?.isConnected === true
+  );
+}
+
+function openDialogWithViewTransition(dialog, trigger) {
+  if (!canViewTransition(dialog, trigger)) {
+    openDialog(dialog, trigger);
+    return;
+  }
+
+  setVtName(trigger, VT_NAME);
+
+  dialog.ownerDocument.startViewTransition(() => {
+    clearVtName(trigger);
+    setVtName(dialog, VT_NAME);
+    openDialog(dialog, trigger);
+  });
 }
 
 function isOutsideDialog(dialog, event) {
@@ -145,6 +201,21 @@ export function closeDialog(dialog, returnValue = "") {
     return;
   }
 
+  const trigger = state.restoreFocusTo;
+  if (canViewTransition(dialog, trigger)) {
+    state.closing = true;
+    setVtName(dialog, VT_NAME);
+
+    const transition = dialog.ownerDocument.startViewTransition(() => {
+      clearVtName(dialog);
+      setVtName(trigger, VT_NAME);
+      dialog.close(returnValue);
+    });
+
+    transition.finished.finally(() => clearVtName(trigger));
+    return;
+  }
+
   dialog.classList.add("is-closing");
 
   const animationTime = getAnimationTime(dialog);
@@ -214,7 +285,7 @@ function handleTriggerClick(event) {
     return;
   }
 
-  openDialog(state.dialog, trigger);
+  openDialogWithViewTransition(state.dialog, trigger);
 }
 
 function handleDialogClick(event) {
@@ -258,11 +329,25 @@ function handleDialogCancel(event) {
   closeDialog(dialog);
 }
 
+function handleDialogCommand(event) {
+  if (event.command !== "show-modal") return;
+
+  const dialog = event.currentTarget;
+  if (!wantsViewTransition(dialog)) return;
+
+  const trigger = event.invoker || event.sourceEvent?.target;
+  if (!canViewTransition(dialog, trigger)) return;
+
+  event.preventDefault();
+  openDialogWithViewTransition(dialog, trigger);
+}
+
 function handleDialogClose(event) {
   const dialog = event.currentTarget;
   const state = dialogMap.get(dialog);
 
   dialog.classList.remove("is-closing");
+  clearVtName(dialog);
 
   if (!state) return;
 
@@ -295,6 +380,7 @@ function ensureDialogWired(dialog) {
   dialog.addEventListener("click", handleDialogClick, { signal: controller.signal });
   dialog.addEventListener("submit", handleDialogSubmit, { signal: controller.signal });
   dialog.addEventListener("cancel", handleDialogCancel, { signal: controller.signal });
+  dialog.addEventListener("command", handleDialogCommand, { signal: controller.signal });
   dialog.addEventListener("close", handleDialogClose, { signal: controller.signal });
 
   // Let modern browsers know the intended native close policy. Backdrop click

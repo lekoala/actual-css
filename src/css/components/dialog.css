@@ -15,10 +15,12 @@
   box-shadow: var(--shadow);
   padding: 0;
   opacity: 0;
-  transform: translateY(0.35rem) scale(0.98);
+  translate: 0 0.35rem;
+  scale: 0.98;
   transition:
     opacity var(--duration),
-    transform var(--duration),
+    translate var(--duration),
+    scale var(--duration),
     overlay var(--duration) allow-discrete,
     display var(--duration) allow-discrete;
 }
@@ -49,13 +51,21 @@
 
 .dialog[open] {
   opacity: 1;
-  transform: translateY(0) scale(1);
+  translate: 0 0;
+  scale: 1;
+}
+
+.dialog.is-closing {
+  opacity: 0;
+  translate: 0 0.35rem;
+  scale: 0.98;
 }
 
 @starting-style {
   .dialog[open] {
     opacity: 0;
-    transform: translateY(0.35rem) scale(0.98);
+    translate: 0 0.35rem;
+    scale: 0.98;
   }
 }
 
@@ -75,5 +85,12 @@
 @starting-style {
   .dialog[open]::backdrop {
     opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  ::view-transition-group(actual-dialog) {
+    animation-duration: var(--duration);
+    animation-timing-function: var(--ease);
   }
 }
