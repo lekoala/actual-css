@@ -633,6 +633,7 @@ Available options:
 * `data-dialog-dismissible` enables backdrop click dismissal.
 * `data-dialog-modal="false"` opens with `show()` instead of `showModal()`.
 * `data-dialog-animate="false"` disables animation-aware closing.
+* `data-dialog-view-transition` enables a view transition that morphs the dialog to/from its trigger. Only active when the browser supports `document.startViewTransition` and the user allows motion.
 
 ### Animation
 
@@ -641,15 +642,15 @@ The runtime adds `.is-closing` while a dialog is closing. The actual `dialog.clo
 ```css
 .dialog {
   opacity: 0;
-  scale: 0.96;
-  translate: 0 0.5rem;
+  scale: 0.98;
+  translate: 0 0.35rem;
 
   transition:
-    opacity 160ms ease,
-    scale 160ms ease,
-    translate 160ms ease,
-    display 160ms allow-discrete,
-    overlay 160ms allow-discrete;
+    opacity var(--duration),
+    scale var(--duration),
+    translate var(--duration),
+    display var(--duration) allow-discrete,
+    overlay var(--duration) allow-discrete;
 }
 
 .dialog[open] {
@@ -660,35 +661,73 @@ The runtime adds `.is-closing` while a dialog is closing. The actual `dialog.clo
 
 .dialog.is-closing {
   opacity: 0;
-  scale: 0.96;
-  translate: 0 0.5rem;
+  scale: 0.98;
+  translate: 0 0.35rem;
 }
 
 @starting-style {
   .dialog[open] {
     opacity: 0;
-    scale: 0.96;
-    translate: 0 0.5rem;
+    scale: 0.98;
+    translate: 0 0.35rem;
   }
 }
 
 .dialog::backdrop {
-  background: rgb(0 0 0 / 0);
+  background: var(--surface-solid);
+  opacity: 0;
   transition:
-    background 160ms ease,
-    display 160ms allow-discrete,
-    overlay 160ms allow-discrete;
+    opacity var(--duration),
+    display var(--duration) allow-discrete,
+    overlay var(--duration) allow-discrete;
 }
 
 .dialog[open]::backdrop {
-  background: rgb(0 0 0 / 0.45);
+  opacity: 0.5;
 }
 
 @starting-style {
   .dialog[open]::backdrop {
-    background: rgb(0 0 0 / 0);
+    opacity: 0;
   }
 }
+```
+
+### View transitions
+
+Add `data-dialog-view-transition` to morph the dialog to/from its trigger using the View Transition API. The dialog appears to grow out of the trigger on open and shrink back into it on close, communicating the relationship between the two.
+
+The effect is progressive: it only runs when the browser supports `document.startViewTransition` and the user has not requested reduced motion. Otherwise the fade/scale transition above is used. Works with both `commandfor`/`command` triggers and `data-dialog` triggers.
+
+```html
+<button class="btn"
+        type="button"
+        commandfor="vt-dialog"
+        command="show-modal">
+  Open dialog
+</button>
+
+<dialog class="dialog"
+        id="vt-dialog"
+        data-dialog-view-transition
+        data-dialog-dismissible>
+  <form method="dialog">
+    <header>
+      <h3>Title</h3>
+      <p>This dialog morphs to and from the trigger button.</p>
+    </header>
+
+    <footer>
+      <button class="btn outline"
+              type="button"
+              commandfor="vt-dialog"
+              command="request-close">
+        Cancel
+      </button>
+      <button class="btn primary" value="confirm">Confirm</button>
+    </footer>
+  </form>
+</dialog>
 ```
 
 ### Notes
@@ -707,6 +746,7 @@ Links:
 - https://uiterms.com/alert-dialog/
 - https://uiterms.com/dialog/
 - Modern dialogs: https://codepen.io/lekoalabe/pen/GgKOKOE
+- Animating the dialog element using view transitions: https://pqina.nl/blog/animating-the-dialog-element-using-view-transitions/
 
 ## Drawer
 
