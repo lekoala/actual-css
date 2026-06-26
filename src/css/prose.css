@@ -4,6 +4,20 @@
  * Global element styles stay mild so app UI is not shaped accidentally. Page
  * layout, forms, cards, navigation, and app tables remain outside this scope.
  */
+
+:root {
+  /* Prose scale */
+  --prose-size: 1rem;
+  --prose-line-height: 1.7;
+  --prose-measure: 70ch;
+  --prose-flow: 1em;
+  --prose-heading-line-height: 1.2;
+  --prose-h1: 2rem;
+  --prose-h2: 1.5rem;
+  --prose-h3: 1.25rem;
+  --prose-h4: 1.125rem;
+}
+
 .prose {
   max-inline-size: var(--prose-measure);
   color: var(--text);
@@ -21,12 +35,6 @@
   color: var(--text);
   font-weight: var(--font-weight-strong);
   line-height: var(--prose-heading-line-height);
-}
-
-@supports (text-wrap: balance) {
-  .prose :where(h1, h2, h3, h4) {
-    text-wrap: balance;
-  }
 }
 
 @supports (text-wrap: pretty) {
@@ -82,7 +90,6 @@
   border-radius: var(--radius-sm);
   background: var(--surface-subtle);
   color: var(--text);
-  font-family: var(--font-mono);
   font-size: 0.875em;
 }
 
@@ -109,11 +116,6 @@
   color: var(--text-muted);
 }
 
-.prose :where(img, video, canvas, svg) {
-  max-inline-size: 100%;
-  block-size: auto;
-}
-
 .prose figure {
   margin-inline: 0;
 }
@@ -134,6 +136,20 @@
   padding: 0.5em;
   border-block-end: var(--border-width) solid var(--border);
   text-align: start;
+}
+
+/* Lead paragraph: a slightly larger, more relaxed reading-introduction text.
+   Non-fluid and always available — use .text-lead from the optional fluid
+   module for marketing/display surfaces. */
+.lead {
+  font-size: 1.125em;
+  line-height: var(--line-height-relaxed);
+}
+
+/* Readable content measure. Composes with .center for centering or with
+   margin-inline: auto for a one-off centered block. */
+.measure {
+  max-inline-size: var(--prose-measure);
 }
 
 .prose-sm {

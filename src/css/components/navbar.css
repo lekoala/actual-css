@@ -1,0 +1,79 @@
+/*
+ * Navbar — top-level navigation bar.
+ *
+ * .navbar is a horizontal bar; .navbar-brand is the brand link; .navbar-nav is
+ * the inline link list using .nav-link items. .nav-list is the vertical nav
+ * list shared with .drawer, fed by the shared --gap token.
+ */
+.navbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap);
+  padding-block: var(--space-3);
+  padding-inline: var(--space-4);
+  border: var(--border-width) solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface-raised);
+  color: var(--text);
+}
+
+.navbar-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--text);
+  font-weight: var(--font-weight-bold);
+  text-decoration: none;
+}
+
+.navbar-brand:focus-visible {
+  outline: var(--focus-outline);
+  outline-offset: var(--focus-outline-offset);
+  border-radius: var(--radius-sm);
+}
+
+.navbar-nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.nav-link {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: var(--control-size-sm);
+  padding-inline: var(--space-2);
+  border-radius: var(--radius);
+  color: var(--text-muted);
+  font-weight: var(--font-weight-medium);
+  text-decoration: none;
+}
+
+.nav-link:hover,
+.nav-link:where([aria-current]:not([aria-current="false"])) {
+  background: var(--surface-subtle);
+  color: var(--text);
+}
+
+.nav-link:focus-visible {
+  outline: var(--focus-outline);
+  outline-offset: var(--focus-outline-offset);
+}
+
+/* Nav list — a vertical navigation list. Used by .drawer for stacked links. */
+.nav-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  --gap: var(--space-2);
+}
+
+.nav-list > li {
+  margin: 0;
+}

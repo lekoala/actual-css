@@ -1,0 +1,30 @@
+/*
+ * Pagination — page navigation for paginated lists.
+ *
+ * Render .btn elements inside a .pagination list. The active page is marked
+ * with aria-current="page" and tinted with the intent color. Pagination
+ * buttons are square to keep numeric labels aligned.
+ */
+.pagination {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pagination .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: var(--control-size-md);
+  padding-inline: 0;
+}
+
+.pagination .btn[aria-current="page"] {
+  border-color: var(--intent, var(--primary));
+  background: var(--intent, var(--primary));
+  color: var(--intent-fg, var(--primary-fg));
+}

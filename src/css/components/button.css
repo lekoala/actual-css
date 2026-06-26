@@ -38,6 +38,20 @@
     transform var(--duration);
 }
 
+/* Variant token mapping. .solid/.soft/.outline are shared with .badge/.alert
+   via variants.css; .btn defaults to solid, and .ghost/.link are .btn-only. */
+.btn:not(:where(.soft, .outline, .ghost, .link)) {
+  --ui-bg: var(--intent, var(--neutral));
+  --ui-fg: var(--intent-fg, var(--neutral-fg));
+  --ui-border: transparent;
+}
+
+.btn.ghost {
+  --ui-bg: transparent;
+  --ui-fg: var(--intent, var(--text));
+  --ui-border: transparent;
+}
+
 .btn:hover {
   background: var(--ui-hover-bg, var(--btn-bg));
 }
@@ -50,11 +64,21 @@
   --ui-hover-bg: var(--surface-subtle);
 }
 
+@supports (color: color-mix(in oklch, red, white)) {
+  .btn:not(:where(.soft, .outline, .ghost, .link)):hover {
+    --ui-hover-bg: color-mix(in srgb, var(--intent, var(--neutral)) 88%, black);
+  }
+}
+
 .btn:active {
   transform: translateY(1px);
 }
 
 .btn.link {
+  --ui-bg: transparent;
+  --ui-fg: var(--intent, var(--text));
+  --ui-border: transparent;
+
   min-block-size: auto;
   padding-inline: 0;
   border-color: transparent;

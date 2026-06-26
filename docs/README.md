@@ -22,10 +22,9 @@ If code and docs disagree, ask the user what is the expected outcome.
 - patterns.md : typical app patterns
 - components.md : all components
 - utilities.md : basic utils
-- ui.md : components that requires js to work
-- components.md : all components
+- ui.md : components that require js to work
 
 ## Other relevant files
 
-- guildelines.md : core guildelines to follow
+- guidelines.md : core guidelines to follow
 - references.md : inspiration and external resources

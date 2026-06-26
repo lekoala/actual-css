@@ -1,0 +1,37 @@
+/*
+ * Surface — shared modal scrim and backdrop for dropdown and drawer.
+ *
+ * Drawn by .drawer::backdrop (native dialog top-layer) and .surface-backdrop
+ * (custom fixed div for dropdown sheets on coarse pointers). The native
+ * .dialog::backdrop uses its own opacity transition over --surface-solid
+ * (dialog.css); the tokens here keep all three statements reading the same
+ * surface color so the scrim stays consistent across the dialog family.
+ *
+ * .surface-backdrop, .is-sheet, and .is-open are runtime markers set by
+ * surface.js. Authors opt in via [data-surface-mobile="sheet|auto|none|anchored"]
+ * configuration instead — the JS resolves "auto" into .is-sheet at run time.
+ */
+:root {
+  --backdrop-color: var(--surface-solid);
+  --backdrop-opacity: 0.45;
+  --backdrop-fill: rgb(0 0 0 / var(--backdrop-opacity));
+}
+
+@supports (color: color-mix(in srgb, var(--surface-solid), transparent 50%)) {
+  :root {
+    --backdrop-fill: color-mix(
+      in srgb,
+      var(--backdrop-color) calc(var(--backdrop-opacity) * 100%),
+      transparent
+    );
+  }
+}
+
+/* Custom backdrop for overlays that do not use the native dialog top-layer.
+ * Its z-index sits just below the dropdown menu it accompanies. */
+.surface-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: calc(var(--z-dropdown) - 1);
+  background: var(--backdrop-fill);
+}

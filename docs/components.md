@@ -94,6 +94,7 @@ Links:
 - https://modern-css.com/accordion-without-javascript/
 - https://modern-css.com/exclusive-accordions-without-javascript/
 - https://uiterms.com/accordion/
+- https://basecoatui.com/components/accordion/
 
 ## Alert
 
@@ -178,12 +179,12 @@ Links:
 
 ## Avatar
 
-> Initials or image representing a person or entity, composable with badge and indicator.
+> Initials or image representing a person or entity, composable with a status dot.
 
 - Supports initials and images.
 - Can be an inert element, link, or button.
 - Can be grouped with `role="group"` and `:has()`
-- Can be combined with `badge` and `indicator`.
+- A status dot attaches as an empty `.badge` child; the badge carries an `aria-label` so the dot conveys its meaning to assistive tech.
 - Does not support shape modifiers as public API. Shape is theme-level.
 - Sizes can be adjusted with CSS variables and optional `.sm` or `.lg`.
 - Background is an exposed css variable (and can use `data-tone`).
@@ -191,17 +192,17 @@ Links:
 ```html
 <div class="avatar" role="img" aria-label="John Doe, online">
   <span aria-hidden="true">JD</span>
-  <span class="badge indicator success" aria-label="Online"></span>
+  <span class="badge success" aria-label="Online"></span>
 </div>
 
 <div class="avatar lg" role="img" aria-label="John Doe, online">
   <span aria-hidden="true">JD</span>
-  <span class="badge indicator success" aria-label="Online"></span>
+  <span class="badge success" aria-label="Online"></span>
 </div>
 
-<div class="avatar sm" role="img" aria-label="John Doe, online">
+<div class="avatar sm" role="img" aria-label="John Doe, errors">
   <span aria-hidden="true">JD</span>
-  <span class="badge indicator indicator-bottom danger" aria-label="Online"></span>
+  <span class="badge danger" aria-label="2 errors"></span>
 </div>
 ```
 
@@ -270,7 +271,7 @@ Links:
 
 <button type="button" class="btn secondary soft" aria-label="Notifications">
   <i class="ti ti-bell" aria-hidden="true"></i>
-  <span class="badge indicator danger" aria-label="Errors!"></span>
+  <span class="badge danger" aria-label="Errors!"></span>
 </button>
 ```
 
@@ -371,6 +372,7 @@ Links:
 - https://moderncss.dev/css-button-styling-guide/
 - Button theming: https://codepen.io/lekoalabe/pen/RNaXBBP
 - Buttons: https://codepen.io/lekoalabe/pen/oNORPZP
+- https://piccalil.li/blog/how-i-build-a-button-component/
 
 ## Card
 
@@ -738,6 +740,7 @@ Available options:
 * `data-dialog-dismissible` enables backdrop click dismissal.
 * `data-dialog-modal="false"` opens with `show()` instead of `showModal()`.
 * `data-dialog-view-transition` enables a view transition that morphs the dialog to/from its trigger. Only active when the browser supports `document.startViewTransition` and the user allows motion.
+* `closedby="any"` is the no-JavaScript light-dismiss path. The runtime rewrites it to `closedby="closerequest"` where supported so dialog light-dismiss keeps the modal workflow intact — the same behavior, just stated in terms the platform understands.
 
 ### Animation
 
@@ -858,6 +861,7 @@ Links:
 - https://uiterms.com/dialog/
 - Modern dialogs: https://codepen.io/lekoalabe/pen/GgKOKOE
 - Animating the dialog element using view transitions: https://pqina.nl/blog/animating-the-dialog-element-using-view-transitions/
+- https://basecoatui.com/components/alert-dialog/
 
 ## Drawer
 
@@ -897,9 +901,9 @@ Links:
         <details>
           <summary>Settings</summary>
           <ul class="nav-list stack">
-            <li><a href="#">General</a></li>
-            <li><a href="#">Security</a></li>
-            <li><a href="#">Billing</a></li>
+            <li><a class="nav-link" href="#">General</a></li>
+            <li><a class="nav-link" href="#">Security</a></li>
+            <li><a class="nav-link" href="#">Billing</a></li>
           </ul>
         </details>
       </li>
@@ -912,13 +916,7 @@ Links:
 </dialog>
 ```
 
-```js
-document.querySelectorAll("dialog.drawer").forEach((dialog) => {
-  dialog.addEventListener("click", (e) => {
-    if (e.target === dialog) dialog.close();
-  });
-});
-```
+Backdrop click dismissal and Escape are provided by the native dialog element on its own. Add `data-dialog-dismissible` to the drawer's opening button's target when you want the optional runtime to wire the same behavior in browsers that need a small fallback. No manual `addEventListener("click", ...)` is required.
 
 Links:
 - https://oat.ink/components/#sidebar

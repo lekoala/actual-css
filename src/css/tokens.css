@@ -2,8 +2,6 @@
   /* Typography */
   --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  --font-body: var(--font-sans);
-  --font-size: 1rem;
   --line-height: 1.5;
   --line-height-tight: 1.25;
   --line-height-relaxed: 1.75;
@@ -12,16 +10,11 @@
   --font-weight-strong: 650;
   --font-weight-bold: 700;
 
-  /* Prose */
-  --prose-size: 1rem;
-  --prose-line-height: 1.7;
-  --prose-measure: 70ch;
-  --prose-flow: 1em;
-  --prose-heading-line-height: 1.2;
-  --prose-h1: 2rem;
-  --prose-h2: 1.5rem;
-  --prose-h3: 1.25rem;
-  --prose-h4: 1.125rem;
+  /* Typography scale */
+  --font-size-xs: 0.8125rem;
+  --font-size-sm: 0.875rem;
+  --font-size-md: 1rem;
+  --font-size-lg: 1.125rem;
 
   /* Spacing */
   --gap: 0.75rem;
@@ -32,74 +25,53 @@
   --space-5: 1.5rem;
   --space-6: 2rem;
 
-  /* Shape / rhythm / motion */
+  /* Shape */
   --border-width: 1px;
   --radius-full: 9999px;
-  --shadow-color: 220 30% 10%;
   --shadow: 0 0.5rem 1.5rem hsl(var(--shadow-color) / 0.08);
   --shadow-popout: 0 0.25rem 0.75rem hsl(var(--shadow-color) / 0.15);
+
+  /* Motion — see reset.css for the prefers-reduced-motion hard reset, which
+     zeroes raw animations/transitions in addition to --duration here.
+     --duration drives component transitions (hover/focus); the dedicated
+     animation rates below tune one-shot open/close and decorative loops. */
   --duration: 150ms;
+  --duration-slow: 200ms;
+  --duration-spin: 0.75s;
+  --duration-shimmer: 1.2s;
   --ease: ease;
 
   /* Focus ring — shared by every interactive component's :focus-visible */
   --focus-outline: calc(var(--border-width) * 2) solid var(--focus);
   --focus-outline-offset: 2px;
 
+  /* Status dot positioning — used by .avatar > .badge:empty. The offset is
+     the circle-aware inset (1 - 1/√2) / 2 ≈ 14.65%; the ring surrounds the
+     dot with the parent surface color. */
+  --indicator-offset: 14.65%;
+  --indicator-ring: var(--surface);
+
   /* Progress / meter track height */
   --bar-height: 0.65rem;
 
-  /* Controls */
+  /* Controls — inputs and buttons share --control-size so heights always match.
+     .sm/.lg (variants.css) switch --control-size and --control-font-size. */
   --control-size-sm: 2rem;
-  --control-size-md: 2.5rem;
-  --control-size-lg: 3rem;
+  --control-size-md: 2.375rem;
+  --control-size-lg: 2.75rem;
   --control-size: var(--control-size-md);
   --control-pad-x: 1em;
   --control-font-size: var(--font-size-md);
 
-  /* Typography scale */
-  --font-size-sm: 0.875rem;
-  --font-size-md: 0.9375rem;
-  --font-size-lg: 1rem;
-
   /* Shared icons */
   --icon-chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%238892a4' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
   --icon-check: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%238892a4' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E");
-
-  /* Typography */
-  --heading: var(--text);
-  --hgroup-gap: 0.25em;
-
-  /* Selection */
-  --selection-bg: var(--primary);
-  --selection-fg: var(--primary-fg);
-
-  /* Strong divider */
-  --border-width-strong: 4px;
 
   /* Layering */
   --z-sticky: 10;
   --z-dropdown: 20;
   --z-popover: 30;
   --z-tooltip: 50;
-}
-
-[data-tone="dark"] {
-  --tone-fg: var(--color-white, white);
-  --tone-muted: rgba(255, 255, 255, 0.75);
-  --tone-border: rgba(255, 255, 255, 0.25);
-}
-
-@supports (color: color-mix(in oklch, red, white)) {
-  [data-tone="dark"] {
-    --tone-muted: color-mix(in oklch, var(--tone-fg), transparent 25%);
-    --tone-border: color-mix(in oklch, var(--tone-fg), transparent 75%);
-  }
-}
-
-[data-tone="light"] {
-  --tone-fg: var(--text);
-  --tone-muted: var(--text-muted);
-  --tone-border: var(--border);
 }
 
 @media (prefers-reduced-motion: reduce) {

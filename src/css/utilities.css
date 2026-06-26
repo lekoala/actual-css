@@ -20,49 +20,6 @@
   overflow: auto;
 }
 
-.scroller {
-  --scroller-size: 0.625rem;
-  --scroller-padding: 0.125rem;
-  --scroller-track: transparent;
-  --scroller-thumb: var(--border);
-  --scroller-thumb-hover: var(--text-muted);
-
-  scrollbar-color: var(--scroller-thumb) var(--scroller-track);
-  scrollbar-width: thin;
-}
-
-.scroller::-webkit-scrollbar {
-  width: var(--scroller-size);
-  height: var(--scroller-size);
-}
-
-.scroller::-webkit-scrollbar-track {
-  background: var(--scroller-track);
-}
-
-.scroller::-webkit-scrollbar-thumb {
-  border: var(--scroller-padding) solid transparent;
-  border-radius: var(--radius-full);
-  background: var(--scroller-thumb);
-  background-clip: content-box;
-}
-
-.scroller::-webkit-scrollbar-thumb:hover {
-  background: var(--scroller-thumb-hover);
-  background-clip: content-box;
-}
-
-.scroller::-webkit-scrollbar-corner {
-  background: var(--scroller-track);
-}
-
-@supports (color: color-mix(in oklch, red, white)) {
-  .scroller {
-    --scroller-thumb: color-mix(in oklch, var(--text-muted), transparent 55%);
-    --scroller-thumb-hover: color-mix(in oklch, var(--text-muted), transparent 30%);
-  }
-}
-
 .grow {
   flex: 1 1 auto;
   min-inline-size: 0;
@@ -72,9 +29,10 @@
   color: var(--text-muted);
 }
 
+/* Circle: forces a fully round shape by overriding the --radius token. */
 .circle {
-  --radius: 999px;
-  border-radius: 999px;
+  --radius: var(--radius-full);
+  border-radius: var(--radius);
 }
 
 /* Text alignment — uses logical properties so it follows writing direction. */
@@ -104,60 +62,13 @@
   }
 }
 
-/* Lead paragraph: a slightly larger, more relaxed reading-introduction text.
-   Non-fluid and always available — use .text-lead from the optional fluid
-   module for marketing/display surfaces. */
-.lead {
-  font-size: 1.125em;
-  line-height: var(--line-height-relaxed);
-}
-
-/* Readable content measure. Composes with .center for centering or with
-   margin-inline: auto for a one-off centered block. */
-.measure {
-  max-inline-size: var(--prose-measure);
-}
-
 /* Generic list chrome reset. Use for any list (tags, footer columns, related
-   items). For navigation lists, prefer .nav-list for semantic intent. */
+   items). For navigation lists, prefer .nav-list for semantic intent.
+   components/{actions,navbar,list}.css apply their own resets where needed. */
 .list-reset {
   margin: 0;
   padding: 0;
   list-style: none;
-}
-
-/* Editorial eyebrow label: small, uppercase, muted typography. The base form
-   is unstyled chrome that takes its surrounding color. Add .pill for the
-   bordered rounded shape, and combine with an intent class (.primary,
-   .success, etc.) to tint the text, border, and background. */
-.eyebrow {
-  align-self: flex-start;
-  color: var(--text-muted);
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-medium);
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-}
-
-.eyebrow.pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5em;
-  padding-inline: 0.6em;
-  padding-block: 0.25em;
-  color: var(--intent, var(--text-muted));
-  border: var(--border-width) solid var(--border);
-  border-radius: var(--radius-full, 9999px);
-  background: var(--surface);
-}
-
-/* Tinted pill surface where color-mix is available; the flat fallback above
-    keeps a readable bordered pill everywhere else. */
-@supports (color: color-mix(in oklch, red, white)) {
-  .eyebrow.pill {
-    border-color: color-mix(in oklch, var(--intent, var(--border)) 35%, var(--border));
-    background: color-mix(in oklch, var(--intent, transparent) 6%, var(--surface));
-  }
 }
 
 /* Link variants for chrome that should not look like prose links. Use in
@@ -177,9 +88,9 @@
 }
 
 /* Spacing step helpers — semantic scale (sm / default / lg).
-   Names map to logical properties under the hood for writing-direction
-   safety. The default step uses --space-4, which matches the framework's
-   built-in padding on cards, dialogs, and form-actions. */
+   Names map to logical properties for writing-direction safety. The default
+   step uses --space-4, which matches the framework's built-in padding on
+   cards, dialogs, and form-actions. */
 
 /* Gap */
 .gap-none {

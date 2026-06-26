@@ -8,7 +8,7 @@ const ROOT = join(__dirname, "..");
 const SRC = join(ROOT, "src", "css");
 const DIST = join(ROOT, "dist");
 
-const EXCLUDE = ["themes", "optional"];
+const EXCLUDE = ["optional"];
 
 async function collectCSS(root, base = "") {
   const entries = await readdir(root, { withFileTypes: true });
@@ -52,16 +52,29 @@ async function main() {
   let devSize = 0;
   let minSize = 0;
   let brotliSize = 0;
+  let themesMinSize = 0;
+  let themesBrotliSize = 0;
 
   try {
     const devPath = join(DIST, "actual.css");
     const minPath = join(DIST, "actual.min.css");
-    const [devSt, minSt] = await Promise.all([stat(devPath), stat(minPath)]);
+    const themesMinPath = join(DIST, "actual-themes.min.css");
+    const [devSt, minSt, themesMinSt] = await Promise.all([
+      stat(devPath),
+      stat(minPath),
+      stat(themesMinPath).catch(() => null),
+    ]);
     devSize = devSt.size;
     minSize = minSt.size;
 
     const minCode = await readFile(minPath);
     brotliSize = brotliCompressSync(minCode).length;
+
+    if (themesMinSt) {
+      themesMinSize = themesMinSt.size;
+      const themesMinCode = await readFile(themesMinPath);
+      themesBrotliSize = brotliCompressSync(themesMinCode).length;
+    }
   } catch {
     // dist doesn't exist yet
   }
@@ -104,6 +117,16 @@ async function main() {
         ? `${formatBytes(minSize)} minified → ${formatBytes(brotliSize)} brotli (${((brotliSize / minSize) * 100).toFixed(1)}% of minified)`
         : "";
     console.log(`  ${" ".padEnd(colFile)}  ${" ".padStart(colRaw)}   ${ratio}`);
+
+    if (themesMinSize > 0) {
+      const themesLabel = "    actual-themes.min.css";
+      const themesLine = `  ${themesLabel.padEnd(colFile)}  ${" ".padStart(colRaw)}   ${formatBytes(themesMinSize).padStart(colMin)}   ${formatBytes(themesBrotliSize).padStart(colBr)}`;
+      console.log(themesLine);
+      const themesRatio = `${formatBytes(themesMinSize)} → ${formatBytes(themesBrotliSize)} brotli (${((themesBrotliSize / themesMinSize) * 100).toFixed(1)}%)`;
+      console.log(`  ${" ".padEnd(colFile)}  ${" ".padStart(colRaw)}   ${themesRatio}`);
+      const shipped = `${formatBytes(minSize + themesMinSize)} shipped minified → ${formatBytes(brotliSize + themesBrotliSize)} brotli`;
+      console.log(`  ${" ".padEnd(colFile)}  ${" ".padStart(colRaw)}   ${shipped}`);
+    }
   }
 
   console.log(sep);
@@ -115,6 +138,10 @@ async function main() {
     totalRaw,
     totalMinified: minSize,
     totalBrotli: brotliSize,
+    themesMinified: themesMinSize,
+    themesBrotli: themesBrotliSize,
+    shippedMinified: minSize + themesMinSize,
+    shippedBrotli: brotliSize + themesBrotliSize,
     fileCount: rows.length,
     files: rows,
   };

@@ -1,0 +1,15 @@
+/*
+ * Native-only control polish: file and range inputs that defeat most custom
+ * styling, so the framework stays out of their way and just keeps them readable
+ * and theme-aware.
+ */
+.form input[type="file"],
+.file {
+  color: var(--text-muted);
+}
+
+.form input[type="range"],
+.range {
+  inline-size: 100%;
+  accent-color: var(--intent, var(--primary));
+}

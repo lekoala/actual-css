@@ -2,15 +2,52 @@
  * Checkbox and radio controls.
  *
  * Native inputs keep their behavior while sharing custom geometry, checked,
- * focus, and disabled states across semantic forms and classed aliases.
+ * focus, and disabled states across semantic forms and classed aliases. This
+ * file also owns the .choice label layout (input + label text) so the whole
+ * concept lives in one file.
  *
  * Switches (input[role="switch"]) are excluded so switch.css owns their
  * geometry and states. switch.css is imported after this file.
  */
-.check,
-.radio,
-.form input[type="checkbox"]:not([role="switch"]),
-.form input[type="radio"] {
+.choice,
+.form label:has(> input[type="checkbox"], > input[type="radio"]) {
+  --choice-control-offset: 0.25em;
+
+  display: inline-flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  color: var(--text);
+  cursor: pointer;
+}
+
+/* Optical alignment: nudge the control down so the checkbox/radio sits
+   visually centered with the first line of label text, not flush with the
+   top of the line-box. Default 0.25em (~4px at 16px) places the control just
+   below the cap-height, matching what Bootstrap, Material, and most polished
+   form libraries ship. Multi-line labels still keep the control at the top
+   thanks to align-items: flex-start. Override per-instance via
+   --choice-control-offset for themes with a different line-height or control
+   size. */
+.choice > :is(input[type="checkbox"], input[type="radio"]),
+.form
+  label:has(> input:is([type="checkbox"], [type="radio"]))
+  > input:is([type="checkbox"], input[type="radio"]) {
+  flex: 0 0 auto;
+  margin-block-start: var(--choice-control-offset);
+}
+
+.choice > span > .field-help {
+  display: block;
+}
+
+.choice:has(:disabled),
+.form label:has(> input:is([type="checkbox"], [type="radio"]):disabled) {
+  color: var(--text-subtle);
+  cursor: not-allowed;
+}
+
+/* Control geometry. --choice-* are the per-state tokens. */
+:is(.check, .radio, .form input[type="checkbox"]:not([role="switch"]), .form input[type="radio"]) {
   --choice-border: var(--border);
   --choice-bg: var(--surface);
   --choice-mark: var(--primary-fg);
@@ -29,27 +66,26 @@
   cursor: pointer;
 }
 
-.check,
-.form input[type="checkbox"]:not([role="switch"]) {
+:is(.check, .form input[type="checkbox"]:not([role="switch"])) {
   border-radius: var(--radius-sm);
 }
 
-.radio,
-.form input[type="radio"] {
-  border-radius: 999px;
+:is(.radio, .form input[type="radio"]) {
+  border-radius: var(--radius-full);
 }
 
-.check::before,
-.radio::before,
-.form input[type="checkbox"]:not([role="switch"])::before,
-.form input[type="radio"]::before {
+:is(
+    .check,
+    .radio,
+    .form input[type="checkbox"]:not([role="switch"]),
+    .form input[type="radio"]
+  )::before {
   content: "";
   transform: scale(0);
   transition: transform var(--duration);
 }
 
-.check::before,
-.form input[type="checkbox"]:not([role="switch"])::before {
+:is(.check, .form input[type="checkbox"]:not([role="switch"]))::before {
   inline-size: 0.58em;
   block-size: 0.34em;
   border-inline-start: 2px solid currentColor;
@@ -57,51 +93,56 @@
   transform: translateY(-0.06em) rotate(-45deg) scale(0);
 }
 
-.radio::before,
-.form input[type="radio"]::before {
+:is(.radio, .form input[type="radio"])::before {
   inline-size: 0.5em;
   block-size: 0.5em;
-  border-radius: 999px;
+  border-radius: var(--radius-full);
   background: currentColor;
 }
 
-.check:checked,
-.radio:checked,
-.form input[type="checkbox"]:not([role="switch"]):checked,
-.form input[type="radio"]:checked {
+:is(
+    .check,
+    .radio,
+    .form input[type="checkbox"]:not([role="switch"]),
+    .form input[type="radio"]
+  ):checked {
   --choice-border: var(--intent, var(--primary));
   --choice-bg: var(--intent, var(--primary));
 }
 
-.check:checked::before,
-.form input[type="checkbox"]:not([role="switch"]):checked::before {
+:is(.check, .form input[type="checkbox"]:not([role="switch"])):checked::before {
   transform: translateY(-0.06em) rotate(-45deg) scale(1);
 }
 
-.radio:checked::before,
-.form input[type="radio"]:checked::before {
+:is(.radio, .form input[type="radio"]):checked::before {
   transform: scale(1);
 }
 
-.check:hover,
-.radio:hover,
-.form input[type="checkbox"]:not([role="switch"]):hover,
-.form input[type="radio"]:hover {
+:is(
+    .check,
+    .radio,
+    .form input[type="checkbox"]:not([role="switch"]),
+    .form input[type="radio"]
+  ):hover {
   --choice-border: var(--text-subtle);
 }
 
-.check:focus-visible,
-.radio:focus-visible,
-.form input[type="checkbox"]:not([role="switch"]):focus-visible,
-.form input[type="radio"]:focus-visible {
+:is(
+    .check,
+    .radio,
+    .form input[type="checkbox"]:not([role="switch"]),
+    .form input[type="radio"]
+  ):focus-visible {
   border-color: var(--focus);
   box-shadow: 0 0 0 3px var(--focus-ring);
 }
 
-.check:disabled,
-.radio:disabled,
-.form input[type="checkbox"]:not([role="switch"]):disabled,
-.form input[type="radio"]:disabled {
+:is(
+    .check,
+    .radio,
+    .form input[type="checkbox"]:not([role="switch"]),
+    .form input[type="radio"]
+  ):disabled {
   --choice-bg: var(--surface-subtle);
   --choice-border: var(--border);
   --choice-mark: var(--text-subtle);

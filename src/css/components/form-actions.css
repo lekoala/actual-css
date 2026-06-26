@@ -1,0 +1,43 @@
+/*
+ * Form actions — bottom form bar with optional sticky variant.
+ *
+ * A flex cluster of buttons/actions that closes a form. The sticky variant
+ * docks to the viewport bottom with a translucent blur where supported; at
+ * rest it stays visually neutral so it does not double as a separator.
+ */
+.form-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap);
+  align-items: center;
+  margin-block-start: var(--form-actions-margin-block-start, var(--space-5));
+}
+
+/* Opt-in sticky variant. When the bar is not stuck (at rest) the translucent
+   surface and backdrop-blur are visually neutral. Content scrolling behind
+   the bar reveals the blur as a natural separator instead of relying on a
+   shadow. */
+.form-actions.sticky {
+  position: sticky;
+  inset-block-end: var(--form-actions-sticky-block-offset, 0px);
+  z-index: var(--z-sticky);
+  isolation: isolate;
+
+  margin-inline: calc(var(--form-actions-sticky-inline-offset, 0px) * -1);
+  padding: var(--form-actions-sticky-padding, var(--space-3));
+
+  border-block-start: var(--border-width) solid var(--border);
+  background: var(--surface);
+}
+
+/* Enhanced sticky bar: translucent surface plus blur where both are supported.
+   Guidelines: use @supports positively. */
+@supports (
+    (backdrop-filter: blur(1rem)) and
+    (background: color-mix(in oklch, white 50%, transparent))
+  ) {
+  .form-actions.sticky {
+    background: color-mix(in oklch, var(--surface) 88%, transparent);
+    backdrop-filter: blur(1rem);
+  }
+}

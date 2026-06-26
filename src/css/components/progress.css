@@ -1,0 +1,88 @@
+/*
+ * Progress — native progress bar with theme-aware track and value.
+ *
+ * Consumes the shared --intent/--primary for the value bar and --bar-height
+ * for thickness. Indeterminate state animates a shimmer using --duration-shimmer.
+ */
+.progress {
+  --progress-track: var(--surface-subtle);
+  --progress-value: var(--intent, var(--primary));
+}
+
+.progress {
+  appearance: none;
+  -webkit-appearance: none;
+  display: block;
+  inline-size: 100%;
+  height: var(--bar-height);
+  overflow: hidden;
+  border: 0;
+  border-radius: var(--radius-full);
+  background: var(--surface-subtle);
+}
+
+.progress::-webkit-progress-bar {
+  height: var(--bar-height);
+  border-radius: var(--radius-full);
+  background: var(--progress-track);
+}
+
+.progress::-webkit-progress-value {
+  height: var(--bar-height);
+  border-radius: var(--radius-full);
+  background: var(--progress-value);
+}
+
+.progress::-moz-progress-bar {
+  height: var(--bar-height);
+  border-radius: var(--radius-full);
+  background: var(--progress-value);
+}
+
+/* Indeterminate progress */
+.progress:indeterminate {
+  background:
+    linear-gradient(to right, var(--progress-value) 30%, var(--progress-track) 30%) top left / 150%
+    150% no-repeat,
+    var(--progress-track);
+}
+
+.progress:indeterminate::-webkit-progress-bar {
+  background: transparent;
+}
+
+.progress:indeterminate::-webkit-progress-value {
+  background: transparent;
+}
+
+.progress:indeterminate::-moz-progress-bar {
+  background: transparent;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .progress:indeterminate {
+    animation: actual-progress-indeterminate var(--duration-shimmer) ease-in-out infinite;
+  }
+
+  :where([dir="rtl"] .progress:indeterminate) {
+    animation-direction: reverse;
+  }
+}
+
+@keyframes actual-progress-indeterminate {
+  0% {
+    background-position: 200% 0;
+  }
+
+  20% {
+    background-position: 100% 0;
+  }
+
+  80% {
+    background-position: -100% 0;
+  }
+
+  100% {
+    background-position: -200% 0;
+  }
+}

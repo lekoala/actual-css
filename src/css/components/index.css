@@ -1,13 +1,40 @@
+/* Controls */
 @import "button.css";
 @import "badge.css";
 @import "alert.css";
+@import "actions.css";
+@import "form-actions.css";
+
+/* Surfaces */
 @import "card.css";
-@import "navigation.css";
-@import "data.css";
-@import "indicator.css";
-@import "avatar.css";
-@import "skeleton.css";
-@import "accordion.css";
+@import "surface.css";
 @import "dialog.css";
 @import "drawer.css";
+
+/* Disclosure */
+@import "accordion.css";
+
+/* Feedback */
 @import "spinner.css";
+@import "skeleton.css";
+@import "busy.css";
+@import "progress.css";
+
+/* Display */
+@import "avatar.css";
+@import "eyebrow.css";
+
+/* Navigation */
+@import "navbar.css";
+@import "breadcrumb.css";
+@import "pagination.css";
+
+/* Data */
+@import "table.css";
+@import "meter.css";
+
+/* Layout patterns */
+@import "list.css";
+
+/* Opt-in surface chrome */
+@import "scroller.css";

@@ -22,12 +22,14 @@ still be functional without it
 - Explicit color scheme
 - CSS nesting is not allowed - code must be findable as exposed in the inspector
 - Organize css code AS IF we are using css nesting. Related rules reads one after another and organized together
-- Icons could be <i> or inlined <svg>
+- Icons could be <i> or inlined <svg> (typically, using tabler icons like <i class="ti ti-settings" aria-hidden="true"></i>)
 - Avoid transition all unless needed, try to target specific properties
 - Use @supports positively (no @supports not) — default to the flat baseline, gate the enhanced declaration inside a positive `@supports`
 - Every `color-mix()` declaration needs a flat fallback outside `@supports` (older browsers drop the whole property, not just the function)
 - Prefix all `@keyframes` with `actual-` to avoid collisions with consumer code
 - Each component must have a small surface and be easy to opt-out
+- Component names must be easy to search (eg: `btn` vs `button`) and should not repeat the html element (no <kbd class="kbd"> or <dialog class="dialog">)
+- Use native html (<button>, <dialog>) whenever possible. Augment with JS when needed (eg: improve usability). Use standalone web components only when behaviour needs a custom surface (eg: combobox, datepicker).
 
 ## Interactive states 
 

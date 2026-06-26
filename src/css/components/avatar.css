@@ -1,8 +1,9 @@
 /*
  * Avatars for initials, images, links, and buttons.
  *
- * The visual box stays the same across semantic elements. Grouping and
- * indicators compose around the avatar without changing its meaning.
+ * The visual box stays the same across semantic elements. Grouping and status
+ * dots (an empty .badge child) compose around the avatar without changing its
+ * meaning.
  */
 .avatar {
   --avatar-size: 2.25rem;
@@ -31,7 +32,7 @@
   user-select: none;
 }
 
-.avatar > :first-child:not(:where(img, picture, .badge, .indicator)) {
+.avatar > :first-child:not(:where(img, picture, .badge)) {
   display: inline-grid;
   place-items: center;
   inline-size: 100%;
@@ -86,13 +87,14 @@ button.avatar {
   --avatar-font-size: var(--font-size-lg);
 }
 
-.avatar > .indicator,
-.avatar > .badge.indicator {
+/* Status dot: an empty .badge positioned at the avatar's bottom-end corner.
+   The dot conveys no text — always pair it with an aria-label on the badge. */
+.avatar > .badge:empty {
   position: absolute;
-  inset-block-end: 14.65%;
-  inset-inline-end: 14.65%;
+  inset-block-end: var(--indicator-offset);
+  inset-inline-end: var(--indicator-offset);
   z-index: 1;
-  box-shadow: 0 0 0 2px var(--surface);
+  box-shadow: 0 0 0 2px var(--indicator-ring);
   transform: translate(50%, 50%);
 }
 

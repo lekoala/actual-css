@@ -17,18 +17,13 @@
   block-size: var(--skeleton-size);
   border-radius: var(--skeleton-radius);
   background:
-    linear-gradient(
-      90deg,
-      var(--skeleton-track),
-      var(--skeleton-highlight),
-      var(--skeleton-track)
-    )
+    linear-gradient(90deg, var(--skeleton-track), var(--skeleton-highlight), var(--skeleton-track))
     0 0 / 200% 100%;
 }
 
 @media (prefers-reduced-motion: no-preference) {
   .skeleton {
-    animation: actual-skeleton 1.2s ease-in-out infinite;
+    animation: actual-skeleton var(--duration-shimmer) ease-in-out infinite;
   }
 }
 

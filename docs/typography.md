@@ -56,7 +56,7 @@ The reason for that boundary: a dialog title, a card heading, or a sidebar secti
 
 ### Optional fluid module
 
-`src/optional/typography-fluid.css` is a small file that is not imported by `actual.css`. Projects that need display, title, and lead sizes that scale with the viewport (landing pages, marketing pages, hero sections, documentation homepages) import it manually after `actual.css`.
+`src/css/optional/typography-fluid.css` is a small file that is not imported by `actual.css`. Projects that need display, title, and lead sizes that scale with the viewport (landing pages, marketing pages, hero sections, documentation homepages) import it manually after `actual.css`.
 
 The module exposes three size tokens (`--fluid-display`, `--fluid-title`, `--fluid-lead`) and three composed classes (`.text-display`, `.text-title`, `.text-lead`). It is deliberately not the foundation: body text, app UI, and the default prose scale stay static.
 

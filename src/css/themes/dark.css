@@ -1,3 +1,6 @@
+/* Canonical dark theme. Single-block shape (color-scheme: dark only) — it
+ * does not adapt to prefers-color-scheme; opt in via [data-theme="dark"].
+ * dim.css is a darker variant with lifted surface tones. */
 [data-theme="dark"] {
   color-scheme: dark;
 

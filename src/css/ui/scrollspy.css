@@ -1,0 +1,11 @@
+/*
+ * Scrollspy — nav list whose active section link is highlighted on scroll.
+ *
+ * No visual surface of its own. surface.js watches <nav class="scrollspy">
+ * containing <a href="#section"> links and toggles aria-current="location" on
+ * the link whose target is in view. Highlight styling comes from
+ * .nav-link:where([aria-current]:not([aria-current="false"])) in navbar.css.
+ *
+ * Falls back gracefully: links still work when IntersectionObserver is
+ * unavailable.
+ */

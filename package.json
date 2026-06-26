@@ -29,6 +29,7 @@
     ".": "./dist/actual.min.css",
     "./css": "./src/css/actual.css",
     "./themes": "./src/css/themes/index.css",
+    "./themes.min.css": "./dist/actual-themes.min.css",
     "./themes/*": "./src/css/themes/*.css",
     "./js": "./dist/actual.js",
     "./package.json": "./package.json"

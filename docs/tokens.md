@@ -21,18 +21,18 @@ Intent tokens are used by `.primary`, `.secondary`, `.success`, `.warning`, `.da
 
 ```css
 :root {
-  --primary: hsl(220 90% 56%);
-  --primary-fg: white;
-  --secondary: hsl(270 60% 56%);
-  --secondary-fg: white;
-  --success: hsl(145 60% 36%);
-  --success-fg: white;
-  --warning: hsl(38 92% 50%);
-  --warning-fg: hsl(35 30% 12%);
-  --danger: hsl(0 75% 55%);
-  --danger-fg: white;
-  --neutral: hsl(220 10% 42%);
-  --neutral-fg: white;
+  --primary: hsl(270 24% 32%);
+  --primary-fg: hsl(0 0% 98%);
+  --secondary: hsl(18 24% 36%);
+  --secondary-fg: hsl(0 0% 98%);
+  --success: hsl(145 55% 32%);
+  --success-fg: hsl(0 0% 98%);
+  --warning: hsl(38 76% 34%);
+  --warning-fg: hsl(0 0% 98%);
+  --danger: hsl(2 62% 45%);
+  --danger-fg: hsl(0 0% 98%);
+  --neutral: hsl(220 8% 42%);
+  --neutral-fg: hsl(0 0% 98%);
 }
 ```
 
@@ -42,7 +42,6 @@ Surface tokens describe the canvas and elevation model. Components should prefer
 :root {
   --surface: hsl(0 0% 100%);
   --surface-raised: hsl(0 0% 100%);
-  --surface-faint: hsl(220 20% 98%);
   --surface-subtle: hsl(220 14% 96%);
   --surface-solid: hsl(222 18% 12%);
 
@@ -52,14 +51,12 @@ Surface tokens describe the canvas and elevation model. Components should prefer
 
   --border: hsl(220 12% 88%);
   --focus: var(--primary);
-  --focus-ring: hsl(12 10% 31% / 0.22);
+  --focus-ring: hsl(258 21% 32% / 0.22);
   --hover-overlay: hsl(220 20% 10% / 0.04);
 }
 ```
 
-The surface levels are: `surface` (canvas), `surface-raised` (cards, raised surfaces), `surface-faint` (the quietest background level — for soft alert areas, faint badge backgrounds, and other secondary zones), `surface-subtle` (the working subtle level — for hover overlays, form fields, table headers), and `surface-solid` (the dark inverse surface, used for accent areas).
-
-`surface-faint` is a surface level, not a text level. It is not a fourth text tier.
+The surface levels are: `surface` (canvas), `surface-raised` (cards, raised surfaces), `surface-subtle` (the working subtle level — for hover overlays, form fields, table headers), and `surface-solid` (the dark inverse surface, used for accent areas).
 
 Use `*-fg` pairs only for solid backgrounds where the component controls both foreground and background. Do not require a foreground token for every surface token.
 
@@ -110,44 +107,57 @@ Typography tokens should cover the document baseline and common component needs.
 :root {
   --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  --font-body: var(--font-sans);
 
-  --font-size: 1rem;
   --line-height: 1.5;
   --font-weight: 400;
   --font-weight-strong: 650;
+
+  /* Type scale */
+  --font-size-xs: 0.8125rem;
+  --font-size-sm: 0.875rem;
+  --font-size-md: 1rem;       /* base */
+  --font-size-lg: 1.125rem;
 }
 ```
 
-Components can use local font variables for their own mapping, but should inherit by default.
+Components can use local font variables for their own mapping, but should inherit by default. `--font-size-md` is the baseline — going smaller (`.sm`/`--font-size-sm`/`-xs`) is the easy direction; going larger adjusts line-heights and surrounding paddings, so prefer keeping base body text at `--font-size-md`.
 
 ### Controls
 
-Controls share sizing so buttons, inputs, selects, and compact app UI align.
+Controls share sizing so buttons, inputs, selects, and compact app UI always align. `.sm`/`.lg` set the shared `--control-size` and `--control-font-size`.
 
 ```css
 :root {
-  --control-size: 2.5rem;
-  --control-pad-x: 1rem;
-  --control-font-size: 0.9375rem;
+  --control-size-sm: 2rem;      /* 32px → .sm */
+  --control-size-md: 2.375rem;  /* 38px → default */
+  --control-size-lg: 2.75rem;   /* 44px → .lg */
+  --control-size: var(--control-size-md);
+  --control-pad-x: 1em;
+  --control-font-size: var(--font-size-md);
 }
 ```
 
-Size modifiers such as `.sm` and `.lg` should set these shared control tokens first. Component-specific size variables can read from them.
+| Variant | control height | font size |
+|---|---|---|
+| `.lg` | 44px | 18px (`--font-size-lg`) |
+| default | 38px | 16px (`--font-size-md`, the baseline) |
+| `.sm` | 32px | 14px (`--font-size-sm`) |
+
+Size modifiers swap the shared control tokens:
 
 ```css
 .sm {
-  --control-size: 2rem;
-  --control-pad-x: 0.75rem;
-  --control-font-size: 0.875rem;
+  --control-size: var(--control-size-sm);
+  --control-font-size: var(--font-size-sm);
 }
 
 .lg {
-  --control-size: 3rem;
-  --control-pad-x: 1.25rem;
-  --control-font-size: 1rem;
+  --control-size: var(--control-size-lg);
+  --control-font-size: var(--font-size-lg);
 }
 ```
+
+`.sm`/`.lg` on display elements (badge, avatar, spinner) use their own size scales and do not align to control heights — only interactive controls line up.
 
 ### Elevation
 
@@ -166,7 +176,10 @@ Motion tokens keep transitions consistent and easy to disable.
 
 ```css
 :root {
-  --duration: 150ms;
+  --duration: 150ms;          /* component transitions (hover/focus) */
+  --duration-slow: 200ms;     /* one-shot open/close (.drawer animation) */
+  --duration-spin: 0.75s;     /* continuous spin (.spinner) */
+  --duration-shimmer: 1.2s;   /* continuous shimmer (.skeleton, indeterminate .progress) */
   --ease: ease;
 }
 
@@ -176,6 +189,8 @@ Motion tokens keep transitions consistent and easy to disable.
   }
 }
 ```
+
+`reset.css` zeroes raw `animation-duration`/`transition-duration` under `prefers-reduced-motion: reduce` in addition to the `--duration` token above, so decorative loops (`.spinner`, `.skeleton`) also stop.
 
 ### Icons
 
@@ -189,6 +204,22 @@ Icons used by CSS-only controls are public tokens because users may need to repl
 ```
 
 Only add an icon token when CSS needs the icon. Markup icons should stay in markup.
+
+### Composition tokens
+
+A few cross-component helpers:
+
+- `--indicator-offset` / `--indicator-ring` — positioning and contrast ring for a status dot attached to `.avatar > .badge:empty`.
+- `--backdrop-color` / `--backdrop-opacity` / `--backdrop-fill` — modal scrim color and opacity shared by `.drawer::backdrop`, `.surface-backdrop`, and conceptually by `.dialog::backdrop`. Override `--backdrop-opacity` per theme for a denser or lighter scrim.
+
+```css
+:root {
+  --indicator-offset: 14.65%;      /* circle-aware inset */
+  --indicator-ring: var(--surface);
+  --backdrop-color: var(--surface-solid);
+  --backdrop-opacity: 0.45;
+}
+```
 
 ## Internal Tokens
 

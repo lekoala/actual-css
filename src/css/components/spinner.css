@@ -1,7 +1,8 @@
 /*
- * Spinner for compact loading feedback.
+ * Spinner — compact loading feedback.
  *
- * Uses currentColor so it adapts to buttons, alerts, badges, and text.
+ * Uses currentColor so it adapts to buttons, alerts, badges, and text. The
+ * [aria-busy] overlay composition lives in components/busy.css.
  */
 .spinner {
   --spinner-size: 1.5rem;
@@ -17,7 +18,7 @@
   border-inline-end-color: var(--spinner-value);
   border-radius: var(--radius-full);
   opacity: 0.85;
-  animation: actual-spin 0.75s linear infinite;
+  animation: actual-spin var(--duration-spin) linear infinite;
   vertical-align: text-bottom;
 }
 
@@ -40,44 +41,6 @@
 .spinner.lg {
   --spinner-size: 3rem;
   --spinner-width: 3px;
-}
-
-/* Busy overlay: a non-button element with aria-busy="true" and a direct
- * last-child .spinner shows that spinner as a centered overlay.
- * Buttons keep spinners inline. */
-[aria-busy] > .spinner:last-child {
-  display: none;
-}
-
-[aria-busy="true"] > .spinner:last-child {
-  display: inline-block;
-}
-
-[aria-busy="true"]:not(.btn):has(> .spinner:last-child) {
-  position: relative;
-}
-
-[aria-busy="true"]:not(.btn):has(> .spinner:last-child)::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  border-radius: inherit;
-  background: var(--surface);
-}
-
-@supports (color: color-mix(in oklch, red, white)) {
-  [aria-busy="true"]:not(.btn):has(> .spinner:last-child)::before {
-    background: color-mix(in oklch, var(--surface), transparent 20%);
-  }
-}
-
-[aria-busy="true"]:not(.btn) > .spinner:last-child {
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-  margin: auto;
-  display: block;
 }
 
 @keyframes actual-spin {
