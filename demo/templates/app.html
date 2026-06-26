@@ -111,13 +111,13 @@
     }
 
     .app-filter-bar {
-      --cluster-justify: space-between;
+      --cluster-justify: flex-end;
       flex-wrap: wrap;
       gap: 0.5rem;
     }
 
     .app-filter-controls {
-      flex: 1 1 auto;
+      flex: 0 1 auto;
       flex-wrap: nowrap;
       min-inline-size: 0;
     }
@@ -539,7 +539,7 @@
         <!-- Filter bar -->
         <section class="card compact">
           <div class="cluster app-filter-bar">
-            <div class="cluster app-filter-controls" style="gap: 0.5rem;">
+            <div class="cluster app-filter-controls gap-sm">
               <select class="select sm" aria-label="Filter by status">
                 <option value="">All statuses</option>
                 <option value="success">Success</option>
@@ -555,7 +555,7 @@
               </select>
               <input class="input sm" type="date" aria-label="Filter by date">
             </div>
-            <div class="cluster app-filter-actions" style="gap: 0.5rem;">
+            <div class="cluster app-filter-actions gap-sm">
               <button class="btn neutral outline sm" type="button">
                 <i class="ti ti-filter" aria-hidden="true"></i>
                 Apply

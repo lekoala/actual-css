@@ -24,7 +24,7 @@ still be functional without it
 - Organize css code AS IF we are using css nesting. Related rules reads one after another and organized together
 - Icons could be <i> or inlined <svg> (typically, using tabler icons like <i class="ti ti-settings" aria-hidden="true"></i>)
 - Avoid transition all unless needed, try to target specific properties
-- Use @supports positively (no @supports not) — default to the flat baseline, gate the enhanced declaration inside a positive `@supports`
+- Use `@supports` positively (no `@supports not`) only when it protects a dependent group of rules or a real fallback/modern branch. Do not gate a single progressive declaration whose unsupported value is simply ignored by the browser, such as `text-wrap: balance`.
 - Every `color-mix()` declaration needs a flat fallback outside `@supports` (older browsers drop the whole property, not just the function)
 - Prefix all `@keyframes` with `actual-` to avoid collisions with consumer code
 - Each component must have a small surface and be easy to opt-out

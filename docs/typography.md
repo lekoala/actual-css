@@ -107,13 +107,13 @@ There is no `--line-height-normal`. It would be redundant with `--line-height`. 
 - inside `.prose` for headings (balance) and for paragraphs, list items, and blockquotes (pretty)
 - as opt-in utilities `.text-balance` and `.text-pretty` for any element outside `.prose`
 
-All three are wrapped in `@supports` so that the property gracefully degrades in browsers that do not support it. There is no `text-align: center` hidden inside `.text-balance`: balance is about wrapping, not alignment.
+These declarations degrade naturally: browsers that do not support a `text-wrap` value ignore it and keep normal wrapping. There is no `text-align: center` hidden inside `.text-balance`: balance is about wrapping, not alignment.
 
 ## Headings
 
 Headings are split between the global baseline and `.prose`.
 
-Globally, headings get a tight line-height, a color from `--heading` (or inherited), and `text-wrap: balance` where supported. They do not get a `font-size`, a `font-weight`, or margins. The reason is that a card heading, a dialog title, or a sidebar section should not be auto-magically enlarged by selector.
+Globally, headings get a tight line-height, a color from `--heading` (or inherited), and progressive `text-wrap: balance`. They do not get a `font-size`, a `font-weight`, or margins. The reason is that a card heading, a dialog title, or a sidebar section should not be auto-magically enlarged by selector.
 
 Inside `.prose`, headings get a `font-weight` from `--font-weight-strong`, a tighter line-height from `--prose-heading-line-height`, a margin-block rhythm, and an explicit `text-wrap: balance`. The `h1` to `h4` font sizes are also scoped to `.prose` and are not exposed as a public scale.
 

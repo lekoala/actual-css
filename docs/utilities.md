@@ -284,7 +284,7 @@ Use `.text-start`, `.text-center`, or `.text-end` when a component or layout pri
 
 ### Text Wrap
 
-`.text-balance` and `.text-pretty` opt elements outside `.prose` into balanced or pretty text wrapping. Both are gated on `@supports` — they degrade silently in browsers that do not support the feature.
+`.text-balance` and `.text-pretty` opt elements outside `.prose` into balanced or pretty text wrapping. They are safe progressive enhancements: browsers that do not support a `text-wrap` value ignore that declaration and keep normal wrapping.
 
 ### Lead
 

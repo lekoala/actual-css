@@ -17,17 +17,12 @@ a {
 }
 
 /* Global heading chrome: color (--heading or inherit), a tight line-height,
-   and opt-in text-wrap: balance where supported. No font-size or font-weight
-   is set globally — components and .prose own the per-context scale. */
+   and progressive text-wrap. No font-size or font-weight is set globally —
+   components and .prose own the per-context scale. */
 :where(h1, h2, h3, h4, h5, h6) {
   color: var(--heading, inherit);
   line-height: var(--line-height-tight);
-}
-
-@supports (text-wrap: balance) {
-  :where(h1, h2, h3, h4, h5, h6) {
-    text-wrap: balance;
-  }
+  text-wrap: balance;
 }
 
 /* Compact heading groups. Structural only: display, gap, internal margin reset.
