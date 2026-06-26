@@ -1,0 +1,136 @@
+/*
+ * Modal shell styling for native dialog elements.
+ *
+ * Spacing, radius, transitions, and focus treatment come from shared tokens.
+ * Opening behavior and intent-specific decisions stay outside this component.
+ */
+.modal {
+  --modal-size: 32rem;
+
+  max-inline-size: min(100% - 2rem, var(--modal-size));
+  max-block-size: calc(100vh - 2rem);
+  max-block-size: calc(100dvb - 2rem);
+  border: var(--border-width) solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface-raised);
+  color: var(--text);
+  box-shadow: var(--shadow);
+  padding: 0;
+  overflow: visible;
+  opacity: 0;
+  /*
+   * Keep the open dialog root untransformed. Fixed overlays mounted inside a
+   * modal dialog use viewport coordinates; transform/translate/scale on this
+   * element would make them position against the dialog instead.
+   */
+  transition:
+    opacity var(--duration),
+    transform var(--duration),
+    overlay var(--duration) allow-discrete,
+    display var(--duration) allow-discrete;
+}
+
+.modal > form,
+.modal > .stack {
+  display: grid;
+  gap: var(--space-4);
+  max-block-size: calc(100vh - 2rem);
+  max-block-size: calc(100dvb - 2rem);
+  overflow: auto;
+  overscroll-behavior: contain;
+  padding: var(--space-4);
+}
+
+.modal.scrollable > form,
+.modal.scrollable > .stack {
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  overflow: hidden;
+}
+
+.modal.scrollable > form > :not(header, footer),
+.modal.scrollable > .stack > :not(header, footer) {
+  min-block-size: 0;
+  overflow: auto;
+  overscroll-behavior: contain;
+}
+
+.modal header > :first-child,
+.modal footer > :first-child {
+  margin-block-start: 0;
+}
+
+.modal header > :last-child,
+.modal footer > :last-child {
+  margin-block-end: 0;
+}
+
+.modal footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--gap);
+}
+
+.modal[open] {
+  opacity: 1;
+  transform: none;
+}
+
+@starting-style {
+  .modal[open] {
+    opacity: 0;
+    transform: translateY(0.35rem) scale(0.98);
+  }
+}
+
+.modal::backdrop {
+  background: var(--surface-solid);
+  opacity: 0;
+  transition:
+    opacity var(--duration),
+    overlay var(--duration) allow-discrete,
+    display var(--duration) allow-discrete;
+}
+
+.modal[open]::backdrop {
+  opacity: 0.5;
+}
+
+@supports selector(:has(dialog:modal)) {
+  html:has(dialog:modal) {
+    overflow: hidden;
+    scrollbar-gutter: stable;
+  }
+}
+
+@starting-style {
+  .modal[open]::backdrop {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .modal.is-static {
+    animation: actual-modal-static 180ms var(--ease);
+  }
+
+  ::view-transition-group(actual-dialog) {
+    animation-duration: var(--duration);
+    animation-timing-function: var(--ease);
+  }
+}
+
+@keyframes actual-modal-static {
+  0%,
+  100% {
+    transform: none;
+  }
+
+  35% {
+    transform: translateX(-0.35rem);
+  }
+
+  70% {
+    transform: translateX(0.35rem);
+  }
+}

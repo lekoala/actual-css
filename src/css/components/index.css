@@ -8,7 +8,7 @@
 /* Surfaces */
 @import "card.css";
 @import "surface.css";
-@import "dialog.css";
+@import "modal.css";
 @import "drawer.css";
 
 /* Disclosure */

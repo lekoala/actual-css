@@ -530,339 +530,6 @@ Links:
 - https://smolcss.dev/#smol-card-component
 - https://uiterms.com/card/
 
-## Dialog
-
-> Modal overlay for focused tasks, confirmations, or forms, built on the native `<dialog>` element.
-
-Dialogs use the platform-native `<dialog class="dialog">` element with `commandfor` and `command` buttons.
-
-Use `command="show-modal"` to open a modal dialog.
-
-Use `command="request-close"` for cancel-style buttons so close requests go through the dialog’s cancel lifecycle.
-
-Use `closedby="any"` as the no-JavaScript light-dismiss path. Add `data-dialog-dismissible` so the optional runtime can provide the same behavior in browsers that need a small fallback.
-
-### Alert dialog
-
-Use this shape when the dialog interrupts the flow and asks for a decision. It has no close icon and no light dismiss; the footer actions are the way out. With the optional runtime, backdrop clicks give a small static feedback instead of closing.
-
-```html
-<button class="btn"
-        type="button"
-        commandfor="delete-dialog"
-        command="show-modal">
-  Delete project
-</button>
-
-<dialog class="dialog" id="delete-dialog">
-  <form method="dialog">
-    <header>
-      <h3>Delete project?</h3>
-      <p>This action cannot be undone.</p>
-    </header>
-
-    <div>
-      <p>The project, saved reports, and connected automations will be removed permanently.</p>
-    </div>
-
-    <footer>
-      <button class="btn outline"
-              type="button"
-              commandfor="delete-dialog"
-              command="request-close">
-        Cancel
-      </button>
-
-      <button class="btn danger"
-              value="delete">
-        Delete
-      </button>
-    </footer>
-  </form>
-</dialog>
-```
-
-### Dialog
-
-Use this shape for contextual information or lightweight secondary content. It has no action button; the header close button dismisses the dialog.
-
-```html
-<button class="btn"
-        type="button"
-        commandfor="details-dialog"
-        command="show-modal">
-  View details
-</button>
-
-<dialog class="dialog"
-        id="details-dialog"
-        closedby="any"
-        data-dialog-dismissible>
-  <div class="stack">
-    <header class="cluster" style="--cluster-justify: space-between">
-      <hgroup>
-        <h3>Release details</h3>
-        <p>Changes included in this version.</p>
-      </hgroup>
-
-      <button class="btn ghost"
-              type="button"
-              commandfor="details-dialog"
-              command="request-close"
-              aria-label="Close dialog">
-        <i class="ti ti-x" aria-hidden="true"></i>
-      </button>
-    </header>
-
-    <div>
-      <p>The release improves dialog behavior, scroll handling, and progressive enhancement for modern browsers.</p>
-      <p>There are no decisions to make here; the content can simply be dismissed when finished.</p>
-    </div>
-  </div>
-</dialog>
-```
-
-### Scrollable dialog
-
-Use `dialog scrollable` when the header and footer should stay visible while the dialog body scrolls. Modal dialogs also lock page scroll in browsers that support `:has()` and `:modal`; older browsers keep native dialog behavior.
-
-```html
-<button class="btn"
-        type="button"
-        commandfor="scroll-dialog"
-        command="show-modal">
-  Open scrollable dialog
-</button>
-
-<dialog class="dialog scrollable"
-        id="scroll-dialog"
-        closedby="any"
-        data-dialog-dismissible>
-  <form method="dialog">
-    <header>
-      <h3>Terms review</h3>
-      <p>Review the full text before continuing.</p>
-    </header>
-
-    <div class="stack">
-      <p>Actual CSS keeps long dialog content inside the dialog surface instead of letting it run past the viewport.</p>
-      <p>Section 1. The service stores project settings, interface preferences, and theme choices so teams can keep a consistent working environment.</p>
-      <p>Section 2. Administrators can invite users, remove inactive accounts, and review access periodically.</p>
-      <p>Section 3. Billing changes may affect future invoices. Existing invoices remain available from the account area.</p>
-      <p>Section 4. Export tools are provided for common formats. Large exports may take a few minutes to prepare.</p>
-      <p>Section 5. Support requests should include relevant browser, operating system, and account context.</p>
-      <p>Section 6. Experimental features can change or disappear before a stable release.</p>
-      <p>Section 7. Continued use confirms acceptance of the current terms.</p>
-    </div>
-
-    <footer>
-      <button class="btn outline"
-              type="button"
-              commandfor="scroll-dialog"
-              command="request-close">
-        Cancel
-      </button>
-
-      <button class="btn primary" value="accept">
-        Accept
-      </button>
-    </footer>
-  </form>
-</dialog>
-```
-
-### Dialog overlays
-
-Dropdowns and tooltips opened from inside a modal dialog are mounted inside the dialog so they stay in the same top-layer context.
-
-```html
-<button class="btn"
-        type="button"
-        commandfor="overlay-dialog"
-        command="show-modal">
-  Open dialog overlays
-</button>
-
-<dialog class="dialog"
-        id="overlay-dialog"
-        closedby="any"
-        data-dialog-dismissible>
-  <div class="stack">
-    <header class="cluster" style="--cluster-justify: space-between">
-      <hgroup>
-        <h3>Dialog overlays</h3>
-        <p>Dropdowns and tooltips remain above the dialog surface.</p>
-      </hgroup>
-
-      <button class="btn ghost"
-              type="button"
-              commandfor="overlay-dialog"
-              command="request-close"
-              aria-label="Close dialog">
-        <i class="ti ti-x" aria-hidden="true"></i>
-      </button>
-    </header>
-
-    <div class="cluster">
-      <button class="btn"
-              type="button"
-              aria-haspopup="menu"
-              aria-expanded="false"
-              aria-controls="dialog-actions-menu">
-        Actions
-      </button>
-
-      <button class="btn outline"
-              type="button"
-              data-tooltip="Tooltip inside a dialog">
-        Tooltip
-      </button>
-    </div>
-
-    <div class="dropdown-menu"
-         id="dialog-actions-menu"
-         role="menu"
-         hidden>
-      <button class="btn link" type="button" role="menuitem">Archive</button>
-      <button class="btn link" type="button" role="menuitem">Duplicate</button>
-      <button class="btn link" type="button" role="menuitem">Share</button>
-    </div>
-  </div>
-</dialog>
-```
-
-### JavaScript options
-
-Add options directly on the dialog element. Without JavaScript, modern browsers still use the native dialog behavior; the runtime only adds fallback opening, focus restoration, light dismiss, and optional view transitions.
-
-Available options:
-
-* `data-dialog-dismissible` enables backdrop click dismissal.
-* `data-dialog-modal="false"` opens with `show()` instead of `showModal()`.
-* `data-dialog-view-transition` enables a view transition that morphs the dialog to/from its trigger. Only active when the browser supports `document.startViewTransition` and the user allows motion.
-* `closedby="any"` is the no-JavaScript light-dismiss path. The runtime rewrites it to `closedby="closerequest"` where supported so dialog light-dismiss keeps the modal workflow intact — the same behavior, just stated in terms the platform understands.
-
-### Animation
-
-The base CSS gives supporting browsers a small opening transition. Closing remains native unless `data-dialog-view-transition` is enabled and the browser supports the View Transition API.
-
-The open dialog root intentionally ends at `transform: none`; fixed dropdowns and tooltips mounted inside a modal dialog rely on viewport coordinates.
-
-```css
-.dialog {
-  opacity: 0;
-  overflow: visible;
-
-  transition:
-    opacity var(--duration),
-    transform var(--duration),
-    display var(--duration) allow-discrete,
-    overlay var(--duration) allow-discrete;
-}
-
-.dialog > form,
-.dialog > .stack {
-  max-block-size: calc(100vh - 2rem);
-  max-block-size: calc(100dvb - 2rem);
-  overflow: auto;
-  overscroll-behavior: contain;
-}
-
-.dialog[open] {
-  opacity: 1;
-  transform: none;
-}
-
-@starting-style {
-  .dialog[open] {
-    opacity: 0;
-    transform: translateY(0.35rem) scale(0.98);
-  }
-}
-
-.dialog::backdrop {
-  background: var(--surface-solid);
-  opacity: 0;
-  transition:
-    opacity var(--duration),
-    display var(--duration) allow-discrete,
-    overlay var(--duration) allow-discrete;
-}
-
-.dialog[open]::backdrop {
-  opacity: 0.5;
-}
-
-@supports selector(:has(dialog:modal)) {
-  html:has(dialog:modal) {
-    overflow: hidden;
-    scrollbar-gutter: stable;
-  }
-}
-
-@starting-style {
-  .dialog[open]::backdrop {
-    opacity: 0;
-  }
-}
-```
-
-### View transitions
-
-Add `data-dialog-view-transition` to morph the dialog to/from its trigger using the View Transition API. The dialog appears to grow out of the trigger on open and shrink back into it on close, communicating the relationship between the two.
-
-The effect is progressive: it only runs when the browser supports `document.startViewTransition` and the user has not requested reduced motion. Otherwise the dialog simply opens and closes with the baseline dialog transition.
-
-```html
-<button class="btn"
-        type="button"
-        commandfor="vt-dialog"
-        command="show-modal">
-  Open dialog
-</button>
-
-<dialog class="dialog"
-        id="vt-dialog"
-        data-dialog-view-transition
-        data-dialog-dismissible>
-  <form method="dialog">
-    <header>
-      <h3>Title</h3>
-      <p>This dialog morphs to and from the trigger button.</p>
-    </header>
-
-    <footer>
-      <button class="btn outline"
-              type="button"
-              commandfor="vt-dialog"
-              command="request-close">
-        Cancel
-      </button>
-      <button class="btn primary" value="confirm">Confirm</button>
-    </footer>
-  </form>
-</dialog>
-```
-
-### Notes
-
-Prefer native dialog behavior whenever possible. The framework runtime should not replace the platform modal system; it should only make dialogs declarative, animation-friendly, and consistent across supported browsers.
-
-Links:
-- https://oat.ink/components/#dialog
-- https://picocss.com/docs/modal
-- https://daisyui.com/components/modal/
-- https://getbootstrap.com/docs/5.3/components/modal/
-- https://modern-css.com/modal-dialogs-without-a-javascript-library/
-- https://modern-css.com/full-width-without-horizontal-scrollbar-overflow/
-- https://modern-css.com/modal-controls-without-onclick-handlers/
-- https://modern-css.com/dialog-light-dismiss-without-click-outside-listeners/
-- https://uiterms.com/alert-dialog/
-- https://uiterms.com/dialog/
-- Modern dialogs: https://codepen.io/lekoalabe/pen/GgKOKOE
-- Animating the dialog element using view transitions: https://pqina.nl/blog/animating-the-dialog-element-using-view-transitions/
-- https://basecoatui.com/components/alert-dialog/
-
 ## Drawer
 
 > Modal side-sheet that overlays the page for navigation or filters.
@@ -943,6 +610,339 @@ Links:
 Links:
 - https://oat.ink/components/#meter
 
+
+## Modal
+
+> Centered modal overlay for focused tasks, confirmations, or forms, built on the native `<dialog>` element.
+
+Modals use the platform-native `<dialog class="modal">` element with `commandfor` and `command` buttons.
+
+Use `command="show-modal"` to open a modal dialog.
+
+Use `command="request-close"` for cancel-style buttons so close requests go through the dialog’s cancel lifecycle.
+
+Use `closedby="any"` as the no-JavaScript light-dismiss path. Add `data-dialog-dismissible` so the optional runtime can provide the same behavior in browsers that need a small fallback.
+
+### Alert dialog
+
+Use this shape when the dialog interrupts the flow and asks for a decision. It has no close icon and no light dismiss; the footer actions are the way out. With the optional runtime, backdrop clicks give a small static feedback instead of closing.
+
+```html
+<button class="btn"
+        type="button"
+        commandfor="delete-dialog"
+        command="show-modal">
+  Delete project
+</button>
+
+<dialog class="modal" id="delete-dialog">
+  <form method="dialog">
+    <header>
+      <h3>Delete project?</h3>
+      <p>This action cannot be undone.</p>
+    </header>
+
+    <div>
+      <p>The project, saved reports, and connected automations will be removed permanently.</p>
+    </div>
+
+    <footer>
+      <button class="btn outline"
+              type="button"
+              commandfor="delete-dialog"
+              command="request-close">
+        Cancel
+      </button>
+
+      <button class="btn danger"
+              value="delete">
+        Delete
+      </button>
+    </footer>
+  </form>
+</dialog>
+```
+
+### Information modal
+
+Use this shape for contextual information or lightweight secondary content. It has no action button; the header close button dismisses the dialog.
+
+```html
+<button class="btn"
+        type="button"
+        commandfor="details-dialog"
+        command="show-modal">
+  View details
+</button>
+
+<dialog class="modal"
+        id="details-dialog"
+        closedby="any"
+        data-dialog-dismissible>
+  <div class="stack">
+    <header class="cluster" style="--cluster-justify: space-between">
+      <hgroup>
+        <h3>Release details</h3>
+        <p>Changes included in this version.</p>
+      </hgroup>
+
+      <button class="btn ghost"
+              type="button"
+              commandfor="details-dialog"
+              command="request-close"
+              aria-label="Close dialog">
+        <i class="ti ti-x" aria-hidden="true"></i>
+      </button>
+    </header>
+
+    <div>
+      <p>The release improves dialog behavior, scroll handling, and progressive enhancement for modern browsers.</p>
+      <p>There are no decisions to make here; the content can simply be dismissed when finished.</p>
+    </div>
+  </div>
+</dialog>
+```
+
+### Scrollable modal
+
+Use `modal scrollable` when the header and footer should stay visible while the dialog body scrolls. Modal dialogs also lock page scroll in browsers that support `:has()` and `:modal`; older browsers keep native dialog behavior.
+
+```html
+<button class="btn"
+        type="button"
+        commandfor="scroll-dialog"
+        command="show-modal">
+  Open scrollable modal
+</button>
+
+<dialog class="modal scrollable"
+        id="scroll-dialog"
+        closedby="any"
+        data-dialog-dismissible>
+  <form method="dialog">
+    <header>
+      <h3>Terms review</h3>
+      <p>Review the full text before continuing.</p>
+    </header>
+
+    <div class="stack">
+      <p>Actual CSS keeps long dialog content inside the dialog surface instead of letting it run past the viewport.</p>
+      <p>Section 1. The service stores project settings, interface preferences, and theme choices so teams can keep a consistent working environment.</p>
+      <p>Section 2. Administrators can invite users, remove inactive accounts, and review access periodically.</p>
+      <p>Section 3. Billing changes may affect future invoices. Existing invoices remain available from the account area.</p>
+      <p>Section 4. Export tools are provided for common formats. Large exports may take a few minutes to prepare.</p>
+      <p>Section 5. Support requests should include relevant browser, operating system, and account context.</p>
+      <p>Section 6. Experimental features can change or disappear before a stable release.</p>
+      <p>Section 7. Continued use confirms acceptance of the current terms.</p>
+    </div>
+
+    <footer>
+      <button class="btn outline"
+              type="button"
+              commandfor="scroll-dialog"
+              command="request-close">
+        Cancel
+      </button>
+
+      <button class="btn primary" value="accept">
+        Accept
+      </button>
+    </footer>
+  </form>
+</dialog>
+```
+
+### Overlays inside modals
+
+Dropdowns and tooltips opened from inside a modal dialog are mounted inside the dialog so they stay in the same top-layer context.
+
+```html
+<button class="btn"
+        type="button"
+        commandfor="overlay-dialog"
+        command="show-modal">
+  Open modal overlays
+</button>
+
+<dialog class="modal"
+        id="overlay-dialog"
+        closedby="any"
+        data-dialog-dismissible>
+  <div class="stack">
+    <header class="cluster" style="--cluster-justify: space-between">
+      <hgroup>
+        <h3>Modal overlays</h3>
+        <p>Dropdowns and tooltips remain above the dialog surface.</p>
+      </hgroup>
+
+      <button class="btn ghost"
+              type="button"
+              commandfor="overlay-dialog"
+              command="request-close"
+              aria-label="Close dialog">
+        <i class="ti ti-x" aria-hidden="true"></i>
+      </button>
+    </header>
+
+    <div class="cluster">
+      <button class="btn"
+              type="button"
+              aria-haspopup="menu"
+              aria-expanded="false"
+              aria-controls="dialog-actions-menu">
+        Actions
+      </button>
+
+      <button class="btn outline"
+              type="button"
+              data-tooltip="Tooltip inside a dialog">
+        Tooltip
+      </button>
+    </div>
+
+    <div class="dropdown-menu"
+         id="dialog-actions-menu"
+         role="menu"
+         hidden>
+      <button class="btn link" type="button" role="menuitem">Archive</button>
+      <button class="btn link" type="button" role="menuitem">Duplicate</button>
+      <button class="btn link" type="button" role="menuitem">Share</button>
+    </div>
+  </div>
+</dialog>
+```
+
+### JavaScript options
+
+Add options directly on the dialog element. Without JavaScript, modern browsers still use the native dialog behavior; the runtime only adds fallback opening, focus restoration, light dismiss, and optional view transitions.
+
+Available options:
+
+* `data-dialog-dismissible` enables backdrop click dismissal.
+* `data-dialog-modal="false"` opens with `show()` instead of `showModal()`.
+* `data-dialog-view-transition` enables a view transition that morphs the dialog to/from its trigger. Only active when the browser supports `document.startViewTransition` and the user allows motion.
+* `closedby="any"` is the no-JavaScript light-dismiss path. The runtime rewrites it to `closedby="closerequest"` where supported so dialog light-dismiss keeps the modal workflow intact — the same behavior, just stated in terms the platform understands.
+
+### Animation
+
+The base CSS gives supporting browsers a small opening transition. Closing remains native unless `data-dialog-view-transition` is enabled and the browser supports the View Transition API.
+
+The open dialog root intentionally ends at `transform: none`; fixed dropdowns and tooltips mounted inside a modal dialog rely on viewport coordinates.
+
+```css
+.modal {
+  opacity: 0;
+  overflow: visible;
+
+  transition:
+    opacity var(--duration),
+    transform var(--duration),
+    display var(--duration) allow-discrete,
+    overlay var(--duration) allow-discrete;
+}
+
+.modal > form,
+.modal > .stack {
+  max-block-size: calc(100vh - 2rem);
+  max-block-size: calc(100dvb - 2rem);
+  overflow: auto;
+  overscroll-behavior: contain;
+}
+
+.modal[open] {
+  opacity: 1;
+  transform: none;
+}
+
+@starting-style {
+  .modal[open] {
+    opacity: 0;
+    transform: translateY(0.35rem) scale(0.98);
+  }
+}
+
+.modal::backdrop {
+  background: var(--surface-solid);
+  opacity: 0;
+  transition:
+    opacity var(--duration),
+    display var(--duration) allow-discrete,
+    overlay var(--duration) allow-discrete;
+}
+
+.modal[open]::backdrop {
+  opacity: 0.5;
+}
+
+@supports selector(:has(dialog:modal)) {
+  html:has(dialog:modal) {
+    overflow: hidden;
+    scrollbar-gutter: stable;
+  }
+}
+
+@starting-style {
+  .modal[open]::backdrop {
+    opacity: 0;
+  }
+}
+```
+
+### View transitions
+
+Add `data-dialog-view-transition` to morph the dialog to/from its trigger using the View Transition API. The dialog appears to grow out of the trigger on open and shrink back into it on close, communicating the relationship between the two.
+
+The effect is progressive: it only runs when the browser supports `document.startViewTransition` and the user has not requested reduced motion. Otherwise the dialog simply opens and closes with the baseline dialog transition.
+
+```html
+<button class="btn"
+        type="button"
+        commandfor="vt-dialog"
+        command="show-modal">
+  Open modal
+</button>
+
+<dialog class="modal"
+        id="vt-dialog"
+        data-dialog-view-transition
+        data-dialog-dismissible>
+  <form method="dialog">
+    <header>
+      <h3>Title</h3>
+      <p>This dialog morphs to and from the trigger button.</p>
+    </header>
+
+    <footer>
+      <button class="btn outline"
+              type="button"
+              commandfor="vt-dialog"
+              command="request-close">
+        Cancel
+      </button>
+      <button class="btn primary" value="confirm">Confirm</button>
+    </footer>
+  </form>
+</dialog>
+```
+
+### Notes
+
+Prefer native dialog behavior whenever possible. The framework runtime should not replace the platform modal system; it should only make dialogs declarative, animation-friendly, and consistent across supported browsers.
+
+Links:
+- https://oat.ink/components/#dialog
+- https://picocss.com/docs/modal
+- https://daisyui.com/components/modal/
+- https://getbootstrap.com/docs/5.3/components/modal/
+- https://modern-css.com/modal-dialogs-without-a-javascript-library/
+- https://modern-css.com/full-width-without-horizontal-scrollbar-overflow/
+- https://modern-css.com/modal-controls-without-onclick-handlers/
+- https://modern-css.com/dialog-light-dismiss-without-click-outside-listeners/
+- https://uiterms.com/alert-dialog/
+- https://uiterms.com/dialog/
+- Modern dialogs: https://codepen.io/lekoalabe/pen/GgKOKOE
+- Animating the dialog element using view transitions: https://pqina.nl/blog/animating-the-dialog-element-using-view-transitions/
+- https://basecoatui.com/components/alert-dialog/
 
 ## Pagination
 
