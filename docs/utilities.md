@@ -74,6 +74,59 @@ Links:
 - https://getbootstrap.com/docs/5.3/content/tables/#responsive-tables
 - https://picocss.com/docs/overflow-auto
 
+## Sizing And Wrapping
+
+> Small layout corrections for controls, labels, and compact rails.
+
+Use `.fit` when a control or element should shrink to its content instead of filling the available inline space.
+
+```html
+<select class="select fit" aria-label="Theme">
+  <option>System</option>
+  <option>Light</option>
+  <option>Dark</option>
+</select>
+```
+
+Use `.nowrap` on a flex layout such as `.cluster` when the group must stay on one line.
+
+```html
+<div class="cluster nowrap gap-sm">
+  <select class="select sm fit" aria-label="Segment">
+    <option>All segments</option>
+  </select>
+  <button class="btn sm outline" type="button">Filter</button>
+</div>
+```
+
+Use `.truncate` on the flexible item that should ellipsize inside a constrained row.
+
+```html
+<header class="cluster nowrap">
+  <strong class="truncate">A long account name that should not push actions away</strong>
+  <button class="btn sm ghost" type="button">Open</button>
+</header>
+```
+
+```css
+.fit {
+  inline-size: fit-content;
+  max-inline-size: 100%;
+}
+
+.nowrap {
+  flex-wrap: nowrap;
+  white-space: nowrap;
+}
+
+.truncate {
+  min-inline-size: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+```
+
 ### Scroller
 
 Use `.scroller` to apply the framework scrollbar treatment to a scroll container. It styles the scrollbar only; pair it with `.overflow-auto` or a component that already creates overflow.

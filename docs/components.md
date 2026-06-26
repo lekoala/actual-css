@@ -382,6 +382,7 @@ Links:
 - Supports one or more content sections.
 - Should display nicely in grids with equal-height behavior.
 - Does not own page spacing.
+- A direct `<header>` or `<footer>` is the card's structural slot.
 - Use `data-bleed` on a direct child to escape the card padding (full-width images, colored headers or footers).
 
 ```html
@@ -402,7 +403,7 @@ Links:
       <li><span class="badge outline">5 min read</span></li>
     </ul>
 
-    <footer class="cluster" style="justify-content: space-between">
+    <footer>
       <time datetime="2026-06-12" class="muted">June 12, 2026</time>
       <button type="button" class="btn outline">Read more</button>
     </footer>
@@ -420,7 +421,7 @@ Links:
     <section aria-label="Summary">
       <p>A short caption that wraps across a few lines. The image bleeds to the card edges.</p>
     </section>
-    <footer class="cluster">
+    <footer>
       <span class="badge primary soft">Photo</span>
       <button type="button" class="btn outline">View</button>
     </footer>
@@ -448,7 +449,7 @@ Links:
     <li>Priority support</li>
   </ul>
 
-  <footer data-bleed class="cluster" style="background: var(--surface-subtle); justify-content: center">
+  <footer data-bleed style="background: var(--surface-subtle); justify-content: center">
     <a class="btn primary" href="/billing">Upgrade</a>
   </footer>
 </article>
@@ -461,7 +462,7 @@ Links:
       <h3>Components</h3>
     </header>
     <p>Buttons, alerts, dialogs — all opt-in.</p>
-    <footer class="cluster">
+    <footer>
       <a class="btn outline" href="components.html">Browse</a>
     </footer>
   </article>
@@ -471,7 +472,7 @@ Links:
       <h3>Layout</h3>
     </header>
     <p>Stack, cluster, grid, switcher, sidebar.</p>
-    <footer class="cluster">
+    <footer>
       <a class="btn outline" href="layout.html">Browse</a>
     </footer>
   </article>
@@ -481,7 +482,7 @@ Links:
       <h3>Patterns</h3>
     </header>
     <p>Actions, nav-list — small structural helpers.</p>
-    <footer class="cluster">
+    <footer>
       <a class="btn outline" href="patterns.html">Browse</a>
     </footer>
   </article>
