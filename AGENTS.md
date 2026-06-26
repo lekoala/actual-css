@@ -13,6 +13,8 @@ Elegance is key.
 
 This library has not reached 1.0 and can make as many breaking changes as required to reach the proper shape.
 
+Add relevant guards for future-us when needed based on traps and discoveries.
+
 ## Tools
 
 - Do not lint yourself, this is done by config and use biome
@@ -26,4 +28,4 @@ No need to mention that you didn't do anything
 
 - Don't open the browser
 - Don't create file outside the project
-- Temp files can be created in tmp
+- Temp files can be created in `./tmp`

@@ -542,7 +542,7 @@ Use `closedby="any"` as the no-JavaScript light-dismiss path. Add `data-dialog-d
 
 ### Alert dialog
 
-Use this shape when the dialog interrupts the flow and asks for a decision. It has no close icon and no light dismiss; the footer actions are the way out.
+Use this shape when the dialog interrupts the flow and asks for a decision. It has no close icon and no light dismiss; the footer actions are the way out. With the optional runtime, backdrop clicks give a small static feedback instead of closing.
 
 ```html
 <button class="btn"
@@ -622,7 +622,7 @@ Use this shape for contextual information or lightweight secondary content. It h
 
 ### Scrollable dialog
 
-Tall dialogs scroll inside the dialog surface. Modal dialogs also lock page scroll in browsers that support `:has()` and `:modal`; older browsers keep native dialog behavior.
+Use `dialog scrollable` when the header and footer should stay visible while the dialog body scrolls. Modal dialogs also lock page scroll in browsers that support `:has()` and `:modal`; older browsers keep native dialog behavior.
 
 ```html
 <button class="btn"
@@ -632,7 +632,7 @@ Tall dialogs scroll inside the dialog surface. Modal dialogs also lock page scro
   Open scrollable dialog
 </button>
 
-<dialog class="dialog"
+<dialog class="dialog scrollable"
         id="scroll-dialog"
         closedby="any"
         data-dialog-dismissible>
@@ -669,6 +669,66 @@ Tall dialogs scroll inside the dialog surface. Modal dialogs also lock page scro
 </dialog>
 ```
 
+### Dialog overlays
+
+Dropdowns and tooltips opened from inside a modal dialog are mounted inside the dialog so they stay in the same top-layer context.
+
+```html
+<button class="btn"
+        type="button"
+        commandfor="overlay-dialog"
+        command="show-modal">
+  Open dialog overlays
+</button>
+
+<dialog class="dialog"
+        id="overlay-dialog"
+        closedby="any"
+        data-dialog-dismissible>
+  <div class="stack">
+    <header class="cluster" style="--cluster-justify: space-between">
+      <hgroup>
+        <h3>Dialog overlays</h3>
+        <p>Dropdowns and tooltips remain above the dialog surface.</p>
+      </hgroup>
+
+      <button class="btn ghost"
+              type="button"
+              commandfor="overlay-dialog"
+              command="request-close"
+              aria-label="Close dialog">
+        <i class="ti ti-x" aria-hidden="true"></i>
+      </button>
+    </header>
+
+    <div class="cluster">
+      <button class="btn"
+              type="button"
+              aria-haspopup="menu"
+              aria-expanded="false"
+              aria-controls="dialog-actions-menu">
+        Actions
+      </button>
+
+      <button class="btn outline"
+              type="button"
+              data-tooltip="Tooltip inside a dialog">
+        Tooltip
+      </button>
+    </div>
+
+    <div class="dropdown-menu"
+         id="dialog-actions-menu"
+         role="menu"
+         hidden>
+      <button class="btn link" type="button" role="menuitem">Archive</button>
+      <button class="btn link" type="button" role="menuitem">Duplicate</button>
+      <button class="btn link" type="button" role="menuitem">Share</button>
+    </div>
+  </div>
+</dialog>
+```
+
 ### JavaScript options
 
 Add options directly on the dialog element. Without JavaScript, modern browsers still use the native dialog behavior; the runtime only adds fallback opening, focus restoration, light dismiss, and optional view transitions.
@@ -683,35 +743,37 @@ Available options:
 
 The base CSS gives supporting browsers a small opening transition. Closing remains native unless `data-dialog-view-transition` is enabled and the browser supports the View Transition API.
 
+The open dialog root intentionally ends at `transform: none`; fixed dropdowns and tooltips mounted inside a modal dialog rely on viewport coordinates.
+
 ```css
 .dialog {
-  max-block-size: calc(100vh - 2rem);
-  max-block-size: calc(100dvb - 2rem);
   opacity: 0;
-  overflow: auto;
-  overscroll-behavior: contain;
-  scale: 0.98;
-  translate: 0 0.35rem;
+  overflow: visible;
 
   transition:
     opacity var(--duration),
-    scale var(--duration),
-    translate var(--duration),
+    transform var(--duration),
     display var(--duration) allow-discrete,
     overlay var(--duration) allow-discrete;
 }
 
+.dialog > form,
+.dialog > .stack {
+  max-block-size: calc(100vh - 2rem);
+  max-block-size: calc(100dvb - 2rem);
+  overflow: auto;
+  overscroll-behavior: contain;
+}
+
 .dialog[open] {
   opacity: 1;
-  scale: 1;
-  translate: 0 0;
+  transform: none;
 }
 
 @starting-style {
   .dialog[open] {
     opacity: 0;
-    scale: 0.98;
-    translate: 0 0.35rem;
+    transform: translateY(0.35rem) scale(0.98);
   }
 }
 
@@ -1023,6 +1085,7 @@ Links:
 - Use `data-shape` for common placeholder forms: `text`, `title`, `avatar`, `box`.
 - Put `role="status"` and accessible text on the loading region, not on every placeholder.
 - Use layout utilities for placeholder arrangement.
+- Only relevant for simple placeholders - use more structural solutions like phantom-ui for complex cases.
 
 ```html
 <article class="card" role="status" aria-label="Loading profile">
@@ -1039,6 +1102,7 @@ Links:
 Links:
 - https://oat.ink/components/#skeleton
 - https://daisyui.com/components/skeleton/
+- https://github.com/Aejkatappaja/phantom-ui
 
 ## Table
 

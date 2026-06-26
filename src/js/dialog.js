@@ -116,6 +116,23 @@ function isOutsideDialog(dialog, event) {
   );
 }
 
+function flashStatic(dialog) {
+  const state = ensureDialogWired(dialog);
+
+  if (state.staticTimer) {
+    window.clearTimeout(state.staticTimer);
+  }
+
+  dialog.classList.remove("is-static");
+  void dialog.offsetWidth;
+  dialog.classList.add("is-static");
+
+  state.staticTimer = window.setTimeout(() => {
+    dialog.classList.remove("is-static");
+    state.staticTimer = null;
+  }, 250);
+}
+
 function finishClose(dialog, returnValue = "") {
   const state = dialogMap.get(dialog);
 
@@ -212,14 +229,16 @@ function handleTriggerClick(event) {
 function handleDialogClick(event) {
   const dialog = event.currentTarget;
 
-  if (
-    isDismissible(dialog) &&
-    event.target === dialog &&
-    isOutsideDialog(dialog, event)
-  ) {
-    event.preventDefault();
+  if (event.target !== dialog || !isOutsideDialog(dialog, event)) return;
+
+  event.preventDefault();
+
+  if (isDismissible(dialog)) {
     requestDialogClose(dialog);
+    return;
   }
+
+  flashStatic(dialog);
 }
 
 function handleDialogSubmit(event) {
@@ -251,6 +270,12 @@ function handleDialogClose(event) {
 
   if (!state) return;
 
+  if (state.staticTimer) {
+    window.clearTimeout(state.staticTimer);
+    state.staticTimer = null;
+  }
+
+  dialog.classList.remove("is-static");
   state.closing = false;
   state.returnValue = "";
 
@@ -271,6 +296,7 @@ function ensureDialogWired(dialog) {
     closing: false,
     restoreFocusTo: null,
     returnValue: "",
+    staticTimer: null,
   };
 
   dialog.addEventListener("click", handleDialogClick, { signal: controller.signal });
@@ -294,7 +320,12 @@ function disconnectDialog(dialog) {
   const state = dialogMap.get(dialog);
   if (!state) return;
 
+  if (state.staticTimer) {
+    window.clearTimeout(state.staticTimer);
+  }
+
   state.controller.abort();
+  dialog.classList.remove("is-static");
   dialogMap.delete(dialog);
 }
 
