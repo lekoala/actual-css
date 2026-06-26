@@ -824,6 +824,37 @@ Available options:
 * `data-dialog-view-transition` enables a view transition that morphs the dialog to/from its trigger. Only active when the browser supports `document.startViewTransition` and the user allows motion.
 * `closedby="any"` is the no-JavaScript light-dismiss path. The runtime rewrites it to `closedby="closerequest"` where supported so dialog light-dismiss keeps the modal workflow intact — the same behavior, just stated in terms the platform understands.
 
+### Legacy browsers and polyfills
+
+Actual CSS does not bundle a dialog polyfill. In browsers without `HTMLDialogElement.showModal()` support, such as Firefox 97, the runtime still wires `commandfor` triggers and shows a native alert when a user tries to open the dialog. This is a deliberate failure mode: the action is acknowledged, but the framework does not pretend to provide modal focus trapping without platform or polyfill support.
+
+To support those browsers, load a dialog polyfill and register each dialog before it is opened. The polyfill may load before or after the Actual CSS runtime; the runtime checks the target dialog when the trigger is used.
+
+```js
+import "actual-css/js";
+import dialogPolyfill from "dialog-polyfill";
+
+document.querySelectorAll("dialog").forEach((dialog) => {
+  dialogPolyfill.registerDialog(dialog);
+});
+```
+
+For conditional loading, register the polyfill before the first unsupported dialog open:
+
+```js
+import "actual-css/js";
+
+if (!("HTMLDialogElement" in window) || !HTMLDialogElement.prototype.showModal) {
+  const { default: dialogPolyfill } = await import("dialog-polyfill");
+
+  document.querySelectorAll("dialog").forEach((dialog) => {
+    dialogPolyfill.registerDialog(dialog);
+  });
+}
+```
+
+If dialogs are injected later, register those new dialog elements before their open trigger is used.
+
 ### Animation
 
 The base CSS gives supporting browsers a small opening transition. Closing remains native unless `data-dialog-view-transition` is enabled and the browser supports the View Transition API.
@@ -837,9 +868,7 @@ The open dialog root intentionally ends at `transform: none`; fixed dropdowns an
 
   transition:
     opacity var(--duration),
-    transform var(--duration),
-    display var(--duration) allow-discrete,
-    overlay var(--duration) allow-discrete;
+    transform var(--duration);
 }
 
 .modal > form,
@@ -865,10 +894,24 @@ The open dialog root intentionally ends at `transform: none`; fixed dropdowns an
 .modal::backdrop {
   background: var(--surface-solid);
   opacity: 0;
-  transition:
-    opacity var(--duration),
-    display var(--duration) allow-discrete,
-    overlay var(--duration) allow-discrete;
+  transition: opacity var(--duration);
+}
+
+@supports (transition-behavior: allow-discrete) {
+  .modal {
+    transition:
+      opacity var(--duration),
+      transform var(--duration),
+      overlay var(--duration) allow-discrete,
+      display var(--duration) allow-discrete;
+  }
+
+  .modal::backdrop {
+    transition:
+      opacity var(--duration),
+      overlay var(--duration) allow-discrete,
+      display var(--duration) allow-discrete;
+  }
 }
 
 .modal[open]::backdrop {

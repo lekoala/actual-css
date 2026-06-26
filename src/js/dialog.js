@@ -21,6 +21,8 @@ const triggerMap = new WeakMap();
 const dialogMap = new WeakMap();
 const DIALOG_TRIGGER_SELECTOR = "button[commandfor][command]";
 const DIALOG_SELECTOR = "dialog";
+const DEFAULT_UNSUPPORTED_MESSAGE =
+  "This dialog cannot open because this browser does not support this feature.";
 
 function supportsDialog() {
   return (
@@ -29,8 +31,27 @@ function supportsDialog() {
   );
 }
 
+function isDialogElement(el) {
+  return (
+    typeof Node !== "undefined" &&
+    el?.nodeType === Node.ELEMENT_NODE &&
+    el.localName === "dialog"
+  );
+}
+
+function canControlDialog(el) {
+  // Optional polyfills may patch registered <dialog> elements without making
+  // supportsDialog() true globally, so check the actual element before opening.
+  return (
+    isDialogElement(el) &&
+    typeof el.show === "function" &&
+    typeof el.showModal === "function" &&
+    typeof el.close === "function"
+  );
+}
+
 function isDialog(el) {
-  return typeof HTMLDialogElement !== "undefined" && el instanceof HTMLDialogElement;
+  return canControlDialog(el);
 }
 
 function boolData(el, name) {
@@ -44,6 +65,11 @@ function dialogIdFor(trigger) {
 function dialogFor(trigger) {
   const id = dialogIdFor(trigger);
   return id ? trigger.ownerDocument.getElementById(id) : null;
+}
+
+function notifyUnsupportedDialog(dialog, trigger) {
+  const win = trigger.ownerDocument.defaultView;
+  win?.alert?.(DEFAULT_UNSUPPORTED_MESSAGE);
 }
 
 function isModal(dialog) {
@@ -211,6 +237,13 @@ function handleTriggerClick(event) {
 
   event.preventDefault();
 
+  if (!isDialog(state.dialog)) {
+    if (command === "show-modal" || command === "show") {
+      notifyUnsupportedDialog(state.dialog, trigger);
+    }
+    return;
+  }
+
   if (command === "show-modal") {
     openDialogWithViewTransition(state.dialog, trigger);
     return;
@@ -333,9 +366,11 @@ function connectTrigger(trigger) {
   if (triggerMap.has(trigger)) return;
 
   const dialog = dialogFor(trigger);
-  if (!isDialog(dialog)) return;
+  if (!isDialogElement(dialog)) return;
 
-  ensureDialogWired(dialog);
+  if (isDialog(dialog)) {
+    ensureDialogWired(dialog);
+  }
 
   const controller = new AbortController();
   trigger.setAttribute("aria-controls", dialog.id);
@@ -365,6 +400,15 @@ if (typeof document !== "undefined" && supportsDialog()) {
     [DIALOG_SELECTOR]: (dialog) => {
       ensureDialogWired(dialog);
       return () => disconnectDialog(dialog);
+    },
+  });
+}
+
+if (typeof document !== "undefined" && !supportsDialog()) {
+  enhance({
+    [DIALOG_TRIGGER_SELECTOR]: (trigger) => {
+      connectTrigger(trigger);
+      return () => disconnectTrigger(trigger);
     },
   });
 }
