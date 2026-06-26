@@ -77,11 +77,6 @@
       padding-inline-start: 2.25rem;
     }
 
-    .dashboard-theme-select {
-      inline-size: max-content;
-      max-inline-size: 12rem;
-    }
-
     .dashboard-hide-mobile {
       display: none;
     }
@@ -199,33 +194,6 @@
     .dashboard-account {
       display: grid;
       gap: var(--space-1);
-    }
-
-    .dashboard-card-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: var(--space-3);
-      min-inline-size: 0;
-    }
-
-    .dashboard-card-header h2 {
-      flex: 1 1 auto;
-      min-inline-size: 0;
-      margin: 0;
-    }
-
-    .dashboard-filters {
-      display: flex;
-      flex: 0 0 auto;
-      align-items: center;
-      gap: var(--space-2);
-      white-space: nowrap;
-    }
-
-    .dashboard-filters .select {
-      inline-size: max-content;
-      max-inline-size: 11rem;
     }
 
     .dashboard-progress-list {
@@ -419,7 +387,7 @@
           <input class="input sm" type="search" aria-label="Search" placeholder="Search accounts, invoices, notes">
         </label>
 
-        <select class="select sm dashboard-hide-mobile dashboard-theme-select" id="theme-switcher" aria-label="Switch theme">
+        <select class="select sm dashboard-hide-mobile fit" id="theme-switcher" aria-label="Switch theme">
           <option value="">System</option>
           <option value="light">Light</option>
           <option value="dark">Dark</option>
@@ -541,10 +509,10 @@
             </section>
 
             <section class="card stack" id="accounts">
-              <div class="dashboard-card-header">
+              <header>
                 <h2>Priority accounts</h2>
-                <div class="dashboard-filters">
-                  <select class="select sm" aria-label="Filter accounts">
+                <div class="cluster nowrap gap-sm">
+                  <select class="select sm fit" aria-label="Filter accounts">
                     <option>All segments</option>
                     <option>Enterprise</option>
                     <option>Mid-market</option>
@@ -555,7 +523,7 @@
                     Filter
                   </button>
                 </div>
-              </div>
+              </header>
 
               <div class="table-wrap" role="region" aria-labelledby="accounts-table" tabindex="0">
                 <table class="table" style="--table-min: 58rem;">
@@ -668,10 +636,10 @@
                 </table>
               </div>
 
-              <div class="cluster" style="--cluster-justify: space-between;">
+              <footer>
                 <span class="muted">Showing 4 of 28 priority accounts</span>
                 <nav aria-label="Account pages">
-                  <ol class="pagination sm">
+                  <ol class="pagination sm nowrap">
                     <li>
                       <a class="btn outline" href="#" aria-disabled="true" aria-label="Previous page">
                         <i class="ti ti-chevron-left" aria-hidden="true"></i>
@@ -687,7 +655,7 @@
                     </li>
                   </ol>
                 </nav>
-              </div>
+              </footer>
             </section>
           </div>
 

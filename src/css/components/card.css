@@ -2,7 +2,8 @@
  * Cards provide a neutral raised surface for grouped content.
  *
  * Surface, border, radius, padding, density, and elevation stay local here.
- * Content anatomy and page layout remain the job of markup and layout primitives.
+ * Direct header/footer children are structural slots. Page layout remains the
+ * job of markup and layout primitives outside the card.
  */
 .card {
   --card-pad: var(--space-4);
@@ -19,6 +20,24 @@
 
 .card > * {
   min-inline-size: 0;
+}
+
+.card > :where(header, footer) {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  min-inline-size: 0;
+}
+
+.card > :where(header, footer) > * {
+  min-inline-size: 0;
+  margin-block: 0;
+}
+
+.card > header {
+  align-items: flex-start;
 }
 
 .card > :first-child {

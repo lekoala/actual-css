@@ -20,9 +20,26 @@
   overflow: auto;
 }
 
+.fit {
+  inline-size: fit-content;
+  max-inline-size: 100%;
+}
+
 .grow {
   flex: 1 1 auto;
   min-inline-size: 0;
+}
+
+.nowrap {
+  flex-wrap: nowrap;
+  white-space: nowrap;
+}
+
+.truncate {
+  min-inline-size: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .muted {
