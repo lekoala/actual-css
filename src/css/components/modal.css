@@ -25,9 +25,7 @@
    */
   transition:
     opacity var(--duration),
-    transform var(--duration),
-    overlay var(--duration) allow-discrete,
-    display var(--duration) allow-discrete;
+    transform var(--duration);
 }
 
 .modal > form,
@@ -86,10 +84,24 @@
 .modal::backdrop {
   background: var(--surface-solid);
   opacity: 0;
-  transition:
-    opacity var(--duration),
-    overlay var(--duration) allow-discrete,
-    display var(--duration) allow-discrete;
+  transition: opacity var(--duration);
+}
+
+@supports (transition-behavior: allow-discrete) {
+  .modal {
+    transition:
+      opacity var(--duration),
+      transform var(--duration),
+      overlay var(--duration) allow-discrete,
+      display var(--duration) allow-discrete;
+  }
+
+  .modal::backdrop {
+    transition:
+      opacity var(--duration),
+      overlay var(--duration) allow-discrete,
+      display var(--duration) allow-discrete;
+  }
 }
 
 .modal[open]::backdrop {

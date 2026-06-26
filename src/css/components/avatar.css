@@ -9,8 +9,8 @@
   --avatar-size: 2.25rem;
   --avatar-radius: var(--radius-full, 9999px);
   --avatar-font-size: var(--font-size-sm);
-  --avatar-bg: var(--surface-subtle);
-  --avatar-fg: var(--tone-fg, var(--text-muted));
+  --avatar-bg: var(--intent, var(--surface-subtle));
+  --avatar-fg: var(--intent-fg, var(--tone-fg, var(--text-muted)));
 
   position: relative;
   display: inline-grid;
@@ -72,11 +72,6 @@ button.avatar {
   outline-offset: var(--focus-outline-offset);
 }
 
-.avatar:where(.primary, .secondary, .success, .warning, .danger, .neutral) {
-  background: var(--intent);
-  color: var(--intent-fg);
-}
-
 .avatar.sm {
   --avatar-size: 1.75rem;
   --avatar-font-size: 0.8125rem;
@@ -99,22 +94,24 @@ button.avatar {
 }
 
 /* Grouped avatars */
-:where([role="group"]:has(> .avatar + .avatar)) {
-  --avatar-group-overlap: calc(var(--avatar-size, 2.25rem) / -4);
-  --avatar-group-ring: 2px;
+@supports selector([role="group"]:has(> .avatar + .avatar)) {
+  :where([role="group"]:has(> .avatar + .avatar)) {
+    --avatar-group-overlap: calc(var(--avatar-size, 2.25rem) / -4);
+    --avatar-group-ring: 2px;
 
-  display: inline-flex;
-  align-items: center;
-}
+    display: inline-flex;
+    align-items: center;
+  }
 
-:where([role="group"]:has(> .avatar + .avatar)) > .avatar {
-  box-shadow: 0 0 0 var(--avatar-group-ring) var(--surface);
-}
+  :where([role="group"]:has(> .avatar + .avatar)) > .avatar {
+    box-shadow: 0 0 0 var(--avatar-group-ring) var(--surface);
+  }
 
-:where([role="group"]:has(> .avatar + .avatar)) > .avatar + .avatar {
-  margin-inline-start: var(--avatar-group-overlap);
-}
+  :where([role="group"]:has(> .avatar + .avatar)) > .avatar + .avatar {
+    margin-inline-start: var(--avatar-group-overlap);
+  }
 
-:where([role="group"]:has(> .avatar + .avatar)) > .avatar:is(:hover, :focus-visible) {
-  z-index: 1;
+  :where([role="group"]:has(> .avatar + .avatar)) > .avatar:is(:hover, :focus-visible) {
+    z-index: 1;
+  }
 }

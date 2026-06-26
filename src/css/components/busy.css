@@ -13,29 +13,32 @@
   display: inline-block;
 }
 
-[aria-busy="true"]:not(.btn):has(> .spinner:last-child) {
-  position: relative;
-}
+@supports selector([aria-busy="true"]:has(> .spinner:last-child)) {
+  [aria-busy="true"]:not(.btn):has(> .spinner:last-child) {
+    position: relative;
+  }
 
-[aria-busy="true"]:not(.btn):has(> .spinner:last-child)::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  border-radius: inherit;
-  background: var(--surface);
-}
-
-@supports (color: color-mix(in oklch, red, white)) {
   [aria-busy="true"]:not(.btn):has(> .spinner:last-child)::before {
-    background: color-mix(in oklch, var(--surface), transparent 20%);
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    border-radius: inherit;
+    background: var(--surface);
+  }
+
+  [aria-busy="true"]:not(.btn) > .spinner:last-child {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    margin: auto;
+    display: block;
   }
 }
 
-[aria-busy="true"]:not(.btn) > .spinner:last-child {
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-  margin: auto;
-  display: block;
+@supports (selector([aria-busy="true"]:has(> .spinner:last-child))) and
+  (color: color-mix(in oklch, red, white)) {
+  [aria-busy="true"]:not(.btn):has(> .spinner:last-child)::before {
+    background: color-mix(in oklch, var(--surface), transparent 20%);
+  }
 }

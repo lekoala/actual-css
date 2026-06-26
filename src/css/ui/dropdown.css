@@ -25,8 +25,13 @@
   inline-size: max-content;
   min-inline-size: min(
     var(--dropdown-trigger-width, 0px),
+    min(20rem, calc(100vw - var(--space-6)))
+  );
+  min-inline-size: min(
+    var(--dropdown-trigger-width, 0px),
     min(20rem, calc(100vi - var(--space-6)))
   );
+  max-inline-size: min(20rem, calc(100vw - var(--space-6)));
   max-inline-size: min(20rem, calc(100vi - var(--space-6)));
   margin: 0;
   padding: var(--space-1);
@@ -46,6 +51,7 @@
   inline-size: auto;
   min-inline-size: 0;
   max-inline-size: none;
+  max-block-size: min(75vh, 32rem);
   max-block-size: min(75vb, 32rem);
   overflow: auto;
   padding: max(var(--space-3), env(safe-area-inset-top)) var(--space-3)

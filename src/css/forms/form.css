@@ -20,11 +20,13 @@
 
 /* Plain-HTML convenience: a label directly wrapping a text-like control or
    textarea gets the field rhythm, not the .choice layout. */
-.form
-label:not(.choice):has(> input:not(:is([type="checkbox"], [type="radio"])), > textarea, > select) {
-  display: grid;
-  gap: var(--space-1);
-  color: var(--text);
+@supports selector(label:has(> input)) {
+  .form
+  label:not(.choice):has(> input:not(:is([type="checkbox"], [type="radio"])), > textarea, > select) {
+    display: grid;
+    gap: var(--space-1);
+    color: var(--text);
+  }
 }
 
 .field-group,

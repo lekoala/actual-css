@@ -11,8 +11,10 @@
   --drawer-pad: var(--space-4);
 
   inline-size: min(90vw, var(--drawer-size));
+  block-size: 100vh;
   block-size: 100dvh;
   max-inline-size: none;
+  max-block-size: 100vh;
   max-block-size: 100dvh;
   margin: 0;
   padding: var(--drawer-pad);

@@ -4,7 +4,7 @@
  * Variant scope: .solid/.soft/.outline set --ui-* so any component consuming
  * those tokens (.btn, .badge, .alert, .card) renders the variant. Component-
  * specific defaults (.btn solid-by-default, .badge solid-by-default, .alert
- * default transparent, .alert intent-tinted soft) live with their components:
+ * subtle-by-default, .alert intent-tinted soft) live with their components:
  *   components/button.css — .btn default solid + .btn.ghost + .btn.link
  *   components/badge.css   — .badge default solid
  *   components/alert.css   — .alert default + .alert intent-aware soft + tint
@@ -15,8 +15,8 @@
  * .sm/.lg; applying .sm/.lg to alert, card, dialog, accordion, navbar, table is
  * a no-op.
  *
- * Intent list source of truth: intents.css. The only per-intent selectors that
- * re-list the intents live in components/alert.css.
+ * Intent list source of truth: intents.css. Components consume --intent* tokens
+ * instead of re-listing intent classes.
  */
 .solid {
   --ui-bg: var(--intent, var(--neutral));
@@ -50,12 +50,24 @@
    class; --ui-hover-bg is consumed by .btn, .badge, .alert where set. */
 @supports (color: color-mix(in oklch, red, white)) {
   .soft {
-    --ui-bg: color-mix(in oklch, var(--intent, var(--neutral)), var(--surface) 88%);
-    --ui-border: color-mix(in oklch, var(--intent, var(--neutral)), var(--surface) 65%);
+    --ui-bg: color-mix(
+      in oklch,
+      var(--surface) var(--soft-bg-mix),
+      var(--intent, var(--neutral))
+    );
+    --ui-border: color-mix(
+      in oklch,
+      var(--surface) var(--soft-border-mix),
+      var(--intent, var(--neutral))
+    );
   }
 
   .soft:hover {
-    --ui-hover-bg: color-mix(in oklch, var(--intent, var(--neutral)), transparent 88%);
+    --ui-hover-bg: color-mix(
+      in oklch,
+      var(--intent, var(--neutral)) var(--soft-hover-alpha),
+      transparent
+    );
   }
 
   .outline:hover {

@@ -9,8 +9,7 @@
  * Switches (input[role="switch"]) are excluded so switch.css owns their
  * geometry and states. switch.css is imported after this file.
  */
-.choice,
-.form label:has(> input[type="checkbox"], > input[type="radio"]) {
+.choice {
   --choice-control-offset: 0.25em;
 
   display: inline-flex;
@@ -21,6 +20,19 @@
   cursor: pointer;
 }
 
+@supports selector(label:has(> input)) {
+  .form label:has(> input[type="checkbox"], > input[type="radio"]) {
+    --choice-control-offset: 0.25em;
+
+    display: inline-flex;
+    align-items: flex-start;
+    gap: var(--space-2);
+    color: var(--text);
+    font-size: var(--control-font-size);
+    cursor: pointer;
+  }
+}
+
 /* Optical alignment: nudge the control down so the checkbox/radio sits
    visually centered with the first line of label text, not flush with the
    top of the line-box. Default 0.25em (~4px at 16px) places the control just
@@ -29,22 +41,30 @@
    thanks to align-items: flex-start. Override per-instance via
    --choice-control-offset for themes with a different line-height or control
    size. */
-.choice > :is(input[type="checkbox"], input[type="radio"]),
-.form
-  label:has(> input:is([type="checkbox"], [type="radio"]))
-  > input:is([type="checkbox"], input[type="radio"]) {
+.choice > :is(input[type="checkbox"], input[type="radio"]) {
   flex: 0 0 auto;
   margin-block-start: var(--choice-control-offset);
+}
+
+@supports selector(label:has(> input)) {
+  .form
+    label:has(> input:is([type="checkbox"], [type="radio"]))
+    > input:is([type="checkbox"], input[type="radio"]) {
+    flex: 0 0 auto;
+    margin-block-start: var(--choice-control-offset);
+  }
 }
 
 .choice > span > .field-help {
   display: block;
 }
 
-.choice:has(:disabled),
-.form label:has(> input:is([type="checkbox"], [type="radio"]):disabled) {
-  color: var(--text-subtle);
-  cursor: not-allowed;
+@supports selector(label:has(> input)) {
+  .choice:has(:disabled),
+  .form label:has(> input:is([type="checkbox"], [type="radio"]):disabled) {
+    color: var(--text-subtle);
+    cursor: not-allowed;
+  }
 }
 
 /* Control geometry. --choice-* are the per-state tokens. */
