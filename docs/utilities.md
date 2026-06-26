@@ -74,6 +74,44 @@ Links:
 - https://getbootstrap.com/docs/5.3/content/tables/#responsive-tables
 - https://picocss.com/docs/overflow-auto
 
+### Scroller
+
+Use `.scroller` to apply the framework scrollbar treatment to a scroll container. It styles the scrollbar only; pair it with `.overflow-auto` or a component that already creates overflow.
+
+```html
+<div class="overflow-auto scroller" style="max-block-size: 12rem">
+  <div class="stack">
+    <p>Scrollable content keeps the native scrollbar but makes it quieter.</p>
+    <p>Long content can keep flowing without forcing every component to invent its own scrollbar rules.</p>
+    <p>The utility exposes local custom properties for one-off tuning.</p>
+  </div>
+</div>
+```
+
+```css
+.scroller {
+  --scroller-size: 0.625rem;
+  --scroller-padding: 0.125rem;
+  --scroller-track: transparent;
+  --scroller-thumb: var(--border);
+  --scroller-thumb-hover: var(--text-muted);
+
+  scrollbar-color: var(--scroller-thumb) var(--scroller-track);
+  scrollbar-width: thin;
+}
+```
+
+Customize locally when a scroll surface needs more contrast:
+
+```html
+<div class="overflow-auto scroller"
+     style="--scroller-thumb: var(--text-muted); --scroller-thumb-hover: var(--text)">
+  ...
+</div>
+```
+
+For rounded scroll containers, keep the thumb visually away from the edge by tuning `--scroller-padding` rather than adding extra wrappers or masking pseudo-elements.
+
 ## Flex Helpers
 
 > Small flex helpers for grow behavior and other one-line needs.

@@ -532,116 +532,164 @@ Links:
 
 > Modal overlay for focused tasks, confirmations, or forms, built on the native `<dialog>` element.
 
-Dialogs use the platform-native `<dialog class="dialog">` element.
-
-Modern browsers can open and close dialogs declaratively with `commandfor` and `command`. The optional JavaScript runtime progressively enhances dialogs with fallback triggers, animation-aware closing, backdrop dismissal, return-value handling, and scrollbar awareness.
-
-### Native-first dialog
+Dialogs use the platform-native `<dialog class="dialog">` element with `commandfor` and `command` buttons.
 
 Use `command="show-modal"` to open a modal dialog.
 
-Use `command="request-close"` for cancel-style buttons so close requests go through the dialog’s cancel lifecycle. This allows JavaScript to intercept the close request for exit animations.
+Use `command="request-close"` for cancel-style buttons so close requests go through the dialog’s cancel lifecycle.
 
-Use `closedby="any"` as a modern enhancement for light dismiss. Add `data-dialog-dismissible` when using the optional JavaScript runtime so the same intent is available as a fallback.
+Use `closedby="any"` as the no-JavaScript light-dismiss path. Add `data-dialog-dismissible` so the optional runtime can provide the same behavior in browsers that need a small fallback.
+
+### Alert dialog
+
+Use this shape when the dialog interrupts the flow and asks for a decision. It has no close icon and no light dismiss; the footer actions are the way out.
 
 ```html
 <button class="btn"
         type="button"
-        commandfor="demo-dialog"
+        commandfor="delete-dialog"
         command="show-modal">
-  Open dialog
+  Delete project
 </button>
 
-<dialog class="dialog"
-        id="demo-dialog"
-        closedby="any"
-        data-dialog-dismissible>
+<dialog class="dialog" id="delete-dialog">
   <form method="dialog">
     <header>
-      <h3>Title</h3>
-      <p>This is a dialog description.</p>
+      <h3>Delete project?</h3>
+      <p>This action cannot be undone.</p>
     </header>
 
     <div>
-      <p>Dialog content goes here. You can put any HTML inside.</p>
-      <p>Click outside or press Escape to close.</p>
+      <p>The project, saved reports, and connected automations will be removed permanently.</p>
     </div>
 
     <footer>
       <button class="btn outline"
               type="button"
-              commandfor="demo-dialog"
+              commandfor="delete-dialog"
               command="request-close">
         Cancel
       </button>
 
-      <button class="btn primary"
-              value="confirm">
-        Confirm
+      <button class="btn danger"
+              value="delete">
+        Delete
       </button>
     </footer>
   </form>
 </dialog>
 ```
 
-### JavaScript-enhanced dialog
+### Dialog
 
-Use `data-dialog` when you want the framework runtime to provide fallback opening, focus restoration, scrollbar awareness, and animation-aware close handling.
+Use this shape for contextual information or lightweight secondary content. It has no action button; the header close button dismisses the dialog.
 
 ```html
 <button class="btn"
         type="button"
-        data-dialog="example-dialog">
-  Open dialog
+        commandfor="details-dialog"
+        command="show-modal">
+  View details
 </button>
 
 <dialog class="dialog"
-        id="example-dialog"
+        id="details-dialog"
+        closedby="any"
         data-dialog-dismissible>
-  <header>
-    <h3>Title</h3>
-    <p>This is a dialog description.</p>
-  </header>
+  <div class="stack">
+    <header class="cluster" style="--cluster-justify: space-between">
+      <hgroup>
+        <h3>Release details</h3>
+        <p>Changes included in this version.</p>
+      </hgroup>
 
-  <div>
-    <p>Dialog content goes here.</p>
+      <button class="btn ghost"
+              type="button"
+              commandfor="details-dialog"
+              command="request-close"
+              aria-label="Close dialog">
+        <i class="ti ti-x" aria-hidden="true"></i>
+      </button>
+    </header>
+
+    <div>
+      <p>The release improves dialog behavior, scroll handling, and progressive enhancement for modern browsers.</p>
+      <p>There are no decisions to make here; the content can simply be dismissed when finished.</p>
+    </div>
   </div>
+</dialog>
+```
 
-  <footer>
-    <button class="btn outline"
-            type="button"
-            data-dialog-close>
-      Cancel
-    </button>
+### Scrollable dialog
 
-    <button class="btn primary"
-            type="button"
-            data-dialog-close
-            value="confirm">
-      Confirm
-    </button>
-  </footer>
+Tall dialogs scroll inside the dialog surface. Modal dialogs also lock page scroll in browsers that support `:has()` and `:modal`; older browsers keep native dialog behavior.
+
+```html
+<button class="btn"
+        type="button"
+        commandfor="scroll-dialog"
+        command="show-modal">
+  Open scrollable dialog
+</button>
+
+<dialog class="dialog"
+        id="scroll-dialog"
+        closedby="any"
+        data-dialog-dismissible>
+  <form method="dialog">
+    <header>
+      <h3>Terms review</h3>
+      <p>Review the full text before continuing.</p>
+    </header>
+
+    <div class="stack">
+      <p>Actual CSS keeps long dialog content inside the dialog surface instead of letting it run past the viewport.</p>
+      <p>Section 1. The service stores project settings, interface preferences, and theme choices so teams can keep a consistent working environment.</p>
+      <p>Section 2. Administrators can invite users, remove inactive accounts, and review access periodically.</p>
+      <p>Section 3. Billing changes may affect future invoices. Existing invoices remain available from the account area.</p>
+      <p>Section 4. Export tools are provided for common formats. Large exports may take a few minutes to prepare.</p>
+      <p>Section 5. Support requests should include relevant browser, operating system, and account context.</p>
+      <p>Section 6. Experimental features can change or disappear before a stable release.</p>
+      <p>Section 7. Continued use confirms acceptance of the current terms.</p>
+    </div>
+
+    <footer>
+      <button class="btn outline"
+              type="button"
+              commandfor="scroll-dialog"
+              command="request-close">
+        Cancel
+      </button>
+
+      <button class="btn primary" value="accept">
+        Accept
+      </button>
+    </footer>
+  </form>
 </dialog>
 ```
 
 ### JavaScript options
 
-Add options directly on the dialog element.
+Add options directly on the dialog element. Without JavaScript, modern browsers still use the native dialog behavior; the runtime only adds fallback opening, focus restoration, light dismiss, and optional view transitions.
 
 Available options:
 
 * `data-dialog-dismissible` enables backdrop click dismissal.
 * `data-dialog-modal="false"` opens with `show()` instead of `showModal()`.
-* `data-dialog-animate="false"` disables animation-aware closing.
 * `data-dialog-view-transition` enables a view transition that morphs the dialog to/from its trigger. Only active when the browser supports `document.startViewTransition` and the user allows motion.
 
 ### Animation
 
-The runtime adds `.is-closing` while a dialog is closing. The actual `dialog.close()` call is delayed until the active transition or animation completes.
+The base CSS gives supporting browsers a small opening transition. Closing remains native unless `data-dialog-view-transition` is enabled and the browser supports the View Transition API.
 
 ```css
 .dialog {
+  max-block-size: calc(100vh - 2rem);
+  max-block-size: calc(100dvb - 2rem);
   opacity: 0;
+  overflow: auto;
+  overscroll-behavior: contain;
   scale: 0.98;
   translate: 0 0.35rem;
 
@@ -657,12 +705,6 @@ The runtime adds `.is-closing` while a dialog is closing. The actual `dialog.clo
   opacity: 1;
   scale: 1;
   translate: 0 0;
-}
-
-.dialog.is-closing {
-  opacity: 0;
-  scale: 0.98;
-  translate: 0 0.35rem;
 }
 
 @starting-style {
@@ -686,6 +728,13 @@ The runtime adds `.is-closing` while a dialog is closing. The actual `dialog.clo
   opacity: 0.5;
 }
 
+@supports selector(:has(dialog:modal)) {
+  html:has(dialog:modal) {
+    overflow: hidden;
+    scrollbar-gutter: stable;
+  }
+}
+
 @starting-style {
   .dialog[open]::backdrop {
     opacity: 0;
@@ -697,7 +746,7 @@ The runtime adds `.is-closing` while a dialog is closing. The actual `dialog.clo
 
 Add `data-dialog-view-transition` to morph the dialog to/from its trigger using the View Transition API. The dialog appears to grow out of the trigger on open and shrink back into it on close, communicating the relationship between the two.
 
-The effect is progressive: it only runs when the browser supports `document.startViewTransition` and the user has not requested reduced motion. Otherwise the fade/scale transition above is used. Works with both `commandfor`/`command` triggers and `data-dialog` triggers.
+The effect is progressive: it only runs when the browser supports `document.startViewTransition` and the user has not requested reduced motion. Otherwise the dialog simply opens and closes with the baseline dialog transition.
 
 ```html
 <button class="btn"
