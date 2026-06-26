@@ -1,441 +1,847 @@
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Actual CSS Dashboard Demo</title>
+  <title>Revenue Operations Dashboard - Actual CSS</title>
   <link rel="stylesheet" href="../../src/css/actual.css">
-  <link rel="stylesheet" href="../../src/themes/index.css">
+  <link rel="stylesheet" href="../../src/css/themes/index.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
   <style>
-    /* Template-local rules. Each one papers over a known framework gap.
-     *   1. .dashboard-topbar (sticky, backdrop blur) -> topbar pattern.
-     *   2. .dashboard-hide-md                      -> small-screen nav swap.
-     *   3. .dashboard-hero                          -> small hero spacing.
-     *   4. .dashboard-stat / .dashboard-stat-value  -> stat card composition.
-     * The rest of the page is composed from existing primitives
-     * (.navbar, .nav-link, .breadcrumb, .card, .grid,
-     * .sidebar-layout, .tabs, .table, .table-wrap, .pagination,
-     * .dropdown, .media, .alert, .button, .avatar).
-     */
+    .dashboard-shell {
+      display: grid;
+      grid-template-columns: 1fr;
+      min-block-size: 100dvh;
+      background: var(--surface);
+    }
+
+    .dashboard-sidebar {
+      display: none;
+      flex-direction: column;
+      gap: var(--space-4);
+      inline-size: 17rem;
+      padding: var(--space-4);
+      border-inline-end: var(--border-width) solid var(--border);
+      background: var(--surface-raised);
+    }
+
+    .dashboard-main {
+      min-inline-size: 0;
+    }
 
     .dashboard-topbar {
       position: sticky;
       inset-block-start: 0;
-      z-index: var(--z-sticky, 10);
+      z-index: var(--z-sticky);
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      min-block-size: 4rem;
+      padding-inline: var(--space-4);
+      border-block-end: var(--border-width) solid var(--border);
+      background: var(--surface);
       isolation: isolate;
     }
 
     @supports ((backdrop-filter: blur(1rem)) or (-webkit-backdrop-filter: blur(1rem))) {
       .dashboard-topbar {
-        background: color-mix(in oklch, var(--surface) 88%, transparent);
+        background: color-mix(in oklch, var(--surface) 90%, transparent);
         backdrop-filter: blur(0.75rem);
         -webkit-backdrop-filter: blur(0.75rem);
       }
     }
 
-    .dashboard-hero {
-      padding-block: 1rem 0.5rem;
+    .dashboard-content {
+      --center-size: 86rem;
+      --gap: var(--space-4);
+
+      padding-block: var(--space-4) var(--space-6);
+    }
+
+    .dashboard-search {
+      position: relative;
+      flex: 0 1 28rem;
+    }
+
+    .dashboard-search i {
+      position: absolute;
+      inset-block-start: 50%;
+      inset-inline-start: 0.7rem;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      pointer-events: none;
+    }
+
+    .dashboard-search .input {
+      padding-inline-start: 2.25rem;
+    }
+
+    .dashboard-theme-select {
+      inline-size: max-content;
+      max-inline-size: 12rem;
+    }
+
+    .dashboard-hide-mobile {
+      display: none;
+    }
+
+    .dashboard-topbar .breadcrumb {
+      display: flex;
+      flex: 0 1 auto;
+      flex-wrap: nowrap;
+      min-inline-size: 0;
+      max-inline-size: 24rem;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+    .dashboard-topbar .breadcrumb li {
+      flex: 0 0 auto;
+    }
+
+    .dashboard-topbar .breadcrumb li:last-child {
+      flex: 1 1 auto;
+      min-inline-size: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .dashboard-nav .nav-link {
+      inline-size: 100%;
+      justify-content: flex-start;
+      gap: var(--space-2);
+      min-block-size: 2.35rem;
+      padding-inline: var(--space-3);
+    }
+
+    .dashboard-nav .nav-link i {
+      color: var(--text-muted);
+      font-size: 1.125rem;
+    }
+
+    .dashboard-nav .nav-link[aria-current="page"] {
+      color: var(--text);
+      background: var(--surface-subtle);
+    }
+
+    .dashboard-nav .nav-link[aria-current="page"] i {
+      color: var(--intent, var(--primary));
+    }
+
+    .dashboard-section-title {
+      margin: 0;
+      color: var(--text-muted);
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-strong);
+      text-transform: uppercase;
+      letter-spacing: 0;
     }
 
     .dashboard-stat {
+      display: grid;
+      gap: var(--space-4);
+      align-content: space-between;
+      min-block-size: 11rem;
+    }
+
+    .dashboard-stat-heading {
       display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 0.5rem;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-2);
+      color: var(--text-muted);
+      font-size: var(--font-size-sm);
+    }
+
+    .dashboard-stat-icon {
+      display: inline-grid;
+      place-items: center;
+      inline-size: 2rem;
+      block-size: 2rem;
+      border-radius: var(--radius);
+      background: var(--surface-subtle);
+      color: var(--intent, var(--primary));
+    }
+
+    .dashboard-stat-body {
+      display: grid;
+      gap: var(--space-2);
     }
 
     .dashboard-stat-value {
       color: var(--text);
-      font-size: 1.75rem;
+      font-size: 2rem;
       font-weight: var(--font-weight-bold);
-      line-height: 1.1;
+      line-height: 1;
     }
 
-    .dashboard-hide-md {
-      display: none;
+    .dashboard-stat-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-2);
+      color: var(--text-muted);
+      font-size: var(--font-size-sm);
     }
 
-    @media (max-width: 48rem) {
-      .dashboard-hide-md {
+    .dashboard-board {
+      display: grid;
+      gap: var(--space-4);
+      grid-template-columns: minmax(0, 1fr);
+      align-items: start;
+    }
+
+    .dashboard-board-main {
+      min-inline-size: 0;
+    }
+
+    .dashboard-account {
+      display: grid;
+      gap: var(--space-1);
+    }
+
+    .dashboard-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-3);
+      min-inline-size: 0;
+    }
+
+    .dashboard-card-header h2 {
+      flex: 1 1 auto;
+      min-inline-size: 0;
+      margin: 0;
+    }
+
+    .dashboard-filters {
+      display: flex;
+      flex: 0 0 auto;
+      align-items: center;
+      gap: var(--space-2);
+      white-space: nowrap;
+    }
+
+    .dashboard-filters .select {
+      inline-size: max-content;
+      max-inline-size: 11rem;
+    }
+
+    .dashboard-progress-list {
+      display: grid;
+      gap: var(--space-3);
+    }
+
+    .dashboard-progress-row {
+      display: grid;
+      gap: var(--space-2);
+    }
+
+    .dashboard-progress-label {
+      display: flex;
+      justify-content: space-between;
+      gap: var(--space-2);
+      color: var(--text-muted);
+      font-size: var(--font-size-sm);
+    }
+
+    .dashboard-feed {
+      display: grid;
+      gap: var(--space-3);
+    }
+
+    .dashboard-feed-item {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      gap: var(--space-3);
+      align-items: start;
+    }
+
+    .dashboard-feed-item + .dashboard-feed-item {
+      padding-block-start: var(--space-3);
+      border-block-start: var(--border-width) solid var(--border);
+    }
+
+    .dashboard-dot {
+      inline-size: 0.625rem;
+      block-size: 0.625rem;
+      margin-block-start: 0.45rem;
+      border-radius: var(--radius);
+      background: var(--intent, var(--primary));
+      box-shadow: 0 0 0 0.25rem var(--surface-subtle);
+    }
+
+    .dashboard-template-note {
+      padding-block: var(--space-4);
+      border-block-start: var(--border-width) solid var(--border);
+      color: var(--text-muted);
+      font-size: var(--font-size-sm);
+    }
+
+    @media (min-width: 56rem) {
+      .dashboard-hide-mobile {
         display: initial;
+      }
+
+      .dashboard-search.dashboard-hide-mobile {
+        display: block;
+      }
+
+      .dashboard-topbar .breadcrumb.dashboard-hide-mobile {
+        display: flex;
+      }
+    }
+
+    @media (min-width: 72rem) {
+      .dashboard-shell {
+        grid-template-columns: auto minmax(0, 1fr);
+      }
+
+      .dashboard-sidebar {
+        position: sticky;
+        inset-block-start: 0;
+        display: flex;
+        block-size: 100dvh;
+        overflow-y: auto;
+      }
+
+      .dashboard-menu-button {
+        display: none;
+      }
+
+      .dashboard-board {
+        grid-template-columns: minmax(0, 1fr) minmax(18rem, 22rem);
       }
     }
   </style>
 </head>
-<body class="app-shell">
-  <!-- Topbar: brand, primary nav, theme switcher, account dropdown. -->
-  <header class="navbar dashboard-topbar">
-    <a class="navbar-brand" href="#top">
-      <span class="avatar primary"><abbr class="circle">AC</abbr></span>
-      <span class="dashboard-hide-md">Actual CSS</span>
-    </a>
 
-    <nav aria-label="Primary">
-      <ul class="navbar-nav">
-        <li><a class="nav-link" href="#metrics" aria-current="page">Metrics</a></li>
-        <li><a class="nav-link" href="#revenue">Revenue</a></li>
-        <li><a class="nav-link" href="#activity">Activity</a></li>
-        <li><a class="nav-link" href="#quick-actions">Quick actions</a></li>
-      </ul>
-    </nav>
+<body>
+  <div class="dashboard-shell">
+    <aside class="dashboard-sidebar" aria-label="Workspace navigation">
+      <a class="navbar-brand" href="#overview">
+        <span class="avatar primary"><abbr>AC</abbr></span>
+        <span>Actual Cloud</span>
+      </a>
 
-    <div class="cluster">
-      <select class="select sm dashboard-hide-md" id="theme-switcher" aria-label="Switch theme">
-        <option value="">System</option>
-        <option value="light">Light</option>
-        <option value="dark">Dark</option>
-        <option value="dim">Dim</option>
-        <option value="corporate">Corporate</option>
-        <option value="forest">Forest</option>
-        <option value="ocean">Ocean</option>
-        <option value="sunset">Sunset</option>
-        <option value="lavender">Lavender</option>
-        <option value="mono">Mono</option>
-        <option value="square">Square</option>
-      </select>
+      <div class="card compact stack">
+        <span class="muted">Workspace</span>
+        <div class="cluster" style="--cluster-justify: space-between;">
+          <strong>Enterprise</strong>
+          <span class="badge success soft">Live</span>
+        </div>
+      </div>
+
+      <nav class="dashboard-nav stack" aria-label="Primary">
+        <p class="dashboard-section-title">Operate</p>
+        <ul class="nav-list stack">
+          <li>
+            <a class="nav-link" href="#overview" aria-current="page">
+              <i class="ti ti-layout-dashboard" aria-hidden="true"></i>
+              Overview
+            </a>
+          </li>
+          <li>
+            <a class="nav-link" href="#accounts">
+              <i class="ti ti-building-bank" aria-hidden="true"></i>
+              Accounts
+            </a>
+          </li>
+          <li>
+            <a class="nav-link" href="#pipeline">
+              <i class="ti ti-chart-funnel" aria-hidden="true"></i>
+              Pipeline
+            </a>
+          </li>
+          <li>
+            <a class="nav-link" href="#activity">
+              <i class="ti ti-activity" aria-hidden="true"></i>
+              Activity
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <nav class="dashboard-nav stack" aria-label="Administration">
+        <p class="dashboard-section-title">Admin</p>
+        <ul class="nav-list stack">
+          <li>
+            <a class="nav-link" href="#team">
+              <i class="ti ti-users" aria-hidden="true"></i>
+              Team
+              <span class="badge neutral soft sm" style="margin-inline-start: auto;">18</span>
+            </a>
+          </li>
+          <li>
+            <a class="nav-link" href="#settings">
+              <i class="ti ti-settings" aria-hidden="true"></i>
+              Settings
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="grow"></div>
 
       <div class="dropdown">
-        <button class="btn neutral ghost sm" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="account-menu" id="account-menu-trigger" aria-label="Account menu">
+        <button class="btn neutral ghost" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="sidebar-user-menu"
+          id="sidebar-user-trigger" style="inline-size: 100%; justify-content: flex-start;">
           <span class="avatar sm"><abbr>LW</abbr></span>
-          <span class="dashboard-hide-md">Laura</span>
-          <i class="ti ti-chevron-down" aria-hidden="true"></i>
+          <span>Laura Williams</span>
         </button>
-        <div class="dropdown-menu" role="menu" id="account-menu" aria-labelledby="account-menu-trigger" hidden>
-          <button class="btn link" type="button" role="menuitem">View profile</button>
-          <button class="btn link" type="button" role="menuitem">Settings</button>
-          <button class="btn link" type="button" role="menuitem">Keyboard shortcuts</button>
+        <div class="dropdown-menu" role="menu" id="sidebar-user-menu" aria-labelledby="sidebar-user-trigger" hidden>
+          <button class="btn link" type="button" role="menuitem">Profile</button>
+          <button class="btn link" type="button" role="menuitem">Preferences</button>
           <hr role="separator">
           <button class="btn link danger" type="button" role="menuitem">Sign out</button>
         </div>
       </div>
-    </div>
-  </header>
+    </aside>
 
-  <main class="grow center stack" id="dashboard">
-    <!-- Page header / hero -->
-    <header class="dashboard-hero stack">
-      <ol class="breadcrumb" aria-label="Breadcrumb">
-        <li><a href="#top">Actual</a></li>
-        <li><a href="#dashboard">Dashboard</a></li>
-        <li aria-current="page">Kitchen sink</li>
-      </ol>
+    <div class="dashboard-main">
+      <header class="dashboard-topbar">
+        <button class="btn neutral ghost dashboard-menu-button" type="button" commandfor="navigation-drawer" command="show-modal"
+          aria-label="Open navigation">
+          <i class="ti ti-menu-2" aria-hidden="true"></i>
+        </button>
 
-      <div class="cluster" style="--cluster-justify: space-between; flex-wrap: wrap; gap: 1rem;">
-        <hgroup>
-          <div class="cluster" style="gap: 0.75rem; flex-wrap: wrap;">
-            <h1>Dashboard kitchen sink</h1>
-            <span class="badge success soft">Live v0.1.0</span>
+        <ol class="breadcrumb dashboard-hide-mobile" aria-label="Breadcrumb">
+          <li><a href="#overview">Actual Cloud</a></li>
+          <li><a href="#revenue">Revenue</a></li>
+          <li aria-current="page">Overview</li>
+        </ol>
+
+        <div class="grow"></div>
+
+        <label class="dashboard-search dashboard-hide-mobile">
+          <i class="ti ti-search" aria-hidden="true"></i>
+          <input class="input sm" type="search" aria-label="Search" placeholder="Search accounts, invoices, notes">
+        </label>
+
+        <select class="select sm dashboard-hide-mobile dashboard-theme-select" id="theme-switcher" aria-label="Switch theme">
+          <option value="">System</option>
+          <option value="light">Light</option>
+          <option value="dark">Dark</option>
+          <option value="dim">Dim</option>
+          <option value="corporate">Corporate</option>
+          <option value="forest">Forest</option>
+          <option value="ocean">Ocean</option>
+          <option value="sunset">Sunset</option>
+          <option value="lavender">Lavender</option>
+          <option value="mono">Mono</option>
+          <option value="square">Square</option>
+        </select>
+
+        <button class="btn neutral ghost sm" type="button" aria-label="Notifications">
+          <i class="ti ti-bell" aria-hidden="true"></i>
+          <span class="badge danger" aria-label="3 unread notifications"></span>
+        </button>
+
+        <div class="dropdown">
+          <button class="btn neutral ghost sm" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="account-menu"
+            id="account-menu-trigger" aria-label="Account menu">
+            <span class="avatar sm"><abbr>LW</abbr></span>
+            <i class="ti ti-chevron-down dashboard-hide-mobile" aria-hidden="true"></i>
+          </button>
+          <div class="dropdown-menu" role="menu" id="account-menu" aria-labelledby="account-menu-trigger" hidden>
+            <button class="btn link" type="button" role="menuitem">View profile</button>
+            <button class="btn link" type="button" role="menuitem">Account settings</button>
+            <button class="btn link" type="button" role="menuitem">Keyboard shortcuts</button>
+            <hr role="separator">
+            <button class="btn link danger" type="button" role="menuitem">Sign out</button>
           </div>
-          <p class="muted" style="margin: 0;">Showing various types of typical UI elements for a dashboard.</p>
-        </hgroup>
-
-        <div class="cluster">
-          <label class="choice">
-            <input class="switch" type="checkbox" checked>
-            Auto-refresh
-          </label>
-          <button class="btn neutral outline" type="button" commandfor="delete-dialog" command="show-modal">Open dialog</button>
         </div>
-      </div>
+      </header>
+
+      <main class="center stack dashboard-content" id="overview">
+        <header class="cluster" style="--cluster-justify: space-between; align-items: flex-start;">
+          <hgroup>
+            <p class="eyebrow">Revenue operations</p>
+            <h1>Portfolio health</h1>
+            <p class="muted">A focused view of recurring revenue, collection risk, and expansion work for Q3.</p>
+          </hgroup>
+
+          <div class="cluster" style="gap: var(--space-2);">
+            <button class="btn neutral outline" type="button">
+              <i class="ti ti-download" aria-hidden="true"></i>
+              Export
+            </button>
+            <button class="btn primary" type="button" commandfor="forecast-modal" command="show-modal">
+              <i class="ti ti-plus" aria-hidden="true"></i>
+              New forecast
+            </button>
+          </div>
+        </header>
+
+        <section class="alert warning soft" role="status">
+          <i class="ti ti-alert-triangle" aria-hidden="true"></i>
+          <div class="cluster" style="--cluster-justify: space-between; flex: 1 1 auto;">
+            <div>
+              <strong>Three enterprise renewals need review.</strong>
+              <span>Legal redlines are blocking $184K in weighted pipeline.</span>
+            </div>
+            <a class="btn warning outline sm" href="#pipeline">Review pipeline</a>
+          </div>
+        </section>
+
+        <div class="dashboard-board">
+          <div class="stack dashboard-board-main">
+            <section class="grid" style="--grid-min: 14rem;" aria-label="Revenue metrics">
+              <article class="card raised dashboard-stat">
+                <div class="dashboard-stat-heading">
+                  <span>Recurring revenue</span>
+                  <span class="dashboard-stat-icon primary">
+                    <i class="ti ti-repeat" aria-hidden="true"></i>
+                  </span>
+                </div>
+                <div class="dashboard-stat-body">
+                  <data class="dashboard-stat-value" value="1842000">$1.84M</data>
+                  <div class="dashboard-stat-meta">
+                    <span class="badge success soft">+8.4%</span>
+                    <span>Goal $1.9M</span>
+                  </div>
+                  <progress class="progress primary" value="97" max="100" aria-label="Recurring revenue goal"></progress>
+                </div>
+              </article>
+
+              <article class="card raised dashboard-stat">
+                <div class="dashboard-stat-heading">
+                  <span>Expansion pipeline</span>
+                  <span class="dashboard-stat-icon success">
+                    <i class="ti ti-trending-up" aria-hidden="true"></i>
+                  </span>
+                </div>
+                <div class="dashboard-stat-body">
+                  <data class="dashboard-stat-value" value="642000">$642K</data>
+                  <div class="dashboard-stat-meta">
+                    <span class="badge success soft">32 opps</span>
+                    <span>82% commit</span>
+                  </div>
+                  <progress class="progress success" value="82" max="100" aria-label="Expansion commit coverage"></progress>
+                </div>
+              </article>
+
+              <article class="card raised dashboard-stat">
+                <div class="dashboard-stat-heading">
+                  <span>At-risk revenue</span>
+                  <span class="dashboard-stat-icon warning">
+                    <i class="ti ti-alert-circle" aria-hidden="true"></i>
+                  </span>
+                </div>
+                <div class="dashboard-stat-body">
+                  <data class="dashboard-stat-value" value="312000">$312K</data>
+                  <div class="dashboard-stat-meta">
+                    <span class="badge warning soft">17 accounts</span>
+                    <span>$84K urgent</span>
+                  </div>
+                  <progress class="progress warning" value="27" max="100" aria-label="At-risk revenue share"></progress>
+                </div>
+              </article>
+            </section>
+
+            <section class="card stack" id="accounts">
+              <div class="dashboard-card-header">
+                <h2>Priority accounts</h2>
+                <div class="dashboard-filters">
+                  <select class="select sm" aria-label="Filter accounts">
+                    <option>All segments</option>
+                    <option>Enterprise</option>
+                    <option>Mid-market</option>
+                    <option>Expansion</option>
+                  </select>
+                  <button class="btn neutral outline sm" type="button">
+                    <i class="ti ti-filter" aria-hidden="true"></i>
+                    Filter
+                  </button>
+                </div>
+              </div>
+
+              <div class="table-wrap" role="region" aria-labelledby="accounts-table" tabindex="0">
+                <table class="table" style="--table-min: 58rem;">
+                  <caption id="accounts-table" class="sr-only">Priority accounts</caption>
+                  <thead>
+                    <tr>
+                      <th scope="col">Account</th>
+                      <th scope="col">Owner</th>
+                      <th scope="col" data-align="end">ARR</th>
+                      <th scope="col">Stage</th>
+                      <th scope="col">Health</th>
+                      <th scope="col" data-nowrap>Next step</th>
+                      <th scope="col"><span class="sr-only">Actions</span></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <div class="dashboard-account">
+                          <strong>Northstar Logistics</strong>
+                          <span class="muted">Enterprise renewal</span>
+                        </div>
+                      </td>
+                      <td>
+                        <span class="cluster" style="gap: var(--space-2);">
+                          <span class="avatar sm"><abbr>AM</abbr></span>
+                          Ada
+                        </span>
+                      </td>
+                      <td data-align="end" data-nowrap>$428K</td>
+                      <td><span class="badge primary soft">Negotiation</span></td>
+                      <td><span class="badge warning soft">Watch</span></td>
+                      <td data-nowrap>Legal review</td>
+                      <td>
+                        <button class="btn neutral ghost sm" type="button" aria-label="Open account">
+                          <i class="ti ti-arrow-right" aria-hidden="true"></i>
+                        </button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <div class="dashboard-account">
+                          <strong>Helio Systems</strong>
+                          <span class="muted">Expansion motion</span>
+                        </div>
+                      </td>
+                      <td>
+                        <span class="cluster" style="gap: var(--space-2);">
+                          <span class="avatar sm"><abbr>JL</abbr></span>
+                          Jana
+                        </span>
+                      </td>
+                      <td data-align="end" data-nowrap>$216K</td>
+                      <td><span class="badge success soft">Commit</span></td>
+                      <td><span class="badge success soft">Strong</span></td>
+                      <td data-nowrap>Security call</td>
+                      <td>
+                        <button class="btn neutral ghost sm" type="button" aria-label="Open account">
+                          <i class="ti ti-arrow-right" aria-hidden="true"></i>
+                        </button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <div class="dashboard-account">
+                          <strong>Orchid Health</strong>
+                          <span class="muted">Risk mitigation</span>
+                        </div>
+                      </td>
+                      <td>
+                        <span class="cluster" style="gap: var(--space-2);">
+                          <span class="avatar sm"><abbr>RM</abbr></span>
+                          Rin
+                        </span>
+                      </td>
+                      <td data-align="end" data-nowrap>$184K</td>
+                      <td><span class="badge warning soft">Procurement</span></td>
+                      <td><span class="badge danger soft">At risk</span></td>
+                      <td data-nowrap>Exec sponsor</td>
+                      <td>
+                        <button class="btn neutral ghost sm" type="button" aria-label="Open account">
+                          <i class="ti ti-arrow-right" aria-hidden="true"></i>
+                        </button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <div class="dashboard-account">
+                          <strong>Vertex Labs</strong>
+                          <span class="muted">New business</span>
+                        </div>
+                      </td>
+                      <td>
+                        <span class="cluster" style="gap: var(--space-2);">
+                          <span class="avatar sm"><abbr>TS</abbr></span>
+                          Theo
+                        </span>
+                      </td>
+                      <td data-align="end" data-nowrap>$132K</td>
+                      <td><span class="badge neutral soft">Discovery</span></td>
+                      <td><span class="badge neutral soft">New</span></td>
+                      <td data-nowrap>ROI workshop</td>
+                      <td>
+                        <button class="btn neutral ghost sm" type="button" aria-label="Open account">
+                          <i class="ti ti-arrow-right" aria-hidden="true"></i>
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="cluster" style="--cluster-justify: space-between;">
+                <span class="muted">Showing 4 of 28 priority accounts</span>
+                <nav aria-label="Account pages">
+                  <ol class="pagination sm">
+                    <li>
+                      <a class="btn outline" href="#" aria-disabled="true" aria-label="Previous page">
+                        <i class="ti ti-chevron-left" aria-hidden="true"></i>
+                      </a>
+                    </li>
+                    <li><a class="btn" href="#" aria-current="page">1</a></li>
+                    <li><a class="btn outline" href="#">2</a></li>
+                    <li><a class="btn outline" href="#">3</a></li>
+                    <li>
+                      <a class="btn outline" href="#" aria-label="Next page">
+                        <i class="ti ti-chevron-right" aria-hidden="true"></i>
+                      </a>
+                    </li>
+                  </ol>
+                </nav>
+              </div>
+            </section>
+          </div>
+
+          <aside class="stack" aria-label="Revenue sidebar">
+            <section class="card stack" id="pipeline">
+              <h2 style="margin: 0;">Pipeline by stage</h2>
+              <div class="dashboard-progress-list">
+                <div class="dashboard-progress-row">
+                  <div class="dashboard-progress-label">
+                    <span>Commit</span>
+                    <strong>$642K</strong>
+                  </div>
+                  <progress class="progress" value="82" max="100" aria-label="Commit stage"></progress>
+                </div>
+                <div class="dashboard-progress-row">
+                  <div class="dashboard-progress-label">
+                    <span>Negotiation</span>
+                    <strong>$418K</strong>
+                  </div>
+                  <progress class="progress" value="58" max="100" aria-label="Negotiation stage"></progress>
+                </div>
+                <div class="dashboard-progress-row">
+                  <div class="dashboard-progress-label">
+                    <span>Procurement</span>
+                    <strong>$296K</strong>
+                  </div>
+                  <progress class="progress" value="43" max="100" aria-label="Procurement stage"></progress>
+                </div>
+              </div>
+            </section>
+
+            <section class="card stack" id="activity">
+              <h2 style="margin: 0;">Activity</h2>
+              <div class="dashboard-feed">
+                <div class="dashboard-feed-item">
+                  <span class="dashboard-dot success" aria-hidden="true"></span>
+                  <div>
+                    <strong>Helio Systems approved security terms.</strong>
+                    <p class="muted">Jana moved the account to commit.</p>
+                  </div>
+                </div>
+                <div class="dashboard-feed-item">
+                  <span class="dashboard-dot warning" aria-hidden="true"></span>
+                  <div>
+                    <strong>Orchid Health flagged timeline risk.</strong>
+                    <p class="muted">Procurement needs executive approval.</p>
+                  </div>
+                </div>
+                <div class="dashboard-feed-item">
+                  <span class="dashboard-dot primary" aria-hidden="true"></span>
+                  <div>
+                    <strong>Northstar renewal package sent.</strong>
+                    <p class="muted">Legal review is due Friday.</p>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <section class="card stack" id="team">
+              <h2 style="margin: 0;">Team coverage</h2>
+              <div role="group" aria-label="Revenue team">
+                <span class="avatar primary" title="Ada Morgan"><abbr>AM</abbr></span>
+                <span class="avatar success" title="Jana Lee"><abbr>JL</abbr></span>
+                <span class="avatar warning" title="Rin Moreau"><abbr>RM</abbr></span>
+                <span class="avatar" title="Theo Silva"><abbr>TS</abbr></span>
+                <span class="avatar neutral" title="Mira Hart"><abbr>MH</abbr></span>
+              </div>
+              <p class="muted">Five owners cover 28 priority accounts this week.</p>
+            </section>
+          </aside>
+        </div>
+
+        <footer class="dashboard-template-note">
+          <div class="cluster" style="--cluster-justify: space-between;">
+            <span>Actual CSS dashboard template</span>
+            <ul class="nav-list cluster" aria-label="Template links">
+              <li><a class="link-plain" href="#overview">Overview</a></li>
+              <li><a class="link-plain" href="#accounts">Accounts</a></li>
+              <li><a class="link-plain" href="#pipeline">Pipeline</a></li>
+            </ul>
+          </div>
+        </footer>
+      </main>
+    </div>
+  </div>
+
+  <dialog class="drawer" id="navigation-drawer" aria-label="Navigation">
+    <header class="cluster" style="--cluster-justify: space-between;">
+      <strong>Actual Cloud</strong>
+      <form method="dialog">
+        <button class="btn ghost" type="submit" aria-label="Close navigation">
+          <i class="ti ti-x" aria-hidden="true"></i>
+        </button>
+      </form>
     </header>
 
-    <!-- Metrics -->
-    <section id="metrics" class="stack">
-      <h2>Metrics</h2>
-      <div class="grid" style="--grid-min: 13rem;" aria-label="Key metrics">
-        <article class="card raised dashboard-stat">
-          <span class="muted">Revenue</span>
-          <data class="dashboard-stat-value" value="42128">$42,128</data>
-          <span class="badge success soft">+12.5% vs last month</span>
-          <progress class="progress" value="72" max="100" aria-label="Revenue target progress"></progress>
-        </article>
-        <article class="card raised dashboard-stat">
-          <span class="muted">Active users</span>
-          <data class="dashboard-stat-value" value="2847">2,847</data>
-          <span class="badge danger soft">-3.2% vs last month</span>
-          <progress class="progress" value="38" max="100" aria-label="User growth"></progress>
-        </article>
-        <article class="card raised dashboard-stat">
-          <span class="muted">Retention</span>
-          <data class="dashboard-stat-value" value="83.24">83.24%</data>
-          <span class="badge success soft">+0.8% vs last month</span>
-        </article>
-        <article class="card raised dashboard-stat">
-          <span class="muted">Uptime</span>
-          <data class="dashboard-stat-value" value="99.99">99.99%</data>
-          <span class="badge success outline">Healthy</span>
-        </article>
-      </div>
-    </section>
-
-    <!-- Sidebar-layout: revenue tabs/table (main) + activity/team/maintenance (aside) -->
-    <section id="revenue" class="sidebar-layout">
-      <div class="stack">
-        <h2>Revenue</h2>
-        <ul class="tabs" aria-label="Revenue views">
-          <li><button class="tab" type="button" aria-pressed="true">By plan</button></li>
-          <li><button class="tab" type="button" aria-pressed="false">By region</button></li>
-          <li><button class="tab" type="button" aria-pressed="false">By channel</button></li>
-        </ul>
-
-        <div class="card stack">
-          <div class="table-wrap" role="region" aria-labelledby="revenue-table" tabindex="0">
-            <table class="table" style="--table-min: 64rem;">
-              <caption id="revenue-table" class="sr-only">Revenue by month</caption>
-              <thead>
-                <tr>
-                  <th scope="col">Month</th>
-                  <th scope="col">Plan</th>
-                  <th scope="col" data-align="end">Revenue</th>
-                  <th scope="col" data-align="end">Churn</th>
-                  <th scope="col">Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>March 2026</td>
-                  <td>Team</td>
-                  <td data-align="end" data-nowrap>$42,128</td>
-                  <td data-align="end" data-nowrap>1.2%</td>
-                  <td><span class="badge success soft">Healthy</span></td>
-                </tr>
-                <tr>
-                  <td>April 2026</td>
-                  <td>Team + Business</td>
-                  <td data-align="end" data-nowrap>$48,902</td>
-                  <td data-align="end" data-nowrap>0.9%</td>
-                  <td><span class="badge success soft">Healthy</span></td>
-                </tr>
-                <tr>
-                  <td>May 2026</td>
-                  <td>Team + Business</td>
-                  <td data-align="end" data-nowrap>$53,470</td>
-                  <td data-align="end" data-nowrap>0.7%</td>
-                  <td><span class="badge warning soft">Watch</span></td>
-                </tr>
-                <tr>
-                  <td>June 2026</td>
-                  <td>Business + Enterprise</td>
-                  <td data-align="end" data-nowrap>$61,884</td>
-                  <td data-align="end" data-nowrap>0.5%</td>
-                  <td><span class="badge success soft">Healthy</span></td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <div class="cluster" style="--cluster-justify: space-between; flex-wrap: wrap; gap: 0.5rem;">
-            <span class="muted">Showing 4 of 12 months</span>
-            <nav aria-label="Pagination">
-              <ol class="pagination">
-                <li><a class="page-link" href="#" aria-disabled="true">Prev</a></li>
-                <li><a class="page-link" aria-current="page" href="#">1</a></li>
-                <li><a class="page-link" href="#">2</a></li>
-                <li><a class="page-link" href="#">3</a></li>
-                <li><a class="page-link" href="#">Next</a></li>
-              </ol>
-            </nav>
-          </div>
-        </div>
-      </div>
-
-      <aside class="stack" aria-label="Sidebar">
-        <!-- Recent activity -->
-        <section class="card stack">
-          <hgroup>
-            <h2 style="margin: 0; font-size: 1rem;">Recent activity</h2>
-            <p class="muted" style="margin: 0; font-size: 0.875rem;">Last 24 hours</p>
-          </hgroup>
-
-          <div class="media">
-            <span class="avatar success"><abbr>JL</abbr></span>
-            <div>
-              <div><strong>Jana Lindgren</strong> <span class="muted">deployed</span> <code>v2.4.1</code></div>
-              <small class="muted">12 min ago</small>
-            </div>
-          </div>
-          <div class="media">
-            <span class="avatar primary"><abbr>AM</abbr></span>
-            <div>
-              <div><strong>Ada Meridian</strong> <span class="muted">approved</span> a pull request</div>
-              <small class="muted">38 min ago</small>
-            </div>
-          </div>
-          <div class="media">
-            <span class="avatar warning"><abbr>RM</abbr></span>
-            <div>
-              <div><strong>Rin Moreau</strong> <span class="muted">flagged</span> a regression in checkout</div>
-              <small class="muted">1 hour ago</small>
-            </div>
-          </div>
-          <div class="media">
-            <span class="avatar"><abbr>TS</abbr></span>
-            <div>
-              <div><strong>Tomek Sava</strong> <span class="muted">resolved</span> 6 support tickets</div>
-              <small class="muted">3 hours ago</small>
-            </div>
-          </div>
-        </section>
-
-        <!-- Team online -->
-        <section class="card stack">
-          <hgroup>
-            <h2 style="margin: 0; font-size: 1rem;">Team online</h2>
-            <p class="muted" style="margin: 0; font-size: 0.875rem;">8 of 14 members</p>
-          </hgroup>
-          <div role="group" aria-label="Team members">
-            <span class="avatar primary" title="Ada Meridian"><abbr>AM</abbr></span>
-            <span class="avatar success" title="Jana Lindgren"><abbr>JL</abbr></span>
-            <span class="avatar warning" title="Rin Moreau"><abbr>RM</abbr></span>
-            <span class="avatar" title="Tomek Sava"><abbr>TS</abbr></span>
-            <span class="avatar secondary" title="Kai Aoyama"><abbr>KA</abbr></span>
-            <span class="avatar danger" title="Mira Halberg"><abbr>MH</abbr></span>
-            <span class="avatar neutral" title="Yusuf Adler"><abbr>YA</abbr></span>
-            <span class="avatar" title="Pia Vester"><abbr>PV</abbr></span>
-          </div>
-        </section>
-
-        <!-- Maintenance notice -->
-        <div class="alert primary" role="status">
-          <span aria-hidden="true">i</span>
-          <div>
-            <strong>Scheduled maintenance</strong>
-            <p style="margin: 0.25rem 0 0; font-size: 0.9375rem;">A 15-minute window is planned for Sunday, 04:00 UTC. <a href="#">Read the changelog</a>.</p>
-          </div>
-        </div>
-      </aside>
-    </section>
-
-    <!-- Quick actions -->
-    <section id="quick-actions" class="stack">
-      <h2>Quick actions</h2>
-      <div class="grid" style="--grid-min: 16rem;">
-        <a class="card subtle" href="#" style="color: inherit; text-decoration: none;">
-          <div class="media">
-            <span class="avatar primary"><i class="ti ti-rocket" aria-hidden="true"></i></span>
-            <div>
-              <strong>Deploy</strong>
-              <p class="muted" style="margin: 0; font-size: 0.9375rem;">Ship the latest changes to production.</p>
-            </div>
-          </div>
-        </a>
-        <a class="card subtle" href="#" style="color: inherit; text-decoration: none;">
-          <div class="media">
-            <span class="avatar success"><i class="ti ti-circle-check" aria-hidden="true"></i></span>
-            <div>
-              <strong>Run checks</strong>
-              <p class="muted" style="margin: 0; font-size: 0.9375rem;">Execute the full quality suite.</p>
-            </div>
-          </div>
-        </a>
-        <a class="card subtle" href="#" style="color: inherit; text-decoration: none;">
-          <div class="media">
-            <span class="avatar warning"><i class="ti ti-bell" aria-hidden="true"></i></span>
-            <div>
-              <strong>Send announcement</strong>
-              <p class="muted" style="margin: 0; font-size: 0.9375rem;">Notify all team members in one click.</p>
-            </div>
-          </div>
-        </a>
-        <a class="card subtle" href="#" style="color: inherit; text-decoration: none;">
-          <div class="media">
-            <span class="avatar secondary"><i class="ti ti-file-export" aria-hidden="true"></i></span>
-            <div>
-              <strong>Export report</strong>
-              <p class="muted" style="margin: 0; font-size: 0.9375rem;">Download a PDF summary for stakeholders.</p>
-            </div>
-          </div>
-        </a>
-      </div>
-    </section>
-
-    <!-- Activity section: a placeholder anchor that the right-rail above already previews. -->
-    <section id="activity" class="stack">
-      <h2>Activity</h2>
-      <p class="muted">Per-user activity timeline lives here. The right-rail above already previews the framework <code>.media</code> shape.</p>
-    </section>
-  </main>
-
-  <footer class="center" style="padding-block: 2rem; border-block-start: var(--border-width) solid var(--border); color: var(--text-muted);">
-    <div class="cluster" style="--cluster-justify: space-between; flex-wrap: wrap; gap: 0.5rem;">
-      <span>Actual CSS kitchen sink demo</span>
-      <ul class="nav-list cluster" aria-label="Footer">
-        <li><a href="#metrics" style="color: inherit; text-decoration: none;">Metrics</a></li>
-        <li><a href="#revenue" style="color: inherit; text-decoration: none;">Revenue</a></li>
-        <li><a href="#activity" style="color: inherit; text-decoration: none;">Activity</a></li>
+    <nav class="dashboard-nav" aria-label="Mobile navigation">
+      <ul class="nav-list stack">
+        <li><a class="nav-link" href="#overview" aria-current="page"><i class="ti ti-layout-dashboard" aria-hidden="true"></i> Overview</a></li>
+        <li><a class="nav-link" href="#accounts"><i class="ti ti-building-bank" aria-hidden="true"></i> Accounts</a></li>
+        <li><a class="nav-link" href="#pipeline"><i class="ti ti-chart-funnel" aria-hidden="true"></i> Pipeline</a></li>
+        <li><a class="nav-link" href="#activity"><i class="ti ti-activity" aria-hidden="true"></i> Activity</a></li>
+        <li><a class="nav-link" href="#team"><i class="ti ti-users" aria-hidden="true"></i> Team</a></li>
       </ul>
-    </div>
-  </footer>
+    </nav>
+  </dialog>
 
-  <!-- Delete confirmation dialog (invoker commands, no inline JS). -->
-  <dialog class="modal" id="delete-dialog" closedby="any">
+  <dialog class="modal" id="forecast-modal" closedby="any" data-dialog-dismissible>
     <form method="dialog" class="stack">
       <header>
-        <h3>Confirm deletion</h3>
-        <p class="muted">Are you sure you want to delete order #ORD-7295? This action cannot be undone.</p>
+        <h3>Create forecast</h3>
+        <p class="muted">Add a forecast scenario for the current revenue cycle.</p>
       </header>
+
+      <div class="grid" style="--grid-min: 14rem;">
+        <label class="field">
+          <span class="field-label">Scenario name</span>
+          <input class="input" type="text" placeholder="Conservative Q3">
+        </label>
+        <label class="field">
+          <span class="field-label">Confidence</span>
+          <select class="select">
+            <option>High</option>
+            <option>Medium</option>
+            <option>Low</option>
+          </select>
+        </label>
+        <label class="field" style="grid-column: 1 / -1;">
+          <span class="field-label">Notes</span>
+          <textarea class="textarea" rows="4" placeholder="Key assumptions and risks"></textarea>
+        </label>
+      </div>
+
       <footer>
-        <button class="btn neutral outline" type="button" commandfor="delete-dialog" command="close">Cancel</button>
-        <button class="btn danger" value="delete">Delete order</button>
+        <button class="btn neutral outline" value="cancel" formnovalidate>Cancel</button>
+        <button class="btn primary" value="create">Create forecast</button>
       </footer>
     </form>
   </dialog>
 
+  <script src="../../dist/actual.js"></script>
   <script>
-    // Theme switcher. src/themes/index.css already imports every theme, so
-    // flipping data-theme on <html> is the only step required.
-    (function () {
-      const switcher = document.getElementById('theme-switcher');
-      if (!switcher) return;
-      switcher.addEventListener('change', () => {
-        const value = switcher.value;
-        if (value) document.documentElement.dataset.theme = value;
-        else document.documentElement.removeAttribute('data-theme');
+    const switcher = document.getElementById("theme-switcher");
+
+    if (switcher) {
+      switcher.addEventListener("change", () => {
+        if (switcher.value) {
+          document.documentElement.dataset.theme = switcher.value;
+        } else {
+          document.documentElement.removeAttribute("data-theme");
+        }
       });
-    })();
-
-    // .dropdown toggler. Framework documents the contract; this is the
-    // matching runtime: aria-expanded, hidden, Escape, outside click, focus
-    // return. Same shape can be reused by other templates and demos.
-    (function () {
-      const triggers = document.querySelectorAll('.dropdown [aria-haspopup="menu"]');
-      triggers.forEach((trigger) => {
-        const id = trigger.getAttribute('aria-controls');
-        const menu = id ? document.getElementById(id) : trigger.nextElementSibling;
-        if (!menu) return;
-
-        const close = () => {
-          trigger.setAttribute('aria-expanded', 'false');
-          menu.setAttribute('hidden', '');
-        };
-        const open = () => {
-          trigger.setAttribute('aria-expanded', 'true');
-          menu.removeAttribute('hidden');
-        };
-
-        trigger.addEventListener('click', (event) => {
-          event.stopPropagation();
-          if (trigger.getAttribute('aria-expanded') === 'true') close();
-          else open();
-        });
-
-        menu.addEventListener('click', (event) => {
-          if (event.target.closest('[role="menuitem"]')) close();
-        });
-
-        document.addEventListener('click', (event) => {
-          if (!menu.contains(event.target) && event.target !== trigger) close();
-        });
-
-        document.addEventListener('keydown', (event) => {
-          if (event.key === 'Escape' && trigger.getAttribute('aria-expanded') === 'true') {
-            close();
-            trigger.focus();
-          }
-        });
-      });
-    })();
+    }
   </script>
 </body>
+
 </html>
