@@ -16,15 +16,16 @@
   color: var(--text);
   box-shadow: var(--shadow);
   padding: 0;
-  overflow: auto;
-  overscroll-behavior: contain;
+  overflow: visible;
   opacity: 0;
-  translate: 0 0.35rem;
-  scale: 0.98;
+  /*
+   * Keep the open dialog root untransformed. Fixed overlays mounted inside a
+   * modal dialog use viewport coordinates; transform/translate/scale on this
+   * element would make them position against the dialog instead.
+   */
   transition:
     opacity var(--duration),
-    translate var(--duration),
-    scale var(--duration),
+    transform var(--duration),
     overlay var(--duration) allow-discrete,
     display var(--duration) allow-discrete;
 }
@@ -33,7 +34,24 @@
 .dialog > .stack {
   display: grid;
   gap: var(--space-4);
+  max-block-size: calc(100vh - 2rem);
+  max-block-size: calc(100dvb - 2rem);
+  overflow: auto;
+  overscroll-behavior: contain;
   padding: var(--space-4);
+}
+
+.dialog.scrollable > form,
+.dialog.scrollable > .stack {
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  overflow: hidden;
+}
+
+.dialog.scrollable > form > :not(header, footer),
+.dialog.scrollable > .stack > :not(header, footer) {
+  min-block-size: 0;
+  overflow: auto;
+  overscroll-behavior: contain;
 }
 
 .dialog header > :first-child,
@@ -55,15 +73,13 @@
 
 .dialog[open] {
   opacity: 1;
-  translate: 0 0;
-  scale: 1;
+  transform: none;
 }
 
 @starting-style {
   .dialog[open] {
     opacity: 0;
-    translate: 0 0.35rem;
-    scale: 0.98;
+    transform: translateY(0.35rem) scale(0.98);
   }
 }
 
@@ -94,8 +110,27 @@
 }
 
 @media (prefers-reduced-motion: no-preference) {
+  .dialog.is-static {
+    animation: actual-dialog-static 180ms var(--ease);
+  }
+
   ::view-transition-group(actual-dialog) {
     animation-duration: var(--duration);
     animation-timing-function: var(--ease);
+  }
+}
+
+@keyframes actual-dialog-static {
+  0%,
+  100% {
+    transform: none;
+  }
+
+  35% {
+    transform: translateX(-0.35rem);
+  }
+
+  70% {
+    transform: translateX(0.35rem);
   }
 }

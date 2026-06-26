@@ -464,6 +464,48 @@ small {
   overflow: auto;
 }
 
+.scroller {
+  --scroller-size: .625rem;
+  --scroller-padding: .125rem;
+  --scroller-track: transparent;
+  --scroller-thumb: var(--border);
+  --scroller-thumb-hover: var(--text-muted);
+  scrollbar-color: var(--scroller-thumb) var(--scroller-track);
+  scrollbar-width: thin;
+}
+
+.scroller::-webkit-scrollbar {
+  width: var(--scroller-size);
+  height: var(--scroller-size);
+}
+
+.scroller::-webkit-scrollbar-track {
+  background: var(--scroller-track);
+}
+
+.scroller::-webkit-scrollbar-thumb {
+  border: var(--scroller-padding) solid transparent;
+  border-radius: var(--radius-full);
+  background: var(--scroller-thumb);
+  background-clip: content-box;
+}
+
+.scroller::-webkit-scrollbar-thumb:hover {
+  background: var(--scroller-thumb-hover);
+  background-clip: content-box;
+}
+
+.scroller::-webkit-scrollbar-corner {
+  background: var(--scroller-track);
+}
+
+@supports (color: color-mix(in oklch, red, white)) {
+  .scroller {
+    --scroller-thumb: color-mix(in oklch, var(--text-muted), transparent 55%);
+    --scroller-thumb-hover: color-mix(in oklch, var(--text-muted), transparent 30%);
+  }
+}
+
 .grow {
   flex: auto;
   min-inline-size: 0;
@@ -1232,6 +1274,9 @@ button.badge:disabled, .badge[aria-disabled="true"] {
   border: var(--border-width) solid var(--border);
   border-radius: var(--radius-lg);
   background: var(--surface-raised);
+  inline-size: 100%;
+  min-inline-size: 0;
+  max-inline-size: 100%;
   overflow-x: auto;
 }
 
@@ -1671,9 +1716,11 @@ button.avatar {
 .dialog {
   --dialog-size: 32rem;
   max-inline-size: min(100% - 2rem, var(--dialog-size));
+  max-block-size: calc(100vh - 2rem);
   border: var(--border-width) solid var(--border);
   border-radius: var(--radius-lg);
   background: var(--surface-raised);
+  max-block-size: calc(100dvb - 2rem);
   color: var(--text);
   box-shadow: var(--shadow);
   opacity: 0;
@@ -1682,13 +1729,28 @@ button.avatar {
     overlay var(--duration) allow-discrete,
     display var(--duration) allow-discrete;
   padding: 0;
-  transform: translateY(.35rem) scale(.98);
+  overflow: visible;
 }
 
 .dialog > form, .dialog > .stack {
   gap: var(--space-4);
+  max-block-size: calc(100vh - 2rem);
+  overscroll-behavior: contain;
+  max-block-size: calc(100dvb - 2rem);
   padding: var(--space-4);
   display: grid;
+  overflow: auto;
+}
+
+.dialog.scrollable > form, .dialog.scrollable > .stack {
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  overflow: hidden;
+}
+
+.dialog.scrollable > form > :not(header, footer), .dialog.scrollable > .stack > :not(header, footer) {
+  overscroll-behavior: contain;
+  min-block-size: 0;
+  overflow: auto;
 }
 
 .dialog header > :first-child, .dialog footer > :first-child {
@@ -1708,7 +1770,7 @@ button.avatar {
 
 .dialog[open] {
   opacity: 1;
-  transform: translateY(0) scale(1);
+  transform: none;
 }
 
 @starting-style {
@@ -1730,9 +1792,41 @@ button.avatar {
   opacity: .5;
 }
 
+@supports selector(:has(dialog:modal)) {
+  html:has(dialog:modal) {
+    scrollbar-gutter: stable;
+    overflow: hidden;
+  }
+}
+
 @starting-style {
   .dialog[open]::backdrop {
     opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .dialog.is-static {
+    animation: actual-dialog-static .18s var(--ease);
+  }
+
+  ::view-transition-group(actual-dialog) {
+    animation-duration: var(--duration);
+    animation-timing-function: var(--ease);
+  }
+}
+
+@keyframes actual-dialog-static {
+  0%, 100% {
+    transform: none;
+  }
+
+  35% {
+    transform: translateX(-.35rem);
+  }
+
+  70% {
+    transform: translateX(.35rem);
   }
 }
 
@@ -2393,10 +2487,11 @@ dialog.drawer[data-side="end"] {
 
 .dropdown-menu {
   z-index: var(--z-dropdown);
+  inline-size: max-content;
+  min-inline-size: min(var(--dropdown-trigger-width, 0px), min(20rem, calc(100vi - 2rem)));
   border: var(--border-width) solid var(--border);
   border-radius: var(--radius);
   background: var(--surface-raised);
-  min-inline-size: max-content;
   max-inline-size: min(20rem, 100vi - 2rem);
   box-shadow: var(--shadow-popout);
   gap: .125rem;
@@ -2404,6 +2499,21 @@ dialog.drawer[data-side="end"] {
   padding: .35rem;
   list-style: none;
   display: grid;
+}
+
+.dropdown-menu.is-sheet {
+  inset-block-end: 0;
+  inset-inline: 0;
+  max-block-size: min(75vb, 32rem);
+  inline-size: auto;
+  min-inline-size: 0;
+  max-inline-size: none;
+  padding: max(.75rem, env(safe-area-inset-top)) .75rem
+    max(.75rem, env(safe-area-inset-bottom));
+  border-end-end-radius: 0;
+  border-end-start-radius: 0;
+  top: auto;
+  overflow: auto;
 }
 
 .dropdown-menu[hidden] {
@@ -2430,7 +2540,11 @@ dialog.drawer[data-side="end"] {
   display: flex;
 }
 
-.dropdown-menu > button:hover, .dropdown-menu > a:hover, .dropdown-menu > [role="menuitem"]:hover, .dropdown-menu > button:focus, .dropdown-menu > a:focus, .dropdown-menu > [role="menuitem"]:focus, .dropdown-menu > button:focus-visible, .dropdown-menu > a:focus-visible, .dropdown-menu > [role="menuitem"]:focus-visible {
+.dropdown-menu.is-sheet > button, .dropdown-menu.is-sheet > a, .dropdown-menu.is-sheet > [role="menuitem"] {
+  min-block-size: 2.75rem;
+}
+
+.dropdown-menu > button:hover, .dropdown-menu > a:hover, .dropdown-menu > [role="menuitem"]:hover, .dropdown-menu > button:focus-visible, .dropdown-menu > a:focus-visible, .dropdown-menu > [role="menuitem"]:focus-visible {
   background: var(--surface-subtle);
 }
 
@@ -2440,6 +2554,13 @@ dialog.drawer[data-side="end"] {
   inline-size: 100%;
   margin: 0;
   margin-block: .25rem;
+}
+
+.surface-backdrop {
+  z-index: calc(var(--z-dropdown) - 1);
+  background: #00000059;
+  position: fixed;
+  inset: 0;
 }
 
 .tabs {
@@ -2478,7 +2599,7 @@ dialog.drawer[data-side="end"] {
   border-radius: var(--radius-sm) var(--radius-sm) 0 0;
 }
 
-.tab[aria-selected="true"], .tab[aria-current="page"] {
+.tab[aria-selected="true"], .tab[aria-current="page"], .tab[aria-pressed="true"] {
   border-block-end-color: var(--intent, var(--primary));
   color: var(--intent, var(--primary));
 }

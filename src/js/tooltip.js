@@ -27,6 +27,30 @@ let uid = 0;
 const tipMap = new WeakMap();
 const cleanupMap = new WeakMap();
 const generatedTips = new WeakSet();
+const mountedTips = new WeakMap();
+
+function mountTip(tip, trigger) {
+  const root = trigger.closest("dialog") || document.body;
+  const parent = tip.parentNode;
+  if (!root || !parent || parent === root) return;
+
+  mountedTips.set(tip, { parent, next: tip.nextSibling });
+  root.append(tip);
+}
+
+function restoreTip(tip) {
+  const mount = mountedTips.get(tip);
+  if (!mount) return;
+
+  if (mount.parent.isConnected) {
+    const next = mount.next?.parentNode === mount.parent ? mount.next : null;
+    mount.parent.insertBefore(tip, next);
+  } else {
+    tip.remove();
+  }
+
+  mountedTips.delete(tip);
+}
 
 function ensureTip(trigger) {
   if (tipMap.has(trigger)) return tipMap.get(trigger);
@@ -68,6 +92,8 @@ function ensureTip(trigger) {
 
     const placement = trigger.getAttribute("data-tooltip-placement");
     if (placement) tip._placement = placement;
+
+    mountTip(tip, trigger);
   }
 
   // wire event handlers
@@ -104,6 +130,7 @@ function ensureTip(trigger) {
     tip.removeEventListener("floating:hide", onHide);
     untrack();
     if (generatedTips.has(tip)) tip.remove();
+    else restoreTip(tip);
     tipMap.delete(trigger);
     cleanupMap.delete(trigger);
   });
