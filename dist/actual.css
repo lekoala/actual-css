@@ -42,12 +42,7 @@ a {
 :where(h1, h2, h3, h4, h5, h6) {
   color: var(--heading, inherit);
   line-height: var(--line-height-tight);
-}
-
-@supports (text-wrap: balance) {
-  :where(h1, h2, h3, h4, h5, h6) {
-    text-wrap: balance;
-  }
+  text-wrap: balance;
 }
 
 hgroup {
@@ -477,10 +472,8 @@ small {
   margin-block: 1.5em 0;
 }
 
-@supports (text-wrap: pretty) {
-  .prose :where(p, li, blockquote) {
-    text-wrap: pretty;
-  }
+.prose :where(p, li, blockquote) {
+  text-wrap: pretty;
 }
 
 .prose > :first-child {
@@ -1981,6 +1974,10 @@ button.avatar {
   margin: 0;
 }
 
+.field-group + .field-group, .form fieldset + fieldset {
+  margin-block-start: var(--space-4);
+}
+
 .field-label, .form legend {
   color: var(--text);
   font-weight: var(--font-weight-strong);
@@ -2017,6 +2014,7 @@ button.avatar {
   border-radius: var(--radius);
   background: var(--control-bg);
   color: var(--control-fg);
+  font-size: var(--control-font-size);
   transition: border-color var(--duration),
     box-shadow var(--duration),
     background-color var(--duration),
@@ -2043,6 +2041,11 @@ button.avatar {
   --control-border: var(--danger);
 }
 
+.input[readonly], .textarea[readonly], :is(.form, .field) :where(input, textarea)[readonly] {
+  --control-bg: var(--surface-subtle);
+  --control-border: var(--border);
+}
+
 :is(.input, .textarea, :is(.form, .field) :where(input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"], [type="button"], [type="submit"], [type="reset"], [type="color"]), textarea)):disabled {
   --control-bg: var(--surface-subtle);
   --control-fg: var(--text-subtle);
@@ -2060,6 +2063,7 @@ button.avatar {
   align-items: flex-start;
   gap: var(--space-2);
   color: var(--text);
+  font-size: var(--control-font-size);
   cursor: pointer;
   display: inline-flex;
 }
@@ -2166,6 +2170,7 @@ button.avatar {
   border-radius: var(--radius);
   background: var(--control-bg);
   color: var(--control-fg);
+  font-size: var(--control-font-size);
   transition: border-color var(--duration),
     box-shadow var(--duration),
     background-color var(--duration),
@@ -2334,14 +2339,16 @@ button.avatar {
 .switch, .form input[role="switch"] {
   --switch-bg: var(--border);
   --switch-knob: var(--surface-raised);
-  --switch-width: 2.75rem;
-  --switch-knob-size: 1.05rem;
-  --switch-knob-margin: .18rem;
+  --switch-width: calc(var(--control-size) * 1.16);
+  --switch-block-size: calc(var(--control-size) * .63);
+  --switch-knob-margin: calc(var(--switch-block-size) * .12);
+  --switch-knob-size: calc(var(--switch-block-size) - 2 * var(--switch-knob-margin));
   --switch-travel: calc(var(--switch-width) -
     var(--switch-knob-size) -
     2 *
     var(--switch-knob-margin));
   inline-size: var(--switch-width);
+  block-size: var(--switch-block-size);
   border: var(--border-width) solid var(--border);
   background: var(--switch-bg);
   appearance: none;
@@ -2349,7 +2356,6 @@ button.avatar {
   border-radius: 999px;
   justify-content: start;
   align-items: center;
-  block-size: 1.5rem;
   margin: 0;
   display: inline-grid;
   position: relative;
@@ -2611,6 +2617,10 @@ button.avatar {
   overflow: hidden;
 }
 
+.items-start {
+  align-items: start;
+}
+
 .muted {
   color: var(--text-muted);
 }
@@ -2632,16 +2642,12 @@ button.avatar {
   text-align: end;
 }
 
-@supports (text-wrap: balance) {
-  .text-balance {
-    text-wrap: balance;
-  }
+.text-balance {
+  text-wrap: balance;
 }
 
-@supports (text-wrap: pretty) {
-  .text-pretty {
-    text-wrap: pretty;
-  }
+.text-pretty {
+  text-wrap: pretty;
 }
 
 .list-reset {

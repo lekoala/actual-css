@@ -31,7 +31,7 @@
   <li>inside <code>.prose</code> for headings (balance) and for paragraphs, list items, and blockquotes (pretty)</li>
   <li>as opt-in utilities <code>.text-balance</code> and <code>.text-pretty</code> for any element outside <code>.prose</code></li>
 </ul>
-<p>All three are wrapped in <code>@supports</code> so that the property gracefully degrades in browsers that do not support it. There is no <code>text-align: center</code> hidden inside <code>.text-balance</code>: balance is about wrapping, not alignment.</p>
+<p>These declarations degrade naturally: browsers that do not support a <code>text-wrap</code> value ignore it and keep normal wrapping. There is no <code>text-align: center</code> hidden inside <code>.text-balance</code>: balance is about wrapping, not alignment.</p>
     </div>
     
   </section>

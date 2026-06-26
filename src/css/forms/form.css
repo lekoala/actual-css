@@ -36,6 +36,11 @@ label:not(.choice):has(> input:not(:is([type="checkbox"], [type="radio"])), > te
   border-radius: var(--radius);
 }
 
+.field-group + .field-group,
+.form fieldset + fieldset {
+  margin-block-start: var(--space-4);
+}
+
 .field-label,
 .form legend {
   color: var(--text);
