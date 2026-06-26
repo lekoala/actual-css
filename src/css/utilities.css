@@ -20,6 +20,49 @@
   overflow: auto;
 }
 
+.scroller {
+  --scroller-size: 0.625rem;
+  --scroller-padding: 0.125rem;
+  --scroller-track: transparent;
+  --scroller-thumb: var(--border);
+  --scroller-thumb-hover: var(--text-muted);
+
+  scrollbar-color: var(--scroller-thumb) var(--scroller-track);
+  scrollbar-width: thin;
+}
+
+.scroller::-webkit-scrollbar {
+  width: var(--scroller-size);
+  height: var(--scroller-size);
+}
+
+.scroller::-webkit-scrollbar-track {
+  background: var(--scroller-track);
+}
+
+.scroller::-webkit-scrollbar-thumb {
+  border: var(--scroller-padding) solid transparent;
+  border-radius: var(--radius-full);
+  background: var(--scroller-thumb);
+  background-clip: content-box;
+}
+
+.scroller::-webkit-scrollbar-thumb:hover {
+  background: var(--scroller-thumb-hover);
+  background-clip: content-box;
+}
+
+.scroller::-webkit-scrollbar-corner {
+  background: var(--scroller-track);
+}
+
+@supports (color: color-mix(in oklch, red, white)) {
+  .scroller {
+    --scroller-thumb: color-mix(in oklch, var(--text-muted), transparent 55%);
+    --scroller-thumb-hover: color-mix(in oklch, var(--text-muted), transparent 30%);
+  }
+}
+
 .grow {
   flex: 1 1 auto;
   min-inline-size: 0;

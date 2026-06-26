@@ -1,7 +1,9 @@
 {
   "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
   "files": {
-    "includes": ["src/**/*.css"]
+    "includes": [
+      "src/**/*.css"
+    ]
   },
   "formatter": {
     "indentStyle": "space",
@@ -12,6 +14,9 @@
     "rules": {
       "complexity": {
         "noImportantStyles": "off"
+      },
+      "suspicious": {
+        "noDuplicateProperties": "off"
       }
     }
   },
