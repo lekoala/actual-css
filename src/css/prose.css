@@ -37,10 +37,8 @@
   line-height: var(--prose-heading-line-height);
 }
 
-@supports (text-wrap: pretty) {
-  .prose :where(p, li, blockquote) {
-    text-wrap: pretty;
-  }
+.prose :where(p, li, blockquote) {
+  text-wrap: pretty;
 }
 
 .prose > :first-child {

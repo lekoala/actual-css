@@ -65,18 +65,13 @@
   text-align: end;
 }
 
-/* text-wrap utilities: opt in for elements outside .prose. Gated on @supports
-   for consistency with the prose scope. */
-@supports (text-wrap: balance) {
-  .text-balance {
-    text-wrap: balance;
-  }
+/* Text wrapping utilities. Unsupported values are ignored by the browser. */
+.text-balance {
+  text-wrap: balance;
 }
 
-@supports (text-wrap: pretty) {
-  .text-pretty {
-    text-wrap: pretty;
-  }
+.text-pretty {
+  text-wrap: pretty;
 }
 
 /* Generic list chrome reset. Use for any list (tags, footer columns, related
