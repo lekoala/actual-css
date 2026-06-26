@@ -4,6 +4,8 @@ Plain CSS component framework with semantic classes, universal variants, small t
 
 ## Browser support
 
+Aims to be compatible with any browser from the last 5 years:
+
 Degraded (:where):
 - Firefox 82+
 - Safari 14+

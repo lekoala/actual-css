@@ -55,14 +55,6 @@ Use `.stack` for vertical flow with consistent spacing.
 </section>
 ```
 
-```css
-.stack {
-  display: flex;
-  flex-direction: column;
-  gap: var(--gap);
-}
-```
-
 Use stack for forms, card content, modal bodies, side panels, and documentation blocks.
 
 Links:
@@ -81,15 +73,6 @@ Use `.cluster` for inline groups that wrap naturally.
   <button class="btn outline" type="button">Cancel</button>
   <a href="/docs">Read docs</a>
 </div>
-```
-
-```css
-.cluster {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--gap);
-}
 ```
 
 Use cluster for action rows, tags, toolbar sections, metadata, and compact navigation.
@@ -115,15 +98,6 @@ Use `.center` to constrain readable page content and center it in the viewport.
     <p>Install the stylesheet and use semantic HTML.</p>
   </section>
 </main>
-```
-
-```css
-.center {
-  box-sizing: content-box;
-  max-inline-size: var(--center-size, 72rem);
-  margin-inline: auto;
-  padding-inline: var(--center-pad, 1rem);
-}
 ```
 
 Tune width and side padding with local variables.
@@ -220,14 +194,6 @@ Use `.grid` for responsive equal-width item grids.
 </section>
 ```
 
-```css
-.grid {
-  display: grid;
-  gap: var(--gap);
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--grid-min, 16rem)), 1fr));
-}
-```
-
 Tune the minimum item width with `--grid-min`.
 
 ```css
@@ -238,7 +204,7 @@ Tune the minimum item width with `--grid-min`.
 
 ### Fixed Columns
 
-> Predictable 2/3/4-column grids. Full count by default; wrap in `.grid-responsive` to make the column count collapse on narrow wrappers.
+Predictable 2/3/4-column grids. Full count by default; wrap in `.grid-responsive` to make the column count collapse on narrow wrappers.
 
 Use `.grid-2`, `.grid-3`, and `.grid-4` when the column count matters more than the item minimum width — for example, when a row should always read as "three items side by side", or when an empty cell should not stretch to fill space. Unlike `.grid`, the columns are fixed; if you have only two items in a `.grid-3`, the third cell stays empty rather than redistributing.
 
@@ -263,37 +229,31 @@ A `.grid-2/3/4` without a wrapper is a **fixed grid** (always at its full column
 </div>
 ```
 
-```css
-.grid-responsive {
-  container-type: inline-size;
-}
+A `grid-4` demo
 
-.grid-2,
-.grid-3,
-.grid-4 {
-  display: grid;
-  gap: var(--gap);
-}
-
-.grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-.grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-.grid-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-
-@container (width < 28rem) {
-  .grid-responsive .grid-2,
-  .grid-responsive .grid-3,
-  .grid-responsive .grid-4 {
-    grid-template-columns: 1fr;
-  }
-}
-
-@container (28rem <= width < 48rem) {
-  .grid-responsive .grid-3,
-  .grid-responsive .grid-4 {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
+```html
+<div class="grid-responsive">
+  <div class="grid-4">
+    <article class="card">
+      <h3>Starter</h3>
+      <p>For small projects.</p>
+    </article>
+    <article class="card">
+      <h3>Team</h3>
+      <p>For shared products.</p>
+    </article>
+    <article class="card">
+      <h3>Scale</h3>
+      <p>For larger systems.</p>
+    </article>
+    <article class="card">
+      <h3>Enterprise</h3>
+      <p>Contact us.</p>
+    </article>
+  </div>
+</div>
 ```
+
 
 Behavior:
 - Without `.grid-responsive`: `.grid-2` is always 2 cols, `.grid-3` is always 3 cols, `.grid-4` is always 4 cols.
@@ -330,25 +290,6 @@ Use `with-sidebar` for two-column layouts where one side has a preferred width a
     <p class="muted">Overview of recent activity and account settings.</p>
   </main>
 </div>
-```
-
-```css
-.with-sidebar {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--gap);
-}
-
-.with-sidebar > :first-child {
-  flex-basis: var(--sidebar-size, 16rem);
-  flex-grow: 1;
-}
-
-.with-sidebar > :last-child {
-  flex-basis: 0;
-  flex-grow: 999;
-  min-inline-size: min(100%, var(--sidebar-content-min, 50%));
-}
 ```
 
 Tune the side width and wrapping threshold with `--sidebar-size` and `--sidebar-content-min`.
