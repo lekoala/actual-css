@@ -77,8 +77,22 @@
     <div class="component-prose">
       <p>The surface levels are: <code>surface</code> (canvas), <code>surface-raised</code> (cards, raised surfaces), <code>surface-subtle</code> (the working subtle level — for hover overlays, form fields, table headers), and <code>surface-solid</code> (the dark inverse surface, used for accent areas). Use <code>*-fg</code> pairs only for solid backgrounds where the component controls both foreground and background. Do not require a foreground token for every surface token.</p>
 <h3>Default theme philosophy</h3>
-<p>The default theme is intentionally calm. <code>primary</code> is a near-neutral dark grey rather than a saturated brand color, <code>secondary</code> is a neutral surface rather than a colored intent, and the semantic states are desaturated. Optional themes can re-introduce vivid intent palettes on top of this foundation; the default is meant to be the adult, editorial baseline. Soft variants (<code>.btn.soft</code>, <code>.badge.soft</code>, <code>.alert.soft</code>, etc.) are generated from intent colors through <code>color-mix()</code>. A future theme may introduce explicit <code>--{intent}-soft*</code> tokens if the generated softs prove too expressive.</p>
-<h3>Shape</h3>
+<p>The default theme is intentionally calm. <code>primary</code> is a near-neutral dark grey rather than a saturated brand color, <code>secondary</code> is a neutral surface rather than a colored intent, and the semantic states are desaturated. Optional themes can re-introduce vivid intent palettes on top of this foundation; the default is meant to be the adult, editorial baseline. Soft variants (<code>.btn.soft</code>, <code>.badge.soft</code>, <code>.alert.soft</code>, etc.) are generated from intent colors through <code>color-mix()</code>. Themes can tune the mix globally instead of rewriting component selectors.</p>
+    </div>
+    <section class="component-section">
+      <h2>CSS</h2>
+      <div class="example-group">
+        <div class="example-code">
+          <pre><code class="language-css"><span class="token selector">:root</span> <span class="token punctuation">{</span>
+  <span class="token property">--soft-bg-mix</span><span class="token punctuation">:</span> 88%<span class="token punctuation">;</span>
+  <span class="token property">--soft-border-mix</span><span class="token punctuation">:</span> 65%<span class="token punctuation">;</span>
+  <span class="token property">--soft-hover-alpha</span><span class="token punctuation">:</span> 12%<span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+        </div>
+      </div>
+    </section>
+    <div class="component-prose">
+      <h3>Shape</h3>
 <p>Shape is intentionally small. Components can derive local radii from these.</p>
     </div>
     <section class="component-section">
@@ -230,14 +244,15 @@
       <div class="example-group">
         <div class="example-code">
           <pre><code class="language-css"><span class="token selector">:root</span> <span class="token punctuation">{</span>
-  <span class="token property">--icon-chevron</span><span class="token punctuation">:</span> <span class="token url"><span class="token function">url</span><span class="token punctuation">(</span><span class="token string url">"data:image/svg+xml,..."</span><span class="token punctuation">)</span></span><span class="token punctuation">;</span>
-  <span class="token property">--icon-check</span><span class="token punctuation">:</span> <span class="token url"><span class="token function">url</span><span class="token punctuation">(</span><span class="token string url">"data:image/svg+xml,..."</span><span class="token punctuation">)</span></span><span class="token punctuation">;</span>
+  <span class="token property">--icon-chevron-mask</span><span class="token punctuation">:</span> <span class="token url"><span class="token function">url</span><span class="token punctuation">(</span><span class="token string url">"data:image/svg+xml,...stroke='black'..."</span><span class="token punctuation">)</span></span><span class="token punctuation">;</span>
+  <span class="token property">--icon-check-mask</span><span class="token punctuation">:</span> <span class="token url"><span class="token function">url</span><span class="token punctuation">(</span><span class="token string url">"data:image/svg+xml,...stroke='black'..."</span><span class="token punctuation">)</span></span><span class="token punctuation">;</span>
+  <span class="token property">--icon-chevron-image</span><span class="token punctuation">:</span> <span class="token url"><span class="token function">url</span><span class="token punctuation">(</span><span class="token string url">"data:image/svg+xml,..."</span><span class="token punctuation">)</span></span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span></code></pre>
         </div>
       </div>
     </section>
     <div class="component-prose">
-      <p>Only add an icon token when CSS needs the icon. Markup icons should stay in markup.</p>
+      <p>Prefer <code>*-mask</code> tokens for CSS icons so components can color them with <code>background-color: currentColor</code> or a semantic token. Use image tokens only where the platform requires <code>background-image</code> (native select chevrons cannot use <code>currentColor</code>). Only add an icon token when CSS needs the icon. Markup icons should stay in markup.</p>
 <h3>Composition tokens</h3>
 <p>A few cross-component helpers:</p>
 <ul>

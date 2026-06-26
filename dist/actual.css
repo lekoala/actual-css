@@ -114,8 +114,14 @@ small {
   --control-size: var(--control-size-md);
   --control-pad-x: 1em;
   --control-font-size: var(--font-size-md);
-  --icon-chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%238892a4' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
-  --icon-check: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%238892a4' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E");
+  --soft-bg-mix: 88%;
+  --soft-border-mix: 65%;
+  --soft-hover-alpha: 12%;
+  --icon-chevron-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  --icon-check-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E");
+  --icon-chevron-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%238892a4' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  --icon-chevron: var(--icon-chevron-mask);
+  --icon-check: var(--icon-check-mask);
   --z-sticky: 10;
   --z-dropdown: 20;
   --z-popover: 30;
@@ -151,6 +157,14 @@ small {
   --lightningcss-light: ;
   --lightningcss-dark: initial;
   color-scheme: dark;
+}
+
+@supports not (color: light-dark(red, blue)) {
+  [data-theme="dark"] {
+    --lightningcss-light: initial;
+    --lightningcss-dark: ;
+    color-scheme: light;
+  }
 }
 
 :root, [data-theme="light"] {
@@ -237,31 +251,43 @@ small {
 .primary {
   --intent: var(--primary);
   --intent-fg: var(--primary-fg);
+  --intent-alert-bg: var(--lightningcss-light, color-mix(in srgb, var(--intent) 8%, transparent)) var(--lightningcss-dark, color-mix(in srgb, var(--intent) 20%, transparent));
+  --intent-alert-border: transparent;
 }
 
 .secondary {
   --intent: var(--secondary);
   --intent-fg: var(--secondary-fg);
+  --intent-alert-bg: var(--lightningcss-light, color-mix(in srgb, var(--intent) 8%, transparent)) var(--lightningcss-dark, color-mix(in srgb, var(--intent) 20%, transparent));
+  --intent-alert-border: transparent;
 }
 
 .success {
   --intent: var(--success);
   --intent-fg: var(--success-fg);
+  --intent-alert-bg: var(--lightningcss-light, color-mix(in srgb, var(--intent) 8%, transparent)) var(--lightningcss-dark, color-mix(in srgb, var(--intent) 20%, transparent));
+  --intent-alert-border: transparent;
 }
 
 .warning {
   --intent: var(--warning);
   --intent-fg: var(--warning-fg);
+  --intent-alert-bg: var(--lightningcss-light, color-mix(in srgb, var(--intent) 8%, transparent)) var(--lightningcss-dark, color-mix(in srgb, var(--intent) 20%, transparent));
+  --intent-alert-border: transparent;
 }
 
 .danger {
   --intent: var(--danger);
   --intent-fg: var(--danger-fg);
+  --intent-alert-bg: var(--lightningcss-light, color-mix(in srgb, var(--intent) 8%, transparent)) var(--lightningcss-dark, color-mix(in srgb, var(--intent) 20%, transparent));
+  --intent-alert-border: transparent;
 }
 
 .neutral {
   --intent: var(--neutral);
   --intent-fg: var(--neutral-fg);
+  --intent-alert-bg: var(--lightningcss-light, color-mix(in srgb, var(--intent) 8%, transparent)) var(--lightningcss-dark, color-mix(in srgb, var(--intent) 20%, transparent));
+  --intent-alert-border: transparent;
 }
 
 .stack {
@@ -328,6 +354,20 @@ small {
   }
 }
 
+@supports not (container-type: inline-size) {
+  @media (max-width: 47.999rem) {
+    .grid-responsive .grid-3, .grid-responsive .grid-4 {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 27.999rem) {
+    .grid-responsive .grid-2, .grid-responsive .grid-3, .grid-responsive .grid-4 {
+      grid-template-columns: 1fr;
+    }
+  }
+}
+
 .with-sidebar {
   gap: var(--gap);
   flex-wrap: wrap;
@@ -369,6 +409,7 @@ small {
 }
 
 .app-shell {
+  min-block-size: 100vh;
   flex-direction: column;
   min-block-size: 100dvh;
   display: flex;
@@ -428,12 +469,18 @@ small {
 
 @supports (color: color-mix(in oklch, red, white)) {
   .soft {
-    --ui-bg: color-mix(in oklch, var(--intent, var(--neutral)), var(--surface) 88%);
-    --ui-border: color-mix(in oklch, var(--intent, var(--neutral)), var(--surface) 65%);
+    --ui-bg: color-mix(in oklch,
+      var(--surface) var(--soft-bg-mix),
+      var(--intent, var(--neutral)));
+    --ui-border: color-mix(in oklch,
+      var(--surface) var(--soft-border-mix),
+      var(--intent, var(--neutral)));
   }
 
   .soft:hover {
-    --ui-hover-bg: color-mix(in oklch, var(--intent, var(--neutral)), transparent 88%);
+    --ui-hover-bg: color-mix(in oklch,
+      var(--intent, var(--neutral)) var(--soft-hover-alpha),
+      transparent);
   }
 
   .outline:hover {
@@ -606,6 +653,7 @@ small {
   --btn-fg: var(--ui-fg, var(--intent-fg, var(--neutral-fg)));
   --btn-border: var(--ui-border, transparent);
   min-block-size: var(--btn-min-size);
+  padding-block: var(--space-2);
   padding-block: max(var(--space-1), calc((var(--btn-min-size) - 1lh) / 2));
   padding-inline: var(--btn-pad-x);
   border: var(--border-width) solid var(--btn-border);
@@ -707,25 +755,27 @@ small {
   --spinner-width: .15em;
 }
 
-:where([role="group"]:has( > .btn + .btn)) {
-  border-radius: var(--radius);
-  display: inline-flex;
-}
+@supports selector([role="group"]:has(> .btn + .btn)) {
+  :where([role="group"]:has( > .btn + .btn)) {
+    border-radius: var(--radius);
+    display: inline-flex;
+  }
 
-:where([role="group"]:has( > .btn + .btn)) > .btn {
-  border-inline-end: 0;
-  border-radius: 0;
-}
+  :where([role="group"]:has( > .btn + .btn)) > .btn {
+    border-inline-end: 0;
+    border-radius: 0;
+  }
 
-:where([role="group"]:has( > .btn + .btn)) > .btn:first-child {
-  border-start-start-radius: inherit;
-  border-end-start-radius: inherit;
-}
+  :where([role="group"]:has( > .btn + .btn)) > .btn:first-child {
+    border-start-start-radius: inherit;
+    border-end-start-radius: inherit;
+  }
 
-:where([role="group"]:has( > .btn + .btn)) > .btn:last-child {
-  border-inline-end: var(--border-width) solid var(--btn-border);
-  border-start-end-radius: inherit;
-  border-end-end-radius: inherit;
+  :where([role="group"]:has( > .btn + .btn)) > .btn:last-child {
+    border-inline-end: var(--border-width) solid var(--btn-border);
+    border-start-end-radius: inherit;
+    border-end-end-radius: inherit;
+  }
 }
 
 .badge {
@@ -809,9 +859,21 @@ button.badge:disabled, .badge[aria-disabled="true"] {
   pointer-events: none;
 }
 
+:where(.alert) {
+  --intent: initial;
+  --intent-fg: initial;
+  --intent-alert-bg: initial;
+  --intent-alert-border: initial;
+}
+
 .alert {
   --alert-pad-block: var(--space-4);
   --alert-pad-inline: var(--space-4);
+  --alert-bg: var(--surface-subtle);
+  --alert-border: var(--border);
+  --ui-bg: var(--alert-bg);
+  --ui-border: var(--alert-border);
+  --ui-fg: var(--intent, var(--text));
   padding-block: var(--alert-pad-block);
   padding-inline: var(--alert-pad-inline);
   background: var(--ui-bg, transparent);
@@ -832,44 +894,63 @@ button.badge:disabled, .badge[aria-disabled="true"] {
   margin-block-end: 0;
 }
 
-:where(.alert):not(:where(.primary, .secondary, .success, .warning, .danger, .neutral, .solid, .outline, .soft)) {
-  --ui-bg: transparent;
-  --ui-border: var(--border);
-  --ui-fg: var(--text);
-}
-
-.alert:where(.primary, .secondary, .success, .warning, .danger, .neutral):not(:where(.solid, .outline)) {
-  --ui-bg: var(--surface-subtle);
-  --ui-border: var(--border);
+.alert:where(.soft) {
+  --alert-bg: var(--surface-subtle);
+  --alert-border: var(--border);
   --ui-fg: var(--intent, var(--text));
 }
 
-@supports (color: color-mix(in oklch, red, white)) and (color: light-dark(red, blue)) {
-  .alert:where(.primary, .secondary, .success, .warning, .danger, .neutral):not(:where(.solid, .outline)) {
-    --ui-bg: light-dark(color-mix(in srgb, var(--intent) 8%, transparent), color-mix(in srgb, var(--intent) 20%, transparent));
-    --ui-border: transparent;
+.alert.solid {
+  --ui-bg: var(--intent, var(--neutral));
+  --ui-fg: var(--intent-fg, var(--neutral-fg));
+  --ui-border: transparent;
+}
+
+.alert.outline {
+  --ui-bg: transparent;
+  --ui-fg: var(--intent, var(--text));
+  --ui-border: var(--intent, var(--border));
+}
+
+@supports (color: color-mix(in oklch, red, white)) {
+  .alert:where(.soft) {
+    --alert-bg: color-mix(in oklch,
+      var(--surface) var(--soft-bg-mix),
+      var(--intent, var(--neutral)));
+    --alert-border: color-mix(in oklch,
+      var(--surface) var(--soft-border-mix),
+      var(--intent, var(--neutral)));
   }
 }
 
-.alert:has( > :first-child[aria-hidden="true"]) {
-  align-items: start;
-  column-gap: var(--space-3);
-  grid-template-columns: auto minmax(0, 1fr);
-  display: grid;
+@supports (color: color-mix(in oklch, red, white)) and (color: light-dark(red, blue)) {
+  .alert:where(:not(.solid, .outline)) {
+    --ui-bg: var(--intent-alert-bg, var(--alert-bg));
+    --ui-border: var(--intent-alert-border, var(--alert-border));
+  }
 }
 
-.alert:has( > :first-child[aria-hidden="true"]) > :first-child {
-  inline-size: 1.25em;
-  block-size: calc(1em * var(--line-height));
-  grid-area: 1 / 1 / -1;
-  place-items: center;
-  font-size: 1.25em;
-  line-height: 1;
-  display: inline-grid;
-}
+@supports selector(.alert:has(> *)) {
+  .alert:has( > :first-child[aria-hidden="true"]) {
+    align-items: start;
+    column-gap: var(--space-3);
+    grid-template-columns: auto minmax(0, 1fr);
+    display: grid;
+  }
 
-.alert:has( > :first-child[aria-hidden="true"]) > :not(:first-child) {
-  grid-column: 2;
+  .alert:has( > :first-child[aria-hidden="true"]) > :first-child {
+    inline-size: 1.25em;
+    block-size: calc(1em * var(--line-height));
+    grid-area: 1 / 1 / -1;
+    place-items: center;
+    font-size: 1.25em;
+    line-height: 1;
+    display: inline-grid;
+  }
+
+  .alert:has( > :first-child[aria-hidden="true"]) > :not(:first-child) {
+    grid-column: 2;
+  }
 }
 
 .alert :where(a:not(.btn)) {
@@ -1046,9 +1127,7 @@ button.badge:disabled, .badge[aria-disabled="true"] {
   box-shadow: var(--shadow);
   opacity: 0;
   transition: opacity var(--duration),
-    transform var(--duration),
-    overlay var(--duration) allow-discrete,
-    display var(--duration) allow-discrete;
+    transform var(--duration);
   padding: 0;
   overflow: visible;
 }
@@ -1104,9 +1183,22 @@ button.badge:disabled, .badge[aria-disabled="true"] {
 .modal::backdrop {
   background: var(--surface-solid);
   opacity: 0;
-  transition: opacity var(--duration),
-    overlay var(--duration) allow-discrete,
-    display var(--duration) allow-discrete;
+  transition: opacity var(--duration);
+}
+
+@supports (transition-behavior: allow-discrete) {
+  .modal {
+    transition: opacity var(--duration),
+      transform var(--duration),
+      overlay var(--duration) allow-discrete,
+      display var(--duration) allow-discrete;
+  }
+
+  .modal::backdrop {
+    transition: opacity var(--duration),
+      overlay var(--duration) allow-discrete,
+      display var(--duration) allow-discrete;
+  }
 }
 
 .modal[open]::backdrop {
@@ -1155,9 +1247,11 @@ button.badge:disabled, .badge[aria-disabled="true"] {
   --drawer-size: 20rem;
   --drawer-pad: var(--space-4);
   inline-size: min(90vw, var(--drawer-size));
+  block-size: 100vh;
   block-size: 100dvh;
-  max-block-size: 100dvh;
+  max-block-size: 100vh;
   max-inline-size: none;
+  max-block-size: 100dvh;
   padding: var(--drawer-pad);
   border: 0;
   border-inline-end: var(--border-width) solid var(--border);
@@ -1259,9 +1353,9 @@ button.badge:disabled, .badge[aria-disabled="true"] {
   background-color: var(--text-muted);
   block-size: 1rem;
   inline-size: 1rem;
-  -webkit-mask-image: var(--icon-chevron);
-  -webkit-mask-image: var(--icon-chevron);
-  mask-image: var(--icon-chevron);
+  -webkit-mask-image: var(--icon-chevron-mask);
+  -webkit-mask-image: var(--icon-chevron-mask);
+  mask-image: var(--icon-chevron-mask);
   transition: transform var(--duration);
   flex: none;
   margin-inline-start: auto;
@@ -1297,11 +1391,16 @@ button.badge:disabled, .badge[aria-disabled="true"] {
   padding-inline-start: 2rem;
 }
 
+:where(.spinner) {
+  --intent: initial;
+}
+
 .spinner {
   --spinner-size: 1.5rem;
   --spinner-width: 2px;
   --spinner-track: currentColor;
   --spinner-value: transparent;
+  color: var(--intent, currentColor);
   inline-size: var(--spinner-size);
   block-size: var(--spinner-size);
   border: var(--spinner-width) solid var(--spinner-track);
@@ -1320,10 +1419,6 @@ button.badge:disabled, .badge[aria-disabled="true"] {
     --spinner-value: currentColor;
     opacity: 1;
   }
-}
-
-.spinner:where(.primary, .secondary, .success, .warning, .danger, .neutral) {
-  color: var(--intent);
 }
 
 .spinner.sm {
@@ -1401,31 +1496,33 @@ button.badge:disabled, .badge[aria-disabled="true"] {
   display: inline-block;
 }
 
-[aria-busy="true"]:not(.btn):has( > .spinner:last-child) {
-  position: relative;
-}
+@supports selector([aria-busy="true"]:has(> .spinner:last-child)) {
+  [aria-busy="true"]:not(.btn):has( > .spinner:last-child) {
+    position: relative;
+  }
 
-[aria-busy="true"]:not(.btn):has( > .spinner:last-child):before {
-  content: "";
-  z-index: 1;
-  border-radius: inherit;
-  background: var(--surface);
-  position: absolute;
-  inset: 0;
-}
-
-@supports (color: color-mix(in oklch, red, white)) {
   [aria-busy="true"]:not(.btn):has( > .spinner:last-child):before {
-    background: color-mix(in oklch, var(--surface), transparent 20%);
+    content: "";
+    z-index: 1;
+    border-radius: inherit;
+    background: var(--surface);
+    position: absolute;
+    inset: 0;
+  }
+
+  [aria-busy="true"]:not(.btn) > .spinner:last-child {
+    z-index: 2;
+    margin: auto;
+    display: block;
+    position: absolute;
+    inset: 0;
   }
 }
 
-[aria-busy="true"]:not(.btn) > .spinner:last-child {
-  z-index: 2;
-  margin: auto;
-  display: block;
-  position: absolute;
-  inset: 0;
+@supports selector([aria-busy="true"]:has(> .spinner:last-child)) and (color: color-mix(in oklch, red, white)) {
+  [aria-busy="true"]:not(.btn):has( > .spinner:last-child):before {
+    background: color-mix(in oklch, var(--surface), transparent 20%);
+  }
 }
 
 .progress {
@@ -1509,8 +1606,8 @@ button.badge:disabled, .badge[aria-disabled="true"] {
   --avatar-size: 2.25rem;
   --avatar-radius: var(--radius-full, 9999px);
   --avatar-font-size: var(--font-size-sm);
-  --avatar-bg: var(--surface-subtle);
-  --avatar-fg: var(--tone-fg, var(--text-muted));
+  --avatar-bg: var(--intent, var(--surface-subtle));
+  --avatar-fg: var(--intent-fg, var(--tone-fg, var(--text-muted)));
   inline-size: var(--avatar-size);
   block-size: var(--avatar-size);
   border-radius: var(--avatar-radius);
@@ -1570,11 +1667,6 @@ button.avatar {
   outline-offset: var(--focus-outline-offset);
 }
 
-.avatar:where(.primary, .secondary, .success, .warning, .danger, .neutral) {
-  background: var(--intent);
-  color: var(--intent-fg);
-}
-
 .avatar.sm {
   --avatar-size: 1.75rem;
   --avatar-font-size: .8125rem;
@@ -1594,23 +1686,25 @@ button.avatar {
   transform: translate(50%, 50%);
 }
 
-:where([role="group"]:has( > .avatar + .avatar)) {
-  --avatar-group-overlap: calc(var(--avatar-size, 2.25rem) / -4);
-  --avatar-group-ring: 2px;
-  align-items: center;
-  display: inline-flex;
-}
+@supports selector([role="group"]:has(> .avatar + .avatar)) {
+  :where([role="group"]:has( > .avatar + .avatar)) {
+    --avatar-group-overlap: calc(var(--avatar-size, 2.25rem) / -4);
+    --avatar-group-ring: 2px;
+    align-items: center;
+    display: inline-flex;
+  }
 
-:where([role="group"]:has( > .avatar + .avatar)) > .avatar {
-  box-shadow: 0 0 0 var(--avatar-group-ring) var(--surface);
-}
+  :where([role="group"]:has( > .avatar + .avatar)) > .avatar {
+    box-shadow: 0 0 0 var(--avatar-group-ring) var(--surface);
+  }
 
-:where([role="group"]:has( > .avatar + .avatar)) > .avatar + .avatar {
-  margin-inline-start: var(--avatar-group-overlap);
-}
+  :where([role="group"]:has( > .avatar + .avatar)) > .avatar + .avatar {
+    margin-inline-start: var(--avatar-group-overlap);
+  }
 
-:where([role="group"]:has( > .avatar + .avatar)) > .avatar:is(:hover, :focus-visible) {
-  z-index: 1;
+  :where([role="group"]:has( > .avatar + .avatar)) > .avatar:is(:hover, :focus-visible) {
+    z-index: 1;
+  }
 }
 
 .eyebrow {
@@ -1960,10 +2054,18 @@ button.avatar {
   color: var(--text);
 }
 
-.field, .form label:not(.choice):has( > input:not(:is([type="checkbox"], [type="radio"])),  > textarea,  > select) {
+.field {
   gap: var(--space-1);
   color: var(--text);
   display: grid;
+}
+
+@supports selector(label:has(> input)) {
+  .form label:not(.choice):has( > input:not(:is([type="checkbox"], [type="radio"])),  > textarea,  > select) {
+    gap: var(--space-1);
+    color: var(--text);
+    display: grid;
+  }
 }
 
 .field-group, .form fieldset {
@@ -2058,7 +2160,7 @@ button.avatar {
   color: var(--text-subtle);
 }
 
-.choice, .form label:has( > input[type="checkbox"],  > input[type="radio"]) {
+.choice {
   --choice-control-offset: .25em;
   align-items: flex-start;
   gap: var(--space-2);
@@ -2068,18 +2170,39 @@ button.avatar {
   display: inline-flex;
 }
 
-.choice > :is(input[type="checkbox"], input[type="radio"]), .form label:has( > input:is([type="checkbox"], [type="radio"])) > input:is([type="checkbox"], input[type="radio"]) {
+@supports selector(label:has(> input)) {
+  .form label:has( > input[type="checkbox"],  > input[type="radio"]) {
+    --choice-control-offset: .25em;
+    align-items: flex-start;
+    gap: var(--space-2);
+    color: var(--text);
+    font-size: var(--control-font-size);
+    cursor: pointer;
+    display: inline-flex;
+  }
+}
+
+.choice > :is(input[type="checkbox"], input[type="radio"]) {
   flex: none;
   margin-block-start: var(--choice-control-offset);
+}
+
+@supports selector(label:has(> input)) {
+  .form label:has( > input:is([type="checkbox"], [type="radio"])) > input:is([type="checkbox"], input[type="radio"]) {
+    flex: none;
+    margin-block-start: var(--choice-control-offset);
+  }
 }
 
 .choice > span > .field-help {
   display: block;
 }
 
-.choice:has(:disabled), .form label:has( > input:is([type="checkbox"], [type="radio"]):disabled) {
-  color: var(--text-subtle);
-  cursor: not-allowed;
+@supports selector(label:has(> input)) {
+  .choice:has(:disabled), .form label:has( > input:is([type="checkbox"], [type="radio"]):disabled) {
+    color: var(--text-subtle);
+    cursor: not-allowed;
+  }
 }
 
 :is(.check, .radio, .form input[type="checkbox"]:not([role="switch"]), .form input[type="radio"]) {
@@ -2180,7 +2303,7 @@ button.avatar {
 
 .select:not([multiple], [size]), .form select:not([multiple], [size]) {
   appearance: none;
-  background-image: var(--icon-chevron);
+  background-image: var(--icon-chevron-image);
   background-position: center right var(--space-3);
   background-repeat: no-repeat;
   background-size: 1rem;
@@ -2220,6 +2343,7 @@ button.avatar {
 
     .select:not([multiple], [size], .native)::picker(select) {
       appearance: base-select;
+      max-height: min(24rem, 70vh);
       max-height: min(24rem, 70dvh);
       margin-block: var(--space-2);
       border: var(--border-width) solid var(--border);
@@ -2232,6 +2356,7 @@ button.avatar {
 
     .form select:not([multiple], [size], .native)::picker(select) {
       appearance: base-select;
+      max-height: min(24rem, 70vh);
       max-height: min(24rem, 70dvh);
       margin-block: var(--space-2);
       border: var(--border-width) solid var(--border);
@@ -2287,9 +2412,9 @@ button.avatar {
       content: "";
       block-size: 1rem;
       inline-size: 1rem;
-      -webkit-mask-image: var(--icon-check);
-      -webkit-mask-image: var(--icon-check);
-      mask-image: var(--icon-check);
+      -webkit-mask-image: var(--icon-check-mask);
+      -webkit-mask-image: var(--icon-check-mask);
+      mask-image: var(--icon-check-mask);
       background-color: currentColor;
       display: block;
       -webkit-mask-position: center;
@@ -2304,9 +2429,9 @@ button.avatar {
       content: "";
       block-size: 1rem;
       inline-size: 1rem;
-      -webkit-mask-image: var(--icon-check);
-      -webkit-mask-image: var(--icon-check);
-      mask-image: var(--icon-check);
+      -webkit-mask-image: var(--icon-check-mask);
+      -webkit-mask-image: var(--icon-check-mask);
+      mask-image: var(--icon-check-mask);
       background-color: currentColor;
       display: block;
       -webkit-mask-position: center;
@@ -2414,7 +2539,10 @@ button.avatar {
   gap: var(--space-1);
   inline-size: max-content;
   min-inline-size: min(var(--dropdown-trigger-width, 0px),
+    min(20rem, calc(100vw - var(--space-6))));
+  min-inline-size: min(var(--dropdown-trigger-width, 0px),
     min(20rem, calc(100vi - var(--space-6))));
+  max-inline-size: min(20rem, calc(100vw - var(--space-6)));
   max-inline-size: min(20rem, calc(100vi - var(--space-6)));
   padding: var(--space-1);
   border: var(--border-width) solid var(--border);
@@ -2429,10 +2557,11 @@ button.avatar {
 .dropdown-menu.is-sheet {
   inset-block-end: 0;
   inset-inline: 0;
-  max-block-size: min(75vb, 32rem);
+  max-block-size: min(75vh, 32rem);
   inline-size: auto;
   min-inline-size: 0;
   max-inline-size: none;
+  max-block-size: min(75vb, 32rem);
   padding: max(var(--space-3), env(safe-area-inset-top)) var(--space-3)
     max(var(--space-3), env(safe-area-inset-bottom));
   border-end-end-radius: 0;
@@ -2527,6 +2656,7 @@ button.avatar {
   --tooltip-fg: var(--surface);
   --tooltip-arrow-size: 5px;
   z-index: var(--z-tooltip);
+  max-inline-size: min(24rem, 100vw - 2rem);
   border-radius: var(--radius-sm);
   background: var(--tooltip-bg);
   max-inline-size: min(24rem, 100vi - 2rem);
