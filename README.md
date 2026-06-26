@@ -26,3 +26,10 @@ Recommended (oklch, light-dark):
 
 Older browsers get a progressively degraded experience.
 Dark mode and animated top-layer transitions require newer browsers.
+
+Actual CSS does not bundle a `<dialog>` polyfill. If the JavaScript runtime is
+loaded in a browser without `HTMLDialogElement.showModal()` (for example Firefox
+97), dialog triggers show a native alert instead of failing silently. Projects
+that need real dialogs there can load and register an external dialog polyfill
+before a dialog is opened. The polyfill may load before or after `actual-css/js`;
+the runtime checks the target dialog when the trigger is used.

@@ -20,6 +20,14 @@ select {
   font: inherit;
 }
 
+/* Legacy dialog fallback only. Modern dialogs keep the browser's native closed
+   state so display/overlay transitions are not flattened by the reset. */
+@supports not (selector(dialog:modal)) {
+  dialog:not([open]) {
+    display: none;
+  }
+}
+
 :where(img, svg, video) {
   max-inline-size: 100%;
   block-size: auto;
