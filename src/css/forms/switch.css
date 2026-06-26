@@ -12,9 +12,10 @@
 .form input[role="switch"] {
   --switch-bg: var(--border);
   --switch-knob: var(--surface-raised);
-  --switch-width: 2.75rem;
-  --switch-knob-size: 1.05rem;
-  --switch-knob-margin: 0.18rem;
+  --switch-width: calc(var(--control-size) * 1.16);
+  --switch-block-size: calc(var(--control-size) * 0.63);
+  --switch-knob-margin: calc(var(--switch-block-size) * 0.12);
+  --switch-knob-size: calc(var(--switch-block-size) - 2 * var(--switch-knob-margin));
   --switch-travel: calc(
     var(--switch-width) -
     var(--switch-knob-size) -
@@ -27,7 +28,7 @@
   align-items: center;
   justify-content: start;
   inline-size: var(--switch-width);
-  block-size: 1.5rem;
+  block-size: var(--switch-block-size);
   margin: 0;
   border: var(--border-width) solid var(--border);
   border-radius: 999px;

@@ -42,6 +42,10 @@
   white-space: nowrap;
 }
 
+.items-start {
+  align-items: start;
+}
+
 .muted {
   color: var(--text-muted);
 }

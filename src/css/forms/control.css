@@ -40,6 +40,7 @@
   border-radius: var(--radius);
   background: var(--control-bg);
   color: var(--control-fg);
+  font-size: var(--control-font-size);
   outline: none;
   transition:
     border-color var(--duration),
@@ -103,6 +104,13 @@
 .textarea[aria-invalid="true"],
 :is(.form, .field) :where(input, textarea)[aria-invalid="true"] {
   --control-border: var(--danger);
+}
+
+.input[readonly],
+.textarea[readonly],
+:is(.form, .field) :where(input, textarea)[readonly] {
+  --control-bg: var(--surface-subtle);
+  --control-border: var(--border);
 }
 
 :is(

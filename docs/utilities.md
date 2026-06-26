@@ -191,6 +191,23 @@ Use `.grow` when one item in a flex layout should take available space without o
 }
 ```
 
+### Items Start
+
+Use `.items-start` on flex or grid layouts when children should keep their natural height and align to the block-start edge. This is especially useful for form fields in a grid, where the default grid stretch would make short fields as tall as taller neighbors.
+
+```html
+<div class="grid items-start">
+  <label class="field">
+    <span class="field-label">Name</span>
+    <input type="text" />
+  </label>
+  <label class="field">
+    <span class="field-label">Notes</span>
+    <textarea></textarea>
+  </label>
+</div>
+```
+
 ## Spacing Helpers
 
 > Semantic step helpers for gap, padding, and margin — the most common inline-style escape hatches.
