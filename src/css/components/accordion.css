@@ -20,10 +20,10 @@
 .accordion summary {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: var(--space-3);
   cursor: pointer;
   list-style: none;
-  padding: 1rem;
+  padding: var(--space-4);
   color: var(--text);
   font-weight: var(--font-weight-bold);
 }
@@ -60,14 +60,14 @@
 }
 
 .accordion details > summary + * {
-  padding-block: 0 1rem;
-  padding-inline: 1rem;
+  padding-block: 0 var(--space-4);
+  padding-inline: var(--space-4);
   color: var(--text-muted);
   margin-block: 0;
 }
 
 .accordion details[open] > summary + * {
-  padding-block-start: 0.25rem;
+  padding-block-start: var(--space-1);
 }
 
 .accordion details > summary + * > :first-child {

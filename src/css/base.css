@@ -16,10 +16,9 @@ a {
   color: inherit;
 }
 
-/* Global heading reset stays minimal: no font-size, no font-weight, no margins.
-   Headings inherit color from --heading (or currentColor via inherit fallback).
-   A tight line-height keeps multi-line headings readable; balance is opt-in
-   where it is supported. Components and .prose own the rest. */
+/* Global heading chrome: color (--heading or inherit), a tight line-height,
+   and opt-in text-wrap: balance where supported. No font-size or font-weight
+   is set globally — components and .prose own the per-context scale. */
 :where(h1, h2, h3, h4, h5, h6) {
   color: var(--heading, inherit);
   line-height: var(--line-height-tight);

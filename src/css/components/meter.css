@@ -1,0 +1,48 @@
+/*
+ * Meter — native gauge for known-range values.
+ *
+ * Maps the three standard meter zones (optimum / suboptimum / even-less-good)
+ * to the shared success / warning / danger intent colors.
+ */
+.meter {
+  appearance: none;
+  -webkit-appearance: none;
+  display: block;
+  inline-size: 100%;
+  height: var(--bar-height);
+  overflow: hidden;
+  border: 0;
+  border-radius: var(--radius-full);
+  background: var(--surface-subtle);
+}
+
+.meter::-webkit-meter-bar {
+  -webkit-appearance: none;
+  height: var(--bar-height);
+  border: 0;
+  border-radius: var(--radius-full);
+  background: var(--surface-subtle);
+}
+
+.meter::-webkit-meter-optimum-value {
+  height: var(--bar-height);
+  border-radius: var(--radius-full);
+  background: var(--success);
+}
+
+.meter::-webkit-meter-suboptimum-value {
+  height: var(--bar-height);
+  border-radius: var(--radius-full);
+  background: var(--warning);
+}
+
+.meter::-webkit-meter-even-less-good-value {
+  height: var(--bar-height);
+  border-radius: var(--radius-full);
+  background: var(--danger);
+}
+
+.meter::-moz-meter-bar {
+  height: var(--bar-height);
+  border-radius: var(--radius-full);
+}

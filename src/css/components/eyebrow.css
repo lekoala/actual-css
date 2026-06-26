@@ -1,0 +1,36 @@
+/*
+ * Eyebrow — editorial small-cap label for section openers.
+ *
+ * Base form is unstyled chrome that takes its surrounding color. Add .pill for
+ * the bordered rounded shape, and combine with an intent class (.primary,
+ * .success, etc.) to tint the text, border, and background.
+ */
+.eyebrow {
+  align-self: flex-start;
+  color: var(--text-muted);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.eyebrow.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  padding-inline: 0.6em;
+  padding-block: 0.25em;
+  color: var(--intent, var(--text-muted));
+  border: var(--border-width) solid var(--border);
+  border-radius: var(--radius-full);
+  background: var(--surface);
+}
+
+/* Tinted pill surface where color-mix is available; the flat fallback above
+   keeps a readable bordered pill everywhere else. */
+@supports (color: color-mix(in oklch, red, white)) {
+  .eyebrow.pill {
+    border-color: color-mix(in oklch, var(--intent, var(--border)) 35%, var(--border));
+    background: color-mix(in oklch, var(--intent, transparent) 6%, var(--surface));
+  }
+}

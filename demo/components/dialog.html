@@ -402,9 +402,10 @@
   <li><code>data-dialog-dismissible</code> enables backdrop click dismissal.</li>
   <li><code>data-dialog-modal=&quot;false&quot;</code> opens with <code>show()</code> instead of <code>showModal()</code>.</li>
   <li><code>data-dialog-view-transition</code> enables a view transition that morphs the dialog to/from its trigger. Only active when the browser supports <code>document.startViewTransition</code> and the user allows motion.</li>
+  <li><code>closedby=&quot;any&quot;</code> is the no-JavaScript light-dismiss path. The runtime rewrites it to <code>closedby=&quot;closerequest&quot;</code> where supported so dialog light-dismiss keeps the modal workflow intact — the same behavior, just stated in terms the platform understands.</li>
 </ul>
 <h3>Animation</h3>
-<p>The base CSS gives supporting browsers a small opening transition. Closing remains native unless <code>data-dialog-view-transition</code> is enabled and the browser supports the View Transition API.</p>
+<p>The base CSS gives supporting browsers a small opening transition. Closing remains native unless <code>data-dialog-view-transition</code> is enabled and the browser supports the View Transition API. The open dialog root intentionally ends at <code>transform: none</code>; fixed dropdowns and tooltips mounted inside a modal dialog rely on viewport coordinates.</p>
     </div>
     <section class="component-section">
       <h2>CSS</h2>
@@ -542,7 +543,7 @@
 <p>Prefer native dialog behavior whenever possible. The framework runtime should not replace the platform modal system; it should only make dialogs declarative, animation-friendly, and consistent across supported browsers.</p>
     </div>
         <details class="demo-links">
-      <summary>Links (12)</summary>
+      <summary>Links (13)</summary>
       <ul>
         <li><a href="https://oat.ink/components/#dialog" rel="noopener noreferrer">https://oat.ink/components/#dialog</a></li>
         <li><a href="https://picocss.com/docs/modal" rel="noopener noreferrer">https://picocss.com/docs/modal</a></li>
@@ -556,6 +557,7 @@
         <li><a href="https://uiterms.com/dialog/" rel="noopener noreferrer">https://uiterms.com/dialog/</a></li>
         <li><a href="https://codepen.io/lekoalabe/pen/GgKOKOE" rel="noopener noreferrer">Modern dialogs</a></li>
         <li><a href="https://pqina.nl/blog/animating-the-dialog-element-using-view-transitions/" rel="noopener noreferrer">Animating the dialog element using view transitions</a></li>
+        <li><a href="https://basecoatui.com/components/alert-dialog/" rel="noopener noreferrer">https://basecoatui.com/components/alert-dialog/</a></li>
       </ul>
     </details>
   </section>

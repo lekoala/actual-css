@@ -1,0 +1,74 @@
+/*
+ * Table — structured tabular data.
+ *
+ * .table-wrap provides the scroll container and outer chrome; .table owns row
+ * and cell rules. Tokens are sourced from the shared scale.
+ */
+.table-wrap {
+  inline-size: 100%;
+  max-inline-size: 100%;
+  min-inline-size: 0;
+  overflow-x: auto;
+  border: var(--border-width) solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface-raised);
+}
+
+.table-wrap:focus-visible {
+  outline: var(--focus-outline);
+  outline-offset: var(--focus-outline-offset);
+}
+
+.table {
+  --table-min: 100%;
+  --table-cell-pad: var(--space-3);
+
+  inline-size: max(var(--table-min), 100%);
+  border-collapse: collapse;
+  background: transparent;
+  color: var(--text);
+  font-size: var(--font-size-md);
+}
+
+.table caption {
+  padding: var(--table-cell-pad);
+  color: var(--text-muted);
+  text-align: start;
+}
+
+.table th,
+.table td {
+  padding: var(--table-cell-pad);
+  border-block-end: var(--border-width) solid var(--border);
+  text-align: start;
+  vertical-align: baseline;
+}
+
+.table thead th {
+  vertical-align: bottom;
+}
+
+.table th {
+  color: var(--text-muted);
+  font-weight: var(--font-weight-strong);
+}
+
+.table thead {
+  background: var(--surface-subtle);
+}
+
+.table tbody tr:hover {
+  background-color: var(--hover-overlay);
+}
+
+.table tr:last-child > * {
+  border-block-end: 0;
+}
+
+.table :where(th, td)[data-align="end"] {
+  text-align: end;
+}
+
+.table :where(th, td)[data-nowrap] {
+  white-space: nowrap;
+}

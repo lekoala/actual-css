@@ -20,6 +20,10 @@ const triggerMap = new WeakMap();
 
 // ── Event handlers ─────────────────────────────────────
 
+function openMenu(menu, trigger) {
+  openSurface(menu, { trigger, source: trigger, placement: "bottom-start", distance: 4 });
+}
+
 function onTriggerClick(e) {
   const trigger = e.currentTarget;
   const state = triggerMap.get(trigger);
@@ -28,7 +32,7 @@ function onTriggerClick(e) {
   const menu = state.menu;
   if (!menu || !menu.isConnected) return;
   if (isSurfaceOpen(menu)) closeSurface(menu);
-  else openSurface(menu, { trigger, source: trigger, placement: "bottom-start", distance: 4 });
+  else openMenu(menu, trigger);
 }
 
 function onTriggerKeydown(e) {
@@ -43,37 +47,29 @@ function onTriggerKeydown(e) {
   switch (e.key) {
     case "ArrowDown":
       e.preventDefault();
-      if (!isSurfaceOpen(menu)) {
-        openSurface(menu, { trigger, source: trigger, placement: "bottom-start", distance: 4 });
-      }
+      if (!isSurfaceOpen(menu)) openMenu(menu, trigger);
       focusFirstMenuItem(menu);
       break;
     case "ArrowUp":
       e.preventDefault();
-      if (!isSurfaceOpen(menu)) {
-        openSurface(menu, { trigger, source: trigger, placement: "bottom-start", distance: 4 });
-      }
+      if (!isSurfaceOpen(menu)) openMenu(menu, trigger);
       focusLastMenuItem(menu);
       break;
     case "Home":
       e.preventDefault();
-      if (!isSurfaceOpen(menu)) {
-        openSurface(menu, { trigger, source: trigger, placement: "bottom-start", distance: 4 });
-      }
+      if (!isSurfaceOpen(menu)) openMenu(menu, trigger);
       focusFirstMenuItem(menu);
       break;
     case "End":
       e.preventDefault();
-      if (!isSurfaceOpen(menu)) {
-        openSurface(menu, { trigger, source: trigger, placement: "bottom-start", distance: 4 });
-      }
+      if (!isSurfaceOpen(menu)) openMenu(menu, trigger);
       focusLastMenuItem(menu);
       break;
     case "Enter":
     case " ":
       e.preventDefault();
       if (!isSurfaceOpen(menu)) {
-        openSurface(menu, { trigger, source: trigger, placement: "bottom-start", distance: 4 });
+        openMenu(menu, trigger);
         focusFirstMenuItem(menu);
       } else {
         closeSurface(menu);

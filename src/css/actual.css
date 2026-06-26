@@ -4,10 +4,9 @@
 @import "./theme.css";
 @import "./intents.css";
 @import "./layout.css";
-@import "./patterns.css";
+@import "./variants.css";
 @import "./utilities.css";
 @import "./prose.css";
 @import "./components/index.css";
 @import "./forms/index.css";
 @import "./ui/index.css";
-@import "./variants.css";

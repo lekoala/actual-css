@@ -402,8 +402,6 @@ The media object is the underlying pattern of `.blog-author`, `.blog-comment`, a
 
 ## Switcher
 
-## Switcher
-
 > Row that becomes a column when space gets tight, useful for small sets of panels.
 
 Use `.switcher` for rows that should become columns when space gets tight.

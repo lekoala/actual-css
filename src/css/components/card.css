@@ -43,7 +43,7 @@
 }
 
 .card.compact {
-  --card-pad: 0.5rem;
+  --card-pad: var(--space-2);
 }
 
 /* Full-bleed children */

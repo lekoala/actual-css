@@ -1,3 +1,7 @@
+/* Dim — a dark theme variant that lifts the surface tones up a few percentage
+ * points. Same shape as dark.css (dark-only, single block) so authors can drop
+ * it in when the canonical dark is too dense. Demonstrates how a theme can
+ * recolor the same token set without changing structure. */
 [data-theme="dim"] {
   color-scheme: dark;
 

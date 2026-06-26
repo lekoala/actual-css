@@ -1,36 +1,30 @@
-/* Default variant is solid. Components consume --ui-* and map them to local variables.
+/*
+ * Cross-cutting variant token mapping.
  *
- * Variant scope: .solid/.soft/.outline apply to components that consume --ui-*:
- * .btn, .badge, .alert, .card. .ghost and .link are .btn-only.
- * Other components (input, select, avatar, spinner, accordion, tab) handle
- * intents via their own rules; adding a variant class to them is a no-op.
+ * Variant scope: .solid/.soft/.outline set --ui-* so any component consuming
+ * those tokens (.btn, .badge, .alert, .card) renders the variant. Component-
+ * specific defaults (.btn solid-by-default, .badge solid-by-default, .alert
+ * default transparent, .alert intent-tinted soft) live with their components:
+ *   components/button.css — .btn default solid + .btn.ghost + .btn.link
+ *   components/badge.css   — .badge default solid
+ *   components/alert.css   — .alert default + .alert intent-aware soft + tint
  *
- * Size scope: .sm/.lg set --control-size and --control-font-size, so they
- * reach .btn, .input, .select, .textarea, and switch. Components with their
- * own size handling (spinner, badge, avatar) define local .sm/.lg. Applying
- * .sm/.lg to alert, card, dialog, accordion, navbar, table is a no-op. */
-.solid,
-.btn:not(:where(.soft, .outline, .ghost, .link)),
-.badge:not(:where(.soft, .outline)) {
+ * .sm/.lg set --control-size and --control-font-size, reaching every component
+ * that consumes those tokens (.btn, .input, .select, .textarea, switch).
+ * Components with their own size handling (spinner, badge, avatar) define local
+ * .sm/.lg; applying .sm/.lg to alert, card, dialog, accordion, navbar, table is
+ * a no-op.
+ *
+ * Intent list source of truth: intents.css. The only per-intent selectors that
+ * re-list the intents live in components/alert.css.
+ */
+.solid {
   --ui-bg: var(--intent, var(--neutral));
   --ui-fg: var(--intent-fg, var(--neutral-fg));
   --ui-border: transparent;
 }
 
-/* Default alert without intent: transparent with border */
-:where(.alert):not(
-    :where(.primary, .secondary, .success, .warning, .danger, .neutral, .solid, .outline, .soft)
-  ) {
-  --ui-bg: transparent;
-  --ui-border: var(--border);
-  --ui-fg: var(--text);
-}
-
-/* Soft variant and alerts with intent */
-.soft,
-.alert:where(.primary, .secondary, .success, .warning, .danger, .neutral):not(
-    :where(.solid, .outline)
-  ) {
+.soft {
   --ui-bg: var(--surface-subtle);
   --ui-border: var(--border);
   --ui-fg: var(--intent, var(--text));
@@ -42,18 +36,6 @@
   --ui-border: var(--intent, var(--border));
 }
 
-.btn.ghost {
-  --ui-bg: transparent;
-  --ui-fg: var(--intent, var(--text));
-  --ui-border: transparent;
-}
-
-.btn.link {
-  --ui-bg: transparent;
-  --ui-fg: var(--intent, var(--text));
-  --ui-border: transparent;
-}
-
 .sm {
   --control-size: var(--control-size-sm);
   --control-font-size: var(--font-size-sm);
@@ -63,38 +45,20 @@
   --control-font-size: var(--font-size-lg);
 }
 
-/* Modern color enhancement. Baseline variant values above remain usable everywhere. */
+/* Modern color enhancement. Baseline variant values above remain usable
+   everywhere. The hover rules apply to any element carrying the variant
+   class; --ui-hover-bg is consumed by .btn, .badge, .alert where set. */
 @supports (color: color-mix(in oklch, red, white)) {
   .soft {
     --ui-bg: color-mix(in oklch, var(--intent, var(--neutral)), var(--surface) 88%);
     --ui-border: color-mix(in oklch, var(--intent, var(--neutral)), var(--surface) 65%);
   }
 
-  .btn:not(:where(.soft, .outline, .ghost, .link)):hover {
-    --ui-hover-bg: color-mix(in srgb, var(--intent, var(--neutral)) 88%, black);
-  }
-
-  :where(a.badge, button.badge, a.alert, button.alert).soft:hover,
-  .btn:where(.ghost, .soft):hover {
+  .soft:hover {
     --ui-hover-bg: color-mix(in oklch, var(--intent, var(--neutral)), transparent 88%);
   }
 
-  :where(.btn, a.badge, button.badge, a.alert, button.alert).outline:hover {
+  .outline:hover {
     --ui-hover-bg: color-mix(in oklch, var(--intent, var(--neutral)), transparent 92%);
-  }
-}
-
-/* Intent-tinted alerts require both color-mix and light-dark(). Splitting the
-    guard from the block above avoids an invalid --ui-bg on browsers that
-    support color-mix but not light-dark(). */
-@supports ((color: color-mix(in oklch, red, white)) and (color: light-dark(red, blue))) {
-  .alert:where(.primary, .secondary, .success, .warning, .danger, .neutral):not(
-      :where(.solid, .outline)
-    ) {
-    --ui-bg: light-dark(
-      color-mix(in srgb, var(--intent) 8%, transparent),
-      color-mix(in srgb, var(--intent) 20%, transparent)
-    );
-    --ui-border: transparent;
   }
 }

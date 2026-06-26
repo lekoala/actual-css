@@ -1,8 +1,0 @@
-/*
- * Range controls use native behavior with theme-aware accent color.
- */
-.form input[type="range"],
-.range {
-  inline-size: 100%;
-  accent-color: var(--intent, var(--primary));
-}

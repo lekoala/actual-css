@@ -1,3 +1,10 @@
+/* Opt-in theme bundle. Importing this file pulls in every theme below, each
+ * gated by [data-theme="…"]. The light baseline is :root in src/css/theme.css —
+ * there is no light.css here. dark and dim are single-block dark-only themes
+ * (color-scheme: dark) so they cannot adapt to prefers-color-scheme; the other
+ * five are paired light/dark themes using light-dark(). square additionally
+ * demonstrates overriding the full --radius scale to 0; dim demonstrates a
+ * dark theme with lifted surface tones. */
 @import "./dark.css";
 @import "./dim.css";
 @import "./corporate.css";

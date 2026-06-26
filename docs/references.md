@@ -65,3 +65,9 @@ Bad: scss, classless
 https://oat.ink/
 Good: clean, good ui
 Bad: classless
+
+### Basecoat
+
+https://basecoatui.com/
+Good: pure css, no react
+Bad: tailwind

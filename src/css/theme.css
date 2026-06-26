@@ -13,6 +13,7 @@
 /* Light fallback — also the default on browsers without light-dark() support. */
 :root,
 [data-theme="light"] {
+  /* Intent colors */
   --primary: hsl(270 24% 32%);
   --primary-fg: hsl(0 0% 98%);
 
@@ -31,24 +32,59 @@
   --neutral: hsl(220 8% 42%);
   --neutral-fg: hsl(0 0% 98%);
 
+  /* Surfaces */
   --surface: hsl(0 0% 100%);
   --surface-raised: hsl(0 0% 100%);
-  --surface-faint: hsl(220 20% 98%);
   --surface-subtle: hsl(220 14% 96%);
   --surface-solid: hsl(222 18% 12%);
 
+  /* Text */
   --text: hsl(222 18% 12%);
   --text-muted: hsl(220 8% 42%);
   --text-subtle: hsl(220 7% 58%);
 
+  /* Lines and focus */
   --border: hsl(220 12% 88%);
   --focus: var(--primary);
   --focus-ring: hsl(258 21% 32% / 0.22);
   --hover-overlay: hsl(220 20% 10% / 0.04);
 
+  /* Radius scale — themes may override the whole scale (e.g. [data-theme="square"]) */
   --radius: 0.5rem;
   --radius-sm: 0.25rem;
   --radius-lg: 0.75rem;
+
+  /* Shadow color (HSL channels) — consumed by --shadow / --shadow-popout in tokens.css */
+  --shadow-color: 220 30% 10%;
+
+  /* Heading and selection — derived from theme color tokens */
+  --heading: var(--text);
+  --selection-bg: var(--primary);
+  --selection-fg: var(--primary-fg);
+
+  /* hgroup internal gap */
+  --hgroup-gap: 0.25em;
+}
+
+/* Tone subsystem — explicit light/dark surface inversion (e.g. dark-on-light
+   avatars). Consumed by components that compose on a tone-flipped surface. */
+[data-tone="dark"] {
+  --tone-fg: white;
+  --tone-muted: rgba(255, 255, 255, 0.75);
+  --tone-border: rgba(255, 255, 255, 0.25);
+}
+
+@supports (color: color-mix(in oklch, red, white)) {
+  [data-tone="dark"] {
+    --tone-muted: color-mix(in oklch, var(--tone-fg), transparent 25%);
+    --tone-border: color-mix(in oklch, var(--tone-fg), transparent 75%);
+  }
+}
+
+[data-tone="light"] {
+  --tone-fg: var(--text);
+  --tone-muted: var(--text-muted);
+  --tone-border: var(--border);
 }
 
 /* Auto dark mode via light-dark(). Resolves based on the element's color-scheme:
@@ -77,7 +113,6 @@
 
     --surface: light-dark(hsl(0 0% 100%), hsl(222 18% 8%));
     --surface-raised: light-dark(hsl(0 0% 100%), hsl(222 16% 11%));
-    --surface-faint: light-dark(hsl(220 20% 98%), hsl(222 14% 13%));
     --surface-subtle: light-dark(hsl(220 14% 96%), hsl(222 14% 15%));
     --surface-solid: light-dark(hsl(222 18% 12%), hsl(0 0% 96%));
 

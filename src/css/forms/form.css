@@ -2,10 +2,11 @@
  * Form layout and supporting text.
  *
  * `.form` scopes semantic field rhythm without requiring classes on every
- * control. Individual controls keep their own files.
+ * control. Individual controls keep their own files; .choice label layout
+ * lives in choice.css; .form-actions lives in components/form-actions.css.
  *
  * Public API: .field, .field-label, .field-help, .field-error, .field-group,
- * .choice, .form-actions, .required-mark.
+ * .required-mark.
  */
 .form {
   color: var(--text);
@@ -13,50 +14,24 @@
 
 .field {
   display: grid;
-  gap: 0.375rem;
+  gap: var(--space-1);
   color: var(--text);
 }
 
-/* Plain-HTML convenience, not the main contract. */
+/* Plain-HTML convenience: a label directly wrapping a text-like control or
+   textarea gets the field rhythm, not the .choice layout. */
 .form
 label:not(.choice):has(> input:not(:is([type="checkbox"], [type="radio"])), > textarea, > select) {
   display: grid;
-  gap: 0.375rem;
+  gap: var(--space-1);
   color: var(--text);
-}
-
-.choice,
-.form label:has(> input[type="checkbox"], > input[type="radio"]) {
-  --choice-control-offset: 0.25em;
-
-  display: inline-flex;
-  align-items: flex-start;
-  gap: 0.5rem;
-  color: var(--text);
-  cursor: pointer;
-}
-
-/* Optical alignment: nudge the control down so the checkbox/radio/switch
-   sits visually centered with the first line of label text, not flush
-   with the top of the line-box. Default 0.25em (~4px at 16px) places
-   the control just below the cap-height, matching what Bootstrap, Material,
-   and most polished form libraries ship. Multi-line labels still keep
-   the control at the top thanks to align-items: flex-start. Override
-   per-instance via --choice-control-offset for themes with a different
-   line-height or control size. */
-.choice > :is(input[type="checkbox"], input[type="radio"]),
-.form
-  label:has(> input:is([type="checkbox"], [type="radio"]))
-  > input:is([type="checkbox"], input[type="radio"]) {
-  flex: 0 0 auto;
-  margin-block-start: var(--choice-control-offset);
 }
 
 .field-group,
 .form fieldset {
   min-inline-size: 0;
   margin: 0;
-  padding: 0.75rem;
+  padding: var(--space-3);
   border: var(--border-width) solid var(--border);
   border-radius: var(--radius);
 }
@@ -70,22 +45,18 @@ label:not(.choice):has(> input:not(:is([type="checkbox"], [type="radio"])), > te
 .field-group > legend,
 .form fieldset > legend {
   padding-block: 0;
-  padding-inline: var(--fieldset-legend-padding-inline, 0.25rem);
-  font-size: 0.8125rem;
+  padding-inline: var(--fieldset-legend-padding-inline, var(--space-1));
+  font-size: var(--font-size-xs);
 }
 
 .field-help {
   color: var(--text-muted);
-  font-size: 0.875rem;
-}
-
-.choice > span > .field-help {
-  display: block;
+  font-size: var(--font-size-sm);
 }
 
 .field-error {
   color: var(--danger);
-  font-size: 0.875rem;
+  font-size: var(--font-size-sm);
 }
 
 .required-mark {
@@ -94,47 +65,4 @@ label:not(.choice):has(> input:not(:is([type="checkbox"], [type="radio"])), > te
 
 .field.danger .field-help {
   color: var(--danger);
-}
-
-.choice:has(:disabled),
-.form label:has(> input:is([type="checkbox"], [type="radio"]):disabled) {
-  color: var(--text-subtle);
-  cursor: not-allowed;
-}
-
-.form-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--gap);
-  align-items: center;
-  margin-block-start: var(--form-actions-margin-block-start, var(--space-5));
-}
-
-/* Opt-in sticky variant. When the bar is not stuck (at rest) the
-   translucent surface and backdrop-blur are visually neutral. Content
-   scrolling behind the bar reveals the blur as a natural separator
-   instead of relying on a shadow. */
-.form-actions.sticky {
-  position: sticky;
-  inset-block-end: var(--form-actions-sticky-block-offset, 0px);
-  z-index: var(--z-sticky);
-  isolation: isolate;
-
-  margin-inline: calc(var(--form-actions-sticky-inline-offset, 0px) * -1);
-  padding: var(--form-actions-sticky-padding, var(--space-3));
-
-  border-block-start: var(--border-width) solid var(--border);
-  background: var(--surface);
-}
-
-/* Enhanced sticky bar: translucent surface plus blur where both are supported.
-    Guidelines: use @supports positively. */
-@supports (
-    (backdrop-filter: blur(1rem)) and
-    (background: color-mix(in oklch, white 50%, transparent))
-  ) {
-  .form-actions.sticky {
-    background: color-mix(in oklch, var(--surface) 88%, transparent);
-    backdrop-filter: blur(1rem);
-  }
 }

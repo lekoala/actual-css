@@ -43,9 +43,14 @@
   block-size: var(--badge-size);
 }
 
-.badge.outline {
-  --badge-radius: var(--radius);
+/* Variant token mapping — solid default. .badge.solid sets the same mapping
+   via the cross-cutting .solid in variants.css. */
+.badge:not(:where(.soft, .outline)) {
+  --ui-bg: var(--intent, var(--neutral));
+  --ui-fg: var(--intent-fg, var(--neutral-fg));
+  --ui-border: transparent;
 }
+
 .badge.sm {
   --badge-size: 1.25rem;
   --badge-font-size: 0.75rem;
