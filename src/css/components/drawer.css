@@ -30,7 +30,7 @@
   gap: var(--space-4);
 }
 
-/* Backdrop color sourced from components/surface.css so it matches .dialog
+/* Backdrop color sourced from components/surface.css so it matches .modal
    and .surface-backdrop across the dialog family. */
 .drawer::backdrop {
   background: var(--backdrop-fill);

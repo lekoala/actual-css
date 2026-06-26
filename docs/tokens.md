@@ -210,7 +210,7 @@ Only add an icon token when CSS needs the icon. Markup icons should stay in mark
 A few cross-component helpers:
 
 - `--indicator-offset` / `--indicator-ring` — positioning and contrast ring for a status dot attached to `.avatar > .badge:empty`.
-- `--backdrop-color` / `--backdrop-opacity` / `--backdrop-fill` — modal scrim color and opacity shared by `.drawer::backdrop`, `.surface-backdrop`, and conceptually by `.dialog::backdrop`. Override `--backdrop-opacity` per theme for a denser or lighter scrim.
+- `--backdrop-color` / `--backdrop-opacity` / `--backdrop-fill` — modal scrim color and opacity shared by `.drawer::backdrop`, `.surface-backdrop`, and conceptually by `.modal::backdrop`. Override `--backdrop-opacity` per theme for a denser or lighter scrim.
 
 ```css
 :root {
