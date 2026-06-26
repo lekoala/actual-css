@@ -11,6 +11,7 @@ If guidelines conflict, think about what would be best or ask the user if no dec
 - Em/Rem are already spacing units : use em for consistent spacing with the size of the element (eg: bigger buttons)
 - Grouping works with `role="group"` and `:has` (https://caniuse.com/css-has) : it's a progresssive enhancement, ui should
 still be functional without it
+- Keep `:has()` out of selector lists that also contain legacy-safe selectors. Put the `:has()` branch in `@supports selector(...)` so older browsers do not invalidate unrelated rules.
 - Prefer container queries of media queries (https://modern-css.com/responsive-components-without-media-queries/) : local behaviour
 - Components don't deal with page layout (no "margin-bottom" for a card)
 - Avoid inline styles when possible (use utilities)
@@ -26,6 +27,7 @@ still be functional without it
 - Avoid transition all unless needed, try to target specific properties
 - Use `@supports` positively (no `@supports not`) only when it protects a dependent group of rules or a real fallback/modern branch. Do not gate a single progressive declaration whose unsupported value is simply ignored by the browser, such as `text-wrap: balance`.
 - Every `color-mix()` declaration needs a flat fallback outside `@supports` (older browsers drop the whole property, not just the function)
+- CSS data-URI icons should be masks when possible, with color supplied by CSS. Use `background-image` icons only for controls that cannot use masks/currentColor.
 - Prefix all `@keyframes` with `actual-` to avoid collisions with consumer code
 - Each component must have a small surface and be easy to opt-out
 - Component names must be easy to search (eg: `btn` vs `button`) and should not repeat the html element (no <kbd class="kbd"> or <dialog class="dialog">)

@@ -4,12 +4,19 @@
  * Uses currentColor so it adapts to buttons, alerts, badges, and text. The
  * [aria-busy] overlay composition lives in components/busy.css.
  */
+/* Prevent inherited intents from coloring the spinner. Local intent classes
+   still win because :where() has zero specificity. */
+:where(.spinner) {
+  --intent: initial;
+}
+
 .spinner {
   --spinner-size: 1.5rem;
   --spinner-width: 2px;
   --spinner-track: currentColor;
   --spinner-value: transparent;
 
+  color: var(--intent, currentColor);
   display: inline-block;
   flex-shrink: 0;
   inline-size: var(--spinner-size);
@@ -28,10 +35,6 @@
     --spinner-value: currentColor;
     opacity: 1;
   }
-}
-
-.spinner:where(.primary, .secondary, .success, .warning, .danger, .neutral) {
-  color: var(--intent);
 }
 
 .spinner.sm {

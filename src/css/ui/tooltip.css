@@ -10,6 +10,7 @@
   --tooltip-arrow-size: 5px;
 
   z-index: var(--z-tooltip);
+  max-inline-size: min(24rem, calc(100vw - 2rem));
   max-inline-size: min(24rem, calc(100vi - 2rem));
   padding: 0.25em 0.6em;
   border-radius: var(--radius-sm);

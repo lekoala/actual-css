@@ -80,6 +80,23 @@
   }
 }
 
+@supports not (container-type: inline-size) {
+  @media (max-width: 47.999rem) {
+    .grid-responsive .grid-3,
+    .grid-responsive .grid-4 {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 27.999rem) {
+    .grid-responsive .grid-2,
+    .grid-responsive .grid-3,
+    .grid-responsive .grid-4 {
+      grid-template-columns: 1fr;
+    }
+  }
+}
+
 .with-sidebar {
   display: flex;
   flex-wrap: wrap;
@@ -121,6 +138,7 @@
 }
 
 .app-shell {
+  min-block-size: 100vh;
   min-block-size: 100dvh;
   display: flex;
   flex-direction: column;

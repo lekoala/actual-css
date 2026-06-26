@@ -18,6 +18,7 @@
   justify-content: center;
   gap: 0.5em;
   min-block-size: var(--btn-min-size);
+  padding-block: var(--space-2);
   padding-block: max(var(--space-1), calc((var(--btn-min-size) - 1lh) / 2));
   padding-inline: var(--btn-pad-x);
   border: var(--border-width) solid var(--btn-border);
@@ -120,23 +121,25 @@
 }
 
 /* Auto-detect button groups via role="group" */
-:where([role="group"]:has(> .btn + .btn)) {
-  display: inline-flex;
-  border-radius: var(--radius);
-}
+@supports selector([role="group"]:has(> .btn + .btn)) {
+  :where([role="group"]:has(> .btn + .btn)) {
+    display: inline-flex;
+    border-radius: var(--radius);
+  }
 
-:where([role="group"]:has(> .btn + .btn)) > .btn {
-  border-radius: 0;
-  border-inline-end: 0;
-}
+  :where([role="group"]:has(> .btn + .btn)) > .btn {
+    border-radius: 0;
+    border-inline-end: 0;
+  }
 
-:where([role="group"]:has(> .btn + .btn)) > .btn:first-child {
-  border-start-start-radius: inherit;
-  border-end-start-radius: inherit;
-}
+  :where([role="group"]:has(> .btn + .btn)) > .btn:first-child {
+    border-start-start-radius: inherit;
+    border-end-start-radius: inherit;
+  }
 
-:where([role="group"]:has(> .btn + .btn)) > .btn:last-child {
-  border-inline-end: var(--border-width) solid var(--btn-border);
-  border-start-end-radius: inherit;
-  border-end-end-radius: inherit;
+  :where([role="group"]:has(> .btn + .btn)) > .btn:last-child {
+    border-inline-end: var(--border-width) solid var(--btn-border);
+    border-start-end-radius: inherit;
+    border-end-end-radius: inherit;
+  }
 }

@@ -1,24 +1,56 @@
+/* Component-specific intent tokens may use modern color functions. Components
+   must guard their consumption with matching @supports rules. */
 .primary {
   --intent: var(--primary);
   --intent-fg: var(--primary-fg);
+  --intent-alert-bg: light-dark(
+    color-mix(in srgb, var(--intent) 8%, transparent),
+    color-mix(in srgb, var(--intent) 20%, transparent)
+  );
+  --intent-alert-border: transparent;
 }
 .secondary {
   --intent: var(--secondary);
   --intent-fg: var(--secondary-fg);
+  --intent-alert-bg: light-dark(
+    color-mix(in srgb, var(--intent) 8%, transparent),
+    color-mix(in srgb, var(--intent) 20%, transparent)
+  );
+  --intent-alert-border: transparent;
 }
 .success {
   --intent: var(--success);
   --intent-fg: var(--success-fg);
+  --intent-alert-bg: light-dark(
+    color-mix(in srgb, var(--intent) 8%, transparent),
+    color-mix(in srgb, var(--intent) 20%, transparent)
+  );
+  --intent-alert-border: transparent;
 }
 .warning {
   --intent: var(--warning);
   --intent-fg: var(--warning-fg);
+  --intent-alert-bg: light-dark(
+    color-mix(in srgb, var(--intent) 8%, transparent),
+    color-mix(in srgb, var(--intent) 20%, transparent)
+  );
+  --intent-alert-border: transparent;
 }
 .danger {
   --intent: var(--danger);
   --intent-fg: var(--danger-fg);
+  --intent-alert-bg: light-dark(
+    color-mix(in srgb, var(--intent) 8%, transparent),
+    color-mix(in srgb, var(--intent) 20%, transparent)
+  );
+  --intent-alert-border: transparent;
 }
 .neutral {
   --intent: var(--neutral);
   --intent-fg: var(--neutral-fg);
+  --intent-alert-bg: light-dark(
+    color-mix(in srgb, var(--intent) 8%, transparent),
+    color-mix(in srgb, var(--intent) 20%, transparent)
+  );
+  --intent-alert-border: transparent;
 }

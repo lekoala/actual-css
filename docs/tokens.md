@@ -64,7 +64,15 @@ Use `*-fg` pairs only for solid backgrounds where the component controls both fo
 
 The default theme is intentionally calm. `primary` is a near-neutral dark grey rather than a saturated brand color, `secondary` is a neutral surface rather than a colored intent, and the semantic states are desaturated. Optional themes can re-introduce vivid intent palettes on top of this foundation; the default is meant to be the adult, editorial baseline.
 
-Soft variants (`.btn.soft`, `.badge.soft`, `.alert.soft`, etc.) are generated from intent colors through `color-mix()`. A future theme may introduce explicit `--{intent}-soft*` tokens if the generated softs prove too expressive.
+Soft variants (`.btn.soft`, `.badge.soft`, `.alert.soft`, etc.) are generated from intent colors through `color-mix()`. Themes can tune the mix globally instead of rewriting component selectors.
+
+```css
+:root {
+  --soft-bg-mix: 88%;
+  --soft-border-mix: 65%;
+  --soft-hover-alpha: 12%;
+}
+```
 
 ### Shape
 
@@ -198,12 +206,13 @@ Icons used by CSS-only controls are public tokens because users may need to repl
 
 ```css
 :root {
-  --icon-chevron: url("data:image/svg+xml,...");
-  --icon-check: url("data:image/svg+xml,...");
+  --icon-chevron-mask: url("data:image/svg+xml,...stroke='black'...");
+  --icon-check-mask: url("data:image/svg+xml,...stroke='black'...");
+  --icon-chevron-image: url("data:image/svg+xml,...");
 }
 ```
 
-Only add an icon token when CSS needs the icon. Markup icons should stay in markup.
+Prefer `*-mask` tokens for CSS icons so components can color them with `background-color: currentColor` or a semantic token. Use image tokens only where the platform requires `background-image` (native select chevrons cannot use `currentColor`). Only add an icon token when CSS needs the icon. Markup icons should stay in markup.
 
 ### Composition tokens
 
@@ -267,7 +276,7 @@ A theme can be complete by overriding only:
 - intent colors and foreground pairs
 - surface, text, border, focus, and overlay colors
 - radius tokens
-- optional shadow, motion, and typography tokens
+- optional shadow, motion, typography, and soft-variant mix tokens
 
 ```css
 [data-theme="brand"] {
@@ -298,6 +307,8 @@ A theme can be complete by overriding only:
   --focus: var(--primary);
   --focus-ring: hsl(260 70% 54% / 0.22);
   --hover-overlay: hsl(260 30% 10% / 0.04);
+  --soft-bg-mix: 84%;
+  --soft-border-mix: 58%;
 
   --radius: 0.625rem;
   --radius-sm: 0.3125rem;

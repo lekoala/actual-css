@@ -35,7 +35,7 @@
 .form select:not([multiple], [size]) {
   appearance: none;
   padding-inline-end: calc(var(--space-3) + var(--space-6));
-  background-image: var(--icon-chevron);
+  background-image: var(--icon-chevron-image);
   background-position: center right var(--space-3);
   background-size: 1rem auto;
   background-repeat: no-repeat;

@@ -10,6 +10,14 @@
   color-scheme: dark;
 }
 
+/* Demo themes use light-dark(). Older browsers get the light fallback rather
+   than a partially dark native color scheme over light tokens. */
+@supports not (color: light-dark(red, blue)) {
+  [data-theme="dark"] {
+    color-scheme: light;
+  }
+}
+
 /* Light fallback — also the default on browsers without light-dark() support. */
 :root,
 [data-theme="light"] {

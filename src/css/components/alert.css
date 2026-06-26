@@ -1,12 +1,26 @@
 /*
  * Alerts for inline feedback and status messages.
  *
- * Consumes the shared --ui-* variant plumbing so emphasis can change
- * without creating alert-only color rules.
+ * Keeps alert defaults local while consuming the shared --ui-* variant
+ * plumbing for emphasis.
  */
+/* Prevent inherited intents from tinting the alert. Local intent classes still
+   win because :where() has zero specificity. */
+:where(.alert) {
+  --intent: initial;
+  --intent-fg: initial;
+  --intent-alert-bg: initial;
+  --intent-alert-border: initial;
+}
+
 .alert {
   --alert-pad-block: var(--space-4);
   --alert-pad-inline: var(--space-4);
+  --alert-bg: var(--surface-subtle);
+  --alert-border: var(--border);
+  --ui-bg: var(--alert-bg);
+  --ui-border: var(--alert-border);
+  --ui-fg: var(--intent, var(--text));
 
   padding-block: var(--alert-pad-block);
   padding-inline: var(--alert-pad-inline);
@@ -28,61 +42,70 @@
   margin-block-end: 0;
 }
 
-/* Variant token mapping. Source of truth for the intent list: intents.css.
-   Adding an intent requires updating every :where(.primary, .secondary,
-   .success, .warning, .danger, .neutral) list below. */
-:where(.alert):not(
-    :where(.primary, .secondary, .success, .warning, .danger, .neutral, .solid, .outline, .soft)
-  ) {
-  --ui-bg: transparent;
-  --ui-border: var(--border);
-  --ui-fg: var(--text);
-}
-
-.alert:where(.primary, .secondary, .success, .warning, .danger, .neutral):not(
-    :where(.solid, .outline)
-  ) {
-  --ui-bg: var(--surface-subtle);
-  --ui-border: var(--border);
+/* Variant token mapping. Intent-aware tints are sourced from intents.css. */
+.alert:where(.soft) {
+  --alert-bg: var(--surface-subtle);
+  --alert-border: var(--border);
   --ui-fg: var(--intent, var(--text));
 }
 
-/* Intent-tinted alerts require both color-mix and light-dark(). Splitting the
-   guard from the cross-cutting hover block in variants.css avoids an invalid
-   --ui-bg on browsers that support color-mix but not light-dark(). */
-@supports ((color: color-mix(in oklch, red, white)) and (color: light-dark(red, blue))) {
-  .alert:where(.primary, .secondary, .success, .warning, .danger, .neutral):not(
-      :where(.solid, .outline)
-    ) {
-    --ui-bg: light-dark(
-      color-mix(in srgb, var(--intent) 8%, transparent),
-      color-mix(in srgb, var(--intent) 20%, transparent)
+.alert.solid {
+  --ui-bg: var(--intent, var(--neutral));
+  --ui-fg: var(--intent-fg, var(--neutral-fg));
+  --ui-border: transparent;
+}
+
+.alert.outline {
+  --ui-bg: transparent;
+  --ui-fg: var(--intent, var(--text));
+  --ui-border: var(--intent, var(--border));
+}
+
+@supports (color: color-mix(in oklch, red, white)) {
+  .alert:where(.soft) {
+    --alert-bg: color-mix(
+      in oklch,
+      var(--surface) var(--soft-bg-mix),
+      var(--intent, var(--neutral))
     );
-    --ui-border: transparent;
+    --alert-border: color-mix(
+      in oklch,
+      var(--surface) var(--soft-border-mix),
+      var(--intent, var(--neutral))
+    );
+  }
+}
+
+@supports ((color: color-mix(in oklch, red, white)) and (color: light-dark(red, blue))) {
+  .alert:where(:not(.solid, .outline)) {
+    --ui-bg: var(--intent-alert-bg, var(--alert-bg));
+    --ui-border: var(--intent-alert-border, var(--alert-border));
   }
 }
 
 /* Decorative leading icon */
-.alert:has(> :first-child[aria-hidden="true"]) {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
-  align-items: start;
-  column-gap: var(--space-3);
-}
+@supports selector(.alert:has(> *)) {
+  .alert:has(> :first-child[aria-hidden="true"]) {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: start;
+    column-gap: var(--space-3);
+  }
 
-.alert:has(> :first-child[aria-hidden="true"]) > :first-child {
-  grid-column: 1;
-  grid-row: 1 / -1;
-  display: inline-grid;
-  place-items: center;
-  inline-size: 1.25em;
-  block-size: calc(1em * var(--line-height));
-  font-size: 1.25em;
-  line-height: 1;
-}
+  .alert:has(> :first-child[aria-hidden="true"]) > :first-child {
+    grid-column: 1;
+    grid-row: 1 / -1;
+    display: inline-grid;
+    place-items: center;
+    inline-size: 1.25em;
+    block-size: calc(1em * var(--line-height));
+    font-size: 1.25em;
+    line-height: 1;
+  }
 
-.alert:has(> :first-child[aria-hidden="true"]) > :not(:first-child) {
-  grid-column: 2;
+  .alert:has(> :first-child[aria-hidden="true"]) > :not(:first-child) {
+    grid-column: 2;
+  }
 }
 
 /* Links */

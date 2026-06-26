@@ -18,6 +18,7 @@
     .select:not([multiple], [size], .native)::picker(select),
     .form select:not([multiple], [size], .native)::picker(select) {
       appearance: base-select;
+      max-height: min(24rem, 70vh);
       max-height: min(24rem, 70dvh);
       margin-block: var(--space-2);
       padding: 0;
@@ -73,8 +74,8 @@
       inline-size: 1rem;
       block-size: 1rem;
       background-color: currentColor;
-      -webkit-mask-image: var(--icon-check);
-      mask-image: var(--icon-check);
+      -webkit-mask-image: var(--icon-check-mask);
+      mask-image: var(--icon-check-mask);
       -webkit-mask-repeat: no-repeat;
       mask-repeat: no-repeat;
       -webkit-mask-size: contain;
