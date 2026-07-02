@@ -36,7 +36,7 @@
   <li>A pattern should be useful in more than one component or context.</li>
 </ul>
 <h3>Actions</h3>
-<p>Use <code>.actions</code> for a semantic list of actions. It removes native list chrome but does not define layout. Combine it with <code>.cluster</code>, <code>.stack</code>, or another layout primitive.</p>
+<p>Use <code>.actions</code> for a semantic list of actions. It removes native list chrome and provides a baseline row layout (<code>display: flex</code>, wrap, shared gap). Compose with layout primitives only when you need a different direction or distribution.</p>
     </div>
     <section class="component-section">
       <div class="example-group">
@@ -388,12 +388,12 @@
     <div class="component-prose">
       <p>Keep this separate from layout primitives. <code>.cluster</code> and <code>.stack</code> should not style links.</p>
 <h3>Generic List</h3>
-<p>Use <code>.list</code> for rich content lists where each item may contain multiple elements.</p>
+<p>Use <code>.list-group</code> for rich content lists where each item may contain multiple elements.</p>
     </div>
     <section class="component-section">
       <div class="example-group">
         <div class="example-render">
-          <figure class="list">
+          <figure class="list-group">
   <figcaption>Most played songs this week</figcaption>
 
   <ul>
@@ -415,7 +415,7 @@
 </figure>
         </div>
         <div class="example-code">
-          <pre><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>figure</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>list<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+          <pre><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>figure</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>list-group<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
   <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>figcaption</span><span class="token punctuation">></span></span>Most played songs this week<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>figcaption</span><span class="token punctuation">></span></span>
 
   <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>ul</span><span class="token punctuation">></span></span>
@@ -439,13 +439,13 @@
       </div>
     </section>
     <div class="component-prose">
-      <p><code>.list</code> is different from <code>.nav-list</code> and <code>.actions</code>.</p>
+      <p><code>.list-group</code> is different from <code>.nav-list</code> and <code>.actions</code>.</p>
 <ul>
   <li><code>.actions</code> is for action controls.</li>
   <li><code>.nav-list</code> is for navigation links.</li>
-  <li><code>.list</code> is for structured content items.</li>
+  <li><code>.list-group</code> is for structured content items.</li>
 </ul>
-<p>If <code>.list</code> receives visual styling, document it as a component-like pattern rather than a layout primitive.</p>
+<p>If <code>.list-group</code> receives visual styling, document it as a component-like pattern rather than a layout primitive.</p>
 <h3>Relationship With Layout</h3>
 <p>Patterns often compose with layout primitives.</p>
     </div>

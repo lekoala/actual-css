@@ -52,7 +52,8 @@
     "watch:demo": "bun scripts/build-demo.js --watch",
     "build:dist": "bun scripts/build-dist.js",
     "build:js": "bun scripts/build-js.js",
-    "build:size": "bun scripts/build-size.js"
+    "build:size": "bun scripts/build-size.js",
+    "build:all": "bun run build:demo && bun run build:dist && bun run build:js && bun run build:size"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.4.0",

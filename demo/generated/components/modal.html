@@ -279,7 +279,7 @@
     </section>
     <div class="component-prose">
       <h3>Overlays inside modals</h3>
-<p>Dropdowns and tooltips opened from inside a modal dialog are mounted inside the dialog so they stay in the same top-layer context.</p>
+<p>Menus and tooltips opened from inside a modal dialog are mounted inside the dialog so they stay in the same top-layer context.</p>
     </div>
     <section class="component-section">
       <div class="example-group">
@@ -299,7 +299,7 @@
     <header class="cluster" style="--cluster-justify: space-between">
       <hgroup>
         <h3>Modal overlays</h3>
-        <p>Dropdowns and tooltips remain above the dialog surface.</p>
+        <p>Menus and tooltips remain above the dialog surface.</p>
       </hgroup>
 
       <button class="btn ghost"
@@ -327,13 +327,13 @@
       </button>
     </div>
 
-    <div class="dropdown-menu"
+    <div class="menu"
          id="dialog-actions-menu"
          role="menu"
          hidden>
-      <button class="btn link" type="button" role="menuitem">Archive</button>
-      <button class="btn link" type="button" role="menuitem">Duplicate</button>
-      <button class="btn link" type="button" role="menuitem">Share</button>
+      <button class="menu-item" type="button" role="menuitem">Archive</button>
+      <button class="menu-item" type="button" role="menuitem">Duplicate</button>
+      <button class="menu-item" type="button" role="menuitem">Share</button>
     </div>
   </div>
 </dialog>
@@ -354,7 +354,7 @@
     <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>header</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>cluster<span class="token punctuation">"</span></span> <span class="token special-attr"><span class="token attr-name">style</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span><span class="token value css language-css"><span class="token property">--cluster-justify</span><span class="token punctuation">:</span> space-between</span><span class="token punctuation">"</span></span></span><span class="token punctuation">></span></span>
       <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>hgroup</span><span class="token punctuation">></span></span>
         <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>h3</span><span class="token punctuation">></span></span>Modal overlays<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>h3</span><span class="token punctuation">></span></span>
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">></span></span>Dropdowns and tooltips remain above the dialog surface.<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>p</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">></span></span>Menus and tooltips remain above the dialog surface.<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>p</span><span class="token punctuation">></span></span>
       <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>hgroup</span><span class="token punctuation">></span></span>
 
       <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>button</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>btn ghost<span class="token punctuation">"</span></span>
@@ -382,13 +382,13 @@
       <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">></span></span>
     <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
 
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>dropdown-menu<span class="token punctuation">"</span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>menu<span class="token punctuation">"</span></span>
          <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>dialog-actions-menu<span class="token punctuation">"</span></span>
          <span class="token attr-name">role</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>menu<span class="token punctuation">"</span></span>
          <span class="token attr-name">hidden</span><span class="token punctuation">></span></span>
-      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>button</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>btn link<span class="token punctuation">"</span></span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>button<span class="token punctuation">"</span></span> <span class="token attr-name">role</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>menuitem<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Archive<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">></span></span>
-      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>button</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>btn link<span class="token punctuation">"</span></span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>button<span class="token punctuation">"</span></span> <span class="token attr-name">role</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>menuitem<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Duplicate<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">></span></span>
-      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>button</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>btn link<span class="token punctuation">"</span></span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>button<span class="token punctuation">"</span></span> <span class="token attr-name">role</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>menuitem<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Share<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">></span></span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>button</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>menu-item<span class="token punctuation">"</span></span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>button<span class="token punctuation">"</span></span> <span class="token attr-name">role</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>menuitem<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Archive<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">></span></span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>button</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>menu-item<span class="token punctuation">"</span></span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>button<span class="token punctuation">"</span></span> <span class="token attr-name">role</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>menuitem<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Duplicate<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">></span></span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>button</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>menu-item<span class="token punctuation">"</span></span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>button<span class="token punctuation">"</span></span> <span class="token attr-name">role</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>menuitem<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Share<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">></span></span>
     <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
   <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dialog</span><span class="token punctuation">></span></span></code></pre>
@@ -455,13 +455,13 @@ if (!("HTMLDialogElement" in window) || !HTMLDialogElement.prototype.showModal) 
     <div class="component-prose">
       <p>If dialogs are injected later, register those new dialog elements before their open trigger is used.</p>
 <h3>Animation</h3>
-<p>The base CSS gives supporting browsers a small opening transition. Closing remains native unless <code>data-dialog-view-transition</code> is enabled and the browser supports the View Transition API. The open dialog root intentionally ends at <code>transform: none</code>; fixed dropdowns and tooltips mounted inside a modal dialog rely on viewport coordinates.</p>
+<p>The base CSS gives supporting browsers a small opening transition. Closing remains native unless <code>data-dialog-view-transition</code> is enabled and the browser supports the View Transition API. The open dialog root intentionally ends at <code>transform: none</code>; fixed menus and tooltips mounted inside a modal dialog rely on viewport coordinates.</p>
     </div>
     <section class="component-section">
       <h2>CSS</h2>
       <div class="example-group">
         <div class="example-code">
-          <pre><code class="language-css"><span class="token selector">.modal</span> <span class="token punctuation">{</span>
+          <pre><code class="language-css"><span class="token selector">dialog.modal</span> <span class="token punctuation">{</span>
   <span class="token property">opacity</span><span class="token punctuation">:</span> 0<span class="token punctuation">;</span>
   <span class="token property">overflow</span><span class="token punctuation">:</span> visible<span class="token punctuation">;</span>
 
@@ -470,34 +470,34 @@ if (!("HTMLDialogElement" in window) || !HTMLDialogElement.prototype.showModal) 
     transform <span class="token function">var</span><span class="token punctuation">(</span>--duration<span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span>
 
-<span class="token selector">.modal > form,
-.modal > .stack</span> <span class="token punctuation">{</span>
+<span class="token selector">dialog.modal > form,
+dialog.modal > .stack</span> <span class="token punctuation">{</span>
   <span class="token property">max-block-size</span><span class="token punctuation">:</span> <span class="token function">calc</span><span class="token punctuation">(</span>100vh - 2rem<span class="token punctuation">)</span><span class="token punctuation">;</span>
   <span class="token property">max-block-size</span><span class="token punctuation">:</span> <span class="token function">calc</span><span class="token punctuation">(</span>100dvb - 2rem<span class="token punctuation">)</span><span class="token punctuation">;</span>
   <span class="token property">overflow</span><span class="token punctuation">:</span> auto<span class="token punctuation">;</span>
   <span class="token property">overscroll-behavior</span><span class="token punctuation">:</span> contain<span class="token punctuation">;</span>
 <span class="token punctuation">}</span>
 
-<span class="token selector">.modal[open]</span> <span class="token punctuation">{</span>
+<span class="token selector">dialog.modal[open]</span> <span class="token punctuation">{</span>
   <span class="token property">opacity</span><span class="token punctuation">:</span> 1<span class="token punctuation">;</span>
   <span class="token property">transform</span><span class="token punctuation">:</span> none<span class="token punctuation">;</span>
 <span class="token punctuation">}</span>
 
 <span class="token atrule"><span class="token rule">@starting-style</span></span> <span class="token punctuation">{</span>
-  <span class="token selector">.modal[open]</span> <span class="token punctuation">{</span>
+  <span class="token selector">dialog.modal[open]</span> <span class="token punctuation">{</span>
     <span class="token property">opacity</span><span class="token punctuation">:</span> 0<span class="token punctuation">;</span>
     <span class="token property">transform</span><span class="token punctuation">:</span> <span class="token function">translateY</span><span class="token punctuation">(</span>0.35rem<span class="token punctuation">)</span> <span class="token function">scale</span><span class="token punctuation">(</span>0.98<span class="token punctuation">)</span><span class="token punctuation">;</span>
   <span class="token punctuation">}</span>
 <span class="token punctuation">}</span>
 
-<span class="token selector">.modal::backdrop</span> <span class="token punctuation">{</span>
-  <span class="token property">background</span><span class="token punctuation">:</span> <span class="token function">var</span><span class="token punctuation">(</span>--surface-solid<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token selector">dialog.modal::backdrop</span> <span class="token punctuation">{</span>
+  <span class="token property">background</span><span class="token punctuation">:</span> <span class="token function">var</span><span class="token punctuation">(</span>--backdrop-fill<span class="token punctuation">)</span><span class="token punctuation">;</span>
   <span class="token property">opacity</span><span class="token punctuation">:</span> 0<span class="token punctuation">;</span>
   <span class="token property">transition</span><span class="token punctuation">:</span> opacity <span class="token function">var</span><span class="token punctuation">(</span>--duration<span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span>
 
 <span class="token atrule"><span class="token rule">@supports</span> <span class="token punctuation">(</span><span class="token property">transition-behavior</span><span class="token punctuation">:</span> allow-discrete<span class="token punctuation">)</span></span> <span class="token punctuation">{</span>
-  <span class="token selector">.modal</span> <span class="token punctuation">{</span>
+  <span class="token selector">dialog.modal</span> <span class="token punctuation">{</span>
     <span class="token property">transition</span><span class="token punctuation">:</span>
       opacity <span class="token function">var</span><span class="token punctuation">(</span>--duration<span class="token punctuation">)</span><span class="token punctuation">,</span>
       transform <span class="token function">var</span><span class="token punctuation">(</span>--duration<span class="token punctuation">)</span><span class="token punctuation">,</span>
@@ -505,7 +505,7 @@ if (!("HTMLDialogElement" in window) || !HTMLDialogElement.prototype.showModal) 
       display <span class="token function">var</span><span class="token punctuation">(</span>--duration<span class="token punctuation">)</span> allow-discrete<span class="token punctuation">;</span>
   <span class="token punctuation">}</span>
 
-  <span class="token selector">.modal::backdrop</span> <span class="token punctuation">{</span>
+  <span class="token selector">dialog.modal::backdrop</span> <span class="token punctuation">{</span>
     <span class="token property">transition</span><span class="token punctuation">:</span>
       opacity <span class="token function">var</span><span class="token punctuation">(</span>--duration<span class="token punctuation">)</span><span class="token punctuation">,</span>
       overlay <span class="token function">var</span><span class="token punctuation">(</span>--duration<span class="token punctuation">)</span> allow-discrete<span class="token punctuation">,</span>
@@ -513,8 +513,8 @@ if (!("HTMLDialogElement" in window) || !HTMLDialogElement.prototype.showModal) 
   <span class="token punctuation">}</span>
 <span class="token punctuation">}</span>
 
-<span class="token selector">.modal[open]::backdrop</span> <span class="token punctuation">{</span>
-  <span class="token property">opacity</span><span class="token punctuation">:</span> 0.5<span class="token punctuation">;</span>
+<span class="token selector">dialog.modal[open]::backdrop</span> <span class="token punctuation">{</span>
+  <span class="token property">opacity</span><span class="token punctuation">:</span> 1<span class="token punctuation">;</span>
 <span class="token punctuation">}</span>
 
 <span class="token atrule"><span class="token rule">@supports</span> <span class="token function">selector</span><span class="token punctuation">(</span><span class="token selector-function-argument selector">:has(dialog:modal)</span><span class="token punctuation">)</span></span> <span class="token punctuation">{</span>
@@ -525,7 +525,7 @@ if (!("HTMLDialogElement" in window) || !HTMLDialogElement.prototype.showModal) 
 <span class="token punctuation">}</span>
 
 <span class="token atrule"><span class="token rule">@starting-style</span></span> <span class="token punctuation">{</span>
-  <span class="token selector">.modal[open]::backdrop</span> <span class="token punctuation">{</span>
+  <span class="token selector">dialog.modal[open]::backdrop</span> <span class="token punctuation">{</span>
     <span class="token property">opacity</span><span class="token punctuation">:</span> 0<span class="token punctuation">;</span>
   <span class="token punctuation">}</span>
 <span class="token punctuation">}</span></code></pre>
@@ -605,7 +605,7 @@ if (!("HTMLDialogElement" in window) || !HTMLDialogElement.prototype.showModal) 
 <p>Prefer native dialog behavior whenever possible. The framework runtime should not replace the platform modal system; it should only make dialogs declarative, animation-friendly, and consistent across supported browsers.</p>
     </div>
         <details class="demo-links">
-      <summary>Links (13)</summary>
+      <summary>Links (14)</summary>
       <ul>
         <li><a href="https://oat.ink/components/#dialog" rel="noopener noreferrer">https://oat.ink/components/#dialog</a></li>
         <li><a href="https://picocss.com/docs/modal" rel="noopener noreferrer">https://picocss.com/docs/modal</a></li>
@@ -620,6 +620,7 @@ if (!("HTMLDialogElement" in window) || !HTMLDialogElement.prototype.showModal) 
         <li><a href="https://codepen.io/lekoalabe/pen/GgKOKOE" rel="noopener noreferrer">Modern dialogs</a></li>
         <li><a href="https://pqina.nl/blog/animating-the-dialog-element-using-view-transitions/" rel="noopener noreferrer">Animating the dialog element using view transitions</a></li>
         <li><a href="https://basecoatui.com/components/alert-dialog/" rel="noopener noreferrer">https://basecoatui.com/components/alert-dialog/</a></li>
+        <li><a href="https://v6-dev--twbs-bootstrap.netlify.app/docs/6.0/components/dialog/" rel="noopener noreferrer">https://v6-dev--twbs-bootstrap.netlify.app/docs/6.0/components/dialog/</a></li>
       </ul>
     </details>
   </section>
