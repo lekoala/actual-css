@@ -62,8 +62,8 @@
   --radius-sm: 0.25rem;
   --radius-lg: 0.75rem;
 
-  /* Shadow color (HSL channels) — consumed by --shadow / --shadow-popout in tokens.css */
-  --shadow-color: 220 30% 10%;
+  /* Shadow color — consumed by --shadow / --shadow-popout in tokens.css */
+  --shadow-color: hsl(220 30% 10%);
 
   /* Heading and selection — derived from theme color tokens */
   --heading: var(--text);
@@ -131,6 +131,6 @@
     --border: light-dark(hsl(220 12% 88%), hsl(222 12% 24%));
     --focus-ring: light-dark(hsl(258 21% 32% / 0.22), hsl(270 36% 78% / 0.28));
     --hover-overlay: light-dark(hsl(220 20% 10% / 0.04), hsl(0 0% 100% / 0.06));
-    --shadow-color: light-dark(220 30% 10%, 0 0% 0%);
+    --shadow-color: light-dark(hsl(220 30% 10%), hsl(0 0% 0%));
   }
 }

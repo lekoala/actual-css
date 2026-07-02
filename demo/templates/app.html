@@ -27,15 +27,15 @@
      *     -> fixed top-end stack for dismissible .alert (gap: toast container).
      *   .app-sidebar .nav-link / .app-sidebar .nav-link .badge
      *     -> sidebar nav with icon + text + trailing badge (gap: side nav link).
-     *   .app-sidebar .dropdown
-     *     -> full-width sidebar dropdown triggers (gap: side nav dropdown).
+     *   .app-sidebar .menu-trigger
+     *     -> full-width sidebar menu triggers (gap: side nav menu).
      *   .app-sidebar .nav-list-sub
      *     -> indented sub-navigation (gap: sub-nav indent).
      *   .app-sidebar details > summary
      *     -> collapsible section with chevron rotation (gap: collapsible nav).
      *
      * Everything else (avatars, buttons, badges, cards, tables, dialogs,
-     * drawer, dropdowns, alerts, forms) comes straight from the framework.
+     * drawer, menus, alerts, forms) comes straight from the framework.
      */
 
     .app-layout {
@@ -234,12 +234,12 @@
       color: var(--intent, var(--primary));
     }
 
-    .app-sidebar .dropdown {
+    .app-sidebar .menu-trigger {
       display: block;
       inline-size: 100%;
     }
 
-    .app-sidebar .dropdown>[aria-haspopup="menu"] {
+    .app-sidebar .menu-trigger > [aria-haspopup="menu"] {
       inline-size: 100%;
     }
 
@@ -331,7 +331,7 @@
       </a>
 
       <!-- Workspace switcher -->
-      <div class="dropdown">
+      <div class="menu-trigger">
         <button class="btn neutral outline sm" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="workspace-menu"
           id="workspace-menu-trigger" style="inline-size: 100%; justify-content: space-between;">
           <span class="cluster" style="gap: 0.5rem;">
@@ -340,7 +340,7 @@
           </span>
           <i class="ti ti-chevron-down" aria-hidden="true"></i>
         </button>
-        <div class="dropdown-menu" role="menu" id="workspace-menu" aria-labelledby="workspace-menu-trigger" hidden>
+        <div class="menu" role="menu" id="workspace-menu" aria-labelledby="workspace-menu-trigger" hidden>
           <button class="btn link" type="button" role="menuitem">
             <span class="avatar sm primary" style="margin-inline-end: 0.5rem;"><abbr>OC</abbr></span>
             Ocean Beach
@@ -425,13 +425,13 @@
       <div class="grow"></div>
 
       <!-- Account pinned to the bottom -->
-      <div class="dropdown">
+      <div class="menu-trigger">
         <button class="btn neutral ghost sm" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="sidebar-account-menu"
           id="sidebar-account-trigger" style="inline-size: 100%; justify-content: flex-start;">
           <span class="avatar sm"><abbr>LW</abbr></span>
           <span>Laura Williams</span>
         </button>
-        <div class="dropdown-menu" role="menu" id="sidebar-account-menu" aria-labelledby="sidebar-account-trigger" hidden>
+        <div class="menu" role="menu" id="sidebar-account-menu" aria-labelledby="sidebar-account-trigger" hidden>
           <button class="btn link" type="button" role="menuitem">View profile</button>
           <button class="btn link" type="button" role="menuitem">Settings</button>
           <hr role="separator">
@@ -467,24 +467,24 @@
             style="position: absolute; inset-block-start: 0; inset-inline-end: 0; transform: translate(40%, -40%);">12</span>
         </button>
 
-        <div class="dropdown app-layout-hide-mobile">
+        <div class="menu-trigger app-layout-hide-mobile">
           <button class="btn neutral ghost sm" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="help-menu"
             id="help-menu-trigger" aria-label="Help">
             <i class="ti ti-help" aria-hidden="true"></i>
           </button>
-          <div class="dropdown-menu" role="menu" id="help-menu" aria-labelledby="help-menu-trigger" hidden>
+          <div class="menu" role="menu" id="help-menu" aria-labelledby="help-menu-trigger" hidden>
             <a class="btn link" href="#" role="menuitem">Documentation</a>
             <a class="btn link" href="#" role="menuitem">Keyboard shortcuts</a>
             <a class="btn link" href="#" role="menuitem">Contact support</a>
           </div>
         </div>
 
-        <div class="dropdown">
+        <div class="menu-trigger">
           <button class="btn neutral ghost sm" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="user-menu"
             id="user-menu-trigger" aria-label="Account menu">
             <span class="avatar sm"><abbr>LW</abbr></span>
           </button>
-          <div class="dropdown-menu" role="menu" id="user-menu" aria-labelledby="user-menu-trigger" hidden>
+          <div class="menu" role="menu" id="user-menu" aria-labelledby="user-menu-trigger" hidden>
             <button class="btn link" type="button" role="menuitem">View profile</button>
             <button class="btn link" type="button" role="menuitem">Settings</button>
             <hr role="separator">
@@ -574,13 +574,13 @@
                 <input class="check" type="checkbox" aria-label="Select all rows">
                 Select all
               </label>
-              <div class="dropdown">
+              <div class="menu-trigger">
                 <button class="btn neutral outline sm" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="bulk-menu"
                   id="bulk-menu-trigger">
                   Bulk actions
                   <i class="ti ti-chevron-down" aria-hidden="true"></i>
                 </button>
-                <div class="dropdown-menu" role="menu" id="bulk-menu" aria-labelledby="bulk-menu-trigger" hidden>
+                <div class="menu" role="menu" id="bulk-menu" aria-labelledby="bulk-menu-trigger" hidden>
                   <button class="btn link" type="button" role="menuitem">Export selected</button>
                   <button class="btn link" type="button" role="menuitem">Mark as paid</button>
                   <hr role="separator">
@@ -613,12 +613,12 @@
                   <td>Card</td>
                   <td data-nowrap>20.3.2021</td>
                   <td>
-                    <div class="dropdown">
+                    <div class="menu-trigger">
                       <button class="btn neutral ghost sm" type="button" aria-haspopup="menu" aria-expanded="false"
                         aria-controls="row-1-menu" id="row-1-trigger" aria-label="Row actions">
                         <i class="ti ti-dots-vertical" aria-hidden="true"></i>
                       </button>
-                      <div class="dropdown-menu" role="menu" id="row-1-menu" aria-labelledby="row-1-trigger" hidden>
+                      <div class="menu" role="menu" id="row-1-menu" aria-labelledby="row-1-trigger" hidden>
                         <button class="btn link" type="button" role="menuitem">View details</button>
                         <button class="btn link" type="button" role="menuitem">Copy link</button>
                         <hr role="separator">
@@ -636,12 +636,12 @@
                   <td>Card</td>
                   <td data-nowrap>19.3.2021</td>
                   <td>
-                    <div class="dropdown">
+                    <div class="menu-trigger">
                       <button class="btn neutral ghost sm" type="button" aria-haspopup="menu" aria-expanded="false"
                         aria-controls="row-2-menu" id="row-2-trigger" aria-label="Row actions">
                         <i class="ti ti-dots-vertical" aria-hidden="true"></i>
                       </button>
-                      <div class="dropdown-menu" role="menu" id="row-2-menu" aria-labelledby="row-2-trigger" hidden>
+                      <div class="menu" role="menu" id="row-2-menu" aria-labelledby="row-2-trigger" hidden>
                         <button class="btn link" type="button" role="menuitem">View details</button>
                         <button class="btn link" type="button" role="menuitem">Copy link</button>
                         <hr role="separator">
@@ -659,12 +659,12 @@
                   <td>Card</td>
                   <td data-nowrap>18.3.2021</td>
                   <td>
-                    <div class="dropdown">
+                    <div class="menu-trigger">
                       <button class="btn neutral ghost sm" type="button" aria-haspopup="menu" aria-expanded="false"
                         aria-controls="row-3-menu" id="row-3-trigger" aria-label="Row actions">
                         <i class="ti ti-dots-vertical" aria-hidden="true"></i>
                       </button>
-                      <div class="dropdown-menu" role="menu" id="row-3-menu" aria-labelledby="row-3-trigger" hidden>
+                      <div class="menu" role="menu" id="row-3-menu" aria-labelledby="row-3-trigger" hidden>
                         <button class="btn link" type="button" role="menuitem">View details</button>
                         <button class="btn link" type="button" role="menuitem">Copy link</button>
                         <hr role="separator">
@@ -682,12 +682,12 @@
                   <td>Card</td>
                   <td data-nowrap>17.3.2021</td>
                   <td>
-                    <div class="dropdown">
+                    <div class="menu-trigger">
                       <button class="btn neutral ghost sm" type="button" aria-haspopup="menu" aria-expanded="false"
                         aria-controls="row-4-menu" id="row-4-trigger" aria-label="Row actions">
                         <i class="ti ti-dots-vertical" aria-hidden="true"></i>
                       </button>
-                      <div class="dropdown-menu" role="menu" id="row-4-menu" aria-labelledby="row-4-trigger" hidden>
+                      <div class="menu" role="menu" id="row-4-menu" aria-labelledby="row-4-trigger" hidden>
                         <button class="btn link" type="button" role="menuitem">View details</button>
                         <button class="btn link" type="button" role="menuitem">Copy link</button>
                         <hr role="separator">
@@ -705,12 +705,12 @@
                   <td>Bank transfer</td>
                   <td data-nowrap>16.3.2021</td>
                   <td>
-                    <div class="dropdown">
+                    <div class="menu-trigger">
                       <button class="btn neutral ghost sm" type="button" aria-haspopup="menu" aria-expanded="false"
                         aria-controls="row-5-menu" id="row-5-trigger" aria-label="Row actions">
                         <i class="ti ti-dots-vertical" aria-hidden="true"></i>
                       </button>
-                      <div class="dropdown-menu" role="menu" id="row-5-menu" aria-labelledby="row-5-trigger" hidden>
+                      <div class="menu" role="menu" id="row-5-menu" aria-labelledby="row-5-trigger" hidden>
                         <button class="btn link" type="button" role="menuitem">View details</button>
                         <button class="btn link" type="button" role="menuitem">Copy link</button>
                         <hr role="separator">

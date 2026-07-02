@@ -9,26 +9,26 @@ UI components are interactive patterns that need JavaScript or modern platform b
 - Use shared button classes and variants for triggers.
 - Do not add toasts. Use alerts, status regions, dialogs, or inline validation instead.
 
-## Dropdown
+## Menu
 
 > Positioned menu attached to a trigger, with full keyboard, focus, and ARIA support.
 
-Dropdown and context menu share one action-surface runtime:
+Menu and context menu share one action-surface runtime:
 
-- Dropdown = a visible trigger opens a surface.
+- Menu = a visible trigger opens a surface.
 - Context menu = right click or a keyboard context action opens that same surface.
 - Sheet = mobile presentation mode of that same surface.
 
-Use `data-surface-mobile` on the menu to control mobile behavior:
+Use `data-menu-mobile` on the menu to control mobile behavior:
 
 - `auto` is the default. It keeps the surface anchored on desktop and switches to a bottom sheet on coarse pointers below the breakpoint.
 - `sheet` always uses the sheet presentation.
 - `anchored` always uses floating positioning.
 - `none` disables the mobile transformation.
 
-`data-surface-breakpoint` only matters for `auto`. Prefer the built-in tokens (`sm`, `md`, `lg`) and use raw pixel values only as an escape hatch, for example `data-surface-breakpoint="640"`.
+`data-menu-breakpoint` only matters for `auto`. Prefer the built-in tokens (`sm`, `md`, `lg`) and use raw pixel values only as an escape hatch, for example `data-menu-breakpoint="640"`.
 
-Dropdown still covers two distinct patterns:
+Menu still covers two distinct patterns:
 
 ### App menu
 - A list of *actions* the user can take: sign out, copy, delete.
@@ -43,46 +43,45 @@ Dropdown still covers two distinct patterns:
 - Just a toggle with outside-click and Escape dismissal.
 
 ```html
-<div class="dropdown">
-  <button class="btn outline"
-          type="button"
-          aria-haspopup="menu"
-          aria-expanded="false"
-          aria-controls="account-menu"
-          id="account-menu-trigger">
-    Account
-    <i class="ti ti-chevron-down" aria-hidden="true"></i>
-  </button>
+<button class="btn outline"
+        type="button"
+        aria-haspopup="menu"
+        aria-expanded="false"
+        aria-controls="account-menu"
+        id="account-menu-trigger">
+  Account
+  <i class="ti ti-chevron-down" aria-hidden="true"></i>
+</button>
 
-  <div class="dropdown-menu"
-       role="menu"
-       id="account-menu"
-       aria-labelledby="account-menu-trigger"
-       hidden>
-    <button class="btn link" type="button" role="menuitem">Profile</button>
-    <button class="btn link" type="button" role="menuitem">Settings</button>
-    <hr role="separator" />
-    <button class="btn link danger" type="button" role="menuitem">Sign out</button>
-  </div>
+<div class="menu"
+     role="menu"
+     id="account-menu"
+     aria-labelledby="account-menu-trigger"
+     hidden>
+  <button class="menu-item" type="button" role="menuitem">Profile</button>
+  <button class="menu-item" type="button" role="menuitem">Settings</button>
+  <hr class="menu-divider" role="separator" />
+  <button class="menu-item danger" type="button" role="menuitem">Sign out</button>
 </div>
 ```
 
 ```html
 <nav aria-label="Main navigation">
   <ul class="list-reset cluster">
-    <li class="dropdown">
+    <li>
       <button class="btn ghost"
               type="button"
+              aria-haspopup="menu"
               aria-expanded="false"
               aria-controls="products-panel">
         Products
         <i class="ti ti-chevron-down" aria-hidden="true"></i>
       </button>
 
-      <div class="dropdown-menu"
+      <div class="menu"
            id="products-panel"
            aria-label="Products"
-           data-surface-mobile="auto"
+           data-menu-mobile="auto"
            hidden>
         <section aria-labelledby="products-design" class="px py-sm">
           <h3 id="products-design">Design</h3>
@@ -140,29 +139,27 @@ Long press is opt-in with `data-context-menu-long-press`. Empty uses the default
   </div>
   <p class="text-sm text-muted">Right click inside the card, press the context-menu key, or long press on touch.</p>
 
-  <div class="dropdown-menu"
+  <div class="menu"
        role="menu"
        id="file-actions"
        aria-labelledby="file-actions-trigger"
        hidden>
-    <button class="btn link" type="button" role="menuitem">Open</button>
-    <button class="btn link" type="button" role="menuitem">Rename</button>
-    <hr role="separator" />
-    <button class="btn link danger" type="button" role="menuitem">Delete</button>
+    <button class="menu-item" type="button" role="menuitem">Open</button>
+    <button class="menu-item" type="button" role="menuitem">Rename</button>
+    <hr class="menu-divider" role="separator" />
+    <button class="menu-item danger" type="button" role="menuitem">Delete</button>
   </div>
 </div>
 ```
 
 Links:
-- https://picocss.com/docs/dropdown
-- https://oat.ink/components/#dropdown
-- https://daisyui.com/components/dropdown/
+- https://oat.ink/components/#menu
+- https://daisyui.com/components/menu/
 - https://www.w3.org/WAI/ARIA/apg/patterns/menu-button/
 - https://github.com/lekoala/pure-context-menu
 - https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Global_attributes/popover
-- https://getbootstrap.com/docs/5.3/components/dropdowns/#overview
-- https://getbootstrap.com/docs/5.3/components/popovers/#overview
 - https://v6-dev--twbs-bootstrap.netlify.app/docs/6.0/components/menu/
+- https://getbootstrap.com/docs/5.3/components/popovers/#overview
 
 ## Tabs
 

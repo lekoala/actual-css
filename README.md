@@ -37,7 +37,7 @@ Size variants `.sm` and `.lg` scale controls consistently.
 
 ## What's inside
 
-**Components** — button, card, badge, alert, modal, drawer, navbar, table, accordion, breadcrumb, pagination, skeleton, spinner, avatar, meter, progress, list, eyebrow, surface, scroller, actions, busy, form-actions.
+**Components** — button, card, badge, alert, modal, drawer, navbar, table, accordion, breadcrumb, pagination, skeleton, spinner, avatar, meter, progress, list-group, eyebrow, surface, scroller, actions, busy, form-actions.
 
 **Layout primitives** — `.stack`, `.cluster`, `.grid`, `.with-sidebar`, `.switcher`, `.center`, `.media`, `.frame`, `.app-shell`, `.grid-responsive`.
 
@@ -49,7 +49,7 @@ Size variants `.sm` and `.lg` scale controls consistently.
 
 **Themes** — auto dark mode via `light-dark()`. 8 theme packs: corporate, forest, ocean, sunset, lavender, mono, dim, square. Switch with `data-theme="dark"` or a theme name.
 
-**JS enhancers** — dialog, dropdown, tooltip, tabs, scrollspy, context-menu, floating. Drop in `actual.js` and they auto-enhance via data-attributes.
+**JS enhancers** — dialog, menu, tooltip, tabs, scrollspy, context-menu, floating. Drop in `actual.js` and they auto-enhance via data-attributes.
 
 ```html
 <script src="actual.js" type="module"></script>

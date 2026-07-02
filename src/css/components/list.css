@@ -1,22 +1,22 @@
 /*
- * List — rich content lists as a single figure.
+ * List group — rich content lists as a single figure.
  *
  * Each li wraps multiple children in a row: avatar, title, description,
  * action buttons flow naturally. The description breaks onto its own row via
  * flex-basis.
  */
-.list > figcaption {
+:where(.list-group, .list) > figcaption {
   font-weight: var(--font-weight-strong);
   margin-block-end: var(--space-3);
 }
 
-.list > ul {
+:where(.list-group, .list) > ul {
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
-.list > ul > li {
+:where(.list-group, .list) > ul > li {
   margin: 0;
   display: flex;
   flex-wrap: wrap;
@@ -26,11 +26,11 @@
   padding-block: var(--space-3);
 }
 
-.list > ul > li:not(:last-child) {
+:where(.list-group, .list) > ul > li:not(:last-child) {
   border-block-end: var(--border-width) solid var(--border);
 }
 
-.list > ul > li > p {
+:where(.list-group, .list) > ul > li > p {
   flex-basis: 100%;
   margin: 0;
 }

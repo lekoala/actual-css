@@ -781,7 +781,7 @@ Use `modal scrollable` when the header and footer should stay visible while the 
 
 ### Overlays inside modals
 
-Dropdowns and tooltips opened from inside a modal dialog are mounted inside the dialog so they stay in the same top-layer context.
+Menus and tooltips opened from inside a modal dialog are mounted inside the dialog so they stay in the same top-layer context.
 
 ```html
 <button class="btn"
@@ -799,7 +799,7 @@ Dropdowns and tooltips opened from inside a modal dialog are mounted inside the 
     <header class="cluster" style="--cluster-justify: space-between">
       <hgroup>
         <h3>Modal overlays</h3>
-        <p>Dropdowns and tooltips remain above the dialog surface.</p>
+        <p>Menus and tooltips remain above the dialog surface.</p>
       </hgroup>
 
       <button class="btn ghost"
@@ -827,13 +827,13 @@ Dropdowns and tooltips opened from inside a modal dialog are mounted inside the 
       </button>
     </div>
 
-    <div class="dropdown-menu"
+    <div class="menu"
          id="dialog-actions-menu"
          role="menu"
          hidden>
-      <button class="btn link" type="button" role="menuitem">Archive</button>
-      <button class="btn link" type="button" role="menuitem">Duplicate</button>
-      <button class="btn link" type="button" role="menuitem">Share</button>
+      <button class="menu-item" type="button" role="menuitem">Archive</button>
+      <button class="menu-item" type="button" role="menuitem">Duplicate</button>
+      <button class="menu-item" type="button" role="menuitem">Share</button>
     </div>
   </div>
 </dialog>
@@ -885,7 +885,7 @@ If dialogs are injected later, register those new dialog elements before their o
 
 The base CSS gives supporting browsers a small opening transition. Closing remains native unless `data-dialog-view-transition` is enabled and the browser supports the View Transition API.
 
-The open dialog root intentionally ends at `transform: none`; fixed dropdowns and tooltips mounted inside a modal dialog rely on viewport coordinates.
+The open dialog root intentionally ends at `transform: none`; fixed menus and tooltips mounted inside a modal dialog rely on viewport coordinates.
 
 ```css
 .modal {

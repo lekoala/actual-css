@@ -6,7 +6,7 @@
  * blocks a layout. Add .native to a specific select to opt out.
  *
  * No layout or interaction contract may depend on appearance: base-select.
- * Arbitrary dropdown and menu behavior belongs elsewhere.
+ * Arbitrary menu and popover behavior belongs elsewhere.
  */
 @media (hover: hover) and (pointer: fine) {
   @supports (appearance: base-select) {

@@ -55,6 +55,6 @@
     --border: light-dark(hsl(25 38% 84%), hsl(20 12% 24%));
     --focus-ring: light-dark(hsl(16 84% 43% / 0.22), hsl(16 75% 80% / 0.28));
     --hover-overlay: light-dark(hsl(220 30% 10% / 0.04), hsl(0 0% 100% / 0.06));
-    --shadow-color: light-dark(220 30% 10%, 0 0% 0%);
+    --shadow-color: light-dark(hsl(220 30% 10%), hsl(0 0% 0%));
   }
 }

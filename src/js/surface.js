@@ -41,13 +41,19 @@ function restoreSurface(menu) {
 }
 
 function getBreakpoint(menu) {
-  const value = menu.dataset.surfaceBreakpoint || "";
+  const value = menu.dataset.menuBreakpoint || "";
   const raw = Number.parseInt(BREAKPOINTS[value] || value, 10);
   return Number.isFinite(raw) ? raw : DEFAULT_BREAKPOINT;
 }
 
 function getMobileMode(menu, mode) {
-  return mode || menu.dataset.surfaceMobile || "auto";
+  return mode || menu.dataset.menuMobile || "auto";
+}
+
+function getAutoCloseMode(menu, value) {
+  const mode = String(value ?? menu.dataset.menuAutoClose ?? "true").toLowerCase();
+  if (mode === "inside" || mode === "outside" || mode === "false") return mode;
+  return "true";
 }
 
 function shouldUseSheet(menu, mode) {
@@ -115,9 +121,9 @@ function positionSurface(menu) {
 
   if (state.trigger) {
     const triggerWidth = state.trigger.getBoundingClientRect().width;
-    menu.style.setProperty("--dropdown-trigger-width", `${triggerWidth}px`);
+    menu.style.setProperty("--menu-trigger-width", `${triggerWidth}px`);
   } else {
-    menu.style.removeProperty("--dropdown-trigger-width");
+    menu.style.removeProperty("--menu-trigger-width");
   }
 
   const opts = {
@@ -155,6 +161,7 @@ function ensureSurfaceWired(menu) {
     flip: true,
     shift: true,
     shiftPadding: 4,
+    autoClose: "true",
     isSheet: false,
   };
 
@@ -191,6 +198,8 @@ function ensureSurfaceWired(menu) {
     menu.addEventListener(
       "click",
       (e) => {
+        const state = surfaceMap.get(menu);
+        if (!state || state.autoClose === "outside" || state.autoClose === "false") return;
         const item = e.target.closest('[role="menuitem"]');
         if (item) closeSurface(menu);
       },
@@ -232,6 +241,7 @@ export function openSurface(menu, opts = {}) {
       ? { x: opts.x, y: opts.y }
       : null;
   state.mobile = getMobileMode(menu, opts.mobile);
+  state.autoClose = getAutoCloseMode(menu, opts.autoClose);
   state.placement = opts.placement || "bottom-start";
   state.distance = opts.distance ?? 4;
   state.flip = opts.flip !== false;
@@ -284,6 +294,7 @@ if (typeof document !== "undefined") {
   document.addEventListener("click", (e) => {
     for (const menu of openSurfaces) {
       const state = surfaceMap.get(menu);
+      if (!state || state.autoClose === "inside" || state.autoClose === "false") continue;
       if (menu.contains(e.target) || state?.trigger?.contains(e.target)) continue;
       closeSurface(menu);
     }

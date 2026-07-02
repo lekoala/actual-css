@@ -21,7 +21,7 @@ Use patterns when a semantic element needs a small amount of normalization befor
 
 Use `.actions` for a semantic list of actions.
 
-It removes native list chrome but does not define layout. Combine it with `.cluster`, `.stack`, or another layout primitive.
+It removes native list chrome and provides a baseline row layout (`display: flex`, wrap, shared gap). Compose with layout primitives only when you need a different direction or distribution.
 
 ```html{.stack}
 <menu class="actions cluster">
@@ -251,10 +251,10 @@ Keep this separate from layout primitives. `.cluster` and `.stack` should not st
 
 ### Generic List
 
-Use `.list` for rich content lists where each item may contain multiple elements.
+Use `.list-group` for rich content lists where each item may contain multiple elements.
 
 ```html
-<figure class="list">
+<figure class="list-group">
   <figcaption>Most played songs this week</figcaption>
 
   <ul>
@@ -276,13 +276,13 @@ Use `.list` for rich content lists where each item may contain multiple elements
 </figure>
 ```
 
-`.list` is different from `.nav-list` and `.actions`.
+`.list-group` is different from `.nav-list` and `.actions`.
 
 - `.actions` is for action controls.
 - `.nav-list` is for navigation links.
-- `.list` is for structured content items.
+- `.list-group` is for structured content items.
 
-If `.list` receives visual styling, document it as a component-like pattern rather than a layout primitive.
+If `.list-group` receives visual styling, document it as a component-like pattern rather than a layout primitive.
 
 ### Relationship With Layout
 
