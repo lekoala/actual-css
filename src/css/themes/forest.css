@@ -26,6 +26,11 @@
   --border: hsl(105 18% 78%);
   --focus: var(--primary);
   --focus-ring: hsl(145 45% 34% / 0.22);
+
+  /* Organic rounding — demonstrates scaling the radius tokens up. */
+  --radius: 0.75rem;
+  --radius-sm: 0.5rem;
+  --radius-lg: 1.25rem;
 }
 
 @supports (color: light-dark(red, blue)) {

@@ -1,0 +1,64 @@
+/* Spruce — deep spruce-green primary with copper secondary over sea-green
+ * tinted neutrals. Paired light/dark via light-dark(). The green primary is
+ * deliberately far from success in hue (174 vs 135) and saturation so the two
+ * never read as the same signal; keep that split when adjusting either. */
+[data-theme="spruce"] {
+  color-scheme: light dark;
+
+  --primary: hsl(174 45% 24%);
+  --primary-fg: hsl(160 30% 97%);
+  --secondary: hsl(24 48% 42%);
+  --secondary-fg: hsl(0 0% 98%);
+  --success: hsl(135 38% 33%);
+  --success-fg: hsl(0 0% 98%);
+  --warning: hsl(42 72% 35%);
+  --warning-fg: hsl(0 0% 98%);
+  --danger: hsl(3 55% 44%);
+  --danger-fg: hsl(0 0% 98%);
+  --neutral: hsl(185 8% 40%);
+  --neutral-fg: hsl(0 0% 98%);
+
+  --surface: hsl(0 0% 100%);
+  --surface-raised: hsl(160 20% 98%);
+  --surface-subtle: hsl(168 18% 95%);
+  --surface-solid: hsl(185 25% 11%);
+
+  --text: hsl(185 25% 11%);
+  --text-muted: hsl(183 9% 40%);
+  --text-subtle: hsl(182 7% 55%);
+
+  --border: hsl(170 12% 86%);
+  --focus: var(--primary);
+  --focus-ring: hsl(174 45% 24% / 0.22);
+}
+
+@supports (color: light-dark(red, blue)) {
+  [data-theme="spruce"] {
+    --primary: light-dark(hsl(174 45% 24%), hsl(170 35% 66%));
+    --primary-fg: light-dark(hsl(160 30% 97%), hsl(174 40% 9%));
+    --secondary: light-dark(hsl(24 48% 42%), hsl(26 50% 70%));
+    --secondary-fg: light-dark(hsl(0 0% 98%), hsl(26 35% 11%));
+    --success: light-dark(hsl(135 38% 33%), hsl(135 35% 60%));
+    --success-fg: light-dark(hsl(0 0% 98%), hsl(135 35% 8%));
+    --warning: light-dark(hsl(42 72% 35%), hsl(44 60% 62%));
+    --warning-fg: light-dark(hsl(0 0% 98%), hsl(42 35% 10%));
+    --danger: light-dark(hsl(3 55% 44%), hsl(3 58% 69%));
+    --danger-fg: light-dark(hsl(0 0% 98%), hsl(3 35% 10%));
+    --neutral: light-dark(hsl(185 8% 40%), hsl(183 10% 70%));
+    --neutral-fg: light-dark(hsl(0 0% 98%), hsl(185 18% 10%));
+
+    --surface: light-dark(hsl(0 0% 100%), hsl(182 20% 8%));
+    --surface-raised: light-dark(hsl(160 20% 98%), hsl(182 17% 11%));
+    --surface-subtle: light-dark(hsl(168 18% 95%), hsl(182 14% 15%));
+    --surface-solid: light-dark(hsl(185 25% 11%), hsl(0 0% 96%));
+
+    --text: light-dark(hsl(185 25% 11%), hsl(175 12% 94%));
+    --text-muted: light-dark(hsl(183 9% 40%), hsl(180 8% 66%));
+    --text-subtle: light-dark(hsl(182 7% 55%), hsl(180 7% 52%));
+
+    --border: light-dark(hsl(170 12% 86%), hsl(182 12% 23%));
+    --focus-ring: light-dark(hsl(174 45% 24% / 0.22), hsl(170 35% 66% / 0.28));
+    --hover-overlay: light-dark(hsl(185 30% 10% / 0.04), hsl(0 0% 100% / 0.06));
+    --shadow-color: light-dark(hsl(185 30% 10%), hsl(0 0% 0%));
+  }
+}

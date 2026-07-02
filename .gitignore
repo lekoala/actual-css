@@ -47,3 +47,6 @@ playwright-report/
 # Local directories
 thirdparty
 local/
+
+# Claude
+/.claude/settings.local.json
