@@ -157,6 +157,8 @@ Links:
 </div>
 ```
 
+Variants
+
 ```html{.stack}
 <div class="alert danger sm" role="alert">
   I'm a small error
@@ -168,6 +170,10 @@ Links:
 
 <div class="alert danger outline" role="alert">
   I'm an outline error <a href="#">with a link</a>
+</div>
+
+<div class="alert danger solid" role="alert">
+  I'm a solid error <a href="#">with a link</a>
 </div>
 ```
 
@@ -262,9 +268,13 @@ Links:
 <span class="badge warning soft">Soft warning</span>
 ```
 
+In a title
+
 ```html
 <h2>New features <span class="badge success soft">New</span></h2>
 ```
+
+Composed
 
 ```html
 <button type="button" class="btn ghost" aria-label="Notifications">
@@ -276,6 +286,14 @@ Links:
   <i class="ti ti-bell" aria-hidden="true"></i>
   <span class="badge danger" aria-label="Errors!"></span>
 </button>
+```
+
+Size variants
+
+```html
+<span class="badge success sm">Small Success</span>
+<span class="badge success">Regular Success</span>
+<span class="badge success lg">Large Success</span>
 ```
 
 Links:
@@ -345,6 +363,8 @@ Links:
 <button class="btn" type="button" disabled>Disabled</button>
 ```
 
+Button group using `role="group"`
+
 ```html
 <div role="group" aria-label="Text alignment">
   <button class="btn" type="button">Left</button>
@@ -353,10 +373,17 @@ Links:
 </div>
 ```
 
+Size variants
+
 ```html
-<button class="btn" type="button">Default</button>
 <button class="btn sm" type="button">Small</button>
+<button class="btn" type="button">Regular</button>
 <button class="btn lg" type="button">Large</button>
+```
+
+With icons, loading state...
+
+```html
 <button class="btn" type="button"><i class="ti ti-star"></i> With an icon</button>
 <button class="btn primary" type="button" aria-busy="true" disabled>
   <span class="spinner" aria-hidden="true"></span>

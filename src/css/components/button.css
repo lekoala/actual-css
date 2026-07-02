@@ -67,7 +67,7 @@
 
 @supports (color: color-mix(in oklch, red, white)) {
   .btn:not(:where(.soft, .outline, .ghost, .link)):hover {
-    --ui-hover-bg: color-mix(in srgb, var(--intent, var(--neutral)) 88%, black);
+    --ui-hover-bg: color-mix(in oklch, var(--intent, var(--neutral)) 88%, black);
   }
 }
 

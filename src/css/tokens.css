@@ -85,10 +85,10 @@
   --z-tooltip: 50;
 }
 
-@supports (color: color-mix(in srgb, black, transparent)) {
+@supports (color: color-mix(in oklch, red, white)) {
   :root {
-    --shadow: 0 0.5rem 1.5rem color-mix(in srgb, var(--shadow-color) 8%, transparent);
-    --shadow-popout: 0 0.25rem 0.75rem color-mix(in srgb, var(--shadow-color) 15%, transparent);
+    --shadow: 0 0.5rem 1.5rem color-mix(in oklch, var(--shadow-color) 8%, transparent);
+    --shadow-popout: 0 0.25rem 0.75rem color-mix(in oklch, var(--shadow-color) 15%, transparent);
   }
 }
 

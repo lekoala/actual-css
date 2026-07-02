@@ -56,15 +56,11 @@
   --ui-border: var(--intent, var(--border));
 }
 
-@supports (color: color-mix(in srgb, black, white)) {
+@supports (color: color-mix(in oklch, red, white)) {
   .alert:where(:not(.solid, .outline)) {
-    --ui-bg: color-mix(
-      in srgb,
-      var(--surface) var(--soft-bg-mix),
-      var(--intent, var(--neutral))
-    );
+    --ui-bg: color-mix(in oklch, var(--surface) var(--soft-bg-mix), var(--intent, var(--neutral)));
     --ui-border: color-mix(
-      in srgb,
+      in oklch,
       var(--surface) var(--soft-border-mix),
       var(--intent, var(--neutral))
     );

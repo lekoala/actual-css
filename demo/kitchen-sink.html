@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Actual CSS — Kitchen Sink</title>
+  <link rel="stylesheet" href="../dist/actual.min.css">
+  <style>
+    body { padding: 2rem; }
+    section { margin-block: 2rem; }
+    section h2 {
+      font-size: var(--font-size-lg);
+      font-weight: var(--font-weight-strong);
+      margin-block-end: var(--space-3);
+      border-block-end: var(--border-width) solid var(--border);
+      padding-block-end: var(--space-2);
+    }
+    .sink-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--gap);
+      align-items: start;
+    }
+    .sink-col { display: grid; gap: var(--space-2); }
+  </style>
+</head>
+<body class="theme-light">
+
+  <h1>Actual CSS — Kitchen Sink</h1>
+  <p>
+    <label>
+      <input type="checkbox" id="darkToggle" onchange="document.body.className = this.checked ? 'theme-dark' : 'theme-light'">
+      Dark mode
+    </label>
+  </p>
+
+  <!-- 1. Buttons -->
+  <section>
+    <h2>Buttons</h2>
+    <div class="sink-grid">
+      <div class="sink-col">
+        <button class="btn">Default</button>
+        <button class="btn primary">Primary</button>
+        <button class="btn secondary">Secondary</button>
+        <button class="btn success">Success</button>
+        <button class="btn warning">Warning</button>
+        <button class="btn danger">Danger</button>
+        <button class="btn neutral">Neutral</button>
+      </div>
+      <div class="sink-col">
+        <button class="btn soft primary">Soft primary</button>
+        <button class="btn soft success">Soft success</button>
+        <button class="btn soft warning">Soft warning</button>
+        <button class="btn soft danger">Soft danger</button>
+      </div>
+      <div class="sink-col">
+        <button class="btn outline primary">Outline primary</button>
+        <button class="btn outline success">Outline success</button>
+        <button class="btn outline warning">Outline warning</button>
+        <button class="btn outline danger">Outline danger</button>
+      </div>
+      <div class="sink-col">
+        <button class="btn ghost primary">Ghost primary</button>
+        <button class="btn link primary">Link primary</button>
+      </div>
+      <div class="sink-col">
+        <button class="btn sm primary">Small</button>
+        <button class="btn lg primary">Large</button>
+      </div>
+      <div class="sink-col">
+        <button class="btn" disabled>Disabled</button>
+        <button class="btn primary" aria-busy="true">Loading</button>
+      </div>
+      <div class="sink-col">
+        <a class="btn primary" href="#">Link button</a>
+      </div>
+      <div role="group" aria-label="Button group">
+        <button class="btn primary">Left</button>
+        <button class="btn primary">Middle</button>
+        <button class="btn primary">Right</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. Badges -->
+  <section>
+    <h2>Badges</h2>
+    <div class="sink-grid">
+      <div class="sink-col">
+        <span class="badge">Default</span>
+        <span class="badge primary">Primary</span>
+        <span class="badge success">Success</span>
+        <span class="badge warning">Warning</span>
+        <span class="badge danger">Danger</span>
+        <span class="badge neutral">Neutral</span>
+      </div>
+      <div class="sink-col">
+        <span class="badge soft primary">Soft</span>
+        <span class="badge soft success">Soft</span>
+        <span class="badge soft warning">Soft</span>
+        <span class="badge soft danger">Soft</span>
+      </div>
+      <div class="sink-col">
+        <span class="badge outline primary">Outline</span>
+        <span class="badge outline success">Outline</span>
+      </div>
+      <div class="sink-col">
+        <span class="badge sm primary">Small</span>
+        <span class="badge lg primary">Large</span>
+      </div>
+      <div class="sink-col">
+        <span class="badge primary" style="--badge-dot-size:0.5rem"></span>
+        <span class="badge success" style="--badge-dot-size:0.5rem"></span>
+        <span class="badge danger" style="--badge-dot-size:0.5rem"></span>
+      </div>
+      <a class="badge primary" href="#">Link badge</a>
+      <button class="badge primary">Button badge</button>
+    </div>
+  </section>
+
+  <!-- 3. Alerts -->
+  <section>
+    <h2>Alerts</h2>
+    <div style="display:grid;gap:var(--space-3);max-inline-size:40rem">
+      <div class="alert">Default alert</div>
+      <div class="alert primary">Primary alert</div>
+      <div class="alert success">Success alert</div>
+      <div class="alert warning">Warning alert</div>
+      <div class="alert danger">Danger alert</div>
+      <div class="alert solid primary">Solid primary</div>
+      <div class="alert outline primary">Outline primary</div>
+      <div class="alert sm primary">Small alert</div>
+      <div class="alert lg primary">Large alert</div>
+    </div>
+  </section>
+
+  <!-- 4. Cards -->
+  <section>
+    <h2>Cards</h2>
+    <div class="sink-grid">
+      <div class="card" style="max-inline-size:20rem">
+        <div class="card-body">
+          <h3>Card title</h3>
+          <p>Some quick example text to build on the card.</p>
+          <button class="btn primary">Go somewhere</button>
+        </div>
+      </div>
+      <div class="card primary" style="max-inline-size:20rem">
+        <div class="card-body">
+          <h3>Primary card</h3>
+          <p>Card with intent class.</p>
+        </div>
+      </div>
+      <div class="card" style="max-inline-size:20rem">
+        <div class="card-header">Header</div>
+        <div class="card-body">Body with <a href="#">link</a></div>
+        <div class="card-footer">Footer</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. Avatars -->
+  <section>
+    <h2>Avatars</h2>
+    <div class="sink-grid">
+      <span class="avatar"><span>TP</span></span>
+      <span class="avatar primary"><span>JD</span></span>
+      <button class="avatar"><span>AB</span></button>
+      <span class="avatar sm"><span>SM</span></span>
+      <span class="avatar lg"><span>LG</span></span>
+      <div role="group" aria-label="Team">
+        <span class="avatar"><span>A</span></span>
+        <span class="avatar primary"><span>B</span></span>
+        <span class="avatar success"><span>C</span></span>
+      </div>
+      <span class="avatar">
+        <span>TP</span>
+        <span class="badge success" aria-label="Online"></span>
+      </span>
+    </div>
+  </section>
+
+  <!-- 6. Forms -->
+  <section>
+    <h2>Forms</h2>
+    <div class="form" style="max-inline-size:30rem;display:grid;gap:var(--space-4)">
+      <div class="field">
+        <label class="field-label" for="name">Name</label>
+        <input id="name" type="text" placeholder="Enter your name">
+      </div>
+      <div class="field">
+        <label class="field-label" for="email">Email</label>
+        <input id="email" type="email" placeholder="email@example.com" aria-invalid="true">
+        <span class="field-error">Please enter a valid email</span>
+      </div>
+      <div class="field">
+        <label class="field-label" for="msg">Message</label>
+        <textarea id="msg" placeholder="Your message"></textarea>
+      </div>
+      <div class="field">
+        <label class="field-label" for="country">Country</label>
+        <select class="select" id="country">
+          <option>Belgium</option>
+          <option>France</option>
+          <option>Netherlands</option>
+        </select>
+      </div>
+      <div class="field">
+        <label class="field-label">Inline select</label>
+        <select class="select native" id="country2">
+          <option>Belgium</option>
+          <option>France</option>
+        </select>
+        <span class="field-help">.native disables the enhanced picker</span>
+      </div>
+      <label class="choice">
+        <input type="checkbox" checked>
+        Remember me
+      </label>
+      <label class="choice">
+        <input type="radio" name="opt" checked>
+        Option A
+      </label>
+      <label class="choice">
+        <input type="radio" name="opt">
+        Option B
+      </label>
+      <label class="choice">
+        <input type="checkbox" role="switch" checked>
+        Notifications
+      </label>
+      <label class="choice">
+        <input type="checkbox" disabled>
+        Disabled option
+      </label>
+      <div class="field danger">
+        <label class="field-label" for="danger">Danger field</label>
+        <input id="danger" type="text" value="Invalid value">
+        <span class="field-error">This field has an error</span>
+      </div>
+      <div class="form-actions">
+        <button class="btn primary">Submit</button>
+        <button class="btn">Cancel</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. Tables -->
+  <section>
+    <h2>Tables</h2>
+    <div style="overflow-x:auto">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Role</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Alice</td>
+            <td>Developer</td>
+            <td><span class="badge success">Active</span></td>
+          </tr>
+          <tr>
+            <td>Bob</td>
+            <td>Designer</td>
+            <td><span class="badge warning">Away</span></td>
+          </tr>
+          <tr>
+            <td>Charlie</td>
+            <td>Manager</td>
+            <td><span class="badge neutral">Offline</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 8. Modal / Drawer -->
+  <section>
+    <h2>Modal / Drawer</h2>
+    <p>
+      <button class="btn primary" onclick="document.getElementById('demoModal').showModal()">Open modal</button>
+      <button class="btn outline" onclick="document.getElementById('demoDrawer').showModal()">Open drawer</button>
+    </p>
+    <dialog class="modal" id="demoModal" style="max-inline-size:24rem">
+      <form method="dialog" class="stack">
+        <header><h3>Modal title</h3></header>
+        <p>Modal content goes here.</p>
+        <footer>
+          <button class="btn" type="submit" value="cancel">Cancel</button>
+          <button class="btn primary" type="submit" value="confirm">Confirm</button>
+        </footer>
+      </form>
+    </dialog>
+    <dialog class="drawer" id="demoDrawer">
+      <form method="dialog" class="stack">
+        <header><h3>Drawer title</h3></header>
+        <p>Drawer content slides in from the side.</p>
+        <footer>
+          <button class="btn" type="submit" value="cancel">Close</button>
+        </footer>
+      </form>
+    </dialog>
+  </section>
+
+  <!-- 9. Flyout / Tooltip (markup only — JS required for behavior) -->
+  <section>
+    <h2>Flyout / Tooltip</h2>
+    <p>Flyout and tooltip require JavaScript. Markup example:</p>
+    <div class="flyout" id="demoFlyout">
+      <button class="btn" popovertarget="demoFlyoutPanel" style="anchor-name:--flyout-btn">Toggle flyout</button>
+      <div class="flyout-panel" id="demoFlyoutPanel" popover>
+        <p>Flyout panel content.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 10. Dark mode -->
+  <section>
+    <h2>Dark mode</h2>
+    <p>Use the toggle at the top to switch between <code>.theme-light</code> and <code>.theme-dark</code>.</p>
+  </section>
+
+</body>
+</html>

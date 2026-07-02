@@ -16,20 +16,20 @@ const DIST = join(ROOT, "dist");
  * :has(), and modern selectors stay compact in the dist.
  *
  * Coverage picks up:
- *   - Chrome 105+ / Edge 105+  :has(), :is(), :where(), logical properties
- *   - Firefox 121+             :has()
- *   - Safari 15.4+              :has() with full support, logical properties
+ *   - Chrome 120+ / Edge 120+  :has(), :is(), :where(), logical properties, light-dark
+ *   - Firefox 121+             :has(), light-dark
+ *   - Safari 17.5+             :has() with full support, logical properties, light-dark
  *
- * :is(), :where(), logical properties, and gap shorthands are all
- * covered by these baselines, so the only remaining transpilation in
+ * :is(), :where(), logical properties, gap shorthands, and light-dark()
+ * are all covered by these baselines. The only remaining transpilation in
  * the dist is for features already gated by @supports (color-mix,
- * light-dark, backdrop-filter).
+ * backdrop-filter) whose fallbacks are set outside the gate.
  */
 const targets = {
-  chrome: 105 << 16,
+  chrome: 120 << 16,
   firefox: 121 << 16,
-  safari: (15 << 16) | (4 << 8),
-  edge: 105 << 16,
+  safari: (17 << 16) | (5 << 8),
+  edge: 120 << 16,
 };
 
 async function build({ entry = ENTRY, minify, naming }) {
