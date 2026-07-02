@@ -26,6 +26,7 @@ still be functional without it
 - Icons could be <i> or inlined <svg> (typically, using tabler icons like <i class="ti ti-settings" aria-hidden="true"></i>)
 - Avoid transition all unless needed, try to target specific properties
 - Use `@supports` positively (no `@supports not`) only when it protects a dependent group of rules or a real fallback/modern branch. Do not gate a single progressive declaration whose unsupported value is simply ignored by the browser, such as `text-wrap: balance`.
+- Actual CSS is layer-compatible, not layer-dependent. Keep `actual.css` unlayered for the Degraded target; expose cascade layers only through optional wrappers such as `actual.layer.css`.
 - Every `color-mix()` declaration needs a flat fallback outside `@supports` (older browsers drop the whole property, not just the function)
 - CSS data-URI icons should be masks when possible, with color supplied by CSS. Use `background-image` icons only for controls that cannot use masks/currentColor.
 - Prefix all `@keyframes` with `actual-` to avoid collisions with consumer code

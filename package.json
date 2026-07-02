@@ -28,6 +28,7 @@
   "exports": {
     ".": "./dist/actual.min.css",
     "./css": "./src/css/actual.css",
+    "./css/layer": "./src/css/actual.layer.css",
     "./themes": "./src/css/themes/index.css",
     "./themes.min.css": "./dist/actual-themes.min.css",
     "./themes/*": "./src/css/themes/*.css",
