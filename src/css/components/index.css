@@ -3,7 +3,6 @@
 @import "badge.css";
 @import "alert.css";
 @import "actions.css";
-@import "form-actions.css";
 
 /* Surfaces */
 @import "card.css";
@@ -22,7 +21,7 @@
 
 /* Display */
 @import "avatar.css";
-@import "eyebrow.css";
+@import "overline.css";
 
 /* Navigation */
 @import "navbar.css";
@@ -35,6 +34,3 @@
 
 /* Layout patterns */
 @import "list.css";
-
-/* Opt-in surface chrome */
-@import "scroller.css";

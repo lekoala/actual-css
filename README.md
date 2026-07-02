@@ -56,11 +56,11 @@ Size variants `.sm` and `.lg` scale controls consistently.
 
 **Components** — button, card, badge, alert, modal, drawer, table, accordion, breadcrumb, pagination, skeleton, spinner, avatar, meter, progress, busy.
 
-**Patterns and chrome** — actions, form-actions, list-group, navbar, eyebrow, scroller. These are regular source files too; import them only when they fit your product.
+**Patterns and chrome** — actions, list-group, navbar, overline. These are regular source files too; import them only when they fit your product.
 
 **Layout primitives** — `.stack`, `.cluster`, `.grid`, `.with-sidebar`, `.switcher`, `.center`, `.media`, `.frame`, `.app-shell`, `.grid-responsive`.
 
-**Forms** — `.field` layout, `.choice` (checkbox/radio), `.switch`, `.select`, `.custom-select`, `.control` base, validation states.
+**Forms** — `.field` layout, `.choice` (checkbox/radio), `.switch`, `.select`, `.custom-select`, `.control` base, validation states, `.form-actions`.
 
 **Prose** — opt-in rich text scope (`.prose`) with typographic scale, measure, lead paragraphs.
 
@@ -68,7 +68,7 @@ Size variants `.sm` and `.lg` scale controls consistently.
 
 **Themes** — auto dark mode via `light-dark()`. 8 theme packs: corporate, forest, ocean, sunset, lavender, mono, dim, square. Switch with `data-theme="dark"` or a theme name.
 
-**Optional CSS** — `actual-css/css/layer` wraps Actual in `@layer actual`; `actual-css/css/optional/typography-fluid` adds fluid display typography when a project wants it.
+**Optional CSS** — `actual-css/css/layer` wraps Actual in `@layer actual`; `actual-css/css/optional/typography-fluid` adds fluid display typography; `actual-css/css/optional/scroller` adds custom scrollbar chrome.
 
 **JS enhancers** — dialog, menu, tooltip, tabs, scrollspy, context-menu, floating. Drop in `actual.js` and they auto-enhance via data-attributes.
 

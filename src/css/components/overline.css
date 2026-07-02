@@ -1,11 +1,11 @@
 /*
- * Eyebrow — editorial small-cap label for section openers.
+ * Overline — editorial small-cap label for section openers.
  *
  * Base form is unstyled chrome that takes its surrounding color. Add .pill for
  * the bordered rounded shape, and combine with an intent class (.primary,
  * .success, etc.) to tint the text, border, and background.
  */
-.eyebrow {
+.overline {
   align-self: flex-start;
   color: var(--text-muted);
   font-size: var(--font-size-sm);
@@ -14,7 +14,7 @@
   text-transform: uppercase;
 }
 
-.eyebrow.pill {
+.overline.pill {
   display: inline-flex;
   align-items: center;
   gap: 0.5em;
@@ -29,7 +29,7 @@
 /* Tinted pill surface where color-mix is available; the flat fallback above
    keeps a readable bordered pill everywhere else. */
 @supports (color: color-mix(in oklch, red, white)) {
-  .eyebrow.pill {
+  .overline.pill {
     border-color: color-mix(in oklch, var(--intent, var(--border)) 35%, var(--border));
     background: color-mix(in oklch, var(--intent, transparent) 6%, var(--surface));
   }

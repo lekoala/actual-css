@@ -129,7 +129,13 @@ Use `.truncate` on the flexible item that should ellipsize inside a constrained 
 
 ### Scroller
 
-Use `.scroller` to apply the framework scrollbar treatment to a scroll container. It styles the scrollbar only; pair it with `.overflow-auto` or a component that already creates overflow.
+Use `.scroller` to apply optional framework scrollbar treatment to a scroll container. It styles the scrollbar only; pair it with `.overflow-auto` or a component that already creates overflow.
+
+`scroller` is not imported by `actual.css`. Import it explicitly when a project wants Actual CSS scrollbar chrome instead of the native OS default:
+
+```css
+@import "actual-css/css/optional/scroller";
+```
 
 ```html
 <div class="overflow-auto scroller" style="max-block-size: 12rem">
@@ -346,11 +352,11 @@ Use it for any content that needs a comfortable measure: prose articles, TOC lis
 
 ## Editorial Labels
 
-### Eyebrow
+### Overline
 
-`.eyebrow` is a small editorial label: muted color, smaller size, uppercase, slight letter-spacing. It does not impose a shape by itself. Add `.pill` for a bordered rounded chip, and combine with an intent class (`.primary`, `.success`, etc.) to tint the chip's text, border, and background.
+`.overline` is a small editorial label: muted color, smaller size, uppercase, slight letter-spacing. It does not impose a shape by itself. Add `.pill` for a bordered rounded chip, and combine with an intent class (`.primary`, `.success`, etc.) to tint the chip's text, border, and background.
 
-The eyebrow exists because categories, kicker labels, and section markers recur across editorial surfaces, and `.badge` is the wrong shape for them. `.badge` is a status indicator; `.eyebrow` is metadata.
+The overline exists because categories, kicker labels, and section markers recur across editorial surfaces, and `.badge` is the wrong shape for them. `.badge` is a status indicator; `.overline` is metadata.
 
 ## Link Variants
 
