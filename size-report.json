@@ -1,25 +1,25 @@
 {
-  "timestamp": "2026-07-02T13:51:04.766Z",
-  "totalRaw": 107856,
-  "totalMinified": 55059,
-  "totalBrotli": 9651,
-  "themesMinified": 11303,
-  "themesBrotli": 1668,
-  "shippedMinified": 66362,
-  "shippedBrotli": 11319,
-  "fileCount": 58,
+  "timestamp": "2026-07-02T15:58:27.520Z",
+  "totalRaw": 120005,
+  "totalMinified": 55065,
+  "totalBrotli": 9639,
+  "themesMinified": 16153,
+  "themesBrotli": 2556,
+  "shippedMinified": 71218,
+  "shippedBrotli": 12195,
+  "fileCount": 62,
   "files": [
+    {
+      "file": "theme.css",
+      "raw": 4669
+    },
     {
       "file": "forms/choice.css",
       "raw": 4617
     },
     {
       "file": "tokens.css",
-      "raw": 4294
-    },
-    {
-      "file": "theme.css",
-      "raw": 4212
+      "raw": 4369
     },
     {
       "file": "layout.css",
@@ -70,28 +70,44 @@
       "raw": 2705
     },
     {
+      "file": "themes/spruce.css",
+      "raw": 2641
+    },
+    {
+      "file": "themes/petrol.css",
+      "raw": 2581
+    },
+    {
       "file": "themes/square.css",
       "raw": 2573
+    },
+    {
+      "file": "themes/sunset.css",
+      "raw": 2503
+    },
+    {
+      "file": "themes/lavender.css",
+      "raw": 2483
+    },
+    {
+      "file": "themes/neon.css",
+      "raw": 2460
+    },
+    {
+      "file": "themes/forest.css",
+      "raw": 2394
+    },
+    {
+      "file": "themes/cyberpunk.css",
+      "raw": 2272
     },
     {
       "file": "themes/corporate.css",
       "raw": 2271
     },
     {
-      "file": "themes/lavender.css",
-      "raw": 2271
-    },
-    {
       "file": "themes/ocean.css",
       "raw": 2265
-    },
-    {
-      "file": "themes/forest.css",
-      "raw": 2253
-    },
-    {
-      "file": "themes/sunset.css",
-      "raw": 2238
     },
     {
       "file": "components/badge.css",
@@ -128,6 +144,10 @@
     {
       "file": "components/navbar.css",
       "raw": 1790
+    },
+    {
+      "file": "themes/index.css",
+      "raw": 1775
     },
     {
       "file": "forms/form.css",
@@ -200,10 +220,6 @@
     {
       "file": "components/list.css",
       "raw": 767
-    },
-    {
-      "file": "themes/index.css",
-      "raw": 730
     },
     {
       "file": "components/index.css",
