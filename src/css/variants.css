@@ -60,11 +60,7 @@
    class; --ui-hover-bg is consumed by .btn, .badge, .alert where set. */
 @supports (color: color-mix(in oklch, red, white)) {
   .soft {
-    --ui-bg: color-mix(
-      in oklch,
-      var(--surface) var(--soft-bg-mix),
-      var(--intent, var(--neutral))
-    );
+    --ui-bg: color-mix(in oklch, var(--surface) var(--soft-bg-mix), var(--intent, var(--neutral)));
     --ui-border: color-mix(
       in oklch,
       var(--surface) var(--soft-border-mix),

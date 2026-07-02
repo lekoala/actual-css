@@ -17,10 +17,10 @@
   --backdrop-fill: rgb(0 0 0 / var(--backdrop-opacity));
 }
 
-@supports (color: color-mix(in srgb, var(--surface-solid), transparent 50%)) {
+@supports (color: color-mix(in oklch, red, white)) {
   :root {
     --backdrop-fill: color-mix(
-      in srgb,
+      in oklch,
       var(--backdrop-color) calc(var(--backdrop-opacity) * 100%),
       transparent
     );

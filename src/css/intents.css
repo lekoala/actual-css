@@ -1,5 +1,8 @@
-/* Intent classes expose shared foreground/background tokens. Components decide
-   how strongly they consume them. */
+/*
+ * Intent classes do not style elements directly.
+ * They only expose --intent and --intent-fg.
+ * Components and variants decide how to consume them.
+ */
 :where(.btn, .badge, .alert, .card, .avatar, .progress, .meter, .switch, .check, .radio) {
   --intent: initial;
   --intent-fg: initial;

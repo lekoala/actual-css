@@ -135,10 +135,10 @@ small {
   --z-tooltip: 50;
 }
 
-@supports (color: color-mix(in srgb, black, transparent)) {
+@supports (color: color-mix(in oklch, red, white)) {
   :root {
-    --shadow: 0 .5rem 1.5rem color-mix(in srgb, var(--shadow-color) 8%, transparent);
-    --shadow-popout: 0 .25rem .75rem color-mix(in srgb, var(--shadow-color) 15%, transparent);
+    --shadow: 0 .5rem 1.5rem color-mix(in oklch, var(--shadow-color) 8%, transparent);
+    --shadow-popout: 0 .25rem .75rem color-mix(in oklch, var(--shadow-color) 15%, transparent);
   }
 }
 
@@ -366,13 +366,13 @@ small {
 }
 
 @supports not (container-type: inline-size) {
-  @media (max-width: 47.999rem) {
+  @media (width <= 47.999rem) {
     .grid-responsive .grid-3, .grid-responsive .grid-4 {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
   }
 
-  @media (max-width: 27.999rem) {
+  @media (width <= 27.999rem) {
     .grid-responsive .grid-2, .grid-responsive .grid-3, .grid-responsive .grid-4 {
       grid-template-columns: 1fr;
     }
@@ -420,7 +420,6 @@ small {
 }
 
 .app-shell {
-  min-block-size: 100vh;
   flex-direction: column;
   min-block-size: 100dvh;
   display: flex;
@@ -443,7 +442,7 @@ small {
   display: grid;
 }
 
-@media (min-width: 64rem) {
+@media (width >= 64rem) {
   .sidebar-layout {
     grid-template-columns: minmax(0, 1fr) var(--sidebar-layout-size, 18rem);
     align-items: start;
@@ -490,9 +489,7 @@ small {
 
 @supports (color: color-mix(in oklch, red, white)) {
   .soft {
-    --ui-bg: color-mix(in oklch,
-      var(--surface) var(--soft-bg-mix),
-      var(--intent, var(--neutral)));
+    --ui-bg: color-mix(in oklch, var(--surface) var(--soft-bg-mix), var(--intent, var(--neutral)));
     --ui-border: color-mix(in oklch,
       var(--surface) var(--soft-border-mix),
       var(--intent, var(--neutral)));
@@ -725,7 +722,7 @@ small {
 
 @supports (color: color-mix(in oklch, red, white)) {
   .btn:not(:where(.soft, .outline, .ghost, .link)):hover {
-    --ui-hover-bg: color-mix(in srgb, var(--intent, var(--neutral)) 88%, black);
+    --ui-hover-bg: color-mix(in oklch, var(--intent, var(--neutral)) 88%, black);
   }
 }
 
@@ -919,12 +916,10 @@ button.badge:disabled, .badge[aria-disabled="true"] {
   --ui-border: var(--intent, var(--border));
 }
 
-@supports (color: color-mix(in srgb, black, white)) {
+@supports (color: color-mix(in oklch, red, white)) {
   .alert:where(:not(.solid, .outline)) {
-    --ui-bg: color-mix(in srgb,
-      var(--surface) var(--soft-bg-mix),
-      var(--intent, var(--neutral)));
-    --ui-border: color-mix(in srgb,
+    --ui-bg: color-mix(in oklch, var(--surface) var(--soft-bg-mix), var(--intent, var(--neutral)));
+    --ui-border: color-mix(in oklch,
       var(--surface) var(--soft-border-mix),
       var(--intent, var(--neutral)));
   }
@@ -1093,9 +1088,9 @@ button.badge:disabled, .badge[aria-disabled="true"] {
   --backdrop-fill: rgb(0 0 0 / var(--backdrop-opacity));
 }
 
-@supports (color: color-mix(in srgb, var(--surface-solid), transparent 50%)) {
+@supports (color: color-mix(in oklch, red, white)) {
   :root {
-    --backdrop-fill: color-mix(in srgb,
+    --backdrop-fill: color-mix(in oklch,
       var(--backdrop-color) calc(var(--backdrop-opacity) * 100%),
       transparent);
   }
@@ -1111,7 +1106,6 @@ button.badge:disabled, .badge[aria-disabled="true"] {
 dialog.modal {
   --modal-size: 32rem;
   max-inline-size: min(100% - 2rem, var(--modal-size));
-  max-block-size: calc(100vh - 2rem);
   border: var(--border-width) solid var(--border);
   border-radius: var(--radius-lg);
   background: var(--surface-raised);
@@ -1127,7 +1121,6 @@ dialog.modal {
 
 dialog.modal > form, dialog.modal > .stack {
   gap: var(--space-4);
-  max-block-size: calc(100vh - 2rem);
   overscroll-behavior: contain;
   max-block-size: calc(100dvb - 2rem);
   padding: var(--space-4);
@@ -1240,11 +1233,9 @@ dialog.drawer {
   --drawer-size: 20rem;
   --drawer-pad: var(--space-4);
   inline-size: min(90vw, var(--drawer-size));
-  block-size: 100vh;
   block-size: 100dvh;
-  max-block-size: 100vh;
-  max-inline-size: none;
   max-block-size: 100dvh;
+  max-inline-size: none;
   padding: var(--drawer-pad);
   border: 0;
   border-inline-end: var(--border-width) solid var(--border);
@@ -1347,16 +1338,12 @@ dialog.drawer nav {
   block-size: 1rem;
   inline-size: 1rem;
   -webkit-mask-image: var(--icon-chevron-mask);
-  -webkit-mask-image: var(--icon-chevron-mask);
   mask-image: var(--icon-chevron-mask);
   transition: transform var(--duration);
   flex: none;
   margin-inline-start: auto;
-  -webkit-mask-position: center;
   mask-position: center;
-  -webkit-mask-size: contain;
   mask-size: contain;
-  -webkit-mask-repeat: no-repeat;
   mask-repeat: no-repeat;
 }
 
@@ -2300,7 +2287,6 @@ button.avatar {
 
     .select:not([multiple], [size], .native)::picker(select) {
       appearance: base-select;
-      max-height: min(24rem, 70vh);
       max-height: min(24rem, 70dvh);
       margin-block: var(--space-2);
       border: var(--border-width) solid var(--border);
@@ -2313,7 +2299,6 @@ button.avatar {
 
     .form select:not([multiple], [size], .native)::picker(select) {
       appearance: base-select;
-      max-height: min(24rem, 70vh);
       max-height: min(24rem, 70dvh);
       margin-block: var(--space-2);
       border: var(--border-width) solid var(--border);
@@ -2370,15 +2355,11 @@ button.avatar {
       block-size: 1rem;
       inline-size: 1rem;
       -webkit-mask-image: var(--icon-check-mask);
-      -webkit-mask-image: var(--icon-check-mask);
       mask-image: var(--icon-check-mask);
       background-color: currentColor;
       display: block;
-      -webkit-mask-position: center;
       mask-position: center;
-      -webkit-mask-size: contain;
       mask-size: contain;
-      -webkit-mask-repeat: no-repeat;
       mask-repeat: no-repeat;
     }
 
@@ -2387,15 +2368,11 @@ button.avatar {
       block-size: 1rem;
       inline-size: 1rem;
       -webkit-mask-image: var(--icon-check-mask);
-      -webkit-mask-image: var(--icon-check-mask);
       mask-image: var(--icon-check-mask);
       background-color: currentColor;
       display: block;
-      -webkit-mask-position: center;
       mask-position: center;
-      -webkit-mask-size: contain;
       mask-size: contain;
-      -webkit-mask-repeat: no-repeat;
       mask-repeat: no-repeat;
     }
 
@@ -2517,10 +2494,8 @@ button.avatar {
   z-index: var(--z-menu);
   gap: var(--space-1);
   inline-size: max-content;
-  min-inline-size: min(var(--flyout-trigger-width, 0px),
-    min(20rem, calc(100vw - var(--space-6))));
-  min-inline-size: min(var(--flyout-trigger-width, 0px),
-    min(20rem, calc(100vi - var(--space-6))));
+  min-inline-size: min(var(--flyout-trigger-width, 0px), min(20rem, calc(100vw - var(--space-6))));
+  min-inline-size: min(var(--flyout-trigger-width, 0px), min(20rem, calc(100vi - var(--space-6))));
   max-inline-size: min(20rem, calc(100vw - var(--space-6)));
   max-inline-size: min(20rem, calc(100vi - var(--space-6)));
   padding: var(--space-1);
@@ -2537,11 +2512,10 @@ button.avatar {
 }
 
 .flyout.is-sheet {
-  max-block-size: min(75vh, 32rem);
+  max-block-size: min(75vb, 32rem);
   inline-size: auto;
   min-inline-size: 0;
   max-inline-size: none;
-  max-block-size: min(75vb, 32rem);
   padding: max(var(--space-3), env(safe-area-inset-top)) var(--space-3)
     max(var(--space-3), env(safe-area-inset-bottom));
   border-end-end-radius: 0;
@@ -2643,7 +2617,6 @@ button.avatar {
   --tooltip-fg: var(--surface);
   --tooltip-arrow-size: 5px;
   z-index: var(--z-tooltip);
-  max-inline-size: min(24rem, 100vw - 2rem);
   border-radius: var(--radius-sm);
   background: var(--tooltip-bg);
   max-inline-size: min(24rem, 100vi - 2rem);
