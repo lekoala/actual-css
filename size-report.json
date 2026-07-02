@@ -1,129 +1,133 @@
 {
-  "timestamp": "2026-06-26T12:38:26.386Z",
-  "totalRaw": 102576,
-  "totalMinified": 52401,
-  "totalBrotli": 9466,
-  "themesMinified": 12562,
-  "themesBrotli": 1766,
-  "shippedMinified": 64963,
-  "shippedBrotli": 11232,
+  "timestamp": "2026-07-02T10:29:31.871Z",
+  "totalRaw": 109450,
+  "totalMinified": 57754,
+  "totalBrotli": 9904,
+  "themesMinified": 12513,
+  "themesBrotli": 1755,
+  "shippedMinified": 70267,
+  "shippedBrotli": 11659,
   "fileCount": 57,
   "files": [
     {
       "file": "forms/choice.css",
-      "raw": 4191
+      "raw": 4667
     },
     {
       "file": "theme.css",
-      "raw": 4003
-    },
-    {
-      "file": "components/button.css",
-      "raw": 3608
+      "raw": 4251
     },
     {
       "file": "layout.css",
-      "raw": 3540
-    },
-    {
-      "file": "prose.css",
-      "raw": 3363
-    },
-    {
-      "file": "forms/control.css",
-      "raw": 3267
-    },
-    {
-      "file": "ui/dropdown.css",
-      "raw": 2948
-    },
-    {
-      "file": "forms/custom-select.css",
-      "raw": 2926
+      "raw": 3945
     },
     {
       "file": "tokens.css",
-      "raw": 2905
+      "raw": 3808
     },
     {
-      "file": "components/avatar.css",
-      "raw": 2884
+      "file": "components/button.css",
+      "raw": 3733
     },
     {
-      "file": "components/dialog.css",
-      "raw": 2873
+      "file": "forms/control.css",
+      "raw": 3509
     },
     {
-      "file": "utilities.css",
-      "raw": 2767
+      "file": "prose.css",
+      "raw": 3323
+    },
+    {
+      "file": "ui/menu.css",
+      "raw": 3265
+    },
+    {
+      "file": "components/modal.css",
+      "raw": 3193
+    },
+    {
+      "file": "forms/custom-select.css",
+      "raw": 2971
     },
     {
       "file": "components/alert.css",
-      "raw": 2644
+      "raw": 2966
     },
     {
-      "file": "themes/square.css",
-      "raw": 2563
+      "file": "utilities.css",
+      "raw": 2908
+    },
+    {
+      "file": "components/avatar.css",
+      "raw": 2875
     },
     {
       "file": "forms/switch.css",
-      "raw": 2520
+      "raw": 2705
+    },
+    {
+      "file": "themes/square.css",
+      "raw": 2573
+    },
+    {
+      "file": "variants.css",
+      "raw": 2390
     },
     {
       "file": "components/badge.css",
       "raw": 2282
     },
     {
-      "file": "variants.css",
-      "raw": 2277
-    },
-    {
       "file": "themes/corporate.css",
-      "raw": 2261
+      "raw": 2271
     },
     {
       "file": "themes/lavender.css",
-      "raw": 2261
+      "raw": 2271
     },
     {
       "file": "themes/ocean.css",
-      "raw": 2255
+      "raw": 2265
     },
     {
       "file": "themes/forest.css",
-      "raw": 2243
+      "raw": 2253
     },
     {
       "file": "themes/sunset.css",
-      "raw": 2228
+      "raw": 2238
     },
     {
       "file": "themes/mono.css",
-      "raw": 2203
+      "raw": 2213
+    },
+    {
+      "file": "components/card.css",
+      "raw": 2209
     },
     {
       "file": "forms/select.css",
-      "raw": 2084
+      "raw": 2151
     },
     {
       "file": "ui/tooltip.css",
-      "raw": 1953
+      "raw": 2023
+    },
+    {
+      "file": "components/drawer.css",
+      "raw": 1973
     },
     {
       "file": "components/progress.css",
       "raw": 1950
     },
     {
+      "file": "intents.css",
+      "raw": 1943
+    },
+    {
       "file": "components/accordion.css",
-      "raw": 1896
-    },
-    {
-      "file": "components/drawer.css",
-      "raw": 1886
-    },
-    {
-      "file": "components/card.css",
-      "raw": 1854
+      "raw": 1906
     },
     {
       "file": "components/navbar.css",
@@ -131,7 +135,7 @@
     },
     {
       "file": "forms/form.css",
-      "raw": 1495
+      "raw": 1648
     },
     {
       "file": "components/form-actions.css",
@@ -150,16 +154,20 @@
       "raw": 1365
     },
     {
+      "file": "components/spinner.css",
+      "raw": 1277
+    },
+    {
       "file": "base.css",
-      "raw": 1361
+      "raw": 1264
     },
     {
       "file": "components/surface.css",
-      "raw": 1341
+      "raw": 1228
     },
     {
-      "file": "components/spinner.css",
-      "raw": 1169
+      "file": "components/busy.css",
+      "raw": 1195
     },
     {
       "file": "components/eyebrow.css",
@@ -178,24 +186,24 @@
       "raw": 1099
     },
     {
-      "file": "components/busy.css",
-      "raw": 1025
-    },
-    {
       "file": "themes/dark.css",
       "raw": 1018
+    },
+    {
+      "file": "components/pagination.css",
+      "raw": 942
+    },
+    {
+      "file": "components/list.css",
+      "raw": 842
     },
     {
       "file": "components/breadcrumb.css",
       "raw": 804
     },
     {
-      "file": "components/pagination.css",
-      "raw": 751
-    },
-    {
-      "file": "components/list.css",
-      "raw": 731
+      "file": "reset.css",
+      "raw": 802
     },
     {
       "file": "themes/index.css",
@@ -203,27 +211,19 @@
     },
     {
       "file": "components/index.css",
-      "raw": 642
-    },
-    {
-      "file": "reset.css",
-      "raw": 557
+      "raw": 684
     },
     {
       "file": "ui/scrollspy.css",
       "raw": 478
     },
     {
-      "file": "intents.css",
-      "raw": 453
+      "file": "components/actions.css",
+      "raw": 452
     },
     {
       "file": "forms/native.css",
       "raw": 356
-    },
-    {
-      "file": "components/actions.css",
-      "raw": 326
     },
     {
       "file": "forms/index.css",
@@ -235,7 +235,7 @@
     },
     {
       "file": "ui/index.css",
-      "raw": 91
+      "raw": 87
     }
   ]
 }
