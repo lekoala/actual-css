@@ -9,10 +9,10 @@
  *   components/badge.css   — .badge default solid
  *   components/alert.css   — .alert default + .alert intent-aware soft + tint
  *
- * .sm/.lg set --control-size and --control-font-size, reaching every component
- * that consumes those tokens (.btn, .input, .select, .textarea, switch).
- * Components with their own size handling (spinner, badge, avatar) define local
- * .sm/.lg; applying .sm/.lg to alert, card, dialog, accordion, navbar, table is
+ * .sm/.lg set shared size tokens. Controls consume --control-*; non-control
+ * components may consume --variant-* when the variant should affect their
+ * local density. Components with bespoke sizing (spinner, badge, avatar) define
+ * local .sm/.lg; applying .sm/.lg to card, dialog, accordion, navbar, table is
  * a no-op.
  *
  * Intent list source of truth: intents.css. Components consume --intent* tokens
@@ -39,10 +39,16 @@
 .sm {
   --control-size: var(--control-size-sm);
   --control-font-size: var(--font-size-sm);
+  --variant-font-size: var(--font-size-sm);
+  --variant-icon-size: 1rem;
+  --variant-pad-block: var(--space-3);
 }
 .lg {
   --control-size: var(--control-size-lg);
   --control-font-size: var(--font-size-lg);
+  --variant-font-size: var(--font-size-lg);
+  --variant-icon-size: 1.5rem;
+  --variant-pad-block: var(--space-5);
 }
 
 /* Modern color enhancement. Baseline variant values above remain usable

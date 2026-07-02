@@ -935,6 +935,13 @@ button.badge:disabled, .badge[aria-disabled="true"] {
   --ui-border: var(--intent, var(--border));
 }
 
+@supports (color: color-mix(in srgb, black, white)) {
+  .alert:where(:not(.solid, .outline)) {
+    --ui-bg: color-mix(in srgb, var(--intent, var(--neutral)) 8%, var(--surface));
+    --ui-border: color-mix(in srgb, var(--intent, var(--neutral)) 24%, var(--border));
+  }
+}
+
 @supports (color: color-mix(in oklch, red, white)) {
   .alert:where(.soft) {
     --alert-bg: color-mix(in oklch,
@@ -946,7 +953,7 @@ button.badge:disabled, .badge[aria-disabled="true"] {
   }
 }
 
-@supports (color: color-mix(in oklch, red, white)) and (color: light-dark(red, blue)) {
+@supports (color: light-dark(red, blue)) and (color: color-mix(in srgb, black, white)) {
   .alert:where(:not(.solid, .outline)) {
     --ui-bg: var(--intent-alert-bg, var(--alert-bg));
     --ui-border: var(--intent-alert-border, var(--alert-border));
@@ -962,13 +969,19 @@ button.badge:disabled, .badge[aria-disabled="true"] {
   }
 
   .alert:has( > :first-child[aria-hidden="true"]) > :first-child {
-    inline-size: 1.25em;
-    block-size: calc(1em * var(--line-height));
     grid-area: 1 / 1 / -1;
     place-items: center;
-    font-size: 1.25em;
+    block-size: 1.25rem;
+    inline-size: 1.25rem;
+    margin-block-start: .125em;
+    font-size: 1.25rem;
     line-height: 1;
     display: inline-grid;
+  }
+
+  .alert:has( > :first-child[aria-hidden="true"]) > :first-child:is(svg, i) {
+    block-size: 1.25rem;
+    inline-size: 1.25rem;
   }
 
   .alert:has( > :first-child[aria-hidden="true"]) > :not(:first-child) {

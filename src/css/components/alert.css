@@ -14,8 +14,10 @@
 }
 
 .alert {
-  --alert-pad-block: var(--space-4);
+  --alert-pad-block: var(--variant-pad-block, var(--space-4));
   --alert-pad-inline: var(--space-4);
+  --alert-font-size: var(--variant-font-size, var(--font-size-md));
+  --alert-icon-size: var(--variant-icon-size, 1.25rem);
   --alert-bg: var(--surface-subtle);
   --alert-border: var(--border);
   --ui-bg: var(--alert-bg);
@@ -28,6 +30,7 @@
   color: var(--ui-fg, var(--text));
   border: var(--border-width) solid var(--ui-border, var(--border));
   border-radius: var(--radius-lg);
+  font-size: var(--alert-font-size);
 }
 
 .alert > * {
@@ -61,6 +64,13 @@
   --ui-border: var(--intent, var(--border));
 }
 
+@supports (color: color-mix(in srgb, black, white)) {
+  .alert:where(:not(.solid, .outline)) {
+    --ui-bg: color-mix(in srgb, var(--intent, var(--neutral)) 8%, var(--surface));
+    --ui-border: color-mix(in srgb, var(--intent, var(--neutral)) 24%, var(--border));
+  }
+}
+
 @supports (color: color-mix(in oklch, red, white)) {
   .alert:where(.soft) {
     --alert-bg: color-mix(
@@ -76,7 +86,10 @@
   }
 }
 
-@supports ((color: color-mix(in oklch, red, white)) and (color: light-dark(red, blue))) {
+@supports (
+  (color: light-dark(red, blue)) and
+    (color: color-mix(in srgb, black, white))
+) {
   .alert:where(:not(.solid, .outline)) {
     --ui-bg: var(--intent-alert-bg, var(--alert-bg));
     --ui-border: var(--intent-alert-border, var(--alert-border));
@@ -84,6 +97,16 @@
 }
 
 /* Decorative leading icon */
+.alert > :first-child[aria-hidden="true"] {
+  display: inline-block;
+  flex: none;
+  inline-size: var(--alert-icon-size);
+  block-size: var(--alert-icon-size);
+  font-size: var(--alert-icon-size);
+  line-height: 1;
+  vertical-align: -0.125em;
+}
+
 @supports selector(.alert:has(> *)) {
   .alert:has(> :first-child[aria-hidden="true"]) {
     display: grid;
@@ -97,10 +120,16 @@
     grid-row: 1 / -1;
     display: inline-grid;
     place-items: center;
-    inline-size: 1.25em;
-    block-size: calc(1em * var(--line-height));
-    font-size: 1.25em;
+    inline-size: var(--alert-icon-size);
+    block-size: var(--alert-icon-size);
+    margin-block-start: 0.125em;
+    font-size: var(--alert-icon-size);
     line-height: 1;
+  }
+
+  .alert:has(> :first-child[aria-hidden="true"]) > :first-child:is(svg, i) {
+    inline-size: var(--alert-icon-size);
+    block-size: var(--alert-icon-size);
   }
 
   .alert:has(> :first-child[aria-hidden="true"]) > :not(:first-child) {
