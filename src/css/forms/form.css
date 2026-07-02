@@ -3,7 +3,7 @@
  *
  * `.form` scopes semantic field rhythm without requiring classes on every
  * control. Individual controls keep their own files; .choice label layout
- * lives in choice.css; .form-actions lives in components/form-actions.css.
+ * lives in choice.css; .form-actions lives in form-actions.css.
  *
  * Public API: .field, .field-label, .field-help, .field-error, .field-group,
  * .required-mark.

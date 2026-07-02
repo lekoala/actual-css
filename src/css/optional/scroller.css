@@ -1,5 +1,5 @@
 /*
- * Scroller — opt-in custom scrollbar styling for overflow regions.
+ * Scroller — optional custom scrollbar styling for overflow regions.
  *
  * Apply to any scroll container (.overflow-auto, sidebars, long tables). Both
  * stable-color (Firefox) and ::-webkit-scrollbar (Safari/Chromium) are styled;
