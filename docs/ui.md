@@ -28,6 +28,17 @@ Use `data-menu-mobile` on the menu to control mobile behavior:
 
 `data-menu-breakpoint` only matters for `auto`. Prefer the built-in tokens (`sm`, `md`, `lg`) and use raw pixel values only as an escape hatch, for example `data-menu-breakpoint="640"`.
 
+Use `data-menu-placement` for the preferred anchored placement. It accepts the placement strings supported by the floating runtime, such as `bottom-start`, `bottom-end`, `top-start`, `right`, or `left`.
+
+Use `data-menu-distance` for the trigger gap in pixels. The default is `4`.
+
+Use `data-menu-auto-close` when the default click dismissal behavior is not right. Escape still follows the shared surface lifecycle.
+
+- `true` is the default. App menu items close on activation and outside clicks close the menu.
+- `inside` closes on app menu item activation only.
+- `outside` closes on outside click only.
+- `false` disables automatic click closing.
+
 Menu still covers two distinct patterns:
 
 ### App menu

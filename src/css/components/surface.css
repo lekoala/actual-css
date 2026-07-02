@@ -3,9 +3,9 @@
  *
  * Drawn by .drawer::backdrop (native dialog top-layer) and .surface-backdrop
  * (custom fixed div for menu sheets on coarse pointers). The native
- * .modal::backdrop uses its own opacity transition over --surface-solid
- * (modal.css); the tokens here keep all three statements reading the same
- * surface color so the scrim stays consistent across the dialog family.
+ * .modal::backdrop uses the same fill and animates opacity from 0 to 1
+ * (modal.css), so the scrim strength stays consistent across the dialog
+ * family.
  *
  * .surface-backdrop, .is-sheet, and .is-open are runtime markers set by
  * surface.js. Authors opt in via [data-menu-mobile="sheet|auto|none|anchored"]

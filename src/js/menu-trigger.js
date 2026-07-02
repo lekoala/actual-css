@@ -19,7 +19,7 @@ import {
 const triggerMap = new WeakMap();
 
 function openMenu(menu, trigger) {
-  openSurface(menu, { trigger, source: trigger, placement: "bottom-start", distance: 4 });
+  openSurface(menu, { trigger, source: trigger });
 }
 
 function onTriggerClick(e) {
