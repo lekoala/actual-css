@@ -158,7 +158,7 @@
     <div class="component-prose">
       <p>Components can use local font variables for their own mapping, but should inherit by default. <code>--font-size-md</code> is the baseline — going smaller (<code>.sm</code>/<code>--font-size-sm</code>/<code>-xs</code>) is the easy direction; going larger adjusts line-heights and surrounding paddings, so prefer keeping base body text at <code>--font-size-md</code>.</p>
 <h3>Controls</h3>
-<p>Controls share sizing so buttons, inputs, selects, and compact app UI always align. <code>.sm</code>/<code>.lg</code> set the shared <code>--control-size</code> and <code>--control-font-size</code>.</p>
+<p>Controls share sizing so buttons, inputs, selects, and compact app UI always align. <code>.sm</code>/<code>.lg</code> set shared density tokens for controls, content components, and compact labels.</p>
     </div>
     <section class="component-section">
       <h2>CSS</h2>
@@ -185,17 +185,27 @@
           <pre><code class="language-css"><span class="token selector">.sm</span> <span class="token punctuation">{</span>
   <span class="token property">--control-size</span><span class="token punctuation">:</span> <span class="token function">var</span><span class="token punctuation">(</span>--control-size-sm<span class="token punctuation">)</span><span class="token punctuation">;</span>
   <span class="token property">--control-font-size</span><span class="token punctuation">:</span> <span class="token function">var</span><span class="token punctuation">(</span>--font-size-sm<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token property">--variant-font-size</span><span class="token punctuation">:</span> <span class="token function">var</span><span class="token punctuation">(</span>--font-size-sm<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token property">--variant-icon-size</span><span class="token punctuation">:</span> 1rem<span class="token punctuation">;</span>
+  <span class="token property">--variant-pad-block</span><span class="token punctuation">:</span> <span class="token function">var</span><span class="token punctuation">(</span>--space-3<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token property">--variant-compact-size</span><span class="token punctuation">:</span> 1.25rem<span class="token punctuation">;</span>
+  <span class="token property">--variant-compact-font-size</span><span class="token punctuation">:</span> 0.75rem<span class="token punctuation">;</span>
 <span class="token punctuation">}</span>
 
 <span class="token selector">.lg</span> <span class="token punctuation">{</span>
   <span class="token property">--control-size</span><span class="token punctuation">:</span> <span class="token function">var</span><span class="token punctuation">(</span>--control-size-lg<span class="token punctuation">)</span><span class="token punctuation">;</span>
   <span class="token property">--control-font-size</span><span class="token punctuation">:</span> <span class="token function">var</span><span class="token punctuation">(</span>--font-size-lg<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token property">--variant-font-size</span><span class="token punctuation">:</span> <span class="token function">var</span><span class="token punctuation">(</span>--font-size-lg<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token property">--variant-icon-size</span><span class="token punctuation">:</span> 1.5rem<span class="token punctuation">;</span>
+  <span class="token property">--variant-pad-block</span><span class="token punctuation">:</span> <span class="token function">var</span><span class="token punctuation">(</span>--space-5<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token property">--variant-compact-size</span><span class="token punctuation">:</span> 1.875rem<span class="token punctuation">;</span>
+  <span class="token property">--variant-compact-font-size</span><span class="token punctuation">:</span> <span class="token function">var</span><span class="token punctuation">(</span>--font-size-sm<span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span></code></pre>
         </div>
       </div>
     </section>
     <div class="component-prose">
-      <p><code>.sm</code>/<code>.lg</code> on display elements (badge, avatar, spinner) use their own size scales and do not align to control heights — only interactive controls line up.</p>
+      <p>Content components can consume <code>--variant-<em></code> for local density. Compact labels such as <code>.badge</code> consume <code>--variant-compact-</em></code>; display elements with special geometry, such as avatar and spinner, keep their own size scales.</p>
 <h3>Elevation</h3>
 <p>Use a tiny elevation surface. Components should not invent their own shadow scales.</p>
     </div>

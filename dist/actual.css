@@ -474,6 +474,8 @@ small {
   --variant-font-size: var(--font-size-sm);
   --variant-icon-size: 1rem;
   --variant-pad-block: var(--space-3);
+  --variant-compact-size: 1.25rem;
+  --variant-compact-font-size: .75rem;
 }
 
 .lg {
@@ -482,6 +484,8 @@ small {
   --variant-font-size: var(--font-size-lg);
   --variant-icon-size: 1.5rem;
   --variant-pad-block: var(--space-5);
+  --variant-compact-size: 1.875rem;
+  --variant-compact-font-size: var(--font-size-sm);
 }
 
 @supports (color: color-mix(in oklch, red, white)) {
@@ -796,9 +800,10 @@ small {
 }
 
 .badge {
-  --badge-size: 1.5rem;
+  --badge-size: var(--variant-compact-size, 1.5rem);
   --badge-pad-x: .55em;
-  --badge-font-size: .8125rem;
+  --badge-font-size: var(--variant-compact-font-size, .8125rem);
+  --badge-dot-size: .5rem;
   --badge-bg: var(--ui-bg, var(--intent, var(--neutral)));
   --badge-fg: var(--ui-fg, var(--intent-fg, var(--neutral-fg)));
   --badge-border: var(--ui-border, transparent);
@@ -825,7 +830,7 @@ small {
 }
 
 .badge:empty {
-  --badge-size: .5rem;
+  --badge-size: var(--badge-dot-size);
   inline-size: var(--badge-size);
   block-size: var(--badge-size);
   border: 0;
@@ -836,16 +841,6 @@ small {
   --ui-bg: var(--intent, var(--neutral));
   --ui-fg: var(--intent-fg, var(--neutral-fg));
   --ui-border: transparent;
-}
-
-.badge.sm {
-  --badge-size: 1.25rem;
-  --badge-font-size: .75rem;
-}
-
-.badge.lg {
-  --badge-size: 1.875rem;
-  --badge-font-size: var(--font-size-sm);
 }
 
 :where(a.badge, button.badge):hover {
