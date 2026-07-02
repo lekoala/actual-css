@@ -1,14 +1,14 @@
 /*
- * Surface — shared modal scrim and backdrop for menu and drawer.
+ * Surface — shared modal scrim and backdrop for flyout and drawer.
  *
  * Drawn by .drawer::backdrop (native dialog top-layer) and .surface-backdrop
- * (custom fixed div for menu sheets on coarse pointers). The native
+ * (custom fixed div for flyout sheets on coarse pointers). The native
  * .modal::backdrop uses the same fill and animates opacity from 0 to 1
  * (modal.css), so the scrim strength stays consistent across the dialog
  * family.
  *
  * .surface-backdrop, .is-sheet, and .is-open are runtime markers set by
- * surface.js. Authors opt in via [data-menu-mobile="sheet|auto|none|anchored"]
+ * surface.js. Authors opt in via [data-flyout-mobile="sheet|auto|none|anchored"]
  * — the JS resolves "auto" into .is-sheet at run time.
  */
 :root {
@@ -28,7 +28,7 @@
 }
 
 /* Custom backdrop for overlays that do not use the native dialog top-layer.
- * Its z-index sits just below the menu it accompanies. */
+ * Its z-index sits just below the flyout it accompanies. */
 .surface-backdrop {
   position: fixed;
   inset: 0;

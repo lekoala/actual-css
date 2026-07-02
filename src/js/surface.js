@@ -41,27 +41,27 @@ function restoreSurface(menu) {
 }
 
 function getBreakpoint(menu) {
-  const value = menu.dataset.menuBreakpoint || "";
+  const value = menu.dataset.flyoutBreakpoint || "";
   const raw = Number.parseInt(BREAKPOINTS[value] || value, 10);
   return Number.isFinite(raw) ? raw : DEFAULT_BREAKPOINT;
 }
 
 function getMobileMode(menu, mode) {
-  return mode || menu.dataset.menuMobile || "auto";
+  return mode || menu.dataset.flyoutMobile || "auto";
 }
 
 function getPlacement(menu, placement) {
-  return placement || menu.dataset.menuPlacement || "bottom-start";
+  return placement || menu.dataset.flyoutPlacement || "bottom-start";
 }
 
 function getDistance(menu, distance) {
   if (distance != null) return distance;
-  const value = Number.parseFloat(menu.dataset.menuDistance);
+  const value = Number.parseFloat(menu.dataset.flyoutDistance);
   return Number.isFinite(value) ? value : 4;
 }
 
 function getAutoCloseMode(menu, value) {
-  const mode = String(value ?? menu.dataset.menuAutoClose ?? "true").toLowerCase();
+  const mode = String(value ?? menu.dataset.flyoutAutoClose ?? "true").toLowerCase();
   if (mode === "inside" || mode === "outside" || mode === "false") return mode;
   return "true";
 }
@@ -131,9 +131,9 @@ function positionSurface(menu) {
 
   if (state.trigger) {
     const triggerWidth = state.trigger.getBoundingClientRect().width;
-    menu.style.setProperty("--menu-trigger-width", `${triggerWidth}px`);
+    menu.style.setProperty("--flyout-trigger-width", `${triggerWidth}px`);
   } else {
-    menu.style.removeProperty("--menu-trigger-width");
+    menu.style.removeProperty("--flyout-trigger-width");
   }
 
   const opts = {
@@ -205,17 +205,20 @@ function ensureSurfaceWired(menu) {
       (e) => onMenuKeydown(e, { close: (target) => closeSurface(target) }),
       { signal: controller.signal },
     );
-    menu.addEventListener(
-      "click",
-      (e) => {
-        const state = surfaceMap.get(menu);
-        if (!state || state.autoClose === "outside" || state.autoClose === "false") return;
-        const item = e.target.closest('[role="menuitem"]');
-        if (item) closeSurface(menu);
-      },
-      { signal: controller.signal },
-    );
   }
+
+  menu.addEventListener(
+    "click",
+    (e) => {
+      const state = surfaceMap.get(menu);
+      if (!state || state.autoClose === "outside" || state.autoClose === "false") return;
+      const item = e.target.closest(
+        '[role="menuitem"], .flyout > button, .flyout > a, .flyout > li > button, .flyout > li > a',
+      );
+      if (item) closeSurface(menu);
+    },
+    { signal: controller.signal },
+  );
 
   surfaceMap.set(menu, state);
   return state;

@@ -54,7 +54,7 @@ function openContextMenu(target, menu, opts = {}) {
     y: opts.y,
     placement: opts.placement || "bottom-start",
     distance: opts.distance ?? 2,
-    mobile: opts.mobile || menu.dataset.menuMobile || "auto",
+    mobile: opts.mobile || menu.dataset.flyoutMobile || "auto",
     scope: opts.scope || getContextScope(target),
   });
   focusMenu(menu);

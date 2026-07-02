@@ -15,49 +15,50 @@ The full runtime is `actual-css/js`. Each enhancer is also importable on its own
 
 ```js
 import "actual-css/js/dialog";
-import "actual-css/js/menu";
+import "actual-css/js/flyout";
 import "actual-css/js/tooltip";
 ```
 
 Enhancer modules self-register when imported. They do not require init calls and should stay safe to import independently.
 
-## Menu
+## Flyout
 
-> Positioned menu attached to a trigger, with full keyboard, focus, and ARIA support.
+> Positioned surface attached to a trigger, commonly used for action lists and small panels.
 
-Menu and context menu share one action-surface runtime:
+Flyout and context menu share one action-surface runtime:
 
-- Menu = a visible trigger opens a surface.
+- Flyout = a visible trigger opens a surface.
 - Context menu = right click or a keyboard context action opens that same surface.
 - Sheet = mobile presentation mode of that same surface.
 
-Use `data-menu-mobile` on the menu to control mobile behavior:
+Use `data-flyout-mobile` on the flyout to control mobile behavior:
 
 - `auto` is the default. It keeps the surface anchored on desktop and switches to a bottom sheet on coarse pointers below the breakpoint.
 - `sheet` always uses the sheet presentation.
 - `anchored` always uses floating positioning.
 - `none` disables the mobile transformation.
 
-`data-menu-breakpoint` only matters for `auto`. Prefer the built-in tokens (`sm`, `md`, `lg`) and use raw pixel values only as an escape hatch, for example `data-menu-breakpoint="640"`.
+`data-flyout-breakpoint` only matters for `auto`. Prefer the built-in tokens (`sm`, `md`, `lg`) and use raw pixel values only as an escape hatch, for example `data-flyout-breakpoint="640"`.
 
-Use `data-menu-placement` for the preferred anchored placement. It accepts the placement strings supported by the floating runtime, such as `bottom-start`, `bottom-end`, `top-start`, `right`, or `left`.
+Use `data-flyout-placement` for the preferred anchored placement. It accepts the placement strings supported by the floating runtime, such as `bottom-start`, `bottom-end`, `top-start`, `right`, or `left`.
 
-Use `data-menu-distance` for the trigger gap in pixels. The default is `4`.
+Use `data-flyout-distance` for the trigger gap in pixels. The default is `4`.
 
-Use `data-menu-auto-close` when the default click dismissal behavior is not right. Escape still follows the shared surface lifecycle.
+Use `data-flyout-auto-close` when the default click dismissal behavior is not right. Escape still follows the shared surface lifecycle.
 
-- `true` is the default. App menu items close on activation and outside clicks close the menu.
-- `inside` closes on app menu item activation only.
+- `true` is the default. Action items close on activation and outside clicks close the flyout.
+- `inside` closes on action item activation only.
 - `outside` closes on outside click only.
 - `false` disables automatic click closing.
 
-Menu still covers two distinct patterns:
+Flyout covers two distinct patterns:
 
-### App menu
+### Action list
 - A list of *actions* the user can take: sign out, copy, delete.
-- Items are `<button role="menuitem">`.
-- Arrow keys navigate between items. Home/End jump to first/last.
-- Uses `aria-haspopup="menu"` and `role="menu"`.
+- Use `<menu class="flyout">` with `<li>` items.
+- Items are regular `<button>` or `<a>` elements.
+- Use `.sm` or `.lg` for density changes.
+- Add `role="menu"` / `role="menuitem"` only when you intentionally need the ARIA menu pattern and roving arrow-key behavior.
 
 ### Nav panel
 - A panel of *links* to other pages: product categories, docs sections.
@@ -68,24 +69,22 @@ Menu still covers two distinct patterns:
 ```html
 <button class="btn outline"
         type="button"
-        aria-haspopup="menu"
         aria-expanded="false"
-        aria-controls="account-menu"
-        id="account-menu-trigger">
+        aria-controls="account-actions"
+        id="account-flyout-trigger">
   Account
   <i class="ti ti-chevron-down" aria-hidden="true"></i>
 </button>
 
-<div class="menu"
-     role="menu"
-     id="account-menu"
-     aria-labelledby="account-menu-trigger"
-     hidden>
-  <button class="menu-item" type="button" role="menuitem">Profile</button>
-  <button class="menu-item" type="button" role="menuitem">Settings</button>
-  <hr class="menu-divider" role="separator" />
-  <button class="menu-item danger" type="button" role="menuitem">Sign out</button>
-</div>
+<menu class="flyout sm"
+      id="account-actions"
+      aria-labelledby="account-flyout-trigger"
+      hidden>
+  <li><button type="button">Profile</button></li>
+  <li><button type="button">Settings</button></li>
+  <li><hr /></li>
+  <li><button class="danger" type="button">Sign out</button></li>
+</menu>
 ```
 
 ```html
@@ -94,17 +93,16 @@ Menu still covers two distinct patterns:
     <li>
       <button class="btn ghost"
               type="button"
-              aria-haspopup="menu"
               aria-expanded="false"
               aria-controls="products-panel">
         Products
         <i class="ti ti-chevron-down" aria-hidden="true"></i>
       </button>
 
-      <div class="menu"
+      <div class="flyout"
            id="products-panel"
            aria-label="Products"
-           data-menu-mobile="auto"
+           data-flyout-mobile="auto"
            hidden>
         <section aria-labelledby="products-design" class="px py-sm">
           <h3 id="products-design">Design</h3>
@@ -136,9 +134,9 @@ Menu still covers two distinct patterns:
 
 ### Context menu
 
-The same menu can be opened from a visible button and a contextual target. Prefer shipping both so desktop users get right click and mobile users still have a discoverable trigger.
+The same flyout can be opened from a visible button and a contextual target. Prefer shipping both so desktop users get right click and mobile users still have a discoverable trigger.
 
-Add `data-context-menu-scope` when the menu should stay inside a specific region. Empty or `self` constrains to the target itself, `parent` constrains to the parent, and a selector constrains to the closest matching ancestor or first matching element.
+Add `data-context-menu-scope` when the flyout should stay inside a specific region. Empty or `self` constrains to the target itself, `parent` constrains to the parent, and a selector constrains to the closest matching ancestor or first matching element.
 
 Long press is opt-in with `data-context-menu-long-press`. Empty uses the default delay; a number sets the delay in milliseconds.
 
@@ -153,7 +151,6 @@ Long press is opt-in with `data-context-menu-long-press`. Empty uses the default
     <strong>File.pdf</strong>
     <button class="btn ghost"
             type="button"
-            aria-haspopup="menu"
             aria-expanded="false"
             aria-controls="file-actions"
             id="file-actions-trigger">
@@ -162,16 +159,15 @@ Long press is opt-in with `data-context-menu-long-press`. Empty uses the default
   </div>
   <p class="text-sm text-muted">Right click inside the card, press the context-menu key, or long press on touch.</p>
 
-  <div class="menu"
-       role="menu"
-       id="file-actions"
-       aria-labelledby="file-actions-trigger"
-       hidden>
-    <button class="menu-item" type="button" role="menuitem">Open</button>
-    <button class="menu-item" type="button" role="menuitem">Rename</button>
-    <hr class="menu-divider" role="separator" />
-    <button class="menu-item danger" type="button" role="menuitem">Delete</button>
-  </div>
+  <menu class="flyout"
+        id="file-actions"
+        aria-labelledby="file-actions-trigger"
+        hidden>
+    <li><button type="button">Open</button></li>
+    <li><button type="button">Rename</button></li>
+    <li><hr /></li>
+    <li><button class="danger" type="button">Delete</button></li>
+  </menu>
 </div>
 ```
 

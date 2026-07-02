@@ -27,7 +27,7 @@ Or compose only the pieces you use:
 @import "actual-css/css/components/button";
 @import "actual-css/css/components/card";
 @import "actual-css/css/forms";
-@import "actual-css/css/ui/menu";
+@import "actual-css/css/ui/flyout";
 @import "actual-css/css/utilities";
 ```
 
@@ -70,7 +70,7 @@ Size variants `.sm` and `.lg` scale controls consistently.
 
 **Optional CSS** — `actual-css/css/layer` wraps Actual in `@layer actual`; `actual-css/css/optional/typography-fluid` adds fluid display typography; `actual-css/css/optional/scroller` adds custom scrollbar chrome.
 
-**JS enhancers** — dialog, menu, tooltip, tabs, scrollspy, context-menu, floating. Drop in `actual.js` and they auto-enhance via data-attributes.
+**JS enhancers** — dialog, flyout, tooltip, tabs, scrollspy, context-menu, floating. Drop in `actual.js` and they auto-enhance via data-attributes.
 
 ```html
 <script src="actual.js" type="module"></script>
@@ -80,7 +80,7 @@ Bundlers can also import only the enhancers they need:
 
 ```js
 import "actual-css/js/dialog";
-import "actual-css/js/menu";
+import "actual-css/js/flyout";
 import "actual-css/js/tooltip";
 ```
 

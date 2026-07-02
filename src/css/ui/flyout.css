@@ -1,18 +1,18 @@
 /*
- * Menu — floating panel for actions and links.
+ * Flyout — floating panel for actions and links.
  *
  * JavaScript owns positioning (position: fixed + left/top), show/hide
  * (hidden + display), focus, and keyboard behavior. CSS owns the surfaced
  * panel appearance and item styles.
  *
- * Runtime markers (managed by surface.js): .is-open marks an open menu,
+ * Runtime markers (managed by surface.js): .is-open marks an open flyout,
  * .is-sheet marks "auto" resolved to bottom-sheet presentation on coarse
  * pointers. Authors opt into mobile behavior with
- * [data-menu-mobile="sheet|auto|none|anchored"].
- * --menu-trigger-width is set by surface.js while an open menu is positioned.
+ * [data-flyout-mobile="sheet|auto|none|anchored"].
+ * --flyout-trigger-width is set by surface.js while an open flyout is positioned.
  */
 
-.menu {
+.flyout {
   z-index: var(--z-menu);
   position: absolute;
   inset-block-start: calc(100% + var(--space-1));
@@ -21,11 +21,11 @@
   gap: var(--space-1);
   inline-size: max-content;
   min-inline-size: min(
-    var(--menu-trigger-width, 0px),
+    var(--flyout-trigger-width, 0px),
     min(20rem, calc(100vw - var(--space-6)))
   );
   min-inline-size: min(
-    var(--menu-trigger-width, 0px),
+    var(--flyout-trigger-width, 0px),
     min(20rem, calc(100vi - var(--space-6)))
   );
   max-inline-size: min(20rem, calc(100vw - var(--space-6)));
@@ -39,9 +39,9 @@
   list-style: none;
 }
 
-/* Bottom-sheet presentation. surface.js toggles .is-sheet when the menu is
+/* Bottom-sheet presentation. surface.js toggles .is-sheet when the flyout is
    opened on coarse pointer / narrow viewports. */
-.menu.is-sheet {
+.flyout.is-sheet {
   position: fixed;
   inset-inline: 0;
   inset-block-start: auto;
@@ -58,20 +58,22 @@
   border-end-end-radius: 0;
 }
 
-.menu[hidden] {
+.flyout[hidden] {
   display: none;
 }
 
-.menu-item,
-.menu > button,
-.menu > a,
-.menu > [role="menuitem"] {
+.flyout > li {
+  margin: 0;
+}
+
+.flyout > :where(button, a, [role="menuitem"]),
+.flyout > li > :where(button, a, [role="menuitem"]) {
   display: flex;
   align-items: center;
   justify-content: flex-start;
   gap: var(--space-2);
   inline-size: 100%;
-  min-block-size: var(--control-size-sm);
+  min-block-size: var(--control-size);
   padding-inline: var(--space-2);
   border: 0;
   border-radius: var(--radius-sm);
@@ -85,42 +87,24 @@
   cursor: pointer;
 }
 
-.menu.is-sheet .menu-item,
-.menu.is-sheet > button,
-.menu.is-sheet > a,
-.menu.is-sheet > [role="menuitem"] {
+.flyout.is-sheet > :where(button, a, [role="menuitem"]),
+.flyout.is-sheet > li > :where(button, a, [role="menuitem"]) {
   min-block-size: var(--control-size-lg);
 }
 
-.menu-item:hover,
-.menu-item:focus-visible,
-.menu > button:hover,
-.menu > a:hover,
-.menu > [role="menuitem"]:hover,
-.menu > button:focus-visible,
-.menu > a:focus-visible,
-.menu > [role="menuitem"]:focus-visible {
+.flyout > :where(button, a, [role="menuitem"]):hover,
+.flyout > :where(button, a, [role="menuitem"]):focus-visible,
+.flyout > li > :where(button, a, [role="menuitem"]):hover,
+.flyout > li > :where(button, a, [role="menuitem"]):focus-visible {
   background: var(--surface-subtle);
   outline: none;
 }
 
-.menu-divider,
-.menu hr {
+.flyout > hr,
+.flyout > li > hr {
   inline-size: 100%;
   margin: 0;
   margin-block: var(--space-1);
   border: 0;
   border-block-start: var(--border-width) solid var(--border);
-}
-
-.menu-header {
-  padding-inline: var(--space-2);
-  font-size: var(--font-size-xs);
-  font-weight: var(--font-weight-strong);
-  color: var(--text-muted);
-}
-
-.menu-text {
-  padding-inline: var(--space-2);
-  color: var(--text-muted);
 }
