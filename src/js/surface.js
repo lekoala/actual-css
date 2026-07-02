@@ -50,6 +50,16 @@ function getMobileMode(menu, mode) {
   return mode || menu.dataset.menuMobile || "auto";
 }
 
+function getPlacement(menu, placement) {
+  return placement || menu.dataset.menuPlacement || "bottom-start";
+}
+
+function getDistance(menu, distance) {
+  if (distance != null) return distance;
+  const value = Number.parseFloat(menu.dataset.menuDistance);
+  return Number.isFinite(value) ? value : 4;
+}
+
 function getAutoCloseMode(menu, value) {
   const mode = String(value ?? menu.dataset.menuAutoClose ?? "true").toLowerCase();
   if (mode === "inside" || mode === "outside" || mode === "false") return mode;
@@ -242,8 +252,8 @@ export function openSurface(menu, opts = {}) {
       : null;
   state.mobile = getMobileMode(menu, opts.mobile);
   state.autoClose = getAutoCloseMode(menu, opts.autoClose);
-  state.placement = opts.placement || "bottom-start";
-  state.distance = opts.distance ?? 4;
+  state.placement = getPlacement(menu, opts.placement);
+  state.distance = getDistance(menu, opts.distance);
   state.flip = opts.flip !== false;
   state.shift = opts.shift !== false;
   state.shiftPadding = opts.shiftPadding ?? 4;

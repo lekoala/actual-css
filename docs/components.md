@@ -888,7 +888,7 @@ The base CSS gives supporting browsers a small opening transition. Closing remai
 The open dialog root intentionally ends at `transform: none`; fixed menus and tooltips mounted inside a modal dialog rely on viewport coordinates.
 
 ```css
-.modal {
+dialog.modal {
   opacity: 0;
   overflow: visible;
 
@@ -897,34 +897,34 @@ The open dialog root intentionally ends at `transform: none`; fixed menus and to
     transform var(--duration);
 }
 
-.modal > form,
-.modal > .stack {
+dialog.modal > form,
+dialog.modal > .stack {
   max-block-size: calc(100vh - 2rem);
   max-block-size: calc(100dvb - 2rem);
   overflow: auto;
   overscroll-behavior: contain;
 }
 
-.modal[open] {
+dialog.modal[open] {
   opacity: 1;
   transform: none;
 }
 
 @starting-style {
-  .modal[open] {
+  dialog.modal[open] {
     opacity: 0;
     transform: translateY(0.35rem) scale(0.98);
   }
 }
 
-.modal::backdrop {
-  background: var(--surface-solid);
+dialog.modal::backdrop {
+  background: var(--backdrop-fill);
   opacity: 0;
   transition: opacity var(--duration);
 }
 
 @supports (transition-behavior: allow-discrete) {
-  .modal {
+  dialog.modal {
     transition:
       opacity var(--duration),
       transform var(--duration),
@@ -932,7 +932,7 @@ The open dialog root intentionally ends at `transform: none`; fixed menus and to
       display var(--duration) allow-discrete;
   }
 
-  .modal::backdrop {
+  dialog.modal::backdrop {
     transition:
       opacity var(--duration),
       overlay var(--duration) allow-discrete,
@@ -940,8 +940,8 @@ The open dialog root intentionally ends at `transform: none`; fixed menus and to
   }
 }
 
-.modal[open]::backdrop {
-  opacity: 0.5;
+dialog.modal[open]::backdrop {
+  opacity: 1;
 }
 
 @supports selector(:has(dialog:modal)) {
@@ -952,7 +952,7 @@ The open dialog root intentionally ends at `transform: none`; fixed menus and to
 }
 
 @starting-style {
-  .modal[open]::backdrop {
+  dialog.modal[open]::backdrop {
     opacity: 0;
   }
 }

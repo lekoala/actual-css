@@ -60,6 +60,7 @@
 }
 
 .select[aria-invalid="true"],
+.field.danger select,
 .form select[aria-invalid="true"] {
   --control-border: var(--danger);
 }
