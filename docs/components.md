@@ -490,6 +490,31 @@ Links:
 ```
 
 ```html
+<section class="grid gap-none">
+  <article class="card">
+    <header>
+      <h3>Design tokens</h3>
+    </header>
+    <p>Semantic variables for color, shape, spacing, and motion.</p>
+  </article>
+
+  <article class="card">
+    <header>
+      <h3>Utilities</h3>
+    </header>
+    <p>Small layout helpers for local composition.</p>
+  </article>
+
+  <article class="card">
+    <header>
+      <h3>Runtime</h3>
+    </header>
+    <p>Optional JavaScript for progressive interactions.</p>
+  </article>
+</section>
+```
+
+```html
 <section class="grid">
   <article class="card raised">
     <hgroup>
@@ -592,6 +617,7 @@ Links:
 - https://mac81.github.io/pure-drawer/
 - Drawer: https://codepen.io/nwest88/pen/PwwZpv
 - https://uiterms.com/drawer/
+- https://v6-dev--twbs-bootstrap.netlify.app/docs/6.0/components/drawer/
 
 ## Meter
 
@@ -987,6 +1013,7 @@ Links:
 - Modern dialogs: https://codepen.io/lekoalabe/pen/GgKOKOE
 - Animating the dialog element using view transitions: https://pqina.nl/blog/animating-the-dialog-element-using-view-transitions/
 - https://basecoatui.com/components/alert-dialog/
+- https://v6-dev--twbs-bootstrap.netlify.app/docs/6.0/components/dialog/
 
 ## Pagination
 

@@ -404,6 +404,56 @@
   <li><code>data-dialog-view-transition</code> enables a view transition that morphs the dialog to/from its trigger. Only active when the browser supports <code>document.startViewTransition</code> and the user allows motion.</li>
   <li><code>closedby=&quot;any&quot;</code> is the no-JavaScript light-dismiss path. The runtime rewrites it to <code>closedby=&quot;closerequest&quot;</code> where supported so dialog light-dismiss keeps the modal workflow intact — the same behavior, just stated in terms the platform understands.</li>
 </ul>
+<h3>Legacy browsers and polyfills</h3>
+<p>Actual CSS does not bundle a dialog polyfill. In browsers without <code>HTMLDialogElement.showModal()</code> support, such as Firefox 97, the runtime still wires <code>commandfor</code> triggers and shows a native alert when a user tries to open the dialog. This is a deliberate failure mode: the action is acknowledged, but the framework does not pretend to provide modal focus trapping without platform or polyfill support. To support those browsers, load a dialog polyfill and register each dialog before it is opened. The polyfill may load before or after the Actual CSS runtime; the runtime checks the target dialog when the trigger is used.</p>
+    </div>
+    <section class="component-section">
+      <div class="example-group">
+        <div class="example-code">
+          <pre><code class="language-js"><span class="token keyword">import</span> <span class="token string">"actual-css/js"</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> dialogPolyfill <span class="token keyword">from</span> <span class="token string">"dialog-polyfill"</span><span class="token punctuation">;</span>
+
+document<span class="token punctuation">.</span><span class="token function">querySelectorAll</span><span class="token punctuation">(</span><span class="token string">"dialog"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">forEach</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token parameter">dialog</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+  dialogPolyfill<span class="token punctuation">.</span><span class="token function">registerDialog</span><span class="token punctuation">(</span>dialog<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+        </div>
+      </div>
+    </section>
+    <script>try{import "actual-css/js";
+import dialogPolyfill from "dialog-polyfill";
+
+document.querySelectorAll("dialog").forEach((dialog) => {
+  dialogPolyfill.registerDialog(dialog);
+});}catch(e){console.error(e)}</script>
+    <div class="component-prose">
+      <p>For conditional loading, register the polyfill before the first unsupported dialog open:</p>
+    </div>
+    <section class="component-section">
+      <div class="example-group">
+        <div class="example-code">
+          <pre><code class="language-js"><span class="token keyword">import</span> <span class="token string">"actual-css/js"</span><span class="token punctuation">;</span>
+
+<span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span><span class="token punctuation">(</span><span class="token string">"HTMLDialogElement"</span> <span class="token keyword">in</span> window<span class="token punctuation">)</span> <span class="token operator">||</span> <span class="token operator">!</span><span class="token class-name">HTMLDialogElement</span><span class="token punctuation">.</span>prototype<span class="token punctuation">.</span>showModal<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">const</span> <span class="token punctuation">{</span> <span class="token keyword">default</span><span class="token operator">:</span> dialogPolyfill <span class="token punctuation">}</span> <span class="token operator">=</span> <span class="token keyword">await</span> <span class="token keyword">import</span><span class="token punctuation">(</span><span class="token string">"dialog-polyfill"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  document<span class="token punctuation">.</span><span class="token function">querySelectorAll</span><span class="token punctuation">(</span><span class="token string">"dialog"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">forEach</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token parameter">dialog</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+    dialogPolyfill<span class="token punctuation">.</span><span class="token function">registerDialog</span><span class="token punctuation">(</span>dialog<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+        </div>
+      </div>
+    </section>
+    <script>try{import "actual-css/js";
+
+if (!("HTMLDialogElement" in window) || !HTMLDialogElement.prototype.showModal) {
+  const { default: dialogPolyfill } = await import("dialog-polyfill");
+
+  document.querySelectorAll("dialog").forEach((dialog) => {
+    dialogPolyfill.registerDialog(dialog);
+  });
+}}catch(e){console.error(e)}</script>
+    <div class="component-prose">
+      <p>If dialogs are injected later, register those new dialog elements before their open trigger is used.</p>
 <h3>Animation</h3>
 <p>The base CSS gives supporting browsers a small opening transition. Closing remains native unless <code>data-dialog-view-transition</code> is enabled and the browser supports the View Transition API. The open dialog root intentionally ends at <code>transform: none</code>; fixed dropdowns and tooltips mounted inside a modal dialog rely on viewport coordinates.</p>
     </div>
@@ -417,9 +467,7 @@
 
   <span class="token property">transition</span><span class="token punctuation">:</span>
     opacity <span class="token function">var</span><span class="token punctuation">(</span>--duration<span class="token punctuation">)</span><span class="token punctuation">,</span>
-    transform <span class="token function">var</span><span class="token punctuation">(</span>--duration<span class="token punctuation">)</span><span class="token punctuation">,</span>
-    display <span class="token function">var</span><span class="token punctuation">(</span>--duration<span class="token punctuation">)</span> allow-discrete<span class="token punctuation">,</span>
-    overlay <span class="token function">var</span><span class="token punctuation">(</span>--duration<span class="token punctuation">)</span> allow-discrete<span class="token punctuation">;</span>
+    transform <span class="token function">var</span><span class="token punctuation">(</span>--duration<span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span>
 
 <span class="token selector">.modal > form,
@@ -445,10 +493,24 @@
 <span class="token selector">.modal::backdrop</span> <span class="token punctuation">{</span>
   <span class="token property">background</span><span class="token punctuation">:</span> <span class="token function">var</span><span class="token punctuation">(</span>--surface-solid<span class="token punctuation">)</span><span class="token punctuation">;</span>
   <span class="token property">opacity</span><span class="token punctuation">:</span> 0<span class="token punctuation">;</span>
-  <span class="token property">transition</span><span class="token punctuation">:</span>
-    opacity <span class="token function">var</span><span class="token punctuation">(</span>--duration<span class="token punctuation">)</span><span class="token punctuation">,</span>
-    display <span class="token function">var</span><span class="token punctuation">(</span>--duration<span class="token punctuation">)</span> allow-discrete<span class="token punctuation">,</span>
-    overlay <span class="token function">var</span><span class="token punctuation">(</span>--duration<span class="token punctuation">)</span> allow-discrete<span class="token punctuation">;</span>
+  <span class="token property">transition</span><span class="token punctuation">:</span> opacity <span class="token function">var</span><span class="token punctuation">(</span>--duration<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token atrule"><span class="token rule">@supports</span> <span class="token punctuation">(</span><span class="token property">transition-behavior</span><span class="token punctuation">:</span> allow-discrete<span class="token punctuation">)</span></span> <span class="token punctuation">{</span>
+  <span class="token selector">.modal</span> <span class="token punctuation">{</span>
+    <span class="token property">transition</span><span class="token punctuation">:</span>
+      opacity <span class="token function">var</span><span class="token punctuation">(</span>--duration<span class="token punctuation">)</span><span class="token punctuation">,</span>
+      transform <span class="token function">var</span><span class="token punctuation">(</span>--duration<span class="token punctuation">)</span><span class="token punctuation">,</span>
+      overlay <span class="token function">var</span><span class="token punctuation">(</span>--duration<span class="token punctuation">)</span> allow-discrete<span class="token punctuation">,</span>
+      display <span class="token function">var</span><span class="token punctuation">(</span>--duration<span class="token punctuation">)</span> allow-discrete<span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token selector">.modal::backdrop</span> <span class="token punctuation">{</span>
+    <span class="token property">transition</span><span class="token punctuation">:</span>
+      opacity <span class="token function">var</span><span class="token punctuation">(</span>--duration<span class="token punctuation">)</span><span class="token punctuation">,</span>
+      overlay <span class="token function">var</span><span class="token punctuation">(</span>--duration<span class="token punctuation">)</span> allow-discrete<span class="token punctuation">,</span>
+      display <span class="token function">var</span><span class="token punctuation">(</span>--duration<span class="token punctuation">)</span> allow-discrete<span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
 <span class="token punctuation">}</span>
 
 <span class="token selector">.modal[open]::backdrop</span> <span class="token punctuation">{</span>

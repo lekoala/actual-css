@@ -63,18 +63,6 @@
         </div>
       </div>
     </section>
-    <section class="component-section">
-      <h2>CSS</h2>
-      <div class="example-group">
-        <div class="example-code">
-          <pre><code class="language-css"><span class="token selector">.grid</span> <span class="token punctuation">{</span>
-  <span class="token property">display</span><span class="token punctuation">:</span> grid<span class="token punctuation">;</span>
-  <span class="token property">gap</span><span class="token punctuation">:</span> <span class="token function">var</span><span class="token punctuation">(</span>--gap<span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token property">grid-template-columns</span><span class="token punctuation">:</span> <span class="token function">repeat</span><span class="token punctuation">(</span>auto-fit<span class="token punctuation">,</span> <span class="token function">minmax</span><span class="token punctuation">(</span><span class="token function">min</span><span class="token punctuation">(</span>100%<span class="token punctuation">,</span> <span class="token function">var</span><span class="token punctuation">(</span>--grid-min<span class="token punctuation">,</span> 16rem<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span> 1fr<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span></code></pre>
-        </div>
-      </div>
-    </section>
     <div class="component-prose">
       <p>Tune the minimum item width with <code>--grid-min</code>.</p>
     </div>
@@ -90,7 +78,7 @@
     </section>
     <div class="component-prose">
       <h3>Fixed Columns</h3>
-<p>> Predictable 2/3/4-column grids. Full count by default; wrap in <code>.grid-responsive</code> to make the column count collapse on narrow wrappers. Use <code>.grid-2</code>, <code>.grid-3</code>, and <code>.grid-4</code> when the column count matters more than the item minimum width — for example, when a row should always read as "three items side by side", or when an empty cell should not stretch to fill space. Unlike <code>.grid</code>, the columns are fixed; if you have only two items in a <code>.grid-3</code>, the third cell stays empty rather than redistributing. A <code>.grid-2/3/4</code> without a wrapper is a <strong>fixed grid</strong> (always at its full column count); with a <code>.grid-responsive</code> wrapper, it's a <strong>responsive grid</strong> (the column count collapses on narrow wrappers). The wrapper is the query container; the grid itself is a plain block grid.</p>
+<p>Predictable 2/3/4-column grids. Full count by default; wrap in <code>.grid-responsive</code> to make the column count collapse on narrow wrappers. Use <code>.grid-2</code>, <code>.grid-3</code>, and <code>.grid-4</code> when the column count matters more than the item minimum width — for example, when a row should always read as "three items side by side", or when an empty cell should not stretch to fill space. Unlike <code>.grid</code>, the columns are fixed; if you have only two items in a <code>.grid-3</code>, the third cell stays empty rather than redistributing. A <code>.grid-2/3/4</code> without a wrapper is a <strong>fixed grid</strong> (always at its full column count); with a <code>.grid-responsive</code> wrapper, it's a <strong>responsive grid</strong> (the column count collapses on narrow wrappers). The wrapper is the query container; the grid itself is a plain block grid.</p>
     </div>
     <section class="component-section">
       <div class="example-group">
@@ -132,39 +120,54 @@
         </div>
       </div>
     </section>
+    <div class="component-prose">
+      <p>A <code>grid-4</code> demo</p>
+    </div>
     <section class="component-section">
-      <h2>CSS</h2>
       <div class="example-group">
+        <div class="example-render">
+          <div class="grid-responsive">
+  <div class="grid-4">
+    <article class="card">
+      <h3>Starter</h3>
+      <p>For small projects.</p>
+    </article>
+    <article class="card">
+      <h3>Team</h3>
+      <p>For shared products.</p>
+    </article>
+    <article class="card">
+      <h3>Scale</h3>
+      <p>For larger systems.</p>
+    </article>
+    <article class="card">
+      <h3>Enterprise</h3>
+      <p>Contact us.</p>
+    </article>
+  </div>
+</div>
+        </div>
         <div class="example-code">
-          <pre><code class="language-css"><span class="token selector">.grid-responsive</span> <span class="token punctuation">{</span>
-  <span class="token property">container-type</span><span class="token punctuation">:</span> inline-size<span class="token punctuation">;</span>
-<span class="token punctuation">}</span>
-
-<span class="token selector">.grid-2,
-.grid-3,
-.grid-4</span> <span class="token punctuation">{</span>
-  <span class="token property">display</span><span class="token punctuation">:</span> grid<span class="token punctuation">;</span>
-  <span class="token property">gap</span><span class="token punctuation">:</span> <span class="token function">var</span><span class="token punctuation">(</span>--gap<span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span>
-
-<span class="token selector">.grid-2</span> <span class="token punctuation">{</span> <span class="token property">grid-template-columns</span><span class="token punctuation">:</span> <span class="token function">repeat</span><span class="token punctuation">(</span>2<span class="token punctuation">,</span> <span class="token function">minmax</span><span class="token punctuation">(</span>0<span class="token punctuation">,</span> 1fr<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
-<span class="token selector">.grid-3</span> <span class="token punctuation">{</span> <span class="token property">grid-template-columns</span><span class="token punctuation">:</span> <span class="token function">repeat</span><span class="token punctuation">(</span>3<span class="token punctuation">,</span> <span class="token function">minmax</span><span class="token punctuation">(</span>0<span class="token punctuation">,</span> 1fr<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
-<span class="token selector">.grid-4</span> <span class="token punctuation">{</span> <span class="token property">grid-template-columns</span><span class="token punctuation">:</span> <span class="token function">repeat</span><span class="token punctuation">(</span>4<span class="token punctuation">,</span> <span class="token function">minmax</span><span class="token punctuation">(</span>0<span class="token punctuation">,</span> 1fr<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
-
-<span class="token atrule"><span class="token rule">@container</span> <span class="token punctuation">(</span>width &lt; 28rem<span class="token punctuation">)</span></span> <span class="token punctuation">{</span>
-  <span class="token selector">.grid-responsive .grid-2,
-  .grid-responsive .grid-3,
-  .grid-responsive .grid-4</span> <span class="token punctuation">{</span>
-    <span class="token property">grid-template-columns</span><span class="token punctuation">:</span> 1fr<span class="token punctuation">;</span>
-  <span class="token punctuation">}</span>
-<span class="token punctuation">}</span>
-
-<span class="token atrule"><span class="token rule">@container</span> <span class="token punctuation">(</span>28rem &lt;= width &lt; 48rem<span class="token punctuation">)</span></span> <span class="token punctuation">{</span>
-  <span class="token selector">.grid-responsive .grid-3,
-  .grid-responsive .grid-4</span> <span class="token punctuation">{</span>
-    <span class="token property">grid-template-columns</span><span class="token punctuation">:</span> <span class="token function">repeat</span><span class="token punctuation">(</span>2<span class="token punctuation">,</span> <span class="token function">minmax</span><span class="token punctuation">(</span>0<span class="token punctuation">,</span> 1fr<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token punctuation">}</span>
-<span class="token punctuation">}</span></code></pre>
+          <pre><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>grid-responsive<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>grid-4<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>article</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>card<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>h3</span><span class="token punctuation">></span></span>Starter<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>h3</span><span class="token punctuation">></span></span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">></span></span>For small projects.<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>p</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>article</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>article</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>card<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>h3</span><span class="token punctuation">></span></span>Team<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>h3</span><span class="token punctuation">></span></span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">></span></span>For shared products.<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>p</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>article</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>article</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>card<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>h3</span><span class="token punctuation">></span></span>Scale<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>h3</span><span class="token punctuation">></span></span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">></span></span>For larger systems.<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>p</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>article</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>article</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>card<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>h3</span><span class="token punctuation">></span></span>Enterprise<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>h3</span><span class="token punctuation">></span></span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">></span></span>Contact us.<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>p</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>article</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span></code></pre>
         </div>
       </div>
     </section>
