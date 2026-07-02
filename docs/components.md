@@ -246,10 +246,11 @@ Links:
 > Compact label for counts, status, or category tags, with shared intents and variants.
 
 - Supports intent colors.
-- Supports shared variants, especially `.soft` and `.outline`.
+- Solid by default. Use `.soft` or `.outline` for quieter emphasis.
+- Use `.sm` or `.lg` for compact density changes.
 - Can be used inline in headings.
 - Can be used as a count badge.
-- Can be used as a dot badge when it has an accessible name.
+- Can be used as a stable dot badge when empty and given an accessible name.
 
 ```html
 <span class="badge">Default</span>
