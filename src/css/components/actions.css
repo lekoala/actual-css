@@ -2,7 +2,7 @@
  * Actions — a horizontal action-button cluster.
  *
  * Composes with .btn (or any inline element) and feeds layout via the shared
- * --gap token. .alert consumes .actions for its trailing action row.
+ * --gap token.
  */
 .actions {
   --gap: var(--space-2);

@@ -64,7 +64,7 @@ Use `*-fg` pairs only for solid backgrounds where the component controls both fo
 
 The default theme is intentionally calm. `primary` is a near-neutral dark grey rather than a saturated brand color, `secondary` is a neutral surface rather than a colored intent, and the semantic states are desaturated. Optional themes can re-introduce vivid intent palettes on top of this foundation; the default is meant to be the adult, editorial baseline.
 
-Soft variants (`.btn.soft`, `.badge.soft`, `.alert.soft`, etc.) are generated from intent colors through `color-mix()`. Themes can tune the mix globally instead of rewriting component selectors.
+Soft surfaces (`.btn.soft`, `.badge.soft`, and the default `.alert`) are generated from intent colors through `color-mix()`. Themes can tune the mix globally instead of rewriting component selectors.
 
 ```css
 :root {
