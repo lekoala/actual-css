@@ -64,6 +64,28 @@ Actual CSS is built as progressive enhancement. Features gate on `@supports` —
 - **Intermediate** (`:has`, containers) — Firefox 121+, Safari 16+, Chromium 106+. Container queries, alert icon grid, intent tints.
 - **Recommended** — Firefox 129+, Safari 17.5+, Chromium 123+. `light-dark()`, `color-mix()`, full theming.
 
+### Cascade layers
+
+Actual CSS is layer-compatible, not layer-dependent. The default `actual.css` file is unlayered and works in the Degraded compatibility target.
+
+Projects that intentionally use cascade layers can import Actual CSS into a low-priority layer:
+
+```css
+@layer actual, app, utilities, overrides;
+
+@import "actual-css/css/layer";
+```
+
+Or wrap the default entrypoint yourself:
+
+```css
+@layer actual, app, utilities, overrides;
+
+@import "actual-css/css" layer(actual);
+```
+
+Cascade layers require the Minimum compatibility target or above. Keep project-specific layer names in the application; Actual CSS only claims the optional `actual` layer.
+
 ## License
 
 MIT
