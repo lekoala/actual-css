@@ -3,7 +3,7 @@
 Follow these guidelines as best as possible, but don't follow them blindly.
 If guidelines conflict, think about what would be best or ask the user if no decisive answer can be made.
 
-- Wide browser support (even older browsers, not IE 11)
+- Works everywhere, works best on modern browsers. Wide browser support (even older browsers, not IE 11)
 - No compile, build step (it's just css)
 - No post processing - use browsers prefix when needed
 - Dark mode is for modern browsers only (light mode is default otherwise): use `light-dark()` for theme tokens (https://caniuse.com/wf-light-dark), keep `@media (prefers-color-scheme)` only for the `color-scheme` declaration
@@ -19,14 +19,12 @@ still be functional without it
 - Don't fight z-index, isolate (https://modern-css.com/z-index-isolation/) — when a z-index is unavoidable, source it from a `--z-*` token, not a magic number
 - Naming: try to stick to https://uiterms.com/ naming
 - Must be accessible by default (keyboard navigation, aria-label, hidden element, proper semantic) — every interactive element gets a `:focus-visible` ring, including links, summaries, and nav items
-- Works everywhere, works best on modern browsers
 - Explicit color scheme
-- CSS nesting is not allowed - code must be findable as exposed in the inspector
-- Organize css code AS IF we are using css nesting. Related rules reads one after another and organized together
+- CSS nesting is not allowed - code must be findable as exposed in the inspector. Organize css code AS IF we are using css nesting. Related rules reads one after another and organized together
 - Icons could be <i> or inlined <svg> (typically, using tabler icons like <i class="ti ti-settings" aria-hidden="true"></i>)
-- Avoid transition all unless needed, try to target specific properties
+- Avoid `transition: all` unless needed, try to target specific properties
 - Use `@supports` positively (no `@supports not`) only when it protects a dependent group of rules or a real fallback/modern branch. Do not gate a single progressive declaration whose unsupported value is simply ignored by the browser, such as `text-wrap: balance`.
-- Actual CSS is layer-compatible, not layer-dependent. Keep `actual.css` unlayered for the Degraded target; expose cascade layers only through optional wrappers such as `actual.layer.css`.
+- Layer-compatible, not layer-dependent. Unlayered for the Degraded target; expose cascade layers only through optional wrappers such as `actual.layer.css`.
 - Public CSS grammar is `.component [intent] [variant] [size] [modifier]`. Classes name roles and boolean modifiers; `data-*` carries configurable values; `is-*` classes are runtime internals, not author API.
 - Public data attributes are namespaced by feature (`data-menu-*`, `data-dialog-*`, `data-tooltip-*`). Do not expose shared implementation names such as `surface` unless they are meant as a stable author concept.
 - JavaScript modules are side-effect enhancers. `actual-css/js` enables everything; `actual-css/js/<module>` lets projects opt into one behavior. Keep modules self-registering and safe to import independently.

@@ -9,8 +9,6 @@
 :where(.alert) {
   --intent: initial;
   --intent-fg: initial;
-  --intent-alert-bg: initial;
-  --intent-alert-border: initial;
 }
 
 .alert {
@@ -45,13 +43,7 @@
   margin-block-end: 0;
 }
 
-/* Variant token mapping. Intent-aware tints are sourced from intents.css. */
-.alert:where(.soft) {
-  --alert-bg: var(--surface-subtle);
-  --alert-border: var(--border);
-  --ui-fg: var(--intent, var(--text));
-}
-
+/* Alerts are soft by default. Use .solid or .outline for stronger emphasis. */
 .alert.solid {
   --ui-bg: var(--intent, var(--neutral));
   --ui-fg: var(--intent-fg, var(--neutral-fg));
@@ -66,33 +58,16 @@
 
 @supports (color: color-mix(in srgb, black, white)) {
   .alert:where(:not(.solid, .outline)) {
-    --ui-bg: color-mix(in srgb, var(--intent, var(--neutral)) 8%, var(--surface));
-    --ui-border: color-mix(in srgb, var(--intent, var(--neutral)) 24%, var(--border));
-  }
-}
-
-@supports (color: color-mix(in oklch, red, white)) {
-  .alert:where(.soft) {
-    --alert-bg: color-mix(
-      in oklch,
+    --ui-bg: color-mix(
+      in srgb,
       var(--surface) var(--soft-bg-mix),
       var(--intent, var(--neutral))
     );
-    --alert-border: color-mix(
-      in oklch,
+    --ui-border: color-mix(
+      in srgb,
       var(--surface) var(--soft-border-mix),
       var(--intent, var(--neutral))
     );
-  }
-}
-
-@supports (
-  (color: light-dark(red, blue)) and
-    (color: color-mix(in srgb, black, white))
-) {
-  .alert:where(:not(.solid, .outline)) {
-    --ui-bg: var(--intent-alert-bg, var(--alert-bg));
-    --ui-border: var(--intent-alert-border, var(--alert-border));
   }
 }
 
@@ -141,9 +116,4 @@
 .alert :where(a:not(.btn)) {
   color: inherit;
   font-weight: var(--font-weight-strong);
-}
-
-/* Actions */
-.alert > .actions {
-  margin-block-start: var(--space-3);
 }

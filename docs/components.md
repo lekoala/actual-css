@@ -103,12 +103,13 @@ Links:
 - Supports intent colors.
 - Supports longer text and lists.
 - Links inherit alert color by default.
+- Alerts are soft by default. Use `.solid` or `.outline` when the message needs stronger or quieter emphasis.
 - Use `<menu class="actions cluster">` for alert action lists.
 - Use `role="alert"` only when the alert is injected dynamically and should be announced.
 - Not a toast.
 - Could have simple or complex html content.
 - Alerts may include a decorative leading icon. Place an `aria-hidden="true"` element as the first direct child.
-- Font-size inherits from the surrounding context. Adjust via local CSS variables for specific use cases.
+- Use `.sm` or `.lg` for density changes. The inline padding stays stable.
 
 ```html{.stack}
 <div class="alert success">
@@ -141,7 +142,7 @@ Links:
 ```
 
 ```html
-<div class="alert danger soft" role="alert">
+<div class="alert danger" role="alert">
   <i class="ti ti-alert-triangle" aria-hidden="true"></i>
 
   <div class="stack">

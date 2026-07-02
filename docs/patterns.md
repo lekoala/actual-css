@@ -43,10 +43,10 @@ Use `.actions` for:
 - toolbar actions
 - form submit/cancel groups
 
-Components should only add contextual spacing.
+Use layout primitives for contextual spacing.
 
 ```html
-<div class="alert warning">
+<div class="alert warning stack">
   <p>Your billing method has expired.</p>
 
   <menu class="actions cluster">
@@ -65,11 +65,6 @@ Prefer composition over making each component reimplement action-list layout.
   gap: var(--space-2);
   padding: 0;
   list-style: none;
-}
-
-/* Prefer */
-.alert > .actions {
-  margin-block-start: var(--space-3);
 }
 ```
 

@@ -1,13 +1,12 @@
 /*
  * Cross-cutting variant token mapping.
  *
- * Variant scope: .solid/.soft/.outline set --ui-* so any component consuming
- * those tokens (.btn, .badge, .alert, .card) renders the variant. Component-
- * specific defaults (.btn solid-by-default, .badge solid-by-default, .alert
- * subtle-by-default, .alert intent-tinted soft) live with their components:
+ * Variant scope: .solid/.soft/.outline set --ui-* for components that opt into
+ * shared variants. Component-specific defaults (.btn solid-by-default, .badge
+ * solid-by-default, .alert soft-by-default) live with their components:
  *   components/button.css — .btn default solid + .btn.ghost + .btn.link
  *   components/badge.css   — .badge default solid
- *   components/alert.css   — .alert default + .alert intent-aware soft + tint
+ *   components/alert.css   — .alert default + .alert.solid/.alert.outline
  *
  * .sm/.lg set shared size tokens. Controls consume --control-*; non-control
  * components may consume --variant-* when the variant should affect their
