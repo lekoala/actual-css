@@ -29,12 +29,13 @@
   <li>Supports intent colors.</li>
   <li>Supports longer text and lists.</li>
   <li>Links inherit alert color by default.</li>
+  <li>Alerts are soft by default. Use <code>.solid</code> or <code>.outline</code> when the message needs stronger or quieter emphasis.</li>
   <li>Use <code>&lt;menu class=&quot;actions cluster&quot;&gt;</code> for alert action lists.</li>
   <li>Use <code>role=&quot;alert&quot;</code> only when the alert is injected dynamically and should be announced.</li>
   <li>Not a toast.</li>
   <li>Could have simple or complex html content.</li>
   <li>Alerts may include a decorative leading icon. Place an <code>aria-hidden=&quot;true&quot;</code> element as the first direct child.</li>
-  <li>Font-size inherits from the surrounding context. Adjust via local CSS variables for specific use cases.</li>
+  <li>Use <code>.sm</code> or <code>.lg</code> for density changes. The inline padding stays stable.</li>
 </ul>
     </div>
     <section class="component-section">
@@ -102,7 +103,7 @@
     <section class="component-section">
       <div class="example-group">
         <div class="example-render">
-          <div class="alert danger soft" role="alert">
+          <div class="alert danger" role="alert">
   <i class="ti ti-alert-triangle" aria-hidden="true"></i>
 
   <div class="stack">
@@ -117,7 +118,7 @@
 </div>
         </div>
         <div class="example-code">
-          <pre><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>alert danger soft<span class="token punctuation">"</span></span> <span class="token attr-name">role</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>alert<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+          <pre><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>alert danger<span class="token punctuation">"</span></span> <span class="token attr-name">role</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>alert<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
   <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>i</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>ti ti-alert-triangle<span class="token punctuation">"</span></span> <span class="token attr-name">aria-hidden</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>true<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>i</span><span class="token punctuation">></span></span>
 
   <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>stack<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>

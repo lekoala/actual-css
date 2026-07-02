@@ -73,12 +73,12 @@
   <li>toolbar actions</li>
   <li>form submit/cancel groups</li>
 </ul>
-<p>Components should only add contextual spacing.</p>
+<p>Use layout primitives for contextual spacing.</p>
     </div>
     <section class="component-section">
       <div class="example-group">
         <div class="example-render">
-          <div class="alert warning">
+          <div class="alert warning stack">
   <p>Your billing method has expired.</p>
 
   <menu class="actions cluster">
@@ -88,7 +88,7 @@
 </div>
         </div>
         <div class="example-code">
-          <pre><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>alert warning<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+          <pre><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>alert warning stack<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
   <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">></span></span>Your billing method has expired.<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>p</span><span class="token punctuation">></span></span>
 
   <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>menu</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>actions cluster<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
@@ -112,11 +112,6 @@
   <span class="token property">gap</span><span class="token punctuation">:</span> <span class="token function">var</span><span class="token punctuation">(</span>--space-2<span class="token punctuation">)</span><span class="token punctuation">;</span>
   <span class="token property">padding</span><span class="token punctuation">:</span> 0<span class="token punctuation">;</span>
   <span class="token property">list-style</span><span class="token punctuation">:</span> none<span class="token punctuation">;</span>
-<span class="token punctuation">}</span>
-
-<span class="token comment">/* Prefer */</span>
-<span class="token selector">.alert > .actions</span> <span class="token punctuation">{</span>
-  <span class="token property">margin-block-start</span><span class="token punctuation">:</span> <span class="token function">var</span><span class="token punctuation">(</span>--space-3<span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span></code></pre>
         </div>
       </div>

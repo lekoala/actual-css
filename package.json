@@ -41,7 +41,7 @@
     "./js/context-menu": "./src/js/context-menu.js",
     "./js/dialog": "./src/js/dialog.js",
     "./js/floating": "./src/js/floating.js",
-    "./js/menu": "./src/js/menu-trigger.js",
+    "./js/flyout": "./src/js/flyout.js",
     "./js/scrollspy": "./src/js/scrollspy.js",
     "./js/tab": "./src/js/tab.js",
     "./js/tooltip": "./src/js/tooltip.js",

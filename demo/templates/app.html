@@ -27,7 +27,7 @@
      *     -> fixed top-end stack for dismissible .alert (gap: toast container).
      *   .app-sidebar .nav-link / .app-sidebar .nav-link .badge
      *     -> sidebar nav with icon + text + trailing badge (gap: side nav link).
-     *   .app-sidebar .menu-trigger
+     *   .app-sidebar .flyout-trigger
      *     -> full-width sidebar menu triggers (gap: side nav menu).
      *   .app-sidebar .nav-list-sub
      *     -> indented sub-navigation (gap: sub-nav indent).
@@ -234,12 +234,12 @@
       color: var(--intent, var(--primary));
     }
 
-    .app-sidebar .menu-trigger {
+    .app-sidebar .flyout-trigger {
       display: block;
       inline-size: 100%;
     }
 
-    .app-sidebar .menu-trigger > [aria-haspopup="menu"] {
+    .app-sidebar .flyout-trigger > [aria-haspopup="menu"] {
       inline-size: 100%;
     }
 
@@ -331,16 +331,16 @@
       </a>
 
       <!-- Workspace switcher -->
-      <div class="menu-trigger">
+      <div class="flyout-trigger">
         <button class="btn neutral outline sm" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="workspace-menu"
-          id="workspace-menu-trigger" style="inline-size: 100%; justify-content: space-between;">
+          id="workspace-flyout-trigger" style="inline-size: 100%; justify-content: space-between;">
           <span class="cluster" style="gap: 0.5rem;">
             <span class="avatar sm"><abbr>OC</abbr></span>
             <span>Ocean Beach</span>
           </span>
           <i class="ti ti-chevron-down" aria-hidden="true"></i>
         </button>
-        <div class="menu" role="menu" id="workspace-menu" aria-labelledby="workspace-menu-trigger" hidden>
+        <menu class="flyout" role="menu" id="workspace-menu" aria-labelledby="workspace-flyout-trigger" hidden>
           <button class="btn link" type="button" role="menuitem">
             <span class="avatar sm primary" style="margin-inline-end: 0.5rem;"><abbr>OC</abbr></span>
             Ocean Beach
@@ -358,7 +358,7 @@
             <i class="ti ti-plus" aria-hidden="true" style="margin-inline-end: 0.5rem;"></i>
             New clinic
           </button>
-        </div>
+        </menu>
       </div>
 
       <nav aria-label="Primary">
@@ -425,18 +425,18 @@
       <div class="grow"></div>
 
       <!-- Account pinned to the bottom -->
-      <div class="menu-trigger">
+      <div class="flyout-trigger">
         <button class="btn neutral ghost sm" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="sidebar-account-menu"
           id="sidebar-account-trigger" style="inline-size: 100%; justify-content: flex-start;">
           <span class="avatar sm"><abbr>LW</abbr></span>
           <span>Laura Williams</span>
         </button>
-        <div class="menu" role="menu" id="sidebar-account-menu" aria-labelledby="sidebar-account-trigger" hidden>
+        <menu class="flyout" role="menu" id="sidebar-account-menu" aria-labelledby="sidebar-account-trigger" hidden>
           <button class="btn link" type="button" role="menuitem">View profile</button>
           <button class="btn link" type="button" role="menuitem">Settings</button>
           <hr role="separator">
           <button class="btn link danger" type="button" role="menuitem">Sign out</button>
-        </div>
+        </menu>
       </div>
     </aside>
 
@@ -467,29 +467,29 @@
             style="position: absolute; inset-block-start: 0; inset-inline-end: 0; transform: translate(40%, -40%);">12</span>
         </button>
 
-        <div class="menu-trigger app-layout-hide-mobile">
+        <div class="flyout-trigger app-layout-hide-mobile">
           <button class="btn neutral ghost sm" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="help-menu"
-            id="help-menu-trigger" aria-label="Help">
+            id="help-flyout-trigger" aria-label="Help">
             <i class="ti ti-help" aria-hidden="true"></i>
           </button>
-          <div class="menu" role="menu" id="help-menu" aria-labelledby="help-menu-trigger" hidden>
+          <menu class="flyout" role="menu" id="help-menu" aria-labelledby="help-flyout-trigger" hidden>
             <a class="btn link" href="#" role="menuitem">Documentation</a>
             <a class="btn link" href="#" role="menuitem">Keyboard shortcuts</a>
             <a class="btn link" href="#" role="menuitem">Contact support</a>
-          </div>
+          </menu>
         </div>
 
-        <div class="menu-trigger">
+        <div class="flyout-trigger">
           <button class="btn neutral ghost sm" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="user-menu"
-            id="user-menu-trigger" aria-label="Account menu">
+            id="user-flyout-trigger" aria-label="Account menu">
             <span class="avatar sm"><abbr>LW</abbr></span>
           </button>
-          <div class="menu" role="menu" id="user-menu" aria-labelledby="user-menu-trigger" hidden>
+          <menu class="flyout" role="menu" id="user-menu" aria-labelledby="user-flyout-trigger" hidden>
             <button class="btn link" type="button" role="menuitem">View profile</button>
             <button class="btn link" type="button" role="menuitem">Settings</button>
             <hr role="separator">
             <button class="btn link danger" type="button" role="menuitem">Sign out</button>
-          </div>
+          </menu>
         </div>
       </header>
 
@@ -574,18 +574,18 @@
                 <input class="check" type="checkbox" aria-label="Select all rows">
                 Select all
               </label>
-              <div class="menu-trigger">
+              <div class="flyout-trigger">
                 <button class="btn neutral outline sm" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="bulk-menu"
-                  id="bulk-menu-trigger">
+                  id="bulk-flyout-trigger">
                   Bulk actions
                   <i class="ti ti-chevron-down" aria-hidden="true"></i>
                 </button>
-                <div class="menu" role="menu" id="bulk-menu" aria-labelledby="bulk-menu-trigger" hidden>
+                <menu class="flyout" role="menu" id="bulk-menu" aria-labelledby="bulk-flyout-trigger" hidden>
                   <button class="btn link" type="button" role="menuitem">Export selected</button>
                   <button class="btn link" type="button" role="menuitem">Mark as paid</button>
                   <hr role="separator">
                   <button class="btn link danger" type="button" role="menuitem">Delete selected</button>
-                </div>
+                </menu>
               </div>
             </div>
           </div>
@@ -613,18 +613,18 @@
                   <td>Card</td>
                   <td data-nowrap>20.3.2021</td>
                   <td>
-                    <div class="menu-trigger">
+                    <div class="flyout-trigger">
                       <button class="btn neutral ghost sm" type="button" aria-haspopup="menu" aria-expanded="false"
                         aria-controls="row-1-menu" id="row-1-trigger" aria-label="Row actions">
                         <i class="ti ti-dots-vertical" aria-hidden="true"></i>
                       </button>
-                      <div class="menu" role="menu" id="row-1-menu" aria-labelledby="row-1-trigger" hidden>
+                      <menu class="flyout" role="menu" id="row-1-menu" aria-labelledby="row-1-trigger" hidden>
                         <button class="btn link" type="button" role="menuitem">View details</button>
                         <button class="btn link" type="button" role="menuitem">Copy link</button>
                         <hr role="separator">
                         <button class="btn link" type="button" role="menuitem">Refund</button>
                         <button class="btn link danger" type="button" role="menuitem">Delete</button>
-                      </div>
+                      </menu>
                     </div>
                   </td>
                 </tr>
@@ -636,18 +636,18 @@
                   <td>Card</td>
                   <td data-nowrap>19.3.2021</td>
                   <td>
-                    <div class="menu-trigger">
+                    <div class="flyout-trigger">
                       <button class="btn neutral ghost sm" type="button" aria-haspopup="menu" aria-expanded="false"
                         aria-controls="row-2-menu" id="row-2-trigger" aria-label="Row actions">
                         <i class="ti ti-dots-vertical" aria-hidden="true"></i>
                       </button>
-                      <div class="menu" role="menu" id="row-2-menu" aria-labelledby="row-2-trigger" hidden>
+                      <menu class="flyout" role="menu" id="row-2-menu" aria-labelledby="row-2-trigger" hidden>
                         <button class="btn link" type="button" role="menuitem">View details</button>
                         <button class="btn link" type="button" role="menuitem">Copy link</button>
                         <hr role="separator">
                         <button class="btn link" type="button" role="menuitem">Refund</button>
                         <button class="btn link danger" type="button" role="menuitem">Delete</button>
-                      </div>
+                      </menu>
                     </div>
                   </td>
                 </tr>
@@ -659,18 +659,18 @@
                   <td>Card</td>
                   <td data-nowrap>18.3.2021</td>
                   <td>
-                    <div class="menu-trigger">
+                    <div class="flyout-trigger">
                       <button class="btn neutral ghost sm" type="button" aria-haspopup="menu" aria-expanded="false"
                         aria-controls="row-3-menu" id="row-3-trigger" aria-label="Row actions">
                         <i class="ti ti-dots-vertical" aria-hidden="true"></i>
                       </button>
-                      <div class="menu" role="menu" id="row-3-menu" aria-labelledby="row-3-trigger" hidden>
+                      <menu class="flyout" role="menu" id="row-3-menu" aria-labelledby="row-3-trigger" hidden>
                         <button class="btn link" type="button" role="menuitem">View details</button>
                         <button class="btn link" type="button" role="menuitem">Copy link</button>
                         <hr role="separator">
                         <button class="btn link" type="button" role="menuitem">Refund</button>
                         <button class="btn link danger" type="button" role="menuitem">Delete</button>
-                      </div>
+                      </menu>
                     </div>
                   </td>
                 </tr>
@@ -682,18 +682,18 @@
                   <td>Card</td>
                   <td data-nowrap>17.3.2021</td>
                   <td>
-                    <div class="menu-trigger">
+                    <div class="flyout-trigger">
                       <button class="btn neutral ghost sm" type="button" aria-haspopup="menu" aria-expanded="false"
                         aria-controls="row-4-menu" id="row-4-trigger" aria-label="Row actions">
                         <i class="ti ti-dots-vertical" aria-hidden="true"></i>
                       </button>
-                      <div class="menu" role="menu" id="row-4-menu" aria-labelledby="row-4-trigger" hidden>
+                      <menu class="flyout" role="menu" id="row-4-menu" aria-labelledby="row-4-trigger" hidden>
                         <button class="btn link" type="button" role="menuitem">View details</button>
                         <button class="btn link" type="button" role="menuitem">Copy link</button>
                         <hr role="separator">
                         <button class="btn link" type="button" role="menuitem">Refund</button>
                         <button class="btn link danger" type="button" role="menuitem">Delete</button>
-                      </div>
+                      </menu>
                     </div>
                   </td>
                 </tr>
@@ -705,18 +705,18 @@
                   <td>Bank transfer</td>
                   <td data-nowrap>16.3.2021</td>
                   <td>
-                    <div class="menu-trigger">
+                    <div class="flyout-trigger">
                       <button class="btn neutral ghost sm" type="button" aria-haspopup="menu" aria-expanded="false"
                         aria-controls="row-5-menu" id="row-5-trigger" aria-label="Row actions">
                         <i class="ti ti-dots-vertical" aria-hidden="true"></i>
                       </button>
-                      <div class="menu" role="menu" id="row-5-menu" aria-labelledby="row-5-trigger" hidden>
+                      <menu class="flyout" role="menu" id="row-5-menu" aria-labelledby="row-5-trigger" hidden>
                         <button class="btn link" type="button" role="menuitem">View details</button>
                         <button class="btn link" type="button" role="menuitem">Copy link</button>
                         <hr role="separator">
                         <button class="btn link" type="button" role="menuitem">Refund</button>
                         <button class="btn link danger" type="button" role="menuitem">Delete</button>
-                      </div>
+                      </menu>
                     </div>
                   </td>
                 </tr>

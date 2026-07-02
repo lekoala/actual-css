@@ -7,7 +7,7 @@
  * Injected content wires automatically; removal cleans up automatically.
  */
 
-import "./menu-trigger.js";
+import "./flyout.js";
 import "./context-menu.js";
 import "./dialog.js";
 import "./tab.js";

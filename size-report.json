@@ -1,12 +1,12 @@
 {
-  "timestamp": "2026-07-02T12:25:48.120Z",
-  "totalRaw": 108896,
-  "totalMinified": 57080,
-  "totalBrotli": 9775,
+  "timestamp": "2026-07-02T13:08:55.758Z",
+  "totalRaw": 107458,
+  "totalMinified": 55723,
+  "totalBrotli": 9683,
   "themesMinified": 12513,
   "themesBrotli": 1755,
-  "shippedMinified": 69593,
-  "shippedBrotli": 11530,
+  "shippedMinified": 68236,
+  "shippedBrotli": 11438,
   "fileCount": 57,
   "files": [
     {
@@ -34,20 +34,20 @@
       "raw": 3509
     },
     {
-      "file": "components/alert.css",
-      "raw": 3392
-    },
-    {
       "file": "prose.css",
       "raw": 3323
     },
     {
-      "file": "ui/menu.css",
-      "raw": 3265
-    },
-    {
       "file": "components/modal.css",
       "raw": 3193
+    },
+    {
+      "file": "ui/flyout.css",
+      "raw": 3165
+    },
+    {
+      "file": "components/alert.css",
+      "raw": 3100
     },
     {
       "file": "forms/custom-select.css",
@@ -71,7 +71,7 @@
     },
     {
       "file": "variants.css",
-      "raw": 2390
+      "raw": 2531
     },
     {
       "file": "components/badge.css",
@@ -122,10 +122,6 @@
       "raw": 1950
     },
     {
-      "file": "intents.css",
-      "raw": 1943
-    },
-    {
       "file": "components/accordion.css",
       "raw": 1906
     },
@@ -159,7 +155,7 @@
     },
     {
       "file": "components/surface.css",
-      "raw": 1228
+      "raw": 1236
     },
     {
       "file": "components/busy.css",
@@ -198,6 +194,10 @@
       "raw": 802
     },
     {
+      "file": "intents.css",
+      "raw": 800
+    },
+    {
       "file": "components/list.css",
       "raw": 767
     },
@@ -219,7 +219,7 @@
     },
     {
       "file": "components/actions.css",
-      "raw": 452
+      "raw": 398
     },
     {
       "file": "forms/native.css",
@@ -235,7 +235,7 @@
     },
     {
       "file": "ui/index.css",
-      "raw": 87
+      "raw": 89
     }
   ]
 }

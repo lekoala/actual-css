@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Menu — Actual CSS</title>
+  <title>Flyout — Actual CSS</title>
   <link rel="stylesheet" href="../../../src/css/actual.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3/dist/tabler-icons.min.css">
   <link rel="stylesheet" href="../../styles/demo.css">
@@ -21,37 +21,38 @@
   <main class="center">
   <section class="component-section">
     <header class="component-header">
-      <h1>Menu</h1>
-      <p>Positioned menu attached to a trigger, with full keyboard, focus, and ARIA support.</p>
+      <h1>Flyout</h1>
+      <p>Positioned surface attached to a trigger, commonly used for action lists and small panels.</p>
     </header>
         <div class="component-prose">
-      <p>Menu and context menu share one action-surface runtime:</p>
+      <p>Flyout and context menu share one action-surface runtime:</p>
 <ul>
-  <li>Menu = a visible trigger opens a surface.</li>
+  <li>Flyout = a visible trigger opens a surface.</li>
   <li>Context menu = right click or a keyboard context action opens that same surface.</li>
   <li>Sheet = mobile presentation mode of that same surface.</li>
 </ul>
-<p>Use <code>data-menu-mobile</code> on the menu to control mobile behavior:</p>
+<p>Use <code>data-flyout-mobile</code> on the flyout to control mobile behavior:</p>
 <ul>
   <li><code>auto</code> is the default. It keeps the surface anchored on desktop and switches to a bottom sheet on coarse pointers below the breakpoint.</li>
   <li><code>sheet</code> always uses the sheet presentation.</li>
   <li><code>anchored</code> always uses floating positioning.</li>
   <li><code>none</code> disables the mobile transformation.</li>
 </ul>
-<p><code>data-menu-breakpoint</code> only matters for <code>auto</code>. Prefer the built-in tokens (<code>sm</code>, <code>md</code>, <code>lg</code>) and use raw pixel values only as an escape hatch, for example <code>data-menu-breakpoint=&quot;640&quot;</code>. Use <code>data-menu-placement</code> for the preferred anchored placement. It accepts the placement strings supported by the floating runtime, such as <code>bottom-start</code>, <code>bottom-end</code>, <code>top-start</code>, <code>right</code>, or <code>left</code>. Use <code>data-menu-distance</code> for the trigger gap in pixels. The default is <code>4</code>. Use <code>data-menu-auto-close</code> when the default click dismissal behavior is not right. Escape still follows the shared surface lifecycle.</p>
+<p><code>data-flyout-breakpoint</code> only matters for <code>auto</code>. Prefer the built-in tokens (<code>sm</code>, <code>md</code>, <code>lg</code>) and use raw pixel values only as an escape hatch, for example <code>data-flyout-breakpoint=&quot;640&quot;</code>. Use <code>data-flyout-placement</code> for the preferred anchored placement. It accepts the placement strings supported by the floating runtime, such as <code>bottom-start</code>, <code>bottom-end</code>, <code>top-start</code>, <code>right</code>, or <code>left</code>. Use <code>data-flyout-distance</code> for the trigger gap in pixels. The default is <code>4</code>. Use <code>data-flyout-auto-close</code> when the default click dismissal behavior is not right. Escape still follows the shared surface lifecycle.</p>
 <ul>
-  <li><code>true</code> is the default. App menu items close on activation and outside clicks close the menu.</li>
-  <li><code>inside</code> closes on app menu item activation only.</li>
+  <li><code>true</code> is the default. Action items close on activation and outside clicks close the flyout.</li>
+  <li><code>inside</code> closes on action item activation only.</li>
   <li><code>outside</code> closes on outside click only.</li>
   <li><code>false</code> disables automatic click closing.</li>
 </ul>
-<p>Menu still covers two distinct patterns:</p>
-<h3>App menu</h3>
+<p>Flyout covers two distinct patterns:</p>
+<h3>Action list</h3>
 <ul>
   <li>A list of <em>actions</em> the user can take: sign out, copy, delete.</li>
-  <li>Items are <code>&lt;button role=&quot;menuitem&quot;&gt;</code>.</li>
-  <li>Arrow keys navigate between items. Home/End jump to first/last.</li>
-  <li>Uses <code>aria-haspopup=&quot;menu&quot;</code> and <code>role=&quot;menu&quot;</code>.</li>
+  <li>Use <code>&lt;menu class=&quot;flyout&quot;&gt;</code> with <code>&lt;li&gt;</code> items.</li>
+  <li>Items are regular <code>&lt;button&gt;</code> or <code>&lt;a&gt;</code> elements.</li>
+  <li>Use <code>.sm</code> or <code>.lg</code> for density changes.</li>
+  <li>Add <code>role=&quot;menu&quot;</code> / <code>role=&quot;menuitem&quot;</code> only when you intentionally need the ARIA menu pattern and roving arrow-key behavior.</li>
 </ul>
 <h3>Nav panel</h3>
 <ul>
@@ -66,46 +67,42 @@
         <div class="example-render">
           <button class="btn outline"
         type="button"
-        aria-haspopup="menu"
         aria-expanded="false"
-        aria-controls="account-menu"
-        id="account-menu-trigger">
+        aria-controls="account-actions"
+        id="account-flyout-trigger">
   Account
   <i class="ti ti-chevron-down" aria-hidden="true"></i>
 </button>
 
-<div class="menu"
-     role="menu"
-     id="account-menu"
-     aria-labelledby="account-menu-trigger"
-     hidden>
-  <button class="menu-item" type="button" role="menuitem">Profile</button>
-  <button class="menu-item" type="button" role="menuitem">Settings</button>
-  <hr class="menu-divider" role="separator" />
-  <button class="menu-item danger" type="button" role="menuitem">Sign out</button>
-</div>
+<menu class="flyout sm"
+      id="account-actions"
+      aria-labelledby="account-flyout-trigger"
+      hidden>
+  <li><button type="button">Profile</button></li>
+  <li><button type="button">Settings</button></li>
+  <li><hr /></li>
+  <li><button class="danger" type="button">Sign out</button></li>
+</menu>
         </div>
         <div class="example-code">
           <pre><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>button</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>btn outline<span class="token punctuation">"</span></span>
         <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>button<span class="token punctuation">"</span></span>
-        <span class="token attr-name">aria-haspopup</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>menu<span class="token punctuation">"</span></span>
         <span class="token attr-name">aria-expanded</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>false<span class="token punctuation">"</span></span>
-        <span class="token attr-name">aria-controls</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>account-menu<span class="token punctuation">"</span></span>
-        <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>account-menu-trigger<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+        <span class="token attr-name">aria-controls</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>account-actions<span class="token punctuation">"</span></span>
+        <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>account-flyout-trigger<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
   Account
   <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>i</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>ti ti-chevron-down<span class="token punctuation">"</span></span> <span class="token attr-name">aria-hidden</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>true<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>i</span><span class="token punctuation">></span></span>
 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">></span></span>
 
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>menu<span class="token punctuation">"</span></span>
-     <span class="token attr-name">role</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>menu<span class="token punctuation">"</span></span>
-     <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>account-menu<span class="token punctuation">"</span></span>
-     <span class="token attr-name">aria-labelledby</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>account-menu-trigger<span class="token punctuation">"</span></span>
-     <span class="token attr-name">hidden</span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>button</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>menu-item<span class="token punctuation">"</span></span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>button<span class="token punctuation">"</span></span> <span class="token attr-name">role</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>menuitem<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Profile<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>button</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>menu-item<span class="token punctuation">"</span></span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>button<span class="token punctuation">"</span></span> <span class="token attr-name">role</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>menuitem<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Settings<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>hr</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>menu-divider<span class="token punctuation">"</span></span> <span class="token attr-name">role</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>separator<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>button</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>menu-item danger<span class="token punctuation">"</span></span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>button<span class="token punctuation">"</span></span> <span class="token attr-name">role</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>menuitem<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Sign out<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span></code></pre>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>menu</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>flyout sm<span class="token punctuation">"</span></span>
+      <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>account-actions<span class="token punctuation">"</span></span>
+      <span class="token attr-name">aria-labelledby</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>account-flyout-trigger<span class="token punctuation">"</span></span>
+      <span class="token attr-name">hidden</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>li</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>button</span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>button<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Profile<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>li</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>li</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>button</span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>button<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Settings<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>li</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>li</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>hr</span> <span class="token punctuation">/></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>li</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>li</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>button</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>danger<span class="token punctuation">"</span></span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>button<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Sign out<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>li</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>menu</span><span class="token punctuation">></span></span></code></pre>
         </div>
       </div>
     </section>
@@ -117,17 +114,16 @@
     <li>
       <button class="btn ghost"
               type="button"
-              aria-haspopup="menu"
               aria-expanded="false"
               aria-controls="products-panel">
         Products
         <i class="ti ti-chevron-down" aria-hidden="true"></i>
       </button>
 
-      <div class="menu"
+      <div class="flyout"
            id="products-panel"
            aria-label="Products"
-           data-menu-mobile="auto"
+           data-flyout-mobile="auto"
            hidden>
         <section aria-labelledby="products-design" class="px py-sm">
           <h3 id="products-design">Design</h3>
@@ -162,17 +158,16 @@
     <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>li</span><span class="token punctuation">></span></span>
       <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>button</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>btn ghost<span class="token punctuation">"</span></span>
               <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>button<span class="token punctuation">"</span></span>
-              <span class="token attr-name">aria-haspopup</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>menu<span class="token punctuation">"</span></span>
               <span class="token attr-name">aria-expanded</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>false<span class="token punctuation">"</span></span>
               <span class="token attr-name">aria-controls</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>products-panel<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
         Products
         <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>i</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>ti ti-chevron-down<span class="token punctuation">"</span></span> <span class="token attr-name">aria-hidden</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>true<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>i</span><span class="token punctuation">></span></span>
       <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">></span></span>
 
-      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>menu<span class="token punctuation">"</span></span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>flyout<span class="token punctuation">"</span></span>
            <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>products-panel<span class="token punctuation">"</span></span>
            <span class="token attr-name">aria-label</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>Products<span class="token punctuation">"</span></span>
-           <span class="token attr-name">data-menu-mobile</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>auto<span class="token punctuation">"</span></span>
+           <span class="token attr-name">data-flyout-mobile</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>auto<span class="token punctuation">"</span></span>
            <span class="token attr-name">hidden</span><span class="token punctuation">></span></span>
         <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>section</span> <span class="token attr-name">aria-labelledby</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>products-design<span class="token punctuation">"</span></span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>px py-sm<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
           <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>h3</span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>products-design<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Design<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>h3</span><span class="token punctuation">></span></span>
@@ -205,7 +200,7 @@
     </section>
     <div class="component-prose">
       <h3>Context menu</h3>
-<p>The same menu can be opened from a visible button and a contextual target. Prefer shipping both so desktop users get right click and mobile users still have a discoverable trigger. Add <code>data-context-menu-scope</code> when the menu should stay inside a specific region. Empty or <code>self</code> constrains to the target itself, <code>parent</code> constrains to the parent, and a selector constrains to the closest matching ancestor or first matching element. Long press is opt-in with <code>data-context-menu-long-press</code>. Empty uses the default delay; a number sets the delay in milliseconds.</p>
+<p>The same flyout can be opened from a visible button and a contextual target. Prefer shipping both so desktop users get right click and mobile users still have a discoverable trigger. Add <code>data-context-menu-scope</code> when the flyout should stay inside a specific region. Empty or <code>self</code> constrains to the target itself, <code>parent</code> constrains to the parent, and a selector constrains to the closest matching ancestor or first matching element. Long press is opt-in with <code>data-context-menu-long-press</code>. Empty uses the default delay; a number sets the delay in milliseconds.</p>
     </div>
     <section class="component-section">
       <div class="example-group">
@@ -220,7 +215,6 @@
     <strong>File.pdf</strong>
     <button class="btn ghost"
             type="button"
-            aria-haspopup="menu"
             aria-expanded="false"
             aria-controls="file-actions"
             id="file-actions-trigger">
@@ -229,16 +223,15 @@
   </div>
   <p class="text-sm text-muted">Right click inside the card, press the context-menu key, or long press on touch.</p>
 
-  <div class="menu"
-       role="menu"
-       id="file-actions"
-       aria-labelledby="file-actions-trigger"
-       hidden>
-    <button class="menu-item" type="button" role="menuitem">Open</button>
-    <button class="menu-item" type="button" role="menuitem">Rename</button>
-    <hr class="menu-divider" role="separator" />
-    <button class="menu-item danger" type="button" role="menuitem">Delete</button>
-  </div>
+  <menu class="flyout"
+        id="file-actions"
+        aria-labelledby="file-actions-trigger"
+        hidden>
+    <li><button type="button">Open</button></li>
+    <li><button type="button">Rename</button></li>
+    <li><hr /></li>
+    <li><button class="danger" type="button">Delete</button></li>
+  </menu>
 </div>
         </div>
         <div class="example-code">
@@ -252,7 +245,6 @@
     <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>strong</span><span class="token punctuation">></span></span>File.pdf<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>strong</span><span class="token punctuation">></span></span>
     <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>button</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>btn ghost<span class="token punctuation">"</span></span>
             <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>button<span class="token punctuation">"</span></span>
-            <span class="token attr-name">aria-haspopup</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>menu<span class="token punctuation">"</span></span>
             <span class="token attr-name">aria-expanded</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>false<span class="token punctuation">"</span></span>
             <span class="token attr-name">aria-controls</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>file-actions<span class="token punctuation">"</span></span>
             <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>file-actions-trigger<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
@@ -261,16 +253,15 @@
   <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
   <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>text-sm text-muted<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Right click inside the card, press the context-menu key, or long press on touch.<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>p</span><span class="token punctuation">></span></span>
 
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>menu<span class="token punctuation">"</span></span>
-       <span class="token attr-name">role</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>menu<span class="token punctuation">"</span></span>
-       <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>file-actions<span class="token punctuation">"</span></span>
-       <span class="token attr-name">aria-labelledby</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>file-actions-trigger<span class="token punctuation">"</span></span>
-       <span class="token attr-name">hidden</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>button</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>menu-item<span class="token punctuation">"</span></span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>button<span class="token punctuation">"</span></span> <span class="token attr-name">role</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>menuitem<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Open<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>button</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>menu-item<span class="token punctuation">"</span></span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>button<span class="token punctuation">"</span></span> <span class="token attr-name">role</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>menuitem<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Rename<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>hr</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>menu-divider<span class="token punctuation">"</span></span> <span class="token attr-name">role</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>separator<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>button</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>menu-item danger<span class="token punctuation">"</span></span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>button<span class="token punctuation">"</span></span> <span class="token attr-name">role</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>menuitem<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Delete<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>menu</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>flyout<span class="token punctuation">"</span></span>
+        <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>file-actions<span class="token punctuation">"</span></span>
+        <span class="token attr-name">aria-labelledby</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>file-actions-trigger<span class="token punctuation">"</span></span>
+        <span class="token attr-name">hidden</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>li</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>button</span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>button<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Open<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>li</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>li</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>button</span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>button<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Rename<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>li</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>li</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>hr</span> <span class="token punctuation">/></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>li</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>li</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>button</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>danger<span class="token punctuation">"</span></span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>button<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Delete<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>li</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>menu</span><span class="token punctuation">></span></span>
 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span></code></pre>
         </div>
       </div>

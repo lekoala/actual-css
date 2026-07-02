@@ -274,43 +274,31 @@ small {
 .primary {
   --intent: var(--primary);
   --intent-fg: var(--primary-fg);
-  --intent-alert-bg: var(--lightningcss-light, color-mix(in srgb, var(--intent) 8%, transparent)) var(--lightningcss-dark, color-mix(in srgb, var(--intent) 20%, transparent));
-  --intent-alert-border: transparent;
 }
 
 .secondary {
   --intent: var(--secondary);
   --intent-fg: var(--secondary-fg);
-  --intent-alert-bg: var(--lightningcss-light, color-mix(in srgb, var(--intent) 8%, transparent)) var(--lightningcss-dark, color-mix(in srgb, var(--intent) 20%, transparent));
-  --intent-alert-border: transparent;
 }
 
 .success {
   --intent: var(--success);
   --intent-fg: var(--success-fg);
-  --intent-alert-bg: var(--lightningcss-light, color-mix(in srgb, var(--intent) 8%, transparent)) var(--lightningcss-dark, color-mix(in srgb, var(--intent) 20%, transparent));
-  --intent-alert-border: transparent;
 }
 
 .warning {
   --intent: var(--warning);
   --intent-fg: var(--warning-fg);
-  --intent-alert-bg: var(--lightningcss-light, color-mix(in srgb, var(--intent) 8%, transparent)) var(--lightningcss-dark, color-mix(in srgb, var(--intent) 20%, transparent));
-  --intent-alert-border: transparent;
 }
 
 .danger {
   --intent: var(--danger);
   --intent-fg: var(--danger-fg);
-  --intent-alert-bg: var(--lightningcss-light, color-mix(in srgb, var(--intent) 8%, transparent)) var(--lightningcss-dark, color-mix(in srgb, var(--intent) 20%, transparent));
-  --intent-alert-border: transparent;
 }
 
 .neutral {
   --intent: var(--neutral);
   --intent-fg: var(--neutral-fg);
-  --intent-alert-bg: var(--lightningcss-light, color-mix(in srgb, var(--intent) 8%, transparent)) var(--lightningcss-dark, color-mix(in srgb, var(--intent) 20%, transparent));
-  --intent-alert-border: transparent;
 }
 
 .stack {
@@ -483,11 +471,17 @@ small {
 .sm {
   --control-size: var(--control-size-sm);
   --control-font-size: var(--font-size-sm);
+  --variant-font-size: var(--font-size-sm);
+  --variant-icon-size: 1rem;
+  --variant-pad-block: var(--space-3);
 }
 
 .lg {
   --control-size: var(--control-size-lg);
   --control-font-size: var(--font-size-lg);
+  --variant-font-size: var(--font-size-lg);
+  --variant-icon-size: 1.5rem;
+  --variant-pad-block: var(--space-5);
 }
 
 @supports (color: color-mix(in oklch, red, white)) {
@@ -885,13 +879,13 @@ button.badge:disabled, .badge[aria-disabled="true"] {
 :where(.alert) {
   --intent: initial;
   --intent-fg: initial;
-  --intent-alert-bg: initial;
-  --intent-alert-border: initial;
 }
 
 .alert {
-  --alert-pad-block: var(--space-4);
+  --alert-pad-block: var(--variant-pad-block, var(--space-4));
   --alert-pad-inline: var(--space-4);
+  --alert-font-size: var(--variant-font-size, var(--font-size-md));
+  --alert-icon-size: var(--variant-icon-size, 1.25rem);
   --alert-bg: var(--surface-subtle);
   --alert-border: var(--border);
   --ui-bg: var(--alert-bg);
@@ -903,6 +897,7 @@ button.badge:disabled, .badge[aria-disabled="true"] {
   color: var(--ui-fg, var(--text));
   border: var(--border-width) solid var(--ui-border, var(--border));
   border-radius: var(--radius-lg);
+  font-size: var(--alert-font-size);
 }
 
 .alert > * {
@@ -915,12 +910,6 @@ button.badge:disabled, .badge[aria-disabled="true"] {
 
 .alert > :last-child {
   margin-block-end: 0;
-}
-
-.alert:where(.soft) {
-  --alert-bg: var(--surface-subtle);
-  --alert-border: var(--border);
-  --ui-fg: var(--intent, var(--text));
 }
 
 .alert.solid {
@@ -937,27 +926,23 @@ button.badge:disabled, .badge[aria-disabled="true"] {
 
 @supports (color: color-mix(in srgb, black, white)) {
   .alert:where(:not(.solid, .outline)) {
-    --ui-bg: color-mix(in srgb, var(--intent, var(--neutral)) 8%, var(--surface));
-    --ui-border: color-mix(in srgb, var(--intent, var(--neutral)) 24%, var(--border));
-  }
-}
-
-@supports (color: color-mix(in oklch, red, white)) {
-  .alert:where(.soft) {
-    --alert-bg: color-mix(in oklch,
+    --ui-bg: color-mix(in srgb,
       var(--surface) var(--soft-bg-mix),
       var(--intent, var(--neutral)));
-    --alert-border: color-mix(in oklch,
+    --ui-border: color-mix(in srgb,
       var(--surface) var(--soft-border-mix),
       var(--intent, var(--neutral)));
   }
 }
 
-@supports (color: light-dark(red, blue)) and (color: color-mix(in srgb, black, white)) {
-  .alert:where(:not(.solid, .outline)) {
-    --ui-bg: var(--intent-alert-bg, var(--alert-bg));
-    --ui-border: var(--intent-alert-border, var(--alert-border));
-  }
+.alert > :first-child[aria-hidden="true"] {
+  inline-size: var(--alert-icon-size);
+  block-size: var(--alert-icon-size);
+  font-size: var(--alert-icon-size);
+  vertical-align: -.125em;
+  flex: none;
+  line-height: 1;
+  display: inline-block;
 }
 
 @supports selector(.alert:has(> *)) {
@@ -969,19 +954,19 @@ button.badge:disabled, .badge[aria-disabled="true"] {
   }
 
   .alert:has( > :first-child[aria-hidden="true"]) > :first-child {
+    inline-size: var(--alert-icon-size);
+    block-size: var(--alert-icon-size);
+    font-size: var(--alert-icon-size);
     grid-area: 1 / 1 / -1;
     place-items: center;
-    block-size: 1.25rem;
-    inline-size: 1.25rem;
     margin-block-start: .125em;
-    font-size: 1.25rem;
     line-height: 1;
     display: inline-grid;
   }
 
   .alert:has( > :first-child[aria-hidden="true"]) > :first-child:is(svg, i) {
-    block-size: 1.25rem;
-    inline-size: 1.25rem;
+    inline-size: var(--alert-icon-size);
+    block-size: var(--alert-icon-size);
   }
 
   .alert:has( > :first-child[aria-hidden="true"]) > :not(:first-child) {
@@ -992,10 +977,6 @@ button.badge:disabled, .badge[aria-disabled="true"] {
 .alert :where(a:not(.btn)) {
   color: inherit;
   font-weight: var(--font-weight-strong);
-}
-
-.alert > .actions {
-  margin-block-start: var(--space-3);
 }
 
 .actions {
@@ -2537,13 +2518,13 @@ button.avatar {
   }
 }
 
-.menu {
+.flyout {
   z-index: var(--z-menu);
   gap: var(--space-1);
   inline-size: max-content;
-  min-inline-size: min(var(--menu-trigger-width, 0px),
+  min-inline-size: min(var(--flyout-trigger-width, 0px),
     min(20rem, calc(100vw - var(--space-6))));
-  min-inline-size: min(var(--menu-trigger-width, 0px),
+  min-inline-size: min(var(--flyout-trigger-width, 0px),
     min(20rem, calc(100vi - var(--space-6))));
   max-inline-size: min(20rem, calc(100vw - var(--space-6)));
   max-inline-size: min(20rem, calc(100vi - var(--space-6)));
@@ -2560,7 +2541,7 @@ button.avatar {
   inset-inline-start: 0;
 }
 
-.menu.is-sheet {
+.flyout.is-sheet {
   max-block-size: min(75vh, 32rem);
   inline-size: auto;
   min-inline-size: 0;
@@ -2576,16 +2557,20 @@ button.avatar {
   overflow: auto;
 }
 
-.menu[hidden] {
+.flyout[hidden] {
   display: none;
 }
 
-.menu-item, .menu > button, .menu > a, .menu > [role="menuitem"] {
+.flyout > li {
+  margin: 0;
+}
+
+.flyout > :where(button, a, [role="menuitem"]), .flyout > li > :where(button, a, [role="menuitem"]) {
   justify-content: flex-start;
   align-items: center;
   gap: var(--space-2);
   inline-size: 100%;
-  min-block-size: var(--control-size-sm);
+  min-block-size: var(--control-size);
   padding-inline: var(--space-2);
   border-radius: var(--radius-sm);
   color: var(--text);
@@ -2600,33 +2585,21 @@ button.avatar {
   display: flex;
 }
 
-.menu.is-sheet .menu-item, .menu.is-sheet > button, .menu.is-sheet > a, .menu.is-sheet > [role="menuitem"] {
+.flyout.is-sheet > :where(button, a, [role="menuitem"]), .flyout.is-sheet > li > :where(button, a, [role="menuitem"]) {
   min-block-size: var(--control-size-lg);
 }
 
-.menu-item:hover, .menu-item:focus-visible, .menu > button:hover, .menu > a:hover, .menu > [role="menuitem"]:hover, .menu > button:focus-visible, .menu > a:focus-visible, .menu > [role="menuitem"]:focus-visible {
+.flyout > :where(button, a, [role="menuitem"]):hover, .flyout > :where(button, a, [role="menuitem"]):focus-visible, .flyout > li > :where(button, a, [role="menuitem"]):hover, .flyout > li > :where(button, a, [role="menuitem"]):focus-visible {
   background: var(--surface-subtle);
   outline: none;
 }
 
-.menu-divider, .menu hr {
+.flyout > hr, .flyout > li > hr {
   inline-size: 100%;
   margin: 0;
   margin-block: var(--space-1);
   border: 0;
   border-block-start: var(--border-width) solid var(--border);
-}
-
-.menu-header {
-  padding-inline: var(--space-2);
-  font-size: var(--font-size-xs);
-  font-weight: var(--font-weight-strong);
-  color: var(--text-muted);
-}
-
-.menu-text {
-  padding-inline: var(--space-2);
-  color: var(--text-muted);
 }
 
 .tabs {
