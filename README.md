@@ -86,14 +86,21 @@ import "actual-css/js/tooltip";
 
 The package does not maintain partial bundles. Modular entrypoints map to source files so projects can compose their own shape with low framework overhead.
 
+## Distribution
+
+- `dist/actual.css` — distribution moderne lisible. Les syntaxes modernes (`light-dark()`, `color-mix()`, `@container`, `:has()`, `100dvh`, `100vi`) sont conservées telles quelles. Pas de transpilation interne.
+- `dist/actual.min.css` — même CSS, minifié pour la production.
+- Une build "compat" n'est pas fournie pour l'instant. Le framework est conçu en **progressive enhancement** : les features modernes sont gated par `@supports`, les vieux navigateurs reçoivent le layout de base, les formulaires et les composants sans les fioritures.
+- Si tu as besoin de fallbacks plus conservateurs (vh/vw, min-width/max-width), tu peux importer les sources individuelles depuis `src/css/`.
+
 ## Browser support
 
-Actual CSS is built as progressive enhancement. Features gate on `@supports` — older browsers get core layout, forms, and components without the bells.
+Actual CSS est construit en progressive enhancement. Les fonctionnalités sont gated par `@supports`.
 
 - **Degraded** (`:is`, `:where`) — Firefox 78+, Safari 14+, Chromium 88+. Core layout, typography, forms, components.
 - **Minimum** (`<dialog>`) — Firefox 98+, Safari 15.4+, Chromium 99+. Modal, drawer, top-layer.
 - **Intermediate** (`:has`, containers) — Firefox 121+, Safari 16+, Chromium 106+. Container queries, alert icon grid, intent tints.
-- **Recommended** — Firefox 129+, Safari 17.5+, Chromium 123+. `light-dark()`, `color-mix()`, full theming.
+- **Recommended** — Firefox 121+, Safari 17.5+, Chrome 120+. `light-dark()`, `color-mix()`, `light-dark()`, full theming.
 
 ### Cascade layers
 

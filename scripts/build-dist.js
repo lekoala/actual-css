@@ -1,5 +1,5 @@
 import { bundle, Features } from "lightningcss";
-import { mkdir, rm, stat, writeFile } from "node:fs/promises";
+import { mkdir, readFile, rm, stat, writeFile } from "node:fs/promises";
 import { existsSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -54,6 +54,35 @@ async function build({ entry = ENTRY, minify, naming }) {
   return outPath;
 }
 
+async function verifyDist(distDir) {
+  const distFiles = ["actual.css", "actual.min.css", "actual-themes.min.css"];
+  let ok = true;
+
+  for (const file of distFiles) {
+    const path = join(distDir, file);
+    if (!existsSync(path)) continue;
+    const content = await readFile(path, "utf8");
+
+    // No lightningcss bookkeeping variables
+    if (content.includes("--lightningcss")) {
+      console.error(`FAIL ${file}: contains --lightningcss-* variables`);
+      ok = false;
+    }
+
+    // No srgb color-mix (all modern mixes must be oklch)
+    if (/color-mix\(in srgb/.test(content)) {
+      console.error(`FAIL ${file}: contains color-mix(in srgb, ...)`);
+      ok = false;
+    }
+  }
+
+  if (!ok) {
+    console.error("\nDist verification FAILED");
+    process.exit(1);
+  }
+  console.log("\nDist verification passed");
+}
+
 function formatBytes(bytes) {
   if (bytes < 1024) return `${bytes} B`;
   return `${(bytes / 1024).toFixed(1)} KB`;
@@ -90,6 +119,8 @@ async function main() {
   console.log(`Built ${devPath} (${formatBytes(devStat.size)})`);
   console.log(`Built ${minPath} (${formatBytes(minStat.size)}) — ${ratio}% smaller`);
   console.log(`Built ${themesPath} (${formatBytes(themesStat.size)})`);
+
+  await verifyDist(DIST);
 }
 
 main();

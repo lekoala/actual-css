@@ -138,8 +138,7 @@
 }
 
 .app-shell {
-  min-block-size: 100vh;
-  min-block-size: 100dvh;
+  min-block-size: var(--viewport-block);
   display: flex;
   flex-direction: column;
 }

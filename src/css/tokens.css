@@ -78,11 +78,30 @@
   --icon-chevron: var(--icon-chevron-mask);
   --icon-check: var(--icon-check-mask);
 
+  /* Viewport size tokens — fallback vh/vw with dvh/vi enhancement.
+     Consumed by full-viewport components (app-shell, drawer, modal, flyout).
+     Custom properties (rather than double declarations) protect the
+     fallback from Lightning CSS bundle deduplication. */
+  --viewport-block: 100vh;
+  --viewport-inline: 100vw;
+
   /* Layering */
   --z-sticky: 10;
   --z-menu: 20;
   --z-popover: 30;
   --z-tooltip: 50;
+}
+
+@supports (block-size: 100dvh) {
+  :root {
+    --viewport-block: 100dvh;
+  }
+}
+
+@supports (inline-size: 100vi) {
+  :root {
+    --viewport-inline: 100vi;
+  }
 }
 
 @supports (color: color-mix(in oklch, red, white)) {

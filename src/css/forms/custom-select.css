@@ -18,8 +18,7 @@
     .select:not([multiple], [size], .native)::picker(select),
     .form select:not([multiple], [size], .native)::picker(select) {
       appearance: base-select;
-      max-height: min(24rem, 70vh);
-      max-height: min(24rem, 70dvh);
+      max-height: min(24rem, calc(var(--viewport-block) * 0.7));
       margin-block: var(--space-2);
       padding: 0;
       border: var(--border-width) solid var(--border);
