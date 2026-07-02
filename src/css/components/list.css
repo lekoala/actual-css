@@ -5,18 +5,18 @@
  * action buttons flow naturally. The description breaks onto its own row via
  * flex-basis.
  */
-:where(.list-group, .list) > figcaption {
+.list-group > figcaption {
   font-weight: var(--font-weight-strong);
   margin-block-end: var(--space-3);
 }
 
-:where(.list-group, .list) > ul {
+.list-group > ul {
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
-:where(.list-group, .list) > ul > li {
+.list-group > ul > li {
   margin: 0;
   display: flex;
   flex-wrap: wrap;
@@ -26,11 +26,11 @@
   padding-block: var(--space-3);
 }
 
-:where(.list-group, .list) > ul > li:not(:last-child) {
+.list-group > ul > li:not(:last-child) {
   border-block-end: var(--border-width) solid var(--border);
 }
 
-:where(.list-group, .list) > ul > li > p {
+.list-group > ul > li > p {
   flex-basis: 100%;
   margin: 0;
 }

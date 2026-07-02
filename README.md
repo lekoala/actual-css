@@ -14,6 +14,23 @@ Then import in your CSS:
 @import "actual-css";
 ```
 
+Or compose only the pieces you use:
+
+```css
+@import "actual-css/css/reset";
+@import "actual-css/css/base";
+@import "actual-css/css/tokens";
+@import "actual-css/css/theme";
+@import "actual-css/css/intents";
+@import "actual-css/css/variants";
+@import "actual-css/css/layout";
+@import "actual-css/css/components/button";
+@import "actual-css/css/components/card";
+@import "actual-css/css/forms";
+@import "actual-css/css/ui/menu";
+@import "actual-css/css/utilities";
+```
+
 Or grab the compiled file from `dist/actual.min.css` and link it directly:
 
 ```html
@@ -37,7 +54,9 @@ Size variants `.sm` and `.lg` scale controls consistently.
 
 ## What's inside
 
-**Components** — button, card, badge, alert, modal, drawer, navbar, table, accordion, breadcrumb, pagination, skeleton, spinner, avatar, meter, progress, list-group, eyebrow, surface, scroller, actions, busy, form-actions.
+**Components** — button, card, badge, alert, modal, drawer, table, accordion, breadcrumb, pagination, skeleton, spinner, avatar, meter, progress, busy.
+
+**Patterns and chrome** — actions, form-actions, list-group, navbar, eyebrow, scroller. These are regular source files too; import them only when they fit your product.
 
 **Layout primitives** — `.stack`, `.cluster`, `.grid`, `.with-sidebar`, `.switcher`, `.center`, `.media`, `.frame`, `.app-shell`, `.grid-responsive`.
 
@@ -49,11 +68,23 @@ Size variants `.sm` and `.lg` scale controls consistently.
 
 **Themes** — auto dark mode via `light-dark()`. 8 theme packs: corporate, forest, ocean, sunset, lavender, mono, dim, square. Switch with `data-theme="dark"` or a theme name.
 
+**Optional CSS** — `actual-css/css/layer` wraps Actual in `@layer actual`; `actual-css/css/optional/typography-fluid` adds fluid display typography when a project wants it.
+
 **JS enhancers** — dialog, menu, tooltip, tabs, scrollspy, context-menu, floating. Drop in `actual.js` and they auto-enhance via data-attributes.
 
 ```html
 <script src="actual.js" type="module"></script>
 ```
+
+Bundlers can also import only the enhancers they need:
+
+```js
+import "actual-css/js/dialog";
+import "actual-css/js/menu";
+import "actual-css/js/tooltip";
+```
+
+The package does not maintain partial bundles. Modular entrypoints map to source files so projects can compose their own shape with low framework overhead.
 
 ## Browser support
 

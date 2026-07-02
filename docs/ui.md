@@ -9,6 +9,18 @@ UI components are interactive patterns that need JavaScript or modern platform b
 - Use shared button classes and variants for triggers.
 - Do not add toasts. Use alerts, status regions, dialogs, or inline validation instead.
 
+## JavaScript Modules
+
+The full runtime is `actual-css/js`. Each enhancer is also importable on its own for projects that use custom components or want a smaller behavior surface:
+
+```js
+import "actual-css/js/dialog";
+import "actual-css/js/menu";
+import "actual-css/js/tooltip";
+```
+
+Enhancer modules self-register when imported. They do not require init calls and should stay safe to import independently.
+
 ## Menu
 
 > Positioned menu attached to a trigger, with full keyboard, focus, and ARIA support.
