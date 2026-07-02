@@ -1,13 +1,13 @@
 {
-  "timestamp": "2026-07-02T13:08:55.758Z",
-  "totalRaw": 107458,
-  "totalMinified": 55723,
-  "totalBrotli": 9683,
+  "timestamp": "2026-07-02T13:13:34.166Z",
+  "totalRaw": 107717,
+  "totalMinified": 55843,
+  "totalBrotli": 9700,
   "themesMinified": 12513,
   "themesBrotli": 1755,
-  "shippedMinified": 68236,
-  "shippedBrotli": 11438,
-  "fileCount": 57,
+  "shippedMinified": 68356,
+  "shippedBrotli": 11455,
+  "fileCount": 58,
   "files": [
     {
       "file": "forms/choice.css",
@@ -62,20 +62,16 @@
       "raw": 2875
     },
     {
+      "file": "variants.css",
+      "raw": 2742
+    },
+    {
       "file": "forms/switch.css",
       "raw": 2705
     },
     {
       "file": "themes/square.css",
       "raw": 2573
-    },
-    {
-      "file": "variants.css",
-      "raw": 2531
-    },
-    {
-      "file": "components/badge.css",
-      "raw": 2282
     },
     {
       "file": "themes/corporate.css",
@@ -96,6 +92,10 @@
     {
       "file": "themes/sunset.css",
       "raw": 2238
+    },
+    {
+      "file": "components/badge.css",
+      "raw": 2234
     },
     {
       "file": "themes/mono.css",
@@ -232,6 +232,10 @@
     {
       "file": "actual.css",
       "raw": 306
+    },
+    {
+      "file": "actual.full.css",
+      "raw": 96
     },
     {
       "file": "ui/index.css",
