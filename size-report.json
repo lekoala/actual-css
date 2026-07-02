@@ -1,12 +1,12 @@
 {
-  "timestamp": "2026-07-02T13:34:10.743Z",
-  "totalRaw": 107594,
-  "totalMinified": 54853,
-  "totalBrotli": 9602,
+  "timestamp": "2026-07-02T13:51:04.766Z",
+  "totalRaw": 107856,
+  "totalMinified": 55059,
+  "totalBrotli": 9651,
   "themesMinified": 11303,
   "themesBrotli": 1668,
-  "shippedMinified": 66156,
-  "shippedBrotli": 11270,
+  "shippedMinified": 66362,
+  "shippedBrotli": 11319,
   "fileCount": 58,
   "files": [
     {
@@ -14,16 +14,16 @@
       "raw": 4617
     },
     {
+      "file": "tokens.css",
+      "raw": 4294
+    },
+    {
       "file": "theme.css",
       "raw": 4212
     },
     {
       "file": "layout.css",
-      "raw": 3945
-    },
-    {
-      "file": "tokens.css",
-      "raw": 3803
+      "raw": 3935
     },
     {
       "file": "components/button.css",
@@ -39,19 +39,19 @@
     },
     {
       "file": "components/modal.css",
-      "raw": 3193
-    },
-    {
-      "file": "ui/flyout.css",
-      "raw": 3141
+      "raw": 3147
     },
     {
       "file": "components/alert.css",
       "raw": 3077
     },
     {
+      "file": "ui/flyout.css",
+      "raw": 3026
+    },
+    {
       "file": "forms/custom-select.css",
-      "raw": 2971
+      "raw": 2963
     },
     {
       "file": "utilities.css",
@@ -111,11 +111,11 @@
     },
     {
       "file": "ui/tooltip.css",
-      "raw": 2023
+      "raw": 1989
     },
     {
       "file": "components/drawer.css",
-      "raw": 1973
+      "raw": 1957
     },
     {
       "file": "components/progress.css",

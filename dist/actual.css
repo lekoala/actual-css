@@ -129,10 +129,24 @@ small {
   --icon-chevron-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%238892a4' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
   --icon-chevron: var(--icon-chevron-mask);
   --icon-check: var(--icon-check-mask);
+  --viewport-block: 100vh;
+  --viewport-inline: 100vw;
   --z-sticky: 10;
   --z-menu: 20;
   --z-popover: 30;
   --z-tooltip: 50;
+}
+
+@supports (block-size: 100dvh) {
+  :root {
+    --viewport-block: 100dvh;
+  }
+}
+
+@supports (inline-size: 100vi) {
+  :root {
+    --viewport-inline: 100vi;
+  }
 }
 
 @supports (color: color-mix(in oklch, red, white)) {
@@ -401,8 +415,8 @@ small {
 }
 
 .app-shell {
+  min-block-size: var(--viewport-block);
   flex-direction: column;
-  min-block-size: 100dvh;
   display: flex;
 }
 
@@ -1087,10 +1101,10 @@ button.badge:disabled, .badge[aria-disabled="true"] {
 dialog.modal {
   --modal-size: 32rem;
   max-inline-size: min(100% - 2rem, var(--modal-size));
+  max-block-size: calc(var(--viewport-block) - 2rem);
   border: var(--border-width) solid var(--border);
   border-radius: var(--radius-lg);
   background: var(--surface-raised);
-  max-block-size: calc(100dvb - 2rem);
   color: var(--text);
   box-shadow: var(--shadow);
   opacity: 0;
@@ -1102,8 +1116,8 @@ dialog.modal {
 
 dialog.modal > form, dialog.modal > .stack {
   gap: var(--space-4);
+  max-block-size: calc(var(--viewport-block) - 2rem);
   overscroll-behavior: contain;
-  max-block-size: calc(100dvb - 2rem);
   padding: var(--space-4);
   display: grid;
   overflow: auto;
@@ -1214,9 +1228,9 @@ dialog.drawer {
   --drawer-size: 20rem;
   --drawer-pad: var(--space-4);
   inline-size: min(90vw, var(--drawer-size));
-  block-size: 100dvh;
-  max-block-size: 100dvh;
+  block-size: var(--viewport-block);
   max-inline-size: none;
+  max-block-size: var(--viewport-block);
   padding: var(--drawer-pad);
   border: 0;
   border-inline-end: var(--border-width) solid var(--border);
@@ -2268,7 +2282,7 @@ button.avatar {
 
     .select:not([multiple], [size], .native)::picker(select) {
       appearance: base-select;
-      max-height: min(24rem, 70dvh);
+      max-height: min(24rem, calc(var(--viewport-block) * .7));
       margin-block: var(--space-2);
       border: var(--border-width) solid var(--border);
       border-radius: var(--radius);
@@ -2280,7 +2294,7 @@ button.avatar {
 
     .form select:not([multiple], [size], .native)::picker(select) {
       appearance: base-select;
-      max-height: min(24rem, 70dvh);
+      max-height: min(24rem, calc(var(--viewport-block) * .7));
       margin-block: var(--space-2);
       border: var(--border-width) solid var(--border);
       border-radius: var(--radius);
@@ -2475,10 +2489,9 @@ button.avatar {
   z-index: var(--z-menu);
   gap: var(--space-1);
   inline-size: max-content;
-  min-inline-size: min(var(--flyout-trigger-width, 0px), min(20rem, calc(100vw - var(--space-6))));
-  min-inline-size: min(var(--flyout-trigger-width, 0px), min(20rem, calc(100vi - var(--space-6))));
-  max-inline-size: min(20rem, calc(100vw - var(--space-6)));
-  max-inline-size: min(20rem, calc(100vi - var(--space-6)));
+  min-inline-size: min(var(--flyout-trigger-width, 0px),
+    min(20rem, calc(var(--viewport-inline) - var(--space-6))));
+  max-inline-size: min(20rem, calc(var(--viewport-inline) - var(--space-6)));
   padding: var(--space-1);
   border: var(--border-width) solid var(--border);
   border-radius: var(--radius);
@@ -2598,9 +2611,9 @@ button.avatar {
   --tooltip-fg: var(--surface);
   --tooltip-arrow-size: 5px;
   z-index: var(--z-tooltip);
+  max-inline-size: min(24rem, calc(var(--viewport-inline) - 2rem));
   border-radius: var(--radius-sm);
   background: var(--tooltip-bg);
-  max-inline-size: min(24rem, 100vi - 2rem);
   color: var(--tooltip-fg);
   font-size: .8125rem;
   line-height: var(--line-height-tight);

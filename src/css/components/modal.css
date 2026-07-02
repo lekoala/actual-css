@@ -8,8 +8,7 @@ dialog.modal {
   --modal-size: 32rem;
 
   max-inline-size: min(100% - 2rem, var(--modal-size));
-  max-block-size: calc(100vh - 2rem);
-  max-block-size: calc(100dvb - 2rem);
+  max-block-size: calc(var(--viewport-block) - 2rem);
   border: var(--border-width) solid var(--border);
   border-radius: var(--radius-lg);
   background: var(--surface-raised);
@@ -32,8 +31,7 @@ dialog.modal > form,
 dialog.modal > .stack {
   display: grid;
   gap: var(--space-4);
-  max-block-size: calc(100vh - 2rem);
-  max-block-size: calc(100dvb - 2rem);
+  max-block-size: calc(var(--viewport-block) - 2rem);
   overflow: auto;
   overscroll-behavior: contain;
   padding: var(--space-4);

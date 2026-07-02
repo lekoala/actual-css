@@ -11,8 +11,7 @@
 
   position: fixed;
   z-index: var(--z-tooltip);
-  max-inline-size: min(24rem, calc(100vw - 2rem));
-  max-inline-size: min(24rem, calc(100vi - 2rem));
+  max-inline-size: min(24rem, calc(var(--viewport-inline) - 2rem));
   padding: 0.25em 0.6em;
   border-radius: var(--radius-sm);
   background: var(--tooltip-bg);
