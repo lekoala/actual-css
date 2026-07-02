@@ -1,16 +1,38 @@
 /* Opt-in theme bundle. Importing this file pulls in every theme below, each
  * gated by [data-theme="…"]. The light baseline is :root in src/css/theme.css —
- * there is no light.css here. dark and dim are single-block dark-only themes
- * (color-scheme: dark) so they cannot adapt to prefers-color-scheme; the other
- * five are paired light/dark themes using light-dark(). square additionally
- * demonstrates overriding the full --radius scale to 0; dim demonstrates a
- * dark theme with lifted surface tones. */
+ * there is no light.css here.
+ *
+ * The themes are illustrative: each one demonstrates a different set of knobs
+ * the token contract exposes, beyond recoloring.
+ *
+ *   dark       — canonical dark (single block, color-scheme: dark only)
+ *   dim        — dark variant with lifted surface tones
+ *   corporate  — reference paired light/dark recolor via light-dark()
+ *   forest     — paired recolor + scaled-up radius tokens
+ *   ocean      — reference paired recolor
+ *   spruce     — deep spruce-green primary + copper secondary
+ *   petrol     — desaturated petrol-blue primary + apricot secondary
+ *   sunset     — paired recolor + selection and shadow-color theming
+ *   lavender   — paired recolor + soft-variant tuning, tinted shadows
+ *   mono       — grayscale palette, colored status intents only
+ *   square     — paired recolor + full radius scale forced to 0
+ *   cyberpunk  — light-only stress test: yellow canvas, dark-on-bright
+ *                intents, 2px borders, hard offset shadows
+ *   neon       — dark-only + wide-gamut P3 upgrade via oklch(), glow
+ *                shadows, soft-variant tuning
+ *
+ * Single-block themes (dark, dim, cyberpunk, neon) pin one color-scheme and
+ * cannot adapt to prefers-color-scheme; the paired ones follow the OS. */
 @import "./dark.css";
 @import "./dim.css";
 @import "./corporate.css";
 @import "./forest.css";
 @import "./ocean.css";
+@import "./spruce.css";
+@import "./petrol.css";
 @import "./sunset.css";
 @import "./lavender.css";
 @import "./mono.css";
 @import "./square.css";
+@import "./cyberpunk.css";
+@import "./neon.css";

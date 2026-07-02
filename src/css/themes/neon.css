@@ -1,0 +1,66 @@
+/* Neon — dark-only theme (single block, color-scheme: dark, same shape as
+ * dark.css) that demonstrates wide-gamut progressive enhancement. The baseline
+ * block uses sRGB-safe hsl() and works everywhere dark.css works; on P3
+ * displays with oklch() support the intents are re-declared with chroma beyond
+ * sRGB. This is the pattern for shipping colors sRGB cannot express without
+ * breaking older screens or browsers. Also demonstrates the soft-variant
+ * tuning knobs and glow shadows on popovers. */
+[data-theme="neon"] {
+  color-scheme: dark;
+
+  /* Electric intents over near-black: bright hues carry dark ink so solid
+     chips read as lit signs rather than white-on-color buttons. */
+  --primary: hsl(315 95% 62%);
+  --primary-fg: hsl(315 100% 8%);
+  --secondary: hsl(182 100% 46%);
+  --secondary-fg: hsl(182 100% 7%);
+  --success: hsl(135 85% 52%);
+  --success-fg: hsl(135 100% 6%);
+  --warning: hsl(55 95% 55%);
+  --warning-fg: hsl(55 100% 7%);
+  --danger: hsl(350 100% 64%);
+  --danger-fg: hsl(350 100% 8%);
+  --neutral: hsl(260 12% 76%);
+  --neutral-fg: hsl(260 25% 8%);
+
+  --surface: hsl(260 25% 6%);
+  --surface-raised: hsl(260 22% 9%);
+  --surface-subtle: hsl(260 20% 13%);
+  --surface-solid: hsl(0 0% 96%);
+
+  --text: hsl(0 0% 97%);
+  --text-muted: hsl(260 12% 70%);
+  --text-subtle: hsl(260 8% 55%);
+
+  --border: hsl(260 18% 24%);
+  --focus: var(--secondary);
+  --focus-ring: hsl(182 100% 46% / 0.35);
+  --hover-overlay: hsl(0 0% 100% / 0.07);
+  --shadow-color: hsl(260 60% 3%);
+
+  /* Neon tints: stronger soft surfaces and hovers than the default recipe,
+     so tinted chips glow against the near-black canvas. */
+  --soft-bg-mix: 80%;
+  --soft-border-mix: 45%;
+  --soft-hover-alpha: 20%;
+
+  /* Popovers and tooltips glow instead of dropping a shadow. */
+  --shadow-popout: 0 0 1rem hsl(315 95% 62% / 0.25);
+}
+
+/* Wide-gamut upgrade: chroma beyond sRGB on P3-capable displays. Both gates
+   are required — a P3 screen driven by an older browser keeps the hsl()
+   baseline above; -fg inks stay unchanged (near-black is gamut-safe). */
+@media (color-gamut: p3) {
+  @supports (color: oklch(0% 0 0)) {
+    [data-theme="neon"] {
+      --primary: oklch(70% 0.32 340);
+      --secondary: oklch(85% 0.17 195);
+      --success: oklch(85% 0.28 148);
+      --warning: oklch(92% 0.2 105);
+      --danger: oklch(68% 0.26 15);
+      --focus-ring: oklch(85% 0.17 195 / 0.35);
+      --shadow-popout: 0 0 1rem oklch(70% 0.32 340 / 0.3);
+    }
+  }
+}

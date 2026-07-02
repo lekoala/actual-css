@@ -1,6 +1,6 @@
 # Actual CSS
 
-Plain CSS component framework. Semantic classes, universal variants, small tokens, strong themes, progressive enhancement.
+Plain CSS component framework. Semantic classes, shared variants, small tokens, themes, and progressive enhancement.
 
 ## Install
 
@@ -8,13 +8,13 @@ Plain CSS component framework. Semantic classes, universal variants, small token
 npm install actual-css
 ```
 
-Then import in your CSS:
+Import the full framework in your CSS:
 
 ```css
 @import "actual-css";
 ```
 
-Or compose only the pieces you use:
+Or import only the pieces you use:
 
 ```css
 @import "actual-css/css/reset";
@@ -31,7 +31,7 @@ Or compose only the pieces you use:
 @import "actual-css/css/utilities";
 ```
 
-Or grab the compiled file from `dist/actual.min.css` and link it directly:
+You can also use the compiled file directly:
 
 ```html
 <link rel="stylesheet" href="actual.min.css">
@@ -39,7 +39,7 @@ Or grab the compiled file from `dist/actual.min.css` and link it directly:
 
 ## Usage
 
-Add classes to your HTML. Components style themselves, variants switch the look, intents set the color.
+Add classes to your HTML. Components define the structure, variants change the style, and intents set the color.
 
 ```html
 <button class="btn">Click me</button>
@@ -48,35 +48,57 @@ Add classes to your HTML. Components style themselves, variants switch the look,
 <button class="btn success soft sm">Confirm</button>
 ```
 
-Intents (`.primary`, `.secondary`, `.success`, `.warning`, `.danger`, `.neutral`) and variants (`.solid`, `.soft`, `.outline`, `.ghost`, `.link`) work across components — button, badge, alert, card.
+Intents such as `.primary`, `.secondary`, `.success`, `.warning`, `.error`, and `.neutral` work across components.
+
+Variants such as `.solid`, `.soft`, `.outline`, `.ghost`, and `.link` are shared by components like buttons, badges, alerts, and cards.
 
 Size variants `.sm` and `.lg` scale controls consistently.
 
-## What's inside
+## What's included
 
-**Components** — button, card, badge, alert, modal, drawer, table, accordion, breadcrumb, pagination, skeleton, spinner, avatar, meter, progress, busy.
+**Components** — button, card, badge, alert, dialog, drawer, table, accordion, breadcrumb, pagination, skeleton, spinner, avatar, meter, progress, and busy indicators.
 
-**Patterns and chrome** — actions, list-group, navbar, overline. These are regular source files too; import them only when they fit your product.
+**Patterns** — actions, list group, navbar, and overline. These are regular source files and can be imported only when needed.
 
-**Layout primitives** — `.stack`, `.cluster`, `.grid`, `.with-sidebar`, `.switcher`, `.center`, `.media`, `.frame`, `.app-shell`, `.grid-responsive`.
+**Layout primitives** — `.stack`, `.cluster`, `.grid`, `.with-sidebar`, `.switcher`, `.center`, `.media`, `.frame`, `.app-shell`, and `.grid-responsive`.
 
-**Forms** — `.field` layout, `.choice` (checkbox/radio), `.switch`, `.select`, `.custom-select`, `.control` base, validation states, `.form-actions`.
+**Forms** — field layout, choices, switches, selects, custom selects, control base styles, validation states, and form actions.
 
-**Prose** — opt-in rich text scope (`.prose`) with typographic scale, measure, lead paragraphs.
+**Prose** — opt-in rich text styling with `.prose`.
 
-**Utilities** — spacing steps (`.py`, `.px`, `.gap-*`, `.mbs-*`, `.mbe-*`), `.truncate`, `.muted`, `.circle`, `.sr-only`, `.text-balance`, link variants.
+**Utilities** — spacing, gaps, logical margins, truncation, muted text, circles, screen-reader-only text, text wrapping, and link variants.
 
-**Themes** — auto dark mode via `light-dark()`. 8 theme packs: corporate, forest, ocean, sunset, lavender, mono, dim, square. Switch with `data-theme="dark"` or a theme name.
+**Themes** — automatic light and dark mode with `light-dark()`, plus optional theme presets. Themes can be selected with `data-theme`.
 
-**Optional CSS** — `actual-css/css/layer` wraps Actual in `@layer actual`; `actual-css/css/optional/typography-fluid` adds fluid display typography; `actual-css/css/optional/scroller` adds custom scrollbar chrome.
+```html
+<html data-theme="forest">
+```
 
-**JS enhancers** — dialog, flyout, tooltip, tabs, scrollspy, context-menu, floating. Drop in `actual.js` and they auto-enhance via data-attributes.
+## Optional CSS
+
+Actual CSS also ships optional entrypoints:
+
+```css
+@import "actual-css/css/layer";
+@import "actual-css/css/optional/typography-fluid";
+@import "actual-css/css/optional/scroller";
+```
+
+* `layer` wraps Actual CSS in `@layer actual`.
+* `typography-fluid` adds fluid display typography.
+* `scroller` adds custom scrollbar styling.
+
+## JavaScript enhancers
+
+Some components can be enhanced with JavaScript: dialog, flyout, tooltip, tabs, scrollspy, context menu, and floating UI.
+
+Use the full module:
 
 ```html
 <script src="actual.js" type="module"></script>
 ```
 
-Bundlers can also import only the enhancers they need:
+Or import only the enhancers you need:
 
 ```js
 import "actual-css/js/dialog";
@@ -84,29 +106,33 @@ import "actual-css/js/flyout";
 import "actual-css/js/tooltip";
 ```
 
-The package does not maintain partial bundles. Modular entrypoints map to source files so projects can compose their own shape with low framework overhead.
+The package does not maintain separate partial bundles. Modular entrypoints map to source files, so each project can compose the framework shape it needs.
 
 ## Distribution
 
-- `dist/actual.css` — distribution moderne lisible. Les syntaxes modernes (`light-dark()`, `color-mix()`, `@container`, `:has()`, `100dvh`, `100vi`) sont conservées telles quelles. Pas de transpilation interne.
-- `dist/actual.min.css` — même CSS, minifié pour la production.
-- Une build "compat" n'est pas fournie pour l'instant. Le framework est conçu en **progressive enhancement** : les features modernes sont gated par `@supports`, les vieux navigateurs reçoivent le layout de base, les formulaires et les composants sans les fioritures.
-- Si tu as besoin de fallbacks plus conservateurs (vh/vw, min-width/max-width), tu peux importer les sources individuelles depuis `src/css/`.
+* `dist/actual.css` — readable modern CSS.
+* `dist/actual.min.css` — the same CSS, minified for production.
+
+Modern syntax such as `light-dark()`, `color-mix()`, `@container`, `:has()`, `100dvh`, and `100vi` is preserved in the distributed files.
+
+Actual CSS does not currently ship a separate compatibility build. It is designed as progressive enhancement: modern features are guarded with `@supports` where needed, while older browsers still receive core layout, forms, and components.
+
+For more conservative fallbacks, import and compose the source entrypoints directly.
 
 ## Browser support
 
-Actual CSS est construit en progressive enhancement. Les fonctionnalités sont gated par `@supports`.
+Actual CSS is built around progressive enhancement.
 
-- **Degraded** (`:is`, `:where`) — Firefox 78+, Safari 14+, Chromium 88+. Core layout, typography, forms, components.
-- **Minimum** (`<dialog>`) — Firefox 98+, Safari 15.4+, Chromium 99+. Modal, drawer, top-layer.
-- **Intermediate** (`:has`, containers) — Firefox 121+, Safari 16+, Chromium 106+. Container queries, alert icon grid, intent tints.
-- **Recommended** — Firefox 121+, Safari 17.5+, Chrome 120+. `light-dark()`, `color-mix()`, `light-dark()`, full theming.
+* **Degraded** — Firefox 78+, Safari 14+, Chromium 88+. Core layout, typography, forms, and components.
+* **Minimum** — Firefox 98+, Safari 15.4+, Chromium 99+. Dialog, drawer, and top-layer behavior.
+* **Intermediate** — Firefox 121+, Safari 16+, Chromium 106+. `:has()`, container queries, alert icon layout, and intent tints.
+* **Recommended** — Firefox 129+, Safari 17.5+, Chromium 123+. `light-dark()`, `color-mix()`, and full theming.
 
-### Cascade layers
+## Cascade layers
 
-Actual CSS is layer-compatible, not layer-dependent. The default `actual.css` file is unlayered and works in the Degraded compatibility target.
+Actual CSS is layer-compatible, not layer-dependent. The default `actual.css` file is unlayered.
 
-Projects that intentionally use cascade layers can import Actual CSS into a low-priority layer:
+Projects that use cascade layers can import Actual CSS into a low-priority layer:
 
 ```css
 @layer actual, app, utilities, overrides;
@@ -119,10 +145,12 @@ Or wrap the default entrypoint yourself:
 ```css
 @layer actual, app, utilities, overrides;
 
-@import "actual-css/css" layer(actual);
+@import "actual-css" layer(actual);
 ```
 
-Cascade layers require the Minimum compatibility target or above. Keep project-specific layer names in the application; Actual CSS only claims the optional `actual` layer.
+Cascade layers require the Minimum compatibility target or above.
+
+Actual CSS only claims the optional `actual` layer. Application-specific layer names stay in the application.
 
 ## License
 

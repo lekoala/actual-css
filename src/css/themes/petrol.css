@@ -1,0 +1,64 @@
+/* Petrol — desaturated petrol-blue primary with apricot secondary over cool
+ * blue-tinted neutrals. Paired light/dark via light-dark(). The most
+ * conventional of the bundled palettes: warm, highly legible, no semantic
+ * hue collisions. */
+[data-theme="petrol"] {
+  color-scheme: light dark;
+
+  --primary: hsl(203 55% 30%);
+  --primary-fg: hsl(0 0% 98%);
+  --secondary: hsl(22 55% 47%);
+  --secondary-fg: hsl(0 0% 98%);
+  --success: hsl(155 45% 32%);
+  --success-fg: hsl(0 0% 98%);
+  --warning: hsl(38 70% 36%);
+  --warning-fg: hsl(0 0% 98%);
+  --danger: hsl(357 55% 45%);
+  --danger-fg: hsl(0 0% 98%);
+  --neutral: hsl(210 8% 43%);
+  --neutral-fg: hsl(0 0% 98%);
+
+  --surface: hsl(0 0% 100%);
+  --surface-raised: hsl(204 30% 98%);
+  --surface-subtle: hsl(204 25% 96%);
+  --surface-solid: hsl(207 25% 12%);
+
+  --text: hsl(207 25% 12%);
+  --text-muted: hsl(206 9% 42%);
+  --text-subtle: hsl(205 7% 57%);
+
+  --border: hsl(205 15% 87%);
+  --focus: var(--primary);
+  --focus-ring: hsl(203 55% 30% / 0.22);
+}
+
+@supports (color: light-dark(red, blue)) {
+  [data-theme="petrol"] {
+    --primary: light-dark(hsl(203 55% 30%), hsl(202 55% 72%));
+    --primary-fg: light-dark(hsl(0 0% 98%), hsl(204 40% 10%));
+    --secondary: light-dark(hsl(22 55% 47%), hsl(24 55% 70%));
+    --secondary-fg: light-dark(hsl(0 0% 98%), hsl(24 35% 11%));
+    --success: light-dark(hsl(155 45% 32%), hsl(155 40% 60%));
+    --success-fg: light-dark(hsl(0 0% 98%), hsl(155 35% 8%));
+    --warning: light-dark(hsl(38 70% 36%), hsl(40 62% 63%));
+    --warning-fg: light-dark(hsl(0 0% 98%), hsl(38 35% 10%));
+    --danger: light-dark(hsl(357 55% 45%), hsl(357 58% 70%));
+    --danger-fg: light-dark(hsl(0 0% 98%), hsl(357 35% 10%));
+    --neutral: light-dark(hsl(210 8% 43%), hsl(208 10% 71%));
+    --neutral-fg: light-dark(hsl(0 0% 98%), hsl(208 18% 10%));
+
+    --surface: light-dark(hsl(0 0% 100%), hsl(206 22% 9%));
+    --surface-raised: light-dark(hsl(204 30% 98%), hsl(206 19% 12%));
+    --surface-subtle: light-dark(hsl(204 25% 96%), hsl(206 15% 16%));
+    --surface-solid: light-dark(hsl(207 25% 12%), hsl(0 0% 96%));
+
+    --text: light-dark(hsl(207 25% 12%), hsl(205 12% 95%));
+    --text-muted: light-dark(hsl(206 9% 42%), hsl(205 8% 67%));
+    --text-subtle: light-dark(hsl(205 7% 57%), hsl(205 7% 53%));
+
+    --border: light-dark(hsl(205 15% 87%), hsl(206 12% 24%));
+    --focus-ring: light-dark(hsl(203 55% 30% / 0.22), hsl(202 55% 72% / 0.28));
+    --hover-overlay: light-dark(hsl(207 30% 10% / 0.04), hsl(0 0% 100% / 0.06));
+    --shadow-color: light-dark(hsl(207 30% 10%), hsl(0 0% 0%));
+  }
+}

@@ -1,0 +1,60 @@
+/* Cyberpunk — light-only stress-test theme (single block, color-scheme: light,
+ * same shape as dark.css). Illustrative rather than production: it exists to
+ * prove the token contract survives an extreme spec — a saturated yellow
+ * canvas, near-black text and borders, dark-on-bright intent pairs, zero
+ * radius, 2px strokes, and hard offset shadows — without touching a single
+ * component rule. */
+[data-theme="cyberpunk"] {
+  color-scheme: light;
+
+  /* Bright intents carry dark ink. Each -fg pair is hand-tuned: danger keeps
+     a light fg because saturated red is too dark for near-black text, and
+     neutral inverts the canvas (black chip, yellow text). */
+  --primary: hsl(330 100% 60%);
+  --primary-fg: hsl(330 100% 10%);
+  --secondary: hsl(187 100% 42%);
+  --secondary-fg: hsl(187 100% 8%);
+  --success: hsl(150 100% 35%);
+  --success-fg: hsl(150 100% 6%);
+  --warning: hsl(25 95% 50%);
+  --warning-fg: hsl(25 100% 8%);
+  --danger: hsl(0 85% 44%);
+  --danger-fg: hsl(0 0% 98%);
+  --neutral: hsl(56 30% 8%);
+  --neutral-fg: hsl(56 100% 55%);
+
+  /* Yellow canvas. Raised surfaces go paler instead of shadowed — elevation
+     is carried by the hard offset shadow below. */
+  --surface: hsl(56 100% 50%);
+  --surface-raised: hsl(54 100% 64%);
+  --surface-subtle: hsl(53 100% 80%);
+  --surface-solid: hsl(56 30% 8%);
+
+  --text: hsl(56 60% 6%);
+  --text-muted: hsl(56 25% 22%);
+  --text-subtle: hsl(56 14% 34%);
+
+  --border: hsl(56 60% 6%);
+  --focus: hsl(330 100% 42%);
+  --focus-ring: hsl(330 100% 42% / 0.3);
+  --hover-overlay: hsl(56 100% 8% / 0.08);
+
+  /* Structure: sharp corners, thick strokes, print-like offset shadows.
+     Overriding --shadow directly bypasses the color-mix shadow recipe in
+     tokens.css (themes load later, so these flat values win). */
+  --radius: 0;
+  --radius-sm: 0;
+  --radius-lg: 0;
+  --border-width: 2px;
+  --shadow: 0.25rem 0.25rem 0 hsl(56 60% 6%);
+  --shadow-popout: 0.25rem 0.25rem 0 hsl(56 60% 6%);
+  --shadow-color: hsl(56 60% 6%);
+
+  /* Soft surfaces mix against a saturated yellow, so the default recipe reads
+     as more yellow — pull more intent in for tints that stay legible. */
+  --soft-bg-mix: 78%;
+  --soft-border-mix: 40%;
+
+  --selection-bg: hsl(56 60% 6%);
+  --selection-fg: hsl(56 100% 50%);
+}
