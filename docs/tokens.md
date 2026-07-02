@@ -132,7 +132,7 @@ Components can use local font variables for their own mapping, but should inheri
 
 ### Controls
 
-Controls share sizing so buttons, inputs, selects, and compact app UI always align. `.sm`/`.lg` set the shared `--control-size` and `--control-font-size`.
+Controls share sizing so buttons, inputs, selects, and compact app UI always align. `.sm`/`.lg` set shared density tokens for controls, content components, and compact labels.
 
 ```css
 :root {
@@ -157,15 +157,25 @@ Size modifiers swap the shared control tokens:
 .sm {
   --control-size: var(--control-size-sm);
   --control-font-size: var(--font-size-sm);
+  --variant-font-size: var(--font-size-sm);
+  --variant-icon-size: 1rem;
+  --variant-pad-block: var(--space-3);
+  --variant-compact-size: 1.25rem;
+  --variant-compact-font-size: 0.75rem;
 }
 
 .lg {
   --control-size: var(--control-size-lg);
   --control-font-size: var(--font-size-lg);
+  --variant-font-size: var(--font-size-lg);
+  --variant-icon-size: 1.5rem;
+  --variant-pad-block: var(--space-5);
+  --variant-compact-size: 1.875rem;
+  --variant-compact-font-size: var(--font-size-sm);
 }
 ```
 
-`.sm`/`.lg` on display elements (badge, avatar, spinner) use their own size scales and do not align to control heights — only interactive controls line up.
+Content components can consume `--variant-*` for local density. Compact labels such as `.badge` consume `--variant-compact-*`; display elements with special geometry, such as avatar and spinner, keep their own size scales.
 
 ### Elevation
 

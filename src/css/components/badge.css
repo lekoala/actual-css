@@ -1,13 +1,14 @@
 /*
  * Badges for compact labels, counts, and state hints.
  *
- * Variants flow through shared `--ui-*` variables before mapping locally, with
- * a solid default and no badge-specific color API.
+ * Solid by default. Shared .soft/.outline variants stay available for quieter
+ * tags without adding a badge-specific color API.
  */
 .badge {
-  --badge-size: 1.5rem;
+  --badge-size: var(--variant-compact-size, 1.5rem);
   --badge-pad-x: 0.55em;
-  --badge-font-size: 0.8125rem;
+  --badge-font-size: var(--variant-compact-font-size, 0.8125rem);
+  --badge-dot-size: 0.5rem;
   --badge-bg: var(--ui-bg, var(--intent, var(--neutral)));
   --badge-fg: var(--ui-fg, var(--intent-fg, var(--neutral-fg)));
   --badge-border: var(--ui-border, transparent);
@@ -36,7 +37,7 @@
 }
 
 .badge:empty {
-  --badge-size: 0.5rem;
+  --badge-size: var(--badge-dot-size);
   padding: 0;
   border: 0;
   inline-size: var(--badge-size);
@@ -49,15 +50,6 @@
   --ui-bg: var(--intent, var(--neutral));
   --ui-fg: var(--intent-fg, var(--neutral-fg));
   --ui-border: transparent;
-}
-
-.badge.sm {
-  --badge-size: 1.25rem;
-  --badge-font-size: 0.75rem;
-}
-.badge.lg {
-  --badge-size: 1.875rem;
-  --badge-font-size: var(--font-size-sm);
 }
 
 :where(a.badge, button.badge):hover {
