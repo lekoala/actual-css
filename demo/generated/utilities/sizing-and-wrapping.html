@@ -112,8 +112,16 @@
     </section>
     <div class="component-prose">
       <h3>Scroller</h3>
-<p>Use <code>.scroller</code> to apply the framework scrollbar treatment to a scroll container. It styles the scrollbar only; pair it with <code>.overflow-auto</code> or a component that already creates overflow.</p>
+<p>Use <code>.scroller</code> to apply optional framework scrollbar treatment to a scroll container. It styles the scrollbar only; pair it with <code>.overflow-auto</code> or a component that already creates overflow. <code>scroller</code> is not imported by <code>actual.css</code>. Import it explicitly when a project wants Actual CSS scrollbar chrome instead of the native OS default:</p>
     </div>
+    <section class="component-section">
+      <h2>CSS</h2>
+      <div class="example-group">
+        <div class="example-code">
+          <pre><code class="language-css"><span class="token atrule"><span class="token rule">@import</span> <span class="token string">"actual-css/css/optional/scroller"</span><span class="token punctuation">;</span></span></code></pre>
+        </div>
+      </div>
+    </section>
     <section class="component-section">
       <div class="example-group">
         <div class="example-render">
