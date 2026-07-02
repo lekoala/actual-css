@@ -1,4 +1,4 @@
-import { bundle } from "lightningcss";
+import { bundle, Features } from "lightningcss";
 import { mkdir, rm, stat, writeFile } from "node:fs/promises";
 import { existsSync } from "node:fs";
 import { join, dirname } from "node:path";
@@ -24,6 +24,11 @@ const DIST = join(ROOT, "dist");
  * are all covered by these baselines. The only remaining transpilation in
  * the dist is for features already gated by @supports (color-mix,
  * backdrop-filter) whose fallbacks are set outside the gate.
+ *
+ * Light-dark transpilation is explicitly excluded (Features.LightDark)
+ * even though the targets natively support it — this keeps the dist free
+ * of the --lightningcss-light/--lightningcss-dark bookkeeping variables
+ * since all light-dark() usage is already wrapped in @supports.
  */
 const targets = {
   chrome: 120 << 16,
@@ -37,6 +42,7 @@ async function build({ entry = ENTRY, minify, naming }) {
     filename: entry,
     minify,
     targets,
+    exclude: Features.LightDark,
     sourceMap: true,
   });
 
