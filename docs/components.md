@@ -112,11 +112,12 @@ Links:
 
 ```html{.stack}
 <div class="alert success">
-  <strong>✓</strong> Your changes have been saved. <a href="#">View activity</a>.
+  <i class="ti ti-circle-check" aria-hidden="true"></i>
+  <div>Your changes have been saved. <a href="#">View activity</a>.</div>
 </div>
 
 <div class="alert warning" role="alert">
-  <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M9.05.435c-.58-.58-1.52-.58-2.1 0L.436 6.95c-.58.58-.58 1.519 0 2.098l6.516 6.516c.58.58 1.519.58 2.098 0l6.516-6.516c.58-.58.58-1.519 0-2.098zM8 4c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995A.905.905 0 0 1 8 4m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/></svg>
+  <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
   <div>Please review the <a href="#">failed checks</a> before continuing.</div>
 </div>
 
