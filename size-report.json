@@ -1,12 +1,12 @@
 {
-  "timestamp": "2026-07-02T10:29:31.871Z",
-  "totalRaw": 109450,
-  "totalMinified": 57754,
-  "totalBrotli": 9904,
+  "timestamp": "2026-07-02T12:16:44.513Z",
+  "totalRaw": 108470,
+  "totalMinified": 56724,
+  "totalBrotli": 9762,
   "themesMinified": 12513,
   "themesBrotli": 1755,
-  "shippedMinified": 70267,
-  "shippedBrotli": 11659,
+  "shippedMinified": 69237,
+  "shippedBrotli": 11517,
   "fileCount": 57,
   "files": [
     {
@@ -55,7 +55,7 @@
     },
     {
       "file": "utilities.css",
-      "raw": 2908
+      "raw": 2917
     },
     {
       "file": "components/avatar.css",
@@ -135,19 +135,15 @@
     },
     {
       "file": "forms/form.css",
-      "raw": 1648
+      "raw": 1637
     },
     {
-      "file": "components/form-actions.css",
-      "raw": 1488
+      "file": "forms/form-actions.css",
+      "raw": 1479
     },
     {
       "file": "components/table.css",
       "raw": 1461
-    },
-    {
-      "file": "components/scroller.css",
-      "raw": 1400
     },
     {
       "file": "components/skeleton.css",
@@ -170,8 +166,8 @@
       "raw": 1195
     },
     {
-      "file": "components/eyebrow.css",
-      "raw": 1158
+      "file": "components/overline.css",
+      "raw": 1162
     },
     {
       "file": "components/meter.css",
@@ -194,10 +190,6 @@
       "raw": 942
     },
     {
-      "file": "components/list.css",
-      "raw": 842
-    },
-    {
       "file": "components/breadcrumb.css",
       "raw": 804
     },
@@ -206,12 +198,20 @@
       "raw": 802
     },
     {
+      "file": "components/list.css",
+      "raw": 767
+    },
+    {
       "file": "themes/index.css",
       "raw": 730
     },
     {
       "file": "components/index.css",
-      "raw": 684
+      "raw": 604
+    },
+    {
+      "file": "actual.layer.css",
+      "raw": 552
     },
     {
       "file": "ui/scrollspy.css",
@@ -227,7 +227,7 @@
     },
     {
       "file": "forms/index.css",
-      "raw": 317
+      "raw": 347
     },
     {
       "file": "actual.css",
