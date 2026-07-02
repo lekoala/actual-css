@@ -1,5 +1,5 @@
 /*
- * Dropdown — floating menu panel attached to a trigger.
+ * Menu — floating panel for actions and links.
  *
  * JavaScript owns positioning (position: fixed + left/top), show/hide
  * (hidden + display), focus, and keyboard behavior. CSS owns the surfaced
@@ -7,28 +7,25 @@
  *
  * Runtime markers (managed by surface.js): .is-open marks an open menu,
  * .is-sheet marks "auto" resolved to bottom-sheet presentation on coarse
- * pointers. Authors opt into the sheet behavior with
- * [data-surface-mobile="sheet|auto|none|anchored"] — the JS toggles .is-sheet
- * on the menu accordingly. --dropdown-trigger-width is set by surface.js to
- * the trigger's inline size when an open menu is positioned, sizing the
- * default menu width up to 20rem.
+ * pointers. Authors opt into mobile behavior with
+ * [data-menu-mobile="sheet|auto|none|anchored"].
+ * --menu-trigger-width is set by surface.js while an open menu is positioned.
  */
-.dropdown {
-  position: relative;
-  display: inline-block;
-}
 
-.dropdown-menu {
-  z-index: var(--z-dropdown);
+.menu {
+  z-index: var(--z-menu);
+  position: absolute;
+  inset-block-start: calc(100% + var(--space-1));
+  inset-inline-start: 0;
   display: grid;
   gap: var(--space-1);
   inline-size: max-content;
   min-inline-size: min(
-    var(--dropdown-trigger-width, 0px),
+    var(--menu-trigger-width, 0px),
     min(20rem, calc(100vw - var(--space-6)))
   );
   min-inline-size: min(
-    var(--dropdown-trigger-width, 0px),
+    var(--menu-trigger-width, 0px),
     min(20rem, calc(100vi - var(--space-6)))
   );
   max-inline-size: min(20rem, calc(100vw - var(--space-6)));
@@ -44,10 +41,11 @@
 
 /* Bottom-sheet presentation. surface.js toggles .is-sheet when the menu is
    opened on coarse pointer / narrow viewports. */
-.dropdown-menu.is-sheet {
+.menu.is-sheet {
+  position: fixed;
   inset-inline: 0;
+  inset-block-start: auto;
   inset-block-end: 0;
-  top: auto;
   inline-size: auto;
   min-inline-size: 0;
   max-inline-size: none;
@@ -60,13 +58,14 @@
   border-end-end-radius: 0;
 }
 
-.dropdown-menu[hidden] {
+.menu[hidden] {
   display: none;
 }
 
-.dropdown-menu > button,
-.dropdown-menu > a,
-.dropdown-menu > [role="menuitem"] {
+.menu-item,
+.menu > button,
+.menu > a,
+.menu > [role="menuitem"] {
   display: flex;
   align-items: center;
   justify-content: flex-start;
@@ -76,7 +75,7 @@
   padding-inline: var(--space-2);
   border: 0;
   border-radius: var(--radius-sm);
-  background: transparent;
+  background: none;
   color: var(--text);
   font: inherit;
   font-weight: var(--font-weight);
@@ -86,25 +85,42 @@
   cursor: pointer;
 }
 
-.dropdown-menu.is-sheet > button,
-.dropdown-menu.is-sheet > a,
-.dropdown-menu.is-sheet > [role="menuitem"] {
+.menu.is-sheet .menu-item,
+.menu.is-sheet > button,
+.menu.is-sheet > a,
+.menu.is-sheet > [role="menuitem"] {
   min-block-size: var(--control-size-lg);
 }
 
-.dropdown-menu > button:hover,
-.dropdown-menu > a:hover,
-.dropdown-menu > [role="menuitem"]:hover,
-.dropdown-menu > button:focus-visible,
-.dropdown-menu > a:focus-visible,
-.dropdown-menu > [role="menuitem"]:focus-visible {
+.menu-item:hover,
+.menu-item:focus-visible,
+.menu > button:hover,
+.menu > a:hover,
+.menu > [role="menuitem"]:hover,
+.menu > button:focus-visible,
+.menu > a:focus-visible,
+.menu > [role="menuitem"]:focus-visible {
   background: var(--surface-subtle);
+  outline: none;
 }
 
-.dropdown-menu hr {
+.menu-divider,
+.menu hr {
   inline-size: 100%;
   margin: 0;
   margin-block: var(--space-1);
   border: 0;
   border-block-start: var(--border-width) solid var(--border);
+}
+
+.menu-header {
+  padding-inline: var(--space-2);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-strong);
+  color: var(--text-muted);
+}
+
+.menu-text {
+  padding-inline: var(--space-2);
+  color: var(--text-muted);
 }

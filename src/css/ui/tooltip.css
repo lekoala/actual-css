@@ -9,6 +9,7 @@
   --tooltip-fg: var(--surface);
   --tooltip-arrow-size: 5px;
 
+  position: fixed;
   z-index: var(--z-tooltip);
   max-inline-size: min(24rem, calc(100vw - 2rem));
   max-inline-size: min(24rem, calc(100vi - 2rem));

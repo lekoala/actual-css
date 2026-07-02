@@ -6,7 +6,7 @@
  * shell only — navigation content inside uses .nav-link and .accordion, which
  * carry their own link/summary styling.
  */
-.drawer {
+dialog.drawer {
   --drawer-size: 20rem;
   --drawer-pad: var(--space-4);
 
@@ -26,7 +26,7 @@
   box-shadow: var(--shadow);
 }
 
-.drawer[open] {
+dialog.drawer[open] {
   display: grid;
   grid-template-rows: auto minmax(0, 1fr) auto;
   gap: var(--space-4);
@@ -34,11 +34,11 @@
 
 /* Backdrop color sourced from components/surface.css so it matches .modal
    and .surface-backdrop across the dialog family. */
-.drawer::backdrop {
+dialog.drawer::backdrop {
   background: var(--backdrop-fill);
 }
 
-.drawer[data-side="end"] {
+dialog.drawer[data-side="end"] {
   margin-inline-start: auto;
   margin-inline-end: 0;
   border-inline-end: 0;
@@ -46,17 +46,17 @@
 }
 
 /* Scrollable navigation region inside the drawer. */
-.drawer nav {
+dialog.drawer nav {
   min-block-size: 0;
   overflow-y: auto;
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .drawer[open] {
+  dialog.drawer[open] {
     animation: actual-drawer-start var(--duration-slow) var(--ease, ease-out);
   }
 
-  .drawer[data-side="end"][open] {
+  dialog.drawer[data-side="end"][open] {
     animation-name: actual-drawer-end;
   }
 }

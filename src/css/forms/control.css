@@ -12,23 +12,23 @@
  * (here and in select.css). The .field wrapper uses --field-* (form.css).
  */
 :is(
-    .input,
-    .textarea,
-    :is(.form, .field)
-      :where(
-        input:not(
-            [type="checkbox"],
-            [type="radio"],
-            [type="range"],
-            [type="file"],
-            [type="button"],
-            [type="submit"],
-            [type="reset"],
-            [type="color"]
-          ),
-        textarea
-      )
-  ) {
+  .input,
+  .textarea,
+  :is(.form, .field)
+    :where(
+      input:not(
+        [type="checkbox"],
+        [type="radio"],
+        [type="range"],
+        [type="file"],
+        [type="button"],
+        [type="submit"],
+        [type="reset"],
+        [type="color"]
+      ),
+      textarea
+    )
+) {
   --control-border: var(--border);
   --control-bg: var(--surface);
   --control-fg: var(--text);
@@ -57,49 +57,63 @@
 }
 
 :is(
-    .input,
-    .textarea,
-    :is(.form, .field)
-      :where(
-        input:not(
-            [type="checkbox"],
-            [type="radio"],
-            [type="range"],
-            [type="file"],
-            [type="button"],
-            [type="submit"],
-            [type="reset"],
-            [type="color"]
-          ),
-        textarea
-      )
-  ):hover:not(:disabled) {
+  .input,
+  .textarea,
+  :is(.form, .field)
+    :where(
+      input:not(
+        [type="checkbox"],
+        [type="radio"],
+        [type="range"],
+        [type="file"],
+        [type="button"],
+        [type="submit"],
+        [type="reset"],
+        [type="color"]
+      ),
+      textarea
+    )
+):hover:not(:disabled) {
   --control-border: var(--text-subtle);
 }
 
 :is(
-    .input,
-    .textarea,
-    :is(.form, .field)
-      :where(
-        input:not(
-            [type="checkbox"],
-            [type="radio"],
-            [type="range"],
-            [type="file"],
-            [type="button"],
-            [type="submit"],
-            [type="reset"],
-            [type="color"]
-          ),
-        textarea
-      )
-  ):focus-visible {
+  .input,
+  .textarea,
+  :is(.form, .field)
+    :where(
+      input:not(
+        [type="checkbox"],
+        [type="radio"],
+        [type="range"],
+        [type="file"],
+        [type="button"],
+        [type="submit"],
+        [type="reset"],
+        [type="color"]
+      ),
+      textarea
+    )
+):focus-visible {
   border-color: var(--focus);
   box-shadow: 0 0 0 3px var(--focus-ring);
 }
 
-.field.danger,
+.field.danger
+  :where(
+    input:not(
+      [type="checkbox"],
+      [type="radio"],
+      [type="range"],
+      [type="file"],
+      [type="button"],
+      [type="submit"],
+      [type="reset"],
+      [type="color"]
+    ),
+    textarea,
+    select
+  ),
 .input[aria-invalid="true"],
 .textarea[aria-invalid="true"],
 :is(.form, .field) :where(input, textarea)[aria-invalid="true"] {
@@ -114,23 +128,23 @@
 }
 
 :is(
-    .input,
-    .textarea,
-    :is(.form, .field)
-      :where(
-        input:not(
-            [type="checkbox"],
-            [type="radio"],
-            [type="range"],
-            [type="file"],
-            [type="button"],
-            [type="submit"],
-            [type="reset"],
-            [type="color"]
-          ),
-        textarea
-      )
-  ):disabled {
+  .input,
+  .textarea,
+  :is(.form, .field)
+    :where(
+      input:not(
+        [type="checkbox"],
+        [type="radio"],
+        [type="range"],
+        [type="file"],
+        [type="button"],
+        [type="submit"],
+        [type="reset"],
+        [type="color"]
+      ),
+      textarea
+    )
+):disabled {
   --control-bg: var(--surface-subtle);
   --control-fg: var(--text-subtle);
   --control-border: var(--border);

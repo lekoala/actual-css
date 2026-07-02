@@ -4,7 +4,7 @@
  * Spacing, radius, transitions, and focus treatment come from shared tokens.
  * Opening behavior and intent-specific decisions stay outside this component.
  */
-.modal {
+dialog.modal {
   --modal-size: 32rem;
 
   max-inline-size: min(100% - 2rem, var(--modal-size));
@@ -28,8 +28,8 @@
     transform var(--duration);
 }
 
-.modal > form,
-.modal > .stack {
+dialog.modal > form,
+dialog.modal > .stack {
   display: grid;
   gap: var(--space-4);
   max-block-size: calc(100vh - 2rem);
@@ -39,56 +39,56 @@
   padding: var(--space-4);
 }
 
-.modal.scrollable > form,
-.modal.scrollable > .stack {
+dialog.modal.scrollable > form,
+dialog.modal.scrollable > .stack {
   grid-template-rows: auto minmax(0, 1fr) auto;
   overflow: hidden;
 }
 
-.modal.scrollable > form > :not(header, footer),
-.modal.scrollable > .stack > :not(header, footer) {
+dialog.modal.scrollable > form > :not(header, footer),
+dialog.modal.scrollable > .stack > :not(header, footer) {
   min-block-size: 0;
   overflow: auto;
   overscroll-behavior: contain;
 }
 
-.modal header > :first-child,
-.modal footer > :first-child {
+dialog.modal header > :first-child,
+dialog.modal footer > :first-child {
   margin-block-start: 0;
 }
 
-.modal header > :last-child,
-.modal footer > :last-child {
+dialog.modal header > :last-child,
+dialog.modal footer > :last-child {
   margin-block-end: 0;
 }
 
-.modal footer {
+dialog.modal footer {
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-end;
   gap: var(--gap);
 }
 
-.modal[open] {
+dialog.modal[open] {
   opacity: 1;
   transform: none;
 }
 
 @starting-style {
-  .modal[open] {
+  dialog.modal[open] {
     opacity: 0;
     transform: translateY(0.35rem) scale(0.98);
   }
 }
 
-.modal::backdrop {
-  background: var(--surface-solid);
+dialog.modal::backdrop {
+  background: var(--backdrop-fill);
   opacity: 0;
   transition: opacity var(--duration);
 }
 
 @supports (transition-behavior: allow-discrete) {
-  .modal {
+  dialog.modal {
     transition:
       opacity var(--duration),
       transform var(--duration),
@@ -96,7 +96,7 @@
       display var(--duration) allow-discrete;
   }
 
-  .modal::backdrop {
+  dialog.modal::backdrop {
     transition:
       opacity var(--duration),
       overlay var(--duration) allow-discrete,
@@ -104,7 +104,7 @@
   }
 }
 
-.modal[open]::backdrop {
+dialog.modal[open]::backdrop {
   opacity: 0.5;
 }
 
@@ -116,13 +116,13 @@
 }
 
 @starting-style {
-  .modal[open]::backdrop {
+  dialog.modal[open]::backdrop {
     opacity: 0;
   }
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .modal.is-static {
+  dialog.modal.is-static {
     animation: actual-modal-static 180ms var(--ease);
   }
 

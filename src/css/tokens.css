@@ -28,8 +28,9 @@
   /* Shape */
   --border-width: 1px;
   --radius-full: 9999px;
-  --shadow: 0 0.5rem 1.5rem hsl(var(--shadow-color) / 0.08);
-  --shadow-popout: 0 0.25rem 0.75rem hsl(var(--shadow-color) / 0.15);
+  --shadow-color: hsl(220 30% 10%);
+  --shadow: 0 0.5rem 1.5rem rgb(0 0 0 / 0.08);
+  --shadow-popout: 0 0.25rem 0.75rem rgb(0 0 0 / 0.15);
 
   /* Motion — see reset.css for the prefers-reduced-motion hard reset, which
      zeroes raw animations/transitions in addition to --duration here.
@@ -79,9 +80,16 @@
 
   /* Layering */
   --z-sticky: 10;
-  --z-dropdown: 20;
+  --z-menu: 20;
   --z-popover: 30;
   --z-tooltip: 50;
+}
+
+@supports (color: color-mix(in srgb, black, transparent)) {
+  :root {
+    --shadow: 0 0.5rem 1.5rem color-mix(in srgb, var(--shadow-color) 8%, transparent);
+    --shadow-popout: 0 0.25rem 0.75rem color-mix(in srgb, var(--shadow-color) 15%, transparent);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

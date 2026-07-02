@@ -123,7 +123,7 @@ Links:
 - Can contain complex items
 
 ```html
-<figure class="list">
+<figure class="list-group">
     <figcaption>My favorite fruits</figcaption>    
        <ul>
           <li>Banana</li>
@@ -134,7 +134,7 @@ Links:
 ```
 
 ```html
-<figure class="list">
+<figure class="list-group">
     <figcaption>Most played songs this week</figcaption>    
        <ul>
           <li>

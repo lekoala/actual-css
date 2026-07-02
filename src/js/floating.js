@@ -1,5 +1,5 @@
 /*
- * Compact positioning engine for dropdowns, tooltips, and popovers.
+ * Compact positioning engine for menus, tooltips, and popovers.
  *
  * Core math ported from Floating UI. Uses a single global scroll/resize
  * listener to reposition all registered floating elements via rAF.

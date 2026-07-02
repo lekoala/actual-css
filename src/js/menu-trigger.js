@@ -1,5 +1,5 @@
 /*
- * Dropdown — trigger adapter over the shared action-surface runtime.
+ * Menu trigger — trigger adapter over the shared action-surface runtime.
  *
  * App menus keep roving focus and menuitem activation. Nav panels reuse the
  * same surface lifecycle without menu semantics.
@@ -17,8 +17,6 @@ import {
 
 // trigger -> { menu, controller }
 const triggerMap = new WeakMap();
-
-// ── Event handlers ─────────────────────────────────────
 
 function openMenu(menu, trigger) {
   openSurface(menu, { trigger, source: trigger, placement: "bottom-start", distance: 4 });
@@ -81,13 +79,11 @@ function onTriggerKeydown(e) {
   }
 }
 
-// ── Lifecycle: connect / disconnect ────────────────────
-
 function connectTrigger(trigger) {
   if (triggerMap.has(trigger)) return;
   const menuId = trigger.getAttribute("aria-controls");
   const menu = menuId && document.getElementById(menuId);
-  if (!menu) return;
+  if (!menu || !menu.matches(".menu")) return;
 
   const isAppMenu = trigger.getAttribute("aria-haspopup") === "menu";
   const controller = new AbortController();
@@ -111,8 +107,6 @@ function disconnectTrigger(trigger) {
 
 function connectMenu(menu) {
   if (!menu.id) return;
-  // Wire any trigger that references this menu but wasn't wired yet
-  // (trigger connected before its menu was present).
   const triggers = document.querySelectorAll(`[aria-controls="${CSS.escape(menu.id)}"]`);
   for (const trigger of triggers) {
     if (!triggerMap.has(trigger)) connectTrigger(trigger);
@@ -124,15 +118,13 @@ function disconnectMenu(menu) {
   disconnectSurface(menu);
 }
 
-// ── Self-registration ──────────────────────────────────
-
 if (typeof document !== "undefined") {
   enhance({
-    '[aria-haspopup="menu"], .dropdown > [aria-expanded][aria-controls]': (trigger) => {
+    '[aria-haspopup="menu"][aria-controls]': (trigger) => {
       connectTrigger(trigger);
       return () => disconnectTrigger(trigger);
     },
-    ".dropdown-menu": (menu) => {
+    ".menu": (menu) => {
       connectMenu(menu);
       return () => disconnectMenu(menu);
     },

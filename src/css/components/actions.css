@@ -5,12 +5,21 @@
  * --gap token. .alert consumes .actions for its trailing action row.
  */
 .actions {
+  --gap: var(--space-2);
+
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--gap);
   margin: 0;
   padding: 0;
   list-style: none;
-  --gap: var(--space-2);
 }
 
 .actions > li {
   margin: 0;
+}
+
+.actions.end {
+  justify-content: flex-end;
 }
