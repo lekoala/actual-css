@@ -159,6 +159,11 @@ Links:
 - https://uiterms.com/slider/
 - https://uiterms.com/switch/
 - https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/label
+- https://open-ui.org/components/checkbox.research/
+- https://open-ui.org/components/radio-button.research/
+- https://open-ui.org/components/select.research/
+- https://open-ui.org/components/slider.research/
+- https://open-ui.org/components/switch/
 
 ## States And Sizes
 

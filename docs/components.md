@@ -95,6 +95,7 @@ Links:
 - https://modern-css.com/exclusive-accordions-without-javascript/
 - https://uiterms.com/accordion/
 - https://basecoatui.com/components/accordion/
+- https://open-ui.org/components/accordion.explainer/
 
 ## Alert
 
@@ -184,6 +185,7 @@ Links:
 - https://www.a11y-collective.com/blog/aria-alert/
 - https://primer.style/accessibility/patterns/accessible-notifications-and-messages/
 - https://uiterms.com/alert/
+- https://open-ui.org/components/alert.research/
 
 ## Avatar
 
@@ -246,6 +248,7 @@ Links:
 - https://oat.ink/components/#avatar
 - https://daisyui.com/components/avatar/
 - https://smolcss.dev/#smol-avatar-list
+- https://open-ui.org/components/avatar.research/
 
 ## Badge
 
@@ -304,6 +307,7 @@ Links:
 - https://uiterms.com/badge/
 - https://m3.material.io/components/badges/overview
 - https://daisyui.com/components/indicator/
+- https://open-ui.org/components/badge.research/
 
 ## Breadcrumb
 
@@ -331,6 +335,7 @@ Links:
 - https://getbootstrap.com/docs/5.3/components/breadcrumb/
 - https://gomakethings.com/articles/creating-unstyled-lists/
 - https://uiterms.com/breadcrumbs/
+- https://open-ui.org/components/breadcrumb.research/
 
 ## Button
 
@@ -403,6 +408,7 @@ Links:
 - Button theming: https://codepen.io/lekoalabe/pen/RNaXBBP
 - Buttons: https://codepen.io/lekoalabe/pen/oNORPZP
 - https://piccalil.li/blog/how-i-build-a-button-component/
+- https://open-ui.org/components/button/
 
 ## Card
 
@@ -585,6 +591,7 @@ Links:
 - https://semantic-ui.com/views/card.html
 - https://smolcss.dev/#smol-card-component
 - https://uiterms.com/card/
+- https://open-ui.org/components/card.research/
 
 ## Drawer
 
@@ -1042,6 +1049,8 @@ Links:
 - Animating the dialog element using view transitions: https://pqina.nl/blog/animating-the-dialog-element-using-view-transitions/
 - https://basecoatui.com/components/alert-dialog/
 - https://v6-dev--twbs-bootstrap.netlify.app/docs/6.0/components/dialog/
+- https://open-ui.org/components/invokers.explainer/
+- https://open-ui.org/components/dialog.research/
 
 ## Pagination
 
@@ -1288,3 +1297,4 @@ Links:
 - https://oat.ink/components/#table
 - https://getbootstrap.com/docs/5.3/content/tables/
 - https://piccalil.li/blog/styling-tables-the-modern-css-way/
+- https://open-ui.org/components/table.research/

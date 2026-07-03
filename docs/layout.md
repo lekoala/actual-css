@@ -170,6 +170,7 @@ Links:
 Links:
 - https://daisyui.com/components/list/
 - https://html.spec.whatwg.org/multipage/grouping-content.html#the-li-element
+- https://open-ui.org/components/list.research/
 
 ## Grid
 

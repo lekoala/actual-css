@@ -18,6 +18,7 @@ still be functional without it
 - Use logical properties (https://modern-css.com/direction-aware-layouts-without-left-and-right/) — prefer `padding-block`/`padding-inline` over physical `padding` shorthands when axes differ; symmetric single-value `padding` is fine
 - Don't fight z-index, isolate (https://modern-css.com/z-index-isolation/) — when a z-index is unavoidable, source it from a `--z-*` token, not a magic number
 - Naming: try to stick to https://uiterms.com/ naming
+- Research: take into account https://open-ui.org/ when available
 - Must be accessible by default (keyboard navigation, aria-label, hidden element, proper semantic) — every interactive element gets a `:focus-visible` ring, including links, summaries, and nav items
 - Explicit color scheme
 - CSS nesting is not allowed - code must be findable as exposed in the inspector. Organize css code AS IF we are using css nesting. Related rules reads one after another and organized together
