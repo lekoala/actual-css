@@ -88,8 +88,6 @@ const RESERVED = new Set([
   "primary",
   "progress",
   "prose",
-  "prose-lg",
-  "prose-sm",
   "px",
   "px-lg",
   "px-sm",
