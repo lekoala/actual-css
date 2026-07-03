@@ -125,7 +125,7 @@ async function main() {
       console.log(themesLine);
       const themesRatio = `${formatBytes(themesMinSize)} → ${formatBytes(themesBrotliSize)} brotli (${((themesBrotliSize / themesMinSize) * 100).toFixed(1)}%)`;
       console.log(`  ${" ".padEnd(colFile)}  ${" ".padStart(colRaw)}   ${themesRatio}`);
-      const shipped = `${formatBytes(minSize + themesMinSize)} shipped minified → ${formatBytes(brotliSize + themesBrotliSize)} brotli`;
+      const shipped = `${formatBytes(minSize)} shipped minified → ${formatBytes(brotliSize)} brotli`;
       console.log(`  ${" ".padEnd(colFile)}  ${" ".padStart(colRaw)}   ${shipped}`);
     }
   }
@@ -141,8 +141,8 @@ async function main() {
     totalBrotli: brotliSize,
     themesMinified: themesMinSize,
     themesBrotli: themesBrotliSize,
-    shippedMinified: minSize + themesMinSize,
-    shippedBrotli: brotliSize + themesBrotliSize,
+    shippedMinified: minSize,
+    shippedBrotli: brotliSize,
     maxShippedBrotli: MAX_SHIPPED_BROTLI,
     fileCount: rows.length,
     files: rows,
