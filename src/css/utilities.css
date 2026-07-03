@@ -42,11 +42,13 @@
   white-space: nowrap;
 }
 
-.items-start.items-start {
+.items-start {
+  --items-align: start;
   align-items: start;
 }
 
-.items-center.items-center {
+.items-center {
+  --items-align: center;
   align-items: center;
 }
 
@@ -62,14 +64,17 @@
 
 /* Text alignment — uses logical properties so it follows writing direction. */
 .text-start {
+  --text-align: start;
   text-align: start;
 }
 
 .text-center {
+  --text-align: center;
   text-align: center;
 }
 
 .text-end {
+  --text-align: end;
   text-align: end;
 }
 

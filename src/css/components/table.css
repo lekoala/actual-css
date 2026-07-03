@@ -33,14 +33,14 @@
 .table caption {
   padding: var(--table-cell-pad);
   color: var(--text-muted);
-  text-align: start;
+  text-align: var(--text-align, start);
 }
 
 .table th,
 .table td {
   padding: var(--table-cell-pad);
   border-block-end: var(--border-width) solid var(--border);
-  text-align: start;
+  text-align: var(--text-align, start);
   vertical-align: baseline;
 }
 
@@ -65,12 +65,4 @@
 
 .table tr:last-child > * {
   border-block-end: 0;
-}
-
-.table :where(th, td)[data-align="end"] {
-  text-align: end;
-}
-
-.table :where(th, td)[data-nowrap] {
-  white-space: nowrap;
 }

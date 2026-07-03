@@ -36,7 +36,7 @@
 .card > :where(header, footer) {
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
+  align-items: var(--items-align, center);
   justify-content: space-between;
   gap: var(--space-3);
   min-inline-size: 0;
@@ -48,7 +48,7 @@
 }
 
 .card > header {
-  align-items: flex-start;
+  align-items: var(--items-align, flex-start);
 }
 
 .card > :first-child {
