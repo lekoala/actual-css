@@ -1,6 +1,8 @@
 # Actual CSS
 
-Plain CSS component framework. Semantic classes, shared variants, small tokens, themes, and progressive enhancement.
+Plain CSS component framework for new projects. Semantic classes, shared variants, small tokens, themes, and progressive enhancement.
+
+Actual CSS claims a small set of global class names. For existing projects: cascade layers, import order, or an optional prefix transform.
 
 ## Install
 
@@ -48,11 +50,23 @@ Add classes to your HTML. Components define the structure, variants change the s
 <button class="btn success soft sm">Confirm</button>
 ```
 
-Intents such as `.primary`, `.secondary`, `.success`, `.warning`, `.error`, and `.neutral` work across components.
+Intents such as `.primary`, `.secondary`, `.success`, `.warning`, `.danger`, and `.neutral` work across components.
 
 Variants such as `.solid`, `.soft`, `.outline`, `.ghost`, and `.link` are shared by components like buttons, badges, alerts, and cards.
 
 Size variants `.sm` and `.lg` scale controls consistently.
+
+## Public Class Grammar
+
+Actual CSS uses a small unprefixed class grammar:
+
+```text
+.component [intent] [variant] [size] [modifier]
+```
+
+Components, layout helpers, form helpers, UI helpers, and utilities claim their documented class names. Intents are `.primary`, `.secondary`, `.success`, `.warning`, `.danger`, and `.neutral`; shared variants are `.solid`, `.soft`, `.outline`, `.ghost`, and `.link`; shared sizes are `.sm` and `.lg`.
+
+Undocumented `is-*` classes are runtime internals.
 
 ## What's included
 
@@ -132,12 +146,28 @@ Actual CSS is built around progressive enhancement.
 
 Actual CSS is layer-compatible, not layer-dependent. The default `actual.css` file is unlayered.
 
+Use `actual.layer.css` as the official collision strategy when an existing project already owns one of Actual's reserved class names.
+
 Projects that use cascade layers can import Actual CSS into a low-priority layer:
 
 ```css
 @layer actual, app, utilities, overrides;
 
 @import "actual-css/css/layer";
+```
+
+For example, if the application already has a legacy `.badge`, put Actual in a lower-priority layer and keep application CSS in a later layer:
+
+```css
+@layer actual, app;
+
+@import "actual-css/css/layer";
+
+@layer app {
+  .badge {
+    /* Existing app badge keeps winning. */
+  }
+}
 ```
 
 Or wrap the default entrypoint yourself:
@@ -151,6 +181,8 @@ Or wrap the default entrypoint yourself:
 Cascade layers require the Minimum compatibility target or above.
 
 Actual CSS only claims the optional `actual` layer. Application-specific layer names stay in the application.
+
+Projects that need prefixed class names can run a post-install or build-pipeline transform that rewrites reserved classes, for example `.btn.primary` to `.ac-btn.ac-primary`. That transform is an application output strategy, not an alternate Actual CSS API.
 
 ## License
 

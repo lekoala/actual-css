@@ -25,7 +25,7 @@
       <p>What a theme must override to restyle the library without touching components.</p>
     </header>
         <div class="component-prose">
-      <p>A theme can be complete by overriding only:</p>
+      <p>Themes override tokens, not selectors. The themes in <code>src/css/themes/</code> are demo examples, not shipped by the default stylesheet; they exist to show valid ways to use this contract. A minimal recolor theme overrides the intent pairs, surfaces, text colors, border, focus, focus ring, and hover overlay. Shape, shadow, motion, typography, and soft-variant mix tokens are optional knobs. Override them only when the theme actually changes that part of the system. A full theme can override:</p>
 <ul>
   <li>intent colors and foreground pairs</li>
   <li>surface, text, border, focus, and overlay colors</li>

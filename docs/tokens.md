@@ -18,6 +18,7 @@ The surface stays small by keeping most tokens semantic, not component-specific.
 ### Color
 
 Intent tokens are used by `.primary`, `.secondary`, `.success`, `.warning`, `.danger`, and `.neutral`.
+They are curated color/foreground pairs. Actual CSS does not compute foregrounds automatically in the core theme contract.
 
 ```css
 :root {
@@ -281,7 +282,13 @@ Rules:
 
 > What a theme must override to restyle the library without touching components.
 
-A theme can be complete by overriding only:
+Themes override tokens, not selectors. The themes in `src/css/themes/` are demo examples, not shipped by the default stylesheet; they exist to show valid ways to use this contract.
+
+A minimal recolor theme overrides the intent pairs, surfaces, text colors, border, focus, focus ring, and hover overlay.
+
+Shape, shadow, motion, typography, and soft-variant mix tokens are optional knobs. Override them only when the theme actually changes that part of the system.
+
+A full theme can override:
 
 - intent colors and foreground pairs
 - surface, text, border, focus, and overlay colors
