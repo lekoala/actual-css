@@ -1,32 +1,25 @@
 # Documentation
 
-This project keeps documentation intentionally small.
+Start here when using or changing Actual CSS.
 
-## Rules
+## Start Here
 
-Do not document what the code already says.
+- [Mental model](mental-model.md): how tokens, components, variants, and JS enhancers fit together.
+- [Guidelines](guidelines.md): rules for keeping the library small and maintainable.
+- [Why Actual CSS](why.md): positioning, tradeoffs, and non-goals.
+- [Accessibility](accessibility.md): guarantees, test coverage, and author responsibilities.
 
-Document:
-- why a rule exists,
-- how things compose,
-- where the boundaries are,
-- what agents or contributors must not accidentally change.
+## API Surface
 
-If code and docs disagree, ask the user what is the expected outcome.
+- [Tokens](tokens.md): public design-token contract.
+- [Typography](typography.md): text defaults, prose, and optional fluid type.
+- [Layout](layout.md): layout primitives and responsive composition.
+- [Components](components.md): static component classes and examples.
+- [Forms](forms.md): fields, validation, controls, and form actions.
+- [UI](ui.md): JS-enhanced interface patterns.
+- [Utilities](utilities.md): small one-purpose helpers.
+- [Patterns](patterns.md): common app compositions.
 
-## Docs content
+## Rule of Thumb
 
-- tokens.md : core tokens
-- typography.md : typography
-- layout.md : layout helpers
-- patterns.md : typical app patterns
-- components.md : all components
-- utilities.md : basic utils
-- ui.md : components that require js to work
-- why.md : positioning and tradeoffs
-- accessibility.md : guarantees and author responsibilities
-
-## Other relevant files
-
-- guidelines.md : core guidelines to follow
-- references.md : inspiration and external resources
+If code and docs disagree, treat code as the API source and update the smallest doc that explains the decision.
