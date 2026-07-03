@@ -62,7 +62,9 @@
 .select:focus-visible,
 .form select:focus-visible {
   --control-border: var(--focus);
-  --control-ring: 0 0 0 3px var(--focus-ring);
+  outline: var(--focus-ring-outline);
+  outline-offset: var(--focus-ring-offset);
+  box-shadow: var(--focus-ring-shadow);
 }
 
 .select[aria-invalid="true"],
