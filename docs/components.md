@@ -301,14 +301,20 @@ Size variants
 
 Removable tag pattern
 
-Use `.badge soft` for tag/chip visuals. Add a direct dismiss button only when the tag can actually be removed. There is no `.chip` component until a selectable chip pattern, such as `aria-pressed`, proves it needs its own contract.
+Use `.badge soft` for tag visuals. Add a direct dismiss button only when the tag can actually be removed. There is no separate chip component.
 
 ```html
 <span class="badge primary soft">
   Design
   <button type="button" aria-label="Remove Design">
-    <span aria-hidden="true">x</span>
+    <i class="ti ti-x" aria-hidden="true"></i>
   </button>
+</span>
+<span class="badge primary soft">
+  <button type="button" aria-label="Remove Design">
+    <i class="ti ti-x" aria-hidden="true"></i>
+  </button>
+  Design
 </span>
 ```
 
