@@ -1,0 +1,31 @@
+/*
+ * Key — keyboard keys and shortcut tokens for UI chrome.
+ *
+ * Use .key outside prose. Plain kbd inside .prose gets the same visual
+ * treatment from prose.css so authored content stays convenient.
+ */
+.key {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-inline-size: 1.75em;
+  min-block-size: 1.6em;
+  padding-inline: 0.45em;
+  border: var(--border-width) solid var(--border);
+  border-block-end-width: calc(var(--border-width) * 2);
+  border-radius: var(--radius-sm);
+  background: var(--surface-raised);
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 0.875em;
+  font-weight: var(--font-weight-medium);
+  line-height: 1;
+  white-space: nowrap;
+  vertical-align: 0.08em;
+}
+
+@media (forced-colors: active) {
+  .key {
+    border-color: ButtonText;
+  }
+}

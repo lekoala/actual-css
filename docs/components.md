@@ -299,6 +299,19 @@ Size variants
 <span class="badge success lg">Large Success</span>
 ```
 
+Removable tag pattern
+
+Use `.badge soft` for tag/chip visuals. Add a direct dismiss button only when the tag can actually be removed. There is no `.chip` component until a selectable chip pattern, such as `aria-pressed`, proves it needs its own contract.
+
+```html
+<span class="badge primary soft">
+  Design
+  <button type="button" aria-label="Remove Design">
+    <span aria-hidden="true">x</span>
+  </button>
+</span>
+```
+
 Links:
 - https://oat.ink/components/#badge
 - https://daisyui.com/components/badge/
@@ -655,6 +668,36 @@ Links:
 - Drawer: https://codepen.io/nwest88/pen/PwwZpv
 - https://uiterms.com/drawer/
 - https://v6-dev--twbs-bootstrap.netlify.app/docs/6.0/components/drawer/
+
+## Key
+
+> Keyboard keys and shortcut tokens for app UI, command palettes, menus, and help text.
+
+- Use `<kbd class="key">` outside prose.
+- Plain `<kbd>` inside `.prose` gets the same visual treatment for authored content.
+- `.shortcut` is a documented composition, not a component class. Compose multiple `.key` elements with text or layout utilities.
+- Use short, familiar labels such as `Ctrl`, `Shift`, `Esc`, or `K`.
+
+```html
+<p>Press <kbd class="key">Esc</kbd> to close the panel.</p>
+
+<div class="cluster" aria-label="Keyboard shortcut Control K">
+  <kbd class="key">Ctrl</kbd>
+  <kbd class="key">K</kbd>
+</div>
+```
+
+In menus, keep the command label and shortcut in the same interactive item.
+
+```html
+<button type="button">
+  <span>Search</span>
+  <span class="cluster" aria-label="Keyboard shortcut Control K">
+    <kbd class="key">Ctrl</kbd>
+    <kbd class="key">K</kbd>
+  </span>
+</button>
+```
 
 ## Meter
 

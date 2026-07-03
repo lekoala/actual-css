@@ -55,6 +55,34 @@
   block-size: var(--badge-size);
 }
 
+.badge > button {
+  display: inline-grid;
+  place-items: center;
+  flex: 0 0 auto;
+  inline-size: 1.25em;
+  block-size: 1.25em;
+  margin-inline-end: -0.25em;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-full);
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  line-height: 1;
+  cursor: pointer;
+}
+
+@media (hover: hover) {
+  .badge > button:hover {
+    background: var(--hover-overlay);
+  }
+}
+
+.badge > button:focus-visible {
+  outline: var(--focus-outline);
+  outline-offset: var(--focus-outline-offset);
+}
+
 /* .solid/.soft/.outline are shared via variants.css. The --badge-* fallbacks
    make .badge solid by default. */
 @media (hover: hover) {

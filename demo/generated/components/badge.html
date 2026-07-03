@@ -115,6 +115,29 @@
         </div>
       </div>
     </section>
+    <div class="component-prose">
+      <p>Removable tag pattern Use <code>.badge soft</code> for tag/chip visuals. Add a direct dismiss button only when the tag can actually be removed. There is no <code>.chip</code> component until a selectable chip pattern, such as <code>aria-pressed</code>, proves it needs its own contract.</p>
+    </div>
+    <section class="component-section">
+      <div class="example-group">
+        <div class="example-render">
+          <span class="badge primary soft">
+  Design
+  <button type="button" aria-label="Remove Design">
+    <span aria-hidden="true">x</span>
+  </button>
+</span>
+        </div>
+        <div class="example-code">
+          <pre><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>badge primary soft<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+  Design
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>button</span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>button<span class="token punctuation">"</span></span> <span class="token attr-name">aria-label</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>Remove Design<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token attr-name">aria-hidden</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>true<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>x<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span></code></pre>
+        </div>
+      </div>
+    </section>
         <details class="demo-links">
       <summary>Links (8)</summary>
       <ul>

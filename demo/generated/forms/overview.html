@@ -283,6 +283,7 @@
   <li><code>.field-group</code> styles a <code>&lt;fieldset&gt;</code> outside <code>.form</code>. Inside <code>.form</code>, a bare <code>&lt;fieldset&gt;</code> is also styled.</li>
   <li><code>.choice</code> is the explicit choice-label API. A bare <code>&lt;label&gt;</code> whose first child is a checkbox or radio is auto-styled to match. The control goes first, the label group second, so multi-line labels align the control with the first line.</li>
   <li>For a switch, prefer <code>class=&quot;switch&quot;</code> plus <code>role=&quot;switch&quot;</code>. The class is the explicit API; the attribute is recognized as a fallback so both compose.</li>
+  <li>Core range controls stay native and are enhanced by <code>accent-color</code>. An optional richer range skin may come later if real projects need it.</li>
   <li><code>.form-actions</code> carries a default top margin. Override it with <code>--form-actions-margin-block-start</code>. It is class-only and may live inside or outside <code>&lt;form&gt;</code>. See Detached Actions below.</li>
 </ul>
     </div>
