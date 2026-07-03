@@ -1,4 +1,4 @@
-## Patterns
+# Patterns
 
 > Small structural helpers for recurring semantic HTML shapes, between layout primitives and full components.
 
@@ -17,7 +17,7 @@ Use patterns when a semantic element needs a small amount of normalization befor
 - Avoid broad element selectors such as `nav ul` or `.alert menu`.
 - A pattern should be useful in more than one component or context.
 
-### Actions
+## Actions
 
 Use `.actions` for a semantic list of actions.
 
@@ -68,13 +68,14 @@ Prefer composition over making each component reimplement action-list layout.
 }
 ```
 
-### Navigation List
+## Navigation List
 
 Use `.nav-list` for a semantic list of navigation links.
 
 It removes native list chrome but does not force a direction. Combine it with layout primitives depending on context.
 
 ```html{.stack}
+<h2>Navigation</h2>
 <nav aria-label="Main navigation">
   <ul class="nav-list cluster">
     <li><a href="/docs">Docs</a></li>
@@ -82,7 +83,7 @@ It removes native list chrome but does not force a direction. Combine it with la
     <li><a href="/examples">Examples</a></li>
   </ul>
 </nav>
-
+<h2>Documentation</h2>
 <nav aria-label="Documentation">
   <ul class="nav-list stack">
     <li><a href="/docs/getting-started" aria-current="page">Getting started</a></li>
@@ -126,9 +127,6 @@ Prefer an explicit pattern class.
 </nav>
 ```
 
-Links:
-- https://picocss.com/docs/nav
-
 ### Header Navigation
 
 Header navigation is usually a composition of landmarks, layout primitives, and patterns.
@@ -166,9 +164,6 @@ A project may add `.site-header` when it needs a visual shell.
   background: var(--surface);
 }
 ```
-
-Links:
-- https://daisyui.com/components/navbar/
 
 ### Side Navigation
 
@@ -244,7 +239,11 @@ A project may add `.side-nav` only when it needs specific visual behavior such a
 
 Keep this separate from layout primitives. `.cluster` and `.stack` should not style links.
 
-### Generic List
+Links:
+- https://picocss.com/docs/nav
+- https://daisyui.com/components/navbar/
+
+## List Group
 
 Use `.list-group` for rich content lists where each item may contain multiple elements.
 
@@ -254,18 +253,32 @@ Use `.list-group` for rich content lists where each item may contain multiple el
 
   <ul>
     <li>
-      <div class="avatar"><span>DL</span></div>
+      <div class="avatar">
+        <img src="https://i.pravatar.cc/48?img=5" alt="Dio Lupa" />
+      </div>
       <div>
         <div>Dio Lupa</div>
         <div class="muted">Remaining Reason</div>
       </div>
-      <p>
-        "Remaining Reason" became an instant hit, praised for its haunting sound
-        and emotional depth.
-      </p>
+      <span class="muted">3:45</span>
       <button class="btn ghost" aria-label="Play">
         <i class="ti ti-player-play"></i>
       </button>
+      <p>"Remaining Reason" became an instant hit.</p>
+    </li>
+    <li>
+      <div class="avatar">
+        <img src="https://i.pravatar.cc/48?img=10" alt="Astral Planes" />
+      </div>
+      <div>
+        <div>Astral Planes</div>
+        <div class="muted">Neon Drift</div>
+      </div>
+      <span class="muted">4:12</span>
+      <button class="btn ghost" aria-label="Play">
+        <i class="ti ti-player-play"></i>
+      </button>
+      <p>"Neon Drift" blends retro synths with modern beats.</p>
     </li>
   </ul>
 </figure>
@@ -279,7 +292,7 @@ Use `.list-group` for rich content lists where each item may contain multiple el
 
 If `.list-group` receives visual styling, document it as a component-like pattern rather than a layout primitive.
 
-### Relationship With Layout
+## Relationship With Layout
 
 Patterns often compose with layout primitives.
 
