@@ -179,6 +179,7 @@ Links:
 - https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Global_attributes/popover
 - https://v6-dev--twbs-bootstrap.netlify.app/docs/6.0/components/menu/
 - https://getbootstrap.com/docs/5.3/components/popovers/#overview
+- https://open-ui.org/components/menu.research/
 
 ## Tabs
 
@@ -252,6 +253,7 @@ Links:
 - https://basecoatui.com/components/tabs/
 - https://daisyui.com/components/tab/
 - https://inclusive-components.design/tabbed-interfaces/
+- https://open-ui.org/components/tabs.research/
 
 ## Tooltip
 
@@ -328,6 +330,7 @@ Links:
 - https://m3.material.io/components/tooltips/overview
 - https://basecoatui.com/components/tooltip/
 - https://daisyui.com/components/tooltip/
+- https://open-ui.org/components/tooltip.research/
 
 ## Scrollspy
 
