@@ -90,7 +90,9 @@
 .flyout > :where(button, a, [role="menuitem"]):focus-visible,
 .flyout > li > :where(button, a, [role="menuitem"]):focus-visible {
   background: var(--surface-subtle);
-  outline: none;
+  outline: var(--focus-ring-outline);
+  outline-offset: var(--focus-ring-offset);
+  box-shadow: var(--focus-ring-shadow);
 }
 
 @media (hover: hover) {

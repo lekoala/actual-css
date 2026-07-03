@@ -31,8 +31,9 @@
     .select:not([multiple], [size], .native):open,
     .form select:not([multiple], [size], .native):open {
       border-color: var(--focus);
-      outline: 0;
-      box-shadow: 0 0 0 3px var(--focus-ring);
+      outline: var(--focus-ring-outline);
+      outline-offset: var(--focus-ring-offset);
+      box-shadow: var(--focus-ring-shadow);
     }
 
     .select:not([multiple], [size], .native)::picker-icon,
@@ -56,8 +57,13 @@
     .form select option:not(:disabled):focus-visible {
       background-color: var(--primary);
       color: var(--primary-fg);
-      outline: none;
       cursor: pointer;
+    }
+
+    .select option:not(:disabled):focus-visible,
+    .form select option:not(:disabled):focus-visible {
+      outline: var(--focus-ring-outline);
+      outline-offset: var(--focus-ring-offset);
     }
 
     .select option:active,

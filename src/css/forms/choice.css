@@ -11,7 +11,13 @@
  */
 /* Intent boundary — inherited intents do not tint this component.
    Local intent classes still win because :where() has zero specificity. */
-:where(.choice, .check, .radio, .form input[type="checkbox"]:not([role="switch"]), .form input[type="radio"]) {
+:where(
+    .choice,
+    .check,
+    .radio,
+    .form input[type="checkbox"]:not([role="switch"]),
+    .form input[type="radio"]
+  ) {
   --intent: initial;
   --intent-fg: initial;
   --ui-bg: initial;
@@ -186,7 +192,9 @@
     .form input[type="radio"]
   ):focus-visible {
   border-color: var(--focus);
-  box-shadow: 0 0 0 3px var(--focus-ring);
+  outline: var(--focus-ring-outline);
+  outline-offset: var(--focus-ring-offset);
+  box-shadow: var(--focus-ring-shadow);
 }
 
 :is(

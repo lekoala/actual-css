@@ -14,23 +14,23 @@
  * wrapper uses --field-* (form.css).
  */
 :is(
-  .input,
-  .textarea,
-  :is(.form, .field)
-    :where(
-      input:not(
-        [type="checkbox"],
-        [type="radio"],
-        [type="range"],
-        [type="file"],
-        [type="button"],
-        [type="submit"],
-        [type="reset"],
-        [type="color"]
-      ),
-      textarea
-    )
-) {
+    .input,
+    .textarea,
+    :is(.form, .field)
+      :where(
+        input:not(
+            [type="checkbox"],
+            [type="radio"],
+            [type="range"],
+            [type="file"],
+            [type="button"],
+            [type="submit"],
+            [type="reset"],
+            [type="color"]
+          ),
+        textarea
+      )
+  ) {
   --control-border: var(--border);
   --control-bg: var(--surface);
   --control-fg: var(--text);
@@ -70,7 +70,9 @@
 
 :is(.input, .textarea, :is(.form, .field) :where(input, textarea)):focus-visible {
   --control-border: var(--focus);
-  --control-ring: 0 0 0 3px var(--focus-ring);
+  outline: var(--focus-ring-outline);
+  outline-offset: var(--focus-ring-offset);
+  box-shadow: var(--focus-ring-shadow);
 }
 
 .field.danger :where(input, textarea, select),

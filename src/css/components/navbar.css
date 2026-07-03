@@ -83,3 +83,9 @@
 .nav-list > li {
   margin: 0;
 }
+
+@media (forced-colors: active) {
+  .nav-link:where([aria-current]:not([aria-current="false"])) {
+    outline: 1px solid transparent;
+  }
+}

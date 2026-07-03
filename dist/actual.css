@@ -199,6 +199,9 @@ small {
   --border: #dfdce5;
   --focus: var(--primary);
   --focus-ring: #52396f38;
+  --focus-ring-shadow: 0 0 0 3px var(--focus-ring);
+  --focus-ring-outline: 2px solid transparent;
+  --focus-ring-offset: 2px;
   --hover-overlay: #18141f0a;
   --radius: .5rem;
   --radius-sm: .25rem;
@@ -252,6 +255,9 @@ small {
     --text-subtle: light-dark(#8e8a99, #868192);
     --border: light-dark(#dfdce5, #3b3645);
     --focus-ring: light-dark(#52396f38, #c0a8dc47);
+    --focus-ring-shadow: 0 0 0 3px var(--focus-ring);
+    --focus-ring-outline: 2px solid transparent;
+    --focus-ring-offset: 2px;
     --hover-overlay: light-dark(#18141f0a, #ffffff0f);
     --shadow-color: light-dark(#171320, #050307);
   }
@@ -1128,6 +1134,12 @@ button.badge:disabled, .badge[aria-disabled="true"] {
   box-shadow: var(--shadow);
 }
 
+@media (forced-colors: active) {
+  .card.raised {
+    border-color: buttontext;
+  }
+}
+
 .card.subtle {
   background: var(--surface-subtle);
 }
@@ -1977,6 +1989,12 @@ button.avatar {
   margin: 0;
 }
 
+@media (forced-colors: active) {
+  .nav-link:where([aria-current]:not([aria-current="false"])) {
+    outline: 1px solid #0000;
+  }
+}
+
 .breadcrumb {
   align-items: center;
   gap: var(--space-1);
@@ -2044,6 +2062,12 @@ button.avatar {
   border-color: var(--intent, var(--primary));
   background: var(--intent, var(--primary));
   color: var(--intent-fg, var(--primary-fg));
+}
+
+@media (forced-colors: active) {
+  .pagination .btn[aria-current="page"] {
+    outline: 1px solid #0000;
+  }
 }
 
 .table-wrap {
@@ -2312,7 +2336,9 @@ button.avatar {
 
 :is(.input, .textarea, :is(.form, .field) :where(input, textarea)):focus-visible {
   --control-border: var(--focus);
-  --control-ring: 0 0 0 3px var(--focus-ring);
+  outline: var(--focus-ring-outline);
+  outline-offset: var(--focus-ring-offset);
+  box-shadow: var(--focus-ring-shadow);
 }
 
 .field.danger :where(input, textarea, select), .input[aria-invalid="true"], .textarea[aria-invalid="true"], :is(.form, .field) :where(input, textarea)[aria-invalid="true"] {
@@ -2474,7 +2500,9 @@ button.avatar {
 
 :is(.check, .radio, .form input[type="checkbox"]:not([role="switch"]), .form input[type="radio"]):focus-visible {
   border-color: var(--focus);
-  box-shadow: 0 0 0 3px var(--focus-ring);
+  outline: var(--focus-ring-outline);
+  outline-offset: var(--focus-ring-offset);
+  box-shadow: var(--focus-ring-shadow);
 }
 
 :is(.check, .radio, .form input[type="checkbox"]:not([role="switch"]), .form input[type="radio"]):disabled {
@@ -2550,7 +2578,9 @@ button.avatar {
 
 .select:focus-visible, .form select:focus-visible {
   --control-border: var(--focus);
-  --control-ring: 0 0 0 3px var(--focus-ring);
+  outline: var(--focus-ring-outline);
+  outline-offset: var(--focus-ring-offset);
+  box-shadow: var(--focus-ring-shadow);
 }
 
 .select[aria-invalid="true"], .field.danger select, .form select[aria-invalid="true"] {
@@ -2597,14 +2627,16 @@ button.avatar {
 
     .select:not([multiple], [size], .native):open {
       border-color: var(--focus);
-      box-shadow: 0 0 0 3px var(--focus-ring);
-      outline: 0;
+      outline: var(--focus-ring-outline);
+      outline-offset: var(--focus-ring-offset);
+      box-shadow: var(--focus-ring-shadow);
     }
 
     .form select:not([multiple], [size], .native):open {
       border-color: var(--focus);
-      box-shadow: 0 0 0 3px var(--focus-ring);
-      outline: 0;
+      outline: var(--focus-ring-outline);
+      outline-offset: var(--focus-ring-offset);
+      box-shadow: var(--focus-ring-shadow);
     }
 
     .select:not([multiple], [size], .native)::picker-icon {
@@ -2628,7 +2660,11 @@ button.avatar {
       background-color: var(--primary);
       color: var(--primary-fg);
       cursor: pointer;
-      outline: none;
+    }
+
+    .select option:not(:disabled):focus-visible, .form select option:not(:disabled):focus-visible {
+      outline: var(--focus-ring-outline);
+      outline-offset: var(--focus-ring-offset);
     }
 
     .select option:active, .form select option:active {
@@ -2888,7 +2924,9 @@ button.avatar {
 
 .flyout > :where(button, a, [role="menuitem"]):focus-visible, .flyout > li > :where(button, a, [role="menuitem"]):focus-visible {
   background: var(--surface-subtle);
-  outline: none;
+  outline: var(--focus-ring-outline);
+  outline-offset: var(--focus-ring-offset);
+  box-shadow: var(--focus-ring-shadow);
 }
 
 @media (hover: hover) {
@@ -2961,6 +2999,12 @@ button.avatar {
 .tab[aria-selected="true"], .tab[aria-current="page"], .tab[aria-pressed="true"] {
   border-block-end-color: var(--intent, var(--primary));
   color: var(--intent, var(--primary));
+}
+
+@media (forced-colors: active) {
+  .tab[aria-selected="true"], .tab[aria-current="page"], .tab[aria-pressed="true"] {
+    border-block-end-width: 2px;
+  }
 }
 
 .tooltip {
