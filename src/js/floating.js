@@ -5,6 +5,8 @@
  * listener to reposition all registered floating elements via rAF.
  */
 
+import { EVENTS } from "./events.js";
+
 /* ── Placement parsing ────────────────────────────────── */
 
 function getSide(p) {
@@ -112,13 +114,13 @@ let pendingType = null;
 function notify(type) {
   for (const el of tracked) {
     el.dispatchEvent(
-      new CustomEvent("actual:reposition", {
+      new CustomEvent(EVENTS.reposition, {
         bubbles: false,
         detail: { type },
       }),
     );
     if (type === "escape") {
-      el.dispatchEvent(new CustomEvent("actual:hide", { bubbles: false }));
+      el.dispatchEvent(new CustomEvent(EVENTS.hide, { bubbles: false }));
     }
   }
 }

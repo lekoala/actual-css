@@ -1,4 +1,5 @@
 import { track, reposition, repositionAt } from "./floating.js";
+import { EVENTS } from "./events.js";
 import { onMenuKeydown } from "./menu.js";
 
 const DEFAULT_BREAKPOINT = 768;
@@ -176,7 +177,7 @@ function ensureSurfaceWired(menu) {
   };
 
   menu.addEventListener(
-    "actual:reposition",
+    EVENTS.reposition,
     (e) => {
       if (menu.hidden) return;
       if (e.detail?.type === "scroll" && surfaceMap.get(menu)?.point) {
@@ -192,7 +193,7 @@ function ensureSurfaceWired(menu) {
   );
 
   menu.addEventListener(
-    "actual:hide",
+    EVENTS.hide,
     () => {
       if (!menu.hidden) closeSurface(menu, { restoreFocus: true });
     },
