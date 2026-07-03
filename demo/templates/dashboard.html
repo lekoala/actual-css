@@ -124,6 +124,15 @@
       color: var(--intent, var(--primary));
     }
 
+    .dashboard-sidebar .flyout-trigger {
+      display: block;
+      inline-size: 100%;
+    }
+
+    .dashboard-sidebar .flyout-trigger > [aria-haspopup="menu"] {
+      inline-size: 100%;
+    }
+
     .dashboard-section-title {
       margin: 0;
       color: var(--text-muted);
@@ -358,11 +367,11 @@
           <span class="avatar sm"><abbr>LW</abbr></span>
           <span>Laura Williams</span>
         </button>
-        <menu class="flyout" role="menu" id="sidebar-user-menu" aria-labelledby="sidebar-user-trigger" hidden>
-          <button class="btn link" type="button" role="menuitem">Profile</button>
-          <button class="btn link" type="button" role="menuitem">Preferences</button>
-          <hr role="separator">
-          <button class="btn link danger" type="button" role="menuitem">Sign out</button>
+        <menu class="flyout sm" role="menu" id="sidebar-user-menu" aria-labelledby="sidebar-user-trigger" hidden>
+          <li><button type="button" role="menuitem">Profile</button></li>
+          <li><button type="button" role="menuitem">Preferences</button></li>
+          <li><hr role="separator"></li>
+          <li><button class="danger" type="button" role="menuitem">Sign out</button></li>
         </menu>
       </div>
     </aside>
@@ -416,13 +425,13 @@
             <span class="avatar sm"><abbr>LW</abbr></span>
             <i class="ti ti-chevron-down dashboard-hide-mobile" aria-hidden="true"></i>
           </button>
-          <menu class="flyout" role="menu" id="account-menu" aria-labelledby="account-flyout-trigger" hidden>
-            <button class="btn link" type="button" role="menuitem">View profile</button>
-            <button class="btn link" type="button" role="menuitem">Account settings</button>
-            <button class="btn link" type="button" role="menuitem">Keyboard shortcuts</button>
-            <hr role="separator">
-            <button class="btn link danger" type="button" role="menuitem">Sign out</button>
-          </menu>
+        <menu class="flyout sm" role="menu" id="account-menu" aria-labelledby="account-flyout-trigger" hidden>
+          <li><button type="button" role="menuitem">View profile</button></li>
+          <li><button type="button" role="menuitem">Account settings</button></li>
+          <li><button type="button" role="menuitem">Keyboard shortcuts</button></li>
+          <li><hr role="separator"></li>
+          <li><button class="danger" type="button" role="menuitem">Sign out</button></li>
+        </menu>
         </div>
       </header>
 
