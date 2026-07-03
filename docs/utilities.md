@@ -197,7 +197,7 @@ Use `.grow` when one item in a flex layout should take available space without o
 }
 ```
 
-### Items Start
+### Item Alignment
 
 Use `.items-start` on flex or grid layouts when children should keep their natural height and align to the block-start edge. This is especially useful for form fields in a grid, where the default grid stretch would make short fields as tall as taller neighbors.
 
@@ -213,6 +213,8 @@ Use `.items-start` on flex or grid layouts when children should keep their natur
   </label>
 </div>
 ```
+
+Use `.items-center` when a flex or grid layout should center its children on the cross axis.
 
 ## Spacing Helpers
 

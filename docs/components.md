@@ -468,7 +468,7 @@ Links:
 
 ```html
 <div style="max-inline-size: 32rem">
-  <article class="card">
+  <article class="card stack">
     <img data-bleed src="https://picsum.photos/seed/actual-css-card/600/300" alt="Coastal cliffs at dusk" />
     <header>
       <h3>Coastal cliffs at dusk</h3>
@@ -485,8 +485,8 @@ Links:
 ```
 
 ```html
-<article class="card stack" style="--card-max-inline-size: 24rem; text-align: center">
-  <header data-bleed class="stack" style="background: var(--surface-subtle)">
+<article class="card stack" style="--card-max-inline-size: 24rem">
+  <header data-bleed class="stack items-center text-center" style="background: var(--surface-subtle)">
     <hgroup>
       <h3>Team</h3>
       <p class="muted">For growing products</p>
