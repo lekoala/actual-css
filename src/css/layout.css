@@ -166,9 +166,18 @@
   grid-template-columns: minmax(0, 1fr);
 }
 
-@media (min-width: 64rem) {
-  .sidebar-layout {
+@container (width >= 64rem) {
+  .grid-responsive .sidebar-layout {
     grid-template-columns: minmax(0, 1fr) var(--sidebar-layout-size, 18rem);
     align-items: start;
+  }
+}
+
+@supports not (container-type: inline-size) {
+  @media (min-width: 64rem) {
+    .sidebar-layout {
+      grid-template-columns: minmax(0, 1fr) var(--sidebar-layout-size, 18rem);
+      align-items: start;
+    }
   }
 }

@@ -5,7 +5,6 @@
   "type": "module",
   "license": "MIT",
   "author": "Thomas <thomas@lekoala.be>",
-  "private": true,
   "repository": {
     "type": "git",
     "url": "https://onedev.kalyptus.ovh/actual-css.git"
@@ -53,6 +52,10 @@
     "dist",
     "src/css",
     "src/js",
+    "docs",
+    "CHANGELOG.md",
+    "llms.txt",
+    "llms-full.txt",
     "LICENSE",
     "README.md"
   ],
@@ -62,6 +65,7 @@
   "scripts": {
     "lint": "biome check",
     "lint:fix": "biome check --write",
+    "build:llms": "bun scripts/build-llms.js",
     "build:demo": "bun scripts/build-demo.js",
     "watch:demo": "bun scripts/build-demo.js --watch",
     "build:dist": "bun scripts/build-dist.js",

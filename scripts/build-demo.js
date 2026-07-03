@@ -30,6 +30,8 @@ const DEMO_CATEGORY_FILES = [
   "utilities.md",
   "typography.md",
   "tokens.md",
+  "accessibility.md",
+  "why.md",
 ];
 
 const TITLE_WORDS = {

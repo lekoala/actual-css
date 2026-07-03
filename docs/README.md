@@ -23,6 +23,8 @@ If code and docs disagree, ask the user what is the expected outcome.
 - components.md : all components
 - utilities.md : basic utils
 - ui.md : components that require js to work
+- why.md : positioning and tradeoffs
+- accessibility.md : guarantees and author responsibilities
 
 ## Other relevant files
 

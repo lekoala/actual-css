@@ -15,6 +15,7 @@ still be functional without it
 - Prefer container queries of media queries (https://modern-css.com/responsive-components-without-media-queries/) : local behaviour
 - Components don't deal with page layout (no "margin-bottom" for a card)
 - Avoid inline styles when possible (use utilities)
+- Runtime JS may set inline styles for dynamic geometry such as floating coordinates or measured trigger width.
 - Use logical properties (https://modern-css.com/direction-aware-layouts-without-left-and-right/) — prefer `padding-block`/`padding-inline` over physical `padding` shorthands when axes differ; symmetric single-value `padding` is fine
 - Don't fight z-index, isolate (https://modern-css.com/z-index-isolation/) — when a z-index is unavoidable, source it from a `--z-*` token, not a magic number
 - Naming: try to stick to https://uiterms.com/ naming

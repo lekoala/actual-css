@@ -299,21 +299,23 @@ Tune the side width and wrapping threshold with `--sidebar-size` and `--sidebar-
 
 `.sidebar-layout` is a complementary two-column primitive that uses CSS grid instead of flex. Use it when the aside should align to the top of the content (e.g. a sticky table of contents) or when the content area contains multiple sections that should stretch together.
 
-Below the 64rem breakpoint the columns stack; at and above it the aside takes `--sidebar-layout-size` and the content takes the remaining space.
+Wrap it in `.grid-responsive` to make the switch depend on the container width. Below 64rem the columns stack; at and above it the aside takes `--sidebar-layout-size` and the content takes the remaining space. Older browsers use the viewport fallback.
 
 ```html
-<div class="sidebar-layout" style="--sidebar-layout-size: 18rem">
-  <article class="stack">
-    <h1>Long-form article</h1>
-    <p>Article body that benefits from a sticky table of contents.</p>
-  </article>
+<div class="grid-responsive">
+  <div class="sidebar-layout" style="--sidebar-layout-size: 18rem">
+    <article class="stack">
+      <h1>Long-form article</h1>
+      <p>Article body that benefits from a sticky table of contents.</p>
+    </article>
 
-  <aside class="stack">
-    <h3>On this page</h3>
-    <ol class="list-reset">
-      <li><a class="link-muted" href="#section">Section</a></li>
-    </ol>
-  </aside>
+    <aside class="stack">
+      <h3>On this page</h3>
+      <ol class="list-reset">
+        <li><a class="link-muted" href="#section">Section</a></li>
+      </ol>
+    </aside>
+  </div>
 </div>
 ```
 
