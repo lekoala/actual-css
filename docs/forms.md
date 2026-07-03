@@ -138,6 +138,7 @@
 - `.field-group` styles a `<fieldset>` outside `.form`. Inside `.form`, a bare `<fieldset>` is also styled.
 - `.choice` is the explicit choice-label API. A bare `<label>` whose first child is a checkbox or radio is auto-styled to match. The control goes first, the label group second, so multi-line labels align the control with the first line.
 - For a switch, prefer `class="switch"` plus `role="switch"`. The class is the explicit API; the attribute is recognized as a fallback so both compose.
+- Core range controls stay native and are enhanced by `accent-color`. An optional richer range skin may come later if real projects need it.
 - `.form-actions` carries a default top margin. Override it with `--form-actions-margin-block-start`. It is class-only and may live inside or outside `<form>`. See Detached Actions below.
 
 Links:
@@ -787,6 +788,19 @@ A sticky footer can cover the last field on short pages. That is a page-layout c
        aria-checked="true"
        checked
        onchange="this.setAttribute('aria-checked', this.checked)" />
+```
+
+## Range
+
+> Native range inputs with theme-aware accent color.
+
+Core: native range, enhanced by `accent-color`. Optional richer skin may come later.
+
+```html
+<label class="field">
+  <span class="field-label">Volume</span>
+  <input type="range" min="0" max="100" value="50" />
+</label>
 ```
 
 ## Validation

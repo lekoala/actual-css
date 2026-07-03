@@ -51,6 +51,7 @@ const RESERVED = new Set([
   "is-sheet",
   "is-static",
   "items-start",
+  "key",
   "lead",
   "lg",
   "link",
