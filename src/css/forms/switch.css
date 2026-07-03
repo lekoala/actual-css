@@ -8,6 +8,17 @@
  * convenience selector for hosts that prefer attribute-only markup. The two
  * compose: when both are present, class and role get the same styles.
  */
+/* Intent boundary — inherited intents do not tint this component.
+   Local intent classes still win because :where() has zero specificity. */
+:where(.switch, .form input[role="switch"]) {
+  --intent: initial;
+  --intent-fg: initial;
+  --ui-bg: initial;
+  --ui-fg: initial;
+  --ui-border: initial;
+  --ui-hover-bg: initial;
+}
+
 .switch,
 .form input[role="switch"] {
   --switch-bg: var(--border);
@@ -88,4 +99,33 @@
   border-color: var(--border);
   opacity: 1;
   cursor: not-allowed;
+}
+
+@media (forced-colors: active) {
+  .switch,
+  .form input[role="switch"] {
+    border-color: ButtonText;
+  }
+
+  .switch::before,
+  .form input[role="switch"]::before {
+    --switch-knob: ButtonText;
+    box-shadow: none;
+  }
+
+  .switch:checked,
+  .form input[role="switch"]:checked {
+    --switch-bg: Highlight;
+    --switch-knob: HighlightText;
+    border-color: Highlight;
+    forced-color-adjust: none;
+  }
+
+  .switch:disabled,
+  .form input[role="switch"]:disabled {
+    --switch-bg: Canvas;
+    --switch-knob: GrayText;
+    border-color: GrayText;
+    forced-color-adjust: auto;
+  }
 }

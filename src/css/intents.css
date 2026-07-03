@@ -1,17 +1,9 @@
 /*
  * Intent classes do not style elements directly.
  * They only expose --intent and --intent-fg.
- * Components and variants decide how to consume them.
+ * Components and variants decide how to consume them. Each component that
+ * consumes --intent or --ui-* declares its own local intent boundary.
  */
-:where(.btn, .badge, .alert, .card, .avatar, .progress, .meter, .switch, .check, .radio) {
-  --intent: initial;
-  --intent-fg: initial;
-  --ui-bg: initial;
-  --ui-fg: initial;
-  --ui-border: initial;
-  --ui-hover-bg: initial;
-}
-
 .primary {
   --intent: var(--primary);
   --intent-fg: var(--primary-fg);

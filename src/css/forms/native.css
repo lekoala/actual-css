@@ -3,6 +3,17 @@
  * styling, so the framework stays out of their way and just keeps them readable
  * and theme-aware.
  */
+/* Intent boundary — inherited intents do not tint this component.
+   Local intent classes still win because :where() has zero specificity. */
+:where(.range, .form input[type="range"]) {
+  --intent: initial;
+  --intent-fg: initial;
+  --ui-bg: initial;
+  --ui-fg: initial;
+  --ui-border: initial;
+  --ui-hover-bg: initial;
+}
+
 .form input[type="file"],
 .file {
   color: var(--text-muted);

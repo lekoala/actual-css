@@ -14,6 +14,9 @@
   --control-border: var(--border);
   --control-bg: var(--surface);
   --control-fg: var(--text);
+  --control-ring: none;
+  --control-cursor: auto;
+  --control-opacity: 1;
 
   inline-size: 100%;
   min-block-size: var(--control-size);
@@ -23,6 +26,9 @@
   background: var(--control-bg);
   color: var(--control-fg);
   font-size: var(--control-font-size);
+  box-shadow: var(--control-ring);
+  cursor: var(--control-cursor);
+  opacity: var(--control-opacity);
   outline: none;
   transition:
     border-color var(--duration),
@@ -55,8 +61,8 @@
 
 .select:focus-visible,
 .form select:focus-visible {
-  border-color: var(--focus);
-  box-shadow: 0 0 0 3px var(--focus-ring);
+  --control-border: var(--focus);
+  --control-ring: 0 0 0 3px var(--focus-ring);
 }
 
 .select[aria-invalid="true"],
@@ -70,6 +76,6 @@
   --control-bg: var(--surface-subtle);
   --control-fg: var(--text-subtle);
   --control-border: var(--border);
-  cursor: not-allowed;
-  opacity: 1;
+  --control-cursor: not-allowed;
+  --control-opacity: 1;
 }

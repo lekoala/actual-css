@@ -4,11 +4,15 @@
  * Keeps alert defaults local while consuming the shared --ui-* variant
  * plumbing for emphasis.
  */
-/* Prevent inherited intents from tinting the alert. Local intent classes still
-   win because :where() has zero specificity. */
+/* Intent boundary — inherited intents do not tint this component.
+   Local intent classes still win because :where() has zero specificity. */
 :where(.alert) {
   --intent: initial;
   --intent-fg: initial;
+  --ui-bg: initial;
+  --ui-fg: initial;
+  --ui-border: initial;
+  --ui-hover-bg: initial;
 }
 
 .alert {
@@ -58,12 +62,14 @@
 
 @supports (color: color-mix(in oklch, red, white)) {
   .alert:where(:not(.solid, .outline)) {
+    /* @sync soft-recipe */
     --ui-bg: color-mix(in oklch, var(--surface) var(--soft-bg-mix), var(--intent, var(--neutral)));
     --ui-border: color-mix(
       in oklch,
       var(--surface) var(--soft-border-mix),
       var(--intent, var(--neutral))
     );
+    /* @sync soft-recipe */
   }
 }
 

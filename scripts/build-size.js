@@ -9,6 +9,7 @@ const SRC = join(ROOT, "src", "css");
 const DIST = join(ROOT, "dist");
 
 const EXCLUDE = ["optional"];
+const MAX_SHIPPED_BROTLI = 13 * 1024;
 
 async function collectCSS(root, base = "") {
   const entries = await readdir(root, { withFileTypes: true });
@@ -142,6 +143,7 @@ async function main() {
     themesBrotli: themesBrotliSize,
     shippedMinified: minSize + themesMinSize,
     shippedBrotli: brotliSize + themesBrotliSize,
+    maxShippedBrotli: MAX_SHIPPED_BROTLI,
     fileCount: rows.length,
     files: rows,
   };
@@ -151,6 +153,13 @@ async function main() {
     JSON.stringify(report, null, 2) + "\n",
   );
   console.log("Report written to size-report.json\n");
+
+  if (hasDist && report.shippedBrotli > MAX_SHIPPED_BROTLI) {
+    console.error(
+      `Size budget exceeded: shipped brotli is ${formatBytes(report.shippedBrotli)} (max ${formatBytes(MAX_SHIPPED_BROTLI)}).`,
+    );
+    process.exit(1);
+  }
 }
 
 main();

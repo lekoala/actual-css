@@ -13,11 +13,21 @@
  * Public API:
  *   --fluid-display, --fluid-title, --fluid-lead  (size tokens, clamp())
  *   .text-display, .text-title, .text-lead        (composed classes)
+ *
+ * Values are generated from scripts/rfs.ts over the 360px -> 1440px range.
  */
 :root {
-  --fluid-display: clamp(2.75rem, 4vw, 4.25rem);
-  --fluid-title: clamp(2rem, 2vw, 2.75rem);
-  --fluid-lead: clamp(1.125rem, 1vw, 1.25rem);
+  --fluid-display: clamp(2.75rem, calc(2.25rem + 2.222vw), 4.25rem);
+  --fluid-title: clamp(2rem, calc(1.75rem + 1.111vw), 2.75rem);
+  --fluid-lead: clamp(1.125rem, calc(1.0833rem + 0.185vw), 1.25rem);
+}
+
+@supports (inline-size: 100vi) {
+  :root {
+    --fluid-display: clamp(2.75rem, calc(2.25rem + 2.222vi), 4.25rem);
+    --fluid-title: clamp(2rem, calc(1.75rem + 1.111vi), 2.75rem);
+    --fluid-lead: clamp(1.125rem, calc(1.0833rem + 0.185vi), 1.25rem);
+  }
 }
 
 .text-display {

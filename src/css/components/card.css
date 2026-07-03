@@ -5,6 +5,17 @@
  * Direct header/footer children are structural slots. Page layout remains the
  * job of markup and layout primitives outside the card.
  */
+/* Intent boundary — inherited intents do not tint this component.
+   Local intent classes still win because :where() has zero specificity. */
+:where(.card) {
+  --intent: initial;
+  --intent-fg: initial;
+  --ui-bg: initial;
+  --ui-fg: initial;
+  --ui-border: initial;
+  --ui-hover-bg: initial;
+}
+
 .card {
   --card-pad: var(--space-4);
   --card-radius: var(--radius-lg);

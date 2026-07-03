@@ -5,6 +5,17 @@
  * the bordered rounded shape, and combine with an intent class (.primary,
  * .success, etc.) to tint the text, border, and background.
  */
+/* Intent boundary — inherited intents do not tint this component.
+   Local intent classes still win because :where() has zero specificity. */
+:where(.overline) {
+  --intent: initial;
+  --intent-fg: initial;
+  --ui-bg: initial;
+  --ui-fg: initial;
+  --ui-border: initial;
+  --ui-hover-bg: initial;
+}
+
 .overline {
   align-self: flex-start;
   color: var(--text-muted);
