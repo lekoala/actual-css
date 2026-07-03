@@ -21,6 +21,7 @@
  */
 
 import { track, reposition } from "./floating.js";
+import { EVENTS } from "./events.js";
 import enhance from "./enhance.js";
 
 let uid = 0;
@@ -118,16 +119,16 @@ function ensureTip(trigger) {
     }
   };
 
-  tip.addEventListener("actual:reposition", onReposition);
-  tip.addEventListener("actual:hide", onHide);
+  tip.addEventListener(EVENTS.reposition, onReposition);
+  tip.addEventListener(EVENTS.hide, onHide);
   const untrack = track(tip);
 
   cleanupMap.set(trigger, () => {
     onHide();
     trigger.removeEventListener("mouseleave", onHide);
     trigger.removeEventListener("blur", onHide);
-    tip.removeEventListener("actual:reposition", onReposition);
-    tip.removeEventListener("actual:hide", onHide);
+    tip.removeEventListener(EVENTS.reposition, onReposition);
+    tip.removeEventListener(EVENTS.hide, onHide);
     untrack();
     if (generatedTips.has(tip)) tip.remove();
     else restoreTip(tip);
