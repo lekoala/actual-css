@@ -21,6 +21,10 @@ const DEMO = join(ROOT, "demo");
 const GENERATED_DEMO = join(DEMO, "generated");
 const DOCS = join(ROOT, "docs");
 
+const RESERVED_CLASSES = JSON.parse(
+  readFileSync(join(__dirname, "reserved-classes.json"), "utf8"),
+);
+
 const DEMO_CATEGORY_FILES = [
   "components.md",
   "forms.md",
@@ -32,6 +36,7 @@ const DEMO_CATEGORY_FILES = [
   "tokens.md",
   "accessibility.md",
   "why.md",
+  "reserved.md",
 ];
 
 const TITLE_WORDS = {
@@ -314,6 +319,15 @@ ${items}
     </details>`;
 }
 
+function renderReservedClasses() {
+  const items = RESERVED_CLASSES.map(
+    (name) => `      <code>.${name}</code>`,
+  ).join("\n");
+  return `<div class="cluster gap-sm">
+${items}
+    </div>`;
+}
+
 function renderPage(catName, section) {
   const desc = section.desc ? `<p>${escapeHtml(section.desc)}</p>` : "";
   const items = section.items.map(renderItem).join("\n");
@@ -395,6 +409,10 @@ function buildCategory(category) {
   const slug = slugify(category.name);
   const dir = join(GENERATED_DEMO, slug);
   const expectedFiles = new Set(["index.html", ...sections.map((section) => `${section.slug}.html`)]);
+
+  if (category.file === "reserved.md" && sections.length > 0) {
+    sections[0].items.push({ type: "prose", html: renderReservedClasses() });
+  }
 
   mkdirSync(dir, { recursive: true });
 
