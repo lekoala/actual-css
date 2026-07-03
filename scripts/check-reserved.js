@@ -50,6 +50,7 @@ const RESERVED = new Set([
   "inverted",
   "is-sheet",
   "is-static",
+  "items-center",
   "items-start",
   "key",
   "lead",

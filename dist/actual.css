@@ -3083,6 +3083,10 @@ button.avatar {
   align-items: start;
 }
 
+.items-center {
+  align-items: center;
+}
+
 .muted {
   color: var(--text-muted);
 }
