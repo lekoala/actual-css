@@ -1,12 +1,12 @@
 {
-  "timestamp": "2026-07-03T15:04:06.103Z",
-  "totalRaw": 129624,
-  "totalMinified": 61347,
-  "totalBrotli": 10240,
+  "timestamp": "2026-07-03T15:05:27.632Z",
+  "totalRaw": 129649,
+  "totalMinified": 61372,
+  "totalBrotli": 10217,
   "themesMinified": 16153,
   "themesBrotli": 2556,
-  "shippedMinified": 77500,
-  "shippedBrotli": 12796,
+  "shippedMinified": 77525,
+  "shippedBrotli": 12773,
   "maxShippedBrotli": 13312,
   "fileCount": 63,
   "files": [
@@ -60,7 +60,7 @@
     },
     {
       "file": "utilities.css",
-      "raw": 2991
+      "raw": 3016
     },
     {
       "file": "forms/custom-select.css",
