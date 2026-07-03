@@ -70,7 +70,7 @@ Undocumented `is-*` classes are runtime internals.
 
 ## What's included
 
-**Components** — button, card, badge, alert, dialog, drawer, table, accordion, breadcrumb, pagination, skeleton, spinner, avatar, meter, progress, and busy indicators.
+**Components** — button, card, badge, alert, dialog, drawer, table, accordion, breadcrumb, pagination, skeleton, spinner, avatar, key, meter, progress, and busy indicators.
 
 **Patterns** — actions, list group, navbar, and overline. These are regular source files and can be imported only when needed.
 
@@ -187,3 +187,12 @@ Projects that need prefixed class names can run a post-install or build-pipeline
 ## License
 
 MIT
+
+## Docs
+
+- `docs/mental-model.md`
+- `docs/tokens.md`
+- `docs/components.md`
+- `docs/forms.md`
+- `docs/accessibility.md`
+- `docs/why.md`
