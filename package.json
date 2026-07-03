@@ -68,10 +68,12 @@
     "build:js": "bun scripts/build-js.js",
     "build:size": "bun scripts/build-size.js",
     "check:reserved": "bun scripts/check-reserved.js",
-    "build:all": "bun run build:demo && bun run build:dist && bun run check:reserved && bun run build:js && bun run build:size"
+    "test": "bun test",
+    "build:all": "bun run build:demo && bun run build:dist && bun run check:reserved && bun run test && bun run build:js && bun run build:size"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.4.0",
+    "happy-dom": "^20.10.6",
     "lightningcss": "^1.32.0",
     "prismjs": "^1.30.0"
   }
