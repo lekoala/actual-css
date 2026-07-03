@@ -1,12 +1,12 @@
 {
-  "timestamp": "2026-07-03T15:05:27.632Z",
-  "totalRaw": 129649,
-  "totalMinified": 61372,
-  "totalBrotli": 10217,
+  "timestamp": "2026-07-03T15:10:55.896Z",
+  "totalRaw": 129692,
+  "totalMinified": 61413,
+  "totalBrotli": 10233,
   "themesMinified": 16153,
   "themesBrotli": 2556,
-  "shippedMinified": 77525,
-  "shippedBrotli": 12773,
+  "shippedMinified": 77566,
+  "shippedBrotli": 12789,
   "maxShippedBrotli": 13312,
   "fileCount": 63,
   "files": [
@@ -60,7 +60,7 @@
     },
     {
       "file": "utilities.css",
-      "raw": 3016
+      "raw": 3108
     },
     {
       "file": "forms/custom-select.css",
@@ -88,7 +88,7 @@
     },
     {
       "file": "components/card.css",
-      "raw": 2508
+      "raw": 2548
     },
     {
       "file": "themes/sunset.css",
@@ -163,10 +163,6 @@
       "raw": 1495
     },
     {
-      "file": "components/table.css",
-      "raw": 1493
-    },
-    {
       "file": "forms/form-actions.css",
       "raw": 1479
     },
@@ -176,6 +172,10 @@
     },
     {
       "file": "components/spinner.css",
+      "raw": 1404
+    },
+    {
+      "file": "components/table.css",
       "raw": 1404
     },
     {

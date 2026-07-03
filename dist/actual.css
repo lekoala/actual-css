@@ -1099,8 +1099,8 @@ button.badge:disabled, .badge[aria-disabled="true"] {
 }
 
 .card > :where(header, footer) {
+  align-items: var(--items-align, center);
   justify-content: space-between;
-  align-items: center;
   gap: var(--space-3);
   flex-wrap: wrap;
   min-inline-size: 0;
@@ -1113,7 +1113,7 @@ button.badge:disabled, .badge[aria-disabled="true"] {
 }
 
 .card > header {
-  align-items: flex-start;
+  align-items: var(--items-align, flex-start);
 }
 
 .card > :first-child {
@@ -2074,13 +2074,13 @@ button.avatar {
 .table caption {
   padding: var(--table-cell-pad);
   color: var(--text-muted);
-  text-align: start;
+  text-align: var(--text-align, start);
 }
 
 .table th, .table td {
   padding: var(--table-cell-pad);
   border-block-end: var(--border-width) solid var(--border);
-  text-align: start;
+  text-align: var(--text-align, start);
   vertical-align: baseline;
 }
 
@@ -2105,14 +2105,6 @@ button.avatar {
 
 .table tr:last-child > * {
   border-block-end: 0;
-}
-
-.table :where(th, td)[data-align="end"] {
-  text-align: end;
-}
-
-.table :where(th, td)[data-nowrap] {
-  white-space: nowrap;
 }
 
 :where(.meter) {
@@ -3079,11 +3071,13 @@ button.avatar {
   overflow: hidden;
 }
 
-.items-start.items-start {
+.items-start {
+  --items-align: start;
   align-items: start;
 }
 
-.items-center.items-center {
+.items-center {
+  --items-align: center;
   align-items: center;
 }
 
@@ -3097,14 +3091,17 @@ button.avatar {
 }
 
 .text-start {
+  --text-align: start;
   text-align: start;
 }
 
 .text-center {
+  --text-align: center;
   text-align: center;
 }
 
 .text-end {
+  --text-align: end;
   text-align: end;
 }
 

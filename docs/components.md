@@ -1265,7 +1265,7 @@ Links:
 
 - Use native `<table class="table">` inside a `.table-wrap` for surface, border, radius, and overflow.
 - Use `<caption>`, `scope="col"`, and `scope="row"` for accessibility.
-- Use `data-align="end"` for numeric columns and `data-nowrap` for non-wrapping cells.
+- Use `.text-end` for numeric columns and `.nowrap` for non-wrapping cells.
 - For wide tables, make the wrapper an accessible scroll region with `role="region"`, `aria-labelledby`, and `tabindex="0"`.
 - Tables stay content-first and neutral by default.
 
@@ -1313,28 +1313,28 @@ Links:
       <tr>
         <th scope="col">Month</th>
         <th scope="col">Plan</th>
-        <th scope="col" data-align="end">Revenue</th>
-        <th scope="col" data-align="end">Churn</th>
+        <th scope="col" class="text-end">Revenue</th>
+        <th scope="col" class="text-end">Churn</th>
       </tr>
     </thead>
     <tbody>
       <tr>
         <td>March 2026</td>
         <td>Team</td>
-        <td data-align="end" data-nowrap>$42,128</td>
-        <td data-align="end" data-nowrap>1.2%</td>
+        <td class="text-end nowrap">$42,128</td>
+        <td class="text-end nowrap">1.2%</td>
       </tr>
       <tr>
         <td>April 2026</td>
         <td>Team + Business</td>
-        <td data-align="end" data-nowrap>$48,902</td>
-        <td data-align="end" data-nowrap>0.9%</td>
+        <td class="text-end nowrap">$48,902</td>
+        <td class="text-end nowrap">0.9%</td>
       </tr>
       <tr>
         <td>May 2026</td>
         <td>Team + Business</td>
-        <td data-align="end" data-nowrap>$53,470</td>
-        <td data-align="end" data-nowrap>0.7%</td>
+        <td class="text-end nowrap">$53,470</td>
+        <td class="text-end nowrap">0.7%</td>
       </tr>
     </tbody>
   </table>
