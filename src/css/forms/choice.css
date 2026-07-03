@@ -96,11 +96,11 @@
 }
 
 :is(
-  .check,
-  .radio,
-  .form input[type="checkbox"]:not([role="switch"]),
-  .form input[type="radio"]
-)::before {
+    .check,
+    .radio,
+    .form input[type="checkbox"]:not([role="switch"]),
+    .form input[type="radio"]
+  )::before {
   content: "";
   transform: scale(0);
   transition: transform var(--duration);
@@ -122,11 +122,11 @@
 }
 
 :is(
-  .check,
-  .radio,
-  .form input[type="checkbox"]:not([role="switch"]),
-  .form input[type="radio"]
-):checked {
+    .check,
+    .radio,
+    .form input[type="checkbox"]:not([role="switch"]),
+    .form input[type="radio"]
+  ):checked {
   --choice-border: var(--intent, var(--primary));
   --choice-bg: var(--intent, var(--primary));
 }
@@ -135,35 +135,48 @@
   transform: translateY(-0.06em) rotate(-45deg) scale(1);
 }
 
+:is(.check, .form input[type="checkbox"]:not([role="switch"])):indeterminate {
+  --choice-border: var(--intent, var(--text-subtle));
+  --choice-bg: var(--intent, var(--surface));
+  --choice-mark: var(--intent, var(--primary));
+}
+
+:is(.check, .form input[type="checkbox"]:not([role="switch"])):indeterminate::before {
+  inline-size: 0.6em;
+  block-size: 0;
+  border-block-end: 2px solid currentColor;
+  transform: scale(1);
+}
+
 :is(.radio, .form input[type="radio"]):checked::before {
   transform: scale(1);
 }
 
 :is(
-  .check,
-  .radio,
-  .form input[type="checkbox"]:not([role="switch"]),
-  .form input[type="radio"]
-):hover {
+    .check,
+    .radio,
+    .form input[type="checkbox"]:not([role="switch"]),
+    .form input[type="radio"]
+  ):hover {
   --choice-border: var(--text-subtle);
 }
 
 :is(
-  .check,
-  .radio,
-  .form input[type="checkbox"]:not([role="switch"]),
-  .form input[type="radio"]
-):focus-visible {
+    .check,
+    .radio,
+    .form input[type="checkbox"]:not([role="switch"]),
+    .form input[type="radio"]
+  ):focus-visible {
   border-color: var(--focus);
   box-shadow: 0 0 0 3px var(--focus-ring);
 }
 
 :is(
-  .check,
-  .radio,
-  .form input[type="checkbox"]:not([role="switch"]),
-  .form input[type="radio"]
-):disabled {
+    .check,
+    .radio,
+    .form input[type="checkbox"]:not([role="switch"]),
+    .form input[type="radio"]
+  ):disabled {
   --choice-bg: var(--surface-subtle);
   --choice-border: var(--border);
   --choice-mark: var(--text-subtle);

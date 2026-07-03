@@ -249,7 +249,7 @@ The `.sm` and `.lg` modifiers set the shared control tokens used by inputs, sele
         </label>
       </div>
 
-      <div class="grid-4 items-start">
+      <div class="grid-5 items-start">
         <label class="choice">
           <input type="checkbox" />
           <span>
@@ -279,6 +279,14 @@ The `.sm` and `.lg` modifiers set the shared control tokens used by inputs, sele
           <span>
             <span class="field-label">Disabled unchecked</span>
             <span class="field-help">Unavailable and not selected.</span>
+          </span>
+        </label>
+
+        <label class="choice">
+          <input type="checkbox" id="indet-demo" />
+          <span>
+            <span class="field-label">Indeterminate checkbox</span>
+            <span class="field-help">Partially selected — set via <code>element.indeterminate = true</code>. Try it: <button class="btn text sm" type="button" onclick="document.getElementById('indet-demo').indeterminate = !document.getElementById('indet-demo').indeterminate">toggle</button></span>
           </span>
         </label>
       </div>
@@ -419,7 +427,7 @@ The `.sm` and `.lg` modifiers set the shared control tokens used by inputs, sele
         <button class="btn outline lg" type="button">Large</button>
       </div>
 
-      <div class="grid-3 items-start">
+      <div class="grid-4 items-start">
         <label class="choice sm">
           <input type="checkbox" checked />
           <span>Small checkbox</span>
@@ -431,6 +439,10 @@ The `.sm` and `.lg` modifiers set the shared control tokens used by inputs, sele
         <label class="choice lg">
           <input type="checkbox" checked />
           <span>Large checkbox</span>
+        </label>
+        <label class="choice">
+          <input type="checkbox" id="indet-size" />
+          <span>Indeterminate <button class="btn text sm" type="button" onclick="document.getElementById('indet-size').indeterminate = !document.getElementById('indet-size').indeterminate">toggle</button></span>
         </label>
       </div>
 

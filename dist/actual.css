@@ -2200,6 +2200,19 @@ button.avatar {
   transform: translateY(-.06em) rotate(-45deg) scale(1);
 }
 
+:is(.check, .form input[type="checkbox"]:not([role="switch"])):indeterminate {
+  --choice-border: var(--intent, var(--text-subtle));
+  --choice-bg: var(--intent, var(--surface));
+  --choice-mark: var(--intent, var(--primary));
+}
+
+:is(.check, .form input[type="checkbox"]:not([role="switch"])):indeterminate:before {
+  border-block-end: 2px solid;
+  block-size: 0;
+  inline-size: .6em;
+  transform: scale(1);
+}
+
 :is(.radio, .form input[type="radio"]):checked:before {
   transform: scale(1);
 }
