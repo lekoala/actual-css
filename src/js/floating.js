@@ -112,13 +112,13 @@ let pendingType = null;
 function notify(type) {
   for (const el of tracked) {
     el.dispatchEvent(
-      new CustomEvent("floating:reposition", {
+      new CustomEvent("actual:reposition", {
         bubbles: false,
         detail: { type },
       }),
     );
     if (type === "escape") {
-      el.dispatchEvent(new CustomEvent("floating:hide", { bubbles: false }));
+      el.dispatchEvent(new CustomEvent("actual:hide", { bubbles: false }));
     }
   }
 }

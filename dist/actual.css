@@ -489,16 +489,6 @@ small {
       var(--surface) var(--soft-border-mix),
       var(--intent, var(--neutral)));
   }
-
-  .soft:hover {
-    --ui-hover-bg: color-mix(in oklch,
-      var(--intent, var(--neutral)) var(--soft-hover-alpha),
-      transparent);
-  }
-
-  .outline:hover {
-    --ui-hover-bg: color-mix(in oklch, var(--intent, var(--neutral)), transparent 92%);
-  }
 }
 
 :root {
@@ -719,6 +709,16 @@ small {
   .btn:not(:where(.soft, .outline, .ghost, .link)):hover {
     --ui-hover-bg: color-mix(in oklch, var(--intent, var(--neutral)) 88%, black);
   }
+
+  .btn.soft:hover {
+    --ui-hover-bg: color-mix(in oklch,
+      var(--intent, var(--neutral)) var(--soft-hover-alpha),
+      transparent);
+  }
+
+  .btn.outline:hover {
+    --ui-hover-bg: color-mix(in oklch, var(--intent, var(--neutral)), transparent 92%);
+  }
 }
 
 .btn:active {
@@ -845,6 +845,18 @@ small {
 
 :where(a.badge, button.badge):where(.outline):hover {
   --ui-hover-bg: var(--surface-subtle);
+}
+
+@supports (color: color-mix(in oklch, red, white)) {
+  :where(a.badge, button.badge):where(.soft):hover {
+    --ui-hover-bg: color-mix(in oklch,
+      var(--intent, var(--neutral)) var(--soft-hover-alpha),
+      transparent);
+  }
+
+  :where(a.badge, button.badge):where(.outline):hover {
+    --ui-hover-bg: color-mix(in oklch, var(--intent, var(--neutral)), transparent 92%);
+  }
 }
 
 :where(a.badge, button.badge):focus-visible {

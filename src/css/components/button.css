@@ -69,6 +69,18 @@
   .btn:not(:where(.soft, .outline, .ghost, .link)):hover {
     --ui-hover-bg: color-mix(in oklch, var(--intent, var(--neutral)) 88%, black);
   }
+
+  .btn.soft:hover {
+    --ui-hover-bg: color-mix(
+      in oklch,
+      var(--intent, var(--neutral)) var(--soft-hover-alpha),
+      transparent
+    );
+  }
+
+  .btn.outline:hover {
+    --ui-hover-bg: color-mix(in oklch, var(--intent, var(--neutral)), transparent 92%);
+  }
 }
 
 .btn:active {

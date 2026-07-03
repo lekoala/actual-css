@@ -1,12 +1,12 @@
 {
-  "timestamp": "2026-07-03T12:34:18.711Z",
-  "totalRaw": 120481,
-  "totalMinified": 55425,
-  "totalBrotli": 9680,
+  "timestamp": "2026-07-03T12:38:02.762Z",
+  "totalRaw": 120815,
+  "totalMinified": 55765,
+  "totalBrotli": 9702,
   "themesMinified": 16153,
   "themesBrotli": 2556,
-  "shippedMinified": 71578,
-  "shippedBrotli": 12236,
+  "shippedMinified": 71918,
+  "shippedBrotli": 12258,
   "fileCount": 62,
   "files": [
     {
@@ -22,12 +22,12 @@
       "raw": 4369
     },
     {
-      "file": "layout.css",
-      "raw": 3935
+      "file": "components/button.css",
+      "raw": 4007
     },
     {
-      "file": "components/button.css",
-      "raw": 3734
+      "file": "layout.css",
+      "raw": 3935
     },
     {
       "file": "forms/control.css",
@@ -62,16 +62,16 @@
       "raw": 2875
     },
     {
-      "file": "variants.css",
-      "raw": 2718
-    },
-    {
       "file": "forms/switch.css",
       "raw": 2705
     },
     {
       "file": "themes/spruce.css",
       "raw": 2641
+    },
+    {
+      "file": "components/badge.css",
+      "raw": 2628
     },
     {
       "file": "themes/petrol.css",
@@ -98,6 +98,10 @@
       "raw": 2394
     },
     {
+      "file": "variants.css",
+      "raw": 2385
+    },
+    {
       "file": "themes/cyberpunk.css",
       "raw": 2272
     },
@@ -108,10 +112,6 @@
     {
       "file": "themes/ocean.css",
       "raw": 2265
-    },
-    {
-      "file": "components/badge.css",
-      "raw": 2234
     },
     {
       "file": "themes/mono.css",

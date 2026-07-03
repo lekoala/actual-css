@@ -27,7 +27,8 @@ still be functional without it
 - Use `@supports` positively (no `@supports not`) only when it protects a dependent group of rules or a real fallback/modern branch. Do not gate a single progressive declaration whose unsupported value is simply ignored by the browser, such as `text-wrap: balance`.
 - Layer-compatible, not layer-dependent. Unlayered for the Degraded target; expose cascade layers only through optional wrappers such as `actual.layer.css`.
 - Public CSS grammar is `.component [intent] [variant] [size] [modifier]`. Classes name roles and boolean modifiers; `data-*` carries configurable values; `is-*` classes are runtime internals, not author API.
-- Public data attributes are namespaced by feature (`data-flyout-*`, `data-dialog-*`, `data-tooltip-*`). Do not expose shared implementation names such as `surface` unless they are meant as a stable author concept.
+- Public JS data attributes are namespaced by feature (`data-flyout-*`, `data-context-menu-*`, `data-dialog-*`, `data-tooltip-*`; `data-toast-*` is reserved). Do not expose shared implementation names such as `surface` unless they are meant as a stable author concept.
+- Custom events use the `actual:*` namespace.
 - JavaScript modules are side-effect enhancers. `actual-css/js` enables everything; `actual-css/js/<module>` lets projects opt into one behavior. Keep modules self-registering and safe to import independently.
 - Every `color-mix()` declaration needs a flat fallback outside `@supports` (older browsers drop the whole property, not just the function)
 - CSS data-URI icons should be masks when possible, with color supplied by CSS. Use `background-image` icons only for controls that cannot use masks/currentColor.
