@@ -326,7 +326,7 @@ Shape utilities should be rare because shape is mostly theme-level.
 Use `.circle` only when an element must be perfectly round.
 
 ```html
-<img class="circle" src="/avatar.jpg" alt="Jane Doe" width="48" height="48" />
+<img class="circle" src="https://i.pravatar.cc/48?img=5" alt="Jane Doe" width="48" height="48" />
 ```
 
 ```css

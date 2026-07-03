@@ -2210,6 +2210,10 @@ button.avatar {
   display: flex;
 }
 
+.list-group > ul > li > .muted {
+  margin-inline-start: auto;
+}
+
 .list-group > ul > li:not(:last-child) {
   border-block-end: var(--border-width) solid var(--border);
 }
