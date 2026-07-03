@@ -55,7 +55,6 @@
     "docs",
     "CHANGELOG.md",
     "llms.txt",
-    "llms-full.txt",
     "LICENSE",
     "README.md"
   ],
@@ -65,7 +64,6 @@
   "scripts": {
     "lint": "biome check",
     "lint:fix": "biome check --write",
-    "build:llms": "bun scripts/build-llms.js",
     "build:demo": "bun scripts/build-demo.js",
     "watch:demo": "bun scripts/build-demo.js --watch",
     "build:dist": "bun scripts/build-dist.js",

@@ -6,12 +6,12 @@ It claims a small public grammar: `.component [intent] [variant] [size] [modifie
 
 ## Tradeoffs
 
-| Library | Good at | Tradeoff |
-|---|---|---|
-| Actual CSS | Semantic components, theming, source imports | Young ecosystem |
-| Bootstrap | Broad coverage, familiar patterns | Larger API and stronger defaults |
-| Pico | Fast readable pages | Less component depth |
-| daisy-style libraries | Many ready variants | Usually tied to a build pipeline |
+| Library               | Good at                                      | Tradeoff                         |
+|-----------------------|----------------------------------------------|----------------------------------|
+| Actual CSS            | Semantic components, theming, source imports | Young ecosystem                  |
+| Bootstrap             | Broad coverage, familiar patterns            | Larger API and stronger defaults |
+| Pico                  | Fast readable pages                          | Less component depth             |
+| daisy-style libraries | Many ready variants                          | Usually tied to a build pipeline |
 
 ## Non-goals
 

@@ -237,11 +237,11 @@ Override the default gap from layout primitives (`.stack`, `.cluster`, `.grid`):
 </ul>
 ```
 
-| Class | Maps to |
-|-------|---------|
-| `.gap-none` | `gap: 0` |
-| `.gap-sm` | `gap: var(--space-2)` |
-| `.gap-lg` | `gap: var(--space-5)` |
+| Class       | Maps to               |
+|-------------|-----------------------|
+| `.gap-none` | `gap: 0`              |
+| `.gap-sm`   | `gap: var(--space-2)` |
+| `.gap-lg`   | `gap: var(--space-5)` |
 
 ### Padding
 
@@ -253,13 +253,13 @@ Block (vertical) and inline (horizontal) padding:
 </section>
 ```
 
-| Class | Maps to |
-|-------|---------|
-| `.py-sm` | `padding-block: var(--space-2)` |
-| `.py` | `padding-block: var(--space-4)` |
-| `.py-lg` | `padding-block: var(--space-5)` |
+| Class    | Maps to                          |
+|----------|----------------------------------|
+| `.py-sm` | `padding-block: var(--space-2)`  |
+| `.py`    | `padding-block: var(--space-4)`  |
+| `.py-lg` | `padding-block: var(--space-5)`  |
 | `.px-sm` | `padding-inline: var(--space-2)` |
-| `.px` | `padding-inline: var(--space-4)` |
+| `.px`    | `padding-inline: var(--space-4)` |
 | `.px-lg` | `padding-inline: var(--space-5)` |
 
 ### Margin
@@ -270,14 +270,14 @@ Block-start and block-end margin for giving elements room:
 <h2 class="mbs">A section heading with space above</h2>
 ```
 
-| Class | Maps to |
-|-------|---------|
+| Class     | Maps to                              |
+|-----------|--------------------------------------|
 | `.mbs-sm` | `margin-block-start: var(--space-2)` |
-| `.mbs` | `margin-block-start: var(--space-4)` |
+| `.mbs`    | `margin-block-start: var(--space-4)` |
 | `.mbs-lg` | `margin-block-start: var(--space-5)` |
-| `.mbe-sm` | `margin-block-end: var(--space-2)` |
-| `.mbe` | `margin-block-end: var(--space-4)` |
-| `.mbe-lg` | `margin-block-end: var(--space-5)` |
+| `.mbe-sm` | `margin-block-end: var(--space-2)`   |
+| `.mbe`    | `margin-block-end: var(--space-4)`   |
+| `.mbe-lg` | `margin-block-end: var(--space-5)`   |
 
 No `mbs-none` / `mbe-none` — use `margin: 0` via `.list-reset` for lists, or a layout primitive that already resets margins (`.stack > *`).
 
