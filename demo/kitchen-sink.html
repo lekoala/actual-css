@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -24,12 +24,12 @@
     .sink-col { display: grid; gap: var(--space-2); }
   </style>
 </head>
-<body class="theme-light">
+<body>
 
   <h1>Actual CSS — Kitchen Sink</h1>
   <p>
     <label>
-      <input type="checkbox" id="darkToggle" onchange="document.body.className = this.checked ? 'theme-dark' : 'theme-light'">
+      <input type="checkbox" id="darkToggle" onchange="document.documentElement.dataset.theme = this.checked ? 'dark' : 'light'">
       Dark mode
     </label>
   </p>
@@ -306,23 +306,37 @@
     </dialog>
   </section>
 
-  <!-- 9. Flyout / Tooltip (markup only — JS required for behavior) -->
+  <!-- 9. Flyout / Tooltip -->
   <section>
     <h2>Flyout / Tooltip</h2>
-    <p>Flyout and tooltip require JavaScript. Markup example:</p>
-    <div class="flyout" id="demoFlyout">
-      <button class="btn" popovertarget="demoFlyoutPanel" style="anchor-name:--flyout-btn">Toggle flyout</button>
-      <div class="flyout-panel" id="demoFlyoutPanel" popover>
-        <p>Flyout panel content.</p>
-      </div>
+    <div class="flyout-trigger">
+      <button class="btn"
+              type="button"
+              aria-haspopup="menu"
+              aria-expanded="false"
+              aria-controls="demo-flyout"
+              id="demo-flyout-trigger">
+        Toggle flyout
+      </button>
+      <menu class="flyout"
+            role="menu"
+            id="demo-flyout"
+            aria-labelledby="demo-flyout-trigger"
+            hidden>
+        <li><button type="button" role="menuitem">First action</button></li>
+        <li><button type="button" role="menuitem">Second action</button></li>
+        <li><hr role="separator"></li>
+        <li><button type="button" role="menuitem">Last action</button></li>
+      </menu>
     </div>
   </section>
 
   <!-- 10. Dark mode -->
   <section>
     <h2>Dark mode</h2>
-    <p>Use the toggle at the top to switch between <code>.theme-light</code> and <code>.theme-dark</code>.</p>
+    <p>Use the toggle at the top to switch between <code>data-theme="light"</code> and <code>data-theme="dark"</code>.</p>
   </section>
 
+  <script src="../dist/actual.js"></script>
 </body>
 </html>
