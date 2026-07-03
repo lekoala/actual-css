@@ -497,7 +497,7 @@ Links:
     </p>
   </header>
 
-  <ul class="stack" style="list-style: none; padding: 0">
+  <ul class="stack items-center" style="list-style: none; padding: 0">
     <li>Unlimited projects</li>
     <li>Up to 25 seats</li>
     <li>Shared workspaces</li>

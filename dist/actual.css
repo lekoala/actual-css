@@ -3079,11 +3079,11 @@ button.avatar {
   overflow: hidden;
 }
 
-.items-start {
+.items-start.items-start {
   align-items: start;
 }
 
-.items-center {
+.items-center.items-center {
   align-items: center;
 }
 
