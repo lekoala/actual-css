@@ -33,6 +33,11 @@ still be functional without it
 - Every `color-mix()` declaration needs a flat fallback outside `@supports` (older browsers drop the whole property, not just the function)
 - CSS data-URI icons should be masks when possible, with color supplied by CSS. Use `background-image` icons only for controls that cannot use masks/currentColor.
 - Prefix all `@keyframes` with `actual-` to avoid collisions with consumer code
+- A component that consumes `--intent` or `--ui-*` declares its own intent boundary at the top of its file.
+- Hover rules that change surface colors go inside `@media (hover: hover)`. `:active` feedback stays unguarded.
+- Components with visual state indicators must be checked in `forced-colors: active`; use local system-color rules instead of a central high-contrast stylesheet.
+- New form controls must not consume `--control-border`, `--control-bg`, or `--control-fg` unless they want the shared text-control states.
+- Actual supports both wrapped labels and `for`/`id` labels. Layout helpers may improve common `.field` structures, but native form semantics remain the baseline.
 - Each component must have a small surface and be easy to opt-out
 - Component names must be easy to search (eg: `btn` vs `button`) and should not repeat the html element (no <kbd class="kbd"> or <dialog class="dialog">)
 - Use native html (<button>, <dialog>) whenever possible. Augment with JS when needed (eg: improve usability). Use standalone web components only when behaviour needs a custom surface (eg: combobox, datepicker).

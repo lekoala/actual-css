@@ -49,6 +49,13 @@
   --skeleton-size: 8rem;
 }
 
+@media (forced-colors: active) {
+  .skeleton {
+    border: var(--border-width) solid ButtonText;
+    background: GrayText;
+  }
+}
+
 @keyframes actual-skeleton {
   from {
     background-position: 200% 0;

@@ -257,15 +257,6 @@ small {
   }
 }
 
-:where(.btn, .badge, .alert, .card, .avatar, .progress, .meter, .switch, .check, .radio) {
-  --intent: initial;
-  --intent-fg: initial;
-  --ui-bg: initial;
-  --ui-fg: initial;
-  --ui-border: initial;
-  --ui-hover-bg: initial;
-}
-
 .primary {
   --intent: var(--primary);
   --intent-fg: var(--primary-fg);
@@ -648,6 +639,15 @@ small {
   --prose-h4: 1.25rem;
 }
 
+:where(.btn) {
+  --intent: initial;
+  --intent-fg: initial;
+  --ui-bg: initial;
+  --ui-fg: initial;
+  --ui-border: initial;
+  --ui-hover-bg: initial;
+}
+
 .btn {
   --btn-font-size: var(--control-font-size);
   --btn-min-size: var(--control-size);
@@ -681,43 +681,39 @@ small {
   position: relative;
 }
 
-.btn:not(:where(.soft, .outline, .ghost, .link)) {
-  --ui-bg: var(--intent, var(--neutral));
-  --ui-fg: var(--intent-fg, var(--neutral-fg));
-  --ui-border: transparent;
-}
-
 .btn.ghost {
   --ui-bg: transparent;
   --ui-fg: var(--intent, var(--text));
   --ui-border: transparent;
 }
 
-.btn:hover {
-  background: var(--ui-hover-bg, var(--btn-bg));
-}
-
-.btn:not(:where(.outline, .ghost, .link)):hover {
-  box-shadow: inset 0 0 0 999px var(--hover-overlay);
-}
-
-.btn:where(.outline, .ghost):hover {
-  --ui-hover-bg: var(--surface-subtle);
-}
-
-@supports (color: color-mix(in oklch, red, white)) {
-  .btn:not(:where(.soft, .outline, .ghost, .link)):hover {
-    --ui-hover-bg: color-mix(in oklch, var(--intent, var(--neutral)) 88%, black);
+@media (hover: hover) {
+  .btn:hover {
+    background: var(--ui-hover-bg, var(--btn-bg));
   }
 
-  .btn.soft:hover {
-    --ui-hover-bg: color-mix(in oklch,
-      var(--intent, var(--neutral)) var(--soft-hover-alpha),
-      transparent);
+  .btn:not(:where(.outline, .ghost, .link)):hover {
+    box-shadow: inset 0 0 0 999px var(--hover-overlay);
   }
 
-  .btn.outline:hover {
-    --ui-hover-bg: color-mix(in oklch, var(--intent, var(--neutral)), transparent 92%);
+  .btn:where(.outline, .ghost):hover {
+    --ui-hover-bg: var(--surface-subtle);
+  }
+
+  @supports (color: color-mix(in oklch, red, white)) {
+    .btn:not(:where(.soft, .outline, .ghost, .link)):hover {
+      --ui-hover-bg: color-mix(in oklch, var(--intent, var(--neutral)) 88%, black);
+    }
+
+    .btn.soft:hover {
+      --ui-hover-bg: color-mix(in oklch,
+        var(--intent, var(--neutral)) var(--soft-hover-alpha),
+        transparent);
+    }
+
+    .btn.outline:hover {
+      --ui-hover-bg: color-mix(in oklch, var(--intent, var(--neutral)), transparent 92%);
+    }
   }
 }
 
@@ -768,6 +764,13 @@ small {
   --spinner-width: .15em;
 }
 
+@media (forced-colors: active) {
+  .btn:disabled, .btn[aria-disabled="true"] {
+    color: graytext;
+    border-color: graytext;
+  }
+}
+
 @supports selector([role="group"]:has(> .btn + .btn)) {
   :where([role="group"]:has( > .btn + .btn)) {
     border-radius: var(--radius);
@@ -789,6 +792,15 @@ small {
     border-start-end-radius: inherit;
     border-end-end-radius: inherit;
   }
+}
+
+:where(.badge) {
+  --intent: initial;
+  --intent-fg: initial;
+  --ui-bg: initial;
+  --ui-fg: initial;
+  --ui-border: initial;
+  --ui-hover-bg: initial;
 }
 
 .badge {
@@ -829,33 +841,29 @@ small {
   padding: 0;
 }
 
-.badge:not(:where(.soft, .outline)) {
-  --ui-bg: var(--intent, var(--neutral));
-  --ui-fg: var(--intent-fg, var(--neutral-fg));
-  --ui-border: transparent;
-}
+@media (hover: hover) {
+  :where(a.badge, button.badge):hover {
+    background: var(--ui-hover-bg, var(--badge-bg));
+  }
 
-:where(a.badge, button.badge):hover {
-  background: var(--ui-hover-bg, var(--badge-bg));
-}
-
-:where(a.badge, button.badge):not(:where(.outline)):hover {
-  box-shadow: inset 0 0 0 999px var(--hover-overlay);
-}
-
-:where(a.badge, button.badge):where(.outline):hover {
-  --ui-hover-bg: var(--surface-subtle);
-}
-
-@supports (color: color-mix(in oklch, red, white)) {
-  :where(a.badge, button.badge):where(.soft):hover {
-    --ui-hover-bg: color-mix(in oklch,
-      var(--intent, var(--neutral)) var(--soft-hover-alpha),
-      transparent);
+  :where(a.badge, button.badge):not(:where(.outline)):hover {
+    box-shadow: inset 0 0 0 999px var(--hover-overlay);
   }
 
   :where(a.badge, button.badge):where(.outline):hover {
-    --ui-hover-bg: color-mix(in oklch, var(--intent, var(--neutral)), transparent 92%);
+    --ui-hover-bg: var(--surface-subtle);
+  }
+
+  @supports (color: color-mix(in oklch, red, white)) {
+    :where(a.badge, button.badge):where(.soft):hover {
+      --ui-hover-bg: color-mix(in oklch,
+        var(--intent, var(--neutral)) var(--soft-hover-alpha),
+        transparent);
+    }
+
+    :where(a.badge, button.badge):where(.outline):hover {
+      --ui-hover-bg: color-mix(in oklch, var(--intent, var(--neutral)), transparent 92%);
+    }
   }
 }
 
@@ -875,9 +883,20 @@ button.badge:disabled, .badge[aria-disabled="true"] {
   pointer-events: none;
 }
 
+@media (forced-colors: active) {
+  button.badge:disabled, .badge[aria-disabled="true"] {
+    color: graytext;
+    border-color: graytext;
+  }
+}
+
 :where(.alert) {
   --intent: initial;
   --intent-fg: initial;
+  --ui-bg: initial;
+  --ui-fg: initial;
+  --ui-border: initial;
+  --ui-hover-bg: initial;
 }
 
 .alert {
@@ -993,6 +1012,15 @@ button.badge:disabled, .badge[aria-disabled="true"] {
 
 .actions.end {
   justify-content: flex-end;
+}
+
+:where(.card) {
+  --intent: initial;
+  --intent-fg: initial;
+  --ui-bg: initial;
+  --ui-fg: initial;
+  --ui-border: initial;
+  --ui-hover-bg: initial;
 }
 
 .card {
@@ -1380,6 +1408,11 @@ dialog.drawer nav {
 
 :where(.spinner) {
   --intent: initial;
+  --intent-fg: initial;
+  --ui-bg: initial;
+  --ui-fg: initial;
+  --ui-border: initial;
+  --ui-hover-bg: initial;
 }
 
 .spinner {
@@ -1465,6 +1498,13 @@ dialog.drawer nav {
   --skeleton-size: 8rem;
 }
 
+@media (forced-colors: active) {
+  .skeleton {
+    border: var(--border-width) solid ButtonText;
+    background: graytext;
+  }
+}
+
 @keyframes actual-skeleton {
   from {
     background-position: 200% 0;
@@ -1510,6 +1550,15 @@ dialog.drawer nav {
   [aria-busy="true"]:not(.btn):has( > .spinner:last-child):before {
     background: color-mix(in oklch, var(--surface), transparent 20%);
   }
+}
+
+:where(.progress) {
+  --intent: initial;
+  --intent-fg: initial;
+  --ui-bg: initial;
+  --ui-fg: initial;
+  --ui-border: initial;
+  --ui-hover-bg: initial;
 }
 
 .progress {
@@ -1587,6 +1636,40 @@ dialog.drawer nav {
   100% {
     background-position: -200% 0;
   }
+}
+
+@media (forced-colors: active) {
+  .progress {
+    border: var(--border-width) solid ButtonText;
+    background: canvas;
+  }
+
+  .progress::-webkit-progress-bar {
+    background: canvas;
+  }
+
+  .progress::-webkit-progress-value {
+    forced-color-adjust: none;
+    background: highlight;
+  }
+
+  .progress::-moz-progress-bar {
+    forced-color-adjust: none;
+    background: highlight;
+  }
+
+  .progress:indeterminate {
+    background: canvas;
+  }
+}
+
+:where(.avatar) {
+  --intent: initial;
+  --intent-fg: initial;
+  --ui-bg: initial;
+  --ui-fg: initial;
+  --ui-border: initial;
+  --ui-hover-bg: initial;
 }
 
 .avatar {
@@ -1694,6 +1777,15 @@ button.avatar {
   }
 }
 
+:where(.overline) {
+  --intent: initial;
+  --intent-fg: initial;
+  --ui-bg: initial;
+  --ui-fg: initial;
+  --ui-border: initial;
+  --ui-hover-bg: initial;
+}
+
 .overline {
   color: var(--text-muted);
   font-size: var(--font-size-sm);
@@ -1772,9 +1864,16 @@ button.avatar {
   display: inline-flex;
 }
 
-.nav-link:hover, .nav-link:where([aria-current]:not([aria-current="false"])) {
+.nav-link:where([aria-current]:not([aria-current="false"])) {
   background: var(--surface-subtle);
   color: var(--text);
+}
+
+@media (hover: hover) {
+  .nav-link:hover {
+    background: var(--surface-subtle);
+    color: var(--text);
+  }
 }
 
 .nav-link:focus-visible {
@@ -1913,8 +2012,10 @@ button.avatar {
   background: var(--surface-subtle);
 }
 
-.table tbody tr:hover {
-  background-color: var(--hover-overlay);
+@media (hover: hover) {
+  .table tbody tr:hover {
+    background-color: var(--hover-overlay);
+  }
 }
 
 .table tr:last-child > * {
@@ -1927,6 +2028,15 @@ button.avatar {
 
 .table :where(th, td)[data-nowrap] {
   white-space: nowrap;
+}
+
+:where(.meter) {
+  --intent: initial;
+  --intent-fg: initial;
+  --ui-bg: initial;
+  --ui-fg: initial;
+  --ui-border: initial;
+  --ui-hover-bg: initial;
 }
 
 .meter {
@@ -1969,6 +2079,38 @@ button.avatar {
 .meter::-moz-meter-bar {
   height: var(--bar-height);
   border-radius: var(--radius-full);
+}
+
+@media (forced-colors: active) {
+  .meter {
+    border: var(--border-width) solid ButtonText;
+    background: canvas;
+  }
+
+  .meter::-webkit-meter-bar {
+    background: canvas;
+    border: 0;
+  }
+
+  .meter::-webkit-meter-optimum-value {
+    forced-color-adjust: none;
+    background: highlight;
+  }
+
+  .meter::-webkit-meter-suboptimum-value {
+    forced-color-adjust: none;
+    background: highlight;
+  }
+
+  .meter::-webkit-meter-even-less-good-value {
+    forced-color-adjust: none;
+    background: highlight;
+  }
+
+  .meter::-moz-meter-bar {
+    forced-color-adjust: none;
+    background: highlight;
+  }
 }
 
 .list-group > figcaption {
@@ -2060,6 +2202,9 @@ button.avatar {
   --control-border: var(--border);
   --control-bg: var(--surface);
   --control-fg: var(--text);
+  --control-ring: none;
+  --control-cursor: auto;
+  --control-opacity: 1;
   inline-size: 100%;
   min-block-size: var(--control-size);
   padding-inline: var(--space-3);
@@ -2068,6 +2213,9 @@ button.avatar {
   background: var(--control-bg);
   color: var(--control-fg);
   font-size: var(--control-font-size);
+  box-shadow: var(--control-ring);
+  cursor: var(--control-cursor);
+  opacity: var(--control-opacity);
   transition: border-color var(--duration),
     box-shadow var(--duration),
     background-color var(--duration),
@@ -2081,16 +2229,16 @@ button.avatar {
   resize: vertical;
 }
 
-:is(.input, .textarea, :is(.form, .field) :where(input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"], [type="button"], [type="submit"], [type="reset"], [type="color"]), textarea)):hover:not(:disabled) {
+:is(.input, .textarea, :is(.form, .field) :where(input, textarea)):hover:not(:disabled) {
   --control-border: var(--text-subtle);
 }
 
-:is(.input, .textarea, :is(.form, .field) :where(input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"], [type="button"], [type="submit"], [type="reset"], [type="color"]), textarea)):focus-visible {
-  border-color: var(--focus);
-  box-shadow: 0 0 0 3px var(--focus-ring);
+:is(.input, .textarea, :is(.form, .field) :where(input, textarea)):focus-visible {
+  --control-border: var(--focus);
+  --control-ring: 0 0 0 3px var(--focus-ring);
 }
 
-.field.danger :where(input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"], [type="button"], [type="submit"], [type="reset"], [type="color"]), textarea, select), .input[aria-invalid="true"], .textarea[aria-invalid="true"], :is(.form, .field) :where(input, textarea)[aria-invalid="true"] {
+.field.danger :where(input, textarea, select), .input[aria-invalid="true"], .textarea[aria-invalid="true"], :is(.form, .field) :where(input, textarea)[aria-invalid="true"] {
   --control-border: var(--danger);
 }
 
@@ -2099,16 +2247,30 @@ button.avatar {
   --control-border: var(--border);
 }
 
-:is(.input, .textarea, :is(.form, .field) :where(input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"], [type="button"], [type="submit"], [type="reset"], [type="color"]), textarea)):disabled {
+:is(.input, .textarea, :is(.form, .field) :where(input, textarea)):disabled {
   --control-bg: var(--surface-subtle);
   --control-fg: var(--text-subtle);
   --control-border: var(--border);
-  cursor: not-allowed;
-  opacity: 1;
+  --control-cursor: not-allowed;
+  --control-opacity: 1;
 }
 
 .input::placeholder, .textarea::placeholder, :is(.form, .field) :where(input, textarea)::placeholder {
   color: var(--text-subtle);
+}
+
+:where(.choice, .check, .radio, .form input[type="checkbox"]:not([role="switch"]), .form input[type="radio"]) {
+  --intent: initial;
+  --intent-fg: initial;
+  --ui-bg: initial;
+  --ui-fg: initial;
+  --ui-border: initial;
+  --ui-hover-bg: initial;
+}
+
+:where(.choice) :where(input[type="checkbox"]:not([role="switch"]), input[type="radio"]) {
+  --intent: inherit;
+  --intent-fg: inherit;
 }
 
 .choice {
@@ -2246,10 +2408,34 @@ button.avatar {
   opacity: 1;
 }
 
+@media (forced-colors: active) {
+  :is(.check, .radio, .form input[type="checkbox"]:not([role="switch"]), .form input[type="radio"]) {
+    --choice-border: ButtonText;
+    --choice-bg: Canvas;
+    --choice-mark: ButtonText;
+  }
+
+  :is(.check, .radio, .form input[type="checkbox"]:not([role="switch"]), .form input[type="radio"]):checked, :is(.check, .form input[type="checkbox"]:not([role="switch"])):indeterminate {
+    --choice-border: Highlight;
+    --choice-bg: Highlight;
+    --choice-mark: HighlightText;
+    forced-color-adjust: none;
+  }
+
+  :is(.check, .radio, .form input[type="checkbox"]:not([role="switch"]), .form input[type="radio"]):disabled {
+    --choice-border: GrayText;
+    --choice-bg: Canvas;
+    --choice-mark: GrayText;
+  }
+}
+
 .select, .form select {
   --control-border: var(--border);
   --control-bg: var(--surface);
   --control-fg: var(--text);
+  --control-ring: none;
+  --control-cursor: auto;
+  --control-opacity: 1;
   inline-size: 100%;
   min-block-size: var(--control-size);
   padding-inline: var(--space-3);
@@ -2258,6 +2444,9 @@ button.avatar {
   background: var(--control-bg);
   color: var(--control-fg);
   font-size: var(--control-font-size);
+  box-shadow: var(--control-ring);
+  cursor: var(--control-cursor);
+  opacity: var(--control-opacity);
   transition: border-color var(--duration),
     box-shadow var(--duration),
     background-color var(--duration),
@@ -2283,8 +2472,8 @@ button.avatar {
 }
 
 .select:focus-visible, .form select:focus-visible {
-  border-color: var(--focus);
-  box-shadow: 0 0 0 3px var(--focus-ring);
+  --control-border: var(--focus);
+  --control-ring: 0 0 0 3px var(--focus-ring);
 }
 
 .select[aria-invalid="true"], .field.danger select, .form select[aria-invalid="true"] {
@@ -2295,8 +2484,8 @@ button.avatar {
   --control-bg: var(--surface-subtle);
   --control-fg: var(--text-subtle);
   --control-border: var(--border);
-  cursor: not-allowed;
-  opacity: 1;
+  --control-cursor: not-allowed;
+  --control-opacity: 1;
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -2406,6 +2595,15 @@ button.avatar {
   }
 }
 
+:where(.range, .form input[type="range"]) {
+  --intent: initial;
+  --intent-fg: initial;
+  --ui-bg: initial;
+  --ui-fg: initial;
+  --ui-border: initial;
+  --ui-hover-bg: initial;
+}
+
 .form input[type="file"], .file {
   color: var(--text-muted);
 }
@@ -2413,6 +2611,15 @@ button.avatar {
 .form input[type="range"], .range {
   inline-size: 100%;
   accent-color: var(--intent, var(--primary));
+}
+
+:where(.switch, .form input[role="switch"]) {
+  --intent: initial;
+  --intent-fg: initial;
+  --ui-bg: initial;
+  --ui-fg: initial;
+  --ui-border: initial;
+  --ui-hover-bg: initial;
 }
 
 .switch, .form input[role="switch"] {
@@ -2481,6 +2688,31 @@ button.avatar {
   border-color: var(--border);
   opacity: 1;
   cursor: not-allowed;
+}
+
+@media (forced-colors: active) {
+  .switch, .form input[role="switch"] {
+    border-color: buttontext;
+  }
+
+  .switch:before, .form input[role="switch"]:before {
+    --switch-knob: ButtonText;
+    box-shadow: none;
+  }
+
+  .switch:checked, .form input[role="switch"]:checked {
+    --switch-bg: Highlight;
+    --switch-knob: HighlightText;
+    forced-color-adjust: none;
+    border-color: highlight;
+  }
+
+  .switch:disabled, .form input[role="switch"]:disabled {
+    --switch-bg: Canvas;
+    --switch-knob: GrayText;
+    forced-color-adjust: auto;
+    border-color: graytext;
+  }
 }
 
 .form-actions {
@@ -2577,9 +2809,16 @@ button.avatar {
   min-block-size: var(--control-size-lg);
 }
 
-.flyout > :where(button, a, [role="menuitem"]):hover, .flyout > :where(button, a, [role="menuitem"]):focus-visible, .flyout > li > :where(button, a, [role="menuitem"]):hover, .flyout > li > :where(button, a, [role="menuitem"]):focus-visible {
+.flyout > :where(button, a, [role="menuitem"]):focus-visible, .flyout > li > :where(button, a, [role="menuitem"]):focus-visible {
   background: var(--surface-subtle);
   outline: none;
+}
+
+@media (hover: hover) {
+  .flyout > :where(button, a, [role="menuitem"]):hover, .flyout > li > :where(button, a, [role="menuitem"]):hover {
+    background: var(--surface-subtle);
+    outline: none;
+  }
 }
 
 .flyout > hr, .flyout > li > hr {
@@ -2588,6 +2827,22 @@ button.avatar {
   margin-block: var(--space-1);
   border: 0;
   border-block-start: var(--border-width) solid var(--border);
+}
+
+@media (forced-colors: active) {
+  .flyout {
+    box-shadow: none;
+    border-color: buttontext;
+  }
+}
+
+:where(.tab) {
+  --intent: initial;
+  --intent-fg: initial;
+  --ui-bg: initial;
+  --ui-fg: initial;
+  --ui-border: initial;
+  --ui-hover-bg: initial;
 }
 
 .tabs {
@@ -2601,13 +2856,13 @@ button.avatar {
 }
 
 .tab {
+  border: 0;
   min-block-size: 2.4rem;
   color: var(--text-muted);
   font: inherit;
   font-weight: var(--font-weight-strong);
   cursor: pointer;
   background: none;
-  border: 0;
   border-block-end: 2px solid #0000;
   border-radius: 0;
   align-items: center;
@@ -2687,6 +2942,18 @@ button.avatar {
   inset-block-start: 50%;
   inset-inline-start: calc(-.98 * var(--tooltip-arrow-size));
   translate: 0 -50%;
+}
+
+@media (forced-colors: active) {
+  .tooltip {
+    --tooltip-bg: Canvas;
+    --tooltip-fg: CanvasText;
+    border: var(--border-width) solid ButtonText;
+  }
+
+  .tooltip:before {
+    display: none;
+  }
 }
 
 .sr-only {
@@ -2776,8 +3043,10 @@ button.avatar {
   text-decoration: none;
 }
 
-.link-muted:hover {
-  color: var(--text);
+@media (hover: hover) {
+  .link-muted:hover {
+    color: var(--text);
+  }
 }
 
 .gap-none {

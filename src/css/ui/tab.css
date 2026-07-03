@@ -5,6 +5,17 @@
  * and arrow-key navigation. CSS owns the tab strip appearance and
  * active indicator.
  */
+/* Intent boundary — inherited intents do not tint this component.
+   Local intent classes still win because :where() has zero specificity. */
+:where(.tab) {
+  --intent: initial;
+  --intent-fg: initial;
+  --ui-bg: initial;
+  --ui-fg: initial;
+  --ui-border: initial;
+  --ui-hover-bg: initial;
+}
+
 .tabs {
   display: flex;
   flex-wrap: wrap;

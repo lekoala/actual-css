@@ -4,6 +4,17 @@
  * Consumes the shared --intent/--primary for the value bar and --bar-height
  * for thickness. Indeterminate state animates a shimmer using --duration-shimmer.
  */
+/* Intent boundary — inherited intents do not tint this component.
+   Local intent classes still win because :where() has zero specificity. */
+:where(.progress) {
+  --intent: initial;
+  --intent-fg: initial;
+  --ui-bg: initial;
+  --ui-fg: initial;
+  --ui-border: initial;
+  --ui-hover-bg: initial;
+}
+
 .progress {
   --progress-track: var(--surface-subtle);
   --progress-value: var(--intent, var(--primary));
@@ -84,5 +95,30 @@
 
   100% {
     background-position: -200% 0;
+  }
+}
+
+@media (forced-colors: active) {
+  .progress {
+    border: var(--border-width) solid ButtonText;
+    background: Canvas;
+  }
+
+  .progress::-webkit-progress-bar {
+    background: Canvas;
+  }
+
+  .progress::-webkit-progress-value {
+    background: Highlight;
+    forced-color-adjust: none;
+  }
+
+  .progress::-moz-progress-bar {
+    background: Highlight;
+    forced-color-adjust: none;
+  }
+
+  .progress:indeterminate {
+    background: Canvas;
   }
 }

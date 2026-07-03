@@ -59,11 +59,13 @@
    everywhere. Interactive states live in the components that consume them. */
 @supports (color: color-mix(in oklch, red, white)) {
   .soft {
+    /* @sync soft-recipe */
     --ui-bg: color-mix(in oklch, var(--surface) var(--soft-bg-mix), var(--intent, var(--neutral)));
     --ui-border: color-mix(
       in oklch,
       var(--surface) var(--soft-border-mix),
       var(--intent, var(--neutral))
     );
+    /* @sync soft-recipe */
   }
 }

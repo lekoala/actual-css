@@ -5,6 +5,17 @@
  * dots (an empty .badge child) compose around the avatar without changing its
  * meaning.
  */
+/* Intent boundary — inherited intents do not tint this component.
+   Local intent classes still win because :where() has zero specificity. */
+:where(.avatar) {
+  --intent: initial;
+  --intent-fg: initial;
+  --ui-bg: initial;
+  --ui-fg: initial;
+  --ui-border: initial;
+  --ui-hover-bg: initial;
+}
+
 .avatar {
   --avatar-size: 2.25rem;
   --avatar-radius: var(--radius-full, 9999px);

@@ -9,6 +9,24 @@
  * Switches (input[role="switch"]) are excluded so switch.css owns their
  * geometry and states. switch.css is imported after this file.
  */
+/* Intent boundary — inherited intents do not tint this component.
+   Local intent classes still win because :where() has zero specificity. */
+:where(.choice, .check, .radio, .form input[type="checkbox"]:not([role="switch"]), .form input[type="radio"]) {
+  --intent: initial;
+  --intent-fg: initial;
+  --ui-bg: initial;
+  --ui-fg: initial;
+  --ui-border: initial;
+  --ui-hover-bg: initial;
+}
+
+/* A classed .choice is the component surface. Let its nested input consume a
+   local intent without reopening inherited page-level intents. */
+:where(.choice) :where(input[type="checkbox"]:not([role="switch"]), input[type="radio"]) {
+  --intent: inherit;
+  --intent-fg: inherit;
+}
+
 .choice {
   --choice-control-offset: 0.25em;
 
@@ -182,4 +200,41 @@
   --choice-mark: var(--text-subtle);
   cursor: not-allowed;
   opacity: 1;
+}
+
+@media (forced-colors: active) {
+  :is(
+      .check,
+      .radio,
+      .form input[type="checkbox"]:not([role="switch"]),
+      .form input[type="radio"]
+    ) {
+    --choice-border: ButtonText;
+    --choice-bg: Canvas;
+    --choice-mark: ButtonText;
+  }
+
+  :is(
+      .check,
+      .radio,
+      .form input[type="checkbox"]:not([role="switch"]),
+      .form input[type="radio"]
+    ):checked,
+  :is(.check, .form input[type="checkbox"]:not([role="switch"])):indeterminate {
+    --choice-border: Highlight;
+    --choice-bg: Highlight;
+    --choice-mark: HighlightText;
+    forced-color-adjust: none;
+  }
+
+  :is(
+      .check,
+      .radio,
+      .form input[type="checkbox"]:not([role="switch"]),
+      .form input[type="radio"]
+    ):disabled {
+    --choice-border: GrayText;
+    --choice-bg: Canvas;
+    --choice-mark: GrayText;
+  }
 }

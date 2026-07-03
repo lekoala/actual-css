@@ -55,10 +55,16 @@
   text-decoration: none;
 }
 
-.nav-link:hover,
 .nav-link:where([aria-current]:not([aria-current="false"])) {
   background: var(--surface-subtle);
   color: var(--text);
+}
+
+@media (hover: hover) {
+  .nav-link:hover {
+    background: var(--surface-subtle);
+    color: var(--text);
+  }
 }
 
 .nav-link:focus-visible {

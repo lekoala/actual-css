@@ -4,10 +4,15 @@
  * Uses currentColor so it adapts to buttons, alerts, badges, and text. The
  * [aria-busy] overlay composition lives in components/busy.css.
  */
-/* Prevent inherited intents from coloring the spinner. Local intent classes
-   still win because :where() has zero specificity. */
+/* Intent boundary — inherited intents do not tint this component.
+   Local intent classes still win because :where() has zero specificity. */
 :where(.spinner) {
   --intent: initial;
+  --intent-fg: initial;
+  --ui-bg: initial;
+  --ui-fg: initial;
+  --ui-border: initial;
+  --ui-hover-bg: initial;
 }
 
 .spinner {

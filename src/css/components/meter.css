@@ -4,6 +4,17 @@
  * Maps the three standard meter zones (optimum / suboptimum / even-less-good)
  * to the shared success / warning / danger intent colors.
  */
+/* Intent boundary — inherited intents do not tint this component.
+   Local intent classes still win because :where() has zero specificity. */
+:where(.meter) {
+  --intent: initial;
+  --intent-fg: initial;
+  --ui-bg: initial;
+  --ui-fg: initial;
+  --ui-border: initial;
+  --ui-hover-bg: initial;
+}
+
 .meter {
   appearance: none;
   -webkit-appearance: none;
@@ -45,4 +56,24 @@
 .meter::-moz-meter-bar {
   height: var(--bar-height);
   border-radius: var(--radius-full);
+}
+
+@media (forced-colors: active) {
+  .meter {
+    border: var(--border-width) solid ButtonText;
+    background: Canvas;
+  }
+
+  .meter::-webkit-meter-bar {
+    border: 0;
+    background: Canvas;
+  }
+
+  .meter::-webkit-meter-optimum-value,
+  .meter::-webkit-meter-suboptimum-value,
+  .meter::-webkit-meter-even-less-good-value,
+  .meter::-moz-meter-bar {
+    background: Highlight;
+    forced-color-adjust: none;
+  }
 }
