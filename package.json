@@ -67,7 +67,8 @@
     "build:dist": "bun scripts/build-dist.js",
     "build:js": "bun scripts/build-js.js",
     "build:size": "bun scripts/build-size.js",
-    "build:all": "bun run build:demo && bun run build:dist && bun run build:js && bun run build:size"
+    "check:reserved": "bun scripts/check-reserved.js",
+    "build:all": "bun run build:demo && bun run build:dist && bun run check:reserved && bun run build:js && bun run build:size"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.4.0",

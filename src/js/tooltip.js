@@ -118,16 +118,16 @@ function ensureTip(trigger) {
     }
   };
 
-  tip.addEventListener("floating:reposition", onReposition);
-  tip.addEventListener("floating:hide", onHide);
+  tip.addEventListener("actual:reposition", onReposition);
+  tip.addEventListener("actual:hide", onHide);
   const untrack = track(tip);
 
   cleanupMap.set(trigger, () => {
     onHide();
     trigger.removeEventListener("mouseleave", onHide);
     trigger.removeEventListener("blur", onHide);
-    tip.removeEventListener("floating:reposition", onReposition);
-    tip.removeEventListener("floating:hide", onHide);
+    tip.removeEventListener("actual:reposition", onReposition);
+    tip.removeEventListener("actual:hide", onHide);
     untrack();
     if (generatedTips.has(tip)) tip.remove();
     else restoreTip(tip);

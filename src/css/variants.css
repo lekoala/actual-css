@@ -56,8 +56,7 @@
 }
 
 /* Modern color enhancement. Baseline variant values above remain usable
-   everywhere. The hover rules apply to any element carrying the variant
-   class; --ui-hover-bg is consumed by .btn, .badge, .alert where set. */
+   everywhere. Interactive states live in the components that consume them. */
 @supports (color: color-mix(in oklch, red, white)) {
   .soft {
     --ui-bg: color-mix(in oklch, var(--surface) var(--soft-bg-mix), var(--intent, var(--neutral)));
@@ -66,17 +65,5 @@
       var(--surface) var(--soft-border-mix),
       var(--intent, var(--neutral))
     );
-  }
-
-  .soft:hover {
-    --ui-hover-bg: color-mix(
-      in oklch,
-      var(--intent, var(--neutral)) var(--soft-hover-alpha),
-      transparent
-    );
-  }
-
-  .outline:hover {
-    --ui-hover-bg: color-mix(in oklch, var(--intent, var(--neutral)), transparent 92%);
   }
 }

@@ -176,7 +176,7 @@ function ensureSurfaceWired(menu) {
   };
 
   menu.addEventListener(
-    "floating:reposition",
+    "actual:reposition",
     (e) => {
       if (menu.hidden) return;
       if (e.detail?.type === "scroll" && surfaceMap.get(menu)?.point) {
@@ -192,7 +192,7 @@ function ensureSurfaceWired(menu) {
   );
 
   menu.addEventListener(
-    "floating:hide",
+    "actual:hide",
     () => {
       if (!menu.hidden) closeSurface(menu, { restoreFocus: true });
     },
