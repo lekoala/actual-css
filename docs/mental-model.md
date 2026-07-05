@@ -55,32 +55,3 @@ When using a component, child elements follow the semantic pattern of that compo
 
 No child classes like `.avatar-img` are needed.
 
-## Progressive enhancement
-
-Modern features are gated with `@supports`; unsupported browsers keep the core layout and controls.
-
-- `color-mix(in oklch, ...)` — enhanced variant surfaces and hover states
-- `appearance: base-select` — enhanced select picker on fine-pointer devices
-- `backdrop-filter` — enhanced sticky form actions
-- `transition-behavior: allow-discrete` — smooth dialog open/close
-- `:has()` — button groups, alert icons, form label layout
-
-## Public class grammar
-
-Actual CSS uses bare global class names as its public CSS API. The grammar is:
-
-```text
-.component [intent] [variant] [size] [modifier]
-```
-
-Examples:
-
-```html
-<button class="btn primary outline lg">Publish</button>
-<span class="badge success soft">Online</span>
-<section class="card raised stack">...</section>
-```
-
-Documented classes are the public API. Treat them like package exports: adding one is an API decision, renaming or removing one is breaking, and `is-*` classes belong to runtime internals rather than the author API.
-
-Actual CSS is intended for new projects. Existing projects with class collisions should use `actual.layer.css`, import order, or their own prefix transform as a pipeline output. The primary API remains unprefixed.

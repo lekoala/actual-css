@@ -34,10 +34,6 @@ Use `.sr-only` for text that should be available to assistive technology but vis
 }
 ```
 
-Links:
-- https://piccalil.li/blog/a-modern-css-reset/
-- https://www.a11yproject.com/posts/how-to-hide-content/
-
 ## Overflow
 
 > Explicit overflow handling for content that may exceed its container.
@@ -69,10 +65,6 @@ Use `.overflow-auto` when content may overflow its container, especially tables 
   overflow: auto;
 }
 ```
-
-Links:
-- https://getbootstrap.com/docs/5.3/content/tables/#responsive-tables
-- https://picocss.com/docs/overflow-auto
 
 ## Sizing And Wrapping
 
@@ -374,5 +366,3 @@ The overline exists because categories, kicker labels, and section markers recur
 - No utility variants for hover, focus, dark mode, or arbitrary selectors — use component states.
 - No full spacing scale with every step and direction — the 17 spacing helpers above cover the most common escape hatches.
 
-Links:
-- https://github.com/knadh/oat/blob/master/src/css/utilities.css

@@ -173,16 +173,6 @@ Long press is opt-in with `data-context-menu-long-press`. Empty uses the default
 </div>
 ```
 
-Links:
-- https://oat.ink/components/#menu
-- https://daisyui.com/components/menu/
-- https://www.w3.org/WAI/ARIA/apg/patterns/menu-button/
-- https://github.com/lekoala/pure-context-menu
-- https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Global_attributes/popover
-- https://v6-dev--twbs-bootstrap.netlify.app/docs/6.0/components/menu/
-- https://getbootstrap.com/docs/5.3/components/popovers/#overview
-- https://open-ui.org/components/menu.research/
-
 ## Tabs
 
 > In-place panel switcher using real tab semantics, with roving tabindex and arrow-key navigation.
@@ -245,17 +235,6 @@ Links:
   </ul>
 </nav>
 ```
-
-Links:
-- https://www.makethingsaccessible.com/guides/responsive-and-accessible-tabbed-interfaces/
-- https://www.w3.org/WAI/ARIA/apg/patterns/tabs/
-- https://uiterms.com/tabs/
-- https://m3.material.io/components/tabs/accessibility
-- https://css-tricks.com/pure-css-tabs-with-details-grid-and-subgrid/
-- https://basecoatui.com/components/tabs/
-- https://daisyui.com/components/tab/
-- https://inclusive-components.design/tabbed-interfaces/
-- https://open-ui.org/components/tabs.research/
 
 ## Tooltip
 
@@ -324,17 +303,6 @@ Override `--tooltip-bg` and `--tooltip-fg` on the tooltip element to change the 
 </div>
 ```
 
-Links:
-- https://oat.ink/components/#tooltip
-- https://picocss.com/docs/tooltip
-- https://uiterms.com/tooltip/
-- https://vispero.com/resources/using-the-html-title-attribute-updated/
-- Modern tooltips: https://codepen.io/lekoalabe/pen/JoPNWpX
-- https://m3.material.io/components/tooltips/overview
-- https://basecoatui.com/components/tooltip/
-- https://daisyui.com/components/tooltip/
-- https://open-ui.org/components/tooltip.research/
-
 ## Scrollspy
 
 > Navigation that highlights the active section of a long page as the user scrolls.
@@ -366,7 +334,3 @@ Links:
 </main>
 ```
 
-Links:
-- https://getbootstrap.com/docs/5.3/components/scrollspy/
-- https://una.im/scroll-target-group/
-- https://www.sarasoueidan.com/blog/css-scrollspy/

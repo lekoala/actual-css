@@ -239,10 +239,6 @@ A project may add `.side-nav` only when it needs specific visual behavior such a
 
 Keep this separate from layout primitives. `.cluster` and `.stack` should not style links.
 
-Links:
-- https://picocss.com/docs/nav
-- https://daisyui.com/components/navbar/
-
 ## List Group
 
 Use `.list-group` for rich content lists where each item may contain multiple elements.

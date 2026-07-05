@@ -83,20 +83,6 @@ Components are presented alphabetically.
 </div>
 ```
 
-Links:
-- https://picocss.com/docs/accordion
-- https://oat.ink/components/#accordion
-- https://daisyui.com/components/accordion/
-- https://getbootstrap.com/docs/5.3/components/accordion/
-- https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/details
-- https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/summary
-- https://semantic-ui.com/modules/accordion.html
-- https://modern-css.com/accordion-without-javascript/
-- https://modern-css.com/exclusive-accordions-without-javascript/
-- https://uiterms.com/accordion/
-- https://basecoatui.com/components/accordion/
-- https://open-ui.org/components/accordion.explainer/
-
 ## Alert
 
 > Inline status messages for confirmations, warnings, and errors, with intents, icons, and action lists.
@@ -178,15 +164,6 @@ Variants
 </div>
 ```
 
-Links:
-- https://oat.ink/components/#alert
-- https://getbootstrap.com/docs/5.3/components/alerts/
-- https://playground.halfaccessible.com/aria-reference/alert-role
-- https://www.a11y-collective.com/blog/aria-alert/
-- https://primer.style/accessibility/patterns/accessible-notifications-and-messages/
-- https://uiterms.com/alert/
-- https://open-ui.org/components/alert.research/
-
 ## Avatar
 
 > Initials or image representing a person or entity, composable with a status dot.
@@ -243,12 +220,6 @@ Links:
   </div>
 </div>
 ```
-
-Links:
-- https://oat.ink/components/#avatar
-- https://daisyui.com/components/avatar/
-- https://smolcss.dev/#smol-avatar-list
-- https://open-ui.org/components/avatar.research/
 
 ## Badge
 
@@ -318,16 +289,6 @@ Use `.badge soft` for tag visuals. Add a direct dismiss button only when the tag
 </span>
 ```
 
-Links:
-- https://oat.ink/components/#badge
-- https://daisyui.com/components/badge/
-- https://semantic-ui.com/elements/label.html
-- https://getbootstrap.com/docs/5.3/components/badge/
-- https://uiterms.com/badge/
-- https://m3.material.io/components/badges/overview
-- https://daisyui.com/components/indicator/
-- https://open-ui.org/components/badge.research/
-
 ## Breadcrumb
 
 > Trail of links showing the current page's location in a hierarchy.
@@ -347,14 +308,6 @@ Links:
   </ol>
 </nav>
 ```
-
-Links:
-- https://oat.ink/components/#breadcrumb
-- https://daisyui.com/components/breadcrumbs/
-- https://getbootstrap.com/docs/5.3/components/breadcrumb/
-- https://gomakethings.com/articles/creating-unstyled-lists/
-- https://uiterms.com/breadcrumbs/
-- https://open-ui.org/components/breadcrumb.research/
 
 ## Button
 
@@ -414,20 +367,6 @@ With icons, loading state...
   Saving…
 </button>
 ```
-
-Links:
-- https://picocss.com/docs/button
-- https://daisyui.com/components/button/
-- https://semantic-ui.com/elements/button.html
-- https://bulma.io/documentation/elements/button/
-- https://oat.ink/components/#button
-- https://getbootstrap.com/docs/5.3/components/buttons/
-- https://moderncss.dev/icon-button-css-styling-guide/
-- https://moderncss.dev/css-button-styling-guide/
-- Button theming: https://codepen.io/lekoalabe/pen/RNaXBBP
-- Buttons: https://codepen.io/lekoalabe/pen/oNORPZP
-- https://piccalil.li/blog/how-i-build-a-button-component/
-- https://open-ui.org/components/button/
 
 ## Card
 
@@ -602,16 +541,6 @@ Links:
 </section>
 ```
 
-Links:
-- https://oat.ink/components/#card
-- https://daisyui.com/components/card/
-- https://picocss.com/docs/card
-- https://getbootstrap.com/docs/5.3/components/card/
-- https://semantic-ui.com/views/card.html
-- https://smolcss.dev/#smol-card-component
-- https://uiterms.com/card/
-- https://open-ui.org/components/card.research/
-
 ## Drawer
 
 > Modal side-sheet that overlays the page for navigation or filters.
@@ -698,14 +627,6 @@ For drawers with unsaved settings or critical actions, omit the dismiss attribut
 
 Backdrop click dismissal and Escape are provided by the native dialog element when `closedby="any"` is set. Add `data-dialog-dismissible` when you want the optional runtime to wire the same behavior in browsers that need a small fallback. When both are omitted, clicking the backdrop briefly flashes the drawer instead of closing it — useful for drawers that should not be dismissed accidentally.
 
-Links:
-- https://oat.ink/components/#sidebar
-- https://daisyui.com/components/drawer/
-- https://mac81.github.io/pure-drawer/
-- Drawer: https://codepen.io/nwest88/pen/PwwZpv
-- https://uiterms.com/drawer/
-- https://v6-dev--twbs-bootstrap.netlify.app/docs/6.0/components/drawer/
-
 ## Key
 
 > Keyboard keys and shortcut tokens for app UI, command palettes, menus, and help text.
@@ -750,10 +671,6 @@ In menus, keep the command label and shortcut in the same interactive item.
 <meter class="meter" value="0.5" min="0" max="1" low="0.3" high="0.7" optimum="1"></meter>
 <meter class="meter" value="0.2" min="0" max="1" low="0.3" high="0.7" optimum="1"></meter>
 ```
-
-Links:
-- https://oat.ink/components/#meter
-
 
 ## Modal
 
@@ -1114,24 +1031,6 @@ The effect is progressive: it only runs when the browser supports `document.star
 
 Prefer native dialog behavior whenever possible. The framework runtime should not replace the platform modal system; it should only make dialogs declarative, animation-friendly, and consistent across supported browsers.
 
-Links:
-- https://oat.ink/components/#dialog
-- https://picocss.com/docs/modal
-- https://daisyui.com/components/modal/
-- https://getbootstrap.com/docs/5.3/components/modal/
-- https://modern-css.com/modal-dialogs-without-a-javascript-library/
-- https://modern-css.com/full-width-without-horizontal-scrollbar-overflow/
-- https://modern-css.com/modal-controls-without-onclick-handlers/
-- https://modern-css.com/dialog-light-dismiss-without-click-outside-listeners/
-- https://uiterms.com/alert-dialog/
-- https://uiterms.com/dialog/
-- Modern dialogs: https://codepen.io/lekoalabe/pen/GgKOKOE
-- Animating the dialog element using view transitions: https://pqina.nl/blog/animating-the-dialog-element-using-view-transitions/
-- https://basecoatui.com/components/alert-dialog/
-- https://v6-dev--twbs-bootstrap.netlify.app/docs/6.0/components/dialog/
-- https://open-ui.org/components/invokers.explainer/
-- https://open-ui.org/components/dialog.research/
-
 ## Pagination
 
 > Navigation controls to move between pages of content.
@@ -1173,11 +1072,6 @@ Links:
 </nav>
 ```
 
-Links:
-- https://oat.ink/components/#pagination
-- https://daisyui.com/components/pagination/
-- https://uiterms.com/pagination/
-
 ## Progress
 
 > Indeterminate or determinate indicator of task completion.
@@ -1199,14 +1093,6 @@ Links:
   <progress class="progress" id="upload-progress" value="60" max="100">60%</progress>
 </section>
 ```
-
-Links:
-- https://oat.ink/components/#progress
-- https://daisyui.com/components/progress/
-- https://picocss.com/docs/progress
-- https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/progress
-- https://getbootstrap.com/docs/5.3/components/progress/
-- Indeterminate: https://codepen.io/lekoalabe/pen/NWEzXMO
 
 ## Spinner
 
@@ -1258,11 +1144,6 @@ Links:
 </div>
 ```
 
-Links:
-- https://oat.ink/components/#spinner
-- https://picocss.com/docs/loading
-- https://daisyui.com/components/loading/
-
 ## Skeleton
 
 > Placeholder shapes for content that is loading.
@@ -1284,11 +1165,6 @@ Links:
   </div>
 </article>
 ```
-
-Links:
-- https://oat.ink/components/#skeleton
-- https://daisyui.com/components/skeleton/
-- https://github.com/Aejkatappaja/phantom-ui
 
 ## Table
 
@@ -1372,9 +1248,3 @@ Links:
 </div>
 ```
 
-Links:
-- https://picocss.com/docs/table
-- https://oat.ink/components/#table
-- https://getbootstrap.com/docs/5.3/content/tables/
-- https://piccalil.li/blog/styling-tables-the-modern-css-way/
-- https://open-ui.org/components/table.research/

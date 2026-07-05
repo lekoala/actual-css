@@ -57,10 +57,6 @@ Use `.stack` for vertical flow with consistent spacing.
 
 Use stack for forms, card content, modal bodies, side panels, and documentation blocks.
 
-Links:
-- https://github.com/knadh/oat/blob/master/src/css/utilities.css
-- https://every-layout.dev/layouts/stack/
-
 ## Cluster
 
 > Inline groups that wrap naturally, useful for action rows, tags, and toolbars.
@@ -76,10 +72,6 @@ Use `.cluster` for inline groups that wrap naturally.
 ```
 
 Use cluster for action rows, tags, toolbar sections, metadata, and compact navigation.
-
-Links:
-- https://modern-css.com/spacing-elements-without-margin-hacks/
-- https://every-layout.dev/layouts/cluster/
 
 ## Center
 
@@ -108,11 +100,6 @@ Tune width and side padding with local variables.
   --center-pad: var(--space-4);
 }
 ```
-
-Links:
-- https://picocss.com/docs/container
-- https://smolcss.dev/#smol-container
-- https://every-layout.dev/layouts/center/
 
 ## List
 
@@ -166,11 +153,6 @@ Links:
        </ul>
 </figure>
 ```
-
-Links:
-- https://daisyui.com/components/list/
-- https://html.spec.whatwg.org/multipage/grouping-content.html#the-li-element
-- https://open-ui.org/components/list.research/
 
 ## Grid
 
@@ -255,7 +237,6 @@ A `grid-4` demo
 </div>
 ```
 
-
 Behavior:
 - Without `.grid-responsive`: `.grid-2` is always 2 cols, `.grid-3` is always 3 cols, `.grid-4` is always 4 cols.
 - With `.grid-responsive`: all three collapse to one column on a narrow wrapper (under 28rem). As the wrapper widens, they step back to 2 cols (28rem-48rem) and then to their full count (48rem+).
@@ -263,13 +244,6 @@ Behavior:
 - The wrapper is the query container, so the same class behaves differently in a narrow sidebar than in a wide main area. No viewport breakpoints are involved.
 
 Do not add `.row`, `.col-6`, `.offset-2`, or other fixed grid-system classes unless the project later proves it needs a formal grid system.
-
-Links:
-- https://picocss.com/docs/grid
-- https://oat.ink/components/#grid
-- https://modern-css.com/grid-layout-without-extra-wrappers/
-- https://moderncss.dev/3-css-grid-techniques-to-make-you-a-grid-convert/
-- https://smolcss.dev/#smol-css-grid
 
 ## Sidebar
 
@@ -320,9 +294,6 @@ Wrap it in `.grid-responsive` to make the switch depend on the container width. 
 ```
 
 `.with-sidebar` and `.sidebar-layout` are not interchangeable. `.with-sidebar` is flex-based and lets the side and content grow together; `.sidebar-layout` is grid-based and locks the aside to its declared width. Pick the one that matches the role.
-
-Links:
-- https://every-layout.dev/layouts/sidebar/
 
 ## Media Object
 
@@ -382,9 +353,6 @@ Use `.switcher` for rows that should become columns when space gets tight.
 
 This is useful for small sets of panels, not large card collections. Use `.grid` for repeatable collections.
 
-Links:
-- https://every-layout.dev/layouts/switcher/
-
 ## Frame
 
 > Media container that holds a stable aspect ratio for images, video, or embeds.
@@ -418,9 +386,6 @@ Use local variables for common ratios.
 }
 ```
 
-Links:
-- https://every-layout.dev/layouts/frame/
-
 ## Header And Footer
 
 > Document landmarks for top and bottom regions, composed with layout primitives.
@@ -447,10 +412,3 @@ Use semantic elements by default.
 
 Sticky header/footer behavior should be opt-in and documented only if it becomes part of the shipped layout API.
 
-Links:
-- https://uiterms.com/sticky-header/
-- https://developer.mozilla.org/en-US/docs/Web/CSS/How_to/Layout_cookbook/Sticky_footers
-- https://crinkles.dev/writing/enhanced-sticky-footer/
-- https://prismic.io/blog/css-sticky-footers
-- https://modern-css.com/sticky-headers-without-javascript-scroll-listeners/
-- https://picocss.com/docs/landmarks-section

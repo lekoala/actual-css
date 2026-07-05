@@ -1,8 +1,8 @@
-# Accessibility
-
-Actual CSS makes the accessible path the default where CSS and small runtime enhancers can help.
+# Accessibility decisions
 
 ## Guarantees
+
+Actual CSS makes the accessible path the default where CSS and small runtime enhancers can help.
 
 - Visible `:focus-visible` styles on interactive components.
 - Native elements first: `button`, `a`, `details`, `dialog`, form controls.
@@ -17,4 +17,10 @@ Actual CSS makes the accessible path the default where CSS and small runtime enh
 - Keep form errors inline and connected with `aria-describedby`.
 - Do not put critical information only in a transient notification.
 
-Happy DOM tests validate orchestration, not pixels or real browser layout.
+## Interactive states
+
+- Interactive controls must be identifiable at rest, either by their own styling or by clear surrounding context.
+- Interactive states are: rest, hover, active / pressed, focus-visible, disabled, selected / current / expanded (when applicable).
+- Do not rely on hover alone to reveal interactivity.
+- Do not use color alone to communicate state.
+- Use structure, border, background, iconography, and spacing consistently.

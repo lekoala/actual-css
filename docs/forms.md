@@ -142,31 +142,6 @@
 - `.form-actions` carries a default top margin. Override it with `--form-actions-margin-block-start`. It is class-only and may live inside or outside `<form>`. See Detached Actions below.
 - Joined form controls use `role="group"` plus direct input/select/textarea/`.btn`/`.affix` children. The role carries the accessibility grouping; the structural selector opts into the joined visual treatment without catching checkbox/radio groups.
 
-Links:
-- https://oat.ink/components/#form
-- https://picocss.com/docs/forms
-- https://picocss.com/docs/group
-- https://getbootstrap.com/docs/5.3/forms/overview/
-- https://developer.chrome.com/blog/a-customizable-select
-- https://modern-css.com/customizable-selects-without-a-javascript-library/
-- https://smolcss.dev/#smol-focus-styles
-- https://daisyui.com/components/checkbox/
-- https://daisyui.com/components/fieldset/
-- https://daisyui.com/components/label/
-- https://daisyui.com/components/radio/
-- https://daisyui.com/components/range/
-- https://daisyui.com/components/select/
-- https://daisyui.com/components/textarea/
-- https://daisyui.com/components/toggle/
-- https://uiterms.com/slider/
-- https://uiterms.com/switch/
-- https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/label
-- https://open-ui.org/components/checkbox.research/
-- https://open-ui.org/components/radio-button.research/
-- https://open-ui.org/components/select.research/
-- https://open-ui.org/components/slider.research/
-- https://open-ui.org/components/switch/
-
 ## States And Sizes
 
 > Read-only, disabled, and shared size modifiers for form controls.
@@ -515,9 +490,6 @@ Use **`for`/`id`** when the layout needs the label and control in different grid
 ```
 
 The mixed shape `<label for="x">…<input id="x"></label>` is allowed by the spec but rarely useful. Prefer either pure wrapped or pure `for`/`id`.
-
-Links:
-- https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/label
 
 ## Joined Controls
 
@@ -900,7 +872,3 @@ Core: native range, enhanced by `accent-color`. Optional richer skin may come la
 </form>
 ```
 
-Links:
-- https://daisyui.com/components/validator/
-- https://getbootstrap.com/docs/5.3/forms/validation/
-- https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Reference/Roles/switch_role
