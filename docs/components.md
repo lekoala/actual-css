@@ -617,8 +617,10 @@ Links:
 > Modal side-sheet that overlays the page for navigation or filters.
 
 - Use `dialog.drawer` for modal side-sheets that overlay the page.
-- Use the `command="show-modal"` and `commandfor="<id>"` attributes to open the drawer without JavaScript.
+- Use `command="show-modal"` and `commandfor="<id>"` to open the drawer without JavaScript.
 - Use `form method="dialog"` for close buttons inside the drawer.
+- Use `data-dialog-dismissible` and `closedby="any"` when backdrop click should close the drawer.
+- Omit those attributes when the drawer requires an explicit action (e.g. a form with unsaved changes).
 - Use `[data-side="end"]` for a right-side drawer.
 - Permanent desktop sidebars belong in layout, not here.
 
@@ -631,7 +633,11 @@ Links:
   <i class="ti ti-menu-2" aria-hidden="true"></i>
 </button>
 
-<dialog class="drawer" id="main-drawer" aria-label="Main navigation">
+<dialog class="drawer"
+        id="main-drawer"
+        aria-label="Main navigation"
+        closedby="any"
+        data-dialog-dismissible>
   <header class="cluster" style="--cluster-justify: space-between">
     <strong>Menu</strong>
 
@@ -646,26 +652,51 @@ Links:
     <ul class="nav-list stack">
       <li><a href="#" aria-current="page">Home</a></li>
       <li><a href="#">Users</a></li>
-      <li>
-        <details>
-          <summary>Settings</summary>
-          <ul class="nav-list stack">
-            <li><a class="nav-link" href="#">General</a></li>
-            <li><a class="nav-link" href="#">Security</a></li>
-            <li><a class="nav-link" href="#">Billing</a></li>
-          </ul>
-        </details>
-      </li>
+      <li><a href="#">Settings</a></li>
+      <li><a href="#">Logout</a></li>
     </ul>
   </nav>
-
-  <footer>
-    <button class="btn outline" type="button">Logout</button>
-  </footer>
 </dialog>
 ```
 
-Backdrop click dismissal and Escape are provided by the native dialog element on its own. Add `data-dialog-dismissible` to the drawer's opening button's target when you want the optional runtime to wire the same behavior in browsers that need a small fallback. No manual `addEventListener("click", ...)` is required.
+### Non-dismissible drawer
+
+For drawers with unsaved settings or critical actions, omit the dismiss attributes. Backdrop click shows a static indicator instead of closing. Escape key still works natively.
+
+```html
+<button class="btn"
+        type="button"
+        command="show-modal"
+        commandfor="settings-drawer">
+  Edit settings
+</button>
+
+<dialog class="drawer"
+        id="settings-drawer"
+        aria-label="Settings"
+        data-side="end">
+  <form method="dialog">
+    <header class="cluster" style="--cluster-justify: space-between">
+      <strong>Settings</strong>
+      <button class="btn ghost"
+              type="submit"
+              aria-label="Close settings">
+        <i class="ti ti-x" aria-hidden="true"></i>
+      </button>
+    </header>
+
+    <div class="stack">
+      <p>Unsaved changes will be lost if you close without saving.</p>
+    </div>
+
+    <footer class="cluster" style="--cluster-justify: end">
+      <button class="btn" value="save">Save</button>
+    </footer>
+  </form>
+</dialog>
+```
+
+Backdrop click dismissal and Escape are provided by the native dialog element when `closedby="any"` is set. Add `data-dialog-dismissible` when you want the optional runtime to wire the same behavior in browsers that need a small fallback. When both are omitted, clicking the backdrop briefly flashes the drawer instead of closing it — useful for drawers that should not be dismissed accidentally.
 
 Links:
 - https://oat.ink/components/#sidebar
