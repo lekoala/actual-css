@@ -23,4 +23,4 @@ Actual CSS uses a small public grammar: `.component [intent] [variant] [size] [m
 
 - CSS: `actual-css`, `actual-css/css`, `actual-css/css/layer`, `actual-css/css/components`, `actual-css/css/forms`, `actual-css/css/ui`.
 - Optional CSS: `actual-css/css/optional/typography-fluid`, `actual-css/css/optional/scroller`.
-- JavaScript: `actual-css/js`, plus individual enhancers such as `actual-css/js/dialog`, `actual-css/js/flyout`, `actual-css/js/tooltip`, and `actual-css/js/tab`.
+- JavaScript: `actual-css/js`, plus individual enhancers such as `actual-css/js/dialog`, `actual-css/js/flyout`, `actual-css/js/tooltip`, `actual-css/js/tab`, `actual-css/js/inputmode`, and `actual-css/js/mask`.
