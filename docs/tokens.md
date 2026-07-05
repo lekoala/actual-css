@@ -52,6 +52,8 @@ Surface tokens describe the canvas and elevation model. Components should prefer
 
   --border: hsl(220 12% 88%);
   --focus: var(--primary);
+  --focus-outline: 2px solid var(--focus);
+  --focus-outline-offset: 2px;
   --focus-ring: hsl(258 21% 32% / 0.22);
   --hover-overlay: hsl(220 20% 10% / 0.04);
 }
@@ -60,6 +62,12 @@ Surface tokens describe the canvas and elevation model. Components should prefer
 The surface levels are: `surface` (canvas), `surface-raised` (cards, raised surfaces), `surface-subtle` (the working subtle level — for hover overlays, form fields, table headers), and `surface-solid` (the dark inverse surface, used for accent areas).
 
 Use `*-fg` pairs only for solid backgrounds where the component controls both foreground and background. Do not require a foreground token for every surface token.
+
+Focus styling is outline-first. Components use `--focus-outline` and
+`--focus-outline-offset` for the guaranteed visible affordance, then add
+`--focus-ring-shadow` only as an enhancement where a softer halo helps.
+`forced-colors: active` disables the shadow and maps the outline to
+`Highlight`.
 
 ### Default theme philosophy
 
@@ -340,6 +348,13 @@ and follows the user's OS preference in browsers that support `light-dark()`.
 Dark themes should set `color-scheme: dark`. Light themes should set
 `color-scheme: light`. Browsers without `light-dark()` receive the light
 fallback.
+
+In `forced-colors: active`, the default theme maps the public color tokens to
+system colors (`Canvas`, `CanvasText`, `ButtonText`, `Highlight`, and
+`HighlightText`) and removes decorative shadows. Components should inherit
+that token mode by default; keep local forced-color rules only for custom
+control geometry, native bar parts, disabled states, or selected states that
+would otherwise be communicated only by background color.
 
 ## Component Mapping
 

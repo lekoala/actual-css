@@ -11,22 +11,6 @@
  * surface.js. Authors opt in via [data-flyout-mobile="sheet|auto|none|anchored"]
  * — the JS resolves "auto" into .is-sheet at run time.
  */
-:root {
-  --backdrop-color: var(--surface-solid);
-  --backdrop-opacity: 0.45;
-  --backdrop-fill: rgb(0 0 0 / var(--backdrop-opacity));
-}
-
-@supports (color: color-mix(in oklch, red, white)) {
-  :root {
-    --backdrop-fill: color-mix(
-      in oklch,
-      var(--backdrop-color) calc(var(--backdrop-opacity) * 100%),
-      transparent
-    );
-  }
-}
-
 /* Custom backdrop for overlays that do not use the native dialog top-layer.
  * Its z-index sits just below the flyout it accompanies. */
 .surface-backdrop {

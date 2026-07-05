@@ -62,12 +62,6 @@
 .card.raised {
   box-shadow: var(--shadow);
 }
-
-@media (forced-colors: active) {
-  .card.raised {
-    border-color: ButtonText;
-  }
-}
 .card.subtle {
   background: var(--surface-subtle);
 }

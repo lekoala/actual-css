@@ -97,6 +97,8 @@
   --choice-bg: var(--surface);
   --choice-mark: var(--primary-fg);
 
+  position: relative;
+  vertical-align: middle;
   display: inline-grid;
   place-content: center;
   inline-size: 1.125em;
@@ -126,6 +128,9 @@
     .form input[type="radio"]
   )::before {
   content: "";
+  position: absolute;
+  inset: 0;
+  margin: auto;
   transform: scale(0);
   transition: transform var(--duration);
 }
@@ -166,6 +171,7 @@
 }
 
 :is(.check, .form input[type="checkbox"]:not([role="switch"])):indeterminate::before {
+  border-inline-start: 0;
   inline-size: 0.6em;
   block-size: 0;
   border-block-end: 2px solid currentColor;
@@ -192,8 +198,8 @@
     .form input[type="radio"]
   ):focus-visible {
   border-color: var(--focus);
-  outline: var(--focus-ring-outline);
-  outline-offset: var(--focus-ring-offset);
+  outline: var(--focus-outline);
+  outline-offset: var(--focus-outline-offset);
   box-shadow: var(--focus-ring-shadow);
 }
 

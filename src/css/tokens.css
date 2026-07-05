@@ -55,6 +55,11 @@
   --indicator-offset: 14.65%;
   --indicator-ring: var(--surface);
 
+  /* Shared backdrop — consumed by modal, drawer, and mobile flyout sheets. */
+  --backdrop-color: var(--surface-solid);
+  --backdrop-opacity: 0.45;
+  --backdrop-fill: rgb(0 0 0 / var(--backdrop-opacity));
+
   /* Progress / meter track height */
   --bar-height: 0.65rem;
 
@@ -112,6 +117,11 @@
   :root {
     --shadow: 0 0.5rem 1.5rem color-mix(in oklch, var(--shadow-color) 8%, transparent);
     --shadow-popout: 0 0.25rem 0.75rem color-mix(in oklch, var(--shadow-color) 15%, transparent);
+    --backdrop-fill: color-mix(
+      in oklch,
+      var(--backdrop-color) calc(var(--backdrop-opacity) * 100%),
+      transparent
+    );
   }
 }
 

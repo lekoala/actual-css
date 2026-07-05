@@ -138,8 +138,8 @@
 .flyout > :where(button, a, [role="menuitem"]):focus-visible,
 .flyout > li > :where(button, a, [role="menuitem"]):focus-visible {
   background: var(--surface-subtle);
-  outline: var(--focus-ring-outline);
-  outline-offset: var(--focus-ring-offset);
+  outline: var(--focus-outline);
+  outline-offset: var(--focus-outline-offset);
   box-shadow: var(--focus-ring-shadow);
 }
 
@@ -158,11 +158,4 @@
   margin-block: var(--space-1);
   border: 0;
   border-block-start: var(--border-width) solid var(--border);
-}
-
-@media (forced-colors: active) {
-  .flyout {
-    border-color: ButtonText;
-    box-shadow: none;
-  }
 }

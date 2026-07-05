@@ -62,8 +62,8 @@
 .select:focus-visible,
 .form select:focus-visible {
   --control-border: var(--focus);
-  outline: var(--focus-ring-outline);
-  outline-offset: var(--focus-ring-offset);
+  outline: var(--focus-outline);
+  outline-offset: var(--focus-outline-offset);
   box-shadow: var(--focus-ring-shadow);
 }
 
