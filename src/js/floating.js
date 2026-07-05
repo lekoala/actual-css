@@ -91,6 +91,17 @@ function getInlineOverflow(coords, floating, minX, maxX) {
   );
 }
 
+function toBoundary(rect) {
+  return {
+    x: rect.x,
+    y: rect.y,
+    width: rect.width,
+    height: rect.height,
+    right: rect.x + rect.width,
+    bottom: rect.y + rect.height,
+  };
+}
+
 const supportsDirSelector =
   typeof CSS !== "undefined" && CSS.supports("selector(:dir(rtl))");
 
@@ -103,6 +114,66 @@ function isRTL(el) {
 
 function getDocEl(doc) {
   return doc.documentElement;
+}
+
+function toNumber(value) {
+  const number = Number.parseFloat(value);
+  return Number.isFinite(number) ? number : 0;
+}
+
+function getViewportBoundary(doc) {
+  const win = doc.defaultView || window;
+  const docEl = getDocEl(doc);
+  const visualViewport = win.visualViewport;
+  const x = visualViewport?.offsetLeft || 0;
+  const y = visualViewport?.offsetTop || 0;
+  let width = visualViewport?.width || docEl.clientWidth || win.innerWidth;
+  const height = visualViewport?.height || docEl.clientHeight || win.innerHeight;
+
+  const body = doc.body;
+  if (body?.clientWidth > 0) {
+    const bodyStyle = win.getComputedStyle?.(body);
+    const bodyMargin =
+      doc.compatMode === "CSS1Compat"
+        ? toNumber(bodyStyle?.marginLeft) + toNumber(bodyStyle?.marginRight)
+        : 0;
+    const stableScrollbar = Math.abs(docEl.clientWidth - body.clientWidth - bodyMargin);
+    if (stableScrollbar <= 25) {
+      width -= stableScrollbar;
+    }
+  }
+
+  return toBoundary({ x, y, width, height });
+}
+
+function getBoundary(ref, opts) {
+  if (!opts.scope) return getViewportBoundary(ref.ownerDocument);
+  const rect = opts.scope.getBoundingClientRect();
+  return toBoundary({
+    x: rect.x,
+    y: rect.y,
+    width: rect.width,
+    height: rect.height,
+  });
+}
+
+function isOutsideBoundary(rect, boundary) {
+  return (
+    rect.right < boundary.x ||
+    rect.left > boundary.right ||
+    rect.bottom < boundary.y ||
+    rect.top > boundary.bottom
+  );
+}
+
+function getAvailableHeight(refRect, side, boundary, distance, padding) {
+  if (side === "top") {
+    return Math.max(0, refRect.top - boundary.y - distance - padding);
+  }
+  if (side === "bottom") {
+    return Math.max(0, boundary.bottom - refRect.bottom - distance - padding);
+  }
+  return Math.max(0, boundary.height - padding * 2);
 }
 
 function isVisible(el) {
@@ -122,6 +193,7 @@ function getFloatingSize(float) {
 /* ── Global scroll / resize tracking ──────────────────── */
 
 const tracked = new Set();
+let resizeObserver = null;
 let tick = false;
 let pendingType = null;
 
@@ -152,6 +224,23 @@ function rafNotify(e) {
   tick = true;
 }
 
+function getResizeObserver() {
+  if (resizeObserver || typeof window === "undefined" || !window.ResizeObserver) {
+    return resizeObserver;
+  }
+
+  resizeObserver = new window.ResizeObserver((entries, observer) => {
+    for (const entry of entries) {
+      observer.unobserve(entry.target);
+      rafNotify({ type: "element-resize" });
+      requestAnimationFrame(() => {
+        if (tracked.has(entry.target)) observer.observe(entry.target);
+      });
+    }
+  });
+  return resizeObserver;
+}
+
 if (typeof document !== "undefined") {
   document.addEventListener("scroll", rafNotify, { passive: true, capture: true });
   document.addEventListener("keydown", (e) => {
@@ -172,7 +261,11 @@ if (typeof window !== "undefined") {
  */
 export function track(el) {
   tracked.add(el);
-  return () => tracked.delete(el);
+  getResizeObserver()?.observe(el);
+  return () => {
+    tracked.delete(el);
+    resizeObserver?.unobserve(el);
+  };
 }
 
 /**
@@ -203,25 +296,17 @@ export function reposition(ref, float, opts = {}) {
     placement.startsWith("bottom") ? rects[rects.length - 1] : rects[0];
   if (!refRect) return;
 
+  const boundary = getBoundary(ref, opts);
+  if (isOutsideBoundary(refRect, boundary)) {
+    float.dispatchEvent(new CustomEvent(EVENTS.hide, { bubbles: false }));
+    return;
+  }
+
   const floatRect = getFloatingSize(float);
-  const doc = getDocEl(ref.ownerDocument);
-  let cw = doc.clientWidth;
-  let ch = doc.clientHeight;
-
-  if (window.innerWidth - cw > 20) {
-    cw = window.innerWidth;
-    ch = window.innerHeight;
-  }
-
-  let sx = 0;
-  let sy = 0;
-  if (opts.scope) {
-    const b = opts.scope.getBoundingClientRect();
-    sx = b.x;
-    sy = b.y;
-    cw = b.x + b.width;
-    ch = b.y + b.height;
-  }
+  const sx = boundary.x;
+  const sy = boundary.y;
+  const cw = boundary.right;
+  const ch = boundary.bottom;
 
   let side = getSide(placement);
   const align = getAlignment(placement);
@@ -248,7 +333,7 @@ export function reposition(ref, float, opts = {}) {
     if (
       axis === "y" &&
       coords.x + floatRect.width > cw &&
-      doc.clientWidth - floatRect.width < 128
+      boundary.width - floatRect.width < 128
     ) {
       side = "top";
       axis = "x";
@@ -293,7 +378,26 @@ export function reposition(ref, float, opts = {}) {
     }
   }
 
+  let py = 50;
+  if (axis === "y" && (shift || floatRect.height > refRect.height)) {
+    const minY = sy + shiftPad;
+    const maxY = ch - floatRect.height - shiftPad;
+
+    if (coords.y < minY) {
+      const total = minY - coords.y;
+      coords.y = minY;
+      py = 50 - (total / floatRect.height) * 100;
+    } else if (coords.y > maxY) {
+      const total = maxY - coords.y;
+      coords.y = Math.max(sy, maxY);
+      py = 50 + (total / floatRect.height) * 100;
+    }
+  }
+
+  const availableHeight = getAvailableHeight(refRect, side, boundary, distance, shiftPad);
   float.style.setProperty("--arrow-x", `${p}%`);
+  float.style.setProperty("--arrow-y", `${py}%`);
+  float.style.setProperty("--available-height", `${availableHeight}px`);
   float.dataset.placement = current;
   Object.assign(float.style, {
     left: `${coords.x}px`,

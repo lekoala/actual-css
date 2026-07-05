@@ -82,7 +82,7 @@
 
 .tooltip[data-placement^="left"]::before {
   inset-inline-end: calc(-0.98 * var(--tooltip-arrow-size));
-  inset-block-start: 50%;
+  inset-block-start: var(--arrow-y, 50%);
   inline-size: var(--tooltip-arrow-size);
   block-size: calc(var(--tooltip-arrow-size) * 2);
   translate: 0 -50%;
@@ -91,7 +91,7 @@
 
 .tooltip[data-placement^="right"]::before {
   inset-inline-start: calc(-0.98 * var(--tooltip-arrow-size));
-  inset-block-start: 50%;
+  inset-block-start: var(--arrow-y, 50%);
   inline-size: var(--tooltip-arrow-size);
   block-size: calc(var(--tooltip-arrow-size) * 2);
   translate: 0 -50%;
