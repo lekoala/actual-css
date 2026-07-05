@@ -48,6 +48,7 @@
 }
 
 .field-label,
+.field-group > legend,
 .form legend {
   color: var(--text);
   font-weight: var(--font-weight-strong);
