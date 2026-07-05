@@ -2851,37 +2851,35 @@ button.avatar {
   display: inline-flex;
 }
 
-@supports selector([role="group"]:has(> input + .btn)) {
-  :where([role="group"]:has( > :is(.input, .select, .textarea, .affix, input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"], [type="button"], [type="submit"], [type="reset"], [type="color"]), select, textarea) + :is(.input, .select, .textarea, .affix, .btn, input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"], [type="button"], [type="submit"], [type="reset"], [type="color"]), select, textarea))) {
-    border-radius: var(--radius);
-    align-items: stretch;
-    inline-size: 100%;
-    display: flex;
-  }
+:where([role="group"]:has( > :is(.input, .select, .textarea, .affix, input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"], [type="button"], [type="submit"], [type="reset"], [type="color"]), select, textarea) + :is(.input, .select, .textarea, .affix, .btn, input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"], [type="button"], [type="submit"], [type="reset"], [type="color"]), select, textarea))) {
+  border-radius: var(--radius);
+  align-items: stretch;
+  inline-size: 100%;
+  display: flex;
+}
 
-  :where([role="group"]:has( > :is(.input, .select, .textarea, .affix, input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"], [type="button"], [type="submit"], [type="reset"], [type="color"]), select, textarea) + :is(.input, .select, .textarea, .affix, .btn, input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"], [type="button"], [type="submit"], [type="reset"], [type="color"]), select, textarea))) > :is(.input, .select, .textarea, .affix, .btn, input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"], [type="button"], [type="submit"], [type="reset"], [type="color"]), select, textarea) {
-    border-radius: 0;
-    min-inline-size: 0;
-    position: relative;
-  }
+:where([role="group"]:has( > :is(.input, .select, .textarea, .affix, input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"], [type="button"], [type="submit"], [type="reset"], [type="color"]), select, textarea) + :is(.input, .select, .textarea, .affix, .btn, input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"], [type="button"], [type="submit"], [type="reset"], [type="color"]), select, textarea))) > :is(.input, .select, .textarea, .affix, .btn, input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"], [type="button"], [type="submit"], [type="reset"], [type="color"]), select, textarea) {
+  border-radius: 0;
+  min-inline-size: 0;
+  position: relative;
+}
 
-  :where([role="group"]:has( > :is(.input, .select, .textarea, .affix, input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"], [type="button"], [type="submit"], [type="reset"], [type="color"]), select, textarea) + :is(.input, .select, .textarea, .affix, .btn, input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"], [type="button"], [type="submit"], [type="reset"], [type="color"]), select, textarea))) > :is(.input, .select, .textarea, .affix, .btn, input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"], [type="button"], [type="submit"], [type="reset"], [type="color"]), select, textarea) + :is(.input, .select, .textarea, .affix, .btn, input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"], [type="button"], [type="submit"], [type="reset"], [type="color"]), select, textarea) {
-    margin-inline-start: calc(var(--border-width) * -1);
-  }
+:where([role="group"]:has( > :is(.input, .select, .textarea, .affix, input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"], [type="button"], [type="submit"], [type="reset"], [type="color"]), select, textarea) + :is(.input, .select, .textarea, .affix, .btn, input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"], [type="button"], [type="submit"], [type="reset"], [type="color"]), select, textarea))) > :is(.input, .select, .textarea, .affix, .btn, input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"], [type="button"], [type="submit"], [type="reset"], [type="color"]), select, textarea) + :is(.input, .select, .textarea, .affix, .btn, input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"], [type="button"], [type="submit"], [type="reset"], [type="color"]), select, textarea) {
+  margin-inline-start: calc(var(--border-width) * -1);
+}
 
-  :where([role="group"]:has( > :is(.input, .select, .textarea, .affix, input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"], [type="button"], [type="submit"], [type="reset"], [type="color"]), select, textarea) + :is(.input, .select, .textarea, .affix, .btn, input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"], [type="button"], [type="submit"], [type="reset"], [type="color"]), select, textarea))) > :is(.input, .select, .textarea, .affix, .btn, input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"], [type="button"], [type="submit"], [type="reset"], [type="color"]), select, textarea):first-child {
-    border-start-start-radius: inherit;
-    border-end-start-radius: inherit;
-  }
+:where([role="group"]:has( > :is(.input, .select, .textarea, .affix, input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"], [type="button"], [type="submit"], [type="reset"], [type="color"]), select, textarea) + :is(.input, .select, .textarea, .affix, .btn, input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"], [type="button"], [type="submit"], [type="reset"], [type="color"]), select, textarea))) > :is(.input, .select, .textarea, .affix, .btn, input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"], [type="button"], [type="submit"], [type="reset"], [type="color"]), select, textarea):first-child {
+  border-start-start-radius: inherit;
+  border-end-start-radius: inherit;
+}
 
-  :where([role="group"]:has( > :is(.input, .select, .textarea, .affix, input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"], [type="button"], [type="submit"], [type="reset"], [type="color"]), select, textarea) + :is(.input, .select, .textarea, .affix, .btn, input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"], [type="button"], [type="submit"], [type="reset"], [type="color"]), select, textarea))) > :is(.input, .select, .textarea, .affix, .btn, input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"], [type="button"], [type="submit"], [type="reset"], [type="color"]), select, textarea):last-child {
-    border-start-end-radius: inherit;
-    border-end-end-radius: inherit;
-  }
+:where([role="group"]:has( > :is(.input, .select, .textarea, .affix, input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"], [type="button"], [type="submit"], [type="reset"], [type="color"]), select, textarea) + :is(.input, .select, .textarea, .affix, .btn, input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"], [type="button"], [type="submit"], [type="reset"], [type="color"]), select, textarea))) > :is(.input, .select, .textarea, .affix, .btn, input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"], [type="button"], [type="submit"], [type="reset"], [type="color"]), select, textarea):last-child {
+  border-start-end-radius: inherit;
+  border-end-end-radius: inherit;
+}
 
-  :where([role="group"]:has( > :is(.input, .select, .textarea, .affix, input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"], [type="button"], [type="submit"], [type="reset"], [type="color"]), select, textarea) + :is(.input, .select, .textarea, .affix, .btn, input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"], [type="button"], [type="submit"], [type="reset"], [type="color"]), select, textarea))) > :is(.input, .select, .textarea, .affix, .btn, input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"], [type="button"], [type="submit"], [type="reset"], [type="color"]), select, textarea):is(:focus, :focus-within) {
-    z-index: 1;
-  }
+:where([role="group"]:has( > :is(.input, .select, .textarea, .affix, input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"], [type="button"], [type="submit"], [type="reset"], [type="color"]), select, textarea) + :is(.input, .select, .textarea, .affix, .btn, input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"], [type="button"], [type="submit"], [type="reset"], [type="color"]), select, textarea))) > :is(.input, .select, .textarea, .affix, .btn, input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"], [type="button"], [type="submit"], [type="reset"], [type="color"]), select, textarea):is(:focus, :focus-within) {
+  z-index: 1;
 }
 
 .form-actions {
