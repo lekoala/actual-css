@@ -157,11 +157,3 @@ These are decisions that the framework has already made. Re-introducing them sil
 - Do not add heading-level utility classes (`h1`, `h2`, …) or a public `fs-*` scale until theme work and real components prove they are needed.
 - Do not extend `.prose` to style cards, alerts, app tables, or navigation. Those belong to their components.
 
-## References
-
-- https://daisyui.com/docs/layout-and-typography/
-- https://nordhealth.design/typography
-- https://primer.style/product/primitives/typography/
-- https://picocss.com/docs/typography
-- https://piccalil.li/blog/a-more-modern-css-reset/
-- https://moderncss.dev/generating-font-size-css-rules-and-creating-a-fluid-type-scale/

@@ -5,9 +5,6 @@ Start here when using or changing Actual CSS.
 ## Start Here
 
 - [Mental model](mental-model.md): how tokens, components, variants, and JS enhancers fit together.
-- [Guidelines](guidelines.md): rules for keeping the library small and maintainable.
-- [Why Actual CSS](why.md): positioning, tradeoffs, and non-goals.
-- [Accessibility](accessibility.md): guarantees, test coverage, and author responsibilities.
 
 ## API Surface
 
@@ -19,6 +16,13 @@ Start here when using or changing Actual CSS.
 - [UI](ui.md): JS-enhanced interface patterns.
 - [Utilities](utilities.md): small one-purpose helpers.
 - [Patterns](patterns.md): common app compositions.
+
+## Design Notes
+
+- [References](design-notes/references.md): positioning, tradeoffs, non-goals, and research links.
+- [Browser support](design-notes/browser-support.md): progressive enhancement strategy, feature gating, and fallbacks.
+- [Naming conventions](design-notes/naming.md): class grammar, component naming rules, and JS attribute namespacing.
+- [Accessibility decisions](design-notes/accessibility-decisions.md): guarantees, author responsibilities, and interactive states.
 
 ## Rule of Thumb
 

@@ -369,12 +369,3 @@ This makes the contract obvious:
 - Do not rely on Sass, PostCSS, or generated token files.
 - Do not make dark mode required for old browsers. Light mode is the fallback.
 
-## Links
-
-> Reference reading on design tokens and theming approaches.
-
-- https://primer.style/product/primitives/
-- https://picocss.com/docs/css-variables
-- https://nordhealth.design/tokens
-- https://oat.ink/customizing/
-- https://modern-css.com/theme-variables-without-a-preprocessor/
