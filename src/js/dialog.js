@@ -391,7 +391,7 @@ function disconnectTrigger(trigger) {
   triggerMap.delete(trigger);
 }
 
-if (typeof document !== "undefined" && supportsDialog()) {
+if (supportsDialog()) {
   enhance({
     [DIALOG_TRIGGER_SELECTOR]: (trigger) => {
       connectTrigger(trigger);
@@ -402,9 +402,7 @@ if (typeof document !== "undefined" && supportsDialog()) {
       return () => disconnectDialog(dialog);
     },
   });
-}
-
-if (typeof document !== "undefined" && !supportsDialog()) {
+} else {
   enhance({
     [DIALOG_TRIGGER_SELECTOR]: (trigger) => {
       connectTrigger(trigger);

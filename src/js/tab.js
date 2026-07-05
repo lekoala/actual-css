@@ -131,14 +131,12 @@ function onClick(e) {
   tab.focus();
 }
 
-if (typeof document !== "undefined") {
-  enhance({
-    '[role="tablist"]': (list) => {
-      const controller = new AbortController();
-      initialize(list);
-      list.addEventListener("click", onClick, { signal: controller.signal });
-      list.addEventListener("keydown", onKeydown, { signal: controller.signal });
-      return () => controller.abort();
-    },
-  });
-}
+enhance({
+  '[role="tablist"]': (list) => {
+    const controller = new AbortController();
+    initialize(list);
+    list.addEventListener("click", onClick, { signal: controller.signal });
+    list.addEventListener("keydown", onKeydown, { signal: controller.signal });
+    return () => controller.abort();
+  },
+});

@@ -56,8 +56,6 @@ function connectInputmode(el) {
   return () => controller.abort();
 }
 
-if (typeof document !== "undefined") {
-  enhance({
-    [SELECTOR]: connectInputmode,
-  });
-}
+enhance({
+  [SELECTOR]: connectInputmode,
+});

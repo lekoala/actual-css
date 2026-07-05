@@ -58,7 +58,8 @@ Flyout covers two distinct patterns:
 - Use `<menu class="flyout">` with `<li>` items.
 - Items are regular `<button>` or `<a>` elements.
 - Use `.sm` or `.lg` for density changes.
-- Add `role="menu"` / `role="menuitem"` only when you intentionally need the ARIA menu pattern and roving arrow-key behavior.
+- Direct action items get roving arrow-key focus.
+- Add `role="menu"` / `role="menuitem"` only when you intentionally need the ARIA menu pattern.
 
 ### Nav panel
 - A panel of *links* to other pages: product categories, docs sections.
@@ -136,14 +137,13 @@ Flyout covers two distinct patterns:
 
 The same flyout can be opened from a visible button and a contextual target. Prefer shipping both so desktop users get right click and mobile users still have a discoverable trigger.
 
-Add `data-context-menu-scope` when the flyout should stay inside a specific region. Empty or `self` constrains to the target itself, `parent` constrains to the parent, and a selector constrains to the closest matching ancestor or first matching element.
+Add `data-context-menu-scope` only when the flyout should stay inside a specific region. Empty or `self` constrains to the target itself, `parent` constrains to the parent, and a selector constrains to the closest matching ancestor or first matching element. The scope also constrains the available height, so omit it when the menu is allowed to escape the card or list item.
 
 Long press is opt-in with `data-context-menu-long-press`. Empty uses the default delay; a number sets the delay in milliseconds.
 
 ```html
 <div class="card stack gap-sm"
      data-context-menu="file-actions"
-     data-context-menu-scope="self"
      data-context-menu-long-press
      tabindex="0"
      style="min-block-size: 12rem;">

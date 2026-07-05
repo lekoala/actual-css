@@ -1,6 +1,6 @@
 import { track, reposition, repositionAt } from "./floating.js";
 import { EVENTS } from "./events.js";
-import { onMenuKeydown } from "./menu.js";
+import { hasMenuItem, hasMenuItems, onMenuKeydown } from "./menu.js";
 
 const DEFAULT_BREAKPOINT = 768;
 const BREAKPOINTS = {
@@ -214,7 +214,7 @@ function ensureSurfaceWired(menu) {
     { signal: controller.signal },
   );
 
-  if (menu.getAttribute("role") === "menu") {
+  if (hasMenuItems(menu)) {
     menu.addEventListener(
       "keydown",
       (e) => onMenuKeydown(e, { close: (target) => closeSurface(target) }),
@@ -227,10 +227,7 @@ function ensureSurfaceWired(menu) {
     (e) => {
       const state = surfaceMap.get(menu);
       if (!state || state.autoClose === "outside" || state.autoClose === "false") return;
-      const item = e.target.closest(
-        '[role="menuitem"], .flyout > button, .flyout > a, .flyout > li > button, .flyout > li > a',
-      );
-      if (item) closeSurface(menu);
+      if (hasMenuItem(e.target)) closeSurface(menu);
     },
     { signal: controller.signal },
   );
@@ -323,6 +320,7 @@ export function disconnectSurface(menu) {
   restoreSurface(menu);
 }
 
+// Global outside-click listener runs at import time; keep SSR imports inert.
 if (typeof document !== "undefined") {
   document.addEventListener("click", (e) => {
     for (const menu of openSurfaces) {

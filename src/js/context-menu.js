@@ -1,5 +1,5 @@
 import enhance from "./enhance.js";
-import { focusFirstMenuItem } from "./menu.js";
+import { focusFirstMenuItem, hasMenuItems } from "./menu.js";
 import { closeSurface, isSurfaceOpen, openSurface, prepareSurface } from "./surface.js";
 
 const LONG_PRESS_MS = 450;
@@ -41,7 +41,7 @@ function getLongPressDelay(target, menu) {
 }
 
 function focusMenu(menu) {
-  if (menu.getAttribute("role") === "menu") {
+  if (hasMenuItems(menu)) {
     focusFirstMenuItem(menu);
   }
 }
@@ -187,11 +187,9 @@ function disconnectContextTarget(target) {
   contextMap.delete(target);
 }
 
-if (typeof document !== "undefined") {
-  enhance({
-    "[data-context-menu]": (target) => {
-      connectContextTarget(target);
-      return () => disconnectContextTarget(target);
-    },
-  });
-}
+enhance({
+  "[data-context-menu]": (target) => {
+    connectContextTarget(target);
+    return () => disconnectContextTarget(target);
+  },
+});

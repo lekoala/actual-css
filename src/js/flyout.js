@@ -6,6 +6,7 @@
  */
 
 import enhance from "./enhance.js";
+import { focusFirstDescendant } from "./focus.js";
 import { focusFirstMenuItem, focusLastMenuItem, getMenuItems } from "./menu.js";
 import {
   closeSurface,
@@ -20,6 +21,11 @@ const triggerMap = new WeakMap();
 
 function openFlyout(flyout, trigger) {
   openSurface(flyout, { trigger, source: trigger });
+}
+
+function openAndFocusPanel(flyout, trigger) {
+  if (!isSurfaceOpen(flyout)) openFlyout(flyout, trigger);
+  focusFirstDescendant(flyout);
 }
 
 function onTriggerClick(e) {
@@ -40,7 +46,28 @@ function onTriggerKeydown(e) {
   const flyout = state.flyout;
   if (!flyout || !flyout.isConnected) return;
   const items = getMenuItems(flyout);
-  if (!items.length) return;
+  const isActionList = items.length > 0;
+
+  if (!isActionList) {
+    switch (e.key) {
+      case "ArrowDown":
+        e.preventDefault();
+        openAndFocusPanel(flyout, trigger);
+        break;
+      case "Enter":
+      case " ":
+        e.preventDefault();
+        if (isSurfaceOpen(flyout)) closeSurface(flyout);
+        else openAndFocusPanel(flyout, trigger);
+        break;
+      case "Tab":
+        if (isSurfaceOpen(flyout) && !e.shiftKey && focusFirstDescendant(flyout)) {
+          e.preventDefault();
+        }
+        break;
+    }
+    return;
+  }
 
   switch (e.key) {
     case "ArrowDown":
@@ -85,17 +112,13 @@ function connectTrigger(trigger) {
   const flyout = flyoutId && document.getElementById(flyoutId);
   if (!flyout || !flyout.matches(".flyout")) return;
 
-  const isAppMenu =
-    trigger.getAttribute("aria-haspopup") === "menu" || flyout.getAttribute("role") === "menu";
   const controller = new AbortController();
   triggerMap.set(trigger, { flyout, controller });
 
   prepareSurface(flyout, trigger);
 
   trigger.addEventListener("click", onTriggerClick, { signal: controller.signal });
-  if (isAppMenu) {
-    trigger.addEventListener("keydown", onTriggerKeydown, { signal: controller.signal });
-  }
+  trigger.addEventListener("keydown", onTriggerKeydown, { signal: controller.signal });
 }
 
 function disconnectTrigger(trigger) {
@@ -119,15 +142,13 @@ function disconnectFlyout(flyout) {
   disconnectSurface(flyout);
 }
 
-if (typeof document !== "undefined") {
-  enhance({
-    "[aria-controls]": (trigger) => {
-      connectTrigger(trigger);
-      return () => disconnectTrigger(trigger);
-    },
-    ".flyout": (flyout) => {
-      connectFlyout(flyout);
-      return () => disconnectFlyout(flyout);
-    },
-  });
-}
+enhance({
+  "[aria-controls]": (trigger) => {
+    connectTrigger(trigger);
+    return () => disconnectTrigger(trigger);
+  },
+  ".flyout": (flyout) => {
+    connectFlyout(flyout);
+    return () => disconnectFlyout(flyout);
+  },
+});

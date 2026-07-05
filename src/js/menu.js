@@ -1,9 +1,37 @@
 import { firstItem, lastItem, nextItem } from "./keys.js";
 
+export const MENU_ITEM_SELECTOR = [
+  '[role="menuitem"]',
+  ".flyout > button",
+  ".flyout > a",
+  ".flyout > li > button",
+  ".flyout > li > a",
+].join(",");
+
 export function getMenuItems(menu) {
-  return [
-    ...menu.querySelectorAll('[role="menuitem"]:not([disabled]):not([aria-disabled="true"])'),
-  ];
+  return [...menu.querySelectorAll(MENU_ITEM_SELECTOR)].filter(
+    (item) => !item.disabled && item.getAttribute("aria-disabled") !== "true",
+  );
+}
+
+function isAriaMenuItem(item) {
+  return item.getAttribute("role") === "menuitem";
+}
+
+function activateCurrentItem(menu) {
+  const item = document.activeElement;
+  if (!menu.contains(item) || !isAriaMenuItem(item)) return false;
+
+  item.click();
+  return true;
+}
+
+export function hasMenuItems(menu) {
+  return getMenuItems(menu).length > 0;
+}
+
+export function hasMenuItem(target) {
+  return !!target.closest?.(MENU_ITEM_SELECTOR);
 }
 
 export function focusFirstMenuItem(menu) {
@@ -41,9 +69,10 @@ export function onMenuKeydown(e, { close }) {
       break;
     case "Enter":
     case " ":
-      e.preventDefault();
-      document.activeElement?.click();
-      close(menu);
+      if (activateCurrentItem(menu)) {
+        e.preventDefault();
+        close(menu);
+      }
       break;
   }
 }
