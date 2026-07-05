@@ -62,6 +62,57 @@
   border-radius: var(--radius);
 }
 
+/*
+ * Join — visually joins adjacent controls (inputs, buttons, selects…)
+ * into a single cohesive unit. Pure layout; no form-specific tokens.
+ *
+ * Usage:  <div class="join" role="group" aria-label="…">
+ *           <span class="join-addon">$</span>
+ *           <input>
+ *           <button class="btn">…</button>
+ *         </div>
+ */
+.join {
+  --join-ss: 0;
+  --join-se: 0;
+  --join-es: 0;
+  --join-ee: 0;
+  align-items: stretch;
+  display: inline-flex;
+}
+
+.join > * {
+  border-start-start-radius: var(--join-ss);
+  border-start-end-radius: var(--join-se);
+  border-end-end-radius: var(--join-ee);
+  border-end-start-radius: var(--join-es);
+}
+
+.join > :first-child {
+  --join-ss: var(--radius);
+  --join-es: var(--radius);
+}
+
+.join > :last-child {
+  --join-se: var(--radius);
+  --join-ee: var(--radius);
+}
+
+.join > :only-child {
+  --join-ss: var(--radius);
+  --join-se: var(--radius);
+  --join-es: var(--radius);
+  --join-ee: var(--radius);
+}
+
+.join > * + * {
+  margin-inline-start: calc(var(--border-width) * -1);
+}
+
+.join > :is(:focus, :focus-within) {
+  z-index: 1;
+}
+
 /* Text alignment — uses logical properties so it follows writing direction. */
 .text-start {
   --text-align: start;

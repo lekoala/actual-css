@@ -783,29 +783,6 @@ small {
   }
 }
 
-@supports selector([role="group"]:has(> .btn + .btn)) {
-  :where([role="group"]:has( > .btn + .btn)) {
-    border-radius: var(--radius);
-    display: inline-flex;
-  }
-
-  :where([role="group"]:has( > .btn + .btn)) > .btn {
-    border-inline-end: 0;
-    border-radius: 0;
-  }
-
-  :where([role="group"]:has( > .btn + .btn)) > .btn:first-child {
-    border-start-start-radius: inherit;
-    border-end-start-radius: inherit;
-  }
-
-  :where([role="group"]:has( > .btn + .btn)) > .btn:last-child {
-    border-inline-end: var(--border-width) solid var(--btn-border);
-    border-start-end-radius: inherit;
-    border-end-end-radius: inherit;
-  }
-}
-
 :where(.badge) {
   --intent: initial;
   --intent-fg: initial;
@@ -2833,7 +2810,7 @@ button.avatar {
   }
 }
 
-.affix {
+.join-addon {
   --control-border: var(--border);
   --control-bg: var(--surface-subtle);
   --control-fg: var(--text-muted);
@@ -2849,37 +2826,6 @@ button.avatar {
   align-items: center;
   line-height: 1;
   display: inline-flex;
-}
-
-:where([role="group"]:has( > :is(.input, .select, .textarea, .affix, input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"], [type="button"], [type="submit"], [type="reset"], [type="color"]), select, textarea) + :is(.input, .select, .textarea, .affix, .btn, input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"], [type="button"], [type="submit"], [type="reset"], [type="color"]), select, textarea))) {
-  border-radius: var(--radius);
-  align-items: stretch;
-  inline-size: 100%;
-  display: flex;
-}
-
-:where([role="group"]:has( > :is(.input, .select, .textarea, .affix, input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"], [type="button"], [type="submit"], [type="reset"], [type="color"]), select, textarea) + :is(.input, .select, .textarea, .affix, .btn, input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"], [type="button"], [type="submit"], [type="reset"], [type="color"]), select, textarea))) > :is(.input, .select, .textarea, .affix, .btn, input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"], [type="button"], [type="submit"], [type="reset"], [type="color"]), select, textarea) {
-  border-radius: 0;
-  min-inline-size: 0;
-  position: relative;
-}
-
-:where([role="group"]:has( > :is(.input, .select, .textarea, .affix, input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"], [type="button"], [type="submit"], [type="reset"], [type="color"]), select, textarea) + :is(.input, .select, .textarea, .affix, .btn, input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"], [type="button"], [type="submit"], [type="reset"], [type="color"]), select, textarea))) > :is(.input, .select, .textarea, .affix, .btn, input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"], [type="button"], [type="submit"], [type="reset"], [type="color"]), select, textarea) + :is(.input, .select, .textarea, .affix, .btn, input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"], [type="button"], [type="submit"], [type="reset"], [type="color"]), select, textarea) {
-  margin-inline-start: calc(var(--border-width) * -1);
-}
-
-:where([role="group"]:has( > :is(.input, .select, .textarea, .affix, input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"], [type="button"], [type="submit"], [type="reset"], [type="color"]), select, textarea) + :is(.input, .select, .textarea, .affix, .btn, input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"], [type="button"], [type="submit"], [type="reset"], [type="color"]), select, textarea))) > :is(.input, .select, .textarea, .affix, .btn, input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"], [type="button"], [type="submit"], [type="reset"], [type="color"]), select, textarea):first-child {
-  border-start-start-radius: inherit;
-  border-end-start-radius: inherit;
-}
-
-:where([role="group"]:has( > :is(.input, .select, .textarea, .affix, input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"], [type="button"], [type="submit"], [type="reset"], [type="color"]), select, textarea) + :is(.input, .select, .textarea, .affix, .btn, input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"], [type="button"], [type="submit"], [type="reset"], [type="color"]), select, textarea))) > :is(.input, .select, .textarea, .affix, .btn, input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"], [type="button"], [type="submit"], [type="reset"], [type="color"]), select, textarea):last-child {
-  border-start-end-radius: inherit;
-  border-end-end-radius: inherit;
-}
-
-:where([role="group"]:has( > :is(.input, .select, .textarea, .affix, input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"], [type="button"], [type="submit"], [type="reset"], [type="color"]), select, textarea) + :is(.input, .select, .textarea, .affix, .btn, input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"], [type="button"], [type="submit"], [type="reset"], [type="color"]), select, textarea))) > :is(.input, .select, .textarea, .affix, .btn, input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"], [type="button"], [type="submit"], [type="reset"], [type="color"]), select, textarea):is(:focus, :focus-within) {
-  z-index: 1;
 }
 
 .form-actions {
@@ -3261,6 +3207,47 @@ button.avatar {
 .circle {
   --radius: var(--radius-full);
   border-radius: var(--radius);
+}
+
+.join {
+  --join-ss: 0;
+  --join-se: 0;
+  --join-es: 0;
+  --join-ee: 0;
+  align-items: stretch;
+  display: inline-flex;
+}
+
+.join > * {
+  border-start-start-radius: var(--join-ss);
+  border-start-end-radius: var(--join-se);
+  border-end-end-radius: var(--join-ee);
+  border-end-start-radius: var(--join-es);
+}
+
+.join > :first-child {
+  --join-ss: var(--radius);
+  --join-es: var(--radius);
+}
+
+.join > :last-child {
+  --join-se: var(--radius);
+  --join-ee: var(--radius);
+}
+
+.join > :only-child {
+  --join-ss: var(--radius);
+  --join-se: var(--radius);
+  --join-es: var(--radius);
+  --join-ee: var(--radius);
+}
+
+.join > * + * {
+  margin-inline-start: calc(var(--border-width) * -1);
+}
+
+.join > :is(:focus, :focus-within) {
+  z-index: 1;
 }
 
 .text-start {

@@ -146,27 +146,3 @@
     color: GrayText;
   }
 }
-
-/* Auto-detect button groups via role="group" */
-@supports selector([role="group"]:has(> .btn + .btn)) {
-  :where([role="group"]:has(> .btn + .btn)) {
-    display: inline-flex;
-    border-radius: var(--radius);
-  }
-
-  :where([role="group"]:has(> .btn + .btn)) > .btn {
-    border-radius: 0;
-    border-inline-end: 0;
-  }
-
-  :where([role="group"]:has(> .btn + .btn)) > .btn:first-child {
-    border-start-start-radius: inherit;
-    border-end-start-radius: inherit;
-  }
-
-  :where([role="group"]:has(> .btn + .btn)) > .btn:last-child {
-    border-inline-end: var(--border-width) solid var(--btn-border);
-    border-start-end-radius: inherit;
-    border-end-end-radius: inherit;
-  }
-}

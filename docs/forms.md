@@ -140,7 +140,7 @@
 - For a switch, prefer `class="switch"` plus `role="switch"`. The class is the explicit API; the attribute is recognized as a fallback so both compose.
 - Core range controls stay native and are enhanced by `accent-color`. An optional richer range skin may come later if real projects need it.
 - `.form-actions` carries a default top margin. Override it with `--form-actions-margin-block-start`. It is class-only and may live inside or outside `<form>`. See Detached Actions below.
-- Joined form controls use `role="group"` plus direct input/select/textarea/`.btn`/`.affix` children. The role carries the accessibility grouping; the structural selector opts into the joined visual treatment without catching checkbox/radio groups.
+- `.join` visually joins adjacent controls into a single unit. Use `.join-addon` for static prefix/suffix content. The container still carries `role="group"` for accessibility.
 
 ## States And Sizes
 
@@ -493,15 +493,15 @@ The mixed shape `<label for="x">…<input id="x"></label>` is allowed by the spe
 
 ## Joined Controls
 
-> Use `role="group"` when one field is composed from an input, affix, select, textarea, or action button.
+> Use `.join` when controls need to be visually joined into a single unit.
 
-The group should be labelled with `aria-labelledby` or `aria-label`. `.affix` is for static prefix/suffix content such as currency symbols, units, or protocol text. Action buttons inside the group should use `.btn`.
+Add `.join` to the wrapper that groups the controls. Use `.join-addon` for static prefix/suffix content such as currency symbols, units, or protocol text. Action buttons inside the group should use `.btn`. The wrapper should still carry `role="group"` with a label for accessibility.
 
 ```html
 <div class="field">
   <label class="field-label" id="amount-label" for="amount">Amount</label>
-  <div role="group" aria-labelledby="amount-label">
-    <span class="affix">$</span>
+  <div class="join" role="group" aria-labelledby="amount-label">
+    <span class="join-addon">$</span>
     <input id="amount" name="amount" inputmode="decimal" />
     <button class="btn outline" type="button">Clear</button>
   </div>
@@ -509,9 +509,7 @@ The group should be labelled with `aria-labelledby` or `aria-label`. `.affix` is
 </div>
 ```
 
-The selector is structural, not a bare `[role="group"]`: ordinary radio,
-checkbox, and switch groups keep their normal stacked/choice layouts. Use
-`<fieldset>` and `.choice` for those.
+`.join` handles border-radius and border collapsing between adjacent children. It works with any direct child — `.input`, `.btn`, `.select`, `.join-addon`, or bare native controls.
 
 ## Input Policy
 

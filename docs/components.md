@@ -318,7 +318,7 @@ Use `.badge soft` for tag visuals. Add a direct dismiss button only when the tag
 - Always set `type="button"` when a button is not submitting a form.
 - Supports shared intents, shared variants, button-only variants, and sizes.
 - Adds button-only `.ghost` and `.link` variants.
-- Button groups use `role="group"` and are progressively enhanced with `:has()`.
+- Button groups use `.join` to visually join adjacent buttons.
 
 ```html{.cluster}
 <button type="button">Unstyled</button>
@@ -340,10 +340,10 @@ Use `.badge soft` for tag visuals. Add a direct dismiss button only when the tag
 <button class="btn" type="button" disabled>Disabled</button>
 ```
 
-Button group using `role="group"`
+Button group using `.join`
 
 ```html
-<div role="group" aria-label="Text alignment">
+<div class="join" role="group" aria-label="Text alignment">
   <button class="btn" type="button">Left</button>
   <button class="btn outline" type="button">Center</button>
   <button class="btn soft" type="button">Right</button>

@@ -1,19 +1,15 @@
 {
-  "timestamp": "2026-07-05T09:50:37.457Z",
-  "totalRaw": 141956,
-  "totalMinified": 68227,
-  "totalBrotli": 10645,
+  "timestamp": "2026-07-05T10:16:43.012Z",
+  "totalRaw": 134059,
+  "totalMinified": 64640,
+  "totalBrotli": 10581,
   "themesMinified": 16153,
   "themesBrotli": 2556,
-  "shippedMinified": 68227,
-  "shippedBrotli": 10645,
+  "shippedMinified": 64640,
+  "shippedBrotli": 10581,
   "maxShippedBrotli": 13312,
   "fileCount": 64,
   "files": [
-    {
-      "file": "forms/group.css",
-      "raw": 8914
-    },
     {
       "file": "forms/choice.css",
       "raw": 6717
@@ -31,12 +27,16 @@
       "raw": 4369
     },
     {
-      "file": "components/button.css",
-      "raw": 4333
+      "file": "utilities.css",
+      "raw": 4193
     },
     {
       "file": "layout.css",
       "raw": 4170
+    },
+    {
+      "file": "components/button.css",
+      "raw": 3650
     },
     {
       "file": "forms/switch.css",
@@ -65,10 +65,6 @@
     {
       "file": "components/modal.css",
       "raw": 3147
-    },
-    {
-      "file": "utilities.css",
-      "raw": 3108
     },
     {
       "file": "forms/control.css",
@@ -239,6 +235,10 @@
       "raw": 623
     },
     {
+      "file": "forms/join.css",
+      "raw": 616
+    },
+    {
       "file": "actual.layer.css",
       "raw": 552
     },
@@ -252,7 +252,7 @@
     },
     {
       "file": "forms/index.css",
-      "raw": 370
+      "raw": 369
     },
     {
       "file": "actual.css",
