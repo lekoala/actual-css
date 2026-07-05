@@ -4,6 +4,25 @@ import { cleanupDOM, mockRect, setupDOM } from "./helpers/dom.js";
 
 setupDOM();
 
+let resizeCallback;
+let resizeObserver;
+const resizeObserved = new Set();
+
+window.ResizeObserver = class ResizeObserver {
+  constructor(cb) {
+    resizeCallback = cb;
+    resizeObserver = this;
+  }
+
+  observe(el) {
+    resizeObserved.add(el);
+  }
+
+  unobserve(el) {
+    resizeObserved.delete(el);
+  }
+};
+
 const { reposition, repositionAt, track } = await import(
   `../src/js/floating.js?test=${Date.now()}`
 );
@@ -35,6 +54,10 @@ function nextFrame() {
 
 afterEach(() => {
   while (untracks.length) untracks.pop()();
+  delete window.visualViewport;
+  delete document.body.clientWidth;
+  document.body.style.margin = "";
+  resizeObserved.clear();
   document.body.innerHTML = "";
 });
 
@@ -73,6 +96,23 @@ test("scroll and resize dispatch actual:reposition", async () => {
   expect(events).toEqual(["scroll", "resize"]);
 });
 
+test("track dispatches reposition when a floating element resizes", async () => {
+  document.body.innerHTML = '<div id="float"></div>';
+  const float = document.getElementById("float");
+  const events = [];
+  untracks.push(track(float));
+  float.addEventListener(EVENTS.reposition, (event) => events.push(event.detail.type));
+
+  expect(resizeObserved.has(float)).toBe(true);
+
+  resizeCallback([{ target: float }], resizeObserver);
+  await nextFrame();
+  await nextFrame();
+
+  expect(events).toEqual(["element-resize"]);
+  expect(resizeObserved.has(float)).toBe(true);
+});
+
 test("Escape dispatches actual:hide", () => {
   document.body.innerHTML = '<div id="float"></div>';
   const float = document.getElementById("float");
@@ -101,6 +141,7 @@ test("reposition sets coordinates, placement, and arrow position", () => {
   expect(float.style.top).toBe("132px");
   expect(float.dataset.placement).toBe("bottom-start");
   expect(float.style.getPropertyValue("--arrow-x")).toBe("50%");
+  expect(float.style.getPropertyValue("--available-height")).toBe("632px");
 });
 
 test("reposition measures transformed floating elements from layout size", () => {
@@ -141,6 +182,78 @@ test("reposition skips hidden elements without rejecting visible fixed elements"
 
   expect(hidden.style.left).toBe("");
   expect(fixed.style.left).toBe("100px");
+});
+
+test("reposition uses body stable-scrollbar width when clamping to the viewport", () => {
+  setViewport(1024, 768);
+  document.body.style.margin = "0";
+  Object.defineProperty(document.body, "clientWidth", {
+    configurable: true,
+    value: 1009,
+  });
+  document.body.innerHTML = '<button id="ref"></button><div id="float"></div>';
+  const ref = document.getElementById("ref");
+  const float = document.getElementById("float");
+  mockRect(ref, { x: 950, y: 100, width: 60, height: 24 });
+  mockRect(float, { x: 0, y: 0, width: 120, height: 80 });
+
+  reposition(ref, float, { placement: "bottom", distance: 8 });
+
+  expect(float.style.left).toBe("885px");
+});
+
+test("reposition uses visual viewport offsets as the fixed boundary", () => {
+  setViewport(1024, 768);
+  Object.defineProperty(window, "visualViewport", {
+    configurable: true,
+    value: {
+      width: 500,
+      height: 400,
+      offsetLeft: 20,
+      offsetTop: 30,
+    },
+  });
+  document.body.innerHTML = '<button id="ref"></button><div id="float"></div>';
+  const ref = document.getElementById("ref");
+  const float = document.getElementById("float");
+  mockRect(ref, { x: 480, y: 100, width: 20, height: 24 });
+  mockRect(float, { x: 0, y: 0, width: 100, height: 80 });
+
+  reposition(ref, float, { placement: "bottom", distance: 8 });
+
+  expect(float.style.left).toBe("416px");
+});
+
+test("reposition dispatches hide when the reference is outside the boundary", () => {
+  setViewport();
+  document.body.innerHTML = '<button id="ref"></button><div id="float"></div>';
+  const ref = document.getElementById("ref");
+  const float = document.getElementById("float");
+  let hides = 0;
+  float.addEventListener(EVENTS.hide, () => {
+    hides += 1;
+  });
+  mockRect(ref, { x: -220, y: 100, width: 60, height: 24 });
+  mockRect(float, { x: 0, y: 0, width: 120, height: 80 });
+
+  reposition(ref, float, { placement: "bottom-start", distance: 8 });
+
+  expect(hides).toBe(1);
+  expect(float.style.left).toBe("");
+});
+
+test("reposition clamps side placements on the y axis", () => {
+  setViewport(1024, 768);
+  document.body.innerHTML = '<button id="ref"></button><div id="float"></div>';
+  const ref = document.getElementById("ref");
+  const float = document.getElementById("float");
+  mockRect(ref, { x: 100, y: 730, width: 20, height: 20 });
+  mockRect(float, { x: 0, y: 0, width: 100, height: 100 });
+
+  reposition(ref, float, { placement: "right", distance: 8 });
+
+  expect(float.style.top).toBe("664px");
+  expect(float.style.getPropertyValue("--arrow-y")).toBe("24%");
 });
 
 test("repositionAt positions a floating element from a point reference", () => {

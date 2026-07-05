@@ -25,6 +25,11 @@
     min(20rem, calc(var(--viewport-inline) - var(--space-6)))
   );
   max-inline-size: min(20rem, calc(var(--viewport-inline) - var(--space-6)));
+  max-block-size: min(
+    24rem,
+    var(--available-height, calc(var(--viewport-block) - var(--space-6)))
+  );
+  overflow: auto;
   margin: 0;
   padding: var(--space-1);
   border: var(--border-width) solid var(--border);
