@@ -4,12 +4,17 @@ const FOCUSABLE_SELECTOR = [
   "input:not([disabled])",
   "select:not([disabled])",
   "textarea:not([disabled])",
-  "[tabindex]:not([tabindex='-1'])",
+  "summary",
+  "[contenteditable]:not([contenteditable='false'])",
+  "[tabindex]",
 ].join(",");
 
 export function getFocusable(root) {
   return [...root.querySelectorAll(FOCUSABLE_SELECTOR)].filter(
-    (el) => !el.hidden && el.getAttribute("aria-hidden") !== "true",
+    (el) =>
+      el.tabIndex >= 0 &&
+      el.checkVisibility?.() !== false &&
+      !el.closest('[inert], [aria-hidden="true"]'),
   );
 }
 

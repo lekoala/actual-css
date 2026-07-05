@@ -40,9 +40,26 @@ function getLongPressDelay(target, menu) {
   return Number.isFinite(delay) ? delay : LONG_PRESS_MS;
 }
 
-function focusMenu(menu) {
-  if (hasMenuItems(menu)) {
+function focusMenuContainer(menu) {
+  if (!menu.hasAttribute("tabindex")) {
+    menu.tabIndex = -1;
+  }
+  menu.focus();
+}
+
+// Pointer-triggered opens (right-click, long-press) focus the menu container,
+// not the first item: a pointer-set focus ring is invisible (:focus-visible
+// doesn't match), so focusing "Open" makes the first ArrowDown look like it
+// skips to the second item. Focusing the container keeps the ring hidden and
+// lets keys.js's out-of-list fallback (indexOf === -1) land ArrowDown/ArrowUp
+// on the first/last item, matching native OS context menus. Keyboard-triggered
+// opens (openFromKeyboard) still focus the first item directly.
+function focusMenu(menu, mode) {
+  if (!hasMenuItems(menu)) return;
+  if (mode === "first-item") {
     focusFirstMenuItem(menu);
+  } else {
+    focusMenuContainer(menu);
   }
 }
 
@@ -57,7 +74,7 @@ function openContextMenu(target, menu, opts = {}) {
     mobile: opts.mobile || menu.dataset.flyoutMobile || "auto",
     scope: opts.scope || getContextScope(target),
   });
-  focusMenu(menu);
+  focusMenu(menu, opts.focus);
 }
 
 function openFromKeyboard(target, menu) {
@@ -67,6 +84,7 @@ function openFromKeyboard(target, menu) {
     y: rect.bottom,
     placement: "bottom-start",
     distance: 4,
+    focus: "first-item",
   });
 }
 

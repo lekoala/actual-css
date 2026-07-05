@@ -146,11 +146,9 @@ Controls share sizing so buttons, inputs, selects, and compact app UI always ali
 }
 ```
 
-| Variant | control height | font size                             |
-|---------|----------------|---------------------------------------|
-| `.lg`   | 44px           | 18px (`--font-size-lg`)               |
-| default | 38px           | 16px (`--font-size-md`, the baseline) |
-| `.sm`   | 32px           | 14px (`--font-size-sm`)               |
+- `.lg` — 44px control height, `--font-size-lg` (18px)
+- default — 38px control height, `--font-size-md` (16px, the baseline)
+- `.sm` — 32px control height, `--font-size-sm` (14px)
 
 Size modifiers swap the shared control tokens:
 

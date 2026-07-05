@@ -115,3 +115,28 @@ test("keyboard context menu focuses the first direct action item", async () => {
   expect(menu.classList.contains("is-open")).toBe(true);
   expect(document.activeElement).toBe(first);
 });
+
+test("pointer context menu focuses the menu container, not the first item", async () => {
+  await loadContextMenu(`
+    <div id="target" data-context-menu="menu" tabindex="0">File.pdf</div>
+    <menu id="menu" class="flyout" hidden>
+      <li><button id="first" type="button">First</button></li>
+      <li><button id="second" type="button">Second</button></li>
+    </menu>
+  `);
+  const target = document.getElementById("target");
+  const menu = document.getElementById("menu");
+  const first = document.getElementById("first");
+  setupGeometry(target, menu);
+
+  target.dispatchEvent(
+    new MouseEvent("contextmenu", { bubbles: true, cancelable: true, clientX: 20, clientY: 30 }),
+  );
+
+  expect(menu.hidden).toBe(false);
+  expect(document.activeElement).toBe(menu);
+
+  press(menu, "ArrowDown");
+
+  expect(document.activeElement).toBe(first);
+});

@@ -19,7 +19,9 @@ import "actual-css/js/flyout";
 import "actual-css/js/tooltip";
 ```
 
-Enhancer modules self-register when imported. They do not require init calls and should stay safe to import independently.
+Enhancer modules self-register when imported. They do not require init calls and
+are safe to import during server-side rendering: outside a browser, registration
+is a no-op until the module is loaded again with a DOM.
 
 ## Flyout
 
