@@ -15,10 +15,20 @@
 
 /**
  * @param {Record<string, (el: Element) => (() => void) | void>} enhancers
- * @param {Document | Element | DocumentFragment} [root=document.documentElement]
+ * @param {Document | Element | DocumentFragment} [root]
  * @returns {{ refresh: (node: Node) => void, forget: (el: Element) => void, disconnect: () => void }}
  */
-export default function enhance(enhancers, root = document.documentElement) {
+export default function enhance(enhancers, root) {
+  if (typeof document === "undefined") {
+    return {
+      refresh() {},
+      forget() {},
+      disconnect() {},
+    };
+  }
+
+  root ??= document.documentElement;
+
   const selectors = Object.keys(enhancers);
   const selectorString = selectors.join(",");
 

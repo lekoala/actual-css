@@ -16,6 +16,8 @@
 import enhance from "./enhance.js";
 
 function setupNav(nav) {
+  if (typeof IntersectionObserver === "undefined") return;
+
   const links = [...nav.querySelectorAll("a[href^='#']")];
   if (!links.length) return;
 
@@ -54,8 +56,6 @@ function setupNav(nav) {
   return () => io.disconnect();
 }
 
-if (typeof document !== "undefined" && typeof IntersectionObserver !== "undefined") {
-  enhance({
-    ".scrollspy": setupNav,
-  });
-}
+enhance({
+  ".scrollspy": setupNav,
+});

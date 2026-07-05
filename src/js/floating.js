@@ -241,6 +241,7 @@ function getResizeObserver() {
   return resizeObserver;
 }
 
+// Global document listeners run at import time; keep SSR imports inert.
 if (typeof document !== "undefined") {
   document.addEventListener("scroll", rafNotify, { passive: true, capture: true });
   document.addEventListener("keydown", (e) => {
@@ -249,6 +250,7 @@ if (typeof document !== "undefined") {
     }
   });
 }
+// Global window listener runs at import time; keep SSR imports inert.
 if (typeof window !== "undefined") {
   window.addEventListener("resize", rafNotify, { passive: true });
 }

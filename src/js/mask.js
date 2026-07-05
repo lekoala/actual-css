@@ -110,8 +110,6 @@ function connectMask(el) {
   return () => controller.abort();
 }
 
-if (typeof document !== "undefined") {
-  enhance({
-    [SELECTOR]: connectMask,
-  });
-}
+enhance({
+  [SELECTOR]: connectMask,
+});

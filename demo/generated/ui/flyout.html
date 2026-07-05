@@ -52,7 +52,8 @@
   <li>Use <code>&lt;menu class=&quot;flyout&quot;&gt;</code> with <code>&lt;li&gt;</code> items.</li>
   <li>Items are regular <code>&lt;button&gt;</code> or <code>&lt;a&gt;</code> elements.</li>
   <li>Use <code>.sm</code> or <code>.lg</code> for density changes.</li>
-  <li>Add <code>role=&quot;menu&quot;</code> / <code>role=&quot;menuitem&quot;</code> only when you intentionally need the ARIA menu pattern and roving arrow-key behavior.</li>
+  <li>Direct action items get roving arrow-key focus.</li>
+  <li>Add <code>role=&quot;menu&quot;</code> / <code>role=&quot;menuitem&quot;</code> only when you intentionally need the ARIA menu pattern.</li>
 </ul>
 <h3>Nav panel</h3>
 <ul>
@@ -200,14 +201,13 @@
     </section>
     <div class="component-prose">
       <h3>Context menu</h3>
-<p>The same flyout can be opened from a visible button and a contextual target. Prefer shipping both so desktop users get right click and mobile users still have a discoverable trigger. Add <code>data-context-menu-scope</code> when the flyout should stay inside a specific region. Empty or <code>self</code> constrains to the target itself, <code>parent</code> constrains to the parent, and a selector constrains to the closest matching ancestor or first matching element. Long press is opt-in with <code>data-context-menu-long-press</code>. Empty uses the default delay; a number sets the delay in milliseconds.</p>
+<p>The same flyout can be opened from a visible button and a contextual target. Prefer shipping both so desktop users get right click and mobile users still have a discoverable trigger. Add <code>data-context-menu-scope</code> only when the flyout should stay inside a specific region. Empty or <code>self</code> constrains to the target itself, <code>parent</code> constrains to the parent, and a selector constrains to the closest matching ancestor or first matching element. The scope also constrains the available height, so omit it when the menu is allowed to escape the card or list item. Long press is opt-in with <code>data-context-menu-long-press</code>. Empty uses the default delay; a number sets the delay in milliseconds.</p>
     </div>
     <section class="component-section">
       <div class="example-group">
         <div class="example-render">
           <div class="card stack gap-sm"
      data-context-menu="file-actions"
-     data-context-menu-scope="self"
      data-context-menu-long-press
      tabindex="0"
      style="min-block-size: 12rem;">
@@ -237,7 +237,6 @@
         <div class="example-code">
           <pre><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>card stack gap-sm<span class="token punctuation">"</span></span>
      <span class="token attr-name">data-context-menu</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>file-actions<span class="token punctuation">"</span></span>
-     <span class="token attr-name">data-context-menu-scope</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>self<span class="token punctuation">"</span></span>
      <span class="token attr-name">data-context-menu-long-press</span>
      <span class="token attr-name">tabindex</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>0<span class="token punctuation">"</span></span>
      <span class="token special-attr"><span class="token attr-name">style</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span><span class="token value css language-css"><span class="token property">min-block-size</span><span class="token punctuation">:</span> 12rem<span class="token punctuation">;</span></span><span class="token punctuation">"</span></span></span><span class="token punctuation">></span></span>

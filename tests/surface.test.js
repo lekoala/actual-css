@@ -1,5 +1,5 @@
 import { afterAll, afterEach, expect, test } from "bun:test";
-import { cleanupDOM, click, mockRect, nextMicrotask, setupDOM } from "./helpers/dom.js";
+import { cleanupDOM, click, mockRect, nextMicrotask, press, setupDOM } from "./helpers/dom.js";
 
 setupDOM();
 
@@ -221,6 +221,31 @@ test("default auto-close closes from menu item clicks and outside clicks", () =>
   openSurface(menu, { trigger });
   click(document.getElementById("outside"));
   expect(isSurfaceOpen(menu)).toBe(false);
+});
+
+test("arrow keys rove direct flyout action items", () => {
+  setBody(`
+    <button aria-controls="menu"></button>
+    <menu id="menu" class="flyout">
+      <li><button id="first" type="button">First</button></li>
+      <li><button id="second" type="button">Second</button></li>
+    </menu>
+  `);
+  const trigger = document.querySelector("button[aria-controls]");
+  const menu = document.getElementById("menu");
+  const first = document.getElementById("first");
+  const second = document.getElementById("second");
+  mockPlacement(trigger, menu);
+
+  openSurface(menu, { trigger });
+  first.focus();
+  press(first, "ArrowDown");
+
+  expect(document.activeElement).toBe(second);
+
+  press(second, "ArrowUp");
+
+  expect(document.activeElement).toBe(first);
 });
 
 test("outside-only auto-close keeps inside clicks open", () => {

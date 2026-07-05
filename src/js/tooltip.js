@@ -169,6 +169,7 @@ function handleTriggerIntent(e) {
   if (tip) show(tip, trigger);
 }
 
+// Delegated discovery listeners run at import time; keep SSR imports inert.
 if (typeof document !== "undefined") {
   document.addEventListener("mouseover", handleTriggerIntent);
   document.addEventListener("focusin", handleTriggerIntent);
