@@ -1180,8 +1180,34 @@ button.badge:disabled, .badge[aria-disabled="true"] {
 .surface-backdrop {
   z-index: calc(var(--z-menu) - 1);
   background: var(--backdrop-fill);
+  opacity: 1;
+  transition: opacity var(--duration) var(--ease, ease);
   position: fixed;
   inset: 0;
+}
+
+.surface-backdrop[hidden] {
+  opacity: 0;
+  display: none;
+}
+
+@starting-style {
+  .surface-backdrop:not([hidden]) {
+    opacity: 0;
+  }
+}
+
+@supports (transition-behavior: allow-discrete) {
+  .surface-backdrop {
+    transition: opacity var(--duration) var(--ease, ease),
+      display var(--duration) allow-discrete;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .surface-backdrop {
+    transition: none;
+  }
 }
 
 dialog.modal {
@@ -2841,17 +2867,32 @@ button.avatar {
   min-inline-size: min(var(--flyout-trigger-width, 0px),
     min(20rem, calc(var(--viewport-inline) - var(--space-6))));
   max-inline-size: min(20rem, calc(var(--viewport-inline) - var(--space-6)));
+  max-block-size: min(24rem,
+    var(--available-height, calc(var(--viewport-block) - var(--space-6))));
   padding: var(--space-1);
   border: var(--border-width) solid var(--border);
   border-radius: var(--radius);
   background: var(--surface-raised);
   box-shadow: var(--shadow-popout);
+  opacity: 1;
+  transition: opacity var(--duration-fast, var(--duration)) var(--ease, ease),
+    scale var(--duration-fast, var(--duration)) var(--ease, ease),
+    translate var(--duration-fast, var(--duration)) var(--ease, ease);
   margin: 0;
   list-style: none;
   display: grid;
   position: absolute;
   inset-block-start: calc(100% + var(--space-1));
   inset-inline-start: 0;
+  overflow: auto;
+  scale: 1;
+}
+
+@starting-style {
+  .flyout.is-open {
+    opacity: 0;
+    scale: .98;
+  }
 }
 
 .flyout.is-sheet {
@@ -2870,7 +2911,36 @@ button.avatar {
 }
 
 .flyout[hidden] {
+  opacity: 0;
   display: none;
+  scale: .98;
+}
+
+.flyout.is-sheet[hidden] {
+  scale: 1;
+  translate: 0 var(--space-3);
+}
+
+@starting-style {
+  .flyout.is-sheet.is-open {
+    scale: 1;
+    translate: 0 var(--space-3);
+  }
+}
+
+@supports (transition-behavior: allow-discrete) {
+  .flyout {
+    transition: opacity var(--duration-fast, var(--duration)) var(--ease, ease),
+      scale var(--duration-fast, var(--duration)) var(--ease, ease),
+      translate var(--duration-fast, var(--duration)) var(--ease, ease),
+      display var(--duration-fast, var(--duration)) allow-discrete;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .flyout {
+    transition: none;
+  }
 }
 
 .flyout > li {
@@ -3000,8 +3070,39 @@ button.avatar {
   pointer-events: none;
   -webkit-user-select: none;
   user-select: none;
+  opacity: 1;
+  transition: opacity var(--duration-fast, var(--duration)) var(--ease, ease),
+    scale var(--duration-fast, var(--duration)) var(--ease, ease);
   padding: .25em .6em;
   position: fixed;
+  scale: 1;
+}
+
+.tooltip[hidden] {
+  opacity: 0;
+  display: none;
+  scale: .96;
+}
+
+@starting-style {
+  .tooltip:not([hidden]) {
+    opacity: 0;
+    scale: .96;
+  }
+}
+
+@supports (transition-behavior: allow-discrete) {
+  .tooltip {
+    transition: opacity var(--duration-fast, var(--duration)) var(--ease, ease),
+      scale var(--duration-fast, var(--duration)) var(--ease, ease),
+      display var(--duration-fast, var(--duration)) allow-discrete;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tooltip {
+    transition: none;
+  }
 }
 
 .tooltip:before {
@@ -3030,7 +3131,7 @@ button.avatar {
   inline-size: var(--tooltip-arrow-size);
   block-size: calc(var(--tooltip-arrow-size) * 2);
   clip-path: polygon(100% 50%, 0 0, 0 100%);
-  inset-block-start: 50%;
+  inset-block-start: var(--arrow-y, 50%);
   inset-inline-end: calc(-.98 * var(--tooltip-arrow-size));
   translate: 0 -50%;
 }
@@ -3039,7 +3140,7 @@ button.avatar {
   inline-size: var(--tooltip-arrow-size);
   block-size: calc(var(--tooltip-arrow-size) * 2);
   clip-path: polygon(0 50%, 100% 0, 100% 100%);
-  inset-block-start: 50%;
+  inset-block-start: var(--arrow-y, 50%);
   inset-inline-start: calc(-.98 * var(--tooltip-arrow-size));
   translate: 0 -50%;
 }
