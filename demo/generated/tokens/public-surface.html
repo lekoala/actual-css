@@ -250,7 +250,7 @@
       </div>
     </section>
     <div class="component-prose">
-      <p><code>reset.css</code> zeroes raw <code>animation-duration</code>/<code>transition-duration</code> under <code>prefers-reduced-motion: reduce</code> in addition to the <code>--duration</code> token above, so decorative loops (<code>.spinner</code>, <code>.skeleton</code>) also stop.</p>
+      <p><code>reset.css</code> clamps raw animation and transition durations to <code>0.01ms</code>, resets their delays, and restores <code>html</code> scroll behavior under <code>prefers-reduced-motion: reduce</code> in addition to the <code>--duration</code> token above. Decorative loops effectively complete immediately without blanket-disabling animation support.</p>
 <h3>Icons</h3>
 <p>Icons used by CSS-only controls are public tokens because users may need to replace them.</p>
     </div>

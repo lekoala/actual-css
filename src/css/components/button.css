@@ -22,6 +22,7 @@
   --btn-bg: var(--ui-bg, var(--intent, var(--neutral)));
   --btn-fg: var(--ui-fg, var(--intent-fg, var(--neutral-fg)));
   --btn-border: var(--ui-border, transparent);
+  --btn-radius: var(--radius);
 
   position: relative;
   display: inline-flex;
@@ -33,7 +34,7 @@
   padding-block: max(var(--space-1), calc((var(--btn-min-size) - 1lh) / 2));
   padding-inline: var(--btn-pad-x);
   border: var(--border-width) solid var(--btn-border);
-  border-radius: var(--radius);
+  border-radius: var(--btn-radius);
   background: var(--btn-bg);
   color: var(--btn-fg);
   font: inherit;
@@ -98,13 +99,17 @@
   --ui-bg: transparent;
   --ui-fg: var(--intent, var(--text));
   --ui-border: transparent;
+  --btn-radius: var(--radius-sm);
 
   min-block-size: auto;
   padding-inline: 0;
   border-color: transparent;
-  border-radius: var(--radius-sm);
   text-decoration: underline;
   text-underline-offset: 0.18em;
+}
+
+.btn.circle {
+  --btn-radius: var(--radius-full);
 }
 
 .btn.link:hover {

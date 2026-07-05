@@ -207,7 +207,11 @@ Motion tokens keep transitions consistent and easy to disable.
 }
 ```
 
-`reset.css` zeroes raw `animation-duration`/`transition-duration` under `prefers-reduced-motion: reduce` in addition to the `--duration` token above, so decorative loops (`.spinner`, `.skeleton`) also stop.
+`reset.css` clamps raw animation and transition durations to `0.01ms`, resets
+their delays, and restores `html` scroll behavior under
+`prefers-reduced-motion: reduce` in addition to the `--duration` token above.
+Decorative loops effectively complete immediately without blanket-disabling
+animation support.
 
 ### Icons
 
@@ -331,7 +335,11 @@ A full theme can override:
 }
 ```
 
-Dark themes should set `color-scheme: dark`. Light themes should set `color-scheme: light`.
+Without `data-theme`, the default theme advertises `color-scheme: light dark`
+and follows the user's OS preference in browsers that support `light-dark()`.
+Dark themes should set `color-scheme: dark`. Light themes should set
+`color-scheme: light`. Browsers without `light-dark()` receive the light
+fallback.
 
 ## Component Mapping
 
@@ -368,4 +376,3 @@ This makes the contract obvious:
 - Do not add Tailwind-like color scales as public API.
 - Do not rely on Sass, PostCSS, or generated token files.
 - Do not make dark mode required for old browsers. Light mode is the fallback.
-

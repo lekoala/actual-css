@@ -10,7 +10,10 @@ Works everywhere, works best on modern browsers. Wide browser support (even olde
 
 ## Dark mode
 
-Dark mode is for modern browsers only (light mode is the default otherwise). Use `light-dark()` for theme tokens. Keep `@media (prefers-color-scheme)` only for the `color-scheme` declaration.
+Dark mode is for modern browsers only (light mode is the fallback otherwise).
+Use `color-scheme: light dark` plus `light-dark()` for theme tokens so the
+default theme follows the OS without `data-theme`. Explicit themes pin
+`color-scheme` to light or dark.
 
 ## Progressive enhancement
 

@@ -56,10 +56,9 @@
   color: var(--text-muted);
 }
 
-/* Circle: forces a fully round shape by overriding the --radius token. */
+/* Circle: forces a fully round shape without mutating global radius tokens. */
 .circle {
-  --radius: var(--radius-full);
-  border-radius: var(--radius);
+  border-radius: var(--radius-full);
 }
 
 /*
@@ -73,12 +72,17 @@
  *         </div>
  */
 .join {
+  --join-radius: var(--radius);
   --join-ss: 0;
   --join-se: 0;
   --join-es: 0;
   --join-ee: 0;
   align-items: stretch;
   display: inline-flex;
+}
+
+.join.circle {
+  --join-radius: var(--radius-full);
 }
 
 .join > * {
@@ -89,20 +93,20 @@
 }
 
 .join > :first-child {
-  --join-ss: var(--radius);
-  --join-es: var(--radius);
+  --join-ss: var(--join-radius);
+  --join-es: var(--join-radius);
 }
 
 .join > :last-child {
-  --join-se: var(--radius);
-  --join-ee: var(--radius);
+  --join-se: var(--join-radius);
+  --join-ee: var(--join-radius);
 }
 
 .join > :only-child {
-  --join-ss: var(--radius);
-  --join-se: var(--radius);
-  --join-es: var(--radius);
-  --join-ee: var(--radius);
+  --join-ss: var(--join-radius);
+  --join-se: var(--join-radius);
+  --join-es: var(--join-radius);
+  --join-ee: var(--join-radius);
 }
 
 .join > * + * {

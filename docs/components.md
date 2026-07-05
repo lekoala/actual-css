@@ -231,6 +231,7 @@ Variants
 - Can be used inline in headings.
 - Can be used as a count badge.
 - Can be used as a stable dot badge when empty and given an accessible name.
+- Empty badges render as dots. The element must be truly empty: no text and no whitespace.
 
 ```html
 <span class="badge">Default</span>
@@ -260,6 +261,12 @@ Composed
   <i class="ti ti-bell" aria-hidden="true"></i>
   <span class="badge danger" aria-label="Errors!"></span>
 </button>
+```
+
+Empty badge dot
+
+```html
+<span class="badge success" aria-label="Online"></span>
 ```
 
 Size variants

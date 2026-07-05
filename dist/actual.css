@@ -26,11 +26,16 @@ button, input, textarea, select {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  *, :before, :after {
+  html {
     scroll-behavior: auto !important;
+  }
+
+  *, :before, :after {
     transition-duration: .01ms !important;
+    transition-delay: 0s !important;
     animation-duration: .01ms !important;
     animation-iteration-count: 1 !important;
+    animation-delay: 0s !important;
   }
 }
 
@@ -165,6 +170,10 @@ small {
   }
 }
 
+:root {
+  color-scheme: light dark;
+}
+
 [data-theme="light"] {
   color-scheme: light;
 }
@@ -174,7 +183,7 @@ small {
 }
 
 @supports not (color: light-dark(red, blue)) {
-  [data-theme="dark"] {
+  :root, [data-theme="light"], [data-theme="dark"] {
     color-scheme: light;
   }
 }
@@ -674,12 +683,13 @@ small {
   --btn-bg: var(--ui-bg, var(--intent, var(--neutral)));
   --btn-fg: var(--ui-fg, var(--intent-fg, var(--neutral-fg)));
   --btn-border: var(--ui-border, transparent);
+  --btn-radius: var(--radius);
   min-block-size: var(--btn-min-size);
   padding-block: var(--space-2);
   padding-block: max(var(--space-1), calc((var(--btn-min-size) - 1lh) / 2));
   padding-inline: var(--btn-pad-x);
   border: var(--border-width) solid var(--btn-border);
-  border-radius: var(--radius);
+  border-radius: var(--btn-radius);
   background: var(--btn-bg);
   color: var(--btn-fg);
   font: inherit;
@@ -744,12 +754,16 @@ small {
   --ui-bg: transparent;
   --ui-fg: var(--intent, var(--text));
   --ui-border: transparent;
-  border-radius: var(--radius-sm);
+  --btn-radius: var(--radius-sm);
   text-underline-offset: .18em;
   border-color: #0000;
   min-block-size: auto;
   padding-inline: 0;
   text-decoration: underline;
+}
+
+.btn.circle {
+  --btn-radius: var(--radius-full);
 }
 
 .btn.link:hover {
@@ -3210,17 +3224,21 @@ button.avatar {
 }
 
 .circle {
-  --radius: var(--radius-full);
-  border-radius: var(--radius);
+  border-radius: var(--radius-full);
 }
 
 .join {
+  --join-radius: var(--radius);
   --join-ss: 0;
   --join-se: 0;
   --join-es: 0;
   --join-ee: 0;
   align-items: stretch;
   display: inline-flex;
+}
+
+.join.circle {
+  --join-radius: var(--radius-full);
 }
 
 .join > * {
@@ -3231,20 +3249,20 @@ button.avatar {
 }
 
 .join > :first-child {
-  --join-ss: var(--radius);
-  --join-es: var(--radius);
+  --join-ss: var(--join-radius);
+  --join-es: var(--join-radius);
 }
 
 .join > :last-child {
-  --join-se: var(--radius);
-  --join-ee: var(--radius);
+  --join-se: var(--join-radius);
+  --join-ee: var(--join-radius);
 }
 
 .join > :only-child {
-  --join-ss: var(--radius);
-  --join-se: var(--radius);
-  --join-es: var(--radius);
-  --join-ee: var(--radius);
+  --join-ss: var(--join-radius);
+  --join-se: var(--join-radius);
+  --join-es: var(--join-radius);
+  --join-ee: var(--join-radius);
 }
 
 .join > * + * {

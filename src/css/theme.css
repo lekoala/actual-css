@@ -1,3 +1,7 @@
+:root {
+  color-scheme: light dark;
+}
+
 [data-theme="light"] {
   color-scheme: light;
 }
@@ -6,9 +10,12 @@
   color-scheme: dark;
 }
 
-/* Demo themes use light-dark(). Older browsers get the light fallback rather
-   than a partially dark native color scheme over light tokens. */
+/* Dark mode is progressive enhancement via light-dark(). Older browsers get
+   the light fallback rather than a partially dark native color scheme over
+   light tokens. */
 @supports not (color: light-dark(red, blue)) {
+  :root,
+  [data-theme="light"],
   [data-theme="dark"] {
     color-scheme: light;
   }
