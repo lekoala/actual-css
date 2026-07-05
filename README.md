@@ -104,7 +104,7 @@ Actual CSS also ships optional entrypoints:
 
 ## JavaScript enhancers
 
-Some components can be enhanced with JavaScript: dialog, flyout, tooltip, tabs, scrollspy, context menu, and floating UI.
+Some components can be enhanced with JavaScript: dialog, flyout, tooltip, tabs, scrollspy, context menu, floating UI, numeric `inputmode` enforcement, and input masks.
 
 Use the full module:
 
@@ -117,10 +117,12 @@ Or import only the enhancers you need:
 ```js
 import "actual-css/js/dialog";
 import "actual-css/js/flyout";
+import "actual-css/js/inputmode";
+import "actual-css/js/mask";
 import "actual-css/js/tooltip";
 ```
 
-The package does not maintain separate partial bundles. Modular entrypoints map to source files, so each project can compose the framework shape it needs.
+The package does not maintain separate partial bundles. Modular entrypoints map to source files, so each project can compose the framework shape it needs. To customize the full runtime, comment the imports you do not want in `src/js/index.js` and rebuild the JavaScript bundle.
 
 ## Distribution
 

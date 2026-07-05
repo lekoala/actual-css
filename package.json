@@ -41,6 +41,8 @@
     "./js/dialog": "./src/js/dialog.js",
     "./js/floating": "./src/js/floating.js",
     "./js/flyout": "./src/js/flyout.js",
+    "./js/inputmode": "./src/js/inputmode.js",
+    "./js/mask": "./src/js/mask.js",
     "./js/scrollspy": "./src/js/scrollspy.js",
     "./js/tab": "./src/js/tab.js",
     "./js/tooltip": "./src/js/tooltip.js",

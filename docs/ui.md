@@ -313,7 +313,8 @@ Override `--tooltip-bg` and `--tooltip-fg` on the tooltip element to change the 
 </button>
 
 <div class="tooltip" role="tooltip" id="tip-grad" hidden
-     style="--tooltip-bg: linear-gradient(135deg, oklch(0.45 0.22 280), oklch(0.5 0.2 10));
+     style="background-color: #5b2d9e;
+            --tooltip-bg: linear-gradient(135deg, oklch(0.45 0.22 280), oklch(0.5 0.2 10));
             --tooltip-fg: white;
             padding: 0.4em 0.8em;
             font-weight: var(--font-weight-medium);">

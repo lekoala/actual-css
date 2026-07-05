@@ -140,6 +140,7 @@
 - For a switch, prefer `class="switch"` plus `role="switch"`. The class is the explicit API; the attribute is recognized as a fallback so both compose.
 - Core range controls stay native and are enhanced by `accent-color`. An optional richer range skin may come later if real projects need it.
 - `.form-actions` carries a default top margin. Override it with `--form-actions-margin-block-start`. It is class-only and may live inside or outside `<form>`. See Detached Actions below.
+- Joined form controls use `role="group"` plus direct input/select/textarea/`.btn`/`.affix` children. The role carries the accessibility grouping; the structural selector opts into the joined visual treatment without catching checkbox/radio groups.
 
 Links:
 - https://oat.ink/components/#form
@@ -517,6 +518,68 @@ The mixed shape `<label for="x">…<input id="x"></label>` is allowed by the spe
 
 Links:
 - https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/label
+
+## Joined Controls
+
+> Use `role="group"` when one field is composed from an input, affix, select, textarea, or action button.
+
+The group should be labelled with `aria-labelledby` or `aria-label`. `.affix` is for static prefix/suffix content such as currency symbols, units, or protocol text. Action buttons inside the group should use `.btn`.
+
+```html
+<div class="field">
+  <label class="field-label" id="amount-label" for="amount">Amount</label>
+  <div role="group" aria-labelledby="amount-label">
+    <span class="affix">$</span>
+    <input id="amount" name="amount" inputmode="decimal" />
+    <button class="btn outline" type="button">Clear</button>
+  </div>
+  <span class="field-help">Enter the invoice total before tax.</span>
+</div>
+```
+
+The selector is structural, not a bare `[role="group"]`: ordinary radio,
+checkbox, and switch groups keep their normal stacked/choice layouts. Use
+`<fieldset>` and `.choice` for those.
+
+## Input Policy
+
+> Native input intent first. Actual's runtime reinforces the safe numeric cases
+> and fixed-shape masks.
+
+`inputmode` changes the virtual keyboard but does not constrain the value. When
+the default JavaScript runtime is loaded, `inputmode="numeric"` keeps unsigned
+digits only and `inputmode="decimal"` keeps unsigned decimal values with a single
+`.` separator.
+
+```html
+<label class="field">
+  <span class="field-label">Quantity</span>
+  <input inputmode="numeric" placeholder="42" />
+</label>
+```
+
+```html
+<label class="field">
+  <span class="field-label">Amount</span>
+  <input inputmode="decimal" placeholder="12.34" />
+</label>
+```
+
+For signed numbers, locale formatting, currency rules, slugs, or app-specific
+character policies, use application code. Those rules are domain policy, not a
+framework default.
+
+### Pattern mask
+
+Use `data-mask` when the input has a fixed shape. Tokens are `9` for a digit,
+`a` for a letter, and `*` for any character.
+
+```html
+<label class="field">
+  <span class="field-label">Reference</span>
+  <input data-mask="aaa-999" autocomplete="off" placeholder="abc-123" />
+</label>
+```
 
 ## Detached Actions
 

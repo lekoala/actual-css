@@ -13,3 +13,5 @@ import "./dialog.js";
 import "./tab.js";
 import "./tooltip.js";
 import "./scrollspy.js";
+import "./inputmode.js";
+import "./mask.js";

@@ -285,6 +285,7 @@
   <li>For a switch, prefer <code>class=&quot;switch&quot;</code> plus <code>role=&quot;switch&quot;</code>. The class is the explicit API; the attribute is recognized as a fallback so both compose.</li>
   <li>Core range controls stay native and are enhanced by <code>accent-color</code>. An optional richer range skin may come later if real projects need it.</li>
   <li><code>.form-actions</code> carries a default top margin. Override it with <code>--form-actions-margin-block-start</code>. It is class-only and may live inside or outside <code>&lt;form&gt;</code>. See Detached Actions below.</li>
+  <li>Joined form controls use <code>role=&quot;group&quot;</code> plus direct input/select/textarea/<code>.btn</code>/<code>.affix</code> children. The role carries the accessibility grouping; the structural selector opts into the joined visual treatment without catching checkbox/radio groups.</li>
 </ul>
     </div>
         <details class="demo-links">
