@@ -34,8 +34,7 @@ const DEMO_CATEGORY_FILES = [
   "utilities.md",
   "typography.md",
   "tokens.md",
-  "accessibility.md",
-  "why.md",
+  "mental-model.md",
   "reserved.md",
 ];
 
@@ -127,7 +126,7 @@ function renderProseBlock(lines) {
 }
 
 function parseMarkdown(content, fallbackTitle) {
-  const lines = content.split("\n");
+  const lines = content.split(/\r?\n/);
   const sections = [];
   let current = null;
   let codeBlock = null;
@@ -385,7 +384,7 @@ function renderMainIndex(categories) {
 }
 
 function extractCategoryDescription(content) {
-  const lines = content.split("\n");
+  const lines = content.split(/\r?\n/);
   let inCode = false;
   for (const line of lines) {
     if (line.startsWith("```")) {
