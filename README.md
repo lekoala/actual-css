@@ -186,6 +186,10 @@ Actual CSS only claims the optional `actual` layer. Application-specific layer n
 
 Projects that need prefixed class names can run a post-install or build-pipeline transform that rewrites reserved classes, for example `.btn.primary` to `.ac-btn.ac-primary`. That transform is an application output strategy, not an alternate Actual CSS API.
 
+## AI Disclosure
+
+Actual CSS uses AI-assisted tooling for code generation, refactoring, and debugging. Patterns and architecture come from hand-written prototypes and iterative human-driven refinement. AI output is reviewed, tested, and owned by the maintainer.
+
 ## License
 
 MIT

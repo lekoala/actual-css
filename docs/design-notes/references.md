@@ -68,6 +68,7 @@ It claims a small public grammar: `.component [intent] [variant] [size] [modifie
 - https://primer.style/accessibility/patterns/accessible-notifications-and-messages/
 - https://uiterms.com/alert/
 - https://open-ui.org/components/alert.research/
+- https://kelpui.com/docs/components/callouts/
 
 ### Components: Avatar
 
@@ -86,6 +87,7 @@ It claims a small public grammar: `.component [intent] [variant] [size] [modifie
 - https://m3.material.io/components/badges/overview
 - https://daisyui.com/components/indicator/
 - https://open-ui.org/components/badge.research/
+- https://kelpui.com/docs/components/badges/
 
 ### Components: Breadcrumb
 
@@ -110,6 +112,7 @@ It claims a small public grammar: `.component [intent] [variant] [size] [modifie
 - https://codepen.io/lekoalabe/pen/oNORPZP
 - https://piccalil.li/blog/how-i-build-a-button-component/
 - https://open-ui.org/components/button/
+- https://kelpui.com/docs/components/buttons/
 
 ### Components: Card
 
@@ -153,6 +156,7 @@ It claims a small public grammar: `.component [intent] [variant] [size] [modifie
 - https://v6-dev--twbs-bootstrap.netlify.app/docs/6.0/components/dialog/
 - https://open-ui.org/components/invokers.explainer/
 - https://open-ui.org/components/dialog.research/
+- https://kelpui.com/docs/components/dialog/
 
 ### Components: Pagination
 
@@ -174,12 +178,14 @@ It claims a small public grammar: `.component [intent] [variant] [size] [modifie
 - https://oat.ink/components/#spinner
 - https://picocss.com/docs/loading
 - https://daisyui.com/components/loading/
+- https://kelpui.com/docs/components/spinner/
 
 ### Components: Skeleton
 
 - https://oat.ink/components/#skeleton
 - https://daisyui.com/components/skeleton/
 - https://github.com/Aejkatappaja/phantom-ui
+- https://kelpui.com/docs/components/skeleton/
 
 ### Components: Table
 
@@ -193,11 +199,13 @@ It claims a small public grammar: `.component [intent] [variant] [size] [modifie
 
 - https://github.com/knadh/oat/blob/master/src/css/utilities.css
 - https://every-layout.dev/layouts/stack/
+- https://kelpui.com/docs/layout/stack/
 
 ### Layout: Cluster
 
 - https://modern-css.com/spacing-elements-without-margin-hacks/
 - https://every-layout.dev/layouts/cluster/
+- https://kelpui.com/docs/layout/cluster/
 
 ### Layout: Center
 
@@ -218,10 +226,12 @@ It claims a small public grammar: `.component [intent] [variant] [size] [modifie
 - https://modern-css.com/grid-layout-without-extra-wrappers/
 - https://moderncss.dev/3-css-grid-techniques-to-make-you-a-grid-convert/
 - https://smolcss.dev/#smol-css-grid
+- https://kelpui.com/docs/layout/grid/
 
 ### Layout: Sidebar
 
 - https://every-layout.dev/layouts/sidebar/
+- https://kelpui.com/docs/layout/sidecar/
 
 ### Layout: Switcher
 
@@ -269,6 +279,7 @@ It claims a small public grammar: `.component [intent] [variant] [size] [modifie
 
 - https://picocss.com/docs/nav
 - https://daisyui.com/components/navbar/
+- https://kelpui.com/docs/components/navbar/
 
 ### UI: Flyout / Menu
 
@@ -292,6 +303,7 @@ It claims a small public grammar: `.component [intent] [variant] [size] [modifie
 - https://daisyui.com/components/tab/
 - https://inclusive-components.design/tabbed-interfaces/
 - https://open-ui.org/components/tabs.research/
+- https://kelpui.com/docs/components/tabs/
 
 ### UI: Tooltip
 
