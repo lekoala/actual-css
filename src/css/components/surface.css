@@ -34,4 +34,31 @@
   inset: 0;
   z-index: calc(var(--z-menu) - 1);
   background: var(--backdrop-fill);
+  opacity: 1;
+  transition: opacity var(--duration) var(--ease, ease);
+}
+
+.surface-backdrop[hidden] {
+  display: none;
+  opacity: 0;
+}
+
+@starting-style {
+  .surface-backdrop:not([hidden]) {
+    opacity: 0;
+  }
+}
+
+@supports (transition-behavior: allow-discrete) {
+  .surface-backdrop {
+    transition:
+      opacity var(--duration) var(--ease, ease),
+      display var(--duration) allow-discrete;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .surface-backdrop {
+    transition: none;
+  }
 }

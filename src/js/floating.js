@@ -105,6 +105,20 @@ function getDocEl(doc) {
   return doc.documentElement;
 }
 
+function isVisible(el) {
+  if (el.hidden) return false;
+  if (typeof el.checkVisibility === "function") return el.checkVisibility();
+  return el.getClientRects().length > 0;
+}
+
+function getFloatingSize(float) {
+  const rect = float.getBoundingClientRect();
+  return {
+    width: float.offsetWidth || rect.width,
+    height: float.offsetHeight || rect.height,
+  };
+}
+
 /* ── Global scroll / resize tracking ──────────────────── */
 
 const tracked = new Set();
@@ -175,8 +189,7 @@ export function track(el) {
  * @param {Element} [opts.scope]     constrain to a bounding element
  */
 export function reposition(ref, float, opts = {}) {
-  if (float.style.display === "none" || float.style.visibility === "hidden")
-    return;
+  if (!isVisible(float)) return;
 
   const placement = opts.placement || "bottom-start";
   const distance = opts.distance || 0;
@@ -190,7 +203,7 @@ export function reposition(ref, float, opts = {}) {
     placement.startsWith("bottom") ? rects[rects.length - 1] : rects[0];
   if (!refRect) return;
 
-  const floatRect = float.getBoundingClientRect();
+  const floatRect = getFloatingSize(float);
   const doc = getDocEl(ref.ownerDocument);
   let cw = doc.clientWidth;
   let ch = doc.clientHeight;

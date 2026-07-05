@@ -68,7 +68,6 @@ function ensureTip(trigger) {
     tip.id = `tooltip-${uid}`;
     tip.textContent = text;
     tip.hidden = true;
-    tip.style.display = "none";
     tip.style.position = "fixed";
     tip.inert = true;
     generatedTips.add(tip);
@@ -88,7 +87,6 @@ function ensureTip(trigger) {
     tip = document.getElementById(tipId);
     if (!tip || tip.getAttribute("role") !== "tooltip") { tipMap.set(trigger, null); return null; }
     tip.hidden = true;
-    tip.style.display = "none";
     tip.style.position = "fixed";
 
     const placement = trigger.getAttribute("data-tooltip-placement");
@@ -102,7 +100,6 @@ function ensureTip(trigger) {
     if (tip._delay) clearTimeout(tip._delay);
     tip._delay = null;
     tip.hidden = true;
-    tip.style.display = "none";
   };
 
   trigger.addEventListener("mouseleave", onHide);
@@ -150,7 +147,6 @@ function show(tip, ref) {
   if (tip._delay) clearTimeout(tip._delay);
   tip._delay = setTimeout(() => {
     tip.hidden = false;
-    tip.style.display = "";
     reposition(ref, tip, {
       placement: tip._placement || "top",
       distance: 6,

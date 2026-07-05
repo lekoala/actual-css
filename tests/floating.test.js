@@ -103,6 +103,46 @@ test("reposition sets coordinates, placement, and arrow position", () => {
   expect(float.style.getPropertyValue("--arrow-x")).toBe("50%");
 });
 
+test("reposition measures transformed floating elements from layout size", () => {
+  setViewport();
+  document.body.innerHTML = '<button id="ref"></button><div id="float"></div>';
+  const ref = document.getElementById("ref");
+  const float = document.getElementById("float");
+  mockRect(ref, { x: 100, y: 100, width: 20, height: 20 });
+  mockRect(float, { x: 0, y: 0, width: 80, height: 40 });
+  Object.defineProperty(float, "offsetWidth", {
+    configurable: true,
+    value: 100,
+  });
+  Object.defineProperty(float, "offsetHeight", {
+    configurable: true,
+    value: 50,
+  });
+
+  reposition(ref, float, { placement: "bottom", distance: 0 });
+
+  expect(float.style.left).toBe("60px");
+  expect(float.style.top).toBe("120px");
+});
+
+test("reposition skips hidden elements without rejecting visible fixed elements", () => {
+  setViewport();
+  document.body.innerHTML = '<button id="ref"></button><div id="hidden" hidden></div><div id="fixed"></div>';
+  const ref = document.getElementById("ref");
+  const hidden = document.getElementById("hidden");
+  const fixed = document.getElementById("fixed");
+  mockRect(ref, { x: 100, y: 100, width: 60, height: 24 });
+  mockRect(hidden, { x: 0, y: 0, width: 120, height: 80 });
+  mockRect(fixed, { x: 0, y: 0, width: 120, height: 80 });
+  fixed.style.position = "fixed";
+
+  reposition(ref, hidden, { placement: "bottom-start", distance: 8 });
+  reposition(ref, fixed, { placement: "bottom-start", distance: 8 });
+
+  expect(hidden.style.left).toBe("");
+  expect(fixed.style.left).toBe("100px");
+});
+
 test("repositionAt positions a floating element from a point reference", () => {
   setViewport();
   document.body.innerHTML = '<div id="float"></div>';
@@ -129,4 +169,3 @@ test("reposition flips when the preferred side overflows", () => {
   expect(float.dataset.placement).toBe("top-start");
   expect(Number.parseFloat(float.style.top)).toBeLessThan(730);
 });
-

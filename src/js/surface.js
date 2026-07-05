@@ -12,6 +12,16 @@ const openSurfaces = new Set();
 const surfaceMap = new WeakMap();
 const mountedSurfaces = new WeakMap();
 
+function waitForAnimations(...elements) {
+  const animations = elements
+    .filter(Boolean)
+    .flatMap((el) =>
+      typeof el.getAnimations === "function" ? el.getAnimations({ subtree: true }) : [],
+    );
+
+  return Promise.allSettled(animations.map((animation) => animation.finished));
+}
+
 function getSurfaceRoot(menu, anchor) {
   return anchor?.closest("dialog") || menu.closest("dialog") || menu.ownerDocument.body;
 }
@@ -103,7 +113,10 @@ function ensureBackdrop(menu, state) {
     return;
   }
 
-  if (state.backdrop?.isConnected) return;
+  if (state.backdrop?.isConnected) {
+    state.backdrop.hidden = false;
+    return;
+  }
 
   const backdrop = menu.ownerDocument.createElement("div");
   backdrop.className = "surface-backdrop";
@@ -174,6 +187,7 @@ function ensureSurfaceWired(menu) {
     shiftPadding: 4,
     autoClose: "true",
     isSheet: false,
+    closeId: 0,
   };
 
   menu.addEventListener(
@@ -234,7 +248,6 @@ export function prepareSurface(menu, anchor) {
   mountSurface(menu, anchor);
   menu.style.position = "fixed";
   menu.hidden = true;
-  menu.style.display = "none";
 }
 
 export function openSurface(menu, opts = {}) {
@@ -263,10 +276,10 @@ export function openSurface(menu, opts = {}) {
   state.shiftPadding = opts.shiftPadding ?? 4;
   state.scope = opts.scope;
   state.restoreFocusTo = opts.restoreFocusTo || opts.trigger || opts.source || null;
+  state.closeId++;
 
   menu.classList.add("is-open");
   menu.hidden = false;
-  menu.style.display = "";
   openSurfaces.add(menu);
   applyPresentation(menu, state);
   syncExpanded(menu, true);
@@ -277,18 +290,24 @@ export function closeSurface(menu, opts = {}) {
   if (!menu || !isSurfaceOpen(menu)) return;
 
   const state = surfaceMap.get(menu);
+  const closeId = state ? ++state.closeId : 0;
   menu.classList.remove("is-open");
   menu.classList.remove("is-sheet");
   menu.hidden = true;
-  menu.style.display = "none";
-  state?.backdrop?.remove();
-  if (state) state.backdrop = null;
+  const backdrop = state?.backdrop || null;
+  if (backdrop) backdrop.hidden = true;
   openSurfaces.delete(menu);
   syncExpanded(menu, false);
 
   if (opts.restoreFocus && state?.restoreFocusTo?.isConnected) {
     state.restoreFocusTo.focus();
   }
+
+  waitForAnimations(menu, backdrop).then(() => {
+    if (!state || state.closeId !== closeId) return;
+    backdrop?.remove();
+    if (state.backdrop === backdrop) state.backdrop = null;
+  });
 }
 
 export function disconnectSurface(menu) {

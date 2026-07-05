@@ -1,5 +1,5 @@
 import { afterAll, afterEach, expect, test } from "bun:test";
-import { cleanupDOM, click, mockRect, setupDOM } from "./helpers/dom.js";
+import { cleanupDOM, click, mockRect, nextMicrotask, setupDOM } from "./helpers/dom.js";
 
 setupDOM();
 
@@ -62,7 +62,7 @@ test("closeSurface hides a menu and resets presentation state", () => {
   closeSurface(menu);
 
   expect(menu.hidden).toBe(true);
-  expect(menu.style.display).toBe("none");
+  expect(menu.style.display).toBe("");
   expect(menu.classList.contains("is-open")).toBe(false);
   expect(menu.classList.contains("is-sheet")).toBe(false);
   expect(trigger.getAttribute("aria-expanded")).toBe("false");
@@ -115,6 +115,7 @@ test("prepareSurface mounts to the surface root and disconnectSurface restores i
   expect(menu.parentNode).toBe(document.body);
   expect(menu.hidden).toBe(true);
   expect(menu.style.position).toBe("fixed");
+  expect(menu.style.display).toBe("");
 
   disconnectSurface(menu);
 
@@ -132,6 +133,78 @@ test("sheet mode adds sheet class and backdrop", () => {
 
   expect(menu.classList.contains("is-sheet")).toBe(true);
   expect(document.querySelector(".surface-backdrop")).not.toBeNull();
+});
+
+test("sheet close hides the backdrop immediately and removes it after animations", async () => {
+  setBody('<button aria-controls="menu"></button><div id="menu" class="flyout" data-flyout-mobile="sheet"></div>');
+  const trigger = document.querySelector("button");
+  const menu = document.getElementById("menu");
+  mockPlacement(trigger, menu);
+  openSurface(menu, { trigger });
+
+  const backdrop = document.querySelector(".surface-backdrop");
+  let finish;
+  const finished = new Promise((resolve) => {
+    finish = resolve;
+  });
+  menu.getAnimations = () => [{ finished }];
+  backdrop.getAnimations = () => [];
+
+  closeSurface(menu);
+
+  expect(menu.hidden).toBe(true);
+  expect(backdrop.hidden).toBe(true);
+  expect(backdrop.isConnected).toBe(true);
+
+  finish();
+  await nextMicrotask();
+
+  expect(backdrop.isConnected).toBe(false);
+});
+
+test("reopening a sheet cancels stale close cleanup", async () => {
+  setBody('<button aria-controls="menu"></button><div id="menu" class="flyout" data-flyout-mobile="sheet"></div>');
+  const trigger = document.querySelector("button");
+  const menu = document.getElementById("menu");
+  mockPlacement(trigger, menu);
+  openSurface(menu, { trigger });
+
+  const backdrop = document.querySelector(".surface-backdrop");
+  let finish;
+  const finished = new Promise((resolve) => {
+    finish = resolve;
+  });
+  menu.getAnimations = () => [{ finished }];
+  backdrop.getAnimations = () => [];
+
+  closeSurface(menu);
+  openSurface(menu, { trigger });
+
+  expect(backdrop.hidden).toBe(false);
+  expect(backdrop.isConnected).toBe(true);
+
+  finish();
+  await nextMicrotask();
+
+  expect(backdrop.isConnected).toBe(true);
+  expect(isSurfaceOpen(menu)).toBe(true);
+});
+
+test("prepareSurface mounts surfaces inside an open dialog root", () => {
+  setBody(`
+    <dialog id="modal" open>
+      <section id="host"><button id="trigger"></button><div id="menu" class="flyout"></div></section>
+    </dialog>
+  `);
+  const dialog = document.getElementById("modal");
+  const trigger = document.getElementById("trigger");
+  const menu = document.getElementById("menu");
+
+  prepareSurface(menu, trigger);
+
+  expect(menu.parentNode).toBe(dialog);
+
+  disconnectSurface(menu);
 });
 
 test("default auto-close closes from menu item clicks and outside clicks", () => {
@@ -178,4 +251,3 @@ test("disabled auto-close keeps inside and outside clicks open", () => {
 
   expect(isSurfaceOpen(menu)).toBe(true);
 });
-

@@ -3,6 +3,7 @@
  *
  * Position, placement, and arrow position are managed by JavaScript
  * via position: fixed, left, top, data-placement, and --arrow-x.
+ * Visibility is managed with hidden; CSS owns entry and exit animation.
  */
 .tooltip {
   --tooltip-bg: var(--surface-solid);
@@ -20,6 +21,39 @@
   line-height: var(--line-height-tight);
   pointer-events: none;
   user-select: none;
+  opacity: 1;
+  scale: 1;
+  transition:
+    opacity var(--duration-fast, var(--duration)) var(--ease, ease),
+    scale var(--duration-fast, var(--duration)) var(--ease, ease);
+}
+
+.tooltip[hidden] {
+  display: none;
+  opacity: 0;
+  scale: 0.96;
+}
+
+@starting-style {
+  .tooltip:not([hidden]) {
+    opacity: 0;
+    scale: 0.96;
+  }
+}
+
+@supports (transition-behavior: allow-discrete) {
+  .tooltip {
+    transition:
+      opacity var(--duration-fast, var(--duration)) var(--ease, ease),
+      scale var(--duration-fast, var(--duration)) var(--ease, ease),
+      display var(--duration-fast, var(--duration)) allow-discrete;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tooltip {
+    transition: none;
+  }
 }
 
 /* ── Arrow — clipped triangle ──────────────────────── */

@@ -1,9 +1,9 @@
 /*
  * Flyout — floating panel for actions and links.
  *
- * JavaScript owns positioning (position: fixed + left/top), show/hide
- * (hidden + display), focus, and keyboard behavior. CSS owns the surfaced
- * panel appearance and item styles.
+ * JavaScript owns positioning (position: fixed + left/top), state
+ * (hidden + .is-open), focus, and keyboard behavior. CSS owns the surfaced
+ * panel appearance, item styles, and animation.
  *
  * Runtime markers (managed by surface.js): .is-open marks an open flyout,
  * .is-sheet marks "auto" resolved to bottom-sheet presentation on coarse
@@ -32,6 +32,19 @@
   background: var(--surface-raised);
   box-shadow: var(--shadow-popout);
   list-style: none;
+  opacity: 1;
+  scale: 1;
+  transition:
+    opacity var(--duration-fast, var(--duration)) var(--ease, ease),
+    scale var(--duration-fast, var(--duration)) var(--ease, ease),
+    translate var(--duration-fast, var(--duration)) var(--ease, ease);
+}
+
+@starting-style {
+  .flyout.is-open {
+    opacity: 0;
+    scale: 0.98;
+  }
 }
 
 /* Bottom-sheet presentation. surface.js toggles .is-sheet when the flyout is
@@ -55,6 +68,36 @@
 
 .flyout[hidden] {
   display: none;
+  opacity: 0;
+  scale: 0.98;
+}
+
+.flyout.is-sheet[hidden] {
+  scale: 1;
+  translate: 0 var(--space-3);
+}
+
+@starting-style {
+  .flyout.is-sheet.is-open {
+    scale: 1;
+    translate: 0 var(--space-3);
+  }
+}
+
+@supports (transition-behavior: allow-discrete) {
+  .flyout {
+    transition:
+      opacity var(--duration-fast, var(--duration)) var(--ease, ease),
+      scale var(--duration-fast, var(--duration)) var(--ease, ease),
+      translate var(--duration-fast, var(--duration)) var(--ease, ease),
+      display var(--duration-fast, var(--duration)) allow-discrete;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .flyout {
+    transition: none;
+  }
 }
 
 .flyout > li {
