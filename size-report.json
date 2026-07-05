@@ -1,12 +1,12 @@
 {
-  "timestamp": "2026-07-05T16:40:55.132Z",
-  "totalRaw": 133757,
-  "totalMinified": 64344,
-  "totalBrotli": 10534,
+  "timestamp": "2026-07-05T17:53:55.669Z",
+  "totalRaw": 134136,
+  "totalMinified": 64628,
+  "totalBrotli": 10563,
   "themesMinified": 16153,
   "themesBrotli": 2556,
-  "shippedMinified": 64344,
-  "shippedBrotli": 10534,
+  "shippedMinified": 64628,
+  "shippedBrotli": 10563,
   "maxShippedBrotli": 13312,
   "fileCount": 64,
   "files": [
@@ -16,7 +16,7 @@
     },
     {
       "file": "theme.css",
-      "raw": 4929
+      "raw": 5029
     },
     {
       "file": "tokens.css",
@@ -32,11 +32,11 @@
     },
     {
       "file": "utilities.css",
-      "raw": 3773
+      "raw": 3878
     },
     {
       "file": "components/button.css",
-      "raw": 3650
+      "raw": 3737
     },
     {
       "file": "forms/switch.css",
@@ -207,6 +207,10 @@
       "raw": 1018
     },
     {
+      "file": "reset.css",
+      "raw": 889
+    },
+    {
       "file": "components/list.css",
       "raw": 832
     },
@@ -217,10 +221,6 @@
     {
       "file": "components/breadcrumb.css",
       "raw": 804
-    },
-    {
-      "file": "reset.css",
-      "raw": 802
     },
     {
       "file": "intents.css",

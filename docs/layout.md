@@ -101,6 +101,10 @@ Tune width and side padding with local variables.
 }
 ```
 
+`.center` intentionally uses `box-sizing: content-box`. The max inline size is
+the content measure, while inline padding is added outside that measure. This is
+deliberate even though the global reset uses `border-box`.
+
 ## List
 
 > Rich content lists where each item may contain multiple elements, captured as a single figure.
@@ -411,4 +415,3 @@ Use semantic elements by default.
 ```
 
 Sticky header/footer behavior should be opt-in and documented only if it becomes part of the shipped layout API.
-

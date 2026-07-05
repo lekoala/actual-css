@@ -307,8 +307,7 @@ Use `.circle` only when an element must be perfectly round.
 
 ```css
 .circle {
-  --radius: 999px;
-  border-radius: 999px;
+  border-radius: var(--radius-full);
 }
 ```
 
@@ -355,4 +354,3 @@ The overline exists because categories, kicker labels, and section markers recur
 - No breakpoint utility variants — use container queries or layout primitives.
 - No utility variants for hover, focus, dark mode, or arbitrary selectors — use component states.
 - No full spacing scale with every step and direction — the 17 spacing helpers above cover the most common escape hatches.
-
