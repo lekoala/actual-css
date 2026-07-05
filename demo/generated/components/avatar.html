@@ -28,7 +28,7 @@
       <ul>
   <li>Supports initials and images.</li>
   <li>Can be an inert element, link, or button.</li>
-  <li>Can be grouped with <code>role=&quot;group&quot;</code> and <code>:has()</code></li>
+  <li>Stack avatars with <code>.avatar-stack</code> for overlapping group displays</li>
   <li>A status dot attaches as an empty <code>.badge</code> child; the badge carries an <code>aria-label</code> so the dot conveys its meaning to assistive tech.</li>
   <li>Does not support shape modifiers as public API. Shape is theme-level.</li>
   <li>Sizes can be adjusted with CSS variables and optional <code>.sm</code> or <code>.lg</code>.</li>
@@ -104,7 +104,7 @@
     <section class="component-section">
       <div class="example-group">
         <div class="example-render">
-          <div role="group" aria-label="Team members">
+          <div class="avatar-stack" role="group" aria-label="Team members">
   <div class="avatar" role="img" aria-label="John Doe" style="--avatar-bg:#E5EEE4">
     <span aria-hidden="true">JD</span>
   </div>
@@ -117,7 +117,7 @@
 </div>
         </div>
         <div class="example-code">
-          <pre><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">role</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>group<span class="token punctuation">"</span></span> <span class="token attr-name">aria-label</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>Team members<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+          <pre><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>avatar-stack<span class="token punctuation">"</span></span> <span class="token attr-name">role</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>group<span class="token punctuation">"</span></span> <span class="token attr-name">aria-label</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>Team members<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
   <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>avatar<span class="token punctuation">"</span></span> <span class="token attr-name">role</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>img<span class="token punctuation">"</span></span> <span class="token attr-name">aria-label</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>John Doe<span class="token punctuation">"</span></span> <span class="token special-attr"><span class="token attr-name">style</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span><span class="token value css language-css"><span class="token property">--avatar-bg</span><span class="token punctuation">:</span>#E5EEE4</span><span class="token punctuation">"</span></span></span><span class="token punctuation">></span></span>
     <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token attr-name">aria-hidden</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>true<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>JD<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span>
   <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>

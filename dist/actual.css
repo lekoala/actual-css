@@ -1805,25 +1805,23 @@ button.avatar {
   transform: translate(50%, 50%);
 }
 
-@supports selector([role="group"]:has(> .avatar + .avatar)) {
-  :where([role="group"]:has( > .avatar + .avatar)) {
-    --avatar-group-overlap: calc(var(--avatar-size, 2.25rem) / -4);
-    --avatar-group-ring: 2px;
-    align-items: center;
-    display: inline-flex;
-  }
+.avatar-stack {
+  --avatar-stack-overlap: calc(var(--avatar-size, 2.25rem) / -4);
+  --avatar-stack-ring: 2px;
+  align-items: center;
+  display: inline-flex;
+}
 
-  :where([role="group"]:has( > .avatar + .avatar)) > .avatar {
-    box-shadow: 0 0 0 var(--avatar-group-ring) var(--surface);
-  }
+.avatar-stack > .avatar {
+  box-shadow: 0 0 0 var(--avatar-stack-ring) var(--surface);
+}
 
-  :where([role="group"]:has( > .avatar + .avatar)) > .avatar + .avatar {
-    margin-inline-start: var(--avatar-group-overlap);
-  }
+.avatar-stack > .avatar + .avatar {
+  margin-inline-start: var(--avatar-stack-overlap);
+}
 
-  :where([role="group"]:has( > .avatar + .avatar)) > .avatar:is(:hover, :focus-visible) {
-    z-index: 1;
-  }
+.avatar-stack > .avatar:is(:hover, :focus-visible) {
+  z-index: 1;
 }
 
 .key {
@@ -2256,7 +2254,7 @@ button.avatar {
   margin-block-start: var(--space-4);
 }
 
-.field-label, .form legend {
+.field-label, .field-group > legend, .form legend {
   color: var(--text);
   font-weight: var(--font-weight-strong);
 }

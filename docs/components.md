@@ -170,7 +170,7 @@ Variants
 
 - Supports initials and images.
 - Can be an inert element, link, or button.
-- Can be grouped with `role="group"` and `:has()`
+- Stack avatars with `.avatar-stack` for overlapping group displays
 - A status dot attaches as an empty `.badge` child; the badge carries an `aria-label` so the dot conveys its meaning to assistive tech.
 - Does not support shape modifiers as public API. Shape is theme-level.
 - Sizes can be adjusted with CSS variables and optional `.sm` or `.lg`.
@@ -208,7 +208,7 @@ Variants
 ```
 
 ```html
-<div role="group" aria-label="Team members">
+<div class="avatar-stack" role="group" aria-label="Team members">
   <div class="avatar" role="img" aria-label="John Doe" style="--avatar-bg:#E5EEE4">
     <span aria-hidden="true">JD</span>
   </div>
