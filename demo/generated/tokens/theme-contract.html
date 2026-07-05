@@ -76,7 +76,7 @@
       </div>
     </section>
     <div class="component-prose">
-      <p>Without <code>data-theme</code>, the default theme advertises <code>color-scheme: light dark</code> and follows the user's OS preference in browsers that support <code>light-dark()</code>. Dark themes should set <code>color-scheme: dark</code>. Light themes should set <code>color-scheme: light</code>. Browsers without <code>light-dark()</code> receive the light fallback.</p>
+      <p>Without <code>data-theme</code>, the default theme advertises <code>color-scheme: light dark</code> and follows the user's OS preference in browsers that support <code>light-dark()</code>. Dark themes should set <code>color-scheme: dark</code>. Light themes should set <code>color-scheme: light</code>. Browsers without <code>light-dark()</code> receive the light fallback. In <code>forced-colors: active</code>, the default theme maps the public color tokens to system colors (<code>Canvas</code>, <code>CanvasText</code>, <code>ButtonText</code>, <code>Highlight</code>, and <code>HighlightText</code>) and removes decorative shadows. Components should inherit that token mode by default; keep local forced-color rules only for custom control geometry, native bar parts, disabled states, or selected states that would otherwise be communicated only by background color.</p>
     </div>
     
   </section>

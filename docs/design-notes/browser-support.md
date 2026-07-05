@@ -39,7 +39,12 @@ Hover rules that change surface colors go inside `@media (hover: hover)`. `:acti
 
 ### forced-colors
 
-Components with visual state indicators must be checked in `forced-colors: active`; use local system-color rules instead of a central high-contrast stylesheet.
+The default theme maps public color, focus, and shadow tokens to system colors
+inside `forced-colors: active`. Components should rely on those tokens first.
+Use local forced-color rules only for shapes or states the token layer cannot
+infer, such as custom checkbox/switch geometry, native progress/meter parts,
+disabled affordances, tooltip arrows, or selected states otherwise expressed
+only through background color.
 
 ### :has()
 

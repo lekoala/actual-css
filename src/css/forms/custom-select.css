@@ -31,8 +31,8 @@
     .select:not([multiple], [size], .native):open,
     .form select:not([multiple], [size], .native):open {
       border-color: var(--focus);
-      outline: var(--focus-ring-outline);
-      outline-offset: var(--focus-ring-offset);
+      outline: var(--focus-outline);
+      outline-offset: var(--focus-outline-offset);
       box-shadow: var(--focus-ring-shadow);
     }
 
@@ -62,8 +62,8 @@
 
     .select option:not(:disabled):focus-visible,
     .form select option:not(:disabled):focus-visible {
-      outline: var(--focus-ring-outline);
-      outline-offset: var(--focus-ring-offset);
+      outline: var(--focus-outline);
+      outline-offset: var(--focus-outline-offset);
     }
 
     .select option:active,

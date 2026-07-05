@@ -64,8 +64,6 @@
   --focus: var(--primary);
   --focus-ring: hsl(268 32% 33% / 0.22);
   --focus-ring-shadow: 0 0 0 3px var(--focus-ring);
-  --focus-ring-outline: 2px solid transparent;
-  --focus-ring-offset: 2px;
   --hover-overlay: hsl(260 20% 10% / 0.04);
 
   /* Radius scale — themes may override the whole scale (e.g. [data-theme="square"]) */
@@ -144,9 +142,48 @@
     --border: light-dark(hsl(260 15% 88%), hsl(262 12% 24%));
     --focus-ring: light-dark(hsl(268 32% 33% / 0.22), hsl(268 42% 76% / 0.28));
     --focus-ring-shadow: 0 0 0 3px var(--focus-ring);
-    --focus-ring-outline: 2px solid transparent;
-    --focus-ring-offset: 2px;
     --hover-overlay: light-dark(hsl(260 20% 10% / 0.04), hsl(0 0% 100% / 0.06));
     --shadow-color: light-dark(hsl(260 25% 10%), hsl(262 40% 2%));
+  }
+}
+
+@media (forced-colors: active) {
+  :root,
+  [data-theme="light"],
+  [data-theme="dark"] {
+    --primary: Highlight;
+    --primary-fg: HighlightText;
+    --secondary: ButtonText;
+    --secondary-fg: Canvas;
+    --success: Highlight;
+    --success-fg: HighlightText;
+    --warning: Highlight;
+    --warning-fg: HighlightText;
+    --danger: Highlight;
+    --danger-fg: HighlightText;
+    --neutral: ButtonText;
+    --neutral-fg: Canvas;
+
+    --surface: Canvas;
+    --surface-raised: Canvas;
+    --surface-subtle: Canvas;
+    --surface-solid: CanvasText;
+
+    --text: CanvasText;
+    --text-muted: CanvasText;
+    --text-subtle: GrayText;
+    --border: ButtonText;
+    --focus: Highlight;
+    --focus-outline: calc(var(--border-width) * 2) solid Highlight;
+    --focus-outline-offset: 2px;
+    --focus-ring: Highlight;
+    --focus-ring-shadow: none;
+    --hover-overlay: transparent;
+
+    --shadow: none;
+    --shadow-popout: none;
+    --indicator-ring: Canvas;
+    --backdrop-color: Canvas;
+    --backdrop-fill: Canvas;
   }
 }

@@ -122,6 +122,9 @@ small {
   --focus-outline-offset: 2px;
   --indicator-offset: 14.65%;
   --indicator-ring: var(--surface);
+  --backdrop-color: var(--surface-solid);
+  --backdrop-opacity: .45;
+  --backdrop-fill: rgb(0 0 0 / var(--backdrop-opacity));
   --bar-height: .65rem;
   --control-size-sm: 2rem;
   --control-size-md: 2.375rem;
@@ -161,6 +164,9 @@ small {
   :root {
     --shadow: 0 .5rem 1.5rem color-mix(in oklch, var(--shadow-color) 8%, transparent);
     --shadow-popout: 0 .25rem .75rem color-mix(in oklch, var(--shadow-color) 15%, transparent);
+    --backdrop-fill: color-mix(in oklch,
+      var(--backdrop-color) calc(var(--backdrop-opacity) * 100%),
+      transparent);
   }
 }
 
@@ -212,8 +218,6 @@ small {
   --focus: var(--primary);
   --focus-ring: #52396f38;
   --focus-ring-shadow: 0 0 0 3px var(--focus-ring);
-  --focus-ring-outline: 2px solid transparent;
-  --focus-ring-offset: 2px;
   --hover-overlay: #18141f0a;
   --radius: .5rem;
   --radius-sm: .25rem;
@@ -268,10 +272,44 @@ small {
     --border: light-dark(#dfdce5, #3b3645);
     --focus-ring: light-dark(#52396f38, #c0a8dc47);
     --focus-ring-shadow: 0 0 0 3px var(--focus-ring);
-    --focus-ring-outline: 2px solid transparent;
-    --focus-ring-offset: 2px;
     --hover-overlay: light-dark(#18141f0a, #ffffff0f);
     --shadow-color: light-dark(#171320, #050307);
+  }
+}
+
+@media (forced-colors: active) {
+  :root, [data-theme="light"], [data-theme="dark"] {
+    --primary: Highlight;
+    --primary-fg: HighlightText;
+    --secondary: ButtonText;
+    --secondary-fg: Canvas;
+    --success: Highlight;
+    --success-fg: HighlightText;
+    --warning: Highlight;
+    --warning-fg: HighlightText;
+    --danger: Highlight;
+    --danger-fg: HighlightText;
+    --neutral: ButtonText;
+    --neutral-fg: Canvas;
+    --surface: Canvas;
+    --surface-raised: Canvas;
+    --surface-subtle: Canvas;
+    --surface-solid: CanvasText;
+    --text: CanvasText;
+    --text-muted: CanvasText;
+    --text-subtle: GrayText;
+    --border: ButtonText;
+    --focus: Highlight;
+    --focus-outline: calc(var(--border-width) * 2) solid Highlight;
+    --focus-outline-offset: 2px;
+    --focus-ring: Highlight;
+    --focus-ring-shadow: none;
+    --hover-overlay: transparent;
+    --shadow: none;
+    --shadow-popout: none;
+    --indicator-ring: Canvas;
+    --backdrop-color: Canvas;
+    --backdrop-fill: Canvas;
   }
 }
 
@@ -1107,12 +1145,6 @@ button.badge:disabled, .badge[aria-disabled="true"] {
   box-shadow: var(--shadow);
 }
 
-@media (forced-colors: active) {
-  .card.raised {
-    border-color: buttontext;
-  }
-}
-
 .card.subtle {
   background: var(--surface-subtle);
 }
@@ -1159,20 +1191,6 @@ button.badge:disabled, .badge[aria-disabled="true"] {
 
 .card > :where(header, footer, figure)[data-bleed] {
   padding: var(--card-pad);
-}
-
-:root {
-  --backdrop-color: var(--surface-solid);
-  --backdrop-opacity: .45;
-  --backdrop-fill: rgb(0 0 0 / var(--backdrop-opacity));
-}
-
-@supports (color: color-mix(in oklch, red, white)) {
-  :root {
-    --backdrop-fill: color-mix(in oklch,
-      var(--backdrop-color) calc(var(--backdrop-opacity) * 100%),
-      transparent);
-  }
 }
 
 .surface-backdrop {
@@ -1865,12 +1883,6 @@ button.avatar {
   display: inline-flex;
 }
 
-@media (forced-colors: active) {
-  .key {
-    border-color: buttontext;
-  }
-}
-
 :where(.overline) {
   --intent: initial;
   --intent-fg: initial;
@@ -1988,7 +2000,7 @@ button.avatar {
 
 @media (forced-colors: active) {
   .nav-link:where([aria-current]:not([aria-current="false"])) {
-    outline: 1px solid #0000;
+    outline: var(--border-width) solid currentColor;
   }
 }
 
@@ -2059,12 +2071,6 @@ button.avatar {
   border-color: var(--intent, var(--primary));
   background: var(--intent, var(--primary));
   color: var(--intent-fg, var(--primary-fg));
-}
-
-@media (forced-colors: active) {
-  .pagination .btn[aria-current="page"] {
-    outline: 1px solid #0000;
-  }
 }
 
 .table-wrap {
@@ -2337,8 +2343,8 @@ button.avatar {
 
 :is(.input, .textarea, :is(.form, .field) :where(input, textarea)):focus-visible {
   --control-border: var(--focus);
-  outline: var(--focus-ring-outline);
-  outline-offset: var(--focus-ring-offset);
+  outline: var(--focus-outline);
+  outline-offset: var(--focus-outline-offset);
   box-shadow: var(--focus-ring-shadow);
 }
 
@@ -2426,6 +2432,7 @@ button.avatar {
   --choice-border: var(--border);
   --choice-bg: var(--surface);
   --choice-mark: var(--primary-fg);
+  vertical-align: middle;
   border: var(--border-width) solid var(--choice-border);
   background: var(--choice-bg);
   block-size: 1.125em;
@@ -2438,6 +2445,7 @@ button.avatar {
   margin-block-end: 0;
   margin-inline: 0;
   display: inline-grid;
+  position: relative;
 }
 
 :is(.check, .form input[type="checkbox"]:not([role="switch"])) {
@@ -2451,6 +2459,9 @@ button.avatar {
 :is(.check, .radio, .form input[type="checkbox"]:not([role="switch"]), .form input[type="radio"]):before {
   content: "";
   transition: transform var(--duration);
+  margin: auto;
+  position: absolute;
+  inset: 0;
   transform: scale(0);
 }
 
@@ -2486,6 +2497,7 @@ button.avatar {
 
 :is(.check, .form input[type="checkbox"]:not([role="switch"])):indeterminate:before {
   border-block-end: 2px solid;
+  border-inline-start: 0;
   block-size: 0;
   inline-size: .6em;
   transform: scale(1);
@@ -2501,8 +2513,8 @@ button.avatar {
 
 :is(.check, .radio, .form input[type="checkbox"]:not([role="switch"]), .form input[type="radio"]):focus-visible {
   border-color: var(--focus);
-  outline: var(--focus-ring-outline);
-  outline-offset: var(--focus-ring-offset);
+  outline: var(--focus-outline);
+  outline-offset: var(--focus-outline-offset);
   box-shadow: var(--focus-ring-shadow);
 }
 
@@ -2579,8 +2591,8 @@ button.avatar {
 
 .select:focus-visible, .form select:focus-visible {
   --control-border: var(--focus);
-  outline: var(--focus-ring-outline);
-  outline-offset: var(--focus-ring-offset);
+  outline: var(--focus-outline);
+  outline-offset: var(--focus-outline-offset);
   box-shadow: var(--focus-ring-shadow);
 }
 
@@ -2628,15 +2640,15 @@ button.avatar {
 
     .select:not([multiple], [size], .native):open {
       border-color: var(--focus);
-      outline: var(--focus-ring-outline);
-      outline-offset: var(--focus-ring-offset);
+      outline: var(--focus-outline);
+      outline-offset: var(--focus-outline-offset);
       box-shadow: var(--focus-ring-shadow);
     }
 
     .form select:not([multiple], [size], .native):open {
       border-color: var(--focus);
-      outline: var(--focus-ring-outline);
-      outline-offset: var(--focus-ring-offset);
+      outline: var(--focus-outline);
+      outline-offset: var(--focus-outline-offset);
       box-shadow: var(--focus-ring-shadow);
     }
 
@@ -2664,8 +2676,8 @@ button.avatar {
     }
 
     .select option:not(:disabled):focus-visible, .form select option:not(:disabled):focus-visible {
-      outline: var(--focus-ring-outline);
-      outline-offset: var(--focus-ring-offset);
+      outline: var(--focus-outline);
+      outline-offset: var(--focus-outline-offset);
     }
 
     .select option:active, .form select option:active {
@@ -2987,8 +2999,8 @@ button.avatar {
 
 .flyout > :where(button, a, [role="menuitem"]):focus-visible, .flyout > li > :where(button, a, [role="menuitem"]):focus-visible {
   background: var(--surface-subtle);
-  outline: var(--focus-ring-outline);
-  outline-offset: var(--focus-ring-offset);
+  outline: var(--focus-outline);
+  outline-offset: var(--focus-outline-offset);
   box-shadow: var(--focus-ring-shadow);
 }
 
@@ -3005,13 +3017,6 @@ button.avatar {
   margin-block: var(--space-1);
   border: 0;
   border-block-start: var(--border-width) solid var(--border);
-}
-
-@media (forced-colors: active) {
-  .flyout {
-    box-shadow: none;
-    border-color: buttontext;
-  }
 }
 
 :where(.tab) {
@@ -3062,12 +3067,6 @@ button.avatar {
 .tab[aria-selected="true"], .tab[aria-current="page"], .tab[aria-pressed="true"] {
   border-block-end-color: var(--intent, var(--primary));
   color: var(--intent, var(--primary));
-}
-
-@media (forced-colors: active) {
-  .tab[aria-selected="true"], .tab[aria-current="page"], .tab[aria-pressed="true"] {
-    border-block-end-width: 2px;
-  }
 }
 
 .tooltip {
