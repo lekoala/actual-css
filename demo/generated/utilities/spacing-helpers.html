@@ -38,13 +38,13 @@
     <section class="component-section">
       <div class="example-group">
         <div class="example-render">
-          <ul class="cluster gap-sm">
+          <ul class="cluster">
   <li><a href="/about" class="btn ghost">About</a></li>
   <li><a href="/contact" class="btn ghost">Contact</a></li>
 </ul>
         </div>
         <div class="example-code">
-          <pre><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>ul</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>cluster gap-sm<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+          <pre><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>ul</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>cluster<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
   <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>li</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>a</span> <span class="token attr-name">href</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>/about<span class="token punctuation">"</span></span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>btn ghost<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>About<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>a</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>li</span><span class="token punctuation">></span></span>
   <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>li</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>a</span> <span class="token attr-name">href</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>/contact<span class="token punctuation">"</span></span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>btn ghost<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Contact<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>a</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>li</span><span class="token punctuation">></span></span>
 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>ul</span><span class="token punctuation">></span></span></code></pre>
@@ -54,11 +54,9 @@
     <div class="component-prose">
       <ul>
   <li><code>.gap-none</code> → <code>gap: 0</code></li>
-  <li><code>.gap-sm</code> → <code>gap: var(--space-2)</code></li>
-  <li><code>.gap-lg</code> → <code>gap: var(--space-5)</code></li>
 </ul>
 <h3>Padding</h3>
-<p>Block (vertical) and inline (horizontal) padding:</p>
+<p>Block (vertical) and inline (horizontal) padding. Values respond to the <code>.sm</code> / <code>.lg</code> modifiers.</p>
     </div>
     <section class="component-section">
       <div class="example-group">
@@ -76,12 +74,8 @@
     </section>
     <div class="component-prose">
       <ul>
-  <li><code>.py-sm</code> → <code>padding-block: var(--space-2)</code></li>
-  <li><code>.py</code> → <code>padding-block: var(--space-4)</code></li>
-  <li><code>.py-lg</code> → <code>padding-block: var(--space-5)</code></li>
-  <li><code>.px-sm</code> → <code>padding-inline: var(--space-2)</code></li>
-  <li><code>.px</code> → <code>padding-inline: var(--space-4)</code></li>
-  <li><code>.px-lg</code> → <code>padding-inline: var(--space-5)</code></li>
+  <li><code>.py</code> → <code>padding-block: var(--variant-space)</code></li>
+  <li><code>.px</code> → <code>padding-inline: var(--variant-space)</code></li>
 </ul>
 <h3>Margin</h3>
 <p>Block-start and block-end margin for giving elements room:</p>
@@ -98,12 +92,8 @@
     </section>
     <div class="component-prose">
       <ul>
-  <li><code>.mbs-sm</code> → <code>margin-block-start: var(--space-2)</code></li>
-  <li><code>.mbs</code> → <code>margin-block-start: var(--space-4)</code></li>
-  <li><code>.mbs-lg</code> → <code>margin-block-start: var(--space-5)</code></li>
-  <li><code>.mbe-sm</code> → <code>margin-block-end: var(--space-2)</code></li>
-  <li><code>.mbe</code> → <code>margin-block-end: var(--space-4)</code></li>
-  <li><code>.mbe-lg</code> → <code>margin-block-end: var(--space-5)</code></li>
+  <li><code>.mbs</code> → <code>margin-block-start: var(--variant-space)</code></li>
+  <li><code>.mbe</code> → <code>margin-block-end: var(--variant-space)</code></li>
 </ul>
 <p>No <code>mbs-none</code> / <code>mbe-none</code> — use <code>margin: 0</code> via <code>.list-reset</code> for lists, or a layout primitive that already resets margins (<code>.stack &gt; *</code>).</p>
     </div>

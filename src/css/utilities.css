@@ -175,53 +175,23 @@
 .gap-none {
   gap: 0;
 }
-.gap-sm {
-  gap: var(--space-2);
-}
-.gap-lg {
-  gap: var(--space-5);
-}
 
 /* Padding — block (vertical) */
-.py-sm {
-  padding-block: var(--space-2);
-}
 .py {
-  padding-block: var(--space-4);
-}
-.py-lg {
-  padding-block: var(--space-5);
+  padding-block: var(--variant-space);
 }
 
 /* Padding — inline (horizontal) */
-.px-sm {
-  padding-inline: var(--space-2);
-}
 .px {
-  padding-inline: var(--space-4);
-}
-.px-lg {
-  padding-inline: var(--space-5);
+  padding-inline: var(--variant-space);
 }
 
 /* Margin — block-start */
-.mbs-sm {
-  margin-block-start: var(--space-2);
-}
 .mbs {
-  margin-block-start: var(--space-4);
-}
-.mbs-lg {
-  margin-block-start: var(--space-5);
+  margin-block-start: var(--variant-space);
 }
 
 /* Margin — block-end */
-.mbe-sm {
-  margin-block-end: var(--space-2);
-}
 .mbe {
-  margin-block-end: var(--space-4);
-}
-.mbe-lg {
-  margin-block-end: var(--space-5);
+  margin-block-end: var(--variant-space);
 }

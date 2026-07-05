@@ -17,7 +17,10 @@
   --font-size-lg: 1.125rem;
 
   /* Spacing */
-  --gap: 0.75rem;
+  --gap-md: 0.75rem;
+  --gap: var(--gap-md);
+  --variant-space-md: var(--space-4);
+  --variant-space: var(--variant-space-md);
   --space-1: 0.25rem;
   --space-2: 0.5rem;
   --space-3: 0.75rem;

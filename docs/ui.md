@@ -107,7 +107,7 @@ Flyout covers two distinct patterns:
            aria-label="Products"
            data-flyout-mobile="auto"
            hidden>
-        <section aria-labelledby="products-design" class="px py-sm">
+        <section aria-labelledby="products-design" class="px py">
           <h3 id="products-design">Design</h3>
           <ul>
             <li><a href="/figma">Figma integration</a></li>
@@ -115,7 +115,7 @@ Flyout covers two distinct patterns:
           </ul>
         </section>
 
-        <section aria-labelledby="products-dev" class="px py-sm">
+        <section aria-labelledby="products-dev" class="px py">
           <h3 id="products-dev">Development</h3>
           <ul>
             <li><a href="/components">Components</a></li>
@@ -123,7 +123,7 @@ Flyout covers two distinct patterns:
           </ul>
         </section>
 
-        <footer class="px py-sm">
+        <footer class="px py">
           <a href="/pricing" class="btn primary">See pricing</a>
         </footer>
       </div>
@@ -144,7 +144,7 @@ Add `data-context-menu-scope` only when the flyout should stay inside a specific
 Long press is opt-in with `data-context-menu-long-press`. Empty uses the default delay; a number sets the delay in milliseconds.
 
 ```html
-<div class="card stack gap-sm"
+<div class="card stack"
      data-context-menu="file-actions"
      data-context-menu-long-press
      tabindex="0"

@@ -322,7 +322,7 @@ function renderReservedClasses() {
   const items = RESERVED_CLASSES.map(
     (name) => `      <code>.${name}</code>`,
   ).join("\n");
-  return `<div class="cluster gap-sm">
+  return `<div class="cluster">
 ${items}
     </div>`;
 }
