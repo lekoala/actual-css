@@ -11,6 +11,7 @@ test("javascript modules import without a DOM", async () => {
   cleanupDOM();
 
   const modules = [
+    "index",
     "context-menu",
     "dialog",
     "floating",
