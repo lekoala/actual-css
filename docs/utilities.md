@@ -83,7 +83,7 @@ Use `.fit` when a control or element should shrink to its content instead of fil
 Use `.nowrap` on a flex layout such as `.cluster` when the group must stay on one line.
 
 ```html
-<div class="cluster nowrap gap-sm">
+<div class="cluster nowrap sm">
   <select class="select sm fit" aria-label="Segment">
     <option>All segments</option>
   </select>
@@ -225,19 +225,17 @@ All map to logical properties (`padding-block`, `margin-block-end`, etc.) for wr
 Override the default gap from layout primitives (`.stack`, `.cluster`, `.grid`):
 
 ```html
-<ul class="cluster gap-sm">
+<ul class="cluster">
   <li><a href="/about" class="btn ghost">About</a></li>
   <li><a href="/contact" class="btn ghost">Contact</a></li>
 </ul>
 ```
 
 - `.gap-none` → `gap: 0`
-- `.gap-sm` → `gap: var(--space-2)`
-- `.gap-lg` → `gap: var(--space-5)`
 
 ### Padding
 
-Block (vertical) and inline (horizontal) padding:
+Block (vertical) and inline (horizontal) padding. Values respond to the `.sm` / `.lg` modifiers.
 
 ```html
 <section role="tabpanel" class="py">
@@ -245,12 +243,8 @@ Block (vertical) and inline (horizontal) padding:
 </section>
 ```
 
-- `.py-sm` → `padding-block: var(--space-2)`
-- `.py` → `padding-block: var(--space-4)`
-- `.py-lg` → `padding-block: var(--space-5)`
-- `.px-sm` → `padding-inline: var(--space-2)`
-- `.px` → `padding-inline: var(--space-4)`
-- `.px-lg` → `padding-inline: var(--space-5)`
+- `.py` → `padding-block: var(--variant-space)`
+- `.px` → `padding-inline: var(--variant-space)`
 
 ### Margin
 
@@ -260,12 +254,8 @@ Block-start and block-end margin for giving elements room:
 <h2 class="mbs">A section heading with space above</h2>
 ```
 
-- `.mbs-sm` → `margin-block-start: var(--space-2)`
-- `.mbs` → `margin-block-start: var(--space-4)`
-- `.mbs-lg` → `margin-block-start: var(--space-5)`
-- `.mbe-sm` → `margin-block-end: var(--space-2)`
-- `.mbe` → `margin-block-end: var(--space-4)`
-- `.mbe-lg` → `margin-block-end: var(--space-5)`
+- `.mbs` → `margin-block-start: var(--variant-space)`
+- `.mbe` → `margin-block-end: var(--variant-space)`
 
 No `mbs-none` / `mbe-none` — use `margin: 0` via `.list-reset` for lists, or a layout primitive that already resets margins (`.stack > *`).
 

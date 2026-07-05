@@ -37,6 +37,8 @@
 }
 
 .sm {
+  --gap: var(--space-2);
+  --variant-space: var(--space-2);
   --control-size: var(--control-size-sm);
   --control-font-size: var(--font-size-sm);
   --variant-font-size: var(--font-size-sm);
@@ -46,6 +48,8 @@
   --variant-compact-font-size: 0.75rem;
 }
 .lg {
+  --gap: var(--space-5);
+  --variant-space: var(--space-5);
   --control-size: var(--control-size-lg);
   --control-font-size: var(--font-size-lg);
   --variant-font-size: var(--font-size-lg);
