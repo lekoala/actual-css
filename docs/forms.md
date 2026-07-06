@@ -580,7 +580,8 @@ run from left to right.
 
 For signed numbers, locale formatting, currency rules, time ranges, or
 app-specific character policies, use application code. Those rules are domain
-policy, not a framework default.
+policy, not a framework default. See [JavaScript](javascript.md) for custom
+filter patterns built on `enhance()`.
 
 ### Pattern mask
 
@@ -922,4 +923,3 @@ Core: native range, enhanced by `accent-color`. Optional richer skin may come la
   </div>
 </form>
 ```
-
