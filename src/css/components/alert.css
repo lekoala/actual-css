@@ -88,7 +88,7 @@
   .alert:has(> :first-child[aria-hidden="true"]) {
     display: grid;
     grid-template-columns: auto minmax(0, 1fr);
-    align-items: start;
+    align-items: var(--items-align, start);
     column-gap: var(--space-3);
   }
 

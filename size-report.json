@@ -1,12 +1,12 @@
 {
-  "timestamp": "2026-07-06T21:51:12.322Z",
-  "totalRaw": 143567,
-  "totalMinified": 71728,
-  "totalBrotli": 11232,
+  "timestamp": "2026-07-06T22:00:55.218Z",
+  "totalRaw": 143795,
+  "totalMinified": 71917,
+  "totalBrotli": 11241,
   "themesMinified": 16153,
   "themesBrotli": 2556,
-  "shippedMinified": 71728,
-  "shippedBrotli": 11232,
+  "shippedMinified": 71917,
+  "shippedBrotli": 11241,
   "maxShippedBrotli": 13312,
   "fileCount": 66,
   "files": [
@@ -48,7 +48,7 @@
     },
     {
       "file": "components/alert.css",
-      "raw": 3488
+      "raw": 3508
     },
     {
       "file": "components/modal.css",
@@ -71,6 +71,10 @@
       "raw": 2848
     },
     {
+      "file": "forms/select.css",
+      "raw": 2801
+    },
+    {
       "file": "utilities.css",
       "raw": 2724
     },
@@ -81,10 +85,6 @@
     {
       "file": "themes/spruce.css",
       "raw": 2641
-    },
-    {
-      "file": "forms/select.css",
-      "raw": 2593
     },
     {
       "file": "themes/petrol.css",
