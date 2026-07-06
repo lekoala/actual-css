@@ -1,12 +1,12 @@
 {
-  "timestamp": "2026-07-06T14:53:03.108Z",
+  "timestamp": "2026-07-06T16:12:46.528Z",
   "totalRaw": 138809,
   "totalMinified": 68005,
-  "totalBrotli": 10895,
+  "totalBrotli": 10880,
   "themesMinified": 16153,
   "themesBrotli": 2556,
   "shippedMinified": 68005,
-  "shippedBrotli": 10895,
+  "shippedBrotli": 10880,
   "maxShippedBrotli": 13312,
   "fileCount": 66,
   "files": [
