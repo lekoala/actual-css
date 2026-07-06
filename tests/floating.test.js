@@ -224,21 +224,21 @@ test("reposition uses visual viewport offsets as the fixed boundary", () => {
   expect(float.style.left).toBe("416px");
 });
 
-test("reposition dispatches hide when the reference is outside the boundary", () => {
+test("reposition dispatches out-of-view when the reference is outside the boundary", () => {
   setViewport();
   document.body.innerHTML = '<button id="ref"></button><div id="float"></div>';
   const ref = document.getElementById("ref");
   const float = document.getElementById("float");
-  let hides = 0;
-  float.addEventListener(EVENTS.hide, () => {
-    hides += 1;
+  let outOfView = 0;
+  float.addEventListener(EVENTS.outOfView, () => {
+    outOfView += 1;
   });
   mockRect(ref, { x: -220, y: 100, width: 60, height: 24 });
   mockRect(float, { x: 0, y: 0, width: 120, height: 80 });
 
   reposition(ref, float, { placement: "bottom-start", distance: 8 });
 
-  expect(hides).toBe(1);
+  expect(outOfView).toBe(1);
   expect(float.style.left).toBe("");
 });
 
