@@ -14,6 +14,7 @@ Start here when using or changing Actual CSS.
 - [Components](components.md): native and CSS-only component classes and examples.
 - [Forms](forms.md): fields, validation, controls, and form actions.
 - [UI](ui.md): JS-enhanced component behavior.
+- [JavaScript](javascript.md): runtime imports, `enhance()`, custom filters, and app-level extensions.
 - [Utilities](utilities.md): small one-purpose helpers.
 - [Patterns](patterns.md): common app compositions.
 
