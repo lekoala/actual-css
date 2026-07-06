@@ -73,7 +73,7 @@
 }
 
 @media (hover: hover) {
-  .badge > button:hover {
+  .badge > button:not(:disabled):hover {
     background: var(--hover-overlay);
   }
 }
@@ -86,20 +86,20 @@
 /* .solid/.soft/.outline are shared via variants.css. The --badge-* fallbacks
    make .badge solid by default. */
 @media (hover: hover) {
-  :where(a.badge, button.badge):hover {
+  :where(a.badge, button.badge):not(:where(:disabled, [aria-disabled="true"])):hover {
     background: var(--ui-hover-bg, var(--badge-bg));
   }
 
-  :where(a.badge, button.badge):not(:where(.outline)):hover {
+  :where(a.badge, button.badge):not(:where(:disabled, [aria-disabled="true"], .outline)):hover {
     box-shadow: inset 0 0 0 999px var(--hover-overlay);
   }
 
-  :where(a.badge, button.badge):where(.outline):hover {
+  :where(a.badge, button.badge):where(.outline):not(:where(:disabled, [aria-disabled="true"])):hover {
     --ui-hover-bg: var(--surface-subtle);
   }
 
   @supports (color: color-mix(in oklch, red, white)) {
-    :where(a.badge, button.badge):where(.soft):hover {
+    :where(a.badge, button.badge):where(.soft):not(:where(:disabled, [aria-disabled="true"])):hover {
       --ui-hover-bg: color-mix(
         in oklch,
         var(--intent, var(--neutral)) var(--soft-hover-alpha),
@@ -107,7 +107,7 @@
       );
     }
 
-    :where(a.badge, button.badge):where(.outline):hover {
+    :where(a.badge, button.badge):where(.outline):not(:where(:disabled, [aria-disabled="true"])):hover {
       --ui-hover-bg: color-mix(in oklch, var(--intent, var(--neutral)), transparent 92%);
     }
   }
@@ -127,6 +127,9 @@ button.badge:disabled,
 .badge[aria-disabled="true"] {
   opacity: 0.55;
   cursor: not-allowed;
+}
+
+a.badge[aria-disabled="true"] {
   pointer-events: none;
 }
 
@@ -143,12 +146,12 @@ button.badge:disabled,
   }
 
   @media (hover: hover) {
-    :where(a.badge, button.badge):hover {
+    :where(a.badge, button.badge):hover:not(:where(:disabled, [aria-disabled="true"])) {
       outline: var(--border-width) solid ButtonText;
       outline-offset: 2px;
     }
 
-    .badge > button:hover {
+    .badge > button:not(:disabled):hover {
       outline: var(--border-width) solid currentColor;
       outline-offset: 1px;
     }

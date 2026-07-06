@@ -60,24 +60,24 @@
 }
 
 @media (hover: hover) {
-  .btn:hover {
+  .btn:not(:where(:disabled, [aria-disabled="true"])):hover {
     background: var(--ui-hover-bg, var(--btn-bg));
   }
 
-  .btn:not(:where(.outline, .ghost, .link)):hover {
+  .btn:not(:where(:disabled, [aria-disabled="true"], .outline, .ghost, .link)):hover {
     box-shadow: inset 0 0 0 999px var(--hover-overlay);
   }
 
-  .btn:where(.outline, .ghost):hover {
+  .btn:where(.outline, .ghost):not(:where(:disabled, [aria-disabled="true"])):hover {
     --ui-hover-bg: var(--surface-subtle);
   }
 
   @supports (color: color-mix(in oklch, red, white)) {
-    .btn:not(:where(.soft, .outline, .ghost, .link)):hover {
+    .btn:not(:where(:disabled, [aria-disabled="true"], .soft, .outline, .ghost, .link)):hover {
       --ui-hover-bg: color-mix(in oklch, var(--intent, var(--neutral)) 88%, black);
     }
 
-    .btn.soft:hover {
+    .btn.soft:not(:where(:disabled, [aria-disabled="true"])):hover {
       --ui-hover-bg: color-mix(
         in oklch,
         var(--intent, var(--neutral)) var(--soft-hover-alpha),
@@ -85,7 +85,7 @@
       );
     }
 
-    .btn.outline:hover {
+    .btn.outline:not(:where(:disabled, [aria-disabled="true"])):hover {
       --ui-hover-bg: color-mix(in oklch, var(--intent, var(--neutral)), transparent 92%);
     }
   }
@@ -112,7 +112,7 @@
   --btn-radius: var(--radius-full);
 }
 
-.btn.link:hover {
+.btn.link:not(:where(:disabled, [aria-disabled="true"])):hover {
   background: transparent;
   color: var(--intent, var(--text));
   text-decoration-thickness: 0.12em;
@@ -132,6 +132,9 @@
 .btn[aria-disabled="true"] {
   cursor: not-allowed;
   opacity: 0.65;
+}
+
+a.btn[aria-disabled="true"] {
   pointer-events: none;
 }
 
