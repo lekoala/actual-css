@@ -23,6 +23,25 @@
   --join-radius: var(--radius-full);
 }
 
+.join-addon {
+  --control-border: var(--border);
+  --control-bg: var(--surface-subtle);
+  --control-fg: var(--text-muted);
+
+  align-items: center;
+  display: inline-flex;
+  justify-content: center;
+  min-block-size: var(--control-size);
+  padding-inline: var(--space-3);
+  border: var(--border-width) solid var(--control-border);
+  border-radius: var(--radius);
+  background: var(--control-bg);
+  color: var(--control-fg);
+  font-size: var(--control-font-size);
+  line-height: 1;
+  white-space: nowrap;
+}
+
 .join > * {
   border-start-start-radius: var(--join-ss);
   border-start-end-radius: var(--join-se);
@@ -53,23 +72,4 @@
 
 .join > :is(:focus, :focus-within) {
   z-index: 1;
-}
-
-.join-addon {
-  --control-border: var(--border);
-  --control-bg: var(--surface-subtle);
-  --control-fg: var(--text-muted);
-
-  align-items: center;
-  display: inline-flex;
-  justify-content: center;
-  min-block-size: var(--control-size);
-  padding-inline: var(--space-3);
-  border: var(--border-width) solid var(--control-border);
-  border-radius: var(--radius);
-  background: var(--control-bg);
-  color: var(--control-fg);
-  font-size: var(--control-font-size);
-  line-height: 1;
-  white-space: nowrap;
 }
