@@ -15,6 +15,10 @@ button, input, textarea, select {
   font: inherit;
 }
 
+[hidden]:not([hidden="until-found"]) {
+  display: none;
+}
+
 @supports not selector(dialog:modal) {
   dialog:not([open]) {
     display: none;
@@ -526,7 +530,7 @@ small {
   }
 }
 
-:root {
+.prose {
   --prose-size: 1rem;
   --prose-line-height: 1.7;
   --prose-measure: 70ch;
@@ -536,9 +540,6 @@ small {
   --prose-h2: 1.5rem;
   --prose-h3: 1.25rem;
   --prose-h4: 1.125rem;
-}
-
-.prose {
   max-inline-size: var(--prose-measure);
   color: var(--text);
   font-size: var(--prose-size);
@@ -660,7 +661,7 @@ small {
 }
 
 .measure {
-  max-inline-size: var(--prose-measure);
+  max-inline-size: var(--prose-measure, 70ch);
 }
 
 .prose.sm {
@@ -1294,18 +1295,18 @@ dialog.modal {
   background: var(--surface-raised);
   color: var(--text);
   box-shadow: var(--shadow);
+  padding: var(--space-4);
   opacity: 0;
   transition: opacity var(--duration),
     transform var(--duration);
-  padding: 0;
   overflow: visible;
 }
 
 dialog.modal > form, dialog.modal > .stack {
   gap: var(--space-4);
-  max-block-size: calc(var(--viewport-block) - 2rem);
+  max-block-size: calc(var(--viewport-block) - 2rem - var(--space-4) * 2);
   overscroll-behavior: contain;
-  padding: var(--space-4);
+  padding: 0;
   display: grid;
   overflow: auto;
 }
@@ -2851,6 +2852,12 @@ button.avatar {
   --control-border: var(--danger);
 }
 
+@supports selector(:user-invalid) {
+  :is(.input:user-invalid, .textarea:user-invalid, :is(.form, .field) :where(input, textarea):user-invalid) {
+    --control-border: var(--danger);
+  }
+}
+
 .input[readonly], .textarea[readonly], :is(.form, .field) :where(input, textarea)[readonly] {
   --control-bg: var(--surface-subtle);
   --control-border: var(--border);
@@ -3103,6 +3110,16 @@ button.avatar {
   --control-border: var(--danger);
 }
 
+@supports selector(:user-invalid) {
+  .select:user-invalid {
+    --control-border: var(--danger);
+  }
+
+  .form select:user-invalid {
+    --control-border: var(--danger);
+  }
+}
+
 .select:disabled, .form select:disabled {
   --control-bg: var(--surface-subtle);
   --control-fg: var(--text-subtle);
@@ -3251,6 +3268,20 @@ button.avatar {
         color: buttontext;
         forced-color-adjust: auto;
         background-color: buttonface;
+      }
+
+      .select option::checkmark {
+        color: highlighttext;
+        forced-color-adjust: none;
+      }
+
+      .form select option::checkmark {
+        color: highlighttext;
+        forced-color-adjust: none;
+      }
+
+      .select optgroup, .form select optgroup {
+        color: graytext;
       }
     }
   }
@@ -3645,6 +3676,11 @@ button.avatar {
 @media print {
   .flyout, .tooltip, .surface-backdrop, .spinner, button.btn, input[type="button"].btn, input[type="submit"].btn, input[type="reset"].btn {
     display: none !important;
+  }
+
+  a.btn:after {
+    content: " (" attr(href) ")";
+    font-size: .875em;
   }
 
   .card, .alert, .badge {

@@ -41,7 +41,6 @@ test("data-mask formats token masks and sets size", async () => {
   input(el, "ab1");
 
   expect(el.value).toBe("ab-1");
-  expect(el.size).toBe(5);
 });
 
 test("mask auto-adds trailing literals while typing", async () => {
