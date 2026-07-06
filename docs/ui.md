@@ -149,7 +149,7 @@ Long press is opt-in with `data-context-menu-long-press`. Empty uses the default
      data-context-menu-long-press
      tabindex="0"
      style="min-block-size: 12rem;">
-  <div class="cluster justify-between items-center">
+  <div class="cluster justify-content-space-between items-center">
     <strong>File.pdf</strong>
     <button class="btn ghost"
             type="button"
@@ -333,4 +333,3 @@ Override `--tooltip-bg` and `--tooltip-fg` on the tooltip element to change the 
   </section>
 </main>
 ```
-

@@ -206,7 +206,7 @@ Use `.items-start` on flex or grid layouts when children should keep their natur
 </div>
 ```
 
-Use `.items-center` when a flex or grid layout should center its children on the cross axis.
+Use `.items-center` when a flex or grid layout should center its children on the cross axis. Use `.items-end` when children should align to the block-end edge.
 
 ## Spacing Helpers
 
