@@ -70,6 +70,6 @@
   margin-inline-start: calc(var(--border-width) * -1);
 }
 
-.join > :is(:focus, :focus-within) {
+.join > :is(:hover, :focus, :focus-within) {
   z-index: 1;
 }

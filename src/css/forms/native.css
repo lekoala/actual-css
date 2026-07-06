@@ -19,6 +19,32 @@
   color: var(--text-muted);
 }
 
+.form input[type="file"]::file-selector-button,
+.file::file-selector-button {
+  margin-inline-end: var(--space-3);
+  padding-block: var(--space-1);
+  padding-inline: var(--space-2);
+  border: var(--border-width) solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface-subtle);
+  color: var(--text);
+  font: inherit;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition:
+    background-color var(--duration),
+    border-color var(--duration),
+    color var(--duration);
+}
+
+@media (hover: hover) {
+  .form input[type="file"]:not(:disabled)::file-selector-button:hover,
+  .file:not(:disabled)::file-selector-button:hover {
+    background: var(--border);
+  }
+}
+
 .form input[type="range"],
 .range {
   inline-size: 100%;

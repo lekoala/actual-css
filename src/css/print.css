@@ -1,0 +1,16 @@
+@media print {
+  .flyout,
+  .tooltip,
+  .surface-backdrop,
+  .btn,
+  .spinner {
+    display: none !important;
+  }
+
+  .card,
+  .alert,
+  .badge {
+    border: 1px solid #000;
+    break-inside: avoid;
+  }
+}
