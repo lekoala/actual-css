@@ -515,8 +515,7 @@ When composing source files manually, import `components/join.css` after the con
 
 ## Input Policy
 
-> Native input intent first. Actual's runtime filters values only when explicitly
-> asked, and fixed-shape masks stay opt-in through `data-mask`.
+> Native input intent first. Actual's runtime filters values only when explicitly asked, and fixed-shape masks stay opt-in through `data-mask`.
 
 `inputmode` changes the virtual keyboard but does not constrain the value. Actual
 does not filter plain `inputmode` fields by default because numeric entry often
