@@ -352,6 +352,19 @@
         text-decoration: underline;
         text-underline-offset: 0.2em;
       }
+
+      /* Progressive enhancement: native CSS scrollspy when supported.
+         Framework JS (IntersectionObserver) handles the fallback. */
+      @supports selector(:target-current) {
+        .scrollspy {
+          scroll-target-group: auto;
+        }
+
+        .scrollspy a:target-current {
+          color: var(--primary);
+          font-weight: var(--font-weight-medium);
+        }
+      }
     </style>
   </head>
   <body>
@@ -430,7 +443,7 @@
                 and avoid exposing more tokens than theme work has earned.
               </p>
 
-              <h2>Why the baseline should stay mild</h2>
+              <h2 id="why-the-baseline-should-stay-mild">Why the baseline should stay mild</h2>
               <p>
                 The first reason is reach. A global <code>h1</code> rule touches a card title in a sidebar, a dialog
                 heading, a section label in a dashboard, and a hero banner on a marketing page. If the rule says
@@ -451,7 +464,7 @@
                 <figcaption>The three scopes, from broadest to narrowest: baseline, <code>.prose</code>, optional fluid module.</figcaption>
               </figure>
 
-              <h2>Three scopes, three jobs</h2>
+              <h2 id="three-scopes-three-jobs">Three scopes, three jobs</h2>
               <p>
                 A typography system stays small when it has clear boundaries. The framework this article ships
                 with uses three.
@@ -470,7 +483,7 @@
                   classes. For landing pages, hero sections, and documentation homepages.</li>
               </ul>
 
-              <h2>A small example</h2>
+              <h2 id="a-small-example">A small example</h2>
               <p>
                 Compare a global heading reset to a scoped one. The first is loud; the second stays out of the way.
               </p>
@@ -500,7 +513,7 @@
                 every card, dialog, and table heading in the app.
               </p>
 
-              <h2>What it means in practice</h2>
+              <h2 id="what-it-means-in-practice">What it means in practice</h2>
               <p>
                 In practice, "quiet defaults" means a few concrete choices that compose well.
               </p>
@@ -519,7 +532,7 @@
                   wrapping, not alignment.</li>
               </ol>
 
-              <h2>When the rule applies</h2>
+              <h2 id="when-the-rule-applies">When the rule applies</h2>
               <p>
                 The split between scopes is not just a code organization. It maps to a recurring decision:
                 <em>is this content authored, or is it UI?</em>
@@ -570,7 +583,7 @@
                 </p>
               </blockquote>
 
-              <h2>What we left out</h2>
+              <h2 id="what-we-left-out">What we left out</h2>
               <p>
                 The system above does not include a public type scale. There is no <code>fs-1</code> to
                 <code>fs-7</code>, no heading-level utility class, no <code>text-h1</code> ladder. We resisted
@@ -583,7 +596,7 @@
                 can override its tokens, not invent a parallel scale inside components.
               </p>
 
-              <h2>Closing</h2>
+              <h2 id="closing">Closing</h2>
               <p>
                 A typography system earns its keep by being invisible. The user does not think about the line
                 height of a heading. They do not notice the wrap balance on a paragraph. They read, they scan,
@@ -704,20 +717,20 @@
               </form>
             </section>
 
-            <section>
+            <nav class="scrollspy" aria-label="On this page">
               <h3 style="margin: 0 0 0.75rem; font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-muted);">
                 On this page
               </h3>
               <ol style="list-style: none; padding: 0; margin: 0; display: grid; gap: 0.35rem; font-size: 0.9375rem;">
-                <li><a href="#" style="color: var(--primary); text-decoration: none;">Why the baseline should stay mild</a></li>
-                <li><a href="#" style="color: var(--text-muted); text-decoration: none;">Three scopes, three jobs</a></li>
-                <li><a href="#" style="color: var(--text-muted); text-decoration: none;">A small example</a></li>
-                <li><a href="#" style="color: var(--text-muted); text-decoration: none;">What it means in practice</a></li>
-                <li><a href="#" style="color: var(--text-muted); text-decoration: none;">When the rule applies</a></li>
-                <li><a href="#" style="color: var(--text-muted); text-decoration: none;">What we left out</a></li>
-                <li><a href="#" style="color: var(--text-muted); text-decoration: none;">Closing</a></li>
+                <li><a href="#why-the-baseline-should-stay-mild">Why the baseline should stay mild</a></li>
+                <li><a href="#three-scopes-three-jobs">Three scopes, three jobs</a></li>
+                <li><a href="#a-small-example">A small example</a></li>
+                <li><a href="#what-it-means-in-practice">What it means in practice</a></li>
+                <li><a href="#when-the-rule-applies">When the rule applies</a></li>
+                <li><a href="#what-we-left-out">What we left out</a></li>
+                <li><a href="#closing">Closing</a></li>
               </ol>
-            </section>
+            </nav>
 
             <section>
               <h3 style="margin: 0 0 0.75rem; font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-muted);">
@@ -808,5 +821,6 @@
       </div>
       <p style="margin: 1.5rem 0 0; font-size: 0.8125rem;">© 2026 Actual Notes. Set in the system font stack.</p>
     </footer>
+  <script src="../../dist/actual.js"></script>
   </body>
   </html>
