@@ -11,7 +11,7 @@ Actual CSS uses a small public grammar: `.component [intent] [variant] [size] [m
 - [Tokens](docs/tokens.md): Theme contract and public token surface.
 - [Components](docs/components.md): Component markup and composition examples.
 - [Forms](docs/forms.md): Field layout, controls, labels, validation, and form actions.
-- [Interactive components](docs/ui.md): JavaScript-enhanced component behavior.
+- [UI](docs/ui.md): JavaScript-enhanced component behavior.
 
 ## Design & Maintenance
 
