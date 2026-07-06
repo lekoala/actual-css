@@ -1,6 +1,6 @@
 # Dependencies
 node_modules/
-*.lock
+package-lock.json
 
 # Build output
 out/

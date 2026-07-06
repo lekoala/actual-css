@@ -1,23 +1,12 @@
 # Actual CSS
 
-> Plain CSS component framework for new projects: semantic classes, shared variants, small tokens, themes, and progressive enhancement.
+> Plain CSS component framework for new projects: semantic classes, shared variants, small tokens, theme hooks, and progressive enhancement.
 
 Actual CSS uses a small public grammar: `.component [intent] [variant] [size] [modifier]`. It claims unprefixed class names by design. Existing projects with collisions should use cascade layers, import order, or an application-side prefix transform.
 
-## Core Documentation & Guides
+## Documentation
 
-- [README](README.md): Install, imports, public class grammar, browser support, and distribution notes.
-- [Mental Model](docs/mental-model.md): How components, intents, variants, tokens, and runtime enhancers fit together.
-- [Tokens](docs/tokens.md): Theme contract and public token surface.
-- [Components](docs/components.md): Component markup and composition examples.
-- [Forms](docs/forms.md): Field layout, controls, labels, validation, and form actions.
-- [UI](docs/ui.md): JavaScript-enhanced component behavior.
-
-## Design & Maintenance
-
-- [Why Actual CSS](docs/why.md): Positioning, tradeoffs, and non-goals.
-- [Accessibility](docs/accessibility.md): Guarantees, tested behavior, and author responsibilities.
-- [Guidelines](docs/guidelines.md): Contributor rules and implementation constraints.
+- [Docs index](docs/README.md): the maintained map of user docs and design notes.
 
 ## Package Entrypoints
 

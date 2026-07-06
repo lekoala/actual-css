@@ -9,7 +9,7 @@ Comments explain the purpose.
 Ship production ready, future-proof code.
 Always think about ease of maintenance and low developer burden.
 
-Elegance is key.
+Elegance is key. Less is more.
 
 This library has not reached 1.0 and can make as many breaking changes as required to reach the proper shape.
 
