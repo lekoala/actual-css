@@ -29,6 +29,8 @@ const tipMap = new WeakMap();
 const cleanupMap = new WeakMap();
 const generatedTips = new WeakSet();
 const mountedTips = new WeakMap();
+const delayMap = new WeakMap();
+const placementMap = new WeakMap();
 
 function mountTip(tip, trigger) {
   const root = trigger.closest("dialog") || document.body;
@@ -73,7 +75,7 @@ function ensureTip(trigger) {
     generatedTips.add(tip);
 
     const placement = trigger.getAttribute("data-tooltip-placement");
-    if (placement) tip._placement = placement;
+    if (placement) placementMap.set(tip, placement);
 
     const parent = trigger.closest("dialog") || document.body;
     parent.appendChild(tip);
@@ -90,15 +92,15 @@ function ensureTip(trigger) {
     tip.style.position = "fixed";
 
     const placement = trigger.getAttribute("data-tooltip-placement");
-    if (placement) tip._placement = placement;
+    if (placement) placementMap.set(tip, placement);
 
     mountTip(tip, trigger);
   }
 
   // wire event handlers
   const onHide = () => {
-    if (tip._delay) clearTimeout(tip._delay);
-    tip._delay = null;
+    const d = delayMap.get(tip);
+    if (d) { clearTimeout(d); delayMap.delete(tip); }
     tip.hidden = true;
   };
 
@@ -108,7 +110,7 @@ function ensureTip(trigger) {
   const onReposition = () => {
     if (!tip.hidden) {
       reposition(trigger, tip, {
-        placement: tip._placement || "top",
+        placement: placementMap.get(tip) || "top",
         distance: 6,
         flip: true,
         shift: true,
@@ -146,16 +148,17 @@ function cleanupTrigger(trigger) {
 }
 
 function show(tip, ref) {
-  if (tip._delay) clearTimeout(tip._delay);
-  tip._delay = setTimeout(() => {
+  const existing = delayMap.get(tip);
+  if (existing) clearTimeout(existing);
+  delayMap.set(tip, setTimeout(() => {
     tip.hidden = false;
     reposition(ref, tip, {
-      placement: tip._placement || "top",
+      placement: placementMap.get(tip) || "top",
       distance: 6,
       flip: true,
       shift: true,
     });
-  }, 150);
+  }, 150));
 }
 
 // ── Delegated discovery (mouseover + focusin bubble) ───

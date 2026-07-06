@@ -8,6 +8,25 @@ Works everywhere, works best on modern browsers. Wide browser support (even olde
 - No post-processing — use browser prefixes when needed.
 - CSS nesting is not used — code must be findable in the inspector. Rules are organized as if nesting were used, grouped together without nesting syntax.
 
+## Baseline
+
+| Feature area     | Baseline    | Progressive enhancement       |
+|------------------|-------------|-------------------------------|
+| Layout (flex, grid, position) | Baseline 2023 | —                  |
+| CSS custom properties         | Baseline 2023 | —                  |
+| `:has()`                      | Baseline 2023 | —                  |
+| `color-mix()`                 | Baseline 2023 | Fallback flat color |
+| `light-dark()`                | 2024+        | Manual theme override |
+| `:user-invalid`               | 2024+        | `[aria-invalid]` attribute |
+| `transition-behavior: allow-discrete` | 2024+ | Native dialog open/close |
+| `appearance: base-select`     | 2024+        | Native `<select>` |
+| `@starting-style`             | 2024+        | Instant appearance |
+| View Transition API           | 2024+        | Dialog open/close transition |
+| CSS Anchor Positioning        | Future       | JS positioning (`floating.js`) |
+
+Core layout and visual tokens work on all Baseline 2023 browsers. Features marked
+2024+ are gated with `@supports` or degrade gracefully through fallback values.
+
 ## Dark mode
 
 Dark mode is for modern browsers only (light mode is the fallback otherwise).

@@ -13,6 +13,11 @@
     display: none !important;
   }
 
+  a.btn::after {
+    content: " (" attr(href) ")";
+    font-size: 0.875em;
+  }
+
   .card,
   .alert,
   .badge {
