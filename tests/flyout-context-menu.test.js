@@ -1,5 +1,5 @@
 import { afterEach, expect, test } from "bun:test";
-import { cleanupDOM, click, mockRect, press, setupDOM } from "./helpers/dom.js";
+import { cleanupDOM, click, mockRect, nextMicrotask, press, setupDOM } from "./helpers/dom.js";
 
 let importId = 0;
 
@@ -48,6 +48,57 @@ test("flyout trigger arrow key opens and focuses direct action items", async () 
   expect(menu.hidden).toBe(false);
   expect(menu.classList.contains("is-open")).toBe(true);
   expect(document.activeElement).toBe(first);
+});
+
+test("flyout trigger gets initial disclosure attributes", async () => {
+  await loadFlyout(`
+    <button id="trigger" type="button" aria-controls="menu" aria-expanded="false">Open</button>
+    <menu id="menu" class="flyout" hidden>
+      <li><button type="button">First</button></li>
+    </menu>
+  `);
+  const trigger = document.getElementById("trigger");
+
+  expect(trigger.getAttribute("aria-expanded")).toBe("false");
+  expect(trigger.getAttribute("aria-haspopup")).toBe("menu");
+});
+
+test("removing one trigger does not disconnect a shared flyout", async () => {
+  await loadFlyout(`
+    <button id="first-trigger" type="button" aria-controls="menu" aria-expanded="false">First</button>
+    <button id="second-trigger" type="button" aria-controls="menu" aria-expanded="false">Second</button>
+    <menu id="menu" class="flyout" hidden>
+      <li><button type="button">Item</button></li>
+    </menu>
+  `);
+  const first = document.getElementById("first-trigger");
+  const second = document.getElementById("second-trigger");
+  const menu = document.getElementById("menu");
+  setupGeometry(second, menu);
+
+  first.remove();
+  await nextMicrotask();
+  click(second);
+
+  expect(menu.hidden).toBe(false);
+  expect(menu.classList.contains("is-open")).toBe(true);
+});
+
+test("flyout connects when the menu is inserted after its trigger", async () => {
+  await loadFlyout('<main><button id="trigger" type="button" aria-controls="menu" aria-expanded="false">Open</button></main>');
+
+  document.querySelector("main").insertAdjacentHTML(
+    "beforeend",
+    '<menu id="menu" class="flyout" hidden><li><button type="button">Item</button></li></menu>',
+  );
+  await nextMicrotask();
+  const trigger = document.getElementById("trigger");
+  const menu = document.getElementById("menu");
+  setupGeometry(trigger, menu);
+  click(trigger);
+
+  expect(menu.hidden).toBe(false);
+  expect(menu.classList.contains("is-open")).toBe(true);
 });
 
 test("flyout trigger opens nav panels and focuses the first link", async () => {

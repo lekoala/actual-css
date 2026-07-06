@@ -69,6 +69,46 @@ test("Home and End move to first and last tabs", async () => {
   expect(document.activeElement).toBe(tabA);
 });
 
+test("vertical tablists use ArrowDown and ArrowUp for selection", async () => {
+  await loadTabs(tabsMarkup().replace('role="tablist"', 'role="tablist" aria-orientation="vertical"'));
+  const tabA = document.getElementById("tab-a");
+  const tabB = document.getElementById("tab-b");
+
+  tabA.focus();
+  press(tabA, "ArrowDown");
+
+  expect(tabA.getAttribute("aria-selected")).toBe("false");
+  expect(tabB.getAttribute("aria-selected")).toBe("true");
+  expect(document.activeElement).toBe(tabB);
+
+  press(tabB, "ArrowUp");
+
+  expect(tabA.getAttribute("aria-selected")).toBe("true");
+  expect(document.activeElement).toBe(tabA);
+});
+
+test("horizontal ArrowDown moves focus to the selected panel", async () => {
+  await loadTabs(tabsMarkup());
+  const tabA = document.getElementById("tab-a");
+  const panelA = document.getElementById("panel-a");
+
+  tabA.focus();
+  press(tabA, "ArrowDown");
+
+  expect(document.activeElement).toBe(panelA);
+});
+
+test("vertical tablists ignore ArrowRight for selection", async () => {
+  await loadTabs(tabsMarkup().replace('role="tablist"', 'role="tablist" aria-orientation="vertical"'));
+  const tabA = document.getElementById("tab-a");
+
+  tabA.focus();
+  press(tabA, "ArrowRight");
+
+  expect(tabA.getAttribute("aria-selected")).toBe("true");
+  expect(document.activeElement).toBe(tabA);
+});
+
 test("dynamically inserted tablists are initialized", async () => {
   setupDOM("<main></main>");
   await import(`../src/js/tab.js?test=${++importId}`);
@@ -85,4 +125,3 @@ test("dynamically inserted tablists are initialized", async () => {
   expect(document.getElementById("panel-a").hidden).toBe(true);
   expect(document.getElementById("panel-b").hidden).toBe(false);
 });
-

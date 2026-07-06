@@ -1,5 +1,6 @@
 import { afterAll, afterEach, expect, test } from "bun:test";
 import { cleanupDOM, click, mockRect, nextMicrotask, press, setupDOM } from "./helpers/dom.js";
+import { EVENTS } from "../src/js/events.js";
 
 setupDOM();
 
@@ -102,6 +103,44 @@ test("closeSurface can restore focus to the opening trigger", () => {
   closeSurface(menu, { restoreFocus: true });
 
   expect(document.activeElement).toBe(trigger);
+});
+
+test("out-of-view hide closes without restoring focus", () => {
+  setBody('<button aria-controls="menu">Open</button><button id="next">Next</button><div id="menu" class="flyout"></div>');
+  const trigger = document.querySelector("button[aria-controls]");
+  const next = document.getElementById("next");
+  const menu = document.getElementById("menu");
+  mockPlacement(trigger, menu);
+  openSurface(menu, { trigger });
+  next.focus();
+
+  menu.dispatchEvent(
+    new CustomEvent(EVENTS.hide, { detail: { type: "out-of-view" } }),
+  );
+
+  expect(isSurfaceOpen(menu)).toBe(false);
+  expect(document.activeElement).toBe(next);
+});
+
+test("escape hide closes and restores focus without scrolling", () => {
+  setBody('<button aria-controls="menu">Open</button><button id="next">Next</button><div id="menu" class="flyout"></div>');
+  const trigger = document.querySelector("button[aria-controls]");
+  const next = document.getElementById("next");
+  const menu = document.getElementById("menu");
+  let preventScroll;
+  trigger.focus = (opts) => {
+    preventScroll = opts?.preventScroll;
+    HTMLElement.prototype.focus.call(trigger);
+  };
+  mockPlacement(trigger, menu);
+  openSurface(menu, { trigger });
+  next.focus();
+
+  menu.dispatchEvent(new CustomEvent(EVENTS.hide, { detail: { type: "escape" } }));
+
+  expect(isSurfaceOpen(menu)).toBe(false);
+  expect(document.activeElement).toBe(trigger);
+  expect(preventScroll).toBe(true);
 });
 
 test("prepareSurface mounts to the surface root and disconnectSurface restores it", () => {
@@ -246,6 +285,28 @@ test("arrow keys rove direct flyout action items", () => {
   press(second, "ArrowUp");
 
   expect(document.activeElement).toBe(first);
+});
+
+test("arrow keys skip hidden flyout action items", () => {
+  setBody(`
+    <button aria-controls="menu"></button>
+    <menu id="menu" class="flyout">
+      <li><button id="first" type="button">First</button></li>
+      <li hidden><button id="hidden" type="button">Hidden</button></li>
+      <li><button id="second" type="button">Second</button></li>
+    </menu>
+  `);
+  const trigger = document.querySelector("button[aria-controls]");
+  const menu = document.getElementById("menu");
+  const first = document.getElementById("first");
+  const second = document.getElementById("second");
+  mockPlacement(trigger, menu);
+
+  openSurface(menu, { trigger });
+  first.focus();
+  press(first, "ArrowDown");
+
+  expect(document.activeElement).toBe(second);
 });
 
 test("outside-only auto-close keeps inside clicks open", () => {

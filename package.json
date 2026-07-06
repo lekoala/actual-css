@@ -47,10 +47,16 @@
     "./package.json": "./package.json"
   },
   "main": "./dist/actual.js",
+  "style": "./dist/actual.min.css",
+  "unpkg": "./dist/actual.min.css",
+  "jsdelivr": "./dist/actual.min.css",
   "sideEffects": true,
   "files": [
     "dist",
+    "!dist/actual-themes.min.css",
+    "!dist/actual-themes.min.css.map",
     "src/css",
+    "!src/css/themes",
     "src/js",
     "docs",
     "CHANGELOG.md",

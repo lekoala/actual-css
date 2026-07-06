@@ -12,6 +12,11 @@
  * --flyout-trigger-width is set by surface.js while an open flyout is positioned.
  */
 
+.flyout-root {
+  position: relative;
+  display: inline-block;
+}
+
 .flyout {
   z-index: var(--z-menu);
   position: absolute;
@@ -62,8 +67,7 @@
   inline-size: auto;
   min-inline-size: 0;
   max-inline-size: none;
-  max-block-size: min(75vh, 32rem);
-  max-block-size: min(75vb, 32rem);
+  max-block-size: min(calc(var(--viewport-block) * 0.75), 32rem);
   overflow: auto;
   padding: max(var(--space-3), env(safe-area-inset-top)) var(--space-3)
     max(var(--space-3), env(safe-area-inset-bottom));

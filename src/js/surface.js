@@ -1,6 +1,6 @@
 import { track, reposition, repositionAt } from "./floating.js";
 import { EVENTS } from "./events.js";
-import { hasMenuItem, hasMenuItems, onMenuKeydown } from "./menu.js";
+import { hasMenuItem, onMenuKeydown } from "./menu.js";
 
 const DEFAULT_BREAKPOINT = 768;
 const BREAKPOINTS = {
@@ -208,19 +208,17 @@ function ensureSurfaceWired(menu) {
 
   menu.addEventListener(
     EVENTS.hide,
-    () => {
-      if (!menu.hidden) closeSurface(menu, { restoreFocus: true });
+    (e) => {
+      if (!menu.hidden) closeSurface(menu, { restoreFocus: e.detail?.type === "escape" });
     },
     { signal: controller.signal },
   );
 
-  if (hasMenuItems(menu)) {
-    menu.addEventListener(
-      "keydown",
-      (e) => onMenuKeydown(e, { close: (target) => closeSurface(target) }),
-      { signal: controller.signal },
-    );
-  }
+  menu.addEventListener(
+    "keydown",
+    (e) => onMenuKeydown(e, { close: (target) => closeSurface(target) }),
+    { signal: controller.signal },
+  );
 
   menu.addEventListener(
     "click",
@@ -245,6 +243,7 @@ export function prepareSurface(menu, anchor) {
   mountSurface(menu, anchor);
   menu.style.position = "fixed";
   menu.hidden = true;
+  syncExpanded(menu, false);
 }
 
 export function openSurface(menu, opts = {}) {
@@ -297,7 +296,7 @@ export function closeSurface(menu, opts = {}) {
   syncExpanded(menu, false);
 
   if (opts.restoreFocus && state?.restoreFocusTo?.isConnected) {
-    state.restoreFocusTo.focus();
+    state.restoreFocusTo.focus({ preventScroll: true });
   }
 
   waitForAnimations(menu, backdrop).then(() => {

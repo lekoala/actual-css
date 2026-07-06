@@ -79,3 +79,24 @@
   margin: 0;
   padding-inline-start: 2rem;
 }
+
+@media (forced-colors: active) {
+  .accordion {
+    border-color: ButtonText;
+    background: Canvas;
+    color: CanvasText;
+  }
+
+  .accordion > details + details {
+    border-block-start-color: ButtonText;
+  }
+
+  .accordion summary {
+    color: CanvasText;
+  }
+
+  .accordion summary::after {
+    background-color: ButtonText;
+    forced-color-adjust: none;
+  }
+}

@@ -6,6 +6,7 @@
  * Panel:     [role="tabpanel"]  with id matching aria-controls
  *
  * Keyboard:  ArrowLeft/Right, Home/End (select tab, wrapping)
+ *            ArrowUp/Down for aria-orientation="vertical"
  *            ArrowDown (focus selected panel)
  *
  * Self-registers via enhance: injected tablists wire automatically.
@@ -84,15 +85,38 @@ function onKeydown(e) {
   if (!list) return;
 
   const tabs = tabsOf(list);
+  const isVertical = list.getAttribute("aria-orientation") === "vertical";
   let next;
 
   switch (e.key) {
     case "ArrowRight":
+      if (isVertical) break;
       e.preventDefault();
       next = nextItem(tabs, tab, 1, { wrap: true });
       if (next) activateAndFocus(next);
       break;
     case "ArrowLeft":
+      if (isVertical) break;
+      e.preventDefault();
+      next = nextItem(tabs, tab, -1, { wrap: true });
+      if (next) activateAndFocus(next);
+      break;
+    case "ArrowDown":
+      if (!isVertical) {
+        e.preventDefault();
+        const panel = panelFor(tab);
+        if (panel) {
+          makePanelFocusable(panel);
+          panel.focus();
+        }
+        break;
+      }
+      e.preventDefault();
+      next = nextItem(tabs, tab, 1, { wrap: true });
+      if (next) activateAndFocus(next);
+      break;
+    case "ArrowUp":
+      if (!isVertical) break;
       e.preventDefault();
       next = nextItem(tabs, tab, -1, { wrap: true });
       if (next) activateAndFocus(next);
@@ -105,15 +129,6 @@ function onKeydown(e) {
       e.preventDefault();
       activateAndFocus(lastItem(tabs));
       break;
-    case "ArrowDown": {
-      e.preventDefault();
-      const panel = panelFor(tab);
-      if (panel) {
-        makePanelFocusable(panel);
-        panel.focus();
-      }
-      break;
-    }
     case "Enter":
     case " ":
       e.preventDefault();

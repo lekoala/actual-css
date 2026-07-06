@@ -19,6 +19,17 @@ function input(el, value, inputType = "insertText") {
   el.dispatchEvent(event);
 }
 
+function inputAt(el, value, caret, inputType) {
+  el.value = value;
+  el.setSelectionRange?.(caret, caret);
+  const event = new Event("input", { bubbles: true });
+  Object.defineProperty(event, "inputType", {
+    configurable: true,
+    value: inputType,
+  });
+  el.dispatchEvent(event);
+}
+
 afterEach(() => {
   cleanupDOM();
 });
@@ -40,6 +51,15 @@ test("mask deletion does not re-add trailing literals", async () => {
   input(el, "ab-", "deleteContentBackward");
 
   expect(el.value).toBe("ab");
+});
+
+test("mask deletion over a literal removes the previous raw character", async () => {
+  await loadMask('<input data-mask="999-999">');
+  const el = document.querySelector("input");
+
+  inputAt(el, "123456", 3, "deleteContentBackward");
+
+  expect(el.value).toBe("124-56");
 });
 
 test("mask dispatches input after programmatic formatting", async () => {

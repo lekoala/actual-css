@@ -31,10 +31,7 @@ function appendFollowingLiterals(mask, start) {
   return out;
 }
 
-function applyMask(value, mask, inputType = "") {
-  if (!mask) return value;
-
-  const raw = rawMaskChars(value, mask);
+function formatRaw(raw, mask, inputType = "") {
   const autoLiteral = inputType.startsWith("insert");
   let rawIndex = 0;
   let out = "";
@@ -68,6 +65,11 @@ function applyMask(value, mask, inputType = "") {
   return out;
 }
 
+function applyMask(value, mask, inputType = "") {
+  if (!mask) return value;
+  return formatRaw(rawMaskChars(value, mask), mask, inputType);
+}
+
 function caretForMask(value, mask, rawCount) {
   if (rawCount <= 0) return 0;
 
@@ -97,9 +99,21 @@ function connectMask(el) {
   onTextInput(el, (event) => {
     const inputType = event.inputType || "";
     const caret = selectionStart(el);
-    const rawBeforeCaret = rawMaskChars(el.value.slice(0, caret), mask).length;
+    let rawBeforeCaret = rawMaskChars(el.value.slice(0, caret), mask).length;
     const previous = el.value;
-    const next = applyMask(previous, mask, inputType);
+    let next = applyMask(previous, mask, inputType);
+
+    if (inputType.startsWith("delete") && next.length > previous.length) {
+      const raw = rawMaskChars(previous, mask);
+      const deleteIndex =
+        inputType === "deleteContentForward" ? rawBeforeCaret : rawBeforeCaret - 1;
+
+      if (deleteIndex >= 0 && deleteIndex < raw.length) {
+        raw.splice(deleteIndex, 1);
+        rawBeforeCaret = Math.max(0, deleteIndex);
+        next = formatRaw(raw, mask, inputType);
+      }
+    }
 
     if (next === previous) return;
 

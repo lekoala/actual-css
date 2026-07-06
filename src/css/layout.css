@@ -101,7 +101,7 @@
 
 @supports not (container-type: inline-size) {
   @media (min-width: 64rem) {
-    .sidebar-layout {
+    .container-query .sidebar-layout {
       grid-template-columns: minmax(0, 1fr) var(--sidebar-layout-size, 18rem);
       align-items: start;
     }

@@ -18,7 +18,7 @@
 
 .avatar {
   --avatar-size: 2.25rem;
-  --avatar-radius: var(--radius-full, 9999px);
+  --avatar-radius: var(--radius-full);
   --avatar-font-size: var(--font-size-sm);
   --avatar-bg: var(--intent, var(--surface-subtle));
   --avatar-fg: var(--intent-fg, var(--tone-fg, var(--text-muted)));
@@ -93,7 +93,7 @@ button.avatar {
 
 .avatar.sm {
   --avatar-size: 1.75rem;
-  --avatar-font-size: 0.8125rem;
+  --avatar-font-size: var(--font-size-xs);
 }
 
 .avatar.lg {
@@ -120,6 +120,24 @@ button.avatar {
 
   display: inline-flex;
   align-items: center;
+}
+
+.avatar-stack.sm {
+  --avatar-size: 1.75rem;
+}
+
+.avatar-stack.lg {
+  --avatar-size: 3rem;
+}
+
+@supports selector(:has(> .avatar)) {
+  .avatar-stack:has(> .avatar.sm) {
+    --avatar-size: 1.75rem;
+  }
+
+  .avatar-stack:has(> .avatar.lg) {
+    --avatar-size: 3rem;
+  }
 }
 
 .avatar-stack > .avatar {

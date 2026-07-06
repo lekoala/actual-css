@@ -18,6 +18,7 @@ import {
 
 // trigger -> { flyout, controller }
 const triggerMap = new WeakMap();
+const FLYOUT_TRIGGER_SELECTOR = "[aria-controls][aria-expanded], [aria-controls][aria-haspopup]";
 
 function openFlyout(flyout, trigger) {
   openSurface(flyout, { trigger, source: trigger });
@@ -116,6 +117,12 @@ function connectTrigger(trigger) {
   triggerMap.set(trigger, { flyout, controller });
 
   prepareSurface(flyout, trigger);
+  if (!trigger.hasAttribute("aria-expanded")) {
+    trigger.setAttribute("aria-expanded", "false");
+  }
+  if (!trigger.hasAttribute("aria-haspopup") && flyout.matches("menu, [role='menu']")) {
+    trigger.setAttribute("aria-haspopup", "menu");
+  }
 
   trigger.addEventListener("click", onTriggerClick, { signal: controller.signal });
   trigger.addEventListener("keydown", onTriggerKeydown, { signal: controller.signal });
@@ -125,13 +132,14 @@ function disconnectTrigger(trigger) {
   const state = triggerMap.get(trigger);
   if (!state) return;
   state.controller.abort();
-  disconnectFlyout(state.flyout);
   triggerMap.delete(trigger);
 }
 
 function connectFlyout(flyout) {
   if (!flyout.id) return;
-  const triggers = document.querySelectorAll(`[aria-controls="${CSS.escape(flyout.id)}"]`);
+  const triggers = document.querySelectorAll(
+    `${FLYOUT_TRIGGER_SELECTOR}[aria-controls="${CSS.escape(flyout.id)}"]`,
+  );
   for (const trigger of triggers) {
     if (!triggerMap.has(trigger)) connectTrigger(trigger);
   }
@@ -143,7 +151,7 @@ function disconnectFlyout(flyout) {
 }
 
 enhance({
-  "[aria-controls]": (trigger) => {
+  [FLYOUT_TRIGGER_SELECTOR]: (trigger) => {
     connectTrigger(trigger);
     return () => disconnectTrigger(trigger);
   },

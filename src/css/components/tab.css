@@ -19,7 +19,7 @@
 .tabs {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.35rem;
+  gap: var(--space-1);
   margin: 0;
   padding: 0;
   border-block-end: var(--border-width) solid var(--border);
@@ -29,8 +29,8 @@
 .tab {
   display: inline-flex;
   align-items: center;
-  min-block-size: 2.4rem;
-  padding-inline: 0.8rem;
+  min-block-size: var(--control-size);
+  padding-inline: var(--space-3);
   border: 0;
   border-block-end: 2px solid transparent;
   border-radius: 0;
@@ -42,8 +42,10 @@
   cursor: pointer;
 }
 
-.tab:hover {
-  color: var(--text);
+@media (hover: hover) {
+  .tab:hover {
+    color: var(--text);
+  }
 }
 
 .tab:focus-visible {
@@ -68,10 +70,12 @@
     color: ButtonText;
   }
 
-  .tab:hover {
-    color: ButtonText;
-    text-decoration: underline;
-    text-underline-offset: 0.18em;
+  @media (hover: hover) {
+    .tab:hover {
+      color: ButtonText;
+      text-decoration: underline;
+      text-underline-offset: 0.18em;
+    }
   }
 
   .tab[aria-selected="true"],

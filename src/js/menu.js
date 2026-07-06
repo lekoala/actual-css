@@ -10,7 +10,11 @@ export const MENU_ITEM_SELECTOR = [
 
 export function getMenuItems(menu) {
   return [...menu.querySelectorAll(MENU_ITEM_SELECTOR)].filter(
-    (item) => !item.disabled && item.getAttribute("aria-disabled") !== "true",
+    (item) =>
+      !item.disabled &&
+      item.getAttribute("aria-disabled") !== "true" &&
+      item.checkVisibility?.() !== false &&
+      !item.closest("[hidden], [inert], [aria-hidden='true']"),
   );
 }
 

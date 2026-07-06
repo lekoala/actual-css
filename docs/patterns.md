@@ -243,6 +243,8 @@ Keep this separate from layout primitives. `.cluster` and `.stack` should not st
 
 Use `.list-group` for rich content lists where each item may contain multiple elements.
 
+Use `figure`/`figcaption` when the list is a captioned content unit. Use `div`/`header` when it is an application panel or section.
+
 ```html
 <figure class="list-group">
   <figcaption>Most played songs this week</figcaption>
@@ -256,7 +258,7 @@ Use `.list-group` for rich content lists where each item may contain multiple el
         <div>Dio Lupa</div>
         <div class="muted">Remaining Reason</div>
       </div>
-      <span class="muted">3:45</span>
+      <span class="list-meta muted">3:45</span>
       <button class="btn ghost" aria-label="Play">
         <i class="ti ti-player-play"></i>
       </button>
@@ -270,7 +272,7 @@ Use `.list-group` for rich content lists where each item may contain multiple el
         <div>Astral Planes</div>
         <div class="muted">Neon Drift</div>
       </div>
-      <span class="muted">4:12</span>
+      <span class="list-meta muted">4:12</span>
       <button class="btn ghost" aria-label="Play">
         <i class="ti ti-player-play"></i>
       </button>
@@ -278,6 +280,23 @@ Use `.list-group` for rich content lists where each item may contain multiple el
     </li>
   </ul>
 </figure>
+```
+
+```html
+<div class="list-group">
+  <header>Recent files</header>
+
+  <ul>
+    <li>
+      <strong>Proposal.pdf</strong>
+      <span class="list-meta muted">Edited today</span>
+    </li>
+    <li>
+      <strong>Roadmap.md</strong>
+      <span class="list-meta muted">Edited yesterday</span>
+    </li>
+  </ul>
+</div>
 ```
 
 `.list-group` is different from `.nav-list` and `.actions`.
