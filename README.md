@@ -31,9 +31,9 @@ Or import only the pieces you use:
 @import "actual-css/css/components/button";
 @import "actual-css/css/components/card";
 @import "actual-css/css/forms";
-@import "actual-css/css/ui/flyout";
+@import "actual-css/css/components/flyout";
 @import "actual-css/css/utilities";
-@import "actual-css/css/join";
+@import "actual-css/css/components/join";
 ```
 
 You can also use the compiled file directly:
@@ -67,13 +67,13 @@ Actual CSS uses a small unprefixed class grammar:
 .component [intent] [variant] [size] [modifier]
 ```
 
-Components, layout helpers, form helpers, UI helpers, and utilities claim their documented class names. Intents are `.primary`, `.secondary`, `.success`, `.warning`, `.danger`, and `.neutral`; shared variants are `.solid`, `.soft`, `.outline`, `.ghost`, and `.link`; shared sizes are `.sm` and `.lg`.
+Components, layout helpers, form helpers, and utilities claim their documented class names. Intents are `.primary`, `.secondary`, `.success`, `.warning`, `.danger`, and `.neutral`; shared variants are `.solid`, `.soft`, `.outline`, `.ghost`, and `.link`; shared sizes are `.sm` and `.lg`.
 
 Undocumented `is-*` classes are runtime internals.
 
 ## What's included
 
-**Components** — button, card, badge, alert, dialog, drawer, table, accordion, breadcrumb, pagination, skeleton, spinner, avatar, key, meter, progress, and busy indicators.
+**Components** — button, card, badge, alert, dialog, drawer, flyout, tooltip, tabs, scrollspy, table, accordion, breadcrumb, pagination, skeleton, spinner, avatar, key, meter, progress, joined controls, and busy indicators.
 
 **Patterns** — actions, list group, navbar, and overline. These are regular source files and can be imported only when needed.
 

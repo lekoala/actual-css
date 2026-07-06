@@ -281,7 +281,7 @@ It claims a small public grammar: `.component [intent] [variant] [size] [modifie
 - https://daisyui.com/components/navbar/
 - https://kelpui.com/docs/components/navbar/
 
-### UI: Flyout / Menu
+### Interactive Components: Flyout / Menu
 
 - https://oat.ink/components/#menu
 - https://daisyui.com/components/menu/
@@ -292,7 +292,7 @@ It claims a small public grammar: `.component [intent] [variant] [size] [modifie
 - https://getbootstrap.com/docs/5.3/components/popovers/#overview
 - https://open-ui.org/components/menu.research/
 
-### UI: Tabs
+### Interactive Components: Tabs
 
 - https://www.makethingsaccessible.com/guides/responsive-and-accessible-tabbed-interfaces/
 - https://www.w3.org/WAI/ARIA/apg/patterns/tabs/
@@ -305,7 +305,7 @@ It claims a small public grammar: `.component [intent] [variant] [size] [modifie
 - https://open-ui.org/components/tabs.research/
 - https://kelpui.com/docs/components/tabs/
 
-### UI: Tooltip
+### Interactive Components: Tooltip
 
 - https://oat.ink/components/#tooltip
 - https://picocss.com/docs/tooltip
@@ -317,7 +317,7 @@ It claims a small public grammar: `.component [intent] [variant] [size] [modifie
 - https://daisyui.com/components/tooltip/
 - https://open-ui.org/components/tooltip.research/
 
-### UI: Scrollspy
+### Interactive Components: Scrollspy
 
 - https://getbootstrap.com/docs/5.3/components/scrollspy/
 - https://una.im/scroll-target-group/

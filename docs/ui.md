@@ -1,6 +1,6 @@
-# UI
+# Interactive Components
 
-UI components are interactive patterns that need JavaScript or modern platform behavior to be complete. They follow the same principles as static components: semantic markup first, small class API, shared tokens, and progressive enhancement.
+Interactive components need JavaScript or modern platform behavior to be complete. They follow the same principles as every component: semantic markup first, small class API, shared tokens, and progressive enhancement.
 
 - CSS owns layout, surfaces, state styling, and transitions.
 - JavaScript owns open/closed state, ARIA synchronization, focus management, keyboard behavior, and dismissal.
