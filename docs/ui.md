@@ -266,87 +266,11 @@ If dialogs are injected later, register those new dialog elements before their o
 
 ### Animation
 
-The base CSS gives supporting browsers a small opening transition. Closing remains native unless `data-dialog-view-transition` is enabled and the browser supports the View Transition API.
+The base CSS gives supporting browsers a small opening transition. Closing remains native unless a view transition is enabled.
 
 The open dialog root intentionally ends at `transform: none`; fixed flyouts and tooltips mounted inside a modal dialog rely on viewport coordinates.
 
-```css
-dialog.modal {
-  opacity: 0;
-  overflow: visible;
-
-  transition:
-    opacity var(--duration),
-    transform var(--duration);
-}
-
-dialog.modal > form,
-dialog.modal > .stack {
-  max-block-size: calc(100vh - 2rem);
-  max-block-size: calc(100dvb - 2rem);
-  overflow: auto;
-  overscroll-behavior: contain;
-}
-
-dialog.modal[open] {
-  opacity: 1;
-  transform: none;
-}
-
-@starting-style {
-  dialog.modal[open] {
-    opacity: 0;
-    transform: translateY(0.35rem) scale(0.98);
-  }
-}
-
-dialog.modal::backdrop {
-  background: var(--backdrop-fill);
-  opacity: 0;
-  transition: opacity var(--duration);
-}
-
-@supports (transition-behavior: allow-discrete) {
-  dialog.modal {
-    transition:
-      opacity var(--duration),
-      transform var(--duration),
-      overlay var(--duration) allow-discrete,
-      display var(--duration) allow-discrete;
-  }
-
-  dialog.modal::backdrop {
-    transition:
-      opacity var(--duration),
-      overlay var(--duration) allow-discrete,
-      display var(--duration) allow-discrete;
-  }
-}
-
-dialog.modal[open]::backdrop {
-  opacity: 1;
-}
-
-html.has-modal-open {
-  overflow: hidden;
-  scrollbar-gutter: stable;
-}
-
-@supports selector(:has(dialog:modal)) {
-  html:has(dialog:modal) {
-    overflow: hidden;
-    scrollbar-gutter: stable;
-  }
-}
-
-@starting-style {
-  dialog.modal[open]::backdrop {
-    opacity: 0;
-  }
-}
-```
-
-### View transitions
+#### View transition
 
 Add `data-dialog-view-transition` to morph the dialog to/from its trigger using the View Transition API. The dialog appears to grow out of the trigger on open and shrink back into it on close, communicating the relationship between the two.
 

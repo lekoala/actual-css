@@ -515,31 +515,47 @@ When composing source files manually, import `components/join.css` after the con
 
 ## Input Policy
 
-> Native input intent first. Actual's runtime reinforces the safe numeric cases
-> and fixed-shape masks.
+> Native input intent first. Actual's runtime filters values only when explicitly
+> asked, and fixed-shape masks stay opt-in through `data-mask`.
 
-`inputmode` changes the virtual keyboard but does not constrain the value. When
-the default JavaScript runtime is loaded, `inputmode="numeric"` keeps unsigned
-digits only and `inputmode="decimal"` keeps unsigned decimal values with a single
-`.` separator.
+`inputmode` changes the virtual keyboard but does not constrain the value. Actual
+does not filter plain `inputmode` fields by default because numeric entry often
+needs temporary, signed, grouped, or locale-specific values while the user types.
+
+Add `data-filter` when the field should enforce one of Actual's small built-in
+filters. An empty `data-filter` uses `inputmode` when it is `numeric` or
+`decimal`; an explicit value wins.
 
 ```html
 <label class="field">
   <span class="field-label">Quantity</span>
-  <input inputmode="numeric" placeholder="42" />
+  <input inputmode="numeric" data-filter placeholder="42" />
 </label>
 ```
 
 ```html
 <label class="field">
   <span class="field-label">Amount</span>
-  <input inputmode="decimal" placeholder="12.34" />
+  <input inputmode="decimal" data-filter="decimal" placeholder="12.34" />
 </label>
 ```
 
-For signed numbers, locale formatting, currency rules, slugs, or app-specific
-character policies, use application code. Those rules are domain policy, not a
-framework default.
+The built-in filters are intentionally narrow: `numeric` keeps digits only, and
+`decimal` keeps digits plus a single `.` separator. Text filters are available
+for simple transforms: `lower`, `upper`, `letters`, and `slug`.
+
+Filters can be piped when a field needs more than one transform.
+
+```html
+<label class="field">
+  <span class="field-label">Slug</span>
+  <input data-filter="lower|slug" autocomplete="off" placeholder="release-notes" />
+</label>
+```
+
+For signed numbers, locale formatting, currency rules, time ranges, or
+app-specific character policies, use application code. Those rules are domain
+policy, not a framework default.
 
 ### Pattern mask
 

@@ -93,6 +93,10 @@
   outline-offset: var(--focus-outline-offset);
 }
 
+.field.danger :where(.switch, input[role="switch"]) {
+  border-color: var(--danger);
+}
+
 .switch:disabled,
 .form input[role="switch"]:disabled {
   --switch-bg: var(--surface-subtle);

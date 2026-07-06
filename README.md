@@ -105,7 +105,7 @@ Actual CSS also ships optional entrypoints:
 
 ## JavaScript enhancers
 
-Some components can be enhanced with JavaScript: dialog/drawer, flyout, tooltip, tabs, scrollspy, context menu, floating UI, numeric `inputmode` enforcement, and input masks.
+Some components can be enhanced with JavaScript: dialog/drawer, flyout, tooltip, tabs, scrollspy, context menu, floating UI, opt-in `data-filter` input filtering, and input masks.
 
 Use the full module:
 
@@ -118,7 +118,7 @@ Or import only the enhancers you need:
 ```js
 import "actual-css/js/dialog";
 import "actual-css/js/flyout";
-import "actual-css/js/inputmode";
+import "actual-css/js/filter";
 import "actual-css/js/mask";
 import "actual-css/js/tooltip";
 ```
