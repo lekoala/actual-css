@@ -43,6 +43,14 @@
   user-select: none;
 }
 
+/* Forced colors wipe the background and the stack ring (box-shadow), so the
+   shape needs a real border to stay visible. */
+@media (forced-colors: active) {
+  .avatar {
+    border: var(--border-width) solid CanvasText;
+  }
+}
+
 .avatar > :first-child:not(:where(img, picture, .badge)) {
   display: inline-grid;
   place-items: center;

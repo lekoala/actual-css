@@ -120,16 +120,7 @@
   font-weight: var(--font-weight-strong);
 }
 
-@media (forced-colors: active) {
-  .alert {
-    border-color: ButtonText;
-    background: Canvas;
-    color: CanvasText;
-  }
-
-  .alert.solid {
-    border-color: Highlight;
-    background: Highlight;
-    color: HighlightText;
-  }
-}
+/* Forced colors: no override needed. The always-on border gets a forced
+   readable color, and text on a Highlight surface would trigger Chromium's
+   Canvas backplate (unreadable) — so .solid intentionally falls back to the
+   default look. */

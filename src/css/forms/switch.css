@@ -102,14 +102,16 @@
 }
 
 @media (forced-colors: active) {
+  /* --switch-knob must be set on the element, not on ::before: a custom
+     property declared on the pseudo would shadow the :checked override. */
   .switch,
   .form input[role="switch"] {
+    --switch-knob: ButtonText;
     border-color: ButtonText;
   }
 
   .switch::before,
   .form input[role="switch"]::before {
-    --switch-knob: ButtonText;
     box-shadow: none;
   }
 

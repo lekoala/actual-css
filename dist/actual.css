@@ -1097,20 +1097,6 @@ button.badge:disabled, .badge[aria-disabled="true"] {
   font-weight: var(--font-weight-strong);
 }
 
-@media (forced-colors: active) {
-  .alert {
-    color: canvastext;
-    background: canvas;
-    border-color: buttontext;
-  }
-
-  .alert.solid {
-    color: highlighttext;
-    background: highlight;
-    border-color: highlight;
-  }
-}
-
 .actions {
   --gap: var(--space-2);
   align-items: center;
@@ -1880,6 +1866,12 @@ dialog.drawer nav {
   display: inline-grid;
   position: relative;
   overflow: visible;
+}
+
+@media (forced-colors: active) {
+  .avatar {
+    border: var(--border-width) solid CanvasText;
+  }
 }
 
 .avatar > :first-child:not(:where(img, picture, .badge)) {
@@ -2966,11 +2958,11 @@ button.avatar {
 
 @media (forced-colors: active) {
   .switch, .form input[role="switch"] {
+    --switch-knob: ButtonText;
     border-color: buttontext;
   }
 
   .switch:before, .form input[role="switch"]:before {
-    --switch-knob: ButtonText;
     box-shadow: none;
   }
 
