@@ -58,3 +58,26 @@
   border-block-end-color: var(--intent, var(--primary));
   color: var(--intent, var(--primary));
 }
+
+@media (forced-colors: active) {
+  .tabs {
+    border-block-end-color: ButtonText;
+  }
+
+  .tab {
+    color: ButtonText;
+  }
+
+  .tab:hover {
+    color: ButtonText;
+    text-decoration: underline;
+    text-underline-offset: 0.18em;
+  }
+
+  .tab[aria-selected="true"],
+  .tab[aria-current="page"],
+  .tab[aria-pressed="true"] {
+    border-block-end-color: Highlight;
+    color: Highlight;
+  }
+}

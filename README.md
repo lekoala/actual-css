@@ -25,12 +25,15 @@ Or import only the pieces you use:
 @import "actual-css/css/theme";
 @import "actual-css/css/intents";
 @import "actual-css/css/variants";
+@import "actual-css/css/container";
 @import "actual-css/css/layout";
+@import "actual-css/css/grid";
 @import "actual-css/css/components/button";
 @import "actual-css/css/components/card";
 @import "actual-css/css/forms";
 @import "actual-css/css/ui/flyout";
 @import "actual-css/css/utilities";
+@import "actual-css/css/join";
 ```
 
 You can also use the compiled file directly:
@@ -74,7 +77,7 @@ Undocumented `is-*` classes are runtime internals.
 
 **Patterns** — actions, list group, navbar, and overline. These are regular source files and can be imported only when needed.
 
-**Layout primitives** — `.stack`, `.cluster`, `.grid`, `.with-sidebar`, `.switcher`, `.center`, `.media`, `.frame`, `.app-shell`, and `.grid-responsive`.
+**Layout primitives** — `.stack`, `.cluster`, `.grid`, `.with-sidebar`, `.switcher`, `.center`, `.media`, `.frame`, `.app-shell`, and `.container-query`.
 
 **Forms** — field layout, choices, switches, selects, custom selects, control base styles, validation states, and form actions.
 

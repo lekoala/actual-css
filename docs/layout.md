@@ -191,14 +191,14 @@ Tune the minimum item width with `--grid-min`.
 
 ### Fixed Columns
 
-Predictable 2/3/4-column grids. Full count by default; wrap in `.grid-responsive` to make the column count collapse on narrow wrappers.
+Predictable 2/3/4-column grids. Full count by default; wrap in `.container-query` to make the column count collapse on narrow wrappers.
 
 Use `.grid-2`, `.grid-3`, and `.grid-4` when the column count matters more than the item minimum width — for example, when a row should always read as "three items side by side", or when an empty cell should not stretch to fill space. Unlike `.grid`, the columns are fixed; if you have only two items in a `.grid-3`, the third cell stays empty rather than redistributing.
 
-A `.grid-2/3/4` without a wrapper is a **fixed grid** (always at its full column count); with a `.grid-responsive` wrapper, it's a **responsive grid** (the column count collapses on narrow wrappers). The wrapper is the query container; the grid itself is a plain block grid.
+A `.grid-2/3/4` without a wrapper is a **fixed grid** (always at its full column count); with a `.container-query` wrapper, it's a **responsive grid** (the column count collapses on narrow wrappers). The wrapper is the query container; the grid itself is a plain block grid.
 
 ```html
-<div class="grid-responsive">
+<div class="container-query">
   <div class="grid-3">
     <article class="card">
       <h3>Starter</h3>
@@ -219,7 +219,7 @@ A `.grid-2/3/4` without a wrapper is a **fixed grid** (always at its full column
 A `grid-4` demo
 
 ```html
-<div class="grid-responsive">
+<div class="container-query">
   <div class="grid-4">
     <article class="card">
       <h3>Starter</h3>
@@ -242,8 +242,8 @@ A `grid-4` demo
 ```
 
 Behavior:
-- Without `.grid-responsive`: `.grid-2` is always 2 cols, `.grid-3` is always 3 cols, `.grid-4` is always 4 cols.
-- With `.grid-responsive`: all three collapse to one column on a narrow wrapper (under 28rem). As the wrapper widens, they step back to 2 cols (28rem-48rem) and then to their full count (48rem+).
+- Without `.container-query`: `.grid-2` is always 2 cols, `.grid-3` is always 3 cols, `.grid-4` is always 4 cols.
+- With `.container-query`: all three collapse to one column on a narrow wrapper (under 28rem). As the wrapper widens, they step back to 2 cols (28rem-48rem) and then to their full count (48rem+).
 - The intermediate 2-col step is useful for lists of items divisible by both 2 and 3 (or 4) — a 12-item list reads as 12 lines, then 6 lines of 2, then 4 lines of 3 (or 3 lines of 4), depending on the grid.
 - The wrapper is the query container, so the same class behaves differently in a narrow sidebar than in a wide main area. No viewport breakpoints are involved.
 
@@ -277,10 +277,10 @@ Tune the side width and wrapping threshold with `--sidebar-size` and `--sidebar-
 
 `.sidebar-layout` is a complementary two-column primitive that uses CSS grid instead of flex. Use it when the aside should align to the top of the content (e.g. a sticky table of contents) or when the content area contains multiple sections that should stretch together.
 
-Wrap it in `.grid-responsive` to make the switch depend on the container width. Below 64rem the columns stack; at and above it the aside takes `--sidebar-layout-size` and the content takes the remaining space. Older browsers use the viewport fallback.
+Wrap it in `.container-query` to make the switch depend on the container width. Below 64rem the columns stack; at and above it the aside takes `--sidebar-layout-size` and the content takes the remaining space. Older browsers use the viewport fallback.
 
 ```html
-<div class="grid-responsive">
+<div class="container-query">
   <div class="sidebar-layout" style="--sidebar-layout-size: 18rem">
     <article class="stack">
       <h1>Long-form article</h1>

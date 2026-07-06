@@ -144,3 +144,16 @@ dialog.modal[open]::backdrop {
     transform: translateX(0.35rem);
   }
 }
+
+@media (forced-colors: active) {
+  dialog.modal {
+    border-color: ButtonText;
+    background: Canvas;
+    color: CanvasText;
+    box-shadow: none;
+  }
+
+  dialog.modal::backdrop {
+    background: Canvas;
+  }
+}

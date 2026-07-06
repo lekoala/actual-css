@@ -23,80 +23,6 @@
   padding-inline: var(--center-pad, 1rem);
 }
 
-.grid {
-  display: grid;
-  gap: var(--gap);
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--grid-min, 16rem)), 1fr));
-}
-
-/* Query-container wrapper that opts .grid-2/3/4 into responsive
- * collapse. Wrap a .grid-2/3/4 inside .grid-responsive to make the
- * column count collapse on narrow wrappers. Without this wrapper,
- * .grid-2/3/4 stay at their full column count. */
-.grid-responsive {
-  container-type: inline-size;
-}
-
-/* Fixed-column grids at their full count by default.
- *   .grid-2: 2 cols
- *   .grid-3: 3 cols
- *   .grid-4: 4 cols
- * When placed inside .grid-responsive, the column count collapses
- * on narrow wrappers. The intermediate 2-col step applies to all
- * three grids; for a 12-item list this reads as 12 lines, 6 lines
- * of 2, then 4 lines of 3 as the wrapper widens.
- *   .grid-2: 1 col -> 2 cols
- *   .grid-3: 1 col -> 2 cols -> 3 cols
- *   .grid-4: 1 col -> 2 cols -> 4 cols */
-.grid-2,
-.grid-3,
-.grid-4 {
-  display: grid;
-  gap: var(--gap);
-}
-
-.grid-2 {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-}
-.grid-3 {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-}
-.grid-4 {
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-}
-
-@container (width < 28rem) {
-  .grid-responsive .grid-2,
-  .grid-responsive .grid-3,
-  .grid-responsive .grid-4 {
-    grid-template-columns: 1fr;
-  }
-}
-
-@container (28rem <= width < 48rem) {
-  .grid-responsive .grid-3,
-  .grid-responsive .grid-4 {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-@supports not (container-type: inline-size) {
-  @media (max-width: 47.999rem) {
-    .grid-responsive .grid-3,
-    .grid-responsive .grid-4 {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-  }
-
-  @media (max-width: 27.999rem) {
-    .grid-responsive .grid-2,
-    .grid-responsive .grid-3,
-    .grid-responsive .grid-4 {
-      grid-template-columns: 1fr;
-    }
-  }
-}
-
 .with-sidebar {
   display: flex;
   flex-wrap: wrap;
@@ -167,7 +93,7 @@
 }
 
 @container (width >= 64rem) {
-  .grid-responsive .sidebar-layout {
+  .container-query .sidebar-layout {
     grid-template-columns: minmax(0, 1fr) var(--sidebar-layout-size, 18rem);
     align-items: start;
   }

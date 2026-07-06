@@ -151,39 +151,10 @@
   :root,
   [data-theme="light"],
   [data-theme="dark"] {
-    --primary: Highlight;
-    --primary-fg: HighlightText;
-    --secondary: ButtonText;
-    --secondary-fg: Canvas;
-    --success: Highlight;
-    --success-fg: HighlightText;
-    --warning: Highlight;
-    --warning-fg: HighlightText;
-    --danger: Highlight;
-    --danger-fg: HighlightText;
-    --neutral: ButtonText;
-    --neutral-fg: Canvas;
-
-    --surface: Canvas;
-    --surface-raised: Canvas;
-    --surface-subtle: Canvas;
-    --surface-solid: CanvasText;
-
-    --text: CanvasText;
-    --text-muted: CanvasText;
-    --text-subtle: GrayText;
-    --border: ButtonText;
-    --focus: Highlight;
     --focus-outline: calc(var(--border-width) * 2) solid Highlight;
     --focus-outline-offset: 2px;
-    --focus-ring: Highlight;
     --focus-ring-shadow: none;
-    --hover-overlay: transparent;
 
-    --shadow: none;
-    --shadow-popout: none;
-    --indicator-ring: Canvas;
-    --backdrop-color: Canvas;
     --backdrop-fill: Canvas;
   }
 }

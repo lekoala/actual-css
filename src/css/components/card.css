@@ -111,3 +111,23 @@
 .card > :where(header, footer, figure)[data-bleed] {
   padding: var(--card-pad);
 }
+
+@media (forced-colors: active) {
+  .card {
+    border-color: ButtonText;
+    background: Canvas;
+    color: CanvasText;
+  }
+
+  .card.raised {
+    box-shadow: none;
+  }
+
+  .card.inverted {
+    --heading: CanvasText;
+
+    border-color: ButtonText;
+    background: Canvas;
+    color: CanvasText;
+  }
+}

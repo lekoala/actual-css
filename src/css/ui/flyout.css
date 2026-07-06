@@ -159,3 +159,28 @@
   border: 0;
   border-block-start: var(--border-width) solid var(--border);
 }
+
+@media (forced-colors: active) {
+  .flyout {
+    border-color: ButtonText;
+    background: Canvas;
+    color: CanvasText;
+    box-shadow: none;
+  }
+
+  .flyout > :where(button, a, [role="menuitem"]):focus-visible,
+  .flyout > li > :where(button, a, [role="menuitem"]):focus-visible {
+    background: Canvas;
+    color: CanvasText;
+  }
+
+  @media (hover: hover) {
+    .flyout > :where(button, a, [role="menuitem"]):hover,
+    .flyout > li > :where(button, a, [role="menuitem"]):hover {
+      outline: var(--border-width) solid ButtonText;
+      outline-offset: -1px;
+      background: Canvas;
+      color: CanvasText;
+    }
+  }
+}

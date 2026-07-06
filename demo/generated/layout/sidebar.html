@@ -64,12 +64,12 @@
     <div class="component-prose">
       <p>Tune the side width and wrapping threshold with <code>--sidebar-size</code> and <code>--sidebar-content-min</code>.</p>
 <h3>Sidebar Layout (Grid)</h3>
-<p><code>.sidebar-layout</code> is a complementary two-column primitive that uses CSS grid instead of flex. Use it when the aside should align to the top of the content (e.g. a sticky table of contents) or when the content area contains multiple sections that should stretch together. Wrap it in <code>.grid-responsive</code> to make the switch depend on the container width. Below 64rem the columns stack; at and above it the aside takes <code>--sidebar-layout-size</code> and the content takes the remaining space. Older browsers use the viewport fallback.</p>
+<p><code>.sidebar-layout</code> is a complementary two-column primitive that uses CSS grid instead of flex. Use it when the aside should align to the top of the content (e.g. a sticky table of contents) or when the content area contains multiple sections that should stretch together. Wrap it in <code>.container-query</code> to make the switch depend on the container width. Below 64rem the columns stack; at and above it the aside takes <code>--sidebar-layout-size</code> and the content takes the remaining space. Older browsers use the viewport fallback.</p>
     </div>
     <section class="component-section">
       <div class="example-group">
         <div class="example-render">
-          <div class="grid-responsive">
+          <div class="container-query">
   <div class="sidebar-layout" style="--sidebar-layout-size: 18rem">
     <article class="stack">
       <h1>Long-form article</h1>
@@ -86,7 +86,7 @@
 </div>
         </div>
         <div class="example-code">
-          <pre><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>grid-responsive<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+          <pre><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>container-query<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
   <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>sidebar-layout<span class="token punctuation">"</span></span> <span class="token special-attr"><span class="token attr-name">style</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span><span class="token value css language-css"><span class="token property">--sidebar-layout-size</span><span class="token punctuation">:</span> 18rem</span><span class="token punctuation">"</span></span></span><span class="token punctuation">></span></span>
     <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>article</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>stack<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
       <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>h1</span><span class="token punctuation">></span></span>Long-form article<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>h1</span><span class="token punctuation">></span></span>
