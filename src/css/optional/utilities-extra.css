@@ -7,7 +7,8 @@
  * Core principle:
  * - .sm / .lg provide local rhythm through --gap and --variant-space.
  * - utilities consume the current context instead of defining their own -sm/-lg scale.
- * - follow .{property}-{value} naming
+ * - optional utilities extend core utilities, they do not re-express them.
+ * - follow verbose .{property}-{value} naming.
  */
 
 /* Display */
@@ -82,60 +83,41 @@
   flex-wrap: nowrap;
 }
 
-.justify-start {
+.justify-content-start {
+  --cluster-justify: flex-start;
   justify-content: flex-start;
 }
 
-.justify-center {
+.justify-content-center {
+  --cluster-justify: center;
   justify-content: center;
 }
 
-.justify-end {
+.justify-content-end {
+  --cluster-justify: flex-end;
   justify-content: flex-end;
 }
 
-.justify-between {
+.justify-content-space-between {
+  --cluster-justify: space-between;
   justify-content: space-between;
 }
 
-.align-start {
-  --items-align: start;
-  align-items: start;
-}
-
-.align-center {
-  --items-align: center;
-  align-items: center;
-}
-
-.align-end {
-  --items-align: end;
-  align-items: end;
-}
-
-.self-start {
+.align-self-start {
   align-self: start;
 }
 
-.self-center {
+.align-self-center {
   align-self: center;
 }
 
-.self-end {
+.align-self-end {
   align-self: end;
 }
 
 /* Spacing */
 .padding {
-  padding: var(--variant-space, var(--space-4));
-}
-
-.padding-inline {
-  padding-inline: var(--variant-space, var(--space-4));
-}
-
-.padding-block {
-  padding-block: var(--variant-space, var(--space-4));
+  padding: var(--variant-space);
 }
 
 .margin-inline-auto {
@@ -188,7 +170,7 @@
 }
 
 /* Text */
-.text-wrap {
+.white-space-normal {
   white-space: normal;
 }
 
@@ -208,26 +190,25 @@
   text-transform: capitalize;
 }
 
-.font-normal {
+.font-weight-normal {
   font-weight: var(--font-weight);
 }
 
-.font-medium {
+.font-weight-medium {
   font-weight: var(--font-weight-medium);
 }
 
-.font-strong {
+.font-weight-strong {
   font-weight: var(--font-weight-strong);
 }
 
-.font-bold {
+.font-weight-bold {
   font-weight: var(--font-weight-bold);
 }
 
 /* Radius */
 .radius-sm {
-  --radius: var(--radius-sm);
-  border-radius: var(--radius);
+  border-radius: var(--radius-sm);
 }
 
 .radius {
@@ -235,13 +216,7 @@
 }
 
 .radius-lg {
-  --radius: var(--radius-lg);
-  border-radius: var(--radius);
-}
-
-.radius-full {
-  --radius: var(--radius-full);
-  border-radius: var(--radius);
+  border-radius: var(--radius-lg);
 }
 
 /* Border */

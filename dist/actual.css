@@ -3392,6 +3392,11 @@ button.avatar {
   align-items: center;
 }
 
+.items-end {
+  --items-align: end;
+  align-items: end;
+}
+
 .muted {
   color: var(--text-muted);
 }
