@@ -1,0 +1,9 @@
+/*
+ * Container query opt-in.
+ *
+ * Used by responsive primitives that should react to their wrapper width
+ * instead of the viewport.
+ */
+.container-query {
+  container-type: inline-size;
+}

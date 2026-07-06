@@ -100,3 +100,33 @@
     }
   }
 }
+
+@media (forced-colors: active) {
+  @media (hover: hover) and (pointer: fine) {
+    @supports (appearance: base-select) {
+      .select:not([multiple], [size], .native)::picker(select),
+      .form select:not([multiple], [size], .native)::picker(select) {
+        border-color: ButtonText;
+        background-color: Canvas;
+        color: CanvasText;
+        box-shadow: none;
+      }
+
+      .select option:not(:disabled):hover,
+      .select option:not(:disabled):focus-visible,
+      .form select option:not(:disabled):hover,
+      .form select option:not(:disabled):focus-visible {
+        background-color: Highlight;
+        color: HighlightText;
+        forced-color-adjust: none;
+      }
+
+      .select option:active,
+      .form select option:active {
+        background-color: ButtonFace;
+        color: ButtonText;
+        forced-color-adjust: auto;
+      }
+    }
+  }
+}

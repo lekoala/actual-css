@@ -1,0 +1,75 @@
+/*
+ * Join — visually groups adjacent controls into a single unit.
+ *
+ * This is a cross-cutting control primitive, not a forms-only component:
+ * it applies equally to inputs, selects, buttons, and button-like links.
+ *
+ * Cascade note: .join writes border-radius longhands on its direct children.
+ * Keep this file loaded after control/component styles so those corners win at
+ * equal specificity.
+ */
+.join {
+  --join-radius: var(--radius);
+  --join-ss: 0;
+  --join-se: 0;
+  --join-es: 0;
+  --join-ee: 0;
+
+  align-items: stretch;
+  display: inline-flex;
+}
+
+.join.circle {
+  --join-radius: var(--radius-full);
+}
+
+.join > * {
+  border-start-start-radius: var(--join-ss);
+  border-start-end-radius: var(--join-se);
+  border-end-end-radius: var(--join-ee);
+  border-end-start-radius: var(--join-es);
+}
+
+.join > :first-child {
+  --join-ss: var(--join-radius);
+  --join-es: var(--join-radius);
+}
+
+.join > :last-child {
+  --join-se: var(--join-radius);
+  --join-ee: var(--join-radius);
+}
+
+.join > :only-child {
+  --join-ss: var(--join-radius);
+  --join-se: var(--join-radius);
+  --join-es: var(--join-radius);
+  --join-ee: var(--join-radius);
+}
+
+.join > * + * {
+  margin-inline-start: calc(var(--border-width) * -1);
+}
+
+.join > :is(:focus, :focus-within) {
+  z-index: 1;
+}
+
+.join-addon {
+  --control-border: var(--border);
+  --control-bg: var(--surface-subtle);
+  --control-fg: var(--text-muted);
+
+  align-items: center;
+  display: inline-flex;
+  justify-content: center;
+  min-block-size: var(--control-size);
+  padding-inline: var(--space-3);
+  border: var(--border-width) solid var(--control-border);
+  border-radius: var(--radius);
+  background: var(--control-bg);
+  color: var(--control-fg);
+  font-size: var(--control-font-size);
+  line-height: 1;
+  white-space: nowrap;
+}

@@ -34,3 +34,12 @@
   background: var(--intent, var(--primary));
   color: var(--intent-fg, var(--primary-fg));
 }
+
+@media (forced-colors: active) {
+  .pagination .btn[aria-current="page"] {
+    border-color: Highlight;
+    background: Highlight;
+    color: HighlightText;
+    forced-color-adjust: none;
+  }
+}

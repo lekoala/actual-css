@@ -131,9 +131,33 @@ button.badge:disabled,
 }
 
 @media (forced-colors: active) {
+  .badge {
+    border-color: ButtonText;
+    background: Canvas;
+    color: CanvasText;
+    box-shadow: none;
+  }
+
+  .badge:empty {
+    background: ButtonText;
+  }
+
+  @media (hover: hover) {
+    :where(a.badge, button.badge):hover {
+      outline: var(--border-width) solid ButtonText;
+      outline-offset: 2px;
+    }
+
+    .badge > button:hover {
+      outline: var(--border-width) solid currentColor;
+      outline-offset: 1px;
+    }
+  }
+
   button.badge:disabled,
   .badge[aria-disabled="true"] {
     border-color: GrayText;
+    background: Canvas;
     color: GrayText;
   }
 }

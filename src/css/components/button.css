@@ -145,9 +145,39 @@
 }
 
 @media (forced-colors: active) {
+  .btn {
+    border-color: ButtonText;
+    background: ButtonFace;
+    color: ButtonText;
+    box-shadow: none;
+  }
+
+  .btn.link {
+    border-color: transparent;
+    background: Canvas;
+    color: LinkText;
+  }
+
+  .btn[aria-pressed="true"],
+  .btn:where([aria-current]:not([aria-current="false"])) {
+    border-color: Highlight;
+    background: Highlight;
+    color: HighlightText;
+    forced-color-adjust: none;
+  }
+
+  @media (hover: hover) {
+    .btn:hover:not(:where(:disabled, [aria-disabled="true"], .link)) {
+      outline: var(--border-width) solid ButtonText;
+      outline-offset: 2px;
+    }
+  }
+
   .btn:disabled,
   .btn[aria-disabled="true"] {
     border-color: GrayText;
+    background: Canvas;
     color: GrayText;
+    forced-color-adjust: auto;
   }
 }

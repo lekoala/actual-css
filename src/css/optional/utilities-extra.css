@@ -1,0 +1,314 @@
+/*
+ * Optional utility helpers.
+ *
+ * These classes are intentionally not part of the core API.
+ * They are escape hatches for layout nudges, not a full atomic scale.
+ *
+ * Core principle:
+ * - .sm / .lg provide local rhythm through --gap and --variant-space.
+ * - utilities consume the current context instead of defining their own -sm/-lg scale.
+ * - follow .{property}-{value} naming
+ */
+
+/* Display */
+.display-block {
+  display: block;
+}
+
+.display-inline {
+  display: inline;
+}
+
+.display-inline-block {
+  display: inline-block;
+}
+
+.display-flex {
+  display: flex;
+}
+
+.display-inline-flex {
+  display: inline-flex;
+}
+
+.display-grid {
+  display: grid;
+}
+
+/* Position */
+.position-relative {
+  position: relative;
+}
+
+.position-absolute {
+  position: absolute;
+}
+
+.position-fixed {
+  position: fixed;
+}
+
+.position-sticky {
+  position: sticky;
+}
+
+/* Sizing */
+.inline-size-full {
+  inline-size: 100%;
+}
+
+.block-size-full {
+  block-size: 100%;
+}
+
+.min-inline-size-0 {
+  min-inline-size: 0;
+}
+
+.min-block-size-0 {
+  min-block-size: 0;
+}
+
+.max-inline-size-none {
+  max-inline-size: none;
+}
+
+/* Flex / alignment */
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
+.flex-nowrap {
+  flex-wrap: nowrap;
+}
+
+.justify-start {
+  justify-content: flex-start;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.justify-end {
+  justify-content: flex-end;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.align-start {
+  --items-align: start;
+  align-items: start;
+}
+
+.align-center {
+  --items-align: center;
+  align-items: center;
+}
+
+.align-end {
+  --items-align: end;
+  align-items: end;
+}
+
+.self-start {
+  align-self: start;
+}
+
+.self-center {
+  align-self: center;
+}
+
+.self-end {
+  align-self: end;
+}
+
+/* Spacing */
+.padding {
+  padding: var(--variant-space, var(--space-4));
+}
+
+.padding-inline {
+  padding-inline: var(--variant-space, var(--space-4));
+}
+
+.padding-block {
+  padding-block: var(--variant-space, var(--space-4));
+}
+
+.margin-inline-auto {
+  margin-inline: auto;
+}
+
+.margin-inline-start-auto {
+  margin-inline-start: auto;
+}
+
+.margin-inline-end-auto {
+  margin-inline-end: auto;
+}
+
+.margin-block-start-auto {
+  margin-block-start: auto;
+}
+
+.margin-block-end-auto {
+  margin-block-end: auto;
+}
+
+.gap {
+  gap: var(--gap);
+}
+
+.row-gap {
+  row-gap: var(--gap);
+}
+
+.column-gap {
+  column-gap: var(--gap);
+}
+
+/* Overflow */
+.overflow-hidden {
+  overflow: hidden;
+}
+
+.overflow-clip {
+  overflow: clip;
+}
+
+.overflow-x-auto {
+  overflow-x: auto;
+}
+
+.overflow-y-auto {
+  overflow-y: auto;
+}
+
+/* Text */
+.text-wrap {
+  white-space: normal;
+}
+
+.text-break {
+  overflow-wrap: break-word;
+}
+
+.text-uppercase {
+  text-transform: uppercase;
+}
+
+.text-lowercase {
+  text-transform: lowercase;
+}
+
+.text-capitalize {
+  text-transform: capitalize;
+}
+
+.font-normal {
+  font-weight: var(--font-weight);
+}
+
+.font-medium {
+  font-weight: var(--font-weight-medium);
+}
+
+.font-strong {
+  font-weight: var(--font-weight-strong);
+}
+
+.font-bold {
+  font-weight: var(--font-weight-bold);
+}
+
+/* Radius */
+.radius-sm {
+  --radius: var(--radius-sm);
+  border-radius: var(--radius);
+}
+
+.radius {
+  border-radius: var(--radius);
+}
+
+.radius-lg {
+  --radius: var(--radius-lg);
+  border-radius: var(--radius);
+}
+
+.radius-full {
+  --radius: var(--radius-full);
+  border-radius: var(--radius);
+}
+
+/* Border */
+.border {
+  border: var(--border-width) solid var(--border);
+}
+
+.border-block-start {
+  border-block-start: var(--border-width) solid var(--border);
+}
+
+.border-block-end {
+  border-block-end: var(--border-width) solid var(--border);
+}
+
+.border-inline-start {
+  border-inline-start: var(--border-width) solid var(--border);
+}
+
+.border-inline-end {
+  border-inline-end: var(--border-width) solid var(--border);
+}
+
+/* Surface */
+.background-surface {
+  background: var(--surface);
+  color: var(--text);
+}
+
+.background-raised {
+  background: var(--surface-raised);
+  color: var(--text);
+}
+
+.background-subtle {
+  background: var(--surface-subtle);
+  color: var(--text);
+}
+
+/* Shadow */
+.shadow {
+  box-shadow: var(--shadow);
+}
+
+.shadow-popout {
+  box-shadow: var(--shadow-popout);
+}
+
+/* Interaction */
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.pointer-events-none {
+  pointer-events: none;
+}
+
+.user-select-none {
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* Visibility */
+.display-none {
+  display: none;
+}
+
+.visibility-hidden {
+  visibility: hidden;
+}

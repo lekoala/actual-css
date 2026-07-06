@@ -154,7 +154,7 @@ The `.sm` and `.lg` modifiers set the shared control tokens used by inputs, sele
 <form class="form" novalidate>
   <fieldset>
     <legend class="field-label">Text control states</legend>
-    <div class="stack grid-responsive">
+    <div class="stack container-query">
       <div class="grid-3 items-start">
         <label class="field">
           <span class="field-label">Editable</span>
@@ -195,7 +195,7 @@ The `.sm` and `.lg` modifiers set the shared control tokens used by inputs, sele
 
   <fieldset>
     <legend class="field-label">Choice and select states</legend>
-    <div class="stack grid-responsive">
+    <div class="stack container-query">
       <div class="grid-3 items-start">
         <label class="field">
           <span class="field-label">Editable select</span>
@@ -340,7 +340,7 @@ The `.sm` and `.lg` modifiers set the shared control tokens used by inputs, sele
 
   <fieldset>
     <legend class="field-label">Control sizes</legend>
-    <div class="stack grid-responsive">
+    <div class="stack container-query">
       <div class="grid-3 items-start">
         <label class="field sm">
           <span class="field-label">Small field</span>
@@ -496,6 +496,8 @@ The mixed shape `<label for="x">…<input id="x"></label>` is allowed by the spe
 > Use `.join` when controls need to be visually joined into a single unit.
 
 Add `.join` to the wrapper that groups the controls. Use `.join-addon` for static prefix/suffix content such as currency symbols, units, or protocol text. Action buttons inside the group should use `.btn`. The wrapper should still carry `role="group"` with a label for accessibility.
+
+When composing source files manually, import `join.css` after the controls it groups. `.join` writes child border-radius longhands directly so joined corners win at equal specificity.
 
 ```html
 <div class="field">

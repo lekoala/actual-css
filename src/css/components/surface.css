@@ -46,3 +46,9 @@
     transition: none;
   }
 }
+
+@media (forced-colors: active) {
+  .surface-backdrop {
+    background: Canvas;
+  }
+}

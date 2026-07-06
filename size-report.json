@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-07-05T18:02:34.151Z",
-  "totalRaw": 134586,
-  "totalMinified": 64923,
-  "totalBrotli": 10653,
+  "timestamp": "2026-07-06T14:49:52.870Z",
+  "totalRaw": 138751,
+  "totalMinified": 67960,
+  "totalBrotli": 10883,
   "themesMinified": 16153,
   "themesBrotli": 2556,
-  "shippedMinified": 64923,
-  "shippedBrotli": 10653,
+  "shippedMinified": 67960,
+  "shippedBrotli": 10883,
   "maxShippedBrotli": 13312,
-  "fileCount": 64,
+  "fileCount": 66,
   "files": [
     {
       "file": "forms/choice.css",
@@ -16,51 +16,43 @@
     },
     {
       "file": "theme.css",
-      "raw": 5899
+      "raw": 5134
+    },
+    {
+      "file": "ui/flyout.css",
+      "raw": 4968
     },
     {
       "file": "tokens.css",
       "raw": 4826
     },
     {
-      "file": "ui/flyout.css",
-      "raw": 4340
-    },
-    {
-      "file": "layout.css",
-      "raw": 4170
-    },
-    {
-      "file": "utilities.css",
-      "raw": 3878
-    },
-    {
       "file": "components/button.css",
-      "raw": 3737
+      "raw": 4398
+    },
+    {
+      "file": "forms/custom-select.css",
+      "raw": 4088
+    },
+    {
+      "file": "components/badge.css",
+      "raw": 3966
     },
     {
       "file": "forms/switch.css",
       "raw": 3625
     },
     {
-      "file": "components/badge.css",
-      "raw": 3501
+      "file": "components/alert.css",
+      "raw": 3471
+    },
+    {
+      "file": "components/modal.css",
+      "raw": 3359
     },
     {
       "file": "prose.css",
       "raw": 3294
-    },
-    {
-      "file": "components/alert.css",
-      "raw": 3239
-    },
-    {
-      "file": "forms/custom-select.css",
-      "raw": 3208
-    },
-    {
-      "file": "components/modal.css",
-      "raw": 3147
     },
     {
       "file": "components/avatar.css",
@@ -75,8 +67,16 @@
       "raw": 3006
     },
     {
+      "file": "components/card.css",
+      "raw": 2848
+    },
+    {
       "file": "components/progress.css",
       "raw": 2700
+    },
+    {
+      "file": "utilities.css",
+      "raw": 2666
     },
     {
       "file": "themes/spruce.css",
@@ -93,10 +93,6 @@
     {
       "file": "variants.css",
       "raw": 2561
-    },
-    {
-      "file": "components/card.css",
-      "raw": 2548
     },
     {
       "file": "themes/sunset.css",
@@ -119,12 +115,24 @@
       "raw": 2394
     },
     {
+      "file": "components/navbar.css",
+      "raw": 2371
+    },
+    {
+      "file": "layout.css",
+      "raw": 2299
+    },
+    {
       "file": "themes/cyberpunk.css",
       "raw": 2272
     },
     {
       "file": "themes/corporate.css",
       "raw": 2271
+    },
+    {
+      "file": "components/drawer.css",
+      "raw": 2265
     },
     {
       "file": "themes/ocean.css",
@@ -135,20 +143,24 @@
       "raw": 2213
     },
     {
-      "file": "components/navbar.css",
-      "raw": 2044
-    },
-    {
-      "file": "components/drawer.css",
-      "raw": 1957
-    },
-    {
       "file": "components/accordion.css",
       "raw": 1906
     },
     {
       "file": "components/meter.css",
       "raw": 1837
+    },
+    {
+      "file": "grid.css",
+      "raw": 1817
+    },
+    {
+      "file": "ui/tab.css",
+      "raw": 1789
+    },
+    {
+      "file": "join.css",
+      "raw": 1778
     },
     {
       "file": "themes/index.css",
@@ -171,20 +183,16 @@
       "raw": 1465
     },
     {
+      "file": "components/surface.css",
+      "raw": 1443
+    },
+    {
       "file": "components/spinner.css",
       "raw": 1404
     },
     {
       "file": "components/table.css",
       "raw": 1404
-    },
-    {
-      "file": "ui/tab.css",
-      "raw": 1397
-    },
-    {
-      "file": "components/surface.css",
-      "raw": 1357
     },
     {
       "file": "base.css",
@@ -195,16 +203,16 @@
       "raw": 1195
     },
     {
+      "file": "components/pagination.css",
+      "raw": 1137
+    },
+    {
       "file": "themes/dim.css",
       "raw": 1108
     },
     {
       "file": "themes/dark.css",
       "raw": 1018
-    },
-    {
-      "file": "components/pagination.css",
-      "raw": 942
     },
     {
       "file": "reset.css",
@@ -223,6 +231,10 @@
       "raw": 735
     },
     {
+      "file": "actual.layer.css",
+      "raw": 704
+    },
+    {
       "file": "intents.css",
       "raw": 702
     },
@@ -235,14 +247,6 @@
       "raw": 623
     },
     {
-      "file": "forms/join.css",
-      "raw": 616
-    },
-    {
-      "file": "actual.layer.css",
-      "raw": 552
-    },
-    {
       "file": "ui/scrollspy.css",
       "raw": 478
     },
@@ -251,20 +255,24 @@
       "raw": 398
     },
     {
-      "file": "forms/index.css",
-      "raw": 369
-    },
-    {
       "file": "actual.css",
-      "raw": 306
+      "raw": 377
     },
     {
-      "file": "actual.full.css",
-      "raw": 96
+      "file": "forms/index.css",
+      "raw": 347
+    },
+    {
+      "file": "container.css",
+      "raw": 191
     },
     {
       "file": "ui/index.css",
       "raw": 89
+    },
+    {
+      "file": "actual.full.css",
+      "raw": 52
     }
   ]
 }

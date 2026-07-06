@@ -119,3 +119,17 @@
   color: inherit;
   font-weight: var(--font-weight-strong);
 }
+
+@media (forced-colors: active) {
+  .alert {
+    border-color: ButtonText;
+    background: Canvas;
+    color: CanvasText;
+  }
+
+  .alert.solid {
+    border-color: Highlight;
+    background: Highlight;
+    color: HighlightText;
+  }
+}
