@@ -117,7 +117,7 @@ Use this shape for contextual information or lightweight secondary content. It h
 
 ### Scrollable modal
 
-Use `modal scrollable` when the header and footer should stay visible while the dialog body scrolls. Modal dialogs also lock page scroll in browsers that support `:has()` and `:modal`; older browsers keep native dialog behavior.
+Use `modal scrollable` when the header and footer should stay visible while the dialog body scrolls. Modal dialogs lock page scroll through `:has()` and `:modal` in modern CSS, and through the runtime-managed `html.has-modal-open` hook when the optional dialog helper opens the modal.
 
 ```html
 <button class="btn"
@@ -327,6 +327,11 @@ dialog.modal[open]::backdrop {
   opacity: 1;
 }
 
+html.has-modal-open {
+  overflow: hidden;
+  scrollbar-gutter: stable;
+}
+
 @supports selector(:has(dialog:modal)) {
   html:has(dialog:modal) {
     overflow: hidden;
@@ -502,6 +507,7 @@ Flyout covers two distinct patterns:
 
 ### Action list
 - A list of *actions* the user can take: sign out, copy, delete.
+- Wrap the trigger and flyout in `.flyout-root` when the flyout should have a local absolute-position fallback before JavaScript positions it.
 - Use `<menu class="flyout">` with `<li>` items.
 - Items are regular `<button>` or `<a>` elements.
 - Use `.sm` or `.lg` for density changes.
@@ -515,30 +521,32 @@ Flyout covers two distinct patterns:
 - Just a toggle with outside-click and Escape dismissal.
 
 ```html
-<button class="btn outline"
-        type="button"
-        aria-expanded="false"
-        aria-controls="account-actions"
-        id="account-flyout-trigger">
-  Account
-  <i class="ti ti-chevron-down" aria-hidden="true"></i>
-</button>
+<div class="flyout-root">
+  <button class="btn outline"
+          type="button"
+          aria-expanded="false"
+          aria-controls="account-actions"
+          id="account-flyout-trigger">
+    Account
+    <i class="ti ti-chevron-down" aria-hidden="true"></i>
+  </button>
 
-<menu class="flyout sm"
-      id="account-actions"
-      aria-labelledby="account-flyout-trigger"
-      hidden>
-  <li><button type="button">Profile</button></li>
-  <li><button type="button">Settings</button></li>
-  <li><hr /></li>
-  <li><button class="danger" type="button">Sign out</button></li>
-</menu>
+  <menu class="flyout sm"
+        id="account-actions"
+        aria-labelledby="account-flyout-trigger"
+        hidden>
+    <li><button type="button">Profile</button></li>
+    <li><button type="button">Settings</button></li>
+    <li><hr /></li>
+    <li><button class="danger" type="button">Sign out</button></li>
+  </menu>
+</div>
 ```
 
 ```html
 <nav aria-label="Main navigation">
   <ul class="list-reset cluster">
-    <li>
+    <li class="flyout-root">
       <button class="btn ghost"
               type="button"
               aria-expanded="false"

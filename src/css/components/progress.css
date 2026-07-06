@@ -25,27 +25,27 @@
   -webkit-appearance: none;
   display: block;
   inline-size: 100%;
-  height: var(--bar-height);
+  block-size: var(--bar-height);
   overflow: hidden;
   border: 0;
   border-radius: var(--radius-full);
-  background: var(--surface-subtle);
+  background: var(--progress-track);
 }
 
 .progress::-webkit-progress-bar {
-  height: var(--bar-height);
+  block-size: var(--bar-height);
   border-radius: var(--radius-full);
   background: var(--progress-track);
 }
 
 .progress::-webkit-progress-value {
-  height: var(--bar-height);
+  block-size: var(--bar-height);
   border-radius: var(--radius-full);
   background: var(--progress-value);
 }
 
 .progress::-moz-progress-bar {
-  height: var(--bar-height);
+  block-size: var(--bar-height);
   border-radius: var(--radius-full);
   background: var(--progress-value);
 }

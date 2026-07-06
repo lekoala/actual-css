@@ -116,7 +116,7 @@
 }
 
 /* Spacing */
-.padding {
+.padding-context {
   padding: var(--variant-space);
 }
 
@@ -140,15 +140,15 @@
   margin-block-end: auto;
 }
 
-.gap {
+.gap-context {
   gap: var(--gap);
 }
 
-.row-gap {
+.row-gap-context {
   row-gap: var(--gap);
 }
 
-.column-gap {
+.column-gap-context {
   column-gap: var(--gap);
 }
 
@@ -207,20 +207,20 @@
 }
 
 /* Radius */
-.radius-sm {
+.radius-sm-context {
   border-radius: var(--radius-sm);
 }
 
-.radius {
+.radius-context {
   border-radius: var(--radius);
 }
 
-.radius-lg {
+.radius-lg-context {
   border-radius: var(--radius-lg);
 }
 
 /* Border */
-.border {
+.border-context {
   border: var(--border-width) solid var(--border);
 }
 
@@ -257,11 +257,11 @@
 }
 
 /* Shadow */
-.shadow {
+.shadow-context {
   box-shadow: var(--shadow);
 }
 
-.shadow-popout {
+.shadow-popout-context {
   box-shadow: var(--shadow-popout);
 }
 

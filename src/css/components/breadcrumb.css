@@ -31,9 +31,11 @@
   text-decoration: none;
 }
 
-.breadcrumb a:hover {
-  color: var(--text);
-  text-decoration: underline;
+@media (hover: hover) {
+  .breadcrumb a:hover {
+    color: var(--text);
+    text-decoration: underline;
+  }
 }
 
 .breadcrumb a:focus-visible {

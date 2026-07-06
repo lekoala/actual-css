@@ -1,11 +1,11 @@
 /*
- * List group — rich content lists as a single figure.
+ * List group — rich content lists with an optional header/caption.
  *
  * Each li wraps multiple children in a row: avatar, title, description,
  * action buttons flow naturally. The description breaks onto its own row via
  * flex-basis.
  */
-.list-group > figcaption {
+.list-group > :where(header, figcaption) {
   font-weight: var(--font-weight-strong);
   margin-block-end: var(--space-3);
 }
@@ -26,7 +26,7 @@
   padding-block: var(--space-3);
 }
 
-.list-group > ul > li > .muted {
+.list-group > ul > li > .list-meta {
   margin-inline-start: auto;
 }
 

@@ -1,18 +1,18 @@
 {
-  "timestamp": "2026-07-06T19:36:32.802Z",
-  "totalRaw": 141035,
-  "totalMinified": 69825,
-  "totalBrotli": 11019,
+  "timestamp": "2026-07-06T20:08:22.508Z",
+  "totalRaw": 142221,
+  "totalMinified": 70813,
+  "totalBrotli": 11111,
   "themesMinified": 16153,
   "themesBrotli": 2556,
-  "shippedMinified": 69825,
-  "shippedBrotli": 11019,
+  "shippedMinified": 70813,
+  "shippedBrotli": 11111,
   "maxShippedBrotli": 13312,
   "fileCount": 66,
   "files": [
     {
       "file": "forms/choice.css",
-      "raw": 6839
+      "raw": 6875
     },
     {
       "file": "theme.css",
@@ -20,11 +20,11 @@
     },
     {
       "file": "components/flyout.css",
-      "raw": 4968
+      "raw": 5027
     },
     {
       "file": "tokens.css",
-      "raw": 4826
+      "raw": 4852
     },
     {
       "file": "components/button.css",
@@ -40,7 +40,11 @@
     },
     {
       "file": "forms/switch.css",
-      "raw": 3774
+      "raw": 3838
+    },
+    {
+      "file": "components/avatar.css",
+      "raw": 3540
     },
     {
       "file": "components/alert.css",
@@ -48,23 +52,19 @@
     },
     {
       "file": "components/modal.css",
-      "raw": 3329
+      "raw": 3432
     },
     {
       "file": "prose.css",
       "raw": 3294
     },
     {
-      "file": "components/avatar.css",
-      "raw": 3270
-    },
-    {
       "file": "forms/control.css",
-      "raw": 3056
+      "raw": 3055
     },
     {
       "file": "components/tooltip.css",
-      "raw": 3006
+      "raw": 3016
     },
     {
       "file": "components/card.css",
@@ -76,7 +76,7 @@
     },
     {
       "file": "components/progress.css",
-      "raw": 2700
+      "raw": 2716
     },
     {
       "file": "themes/spruce.css",
@@ -120,19 +120,23 @@
     },
     {
       "file": "layout.css",
-      "raw": 2299
+      "raw": 2316
+    },
+    {
+      "file": "components/drawer.css",
+      "raw": 2295
     },
     {
       "file": "themes/cyberpunk.css",
       "raw": 2272
     },
     {
-      "file": "themes/corporate.css",
+      "file": "components/accordion.css",
       "raw": 2271
     },
     {
-      "file": "components/drawer.css",
-      "raw": 2265
+      "file": "themes/corporate.css",
+      "raw": 2271
     },
     {
       "file": "themes/ocean.css",
@@ -143,20 +147,16 @@
       "raw": 2213
     },
     {
-      "file": "components/accordion.css",
-      "raw": 1906
+      "file": "components/tab.css",
+      "raw": 1889
     },
     {
       "file": "components/meter.css",
-      "raw": 1837
+      "raw": 1861
     },
     {
       "file": "grid.css",
       "raw": 1817
-    },
-    {
-      "file": "components/tab.css",
-      "raw": 1789
     },
     {
       "file": "components/join.css",
@@ -224,11 +224,11 @@
     },
     {
       "file": "components/list.css",
-      "raw": 832
+      "raw": 865
     },
     {
       "file": "components/breadcrumb.css",
-      "raw": 804
+      "raw": 838
     },
     {
       "file": "components/key.css",

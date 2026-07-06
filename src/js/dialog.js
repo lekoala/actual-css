@@ -19,6 +19,7 @@ import enhance from "./enhance.js";
 
 const triggerMap = new WeakMap();
 const dialogMap = new WeakMap();
+const wiredDialogs = new Set();
 const DIALOG_TRIGGER_SELECTOR = "button[commandfor][command]";
 const DIALOG_SELECTOR = "dialog";
 const DEFAULT_UNSUPPORTED_MESSAGE =
@@ -74,6 +75,25 @@ function notifyUnsupportedDialog(dialog, trigger) {
 
 function isModal(dialog) {
   return dialog.getAttribute("data-dialog-modal") !== "false";
+}
+
+function syncModalOpenClass(doc = document) {
+  let hasOpenModal = false;
+
+  for (const dialog of wiredDialogs) {
+    const state = dialogMap.get(dialog);
+    if (
+      dialog.ownerDocument === doc &&
+      dialog.isConnected &&
+      dialog.open &&
+      state?.modalOpen === true
+    ) {
+      hasOpenModal = true;
+      break;
+    }
+  }
+
+  doc.documentElement.classList.toggle("has-modal-open", hasOpenModal);
 }
 
 function isDismissible(dialog) {
@@ -223,9 +243,13 @@ export function openDialog(dialog, trigger = null) {
 
   if (isModal(dialog)) {
     dialog.showModal();
+    state.modalOpen = true;
   } else {
     dialog.show();
+    state.modalOpen = false;
   }
+
+  syncModalOpenClass(dialog.ownerDocument);
 }
 
 function handleTriggerClick(event) {
@@ -311,6 +335,8 @@ function handleDialogClose(event) {
   dialog.classList.remove("is-static");
   state.closing = false;
   state.returnValue = "";
+  state.modalOpen = false;
+  syncModalOpenClass(dialog.ownerDocument);
 
   const restoreFocusTo = state.restoreFocusTo;
   state.restoreFocusTo = null;
@@ -327,6 +353,7 @@ function ensureDialogWired(dialog) {
   const state = {
     controller,
     closing: false,
+    modalOpen: dialog.open && isModal(dialog),
     restoreFocusTo: null,
     returnValue: "",
     staticTimer: null,
@@ -346,7 +373,21 @@ function ensureDialogWired(dialog) {
   }
 
   dialogMap.set(dialog, state);
+  wiredDialogs.add(dialog);
+  syncModalOpenClass(dialog.ownerDocument);
   return state;
+}
+
+function connectDialog(dialog) {
+  ensureDialogWired(dialog);
+  if (!dialog.id) return;
+
+  const triggers = dialog.ownerDocument.querySelectorAll(
+    `${DIALOG_TRIGGER_SELECTOR}[commandfor="${CSS.escape(dialog.id)}"]`,
+  );
+  for (const trigger of triggers) {
+    connectTrigger(trigger);
+  }
 }
 
 function disconnectDialog(dialog) {
@@ -359,7 +400,10 @@ function disconnectDialog(dialog) {
 
   state.controller.abort();
   dialog.classList.remove("is-static");
+  state.modalOpen = false;
   dialogMap.delete(dialog);
+  wiredDialogs.delete(dialog);
+  syncModalOpenClass(dialog.ownerDocument);
 }
 
 function connectTrigger(trigger) {
@@ -398,7 +442,7 @@ if (supportsDialog()) {
       return () => disconnectTrigger(trigger);
     },
     [DIALOG_SELECTOR]: (dialog) => {
-      ensureDialogWired(dialog);
+      connectDialog(dialog);
       return () => disconnectDialog(dialog);
     },
   });

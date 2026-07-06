@@ -40,6 +40,7 @@
      --duration drives component transitions (hover/focus); the dedicated
      animation rates below tune one-shot open/close and decorative loops. */
   --duration: 150ms;
+  --duration-fast: 100ms;
   --duration-slow: 200ms;
   --duration-spin: 0.75s;
   --duration-shimmer: 1.2s;

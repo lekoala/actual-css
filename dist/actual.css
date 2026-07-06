@@ -115,6 +115,7 @@ small {
   --shadow: 0 .5rem 1.5rem #00000014;
   --shadow-popout: 0 .25rem .75rem #00000026;
   --duration: .15s;
+  --duration-fast: .1s;
   --duration-slow: .2s;
   --duration-spin: .75s;
   --duration-shimmer: 1.2s;
@@ -418,7 +419,7 @@ small {
 
 @supports not (container-type: inline-size) {
   @media (width >= 64rem) {
-    .sidebar-layout {
+    .container-query .sidebar-layout {
       grid-template-columns: minmax(0, 1fr) var(--sidebar-layout-size, 18rem);
       align-items: start;
     }
@@ -1372,8 +1373,14 @@ dialog.modal[open]::backdrop {
   opacity: 1;
 }
 
+html.has-modal-open {
+  scrollbar-gutter: stable;
+  overflow: hidden;
+}
+
 @supports selector(:has(dialog:modal)) {
   html:has(dialog:modal) {
+    scrollbar-gutter: stable;
     overflow: hidden;
   }
 }
@@ -1425,7 +1432,7 @@ dialog.modal[open]::backdrop {
 dialog.drawer {
   --drawer-size: 20rem;
   --drawer-pad: var(--space-4);
-  inline-size: min(90vw, var(--drawer-size));
+  inline-size: min(calc(var(--viewport-inline) * .9), var(--drawer-size));
   block-size: var(--viewport-block);
   max-inline-size: none;
   max-block-size: var(--viewport-block);
@@ -1511,6 +1518,11 @@ dialog.drawer nav {
   }
 }
 
+.flyout-root {
+  display: inline-block;
+  position: relative;
+}
+
 .flyout {
   z-index: var(--z-menu);
   gap: var(--space-1);
@@ -1547,10 +1559,10 @@ dialog.drawer nav {
 }
 
 .flyout.is-sheet {
-  max-block-size: min(75vb, 32rem);
   inline-size: auto;
   min-inline-size: 0;
   max-inline-size: none;
+  max-block-size: min(calc(var(--viewport-block) * .75), 32rem);
   padding: max(var(--space-3), env(safe-area-inset-top)) var(--space-3)
     max(var(--space-3), env(safe-area-inset-bottom));
   border-end-end-radius: 0;
@@ -1676,7 +1688,7 @@ dialog.drawer nav {
   border-radius: var(--radius-sm);
   background: var(--tooltip-bg);
   color: var(--tooltip-fg);
-  font-size: .8125rem;
+  font-size: var(--font-size-xs);
   line-height: var(--line-height-tight);
   pointer-events: none;
   -webkit-user-select: none;
@@ -1836,6 +1848,27 @@ dialog.drawer nav {
 .accordion details > summary + ul, .accordion details > summary + ol {
   margin: 0;
   padding-inline-start: 2rem;
+}
+
+@media (forced-colors: active) {
+  .accordion {
+    color: canvastext;
+    background: canvas;
+    border-color: buttontext;
+  }
+
+  .accordion > details + details {
+    border-block-start-color: buttontext;
+  }
+
+  .accordion summary {
+    color: canvastext;
+  }
+
+  .accordion summary:after {
+    forced-color-adjust: none;
+    background-color: buttontext;
+  }
 }
 
 :where(.spinner) {
@@ -1998,28 +2031,28 @@ dialog.drawer nav {
   --progress-value: var(--intent, var(--primary));
   appearance: none;
   inline-size: 100%;
-  height: var(--bar-height);
+  block-size: var(--bar-height);
   border-radius: var(--radius-full);
-  background: var(--surface-subtle);
+  background: var(--progress-track);
   border: 0;
   display: block;
   overflow: hidden;
 }
 
 .progress::-webkit-progress-bar {
-  height: var(--bar-height);
+  block-size: var(--bar-height);
   border-radius: var(--radius-full);
   background: var(--progress-track);
 }
 
 .progress::-webkit-progress-value {
-  height: var(--bar-height);
+  block-size: var(--bar-height);
   border-radius: var(--radius-full);
   background: var(--progress-value);
 }
 
 .progress::-moz-progress-bar {
-  height: var(--bar-height);
+  block-size: var(--bar-height);
   border-radius: var(--radius-full);
   background: var(--progress-value);
 }
@@ -2106,7 +2139,7 @@ dialog.drawer nav {
 
 .avatar {
   --avatar-size: 2.25rem;
-  --avatar-radius: var(--radius-full, 9999px);
+  --avatar-radius: var(--radius-full);
   --avatar-font-size: var(--font-size-sm);
   --avatar-bg: var(--intent, var(--surface-subtle));
   --avatar-fg: var(--intent-fg, var(--tone-fg, var(--text-muted)));
@@ -2177,7 +2210,7 @@ button.avatar {
 
 .avatar.sm {
   --avatar-size: 1.75rem;
-  --avatar-font-size: .8125rem;
+  --avatar-font-size: var(--font-size-xs);
 }
 
 .avatar.lg {
@@ -2199,6 +2232,24 @@ button.avatar {
   --avatar-stack-ring: 2px;
   align-items: center;
   display: inline-flex;
+}
+
+.avatar-stack.sm {
+  --avatar-size: 1.75rem;
+}
+
+.avatar-stack.lg {
+  --avatar-size: 3rem;
+}
+
+@supports selector(:has(> .avatar)) {
+  .avatar-stack:has( > .avatar.sm) {
+    --avatar-size: 1.75rem;
+  }
+
+  .avatar-stack:has( > .avatar.lg) {
+    --avatar-size: 3rem;
+  }
 }
 
 .avatar-stack > .avatar {
@@ -2394,9 +2445,11 @@ button.avatar {
   text-decoration: none;
 }
 
-.breadcrumb a:hover {
-  color: var(--text);
-  text-decoration: underline;
+@media (hover: hover) {
+  .breadcrumb a:hover {
+    color: var(--text);
+    text-decoration: underline;
+  }
 }
 
 .breadcrumb a:focus-visible {
@@ -2454,9 +2507,9 @@ button.avatar {
 }
 
 .tabs {
+  gap: var(--space-1);
   border-block-end: var(--border-width) solid var(--border);
   flex-wrap: wrap;
-  gap: .35rem;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -2464,8 +2517,9 @@ button.avatar {
 }
 
 .tab {
+  min-block-size: var(--control-size);
+  padding-inline: var(--space-3);
   border: 0;
-  min-block-size: 2.4rem;
   color: var(--text-muted);
   font: inherit;
   font-weight: var(--font-weight-strong);
@@ -2474,13 +2528,14 @@ button.avatar {
   border-block-end: 2px solid #0000;
   border-radius: 0;
   align-items: center;
-  padding-inline: .8rem;
   text-decoration: none;
   display: inline-flex;
 }
 
-.tab:hover {
-  color: var(--text);
+@media (hover: hover) {
+  .tab:hover {
+    color: var(--text);
+  }
 }
 
 .tab:focus-visible {
@@ -2503,10 +2558,12 @@ button.avatar {
     color: buttontext;
   }
 
-  .tab:hover {
-    color: buttontext;
-    text-underline-offset: .18em;
-    text-decoration: underline;
+  @media (hover: hover) {
+    .tab:hover {
+      color: buttontext;
+      text-underline-offset: .18em;
+      text-decoration: underline;
+    }
   }
 
   .tab[aria-selected="true"], .tab[aria-current="page"], .tab[aria-pressed="true"] {
@@ -2588,7 +2645,7 @@ button.avatar {
 .meter {
   appearance: none;
   inline-size: 100%;
-  height: var(--bar-height);
+  block-size: var(--bar-height);
   border-radius: var(--radius-full);
   background: var(--surface-subtle);
   border: 0;
@@ -2598,32 +2655,32 @@ button.avatar {
 
 .meter::-webkit-meter-bar {
   -webkit-appearance: none;
-  height: var(--bar-height);
+  block-size: var(--bar-height);
   border-radius: var(--radius-full);
   background: var(--surface-subtle);
   border: 0;
 }
 
 .meter::-webkit-meter-optimum-value {
-  height: var(--bar-height);
+  block-size: var(--bar-height);
   border-radius: var(--radius-full);
   background: var(--success);
 }
 
 .meter::-webkit-meter-suboptimum-value {
-  height: var(--bar-height);
+  block-size: var(--bar-height);
   border-radius: var(--radius-full);
   background: var(--warning);
 }
 
 .meter::-webkit-meter-even-less-good-value {
-  height: var(--bar-height);
+  block-size: var(--bar-height);
   border-radius: var(--radius-full);
   background: var(--danger);
 }
 
 .meter::-moz-meter-bar {
-  height: var(--bar-height);
+  block-size: var(--bar-height);
   border-radius: var(--radius-full);
 }
 
@@ -2659,7 +2716,7 @@ button.avatar {
   }
 }
 
-.list-group > figcaption {
+.list-group > :where(header, figcaption) {
   font-weight: var(--font-weight-strong);
   margin-block-end: var(--space-3);
 }
@@ -2680,7 +2737,7 @@ button.avatar {
   display: flex;
 }
 
-.list-group > ul > li > .muted {
+.list-group > ul > li > .list-meta {
   margin-inline-start: auto;
 }
 
@@ -2809,7 +2866,7 @@ button.avatar {
 }
 
 .input::placeholder, .textarea::placeholder, :is(.form, .field) :where(input, textarea)::placeholder {
-  color: var(--text-subtle);
+  color: var(--text-muted);
 }
 
 :where(.choice, .check, .radio, .form input[type="checkbox"]:not([role="switch"]), .form input[type="radio"]) {
@@ -2854,7 +2911,7 @@ button.avatar {
 }
 
 @supports selector(label:has(> input)) {
-  .form label:has( > input:is([type="checkbox"], [type="radio"])) > input:is([type="checkbox"], input[type="radio"]) {
+  .form label:has( > input:is([type="checkbox"], [type="radio"])) > input:is([type="checkbox"], [type="radio"]) {
     flex: none;
     margin-block-start: var(--choice-control-offset);
   }
@@ -2950,7 +3007,7 @@ button.avatar {
   transform: scale(1);
 }
 
-:is(.check, .radio, .form input[type="checkbox"]:not([role="switch"]), .form input[type="radio"]):hover {
+:is(.check, .radio, .form input[type="checkbox"]:not([role="switch"]), .form input[type="radio"]):hover:not(:checked, :indeterminate, :disabled) {
   --choice-border: var(--text-subtle);
 }
 
@@ -3281,10 +3338,10 @@ button.avatar {
   inline-size: var(--switch-width);
   block-size: var(--switch-block-size);
   border: var(--border-width) solid var(--border);
+  border-radius: var(--radius-full);
   background: var(--switch-bg);
   appearance: none;
   cursor: pointer;
-  border-radius: 999px;
   justify-content: start;
   align-items: center;
   margin: 0;
@@ -3297,12 +3354,12 @@ button.avatar {
   inline-size: var(--switch-knob-size);
   block-size: var(--switch-knob-size);
   margin-inline: var(--switch-knob-margin);
+  border-radius: var(--radius-full);
   background: var(--switch-knob);
   box-shadow: var(--shadow);
   transition: transform var(--duration),
     background-color var(--duration),
     box-shadow var(--duration);
-  border-radius: 999px;
 }
 
 .switch:hover:not(:disabled), .form input[role="switch"]:hover:not(:disabled) {
@@ -3329,6 +3386,7 @@ button.avatar {
 }
 
 .switch:disabled, .form input[role="switch"]:disabled {
+  --switch-bg: var(--surface-subtle);
   --switch-knob: var(--text-subtle);
   border-color: var(--border);
   opacity: 1;

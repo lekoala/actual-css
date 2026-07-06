@@ -183,7 +183,7 @@
     </section>
     <div class="component-prose">
       <h3>Scrollable modal</h3>
-<p>Use <code>modal scrollable</code> when the header and footer should stay visible while the dialog body scrolls. Modal dialogs also lock page scroll in browsers that support <code>:has()</code> and <code>:modal</code>; older browsers keep native dialog behavior.</p>
+<p>Use <code>modal scrollable</code> when the header and footer should stay visible while the dialog body scrolls. Modal dialogs lock page scroll through <code>:has()</code> and <code>:modal</code> in modern CSS, and through the runtime-managed <code>html.has-modal-open</code> hook when the optional dialog helper opens the modal.</p>
     </div>
     <section class="component-section">
       <div class="example-group">
@@ -511,6 +511,11 @@ dialog.modal > .stack</span> <span class="token punctuation">{</span>
 
 <span class="token selector">dialog.modal[open]::backdrop</span> <span class="token punctuation">{</span>
   <span class="token property">opacity</span><span class="token punctuation">:</span> 1<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token selector">html.has-modal-open</span> <span class="token punctuation">{</span>
+  <span class="token property">overflow</span><span class="token punctuation">:</span> hidden<span class="token punctuation">;</span>
+  <span class="token property">scrollbar-gutter</span><span class="token punctuation">:</span> stable<span class="token punctuation">;</span>
 <span class="token punctuation">}</span>
 
 <span class="token atrule"><span class="token rule">@supports</span> <span class="token function">selector</span><span class="token punctuation">(</span><span class="token selector-function-argument selector">:has(dialog:modal)</span><span class="token punctuation">)</span></span> <span class="token punctuation">{</span>

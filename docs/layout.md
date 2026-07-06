@@ -107,10 +107,11 @@ deliberate even though the global reset uses `border-box`.
 
 ## List
 
-> Rich content lists where each item may contain multiple elements, captured as a single figure.
+> Rich content lists where each item may contain multiple elements.
 
-- Use figure to capture as a single unit
-- `figcaption` is optional
+- Use `figure` and `figcaption` when the list reads as a captioned content unit
+- Use `div` and `header` when the list is an application panel or section
+- The heading wrapper is optional
 - Can contain complex items
 
 ```html
@@ -122,6 +123,17 @@ deliberate even though the global reset uses `border-box`.
           <li>Chocolate</li>
        </ul>
 </figure>
+```
+
+```html
+<div class="list-group">
+    <header>Recent files</header>
+       <ul>
+          <li>Proposal.pdf</li>
+          <li>Roadmap.md</li>
+          <li>Budget.xlsx</li>
+       </ul>
+</div>
 ```
 
 ```html

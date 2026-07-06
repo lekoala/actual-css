@@ -206,7 +206,12 @@ function notify(type) {
       }),
     );
     if (type === "escape") {
-      el.dispatchEvent(new CustomEvent(EVENTS.hide, { bubbles: false }));
+      el.dispatchEvent(
+        new CustomEvent(EVENTS.hide, {
+          bubbles: false,
+          detail: { type: "escape" },
+        }),
+      );
     }
   }
 }
@@ -300,7 +305,12 @@ export function reposition(ref, float, opts = {}) {
 
   const boundary = getBoundary(ref, opts);
   if (isOutsideBoundary(refRect, boundary)) {
-    float.dispatchEvent(new CustomEvent(EVENTS.hide, { bubbles: false }));
+    float.dispatchEvent(
+      new CustomEvent(EVENTS.hide, {
+        bubbles: false,
+        detail: { type: "out-of-view" },
+      }),
+    );
     return;
   }
 

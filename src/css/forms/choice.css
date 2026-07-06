@@ -73,7 +73,7 @@
 @supports selector(label:has(> input)) {
   .form
     label:has(> input:is([type="checkbox"], [type="radio"]))
-    > input:is([type="checkbox"], input[type="radio"]) {
+    > input:is([type="checkbox"], [type="radio"]) {
     flex: 0 0 auto;
     margin-block-start: var(--choice-control-offset);
   }
@@ -187,7 +187,7 @@
     .radio,
     .form input[type="checkbox"]:not([role="switch"]),
     .form input[type="radio"]
-  ):hover {
+  ):hover:not(:checked, :indeterminate, :disabled) {
   --choice-border: var(--text-subtle);
 }
 

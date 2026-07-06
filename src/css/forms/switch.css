@@ -42,7 +42,7 @@
   block-size: var(--switch-block-size);
   margin: 0;
   border: var(--border-width) solid var(--border);
-  border-radius: 999px;
+  border-radius: var(--radius-full);
   background: var(--switch-bg);
   appearance: none;
   cursor: pointer;
@@ -54,7 +54,7 @@
   inline-size: var(--switch-knob-size);
   block-size: var(--switch-knob-size);
   margin-inline: var(--switch-knob-margin);
-  border-radius: 999px;
+  border-radius: var(--radius-full);
   background: var(--switch-knob);
   box-shadow: var(--shadow);
   transition:
@@ -95,6 +95,7 @@
 
 .switch:disabled,
 .form input[role="switch"]:disabled {
+  --switch-bg: var(--surface-subtle);
   --switch-knob: var(--text-subtle);
   border-color: var(--border);
   opacity: 1;

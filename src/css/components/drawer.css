@@ -10,7 +10,7 @@ dialog.drawer {
   --drawer-size: 20rem;
   --drawer-pad: var(--space-4);
 
-  inline-size: min(90vw, var(--drawer-size));
+  inline-size: min(calc(var(--viewport-inline) * 0.9), var(--drawer-size));
   block-size: var(--viewport-block);
   max-inline-size: none;
   max-block-size: var(--viewport-block);
