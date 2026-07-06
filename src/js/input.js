@@ -16,6 +16,10 @@ export function setCaret(el, position) {
   }
 }
 
+export function dispatchInput(el) {
+  el.dispatchEvent(new Event("input", { bubbles: true }));
+}
+
 export function onTextInput(el, handler, signal) {
   let composing = false;
 

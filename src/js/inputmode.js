@@ -7,7 +7,7 @@
  */
 
 import enhance from "./enhance.js";
-import { onTextInput, selectionStart, setCaret } from "./input.js";
+import { dispatchInput, onTextInput, selectionStart, setCaret } from "./input.js";
 
 const SELECTOR = "input[inputmode]";
 
@@ -50,6 +50,7 @@ function connectInputmode(el) {
     if (next === previous) return;
 
     el.value = next;
+    dispatchInput(el);
     setCaret(el, filterValue(previous.slice(0, caret), mode).length);
   }, controller.signal);
 

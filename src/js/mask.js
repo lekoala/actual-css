@@ -5,7 +5,7 @@
  */
 
 import enhance from "./enhance.js";
-import { onTextInput, selectionStart, setCaret } from "./input.js";
+import { dispatchInput, onTextInput, selectionStart, setCaret } from "./input.js";
 
 const SELECTOR = "input[data-mask]";
 const TOKEN_TESTS = {
@@ -104,6 +104,7 @@ function connectMask(el) {
     if (next === previous) return;
 
     el.value = next;
+    dispatchInput(el);
     setCaret(el, caretForMask(next, mask, rawBeforeCaret));
   }, controller.signal);
 
