@@ -23,7 +23,7 @@ select {
 }
 
 [hidden]:not([hidden="until-found"]) {
-  display: none;
+  display: none !important;
 }
 
 /* Legacy dialog fallback only. Modern dialogs keep the browser's native closed
