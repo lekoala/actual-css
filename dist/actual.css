@@ -16,7 +16,7 @@ button, input, textarea, select {
 }
 
 [hidden]:not([hidden="until-found"]) {
-  display: none;
+  display: none !important;
 }
 
 @supports not selector(dialog:modal) {
