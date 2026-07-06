@@ -42,7 +42,7 @@ async function build({ entry = ENTRY, minify, naming }) {
     filename: entry,
     minify,
     targets,
-    exclude: Features.LightDark,
+    exclude: Features.LightDark | Features.MediaQueries,
     sourceMap: true,
   });
 
