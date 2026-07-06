@@ -74,6 +74,7 @@
 }
 
 @supports selector(:user-invalid) {
+
   .select:user-invalid,
   .form select:user-invalid {
     --control-border: var(--danger);
@@ -87,4 +88,14 @@
   --control-border: var(--border);
   --control-cursor: not-allowed;
   --control-opacity: 1;
+}
+
+@media (forced-colors: active) {
+
+  .select:not([multiple], [size]),
+  .form select:not([multiple], [size]) {
+    appearance: auto;
+    background-image: none;
+    padding-inline-end: var(--space-3);
+  }
 }
