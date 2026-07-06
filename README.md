@@ -1,6 +1,6 @@
 # Actual CSS
 
-Plain CSS component framework for new projects. Semantic classes, shared variants, small tokens, themes, and progressive enhancement.
+Plain CSS component framework for new projects. Semantic classes, shared variants, small tokens, theme hooks, and progressive enhancement.
 
 Actual CSS claims a small set of global class names. For existing projects: cascade layers, import order, or an optional prefix transform.
 
@@ -55,7 +55,7 @@ Add classes to your HTML. Components define the structure, variants change the s
 
 Intents such as `.primary`, `.secondary`, `.success`, `.warning`, `.danger`, and `.neutral` work across components.
 
-Variants such as `.solid`, `.soft`, `.outline`, `.ghost`, and `.link` are shared by components like buttons, badges, alerts, and cards.
+Variants such as `.solid`, `.soft`, and `.outline` are shared by components like buttons, badges, alerts, and cards. `.ghost` and `.link` are button-only variants.
 
 Size variants `.sm` and `.lg` scale controls consistently.
 
@@ -67,7 +67,7 @@ Actual CSS uses a small unprefixed class grammar:
 .component [intent] [variant] [size] [modifier]
 ```
 
-Components, layout helpers, form helpers, and utilities claim their documented class names. Intents are `.primary`, `.secondary`, `.success`, `.warning`, `.danger`, and `.neutral`; shared variants are `.solid`, `.soft`, `.outline`, `.ghost`, and `.link`; shared sizes are `.sm` and `.lg`.
+Components, layout helpers, form helpers, and utilities claim their documented class names. Intents are `.primary`, `.secondary`, `.success`, `.warning`, `.danger`, and `.neutral`; shared variants are `.solid`, `.soft`, and `.outline`; button-only variants are `.ghost` and `.link`; shared sizes are `.sm` and `.lg`.
 
 Undocumented `is-*` classes are runtime internals.
 
@@ -87,11 +87,7 @@ Undocumented `is-*` classes are runtime internals.
 
 **Utilities** — spacing, gaps, logical margins, truncation, muted text, circles, screen-reader-only text, text wrapping, and link variants.
 
-**Themes** — automatic light and dark mode with `light-dark()`, plus optional theme presets. Themes can be selected with `data-theme`.
-
-```html
-<html data-theme="forest">
-```
+**Theme hooks** — public tokens for color, radius, shadow, motion, and typography. Reference presets in `src/css/themes/` are demo material, not default CSS or public package entrypoints.
 
 ## Optional CSS
 
@@ -201,9 +197,4 @@ MIT
 
 ## Docs
 
-- `docs/mental-model.md`
-- `docs/tokens.md`
-- `docs/components.md`
-- `docs/forms.md`
-- `docs/accessibility.md`
-- `docs/why.md`
+Start with [`docs/README.md`](docs/README.md).
