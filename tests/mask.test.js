@@ -44,6 +44,26 @@ test("data-mask formats token masks and sets size", async () => {
   expect(el.size).toBe(5);
 });
 
+test("mask auto-adds trailing literals while typing", async () => {
+  await loadMask('<input data-mask="999-999">');
+  const el = document.querySelector("input");
+
+  input(el, "123");
+
+  expect(el.value).toBe("123-");
+});
+
+test("mask accepts a fixed literal typed by hand", async () => {
+  await loadMask('<input data-mask="999-999">');
+  const el = document.querySelector("input");
+
+  input(el, "123-");
+  expect(el.value).toBe("123-");
+
+  input(el, "123-4");
+  expect(el.value).toBe("123-4");
+});
+
 test("mask deletion does not re-add trailing literals", async () => {
   await loadMask('<input data-mask="aa-99">');
   const el = document.querySelector("input");

@@ -95,8 +95,11 @@ function connectMask(el) {
   if (!el.hasAttribute("size")) el.size = mask.length;
 
   const controller = new AbortController();
+  let masking = false;
 
   onTextInput(el, (event) => {
+    if (masking) return;
+
     const inputType = event.inputType || "";
     const caret = selectionStart(el);
     let rawBeforeCaret = rawMaskChars(el.value.slice(0, caret), mask).length;
@@ -118,8 +121,13 @@ function connectMask(el) {
     if (next === previous) return;
 
     el.value = next;
-    dispatchInput(el);
     setCaret(el, caretForMask(next, mask, rawBeforeCaret));
+    try {
+      masking = true;
+      dispatchInput(el);
+    } finally {
+      masking = false;
+    }
   }, controller.signal);
 
   return () => controller.abort();
