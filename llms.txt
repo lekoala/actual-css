@@ -11,7 +11,7 @@ Actual CSS uses a small public grammar: `.component [intent] [variant] [size] [m
 - [Tokens](docs/tokens.md): Theme contract and public token surface.
 - [Components](docs/components.md): Component markup and composition examples.
 - [Forms](docs/forms.md): Field layout, controls, labels, validation, and form actions.
-- [UI](docs/ui.md): JavaScript-enhanced UI patterns.
+- [Interactive components](docs/ui.md): JavaScript-enhanced component behavior.
 
 ## Design & Maintenance
 
@@ -21,6 +21,6 @@ Actual CSS uses a small public grammar: `.component [intent] [variant] [size] [m
 
 ## Package Entrypoints
 
-- CSS: `actual-css`, `actual-css/css`, `actual-css/css/layer`, `actual-css/css/components`, `actual-css/css/forms`, `actual-css/css/ui`.
+- CSS: `actual-css`, `actual-css/css`, `actual-css/css/layer`, `actual-css/css/components`, `actual-css/css/forms`.
 - Optional CSS: `actual-css/css/optional/typography-fluid`, `actual-css/css/optional/scroller`.
 - JavaScript: `actual-css/js`, plus individual enhancers such as `actual-css/js/dialog`, `actual-css/js/flyout`, `actual-css/js/tooltip`, `actual-css/js/tab`, `actual-css/js/inputmode`, and `actual-css/js/mask`.

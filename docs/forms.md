@@ -497,7 +497,7 @@ The mixed shape `<label for="x">…<input id="x"></label>` is allowed by the spe
 
 Add `.join` to the wrapper that groups the controls. Use `.join-addon` for static prefix/suffix content such as currency symbols, units, or protocol text. Action buttons inside the group should use `.btn`. The wrapper should still carry `role="group"` with a label for accessibility.
 
-When composing source files manually, import `join.css` after the controls it groups. `.join` writes child border-radius longhands directly so joined corners win at equal specificity.
+When composing source files manually, import `components/join.css` after the controls it groups. `.join` writes child border-radius longhands directly so joined corners win at equal specificity.
 
 ```html
 <div class="field">

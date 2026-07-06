@@ -11,9 +11,9 @@ Start here when using or changing Actual CSS.
 - [Tokens](tokens.md): public design-token contract.
 - [Typography](typography.md): text defaults, prose, and optional fluid type.
 - [Layout](layout.md): layout primitives and responsive composition.
-- [Components](components.md): static component classes and examples.
+- [Components](components.md): component classes and examples.
 - [Forms](forms.md): fields, validation, controls, and form actions.
-- [UI](ui.md): JS-enhanced interface patterns.
+- [Interactive components](ui.md): JS-enhanced component behavior.
 - [Utilities](utilities.md): small one-purpose helpers.
 - [Patterns](patterns.md): common app compositions.
 

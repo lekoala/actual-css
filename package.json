@@ -31,7 +31,6 @@
     "./css/components": "./src/css/components/index.css",
     "./css/forms": "./src/css/forms/index.css",
     "./css/themes": "./src/css/themes/index.css",
-    "./css/ui": "./src/css/ui/index.css",
     "./css/*": "./src/css/*.css",
     "./themes": "./src/css/themes/index.css",
     "./themes.min.css": "./dist/actual-themes.min.css",

@@ -4,6 +4,7 @@
 
 html {
   -webkit-text-size-adjust: 100%;
+  scrollbar-gutter: stable;
 }
 
 body {
@@ -728,30 +729,30 @@ small {
 }
 
 @media (hover: hover) {
-  .btn:hover {
+  .btn:not(:where(:disabled, [aria-disabled="true"])):hover {
     background: var(--ui-hover-bg, var(--btn-bg));
   }
 
-  .btn:not(:where(.outline, .ghost, .link)):hover {
+  .btn:not(:where(:disabled, [aria-disabled="true"], .outline, .ghost, .link)):hover {
     box-shadow: inset 0 0 0 999px var(--hover-overlay);
   }
 
-  .btn:where(.outline, .ghost):hover {
+  .btn:where(.outline, .ghost):not(:where(:disabled, [aria-disabled="true"])):hover {
     --ui-hover-bg: var(--surface-subtle);
   }
 
   @supports (color: color-mix(in oklch, red, white)) {
-    .btn:not(:where(.soft, .outline, .ghost, .link)):hover {
+    .btn:not(:where(:disabled, [aria-disabled="true"], .soft, .outline, .ghost, .link)):hover {
       --ui-hover-bg: color-mix(in oklch, var(--intent, var(--neutral)) 88%, black);
     }
 
-    .btn.soft:hover {
+    .btn.soft:not(:where(:disabled, [aria-disabled="true"])):hover {
       --ui-hover-bg: color-mix(in oklch,
         var(--intent, var(--neutral)) var(--soft-hover-alpha),
         transparent);
     }
 
-    .btn.outline:hover {
+    .btn.outline:not(:where(:disabled, [aria-disabled="true"])):hover {
       --ui-hover-bg: color-mix(in oklch, var(--intent, var(--neutral)), transparent 92%);
     }
   }
@@ -777,7 +778,7 @@ small {
   --btn-radius: var(--radius-full);
 }
 
-.btn.link:hover {
+.btn.link:not(:where(:disabled, [aria-disabled="true"])):hover {
   color: var(--intent, var(--text));
   background: none;
   text-decoration-thickness: .12em;
@@ -796,6 +797,9 @@ small {
 .btn:disabled, .btn[aria-disabled="true"] {
   cursor: not-allowed;
   opacity: .65;
+}
+
+a.btn[aria-disabled="true"] {
   pointer-events: none;
 }
 
@@ -909,7 +913,7 @@ small {
 }
 
 @media (hover: hover) {
-  .badge > button:hover {
+  .badge > button:not(:disabled):hover {
     background: var(--hover-overlay);
   }
 }
@@ -920,26 +924,26 @@ small {
 }
 
 @media (hover: hover) {
-  :where(a.badge, button.badge):hover {
+  :where(a.badge, button.badge):not(:where(:disabled, [aria-disabled="true"])):hover {
     background: var(--ui-hover-bg, var(--badge-bg));
   }
 
-  :where(a.badge, button.badge):not(:where(.outline)):hover {
+  :where(a.badge, button.badge):not(:where(:disabled, [aria-disabled="true"], .outline)):hover {
     box-shadow: inset 0 0 0 999px var(--hover-overlay);
   }
 
-  :where(a.badge, button.badge):where(.outline):hover {
+  :where(a.badge, button.badge):where(.outline):not(:where(:disabled, [aria-disabled="true"])):hover {
     --ui-hover-bg: var(--surface-subtle);
   }
 
   @supports (color: color-mix(in oklch, red, white)) {
-    :where(a.badge, button.badge):where(.soft):hover {
+    :where(a.badge, button.badge):where(.soft):not(:where(:disabled, [aria-disabled="true"])):hover {
       --ui-hover-bg: color-mix(in oklch,
         var(--intent, var(--neutral)) var(--soft-hover-alpha),
         transparent);
     }
 
-    :where(a.badge, button.badge):where(.outline):hover {
+    :where(a.badge, button.badge):where(.outline):not(:where(:disabled, [aria-disabled="true"])):hover {
       --ui-hover-bg: color-mix(in oklch, var(--intent, var(--neutral)), transparent 92%);
     }
   }
@@ -958,6 +962,9 @@ button.badge {
 button.badge:disabled, .badge[aria-disabled="true"] {
   opacity: .55;
   cursor: not-allowed;
+}
+
+a.badge[aria-disabled="true"] {
   pointer-events: none;
 }
 
@@ -974,12 +981,12 @@ button.badge:disabled, .badge[aria-disabled="true"] {
   }
 
   @media (hover: hover) {
-    :where(a.badge, button.badge):hover {
+    :where(a.badge, button.badge):hover:not(:where(:disabled, [aria-disabled="true"])) {
       outline: var(--border-width) solid ButtonText;
       outline-offset: 2px;
     }
 
-    .badge > button:hover {
+    .badge > button:not(:disabled):hover {
       outline: var(--border-width) solid currentColor;
       outline-offset: 1px;
     }
@@ -1367,7 +1374,6 @@ dialog.modal[open]::backdrop {
 
 @supports selector(:has(dialog:modal)) {
   html:has(dialog:modal) {
-    scrollbar-gutter: stable;
     overflow: hidden;
   }
 }
@@ -1502,6 +1508,263 @@ dialog.drawer nav {
 
   dialog.drawer::backdrop {
     background: canvas;
+  }
+}
+
+.flyout {
+  z-index: var(--z-menu);
+  gap: var(--space-1);
+  inline-size: max-content;
+  min-inline-size: min(var(--flyout-trigger-width, 0px),
+    min(20rem, calc(var(--viewport-inline) - var(--space-6))));
+  max-inline-size: min(20rem, calc(var(--viewport-inline) - var(--space-6)));
+  max-block-size: min(24rem,
+    var(--available-height, calc(var(--viewport-block) - var(--space-6))));
+  padding: var(--space-1);
+  border: var(--border-width) solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface-raised);
+  box-shadow: var(--shadow-popout);
+  opacity: 1;
+  transition: opacity var(--duration-fast, var(--duration)) var(--ease, ease),
+    scale var(--duration-fast, var(--duration)) var(--ease, ease),
+    translate var(--duration-fast, var(--duration)) var(--ease, ease);
+  margin: 0;
+  list-style: none;
+  display: grid;
+  position: absolute;
+  inset-block-start: calc(100% + var(--space-1));
+  inset-inline-start: 0;
+  overflow: auto;
+  scale: 1;
+}
+
+@starting-style {
+  .flyout.is-open {
+    opacity: 0;
+    scale: .98;
+  }
+}
+
+.flyout.is-sheet {
+  max-block-size: min(75vb, 32rem);
+  inline-size: auto;
+  min-inline-size: 0;
+  max-inline-size: none;
+  padding: max(var(--space-3), env(safe-area-inset-top)) var(--space-3)
+    max(var(--space-3), env(safe-area-inset-bottom));
+  border-end-end-radius: 0;
+  border-end-start-radius: 0;
+  position: fixed;
+  inset-block: auto 0;
+  inset-inline: 0;
+  overflow: auto;
+}
+
+.flyout[hidden] {
+  opacity: 0;
+  display: none;
+  scale: .98;
+}
+
+.flyout.is-sheet[hidden] {
+  scale: 1;
+  translate: 0 var(--space-3);
+}
+
+@starting-style {
+  .flyout.is-sheet.is-open {
+    scale: 1;
+    translate: 0 var(--space-3);
+  }
+}
+
+@supports (transition-behavior: allow-discrete) {
+  .flyout {
+    transition: opacity var(--duration-fast, var(--duration)) var(--ease, ease),
+      scale var(--duration-fast, var(--duration)) var(--ease, ease),
+      translate var(--duration-fast, var(--duration)) var(--ease, ease),
+      display var(--duration-fast, var(--duration)) allow-discrete;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .flyout {
+    transition: none;
+  }
+}
+
+.flyout > li {
+  margin: 0;
+}
+
+.flyout > :where(button, a, [role="menuitem"]), .flyout > li > :where(button, a, [role="menuitem"]) {
+  justify-content: flex-start;
+  align-items: center;
+  gap: var(--space-2);
+  inline-size: 100%;
+  min-block-size: var(--control-size);
+  padding-inline: var(--space-2);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  font: inherit;
+  font-weight: var(--font-weight);
+  text-align: start;
+  white-space: nowrap;
+  cursor: pointer;
+  background: none;
+  border: 0;
+  text-decoration: none;
+  display: flex;
+}
+
+.flyout.is-sheet > :where(button, a, [role="menuitem"]), .flyout.is-sheet > li > :where(button, a, [role="menuitem"]) {
+  min-block-size: var(--control-size-lg);
+}
+
+.flyout > :where(button, a, [role="menuitem"]):focus-visible, .flyout > li > :where(button, a, [role="menuitem"]):focus-visible {
+  background: var(--surface-subtle);
+  outline: var(--focus-outline);
+  outline-offset: var(--focus-outline-offset);
+  box-shadow: var(--focus-ring-shadow);
+}
+
+@media (hover: hover) {
+  .flyout > :where(button, a, [role="menuitem"]):hover, .flyout > li > :where(button, a, [role="menuitem"]):hover {
+    background: var(--surface-subtle);
+    outline: none;
+  }
+}
+
+.flyout > hr, .flyout > li > hr {
+  inline-size: 100%;
+  margin: 0;
+  margin-block: var(--space-1);
+  border: 0;
+  border-block-start: var(--border-width) solid var(--border);
+}
+
+@media (forced-colors: active) {
+  .flyout {
+    color: canvastext;
+    box-shadow: none;
+    background: canvas;
+    border-color: buttontext;
+  }
+
+  .flyout > :where(button, a, [role="menuitem"]):focus-visible, .flyout > li > :where(button, a, [role="menuitem"]):focus-visible {
+    color: canvastext;
+    background: canvas;
+  }
+
+  @media (hover: hover) {
+    .flyout > :where(button, a, [role="menuitem"]):hover, .flyout > li > :where(button, a, [role="menuitem"]):hover {
+      outline: var(--border-width) solid ButtonText;
+      outline-offset: -1px;
+      color: canvastext;
+      background: canvas;
+    }
+  }
+}
+
+.tooltip {
+  --tooltip-bg: var(--surface-solid);
+  --tooltip-fg: var(--surface);
+  --tooltip-arrow-size: 5px;
+  z-index: var(--z-tooltip);
+  max-inline-size: min(24rem, calc(var(--viewport-inline) - 2rem));
+  border-radius: var(--radius-sm);
+  background: var(--tooltip-bg);
+  color: var(--tooltip-fg);
+  font-size: .8125rem;
+  line-height: var(--line-height-tight);
+  pointer-events: none;
+  -webkit-user-select: none;
+  user-select: none;
+  opacity: 1;
+  transition: opacity var(--duration-fast, var(--duration)) var(--ease, ease),
+    scale var(--duration-fast, var(--duration)) var(--ease, ease);
+  padding: .25em .6em;
+  position: fixed;
+  scale: 1;
+}
+
+.tooltip[hidden] {
+  opacity: 0;
+  display: none;
+  scale: .96;
+}
+
+@starting-style {
+  .tooltip:not([hidden]) {
+    opacity: 0;
+    scale: .96;
+  }
+}
+
+@supports (transition-behavior: allow-discrete) {
+  .tooltip {
+    transition: opacity var(--duration-fast, var(--duration)) var(--ease, ease),
+      scale var(--duration-fast, var(--duration)) var(--ease, ease),
+      display var(--duration-fast, var(--duration)) allow-discrete;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tooltip {
+    transition: none;
+  }
+}
+
+.tooltip:before {
+  content: "";
+  inline-size: calc(var(--tooltip-arrow-size) * 2);
+  block-size: var(--tooltip-arrow-size);
+  background: var(--tooltip-bg);
+  position: absolute;
+}
+
+.tooltip[data-placement^="top"]:before {
+  clip-path: polygon(50% 100%, 0 0, 100% 0);
+  inset-block-end: calc(-.98 * var(--tooltip-arrow-size));
+  inset-inline-start: var(--arrow-x, 50%);
+  translate: -50%;
+}
+
+.tooltip[data-placement^="bottom"]:before {
+  clip-path: polygon(50% 0, 0 100%, 100% 100%);
+  inset-block-start: calc(-.98 * var(--tooltip-arrow-size));
+  inset-inline-start: var(--arrow-x, 50%);
+  translate: -50%;
+}
+
+.tooltip[data-placement^="left"]:before {
+  inline-size: var(--tooltip-arrow-size);
+  block-size: calc(var(--tooltip-arrow-size) * 2);
+  clip-path: polygon(100% 50%, 0 0, 0 100%);
+  inset-block-start: var(--arrow-y, 50%);
+  inset-inline-end: calc(-.98 * var(--tooltip-arrow-size));
+  translate: 0 -50%;
+}
+
+.tooltip[data-placement^="right"]:before {
+  inline-size: var(--tooltip-arrow-size);
+  block-size: calc(var(--tooltip-arrow-size) * 2);
+  clip-path: polygon(0 50%, 100% 0, 100% 100%);
+  inset-block-start: var(--arrow-y, 50%);
+  inset-inline-start: calc(-.98 * var(--tooltip-arrow-size));
+  translate: 0 -50%;
+}
+
+@media (forced-colors: active) {
+  .tooltip {
+    --tooltip-bg: Canvas;
+    --tooltip-fg: CanvasText;
+    border: var(--border-width) solid ButtonText;
+  }
+
+  .tooltip:before {
+    display: none;
   }
 }
 
@@ -2178,6 +2441,77 @@ button.avatar {
     forced-color-adjust: none;
     background: highlight;
     border-color: highlight;
+  }
+}
+
+:where(.tab) {
+  --intent: initial;
+  --intent-fg: initial;
+  --ui-bg: initial;
+  --ui-fg: initial;
+  --ui-border: initial;
+  --ui-hover-bg: initial;
+}
+
+.tabs {
+  border-block-end: var(--border-width) solid var(--border);
+  flex-wrap: wrap;
+  gap: .35rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+}
+
+.tab {
+  border: 0;
+  min-block-size: 2.4rem;
+  color: var(--text-muted);
+  font: inherit;
+  font-weight: var(--font-weight-strong);
+  cursor: pointer;
+  background: none;
+  border-block-end: 2px solid #0000;
+  border-radius: 0;
+  align-items: center;
+  padding-inline: .8rem;
+  text-decoration: none;
+  display: inline-flex;
+}
+
+.tab:hover {
+  color: var(--text);
+}
+
+.tab:focus-visible {
+  outline: var(--focus-outline);
+  outline-offset: -2px;
+  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+}
+
+.tab[aria-selected="true"], .tab[aria-current="page"], .tab[aria-pressed="true"] {
+  border-block-end-color: var(--intent, var(--primary));
+  color: var(--intent, var(--primary));
+}
+
+@media (forced-colors: active) {
+  .tabs {
+    border-block-end-color: buttontext;
+  }
+
+  .tab {
+    color: buttontext;
+  }
+
+  .tab:hover {
+    color: buttontext;
+    text-underline-offset: .18em;
+    text-decoration: underline;
+  }
+
+  .tab[aria-selected="true"], .tab[aria-current="page"], .tab[aria-pressed="true"] {
+    color: highlight;
+    border-block-end-color: highlight;
   }
 }
 
@@ -2874,6 +3208,50 @@ button.avatar {
   color: var(--text-muted);
 }
 
+.form input[type="file"]::file-selector-button {
+  padding-block: var(--space-1);
+  padding-inline: var(--space-2);
+  border: var(--border-width) solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface-subtle);
+  color: var(--text);
+  font: inherit;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition: background-color var(--duration),
+    border-color var(--duration),
+    color var(--duration);
+  margin-inline-end: var(--space-3);
+}
+
+.file::file-selector-button {
+  padding-block: var(--space-1);
+  padding-inline: var(--space-2);
+  border: var(--border-width) solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface-subtle);
+  color: var(--text);
+  font: inherit;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition: background-color var(--duration),
+    border-color var(--duration),
+    color var(--duration);
+  margin-inline-end: var(--space-3);
+}
+
+@media (hover: hover) {
+  .form input[type="file"]:not(:disabled)::file-selector-button:hover {
+    background: var(--border);
+  }
+
+  .file:not(:disabled)::file-selector-button:hover {
+    background: var(--border);
+  }
+}
+
 .form input[type="range"], .range {
   inline-size: 100%;
   accent-color: var(--intent, var(--primary));
@@ -3005,334 +3383,6 @@ button.avatar {
     background: color-mix(in oklch, var(--surface) 88%, transparent);
     -webkit-backdrop-filter: blur(1rem);
     backdrop-filter: blur(1rem);
-  }
-}
-
-.flyout {
-  z-index: var(--z-menu);
-  gap: var(--space-1);
-  inline-size: max-content;
-  min-inline-size: min(var(--flyout-trigger-width, 0px),
-    min(20rem, calc(var(--viewport-inline) - var(--space-6))));
-  max-inline-size: min(20rem, calc(var(--viewport-inline) - var(--space-6)));
-  max-block-size: min(24rem,
-    var(--available-height, calc(var(--viewport-block) - var(--space-6))));
-  padding: var(--space-1);
-  border: var(--border-width) solid var(--border);
-  border-radius: var(--radius);
-  background: var(--surface-raised);
-  box-shadow: var(--shadow-popout);
-  opacity: 1;
-  transition: opacity var(--duration-fast, var(--duration)) var(--ease, ease),
-    scale var(--duration-fast, var(--duration)) var(--ease, ease),
-    translate var(--duration-fast, var(--duration)) var(--ease, ease);
-  margin: 0;
-  list-style: none;
-  display: grid;
-  position: absolute;
-  inset-block-start: calc(100% + var(--space-1));
-  inset-inline-start: 0;
-  overflow: auto;
-  scale: 1;
-}
-
-@starting-style {
-  .flyout.is-open {
-    opacity: 0;
-    scale: .98;
-  }
-}
-
-.flyout.is-sheet {
-  max-block-size: min(75vb, 32rem);
-  inline-size: auto;
-  min-inline-size: 0;
-  max-inline-size: none;
-  padding: max(var(--space-3), env(safe-area-inset-top)) var(--space-3)
-    max(var(--space-3), env(safe-area-inset-bottom));
-  border-end-end-radius: 0;
-  border-end-start-radius: 0;
-  position: fixed;
-  inset-block: auto 0;
-  inset-inline: 0;
-  overflow: auto;
-}
-
-.flyout[hidden] {
-  opacity: 0;
-  display: none;
-  scale: .98;
-}
-
-.flyout.is-sheet[hidden] {
-  scale: 1;
-  translate: 0 var(--space-3);
-}
-
-@starting-style {
-  .flyout.is-sheet.is-open {
-    scale: 1;
-    translate: 0 var(--space-3);
-  }
-}
-
-@supports (transition-behavior: allow-discrete) {
-  .flyout {
-    transition: opacity var(--duration-fast, var(--duration)) var(--ease, ease),
-      scale var(--duration-fast, var(--duration)) var(--ease, ease),
-      translate var(--duration-fast, var(--duration)) var(--ease, ease),
-      display var(--duration-fast, var(--duration)) allow-discrete;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .flyout {
-    transition: none;
-  }
-}
-
-.flyout > li {
-  margin: 0;
-}
-
-.flyout > :where(button, a, [role="menuitem"]), .flyout > li > :where(button, a, [role="menuitem"]) {
-  justify-content: flex-start;
-  align-items: center;
-  gap: var(--space-2);
-  inline-size: 100%;
-  min-block-size: var(--control-size);
-  padding-inline: var(--space-2);
-  border-radius: var(--radius-sm);
-  color: var(--text);
-  font: inherit;
-  font-weight: var(--font-weight);
-  text-align: start;
-  white-space: nowrap;
-  cursor: pointer;
-  background: none;
-  border: 0;
-  text-decoration: none;
-  display: flex;
-}
-
-.flyout.is-sheet > :where(button, a, [role="menuitem"]), .flyout.is-sheet > li > :where(button, a, [role="menuitem"]) {
-  min-block-size: var(--control-size-lg);
-}
-
-.flyout > :where(button, a, [role="menuitem"]):focus-visible, .flyout > li > :where(button, a, [role="menuitem"]):focus-visible {
-  background: var(--surface-subtle);
-  outline: var(--focus-outline);
-  outline-offset: var(--focus-outline-offset);
-  box-shadow: var(--focus-ring-shadow);
-}
-
-@media (hover: hover) {
-  .flyout > :where(button, a, [role="menuitem"]):hover, .flyout > li > :where(button, a, [role="menuitem"]):hover {
-    background: var(--surface-subtle);
-    outline: none;
-  }
-}
-
-.flyout > hr, .flyout > li > hr {
-  inline-size: 100%;
-  margin: 0;
-  margin-block: var(--space-1);
-  border: 0;
-  border-block-start: var(--border-width) solid var(--border);
-}
-
-@media (forced-colors: active) {
-  .flyout {
-    color: canvastext;
-    box-shadow: none;
-    background: canvas;
-    border-color: buttontext;
-  }
-
-  .flyout > :where(button, a, [role="menuitem"]):focus-visible, .flyout > li > :where(button, a, [role="menuitem"]):focus-visible {
-    color: canvastext;
-    background: canvas;
-  }
-
-  @media (hover: hover) {
-    .flyout > :where(button, a, [role="menuitem"]):hover, .flyout > li > :where(button, a, [role="menuitem"]):hover {
-      outline: var(--border-width) solid ButtonText;
-      outline-offset: -1px;
-      color: canvastext;
-      background: canvas;
-    }
-  }
-}
-
-:where(.tab) {
-  --intent: initial;
-  --intent-fg: initial;
-  --ui-bg: initial;
-  --ui-fg: initial;
-  --ui-border: initial;
-  --ui-hover-bg: initial;
-}
-
-.tabs {
-  border-block-end: var(--border-width) solid var(--border);
-  flex-wrap: wrap;
-  gap: .35rem;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  display: flex;
-}
-
-.tab {
-  border: 0;
-  min-block-size: 2.4rem;
-  color: var(--text-muted);
-  font: inherit;
-  font-weight: var(--font-weight-strong);
-  cursor: pointer;
-  background: none;
-  border-block-end: 2px solid #0000;
-  border-radius: 0;
-  align-items: center;
-  padding-inline: .8rem;
-  text-decoration: none;
-  display: inline-flex;
-}
-
-.tab:hover {
-  color: var(--text);
-}
-
-.tab:focus-visible {
-  outline: var(--focus-outline);
-  outline-offset: -2px;
-  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
-}
-
-.tab[aria-selected="true"], .tab[aria-current="page"], .tab[aria-pressed="true"] {
-  border-block-end-color: var(--intent, var(--primary));
-  color: var(--intent, var(--primary));
-}
-
-@media (forced-colors: active) {
-  .tabs {
-    border-block-end-color: buttontext;
-  }
-
-  .tab {
-    color: buttontext;
-  }
-
-  .tab:hover {
-    color: buttontext;
-    text-underline-offset: .18em;
-    text-decoration: underline;
-  }
-
-  .tab[aria-selected="true"], .tab[aria-current="page"], .tab[aria-pressed="true"] {
-    color: highlight;
-    border-block-end-color: highlight;
-  }
-}
-
-.tooltip {
-  --tooltip-bg: var(--surface-solid);
-  --tooltip-fg: var(--surface);
-  --tooltip-arrow-size: 5px;
-  z-index: var(--z-tooltip);
-  max-inline-size: min(24rem, calc(var(--viewport-inline) - 2rem));
-  border-radius: var(--radius-sm);
-  background: var(--tooltip-bg);
-  color: var(--tooltip-fg);
-  font-size: .8125rem;
-  line-height: var(--line-height-tight);
-  pointer-events: none;
-  -webkit-user-select: none;
-  user-select: none;
-  opacity: 1;
-  transition: opacity var(--duration-fast, var(--duration)) var(--ease, ease),
-    scale var(--duration-fast, var(--duration)) var(--ease, ease);
-  padding: .25em .6em;
-  position: fixed;
-  scale: 1;
-}
-
-.tooltip[hidden] {
-  opacity: 0;
-  display: none;
-  scale: .96;
-}
-
-@starting-style {
-  .tooltip:not([hidden]) {
-    opacity: 0;
-    scale: .96;
-  }
-}
-
-@supports (transition-behavior: allow-discrete) {
-  .tooltip {
-    transition: opacity var(--duration-fast, var(--duration)) var(--ease, ease),
-      scale var(--duration-fast, var(--duration)) var(--ease, ease),
-      display var(--duration-fast, var(--duration)) allow-discrete;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .tooltip {
-    transition: none;
-  }
-}
-
-.tooltip:before {
-  content: "";
-  inline-size: calc(var(--tooltip-arrow-size) * 2);
-  block-size: var(--tooltip-arrow-size);
-  background: var(--tooltip-bg);
-  position: absolute;
-}
-
-.tooltip[data-placement^="top"]:before {
-  clip-path: polygon(50% 100%, 0 0, 100% 0);
-  inset-block-end: calc(-.98 * var(--tooltip-arrow-size));
-  inset-inline-start: var(--arrow-x, 50%);
-  translate: -50%;
-}
-
-.tooltip[data-placement^="bottom"]:before {
-  clip-path: polygon(50% 0, 0 100%, 100% 100%);
-  inset-block-start: calc(-.98 * var(--tooltip-arrow-size));
-  inset-inline-start: var(--arrow-x, 50%);
-  translate: -50%;
-}
-
-.tooltip[data-placement^="left"]:before {
-  inline-size: var(--tooltip-arrow-size);
-  block-size: calc(var(--tooltip-arrow-size) * 2);
-  clip-path: polygon(100% 50%, 0 0, 0 100%);
-  inset-block-start: var(--arrow-y, 50%);
-  inset-inline-end: calc(-.98 * var(--tooltip-arrow-size));
-  translate: 0 -50%;
-}
-
-.tooltip[data-placement^="right"]:before {
-  inline-size: var(--tooltip-arrow-size);
-  block-size: calc(var(--tooltip-arrow-size) * 2);
-  clip-path: polygon(0 50%, 100% 0, 100% 100%);
-  inset-block-start: var(--arrow-y, 50%);
-  inset-inline-start: calc(-.98 * var(--tooltip-arrow-size));
-  translate: 0 -50%;
-}
-
-@media (forced-colors: active) {
-  .tooltip {
-    --tooltip-bg: Canvas;
-    --tooltip-fg: CanvasText;
-    border: var(--border-width) solid ButtonText;
-  }
-
-  .tooltip:before {
-    display: none;
   }
 }
 
@@ -3522,6 +3572,17 @@ button.avatar {
   margin-inline-start: calc(var(--border-width) * -1);
 }
 
-.join > :is(:focus, :focus-within) {
+.join > :is(:hover, :focus, :focus-within) {
   z-index: 1;
+}
+
+@media print {
+  .flyout, .tooltip, .surface-backdrop, .btn, .spinner {
+    display: none !important;
+  }
+
+  .card, .alert, .badge {
+    break-inside: avoid;
+    border: 1px solid #000;
+  }
 }
