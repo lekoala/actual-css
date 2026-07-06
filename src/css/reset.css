@@ -22,6 +22,10 @@ select {
   font: inherit;
 }
 
+[hidden]:not([hidden="until-found"]) {
+  display: none;
+}
+
 /* Legacy dialog fallback only. Modern dialogs keep the browser's native closed
    state so display/overlay transitions are not flattened by the reset. */
 @supports not (selector(dialog:modal)) {

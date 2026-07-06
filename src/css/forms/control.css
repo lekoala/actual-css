@@ -82,6 +82,14 @@
   --control-border: var(--danger);
 }
 
+@supports selector(:user-invalid) {
+  .input:user-invalid,
+  .textarea:user-invalid,
+  :is(.form, .field) :where(input, textarea):user-invalid {
+    --control-border: var(--danger);
+  }
+}
+
 .input[readonly],
 .textarea[readonly],
 :is(.form, .field) :where(input, textarea)[readonly] {

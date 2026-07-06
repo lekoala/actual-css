@@ -36,7 +36,6 @@ temp/
 
 # Cache directories
 .cache/
-.eslintcache
 
 # Playwright
 /test-results/

@@ -23,6 +23,21 @@ run cleanup.
 already-connected element receives a behavior attribute later, call the returned
 `refresh(node)` handle or reinsert the element.
 
+### Side-effect modules
+
+All JS modules are side-effect modules: importing them registers behavior
+automatically. There is no init call, no global registry, and nothing to
+configure. This keeps imports declarative and tree-shakeable.
+
+```js
+import "actual-css/js";        // full runtime
+import "actual-css/js/dialog"; // single feature
+```
+
+Modules are safe to import during SSR — registration is a no-op when there is no
+DOM. The runtime remains active until the page unloads. There is no teardown
+handle; cleanup is per-element when an element leaves the DOM.
+
 ## Extending The Runtime
 
 Use `enhance()` for project-specific behavior. It accepts a selector map where

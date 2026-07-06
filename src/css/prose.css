@@ -5,7 +5,7 @@
  * layout, forms, cards, navigation, and app tables remain outside this scope.
  */
 
-:root {
+.prose {
   /* Prose scale */
   --prose-size: 1rem;
   --prose-line-height: 1.7;
@@ -16,9 +16,7 @@
   --prose-h2: 1.5rem;
   --prose-h3: 1.25rem;
   --prose-h4: 1.125rem;
-}
 
-.prose {
   max-inline-size: var(--prose-measure);
   color: var(--text);
   font-size: var(--prose-size);
@@ -41,7 +39,7 @@
   text-wrap: pretty;
 }
 
-.prose> :first-child {
+.prose > :first-child {
   margin-block-start: 0;
 }
 
@@ -82,7 +80,7 @@
   padding-inline-start: 1.5em;
 }
 
-.prose li+li {
+.prose li + li {
   margin-block-start: 0.35em;
 }
 
@@ -146,7 +144,7 @@
 /* Readable content measure. Composes with .center for centering or with
    margin-inline: auto for a one-off centered block. */
 .measure {
-  max-inline-size: var(--prose-measure);
+  max-inline-size: var(--prose-measure, 70ch);
 }
 
 .prose.sm {

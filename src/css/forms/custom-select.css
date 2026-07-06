@@ -127,6 +127,17 @@
         color: ButtonText;
         forced-color-adjust: auto;
       }
+
+      .select option::checkmark,
+      .form select option::checkmark {
+        color: HighlightText;
+        forced-color-adjust: none;
+      }
+
+      .select optgroup,
+      .form select optgroup {
+        color: GrayText;
+      }
     }
   }
 }

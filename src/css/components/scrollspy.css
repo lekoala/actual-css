@@ -8,4 +8,8 @@
  *
  * Falls back gracefully: links still work when IntersectionObserver is
  * unavailable.
+ *
+ * Intentionally empty: no CSS rules needed. The class is kept in the bundle
+ * so the selector is available for JS enhancement and for authors to hook
+ * their own styling.
  */

@@ -92,7 +92,7 @@ function caretForMask(value, mask, rawCount) {
 function connectMask(el) {
   const mask = el.dataset.mask || "";
   if (!mask) return;
-  if (!el.hasAttribute("size")) el.size = mask.length;
+  if (el.hasAttribute("data-mask-size") && !el.hasAttribute("size")) el.size = mask.length;
 
   const controller = new AbortController();
   let masking = false;

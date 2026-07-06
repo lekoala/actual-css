@@ -73,6 +73,13 @@
   --control-border: var(--danger);
 }
 
+@supports selector(:user-invalid) {
+  .select:user-invalid,
+  .form select:user-invalid {
+    --control-border: var(--danger);
+  }
+}
+
 .select:disabled,
 .form select:disabled {
   --control-bg: var(--surface-subtle);
