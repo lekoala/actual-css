@@ -22,10 +22,10 @@
   <section class="component-section">
     <header class="component-header">
       <h1>Input Policy</h1>
-      <p>Native input intent first. Actual's runtime filters values only when explicitly</p>
+      <p>Native input intent first. Actual's runtime filters values only when explicitly asked, and fixed-shape masks stay opt-in through `data-mask`.</p>
     </header>
         <div class="component-prose">
-      <p>> asked, and fixed-shape masks stay opt-in through <code>data-mask</code>. <code>inputmode</code> changes the virtual keyboard but does not constrain the value. Actual does not filter plain <code>inputmode</code> fields by default because numeric entry often needs temporary, signed, grouped, or locale-specific values while the user types. When the JavaScript runtime is loaded, Actual enhances <code>input[data-filter]</code>. Textareas are left alone. Add <code>data-filter</code> when the field should enforce one of Actual's small built-in filters. Unsupported filter names are ignored. An empty <code>data-filter</code> uses <code>inputmode</code> only when it is <code>numeric</code> or <code>decimal</code>; an explicit value always wins.</p>
+      <p><code>inputmode</code> changes the virtual keyboard but does not constrain the value. Actual does not filter plain <code>inputmode</code> fields by default because numeric entry often needs temporary, signed, grouped, or locale-specific values while the user types. When the JavaScript runtime is loaded, Actual enhances <code>input[data-filter]</code>. Textareas are left alone. Add <code>data-filter</code> when the field should enforce one of Actual's small built-in filters. Unsupported filter names are ignored. An empty <code>data-filter</code> uses <code>inputmode</code> only when it is <code>numeric</code> or <code>decimal</code>; an explicit value always wins.</p>
     </div>
     <section class="component-section">
       <div class="example-group">
