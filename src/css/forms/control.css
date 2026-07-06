@@ -38,6 +38,7 @@
   --control-cursor: auto;
   --control-opacity: 1;
 
+  appearance: none;
   inline-size: 100%;
   min-block-size: var(--control-size);
   padding-inline: var(--space-3);

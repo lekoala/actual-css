@@ -2755,6 +2755,7 @@ button.avatar {
   --control-ring: none;
   --control-cursor: auto;
   --control-opacity: 1;
+  appearance: none;
   inline-size: 100%;
   min-block-size: var(--control-size);
   padding-inline: var(--space-3);
@@ -3584,5 +3585,9 @@ button.avatar {
   .card, .alert, .badge {
     break-inside: avoid;
     border: 1px solid #000;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    break-after: avoid;
   }
 }
