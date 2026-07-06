@@ -522,9 +522,14 @@ When composing source files manually, import `components/join.css` after the con
 does not filter plain `inputmode` fields by default because numeric entry often
 needs temporary, signed, grouped, or locale-specific values while the user types.
 
+When the JavaScript runtime is loaded, Actual enhances `input[data-filter]`.
+Textareas are left alone.
+
 Add `data-filter` when the field should enforce one of Actual's small built-in
-filters. An empty `data-filter` uses `inputmode` when it is `numeric` or
-`decimal`; an explicit value wins.
+filters. Unsupported filter names are ignored.
+
+An empty `data-filter` uses `inputmode` only when it is `numeric` or `decimal`;
+an explicit value always wins.
 
 ```html
 <label class="field">
@@ -540,16 +545,37 @@ filters. An empty `data-filter` uses `inputmode` when it is `numeric` or
 </label>
 ```
 
-The built-in filters are intentionally narrow: `numeric` keeps digits only, and
-`decimal` keeps digits plus a single `.` separator. Text filters are available
-for simple transforms: `lower`, `upper`, `letters`, and `slug`.
+### Built-in filters
 
-Filters can be piped when a field needs more than one transform.
+The built-in filters are intentionally narrow. They are input helpers, not
+domain validation.
+
+| Filter | Behavior |
+| --- | --- |
+| `numeric` | Keeps ASCII digits only: `0` through `9`. |
+| `decimal` | Converts `,` to `.`, keeps ASCII digits, and keeps the first `.` separator. |
+| `lower` | Converts the value with `toLocaleLowerCase()`. |
+| `upper` | Converts the value with `toLocaleUpperCase()`. |
+| `letters` | Keeps Unicode letters only. Digits, punctuation, symbols, and spaces are removed. |
+| `slug` | Normalizes accents, lowercases text, turns runs of non-letter and non-digit characters into `-`, collapses repeated `-`, and trims edge separators. |
+
+During direct typing, `slug` may keep a trailing `-` until the next character so
+words do not merge while the user is still entering text.
+
+Filters can be piped with `|` when a field needs more than one transform. They
+run from left to right.
 
 ```html
 <label class="field">
   <span class="field-label">Slug</span>
   <input data-filter="lower|slug" autocomplete="off" placeholder="release-notes" />
+</label>
+```
+
+```html
+<label class="field">
+  <span class="field-label">Code</span>
+  <input data-filter="upper|letters" autocomplete="off" placeholder="ABC" />
 </label>
 ```
 
