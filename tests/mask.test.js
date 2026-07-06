@@ -42,6 +42,20 @@ test("mask deletion does not re-add trailing literals", async () => {
   expect(el.value).toBe("ab");
 });
 
+test("mask dispatches input after programmatic formatting", async () => {
+  setupDOM('<input data-mask="aa-99">');
+  const el = document.querySelector("input");
+  const seen = [];
+  el.addEventListener("input", () => {
+    seen.push(el.value);
+  });
+  await import(`../src/js/mask.js?test=${++importId}`);
+
+  input(el, "ab1");
+
+  expect(seen).toEqual(["ab1", "ab-1"]);
+});
+
 test("dynamically inserted mask inputs are enhanced", async () => {
   await loadMask("<main></main>");
 

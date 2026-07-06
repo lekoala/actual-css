@@ -553,6 +553,16 @@ Use `data-mask` when the input has a fixed shape. Tokens are `9` for a digit,
 </label>
 ```
 
+```html
+<label class="field">
+  <span class="field-label">Date</span>
+  <input data-mask="9999-99-99" inputmode="numeric" autocomplete="off" placeholder="yyyy-mm-dd" />
+</label>
+```
+
+Masks enforce shape, not domain validity. Use application validation when a date
+must reject impossible values such as `2026-13-40`.
+
 ## Detached Actions
 
 > `.form-actions` is class-only. It may live inside or outside the `<form>`. Use the native `form` attribute to connect a detached submit button to its form.

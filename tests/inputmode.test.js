@@ -36,6 +36,20 @@ test("inputmode decimal keeps one decimal separator", async () => {
   expect(el.value).toBe("12.34");
 });
 
+test("inputmode dispatches input after programmatic formatting", async () => {
+  setupDOM('<input inputmode="numeric">');
+  const el = document.querySelector("input");
+  const seen = [];
+  el.addEventListener("input", () => {
+    seen.push(el.value);
+  });
+  await import(`../src/js/inputmode.js?test=${++importId}`);
+
+  input(el, "a1b2");
+
+  expect(seen).toEqual(["a1b2", "12"]);
+});
+
 test("unsupported inputmode values are ignored", async () => {
   await loadInputmode('<input inputmode="email">');
   const el = document.querySelector("input");
