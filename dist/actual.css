@@ -1295,18 +1295,18 @@ dialog.modal {
   background: var(--surface-raised);
   color: var(--text);
   box-shadow: var(--shadow);
-  padding: var(--space-4);
   opacity: 0;
   transition: opacity var(--duration),
     transform var(--duration);
+  padding: 0;
   overflow: visible;
 }
 
 dialog.modal > form, dialog.modal > .stack {
   gap: var(--space-4);
-  max-block-size: calc(var(--viewport-block) - 2rem - var(--space-4) * 2);
+  max-block-size: calc(var(--viewport-block) - 2rem);
   overscroll-behavior: contain;
-  padding: 0;
+  padding: var(--space-4);
   display: grid;
   overflow: auto;
 }
