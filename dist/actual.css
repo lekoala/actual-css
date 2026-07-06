@@ -2812,7 +2812,6 @@ button.avatar {
   --control-ring: none;
   --control-cursor: auto;
   --control-opacity: 1;
-  appearance: none;
   inline-size: 100%;
   min-block-size: var(--control-size);
   padding-inline: var(--space-3);
@@ -3007,6 +3006,10 @@ button.avatar {
   transform: scale(1);
 }
 
+.field.danger :where(.check, .radio, input[type="checkbox"]:not([role="switch"]), input[type="radio"]) {
+  --choice-border: var(--danger);
+}
+
 :is(.check, .radio, .form input[type="checkbox"]:not([role="switch"]), .form input[type="radio"]):hover:not(:checked, :indeterminate, :disabled) {
   --choice-border: var(--text-subtle);
 }
@@ -3085,7 +3088,7 @@ button.avatar {
   background-position: center left var(--space-3);
 }
 
-.select:hover, .form select:hover {
+.select:hover:not(:disabled), .form select:hover:not(:disabled) {
   --control-border: var(--text-subtle);
 }
 
@@ -3385,6 +3388,10 @@ button.avatar {
   outline-offset: var(--focus-outline-offset);
 }
 
+.field.danger :where(.switch, input[role="switch"]) {
+  border-color: var(--danger);
+}
+
 .switch:disabled, .form input[role="switch"]:disabled {
   --switch-bg: var(--surface-subtle);
   --switch-knob: var(--text-subtle);
@@ -3636,7 +3643,7 @@ button.avatar {
 }
 
 @media print {
-  .flyout, .tooltip, .surface-backdrop, .btn, .spinner {
+  .flyout, .tooltip, .surface-backdrop, .spinner, button.btn, input[type="button"].btn, input[type="submit"].btn, input[type="reset"].btn {
     display: none !important;
   }
 

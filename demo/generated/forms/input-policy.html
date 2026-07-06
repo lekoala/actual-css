@@ -22,23 +22,23 @@
   <section class="component-section">
     <header class="component-header">
       <h1>Input Policy</h1>
-      <p>Native input intent first. Actual's runtime reinforces the safe numeric cases</p>
+      <p>Native input intent first. Actual's runtime filters values only when explicitly</p>
     </header>
         <div class="component-prose">
-      <p>> and fixed-shape masks. <code>inputmode</code> changes the virtual keyboard but does not constrain the value. When the default JavaScript runtime is loaded, <code>inputmode=&quot;numeric&quot;</code> keeps unsigned digits only and <code>inputmode=&quot;decimal&quot;</code> keeps unsigned decimal values with a single <code>.</code> separator.</p>
+      <p>> asked, and fixed-shape masks stay opt-in through <code>data-mask</code>. <code>inputmode</code> changes the virtual keyboard but does not constrain the value. Actual does not filter plain <code>inputmode</code> fields by default because numeric entry often needs temporary, signed, grouped, or locale-specific values while the user types. Add <code>data-filter</code> when the field should enforce one of Actual's small built-in filters. An empty <code>data-filter</code> uses <code>inputmode</code> when it is <code>numeric</code> or <code>decimal</code>; an explicit value wins.</p>
     </div>
     <section class="component-section">
       <div class="example-group">
         <div class="example-render">
           <label class="field">
   <span class="field-label">Quantity</span>
-  <input inputmode="numeric" placeholder="42" />
+  <input inputmode="numeric" data-filter placeholder="42" />
 </label>
         </div>
         <div class="example-code">
           <pre><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>label</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>field<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
   <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>field-label<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Quantity<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span> <span class="token attr-name">inputmode</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>numeric<span class="token punctuation">"</span></span> <span class="token attr-name">placeholder</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>42<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span> <span class="token attr-name">inputmode</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>numeric<span class="token punctuation">"</span></span> <span class="token attr-name">data-filter</span> <span class="token attr-name">placeholder</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>42<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span>
 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>label</span><span class="token punctuation">></span></span></code></pre>
         </div>
       </div>
@@ -48,19 +48,38 @@
         <div class="example-render">
           <label class="field">
   <span class="field-label">Amount</span>
-  <input inputmode="decimal" placeholder="12.34" />
+  <input inputmode="decimal" data-filter="decimal" placeholder="12.34" />
 </label>
         </div>
         <div class="example-code">
           <pre><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>label</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>field<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
   <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>field-label<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Amount<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span> <span class="token attr-name">inputmode</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>decimal<span class="token punctuation">"</span></span> <span class="token attr-name">placeholder</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>12.34<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span> <span class="token attr-name">inputmode</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>decimal<span class="token punctuation">"</span></span> <span class="token attr-name">data-filter</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>decimal<span class="token punctuation">"</span></span> <span class="token attr-name">placeholder</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>12.34<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span>
 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>label</span><span class="token punctuation">></span></span></code></pre>
         </div>
       </div>
     </section>
     <div class="component-prose">
-      <p>For signed numbers, locale formatting, currency rules, slugs, or app-specific character policies, use application code. Those rules are domain policy, not a framework default.</p>
+      <p>The built-in filters are intentionally narrow: <code>numeric</code> keeps digits only, and <code>decimal</code> keeps digits plus a single <code>.</code> separator. Text filters are available for simple transforms: <code>lower</code>, <code>upper</code>, <code>letters</code>, and <code>slug</code>. Filters can be piped when a field needs more than one transform.</p>
+    </div>
+    <section class="component-section">
+      <div class="example-group">
+        <div class="example-render">
+          <label class="field">
+  <span class="field-label">Slug</span>
+  <input data-filter="lower|slug" autocomplete="off" placeholder="release-notes" />
+</label>
+        </div>
+        <div class="example-code">
+          <pre><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>label</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>field<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>field-label<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Slug<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span> <span class="token attr-name">data-filter</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>lower|slug<span class="token punctuation">"</span></span> <span class="token attr-name">autocomplete</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>off<span class="token punctuation">"</span></span> <span class="token attr-name">placeholder</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>release-notes<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>label</span><span class="token punctuation">></span></span></code></pre>
+        </div>
+      </div>
+    </section>
+    <div class="component-prose">
+      <p>For signed numbers, locale formatting, currency rules, time ranges, or app-specific character policies, use application code. Those rules are domain policy, not a framework default.</p>
 <h3>Pattern mask</h3>
 <p>Use <code>data-mask</code> when the input has a fixed shape. Tokens are <code>9</code> for a digit, <code>a</code> for a letter, and <code>*</code> for any character.</p>
     </div>

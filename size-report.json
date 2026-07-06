@@ -1,18 +1,18 @@
 {
-  "timestamp": "2026-07-06T20:27:24.983Z",
-  "totalRaw": 142297,
-  "totalMinified": 70813,
-  "totalBrotli": 11111,
+  "timestamp": "2026-07-06T20:47:05.166Z",
+  "totalRaw": 142684,
+  "totalMinified": 71101,
+  "totalBrotli": 11148,
   "themesMinified": 16153,
   "themesBrotli": 2556,
-  "shippedMinified": 70813,
-  "shippedBrotli": 11111,
+  "shippedMinified": 71101,
+  "shippedBrotli": 11148,
   "maxShippedBrotli": 13312,
   "fileCount": 66,
   "files": [
     {
       "file": "forms/choice.css",
-      "raw": 6875
+      "raw": 7039
     },
     {
       "file": "theme.css",
@@ -40,7 +40,7 @@
     },
     {
       "file": "forms/switch.css",
-      "raw": 3838
+      "raw": 3926
     },
     {
       "file": "components/avatar.css",
@@ -60,7 +60,7 @@
     },
     {
       "file": "forms/control.css",
-      "raw": 3055
+      "raw": 3035
     },
     {
       "file": "components/tooltip.css",
@@ -108,7 +108,7 @@
     },
     {
       "file": "forms/select.css",
-      "raw": 2429
+      "raw": 2459
     },
     {
       "file": "themes/forest.css",
@@ -259,12 +259,12 @@
       "raw": 398
     },
     {
-      "file": "forms/index.css",
-      "raw": 347
+      "file": "print.css",
+      "raw": 395
     },
     {
-      "file": "print.css",
-      "raw": 270
+      "file": "forms/index.css",
+      "raw": 347
     },
     {
       "file": "container.css",

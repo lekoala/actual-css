@@ -2,8 +2,14 @@
   .flyout,
   .tooltip,
   .surface-backdrop,
-  .btn,
   .spinner {
+    display: none !important;
+  }
+
+  button.btn,
+  input[type="button"].btn,
+  input[type="submit"].btn,
+  input[type="reset"].btn {
     display: none !important;
   }
 

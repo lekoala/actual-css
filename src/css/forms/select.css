@@ -54,8 +54,8 @@
   background-position: center left var(--space-3);
 }
 
-.select:hover,
-.form select:hover {
+.select:hover:not(:disabled),
+.form select:hover:not(:disabled) {
   --control-border: var(--text-subtle);
 }
 

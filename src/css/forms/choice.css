@@ -182,6 +182,16 @@
   transform: scale(1);
 }
 
+.field.danger
+  :where(
+    .check,
+    .radio,
+    input[type="checkbox"]:not([role="switch"]),
+    input[type="radio"]
+  ) {
+  --choice-border: var(--danger);
+}
+
 :is(
     .check,
     .radio,
