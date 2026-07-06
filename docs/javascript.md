@@ -2,8 +2,7 @@
 
 ## Overview
 
-> Small progressive enhancers that attach to semantic HTML and clean themselves
-> up when the DOM changes.
+> Small progressive enhancers that attach to semantic HTML and clean themselves up when the DOM changes.
 
 Actual's JavaScript modules are optional. Importing `actual-css/js` registers the
 full runtime; importing a specific module registers only that behavior.
@@ -19,6 +18,10 @@ The runtime does not require `DOMContentLoaded` or manual init calls. Each modul
 uses the shared `enhance()` lifecycle helper: initial matching elements are
 connected, inserted matching elements are connected later, and removed elements
 run cleanup.
+
+`enhance()` observes DOM insertions and removals, not attribute changes. If an
+already-connected element receives a behavior attribute later, call the returned
+`refresh(node)` handle or reinsert the element.
 
 ## Extending The Runtime
 
@@ -207,4 +210,3 @@ enhance({
   },
 });
 ```
-

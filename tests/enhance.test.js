@@ -38,6 +38,48 @@ test("enhances dynamically inserted matching descendants", async () => {
   runtime.disconnect();
 });
 
+test("shares one lifecycle across multiple enhance calls", async () => {
+  setupDOM("<section></section>");
+  const calls = [];
+  const first = enhance({
+    "[data-one]": (el) => calls.push(["one", el.id]),
+  });
+  const second = enhance({
+    "[data-two]": (el) => calls.push(["two", el.id]),
+  });
+
+  document.querySelector("section").innerHTML = `
+    <button id="a" data-one></button>
+    <button id="b" data-two></button>
+  `;
+  await nextMicrotask();
+
+  expect(calls).toEqual([
+    ["one", "a"],
+    ["two", "b"],
+  ]);
+  first.disconnect();
+  second.disconnect();
+});
+
+test("disconnecting one enhance call leaves sibling enhancers alive", async () => {
+  setupDOM('<section><button id="one" data-one></button><button id="two" data-two></button></section>');
+  const cleanupCalls = [];
+  const first = enhance({
+    "[data-one]": (el) => () => cleanupCalls.push(el.id),
+  });
+  const second = enhance({
+    "[data-two]": (el) => () => cleanupCalls.push(el.id),
+  });
+
+  first.disconnect();
+  document.querySelector("[data-two]").remove();
+  await nextMicrotask();
+
+  expect(cleanupCalls).toEqual(["one", "two"]);
+  second.disconnect();
+});
+
 test("runs cleanup when an enhanced element is removed", async () => {
   setupDOM('<button data-test></button>');
   const cleanupCalls = [];
@@ -102,3 +144,15 @@ test("disconnect stops observation and cleans active instances once", async () =
   expect(cleanupCalls).toEqual(["one", "two"]);
 });
 
+test("refresh is a no-op after disconnect", () => {
+  setupDOM('<section><button data-test id="one"></button></section>');
+  const calls = [];
+  const runtime = enhance({
+    "[data-test]": (el) => calls.push(el.id),
+  });
+
+  runtime.disconnect();
+  runtime.refresh(document.body);
+
+  expect(calls).toEqual(["one"]);
+});
