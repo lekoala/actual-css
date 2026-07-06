@@ -1,12 +1,12 @@
 {
-  "timestamp": "2026-07-06T21:32:22.794Z",
-  "totalRaw": 143577,
-  "totalMinified": 71739,
-  "totalBrotli": 11233,
+  "timestamp": "2026-07-06T21:43:34.218Z",
+  "totalRaw": 143556,
+  "totalMinified": 71718,
+  "totalBrotli": 11244,
   "themesMinified": 16153,
   "themesBrotli": 2556,
-  "shippedMinified": 71739,
-  "shippedBrotli": 11233,
+  "shippedMinified": 71718,
+  "shippedBrotli": 11244,
   "maxShippedBrotli": 13312,
   "fileCount": 66,
   "files": [
@@ -52,7 +52,7 @@
     },
     {
       "file": "components/modal.css",
-      "raw": 3453
+      "raw": 3432
     },
     {
       "file": "prose.css",
