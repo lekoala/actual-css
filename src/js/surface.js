@@ -215,6 +215,14 @@ function ensureSurfaceWired(menu) {
   );
 
   menu.addEventListener(
+    EVENTS.outOfView,
+    () => {
+      if (!menu.hidden) closeSurface(menu);
+    },
+    { signal: controller.signal },
+  );
+
+  menu.addEventListener(
     "keydown",
     (e) => onMenuKeydown(e, { close: (target) => closeSurface(target) }),
     { signal: controller.signal },

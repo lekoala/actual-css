@@ -118,6 +118,7 @@ function ensureTip(trigger) {
 
   tip.addEventListener(EVENTS.reposition, onReposition);
   tip.addEventListener(EVENTS.hide, onHide);
+  tip.addEventListener(EVENTS.outOfView, onHide);
   const untrack = track(tip);
 
   cleanupMap.set(trigger, () => {
@@ -126,6 +127,7 @@ function ensureTip(trigger) {
     trigger.removeEventListener("blur", onHide);
     tip.removeEventListener(EVENTS.reposition, onReposition);
     tip.removeEventListener(EVENTS.hide, onHide);
+    tip.removeEventListener(EVENTS.outOfView, onHide);
     untrack();
     if (generatedTips.has(tip)) tip.remove();
     else restoreTip(tip);

@@ -1,44 +1,33 @@
-# CSS Anchor Positioning
+# Future Transition: CSS Anchor Positioning
 
-The CSS Anchor Positioning API is designed to replace the JS positioning engine. It covers 100% of the use cases (arrow, flip/up-down, shift).
+## Context
 
-## Flip / Shift
+Currently, the positioning logic for tooltips, flyouts, and context menus is handled by a custom JavaScript engine (in `floating.js`). This engine computes absolute coordinates, handles viewport boundaries, and applies "flip" and "shift" heuristics to prevent overflow.
 
-Collisions are handled natively via `position-try-options`. The browser automatically picks the layout that fits the viewport.
+As of mid-2024, modern browsers started supporting the **CSS Anchor Positioning API**, which delegates this heavy mathematical lifting directly to the browser's layout engine.
+
+## Migration Path
+
+When global browser support for CSS Anchor Positioning reaches a safe threshold (~95%), the JS positioning engine should be deprecated in favor of a CSS-only approach.
+
+### 1. Element-to-Element Anchoring (Tooltips & Flyouts)
+
+For elements anchored to physical DOM nodes (like a button triggering a flyout), the JS calculation can be fully replaced by CSS:
 
 ```css
-.tooltip {
+.flyout {
   position: absolute;
-  position-anchor: --my-button;
+  position-anchor: --trigger-element;
   top: anchor(bottom);
-  justify-self: anchor-center;
-
-  position-try-options: flip-block, flip-inline;
+  left: anchor(start);
+  
+  /* Replaces the JS flip/shift logic natively */
+  position-try-fallbacks: flip-block, flip-inline;
 }
 ```
 
-When the user scrolls and space below disappears, the browser flips the tooltip above the button (`flip-block`) without JavaScript.
+### 2. The Pointer Coordinates Exception (Context Menus)
 
-## Arrow
+CSS Anchor Positioning does not cover 100% of our use cases. Context menus (repositionAt) open at dynamic pointer coordinates (clientX/clientY), not relative to a DOM element.
 
-The pseudo-element can anchor to the target center regardless of the tooltip position.
-
-```css
-.tooltip::before {
-  content: "";
-  position: absolute;
-  left: anchor(center);
-  bottom: 100%;
-}
-```
-
-If the tooltip shifts left due to the viewport edge, the arrow stays fixed on `anchor(center)`.
-
-## Recommendation: keep JS for now
-
-CSS Anchor Positioning is the right long-term replacement, but the current JS implementation is the pragmatic choice today:
-
-- **Compatibility**: JS works on 100% of browsers today. CSS Anchor Positioning leaves out older Apple devices (pre-Safari 18) and older Firefox.
-- **Performance**: The existing math functions (`l`, `i`, `vb`) are pure, minified, fast, and dependency-free.
-
-Revisit CSS Anchor Positioning for v2 when global support reaches ~95%.
+Therefore, the JS engine cannot be entirely deleted. A lightweight JavaScript layer will still be required to capture the pointer event and pass the coordinates to the DOM (either by updating CSS variables --x/--y, or using the upcoming JS Virtual Anchor API).

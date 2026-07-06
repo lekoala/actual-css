@@ -105,7 +105,7 @@ test("closeSurface can restore focus to the opening trigger", () => {
   expect(document.activeElement).toBe(trigger);
 });
 
-test("out-of-view hide closes without restoring focus", () => {
+test("out-of-view closes without restoring focus", () => {
   setBody('<button aria-controls="menu">Open</button><button id="next">Next</button><div id="menu" class="flyout"></div>');
   const trigger = document.querySelector("button[aria-controls]");
   const next = document.getElementById("next");
@@ -115,7 +115,7 @@ test("out-of-view hide closes without restoring focus", () => {
   next.focus();
 
   menu.dispatchEvent(
-    new CustomEvent(EVENTS.hide, { detail: { type: "out-of-view" } }),
+    new CustomEvent(EVENTS.outOfView, { detail: { type: "out-of-view" } }),
   );
 
   expect(isSurfaceOpen(menu)).toBe(false);

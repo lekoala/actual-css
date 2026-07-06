@@ -121,6 +121,9 @@ function toNumber(value) {
   return Number.isFinite(number) ? number : 0;
 }
 
+const STABLE_SCROLLBAR_MAX_WIDTH = 25;
+const NARROW_INLINE_FLIP_FALLBACK = 128;
+
 function getViewportBoundary(doc) {
   const win = doc.defaultView || window;
   const docEl = getDocEl(doc);
@@ -137,8 +140,10 @@ function getViewportBoundary(doc) {
       doc.compatMode === "CSS1Compat"
         ? toNumber(bodyStyle?.marginLeft) + toNumber(bodyStyle?.marginRight)
         : 0;
+    // Classic stable scrollbars reserve inline space on the body. Subtract only
+    // plausible scrollbar widths so unusual body sizing does not shrink the viewport.
     const stableScrollbar = Math.abs(docEl.clientWidth - body.clientWidth - bodyMargin);
-    if (stableScrollbar <= 25) {
+    if (stableScrollbar <= STABLE_SCROLLBAR_MAX_WIDTH) {
       width -= stableScrollbar;
     }
   }
@@ -306,7 +311,7 @@ export function reposition(ref, float, opts = {}) {
   const boundary = getBoundary(ref, opts);
   if (isOutsideBoundary(refRect, boundary)) {
     float.dispatchEvent(
-      new CustomEvent(EVENTS.hide, {
+      new CustomEvent(EVENTS.outOfView, {
         bubbles: false,
         detail: { type: "out-of-view" },
       }),
@@ -341,11 +346,12 @@ export function reposition(ref, float, opts = {}) {
       applyOffset(coords, side, distance, rtl);
     }
 
-    // fall back to top if still overflowing on y axis
+    // Narrow side placements can fit neither left nor right. In that case,
+    // fall back to top so compact mobile layouts get a usable placement.
     if (
       axis === "y" &&
       coords.x + floatRect.width > cw &&
-      boundary.width - floatRect.width < 128
+      boundary.width - floatRect.width < NARROW_INLINE_FLIP_FALLBACK
     ) {
       side = "top";
       axis = "x";
