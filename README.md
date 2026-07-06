@@ -73,7 +73,9 @@ Undocumented `is-*` classes are runtime internals.
 
 ## What's included
 
-**Components** — button, card, badge, alert, dialog, drawer, flyout, tooltip, tabs, scrollspy, table, accordion, breadcrumb, pagination, skeleton, spinner, avatar, key, meter, progress, joined controls, and busy indicators.
+**Components** — button, card, badge, alert, table, accordion, breadcrumb, pagination, skeleton, spinner, avatar, key, meter, progress, joined controls, and busy indicators.
+
+**UI components** — dialog, drawer, flyout, tooltip, tabs, scrollspy, context menus, and other components that rely on JavaScript or modern platform behavior.
 
 **Patterns** — actions, list group, navbar, and overline. These are regular source files and can be imported only when needed.
 
@@ -107,7 +109,7 @@ Actual CSS also ships optional entrypoints:
 
 ## JavaScript enhancers
 
-Some components can be enhanced with JavaScript: dialog, flyout, tooltip, tabs, scrollspy, context menu, floating UI, numeric `inputmode` enforcement, and input masks.
+Some components can be enhanced with JavaScript: dialog/drawer, flyout, tooltip, tabs, scrollspy, context menu, floating UI, numeric `inputmode` enforcement, and input masks.
 
 Use the full module:
 
