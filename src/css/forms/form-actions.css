@@ -33,11 +33,12 @@
 /* Enhanced sticky bar: translucent surface plus blur where both are supported.
    Guidelines: use @supports positively. */
 @supports (
-    (backdrop-filter: blur(1rem)) and
+    ((-webkit-backdrop-filter: blur(1rem)) or (backdrop-filter: blur(1rem))) and
     (background: color-mix(in oklch, white 50%, transparent))
   ) {
   .form-actions.sticky {
     background: color-mix(in oklch, var(--surface) 88%, transparent);
+    -webkit-backdrop-filter: blur(1rem);
     backdrop-filter: blur(1rem);
   }
 }

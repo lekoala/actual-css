@@ -90,8 +90,8 @@
 
   /* Viewport size tokens — fallback vh/vw with dvh/vi enhancement.
      Consumed by full-viewport components (app-shell, drawer, modal, flyout).
-     Custom properties (rather than double declarations) protect the
-     fallback from Lightning CSS bundle deduplication. */
+     Custom properties keep the fallback explicit while allowing modern units
+     to enhance the same public tokens. */
   --viewport-block: 100vh;
   --viewport-inline: 100vw;
 
