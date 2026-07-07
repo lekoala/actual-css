@@ -25,46 +25,7 @@
       <p>Two-column layout where one side has a preferred width and the other takes the remaining space.</p>
     </header>
         <div class="component-prose">
-      <p>Use <code>with-sidebar</code> for two-column layouts where one side has a preferred width and the other takes the remaining space.</p>
-    </div>
-    <section class="component-section">
-      <div class="example-group">
-        <div class="example-render">
-          <div class="with-sidebar">
-  <aside>
-    <nav aria-label="Settings">
-      <a href="/profile" aria-current="page">Profile</a>
-      <a href="/billing">Billing</a>
-    </nav>
-  </aside>
-
-  <main class="stack">
-    <h1>Dashboard</h1>
-    <p class="muted">Overview of recent activity and account settings.</p>
-  </main>
-</div>
-        </div>
-        <div class="example-code">
-          <pre><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>with-sidebar<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>aside</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>nav</span> <span class="token attr-name">aria-label</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>Settings<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>a</span> <span class="token attr-name">href</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>/profile<span class="token punctuation">"</span></span> <span class="token attr-name">aria-current</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>page<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Profile<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>a</span><span class="token punctuation">></span></span>
-      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>a</span> <span class="token attr-name">href</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>/billing<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Billing<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>a</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>nav</span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>aside</span><span class="token punctuation">></span></span>
-
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>main</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>stack<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>h1</span><span class="token punctuation">></span></span>Dashboard<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>h1</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>muted<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Overview of recent activity and account settings.<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>p</span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>main</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span></code></pre>
-        </div>
-      </div>
-    </section>
-    <div class="component-prose">
-      <p>Tune the side width and wrapping threshold with <code>--sidebar-size</code> and <code>--sidebar-content-min</code>.</p>
-<h3>Sidebar Layout (Grid)</h3>
-<p><code>.sidebar-layout</code> is a complementary two-column primitive that uses CSS grid instead of flex. Use it when the aside should align to the top of the content (e.g. a sticky table of contents) or when the content area contains multiple sections that should stretch together. Wrap it in <code>.container-query</code> to make the switch depend on the container width. Below 64rem the columns stack; at and above it the aside takes <code>--sidebar-layout-size</code> and the content takes the remaining space. Older browsers use the viewport fallback.</p>
+      <p>Use <code>.sidebar-layout</code> for two-column layouts where the aside should align to the top of the content, stay sticky, or keep a predictable declared width. Wrap it in <code>.container-query</code> to make the switch depend on the container width. Below 64rem the columns stack; at and above it the aside takes <code>--sidebar-layout-size</code> and the content takes the remaining space. Older browsers use the viewport fallback.</p>
     </div>
     <section class="component-section">
       <div class="example-group">
@@ -105,7 +66,7 @@
       </div>
     </section>
     <div class="component-prose">
-      <p><code>.with-sidebar</code> and <code>.sidebar-layout</code> are not interchangeable. <code>.with-sidebar</code> is flex-based and lets the side and content grow together; <code>.sidebar-layout</code> is grid-based and locks the aside to its declared width. Pick the one that matches the role.</p>
+      <p>Tune the side width with <code>--sidebar-layout-size</code>.</p>
     </div>
     
   </section>

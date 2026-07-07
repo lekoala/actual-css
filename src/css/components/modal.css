@@ -20,8 +20,10 @@ dialog.modal {
   /*
    * Keep the open dialog root untransformed. Fixed overlays mounted inside a
    * modal dialog use viewport coordinates; transform/translate/scale on this
-   * element would make them position against the dialog instead.
+   * element would make them position against the dialog instead. The closed
+   * state can still carry a small transform for enter/exit motion.
    */
+  transform: translateY(0.35rem) scale(0.98);
   transition:
     opacity var(--duration),
     transform var(--duration);

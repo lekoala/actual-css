@@ -107,68 +107,41 @@ deliberate even though the global reset uses `border-box`.
 
 ## List
 
-> Rich content lists where each item may contain multiple elements.
+> Lists stay native by default. Compose visual list rows from existing primitives.
 
-- Use `figure` and `figcaption` when the list reads as a captioned content unit
-- Use `div` and `header` when the list is an application panel or section
-- The heading wrapper is optional
-- Can contain complex items
+Use `.list-reset` only when markers are not part of the content. Combine `.stack`, `.media`, `.cluster`, spacing helpers, and local styles for application-style rows.
 
 ```html
-<figure class="list-group">
-    <figcaption>My favorite fruits</figcaption>    
-       <ul>
-          <li>Banana</li>
-          <li>Orange</li>
-          <li>Chocolate</li>
-       </ul>
+<figure class="stack">
+  <figcaption><strong>Most played songs this week</strong></figcaption>
+
+  <ul class="list-reset stack gap-none">
+    <li class="media py" style="border-block-end: var(--border-width) solid var(--border)">
+      <div class="avatar">
+        <img src="https://i.pravatar.cc/48?img=5" alt="Dio Lupa" />
+      </div>
+      <div class="stack">
+        <strong>Dio Lupa</strong>
+        <span class="muted">Remaining Reason</span>
+      </div>
+      <span class="muted" style="margin-inline-start: auto">3:45</span>
+    </li>
+
+    <li class="media py" style="border-block-end: var(--border-width) solid var(--border)">
+      <div class="avatar">
+        <img src="https://i.pravatar.cc/48?img=10" alt="Astral Planes" />
+      </div>
+      <div class="stack">
+        <strong>Astral Planes</strong>
+        <span class="muted">Neon Drift</span>
+      </div>
+      <span class="muted" style="margin-inline-start: auto">4:12</span>
+    </li>
+  </ul>
 </figure>
 ```
 
-```html
-<div class="list-group">
-    <header>Recent files</header>
-       <ul>
-          <li>Proposal.pdf</li>
-          <li>Roadmap.md</li>
-          <li>Budget.xlsx</li>
-       </ul>
-</div>
-```
-
-```html
-<figure class="list-group">
-    <figcaption>Most played songs this week</figcaption>    
-       <ul>
-          <li>
-            <div class="avatar"><span>DL</span></div>
-            <div>
-              <div>Dio Lupa</div>
-              <div class="muted">Remaining Reason</div>
-            </div>
-            <p>
-              "Remaining Reason" became an instant hit, praised for its haunting sound and emotional depth. A viral performance brought it widespread recognition, making it one of Dio Lupa’s most iconic tracks.
-            </p>
-            <button class="btn ghost" aria-label="Play">
-              <i class="ti ti-player-play"></i>
-            </button>
-            <button class="btn ghost" aria-label="Like">
-              <i class="ti ti-heart"></i>
-            </button>
-          </li>
-          <li> 
-            <div class="avatar"><span>EB</span></div>
-            <div>
-              <div>Ellie Beilish</div>
-              <div class="muted">Bears of a fever</div>
-            </div>
-            <p>
-              "Bears of a Fever" captivated audiences with its intense energy and mysterious lyrics. Its popularity skyrocketed after fans shared it widely online, earning Ellie critical acclaim.
-            </p>
-        </li>
-       </ul>
-</figure>
-```
+Keep semantic lists unstyled when the markers carry meaning.
 
 ## Grid
 
@@ -299,29 +272,7 @@ Do not add `.row`, `.col-6`, `.offset-2`, or other fixed grid-system classes unl
 
 > Two-column layout where one side has a preferred width and the other takes the remaining space.
 
-Use `with-sidebar` for two-column layouts where one side has a preferred width and the other takes the remaining space.
-
-```html
-<div class="with-sidebar">
-  <aside>
-    <nav aria-label="Settings">
-      <a href="/profile" aria-current="page">Profile</a>
-      <a href="/billing">Billing</a>
-    </nav>
-  </aside>
-
-  <main class="stack">
-    <h1>Dashboard</h1>
-    <p class="muted">Overview of recent activity and account settings.</p>
-  </main>
-</div>
-```
-
-Tune the side width and wrapping threshold with `--sidebar-size` and `--sidebar-content-min`.
-
-### Sidebar Layout (Grid)
-
-`.sidebar-layout` is a complementary two-column primitive that uses CSS grid instead of flex. Use it when the aside should align to the top of the content (e.g. a sticky table of contents) or when the content area contains multiple sections that should stretch together.
+Use `.sidebar-layout` for two-column layouts where the aside should align to the top of the content, stay sticky, or keep a predictable declared width.
 
 Wrap it in `.container-query` to make the switch depend on the container width. Below 64rem the columns stack; at and above it the aside takes `--sidebar-layout-size` and the content takes the remaining space. Older browsers use the viewport fallback.
 
@@ -343,7 +294,7 @@ Wrap it in `.container-query` to make the switch depend on the container width. 
 </div>
 ```
 
-`.with-sidebar` and `.sidebar-layout` are not interchangeable. `.with-sidebar` is flex-based and lets the side and content grow together; `.sidebar-layout` is grid-based and locks the aside to its declared width. Pick the one that matches the role.
+Tune the side width with `--sidebar-layout-size`.
 
 ## Media Object
 
@@ -351,10 +302,10 @@ Wrap it in `.container-query` to make the switch depend on the container width. 
 
 `.media` is the media object: a grid with `auto minmax(0, 1fr)` columns. Use it for author cards, comments, meta rows, and any composition that pairs a small leading element with a flexible content block. The trailing column takes the remaining space and never overflows.
 
-Add `.media-middle` to align the leading element to the center of the trailing content's first line. This is what you want when the trailing content is a single short string; for multi-line content, the default `align-items: start` is more comfortable.
+Add `.items-center` to align the leading element with short trailing content. For multi-line content, the default `align-items: start` is more comfortable.
 
 ```html
-<article class="card media">
+<article class="card media items-center">
   <span class="avatar"><abbr>AM</abbr></span>
   <div class="stack">
     <strong>Ada Meridian</strong>

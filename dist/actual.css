@@ -483,23 +483,6 @@ small {
   padding-inline: var(--center-pad, 1rem);
 }
 
-.with-sidebar {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--gap);
-}
-
-.with-sidebar > :first-child {
-  flex-basis: var(--sidebar-size, 16rem);
-  flex-grow: 1;
-}
-
-.with-sidebar > :last-child {
-  flex-basis: 0;
-  flex-grow: 999;
-  min-inline-size: min(100%, var(--sidebar-content-min, 50%));
-}
-
 .frame {
   overflow: hidden;
   aspect-ratio: var(--frame-ratio, 16 / 9);
@@ -527,13 +510,9 @@ small {
   align-items: start;
 }
 
-.media-middle {
-  align-items: center;
-}
-
-/* Sidebar layout: content + aside using grid. Complementary to .with-sidebar
-   (flex-based): use this when the aside is sticky or the content is
-   multi-section. The aside width is tunable with --sidebar-layout-size. */
+/* Sidebar layout: content + aside using grid. Use this when the aside is
+   sticky or the content is multi-section. The aside width is tunable with
+   --sidebar-layout-size. */
 .sidebar-layout {
   display: grid;
   gap: var(--gap);
@@ -1420,10 +1399,6 @@ a.badge[aria-disabled="true"] {
   margin: 0;
 }
 
-.actions.end {
-  justify-content: flex-end;
-}
-
 
 /* Surfaces */
 /*
@@ -1639,8 +1614,10 @@ dialog.modal {
   /*
    * Keep the open dialog root untransformed. Fixed overlays mounted inside a
    * modal dialog use viewport coordinates; transform/translate/scale on this
-   * element would make them position against the dialog instead.
+   * element would make them position against the dialog instead. The closed
+   * state can still carry a small transform for enter/exit motion.
    */
+  transform: translateY(0.35rem) scale(0.98);
   transition:
     opacity var(--duration),
     transform var(--duration);
@@ -1786,13 +1763,15 @@ html.has-modal-open {
  * Drawer — modal side-sheet built on the native dialog element.
  *
  * Top-layer rendering, ::backdrop, Escape, and modal focus come from the
- * native dialog. Opening/closing stays with the app. The drawer is a layout
- * shell only — navigation content inside uses .nav-link and .accordion, which
- * carry their own link/summary styling.
+ * native dialog. CSS owns progressive enter/exit motion where browsers support
+ * discrete display/overlay transitions. The drawer is a layout shell only —
+ * navigation content inside uses .nav-link and .accordion, which carry their
+ * own link/summary styling.
  */
 dialog.drawer {
   --drawer-size: 20rem;
   --drawer-pad: var(--space-4);
+  --drawer-closed-translate: -100%;
 
   inline-size: min(calc(var(--viewport-inline) * 0.9), var(--drawer-size));
   block-size: var(--viewport-block);
@@ -1806,25 +1785,51 @@ dialog.drawer {
   background: var(--surface-raised);
   color: var(--text);
   box-shadow: var(--shadow);
+  opacity: 0;
+  transform: translateX(var(--drawer-closed-translate));
+  transition:
+    opacity var(--duration-slow),
+    transform var(--duration-slow);
 }
 
 dialog.drawer[open] {
   display: grid;
   grid-template-rows: auto minmax(0, 1fr) auto;
   gap: var(--space-4);
+  opacity: 1;
+  transform: translateX(0);
 }
 
 /* Backdrop color sourced from components/surface.css so it matches .modal
    and .surface-backdrop across the dialog family. */
 dialog.drawer::backdrop {
   background: var(--backdrop-fill);
+  opacity: 0;
+  transition: opacity var(--duration-slow);
 }
 
 dialog.drawer[data-side="end"] {
+  --drawer-closed-translate: 100%;
+
   margin-inline-start: auto;
   margin-inline-end: 0;
   border-inline-end: 0;
   border-inline-start: var(--border-width) solid var(--border);
+}
+
+dialog.drawer[open]::backdrop {
+  opacity: 1;
+}
+
+@starting-style {
+  dialog.drawer[open] {
+    opacity: 0;
+    transform: translateX(var(--drawer-closed-translate));
+  }
+
+  dialog.drawer[open]::backdrop {
+    opacity: 0;
+  }
 }
 
 /* Scrollable navigation region inside the drawer. */
@@ -1833,47 +1838,31 @@ dialog.drawer nav {
   overflow-y: auto;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  dialog.drawer[open] {
-    animation: actual-drawer-start var(--duration-slow) var(--ease, ease-out);
+@supports (transition-behavior: allow-discrete) {
+  dialog.drawer {
+    transition:
+      opacity var(--duration-slow),
+      transform var(--duration-slow),
+      overlay var(--duration-slow) allow-discrete,
+      display var(--duration-slow) allow-discrete;
   }
 
-  dialog.drawer[data-side="end"][open] {
-    animation-name: actual-drawer-end;
-  }
-}
-
-@keyframes actual-drawer-start {
-  from {
-    transform: translateX(-100%);
-    opacity: 0;
-  }
-
-  to {
-    transform: translateX(0);
-    opacity: 1;
+  dialog.drawer::backdrop {
+    transition:
+      opacity var(--duration-slow),
+      overlay var(--duration-slow) allow-discrete,
+      display var(--duration-slow) allow-discrete;
   }
 }
 
-@keyframes actual-drawer-end {
-  from {
-    transform: translateX(100%);
-    opacity: 0;
-  }
-
-  to {
-    transform: translateX(0);
-    opacity: 1;
-  }
+/* RTL: swap closed transform directions so the drawer slides from the correct
+   inline side. */
+[dir="rtl"] dialog.drawer {
+  --drawer-closed-translate: 100%;
 }
 
-/* RTL: swap animation directions so the drawer slides from the correct side.
-   The start position flips because inset-inline-start anchors the opposite edge. */
-[dir="rtl"] dialog.drawer[open] {
-  animation-name: actual-drawer-end;
-}
-[dir="rtl"] dialog.drawer[data-side="end"][open] {
-  animation-name: actual-drawer-start;
+[dir="rtl"] dialog.drawer[data-side="end"] {
+  --drawer-closed-translate: -100%;
 }
 
 @media (forced-colors: active) {
@@ -1921,12 +1910,18 @@ dialog.drawer nav {
   inset-inline-start: 0;
   display: grid;
   gap: var(--space-1);
-  inline-size: max-content;
+  inline-size: var(--flyout-inline-size, max-content);
   min-inline-size: min(
     var(--flyout-trigger-width, 0px),
-    min(20rem, calc(var(--viewport-inline) - var(--space-6)))
+    min(
+      var(--flyout-max-inline-size, 20rem),
+      calc(var(--viewport-inline) - var(--space-6))
+    )
   );
-  max-inline-size: min(20rem, calc(var(--viewport-inline) - var(--space-6)));
+  max-inline-size: min(
+    var(--flyout-max-inline-size, 20rem),
+    calc(var(--viewport-inline) - var(--space-6))
+  );
   max-block-size: min(
     24rem,
     var(--available-height, calc(var(--viewport-block) - var(--space-6)))
@@ -1972,6 +1967,10 @@ dialog.drawer nav {
   border-end-end-radius: 0;
 }
 
+.flyout.is-sheet:where(.grid-2, .grid-3, .grid-4, .grid-6) {
+  grid-template-columns: 1fr;
+}
+
 .flyout[hidden] {
   display: none;
   opacity: 0;
@@ -2010,8 +2009,33 @@ dialog.drawer nav {
   margin: 0;
 }
 
+.flyout > :where(section, footer) {
+  min-inline-size: 0;
+  padding: var(--space-2);
+}
+
+.flyout > section > :where(h1, h2, h3, h4, h5, h6) {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-strong);
+}
+
+.flyout > section > ul {
+  display: grid;
+  gap: var(--space-1);
+  margin: var(--space-1) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.flyout > section > ul > li {
+  margin: 0;
+}
+
 .flyout > :where(button, a, [role="menuitem"]),
-.flyout > li > :where(button, a, [role="menuitem"]) {
+.flyout > li > :where(button, a, [role="menuitem"]),
+.flyout > section > ul > li > a {
   display: flex;
   align-items: center;
   justify-content: flex-start;
@@ -2032,12 +2056,14 @@ dialog.drawer nav {
 }
 
 .flyout.is-sheet > :where(button, a, [role="menuitem"]),
-.flyout.is-sheet > li > :where(button, a, [role="menuitem"]) {
+.flyout.is-sheet > li > :where(button, a, [role="menuitem"]),
+.flyout.is-sheet > section > ul > li > a {
   min-block-size: var(--control-size-lg);
 }
 
 .flyout > :where(button, a, [role="menuitem"]):focus-visible,
-.flyout > li > :where(button, a, [role="menuitem"]):focus-visible {
+.flyout > li > :where(button, a, [role="menuitem"]):focus-visible,
+.flyout > section > ul > li > a:focus-visible {
   background: var(--surface-subtle);
   outline: var(--focus-outline);
   outline-offset: var(--focus-outline-offset);
@@ -2046,7 +2072,8 @@ dialog.drawer nav {
 
 @media (hover: hover) {
   .flyout > :where(button, a, [role="menuitem"]):hover,
-  .flyout > li > :where(button, a, [role="menuitem"]):hover {
+  .flyout > li > :where(button, a, [role="menuitem"]):hover,
+  .flyout > section > ul > li > a:hover {
     background: var(--surface-subtle);
     outline: none;
   }
@@ -2070,14 +2097,16 @@ dialog.drawer nav {
   }
 
   .flyout > :where(button, a, [role="menuitem"]):focus-visible,
-  .flyout > li > :where(button, a, [role="menuitem"]):focus-visible {
+  .flyout > li > :where(button, a, [role="menuitem"]):focus-visible,
+  .flyout > section > ul > li > a:focus-visible {
     background: Canvas;
     color: CanvasText;
   }
 
   @media (hover: hover) {
     .flyout > :where(button, a, [role="menuitem"]):hover,
-    .flyout > li > :where(button, a, [role="menuitem"]):hover {
+    .flyout > li > :where(button, a, [role="menuitem"]):hover,
+    .flyout > section > ul > li > a:hover {
       outline: var(--border-width) solid ButtonText;
       outline-offset: -1px;
       background: Canvas;
@@ -3293,44 +3322,6 @@ button.avatar {
   }
 }
 
-
-/* Layout patterns */
-/*
- * List group — rich content lists with an optional header/caption.
- *
- * Each li wraps multiple children in a row: avatar, title, meta,
- * action buttons flow naturally. Compose with .media for leading
- * content or use .stack inside the li for multi-line descriptions.
- */
-.list-group > :where(header, figcaption) {
-  font-weight: var(--font-weight-strong);
-  margin-block-end: var(--space-3);
-}
-
-.list-group > ul {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.list-group > ul > li {
-  margin: 0;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  column-gap: var(--space-3);
-  row-gap: var(--space-1);
-  padding-block: var(--space-3);
-}
-
-.list-group > ul > li > .list-meta {
-  margin-inline-start: auto;
-}
-
-.list-group > ul > li:not(:last-child) {
-  border-block-end: var(--border-width) solid var(--border);
-}
-
 /* Forms — import order matters: switch.css must follow choice.css so its
    :not([role="switch"]) exclusion in choice.css still applies. */
 /*
@@ -4195,8 +4186,7 @@ button.avatar {
 
 /* Generic list chrome reset. Use for any list (tags, footer columns, related
    items). For navigation lists, prefer .nav-list for semantic intent.
-   components/{actions,navbar,list-group}.css apply their own resets where
-   needed. */
+   components/{actions,navbar}.css apply their own resets where needed. */
 .list-reset {
   margin: 0;
   padding: 0;

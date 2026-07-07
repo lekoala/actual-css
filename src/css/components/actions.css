@@ -19,7 +19,3 @@
 .actions > li {
   margin: 0;
 }
-
-.actions.end {
-  justify-content: flex-end;
-}

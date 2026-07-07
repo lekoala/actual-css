@@ -23,23 +23,6 @@
   padding-inline: var(--center-pad, 1rem);
 }
 
-.with-sidebar {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--gap);
-}
-
-.with-sidebar > :first-child {
-  flex-basis: var(--sidebar-size, 16rem);
-  flex-grow: 1;
-}
-
-.with-sidebar > :last-child {
-  flex-basis: 0;
-  flex-grow: 999;
-  min-inline-size: min(100%, var(--sidebar-content-min, 50%));
-}
-
 .frame {
   overflow: hidden;
   aspect-ratio: var(--frame-ratio, 16 / 9);
@@ -67,13 +50,9 @@
   align-items: start;
 }
 
-.media-middle {
-  align-items: center;
-}
-
-/* Sidebar layout: content + aside using grid. Complementary to .with-sidebar
-   (flex-based): use this when the aside is sticky or the content is
-   multi-section. The aside width is tunable with --sidebar-layout-size. */
+/* Sidebar layout: content + aside using grid. Use this when the aside is
+   sticky or the content is multi-section. The aside width is tunable with
+   --sidebar-layout-size. */
 .sidebar-layout {
   display: grid;
   gap: var(--gap);

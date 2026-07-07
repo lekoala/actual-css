@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>List — Actual CSS</title>
+  <title>Structured Lists — Actual CSS</title>
   <link rel="stylesheet" href="../../../src/css/actual.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3/dist/tabler-icons.min.css">
   <link rel="stylesheet" href="../../styles/demo.css">
@@ -15,17 +15,17 @@
 
 <body>
   <nav class="demo-nav">
-    <a href="index.html">&larr; Layout</a>
+    <a href="index.html">&larr; Patterns</a>
     <a href="../index.html">Homepage</a>
   </nav>
   <main class="center">
   <section class="component-section">
     <header class="component-header">
-      <h1>List</h1>
-      <p>Lists stay native by default. Compose visual list rows from existing primitives.</p>
+      <h1>Structured Lists</h1>
+      
     </header>
         <div class="component-prose">
-      <p>Use <code>.list-reset</code> only when markers are not part of the content. Combine <code>.stack</code>, <code>.media</code>, <code>.cluster</code>, spacing helpers, and local styles for application-style rows.</p>
+      <p>Use native lists plus layout primitives for rich content rows. Reset list chrome only when markers are not part of the content.</p>
     </div>
     <section class="component-section">
       <div class="example-group">
@@ -43,6 +43,9 @@
         <span class="muted">Remaining Reason</span>
       </div>
       <span class="muted" style="margin-inline-start: auto">3:45</span>
+      <button class="btn ghost" aria-label="Play">
+        <i class="ti ti-player-play"></i>
+      </button>
     </li>
 
     <li class="media py" style="border-block-end: var(--border-width) solid var(--border)">
@@ -54,6 +57,9 @@
         <span class="muted">Neon Drift</span>
       </div>
       <span class="muted" style="margin-inline-start: auto">4:12</span>
+      <button class="btn ghost" aria-label="Play">
+        <i class="ti ti-player-play"></i>
+      </button>
     </li>
   </ul>
 </figure>
@@ -72,6 +78,9 @@
         <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>muted<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Remaining Reason<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span>
       <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
       <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>muted<span class="token punctuation">"</span></span> <span class="token special-attr"><span class="token attr-name">style</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span><span class="token value css language-css"><span class="token property">margin-inline-start</span><span class="token punctuation">:</span> auto</span><span class="token punctuation">"</span></span></span><span class="token punctuation">></span></span>3:45<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>button</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>btn ghost<span class="token punctuation">"</span></span> <span class="token attr-name">aria-label</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>Play<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>i</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>ti ti-player-play<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>i</span><span class="token punctuation">></span></span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">></span></span>
     <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>li</span><span class="token punctuation">></span></span>
 
     <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>li</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>media py<span class="token punctuation">"</span></span> <span class="token special-attr"><span class="token attr-name">style</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span><span class="token value css language-css"><span class="token property">border-block-end</span><span class="token punctuation">:</span> <span class="token function">var</span><span class="token punctuation">(</span>--border-width<span class="token punctuation">)</span> solid <span class="token function">var</span><span class="token punctuation">(</span>--border<span class="token punctuation">)</span></span><span class="token punctuation">"</span></span></span><span class="token punctuation">></span></span>
@@ -83,6 +92,9 @@
         <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>muted<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Neon Drift<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span>
       <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
       <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>muted<span class="token punctuation">"</span></span> <span class="token special-attr"><span class="token attr-name">style</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span><span class="token value css language-css"><span class="token property">margin-inline-start</span><span class="token punctuation">:</span> auto</span><span class="token punctuation">"</span></span></span><span class="token punctuation">></span></span>4:12<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>button</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>btn ghost<span class="token punctuation">"</span></span> <span class="token attr-name">aria-label</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>Play<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>i</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>ti ti-player-play<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>i</span><span class="token punctuation">></span></span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">></span></span>
     <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>li</span><span class="token punctuation">></span></span>
   <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>ul</span><span class="token punctuation">></span></span>
 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>figure</span><span class="token punctuation">></span></span></code></pre>
@@ -90,13 +102,13 @@
       </div>
     </section>
     <div class="component-prose">
-      <p>Keep semantic lists unstyled when the markers carry meaning.</p>
+      <p>Use <code>.actions</code> for action controls and <code>.nav-list</code> for navigation links. For structured content items, compose <code>.list-reset</code>, <code>.stack</code>, <code>.cluster</code>, <code>.media</code>, and components directly.</p>
     </div>
     
   </section>
   </main>
   <footer class="demo-footer">
-    <a href="index.html">Back to Layout</a>
+    <a href="index.html">Back to Patterns</a>
   </footer>
 </body>
 

@@ -419,7 +419,7 @@ With icons, loading state...
     <header>
       <h3>Coastal cliffs at dusk</h3>
     </header>
-    <section aria-label="Summary">
+    <section class="stack" aria-label="Summary">
       <p>A short caption that wraps across a few lines. The image bleeds to the card edges.</p>
     </section>
     <footer>

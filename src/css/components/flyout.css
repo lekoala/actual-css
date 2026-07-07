@@ -24,12 +24,18 @@
   inset-inline-start: 0;
   display: grid;
   gap: var(--space-1);
-  inline-size: max-content;
+  inline-size: var(--flyout-inline-size, max-content);
   min-inline-size: min(
     var(--flyout-trigger-width, 0px),
-    min(20rem, calc(var(--viewport-inline) - var(--space-6)))
+    min(
+      var(--flyout-max-inline-size, 20rem),
+      calc(var(--viewport-inline) - var(--space-6))
+    )
   );
-  max-inline-size: min(20rem, calc(var(--viewport-inline) - var(--space-6)));
+  max-inline-size: min(
+    var(--flyout-max-inline-size, 20rem),
+    calc(var(--viewport-inline) - var(--space-6))
+  );
   max-block-size: min(
     24rem,
     var(--available-height, calc(var(--viewport-block) - var(--space-6)))
@@ -75,6 +81,10 @@
   border-end-end-radius: 0;
 }
 
+.flyout.is-sheet:where(.grid-2, .grid-3, .grid-4, .grid-6) {
+  grid-template-columns: 1fr;
+}
+
 .flyout[hidden] {
   display: none;
   opacity: 0;
@@ -113,8 +123,33 @@
   margin: 0;
 }
 
+.flyout > :where(section, footer) {
+  min-inline-size: 0;
+  padding: var(--space-2);
+}
+
+.flyout > section > :where(h1, h2, h3, h4, h5, h6) {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-strong);
+}
+
+.flyout > section > ul {
+  display: grid;
+  gap: var(--space-1);
+  margin: var(--space-1) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.flyout > section > ul > li {
+  margin: 0;
+}
+
 .flyout > :where(button, a, [role="menuitem"]),
-.flyout > li > :where(button, a, [role="menuitem"]) {
+.flyout > li > :where(button, a, [role="menuitem"]),
+.flyout > section > ul > li > a {
   display: flex;
   align-items: center;
   justify-content: flex-start;
@@ -135,12 +170,14 @@
 }
 
 .flyout.is-sheet > :where(button, a, [role="menuitem"]),
-.flyout.is-sheet > li > :where(button, a, [role="menuitem"]) {
+.flyout.is-sheet > li > :where(button, a, [role="menuitem"]),
+.flyout.is-sheet > section > ul > li > a {
   min-block-size: var(--control-size-lg);
 }
 
 .flyout > :where(button, a, [role="menuitem"]):focus-visible,
-.flyout > li > :where(button, a, [role="menuitem"]):focus-visible {
+.flyout > li > :where(button, a, [role="menuitem"]):focus-visible,
+.flyout > section > ul > li > a:focus-visible {
   background: var(--surface-subtle);
   outline: var(--focus-outline);
   outline-offset: var(--focus-outline-offset);
@@ -149,7 +186,8 @@
 
 @media (hover: hover) {
   .flyout > :where(button, a, [role="menuitem"]):hover,
-  .flyout > li > :where(button, a, [role="menuitem"]):hover {
+  .flyout > li > :where(button, a, [role="menuitem"]):hover,
+  .flyout > section > ul > li > a:hover {
     background: var(--surface-subtle);
     outline: none;
   }
@@ -173,14 +211,16 @@
   }
 
   .flyout > :where(button, a, [role="menuitem"]):focus-visible,
-  .flyout > li > :where(button, a, [role="menuitem"]):focus-visible {
+  .flyout > li > :where(button, a, [role="menuitem"]):focus-visible,
+  .flyout > section > ul > li > a:focus-visible {
     background: Canvas;
     color: CanvasText;
   }
 
   @media (hover: hover) {
     .flyout > :where(button, a, [role="menuitem"]):hover,
-    .flyout > li > :where(button, a, [role="menuitem"]):hover {
+    .flyout > li > :where(button, a, [role="menuitem"]):hover,
+    .flyout > section > ul > li > a:hover {
       outline: var(--border-width) solid ButtonText;
       outline-offset: -1px;
       background: Canvas;
