@@ -12,18 +12,20 @@
 /* Intent boundary — inherited intents do not tint this component.
    Local intent classes still win because :where() has zero specificity. */
 :where(
-    .choice,
-    .check,
-    .radio,
-    .form input[type="checkbox"]:not([role="switch"]),
-    .form input[type="radio"]
-  ) {
+  .choice,
+  .check,
+  .radio,
+  .form input[type="checkbox"]:not([role="switch"]),
+  .form input[type="radio"]
+) {
+  /* @sync intent-boundary */
   --intent: initial;
   --intent-fg: initial;
   --ui-bg: initial;
   --ui-fg: initial;
   --ui-border: initial;
   --ui-hover-bg: initial;
+  /* @sync intent-boundary */
 }
 
 /* A classed .choice is the component surface. Let its nested input consume a
@@ -122,11 +124,11 @@
 }
 
 :is(
-    .check,
-    .radio,
-    .form input[type="checkbox"]:not([role="switch"]),
-    .form input[type="radio"]
-  )::before {
+  .check,
+  .radio,
+  .form input[type="checkbox"]:not([role="switch"]),
+  .form input[type="radio"]
+)::before {
   content: "";
   position: absolute;
   inset: 0;
@@ -151,11 +153,11 @@
 }
 
 :is(
-    .check,
-    .radio,
-    .form input[type="checkbox"]:not([role="switch"]),
-    .form input[type="radio"]
-  ):checked {
+  .check,
+  .radio,
+  .form input[type="checkbox"]:not([role="switch"]),
+  .form input[type="radio"]
+):checked {
   --choice-border: var(--intent, var(--primary));
   --choice-bg: var(--intent, var(--primary));
 }
@@ -183,30 +185,27 @@
 }
 
 .field.danger
-  :where(
-    .check,
-    .radio,
-    input[type="checkbox"]:not([role="switch"]),
-    input[type="radio"]
-  ) {
+  :where(.check, .radio, input[type="checkbox"]:not([role="switch"]), input[type="radio"]) {
   --choice-border: var(--danger);
 }
 
-:is(
+@media (hover: hover) {
+  :is(
     .check,
     .radio,
     .form input[type="checkbox"]:not([role="switch"]),
     .form input[type="radio"]
   ):hover:not(:checked, :indeterminate, :disabled) {
-  --choice-border: var(--text-subtle);
+    --choice-border: var(--text-subtle);
+  }
 }
 
 :is(
-    .check,
-    .radio,
-    .form input[type="checkbox"]:not([role="switch"]),
-    .form input[type="radio"]
-  ):focus-visible {
+  .check,
+  .radio,
+  .form input[type="checkbox"]:not([role="switch"]),
+  .form input[type="radio"]
+):focus-visible {
   border-color: var(--focus);
   outline: var(--focus-outline);
   outline-offset: var(--focus-outline-offset);
@@ -214,11 +213,11 @@
 }
 
 :is(
-    .check,
-    .radio,
-    .form input[type="checkbox"]:not([role="switch"]),
-    .form input[type="radio"]
-  ):disabled {
+  .check,
+  .radio,
+  .form input[type="checkbox"]:not([role="switch"]),
+  .form input[type="radio"]
+):disabled {
   --choice-bg: var(--surface-subtle);
   --choice-border: var(--border);
   --choice-mark: var(--text-subtle);
@@ -228,22 +227,22 @@
 
 @media (forced-colors: active) {
   :is(
-      .check,
-      .radio,
-      .form input[type="checkbox"]:not([role="switch"]),
-      .form input[type="radio"]
-    ) {
+    .check,
+    .radio,
+    .form input[type="checkbox"]:not([role="switch"]),
+    .form input[type="radio"]
+  ) {
     --choice-border: ButtonText;
     --choice-bg: Canvas;
     --choice-mark: ButtonText;
   }
 
   :is(
-      .check,
-      .radio,
-      .form input[type="checkbox"]:not([role="switch"]),
-      .form input[type="radio"]
-    ):checked,
+    .check,
+    .radio,
+    .form input[type="checkbox"]:not([role="switch"]),
+    .form input[type="radio"]
+  ):checked,
   :is(.check, .form input[type="checkbox"]:not([role="switch"])):indeterminate {
     --choice-border: Highlight;
     --choice-bg: Highlight;
@@ -252,11 +251,11 @@
   }
 
   :is(
-      .check,
-      .radio,
-      .form input[type="checkbox"]:not([role="switch"]),
-      .form input[type="radio"]
-    ):disabled {
+    .check,
+    .radio,
+    .form input[type="checkbox"]:not([role="switch"]),
+    .form input[type="radio"]
+  ):disabled {
     --choice-border: GrayText;
     --choice-bg: Canvas;
     --choice-mark: GrayText;

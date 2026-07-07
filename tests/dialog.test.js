@@ -133,6 +133,32 @@ test("dialog triggers connect when the dialog is inserted later", async () => {
   expect(trigger.getAttribute("aria-controls")).toBe("prefs");
 });
 
+test("a dialog with a bare open attribute is not treated as an open modal", async () => {
+  await loadDialog('<dialog id="prefs" open class="modal">Already open</dialog>');
+  const dialog = document.getElementById("prefs");
+
+  expect(dialog.open).toBe(true);
+  expect(document.documentElement.classList.contains("has-modal-open")).toBe(false);
+});
+
+test("dialog triggers connect when the trigger is inserted later", async () => {
+  setupDOM('<main><dialog id="prefs"></dialog></main>');
+  patchDialogMethods();
+  await import(`../src/js/dialog.js?test=${++importId}`);
+
+  document
+    .querySelector("main")
+    .insertAdjacentHTML("beforeend", '<button commandfor="prefs" command="show-modal">Open</button>');
+  await nextMicrotask();
+  const trigger = document.querySelector("button");
+  const dialog = document.getElementById("prefs");
+
+  click(trigger);
+
+  expect(dialog.open).toBe(true);
+  expect(trigger.getAttribute("aria-controls")).toBe("prefs");
+});
+
 test("dismissible backdrop clicks close the dialog", async () => {
   await loadDialog('<button commandfor="prefs" command="show-modal">Open</button><dialog id="prefs" data-dialog-dismissible></dialog>');
   const trigger = document.querySelector("button");
