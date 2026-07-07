@@ -42,7 +42,7 @@ Modern features are gated with `@supports`; unsupported browsers keep the core l
 - `appearance: base-select` — enhanced select picker on fine-pointer devices
 - `backdrop-filter` — enhanced sticky form actions
 - `transition-behavior: allow-discrete` — smooth dialog open/close
-- `:has()` — button groups, alert icons
+- `:has()` — button groups, alert icons, disabled choice labels
 
 ### @supports usage
 
