@@ -207,8 +207,8 @@ small {
 
   /* Viewport size tokens — fallback vh/vw with dvh/vi enhancement.
      Consumed by full-viewport components (app-shell, drawer, modal, flyout).
-     Custom properties (rather than double declarations) protect the
-     fallback from Lightning CSS bundle deduplication. */
+     Custom properties keep the fallback explicit while allowing modern units
+     to enhance the same public tokens. */
   --viewport-block: 100vh;
   --viewport-inline: 100vw;
 
@@ -4210,11 +4210,12 @@ button.avatar {
 /* Enhanced sticky bar: translucent surface plus blur where both are supported.
    Guidelines: use @supports positively. */
 @supports (
-    (backdrop-filter: blur(1rem)) and
+    ((-webkit-backdrop-filter: blur(1rem)) or (backdrop-filter: blur(1rem))) and
     (background: color-mix(in oklch, white 50%, transparent))
   ) {
   .form-actions.sticky {
     background: color-mix(in oklch, var(--surface) 88%, transparent);
+    -webkit-backdrop-filter: blur(1rem);
     backdrop-filter: blur(1rem);
   }
 }
