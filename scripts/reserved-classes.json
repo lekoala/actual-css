@@ -21,7 +21,6 @@
   "container-query",
   "danger",
   "drawer",
-  "end",
   "field",
   "field-error",
   "field-group",
@@ -56,14 +55,11 @@
   "link",
   "link-muted",
   "link-plain",
-  "list-group",
-  "list-meta",
   "list-reset",
   "mbe",
   "mbs",
   "measure",
   "media",
-  "media-middle",
   "meter",
   "modal",
   "muted",
@@ -118,6 +114,5 @@
   "textarea",
   "tooltip",
   "truncate",
-  "warning",
-  "with-sidebar"
+  "warning"
 ]

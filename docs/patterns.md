@@ -239,73 +239,47 @@ A project may add `.side-nav` only when it needs specific visual behavior such a
 
 Keep this separate from layout primitives. `.cluster` and `.stack` should not style links.
 
-## List Group
+## Structured Lists
 
-Use `.list-group` for rich content lists where each item may contain multiple elements.
-
-Use `figure`/`figcaption` when the list is a captioned content unit. Use `div`/`header` when it is an application panel or section.
+Use native lists plus layout primitives for rich content rows. Reset list chrome only when markers are not part of the content.
 
 ```html
-<figure class="list-group">
-  <figcaption>Most played songs this week</figcaption>
+<figure class="stack">
+  <figcaption><strong>Most played songs this week</strong></figcaption>
 
-  <ul>
-    <li>
+  <ul class="list-reset stack gap-none">
+    <li class="media py" style="border-block-end: var(--border-width) solid var(--border)">
       <div class="avatar">
         <img src="https://i.pravatar.cc/48?img=5" alt="Dio Lupa" />
       </div>
-      <div>
-        <div>Dio Lupa</div>
-        <div class="muted">Remaining Reason</div>
+      <div class="stack">
+        <strong>Dio Lupa</strong>
+        <span class="muted">Remaining Reason</span>
       </div>
-      <span class="list-meta muted">3:45</span>
+      <span class="muted" style="margin-inline-start: auto">3:45</span>
       <button class="btn ghost" aria-label="Play">
         <i class="ti ti-player-play"></i>
       </button>
-      <p>"Remaining Reason" became an instant hit.</p>
     </li>
-    <li>
+
+    <li class="media py" style="border-block-end: var(--border-width) solid var(--border)">
       <div class="avatar">
         <img src="https://i.pravatar.cc/48?img=10" alt="Astral Planes" />
       </div>
-      <div>
-        <div>Astral Planes</div>
-        <div class="muted">Neon Drift</div>
+      <div class="stack">
+        <strong>Astral Planes</strong>
+        <span class="muted">Neon Drift</span>
       </div>
-      <span class="list-meta muted">4:12</span>
+      <span class="muted" style="margin-inline-start: auto">4:12</span>
       <button class="btn ghost" aria-label="Play">
         <i class="ti ti-player-play"></i>
       </button>
-      <p>"Neon Drift" blends retro synths with modern beats.</p>
     </li>
   </ul>
 </figure>
 ```
 
-```html
-<div class="list-group">
-  <header>Recent files</header>
-
-  <ul>
-    <li>
-      <strong>Proposal.pdf</strong>
-      <span class="list-meta muted">Edited today</span>
-    </li>
-    <li>
-      <strong>Roadmap.md</strong>
-      <span class="list-meta muted">Edited yesterday</span>
-    </li>
-  </ul>
-</div>
-```
-
-`.list-group` is different from `.nav-list` and `.actions`.
-
-- `.actions` is for action controls.
-- `.nav-list` is for navigation links.
-- `.list-group` is for structured content items.
-
-If `.list-group` receives visual styling, document it as a component-like pattern rather than a layout primitive.
+Use `.actions` for action controls and `.nav-list` for navigation links. For structured content items, compose `.list-reset`, `.stack`, `.cluster`, `.media`, and components directly.
 
 ## Relationship With Layout
 

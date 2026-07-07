@@ -266,7 +266,7 @@ If dialogs are injected later, register those new dialog elements before their o
 
 ### Animation
 
-The base CSS gives supporting browsers a small opening transition. Closing remains native unless a view transition is enabled.
+The base CSS gives supporting browsers small enter and exit transitions. Exit motion relies on `transition-behavior: allow-discrete` so the native dialog can remain in the top layer while `display` and `overlay` transition out. Browsers without that support keep native close behavior.
 
 The open dialog root intentionally ends at `transform: none`; fixed flyouts and tooltips mounted inside a modal dialog rely on viewport coordinates.
 
@@ -443,6 +443,7 @@ Flyout covers two distinct patterns:
 - Items are regular `<a href>` links, not `role="menuitem"`.
 - No arrow-key navigation, no `role="menu"`.
 - Just a toggle with outside-click and Escape dismissal.
+- Use grid utilities, such as `.grid-3`, for wider multi-column flyouts.
 
 ```html
 <div class="flyout-root">
@@ -484,7 +485,7 @@ Flyout covers two distinct patterns:
            aria-label="Products"
            data-flyout-mobile="auto"
            hidden>
-        <section aria-labelledby="products-design" class="px py">
+        <section aria-labelledby="products-design">
           <h3 id="products-design">Design</h3>
           <ul>
             <li><a href="/figma">Figma integration</a></li>
@@ -492,7 +493,7 @@ Flyout covers two distinct patterns:
           </ul>
         </section>
 
-        <section aria-labelledby="products-dev" class="px py">
+        <section aria-labelledby="products-dev">
           <h3 id="products-dev">Development</h3>
           <ul>
             <li><a href="/components">Components</a></li>
@@ -500,7 +501,7 @@ Flyout covers two distinct patterns:
           </ul>
         </section>
 
-        <footer class="px py">
+        <footer>
           <a href="/pricing" class="btn primary">See pricing</a>
         </footer>
       </div>
@@ -508,6 +509,65 @@ Flyout covers two distinct patterns:
 
     <li><a href="/about" class="btn ghost">About</a></li>
     <li><a href="/contact" class="btn ghost">Contact</a></li>
+  </ul>
+</nav>
+```
+
+### Mega menu
+
+Use `class="flyout grid-3"` when a nav panel needs multiple link groups. Keep links regular anchors and let the panel collapse to a sheet on mobile with `data-flyout-mobile="auto"`.
+
+```html
+<nav aria-label="Product navigation">
+  <ul class="list-reset cluster">
+    <li class="flyout-root">
+      <button class="btn ghost"
+              type="button"
+              aria-expanded="false"
+              aria-controls="product-mega-menu">
+        Platform
+        <i class="ti ti-chevron-down" aria-hidden="true"></i>
+      </button>
+
+      <div class="flyout grid-3"
+           id="product-mega-menu"
+           aria-label="Platform"
+           data-flyout-mobile="auto"
+           style="--flyout-inline-size: 42rem; --flyout-max-inline-size: 42rem"
+           hidden>
+        <section aria-labelledby="mega-design">
+          <h3 id="mega-design">Design</h3>
+          <ul>
+            <li><a href="/figma">Figma integration</a></li>
+            <li><a href="/tokens">Design tokens</a></li>
+            <li><a href="/handoff">Developer handoff</a></li>
+          </ul>
+        </section>
+
+        <section aria-labelledby="mega-develop">
+          <h3 id="mega-develop">Development</h3>
+          <ul>
+            <li><a href="/components">Components</a></li>
+            <li><a href="/api">API</a></li>
+            <li><a href="/changelog">Changelog</a></li>
+          </ul>
+        </section>
+
+        <section aria-labelledby="mega-operate">
+          <h3 id="mega-operate">Operate</h3>
+          <ul>
+            <li><a href="/analytics">Analytics</a></li>
+            <li><a href="/security">Security</a></li>
+            <li><a href="/support">Support</a></li>
+          </ul>
+        </section>
+
+        <footer class="cluster"
+                style="grid-column: 1 / -1; --cluster-justify: flex-end; border-block-start: var(--border-width) solid var(--border)">
+          <a href="/pricing" class="btn primary">See pricing</a>
+        </footer>
+      </div>
+    </li>
   </ul>
 </nav>
 ```

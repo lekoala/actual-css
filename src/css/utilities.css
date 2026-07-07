@@ -96,8 +96,7 @@
 
 /* Generic list chrome reset. Use for any list (tags, footer columns, related
    items). For navigation lists, prefer .nav-list for semantic intent.
-   components/{actions,navbar,list-group}.css apply their own resets where
-   needed. */
+   components/{actions,navbar}.css apply their own resets where needed. */
 .list-reset {
   margin: 0;
   padding: 0;
