@@ -2,8 +2,7 @@
  * Pagination — page navigation for paginated lists.
  *
  * Render .btn elements inside a .pagination list. The active page is marked
- * with aria-current="page" and tinted with the intent color. Pagination
- * numeric buttons are square; prev/next links can use text labels.
+ * with aria-current="page" and tinted with the intent color.
  */
 .pagination {
   display: flex;
@@ -16,17 +15,7 @@
 }
 
 .pagination .btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  inline-size: var(--control-size);
-  padding-inline: 0;
-}
-
-.pagination .btn:where([rel="prev"], [rel="next"]) {
-  inline-size: auto;
   min-inline-size: var(--control-size);
-  padding-inline: var(--btn-pad-x, var(--control-pad-x, 1em));
 }
 
 .pagination .btn[aria-current="page"] {

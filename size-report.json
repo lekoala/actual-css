@@ -1,12 +1,12 @@
 {
-  "timestamp": "2026-07-07T14:05:06.639Z",
-  "totalRaw": 144683,
-  "totalMinified": 78562,
-  "totalBrotli": 11406,
+  "timestamp": "2026-07-07T14:23:15.124Z",
+  "totalRaw": 144421,
+  "totalMinified": 78330,
+  "totalBrotli": 11341,
   "themesMinified": 23261,
   "themesBrotli": 2639,
-  "shippedMinified": 78562,
-  "shippedBrotli": 11406,
+  "shippedMinified": 78330,
+  "shippedBrotli": 11341,
   "maxShippedBrotli": 13312,
   "fileCount": 66,
   "files": [
@@ -51,12 +51,12 @@
       "raw": 3600
     },
     {
-      "file": "components/alert.css",
-      "raw": 3568
+      "file": "variants.css",
+      "raw": 3579
     },
     {
-      "file": "variants.css",
-      "raw": 3442
+      "file": "components/alert.css",
+      "raw": 3568
     },
     {
       "file": "components/modal.css",
@@ -111,16 +111,16 @@
       "raw": 2460
     },
     {
+      "file": "grid.css",
+      "raw": 2444
+    },
+    {
       "file": "themes/forest.css",
       "raw": 2394
     },
     {
       "file": "components/navbar.css",
       "raw": 2371
-    },
-    {
-      "file": "layout.css",
-      "raw": 2316
     },
     {
       "file": "themes/cyberpunk.css",
@@ -135,16 +135,16 @@
       "raw": 2271
     },
     {
-      "file": "grid.css",
-      "raw": 2267
-    },
-    {
       "file": "themes/ocean.css",
       "raw": 2265
     },
     {
       "file": "themes/mono.css",
       "raw": 2213
+    },
+    {
+      "file": "layout.css",
+      "raw": 2120
     },
     {
       "file": "components/tab.css",
@@ -207,10 +207,6 @@
       "raw": 1195
     },
     {
-      "file": "components/pagination.css",
-      "raw": 1137
-    },
-    {
       "file": "themes/dim.css",
       "raw": 1108
     },
@@ -223,12 +219,16 @@
       "raw": 1018
     },
     {
-      "file": "components/list.css",
-      "raw": 865
-    },
-    {
       "file": "components/breadcrumb.css",
       "raw": 838
+    },
+    {
+      "file": "components/list.css",
+      "raw": 835
+    },
+    {
+      "file": "components/pagination.css",
+      "raw": 787
     },
     {
       "file": "components/key.css",

@@ -288,9 +288,9 @@ A `grid-6` demo for compact items:
 
 Behavior:
 - Without `.container-query`: `.grid-2` is always 2 cols, `.grid-3` is always 3 cols, `.grid-4` is always 4 cols, and `.grid-6` is always 6 cols.
-- With `.container-query`: all four collapse to one column on a narrow wrapper (under 28rem). `.grid-3` and `.grid-4` step through 2 columns between 28rem and 48rem. `.grid-6` steps through 3 columns between 28rem and 64rem, then returns to 6 columns.
+- With `.container-query`: `.grid-2`, `.grid-3`, and `.grid-4` collapse to one column on a narrow wrapper (under 28rem). `.grid-3` and `.grid-4` step through 2 columns between 28rem and 48rem. `.grid-6` starts at 2 columns under 28rem, steps through 3 columns between 28rem and 64rem, then returns to 6 columns.
 - The intermediate 2-col step is useful for lists of items divisible by both 2 and 3 (or 4) — a 12-item list reads as 12 lines, then 6 lines of 2, then 4 lines of 3 (or 3 lines of 4), depending on the grid.
-- `.grid-6` is for compact items such as stats, shortcut tiles, swatches, avatar summaries, and small settings cards. If item width matters more than an exact six-column rhythm, prefer `.grid` with a smaller `--grid-min`.
+- `.grid-6` is for compact items such as stats, shortcut tiles, swatches, avatar summaries, and small settings cards. It does not collapse to one column by default. If item width matters more than an exact six-column rhythm, prefer `.grid` with a smaller `--grid-min`.
 - The wrapper is the query container, so the same class behaves differently in a narrow sidebar than in a wide main area. No viewport breakpoints are involved.
 
 Do not add `.row`, `.col-6`, `.offset-2`, or other fixed grid-system classes unless the project later proves it needs a formal grid system.
@@ -368,6 +368,7 @@ The media object is the underlying pattern of `.blog-author`, `.blog-comment`, a
 ## Switcher
 
 > Row that becomes a column when space gets tight, useful for small sets of panels.
+> **Optional** — import `src/css/optional/layout-extra.css` or `@import "actual/optional"`.
 
 Use `.switcher` for rows that should become columns when space gets tight.
 
@@ -388,20 +389,9 @@ Use `.switcher` for rows that should become columns when space gets tight.
 </section>
 ```
 
-```css
-.switcher {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--gap);
-}
-
-.switcher > * {
-  flex-basis: calc((var(--switcher-threshold, 40rem) - 100%) * 999);
-  flex-grow: 1;
-}
-```
-
 This is useful for small sets of panels, not large card collections. Use `.grid` for repeatable collections.
+
+The `.switcher` class is defined in `src/css/optional/layout-extra.css`. Import it when needed.
 
 ## Frame
 
@@ -411,7 +401,7 @@ Use `.frame` for media that needs a stable aspect ratio.
 
 ```html
 <figure class="frame">
-  <img src="/preview.jpg" alt="Preview placeholder" width="1600" height="900" />
+  <img src="https://picsum.photos/seed/actual-css-frame/1600/900" alt="Preview placeholder" width="1600" height="900" />
 </figure>
 ```
 
