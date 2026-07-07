@@ -153,15 +153,11 @@ Actual CSS is layer-compatible, not layer-dependent. The default `actual.css` fi
 
 Use `actual.layer.css` as the official collision strategy when an existing project already owns one of Actual's reserved class names.
 
-Projects that use cascade layers can import Actual CSS into a low-priority layer:
-
 ```css
-@layer actual, app, utilities, overrides;
-
 @import "actual-css/css/layer";
 ```
 
-For example, if the application already has a legacy `.badge`, put Actual in a lower-priority layer and keep application CSS in a later layer:
+The layer entrypoint wraps all rules in `@layer actual`, so author styles outside any layer win at equal specificity.
 
 ```css
 @layer actual, app;
@@ -169,25 +165,11 @@ For example, if the application already has a legacy `.badge`, put Actual in a l
 @import "actual-css/css/layer";
 
 @layer app {
-  .badge {
-    /* Existing app badge keeps winning. */
-  }
+  .badge { /* Keeps winning over Actual's .badge */ }
 }
 ```
 
-Or wrap the default entrypoint yourself:
-
-```css
-@layer actual, app, utilities, overrides;
-
-@import "actual-css" layer(actual);
-```
-
-Cascade layers require the Minimum compatibility target or above.
-
-Actual CSS only claims the optional `actual` layer. Application-specific layer names stay in the application.
-
-Projects that need prefixed class names can run a post-install or build-pipeline transform that rewrites reserved classes, for example `.btn.primary` to `.ac-btn.ac-primary`. That transform is an application output strategy, not an alternate Actual CSS API.
+Projects that need prefixed class names can use a build-pipeline transform (`.btn` → `.ac-btn`). See [`docs/design-notes/cascade-layer.md`](docs/design-notes/cascade-layer.md) for details.
 
 ## AI Disclosure
 
