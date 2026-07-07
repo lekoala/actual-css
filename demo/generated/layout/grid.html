@@ -78,7 +78,7 @@
     </section>
     <div class="component-prose">
       <h3>Fixed Columns</h3>
-<p>Predictable 2/3/4-column grids. Full count by default; wrap in <code>.container-query</code> to make the column count collapse on narrow wrappers. Use <code>.grid-2</code>, <code>.grid-3</code>, and <code>.grid-4</code> when the column count matters more than the item minimum width — for example, when a row should always read as "three items side by side", or when an empty cell should not stretch to fill space. Unlike <code>.grid</code>, the columns are fixed; if you have only two items in a <code>.grid-3</code>, the third cell stays empty rather than redistributing. A <code>.grid-2/3/4</code> without a wrapper is a <strong>fixed grid</strong> (always at its full column count); with a <code>.container-query</code> wrapper, it's a <strong>responsive grid</strong> (the column count collapses on narrow wrappers). The wrapper is the query container; the grid itself is a plain block grid.</p>
+<p>Predictable 2/3/4/6-column grids. Full count by default; wrap in <code>.container-query</code> to make the column count collapse on narrow wrappers. Use <code>.grid-2</code>, <code>.grid-3</code>, <code>.grid-4</code>, and <code>.grid-6</code> when the column count matters more than the item minimum width — for example, when a row should always read as "three items side by side", or when an empty cell should not stretch to fill space. Unlike <code>.grid</code>, the columns are fixed; if you have only two items in a <code>.grid-3</code>, the third cell stays empty rather than redistributing. A <code>.grid-2/3/4/6</code> without a wrapper is a <strong>fixed grid</strong> (always at its full column count); with a <code>.container-query</code> wrapper, it's a <strong>responsive grid</strong> (the column count collapses on narrow wrappers). The wrapper is the query container; the grid itself is a plain block grid.</p>
     </div>
     <section class="component-section">
       <div class="example-group">
@@ -172,11 +172,79 @@
       </div>
     </section>
     <div class="component-prose">
+      <p>A <code>grid-6</code> demo for compact items:</p>
+    </div>
+    <section class="component-section">
+      <div class="example-group">
+        <div class="example-render">
+          <div class="container-query">
+  <div class="grid-6">
+    <article class="card compact">
+      <span class="muted">Open</span>
+      <strong>18</strong>
+    </article>
+    <article class="card compact">
+      <span class="muted">Queued</span>
+      <strong>7</strong>
+    </article>
+    <article class="card compact">
+      <span class="muted">Blocked</span>
+      <strong>2</strong>
+    </article>
+    <article class="card compact">
+      <span class="muted">Shipped</span>
+      <strong>41</strong>
+    </article>
+    <article class="card compact">
+      <span class="muted">Owners</span>
+      <strong>6</strong>
+    </article>
+    <article class="card compact">
+      <span class="muted">SLA</span>
+      <strong>99%</strong>
+    </article>
+  </div>
+</div>
+        </div>
+        <div class="example-code">
+          <pre><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>container-query<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>grid-6<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>article</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>card compact<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>muted<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Open<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>strong</span><span class="token punctuation">></span></span>18<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>strong</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>article</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>article</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>card compact<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>muted<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Queued<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>strong</span><span class="token punctuation">></span></span>7<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>strong</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>article</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>article</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>card compact<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>muted<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Blocked<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>strong</span><span class="token punctuation">></span></span>2<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>strong</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>article</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>article</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>card compact<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>muted<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Shipped<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>strong</span><span class="token punctuation">></span></span>41<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>strong</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>article</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>article</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>card compact<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>muted<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Owners<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>strong</span><span class="token punctuation">></span></span>6<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>strong</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>article</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>article</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>card compact<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>muted<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>SLA<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>strong</span><span class="token punctuation">></span></span>99%<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>strong</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>article</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span></code></pre>
+        </div>
+      </div>
+    </section>
+    <div class="component-prose">
       <p>Behavior:</p>
 <ul>
-  <li>Without <code>.container-query</code>: <code>.grid-2</code> is always 2 cols, <code>.grid-3</code> is always 3 cols, <code>.grid-4</code> is always 4 cols.</li>
-  <li>With <code>.container-query</code>: all three collapse to one column on a narrow wrapper (under 28rem). As the wrapper widens, they step back to 2 cols (28rem-48rem) and then to their full count (48rem+).</li>
+  <li>Without <code>.container-query</code>: <code>.grid-2</code> is always 2 cols, <code>.grid-3</code> is always 3 cols, <code>.grid-4</code> is always 4 cols, and <code>.grid-6</code> is always 6 cols.</li>
+  <li>With <code>.container-query</code>: all four collapse to one column on a narrow wrapper (under 28rem). <code>.grid-3</code> and <code>.grid-4</code> step through 2 columns between 28rem and 48rem. <code>.grid-6</code> steps through 3 columns between 28rem and 64rem, then returns to 6 columns.</li>
   <li>The intermediate 2-col step is useful for lists of items divisible by both 2 and 3 (or 4) — a 12-item list reads as 12 lines, then 6 lines of 2, then 4 lines of 3 (or 3 lines of 4), depending on the grid.</li>
+  <li><code>.grid-6</code> is for compact items such as stats, shortcut tiles, swatches, avatar summaries, and small settings cards. If item width matters more than an exact six-column rhythm, prefer <code>.grid</code> with a smaller <code>--grid-min</code>.</li>
   <li>The wrapper is the query container, so the same class behaves differently in a narrow sidebar than in a wide main area. No viewport breakpoints are involved.</li>
 </ul>
 <p>Do not add <code>.row</code>, <code>.col-6</code>, <code>.offset-2</code>, or other fixed grid-system classes unless the project later proves it needs a formal grid system.</p>

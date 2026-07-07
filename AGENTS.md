@@ -29,3 +29,4 @@ No need to mention that you didn't do anything
 - Don't open the browser
 - Don't create file outside the project
 - Temp files can be created in `./tmp`
+- If code and docs disagree, treat code as the API source and update the smallest doc that explains the decision
