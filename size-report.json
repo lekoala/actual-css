@@ -1,12 +1,12 @@
 {
-  "timestamp": "2026-07-07T15:09:14.913Z",
-  "totalRaw": 139294,
-  "totalMinified": 74188,
-  "totalBrotli": 11041,
+  "timestamp": "2026-07-07T15:18:32.057Z",
+  "totalRaw": 139558,
+  "totalMinified": 74206,
+  "totalBrotli": 11039,
   "themesMinified": 23261,
   "themesBrotli": 2639,
-  "shippedMinified": 74188,
-  "shippedBrotli": 11041,
+  "shippedMinified": 74206,
+  "shippedBrotli": 11039,
   "maxShippedBrotli": 13312,
   "fileCount": 66,
   "files": [
@@ -71,12 +71,12 @@
       "raw": 2930
     },
     {
-      "file": "components/card.css",
-      "raw": 2872
+      "file": "forms/control.css",
+      "raw": 2876
     },
     {
-      "file": "forms/control.css",
-      "raw": 2856
+      "file": "components/card.css",
+      "raw": 2872
     },
     {
       "file": "components/progress.css",
@@ -219,6 +219,10 @@
       "raw": 1018
     },
     {
+      "file": "components/scrollspy.css",
+      "raw": 899
+    },
+    {
       "file": "components/breadcrumb.css",
       "raw": 838
     },
@@ -241,10 +245,6 @@
     {
       "file": "intents.css",
       "raw": 702
-    },
-    {
-      "file": "components/scrollspy.css",
-      "raw": 655
     },
     {
       "file": "print.css",

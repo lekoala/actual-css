@@ -682,19 +682,24 @@ Override `--tooltip-bg` and `--tooltip-fg` on the tooltip element to change the 
 
 ## Scrollspy
 
-> Navigation that highlights the active section of a long page as the user scrolls.
+> Behavior hook for navigation that marks the active section while the page scrolls.
 
-- Use regular document landmarks and anchor links.
-- JavaScript updates `aria-current="true"` or `aria-current="location"` on the active link.
-- Prefer `IntersectionObserver` with a small fallback that leaves links usable.
-- CSS styles the current state; it should not depend on scroll JavaScript to make navigation usable.
+Scrollspy is a behavior hook, not a visual component. It marks a navigation
+region for the JavaScript enhancement. Pair it with `.nav-list` and `.nav-link`,
+or style `[aria-current]` yourself.
+
+- `.scrollspy` marks the region for JS detection. It does not add visual styles.
+- `.nav-list` and `.nav-link` provide the visible list and active link styling.
+- The JS enhancer uses `IntersectionObserver` to toggle `aria-current="location"`
+  on the active link. Without JavaScript, the links remain regular anchor links.
+- The same markup also works with the CSS-native scroll markers path (see below).
 
 ```html
 <nav class="scrollspy" aria-label="Page sections">
-  <ol>
-    <li><a href="#overview" aria-current="location">Overview</a></li>
-    <li><a href="#tokens">Tokens</a></li>
-    <li><a href="#components">Components</a></li>
+  <ol class="nav-list stack">
+    <li><a class="nav-link" href="#overview" aria-current="location">Overview</a></li>
+    <li><a class="nav-link" href="#tokens">Tokens</a></li>
+    <li><a class="nav-link" href="#components">Components</a></li>
   </ol>
 </nav>
 
@@ -702,11 +707,35 @@ Override `--tooltip-bg` and `--tooltip-fg` on the tooltip element to change the 
   <section id="overview" tabindex="-1">
     <h2>Overview</h2>
   </section>
+
   <section id="tokens" tabindex="-1">
     <h2>Tokens</h2>
   </section>
+
   <section id="components" tabindex="-1">
     <h2>Components</h2>
   </section>
 </main>
 ```
+
+### Native scroll markers
+
+Modern browsers are starting to support CSS-native scroll markers with
+`scroll-target-group` and `:target-current`. This can style the active link
+without JavaScript.
+
+```css
+@supports selector(:target-current) {
+  .scrollspy {
+    scroll-target-group: auto;
+  }
+
+  .scrollspy a:target-current {
+    color: var(--primary);
+    font-weight: var(--font-weight-medium);
+  }
+}
+```
+
+Keep this as progressive enhancement. The JavaScript enhancement remains the
+portable fallback — the same markup serves both paths.
