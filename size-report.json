@@ -1,18 +1,18 @@
 {
-  "timestamp": "2026-07-06T22:00:55.218Z",
-  "totalRaw": 143795,
-  "totalMinified": 71917,
-  "totalBrotli": 11241,
+  "timestamp": "2026-07-07T12:09:39.391Z",
+  "totalRaw": 143215,
+  "totalMinified": 70223,
+  "totalBrotli": 11169,
   "themesMinified": 16153,
   "themesBrotli": 2556,
-  "shippedMinified": 71917,
-  "shippedBrotli": 11241,
+  "shippedMinified": 70223,
+  "shippedBrotli": 11169,
   "maxShippedBrotli": 13312,
   "fileCount": 66,
   "files": [
     {
       "file": "forms/choice.css",
-      "raw": 7039
+      "raw": 7029
     },
     {
       "file": "theme.css",
@@ -28,63 +28,67 @@
     },
     {
       "file": "components/button.css",
-      "raw": 4736
+      "raw": 4557
     },
     {
       "file": "forms/custom-select.css",
-      "raw": 4322
-    },
-    {
-      "file": "components/badge.css",
-      "raw": 4301
+      "raw": 4282
     },
     {
       "file": "forms/switch.css",
-      "raw": 3926
+      "raw": 4020
+    },
+    {
+      "file": "components/badge.css",
+      "raw": 3761
     },
     {
       "file": "components/avatar.css",
-      "raw": 3540
+      "raw": 3600
     },
     {
       "file": "components/alert.css",
-      "raw": 3508
+      "raw": 3568
+    },
+    {
+      "file": "variants.css",
+      "raw": 3442
     },
     {
       "file": "components/modal.css",
       "raw": 3432
     },
     {
-      "file": "prose.css",
-      "raw": 3293
+      "file": "forms/control.css",
+      "raw": 3418
     },
     {
-      "file": "forms/control.css",
-      "raw": 3224
+      "file": "prose.css",
+      "raw": 3335
     },
     {
       "file": "components/tooltip.css",
       "raw": 3016
     },
     {
-      "file": "components/card.css",
-      "raw": 2848
-    },
-    {
-      "file": "forms/select.css",
-      "raw": 2801
-    },
-    {
       "file": "utilities.css",
-      "raw": 2724
+      "raw": 2930
+    },
+    {
+      "file": "components/card.css",
+      "raw": 2872
     },
     {
       "file": "components/progress.css",
-      "raw": 2716
+      "raw": 2776
     },
     {
       "file": "themes/spruce.css",
       "raw": 2641
+    },
+    {
+      "file": "components/drawer.css",
+      "raw": 2624
     },
     {
       "file": "themes/petrol.css",
@@ -93,10 +97,6 @@
     {
       "file": "themes/square.css",
       "raw": 2573
-    },
-    {
-      "file": "variants.css",
-      "raw": 2561
     },
     {
       "file": "themes/sunset.css",
@@ -123,10 +123,6 @@
       "raw": 2316
     },
     {
-      "file": "components/drawer.css",
-      "raw": 2295
-    },
-    {
       "file": "themes/cyberpunk.css",
       "raw": 2272
     },
@@ -148,19 +144,19 @@
     },
     {
       "file": "components/tab.css",
-      "raw": 1889
+      "raw": 1949
+    },
+    {
+      "file": "components/join.css",
+      "raw": 1941
     },
     {
       "file": "components/meter.css",
-      "raw": 1861
+      "raw": 1921
     },
     {
       "file": "grid.css",
       "raw": 1817
-    },
-    {
-      "file": "components/join.css",
-      "raw": 1786
     },
     {
       "file": "themes/index.css",
@@ -171,28 +167,28 @@
       "raw": 1686
     },
     {
+      "file": "components/overline.css",
+      "raw": 1525
+    },
+    {
       "file": "components/skeleton.css",
       "raw": 1495
+    },
+    {
+      "file": "forms/native.css",
+      "raw": 1484
     },
     {
       "file": "forms/form-actions.css",
       "raw": 1479
     },
     {
-      "file": "components/overline.css",
-      "raw": 1465
+      "file": "components/spinner.css",
+      "raw": 1464
     },
     {
       "file": "components/surface.css",
       "raw": 1443
-    },
-    {
-      "file": "forms/native.css",
-      "raw": 1424
-    },
-    {
-      "file": "components/spinner.css",
-      "raw": 1404
     },
     {
       "file": "components/table.css",
@@ -201,6 +197,10 @@
     {
       "file": "base.css",
       "raw": 1264
+    },
+    {
+      "file": "forms/select.css",
+      "raw": 1245
     },
     {
       "file": "components/busy.css",
@@ -239,10 +239,6 @@
       "raw": 728
     },
     {
-      "file": "actual.layer.css",
-      "raw": 719
-    },
-    {
       "file": "intents.css",
       "raw": 702
     },
@@ -269,6 +265,10 @@
     {
       "file": "container.css",
       "raw": 191
+    },
+    {
+      "file": "actual.layer.css",
+      "raw": 59
     },
     {
       "file": "actual.full.css",

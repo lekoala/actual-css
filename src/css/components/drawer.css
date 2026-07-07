@@ -83,6 +83,15 @@ dialog.drawer nav {
   }
 }
 
+/* RTL: swap animation directions so the drawer slides from the correct side.
+   The start position flips because inset-inline-start anchors the opposite edge. */
+[dir="rtl"] dialog.drawer[open] {
+  animation-name: actual-drawer-end;
+}
+[dir="rtl"] dialog.drawer[data-side="end"][open] {
+  animation-name: actual-drawer-start;
+}
+
 @media (forced-colors: active) {
   dialog.drawer {
     border-inline-end-color: ButtonText;

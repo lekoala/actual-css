@@ -128,7 +128,9 @@ function ensureTip(trigger) {
 
     const parent = trigger.closest("dialog") || document.body;
     parent.appendChild(tip);
-    trigger.setAttribute("aria-describedby", tip.id);
+    const existing = trigger.getAttribute("aria-describedby");
+    const ids = existing ? `${existing} ${tip.id}` : tip.id;
+    trigger.setAttribute("aria-describedby", ids);
   }
 
   // explicit: data-tooltip (empty) + aria-describedby → find existing element

@@ -530,6 +530,22 @@ small {
   }
 }
 
+:is(.btn, a.badge, button.badge):is(.outline, .ghost) {
+  --ui-hover-bg: var(--surface-subtle);
+}
+
+@supports (color: color-mix(in oklch, red, white)) {
+  :is(.btn, a.badge, button.badge).soft {
+    --ui-hover-bg: color-mix(in oklch,
+      var(--intent, var(--neutral)) var(--soft-hover-alpha),
+      transparent);
+  }
+
+  :is(.btn, a.badge, button.badge).outline {
+    --ui-hover-bg: color-mix(in oklch, var(--intent, var(--neutral)), transparent 92%);
+  }
+}
+
 .prose {
   --prose-size: 1rem;
   --prose-line-height: 1.7;
@@ -589,13 +605,15 @@ small {
   text-decoration-thickness: .08em;
 }
 
-.prose a:hover {
-  text-decoration-thickness: .12em;
-}
-
-@supports (color: color-mix(in oklch, red, white)) {
+@media (hover: hover) {
   .prose a:hover {
-    color: color-mix(in oklch, var(--primary), var(--text) 15%);
+    text-decoration-thickness: .12em;
+  }
+
+  @supports (color: color-mix(in oklch, red, white)) {
+    .prose a:hover {
+      color: color-mix(in oklch, var(--primary), var(--text) 15%);
+    }
   }
 }
 
@@ -739,23 +757,9 @@ small {
     box-shadow: inset 0 0 0 999px var(--hover-overlay);
   }
 
-  .btn:where(.outline, .ghost):not(:where(:disabled, [aria-disabled="true"])):hover {
-    --ui-hover-bg: var(--surface-subtle);
-  }
-
   @supports (color: color-mix(in oklch, red, white)) {
     .btn:not(:where(:disabled, [aria-disabled="true"], .soft, .outline, .ghost, .link)):hover {
       --ui-hover-bg: color-mix(in oklch, var(--intent, var(--neutral)) 88%, black);
-    }
-
-    .btn.soft:not(:where(:disabled, [aria-disabled="true"])):hover {
-      --ui-hover-bg: color-mix(in oklch,
-        var(--intent, var(--neutral)) var(--soft-hover-alpha),
-        transparent);
-    }
-
-    .btn.outline:not(:where(:disabled, [aria-disabled="true"])):hover {
-      --ui-hover-bg: color-mix(in oklch, var(--intent, var(--neutral)), transparent 92%);
     }
   }
 }
@@ -776,14 +780,12 @@ small {
   text-decoration: underline;
 }
 
-.btn.circle {
-  --btn-radius: var(--radius-full);
-}
-
-.btn.link:not(:where(:disabled, [aria-disabled="true"])):hover {
-  color: var(--intent, var(--text));
-  background: none;
-  text-decoration-thickness: .12em;
+@media (hover: hover) {
+  .btn.link:not(:where(:disabled, [aria-disabled="true"])):hover {
+    color: var(--intent, var(--text));
+    background: none;
+    text-decoration-thickness: .12em;
+  }
 }
 
 .btn:focus-visible {
@@ -932,22 +934,6 @@ a.btn[aria-disabled="true"] {
 
   :where(a.badge, button.badge):not(:where(:disabled, [aria-disabled="true"], .outline)):hover {
     box-shadow: inset 0 0 0 999px var(--hover-overlay);
-  }
-
-  :where(a.badge, button.badge):where(.outline):not(:where(:disabled, [aria-disabled="true"])):hover {
-    --ui-hover-bg: var(--surface-subtle);
-  }
-
-  @supports (color: color-mix(in oklch, red, white)) {
-    :where(a.badge, button.badge):where(.soft):not(:where(:disabled, [aria-disabled="true"])):hover {
-      --ui-hover-bg: color-mix(in oklch,
-        var(--intent, var(--neutral)) var(--soft-hover-alpha),
-        transparent);
-    }
-
-    :where(a.badge, button.badge):where(.outline):not(:where(:disabled, [aria-disabled="true"])):hover {
-      --ui-hover-bg: color-mix(in oklch, var(--intent, var(--neutral)), transparent 92%);
-    }
   }
 }
 
@@ -1195,36 +1181,36 @@ a.badge[aria-disabled="true"] {
   --card-pad: var(--space-2);
 }
 
-.card > [data-bleed] {
+.card > .bleed {
   margin-inline: calc(var(--card-pad) * -1);
   max-inline-size: none;
 }
 
-.card > [data-bleed]:first-child {
+.card > .bleed:first-child {
   border-start-start-radius: inherit;
   border-start-end-radius: inherit;
   margin-block-start: calc(var(--card-pad) * -1);
 }
 
-.card > [data-bleed]:last-child {
+.card > .bleed:last-child {
   border-end-end-radius: inherit;
   border-end-start-radius: inherit;
   margin-block-end: calc(var(--card-pad) * -1);
 }
 
-.card > :where(img, picture, video, canvas, svg)[data-bleed] {
+.card > :where(img, picture, video, canvas, svg).bleed {
   inline-size: calc(100% + var(--card-pad) * 2);
   max-inline-size: none;
   display: block;
 }
 
-.card > picture[data-bleed] > img {
+.card > picture.bleed > img {
   block-size: auto;
   inline-size: 100%;
   display: block;
 }
 
-.card > :where(header, footer, figure)[data-bleed] {
+.card > :where(header, footer, figure).bleed {
   padding: var(--card-pad);
 }
 
@@ -1500,6 +1486,14 @@ dialog.drawer nav {
     opacity: 1;
     transform: translateX(0);
   }
+}
+
+[dir="rtl"] dialog.drawer[open] {
+  animation-name: actual-drawer-end;
+}
+
+[dir="rtl"] dialog.drawer[data-side="end"][open] {
+  animation-name: actual-drawer-start;
 }
 
 @media (forced-colors: active) {
@@ -2806,7 +2800,7 @@ button.avatar {
   color: var(--danger);
 }
 
-:is(.input, .textarea, :is(.form, .field) :where(input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"], [type="button"], [type="submit"], [type="reset"], [type="color"]), textarea)) {
+:is(.input, .textarea, .select, :is(.form, .field) :where(input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"], [type="button"], [type="submit"], [type="reset"], [type="color"]), textarea, select)) {
   --control-border: var(--border);
   --control-bg: var(--surface);
   --control-fg: var(--text);
@@ -2837,23 +2831,25 @@ button.avatar {
   resize: vertical;
 }
 
-:is(.input, .textarea, :is(.form, .field) :where(input, textarea)):hover:not(:disabled) {
-  --control-border: var(--text-subtle);
+@media (hover: hover) {
+  :is(.input, .textarea, .select, :is(.form, .field) :where(input, textarea, select)):hover:not(:disabled) {
+    --control-border: var(--text-subtle);
+  }
 }
 
-:is(.input, .textarea, :is(.form, .field) :where(input, textarea)):focus-visible {
+:is(.input, .textarea, .select, :is(.form, .field) :where(input, textarea, select)):focus-visible {
   --control-border: var(--focus);
   outline: var(--focus-outline);
   outline-offset: var(--focus-outline-offset);
   box-shadow: var(--focus-ring-shadow);
 }
 
-.field.danger :where(input, textarea, select), .input[aria-invalid="true"], .textarea[aria-invalid="true"], :is(.form, .field) :where(input, textarea)[aria-invalid="true"] {
+.field.danger :where(input, textarea, select), .input[aria-invalid="true"], .textarea[aria-invalid="true"], .select[aria-invalid="true"], :is(.form, .field) :where(input, textarea, select)[aria-invalid="true"] {
   --control-border: var(--danger);
 }
 
 @supports selector(:user-invalid) {
-  :is(.input:user-invalid, .textarea:user-invalid, :is(.form, .field) :where(input, textarea):user-invalid) {
+  :is(.input:user-invalid, .textarea:user-invalid, .select:user-invalid, :is(.form, .field) :where(input, textarea, select):user-invalid) {
     --control-border: var(--danger);
   }
 }
@@ -2863,7 +2859,7 @@ button.avatar {
   --control-border: var(--border);
 }
 
-:is(.input, .textarea, :is(.form, .field) :where(input, textarea)):disabled {
+:is(.input, .textarea, .select, :is(.form, .field) :where(input, textarea, select)):disabled {
   --control-bg: var(--surface-subtle);
   --control-fg: var(--text-subtle);
   --control-border: var(--border);
@@ -3017,8 +3013,10 @@ button.avatar {
   --choice-border: var(--danger);
 }
 
-:is(.check, .radio, .form input[type="checkbox"]:not([role="switch"]), .form input[type="radio"]):hover:not(:checked, :indeterminate, :disabled) {
-  --choice-border: var(--text-subtle);
+@media (hover: hover) {
+  :is(.check, .radio, .form input[type="checkbox"]:not([role="switch"]), .form input[type="radio"]):hover:not(:checked, :indeterminate, :disabled) {
+    --choice-border: var(--text-subtle);
+  }
 }
 
 :is(.check, .radio, .form input[type="checkbox"]:not([role="switch"]), .form input[type="radio"]):focus-visible {
@@ -3057,31 +3055,6 @@ button.avatar {
   }
 }
 
-.select, .form select {
-  --control-border: var(--border);
-  --control-bg: var(--surface);
-  --control-fg: var(--text);
-  --control-ring: none;
-  --control-cursor: auto;
-  --control-opacity: 1;
-  inline-size: 100%;
-  min-block-size: var(--control-size);
-  padding-inline: var(--space-3);
-  border: var(--border-width) solid var(--control-border);
-  border-radius: var(--radius);
-  background: var(--control-bg);
-  color: var(--control-fg);
-  font-size: var(--control-font-size);
-  box-shadow: var(--control-ring);
-  cursor: var(--control-cursor);
-  opacity: var(--control-opacity);
-  transition: border-color var(--duration),
-    box-shadow var(--duration),
-    background-color var(--duration),
-    color var(--duration);
-  outline: none;
-}
-
 .select:not([multiple], [size]), .form select:not([multiple], [size]) {
   appearance: none;
   background-image: var(--icon-chevron-image);
@@ -3095,39 +3068,6 @@ button.avatar {
   background-position: center left var(--space-3);
 }
 
-.select:hover:not(:disabled), .form select:hover:not(:disabled) {
-  --control-border: var(--text-subtle);
-}
-
-.select:focus-visible, .form select:focus-visible {
-  --control-border: var(--focus);
-  outline: var(--focus-outline);
-  outline-offset: var(--focus-outline-offset);
-  box-shadow: var(--focus-ring-shadow);
-}
-
-.select[aria-invalid="true"], .field.danger select, .form select[aria-invalid="true"] {
-  --control-border: var(--danger);
-}
-
-@supports selector(:user-invalid) {
-  .select:user-invalid {
-    --control-border: var(--danger);
-  }
-
-  .form select:user-invalid {
-    --control-border: var(--danger);
-  }
-}
-
-.select:disabled, .form select:disabled {
-  --control-bg: var(--surface-subtle);
-  --control-fg: var(--text-subtle);
-  --control-border: var(--border);
-  --control-cursor: not-allowed;
-  --control-opacity: 1;
-}
-
 @media (forced-colors: active) {
   .select:not([multiple], [size]), .form select:not([multiple], [size]) {
     appearance: auto;
@@ -3136,7 +3076,7 @@ button.avatar {
   }
 }
 
-@media (hover: hover) and (pointer: fine) {
+@media (hover: hover) {
   @supports (appearance: base-select) {
     .select:not([multiple], [size], .native), .form select:not([multiple], [size], .native) {
       appearance: base-select;
@@ -3250,7 +3190,7 @@ button.avatar {
 }
 
 @media (forced-colors: active) {
-  @media (hover: hover) and (pointer: fine) {
+  @media (hover: hover) {
     @supports (appearance: base-select) {
       .select:not([multiple], [size], .native)::picker(select) {
         color: canvastext;
@@ -3404,8 +3344,10 @@ button.avatar {
     box-shadow var(--duration);
 }
 
-.switch:hover:not(:disabled), .form input[role="switch"]:hover:not(:disabled) {
-  border-color: var(--intent, var(--primary));
+@media (hover: hover) {
+  .switch:hover:not(:disabled), .form input[role="switch"]:hover:not(:disabled) {
+    border-color: var(--intent, var(--primary));
+  }
 }
 
 .switch:checked, .form input[role="switch"]:checked {
