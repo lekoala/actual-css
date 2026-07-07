@@ -1,12 +1,12 @@
 {
-  "timestamp": "2026-07-07T12:09:39.391Z",
-  "totalRaw": 143215,
-  "totalMinified": 70223,
-  "totalBrotli": 11169,
+  "timestamp": "2026-07-07T13:17:47.945Z",
+  "totalRaw": 144236,
+  "totalMinified": 71118,
+  "totalBrotli": 11284,
   "themesMinified": 16153,
   "themesBrotli": 2556,
-  "shippedMinified": 70223,
-  "shippedBrotli": 11169,
+  "shippedMinified": 71118,
+  "shippedBrotli": 11284,
   "maxShippedBrotli": 13312,
   "fileCount": 66,
   "files": [
@@ -23,6 +23,10 @@
       "raw": 5027
     },
     {
+      "file": "forms/custom-select.css",
+      "raw": 4871
+    },
+    {
       "file": "tokens.css",
       "raw": 4852
     },
@@ -31,12 +35,12 @@
       "raw": 4557
     },
     {
-      "file": "forms/custom-select.css",
-      "raw": 4282
-    },
-    {
       "file": "forms/switch.css",
       "raw": 4020
+    },
+    {
+      "file": "forms/control.css",
+      "raw": 3850
     },
     {
       "file": "components/badge.css",
@@ -57,10 +61,6 @@
     {
       "file": "components/modal.css",
       "raw": 3432
-    },
-    {
-      "file": "forms/control.css",
-      "raw": 3418
     },
     {
       "file": "prose.css",

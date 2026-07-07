@@ -8,7 +8,7 @@
  * No layout or interaction contract may depend on appearance: base-select.
  * Arbitrary menu and popover behavior belongs elsewhere.
  */
-@media (hover: hover) {
+@media (hover: hover) and (pointer: fine) {
   @supports (appearance: base-select) {
     .select:not([multiple], [size], .native),
     .form select:not([multiple], [size], .native) {
@@ -30,9 +30,9 @@
 
     .select:not([multiple], [size], .native):open,
     .form select:not([multiple], [size], .native):open {
-      border-color: var(--focus);
-      outline: var(--focus-outline);
-      outline-offset: var(--focus-outline-offset);
+      --control-border: var(--border);
+      --control-bg: var(--surface-raised);
+      outline: none;
       box-shadow: var(--focus-ring-shadow);
     }
 
@@ -52,18 +52,24 @@
     }
 
     .select option:not(:disabled):hover,
-    .select option:not(:disabled):focus-visible,
-    .form select option:not(:disabled):hover,
-    .form select option:not(:disabled):focus-visible {
-      background-color: var(--primary);
-      color: var(--primary-fg);
+    .form select option:not(:disabled):hover {
+      background-color: var(--surface-subtle);
+      color: var(--text);
       cursor: pointer;
     }
 
     .select option:not(:disabled):focus-visible,
     .form select option:not(:disabled):focus-visible {
-      outline: var(--focus-outline);
-      outline-offset: var(--focus-outline-offset);
+      background-color: var(--surface-subtle);
+      color: var(--text);
+      outline: none;
+    }
+
+    @supports (color: color-mix(in oklch, red, white)) {
+      .select option:not(:disabled):focus-visible,
+      .form select option:not(:disabled):focus-visible {
+        background-color: color-mix(in oklch, var(--primary) 12%, transparent);
+      }
     }
 
     .select option:active,
@@ -102,13 +108,20 @@
 }
 
 @media (forced-colors: active) {
-  @media (hover: hover) {
+  @media (hover: hover) and (pointer: fine) {
     @supports (appearance: base-select) {
       .select:not([multiple], [size], .native)::picker(select),
       .form select:not([multiple], [size], .native)::picker(select) {
         border-color: ButtonText;
         background-color: Canvas;
         color: CanvasText;
+        box-shadow: none;
+      }
+
+      .select:not([multiple], [size], .native):open,
+      .form select:not([multiple], [size], .native):open {
+        outline: var(--focus-outline);
+        outline-offset: var(--focus-outline-offset);
         box-shadow: none;
       }
 
@@ -130,8 +143,12 @@
 
       .select option::checkmark,
       .form select option::checkmark {
-        color: HighlightText;
         forced-color-adjust: none;
+      }
+
+      .select option:not(:disabled):is(:hover, :focus-visible)::checkmark,
+      .form select option:not(:disabled):is(:hover, :focus-visible)::checkmark {
+        color: HighlightText;
       }
 
       .select optgroup,

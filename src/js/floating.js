@@ -221,6 +221,13 @@ function notify(type) {
   }
 }
 
+function hasOpenSurface() {
+  for (const el of tracked) {
+    if (el.isConnected && isVisible(el)) return true;
+  }
+  return false;
+}
+
 function rafNotify(e) {
   pendingType = pendingType === "scroll" ? pendingType : e?.type;
   if (!tick) {
@@ -256,6 +263,7 @@ if (typeof document !== "undefined") {
   document.addEventListener("scroll", rafNotify, { passive: true, capture: true });
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape" && !e.ctrlKey && !e.altKey && !e.shiftKey) {
+      if (!hasOpenSurface()) return;
       e.preventDefault();
       notify("escape");
     }

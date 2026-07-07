@@ -127,6 +127,36 @@ test("Escape dispatches actual:hide", () => {
   expect(hides).toBe(1);
 });
 
+test("Escape is not prevented when no tracked surface is open", () => {
+  const event = new KeyboardEvent("keydown", {
+    key: "Escape",
+    cancelable: true,
+  });
+
+  document.dispatchEvent(event);
+
+  expect(event.defaultPrevented).toBe(false);
+});
+
+test("Escape ignores hidden tracked surfaces", () => {
+  document.body.innerHTML = '<div id="float" hidden></div>';
+  const float = document.getElementById("float");
+  let hides = 0;
+  untracks.push(track(float));
+  float.addEventListener(EVENTS.hide, () => {
+    hides += 1;
+  });
+
+  const event = new KeyboardEvent("keydown", {
+    key: "Escape",
+    cancelable: true,
+  });
+  document.dispatchEvent(event);
+
+  expect(event.defaultPrevented).toBe(false);
+  expect(hides).toBe(0);
+});
+
 test("reposition sets coordinates, placement, and arrow position", () => {
   setViewport();
   document.body.innerHTML = '<button id="ref"></button><div id="float"></div>';

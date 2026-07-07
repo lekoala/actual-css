@@ -2832,16 +2832,26 @@ button.avatar {
 }
 
 @media (hover: hover) {
-  :is(.input, .textarea, .select, :is(.form, .field) :where(input, textarea, select)):hover:not(:disabled) {
+  :is(.input, .textarea, :is(.form, .field) :where(input, textarea)):hover:not(:disabled) {
     --control-border: var(--text-subtle);
+  }
+
+  :is(.select, :is(.form, .field) select):hover:not(:disabled) {
+    --control-bg: var(--surface-subtle);
   }
 }
 
-:is(.input, .textarea, .select, :is(.form, .field) :where(input, textarea, select)):focus-visible {
+:is(.input, .textarea, :is(.form, .field) :where(input, textarea)):focus-visible {
   --control-border: var(--focus);
   outline: var(--focus-outline);
   outline-offset: var(--focus-outline-offset);
   box-shadow: var(--focus-ring-shadow);
+}
+
+:is(.select, :is(.form, .field) select):focus-visible {
+  --control-border: var(--border);
+  box-shadow: var(--focus-ring-shadow);
+  outline: none;
 }
 
 .field.danger :where(input, textarea, select), .input[aria-invalid="true"], .textarea[aria-invalid="true"], .select[aria-invalid="true"], :is(.form, .field) :where(input, textarea, select)[aria-invalid="true"] {
@@ -2869,6 +2879,14 @@ button.avatar {
 
 .input::placeholder, .textarea::placeholder, :is(.form, .field) :where(input, textarea)::placeholder {
   color: var(--text-muted);
+}
+
+@media (forced-colors: active) {
+  :is(.select, :is(.form, .field) select):focus-visible {
+    outline: var(--focus-outline);
+    outline-offset: var(--focus-outline-offset);
+    box-shadow: none;
+  }
 }
 
 :where(.choice, .check, .radio, .form input[type="checkbox"]:not([role="switch"]), .form input[type="radio"]) {
@@ -3076,7 +3094,7 @@ button.avatar {
   }
 }
 
-@media (hover: hover) {
+@media (hover: hover) and (pointer: fine) {
   @supports (appearance: base-select) {
     .select:not([multiple], [size], .native), .form select:not([multiple], [size], .native) {
       appearance: base-select;
@@ -3107,17 +3125,17 @@ button.avatar {
     }
 
     .select:not([multiple], [size], .native):open {
-      border-color: var(--focus);
-      outline: var(--focus-outline);
-      outline-offset: var(--focus-outline-offset);
+      --control-border: var(--border);
+      --control-bg: var(--surface-raised);
       box-shadow: var(--focus-ring-shadow);
+      outline: none;
     }
 
     .form select:not([multiple], [size], .native):open {
-      border-color: var(--focus);
-      outline: var(--focus-outline);
-      outline-offset: var(--focus-outline-offset);
+      --control-border: var(--border);
+      --control-bg: var(--surface-raised);
       box-shadow: var(--focus-ring-shadow);
+      outline: none;
     }
 
     .select:not([multiple], [size], .native)::picker-icon {
@@ -3137,15 +3155,22 @@ button.avatar {
       position: relative;
     }
 
-    .select option:not(:disabled):hover, .select option:not(:disabled):focus-visible, .form select option:not(:disabled):hover, .form select option:not(:disabled):focus-visible {
-      background-color: var(--primary);
-      color: var(--primary-fg);
+    .select option:not(:disabled):hover, .form select option:not(:disabled):hover {
+      background-color: var(--surface-subtle);
+      color: var(--text);
       cursor: pointer;
     }
 
     .select option:not(:disabled):focus-visible, .form select option:not(:disabled):focus-visible {
-      outline: var(--focus-outline);
-      outline-offset: var(--focus-outline-offset);
+      background-color: var(--surface-subtle);
+      color: var(--text);
+      outline: none;
+    }
+
+    @supports (color: color-mix(in oklch, red, white)) {
+      .select option:not(:disabled):focus-visible, .form select option:not(:disabled):focus-visible {
+        background-color: color-mix(in oklch, var(--primary) 12%, transparent);
+      }
     }
 
     .select option:active, .form select option:active {
@@ -3190,7 +3215,7 @@ button.avatar {
 }
 
 @media (forced-colors: active) {
-  @media (hover: hover) {
+  @media (hover: hover) and (pointer: fine) {
     @supports (appearance: base-select) {
       .select:not([multiple], [size], .native)::picker(select) {
         color: canvastext;
@@ -3206,6 +3231,18 @@ button.avatar {
         border-color: buttontext;
       }
 
+      .select:not([multiple], [size], .native):open {
+        outline: var(--focus-outline);
+        outline-offset: var(--focus-outline-offset);
+        box-shadow: none;
+      }
+
+      .form select:not([multiple], [size], .native):open {
+        outline: var(--focus-outline);
+        outline-offset: var(--focus-outline-offset);
+        box-shadow: none;
+      }
+
       .select option:not(:disabled):hover, .select option:not(:disabled):focus-visible, .form select option:not(:disabled):hover, .form select option:not(:disabled):focus-visible {
         color: highlighttext;
         forced-color-adjust: none;
@@ -3219,13 +3256,19 @@ button.avatar {
       }
 
       .select option::checkmark {
-        color: highlighttext;
         forced-color-adjust: none;
       }
 
       .form select option::checkmark {
-        color: highlighttext;
         forced-color-adjust: none;
+      }
+
+      .select option:not(:disabled):is(:hover, :focus-visible)::checkmark {
+        color: highlighttext;
+      }
+
+      .form select option:not(:disabled):is(:hover, :focus-visible)::checkmark {
+        color: highlighttext;
       }
 
       .select optgroup, .form select optgroup {
