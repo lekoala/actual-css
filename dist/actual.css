@@ -3119,15 +3119,21 @@ button.avatar {
 }
 
 /*
- * Scrollspy — nav list whose active section link is highlighted on scroll.
+ * Scrollspy — behavior hook for navigation that marks the active section
+ * while the page scrolls.
  *
- * No visual surface of its own. surface.js watches <nav class="scrollspy">
+ * Does not add visual styles by itself. surface.js watches <nav class="scrollspy">
  * containing <a href="#section"> links and toggles aria-current="location" on
- * the link whose target is in view. Highlight styling comes from
- * .nav-link:where([aria-current]:not([aria-current="false"])) in navbar.css.
+ * the link whose target is in view. Pair with .nav-list and .nav-link, or style
+ * [aria-current] yourself.
  *
- * Falls back gracefully: links still work when IntersectionObserver is
- * unavailable.
+ * Progressive enhancement: on browsers that support :target-current,
+ * authors can set scroll-target-group: auto on .scrollspy and style
+ * .scrollspy a:target-current to highlight the active link natively,
+ * without JS.
+ *
+ * Falls back gracefully: links still work when IntersectionObserver or
+ * :target-current is unavailable.
  *
  * Intentionally empty: no CSS rules needed. The class is kept in the bundle
  * so the selector is available for JS enhancement and for authors to hook
@@ -3407,6 +3413,7 @@ button.avatar {
   --control-cursor: auto;
   --control-opacity: 1;
 
+  appearance: none;
   inline-size: 100%;
   min-block-size: var(--control-size);
   padding-inline: var(--space-3);

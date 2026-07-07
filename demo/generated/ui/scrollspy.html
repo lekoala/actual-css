@@ -22,24 +22,28 @@
   <section class="component-section">
     <header class="component-header">
       <h1>Scrollspy</h1>
-      <p>Navigation that highlights the active section of a long page as the user scrolls.</p>
+      <p>Behavior hook for navigation that marks the active section while the page scrolls.</p>
     </header>
         <div class="component-prose">
-      <ul>
-  <li>Use regular document landmarks and anchor links.</li>
-  <li>JavaScript updates <code>aria-current=&quot;true&quot;</code> or <code>aria-current=&quot;location&quot;</code> on the active link.</li>
-  <li>Prefer <code>IntersectionObserver</code> with a small fallback that leaves links usable.</li>
-  <li>CSS styles the current state; it should not depend on scroll JavaScript to make navigation usable.</li>
+      <p>Scrollspy is a behavior hook, not a visual component. It marks a navigation region for the JavaScript enhancement. Pair it with <code>.nav-list</code> and <code>.nav-link</code>, or style <code>[aria-current]</code> yourself.</p>
+<ul>
+  <li><code>.scrollspy</code> marks the region for JS detection. It does not add visual styles.</li>
+  <li><code>.nav-list</code> and <code>.nav-link</code> provide the visible list and active link styling.</li>
+  <li>The JS enhancer uses <code>IntersectionObserver</code> to toggle <code>aria-current=&quot;location&quot;</code></li>
+</ul>
+<p>on the active link. Without JavaScript, the links remain regular anchor links.</p>
+<ul>
+  <li>The same markup also works with the CSS-native scroll markers path (see below).</li>
 </ul>
     </div>
     <section class="component-section">
       <div class="example-group">
         <div class="example-render">
           <nav class="scrollspy" aria-label="Page sections">
-  <ol>
-    <li><a href="#overview" aria-current="location">Overview</a></li>
-    <li><a href="#tokens">Tokens</a></li>
-    <li><a href="#components">Components</a></li>
+  <ol class="nav-list stack">
+    <li><a class="nav-link" href="#overview" aria-current="location">Overview</a></li>
+    <li><a class="nav-link" href="#tokens">Tokens</a></li>
+    <li><a class="nav-link" href="#components">Components</a></li>
   </ol>
 </nav>
 
@@ -47,9 +51,11 @@
   <section id="overview" tabindex="-1">
     <h2>Overview</h2>
   </section>
+
   <section id="tokens" tabindex="-1">
     <h2>Tokens</h2>
   </section>
+
   <section id="components" tabindex="-1">
     <h2>Components</h2>
   </section>
@@ -57,10 +63,10 @@
         </div>
         <div class="example-code">
           <pre><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>nav</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>scrollspy<span class="token punctuation">"</span></span> <span class="token attr-name">aria-label</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>Page sections<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>ol</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>li</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>a</span> <span class="token attr-name">href</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>#overview<span class="token punctuation">"</span></span> <span class="token attr-name">aria-current</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>location<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Overview<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>a</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>li</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>li</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>a</span> <span class="token attr-name">href</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>#tokens<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Tokens<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>a</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>li</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>li</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>a</span> <span class="token attr-name">href</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>#components<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Components<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>a</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>li</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>ol</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>nav-list stack<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>li</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>a</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>nav-link<span class="token punctuation">"</span></span> <span class="token attr-name">href</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>#overview<span class="token punctuation">"</span></span> <span class="token attr-name">aria-current</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>location<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Overview<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>a</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>li</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>li</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>a</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>nav-link<span class="token punctuation">"</span></span> <span class="token attr-name">href</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>#tokens<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Tokens<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>a</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>li</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>li</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>a</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>nav-link<span class="token punctuation">"</span></span> <span class="token attr-name">href</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>#components<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Components<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>a</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>li</span><span class="token punctuation">></span></span>
   <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>ol</span><span class="token punctuation">></span></span>
 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>nav</span><span class="token punctuation">></span></span>
 
@@ -68,9 +74,11 @@
   <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>section</span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>overview<span class="token punctuation">"</span></span> <span class="token attr-name">tabindex</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>-1<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
     <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>h2</span><span class="token punctuation">></span></span>Overview<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>h2</span><span class="token punctuation">></span></span>
   <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>section</span><span class="token punctuation">></span></span>
+
   <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>section</span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>tokens<span class="token punctuation">"</span></span> <span class="token attr-name">tabindex</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>-1<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
     <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>h2</span><span class="token punctuation">></span></span>Tokens<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>h2</span><span class="token punctuation">></span></span>
   <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>section</span><span class="token punctuation">></span></span>
+
   <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>section</span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>components<span class="token punctuation">"</span></span> <span class="token attr-name">tabindex</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>-1<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
     <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>h2</span><span class="token punctuation">></span></span>Components<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>h2</span><span class="token punctuation">></span></span>
   <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>section</span><span class="token punctuation">></span></span>
@@ -78,6 +86,30 @@
         </div>
       </div>
     </section>
+    <div class="component-prose">
+      <h3>Native scroll markers</h3>
+<p>Modern browsers are starting to support CSS-native scroll markers with <code>scroll-target-group</code> and <code>:target-current</code>. This can style the active link without JavaScript.</p>
+    </div>
+    <section class="component-section">
+      <h2>CSS</h2>
+      <div class="example-group">
+        <div class="example-code">
+          <pre><code class="language-css"><span class="token atrule"><span class="token rule">@supports</span> <span class="token function">selector</span><span class="token punctuation">(</span><span class="token selector-function-argument selector">:target-current</span><span class="token punctuation">)</span></span> <span class="token punctuation">{</span>
+  <span class="token selector">.scrollspy</span> <span class="token punctuation">{</span>
+    <span class="token property">scroll-target-group</span><span class="token punctuation">:</span> auto<span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token selector">.scrollspy a:target-current</span> <span class="token punctuation">{</span>
+    <span class="token property">color</span><span class="token punctuation">:</span> <span class="token function">var</span><span class="token punctuation">(</span>--primary<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token property">font-weight</span><span class="token punctuation">:</span> <span class="token function">var</span><span class="token punctuation">(</span>--font-weight-medium<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+        </div>
+      </div>
+    </section>
+    <div class="component-prose">
+      <p>Keep this as progressive enhancement. The JavaScript enhancement remains the portable fallback — the same markup serves both paths.</p>
+    </div>
     
   </section>
   </main>
