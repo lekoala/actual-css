@@ -3316,40 +3316,19 @@ button.avatar {
 /*
  * Form layout and supporting text.
  *
- * `.form` scopes semantic field rhythm without requiring classes on every
- * control. Individual controls keep their own files; .choice label layout
- * lives in choice.css; .form-actions lives in form-actions.css.
+ * Individual controls keep their own files; .choice label layout lives in
+ * choice.css; .form-actions lives in form-actions.css.
  *
  * Public API: .field, .field-label, .field-help, .field-error, .field-group,
  * .required-mark.
  */
-.form {
-  color: var(--text);
-}
-
 .field {
   display: grid;
   gap: var(--space-1);
   color: var(--text);
 }
 
-/* Plain-HTML convenience: a label directly wrapping a text-like control or
-   textarea gets the field rhythm, not the .choice layout. */
-@supports selector(label:has(> input)) {
-  .form
-    label:not(.choice):has(
-      > input:not(:is([type="checkbox"], [type="radio"])),
-      > textarea,
-      > select
-    ) {
-    display: grid;
-    gap: var(--space-1);
-    color: var(--text);
-  }
-}
-
-.field-group,
-.form fieldset {
+.field-group {
   min-inline-size: 0;
   margin: 0;
   padding: var(--space-3);
@@ -3357,20 +3336,17 @@ button.avatar {
   border-radius: var(--radius);
 }
 
-.field-group + .field-group,
-.form fieldset + fieldset {
+.field-group+.field-group {
   margin-block-start: var(--space-4);
 }
 
 .field-label,
-.field-group > legend,
-.form legend {
+.field-group>legend {
   color: var(--text);
   font-weight: var(--font-weight-strong);
 }
 
-.field-group > legend,
-.form fieldset > legend {
+.field-group>legend {
   padding-block: 0;
   padding-inline: var(--fieldset-legend-padding-inline, var(--space-1));
   font-size: var(--font-size-xs);
@@ -3395,41 +3371,21 @@ button.avatar {
 }
 
 /*
- * Text controls — input, textarea, select, and their classed equivalents.
+ * Text controls — input, textarea, select.
  *
  * Neutral geometry and interaction states shared across all text-like
- * controls, whether semantic (input[type=text]) or classed (.input). select
- * shares this base recipe; its chevron/appearance layer lives in select.css.
- * checkbox, radio, range, switch, and file have their own files.
- *
- * Button-like and invisible input types are excluded so a stray
- * <input type="submit"> inside .form never inherits field geometry.
+ * controls. select shares this base recipe; its chevron/appearance layer
+ * lives in select.css. checkbox, radio, range, switch, and file have their
+ * own files.
  *
  * --control-* are the per-state control tokens, reserved for control geometry.
  * State selectors only flip tokens; non-text controls do not consume them, so
  * matching those selectors is a no-op. The .field wrapper uses --field-*
  * (form.css).
  */
-:is(
-  .input,
-  .textarea,
-  .select,
-  :is(.form, .field)
-    :where(
-      input:not(
-        [type="checkbox"],
-        [type="radio"],
-        [type="range"],
-        [type="file"],
-        [type="button"],
-        [type="submit"],
-        [type="reset"],
-        [type="color"]
-      ),
-      textarea,
-      select
-    )
-) {
+.input,
+.textarea,
+.select {
   --control-border: var(--border);
   --control-bg: var(--surface);
   --control-fg: var(--text);
@@ -3456,63 +3412,63 @@ button.avatar {
     color var(--duration);
 }
 
-.textarea,
-.form textarea {
+.textarea {
   min-block-size: 6rem;
   padding-block: var(--space-2);
   resize: vertical;
 }
 
 @media (hover: hover) {
-  :is(.input, .textarea, :is(.form, .field) :where(input, textarea)):hover:not(
-    :disabled
-  ) {
+
+  .input:hover:not(:disabled),
+  .textarea:hover:not(:disabled) {
     --control-border: var(--text-subtle);
   }
 
-  :is(.select, :is(.form, .field) select):hover:not(:disabled) {
+  .select:hover:not(:disabled) {
     --control-bg: var(--surface-subtle);
   }
 }
 
-:is(.input, .textarea, :is(.form, .field) :where(input, textarea)):focus-visible {
+.input:focus-visible,
+.textarea:focus-visible {
   --control-border: var(--focus);
   outline: var(--focus-outline);
   outline-offset: var(--focus-outline-offset);
   box-shadow: var(--focus-ring-shadow);
 }
 
-:is(.select, :is(.form, .field) select):focus-visible {
+.select:focus-visible {
   --control-border: var(--border);
   outline: none;
   box-shadow: var(--focus-ring-shadow);
 }
 
-.field.danger :where(input, textarea, select),
+.field.danger :where(.input, .textarea, .select),
 .input[aria-invalid="true"],
 .textarea[aria-invalid="true"],
-.select[aria-invalid="true"],
-:is(.form, .field) :where(input, textarea, select)[aria-invalid="true"] {
+.select[aria-invalid="true"] {
   --control-border: var(--danger);
 }
 
 @supports selector(:user-invalid) {
+
   .input:user-invalid,
   .textarea:user-invalid,
-  .select:user-invalid,
-  :is(.form, .field) :where(input, textarea, select):user-invalid {
+  .select:user-invalid {
     --control-border: var(--danger);
   }
 }
 
 .input[readonly],
-.textarea[readonly],
-:is(.form, .field) :where(input, textarea)[readonly] {
+.textarea[readonly] {
   --control-bg: var(--surface-subtle);
   --control-border: var(--border);
 }
 
-:is(.input, .textarea, .select, :is(.form, .field) :where(input, textarea, select)):disabled {
+.input:disabled,
+.textarea:disabled,
+.select:disabled {
   --control-bg: var(--surface-subtle);
   --control-fg: var(--text-subtle);
   --control-border: var(--border);
@@ -3521,13 +3477,12 @@ button.avatar {
 }
 
 .input::placeholder,
-.textarea::placeholder,
-:is(.form, .field) :where(input, textarea)::placeholder {
+.textarea::placeholder {
   color: var(--text-muted);
 }
 
 @media (forced-colors: active) {
-  :is(.select, :is(.form, .field) select):focus-visible {
+  .select:focus-visible {
     outline: var(--focus-outline);
     outline-offset: var(--focus-outline-offset);
     box-shadow: none;
@@ -3547,13 +3502,7 @@ button.avatar {
  */
 /* Intent boundary — inherited intents do not tint this component.
    Local intent classes still win because :where() has zero specificity. */
-:where(
-  .choice,
-  .check,
-  .radio,
-  .form input[type="checkbox"]:not([role="switch"]),
-  .form input[type="radio"]
-) {
+:where(.choice, .check, .radio) {
   /* @sync intent-boundary */
   --intent: initial;
   --intent-fg: initial;
@@ -3582,19 +3531,6 @@ button.avatar {
   cursor: pointer;
 }
 
-@supports selector(label:has(> input)) {
-  .form label:has(> input[type="checkbox"], > input[type="radio"]) {
-    --choice-control-offset: 0.25em;
-
-    display: inline-flex;
-    align-items: flex-start;
-    gap: var(--space-2);
-    color: var(--text);
-    font-size: var(--control-font-size);
-    cursor: pointer;
-  }
-}
-
 /* Optical alignment: nudge the control down so the checkbox/radio sits
    visually centered with the first line of label text, not flush with the
    top of the line-box. Default 0.25em (~4px at 16px) places the control just
@@ -3603,34 +3539,23 @@ button.avatar {
    thanks to align-items: flex-start. Override per-instance via
    --choice-control-offset for themes with a different line-height or control
    size. */
-.choice > :is(input[type="checkbox"], input[type="radio"]) {
+.choice> :is(input[type="checkbox"], input[type="radio"]) {
   flex: 0 0 auto;
   margin-block-start: var(--choice-control-offset);
 }
 
-@supports selector(label:has(> input)) {
-  .form
-    label:has(> input:is([type="checkbox"], [type="radio"]))
-    > input:is([type="checkbox"], [type="radio"]) {
-    flex: 0 0 auto;
-    margin-block-start: var(--choice-control-offset);
-  }
-}
-
-.choice > span > .field-help {
+.choice>span>.field-help {
   display: block;
 }
 
-@supports selector(label:has(> input)) {
-  .choice:has(:disabled),
-  .form label:has(> input:is([type="checkbox"], [type="radio"]):disabled) {
-    color: var(--text-subtle);
-    cursor: not-allowed;
-  }
+.choice:has(:disabled) {
+  color: var(--text-subtle);
+  cursor: not-allowed;
 }
 
 /* Control geometry. --choice-* are the per-state tokens. */
-:is(.check, .radio, .form input[type="checkbox"]:not([role="switch"]), .form input[type="radio"]) {
+.check,
+.radio {
   --choice-border: var(--border);
   --choice-bg: var(--surface);
   --choice-mark: var(--primary-fg);
@@ -3651,20 +3576,16 @@ button.avatar {
   cursor: pointer;
 }
 
-:is(.check, .form input[type="checkbox"]:not([role="switch"])) {
+.check {
   border-radius: var(--radius-sm);
 }
 
-:is(.radio, .form input[type="radio"]) {
+.radio {
   border-radius: var(--radius-full);
 }
 
-:is(
-  .check,
-  .radio,
-  .form input[type="checkbox"]:not([role="switch"]),
-  .form input[type="radio"]
-)::before {
+.check::before,
+.radio::before {
   content: "";
   position: absolute;
   inset: 0;
@@ -3673,7 +3594,7 @@ button.avatar {
   transition: transform var(--duration);
 }
 
-:is(.check, .form input[type="checkbox"]:not([role="switch"]))::before {
+.check::before {
   inline-size: 0.58em;
   block-size: 0.34em;
   border-inline-start: 2px solid currentColor;
@@ -3681,34 +3602,30 @@ button.avatar {
   transform: translateY(-0.06em) rotate(-45deg) scale(0);
 }
 
-:is(.radio, .form input[type="radio"])::before {
+.radio::before {
   inline-size: 0.5em;
   block-size: 0.5em;
   border-radius: var(--radius-full);
   background: currentColor;
 }
 
-:is(
-  .check,
-  .radio,
-  .form input[type="checkbox"]:not([role="switch"]),
-  .form input[type="radio"]
-):checked {
+.check:checked,
+.radio:checked {
   --choice-border: var(--intent, var(--primary));
   --choice-bg: var(--intent, var(--primary));
 }
 
-:is(.check, .form input[type="checkbox"]:not([role="switch"])):checked::before {
+.check:checked::before {
   transform: translateY(-0.06em) rotate(-45deg) scale(1);
 }
 
-:is(.check, .form input[type="checkbox"]:not([role="switch"])):indeterminate {
+.check:indeterminate {
   --choice-border: var(--intent, var(--text-subtle));
   --choice-bg: var(--intent, var(--surface));
   --choice-mark: var(--intent, var(--primary));
 }
 
-:is(.check, .form input[type="checkbox"]:not([role="switch"])):indeterminate::before {
+.check:indeterminate::before {
   border-inline-start: 0;
   inline-size: 0.6em;
   block-size: 0;
@@ -3716,44 +3633,32 @@ button.avatar {
   transform: scale(1);
 }
 
-:is(.radio, .form input[type="radio"]):checked::before {
+.radio:checked::before {
   transform: scale(1);
 }
 
-.field.danger
-  :where(.check, .radio, input[type="checkbox"]:not([role="switch"]), input[type="radio"]) {
+.field.danger :where(.check, .radio) {
   --choice-border: var(--danger);
 }
 
 @media (hover: hover) {
-  :is(
-    .check,
-    .radio,
-    .form input[type="checkbox"]:not([role="switch"]),
-    .form input[type="radio"]
-  ):hover:not(:checked, :indeterminate, :disabled) {
+
+  .check:hover:not(:checked, :indeterminate, :disabled),
+  .radio:hover:not(:checked, :indeterminate, :disabled) {
     --choice-border: var(--text-subtle);
   }
 }
 
-:is(
-  .check,
-  .radio,
-  .form input[type="checkbox"]:not([role="switch"]),
-  .form input[type="radio"]
-):focus-visible {
+.check:focus-visible,
+.radio:focus-visible {
   border-color: var(--focus);
   outline: var(--focus-outline);
   outline-offset: var(--focus-outline-offset);
   box-shadow: var(--focus-ring-shadow);
 }
 
-:is(
-  .check,
-  .radio,
-  .form input[type="checkbox"]:not([role="switch"]),
-  .form input[type="radio"]
-):disabled {
+.check:disabled,
+.radio:disabled {
   --choice-bg: var(--surface-subtle);
   --choice-border: var(--border);
   --choice-mark: var(--text-subtle);
@@ -3762,36 +3667,25 @@ button.avatar {
 }
 
 @media (forced-colors: active) {
-  :is(
-    .check,
-    .radio,
-    .form input[type="checkbox"]:not([role="switch"]),
-    .form input[type="radio"]
-  ) {
+
+  .check,
+  .radio {
     --choice-border: ButtonText;
     --choice-bg: Canvas;
     --choice-mark: ButtonText;
   }
 
-  :is(
-    .check,
-    .radio,
-    .form input[type="checkbox"]:not([role="switch"]),
-    .form input[type="radio"]
-  ):checked,
-  :is(.check, .form input[type="checkbox"]:not([role="switch"])):indeterminate {
+  .check:checked,
+  .radio:checked,
+  .check:indeterminate {
     --choice-border: Highlight;
     --choice-bg: Highlight;
     --choice-mark: HighlightText;
     forced-color-adjust: none;
   }
 
-  :is(
-    .check,
-    .radio,
-    .form input[type="checkbox"]:not([role="switch"]),
-    .form input[type="radio"]
-  ):disabled {
+  .check:disabled,
+  .radio:disabled {
     --choice-border: GrayText;
     --choice-bg: Canvas;
     --choice-mark: GrayText;
@@ -3808,8 +3702,7 @@ button.avatar {
  * custom-select.css can be opted out independently. Add .native to a specific
  * select to opt out of the enhancement.
  */
-.select:not([multiple], [size]),
-.form select:not([multiple], [size]) {
+.select:not([multiple], [size]) {
   appearance: none;
   padding-inline-end: calc(var(--space-3) + var(--space-6));
   background-image: var(--icon-chevron-image);
@@ -3820,14 +3713,12 @@ button.avatar {
 
 /* The chevron sits on the inline-end side; flip it in RTL so it follows
    the padding-inline-end space reserved for it. */
-[dir="rtl"] .select:not([multiple], [size]),
-[dir="rtl"] .form select:not([multiple], [size]) {
+[dir="rtl"] .select:not([multiple], [size]) {
   background-position: center left var(--space-3);
 }
 
 @media (forced-colors: active) {
-  .select:not([multiple], [size]),
-  .form select:not([multiple], [size]) {
+  .select:not([multiple], [size]) {
     appearance: auto;
     background-image: none;
     padding-inline-end: var(--space-3);
@@ -3837,22 +3728,20 @@ button.avatar {
 /*
  * Customizable select — appearance: base-select picker enhancement.
  *
- * Progressive enhancement on top of the native .select/.form select baseline in
- * select.css. Wrapped in @supports and gated on fine pointer devices so it never
- * blocks a layout. Add .native to a specific select to opt out.
+ * Progressive enhancement on top of the native .select baseline in select.css.
+ * Wrapped in @supports and gated on fine pointer devices so it never blocks a
+ * layout. Add .native to a specific select to opt out.
  *
  * No layout or interaction contract may depend on appearance: base-select.
  * Arbitrary menu and popover behavior belongs elsewhere.
  */
 @media (hover: hover) and (pointer: fine) {
   @supports (appearance: base-select) {
-    .select:not([multiple], [size], .native),
-    .form select:not([multiple], [size], .native) {
+    .select:not([multiple], [size], .native) {
       appearance: base-select;
     }
 
-    .select:not([multiple], [size], .native)::picker(select),
-    .form select:not([multiple], [size], .native)::picker(select) {
+    .select:not([multiple], [size], .native)::picker(select) {
       appearance: base-select;
       max-height: min(24rem, calc(var(--viewport-block) * 0.7));
       margin-block: var(--space-2);
@@ -3864,21 +3753,18 @@ button.avatar {
       box-shadow: var(--shadow-popout);
     }
 
-    .select:not([multiple], [size], .native):open,
-    .form select:not([multiple], [size], .native):open {
+    .select:not([multiple], [size], .native):open {
       --control-border: var(--border);
       --control-bg: var(--surface-raised);
       outline: none;
       box-shadow: var(--focus-ring-shadow);
     }
 
-    .select:not([multiple], [size], .native)::picker-icon,
-    .form select:not([multiple], [size], .native)::picker-icon {
+    .select:not([multiple], [size], .native)::picker-icon {
       display: none;
     }
 
-    .select option,
-    .form select option {
+    .select option {
       position: relative;
       padding-block: var(--space-2);
       padding-inline: var(--space-3);
@@ -3887,28 +3773,24 @@ button.avatar {
       transition-duration: var(--duration);
     }
 
-    .select option:not(:disabled):hover,
-    .form select option:not(:disabled):hover {
+    .select option:not(:disabled):hover {
       background-color: var(--surface-subtle);
       color: var(--text);
       cursor: pointer;
     }
 
-    .select option:not(:disabled):focus-visible,
-    .form select option:not(:disabled):focus-visible {
+    .select option:not(:disabled):focus-visible {
       background-color: var(--primary);
       color: var(--primary-fg);
       outline: none;
     }
 
-    .select option:active,
-    .form select option:active {
+    .select option:active {
       background-color: var(--surface-subtle);
       color: var(--text);
     }
 
-    .select option::checkmark,
-    .form select option::checkmark {
+    .select option::checkmark {
       content: "";
       display: block;
       inline-size: 1rem;
@@ -3924,13 +3806,11 @@ button.avatar {
       mask-position: center;
     }
 
-    .select optgroup,
-    .form select optgroup {
+    .select optgroup {
       padding-block-start: 0.5em;
     }
 
-    .select optgroup option:first-child,
-    .form select optgroup option:first-child {
+    .select optgroup option:first-child {
       margin-block-start: 0.5em;
     }
   }
@@ -3939,49 +3819,41 @@ button.avatar {
 @media (forced-colors: active) {
   @media (hover: hover) and (pointer: fine) {
     @supports (appearance: base-select) {
-      .select:not([multiple], [size], .native)::picker(select),
-      .form select:not([multiple], [size], .native)::picker(select) {
+      .select:not([multiple], [size], .native)::picker(select) {
         border-color: ButtonText;
         background-color: Canvas;
         color: CanvasText;
         box-shadow: none;
       }
 
-      .select:not([multiple], [size], .native):open,
-      .form select:not([multiple], [size], .native):open {
+      .select:not([multiple], [size], .native):open {
         outline: var(--focus-outline);
         outline-offset: var(--focus-outline-offset);
         box-shadow: none;
       }
 
       .select option:not(:disabled):hover,
-      .select option:not(:disabled):focus-visible,
-      .form select option:not(:disabled):hover,
-      .form select option:not(:disabled):focus-visible {
+      .select option:not(:disabled):focus-visible {
         background-color: Highlight;
         color: HighlightText;
         forced-color-adjust: none;
       }
 
-      .select option:active,
-      .form select option:active {
+      .select option:active {
         background-color: ButtonFace;
         color: ButtonText;
         forced-color-adjust: auto;
       }
 
-      .select option::checkmark,
-      .form select option::checkmark {
+      .select option::checkmark {
         forced-color-adjust: none;
       }
 
-      .select option:not(:disabled):is(:hover, :focus-visible)::checkmark,
-      .form select option:not(:disabled):is(:hover, :focus-visible)::checkmark {
+      .select option:not(:disabled):is(:hover, :focus-visible)::checkmark {
         color: HighlightText;
       }
 
-      .select optgroup,
-      .form select optgroup {
+      .select optgroup {
         color: GrayText;
       }
     }
@@ -3995,7 +3867,7 @@ button.avatar {
  */
 /* Intent boundary — inherited intents do not tint this component.
    Local intent classes still win because :where() has zero specificity. */
-:where(.range, :is(.form, .field) input[type="range"]) {
+:where(.range) {
   /* @sync intent-boundary */
   --intent: initial;
   --intent-fg: initial;
@@ -4006,12 +3878,10 @@ button.avatar {
   /* @sync intent-boundary */
 }
 
-:is(.form, .field) input[type="file"],
 .file {
   color: var(--text-muted);
 }
 
-:is(.form, .field) input[type="file"]::file-selector-button,
 .file::file-selector-button {
   margin-inline-end: var(--space-3);
   padding-block: var(--space-1);
@@ -4031,13 +3901,11 @@ button.avatar {
 }
 
 @media (hover: hover) {
-  :is(.form, .field) input[type="file"]:not(:disabled)::file-selector-button:hover,
   .file:not(:disabled)::file-selector-button:hover {
     background: var(--border);
   }
 }
 
-:is(.form, .field) input[type="range"],
 .range {
   inline-size: 100%;
   accent-color: var(--intent, var(--primary));
@@ -4048,14 +3916,10 @@ button.avatar {
  *
  * The switch remains an input control, not a decorative toggle. Checked, hover,
  * focus-visible, and disabled states stay clear.
- *
- * .switch is the explicit API. input[role="switch"] inside .form is a
- * convenience selector for hosts that prefer attribute-only markup. The two
- * compose: when both are present, class and role get the same styles.
  */
 /* Intent boundary — inherited intents do not tint this component.
    Local intent classes still win because :where() has zero specificity. */
-:where(.switch, .form input[role="switch"]) {
+:where(.switch) {
   /* @sync intent-boundary */
   --intent: initial;
   --intent-fg: initial;
@@ -4066,20 +3930,14 @@ button.avatar {
   /* @sync intent-boundary */
 }
 
-.switch,
-.form input[role="switch"] {
+.switch {
   --switch-bg: var(--border);
   --switch-knob: var(--surface-raised);
   --switch-width: calc(var(--control-size) * 1.16);
   --switch-block-size: calc(var(--control-size) * 0.63);
   --switch-knob-margin: calc(var(--switch-block-size) * 0.12);
   --switch-knob-size: calc(var(--switch-block-size) - 2 * var(--switch-knob-margin));
-  --switch-travel: calc(
-    var(--switch-width) -
-    var(--switch-knob-size) -
-    2 *
-    var(--switch-knob-margin)
-  );
+  --switch-travel: calc(var(--switch-width) - var(--switch-knob-size) - 2 * var(--switch-knob-margin));
 
   position: relative;
   display: inline-grid;
@@ -4095,8 +3953,7 @@ button.avatar {
   cursor: pointer;
 }
 
-.switch::before,
-.form input[role="switch"]::before {
+.switch::before {
   content: "";
   inline-size: var(--switch-knob-size);
   block-size: var(--switch-knob-size);
@@ -4111,43 +3968,37 @@ button.avatar {
 }
 
 @media (hover: hover) {
-  .switch:hover:not(:disabled),
-  .form input[role="switch"]:hover:not(:disabled) {
+  .switch:hover:not(:disabled) {
     border-color: var(--intent, var(--primary));
   }
 }
 
-.switch:checked,
-.form input[role="switch"]:checked {
+.switch:checked {
   --switch-bg: var(--intent, var(--primary));
   --switch-knob: var(--intent-fg, var(--primary-fg));
   border-color: var(--intent, var(--primary));
 }
 
-.switch:checked::before,
-.form input[role="switch"]:checked::before {
+.switch:checked::before {
   transform: translateX(var(--switch-travel));
 }
 
 /* The knob travels toward inline-end; in RTL that is leftward, so the
     translateX sign flips. translateX is physical, not logical. */
-[dir="rtl"] .switch:checked::before,
-[dir="rtl"] .form input[role="switch"]:checked::before {
+[dir="rtl"] .switch:checked::before {
   transform: translateX(calc(var(--switch-travel) * -1));
 }
 
-.switch:focus-visible,
-.form input[role="switch"]:focus-visible {
+.switch:focus-visible {
   outline: var(--focus-outline);
   outline-offset: var(--focus-outline-offset);
 }
 
-.field.danger :where(.switch, input[role="switch"]) {
+.field.danger .switch {
   border-color: var(--danger);
 }
 
-.switch:disabled,
-.form input[role="switch"]:disabled {
+.switch:disabled {
   --switch-bg: var(--surface-subtle);
   --switch-knob: var(--text-subtle);
   border-color: var(--border);
@@ -4156,29 +4007,26 @@ button.avatar {
 }
 
 @media (forced-colors: active) {
+
   /* --switch-knob must be set on the element, not on ::before: a custom
      property declared on the pseudo would shadow the :checked override. */
-  .switch,
-  .form input[role="switch"] {
+  .switch {
     --switch-knob: ButtonText;
     border-color: ButtonText;
   }
 
-  .switch::before,
-  .form input[role="switch"]::before {
+  .switch::before {
     box-shadow: none;
   }
 
-  .switch:checked,
-  .form input[role="switch"]:checked {
+  .switch:checked {
     --switch-bg: Highlight;
     --switch-knob: HighlightText;
     border-color: Highlight;
     forced-color-adjust: none;
   }
 
-  .switch:disabled,
-  .form input[role="switch"]:disabled {
+  .switch:disabled {
     --switch-bg: Canvas;
     --switch-knob: GrayText;
     border-color: GrayText;
@@ -4220,10 +4068,7 @@ button.avatar {
 
 /* Enhanced sticky bar: translucent surface plus blur where both are supported.
    Guidelines: use @supports positively. */
-@supports (
-    ((-webkit-backdrop-filter: blur(1rem)) or (backdrop-filter: blur(1rem))) and
-    (background: color-mix(in oklch, white 50%, transparent))
-  ) {
+@supports (((-webkit-backdrop-filter: blur(1rem)) or (backdrop-filter: blur(1rem))) and (background: color-mix(in oklch, white 50%, transparent))) {
   .form-actions.sticky {
     background: color-mix(in oklch, var(--surface) 88%, transparent);
     -webkit-backdrop-filter: blur(1rem);

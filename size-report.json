@@ -1,19 +1,15 @@
 {
-  "timestamp": "2026-07-07T14:24:17.557Z",
-  "totalRaw": 144421,
-  "totalMinified": 78330,
-  "totalBrotli": 11341,
+  "timestamp": "2026-07-07T14:51:12.060Z",
+  "totalRaw": 138686,
+  "totalMinified": 73735,
+  "totalBrotli": 10967,
   "themesMinified": 23261,
   "themesBrotli": 2639,
-  "shippedMinified": 78330,
-  "shippedBrotli": 11341,
+  "shippedMinified": 73735,
+  "shippedBrotli": 10967,
   "maxShippedBrotli": 13312,
   "fileCount": 66,
   "files": [
-    {
-      "file": "forms/choice.css",
-      "raw": 7029
-    },
     {
       "file": "theme.css",
       "raw": 5134
@@ -23,28 +19,24 @@
       "raw": 5027
     },
     {
-      "file": "tokens.css",
-      "raw": 4846
+      "file": "forms/choice.css",
+      "raw": 4990
     },
     {
-      "file": "forms/custom-select.css",
-      "raw": 4610
+      "file": "tokens.css",
+      "raw": 4846
     },
     {
       "file": "components/button.css",
       "raw": 4557
     },
     {
-      "file": "forms/switch.css",
-      "raw": 4020
-    },
-    {
-      "file": "forms/control.css",
-      "raw": 3850
-    },
-    {
       "file": "components/badge.css",
       "raw": 3761
+    },
+    {
+      "file": "forms/custom-select.css",
+      "raw": 3681
     },
     {
       "file": "components/avatar.css",
@@ -67,6 +59,10 @@
       "raw": 3335
     },
     {
+      "file": "forms/switch.css",
+      "raw": 3246
+    },
+    {
       "file": "components/tooltip.css",
       "raw": 3016
     },
@@ -77,6 +73,10 @@
     {
       "file": "components/card.css",
       "raw": 2872
+    },
+    {
+      "file": "forms/control.css",
+      "raw": 2856
     },
     {
       "file": "components/progress.css",
@@ -163,16 +163,8 @@
       "raw": 1775
     },
     {
-      "file": "forms/form.css",
-      "raw": 1686
-    },
-    {
       "file": "forms/form-actions.css",
-      "raw": 1563
-    },
-    {
-      "file": "forms/native.css",
-      "raw": 1549
+      "raw": 1551
     },
     {
       "file": "components/overline.css",
@@ -199,16 +191,24 @@
       "raw": 1379
     },
     {
-      "file": "forms/select.css",
-      "raw": 1245
+      "file": "forms/native.css",
+      "raw": 1285
     },
     {
       "file": "components/busy.css",
       "raw": 1195
     },
     {
+      "file": "forms/select.css",
+      "raw": 1117
+    },
+    {
       "file": "themes/dim.css",
       "raw": 1108
+    },
+    {
+      "file": "forms/form.css",
+      "raw": 1091
     },
     {
       "file": "reset.css",

@@ -8,8 +8,7 @@
  * custom-select.css can be opted out independently. Add .native to a specific
  * select to opt out of the enhancement.
  */
-.select:not([multiple], [size]),
-.form select:not([multiple], [size]) {
+.select:not([multiple], [size]) {
   appearance: none;
   padding-inline-end: calc(var(--space-3) + var(--space-6));
   background-image: var(--icon-chevron-image);
@@ -20,14 +19,12 @@
 
 /* The chevron sits on the inline-end side; flip it in RTL so it follows
    the padding-inline-end space reserved for it. */
-[dir="rtl"] .select:not([multiple], [size]),
-[dir="rtl"] .form select:not([multiple], [size]) {
+[dir="rtl"] .select:not([multiple], [size]) {
   background-position: center left var(--space-3);
 }
 
 @media (forced-colors: active) {
-  .select:not([multiple], [size]),
-  .form select:not([multiple], [size]) {
+  .select:not([multiple], [size]) {
     appearance: auto;
     background-image: none;
     padding-inline-end: var(--space-3);
