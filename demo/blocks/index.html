@@ -1,0 +1,549 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Interface Blocks - Actual CSS</title>
+  <link rel="stylesheet" href="../../src/css/actual.css">
+  <link rel="stylesheet" href="../../src/css/themes/index.css">
+  <link rel="stylesheet" href="../styles/demo.css">
+  <style>
+    .blocks-page {
+      padding-block: var(--space-6);
+    }
+
+    .blocks-intro {
+      --center-size: 72rem;
+    }
+
+    .block-section {
+      --center-size: 72rem;
+
+      padding-block: var(--space-6);
+      border-block-start: var(--border-width) solid var(--border);
+    }
+
+    .block-note {
+      max-inline-size: 64ch;
+      color: var(--text-muted);
+    }
+
+    .block-example {
+      margin-block-start: var(--space-4);
+      padding: var(--space-4);
+      border: var(--border-width) solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+    }
+
+    .block-page-header {
+      display: grid;
+      gap: var(--space-3);
+    }
+
+    .block-page-header-main {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: var(--space-4);
+    }
+
+    .block-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-2);
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .block-filter-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-2);
+      align-items: center;
+    }
+
+    .block-filter-group > :where(.input, .select) {
+      inline-size: auto;
+      min-inline-size: min(100%, 11rem);
+    }
+
+    .block-account {
+      display: grid;
+      gap: var(--space-1);
+    }
+
+    .block-empty {
+      display: grid;
+      place-items: center;
+      gap: var(--space-3);
+      min-block-size: 18rem;
+      padding: var(--space-5);
+      text-align: center;
+    }
+
+    .block-empty-icon {
+      display: inline-grid;
+      place-items: center;
+      inline-size: 3rem;
+      block-size: 3rem;
+      border-radius: var(--radius-full);
+      background: var(--surface-subtle);
+      color: var(--text-muted);
+      font-weight: var(--font-weight-bold);
+    }
+
+    .block-settings-shell {
+      max-inline-size: 52rem;
+    }
+
+    .block-detail {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--space-4);
+      align-items: start;
+    }
+
+    .block-meta-list {
+      display: grid;
+      gap: var(--space-3);
+    }
+
+    .block-meta-row {
+      display: flex;
+      justify-content: space-between;
+      gap: var(--space-3);
+      padding-block-end: var(--space-3);
+      border-block-end: var(--border-width) solid var(--border);
+    }
+
+    .block-message-list {
+      display: grid;
+      gap: var(--space-3);
+    }
+
+    .block-message {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      gap: var(--space-3);
+      align-items: start;
+      padding-block-end: var(--space-3);
+      border-block-end: var(--border-width) solid var(--border);
+    }
+
+    .block-auth {
+      max-inline-size: 28rem;
+      margin-inline: auto;
+    }
+
+    @media (min-width: 56rem) {
+      .block-detail {
+        grid-template-columns: minmax(0, 1fr) minmax(18rem, 22rem);
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="blocks-page">
+    <header class="center stack blocks-intro">
+      <p class="overline">Actual CSS</p>
+      <h1>Interface blocks</h1>
+      <p class="lead">
+        Small app UI recipes used to validate that layout primitives, components, forms, and utilities compose without a new component for every surface.
+      </p>
+    </header>
+
+    <section class="center block-section" id="page-header">
+      <h2>Page header</h2>
+      <p class="block-note">Validates breadcrumb, hgroup, action lists, and responsive wrapping for common app page chrome.</p>
+
+      <div class="block-example">
+        <header class="block-page-header">
+          <ol class="breadcrumb" aria-label="Breadcrumb">
+            <li><a href="#">Projects</a></li>
+            <li><a href="#">Actual Cloud</a></li>
+            <li aria-current="page">Deployments</li>
+          </ol>
+
+          <div class="block-page-header-main">
+            <hgroup>
+              <h2>Deployments</h2>
+              <p class="muted">Review production releases, failed jobs, and pending approvals.</p>
+            </hgroup>
+
+            <menu class="actions cluster">
+              <li><button class="btn neutral outline" type="button">Export</button></li>
+              <li><button class="btn primary" type="button">New deployment</button></li>
+            </menu>
+          </div>
+        </header>
+      </div>
+    </section>
+
+    <section class="center block-section" id="compact-metrics">
+      <h2>Compact metrics</h2>
+      <p class="block-note">Validates `.grid-6` for small repeated items: one column when narrow, three columns in medium containers, six columns when the row has room.</p>
+
+      <div class="block-example container-query">
+        <div class="grid-6">
+          <article class="card compact">
+            <span class="muted">Open</span>
+            <strong>18</strong>
+          </article>
+          <article class="card compact">
+            <span class="muted">Queued</span>
+            <strong>7</strong>
+          </article>
+          <article class="card compact">
+            <span class="muted">Blocked</span>
+            <strong>2</strong>
+          </article>
+          <article class="card compact">
+            <span class="muted">Shipped</span>
+            <strong>41</strong>
+          </article>
+          <article class="card compact">
+            <span class="muted">Owners</span>
+            <strong>6</strong>
+          </article>
+          <article class="card compact">
+            <span class="muted">SLA</span>
+            <strong>99%</strong>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="center block-section" id="table-workspace">
+      <h2>Table workspace</h2>
+      <p class="block-note">Validates dense operational UI: filters, table chrome, row selection, badges, truncation, flyout menus, and pagination.</p>
+
+      <div class="block-example stack">
+        <div class="block-toolbar">
+          <div class="block-filter-group">
+            <input class="input sm" type="search" aria-label="Search accounts" placeholder="Search accounts">
+            <select class="select sm" aria-label="Filter by status">
+              <option>All statuses</option>
+              <option>Healthy</option>
+              <option>Watch</option>
+              <option>Blocked</option>
+            </select>
+            <select class="select sm" aria-label="Filter by owner">
+              <option>All owners</option>
+              <option>Ada</option>
+              <option>Jana</option>
+              <option>Rin</option>
+            </select>
+          </div>
+
+          <menu class="actions cluster sm">
+            <li><button class="btn neutral outline sm" type="button">Export</button></li>
+            <li><button class="btn danger outline sm" type="button">Archive selected</button></li>
+          </menu>
+        </div>
+
+        <div class="table-wrap" role="region" aria-labelledby="accounts-caption" tabindex="0">
+          <table class="table" style="--table-min: 54rem;">
+            <caption id="accounts-caption" class="sr-only">Accounts needing review</caption>
+            <thead>
+              <tr>
+                <th scope="col"><span class="sr-only">Select</span></th>
+                <th scope="col">Account</th>
+                <th scope="col">Owner</th>
+                <th scope="col" class="text-end">ARR</th>
+                <th scope="col">Status</th>
+                <th scope="col">Next step</th>
+                <th scope="col"><span class="sr-only">Actions</span></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><input class="check" type="checkbox" aria-label="Select Northstar Logistics"></td>
+                <td>
+                  <div class="block-account">
+                    <strong>Northstar Logistics</strong>
+                    <span class="muted">Enterprise renewal</span>
+                  </div>
+                </td>
+                <td><span class="avatar sm"><abbr>AM</abbr></span> Ada</td>
+                <td class="text-end nowrap">$428K</td>
+                <td><span class="badge warning soft">Watch</span></td>
+                <td class="nowrap">Legal review</td>
+                <td>
+                  <div class="flyout-trigger">
+                    <button class="btn neutral ghost sm" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="row-menu-1" id="row-trigger-1" aria-label="Row actions">
+                      Actions
+                    </button>
+                    <menu class="flyout sm" role="menu" id="row-menu-1" aria-labelledby="row-trigger-1" hidden>
+                      <li><button type="button" role="menuitem">Open account</button></li>
+                      <li><button type="button" role="menuitem">Copy link</button></li>
+                      <li><hr role="separator"></li>
+                      <li><button class="danger" type="button" role="menuitem">Archive</button></li>
+                    </menu>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td><input class="check" type="checkbox" aria-label="Select Helio Systems"></td>
+                <td>
+                  <div class="block-account">
+                    <strong>Helio Systems</strong>
+                    <span class="muted">Expansion motion</span>
+                  </div>
+                </td>
+                <td><span class="avatar sm"><abbr>JL</abbr></span> Jana</td>
+                <td class="text-end nowrap">$216K</td>
+                <td><span class="badge success soft">Healthy</span></td>
+                <td class="nowrap">Security call</td>
+                <td><button class="btn neutral ghost sm" type="button">Open</button></td>
+              </tr>
+              <tr>
+                <td><input class="check" type="checkbox" aria-label="Select Orchid Health"></td>
+                <td>
+                  <div class="block-account">
+                    <strong>Orchid Health</strong>
+                    <span class="muted">Risk mitigation</span>
+                  </div>
+                </td>
+                <td><span class="avatar sm"><abbr>RM</abbr></span> Rin</td>
+                <td class="text-end nowrap">$184K</td>
+                <td><span class="badge danger soft">Blocked</span></td>
+                <td class="nowrap">Sponsor call</td>
+                <td><button class="btn neutral ghost sm" type="button">Open</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <footer class="cluster" style="--cluster-justify: space-between;">
+          <span class="muted">Showing 3 of 28 accounts</span>
+          <nav aria-label="Accounts pages">
+            <ol class="pagination sm">
+              <li><a class="btn outline" href="#" aria-disabled="true">Previous</a></li>
+              <li><a class="btn" href="#" aria-current="page">1</a></li>
+              <li><a class="btn outline" href="#">2</a></li>
+              <li><a class="btn outline" href="#">Next</a></li>
+            </ol>
+          </nav>
+        </footer>
+      </div>
+    </section>
+
+    <section class="center block-section" id="empty-state">
+      <h2>Empty state</h2>
+      <p class="block-note">Validates centered layout, short copy, and a recoverable next step without inventing an empty-state component.</p>
+
+      <div class="block-example">
+        <section class="block-empty" aria-labelledby="empty-heading">
+          <span class="block-empty-icon" aria-hidden="true">0</span>
+          <hgroup>
+            <h3 id="empty-heading">No saved views yet</h3>
+            <p class="muted">Save a filtered view to return to this work faster next time.</p>
+          </hgroup>
+          <menu class="actions cluster">
+            <li><button class="btn primary" type="button">Save current view</button></li>
+            <li><a class="btn neutral ghost" href="#table-workspace">Review filters</a></li>
+          </menu>
+        </section>
+      </div>
+    </section>
+
+    <section class="center block-section" id="settings-panel">
+      <h2>Settings panel</h2>
+      <p class="block-note">Validates field rhythm, grouped choices, switch geometry, alert messaging, and sticky form actions.</p>
+
+      <div class="block-example block-settings-shell">
+        <form class="form stack">
+          <header>
+            <h3>Workspace settings</h3>
+            <p class="muted">Control defaults for reports, notifications, and release approvals.</p>
+          </header>
+
+          <div class="alert warning" role="status">
+            <strong>Two approvals are still pending.</strong>
+            <span>Changing deployment rules will apply to future releases.</span>
+          </div>
+
+          <div class="grid items-start" style="--grid-min: 14rem;">
+            <label class="field">
+              <span class="field-label">Workspace name</span>
+              <input class="input" type="text" value="Actual Cloud">
+            </label>
+
+            <label class="field">
+              <span class="field-label">Default region</span>
+              <select class="select">
+                <option>EU West</option>
+                <option>US East</option>
+                <option>Asia Pacific</option>
+              </select>
+            </label>
+          </div>
+
+          <fieldset class="field-group">
+            <legend>Notifications</legend>
+            <label class="choice">
+              <input class="switch" type="checkbox" role="switch" checked>
+              <span>
+                Release alerts
+                <span class="field-help">Send status changes to the release channel.</span>
+              </span>
+            </label>
+            <label class="choice">
+              <input class="switch" type="checkbox" role="switch">
+              <span>
+                Weekly summary
+                <span class="field-help">Send a digest every Monday morning.</span>
+              </span>
+            </label>
+          </fieldset>
+
+          <footer class="form-actions sticky">
+            <button class="btn neutral outline" type="reset">Reset</button>
+            <button class="btn primary" type="submit">Save settings</button>
+          </footer>
+        </form>
+      </div>
+    </section>
+
+    <section class="center block-section" id="detail-layout">
+      <h2>Detail layout</h2>
+      <p class="block-note">Validates a common app detail page: prose-light main content, card aside, metadata, status, and action grouping.</p>
+
+      <div class="block-example block-detail">
+        <article class="stack">
+          <header>
+            <p class="overline">Incident INC-1842</p>
+            <h3>Payment webhook latency</h3>
+            <p class="muted">Webhook deliveries are delayed for a subset of enterprise accounts.</p>
+          </header>
+
+          <section class="alert danger" role="alert">
+            <strong>Customer impact detected.</strong>
+            <span>Retry queues are growing in EU West.</span>
+          </section>
+
+          <section class="prose">
+            <h4>Summary</h4>
+            <p>The integration queue started processing slowly after the last deployment. New jobs are accepted, but downstream delivery can take several minutes.</p>
+            <h4>Next response</h4>
+            <ul>
+              <li>Pause non-critical replay jobs.</li>
+              <li>Move enterprise webhooks to the priority worker.</li>
+              <li>Post an update after the next metrics window.</li>
+            </ul>
+          </section>
+        </article>
+
+        <aside class="card stack" aria-label="Incident metadata">
+          <header>
+            <h3 style="margin: 0;">Status</h3>
+            <span class="badge danger soft">Active</span>
+          </header>
+
+          <dl class="block-meta-list">
+            <div class="block-meta-row">
+              <dt class="muted">Owner</dt>
+              <dd>Ada Morgan</dd>
+            </div>
+            <div class="block-meta-row">
+              <dt class="muted">Severity</dt>
+              <dd>High</dd>
+            </div>
+            <div class="block-meta-row">
+              <dt class="muted">Opened</dt>
+              <dd><time datetime="2026-07-07T09:42">09:42</time></dd>
+            </div>
+          </dl>
+
+          <menu class="actions stack">
+            <li><button class="btn primary" type="button">Post update</button></li>
+            <li><button class="btn neutral outline" type="button">Escalate</button></li>
+          </menu>
+        </aside>
+      </div>
+    </section>
+
+    <section class="center block-section" id="notification-center">
+      <h2>Notification center</h2>
+      <p class="block-note">Validates persistent feedback patterns and keeps transient toast messaging out of the main recommendation path.</p>
+
+      <div class="block-example stack">
+        <section class="alert success" role="status">
+          <strong>Deployment completed.</strong>
+          <span>Version 0.1.0 is live in production.</span>
+        </section>
+
+        <section class="alert danger" role="alert">
+          <strong>Billing sync failed.</strong>
+          <span>Retry the sync or check the provider status page.</span>
+          <menu class="actions cluster">
+            <li><button class="btn danger sm" type="button">Retry sync</button></li>
+            <li><a href="#" class="btn neutral ghost sm">View details</a></li>
+          </menu>
+        </section>
+
+        <div class="block-message-list" aria-label="Recent messages">
+          <article class="block-message">
+            <span class="avatar success sm"><abbr>OK</abbr></span>
+            <div>
+              <strong>Exports are ready</strong>
+              <p class="muted">Three CSV exports can be downloaded from the reports page.</p>
+            </div>
+          </article>
+          <article class="block-message">
+            <span class="avatar warning sm"><abbr>!</abbr></span>
+            <div>
+              <strong>Two invoices need review</strong>
+              <p class="muted">The tax region changed for accounts in the EU segment.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="center block-section" id="auth-card">
+      <h2>Auth card</h2>
+      <p class="block-note">Validates a small standalone form: field labels, help text, checkboxes, full-width actions, and secondary navigation.</p>
+
+      <div class="block-example">
+        <form class="card stack block-auth">
+          <header>
+            <span class="avatar primary"><abbr>AC</abbr></span>
+            <h3>Sign in to Actual Cloud</h3>
+            <p class="muted">Use your workspace account to continue.</p>
+          </header>
+
+          <label class="field">
+            <span class="field-label">Email</span>
+            <input class="input" type="email" autocomplete="email" placeholder="you@example.com">
+          </label>
+
+          <label class="field">
+            <span class="field-label">Password</span>
+            <input class="input" type="password" autocomplete="current-password">
+            <span class="field-help">Use at least 12 characters for new accounts.</span>
+          </label>
+
+          <label class="choice">
+            <input class="check" type="checkbox">
+            <span>Keep me signed in</span>
+          </label>
+
+          <button class="btn primary" type="submit">Sign in</button>
+
+          <p class="muted text-center">
+            No account yet? <a href="#">Request access</a>
+          </p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <script src="../../dist/actual.js"></script>
+</body>
+
+</html>

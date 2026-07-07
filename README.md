@@ -97,11 +97,13 @@ Actual CSS also ships optional entrypoints:
 @import "actual-css/css/layer";
 @import "actual-css/css/optional/typography-fluid";
 @import "actual-css/css/optional/scroller";
+@import "actual-css/css/optional/utilities-extra";
 ```
 
 * `layer` wraps Actual CSS in `@layer actual`.
 * `typography-fluid` adds fluid display typography.
 * `scroller` adds custom scrollbar styling.
+* `utilities-extra` adds more helpers.
 
 ## JavaScript enhancers
 
