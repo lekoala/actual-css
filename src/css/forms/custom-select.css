@@ -1,22 +1,20 @@
 /*
  * Customizable select — appearance: base-select picker enhancement.
  *
- * Progressive enhancement on top of the native .select/.form select baseline in
- * select.css. Wrapped in @supports and gated on fine pointer devices so it never
- * blocks a layout. Add .native to a specific select to opt out.
+ * Progressive enhancement on top of the native .select baseline in select.css.
+ * Wrapped in @supports and gated on fine pointer devices so it never blocks a
+ * layout. Add .native to a specific select to opt out.
  *
  * No layout or interaction contract may depend on appearance: base-select.
  * Arbitrary menu and popover behavior belongs elsewhere.
  */
 @media (hover: hover) and (pointer: fine) {
   @supports (appearance: base-select) {
-    .select:not([multiple], [size], .native),
-    .form select:not([multiple], [size], .native) {
+    .select:not([multiple], [size], .native) {
       appearance: base-select;
     }
 
-    .select:not([multiple], [size], .native)::picker(select),
-    .form select:not([multiple], [size], .native)::picker(select) {
+    .select:not([multiple], [size], .native)::picker(select) {
       appearance: base-select;
       max-height: min(24rem, calc(var(--viewport-block) * 0.7));
       margin-block: var(--space-2);
@@ -28,21 +26,18 @@
       box-shadow: var(--shadow-popout);
     }
 
-    .select:not([multiple], [size], .native):open,
-    .form select:not([multiple], [size], .native):open {
+    .select:not([multiple], [size], .native):open {
       --control-border: var(--border);
       --control-bg: var(--surface-raised);
       outline: none;
       box-shadow: var(--focus-ring-shadow);
     }
 
-    .select:not([multiple], [size], .native)::picker-icon,
-    .form select:not([multiple], [size], .native)::picker-icon {
+    .select:not([multiple], [size], .native)::picker-icon {
       display: none;
     }
 
-    .select option,
-    .form select option {
+    .select option {
       position: relative;
       padding-block: var(--space-2);
       padding-inline: var(--space-3);
@@ -51,28 +46,24 @@
       transition-duration: var(--duration);
     }
 
-    .select option:not(:disabled):hover,
-    .form select option:not(:disabled):hover {
+    .select option:not(:disabled):hover {
       background-color: var(--surface-subtle);
       color: var(--text);
       cursor: pointer;
     }
 
-    .select option:not(:disabled):focus-visible,
-    .form select option:not(:disabled):focus-visible {
+    .select option:not(:disabled):focus-visible {
       background-color: var(--primary);
       color: var(--primary-fg);
       outline: none;
     }
 
-    .select option:active,
-    .form select option:active {
+    .select option:active {
       background-color: var(--surface-subtle);
       color: var(--text);
     }
 
-    .select option::checkmark,
-    .form select option::checkmark {
+    .select option::checkmark {
       content: "";
       display: block;
       inline-size: 1rem;
@@ -88,13 +79,11 @@
       mask-position: center;
     }
 
-    .select optgroup,
-    .form select optgroup {
+    .select optgroup {
       padding-block-start: 0.5em;
     }
 
-    .select optgroup option:first-child,
-    .form select optgroup option:first-child {
+    .select optgroup option:first-child {
       margin-block-start: 0.5em;
     }
   }
@@ -103,49 +92,41 @@
 @media (forced-colors: active) {
   @media (hover: hover) and (pointer: fine) {
     @supports (appearance: base-select) {
-      .select:not([multiple], [size], .native)::picker(select),
-      .form select:not([multiple], [size], .native)::picker(select) {
+      .select:not([multiple], [size], .native)::picker(select) {
         border-color: ButtonText;
         background-color: Canvas;
         color: CanvasText;
         box-shadow: none;
       }
 
-      .select:not([multiple], [size], .native):open,
-      .form select:not([multiple], [size], .native):open {
+      .select:not([multiple], [size], .native):open {
         outline: var(--focus-outline);
         outline-offset: var(--focus-outline-offset);
         box-shadow: none;
       }
 
       .select option:not(:disabled):hover,
-      .select option:not(:disabled):focus-visible,
-      .form select option:not(:disabled):hover,
-      .form select option:not(:disabled):focus-visible {
+      .select option:not(:disabled):focus-visible {
         background-color: Highlight;
         color: HighlightText;
         forced-color-adjust: none;
       }
 
-      .select option:active,
-      .form select option:active {
+      .select option:active {
         background-color: ButtonFace;
         color: ButtonText;
         forced-color-adjust: auto;
       }
 
-      .select option::checkmark,
-      .form select option::checkmark {
+      .select option::checkmark {
         forced-color-adjust: none;
       }
 
-      .select option:not(:disabled):is(:hover, :focus-visible)::checkmark,
-      .form select option:not(:disabled):is(:hover, :focus-visible)::checkmark {
+      .select option:not(:disabled):is(:hover, :focus-visible)::checkmark {
         color: HighlightText;
       }
 
-      .select optgroup,
-      .form select optgroup {
+      .select optgroup {
         color: GrayText;
       }
     }

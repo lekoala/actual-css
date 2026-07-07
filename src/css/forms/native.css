@@ -5,7 +5,7 @@
  */
 /* Intent boundary — inherited intents do not tint this component.
    Local intent classes still win because :where() has zero specificity. */
-:where(.range, :is(.form, .field) input[type="range"]) {
+:where(.range) {
   /* @sync intent-boundary */
   --intent: initial;
   --intent-fg: initial;
@@ -16,12 +16,10 @@
   /* @sync intent-boundary */
 }
 
-:is(.form, .field) input[type="file"],
 .file {
   color: var(--text-muted);
 }
 
-:is(.form, .field) input[type="file"]::file-selector-button,
 .file::file-selector-button {
   margin-inline-end: var(--space-3);
   padding-block: var(--space-1);
@@ -41,13 +39,11 @@
 }
 
 @media (hover: hover) {
-  :is(.form, .field) input[type="file"]:not(:disabled)::file-selector-button:hover,
   .file:not(:disabled)::file-selector-button:hover {
     background: var(--border);
   }
 }
 
-:is(.form, .field) input[type="range"],
 .range {
   inline-size: 100%;
   accent-color: var(--intent, var(--primary));

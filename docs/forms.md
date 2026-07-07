@@ -4,25 +4,25 @@
 
 > Cohesive set of form elements that share focus styles, helpers, and validation patterns.
 
-- Native form controls are styled automatically inside `.form`.
-- Reusable classes for explicit composition: `.field`, `.field-label`, `.field-help`, `.field-error`, `.field-group`, `.choice`, `.form-actions`, `.form-actions.sticky`.
+- Form controls are styled with explicit classes, not by parent scope.
+- Reusable classes: `.field`, `.field-label`, `.field-help`, `.field-error`, `.field-group`, `.choice`, `.form-actions`, `.form-actions.sticky`.
 - No floating labels.
 - Proper focus style that preserves keyboard navigation.
-- Auto grouping via `label:has()` for checkbox and radio labels.
+- `.field-group` and `.choice` provide layout without depending on parent scope.
 - Customizable select is progressive enhancement only — the native select remains the baseline.
 
 ```html
-<form class="form" novalidate>
+<form novalidate>
   <div class="stack">
 
     <label class="field">
       <span class="field-label">Full name <span class="required-mark" aria-hidden="true">*</span></span>
-      <input type="text" autocomplete="name" required placeholder="Jane Doe" />
+      <input class="input" type="text" autocomplete="name" required placeholder="Jane Doe" />
     </label>
 
     <label class="field">
       <span class="field-label">Email address <span class="required-mark" aria-hidden="true">*</span></span>
-      <input type="email"
+      <input class="input" type="email"
              autocomplete="email"
              required
              aria-invalid="true"
@@ -35,7 +35,7 @@
 
     <label class="field">
       <span class="field-label">Website</span>
-      <input type="url"
+      <input class="input" type="url"
              autocomplete="url"
              aria-describedby="website-help"
              placeholder="https://example.com" />
@@ -44,7 +44,7 @@
 
     <label class="field">
       <span class="field-label">Bio</span>
-      <textarea aria-describedby="bio-help"
+      <textarea class="textarea" aria-describedby="bio-help"
                 maxlength="200"
                 placeholder="Tell us a bit about yourself…"></textarea>
       <span class="field-help" id="bio-help">Max 200 characters. Shown on your public profile.</span>
@@ -52,7 +52,7 @@
 
     <label class="field">
       <span class="field-label">Language</span>
-      <select autocomplete="language">
+      <select class="select" autocomplete="language">
         <option value="">Choose a language</option>
         <option value="en" selected>English</option>
         <option value="fr">Français</option>
@@ -61,7 +61,7 @@
       </select>
     </label>
 
-    <fieldset>
+    <fieldset class="field-group">
       <legend class="field-label">Availability</legend>
       <div class="stack">
         <label class="choice">
@@ -81,7 +81,7 @@
 
     <label class="field">
       <span class="field-label">Experience level</span>
-      <input type="range"
+      <input class="range" type="range"
              min="0"
              max="10"
              value="5"
@@ -108,13 +108,13 @@
 
     <label class="field">
       <span class="field-label">Profile picture</span>
-      <input type="file" accept="image/*" aria-describedby="file-help" />
+      <input class="file" type="file" accept="image/*" aria-describedby="file-help" />
       <span class="field-help" id="file-help">JPG, PNG or WebP — max 2 MB</span>
     </label>
 
     <label class="field">
       <span class="field-label">Username</span>
-      <input type="text"
+      <input class="input" type="text"
              value="janedoe"
              disabled
              aria-describedby="username-help" />
@@ -133,11 +133,11 @@
 ### Notes
 
 - `required` is enough on native inputs. `aria-required="true"` is redundant and not used in these examples.
-- `.field` is the canonical field wrapper. It works on `<label>` and `<div>`. A plain `<label>` inside `.form` whose first control is a text input, textarea, or select is auto-styled for hand-authored HTML; prefer `.field` for generated markup or non-standard wrappers.
+- `.field` is the canonical field wrapper. It works on `<label>` and `<div>`.
 - `.field-label` is element-agnostic. Use it on `<span>` inside a wrapped label, on `<label for="…">` in a detached layout, or on `<legend>` inside a fieldset.
-- `.field-group` styles a `<fieldset>` outside `.form`. Inside `.form`, a bare `<fieldset>` is also styled.
-- `.choice` is the explicit choice-label API. A bare `<label>` whose first child is a checkbox or radio is auto-styled to match. The control goes first, the label group second, so multi-line labels align the control with the first line.
-- For a switch, prefer `class="switch"` plus `role="switch"`. The class is the explicit API; the attribute is recognized as a fallback so both compose.
+- `.field-group` styles a `<fieldset class="field-group">` as a grouped field container.
+- `.choice` is the choice-label API. The control goes first, the label group second, so multi-line labels align the control with the first line.
+- For a switch, use `class="switch"` and `role="switch"`.
 - Core range controls stay native and are enhanced by `accent-color`. An optional richer range skin may come later if real projects need it.
 - `.form-actions` carries a default top margin. Override it with `--form-actions-margin-block-start`. It is class-only and may live inside or outside `<form>`. See Detached Actions below.
 - `.join` visually joins adjacent controls into a single unit. Use `.join-addon` for static prefix/suffix content. The container still carries `role="group"` for accessibility.
@@ -151,25 +151,25 @@ Use `readonly` for text-like values that can still be focused, selected, and sub
 The `.sm` and `.lg` modifiers set the shared control tokens used by inputs, selects, textareas, buttons, and switches. Put the modifier on the control itself, or on a `.field` wrapper when the whole field should share that size.
 
 ```html
-<form class="form" novalidate>
-  <fieldset>
+<form novalidate>
+  <fieldset class="field-group">
     <legend class="field-label">Text control states</legend>
     <div class="stack container-query">
       <div class="grid-3 items-start">
         <label class="field">
           <span class="field-label">Editable</span>
-          <input type="text" value="Ocean Beach Clinic" />
+          <input class="input" type="text" value="Ocean Beach Clinic" />
         </label>
 
         <label class="field">
           <span class="field-label">Read-only</span>
-          <input type="text" value="INV-2048" readonly />
+          <input class="input" type="text" value="INV-2048" readonly />
           <span class="field-help">Focusable and submitted with the form.</span>
         </label>
 
         <label class="field">
           <span class="field-label">Disabled</span>
-          <input type="text" value="Locked by billing" disabled />
+          <input class="input" type="text" value="Locked by billing" disabled />
           <span class="field-help">Unavailable and not submitted.</span>
         </label>
       </div>
@@ -177,29 +177,29 @@ The `.sm` and `.lg` modifiers set the shared control tokens used by inputs, sele
       <div class="grid-3 items-start">
         <label class="field">
           <span class="field-label">Editable notes</span>
-          <textarea>Patient asked for an invoice copy.</textarea>
+          <textarea class="textarea">Patient asked for an invoice copy.</textarea>
         </label>
 
         <label class="field">
           <span class="field-label">Read-only notes</span>
-          <textarea readonly>Insurance details imported from the patient record.</textarea>
+          <textarea class="textarea" readonly>Insurance details imported from the patient record.</textarea>
         </label>
 
         <label class="field">
           <span class="field-label">Disabled notes</span>
-          <textarea disabled>Notes are disabled until the transaction is selected.</textarea>
+          <textarea class="textarea" disabled>Notes are disabled until the transaction is selected.</textarea>
         </label>
       </div>
     </div>
   </fieldset>
 
-  <fieldset>
+  <fieldset class="field-group">
     <legend class="field-label">Choice and select states</legend>
     <div class="stack container-query">
       <div class="grid-3 items-start">
         <label class="field">
           <span class="field-label">Editable select</span>
-          <select>
+          <select class="select">
             <option>Card</option>
             <option>Bank transfer</option>
             <option>Cash</option>
@@ -208,7 +208,7 @@ The `.sm` and `.lg` modifiers set the shared control tokens used by inputs, sele
 
         <label class="field">
           <span class="field-label">Invalid select</span>
-          <select aria-invalid="true">
+          <select class="select" aria-invalid="true">
             <option>Choose a method</option>
             <option>Card</option>
             <option>Bank transfer</option>
@@ -218,7 +218,7 @@ The `.sm` and `.lg` modifiers set the shared control tokens used by inputs, sele
 
         <label class="field">
           <span class="field-label">Disabled select</span>
-          <select disabled>
+          <select class="select" disabled>
             <option>Card</option>
             <option>Bank transfer</option>
             <option>Cash</option>
@@ -338,44 +338,44 @@ The `.sm` and `.lg` modifiers set the shared control tokens used by inputs, sele
     </div>
   </fieldset>
 
-  <fieldset>
+  <fieldset class="field-group">
     <legend class="field-label">Control sizes</legend>
     <div class="stack container-query">
       <div class="grid-3 items-start">
         <label class="field sm">
           <span class="field-label">Small field</span>
-          <input type="text" value="sm" />
+          <input class="input" type="text" value="sm" />
         </label>
 
         <label class="field">
           <span class="field-label">Default field</span>
-          <input type="text" value="default" />
+          <input class="input" type="text" value="default" />
         </label>
 
         <label class="field lg">
           <span class="field-label">Large field</span>
-          <input type="text" value="lg" />
+          <input class="input" type="text" value="lg" />
         </label>
       </div>
 
       <div class="grid-3 items-start">
         <label class="field sm">
           <span class="field-label">Small select</span>
-          <select>
+          <select class="select">
             <option>Compact</option>
           </select>
         </label>
 
         <label class="field">
           <span class="field-label">Default select</span>
-          <select>
+          <select class="select">
             <option>Default</option>
           </select>
         </label>
 
         <label class="field lg">
           <span class="field-label">Large select</span>
-          <select>
+          <select class="select">
             <option>Comfortable</option>
           </select>
         </label>
@@ -384,17 +384,17 @@ The `.sm` and `.lg` modifiers set the shared control tokens used by inputs, sele
       <div class="grid-3 items-start">
         <label class="field sm">
           <span class="field-label">Small textarea</span>
-          <textarea rows="2">Short note</textarea>
+          <textarea class="textarea" rows="2">Short note</textarea>
         </label>
 
         <label class="field">
           <span class="field-label">Default textarea</span>
-          <textarea rows="2">Default note</textarea>
+          <textarea class="textarea" rows="2">Default note</textarea>
         </label>
 
         <label class="field lg">
           <span class="field-label">Large textarea</span>
-          <textarea rows="2">Comfortable note</textarea>
+          <textarea class="textarea" rows="2">Comfortable note</textarea>
         </label>
       </div>
 
@@ -466,7 +466,7 @@ Use a **wrapped label** for simple hand-authored forms. The whole label area bec
 ```html
 <label class="field">
   <span class="field-label">Full name</span>
-  <input type="text" name="name" autocomplete="name" />
+  <input class="input" type="text" name="name" autocomplete="name" />
 </label>
 ```
 
@@ -613,7 +613,7 @@ must reject impossible values such as `2026-13-40`.
 The simplest case stays inside the form.
 
 ```html
-<form class="form" novalidate>
+<form novalidate>
   <div class="stack">
     <!-- fields -->
   </div>
@@ -628,7 +628,7 @@ The simplest case stays inside the form.
 For sticky page footers, dialog footers, card footers, and split layouts, detach the actions and connect the submit button with `form="<id>"`.
 
 ```html
-<form id="profile-form" class="form" novalidate>
+<form id="profile-form" novalidate>
   <div class="stack">
     <!-- long form fields -->
   </div>
@@ -646,7 +646,6 @@ For multiple submit intents, pair the `form` attribute with `formaction`. The fo
 
 ```html
 <form id="article-form"
-      class="form"
       action="/articles/publish"
       method="post">
   <!-- fields -->
@@ -678,36 +677,36 @@ The `<form>` is the bounding parent. The sticky stays pinned to the viewport bot
 Scroll the page to see the actions stay reachable.
 
 ```html
-<form class="form" novalidate>
+<form novalidate>
   <div class="stack">
     <label class="field">
       <span class="field-label">Full name <span class="required-mark" aria-hidden="true">*</span></span>
-      <input type="text" autocomplete="name" required placeholder="Jane Doe" />
+      <input class="input" type="text" autocomplete="name" required placeholder="Jane Doe" />
     </label>
 
     <label class="field">
       <span class="field-label">Email <span class="required-mark" aria-hidden="true">*</span></span>
-      <input type="email" autocomplete="email" required />
+      <input class="input" type="email" autocomplete="email" required />
     </label>
 
     <label class="field">
       <span class="field-label">Phone</span>
-      <input type="tel" autocomplete="tel" />
+      <input class="input" type="tel" autocomplete="tel" />
     </label>
 
     <label class="field">
       <span class="field-label">Bio</span>
-      <textarea rows="4" placeholder="Tell us about yourself…"></textarea>
+      <textarea class="textarea" rows="4" placeholder="Tell us about yourself…"></textarea>
     </label>
 
     <label class="field">
       <span class="field-label">Website</span>
-      <input type="url" autocomplete="url" placeholder="https://example.com" />
+      <input class="input" type="url" autocomplete="url" placeholder="https://example.com" />
     </label>
 
     <label class="field">
       <span class="field-label">Language</span>
-      <select>
+      <select class="select">
         <option>English</option>
         <option>Français</option>
         <option>Deutsch</option>
@@ -716,15 +715,15 @@ Scroll the page to see the actions stay reachable.
 
     <label class="field">
       <span class="field-label">Experience level</span>
-      <input type="range" min="0" max="10" value="5" />
+      <input class="range" type="range" min="0" max="10" value="5" />
     </label>
 
     <label class="field">
       <span class="field-label">Profile picture</span>
-      <input type="file" accept="image/*" />
+      <input class="file" type="file" accept="image/*" />
     </label>
 
-    <fieldset>
+    <fieldset class="field-group">
       <legend class="field-label">Theme</legend>
       <div class="stack">
         <label class="choice">
@@ -762,36 +761,36 @@ For a sticky page footer, dialog footer, or card footer, detach the actions and 
 Scroll the page to see the detached footer stay reachable.
 
 ```html
-<form id="account-form" class="form" novalidate>
+<form id="account-form" novalidate>
   <div class="stack">
     <label class="field">
       <span class="field-label">Full name <span class="required-mark" aria-hidden="true">*</span></span>
-      <input type="text" autocomplete="name" required placeholder="Jane Doe" />
+      <input class="input" type="text" autocomplete="name" required placeholder="Jane Doe" />
     </label>
 
     <label class="field">
       <span class="field-label">Email <span class="required-mark" aria-hidden="true">*</span></span>
-      <input type="email" autocomplete="email" required />
+      <input class="input" type="email" autocomplete="email" required />
     </label>
 
     <label class="field">
       <span class="field-label">Phone</span>
-      <input type="tel" autocomplete="tel" />
+      <input class="input" type="tel" autocomplete="tel" />
     </label>
 
     <label class="field">
       <span class="field-label">Bio</span>
-      <textarea rows="4" placeholder="Tell us about yourself…"></textarea>
+      <textarea class="textarea" rows="4" placeholder="Tell us about yourself…"></textarea>
     </label>
 
     <label class="field">
       <span class="field-label">Website</span>
-      <input type="url" autocomplete="url" placeholder="https://example.com" />
+      <input class="input" type="url" autocomplete="url" placeholder="https://example.com" />
     </label>
 
     <label class="field">
       <span class="field-label">Language</span>
-      <select>
+      <select class="select">
         <option>English</option>
         <option>Français</option>
         <option>Deutsch</option>
@@ -800,15 +799,15 @@ Scroll the page to see the detached footer stay reachable.
 
     <label class="field">
       <span class="field-label">Experience level</span>
-      <input type="range" min="0" max="10" value="5" />
+      <input class="range" type="range" min="0" max="10" value="5" />
     </label>
 
     <label class="field">
       <span class="field-label">Profile picture</span>
-      <input type="file" accept="image/*" />
+      <input class="file" type="file" accept="image/*" />
     </label>
 
-    <fieldset>
+    <fieldset class="field-group">
       <legend class="field-label">Theme</legend>
       <div class="stack">
         <label class="choice">
@@ -859,7 +858,7 @@ A sticky footer can cover the last field on short pages. That is a page-layout c
 
 > Toggle controls that share a native checkbox at the markup level, with a switch visual.
 
-- The explicit API is `class="switch"`. Adding `role="switch"` is the no-class fallback and the two compose.
+- The API is `class="switch"`. Use `role="switch"` for ARIA correctness.
 - The visual state tracks the native `checked` attribute. No JavaScript is required.
 - For strict ARIA correctness, keep `aria-checked` in sync. This is an enhancement, not the baseline.
 
@@ -887,7 +886,7 @@ Core: native range, enhanced by `accent-color`. Optional richer skin may come la
 ```html
 <label class="field">
   <span class="field-label">Volume</span>
-  <input type="range" min="0" max="100" value="50" />
+  <input class="range" type="range" min="0" max="100" value="50" />
 </label>
 ```
 
@@ -901,11 +900,11 @@ Core: native range, enhanced by `accent-color`. Optional richer skin may come la
 - `role="alert"` on `.field-error` is only required when the message is inserted dynamically. Static messages do not need it.
 
 ```html
-<form class="form" novalidate>
+<form novalidate>
   <div class="stack">
     <label class="field">
       <span class="field-label">Email</span>
-      <input type="email"
+      <input class="input" type="email"
              value="jane@"
              aria-invalid="true"
              aria-describedby="email-error" />
@@ -916,7 +915,7 @@ Core: native range, enhanced by `accent-color`. Optional richer skin may come la
 
     <label class="field">
       <span class="field-label">Username</span>
-      <input type="text" value="janedoe" aria-describedby="username-help" />
+      <input class="input" type="text" value="janedoe" aria-describedby="username-help" />
       <span class="field-help" id="username-help">
         Username is available.
       </span>

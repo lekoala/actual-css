@@ -3,14 +3,10 @@
  *
  * The switch remains an input control, not a decorative toggle. Checked, hover,
  * focus-visible, and disabled states stay clear.
- *
- * .switch is the explicit API. input[role="switch"] inside .form is a
- * convenience selector for hosts that prefer attribute-only markup. The two
- * compose: when both are present, class and role get the same styles.
  */
 /* Intent boundary — inherited intents do not tint this component.
    Local intent classes still win because :where() has zero specificity. */
-:where(.switch, .form input[role="switch"]) {
+:where(.switch) {
   /* @sync intent-boundary */
   --intent: initial;
   --intent-fg: initial;
@@ -21,20 +17,14 @@
   /* @sync intent-boundary */
 }
 
-.switch,
-.form input[role="switch"] {
+.switch {
   --switch-bg: var(--border);
   --switch-knob: var(--surface-raised);
   --switch-width: calc(var(--control-size) * 1.16);
   --switch-block-size: calc(var(--control-size) * 0.63);
   --switch-knob-margin: calc(var(--switch-block-size) * 0.12);
   --switch-knob-size: calc(var(--switch-block-size) - 2 * var(--switch-knob-margin));
-  --switch-travel: calc(
-    var(--switch-width) -
-    var(--switch-knob-size) -
-    2 *
-    var(--switch-knob-margin)
-  );
+  --switch-travel: calc(var(--switch-width) - var(--switch-knob-size) - 2 * var(--switch-knob-margin));
 
   position: relative;
   display: inline-grid;
@@ -50,8 +40,7 @@
   cursor: pointer;
 }
 
-.switch::before,
-.form input[role="switch"]::before {
+.switch::before {
   content: "";
   inline-size: var(--switch-knob-size);
   block-size: var(--switch-knob-size);
@@ -66,43 +55,37 @@
 }
 
 @media (hover: hover) {
-  .switch:hover:not(:disabled),
-  .form input[role="switch"]:hover:not(:disabled) {
+  .switch:hover:not(:disabled) {
     border-color: var(--intent, var(--primary));
   }
 }
 
-.switch:checked,
-.form input[role="switch"]:checked {
+.switch:checked {
   --switch-bg: var(--intent, var(--primary));
   --switch-knob: var(--intent-fg, var(--primary-fg));
   border-color: var(--intent, var(--primary));
 }
 
-.switch:checked::before,
-.form input[role="switch"]:checked::before {
+.switch:checked::before {
   transform: translateX(var(--switch-travel));
 }
 
 /* The knob travels toward inline-end; in RTL that is leftward, so the
     translateX sign flips. translateX is physical, not logical. */
-[dir="rtl"] .switch:checked::before,
-[dir="rtl"] .form input[role="switch"]:checked::before {
+[dir="rtl"] .switch:checked::before {
   transform: translateX(calc(var(--switch-travel) * -1));
 }
 
-.switch:focus-visible,
-.form input[role="switch"]:focus-visible {
+.switch:focus-visible {
   outline: var(--focus-outline);
   outline-offset: var(--focus-outline-offset);
 }
 
-.field.danger :where(.switch, input[role="switch"]) {
+.field.danger .switch {
   border-color: var(--danger);
 }
 
-.switch:disabled,
-.form input[role="switch"]:disabled {
+.switch:disabled {
   --switch-bg: var(--surface-subtle);
   --switch-knob: var(--text-subtle);
   border-color: var(--border);
@@ -111,29 +94,26 @@
 }
 
 @media (forced-colors: active) {
+
   /* --switch-knob must be set on the element, not on ::before: a custom
      property declared on the pseudo would shadow the :checked override. */
-  .switch,
-  .form input[role="switch"] {
+  .switch {
     --switch-knob: ButtonText;
     border-color: ButtonText;
   }
 
-  .switch::before,
-  .form input[role="switch"]::before {
+  .switch::before {
     box-shadow: none;
   }
 
-  .switch:checked,
-  .form input[role="switch"]:checked {
+  .switch:checked {
     --switch-bg: Highlight;
     --switch-knob: HighlightText;
     border-color: Highlight;
     forced-color-adjust: none;
   }
 
-  .switch:disabled,
-  .form input[role="switch"]:disabled {
+  .switch:disabled {
     --switch-bg: Canvas;
     --switch-knob: GrayText;
     border-color: GrayText;
