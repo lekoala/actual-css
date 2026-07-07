@@ -500,18 +500,6 @@ small {
   min-inline-size: min(100%, var(--sidebar-content-min, 50%));
 }
 
-.switcher {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--gap);
-}
-
-.switcher > * {
-  flex-basis: calc((var(--switcher-threshold, 40rem) - 100%) * 999);
-  flex-grow: 1;
-  min-inline-size: 0;
-}
-
 .frame {
   overflow: hidden;
   aspect-ratio: var(--frame-ratio, 16 / 9);
@@ -585,12 +573,12 @@ small {
  *   .grid-6: 6 cols
  * When placed inside .container-query, the column count collapses
  * on narrow wrappers. The intermediate 2-col step applies to
- * .grid-3/.grid-4; .grid-6 skips it because it is meant for compact
- * items that still read well as 3 columns.
+ * .grid-3/.grid-4; .grid-6 starts at 2 columns because it is meant
+ * for compact items that do not need a full single-column stack.
  *   .grid-2: 1 col -> 2 cols
  *   .grid-3: 1 col -> 2 cols -> 3 cols
  *   .grid-4: 1 col -> 2 cols -> 4 cols
- *   .grid-6: 1 col -> 3 cols -> 6 cols */
+ *   .grid-6: 2 cols -> 3 cols -> 6 cols */
 .grid-2,
 .grid-3,
 .grid-4,
@@ -615,9 +603,14 @@ small {
 @container (width < 28rem) {
   .container-query .grid-2,
   .container-query .grid-3,
-  .container-query .grid-4,
-  .container-query .grid-6 {
+  .container-query .grid-4 {
     grid-template-columns: 1fr;
+  }
+}
+
+@container (width < 28rem) {
+  .container-query .grid-6 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
@@ -651,9 +644,12 @@ small {
   @media (max-width: 27.999rem) {
     .container-query .grid-2,
     .container-query .grid-3,
-    .container-query .grid-4,
-    .container-query .grid-6 {
+    .container-query .grid-4 {
       grid-template-columns: 1fr;
+    }
+
+    .container-query .grid-6 {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
   }
 }
@@ -755,6 +751,10 @@ small {
 
   :is(.btn, a.badge, button.badge):is(.outline) {
     --ui-hover-bg: color-mix(in oklch, var(--intent, var(--neutral)), transparent 92%);
+  }
+
+  :is(.btn, a.badge, button.badge):is(.ghost) {
+    --ui-hover-bg: color-mix(in oklch, var(--intent, var(--text)) 8%, transparent);
   }
 }
 
@@ -2983,8 +2983,7 @@ button.avatar {
  * Pagination — page navigation for paginated lists.
  *
  * Render .btn elements inside a .pagination list. The active page is marked
- * with aria-current="page" and tinted with the intent color. Pagination
- * numeric buttons are square; prev/next links can use text labels.
+ * with aria-current="page" and tinted with the intent color.
  */
 .pagination {
   display: flex;
@@ -2997,17 +2996,7 @@ button.avatar {
 }
 
 .pagination .btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  inline-size: var(--control-size);
-  padding-inline: 0;
-}
-
-.pagination .btn:where([rel="prev"], [rel="next"]) {
-  inline-size: auto;
   min-inline-size: var(--control-size);
-  padding-inline: var(--btn-pad-x, var(--control-pad-x, 1em));
 }
 
 .pagination .btn[aria-current="page"] {
@@ -3289,9 +3278,9 @@ button.avatar {
 /*
  * List group — rich content lists with an optional header/caption.
  *
- * Each li wraps multiple children in a row: avatar, title, description,
- * action buttons flow naturally. The description breaks onto its own row via
- * flex-basis.
+ * Each li wraps multiple children in a row: avatar, title, meta,
+ * action buttons flow naturally. Compose with .media for leading
+ * content or use .stack inside the li for multi-line descriptions.
  */
 .list-group > :where(header, figcaption) {
   font-weight: var(--font-weight-strong);
@@ -3320,11 +3309,6 @@ button.avatar {
 
 .list-group > ul > li:not(:last-child) {
   border-block-end: var(--border-width) solid var(--border);
-}
-
-.list-group > ul > li > p {
-  flex-basis: 100%;
-  margin: 0;
 }
 
 /* Forms — import order matters: switch.css must follow choice.css so its

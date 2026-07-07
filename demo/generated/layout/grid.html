@@ -242,9 +242,9 @@
       <p>Behavior:</p>
 <ul>
   <li>Without <code>.container-query</code>: <code>.grid-2</code> is always 2 cols, <code>.grid-3</code> is always 3 cols, <code>.grid-4</code> is always 4 cols, and <code>.grid-6</code> is always 6 cols.</li>
-  <li>With <code>.container-query</code>: all four collapse to one column on a narrow wrapper (under 28rem). <code>.grid-3</code> and <code>.grid-4</code> step through 2 columns between 28rem and 48rem. <code>.grid-6</code> steps through 3 columns between 28rem and 64rem, then returns to 6 columns.</li>
+  <li>With <code>.container-query</code>: <code>.grid-2</code>, <code>.grid-3</code>, and <code>.grid-4</code> collapse to one column on a narrow wrapper (under 28rem). <code>.grid-3</code> and <code>.grid-4</code> step through 2 columns between 28rem and 48rem. <code>.grid-6</code> starts at 2 columns under 28rem, steps through 3 columns between 28rem and 64rem, then returns to 6 columns.</li>
   <li>The intermediate 2-col step is useful for lists of items divisible by both 2 and 3 (or 4) — a 12-item list reads as 12 lines, then 6 lines of 2, then 4 lines of 3 (or 3 lines of 4), depending on the grid.</li>
-  <li><code>.grid-6</code> is for compact items such as stats, shortcut tiles, swatches, avatar summaries, and small settings cards. If item width matters more than an exact six-column rhythm, prefer <code>.grid</code> with a smaller <code>--grid-min</code>.</li>
+  <li><code>.grid-6</code> is for compact items such as stats, shortcut tiles, swatches, avatar summaries, and small settings cards. It does not collapse to one column by default. If item width matters more than an exact six-column rhythm, prefer <code>.grid</code> with a smaller <code>--grid-min</code>.</li>
   <li>The wrapper is the query container, so the same class behaves differently in a narrow sidebar than in a wide main area. No viewport breakpoints are involved.</li>
 </ul>
 <p>Do not add <code>.row</code>, <code>.col-6</code>, <code>.offset-2</code>, or other fixed grid-system classes unless the project later proves it needs a formal grid system.</p>

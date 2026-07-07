@@ -96,4 +96,8 @@
   :is(.btn, a.badge, button.badge):is(.outline) {
     --ui-hover-bg: color-mix(in oklch, var(--intent, var(--neutral)), transparent 92%);
   }
+
+  :is(.btn, a.badge, button.badge):is(.ghost) {
+    --ui-hover-bg: color-mix(in oklch, var(--intent, var(--text)) 8%, transparent);
+  }
 }

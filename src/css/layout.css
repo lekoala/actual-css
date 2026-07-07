@@ -40,18 +40,6 @@
   min-inline-size: min(100%, var(--sidebar-content-min, 50%));
 }
 
-.switcher {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--gap);
-}
-
-.switcher > * {
-  flex-basis: calc((var(--switcher-threshold, 40rem) - 100%) * 999);
-  flex-grow: 1;
-  min-inline-size: 0;
-}
-
 .frame {
   overflow: hidden;
   aspect-ratio: var(--frame-ratio, 16 / 9);

@@ -151,27 +151,7 @@ Actual CSS is built around progressive enhancement.
 
 ## Cascade layers
 
-Actual CSS is layer-compatible, not layer-dependent. The default `actual.css` file is unlayered.
-
-Use `actual.layer.css` as the official collision strategy when an existing project already owns one of Actual's reserved class names.
-
-```css
-@import "actual-css/css/layer";
-```
-
-The layer entrypoint wraps all rules in `@layer actual`, so author styles outside any layer win at equal specificity.
-
-```css
-@layer actual, app;
-
-@import "actual-css/css/layer";
-
-@layer app {
-  .badge { /* Keeps winning over Actual's .badge */ }
-}
-```
-
-Projects that need prefixed class names can use a build-pipeline transform (`.btn` → `.ac-btn`). See [`docs/design-notes/cascade-layer.md`](docs/design-notes/cascade-layer.md) for details.
+Actual CSS is layer-compatible, not layer-dependent. The default `actual.css` file is unlayered. See [`docs/design-notes/cascade-layer.md`](docs/design-notes/cascade-layer.md) for details.
 
 ## AI Disclosure
 

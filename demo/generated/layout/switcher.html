@@ -25,7 +25,7 @@
       <p>Row that becomes a column when space gets tight, useful for small sets of panels.</p>
     </header>
         <div class="component-prose">
-      <p>Use <code>.switcher</code> for rows that should become columns when space gets tight.</p>
+      <p>> <strong>Optional</strong> — import <code>src/css/optional/layout-extra.css</code> or <code>@import &quot;actual/optional&quot;</code>. Use <code>.switcher</code> for rows that should become columns when space gets tight.</p>
     </div>
     <section class="component-section">
       <div class="example-group">
@@ -63,25 +63,8 @@
         </div>
       </div>
     </section>
-    <section class="component-section">
-      <h2>CSS</h2>
-      <div class="example-group">
-        <div class="example-code">
-          <pre><code class="language-css"><span class="token selector">.switcher</span> <span class="token punctuation">{</span>
-  <span class="token property">display</span><span class="token punctuation">:</span> flex<span class="token punctuation">;</span>
-  <span class="token property">flex-wrap</span><span class="token punctuation">:</span> wrap<span class="token punctuation">;</span>
-  <span class="token property">gap</span><span class="token punctuation">:</span> <span class="token function">var</span><span class="token punctuation">(</span>--gap<span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span>
-
-<span class="token selector">.switcher > *</span> <span class="token punctuation">{</span>
-  <span class="token property">flex-basis</span><span class="token punctuation">:</span> <span class="token function">calc</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token function">var</span><span class="token punctuation">(</span>--switcher-threshold<span class="token punctuation">,</span> 40rem<span class="token punctuation">)</span> - 100%<span class="token punctuation">)</span> * 999<span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token property">flex-grow</span><span class="token punctuation">:</span> 1<span class="token punctuation">;</span>
-<span class="token punctuation">}</span></code></pre>
-        </div>
-      </div>
-    </section>
     <div class="component-prose">
-      <p>This is useful for small sets of panels, not large card collections. Use <code>.grid</code> for repeatable collections.</p>
+      <p>This is useful for small sets of panels, not large card collections. Use <code>.grid</code> for repeatable collections. The <code>.switcher</code> class is defined in <code>src/css/optional/layout-extra.css</code>. Import it when needed.</p>
     </div>
     
   </section>

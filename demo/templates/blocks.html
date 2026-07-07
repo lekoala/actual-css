@@ -15,6 +15,8 @@
 
     .blocks-intro {
       --center-size: 72rem;
+
+      margin-block-end: var(--space-5);
     }
 
     .block-section {
@@ -133,6 +135,15 @@
       border-block-end: var(--border-width) solid var(--border);
     }
 
+    .block-message > div {
+      display: grid;
+      gap: var(--space-1);
+    }
+
+    .block-message p {
+      margin-block: 0;
+    }
+
     .block-auth {
       max-inline-size: 28rem;
       margin-inline: auto;
@@ -185,7 +196,7 @@
 
     <section class="center block-section" id="compact-metrics">
       <h2>Compact metrics</h2>
-      <p class="block-note">Validates `.grid-6` for small repeated items: one column when narrow, three columns in medium containers, six columns when the row has room.</p>
+      <p class="block-note">Validates `.grid-6` for small repeated items: two columns when narrow, three columns in medium containers, six columns when the row has room.</p>
 
       <div class="block-example container-query">
         <div class="grid-6">
@@ -322,10 +333,10 @@
           <span class="muted">Showing 3 of 28 accounts</span>
           <nav aria-label="Accounts pages">
             <ol class="pagination sm">
-              <li><a class="btn outline" href="#" aria-disabled="true">Previous</a></li>
+              <li><a class="btn outline" href="#" rel="prev" aria-disabled="true">Previous</a></li>
               <li><a class="btn" href="#" aria-current="page">1</a></li>
               <li><a class="btn outline" href="#">2</a></li>
-              <li><a class="btn outline" href="#">Next</a></li>
+              <li><a class="btn outline" href="#" rel="next">Next</a></li>
             </ol>
           </nav>
         </footer>
@@ -477,9 +488,11 @@
           <span>Version 0.1.0 is live in production.</span>
         </section>
 
-        <section class="alert danger" role="alert">
-          <strong>Billing sync failed.</strong>
-          <span>Retry the sync or check the provider status page.</span>
+        <section class="alert danger stack" role="alert">
+          <div>
+            <strong>Billing sync failed.</strong>
+            <span>Retry the sync or check the provider status page.</span>
+          </div>
           <menu class="actions cluster">
             <li><button class="btn danger sm" type="button">Retry sync</button></li>
             <li><a href="#" class="btn neutral ghost sm">View details</a></li>

@@ -1,0 +1,16 @@
+/*
+ * Additional layout primitives not included in the core bundle.
+ *
+ * Import this file explicitly when a project needs these patterns.
+ */
+.switcher {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap);
+}
+
+.switcher > * {
+  flex-basis: calc((var(--switcher-threshold, 40rem) - 100%) * 999);
+  flex-grow: 1;
+  min-inline-size: 0;
+}

@@ -1,9 +1,9 @@
 /*
  * List group — rich content lists with an optional header/caption.
  *
- * Each li wraps multiple children in a row: avatar, title, description,
- * action buttons flow naturally. The description breaks onto its own row via
- * flex-basis.
+ * Each li wraps multiple children in a row: avatar, title, meta,
+ * action buttons flow naturally. Compose with .media for leading
+ * content or use .stack inside the li for multi-line descriptions.
  */
 .list-group > :where(header, figcaption) {
   font-weight: var(--font-weight-strong);
@@ -32,9 +32,4 @@
 
 .list-group > ul > li:not(:last-child) {
   border-block-end: var(--border-width) solid var(--border);
-}
-
-.list-group > ul > li > p {
-  flex-basis: 100%;
-  margin: 0;
 }
