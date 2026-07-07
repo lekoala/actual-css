@@ -73,6 +73,46 @@ Use `.cluster` for inline groups that wrap naturally.
 
 Use cluster for action rows, tags, toolbar sections, metadata, and compact navigation.
 
+## Scroll Snap
+
+> Horizontal scroll areas that stay useful without JavaScript and snap in modern browsers.
+
+Use `.scroll-snap` for a row of items that should scroll horizontally, such as card rails, media strips, overflow tabs, or a simple carousel baseline.
+
+```html
+<section class="stack" aria-labelledby="featured-title">
+  <h2 id="featured-title">Featured articles</h2>
+
+  <ul class="scroll-snap list-reset">
+    <li class="card" style="inline-size: 18rem">Article one</li>
+    <li class="card" style="inline-size: 18rem">Article two</li>
+    <li class="card" style="inline-size: 18rem">Article three</li>
+  </ul>
+</section>
+```
+
+The baseline is just flex layout plus `overflow-x: auto`, so older browsers and no-JavaScript contexts still get a usable horizontal scroll area. Browsers with scroll snap support add `scroll-snap-type` and item alignment.
+
+Items snap to the inline start edge by default. Use `data-snap="center"` for visual rails where centered cards are the better fit.
+
+```html
+<div class="scroll-snap" data-snap="center">
+  <article class="card" style="inline-size: 18rem">One</article>
+  <article class="card" style="inline-size: 18rem">Two</article>
+  <article class="card" style="inline-size: 18rem">Three</article>
+</div>
+```
+
+Keep scrollbars visible by default. If a product deliberately hides them, make that choice explicit with `data-scrollbar="hidden"`.
+
+```html
+<div class="scroll-snap" data-scrollbar="hidden">
+  ...
+</div>
+```
+
+`.scroll-snap` is not a full interactive carousel. Previous/next buttons, pagination, selected state, and announcements belong to optional JavaScript enhancement. Do not render inert controls without JavaScript.
+
 ## Center
 
 > Constrain readable content and center it in the viewport, with width and padding tunable per instance.

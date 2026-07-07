@@ -476,6 +476,44 @@ small {
   gap: var(--gap);
 }
 
+.scroll-snap {
+  --scroll-snap-gap: var(--gap);
+  --scroll-snap-align: start;
+
+  display: flex;
+  gap: var(--scroll-snap-gap);
+  overflow-x: auto;
+}
+
+.scroll-snap > * {
+  flex: 0 0 auto;
+}
+
+@supports (scroll-snap-type: inline mandatory) {
+  .scroll-snap {
+    overscroll-behavior-inline: contain;
+    scroll-padding-inline: var(--scroll-snap-padding, var(--scroll-snap-gap));
+    scroll-snap-type: inline mandatory;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .scroll-snap > * {
+    scroll-snap-align: var(--scroll-snap-align);
+  }
+
+  .scroll-snap[data-snap="center"] {
+    --scroll-snap-align: center;
+  }
+}
+
+.scroll-snap[data-scrollbar="hidden"] {
+  scrollbar-width: none;
+}
+
+.scroll-snap[data-scrollbar="hidden"]::-webkit-scrollbar {
+  display: none;
+}
+
 .center {
   box-sizing: content-box;
   max-inline-size: var(--center-size, 72rem);
@@ -1058,6 +1096,13 @@ a.btn[aria-disabled="true"] {
   --spinner-width: 0.15em;
 }
 
+.btn:where([aria-pressed="true"], [aria-current]:not([aria-current="false"])):not(.link) {
+  --btn-bg: var(--intent, var(--primary));
+  --btn-fg: var(--intent-fg, var(--primary-fg));
+  --btn-border: var(--intent, var(--primary));
+  --ui-hover-bg: var(--btn-bg);
+}
+
 @media (forced-colors: active) {
   .btn {
     border-color: ButtonText;
@@ -1072,8 +1117,7 @@ a.btn[aria-disabled="true"] {
     color: LinkText;
   }
 
-  .btn[aria-pressed="true"],
-  .btn:where([aria-current]:not([aria-current="false"])) {
+  .btn:where([aria-pressed="true"], [aria-current]:not([aria-current="false"])):not(.link) {
     border-color: Highlight;
     background: Highlight;
     color: HighlightText;
@@ -3026,7 +3070,7 @@ button.avatar {
  * Pagination — page navigation for paginated lists.
  *
  * Render .btn elements inside a .pagination list. The active page is marked
- * with aria-current="page" and tinted with the intent color.
+ * with aria-current="page"; .btn owns the active state styling.
  */
 .pagination {
   display: flex;
@@ -3040,21 +3084,6 @@ button.avatar {
 
 .pagination .btn {
   min-inline-size: var(--control-size);
-}
-
-.pagination .btn[aria-current="page"] {
-  border-color: var(--intent, var(--primary));
-  background: var(--intent, var(--primary));
-  color: var(--intent-fg, var(--primary-fg));
-}
-
-@media (forced-colors: active) {
-  .pagination .btn[aria-current="page"] {
-    border-color: Highlight;
-    background: Highlight;
-    color: HighlightText;
-    forced-color-adjust: none;
-  }
 }
 
 /*

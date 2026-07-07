@@ -2,7 +2,7 @@
  * Pagination — page navigation for paginated lists.
  *
  * Render .btn elements inside a .pagination list. The active page is marked
- * with aria-current="page" and tinted with the intent color.
+ * with aria-current="page"; .btn owns the active state styling.
  */
 .pagination {
   display: flex;
@@ -16,19 +16,4 @@
 
 .pagination .btn {
   min-inline-size: var(--control-size);
-}
-
-.pagination .btn[aria-current="page"] {
-  border-color: var(--intent, var(--primary));
-  background: var(--intent, var(--primary));
-  color: var(--intent-fg, var(--primary-fg));
-}
-
-@media (forced-colors: active) {
-  .pagination .btn[aria-current="page"] {
-    border-color: Highlight;
-    background: Highlight;
-    color: HighlightText;
-    forced-color-adjust: none;
-  }
 }

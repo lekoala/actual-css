@@ -150,6 +150,13 @@ a.btn[aria-disabled="true"] {
   --spinner-width: 0.15em;
 }
 
+.btn:where([aria-pressed="true"], [aria-current]:not([aria-current="false"])):not(.link) {
+  --btn-bg: var(--intent, var(--primary));
+  --btn-fg: var(--intent-fg, var(--primary-fg));
+  --btn-border: var(--intent, var(--primary));
+  --ui-hover-bg: var(--btn-bg);
+}
+
 @media (forced-colors: active) {
   .btn {
     border-color: ButtonText;
@@ -164,8 +171,7 @@ a.btn[aria-disabled="true"] {
     color: LinkText;
   }
 
-  .btn[aria-pressed="true"],
-  .btn:where([aria-current]:not([aria-current="false"])) {
+  .btn:where([aria-pressed="true"], [aria-current]:not([aria-current="false"])):not(.link) {
     border-color: Highlight;
     background: Highlight;
     color: HighlightText;
