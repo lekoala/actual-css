@@ -256,6 +256,7 @@ if (typeof document !== "undefined") {
   document.addEventListener("scroll", rafNotify, { passive: true, capture: true });
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape" && !e.ctrlKey && !e.altKey && !e.shiftKey) {
+      e.preventDefault();
       notify("escape");
     }
   });

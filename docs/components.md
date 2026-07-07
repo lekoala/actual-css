@@ -384,7 +384,7 @@ With icons, loading state...
 - Should display nicely in grids with equal-height behavior.
 - Does not own page spacing.
 - A direct `<header>` or `<footer>` is the card's structural slot.
-- Use `data-bleed` on a direct child to escape the card padding (full-width images, colored headers or footers).
+- Use `.bleed` on a direct child to escape the card padding (full-width images, colored headers or footers).
 
 ```html
 <div style="max-inline-size: 32rem">
@@ -415,7 +415,7 @@ With icons, loading state...
 ```html
 <div style="max-inline-size: 32rem">
   <article class="card stack">
-    <img data-bleed src="https://picsum.photos/seed/actual-css-card/600/300" alt="Coastal cliffs at dusk" />
+    <img class="bleed" src="https://picsum.photos/seed/actual-css-card/600/300" alt="Coastal cliffs at dusk" />
     <header>
       <h3>Coastal cliffs at dusk</h3>
     </header>
@@ -432,7 +432,7 @@ With icons, loading state...
 
 ```html
 <article class="card stack" style="--card-max-inline-size: 24rem">
-  <header data-bleed class="stack items-center text-center" style="background: var(--surface-subtle)">
+  <header class="bleed stack items-center text-center" style="background: var(--surface-subtle)">
     <hgroup>
       <h3>Team</h3>
       <p class="muted">For growing products</p>
@@ -450,7 +450,7 @@ With icons, loading state...
     <li>Priority support</li>
   </ul>
 
-  <footer data-bleed style="background: var(--surface-subtle); justify-content: center">
+  <footer class="bleed" style="background: var(--surface-subtle); justify-content: center">
     <a class="btn primary" href="/billing">Upgrade</a>
   </footer>
 </article>

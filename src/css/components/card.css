@@ -79,38 +79,38 @@
 }
 
 /* Full-bleed children */
-.card > [data-bleed] {
+.card > .bleed {
   margin-inline: calc(var(--card-pad) * -1);
   max-inline-size: none;
 }
 
-.card > [data-bleed]:first-child {
+.card > .bleed:first-child {
   margin-block-start: calc(var(--card-pad) * -1);
   border-start-start-radius: inherit;
   border-start-end-radius: inherit;
 }
 
-.card > [data-bleed]:last-child {
+.card > .bleed:last-child {
   margin-block-end: calc(var(--card-pad) * -1);
   border-end-start-radius: inherit;
   border-end-end-radius: inherit;
 }
 
 /* Media bleed */
-.card > :where(img, picture, video, canvas, svg)[data-bleed] {
+.card > :where(img, picture, video, canvas, svg).bleed {
   display: block;
   inline-size: calc(100% + var(--card-pad) * 2);
   max-inline-size: none;
 }
 
-.card > picture[data-bleed] > img {
+.card > picture.bleed > img {
   display: block;
   inline-size: 100%;
   block-size: auto;
 }
 
 /* Padded structural bleed */
-.card > :where(header, footer, figure)[data-bleed] {
+.card > :where(header, footer, figure).bleed {
   padding: var(--card-pad);
 }
 
