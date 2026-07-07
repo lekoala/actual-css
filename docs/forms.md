@@ -5,7 +5,8 @@
 > Cohesive set of form elements that share focus styles, helpers, and validation patterns.
 
 - Form controls are styled with explicit classes, not by parent scope.
-- Reusable classes: `.field`, `.field-label`, `.field-help`, `.field-error`, `.field-group`, `.choice`, `.form-actions`, `.form-actions.sticky`.
+- Control classes: `.input`, `.textarea`, `.select`, `.check`, `.radio`, `.switch`, `.range`, `.file`.
+- Reusable layout classes: `.field`, `.field-label`, `.field-help`, `.field-error`, `.field-group`, `.choice`, `.form-actions`, `.form-actions.sticky`.
 - No floating labels.
 - Proper focus style that preserves keyboard navigation.
 - `.field-group` and `.choice` provide layout without depending on parent scope.
@@ -65,15 +66,15 @@
       <legend class="field-label">Availability</legend>
       <div class="stack">
         <label class="choice">
-          <input type="radio" name="availability" value="available" checked />
+          <input class="radio" type="radio" name="availability" value="available" checked />
           <span>Available for work</span>
         </label>
         <label class="choice">
-          <input type="radio" name="availability" value="open" />
+          <input class="radio" type="radio" name="availability" value="open" />
           <span>Open to opportunities</span>
         </label>
         <label class="choice">
-          <input type="radio" name="availability" value="unavailable" />
+          <input class="radio" type="radio" name="availability" value="unavailable" />
           <span>Not available</span>
         </label>
       </div>
@@ -99,7 +100,7 @@
     </label>
 
     <label class="choice">
-      <input type="checkbox" />
+      <input class="check" type="checkbox" />
       <span>
         I agree to the <a href="#">terms of service</a>
         <span class="field-help">Required to create an account</span>
@@ -136,7 +137,7 @@
 - `.field` is the canonical field wrapper. It works on `<label>` and `<div>`.
 - `.field-label` is element-agnostic. Use it on `<span>` inside a wrapped label, on `<label for="…">` in a detached layout, or on `<legend>` inside a fieldset.
 - `.field-group` styles a `<fieldset class="field-group">` as a grouped field container.
-- `.choice` is the choice-label API. The control goes first, the label group second, so multi-line labels align the control with the first line.
+- `.choice` is the choice-label API. Use `.check` or `.radio` on the nested control. The control goes first, the label group second, so multi-line labels align the control with the first line.
 - For a switch, use `class="switch"` and `role="switch"`.
 - Core range controls stay native and are enhanced by `accent-color`. An optional richer range skin may come later if real projects need it.
 - `.form-actions` carries a default top margin. Override it with `--form-actions-margin-block-start`. It is class-only and may live inside or outside `<form>`. See Detached Actions below.
@@ -228,7 +229,7 @@ The `.sm` and `.lg` modifiers set the shared control tokens used by inputs, sele
 
       <div class="grid-5 items-start">
         <label class="choice">
-          <input type="checkbox" />
+          <input class="check" type="checkbox" />
           <span>
             <span class="field-label">Unchecked checkbox</span>
             <span class="field-help">Available and not selected.</span>
@@ -236,7 +237,7 @@ The `.sm` and `.lg` modifiers set the shared control tokens used by inputs, sele
         </label>
 
         <label class="choice">
-          <input type="checkbox" checked />
+          <input class="check" type="checkbox" checked />
           <span>
             <span class="field-label">Checked checkbox</span>
             <span class="field-help">Available and selected.</span>
@@ -244,7 +245,7 @@ The `.sm` and `.lg` modifiers set the shared control tokens used by inputs, sele
         </label>
 
         <label class="choice">
-          <input type="checkbox" checked disabled />
+          <input class="check" type="checkbox" checked disabled />
           <span>
             <span class="field-label">Disabled checked</span>
             <span class="field-help">Selected but unavailable.</span>
@@ -252,7 +253,7 @@ The `.sm` and `.lg` modifiers set the shared control tokens used by inputs, sele
         </label>
 
         <label class="choice">
-          <input type="checkbox" disabled />
+          <input class="check" type="checkbox" disabled />
           <span>
             <span class="field-label">Disabled unchecked</span>
             <span class="field-help">Unavailable and not selected.</span>
@@ -260,7 +261,7 @@ The `.sm` and `.lg` modifiers set the shared control tokens used by inputs, sele
         </label>
 
         <label class="choice">
-          <input type="checkbox" id="indet-demo" />
+          <input class="check" type="checkbox" id="indet-demo" />
           <span>
             <span class="field-label">Indeterminate checkbox</span>
             <span class="field-help">Partially selected — set via <code>element.indeterminate = true</code>. Try it: <button class="btn text sm" type="button" onclick="document.getElementById('indet-demo').indeterminate = !document.getElementById('indet-demo').indeterminate">toggle</button></span>
@@ -270,7 +271,7 @@ The `.sm` and `.lg` modifiers set the shared control tokens used by inputs, sele
 
       <div class="grid-4 items-start">
         <label class="choice">
-          <input type="radio" name="demo-radio-state" />
+          <input class="radio" type="radio" name="demo-radio-state" />
           <span>
             <span class="field-label">Unselected radio</span>
             <span class="field-help">Available and not selected.</span>
@@ -278,7 +279,7 @@ The `.sm` and `.lg` modifiers set the shared control tokens used by inputs, sele
         </label>
 
         <label class="choice">
-          <input type="radio" name="demo-radio-state" checked />
+          <input class="radio" type="radio" name="demo-radio-state" checked />
           <span>
             <span class="field-label">Selected radio</span>
             <span class="field-help">Available and selected.</span>
@@ -286,7 +287,7 @@ The `.sm` and `.lg` modifiers set the shared control tokens used by inputs, sele
         </label>
 
         <label class="choice">
-          <input type="radio" name="demo-radio-disabled" checked disabled />
+          <input class="radio" type="radio" name="demo-radio-disabled" checked disabled />
           <span>
             <span class="field-label">Disabled selected</span>
             <span class="field-help">Selected but unavailable.</span>
@@ -294,7 +295,7 @@ The `.sm` and `.lg` modifiers set the shared control tokens used by inputs, sele
         </label>
 
         <label class="choice">
-          <input type="radio" name="demo-radio-disabled" disabled />
+          <input class="radio" type="radio" name="demo-radio-disabled" disabled />
           <span>
             <span class="field-label">Disabled unselected</span>
             <span class="field-help">Unavailable and not selected.</span>
@@ -406,34 +407,34 @@ The `.sm` and `.lg` modifiers set the shared control tokens used by inputs, sele
 
       <div class="grid-4 items-start">
         <label class="choice sm">
-          <input type="checkbox" checked />
+          <input class="check" type="checkbox" checked />
           <span>Small checkbox</span>
         </label>
         <label class="choice">
-          <input type="checkbox" checked />
+          <input class="check" type="checkbox" checked />
           <span>Default checkbox</span>
         </label>
         <label class="choice lg">
-          <input type="checkbox" checked />
+          <input class="check" type="checkbox" checked />
           <span>Large checkbox</span>
         </label>
         <label class="choice">
-          <input type="checkbox" id="indet-size" />
+          <input class="check" type="checkbox" id="indet-size" />
           <span>Indeterminate <button class="btn text sm" type="button" onclick="document.getElementById('indet-size').indeterminate = !document.getElementById('indet-size').indeterminate">toggle</button></span>
         </label>
       </div>
 
       <div class="grid-3 items-start">
         <label class="choice sm">
-          <input type="radio" name="demo-radio-size" checked />
+          <input class="radio" type="radio" name="demo-radio-size" checked />
           <span>Small radio</span>
         </label>
         <label class="choice">
-          <input type="radio" name="demo-radio-size" />
+          <input class="radio" type="radio" name="demo-radio-size" />
           <span>Default radio</span>
         </label>
         <label class="choice lg">
-          <input type="radio" name="demo-radio-size" />
+          <input class="radio" type="radio" name="demo-radio-size" />
           <span>Large radio</span>
         </label>
       </div>
@@ -477,7 +478,8 @@ Use **`for`/`id`** when the layout needs the label and control in different grid
   <label class="field-label" for="profile-email">
     Email address <span class="required-mark" aria-hidden="true">*</span>
   </label>
-  <input id="profile-email"
+  <input class="input"
+         id="profile-email"
          name="email"
          type="email"
          autocomplete="email"
@@ -504,14 +506,14 @@ When composing source files manually, import `components/join.css` after the con
   <label class="field-label" id="amount-label" for="amount">Amount</label>
   <div class="join" role="group" aria-labelledby="amount-label">
     <span class="join-addon">$</span>
-    <input id="amount" name="amount" inputmode="decimal" />
+    <input class="input" id="amount" name="amount" inputmode="decimal" />
     <button class="btn outline" type="button">Clear</button>
   </div>
   <span class="field-help">Enter the invoice total before tax.</span>
 </div>
 ```
 
-`.join` handles border-radius and border collapsing between adjacent children. It works with any direct child — `.input`, `.btn`, `.select`, `.join-addon`, or bare native controls.
+`.join` handles border-radius and border collapsing between adjacent children. It works with any direct child — `.input`, `.btn`, `.select`, or `.join-addon`.
 
 ## Input Policy
 
@@ -534,14 +536,14 @@ filter policy stays obvious in markup.
 ```html
 <label class="field">
   <span class="field-label">Quantity</span>
-  <input inputmode="numeric" data-filter="numeric" placeholder="42" />
+  <input class="input" inputmode="numeric" data-filter="numeric" placeholder="42" />
 </label>
 ```
 
 ```html
 <label class="field">
   <span class="field-label">Amount</span>
-  <input inputmode="decimal" data-filter="decimal" placeholder="12.34" />
+  <input class="input" inputmode="decimal" data-filter="decimal" placeholder="12.34" />
 </label>
 ```
 
@@ -568,14 +570,14 @@ run from left to right.
 ```html
 <label class="field">
   <span class="field-label">Slug</span>
-  <input data-filter="lower|slug" autocomplete="off" placeholder="release-notes" />
+  <input class="input" data-filter="lower|slug" autocomplete="off" placeholder="release-notes" />
 </label>
 ```
 
 ```html
 <label class="field">
   <span class="field-label">Code</span>
-  <input data-filter="upper|letters" autocomplete="off" placeholder="ABC" />
+  <input class="input" data-filter="upper|letters" autocomplete="off" placeholder="ABC" />
 </label>
 ```
 
@@ -592,14 +594,14 @@ Use `data-mask` when the input has a fixed shape. Tokens are `9` for a digit,
 ```html
 <label class="field">
   <span class="field-label">Reference</span>
-  <input data-mask="aaa-999" autocomplete="off" placeholder="abc-123" />
+  <input class="input" data-mask="aaa-999" autocomplete="off" placeholder="abc-123" />
 </label>
 ```
 
 ```html
 <label class="field">
   <span class="field-label">Date</span>
-  <input data-mask="9999-99-99" inputmode="numeric" autocomplete="off" placeholder="yyyy-mm-dd" />
+  <input class="input" data-mask="9999-99-99" inputmode="numeric" autocomplete="off" placeholder="yyyy-mm-dd" />
 </label>
 ```
 
@@ -727,22 +729,22 @@ Scroll the page to see the actions stay reachable.
       <legend class="field-label">Theme</legend>
       <div class="stack">
         <label class="choice">
-          <input type="radio" name="theme" value="light" checked />
+          <input class="radio" type="radio" name="theme" value="light" checked />
           <span>Light</span>
         </label>
         <label class="choice">
-          <input type="radio" name="theme" value="dark" />
+          <input class="radio" type="radio" name="theme" value="dark" />
           <span>Dark</span>
         </label>
         <label class="choice">
-          <input type="radio" name="theme" value="auto" />
+          <input class="radio" type="radio" name="theme" value="auto" />
           <span>System</span>
         </label>
       </div>
     </fieldset>
 
     <label class="choice">
-      <input type="checkbox" />
+      <input class="check" type="checkbox" />
       <span>Email notifications</span>
     </label>
   </div>
@@ -811,22 +813,22 @@ Scroll the page to see the detached footer stay reachable.
       <legend class="field-label">Theme</legend>
       <div class="stack">
         <label class="choice">
-          <input type="radio" name="theme-detached" value="light" checked />
+          <input class="radio" type="radio" name="theme-detached" value="light" checked />
           <span>Light</span>
         </label>
         <label class="choice">
-          <input type="radio" name="theme-detached" value="dark" />
+          <input class="radio" type="radio" name="theme-detached" value="dark" />
           <span>Dark</span>
         </label>
         <label class="choice">
-          <input type="radio" name="theme-detached" value="auto" />
+          <input class="radio" type="radio" name="theme-detached" value="auto" />
           <span>System</span>
         </label>
       </div>
     </fieldset>
 
     <label class="choice">
-      <input type="checkbox" />
+      <input class="check" type="checkbox" />
       <span>Email notifications</span>
     </label>
   </div>

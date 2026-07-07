@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Actual CSS — Kitchen Sink</title>
-  <link rel="stylesheet" href="../dist/actual.min.css">
+  <link rel="stylesheet" href="../../dist/actual.min.css">
   <style>
     body { padding: 2rem; }
     section { margin-block: 2rem; }
@@ -214,28 +214,28 @@
         <span class="field-help">.native disables the enhanced picker</span>
       </div>
       <label class="choice">
-        <input type="checkbox" checked>
+        <input class="check" type="checkbox" checked>
         Remember me
       </label>
       <label class="choice">
-        <input type="radio" name="opt" checked>
+        <input class="radio" type="radio" name="opt" checked>
         Option A
       </label>
       <label class="choice">
-        <input type="radio" name="opt">
+        <input class="radio" type="radio" name="opt">
         Option B
       </label>
       <label class="choice">
-        <input type="checkbox" role="switch" checked>
+        <input class="switch" type="checkbox" role="switch" checked>
         Notifications
       </label>
       <label class="choice">
-        <input type="checkbox" disabled>
+        <input class="check" type="checkbox" disabled>
         Disabled option
       </label>
       <div class="field danger">
         <label class="field-label" for="danger">Danger field</label>
-        <input id="danger" type="text" value="Invalid value">
+        <input class="input" id="danger" type="text" value="Invalid value">
         <span class="field-error">This field has an error</span>
       </div>
       <div class="form-actions">

@@ -25,6 +25,7 @@
   --btn-fg: var(--ui-fg, var(--intent-fg, var(--neutral-fg)));
   --btn-border: var(--ui-border, transparent);
   --btn-radius: var(--radius);
+  --btn-focus-color: var(--focus);
 
   position: relative;
   display: inline-flex;
@@ -51,6 +52,18 @@
     color var(--duration),
     box-shadow var(--duration),
     transform var(--duration);
+}
+
+/* Intent classes tint the focus ring to match the intent color.
+   Browsers without color-mix() fall back to the default --focus-ring. */
+.btn:is(.primary, .secondary, .success, .warning, .danger, .neutral) {
+  --btn-focus-color: var(--intent);
+}
+
+@supports (color: color-mix(in oklch, red, white)) {
+  .btn:is(.primary, .secondary, .success, .warning, .danger, .neutral) {
+    --btn-focus-ring-color: color-mix(in oklch, var(--intent) 28%, transparent);
+  }
 }
 
 /* .solid/.soft/.outline are shared via variants.css. The --btn-* fallbacks
@@ -108,8 +121,9 @@
 }
 
 .btn:focus-visible {
-  outline: var(--focus-outline);
+  outline: calc(var(--border-width) * 2) solid var(--btn-focus-color);
   outline-offset: var(--focus-outline-offset);
+  box-shadow: 0 0 0 3px var(--btn-focus-ring-color, var(--focus-ring));
 }
 
 .btn.link:focus-visible {
