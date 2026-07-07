@@ -68,17 +68,27 @@
 }
 
 @media (hover: hover) {
-  :is(.input, .textarea, .select, :is(.form, .field) :where(input, textarea, select)):hover:not(
+  :is(.input, .textarea, :is(.form, .field) :where(input, textarea)):hover:not(
     :disabled
   ) {
     --control-border: var(--text-subtle);
   }
+
+  :is(.select, :is(.form, .field) select):hover:not(:disabled) {
+    --control-bg: var(--surface-subtle);
+  }
 }
 
-:is(.input, .textarea, .select, :is(.form, .field) :where(input, textarea, select)):focus-visible {
+:is(.input, .textarea, :is(.form, .field) :where(input, textarea)):focus-visible {
   --control-border: var(--focus);
   outline: var(--focus-outline);
   outline-offset: var(--focus-outline-offset);
+  box-shadow: var(--focus-ring-shadow);
+}
+
+:is(.select, :is(.form, .field) select):focus-visible {
+  --control-border: var(--border);
+  outline: none;
   box-shadow: var(--focus-ring-shadow);
 }
 
@@ -118,4 +128,12 @@
 .textarea::placeholder,
 :is(.form, .field) :where(input, textarea)::placeholder {
   color: var(--text-muted);
+}
+
+@media (forced-colors: active) {
+  :is(.select, :is(.form, .field) select):focus-visible {
+    outline: var(--focus-outline);
+    outline-offset: var(--focus-outline-offset);
+    box-shadow: none;
+  }
 }

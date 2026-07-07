@@ -24,3 +24,7 @@ Actual CSS makes the accessible path the default where CSS and small runtime enh
 - Do not rely on hover alone to reveal interactivity.
 - Do not use color alone to communicate state.
 - Use structure, border, background, iconography, and spacing consistently.
+- Select controls stay quieter than text inputs: hover uses a subtle surface change, while focus-visible and open states use a soft ring in normal color modes.
+- Forced-colors keeps strong outlines for select focus/open states, high-contrast option hover/focus states, and a selected checkmark that inherits the option text color unless the option is highlighted.
+- Global Escape handlers only prevent default when Actual has a visible managed surface to close.
+- Prefer explicit `data-filter` values in examples and docs; empty `data-filter` remains supported only as terse numeric/decimal markup.

@@ -524,16 +524,17 @@ needs temporary, signed, grouped, or locale-specific values while the user types
 When the JavaScript runtime is loaded, Actual enhances `input[data-filter]`.
 Textareas are left alone.
 
-Add `data-filter` when the field should enforce one of Actual's small built-in
-filters. Unsupported filter names are ignored.
+Add an explicit `data-filter` value when the field should enforce one of
+Actual's small built-in filters. Unsupported filter names are ignored.
 
-An empty `data-filter` uses `inputmode` only when it is `numeric` or `decimal`;
-an explicit value always wins.
+An empty `data-filter` is supported as terse markup for `inputmode="numeric"`
+and `inputmode="decimal"`, but examples should use explicit values so the
+filter policy stays obvious in markup.
 
 ```html
 <label class="field">
   <span class="field-label">Quantity</span>
-  <input inputmode="numeric" data-filter placeholder="42" />
+  <input inputmode="numeric" data-filter="numeric" placeholder="42" />
 </label>
 ```
 
