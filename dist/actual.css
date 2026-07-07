@@ -3835,7 +3835,6 @@ button.avatar {
  */
 @media (hover: hover) and (pointer: fine) {
   @supports (appearance: base-select) {
-
     .select:not([multiple], [size], .native),
     .form select:not([multiple], [size], .native) {
       appearance: base-select;
@@ -3886,18 +3885,9 @@ button.avatar {
 
     .select option:not(:disabled):focus-visible,
     .form select option:not(:disabled):focus-visible {
-      background-color: var(--surface-subtle);
-      color: var(--text);
+      background-color: var(--primary);
+      color: var(--primary-fg);
       outline: none;
-    }
-
-    @supports (color: color-mix(in oklch, red, white)) {
-
-      .select option:not(:disabled):focus-visible,
-      .form select option:not(:disabled):focus-visible {
-        background-color: color-mix(in oklch, var(--primary) 12%, transparent);
-        box-shadow: inset 0 0 0 1px color-mix(in oklch, var(--primary), transparent 65%);
-      }
     }
 
     .select option:active,
@@ -3938,7 +3928,6 @@ button.avatar {
 @media (forced-colors: active) {
   @media (hover: hover) and (pointer: fine) {
     @supports (appearance: base-select) {
-
       .select:not([multiple], [size], .native)::picker(select),
       .form select:not([multiple], [size], .native)::picker(select) {
         border-color: ButtonText;
