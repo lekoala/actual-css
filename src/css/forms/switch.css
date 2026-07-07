@@ -11,12 +11,14 @@
 /* Intent boundary — inherited intents do not tint this component.
    Local intent classes still win because :where() has zero specificity. */
 :where(.switch, .form input[role="switch"]) {
+  /* @sync intent-boundary */
   --intent: initial;
   --intent-fg: initial;
   --ui-bg: initial;
   --ui-fg: initial;
   --ui-border: initial;
   --ui-hover-bg: initial;
+  /* @sync intent-boundary */
 }
 
 .switch,
@@ -63,9 +65,11 @@
     box-shadow var(--duration);
 }
 
-.switch:hover:not(:disabled),
-.form input[role="switch"]:hover:not(:disabled) {
-  border-color: var(--intent, var(--primary));
+@media (hover: hover) {
+  .switch:hover:not(:disabled),
+  .form input[role="switch"]:hover:not(:disabled) {
+    border-color: var(--intent, var(--primary));
+  }
 }
 
 .switch:checked,

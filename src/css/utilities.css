@@ -61,7 +61,10 @@
   color: var(--text-muted);
 }
 
-/* Circle: forces a fully round shape without mutating global radius tokens. */
+/* Circle: forces a fully round shape without mutating global radius tokens.
+   Works on any component because utilities load after components. .join is
+   the one exception: it writes corner longhands on its children, so
+   .join.circle keeps its own --join-radius hook (join.css). */
 .circle {
   border-radius: var(--radius-full);
 }

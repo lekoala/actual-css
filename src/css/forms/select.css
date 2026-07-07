@@ -1,42 +1,13 @@
 /*
- * Select — native select with text-control geometry and a CSS chevron.
+ * Select — chevron and appearance layer on top of the shared text-control
+ * recipe.
  *
- * Mirrors the text-control contract from control.css but lives separately so
- * the picker (appearance: base-select) enhancement in custom-select.css can be
- * opted out independently. Add .native to a specific select to opt out of the
- * enhancement.
- *
- * --control-* are the per-state control tokens (shared with control.css). The
- * .field wrapper uses --field-* (form.css).
+ * Base geometry and interaction states come from control.css (select shares
+ * the --control-* tokens). This file only removes the native arrow and draws
+ * the CSS chevron, so the picker (appearance: base-select) enhancement in
+ * custom-select.css can be opted out independently. Add .native to a specific
+ * select to opt out of the enhancement.
  */
-.select,
-.form select {
-  --control-border: var(--border);
-  --control-bg: var(--surface);
-  --control-fg: var(--text);
-  --control-ring: none;
-  --control-cursor: auto;
-  --control-opacity: 1;
-
-  inline-size: 100%;
-  min-block-size: var(--control-size);
-  padding-inline: var(--space-3);
-  border: var(--border-width) solid var(--control-border);
-  border-radius: var(--radius);
-  background: var(--control-bg);
-  color: var(--control-fg);
-  font-size: var(--control-font-size);
-  box-shadow: var(--control-ring);
-  cursor: var(--control-cursor);
-  opacity: var(--control-opacity);
-  outline: none;
-  transition:
-    border-color var(--duration),
-    box-shadow var(--duration),
-    background-color var(--duration),
-    color var(--duration);
-}
-
 .select:not([multiple], [size]),
 .form select:not([multiple], [size]) {
   appearance: none;
@@ -54,44 +25,7 @@
   background-position: center left var(--space-3);
 }
 
-.select:hover:not(:disabled),
-.form select:hover:not(:disabled) {
-  --control-border: var(--text-subtle);
-}
-
-.select:focus-visible,
-.form select:focus-visible {
-  --control-border: var(--focus);
-  outline: var(--focus-outline);
-  outline-offset: var(--focus-outline-offset);
-  box-shadow: var(--focus-ring-shadow);
-}
-
-.select[aria-invalid="true"],
-.field.danger select,
-.form select[aria-invalid="true"] {
-  --control-border: var(--danger);
-}
-
-@supports selector(:user-invalid) {
-
-  .select:user-invalid,
-  .form select:user-invalid {
-    --control-border: var(--danger);
-  }
-}
-
-.select:disabled,
-.form select:disabled {
-  --control-bg: var(--surface-subtle);
-  --control-fg: var(--text-subtle);
-  --control-border: var(--border);
-  --control-cursor: not-allowed;
-  --control-opacity: 1;
-}
-
 @media (forced-colors: active) {
-
   .select:not([multiple], [size]),
   .form select:not([multiple], [size]) {
     appearance: auto;

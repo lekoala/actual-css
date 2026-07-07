@@ -76,9 +76,27 @@ test("mask deletion over a literal removes the previous raw character", async ()
   await loadMask('<input data-mask="999-999">');
   const el = document.querySelector("input");
 
+  input(el, "123456");
+  expect(el.value).toBe("123-456");
+
+  // Backspace at "123-|456": the browser removed only the literal.
   inputAt(el, "123456", 3, "deleteContentBackward");
 
   expect(el.value).toBe("124-56");
+});
+
+test("selection deletion spanning a literal only reformats the remaining value", async () => {
+  await loadMask('<input data-mask="999-999">');
+  const el = document.querySelector("input");
+
+  input(el, "123456");
+  expect(el.value).toBe("123-456");
+
+  // User selected "3-4" in "123-456" and deleted: raw characters were
+  // removed, so no extra raw character may be dropped.
+  inputAt(el, "1256", 2, "deleteContentBackward");
+
+  expect(el.value).toBe("125-6");
 });
 
 test("mask dispatches input after programmatic formatting", async () => {

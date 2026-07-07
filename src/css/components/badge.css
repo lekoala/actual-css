@@ -7,12 +7,14 @@
 /* Intent boundary — inherited intents do not tint this component.
    Local intent classes still win because :where() has zero specificity. */
 :where(.badge) {
+  /* @sync intent-boundary */
   --intent: initial;
   --intent-fg: initial;
   --ui-bg: initial;
   --ui-fg: initial;
   --ui-border: initial;
   --ui-hover-bg: initial;
+  /* @sync intent-boundary */
 }
 
 .badge {
@@ -83,8 +85,9 @@
   outline-offset: var(--focus-outline-offset);
 }
 
-/* .solid/.soft/.outline are shared via variants.css. The --badge-* fallbacks
-   make .badge solid by default. */
+/* .solid/.soft/.outline are shared via variants.css, including the
+   .soft/.outline hover recipe (--ui-hover-bg). The --badge-* fallbacks make
+   .badge solid by default. */
 @media (hover: hover) {
   :where(a.badge, button.badge):not(:where(:disabled, [aria-disabled="true"])):hover {
     background: var(--ui-hover-bg, var(--badge-bg));
@@ -92,24 +95,6 @@
 
   :where(a.badge, button.badge):not(:where(:disabled, [aria-disabled="true"], .outline)):hover {
     box-shadow: inset 0 0 0 999px var(--hover-overlay);
-  }
-
-  :where(a.badge, button.badge):where(.outline):not(:where(:disabled, [aria-disabled="true"])):hover {
-    --ui-hover-bg: var(--surface-subtle);
-  }
-
-  @supports (color: color-mix(in oklch, red, white)) {
-    :where(a.badge, button.badge):where(.soft):not(:where(:disabled, [aria-disabled="true"])):hover {
-      --ui-hover-bg: color-mix(
-        in oklch,
-        var(--intent, var(--neutral)) var(--soft-hover-alpha),
-        transparent
-      );
-    }
-
-    :where(a.badge, button.badge):where(.outline):not(:where(:disabled, [aria-disabled="true"])):hover {
-      --ui-hover-bg: color-mix(in oklch, var(--intent, var(--neutral)), transparent 92%);
-    }
   }
 }
 

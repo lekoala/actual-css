@@ -94,6 +94,10 @@ function connectMask(el) {
   if (!mask) return;
   const controller = new AbortController();
   let masking = false;
+  // Last value this handler produced/saw. Distinguishes "backspaced only a
+  // literal" (delete the raw character before it) from a selection deletion
+  // that removed raw characters (just reformat, literals may come back).
+  let lastValue = el.value;
 
   onTextInput(el, (event) => {
     if (masking) return;
@@ -103,8 +107,10 @@ function connectMask(el) {
     let rawBeforeCaret = rawMaskChars(el.value.slice(0, caret), mask).length;
     const previous = el.value;
     let next = applyMask(previous, mask, inputType);
+    const onlyLiteralsRemoved =
+      rawMaskChars(previous, mask).length === rawMaskChars(lastValue, mask).length;
 
-    if (inputType.startsWith("delete") && next.length > previous.length) {
+    if (inputType.startsWith("delete") && onlyLiteralsRemoved && next.length > previous.length) {
       const raw = rawMaskChars(previous, mask);
       const deleteIndex =
         inputType === "deleteContentForward" ? rawBeforeCaret : rawBeforeCaret - 1;
@@ -116,6 +122,7 @@ function connectMask(el) {
       }
     }
 
+    lastValue = next;
     if (next === previous) return;
 
     el.value = next;

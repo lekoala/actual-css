@@ -1,6 +1,7 @@
 import { Window } from "happy-dom";
 
 const assignedGlobals = [
+  "WeakRef",
   "window",
   "document",
   "Document",
@@ -53,8 +54,24 @@ function ensureCSS(window) {
   return css;
 }
 
+// happy-dom holds MutationObserver callbacks only through a WeakRef
+// (MutationObserverListener), so a GC pass mid-test silently kills every
+// observer — enhance() cleanups stop firing after ~100ms waits. Tests swap
+// WeakRef for a strong holder; cleanupDOM restores the real one.
+class StrongRef {
+  #target;
+  constructor(target) {
+    this.#target = target;
+  }
+  deref() {
+    return this.#target;
+  }
+}
+
 export function setupDOM(html = "") {
   cleanupDOM();
+
+  assignGlobal("WeakRef", StrongRef);
 
   const window = new Window();
   activeWindow = window;

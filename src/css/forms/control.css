@@ -1,36 +1,39 @@
 /*
- * Text controls — input, textarea, and their classed equivalents.
+ * Text controls — input, textarea, select, and their classed equivalents.
  *
  * Neutral geometry and interaction states shared across all text-like
- * controls, whether semantic (input[type=text]) or classed (.input). select,
+ * controls, whether semantic (input[type=text]) or classed (.input). select
+ * shares this base recipe; its chevron/appearance layer lives in select.css.
  * checkbox, radio, range, switch, and file have their own files.
  *
  * Button-like and invisible input types are excluded so a stray
  * <input type="submit"> inside .form never inherits field geometry.
  *
- * --control-* are the per-state control tokens, reserved for control geometry
- * (here and in select.css). State selectors only flip tokens; non-text controls
- * do not consume them, so matching those selectors is a no-op. The .field
- * wrapper uses --field-* (form.css).
+ * --control-* are the per-state control tokens, reserved for control geometry.
+ * State selectors only flip tokens; non-text controls do not consume them, so
+ * matching those selectors is a no-op. The .field wrapper uses --field-*
+ * (form.css).
  */
 :is(
-    .input,
-    .textarea,
-    :is(.form, .field)
-      :where(
-        input:not(
-            [type="checkbox"],
-            [type="radio"],
-            [type="range"],
-            [type="file"],
-            [type="button"],
-            [type="submit"],
-            [type="reset"],
-            [type="color"]
-          ),
-        textarea
-      )
-  ) {
+  .input,
+  .textarea,
+  .select,
+  :is(.form, .field)
+    :where(
+      input:not(
+        [type="checkbox"],
+        [type="radio"],
+        [type="range"],
+        [type="file"],
+        [type="button"],
+        [type="submit"],
+        [type="reset"],
+        [type="color"]
+      ),
+      textarea,
+      select
+    )
+) {
   --control-border: var(--border);
   --control-bg: var(--surface);
   --control-fg: var(--text);
@@ -64,11 +67,15 @@
   resize: vertical;
 }
 
-:is(.input, .textarea, :is(.form, .field) :where(input, textarea)):hover:not(:disabled) {
-  --control-border: var(--text-subtle);
+@media (hover: hover) {
+  :is(.input, .textarea, .select, :is(.form, .field) :where(input, textarea, select)):hover:not(
+    :disabled
+  ) {
+    --control-border: var(--text-subtle);
+  }
 }
 
-:is(.input, .textarea, :is(.form, .field) :where(input, textarea)):focus-visible {
+:is(.input, .textarea, .select, :is(.form, .field) :where(input, textarea, select)):focus-visible {
   --control-border: var(--focus);
   outline: var(--focus-outline);
   outline-offset: var(--focus-outline-offset);
@@ -78,14 +85,16 @@
 .field.danger :where(input, textarea, select),
 .input[aria-invalid="true"],
 .textarea[aria-invalid="true"],
-:is(.form, .field) :where(input, textarea)[aria-invalid="true"] {
+.select[aria-invalid="true"],
+:is(.form, .field) :where(input, textarea, select)[aria-invalid="true"] {
   --control-border: var(--danger);
 }
 
 @supports selector(:user-invalid) {
   .input:user-invalid,
   .textarea:user-invalid,
-  :is(.form, .field) :where(input, textarea):user-invalid {
+  .select:user-invalid,
+  :is(.form, .field) :where(input, textarea, select):user-invalid {
     --control-border: var(--danger);
   }
 }
@@ -97,7 +106,7 @@
   --control-border: var(--border);
 }
 
-:is(.input, .textarea, :is(.form, .field) :where(input, textarea)):disabled {
+:is(.input, .textarea, .select, :is(.form, .field) :where(input, textarea, select)):disabled {
   --control-bg: var(--surface-subtle);
   --control-fg: var(--text-subtle);
   --control-border: var(--border);

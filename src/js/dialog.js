@@ -77,6 +77,20 @@ function isModal(dialog) {
   return dialog.getAttribute("data-dialog-modal") !== "false";
 }
 
+function isModalOpen(dialog) {
+  if (!dialog.open) return false;
+  // :modal distinguishes a top-layer showModal() dialog from one opened via
+  // show() or a bare `open` attribute in the initial HTML (never modal per
+  // spec, whatever data-dialog-modal says).
+  try {
+    return dialog.matches(":modal");
+  } catch {
+    // Selector unsupported: the only way a dialog is open before we wire it
+    // is the `open` attribute, which is non-modal.
+    return false;
+  }
+}
+
 function syncModalOpenClass(doc = document) {
   let hasOpenModal = false;
 
@@ -353,7 +367,7 @@ function ensureDialogWired(dialog) {
   const state = {
     controller,
     closing: false,
-    modalOpen: dialog.open && isModal(dialog),
+    modalOpen: isModalOpen(dialog),
     restoreFocusTo: null,
     returnValue: "",
     staticTimer: null,

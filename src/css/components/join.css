@@ -19,6 +19,8 @@
   display: inline-flex;
 }
 
+/* The .circle utility cannot round a join: corners are written as longhands
+   on the children below, so the group radius must flow through the token. */
 .join.circle {
   --join-radius: var(--radius-full);
 }
