@@ -3278,7 +3278,7 @@ button.avatar {
   }
 }
 
-:where(.range, .form input[type="range"]) {
+:where(.range, :is(.form, .field) input[type="range"]) {
   --intent: initial;
   --intent-fg: initial;
   --ui-bg: initial;
@@ -3287,11 +3287,11 @@ button.avatar {
   --ui-hover-bg: initial;
 }
 
-.form input[type="file"], .file {
+:is(.form, .field) input[type="file"], .file {
   color: var(--text-muted);
 }
 
-.form input[type="file"]::file-selector-button {
+:is(.form, .field) input[type="file"]::file-selector-button {
   padding-block: var(--space-1);
   padding-inline: var(--space-2);
   border: var(--border-width) solid var(--border);
@@ -3326,7 +3326,7 @@ button.avatar {
 }
 
 @media (hover: hover) {
-  .form input[type="file"]:not(:disabled)::file-selector-button:hover {
+  :is(.form, .field) input[type="file"]:not(:disabled)::file-selector-button:hover {
     background: var(--border);
   }
 
@@ -3335,7 +3335,7 @@ button.avatar {
   }
 }
 
-.form input[type="range"], .range {
+:is(.form, .field) input[type="range"], .range {
   inline-size: 100%;
   accent-color: var(--intent, var(--primary));
 }
