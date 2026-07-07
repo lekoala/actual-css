@@ -326,6 +326,7 @@ Use `.badge soft` for tag visuals. Add a direct dismiss button only when the tag
 - Supports shared intents, shared variants, button-only variants, and sizes.
 - Adds button-only `.ghost` and `.link` variants.
 - Button groups use `.join` to visually join adjacent buttons.
+- Use `aria-pressed` for toggle buttons. Actual styles the pressed state; application code owns changing the attribute.
 
 ```html{.cluster}
 <button type="button">Unstyled</button>
@@ -354,6 +355,22 @@ Button group using `.join`
   <button class="btn" type="button">Left</button>
   <button class="btn outline" type="button">Center</button>
   <button class="btn soft" type="button">Right</button>
+</div>
+```
+
+Toggle buttons
+
+```html
+<button class="btn" type="button" aria-pressed="false">
+  Bold
+</button>
+```
+
+```html
+<div class="join" role="group" aria-label="Text alignment">
+  <button class="btn" type="button" aria-pressed="true">Left</button>
+  <button class="btn outline" type="button" aria-pressed="false">Center</button>
+  <button class="btn outline" type="button" aria-pressed="false">Right</button>
 </div>
 ```
 

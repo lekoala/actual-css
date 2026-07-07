@@ -86,6 +86,7 @@
   "range",
   "required-mark",
   "scrollable",
+  "scroll-snap",
   "secondary",
   "select",
   "sidebar-layout",

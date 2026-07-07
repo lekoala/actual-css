@@ -74,6 +74,107 @@ behavior can be richer without overloading them.
 - Dispatch a custom event when app code may need to react.
 - Keep modules safe to import without a DOM.
 
+## Scroll Snap Controls
+
+`.scroll-snap` is useful without JavaScript. If a project adds previous/next controls, keep them hidden until the enhancer connects so the no-JavaScript page never shows inert buttons.
+
+```html
+<section class="stack" data-scroll-snap-controls>
+  <div class="scroll-snap" aria-label="Featured articles">
+    <article class="card">...</article>
+    <article class="card">...</article>
+    <article class="card">...</article>
+  </div>
+
+  <div class="cluster" data-scroll-snap-controls-bar hidden>
+    <button class="btn outline" type="button" data-scroll-snap-prev>Previous</button>
+    <button class="btn outline" type="button" data-scroll-snap-next>Next</button>
+  </div>
+</section>
+```
+
+```js
+import enhance from "actual-css/js/enhance";
+
+enhance({
+  "[data-scroll-snap-controls]": (root) => {
+    const scroller = root.querySelector(".scroll-snap");
+    const controls = root.querySelector("[data-scroll-snap-controls-bar]");
+    const previous = root.querySelector("[data-scroll-snap-prev]");
+    const next = root.querySelector("[data-scroll-snap-next]");
+
+    if (!scroller || !controls || !previous || !next) return;
+
+    const controller = new AbortController();
+    const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)");
+    const behavior = () => reduceMotion.matches ? "auto" : "smooth";
+    const step = () => scroller.clientWidth * 0.8;
+
+    previous.addEventListener("click", () => {
+      scroller.scrollBy({ left: -step(), behavior: behavior() });
+    }, { signal: controller.signal });
+
+    next.addEventListener("click", () => {
+      scroller.scrollBy({ left: step(), behavior: behavior() });
+    }, { signal: controller.signal });
+
+    controls.hidden = false;
+
+    return () => {
+      controller.abort();
+      controls.hidden = true;
+    };
+  },
+});
+```
+
+## Toggle Button Groups
+
+Actual styles `.btn[aria-pressed="true"]`; application code should update the attribute. Use grouped buttons when the state belongs to the current page, not for navigation between pages.
+
+```html
+<div class="join" role="group" aria-label="Text style" data-toggle-group>
+  <button class="btn outline" type="button" aria-pressed="false">Bold</button>
+  <button class="btn outline" type="button" aria-pressed="false">Italic</button>
+  <button class="btn outline" type="button" aria-pressed="false">Underline</button>
+</div>
+
+<div class="join" role="group" aria-label="Alignment" data-toggle-group="single">
+  <button class="btn outline" type="button" aria-pressed="true">Left</button>
+  <button class="btn outline" type="button" aria-pressed="false">Center</button>
+  <button class="btn outline" type="button" aria-pressed="false">Right</button>
+</div>
+```
+
+```js
+import enhance from "actual-css/js/enhance";
+
+enhance({
+  "[data-toggle-group]": (group) => {
+    const controller = new AbortController();
+
+    group.addEventListener("click", (event) => {
+      if (!(event.target instanceof Element)) return;
+
+      const button = event.target.closest("button[aria-pressed]");
+      if (!button || !group.contains(button)) return;
+
+      if (group.dataset.toggleGroup === "single") {
+        for (const item of group.querySelectorAll("button[aria-pressed]")) {
+          item.setAttribute("aria-pressed", String(item === button));
+        }
+        return;
+      }
+
+      const pressed = button.getAttribute("aria-pressed") === "true";
+      button.setAttribute("aria-pressed", String(!pressed));
+    }, { signal: controller.signal });
+
+    return () => controller.abort();
+  },
+});
+```
+
 ## Custom Text Filters
 
 `data-filter` is intentionally limited to Actual's built-in filters. For domain
