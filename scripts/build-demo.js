@@ -397,7 +397,7 @@ function renderMainIndex(categories) {
       </article>
       <article class="component-card">
         <div class="card-info">
-          <h3><a href="../kitchen-sink.html">Kitchen Sink</a></h3>
+          <h3><a href="../templates/kitchen-sink.html">Kitchen Sink</a></h3>
           <p>Every component rendered together in one page for visual regression and layout review.</p>
         </div>
       </article>

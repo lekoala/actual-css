@@ -6,7 +6,7 @@
  * Usage:
  *   bun scripts/forced-colors-shot.js [page] [--scheme light|dark] [--out file.png]
  *
- *   page      path or URL to capture (default: demo/kitchen-sink.html)
+ *   page      path or URL to capture (default: demo/templates/kitchen-sink.html)
  *   --scheme  prefers-color-scheme to emulate alongside (default: light)
  *   --out     output file (default: tmp/forced-colors-<scheme>.png)
  *
@@ -33,7 +33,7 @@ const readFlag = (name, fallback) => {
 };
 const scheme = readFlag("--scheme", "light") === "dark" ? "dark" : "light";
 const out = readFlag("--out", join(ROOT, "tmp", `forced-colors-${scheme}.png`));
-const page = args[0] ?? join(ROOT, "demo", "kitchen-sink.html");
+const page = args[0] ?? join(ROOT, "demo", "templates", "kitchen-sink.html");
 const pageUrl = /^https?:/.test(page)
   ? page
   : pathToFileURL(isAbsolute(page) ? page : join(process.cwd(), page)).href;
