@@ -101,7 +101,7 @@ function connectContextTarget(target) {
   const menu = menuFor(target);
   if (!menu) return;
 
-  prepareSurface(menu, target);
+  prepareSurface(menu);
   const controller = new AbortController();
   const addedAriaControls = !target.hasAttribute("aria-controls");
   const addedAriaHaspopup = !target.hasAttribute("aria-haspopup");

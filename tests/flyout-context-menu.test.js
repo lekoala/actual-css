@@ -63,6 +63,28 @@ test("flyout trigger gets initial disclosure attributes", async () => {
   expect(trigger.getAttribute("aria-haspopup")).toBe("menu");
 });
 
+test("flyout stays at its markup position until it is opened", async () => {
+  await loadFlyout(`
+    <main><button id="trigger" type="button" aria-controls="menu" aria-expanded="false">Open</button>
+    <menu id="menu" class="flyout" hidden>
+      <li><button type="button">Item</button></li>
+    </menu></main>
+  `);
+  const main = document.querySelector("main");
+  const trigger = document.getElementById("trigger");
+  const menu = document.getElementById("menu");
+  setupGeometry(trigger, menu);
+
+  expect(menu.parentNode).toBe(main);
+
+  click(trigger);
+  expect(menu.parentNode).toBe(document.body);
+
+  click(trigger);
+  await nextMicrotask();
+  expect(menu.parentNode).toBe(main);
+});
+
 test("removing one trigger does not disconnect a shared flyout", async () => {
   await loadFlyout(`
     <button id="first-trigger" type="button" aria-controls="menu" aria-expanded="false">First</button>

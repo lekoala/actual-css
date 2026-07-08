@@ -116,7 +116,7 @@ function connectTrigger(trigger) {
   const controller = new AbortController();
   triggerMap.set(trigger, { flyout, controller });
 
-  prepareSurface(flyout, trigger);
+  prepareSurface(flyout);
   if (!trigger.hasAttribute("aria-expanded")) {
     trigger.setAttribute("aria-expanded", "false");
   }
