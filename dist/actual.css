@@ -2677,19 +2677,16 @@ dialog.drawer nav {
 
   opacity: 1;
   translate: 0 0;
-  visibility: visible;
   pointer-events: auto;
 
   transition:
     opacity var(--duration-fast),
-    translate var(--duration-fast),
-    visibility var(--duration-fast);
+    translate var(--duration-fast);
 }
 
 .status-bar:empty {
   opacity: 0;
   translate: 0 var(--space-2);
-  visibility: hidden;
   pointer-events: none;
 }
 

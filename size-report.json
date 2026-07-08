@@ -1,12 +1,12 @@
 {
-  "timestamp": "2026-07-08T10:27:35.014Z",
-  "totalRaw": 145813,
-  "totalMinified": 76623,
-  "totalBrotli": 11378,
+  "timestamp": "2026-07-08T10:32:09.646Z",
+  "totalRaw": 145731,
+  "totalMinified": 76549,
+  "totalBrotli": 11367,
   "themesMinified": 26049,
   "themesBrotli": 3018,
-  "shippedMinified": 76623,
-  "shippedBrotli": 11378,
+  "shippedMinified": 76549,
+  "shippedBrotli": 11367,
   "maxShippedBrotli": 13312,
   "fileCount": 67,
   "files": [
@@ -164,7 +164,7 @@
     },
     {
       "file": "components/status-bar.css",
-      "raw": 1826
+      "raw": 1744
     },
     {
       "file": "layout.css",

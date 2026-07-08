@@ -98,3 +98,14 @@ test("ignores actual:invalid events without a message", async () => {
 
   expect(target.textContent).toBe("");
 });
+
+test("ignores actual:invalid events without detail", async () => {
+  await loadStatus(`<div class="status-bar" data-status role="status"></div>`);
+
+  const target = document.querySelector("[data-status]");
+
+  expect(() => {
+    document.dispatchEvent(new CustomEvent("actual:invalid", { bubbles: true }));
+  }).not.toThrow();
+  expect(target.textContent).toBe("");
+});
