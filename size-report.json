@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-07-07T19:30:48.296Z",
-  "totalRaw": 140420,
-  "totalMinified": 75272,
-  "totalBrotli": 11198,
-  "themesMinified": 23261,
-  "themesBrotli": 2639,
-  "shippedMinified": 75272,
-  "shippedBrotli": 11198,
+  "timestamp": "2026-07-08T09:39:25.961Z",
+  "totalRaw": 143508,
+  "totalMinified": 74895,
+  "totalBrotli": 11112,
+  "themesMinified": 26047,
+  "themesBrotli": 3009,
+  "shippedMinified": 74895,
+  "shippedBrotli": 11112,
   "maxShippedBrotli": 13312,
-  "fileCount": 65,
+  "fileCount": 66,
   "files": [
     {
       "file": "components/flyout.css",
@@ -16,7 +16,7 @@
     },
     {
       "file": "components/button.css",
-      "raw": 5435
+      "raw": 5839
     },
     {
       "file": "theme.css",
@@ -53,6 +53,10 @@
     {
       "file": "components/modal.css",
       "raw": 3557
+    },
+    {
+      "file": "themes/edge.css",
+      "raw": 3408
     },
     {
       "file": "prose.css",
@@ -97,10 +101,6 @@
     {
       "file": "themes/square.css",
       "raw": 2573
-    },
-    {
-      "file": "layout.css",
-      "raw": 2552
     },
     {
       "file": "themes/sunset.css",
@@ -160,7 +160,11 @@
     },
     {
       "file": "themes/index.css",
-      "raw": 1775
+      "raw": 1867
+    },
+    {
+      "file": "layout.css",
+      "raw": 1736
     },
     {
       "file": "forms/form-actions.css",

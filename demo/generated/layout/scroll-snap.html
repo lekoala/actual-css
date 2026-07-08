@@ -22,10 +22,10 @@
   <section class="component-section">
     <header class="component-header">
       <h1>Scroll Snap</h1>
-      <p>Horizontal scroll areas that stay useful without JavaScript and snap in modern browsers.</p>
+      <p>Horizontal rails that stay useful without JavaScript and snap in modern browsers.</p>
     </header>
         <div class="component-prose">
-      <p>Use <code>.scroll-snap</code> for a row of items that should scroll horizontally, such as card rails, media strips, overflow tabs, or a simple carousel baseline. Scrolling only appears when the items are wider than the container; set <code>--scroll-snap-item-size</code> for card rails and carousels.</p>
+      <p>> <strong>Optional</strong> — import <code>actual-css/css/optional/scroll-snap</code> or <code>actual-css/css/optional/index</code>. Use <code>.scroll-snap</code> for a niche row of items that should scroll horizontally, such as card rails, media strips, overflow tabs, or a simple touch-friendly carousel baseline. Scrolling only appears when the items are wider than the container; set <code>--scroll-snap-item-size</code> for card rails.</p>
     </div>
     <section class="component-section">
       <div class="example-group">
@@ -58,7 +58,7 @@
       </div>
     </section>
     <div class="component-prose">
-      <p>The baseline is just flex layout plus <code>overflow-x: auto</code>, so older browsers and no-JavaScript contexts still get a usable horizontal scroll area. Browsers with scroll snap support add <code>scroll-snap-type</code> and item alignment. Items snap to the inline start edge by default. Use <code>data-snap=&quot;center&quot;</code> for visual rails where centered cards are the better fit.</p>
+      <p>The baseline is flex layout plus <code>overflow-x: auto</code>, so older browsers still get a usable horizontal scroll area. Browsers with scroll snap support add <code>scroll-snap-type</code> and item alignment. Items snap to the inline start edge by default. Use <code>data-snap=&quot;center&quot;</code> for visual rails where centered cards are the better fit.</p>
     </div>
     <section class="component-section">
       <div class="example-group">
@@ -100,7 +100,7 @@
       </div>
     </section>
     <div class="component-prose">
-      <p><code>.scroll-snap</code> is not a full interactive carousel. Previous/next buttons, pagination, selected state, and announcements belong to optional JavaScript enhancement. Do not render inert controls without JavaScript.</p>
+      <p><code>.scroll-snap</code> is not a full interactive carousel. For previous/next controls, pagination, active state, mouse drag, looping, autoplay, or robust accessibility behavior, use a dedicated carousel library such as Swiper and compose it with Actual components.</p>
     </div>
     
   </section>

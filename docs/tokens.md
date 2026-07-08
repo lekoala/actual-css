@@ -274,11 +274,23 @@ Do not force `.ghost` or `.link` onto components where the interaction model doe
 
 ```css
 .btn {
-  --btn-bg: var(--ui-bg, var(--intent, var(--neutral)));
-  --btn-fg: var(--ui-fg, var(--intent-fg, var(--neutral-fg)));
-  --btn-border: var(--ui-border, transparent);
+  --btn-bg: var(--ui-bg, var(--btn-default-bg, var(--intent, var(--neutral))));
+  --btn-fg: var(--ui-fg, var(--btn-default-fg, var(--intent-fg, var(--neutral-fg))));
+  --btn-border: var(--ui-border, var(--btn-default-border, transparent));
+
+  border: var(--border-width) solid var(--btn-border-color, var(--btn-border));
+  border-block-end-color: var(
+    --btn-border-block-end-color,
+    var(--btn-border-color, var(--btn-border))
+  );
+  border-block-end-width: var(--btn-border-block-end-width, var(--border-width));
 }
 ```
+
+Button-local defaults are intentionally inherited extension points for themes
+that change button grammar, such as turning the default solid button into a
+surface button with an intent-colored lower edge. Keep them local until the
+same need appears across multiple components.
 
 Rules:
 

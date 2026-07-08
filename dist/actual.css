@@ -476,45 +476,6 @@ small {
   gap: var(--gap);
 }
 
-.scroll-snap {
-  --scroll-snap-gap: var(--gap);
-  --scroll-snap-align: start;
-  --scroll-snap-item-size: auto;
-
-  display: flex;
-  gap: var(--scroll-snap-gap);
-  overflow-x: auto;
-}
-
-.scroll-snap > * {
-  flex: 0 0 var(--scroll-snap-item-size);
-}
-
-@supports (scroll-snap-type: inline mandatory) {
-  .scroll-snap {
-    overscroll-behavior-inline: contain;
-    scroll-padding-inline: var(--scroll-snap-padding, var(--scroll-snap-gap));
-    scroll-snap-type: inline mandatory;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  .scroll-snap > * {
-    scroll-snap-align: var(--scroll-snap-align);
-  }
-
-  .scroll-snap[data-snap="center"] {
-    --scroll-snap-align: center;
-  }
-}
-
-.scroll-snap[data-scrollbar="hidden"] {
-  scrollbar-width: none;
-}
-
-.scroll-snap[data-scrollbar="hidden"]::-webkit-scrollbar {
-  display: none;
-}
-
 .center {
   box-sizing: content-box;
   max-inline-size: var(--center-size, 72rem);
@@ -968,9 +929,9 @@ small {
   --btn-font-size: var(--control-font-size);
   --btn-min-size: var(--control-size);
   --btn-pad-x: var(--control-pad-x, 1em);
-  --btn-bg: var(--ui-bg, var(--intent, var(--neutral)));
-  --btn-fg: var(--ui-fg, var(--intent-fg, var(--neutral-fg)));
-  --btn-border: var(--ui-border, transparent);
+  --btn-bg: var(--ui-bg, var(--btn-default-bg, var(--intent, var(--neutral))));
+  --btn-fg: var(--ui-fg, var(--btn-default-fg, var(--intent-fg, var(--neutral-fg))));
+  --btn-border: var(--ui-border, var(--btn-default-border, transparent));
   --btn-radius: var(--radius);
   --btn-focus-color: var(--focus);
 
@@ -983,7 +944,12 @@ small {
   padding-block: var(--space-2);
   padding-block: max(var(--space-1), calc((var(--btn-min-size) - 1lh) / 2));
   padding-inline: var(--btn-pad-x);
-  border: var(--border-width) solid var(--btn-border);
+  border: var(--border-width) solid var(--btn-border-color, var(--btn-border));
+  border-block-end-color: var(
+    --btn-border-block-end-color,
+    var(--btn-border-color, var(--btn-border))
+  );
+  border-block-end-width: var(--btn-border-block-end-width, var(--border-width));
   border-radius: var(--btn-radius);
   background: var(--btn-bg);
   color: var(--btn-fg);
@@ -1013,8 +979,8 @@ small {
   }
 }
 
-/* .solid/.soft/.outline are shared via variants.css. The --btn-* fallbacks
-   make .btn solid by default; .ghost/.link are .btn-only variants. */
+/* .solid/.soft/.outline are shared via variants.css. The baseline --btn-*
+   fallbacks make .btn solid by default; .ghost/.link are .btn-only variants. */
 .btn.ghost {
   --ui-bg: transparent;
   --ui-fg: var(--intent, var(--text));
@@ -1048,6 +1014,8 @@ small {
   --ui-fg: var(--intent, var(--text));
   --ui-border: transparent;
   --btn-radius: var(--radius-sm);
+  --btn-border-block-end-color: transparent;
+  --btn-border-block-end-width: var(--border-width);
 
   min-block-size: auto;
   padding-inline: 0;

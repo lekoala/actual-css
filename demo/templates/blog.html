@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Designing with quiet defaults — Actual CSS</title>
     <link rel="stylesheet" href="../../src/css/actual.css">
+    <link rel="stylesheet" href="../../src/css/themes/index.css">
     <link rel="stylesheet" href="../../src/optional/typography-fluid.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
     <link rel="stylesheet" href="../../demo/styles/demo.css">
@@ -383,6 +384,24 @@
           </ul>
         </nav>
         <div class="cluster">
+          <select class="select sm fit" id="theme-switcher" aria-label="Switch theme">
+            <option value="">System</option>
+            <option value="light">Light</option>
+            <option value="dark">Dark</option>
+            <option value="dim">Dim</option>
+            <option value="corporate">Corporate</option>
+            <option value="forest">Forest</option>
+            <option value="ocean">Ocean</option>
+            <option value="spruce">Spruce</option>
+            <option value="petrol">Petrol</option>
+            <option value="sunset">Sunset</option>
+            <option value="lavender">Lavender</option>
+            <option value="mono">Mono</option>
+            <option value="square">Square</option>
+            <option value="edge">Edge</option>
+            <option value="cyberpunk">Cyberpunk</option>
+            <option value="neon">Neon</option>
+          </select>
           <button class="btn neutral ghost sm" type="button" aria-label="Search">
             <i class="ti ti-search" aria-hidden="true"></i>
           </button>
@@ -822,5 +841,18 @@
       <p style="margin: 1.5rem 0 0; font-size: 0.8125rem;">© 2026 Actual Notes. Set in the system font stack.</p>
     </footer>
   <script src="../../dist/actual.js"></script>
+  <script>
+    const switcher = document.getElementById("theme-switcher");
+
+    if (switcher) {
+      switcher.addEventListener("change", () => {
+        if (switcher.value) {
+          document.documentElement.dataset.theme = switcher.value;
+        } else {
+          document.documentElement.removeAttribute("data-theme");
+        }
+      });
+    }
+  </script>
   </body>
   </html>

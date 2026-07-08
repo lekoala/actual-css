@@ -4,7 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Actual CSS — Kitchen Sink</title>
-  <link rel="stylesheet" href="../../dist/actual.min.css">
+  <link rel="stylesheet" href="../../src/css/actual.css">
+  <link rel="stylesheet" href="../../src/css/themes/index.css">
   <style>
     body { padding: 2rem; }
     section { margin-block: 2rem; }
@@ -27,12 +28,24 @@
 <body>
 
   <h1>Actual CSS — Kitchen Sink</h1>
-  <p>
-    <label>
-      <input type="checkbox" id="darkToggle" onchange="document.documentElement.dataset.theme = this.checked ? 'dark' : 'light'">
-      Dark mode
-    </label>
-  </p>
+  <select class="select fit" id="theme-switcher" aria-label="Switch theme">
+    <option value="">System</option>
+    <option value="light" selected>Light</option>
+    <option value="dark">Dark</option>
+    <option value="dim">Dim</option>
+    <option value="corporate">Corporate</option>
+    <option value="forest">Forest</option>
+    <option value="ocean">Ocean</option>
+    <option value="spruce">Spruce</option>
+    <option value="petrol">Petrol</option>
+    <option value="sunset">Sunset</option>
+    <option value="lavender">Lavender</option>
+    <option value="mono">Mono</option>
+    <option value="square">Square</option>
+    <option value="edge">Edge</option>
+    <option value="cyberpunk">Cyberpunk</option>
+    <option value="neon">Neon</option>
+  </select>
 
   <!-- 1. Buttons -->
   <section>
@@ -334,9 +347,22 @@
   <!-- 10. Dark mode -->
   <section>
     <h2>Dark mode</h2>
-    <p>Use the toggle at the top to switch between <code>data-theme="light"</code> and <code>data-theme="dark"</code>.</p>
+    <p>Use the theme selector at the top to switch <code>data-theme</code>.</p>
   </section>
 
   <script src="../../dist/actual.js"></script>
+  <script>
+    const switcher = document.getElementById("theme-switcher");
+
+    if (switcher) {
+      switcher.addEventListener("change", () => {
+        if (switcher.value) {
+          document.documentElement.dataset.theme = switcher.value;
+        } else {
+          document.documentElement.removeAttribute("data-theme");
+        }
+      });
+    }
+  </script>
 </body>
 </html>
