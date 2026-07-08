@@ -2,7 +2,7 @@
  * Validation — optional form validation enhancer.
  *
  * Native HTML constraint validation runs first. This enhancer prevents
- * premature error display, adds state classes on submit, focuses the first
+ * premature error display, adds invalid state on submit, focuses the first
  * invalid field, and supports a few small custom rules through
  * data-validation-rules. It is a progressive enhancement, not a validation
  * framework: server / AJAX validation lives in app code and feeds results
@@ -20,6 +20,7 @@ const INVALID_CLASS = "is-invalid";
 const NOVALIDATE = "novalidate";
 const WAS_VALIDATED_CLASS = "was-validated";
 const NEEDS_VALIDATION_CLASS = "needs-validation";
+const connectedForms = new WeakMap();
 
 const rules = {
   same(v, el, selector) {
@@ -48,10 +49,6 @@ function ignoreField(field) {
     typeof field.checkValidity !== "function" ||
     ["file", "reset", "submit", "button", "image"].includes(field.type)
   );
-}
-
-function checkRule(el, name, opts) {
-  return rules[name](el.value, el, ...opts);
 }
 
 function checkRules(el) {
@@ -138,6 +135,9 @@ function validateField(el, trigger) {
 }
 
 function connectForm(form) {
+  const existing = connectedForms.get(form);
+  if (existing) return existing;
+
   const controller = new AbortController();
 
   if (!form.hasAttribute(NOVALIDATE)) {
@@ -210,7 +210,12 @@ function connectForm(form) {
     { signal: controller.signal }
   );
 
-  return () => controller.abort();
+  const cleanup = () => {
+    controller.abort();
+    connectedForms.delete(form);
+  };
+  connectedForms.set(form, cleanup);
+  return cleanup;
 }
 
 export class FormValidator {

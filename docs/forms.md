@@ -930,7 +930,7 @@ Core: native range, enhanced by `accent-color`. Optional richer skin may come la
 
 > Native validation first; the enhancer only adds state and focus behavior.
 
-Actual CSS ships validation *styles*. A small optional enhancer (`actual-css/js/validation`) prevents premature error display, marks invalid fields on submit, focuses the first invalid field, and supports a few custom rules. It is not a validation framework — server and AJAX validation stay in app code.
+Actual CSS ships validation *styles*. Invalid fields can be marked with `aria-invalid="true"` or `.is-invalid`; `.is-valid` exists only for explicit success states. A small optional enhancer (`actual-css/js/validation`) prevents premature error display, marks invalid fields on submit, focuses the first invalid field, and supports a few custom rules. It is not a validation framework — server and AJAX validation stay in app code.
 
 Opt in with the `.needs-validation` class. Importing the module registers the behavior; there is no init call.
 
@@ -960,7 +960,7 @@ Opt in with the `.needs-validation` class. Importing the module registers the be
 import "actual-css/js/validation";
 ```
 
-On submit, the enhancer adds `.was-validated` to the form and `.is-invalid` + `aria-invalid="true"` to each invalid field. When the form is invalid it prevents submission, focuses the first invalid field, and dispatches a bubbling `actual:invalid` event with `{ form, firstInvalid, message }`. Wire a status bar or toast from that event instead of coupling the library to one.
+On submit, the enhancer adds `.was-validated` to the form and `.is-invalid` + `aria-invalid="true"` to each invalid field. It does not mark valid fields automatically. When the form is invalid it prevents submission, focuses the first invalid field, and dispatches a bubbling `actual:invalid` event with `{ form, firstInvalid, message }`. Wire a status bar or toast from that event instead of coupling the library to one.
 
 ```js
 document.addEventListener("actual:invalid", (event) => {
@@ -980,7 +980,7 @@ Custom rules live in `data-validation-rules` as a comma-separated list; each rul
 | `digits` | Value is empty or ASCII digits only. |
 | `alnum` | Value is empty or letters and digits only. |
 
-Add your own with `FormValidator.registerRule(name, (value, el, ...opts) => boolean)`. Empty values always pass, so optional fields stay optional.
+Add your own with `FormValidator.registerRule(name, (value, el, ...opts) => boolean)`. The built-in rules treat empty values as valid so optional fields stay optional; custom rules should do the same when that behavior is wanted.
 
 #### Server and AJAX validation
 
