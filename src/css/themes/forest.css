@@ -1,7 +1,7 @@
 [data-theme="forest"] {
   color-scheme: light dark;
 
-  --primary: hsl(145 45% 34%);
+  --primary: hsl(175 48% 26%);
   --primary-fg: white;
   --secondary: hsl(82 42% 34%);
   --secondary-fg: white;
@@ -25,7 +25,7 @@
 
   --border: hsl(105 18% 78%);
   --focus: var(--primary);
-  --focus-ring: hsl(145 45% 34% / 0.22);
+  --focus-ring: hsl(175 48% 26% / 0.22);
 
   /* Organic rounding — demonstrates scaling the radius tokens up. */
   --radius: 0.75rem;
@@ -35,8 +35,8 @@
 
 @supports (color: light-dark(red, blue)) {
   [data-theme="forest"] {
-    --primary: light-dark(hsl(145 45% 34%), hsl(145 53% 80%));
-    --primary-fg: light-dark(white, hsl(145 30% 12%));
+    --primary: light-dark(hsl(175 48% 26%), hsl(175 45% 76%));
+    --primary-fg: light-dark(white, hsl(175 30% 12%));
     --secondary: light-dark(hsl(82 42% 34%), hsl(82 50% 80%));
     --secondary-fg: light-dark(white, hsl(82 30% 12%));
     --success: light-dark(hsl(148 58% 32%), hsl(148 66% 80%));
@@ -58,7 +58,7 @@
     --text-subtle: light-dark(hsl(125 8% 50%), hsl(130 7% 55%));
 
     --border: light-dark(hsl(105 18% 78%), hsl(130 12% 24%));
-    --focus-ring: light-dark(hsl(145 45% 34% / 0.22), hsl(145 53% 80% / 0.28));
+    --focus-ring: light-dark(hsl(175 48% 26% / 0.22), hsl(175 45% 76% / 0.28));
     --hover-overlay: light-dark(hsl(220 30% 10% / 0.04), hsl(0 0% 100% / 0.06));
     --shadow-color: light-dark(hsl(220 30% 10%), hsl(0 0% 0%));
   }
