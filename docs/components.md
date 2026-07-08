@@ -775,35 +775,53 @@ In menus, keep the command label and shortcut in the same interactive item.
 - Intents: `danger`, `success`, `warning`, `neutral`. The default (no intent) is a neutral dark pill.
 
 ```html
-<div class="status-bar" data-status role="status" aria-live="polite" aria-atomic="true"></div>
+<form class="needs-validation" data-validation-message="Please check the highlighted fields.">
+  <label class="field">
+    <span class="field-label">Email</span>
+    <input class="input" type="email" name="email" required
+           aria-describedby="sb-email-error" />
+    <span class="field-error" id="sb-email-error" role="alert">Enter a valid email.</span>
+  </label>
+  <div class="form-actions">
+    <button class="btn primary" type="submit">Submit</button>
+  </div>
+</form>
 ```
 
-```js
-import { status } from "actual-css/js/status";
-
-status("Saved.", { intent: "success" });
-status("Could not save.", { intent: "danger", duration: 6000 });
-
-status.clear();
-```
-
-Importing `actual-css/js/status` auto-wires it to Actual's form validation: a form that fails to submit shows its `data-validation-message` in the status bar with the `danger` intent. No target in the DOM means the call is a no-op, so the markup stays optional.
+Submitting the empty form blocks submission and shows `data-validation-message` in the status bar below — no JavaScript required beyond the runtime.
 
 ```html
-<form class="needs-validation" data-validation-message="Please check the highlighted fields.">
-  <!-- fields -->
-</form>
+<div class="cluster">
+  <button class="btn" type="button" id="sb-success">Show success</button>
+  <button class="btn" type="button" id="sb-danger">Show danger</button>
+  <button class="btn outline" type="button" id="sb-clear">Clear</button>
+</div>
 
 <div class="status-bar" data-status role="status" aria-live="polite" aria-atomic="true"></div>
+
+<script type="module">
+  document.getElementById("sb-success").addEventListener("click", () => {
+    actual.status("Saved.", { intent: "success" });
+  });
+  document.getElementById("sb-danger").addEventListener("click", () => {
+    actual.status("Could not save.", { intent: "danger", duration: 6000 });
+  });
+  document.getElementById("sb-clear").addEventListener("click", () => {
+    actual.status.clear();
+  });
+</script>
 ```
 
 ```js
-import "actual-css/js/status";
-import "actual-css/js/validation";
+actual.status("Saved.", { intent: "success" });
+actual.status("Could not save.", { intent: "danger", duration: 6000 });
+
+actual.status.clear();
 ```
 
-## Table
+The runtime auto-wires the status bar to Actual's form validation: a form that fails to submit shows its `data-validation-message` in the status bar with the `danger` intent. No target in the DOM means the call is a no-op, so the markup stays optional.
 
+## Table
 
 > Data table with caption and scope attributes, and an accessible scroll region for wide content.
 

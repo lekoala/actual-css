@@ -1,9 +1,8 @@
 /*
- * Actual CSS — JavaScript runtime.
+ * Actual CSS - JavaScript runtime.
  *
- * Each module self-registers via observer: importing the runtime enables
- * all behaviors. No DOMContentLoaded ceremony, no init calls. Include
- * the CSS, include this JS, write semantic HTML with ARIA attributes.
+ * Each module self-registers via observer: importing the default runtime
+ * enables common behaviors. No DOMContentLoaded ceremony, no init calls.
  * Injected content wires automatically; removal cleans up automatically.
  */
 
@@ -15,3 +14,5 @@ import "./tooltip.js";
 import "./scrollspy.js";
 import "./filter.js";
 import "./mask.js";
+import "./validation.js";
+import "./status.js";

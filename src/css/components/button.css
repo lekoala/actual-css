@@ -1,9 +1,12 @@
 /*
  * Buttons for actions and button-like links.
  *
- * Keeps shared intent, variant, and size behavior with a solid default. Hover,
- * focus-visible, and disabled states stay available across variants.
+ * Keeps shared intent, variant, and size behavior with a solid default.
+ * Interactive states apply only to native interactive elements; non-interactive
+ * elements such as <span class="btn"> can reuse the visual box without faking
+ * disabled behavior.
  */
+
 /* Intent boundary — inherited intents do not tint this component.
    Local intent classes still win because :where() has zero specificity. */
 :where(.btn) {
@@ -25,7 +28,8 @@
   --btn-fg: var(--ui-fg, var(--btn-default-fg, var(--intent-fg, var(--neutral-fg))));
   --btn-border: var(--ui-border, var(--btn-default-border, transparent));
   --btn-radius: var(--radius);
-  --btn-focus-color: var(--focus);
+  --btn-focus-color: var(--intent, var(--focus));
+  --btn-hover-bg: var(--ui-hover-bg, var(--btn-bg));
 
   position: relative;
   display: inline-flex;
@@ -50,7 +54,7 @@
   font-weight: var(--font-weight-strong);
   line-height: 1;
   text-decoration: none;
-  cursor: pointer;
+  cursor: default;
   transition:
     background-color var(--duration),
     border-color var(--duration),
@@ -59,15 +63,23 @@
     transform var(--duration);
 }
 
-/* Intent classes tint the focus ring to match the intent color.
-   Browsers without color-mix() fall back to the default --focus-ring. */
-.btn:is(.primary, .secondary, .success, .warning, .danger, .neutral) {
-  --btn-focus-color: var(--intent);
+/* Native interactive button surfaces get pointer and interaction states.
+   Plain spans keep the visual .btn box but stay static; [role="button"] opts
+   custom elements in explicitly. */
+:where(
+  a,
+  button,
+  input[type="button"],
+  input[type="submit"],
+  input[type="reset"],
+  [role="button"]
+).btn {
+  cursor: pointer;
 }
 
 @supports (color: color-mix(in oklch, red, white)) {
-  .btn:is(.primary, .secondary, .success, .warning, .danger, .neutral) {
-    --btn-focus-ring-color: color-mix(in oklch, var(--intent) 28%, transparent);
+  .btn {
+    --btn-focus-ring-color: color-mix(in oklch, var(--btn-focus-color) 28%, transparent);
   }
 }
 
@@ -80,18 +92,40 @@
 }
 
 /* The .soft/.outline/.ghost hover recipe (--ui-hover-bg) is shared with
-   .badge in variants.css; only the solid darkening is .btn-specific. */
+   .badge in variants.css; the overlay darkening for solid/soft is .btn-specific.
+   Both rules use plain :not() lists so they keep equal specificity. */
 @media (hover: hover) {
-  .btn:not(:where(:disabled, [aria-disabled="true"])):hover {
-    background: var(--ui-hover-bg, var(--btn-bg));
+  :where(
+    a,
+    button,
+    input[type="button"],
+    input[type="submit"],
+    input[type="reset"],
+    [role="button"]
+  ).btn:not(:disabled, [aria-disabled="true"]):hover {
+    background: var(--btn-hover-bg);
   }
 
-  .btn:not(:where(:disabled, [aria-disabled="true"], .outline, .ghost, .link)):hover {
-    box-shadow: inset 0 0 0 999px var(--hover-overlay);
+  :where(
+    a,
+    button,
+    input[type="button"],
+    input[type="submit"],
+    input[type="reset"],
+    [role="button"]
+  ).btn:not(:disabled, [aria-disabled="true"], .outline, .ghost, .link):hover {
+    box-shadow: inset 0 0 0 999px var(--hover-overlay, rgb(0 0 0 / 0.08));
   }
 }
 
-.btn:active {
+:where(
+  a,
+  button,
+  input[type="button"],
+  input[type="submit"],
+  input[type="reset"],
+  [role="button"]
+).btn:not(:disabled, [aria-disabled="true"]):active {
   transform: translateY(1px);
 }
 
@@ -114,7 +148,14 @@
    after components and overrides border-radius at equal specificity. */
 
 @media (hover: hover) {
-  .btn.link:not(:where(:disabled, [aria-disabled="true"])):hover {
+  :where(
+    a,
+    button,
+    input[type="button"],
+    input[type="submit"],
+    input[type="reset"],
+    [role="button"]
+  ).btn.link:not(:disabled, [aria-disabled="true"]):hover {
     background: transparent;
     color: var(--intent, var(--text));
     text-decoration-thickness: 0.12em;
@@ -138,11 +179,13 @@
   opacity: 0.65;
 }
 
+/* aria-disabled links keep their href for markup simplicity (pagination,
+   toolbars) but stop reacting to the pointer. */
 a.btn[aria-disabled="true"] {
   pointer-events: none;
 }
 
-.btn[aria-busy="true"] {
+.btn[aria-busy="true"]:not(:disabled, [aria-disabled="true"]) {
   cursor: progress;
 }
 
@@ -180,7 +223,14 @@ a.btn[aria-disabled="true"] {
   }
 
   @media (hover: hover) {
-    .btn:hover:not(:where(:disabled, [aria-disabled="true"], .link)) {
+    :where(
+        a,
+        button,
+        input[type="button"],
+        input[type="submit"],
+        input[type="reset"],
+        [role="button"]
+      ).btn:hover:not(:where(:disabled, [aria-disabled="true"], .link)) {
       outline: var(--border-width) solid ButtonText;
       outline-offset: 2px;
     }

@@ -1,22 +1,22 @@
 {
-  "timestamp": "2026-07-08T10:32:09.646Z",
-  "totalRaw": 145731,
-  "totalMinified": 76549,
-  "totalBrotli": 11367,
+  "timestamp": "2026-07-08T13:46:38.554Z",
+  "totalRaw": 147521,
+  "totalMinified": 76975,
+  "totalBrotli": 11354,
   "themesMinified": 26049,
   "themesBrotli": 3018,
-  "shippedMinified": 76549,
-  "shippedBrotli": 11367,
+  "shippedMinified": 76975,
+  "shippedBrotli": 11354,
   "maxShippedBrotli": 13312,
-  "fileCount": 67,
+  "fileCount": 68,
   "files": [
+    {
+      "file": "components/button.css",
+      "raw": 6707
+    },
     {
       "file": "components/flyout.css",
       "raw": 5881
-    },
-    {
-      "file": "components/button.css",
-      "raw": 5593
     },
     {
       "file": "theme.css",
@@ -24,11 +24,15 @@
     },
     {
       "file": "forms/choice.css",
-      "raw": 4993
+      "raw": 4945
     },
     {
       "file": "tokens.css",
       "raw": 4864
+    },
+    {
+      "file": "variants.css",
+      "raw": 3836
     },
     {
       "file": "components/badge.css",
@@ -41,10 +45,6 @@
     {
       "file": "components/avatar.css",
       "raw": 3600
-    },
-    {
-      "file": "variants.css",
-      "raw": 3579
     },
     {
       "file": "components/alert.css",
@@ -64,7 +64,7 @@
     },
     {
       "file": "forms/switch.css",
-      "raw": 3265
+      "raw": 3294
     },
     {
       "file": "utilities.css",
@@ -73,10 +73,6 @@
     {
       "file": "components/drawer.css",
       "raw": 3064
-    },
-    {
-      "file": "forms/control.css",
-      "raw": 3001
     },
     {
       "file": "components/tooltip.css",
@@ -101,6 +97,10 @@
     {
       "file": "themes/square.css",
       "raw": 2573
+    },
+    {
+      "file": "forms/control.css",
+      "raw": 2568
     },
     {
       "file": "themes/sunset.css",
@@ -164,7 +164,7 @@
     },
     {
       "file": "components/status-bar.css",
-      "raw": 1744
+      "raw": 1752
     },
     {
       "file": "layout.css",
@@ -243,12 +243,20 @@
       "raw": 711
     },
     {
+      "file": "forms/validation.css",
+      "raw": 709
+    },
+    {
       "file": "intents.css",
       "raw": 702
     },
     {
       "file": "print.css",
       "raw": 613
+    },
+    {
+      "file": "forms/index.css",
+      "raw": 501
     },
     {
       "file": "actual.css",
@@ -261,10 +269,6 @@
     {
       "file": "components/actions.css",
       "raw": 351
-    },
-    {
-      "file": "forms/index.css",
-      "raw": 347
     },
     {
       "file": "container.css",
