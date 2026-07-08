@@ -792,31 +792,32 @@ Submitting the empty form blocks submission and shows `data-validation-message` 
 
 ```html
 <div class="cluster">
-  <button class="btn" type="button" id="sb-success">Show success</button>
-  <button class="btn" type="button" id="sb-danger">Show danger</button>
-  <button class="btn outline" type="button" id="sb-clear">Clear</button>
+  <button class="btn" type="button" commandfor="sb-status" command="--status"
+          data-status-message="Saved." data-status-intent="success">Show success</button>
+  <button class="btn" type="button" commandfor="sb-status" command="--status"
+          data-status-message="Could not save." data-status-intent="danger"
+          data-status-duration="6000">Show danger</button>
+  <button class="btn outline" type="button" commandfor="sb-status" command="--status-clear">Clear</button>
 </div>
 
-<div class="status-bar" data-status role="status" aria-live="polite" aria-atomic="true"></div>
-
-<script>
-  document.getElementById("sb-success").addEventListener("click", () => {
-    actual.status("Saved.", { intent: "success" });
-  });
-  document.getElementById("sb-danger").addEventListener("click", () => {
-    actual.status("Could not save.", { intent: "danger", duration: 6000 });
-  });
-  document.getElementById("sb-clear").addEventListener("click", () => {
-    actual.status.clear();
-  });
-</script>
+<div class="status-bar" data-status id="sb-status" role="status" aria-live="polite" aria-atomic="true"></div>
 ```
+
+No script required beyond the runtime: `command="--status"` reads its message from `data-status-message` (plus optional `data-status-intent` / `data-status-duration`), `command="--status-clear"` empties the bar. `commandfor` must match the status bar's own `id`.
+
+For dynamic messages — a fetch response, a computed value — use the JS API instead, or dispatch the same event the commands use under the hood:
 
 ```js
 actual.status("Saved.", { intent: "success" });
 actual.status("Could not save.", { intent: "danger", duration: 6000 });
 
 actual.status.clear();
+
+// Equivalent, without importing actual-css/js/status at all:
+document.dispatchEvent(new CustomEvent("actual:status", {
+  bubbles: true,
+  detail: { message: "Saved.", intent: "success" },
+}));
 ```
 
 The runtime auto-wires the status bar to Actual's form validation: a form that fails to submit shows its `data-validation-message` in the status bar with the `danger` intent. No target in the DOM means the call is a no-op, so the markup stays optional.

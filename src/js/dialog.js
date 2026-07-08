@@ -16,8 +16,8 @@
  */
 
 import enhance from "./enhance.js";
+import { commandTrigger, targetFor } from "./command.js";
 
-const triggerMap = new WeakMap();
 const dialogMap = new WeakMap();
 const wiredDialogs = new Set();
 const DIALOG_TRIGGER_SELECTOR = "button[commandfor][command]";
@@ -90,15 +90,6 @@ function syncDialogSemantics(dialog) {
   if (title) {
     dialog.setAttribute("aria-labelledby", ensureId(title, "dialog-title"));
   }
-}
-
-function dialogIdFor(trigger) {
-  return trigger.getAttribute("commandfor") || "";
-}
-
-function dialogFor(trigger) {
-  const id = dialogIdFor(trigger);
-  return id ? trigger.ownerDocument.getElementById(id) : null;
 }
 
 function notifyUnsupportedDialog(dialog, trigger) {
@@ -300,37 +291,6 @@ export function openDialog(dialog, trigger = null) {
   syncModalOpenClass(dialog.ownerDocument);
 }
 
-function handleTriggerClick(event) {
-  const trigger = event.currentTarget;
-  const state = triggerMap.get(trigger);
-  if (!state) return;
-
-  const command = trigger.getAttribute("command").toLowerCase();
-
-  event.preventDefault();
-
-  if (!isDialog(state.dialog)) {
-    if (command === "show-modal" || command === "show") {
-      notifyUnsupportedDialog(state.dialog, trigger);
-    }
-    return;
-  }
-
-  if (command === "show-modal") {
-    openDialogWithViewTransition(state.dialog, trigger);
-    return;
-  }
-
-  if (command === "request-close") {
-    requestDialogClose(state.dialog, trigger.value || "");
-    return;
-  }
-
-  if (command === "close") {
-    closeDialog(state.dialog, trigger.value || "");
-  }
-}
-
 function handleDialogClick(event) {
   const dialog = event.currentTarget;
 
@@ -434,7 +394,7 @@ function connectDialog(dialog) {
     `${DIALOG_TRIGGER_SELECTOR}[commandfor="${CSS.escape(dialog.id)}"]`,
   );
   for (const trigger of triggers) {
-    connectTrigger(trigger);
+    dialogTriggers.connectOne(trigger);
   }
 }
 
@@ -454,51 +414,55 @@ function disconnectDialog(dialog) {
   syncModalOpenClass(dialog.ownerDocument);
 }
 
-function connectTrigger(trigger) {
-  if (triggerMap.has(trigger)) return;
+const dialogTriggers = commandTrigger(DIALOG_TRIGGER_SELECTOR, {
+  resolve: (trigger) => {
+    const dialog = targetFor(trigger);
+    return isDialogElement(dialog) ? dialog : null;
+  },
+  connect: (trigger, dialog) => {
+    if (isDialog(dialog)) {
+      ensureDialogWired(dialog);
+    }
 
-  const dialog = dialogFor(trigger);
-  if (!isDialogElement(dialog)) return;
+    trigger.setAttribute("aria-controls", dialog.id);
 
-  if (isDialog(dialog)) {
-    ensureDialogWired(dialog);
-  }
+    if (!trigger.hasAttribute("aria-haspopup") && isModal(dialog)) {
+      trigger.setAttribute("aria-haspopup", "dialog");
+    }
+  },
+  click: (event, trigger, dialog) => {
+    const command = trigger.getAttribute("command").toLowerCase();
 
-  const controller = new AbortController();
-  trigger.setAttribute("aria-controls", dialog.id);
+    event.preventDefault();
 
-  if (!trigger.hasAttribute("aria-haspopup") && isModal(dialog)) {
-    trigger.setAttribute("aria-haspopup", "dialog");
-  }
+    if (!isDialog(dialog)) {
+      if (command === "show-modal" || command === "show") {
+        notifyUnsupportedDialog(dialog, trigger);
+      }
+      return;
+    }
 
-  trigger.addEventListener("click", handleTriggerClick, { signal: controller.signal });
-  triggerMap.set(trigger, { dialog, controller });
-}
+    if (command === "show-modal") {
+      openDialogWithViewTransition(dialog, trigger);
+      return;
+    }
 
-function disconnectTrigger(trigger) {
-  const state = triggerMap.get(trigger);
-  if (!state) return;
+    if (command === "request-close") {
+      requestDialogClose(dialog, trigger.value || "");
+      return;
+    }
 
-  state.controller.abort();
-  triggerMap.delete(trigger);
-}
+    if (command === "close") {
+      closeDialog(dialog, trigger.value || "");
+    }
+  },
+});
 
 if (supportsDialog()) {
   enhance({
-    [DIALOG_TRIGGER_SELECTOR]: (trigger) => {
-      connectTrigger(trigger);
-      return () => disconnectTrigger(trigger);
-    },
     [DIALOG_SELECTOR]: (dialog) => {
       connectDialog(dialog);
       return () => disconnectDialog(dialog);
-    },
-  });
-} else {
-  enhance({
-    [DIALOG_TRIGGER_SELECTOR]: (trigger) => {
-      connectTrigger(trigger);
-      return () => disconnectTrigger(trigger);
     },
   });
 }
