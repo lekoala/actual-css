@@ -15,7 +15,7 @@
 
 <body>
   <nav class="demo-nav">
-    <a href="index.html">&larr; Components</a>
+    <a href="index.html">&larr; UI</a>
     <a href="../index.html">Homepage</a>
   </nav>
   <main class="center">
@@ -94,33 +94,19 @@
       </div>
     </section>
     <div class="component-prose">
-      <p>No script required beyond the runtime: <code>command=&quot;--status&quot;</code> reads its message from <code>data-status-message</code> (plus optional <code>data-status-intent</code> / <code>data-status-duration</code>), <code>command=&quot;--status-clear&quot;</code> empties the bar. <code>commandfor</code> must match the status bar's own <code>id</code>. For dynamic messages — a fetch response, a computed value — use the JS API instead, or dispatch the same event the commands use under the hood:</p>
+      <p>No script required beyond the runtime: <code>command=&quot;--status&quot;</code> reads its message from <code>data-status-message</code> (plus optional <code>data-status-intent</code> / <code>data-status-duration</code>), <code>command=&quot;--status-clear&quot;</code> empties the bar. <code>commandfor</code> must match the status bar's own <code>id</code>. For dynamic messages — a fetch response, a computed value — dispatch the same event the commands use under the hood:</p>
     </div>
     <section class="component-section">
       <div class="example-group">
         <div class="example-code">
-          <pre><code class="language-js"><span class="token keyword">import</span> <span class="token punctuation">{</span> status <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"actual-css/js/status"</span><span class="token punctuation">;</span>
-
-<span class="token function">status</span><span class="token punctuation">(</span><span class="token string">"Saved."</span><span class="token punctuation">,</span> <span class="token punctuation">{</span> <span class="token literal-property property">intent</span><span class="token operator">:</span> <span class="token string">"success"</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token function">status</span><span class="token punctuation">(</span><span class="token string">"Could not save."</span><span class="token punctuation">,</span> <span class="token punctuation">{</span> <span class="token literal-property property">intent</span><span class="token operator">:</span> <span class="token string">"danger"</span><span class="token punctuation">,</span> <span class="token literal-property property">duration</span><span class="token operator">:</span> <span class="token number">6000</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-status<span class="token punctuation">.</span><span class="token function">clear</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-<span class="token comment">// Or, without importing anything:</span>
-document<span class="token punctuation">.</span><span class="token function">dispatchEvent</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">CustomEvent</span><span class="token punctuation">(</span><span class="token string">"actual:status"</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>
+          <pre><code class="language-js">document<span class="token punctuation">.</span><span class="token function">dispatchEvent</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">CustomEvent</span><span class="token punctuation">(</span><span class="token string">"actual:status"</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>
   <span class="token literal-property property">bubbles</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
   <span class="token literal-property property">detail</span><span class="token operator">:</span> <span class="token punctuation">{</span> <span class="token literal-property property">message</span><span class="token operator">:</span> <span class="token string">"Saved."</span><span class="token punctuation">,</span> <span class="token literal-property property">intent</span><span class="token operator">:</span> <span class="token string">"success"</span> <span class="token punctuation">}</span><span class="token punctuation">,</span>
 <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
         </div>
       </div>
     </section>
-    <script>try{import { status } from "actual-css/js/status";
-
-status("Saved.", { intent: "success" });
-status("Could not save.", { intent: "danger", duration: 6000 });
-status.clear();
-
-// Or, without importing anything:
-document.dispatchEvent(new CustomEvent("actual:status", {
+    <script>try{document.dispatchEvent(new CustomEvent("actual:status", {
   bubbles: true,
   detail: { message: "Saved.", intent: "success" },
 }));}catch(e){console.error(e)}</script>
@@ -131,7 +117,7 @@ document.dispatchEvent(new CustomEvent("actual:status", {
   </section>
   </main>
   <footer class="demo-footer">
-    <a href="index.html">Back to Components</a>
+    <a href="index.html">Back to UI</a>
   </footer>
 </body>
 
