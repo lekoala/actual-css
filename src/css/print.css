@@ -1,6 +1,7 @@
 @media print {
   :root,
   body {
+    /* Save some ink in dark mode */
     color-scheme: light;
     background: #fff;
     color: #000;

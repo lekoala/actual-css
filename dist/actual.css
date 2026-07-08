@@ -4168,6 +4168,17 @@ button.avatar {
   --form-invalid-border: var(--danger);
 }
 
+/* Override checked/indeterminate background so both border and fill signal
+   danger instead of showing a red border around a primary-colored control. */
+.check[aria-invalid="true"]:is(:checked, :indeterminate),
+.radio[aria-invalid="true"]:checked {
+  --choice-bg: var(--danger);
+}
+
+.switch[aria-invalid="true"]:checked {
+  --switch-bg: var(--danger);
+}
+
 @supports selector(:user-invalid) {
   .needs-validation :is(.input, .textarea, .select, .check, .radio, .switch):user-invalid {
     --form-invalid-border: var(--danger);
@@ -4461,6 +4472,7 @@ button.avatar {
 @media print {
   :root,
   body {
+    /* Save some ink in dark mode */
     color-scheme: light;
     background: #fff;
     color: #000;
