@@ -7,35 +7,61 @@
  * Uses IntersectionObserver. Falls back gracefully: links still work
  * even if IntersectionObserver isn't available.
  *
+ * Optional root: data-scrollspy-root="#scroll-container" observes section
+ * visibility within a scroll container instead of the viewport.
+ *
  * Self-registers via enhance: injected .scrollspy navs wire automatically.
- * Cleanup is the IntersectionObserver.disconnect() returned to enhance.
- * Root-level support: a nav's link→section map is built at connect time;
- * links added to an existing nav after connect are not picked up.
+ * Cleanup disconnects the IntersectionObserver and the small MutationObserver
+ * that refreshes the link→section map as nav links or sections are injected.
  */
 
 import enhance from "./enhance.js";
 
+function rootFor(nav) {
+  const selector = nav.getAttribute("data-scrollspy-root");
+  if (!selector) return null;
+
+  try {
+    return nav.ownerDocument.querySelector(selector);
+  } catch {
+    return null;
+  }
+}
+
+function sectionsFor(nav) {
+  const links = [...nav.querySelectorAll("a[href^='#']")];
+  const sections = [];
+
+  for (const link of links) {
+    const id = link.getAttribute("href").slice(1);
+    const section = id ? nav.ownerDocument.getElementById(id) : null;
+    if (section) sections.push({ link, section });
+  }
+
+  return sections;
+}
+
 function setupNav(nav) {
   if (typeof IntersectionObserver === "undefined") return;
 
-  const links = [...nav.querySelectorAll("a[href^='#']")];
-  if (!links.length) return;
+  let io = null;
+  let sections = [];
+  let scheduled = false;
 
-  const sections = [];
-  for (const link of links) {
-    const id = link.getAttribute("href").slice(1);
-    const section = document.getElementById(id);
-    if (section) sections.push({ link, section });
-  }
-  if (!sections.length) return;
+  function rebuild() {
+    scheduled = false;
+    io?.disconnect();
+    sections = sectionsFor(nav);
+    if (!sections.length) return;
 
-  const io = new IntersectionObserver(
-    (entries) => {
-      const visible = entries
-        .filter((e) => e.isIntersecting)
-        .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+    io = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
 
-      if (visible.length) {
+        if (!visible.length) return;
+
         const id = visible[0].target.id;
         for (const { link } of sections) {
           if (link.getAttribute("href") === `#${id}`) {
@@ -44,16 +70,37 @@ function setupNav(nav) {
             link.removeAttribute("aria-current");
           }
         }
-      }
-    },
-    { rootMargin: "-20% 0px -70% 0px", threshold: 0 },
-  );
+      },
+      {
+        root: rootFor(nav),
+        rootMargin: "-20% 0px -70% 0px",
+        threshold: 0,
+      },
+    );
 
-  for (const { section } of sections) {
-    io.observe(section);
+    for (const { section } of sections) {
+      io.observe(section);
+    }
   }
 
-  return () => io.disconnect();
+  function scheduleRebuild() {
+    if (scheduled) return;
+    scheduled = true;
+    queueMicrotask(rebuild);
+  }
+
+  const mo = new MutationObserver(scheduleRebuild);
+  mo.observe(nav, { childList: true, subtree: true });
+  if (nav.ownerDocument.body) {
+    mo.observe(nav.ownerDocument.body, { childList: true, subtree: true });
+  }
+
+  rebuild();
+
+  return () => {
+    io?.disconnect();
+    mo.disconnect();
+  };
 }
 
 enhance({

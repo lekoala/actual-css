@@ -113,12 +113,6 @@
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .flyout {
-    transition: none;
-  }
-}
-
 .flyout > li {
   margin: 0;
 }
@@ -185,9 +179,9 @@
 }
 
 @media (hover: hover) {
-  .flyout > :where(button, a, [role="menuitem"]):hover,
-  .flyout > li > :where(button, a, [role="menuitem"]):hover,
-  .flyout > section > ul > li > a:hover {
+  .flyout > :where(button, a, [role="menuitem"]):hover:not(:focus-visible),
+  .flyout > li > :where(button, a, [role="menuitem"]):hover:not(:focus-visible),
+  .flyout > section > ul > li > a:hover:not(:focus-visible) {
     background: var(--surface-subtle);
     outline: none;
   }

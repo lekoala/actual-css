@@ -50,12 +50,6 @@
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .tooltip {
-    transition: none;
-  }
-}
-
 /* ── Arrow — clipped triangle ──────────────────────── */
 
 .tooltip::before {

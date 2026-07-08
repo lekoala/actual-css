@@ -103,14 +103,24 @@ function connectContextTarget(target) {
 
   prepareSurface(menu, target);
   const controller = new AbortController();
+  const addedAriaControls = !target.hasAttribute("aria-controls");
+  const addedAriaHaspopup = !target.hasAttribute("aria-haspopup");
+  const addedAriaExpanded = !target.hasAttribute("aria-expanded");
   const state = {
     controller,
+    addedAriaControls,
+    addedAriaHaspopup,
+    addedAriaExpanded,
     timer: null,
     pointerId: null,
     startX: 0,
     startY: 0,
     suppressClickUntil: 0,
   };
+
+  if (addedAriaControls) target.setAttribute("aria-controls", menu.id);
+  if (addedAriaHaspopup) target.setAttribute("aria-haspopup", "menu");
+  if (addedAriaExpanded) target.setAttribute("aria-expanded", "false");
 
   target.addEventListener(
     "contextmenu",
@@ -202,6 +212,9 @@ function disconnectContextTarget(target) {
   if (!state) return;
   clearLongPress(state);
   state.controller.abort();
+  if (state.addedAriaControls) target.removeAttribute("aria-controls");
+  if (state.addedAriaHaspopup) target.removeAttribute("aria-haspopup");
+  if (state.addedAriaExpanded) target.removeAttribute("aria-expanded");
   contextMap.delete(target);
 }
 

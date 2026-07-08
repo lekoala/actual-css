@@ -125,3 +125,17 @@ test("dynamically inserted tablists are initialized", async () => {
   expect(document.getElementById("panel-a").hidden).toBe(true);
   expect(document.getElementById("panel-b").hidden).toBe(false);
 });
+
+test("initialization skips a selected tab with a missing panel", async () => {
+  await loadTabs(`
+    <div role="tablist">
+      <button id="tab-a" role="tab" aria-controls="missing-panel" aria-selected="true">A</button>
+      <button id="tab-b" role="tab" aria-controls="panel-b">B</button>
+    </div>
+    <section id="panel-b" role="tabpanel">B panel</section>
+  `);
+
+  expect(document.getElementById("tab-a").getAttribute("aria-selected")).toBe("false");
+  expect(document.getElementById("tab-b").getAttribute("aria-selected")).toBe("true");
+  expect(document.getElementById("panel-b").hidden).toBe(false);
+});

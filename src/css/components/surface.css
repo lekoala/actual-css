@@ -41,12 +41,6 @@
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .surface-backdrop {
-    transition: none;
-  }
-}
-
 @media (forced-colors: active) {
   .surface-backdrop {
     background: Canvas;

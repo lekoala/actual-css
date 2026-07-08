@@ -129,6 +129,37 @@ function ensureBackdrop(menu, state) {
   state.backdrop = backdrop;
 }
 
+function applySheetSemantics(menu, state) {
+  if (state.isSheet) {
+    if (!state.sheetSemanticsApplied) {
+      state.previousRole = menu.getAttribute("role");
+      state.previousAriaModal = menu.getAttribute("aria-modal");
+      state.sheetSemanticsApplied = true;
+    }
+    menu.setAttribute("role", "dialog");
+    menu.setAttribute("aria-modal", "true");
+    return;
+  }
+
+  if (!state.sheetSemanticsApplied) return;
+
+  if (state.previousRole == null) {
+    menu.removeAttribute("role");
+  } else {
+    menu.setAttribute("role", state.previousRole);
+  }
+
+  if (state.previousAriaModal == null) {
+    menu.removeAttribute("aria-modal");
+  } else {
+    menu.setAttribute("aria-modal", state.previousAriaModal);
+  }
+
+  state.previousRole = null;
+  state.previousAriaModal = null;
+  state.sheetSemanticsApplied = false;
+}
+
 function applyPresentation(menu, state) {
   state.isSheet = shouldUseSheet(menu, state.mobile);
   if (state.isSheet) {
@@ -136,6 +167,7 @@ function applyPresentation(menu, state) {
     menu.style.removeProperty("top");
   }
   menu.classList.toggle("is-sheet", state.isSheet);
+  applySheetSemantics(menu, state);
   ensureBackdrop(menu, state);
 }
 
@@ -187,6 +219,9 @@ function ensureSurfaceWired(menu) {
     shiftPadding: 4,
     autoClose: "true",
     isSheet: false,
+    sheetSemanticsApplied: false,
+    previousRole: null,
+    previousAriaModal: null,
     closeId: 0,
   };
 
@@ -295,6 +330,8 @@ export function closeSurface(menu, opts = {}) {
 
   const state = surfaceMap.get(menu);
   const closeId = state ? ++state.closeId : 0;
+  const activeElement = menu.ownerDocument.activeElement;
+  const shouldRestoreFocus = opts.restoreFocus ?? menu.contains(activeElement);
   menu.classList.remove("is-open");
   menu.classList.remove("is-sheet");
   menu.hidden = true;
@@ -302,8 +339,12 @@ export function closeSurface(menu, opts = {}) {
   if (backdrop) backdrop.hidden = true;
   openSurfaces.delete(menu);
   syncExpanded(menu, false);
+  if (state) {
+    state.isSheet = false;
+    applySheetSemantics(menu, state);
+  }
 
-  if (opts.restoreFocus && state?.restoreFocusTo?.isConnected) {
+  if (shouldRestoreFocus && state?.restoreFocusTo?.isConnected) {
     state.restoreFocusTo.focus({ preventScroll: true });
   }
 

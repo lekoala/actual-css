@@ -167,6 +167,20 @@ test("keyboard context menu focuses the first direct action item", async () => {
   expect(document.activeElement).toBe(first);
 });
 
+test("context menu target gets disclosure attributes", async () => {
+  await loadContextMenu(`
+    <div id="target" data-context-menu="menu" tabindex="0">File.pdf</div>
+    <menu id="menu" class="flyout" hidden>
+      <li><button type="button">First</button></li>
+    </menu>
+  `);
+  const target = document.getElementById("target");
+
+  expect(target.getAttribute("aria-controls")).toBe("menu");
+  expect(target.getAttribute("aria-haspopup")).toBe("menu");
+  expect(target.getAttribute("aria-expanded")).toBe("false");
+});
+
 test("pointer context menu focuses the menu container, not the first item", async () => {
   await loadContextMenu(`
     <div id="target" data-context-menu="menu" tabindex="0">File.pdf</div>

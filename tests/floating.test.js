@@ -96,6 +96,20 @@ test("scroll and resize dispatch actual:reposition", async () => {
   expect(events).toEqual(["scroll", "resize"]);
 });
 
+test("scroll and resize in the same frame keep distinct event types", async () => {
+  document.body.innerHTML = '<div id="float"></div>';
+  const float = document.getElementById("float");
+  const events = [];
+  untracks.push(track(float));
+  float.addEventListener(EVENTS.reposition, (event) => events.push(event.detail.type));
+
+  window.dispatchEvent(new Event("resize"));
+  document.dispatchEvent(new Event("scroll"));
+  await nextFrame();
+
+  expect(events).toEqual(["resize", "scroll"]);
+});
+
 test("track dispatches reposition when a floating element resizes", async () => {
   document.body.innerHTML = '<div id="float"></div>';
   const float = document.getElementById("float");

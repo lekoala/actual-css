@@ -22,8 +22,10 @@ const dialogMap = new WeakMap();
 const wiredDialogs = new Set();
 const DIALOG_TRIGGER_SELECTOR = "button[commandfor][command]";
 const DIALOG_SELECTOR = "dialog";
+const DIALOG_TITLE_SELECTOR = "[data-title], h1, h2, h3, h4, h5, h6";
 const DEFAULT_UNSUPPORTED_MESSAGE =
   "This dialog cannot open because this browser does not support this feature.";
+let uid = 0;
 
 function supportsDialog() {
   return (
@@ -57,6 +59,37 @@ function isDialog(el) {
 
 function boolData(el, name) {
   return el.hasAttribute(name) && el.getAttribute(name) !== "false";
+}
+
+function ensureId(el, prefix) {
+  if (!el.id) {
+    uid++;
+    el.id = `${prefix}-${uid}`;
+  }
+  return el.id;
+}
+
+function syncDialogSemantics(dialog) {
+  if (isModal(dialog)) {
+    dialog.setAttribute("aria-modal", "true");
+  } else {
+    dialog.removeAttribute("aria-modal");
+  }
+
+  if (dialog.hasAttribute("aria-label") || dialog.hasAttribute("aria-labelledby")) {
+    return;
+  }
+
+  const label = dialog.getAttribute("data-title")?.trim();
+  if (label) {
+    dialog.setAttribute("aria-label", label);
+    return;
+  }
+
+  const title = dialog.querySelector(DIALOG_TITLE_SELECTOR);
+  if (title) {
+    dialog.setAttribute("aria-labelledby", ensureId(title, "dialog-title"));
+  }
 }
 
 function dialogIdFor(trigger) {
@@ -251,6 +284,7 @@ export function openDialog(dialog, trigger = null) {
   if (!isDialog(dialog) || dialog.open || !dialog.isConnected) return;
 
   const state = ensureDialogWired(dialog);
+  syncDialogSemantics(dialog);
 
   state.closing = false;
   state.restoreFocusTo = trigger || document.activeElement;
@@ -327,8 +361,6 @@ function handleDialogSubmit(event) {
 function handleDialogCancel(event) {
   const dialog = event.currentTarget;
 
-  if (!canViewTransition(dialog, dialogMap.get(dialog)?.restoreFocusTo)) return;
-
   event.preventDefault();
   closeDialog(dialog, dialogMap.get(dialog)?.returnValue || "");
 }
@@ -372,6 +404,8 @@ function ensureDialogWired(dialog) {
     returnValue: "",
     staticTimer: null,
   };
+
+  syncDialogSemantics(dialog);
 
   dialog.addEventListener("click", handleDialogClick, { signal: controller.signal });
   dialog.addEventListener("submit", handleDialogSubmit, { signal: controller.signal });

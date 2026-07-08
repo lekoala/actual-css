@@ -1,26 +1,26 @@
 {
-  "timestamp": "2026-07-08T09:39:25.961Z",
-  "totalRaw": 143508,
-  "totalMinified": 74895,
-  "totalBrotli": 11112,
+  "timestamp": "2026-07-08T09:46:21.771Z",
+  "totalRaw": 143793,
+  "totalMinified": 75159,
+  "totalBrotli": 11161,
   "themesMinified": 26047,
   "themesBrotli": 3009,
-  "shippedMinified": 74895,
-  "shippedBrotli": 11112,
+  "shippedMinified": 75159,
+  "shippedBrotli": 11161,
   "maxShippedBrotli": 13312,
   "fileCount": 66,
   "files": [
     {
       "file": "components/flyout.css",
-      "raw": 5934
+      "raw": 5911
     },
     {
       "file": "components/button.css",
-      "raw": 5839
+      "raw": 5594
     },
     {
       "file": "theme.css",
-      "raw": 5134
+      "raw": 5407
     },
     {
       "file": "forms/choice.css",
@@ -67,16 +67,16 @@
       "raw": 3246
     },
     {
+      "file": "utilities.css",
+      "raw": 3094
+    },
+    {
       "file": "components/drawer.css",
       "raw": 3064
     },
     {
       "file": "components/tooltip.css",
-      "raw": 3016
-    },
-    {
-      "file": "utilities.css",
-      "raw": 2916
+      "raw": 2932
     },
     {
       "file": "forms/control.css",
@@ -175,6 +175,10 @@
       "raw": 1525
     },
     {
+      "file": "base.css",
+      "raw": 1520
+    },
+    {
       "file": "components/skeleton.css",
       "raw": 1495
     },
@@ -183,16 +187,12 @@
       "raw": 1464
     },
     {
-      "file": "components/surface.css",
-      "raw": 1443
-    },
-    {
       "file": "components/table.css",
       "raw": 1404
     },
     {
-      "file": "base.css",
-      "raw": 1379
+      "file": "components/surface.css",
+      "raw": 1350
     },
     {
       "file": "forms/native.css",
@@ -244,7 +244,7 @@
     },
     {
       "file": "print.css",
-      "raw": 475
+      "raw": 613
     },
     {
       "file": "actual.css",
