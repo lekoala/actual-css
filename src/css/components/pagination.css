@@ -3,6 +3,10 @@
  *
  * Render .btn elements inside a .pagination list. The active page is marked
  * with aria-current="page"; .btn owns the active state styling.
+ *
+ * Truncated ranges are plain text (`.muted`, `aria-hidden="true"`), not .btn
+ * — they are decorative, not actionable. They still get the same box sizing
+ * as .btn below so the row stays visually aligned.
  */
 .pagination {
   display: flex;
@@ -15,5 +19,12 @@
 }
 
 .pagination .btn {
+  min-inline-size: var(--control-size);
+}
+
+.pagination [aria-hidden="true"] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   min-inline-size: var(--control-size);
 }
