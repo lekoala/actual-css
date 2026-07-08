@@ -552,14 +552,12 @@ filter policy stays obvious in markup.
 The built-in filters are intentionally narrow. They are input helpers, not
 domain validation.
 
-| Filter | Behavior |
-| --- | --- |
-| `numeric` | Keeps ASCII digits only: `0` through `9`. |
-| `decimal` | Converts `,` to `.`, keeps ASCII digits, and keeps the first `.` separator. |
-| `lower` | Converts the value with `toLocaleLowerCase()`. |
-| `upper` | Converts the value with `toLocaleUpperCase()`. |
-| `letters` | Keeps Unicode letters only. Digits, punctuation, symbols, and spaces are removed. |
-| `slug` | Normalizes accents, lowercases text, turns runs of non-letter and non-digit characters into `-`, collapses repeated `-`, and trims edge separators. |
+- `numeric` — Keeps ASCII digits only: `0` through `9`.
+- `decimal` — Converts `,` to `.`, keeps ASCII digits, and keeps the first `.` separator.
+- `lower` — Converts the value with `toLocaleLowerCase()`.
+- `upper` — Converts the value with `toLocaleUpperCase()`.
+- `letters` — Keeps Unicode letters only. Digits, punctuation, symbols, and spaces are removed.
+- `slug` — Normalizes accents, lowercases text, turns runs of non-letter and non-digit characters into `-`, collapses repeated `-`, and trims edge separators.
 
 During direct typing, `slug` may keep a trailing `-` until the next character so
 words do not merge while the user is still entering text.
@@ -1033,13 +1031,11 @@ document.addEventListener("actual:invalid", (event) => {
 
 Custom rules live in `data-validation-rules` as a comma-separated list; each rule may take space-separated options. The enhancer registers a few defaults:
 
-| Rule | Meaning |
-| --- | --- |
-| `same <selector>` | Value must equal the value of the element matched by `<selector>` (scoped to the field's form). |
-| `number` | Value is empty or a valid `Number`. |
-| `digits` | Value is empty or ASCII digits only. |
-| `alnum` | Value is empty or letters and digits only. |
-| `date` | Value is empty or a valid date. Accepts ISO, locale, and common formats; rejects non-existent dates like `2026-02-29`. |
+- `same <selector>` — Value must equal the value of the element matched by `<selector>` (scoped to the field's form).
+- `number` — Value is empty or a valid `Number`.
+- `digits` — Value is empty or ASCII digits only.
+- `alnum` — Value is empty or letters and digits only.
+- `date` — Value is a valid date. Accepts ISO, locale, and common formats; rejects non-existent dates like `2026-02-29`.
 
 Add your own with `FormValidator.registerRule(name, (value, el, ...opts) => boolean)`. The built-in rules treat empty values as valid so optional fields stay optional; custom rules should do the same when that behavior is wanted.
 

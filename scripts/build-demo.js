@@ -436,8 +436,27 @@ function extractCategoryDescription(content) {
   return "";
 }
 
+function detectTables(content, file) {
+  const lines = content.split(/\r?\n/);
+  let inCode = false;
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    if (line.startsWith("```")) {
+      inCode = !inCode;
+      continue;
+    }
+    if (!inCode && /^\|/.test(line)) {
+      throw new Error(
+        `Markdown table detected in docs/${file}:${i + 1}\n  ${line.trim()}\n` +
+        `Tables are not supported by the demo builder. Use a bullet list instead.`
+      );
+    }
+  }
+}
+
 function buildCategory(category) {
   const md = readFileSync(join(DOCS, category.file), "utf8");
+  detectTables(md, category.file);
   const sections = parseMarkdown(md, category.name);
   const slug = slugify(category.name);
   const dir = join(GENERATED_DEMO, slug);
