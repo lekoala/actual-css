@@ -19,6 +19,7 @@
 
 .switch {
   --switch-bg: var(--border);
+  --switch-border: var(--border);
   --switch-knob: var(--surface-raised);
   --switch-width: calc(var(--control-size) * 1.16);
   --switch-block-size: calc(var(--control-size) * 0.63);
@@ -38,7 +39,7 @@
   inline-size: var(--switch-width);
   block-size: var(--switch-block-size);
   margin: 0;
-  border: var(--border-width) solid var(--border);
+  border: var(--border-width) solid var(--form-invalid-border, var(--switch-border));
   border-radius: var(--radius-full);
   background: var(--switch-bg);
   appearance: none;
@@ -61,14 +62,14 @@
 
 @media (hover: hover) {
   .switch:hover:not(:disabled) {
-    border-color: var(--intent, var(--primary));
+    --switch-border: var(--intent, var(--primary));
   }
 }
 
 .switch:checked {
   --switch-bg: var(--intent, var(--primary));
+  --switch-border: var(--intent, var(--primary));
   --switch-knob: var(--intent-fg, var(--primary-fg));
-  border-color: var(--intent, var(--primary));
 }
 
 .switch:checked::before {
@@ -86,14 +87,10 @@
   outline-offset: var(--focus-outline-offset);
 }
 
-.field.danger .switch {
-  border-color: var(--danger);
-}
-
 .switch:disabled {
   --switch-bg: var(--surface-subtle);
+  --switch-border: var(--border);
   --switch-knob: var(--text-subtle);
-  border-color: var(--border);
   opacity: 1;
   cursor: not-allowed;
 }
@@ -102,8 +99,8 @@
   /* --switch-knob must be set on the element, not on ::before: a custom
      property declared on the pseudo would shadow the :checked override. */
   .switch {
+    --switch-border: ButtonText;
     --switch-knob: ButtonText;
-    border-color: ButtonText;
   }
 
   .switch::before {
@@ -112,15 +109,15 @@
 
   .switch:checked {
     --switch-bg: Highlight;
+    --switch-border: Highlight;
     --switch-knob: HighlightText;
-    border-color: Highlight;
     forced-color-adjust: none;
   }
 
   .switch:disabled {
     --switch-bg: Canvas;
+    --switch-border: GrayText;
     --switch-knob: GrayText;
-    border-color: GrayText;
     forced-color-adjust: auto;
   }
 }

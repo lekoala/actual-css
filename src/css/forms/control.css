@@ -25,7 +25,7 @@
   inline-size: 100%;
   min-block-size: var(--control-size);
   padding-inline: var(--space-3);
-  border: var(--border-width) solid var(--control-border);
+  border: var(--border-width) solid var(--form-invalid-border, var(--control-border));
   border-radius: var(--radius);
   background: var(--control-bg);
   color: var(--control-fg);
@@ -70,23 +70,6 @@
   --control-border: var(--border);
   outline: none;
   box-shadow: var(--focus-ring-shadow);
-}
-
-.field.danger :where(.input, .textarea, .select),
-.input[aria-invalid="true"],
-.textarea[aria-invalid="true"],
-.select[aria-invalid="true"],
-.input.is-invalid,
-.textarea.is-invalid,
-.select.is-invalid,
-.needs-validation.was-validated :is(.input, .textarea, .select):invalid {
-  --control-border: var(--danger);
-}
-
-@supports selector(:user-invalid) {
-  .needs-validation :is(.input, .textarea, .select):user-invalid {
-    --control-border: var(--danger);
-  }
 }
 
 .input[readonly],
