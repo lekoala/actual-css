@@ -894,10 +894,10 @@ Core: native range, enhanced by `accent-color`. Optional richer skin may come la
 
 ## Validation
 
-> Inline error and success feedback that respects assistive technology and form state.
+> Inline error feedback that respects assistive technology and form state.
 
 - `.field-error` is the canonical error message. It is wired to `aria-invalid="true"` via the input, so the visual border and the assistive-tech announcement move together.
-- `.field-help` is the canonical helper text. It carries the description whether the field is in a danger or a success state.
+- `.field-help` is the canonical helper text. It carries supporting copy before and after validation.
 - Set `aria-invalid="true"` on the input. The `.field-error` element is linked via `aria-describedby`.
 - `role="alert"` on `.field-error` is only required when the message is inserted dynamically. Static messages do not need it.
 
@@ -930,7 +930,7 @@ Core: native range, enhanced by `accent-color`. Optional richer skin may come la
 
 > Native validation first; the enhancer only adds state and focus behavior.
 
-Actual CSS ships validation *styles*. Invalid fields can be marked with `aria-invalid="true"` or `.is-invalid`; `.is-valid` exists only for explicit success states. A small optional enhancer (`actual-css/js/validation`) prevents premature error display, marks invalid fields on submit, focuses the first invalid field, and supports a few custom rules. It is not a validation framework — server and AJAX validation stay in app code.
+Actual CSS ships validation *styles*. Invalid fields can be marked with `aria-invalid="true"` or `.is-invalid`. A small optional enhancer (`actual-css/js/validation`) prevents premature error display, marks invalid fields on submit, focuses the first invalid field, and supports a few custom rules. It is not a validation framework — server and AJAX validation stay in app code.
 
 Opt in with the `.needs-validation` class. Importing the module registers the behavior; there is no init call.
 

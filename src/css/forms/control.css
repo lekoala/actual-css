@@ -83,12 +83,6 @@
   --control-border: var(--danger);
 }
 
-.input.is-valid,
-.textarea.is-valid,
-.select.is-valid {
-  --control-border: var(--success);
-}
-
 @supports selector(:user-invalid) {
   .needs-validation :is(.input, .textarea, .select):user-invalid {
     --control-border: var(--danger);

@@ -280,8 +280,7 @@ Forms opt in with `.needs-validation`; importing the module registers the
 behavior. Native HTML constraint validation runs first, then the enhancer adds
 `.is-invalid` / `aria-invalid="true"` to invalid fields on submit, focuses the
 first invalid field, and dispatches a bubbling `actual:invalid` event with
-`{ form, firstInvalid, message }`. Valid fields are not marked automatically;
-use `.is-valid` only when the app has an explicit success state to show.
+`{ form, firstInvalid, message }`. Valid fields are not marked automatically.
 
 ```html
 <form class="needs-validation" data-validation-message="Please check the fields.">
