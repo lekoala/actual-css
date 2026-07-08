@@ -158,27 +158,18 @@
       font-size: 0.875rem;
     }
 
-    .mk-hero-proof .dot {
-      inline-size: 0.25rem;
-      block-size: 0.25rem;
-      border-radius: var(--radius-full);
-      background: var(--text-subtle);
-    }
-
     .mk-hero-visual {
       margin-block-start: 3rem;
     }
 
+    /* .cover/.cover-grid/.cover-glyph come from demo/styles/demo.css —
+       shared decorative placeholder across templates. Only sizing/chrome
+       and the glyph's flipped position (it shares the box with the panel
+       below, so it moves to the top) stay local here. */
     .mk-hero-cover {
-      position: relative;
       aspect-ratio: 4 / 3;
-      overflow: hidden;
       border-radius: var(--radius-lg);
       border: var(--border-width) solid var(--border);
-      background:
-        radial-gradient(ellipse at 18% 20%, color-mix(in oklch, var(--primary) 32%, transparent), transparent 55%),
-        radial-gradient(ellipse at 82% 75%, color-mix(in oklch, var(--secondary) 26%, transparent), transparent 55%),
-        linear-gradient(160deg, color-mix(in oklch, var(--surface-subtle) 65%, var(--primary) 10%), var(--surface-subtle));
     }
 
     @media (min-width: 40rem) {
@@ -193,14 +184,9 @@
       }
     }
 
-    .mk-hero-cover-grid {
-      position: absolute;
-      inset: 0;
-      background-image:
-        linear-gradient(to right, color-mix(in oklch, var(--text) 8%, transparent) 1px, transparent 1px),
-        linear-gradient(to bottom, color-mix(in oklch, var(--text) 8%, transparent) 1px, transparent 1px);
-      background-size: 3rem 3rem;
-      mask-image: radial-gradient(ellipse at center, black 35%, transparent 80%);
+    .mk-hero-cover .cover-glyph {
+      inset-block-start: 1rem;
+      inset-block-end: auto;
     }
 
     /* A sibling of .mk-hero-cover, not a child — pulled up over the image
@@ -235,17 +221,6 @@
     .mk-hero-cover-panel span {
       color: var(--text-muted);
       font-size: 0.8125rem;
-    }
-
-    .mk-hero-cover-glyph {
-      position: absolute;
-      inset-block-start: 1rem;
-      inset-inline-end: 1.25rem;
-      color: color-mix(in oklch, var(--text-muted) 60%, transparent);
-      font-size: clamp(2.5rem, 2rem + 3vw, 4.5rem);
-      line-height: 1;
-      font-weight: var(--font-weight-bold);
-      letter-spacing: -0.03em;
     }
 
     /* Stats band */
@@ -303,14 +278,13 @@
       gap: 0.85rem;
     }
 
+    /* .cover from demo/styles/demo.css. Both gradient stops use the same
+       tint so it reads as one glow instead of a primary/secondary mix. */
     .mk-feature-cover {
-      position: relative;
       aspect-ratio: 16 / 10;
       margin-block-end: 0.25rem;
-      overflow: hidden;
-      background:
-        radial-gradient(ellipse at 30% 25%, color-mix(in oklch, var(--_tint, var(--primary)) 35%, transparent), transparent 60%),
-        var(--surface-subtle);
+      --cover-a: var(--_tint, var(--primary));
+      --cover-b: var(--_tint, var(--primary));
     }
 
     .mk-feature-cover-icon {
@@ -546,11 +520,7 @@
       color: var(--text-muted);
     }
 
-    .mk-footer-inner {
-      display: grid;
-      gap: 1.5rem;
-      grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
-    }
+    /* Column layout comes from the framework's .grid (--grid-min: 12rem). */
 
     .mk-footer h4 {
       margin: 0 0 0.5rem;
@@ -659,9 +629,9 @@
       </div>
 
       <div class="center mk-hero-visual">
-        <div class="mk-hero-cover" role="img" aria-label="Abstract preview of a themed dashboard built with Actual CSS">
-          <div class="mk-hero-cover-grid" aria-hidden="true"></div>
-          <span class="mk-hero-cover-glyph" aria-hidden="true">AC</span>
+        <div class="mk-hero-cover cover" role="img" aria-label="Abstract preview of a themed dashboard built with Actual CSS">
+          <div class="cover-grid" aria-hidden="true"></div>
+          <span class="cover-glyph" aria-hidden="true">AC</span>
         </div>
         <div class="mk-hero-cover-panel">
           <strong>Same markup, new theme</strong>
@@ -702,21 +672,21 @@
 
       <div class="grid-3 container-query">
         <article class="card mk-feature">
-          <div class="mk-feature-cover bleed" aria-hidden="true">
+          <div class="mk-feature-cover cover bleed" aria-hidden="true">
             <span class="mk-feature-cover-icon"><i class="ti ti-stack-2"></i></span>
           </div>
           <strong>Layout primitives</strong>
           <p><code>.stack</code>, <code>.cluster</code>, and <code>.center</code> cover the compositions you reach for every day, without a utility class for every property.</p>
         </article>
         <article class="card mk-feature tint-secondary">
-          <div class="mk-feature-cover bleed" aria-hidden="true">
+          <div class="mk-feature-cover cover bleed" aria-hidden="true">
             <span class="mk-feature-cover-icon"><i class="ti ti-palette"></i></span>
           </div>
           <strong>One theme contract</strong>
           <p>Every component reads from the same token surface. Write one theme that matches your brand instead of overriding seventeen.</p>
         </article>
         <article class="card mk-feature tint-success">
-          <div class="mk-feature-cover bleed" aria-hidden="true">
+          <div class="mk-feature-cover cover bleed" aria-hidden="true">
             <span class="mk-feature-cover-icon"><i class="ti ti-accessible"></i></span>
           </div>
           <strong>Semantic by default</strong>
@@ -886,7 +856,7 @@
   <!-- Site footer -->
   <footer class="mk-footer">
     <div class="center">
-      <div class="mk-footer-inner">
+      <div class="grid" style="--grid-min: 12rem; --gap: 1.5rem;">
         <div>
           <h4>Actual CSS</h4>
           <p style="margin: 0; font-size: 0.875rem;">A CSS framework for teams who'd rather write one theme than fight a thousand utility classes.</p>
