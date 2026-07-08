@@ -53,7 +53,7 @@ Add classes to your HTML. Components define the structure, variants change the s
 <button class="btn success soft sm">Confirm</button>
 ```
 
-Intents such as `.primary`, `.secondary`, `.success`, `.warning`, `.danger`, and `.neutral` work across components.
+Intents such as `.primary`, `.secondary`, `.success`, `.warning`, and `.danger` work across components.
 
 Variants such as `.solid`, `.soft`, and `.outline` are shared by components like buttons, badges, alerts, and cards. `.ghost` and `.link` are button-only variants.
 
@@ -67,7 +67,7 @@ Actual CSS uses a small unprefixed class grammar:
 .component [intent] [variant] [size] [modifier]
 ```
 
-Components, layout helpers, form helpers, and utilities claim their documented class names. Intents are `.primary`, `.secondary`, `.success`, `.warning`, `.danger`, and `.neutral`; shared variants are `.solid`, `.soft`, and `.outline`; button-only variants are `.ghost` and `.link`; shared sizes are `.sm` and `.lg`.
+Components, layout helpers, form helpers, and utilities claim their documented class names. Intents are `.primary`, `.secondary`, `.success`, `.warning`, and `.danger`; shared variants are `.solid`, `.soft`, and `.outline`; button-only variants are `.ghost` and `.link`; shared sizes are `.sm` and `.lg`.
 
 Undocumented `is-*` classes are runtime internals.
 

@@ -3,7 +3,7 @@
 Components are opt-in and use semantic HTML with a small, predictable class API. This page covers components whose core behavior is native HTML or CSS-only. Components that need a JavaScript enhancer or runtime orchestration live in [UI](ui.md).
 
 - Use one component class for the thing being styled: `.btn`, `.card`, `.alert`, `.table`.
-- Use shared intent modifiers when color carries meaning: `.primary`, `.secondary`, `.success`, `.warning`, `.danger`, `.neutral`.
+- Use shared intent modifiers when color carries meaning: `.primary`, `.secondary`, `.success`, `.warning`, `.danger`.
 - Use shared visual variants when emphasis changes: `.solid`, `.soft`, `.outline`.
 - Buttons add two button-only variants: `.ghost` and `.link`.
 - Use shared size modifiers when the component supports sizing: `.sm`, `.lg`.
@@ -320,6 +320,7 @@ Use `.badge soft` for tag visuals. Add a direct dismiss button only when the tag
 
 > Actions and navigation with shared intents, variants, sizes, and a loading state.
 
+- `.btn` is for actionable elements: `<button>`, `<a href>`, or `input[type="button"|"submit"|"reset"]`. Not a decorative box class.
 - Use a real `<button>` for actions.
 - Use `<a class="btn">` for navigation.
 - Always set `type="button"` when a button is not submitting a form.
@@ -327,6 +328,7 @@ Use `.badge soft` for tag visuals. Add a direct dismiss button only when the tag
 - Adds button-only `.ghost` and `.link` variants.
 - Button groups use `.join` to visually join adjacent buttons.
 - Use `aria-pressed` for toggle buttons. Actual styles the pressed state; application code owns changing the attribute.
+- Disable a `<button>` or `<input>` with the native `disabled` attribute. Anchors have no native disabled state, so `<a class="btn" aria-disabled="true">` is the supported way to disable a link button; application code must also prevent the click since `aria-disabled` does not stop navigation on its own.
 
 ```html{.cluster}
 <button type="button">Unstyled</button>
@@ -346,6 +348,7 @@ Use `.badge soft` for tag visuals. Add a direct dismiss button only when the tag
 </button>
 <button class="btn primary" type="button" aria-busy="true">In progress</button>
 <button class="btn" type="button" disabled>Disabled</button>
+<a class="btn outline" href="/account" aria-disabled="true">Disabled link</a>
 ```
 
 Button group using `.join`
@@ -641,6 +644,7 @@ In menus, keep the command label and shortcut in the same interactive item.
 - Numeric links may use `aria-label="Page N"` for clearer screen reader output.
 - Prefer text labels for Previous and Next. Icon-only controls need an accessible name.
 - Page links can compose with `.btn` for button-like hit targets.
+- Truncated ranges are plain text with `.muted` and `aria-hidden="true"`, not `.btn` — they are decorative, not actionable.
 
 ```html
 <nav aria-label="Pagination">
@@ -660,11 +664,11 @@ In menus, keep the command label and shortcut in the same interactive item.
   <ol class="pagination sm">
     <li><a href="?page=1" class="btn outline" rel="prev">Previous</a></li>
     <li><a href="?page=1" class="btn outline" aria-label="Page 1">1</a></li>
-    <li><span class="btn ghost" aria-hidden="true">…</span></li>
+    <li><span class="muted" aria-hidden="true">…</span></li>
     <li><a href="?page=7" class="btn outline" aria-label="Page 7">7</a></li>
     <li><a href="?page=8" class="btn" aria-current="page" aria-label="Page 8">8</a></li>
     <li><a href="?page=9" class="btn outline" aria-label="Page 9">9</a></li>
-    <li><span class="btn ghost" aria-hidden="true">…</span></li>
+    <li><span class="muted" aria-hidden="true">…</span></li>
     <li><a href="?page=20" class="btn outline" aria-label="Page 20">20</a></li>
     <li><a href="?page=9" class="btn outline" rel="next">Next</a></li>
   </ol>

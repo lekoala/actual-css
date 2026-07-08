@@ -26,6 +26,7 @@
     </header>
         <div class="component-prose">
       <ul>
+  <li><code>.btn</code> is for actionable elements: <code>&lt;button&gt;</code>, <code>&lt;a href&gt;</code>, or <code>input[type=&quot;button&quot;|&quot;submit&quot;|&quot;reset&quot;]</code>. Not a decorative box class.</li>
   <li>Use a real <code>&lt;button&gt;</code> for actions.</li>
   <li>Use <code>&lt;a class=&quot;btn&quot;&gt;</code> for navigation.</li>
   <li>Always set <code>type=&quot;button&quot;</code> when a button is not submitting a form.</li>
@@ -33,6 +34,7 @@
   <li>Adds button-only <code>.ghost</code> and <code>.link</code> variants.</li>
   <li>Button groups use <code>.join</code> to visually join adjacent buttons.</li>
   <li>Use <code>aria-pressed</code> for toggle buttons. Actual styles the pressed state; application code owns changing the attribute.</li>
+  <li>Disable a <code>&lt;button&gt;</code> or <code>&lt;input&gt;</code> with the native <code>disabled</code> attribute. Anchors have no native disabled state, so <code>&lt;a class=&quot;btn&quot; aria-disabled=&quot;true&quot;&gt;</code> is the supported way to disable a link button; application code must also prevent the click since <code>aria-disabled</code> does not stop navigation on its own.</li>
 </ul>
     </div>
     <section class="component-section">
@@ -55,6 +57,7 @@
 </button>
 <button class="btn primary" type="button" aria-busy="true">In progress</button>
 <button class="btn" type="button" disabled>Disabled</button>
+<a class="btn outline" href="/account" aria-disabled="true">Disabled link</a>
         </div>
         <div class="example-code">
           <pre><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>button</span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>button<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Unstyled<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">></span></span>
@@ -73,7 +76,8 @@
   Loading
 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">></span></span>
 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>button</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>btn primary<span class="token punctuation">"</span></span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>button<span class="token punctuation">"</span></span> <span class="token attr-name">aria-busy</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>true<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>In progress<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>button</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>btn<span class="token punctuation">"</span></span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>button<span class="token punctuation">"</span></span> <span class="token attr-name">disabled</span><span class="token punctuation">></span></span>Disabled<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">></span></span></code></pre>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>button</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>btn<span class="token punctuation">"</span></span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>button<span class="token punctuation">"</span></span> <span class="token attr-name">disabled</span><span class="token punctuation">></span></span>Disabled<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>a</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>btn outline<span class="token punctuation">"</span></span> <span class="token attr-name">href</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>/account<span class="token punctuation">"</span></span> <span class="token attr-name">aria-disabled</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>true<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Disabled link<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>a</span><span class="token punctuation">></span></span></code></pre>
         </div>
       </div>
     </section>

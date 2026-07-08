@@ -6,7 +6,7 @@ Components are semantic boxes: `.btn`, `.badge`, `.alert`, `.card`, `.avatar`, e
 
 ## Intents
 
-`.primary`, `.secondary`, `.success`, `.warning`, `.danger`, `.neutral` do not style elements directly. They only expose `--intent` and `--intent-fg`. Components and variants decide how to consume them.
+`.primary`, `.secondary`, `.success`, `.warning`, `.danger` do not style elements directly. They only expose `--intent` and `--intent-fg`. Components and variants decide how to consume them.
 
 ```html
 <button class="btn primary">Primary</button>
@@ -14,6 +14,22 @@ Components are semantic boxes: `.btn`, `.badge`, `.alert`, `.card`, `.avatar`, e
 ```
 
 There is no `.btn-primary` or `.badge-success`. Intents are generic and reusable across any component that supports them.
+
+Components fall back to their own default intent when no intent class is set. Buttons, badges, and alerts use the neutral palette (`--neutral` / `--neutral-fg`) by default.
+
+Custom intents need no framework support — define `--intent` and `--intent-fg` on a class:
+
+```css
+.tertiary {
+  --intent: var(--tertiary);
+  --intent-fg: var(--tertiary-fg);
+}
+```
+
+```html
+<button class="btn tertiary">Tertiary</button>
+<span class="badge tertiary">Tertiary</span>
+```
 
 ## Variants
 

@@ -946,15 +946,14 @@ small {
 /*
  * Buttons for actions and button-like links.
  *
- * Keeps shared intent, variant, and size behavior with a solid default.
- * Interactive states apply only to native interactive elements; non-interactive
- * elements such as <span class="btn"> can reuse the visual box without faking
- * disabled behavior.
+ * .btn is for actionable elements only: <button>, <a href>,
+ * input[type="button"|"submit"|"reset"]. It is not a decorative box class.
  *
- * Disabled state uses the native disabled attribute only. aria-disabled is
- * not supported — it is meant for custom non-native components, not for
- * standard interactive elements. Use <button disabled> for disabled buttons,
- * input[type="submit"][disabled] for submit buttons, etc.
+ * Keeps shared intent, variant, and size behavior with a solid default.
+ *
+ * Disabled state uses the native disabled attribute for buttons and inputs.
+ * Anchors have no native disabled state, so a.btn uses aria-disabled="true"
+ * instead — that is the one place this library relies on aria-disabled.
  */
 
 /* Intent boundary — inherited intents do not tint this component.
@@ -1005,27 +1004,13 @@ small {
   font-weight: var(--font-weight-strong);
   line-height: 1;
   text-decoration: none;
-  cursor: default;
+  cursor: pointer;
   transition:
     background-color var(--duration),
     border-color var(--duration),
     color var(--duration),
     box-shadow var(--duration),
     transform var(--duration);
-}
-
-/* Native interactive button surfaces get pointer and interaction states.
-   Plain spans keep the visual .btn box but stay static; [role="button"] opts
-   custom elements in explicitly. */
-:where(
-    a,
-    button,
-    input[type="button"],
-    input[type="submit"],
-    input[type="reset"],
-    [role="button"]
-  ).btn {
-  cursor: pointer;
 }
 
 @supports (color: color-mix(in oklch, red, white)) {
@@ -1055,27 +1040,13 @@ small {
 /* The .soft/.outline/.ghost hover recipe (--ui-hover-bg) is shared with
    .badge in variants.css; the overlay darkening for solid/soft is .btn-specific. */
 @media (hover: hover) {
-  :where(
-      a,
-      button,
-      input[type="button"],
-      input[type="submit"],
-      input[type="reset"],
-      [role="button"]
-    ).btn:not(:disabled):hover {
+  .btn:not(:where(:disabled, [aria-disabled="true"])):hover {
     background: var(--btn-hover-bg);
     box-shadow: inset 0 0 0 999px var(--btn-hover-overlay);
   }
 }
 
-:where(
-    a,
-    button,
-    input[type="button"],
-    input[type="submit"],
-    input[type="reset"],
-    [role="button"]
-  ).btn:not(:disabled):active {
+.btn:not(:where(:disabled, [aria-disabled="true"])):active {
   transform: translateY(1px);
 }
 
@@ -1098,14 +1069,7 @@ small {
    after components and overrides border-radius at equal specificity. */
 
 @media (hover: hover) {
-  :where(
-      a,
-      button,
-      input[type="button"],
-      input[type="submit"],
-      input[type="reset"],
-      [role="button"]
-    ).btn.link:not(:disabled):hover {
+  .btn.link:not(:where(:disabled, [aria-disabled="true"])):hover {
     background: transparent;
     color: var(--intent, var(--text));
     text-decoration-thickness: 0.12em;
@@ -1126,6 +1090,13 @@ small {
 .btn:disabled {
   cursor: not-allowed;
   opacity: 0.65;
+}
+
+/* Anchors have no native disabled state. */
+a.btn[aria-disabled="true"] {
+  cursor: not-allowed;
+  opacity: 0.65;
+  pointer-events: none;
 }
 
 /* Busy */
@@ -1168,20 +1139,14 @@ small {
   }
 
   @media (hover: hover) {
-    :where(
-        a,
-        button,
-        input[type="button"],
-        input[type="submit"],
-        input[type="reset"],
-        [role="button"]
-      ).btn:hover:not(:where(:disabled, .link)) {
+    .btn:hover:not(:where(:disabled, [aria-disabled="true"], .link)) {
       outline: var(--border-width) solid ButtonText;
       outline-offset: 2px;
     }
   }
 
-  .btn:disabled {
+  .btn:disabled,
+  a.btn[aria-disabled="true"] {
     border-color: GrayText;
     background: Canvas;
     color: GrayText;
@@ -3174,6 +3139,10 @@ button.avatar {
  *
  * Render .btn elements inside a .pagination list. The active page is marked
  * with aria-current="page"; .btn owns the active state styling.
+ *
+ * Truncated ranges are plain text (`.muted`, `aria-hidden="true"`), not .btn
+ * — they are decorative, not actionable. They still get the same box sizing
+ * as .btn below so the row stays visually aligned.
  */
 .pagination {
   display: flex;
@@ -3186,6 +3155,13 @@ button.avatar {
 }
 
 .pagination .btn {
+  min-inline-size: var(--control-size);
+}
+
+.pagination [aria-hidden="true"] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   min-inline-size: var(--control-size);
 }
 

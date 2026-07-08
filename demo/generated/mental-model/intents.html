@@ -25,7 +25,7 @@
       
     </header>
         <div class="component-prose">
-      <p><code>.primary</code>, <code>.secondary</code>, <code>.success</code>, <code>.warning</code>, <code>.danger</code>, <code>.neutral</code> do not style elements directly. They only expose <code>--intent</code> and <code>--intent-fg</code>. Components and variants decide how to consume them.</p>
+      <p><code>.primary</code>, <code>.secondary</code>, <code>.success</code>, <code>.warning</code>, <code>.danger</code> do not style elements directly. They only expose <code>--intent</code> and <code>--intent-fg</code>. Components and variants decide how to consume them.</p>
     </div>
     <section class="component-section">
       <div class="example-group">
@@ -40,8 +40,31 @@
       </div>
     </section>
     <div class="component-prose">
-      <p>There is no <code>.btn-primary</code> or <code>.badge-success</code>. Intents are generic and reusable across any component that supports them.</p>
+      <p>There is no <code>.btn-primary</code> or <code>.badge-success</code>. Intents are generic and reusable across any component that supports them. Components fall back to their own default intent when no intent class is set. Buttons, badges, and alerts use the neutral palette (<code>--neutral</code> / <code>--neutral-fg</code>) by default. Custom intents need no framework support — define <code>--intent</code> and <code>--intent-fg</code> on a class:</p>
     </div>
+    <section class="component-section">
+      <h2>CSS</h2>
+      <div class="example-group">
+        <div class="example-code">
+          <pre><code class="language-css"><span class="token selector">.tertiary</span> <span class="token punctuation">{</span>
+  <span class="token property">--intent</span><span class="token punctuation">:</span> <span class="token function">var</span><span class="token punctuation">(</span>--tertiary<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token property">--intent-fg</span><span class="token punctuation">:</span> <span class="token function">var</span><span class="token punctuation">(</span>--tertiary-fg<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+        </div>
+      </div>
+    </section>
+    <section class="component-section">
+      <div class="example-group">
+        <div class="example-render">
+          <button class="btn tertiary">Tertiary</button>
+<span class="badge tertiary">Tertiary</span>
+        </div>
+        <div class="example-code">
+          <pre><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>button</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>btn tertiary<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Tertiary<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>badge tertiary<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Tertiary<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span></code></pre>
+        </div>
+      </div>
+    </section>
     
   </section>
   </main>
