@@ -90,7 +90,14 @@ function renderProseBlock(lines) {
 
   for (const line of trimmed) {
     const h3 = line.match(/^###\s+(.+)$/);
+    const h4 = line.match(/^####\s+(.+)$/);
     const li = line.match(/^[-*]\s+(.+)$/);
+
+    if (h4) {
+      if (current) blocks.push(current);
+      current = { type: "h4", html: `<h4>${inlineProse(h4[1])}</h4>` };
+      continue;
+    }
 
     if (h3) {
       if (current) blocks.push(current);
@@ -119,6 +126,7 @@ function renderProseBlock(lines) {
   return blocks
     .map((b) => {
       if (b.type === "ul") return `<ul>\n${b.html}</ul>`;
+      if (b.type === "h4") return b.html;
       if (b.type === "h3") return b.html;
       return `<p>${b.html}</p>`;
     })

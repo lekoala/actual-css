@@ -26,13 +26,16 @@ const rules = {
     return !target || v === target.value;
   },
   number(v) {
-    return v.length === 0 || !Number.isNaN(Number(v));
+    return !Number.isNaN(Number(v));
   },
   digits(v) {
-    return v.length === 0 || /^\d+$/.test(v);
+    return /^\d+$/.test(v);
   },
   alnum(v) {
-    return v.length === 0 || /^[a-z0-9]+$/i.test(v);
+    return /^[a-z0-9]+$/i.test(v);
+  },
+  date(v) {
+    return !Number.isNaN(Date.parse(v));
   },
 };
 
@@ -60,8 +63,10 @@ function checkRules(el) {
 
   const rulesAttr = el.dataset.validationRules;
   if (rulesAttr) {
+    const hasValue = el.value.trim().length > 0;
     const failed = [];
     for (const entry of rulesAttr.split(",")) {
+      if (!hasValue && !el.required) continue;
       const trimmed = entry.trim();
       if (!trimmed) continue;
       const [name, ...opts] = trimmed.split(/\s+/);

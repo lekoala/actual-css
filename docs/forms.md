@@ -1032,8 +1032,45 @@ Custom rules live in `data-validation-rules` as a comma-separated list; each rul
 | `number` | Value is empty or a valid `Number`. |
 | `digits` | Value is empty or ASCII digits only. |
 | `alnum` | Value is empty or letters and digits only. |
+| `date` | Value is empty or a valid date. Accepts ISO, locale, and common formats; rejects non-existent dates like `2026-02-29`. |
 
 Add your own with `FormValidator.registerRule(name, (value, el, ...opts) => boolean)`. The built-in rules treat empty values as valid so optional fields stay optional; custom rules should do the same when that behavior is wanted.
+
+The `date` rule pairs naturally with `data-mask` — the mask structures input, the rule validates meaning:
+
+```html
+<form class="stack needs-validation" novalidate>
+  <label class="field">
+    <span class="field-label">Date</span>
+    <input class="input" name="date"
+           data-mask="9999-99-99"
+           data-validation-rules="date"
+           inputmode="numeric"
+           autocomplete="off"
+           placeholder="yyyy-mm-dd"
+           aria-describedby="date-help date-error"
+           required />
+    <span class="field-help" id="date-help">
+      Use a real date in yyyy-mm-dd format.
+    </span>
+    <span class="field-error" id="date-error">
+      Enter a valid date.
+    </span>
+  </label>
+
+  <div class="form-actions">
+    <button class="btn primary" type="submit">Submit</button>
+  </div>
+</form>
+```
+
+Custom rules only run when the field has a value. Empty optional fields skip all rules — `required` is the sole gatekeeper for empty values. The equivalent custom registration would look like:
+
+```js
+FormValidator.registerRule("date", (value) => {
+  return !Number.isNaN(Date.parse(value));
+});
+```
 
 #### Server and AJAX validation
 
