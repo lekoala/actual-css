@@ -1,0 +1,943 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Actual CSS — Ship interfaces that feel considered</title>
+  <link rel="stylesheet" href="../../src/css/actual.css">
+  <link rel="stylesheet" href="../../src/css/themes/index.css">
+  <link rel="stylesheet" href="../../src/optional/typography-fluid.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+  <link rel="stylesheet" href="../styles/demo.css">
+  <style>
+    /* Editorial marketing layout: generous whitespace, a single accent used
+       sparingly, italics for emphasis instead of color. Everything else
+       (buttons, cards, badges, avatars) comes straight from the framework. */
+
+    .mk-topbar {
+      position: sticky;
+      inset-block-start: 0;
+      z-index: var(--z-sticky, 10);
+      isolation: isolate;
+      background: color-mix(in oklch, var(--surface) 88%, transparent);
+      backdrop-filter: blur(0.75rem);
+      border-block-end: var(--border-width) solid var(--border);
+    }
+
+    .mk-topbar-inner {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.6rem 1rem;
+      padding-block: 0.85rem;
+    }
+
+    .mk-topbar-nav {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .mk-topbar-nav a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.9375rem;
+    }
+
+    .mk-topbar-nav a:hover {
+      color: var(--text);
+    }
+
+    .mk-topbar-actions {
+      flex-wrap: nowrap;
+    }
+
+    /* Below this width the primary nav links no longer fit alongside the
+       brand and actions without wrapping into a cramped third line — drop
+       them and rely on the in-page anchors (footer, section jump links). */
+    @media (max-width: 58rem) {
+      .mk-topbar-nav {
+        display: none;
+      }
+    }
+
+    /* Below this width even brand + select + two buttons is too tight —
+       drop the secondary "Sign in" link and let the select shrink. */
+    @media (max-width: 26rem) {
+      .mk-topbar-actions {
+        flex-wrap: wrap;
+        justify-content: flex-end;
+      }
+
+      .mk-topbar-actions > a.outline {
+        display: none;
+      }
+
+      .mk-topbar-actions > #theme-switcher {
+        min-inline-size: 0;
+      }
+    }
+
+    .mk-brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      color: inherit;
+      text-decoration: none;
+      font-weight: var(--font-weight-medium);
+      letter-spacing: -0.01em;
+    }
+
+    .mk-brand-mark {
+      display: inline-grid;
+      place-items: center;
+      inline-size: 1.75rem;
+      block-size: 1.75rem;
+      border-radius: var(--radius-sm);
+      background: var(--text);
+      color: var(--surface);
+      font-size: 0.8125rem;
+      font-weight: var(--font-weight-bold);
+    }
+
+    /* Hero */
+    .mk-hero {
+      position: relative;
+      overflow: hidden;
+      padding-block: clamp(4rem, 4rem + 4vw, 7rem) 3rem;
+    }
+
+    .mk-hero-glow {
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background:
+        radial-gradient(ellipse 60% 50% at 50% 0%, color-mix(in oklch, var(--primary) 16%, transparent), transparent 70%),
+        radial-gradient(ellipse 40% 40% at 85% 15%, color-mix(in oklch, var(--secondary) 14%, transparent), transparent 65%);
+    }
+
+    .mk-hero-inner {
+      display: grid;
+      justify-items: center;
+      gap: 1.5rem;
+      max-inline-size: 46rem;
+      margin-inline: auto;
+      text-align: center;
+    }
+
+    .mk-hero h1 {
+      margin: 0;
+      font-style: normal;
+    }
+
+    .mk-hero h1 em {
+      font-style: italic;
+      font-weight: var(--font-weight-medium);
+      color: var(--primary);
+    }
+
+    .mk-hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.75rem;
+    }
+
+    .mk-hero-proof {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      gap: 0.5rem 0.9rem;
+      color: var(--text-muted);
+      font-size: 0.875rem;
+    }
+
+    .mk-hero-proof .dot {
+      inline-size: 0.25rem;
+      block-size: 0.25rem;
+      border-radius: var(--radius-full);
+      background: var(--text-subtle);
+    }
+
+    .mk-hero-visual {
+      margin-block-start: 3rem;
+    }
+
+    .mk-hero-cover {
+      position: relative;
+      aspect-ratio: 4 / 3;
+      overflow: hidden;
+      border-radius: var(--radius-lg);
+      border: var(--border-width) solid var(--border);
+      background:
+        radial-gradient(ellipse at 18% 20%, color-mix(in oklch, var(--primary) 32%, transparent), transparent 55%),
+        radial-gradient(ellipse at 82% 75%, color-mix(in oklch, var(--secondary) 26%, transparent), transparent 55%),
+        linear-gradient(160deg, color-mix(in oklch, var(--surface-subtle) 65%, var(--primary) 10%), var(--surface-subtle));
+    }
+
+    @media (min-width: 40rem) {
+      .mk-hero-cover {
+        aspect-ratio: 16 / 9;
+      }
+    }
+
+    @media (min-width: 64rem) {
+      .mk-hero-cover {
+        aspect-ratio: 21 / 9;
+      }
+    }
+
+    .mk-hero-cover-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(to right, color-mix(in oklch, var(--text) 8%, transparent) 1px, transparent 1px),
+        linear-gradient(to bottom, color-mix(in oklch, var(--text) 8%, transparent) 1px, transparent 1px);
+      background-size: 3rem 3rem;
+      mask-image: radial-gradient(ellipse at center, black 35%, transparent 80%);
+    }
+
+    /* A sibling of .mk-hero-cover, not a child — pulled up over the image
+       with a negative margin. Kept out of the cover's overflow:hidden box
+       so the panel's own height (which varies with text wrap) can never
+       get clipped by the fixed aspect-ratio image behind it. */
+    .mk-hero-cover-panel {
+      position: relative;
+      z-index: 1;
+      margin: -2.5rem 1rem 0;
+      display: grid;
+      gap: 0.4rem;
+      padding: 0.85rem 1rem;
+      border: var(--border-width) solid var(--border);
+      border-radius: var(--radius);
+      background: color-mix(in oklch, var(--surface) 92%, transparent);
+      backdrop-filter: blur(0.5rem);
+      box-shadow: var(--shadow);
+    }
+
+    @media (min-width: 40rem) {
+      .mk-hero-cover-panel {
+        margin-inline: 1.25rem auto;
+        max-inline-size: 18rem;
+      }
+    }
+
+    .mk-hero-cover-panel strong {
+      font-size: 0.9375rem;
+    }
+
+    .mk-hero-cover-panel span {
+      color: var(--text-muted);
+      font-size: 0.8125rem;
+    }
+
+    .mk-hero-cover-glyph {
+      position: absolute;
+      inset-block-start: 1rem;
+      inset-inline-end: 1.25rem;
+      color: color-mix(in oklch, var(--text-muted) 60%, transparent);
+      font-size: clamp(2.5rem, 2rem + 3vw, 4.5rem);
+      line-height: 1;
+      font-weight: var(--font-weight-bold);
+      letter-spacing: -0.03em;
+    }
+
+    /* Stats band */
+    .mk-stats {
+      padding-block: 2.5rem;
+      border-block: var(--border-width) solid var(--border);
+      background: var(--surface-raised);
+    }
+
+    .mk-stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1.75rem 1rem;
+      text-align: center;
+    }
+
+    @media (min-width: 48rem) {
+      .mk-stats-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+    }
+
+    .mk-stat strong {
+      display: block;
+      font-size: clamp(1.75rem, 1.5rem + 1vw, 2.25rem);
+      font-weight: var(--font-weight-bold);
+      letter-spacing: -0.02em;
+    }
+
+    .mk-stat span {
+      color: var(--text-muted);
+      font-size: 0.875rem;
+    }
+
+    /* Section rhythm */
+    .mk-section {
+      padding-block: clamp(3.5rem, 3rem + 2vw, 5.5rem);
+    }
+
+    .mk-section-head {
+      max-inline-size: 34rem;
+      margin-block-end: 2.5rem;
+    }
+
+    .mk-section-head.center-text {
+      margin-inline: auto;
+      text-align: center;
+    }
+
+    /* Feature cards */
+    .mk-feature {
+      --card-pad: 1.75rem;
+
+      display: grid;
+      gap: 0.85rem;
+    }
+
+    .mk-feature-cover {
+      position: relative;
+      aspect-ratio: 16 / 10;
+      margin-block-end: 0.25rem;
+      overflow: hidden;
+      background:
+        radial-gradient(ellipse at 30% 25%, color-mix(in oklch, var(--_tint, var(--primary)) 35%, transparent), transparent 60%),
+        var(--surface-subtle);
+    }
+
+    .mk-feature-cover-icon {
+      position: absolute;
+      inset-block-end: 0.9rem;
+      inset-inline-start: 0.9rem;
+      display: inline-grid;
+      place-items: center;
+      inline-size: 2.5rem;
+      block-size: 2.5rem;
+      border-radius: var(--radius);
+      border: var(--border-width) solid var(--border);
+      background: color-mix(in oklch, var(--surface) 85%, transparent);
+      backdrop-filter: blur(0.35rem);
+      color: var(--_tint, var(--primary));
+      font-size: 1.125rem;
+    }
+
+    .mk-feature.tint-secondary { --_tint: var(--secondary); }
+    .mk-feature.tint-success { --_tint: var(--success); }
+
+    .mk-feature p {
+      margin: 0;
+      color: var(--text-muted);
+    }
+
+    /* Method / philosophy */
+    .mk-method {
+      display: grid;
+      gap: 2.5rem;
+    }
+
+    @media (min-width: 56rem) {
+      .mk-method {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        align-items: center;
+      }
+    }
+
+    .mk-method-list {
+      display: grid;
+      gap: 1.25rem;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .mk-method-list li {
+      display: flex;
+      gap: 0.85rem;
+    }
+
+    .mk-method-list .mk-num {
+      flex: 0 0 auto;
+      display: inline-grid;
+      place-items: center;
+      inline-size: 1.75rem;
+      block-size: 1.75rem;
+      border: var(--border-width) solid var(--border);
+      border-radius: var(--radius-full);
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+    }
+
+    .mk-method-list strong {
+      display: block;
+    }
+
+    .mk-method-list p {
+      margin: 0.15rem 0 0;
+      color: var(--text-muted);
+      font-size: 0.9375rem;
+    }
+
+    .mk-quote {
+      display: grid;
+      gap: 1rem;
+      padding: 2rem;
+    }
+
+    .mk-quote blockquote {
+      margin: 0;
+      font-size: 1.125rem;
+      line-height: var(--line-height-relaxed);
+    }
+
+    .mk-quote blockquote::before {
+      content: open-quote;
+    }
+
+    .mk-quote blockquote::after {
+      content: close-quote;
+    }
+
+    .mk-quote footer {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      color: var(--text-muted);
+      font-size: 0.875rem;
+    }
+
+    .mk-quote footer strong {
+      color: var(--text);
+    }
+
+    /* Theme gallery: small mock-UI previews standing in for real screenshots. */
+    .mk-theme-grid {
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: repeat(auto-fill, minmax(9rem, 1fr));
+    }
+
+    .mk-theme-card {
+      display: grid;
+      gap: 0.6rem;
+      padding: 0.6rem;
+      border: var(--border-width) solid var(--border);
+      border-radius: var(--radius-lg);
+      background: var(--surface);
+    }
+
+    .mk-theme-preview {
+      aspect-ratio: 4 / 3;
+      display: grid;
+      align-content: end;
+      gap: 0.3rem;
+      padding: 0.6rem;
+      border-radius: var(--radius);
+      background: var(--_p-bg);
+    }
+
+    .mk-theme-preview .chip {
+      inline-size: 70%;
+      block-size: 0.4rem;
+      border-radius: var(--radius-full);
+      background: var(--_p-fg);
+      opacity: 0.9;
+    }
+
+    .mk-theme-preview .chip.accent {
+      inline-size: 40%;
+      background: var(--_p-accent);
+      opacity: 1;
+    }
+
+    .mk-theme-card span {
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+      text-align: center;
+    }
+
+    /* Pricing */
+    .mk-pricing-grid {
+      display: grid;
+      gap: 1.25rem;
+    }
+
+    @media (min-width: 56rem) {
+      .mk-pricing-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+
+    .mk-price-card {
+      display: grid;
+      grid-template-rows: auto auto 1fr auto;
+      gap: 1.25rem;
+      padding: 1.75rem;
+    }
+
+    .mk-price-card.featured {
+      border-color: color-mix(in oklch, var(--primary) 45%, var(--border));
+      background: color-mix(in oklch, var(--primary) 4%, var(--surface));
+    }
+
+    .mk-price {
+      display: flex;
+      align-items: baseline;
+      gap: 0.35rem;
+    }
+
+    .mk-price strong {
+      font-size: 2.25rem;
+      font-weight: var(--font-weight-bold);
+      letter-spacing: -0.02em;
+    }
+
+    .mk-price span {
+      color: var(--text-muted);
+      font-size: 0.875rem;
+    }
+
+    .mk-price-features {
+      display: grid;
+      gap: 0.6rem;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      font-size: 0.9375rem;
+    }
+
+    .mk-price-features li {
+      display: flex;
+      align-items: baseline;
+      gap: 0.5rem;
+      color: var(--text-muted);
+    }
+
+    .mk-price-features i {
+      color: var(--success);
+    }
+
+    /* Closing CTA */
+    .mk-cta {
+      padding-block: clamp(3.5rem, 3rem + 2vw, 5.5rem);
+      border-block-start: var(--border-width) solid var(--border);
+      text-align: center;
+    }
+
+    .mk-cta-inner {
+      max-inline-size: 34rem;
+      margin-inline: auto;
+      display: grid;
+      gap: 1.5rem;
+      justify-items: center;
+    }
+
+    /* Footer */
+    .mk-footer {
+      padding-block: 2.5rem;
+      border-block-start: var(--border-width) solid var(--border);
+      color: var(--text-muted);
+    }
+
+    .mk-footer-inner {
+      display: grid;
+      gap: 1.5rem;
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
+    }
+
+    .mk-footer h4 {
+      margin: 0 0 0.5rem;
+      color: var(--text);
+      font-size: 0.875rem;
+      font-weight: var(--font-weight-medium);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .mk-footer ul {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 0.4rem;
+    }
+
+    .mk-footer a {
+      color: var(--text-muted);
+      text-decoration: none;
+    }
+
+    .mk-footer a:hover {
+      color: var(--text);
+      text-decoration: underline;
+      text-underline-offset: 0.2em;
+    }
+
+    .mk-footer-bottom {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-block-start: 2rem;
+      padding-block-start: 1.5rem;
+      border-block-start: var(--border-width) solid var(--border);
+      font-size: 0.8125rem;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Site header -->
+  <header class="mk-topbar">
+    <div class="center mk-topbar-inner">
+      <a class="mk-brand" href="#">
+        <span class="mk-brand-mark" aria-hidden="true">AC</span>
+        Actual CSS
+      </a>
+      <nav aria-label="Primary">
+        <ul class="mk-topbar-nav">
+          <li><a href="#features">Features</a></li>
+          <li><a href="#method">Method</a></li>
+          <li><a href="#themes">Themes</a></li>
+          <li><a href="#pricing">Pricing</a></li>
+        </ul>
+      </nav>
+      <div class="cluster mk-topbar-actions">
+        <select class="select sm fit" id="theme-switcher" aria-label="Switch theme">
+          <option value="">System</option>
+          <option value="light">Light</option>
+          <option value="dark">Dark</option>
+          <option value="dim">Dim</option>
+          <option value="corporate">Corporate</option>
+          <option value="forest">Forest</option>
+          <option value="ocean">Ocean</option>
+          <option value="spruce">Spruce</option>
+          <option value="petrol">Petrol</option>
+          <option value="sunset">Sunset</option>
+          <option value="lavender">Lavender</option>
+          <option value="mono">Mono</option>
+          <option value="square">Square</option>
+          <option value="edge">Edge</option>
+          <option value="cyberpunk">Cyberpunk</option>
+          <option value="neon">Neon</option>
+          <option value="gradient">Gradient</option>
+        </select>
+        <a class="btn neutral outline sm" href="#">Sign in</a>
+        <a class="btn primary sm" href="#pricing">Get started</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero -->
+    <section class="mk-hero">
+      <div class="mk-hero-glow" aria-hidden="true"></div>
+      <div class="center mk-hero-inner">
+        <span class="overline pill primary">v0.9 — public preview</span>
+        <h1 class="text-display">Ship interfaces that feel <em>considered</em>.</h1>
+        <p class="text-lead text-balance">
+          A CSS framework built on layout primitives and semantic HTML, not a wall of utility classes. Style once, theme forever.
+        </p>
+        <div class="mk-hero-actions">
+          <a class="btn primary lg" href="#pricing">Get started — it's free</a>
+          <a class="btn neutral ghost lg" href="#features">See how it works</a>
+        </div>
+        <p class="mk-hero-proof">
+          <span>No build step required</span>
+          <span class="dot" aria-hidden="true"></span>
+          <span>Zero runtime dependencies</span>
+          <span class="dot" aria-hidden="true"></span>
+          <span>MIT licensed</span>
+        </p>
+      </div>
+
+      <div class="center mk-hero-visual">
+        <div class="mk-hero-cover" role="img" aria-label="Abstract preview of a themed dashboard built with Actual CSS">
+          <div class="mk-hero-cover-grid" aria-hidden="true"></div>
+          <span class="mk-hero-cover-glyph" aria-hidden="true">AC</span>
+        </div>
+        <div class="mk-hero-cover-panel">
+          <strong>Same markup, new theme</strong>
+          <span>Swap one stylesheet and every component repaints — no template changes.</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Stats -->
+    <section class="mk-stats">
+      <div class="center mk-stats-grid">
+        <div class="mk-stat">
+          <strong>0</strong>
+          <span>Runtime dependencies</span>
+        </div>
+        <div class="mk-stat">
+          <strong>&lt;40kb</strong>
+          <span>Gzipped, full build</span>
+        </div>
+        <div class="mk-stat">
+          <strong>17</strong>
+          <span>Ready-made themes</span>
+        </div>
+        <div class="mk-stat">
+          <strong>1</strong>
+          <span>Theme contract to learn</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features -->
+    <section class="mk-section center" id="features">
+      <div class="mk-section-head center-text">
+        <span class="overline">Why teams switch</span>
+        <h2>Three primitives. No new mental model.</h2>
+        <p class="muted">Layout, components, and tokens compose the way plain HTML already wants to.</p>
+      </div>
+
+      <div class="grid-3 container-query">
+        <article class="card mk-feature">
+          <div class="mk-feature-cover bleed" aria-hidden="true">
+            <span class="mk-feature-cover-icon"><i class="ti ti-stack-2"></i></span>
+          </div>
+          <strong>Layout primitives</strong>
+          <p><code>.stack</code>, <code>.cluster</code>, and <code>.center</code> cover the compositions you reach for every day, without a utility class for every property.</p>
+        </article>
+        <article class="card mk-feature tint-secondary">
+          <div class="mk-feature-cover bleed" aria-hidden="true">
+            <span class="mk-feature-cover-icon"><i class="ti ti-palette"></i></span>
+          </div>
+          <strong>One theme contract</strong>
+          <p>Every component reads from the same token surface. Write one theme that matches your brand instead of overriding seventeen.</p>
+        </article>
+        <article class="card mk-feature tint-success">
+          <div class="mk-feature-cover bleed" aria-hidden="true">
+            <span class="mk-feature-cover-icon"><i class="ti ti-accessible"></i></span>
+          </div>
+          <strong>Semantic by default</strong>
+          <p>Components style real HTML elements and ARIA patterns first, so accessibility isn't a separate pass at the end.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- Method -->
+    <section class="mk-section center" id="method">
+      <div class="mk-method">
+        <div class="stack">
+          <span class="overline">The method</span>
+          <h2>Quiet defaults, earned complexity</h2>
+          <ol class="mk-method-list">
+            <li>
+              <span class="mk-num" aria-hidden="true">1</span>
+              <div>
+                <strong>Start with plain HTML.</strong>
+                <p>The baseline styles native elements so a form or a table already looks right before a single class is added.</p>
+              </div>
+            </li>
+            <li>
+              <span class="mk-num" aria-hidden="true">2</span>
+              <div>
+                <strong>Add structure with primitives.</strong>
+                <p>Reach for <code>.stack</code>, <code>.cluster</code>, and <code>.grid</code> before inventing a one-off layout.</p>
+              </div>
+            </li>
+            <li>
+              <span class="mk-num" aria-hidden="true">3</span>
+              <div>
+                <strong>Theme at the token layer.</strong>
+                <p>Colors, radii, and spacing flow from a small set of tokens — change the theme, not the components.</p>
+              </div>
+            </li>
+          </ol>
+        </div>
+
+        <div class="mk-quote card">
+          <blockquote>
+            We replaced eleven thousand lines of utility classes with about four hundred lines of components. Onboarding a new designer now takes an afternoon.
+          </blockquote>
+          <footer>
+            <span class="avatar sm"><abbr>RM</abbr></span>
+            <span><strong>Rin Moreau</strong> — Staff engineer, Northstar Logistics</span>
+          </footer>
+        </div>
+      </div>
+    </section>
+
+    <!-- Themes -->
+    <section class="mk-section center" id="themes">
+      <div class="mk-section-head center-text">
+        <span class="overline">One contract, many looks</span>
+        <h2>Themes are a demonstration, not a decision</h2>
+        <p class="muted">Ship one theme that matches your product. The gallery below shows the same components restyled through tokens alone — no component markup changes.</p>
+      </div>
+
+      <div class="mk-theme-grid" role="list" aria-label="Available theme previews">
+        <div class="mk-theme-card" role="listitem" style="--_p-bg:#f4f4f5; --_p-fg:#3f3f46; --_p-accent:#2563eb;">
+          <div class="mk-theme-preview"><span class="chip"></span><span class="chip accent"></span></div>
+          <span>Light</span>
+        </div>
+        <div class="mk-theme-card" role="listitem" style="--_p-bg:#18181b; --_p-fg:#a1a1aa; --_p-accent:#60a5fa;">
+          <div class="mk-theme-preview"><span class="chip"></span><span class="chip accent"></span></div>
+          <span>Dark</span>
+        </div>
+        <div class="mk-theme-card" role="listitem" style="--_p-bg:#0b1f3a; --_p-fg:#c7d2e8; --_p-accent:#f59e0b;">
+          <div class="mk-theme-preview"><span class="chip"></span><span class="chip accent"></span></div>
+          <span>Corporate</span>
+        </div>
+        <div class="mk-theme-card" role="listitem" style="--_p-bg:#10241a; --_p-fg:#bcd9c8; --_p-accent:#34d399;">
+          <div class="mk-theme-preview"><span class="chip"></span><span class="chip accent"></span></div>
+          <span>Forest</span>
+        </div>
+        <div class="mk-theme-card" role="listitem" style="--_p-bg:#0d2b33; --_p-fg:#bfe6ec; --_p-accent:#22d3ee;">
+          <div class="mk-theme-preview"><span class="chip"></span><span class="chip accent"></span></div>
+          <span>Ocean</span>
+        </div>
+        <div class="mk-theme-card" role="listitem" style="--_p-bg:#2a1220; --_p-fg:#f3cdd8; --_p-accent:#fb7185;">
+          <div class="mk-theme-preview"><span class="chip"></span><span class="chip accent"></span></div>
+          <span>Sunset</span>
+        </div>
+        <div class="mk-theme-card" role="listitem" style="--_p-bg:#211b34; --_p-fg:#d9d0f2; --_p-accent:#a78bfa;">
+          <div class="mk-theme-preview"><span class="chip"></span><span class="chip accent"></span></div>
+          <span>Lavender</span>
+        </div>
+        <div class="mk-theme-card" role="listitem" style="--_p-bg:#120014; --_p-fg:#f4b6ff; --_p-accent:#22d3ee;">
+          <div class="mk-theme-preview"><span class="chip"></span><span class="chip accent"></span></div>
+          <span>Cyberpunk</span>
+        </div>
+        <div class="mk-theme-card" role="listitem" style="--_p-bg:var(--surface-subtle); --_p-fg:var(--text-subtle); --_p-accent:var(--text-muted);">
+          <div class="mk-theme-preview" style="display:grid; place-items:center;"><strong style="color:var(--text-muted); font-size:0.9375rem;">+9</strong></div>
+          <span>More</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pricing -->
+    <section class="mk-section center" id="pricing">
+      <div class="mk-section-head center-text">
+        <span class="overline">Pricing</span>
+        <h2>Free to build. Paid support when you need it.</h2>
+        <p class="muted">The framework is MIT licensed. These tiers are for teams that want a direct line to us.</p>
+      </div>
+
+      <div class="mk-pricing-grid">
+        <article class="card mk-price-card">
+          <header>
+            <strong>Community</strong>
+            <p class="muted">For side projects and small teams.</p>
+          </header>
+          <div class="mk-price"><strong>$0</strong><span>/ forever</span></div>
+          <ul class="mk-price-features">
+            <li><i class="ti ti-check" aria-hidden="true"></i> Full framework, MIT license</li>
+            <li><i class="ti ti-check" aria-hidden="true"></i> All 17 themes</li>
+            <li><i class="ti ti-check" aria-hidden="true"></i> Community Discord</li>
+          </ul>
+          <a class="btn neutral outline" href="#">Start building</a>
+        </article>
+
+        <article class="card mk-price-card featured">
+          <header>
+            <span class="badge primary soft">Most popular</span>
+            <strong>Team</strong>
+            <p class="muted">For products shipping to customers.</p>
+          </header>
+          <div class="mk-price"><strong>$29</strong><span>/ month</span></div>
+          <ul class="mk-price-features">
+            <li><i class="ti ti-check" aria-hidden="true"></i> Everything in Community</li>
+            <li><i class="ti ti-check" aria-hidden="true"></i> Priority issue triage</li>
+            <li><i class="ti ti-check" aria-hidden="true"></i> Theme review for your brand</li>
+          </ul>
+          <a class="btn primary" href="#">Start free trial</a>
+        </article>
+
+        <article class="card mk-price-card">
+          <header>
+            <strong>Enterprise</strong>
+            <p class="muted">For organizations with a design system team.</p>
+          </header>
+          <div class="mk-price"><strong>Custom</strong></div>
+          <ul class="mk-price-features">
+            <li><i class="ti ti-check" aria-hidden="true"></i> Everything in Team</li>
+            <li><i class="ti ti-check" aria-hidden="true"></i> Dedicated Slack channel</li>
+            <li><i class="ti ti-check" aria-hidden="true"></i> Custom theme contract audit</li>
+          </ul>
+          <a class="btn neutral outline" href="#">Talk to us</a>
+        </article>
+      </div>
+    </section>
+
+    <!-- Closing CTA -->
+    <section class="mk-cta">
+      <div class="center mk-cta-inner">
+        <h2>Start with the theme you already have.</h2>
+        <p class="muted">Drop in the stylesheet, keep your brand colors, and let the components do the rest.</p>
+        <div class="mk-hero-actions">
+          <a class="btn primary lg" href="#">Read the docs</a>
+          <a class="btn neutral ghost lg" href="#">Star on GitHub</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Site footer -->
+  <footer class="mk-footer">
+    <div class="center">
+      <div class="mk-footer-inner">
+        <div>
+          <h4>Actual CSS</h4>
+          <p style="margin: 0; font-size: 0.875rem;">A CSS framework for teams who'd rather write one theme than fight a thousand utility classes.</p>
+        </div>
+        <div>
+          <h4>Product</h4>
+          <ul>
+            <li><a href="#features">Features</a></li>
+            <li><a href="#themes">Themes</a></li>
+            <li><a href="#pricing">Pricing</a></li>
+            <li><a href="#">Changelog</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Resources</h4>
+          <ul>
+            <li><a href="#">Documentation</a></li>
+            <li><a href="#">Components</a></li>
+            <li><a href="#">GitHub</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Company</h4>
+          <ul>
+            <li><a href="#">About</a></li>
+            <li><a href="#">Contact</a></li>
+            <li><a href="#">Privacy</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="mk-footer-bottom">
+        <span>© 2026 Actual CSS.</span>
+        <span>Set in the system font stack.</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../../dist/actual.js"></script>
+  <script>
+    const switcher = document.getElementById("theme-switcher");
+
+    if (switcher) {
+      switcher.addEventListener("change", () => {
+        if (switcher.value) {
+          document.documentElement.dataset.theme = switcher.value;
+        } else {
+          document.documentElement.removeAttribute("data-theme");
+        }
+      });
+    }
+  </script>
+</body>
+
+</html>
