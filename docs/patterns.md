@@ -165,6 +165,69 @@ A project may add `.site-header` when it needs a visual shell.
 }
 ```
 
+### App Shell With Sidebar
+
+`.app-shell` (see [Layout → Header And Footer](layout.md#header-and-footer)) covers the simple case: a single column stacked `header`/`main`/`footer`. A persistent-sidebar app — a dashboard, an admin panel — needs a second, distinct shape: a two-column grid where the sidebar collapses below a breakpoint. These are not the same primitive solving the same problem two ways; `.app-shell` has no sidebar at all.
+
+```html
+<div class="shell-sidebar">
+  <aside class="shell-sidebar-nav" aria-label="Primary">
+    <a class="navbar-brand" href="#"><span class="avatar primary"><abbr>AC</abbr></span> Product</a>
+    <nav aria-label="Primary">
+      <ul class="nav-list stack">
+        <li><a class="nav-link" href="#" aria-current="page">Overview</a></li>
+        <li><a class="nav-link" href="#">Settings</a></li>
+      </ul>
+    </nav>
+  </aside>
+
+  <div class="shell-sidebar-main">
+    <header class="topbar">...</header>
+    <main class="center">...</main>
+  </div>
+</div>
+```
+
+```css
+.shell-sidebar {
+  display: grid;
+  grid-template-columns: 1fr;
+  min-block-size: var(--viewport-block);
+}
+
+.shell-sidebar-nav {
+  display: none;
+  flex-direction: column;
+  gap: var(--gap);
+  inline-size: var(--shell-sidebar-size, 16rem);
+  padding: var(--space-4);
+  border-inline-end: var(--border-width) solid var(--border);
+  background: var(--surface-raised);
+}
+
+.shell-sidebar-main {
+  min-inline-size: 0;
+}
+
+@media (min-width: 64rem) {
+  .shell-sidebar {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .shell-sidebar-nav {
+    display: flex;
+    position: sticky;
+    inset-block-start: 0;
+    block-size: var(--viewport-block);
+    overflow-y: auto;
+  }
+}
+```
+
+The sidebar width is the one tunable a project reaches for often, so it is exposed as `--shell-sidebar-size` rather than hard-coded — override it locally (`style="--shell-sidebar-size: 18rem"` or in a project stylesheet) instead of forking the rule. The breakpoint stays a literal `64rem` in the media query: custom properties cannot be substituted into a media condition, so a project that genuinely needs a different one copies the rule rather than fighting the token.
+
+Below the breakpoint, mirror the sidebar into a `.drawer` (see [UI → Drawer](ui.md#drawer)) for mobile access — the two are separate elements, not a responsive transform of one.
+
 ### Side Navigation
 
 Side navigation is usually a `.nav-list` composed with `.stack`.

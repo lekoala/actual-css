@@ -180,7 +180,92 @@
       </div>
     </section>
     <div class="component-prose">
-      <h3>Side Navigation</h3>
+      <h3>App Shell With Sidebar</h3>
+<p><code>.app-shell</code> (see <a href="layout.md#header-and-footer">Layout → Header And Footer</a>) covers the simple case: a single column stacked <code>header</code>/<code>main</code>/<code>footer</code>. A persistent-sidebar app — a dashboard, an admin panel — needs a second, distinct shape: a two-column grid where the sidebar collapses below a breakpoint. These are not the same primitive solving the same problem two ways; <code>.app-shell</code> has no sidebar at all.</p>
+    </div>
+    <section class="component-section">
+      <div class="example-group">
+        <div class="example-render">
+          <div class="shell-sidebar">
+  <aside class="shell-sidebar-nav" aria-label="Primary">
+    <a class="navbar-brand" href="#"><span class="avatar primary"><abbr>AC</abbr></span> Product</a>
+    <nav aria-label="Primary">
+      <ul class="nav-list stack">
+        <li><a class="nav-link" href="#" aria-current="page">Overview</a></li>
+        <li><a class="nav-link" href="#">Settings</a></li>
+      </ul>
+    </nav>
+  </aside>
+
+  <div class="shell-sidebar-main">
+    <header class="topbar">...</header>
+    <main class="center">...</main>
+  </div>
+</div>
+        </div>
+        <div class="example-code">
+          <pre><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>shell-sidebar<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>aside</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>shell-sidebar-nav<span class="token punctuation">"</span></span> <span class="token attr-name">aria-label</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>Primary<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>a</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>navbar-brand<span class="token punctuation">"</span></span> <span class="token attr-name">href</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>#<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>avatar primary<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>abbr</span><span class="token punctuation">></span></span>AC<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>abbr</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span> Product<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>a</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>nav</span> <span class="token attr-name">aria-label</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>Primary<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>ul</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>nav-list stack<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>li</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>a</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>nav-link<span class="token punctuation">"</span></span> <span class="token attr-name">href</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>#<span class="token punctuation">"</span></span> <span class="token attr-name">aria-current</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>page<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Overview<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>a</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>li</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>li</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>a</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>nav-link<span class="token punctuation">"</span></span> <span class="token attr-name">href</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>#<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Settings<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>a</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>li</span><span class="token punctuation">></span></span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>ul</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>nav</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>aside</span><span class="token punctuation">></span></span>
+
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>shell-sidebar-main<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>header</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>topbar<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>...<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>header</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>main</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>center<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>...<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>main</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span></code></pre>
+        </div>
+      </div>
+    </section>
+    <section class="component-section">
+      <h2>CSS</h2>
+      <div class="example-group">
+        <div class="example-code">
+          <pre><code class="language-css"><span class="token selector">.shell-sidebar</span> <span class="token punctuation">{</span>
+  <span class="token property">display</span><span class="token punctuation">:</span> grid<span class="token punctuation">;</span>
+  <span class="token property">grid-template-columns</span><span class="token punctuation">:</span> 1fr<span class="token punctuation">;</span>
+  <span class="token property">min-block-size</span><span class="token punctuation">:</span> <span class="token function">var</span><span class="token punctuation">(</span>--viewport-block<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token selector">.shell-sidebar-nav</span> <span class="token punctuation">{</span>
+  <span class="token property">display</span><span class="token punctuation">:</span> none<span class="token punctuation">;</span>
+  <span class="token property">flex-direction</span><span class="token punctuation">:</span> column<span class="token punctuation">;</span>
+  <span class="token property">gap</span><span class="token punctuation">:</span> <span class="token function">var</span><span class="token punctuation">(</span>--gap<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token property">inline-size</span><span class="token punctuation">:</span> <span class="token function">var</span><span class="token punctuation">(</span>--shell-sidebar-size<span class="token punctuation">,</span> 16rem<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token property">padding</span><span class="token punctuation">:</span> <span class="token function">var</span><span class="token punctuation">(</span>--space-4<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token property">border-inline-end</span><span class="token punctuation">:</span> <span class="token function">var</span><span class="token punctuation">(</span>--border-width<span class="token punctuation">)</span> solid <span class="token function">var</span><span class="token punctuation">(</span>--border<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token property">background</span><span class="token punctuation">:</span> <span class="token function">var</span><span class="token punctuation">(</span>--surface-raised<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token selector">.shell-sidebar-main</span> <span class="token punctuation">{</span>
+  <span class="token property">min-inline-size</span><span class="token punctuation">:</span> 0<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token atrule"><span class="token rule">@media</span> <span class="token punctuation">(</span><span class="token property">min-width</span><span class="token punctuation">:</span> 64rem<span class="token punctuation">)</span></span> <span class="token punctuation">{</span>
+  <span class="token selector">.shell-sidebar</span> <span class="token punctuation">{</span>
+    <span class="token property">grid-template-columns</span><span class="token punctuation">:</span> auto <span class="token function">minmax</span><span class="token punctuation">(</span>0<span class="token punctuation">,</span> 1fr<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token selector">.shell-sidebar-nav</span> <span class="token punctuation">{</span>
+    <span class="token property">display</span><span class="token punctuation">:</span> flex<span class="token punctuation">;</span>
+    <span class="token property">position</span><span class="token punctuation">:</span> sticky<span class="token punctuation">;</span>
+    <span class="token property">inset-block-start</span><span class="token punctuation">:</span> 0<span class="token punctuation">;</span>
+    <span class="token property">block-size</span><span class="token punctuation">:</span> <span class="token function">var</span><span class="token punctuation">(</span>--viewport-block<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token property">overflow-y</span><span class="token punctuation">:</span> auto<span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+        </div>
+      </div>
+    </section>
+    <div class="component-prose">
+      <p>The sidebar width is the one tunable a project reaches for often, so it is exposed as <code>--shell-sidebar-size</code> rather than hard-coded — override it locally (<code>style=&quot;--shell-sidebar-size: 18rem&quot;</code> or in a project stylesheet) instead of forking the rule. The breakpoint stays a literal <code>64rem</code> in the media query: custom properties cannot be substituted into a media condition, so a project that genuinely needs a different one copies the rule rather than fighting the token. Below the breakpoint, mirror the sidebar into a <code>.drawer</code> (see <a href="ui.md#drawer">UI → Drawer</a>) for mobile access — the two are separate elements, not a responsive transform of one.</p>
+<h3>Side Navigation</h3>
 <p>Side navigation is usually a <code>.nav-list</code> composed with <code>.stack</code>.</p>
     </div>
     <section class="component-section">
