@@ -937,10 +937,10 @@ Opt in with the `.needs-validation` class. Importing the module registers the be
 ```html
 <form class="needs-validation" data-validation-message="Please check the highlighted fields.">
   <label class="field">
-    <span class="field-label">Email</span>
-    <input class="input" type="email" name="email" required
-           aria-describedby="email-error" />
-    <span class="field-error" id="email-error" role="alert">Enter a valid email.</span>
+    <span class="field-label">Password</span>
+    <input class="input" type="password" name="password" id="password" required
+           aria-describedby="password-error" />
+    <span class="field-error" id="password-error">Enter a password.</span>
   </label>
 
   <label class="field">
@@ -951,7 +951,6 @@ Opt in with the `.needs-validation` class. Importing the module registers the be
     <span class="field-error" id="confirm-error" role="alert">Passwords must match.</span>
   </label>
 
-  <input id="password" name="password" type="password" required hidden />
   <div class="form-actions">
     <button class="btn primary" type="submit">Submit</button>
   </div>
@@ -984,27 +983,31 @@ The status bar (`actual-css/js/status`) auto-wires to that event: import it and 
       </span>
     </label>
 
-    <label class="choice">
-      <input class="check" type="checkbox" name="terms" required
-             aria-describedby="demo-terms-error" />
-      <span>
-        <span class="field-label">Accept the terms</span>
-        <span class="field-error" id="demo-terms-error" role="alert">
-          Required before continuing.
+    <div class="field">
+      <label class="choice">
+        <input class="check" type="checkbox" name="terms" required
+               aria-describedby="demo-terms-error" />
+        <span>
+          <span class="field-label">Accept the terms</span>
         </span>
+      </label>
+      <span class="field-error" id="demo-terms-error" role="alert">
+        Required before continuing.
       </span>
-    </label>
+    </div>
 
-    <label class="choice">
-      <input class="switch" type="checkbox" role="switch" name="confirm" required
-             aria-describedby="demo-confirm-error" />
-      <span>
-        <span class="field-label">Confirm setup</span>
-        <span class="field-error" id="demo-confirm-error" role="alert">
-          Switch this on to submit.
+    <div class="field">
+      <label class="choice">
+        <input class="switch" type="checkbox" role="switch" name="confirm" required
+               aria-describedby="demo-confirm-error" />
+        <span>
+          <span class="field-label">Confirm setup</span>
         </span>
+      </label>
+      <span class="field-error" id="demo-confirm-error" role="alert">
+        Switch this on to submit.
       </span>
-    </label>
+    </div>
 
     <button class="btn primary" type="submit">Submit</button>
   </div>
@@ -1036,24 +1039,42 @@ Custom rules live in `data-validation-rules` as a comma-separated list; each rul
 
 Add your own with `FormValidator.registerRule(name, (value, el, ...opts) => boolean)`. The built-in rules treat empty values as valid so optional fields stay optional; custom rules should do the same when that behavior is wanted.
 
-The `date` rule pairs naturally with `data-mask` — the mask structures input, the rule validates meaning:
+The `date` rule pairs naturally with `data-mask` — the mask structures input, the rule validates meaning. Same rule, different formats:
 
 ```html
 <form class="stack needs-validation" novalidate>
   <label class="field">
-    <span class="field-label">Date</span>
-    <input class="input" name="date"
+    <span class="field-label">Date (ISO)</span>
+    <input class="input" name="date-iso"
            data-mask="9999-99-99"
            data-validation-rules="date"
            inputmode="numeric"
            autocomplete="off"
            placeholder="yyyy-mm-dd"
-           aria-describedby="date-help date-error"
+           aria-describedby="date-iso-help date-iso-error"
            required />
-    <span class="field-help" id="date-help">
-      Use a real date in yyyy-mm-dd format.
+    <span class="field-help" id="date-iso-help">
+      yyyy-mm-dd format.
     </span>
-    <span class="field-error" id="date-error">
+    <span class="field-error" id="date-iso-error">
+      Enter a valid date.
+    </span>
+  </label>
+
+  <label class="field">
+    <span class="field-label">Date (European)</span>
+    <input class="input" name="date-eu"
+           data-mask="99/99/9999"
+           data-validation-rules="date"
+           inputmode="numeric"
+           autocomplete="off"
+           placeholder="dd/mm/yyyy"
+           aria-describedby="date-eu-help date-eu-error"
+           required />
+    <span class="field-help" id="date-eu-help">
+      dd/mm/yyyy format.
+    </span>
+    <span class="field-error" id="date-eu-error">
       Enter a valid date.
     </span>
   </label>

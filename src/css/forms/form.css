@@ -48,27 +48,7 @@
   font-size: var(--font-size-sm);
 }
 
-.field:has(
-    .input[aria-invalid="true"],
-    .input.is-invalid,
-    .textarea[aria-invalid="true"],
-    .textarea.is-invalid,
-    .select[aria-invalid="true"],
-    .select.is-invalid
-  )
-  > .field-error {
-  display: block;
-}
-
-.choice:has(
-    .check[aria-invalid="true"],
-    .check.is-invalid,
-    .switch[aria-invalid="true"],
-    .switch.is-invalid,
-    .radio[aria-invalid="true"],
-    .radio.is-invalid
-  )
-  .field-error {
+.needs-validation.was-validated .field:has(:invalid) > .field-error {
   display: block;
 }
 

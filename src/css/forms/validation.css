@@ -10,7 +10,6 @@
 }
 
 :where(.input, .textarea, .select, .check, .radio, .switch)[aria-invalid="true"],
-:where(.input, .textarea, .select, .check, .radio, .switch).is-invalid,
 .needs-validation.was-validated :is(.input, .textarea, .select, .check, .radio, .switch):invalid {
   --form-invalid-border: var(--danger);
 }
