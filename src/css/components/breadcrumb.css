@@ -1,7 +1,8 @@
 /*
  * Breadcrumb — current-location trail from the site root.
  *
- * Inline list separated by "/". The active (last) item is plain text.
+ * Inline list separated by "/". Mark the current page with `aria-current="page"`
+ * on its item — it's styled as inert (no hover/underline, not clickable).
  */
 .breadcrumb {
   display: flex;
@@ -10,7 +11,7 @@
   gap: var(--space-1);
   margin: 0;
   padding: 0;
-  color: var(--text-muted);
+  color: var(--text-subtle);
   font-size: var(--font-size-sm);
   list-style: none;
 }
@@ -27,12 +28,12 @@
 }
 
 .breadcrumb a {
-  color: inherit;
+  color: var(--text-muted);
   text-decoration: none;
 }
 
 @media (hover: hover) {
-  .breadcrumb a:hover {
+  .breadcrumb a:hover:not(:where([aria-current]:not([aria-current="false"]))) {
     color: var(--text);
     text-decoration: underline;
   }
@@ -42,4 +43,10 @@
   outline: var(--focus-outline);
   outline-offset: var(--focus-outline-offset);
   border-radius: var(--radius-sm);
+}
+
+.breadcrumb a:where([aria-current]:not([aria-current="false"])) {
+  color: var(--text);
+  font-weight: var(--font-weight-medium);
+  pointer-events: none;
 }
