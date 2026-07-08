@@ -359,7 +359,7 @@ export function reposition(ref, float, opts = {}) {
     // fall back to top so compact mobile layouts get a usable placement.
     if (
       axis === "y" &&
-      coords.x + floatRect.width > cw &&
+      (coords.x < sx || coords.x + floatRect.width > cw) &&
       boundary.width - floatRect.width < NARROW_INLINE_FLIP_FALLBACK
     ) {
       side = "top";
