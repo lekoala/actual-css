@@ -12,21 +12,22 @@
  * --flyout-trigger-width is set by surface.js while an open flyout is positioned.
  */
 
-.flyout-root {
+.flyout-trigger {
   position: relative;
   display: inline-block;
 }
 
-/* Full-width trigger: for a flyout trigger that must span its container —
-   e.g. the last row of a full-width sidebar nav list. Stretches both the
-   positioning wrapper and its trigger control. Templates commonly name this
-   wrapper .flyout-trigger; the modifier targets that convention directly. */
-.flyout-trigger.block {
+/* Stretch: for a flyout trigger that must span its container — e.g. the
+   last row of a full-width sidebar nav list. Stretches both the
+   positioning wrapper and its trigger control. Named for the effect
+   (stretch to fill), not the display value, to avoid reading like a
+   generic display-block utility. */
+.flyout-trigger.stretch {
   display: block;
   inline-size: 100%;
 }
 
-.flyout-trigger.block > [aria-haspopup="menu"] {
+.flyout-trigger.stretch > [aria-haspopup="menu"] {
   inline-size: 100%;
 }
 
