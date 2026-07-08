@@ -740,6 +740,9 @@ Override `--tooltip-bg` and `--tooltip-fg` on the tooltip element to change the 
 </div>
 ```
 
+Note: added bonus, this is a long tooltip. If you don't have enough space to display
+it, it will automatically be moved to top/bottom instead
+
 ## Scrollspy
 
 > Behavior hook for navigation that marks the active section while the page scrolls.
