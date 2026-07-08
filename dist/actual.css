@@ -947,6 +947,11 @@ small {
  * Interactive states apply only to native interactive elements; non-interactive
  * elements such as <span class="btn"> can reuse the visual box without faking
  * disabled behavior.
+ *
+ * Disabled state uses the native disabled attribute only. aria-disabled is
+ * not supported — it is meant for custom non-native components, not for
+ * standard interactive elements. Use <button disabled> for disabled buttons,
+ * input[type="submit"][disabled] for submit buttons, etc.
  */
 
 /* Intent boundary — inherited intents do not tint this component.
@@ -972,6 +977,7 @@ small {
   --btn-radius: var(--radius);
   --btn-focus-color: var(--intent, var(--focus));
   --btn-hover-bg: var(--ui-hover-bg, var(--btn-bg));
+  --btn-hover-overlay: var(--hover-overlay, rgb(0 0 0 / 0.08));
 
   position: relative;
   display: inline-flex;
@@ -1009,13 +1015,13 @@ small {
    Plain spans keep the visual .btn box but stay static; [role="button"] opts
    custom elements in explicitly. */
 :where(
-  a,
-  button,
-  input[type="button"],
-  input[type="submit"],
-  input[type="reset"],
-  [role="button"]
-).btn {
+    a,
+    button,
+    input[type="button"],
+    input[type="submit"],
+    input[type="reset"],
+    [role="button"]
+  ).btn {
   cursor: pointer;
 }
 
@@ -1033,41 +1039,40 @@ small {
   --ui-border: transparent;
 }
 
+/* Solid/soft get the overlay darkening on hover; outline/ghost/link stay flat.
+   Routed through a variable instead of a :not(.outline, .ghost, .link)
+   exclusion so the hover rule below only has to state the interactive
+   element list once. */
+.btn.outline,
+.btn.ghost,
+.btn.link {
+  --btn-hover-overlay: transparent;
+}
+
 /* The .soft/.outline/.ghost hover recipe (--ui-hover-bg) is shared with
-   .badge in variants.css; the overlay darkening for solid/soft is .btn-specific.
-   Both rules use plain :not() lists so they keep equal specificity. */
+   .badge in variants.css; the overlay darkening for solid/soft is .btn-specific. */
 @media (hover: hover) {
   :where(
-    a,
-    button,
-    input[type="button"],
-    input[type="submit"],
-    input[type="reset"],
-    [role="button"]
-  ).btn:not(:disabled, [aria-disabled="true"]):hover {
+      a,
+      button,
+      input[type="button"],
+      input[type="submit"],
+      input[type="reset"],
+      [role="button"]
+    ).btn:not(:disabled):hover {
     background: var(--btn-hover-bg);
-  }
-
-  :where(
-    a,
-    button,
-    input[type="button"],
-    input[type="submit"],
-    input[type="reset"],
-    [role="button"]
-  ).btn:not(:disabled, [aria-disabled="true"], .outline, .ghost, .link):hover {
-    box-shadow: inset 0 0 0 999px var(--hover-overlay, rgb(0 0 0 / 0.08));
+    box-shadow: inset 0 0 0 999px var(--btn-hover-overlay);
   }
 }
 
 :where(
-  a,
-  button,
-  input[type="button"],
-  input[type="submit"],
-  input[type="reset"],
-  [role="button"]
-).btn:not(:disabled, [aria-disabled="true"]):active {
+    a,
+    button,
+    input[type="button"],
+    input[type="submit"],
+    input[type="reset"],
+    [role="button"]
+  ).btn:not(:disabled):active {
   transform: translateY(1px);
 }
 
@@ -1091,13 +1096,13 @@ small {
 
 @media (hover: hover) {
   :where(
-    a,
-    button,
-    input[type="button"],
-    input[type="submit"],
-    input[type="reset"],
-    [role="button"]
-  ).btn.link:not(:disabled, [aria-disabled="true"]):hover {
+      a,
+      button,
+      input[type="button"],
+      input[type="submit"],
+      input[type="reset"],
+      [role="button"]
+    ).btn.link:not(:disabled):hover {
     background: transparent;
     color: var(--intent, var(--text));
     text-decoration-thickness: 0.12em;
@@ -1115,19 +1120,13 @@ small {
   outline-offset: 0.2em;
 }
 
-.btn:disabled,
-.btn[aria-disabled="true"] {
+.btn:disabled {
   cursor: not-allowed;
   opacity: 0.65;
 }
 
-/* aria-disabled links keep their href for markup simplicity (pagination,
-   toolbars) but stop reacting to the pointer. */
-a.btn[aria-disabled="true"] {
-  pointer-events: none;
-}
-
-.btn[aria-busy="true"]:not(:disabled, [aria-disabled="true"]) {
+/* Busy */
+.btn[aria-busy="true"]:not(:disabled) {
   cursor: progress;
 }
 
@@ -1136,6 +1135,7 @@ a.btn[aria-disabled="true"] {
   --spinner-width: 0.15em;
 }
 
+/* Toggle */
 .btn:where([aria-pressed="true"], [aria-current]:not([aria-current="false"])):not(.link) {
   --btn-bg: var(--intent, var(--primary));
   --btn-fg: var(--intent-fg, var(--primary-fg));
@@ -1172,14 +1172,13 @@ a.btn[aria-disabled="true"] {
         input[type="submit"],
         input[type="reset"],
         [role="button"]
-      ).btn:hover:not(:where(:disabled, [aria-disabled="true"], .link)) {
+      ).btn:hover:not(:where(:disabled, .link)) {
       outline: var(--border-width) solid ButtonText;
       outline-offset: 2px;
     }
   }
 
-  .btn:disabled,
-  .btn[aria-disabled="true"] {
+  .btn:disabled {
     border-color: GrayText;
     background: Canvas;
     color: GrayText;
@@ -2720,12 +2719,14 @@ dialog.drawer nav {
 /* Intent boundary — inherited intents do not tint this component.
    Local intent classes still win because :where() has zero specificity. */
 :where(.status-bar) {
+  /* @sync intent-boundary */
   --intent: initial;
   --intent-fg: initial;
   --ui-bg: initial;
   --ui-fg: initial;
   --ui-border: initial;
   --ui-hover-bg: initial;
+  /* @sync intent-boundary */
 }
 
 .status-bar {
@@ -2743,7 +2744,7 @@ dialog.drawer nav {
   gap: var(--space-2);
 
   inline-size: fit-content;
-  max-inline-size: min(calc(100vw - var(--space-8)), 32rem);
+  max-inline-size: min(calc(100vw - var(--space-6)), 32rem);
   margin-inline: auto;
 
   padding-block: var(--space-2);
@@ -2757,7 +2758,7 @@ dialog.drawer nav {
   opacity: 1;
   scale: 1;
   translate: 0 0;
-  pointer-events: auto;
+  pointer-events: none;
 
   transition:
     opacity var(--duration-fast) var(--ease, ease),
@@ -3738,9 +3739,9 @@ button.avatar {
 }
 
 .check:indeterminate {
-  --choice-border: var(--intent, var(--text-subtle));
-  --choice-bg: var(--intent, var(--surface));
-  --choice-mark: var(--intent, var(--primary));
+  --choice-border: var(--intent, var(--primary));
+  --choice-bg: var(--intent, var(--primary));
+  --choice-mark: var(--intent-fg, var(--primary-fg));
 }
 
 .check:indeterminate::before {

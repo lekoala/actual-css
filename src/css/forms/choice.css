@@ -129,9 +129,9 @@
 }
 
 .check:indeterminate {
-  --choice-border: var(--intent, var(--text-subtle));
-  --choice-bg: var(--intent, var(--surface));
-  --choice-mark: var(--intent, var(--primary));
+  --choice-border: var(--intent, var(--primary));
+  --choice-bg: var(--intent, var(--primary));
+  --choice-mark: var(--intent-fg, var(--primary-fg));
 }
 
 .check:indeterminate::before {
