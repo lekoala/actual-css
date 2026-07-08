@@ -69,22 +69,17 @@
     .dashboard-topbar .breadcrumb {
       display: flex;
       flex: 0 1 auto;
-      flex-wrap: nowrap;
       min-inline-size: 0;
       max-inline-size: 24rem;
       overflow: hidden;
-      white-space: nowrap;
     }
 
     .dashboard-topbar .breadcrumb li {
       flex: 0 0 auto;
     }
 
-    .dashboard-topbar .breadcrumb li:last-child {
+    .dashboard-topbar .breadcrumb li[aria-current="page"] {
       flex: 1 1 auto;
-      min-inline-size: 0;
-      overflow: hidden;
-      text-overflow: ellipsis;
     }
 
     .dashboard-nav .nav-link {
@@ -359,10 +354,10 @@
           <i class="ti ti-menu-2" aria-hidden="true"></i>
         </button>
 
-        <ol class="breadcrumb dashboard-hide-mobile" aria-label="Breadcrumb">
+        <ol class="breadcrumb nowrap dashboard-hide-mobile" aria-label="Breadcrumb">
           <li><a href="#overview">Actual Cloud</a></li>
           <li><a href="#revenue">Revenue</a></li>
-          <li aria-current="page">Overview</li>
+          <li class="truncate" aria-current="page">Overview</li>
         </ol>
 
         <div class="grow"></div>
