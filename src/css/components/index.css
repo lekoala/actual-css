@@ -22,6 +22,7 @@
 @import "skeleton.css";
 @import "busy.css";
 @import "progress.css";
+@import "status-bar.css";
 
 /* Display */
 @import "avatar.css";

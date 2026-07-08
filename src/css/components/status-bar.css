@@ -1,0 +1,81 @@
+/*
+ * Status bar — singleton floating status area.
+ *
+ * One element in the HTML, empty by default, hidden when :empty but kept in the
+ * accessibility tree so it stays a reliable live region. JavaScript only sets
+ * text content; the visual shows and hides with the content.
+ *
+ * Public API: .status-bar (+ intent modifiers danger/success/warning/neutral),
+ * targeted by [data-status] or .status-bar.
+ */
+
+.status-bar {
+  --status-bg: var(--text);
+  --status-fg: var(--surface);
+
+  position: fixed;
+  inset-block-end: var(--space-4);
+  inset-inline: var(--space-4);
+  z-index: var(--z-status, 60);
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+
+  inline-size: fit-content;
+  max-inline-size: min(calc(100vw - var(--space-8)), 32rem);
+  margin-inline: auto;
+
+  padding-block: var(--space-2);
+  padding-inline: var(--space-3);
+
+  border-radius: var(--radius-full);
+  background: var(--status-bg);
+  color: var(--status-fg);
+  box-shadow: var(--shadow-popout);
+
+  opacity: 1;
+  translate: 0 0;
+  visibility: visible;
+  pointer-events: auto;
+
+  transition:
+    opacity var(--duration-fast),
+    translate var(--duration-fast),
+    visibility var(--duration-fast);
+}
+
+.status-bar:empty {
+  opacity: 0;
+  translate: 0 var(--space-2);
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.status-bar.danger {
+  --status-bg: var(--danger);
+  --status-fg: var(--danger-fg);
+}
+
+.status-bar.success {
+  --status-bg: var(--success);
+  --status-fg: var(--success-fg);
+}
+
+.status-bar.warning {
+  --status-bg: var(--warning);
+  --status-fg: var(--warning-fg);
+}
+
+.status-bar.neutral {
+  --status-bg: var(--neutral);
+  --status-fg: var(--neutral-fg);
+}
+
+@media (max-width: 40rem) {
+  .status-bar {
+    inset-inline: var(--space-3);
+    max-inline-size: calc(100vw - var(--space-6));
+  }
+}

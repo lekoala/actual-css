@@ -758,14 +758,52 @@ In menus, keep the command label and shortcut in the same interactive item.
   <div class="cluster">
     <div class="skeleton" data-shape="avatar" aria-hidden="true"></div>
     <div class="stack grow">
-      <div class="skeleton" data-shape="title" aria-hidden="true"></div>
+  <div class="skeleton" data-shape="title" aria-hidden="true"></div>
       <div class="skeleton" data-shape="text" aria-hidden="true"></div>
     </div>
   </div>
 </article>
 ```
 
+## Status Bar
+
+> Singleton floating area for short, non-critical, transient feedback.
+
+- A status bar is a single live region, not a stacked toaster. New messages replace the previous one.
+- Keep one element in the HTML, empty by default. JavaScript only updates its text content; it shows when non-empty and hides when empty, while staying available as a live region.
+- Use it for transient status (`Saved.`, `Reconnected.`, `Copied.`). Critical, persistent, or actionable information belongs in `.alert`, inline messages, or dialogs.
+- Intents: `danger`, `success`, `warning`, `neutral`. The default (no intent) is a neutral dark pill.
+
+```html
+<div class="status-bar" data-status role="status" aria-live="polite" aria-atomic="true"></div>
+```
+
+```js
+import { status } from "actual-css/js/status";
+
+status("Saved.", { intent: "success" });
+status("Could not save.", { intent: "danger", duration: 6000 });
+
+status.clear();
+```
+
+Importing `actual-css/js/status` auto-wires it to Actual's form validation: a form that fails to submit shows its `data-validation-message` in the status bar with the `danger` intent. No target in the DOM means the call is a no-op, so the markup stays optional.
+
+```html
+<form class="needs-validation" data-validation-message="Please check the highlighted fields.">
+  <!-- fields -->
+</form>
+
+<div class="status-bar" data-status role="status" aria-live="polite" aria-atomic="true"></div>
+```
+
+```js
+import "actual-css/js/status";
+import "actual-css/js/validation";
+```
+
 ## Table
+
 
 > Data table with caption and scope attributes, and an accessible scroll region for wide content.
 

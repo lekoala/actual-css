@@ -47,6 +47,7 @@
     "./js/tab": "./src/js/tab.js",
     "./js/tooltip": "./src/js/tooltip.js",
     "./js/validation": "./src/js/validation.js",
+    "./js/status": "./src/js/status.js",
     "./package.json": "./package.json"
   },
   "main": "./dist/actual.js",

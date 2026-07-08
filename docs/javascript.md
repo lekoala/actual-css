@@ -288,14 +288,25 @@ first invalid field, and dispatches a bubbling `actual:invalid` event with
          aria-describedby="email-error" />
   <span class="field-error" id="email-error">Enter a valid email.</span>
 </form>
+
+<div class="status-bar" data-status role="status" aria-live="polite" aria-atomic="true"></div>
 ```
+
+```js
+import "actual-css/js/validation";
+import "actual-css/js/status";
+```
+
+The status bar auto-wires to `actual:invalid`: the form's `data-validation-message`
+appears with the `danger` intent, no manual listener. To handle the summary
+yourself instead, omit the status import and listen for the event:
 
 ```js
 import "actual-css/js/validation";
 
 document.addEventListener("actual:invalid", (event) => {
   const { firstInvalid, message } = event.detail;
-  // surface message in a status bar or toast
+  // route message to your own surface
 });
 ```
 
