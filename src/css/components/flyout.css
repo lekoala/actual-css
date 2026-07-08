@@ -27,19 +27,13 @@
   inline-size: var(--flyout-inline-size, max-content);
   min-inline-size: min(
     var(--flyout-trigger-width, 0px),
-    min(
-      var(--flyout-max-inline-size, 20rem),
-      calc(var(--viewport-inline) - var(--space-6))
-    )
+    min(var(--flyout-max-inline-size, 20rem), calc(var(--viewport-inline) - var(--space-6)))
   );
   max-inline-size: min(
     var(--flyout-max-inline-size, 20rem),
     calc(var(--viewport-inline) - var(--space-6))
   );
-  max-block-size: min(
-    24rem,
-    var(--available-height, calc(var(--viewport-block) - var(--space-6)))
-  );
+  max-block-size: min(24rem, var(--available-height, calc(var(--viewport-block) - var(--space-6))));
   overflow: auto;
   margin: 0;
   padding: var(--space-1);
