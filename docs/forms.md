@@ -928,7 +928,7 @@ Core: native range, enhanced by `accent-color`. Optional richer skin may come la
 
 Native validation first; the enhancer only adds state and focus behavior.
 
-Actual CSS ships validation *styles*. Invalid fields can be marked with `aria-invalid="true"` or `.is-invalid`. The default forms bundle imports `forms/validation.css`; custom builds may omit that file when validation styling is app-owned. A small enhancer (`actual-css/js/validation`), included in the default runtime (`actual-css/js`) and also importable on its own, prevents premature error display, marks invalid fields on submit, focuses the first invalid field, and supports a few custom rules. It is not a validation framework — server and AJAX validation stay in app code.
+Actual CSS ships validation *styles*. Invalid fields are marked with `aria-invalid="true"` (or the manual `.field.danger` wrapper class). The default forms bundle imports `forms/validation.css`; custom builds may omit that file when validation styling is app-owned. A small enhancer (`actual-css/js/validation`), included in the default runtime (`actual-css/js`) and also importable on its own, prevents premature error display, marks invalid fields on submit, focuses the first invalid field, and supports a few custom rules. It is not a validation framework — server and AJAX validation stay in app code.
 
 Opt in with the `.needs-validation` class. Importing the module registers the behavior; there is no init call.
 
@@ -958,7 +958,7 @@ Opt in with the `.needs-validation` class. Importing the module registers the be
 </form>
 ```
 
-On submit, the enhancer adds `.was-validated` to the form and `.is-invalid` + `aria-invalid="true"` to each invalid field. It does not mark valid fields automatically. When the form is invalid it prevents submission, focuses the first invalid field, and dispatches a bubbling `actual:invalid` event with `{ form, firstInvalid, message }`.
+On submit, the enhancer adds `.was-validated` to the form and `aria-invalid="true"` to each invalid field. It does not mark valid fields automatically. When the form is invalid it prevents submission, focuses the first invalid field, and dispatches a bubbling `actual:invalid` event with `{ form, firstInvalid, message }`.
 
 The status bar (`actual-css/js/status`) auto-wires to that event: import it and add one status element, and the form's `data-validation-message` appears automatically on invalid submit — no manual listener.
 
@@ -1107,4 +1107,4 @@ FormValidator.setErrors(form, { email: "Already taken" });
 FormValidator.clearFieldError(form.elements.email);
 ```
 
-`setErrors` resolves each name to a field, sets `aria-invalid`, `.is-invalid`, the field's `.field-error` text, and `setCustomValidity` so the next submit stays blocked until corrected.
+`setErrors` resolves each name to a field, sets `aria-invalid`, the field's `.field-error` text, and `setCustomValidity` so the next submit stays blocked until corrected.

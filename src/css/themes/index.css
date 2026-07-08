@@ -21,6 +21,8 @@
  *                intents, 2px borders, hard offset shadows
  *   neon       — dark-only + wide-gamut P3 upgrade via oklch(), glow
  *                shadows, soft-variant tuning
+ *   gradient   — paired recolor + Bootstrap 4 style gradient on solid buttons
+ *                via component-local button tokens
  *
  * Single-block themes (dark, dim, cyberpunk, neon) pin one color-scheme and
  * cannot adapt to prefers-color-scheme; the paired ones follow the OS. */
@@ -38,3 +40,4 @@
 @import "./edge.css";
 @import "./cyberpunk.css";
 @import "./neon.css";
+@import "./gradient.css";
