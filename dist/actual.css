@@ -1953,9 +1953,23 @@ dialog.drawer nav {
  * --flyout-trigger-width is set by surface.js while an open flyout is positioned.
  */
 
-.flyout-root {
+.flyout-trigger {
   position: relative;
   display: inline-block;
+}
+
+/* Stretch: for a flyout trigger that must span its container — e.g. the
+   last row of a full-width sidebar nav list. Stretches both the
+   positioning wrapper and its trigger control. Named for the effect
+   (stretch to fill), not the display value, to avoid reading like a
+   generic display-block utility. */
+.flyout-trigger.stretch {
+  display: block;
+  inline-size: 100%;
+}
+
+.flyout-trigger.stretch > [aria-haspopup="menu"] {
+  inline-size: 100%;
 }
 
 .flyout {
@@ -4332,6 +4346,17 @@ button.avatar {
   margin: 0;
   padding: 0;
   list-style: none;
+}
+
+/* Separator dot for inline metadata rows (byline, timestamp, read time,
+   breadcrumb-like facts). Pair with a flex/cluster container; flex: none
+   keeps a flex parent from shrinking it to nothing. */
+.dot {
+  flex: none;
+  inline-size: 0.25rem;
+  block-size: 0.25rem;
+  border-radius: var(--radius-full);
+  background: var(--text-subtle);
 }
 
 /* Link variants for chrome that should not look like prose links. Use in

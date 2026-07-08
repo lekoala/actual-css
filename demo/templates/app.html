@@ -22,8 +22,6 @@
      *     -> responsive compact filter toolbar (gap: toolbar group).
      *   .app-stat / .app-stat-value
      *     -> compact stat card composition (gap: stat card component).
-     *   .toast-stack
-     *     -> fixed top-end stack for dismissible .alert (gap: toast container).
      *   .app-sidebar .nav-link / .app-sidebar .nav-link .badge
      *     -> sidebar nav with icon + text + trailing badge (gap: side nav link).
      *   .app-sidebar .nav-list-sub
@@ -32,7 +30,10 @@
      *     -> collapsible section with chevron rotation (gap: collapsible nav).
      *
      * Everything else (avatars, buttons, badges, cards, tables, dialogs,
-     * drawer, menus, alerts, forms) comes straight from the framework.
+     * drawer, menus, alerts, forms, status bar) comes straight from the
+     * framework — including the singleton .status-bar near the end of
+     * <body>, driven here by a setInterval demo instead of a hand-rolled
+     * fixed toast stack.
      */
 
     .app-layout {
@@ -155,40 +156,6 @@
       line-height: 1.1;
     }
 
-    .toast-stack {
-      --toast-offset: 0.75rem;
-
-      position: fixed;
-      inset-block-start: max(var(--toast-offset), env(safe-area-inset-top));
-      inset-inline-start: max(var(--toast-offset), env(safe-area-inset-left));
-      inset-inline-end: max(var(--toast-offset), env(safe-area-inset-right));
-
-      z-index: var(--z-toast, 1000);
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-
-      pointer-events: none;
-    }
-
-    /* Desktop / larger screens */
-    @media (min-width: 40rem) {
-      .toast-stack {
-        inset-inline-start: auto;
-        inline-size: min(24rem, calc(100vi - 2rem));
-      }
-    }
-
-    .toast {
-      pointer-events: auto;
-      min-inline-size: 0;
-      overflow-wrap: anywhere;
-    }
-
-    .toast-stack>* {
-      pointer-events: auto;
-    }
-
     .app-sidebar .nav-link {
       inline-size: 100%;
       min-block-size: 2.25rem;
@@ -304,7 +271,7 @@
       </a>
 
       <!-- Workspace switcher -->
-      <div class="flyout-trigger block">
+      <div class="flyout-trigger stretch">
         <button class="btn neutral outline sm" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="workspace-menu"
           id="workspace-flyout-trigger" style="justify-content: space-between;">
           <span class="cluster" style="gap: 0.5rem;">
@@ -400,7 +367,7 @@
       <div class="grow"></div>
 
       <!-- Account pinned to the bottom -->
-      <div class="flyout-trigger block">
+      <div class="flyout-trigger stretch">
         <button class="btn neutral ghost sm" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="sidebar-account-menu"
           id="sidebar-account-trigger" style="justify-content: flex-start;">
           <span class="avatar sm"><abbr>LW</abbr></span>
@@ -754,35 +721,42 @@
         <!-- Notifications section -->
         <section class="stack">
           <h2>Recent notifications</h2>
-          <div class="alert success" role="status">
-            <span aria-hidden="true">&check;</span>
-            <div class="cluster" style="--cluster-justify: space-between; flex-wrap: wrap; gap: 0.5rem; flex: 1 1 auto;">
-              <span>Payout of &euro;12,450 has been processed successfully.</span>
-              <button class="btn ghost sm" type="button" data-dismiss>
-                <span class="sr-only">Dismiss</span>
-                <i class="ti ti-x" aria-hidden="true"></i>
-              </button>
+          <div id="notifications-list" class="stack">
+            <div class="alert success items-center" role="status">
+              <i class="ti ti-circle-check" aria-hidden="true"></i>
+              <div class="cluster" style="--cluster-justify: space-between; flex-wrap: wrap; gap: 0.5rem; flex: 1 1 auto;">
+                <span>Payout of &euro;12,450 has been processed successfully.</span>
+                <button class="btn ghost sm" type="button" data-dismiss>
+                  <span class="sr-only">Dismiss</span>
+                  <i class="ti ti-x" aria-hidden="true"></i>
+                </button>
+              </div>
+            </div>
+            <div class="alert warning items-center" role="status">
+              <i class="ti ti-alert-triangle" aria-hidden="true"></i>
+              <div class="cluster" style="--cluster-justify: space-between; flex-wrap: wrap; gap: 0.5rem; flex: 1 1 auto;">
+                <span>3 transactions require manual review. <a href="#">Review now</a></span>
+                <button class="btn ghost sm" type="button" data-dismiss>
+                  <span class="sr-only">Dismiss</span>
+                  <i class="ti ti-x" aria-hidden="true"></i>
+                </button>
+              </div>
+            </div>
+            <div class="alert primary items-center" role="status">
+              <i class="ti ti-info-circle" aria-hidden="true"></i>
+              <div class="cluster" style="--cluster-justify: space-between; flex-wrap: wrap; gap: 0.5rem; flex: 1 1 auto;">
+                <span>New clinic "Ocean Beach" has been added to your account.</span>
+                <button class="btn ghost sm" type="button" data-dismiss>
+                  <span class="sr-only">Dismiss</span>
+                  <i class="ti ti-x" aria-hidden="true"></i>
+                </button>
+              </div>
             </div>
           </div>
-          <div class="alert warning" role="status">
-            <span aria-hidden="true">!</span>
-            <div class="cluster" style="--cluster-justify: space-between; flex-wrap: wrap; gap: 0.5rem; flex: 1 1 auto;">
-              <span>3 transactions require manual review. <a href="#">Review now</a></span>
-              <button class="btn ghost sm" type="button" data-dismiss>
-                <span class="sr-only">Dismiss</span>
-                <i class="ti ti-x" aria-hidden="true"></i>
-              </button>
-            </div>
-          </div>
-          <div class="alert primary" role="status">
-            <span aria-hidden="true">i</span>
-            <div class="cluster" style="--cluster-justify: space-between; flex-wrap: wrap; gap: 0.5rem; flex: 1 1 auto;">
-              <span>New clinic "Ocean Beach" has been added to your account.</span>
-              <button class="btn ghost sm" type="button" data-dismiss>
-                <span class="sr-only">Dismiss</span>
-                <i class="ti ti-x" aria-hidden="true"></i>
-              </button>
-            </div>
+
+          <div id="notifications-empty" class="stack" style="align-items: center; text-align: center; padding-block: 1.5rem; color: var(--text-muted);" hidden>
+            <i class="ti ti-inbox" aria-hidden="true" style="font-size: 1.75rem;"></i>
+            <p class="muted" style="margin: 0;">You're all caught up. No new notifications.</p>
           </div>
         </section>
       </main>
@@ -858,19 +832,9 @@
     </form>
   </dialog>
 
-  <!-- Toast stack: fixed top-end region for dismissible .alert (framework gap). -->
-  <div class="toast-stack" aria-live="polite" aria-atomic="false">
-    <div class="alert success" role="status">
-      <span aria-hidden="true">&check;</span>
-      <div class="cluster" style="--cluster-justify: space-between; flex-wrap: wrap; gap: 0.5rem; flex: 1 1 auto;">
-        <span>Saved. Your changes are now live.</span>
-        <button class="btn ghost sm" type="button" data-dismiss>
-          <span class="sr-only">Dismiss</span>
-          <i class="ti ti-x" aria-hidden="true"></i>
-        </button>
-      </div>
-    </div>
-  </div>
+  <!-- Singleton status bar (framework component). JS below feeds it via the
+       public actual:status event instead of a hand-rolled toast stack. -->
+  <div class="status-bar" data-status role="status" aria-live="polite" aria-atomic="true"></div>
 
   <script src="../../dist/actual.js"></script>
   <script>
@@ -886,13 +850,37 @@
       });
     }
 
-    // [data-dismiss] removes the closest .alert (used by notifications and toasts).
+    // [data-dismiss] removes the closest .alert. When that empties the
+    // notifications list, reveal its empty state.
     document.addEventListener('click', (event) => {
       const dismiss = event.target.closest('[data-dismiss]');
       if (!dismiss) return;
       const alert = dismiss.closest('.alert');
-      if (alert) alert.remove();
+      if (!alert) return;
+
+      const list = alert.closest('#notifications-list');
+      alert.remove();
+
+      if (list && !list.querySelector('.alert')) {
+        document.getElementById('notifications-empty')?.removeAttribute('hidden');
+      }
     });
+
+    // Demo: simulate a live backend feed pushing transient status messages.
+    // Any code can drive the status bar this way — no import needed beyond
+    // the default runtime bundle already loaded above.
+    const statusFeed = [
+      { message: "Syncing transactions…", intent: "neutral" },
+      { message: "All changes saved.", intent: "success" },
+      { message: "Connection restored.", intent: "success" },
+      { message: "Retrying a failed webhook…", intent: "warning" },
+    ];
+    let statusFeedIndex = 0;
+    setInterval(() => {
+      const next = statusFeed[statusFeedIndex % statusFeed.length];
+      statusFeedIndex++;
+      document.dispatchEvent(new CustomEvent("actual:status", { detail: next }));
+    }, 10000);
   </script>
 </body>
 

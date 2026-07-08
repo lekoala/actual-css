@@ -2,7 +2,9 @@
 
 Plain CSS component framework for new projects. Semantic classes, shared variants, small tokens, theme hooks, and progressive enhancement.
 
-Actual CSS claims a small set of global class names. For existing projects: cascade layers, import order, or an optional prefix transform.
+Actual CSS claims a small set (see `reserved-classes.json`) of global class names. 
+
+For existing projects: cascade layers, import order, or an optional prefix transform.
 
 ## Install
 

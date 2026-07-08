@@ -1,22 +1,22 @@
 {
-  "timestamp": "2026-07-08T16:27:17.616Z",
-  "totalRaw": 153758,
-  "totalMinified": 77474,
-  "totalBrotli": 11437,
+  "timestamp": "2026-07-08T21:03:36.062Z",
+  "totalRaw": 154564,
+  "totalMinified": 77743,
+  "totalBrotli": 11490,
   "themesMinified": 28783,
   "themesBrotli": 3328,
-  "shippedMinified": 77474,
-  "shippedBrotli": 11437,
+  "shippedMinified": 77743,
+  "shippedBrotli": 11490,
   "maxShippedBrotli": 13312,
   "fileCount": 69,
   "files": [
     {
-      "file": "components/button.css",
-      "raw": 6269
+      "file": "components/flyout.css",
+      "raw": 6342
     },
     {
-      "file": "components/flyout.css",
-      "raw": 5881
+      "file": "components/button.css",
+      "raw": 6269
     },
     {
       "file": "theme.css",
@@ -59,6 +59,10 @@
       "raw": 3557
     },
     {
+      "file": "utilities.css",
+      "raw": 3439
+    },
+    {
       "file": "themes/edge.css",
       "raw": 3424
     },
@@ -69,10 +73,6 @@
     {
       "file": "forms/switch.css",
       "raw": 3294
-    },
-    {
-      "file": "utilities.css",
-      "raw": 3094
     },
     {
       "file": "components/drawer.css",

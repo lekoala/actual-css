@@ -431,7 +431,7 @@ Flyout covers two distinct patterns:
 
 ### Action list
 - A list of *actions* the user can take: sign out, copy, delete.
-- Wrap the trigger and flyout in `.flyout-root` when the flyout should have a local absolute-position fallback before JavaScript positions it.
+- Wrap the trigger and flyout in `.flyout-trigger` when the flyout should have a local absolute-position fallback before JavaScript positions it. Add `.stretch` when the trigger must span its container, such as the last row of a full-width sidebar nav list.
 - Use `<menu class="flyout">` with `<li>` items.
 - Items are regular `<button>` or `<a>` elements.
 - Use `.sm` or `.lg` for density changes.
@@ -446,7 +446,7 @@ Flyout covers two distinct patterns:
 - Use grid utilities, such as `.grid-3`, for wider multi-column flyouts.
 
 ```html
-<div class="flyout-root">
+<div class="flyout-trigger">
   <button class="btn outline"
           type="button"
           aria-expanded="false"
@@ -471,7 +471,7 @@ Flyout covers two distinct patterns:
 ```html
 <nav aria-label="Main navigation">
   <ul class="list-reset cluster">
-    <li class="flyout-root">
+    <li class="flyout-trigger">
       <button class="btn ghost"
               type="button"
               aria-expanded="false"
@@ -520,7 +520,7 @@ Use `class="flyout grid-3"` when a nav panel needs multiple link groups. Keep li
 ```html
 <nav aria-label="Product navigation">
   <ul class="list-reset cluster">
-    <li class="flyout-root">
+    <li class="flyout-trigger">
       <button class="btn ghost"
               type="button"
               aria-expanded="false"
