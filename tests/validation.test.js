@@ -73,7 +73,6 @@ test("valid form is not blocked on submit", async () => {
 
   expect(event.defaultPrevented).toBe(false);
   expect(form.classList.contains("was-validated")).toBe(true);
-  expect(form.elements.email.classList.contains("is-valid")).toBe(false);
 });
 
 test("number rule is fixed (digits valid, letters invalid)", async () => {

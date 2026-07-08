@@ -44,7 +44,6 @@
   "input",
   "inverted",
   "is-invalid",
-  "is-valid",
   "was-validated",
   "is-open",
   "is-sheet",
