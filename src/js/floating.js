@@ -200,7 +200,7 @@ function getFloatingSize(float) {
 const tracked = new Set();
 let resizeObserver = null;
 let tick = false;
-let pendingType = null;
+const pendingTypes = new Set();
 
 function notify(type) {
   for (const el of tracked) {
@@ -229,12 +229,12 @@ function hasOpenSurface() {
 }
 
 function rafNotify(e) {
-  pendingType = pendingType === "scroll" ? pendingType : e?.type;
+  if (e?.type) pendingTypes.add(e.type);
   if (!tick) {
     requestAnimationFrame(() => {
-      const type = pendingType;
-      pendingType = null;
-      notify(type);
+      const types = [...pendingTypes];
+      pendingTypes.clear();
+      for (const type of types) notify(type);
       tick = false;
     });
   }

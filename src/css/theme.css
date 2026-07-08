@@ -158,3 +158,15 @@
     --backdrop-fill: Canvas;
   }
 }
+
+@media (prefers-contrast: more) {
+  :root,
+  [data-theme="light"],
+  [data-theme="dark"] {
+    --border-width: 2px;
+    --focus-outline-offset: 3px;
+    --focus-ring-shadow: 0 0 0 4px var(--focus-ring);
+    --text-muted: var(--text);
+    --text-subtle: var(--text);
+  }
+}

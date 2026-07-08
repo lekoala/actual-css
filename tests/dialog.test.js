@@ -44,6 +44,34 @@ test("opening a modal dialog sets trigger-owned accessibility attributes", async
   expect(trigger.getAttribute("aria-controls")).toBe("prefs");
 });
 
+test("opening a modal dialog sets dialog accessibility attributes", async () => {
+  await loadDialog(`
+    <button commandfor="prefs" command="show-modal">Open</button>
+    <dialog id="prefs"><h2>Preferences</h2></dialog>
+  `);
+  const trigger = document.querySelector("button");
+  const dialog = document.getElementById("prefs");
+  const title = dialog.querySelector("h2");
+
+  click(trigger);
+
+  expect(dialog.getAttribute("aria-modal")).toBe("true");
+  expect(dialog.getAttribute("aria-labelledby")).toBe(title.id);
+});
+
+test("dialog data-title provides an accessible label", async () => {
+  await loadDialog(`
+    <button commandfor="prefs" command="show-modal">Open</button>
+    <dialog id="prefs" data-title="Preferences"></dialog>
+  `);
+  const trigger = document.querySelector("button");
+  const dialog = document.getElementById("prefs");
+
+  click(trigger);
+
+  expect(dialog.getAttribute("aria-label")).toBe("Preferences");
+});
+
 test("request-close buttons close an open dialog and restore focus", async () => {
   await loadDialog(`
     <button id="open" commandfor="prefs" command="show-modal">Open</button>
@@ -60,6 +88,23 @@ test("request-close buttons close an open dialog and restore focus", async () =>
 
   expect(dialog.open).toBe(false);
   expect(dialog.returnValue).toBe("done");
+  expect(document.activeElement).toBe(open);
+});
+
+test("cancel closes without requiring view transitions", async () => {
+  await loadDialog(`
+    <button id="open" commandfor="prefs" command="show-modal">Open</button>
+    <dialog id="prefs"></dialog>
+  `);
+  const open = document.getElementById("open");
+  const dialog = document.getElementById("prefs");
+
+  click(open);
+  const event = new Event("cancel", { cancelable: true });
+  dialog.dispatchEvent(event);
+
+  expect(event.defaultPrevented).toBe(true);
+  expect(dialog.open).toBe(false);
   expect(document.activeElement).toBe(open);
 });
 

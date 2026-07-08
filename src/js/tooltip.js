@@ -154,13 +154,13 @@ function ensureTip(trigger) {
   const state = wireTip(tip);
   state.refs.add(trigger);
 
+  const triggerController = new AbortController();
   const onLeave = () => hideTip(tip);
-  trigger.addEventListener("mouseleave", onLeave);
-  trigger.addEventListener("blur", onLeave);
+  trigger.addEventListener("mouseleave", onLeave, { signal: triggerController.signal });
+  trigger.addEventListener("blur", onLeave, { signal: triggerController.signal });
 
   cleanupMap.set(trigger, () => {
-    trigger.removeEventListener("mouseleave", onLeave);
-    trigger.removeEventListener("blur", onLeave);
+    triggerController.abort();
     tipMap.delete(trigger);
     cleanupMap.delete(trigger);
 

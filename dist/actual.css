@@ -74,6 +74,12 @@ a {
   text-underline-offset: 0.18em;
 }
 
+a:focus-visible {
+  outline: var(--focus-outline);
+  outline-offset: var(--focus-outline-offset);
+  box-shadow: var(--focus-ring-shadow);
+}
+
 @media (hover: hover) {
   a:hover {
     text-decoration-thickness: 0.12em;
@@ -414,6 +420,18 @@ small {
     --focus-ring-shadow: none;
 
     --backdrop-fill: Canvas;
+  }
+}
+
+@media (prefers-contrast: more) {
+  :root,
+  [data-theme="light"],
+  [data-theme="dark"] {
+    --border-width: 2px;
+    --focus-outline-offset: 3px;
+    --focus-ring-shadow: 0 0 0 4px var(--focus-ring);
+    --text-muted: var(--text);
+    --text-subtle: var(--text);
   }
 }
 
@@ -998,11 +1016,6 @@ small {
     box-shadow: inset 0 0 0 999px var(--hover-overlay);
   }
 
-  @supports (color: color-mix(in oklch, red, white)) {
-    .btn:not(:where(:disabled, [aria-disabled="true"], .soft, .outline, .ghost, .link)):hover {
-      --ui-hover-bg: color-mix(in oklch, var(--intent, var(--neutral)) 88%, black);
-    }
-  }
 }
 
 .btn:active {
@@ -1593,12 +1606,6 @@ a.badge[aria-disabled="true"] {
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .surface-backdrop {
-    transition: none;
-  }
-}
-
 @media (forced-colors: active) {
   .surface-backdrop {
     background: Canvas;
@@ -2012,12 +2019,6 @@ dialog.drawer nav {
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .flyout {
-    transition: none;
-  }
-}
-
 .flyout > li {
   margin: 0;
 }
@@ -2084,9 +2085,9 @@ dialog.drawer nav {
 }
 
 @media (hover: hover) {
-  .flyout > :where(button, a, [role="menuitem"]):hover,
-  .flyout > li > :where(button, a, [role="menuitem"]):hover,
-  .flyout > section > ul > li > a:hover {
+  .flyout > :where(button, a, [role="menuitem"]):hover:not(:focus-visible),
+  .flyout > li > :where(button, a, [role="menuitem"]):hover:not(:focus-visible),
+  .flyout > section > ul > li > a:hover:not(:focus-visible) {
     background: var(--surface-subtle);
     outline: none;
   }
@@ -2177,12 +2178,6 @@ dialog.drawer nav {
       opacity var(--duration-fast, var(--duration)) var(--ease, ease),
       scale var(--duration-fast, var(--duration)) var(--ease, ease),
       display var(--duration-fast, var(--duration)) allow-discrete;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .tooltip {
-    transition: none;
   }
 }
 
@@ -4203,6 +4198,13 @@ button.avatar {
   text-decoration: none;
 }
 
+.link-plain:focus-visible,
+.link-muted:focus-visible {
+  outline: var(--focus-outline);
+  outline-offset: var(--focus-outline-offset);
+  box-shadow: var(--focus-ring-shadow);
+}
+
 @media (hover: hover) {
   .link-muted:hover {
     color: var(--text);
@@ -4319,10 +4321,19 @@ button.avatar {
 }
 
 @media print {
+  :root,
+  body {
+    color-scheme: light;
+    background: #fff;
+    color: #000;
+  }
+
   .flyout,
   .tooltip,
   .surface-backdrop,
-  .spinner {
+  .spinner,
+  dialog.modal[open],
+  dialog.drawer[open] {
     display: none !important;
   }
 
@@ -4341,7 +4352,7 @@ button.avatar {
   .card,
   .alert,
   .badge {
-    border: 1px solid #000;
+    border: 1px solid CanvasText;
     break-inside: avoid;
   }
 

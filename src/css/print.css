@@ -1,8 +1,17 @@
 @media print {
+  :root,
+  body {
+    color-scheme: light;
+    background: #fff;
+    color: #000;
+  }
+
   .flyout,
   .tooltip,
   .surface-backdrop,
-  .spinner {
+  .spinner,
+  dialog.modal[open],
+  dialog.drawer[open] {
     display: none !important;
   }
 
@@ -21,7 +30,7 @@
   .card,
   .alert,
   .badge {
-    border: 1px solid #000;
+    border: 1px solid CanvasText;
     break-inside: avoid;
   }
 

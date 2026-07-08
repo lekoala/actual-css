@@ -105,6 +105,20 @@ test("closeSurface can restore focus to the opening trigger", () => {
   expect(document.activeElement).toBe(trigger);
 });
 
+test("closeSurface restores focus by default when focus is inside the surface", () => {
+  setBody('<button aria-controls="menu">Open</button><div id="menu" class="flyout"><button id="item">Item</button></div>');
+  const trigger = document.querySelector("button[aria-controls]");
+  const item = document.getElementById("item");
+  const menu = document.getElementById("menu");
+  mockPlacement(trigger, menu);
+  openSurface(menu, { trigger });
+  item.focus();
+
+  closeSurface(menu);
+
+  expect(document.activeElement).toBe(trigger);
+});
+
 test("out-of-view closes without restoring focus", () => {
   setBody('<button aria-controls="menu">Open</button><button id="next">Next</button><div id="menu" class="flyout"></div>');
   const trigger = document.querySelector("button[aria-controls]");
@@ -171,7 +185,22 @@ test("sheet mode adds sheet class and backdrop", () => {
   openSurface(menu, { trigger });
 
   expect(menu.classList.contains("is-sheet")).toBe(true);
+  expect(menu.getAttribute("role")).toBe("dialog");
+  expect(menu.getAttribute("aria-modal")).toBe("true");
   expect(document.querySelector(".surface-backdrop")).not.toBeNull();
+});
+
+test("closing sheet mode restores previous semantic attributes", () => {
+  setBody('<button aria-controls="menu"></button><div id="menu" class="flyout" data-flyout-mobile="sheet" role="menu" aria-modal="false"></div>');
+  const trigger = document.querySelector("button");
+  const menu = document.getElementById("menu");
+  mockPlacement(trigger, menu);
+
+  openSurface(menu, { trigger });
+  closeSurface(menu);
+
+  expect(menu.getAttribute("role")).toBe("menu");
+  expect(menu.getAttribute("aria-modal")).toBe("false");
 });
 
 test("sheet close hides the backdrop immediately and removes it after animations", async () => {

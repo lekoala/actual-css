@@ -17,6 +17,12 @@ a {
   text-underline-offset: 0.18em;
 }
 
+a:focus-visible {
+  outline: var(--focus-outline);
+  outline-offset: var(--focus-outline-offset);
+  box-shadow: var(--focus-ring-shadow);
+}
+
 @media (hover: hover) {
   a:hover {
     text-decoration-thickness: 0.12em;

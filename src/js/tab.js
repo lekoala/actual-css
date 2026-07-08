@@ -74,7 +74,10 @@ function activateAndFocus(tab) {
 function initialize(list) {
   const tabs = tabsOf(list);
   if (!tabs.length) return;
-  const selected = tabs.find((tab) => tab.getAttribute("aria-selected") === "true") || tabs[0];
+  const selected =
+    tabs.find((tab) => tab.getAttribute("aria-selected") === "true" && panelFor(tab)) ||
+    tabs.find((tab) => panelFor(tab)) ||
+    tabs[0];
   activate(selected);
 }
 

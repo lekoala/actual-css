@@ -90,11 +90,6 @@
     box-shadow: inset 0 0 0 999px var(--hover-overlay);
   }
 
-  @supports (color: color-mix(in oklch, red, white)) {
-    .btn:not(:where(:disabled, [aria-disabled="true"], .soft, .outline, .ghost, .link)):hover {
-      --ui-hover-bg: color-mix(in oklch, var(--intent, var(--neutral)) 88%, black);
-    }
-  }
 }
 
 .btn:active {
