@@ -1,21 +1,22 @@
 import { firstItem, lastItem, nextItem } from "./keys.js";
 
+const MENU_ITEM_TARGET_SELECTOR = ':where(button, a, [role="menuitem"])';
 export const MENU_ITEM_SELECTOR = [
-  '[role="menuitem"]',
-  ".flyout > button",
-  ".flyout > a",
-  ".flyout > li > button",
-  ".flyout > li > a",
+  `.flyout > ${MENU_ITEM_TARGET_SELECTOR}`,
+  `.flyout > li > ${MENU_ITEM_TARGET_SELECTOR}`,
 ].join(",");
 
-export function getMenuItems(menu) {
-  return [...menu.querySelectorAll(MENU_ITEM_SELECTOR)].filter(
-    (item) =>
-      !item.disabled &&
-      item.getAttribute("aria-disabled") !== "true" &&
-      item.checkVisibility?.() !== false &&
-      !item.closest("[hidden], [inert], [aria-hidden='true']"),
+function isUsableMenuItem(item) {
+  return (
+    !item.disabled &&
+    item.getAttribute("aria-disabled") !== "true" &&
+    item.checkVisibility?.() !== false &&
+    !item.closest("[hidden], [inert], [aria-hidden='true']")
   );
+}
+
+export function getMenuItems(menu) {
+  return [...menu.querySelectorAll(MENU_ITEM_SELECTOR)].filter(isUsableMenuItem);
 }
 
 function isAriaMenuItem(item) {

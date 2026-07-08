@@ -31,25 +31,34 @@ import enhance from "./enhance.js";
 
 const SHOW_DELAY_MS = 150;
 
+/**
+ * @typedef {object} TooltipState
+ * @property {Set<Element>} refs Triggers that currently reference this tip.
+ * @property {Element | null} activeRef Trigger that last showed this tip.
+ * @property {AbortController} controller Tip-level event listener cleanup.
+ * @property {() => void} untrack Floating-position cleanup.
+ * @property {boolean} generated True when the tip was created from data-tooltip text.
+ * @property {{ parent: Node, next: ChildNode | null } | null} mount Original DOM position for explicit tips moved into a dialog/body root.
+ * @property {ReturnType<typeof setTimeout> | null} timer Pending delayed show.
+ */
+
 let uid = 0;
-const tipMap = new WeakMap(); // trigger -> tip | null
-const cleanupMap = new WeakMap(); // trigger -> cleanup
-const generatedTips = new WeakSet();
-const mountedTips = new WeakMap(); // tip -> original { parent, next }
-const delayMap = new WeakMap(); // tip -> pending show timer
-const tipStates = new WeakMap(); // tip -> { refs, activeRef, controller, untrack }
+const triggerStates = new WeakMap(); // trigger -> { tip, cleanup } | { tip: null }
+/** @type {WeakMap<Element, TooltipState>} */
+const tipStates = new WeakMap(); // tip -> { refs, activeRef, controller, untrack, generated, mount, timer }
 
 function mountTip(tip, trigger) {
   const root = trigger.closest("dialog") || document.body;
   const parent = tip.parentNode;
-  if (!root || !parent || parent === root) return;
+  if (!root || !parent || parent === root) return null;
 
-  mountedTips.set(tip, { parent, next: tip.nextSibling });
+  const mount = { parent, next: tip.nextSibling };
   root.append(tip);
+  return mount;
 }
 
-function restoreTip(tip) {
-  const mount = mountedTips.get(tip);
+function restoreTip(tip, state) {
+  const mount = state.mount;
   if (!mount) return;
 
   if (mount.parent.isConnected) {
@@ -58,8 +67,6 @@ function restoreTip(tip) {
   } else {
     tip.remove();
   }
-
-  mountedTips.delete(tip);
 }
 
 function placementFor(ref) {
@@ -76,10 +83,10 @@ function repositionTip(ref, tip) {
 }
 
 function hideTip(tip) {
-  const timer = delayMap.get(tip);
-  if (timer) {
-    clearTimeout(timer);
-    delayMap.delete(tip);
+  const state = tipStates.get(tip);
+  if (state?.timer) {
+    clearTimeout(state.timer);
+    state.timer = null;
   }
   tip.hidden = true;
 }
@@ -87,12 +94,20 @@ function hideTip(tip) {
 // Tip-level wiring happens once per tooltip element, even when an explicit
 // tooltip is shared by several triggers. activeRef is the trigger that last
 // showed the tip, so reposition follows the right reference.
-function wireTip(tip) {
+function wireTip(tip, options = {}) {
   let state = tipStates.get(tip);
   if (state) return state;
 
   const controller = new AbortController();
-  state = { refs: new Set(), activeRef: null, controller, untrack: track(tip) };
+  state = {
+    refs: new Set(),
+    activeRef: null,
+    controller,
+    untrack: track(tip),
+    generated: options.generated === true,
+    mount: options.mount || null,
+    timer: null,
+  };
 
   const onHide = () => hideTip(tip);
   const onReposition = () => {
@@ -108,9 +123,12 @@ function wireTip(tip) {
 }
 
 function ensureTip(trigger) {
-  if (tipMap.has(trigger)) return tipMap.get(trigger);
+  const existing = triggerStates.get(trigger);
+  if (existing) return existing.tip;
 
   let tip;
+  let generated = false;
+  let mount = null;
   const text = trigger.getAttribute("data-tooltip");
 
   // shorthand: data-tooltip="text" → create element lazily
@@ -124,7 +142,7 @@ function ensureTip(trigger) {
     tip.hidden = true;
     tip.style.position = "fixed";
     tip.inert = true;
-    generatedTips.add(tip);
+    generated = true;
 
     const parent = trigger.closest("dialog") || document.body;
     parent.appendChild(tip);
@@ -137,21 +155,23 @@ function ensureTip(trigger) {
   if (!tip) {
     const tipId = trigger.getAttribute("aria-describedby");
     if (!tipId) {
-      tipMap.set(trigger, null);
+      triggerStates.set(trigger, { tip: null });
       return null;
     }
     tip = document.getElementById(tipId);
     if (!tip || tip.getAttribute("role") !== "tooltip") {
-      tipMap.set(trigger, null);
+      triggerStates.set(trigger, { tip: null });
       return null;
     }
     tip.hidden = true;
     tip.style.position = "fixed";
 
-    mountTip(tip, trigger);
+    if (!tipStates.has(tip)) {
+      mount = mountTip(tip, trigger);
+    }
   }
 
-  const state = wireTip(tip);
+  const state = wireTip(tip, { generated, mount });
   state.refs.add(trigger);
 
   const triggerController = new AbortController();
@@ -159,10 +179,9 @@ function ensureTip(trigger) {
   trigger.addEventListener("mouseleave", onLeave, { signal: triggerController.signal });
   trigger.addEventListener("blur", onLeave, { signal: triggerController.signal });
 
-  cleanupMap.set(trigger, () => {
+  const cleanup = () => {
     triggerController.abort();
-    tipMap.delete(trigger);
-    cleanupMap.delete(trigger);
+    triggerStates.delete(trigger);
 
     state.refs.delete(trigger);
     if (state.activeRef === trigger) {
@@ -176,34 +195,30 @@ function ensureTip(trigger) {
     state.controller.abort();
     state.untrack();
     tipStates.delete(tip);
-    if (generatedTips.has(tip)) tip.remove();
-    else restoreTip(tip);
-  });
+    if (state.generated) tip.remove();
+    else restoreTip(tip, state);
+  };
 
-  tipMap.set(trigger, tip);
+  triggerStates.set(trigger, { tip, cleanup });
   return tip;
 }
 
 function cleanupTrigger(trigger) {
   if (trigger.isConnected) return;
-  const cleanup = cleanupMap.get(trigger);
-  if (cleanup) cleanup();
+  triggerStates.get(trigger)?.cleanup?.();
 }
 
 function show(tip, ref) {
   const state = tipStates.get(tip);
-  if (state) state.activeRef = ref;
+  if (!state) return;
 
-  const existing = delayMap.get(tip);
-  if (existing) clearTimeout(existing);
-  delayMap.set(
-    tip,
-    setTimeout(() => {
-      delayMap.delete(tip);
-      tip.hidden = false;
-      repositionTip(ref, tip);
-    }, SHOW_DELAY_MS),
-  );
+  state.activeRef = ref;
+  if (state.timer) clearTimeout(state.timer);
+  state.timer = setTimeout(() => {
+    state.timer = null;
+    tip.hidden = false;
+    repositionTip(ref, tip);
+  }, SHOW_DELAY_MS);
 }
 
 // ── Delegated discovery (mouseover + focusin bubble) ───
