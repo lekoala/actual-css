@@ -12,6 +12,7 @@
   @supports (appearance: base-select) {
     .select:not([multiple], [size], .native) {
       appearance: base-select;
+      align-items: center;
     }
 
     .select:not([multiple], [size], .native)::picker(select) {
