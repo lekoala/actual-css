@@ -16,44 +16,6 @@
   gap: var(--gap);
 }
 
-.scroll-snap {
-  --scroll-snap-gap: var(--gap);
-  --scroll-snap-align: start;
-
-  display: flex;
-  gap: var(--scroll-snap-gap);
-  overflow-x: auto;
-}
-
-.scroll-snap > * {
-  flex: 0 0 auto;
-}
-
-@supports (scroll-snap-type: inline mandatory) {
-  .scroll-snap {
-    overscroll-behavior-inline: contain;
-    scroll-padding-inline: var(--scroll-snap-padding, var(--scroll-snap-gap));
-    scroll-snap-type: inline mandatory;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  .scroll-snap > * {
-    scroll-snap-align: var(--scroll-snap-align);
-  }
-
-  .scroll-snap[data-snap="center"] {
-    --scroll-snap-align: center;
-  }
-}
-
-.scroll-snap[data-scrollbar="hidden"] {
-  scrollbar-width: none;
-}
-
-.scroll-snap[data-scrollbar="hidden"]::-webkit-scrollbar {
-  display: none;
-}
-
 .center {
   box-sizing: content-box;
   max-inline-size: var(--center-size, 72rem);

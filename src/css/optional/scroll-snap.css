@@ -1,0 +1,52 @@
+/*
+ * Scroll snap — optional horizontal rails for niche card strips and simple
+ * touch-friendly overflow areas.
+ *
+ * This is not a full carousel. For previous/next controls, pagination,
+ * active state, drag behavior, looping, or robust desktop mouse interaction,
+ * use a dedicated carousel library.
+ */
+.scroll-snap {
+  --scroll-snap-gap: var(--gap);
+  --scroll-snap-align: start;
+  --scroll-snap-item-size: auto;
+
+  display: flex;
+  gap: var(--scroll-snap-gap);
+  overflow-x: auto;
+}
+
+.scroll-snap > * {
+  flex: 0 0 var(--scroll-snap-item-size);
+}
+
+@supports (scroll-snap-type: x mandatory) {
+  .scroll-snap {
+    overscroll-behavior-inline: contain;
+    scroll-padding-inline: var(--scroll-snap-padding, var(--scroll-snap-gap));
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .scroll-snap > * {
+    scroll-snap-align: var(--scroll-snap-align);
+  }
+
+  .scroll-snap[data-snap="center"] {
+    --scroll-snap-align: center;
+  }
+}
+
+@supports (scroll-snap-type: inline mandatory) {
+  .scroll-snap {
+    scroll-snap-type: inline mandatory;
+  }
+}
+
+.scroll-snap[data-scrollbar="hidden"] {
+  scrollbar-width: none;
+}
+
+.scroll-snap[data-scrollbar="hidden"]::-webkit-scrollbar {
+  display: none;
+}

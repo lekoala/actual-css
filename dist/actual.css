@@ -479,6 +479,7 @@ small {
 .scroll-snap {
   --scroll-snap-gap: var(--gap);
   --scroll-snap-align: start;
+  --scroll-snap-item-size: auto;
 
   display: flex;
   gap: var(--scroll-snap-gap);
@@ -486,7 +487,7 @@ small {
 }
 
 .scroll-snap > * {
-  flex: 0 0 auto;
+  flex: 0 0 var(--scroll-snap-item-size);
 }
 
 @supports (scroll-snap-type: inline mandatory) {
