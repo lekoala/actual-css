@@ -79,7 +79,7 @@ Undocumented `is-*` classes are runtime internals.
 
 **Patterns** — actions, navbar, and overline. These are regular source files and can be imported only when needed.
 
-**Layout primitives** — `.stack`, `.cluster`, `.scroll-snap`, `.grid`, `.switcher`, `.center`, `.media`, `.frame`, `.app-shell`, `.sidebar-layout`, and `.container-query`.
+**Layout primitives** — `.stack`, `.cluster`, `.grid`, `.switcher`, `.center`, `.media`, `.frame`, `.app-shell`, `.sidebar-layout`, and `.container-query`.
 
 **Forms** — field layout, choices, switches, selects, custom selects, control base styles, validation states, and form actions.
 
@@ -96,7 +96,7 @@ Undocumented `is-*` classes are runtime internals.
 @import "actual-css/css/optional/index";
 ```
 
-Browse [`src/css/optional/`](src/css/optional/) for available modules.
+Browse [`src/css/optional/`](src/css/optional/) for available modules such as custom scrollbars, scroll snap rails, extra utilities, and optional layout helpers.
 
 ## JavaScript enhancers
 
