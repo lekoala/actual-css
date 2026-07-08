@@ -1,0 +1,91 @@
+/* Edge - paired light/dark theme that demonstrates component-local button
+ * tokens. Buttons become surface controls with an intent-colored lower edge;
+ * .solid remains available when an action needs a filled treatment. */
+[data-theme="edge"] {
+  color-scheme: light dark;
+
+  --primary: hsl(224 72% 42%);
+  --primary-fg: white;
+  --secondary: hsl(166 54% 30%);
+  --secondary-fg: white;
+  --success: hsl(145 46% 32%);
+  --success-fg: white;
+  --warning: hsl(36 80% 38%);
+  --warning-fg: hsl(34 35% 10%);
+  --danger: hsl(354 62% 46%);
+  --danger-fg: white;
+  --neutral: hsl(228 9% 42%);
+  --neutral-fg: white;
+
+  --surface: hsl(40 20% 99%);
+  --surface-raised: hsl(0 0% 100%);
+  --surface-subtle: hsl(220 24% 95%);
+  --surface-solid: hsl(228 26% 12%);
+
+  --text: hsl(228 24% 12%);
+  --text-muted: hsl(228 9% 42%);
+  --text-subtle: hsl(228 7% 56%);
+
+  --border: hsl(220 14% 86%);
+  --focus: var(--primary);
+  --focus-ring: hsl(224 72% 42% / 0.22);
+  --hover-overlay: hsl(228 30% 10% / 0.04);
+
+  --radius: 0.375rem;
+  --radius-sm: 0.25rem;
+  --radius-lg: 0.625rem;
+
+  --btn-default-bg: var(--surface-subtle);
+  --btn-default-border: transparent;
+  --btn-border-color: transparent;
+  --btn-border-block-end-width: 2px;
+}
+
+/* Intent-dependent button tokens must resolve on the button itself. If these
+   live on [data-theme], var(--intent) computes before local intent classes
+   apply and every button keeps the same primary edge. */
+[data-theme="edge"] .btn:not(.link) {
+  --btn-border-block-end-color: var(--intent, var(--primary));
+}
+
+[data-theme="edge"] .btn:not(:where(.solid, .soft, .outline, .ghost, .link)) {
+  --btn-default-fg: var(--intent, var(--text));
+  --ui-hover-bg: var(--surface-raised);
+}
+
+@media (hover: hover) {
+  [data-theme="edge"] .btn:not(:where(:disabled, [aria-disabled="true"], .solid, .soft, .outline, .ghost, .link)):hover {
+    box-shadow: none;
+  }
+}
+
+@supports (color: light-dark(red, blue)) {
+  [data-theme="edge"] {
+    --primary: light-dark(hsl(224 72% 42%), hsl(220 80% 76%));
+    --primary-fg: light-dark(white, hsl(224 35% 10%));
+    --secondary: light-dark(hsl(166 54% 30%), hsl(166 58% 70%));
+    --secondary-fg: light-dark(white, hsl(166 35% 9%));
+    --success: light-dark(hsl(145 46% 32%), hsl(145 48% 64%));
+    --success-fg: light-dark(white, hsl(145 35% 8%));
+    --warning: light-dark(hsl(36 80% 38%), hsl(40 72% 66%));
+    --warning-fg: light-dark(hsl(34 35% 10%), hsl(38 35% 10%));
+    --danger: light-dark(hsl(354 62% 46%), hsl(354 66% 72%));
+    --danger-fg: light-dark(white, hsl(354 35% 10%));
+    --neutral: light-dark(hsl(228 9% 42%), hsl(228 12% 72%));
+    --neutral-fg: light-dark(white, hsl(228 24% 10%));
+
+    --surface: light-dark(hsl(40 20% 99%), hsl(228 20% 8%));
+    --surface-raised: light-dark(hsl(0 0% 100%), hsl(228 17% 11%));
+    --surface-subtle: light-dark(hsl(220 24% 95%), hsl(228 14% 16%));
+    --surface-solid: light-dark(hsl(228 26% 12%), hsl(0 0% 96%));
+
+    --text: light-dark(hsl(228 24% 12%), hsl(0 0% 96%));
+    --text-muted: light-dark(hsl(228 9% 42%), hsl(228 8% 68%));
+    --text-subtle: light-dark(hsl(228 7% 56%), hsl(228 7% 55%));
+
+    --border: light-dark(hsl(220 14% 86%), hsl(228 12% 24%));
+    --focus-ring: light-dark(hsl(224 72% 42% / 0.22), hsl(220 80% 76% / 0.28));
+    --hover-overlay: light-dark(hsl(228 30% 10% / 0.04), hsl(0 0% 100% / 0.06));
+    --shadow-color: light-dark(hsl(228 30% 10%), hsl(0 0% 0%));
+  }
+}

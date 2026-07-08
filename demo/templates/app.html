@@ -461,6 +461,25 @@
           <input class="input sm app-search-input" type="search" placeholder="Search transactions, patients…" aria-label="Search">
         </label>
 
+        <select class="select sm app-layout-hide-mobile fit" id="theme-switcher" aria-label="Switch theme">
+          <option value="">System</option>
+          <option value="light">Light</option>
+          <option value="dark">Dark</option>
+          <option value="dim">Dim</option>
+          <option value="corporate">Corporate</option>
+          <option value="forest">Forest</option>
+          <option value="ocean">Ocean</option>
+          <option value="spruce">Spruce</option>
+          <option value="petrol">Petrol</option>
+          <option value="sunset">Sunset</option>
+          <option value="lavender">Lavender</option>
+          <option value="mono">Mono</option>
+          <option value="square">Square</option>
+          <option value="edge">Edge</option>
+          <option value="cyberpunk">Cyberpunk</option>
+          <option value="neon">Neon</option>
+        </select>
+
         <button class="btn neutral ghost sm" type="button" aria-label="Notifications" style="position: relative;">
           <i class="ti ti-bell" aria-hidden="true"></i>
           <span class="badge danger sm"
@@ -863,6 +882,18 @@
 
   <script src="../../dist/actual.js"></script>
   <script>
+    const switcher = document.getElementById("theme-switcher");
+
+    if (switcher) {
+      switcher.addEventListener("change", () => {
+        if (switcher.value) {
+          document.documentElement.dataset.theme = switcher.value;
+        } else {
+          document.documentElement.removeAttribute("data-theme");
+        }
+      });
+    }
+
     // [data-dismiss] removes the closest .alert (used by notifications and toasts).
     document.addEventListener('click', (event) => {
       const dismiss = event.target.closest('[data-dismiss]');

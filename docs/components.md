@@ -361,17 +361,37 @@ Button group using `.join`
 Toggle buttons
 
 ```html
-<button class="btn" type="button" aria-pressed="false">
+<button class="btn" type="button" aria-pressed="false" data-demo-toggle>
   Bold
 </button>
 ```
 
 ```html
-<div class="join" role="group" aria-label="Text alignment">
+<div class="join" role="group" aria-label="Text alignment" data-demo-toggle-group="single">
   <button class="btn" type="button" aria-pressed="true">Left</button>
   <button class="btn outline" type="button" aria-pressed="false">Center</button>
   <button class="btn outline" type="button" aria-pressed="false">Right</button>
 </div>
+```
+
+```js
+for (const button of document.querySelectorAll("[data-demo-toggle]")) {
+  button.addEventListener("click", () => {
+    const pressed = button.getAttribute("aria-pressed") === "true";
+    button.setAttribute("aria-pressed", String(!pressed));
+  });
+}
+
+for (const group of document.querySelectorAll('[data-demo-toggle-group="single"]')) {
+  group.addEventListener("click", (event) => {
+    const button = event.target.closest("button[aria-pressed]");
+    if (!button || !group.contains(button)) return;
+
+    for (const item of group.querySelectorAll("button[aria-pressed]")) {
+      item.setAttribute("aria-pressed", String(item === button));
+    }
+  });
+}
 ```
 
 Size variants

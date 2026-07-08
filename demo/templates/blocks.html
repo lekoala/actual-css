@@ -165,6 +165,24 @@
       <p class="lead">
         Small app UI recipes used to validate that layout primitives, components, forms, and utilities compose without a new component for every surface.
       </p>
+      <select class="select sm fit" id="theme-switcher" aria-label="Switch theme">
+        <option value="">System</option>
+        <option value="light">Light</option>
+        <option value="dark">Dark</option>
+        <option value="dim">Dim</option>
+        <option value="corporate">Corporate</option>
+        <option value="forest">Forest</option>
+        <option value="ocean">Ocean</option>
+        <option value="spruce">Spruce</option>
+        <option value="petrol">Petrol</option>
+        <option value="sunset">Sunset</option>
+        <option value="lavender">Lavender</option>
+        <option value="mono">Mono</option>
+        <option value="square">Square</option>
+        <option value="edge">Edge</option>
+        <option value="cyberpunk">Cyberpunk</option>
+        <option value="neon">Neon</option>
+      </select>
     </header>
 
     <section class="center block-section" id="page-header">
@@ -557,6 +575,19 @@
   </main>
 
   <script src="../../dist/actual.js"></script>
+  <script>
+    const switcher = document.getElementById("theme-switcher");
+
+    if (switcher) {
+      switcher.addEventListener("change", () => {
+        if (switcher.value) {
+          document.documentElement.dataset.theme = switcher.value;
+        } else {
+          document.documentElement.removeAttribute("data-theme");
+        }
+      });
+    }
+  </script>
 </body>
 
 </html>
