@@ -14,8 +14,8 @@
  * Three ways to trigger it, all funneling through the same `actual:status`
  * event so any of them can be observed the same way:
  *
- *   - Programmatic (bundlers, third-party code): `status()` / `status.clear()`,
- *     or `actual.status()` off the `window.actual` global on the bundled entry.
+ *   - Programmatic (bundlers, third-party code): `import { status } from
+ *     "actual-css/js/status"`, then `status()` / `status.clear()`.
  *   - Declarative, no JS required beyond the runtime:
  *     <button commandfor="app-status" command="--status"
  *             data-status-message="Saved." data-status-intent="success">

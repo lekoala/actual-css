@@ -41,19 +41,21 @@ such as `actual-css/js/validation` or `actual-css/js/status` when only those
 are needed.
 
 Loading the built `dist/actual.js` as a plain `<script>` (no `type="module"`,
-no bundler) also exposes a small `window.actual` global for calling the
-programmatic API directly — useful for static HTML demos that can't use
-`import`:
+no bundler, no `import`) gets the full runtime — declarative triggers such as
+status's `command="--status"` work immediately. Modules never touch `window`;
+there is no global to call into. Static HTML that needs to trigger something
+from its own inline `<script>` dispatches the module's public event instead
+(see `actual-css/js/status`'s `actual:status`, for example):
 
 ```html
 <script src="actual.js"></script>
 <script>
-  actual.status("Saved.", { intent: "success" });
+  document.dispatchEvent(new CustomEvent("actual:status", {
+    bubbles: true,
+    detail: { message: "Saved.", intent: "success" },
+  }));
 </script>
 ```
-
-Granular imports (`actual-css/js/status`, etc.) never touch `window` — the
-global only exists on the bundled runtime entry.
 
 Modules are safe to import during SSR — registration is a no-op when there is no
 DOM. The runtime remains active until the page unloads. There is no teardown

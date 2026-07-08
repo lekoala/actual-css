@@ -808,12 +808,13 @@ No script required beyond the runtime: `command="--status"` reads its message fr
 For dynamic messages — a fetch response, a computed value — use the JS API instead, or dispatch the same event the commands use under the hood:
 
 ```js
-actual.status("Saved.", { intent: "success" });
-actual.status("Could not save.", { intent: "danger", duration: 6000 });
+import { status } from "actual-css/js/status";
 
-actual.status.clear();
+status("Saved.", { intent: "success" });
+status("Could not save.", { intent: "danger", duration: 6000 });
+status.clear();
 
-// Equivalent, without importing actual-css/js/status at all:
+// Or, without importing anything:
 document.dispatchEvent(new CustomEvent("actual:status", {
   bubbles: true,
   detail: { message: "Saved.", intent: "success" },
