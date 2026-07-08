@@ -7,6 +7,7 @@
   <title>Revenue Operations Dashboard - Actual CSS</title>
   <link rel="stylesheet" href="../../src/css/actual.css">
   <link rel="stylesheet" href="../../src/css/themes/index.css">
+  <link rel="stylesheet" href="../../src/css/optional/layout-extra.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
   <style>
     .dashboard-shell {
@@ -30,26 +31,10 @@
       min-inline-size: 0;
     }
 
+    /* Sticky/blur shell comes from the framework's .topbar (optional
+       layout-extra.css). Only the taller min-height stays local. */
     .dashboard-topbar {
-      position: sticky;
-      inset-block-start: 0;
-      z-index: var(--z-sticky);
-      display: flex;
-      align-items: center;
-      gap: var(--space-3);
       min-block-size: 4rem;
-      padding-inline: var(--space-4);
-      border-block-end: var(--border-width) solid var(--border);
-      background: var(--surface);
-      isolation: isolate;
-    }
-
-    @supports ((backdrop-filter: blur(1rem)) or (-webkit-backdrop-filter: blur(1rem))) {
-      .dashboard-topbar {
-        background: color-mix(in oklch, var(--surface) 90%, transparent);
-        backdrop-filter: blur(0.75rem);
-        -webkit-backdrop-filter: blur(0.75rem);
-      }
     }
 
     .dashboard-content {
@@ -124,21 +109,12 @@
       color: var(--intent, var(--primary));
     }
 
-    .dashboard-sidebar .flyout-trigger {
-      display: block;
-      inline-size: 100%;
-    }
-
-    .dashboard-sidebar .flyout-trigger > [aria-haspopup="menu"] {
-      inline-size: 100%;
-    }
-
+    /* Denser variant of the framework's .overline for a tight sidebar: no
+       letter tracking, bolder weight. Color/size/uppercase already come
+       from .overline. */
     .dashboard-section-title {
       margin: 0;
-      color: var(--text-muted);
-      font-size: var(--font-size-sm);
       font-weight: var(--font-weight-strong);
-      text-transform: uppercase;
       letter-spacing: 0;
     }
 
@@ -311,7 +287,7 @@
       </div>
 
       <nav class="dashboard-nav stack" aria-label="Primary">
-        <p class="dashboard-section-title">Operate</p>
+        <p class="overline dashboard-section-title">Operate</p>
         <ul class="nav-list stack">
           <li>
             <a class="nav-link" href="#overview" aria-current="page">
@@ -341,7 +317,7 @@
       </nav>
 
       <nav class="dashboard-nav stack" aria-label="Administration">
-        <p class="dashboard-section-title">Admin</p>
+        <p class="overline dashboard-section-title">Admin</p>
         <ul class="nav-list stack">
           <li>
             <a class="nav-link" href="#team">
@@ -361,9 +337,9 @@
 
       <div class="grow"></div>
 
-      <div class="flyout-trigger">
+      <div class="flyout-trigger block">
         <button class="btn neutral ghost" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="sidebar-user-menu"
-          id="sidebar-user-trigger" style="inline-size: 100%; justify-content: flex-start;">
+          id="sidebar-user-trigger" style="justify-content: flex-start;">
           <span class="avatar sm"><abbr>LW</abbr></span>
           <span>Laura Williams</span>
         </button>
@@ -377,7 +353,7 @@
     </aside>
 
     <div class="dashboard-main">
-      <header class="dashboard-topbar">
+      <header class="topbar dashboard-topbar">
         <button class="btn neutral ghost dashboard-menu-button" type="button" commandfor="navigation-drawer" command="show-modal"
           aria-label="Open navigation">
           <i class="ti ti-menu-2" aria-hidden="true"></i>

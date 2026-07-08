@@ -7,14 +7,13 @@
   <title>Application — Actual CSS</title>
   <link rel="stylesheet" href="../../src/css/actual.css">
   <link rel="stylesheet" href="../../src/css/themes/index.css">
+  <link rel="stylesheet" href="../../src/css/optional/layout-extra.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
   <style>
     /* Template-local layout. Each rule papers over a known framework gap.
      *
      *   .app-layout / .app-layout-sidebar / .app-layout-main
      *     -> app shell with persistent sidebar (gap: layout primitive).
-     *   .app-layout-topbar
-     *     -> sticky topbar with backdrop blur (gap: topbar pattern).
      *   .app-layout-hamburger / .app-layout-hide-mobile
      *     -> sidebar -> drawer handoff at 64rem (gap: responsive sidebar swap).
      *   .app-search / .app-search-input
@@ -27,8 +26,6 @@
      *     -> fixed top-end stack for dismissible .alert (gap: toast container).
      *   .app-sidebar .nav-link / .app-sidebar .nav-link .badge
      *     -> sidebar nav with icon + text + trailing badge (gap: side nav link).
-     *   .app-sidebar .flyout-trigger
-     *     -> full-width sidebar menu triggers (gap: side nav menu).
      *   .app-sidebar .nav-list-sub
      *     -> indented sub-navigation (gap: sub-nav indent).
      *   .app-sidebar details > summary
@@ -62,25 +59,10 @@
       min-block-size: 100dvh;
     }
 
+    /* Sticky/blur shell comes from the framework's .topbar (optional
+       layout-extra.css). Only the tighter block padding stays local. */
     .app-layout-topbar {
-      position: sticky;
-      inset-block-start: 0;
-      z-index: var(--z-sticky, 10);
-      isolation: isolate;
-      display: flex;
-      align-items: center;
-      gap: var(--gap);
-      padding: 0.65rem 1rem;
-      border-block-end: var(--border-width) solid var(--border);
-      background: var(--surface);
-    }
-
-    @supports ((backdrop-filter: blur(1rem)) or (-webkit-backdrop-filter: blur(1rem))) {
-      .app-layout-topbar {
-        background: color-mix(in oklch, var(--surface) 88%, transparent);
-        backdrop-filter: blur(0.75rem);
-        -webkit-backdrop-filter: blur(0.75rem);
-      }
+      padding-block: 0.65rem;
     }
 
     .app-layout-hamburger {
@@ -234,15 +216,6 @@
       color: var(--intent, var(--primary));
     }
 
-    .app-sidebar .flyout-trigger {
-      display: block;
-      inline-size: 100%;
-    }
-
-    .app-sidebar .flyout-trigger>[aria-haspopup="menu"] {
-      inline-size: 100%;
-    }
-
     .app-sidebar .nav-list-sub {
       --gap: 0.15rem;
       padding-inline-start: 1.65rem;
@@ -331,9 +304,9 @@
       </a>
 
       <!-- Workspace switcher -->
-      <div class="flyout-trigger">
+      <div class="flyout-trigger block">
         <button class="btn neutral outline sm" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="workspace-menu"
-          id="workspace-flyout-trigger" style="inline-size: 100%; justify-content: space-between;">
+          id="workspace-flyout-trigger" style="justify-content: space-between;">
           <span class="cluster" style="gap: 0.5rem;">
             <span class="avatar sm"><abbr>OC</abbr></span>
             <span>Ocean Beach</span>
@@ -427,9 +400,9 @@
       <div class="grow"></div>
 
       <!-- Account pinned to the bottom -->
-      <div class="flyout-trigger">
+      <div class="flyout-trigger block">
         <button class="btn neutral ghost sm" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="sidebar-account-menu"
-          id="sidebar-account-trigger" style="inline-size: 100%; justify-content: flex-start;">
+          id="sidebar-account-trigger" style="justify-content: flex-start;">
           <span class="avatar sm"><abbr>LW</abbr></span>
           <span>Laura Williams</span>
         </button>
@@ -446,7 +419,7 @@
 
     <!-- Main area -->
     <div class="app-layout-main">
-      <header class="app-layout-topbar">
+      <header class="topbar app-layout-topbar">
         <button class="btn neutral ghost app-layout-hamburger" type="button" commandfor="main-drawer" command="show-modal"
           aria-label="Open navigation">
           <i class="ti ti-menu-2" aria-hidden="true"></i>

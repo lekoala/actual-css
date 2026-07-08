@@ -8,7 +8,6 @@ Hand-authored demo sources live in:
 
 - `styles/` for demo-only CSS.
 - `templates/` for standalone static HTML examples.
-- `blocks/` for smaller interface blocks that validate primitive composition.
 - `preview.svg` for the demo preview image.
 
 `index.html` is a generated convenience redirect to `generated/index.html`.
