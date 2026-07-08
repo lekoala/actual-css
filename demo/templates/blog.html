@@ -266,35 +266,8 @@
         color: var(--text-muted);
       }
 
-      /* Column layout comes from the framework's .grid (--grid-min: 12rem). */
-
-      .blog-footer h4 {
-        margin: 0 0 0.5rem;
-        color: var(--text);
-        font-size: 0.875rem;
-        font-weight: var(--font-weight-medium);
-        text-transform: uppercase;
-        letter-spacing: 0.04em;
-      }
-
-      .blog-footer ul {
-        margin: 0;
-        padding: 0;
-        list-style: none;
-        display: grid;
-        gap: 0.35rem;
-      }
-
-      .blog-footer a {
-        color: var(--text-muted);
-        text-decoration: none;
-      }
-
-      .blog-footer a:hover {
-        color: var(--text);
-        text-decoration: underline;
-        text-underline-offset: 0.2em;
-      }
+      /* Column layout and link chrome come from the framework's .grid
+         (--grid-min: 12rem) and demo/styles/demo.css's .footer-links. */
 
       /* Progressive enhancement: native CSS scrollspy when supported.
          Framework JS (IntersectionObserver) handles the fallback. */
@@ -314,7 +287,7 @@
     <!-- Site header -->
     <header class="blog-topbar">
       <div class="center blog-topbar-inner">
-        <a class="navbar-brand" href="#" style="text-decoration: none; color: inherit;">
+        <a class="navbar-brand" href="#">
           <span class="avatar primary"><abbr class="circle">AC</abbr></span>
           Actual Notes
         </a>
@@ -749,7 +722,7 @@
 
     <!-- Site footer -->
     <footer class="blog-footer center">
-      <div class="grid" style="--grid-min: 12rem; --gap: 1.5rem;">
+      <div class="grid footer-links" style="--grid-min: 12rem; --gap: 1.5rem;">
         <div>
           <h4>Actual Notes</h4>
           <p style="margin: 0; font-size: 0.875rem;">A small magazine about the quiet parts of interface design.</p>

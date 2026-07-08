@@ -382,3 +382,36 @@
   font-weight: var(--font-weight-bold);
   letter-spacing: -0.03em;
 }
+
+/* Footer link column: an eyebrow heading + a list of muted links, shared by
+ * every template's site footer. The heading is the same look as the
+ * framework's .overline (small, uppercase, tracked) but at full text color
+ * instead of muted — not worth a variant on the real component for one
+ * demo-only footer treatment, so it stays here. */
+.footer-links h4 {
+  margin: 0 0 0.5rem;
+  color: var(--text);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.footer-links ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.4rem;
+}
+
+.footer-links a {
+  color: var(--text-muted);
+  text-decoration: none;
+}
+
+.footer-links a:hover {
+  color: var(--text);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}

@@ -520,35 +520,8 @@
       color: var(--text-muted);
     }
 
-    /* Column layout comes from the framework's .grid (--grid-min: 12rem). */
-
-    .mk-footer h4 {
-      margin: 0 0 0.5rem;
-      color: var(--text);
-      font-size: 0.875rem;
-      font-weight: var(--font-weight-medium);
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-    }
-
-    .mk-footer ul {
-      margin: 0;
-      padding: 0;
-      list-style: none;
-      display: grid;
-      gap: 0.4rem;
-    }
-
-    .mk-footer a {
-      color: var(--text-muted);
-      text-decoration: none;
-    }
-
-    .mk-footer a:hover {
-      color: var(--text);
-      text-decoration: underline;
-      text-underline-offset: 0.2em;
-    }
+    /* Column layout and link chrome come from the framework's .grid
+       (--grid-min: 12rem) and demo/styles/demo.css's .footer-links. */
 
     .mk-footer-bottom {
       display: flex;
@@ -856,7 +829,7 @@
   <!-- Site footer -->
   <footer class="mk-footer">
     <div class="center">
-      <div class="grid" style="--grid-min: 12rem; --gap: 1.5rem;">
+      <div class="grid footer-links" style="--grid-min: 12rem; --gap: 1.5rem;">
         <div>
           <h4>Actual CSS</h4>
           <p style="margin: 0; font-size: 0.875rem;">A CSS framework for teams who'd rather write one theme than fight a thousand utility classes.</p>
