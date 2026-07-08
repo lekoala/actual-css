@@ -57,9 +57,9 @@
   pointer-events: none;
 
   transition:
-    opacity var(--duration-fast) var(--ease, ease),
-    scale var(--duration-fast) var(--ease, ease),
-    translate var(--duration-fast) var(--ease, ease);
+    opacity var(--duration-slow) var(--ease, ease),
+    scale var(--duration-slow) var(--ease, ease),
+    translate var(--duration-slow) var(--ease, ease);
 }
 
 .status-bar:empty {
