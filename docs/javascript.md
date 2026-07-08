@@ -272,3 +272,46 @@ enhance({
   },
 });
 ```
+
+## Form Validation
+
+`actual-css/js/validation` is an opt-in enhancer, not a validation framework.
+Forms opt in with `.needs-validation`; importing the module registers the
+behavior. Native HTML constraint validation runs first, then the enhancer adds
+`.is-invalid` / `aria-invalid="true"` to invalid fields on submit, focuses the
+first invalid field, and dispatches a bubbling `actual:invalid` event with
+`{ form, firstInvalid, message }`.
+
+```html
+<form class="needs-validation" data-validation-message="Please check the fields.">
+  <input class="input" name="email" type="email" required
+         aria-describedby="email-error" />
+  <span class="field-error" id="email-error">Enter a valid email.</span>
+</form>
+```
+
+```js
+import "actual-css/js/validation";
+
+document.addEventListener("actual:invalid", (event) => {
+  const { firstInvalid, message } = event.detail;
+  // surface message in a status bar or toast
+});
+```
+
+Custom rules go in `data-validation-rules` and resolve through
+`FormValidator.registerRule`. The library never performs network validation;
+server errors flow back through `FormValidator.setErrors(form, { name: message })`
+and `FormValidator.clearFieldError(field)`.
+
+```js
+import { FormValidator } from "actual-css/js/validation";
+
+FormValidator.registerRule("slug", (value) =>
+  value.length === 0 || /^[a-z0-9-]+$/.test(value)
+);
+
+// after an AJAX submit the server reports field errors
+FormValidator.setErrors(form, { email: "Already taken" });
+```
+

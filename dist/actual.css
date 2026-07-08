@@ -1015,7 +1015,6 @@ small {
   .btn:not(:where(:disabled, [aria-disabled="true"], .outline, .ghost, .link)):hover {
     box-shadow: inset 0 0 0 999px var(--hover-overlay);
   }
-
 }
 
 .btn:active {
@@ -1933,19 +1932,13 @@ dialog.drawer nav {
   inline-size: var(--flyout-inline-size, max-content);
   min-inline-size: min(
     var(--flyout-trigger-width, 0px),
-    min(
-      var(--flyout-max-inline-size, 20rem),
-      calc(var(--viewport-inline) - var(--space-6))
-    )
+    min(var(--flyout-max-inline-size, 20rem), calc(var(--viewport-inline) - var(--space-6)))
   );
   max-inline-size: min(
     var(--flyout-max-inline-size, 20rem),
     calc(var(--viewport-inline) - var(--space-6))
   );
-  max-block-size: min(
-    24rem,
-    var(--available-height, calc(var(--viewport-block) - var(--space-6)))
-  );
+  max-block-size: min(24rem, var(--available-height, calc(var(--viewport-block) - var(--space-6))));
   overflow: auto;
   margin: 0;
   padding: var(--space-1);
@@ -3340,17 +3333,17 @@ button.avatar {
   border-radius: var(--radius);
 }
 
-.field-group+.field-group {
+.field-group + .field-group {
   margin-block-start: var(--space-4);
 }
 
 .field-label,
-.field-group>legend {
+.field-group > legend {
   color: var(--text);
   font-weight: var(--font-weight-strong);
 }
 
-.field-group>legend {
+.field-group > legend {
   padding-block: 0;
   padding-inline: var(--fieldset-legend-padding-inline, var(--space-1));
   font-size: var(--font-size-xs);
@@ -3424,7 +3417,6 @@ button.avatar {
 }
 
 @media (hover: hover) {
-
   .input:hover:not(:disabled),
   .textarea:hover:not(:disabled) {
     --control-border: var(--text-subtle);
@@ -3452,12 +3444,22 @@ button.avatar {
 .field.danger :where(.input, .textarea, .select),
 .input[aria-invalid="true"],
 .textarea[aria-invalid="true"],
-.select[aria-invalid="true"] {
+.select[aria-invalid="true"],
+.input.is-invalid,
+.textarea.is-invalid,
+.select.is-invalid,
+.was-validated :invalid {
   --control-border: var(--danger);
 }
 
-@supports selector(:user-invalid) {
+.input.is-valid,
+.textarea.is-valid,
+.select.is-valid,
+.was-validated :valid {
+  --control-border: var(--success);
+}
 
+@supports selector(:user-invalid) {
   .input:user-invalid,
   .textarea:user-invalid,
   .select:user-invalid {
@@ -3544,12 +3546,12 @@ button.avatar {
    thanks to align-items: flex-start. Override per-instance via
    --choice-control-offset for themes with a different line-height or control
    size. */
-.choice> :is(input[type="checkbox"], input[type="radio"]) {
+.choice > :is(input[type="checkbox"], input[type="radio"]) {
   flex: 0 0 auto;
   margin-block-start: var(--choice-control-offset);
 }
 
-.choice>span>.field-help {
+.choice > span > .field-help {
   display: block;
 }
 
@@ -3647,7 +3649,6 @@ button.avatar {
 }
 
 @media (hover: hover) {
-
   .check:hover:not(:checked, :indeterminate, :disabled),
   .radio:hover:not(:checked, :indeterminate, :disabled) {
     --choice-border: var(--text-subtle);
@@ -3672,7 +3673,6 @@ button.avatar {
 }
 
 @media (forced-colors: active) {
-
   .check,
   .radio {
     --choice-border: ButtonText;
@@ -3942,7 +3942,12 @@ button.avatar {
   --switch-block-size: calc(var(--control-size) * 0.63);
   --switch-knob-margin: calc(var(--switch-block-size) * 0.12);
   --switch-knob-size: calc(var(--switch-block-size) - 2 * var(--switch-knob-margin));
-  --switch-travel: calc(var(--switch-width) - var(--switch-knob-size) - 2 * var(--switch-knob-margin));
+  --switch-travel: calc(
+    var(--switch-width) -
+    var(--switch-knob-size) -
+    2 *
+    var(--switch-knob-margin)
+  );
 
   position: relative;
   display: inline-grid;
@@ -4012,7 +4017,6 @@ button.avatar {
 }
 
 @media (forced-colors: active) {
-
   /* --switch-knob must be set on the element, not on ::before: a custom
      property declared on the pseudo would shadow the :checked override. */
   .switch {
@@ -4073,7 +4077,10 @@ button.avatar {
 
 /* Enhanced sticky bar: translucent surface plus blur where both are supported.
    Guidelines: use @supports positively. */
-@supports (((-webkit-backdrop-filter: blur(1rem)) or (backdrop-filter: blur(1rem))) and (background: color-mix(in oklch, white 50%, transparent))) {
+@supports (
+    ((-webkit-backdrop-filter: blur(1rem)) or (backdrop-filter: blur(1rem))) and
+    (background: color-mix(in oklch, white 50%, transparent))
+  ) {
   .form-actions.sticky {
     background: color-mix(in oklch, var(--surface) 88%, transparent);
     -webkit-backdrop-filter: blur(1rem);

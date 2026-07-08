@@ -48,7 +48,6 @@
 }
 
 @media (hover: hover) {
-
   .input:hover:not(:disabled),
   .textarea:hover:not(:disabled) {
     --control-border: var(--text-subtle);
@@ -76,12 +75,22 @@
 .field.danger :where(.input, .textarea, .select),
 .input[aria-invalid="true"],
 .textarea[aria-invalid="true"],
-.select[aria-invalid="true"] {
+.select[aria-invalid="true"],
+.input.is-invalid,
+.textarea.is-invalid,
+.select.is-invalid,
+.was-validated :invalid {
   --control-border: var(--danger);
 }
 
-@supports selector(:user-invalid) {
+.input.is-valid,
+.textarea.is-valid,
+.select.is-valid,
+.was-validated :valid {
+  --control-border: var(--success);
+}
 
+@supports selector(:user-invalid) {
   .input:user-invalid,
   .textarea:user-invalid,
   .select:user-invalid {

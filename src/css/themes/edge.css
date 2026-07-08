@@ -54,7 +54,10 @@
 }
 
 @media (hover: hover) {
-  [data-theme="edge"] .btn:not(:where(:disabled, [aria-disabled="true"], .solid, .soft, .outline, .ghost, .link)):hover {
+  [data-theme="edge"]
+    .btn:not(
+      :where(:disabled, [aria-disabled="true"], .solid, .soft, .outline, .ghost, .link)
+    ):hover {
     box-shadow: none;
   }
 }

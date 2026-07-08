@@ -925,3 +925,75 @@ Core: native range, enhanced by `accent-color`. Optional richer skin may come la
   </div>
 </form>
 ```
+
+### Optional JavaScript enhancer
+
+> Native validation first; the enhancer only adds state and focus behavior.
+
+Actual CSS ships validation *styles*. A small optional enhancer (`actual-css/js/validation`) prevents premature error display, marks invalid fields on submit, focuses the first invalid field, and supports a few custom rules. It is not a validation framework — server and AJAX validation stay in app code.
+
+Opt in with the `.needs-validation` class. Importing the module registers the behavior; there is no init call.
+
+```html
+<form class="needs-validation" data-validation-message="Please check the highlighted fields.">
+  <label class="field">
+    <span class="field-label">Email</span>
+    <input class="input" type="email" name="email" required
+           aria-describedby="email-error" />
+    <span class="field-error" id="email-error" role="alert">Enter a valid email.</span>
+  </label>
+
+  <label class="field">
+    <span class="field-label">Confirm password</span>
+    <input class="input" type="password" name="confirm" required
+           data-validation-rules="same #password"
+           aria-describedby="confirm-error" />
+    <span class="field-error" id="confirm-error" role="alert">Passwords must match.</span>
+  </label>
+
+  <input id="password" name="password" type="password" required hidden />
+  <button class="btn primary" type="submit">Submit</button>
+</form>
+```
+
+```js
+import "actual-css/js/validation";
+```
+
+On submit, the enhancer adds `.was-validated` to the form and `.is-invalid` + `aria-invalid="true"` to each invalid field. When the form is invalid it prevents submission, focuses the first invalid field, and dispatches a bubbling `actual:invalid` event with `{ form, firstInvalid, message }`. Wire a status bar or toast from that event instead of coupling the library to one.
+
+```js
+document.addEventListener("actual:invalid", (event) => {
+  const { firstInvalid, message } = event.detail;
+  // show message in your status bar / toast
+});
+```
+
+#### Built-in custom rules
+
+Custom rules live in `data-validation-rules` as a comma-separated list; each rule may take space-separated options. The enhancer registers a few defaults:
+
+| Rule | Meaning |
+| --- | --- |
+| `same <selector>` | Value must equal the value of the element matched by `<selector>` (scoped to the field's form). |
+| `number` | Value is empty or a valid `Number`. |
+| `digits` | Value is empty or ASCII digits only. |
+| `alnum` | Value is empty or letters and digits only. |
+
+Add your own with `FormValidator.registerRule(name, (value, el, ...opts) => boolean)`. Empty values always pass, so optional fields stay optional.
+
+#### Server and AJAX validation
+
+The enhancer never makes network calls. After a valid client submit, your own `form[data-ajax]` flow (see [JavaScript](javascript.md)) performs the request and maps server errors back onto fields through the public API:
+
+```js
+import { FormValidator } from "actual-css/js/validation";
+
+// server responded with field errors
+FormValidator.setErrors(form, { email: "Already taken" });
+
+// clear a single field once fixed
+FormValidator.clearFieldError(form.elements.email);
+```
+
+`setErrors` resolves each name to a field, sets `aria-invalid`, `.is-invalid`, the field's `.field-error` text, and `setCustomValidity` so the next submit stays blocked until corrected.

@@ -1,22 +1,22 @@
 {
-  "timestamp": "2026-07-08T09:46:21.771Z",
-  "totalRaw": 143793,
-  "totalMinified": 75159,
-  "totalBrotli": 11161,
-  "themesMinified": 26047,
-  "themesBrotli": 3009,
-  "shippedMinified": 75159,
-  "shippedBrotli": 11161,
+  "timestamp": "2026-07-08T10:05:13.965Z",
+  "totalRaw": 144020,
+  "totalMinified": 75371,
+  "totalBrotli": 11202,
+  "themesMinified": 26049,
+  "themesBrotli": 3018,
+  "shippedMinified": 75371,
+  "shippedBrotli": 11202,
   "maxShippedBrotli": 13312,
   "fileCount": 66,
   "files": [
     {
       "file": "components/flyout.css",
-      "raw": 5911
+      "raw": 5881
     },
     {
       "file": "components/button.css",
-      "raw": 5594
+      "raw": 5593
     },
     {
       "file": "theme.css",
@@ -24,7 +24,7 @@
     },
     {
       "file": "forms/choice.css",
-      "raw": 4990
+      "raw": 4993
     },
     {
       "file": "tokens.css",
@@ -56,7 +56,7 @@
     },
     {
       "file": "themes/edge.css",
-      "raw": 3408
+      "raw": 3424
     },
     {
       "file": "prose.css",
@@ -64,11 +64,15 @@
     },
     {
       "file": "forms/switch.css",
-      "raw": 3246
+      "raw": 3265
     },
     {
       "file": "utilities.css",
       "raw": 3094
+    },
+    {
+      "file": "forms/control.css",
+      "raw": 3078
     },
     {
       "file": "components/drawer.css",
@@ -77,10 +81,6 @@
     {
       "file": "components/tooltip.css",
       "raw": 2932
-    },
-    {
-      "file": "forms/control.css",
-      "raw": 2876
     },
     {
       "file": "components/card.css",
@@ -168,7 +168,7 @@
     },
     {
       "file": "forms/form-actions.css",
-      "raw": 1551
+      "raw": 1563
     },
     {
       "file": "components/overline.css",
@@ -212,7 +212,7 @@
     },
     {
       "file": "forms/form.css",
-      "raw": 1091
+      "raw": 1097
     },
     {
       "file": "reset.css",

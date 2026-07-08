@@ -48,12 +48,12 @@
    thanks to align-items: flex-start. Override per-instance via
    --choice-control-offset for themes with a different line-height or control
    size. */
-.choice> :is(input[type="checkbox"], input[type="radio"]) {
+.choice > :is(input[type="checkbox"], input[type="radio"]) {
   flex: 0 0 auto;
   margin-block-start: var(--choice-control-offset);
 }
 
-.choice>span>.field-help {
+.choice > span > .field-help {
   display: block;
 }
 
@@ -151,7 +151,6 @@
 }
 
 @media (hover: hover) {
-
   .check:hover:not(:checked, :indeterminate, :disabled),
   .radio:hover:not(:checked, :indeterminate, :disabled) {
     --choice-border: var(--text-subtle);
@@ -176,7 +175,6 @@
 }
 
 @media (forced-colors: active) {
-
   .check,
   .radio {
     --choice-border: ButtonText;

@@ -84,6 +84,107 @@
         </div>
       </div>
     </section>
+    <div class="component-prose">
+      <h3>Optional JavaScript enhancer</h3>
+<p>> Native validation first; the enhancer only adds state and focus behavior. Actual CSS ships validation <em>styles</em>. A small optional enhancer (<code>actual-css/js/validation</code>) prevents premature error display, marks invalid fields on submit, focuses the first invalid field, and supports a few custom rules. It is not a validation framework — server and AJAX validation stay in app code. Opt in with the <code>.needs-validation</code> class. Importing the module registers the behavior; there is no init call.</p>
+    </div>
+    <section class="component-section">
+      <div class="example-group">
+        <div class="example-render">
+          <form class="needs-validation" data-validation-message="Please check the highlighted fields.">
+  <label class="field">
+    <span class="field-label">Email</span>
+    <input class="input" type="email" name="email" required
+           aria-describedby="email-error" />
+    <span class="field-error" id="email-error" role="alert">Enter a valid email.</span>
+  </label>
+
+  <label class="field">
+    <span class="field-label">Confirm password</span>
+    <input class="input" type="password" name="confirm" required
+           data-validation-rules="same #password"
+           aria-describedby="confirm-error" />
+    <span class="field-error" id="confirm-error" role="alert">Passwords must match.</span>
+  </label>
+
+  <input id="password" name="password" type="password" required hidden />
+  <button class="btn primary" type="submit">Submit</button>
+</form>
+        </div>
+        <div class="example-code">
+          <pre><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>form</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>needs-validation<span class="token punctuation">"</span></span> <span class="token attr-name">data-validation-message</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>Please check the highlighted fields.<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>label</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>field<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>field-label<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Email<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>input<span class="token punctuation">"</span></span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>email<span class="token punctuation">"</span></span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>email<span class="token punctuation">"</span></span> <span class="token attr-name">required</span>
+           <span class="token attr-name">aria-describedby</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>email-error<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>field-error<span class="token punctuation">"</span></span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>email-error<span class="token punctuation">"</span></span> <span class="token attr-name">role</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>alert<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Enter a valid email.<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>label</span><span class="token punctuation">></span></span>
+
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>label</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>field<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>field-label<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Confirm password<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>input<span class="token punctuation">"</span></span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>password<span class="token punctuation">"</span></span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>confirm<span class="token punctuation">"</span></span> <span class="token attr-name">required</span>
+           <span class="token attr-name">data-validation-rules</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>same #password<span class="token punctuation">"</span></span>
+           <span class="token attr-name">aria-describedby</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>confirm-error<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>field-error<span class="token punctuation">"</span></span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>confirm-error<span class="token punctuation">"</span></span> <span class="token attr-name">role</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>alert<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Passwords must match.<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>label</span><span class="token punctuation">></span></span>
+
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>password<span class="token punctuation">"</span></span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>password<span class="token punctuation">"</span></span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>password<span class="token punctuation">"</span></span> <span class="token attr-name">required</span> <span class="token attr-name">hidden</span> <span class="token punctuation">/></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>button</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>btn primary<span class="token punctuation">"</span></span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>submit<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Submit<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>form</span><span class="token punctuation">></span></span></code></pre>
+        </div>
+      </div>
+    </section>
+    <section class="component-section">
+      <div class="example-group">
+        <div class="example-code">
+          <pre><code class="language-js"><span class="token keyword">import</span> <span class="token string">"actual-css/js/validation"</span><span class="token punctuation">;</span></code></pre>
+        </div>
+      </div>
+    </section>
+    <script>try{import "actual-css/js/validation";}catch(e){console.error(e)}</script>
+    <div class="component-prose">
+      <p>On submit, the enhancer adds <code>.was-validated</code> to the form and <code>.is-invalid</code> + <code>aria-invalid=&quot;true&quot;</code> to each invalid field. When the form is invalid it prevents submission, focuses the first invalid field, and dispatches a bubbling <code>actual:invalid</code> event with <code>{ form, firstInvalid, message }</code>. Wire a status bar or toast from that event instead of coupling the library to one.</p>
+    </div>
+    <section class="component-section">
+      <div class="example-group">
+        <div class="example-code">
+          <pre><code class="language-js">document<span class="token punctuation">.</span><span class="token function">addEventListener</span><span class="token punctuation">(</span><span class="token string">"actual:invalid"</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token parameter">event</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+  <span class="token keyword">const</span> <span class="token punctuation">{</span> firstInvalid<span class="token punctuation">,</span> message <span class="token punctuation">}</span> <span class="token operator">=</span> event<span class="token punctuation">.</span>detail<span class="token punctuation">;</span>
+  <span class="token comment">// show message in your status bar / toast</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+        </div>
+      </div>
+    </section>
+    <script>try{document.addEventListener("actual:invalid", (event) => {
+  const { firstInvalid, message } = event.detail;
+  // show message in your status bar / toast
+});}catch(e){console.error(e)}</script>
+    <div class="component-prose">
+      <p>#### Built-in custom rules Custom rules live in <code>data-validation-rules</code> as a comma-separated list; each rule may take space-separated options. The enhancer registers a few defaults: | Rule | Meaning | | --- | --- | | <code>same &lt;selector&gt;</code> | Value must equal the value of the element matched by <code>&lt;selector&gt;</code> (scoped to the field's form). | | <code>number</code> | Value is empty or a valid <code>Number</code>. | | <code>digits</code> | Value is empty or ASCII digits only. | | <code>alnum</code> | Value is empty or letters and digits only. | Add your own with <code>FormValidator.registerRule(name, (value, el, ...opts) =&gt; boolean)</code>. Empty values always pass, so optional fields stay optional. #### Server and AJAX validation The enhancer never makes network calls. After a valid client submit, your own <code>form[data-ajax]</code> flow (see <a href="javascript.md">JavaScript</a>) performs the request and maps server errors back onto fields through the public API:</p>
+    </div>
+    <section class="component-section">
+      <div class="example-group">
+        <div class="example-code">
+          <pre><code class="language-js"><span class="token keyword">import</span> <span class="token punctuation">{</span> FormValidator <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"actual-css/js/validation"</span><span class="token punctuation">;</span>
+
+<span class="token comment">// server responded with field errors</span>
+FormValidator<span class="token punctuation">.</span><span class="token function">setErrors</span><span class="token punctuation">(</span>form<span class="token punctuation">,</span> <span class="token punctuation">{</span> <span class="token literal-property property">email</span><span class="token operator">:</span> <span class="token string">"Already taken"</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// clear a single field once fixed</span>
+FormValidator<span class="token punctuation">.</span><span class="token function">clearFieldError</span><span class="token punctuation">(</span>form<span class="token punctuation">.</span>elements<span class="token punctuation">.</span>email<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+        </div>
+      </div>
+    </section>
+    <script>try{import { FormValidator } from "actual-css/js/validation";
+
+// server responded with field errors
+FormValidator.setErrors(form, { email: "Already taken" });
+
+// clear a single field once fixed
+FormValidator.clearFieldError(form.elements.email);}catch(e){console.error(e)}</script>
+    <div class="component-prose">
+      <p><code>setErrors</code> resolves each name to a field, sets <code>aria-invalid</code>, <code>.is-invalid</code>, the field's <code>.field-error</code> text, and <code>setCustomValidity</code> so the next submit stays blocked until corrected.</p>
+    </div>
     
   </section>
   </main>

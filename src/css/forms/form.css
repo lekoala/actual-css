@@ -21,17 +21,17 @@
   border-radius: var(--radius);
 }
 
-.field-group+.field-group {
+.field-group + .field-group {
   margin-block-start: var(--space-4);
 }
 
 .field-label,
-.field-group>legend {
+.field-group > legend {
   color: var(--text);
   font-weight: var(--font-weight-strong);
 }
 
-.field-group>legend {
+.field-group > legend {
   padding-block: 0;
   padding-inline: var(--fieldset-legend-padding-inline, var(--space-1));
   font-size: var(--font-size-xs);
