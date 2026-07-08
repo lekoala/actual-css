@@ -35,9 +35,6 @@
         display: flex;
         align-items: center;
         gap: 0.35rem;
-        margin: 0;
-        padding: 0;
-        list-style: none;
       }
 
       /* Hero */
@@ -89,9 +86,6 @@
         display: flex;
         flex-wrap: wrap;
         gap: 0.4rem;
-        margin: 0;
-        padding: 0;
-        list-style: none;
       }
 
       .blog-tags a {
@@ -168,13 +162,8 @@
         gap: 1.5rem;
       }
 
-      /* Related posts */
-      .blog-related-grid {
-        display: grid;
-        gap: 1rem;
-        grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
-      }
-
+      /* Related posts: column layout comes from the framework's .grid
+         (--grid-min: 14rem). */
       .blog-related-card {
         display: grid;
         gap: 0.5rem;
@@ -292,7 +281,7 @@
           Actual Notes
         </a>
         <nav aria-label="Primary">
-          <ul class="blog-topbar-nav">
+          <ul class="list-reset blog-topbar-nav">
             <li><a class="nav-link" href="#articles">Articles</a></li>
             <li><a class="nav-link" href="#topics">Topics</a></li>
             <li><a class="nav-link" href="#about">About</a></li>
@@ -547,7 +536,7 @@
 
             <!-- Article end: tags + share + author -->
             <footer class="blog-article-end">
-              <ul class="blog-tags" aria-label="Tags">
+              <ul class="list-reset blog-tags" aria-label="Tags">
                 <li><a href="#">design</a></li>
                 <li><a href="#">typography</a></li>
                 <li><a href="#">systems</a></li>
@@ -585,7 +574,7 @@
                 <p class="muted">Join the conversation — comments are open for two weeks.</p>
               </hgroup>
 
-              <ol style="list-style: none; padding: 0; margin: 0;">
+              <ol class="list-reset">
                 <li class="blog-comment">
                   <span class="avatar"><abbr>JL</abbr></span>
                   <div class="blog-comment-body">
@@ -653,10 +642,10 @@
             </section>
 
             <nav class="scrollspy" aria-label="On this page">
-              <h3 style="margin: 0 0 0.75rem; font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-muted);">
+              <h3 class="overline" style="margin: 0 0 0.75rem;">
                 On this page
               </h3>
-              <ol style="list-style: none; padding: 0; margin: 0; display: grid; gap: 0.35rem; font-size: 0.9375rem;">
+              <ol class="list-reset" style="display: grid; gap: 0.35rem; font-size: 0.9375rem;">
                 <li><a href="#why-the-baseline-should-stay-mild">Why the baseline should stay mild</a></li>
                 <li><a href="#three-scopes-three-jobs">Three scopes, three jobs</a></li>
                 <li><a href="#a-small-example">A small example</a></li>
@@ -668,10 +657,10 @@
             </nav>
 
             <section>
-              <h3 style="margin: 0 0 0.75rem; font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-muted);">
+              <h3 class="overline" style="margin: 0 0 0.75rem;">
                 Topics
               </h3>
-              <ul class="blog-tags" aria-label="Topics">
+              <ul class="list-reset blog-tags" aria-label="Topics">
                 <li><a href="#">design</a></li>
                 <li><a href="#">typography</a></li>
                 <li><a href="#">systems</a></li>
@@ -691,7 +680,7 @@
           <p class="muted">More on the quiet parts of design systems.</p>
         </hgroup>
 
-        <div class="blog-related-grid">
+        <div class="grid" style="--grid-min: 14rem;">
           <a class="blog-related-card" href="#">
             <div class="blog-related-cover cover" aria-hidden="true"></div>
             <span class="overline pill">Tokens</span>
