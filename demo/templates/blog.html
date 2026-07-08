@@ -82,28 +82,12 @@
         border-block-start: var(--border-width) solid var(--border);
       }
 
+      /* Tag pills are just .badge.soft.neutral — badge.css already handles
+         the a.badge hover/focus states. */
       .blog-tags {
         display: flex;
         flex-wrap: wrap;
         gap: 0.4rem;
-      }
-
-      .blog-tags a {
-        display: inline-flex;
-        align-items: center;
-        padding-inline: 0.6rem;
-        padding-block: 0.25rem;
-        border-radius: var(--radius-full, 9999px);
-        color: var(--text-muted);
-        background: var(--surface-subtle);
-        font-size: 0.8125rem;
-        text-decoration: none;
-        transition: background-color var(--duration), color var(--duration);
-      }
-
-      .blog-tags a:hover {
-        color: var(--text);
-        background: color-mix(in oklch, var(--surface-subtle), var(--text) 8%);
       }
 
       .blog-share {
@@ -119,11 +103,9 @@
       }
 
       /* Author card */
+      /* .media items-center (framework) provides the auto/1fr grid shape. */
       .blog-author {
-        display: grid;
-        grid-template-columns: auto minmax(0, 1fr);
         gap: 1rem;
-        align-items: center;
         padding: 1.25rem;
         border: var(--border-width) solid var(--border);
         border-radius: var(--radius-lg);
@@ -196,10 +178,8 @@
         padding-block: 2rem;
       }
 
+      /* .media (framework) provides the auto/1fr grid shape. */
       .blog-comment {
-        display: grid;
-        grid-template-columns: auto minmax(0, 1fr);
-        gap: 0.75rem;
         padding-block: 1rem;
         border-block-end: var(--border-width) solid var(--border);
       }
@@ -537,10 +517,10 @@
             <!-- Article end: tags + share + author -->
             <footer class="blog-article-end">
               <ul class="list-reset blog-tags" aria-label="Tags">
-                <li><a href="#">design</a></li>
-                <li><a href="#">typography</a></li>
-                <li><a href="#">systems</a></li>
-                <li><a href="#">css</a></li>
+                <li><a class="badge soft neutral" href="#">design</a></li>
+                <li><a class="badge soft neutral" href="#">typography</a></li>
+                <li><a class="badge soft neutral" href="#">systems</a></li>
+                <li><a class="badge soft neutral" href="#">css</a></li>
               </ul>
 
               <div class="cluster" style="justify-content: space-between; margin-block-start: 1rem; flex-wrap: wrap; gap: 1rem;">
@@ -553,7 +533,7 @@
                 <button class="btn neutral ghost sm" type="button"><i class="ti ti-bookmark" aria-hidden="true"></i> Save</button>
               </div>
 
-              <article class="blog-author" style="margin-block-start: 1.5rem;">
+              <article class="media items-center blog-author" style="margin-block-start: 1.5rem;">
                 <span class="avatar lg primary"><abbr>AM</abbr></span>
                 <div class="blog-author-body">
                   <strong>Ada Meridian</strong>
@@ -575,7 +555,7 @@
               </hgroup>
 
               <ol class="list-reset">
-                <li class="blog-comment">
+                <li class="media blog-comment">
                   <span class="avatar"><abbr>JL</abbr></span>
                   <div class="blog-comment-body">
                     <div class="blog-comment-head">
@@ -586,7 +566,7 @@
                       for me. We were fighting prose for a year.</p>
                   </div>
                 </li>
-                <li class="blog-comment">
+                <li class="media blog-comment">
                   <span class="avatar"><abbr>RM</abbr></span>
                   <div class="blog-comment-body">
                     <div class="blog-comment-head">
@@ -597,7 +577,7 @@
                       part especially.</p>
                   </div>
                 </li>
-                <li class="blog-comment">
+                <li class="media blog-comment">
                   <span class="avatar primary"><abbr>AM</abbr></span>
                   <div class="blog-comment-body">
                     <div class="blog-comment-head">
@@ -661,12 +641,12 @@
                 Topics
               </h3>
               <ul class="list-reset blog-tags" aria-label="Topics">
-                <li><a href="#">design</a></li>
-                <li><a href="#">typography</a></li>
-                <li><a href="#">systems</a></li>
-                <li><a href="#">css</a></li>
-                <li><a href="#">frameworks</a></li>
-                <li><a href="#">tokens</a></li>
+                <li><a class="badge soft neutral" href="#">design</a></li>
+                <li><a class="badge soft neutral" href="#">typography</a></li>
+                <li><a class="badge soft neutral" href="#">systems</a></li>
+                <li><a class="badge soft neutral" href="#">css</a></li>
+                <li><a class="badge soft neutral" href="#">frameworks</a></li>
+                <li><a class="badge soft neutral" href="#">tokens</a></li>
               </ul>
             </section>
           </aside>

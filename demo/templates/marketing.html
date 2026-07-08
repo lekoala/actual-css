@@ -227,17 +227,10 @@
       background: var(--surface-raised);
     }
 
+    /* Column count comes from the framework's .grid (--grid-min: 10rem):
+       auto-fit naturally lands on 2 columns on mobile, 4 from ~48rem up. */
     .mk-stats-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 1.75rem 1rem;
       text-align: center;
-    }
-
-    @media (min-width: 48rem) {
-      .mk-stats-grid {
-        grid-template-columns: repeat(4, minmax(0, 1fr));
-      }
     }
 
     .mk-stat strong {
@@ -253,7 +246,9 @@
     }
 
     /* Section rhythm */
-    .mk-section {
+    /* Shared with .mk-cta below — same section rhythm. */
+    .mk-section,
+    .mk-cta {
       padding-block: clamp(3.5rem, 3rem + 2vw, 5.5rem);
     }
 
@@ -490,7 +485,6 @@
 
     /* Closing CTA */
     .mk-cta {
-      padding-block: clamp(3.5rem, 3rem + 2vw, 5.5rem);
       border-block-start: var(--border-width) solid var(--border);
       text-align: center;
     }
@@ -605,7 +599,7 @@
 
     <!-- Stats -->
     <section class="mk-stats">
-      <div class="center mk-stats-grid">
+      <div class="center grid mk-stats-grid" style="--grid-min: 10rem; --gap: 1.75rem 1rem;">
         <div class="mk-stat">
           <strong>0</strong>
           <span>Runtime dependencies</span>
