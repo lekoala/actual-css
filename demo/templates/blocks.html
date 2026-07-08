@@ -7,6 +7,7 @@
   <title>Interface Blocks - Actual CSS</title>
   <link rel="stylesheet" href="../../src/css/actual.css">
   <link rel="stylesheet" href="../../src/css/themes/index.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
   <link rel="stylesheet" href="../styles/demo.css">
   <style>
     .blocks-page {
@@ -125,22 +126,10 @@
       gap: var(--space-3);
     }
 
+    /* .media (framework) provides the auto/1fr grid shape. */
     .block-message {
-      display: grid;
-      grid-template-columns: auto minmax(0, 1fr);
-      gap: var(--space-3);
-      align-items: start;
       padding-block-end: var(--space-3);
       border-block-end: var(--border-width) solid var(--border);
-    }
-
-    .block-message > div {
-      display: grid;
-      gap: var(--space-1);
-    }
-
-    .block-message p {
-      margin-block: 0;
     }
 
     .block-auth {
@@ -269,7 +258,11 @@
           </div>
 
           <menu class="actions cluster sm">
-            <li><button class="btn neutral outline sm" type="button">Export</button></li>
+            <li>
+              <button class="btn neutral outline sm" type="button" data-tooltip="Export as CSV" aria-label="Export as CSV">
+                <i class="ti ti-download" aria-hidden="true"></i>
+              </button>
+            </li>
             <li><button class="btn danger outline sm" type="button">Archive selected</button></li>
           </menu>
         </div>
@@ -297,7 +290,12 @@
                     <span class="muted">Enterprise renewal</span>
                   </div>
                 </td>
-                <td><span class="avatar sm"><abbr>AM</abbr></span> Ada</td>
+                <td>
+                  <div class="avatar-stack sm" role="group" aria-label="Ada Morgan and Jana Lindgren">
+                    <span class="avatar sm"><abbr>AM</abbr></span>
+                    <span class="avatar sm primary"><abbr>JL</abbr></span>
+                  </div>
+                </td>
                 <td class="text-end nowrap">$428K</td>
                 <td><span class="badge warning soft">Watch</span></td>
                 <td class="nowrap">Legal review</td>
@@ -518,16 +516,16 @@
         </section>
 
         <div class="block-message-list" aria-label="Recent messages">
-          <article class="block-message">
+          <article class="media block-message">
             <span class="avatar success sm"><abbr>OK</abbr></span>
-            <div>
+            <div class="stack" style="--gap: var(--space-1);">
               <strong>Exports are ready</strong>
               <p class="muted">Three CSV exports can be downloaded from the reports page.</p>
             </div>
           </article>
-          <article class="block-message">
+          <article class="media block-message">
             <span class="avatar warning sm"><abbr>!</abbr></span>
-            <div>
+            <div class="stack" style="--gap: var(--space-1);">
               <strong>Two invoices need review</strong>
               <p class="muted">The tax region changed for accounts in the EU segment.</p>
             </div>
@@ -538,10 +536,10 @@
 
     <section class="center block-section" id="auth-card">
       <h2>Auth card</h2>
-      <p class="block-note">Validates a small standalone form: field labels, help text, checkboxes, full-width actions, and secondary navigation.</p>
+      <p class="block-note">Validates a small standalone form: field labels, help text, checkboxes, full-width actions, secondary navigation, and native constraint validation via `.needs-validation`.</p>
 
       <div class="block-example">
-        <form class="card stack block-auth">
+        <form class="card stack block-auth needs-validation" data-validation-message="Please check the highlighted fields." onsubmit="event.preventDefault();">
           <header>
             <span class="avatar primary"><abbr>AC</abbr></span>
             <h3>Sign in to Actual Cloud</h3>
@@ -550,17 +548,21 @@
 
           <label class="field">
             <span class="field-label">Email</span>
-            <input class="input" type="email" autocomplete="email" placeholder="you@example.com">
+            <input class="input" type="email" name="email" autocomplete="email" placeholder="you@example.com"
+                   required aria-describedby="auth-email-error">
+            <span class="field-error" id="auth-email-error" role="alert">Enter a valid email address.</span>
           </label>
 
           <label class="field">
             <span class="field-label">Password</span>
-            <input class="input" type="password" autocomplete="current-password">
-            <span class="field-help">Use at least 12 characters for new accounts.</span>
+            <input class="input" type="password" name="password" autocomplete="current-password"
+                   required minlength="12" aria-describedby="auth-password-help auth-password-error">
+            <span class="field-help" id="auth-password-help">Use at least 12 characters for new accounts.</span>
+            <span class="field-error" id="auth-password-error" role="alert">Enter a password with at least 12 characters.</span>
           </label>
 
           <label class="choice">
-            <input class="check" type="checkbox">
+            <input class="check" type="checkbox" name="remember">
             <span>Keep me signed in</span>
           </label>
 
@@ -572,7 +574,64 @@
         </form>
       </div>
     </section>
+
+    <section class="center block-section" id="tabbed-panel">
+      <h2>Tabbed panel</h2>
+      <p class="block-note">Validates in-place panel switching with real tab semantics: roving tabindex, `aria-selected`, and arrow-key navigation.</p>
+
+      <div class="block-example">
+        <div class="tabset">
+          <div class="tabs" role="tablist" aria-label="Workspace settings">
+            <button class="tab primary" type="button" role="tab" aria-selected="true" aria-controls="panel-overview" id="tab-overview">
+              Overview
+            </button>
+            <button class="tab" type="button" role="tab" aria-selected="false" aria-controls="panel-integrations" id="tab-integrations" tabindex="-1">
+              Integrations
+            </button>
+            <button class="tab" type="button" role="tab" aria-selected="false" aria-controls="panel-billing" id="tab-billing" tabindex="-1">
+              Billing
+            </button>
+          </div>
+
+          <section role="tabpanel" id="panel-overview" aria-labelledby="tab-overview" tabindex="-1" class="py">
+            <p>Deployments, incidents, and review activity for this workspace at a glance.</p>
+          </section>
+          <section role="tabpanel" id="panel-integrations" aria-labelledby="tab-integrations" tabindex="-1" hidden class="py">
+            <p>Connect Slack, GitHub, and PagerDuty to route alerts to the right channel.</p>
+          </section>
+          <section role="tabpanel" id="panel-billing" aria-labelledby="tab-billing" tabindex="-1" hidden class="py">
+            <p>Manage the plan, seats, and invoices for this workspace.</p>
+          </section>
+        </div>
+      </div>
+    </section>
+
+    <section class="center block-section" id="faq">
+      <h2>FAQ</h2>
+      <p class="block-note">Validates collapsible content on native details/summary, grouped with the `name` attribute so only one answer stays open at a time.</p>
+
+      <div class="block-example">
+        <div class="accordion">
+          <details name="faq" open>
+            <summary>Can I use my own brand colors?</summary>
+            <p>Yes. Themes only set token values — swap the primary, surface, and text tokens without touching component CSS.</p>
+          </details>
+          <details name="faq">
+            <summary>Does this require a build step?</summary>
+            <p>No. Drop in the stylesheet and the optional runtime script; both work directly from a CDN or a static file.</p>
+          </details>
+          <details name="faq">
+            <summary>What happens after a plan is canceled?</summary>
+            <p>Data stays available in read-only mode for 30 days, then archived for another 90 before deletion.</p>
+          </details>
+        </div>
+      </div>
+    </section>
   </main>
+
+  <!-- Singleton status bar: surfaces .needs-validation's data-validation-message
+       on invalid submit, no manual listener (see auth-card block). -->
+  <div class="status-bar" data-status role="status" aria-live="polite" aria-atomic="true"></div>
 
   <script src="../../dist/actual.js"></script>
   <script>
