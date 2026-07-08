@@ -936,20 +936,23 @@ Opt in with the `.needs-validation` class. Importing the module registers the be
 
 ```html
 <form class="needs-validation" data-validation-message="Please check the highlighted fields.">
-  <label class="field">
-    <span class="field-label">Password</span>
-    <input class="input" type="password" name="password" id="password" required
-           aria-describedby="password-error" />
-    <span class="field-error" id="password-error">Enter a password.</span>
-  </label>
+  <div class="stack">
+    <label class="field">
+      <span class="field-label">Password</span>
+      <input class="input" type="password" name="password" id="password" required
+             minlength="8" maxlength="128"
+             aria-describedby="password-error" />
+      <span class="field-error" id="password-error">Enter a password.</span>
+    </label>
 
-  <label class="field">
-    <span class="field-label">Confirm password</span>
-    <input class="input" type="password" name="confirm" required
-           data-validation-rules="same #password"
-           aria-describedby="confirm-error" />
-    <span class="field-error" id="confirm-error" role="alert">Passwords must match.</span>
-  </label>
+    <label class="field">
+      <span class="field-label">Confirm password</span>
+      <input class="input" type="password" name="confirm" required
+             data-validation-rules="same #password"
+             aria-describedby="confirm-error" />
+      <span class="field-error" id="confirm-error" role="alert">Passwords must match.</span>
+    </label>
+  </div>
 
   <div class="form-actions">
     <button class="btn primary" type="submit">Submit</button>
@@ -1008,8 +1011,9 @@ The status bar (`actual-css/js/status`) auto-wires to that event: import it and 
         Switch this on to submit.
       </span>
     </div>
-
-    <button class="btn primary" type="submit">Submit</button>
+    <div class="form-actions">
+      <button class="btn primary" type="submit">Submit</button>
+    </div>
   </div>
 </form>
 
