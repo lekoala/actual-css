@@ -38,7 +38,6 @@ test("invalid field is marked on submit and actual:invalid fires", async () => {
   form.dispatchEvent(event);
 
   expect(event.defaultPrevented).toBe(true);
-  expect(field.classList.contains("is-invalid")).toBe(true);
   expect(field.getAttribute("aria-invalid")).toBe("true");
   expect(form.classList.contains("was-validated")).toBe(true);
   expect(detail?.firstInvalid).toBe(field);
@@ -84,11 +83,11 @@ test("number rule is fixed (digits valid, letters invalid)", async () => {
   const field = form.elements.qty;
   form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
 
-  expect(field.classList.contains("is-invalid")).toBe(true);
+  expect(field.getAttribute("aria-invalid")).toBe("true");
 
   field.value = "123";
   form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
-  expect(field.classList.contains("is-invalid")).toBe(false);
+  expect(field.getAttribute("aria-invalid")).toBeNull();
 });
 
 test("same rule is scoped to the form and tolerates a missing target", async () => {
@@ -103,12 +102,12 @@ test("same rule is scoped to the form and tolerates a missing target", async () 
   const orphan = form.elements.orphan;
 
   form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
-  expect(confirm.classList.contains("is-invalid")).toBe(false);
-  expect(orphan.classList.contains("is-invalid")).toBe(false);
+  expect(confirm.getAttribute("aria-invalid")).toBeNull();
+  expect(orphan.getAttribute("aria-invalid")).toBeNull();
 
   confirm.value = "nope";
   form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
-  expect(confirm.classList.contains("is-invalid")).toBe(true);
+  expect(confirm.getAttribute("aria-invalid")).toBe("true");
 });
 
 test("registerRule adds a custom rule", async () => {
@@ -122,7 +121,7 @@ test("registerRule adds a custom rule", async () => {
   const field = form.elements.code;
   form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
 
-  expect(field.classList.contains("is-invalid")).toBe(true);
+  expect(field.getAttribute("aria-invalid")).toBe("true");
 });
 
 test("unknown rule is skipped with a warning and does not block the form", async () => {
@@ -158,7 +157,7 @@ test("setErrors bridges server validation back to fields", async () => {
 
   FormValidator.setErrors(form, { email: "Already taken" });
 
-  expect(field.classList.contains("is-invalid")).toBe(true);
+  expect(field.getAttribute("aria-invalid")).toBe("true");
   expect(error.textContent).toBe("Already taken");
   expect(form.checkValidity()).toBe(false);
 
@@ -167,7 +166,7 @@ test("setErrors bridges server validation back to fields", async () => {
   expect(blocked.defaultPrevented).toBe(true);
 
   FormValidator.clearFieldError(field);
-  expect(field.classList.contains("is-invalid")).toBe(false);
+  expect(field.getAttribute("aria-invalid")).toBeNull();
   expect(field.checkValidity()).toBe(true);
 
   const allowed = new Event("submit", { bubbles: true, cancelable: true });
@@ -184,12 +183,11 @@ test("re-validation on input clears errors once fixed", async () => {
   const field = form.elements.email;
 
   form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
-  expect(field.classList.contains("is-invalid")).toBe(true);
+  expect(field.getAttribute("aria-invalid")).toBe("true");
 
   field.value = "good@example.com";
   field.dispatchEvent(new Event("input", { bubbles: true }));
   await nextMicrotask();
 
-  expect(field.classList.contains("is-invalid")).toBe(false);
   expect(field.getAttribute("aria-invalid")).toBeNull();
 });

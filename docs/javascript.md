@@ -302,7 +302,7 @@ enhance({
 and also importable on its own — it is an enhancer, not a validation framework.
 Forms opt in with `.needs-validation`; the behavior registers automatically when
 the runtime loads. Native HTML constraint validation runs first, then the
-enhancer adds `.is-invalid` / `aria-invalid="true"` to invalid fields on submit,
+enhancer adds `aria-invalid="true"` to invalid fields on submit,
 focuses the first invalid field, and dispatches a bubbling `actual:invalid`
 event with `{ form, firstInvalid, message }`. Valid fields are not marked
 automatically.

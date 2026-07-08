@@ -1,0 +1,97 @@
+/* Gradient — paired light/dark theme, palette inspired by Bootstrap 4's
+ * defaults. Demonstrates that a solid button can be given the classic
+ * Bootstrap 4 gradient treatment (a 15%-white-lightened top fading to the
+ * flat intent color) purely through token overrides, without touching
+ * button.css. Only bare/.solid buttons are targeted — .soft/.outline/.ghost/
+ * .link stay flat, matching Bootstrap 4's own gradient mixin, which only
+ * wraps its filled button variant. */
+[data-theme="gradient"] {
+  color-scheme: light dark;
+
+  --primary: hsl(211 100% 50%);
+  --primary-fg: white;
+  --secondary: hsl(208 7% 46%);
+  --secondary-fg: white;
+  --success: hsl(134 61% 41%);
+  --success-fg: white;
+  --warning: hsl(45 100% 51%);
+  --warning-fg: hsl(45 100% 10%);
+  --danger: hsl(354 70% 54%);
+  --danger-fg: white;
+  --neutral: hsl(210 10% 23%);
+  --neutral-fg: white;
+
+  --surface: hsl(0 0% 100%);
+  --surface-raised: hsl(0 0% 100%);
+  --surface-subtle: hsl(210 17% 95%);
+  --surface-solid: hsl(210 10% 15%);
+
+  --text: hsl(210 11% 15%);
+  --text-muted: hsl(208 7% 46%);
+  --text-subtle: hsl(210 9% 62%);
+
+  --border: hsl(210 14% 89%);
+  --focus: var(--primary);
+  --focus-ring: hsl(211 100% 50% / 0.25);
+  --hover-overlay: hsl(210 30% 10% / 0.04);
+
+  --radius: 0.25rem;
+  --radius-sm: 0.2rem;
+  --radius-lg: 0.3rem;
+}
+
+@supports (color: light-dark(red, blue)) {
+  [data-theme="gradient"] {
+    --primary: light-dark(hsl(211 100% 50%), hsl(211 90% 72%));
+    --primary-fg: light-dark(white, hsl(211 40% 10%));
+    --secondary: light-dark(hsl(208 7% 46%), hsl(208 10% 72%));
+    --secondary-fg: light-dark(white, hsl(208 15% 10%));
+    --success: light-dark(hsl(134 61% 41%), hsl(134 55% 65%));
+    --success-fg: light-dark(white, hsl(134 40% 8%));
+    --warning: light-dark(hsl(45 100% 51%), hsl(45 90% 70%));
+    --warning-fg: light-dark(hsl(45 100% 10%), hsl(45 100% 10%));
+    --danger: light-dark(hsl(354 70% 54%), hsl(354 75% 74%));
+    --danger-fg: light-dark(white, hsl(354 40% 10%));
+    --neutral: light-dark(hsl(210 10% 23%), hsl(210 12% 75%));
+    --neutral-fg: light-dark(white, hsl(210 15% 10%));
+
+    --surface: light-dark(hsl(0 0% 100%), hsl(210 15% 8%));
+    --surface-raised: light-dark(hsl(0 0% 100%), hsl(210 13% 11%));
+    --surface-subtle: light-dark(hsl(210 17% 95%), hsl(210 12% 16%));
+    --surface-solid: light-dark(hsl(210 10% 15%), hsl(0 0% 96%));
+
+    --text: light-dark(hsl(210 11% 15%), hsl(0 0% 96%));
+    --text-muted: light-dark(hsl(208 7% 46%), hsl(210 8% 68%));
+    --text-subtle: light-dark(hsl(210 9% 62%), hsl(210 7% 55%));
+
+    --border: light-dark(hsl(210 14% 89%), hsl(210 12% 24%));
+    --focus-ring: light-dark(hsl(211 100% 50% / 0.25), hsl(211 90% 72% / 0.3));
+    --hover-overlay: light-dark(hsl(210 30% 10% / 0.04), hsl(0 0% 100% / 0.06));
+    --shadow-color: light-dark(hsl(210 30% 10%), hsl(0 0% 0%));
+  }
+}
+
+@supports (color: color-mix(in oklch, red, white)) {
+  /* Bootstrap 4 gradient recipe (linear-gradient(180deg, mix(white, $color,
+     15%), $color)) ported to the token contract. --ui-bg covers explicit
+     .solid; --btn-default-bg covers the bare/no-variant default. Bootstrap 4
+     still darkens the button on hover even with gradients enabled, so
+     --ui-hover-bg reruns the same recipe over a darkened base color instead
+     of reusing --ui-bg verbatim — the resting gradient shape survives, just
+     shifted darker, same as the flat color-mix darken variants.css uses for
+     hover on ungradiented themes. */
+  [data-theme="gradient"] .btn:not(:where(.soft, .outline, .ghost, .link)) {
+    --gradient-hover-color: color-mix(in oklch, var(--intent, var(--neutral)) 88%, black);
+    --ui-bg: linear-gradient(
+      180deg,
+      color-mix(in oklch, white 15%, var(--intent, var(--neutral))),
+      var(--intent, var(--neutral))
+    );
+    --btn-default-bg: var(--ui-bg);
+    --ui-hover-bg: linear-gradient(
+      180deg,
+      color-mix(in oklch, white 15%, var(--gradient-hover-color)),
+      var(--gradient-hover-color)
+    );
+  }
+}

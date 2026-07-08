@@ -14,7 +14,6 @@
 
 import enhance from "./enhance.js";
 
-const INVALID_CLASS = "is-invalid";
 const NOVALIDATE = "novalidate";
 const WAS_VALIDATED_CLASS = "was-validated";
 const NEEDS_VALIDATION_CLASS = "needs-validation";
@@ -103,12 +102,10 @@ function errorEl(el) {
 
 function markInvalid(el) {
   el.setAttribute("aria-invalid", "true");
-  el.classList.add(INVALID_CLASS);
 }
 
 function markValid(el) {
   el.removeAttribute("aria-invalid");
-  el.classList.remove(INVALID_CLASS);
   delete el.dataset.validationErrors;
 }
 
@@ -124,7 +121,7 @@ function validateField(el, trigger) {
 
   const validationTrigger = el.dataset.validationTrigger || "";
   const alreadyInvalid =
-    el.classList.contains(INVALID_CLASS) || el.dataset.validationErrors;
+    el.getAttribute("aria-invalid") === "true" || el.dataset.validationErrors;
   const wantsTrigger =
     validationTrigger.includes(trigger) && el.value.length > 0;
 

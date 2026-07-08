@@ -86,7 +86,7 @@
     </section>
     <div class="component-prose">
       <h3>Optional JavaScript enhancer</h3>
-<p>Native validation first; the enhancer only adds state and focus behavior. Actual CSS ships validation <em>styles</em>. Invalid fields can be marked with <code>aria-invalid=&quot;true&quot;</code> or <code>.is-invalid</code>. The default forms bundle imports <code>forms/validation.css</code>; custom builds may omit that file when validation styling is app-owned. A small enhancer (<code>actual-css/js/validation</code>), included in the default runtime (<code>actual-css/js</code>) and also importable on its own, prevents premature error display, marks invalid fields on submit, focuses the first invalid field, and supports a few custom rules. It is not a validation framework — server and AJAX validation stay in app code. Opt in with the <code>.needs-validation</code> class. Importing the module registers the behavior; there is no init call.</p>
+<p>Native validation first; the enhancer only adds state and focus behavior. Actual CSS ships validation <em>styles</em>. Invalid fields are marked with <code>aria-invalid=&quot;true&quot;</code> (or the manual <code>.field.danger</code> wrapper class). The default forms bundle imports <code>forms/validation.css</code>; custom builds may omit that file when validation styling is app-owned. A small enhancer (<code>actual-css/js/validation</code>), included in the default runtime (<code>actual-css/js</code>) and also importable on its own, prevents premature error display, marks invalid fields on submit, focuses the first invalid field, and supports a few custom rules. It is not a validation framework — server and AJAX validation stay in app code. Opt in with the <code>.needs-validation</code> class. Importing the module registers the behavior; there is no init call.</p>
     </div>
     <section class="component-section">
       <div class="example-group">
@@ -143,7 +143,7 @@
       </div>
     </section>
     <div class="component-prose">
-      <p>On submit, the enhancer adds <code>.was-validated</code> to the form and <code>.is-invalid</code> + <code>aria-invalid=&quot;true&quot;</code> to each invalid field. It does not mark valid fields automatically. When the form is invalid it prevents submission, focuses the first invalid field, and dispatches a bubbling <code>actual:invalid</code> event with <code>{ form, firstInvalid, message }</code>. The status bar (<code>actual-css/js/status</code>) auto-wires to that event: import it and add one status element, and the form's <code>data-validation-message</code> appears automatically on invalid submit — no manual listener.</p>
+      <p>On submit, the enhancer adds <code>.was-validated</code> to the form and <code>aria-invalid=&quot;true&quot;</code> to each invalid field. It does not mark valid fields automatically. When the form is invalid it prevents submission, focuses the first invalid field, and dispatches a bubbling <code>actual:invalid</code> event with <code>{ form, firstInvalid, message }</code>. The status bar (<code>actual-css/js/status</code>) auto-wires to that event: import it and add one status element, and the form's <code>data-validation-message</code> appears automatically on invalid submit — no manual listener.</p>
     </div>
     <section class="component-section">
       <div class="example-group">
@@ -418,7 +418,7 @@ FormValidator.setErrors(form, { email: "Already taken" });
 // clear a single field once fixed
 FormValidator.clearFieldError(form.elements.email);}catch(e){console.error(e)}</script>
     <div class="component-prose">
-      <p><code>setErrors</code> resolves each name to a field, sets <code>aria-invalid</code>, <code>.is-invalid</code>, the field's <code>.field-error</code> text, and <code>setCustomValidity</code> so the next submit stays blocked until corrected.</p>
+      <p><code>setErrors</code> resolves each name to a field, sets <code>aria-invalid</code>, the field's <code>.field-error</code> text, and <code>setCustomValidity</code> so the next submit stays blocked until corrected.</p>
     </div>
     
   </section>
