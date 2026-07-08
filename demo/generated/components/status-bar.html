@@ -99,12 +99,13 @@
     <section class="component-section">
       <div class="example-group">
         <div class="example-code">
-          <pre><code class="language-js">actual<span class="token punctuation">.</span><span class="token function">status</span><span class="token punctuation">(</span><span class="token string">"Saved."</span><span class="token punctuation">,</span> <span class="token punctuation">{</span> <span class="token literal-property property">intent</span><span class="token operator">:</span> <span class="token string">"success"</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-actual<span class="token punctuation">.</span><span class="token function">status</span><span class="token punctuation">(</span><span class="token string">"Could not save."</span><span class="token punctuation">,</span> <span class="token punctuation">{</span> <span class="token literal-property property">intent</span><span class="token operator">:</span> <span class="token string">"danger"</span><span class="token punctuation">,</span> <span class="token literal-property property">duration</span><span class="token operator">:</span> <span class="token number">6000</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+          <pre><code class="language-js"><span class="token keyword">import</span> <span class="token punctuation">{</span> status <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"actual-css/js/status"</span><span class="token punctuation">;</span>
 
-actual<span class="token punctuation">.</span>status<span class="token punctuation">.</span><span class="token function">clear</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">status</span><span class="token punctuation">(</span><span class="token string">"Saved."</span><span class="token punctuation">,</span> <span class="token punctuation">{</span> <span class="token literal-property property">intent</span><span class="token operator">:</span> <span class="token string">"success"</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">status</span><span class="token punctuation">(</span><span class="token string">"Could not save."</span><span class="token punctuation">,</span> <span class="token punctuation">{</span> <span class="token literal-property property">intent</span><span class="token operator">:</span> <span class="token string">"danger"</span><span class="token punctuation">,</span> <span class="token literal-property property">duration</span><span class="token operator">:</span> <span class="token number">6000</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+status<span class="token punctuation">.</span><span class="token function">clear</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-<span class="token comment">// Equivalent, without importing actual-css/js/status at all:</span>
+<span class="token comment">// Or, without importing anything:</span>
 document<span class="token punctuation">.</span><span class="token function">dispatchEvent</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">CustomEvent</span><span class="token punctuation">(</span><span class="token string">"actual:status"</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>
   <span class="token literal-property property">bubbles</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
   <span class="token literal-property property">detail</span><span class="token operator">:</span> <span class="token punctuation">{</span> <span class="token literal-property property">message</span><span class="token operator">:</span> <span class="token string">"Saved."</span><span class="token punctuation">,</span> <span class="token literal-property property">intent</span><span class="token operator">:</span> <span class="token string">"success"</span> <span class="token punctuation">}</span><span class="token punctuation">,</span>
@@ -112,12 +113,13 @@ document<span class="token punctuation">.</span><span class="token function">dis
         </div>
       </div>
     </section>
-    <script>try{actual.status("Saved.", { intent: "success" });
-actual.status("Could not save.", { intent: "danger", duration: 6000 });
+    <script>try{import { status } from "actual-css/js/status";
 
-actual.status.clear();
+status("Saved.", { intent: "success" });
+status("Could not save.", { intent: "danger", duration: 6000 });
+status.clear();
 
-// Equivalent, without importing actual-css/js/status at all:
+// Or, without importing anything:
 document.dispatchEvent(new CustomEvent("actual:status", {
   bubbles: true,
   detail: { message: "Saved.", intent: "success" },
