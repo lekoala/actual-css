@@ -52,7 +52,7 @@ status.clear = function clear() {
 
 if (typeof document !== "undefined") {
   document.addEventListener("actual:invalid", (event) => {
-    const { message } = event.detail;
+    const message = event.detail?.message;
     if (message) status(message, { intent: "danger" });
   });
 }

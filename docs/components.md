@@ -758,7 +758,7 @@ In menus, keep the command label and shortcut in the same interactive item.
   <div class="cluster">
     <div class="skeleton" data-shape="avatar" aria-hidden="true"></div>
     <div class="stack grow">
-  <div class="skeleton" data-shape="title" aria-hidden="true"></div>
+      <div class="skeleton" data-shape="title" aria-hidden="true"></div>
       <div class="skeleton" data-shape="text" aria-hidden="true"></div>
     </div>
   </div>
