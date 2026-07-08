@@ -1,0 +1,22 @@
+/*
+ * Form validation states.
+ *
+ * Imported by default through forms/index.css. Custom builds may omit this
+ * file when an app wants to own validation styling completely.
+ */
+
+.field.danger {
+  --form-invalid-border: var(--danger);
+}
+
+:where(.input, .textarea, .select, .check, .radio, .switch)[aria-invalid="true"],
+:where(.input, .textarea, .select, .check, .radio, .switch).is-invalid,
+.needs-validation.was-validated :is(.input, .textarea, .select, .check, .radio, .switch):invalid {
+  --form-invalid-border: var(--danger);
+}
+
+@supports selector(:user-invalid) {
+  .needs-validation :is(.input, .textarea, .select, .check, .radio, .switch):user-invalid {
+    --form-invalid-border: var(--danger);
+  }
+}

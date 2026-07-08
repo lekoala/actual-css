@@ -930,7 +930,7 @@ Core: native range, enhanced by `accent-color`. Optional richer skin may come la
 
 > Native validation first; the enhancer only adds state and focus behavior.
 
-Actual CSS ships validation *styles*. Invalid fields can be marked with `aria-invalid="true"` or `.is-invalid`. A small optional enhancer (`actual-css/js/validation`) prevents premature error display, marks invalid fields on submit, focuses the first invalid field, and supports a few custom rules. It is not a validation framework — server and AJAX validation stay in app code.
+Actual CSS ships validation *styles*. Invalid fields can be marked with `aria-invalid="true"` or `.is-invalid`. The default forms bundle imports `forms/validation.css`; custom builds may omit that file when validation styling is app-owned. A small optional enhancer (`actual-css/js/validation`) prevents premature error display, marks invalid fields on submit, focuses the first invalid field, and supports a few custom rules. It is not a validation framework — server and AJAX validation stay in app code.
 
 Opt in with the `.needs-validation` class. Importing the module registers the behavior; there is no init call.
 
