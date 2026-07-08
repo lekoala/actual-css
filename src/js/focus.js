@@ -1,21 +1,25 @@
-const FOCUSABLE_SELECTOR = [
+const FOCUSABLE_SELECTOR = `:where(${[
   "a[href]",
-  "button:not([disabled])",
-  "input:not([disabled])",
-  "select:not([disabled])",
-  "textarea:not([disabled])",
+  "button",
+  "input",
+  "select",
+  "textarea",
   "summary",
   "[contenteditable]:not([contenteditable='false'])",
   "[tabindex]",
-].join(",");
+].join(",")})`;
+
+function isFocusable(el) {
+  return (
+    el.tabIndex >= 0 &&
+    !el.matches(":disabled") &&
+    el.checkVisibility?.() !== false &&
+    !el.closest('[inert], [aria-hidden="true"]')
+  );
+}
 
 export function getFocusable(root) {
-  return [...root.querySelectorAll(FOCUSABLE_SELECTOR)].filter(
-    (el) =>
-      el.tabIndex >= 0 &&
-      el.checkVisibility?.() !== false &&
-      !el.closest('[inert], [aria-hidden="true"]'),
-  );
+  return [...root.querySelectorAll(FOCUSABLE_SELECTOR)].filter(isFocusable);
 }
 
 export function focusFirstDescendant(root) {

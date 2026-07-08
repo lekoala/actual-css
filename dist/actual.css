@@ -3448,21 +3448,12 @@ button.avatar {
 .input.is-invalid,
 .textarea.is-invalid,
 .select.is-invalid,
-.was-validated :invalid {
+.needs-validation.was-validated :is(.input, .textarea, .select):invalid {
   --control-border: var(--danger);
 }
 
-.input.is-valid,
-.textarea.is-valid,
-.select.is-valid,
-.was-validated :valid {
-  --control-border: var(--success);
-}
-
 @supports selector(:user-invalid) {
-  .input:user-invalid,
-  .textarea:user-invalid,
-  .select:user-invalid {
+  .needs-validation :is(.input, .textarea, .select):user-invalid {
     --control-border: var(--danger);
   }
 }
