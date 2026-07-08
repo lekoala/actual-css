@@ -799,7 +799,7 @@ Submitting the empty form blocks submission and shows `data-validation-message` 
 
 <div class="status-bar" data-status role="status" aria-live="polite" aria-atomic="true"></div>
 
-<script type="module">
+<script>
   document.getElementById("sb-success").addEventListener("click", () => {
     actual.status("Saved.", { intent: "success" });
   });

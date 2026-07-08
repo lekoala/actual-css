@@ -40,6 +40,21 @@ enables every built-in behavior. Production apps can import individual modules
 such as `actual-css/js/validation` or `actual-css/js/status` when only those
 are needed.
 
+Loading the built `dist/actual.js` as a plain `<script>` (no `type="module"`,
+no bundler) also exposes a small `window.actual` global for calling the
+programmatic API directly — useful for static HTML demos that can't use
+`import`:
+
+```html
+<script src="actual.js"></script>
+<script>
+  actual.status("Saved.", { intent: "success" });
+</script>
+```
+
+Granular imports (`actual-css/js/status`, etc.) never touch `window` — the
+global only exists on the bundled runtime entry.
+
 Modules are safe to import during SSR — registration is a no-op when there is no
 DOM. The runtime remains active until the page unloads. There is no teardown
 handle; cleanup is per-element when an element leaves the DOM.
