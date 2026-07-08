@@ -1,5 +1,5 @@
 import { afterEach, expect, test } from "bun:test";
-import { cleanupDOM, setupDOM } from "./helpers/dom.js";
+import { cleanupDOM, click, setupDOM } from "./helpers/dom.js";
 
 let importId = 0;
 
@@ -107,5 +107,75 @@ test("ignores actual:invalid events without detail", async () => {
   expect(() => {
     document.dispatchEvent(new CustomEvent("actual:invalid", { bubbles: true }));
   }).not.toThrow();
+  expect(target.textContent).toBe("");
+});
+
+test("actual:status event shows a message", async () => {
+  await loadStatus(`<div class="status-bar" data-status role="status"></div>`);
+
+  const target = document.querySelector("[data-status]");
+  document.dispatchEvent(
+    new CustomEvent("actual:status", {
+      bubbles: true,
+      detail: { message: "Saved.", intent: "success" },
+    })
+  );
+
+  expect(target.textContent).toBe("Saved.");
+  expect(target.classList.contains("success")).toBe(true);
+});
+
+test("actual:status event without a message clears the bar", async () => {
+  const { status } = await loadStatus(`<div class="status-bar" data-status role="status"></div>`);
+
+  const target = document.querySelector("[data-status]");
+  status("Saving…", { duration: false });
+  document.dispatchEvent(new CustomEvent("actual:status", { bubbles: true, detail: {} }));
+
+  expect(target.textContent).toBe("");
+});
+
+test("command=--status trigger dispatches actual:status from its data attributes", async () => {
+  await loadStatus(`
+    <div class="status-bar" data-status id="app-status" role="status"></div>
+    <button commandfor="app-status" command="--status"
+            data-status-message="Saved." data-status-intent="success">Show</button>
+  `);
+  const target = document.getElementById("app-status");
+  const trigger = document.querySelector("button");
+
+  click(trigger);
+
+  expect(target.textContent).toBe("Saved.");
+  expect(target.classList.contains("success")).toBe(true);
+  expect(trigger.getAttribute("aria-controls")).toBe("app-status");
+});
+
+test("command=--status-clear trigger clears the bar", async () => {
+  const { status } = await loadStatus(`
+    <div class="status-bar" data-status id="app-status" role="status"></div>
+    <button commandfor="app-status" command="--status-clear">Clear</button>
+  `);
+  const target = document.getElementById("app-status");
+  const trigger = document.querySelector("button");
+
+  status("Saving…", { duration: false });
+  click(trigger);
+
+  expect(target.textContent).toBe("");
+});
+
+test("command=--status trigger ignores a commandfor pointing elsewhere", async () => {
+  await loadStatus(`
+    <div class="status-bar" data-status id="app-status" role="status"></div>
+    <div id="not-status"></div>
+    <button commandfor="not-status" command="--status"
+            data-status-message="Saved.">Show</button>
+  `);
+  const target = document.getElementById("app-status");
+  const trigger = document.querySelector("button");
+
+  click(trigger);
+
   expect(target.textContent).toBe("");
 });
