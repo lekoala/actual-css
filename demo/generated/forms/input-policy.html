@@ -61,7 +61,16 @@
     </section>
     <div class="component-prose">
       <h3>Built-in filters</h3>
-<p>The built-in filters are intentionally narrow. They are input helpers, not domain validation. | Filter | Behavior | | --- | --- | | <code>numeric</code> | Keeps ASCII digits only: <code>0</code> through <code>9</code>. | | <code>decimal</code> | Converts <code>,</code> to <code>.</code>, keeps ASCII digits, and keeps the first <code>.</code> separator. | | <code>lower</code> | Converts the value with <code>toLocaleLowerCase()</code>. | | <code>upper</code> | Converts the value with <code>toLocaleUpperCase()</code>. | | <code>letters</code> | Keeps Unicode letters only. Digits, punctuation, symbols, and spaces are removed. | | <code>slug</code> | Normalizes accents, lowercases text, turns runs of non-letter and non-digit characters into <code>-</code>, collapses repeated <code>-</code>, and trims edge separators. | During direct typing, <code>slug</code> may keep a trailing <code>-</code> until the next character so words do not merge while the user is still entering text. Filters can be piped with <code>|</code> when a field needs more than one transform. They run from left to right.</p>
+<p>The built-in filters are intentionally narrow. They are input helpers, not domain validation.</p>
+<ul>
+  <li><code>numeric</code> — Keeps ASCII digits only: <code>0</code> through <code>9</code>.</li>
+  <li><code>decimal</code> — Converts <code>,</code> to <code>.</code>, keeps ASCII digits, and keeps the first <code>.</code> separator.</li>
+  <li><code>lower</code> — Converts the value with <code>toLocaleLowerCase()</code>.</li>
+  <li><code>upper</code> — Converts the value with <code>toLocaleUpperCase()</code>.</li>
+  <li><code>letters</code> — Keeps Unicode letters only. Digits, punctuation, symbols, and spaces are removed.</li>
+  <li><code>slug</code> — Normalizes accents, lowercases text, turns runs of non-letter and non-digit characters into <code>-</code>, collapses repeated <code>-</code>, and trims edge separators.</li>
+</ul>
+<p>During direct typing, <code>slug</code> may keep a trailing <code>-</code> until the next character so words do not merge while the user is still entering text. Filters can be piped with <code>|</code> when a field needs more than one transform. They run from left to right.</p>
     </div>
     <section class="component-section">
       <div class="example-group">

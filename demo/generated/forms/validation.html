@@ -278,7 +278,15 @@
 });}catch(e){console.error(e)}</script>
     <div class="component-prose">
       <h4>Built-in custom rules</h4>
-<p>Custom rules live in <code>data-validation-rules</code> as a comma-separated list; each rule may take space-separated options. The enhancer registers a few defaults: | Rule | Meaning | | --- | --- | | <code>same &lt;selector&gt;</code> | Value must equal the value of the element matched by <code>&lt;selector&gt;</code> (scoped to the field's form). | | <code>number</code> | Value is empty or a valid <code>Number</code>. | | <code>digits</code> | Value is empty or ASCII digits only. | | <code>alnum</code> | Value is empty or letters and digits only. | | <code>date</code> | Value is empty or a valid date. Accepts ISO, locale, and common formats; rejects non-existent dates like <code>2026-02-29</code>. | Add your own with <code>FormValidator.registerRule(name, (value, el, ...opts) =&gt; boolean)</code>. The built-in rules treat empty values as valid so optional fields stay optional; custom rules should do the same when that behavior is wanted. The <code>date</code> rule pairs naturally with <code>data-mask</code> — the mask structures input, the rule validates meaning. Same rule, different formats:</p>
+<p>Custom rules live in <code>data-validation-rules</code> as a comma-separated list; each rule may take space-separated options. The enhancer registers a few defaults:</p>
+<ul>
+  <li><code>same &lt;selector&gt;</code> — Value must equal the value of the element matched by <code>&lt;selector&gt;</code> (scoped to the field's form).</li>
+  <li><code>number</code> — Value is empty or a valid <code>Number</code>.</li>
+  <li><code>digits</code> — Value is empty or ASCII digits only.</li>
+  <li><code>alnum</code> — Value is empty or letters and digits only.</li>
+  <li><code>date</code> — Value is a valid date. Accepts ISO, locale, and common formats; rejects non-existent dates like <code>2026-02-29</code>.</li>
+</ul>
+<p>Add your own with <code>FormValidator.registerRule(name, (value, el, ...opts) =&gt; boolean)</code>. The built-in rules treat empty values as valid so optional fields stay optional; custom rules should do the same when that behavior is wanted. The <code>date</code> rule pairs naturally with <code>data-mask</code> — the mask structures input, the rule validates meaning. Same rule, different formats:</p>
     </div>
     <section class="component-section">
       <div class="example-group">
