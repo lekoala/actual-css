@@ -281,9 +281,8 @@ export function isSurfaceOpen(menu) {
   return menu.classList.contains("is-open") && !menu.hidden;
 }
 
-export function prepareSurface(menu, anchor) {
+export function prepareSurface(menu) {
   if (!menu) return;
-  mountSurface(menu, anchor);
   menu.style.position = "fixed";
   menu.hidden = true;
   syncExpanded(menu, false);
@@ -298,7 +297,8 @@ export function openSurface(menu, opts = {}) {
   }
 
   const anchor = opts.trigger || opts.source || null;
-  prepareSurface(menu, anchor);
+  mountSurface(menu, anchor);
+  prepareSurface(menu);
   const state = ensureSurfaceWired(menu);
   state.trigger = opts.trigger || null;
   state.source = opts.source || null;
@@ -352,6 +352,7 @@ export function closeSurface(menu, opts = {}) {
     if (!state || state.closeId !== closeId) return;
     backdrop?.remove();
     if (state.backdrop === backdrop) state.backdrop = null;
+    restoreSurface(menu);
   });
 }
 

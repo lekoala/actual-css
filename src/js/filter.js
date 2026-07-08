@@ -1,9 +1,10 @@
 /*
  * Input filter — opt-in filtering for simple text policies.
  *
- * inputmode only hints the virtual keyboard. Filtering is intentionally
- * opt-in via data-filter. An empty data-filter falls back to inputmode when
- * it is numeric or decimal; explicit data-filter values win.
+ * inputmode only hints the virtual keyboard; it never filters input on its
+ * own. data-filter is the explicit, separate contract for rewriting the
+ * value as the user types — data-filter="numeric" / "decimal" is
+ * intentionally destructive, unlike inputmode.
  */
 
 import enhance from "./enhance.js";
@@ -81,9 +82,7 @@ function explicitFilterModes(value) {
 
 function filterModes(el) {
   const explicit = el.getAttribute("data-filter")?.trim().toLowerCase();
-  const fallback = el.getAttribute("inputmode")?.toLowerCase();
-  if (explicit) return explicitFilterModes(explicit);
-  return fallback === "numeric" || fallback === "decimal" ? [fallback] : [];
+  return explicit ? explicitFilterModes(explicit) : [];
 }
 
 function connectFilter(el) {

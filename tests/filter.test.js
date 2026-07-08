@@ -122,13 +122,13 @@ test("plain inputmode values are ignored", async () => {
   expect(el.value).toBe("a1b2.3");
 });
 
-test("empty data-filter falls back to supported inputmode values", async () => {
+test("empty data-filter does not filter, even with a supported inputmode", async () => {
   await loadFilter('<input data-filter inputmode="numeric">');
   const el = document.querySelector("input");
 
   input(el, "a1b2.3");
 
-  expect(el.value).toBe("123");
+  expect(el.value).toBe("a1b2.3");
 });
 
 test("unsupported data-filter values are ignored", async () => {
@@ -155,7 +155,7 @@ test("data-filter enforcement waits for composition to finish", async () => {
 test("dynamically inserted data-filter inputs are enhanced", async () => {
   await loadFilter("<main></main>");
 
-  document.querySelector("main").innerHTML = '<input data-filter inputmode="decimal">';
+  document.querySelector("main").innerHTML = '<input data-filter="decimal" inputmode="decimal">';
   await nextMicrotask();
   const el = document.querySelector("input");
 

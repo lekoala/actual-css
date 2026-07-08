@@ -157,23 +157,55 @@ test("escape hide closes and restores focus without scrolling", () => {
   expect(preventScroll).toBe(true);
 });
 
-test("prepareSurface mounts to the surface root and disconnectSurface restores it", () => {
+test("prepareSurface leaves the surface at its original position", () => {
   setBody('<section id="host"><button id="next"></button><div id="menu" class="flyout"></div></section>');
   const host = document.getElementById("host");
   const next = document.getElementById("next");
   const menu = document.getElementById("menu");
 
-  prepareSurface(menu, next);
+  prepareSurface(menu);
 
-  expect(menu.parentNode).toBe(document.body);
+  expect(menu.parentNode).toBe(host);
+  expect(menu.previousElementSibling).toBe(next);
   expect(menu.hidden).toBe(true);
   expect(menu.style.position).toBe("fixed");
   expect(menu.style.display).toBe("");
+});
+
+test("openSurface mounts to the surface root and disconnectSurface restores it", () => {
+  setBody('<section id="host"><button id="next" aria-controls="menu"></button><div id="menu" class="flyout"></div></section>');
+  const host = document.getElementById("host");
+  const next = document.getElementById("next");
+  const menu = document.getElementById("menu");
+  mockPlacement(next, menu);
+
+  openSurface(menu, { trigger: next });
+
+  expect(menu.parentNode).toBe(document.body);
 
   disconnectSurface(menu);
 
   expect(menu.parentNode).toBe(host);
   expect(menu.previousElementSibling).toBe(next);
+});
+
+test("closeSurface restores the surface to its original position once animations finish", async () => {
+  setBody('<section id="host"><button id="trigger" aria-controls="menu"></button><div id="menu" class="flyout"></div></section>');
+  const host = document.getElementById("host");
+  const trigger = document.getElementById("trigger");
+  const menu = document.getElementById("menu");
+  mockPlacement(trigger, menu);
+
+  openSurface(menu, { trigger });
+  expect(menu.parentNode).toBe(document.body);
+
+  closeSurface(menu);
+  expect(menu.parentNode).toBe(document.body);
+
+  await nextMicrotask();
+
+  expect(menu.parentNode).toBe(host);
+  expect(menu.previousElementSibling).toBe(trigger);
 });
 
 test("sheet mode adds sheet class and backdrop", () => {
@@ -258,17 +290,18 @@ test("reopening a sheet cancels stale close cleanup", async () => {
   expect(isSurfaceOpen(menu)).toBe(true);
 });
 
-test("prepareSurface mounts surfaces inside an open dialog root", () => {
+test("openSurface mounts surfaces inside an open dialog root", () => {
   setBody(`
     <dialog id="modal" open>
-      <section id="host"><button id="trigger"></button><div id="menu" class="flyout"></div></section>
+      <section id="host"><button id="trigger" aria-controls="menu"></button><div id="menu" class="flyout"></div></section>
     </dialog>
   `);
   const dialog = document.getElementById("modal");
   const trigger = document.getElementById("trigger");
   const menu = document.getElementById("menu");
+  mockPlacement(trigger, menu);
 
-  prepareSurface(menu, trigger);
+  openSurface(menu, { trigger });
 
   expect(menu.parentNode).toBe(dialog);
 

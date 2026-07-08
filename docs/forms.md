@@ -527,11 +527,12 @@ When the JavaScript runtime is loaded, Actual enhances `input[data-filter]`.
 Textareas are left alone.
 
 Add an explicit `data-filter` value when the field should enforce one of
-Actual's small built-in filters. Unsupported filter names are ignored.
-
-An empty `data-filter` is supported as terse markup for `inputmode="numeric"`
-and `inputmode="decimal"`, but examples should use explicit values so the
-filter policy stays obvious in markup.
+Actual's small built-in filters. Unsupported filter names are ignored. An
+empty `data-filter` never filters — `inputmode` is not read as a fallback,
+even when it is `numeric` or `decimal`. `data-filter="numeric"` /
+`data-filter="decimal"` are intentionally destructive (they rewrite the
+value as the user types), unlike `inputmode`, which only hints the virtual
+keyboard.
 
 ```html
 <label class="field">
