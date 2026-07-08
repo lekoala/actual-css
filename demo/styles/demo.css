@@ -340,3 +340,45 @@
 .demo-categories .components-grid {
   margin-block: 0;
 }
+
+/* Cover: decorative gradient placeholder standing in for real photography or
+ * product screenshots. Several templates (blog, marketing) need a "there's
+ * no real image yet" surface, and it should look the same everywhere they
+ * use it — hence sharing it here instead of every template re-deriving its
+ * own gradient math. This is demo tooling, not part of the framework's
+ * public API: real projects use real images.
+ *
+ * Usage: give the element its own aspect-ratio/border/border-radius, add
+ * .cover for the gradient background, and optionally nest .cover-grid
+ * (faint ruled overlay) and/or .cover-glyph (oversized watermark text).
+ * Override --cover-a/--cover-b to retint per instance.
+ */
+.cover {
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at 20% 25%, color-mix(in oklch, var(--cover-a, var(--primary)) 30%, transparent), transparent 60%),
+    radial-gradient(ellipse at 80% 72%, color-mix(in oklch, var(--cover-b, var(--secondary)) 24%, transparent), transparent 55%),
+    var(--surface-subtle);
+}
+
+.cover-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(to right, color-mix(in oklch, var(--text) 8%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in oklch, var(--text) 8%, transparent) 1px, transparent 1px);
+  background-size: 3rem 3rem;
+  mask-image: radial-gradient(ellipse at center, black 35%, transparent 80%);
+}
+
+.cover-glyph {
+  position: absolute;
+  inset-block-end: 1rem;
+  inset-inline-end: 1.25rem;
+  color: color-mix(in oklch, var(--text-muted) 60%, transparent);
+  font-size: clamp(2.5rem, 2rem + 3vw, 4.5rem);
+  line-height: 1;
+  font-weight: var(--font-weight-bold);
+  letter-spacing: -0.03em;
+}

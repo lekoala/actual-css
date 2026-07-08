@@ -103,6 +103,17 @@
   list-style: none;
 }
 
+/* Separator dot for inline metadata rows (byline, timestamp, read time,
+   breadcrumb-like facts). Pair with a flex/cluster container; flex: none
+   keeps a flex parent from shrinking it to nothing. */
+.dot {
+  flex: none;
+  inline-size: 0.25rem;
+  block-size: 0.25rem;
+  border-radius: var(--radius-full);
+  background: var(--text-subtle);
+}
+
 /* Link variants for chrome that should not look like prose links. Use in
    navigation, tags, footer, tables of contents, and similar surfaces. */
 .link-plain {

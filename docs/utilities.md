@@ -163,6 +163,34 @@ Customize locally when a scroll surface needs more contrast:
 
 For rounded scroll containers, keep the thumb visually away from the edge by tuning `--scroller-padding` rather than adding extra wrappers or masking pseudo-elements.
 
+## Metadata Separator
+
+> A small inline dot for separating facts in a metadata row.
+
+Use `.dot` between short facts in a byline, timestamp row, or breadcrumb-like list of details — anywhere a plain `·` character would otherwise be typed as text (which screen readers announce awkwardly).
+
+```html
+<p class="cluster" style="--cluster-justify: flex-start;">
+  <span>Ada Meridian</span>
+  <span class="dot" aria-hidden="true"></span>
+  <time datetime="2026-06-12">June 12, 2026</time>
+  <span class="dot" aria-hidden="true"></span>
+  <span>8 min read</span>
+</p>
+```
+
+```css
+.dot {
+  flex: none;
+  inline-size: 0.25rem;
+  block-size: 0.25rem;
+  border-radius: var(--radius-full);
+  background: var(--text-subtle);
+}
+```
+
+Always mark it `aria-hidden="true"` — it is a visual separator, not content.
+
 ## Flex Helpers
 
 > Small flex helpers for grow behavior and other one-line needs.
