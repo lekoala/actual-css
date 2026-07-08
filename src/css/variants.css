@@ -78,18 +78,21 @@
    on purpose: --ui-hover-bg is only consumed inside their @media (hover: hover)
    rules, so these values are inert until hovered. :is() carries real
    specificity so the components' :where() intent boundaries
-   (--ui-hover-bg: initial) cannot override the recipe. Solid darkening stays
-   .btn-only in button.css. */
+   (--ui-hover-bg: initial) cannot override the recipe. The solid/soft overlay
+   darkening lives in the consuming components. */
 :is(.btn, a.badge, button.badge):is(.outline, .ghost) {
   --ui-hover-bg: var(--surface-subtle);
 }
 
 @supports (color: color-mix(in oklch, red, white)) {
+  /* Same recipe as the resting .soft bg with the surface share reduced by
+     --soft-hover-alpha: stays opaque, so it reads on any backdrop instead of
+     letting the container show through on hover. */
   :is(.btn, a.badge, button.badge):is(.soft) {
     --ui-hover-bg: color-mix(
       in oklch,
-      var(--intent, var(--neutral)) var(--soft-hover-alpha),
-      transparent
+      var(--surface) calc(var(--soft-bg-mix) - var(--soft-hover-alpha)),
+      var(--intent, var(--neutral))
     );
   }
 

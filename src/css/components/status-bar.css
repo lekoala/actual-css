@@ -5,13 +5,27 @@
  * accessibility tree so it stays a reliable live region. JavaScript only sets
  * text content; the visual shows and hides with the content.
  *
- * Public API: .status-bar (+ intent modifiers danger/success/warning/neutral),
- * targeted by [data-status] or .status-bar.
+ * Consumes intent like badge or alert. No need for status-bar-specific modifier
+ * classes — .danger / .success / .warning / .neutral from intents.css drive
+ * the coloring via --intent / --intent-fg.
+ *
+ * Public API: .status-bar (+ intent), targeted by [data-status] or .status-bar.
  */
 
+/* Intent boundary — inherited intents do not tint this component.
+   Local intent classes still win because :where() has zero specificity. */
+:where(.status-bar) {
+  --intent: initial;
+  --intent-fg: initial;
+  --ui-bg: initial;
+  --ui-fg: initial;
+  --ui-border: initial;
+  --ui-hover-bg: initial;
+}
+
 .status-bar {
-  --status-bg: var(--text);
-  --status-fg: var(--surface);
+  --status-bg: var(--intent, var(--text));
+  --status-fg: var(--intent-fg, var(--surface));
 
   position: fixed;
   inset-block-end: var(--space-4);
@@ -48,31 +62,4 @@
   opacity: 0;
   translate: 0 var(--space-2);
   pointer-events: none;
-}
-
-.status-bar.danger {
-  --status-bg: var(--danger);
-  --status-fg: var(--danger-fg);
-}
-
-.status-bar.success {
-  --status-bg: var(--success);
-  --status-fg: var(--success-fg);
-}
-
-.status-bar.warning {
-  --status-bg: var(--warning);
-  --status-fg: var(--warning-fg);
-}
-
-.status-bar.neutral {
-  --status-bg: var(--neutral);
-  --status-fg: var(--neutral-fg);
-}
-
-@media (max-width: 40rem) {
-  .status-bar {
-    inset-inline: var(--space-3);
-    max-inline-size: calc(100vw - var(--space-6));
-  }
 }

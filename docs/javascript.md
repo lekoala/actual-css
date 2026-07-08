@@ -5,7 +5,8 @@
 > Small progressive enhancers that attach to semantic HTML and clean themselves up when the DOM changes.
 
 Actual's JavaScript modules are optional. Importing `actual-css/js` registers the
-full runtime; importing a specific module registers only that behavior.
+complete default runtime — every built-in enhancer, including validation and
+status; importing a specific module registers only that behavior.
 
 ```js
 import "actual-css/js";
@@ -30,9 +31,14 @@ automatically. There is no init call, no global registry, and nothing to
 configure. This keeps imports declarative and tree-shakeable.
 
 ```js
-import "actual-css/js";        // full runtime
+import "actual-css/js";        // complete default runtime (all enhancers)
 import "actual-css/js/dialog"; // single feature
 ```
+
+Use `actual-css/js` for demos, playgrounds, and smoke tests where one import
+enables every built-in behavior. Production apps can import individual modules
+such as `actual-css/js/validation` or `actual-css/js/status` when only those
+are needed.
 
 Modules are safe to import during SSR — registration is a no-op when there is no
 DOM. The runtime remains active until the page unloads. There is no teardown
@@ -275,12 +281,14 @@ enhance({
 
 ## Form Validation
 
-`actual-css/js/validation` is an opt-in enhancer, not a validation framework.
-Forms opt in with `.needs-validation`; importing the module registers the
-behavior. Native HTML constraint validation runs first, then the enhancer adds
-`.is-invalid` / `aria-invalid="true"` to invalid fields on submit, focuses the
-first invalid field, and dispatches a bubbling `actual:invalid` event with
-`{ form, firstInvalid, message }`. Valid fields are not marked automatically.
+`actual-css/js/validation` is part of the default runtime (`actual-css/js`)
+and also importable on its own — it is an enhancer, not a validation framework.
+Forms opt in with `.needs-validation`; the behavior registers automatically when
+the runtime loads. Native HTML constraint validation runs first, then the
+enhancer adds `.is-invalid` / `aria-invalid="true"` to invalid fields on submit,
+focuses the first invalid field, and dispatches a bubbling `actual:invalid`
+event with `{ form, firstInvalid, message }`. Valid fields are not marked
+automatically.
 
 ```html
 <form class="needs-validation" data-validation-message="Please check the fields.">

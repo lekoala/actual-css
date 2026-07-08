@@ -26,12 +26,16 @@ async function build() {
     }
   }
 
+  await buildEntry(ENTRY, "actual.[ext]");
+}
+
+async function buildEntry(entrypoint, naming) {
   const result = await Bun.build({
-    entrypoints: [ENTRY],
+    entrypoints: [entrypoint],
     outdir: DIST,
     minify: true,
     target: "browser",
-    naming: "[dir]/actual.[ext]",
+    naming: `[dir]/${naming}`,
     sourcemap: "external",
   });
 
@@ -40,12 +44,13 @@ async function build() {
     process.exit(1);
   }
 
-  const path = join(DIST, "actual.js");
+  const file = naming.replace("[ext]", "js");
+  const path = join(DIST, file);
   const st = await stat(path);
   const code = await new Response(Bun.file(path)).bytes();
   const brotli = brotliCompressSync(code).length;
 
-  console.log(`Built actual.js (${formatBytes(st.size)}) — brotli ${formatBytes(brotli)}`);
+  console.log(`Built ${file} (${formatBytes(st.size)}) — brotli ${formatBytes(brotli)}`);
 }
 
 build();

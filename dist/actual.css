@@ -732,18 +732,21 @@ small {
    on purpose: --ui-hover-bg is only consumed inside their @media (hover: hover)
    rules, so these values are inert until hovered. :is() carries real
    specificity so the components' :where() intent boundaries
-   (--ui-hover-bg: initial) cannot override the recipe. Solid darkening stays
-   .btn-only in button.css. */
+   (--ui-hover-bg: initial) cannot override the recipe. The solid/soft overlay
+   darkening lives in the consuming components. */
 :is(.btn, a.badge, button.badge):is(.outline, .ghost) {
   --ui-hover-bg: var(--surface-subtle);
 }
 
 @supports (color: color-mix(in oklch, red, white)) {
+  /* Same recipe as the resting .soft bg with the surface share reduced by
+     --soft-hover-alpha: stays opaque, so it reads on any backdrop instead of
+     letting the container show through on hover. */
   :is(.btn, a.badge, button.badge):is(.soft) {
     --ui-hover-bg: color-mix(
       in oklch,
-      var(--intent, var(--neutral)) var(--soft-hover-alpha),
-      transparent
+      var(--surface) calc(var(--soft-bg-mix) - var(--soft-hover-alpha)),
+      var(--intent, var(--neutral))
     );
   }
 
@@ -928,9 +931,12 @@ small {
 /*
  * Buttons for actions and button-like links.
  *
- * Keeps shared intent, variant, and size behavior with a solid default. Hover,
- * focus-visible, and disabled states stay available across variants.
+ * Keeps shared intent, variant, and size behavior with a solid default.
+ * Interactive states apply only to native interactive elements; non-interactive
+ * elements such as <span class="btn"> can reuse the visual box without faking
+ * disabled behavior.
  */
+
 /* Intent boundary — inherited intents do not tint this component.
    Local intent classes still win because :where() has zero specificity. */
 :where(.btn) {
@@ -952,7 +958,8 @@ small {
   --btn-fg: var(--ui-fg, var(--btn-default-fg, var(--intent-fg, var(--neutral-fg))));
   --btn-border: var(--ui-border, var(--btn-default-border, transparent));
   --btn-radius: var(--radius);
-  --btn-focus-color: var(--focus);
+  --btn-focus-color: var(--intent, var(--focus));
+  --btn-hover-bg: var(--ui-hover-bg, var(--btn-bg));
 
   position: relative;
   display: inline-flex;
@@ -977,7 +984,7 @@ small {
   font-weight: var(--font-weight-strong);
   line-height: 1;
   text-decoration: none;
-  cursor: pointer;
+  cursor: default;
   transition:
     background-color var(--duration),
     border-color var(--duration),
@@ -986,15 +993,23 @@ small {
     transform var(--duration);
 }
 
-/* Intent classes tint the focus ring to match the intent color.
-   Browsers without color-mix() fall back to the default --focus-ring. */
-.btn:is(.primary, .secondary, .success, .warning, .danger, .neutral) {
-  --btn-focus-color: var(--intent);
+/* Native interactive button surfaces get pointer and interaction states.
+   Plain spans keep the visual .btn box but stay static; [role="button"] opts
+   custom elements in explicitly. */
+:where(
+  a,
+  button,
+  input[type="button"],
+  input[type="submit"],
+  input[type="reset"],
+  [role="button"]
+).btn {
+  cursor: pointer;
 }
 
 @supports (color: color-mix(in oklch, red, white)) {
-  .btn:is(.primary, .secondary, .success, .warning, .danger, .neutral) {
-    --btn-focus-ring-color: color-mix(in oklch, var(--intent) 28%, transparent);
+  .btn {
+    --btn-focus-ring-color: color-mix(in oklch, var(--btn-focus-color) 28%, transparent);
   }
 }
 
@@ -1007,18 +1022,40 @@ small {
 }
 
 /* The .soft/.outline/.ghost hover recipe (--ui-hover-bg) is shared with
-   .badge in variants.css; only the solid darkening is .btn-specific. */
+   .badge in variants.css; the overlay darkening for solid/soft is .btn-specific.
+   Both rules use plain :not() lists so they keep equal specificity. */
 @media (hover: hover) {
-  .btn:not(:where(:disabled, [aria-disabled="true"])):hover {
-    background: var(--ui-hover-bg, var(--btn-bg));
+  :where(
+    a,
+    button,
+    input[type="button"],
+    input[type="submit"],
+    input[type="reset"],
+    [role="button"]
+  ).btn:not(:disabled, [aria-disabled="true"]):hover {
+    background: var(--btn-hover-bg);
   }
 
-  .btn:not(:where(:disabled, [aria-disabled="true"], .outline, .ghost, .link)):hover {
-    box-shadow: inset 0 0 0 999px var(--hover-overlay);
+  :where(
+    a,
+    button,
+    input[type="button"],
+    input[type="submit"],
+    input[type="reset"],
+    [role="button"]
+  ).btn:not(:disabled, [aria-disabled="true"], .outline, .ghost, .link):hover {
+    box-shadow: inset 0 0 0 999px var(--hover-overlay, rgb(0 0 0 / 0.08));
   }
 }
 
-.btn:active {
+:where(
+  a,
+  button,
+  input[type="button"],
+  input[type="submit"],
+  input[type="reset"],
+  [role="button"]
+).btn:not(:disabled, [aria-disabled="true"]):active {
   transform: translateY(1px);
 }
 
@@ -1041,7 +1078,14 @@ small {
    after components and overrides border-radius at equal specificity. */
 
 @media (hover: hover) {
-  .btn.link:not(:where(:disabled, [aria-disabled="true"])):hover {
+  :where(
+    a,
+    button,
+    input[type="button"],
+    input[type="submit"],
+    input[type="reset"],
+    [role="button"]
+  ).btn.link:not(:disabled, [aria-disabled="true"]):hover {
     background: transparent;
     color: var(--intent, var(--text));
     text-decoration-thickness: 0.12em;
@@ -1065,11 +1109,13 @@ small {
   opacity: 0.65;
 }
 
+/* aria-disabled links keep their href for markup simplicity (pagination,
+   toolbars) but stop reacting to the pointer. */
 a.btn[aria-disabled="true"] {
   pointer-events: none;
 }
 
-.btn[aria-busy="true"] {
+.btn[aria-busy="true"]:not(:disabled, [aria-disabled="true"]) {
   cursor: progress;
 }
 
@@ -1107,7 +1153,14 @@ a.btn[aria-disabled="true"] {
   }
 
   @media (hover: hover) {
-    .btn:hover:not(:where(:disabled, [aria-disabled="true"], .link)) {
+    :where(
+        a,
+        button,
+        input[type="button"],
+        input[type="submit"],
+        input[type="reset"],
+        [role="button"]
+      ).btn:hover:not(:where(:disabled, [aria-disabled="true"], .link)) {
       outline: var(--border-width) solid ButtonText;
       outline-offset: 2px;
     }
@@ -2645,13 +2698,27 @@ dialog.drawer nav {
  * accessibility tree so it stays a reliable live region. JavaScript only sets
  * text content; the visual shows and hides with the content.
  *
- * Public API: .status-bar (+ intent modifiers danger/success/warning/neutral),
- * targeted by [data-status] or .status-bar.
+ * Consumes intent like badge or alert. No need for status-bar-specific modifier
+ * classes — .danger / .success / .warning / .neutral from intents.css drive
+ * the coloring via --intent / --intent-fg.
+ *
+ * Public API: .status-bar (+ intent), targeted by [data-status] or .status-bar.
  */
 
+/* Intent boundary — inherited intents do not tint this component.
+   Local intent classes still win because :where() has zero specificity. */
+:where(.status-bar) {
+  --intent: initial;
+  --intent-fg: initial;
+  --ui-bg: initial;
+  --ui-fg: initial;
+  --ui-border: initial;
+  --ui-hover-bg: initial;
+}
+
 .status-bar {
-  --status-bg: var(--text);
-  --status-fg: var(--surface);
+  --status-bg: var(--intent, var(--text));
+  --status-fg: var(--intent-fg, var(--surface));
 
   position: fixed;
   inset-block-end: var(--space-4);
@@ -2688,33 +2755,6 @@ dialog.drawer nav {
   opacity: 0;
   translate: 0 var(--space-2);
   pointer-events: none;
-}
-
-.status-bar.danger {
-  --status-bg: var(--danger);
-  --status-fg: var(--danger-fg);
-}
-
-.status-bar.success {
-  --status-bg: var(--success);
-  --status-fg: var(--success-fg);
-}
-
-.status-bar.warning {
-  --status-bg: var(--warning);
-  --status-fg: var(--warning-fg);
-}
-
-.status-bar.neutral {
-  --status-bg: var(--neutral);
-  --status-fg: var(--neutral-fg);
-}
-
-@media (max-width: 40rem) {
-  .status-bar {
-    inset-inline: var(--space-3);
-    max-inline-size: calc(100vw - var(--space-6));
-  }
 }
 
 
@@ -3389,7 +3429,9 @@ button.avatar {
 }
 
 /* Forms — import order matters: switch.css must follow choice.css so its
-   :not([role="switch"]) exclusion in choice.css still applies. */
+   :not([role="switch"]) exclusion in choice.css still applies.
+   validation.css is part of the default forms bundle, but custom builds may
+   omit it when validation styling is app-owned. */
 /*
  * Form layout and supporting text.
  *
@@ -3474,7 +3516,7 @@ button.avatar {
   inline-size: 100%;
   min-block-size: var(--control-size);
   padding-inline: var(--space-3);
-  border: var(--border-width) solid var(--control-border);
+  border: var(--border-width) solid var(--form-invalid-border, var(--control-border));
   border-radius: var(--radius);
   background: var(--control-bg);
   color: var(--control-fg);
@@ -3519,23 +3561,6 @@ button.avatar {
   --control-border: var(--border);
   outline: none;
   box-shadow: var(--focus-ring-shadow);
-}
-
-.field.danger :where(.input, .textarea, .select),
-.input[aria-invalid="true"],
-.textarea[aria-invalid="true"],
-.select[aria-invalid="true"],
-.input.is-invalid,
-.textarea.is-invalid,
-.select.is-invalid,
-.needs-validation.was-validated :is(.input, .textarea, .select):invalid {
-  --control-border: var(--danger);
-}
-
-@supports selector(:user-invalid) {
-  .needs-validation :is(.input, .textarea, .select):user-invalid {
-    --control-border: var(--danger);
-  }
 }
 
 .input[readonly],
@@ -3646,7 +3671,7 @@ button.avatar {
   block-size: 1.125em;
   margin-inline: 0;
   margin-block-end: 0;
-  border: var(--border-width) solid var(--choice-border);
+  border: var(--border-width) solid var(--form-invalid-border, var(--choice-border));
   background: var(--choice-bg);
   color: var(--choice-mark);
   accent-color: var(--primary);
@@ -3713,10 +3738,6 @@ button.avatar {
 
 .radio:checked::before {
   transform: scale(1);
-}
-
-.field.danger :where(.check, .radio) {
-  --choice-border: var(--danger);
 }
 
 @media (hover: hover) {
@@ -4008,6 +4029,7 @@ button.avatar {
 
 .switch {
   --switch-bg: var(--border);
+  --switch-border: var(--border);
   --switch-knob: var(--surface-raised);
   --switch-width: calc(var(--control-size) * 1.16);
   --switch-block-size: calc(var(--control-size) * 0.63);
@@ -4027,7 +4049,7 @@ button.avatar {
   inline-size: var(--switch-width);
   block-size: var(--switch-block-size);
   margin: 0;
-  border: var(--border-width) solid var(--border);
+  border: var(--border-width) solid var(--form-invalid-border, var(--switch-border));
   border-radius: var(--radius-full);
   background: var(--switch-bg);
   appearance: none;
@@ -4050,14 +4072,14 @@ button.avatar {
 
 @media (hover: hover) {
   .switch:hover:not(:disabled) {
-    border-color: var(--intent, var(--primary));
+    --switch-border: var(--intent, var(--primary));
   }
 }
 
 .switch:checked {
   --switch-bg: var(--intent, var(--primary));
+  --switch-border: var(--intent, var(--primary));
   --switch-knob: var(--intent-fg, var(--primary-fg));
-  border-color: var(--intent, var(--primary));
 }
 
 .switch:checked::before {
@@ -4075,14 +4097,10 @@ button.avatar {
   outline-offset: var(--focus-outline-offset);
 }
 
-.field.danger .switch {
-  border-color: var(--danger);
-}
-
 .switch:disabled {
   --switch-bg: var(--surface-subtle);
+  --switch-border: var(--border);
   --switch-knob: var(--text-subtle);
-  border-color: var(--border);
   opacity: 1;
   cursor: not-allowed;
 }
@@ -4091,8 +4109,8 @@ button.avatar {
   /* --switch-knob must be set on the element, not on ::before: a custom
      property declared on the pseudo would shadow the :checked override. */
   .switch {
+    --switch-border: ButtonText;
     --switch-knob: ButtonText;
-    border-color: ButtonText;
   }
 
   .switch::before {
@@ -4101,16 +4119,39 @@ button.avatar {
 
   .switch:checked {
     --switch-bg: Highlight;
+    --switch-border: Highlight;
     --switch-knob: HighlightText;
-    border-color: Highlight;
     forced-color-adjust: none;
   }
 
   .switch:disabled {
     --switch-bg: Canvas;
+    --switch-border: GrayText;
     --switch-knob: GrayText;
-    border-color: GrayText;
     forced-color-adjust: auto;
+  }
+}
+
+/*
+ * Form validation states.
+ *
+ * Imported by default through forms/index.css. Custom builds may omit this
+ * file when an app wants to own validation styling completely.
+ */
+
+.field.danger {
+  --form-invalid-border: var(--danger);
+}
+
+:where(.input, .textarea, .select, .check, .radio, .switch)[aria-invalid="true"],
+:where(.input, .textarea, .select, .check, .radio, .switch).is-invalid,
+.needs-validation.was-validated :is(.input, .textarea, .select, .check, .radio, .switch):invalid {
+  --form-invalid-border: var(--danger);
+}
+
+@supports selector(:user-invalid) {
+  .needs-validation :is(.input, .textarea, .select, .check, .radio, .switch):user-invalid {
+    --form-invalid-border: var(--danger);
   }
 }
 

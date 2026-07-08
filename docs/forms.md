@@ -928,9 +928,9 @@ Core: native range, enhanced by `accent-color`. Optional richer skin may come la
 
 ### Optional JavaScript enhancer
 
-> Native validation first; the enhancer only adds state and focus behavior.
+Native validation first; the enhancer only adds state and focus behavior.
 
-Actual CSS ships validation *styles*. Invalid fields can be marked with `aria-invalid="true"` or `.is-invalid`. The default forms bundle imports `forms/validation.css`; custom builds may omit that file when validation styling is app-owned. A small optional enhancer (`actual-css/js/validation`) prevents premature error display, marks invalid fields on submit, focuses the first invalid field, and supports a few custom rules. It is not a validation framework — server and AJAX validation stay in app code.
+Actual CSS ships validation *styles*. Invalid fields can be marked with `aria-invalid="true"` or `.is-invalid`. The default forms bundle imports `forms/validation.css`; custom builds may omit that file when validation styling is app-owned. A small enhancer (`actual-css/js/validation`), included in the default runtime (`actual-css/js`) and also importable on its own, prevents premature error display, marks invalid fields on submit, focuses the first invalid field, and supports a few custom rules. It is not a validation framework — server and AJAX validation stay in app code.
 
 Opt in with the `.needs-validation` class. Importing the module registers the behavior; there is no init call.
 
@@ -952,7 +952,9 @@ Opt in with the `.needs-validation` class. Importing the module registers the be
   </label>
 
   <input id="password" name="password" type="password" required hidden />
-  <button class="btn primary" type="submit">Submit</button>
+  <div class="form-actions">
+    <button class="btn primary" type="submit">Submit</button>
+  </div>
 </form>
 ```
 
@@ -962,11 +964,54 @@ import "actual-css/js/validation";
 
 On submit, the enhancer adds `.was-validated` to the form and `.is-invalid` + `aria-invalid="true"` to each invalid field. It does not mark valid fields automatically. When the form is invalid it prevents submission, focuses the first invalid field, and dispatches a bubbling `actual:invalid` event with `{ form, firstInvalid, message }`.
 
-The optional status bar (`actual-css/js/status`) auto-wires to that event: import it and add one status element, and the form's `data-validation-message` appears automatically on invalid submit — no manual listener.
+The status bar (`actual-css/js/status`) auto-wires to that event: import it and add one status element, and the form's `data-validation-message` appears automatically on invalid submit — no manual listener.
 
 ```html
 <form class="needs-validation" data-validation-message="Please check the highlighted fields.">
-  <!-- fields -->
+  <div class="stack">
+    <label class="field">
+      <span class="field-label">Email</span>
+      <input class="input" type="email" name="email" required
+             aria-describedby="demo-email-error" />
+      <span class="field-error" id="demo-email-error" role="alert">
+        Enter a valid email.
+      </span>
+    </label>
+
+    <label class="field">
+      <span class="field-label">Quantity</span>
+      <input class="input" name="quantity" inputmode="numeric" required
+             data-validation-rules="digits"
+             aria-describedby="demo-quantity-error" />
+      <span class="field-error" id="demo-quantity-error" role="alert">
+        Use digits only.
+      </span>
+    </label>
+
+    <label class="choice">
+      <input class="check" type="checkbox" name="terms" required
+             aria-describedby="demo-terms-error" />
+      <span>
+        <span class="field-label">Accept the terms</span>
+        <span class="field-error" id="demo-terms-error" role="alert">
+          Required before continuing.
+        </span>
+      </span>
+    </label>
+
+    <label class="choice">
+      <input class="switch" type="checkbox" role="switch" name="confirm" required
+             aria-describedby="demo-confirm-error" />
+      <span>
+        <span class="field-label">Confirm setup</span>
+        <span class="field-error" id="demo-confirm-error" role="alert">
+          Switch this on to submit.
+        </span>
+      </span>
+    </label>
+
+    <button class="btn primary" type="submit">Submit</button>
+  </div>
 </form>
 
 <div class="status-bar" data-status role="status" aria-live="polite" aria-atomic="true"></div>
