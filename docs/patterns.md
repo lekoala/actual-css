@@ -239,6 +239,38 @@ A project may add `.side-nav` only when it needs specific visual behavior such a
 
 Keep this separate from layout primitives. `.cluster` and `.stack` should not style links.
 
+## Icon Input
+
+A search or filter input with a leading icon is composition, not a component: position the icon absolutely inside a relative wrapper, and give the input enough start padding to clear it.
+
+```html
+<label class="input-icon" style="position: relative; display: block;">
+  <i class="ti ti-search" aria-hidden="true"></i>
+  <input class="input" type="search" placeholder="Search accounts, invoices, notes" aria-label="Search">
+</label>
+```
+
+```css
+.input-icon {
+  position: relative;
+}
+
+.input-icon i {
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-start: 0.7rem;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
+.input-icon .input {
+  padding-inline-start: 2.25rem;
+}
+```
+
+`pointer-events: none` on the icon keeps clicks passing through to the input underneath. This is not shipped as a framework class because the icon inset and input start-padding depend on the icon size and the input's own padding scale (`.sm` vs default vs `.lg`) — values that a project tunes once and reuses, rather than a fixed contract that would need a modifier for every size combination.
+
 ## Structured Lists
 
 Use native lists plus layout primitives for rich content rows. Reset list chrome only when markers are not part of the content.

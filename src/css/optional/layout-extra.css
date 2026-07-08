@@ -14,3 +14,36 @@
   flex-grow: 1;
   min-inline-size: 0;
 }
+
+/*
+ * Sticky, frosted top bar shell for app/dashboard shells (persistent
+ * sidebar + topbar layouts). Owns positioning, stacking, and the frosted
+ * background only — row content (search, breadcrumb, actions) stays local
+ * to the page.
+ *
+ * Not for marketing/editorial site headers — those are one-off visual
+ * identity per page; see docs/patterns.md's Header Navigation section.
+ * This is for the structural app-shell topbar, which recurs unchanged
+ * across app UIs regardless of brand.
+ */
+.topbar {
+  position: sticky;
+  inset-block-start: 0;
+  z-index: var(--z-sticky);
+  isolation: isolate;
+  display: flex;
+  align-items: center;
+  gap: var(--gap);
+  padding-block: var(--space-3);
+  padding-inline: var(--space-4);
+  border-block-end: var(--border-width) solid var(--border);
+  background: var(--surface);
+}
+
+@supports ((backdrop-filter: blur(1rem)) or (-webkit-backdrop-filter: blur(1rem))) {
+  .topbar {
+    background: color-mix(in oklch, var(--surface) 88%, transparent);
+    backdrop-filter: blur(0.75rem);
+    -webkit-backdrop-filter: blur(0.75rem);
+  }
+}

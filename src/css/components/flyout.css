@@ -17,6 +17,19 @@
   display: inline-block;
 }
 
+/* Full-width trigger: for a flyout trigger that must span its container —
+   e.g. the last row of a full-width sidebar nav list. Stretches both the
+   positioning wrapper and its trigger control. Templates commonly name this
+   wrapper .flyout-trigger; the modifier targets that convention directly. */
+.flyout-trigger.block {
+  display: block;
+  inline-size: 100%;
+}
+
+.flyout-trigger.block > [aria-haspopup="menu"] {
+  inline-size: 100%;
+}
+
 .flyout {
   z-index: var(--z-menu);
   position: absolute;
