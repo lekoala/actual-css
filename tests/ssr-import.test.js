@@ -21,6 +21,7 @@ test("javascript modules import without a DOM", async () => {
     "input",
     "mask",
     "scrollspy",
+    "status",
     "surface",
     "validation",
     "tab",

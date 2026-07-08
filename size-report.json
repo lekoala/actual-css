@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-07-08T10:20:54.812Z",
-  "totalRaw": 143943,
-  "totalMinified": 75301,
-  "totalBrotli": 11198,
+  "timestamp": "2026-07-08T10:27:35.014Z",
+  "totalRaw": 145813,
+  "totalMinified": 76623,
+  "totalBrotli": 11378,
   "themesMinified": 26049,
   "themesBrotli": 3018,
-  "shippedMinified": 75301,
-  "shippedBrotli": 11198,
+  "shippedMinified": 76623,
+  "shippedBrotli": 11378,
   "maxShippedBrotli": 13312,
-  "fileCount": 66,
+  "fileCount": 67,
   "files": [
     {
       "file": "components/flyout.css",
@@ -28,7 +28,7 @@
     },
     {
       "file": "tokens.css",
-      "raw": 4846
+      "raw": 4864
     },
     {
       "file": "components/badge.css",
@@ -163,6 +163,10 @@
       "raw": 1867
     },
     {
+      "file": "components/status-bar.css",
+      "raw": 1826
+    },
+    {
       "file": "layout.css",
       "raw": 1736
     },
@@ -235,12 +239,12 @@
       "raw": 735
     },
     {
-      "file": "intents.css",
-      "raw": 702
+      "file": "components/index.css",
+      "raw": 711
     },
     {
-      "file": "components/index.css",
-      "raw": 685
+      "file": "intents.css",
+      "raw": 702
     },
     {
       "file": "print.css",

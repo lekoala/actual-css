@@ -100,6 +100,7 @@
   --z-menu: 20;
   --z-popover: 30;
   --z-tooltip: 50;
+  --z-status: 60;
 }
 
 @supports (block-size: 100dvh) {
