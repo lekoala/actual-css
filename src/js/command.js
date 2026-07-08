@@ -3,11 +3,10 @@
  *
  * Any element can act as an invoker via `commandfor="target-id" command="name"`.
  * Every module built on this pattern (dialog, status, …) needs the same
- * three things: resolve the commandfor target by id, wire the trigger's
- * click through enhance()'s connect/disconnect lifecycle, and re-attempt
- * that wiring later when the target arrives after the trigger did. This
- * module is that shared plumbing; each caller supplies only what is
- * specific to it — target validation, one-time wiring, and the click
+ * three things: resolve the commandfor target by id, wire one-time connect
+ * semantics (aria-controls, etc.) through enhance()'s lifecycle, and react to
+ * clicks. This module is that shared plumbing; each caller supplies only
+ * what is specific to it — target validation, one-time wiring, and the click
  * behavior itself.
  *
  *   import { commandTrigger } from "./command.js";
@@ -18,7 +17,14 @@
  *     click: (event, trigger, target) => {...},
  *   });
  *
- * `triggers.connectOne(trigger)` re-runs the same wiring outside of
+ * Clicks are handled by a single delegated listener shared across every
+ * commandTrigger() call, not one listener per trigger — cheap to keep
+ * around regardless of how many invokers a page ends up with. A click only
+ * does something if its trigger is already connected (registered in this
+ * call's WeakMap), so the listener stays a no-op for every command it
+ * doesn't own.
+ *
+ * `triggers.connectOne(trigger)` re-runs the connect step outside of
  * enhance()'s own scan — needed when a late-inserted target should retry
  * triggers that already scanned as unresolved (enhance() never re-invokes an
  * enhancer for an element it has already matched against that selector).
@@ -30,13 +36,36 @@ export function targetFor(trigger) {
   return id ? trigger.ownerDocument.getElementById(id) : null;
 }
 
+const registrations = [];
+// Keyed by document, not a plain once-ever flag: `document` is stable for a
+// real page's lifetime, so this only ever runs once there, but test harnesses
+// swap in a fresh document per test and each one needs its own listener.
+const delegatedDocuments = new WeakSet();
+
+function delegateClicks() {
+  if (typeof document === "undefined" || delegatedDocuments.has(document)) return;
+  delegatedDocuments.add(document);
+
+  document.addEventListener("click", (event) => {
+    if (!(event.target instanceof Element)) return;
+
+    const trigger = event.target.closest("[commandfor][command]");
+    if (!trigger) return;
+
+    for (const { wired, click } of registrations) {
+      const target = wired.get(trigger);
+      if (target !== undefined) {
+        click(event, trigger, target);
+        return;
+      }
+    }
+  });
+}
+
 export function commandTrigger(selector, { resolve = targetFor, connect, click }) {
   const wired = new WeakMap();
-
-  function handleClick(event) {
-    const state = wired.get(event.currentTarget);
-    if (state) click(event, event.currentTarget, state.target);
-  }
+  registrations.push({ wired, click });
+  delegateClicks();
 
   function connectOne(trigger) {
     if (wired.has(trigger)) return;
@@ -44,24 +73,14 @@ export function commandTrigger(selector, { resolve = targetFor, connect, click }
     const target = resolve(trigger);
     if (!target) return;
 
-    const controller = new AbortController();
-    wired.set(trigger, { target, controller });
+    wired.set(trigger, target);
     connect?.(trigger, target);
-    trigger.addEventListener("click", handleClick, { signal: controller.signal });
-  }
-
-  function disconnectOne(trigger) {
-    const state = wired.get(trigger);
-    if (!state) return;
-
-    state.controller.abort();
-    wired.delete(trigger);
   }
 
   const runtime = enhance({
     [selector]: (trigger) => {
       connectOne(trigger);
-      return () => disconnectOne(trigger);
+      return () => wired.delete(trigger);
     },
   });
 

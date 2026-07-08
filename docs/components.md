@@ -765,64 +765,6 @@ In menus, keep the command label and shortcut in the same interactive item.
 </article>
 ```
 
-## Status Bar
-
-> Singleton floating area for short, non-critical, transient feedback.
-
-- A status bar is a single live region, not a stacked toaster. New messages replace the previous one.
-- Keep one element in the HTML, empty by default. JavaScript only updates its text content; it shows when non-empty and hides when empty, while staying available as a live region.
-- Use it for transient status (`Saved.`, `Reconnected.`, `Copied.`). Critical, persistent, or actionable information belongs in `.alert`, inline messages, or dialogs.
-- Intents: `danger`, `success`, `warning`, `neutral`. The default (no intent) is a neutral dark pill.
-
-```html
-<form class="needs-validation" data-validation-message="Please check the highlighted fields.">
-  <label class="field">
-    <span class="field-label">Email</span>
-    <input class="input" type="email" name="email" required
-           aria-describedby="sb-email-error" />
-    <span class="field-error" id="sb-email-error" role="alert">Enter a valid email.</span>
-  </label>
-  <div class="form-actions">
-    <button class="btn primary" type="submit">Submit</button>
-  </div>
-</form>
-```
-
-Submitting the empty form blocks submission and shows `data-validation-message` in the status bar below — no JavaScript required beyond the runtime.
-
-```html
-<div class="cluster">
-  <button class="btn" type="button" commandfor="sb-status" command="--status"
-          data-status-message="Saved." data-status-intent="success">Show success</button>
-  <button class="btn" type="button" commandfor="sb-status" command="--status"
-          data-status-message="Could not save." data-status-intent="danger"
-          data-status-duration="6000">Show danger</button>
-  <button class="btn outline" type="button" commandfor="sb-status" command="--status-clear">Clear</button>
-</div>
-
-<div class="status-bar" data-status id="sb-status" role="status" aria-live="polite" aria-atomic="true"></div>
-```
-
-No script required beyond the runtime: `command="--status"` reads its message from `data-status-message` (plus optional `data-status-intent` / `data-status-duration`), `command="--status-clear"` empties the bar. `commandfor` must match the status bar's own `id`.
-
-For dynamic messages — a fetch response, a computed value — use the JS API instead, or dispatch the same event the commands use under the hood:
-
-```js
-import { status } from "actual-css/js/status";
-
-status("Saved.", { intent: "success" });
-status("Could not save.", { intent: "danger", duration: 6000 });
-status.clear();
-
-// Or, without importing anything:
-document.dispatchEvent(new CustomEvent("actual:status", {
-  bubbles: true,
-  detail: { message: "Saved.", intent: "success" },
-}));
-```
-
-The runtime auto-wires the status bar to Actual's form validation: a form that fails to submit shows its `data-validation-message` in the status bar with the `danger` intent. No target in the DOM means the call is a no-op, so the markup stays optional.
-
 ## Table
 
 > Data table with caption and scope attributes, and an accessible scroll region for wide content.
