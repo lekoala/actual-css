@@ -50,16 +50,19 @@
   box-shadow: var(--shadow-popout);
 
   opacity: 1;
+  scale: 1;
   translate: 0 0;
   pointer-events: auto;
 
   transition:
-    opacity var(--duration-fast),
-    translate var(--duration-fast);
+    opacity var(--duration-fast) var(--ease, ease),
+    scale var(--duration-fast) var(--ease, ease),
+    translate var(--duration-fast) var(--ease, ease);
 }
 
 .status-bar:empty {
   opacity: 0;
+  scale: 0.96;
   translate: 0 var(--space-2);
   pointer-events: none;
 }
