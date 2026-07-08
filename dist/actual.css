@@ -1092,7 +1092,10 @@ small {
   opacity: 0.65;
 }
 
-/* Anchors have no native disabled state. */
+/* Anchors have no native disabled state.
+   a.btn[aria-disabled="true"] only provides disabled styling and blocks pointer
+   activation. For a truly disabled link, remove href or prevent activation in
+   app code. */
 a.btn[aria-disabled="true"] {
   cursor: not-allowed;
   opacity: 0.65;
@@ -3851,6 +3854,7 @@ button.avatar {
   @supports (appearance: base-select) {
     .select:not([multiple], [size], .native) {
       appearance: base-select;
+      align-items: center;
     }
 
     .select:not([multiple], [size], .native)::picker(select) {
