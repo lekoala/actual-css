@@ -45,6 +45,23 @@ test("invalid field is marked on submit and actual:invalid fires", async () => {
   expect(detail?.message).toBe("Check fields");
 });
 
+test("manual init does not connect an already enhanced form twice", async () => {
+  const { default: FormValidator } = await loadValidation(`<form class="needs-validation">
+    <input name="email" type="email" required value="bad">
+  </form>`);
+
+  const form = document.querySelector("form");
+  let invalidEvents = 0;
+  form.addEventListener("actual:invalid", () => {
+    invalidEvents++;
+  });
+
+  FormValidator.init();
+  form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
+
+  expect(invalidEvents).toBe(1);
+});
+
 test("valid form is not blocked on submit", async () => {
   await loadValidation(`<form class="needs-validation">
     <input name="email" type="email" required value="a@b.com">
@@ -56,6 +73,7 @@ test("valid form is not blocked on submit", async () => {
 
   expect(event.defaultPrevented).toBe(false);
   expect(form.classList.contains("was-validated")).toBe(true);
+  expect(form.elements.email.classList.contains("is-valid")).toBe(false);
 });
 
 test("number rule is fixed (digits valid, letters invalid)", async () => {
