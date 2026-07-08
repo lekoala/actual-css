@@ -68,7 +68,7 @@
       align-items: center;
     }
 
-    .block-filter-group > :where(.input, .select) {
+    .block-filter-group :where(.input, .select) {
       inline-size: auto;
       min-inline-size: min(100%, 11rem);
     }
@@ -243,18 +243,20 @@
         <div class="block-toolbar">
           <div class="block-filter-group">
             <input class="input sm" type="search" aria-label="Search accounts" placeholder="Search accounts">
-            <select class="select sm" aria-label="Filter by status">
-              <option>All statuses</option>
-              <option>Healthy</option>
-              <option>Watch</option>
-              <option>Blocked</option>
-            </select>
-            <select class="select sm" aria-label="Filter by owner">
-              <option>All owners</option>
-              <option>Ada</option>
-              <option>Jana</option>
-              <option>Rin</option>
-            </select>
+            <div class="cluster nowrap sm">
+              <select class="select sm" aria-label="Filter by status">
+                <option>All statuses</option>
+                <option>Healthy</option>
+                <option>Watch</option>
+                <option>Blocked</option>
+              </select>
+              <select class="select sm" aria-label="Filter by owner">
+                <option>All owners</option>
+                <option>Ada</option>
+                <option>Jana</option>
+                <option>Rin</option>
+              </select>
+            </div>
           </div>
 
           <menu class="actions cluster sm">
