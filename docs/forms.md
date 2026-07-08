@@ -958,10 +958,6 @@ Opt in with the `.needs-validation` class. Importing the module registers the be
 </form>
 ```
 
-```js
-import "actual-css/js/validation";
-```
-
 On submit, the enhancer adds `.was-validated` to the form and `.is-invalid` + `aria-invalid="true"` to each invalid field. It does not mark valid fields automatically. When the form is invalid it prevents submission, focuses the first invalid field, and dispatches a bubbling `actual:invalid` event with `{ form, firstInvalid, message }`.
 
 The status bar (`actual-css/js/status`) auto-wires to that event: import it and add one status element, and the form's `data-validation-message` appears automatically on invalid submit — no manual listener.
@@ -1015,11 +1011,6 @@ The status bar (`actual-css/js/status`) auto-wires to that event: import it and 
 </form>
 
 <div class="status-bar" data-status role="status" aria-live="polite" aria-atomic="true"></div>
-```
-
-```js
-import "actual-css/js/validation";
-import "actual-css/js/status";
 ```
 
 If you prefer to handle the summary yourself, listen for `actual:invalid` instead of importing the status module:

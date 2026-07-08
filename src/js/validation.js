@@ -10,8 +10,6 @@
  *
  * Opt in with the .needs-validation class. Importing the module registers
  * the behavior; there is no init call.
- *
- *   import "actual-css/js/validation";
  */
 
 import enhance from "./enhance.js";

@@ -138,14 +138,6 @@
         </div>
       </div>
     </section>
-    <section class="component-section">
-      <div class="example-group">
-        <div class="example-code">
-          <pre><code class="language-js"><span class="token keyword">import</span> <span class="token string">"actual-css/js/validation"</span><span class="token punctuation">;</span></code></pre>
-        </div>
-      </div>
-    </section>
-    <script>try{import "actual-css/js/validation";}catch(e){console.error(e)}</script>
     <div class="component-prose">
       <p>On submit, the enhancer adds <code>.was-validated</code> to the form and <code>.is-invalid</code> + <code>aria-invalid=&quot;true&quot;</code> to each invalid field. It does not mark valid fields automatically. When the form is invalid it prevents submission, focuses the first invalid field, and dispatches a bubbling <code>actual:invalid</code> event with <code>{ form, firstInvalid, message }</code>. The status bar (<code>actual-css/js/status</code>) auto-wires to that event: import it and add one status element, and the form's <code>data-validation-message</code> appears automatically on invalid submit — no manual listener.</p>
     </div>
@@ -253,16 +245,6 @@
         </div>
       </div>
     </section>
-    <section class="component-section">
-      <div class="example-group">
-        <div class="example-code">
-          <pre><code class="language-js"><span class="token keyword">import</span> <span class="token string">"actual-css/js/validation"</span><span class="token punctuation">;</span>
-<span class="token keyword">import</span> <span class="token string">"actual-css/js/status"</span><span class="token punctuation">;</span></code></pre>
-        </div>
-      </div>
-    </section>
-    <script>try{import "actual-css/js/validation";
-import "actual-css/js/status";}catch(e){console.error(e)}</script>
     <div class="component-prose">
       <p>If you prefer to handle the summary yourself, listen for <code>actual:invalid</code> instead of importing the status module:</p>
     </div>
