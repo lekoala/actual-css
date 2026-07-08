@@ -85,6 +85,14 @@
 }
 
 @supports (color: color-mix(in oklch, red, white)) {
+  /* Solid has no literal class requirement: bare .btn/.badge default to solid,
+     so this must match anything that isn't one of the other variants rather
+     than an explicit .solid class. Stacks with the box-shadow overlay the
+     consuming components apply on top for extra depth. */
+  :is(.btn, a.badge, button.badge):not(:where(.soft, .outline, .ghost, .link)) {
+    --ui-hover-bg: color-mix(in oklch, var(--intent, var(--neutral)) 88%, black);
+  }
+
   /* Same recipe as the resting .soft bg with the surface share reduced by
      --soft-hover-alpha: stays opaque, so it reads on any backdrop instead of
      letting the container show through on hover. */
@@ -96,8 +104,12 @@
     );
   }
 
+  /* Mixed against the opaque --surface-subtle rather than transparent: a
+     transparent-based tint reads clean on light surfaces but goes muddy and
+     low-contrast on dark ones, since the same low alpha lands very
+     differently over a light vs. a near-black backdrop. */
   :is(.btn, a.badge, button.badge):is(.outline) {
-    --ui-hover-bg: color-mix(in oklch, var(--intent, var(--neutral)), transparent 92%);
+    --ui-hover-bg: color-mix(in oklch, var(--surface-subtle) 92%, var(--intent, var(--neutral)));
   }
 
   :is(.btn, a.badge, button.badge):is(.ghost) {
