@@ -33,10 +33,7 @@ let statusTimer;
 
 function statusTarget() {
   if (typeof document === "undefined") return null;
-  return (
-    document.querySelector("[data-status]") ||
-    document.querySelector(".status-bar")
-  );
+  return document.querySelector(".status-bar[data-status]");
 }
 
 export function status(message, options = {}) {
@@ -142,7 +139,7 @@ if (typeof document !== "undefined") {
   });
 
   enhance({
-    "[data-status], .status-bar": (target) => connectStatusTarget(target),
+    ".status-bar[data-status]": (target) => connectStatusTarget(target),
   });
 }
 

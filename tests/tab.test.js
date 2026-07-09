@@ -5,7 +5,7 @@ let importId = 0;
 
 function tabsMarkup() {
   return `
-    <div role="tablist">
+    <div class="tabs" role="tablist">
       <button id="tab-a" role="tab" aria-controls="panel-a" aria-selected="true">A</button>
       <button id="tab-b" role="tab" aria-controls="panel-b">B</button>
       <button id="tab-c" role="tab" aria-controls="panel-c">C</button>
@@ -126,9 +126,20 @@ test("dynamically inserted tablists are initialized", async () => {
   expect(document.getElementById("panel-b").hidden).toBe(false);
 });
 
+test("ignores a tablist without the .tabs component class", async () => {
+  await loadTabs(tabsMarkup().replace('class="tabs" ', ""));
+
+  const tabA = document.getElementById("tab-a");
+  const tabB = document.getElementById("tab-b");
+  click(tabB);
+
+  expect(tabA.getAttribute("aria-selected")).toBe("true");
+  expect(tabB.getAttribute("aria-selected")).toBe(null);
+});
+
 test("initialization skips a selected tab with a missing panel", async () => {
   await loadTabs(`
-    <div role="tablist">
+    <div class="tabs" role="tablist">
       <button id="tab-a" role="tab" aria-controls="missing-panel" aria-selected="true">A</button>
       <button id="tab-b" role="tab" aria-controls="panel-b">B</button>
     </div>

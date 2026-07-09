@@ -618,7 +618,7 @@ Long press is opt-in with `data-context-menu-long-press`. Empty uses the default
 - Use normal links and `aria-current="page"` for page navigation that only looks like tabs.
 - JavaScript owns roving `tabindex`, `aria-selected`, `hidden`, and keyboard behavior.
 - Left/Right select tabs and wrap at the ends. Home/End jump to first/last. Down moves focus into the selected panel.
-- `.tabs` styles the tab list. `.tab` styles each trigger.
+- A tab list needs both `.tabs` and `role="tablist"`; `.tab` styles each trigger.
 
 ```html
 <div class="tabset">
