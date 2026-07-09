@@ -90,6 +90,7 @@
   "required-mark",
   "scrollable",
   "scroll-snap",
+  "scrollspy",
   "secondary",
   "select",
   "sidebar-layout",

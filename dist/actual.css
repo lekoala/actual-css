@@ -55,79 +55,6 @@ select {
   }
 }
 
-/*
- * Base element styles for native HTML semantics.
- *
- * Sits between reset (browser defaults) and prose (rich content scope).
- * These styles apply everywhere — cards, dialogs, heroes — not only in prose.
- */
-
-body {
-  background: var(--surface);
-  color: var(--text);
-  font-family: var(--font-sans);
-  line-height: var(--line-height);
-}
-
-a {
-  color: inherit;
-  text-underline-offset: 0.18em;
-}
-
-a:focus-visible {
-  outline: var(--focus-outline);
-  outline-offset: var(--focus-outline-offset);
-  box-shadow: var(--focus-ring-shadow);
-}
-
-@media (hover: hover) {
-  a:hover {
-    text-decoration-thickness: 0.12em;
-  }
-}
-
-/* Global heading chrome: color (--heading or inherit), a tight line-height,
-   and progressive text-wrap. No font-size or font-weight is set globally —
-   components and .prose own the per-context scale. */
-:where(h1, h2, h3, h4, h5, h6) {
-  color: var(--heading, inherit);
-  line-height: var(--line-height-tight);
-  text-wrap: balance;
-}
-
-/* Compact heading groups. Structural only: display, gap, internal margin reset.
-   No font-size, color, or weight is applied here. */
-hgroup {
-  display: grid;
-  gap: var(--hgroup-gap);
-}
-
-hgroup > * {
-  margin-block: 0;
-}
-
-hr {
-  border: 0;
-  border-block-start: var(--border-width) solid var(--border);
-  margin-block: var(--space-6);
-}
-
-code,
-kbd,
-samp,
-pre {
-  font-family: var(--font-mono);
-}
-
-small {
-  font-size: 0.875em;
-}
-
-::selection {
-  background: var(--selection-bg, var(--primary));
-  color: var(--selection-fg, var(--primary-fg));
-}
-
 :root {
   /* Typography */
   --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
@@ -147,10 +74,8 @@ small {
   --font-size-lg: 1.125rem;
 
   /* Spacing */
-  --gap-md: 0.75rem;
-  --gap: var(--gap-md);
-  --variant-space-md: var(--space-4);
-  --variant-space: var(--variant-space-md);
+  --gap: 0.75rem;
+  --variant-space: var(--space-4);
   --space-1: 0.25rem;
   --space-2: 0.5rem;
   --space-3: 0.75rem;
@@ -161,12 +86,10 @@ small {
   /* Shape */
   --border-width: 1px;
   --radius-full: 9999px;
-  --shadow-color: hsl(220 30% 10%);
   --shadow: 0 0.5rem 1.5rem rgb(0 0 0 / 0.08);
   --shadow-popout: 0 0.25rem 0.75rem rgb(0 0 0 / 0.15);
 
-  /* Motion — see reset.css for the prefers-reduced-motion hard reset, which
-     zeroes raw animations/transitions in addition to --duration here.
+  /* Motion — see reset.css for the prefers-reduced-motion hard reset.
      --duration drives component transitions (hover/focus); the dedicated
      animation rates below tune one-shot open/close and decorative loops. */
   --duration: 150ms;
@@ -215,8 +138,7 @@ small {
   /* Native select uses background-image, which cannot inherit currentColor.
      The stroke matches the default theme's text-subtle (hue 258 neutral). */
   --icon-chevron-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%238a8594' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
-  --icon-chevron: var(--icon-chevron-mask);
-  --icon-check: var(--icon-check-mask);
+  --icon-chevron-image-contrast: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='CanvasText' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
 
   /* Viewport size tokens — fallback vh/vw with dvh/vi enhancement.
      Consumed by full-viewport components (app-shell, drawer, modal, flyout).
@@ -228,7 +150,6 @@ small {
   /* Layering */
   --z-sticky: 10;
   --z-menu: 20;
-  --z-popover: 30;
   --z-tooltip: 50;
   --z-status: 60;
 }
@@ -257,9 +178,9 @@ small {
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
+@media (prefers-contrast: more) {
   :root {
-    --duration: 0.01ms;
+    --icon-chevron-image: var(--icon-chevron-image-contrast);
   }
 }
 
@@ -348,25 +269,15 @@ small {
   --hgroup-gap: 0.25em;
 }
 
-/* Tone subsystem — explicit light/dark surface inversion (e.g. dark-on-light
-   avatars). Consumed by components that compose on a tone-flipped surface. */
+/* Tone subsystem — fixed-backdrop foreground for components placed over media
+   or other surfaces outside the theme token stack. Use data-theme islands for
+   full dark/light subtree inversion. */
 [data-tone="dark"] {
   --tone-fg: white;
-  --tone-muted: rgba(255, 255, 255, 0.75);
-  --tone-border: rgba(255, 255, 255, 0.25);
-}
-
-@supports (color: color-mix(in oklch, red, white)) {
-  [data-tone="dark"] {
-    --tone-muted: color-mix(in oklch, var(--tone-fg), transparent 25%);
-    --tone-border: color-mix(in oklch, var(--tone-fg), transparent 75%);
-  }
 }
 
 [data-tone="light"] {
   --tone-fg: var(--text);
-  --tone-muted: var(--text-muted);
-  --tone-border: var(--border);
 }
 
 /* Auto dark mode via light-dark(). Resolves based on the element's color-scheme:
@@ -406,7 +317,6 @@ small {
 
     --border: light-dark(hsl(260 15% 88%), hsl(262 12% 24%));
     --focus-ring: light-dark(hsl(268 32% 33% / 0.22), hsl(268 42% 76% / 0.28));
-    --focus-ring-shadow: 0 0 0 3px var(--focus-ring);
     --hover-overlay: light-dark(hsl(260 20% 10% / 0.04), hsl(0 0% 100% / 0.06));
     --shadow-color: light-dark(hsl(260 25% 10%), hsl(262 40% 2%));
   }
@@ -417,7 +327,6 @@ small {
   [data-theme="light"],
   [data-theme="dark"] {
     --focus-outline: calc(var(--border-width) * 2) solid Highlight;
-    --focus-outline-offset: 2px;
     --focus-ring-shadow: none;
 
     --backdrop-fill: Canvas;
@@ -434,6 +343,79 @@ small {
     --text-muted: var(--text);
     --text-subtle: var(--text);
   }
+}
+
+/*
+ * Base element styles for native HTML semantics.
+ *
+ * Sits between reset (browser defaults) and prose (rich content scope).
+ * These styles apply everywhere — cards, dialogs, heroes — not only in prose.
+ */
+
+body {
+  background: var(--surface);
+  color: var(--text);
+  font-family: var(--font-sans);
+  line-height: var(--line-height);
+}
+
+a {
+  color: inherit;
+  text-underline-offset: 0.18em;
+}
+
+a:focus-visible {
+  outline: var(--focus-outline);
+  outline-offset: var(--focus-outline-offset);
+  box-shadow: var(--focus-ring-shadow);
+}
+
+@media (hover: hover) {
+  a:hover {
+    text-decoration-thickness: 0.12em;
+  }
+}
+
+/* Global heading chrome: color (--heading or inherit), a tight line-height,
+   and progressive text-wrap. No font-size or font-weight is set globally —
+   components and .prose own the per-context scale. */
+:where(h1, h2, h3, h4, h5, h6) {
+  color: var(--heading, inherit);
+  line-height: var(--line-height-tight);
+  text-wrap: balance;
+}
+
+/* Compact heading groups. Structural only: display, gap, internal margin reset.
+   No font-size, color, or weight is applied here. */
+hgroup {
+  display: grid;
+  gap: var(--hgroup-gap);
+}
+
+hgroup > * {
+  margin-block: 0;
+}
+
+hr {
+  border: 0;
+  border-block-start: var(--border-width) solid var(--border);
+  margin-block: var(--space-6);
+}
+
+code,
+kbd,
+samp,
+pre {
+  font-family: var(--font-mono);
+}
+
+small {
+  font-size: 0.875em;
+}
+
+::selection {
+  background: var(--selection-bg, var(--primary));
+  color: var(--selection-fg, var(--primary-fg));
 }
 
 /*
@@ -607,9 +589,7 @@ small {
   .container-query .grid-4 {
     grid-template-columns: 1fr;
   }
-}
 
-@container (width < 28rem) {
   .container-query .grid-6 {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -800,11 +780,11 @@ small {
   overflow-wrap: break-word;
 }
 
-.prose :where(p, ul, ol, blockquote, pre, table, figure) {
+.prose :where(p, ul, ol, dl, blockquote, pre, table, figure) {
   margin-block: var(--prose-flow) 0;
 }
 
-.prose :where(h1, h2, h3, h4) {
+.prose :where(h1, h2, h3, h4, h5, h6) {
   margin-block: 1.5em 0;
   color: var(--text);
   font-weight: var(--font-weight-strong);
@@ -1220,10 +1200,12 @@ a.btn[aria-disabled="true"] {
   display: inline-grid;
   place-items: center;
   flex: 0 0 auto;
-  inline-size: 1.25em;
-  block-size: 1.25em;
-  margin-inline-end: -0.25em;
-  padding: 0;
+  min-inline-size: 1.5rem;
+  min-block-size: 1.5rem;
+  margin-block: -0.25rem;
+  margin-inline-start: -0.15em;
+  margin-inline-end: -0.45em;
+  padding: 0.25rem;
   border: 0;
   border-radius: var(--radius-full);
   background: transparent;
@@ -2193,7 +2175,7 @@ dialog.drawer nav {
   color: var(--tooltip-fg);
   font-size: var(--font-size-xs);
   line-height: var(--line-height-tight);
-  pointer-events: none;
+  pointer-events: auto;
   user-select: none;
   opacity: 1;
   scale: 1;
@@ -2235,22 +2217,22 @@ dialog.drawer nav {
 }
 
 .tooltip[data-placement^="top"]::before {
-  inset-block-end: calc(-0.98 * var(--tooltip-arrow-size));
-  inset-inline-start: var(--arrow-x, 50%);
+  bottom: calc(-0.98 * var(--tooltip-arrow-size));
+  left: var(--arrow-x, 50%);
   translate: -50% 0;
   clip-path: polygon(50% 100%, 0 0, 100% 0);
 }
 
 .tooltip[data-placement^="bottom"]::before {
-  inset-block-start: calc(-0.98 * var(--tooltip-arrow-size));
-  inset-inline-start: var(--arrow-x, 50%);
+  top: calc(-0.98 * var(--tooltip-arrow-size));
+  left: var(--arrow-x, 50%);
   translate: -50% 0;
   clip-path: polygon(50% 0, 0 100%, 100% 100%);
 }
 
 .tooltip[data-placement^="left"]::before {
-  inset-inline-end: calc(-0.98 * var(--tooltip-arrow-size));
-  inset-block-start: var(--arrow-y, 50%);
+  right: calc(-0.98 * var(--tooltip-arrow-size));
+  top: var(--arrow-y, 50%);
   inline-size: var(--tooltip-arrow-size);
   block-size: calc(var(--tooltip-arrow-size) * 2);
   translate: 0 -50%;
@@ -2258,8 +2240,8 @@ dialog.drawer nav {
 }
 
 .tooltip[data-placement^="right"]::before {
-  inset-inline-start: calc(-0.98 * var(--tooltip-arrow-size));
-  inset-block-start: var(--arrow-y, 50%);
+  left: calc(-0.98 * var(--tooltip-arrow-size));
+  top: var(--arrow-y, 50%);
   inline-size: var(--tooltip-arrow-size);
   block-size: calc(var(--tooltip-arrow-size) * 2);
   translate: 0 -50%;
@@ -2758,6 +2740,13 @@ dialog.drawer nav {
   pointer-events: none;
 }
 
+@media (forced-colors: active) {
+  .status-bar {
+    border: var(--border-width) solid ButtonText;
+    box-shadow: none;
+  }
+}
+
 
 /* Display */
 /*
@@ -3175,7 +3164,7 @@ button.avatar {
   min-inline-size: var(--control-size);
 }
 
-.pagination [aria-hidden="true"] {
+.pagination > li > [aria-hidden="true"] {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -3276,7 +3265,8 @@ button.avatar {
  * Scrollspy — behavior hook for navigation that marks the active section
  * while the page scrolls.
  *
- * Does not add visual styles by itself. surface.js watches <nav class="scrollspy">
+ * Adds only a baseline current-link affordance. scrollspy.js watches
+ * <nav class="scrollspy">
  * containing <a href="#section"> links and toggles aria-current="location" on
  * the link whose target is in view. Pair with .nav-list and .nav-link, or style
  * [aria-current] yourself.
@@ -3289,10 +3279,10 @@ button.avatar {
  * Falls back gracefully: links still work when IntersectionObserver or
  * :target-current is unavailable.
  *
- * Intentionally empty: no CSS rules needed. The class is kept in the bundle
- * so the selector is available for JS enhancement and for authors to hook
- * their own styling.
  */
+.scrollspy a[aria-current="location"] {
+  font-weight: var(--font-weight-strong);
+}
 
 
 /* Data */
@@ -3361,7 +3351,8 @@ button.avatar {
   }
 }
 
-.table tr:last-child > * {
+.table > :last-child > tr:last-child > *,
+.table > tr:last-child > * {
   border-block-end: 0;
 }
 
@@ -3501,18 +3492,6 @@ button.avatar {
   font-size: var(--font-size-sm);
 }
 
-.field.danger > .field-error,
-.field:has([aria-invalid="true"]) > .field-error,
-.needs-validation.was-validated .field:has(:invalid) > .field-error {
-  display: block;
-}
-
-@supports selector(:user-invalid) {
-  .needs-validation .field:has(:user-invalid) > .field-error {
-    display: block;
-  }
-}
-
 .required-mark {
   color: var(--danger);
 }
@@ -3582,16 +3561,11 @@ button.avatar {
 }
 
 .input:focus-visible,
-.textarea:focus-visible {
+.textarea:focus-visible,
+.select:focus-visible {
   --control-border: var(--focus);
   outline: var(--focus-outline);
   outline-offset: var(--focus-outline-offset);
-  box-shadow: var(--focus-ring-shadow);
-}
-
-.select:focus-visible {
-  --control-border: var(--border);
-  outline: none;
   box-shadow: var(--focus-ring-shadow);
 }
 
@@ -3617,9 +3591,9 @@ button.avatar {
 }
 
 @media (forced-colors: active) {
+  .input:focus-visible,
+  .textarea:focus-visible,
   .select:focus-visible {
-    outline: var(--focus-outline);
-    outline-offset: var(--focus-outline-offset);
     box-shadow: none;
   }
 }
@@ -3674,7 +3648,7 @@ button.avatar {
    thanks to align-items: flex-start. Override per-instance via
    --choice-control-offset for themes with a different line-height or control
    size. */
-.choice > :is(input[type="checkbox"], input[type="radio"]) {
+.choice > :is(input[type="checkbox"]:not([role="switch"]), input[type="radio"]) {
   flex: 0 0 auto;
   margin-block-start: var(--choice-control-offset);
 }
@@ -3706,7 +3680,6 @@ button.avatar {
   border: var(--border-width) solid var(--form-invalid-border, var(--choice-border));
   background: var(--choice-bg);
   color: var(--choice-mark);
-  accent-color: var(--primary);
   appearance: none;
   cursor: pointer;
 }
@@ -3748,6 +3721,7 @@ button.avatar {
 .radio:checked {
   --choice-border: var(--intent, var(--primary));
   --choice-bg: var(--intent, var(--primary));
+  --choice-mark: var(--intent-fg, var(--primary-fg));
 }
 
 .check:checked::before {
@@ -3781,7 +3755,7 @@ button.avatar {
 
 .check:focus-visible,
 .radio:focus-visible {
-  border-color: var(--focus);
+  --choice-border: var(--focus);
   outline: var(--focus-outline);
   outline-offset: var(--focus-outline-offset);
   box-shadow: var(--focus-ring-shadow);
@@ -3842,7 +3816,7 @@ button.avatar {
 
 /* The chevron sits on the inline-end side; flip it in RTL so it follows
    the padding-inline-end space reserved for it. */
-[dir="rtl"] .select:not([multiple], [size]) {
+.select:not([multiple], [size]):dir(rtl) {
   background-position: center left var(--space-3);
 }
 
@@ -3894,7 +3868,7 @@ button.avatar {
       display: none;
     }
 
-    .select option {
+    .select:not([multiple], [size], .native) option {
       position: relative;
       padding-block: var(--space-2);
       padding-inline: var(--space-3);
@@ -3903,24 +3877,24 @@ button.avatar {
       transition-duration: var(--duration);
     }
 
-    .select option:not(:disabled):hover {
+    .select:not([multiple], [size], .native) option:not(:disabled):hover {
       background-color: var(--surface-subtle);
       color: var(--text);
       cursor: pointer;
     }
 
-    .select option:not(:disabled):focus-visible {
+    .select:not([multiple], [size], .native) option:not(:disabled):focus-visible {
       background-color: var(--primary);
       color: var(--primary-fg);
       outline: none;
     }
 
-    .select option:active {
+    .select:not([multiple], [size], .native) option:active {
       background-color: var(--surface-subtle);
       color: var(--text);
     }
 
-    .select option::checkmark {
+    .select:not([multiple], [size], .native) option::checkmark {
       content: "";
       display: block;
       inline-size: 1rem;
@@ -3936,11 +3910,11 @@ button.avatar {
       mask-position: center;
     }
 
-    .select optgroup {
+    .select:not([multiple], [size], .native) optgroup {
       padding-block-start: 0.5em;
     }
 
-    .select optgroup option:first-child {
+    .select:not([multiple], [size], .native) optgroup option:first-child {
       margin-block-start: 0.5em;
     }
   }
@@ -3962,28 +3936,29 @@ button.avatar {
         box-shadow: none;
       }
 
-      .select option:not(:disabled):hover,
-      .select option:not(:disabled):focus-visible {
+      .select:not([multiple], [size], .native) option:not(:disabled):hover,
+      .select:not([multiple], [size], .native) option:not(:disabled):focus-visible {
         background-color: Highlight;
         color: HighlightText;
         forced-color-adjust: none;
       }
 
-      .select option:active {
+      .select:not([multiple], [size], .native) option:active {
         background-color: ButtonFace;
         color: ButtonText;
         forced-color-adjust: auto;
       }
 
-      .select option::checkmark {
+      .select:not([multiple], [size], .native) option::checkmark {
         forced-color-adjust: none;
       }
 
-      .select option:not(:disabled):is(:hover, :focus-visible)::checkmark {
+      .select:not([multiple], [size], .native)
+        option:not(:disabled):is(:hover, :focus-visible)::checkmark {
         color: HighlightText;
       }
 
-      .select optgroup {
+      .select:not([multiple], [size], .native) optgroup {
         color: GrayText;
       }
     }
@@ -4121,13 +4096,15 @@ button.avatar {
 
 /* The knob travels toward inline-end; in RTL that is leftward, so the
     translateX sign flips. translateX is physical, not logical. */
-[dir="rtl"] .switch:checked::before {
+.switch:checked:dir(rtl)::before {
   transform: translateX(calc(var(--switch-travel) * -1));
 }
 
 .switch:focus-visible {
+  --switch-border: var(--focus);
   outline: var(--focus-outline);
   outline-offset: var(--focus-outline-offset);
+  box-shadow: var(--focus-ring-shadow);
 }
 
 .switch:disabled {
@@ -4176,6 +4153,12 @@ button.avatar {
   --form-invalid-border: var(--danger);
 }
 
+.field.danger > .field-error,
+.field:has([aria-invalid="true"]) > .field-error,
+.needs-validation.was-validated .field:has(:invalid) > .field-error {
+  display: block;
+}
+
 :where(.input, .textarea, .select, .check, .radio, .switch)[aria-invalid="true"],
 .needs-validation.was-validated :is(.input, .textarea, .select, .check, .radio, .switch):invalid {
   --form-invalid-border: var(--danger);
@@ -4193,6 +4176,10 @@ button.avatar {
 }
 
 @supports selector(:user-invalid) {
+  .needs-validation .field:has(:user-invalid) > .field-error {
+    display: block;
+  }
+
   .needs-validation :is(.input, .textarea, .select, .check, .radio, .switch):user-invalid {
     --form-invalid-border: var(--danger);
   }
@@ -4276,7 +4263,6 @@ button.avatar {
 }
 
 .nowrap {
-  flex-wrap: nowrap;
   white-space: nowrap;
 }
 
@@ -4518,7 +4504,7 @@ button.avatar {
     display: none !important;
   }
 
-  a.btn::after {
+  a.btn[href^="http"]::after {
     content: " (" attr(href) ")";
     font-size: 0.875em;
   }
@@ -4526,7 +4512,7 @@ button.avatar {
   .card,
   .alert,
   .badge {
-    border: 1px solid CanvasText;
+    border: var(--border-width) solid CanvasText;
     break-inside: avoid;
   }
 

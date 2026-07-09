@@ -1,12 +1,12 @@
 {
-  "timestamp": "2026-07-08T21:34:24.199Z",
-  "totalRaw": 154564,
-  "totalMinified": 77743,
-  "totalBrotli": 11490,
+  "timestamp": "2026-07-09T20:05:13.059Z",
+  "totalRaw": 154613,
+  "totalMinified": 78009,
+  "totalBrotli": 11443,
   "themesMinified": 28783,
   "themesBrotli": 3328,
-  "shippedMinified": 77743,
-  "shippedBrotli": 11490,
+  "shippedMinified": 78009,
+  "shippedBrotli": 11443,
   "maxShippedBrotli": 13312,
   "fileCount": 69,
   "files": [
@@ -19,20 +19,24 @@
       "raw": 6269
     },
     {
-      "file": "theme.css",
-      "raw": 5407
+      "file": "forms/choice.css",
+      "raw": 4993
     },
     {
-      "file": "forms/choice.css",
-      "raw": 4947
+      "file": "theme.css",
+      "raw": 4980
     },
     {
       "file": "tokens.css",
-      "raw": 4864
+      "raw": 4897
     },
     {
       "file": "variants.css",
       "raw": 4584
+    },
+    {
+      "file": "forms/custom-select.css",
+      "raw": 4145
     },
     {
       "file": "themes/gradient.css",
@@ -40,11 +44,7 @@
     },
     {
       "file": "components/badge.css",
-      "raw": 3761
-    },
-    {
-      "file": "forms/custom-select.css",
-      "raw": 3708
+      "raw": 3833
     },
     {
       "file": "components/avatar.css",
@@ -59,32 +59,32 @@
       "raw": 3557
     },
     {
-      "file": "utilities.css",
-      "raw": 3439
-    },
-    {
       "file": "themes/edge.css",
       "raw": 3424
     },
     {
-      "file": "prose.css",
-      "raw": 3335
+      "file": "utilities.css",
+      "raw": 3418
     },
     {
       "file": "forms/switch.css",
-      "raw": 3294
+      "raw": 3364
+    },
+    {
+      "file": "prose.css",
+      "raw": 3347
     },
     {
       "file": "components/drawer.css",
       "raw": 3064
     },
     {
-      "file": "components/tooltip.css",
-      "raw": 2932
-    },
-    {
       "file": "components/card.css",
       "raw": 2872
+    },
+    {
+      "file": "components/tooltip.css",
+      "raw": 2828
     },
     {
       "file": "components/progress.css",
@@ -103,10 +103,6 @@
       "raw": 2573
     },
     {
-      "file": "forms/control.css",
-      "raw": 2568
-    },
-    {
       "file": "themes/sunset.css",
       "raw": 2503
     },
@@ -119,8 +115,12 @@
       "raw": 2460
     },
     {
+      "file": "forms/control.css",
+      "raw": 2439
+    },
+    {
       "file": "grid.css",
-      "raw": 2444
+      "raw": 2413
     },
     {
       "file": "themes/forest.css",
@@ -151,6 +151,10 @@
       "raw": 2213
     },
     {
+      "file": "components/status-bar.css",
+      "raw": 2053
+    },
+    {
       "file": "themes/index.css",
       "raw": 2026
     },
@@ -161,10 +165,6 @@
     {
       "file": "components/join.css",
       "raw": 1941
-    },
-    {
-      "file": "components/status-bar.css",
-      "raw": 1925
     },
     {
       "file": "components/meter.css",
@@ -195,12 +195,8 @@
       "raw": 1464
     },
     {
-      "file": "forms/form.css",
-      "raw": 1411
-    },
-    {
       "file": "components/table.css",
-      "raw": 1404
+      "raw": 1448
     },
     {
       "file": "components/surface.css",
@@ -211,6 +207,10 @@
       "raw": 1285
     },
     {
+      "file": "forms/validation.css",
+      "raw": 1252
+    },
+    {
       "file": "components/busy.css",
       "raw": 1195
     },
@@ -219,8 +219,12 @@
       "raw": 1150
     },
     {
+      "file": "forms/form.css",
+      "raw": 1114
+    },
+    {
       "file": "forms/select.css",
-      "raw": 1117
+      "raw": 1114
     },
     {
       "file": "themes/dim.css",
@@ -235,20 +239,16 @@
       "raw": 1018
     },
     {
-      "file": "forms/validation.css",
-      "raw": 993
-    },
-    {
       "file": "intents.css",
       "raw": 943
     },
     {
       "file": "components/scrollspy.css",
-      "raw": 899
+      "raw": 822
     },
     {
       "file": "components/pagination.css",
-      "raw": 778
+      "raw": 785
     },
     {
       "file": "components/key.css",
@@ -260,7 +260,7 @@
     },
     {
       "file": "print.css",
-      "raw": 650
+      "raw": 680
     },
     {
       "file": "forms/index.css",
