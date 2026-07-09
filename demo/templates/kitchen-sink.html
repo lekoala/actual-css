@@ -213,9 +213,14 @@
       <div class="field">
         <label class="field-label" for="country">Country</label>
         <select class="select" id="country">
-          <option>Belgium</option>
-          <option>France</option>
-          <option>Netherlands</option>
+          <optgroup label="Benelux">
+            <option>Belgium</option>
+            <option>Netherlands</option>
+          </optgroup>
+          <optgroup label="Neighbouring countries">
+            <option>France</option>
+            <option disabled>Germany (coming soon)</option>
+          </optgroup>
         </select>
       </div>
       <div class="field">
