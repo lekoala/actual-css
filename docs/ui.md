@@ -574,7 +574,9 @@ Use `class="flyout grid-3"` when a nav panel needs multiple link groups. Keep li
 
 ### Context menu
 
-The same flyout can be opened from a visible button and a contextual target. Prefer shipping both so desktop users get right click and mobile users still have a discoverable trigger.
+Put `data-context-menu` on the smallest unit the actions operate on: a file row, card, or canvas item. Several units may reference the same `<menu class="flyout">`. A normal flyout trigger inside that unit opens the same menu through the same context-aware path.
+
+Before opening, the context element dispatches the cancelable `actual:context-menu` event. Its `detail` contains the shared `menu`, the owning `context`, the exact `origin`, and the opening `trigger` (`pointer`, `touch`, `keyboard`, or `button`). Use it to tailor the static menu to the selected item, or cancel the event to keep it closed. `contextFor(menu)` from `actual-css/js/context-menu` returns that detail while handling a menu action.
 
 Add `data-context-menu-scope` only when the flyout should stay inside a specific region. Empty or `self` constrains to the target itself, `parent` constrains to the parent, and a selector constrains to the closest matching ancestor or first matching element. The scope also constrains the available height, so omit it when the menu is allowed to escape the card or list item.
 

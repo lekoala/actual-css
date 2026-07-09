@@ -23,11 +23,29 @@ async function loadFlyout(html) {
 
 async function loadContextMenu(html) {
   setupDOM(html);
-  await import(`../src/js/context-menu.js?test=${++importId}`);
+  return import(`../src/js/context-menu.js?test=${++importId}`);
+}
+
+async function loadContextMenuAndFlyout(html) {
+  setupDOM(html);
+  const contextMenu = await import(`../src/js/context-menu.js?test=${++importId}`);
+  await import(`../src/js/flyout.js?test=${++importId}`);
+  return contextMenu;
 }
 
 afterEach(() => {
   cleanupDOM();
+});
+
+test("context menu targets require a native .flyout menu", async () => {
+  await loadContextMenu(`
+    <div id="target" data-context-menu="menu" tabindex="0">File.pdf</div>
+    <div id="menu" class="flyout" role="menu" hidden></div>
+  `);
+  const target = document.getElementById("target");
+
+  expect(target.hasAttribute("aria-controls")).toBe(false);
+  expect(target.hasAttribute("aria-haspopup")).toBe(false);
 });
 
 test("flyout trigger arrow key opens and focuses direct action items", async () => {
@@ -61,6 +79,16 @@ test("flyout trigger gets initial disclosure attributes", async () => {
 
   expect(trigger.getAttribute("aria-expanded")).toBe("false");
   expect(trigger.getAttribute("aria-haspopup")).toBe("menu");
+});
+
+test("only native menu flyouts get menu popup semantics", async () => {
+  await loadFlyout(`
+    <button id="trigger" type="button" aria-controls="menu" aria-expanded="false">Open</button>
+    <div id="menu" class="flyout" role="menu" hidden></div>
+  `);
+  const trigger = document.getElementById("trigger");
+
+  expect(trigger.hasAttribute("aria-haspopup")).toBe(false);
 });
 
 test("flyout stays at its markup position until it is opened", async () => {
@@ -215,7 +243,7 @@ test("keyboard context menu focuses the first direct action item", async () => {
   expect(document.activeElement).toBe(first);
 });
 
-test("context menu target gets disclosure attributes", async () => {
+test("context menu targets do not claim button disclosure semantics", async () => {
   await loadContextMenu(`
     <div id="target" data-context-menu="menu" tabindex="0">File.pdf</div>
     <menu id="menu" class="flyout" hidden>
@@ -224,9 +252,81 @@ test("context menu target gets disclosure attributes", async () => {
   `);
   const target = document.getElementById("target");
 
-  expect(target.getAttribute("aria-controls")).toBe("menu");
-  expect(target.getAttribute("aria-haspopup")).toBe("menu");
-  expect(target.getAttribute("aria-expanded")).toBe("false");
+  expect(target.hasAttribute("aria-controls")).toBe(false);
+  expect(target.hasAttribute("aria-haspopup")).toBe(false);
+  expect(target.hasAttribute("aria-expanded")).toBe(false);
+});
+
+test("context menu opening exposes the context and exact origin", async () => {
+  const { contextFor } = await loadContextMenu(`
+    <div id="target" data-context-menu="menu" tabindex="0"><span id="name">File.pdf</span></div>
+    <menu id="menu" class="flyout" hidden>
+      <li><button type="button">Open</button></li>
+    </menu>
+  `);
+  const target = document.getElementById("target");
+  const name = document.getElementById("name");
+  const menu = document.getElementById("menu");
+  let detail;
+  target.addEventListener("actual:context-menu", (event) => {
+    detail = event.detail;
+  });
+  setupGeometry(target, menu);
+
+  name.dispatchEvent(
+    new MouseEvent("contextmenu", { bubbles: true, cancelable: true, clientX: 20, clientY: 30 }),
+  );
+
+  expect(detail.context).toBe(target);
+  expect(detail.origin).toBe(name);
+  expect(detail.trigger).toBe("pointer");
+  expect(contextFor(menu)).toBe(detail);
+});
+
+test("a context menu opening can be cancelled", async () => {
+  await loadContextMenu(`
+    <div id="target" data-context-menu="menu" tabindex="0">File.pdf</div>
+    <menu id="menu" class="flyout" hidden>
+      <li><button type="button">Open</button></li>
+    </menu>
+  `);
+  const target = document.getElementById("target");
+  const menu = document.getElementById("menu");
+  target.addEventListener("actual:context-menu", (event) => event.preventDefault());
+  setupGeometry(target, menu);
+
+  target.dispatchEvent(
+    new MouseEvent("contextmenu", { bubbles: true, cancelable: true, clientX: 20, clientY: 30 }),
+  );
+
+  expect(menu.hidden).toBe(true);
+});
+
+test("a flyout trigger opens the menu with its enclosing context", async () => {
+  await loadContextMenuAndFlyout(`
+    <div id="target" data-context-menu="menu" tabindex="0">
+      <button id="trigger" type="button" aria-controls="menu" aria-expanded="false">More</button>
+    </div>
+    <menu id="menu" class="flyout" hidden>
+      <li><button id="first" type="button">Open</button></li>
+    </menu>
+  `);
+  const target = document.getElementById("target");
+  const trigger = document.getElementById("trigger");
+  const menu = document.getElementById("menu");
+  let detail;
+  target.addEventListener("actual:context-menu", (event) => {
+    detail = event.detail;
+  });
+  setupGeometry(trigger, menu);
+
+  click(trigger);
+
+  expect(menu.hidden).toBe(false);
+  expect(trigger.getAttribute("aria-controls")).toBe("menu");
+  expect(detail.context).toBe(target);
+  expect(detail.origin).toBe(trigger);
+  expect(detail.trigger).toBe("button");
 });
 
 test("pointer context menu focuses the menu container, not the first item", async () => {
