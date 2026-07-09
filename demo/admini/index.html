@@ -1,0 +1,470 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dashboard - Admini on Actual CSS</title>
+  <link rel="stylesheet" href="../../src/css/actual.css">
+  <link rel="stylesheet" href="../../src/css/themes/index.css">
+  <link rel="stylesheet" href="../../src/css/optional/layout-extra.css">
+  <link rel="stylesheet" href="admini.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+</head>
+
+<body>
+  <div class="admini-shell">
+    <!-- admini-shell:sidebar -->
+    <aside class="admini-sidebar" aria-label="Primary navigation">
+      <a class="navbar-brand" href="index.html">
+        <span class="avatar primary"><abbr>AD</abbr></span>
+        <span>Admini</span>
+      </a>
+
+      <nav class="admini-nav stack" aria-label="Primary">
+        <p class="overline admini-section-title">Overview</p>
+        <ul class="nav-list stack">
+          <li>
+            <a class="nav-link" href="index.html" aria-current="page">
+              <i class="ti ti-layout-dashboard" aria-hidden="true"></i>
+              Dashboard
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <nav class="admini-nav stack" aria-label="Manage">
+        <p class="overline admini-section-title">Manage</p>
+        <ul class="nav-list stack">
+          <li>
+            <a class="nav-link" href="tables.html">
+              <i class="ti ti-table" aria-hidden="true"></i>
+              Tables
+            </a>
+          </li>
+          <li>
+            <a class="nav-link" href="forms.html">
+              <i class="ti ti-forms" aria-hidden="true"></i>
+              Forms
+            </a>
+          </li>
+          <li>
+            <a class="nav-link" href="settings.html">
+              <i class="ti ti-settings" aria-hidden="true"></i>
+              Settings
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <nav class="admini-nav stack" aria-label="Pages">
+        <p class="overline admini-section-title">Pages</p>
+        <ul class="nav-list stack">
+          <li>
+            <a class="nav-link" href="login.html">
+              <i class="ti ti-login" aria-hidden="true"></i>
+              Login
+            </a>
+          </li>
+          <li>
+            <a class="nav-link" href="404.html">
+              <i class="ti ti-error-404" aria-hidden="true"></i>
+              404
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="grow"></div>
+
+      <div class="flyout-trigger stretch">
+        <button class="btn neutral ghost" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="sidebar-user-menu"
+          id="sidebar-user-trigger" style="justify-content: flex-start;">
+          <span class="avatar sm"><abbr>JN</abbr></span>
+          <span>John Nemo</span>
+        </button>
+        <menu class="flyout sm" role="menu" id="sidebar-user-menu" aria-labelledby="sidebar-user-trigger" hidden>
+          <li><a href="settings.html" role="menuitem">Profile</a></li>
+          <li><a href="settings.html" role="menuitem">Settings</a></li>
+          <li><hr role="separator"></li>
+          <li><a class="danger" href="login.html" role="menuitem">Sign out</a></li>
+        </menu>
+      </div>
+    </aside>
+    <!-- /admini-shell:sidebar -->
+
+    <div class="admini-main">
+      <!-- admini-shell:topbar -->
+      <header class="topbar admini-topbar">
+        <button class="btn neutral ghost admini-menu-button" type="button" commandfor="navigation-drawer" command="show-modal"
+          aria-label="Open navigation">
+          <i class="ti ti-menu-2" aria-hidden="true"></i>
+        </button>
+
+        <ol class="breadcrumb nowrap admini-hide-mobile" aria-label="Breadcrumb">
+          <li><a href="index.html">Admini</a></li>
+          <li class="truncate" aria-current="page">Dashboard</li>
+        </ol>
+
+        <div class="grow"></div>
+
+        <select class="select sm admini-hide-mobile fit" id="theme-switcher" aria-label="Switch theme">
+          <option value="">System</option>
+          <option value="light">Light</option>
+          <option value="dark">Dark</option>
+          <option value="dim">Dim</option>
+          <option value="corporate">Corporate</option>
+          <option value="forest">Forest</option>
+          <option value="ocean">Ocean</option>
+          <option value="spruce">Spruce</option>
+          <option value="petrol">Petrol</option>
+          <option value="sunset">Sunset</option>
+          <option value="lavender">Lavender</option>
+          <option value="mono">Mono</option>
+          <option value="square">Square</option>
+          <option value="edge">Edge</option>
+          <option value="cyberpunk">Cyberpunk</option>
+          <option value="neon">Neon</option>
+          <option value="gradient">Gradient</option>
+        </select>
+
+        <button class="btn neutral ghost sm" type="button" aria-label="Notifications">
+          <i class="ti ti-bell" aria-hidden="true"></i>
+          <span class="badge danger" aria-label="5 unread notifications"></span>
+        </button>
+
+        <div class="flyout-trigger">
+          <button class="btn neutral ghost sm" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="account-menu"
+            id="account-flyout-trigger" aria-label="Account menu">
+            <span class="avatar sm"><abbr>JN</abbr></span>
+            <i class="ti ti-chevron-down admini-hide-mobile" aria-hidden="true"></i>
+          </button>
+          <menu class="flyout sm" role="menu" id="account-menu" aria-labelledby="account-flyout-trigger" hidden>
+            <li><a href="settings.html" role="menuitem">View profile</a></li>
+            <li><a href="settings.html" role="menuitem">Account settings</a></li>
+            <li><hr role="separator"></li>
+            <li><a class="danger" href="login.html" role="menuitem">Sign out</a></li>
+          </menu>
+        </div>
+      </header>
+      <!-- /admini-shell:topbar -->
+
+      <main class="center stack admini-content">
+        <header class="cluster" style="--cluster-justify: space-between; align-items: flex-start;">
+          <hgroup>
+            <p class="overline">Admini demo</p>
+            <h1>Welcome back, John</h1>
+            <p class="muted">A recreation of the admini Bootstrap 5 admin template's dashboard, built entirely with Actual CSS.</p>
+          </hgroup>
+
+          <button class="btn primary" type="button" commandfor="new-item-modal" command="show-modal">
+            <i class="ti ti-plus" aria-hidden="true"></i>
+            New item
+          </button>
+        </header>
+
+        <section class="grid" style="--grid-min: 13rem;" aria-label="Key metrics">
+          <article class="card raised admini-stat">
+            <div class="admini-stat-heading">
+              <span>Active users</span>
+              <span class="admini-stat-icon danger">
+                <i class="ti ti-users" aria-hidden="true"></i>
+              </span>
+            </div>
+            <data class="admini-stat-value" value="1000">1,000</data>
+            <div class="admini-stat-meta">
+              <span class="badge danger soft">
+                <i class="ti ti-trending-down" aria-hidden="true"></i>
+                -3.75%
+              </span>
+              <span>Since last week</span>
+            </div>
+          </article>
+
+          <article class="card raised admini-stat">
+            <div class="admini-stat-heading">
+              <span>Revenue</span>
+              <span class="admini-stat-icon success">
+                <i class="ti ti-currency-dollar" aria-hidden="true"></i>
+              </span>
+            </div>
+            <data class="admini-stat-value" value="100000">$100,000</data>
+            <div class="admini-stat-meta">
+              <span class="badge success soft">
+                <i class="ti ti-trending-up" aria-hidden="true"></i>
+                +10.00%
+              </span>
+              <span>Since last week</span>
+            </div>
+          </article>
+
+          <article class="card raised admini-stat">
+            <div class="admini-stat-heading">
+              <span>Orders</span>
+              <span class="admini-stat-icon primary">
+                <i class="ti ti-shopping-cart" aria-hidden="true"></i>
+              </span>
+            </div>
+            <data class="admini-stat-value" value="2382">2,382</data>
+            <div class="admini-stat-meta">
+              <span class="badge primary soft">32 today</span>
+            </div>
+          </article>
+
+          <article class="card raised admini-stat">
+            <div class="admini-stat-heading">
+              <span>Refunds</span>
+              <span class="admini-stat-icon warning">
+                <i class="ti ti-receipt-refund" aria-hidden="true"></i>
+              </span>
+            </div>
+            <data class="admini-stat-value" value="2000">$2,000</data>
+            <div class="admini-stat-meta">
+              <span class="badge warning soft">6 pending</span>
+            </div>
+          </article>
+        </section>
+
+        <div class="admini-board">
+          <div class="stack admini-board-main">
+            <section class="card stack">
+              <header>
+                <h2>Recent orders</h2>
+                <div class="cluster nowrap sm">
+                  <select class="select sm fit" aria-label="Filter orders">
+                    <option>All statuses</option>
+                    <option>Paid</option>
+                    <option>Pending</option>
+                    <option>Refunded</option>
+                  </select>
+                  <button class="btn neutral outline sm" type="button">
+                    <i class="ti ti-filter" aria-hidden="true"></i>
+                    Filter
+                  </button>
+                </div>
+              </header>
+
+              <div class="table-wrap" role="region" aria-labelledby="orders-table" tabindex="0">
+                <table class="table" style="--table-min: 40rem;">
+                  <caption id="orders-table" class="sr-only">Recent orders</caption>
+                  <thead>
+                    <tr>
+                      <th scope="col">Customer</th>
+                      <th scope="col" class="text-end">Amount</th>
+                      <th scope="col">Status</th>
+                      <th scope="col"><span class="sr-only">Actions</span></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <span class="cluster" style="gap: var(--space-2);">
+                          <span class="avatar sm"><abbr>MO</abbr></span>
+                          <div class="admini-account">
+                            <strong>Mark Otto</strong>
+                            <span class="muted">#ORD-4821</span>
+                          </div>
+                        </span>
+                      </td>
+                      <td class="text-end nowrap">$428.00</td>
+                      <td><span class="badge success soft">Paid</span></td>
+                      <td>
+                        <button class="btn neutral ghost sm" type="button" aria-label="Open order">
+                          <i class="ti ti-arrow-right" aria-hidden="true"></i>
+                        </button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <span class="cluster" style="gap: var(--space-2);">
+                          <span class="avatar sm"><abbr>JT</abbr></span>
+                          <div class="admini-account">
+                            <strong>Jacob Thornton</strong>
+                            <span class="muted">#ORD-4820</span>
+                          </div>
+                        </span>
+                      </td>
+                      <td class="text-end nowrap">$216.50</td>
+                      <td><span class="badge warning soft">Pending</span></td>
+                      <td>
+                        <button class="btn neutral ghost sm" type="button" aria-label="Open order">
+                          <i class="ti ti-arrow-right" aria-hidden="true"></i>
+                        </button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <span class="cluster" style="gap: var(--space-2);">
+                          <span class="avatar sm"><abbr>LB</abbr></span>
+                          <div class="admini-account">
+                            <strong>Larry the Bird</strong>
+                            <span class="muted">#ORD-4819</span>
+                          </div>
+                        </span>
+                      </td>
+                      <td class="text-end nowrap">$84.00</td>
+                      <td><span class="badge danger soft">Refunded</span></td>
+                      <td>
+                        <button class="btn neutral ghost sm" type="button" aria-label="Open order">
+                          <i class="ti ti-arrow-right" aria-hidden="true"></i>
+                        </button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <span class="cluster" style="gap: var(--space-2);">
+                          <span class="avatar sm"><abbr>RM</abbr></span>
+                          <div class="admini-account">
+                            <strong>Rin Moreau</strong>
+                            <span class="muted">#ORD-4818</span>
+                          </div>
+                        </span>
+                      </td>
+                      <td class="text-end nowrap">$132.20</td>
+                      <td><span class="badge success soft">Paid</span></td>
+                      <td>
+                        <button class="btn neutral ghost sm" type="button" aria-label="Open order">
+                          <i class="ti ti-arrow-right" aria-hidden="true"></i>
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <footer>
+                <span class="muted">Showing 4 of 2,382 orders</span>
+                <nav aria-label="Order pages">
+                  <ol class="pagination sm nowrap">
+                    <li>
+                      <button disabled class="btn outline" aria-label="Previous page">
+                        <i class="ti ti-chevron-left" aria-hidden="true"></i>
+                      </button>
+                    </li>
+                    <li><a class="btn" href="#" aria-current="page">1</a></li>
+                    <li><a class="btn outline" href="#">2</a></li>
+                    <li><a class="btn outline" href="#">3</a></li>
+                    <li>
+                      <a class="btn outline" href="#" aria-label="Next page">
+                        <i class="ti ti-chevron-right" aria-hidden="true"></i>
+                      </a>
+                    </li>
+                  </ol>
+                </nav>
+              </footer>
+            </section>
+          </div>
+
+          <aside class="stack" aria-label="Dashboard sidebar">
+            <section class="card stack">
+              <h2 style="margin: 0;">Team</h2>
+              <div class="avatar-stack" role="group" aria-label="Team members">
+                <span class="avatar primary" title="Mark Otto"><abbr>MO</abbr></span>
+                <span class="avatar success" title="Jacob Thornton"><abbr>JT</abbr></span>
+                <span class="avatar warning" title="Larry the Bird"><abbr>LB</abbr></span>
+                <span class="avatar" title="Rin Moreau"><abbr>RM</abbr></span>
+                <span class="avatar neutral" title="5 more team members"><abbr>+5</abbr></span>
+              </div>
+              <p class="muted">9 people have access to this workspace.</p>
+            </section>
+
+            <section class="card stack">
+              <h2 style="margin: 0;">Activity</h2>
+              <div class="admini-feed">
+                <div class="admini-feed-item">
+                  <span class="admini-dot success" aria-hidden="true"></span>
+                  <div>
+                    <strong>Order #ORD-4821 was paid.</strong>
+                    <p class="muted">Mark Otto completed checkout.</p>
+                  </div>
+                </div>
+                <div class="admini-feed-item">
+                  <span class="admini-dot warning" aria-hidden="true"></span>
+                  <div>
+                    <strong>Order #ORD-4820 is pending review.</strong>
+                    <p class="muted">Awaiting payment confirmation.</p>
+                  </div>
+                </div>
+                <div class="admini-feed-item">
+                  <span class="admini-dot primary" aria-hidden="true"></span>
+                  <div>
+                    <strong>New signup: Rin Moreau.</strong>
+                    <p class="muted">Joined the Enterprise plan.</p>
+                  </div>
+                </div>
+              </div>
+            </section>
+          </aside>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <dialog class="drawer" id="navigation-drawer" aria-label="Navigation">
+    <header class="cluster" style="--cluster-justify: space-between;">
+      <strong>Admini</strong>
+      <form method="dialog">
+        <button class="btn ghost" type="submit" aria-label="Close navigation">
+          <i class="ti ti-x" aria-hidden="true"></i>
+        </button>
+      </form>
+    </header>
+
+    <nav class="admini-nav" aria-label="Mobile navigation">
+      <ul class="nav-list stack">
+        <li><a class="nav-link" href="index.html" aria-current="page"><i class="ti ti-layout-dashboard" aria-hidden="true"></i> Dashboard</a></li>
+        <li><a class="nav-link" href="tables.html"><i class="ti ti-table" aria-hidden="true"></i> Tables</a></li>
+        <li><a class="nav-link" href="forms.html"><i class="ti ti-forms" aria-hidden="true"></i> Forms</a></li>
+        <li><a class="nav-link" href="settings.html"><i class="ti ti-settings" aria-hidden="true"></i> Settings</a></li>
+        <li><a class="nav-link" href="login.html"><i class="ti ti-login" aria-hidden="true"></i> Login</a></li>
+        <li><a class="nav-link" href="404.html"><i class="ti ti-error-404" aria-hidden="true"></i> 404</a></li>
+      </ul>
+    </nav>
+  </dialog>
+
+  <dialog class="modal" id="new-item-modal" closedby="any" data-dialog-dismissible>
+    <form method="dialog" class="stack">
+      <header>
+        <h3>New item</h3>
+        <p class="muted">Add a record to this workspace.</p>
+      </header>
+
+      <div class="grid-2 items-start">
+        <label class="field">
+          <span class="field-label">Name</span>
+          <input class="input" type="text" placeholder="Item name">
+        </label>
+        <label class="field">
+          <span class="field-label">Category</span>
+          <select class="select">
+            <option>General</option>
+            <option>Featured</option>
+            <option>Archived</option>
+          </select>
+        </label>
+      </div>
+
+      <footer>
+        <button class="btn neutral outline" value="cancel" formnovalidate>Cancel</button>
+        <button class="btn primary" value="create">Create item</button>
+      </footer>
+    </form>
+  </dialog>
+
+  <script src="../../dist/actual.js"></script>
+  <script>
+    const switcher = document.getElementById("theme-switcher");
+
+    if (switcher) {
+      switcher.addEventListener("change", () => {
+        if (switcher.value) {
+          document.documentElement.dataset.theme = switcher.value;
+        } else {
+          document.documentElement.removeAttribute("data-theme");
+        }
+      });
+    }
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,350 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Settings - Admini on Actual CSS</title>
+  <link rel="stylesheet" href="../../src/css/actual.css">
+  <link rel="stylesheet" href="../../src/css/themes/index.css">
+  <link rel="stylesheet" href="../../src/css/optional/layout-extra.css">
+  <link rel="stylesheet" href="admini.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+</head>
+
+<body>
+  <div class="admini-shell">
+    <!-- admini-shell:sidebar -->
+    <aside class="admini-sidebar" aria-label="Primary navigation">
+      <a class="navbar-brand" href="index.html">
+        <span class="avatar primary"><abbr>AD</abbr></span>
+        <span>Admini</span>
+      </a>
+
+      <nav class="admini-nav stack" aria-label="Primary">
+        <p class="overline admini-section-title">Overview</p>
+        <ul class="nav-list stack">
+          <li>
+            <a class="nav-link" href="index.html">
+              <i class="ti ti-layout-dashboard" aria-hidden="true"></i>
+              Dashboard
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <nav class="admini-nav stack" aria-label="Manage">
+        <p class="overline admini-section-title">Manage</p>
+        <ul class="nav-list stack">
+          <li>
+            <a class="nav-link" href="tables.html">
+              <i class="ti ti-table" aria-hidden="true"></i>
+              Tables
+            </a>
+          </li>
+          <li>
+            <a class="nav-link" href="forms.html">
+              <i class="ti ti-forms" aria-hidden="true"></i>
+              Forms
+            </a>
+          </li>
+          <li>
+            <a class="nav-link" href="settings.html" aria-current="page">
+              <i class="ti ti-settings" aria-hidden="true"></i>
+              Settings
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <nav class="admini-nav stack" aria-label="Pages">
+        <p class="overline admini-section-title">Pages</p>
+        <ul class="nav-list stack">
+          <li>
+            <a class="nav-link" href="login.html">
+              <i class="ti ti-login" aria-hidden="true"></i>
+              Login
+            </a>
+          </li>
+          <li>
+            <a class="nav-link" href="404.html">
+              <i class="ti ti-error-404" aria-hidden="true"></i>
+              404
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="grow"></div>
+
+      <div class="flyout-trigger stretch">
+        <button class="btn neutral ghost" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="sidebar-user-menu"
+          id="sidebar-user-trigger" style="justify-content: flex-start;">
+          <span class="avatar sm"><abbr>JN</abbr></span>
+          <span>John Nemo</span>
+        </button>
+        <menu class="flyout sm" role="menu" id="sidebar-user-menu" aria-labelledby="sidebar-user-trigger" hidden>
+          <li><a href="settings.html" role="menuitem">Profile</a></li>
+          <li><a href="settings.html" role="menuitem">Settings</a></li>
+          <li><hr role="separator"></li>
+          <li><a class="danger" href="login.html" role="menuitem">Sign out</a></li>
+        </menu>
+      </div>
+    </aside>
+    <!-- /admini-shell:sidebar -->
+
+    <div class="admini-main">
+      <!-- admini-shell:topbar -->
+      <header class="topbar admini-topbar">
+        <button class="btn neutral ghost admini-menu-button" type="button" commandfor="navigation-drawer" command="show-modal"
+          aria-label="Open navigation">
+          <i class="ti ti-menu-2" aria-hidden="true"></i>
+        </button>
+
+        <ol class="breadcrumb nowrap admini-hide-mobile" aria-label="Breadcrumb">
+          <li><a href="index.html">Admini</a></li>
+          <li class="truncate" aria-current="page">Settings</li>
+        </ol>
+
+        <div class="grow"></div>
+
+        <select class="select sm admini-hide-mobile fit" id="theme-switcher" aria-label="Switch theme">
+          <option value="">System</option>
+          <option value="light">Light</option>
+          <option value="dark">Dark</option>
+          <option value="dim">Dim</option>
+          <option value="corporate">Corporate</option>
+          <option value="forest">Forest</option>
+          <option value="ocean">Ocean</option>
+          <option value="spruce">Spruce</option>
+          <option value="petrol">Petrol</option>
+          <option value="sunset">Sunset</option>
+          <option value="lavender">Lavender</option>
+          <option value="mono">Mono</option>
+          <option value="square">Square</option>
+          <option value="edge">Edge</option>
+          <option value="cyberpunk">Cyberpunk</option>
+          <option value="neon">Neon</option>
+          <option value="gradient">Gradient</option>
+        </select>
+
+        <button class="btn neutral ghost sm" type="button" aria-label="Notifications">
+          <i class="ti ti-bell" aria-hidden="true"></i>
+          <span class="badge danger" aria-label="5 unread notifications"></span>
+        </button>
+
+        <div class="flyout-trigger">
+          <button class="btn neutral ghost sm" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="account-menu"
+            id="account-flyout-trigger" aria-label="Account menu">
+            <span class="avatar sm"><abbr>JN</abbr></span>
+            <i class="ti ti-chevron-down admini-hide-mobile" aria-hidden="true"></i>
+          </button>
+          <menu class="flyout sm" role="menu" id="account-menu" aria-labelledby="account-flyout-trigger" hidden>
+            <li><a href="settings.html" role="menuitem">View profile</a></li>
+            <li><a href="settings.html" role="menuitem">Account settings</a></li>
+            <li><hr role="separator"></li>
+            <li><a class="danger" href="login.html" role="menuitem">Sign out</a></li>
+          </menu>
+        </div>
+      </header>
+      <!-- /admini-shell:topbar -->
+
+      <main class="center stack admini-content">
+        <hgroup>
+          <p class="overline">Manage</p>
+          <h1>Settings</h1>
+          <p class="muted">Vertical tabs use the same <code>.tabs</code>/<code>.tab</code> primitives as horizontal ones — only <code>aria-orientation</code> and layout CSS change.</p>
+        </hgroup>
+
+        <div class="admini-settings">
+          <div class="tabs admini-settings-tabs" role="tablist" aria-label="Settings sections" aria-orientation="vertical">
+            <button class="tab primary" type="button" role="tab" aria-selected="true" aria-controls="panel-profile" id="tab-profile">
+              <i class="ti ti-user" aria-hidden="true"></i>
+              Profile
+            </button>
+            <button class="tab" type="button" role="tab" aria-selected="false" aria-controls="panel-account" id="tab-account" tabindex="-1">
+              <i class="ti ti-settings" aria-hidden="true"></i>
+              Account
+            </button>
+            <button class="tab" type="button" role="tab" aria-selected="false" aria-controls="panel-notifications" id="tab-notifications" tabindex="-1">
+              <i class="ti ti-bell" aria-hidden="true"></i>
+              Notifications
+            </button>
+            <button class="tab" type="button" role="tab" aria-selected="false" aria-controls="panel-security" id="tab-security" tabindex="-1">
+              <i class="ti ti-shield-lock" aria-hidden="true"></i>
+              Security
+            </button>
+          </div>
+
+          <div>
+            <section role="tabpanel" id="panel-profile" aria-labelledby="tab-profile" tabindex="-1" class="card stack">
+              <h2 style="margin: 0;">Profile</h2>
+              <form class="stack" style="max-inline-size: 28rem;">
+                <label class="field">
+                  <span class="field-label">Profile picture</span>
+                  <input class="file" type="file" accept="image/*">
+                </label>
+                <div class="grid-2 items-start">
+                  <label class="field">
+                    <span class="field-label">First name</span>
+                    <input class="input" type="text" autocomplete="given-name" value="John">
+                  </label>
+                  <label class="field">
+                    <span class="field-label">Last name</span>
+                    <input class="input" type="text" autocomplete="family-name" value="Nemo">
+                  </label>
+                </div>
+                <label class="field">
+                  <span class="field-label">Company</span>
+                  <input class="input" type="text" autocomplete="organization">
+                </label>
+                <label class="field">
+                  <span class="field-label">Location</span>
+                  <input class="input" type="text" autocomplete="address-level2">
+                </label>
+                <label class="choice">
+                  <input class="check" type="checkbox">
+                  <span>Available for hire</span>
+                </label>
+                <div class="form-actions">
+                  <button class="btn primary" type="submit">Update</button>
+                </div>
+              </form>
+            </section>
+
+            <section role="tabpanel" id="panel-account" aria-labelledby="tab-account" tabindex="-1" hidden class="card stack">
+              <h2 style="margin: 0;">Account settings</h2>
+              <form class="stack" style="max-inline-size: 28rem;">
+                <label class="field">
+                  <span class="field-label">Client ID</span>
+                  <input class="input" type="text" value="xxxxxxxx-xxxx" disabled>
+                </label>
+                <label class="field">
+                  <span class="field-label">Secret key</span>
+                  <input class="input" type="text" value="••••••••••••" disabled>
+                </label>
+                <label class="field">
+                  <span class="field-label">App name</span>
+                  <input class="input" type="text" value="Admini">
+                </label>
+                <label class="field">
+                  <span class="field-label">App URL</span>
+                  <input class="input" type="url" placeholder="https://example.com">
+                </label>
+                <div class="form-actions">
+                  <button class="btn primary" type="submit">Update</button>
+                </div>
+              </form>
+            </section>
+
+            <section role="tabpanel" id="panel-notifications" aria-labelledby="tab-notifications" tabindex="-1" hidden class="card stack">
+              <h2 style="margin: 0;">Notifications</h2>
+              <p class="muted">Email me whenever&hellip;</p>
+              <form class="stack" style="max-inline-size: 28rem;">
+                <label class="choice">
+                  <input class="switch" type="checkbox" role="switch" checked>
+                  <span>Anyone posts a comment</span>
+                </label>
+                <label class="choice">
+                  <input class="switch" type="checkbox" role="switch">
+                  <span>Anyone sends me a message</span>
+                </label>
+                <label class="choice">
+                  <input class="switch" type="checkbox" role="switch" checked>
+                  <span>Anyone invites me to a group</span>
+                </label>
+                <div class="form-actions">
+                  <button class="btn primary" type="submit">Update</button>
+                </div>
+              </form>
+            </section>
+
+            <section role="tabpanel" id="panel-security" aria-labelledby="tab-security" tabindex="-1" hidden class="card stack">
+              <h2 style="margin: 0;">Security</h2>
+              <form class="stack needs-validation" data-validation-message="Passwords do not match" style="max-inline-size: 28rem;">
+                <label class="field">
+                  <span class="field-label">Old password</span>
+                  <input class="input" type="password" id="old-password" autocomplete="current-password">
+                </label>
+                <label class="field">
+                  <span class="field-label">New password</span>
+                  <input class="input" type="password" id="new-password" autocomplete="new-password">
+                </label>
+                <label class="field">
+                  <span class="field-label">Confirm new password</span>
+                  <input class="input" type="password" autocomplete="new-password" data-validation-rules="same #new-password"
+                    aria-describedby="confirm-error">
+                  <span class="field-error" id="confirm-error">Passwords must match.</span>
+                </label>
+                <div class="form-actions">
+                  <button class="btn primary" type="submit">Update</button>
+                </div>
+              </form>
+
+              <hr>
+
+              <div class="cluster" style="--cluster-justify: space-between; align-items: center;">
+                <p style="margin: 0;"><strong>Delete account?</strong> <span class="muted">This cannot be undone.</span></p>
+                <button class="btn danger outline" type="button" commandfor="delete-account-modal" command="show-modal">
+                  Delete account
+                </button>
+              </div>
+            </section>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <dialog class="modal" id="delete-account-modal" closedby="any" data-dialog-dismissible>
+    <form method="dialog" class="stack">
+      <header>
+        <h3>Delete account?</h3>
+        <p class="muted">This will permanently remove your account and all associated data.</p>
+      </header>
+      <footer>
+        <button class="btn neutral outline" value="cancel" formnovalidate>Cancel</button>
+        <button class="btn danger" value="delete">Delete account</button>
+      </footer>
+    </form>
+  </dialog>
+
+  <dialog class="drawer" id="navigation-drawer" aria-label="Navigation">
+    <header class="cluster" style="--cluster-justify: space-between;">
+      <strong>Admini</strong>
+      <form method="dialog">
+        <button class="btn ghost" type="submit" aria-label="Close navigation">
+          <i class="ti ti-x" aria-hidden="true"></i>
+        </button>
+      </form>
+    </header>
+
+    <nav class="admini-nav" aria-label="Mobile navigation">
+      <ul class="nav-list stack">
+        <li><a class="nav-link" href="index.html"><i class="ti ti-layout-dashboard" aria-hidden="true"></i> Dashboard</a></li>
+        <li><a class="nav-link" href="tables.html"><i class="ti ti-table" aria-hidden="true"></i> Tables</a></li>
+        <li><a class="nav-link" href="forms.html"><i class="ti ti-forms" aria-hidden="true"></i> Forms</a></li>
+        <li><a class="nav-link" href="settings.html" aria-current="page"><i class="ti ti-settings" aria-hidden="true"></i> Settings</a></li>
+        <li><a class="nav-link" href="login.html"><i class="ti ti-login" aria-hidden="true"></i> Login</a></li>
+        <li><a class="nav-link" href="404.html"><i class="ti ti-error-404" aria-hidden="true"></i> 404</a></li>
+      </ul>
+    </nav>
+  </dialog>
+
+  <script src="../../dist/actual.js"></script>
+  <script>
+    const switcher = document.getElementById("theme-switcher");
+
+    if (switcher) {
+      switcher.addEventListener("change", () => {
+        if (switcher.value) {
+          document.documentElement.dataset.theme = switcher.value;
+        } else {
+          document.documentElement.removeAttribute("data-theme");
+        }
+      });
+    }
+  </script>
+</body>
+
+</html>
