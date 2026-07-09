@@ -217,8 +217,8 @@ test("sheet mode adds sheet class and backdrop", () => {
   openSurface(menu, { trigger });
 
   expect(menu.classList.contains("is-sheet")).toBe(true);
-  expect(menu.getAttribute("role")).toBe("dialog");
-  expect(menu.getAttribute("aria-modal")).toBe("true");
+  expect(menu.getAttribute("role")).toBeNull();
+  expect(menu.getAttribute("aria-modal")).toBeNull();
   expect(document.querySelector(".surface-backdrop")).not.toBeNull();
 });
 

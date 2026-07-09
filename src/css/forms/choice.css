@@ -48,7 +48,7 @@
    thanks to align-items: flex-start. Override per-instance via
    --choice-control-offset for themes with a different line-height or control
    size. */
-.choice > :is(input[type="checkbox"], input[type="radio"]) {
+.choice > :is(input[type="checkbox"]:not([role="switch"]), input[type="radio"]) {
   flex: 0 0 auto;
   margin-block-start: var(--choice-control-offset);
 }
@@ -80,7 +80,6 @@
   border: var(--border-width) solid var(--form-invalid-border, var(--choice-border));
   background: var(--choice-bg);
   color: var(--choice-mark);
-  accent-color: var(--primary);
   appearance: none;
   cursor: pointer;
 }
@@ -122,6 +121,7 @@
 .radio:checked {
   --choice-border: var(--intent, var(--primary));
   --choice-bg: var(--intent, var(--primary));
+  --choice-mark: var(--intent-fg, var(--primary-fg));
 }
 
 .check:checked::before {
@@ -155,7 +155,7 @@
 
 .check:focus-visible,
 .radio:focus-visible {
-  border-color: var(--focus);
+  --choice-border: var(--focus);
   outline: var(--focus-outline);
   outline-offset: var(--focus-outline-offset);
   box-shadow: var(--focus-ring-shadow);

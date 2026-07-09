@@ -19,7 +19,7 @@
   color: var(--tooltip-fg);
   font-size: var(--font-size-xs);
   line-height: var(--line-height-tight);
-  pointer-events: none;
+  pointer-events: auto;
   user-select: none;
   opacity: 1;
   scale: 1;
@@ -61,22 +61,22 @@
 }
 
 .tooltip[data-placement^="top"]::before {
-  inset-block-end: calc(-0.98 * var(--tooltip-arrow-size));
-  inset-inline-start: var(--arrow-x, 50%);
+  bottom: calc(-0.98 * var(--tooltip-arrow-size));
+  left: var(--arrow-x, 50%);
   translate: -50% 0;
   clip-path: polygon(50% 100%, 0 0, 100% 0);
 }
 
 .tooltip[data-placement^="bottom"]::before {
-  inset-block-start: calc(-0.98 * var(--tooltip-arrow-size));
-  inset-inline-start: var(--arrow-x, 50%);
+  top: calc(-0.98 * var(--tooltip-arrow-size));
+  left: var(--arrow-x, 50%);
   translate: -50% 0;
   clip-path: polygon(50% 0, 0 100%, 100% 100%);
 }
 
 .tooltip[data-placement^="left"]::before {
-  inset-inline-end: calc(-0.98 * var(--tooltip-arrow-size));
-  inset-block-start: var(--arrow-y, 50%);
+  right: calc(-0.98 * var(--tooltip-arrow-size));
+  top: var(--arrow-y, 50%);
   inline-size: var(--tooltip-arrow-size);
   block-size: calc(var(--tooltip-arrow-size) * 2);
   translate: 0 -50%;
@@ -84,8 +84,8 @@
 }
 
 .tooltip[data-placement^="right"]::before {
-  inset-inline-start: calc(-0.98 * var(--tooltip-arrow-size));
-  inset-block-start: var(--arrow-y, 50%);
+  left: calc(-0.98 * var(--tooltip-arrow-size));
+  top: var(--arrow-y, 50%);
   inline-size: var(--tooltip-arrow-size);
   block-size: calc(var(--tooltip-arrow-size) * 2);
   translate: 0 -50%;

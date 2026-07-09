@@ -25,6 +25,7 @@
  *     directly — `detail: { message, intent, duration }`, or `{}` to clear.
  */
 import { commandTrigger, targetFor } from "./command.js";
+import enhance from "./enhance.js";
 
 const INTENTS = ["neutral", "success", "danger", "warning"];
 
@@ -66,6 +67,8 @@ status.clear = function clear() {
 
 const STATUS_SHOW_SELECTOR = 'button[commandfor][command="--status"]';
 const STATUS_CLEAR_SELECTOR = 'button[commandfor][command="--status-clear"]';
+let statusShowTriggers;
+let statusClearTriggers;
 
 function dispatchStatusEvent(source, detail) {
   source.dispatchEvent(new CustomEvent("actual:status", { bubbles: true, detail }));
@@ -88,6 +91,17 @@ function connectStatusTrigger(trigger, target) {
   trigger.setAttribute("aria-controls", target.id);
 }
 
+function connectStatusTarget(target) {
+  if (!target.id) return;
+  const triggers = target.ownerDocument.querySelectorAll(
+    `button[commandfor="${CSS.escape(target.id)}"][command^="--status"]`,
+  );
+  for (const trigger of triggers) {
+    statusShowTriggers.connectOne(trigger);
+    statusClearTriggers.connectOne(trigger);
+  }
+}
+
 if (typeof document !== "undefined") {
   document.addEventListener("actual:invalid", (event) => {
     const message = event.detail?.message;
@@ -105,7 +119,7 @@ if (typeof document !== "undefined") {
     }
   });
 
-  commandTrigger(STATUS_SHOW_SELECTOR, {
+  statusShowTriggers = commandTrigger(STATUS_SHOW_SELECTOR, {
     resolve: resolveStatusTrigger,
     connect: connectStatusTrigger,
     click: (event, trigger) => {
@@ -118,13 +132,17 @@ if (typeof document !== "undefined") {
     },
   });
 
-  commandTrigger(STATUS_CLEAR_SELECTOR, {
+  statusClearTriggers = commandTrigger(STATUS_CLEAR_SELECTOR, {
     resolve: resolveStatusTrigger,
     connect: connectStatusTrigger,
     click: (event, trigger) => {
       event.preventDefault();
       dispatchStatusEvent(trigger, {});
     },
+  });
+
+  enhance({
+    "[data-status], .status-bar": (target) => connectStatusTarget(target),
   });
 }
 

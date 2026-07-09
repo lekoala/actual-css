@@ -9,6 +9,12 @@
   --form-invalid-border: var(--danger);
 }
 
+.field.danger > .field-error,
+.field:has([aria-invalid="true"]) > .field-error,
+.needs-validation.was-validated .field:has(:invalid) > .field-error {
+  display: block;
+}
+
 :where(.input, .textarea, .select, .check, .radio, .switch)[aria-invalid="true"],
 .needs-validation.was-validated :is(.input, .textarea, .select, .check, .radio, .switch):invalid {
   --form-invalid-border: var(--danger);
@@ -26,6 +32,10 @@
 }
 
 @supports selector(:user-invalid) {
+  .needs-validation .field:has(:user-invalid) > .field-error {
+    display: block;
+  }
+
   .needs-validation :is(.input, .textarea, .select, .check, .radio, .switch):user-invalid {
     --form-invalid-border: var(--danger);
   }

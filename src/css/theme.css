@@ -83,25 +83,15 @@
   --hgroup-gap: 0.25em;
 }
 
-/* Tone subsystem — explicit light/dark surface inversion (e.g. dark-on-light
-   avatars). Consumed by components that compose on a tone-flipped surface. */
+/* Tone subsystem — fixed-backdrop foreground for components placed over media
+   or other surfaces outside the theme token stack. Use data-theme islands for
+   full dark/light subtree inversion. */
 [data-tone="dark"] {
   --tone-fg: white;
-  --tone-muted: rgba(255, 255, 255, 0.75);
-  --tone-border: rgba(255, 255, 255, 0.25);
-}
-
-@supports (color: color-mix(in oklch, red, white)) {
-  [data-tone="dark"] {
-    --tone-muted: color-mix(in oklch, var(--tone-fg), transparent 25%);
-    --tone-border: color-mix(in oklch, var(--tone-fg), transparent 75%);
-  }
 }
 
 [data-tone="light"] {
   --tone-fg: var(--text);
-  --tone-muted: var(--text-muted);
-  --tone-border: var(--border);
 }
 
 /* Auto dark mode via light-dark(). Resolves based on the element's color-scheme:
@@ -141,7 +131,6 @@
 
     --border: light-dark(hsl(260 15% 88%), hsl(262 12% 24%));
     --focus-ring: light-dark(hsl(268 32% 33% / 0.22), hsl(268 42% 76% / 0.28));
-    --focus-ring-shadow: 0 0 0 3px var(--focus-ring);
     --hover-overlay: light-dark(hsl(260 20% 10% / 0.04), hsl(0 0% 100% / 0.06));
     --shadow-color: light-dark(hsl(260 25% 10%), hsl(262 40% 2%));
   }
@@ -152,7 +141,6 @@
   [data-theme="light"],
   [data-theme="dark"] {
     --focus-outline: calc(var(--border-width) * 2) solid Highlight;
-    --focus-outline-offset: 2px;
     --focus-ring-shadow: none;
 
     --backdrop-fill: Canvas;

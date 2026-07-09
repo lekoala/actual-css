@@ -1,7 +1,7 @@
 @import "./reset.css";
-@import "./base.css";
 @import "./tokens.css";
 @import "./theme.css";
+@import "./base.css";
 @import "./intents.css";
 @import "./container.css";
 @import "./layout.css";

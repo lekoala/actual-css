@@ -20,7 +20,8 @@ import { commandTrigger, targetFor } from "./command.js";
 
 const dialogMap = new WeakMap();
 const wiredDialogs = new Set();
-const DIALOG_TRIGGER_SELECTOR = "button[commandfor][command]";
+const DIALOG_TRIGGER_SELECTOR =
+  'button[commandfor]:is([command="show-modal"], [command="show"], [command="request-close"], [command="close"])';
 const DIALOG_SELECTOR = "dialog";
 const DIALOG_TITLE_SELECTOR = "[data-title], h1, h2, h3, h4, h5, h6";
 const DEFAULT_UNSUPPORTED_MESSAGE =
@@ -426,7 +427,12 @@ const dialogTriggers = commandTrigger(DIALOG_TRIGGER_SELECTOR, {
 
     trigger.setAttribute("aria-controls", dialog.id);
 
-    if (!trigger.hasAttribute("aria-haspopup") && isModal(dialog)) {
+    const command = trigger.getAttribute("command")?.toLowerCase();
+    if (
+      !trigger.hasAttribute("aria-haspopup") &&
+      (command === "show-modal" || command === "show") &&
+      isModal(dialog)
+    ) {
       trigger.setAttribute("aria-haspopup", "dialog");
     }
   },
@@ -442,7 +448,7 @@ const dialogTriggers = commandTrigger(DIALOG_TRIGGER_SELECTOR, {
       return;
     }
 
-    if (command === "show-modal") {
+    if (command === "show-modal" || command === "show") {
       openDialogWithViewTransition(dialog, trigger);
       return;
     }

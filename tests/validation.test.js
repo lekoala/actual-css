@@ -110,6 +110,47 @@ test("same rule is scoped to the form and tolerates a missing target", async () 
   expect(confirm.getAttribute("aria-invalid")).toBe("true");
 });
 
+test("date rule accepts supported shapes and rejects impossible dates", async () => {
+  await loadValidation(`<form class="needs-validation">
+    <input name="date" data-validation-rules="date">
+  </form>`);
+
+  const form = document.querySelector("form");
+  const field = form.elements.date;
+  const valid = ["2026-05-13", "13/05/2026", "05/13/2026", "13.05.2026"];
+  const invalid = ["13/13/2026", "32/01/2026", "30/02/2026", "13 05 2026"];
+
+  for (const value of valid) {
+    field.value = value;
+    form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
+    expect(field.getAttribute("aria-invalid")).toBeNull();
+  }
+
+  for (const value of invalid) {
+    field.value = value;
+    form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
+    expect(field.getAttribute("aria-invalid")).toBe("true");
+  }
+});
+
+test("empty fields skip custom rules and leave required as the only empty gate", async () => {
+  await loadValidation(`<form class="needs-validation">
+    <input name="optional" data-validation-rules="digits" value="">
+    <input name="required" required data-validation-rules="digits" value="">
+  </form>`);
+
+  const form = document.querySelector("form");
+  const optional = form.elements.optional;
+  const required = form.elements.required;
+  const event = new Event("submit", { bubbles: true, cancelable: true });
+  form.dispatchEvent(event);
+
+  expect(optional.getAttribute("aria-invalid")).toBeNull();
+  expect(optional.dataset.validationErrors).toBeUndefined();
+  expect(required.getAttribute("aria-invalid")).toBe("true");
+  expect(required.dataset.validationErrors).toBeUndefined();
+});
+
 test("registerRule adds a custom rule", async () => {
   const { default: FormValidator } = await loadValidation(`<form class="needs-validation">
     <input name="code" data-validation-rules="uppercase" value="abc">
@@ -137,9 +178,10 @@ test("unknown rule is skipped with a warning and does not block the form", async
     const form = document.querySelector("form");
     const event = new Event("submit", { bubbles: true, cancelable: true });
     form.dispatchEvent(event);
+    form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
 
     expect(event.defaultPrevented).toBe(false);
-    expect(warnings.some((m) => /Unknown validation rule/.test(m))).toBe(true);
+    expect(warnings.filter((m) => /Unknown validation rule/.test(m))).toHaveLength(1);
   } finally {
     console.warn = original;
   }
@@ -190,4 +232,15 @@ test("re-validation on input clears errors once fixed", async () => {
   await nextMicrotask();
 
   expect(field.getAttribute("aria-invalid")).toBeNull();
+});
+
+test("blur validation marks aria-invalid before submit", async () => {
+  await loadValidation(`<form class="needs-validation">
+    <input name="email" type="email" required value="bad">
+  </form>`);
+
+  const field = document.querySelector("input");
+  field.dispatchEvent(new FocusEvent("focusout", { bubbles: true }));
+
+  expect(field.getAttribute("aria-invalid")).toBe("true");
 });

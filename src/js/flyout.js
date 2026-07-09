@@ -24,6 +24,26 @@ function openFlyout(flyout, trigger) {
   openSurface(flyout, { trigger, source: trigger });
 }
 
+function flyoutFor(trigger) {
+  const flyoutId = trigger.getAttribute("aria-controls");
+  const flyout = flyoutId && trigger.ownerDocument.getElementById(flyoutId);
+  return flyout?.matches(".flyout") ? flyout : null;
+}
+
+function resolveCurrentFlyout(trigger, state) {
+  if (state.flyout?.isConnected) return state.flyout;
+
+  const flyout = flyoutFor(trigger);
+  if (!flyout) return null;
+
+  state.flyout = flyout;
+  prepareSurface(flyout);
+  if (!trigger.hasAttribute("aria-haspopup") && flyout.matches("menu, [role='menu']")) {
+    trigger.setAttribute("aria-haspopup", "menu");
+  }
+  return flyout;
+}
+
 function openAndFocusPanel(flyout, trigger) {
   if (!isSurfaceOpen(flyout)) openFlyout(flyout, trigger);
   focusFirstDescendant(flyout);
@@ -34,8 +54,8 @@ function onTriggerClick(e) {
   const state = triggerMap.get(trigger);
   if (!state) return;
   e.stopPropagation();
-  const flyout = state.flyout;
-  if (!flyout || !flyout.isConnected) return;
+  const flyout = resolveCurrentFlyout(trigger, state);
+  if (!flyout) return;
   if (isSurfaceOpen(flyout)) closeSurface(flyout);
   else openFlyout(flyout, trigger);
 }
@@ -44,8 +64,8 @@ function onTriggerKeydown(e) {
   const trigger = e.currentTarget;
   const state = triggerMap.get(trigger);
   if (!state) return;
-  const flyout = state.flyout;
-  if (!flyout || !flyout.isConnected) return;
+  const flyout = resolveCurrentFlyout(trigger, state);
+  if (!flyout) return;
   const items = getMenuItems(flyout);
   const isActionList = items.length > 0;
 
@@ -109,9 +129,8 @@ function onTriggerKeydown(e) {
 
 function connectTrigger(trigger) {
   if (triggerMap.has(trigger)) return;
-  const flyoutId = trigger.getAttribute("aria-controls");
-  const flyout = flyoutId && document.getElementById(flyoutId);
-  if (!flyout || !flyout.matches(".flyout")) return;
+  const flyout = flyoutFor(trigger);
+  if (!flyout) return;
 
   const controller = new AbortController();
   triggerMap.set(trigger, { flyout, controller });
@@ -137,7 +156,7 @@ function disconnectTrigger(trigger) {
 
 function connectFlyout(flyout) {
   if (!flyout.id) return;
-  const triggers = document.querySelectorAll(
+  const triggers = flyout.ownerDocument.querySelectorAll(
     `${FLYOUT_TRIGGER_SELECTOR}[aria-controls="${CSS.escape(flyout.id)}"]`,
   );
   for (const trigger of triggers) {

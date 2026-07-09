@@ -141,6 +141,21 @@ test("Escape dispatches actual:hide", () => {
   expect(hides).toBe(1);
 });
 
+test("Escape hides only the most recently tracked visible surface", () => {
+  document.body.innerHTML = '<div id="first"></div><div id="second"></div>';
+  const first = document.getElementById("first");
+  const second = document.getElementById("second");
+  const hides = [];
+  untracks.push(track(first));
+  untracks.push(track(second));
+  first.addEventListener(EVENTS.hide, () => hides.push("first"));
+  second.addEventListener(EVENTS.hide, () => hides.push("second"));
+
+  document.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape" }));
+
+  expect(hides).toEqual(["second"]);
+});
+
 test("Escape is not prevented when no tracked surface is open", () => {
   const event = new KeyboardEvent("keydown", {
     key: "Escape",
@@ -311,6 +326,19 @@ test("repositionAt positions a floating element from a point reference", () => {
   expect(float.style.left).toBe("210px");
   expect(float.style.top).toBe("135px");
   expect(float.dataset.placement).toBe("right");
+});
+
+test("repositionAt follows document RTL for side offsets", () => {
+  setViewport();
+  document.documentElement.dir = "rtl";
+  document.body.innerHTML = '<div id="float"></div>';
+  const float = document.getElementById("float");
+  mockRect(float, { x: 0, y: 0, width: 100, height: 50 });
+
+  repositionAt(200, 160, float, { placement: "right", distance: 10 });
+
+  expect(float.style.left).toBe("190px");
+  document.documentElement.dir = "";
 });
 
 test("reposition flips when the preferred side overflows", () => {

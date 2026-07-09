@@ -2,7 +2,8 @@
  * Scrollspy — behavior hook for navigation that marks the active section
  * while the page scrolls.
  *
- * Does not add visual styles by itself. surface.js watches <nav class="scrollspy">
+ * Adds only a baseline current-link affordance. scrollspy.js watches
+ * <nav class="scrollspy">
  * containing <a href="#section"> links and toggles aria-current="location" on
  * the link whose target is in view. Pair with .nav-list and .nav-link, or style
  * [aria-current] yourself.
@@ -15,7 +16,7 @@
  * Falls back gracefully: links still work when IntersectionObserver or
  * :target-current is unavailable.
  *
- * Intentionally empty: no CSS rules needed. The class is kept in the bundle
- * so the selector is available for JS enhancement and for authors to hook
- * their own styling.
  */
+.scrollspy a[aria-current="location"] {
+  font-weight: var(--font-weight-strong);
+}

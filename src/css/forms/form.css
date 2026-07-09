@@ -48,18 +48,6 @@
   font-size: var(--font-size-sm);
 }
 
-.field.danger > .field-error,
-.field:has([aria-invalid="true"]) > .field-error,
-.needs-validation.was-validated .field:has(:invalid) > .field-error {
-  display: block;
-}
-
-@supports selector(:user-invalid) {
-  .needs-validation .field:has(:user-invalid) > .field-error {
-    display: block;
-  }
-}
-
 .required-mark {
   color: var(--danger);
 }

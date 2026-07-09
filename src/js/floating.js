@@ -109,7 +109,7 @@ function isRTL(el) {
   if (el.dir === "rtl") return true;
   if (el.dir === "ltr") return false;
   if (supportsDirSelector) return el.matches(":dir(rtl)");
-  return document.dir === "rtl";
+  return el.ownerDocument?.dir === "rtl";
 }
 
 function getDocEl(doc) {
@@ -187,6 +187,15 @@ function isVisible(el) {
   return el.getClientRects().length > 0;
 }
 
+function topVisibleTracked() {
+  const elements = [...tracked];
+  for (let i = elements.length - 1; i >= 0; i--) {
+    const el = elements[i];
+    if (el.isConnected && isVisible(el)) return el;
+  }
+  return null;
+}
+
 function getFloatingSize(float) {
   const rect = float.getBoundingClientRect();
   return {
@@ -203,6 +212,18 @@ let tick = false;
 const pendingTypes = new Set();
 
 function notify(type) {
+  if (type === "escape") {
+    const el = topVisibleTracked();
+    if (!el) return;
+    el.dispatchEvent(
+      new CustomEvent(EVENTS.hide, {
+        bubbles: false,
+        detail: { type: "escape" },
+      }),
+    );
+    return;
+  }
+
   for (const el of tracked) {
     el.dispatchEvent(
       new CustomEvent(EVENTS.reposition, {
@@ -210,22 +231,11 @@ function notify(type) {
         detail: { type },
       }),
     );
-    if (type === "escape") {
-      el.dispatchEvent(
-        new CustomEvent(EVENTS.hide, {
-          bubbles: false,
-          detail: { type: "escape" },
-        }),
-      );
-    }
   }
 }
 
 function hasOpenSurface() {
-  for (const el of tracked) {
-    if (el.isConnected && isVisible(el)) return true;
-  }
-  return false;
+  return topVisibleTracked() !== null;
 }
 
 function rafNotify(e) {
@@ -434,10 +444,13 @@ export function reposition(ref, float, opts = {}) {
 
 export function repositionAt(x, y, float, opts = {}) {
   const doc = float.ownerDocument;
+  const docEl = doc.documentElement;
+  const win = doc.defaultView || window;
+  const direction = doc.dir || docEl?.dir || win.getComputedStyle?.(docEl).direction || "";
   const ref = {
     ownerDocument: doc,
-    dir: doc.dir || "",
-    matches: () => false,
+    dir: direction,
+    matches: (selector) => selector === ":dir(rtl)" && direction === "rtl",
     getClientRects: () => [
       {
         x,

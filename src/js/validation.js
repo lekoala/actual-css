@@ -18,6 +18,43 @@ const NOVALIDATE = "novalidate";
 const WAS_VALIDATED_CLASS = "was-validated";
 const NEEDS_VALIDATION_CLASS = "needs-validation";
 const connectedForms = new WeakMap();
+const warnedRules = new WeakMap();
+
+function validDateParts(year, month, day) {
+  if (month < 1 || month > 12 || day < 1) return false;
+  const days = new Date(Date.UTC(year, month, 0)).getUTCDate();
+  return day <= days;
+}
+
+function isValidDate(value) {
+  const v = value.trim();
+  const iso = /^(\d{4})-(\d{2})-(\d{2})$/.exec(v);
+  if (iso) {
+    return validDateParts(Number(iso[1]), Number(iso[2]), Number(iso[3]));
+  }
+
+  const local = /^(\d{1,2})([/.-])(\d{1,2})\2(\d{4})$/.exec(v);
+  if (!local) return false;
+
+  const first = Number(local[1]);
+  const second = Number(local[3]);
+  const year = Number(local[4]);
+  return (
+    validDateParts(year, second, first) ||
+    validDateParts(year, first, second)
+  );
+}
+
+function warnUnknownRuleOnce(el, name) {
+  let warned = warnedRules.get(el);
+  if (!warned) {
+    warned = new Set();
+    warnedRules.set(el, warned);
+  }
+  if (warned.has(name)) return;
+  warned.add(name);
+  console.warn(`Unknown validation rule "${name}" on ${el.name || el.id || "field"}`);
+}
 
 const rules = {
   same(v, el, selector) {
@@ -34,7 +71,7 @@ const rules = {
     return /^[a-z0-9]+$/i.test(v);
   },
   date(v) {
-    return !Number.isNaN(Date.parse(v));
+    return isValidDate(v);
   },
 };
 
@@ -65,13 +102,13 @@ function checkRules(el) {
     const hasValue = el.value.trim().length > 0;
     const failed = [];
     for (const entry of rulesAttr.split(",")) {
-      if (!hasValue && !el.required) continue;
+      if (!hasValue) continue;
       const trimmed = entry.trim();
       if (!trimmed) continue;
       const [name, ...opts] = trimmed.split(/\s+/);
       const handler = rules[name];
       if (!handler) {
-        console.warn(`Unknown validation rule "${name}" on ${el.name || el.id || "field"}`);
+        warnUnknownRuleOnce(el, name);
         continue;
       }
       if (!handler(el.value, el, ...opts)) {
@@ -123,7 +160,7 @@ function validateField(el, trigger) {
   const alreadyInvalid =
     el.getAttribute("aria-invalid") === "true" || el.dataset.validationErrors;
   const wantsTrigger =
-    validationTrigger.includes(trigger) && el.value.length > 0;
+    trigger === "blur" || (validationTrigger.includes(trigger) && el.value.length > 0);
 
   if (!wantsTrigger && !alreadyInvalid) return;
 

@@ -34,7 +34,7 @@
     "./css/themes": null,
     "./css/themes/*": null,
     "./css/*": "./src/css/*.css",
-    "./js": "./dist/actual.js",
+    "./js": "./src/js/index.js",
     "./js/context-menu": "./src/js/context-menu.js",
     "./js/dialog": "./src/js/dialog.js",
     "./js/enhance": "./src/js/enhance.js",

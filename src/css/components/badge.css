@@ -61,10 +61,12 @@
   display: inline-grid;
   place-items: center;
   flex: 0 0 auto;
-  inline-size: 1.25em;
-  block-size: 1.25em;
-  margin-inline-end: -0.25em;
-  padding: 0;
+  min-inline-size: 1.5rem;
+  min-block-size: 1.5rem;
+  margin-block: -0.25rem;
+  margin-inline-start: -0.15em;
+  margin-inline-end: -0.45em;
+  padding: 0.25rem;
   border: 0;
   border-radius: var(--radius-full);
   background: transparent;

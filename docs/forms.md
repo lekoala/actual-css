@@ -929,7 +929,7 @@ Core: native range, enhanced by `accent-color`. Optional richer skin may come la
 
 Native validation first; the enhancer only adds state and focus behavior.
 
-Actual CSS ships validation *styles*. Invalid fields are marked with `aria-invalid="true"` (or the manual `.field.danger` wrapper class). The default forms bundle imports `forms/validation.css`; custom builds may omit that file when validation styling is app-owned. A small enhancer (`actual-css/js/validation`), included in the default runtime (`actual-css/js`) and also importable on its own, prevents premature error display, marks invalid fields on submit, focuses the first invalid field, and supports a few custom rules. It is not a validation framework — server and AJAX validation stay in app code.
+Actual CSS ships validation *styles*. Invalid fields are marked with `aria-invalid="true"` (or the manual `.field.danger` wrapper class). The default forms bundle imports `forms/validation.css`; custom builds may omit that file when validation styling is app-owned. A small enhancer (`actual-css/js/validation`), included in the default runtime (`actual-css/js`) and also importable on its own, prevents premature error display, marks invalid fields on blur and submit, focuses the first invalid field on submit, and supports a few custom rules. It is not a validation framework — server and AJAX validation stay in app code.
 
 Opt in with the `.needs-validation` class. Importing the module registers the behavior; there is no init call.
 
@@ -959,7 +959,7 @@ Opt in with the `.needs-validation` class. Importing the module registers the be
 </form>
 ```
 
-On submit, the enhancer adds `.was-validated` to the form and `aria-invalid="true"` to each invalid field. It does not mark valid fields automatically. When the form is invalid it prevents submission, focuses the first invalid field, and dispatches a bubbling `actual:invalid` event with `{ form, firstInvalid, message }`.
+On blur, the enhancer sets `aria-invalid="true"` on the invalid field so visual and assistive-tech state move together. On submit, it adds `.was-validated` to the form and marks every invalid field. When the form is invalid it prevents submission, focuses the first invalid field, and dispatches a bubbling `actual:invalid` event with `{ form, firstInvalid, message }`.
 
 The status bar (`actual-css/js/status`) auto-wires to that event: import it and add one status element, and the form's `data-validation-message` appears automatically on invalid submit — no manual listener.
 
@@ -1036,7 +1036,7 @@ Custom rules live in `data-validation-rules` as a comma-separated list; each rul
 - `number` — Value is empty or a valid `Number`.
 - `digits` — Value is empty or ASCII digits only.
 - `alnum` — Value is empty or letters and digits only.
-- `date` — Value is a valid date. Accepts ISO, locale, and common formats; rejects non-existent dates like `2026-02-29`.
+- `date` — Value is a valid date in `yyyy-mm-dd`, `dd/mm/yyyy`, `mm/dd/yyyy`, `dd.mm.yyyy`, `mm.dd.yyyy`, `dd-mm-yyyy`, or `mm-dd-yyyy` shape; rejects non-existent dates like `2026-02-29`. ISO remains the recommended wire format because servers can parse it without guessing.
 
 Add your own with `FormValidator.registerRule(name, (value, el, ...opts) => boolean)`. The built-in rules treat empty values as valid so optional fields stay optional; custom rules should do the same when that behavior is wanted.
 
@@ -1086,11 +1086,11 @@ The `date` rule pairs naturally with `data-mask` — the mask structures input, 
 </form>
 ```
 
-Custom rules only run when the field has a value. Empty optional fields skip all rules — `required` is the sole gatekeeper for empty values. The equivalent custom registration would look like:
+Custom rules only run when the field has a value. Empty fields skip all custom rules — `required` is the sole gatekeeper for empty values. A custom date rule for a stricter app-specific format could look like:
 
 ```js
-FormValidator.registerRule("date", (value) => {
-  return !Number.isNaN(Date.parse(value));
+FormValidator.registerRule("iso-date", (value) => {
+  return /^\d{4}-\d{2}-\d{2}$/.test(value) && !Number.isNaN(Date.parse(value));
 });
 ```
 

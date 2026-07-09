@@ -17,10 +17,8 @@
   --font-size-lg: 1.125rem;
 
   /* Spacing */
-  --gap-md: 0.75rem;
-  --gap: var(--gap-md);
-  --variant-space-md: var(--space-4);
-  --variant-space: var(--variant-space-md);
+  --gap: 0.75rem;
+  --variant-space: var(--space-4);
   --space-1: 0.25rem;
   --space-2: 0.5rem;
   --space-3: 0.75rem;
@@ -31,12 +29,10 @@
   /* Shape */
   --border-width: 1px;
   --radius-full: 9999px;
-  --shadow-color: hsl(220 30% 10%);
   --shadow: 0 0.5rem 1.5rem rgb(0 0 0 / 0.08);
   --shadow-popout: 0 0.25rem 0.75rem rgb(0 0 0 / 0.15);
 
-  /* Motion — see reset.css for the prefers-reduced-motion hard reset, which
-     zeroes raw animations/transitions in addition to --duration here.
+  /* Motion — see reset.css for the prefers-reduced-motion hard reset.
      --duration drives component transitions (hover/focus); the dedicated
      animation rates below tune one-shot open/close and decorative loops. */
   --duration: 150ms;
@@ -85,8 +81,7 @@
   /* Native select uses background-image, which cannot inherit currentColor.
      The stroke matches the default theme's text-subtle (hue 258 neutral). */
   --icon-chevron-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%238a8594' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
-  --icon-chevron: var(--icon-chevron-mask);
-  --icon-check: var(--icon-check-mask);
+  --icon-chevron-image-contrast: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='CanvasText' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
 
   /* Viewport size tokens — fallback vh/vw with dvh/vi enhancement.
      Consumed by full-viewport components (app-shell, drawer, modal, flyout).
@@ -98,7 +93,6 @@
   /* Layering */
   --z-sticky: 10;
   --z-menu: 20;
-  --z-popover: 30;
   --z-tooltip: 50;
   --z-status: 60;
 }
@@ -127,8 +121,8 @@
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
+@media (prefers-contrast: more) {
   :root {
-    --duration: 0.01ms;
+    --icon-chevron-image: var(--icon-chevron-image-contrast);
   }
 }
