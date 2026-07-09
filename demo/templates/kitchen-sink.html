@@ -349,6 +349,38 @@
     </div>
   </section>
 
+  <section>
+    <h2>Context menu</h2>
+    <div class="card stack" id="demo-context-card" data-context-menu="demo-context-menu" tabindex="0">
+      <div class="cluster justify-content-space-between items-center">
+        <strong>Quarterly report.pdf</strong>
+        <button class="btn ghost"
+                type="button"
+                aria-expanded="false"
+                aria-controls="demo-context-menu"
+                id="demo-context-trigger">
+          More
+        </button>
+      </div>
+      <p>Right click a detail below, or use More. The menu reports the exact detail that opened it.</p>
+      <div class="cluster">
+        <span class="badge" data-context-item="File name">Quarterly report.pdf</span>
+        <span class="badge" data-context-item="Owner">Design team</span>
+        <span class="badge" data-context-item="Updated">Updated today</span>
+      </div>
+      <output class="text-sm text-muted" id="demo-context-result" aria-live="polite">
+        No context selected.
+      </output>
+
+      <menu class="flyout" id="demo-context-menu" aria-labelledby="demo-context-trigger" hidden>
+        <li><button type="button">Open</button></li>
+        <li><button type="button">Rename</button></li>
+        <li><hr></li>
+        <li><button class="danger" type="button">Delete</button></li>
+      </menu>
+    </div>
+  </section>
+
   <!-- 10. Dark mode -->
   <section>
     <h2>Dark mode</h2>
@@ -368,6 +400,15 @@
         }
       });
     }
+
+    const contextCard = document.getElementById("demo-context-card");
+    const contextResult = document.getElementById("demo-context-result");
+
+    contextCard?.addEventListener("actual:context-menu", (event) => {
+      const item = event.detail.origin.closest?.("[data-context-item]");
+      const label = item?.dataset.contextItem ?? "the card";
+      contextResult.textContent = `Menu opened for ${label} (${event.detail.trigger}).`;
+    });
   </script>
 </body>
 </html>

@@ -584,6 +584,7 @@ Long press is opt-in with `data-context-menu-long-press`. Empty uses the default
 
 ```html
 <div class="card stack"
+     id="file-card"
      data-context-menu="file-actions"
      data-context-menu-long-press
      tabindex="0"
@@ -598,7 +599,12 @@ Long press is opt-in with `data-context-menu-long-press`. Empty uses the default
       More
     </button>
   </div>
-  <p class="text-sm text-muted">Right click inside the card, press the context-menu key, or long press on touch.</p>
+  <p class="text-sm text-muted">Right click a detail below, press the context-menu key, or use More.</p>
+  <div class="cluster">
+    <span class="badge" data-context-item="File name">File.pdf</span>
+    <span class="badge" data-context-item="Owner">Design team</span>
+  </div>
+  <output id="context-result" class="text-sm text-muted" aria-live="polite">No context selected.</output>
 
   <menu class="flyout"
         id="file-actions"
@@ -610,6 +616,17 @@ Long press is opt-in with `data-context-menu-long-press`. Empty uses the default
     <li><button class="danger" type="button">Delete</button></li>
   </menu>
 </div>
+
+<script>
+  const card = document.getElementById("file-card");
+  const result = document.getElementById("context-result");
+
+  card.addEventListener("actual:context-menu", (event) => {
+    const item = event.detail.origin.closest?.("[data-context-item]");
+    const label = item?.dataset.contextItem ?? "the card";
+    result.textContent = `Menu opened for ${label} (${event.detail.trigger}).`;
+  });
+</script>
 ```
 
 ## Tabs
