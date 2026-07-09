@@ -1,4 +1,5 @@
 import enhance from "./enhance.js";
+import { EVENTS } from "./events.js";
 import { focusFirstMenuItem, hasMenuItems } from "./menu.js";
 import {
   closeSurface,
@@ -86,7 +87,7 @@ function requestContextMenu(context, menu, opts = {}) {
     origin: opts.origin || context,
     trigger: opts.trigger,
   };
-  const event = new CustomEvent("actual:context-menu", {
+  const event = new CustomEvent(EVENTS.contextMenu, {
     bubbles: true,
     cancelable: true,
     detail,
@@ -256,7 +257,7 @@ function disconnectContextTarget(target) {
 function connectContextMenu(menu) {
   const controller = new AbortController();
   menu.addEventListener(
-    "actual:surface-open",
+    EVENTS.surfaceOpen,
     (event) => {
       const options = event.detail?.options;
       const trigger = options?.trigger;

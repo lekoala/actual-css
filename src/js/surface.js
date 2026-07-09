@@ -281,7 +281,7 @@ export function openSurface(menu, opts = {}) {
   if (!menu || !menu.isConnected) return false;
   if (isSurfaceOpen(menu)) return false;
 
-  const beforeOpen = new CustomEvent("actual:surface-open", {
+  const beforeOpen = new CustomEvent(EVENTS.surfaceOpen, {
     bubbles: true,
     cancelable: true,
     detail: { surface: menu, options: opts },
