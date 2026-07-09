@@ -43,6 +43,10 @@
   text-decoration: none;
   vertical-align: middle;
   user-select: none;
+  transition:
+    box-shadow var(--duration),
+    opacity var(--duration),
+    transform var(--duration);
 }
 
 /* Forced colors wipe the background and the stack ring (box-shadow), so the
@@ -50,6 +54,10 @@
 @media (forced-colors: active) {
   .avatar {
     border: var(--border-width) solid CanvasText;
+  }
+
+  :where(a.avatar, button.avatar)::after {
+    display: none;
   }
 }
 
@@ -88,9 +96,40 @@ button.avatar {
   cursor: pointer;
 }
 
+:where(a.avatar, button.avatar)::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--hover-overlay);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--duration);
+}
+
+@media (hover: hover) {
+  :where(a.avatar, button.avatar):not(:where(:disabled, [aria-disabled="true"])):hover::after {
+    opacity: 1;
+  }
+}
+
+:where(a.avatar, button.avatar):not(:where(:disabled, [aria-disabled="true"])):active {
+  transform: translateY(1px);
+}
+
 :where(a.avatar, button.avatar):focus-visible {
   outline: var(--focus-outline);
   outline-offset: var(--focus-outline-offset);
+}
+
+button.avatar:disabled,
+a.avatar[aria-disabled="true"] {
+  cursor: not-allowed;
+  opacity: var(--disabled-opacity);
+}
+
+a.avatar[aria-disabled="true"] {
+  pointer-events: none;
 }
 
 .avatar.sm {

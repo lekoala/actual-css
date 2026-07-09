@@ -169,7 +169,7 @@ Variants
 > Initials or image representing a person or entity, composable with a status dot.
 
 - Supports initials and images.
-- Can be an inert element, link, or button.
+- Can be an inert element, link, or button when the link/button has a real destination or action.
 - Stack avatars with `.avatar-stack` for overlapping group displays
 - A status dot attaches as an empty `.badge` child; the badge carries an `aria-label` so the dot conveys its meaning to assistive tech.
 - Does not support shape modifiers as public API. Shape is theme-level.
@@ -198,13 +198,21 @@ Variants
   <img src="https://mockmind-api.uifaces.co/content/human/219.jpg" alt="Jane Doe" />
 </a>
 
-<button type="button"
-        class="avatar"
-        aria-haspopup="menu"
-        aria-expanded="false"
-        aria-label="Jane Doe, open profile menu">
-  <img src="https://mockmind-api.uifaces.co/content/human/219.jpg" alt="" />
-</button>
+<div class="flyout-trigger">
+  <button type="button"
+          class="avatar"
+          aria-haspopup="menu"
+          aria-expanded="false"
+          aria-controls="profile-menu"
+          id="profile-trigger"
+          aria-label="Jane Doe, open profile menu">
+    <img src="https://mockmind-api.uifaces.co/content/human/219.jpg" alt="" />
+  </button>
+  <menu class="flyout" id="profile-menu" aria-labelledby="profile-trigger" hidden>
+    <li><a href="#profile">View profile</a></li>
+    <li><button type="button">Sign out</button></li>
+  </menu>
+</div>
 ```
 
 ```html
@@ -850,4 +858,3 @@ In menus, keep the command label and shortcut in the same interactive item.
   </table>
 </div>
 ```
-
