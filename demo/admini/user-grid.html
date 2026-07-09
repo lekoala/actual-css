@@ -1,0 +1,432 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>User grid - Admini on Actual CSS</title>
+  <link rel="stylesheet" href="../../src/css/actual.css">
+  <link rel="stylesheet" href="../../src/css/themes/index.css">
+  <link rel="stylesheet" href="../../src/css/optional/layout-extra.css">
+  <link rel="stylesheet" href="admini.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+</head>
+
+<body>
+  <div class="admini-shell">
+    <!-- admini-shell:sidebar -->
+    <aside class="admini-sidebar" aria-label="Primary navigation">
+      <a class="navbar-brand" href="index.html">
+        <span class="avatar primary"><abbr>AD</abbr></span>
+        <span>Admini</span>
+      </a>
+
+      <nav class="admini-nav stack" aria-label="Primary">
+        <p class="overline admini-section-title">Overview</p>
+        <ul class="nav-list stack">
+          <li>
+            <a class="nav-link" href="index.html">
+              <i class="ti ti-layout-dashboard" aria-hidden="true"></i>
+              Dashboard
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <nav class="admini-nav stack" aria-label="Manage">
+        <p class="overline admini-section-title">Manage</p>
+        <ul class="nav-list stack">
+          <li>
+            <a class="nav-link" href="tables.html">
+              <i class="ti ti-table" aria-hidden="true"></i>
+              Tables
+            </a>
+          </li>
+          <li>
+            <a class="nav-link" href="forms.html">
+              <i class="ti ti-forms" aria-hidden="true"></i>
+              Forms
+            </a>
+          </li>
+          <li>
+            <a class="nav-link" href="profile.html">
+              <i class="ti ti-user" aria-hidden="true"></i>
+              Profile
+            </a>
+          </li>
+          <li>
+            <a class="nav-link" href="settings.html">
+              <i class="ti ti-settings" aria-hidden="true"></i>
+              Settings
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <nav class="admini-nav stack" aria-label="Team">
+        <p class="overline admini-section-title">Team</p>
+        <ul class="nav-list stack">
+          <li>
+            <a class="nav-link" href="user-grid.html" aria-current="page">
+              <i class="ti ti-users-group" aria-hidden="true"></i>
+              User grid
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <nav class="admini-nav stack" aria-label="Work">
+        <p class="overline admini-section-title">Work</p>
+        <ul class="nav-list stack">
+          <li>
+            <a class="nav-link" href="kanban.html">
+              <i class="ti ti-layout-kanban" aria-hidden="true"></i>
+              Kanban
+            </a>
+          </li>
+          <li>
+            <a class="nav-link" href="calendar.html">
+              <i class="ti ti-calendar" aria-hidden="true"></i>
+              Calendar
+            </a>
+          </li>
+          <li>
+            <a class="nav-link" href="chat.html">
+              <i class="ti ti-message-circle" aria-hidden="true"></i>
+              Chat
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <nav class="admini-nav stack" aria-label="Billing">
+        <p class="overline admini-section-title">Billing</p>
+        <ul class="nav-list stack">
+          <li>
+            <a class="nav-link" href="invoice.html">
+              <i class="ti ti-file-invoice" aria-hidden="true"></i>
+              Invoice
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <nav class="admini-nav stack" aria-label="Pages">
+        <p class="overline admini-section-title">Pages</p>
+        <ul class="nav-list stack">
+          <li>
+            <a class="nav-link" href="login.html">
+              <i class="ti ti-login" aria-hidden="true"></i>
+              Login
+            </a>
+          </li>
+          <li>
+            <a class="nav-link" href="404.html">
+              <i class="ti ti-error-404" aria-hidden="true"></i>
+              404
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="grow"></div>
+
+      <div class="flyout-trigger stretch">
+        <button class="btn neutral ghost" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="sidebar-user-menu"
+          id="sidebar-user-trigger" style="justify-content: flex-start;">
+          <span class="avatar sm"><abbr>JN</abbr></span>
+          <span>John Nemo</span>
+        </button>
+        <menu class="flyout sm" role="menu" id="sidebar-user-menu" aria-labelledby="sidebar-user-trigger" hidden>
+          <li><a href="profile.html" role="menuitem">Profile</a></li>
+          <li><a href="settings.html" role="menuitem">Settings</a></li>
+          <li><hr role="separator"></li>
+          <li><a class="danger" href="login.html" role="menuitem">Sign out</a></li>
+        </menu>
+      </div>
+    </aside>
+    <!-- /admini-shell:sidebar -->
+
+    <div class="admini-main">
+      <!-- admini-shell:topbar -->
+      <header class="topbar admini-topbar">
+        <button class="btn neutral ghost admini-menu-button" type="button" commandfor="navigation-drawer" command="show-modal"
+          aria-label="Open navigation">
+          <i class="ti ti-menu-2" aria-hidden="true"></i>
+        </button>
+
+        <ol class="breadcrumb nowrap admini-hide-mobile" aria-label="Breadcrumb">
+          <li><a href="index.html">Admini</a></li>
+          <li class="truncate" aria-current="page">User grid</li>
+        </ol>
+
+        <div class="grow"></div>
+
+        <select class="select sm admini-hide-mobile fit" id="theme-switcher" aria-label="Switch theme">
+          <option value="">System</option>
+          <option value="light">Light</option>
+          <option value="dark">Dark</option>
+          <option value="dim">Dim</option>
+          <option value="corporate">Corporate</option>
+          <option value="forest">Forest</option>
+          <option value="ocean">Ocean</option>
+          <option value="spruce">Spruce</option>
+          <option value="petrol">Petrol</option>
+          <option value="sunset">Sunset</option>
+          <option value="lavender">Lavender</option>
+          <option value="mono">Mono</option>
+          <option value="square">Square</option>
+          <option value="edge">Edge</option>
+          <option value="cyberpunk">Cyberpunk</option>
+          <option value="neon">Neon</option>
+          <option value="gradient">Gradient</option>
+        </select>
+
+        <button class="btn neutral ghost sm" type="button" aria-label="Notifications">
+          <i class="ti ti-bell" aria-hidden="true"></i>
+          <span class="badge danger" aria-label="5 unread notifications"></span>
+        </button>
+
+        <div class="flyout-trigger">
+          <button class="btn neutral ghost sm" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="account-menu"
+            id="account-flyout-trigger" aria-label="Account menu">
+            <span class="avatar sm"><abbr>JN</abbr></span>
+            <i class="ti ti-chevron-down admini-hide-mobile" aria-hidden="true"></i>
+          </button>
+          <menu class="flyout sm" role="menu" id="account-menu" aria-labelledby="account-flyout-trigger" hidden>
+            <li><a href="profile.html" role="menuitem">View profile</a></li>
+            <li><a href="settings.html" role="menuitem">Account settings</a></li>
+            <li><hr role="separator"></li>
+            <li><a class="danger" href="login.html" role="menuitem">Sign out</a></li>
+          </menu>
+        </div>
+      </header>
+      <!-- /admini-shell:topbar -->
+
+    <main class="center stack admini-content">
+        <header class="cluster" style="--cluster-justify: space-between; align-items: flex-start;">
+          <hgroup>
+            <p class="overline">Team</p>
+            <h1>User grid</h1>
+            <p class="muted">A card-per-person layout — the pattern the tables and lists elsewhere don't cover.</p>
+          </hgroup>
+          <button class="btn primary" type="button">
+            <i class="ti ti-user-plus" aria-hidden="true"></i>
+            Invite member
+          </button>
+        </header>
+
+        <div class="cluster nowrap sm" style="--cluster-justify: space-between;">
+          <label class="field sm" style="flex: 0 1 20rem;">
+            <span class="field-label sr-only">Search members</span>
+            <input class="input" type="search" placeholder="Search members" aria-label="Search members">
+          </label>
+          <select class="select sm fit" aria-label="Filter by role">
+            <option>All roles</option>
+            <option>Admin</option>
+            <option>Editor</option>
+            <option>Subscriber</option>
+          </select>
+        </div>
+
+        <div class="grid" style="--grid-min: 15rem;">
+          <article class="card raised stack" style="text-align: center;">
+            <div class="cluster" style="justify-content: center;">
+              <span class="avatar lg primary"><abbr>MO</abbr></span>
+            </div>
+            <div>
+              <strong>Mark Otto</strong>
+              <p class="muted" style="margin: 0;">Admin</p>
+            </div>
+            <div class="cluster" style="justify-content: center;">
+              <span class="badge success soft">Active</span>
+            </div>
+            <div class="cluster" style="justify-content: center;">
+              <button class="btn neutral outline sm" type="button">Message</button>
+              <button class="btn neutral ghost sm" type="button" aria-label="More options for Mark Otto">
+                <i class="ti ti-dots" aria-hidden="true"></i>
+              </button>
+            </div>
+          </article>
+
+          <article class="card raised stack" style="text-align: center;">
+            <div class="cluster" style="justify-content: center;">
+              <span class="avatar lg success"><abbr>JT</abbr></span>
+            </div>
+            <div>
+              <strong>Jacob Thornton</strong>
+              <p class="muted" style="margin: 0;">Editor</p>
+            </div>
+            <div class="cluster" style="justify-content: center;">
+              <span class="badge success soft">Active</span>
+            </div>
+            <div class="cluster" style="justify-content: center;">
+              <button class="btn neutral outline sm" type="button">Message</button>
+              <button class="btn neutral ghost sm" type="button" aria-label="More options for Jacob Thornton">
+                <i class="ti ti-dots" aria-hidden="true"></i>
+              </button>
+            </div>
+          </article>
+
+          <article class="card raised stack" style="text-align: center;">
+            <div class="cluster" style="justify-content: center;">
+              <span class="avatar lg warning"><abbr>LB</abbr></span>
+            </div>
+            <div>
+              <strong>Larry the Bird</strong>
+              <p class="muted" style="margin: 0;">Subscriber</p>
+            </div>
+            <div class="cluster" style="justify-content: center;">
+              <span class="badge neutral soft">Away</span>
+            </div>
+            <div class="cluster" style="justify-content: center;">
+              <button class="btn neutral outline sm" type="button">Message</button>
+              <button class="btn neutral ghost sm" type="button" aria-label="More options for Larry the Bird">
+                <i class="ti ti-dots" aria-hidden="true"></i>
+              </button>
+            </div>
+          </article>
+
+          <article class="card raised stack" style="text-align: center;">
+            <div class="cluster" style="justify-content: center;">
+              <span class="avatar lg"><abbr>RM</abbr></span>
+            </div>
+            <div>
+              <strong>Rin Moreau</strong>
+              <p class="muted" style="margin: 0;">Subscriber</p>
+            </div>
+            <div class="cluster" style="justify-content: center;">
+              <span class="badge success soft">Active</span>
+            </div>
+            <div class="cluster" style="justify-content: center;">
+              <button class="btn neutral outline sm" type="button">Message</button>
+              <button class="btn neutral ghost sm" type="button" aria-label="More options for Rin Moreau">
+                <i class="ti ti-dots" aria-hidden="true"></i>
+              </button>
+            </div>
+          </article>
+
+          <article class="card raised stack" style="text-align: center;">
+            <div class="cluster" style="justify-content: center;">
+              <span class="avatar lg primary"><abbr>AM</abbr></span>
+            </div>
+            <div>
+              <strong>Ada Morgan</strong>
+              <p class="muted" style="margin: 0;">Editor</p>
+            </div>
+            <div class="cluster" style="justify-content: center;">
+              <span class="badge success soft">Active</span>
+            </div>
+            <div class="cluster" style="justify-content: center;">
+              <button class="btn neutral outline sm" type="button">Message</button>
+              <button class="btn neutral ghost sm" type="button" aria-label="More options for Ada Morgan">
+                <i class="ti ti-dots" aria-hidden="true"></i>
+              </button>
+            </div>
+          </article>
+
+          <article class="card raised stack" style="text-align: center;">
+            <div class="cluster" style="justify-content: center;">
+              <span class="avatar lg warning"><abbr>TS</abbr></span>
+            </div>
+            <div>
+              <strong>Theo Silva</strong>
+              <p class="muted" style="margin: 0;">Subscriber</p>
+            </div>
+            <div class="cluster" style="justify-content: center;">
+              <span class="badge neutral soft">Away</span>
+            </div>
+            <div class="cluster" style="justify-content: center;">
+              <button class="btn neutral outline sm" type="button">Message</button>
+              <button class="btn neutral ghost sm" type="button" aria-label="More options for Theo Silva">
+                <i class="ti ti-dots" aria-hidden="true"></i>
+              </button>
+            </div>
+          </article>
+
+          <article class="card raised stack" style="text-align: center;">
+            <div class="cluster" style="justify-content: center;">
+              <span class="avatar lg"><abbr>MH</abbr></span>
+            </div>
+            <div>
+              <strong>Mira Hart</strong>
+              <p class="muted" style="margin: 0;">Subscriber</p>
+            </div>
+            <div class="cluster" style="justify-content: center;">
+              <span class="badge success soft">Active</span>
+            </div>
+            <div class="cluster" style="justify-content: center;">
+              <button class="btn neutral outline sm" type="button">Message</button>
+              <button class="btn neutral ghost sm" type="button" aria-label="More options for Mira Hart">
+                <i class="ti ti-dots" aria-hidden="true"></i>
+              </button>
+            </div>
+          </article>
+
+          <article class="card stack" style="text-align: center; border-style: dashed;">
+            <div class="cluster" style="justify-content: center;">
+              <span class="avatar lg neutral"><i class="ti ti-mail" aria-hidden="true"></i></span>
+            </div>
+            <div>
+              <strong>invited@example.com</strong>
+              <p class="muted" style="margin: 0;">Pending invite</p>
+            </div>
+            <div class="cluster" style="justify-content: center;">
+              <span class="badge warning soft">Invited</span>
+            </div>
+            <div class="cluster" style="justify-content: center;">
+              <button class="btn neutral outline sm" type="button">Resend</button>
+              <button class="btn danger ghost sm" type="button">Cancel</button>
+            </div>
+          </article>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <dialog class="drawer" id="navigation-drawer" aria-label="Navigation">
+    <header class="cluster" style="--cluster-justify: space-between;">
+      <strong>Admini</strong>
+      <form method="dialog">
+        <button class="btn ghost" type="submit" aria-label="Close navigation">
+          <i class="ti ti-x" aria-hidden="true"></i>
+        </button>
+      </form>
+    </header>
+
+    <nav class="admini-nav" aria-label="Mobile navigation">
+      <ul class="nav-list stack">
+        <li><a class="nav-link" href="index.html"><i class="ti ti-layout-dashboard" aria-hidden="true"></i> Dashboard</a></li>
+        <li><a class="nav-link" href="tables.html"><i class="ti ti-table" aria-hidden="true"></i> Tables</a></li>
+        <li><a class="nav-link" href="forms.html"><i class="ti ti-forms" aria-hidden="true"></i> Forms</a></li>
+        <li><a class="nav-link" href="profile.html"><i class="ti ti-user" aria-hidden="true"></i> Profile</a></li>
+        <li><a class="nav-link" href="settings.html"><i class="ti ti-settings" aria-hidden="true"></i> Settings</a></li>
+        <li><a class="nav-link" href="user-grid.html" aria-current="page"><i class="ti ti-users-group" aria-hidden="true"></i> User grid</a></li>
+        <li><a class="nav-link" href="kanban.html"><i class="ti ti-layout-kanban" aria-hidden="true"></i> Kanban</a></li>
+        <li><a class="nav-link" href="calendar.html"><i class="ti ti-calendar" aria-hidden="true"></i> Calendar</a></li>
+        <li><a class="nav-link" href="chat.html"><i class="ti ti-message-circle" aria-hidden="true"></i> Chat</a></li>
+        <li><a class="nav-link" href="invoice.html"><i class="ti ti-file-invoice" aria-hidden="true"></i> Invoice</a></li>
+        <li><a class="nav-link" href="login.html"><i class="ti ti-login" aria-hidden="true"></i> Login</a></li>
+        <li><a class="nav-link" href="404.html"><i class="ti ti-error-404" aria-hidden="true"></i> 404</a></li>
+      </ul>
+    </nav>
+  </dialog>
+
+  <script src="../../dist/actual.js"></script>
+  <script>
+    const switcher = document.getElementById("theme-switcher");
+
+    if (switcher) {
+      switcher.addEventListener("change", () => {
+        if (switcher.value) {
+          document.documentElement.dataset.theme = switcher.value;
+        } else {
+          document.documentElement.removeAttribute("data-theme");
+        }
+      });
+    }
+
+  </script>
+</body>
+
+</html>

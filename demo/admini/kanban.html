@@ -1,0 +1,465 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kanban - Admini on Actual CSS</title>
+  <link rel="stylesheet" href="../../src/css/actual.css">
+  <link rel="stylesheet" href="../../src/css/themes/index.css">
+  <link rel="stylesheet" href="../../src/css/optional/layout-extra.css">
+  <link rel="stylesheet" href="admini.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+</head>
+
+<body>
+  <div class="admini-shell">
+    <!-- admini-shell:sidebar -->
+    <aside class="admini-sidebar" aria-label="Primary navigation">
+      <a class="navbar-brand" href="index.html">
+        <span class="avatar primary"><abbr>AD</abbr></span>
+        <span>Admini</span>
+      </a>
+
+      <nav class="admini-nav stack" aria-label="Primary">
+        <p class="overline admini-section-title">Overview</p>
+        <ul class="nav-list stack">
+          <li>
+            <a class="nav-link" href="index.html">
+              <i class="ti ti-layout-dashboard" aria-hidden="true"></i>
+              Dashboard
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <nav class="admini-nav stack" aria-label="Manage">
+        <p class="overline admini-section-title">Manage</p>
+        <ul class="nav-list stack">
+          <li>
+            <a class="nav-link" href="tables.html">
+              <i class="ti ti-table" aria-hidden="true"></i>
+              Tables
+            </a>
+          </li>
+          <li>
+            <a class="nav-link" href="forms.html">
+              <i class="ti ti-forms" aria-hidden="true"></i>
+              Forms
+            </a>
+          </li>
+          <li>
+            <a class="nav-link" href="profile.html">
+              <i class="ti ti-user" aria-hidden="true"></i>
+              Profile
+            </a>
+          </li>
+          <li>
+            <a class="nav-link" href="settings.html">
+              <i class="ti ti-settings" aria-hidden="true"></i>
+              Settings
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <nav class="admini-nav stack" aria-label="Team">
+        <p class="overline admini-section-title">Team</p>
+        <ul class="nav-list stack">
+          <li>
+            <a class="nav-link" href="user-grid.html">
+              <i class="ti ti-users-group" aria-hidden="true"></i>
+              User grid
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <nav class="admini-nav stack" aria-label="Work">
+        <p class="overline admini-section-title">Work</p>
+        <ul class="nav-list stack">
+          <li>
+            <a class="nav-link" href="kanban.html" aria-current="page">
+              <i class="ti ti-layout-kanban" aria-hidden="true"></i>
+              Kanban
+            </a>
+          </li>
+          <li>
+            <a class="nav-link" href="calendar.html">
+              <i class="ti ti-calendar" aria-hidden="true"></i>
+              Calendar
+            </a>
+          </li>
+          <li>
+            <a class="nav-link" href="chat.html">
+              <i class="ti ti-message-circle" aria-hidden="true"></i>
+              Chat
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <nav class="admini-nav stack" aria-label="Billing">
+        <p class="overline admini-section-title">Billing</p>
+        <ul class="nav-list stack">
+          <li>
+            <a class="nav-link" href="invoice.html">
+              <i class="ti ti-file-invoice" aria-hidden="true"></i>
+              Invoice
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <nav class="admini-nav stack" aria-label="Pages">
+        <p class="overline admini-section-title">Pages</p>
+        <ul class="nav-list stack">
+          <li>
+            <a class="nav-link" href="login.html">
+              <i class="ti ti-login" aria-hidden="true"></i>
+              Login
+            </a>
+          </li>
+          <li>
+            <a class="nav-link" href="404.html">
+              <i class="ti ti-error-404" aria-hidden="true"></i>
+              404
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="grow"></div>
+
+      <div class="flyout-trigger stretch">
+        <button class="btn neutral ghost" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="sidebar-user-menu"
+          id="sidebar-user-trigger" style="justify-content: flex-start;">
+          <span class="avatar sm"><abbr>JN</abbr></span>
+          <span>John Nemo</span>
+        </button>
+        <menu class="flyout sm" role="menu" id="sidebar-user-menu" aria-labelledby="sidebar-user-trigger" hidden>
+          <li><a href="profile.html" role="menuitem">Profile</a></li>
+          <li><a href="settings.html" role="menuitem">Settings</a></li>
+          <li><hr role="separator"></li>
+          <li><a class="danger" href="login.html" role="menuitem">Sign out</a></li>
+        </menu>
+      </div>
+    </aside>
+    <!-- /admini-shell:sidebar -->
+
+    <div class="admini-main">
+      <!-- admini-shell:topbar -->
+      <header class="topbar admini-topbar">
+        <button class="btn neutral ghost admini-menu-button" type="button" commandfor="navigation-drawer" command="show-modal"
+          aria-label="Open navigation">
+          <i class="ti ti-menu-2" aria-hidden="true"></i>
+        </button>
+
+        <ol class="breadcrumb nowrap admini-hide-mobile" aria-label="Breadcrumb">
+          <li><a href="index.html">Admini</a></li>
+          <li class="truncate" aria-current="page">Kanban</li>
+        </ol>
+
+        <div class="grow"></div>
+
+        <select class="select sm admini-hide-mobile fit" id="theme-switcher" aria-label="Switch theme">
+          <option value="">System</option>
+          <option value="light">Light</option>
+          <option value="dark">Dark</option>
+          <option value="dim">Dim</option>
+          <option value="corporate">Corporate</option>
+          <option value="forest">Forest</option>
+          <option value="ocean">Ocean</option>
+          <option value="spruce">Spruce</option>
+          <option value="petrol">Petrol</option>
+          <option value="sunset">Sunset</option>
+          <option value="lavender">Lavender</option>
+          <option value="mono">Mono</option>
+          <option value="square">Square</option>
+          <option value="edge">Edge</option>
+          <option value="cyberpunk">Cyberpunk</option>
+          <option value="neon">Neon</option>
+          <option value="gradient">Gradient</option>
+        </select>
+
+        <button class="btn neutral ghost sm" type="button" aria-label="Notifications">
+          <i class="ti ti-bell" aria-hidden="true"></i>
+          <span class="badge danger" aria-label="5 unread notifications"></span>
+        </button>
+
+        <div class="flyout-trigger">
+          <button class="btn neutral ghost sm" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="account-menu"
+            id="account-flyout-trigger" aria-label="Account menu">
+            <span class="avatar sm"><abbr>JN</abbr></span>
+            <i class="ti ti-chevron-down admini-hide-mobile" aria-hidden="true"></i>
+          </button>
+          <menu class="flyout sm" role="menu" id="account-menu" aria-labelledby="account-flyout-trigger" hidden>
+            <li><a href="profile.html" role="menuitem">View profile</a></li>
+            <li><a href="settings.html" role="menuitem">Account settings</a></li>
+            <li><hr role="separator"></li>
+            <li><a class="danger" href="login.html" role="menuitem">Sign out</a></li>
+          </menu>
+        </div>
+      </header>
+      <!-- /admini-shell:topbar -->
+
+    <main class="center stack admini-content" style="--center-size: 84rem;">
+        <header class="cluster" style="--cluster-justify: space-between; align-items: flex-start;">
+          <hgroup>
+            <p class="overline">Work</p>
+            <h1>Kanban</h1>
+            <p class="muted">Cards use native HTML5 drag-and-drop — <code>draggable="true"</code> plus about 30 lines of JS below, no framework involvement.</p>
+          </hgroup>
+          <button class="btn primary" type="button">
+            <i class="ti ti-plus" aria-hidden="true"></i>
+            New task
+          </button>
+        </header>
+
+        <div class="admini-kanban" id="kanban-board">
+          <section class="admini-kanban-column" aria-label="Backlog">
+            <header class="cluster" style="--cluster-justify: space-between;">
+              <h2 style="margin: 0; font-size: var(--font-size-md);">Backlog</h2>
+              <span class="badge neutral soft" data-count>3</span>
+            </header>
+            <div class="admini-kanban-list" data-column="backlog">
+              <article class="card compact stack admini-kanban-card" draggable="true" id="task-1">
+                <strong>Refactor billing webhook retries</strong>
+                <p class="muted" style="margin: 0;">Idempotency keys are missing on the retry path.</p>
+                <div class="cluster" style="--cluster-justify: space-between;">
+                  <span class="badge danger soft sm">High</span>
+                  <span class="cluster" style="gap: var(--space-2);">
+                    <span class="muted" style="font-size: var(--font-size-xs);">Jul 14</span>
+                    <span class="avatar sm" title="Ada Morgan"><abbr>AM</abbr></span>
+                  </span>
+                </div>
+              </article>
+              <article class="card compact stack admini-kanban-card" draggable="true" id="task-2">
+                <strong>Write onboarding email sequence</strong>
+                <p class="muted" style="margin: 0;">Three emails covering setup, first invite, first report.</p>
+                <div class="cluster" style="--cluster-justify: space-between;">
+                  <span class="badge neutral soft sm">Low</span>
+                  <span class="cluster" style="gap: var(--space-2);">
+                    <span class="muted" style="font-size: var(--font-size-xs);">Jul 20</span>
+                    <span class="avatar sm" title="Theo Silva"><abbr>TS</abbr></span>
+                  </span>
+                </div>
+              </article>
+              <article class="card compact stack admini-kanban-card" draggable="true" id="task-3">
+                <strong>Audit third-party scripts</strong>
+                <p class="muted" style="margin: 0;">List every external script and its purpose before the security review.</p>
+                <div class="cluster" style="--cluster-justify: space-between;">
+                  <span class="badge warning soft sm">Medium</span>
+                  <span class="cluster" style="gap: var(--space-2);">
+                    <span class="muted" style="font-size: var(--font-size-xs);">Jul 18</span>
+                    <span class="avatar sm" title="Mira Hart"><abbr>MH</abbr></span>
+                  </span>
+                </div>
+              </article>
+            </div>
+          </section>
+
+          <section class="admini-kanban-column" aria-label="In progress">
+            <header class="cluster" style="--cluster-justify: space-between;">
+              <h2 style="margin: 0; font-size: var(--font-size-md);">In progress</h2>
+              <span class="badge neutral soft" data-count>3</span>
+            </header>
+            <div class="admini-kanban-list" data-column="in-progress">
+              <article class="card compact stack admini-kanban-card" draggable="true" id="task-4">
+                <strong>Rebuild invoice PDF export</strong>
+                <p class="muted" style="margin: 0;">Current export drops the tax breakdown on multi-page invoices.</p>
+                <div class="cluster" style="--cluster-justify: space-between;">
+                  <span class="badge danger soft sm">High</span>
+                  <span class="cluster" style="gap: var(--space-2);">
+                    <span class="muted" style="font-size: var(--font-size-xs);">Jul 11</span>
+                    <span class="avatar sm" title="Jacob Thornton"><abbr>JT</abbr></span>
+                  </span>
+                </div>
+              </article>
+              <article class="card compact stack admini-kanban-card" draggable="true" id="task-5">
+                <strong>Dark mode contrast pass</strong>
+                <p class="muted" style="margin: 0;">A few badge/soft combinations read low-contrast in dim theme.</p>
+                <div class="cluster" style="--cluster-justify: space-between;">
+                  <span class="badge warning soft sm">Medium</span>
+                  <span class="cluster" style="gap: var(--space-2);">
+                    <span class="muted" style="font-size: var(--font-size-xs);">Jul 12</span>
+                    <span class="avatar sm" title="Rin Moreau"><abbr>RM</abbr></span>
+                  </span>
+                </div>
+              </article>
+              <article class="card compact stack admini-kanban-card" draggable="true" id="task-6">
+                <strong>Kanban drag-and-drop demo</strong>
+                <p class="muted" style="margin: 0;">This very board — ship it as part of the admini demo.</p>
+                <div class="cluster" style="--cluster-justify: space-between;">
+                  <span class="badge warning soft sm">Medium</span>
+                  <span class="cluster" style="gap: var(--space-2);">
+                    <span class="muted" style="font-size: var(--font-size-xs);">Jul 9</span>
+                    <span class="avatar sm" title="John Nemo"><abbr>JN</abbr></span>
+                  </span>
+                </div>
+              </article>
+            </div>
+          </section>
+
+          <section class="admini-kanban-column" aria-label="Review">
+            <header class="cluster" style="--cluster-justify: space-between;">
+              <h2 style="margin: 0; font-size: var(--font-size-md);">Review</h2>
+              <span class="badge neutral soft" data-count>2</span>
+            </header>
+            <div class="admini-kanban-list" data-column="review">
+              <article class="card compact stack admini-kanban-card" draggable="true" id="task-7">
+                <strong>Add rate limiting to public API</strong>
+                <p class="muted" style="margin: 0;">Token bucket per API key, 60 req/min default.</p>
+                <div class="cluster" style="--cluster-justify: space-between;">
+                  <span class="badge danger soft sm">High</span>
+                  <span class="cluster" style="gap: var(--space-2);">
+                    <span class="muted" style="font-size: var(--font-size-xs);">Jul 10</span>
+                    <span class="avatar sm" title="Mark Otto"><abbr>MO</abbr></span>
+                  </span>
+                </div>
+              </article>
+              <article class="card compact stack admini-kanban-card" draggable="true" id="task-8">
+                <strong>Update pricing copy</strong>
+                <p class="muted" style="margin: 0;">Reflect the new Enterprise tier limits on the marketing site.</p>
+                <div class="cluster" style="--cluster-justify: space-between;">
+                  <span class="badge neutral soft sm">Low</span>
+                  <span class="cluster" style="gap: var(--space-2);">
+                    <span class="muted" style="font-size: var(--font-size-xs);">Jul 9</span>
+                    <span class="avatar sm" title="Ada Morgan"><abbr>AM</abbr></span>
+                  </span>
+                </div>
+              </article>
+            </div>
+          </section>
+
+          <section class="admini-kanban-column" aria-label="Done">
+            <header class="cluster" style="--cluster-justify: space-between;">
+              <h2 style="margin: 0; font-size: var(--font-size-md);">Done</h2>
+              <span class="badge neutral soft" data-count>2</span>
+            </header>
+            <div class="admini-kanban-list" data-column="done">
+              <article class="card compact stack admini-kanban-card" draggable="true" id="task-9">
+                <strong>Migrate sessions to Redis</strong>
+                <p class="muted" style="margin: 0;">Cut login latency under load, in production since Tuesday.</p>
+                <div class="cluster" style="--cluster-justify: space-between;">
+                  <span class="badge warning soft sm">Medium</span>
+                  <span class="cluster" style="gap: var(--space-2);">
+                    <span class="muted" style="font-size: var(--font-size-xs);">Jul 5</span>
+                    <span class="avatar sm" title="Jacob Thornton"><abbr>JT</abbr></span>
+                  </span>
+                </div>
+              </article>
+              <article class="card compact stack admini-kanban-card" draggable="true" id="task-10">
+                <strong>Fix Safari date picker bug</strong>
+                <p class="muted" style="margin: 0;">Native date input rendered the wrong locale format.</p>
+                <div class="cluster" style="--cluster-justify: space-between;">
+                  <span class="badge neutral soft sm">Low</span>
+                  <span class="cluster" style="gap: var(--space-2);">
+                    <span class="muted" style="font-size: var(--font-size-xs);">Jul 3</span>
+                    <span class="avatar sm" title="Rin Moreau"><abbr>RM</abbr></span>
+                  </span>
+                </div>
+              </article>
+            </div>
+          </section>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <dialog class="drawer" id="navigation-drawer" aria-label="Navigation">
+    <header class="cluster" style="--cluster-justify: space-between;">
+      <strong>Admini</strong>
+      <form method="dialog">
+        <button class="btn ghost" type="submit" aria-label="Close navigation">
+          <i class="ti ti-x" aria-hidden="true"></i>
+        </button>
+      </form>
+    </header>
+
+    <nav class="admini-nav" aria-label="Mobile navigation">
+      <ul class="nav-list stack">
+        <li><a class="nav-link" href="index.html"><i class="ti ti-layout-dashboard" aria-hidden="true"></i> Dashboard</a></li>
+        <li><a class="nav-link" href="tables.html"><i class="ti ti-table" aria-hidden="true"></i> Tables</a></li>
+        <li><a class="nav-link" href="forms.html"><i class="ti ti-forms" aria-hidden="true"></i> Forms</a></li>
+        <li><a class="nav-link" href="profile.html"><i class="ti ti-user" aria-hidden="true"></i> Profile</a></li>
+        <li><a class="nav-link" href="settings.html"><i class="ti ti-settings" aria-hidden="true"></i> Settings</a></li>
+        <li><a class="nav-link" href="user-grid.html"><i class="ti ti-users-group" aria-hidden="true"></i> User grid</a></li>
+        <li><a class="nav-link" href="kanban.html" aria-current="page"><i class="ti ti-layout-kanban" aria-hidden="true"></i> Kanban</a></li>
+        <li><a class="nav-link" href="calendar.html"><i class="ti ti-calendar" aria-hidden="true"></i> Calendar</a></li>
+        <li><a class="nav-link" href="chat.html"><i class="ti ti-message-circle" aria-hidden="true"></i> Chat</a></li>
+        <li><a class="nav-link" href="invoice.html"><i class="ti ti-file-invoice" aria-hidden="true"></i> Invoice</a></li>
+        <li><a class="nav-link" href="login.html"><i class="ti ti-login" aria-hidden="true"></i> Login</a></li>
+        <li><a class="nav-link" href="404.html"><i class="ti ti-error-404" aria-hidden="true"></i> 404</a></li>
+      </ul>
+    </nav>
+  </dialog>
+
+  <script src="../../dist/actual.js"></script>
+  <script>
+    const switcher = document.getElementById("theme-switcher");
+
+    if (switcher) {
+      switcher.addEventListener("change", () => {
+        if (switcher.value) {
+          document.documentElement.dataset.theme = switcher.value;
+        } else {
+          document.documentElement.removeAttribute("data-theme");
+        }
+      });
+    }
+
+    // Native HTML5 drag-and-drop — no framework JS involved. Note this API
+    // has no touch-device equivalent; a real app would add a pointer-based
+    // fallback for mobile.
+    const board = document.getElementById("kanban-board");
+    let dragged = null;
+
+    board.addEventListener("dragstart", (e) => {
+      const card = e.target.closest(".admini-kanban-card");
+      if (!card) return;
+      dragged = card;
+      card.classList.add("is-dragging");
+      e.dataTransfer.setData("text/plain", card.id);
+      e.dataTransfer.effectAllowed = "move";
+    });
+
+    board.addEventListener("dragend", (e) => {
+      const card = e.target.closest(".admini-kanban-card");
+      if (card) card.classList.remove("is-dragging");
+      dragged = null;
+      board.querySelectorAll(".admini-kanban-column.is-dragover").forEach((c) => c.classList.remove("is-dragover"));
+      updateCounts();
+    });
+
+    board.querySelectorAll(".admini-kanban-list").forEach((list) => {
+      list.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        list.closest(".admini-kanban-column").classList.add("is-dragover");
+        if (!dragged) return;
+        const after = [...list.querySelectorAll(".admini-kanban-card:not(.is-dragging)")].find(
+          (card) => e.clientY <= card.getBoundingClientRect().top + card.getBoundingClientRect().height / 2
+        );
+        list.insertBefore(dragged, after || null);
+      });
+      list.addEventListener("dragleave", (e) => {
+        if (!list.contains(e.relatedTarget)) list.closest(".admini-kanban-column").classList.remove("is-dragover");
+      });
+      list.addEventListener("drop", (e) => {
+        e.preventDefault();
+        list.closest(".admini-kanban-column").classList.remove("is-dragover");
+      });
+    });
+
+    function updateCounts() {
+      board.querySelectorAll(".admini-kanban-column").forEach((col) => {
+        const count = col.querySelector(".admini-kanban-list").children.length;
+        const badge = col.querySelector("[data-count]");
+        if (badge) badge.textContent = count;
+      });
+    }
+
+  </script>
+</body>
+
+</html>

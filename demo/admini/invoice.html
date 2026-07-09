@@ -1,0 +1,349 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Invoice #INV-2050 - Admini on Actual CSS</title>
+  <link rel="stylesheet" href="../../src/css/actual.css">
+  <link rel="stylesheet" href="../../src/css/themes/index.css">
+  <link rel="stylesheet" href="../../src/css/optional/layout-extra.css">
+  <link rel="stylesheet" href="admini.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+</head>
+
+<body>
+  <div class="admini-shell">
+    <!-- admini-shell:sidebar -->
+    <aside class="admini-sidebar" aria-label="Primary navigation">
+      <a class="navbar-brand" href="index.html">
+        <span class="avatar primary"><abbr>AD</abbr></span>
+        <span>Admini</span>
+      </a>
+
+      <nav class="admini-nav stack" aria-label="Primary">
+        <p class="overline admini-section-title">Overview</p>
+        <ul class="nav-list stack">
+          <li>
+            <a class="nav-link" href="index.html">
+              <i class="ti ti-layout-dashboard" aria-hidden="true"></i>
+              Dashboard
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <nav class="admini-nav stack" aria-label="Manage">
+        <p class="overline admini-section-title">Manage</p>
+        <ul class="nav-list stack">
+          <li>
+            <a class="nav-link" href="tables.html">
+              <i class="ti ti-table" aria-hidden="true"></i>
+              Tables
+            </a>
+          </li>
+          <li>
+            <a class="nav-link" href="forms.html">
+              <i class="ti ti-forms" aria-hidden="true"></i>
+              Forms
+            </a>
+          </li>
+          <li>
+            <a class="nav-link" href="profile.html">
+              <i class="ti ti-user" aria-hidden="true"></i>
+              Profile
+            </a>
+          </li>
+          <li>
+            <a class="nav-link" href="settings.html">
+              <i class="ti ti-settings" aria-hidden="true"></i>
+              Settings
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <nav class="admini-nav stack" aria-label="Team">
+        <p class="overline admini-section-title">Team</p>
+        <ul class="nav-list stack">
+          <li>
+            <a class="nav-link" href="user-grid.html">
+              <i class="ti ti-users-group" aria-hidden="true"></i>
+              User grid
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <nav class="admini-nav stack" aria-label="Work">
+        <p class="overline admini-section-title">Work</p>
+        <ul class="nav-list stack">
+          <li>
+            <a class="nav-link" href="kanban.html">
+              <i class="ti ti-layout-kanban" aria-hidden="true"></i>
+              Kanban
+            </a>
+          </li>
+          <li>
+            <a class="nav-link" href="calendar.html">
+              <i class="ti ti-calendar" aria-hidden="true"></i>
+              Calendar
+            </a>
+          </li>
+          <li>
+            <a class="nav-link" href="chat.html">
+              <i class="ti ti-message-circle" aria-hidden="true"></i>
+              Chat
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <nav class="admini-nav stack" aria-label="Billing">
+        <p class="overline admini-section-title">Billing</p>
+        <ul class="nav-list stack">
+          <li>
+            <a class="nav-link" href="invoice.html" aria-current="page">
+              <i class="ti ti-file-invoice" aria-hidden="true"></i>
+              Invoice
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <nav class="admini-nav stack" aria-label="Pages">
+        <p class="overline admini-section-title">Pages</p>
+        <ul class="nav-list stack">
+          <li>
+            <a class="nav-link" href="login.html">
+              <i class="ti ti-login" aria-hidden="true"></i>
+              Login
+            </a>
+          </li>
+          <li>
+            <a class="nav-link" href="404.html">
+              <i class="ti ti-error-404" aria-hidden="true"></i>
+              404
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="grow"></div>
+
+      <div class="flyout-trigger stretch">
+        <button class="btn neutral ghost" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="sidebar-user-menu"
+          id="sidebar-user-trigger" style="justify-content: flex-start;">
+          <span class="avatar sm"><abbr>JN</abbr></span>
+          <span>John Nemo</span>
+        </button>
+        <menu class="flyout sm" role="menu" id="sidebar-user-menu" aria-labelledby="sidebar-user-trigger" hidden>
+          <li><a href="profile.html" role="menuitem">Profile</a></li>
+          <li><a href="settings.html" role="menuitem">Settings</a></li>
+          <li><hr role="separator"></li>
+          <li><a class="danger" href="login.html" role="menuitem">Sign out</a></li>
+        </menu>
+      </div>
+    </aside>
+    <!-- /admini-shell:sidebar -->
+
+    <div class="admini-main">
+      <!-- admini-shell:topbar -->
+      <header class="topbar admini-topbar">
+        <button class="btn neutral ghost admini-menu-button" type="button" commandfor="navigation-drawer" command="show-modal"
+          aria-label="Open navigation">
+          <i class="ti ti-menu-2" aria-hidden="true"></i>
+        </button>
+
+        <ol class="breadcrumb nowrap admini-hide-mobile" aria-label="Breadcrumb">
+          <li><a href="index.html">Admini</a></li>
+          <li class="truncate" aria-current="page">Invoice</li>
+        </ol>
+
+        <div class="grow"></div>
+
+        <select class="select sm admini-hide-mobile fit" id="theme-switcher" aria-label="Switch theme">
+          <option value="">System</option>
+          <option value="light">Light</option>
+          <option value="dark">Dark</option>
+          <option value="dim">Dim</option>
+          <option value="corporate">Corporate</option>
+          <option value="forest">Forest</option>
+          <option value="ocean">Ocean</option>
+          <option value="spruce">Spruce</option>
+          <option value="petrol">Petrol</option>
+          <option value="sunset">Sunset</option>
+          <option value="lavender">Lavender</option>
+          <option value="mono">Mono</option>
+          <option value="square">Square</option>
+          <option value="edge">Edge</option>
+          <option value="cyberpunk">Cyberpunk</option>
+          <option value="neon">Neon</option>
+          <option value="gradient">Gradient</option>
+        </select>
+
+        <button class="btn neutral ghost sm" type="button" aria-label="Notifications">
+          <i class="ti ti-bell" aria-hidden="true"></i>
+          <span class="badge danger" aria-label="5 unread notifications"></span>
+        </button>
+
+        <div class="flyout-trigger">
+          <button class="btn neutral ghost sm" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="account-menu"
+            id="account-flyout-trigger" aria-label="Account menu">
+            <span class="avatar sm"><abbr>JN</abbr></span>
+            <i class="ti ti-chevron-down admini-hide-mobile" aria-hidden="true"></i>
+          </button>
+          <menu class="flyout sm" role="menu" id="account-menu" aria-labelledby="account-flyout-trigger" hidden>
+            <li><a href="profile.html" role="menuitem">View profile</a></li>
+            <li><a href="settings.html" role="menuitem">Account settings</a></li>
+            <li><hr role="separator"></li>
+            <li><a class="danger" href="login.html" role="menuitem">Sign out</a></li>
+          </menu>
+        </div>
+      </header>
+      <!-- /admini-shell:topbar -->
+
+    <main class="center stack admini-content">
+        <header class="cluster" style="--cluster-justify: space-between; align-items: flex-start;">
+          <hgroup>
+            <p class="overline">Billing</p>
+            <h1>Invoice</h1>
+            <p class="muted">A print-friendly document layout. Actual's own <code>print.css</code> already hides buttons and dialogs; two rules in <code>admini.css</code> hide the app shell on top of that.</p>
+          </hgroup>
+          <div class="cluster nowrap sm">
+            <button class="btn neutral outline" type="button" id="print-invoice">
+              <i class="ti ti-printer" aria-hidden="true"></i>
+              Print
+            </button>
+            <button class="btn primary" type="button">
+              <i class="ti ti-send" aria-hidden="true"></i>
+              Send invoice
+            </button>
+          </div>
+        </header>
+
+        <article class="card raised stack admini-invoice">
+          <header class="cluster" style="--cluster-justify: space-between; align-items: flex-start;">
+            <div class="cluster" style="gap: var(--space-3);">
+              <span class="avatar lg primary"><abbr>AD</abbr></span>
+              <div>
+                <strong>Admini Inc.</strong>
+                <p class="muted" style="margin: 0;">400 Market Street, Suite 200<br>San Francisco, CA 94105</p>
+              </div>
+            </div>
+            <div style="text-align: end;">
+              <p class="overline" style="margin: 0;">Invoice</p>
+              <h2 style="margin: 0;">#INV-2050</h2>
+              <span class="badge danger soft">Overdue</span>
+            </div>
+          </header>
+
+          <div class="grid-2 items-start">
+            <div>
+              <p class="field-label" style="margin-block-end: var(--space-1);">Billed to</p>
+              <strong>Northstar Logistics</strong>
+              <p class="muted" style="margin: 0;">Ada Morgan &middot; ada@northstarlogistics.com<br>1200 Freight Way, Suite 500<br>Chicago, IL 60601</p>
+            </div>
+            <div class="stack" style="gap: var(--space-1);">
+              <p class="field-label" style="margin: 0;">Details</p>
+              <div class="admini-invoice-totals-row"><span class="muted">Issue date</span><span>Jun 25, 2026</span></div>
+              <div class="admini-invoice-totals-row"><span class="muted">Due date</span><span>Jul 9, 2026</span></div>
+              <div class="admini-invoice-totals-row"><span class="muted">Terms</span><span>Net 14</span></div>
+            </div>
+          </div>
+
+          <div class="table-wrap">
+            <table class="table" style="--table-min: 32rem;">
+              <thead>
+                <tr>
+                  <th scope="col">Item</th>
+                  <th scope="col" class="text-end">Qty</th>
+                  <th scope="col" class="text-end">Price</th>
+                  <th scope="col" class="text-end">Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Enterprise plan &mdash; July</td>
+                  <td class="text-end">1</td>
+                  <td class="text-end">$1,200.00</td>
+                  <td class="text-end">$1,200.00</td>
+                </tr>
+                <tr>
+                  <td>Priority support add-on</td>
+                  <td class="text-end">1</td>
+                  <td class="text-end">$150.00</td>
+                  <td class="text-end">$150.00</td>
+                </tr>
+                <tr>
+                  <td>Onboarding workshop</td>
+                  <td class="text-end">2</td>
+                  <td class="text-end">$300.00</td>
+                  <td class="text-end">$600.00</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="admini-invoice-totals">
+            <div class="admini-invoice-totals-row"><span class="muted">Subtotal</span><span>$1,950.00</span></div>
+            <div class="admini-invoice-totals-row"><span class="muted">Tax (8%)</span><span>$156.00</span></div>
+            <div class="admini-invoice-totals-row"><strong>Total due</strong><strong>$2,106.00</strong></div>
+          </div>
+
+          <footer>
+            <p class="muted" style="margin: 0;">Thank you for your business. Payment is due within 14 days of the issue date.</p>
+          </footer>
+        </article>
+      </main>
+    </div>
+  </div>
+
+  <dialog class="drawer" id="navigation-drawer" aria-label="Navigation">
+    <header class="cluster" style="--cluster-justify: space-between;">
+      <strong>Admini</strong>
+      <form method="dialog">
+        <button class="btn ghost" type="submit" aria-label="Close navigation">
+          <i class="ti ti-x" aria-hidden="true"></i>
+        </button>
+      </form>
+    </header>
+
+    <nav class="admini-nav" aria-label="Mobile navigation">
+      <ul class="nav-list stack">
+        <li><a class="nav-link" href="index.html"><i class="ti ti-layout-dashboard" aria-hidden="true"></i> Dashboard</a></li>
+        <li><a class="nav-link" href="tables.html"><i class="ti ti-table" aria-hidden="true"></i> Tables</a></li>
+        <li><a class="nav-link" href="forms.html"><i class="ti ti-forms" aria-hidden="true"></i> Forms</a></li>
+        <li><a class="nav-link" href="profile.html"><i class="ti ti-user" aria-hidden="true"></i> Profile</a></li>
+        <li><a class="nav-link" href="settings.html"><i class="ti ti-settings" aria-hidden="true"></i> Settings</a></li>
+        <li><a class="nav-link" href="user-grid.html"><i class="ti ti-users-group" aria-hidden="true"></i> User grid</a></li>
+        <li><a class="nav-link" href="kanban.html"><i class="ti ti-layout-kanban" aria-hidden="true"></i> Kanban</a></li>
+        <li><a class="nav-link" href="calendar.html"><i class="ti ti-calendar" aria-hidden="true"></i> Calendar</a></li>
+        <li><a class="nav-link" href="chat.html"><i class="ti ti-message-circle" aria-hidden="true"></i> Chat</a></li>
+        <li><a class="nav-link" href="invoice.html" aria-current="page"><i class="ti ti-file-invoice" aria-hidden="true"></i> Invoice</a></li>
+        <li><a class="nav-link" href="login.html"><i class="ti ti-login" aria-hidden="true"></i> Login</a></li>
+        <li><a class="nav-link" href="404.html"><i class="ti ti-error-404" aria-hidden="true"></i> 404</a></li>
+      </ul>
+    </nav>
+  </dialog>
+
+  <script src="../../dist/actual.js"></script>
+  <script>
+    const switcher = document.getElementById("theme-switcher");
+
+    if (switcher) {
+      switcher.addEventListener("change", () => {
+        if (switcher.value) {
+          document.documentElement.dataset.theme = switcher.value;
+        } else {
+          document.documentElement.removeAttribute("data-theme");
+        }
+      });
+    }
+
+    document.getElementById("print-invoice")?.addEventListener("click", () => window.print());
+
+  </script>
+</body>
+
+</html>
