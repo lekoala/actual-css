@@ -1,4 +1,4 @@
-const FOCUSABLE_SELECTOR = `:where(${[
+const FOCUSABLE_SELECTOR = [
   "a[href]",
   "button",
   "input",
@@ -7,7 +7,7 @@ const FOCUSABLE_SELECTOR = `:where(${[
   "summary",
   "[contenteditable]:not([contenteditable='false'])",
   "[tabindex]",
-].join(",")})`;
+].join(",");
 
 function isFocusable(el) {
   return (

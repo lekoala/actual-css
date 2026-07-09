@@ -10,4 +10,10 @@ export const EVENTS = {
   // Cancelable: dispatched by a context target before its menu opens.
   // detail: { menu, context, origin, trigger }
   contextMenu: `${ACTUAL_EVENT_PREFIX}:context-menu`,
+  // Dispatched to show or clear the singleton status bar.
+  // detail: { message, intent, duration } (or {} to clear)
+  status: `${ACTUAL_EVENT_PREFIX}:status`,
+  // Dispatched by a form after validation blocks submission.
+  // detail: { form, firstInvalid, message }
+  invalid: `${ACTUAL_EVENT_PREFIX}:invalid`,
 };
