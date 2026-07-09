@@ -30,6 +30,10 @@ function flyoutFor(trigger) {
   return flyout?.matches(".flyout") ? flyout : null;
 }
 
+function isMenuFlyout(flyout) {
+  return flyout.matches("menu");
+}
+
 function resolveCurrentFlyout(trigger, state) {
   if (state.flyout?.isConnected) return state.flyout;
 
@@ -38,7 +42,7 @@ function resolveCurrentFlyout(trigger, state) {
 
   state.flyout = flyout;
   prepareSurface(flyout);
-  if (!trigger.hasAttribute("aria-haspopup") && flyout.matches("menu, [role='menu']")) {
+  if (!trigger.hasAttribute("aria-haspopup") && isMenuFlyout(flyout)) {
     trigger.setAttribute("aria-haspopup", "menu");
   }
   return flyout;
@@ -139,7 +143,7 @@ function connectTrigger(trigger) {
   if (!trigger.hasAttribute("aria-expanded")) {
     trigger.setAttribute("aria-expanded", "false");
   }
-  if (!trigger.hasAttribute("aria-haspopup") && flyout.matches("menu, [role='menu']")) {
+  if (!trigger.hasAttribute("aria-haspopup") && isMenuFlyout(flyout)) {
     trigger.setAttribute("aria-haspopup", "menu");
   }
 

@@ -278,8 +278,15 @@ export function prepareSurface(menu) {
 }
 
 export function openSurface(menu, opts = {}) {
-  if (!menu || !menu.isConnected) return;
-  if (isSurfaceOpen(menu)) return;
+  if (!menu || !menu.isConnected) return false;
+  if (isSurfaceOpen(menu)) return false;
+
+  const beforeOpen = new CustomEvent("actual:surface-open", {
+    bubbles: true,
+    cancelable: true,
+    detail: { surface: menu, options: opts },
+  });
+  if (!menu.dispatchEvent(beforeOpen)) return false;
 
   for (const other of openSurfaces) {
     if (other !== menu) closeSurface(other);
@@ -312,6 +319,7 @@ export function openSurface(menu, opts = {}) {
   applyPresentation(menu, state);
   syncExpanded(menu, true);
   positionSurface(menu);
+  return true;
 }
 
 export function closeSurface(menu, opts = {}) {

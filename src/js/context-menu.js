@@ -10,11 +10,21 @@ import {
 
 const LONG_PRESS_MS = 450;
 const MOVE_TOLERANCE = 10;
+const CONTEXT_MENU_SELECTOR = "menu.flyout";
+const CONTEXT_TARGET_SELECTOR = "[data-context-menu]";
 const contextMap = new WeakMap();
+const contextByMenu = new WeakMap();
+
+// Returns the detail from the last accepted `actual:context-menu` event for a
+// menu. This is intentionally optional: static menus need no application JS.
+export function contextFor(menu) {
+  return contextByMenu.get(menu) || null;
+}
 
 function menuFor(target) {
   const id = target.getAttribute("data-context-menu");
-  return id ? target.ownerDocument.getElementById(id) : null;
+  const menu = id ? target.ownerDocument.getElementById(id) : null;
+  return menu?.matches(CONTEXT_MENU_SELECTOR) ? menu : null;
 }
 
 function shouldIgnoreNativeTarget(target) {
@@ -69,28 +79,51 @@ function focusMenu(menu, mode) {
   }
 }
 
-function openContextMenu(target, menu, opts = {}) {
+function requestContextMenu(context, menu, opts = {}) {
+  const detail = {
+    menu,
+    context,
+    origin: opts.origin || context,
+    trigger: opts.trigger,
+  };
+  const event = new CustomEvent("actual:context-menu", {
+    bubbles: true,
+    cancelable: true,
+    detail,
+  });
+  if (!context.dispatchEvent(event)) return null;
+  contextByMenu.set(menu, detail);
+  return detail;
+}
+
+function openContextMenu(context, menu, opts = {}) {
+  if (!requestContextMenu(context, menu, opts)) return;
   if (isSurfaceOpen(menu)) closeSurface(menu);
-  openSurface(menu, {
-    source: target,
+  if (openSurface(menu, {
+    source: context,
     x: opts.x,
     y: opts.y,
     placement: opts.placement || "bottom-start",
     distance: opts.distance ?? 2,
     mobile: opts.mobile || menu.dataset.flyoutMobile || "auto",
-    scope: opts.scope || getContextScope(target),
-  });
-  focusMenu(menu, opts.focus);
+    scope: opts.scope || getContextScope(context),
+    restoreFocusTo: opts.restoreFocusTo,
+  })) {
+    focusMenu(menu, opts.focus);
+  }
 }
 
-function openFromKeyboard(target, menu) {
-  const rect = target.getBoundingClientRect();
-  openContextMenu(target, menu, {
+function openFromKeyboard(context, menu, origin = context, restoreFocusTo) {
+  const rect = origin.getBoundingClientRect();
+  openContextMenu(context, menu, {
     x: rect.left,
     y: rect.bottom,
     placement: "bottom-start",
     distance: 4,
     focus: "first-item",
+    origin,
+    trigger: "keyboard",
+    restoreFocusTo,
   });
 }
 
@@ -109,14 +142,9 @@ function connectContextTarget(target) {
 
   prepareSurface(menu);
   const controller = new AbortController();
-  const addedAriaControls = !target.hasAttribute("aria-controls");
-  const addedAriaHaspopup = !target.hasAttribute("aria-haspopup");
-  const addedAriaExpanded = !target.hasAttribute("aria-expanded");
   const state = {
     controller,
-    addedAriaControls,
-    addedAriaHaspopup,
-    addedAriaExpanded,
+    menu,
     timer: null,
     pointerId: null,
     startX: 0,
@@ -124,17 +152,18 @@ function connectContextTarget(target) {
     suppressClickUntil: 0,
   };
 
-  if (addedAriaControls) target.setAttribute("aria-controls", menu.id);
-  if (addedAriaHaspopup) target.setAttribute("aria-haspopup", "menu");
-  if (addedAriaExpanded) target.setAttribute("aria-expanded", "false");
-
   target.addEventListener(
     "contextmenu",
     (e) => {
       if (shouldIgnoreNativeTarget(e.target)) return;
       e.preventDefault();
       e.stopPropagation();
-      openContextMenu(target, menu, { x: e.clientX, y: e.clientY });
+      openContextMenu(target, menu, {
+        x: e.clientX,
+        y: e.clientY,
+        origin: e.target,
+        trigger: "pointer",
+      });
     },
     { signal: controller.signal },
   );
@@ -145,7 +174,7 @@ function connectContextTarget(target) {
       if (e.key !== "ContextMenu" && !(e.shiftKey && e.key === "F10")) return;
       if (shouldIgnoreNativeTarget(e.target)) return;
       e.preventDefault();
-      openFromKeyboard(target, menu);
+      openFromKeyboard(target, menu, e.target, target);
     },
     { signal: controller.signal },
   );
@@ -168,6 +197,8 @@ function connectContextTarget(target) {
         openContextMenu(target, menu, {
           x: state.startX,
           y: state.startY,
+          origin: e.target,
+          trigger: "touch",
         });
       }, delay);
     },
@@ -218,16 +249,39 @@ function disconnectContextTarget(target) {
   if (!state) return;
   clearLongPress(state);
   state.controller.abort();
-  if (state.addedAriaControls) target.removeAttribute("aria-controls");
-  if (state.addedAriaHaspopup) target.removeAttribute("aria-haspopup");
-  if (state.addedAriaExpanded) target.removeAttribute("aria-expanded");
+  if (contextFor(state.menu)?.context === target) contextByMenu.delete(state.menu);
   contextMap.delete(target);
 }
 
+function connectContextMenu(menu) {
+  const controller = new AbortController();
+  menu.addEventListener(
+    "actual:surface-open",
+    (event) => {
+      const options = event.detail?.options;
+      const trigger = options?.trigger;
+      const context = trigger?.closest?.(CONTEXT_TARGET_SELECTOR);
+      if (!context || menuFor(context) !== menu) return;
+      if (!requestContextMenu(context, menu, { origin: trigger, trigger: "button" })) {
+        event.preventDefault();
+        return;
+      }
+      options.source = context;
+      options.restoreFocusTo = trigger;
+    },
+    { signal: controller.signal },
+  );
+  return () => {
+    controller.abort();
+    contextByMenu.delete(menu);
+    disconnectSurface(menu);
+  };
+}
+
 enhance({
-  "[data-context-menu]": (target) => {
+  [CONTEXT_TARGET_SELECTOR]: (target) => {
     connectContextTarget(target);
     return () => disconnectContextTarget(target);
   },
-  "menu, [role='menu']": (menu) => () => disconnectSurface(menu),
+  [CONTEXT_MENU_SELECTOR]: (menu) => connectContextMenu(menu),
 });
