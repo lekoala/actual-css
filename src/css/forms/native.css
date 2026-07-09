@@ -48,3 +48,17 @@
   inline-size: 100%;
   accent-color: var(--intent, var(--primary));
 }
+
+.file:focus-visible,
+.range:focus-visible {
+  outline: var(--focus-outline);
+  outline-offset: var(--focus-outline-offset);
+  box-shadow: var(--focus-ring-shadow);
+}
+
+@media (forced-colors: active) {
+  .file:focus-visible,
+  .range:focus-visible {
+    box-shadow: none;
+  }
+}

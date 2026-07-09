@@ -27,7 +27,6 @@ Or import only the pieces you use:
 @import "actual-css/css/theme";
 @import "actual-css/css/intents";
 @import "actual-css/css/variants";
-@import "actual-css/css/container";
 @import "actual-css/css/layout";
 @import "actual-css/css/grid";
 @import "actual-css/css/components/button";

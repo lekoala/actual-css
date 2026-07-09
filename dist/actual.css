@@ -125,6 +125,7 @@ select {
   --control-size: var(--control-size-md);
   --control-pad-x: 1em;
   --control-font-size: var(--font-size-md);
+  --disabled-opacity: 0.65;
 
   /* Variant tuning — themes may adjust generated soft surfaces without
      replacing the component rules. */
@@ -266,6 +267,8 @@ select {
   /* Lines and focus */
   --border: hsl(260 15% 88%);
   --focus: var(--primary);
+  /* Pre-color-mix fallback only — superseded below by a derivation from
+     --focus so overriding --primary/--focus never leaves a stale ring. */
   --focus-ring: hsl(268 32% 33% / 0.22);
   --focus-ring-shadow: 0 0 0 3px var(--focus-ring);
   --hover-overlay: hsl(260 20% 10% / 0.04);
@@ -296,6 +299,20 @@ select {
 
 [data-tone="light"] {
   --tone-fg: var(--text);
+}
+
+/* Focus ring derivation — color-mix tier. Runs whether or not light-dark()
+   is also supported, so it covers the color-mix-without-light-dark browser
+   tier on its own; the light-dark block below refines it further with the
+   light/dark alpha split once both features are available. Deriving from
+   --focus (not a literal) means overriding --primary/--focus, in the
+   default theme or any custom one, keeps the ring in sync automatically. */
+@supports (color: color-mix(in oklch, red, white)) {
+  :root,
+  [data-theme="light"],
+  [data-theme="dark"] {
+    --focus-ring: color-mix(in oklch, var(--focus) 22%, transparent);
+  }
 }
 
 /* Auto dark mode via light-dark(). Resolves based on the element's color-scheme:
@@ -337,6 +354,16 @@ select {
     --focus-ring: light-dark(hsl(268 32% 33% / 0.22), hsl(268 42% 76% / 0.28));
     --hover-overlay: light-dark(hsl(260 20% 10% / 0.04), hsl(0 0% 100% / 0.06));
     --shadow-color: light-dark(hsl(260 25% 10%), hsl(262 40% 2%));
+  }
+}
+
+@supports (color: color-mix(in oklch, red, white)) and (color: light-dark(red, blue)) {
+  :root,
+  [data-theme="light"] {
+    --focus-ring: light-dark(
+      color-mix(in oklch, var(--focus) 22%, transparent),
+      color-mix(in oklch, var(--focus) 28%, transparent)
+    );
   }
 }
 
@@ -1081,7 +1108,7 @@ small {
 
 .btn:disabled {
   cursor: not-allowed;
-  opacity: 0.65;
+  opacity: var(--disabled-opacity);
 }
 
 /* Anchors have no native disabled state.
@@ -1090,7 +1117,7 @@ small {
    app code. */
 a.btn[aria-disabled="true"] {
   cursor: not-allowed;
-  opacity: 0.65;
+  opacity: var(--disabled-opacity);
   pointer-events: none;
 }
 
@@ -1263,7 +1290,7 @@ button.badge {
 
 button.badge:disabled,
 .badge[aria-disabled="true"] {
-  opacity: 0.55;
+  opacity: var(--disabled-opacity);
   cursor: not-allowed;
 }
 
@@ -1997,6 +2024,10 @@ dialog.drawer nav {
     opacity var(--duration-fast, var(--duration)) var(--ease, ease),
     scale var(--duration-fast, var(--duration)) var(--ease, ease),
     translate var(--duration-fast, var(--duration)) var(--ease, ease);
+}
+
+.flyout.is-open:not(.is-sheet) {
+  inset: auto;
 }
 
 @starting-style {
@@ -3242,7 +3273,7 @@ button.avatar {
 }
 
 .tab[aria-selected="true"],
-.tab[aria-current="page"],
+.tab[aria-current]:not([aria-current="false"]),
 .tab[aria-pressed="true"] {
   border-block-end-color: var(--intent, var(--primary));
   color: var(--intent, var(--primary));
@@ -3266,7 +3297,7 @@ button.avatar {
   }
 
   .tab[aria-selected="true"],
-  .tab[aria-current="page"],
+  .tab[aria-current]:not([aria-current="false"]),
   .tab[aria-pressed="true"] {
     border-block-end-color: Highlight;
     color: Highlight;
@@ -4025,6 +4056,20 @@ button.avatar {
 .range {
   inline-size: 100%;
   accent-color: var(--intent, var(--primary));
+}
+
+.file:focus-visible,
+.range:focus-visible {
+  outline: var(--focus-outline);
+  outline-offset: var(--focus-outline-offset);
+  box-shadow: var(--focus-ring-shadow);
+}
+
+@media (forced-colors: active) {
+  .file:focus-visible,
+  .range:focus-visible {
+    box-shadow: none;
+  }
 }
 
 /*

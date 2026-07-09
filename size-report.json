@@ -1,34 +1,34 @@
 {
-  "timestamp": "2026-07-09T20:13:41.317Z",
-  "totalRaw": 155228,
-  "totalMinified": 78583,
-  "totalBrotli": 11483,
+  "timestamp": "2026-07-09T20:28:37.981Z",
+  "totalRaw": 156751,
+  "totalMinified": 79443,
+  "totalBrotli": 11564,
   "themesMinified": 28783,
   "themesBrotli": 3328,
-  "shippedMinified": 78583,
-  "shippedBrotli": 11483,
+  "shippedMinified": 79443,
+  "shippedBrotli": 11564,
   "maxShippedBrotli": 13312,
   "fileCount": 68,
   "files": [
     {
       "file": "components/flyout.css",
-      "raw": 6342
+      "raw": 6393
     },
     {
       "file": "components/button.css",
-      "raw": 6269
+      "raw": 6307
+    },
+    {
+      "file": "theme.css",
+      "raw": 6048
     },
     {
       "file": "tokens.css",
-      "raw": 5598
+      "raw": 5626
     },
     {
       "file": "forms/choice.css",
       "raw": 4993
-    },
-    {
-      "file": "theme.css",
-      "raw": 4980
     },
     {
       "file": "variants.css",
@@ -44,7 +44,7 @@
     },
     {
       "file": "components/badge.css",
-      "raw": 3833
+      "raw": 3852
     },
     {
       "file": "components/avatar.css",
@@ -160,7 +160,7 @@
     },
     {
       "file": "components/tab.css",
-      "raw": 1949
+      "raw": 1991
     },
     {
       "file": "components/join.css",
@@ -177,6 +177,10 @@
     {
       "file": "forms/form-actions.css",
       "raw": 1563
+    },
+    {
+      "file": "forms/native.css",
+      "raw": 1562
     },
     {
       "file": "components/overline.css",
@@ -201,10 +205,6 @@
     {
       "file": "components/surface.css",
       "raw": 1350
-    },
-    {
-      "file": "forms/native.css",
-      "raw": 1285
     },
     {
       "file": "forms/validation.css",

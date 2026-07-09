@@ -144,7 +144,7 @@
 
 .btn:disabled {
   cursor: not-allowed;
-  opacity: 0.65;
+  opacity: var(--disabled-opacity);
 }
 
 /* Anchors have no native disabled state.
@@ -153,7 +153,7 @@
    app code. */
 a.btn[aria-disabled="true"] {
   cursor: not-allowed;
-  opacity: 0.65;
+  opacity: var(--disabled-opacity);
   pointer-events: none;
 }
 
