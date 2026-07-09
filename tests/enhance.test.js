@@ -156,3 +156,47 @@ test("refresh is a no-op after disconnect", () => {
 
   expect(calls).toEqual(["one"]);
 });
+
+test("invalid selectors are skipped without blocking valid enhancers", () => {
+  setupDOM('<button data-test></button>');
+  const errors = [];
+  const original = console.error;
+  console.error = (...args) => errors.push(args);
+
+  try {
+    const calls = [];
+    const runtime = enhance({
+      "[": () => calls.push("invalid"),
+      "[data-test]": (el) => calls.push(el),
+    });
+
+    expect(calls).toEqual([document.querySelector("[data-test]")]);
+    expect(errors.length).toBeGreaterThan(0);
+    runtime.disconnect();
+  } finally {
+    console.error = original;
+  }
+});
+
+test("a throwing enhancer does not stop sibling enhancers", () => {
+  setupDOM('<button data-test data-other></button>');
+  const errors = [];
+  const original = console.error;
+  console.error = (...args) => errors.push(args);
+
+  try {
+    const calls = [];
+    const runtime = enhance({
+      "[data-test]": () => {
+        throw new Error("boom");
+      },
+      "[data-other]": (el) => calls.push(el),
+    });
+
+    expect(calls).toEqual([document.querySelector("[data-other]")]);
+    expect(errors.length).toBeGreaterThan(0);
+    runtime.disconnect();
+  } finally {
+    console.error = original;
+  }
+});

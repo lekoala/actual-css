@@ -30,6 +30,7 @@ import { EVENTS } from "./events.js";
 import enhance from "./enhance.js";
 
 const SHOW_DELAY_MS = 150;
+const HIDE_DELAY_MS = 100;
 
 /**
  * @typedef {object} TooltipState
@@ -40,6 +41,9 @@ const SHOW_DELAY_MS = 150;
  * @property {boolean} generated True when the tip was created from data-tooltip text.
  * @property {{ parent: Node, next: ChildNode | null } | null} mount Original DOM position for explicit tips moved into a dialog/body root.
  * @property {ReturnType<typeof setTimeout> | null} timer Pending delayed show.
+ * @property {ReturnType<typeof setTimeout> | null} hideTimer Pending delayed hide.
+ * @property {boolean} overRef Pointer is over the active trigger.
+ * @property {boolean} overTip Pointer is over the tooltip.
  */
 
 let uid = 0;
@@ -88,7 +92,29 @@ function hideTip(tip) {
     clearTimeout(state.timer);
     state.timer = null;
   }
+  if (state?.hideTimer) {
+    clearTimeout(state.hideTimer);
+    state.hideTimer = null;
+  }
   tip.hidden = true;
+}
+
+function clearHide(tip) {
+  const state = tipStates.get(tip);
+  if (!state?.hideTimer) return;
+  clearTimeout(state.hideTimer);
+  state.hideTimer = null;
+}
+
+function scheduleHide(tip) {
+  const state = tipStates.get(tip);
+  if (!state) return;
+  if (state.overRef || state.overTip) return;
+  if (state.hideTimer) clearTimeout(state.hideTimer);
+  state.hideTimer = setTimeout(() => {
+    state.hideTimer = null;
+    if (!state.overRef && !state.overTip) hideTip(tip);
+  }, HIDE_DELAY_MS);
 }
 
 // Tip-level wiring happens once per tooltip element, even when an explicit
@@ -107,6 +133,9 @@ function wireTip(tip, options = {}) {
     generated: options.generated === true,
     mount: options.mount || null,
     timer: null,
+    hideTimer: null,
+    overRef: false,
+    overTip: false,
   };
 
   const onHide = () => hideTip(tip);
@@ -117,6 +146,22 @@ function wireTip(tip, options = {}) {
   tip.addEventListener(EVENTS.reposition, onReposition, { signal: controller.signal });
   tip.addEventListener(EVENTS.hide, onHide, { signal: controller.signal });
   tip.addEventListener(EVENTS.outOfView, onHide, { signal: controller.signal });
+  tip.addEventListener(
+    "mouseenter",
+    () => {
+      state.overTip = true;
+      clearHide(tip);
+    },
+    { signal: controller.signal },
+  );
+  tip.addEventListener(
+    "mouseleave",
+    () => {
+      state.overTip = false;
+      scheduleHide(tip);
+    },
+    { signal: controller.signal },
+  );
 
   tipStates.set(tip, state);
   return state;
@@ -141,26 +186,22 @@ function ensureTip(trigger) {
     tip.textContent = text;
     tip.hidden = true;
     tip.style.position = "fixed";
-    tip.inert = true;
     generated = true;
 
     const parent = trigger.closest("dialog") || document.body;
     parent.appendChild(tip);
     const existing = trigger.getAttribute("aria-describedby");
-    const ids = existing ? `${existing} ${tip.id}` : tip.id;
-    trigger.setAttribute("aria-describedby", ids);
+    if (!existing) trigger.setAttribute("aria-describedby", tip.id);
   }
 
   // explicit: data-tooltip (empty) + aria-describedby → find existing element
   if (!tip) {
     const tipId = trigger.getAttribute("aria-describedby");
     if (!tipId) {
-      triggerStates.set(trigger, { tip: null });
       return null;
     }
     tip = document.getElementById(tipId);
     if (!tip || tip.getAttribute("role") !== "tooltip") {
-      triggerStates.set(trigger, { tip: null });
       return null;
     }
     tip.hidden = true;
@@ -175,7 +216,10 @@ function ensureTip(trigger) {
   state.refs.add(trigger);
 
   const triggerController = new AbortController();
-  const onLeave = () => hideTip(tip);
+  const onLeave = () => {
+    state.overRef = false;
+    scheduleHide(tip);
+  };
   trigger.addEventListener("mouseleave", onLeave, { signal: triggerController.signal });
   trigger.addEventListener("blur", onLeave, { signal: triggerController.signal });
 
@@ -213,6 +257,8 @@ function show(tip, ref) {
   if (!state) return;
 
   state.activeRef = ref;
+  state.overRef = true;
+  clearHide(tip);
   if (state.timer) clearTimeout(state.timer);
   state.timer = setTimeout(() => {
     state.timer = null;

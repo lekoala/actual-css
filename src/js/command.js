@@ -52,9 +52,15 @@ function delegateClicks() {
     const trigger = event.target.closest("[commandfor][command]");
     if (!trigger) return;
 
-    for (const { wired, click } of registrations) {
-      const target = wired.get(trigger);
+    for (const { wired, resolve, connect, click } of registrations) {
+      let target = wired.get(trigger);
       if (target !== undefined) {
+        if (!target?.isConnected) {
+          target = resolve(trigger);
+          if (!target) continue;
+          wired.set(trigger, target);
+          connect?.(trigger, target);
+        }
         click(event, trigger, target);
         return;
       }
@@ -64,7 +70,7 @@ function delegateClicks() {
 
 export function commandTrigger(selector, { resolve = targetFor, connect, click }) {
   const wired = new WeakMap();
-  registrations.push({ wired, click });
+  registrations.push({ wired, resolve, connect, click });
   delegateClicks();
 
   function connectOne(trigger) {

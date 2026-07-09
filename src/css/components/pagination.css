@@ -22,7 +22,7 @@
   min-inline-size: var(--control-size);
 }
 
-.pagination [aria-hidden="true"] {
+.pagination > li > [aria-hidden="true"] {
   display: inline-flex;
   align-items: center;
   justify-content: center;

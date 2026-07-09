@@ -84,3 +84,20 @@ test("scrollspy uses data-scrollspy-root and picks up dynamic links", async () =
     document.getElementById("beta"),
   ]);
 });
+
+test("scrollspy ignores unrelated body mutations", async () => {
+  await loadScrollspy(`
+    <nav class="scrollspy">
+      <a href="#alpha">Alpha</a>
+    </nav>
+    <section id="alpha"></section>
+    <aside></aside>
+  `);
+
+  expect(observers).toHaveLength(1);
+
+  document.querySelector("aside").insertAdjacentHTML("beforeend", "<p>Unrelated</p>");
+  await nextMicrotask();
+
+  expect(observers).toHaveLength(1);
+});

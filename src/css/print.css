@@ -23,7 +23,7 @@
     display: none !important;
   }
 
-  a.btn::after {
+  a.btn[href^="http"]::after {
     content: " (" attr(href) ")";
     font-size: 0.875em;
   }
@@ -31,7 +31,7 @@
   .card,
   .alert,
   .badge {
-    border: 1px solid CanvasText;
+    border: var(--border-width) solid CanvasText;
     break-inside: avoid;
   }
 

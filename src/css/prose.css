@@ -24,11 +24,11 @@
   overflow-wrap: break-word;
 }
 
-.prose :where(p, ul, ol, blockquote, pre, table, figure) {
+.prose :where(p, ul, ol, dl, blockquote, pre, table, figure) {
   margin-block: var(--prose-flow) 0;
 }
 
-.prose :where(h1, h2, h3, h4) {
+.prose :where(h1, h2, h3, h4, h5, h6) {
   margin-block: 1.5em 0;
   color: var(--text);
   font-weight: var(--font-weight-strong);

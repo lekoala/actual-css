@@ -123,6 +123,32 @@ test("flyout connects when the menu is inserted after its trigger", async () => 
   expect(menu.classList.contains("is-open")).toBe(true);
 });
 
+test("flyout trigger re-resolves a same-id replacement", async () => {
+  await loadFlyout(`
+    <main>
+      <button id="trigger" type="button" aria-controls="menu" aria-expanded="false">Open</button>
+      <menu id="menu" class="flyout" hidden><li><button type="button">Old</button></li></menu>
+    </main>
+  `);
+  const trigger = document.getElementById("trigger");
+  const first = document.getElementById("menu");
+
+  first.replaceWith(
+    document.createRange().createContextualFragment(
+      '<menu id="menu" class="flyout" hidden><li><button type="button">New</button></li></menu>',
+    ),
+  );
+  await nextMicrotask();
+  const replacement = document.getElementById("menu");
+  setupGeometry(trigger, replacement);
+
+  click(trigger);
+
+  expect(first.hidden).toBe(true);
+  expect(replacement.hidden).toBe(false);
+  expect(replacement.classList.contains("is-open")).toBe(true);
+});
+
 test("flyout trigger opens nav panels and focuses the first link", async () => {
   await loadFlyout(`
     <button id="trigger" type="button" aria-controls="panel" aria-expanded="false">Products</button>
@@ -226,4 +252,27 @@ test("pointer context menu focuses the menu container, not the first item", asyn
   press(menu, "ArrowDown");
 
   expect(document.activeElement).toBe(first);
+});
+
+test("removing an open context menu cleans up its surface state", async () => {
+  await loadContextMenu(`
+    <div id="target" data-context-menu="menu" tabindex="0">File.pdf</div>
+    <menu id="menu" class="flyout" hidden>
+      <li><button type="button">First</button></li>
+    </menu>
+  `);
+  const target = document.getElementById("target");
+  const menu = document.getElementById("menu");
+  setupGeometry(target, menu);
+
+  target.dispatchEvent(
+    new MouseEvent("contextmenu", { bubbles: true, cancelable: true, clientX: 20, clientY: 30 }),
+  );
+  expect(menu.hidden).toBe(false);
+
+  menu.remove();
+  await nextMicrotask();
+
+  expect(menu.hidden).toBe(true);
+  expect(menu.classList.contains("is-open")).toBe(false);
 });

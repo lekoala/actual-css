@@ -91,6 +91,18 @@ test("request-close buttons close an open dialog and restore focus", async () =>
   expect(document.activeElement).toBe(open);
 });
 
+test("close buttons do not get dialog popup semantics", async () => {
+  await loadDialog(`
+    <button id="open" commandfor="prefs" command="show-modal">Open</button>
+    <dialog id="prefs">
+      <button id="close" commandfor="prefs" command="request-close">Close</button>
+    </dialog>
+  `);
+
+  expect(document.getElementById("open").getAttribute("aria-haspopup")).toBe("dialog");
+  expect(document.getElementById("close").getAttribute("aria-haspopup")).toBeNull();
+});
+
 test("cancel closes without requiring view transitions", async () => {
   await loadDialog(`
     <button id="open" commandfor="prefs" command="show-modal">Open</button>
@@ -176,6 +188,31 @@ test("dialog triggers connect when the dialog is inserted later", async () => {
 
   expect(dialog.open).toBe(true);
   expect(trigger.getAttribute("aria-controls")).toBe("prefs");
+});
+
+test("dialog trigger re-resolves a same-id replacement", async () => {
+  await loadDialog('<main><button commandfor="prefs" command="show-modal">Open</button><dialog id="prefs"></dialog></main>');
+  const trigger = document.querySelector("button");
+  const first = document.getElementById("prefs");
+
+  first.replaceWith(document.createRange().createContextualFragment('<dialog id="prefs"></dialog>'));
+  await nextMicrotask();
+  const replacement = document.getElementById("prefs");
+
+  click(trigger);
+
+  expect(first.open).toBe(false);
+  expect(replacement.open).toBe(true);
+});
+
+test("dialog ignores application commands on dialog targets", async () => {
+  await loadDialog('<button commandfor="prefs" command="--app-command">Run</button><dialog id="prefs"></dialog>');
+  const trigger = document.querySelector("button");
+  const event = new MouseEvent("click", { bubbles: true, cancelable: true });
+
+  trigger.dispatchEvent(event);
+
+  expect(event.defaultPrevented).toBe(false);
 });
 
 test("a dialog with a bare open attribute is not treated as an open modal", async () => {

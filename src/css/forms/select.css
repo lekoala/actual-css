@@ -19,7 +19,7 @@
 
 /* The chevron sits on the inline-end side; flip it in RTL so it follows
    the padding-inline-end space reserved for it. */
-[dir="rtl"] .select:not([multiple], [size]) {
+.select:not([multiple], [size]):dir(rtl) {
   background-position: center left var(--space-3);
 }
 

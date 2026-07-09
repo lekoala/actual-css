@@ -1,6 +1,12 @@
 import enhance from "./enhance.js";
 import { focusFirstMenuItem, hasMenuItems } from "./menu.js";
-import { closeSurface, isSurfaceOpen, openSurface, prepareSurface } from "./surface.js";
+import {
+  closeSurface,
+  disconnectSurface,
+  isSurfaceOpen,
+  openSurface,
+  prepareSurface,
+} from "./surface.js";
 
 const LONG_PRESS_MS = 450;
 const MOVE_TOLERANCE = 10;
@@ -223,4 +229,5 @@ enhance({
     connectContextTarget(target);
     return () => disconnectContextTarget(target);
   },
+  "menu, [role='menu']": (menu) => () => disconnectSurface(menu),
 });

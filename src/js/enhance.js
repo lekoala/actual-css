@@ -37,6 +37,17 @@ function createRegistry(root) {
   const records = new Set();
   let selectorString = "";
 
+  function isValidSelector(selector) {
+    try {
+      root.querySelector?.(selector);
+      if (root instanceof Element) root.matches(selector);
+      return true;
+    } catch (error) {
+      console.error(`Invalid enhancer selector "${selector}"`, error);
+      return false;
+    }
+  }
+
   function updateSelectorString() {
     selectorString = [...records].flatMap((record) => record.selectors).join(",");
   }
@@ -49,7 +60,13 @@ function createRegistry(root) {
       if (!el.matches(selector)) continue;
       if (active?.has(selector)) continue;
 
-      const cleanup = record.enhancers[selector](el);
+      let cleanup;
+      try {
+        cleanup = record.enhancers[selector](el);
+      } catch (error) {
+        console.error(`Enhancer failed for selector "${selector}"`, error);
+        continue;
+      }
       if (!active) {
         active = new Map();
         record.instances.set(el, active);
@@ -110,12 +127,15 @@ function createRegistry(root) {
 
   return {
     add(enhancers) {
-      const selectors = Object.keys(enhancers);
+      const selectors = Object.keys(enhancers).filter(isValidSelector);
       if (!selectors.length) return null;
+      const validEnhancers = Object.fromEntries(
+        selectors.map((selector) => [selector, enhancers[selector]]),
+      );
 
       const record = {
         disconnected: false,
-        enhancers,
+        enhancers: validEnhancers,
         instances: new Map(),
         selectors,
         selectorString: selectors.join(","),

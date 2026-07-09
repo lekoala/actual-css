@@ -21,6 +21,10 @@ function waitForShow() {
   return new Promise((resolve) => setTimeout(resolve, 200));
 }
 
+function waitForHide() {
+  return new Promise((resolve) => setTimeout(resolve, 140));
+}
+
 afterEach(() => {
   cleanupDOM();
 });
@@ -61,6 +65,7 @@ test("an explicit tooltip via aria-describedby is wired, not recreated", async (
   expect(tip.hidden).toBe(false);
 
   leave(trigger);
+  await waitForHide();
 
   expect(tip.hidden).toBe(true);
 });
@@ -94,6 +99,7 @@ test("a shared explicit tooltip survives the removal of one of its triggers", as
   expect(tip.hidden).toBe(false);
 
   leave(a);
+  await waitForHide();
   expect(tip.hidden).toBe(true);
 
   // Removing one trigger must not tear down the tooltip for the other.
@@ -124,6 +130,57 @@ test("removing a shorthand trigger removes its generated tooltip", async () => {
   await nextMicrotask();
 
   expect(document.querySelector('[role="tooltip"]')).toBeNull();
+});
+
+test("explicit tooltip resolution retries after the target is inserted", async () => {
+  await loadTooltip('<main><button data-tooltip aria-describedby="tip1">Trigger</button></main>');
+  const trigger = document.querySelector("button");
+
+  hover(trigger);
+  await waitForShow();
+  expect(document.querySelector('[role="tooltip"]')).toBeNull();
+
+  document
+    .querySelector("main")
+    .insertAdjacentHTML("beforeend", '<div role="tooltip" id="tip1" hidden>Help</div>');
+  const tip = document.getElementById("tip1");
+
+  hover(trigger);
+  await waitForShow();
+
+  expect(tip.hidden).toBe(false);
+});
+
+test("shorthand tooltip does not append to an existing describedby value", async () => {
+  await loadTooltip(`
+    <button data-tooltip="Help" aria-describedby="help">Trigger</button>
+    <p id="help">Existing help.</p>
+  `);
+  const trigger = document.querySelector("button");
+
+  hover(trigger);
+  await waitForShow();
+
+  expect(trigger.getAttribute("aria-describedby")).toBe("help");
+  expect(document.querySelector('[role="tooltip"]').hidden).toBe(false);
+});
+
+test("tooltip stays open while the pointer moves from trigger to tip", async () => {
+  await loadTooltip('<button data-tooltip="Help">Trigger</button>');
+  const trigger = document.querySelector("button");
+
+  hover(trigger);
+  await waitForShow();
+  const tip = document.querySelector('[role="tooltip"]');
+
+  leave(trigger);
+  tip.dispatchEvent(new MouseEvent("mouseenter"));
+  await waitForHide();
+  expect(tip.hidden).toBe(false);
+
+  tip.dispatchEvent(new MouseEvent("mouseleave"));
+  await waitForHide();
+  expect(tip.hidden).toBe(true);
 });
 
 test("actual:hide and actual:out-of-view events hide the tooltip", async () => {

@@ -31,7 +31,6 @@
 }
 
 .nowrap {
-  flex-wrap: nowrap;
   white-space: nowrap;
 }
 

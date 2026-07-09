@@ -41,9 +41,14 @@ function sectionsFor(nav) {
   return sections;
 }
 
+const navState = new WeakMap();
+
+export function refreshScrollspy(nav) {
+  navState.get(nav)?.rebuild();
+}
+
 function setupNav(nav) {
   if (typeof IntersectionObserver === "undefined") return;
-
   let io = null;
   let sections = [];
   let scheduled = false;
@@ -91,15 +96,14 @@ function setupNav(nav) {
 
   const mo = new MutationObserver(scheduleRebuild);
   mo.observe(nav, { childList: true, subtree: true });
-  if (nav.ownerDocument.body) {
-    mo.observe(nav.ownerDocument.body, { childList: true, subtree: true });
-  }
+  navState.set(nav, { rebuild: scheduleRebuild });
 
   rebuild();
 
   return () => {
     io?.disconnect();
     mo.disconnect();
+    navState.delete(nav);
   };
 }
 

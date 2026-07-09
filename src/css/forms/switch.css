@@ -78,13 +78,15 @@
 
 /* The knob travels toward inline-end; in RTL that is leftward, so the
     translateX sign flips. translateX is physical, not logical. */
-[dir="rtl"] .switch:checked::before {
+.switch:checked:dir(rtl)::before {
   transform: translateX(calc(var(--switch-travel) * -1));
 }
 
 .switch:focus-visible {
+  --switch-border: var(--focus);
   outline: var(--focus-outline);
   outline-offset: var(--focus-outline-offset);
+  box-shadow: var(--focus-ring-shadow);
 }
 
 .switch:disabled {

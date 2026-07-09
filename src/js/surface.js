@@ -130,17 +130,6 @@ function ensureBackdrop(menu, state) {
 }
 
 function applySheetSemantics(menu, state) {
-  if (state.isSheet) {
-    if (!state.sheetSemanticsApplied) {
-      state.previousRole = menu.getAttribute("role");
-      state.previousAriaModal = menu.getAttribute("aria-modal");
-      state.sheetSemanticsApplied = true;
-    }
-    menu.setAttribute("role", "dialog");
-    menu.setAttribute("aria-modal", "true");
-    return;
-  }
-
   if (!state.sheetSemanticsApplied) return;
 
   if (state.previousRole == null) {
