@@ -1,7 +1,7 @@
 /*
  * Tabs — in-place panel switcher using real tab semantics.
  *
- * Tab list:  [role="tablist"]
+ * Tab list:  .tabs[role="tablist"]
  * Tab:       [role="tab"]  with aria-selected, aria-controls, id, tabindex
  * Panel:     [role="tabpanel"]  with id matching aria-controls
  *
@@ -17,6 +17,8 @@
 
 import enhance from "./enhance.js";
 import { firstItem, lastItem, nextItem } from "./keys.js";
+
+const TABLIST_SELECTOR = '.tabs[role="tablist"]';
 
 function tabsOf(list) {
   return [...list.querySelectorAll('[role="tab"]')];
@@ -44,7 +46,7 @@ function makePanelFocusable(panel) {
 
 function activate(tab) {
   if (!tab) return;
-  const list = tab.closest('[role="tablist"]');
+  const list = tab.closest(TABLIST_SELECTOR);
   if (!list) return;
   const tabs = tabsOf(list);
   const panels = panelsOf(tabs);
@@ -84,7 +86,7 @@ function initialize(list) {
 function onKeydown(e) {
   const tab = e.target.closest('[role="tab"]');
   if (!tab) return;
-  const list = tab.closest('[role="tablist"]');
+  const list = tab.closest(TABLIST_SELECTOR);
   if (!list) return;
 
   const tabs = tabsOf(list);
@@ -150,7 +152,7 @@ function onClick(e) {
 }
 
 enhance({
-  '[role="tablist"]': (list) => {
+  [TABLIST_SELECTOR]: (list) => {
     const controller = new AbortController();
     initialize(list);
     list.addEventListener("click", onClick, { signal: controller.signal });

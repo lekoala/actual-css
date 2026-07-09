@@ -432,7 +432,7 @@
     const otherAction = document.getElementById("other-action");
     if (otherAction) {
       otherAction.addEventListener("click", () => {
-        const status = document.querySelector("[data-status]");
+        const status = document.querySelector(".status-bar[data-status]");
         if (status) status.textContent = "Action done";
       });
     }

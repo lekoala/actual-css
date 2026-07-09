@@ -2723,7 +2723,7 @@ dialog.drawer nav {
  * classes — .danger / .success / .warning / .neutral from intents.css drive
  * the coloring via --intent / --intent-fg.
  *
- * Public API: .status-bar (+ intent), targeted by [data-status] or .status-bar.
+ * Public API: .status-bar (+ intent), activated for JavaScript by [data-status].
  */
 
 /* Intent boundary — inherited intents do not tint this component.
