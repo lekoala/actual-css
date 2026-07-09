@@ -183,4 +183,12 @@
     --text-muted: var(--text);
     --text-subtle: var(--text);
   }
+
+  [data-theme="light"] {
+    --icon-chevron-image: var(--icon-chevron-image-contrast-light);
+  }
+
+  [data-theme="dark"] {
+    --icon-chevron-image: var(--icon-chevron-image-contrast-dark);
+  }
 }
