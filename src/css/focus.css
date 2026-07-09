@@ -1,0 +1,13 @@
+/* Focus baseline — loaded after components so its legacy fallback also covers
+   controls that reset their native outline. Modern browsers hide it for focus
+   that is not keyboard-relevant; components layer local state on top. */
+:focus {
+  outline: var(--focus-outline);
+  outline-offset: var(--focus-outline-offset);
+}
+
+@supports selector(:focus-visible) {
+  :focus:not(:focus-visible) {
+    outline: none;
+  }
+}

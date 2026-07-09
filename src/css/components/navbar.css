@@ -29,8 +29,6 @@
 }
 
 .navbar-brand:focus-visible {
-  outline: var(--focus-outline);
-  outline-offset: var(--focus-outline-offset);
   border-radius: var(--radius-sm);
 }
 
@@ -65,11 +63,6 @@
     background: var(--surface-subtle);
     color: var(--text);
   }
-}
-
-.nav-link:focus-visible {
-  outline: var(--focus-outline);
-  outline-offset: var(--focus-outline-offset);
 }
 
 /* Nav list — a vertical navigation list. Used by .drawer for stacked links. */

@@ -63,9 +63,11 @@ The surface levels are: `surface` (canvas), `surface-raised` (cards, raised surf
 
 Use `*-fg` pairs only for solid backgrounds where the component controls both foreground and background. Do not require a foreground token for every surface token.
 
-Focus styling is outline-first. Components use `--focus-outline` and
-`--focus-outline-offset` for the guaranteed visible affordance, then add
-`--focus-ring-shadow` only as an enhancement where a softer halo helps.
+Focus styling is outline-first. A global focus baseline uses `--focus-outline`
+and `--focus-outline-offset` for the guaranteed visible affordance: older
+browsers show it on `:focus`, while modern browsers limit it to
+`:focus-visible`. Components add `--focus-ring-shadow` only where a softer
+halo helps.
 `forced-colors: active` disables the shadow and maps the outline to
 `Highlight`.
 

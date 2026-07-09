@@ -28,11 +28,6 @@
   font-weight: var(--font-weight-bold);
 }
 
-.accordion summary:focus-visible {
-  outline: var(--focus-outline);
-  outline-offset: var(--focus-outline-offset);
-}
-
 .accordion summary::-webkit-details-marker {
   display: none;
 }

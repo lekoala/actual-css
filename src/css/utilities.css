@@ -125,13 +125,6 @@
   text-decoration: none;
 }
 
-.link-plain:focus-visible,
-.link-muted:focus-visible {
-  outline: var(--focus-outline);
-  outline-offset: var(--focus-outline-offset);
-  box-shadow: var(--focus-ring-shadow);
-}
-
 @media (hover: hover) {
   .link-muted:hover {
     color: var(--text);

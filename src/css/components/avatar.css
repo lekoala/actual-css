@@ -117,11 +117,6 @@ button.avatar {
   transform: translateY(1px);
 }
 
-:where(a.avatar, button.avatar):focus-visible {
-  outline: var(--focus-outline);
-  outline-offset: var(--focus-outline-offset);
-}
-
 button.avatar:disabled,
 a.avatar[aria-disabled="true"] {
   cursor: not-allowed;
