@@ -24,7 +24,7 @@
  *   - Any other code, without importing this module: dispatch `actual:status`
  *     directly — `detail: { message, intent, duration }`, or `{}` to clear.
  */
-import { commandTrigger, targetFor } from "./command.js";
+import { commandSelector, commandTrigger, targetFor } from "./command.js";
 import enhance from "./enhance.js";
 
 const INTENTS = ["neutral", "success", "danger", "warning"];
@@ -62,8 +62,9 @@ status.clear = function clear() {
   clearTimeout(statusTimer);
 };
 
-const STATUS_SHOW_SELECTOR = 'button[commandfor][command="--status"]';
-const STATUS_CLEAR_SELECTOR = 'button[commandfor][command="--status-clear"]';
+const STATUS_SHOW_COMMANDS = ["--status"];
+const STATUS_CLEAR_COMMANDS = ["--status-clear"];
+const STATUS_TRIGGER_SELECTOR = commandSelector([...STATUS_SHOW_COMMANDS, ...STATUS_CLEAR_COMMANDS]);
 let statusShowTriggers;
 let statusClearTriggers;
 
@@ -91,7 +92,7 @@ function connectStatusTrigger(trigger, target) {
 function connectStatusTarget(target) {
   if (!target.id) return;
   const triggers = target.ownerDocument.querySelectorAll(
-    `button[commandfor="${CSS.escape(target.id)}"][command^="--status"]`,
+    `${STATUS_TRIGGER_SELECTOR}[commandfor="${CSS.escape(target.id)}"]`,
   );
   for (const trigger of triggers) {
     statusShowTriggers.connectOne(trigger);
@@ -116,7 +117,7 @@ if (typeof document !== "undefined") {
     }
   });
 
-  statusShowTriggers = commandTrigger(STATUS_SHOW_SELECTOR, {
+  statusShowTriggers = commandTrigger(STATUS_SHOW_COMMANDS, {
     resolve: resolveStatusTrigger,
     connect: connectStatusTrigger,
     click: (event, trigger) => {
@@ -129,7 +130,7 @@ if (typeof document !== "undefined") {
     },
   });
 
-  statusClearTriggers = commandTrigger(STATUS_CLEAR_SELECTOR, {
+  statusClearTriggers = commandTrigger(STATUS_CLEAR_COMMANDS, {
     resolve: resolveStatusTrigger,
     connect: connectStatusTrigger,
     click: (event, trigger) => {

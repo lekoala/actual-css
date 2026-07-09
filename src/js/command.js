@@ -11,7 +11,7 @@
  *
  *   import { commandTrigger } from "./command.js";
  *
- *   const triggers = commandTrigger('button[commandfor][command="--foo"]', {
+ *   const triggers = commandTrigger(["--foo"], {
  *     resolve: (trigger) => targetFor(trigger),   // element or null
  *     connect: (trigger, target) => {...},        // optional, runs once
  *     click: (event, trigger, target) => {...},
@@ -34,6 +34,17 @@ import enhance from "./enhance.js";
 export function targetFor(trigger) {
   const id = trigger.getAttribute("commandfor");
   return id ? trigger.ownerDocument.getElementById(id) : null;
+}
+
+export function commandSelector(commands) {
+  const names = Array.isArray(commands) ? commands : [commands];
+  if (!names.length || names.some((name) => typeof name !== "string" || !name)) {
+    throw new TypeError("commandTrigger() requires one or more command names.");
+  }
+  const attributes = names.map(
+    (name) => `[command="${name.replaceAll("\\", "\\\\").replaceAll('"', '\\"')}"]`,
+  );
+  return `button[commandfor]:is(${attributes.join(", ")})`;
 }
 
 const registrations = [];
@@ -68,7 +79,8 @@ function delegateClicks() {
   });
 }
 
-export function commandTrigger(selector, { resolve = targetFor, connect, click }) {
+export function commandTrigger(commands, { resolve = targetFor, connect, click }) {
+  const selector = commandSelector(commands);
   const wired = new WeakMap();
   registrations.push({ wired, resolve, connect, click });
   delegateClicks();

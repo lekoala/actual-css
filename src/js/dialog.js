@@ -16,12 +16,12 @@
  */
 
 import enhance from "./enhance.js";
-import { commandTrigger, targetFor } from "./command.js";
+import { commandSelector, commandTrigger, targetFor } from "./command.js";
 
 const dialogMap = new WeakMap();
 const wiredDialogs = new Set();
-const DIALOG_TRIGGER_SELECTOR =
-  'button[commandfor]:is([command="show-modal"], [command="show"], [command="request-close"], [command="close"])';
+const DIALOG_COMMANDS = ["show-modal", "show", "request-close", "close"];
+const DIALOG_TRIGGER_SELECTOR = commandSelector(DIALOG_COMMANDS);
 const DIALOG_SELECTOR = "dialog";
 const DIALOG_TITLE_SELECTOR = "[data-title], h1, h2, h3, h4, h5, h6";
 const DEFAULT_UNSUPPORTED_MESSAGE =
@@ -415,7 +415,7 @@ function disconnectDialog(dialog) {
   syncModalOpenClass(dialog.ownerDocument);
 }
 
-const dialogTriggers = commandTrigger(DIALOG_TRIGGER_SELECTOR, {
+const dialogTriggers = commandTrigger(DIALOG_COMMANDS, {
   resolve: (trigger) => {
     const dialog = targetFor(trigger);
     return isDialogElement(dialog) ? dialog : null;
