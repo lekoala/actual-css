@@ -48,6 +48,14 @@ Modern features are gated with `@supports`; unsupported browsers keep the core l
 
 Use `@supports` positively (no `@supports not`) only when it protects a dependent group of rules or a real fallback/modern branch. Do not gate a single progressive declaration whose unsupported value is simply ignored by the browser, such as `text-wrap: balance`.
 
+When a baseline declaration is already a valid fallback, prefer the normal cascade to an `@supports` wrapper. For example, older browsers keep the opaque surface here, while newer ones replace it with the translucent value:
+
+```css
+background: var(--surface);
+background: color-mix(in oklch, var(--surface) 88%, transparent);
+backdrop-filter: blur(1rem);
+```
+
 ### color-mix fallbacks
 
 Every `color-mix()` declaration needs a flat fallback outside `@supports` (older browsers drop the whole property, not just the function).

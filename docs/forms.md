@@ -55,10 +55,14 @@
       <span class="field-label">Language</span>
       <select class="select" autocomplete="language">
         <option value="">Choose a language</option>
-        <option value="en" selected>English</option>
-        <option value="fr">Français</option>
-        <option value="nl">Nederlands</option>
-        <option value="de">Deutsch</option>
+        <optgroup label="Available languages">
+          <option value="en" selected>English</option>
+          <option value="fr">Français</option>
+          <option value="nl">Nederlands</option>
+        </optgroup>
+        <optgroup label="Not yet available">
+          <option value="de" disabled>Deutsch</option>
+        </optgroup>
       </select>
     </label>
 
@@ -137,6 +141,7 @@
 - `.field` is the canonical field wrapper. It works on `<label>` and `<div>`.
 - `.field-label` is element-agnostic. Use it on `<span>` inside a wrapped label, on `<label for="…">` in a detached layout, or on `<legend>` inside a fieldset.
 - `.field-group` styles a `<fieldset class="field-group">` as a grouped field container.
+- Use native `<optgroup>` and `disabled` options in `.select` controls when applicable; the customizable picker preserves both as a progressive enhancement.
 - `.choice` is the choice-label API. Use `.check` or `.radio` on the nested control. The control goes first, the label group second, so multi-line labels align the control with the first line.
 - For a switch, use `class="switch"` and `role="switch"`.
 - Core range controls stay native and are enhanced by `accent-color`. An optional richer range skin may come later if real projects need it.
