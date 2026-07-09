@@ -82,11 +82,6 @@
   }
 }
 
-.badge > button:focus-visible {
-  outline: var(--focus-outline);
-  outline-offset: var(--focus-outline-offset);
-}
-
 /* .solid/.soft/.outline are shared via variants.css, including the
    .soft/.outline hover recipe (--ui-hover-bg). The --badge-* fallbacks make
    .badge solid by default. */
@@ -98,11 +93,6 @@
   :where(a.badge, button.badge):not(:where(:disabled, [aria-disabled="true"], .outline)):hover {
     box-shadow: inset 0 0 0 999px var(--hover-overlay);
   }
-}
-
-:where(a.badge, button.badge):focus-visible {
-  outline: var(--focus-outline);
-  outline-offset: var(--focus-outline-offset);
 }
 
 button.badge {

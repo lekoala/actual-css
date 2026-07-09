@@ -18,8 +18,6 @@ a {
 }
 
 a:focus-visible {
-  outline: var(--focus-outline);
-  outline-offset: var(--focus-outline-offset);
   box-shadow: var(--focus-ring-shadow);
 }
 

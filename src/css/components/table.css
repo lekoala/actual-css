@@ -14,11 +14,6 @@
   background: var(--surface-raised);
 }
 
-.table-wrap:focus-visible {
-  outline: var(--focus-outline);
-  outline-offset: var(--focus-outline-offset);
-}
-
 .table {
   --table-min: 100%;
   --table-cell-pad: var(--space-3);
