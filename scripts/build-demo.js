@@ -372,47 +372,37 @@ function renderIndex(catName, catDesc, sections) {
     .replace(/\{\{demoAssetsPath\}\}/g, "../../styles");
 }
 
-function renderMainIndex(categories) {
-  let cards = "";
-  for (const cat of categories) {
-    const desc = cat.desc ? `<p>${escapeHtml(cat.desc)}</p>` : "";
-    cards += `      <article class="component-card">
+function renderCardHtml(href, title, description) {
+  const desc = description ? `<p>${escapeHtml(description)}</p>` : "";
+  return `      <article class="component-card">
         <div class="card-info">
-          <h3><a href="${cat.slug}/index.html">${escapeHtml(cat.name)}</a></h3>
+          <h3><a href="${href}">${escapeHtml(title)}</a></h3>
           ${desc}
         </div>
       </article>
 `;
+}
+
+function renderMainIndex(categories, templatePages = [], adminiPages = []) {
+  let cards = "";
+  for (const cat of categories) {
+    cards += renderCardHtml(`${cat.slug}/index.html`, cat.name, cat.desc);
   }
 
-  cards += `<article class="component-card">
-        <div class="card-info">
-          <h3><a href="../templates/blog.html">Blog</a></h3>
-          <p>Blog article layout with prose typography, comments sidebar, and scrollspy table of contents.</p>
-        </div>
-      </article>
-      <article class="component-card">
-        <div class="card-info">
-          <h3><a href="../templates/dashboard.html">Dashboard</a></h3>
-          <p>Data dashboard with cards, tables, metrics, and responsive grid layout.</p>
-        </div>
-      </article>
-      <article class="component-card">
-        <div class="card-info">
-          <h3><a href="../templates/app.html">App Shell</a></h3>
-          <p>Full application layout with sidebar navigation, topbar, and content area.</p>
-        </div>
-      </article>
-      <article class="component-card">
-        <div class="card-info">
-          <h3><a href="../templates/kitchen-sink.html">Kitchen Sink</a></h3>
-          <p>Every component rendered together in one page for visual regression and layout review.</p>
-        </div>
-      </article>
-`;
+  let templateCards = "";
+  for (const page of templatePages) {
+    templateCards += renderCardHtml(`../templates/${page.href}`, page.title, page.description);
+  }
+
+  let adminiCards = "";
+  for (const page of adminiPages) {
+    adminiCards += renderCardHtml(`../admini/${page.href}`, page.title, page.description);
+  }
 
   return templates.mainIndex
     .replace(/\{\{cards\}\}/g, cards)
+    .replace(/\{\{templateCards\}\}/g, templateCards)
+    .replace(/\{\{adminiCards\}\}/g, adminiCards)
     .replace(/\{\{cssPath\}\}/g, "../../src/css")
     .replace(/\{\{demoAssetsPath\}\}/g, "../styles");
 }
@@ -434,6 +424,48 @@ function extractCategoryDescription(content) {
     return t;
   }
   return "";
+}
+
+function extractHtmlPageInfo(filePath) {
+  const content = readFileSync(filePath, "utf8");
+  const descMatch = content.match(/<meta name="description" content="([^"]+)"/);
+  const description = descMatch ? descMatch[1].trim() : "";
+
+  const titleMatch = content.match(/<title>([^<]+)<\/title>/);
+  const htmlTitle = titleMatch ? titleMatch[1].trim() : "";
+
+  return { htmlTitle, description };
+}
+
+function htmlPageCardTitle(slug, htmlTitle) {
+  if (slug === "index") {
+    return htmlTitle
+      .replace(/ - Admini on Actual CSS$/, "")
+      .replace(/ — Actual CSS$/, "")
+      .replace(/ - Actual CSS$/, "")
+      .trim();
+  }
+  return slug
+    .split(/[-_]/)
+    .map((w) => TITLE_WORDS[w] || w.charAt(0).toUpperCase() + w.slice(1))
+    .join(" ");
+}
+
+function discoverHtmlPages(directory) {
+  if (!existsSync(directory)) return [];
+  return readdirSync(directory)
+    .filter((f) => f.endsWith(".html"))
+    .map((f) => {
+      const slug = f.replace(/\.html$/, "");
+      const info = extractHtmlPageInfo(join(directory, f));
+      return {
+        title: htmlPageCardTitle(slug, info.htmlTitle),
+        description: info.description,
+        href: f,
+        slug,
+      };
+    })
+    .sort((a, b) => a.title.localeCompare(b.title));
 }
 
 function detectTables(content, file) {
@@ -543,20 +575,24 @@ Do not edit files here directly. Edit \`docs/*.md\` or \`scripts/templates/*.htm
 
 function main() {
   const categories = discoverCategories();
+  const templatePages = discoverHtmlPages(join(DEMO, "templates"));
+  const adminiPages = discoverHtmlPages(join(DEMO, "admini"));
   mkdirSync(GENERATED_DEMO, { recursive: true });
   const results = categories.map((cat) => buildCategory(cat));
   const expected = new Set(results.map((category) => category.slug));
 
   removeGeneratedDirs(GENERATED_DEMO, expected);
-  removeGeneratedDirs(DEMO, new Set(), new Set(["generated", "styles", "templates"]));
+  removeGeneratedDirs(DEMO, new Set(), new Set(["generated", "styles", "templates", "admini"]));
   writeGeneratedReadme();
-  writeFileSync(join(GENERATED_DEMO, "index.html"), renderMainIndex(results));
+  writeFileSync(join(GENERATED_DEMO, "index.html"), renderMainIndex(results, templatePages, adminiPages));
   writeFileSync(join(DEMO, "index.html"), renderRootRedirect());
 
   console.log("Demo pages generated:");
   for (const r of results) {
     console.log(`  ${r.slug}/ (${r.sections.length} sections)`);
   }
+  console.log(`  templates/ (${templatePages.length} pages)`);
+  console.log(`  admini/ (${adminiPages.length} pages)`);
 }
 
 function runBuild() {

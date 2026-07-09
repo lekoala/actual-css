@@ -341,6 +341,21 @@
   margin-block: 0;
 }
 
+.demo-section {
+  margin-block-start: 3rem;
+  border-block-start: 1px solid var(--border);
+  padding-block-start: 2rem;
+}
+
+.demo-section-title {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-strong);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  margin-block-end: 1.25rem;
+}
+
 /* Cover: decorative gradient placeholder standing in for real photography or
  * product screenshots. Several templates (blog, marketing) need a "there's
  * no real image yet" surface, and it should look the same everywhere they
