@@ -112,7 +112,7 @@ button.badge {
 
 button.badge:disabled,
 .badge[aria-disabled="true"] {
-  opacity: 0.55;
+  opacity: var(--disabled-opacity);
   cursor: not-allowed;
 }
 

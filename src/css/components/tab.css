@@ -57,7 +57,7 @@
 }
 
 .tab[aria-selected="true"],
-.tab[aria-current="page"],
+.tab[aria-current]:not([aria-current="false"]),
 .tab[aria-pressed="true"] {
   border-block-end-color: var(--intent, var(--primary));
   color: var(--intent, var(--primary));
@@ -81,7 +81,7 @@
   }
 
   .tab[aria-selected="true"],
-  .tab[aria-current="page"],
+  .tab[aria-current]:not([aria-current="false"]),
   .tab[aria-pressed="true"] {
     border-block-end-color: Highlight;
     color: Highlight;

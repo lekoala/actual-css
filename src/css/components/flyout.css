@@ -64,6 +64,10 @@
     translate var(--duration-fast, var(--duration)) var(--ease, ease);
 }
 
+.flyout.is-open:not(.is-sheet) {
+  inset: auto;
+}
+
 @starting-style {
   .flyout.is-open {
     opacity: 0;

@@ -68,6 +68,7 @@
   --control-size: var(--control-size-md);
   --control-pad-x: 1em;
   --control-font-size: var(--font-size-md);
+  --disabled-opacity: 0.65;
 
   /* Variant tuning — themes may adjust generated soft surfaces without
      replacing the component rules. */
