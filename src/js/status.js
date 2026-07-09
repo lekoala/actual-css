@@ -26,14 +26,16 @@
  */
 import { commandSelector, commandTrigger, targetFor } from "./command.js";
 import enhance from "./enhance.js";
+import { EVENTS } from "./events.js";
 
 const INTENTS = ["neutral", "success", "danger", "warning"];
+const STATUS_SELECTOR = ".status-bar[data-status]";
 
 let statusTimer;
 
 function statusTarget() {
   if (typeof document === "undefined") return null;
-  return document.querySelector(".status-bar[data-status]");
+  return document.querySelector(STATUS_SELECTOR);
 }
 
 export function status(message, options = {}) {
@@ -69,7 +71,7 @@ let statusShowTriggers;
 let statusClearTriggers;
 
 function dispatchStatusEvent(source, detail) {
-  source.dispatchEvent(new CustomEvent("actual:status", { bubbles: true, detail }));
+  source.dispatchEvent(new CustomEvent(EVENTS.status, { bubbles: true, detail }));
 }
 
 function readDuration(trigger) {
@@ -101,14 +103,14 @@ function connectStatusTarget(target) {
 }
 
 if (typeof document !== "undefined") {
-  document.addEventListener("actual:invalid", (event) => {
+  document.addEventListener(EVENTS.invalid, (event) => {
     const message = event.detail?.message;
     if (message) status(message, { intent: "danger" });
   });
 
   // Public contract: any code can trigger the status bar this way, without
   // importing this module. A message shows it; omitting one clears it.
-  document.addEventListener("actual:status", (event) => {
+  document.addEventListener(EVENTS.status, (event) => {
     const { message, intent, duration } = event.detail ?? {};
     if (message) {
       status(message, { intent, duration });
@@ -140,7 +142,7 @@ if (typeof document !== "undefined") {
   });
 
   enhance({
-    ".status-bar[data-status]": (target) => connectStatusTarget(target),
+    [STATUS_SELECTOR]: (target) => connectStatusTarget(target),
   });
 }
 

@@ -1,10 +1,10 @@
 import { firstItem, lastItem, nextItem } from "./keys.js";
 
-const MENU_ITEM_TARGET_SELECTOR = ':where(button, a, [role="menuitem"])';
-export const MENU_ITEM_SELECTOR = [
-  `.flyout > ${MENU_ITEM_TARGET_SELECTOR}`,
-  `.flyout > li > ${MENU_ITEM_TARGET_SELECTOR}`,
-].join(",");
+const MENU_ITEM_TARGET_SELECTORS = ["button", "a", '[role="menuitem"]'];
+export const MENU_ITEM_SELECTOR = MENU_ITEM_TARGET_SELECTORS.flatMap((target) => [
+  `.flyout > ${target}`,
+  `.flyout > li > ${target}`,
+]).join(",");
 
 function isUsableMenuItem(item) {
   return (

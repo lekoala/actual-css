@@ -13,6 +13,7 @@
  */
 
 import enhance from "./enhance.js";
+import { EVENTS } from "./events.js";
 
 const NOVALIDATE = "novalidate";
 const WAS_VALIDATED_CLASS = "was-validated";
@@ -234,7 +235,7 @@ function connectForm(form) {
       }
 
       form.dispatchEvent(
-        new CustomEvent("actual:invalid", {
+        new CustomEvent(EVENTS.invalid, {
           bubbles: true,
           detail: {
             form,
