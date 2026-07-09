@@ -8,7 +8,7 @@
  * No layout or interaction contract may depend on appearance: base-select.
  * Arbitrary menu and popover behavior belongs elsewhere.
  */
-@media (hover: hover) and (pointer: fine) {
+@media (forced-colors: none) and (hover: hover) and (pointer: fine) {
   @supports (appearance: base-select) {
     .select:not([multiple], [size], .native) {
       appearance: base-select;
@@ -86,51 +86,6 @@
 
     .select:not([multiple], [size], .native) optgroup option:first-child {
       margin-block-start: 0.5em;
-    }
-  }
-}
-
-@media (forced-colors: active) {
-  @media (hover: hover) and (pointer: fine) {
-    @supports (appearance: base-select) {
-      .select:not([multiple], [size], .native)::picker(select) {
-        border-color: ButtonText;
-        background-color: Canvas;
-        color: CanvasText;
-        box-shadow: none;
-      }
-
-      .select:not([multiple], [size], .native):open {
-        outline: var(--focus-outline);
-        outline-offset: var(--focus-outline-offset);
-        box-shadow: none;
-      }
-
-      .select:not([multiple], [size], .native) option:not(:disabled):hover,
-      .select:not([multiple], [size], .native) option:not(:disabled):focus-visible {
-        background-color: Highlight;
-        color: HighlightText;
-        forced-color-adjust: none;
-      }
-
-      .select:not([multiple], [size], .native) option:active {
-        background-color: ButtonFace;
-        color: ButtonText;
-        forced-color-adjust: auto;
-      }
-
-      .select:not([multiple], [size], .native) option::checkmark {
-        forced-color-adjust: none;
-      }
-
-      .select:not([multiple], [size], .native)
-        option:not(:disabled):is(:hover, :focus-visible)::checkmark {
-        color: HighlightText;
-      }
-
-      .select:not([multiple], [size], .native) optgroup {
-        color: GrayText;
-      }
     }
   }
 }
