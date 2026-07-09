@@ -18,7 +18,8 @@ import {
 
 // trigger -> { flyout, controller }
 const triggerMap = new WeakMap();
-const FLYOUT_TRIGGER_SELECTOR = "[aria-controls][aria-expanded], [aria-controls][aria-haspopup]";
+const FLYOUT_SELECTOR = ".flyout";
+const FLYOUT_TRIGGER_SELECTOR = "[aria-controls][aria-expanded]";
 
 function openFlyout(flyout, trigger) {
   openSurface(flyout, { trigger, source: trigger });
@@ -27,7 +28,7 @@ function openFlyout(flyout, trigger) {
 function flyoutFor(trigger) {
   const flyoutId = trigger.getAttribute("aria-controls");
   const flyout = flyoutId && trigger.ownerDocument.getElementById(flyoutId);
-  return flyout?.matches(".flyout") ? flyout : null;
+  return flyout?.matches(FLYOUT_SELECTOR) ? flyout : null;
 }
 
 function isMenuFlyout(flyout) {
@@ -178,7 +179,7 @@ enhance({
     connectTrigger(trigger);
     return () => disconnectTrigger(trigger);
   },
-  ".flyout": (flyout) => {
+  [FLYOUT_SELECTOR]: (flyout) => {
     connectFlyout(flyout);
     return () => disconnectFlyout(flyout);
   },

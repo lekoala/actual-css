@@ -81,6 +81,21 @@ test("flyout trigger gets initial disclosure attributes", async () => {
   expect(trigger.getAttribute("aria-haspopup")).toBe("menu");
 });
 
+test("aria-haspopup alone does not opt into flyout behavior", async () => {
+  await loadFlyout(`
+    <button id="trigger" type="button" aria-controls="menu" aria-haspopup="menu">Open</button>
+    <menu id="menu" class="flyout" hidden>
+      <li><button type="button">First</button></li>
+    </menu>
+  `);
+  const trigger = document.getElementById("trigger");
+  const menu = document.getElementById("menu");
+
+  click(trigger);
+
+  expect(menu.hidden).toBe(true);
+});
+
 test("only native menu flyouts get menu popup semantics", async () => {
   await loadFlyout(`
     <button id="trigger" type="button" aria-controls="menu" aria-expanded="false">Open</button>
