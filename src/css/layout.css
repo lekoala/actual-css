@@ -1,3 +1,7 @@
+.container-query {
+  container-type: inline-size;
+}
+
 .stack {
   display: flex;
   flex-direction: column;

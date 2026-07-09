@@ -138,7 +138,8 @@ select {
   /* Native select uses background-image, which cannot inherit currentColor.
      The stroke matches the default theme's text-subtle (hue 258 neutral). */
   --icon-chevron-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%238a8594' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
-  --icon-chevron-image-contrast: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='CanvasText' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  --icon-chevron-image-contrast-light: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  --icon-chevron-image-contrast-dark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
 
   /* Viewport size tokens — fallback vh/vw with dvh/vi enhancement.
      Consumed by full-viewport components (app-shell, drawer, modal, flyout).
@@ -180,7 +181,24 @@ select {
 
 @media (prefers-contrast: more) {
   :root {
-    --icon-chevron-image: var(--icon-chevron-image-contrast);
+    --icon-chevron-image: var(--icon-chevron-image-contrast-light);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --icon-chevron-image: var(--icon-chevron-image-contrast-dark);
+    }
+  }
+
+  [data-theme="light"],
+  [data-theme="cyberpunk"] {
+    --icon-chevron-image: var(--icon-chevron-image-contrast-light);
+  }
+
+  [data-theme="dark"],
+  [data-theme="dim"],
+  [data-theme="neon"] {
+    --icon-chevron-image: var(--icon-chevron-image-contrast-dark);
   }
 }
 
@@ -452,12 +470,6 @@ small {
   --intent-fg: var(--neutral-fg);
 }
 
-/*
- * Container query opt-in.
- *
- * Used by responsive primitives that should react to their wrapper width
- * instead of the viewport.
- */
 .container-query {
   container-type: inline-size;
 }
@@ -3265,7 +3277,7 @@ button.avatar {
  * Scrollspy — behavior hook for navigation that marks the active section
  * while the page scrolls.
  *
- * Adds only a baseline current-link affordance. scrollspy.js watches
+ * Does not add visual styles by itself. scrollspy.js watches
  * <nav class="scrollspy">
  * containing <a href="#section"> links and toggles aria-current="location" on
  * the link whose target is in view. Pair with .nav-list and .nav-link, or style
@@ -3278,11 +3290,10 @@ button.avatar {
  *
  * Falls back gracefully: links still work when IntersectionObserver or
  * :target-current is unavailable.
- *
+ * Intentionally empty: no CSS rules needed. The class is kept in the bundle
+ * so the selector is available for JS enhancement and for authors to hook
+ * their own styling.
  */
-.scrollspy a[aria-current="location"] {
-  font-weight: var(--font-weight-strong);
-}
 
 
 /* Data */
