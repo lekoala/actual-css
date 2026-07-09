@@ -5,7 +5,7 @@
 Works everywhere, works best on modern browsers. Wide browser support (even older browsers, not IE 11).
 
 - No compile or build step (just CSS).
-- No post-processing — use browser prefixes when needed.
+- No post-processing — use only necessary browser-specific prefixes and engine hooks.
 - CSS nesting is not used — code must be findable in the inspector. Rules are organized as if nesting were used, grouped together without nesting syntax.
 
 ## Baseline
@@ -55,6 +55,12 @@ background: var(--surface);
 background: color-mix(in oklch, var(--surface) 88%, transparent);
 backdrop-filter: blur(1rem);
 ```
+
+### Vendor prefixes and engine hooks
+
+Keep a browser-specific prefix only when it reaches a still-relevant engine behavior that the standard property does not cover, or when it targets a browser-only native part. Examples include `-webkit-mask-*` where needed and pseudo-elements such as `::-webkit-scrollbar` or `::-webkit-progress-value`.
+
+Do not retain a prefixed duplicate merely to preserve an optional visual enhancement on older browsers. If the unprefixed declaration or an earlier fallback keeps the component functional and legible, prefer the smaller rule set.
 
 ### color-mix fallbacks
 
