@@ -515,7 +515,7 @@ Flyout covers two distinct patterns:
 
 ### Mega menu
 
-Use `class="flyout grid-3"` when a nav panel needs multiple link groups. Keep links regular anchors and let the panel collapse to a sheet on mobile with `data-flyout-mobile="auto"`.
+Use `class="flyout grid-3"` when a nav panel needs multiple link groups. Keep links regular anchors and let the panel collapse to a one-column sheet on mobile with `data-flyout-mobile="auto"`.
 
 ```html
 <nav aria-label="Product navigation">

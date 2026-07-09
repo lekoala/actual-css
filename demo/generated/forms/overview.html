@@ -287,6 +287,7 @@
       <h3>Notes</h3>
 <ul>
   <li><code>required</code> is enough on native inputs. <code>aria-required=&quot;true&quot;</code> is redundant and not used in these examples.</li>
+  <li><code>required</code> is the semantic source of truth. Add <code>&lt;span class=&quot;required-mark&quot; aria-hidden=&quot;true&quot;&gt;*&lt;/span&gt;</code> inside a label only when a visual required marker is wanted; the framework does not add one automatically.</li>
   <li><code>.field</code> is the canonical field wrapper. It works on <code>&lt;label&gt;</code> and <code>&lt;div&gt;</code>.</li>
   <li><code>.field-label</code> is element-agnostic. Use it on <code>&lt;span&gt;</code> inside a wrapped label, on <code>&lt;label for=&quot;…&quot;&gt;</code> in a detached layout, or on <code>&lt;legend&gt;</code> inside a fieldset.</li>
   <li><code>.field-group</code> styles a <code>&lt;fieldset class=&quot;field-group&quot;&gt;</code> as a grouped field container.</li>
@@ -297,6 +298,24 @@
   <li><code>.form-actions</code> carries a default top margin. Override it with <code>--form-actions-margin-block-start</code>. It is class-only and may live inside or outside <code>&lt;form&gt;</code>. See Detached Actions below.</li>
   <li><code>.join</code> visually joins adjacent controls into a single unit. Use <code>.join-addon</code> for static prefix/suffix content. The container still carries <code>role=&quot;group&quot;</code> for accessibility.</li>
 </ul>
+<h3>Optional automatic required marks</h3>
+<p>If a form consistently marks every required field, opt into automatic visual markers in application CSS. Scope the rule to that form so other forms stay explicit, and retain a per-field opt-out:</p>
+    </div>
+    <section class="component-section">
+      <h2>CSS</h2>
+      <div class="example-group">
+        <div class="example-code">
+          <pre><code class="language-css"><span class="token selector">form[data-required-marks="auto"]
+  .field:not([data-required-mark="none"]):has(:required)
+  > .field-label::after</span> <span class="token punctuation">{</span>
+  <span class="token property">content</span><span class="token punctuation">:</span> <span class="token string">" *"</span><span class="token punctuation">;</span>
+  <span class="token property">color</span><span class="token punctuation">:</span> <span class="token function">var</span><span class="token punctuation">(</span>--danger<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+        </div>
+      </div>
+    </section>
+    <div class="component-prose">
+      <p><code>required</code> remains the accessible source of truth; this recipe adds only a visual cue. Use <code>data-required-mark=&quot;none&quot;</code> on a <code>.field</code> when a required control should not receive the generated marker.</p>
     </div>
     
   </section>

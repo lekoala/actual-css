@@ -138,6 +138,7 @@
 ### Notes
 
 - `required` is enough on native inputs. `aria-required="true"` is redundant and not used in these examples.
+- `required` is the semantic source of truth. Add `<span class="required-mark" aria-hidden="true">*</span>` inside a label only when a visual required marker is wanted; the framework does not add one automatically.
 - `.field` is the canonical field wrapper. It works on `<label>` and `<div>`.
 - `.field-label` is element-agnostic. Use it on `<span>` inside a wrapped label, on `<label for="…">` in a detached layout, or on `<legend>` inside a fieldset.
 - `.field-group` styles a `<fieldset class="field-group">` as a grouped field container.
@@ -147,6 +148,21 @@
 - Core range controls stay native and are enhanced by `accent-color`. An optional richer range skin may come later if real projects need it.
 - `.form-actions` carries a default top margin. Override it with `--form-actions-margin-block-start`. It is class-only and may live inside or outside `<form>`. See Detached Actions below.
 - `.join` visually joins adjacent controls into a single unit. Use `.join-addon` for static prefix/suffix content. The container still carries `role="group"` for accessibility.
+
+### Optional automatic required marks
+
+If a form consistently marks every required field, opt into automatic visual markers in application CSS. Scope the rule to that form so other forms stay explicit, and retain a per-field opt-out:
+
+```css
+form[data-required-marks="auto"]
+  .field:not([data-required-mark="none"]):has(:required)
+  > .field-label::after {
+  content: " *";
+  color: var(--danger);
+}
+```
+
+`required` remains the accessible source of truth; this recipe adds only a visual cue. Use `data-required-mark="none"` on a `.field` when a required control should not receive the generated marker.
 
 ## States And Sizes
 

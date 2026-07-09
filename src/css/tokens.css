@@ -134,14 +134,4 @@
     }
   }
 
-  [data-theme="light"],
-  [data-theme="cyberpunk"] {
-    --icon-chevron-image: var(--icon-chevron-image-contrast-light);
-  }
-
-  [data-theme="dark"],
-  [data-theme="dim"],
-  [data-theme="neon"] {
-    --icon-chevron-image: var(--icon-chevron-image-contrast-dark);
-  }
 }

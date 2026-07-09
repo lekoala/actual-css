@@ -191,16 +191,6 @@ select {
     }
   }
 
-  [data-theme="light"],
-  [data-theme="cyberpunk"] {
-    --icon-chevron-image: var(--icon-chevron-image-contrast-light);
-  }
-
-  [data-theme="dark"],
-  [data-theme="dim"],
-  [data-theme="neon"] {
-    --icon-chevron-image: var(--icon-chevron-image-contrast-dark);
-  }
 }
 
 :root {
@@ -387,6 +377,14 @@ select {
     --focus-ring-shadow: 0 0 0 4px var(--focus-ring);
     --text-muted: var(--text);
     --text-subtle: var(--text);
+  }
+
+  [data-theme="light"] {
+    --icon-chevron-image: var(--icon-chevron-image-contrast-light);
+  }
+
+  [data-theme="dark"] {
+    --icon-chevron-image: var(--icon-chevron-image-contrast-dark);
   }
 }
 
@@ -2049,14 +2047,11 @@ dialog.drawer nav {
   max-inline-size: none;
   max-block-size: min(calc(var(--viewport-block) * 0.75), 32rem);
   overflow: auto;
+  grid-template-columns: 1fr;
   padding: max(var(--space-3), env(safe-area-inset-top)) var(--space-3)
     max(var(--space-3), env(safe-area-inset-bottom));
   border-end-start-radius: 0;
   border-end-end-radius: 0;
-}
-
-.flyout.is-sheet:where(.grid-2, .grid-3, .grid-4, .grid-6) {
-  grid-template-columns: 1fr;
 }
 
 .flyout[hidden] {

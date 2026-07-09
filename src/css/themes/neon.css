@@ -48,6 +48,12 @@
   --shadow-popout: 0 0 1rem hsl(315 95% 62% / 0.25);
 }
 
+@media (prefers-contrast: more) {
+  [data-theme="neon"] {
+    --icon-chevron-image: var(--icon-chevron-image-contrast-dark);
+  }
+}
+
 /* Wide-gamut upgrade: chroma beyond sRGB on P3-capable displays. Both gates
    are required — a P3 screen driven by an older browser keeps the hsl()
    baseline above; -fg inks stay unchanged (near-black is gamut-safe). */

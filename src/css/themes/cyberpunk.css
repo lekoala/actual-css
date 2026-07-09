@@ -58,3 +58,9 @@
   --selection-bg: hsl(56 60% 6%);
   --selection-fg: hsl(56 100% 50%);
 }
+
+@media (prefers-contrast: more) {
+  [data-theme="cyberpunk"] {
+    --icon-chevron-image: var(--icon-chevron-image-contrast-light);
+  }
+}
