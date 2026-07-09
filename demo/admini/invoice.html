@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Tables - Admini on Actual CSS</title>
+  <title>Invoice #INV-2050 - Admini on Actual CSS</title>
   <link rel="stylesheet" href="../../src/css/actual.css">
   <link rel="stylesheet" href="../../src/css/themes/index.css">
   <link rel="stylesheet" href="../../src/css/optional/layout-extra.css">
@@ -37,7 +37,7 @@
         <p class="overline admini-section-title">Manage</p>
         <ul class="nav-list stack">
           <li>
-            <a class="nav-link" href="tables.html" aria-current="page">
+            <a class="nav-link" href="tables.html">
               <i class="ti ti-table" aria-hidden="true"></i>
               Tables
             </a>
@@ -103,7 +103,7 @@
         <p class="overline admini-section-title">Billing</p>
         <ul class="nav-list stack">
           <li>
-            <a class="nav-link" href="invoice.html">
+            <a class="nav-link" href="invoice.html" aria-current="page">
               <i class="ti ti-file-invoice" aria-hidden="true"></i>
               Invoice
             </a>
@@ -157,7 +157,7 @@
 
         <ol class="breadcrumb nowrap admini-hide-mobile" aria-label="Breadcrumb">
           <li><a href="index.html">Admini</a></li>
-          <li class="truncate" aria-current="page">Tables</li>
+          <li class="truncate" aria-current="page">Invoice</li>
         </ol>
 
         <div class="grow"></div>
@@ -203,139 +203,98 @@
       </header>
       <!-- /admini-shell:topbar -->
 
-      <main class="center stack admini-content">
-        <hgroup>
-          <p class="overline">Manage</p>
-          <h1>Tables</h1>
-          <p class="muted">
-            Tables scroll inside <code>.table-wrap</code> rather than breaking the page layout. Resize the window to see the
-            wide table below scroll horizontally while everything around it stays put.
-          </p>
-        </hgroup>
+    <main class="center stack admini-content">
+        <header class="cluster" style="--cluster-justify: space-between; align-items: flex-start;">
+          <hgroup>
+            <p class="overline">Billing</p>
+            <h1>Invoice</h1>
+            <p class="muted">A print-friendly document layout. Actual's own <code>print.css</code> already hides buttons and dialogs; two rules in <code>admini.css</code> hide the app shell on top of that.</p>
+          </hgroup>
+          <div class="cluster nowrap sm">
+            <button class="btn neutral outline" type="button" id="print-invoice">
+              <i class="ti ti-printer" aria-hidden="true"></i>
+              Print
+            </button>
+            <button class="btn primary" type="button">
+              <i class="ti ti-send" aria-hidden="true"></i>
+              Send invoice
+            </button>
+          </div>
+        </header>
 
-        <section class="card stack">
-          <header>
-            <h2>Team roster</h2>
+        <article class="card raised stack admini-invoice">
+          <header class="cluster" style="--cluster-justify: space-between; align-items: flex-start;">
+            <div class="cluster" style="gap: var(--space-3);">
+              <span class="avatar lg primary"><abbr>AD</abbr></span>
+              <div>
+                <strong>Admini Inc.</strong>
+                <p class="muted" style="margin: 0;">400 Market Street, Suite 200<br>San Francisco, CA 94105</p>
+              </div>
+            </div>
+            <div style="text-align: end;">
+              <p class="overline" style="margin: 0;">Invoice</p>
+              <h2 style="margin: 0;">#INV-2050</h2>
+              <span class="badge danger soft">Overdue</span>
+            </div>
           </header>
 
-          <div class="table-wrap" role="region" aria-labelledby="roster-table" tabindex="0">
-            <table class="table" style="--table-min: 48rem;">
-              <caption id="roster-table" class="sr-only">Team roster</caption>
+          <div class="grid-2 items-start">
+            <div>
+              <p class="field-label" style="margin-block-end: var(--space-1);">Billed to</p>
+              <strong>Northstar Logistics</strong>
+              <p class="muted" style="margin: 0;">Ada Morgan &middot; ada@northstarlogistics.com<br>1200 Freight Way, Suite 500<br>Chicago, IL 60601</p>
+            </div>
+            <div class="stack" style="gap: var(--space-1);">
+              <p class="field-label" style="margin: 0;">Details</p>
+              <div class="admini-invoice-totals-row"><span class="muted">Issue date</span><span>Jun 25, 2026</span></div>
+              <div class="admini-invoice-totals-row"><span class="muted">Due date</span><span>Jul 9, 2026</span></div>
+              <div class="admini-invoice-totals-row"><span class="muted">Terms</span><span>Net 14</span></div>
+            </div>
+          </div>
+
+          <div class="table-wrap">
+            <table class="table" style="--table-min: 32rem;">
               <thead>
                 <tr>
-                  <th scope="col">#</th>
-                  <th scope="col">First</th>
-                  <th scope="col">Last</th>
-                  <th scope="col">Handle</th>
-                  <th scope="col">Role</th>
-                  <th scope="col" class="nowrap">Last active</th>
+                  <th scope="col">Item</th>
+                  <th scope="col" class="text-end">Qty</th>
+                  <th scope="col" class="text-end">Price</th>
+                  <th scope="col" class="text-end">Total</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <th scope="row">1</th>
-                  <td>Mark</td>
-                  <td>Otto</td>
-                  <td>@mdo</td>
-                  <td><span class="badge primary soft">Admin</span></td>
-                  <td class="nowrap muted">2 minutes ago</td>
+                  <td>Enterprise plan &mdash; July</td>
+                  <td class="text-end">1</td>
+                  <td class="text-end">$1,200.00</td>
+                  <td class="text-end">$1,200.00</td>
                 </tr>
                 <tr>
-                  <th scope="row">2</th>
-                  <td>Jacob</td>
-                  <td>Thornton</td>
-                  <td>@fat</td>
-                  <td><span class="badge neutral soft">Editor</span></td>
-                  <td class="nowrap muted">1 hour ago</td>
+                  <td>Priority support add-on</td>
+                  <td class="text-end">1</td>
+                  <td class="text-end">$150.00</td>
+                  <td class="text-end">$150.00</td>
                 </tr>
                 <tr>
-                  <th scope="row">3</th>
-                  <td colspan="2">Larry the Bird</td>
-                  <td>@twitter</td>
-                  <td><span class="badge neutral soft">Subscriber</span></td>
-                  <td class="nowrap muted">Yesterday</td>
-                </tr>
-                <tr>
-                  <th scope="row">4</th>
-                  <td>Rin</td>
-                  <td>Moreau</td>
-                  <td>@rin</td>
-                  <td><span class="badge neutral soft">Subscriber</span></td>
-                  <td class="nowrap muted">3 days ago</td>
+                  <td>Onboarding workshop</td>
+                  <td class="text-end">2</td>
+                  <td class="text-end">$300.00</td>
+                  <td class="text-end">$600.00</td>
                 </tr>
               </tbody>
             </table>
           </div>
 
+          <div class="admini-invoice-totals">
+            <div class="admini-invoice-totals-row"><span class="muted">Subtotal</span><span>$1,950.00</span></div>
+            <div class="admini-invoice-totals-row"><span class="muted">Tax (8%)</span><span>$156.00</span></div>
+            <div class="admini-invoice-totals-row"><strong>Total due</strong><strong>$2,106.00</strong></div>
+          </div>
+
           <footer>
-            <span class="muted">Showing 4 of 128 members</span>
-            <nav aria-label="Pagination">
-              <ol class="pagination sm">
-                <li><span class="btn outline" aria-disabled="true">Previous</span></li>
-                <li><a href="#" class="btn" aria-current="page" aria-label="Page 1">1</a></li>
-                <li><a href="#" class="btn outline" aria-label="Page 2">2</a></li>
-                <li><a href="#" class="btn outline" aria-label="Page 3">3</a></li>
-                <li><span class="muted" aria-hidden="true">&hellip;</span></li>
-                <li><a href="#" class="btn outline" aria-label="Page 32">32</a></li>
-                <li><a href="#" class="btn outline">Next</a></li>
-              </ol>
-            </nav>
+            <p class="muted" style="margin: 0;">Thank you for your business. Payment is due within 14 days of the issue date.</p>
           </footer>
-        </section>
-
-        <div class="grid-2 items-start">
-          <section class="card stack">
-            <header>
-              <h2>Compact table</h2>
-            </header>
-            <div class="table-wrap">
-              <table class="table">
-                <thead>
-                  <tr>
-                    <th scope="col">Pos</th>
-                    <th scope="col">Name</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr><td>1</td><td>John Nemo</td></tr>
-                  <tr><td>2</td><td>Jane Doe</td></tr>
-                  <tr><td>3</td><td>Ada Morgan</td></tr>
-                  <tr><td>4</td><td>Theo Silva</td></tr>
-                </tbody>
-              </table>
-            </div>
-          </section>
-
-          <section class="card stack">
-            <header>
-              <h2>Invoice status</h2>
-            </header>
-            <div class="table-wrap">
-              <table class="table">
-                <thead>
-                  <tr>
-                    <th scope="col">Invoice</th>
-                    <th scope="col">Status</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td class="nowrap">INV-2048</td>
-                    <td><span class="badge success soft">Paid</span></td>
-                  </tr>
-                  <tr>
-                    <td class="nowrap">INV-2049</td>
-                    <td><span class="badge warning soft">Pending</span></td>
-                  </tr>
-                  <tr>
-                    <td class="nowrap">INV-2050</td>
-                    <td><span class="badge danger soft">Overdue</span></td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </section>
-        </div>
+        </article>
       </main>
     </div>
   </div>
@@ -353,7 +312,7 @@
     <nav class="admini-nav" aria-label="Mobile navigation">
       <ul class="nav-list stack">
         <li><a class="nav-link" href="index.html"><i class="ti ti-layout-dashboard" aria-hidden="true"></i> Dashboard</a></li>
-        <li><a class="nav-link" href="tables.html" aria-current="page"><i class="ti ti-table" aria-hidden="true"></i> Tables</a></li>
+        <li><a class="nav-link" href="tables.html"><i class="ti ti-table" aria-hidden="true"></i> Tables</a></li>
         <li><a class="nav-link" href="forms.html"><i class="ti ti-forms" aria-hidden="true"></i> Forms</a></li>
         <li><a class="nav-link" href="profile.html"><i class="ti ti-user" aria-hidden="true"></i> Profile</a></li>
         <li><a class="nav-link" href="settings.html"><i class="ti ti-settings" aria-hidden="true"></i> Settings</a></li>
@@ -361,7 +320,7 @@
         <li><a class="nav-link" href="kanban.html"><i class="ti ti-layout-kanban" aria-hidden="true"></i> Kanban</a></li>
         <li><a class="nav-link" href="calendar.html"><i class="ti ti-calendar" aria-hidden="true"></i> Calendar</a></li>
         <li><a class="nav-link" href="chat.html"><i class="ti ti-message-circle" aria-hidden="true"></i> Chat</a></li>
-        <li><a class="nav-link" href="invoice.html"><i class="ti ti-file-invoice" aria-hidden="true"></i> Invoice</a></li>
+        <li><a class="nav-link" href="invoice.html" aria-current="page"><i class="ti ti-file-invoice" aria-hidden="true"></i> Invoice</a></li>
         <li><a class="nav-link" href="login.html"><i class="ti ti-login" aria-hidden="true"></i> Login</a></li>
         <li><a class="nav-link" href="404.html"><i class="ti ti-error-404" aria-hidden="true"></i> 404</a></li>
       </ul>
@@ -381,6 +340,9 @@
         }
       });
     }
+
+    document.getElementById("print-invoice")?.addEventListener("click", () => window.print());
+
   </script>
 </body>
 

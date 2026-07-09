@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Tables - Admini on Actual CSS</title>
+  <title>Calendar - Admini on Actual CSS</title>
   <link rel="stylesheet" href="../../src/css/actual.css">
   <link rel="stylesheet" href="../../src/css/themes/index.css">
   <link rel="stylesheet" href="../../src/css/optional/layout-extra.css">
@@ -37,7 +37,7 @@
         <p class="overline admini-section-title">Manage</p>
         <ul class="nav-list stack">
           <li>
-            <a class="nav-link" href="tables.html" aria-current="page">
+            <a class="nav-link" href="tables.html">
               <i class="ti ti-table" aria-hidden="true"></i>
               Tables
             </a>
@@ -85,7 +85,7 @@
             </a>
           </li>
           <li>
-            <a class="nav-link" href="calendar.html">
+            <a class="nav-link" href="calendar.html" aria-current="page">
               <i class="ti ti-calendar" aria-hidden="true"></i>
               Calendar
             </a>
@@ -157,7 +157,7 @@
 
         <ol class="breadcrumb nowrap admini-hide-mobile" aria-label="Breadcrumb">
           <li><a href="index.html">Admini</a></li>
-          <li class="truncate" aria-current="page">Tables</li>
+          <li class="truncate" aria-current="page">Calendar</li>
         </ol>
 
         <div class="grow"></div>
@@ -203,138 +203,176 @@
       </header>
       <!-- /admini-shell:topbar -->
 
-      <main class="center stack admini-content">
-        <hgroup>
-          <p class="overline">Manage</p>
-          <h1>Tables</h1>
-          <p class="muted">
-            Tables scroll inside <code>.table-wrap</code> rather than breaking the page layout. Resize the window to see the
-            wide table below scroll horizontally while everything around it stays put.
-          </p>
-        </hgroup>
+    <main class="center stack admini-content">
+        <header class="cluster" style="--cluster-justify: space-between; align-items: flex-start;">
+          <hgroup>
+            <p class="overline">Work</p>
+            <h1>Calendar</h1>
+            <p class="muted">A plain 7-column CSS grid — each event chip reuses <code>.badge</code>, just re-shaped to truncate and left-align.</p>
+          </hgroup>
+          <button class="btn primary" type="button">
+            <i class="ti ti-plus" aria-hidden="true"></i>
+            New event
+          </button>
+        </header>
 
-        <section class="card stack">
-          <header>
-            <h2>Team roster</h2>
-          </header>
-
-          <div class="table-wrap" role="region" aria-labelledby="roster-table" tabindex="0">
-            <table class="table" style="--table-min: 48rem;">
-              <caption id="roster-table" class="sr-only">Team roster</caption>
-              <thead>
-                <tr>
-                  <th scope="col">#</th>
-                  <th scope="col">First</th>
-                  <th scope="col">Last</th>
-                  <th scope="col">Handle</th>
-                  <th scope="col">Role</th>
-                  <th scope="col" class="nowrap">Last active</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <th scope="row">1</th>
-                  <td>Mark</td>
-                  <td>Otto</td>
-                  <td>@mdo</td>
-                  <td><span class="badge primary soft">Admin</span></td>
-                  <td class="nowrap muted">2 minutes ago</td>
-                </tr>
-                <tr>
-                  <th scope="row">2</th>
-                  <td>Jacob</td>
-                  <td>Thornton</td>
-                  <td>@fat</td>
-                  <td><span class="badge neutral soft">Editor</span></td>
-                  <td class="nowrap muted">1 hour ago</td>
-                </tr>
-                <tr>
-                  <th scope="row">3</th>
-                  <td colspan="2">Larry the Bird</td>
-                  <td>@twitter</td>
-                  <td><span class="badge neutral soft">Subscriber</span></td>
-                  <td class="nowrap muted">Yesterday</td>
-                </tr>
-                <tr>
-                  <th scope="row">4</th>
-                  <td>Rin</td>
-                  <td>Moreau</td>
-                  <td>@rin</td>
-                  <td><span class="badge neutral soft">Subscriber</span></td>
-                  <td class="nowrap muted">3 days ago</td>
-                </tr>
-              </tbody>
-            </table>
+        <div class="cluster" style="--cluster-justify: space-between;">
+          <div class="cluster nowrap sm">
+            <button class="btn neutral outline sm" type="button" aria-label="Previous month">
+              <i class="ti ti-chevron-left" aria-hidden="true"></i>
+            </button>
+            <strong>July 2026</strong>
+            <button class="btn neutral outline sm" type="button" aria-label="Next month">
+              <i class="ti ti-chevron-right" aria-hidden="true"></i>
+            </button>
           </div>
+          <button class="btn neutral ghost sm" type="button">Today</button>
+        </div>
 
-          <footer>
-            <span class="muted">Showing 4 of 128 members</span>
-            <nav aria-label="Pagination">
-              <ol class="pagination sm">
-                <li><span class="btn outline" aria-disabled="true">Previous</span></li>
-                <li><a href="#" class="btn" aria-current="page" aria-label="Page 1">1</a></li>
-                <li><a href="#" class="btn outline" aria-label="Page 2">2</a></li>
-                <li><a href="#" class="btn outline" aria-label="Page 3">3</a></li>
-                <li><span class="muted" aria-hidden="true">&hellip;</span></li>
-                <li><a href="#" class="btn outline" aria-label="Page 32">32</a></li>
-                <li><a href="#" class="btn outline">Next</a></li>
-              </ol>
-            </nav>
-          </footer>
-        </section>
-
-        <div class="grid-2 items-start">
-          <section class="card stack">
-            <header>
-              <h2>Compact table</h2>
-            </header>
-            <div class="table-wrap">
-              <table class="table">
-                <thead>
-                  <tr>
-                    <th scope="col">Pos</th>
-                    <th scope="col">Name</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr><td>1</td><td>John Nemo</td></tr>
-                  <tr><td>2</td><td>Jane Doe</td></tr>
-                  <tr><td>3</td><td>Ada Morgan</td></tr>
-                  <tr><td>4</td><td>Theo Silva</td></tr>
-                </tbody>
-              </table>
-            </div>
-          </section>
-
-          <section class="card stack">
-            <header>
-              <h2>Invoice status</h2>
-            </header>
-            <div class="table-wrap">
-              <table class="table">
-                <thead>
-                  <tr>
-                    <th scope="col">Invoice</th>
-                    <th scope="col">Status</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td class="nowrap">INV-2048</td>
-                    <td><span class="badge success soft">Paid</span></td>
-                  </tr>
-                  <tr>
-                    <td class="nowrap">INV-2049</td>
-                    <td><span class="badge warning soft">Pending</span></td>
-                  </tr>
-                  <tr>
-                    <td class="nowrap">INV-2050</td>
-                    <td><span class="badge danger soft">Overdue</span></td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </section>
+        <div class="card" style="padding: 0; overflow: hidden;">
+          <div class="admini-calendar-grid">
+            <div class="admini-calendar-weekday">Sun</div>
+            <div class="admini-calendar-weekday">Mon</div>
+            <div class="admini-calendar-weekday">Tue</div>
+            <div class="admini-calendar-weekday">Wed</div>
+            <div class="admini-calendar-weekday">Thu</div>
+            <div class="admini-calendar-weekday">Fri</div>
+            <div class="admini-calendar-weekday">Sat</div>
+      <div class="admini-calendar-day is-muted">
+        <span class="admini-calendar-day-number">28</span>
+      </div>
+      <div class="admini-calendar-day is-muted">
+        <span class="admini-calendar-day-number">29</span>
+      </div>
+      <div class="admini-calendar-day is-muted">
+        <span class="admini-calendar-day-number">30</span>
+      </div>
+      <div class="admini-calendar-day">
+        <span class="admini-calendar-day-number">1</span>
+      </div>
+      <div class="admini-calendar-day">
+        <span class="admini-calendar-day-number">2</span>
+        <div class="admini-calendar-events">
+          <div class="badge neutral soft admini-calendar-event"><span class="admini-calendar-event-label">Team standup</span></div>
+        </div>
+      </div>
+      <div class="admini-calendar-day">
+        <span class="admini-calendar-day-number">3</span>
+      </div>
+      <div class="admini-calendar-day">
+        <span class="admini-calendar-day-number">4</span>
+      </div>
+      <div class="admini-calendar-day">
+        <span class="admini-calendar-day-number">5</span>
+      </div>
+      <div class="admini-calendar-day">
+        <span class="admini-calendar-day-number">6</span>
+      </div>
+      <div class="admini-calendar-day">
+        <span class="admini-calendar-day-number">7</span>
+        <div class="admini-calendar-events">
+          <div class="badge primary soft admini-calendar-event"><span class="admini-calendar-event-label">Design review</span></div>
+        </div>
+      </div>
+      <div class="admini-calendar-day">
+        <span class="admini-calendar-day-number">8</span>
+      </div>
+      <div class="admini-calendar-day is-today">
+        <span class="admini-calendar-day-number">9</span>
+        <div class="admini-calendar-events">
+          <div class="badge success soft admini-calendar-event"><span class="admini-calendar-event-label">Sprint planning</span></div>
+          <div class="badge neutral soft admini-calendar-event"><span class="admini-calendar-event-label">1:1 Ada</span></div>
+          <div class="muted" style="font-size: var(--font-size-xs);">+1 more</div>
+        </div>
+      </div>
+      <div class="admini-calendar-day">
+        <span class="admini-calendar-day-number">10</span>
+        <div class="admini-calendar-events">
+          <div class="badge danger soft admini-calendar-event"><span class="admini-calendar-event-label">API rate limit due</span></div>
+        </div>
+      </div>
+      <div class="admini-calendar-day">
+        <span class="admini-calendar-day-number">11</span>
+      </div>
+      <div class="admini-calendar-day">
+        <span class="admini-calendar-day-number">12</span>
+      </div>
+      <div class="admini-calendar-day">
+        <span class="admini-calendar-day-number">13</span>
+      </div>
+      <div class="admini-calendar-day">
+        <span class="admini-calendar-day-number">14</span>
+        <div class="admini-calendar-events">
+          <div class="badge warning soft admini-calendar-event"><span class="admini-calendar-event-label">Client demo</span></div>
+        </div>
+      </div>
+      <div class="admini-calendar-day">
+        <span class="admini-calendar-day-number">15</span>
+      </div>
+      <div class="admini-calendar-day">
+        <span class="admini-calendar-day-number">16</span>
+      </div>
+      <div class="admini-calendar-day">
+        <span class="admini-calendar-day-number">17</span>
+        <div class="admini-calendar-events">
+          <div class="badge danger soft admini-calendar-event"><span class="admini-calendar-event-label">Release cut</span></div>
+        </div>
+      </div>
+      <div class="admini-calendar-day">
+        <span class="admini-calendar-day-number">18</span>
+      </div>
+      <div class="admini-calendar-day">
+        <span class="admini-calendar-day-number">19</span>
+      </div>
+      <div class="admini-calendar-day">
+        <span class="admini-calendar-day-number">20</span>
+      </div>
+      <div class="admini-calendar-day">
+        <span class="admini-calendar-day-number">21</span>
+      </div>
+      <div class="admini-calendar-day">
+        <span class="admini-calendar-day-number">22</span>
+        <div class="admini-calendar-events">
+          <div class="badge primary soft admini-calendar-event"><span class="admini-calendar-event-label">Team offsite</span></div>
+        </div>
+      </div>
+      <div class="admini-calendar-day">
+        <span class="admini-calendar-day-number">23</span>
+      </div>
+      <div class="admini-calendar-day">
+        <span class="admini-calendar-day-number">24</span>
+      </div>
+      <div class="admini-calendar-day">
+        <span class="admini-calendar-day-number">25</span>
+      </div>
+      <div class="admini-calendar-day">
+        <span class="admini-calendar-day-number">26</span>
+      </div>
+      <div class="admini-calendar-day">
+        <span class="admini-calendar-day-number">27</span>
+      </div>
+      <div class="admini-calendar-day">
+        <span class="admini-calendar-day-number">28</span>
+        <div class="admini-calendar-events">
+          <div class="badge neutral soft admini-calendar-event"><span class="admini-calendar-event-label">Board meeting</span></div>
+        </div>
+      </div>
+      <div class="admini-calendar-day">
+        <span class="admini-calendar-day-number">29</span>
+      </div>
+      <div class="admini-calendar-day">
+        <span class="admini-calendar-day-number">30</span>
+      </div>
+      <div class="admini-calendar-day">
+        <span class="admini-calendar-day-number">31</span>
+        <div class="admini-calendar-events">
+          <div class="badge warning soft admini-calendar-event"><span class="admini-calendar-event-label">Month close</span></div>
+        </div>
+      </div>
+      <div class="admini-calendar-day is-muted">
+        <span class="admini-calendar-day-number">1</span>
+      </div>
+          </div>
         </div>
       </main>
     </div>
@@ -353,13 +391,13 @@
     <nav class="admini-nav" aria-label="Mobile navigation">
       <ul class="nav-list stack">
         <li><a class="nav-link" href="index.html"><i class="ti ti-layout-dashboard" aria-hidden="true"></i> Dashboard</a></li>
-        <li><a class="nav-link" href="tables.html" aria-current="page"><i class="ti ti-table" aria-hidden="true"></i> Tables</a></li>
+        <li><a class="nav-link" href="tables.html"><i class="ti ti-table" aria-hidden="true"></i> Tables</a></li>
         <li><a class="nav-link" href="forms.html"><i class="ti ti-forms" aria-hidden="true"></i> Forms</a></li>
         <li><a class="nav-link" href="profile.html"><i class="ti ti-user" aria-hidden="true"></i> Profile</a></li>
         <li><a class="nav-link" href="settings.html"><i class="ti ti-settings" aria-hidden="true"></i> Settings</a></li>
         <li><a class="nav-link" href="user-grid.html"><i class="ti ti-users-group" aria-hidden="true"></i> User grid</a></li>
         <li><a class="nav-link" href="kanban.html"><i class="ti ti-layout-kanban" aria-hidden="true"></i> Kanban</a></li>
-        <li><a class="nav-link" href="calendar.html"><i class="ti ti-calendar" aria-hidden="true"></i> Calendar</a></li>
+        <li><a class="nav-link" href="calendar.html" aria-current="page"><i class="ti ti-calendar" aria-hidden="true"></i> Calendar</a></li>
         <li><a class="nav-link" href="chat.html"><i class="ti ti-message-circle" aria-hidden="true"></i> Chat</a></li>
         <li><a class="nav-link" href="invoice.html"><i class="ti ti-file-invoice" aria-hidden="true"></i> Invoice</a></li>
         <li><a class="nav-link" href="login.html"><i class="ti ti-login" aria-hidden="true"></i> Login</a></li>
@@ -381,6 +419,7 @@
         }
       });
     }
+
   </script>
 </body>
 

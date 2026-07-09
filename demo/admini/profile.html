@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Tables - Admini on Actual CSS</title>
+  <title>Profile - Admini on Actual CSS</title>
   <link rel="stylesheet" href="../../src/css/actual.css">
   <link rel="stylesheet" href="../../src/css/themes/index.css">
   <link rel="stylesheet" href="../../src/css/optional/layout-extra.css">
@@ -37,7 +37,7 @@
         <p class="overline admini-section-title">Manage</p>
         <ul class="nav-list stack">
           <li>
-            <a class="nav-link" href="tables.html" aria-current="page">
+            <a class="nav-link" href="tables.html">
               <i class="ti ti-table" aria-hidden="true"></i>
               Tables
             </a>
@@ -49,7 +49,7 @@
             </a>
           </li>
           <li>
-            <a class="nav-link" href="profile.html">
+            <a class="nav-link" href="profile.html" aria-current="page">
               <i class="ti ti-user" aria-hidden="true"></i>
               Profile
             </a>
@@ -157,7 +157,7 @@
 
         <ol class="breadcrumb nowrap admini-hide-mobile" aria-label="Breadcrumb">
           <li><a href="index.html">Admini</a></li>
-          <li class="truncate" aria-current="page">Tables</li>
+          <li class="truncate" aria-current="page">Profile</li>
         </ol>
 
         <div class="grow"></div>
@@ -203,136 +203,115 @@
       </header>
       <!-- /admini-shell:topbar -->
 
-      <main class="center stack admini-content">
-        <hgroup>
-          <p class="overline">Manage</p>
-          <h1>Tables</h1>
-          <p class="muted">
-            Tables scroll inside <code>.table-wrap</code> rather than breaking the page layout. Resize the window to see the
-            wide table below scroll horizontally while everything around it stays put.
-          </p>
-        </hgroup>
-
-        <section class="card stack">
-          <header>
-            <h2>Team roster</h2>
-          </header>
-
-          <div class="table-wrap" role="region" aria-labelledby="roster-table" tabindex="0">
-            <table class="table" style="--table-min: 48rem;">
-              <caption id="roster-table" class="sr-only">Team roster</caption>
-              <thead>
-                <tr>
-                  <th scope="col">#</th>
-                  <th scope="col">First</th>
-                  <th scope="col">Last</th>
-                  <th scope="col">Handle</th>
-                  <th scope="col">Role</th>
-                  <th scope="col" class="nowrap">Last active</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <th scope="row">1</th>
-                  <td>Mark</td>
-                  <td>Otto</td>
-                  <td>@mdo</td>
-                  <td><span class="badge primary soft">Admin</span></td>
-                  <td class="nowrap muted">2 minutes ago</td>
-                </tr>
-                <tr>
-                  <th scope="row">2</th>
-                  <td>Jacob</td>
-                  <td>Thornton</td>
-                  <td>@fat</td>
-                  <td><span class="badge neutral soft">Editor</span></td>
-                  <td class="nowrap muted">1 hour ago</td>
-                </tr>
-                <tr>
-                  <th scope="row">3</th>
-                  <td colspan="2">Larry the Bird</td>
-                  <td>@twitter</td>
-                  <td><span class="badge neutral soft">Subscriber</span></td>
-                  <td class="nowrap muted">Yesterday</td>
-                </tr>
-                <tr>
-                  <th scope="row">4</th>
-                  <td>Rin</td>
-                  <td>Moreau</td>
-                  <td>@rin</td>
-                  <td><span class="badge neutral soft">Subscriber</span></td>
-                  <td class="nowrap muted">3 days ago</td>
-                </tr>
-              </tbody>
-            </table>
+    <main class="center stack admini-content">
+        <div class="card stack" style="--card-pad: 0;">
+          <div style="block-size: 8rem; background: linear-gradient(135deg, var(--primary), var(--secondary));"></div>
+          <div class="stack" style="padding: var(--space-4); margin-block-start: -3rem;">
+            <div class="cluster" style="--cluster-justify: space-between; align-items: flex-end;">
+              <span class="avatar primary" style="--avatar-size: 5rem; --avatar-font-size: 1.5rem; border: 3px solid var(--surface);"><abbr>JN</abbr></span>
+              <div class="cluster nowrap sm">
+                <button class="btn neutral outline" type="button">
+                  <i class="ti ti-message-circle" aria-hidden="true"></i>
+                  Message
+                </button>
+                <a class="btn primary" href="settings.html">
+                  <i class="ti ti-pencil" aria-hidden="true"></i>
+                  Edit profile
+                </a>
+              </div>
+            </div>
+            <hgroup>
+              <h1 style="margin: 0;">John Nemo</h1>
+              <p class="muted" style="margin: 0;">Product Designer &middot; Admini Inc.</p>
+            </hgroup>
+            <div class="cluster" style="gap: var(--space-4);">
+              <span class="muted"><i class="ti ti-map-pin" aria-hidden="true"></i> San Francisco, CA</span>
+              <span class="muted"><i class="ti ti-calendar" aria-hidden="true"></i> Joined March 2023</span>
+              <a class="link-plain" href="mailto:john@example.com"><i class="ti ti-mail" aria-hidden="true"></i> john@example.com</a>
+            </div>
           </div>
+        </div>
 
-          <footer>
-            <span class="muted">Showing 4 of 128 members</span>
-            <nav aria-label="Pagination">
-              <ol class="pagination sm">
-                <li><span class="btn outline" aria-disabled="true">Previous</span></li>
-                <li><a href="#" class="btn" aria-current="page" aria-label="Page 1">1</a></li>
-                <li><a href="#" class="btn outline" aria-label="Page 2">2</a></li>
-                <li><a href="#" class="btn outline" aria-label="Page 3">3</a></li>
-                <li><span class="muted" aria-hidden="true">&hellip;</span></li>
-                <li><a href="#" class="btn outline" aria-label="Page 32">32</a></li>
-                <li><a href="#" class="btn outline">Next</a></li>
-              </ol>
-            </nav>
-          </footer>
+        <section class="grid" style="--grid-min: 10rem;" aria-label="Profile stats">
+          <article class="card compact stack" style="text-align: center;">
+            <span style="font-size: 1.5rem; font-weight: var(--font-weight-bold);">128</span>
+            <span class="muted">Projects</span>
+          </article>
+          <article class="card compact stack" style="text-align: center;">
+            <span style="font-size: 1.5rem; font-weight: var(--font-weight-bold);">2,382</span>
+            <span class="muted">Contributions</span>
+          </article>
+          <article class="card compact stack" style="text-align: center;">
+            <span style="font-size: 1.5rem; font-weight: var(--font-weight-bold);">9</span>
+            <span class="muted">Teammates</span>
+          </article>
+          <article class="card compact stack" style="text-align: center;">
+            <span style="font-size: 1.5rem; font-weight: var(--font-weight-bold);">4.9</span>
+            <span class="muted">Rating</span>
+          </article>
         </section>
 
-        <div class="grid-2 items-start">
-          <section class="card stack">
-            <header>
-              <h2>Compact table</h2>
-            </header>
-            <div class="table-wrap">
-              <table class="table">
-                <thead>
-                  <tr>
-                    <th scope="col">Pos</th>
-                    <th scope="col">Name</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr><td>1</td><td>John Nemo</td></tr>
-                  <tr><td>2</td><td>Jane Doe</td></tr>
-                  <tr><td>3</td><td>Ada Morgan</td></tr>
-                  <tr><td>4</td><td>Theo Silva</td></tr>
-                </tbody>
-              </table>
+        <div class="tabset">
+          <div class="tabs" role="tablist" aria-label="Profile sections">
+            <button class="tab primary" type="button" role="tab" aria-selected="true" aria-controls="panel-about" id="tab-about">About</button>
+            <button class="tab" type="button" role="tab" aria-selected="false" aria-controls="panel-activity" id="tab-activity" tabindex="-1">Activity</button>
+            <button class="tab" type="button" role="tab" aria-selected="false" aria-controls="panel-team" id="tab-team" tabindex="-1">Team</button>
+          </div>
+
+          <section role="tabpanel" id="panel-about" aria-labelledby="tab-about" tabindex="-1" class="stack" style="padding-block-start: var(--space-4);">
+            <div class="card stack">
+              <h2 style="margin: 0;">Bio</h2>
+              <p>Designs the dashboard and billing experience at Admini. Previously led design systems at two Series B startups. Based in San Francisco, working East Coast hours.</p>
+            </div>
+            <div class="card stack">
+              <h2 style="margin: 0;">Skills</h2>
+              <div class="cluster">
+                <span class="badge neutral soft">Design systems</span>
+                <span class="badge neutral soft">Figma</span>
+                <span class="badge neutral soft">Accessibility</span>
+                <span class="badge neutral soft">CSS</span>
+                <span class="badge neutral soft">Prototyping</span>
+              </div>
             </div>
           </section>
 
-          <section class="card stack">
-            <header>
-              <h2>Invoice status</h2>
-            </header>
-            <div class="table-wrap">
-              <table class="table">
-                <thead>
-                  <tr>
-                    <th scope="col">Invoice</th>
-                    <th scope="col">Status</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td class="nowrap">INV-2048</td>
-                    <td><span class="badge success soft">Paid</span></td>
-                  </tr>
-                  <tr>
-                    <td class="nowrap">INV-2049</td>
-                    <td><span class="badge warning soft">Pending</span></td>
-                  </tr>
-                  <tr>
-                    <td class="nowrap">INV-2050</td>
-                    <td><span class="badge danger soft">Overdue</span></td>
-                  </tr>
-                </tbody>
-              </table>
+          <section role="tabpanel" id="panel-activity" aria-labelledby="tab-activity" tabindex="-1" hidden class="stack" style="padding-block-start: var(--space-4);">
+            <div class="card stack">
+              <div class="admini-feed">
+                <div class="admini-feed-item">
+                  <span class="admini-dot success" aria-hidden="true"></span>
+                  <div>
+                    <strong>Shipped the invoice page redesign.</strong>
+                    <p class="muted">Merged 3 hours ago.</p>
+                  </div>
+                </div>
+                <div class="admini-feed-item">
+                  <span class="admini-dot primary" aria-hidden="true"></span>
+                  <div>
+                    <strong>Commented on &ldquo;Kanban drag-and-drop demo&rdquo;.</strong>
+                    <p class="muted">Yesterday.</p>
+                  </div>
+                </div>
+                <div class="admini-feed-item">
+                  <span class="admini-dot warning" aria-hidden="true"></span>
+                  <div>
+                    <strong>Flagged a contrast issue in dark theme.</strong>
+                    <p class="muted">2 days ago.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section role="tabpanel" id="panel-team" aria-labelledby="tab-team" tabindex="-1" hidden class="stack" style="padding-block-start: var(--space-4);">
+            <div class="card stack">
+              <div class="avatar-stack" role="group" aria-label="Team members">
+                <span class="avatar primary" title="Mark Otto"><abbr>MO</abbr></span>
+                <span class="avatar success" title="Jacob Thornton"><abbr>JT</abbr></span>
+                <span class="avatar warning" title="Ada Morgan"><abbr>AM</abbr></span>
+                <span class="avatar" title="Rin Moreau"><abbr>RM</abbr></span>
+              </div>
+              <p class="muted">John works closely with 4 teammates on the platform squad. See the <a class="link-plain" href="user-grid.html">full directory</a>.</p>
             </div>
           </section>
         </div>
@@ -353,9 +332,9 @@
     <nav class="admini-nav" aria-label="Mobile navigation">
       <ul class="nav-list stack">
         <li><a class="nav-link" href="index.html"><i class="ti ti-layout-dashboard" aria-hidden="true"></i> Dashboard</a></li>
-        <li><a class="nav-link" href="tables.html" aria-current="page"><i class="ti ti-table" aria-hidden="true"></i> Tables</a></li>
+        <li><a class="nav-link" href="tables.html"><i class="ti ti-table" aria-hidden="true"></i> Tables</a></li>
         <li><a class="nav-link" href="forms.html"><i class="ti ti-forms" aria-hidden="true"></i> Forms</a></li>
-        <li><a class="nav-link" href="profile.html"><i class="ti ti-user" aria-hidden="true"></i> Profile</a></li>
+        <li><a class="nav-link" href="profile.html" aria-current="page"><i class="ti ti-user" aria-hidden="true"></i> Profile</a></li>
         <li><a class="nav-link" href="settings.html"><i class="ti ti-settings" aria-hidden="true"></i> Settings</a></li>
         <li><a class="nav-link" href="user-grid.html"><i class="ti ti-users-group" aria-hidden="true"></i> User grid</a></li>
         <li><a class="nav-link" href="kanban.html"><i class="ti ti-layout-kanban" aria-hidden="true"></i> Kanban</a></li>
@@ -381,6 +360,7 @@
         }
       });
     }
+
   </script>
 </body>
 

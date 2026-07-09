@@ -318,3 +318,323 @@
   font-weight: var(--font-weight-bold);
   line-height: 1;
 }
+
+/* -------------------------------------------------------------- kanban */
+
+.admini-kanban {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-4);
+  overflow-x: auto;
+  padding-block-end: var(--space-2);
+}
+
+.admini-kanban-column {
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  gap: var(--space-3);
+  inline-size: 19rem;
+  max-block-size: calc(100dvh - 14rem);
+}
+
+.admini-kanban-column.is-dragover {
+  outline: var(--border-width) dashed var(--intent, var(--primary));
+  outline-offset: 0.25rem;
+  border-radius: var(--radius-lg);
+}
+
+.admini-kanban-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-block-size: 3rem;
+  overflow-y: auto;
+  padding: var(--space-1);
+  border-radius: var(--radius-lg);
+}
+
+.admini-kanban-card {
+  cursor: grab;
+}
+
+.admini-kanban-card.is-dragging {
+  opacity: 0.5;
+}
+
+.admini-kanban-card:active {
+  cursor: grabbing;
+}
+
+/* ---------------------------------------------------------------- chat */
+
+.admini-chat-shell {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  block-size: calc(100dvh - 4.2rem);
+}
+
+.admini-chat-list {
+  display: flex;
+  flex-direction: column;
+  min-inline-size: 0;
+  border-inline-end: var(--border-width) solid var(--border);
+  overflow-y: auto;
+}
+
+/* Mobile: single pane at a time. The thread only shows once a
+   conversation is picked; .admini-chat-back returns to the list. */
+.admini-chat-thread {
+  display: none;
+}
+
+.admini-chat-shell.is-thread-open .admini-chat-list {
+  display: none;
+}
+
+.admini-chat-shell.is-thread-open .admini-chat-thread {
+  display: flex;
+}
+
+.admini-chat-item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border: 0;
+  background: none;
+  text-align: start;
+  cursor: pointer;
+}
+
+.admini-chat-item[aria-current="true"] {
+  background: var(--surface-subtle);
+}
+
+@media (hover: hover) {
+  .admini-chat-item:hover {
+    background: var(--surface-subtle);
+  }
+}
+
+.admini-chat-item-body {
+  display: grid;
+  flex: 1 1 auto;
+  gap: 0.125rem;
+  min-inline-size: 0;
+}
+
+.admini-chat-item-top {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+
+.admini-chat-thread {
+  flex-direction: column;
+  min-inline-size: 0;
+}
+
+.admini-chat-thread-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border-block-end: var(--border-width) solid var(--border);
+}
+
+.admini-chat-messages {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: var(--space-3);
+  overflow-y: auto;
+  padding: var(--space-4);
+}
+
+.admini-bubble-row {
+  display: flex;
+  max-inline-size: 34rem;
+}
+
+.admini-bubble-row.is-own {
+  align-self: flex-end;
+  flex-direction: row-reverse;
+}
+
+.admini-bubble {
+  display: grid;
+  gap: 0.25rem;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-lg);
+  background: var(--surface-raised);
+  border: var(--border-width) solid var(--border);
+}
+
+.admini-bubble-row.is-own .admini-bubble {
+  background: color-mix(in oklch, var(--primary) 14%, var(--surface-raised));
+  border-color: transparent;
+}
+
+.admini-bubble-time {
+  color: var(--text-muted);
+  font-size: var(--font-size-xs);
+}
+
+.admini-composer {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  border-block-start: var(--border-width) solid var(--border);
+}
+
+.admini-composer .textarea {
+  flex: 1 1 auto;
+  resize: none;
+}
+
+@media (min-width: 60rem) {
+  .admini-chat-shell {
+    grid-template-columns: 20rem minmax(0, 1fr);
+  }
+
+  /* Match .is-thread-open's specificity so a class left over from a narrow
+     viewport can't hide a pane once the layout is wide enough for both. */
+  .admini-chat-list,
+  .admini-chat-shell.is-thread-open .admini-chat-list,
+  .admini-chat-thread,
+  .admini-chat-shell.is-thread-open .admini-chat-thread {
+    display: flex;
+  }
+
+  .admini-chat-back {
+    display: none;
+  }
+}
+
+/* ------------------------------------------------------------ calendar */
+
+.admini-calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  border-inline-start: var(--border-width) solid var(--border);
+  border-block-start: var(--border-width) solid var(--border);
+}
+
+.admini-calendar-weekday {
+  padding: var(--space-2) var(--space-3);
+  border-inline-end: var(--border-width) solid var(--border);
+  border-block-end: var(--border-width) solid var(--border);
+  background: var(--surface-subtle);
+  color: var(--text-muted);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-strong);
+}
+
+.admini-calendar-day {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-block-size: 6.5rem;
+  padding: var(--space-2);
+  border-inline-end: var(--border-width) solid var(--border);
+  border-block-end: var(--border-width) solid var(--border);
+}
+
+.admini-calendar-day.is-muted {
+  background: var(--surface-subtle);
+  color: var(--text-muted);
+}
+
+.admini-calendar-day.is-today .admini-calendar-day-number {
+  display: inline-grid;
+  place-items: center;
+  inline-size: 1.5rem;
+  block-size: 1.5rem;
+  border-radius: var(--radius);
+  background: var(--primary);
+  color: var(--primary-fg);
+  font-weight: var(--font-weight-strong);
+}
+
+.admini-calendar-events {
+  display: grid;
+  gap: 0.2rem;
+  min-inline-size: 0;
+}
+
+/* Composes with .badge: keep its color/token API, override the pill shape
+   and centering for a left-aligned, truncating day-cell chip. */
+.admini-calendar-event {
+  display: flex;
+  justify-content: flex-start;
+  overflow: hidden;
+  max-inline-size: 100%;
+  border-radius: var(--radius-sm);
+  text-overflow: ellipsis;
+}
+
+.admini-calendar-event-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media (max-width: 56rem) {
+  .admini-calendar-day {
+    min-block-size: 4.5rem;
+  }
+
+  .admini-calendar-event {
+    inline-size: 0.4rem;
+    min-block-size: 0.4rem;
+    padding: 0;
+    border-radius: var(--radius);
+  }
+
+  .admini-calendar-event-label {
+    display: none;
+  }
+}
+
+/* ------------------------------------------------------------- invoice */
+
+.admini-invoice {
+  --card-max-inline-size: 52rem;
+
+  margin-inline: auto;
+}
+
+.admini-invoice-totals {
+  display: grid;
+  gap: var(--space-2);
+  justify-items: end;
+  margin-inline-start: auto;
+  inline-size: min(100%, 18rem);
+}
+
+.admini-invoice-totals-row {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-4);
+  inline-size: 100%;
+}
+
+@media print {
+  .admini-shell {
+    display: block;
+  }
+
+  .admini-sidebar,
+  .admini-topbar,
+  .admini-menu-button {
+    display: none !important;
+  }
+
+  .admini-invoice {
+    --card-max-inline-size: none;
+
+    border: 0 !important;
+    box-shadow: none !important;
+  }
+}

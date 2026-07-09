@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Tables - Admini on Actual CSS</title>
+  <title>Chat - Admini on Actual CSS</title>
   <link rel="stylesheet" href="../../src/css/actual.css">
   <link rel="stylesheet" href="../../src/css/themes/index.css">
   <link rel="stylesheet" href="../../src/css/optional/layout-extra.css">
@@ -37,7 +37,7 @@
         <p class="overline admini-section-title">Manage</p>
         <ul class="nav-list stack">
           <li>
-            <a class="nav-link" href="tables.html" aria-current="page">
+            <a class="nav-link" href="tables.html">
               <i class="ti ti-table" aria-hidden="true"></i>
               Tables
             </a>
@@ -91,7 +91,7 @@
             </a>
           </li>
           <li>
-            <a class="nav-link" href="chat.html">
+            <a class="nav-link" href="chat.html" aria-current="page">
               <i class="ti ti-message-circle" aria-hidden="true"></i>
               Chat
             </a>
@@ -157,7 +157,7 @@
 
         <ol class="breadcrumb nowrap admini-hide-mobile" aria-label="Breadcrumb">
           <li><a href="index.html">Admini</a></li>
-          <li class="truncate" aria-current="page">Tables</li>
+          <li class="truncate" aria-current="page">Chat</li>
         </ol>
 
         <div class="grow"></div>
@@ -203,139 +203,119 @@
       </header>
       <!-- /admini-shell:topbar -->
 
-      <main class="center stack admini-content">
-        <hgroup>
-          <p class="overline">Manage</p>
-          <h1>Tables</h1>
-          <p class="muted">
-            Tables scroll inside <code>.table-wrap</code> rather than breaking the page layout. Resize the window to see the
-            wide table below scroll horizontally while everything around it stays put.
-          </p>
-        </hgroup>
-
-        <section class="card stack">
-          <header>
-            <h2>Team roster</h2>
-          </header>
-
-          <div class="table-wrap" role="region" aria-labelledby="roster-table" tabindex="0">
-            <table class="table" style="--table-min: 48rem;">
-              <caption id="roster-table" class="sr-only">Team roster</caption>
-              <thead>
-                <tr>
-                  <th scope="col">#</th>
-                  <th scope="col">First</th>
-                  <th scope="col">Last</th>
-                  <th scope="col">Handle</th>
-                  <th scope="col">Role</th>
-                  <th scope="col" class="nowrap">Last active</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <th scope="row">1</th>
-                  <td>Mark</td>
-                  <td>Otto</td>
-                  <td>@mdo</td>
-                  <td><span class="badge primary soft">Admin</span></td>
-                  <td class="nowrap muted">2 minutes ago</td>
-                </tr>
-                <tr>
-                  <th scope="row">2</th>
-                  <td>Jacob</td>
-                  <td>Thornton</td>
-                  <td>@fat</td>
-                  <td><span class="badge neutral soft">Editor</span></td>
-                  <td class="nowrap muted">1 hour ago</td>
-                </tr>
-                <tr>
-                  <th scope="row">3</th>
-                  <td colspan="2">Larry the Bird</td>
-                  <td>@twitter</td>
-                  <td><span class="badge neutral soft">Subscriber</span></td>
-                  <td class="nowrap muted">Yesterday</td>
-                </tr>
-                <tr>
-                  <th scope="row">4</th>
-                  <td>Rin</td>
-                  <td>Moreau</td>
-                  <td>@rin</td>
-                  <td><span class="badge neutral soft">Subscriber</span></td>
-                  <td class="nowrap muted">3 days ago</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <footer>
-            <span class="muted">Showing 4 of 128 members</span>
-            <nav aria-label="Pagination">
-              <ol class="pagination sm">
-                <li><span class="btn outline" aria-disabled="true">Previous</span></li>
-                <li><a href="#" class="btn" aria-current="page" aria-label="Page 1">1</a></li>
-                <li><a href="#" class="btn outline" aria-label="Page 2">2</a></li>
-                <li><a href="#" class="btn outline" aria-label="Page 3">3</a></li>
-                <li><span class="muted" aria-hidden="true">&hellip;</span></li>
-                <li><a href="#" class="btn outline" aria-label="Page 32">32</a></li>
-                <li><a href="#" class="btn outline">Next</a></li>
-              </ol>
-            </nav>
-          </footer>
+    <main class="admini-chat-shell" id="chat-shell">
+        <section class="admini-chat-list" aria-label="Conversations">
+          <button class="admini-chat-item" type="button" aria-current="true" data-chat-item>
+            <span class="avatar primary"><abbr>AM</abbr></span>
+            <span class="admini-chat-item-body">
+              <span class="admini-chat-item-top">
+                <strong>Ada Morgan</strong>
+                <span class="muted" style="font-size: var(--font-size-xs);">09:41</span>
+              </span>
+              <span class="muted truncate">Sounds good, see you then!</span>
+            </span>
+          </button>
+          <button class="admini-chat-item" type="button" data-chat-item>
+            <span class="avatar success"><abbr>JT</abbr></span>
+            <span class="admini-chat-item-body">
+              <span class="admini-chat-item-top">
+                <strong>Jacob Thornton</strong>
+                <span class="badge primary sm">2</span>
+              </span>
+              <span class="muted truncate">Pushed the fix, can you review?</span>
+            </span>
+          </button>
+          <button class="admini-chat-item" type="button" data-chat-item>
+            <span class="avatar warning"><abbr>LB</abbr></span>
+            <span class="admini-chat-item-body">
+              <span class="admini-chat-item-top">
+                <strong>Larry the Bird</strong>
+                <span class="muted" style="font-size: var(--font-size-xs);">Yesterday</span>
+              </span>
+              <span class="muted truncate">Thanks for the update.</span>
+            </span>
+          </button>
+          <button class="admini-chat-item" type="button" data-chat-item>
+            <span class="avatar"><abbr>RM</abbr></span>
+            <span class="admini-chat-item-body">
+              <span class="admini-chat-item-top">
+                <strong>Rin Moreau</strong>
+                <span class="badge primary sm">1</span>
+              </span>
+              <span class="muted truncate">Typing…</span>
+            </span>
+          </button>
+          <button class="admini-chat-item" type="button" data-chat-item>
+            <span class="avatar neutral"><abbr>TS</abbr></span>
+            <span class="admini-chat-item-body">
+              <span class="admini-chat-item-top">
+                <strong>Theo Silva</strong>
+                <span class="muted" style="font-size: var(--font-size-xs);">3d</span>
+              </span>
+              <span class="muted truncate">Let's sync tomorrow morning.</span>
+            </span>
+          </button>
         </section>
 
-        <div class="grid-2 items-start">
-          <section class="card stack">
-            <header>
-              <h2>Compact table</h2>
-            </header>
-            <div class="table-wrap">
-              <table class="table">
-                <thead>
-                  <tr>
-                    <th scope="col">Pos</th>
-                    <th scope="col">Name</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr><td>1</td><td>John Nemo</td></tr>
-                  <tr><td>2</td><td>Jane Doe</td></tr>
-                  <tr><td>3</td><td>Ada Morgan</td></tr>
-                  <tr><td>4</td><td>Theo Silva</td></tr>
-                </tbody>
-              </table>
+        <section class="admini-chat-thread" aria-label="Conversation with Ada Morgan">
+          <header class="admini-chat-thread-header">
+            <button class="btn neutral ghost sm admini-chat-back" type="button" aria-label="Back to conversations">
+              <i class="ti ti-arrow-left" aria-hidden="true"></i>
+            </button>
+            <span class="avatar primary"><abbr>AM</abbr></span>
+            <div>
+              <strong>Ada Morgan</strong>
+              <p class="muted" style="margin: 0; font-size: var(--font-size-sm);">Online</p>
             </div>
-          </section>
+            <div class="grow"></div>
+            <button class="btn neutral ghost sm" type="button" aria-label="More options">
+              <i class="ti ti-dots" aria-hidden="true"></i>
+            </button>
+          </header>
 
-          <section class="card stack">
-            <header>
-              <h2>Invoice status</h2>
-            </header>
-            <div class="table-wrap">
-              <table class="table">
-                <thead>
-                  <tr>
-                    <th scope="col">Invoice</th>
-                    <th scope="col">Status</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td class="nowrap">INV-2048</td>
-                    <td><span class="badge success soft">Paid</span></td>
-                  </tr>
-                  <tr>
-                    <td class="nowrap">INV-2049</td>
-                    <td><span class="badge warning soft">Pending</span></td>
-                  </tr>
-                  <tr>
-                    <td class="nowrap">INV-2050</td>
-                    <td><span class="badge danger soft">Overdue</span></td>
-                  </tr>
-                </tbody>
-              </table>
+          <div class="admini-chat-messages" id="chat-messages">
+            <div class="admini-bubble-row">
+              <div class="admini-bubble">
+                <span>Hey! Are we still on for the pricing review at 2?</span>
+                <span class="admini-bubble-time">09:12</span>
+              </div>
             </div>
-          </section>
-        </div>
+            <div class="admini-bubble-row is-own">
+              <div class="admini-bubble">
+                <span>Yes, I'll bring the updated deck.</span>
+                <span class="admini-bubble-time">09:14</span>
+              </div>
+            </div>
+            <div class="admini-bubble-row">
+              <div class="admini-bubble">
+                <span>Perfect. Also — did the invoice page ship?</span>
+                <span class="admini-bubble-time">09:30</span>
+              </div>
+            </div>
+            <div class="admini-bubble-row is-own">
+              <div class="admini-bubble">
+                <span>Just finished it, want to take a look?</span>
+                <span class="admini-bubble-time">09:35</span>
+              </div>
+            </div>
+            <div class="admini-bubble-row">
+              <div class="admini-bubble">
+                <span>Sounds good, see you then!</span>
+                <span class="admini-bubble-time">09:41</span>
+              </div>
+            </div>
+          </div>
+
+          <form class="admini-composer" id="composer-form">
+            <textarea class="textarea" id="composer-input" rows="1" placeholder="Write a message…" aria-label="Message"></textarea>
+            <button class="btn neutral ghost" type="button" aria-label="Attach file">
+              <i class="ti ti-paperclip" aria-hidden="true"></i>
+            </button>
+            <button class="btn primary" type="submit" aria-label="Send message">
+              <i class="ti ti-send" aria-hidden="true"></i>
+            </button>
+          </form>
+        </section>
       </main>
     </div>
   </div>
@@ -353,14 +333,14 @@
     <nav class="admini-nav" aria-label="Mobile navigation">
       <ul class="nav-list stack">
         <li><a class="nav-link" href="index.html"><i class="ti ti-layout-dashboard" aria-hidden="true"></i> Dashboard</a></li>
-        <li><a class="nav-link" href="tables.html" aria-current="page"><i class="ti ti-table" aria-hidden="true"></i> Tables</a></li>
+        <li><a class="nav-link" href="tables.html"><i class="ti ti-table" aria-hidden="true"></i> Tables</a></li>
         <li><a class="nav-link" href="forms.html"><i class="ti ti-forms" aria-hidden="true"></i> Forms</a></li>
         <li><a class="nav-link" href="profile.html"><i class="ti ti-user" aria-hidden="true"></i> Profile</a></li>
         <li><a class="nav-link" href="settings.html"><i class="ti ti-settings" aria-hidden="true"></i> Settings</a></li>
         <li><a class="nav-link" href="user-grid.html"><i class="ti ti-users-group" aria-hidden="true"></i> User grid</a></li>
         <li><a class="nav-link" href="kanban.html"><i class="ti ti-layout-kanban" aria-hidden="true"></i> Kanban</a></li>
         <li><a class="nav-link" href="calendar.html"><i class="ti ti-calendar" aria-hidden="true"></i> Calendar</a></li>
-        <li><a class="nav-link" href="chat.html"><i class="ti ti-message-circle" aria-hidden="true"></i> Chat</a></li>
+        <li><a class="nav-link" href="chat.html" aria-current="page"><i class="ti ti-message-circle" aria-hidden="true"></i> Chat</a></li>
         <li><a class="nav-link" href="invoice.html"><i class="ti ti-file-invoice" aria-hidden="true"></i> Invoice</a></li>
         <li><a class="nav-link" href="login.html"><i class="ti ti-login" aria-hidden="true"></i> Login</a></li>
         <li><a class="nav-link" href="404.html"><i class="ti ti-error-404" aria-hidden="true"></i> 404</a></li>
@@ -381,6 +361,41 @@
         }
       });
     }
+
+    // Selecting a conversation is visual state only here — swapping in the
+    // real thread for each contact is application/data logic, not a
+    // framework concern. On narrow viewports it also reveals the thread pane.
+    const chatShell = document.getElementById("chat-shell");
+
+    chatShell.querySelectorAll("[data-chat-item]").forEach((item) => {
+      item.addEventListener("click", () => {
+        chatShell.querySelectorAll("[data-chat-item]").forEach((el) => el.removeAttribute("aria-current"));
+        item.setAttribute("aria-current", "true");
+        chatShell.classList.add("is-thread-open");
+      });
+    });
+
+    chatShell.querySelector(".admini-chat-back")?.addEventListener("click", () => {
+      chatShell.classList.remove("is-thread-open");
+    });
+
+    const composerForm = document.getElementById("composer-form");
+    const composerInput = document.getElementById("composer-input");
+    const messages = document.getElementById("chat-messages");
+
+    composerForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const value = composerInput.value.trim();
+      if (!value) return;
+      const row = document.createElement("div");
+      row.className = "admini-bubble-row is-own";
+      row.innerHTML = `<div class="admini-bubble"><span></span><span class="admini-bubble-time">Now</span></div>`;
+      row.querySelector("span").textContent = value;
+      messages.appendChild(row);
+      composerInput.value = "";
+      messages.scrollTop = messages.scrollHeight;
+    });
+
   </script>
 </body>
 

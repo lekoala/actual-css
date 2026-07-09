@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Tables - Admini on Actual CSS</title>
+  <title>User grid - Admini on Actual CSS</title>
   <link rel="stylesheet" href="../../src/css/actual.css">
   <link rel="stylesheet" href="../../src/css/themes/index.css">
   <link rel="stylesheet" href="../../src/css/optional/layout-extra.css">
@@ -37,7 +37,7 @@
         <p class="overline admini-section-title">Manage</p>
         <ul class="nav-list stack">
           <li>
-            <a class="nav-link" href="tables.html" aria-current="page">
+            <a class="nav-link" href="tables.html">
               <i class="ti ti-table" aria-hidden="true"></i>
               Tables
             </a>
@@ -67,7 +67,7 @@
         <p class="overline admini-section-title">Team</p>
         <ul class="nav-list stack">
           <li>
-            <a class="nav-link" href="user-grid.html">
+            <a class="nav-link" href="user-grid.html" aria-current="page">
               <i class="ti ti-users-group" aria-hidden="true"></i>
               User grid
             </a>
@@ -157,7 +157,7 @@
 
         <ol class="breadcrumb nowrap admini-hide-mobile" aria-label="Breadcrumb">
           <li><a href="index.html">Admini</a></li>
-          <li class="truncate" aria-current="page">Tables</li>
+          <li class="truncate" aria-current="page">User grid</li>
         </ol>
 
         <div class="grow"></div>
@@ -203,138 +203,182 @@
       </header>
       <!-- /admini-shell:topbar -->
 
-      <main class="center stack admini-content">
-        <hgroup>
-          <p class="overline">Manage</p>
-          <h1>Tables</h1>
-          <p class="muted">
-            Tables scroll inside <code>.table-wrap</code> rather than breaking the page layout. Resize the window to see the
-            wide table below scroll horizontally while everything around it stays put.
-          </p>
-        </hgroup>
+    <main class="center stack admini-content">
+        <header class="cluster" style="--cluster-justify: space-between; align-items: flex-start;">
+          <hgroup>
+            <p class="overline">Team</p>
+            <h1>User grid</h1>
+            <p class="muted">A card-per-person layout — the pattern the tables and lists elsewhere don't cover.</p>
+          </hgroup>
+          <button class="btn primary" type="button">
+            <i class="ti ti-user-plus" aria-hidden="true"></i>
+            Invite member
+          </button>
+        </header>
 
-        <section class="card stack">
-          <header>
-            <h2>Team roster</h2>
-          </header>
+        <div class="cluster nowrap sm" style="--cluster-justify: space-between;">
+          <label class="field sm" style="flex: 0 1 20rem;">
+            <span class="field-label sr-only">Search members</span>
+            <input class="input" type="search" placeholder="Search members" aria-label="Search members">
+          </label>
+          <select class="select sm fit" aria-label="Filter by role">
+            <option>All roles</option>
+            <option>Admin</option>
+            <option>Editor</option>
+            <option>Subscriber</option>
+          </select>
+        </div>
 
-          <div class="table-wrap" role="region" aria-labelledby="roster-table" tabindex="0">
-            <table class="table" style="--table-min: 48rem;">
-              <caption id="roster-table" class="sr-only">Team roster</caption>
-              <thead>
-                <tr>
-                  <th scope="col">#</th>
-                  <th scope="col">First</th>
-                  <th scope="col">Last</th>
-                  <th scope="col">Handle</th>
-                  <th scope="col">Role</th>
-                  <th scope="col" class="nowrap">Last active</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <th scope="row">1</th>
-                  <td>Mark</td>
-                  <td>Otto</td>
-                  <td>@mdo</td>
-                  <td><span class="badge primary soft">Admin</span></td>
-                  <td class="nowrap muted">2 minutes ago</td>
-                </tr>
-                <tr>
-                  <th scope="row">2</th>
-                  <td>Jacob</td>
-                  <td>Thornton</td>
-                  <td>@fat</td>
-                  <td><span class="badge neutral soft">Editor</span></td>
-                  <td class="nowrap muted">1 hour ago</td>
-                </tr>
-                <tr>
-                  <th scope="row">3</th>
-                  <td colspan="2">Larry the Bird</td>
-                  <td>@twitter</td>
-                  <td><span class="badge neutral soft">Subscriber</span></td>
-                  <td class="nowrap muted">Yesterday</td>
-                </tr>
-                <tr>
-                  <th scope="row">4</th>
-                  <td>Rin</td>
-                  <td>Moreau</td>
-                  <td>@rin</td>
-                  <td><span class="badge neutral soft">Subscriber</span></td>
-                  <td class="nowrap muted">3 days ago</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <footer>
-            <span class="muted">Showing 4 of 128 members</span>
-            <nav aria-label="Pagination">
-              <ol class="pagination sm">
-                <li><span class="btn outline" aria-disabled="true">Previous</span></li>
-                <li><a href="#" class="btn" aria-current="page" aria-label="Page 1">1</a></li>
-                <li><a href="#" class="btn outline" aria-label="Page 2">2</a></li>
-                <li><a href="#" class="btn outline" aria-label="Page 3">3</a></li>
-                <li><span class="muted" aria-hidden="true">&hellip;</span></li>
-                <li><a href="#" class="btn outline" aria-label="Page 32">32</a></li>
-                <li><a href="#" class="btn outline">Next</a></li>
-              </ol>
-            </nav>
-          </footer>
-        </section>
-
-        <div class="grid-2 items-start">
-          <section class="card stack">
-            <header>
-              <h2>Compact table</h2>
-            </header>
-            <div class="table-wrap">
-              <table class="table">
-                <thead>
-                  <tr>
-                    <th scope="col">Pos</th>
-                    <th scope="col">Name</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr><td>1</td><td>John Nemo</td></tr>
-                  <tr><td>2</td><td>Jane Doe</td></tr>
-                  <tr><td>3</td><td>Ada Morgan</td></tr>
-                  <tr><td>4</td><td>Theo Silva</td></tr>
-                </tbody>
-              </table>
+        <div class="grid" style="--grid-min: 15rem;">
+          <article class="card raised stack" style="text-align: center;">
+            <div class="cluster" style="justify-content: center;">
+              <span class="avatar lg primary"><abbr>MO</abbr></span>
             </div>
-          </section>
-
-          <section class="card stack">
-            <header>
-              <h2>Invoice status</h2>
-            </header>
-            <div class="table-wrap">
-              <table class="table">
-                <thead>
-                  <tr>
-                    <th scope="col">Invoice</th>
-                    <th scope="col">Status</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td class="nowrap">INV-2048</td>
-                    <td><span class="badge success soft">Paid</span></td>
-                  </tr>
-                  <tr>
-                    <td class="nowrap">INV-2049</td>
-                    <td><span class="badge warning soft">Pending</span></td>
-                  </tr>
-                  <tr>
-                    <td class="nowrap">INV-2050</td>
-                    <td><span class="badge danger soft">Overdue</span></td>
-                  </tr>
-                </tbody>
-              </table>
+            <div>
+              <strong>Mark Otto</strong>
+              <p class="muted" style="margin: 0;">Admin</p>
             </div>
-          </section>
+            <div class="cluster" style="justify-content: center;">
+              <span class="badge success soft">Active</span>
+            </div>
+            <div class="cluster" style="justify-content: center;">
+              <button class="btn neutral outline sm" type="button">Message</button>
+              <button class="btn neutral ghost sm" type="button" aria-label="More options for Mark Otto">
+                <i class="ti ti-dots" aria-hidden="true"></i>
+              </button>
+            </div>
+          </article>
+
+          <article class="card raised stack" style="text-align: center;">
+            <div class="cluster" style="justify-content: center;">
+              <span class="avatar lg success"><abbr>JT</abbr></span>
+            </div>
+            <div>
+              <strong>Jacob Thornton</strong>
+              <p class="muted" style="margin: 0;">Editor</p>
+            </div>
+            <div class="cluster" style="justify-content: center;">
+              <span class="badge success soft">Active</span>
+            </div>
+            <div class="cluster" style="justify-content: center;">
+              <button class="btn neutral outline sm" type="button">Message</button>
+              <button class="btn neutral ghost sm" type="button" aria-label="More options for Jacob Thornton">
+                <i class="ti ti-dots" aria-hidden="true"></i>
+              </button>
+            </div>
+          </article>
+
+          <article class="card raised stack" style="text-align: center;">
+            <div class="cluster" style="justify-content: center;">
+              <span class="avatar lg warning"><abbr>LB</abbr></span>
+            </div>
+            <div>
+              <strong>Larry the Bird</strong>
+              <p class="muted" style="margin: 0;">Subscriber</p>
+            </div>
+            <div class="cluster" style="justify-content: center;">
+              <span class="badge neutral soft">Away</span>
+            </div>
+            <div class="cluster" style="justify-content: center;">
+              <button class="btn neutral outline sm" type="button">Message</button>
+              <button class="btn neutral ghost sm" type="button" aria-label="More options for Larry the Bird">
+                <i class="ti ti-dots" aria-hidden="true"></i>
+              </button>
+            </div>
+          </article>
+
+          <article class="card raised stack" style="text-align: center;">
+            <div class="cluster" style="justify-content: center;">
+              <span class="avatar lg"><abbr>RM</abbr></span>
+            </div>
+            <div>
+              <strong>Rin Moreau</strong>
+              <p class="muted" style="margin: 0;">Subscriber</p>
+            </div>
+            <div class="cluster" style="justify-content: center;">
+              <span class="badge success soft">Active</span>
+            </div>
+            <div class="cluster" style="justify-content: center;">
+              <button class="btn neutral outline sm" type="button">Message</button>
+              <button class="btn neutral ghost sm" type="button" aria-label="More options for Rin Moreau">
+                <i class="ti ti-dots" aria-hidden="true"></i>
+              </button>
+            </div>
+          </article>
+
+          <article class="card raised stack" style="text-align: center;">
+            <div class="cluster" style="justify-content: center;">
+              <span class="avatar lg primary"><abbr>AM</abbr></span>
+            </div>
+            <div>
+              <strong>Ada Morgan</strong>
+              <p class="muted" style="margin: 0;">Editor</p>
+            </div>
+            <div class="cluster" style="justify-content: center;">
+              <span class="badge success soft">Active</span>
+            </div>
+            <div class="cluster" style="justify-content: center;">
+              <button class="btn neutral outline sm" type="button">Message</button>
+              <button class="btn neutral ghost sm" type="button" aria-label="More options for Ada Morgan">
+                <i class="ti ti-dots" aria-hidden="true"></i>
+              </button>
+            </div>
+          </article>
+
+          <article class="card raised stack" style="text-align: center;">
+            <div class="cluster" style="justify-content: center;">
+              <span class="avatar lg warning"><abbr>TS</abbr></span>
+            </div>
+            <div>
+              <strong>Theo Silva</strong>
+              <p class="muted" style="margin: 0;">Subscriber</p>
+            </div>
+            <div class="cluster" style="justify-content: center;">
+              <span class="badge neutral soft">Away</span>
+            </div>
+            <div class="cluster" style="justify-content: center;">
+              <button class="btn neutral outline sm" type="button">Message</button>
+              <button class="btn neutral ghost sm" type="button" aria-label="More options for Theo Silva">
+                <i class="ti ti-dots" aria-hidden="true"></i>
+              </button>
+            </div>
+          </article>
+
+          <article class="card raised stack" style="text-align: center;">
+            <div class="cluster" style="justify-content: center;">
+              <span class="avatar lg"><abbr>MH</abbr></span>
+            </div>
+            <div>
+              <strong>Mira Hart</strong>
+              <p class="muted" style="margin: 0;">Subscriber</p>
+            </div>
+            <div class="cluster" style="justify-content: center;">
+              <span class="badge success soft">Active</span>
+            </div>
+            <div class="cluster" style="justify-content: center;">
+              <button class="btn neutral outline sm" type="button">Message</button>
+              <button class="btn neutral ghost sm" type="button" aria-label="More options for Mira Hart">
+                <i class="ti ti-dots" aria-hidden="true"></i>
+              </button>
+            </div>
+          </article>
+
+          <article class="card stack" style="text-align: center; border-style: dashed;">
+            <div class="cluster" style="justify-content: center;">
+              <span class="avatar lg neutral"><i class="ti ti-mail" aria-hidden="true"></i></span>
+            </div>
+            <div>
+              <strong>invited@example.com</strong>
+              <p class="muted" style="margin: 0;">Pending invite</p>
+            </div>
+            <div class="cluster" style="justify-content: center;">
+              <span class="badge warning soft">Invited</span>
+            </div>
+            <div class="cluster" style="justify-content: center;">
+              <button class="btn neutral outline sm" type="button">Resend</button>
+              <button class="btn danger ghost sm" type="button">Cancel</button>
+            </div>
+          </article>
         </div>
       </main>
     </div>
@@ -353,11 +397,11 @@
     <nav class="admini-nav" aria-label="Mobile navigation">
       <ul class="nav-list stack">
         <li><a class="nav-link" href="index.html"><i class="ti ti-layout-dashboard" aria-hidden="true"></i> Dashboard</a></li>
-        <li><a class="nav-link" href="tables.html" aria-current="page"><i class="ti ti-table" aria-hidden="true"></i> Tables</a></li>
+        <li><a class="nav-link" href="tables.html"><i class="ti ti-table" aria-hidden="true"></i> Tables</a></li>
         <li><a class="nav-link" href="forms.html"><i class="ti ti-forms" aria-hidden="true"></i> Forms</a></li>
         <li><a class="nav-link" href="profile.html"><i class="ti ti-user" aria-hidden="true"></i> Profile</a></li>
         <li><a class="nav-link" href="settings.html"><i class="ti ti-settings" aria-hidden="true"></i> Settings</a></li>
-        <li><a class="nav-link" href="user-grid.html"><i class="ti ti-users-group" aria-hidden="true"></i> User grid</a></li>
+        <li><a class="nav-link" href="user-grid.html" aria-current="page"><i class="ti ti-users-group" aria-hidden="true"></i> User grid</a></li>
         <li><a class="nav-link" href="kanban.html"><i class="ti ti-layout-kanban" aria-hidden="true"></i> Kanban</a></li>
         <li><a class="nav-link" href="calendar.html"><i class="ti ti-calendar" aria-hidden="true"></i> Calendar</a></li>
         <li><a class="nav-link" href="chat.html"><i class="ti ti-message-circle" aria-hidden="true"></i> Chat</a></li>
@@ -381,6 +425,7 @@
         }
       });
     }
+
   </script>
 </body>
 
