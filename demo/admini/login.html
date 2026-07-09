@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Log in - Admini on Actual CSS</title>
+  <link rel="stylesheet" href="../../src/css/actual.css">
+  <link rel="stylesheet" href="../../src/css/themes/index.css">
+  <link rel="stylesheet" href="admini.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+</head>
+
+<body>
+  <div class="admini-auth">
+    <div class="admini-auth-panel admini-hide-mobile">
+      <div class="avatar lg" style="--avatar-bg: color-mix(in oklch, var(--surface) 20%, transparent);">
+        <abbr>AD</abbr>
+      </div>
+      <hgroup>
+        <h1>Admini</h1>
+        <p>A Bootstrap 5 admin template's layout and pages, rebuilt end to end on Actual CSS.</p>
+      </hgroup>
+    </div>
+
+    <div class="admini-auth-form">
+      <div class="admini-auth-form-inner stack">
+        <div class="cluster" style="--cluster-justify: space-between;">
+          <hgroup>
+            <h2 style="margin: 0;">Sign in</h2>
+            <p class="muted">Continue to your workspace.</p>
+          </hgroup>
+          <select class="select sm fit" id="theme-switcher" aria-label="Switch theme">
+            <option value="">System</option>
+            <option value="light">Light</option>
+            <option value="dark">Dark</option>
+            <option value="dim">Dim</option>
+            <option value="corporate">Corporate</option>
+            <option value="forest">Forest</option>
+            <option value="ocean">Ocean</option>
+            <option value="spruce">Spruce</option>
+            <option value="petrol">Petrol</option>
+            <option value="sunset">Sunset</option>
+            <option value="lavender">Lavender</option>
+            <option value="mono">Mono</option>
+            <option value="square">Square</option>
+            <option value="edge">Edge</option>
+            <option value="cyberpunk">Cyberpunk</option>
+            <option value="neon">Neon</option>
+            <option value="gradient">Gradient</option>
+          </select>
+        </div>
+
+        <form class="stack needs-validation" data-validation-message="Enter a valid username and password" action="index.html">
+          <label class="field">
+            <span class="field-label">Username</span>
+            <input class="input" type="text" name="username" autocomplete="username" required spellcheck="false" placeholder="Enter username">
+          </label>
+
+          <label class="field">
+            <span class="field-label">Password</span>
+            <input class="input" type="password" name="password" autocomplete="current-password" required placeholder="Enter password">
+          </label>
+
+          <div class="cluster" style="--cluster-justify: space-between;">
+            <label class="choice sm">
+              <input class="switch" type="checkbox" role="switch" name="remember">
+              <span>Remember me</span>
+            </label>
+            <a class="link-plain" href="#">Forgot password?</a>
+          </div>
+
+          <div class="form-actions">
+            <button class="btn primary" type="submit" style="inline-size: 100%;">
+              Log in
+              <i class="ti ti-login-2" aria-hidden="true"></i>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="../../dist/actual.js"></script>
+  <script>
+    const switcher = document.getElementById("theme-switcher");
+
+    if (switcher) {
+      switcher.addEventListener("change", () => {
+        if (switcher.value) {
+          document.documentElement.dataset.theme = switcher.value;
+        } else {
+          document.documentElement.removeAttribute("data-theme");
+        }
+      });
+    }
+  </script>
+</body>
+
+</html>

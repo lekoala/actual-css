@@ -1,0 +1,320 @@
+/*
+ * Local, hand-authored CSS for the "admini" demo — a port of the
+ * thirdparty/admini-master Bootstrap 5 admin template onto Actual CSS.
+ *
+ * Every page in this folder loads the framework core (+ optional
+ * layout-extra.css for .topbar) plus this one file. Nothing here overrides
+ * component internals — it only lays out the app shell and a few
+ * page-specific arrangements with framework tokens and primitives.
+ *
+ * The sidebar/topbar markup block is identical, byte-for-byte, across every
+ * shell page (see the "admini-shell" HTML comments in each file). That is
+ * intentional: today it is copy-pasted, but the block is delimited so it can
+ * later be extracted behind a shared-layout mechanism (htmx, sco-pe, Turbo
+ * frames, …) without touching any page content.
+ */
+
+/* ---------------------------------------------------------------- shell */
+
+.admini-shell {
+  display: grid;
+  grid-template-columns: 1fr;
+  min-block-size: 100dvh;
+  background: var(--surface);
+}
+
+.admini-sidebar {
+  display: none;
+  flex-direction: column;
+  gap: var(--space-4);
+  inline-size: 17rem;
+  padding: var(--space-4);
+  border-inline-end: var(--border-width) solid var(--border);
+  background: var(--surface-raised);
+}
+
+.admini-main {
+  min-inline-size: 0;
+}
+
+.admini-content {
+  --center-size: 76rem;
+  --gap: var(--space-4);
+
+  padding-block: var(--space-4) var(--space-6);
+}
+
+.admini-hide-mobile {
+  display: none;
+}
+
+.admini-topbar .breadcrumb {
+  display: flex;
+  flex: 0 1 auto;
+  min-inline-size: 0;
+  max-inline-size: 20rem;
+  overflow: hidden;
+}
+
+.admini-topbar .breadcrumb li {
+  flex: 0 0 auto;
+}
+
+.admini-topbar .breadcrumb li[aria-current="page"] {
+  flex: 1 1 auto;
+}
+
+.admini-nav .nav-link {
+  inline-size: 100%;
+  justify-content: flex-start;
+  gap: var(--space-2);
+  min-block-size: 2.35rem;
+  padding-inline: var(--space-3);
+}
+
+.admini-nav .nav-link i {
+  color: var(--text-muted);
+  font-size: 1.125rem;
+}
+
+.admini-nav .nav-link[aria-current="page"] {
+  color: var(--text);
+  background: var(--surface-subtle);
+}
+
+.admini-nav .nav-link[aria-current="page"] i {
+  color: var(--intent, var(--primary));
+}
+
+/* Denser variant of .overline for a tight sidebar: no letter tracking. */
+.admini-section-title {
+  margin: 0;
+  font-weight: var(--font-weight-strong);
+  letter-spacing: 0;
+}
+
+@media (min-width: 56rem) {
+  .admini-hide-mobile {
+    display: initial;
+  }
+
+  .admini-search.admini-hide-mobile {
+    display: block;
+  }
+
+  .admini-topbar .breadcrumb.admini-hide-mobile {
+    display: flex;
+  }
+}
+
+@media (min-width: 72rem) {
+  .admini-shell {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .admini-sidebar {
+    position: sticky;
+    inset-block-start: 0;
+    display: flex;
+    block-size: 100dvh;
+    overflow-y: auto;
+  }
+
+  .admini-menu-button {
+    display: none;
+  }
+}
+
+/* ------------------------------------------------------------- dashboard */
+
+.admini-stat {
+  display: grid;
+  gap: var(--space-3);
+  align-content: space-between;
+  min-block-size: 9rem;
+}
+
+.admini-stat-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  color: var(--text-muted);
+  font-size: var(--font-size-sm);
+}
+
+.admini-stat-icon {
+  display: inline-grid;
+  place-items: center;
+  inline-size: 2rem;
+  block-size: 2rem;
+  border-radius: var(--radius);
+  background: var(--surface-subtle);
+  color: var(--intent, var(--primary));
+}
+
+.admini-stat-value {
+  color: var(--text);
+  font-size: 1.85rem;
+  font-weight: var(--font-weight-bold);
+  line-height: 1;
+}
+
+.admini-stat-meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--text-muted);
+  font-size: var(--font-size-sm);
+}
+
+.admini-board {
+  display: grid;
+  gap: var(--space-4);
+  grid-template-columns: minmax(0, 1fr);
+  align-items: start;
+}
+
+.admini-board-main {
+  min-inline-size: 0;
+}
+
+.admini-feed {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.admini-feed-item {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: var(--space-3);
+  align-items: start;
+}
+
+.admini-feed-item + .admini-feed-item {
+  padding-block-start: var(--space-3);
+  border-block-start: var(--border-width) solid var(--border);
+}
+
+.admini-dot {
+  inline-size: 0.625rem;
+  block-size: 0.625rem;
+  margin-block-start: 0.45rem;
+  border-radius: var(--radius);
+  background: var(--intent, var(--primary));
+  box-shadow: 0 0 0 0.25rem var(--surface-subtle);
+}
+
+.admini-account {
+  display: grid;
+  gap: var(--space-1);
+}
+
+@media (min-width: 72rem) {
+  .admini-board {
+    grid-template-columns: minmax(0, 1fr) minmax(18rem, 21rem);
+  }
+}
+
+/* ----------------------------------------------------------- settings */
+
+.admini-settings {
+  display: grid;
+  gap: var(--space-4);
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.admini-settings-tabs {
+  flex-direction: row;
+  overflow-x: auto;
+  border-block-end: var(--border-width) solid var(--border);
+}
+
+.admini-settings-tabs .tab {
+  flex: 0 0 auto;
+}
+
+@media (min-width: 56rem) {
+  .admini-settings {
+    grid-template-columns: 14rem minmax(0, 1fr);
+  }
+
+  .admini-settings-tabs {
+    flex-direction: column;
+    align-items: stretch;
+    overflow-x: visible;
+    border-block-end: 0;
+    border-inline-end: var(--border-width) solid var(--border);
+    padding-inline-end: var(--space-3);
+  }
+
+  .admini-settings-tabs .tab {
+    justify-content: flex-start;
+    gap: var(--space-2);
+    border-block-end: 0;
+    border-inline-start: 2px solid transparent;
+    border-radius: 0;
+  }
+
+  .admini-settings-tabs .tab[aria-selected="true"] {
+    border-inline-start-color: var(--intent, var(--primary));
+  }
+}
+
+/* --------------------------------------------------------------- auth */
+
+.admini-auth {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  min-block-size: 100dvh;
+}
+
+.admini-auth-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--space-6);
+  padding: var(--space-6) var(--space-4);
+  background: var(--surface-solid);
+  color: var(--surface);
+}
+
+.admini-auth-panel h1 {
+  color: var(--surface);
+}
+
+.admini-auth-form {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-6) var(--space-4);
+}
+
+.admini-auth-form-inner {
+  inline-size: 100%;
+  max-inline-size: 24rem;
+}
+
+@media (min-width: 64rem) {
+  .admini-auth {
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  }
+}
+
+/* ---------------------------------------------------------------- 404 */
+
+.admini-error {
+  display: grid;
+  place-items: center;
+  min-block-size: 100dvh;
+  padding: var(--space-6) var(--space-4);
+  text-align: center;
+}
+
+.admini-error-code {
+  margin: 0;
+  color: var(--intent, var(--primary));
+  font-size: clamp(4rem, 12vw, 7rem);
+  font-weight: var(--font-weight-bold);
+  line-height: 1;
+}
