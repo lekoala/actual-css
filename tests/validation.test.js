@@ -272,6 +272,13 @@ test("removing needs-validation disables runtime and restores novalidate", async
 
   expect(event.defaultPrevented).toBe(false);
   expect(form.hasAttribute("novalidate")).toBe(false);
+
+  form.classList.add("needs-validation");
+  const reenabled = new Event("submit", { bubbles: true, cancelable: true });
+  form.dispatchEvent(reenabled);
+
+  expect(form.hasAttribute("novalidate")).toBe(true);
+  expect(reenabled.defaultPrevented).toBe(true);
 });
 
 test("setErrors bridges server validation back to fields", async () => {

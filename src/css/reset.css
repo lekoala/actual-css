@@ -7,8 +7,6 @@
 
 html {
   -webkit-text-size-adjust: 100%;
-  /* Reserve classic scrollbar space to prevent horizontal layout shift. */
-  scrollbar-gutter: stable;
 }
 
 body {

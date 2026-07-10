@@ -16,4 +16,7 @@ export const EVENTS = {
   // Dispatched by a form after validation blocks submission.
   // detail: { form, firstInvalid, message }
   invalid: `${ACTUAL_EVENT_PREFIX}:invalid`,
+  // Cancelable: dispatched by dialog.js before handling native cancel close.
+  // detail: { dialog, sourceEvent }
+  dialogCancel: `${ACTUAL_EVENT_PREFIX}:dialog-cancel`,
 };

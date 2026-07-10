@@ -19,6 +19,7 @@
 
 import { registerCommands, targetFor } from "./command.js";
 import enhance from "./enhance.js";
+import { EVENTS } from "./events.js";
 import { CLASSES } from "./selectors.js";
 
 const dialogMap = new WeakMap();
@@ -136,7 +137,20 @@ function syncModalOpenClass(doc = document) {
     }
   }
 
-  doc.documentElement.classList.toggle(CLASSES.modalOpen, hasOpenModal);
+  const root = doc.documentElement;
+  const wasOpen = root.classList.contains(CLASSES.modalOpen);
+
+  if (hasOpenModal && !wasOpen) {
+    const viewportWidth = doc.defaultView?.innerWidth;
+    root.classList.toggle(
+      CLASSES.hadScrollbar,
+      Number.isFinite(viewportWidth) && viewportWidth > root.clientWidth,
+    );
+  } else if (!hasOpenModal) {
+    root.classList.remove(CLASSES.hadScrollbar);
+  }
+
+  root.classList.toggle(CLASSES.modalOpen, hasOpenModal);
 }
 
 function isDismissible(dialog) {
@@ -333,12 +347,18 @@ function handleDialogCancel(event) {
     return;
   }
 
-  // Native dialog closes on uncanceled cancel events. For environments without
-  // that default action, mirror it after all listeners had a chance to cancel.
-  queueMicrotask(() => {
-    if (!dialog.open || event.defaultPrevented) return;
-    closeDialog(dialog, dialogMap.get(dialog)?.returnValue || "");
+  const request = new CustomEvent(EVENTS.dialogCancel, {
+    bubbles: true,
+    cancelable: true,
+    detail: { dialog, sourceEvent: event },
   });
+  if (!dialog.dispatchEvent(request)) {
+    event.preventDefault();
+    return;
+  }
+
+  event.preventDefault();
+  closeDialog(dialog, dialogMap.get(dialog)?.returnValue || "");
 }
 
 function handleDialogClose(event) {

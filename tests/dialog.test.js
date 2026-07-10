@@ -116,9 +116,8 @@ test("cancel closes without requiring view transitions", async () => {
   click(open);
   const event = new Event("cancel", { cancelable: true });
   dialog.dispatchEvent(event);
-  await nextMicrotask();
 
-  expect(event.defaultPrevented).toBe(false);
+  expect(event.defaultPrevented).toBe(true);
   expect(dialog.open).toBe(false);
   expect(document.activeElement).toBe(open);
 });
@@ -140,6 +139,32 @@ test("modal dialogs toggle the html scroll-lock hook", async () => {
   click(close);
 
   expect(document.documentElement.classList.contains("has-modal-open")).toBe(false);
+  expect(document.documentElement.classList.contains("had-scrollbar")).toBe(false);
+});
+
+test("modal lock marks had-scrollbar only when classic scrollbar existed", async () => {
+  await loadDialog(`
+    <button id="open" commandfor="prefs" command="show-modal">Open</button>
+    <dialog id="prefs">
+      <button id="close" commandfor="prefs" command="request-close">Close</button>
+    </dialog>
+  `);
+  const root = document.documentElement;
+  const open = document.getElementById("open");
+  const close = document.getElementById("close");
+
+  Object.defineProperty(window, "innerWidth", { configurable: true, value: 1000 });
+  Object.defineProperty(root, "clientWidth", { configurable: true, value: 980 });
+
+  click(open);
+  expect(root.classList.contains("had-scrollbar")).toBe(true);
+
+  click(close);
+  expect(root.classList.contains("had-scrollbar")).toBe(false);
+
+  Object.defineProperty(root, "clientWidth", { configurable: true, value: 1000 });
+  click(open);
+  expect(root.classList.contains("had-scrollbar")).toBe(false);
 });
 
 test("non-modal dialogs do not toggle the html scroll-lock hook", async () => {
@@ -298,14 +323,41 @@ test("application can cancel dismissible dialog cancel event", async () => {
   const dialog = document.getElementById("prefs");
 
   click(trigger);
-  dialog.addEventListener("cancel", (event) => event.preventDefault());
+  dialog.addEventListener("actual:dialog-cancel", (event) => event.preventDefault());
 
+  const event = new Event("cancel", { cancelable: true });
+  dialog.dispatchEvent(event);
+
+  expect(event.defaultPrevented).toBe(true);
+  expect(dialog.open).toBe(true);
+});
+
+test("Escape cancel uses view-transition close path when enabled", async () => {
+  setupDOM(`
+    <button id="open" commandfor="prefs" command="show-modal">Open</button>
+    <dialog id="prefs" data-dialog-dismissible data-dialog-view-transition></dialog>
+  `);
+  patchDialogMethods();
+  const transitions = [];
+  document.startViewTransition = (update) => {
+    update();
+    const finished = Promise.resolve();
+    transitions.push(finished);
+    return { finished };
+  };
+  await import(`../src/js/dialog.js?test=${++importId}`);
+
+  const trigger = document.getElementById("open");
+  const dialog = document.getElementById("prefs");
+
+  click(trigger);
   const event = new Event("cancel", { cancelable: true });
   dialog.dispatchEvent(event);
   await nextMicrotask();
 
   expect(event.defaultPrevented).toBe(true);
-  expect(dialog.open).toBe(true);
+  expect(dialog.open).toBe(false);
+  expect(transitions.length).toBeGreaterThan(0);
 });
 
 test("view-transition opt-in does not throw when unsupported", async () => {
