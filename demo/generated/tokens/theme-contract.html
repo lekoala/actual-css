@@ -76,22 +76,7 @@
       </div>
     </section>
     <div class="component-prose">
-      <p>Without <code>data-theme</code>, the default theme advertises <code>color-scheme: light dark</code> and follows the user's OS preference in browsers that support <code>light-dark()</code>. Dark themes should set <code>color-scheme: dark</code>. Light themes should set <code>color-scheme: light</code>. Browsers without <code>light-dark()</code> receive the light fallback. Because the native select chevron is an SVG background image and cannot inherit <code>currentColor</code>, a theme that pins a single color scheme should own its high-contrast chevron override. A paired <code>light dark</code> theme follows the OS preference automatically and needs no override.</p>
-    </div>
-    <section class="component-section">
-      <h2>CSS</h2>
-      <div class="example-group">
-        <div class="example-code">
-          <pre><code class="language-css"><span class="token atrule"><span class="token rule">@media</span> <span class="token punctuation">(</span><span class="token property">prefers-contrast</span><span class="token punctuation">:</span> more<span class="token punctuation">)</span></span> <span class="token punctuation">{</span>
-  <span class="token selector">[data-theme="brand"]</span> <span class="token punctuation">{</span>
-    <span class="token property">--icon-chevron-image</span><span class="token punctuation">:</span> <span class="token function">var</span><span class="token punctuation">(</span>--icon-chevron-image-contrast-light<span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token punctuation">}</span>
-<span class="token punctuation">}</span></code></pre>
-        </div>
-      </div>
-    </section>
-    <div class="component-prose">
-      <p>In <code>forced-colors: active</code>, the default theme maps the public color tokens to system colors (<code>Canvas</code>, <code>CanvasText</code>, <code>ButtonText</code>, <code>Highlight</code>, and <code>HighlightText</code>) and removes decorative shadows. Components should inherit that token mode by default; keep local forced-color rules only for custom control geometry, native bar parts, disabled states, or selected states that would otherwise be communicated only by background color.</p>
+      <p>Without <code>data-theme</code>, the default theme advertises <code>color-scheme: light dark</code> and follows the user's OS preference in browsers that support <code>light-dark()</code>. Dark themes should set <code>color-scheme: dark</code>. Light themes should set <code>color-scheme: light</code>. Browsers without <code>light-dark()</code> receive the light fallback. Because the native select chevron is an SVG background image and cannot inherit <code>currentColor</code>, the select hands the arrow back to the browser under <code>prefers-contrast: more</code> (same treatment as <code>forced-colors: active</code>) instead of shipping a recolored chevron per theme — one native fallback covers every theme without a high-contrast icon variant to maintain. In <code>forced-colors: active</code>, the default theme maps the public color tokens to system colors (<code>Canvas</code>, <code>CanvasText</code>, <code>ButtonText</code>, <code>Highlight</code>, and <code>HighlightText</code>) and removes decorative shadows. Components should inherit that token mode by default; keep local forced-color rules only for custom control geometry, native bar parts, disabled states, or selected states that would otherwise be communicated only by background color.</p>
     </div>
     
   </section>
