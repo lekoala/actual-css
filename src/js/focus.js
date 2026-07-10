@@ -9,11 +9,17 @@ const FOCUSABLE_SELECTOR = [
   "[tabindex]",
 ].join(",");
 
+export function isElementVisible(el) {
+  if (!el || el.hidden) return false;
+  if (typeof el.checkVisibility === "function") return el.checkVisibility();
+  return el.getClientRects().length > 0;
+}
+
 function isFocusable(el) {
   return (
     el.tabIndex >= 0 &&
     !el.matches(":disabled") &&
-    el.checkVisibility?.() !== false &&
+    isElementVisible(el) &&
     !el.closest('[inert], [aria-hidden="true"]')
   );
 }

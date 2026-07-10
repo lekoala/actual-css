@@ -2,7 +2,7 @@
  * Breadcrumb — current-location trail from the site root.
  *
  * Inline list separated by "/". Mark the current page with `aria-current="page"`
- * on its item — it's styled as inert (no hover/underline, not clickable).
+ * either on the item or on the current link.
  */
 .breadcrumb {
   display: flex;
@@ -33,7 +33,8 @@
 }
 
 @media (hover: hover) {
-  .breadcrumb a:hover:not(:where([aria-current]:not([aria-current="false"]))) {
+  .breadcrumb li:not(:where([aria-current]:not([aria-current="false"])))
+    > a:hover:not(:where([aria-current]:not([aria-current="false"]))) {
     color: var(--text);
     text-decoration: underline;
   }
@@ -46,5 +47,9 @@
 .breadcrumb a:where([aria-current]:not([aria-current="false"])) {
   color: var(--text);
   font-weight: var(--font-weight-medium);
-  pointer-events: none;
+}
+
+.breadcrumb li:where([aria-current]:not([aria-current="false"])) > :where(a, span) {
+  color: var(--text);
+  font-weight: var(--font-weight-medium);
 }

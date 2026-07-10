@@ -67,6 +67,8 @@
 
 /* Nav list — a vertical navigation list. Used by .drawer for stacked links. */
 .nav-list {
+  display: grid;
+  gap: var(--gap);
   margin: 0;
   padding: 0;
   list-style: none;

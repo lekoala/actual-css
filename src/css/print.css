@@ -10,6 +10,7 @@
   .flyout,
   .tooltip,
   .surface-backdrop,
+  .status-bar,
   .spinner,
   dialog.modal[open],
   dialog.drawer[open] {

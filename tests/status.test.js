@@ -92,6 +92,20 @@ test("clear empties the target and cancels the timer", async () => {
   status.clear();
 
   expect(target.textContent).toBe("");
+  expect(target.classList.contains("danger")).toBe(false);
+});
+
+test("classes added after first show are preserved on subsequent status calls", async () => {
+  const { status } = await loadStatus(`<div class="status-bar" data-status role="status"></div>`);
+
+  const target = document.querySelector(".status-bar[data-status]");
+  status("Saving…", { intent: "danger", duration: false });
+  target.classList.add("sticky-app-class");
+  status("Saved.", { intent: "success", duration: false });
+
+  expect(target.classList.contains("sticky-app-class")).toBe(true);
+  expect(target.classList.contains("danger")).toBe(false);
+  expect(target.classList.contains("success")).toBe(true);
 });
 
 test("auto-dismisses after the duration", async () => {

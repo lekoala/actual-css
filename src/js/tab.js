@@ -39,6 +39,14 @@ function panelFor(tab) {
   return panelId ? document.getElementById(panelId) : null;
 }
 
+function isTabDisabled(tab) {
+  return tab.disabled || tab.getAttribute("aria-disabled") === "true";
+}
+
+function activatableTabs(list) {
+  return tabsOf(list).filter((tab) => !isTabDisabled(tab) && panelFor(tab));
+}
+
 function makePanelFocusable(panel) {
   if (!panel.hasAttribute("tabindex")) {
     panel.tabIndex = -1;
@@ -46,7 +54,7 @@ function makePanelFocusable(panel) {
 }
 
 function activate(tab) {
-  if (!tab) return;
+  if (!tab || isTabDisabled(tab) || !panelFor(tab)) return;
   const list = tab.closest(TABLIST_SELECTOR);
   if (!list) return;
   const tabs = tabsOf(list);
@@ -75,12 +83,9 @@ function activateAndFocus(tab) {
 }
 
 function initialize(list) {
-  const tabs = tabsOf(list);
+  const tabs = activatableTabs(list);
   if (!tabs.length) return;
-  const selected =
-    tabs.find((tab) => tab.getAttribute("aria-selected") === "true" && panelFor(tab)) ||
-    tabs.find((tab) => panelFor(tab)) ||
-    tabs[0];
+  const selected = tabs.find((tab) => tab.getAttribute("aria-selected") === "true") || tabs[0];
   activate(selected);
 }
 
@@ -90,7 +95,8 @@ function onKeydown(e) {
   const list = tab.closest(TABLIST_SELECTOR);
   if (!list) return;
 
-  const tabs = tabsOf(list);
+  const tabs = activatableTabs(list);
+  if (!tabs.length || !tabs.includes(tab)) return;
   const isVertical = list.getAttribute("aria-orientation") === "vertical";
   let next;
 
@@ -146,6 +152,10 @@ function onKeydown(e) {
 function onClick(e) {
   const tab = e.target.closest('[role="tab"]');
   if (!tab) return;
+  if (isTabDisabled(tab)) {
+    e.preventDefault();
+    return;
+  }
   e.preventDefault();
   if (tab.getAttribute("aria-selected") === "true") return;
   activate(tab);

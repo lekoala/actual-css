@@ -28,6 +28,13 @@
   list-style: none;
 }
 
+.tabs[aria-orientation="vertical"] {
+  display: grid;
+  justify-items: stretch;
+  border-block-end: 0;
+  border-inline-end: var(--border-width) solid var(--border);
+}
+
 .tab {
   display: inline-flex;
   align-items: center;
@@ -42,6 +49,13 @@
   font-weight: var(--font-weight-strong);
   text-decoration: none;
   cursor: pointer;
+}
+
+.tabs[aria-orientation="vertical"] .tab {
+  justify-content: flex-start;
+  border-block-end: 0;
+  border-inline-end: 2px solid transparent;
+  padding-inline-end: var(--space-4);
 }
 
 @media (hover: hover) {
@@ -63,9 +77,21 @@
   color: var(--intent, var(--primary));
 }
 
+.tabs[aria-orientation="vertical"] .tab[aria-selected="true"],
+.tabs[aria-orientation="vertical"] .tab[aria-current]:not([aria-current="false"]),
+.tabs[aria-orientation="vertical"] .tab[aria-pressed="true"] {
+  border-block-end-color: transparent;
+  border-inline-end-color: var(--intent, var(--primary));
+}
+
 @media (forced-colors: active) {
   .tabs {
     border-block-end-color: ButtonText;
+  }
+
+  .tabs[aria-orientation="vertical"] {
+    border-block-end-color: transparent;
+    border-inline-end-color: ButtonText;
   }
 
   .tab {
@@ -85,5 +111,12 @@
   .tab[aria-pressed="true"] {
     border-block-end-color: Highlight;
     color: Highlight;
+  }
+
+  .tabs[aria-orientation="vertical"] .tab[aria-selected="true"],
+  .tabs[aria-orientation="vertical"] .tab[aria-current]:not([aria-current="false"]),
+  .tabs[aria-orientation="vertical"] .tab[aria-pressed="true"] {
+    border-block-end-color: transparent;
+    border-inline-end-color: Highlight;
   }
 }

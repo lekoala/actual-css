@@ -68,6 +68,31 @@ test("flyout trigger arrow key opens and focuses direct action items", async () 
   expect(document.activeElement).toBe(first);
 });
 
+test("grouped flyout items in section lists support ArrowDown roving", async () => {
+  await loadFlyout(`
+    <button id="trigger" type="button" aria-controls="menu" aria-expanded="false">Open</button>
+    <menu id="menu" class="flyout" hidden>
+      <section>
+        <ul>
+          <li><a id="first" href="/first">First</a></li>
+          <li><a id="second" href="/second">Second</a></li>
+        </ul>
+      </section>
+    </menu>
+  `);
+  const trigger = document.getElementById("trigger");
+  const menu = document.getElementById("menu");
+  const first = document.getElementById("first");
+  const second = document.getElementById("second");
+  setupGeometry(trigger, menu);
+
+  press(trigger, "ArrowDown");
+  press(first, "ArrowDown");
+
+  expect(menu.hidden).toBe(false);
+  expect(document.activeElement).toBe(second);
+});
+
 test("flyout trigger gets initial disclosure attributes", async () => {
   await loadFlyout(`
     <button id="trigger" type="button" aria-controls="menu" aria-expanded="false">Open</button>
@@ -215,6 +240,32 @@ test("flyout trigger opens nav panels and focuses the first link", async () => {
   expect(panel.hidden).toBe(false);
   expect(panel.classList.contains("is-open")).toBe(true);
   expect(document.activeElement).toBe(first);
+});
+
+test("nav panel fallback skips invisible items when checkVisibility is unavailable", async () => {
+  await loadFlyout(`
+    <button id="trigger" type="button" aria-controls="panel" aria-expanded="false">Products</button>
+    <div id="panel" class="flyout" hidden>
+      <section>
+        <button id="hidden" type="button" style="display:none">Hidden</button>
+        <a id="visible" href="/visible">Visible</a>
+      </section>
+    </div>
+  `);
+  const trigger = document.getElementById("trigger");
+  const panel = document.getElementById("panel");
+  const hidden = document.getElementById("hidden");
+  const visible = document.getElementById("visible");
+  setupGeometry(trigger, panel);
+  hidden.checkVisibility = undefined;
+  visible.checkVisibility = undefined;
+  hidden.getClientRects = () => [];
+  visible.getClientRects = () => [{ width: 10, height: 10 }];
+
+  press(trigger, "Enter");
+
+  expect(panel.hidden).toBe(false);
+  expect(document.activeElement).toBe(visible);
 });
 
 test("tab from an open nav panel trigger enters the panel", async () => {

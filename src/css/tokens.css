@@ -53,7 +53,7 @@
   --indicator-ring: var(--surface);
 
   /* Shared backdrop — consumed by modal, drawer, and mobile flyout sheets. */
-  --backdrop-color: var(--surface-solid);
+  --backdrop-color: rgb(0 0 0);
   --backdrop-opacity: 0.45;
   --backdrop-fill: rgb(0 0 0 / var(--backdrop-opacity));
 

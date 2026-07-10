@@ -72,6 +72,7 @@
   color: var(--surface);
   border-color: transparent;
   --heading: var(--surface);
+  --busy-overlay-bg: var(--surface-solid);
 }
 
 .card.compact {
@@ -101,6 +102,10 @@
   display: block;
   inline-size: calc(100% + var(--card-pad) * 2);
   max-inline-size: none;
+}
+
+.card > picture.bleed {
+  overflow: hidden;
 }
 
 .card > picture.bleed > img {

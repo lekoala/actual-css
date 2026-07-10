@@ -101,3 +101,45 @@ test("scrollspy ignores unrelated body mutations", async () => {
 
   expect(observers).toHaveLength(1);
 });
+
+test("scrollspy keeps intersection state across callback batches", async () => {
+  await loadScrollspy(`
+    <nav class="scrollspy">
+      <a href="#alpha">Alpha</a>
+      <a href="#beta">Beta</a>
+    </nav>
+    <section id="alpha"></section>
+    <section id="beta"></section>
+  `);
+
+  const io = observers.at(-1);
+  io.callback([
+    {
+      isIntersecting: true,
+      target: document.getElementById("alpha"),
+      boundingClientRect: { top: 10 },
+    },
+  ]);
+
+  io.callback([
+    {
+      isIntersecting: true,
+      target: document.getElementById("beta"),
+      boundingClientRect: { top: 30 },
+    },
+  ]);
+
+  expect(document.querySelector('a[href="#alpha"]').getAttribute("aria-current")).toBe("location");
+  expect(document.querySelector('a[href="#beta"]').hasAttribute("aria-current")).toBe(false);
+
+  io.callback([
+    {
+      isIntersecting: false,
+      target: document.getElementById("beta"),
+      boundingClientRect: { top: 30 },
+    },
+  ]);
+
+  expect(document.querySelector('a[href="#alpha"]').getAttribute("aria-current")).toBe("location");
+  expect(document.querySelector('a[href="#beta"]').hasAttribute("aria-current")).toBe(false);
+});

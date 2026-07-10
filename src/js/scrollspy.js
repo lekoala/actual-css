@@ -52,25 +52,32 @@ function setupNav(nav) {
   if (typeof IntersectionObserver === "undefined") return;
   let io = null;
   let sections = [];
+  const activeEntries = new Map();
   let scheduled = false;
 
   function rebuild() {
     scheduled = false;
     io?.disconnect();
     sections = sectionsFor(nav);
+    activeEntries.clear();
     if (!sections.length) return;
 
     io = new IntersectionObserver(
       (entries) => {
-        const visible = entries
-          .filter((e) => e.isIntersecting)
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            activeEntries.set(entry.target, entry);
+          } else {
+            activeEntries.delete(entry.target);
+          }
+        }
+
+        const visible = [...activeEntries.values()]
           .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
 
-        if (!visible.length) return;
-
-        const id = visible[0].target.id;
+        const id = visible[0]?.target.id;
         for (const { link } of sections) {
-          if (link.getAttribute("href") === `#${id}`) {
+          if (id && link.getAttribute("href") === `#${id}`) {
             link.setAttribute("aria-current", "location");
           } else {
             link.removeAttribute("aria-current");

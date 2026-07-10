@@ -38,6 +38,10 @@
     color var(--duration);
 }
 
+.file:disabled::file-selector-button {
+  cursor: not-allowed;
+}
+
 @media (hover: hover) {
   .file:not(:disabled)::file-selector-button:hover {
     background: var(--border);

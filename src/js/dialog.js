@@ -5,7 +5,9 @@
  * Close button:  <button commandfor="dialog-id" command="request-close">
  * Dialog:        <dialog id="dialog-id" data-dialog-dismissible>
  *
- * Defaults to modal showModal(). Use data-dialog-modal="false" for show().
+ * Command semantics are explicit: show-modal calls showModal(), show calls
+ * show(). data-dialog-modal still defines the default for direct openDialog()
+ * calls when no command mode is forced.
  * Dismissible means backdrop click/light dismiss is allowed.
  *
  * View transitions (opt-in via data-dialog-view-transition):
@@ -68,8 +70,8 @@ function ensureId(el, prefix) {
   return el.id;
 }
 
-function syncDialogSemantics(dialog) {
-  if (isModal(dialog)) {
+function syncDialogSemantics(dialog, modal = isModal(dialog)) {
+  if (modal) {
     dialog.setAttribute("aria-modal", "true");
   } else {
     dialog.removeAttribute("aria-modal");
@@ -98,6 +100,10 @@ function notifyUnsupportedDialog(trigger) {
 
 function isModal(dialog) {
   return dialog.getAttribute("data-dialog-modal") !== "false";
+}
+
+function resolveModalMode(dialog, forcedModal = null) {
+  return forcedModal == null ? isModal(dialog) : forcedModal;
 }
 
 function isModalOpen(dialog) {
@@ -171,9 +177,9 @@ function canViewTransition(dialog, trigger) {
   );
 }
 
-function openDialogWithViewTransition(dialog, trigger) {
+function openDialogWithViewTransition(dialog, trigger, forcedModal = null) {
   if (!canViewTransition(dialog, trigger)) {
-    openDialog(dialog, trigger);
+    openDialog(dialog, trigger, forcedModal);
     return;
   }
 
@@ -182,7 +188,7 @@ function openDialogWithViewTransition(dialog, trigger) {
   const transition = dialog.ownerDocument.startViewTransition(() => {
     clearVtName(trigger);
     setVtName(dialog, VT_NAME);
-    openDialog(dialog, trigger);
+    openDialog(dialog, trigger, forcedModal);
   });
 
   transition.finished.finally(() => clearVtName(dialog, trigger)).catch(() => {});
@@ -270,16 +276,17 @@ export function requestDialogClose(dialog, returnValue = "") {
   closeDialog(dialog, returnValue);
 }
 
-export function openDialog(dialog, trigger = null) {
+export function openDialog(dialog, trigger = null, forcedModal = null) {
   if (!isDialog(dialog) || dialog.open || !dialog.isConnected) return;
 
   const state = ensureDialogWired(dialog);
-  syncDialogSemantics(dialog);
+  const modal = resolveModalMode(dialog, forcedModal);
+  syncDialogSemantics(dialog, modal);
 
   state.closing = false;
   state.restoreFocusTo = trigger || document.activeElement;
 
-  if (isModal(dialog)) {
+  if (modal) {
     dialog.showModal();
     state.modalOpen = true;
   } else {
@@ -320,8 +327,18 @@ function handleDialogSubmit(event) {
 function handleDialogCancel(event) {
   const dialog = event.currentTarget;
 
-  event.preventDefault();
-  closeDialog(dialog, dialogMap.get(dialog)?.returnValue || "");
+  if (!isDismissible(dialog)) {
+    event.preventDefault();
+    flashStatic(dialog);
+    return;
+  }
+
+  // Native dialog closes on uncanceled cancel events. For environments without
+  // that default action, mirror it after all listeners had a chance to cancel.
+  queueMicrotask(() => {
+    if (!dialog.open || event.defaultPrevented) return;
+    closeDialog(dialog, dialogMap.get(dialog)?.returnValue || "");
+  });
 }
 
 function handleDialogClose(event) {
@@ -419,8 +436,7 @@ registerCommands(DIALOG_COMMANDS, {
 
     if (
       !trigger.hasAttribute("aria-haspopup") &&
-      (command === "show-modal" || command === "show") &&
-      isModal(dialog)
+      (command === "show-modal" || command === "show")
     ) {
       trigger.setAttribute("aria-haspopup", "dialog");
     }
@@ -436,7 +452,7 @@ registerCommands(DIALOG_COMMANDS, {
     }
 
     if (command === "show-modal" || command === "show") {
-      openDialogWithViewTransition(dialog, trigger);
+      openDialogWithViewTransition(dialog, trigger, command === "show-modal");
       return;
     }
 
