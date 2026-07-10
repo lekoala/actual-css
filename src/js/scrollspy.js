@@ -72,8 +72,9 @@ function setupNav(nav) {
           }
         }
 
-        const visible = [...activeEntries.values()]
-          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+        const visible = [...activeEntries.values()].sort(
+          (a, b) => a.boundingClientRect.top - b.boundingClientRect.top,
+        );
 
         const id = visible[0]?.target.id;
         for (const { link } of sections) {
