@@ -62,6 +62,25 @@ test("keeps every linked trigger in sync", async () => {
   expect(document.getElementById("b").getAttribute("aria-pressed")).toBe("true");
 });
 
+test("keeps linked triggers in a shadow root in sync", async () => {
+  await loadPassword('<div id="host"></div>');
+  const shadow = document.getElementById("host").attachShadow({ mode: "open" });
+  shadow.innerHTML = `
+    <input type="password" id="pw">
+    <button id="a" commandfor="pw" command="--password-toggle" aria-pressed="false"></button>
+    <button id="b" commandfor="pw" command="--password-toggle" aria-pressed="false"></button>
+  `;
+  const input = shadow.getElementById("pw");
+
+  shadow.getElementById("a").dispatchEvent(
+    new MouseEvent("click", { bubbles: true, cancelable: true, composed: true }),
+  );
+
+  expect(input.type).toBe("text");
+  expect(shadow.getElementById("a").getAttribute("aria-pressed")).toBe("true");
+  expect(shadow.getElementById("b").getAttribute("aria-pressed")).toBe("true");
+});
+
 test("form submit reverts a revealed input to hidden", async () => {
   await loadPassword(`
     <form>
