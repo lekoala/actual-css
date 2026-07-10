@@ -1,6 +1,7 @@
 import { EVENTS } from "./events.js";
 import { reposition, repositionAt, track } from "./floating.js";
 import { hasMenuItem, onMenuKeydown } from "./menu.js";
+import { CLASSES } from "./selectors.js";
 
 const DEFAULT_BREAKPOINT = 768;
 const BREAKPOINTS = {
@@ -117,7 +118,7 @@ function ensureBackdrop(menu, state) {
   }
 
   const backdrop = menu.ownerDocument.createElement("div");
-  backdrop.className = "surface-backdrop";
+  backdrop.className = CLASSES.backdrop;
   backdrop.hidden = false;
   backdrop.addEventListener("click", () => {
     closeSurface(menu);
@@ -133,7 +134,7 @@ function applyPresentation(menu, state) {
     menu.style.removeProperty("left");
     menu.style.removeProperty("top");
   }
-  menu.classList.toggle("is-sheet", state.isSheet);
+  menu.classList.toggle(CLASSES.sheet, state.isSheet);
   ensureBackdrop(menu, state);
 }
 
@@ -241,7 +242,7 @@ function ensureSurfaceWired(menu) {
 }
 
 export function isSurfaceOpen(menu) {
-  return menu.classList.contains("is-open") && !menu.hidden;
+  return menu.classList.contains(CLASSES.open) && !menu.hidden;
 }
 
 export function prepareSurface(menu) {
@@ -285,7 +286,7 @@ export function openSurface(menu, opts = {}) {
   state.restoreFocusTo = opts.restoreFocusTo || opts.trigger || opts.source || null;
   state.closeId++;
 
-  menu.classList.add("is-open");
+  menu.classList.add(CLASSES.open);
   menu.hidden = false;
   openSurfaces.add(menu);
   applyPresentation(menu, state);
@@ -301,8 +302,8 @@ export function closeSurface(menu, opts = {}) {
   const closeId = state ? ++state.closeId : 0;
   const activeElement = menu.ownerDocument.activeElement;
   const shouldRestoreFocus = opts.restoreFocus ?? menu.contains(activeElement);
-  menu.classList.remove("is-open");
-  menu.classList.remove("is-sheet");
+  menu.classList.remove(CLASSES.open);
+  menu.classList.remove(CLASSES.sheet);
   menu.hidden = true;
   const backdrop = state?.backdrop || null;
   if (backdrop) backdrop.hidden = true;

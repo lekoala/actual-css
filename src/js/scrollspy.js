@@ -16,6 +16,7 @@
  */
 
 import enhance from "./enhance.js";
+import { CLASSES } from "./selectors.js";
 
 function rootFor(nav) {
   const selector = nav.getAttribute("data-scrollspy-root");
@@ -108,5 +109,5 @@ function setupNav(nav) {
 }
 
 enhance({
-  ".scrollspy": setupNav,
+  [`.${CLASSES.scrollspy}`]: setupNav,
 });

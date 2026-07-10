@@ -23,18 +23,43 @@
  *     (the status bar element itself needs the matching `id="app-status"`.)
  *   - Any other code, without importing this module: dispatch `actual:status`
  *     directly — `detail: { message, intent, duration }`, or `{}` to clear.
+ *
+ * The element contract is `.status-bar[data-status]`. Both are required:
+ * "status" is a generic domain word, so the class keeps the document-wide
+ * lookup from matching an unrelated app element that happens to carry its own
+ * `data-status`. `intent` is applied verbatim as one or more classes on the
+ * target (space-separated for more than one, e.g. "danger uppercase").
+ * status.js does not know or validate any specific names — .danger, .success,
+ * and friends are Actual's own intents.css vocabulary, not something this
+ * module hardcodes. Each call resets the target to the class list it had the
+ * first time status() ran, then adds the current call's intent classes, so
+ * stale intent classes never accumulate across calls.
  */
 import { registerCommands, targetFor } from "./command.js";
 import { EVENTS } from "./events.js";
+import { CLASSES } from "./selectors.js";
 
-const INTENTS = ["neutral", "success", "danger", "warning"];
-const STATUS_SELECTOR = ".status-bar[data-status]";
+const STATUS_SELECTOR = `.${CLASSES.statusBar}[data-status]`;
 
 let statusTimer;
+const baselineClasses = new WeakMap();
 
 function statusTarget() {
   if (typeof document === "undefined") return null;
   return document.querySelector(STATUS_SELECTOR);
+}
+
+function baselineFor(target) {
+  let baseline = baselineClasses.get(target);
+  if (!baseline) {
+    baseline = [...target.classList];
+    baselineClasses.set(target, baseline);
+  }
+  return baseline;
+}
+
+function intentClasses(value) {
+  return typeof value === "string" ? value.trim().split(/\s+/).filter(Boolean) : [];
 }
 
 export function status(message, options = {}) {
@@ -43,12 +68,9 @@ export function status(message, options = {}) {
 
   clearTimeout(statusTimer);
 
-  for (const intent of INTENTS) {
-    target.classList.remove(intent);
-  }
-  if (INTENTS.includes(options.intent)) {
-    target.classList.add(options.intent);
-  }
+  target.className = baselineFor(target).join(" ");
+  const intent = intentClasses(options.intent);
+  if (intent.length) target.classList.add(...intent);
 
   target.textContent = message;
 

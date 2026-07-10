@@ -1,6 +1,7 @@
 import enhance from "./enhance.js";
 import { EVENTS } from "./events.js";
 import { focusFirstMenuItem, hasMenuItems } from "./menu.js";
+import { CLASSES } from "./selectors.js";
 import {
   closeSurface,
   disconnectSurface,
@@ -11,7 +12,7 @@ import {
 
 const LONG_PRESS_MS = 450;
 const MOVE_TOLERANCE = 10;
-const CONTEXT_MENU_SELECTOR = "menu.flyout";
+const CONTEXT_MENU_SELECTOR = `menu.${CLASSES.flyout}`;
 const CONTEXT_TARGET_SELECTOR = "[data-context-menu]";
 const contextMap = new WeakMap();
 const contextByMenu = new WeakMap();

@@ -17,8 +17,9 @@
 
 import enhance from "./enhance.js";
 import { firstItem, lastItem, nextItem } from "./keys.js";
+import { CLASSES } from "./selectors.js";
 
-const TABLIST_SELECTOR = '.tabs[role="tablist"]';
+const TABLIST_SELECTOR = `.${CLASSES.tabs}[role="tablist"]`;
 
 function tabsOf(list) {
   return [...list.querySelectorAll('[role="tab"]')];
