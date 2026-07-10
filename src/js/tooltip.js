@@ -3,7 +3,9 @@
  *
  * Shorthand:  <button data-tooltip="Help text" data-tooltip-placement="right">
  * Explicit:   <button data-tooltip aria-describedby="tooltip-id">
- *             <div role="tooltip" id="tooltip-id" hidden>Help text</div>
+ *             <div role="tooltip" id="tooltip-id" hidden>Help <strong>text</strong></div>
+ * Options:    data-tooltip-click toggles on click instead of hover/focus.
+ *             data-tooltip-visible keeps the tooltip visible.
  *
  * Discovery:  [data-tooltip] only. An empty data-tooltip marks an explicit
  *             tooltip that points at an aria-describedby target; a non-empty
@@ -21,7 +23,7 @@
  *             for tooltips that are never triggered. AJAX-loaded triggers
  *             work automatically via bubbling delegated listeners.
  *
- * Show:       hover + focus (150ms delay)
+ * Show:       hover + focus (150ms delay), click toggle, or always visible
  * Hide:       blur, pointer leave, Escape
  */
 
@@ -77,6 +79,19 @@ function placementFor(ref) {
   return ref?.getAttribute("data-tooltip-placement") || "top";
 }
 
+function hasOption(trigger, name) {
+  const value = trigger?.getAttribute(name);
+  return value !== null && value.toLowerCase() !== "false";
+}
+
+function isClickTrigger(trigger) {
+  return hasOption(trigger, "data-tooltip-click");
+}
+
+function isAlwaysVisible(trigger) {
+  return hasOption(trigger, "data-tooltip-visible");
+}
+
 function describedByIds(trigger) {
   return (trigger.getAttribute("aria-describedby") || "").split(/\s+/).filter(Boolean);
 }
@@ -124,8 +139,9 @@ function repositionTip(ref, tip) {
   });
 }
 
-function hideTip(tip) {
+function hideTip(tip, force = false) {
   const state = tipStates.get(tip);
+  if (!force && isAlwaysVisible(state?.activeRef)) return;
   if (state?.timer) {
     clearTimeout(state.timer);
     state.timer = null;
@@ -147,6 +163,7 @@ function clearHide(tip) {
 function scheduleHide(tip) {
   const state = tipStates.get(tip);
   if (!state) return;
+  if (isClickTrigger(state.activeRef) || isAlwaysVisible(state.activeRef)) return;
   if (state.overRef || state.overTip) return;
   if (state.hideTimer) clearTimeout(state.hideTimer);
   state.hideTimer = setTimeout(() => {
@@ -177,13 +194,15 @@ function wireTip(tip, options = {}) {
   };
 
   const onHide = () => hideTip(tip);
+  const onOutOfView = () => hideTip(tip, true);
   const onReposition = () => {
+    if (isAlwaysVisible(state.activeRef)) tip.hidden = false;
     if (!tip.hidden && state.activeRef) repositionTip(state.activeRef, tip);
   };
 
   tip.addEventListener(EVENTS.reposition, onReposition, { signal: controller.signal });
   tip.addEventListener(EVENTS.hide, onHide, { signal: controller.signal });
-  tip.addEventListener(EVENTS.outOfView, onHide, { signal: controller.signal });
+  tip.addEventListener(EVENTS.outOfView, onOutOfView, { signal: controller.signal });
   tip.addEventListener(
     "mouseenter",
     () => {
@@ -262,13 +281,13 @@ function ensureTip(trigger) {
 
     state.refs.delete(trigger);
     if (state.activeRef === trigger) {
-      hideTip(tip);
+      hideTip(tip, true);
       state.activeRef = null;
     }
     // Other triggers still share this tooltip: keep the tip wiring alive.
     if (state.refs.size > 0) return;
 
-    hideTip(tip);
+    hideTip(tip, true);
     state.controller.abort();
     state.untrack();
     tipStates.delete(tip);
@@ -285,7 +304,7 @@ function cleanupTrigger(trigger) {
   triggerStates.get(trigger)?.cleanup?.();
 }
 
-function show(tip, ref) {
+function show(tip, ref, immediate = false) {
   const state = tipStates.get(tip);
   if (!state) return;
 
@@ -293,11 +312,14 @@ function show(tip, ref) {
   state.overRef = true;
   clearHide(tip);
   if (state.timer) clearTimeout(state.timer);
-  state.timer = setTimeout(() => {
+  const reveal = () => {
     state.timer = null;
     tip.hidden = false;
     repositionTip(ref, tip);
-  }, SHOW_DELAY_MS);
+  };
+
+  if (immediate) reveal();
+  else state.timer = setTimeout(reveal, SHOW_DELAY_MS);
 }
 
 // ── Delegated discovery (mouseover + focusin bubble) ───
@@ -307,6 +329,7 @@ const SEL = "[data-tooltip]";
 function handleTriggerIntent(e) {
   const trigger = e.target.closest?.(SEL);
   if (!trigger) return;
+  if (isClickTrigger(trigger) || isAlwaysVisible(trigger)) return;
   if (
     e.type === "mouseover" &&
     e.relatedTarget instanceof Node &&
@@ -318,14 +341,33 @@ function handleTriggerIntent(e) {
   if (tip) show(tip, trigger);
 }
 
+function handleTriggerClick(e) {
+  const trigger = e.target.closest?.(SEL);
+  if (!trigger || !isClickTrigger(trigger) || isAlwaysVisible(trigger)) return;
+
+  const tip = ensureTip(trigger);
+  if (!tip) return;
+
+  e.preventDefault();
+  if (tip.hidden) show(tip, trigger, true);
+  else hideTip(tip, true);
+}
+
 // Delegated discovery listeners run at import time; keep SSR imports inert.
 if (typeof document !== "undefined") {
   document.addEventListener("mouseover", handleTriggerIntent);
   document.addEventListener("focusin", handleTriggerIntent);
+  document.addEventListener("click", handleTriggerClick);
 
-  // No-op at connect: discovery is lazy via mouseover/focusin.
-  // Cleanup is handled by the sweep when the trigger leaves the DOM.
   enhance({
-    [SEL]: (trigger) => () => cleanupTrigger(trigger),
+    [SEL]: (trigger) => {
+      // Ordinary and click-triggered tooltips stay lazy. The always-visible
+      // option necessarily opts into eager creation/wiring.
+      if (isAlwaysVisible(trigger)) {
+        const tip = ensureTip(trigger);
+        if (tip) show(tip, trigger, true);
+      }
+      return () => cleanupTrigger(trigger);
+    },
   });
 }

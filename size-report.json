@@ -1,12 +1,12 @@
 {
-  "timestamp": "2026-07-10T11:01:36.700Z",
-  "totalRaw": 156637,
-  "totalMinified": 78359,
-  "totalBrotli": 11513,
+  "timestamp": "2026-07-10T11:17:17.660Z",
+  "totalRaw": 156664,
+  "totalMinified": 78384,
+  "totalBrotli": 11527,
   "themesMinified": 29280,
   "themesBrotli": 3398,
-  "shippedMinified": 78359,
-  "shippedBrotli": 11513,
+  "shippedMinified": 78384,
+  "shippedBrotli": 11527,
   "maxShippedBrotli": 13312,
   "fileCount": 69,
   "files": [
@@ -84,7 +84,7 @@
     },
     {
       "file": "components/tooltip.css",
-      "raw": 2828
+      "raw": 2855
     },
     {
       "file": "components/progress.css",

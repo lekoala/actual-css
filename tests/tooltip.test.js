@@ -16,6 +16,10 @@ function leave(el) {
   el.dispatchEvent(new MouseEvent("mouseleave"));
 }
 
+function click(el) {
+  el.dispatchEvent(new MouseEvent("click", { bubbles: true, cancelable: true }));
+}
+
 // The show delay is 150ms; wait past it with real timers.
 function waitForShow() {
   return new Promise((resolve) => setTimeout(resolve, 200));
@@ -45,6 +49,59 @@ test("data-tooltip generates a tooltip lazily on first hover", async () => {
 
   await waitForShow();
 
+  expect(tip.hidden).toBe(false);
+});
+
+test("shorthand content stays text while explicit tooltips support HTML", async () => {
+  await loadTooltip(`
+    <button id="plain" data-tooltip="<strong>Plain</strong>">Plain</button>
+    <button id="rich" data-tooltip aria-describedby="rich-tip">Rich</button>
+    <div role="tooltip" id="rich-tip" hidden><strong>Rich</strong> content</div>
+  `);
+
+  hover(document.getElementById("plain"));
+  hover(document.getElementById("rich"));
+  await waitForShow();
+
+  const generated = document.querySelector('[role="tooltip"]:not(#rich-tip)');
+  expect(generated.textContent).toBe("<strong>Plain</strong>");
+  expect(generated.querySelector("strong")).toBeNull();
+  expect(document.querySelector("#rich-tip strong")?.textContent).toBe("Rich");
+});
+
+test("data-tooltip-click toggles on click and ignores hover", async () => {
+  await loadTooltip('<button data-tooltip="Click help" data-tooltip-click>Trigger</button>');
+  const trigger = document.querySelector("button");
+
+  hover(trigger);
+  await waitForShow();
+  expect(document.querySelector('[role="tooltip"]')).toBeNull();
+
+  click(trigger);
+  const tip = document.querySelector('[role="tooltip"]');
+  expect(tip.hidden).toBe(false);
+
+  leave(trigger);
+  await waitForHide();
+  expect(tip.hidden).toBe(false);
+
+  click(trigger);
+  expect(tip.hidden).toBe(true);
+});
+
+test("data-tooltip-visible eagerly creates and keeps a tooltip visible", async () => {
+  await loadTooltip('<button data-tooltip="Persistent help" data-tooltip-visible>Trigger</button>');
+  const trigger = document.querySelector("button");
+  const tip = document.querySelector('[role="tooltip"]');
+
+  expect(tip).not.toBeNull();
+  expect(tip.hidden).toBe(false);
+
+  leave(trigger);
+  await waitForHide();
+  expect(tip.hidden).toBe(false);
+
+  tip.dispatchEvent(new CustomEvent("actual:hide", { detail: { type: "escape" } }));
   expect(tip.hidden).toBe(false);
 });
 

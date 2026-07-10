@@ -723,6 +723,8 @@ Long press is opt-in with `data-context-menu-long-press`. Empty uses the default
 - Tooltips are supplemental. Do not put required information or interactive controls inside them.
 - Show on hover and focus. Hide on Escape, blur, pointer leave, or scroll when appropriate.
 - JavaScript can generate tooltip elements from `data-tooltip`.
+- Add `data-tooltip-click` to toggle it on click instead of hover/focus.
+- Add `data-tooltip-visible` to show it immediately and keep it visible while its trigger is in view.
 - Use `data-tooltip-placement` to set the preferred placement (default `top`).
 - The arrow inherits the tooltip background — custom gradients carry through automatically.
 - Avoid relying on the native `title` attribute as the primary implementation.
@@ -745,6 +747,45 @@ Long press is opt-in with `data-context-menu-long-press`. Empty uses the default
 <button class="btn" type="button" data-tooltip="Save changes">
   Save
 </button>
+```
+
+### Display modes
+
+Click tooltips stay open when the pointer leaves and close on a second click or Escape. They remain supplemental, non-interactive content; use a flyout when the floating content contains controls.
+
+```html
+<p class="cluster">
+  <button class="btn outline" type="button"
+          data-tooltip="Click again or press Escape to close"
+          data-tooltip-click>
+    Toggle on click
+  </button>
+
+  <button class="btn outline" type="button"
+          data-tooltip="Always visible while this trigger is in view"
+          data-tooltip-visible
+          data-tooltip-placement="bottom">
+    Always visible
+  </button>
+</p>
+```
+
+### HTML and long content
+
+The `data-tooltip="…"` shorthand is intentionally plain text. For trusted HTML, use an explicit tooltip referenced by `aria-describedby`. Keep its content non-interactive and concise; long content wraps up to the tooltip's viewport-aware maximum width.
+
+```html
+<button class="btn" type="button"
+        data-tooltip
+        aria-describedby="tip-rich-long"
+        data-tooltip-placement="bottom">
+  Long HTML tooltip
+</button>
+
+<div class="tooltip" role="tooltip" id="tip-rich-long" hidden>
+  <strong>Keyboard shortcut:</strong> press <kbd>Ctrl</kbd> + <kbd>K</kbd> to open search.
+  This longer explanation demonstrates wrapping when a supplemental label needs a little more context.
+</div>
 ```
 
 ### Positioning
@@ -778,12 +819,10 @@ Override `--tooltip-bg` and `--tooltip-fg` on the tooltip element to change the 
             --tooltip-fg: white;
             padding: 0.4em 0.8em;
             font-weight: var(--font-weight-medium);">
-  Custom gradient tooltip → arrow matches
+  <strong>Custom gradient tooltip:</strong> the arrow matches the background, and this longer
+  sentence demonstrates how the tooltip wraps and flips when the preferred side lacks space.
 </div>
 ```
-
-Note: added bonus, this is a long tooltip. If you don't have enough space to display
-it, it will automatically be moved to top/bottom instead
 
 ## Scrollspy
 
