@@ -4478,6 +4478,21 @@ a.avatar[aria-disabled="true"] {
   z-index: 2;
 }
 
+/* An input/select with an attached action reads as one composite field. Move
+   its outer focus treatment to the join; button-only groups keep per-button
+   focus, and unsupported :has() browsers retain the control's normal ring. */
+.join:has(> :is(.input, .textarea, .select):focus-visible) {
+  border-radius: var(--join-radius);
+  outline: var(--focus-outline);
+  outline-offset: var(--focus-outline-offset);
+  box-shadow: var(--focus-ring-shadow);
+}
+
+.join:has(> :is(.input, .textarea, .select)) > :is(.input, .textarea, .select):focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+
 /* Focus baseline — loaded after components so its legacy fallback also covers
    controls that reset their native outline. Modern browsers hide it for focus
    that is not keyboard-relevant; components layer local state on top. */
