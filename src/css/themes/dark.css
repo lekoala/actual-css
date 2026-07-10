@@ -30,9 +30,3 @@
   --focus-ring: hsl(220 90% 66% / 0.28);
   --hover-overlay: hsl(0 0% 100% / 0.06);
 }
-
-@media (prefers-contrast: more) {
-  [data-theme="dark"] {
-    --icon-chevron-image: var(--icon-chevron-image-contrast-dark);
-  }
-}

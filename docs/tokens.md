@@ -364,17 +364,10 @@ Dark themes should set `color-scheme: dark`. Light themes should set
 fallback.
 
 Because the native select chevron is an SVG background image and cannot inherit
-`currentColor`, a theme that pins a single color scheme should own its
-high-contrast chevron override. A paired `light dark` theme follows the OS
-preference automatically and needs no override.
-
-```css
-@media (prefers-contrast: more) {
-  [data-theme="brand"] {
-    --icon-chevron-image: var(--icon-chevron-image-contrast-light);
-  }
-}
-```
+`currentColor`, the select hands the arrow back to the browser under
+`prefers-contrast: more` (same treatment as `forced-colors: active`) instead of
+shipping a recolored chevron per theme — one native fallback covers every
+theme without a high-contrast icon variant to maintain.
 
 In `forced-colors: active`, the default theme maps the public color tokens to
 system colors (`Canvas`, `CanvasText`, `ButtonText`, `Highlight`, and

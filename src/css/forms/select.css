@@ -23,7 +23,11 @@
   background-position: center left var(--space-3);
 }
 
-@media (forced-colors: active) {
+/* Both forced-colors and prefers-contrast hand the arrow back to the
+   browser instead of guessing a higher-contrast recolor of our own icon —
+   simpler than maintaining contrast variants, and native rendering already
+   matches whatever contrast mode the user picked. */
+@media (forced-colors: active), (prefers-contrast: more) {
   .select:not([multiple], [size]) {
     appearance: auto;
     background-image: none;
