@@ -16,12 +16,12 @@
  */
 
 @supports selector(.scrollspy a:target-current) {
-	.scrollspy {
-		scroll-target-group: auto;
-	}
+  .scrollspy {
+    scroll-target-group: auto;
+  }
 
-	.scrollspy a:target-current {
-		color: var(--text);
-		font-weight: var(--font-weight-medium);
-	}
+  .scrollspy a:target-current {
+    color: var(--text);
+    font-weight: var(--font-weight-medium);
+  }
 }

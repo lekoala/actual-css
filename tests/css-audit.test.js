@@ -19,7 +19,7 @@ test("single selects include size=1 in native and custom select paths", () => {
   const customSelectCss = readCss("src/css/forms/custom-select.css");
 
   expect(selectCss).toContain(':not([multiple])[size="1"]');
-  expect(customSelectCss).toContain(':not([multiple], .native)[size="1"]');
+  expect(customSelectCss).toContain('[size]:not([size="1"])');
 });
 
 test("nav-list is self-laid out with grid gap", () => {
@@ -106,8 +106,11 @@ test("scrollspy CSS exposes native target-current enhancement", () => {
   expect(css).toContain(".scrollspy a:target-current");
 });
 
-test("modal no longer redefines scrollbar-gutter in lock hooks", () => {
+test("modal uses scrollbar gutter only for measured classic-scrollbar locks", () => {
   const css = readCss("src/css/components/modal.css");
+  const resetCss = readCss("src/css/reset.css");
 
-  expect(css.includes("scrollbar-gutter: stable;")).toBe(false);
+  expect(css).toContain("html.has-modal-open.had-scrollbar");
+  expect(css).toContain("scrollbar-gutter: stable;");
+  expect(resetCss.includes("scrollbar-gutter: stable;")).toBe(false);
 });

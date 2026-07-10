@@ -6,7 +6,7 @@ Works everywhere, works best on modern browsers. Wide browser support (even olde
 
 - No compile or build step (just CSS).
 - No post-processing — use only necessary browser-specific prefixes and engine hooks.
-- CSS nesting is not used — code must be findable in the inspector. Rules are organized as if nesting were used, grouped together without nesting syntax.
+- CSS nesting is not used — code must be findable in the inspector. Rules are organized as if nesting were used, grouped together without nesting syntax. Exception: see [CSS nesting inside @supports](#css-nesting-inside-supports).
 
 ## Baseline
 
@@ -55,6 +55,12 @@ background: var(--surface);
 background: color-mix(in oklch, var(--surface) 88%, transparent);
 backdrop-filter: blur(1rem);
 ```
+
+### CSS nesting inside @supports
+
+The no-nesting rule protects browsers that predate CSS nesting (Chrome 112, Firefox 117, Safari 16.5). A block already gated behind a later feature can't be reached by any browser that lacks nesting, so the inspector-friendliness argument no longer applies — nest freely inside it. `appearance: base-select` (Chrome 133+) is the current example: everything inside that `@supports` block in `custom-select.css` uses `&`-nesting instead of repeating the `.select:not(...)` selector.
+
+Check the gating feature's baseline against nesting's before relying on this: if a future gate ships on a browser older than nesting's baseline, flatten that block back out.
 
 ### Vendor prefixes and engine hooks
 

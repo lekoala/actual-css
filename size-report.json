@@ -1,12 +1,12 @@
 {
-  "timestamp": "2026-07-10T12:33:01.848Z",
-  "totalRaw": 160289,
-  "totalMinified": 81716,
-  "totalBrotli": 11812,
+  "timestamp": "2026-07-10T12:50:00.760Z",
+  "totalRaw": 159579,
+  "totalMinified": 80881,
+  "totalBrotli": 11805,
   "themesMinified": 28783,
   "themesBrotli": 3328,
-  "shippedMinified": 81716,
-  "shippedBrotli": 11812,
+  "shippedMinified": 80881,
+  "shippedBrotli": 11805,
   "maxShippedBrotli": 13312,
   "fileCount": 70,
   "files": [
@@ -56,7 +56,7 @@
     },
     {
       "file": "components/modal.css",
-      "raw": 3499
+      "raw": 3566
     },
     {
       "file": "themes/edge.css",
@@ -65,10 +65,6 @@
     {
       "file": "forms/switch.css",
       "raw": 3398
-    },
-    {
-      "file": "forms/custom-select.css",
-      "raw": 3321
     },
     {
       "file": "utilities.css",
@@ -101,6 +97,10 @@
     {
       "file": "themes/spruce.css",
       "raw": 2641
+    },
+    {
+      "file": "forms/custom-select.css",
+      "raw": 2638
     },
     {
       "file": "themes/petrol.css",
@@ -231,12 +231,12 @@
       "raw": 1108
     },
     {
-      "file": "reset.css",
-      "raw": 1063
-    },
-    {
       "file": "themes/dark.css",
       "raw": 1018
+    },
+    {
+      "file": "reset.css",
+      "raw": 959
     },
     {
       "file": "intents.css",
@@ -248,7 +248,7 @@
     },
     {
       "file": "components/scrollspy.css",
-      "raw": 843
+      "raw": 853
     },
     {
       "file": "components/pagination.css",

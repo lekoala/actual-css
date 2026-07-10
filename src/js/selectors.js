@@ -35,6 +35,9 @@ export const CLASSES = {
   static: "is-static",
   // dialog.js — written on <html> while any modal dialog is open.
   modalOpen: "has-modal-open",
+  // dialog.js — written on <html> when the viewport had a classic scrollbar
+  // before the first modal lock.
+  hadScrollbar: "had-scrollbar",
   // tooltip.js — class name written on a shorthand-generated tooltip element.
   tooltip: "tooltip",
   // status.js — required alongside [data-status]. "status" is a common
