@@ -31,18 +31,19 @@
  * target (space-separated for more than one, e.g. "danger uppercase").
  * status.js does not know or validate any specific names — .danger, .success,
  * and friends are Actual's own intents.css vocabulary, not something this
- * module hardcodes. Each call resets the target to the class list it had the
- * first time status() ran, then adds the current call's intent classes, so
- * stale intent classes never accumulate across calls.
+ * module hardcodes. Each call removes the intent classes the previous call
+ * added (tracked in data-status-classes on the target itself), then adds the
+ * current call's, so stale intent classes never accumulate and classes the
+ * app added independently are left alone.
  */
 import { registerCommands, targetFor } from "./command.js";
 import { EVENTS } from "./events.js";
 import { CLASSES } from "./selectors.js";
 
 const STATUS_SELECTOR = `.${CLASSES.statusBar}[data-status]`;
+const STATUS_CLASSES_ATTR = "statusClasses";
 
 let statusTimer;
-const transientIntentClasses = new WeakMap();
 
 function statusTarget() {
   if (typeof document === "undefined") return null;
@@ -54,11 +55,11 @@ function intentClasses(value) {
 }
 
 function clearIntentClasses(target) {
-  const previous = transientIntentClasses.get(target);
-  if (previous?.length) {
-    target.classList.remove(...previous);
+  const previous = target.dataset[STATUS_CLASSES_ATTR];
+  if (previous) {
+    target.classList.remove(...previous.split(" "));
   }
-  transientIntentClasses.delete(target);
+  delete target.dataset[STATUS_CLASSES_ATTR];
 }
 
 export function status(message, options = {}) {
@@ -71,7 +72,7 @@ export function status(message, options = {}) {
   const intent = intentClasses(options.intent);
   if (intent.length) {
     target.classList.add(...intent);
-    transientIntentClasses.set(target, intent);
+    target.dataset[STATUS_CLASSES_ATTR] = intent.join(" ");
   }
 
   target.textContent = message;
