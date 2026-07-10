@@ -22,6 +22,14 @@ function commandNames(commands, caller) {
   return [...new Set(names)];
 }
 
+// Native command keywords are ASCII case-insensitive. Custom commands keep
+// their exact spelling, as required by the command invoker contract.
+function commandKey(command) {
+  return command.startsWith("--")
+    ? command
+    : command.replace(/[A-Z]/g, (character) => character.toLowerCase());
+}
+
 /**
  * Resolve a trigger's current `commandfor` target in the same document or
  * shadow root.
@@ -69,10 +77,12 @@ function createRegistry(doc) {
   const commands = new Map();
 
   function route(event) {
+    if (event.defaultPrevented) return;
+
     const trigger = triggerFromEvent(event, doc);
     if (!trigger || trigger.disabled) return;
 
-    const command = trigger.getAttribute("command");
+    const command = commandKey(trigger.getAttribute("command"));
     const registration = commands.get(command);
     if (!registration) return;
 
@@ -107,7 +117,9 @@ function createRegistry(doc) {
  * @throws {Error} When a command already has an owner in the current document.
  */
 export function registerCommands(commands, { resolve = targetFor, prepare, handle } = {}) {
-  const names = commandNames(commands, "registerCommands()");
+  const names = [
+    ...new Set(commandNames(commands, "registerCommands()").map((name) => commandKey(name))),
+  ];
   if (
     typeof resolve !== "function" ||
     (prepare !== undefined && typeof prepare !== "function") ||

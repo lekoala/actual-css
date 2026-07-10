@@ -27,7 +27,10 @@ const PASSWORD_COMMANDS = ["--password-toggle"];
 const TRIGGER_SELECTOR = commandSelector(PASSWORD_COMMANDS);
 
 // Inputs currently revealed by this module — the only ones ever reverted.
-const revealed = new WeakSet();
+// This set is intentionally iterable so pagehide also covers closed shadow
+// roots. Entries leave the set as soon as their input is masked again.
+const revealed = new Set();
+const submitRoots = new WeakSet();
 
 function resolvePasswordInput(trigger) {
   const target = targetFor(trigger);
@@ -55,6 +58,20 @@ function setRevealed(input, reveal) {
   }
 }
 
+function handleSubmit(event) {
+  if (event.defaultPrevented) return;
+  for (const element of event.target.elements ?? []) {
+    if (revealed.has(element)) setRevealed(element, false);
+  }
+}
+
+function watchSubmitRoot(input) {
+  const root = input.getRootNode();
+  if (submitRoots.has(root)) return;
+  submitRoots.add(root);
+  root.addEventListener("submit", handleSubmit);
+}
+
 registerCommands(PASSWORD_COMMANDS, {
   resolve: resolvePasswordInput,
   prepare: (trigger, input) => {
@@ -65,22 +82,17 @@ registerCommands(PASSWORD_COMMANDS, {
   },
   handle: (event, _trigger, input) => {
     event.preventDefault();
-    setRevealed(input, input.type === "password");
+    const reveal = input.type === "password";
+    if (reveal) watchSubmitRoot(input);
+    setRevealed(input, reveal);
   },
 });
 
 if (typeof document !== "undefined") {
-  document.addEventListener("submit", (event) => {
-    if (event.defaultPrevented) return;
-    for (const el of event.target.elements ?? []) {
-      if (revealed.has(el)) setRevealed(el, false);
-    }
-  });
+  submitRoots.add(document);
+  document.addEventListener("submit", handleSubmit);
 
   window.addEventListener("pagehide", () => {
-    for (const trigger of document.querySelectorAll(`${TRIGGER_SELECTOR}[aria-pressed="true"]`)) {
-      const input = targetFor(trigger);
-      if (input && revealed.has(input)) setRevealed(input, false);
-    }
+    for (const input of revealed) setRevealed(input, false);
   });
 }

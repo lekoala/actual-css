@@ -81,6 +81,27 @@ test("keeps linked triggers in a shadow root in sync", async () => {
   expect(shadow.getElementById("b").getAttribute("aria-pressed")).toBe("true");
 });
 
+test("form submit reverts a revealed input in a shadow root", async () => {
+  await loadPassword('<div id="host"></div>');
+  const shadow = document.getElementById("host").attachShadow({ mode: "closed" });
+  shadow.innerHTML = `
+    <form>
+      <input type="password" id="pw">
+      <button type="button" commandfor="pw" command="--password-toggle"></button>
+    </form>
+  `;
+  const input = shadow.getElementById("pw");
+  shadow.querySelector("button").dispatchEvent(
+    new MouseEvent("click", { bubbles: true, cancelable: true, composed: true }),
+  );
+
+  shadow
+    .querySelector("form")
+    .dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
+
+  expect(input.type).toBe("password");
+});
+
 test("form submit reverts a revealed input to hidden", async () => {
   await loadPassword(`
     <form>
@@ -128,6 +149,23 @@ test("pagehide reverts every revealed input", async () => {
 
   click(document.querySelector("button"));
   expect(input.type).toBe("text");
+
+  window.dispatchEvent(new Event("pagehide"));
+
+  expect(input.type).toBe("password");
+});
+
+test("pagehide reverts a revealed input in a closed shadow root", async () => {
+  await loadPassword('<div id="host"></div>');
+  const shadow = document.getElementById("host").attachShadow({ mode: "closed" });
+  shadow.innerHTML = `
+    <input type="password" id="pw">
+    <button commandfor="pw" command="--password-toggle"></button>
+  `;
+  const input = shadow.getElementById("pw");
+  shadow.querySelector("button").dispatchEvent(
+    new MouseEvent("click", { bubbles: true, cancelable: true, composed: true }),
+  );
 
   window.dispatchEvent(new Event("pagehide"));
 
