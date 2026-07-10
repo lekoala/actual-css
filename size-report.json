@@ -1,6 +1,6 @@
 {
-  "timestamp": "2026-07-10T11:29:10.866Z",
-  "totalRaw": 156664,
+  "timestamp": "2026-07-10T11:54:53.254Z",
+  "totalRaw": 156966,
   "totalMinified": 78384,
   "totalBrotli": 11527,
   "themesMinified": 29280,
@@ -135,6 +135,10 @@
       "raw": 2394
     },
     {
+      "file": "components/status-bar.css",
+      "raw": 2356
+    },
+    {
       "file": "themes/corporate.css",
       "raw": 2271
     },
@@ -153,10 +157,6 @@
     {
       "file": "components/accordion.css",
       "raw": 2153
-    },
-    {
-      "file": "components/status-bar.css",
-      "raw": 2054
     },
     {
       "file": "themes/index.css",

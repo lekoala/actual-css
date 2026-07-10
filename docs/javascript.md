@@ -65,6 +65,45 @@ Modules are safe to import during SSR — registration is a no-op when there is 
 DOM. The runtime remains active until the page unloads. There is no teardown
 handle; cleanup is per-element when an element leaves the DOM.
 
+## Using The Runtime With Another CSS Framework
+
+The JS is designed to be usable on its own, without Actual's stylesheet. Two
+kinds of vocabulary appear in the modules, and only one of them is Actual's:
+
+- **data-\* attributes and ARIA** are each module's own behavior API —
+  `data-mask`, `data-tooltip`, `aria-controls`, and so on. They are
+  framework-neutral by construction and never need remapping. A name specific
+  enough to the module (`data-mask`, `data-tooltip`) is safe to match alone.
+  A generic domain word (`data-status` — order status, task status, …) is
+  not: some unrelated element elsewhere in the app could carry the same
+  attribute for its own reasons, so that selector is paired with a class (see
+  `status.js` below) to scope the document-wide lookup down to the real target.
+- **CSS class names** (`.flyout`, `.tabs`, `is-open`, `has-modal-open`, …) are
+  Actual's own vocabulary. Every module that matches against or writes one of
+  these imports it from `actual-css/js/selectors` instead of hardcoding the
+  string:
+
+```js
+// src/js/selectors.js
+export const CLASSES = {
+  flyout: "flyout",
+  tabs: "tabs",
+  open: "is-open",
+  // …
+};
+```
+
+To run this runtime against a different CSS framework, edit that one file (or
+alias it in a bundler) — no other module needs to change. `status.js` is the
+example that draws the line most clearly: its selector requires
+`.status-bar` (from `CLASSES.statusBar`, for the collision-safety reason
+above), but its `intent` option applies whatever class names the caller
+passes straight to the target's class list — `.danger`, `.success`, and the
+rest of Actual's intents.css vocabulary are never referenced by the module
+itself. Each call resets the target to the class list it had the first time
+`status()` ran, then adds the current call's intent classes, so nothing
+accumulates and classes present before JavaScript ever ran are left alone.
+
 ## Extending The Runtime
 
 ### Stateless commands

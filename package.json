@@ -46,6 +46,7 @@
     "./js/mask": "./src/js/mask.js",
     "./js/password": "./src/js/password.js",
     "./js/scrollspy": "./src/js/scrollspy.js",
+    "./js/selectors": "./src/js/selectors.js",
     "./js/tab": "./src/js/tab.js",
     "./js/tooltip": "./src/js/tooltip.js",
     "./js/validation": "./src/js/validation.js",

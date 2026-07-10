@@ -30,6 +30,7 @@
 import enhance from "./enhance.js";
 import { EVENTS } from "./events.js";
 import { reposition, track } from "./floating.js";
+import { CLASSES } from "./selectors.js";
 
 const SHOW_DELAY_MS = 150;
 const HIDE_DELAY_MS = 100;
@@ -238,7 +239,7 @@ function ensureTip(trigger) {
   // shorthand: data-tooltip="text" → create element lazily
   if (text) {
     tip = doc.createElement("div");
-    tip.className = "tooltip";
+    tip.className = CLASSES.tooltip;
     tip.role = "tooltip";
     tip.id = nextTooltipId(doc);
     tip.textContent = text;

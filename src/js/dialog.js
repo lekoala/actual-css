@@ -17,6 +17,7 @@
 
 import { registerCommands, targetFor } from "./command.js";
 import enhance from "./enhance.js";
+import { CLASSES } from "./selectors.js";
 
 const dialogMap = new WeakMap();
 const wiredDialogs = new Set();
@@ -129,7 +130,7 @@ function syncModalOpenClass(doc = document) {
     }
   }
 
-  doc.documentElement.classList.toggle("has-modal-open", hasOpenModal);
+  doc.documentElement.classList.toggle(CLASSES.modalOpen, hasOpenModal);
 }
 
 function isDismissible(dialog) {
@@ -205,12 +206,12 @@ function flashStatic(dialog) {
     window.clearTimeout(state.staticTimer);
   }
 
-  dialog.classList.remove("is-static");
+  dialog.classList.remove(CLASSES.static);
   void dialog.offsetWidth;
-  dialog.classList.add("is-static");
+  dialog.classList.add(CLASSES.static);
 
   state.staticTimer = window.setTimeout(() => {
-    dialog.classList.remove("is-static");
+    dialog.classList.remove(CLASSES.static);
     state.staticTimer = null;
   }, 250);
 }
@@ -336,7 +337,7 @@ function handleDialogClose(event) {
     state.staticTimer = null;
   }
 
-  dialog.classList.remove("is-static");
+  dialog.classList.remove(CLASSES.static);
   state.closing = false;
   state.returnValue = "";
   state.modalOpen = false;
@@ -397,7 +398,7 @@ function disconnectDialog(dialog) {
   }
 
   state.controller.abort();
-  dialog.classList.remove("is-static");
+  dialog.classList.remove(CLASSES.static);
   state.modalOpen = false;
   dialogMap.delete(dialog);
   wiredDialogs.delete(dialog);

@@ -25,9 +25,9 @@ test("writes the message into the .status-bar[data-status] target", async () => 
   expect(target.textContent).toBe("Saved.");
 });
 
-test("requires both the component class and data-status", async () => {
+test("requires both the class and data-status, ignoring an unrelated data-status elsewhere", async () => {
   const { status } = await loadStatus(`
-    <div data-status></div>
+    <div class="task-row" data-status="pending"></div>
     <div class="status-bar" role="status"></div>
     <div class="status-bar" data-status role="status"></div>
   `);
@@ -36,17 +36,52 @@ test("requires both the component class and data-status", async () => {
   status("Copied.");
 
   expect(target.textContent).toBe("Copied.");
-  expect(document.querySelector("[data-status]").textContent).toBe("");
+  expect(document.querySelector(".task-row").textContent).toBe("");
   expect(document.querySelector(".status-bar:not([data-status])").textContent).toBe("");
 });
 
-test("applies the intent class", async () => {
+test("applies the intent as a plain class, with no built-in whitelist", async () => {
+  const { status } = await loadStatus(`<div class="status-bar" data-status role="status"></div>`);
+
+  const target = document.querySelector(".status-bar[data-status]");
+  status("Failed.", { intent: "totally-unknown-name" });
+
+  expect(target.classList.contains("totally-unknown-name")).toBe(true);
+});
+
+test("supports more than one intent class, space-separated", async () => {
+  const { status } = await loadStatus(`<div class="status-bar" data-status role="status"></div>`);
+
+  const target = document.querySelector(".status-bar[data-status]");
+  status("Failed.", { intent: "danger uppercase" });
+
+  expect(target.classList.contains("danger")).toBe(true);
+  expect(target.classList.contains("uppercase")).toBe(true);
+});
+
+test("omitting intent removes the previous call's intent classes", async () => {
   const { status } = await loadStatus(`<div class="status-bar" data-status role="status"></div>`);
 
   const target = document.querySelector(".status-bar[data-status]");
   status("Failed.", { intent: "danger" });
+  status("Saved.");
 
-  expect(target.classList.contains("danger")).toBe(true);
+  expect(target.classList.contains("danger")).toBe(false);
+  expect(target.classList.contains("status-bar")).toBe(true);
+});
+
+test("preserves classes the target already had before the first call", async () => {
+  const { status } = await loadStatus(
+    `<div class="status-bar local-app-class" data-status role="status"></div>`,
+  );
+
+  const target = document.querySelector(".status-bar[data-status]");
+  status("Failed.", { intent: "danger" });
+  status("Saved.");
+
+  expect(target.classList.contains("local-app-class")).toBe(true);
+  expect(target.classList.contains("status-bar")).toBe(true);
+  expect(target.classList.contains("danger")).toBe(false);
 });
 
 test("clear empties the target and cancels the timer", async () => {

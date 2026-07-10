@@ -8,6 +8,7 @@
 import enhance from "./enhance.js";
 import { focusFirstDescendant } from "./focus.js";
 import { focusFirstMenuItem, focusLastMenuItem, getMenuItems } from "./menu.js";
+import { CLASSES } from "./selectors.js";
 import {
   closeSurface,
   disconnectSurface,
@@ -18,7 +19,7 @@ import {
 
 // trigger -> { flyout, controller }
 const triggerMap = new WeakMap();
-const FLYOUT_SELECTOR = ".flyout";
+const FLYOUT_SELECTOR = `.${CLASSES.flyout}`;
 const FLYOUT_TRIGGER_SELECTOR = "[aria-controls][aria-expanded]";
 
 function openFlyout(flyout, trigger) {

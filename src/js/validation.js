@@ -14,10 +14,11 @@
 
 import enhance from "./enhance.js";
 import { EVENTS } from "./events.js";
+import { CLASSES } from "./selectors.js";
 
 const NOVALIDATE = "novalidate";
-const WAS_VALIDATED_CLASS = "was-validated";
-const NEEDS_VALIDATION_CLASS = "needs-validation";
+const WAS_VALIDATED_CLASS = CLASSES.wasValidated;
+const NEEDS_VALIDATION_CLASS = CLASSES.needsValidation;
 const connectedForms = new WeakMap();
 const warnedRules = new WeakMap();
 
@@ -128,7 +129,7 @@ function errorEl(el) {
   if (!ids) return null;
   for (const id of ids.split(/\s+/)) {
     const node = el.ownerDocument.getElementById(id);
-    if (node?.classList.contains("field-error")) {
+    if (node?.classList.contains(CLASSES.fieldError)) {
       return node;
     }
   }
