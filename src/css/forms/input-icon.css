@@ -24,6 +24,13 @@
   pointer-events: none;
 }
 
-.input-icon .input {
+/* font-size only sizes text-metric icons (webfont <i>, <span>). An inline
+   <svg> with just a viewBox ignores it, so give it explicit dimensions. */
+.input-icon > svg:first-child {
+  inline-size: var(--input-icon-size);
+  block-size: var(--input-icon-size);
+}
+
+.input-icon > .input {
   padding-inline-start: calc(var(--space-3) * 2 + var(--input-icon-size));
 }

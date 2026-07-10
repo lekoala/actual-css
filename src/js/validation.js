@@ -10,6 +10,13 @@
  *
  * Opt in with the .needs-validation class. Importing the module registers
  * the behavior; there is no init call.
+ *
+ * The .needs-validation class is a static, init-time contract: this module
+ * does not observe attribute mutations, so toggling the class after connect
+ * only takes effect on the next focusout/input event, not immediately. A
+ * submit that races that window can still bypass native validation (the
+ * managed novalidate attribute is still present). Treat the class as fixed
+ * for a form's lifetime rather than something toggled at runtime.
  */
 
 import enhance from "./enhance.js";
@@ -101,6 +108,10 @@ function fieldContainer(el) {
   return el.closest?.(`.${FIELD_CLASS}`) || null;
 }
 
+// .field.danger is validation-owned state, added/removed here based on
+// aria-invalid/data-validation-errors on the field's controls. A .danger
+// applied manually by app code for an unrelated reason will be removed the
+// next time this runs.
 function syncFieldDangerState(el) {
   const field = fieldContainer(el);
   if (!field) return;
@@ -269,6 +280,19 @@ function connectForm(form) {
         }
         ensureManagedNoValidate(form);
         validateField(el, "input");
+      }
+    },
+    { signal: controller.signal },
+  );
+
+  form.addEventListener(
+    "reset",
+    () => {
+      form.classList.remove(WAS_VALIDATED_CLASS);
+      for (const el of form.elements) {
+        if (ignoreField(el)) continue;
+        el.setCustomValidity("");
+        markValid(el);
       }
     },
     { signal: controller.signal },
