@@ -75,3 +75,9 @@
 .join > :is(:hover, :focus, :focus-within) {
   z-index: 1;
 }
+
+/* Keep an active focus ring above an adjacent hovered control. This matters
+   on platforms where clicking a button does not move focus from the input. */
+.join > :is(:focus, :focus-within) {
+  z-index: 2;
+}

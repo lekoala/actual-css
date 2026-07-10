@@ -168,7 +168,9 @@ a.btn[aria-disabled="true"] {
 }
 
 /* Toggle */
-.btn:where([aria-pressed="true"], [aria-current]:not([aria-current="false"])):not(.link) {
+/* State must outrank the shared .outline/.ghost hover recipes: a pressed
+   button keeps its intent background and foreground while hovered. */
+.btn:is([aria-pressed="true"], [aria-current]:not([aria-current="false"])):not(.link) {
   --btn-bg: var(--intent, var(--primary));
   --btn-fg: var(--intent-fg, var(--primary-fg));
   --btn-border: var(--intent, var(--primary));
@@ -189,7 +191,7 @@ a.btn[aria-disabled="true"] {
     color: LinkText;
   }
 
-  .btn:where([aria-pressed="true"], [aria-current]:not([aria-current="false"])):not(.link) {
+  .btn:is([aria-pressed="true"], [aria-current]:not([aria-current="false"])):not(.link) {
     border-color: Highlight;
     background: Highlight;
     color: HighlightText;
