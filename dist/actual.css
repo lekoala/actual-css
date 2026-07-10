@@ -1127,7 +1127,9 @@ a.btn[aria-disabled="true"] {
 }
 
 /* Toggle */
-.btn:where([aria-pressed="true"], [aria-current]:not([aria-current="false"])):not(.link) {
+/* State must outrank the shared .outline/.ghost hover recipes: a pressed
+   button keeps its intent background and foreground while hovered. */
+.btn:is([aria-pressed="true"], [aria-current]:not([aria-current="false"])):not(.link) {
   --btn-bg: var(--intent, var(--primary));
   --btn-fg: var(--intent-fg, var(--primary-fg));
   --btn-border: var(--intent, var(--primary));
@@ -1148,7 +1150,7 @@ a.btn[aria-disabled="true"] {
     color: LinkText;
   }
 
-  .btn:where([aria-pressed="true"], [aria-current]:not([aria-current="false"])):not(.link) {
+  .btn:is([aria-pressed="true"], [aria-current]:not([aria-current="false"])):not(.link) {
     border-color: Highlight;
     background: Highlight;
     color: HighlightText;
@@ -4468,6 +4470,12 @@ a.avatar[aria-disabled="true"] {
 
 .join > :is(:hover, :focus, :focus-within) {
   z-index: 1;
+}
+
+/* Keep an active focus ring above an adjacent hovered control. This matters
+   on platforms where clicking a button does not move focus from the input. */
+.join > :is(:focus, :focus-within) {
+  z-index: 2;
 }
 
 /* Focus baseline — loaded after components so its legacy fallback also covers
