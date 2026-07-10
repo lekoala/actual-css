@@ -25,49 +25,45 @@
       
     </header>
         <div class="component-prose">
-      <p>A search or filter input with a leading icon is composition, not a component: position the icon absolutely inside a relative wrapper, and give the input enough start padding to clear it.</p>
+      <p>Use <code>.input-icon</code> for a search or filter input with a leading icon.</p>
     </div>
     <section class="component-section">
       <div class="example-group">
         <div class="example-render">
-          <label class="input-icon" style="position: relative; display: block;">
+          <label class="input-icon">
   <i class="ti ti-search" aria-hidden="true"></i>
   <input class="input" type="search" placeholder="Search accounts, invoices, notes" aria-label="Search">
 </label>
         </div>
         <div class="example-code">
-          <pre><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>label</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>input-icon<span class="token punctuation">"</span></span> <span class="token special-attr"><span class="token attr-name">style</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span><span class="token value css language-css"><span class="token property">position</span><span class="token punctuation">:</span> relative<span class="token punctuation">;</span> <span class="token property">display</span><span class="token punctuation">:</span> block<span class="token punctuation">;</span></span><span class="token punctuation">"</span></span></span><span class="token punctuation">></span></span>
+          <pre><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>label</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>input-icon<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
   <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>i</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>ti ti-search<span class="token punctuation">"</span></span> <span class="token attr-name">aria-hidden</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>true<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>i</span><span class="token punctuation">></span></span>
   <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>input<span class="token punctuation">"</span></span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>search<span class="token punctuation">"</span></span> <span class="token attr-name">placeholder</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>Search accounts, invoices, notes<span class="token punctuation">"</span></span> <span class="token attr-name">aria-label</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>Search<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>label</span><span class="token punctuation">></span></span></code></pre>
         </div>
       </div>
     </section>
+    <div class="component-prose">
+      <p>It positions the wrapper's first child absolutely inside a relative container and grows the input's start padding to clear it. <code>pointer-events: none</code> on the icon keeps clicks passing through to the input underneath. It is icon-library agnostic — an <code>&lt;i&gt;</code> webfont icon, an inline <code>&lt;svg&gt;</code>, or a <code>&lt;span&gt;</code> all work as the wrapper's first child. The icon is sized with <code>--variant-icon-size</code> (variants.css), the same token <code>.alert</code> uses, so <code>.sm</code>/<code>.lg</code> scale it automatically. Apply the size class to the wrapper so the icon picks it up, and to the input so its own height/font-size follow:</p>
+    </div>
     <section class="component-section">
-      <h2>CSS</h2>
       <div class="example-group">
+        <div class="example-render stack">
+          <label class="input-icon sm">
+  <i class="ti ti-search" aria-hidden="true"></i>
+  <input class="input sm" type="search" aria-label="Search">
+</label>
+        </div>
         <div class="example-code">
-          <pre><code class="language-css"><span class="token selector">.input-icon</span> <span class="token punctuation">{</span>
-  <span class="token property">position</span><span class="token punctuation">:</span> relative<span class="token punctuation">;</span>
-<span class="token punctuation">}</span>
-
-<span class="token selector">.input-icon i</span> <span class="token punctuation">{</span>
-  <span class="token property">position</span><span class="token punctuation">:</span> absolute<span class="token punctuation">;</span>
-  <span class="token property">inset-block-start</span><span class="token punctuation">:</span> 50%<span class="token punctuation">;</span>
-  <span class="token property">inset-inline-start</span><span class="token punctuation">:</span> 0.7rem<span class="token punctuation">;</span>
-  <span class="token property">transform</span><span class="token punctuation">:</span> <span class="token function">translateY</span><span class="token punctuation">(</span>-50%<span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token property">color</span><span class="token punctuation">:</span> <span class="token function">var</span><span class="token punctuation">(</span>--text-muted<span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token property">pointer-events</span><span class="token punctuation">:</span> none<span class="token punctuation">;</span>
-<span class="token punctuation">}</span>
-
-<span class="token selector">.input-icon .input</span> <span class="token punctuation">{</span>
-  <span class="token property">padding-inline-start</span><span class="token punctuation">:</span> 2.25rem<span class="token punctuation">;</span>
-<span class="token punctuation">}</span></code></pre>
+          <pre><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>label</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>input-icon sm<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>i</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>ti ti-search<span class="token punctuation">"</span></span> <span class="token attr-name">aria-hidden</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>true<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>i</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>input sm<span class="token punctuation">"</span></span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>search<span class="token punctuation">"</span></span> <span class="token attr-name">aria-label</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>Search<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>label</span><span class="token punctuation">></span></span></code></pre>
         </div>
       </div>
     </section>
     <div class="component-prose">
-      <p><code>pointer-events: none</code> on the icon keeps clicks passing through to the input underneath. This is not shipped as a framework class because the icon inset and input start-padding depend on the icon size and the input's own padding scale (<code>.sm</code> vs default vs <code>.lg</code>) — values that a project tunes once and reuses, rather than a fixed contract that would need a modifier for every size combination.</p>
+      <p>Trailing icons (e.g. a clear button) aren't covered by this class — it only handles the leading case.</p>
     </div>
     
   </section>

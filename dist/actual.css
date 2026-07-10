@@ -3623,6 +3623,36 @@ a.avatar[aria-disabled="true"] {
 }
 
 /*
+ * Input Icon — leading decorative icon inside a relative wrapper.
+ *
+ * Icon-library agnostic: selects the wrapper's first child rather than a
+ * specific tag, so it works with an <i> webfont icon, an inline <svg>, or a
+ * <span>. Sizes with --variant-icon-size (variants.css) so .sm/.lg pick up
+ * the same icon scale used elsewhere (alert.css); the input's start padding
+ * grows to match so text never runs under the icon.
+ */
+.input-icon {
+  --input-icon-size: var(--variant-icon-size, 1.25rem);
+
+  display: block;
+  position: relative;
+}
+
+.input-icon > :first-child {
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-start: var(--space-3);
+  transform: translateY(-50%);
+  font-size: var(--input-icon-size);
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
+.input-icon .input {
+  padding-inline-start: calc(var(--space-3) * 2 + var(--input-icon-size));
+}
+
+/*
  * Checkbox and radio controls.
  *
  * Native inputs keep their behavior while sharing custom geometry, checked,

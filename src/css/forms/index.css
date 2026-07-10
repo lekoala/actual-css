@@ -4,6 +4,7 @@
    omit it when validation styling is app-owned. */
 @import "./form.css";
 @import "./control.css";
+@import "./input-icon.css";
 @import "./choice.css";
 @import "./select.css";
 @import "./custom-select.css";
