@@ -2202,6 +2202,7 @@ dialog.drawer nav {
   color: var(--tooltip-fg);
   font-size: var(--font-size-xs);
   line-height: var(--line-height-tight);
+  overflow-wrap: anywhere;
   pointer-events: auto;
   user-select: none;
   opacity: 1;

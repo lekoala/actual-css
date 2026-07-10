@@ -30,6 +30,8 @@
   <li>Tooltips are supplemental. Do not put required information or interactive controls inside them.</li>
   <li>Show on hover and focus. Hide on Escape, blur, pointer leave, or scroll when appropriate.</li>
   <li>JavaScript can generate tooltip elements from <code>data-tooltip</code>.</li>
+  <li>Add <code>data-tooltip-click</code> to toggle it on click instead of hover/focus.</li>
+  <li>Add <code>data-tooltip-visible</code> to show it immediately and keep it visible while its trigger is in view.</li>
   <li>Use <code>data-tooltip-placement</code> to set the preferred placement (default <code>top</code>).</li>
   <li>The arrow inherits the tooltip background — custom gradients carry through automatically.</li>
   <li>Avoid relying on the native <code>title</code> attribute as the primary implementation.</li>
@@ -80,6 +82,80 @@
       </div>
     </section>
     <div class="component-prose">
+      <h3>Display modes</h3>
+<p>Click tooltips stay open when the pointer leaves and close on a second click or Escape. They remain supplemental, non-interactive content; use a flyout when the floating content contains controls.</p>
+    </div>
+    <section class="component-section">
+      <div class="example-group">
+        <div class="example-render">
+          <p class="cluster">
+  <button class="btn outline" type="button"
+          data-tooltip="Click again or press Escape to close"
+          data-tooltip-click>
+    Toggle on click
+  </button>
+
+  <button class="btn outline" type="button"
+          data-tooltip="Always visible while this trigger is in view"
+          data-tooltip-visible
+          data-tooltip-placement="bottom">
+    Always visible
+  </button>
+</p>
+        </div>
+        <div class="example-code">
+          <pre><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>cluster<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>button</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>btn outline<span class="token punctuation">"</span></span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>button<span class="token punctuation">"</span></span>
+          <span class="token attr-name">data-tooltip</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>Click again or press Escape to close<span class="token punctuation">"</span></span>
+          <span class="token attr-name">data-tooltip-click</span><span class="token punctuation">></span></span>
+    Toggle on click
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">></span></span>
+
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>button</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>btn outline<span class="token punctuation">"</span></span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>button<span class="token punctuation">"</span></span>
+          <span class="token attr-name">data-tooltip</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>Always visible while this trigger is in view<span class="token punctuation">"</span></span>
+          <span class="token attr-name">data-tooltip-visible</span>
+          <span class="token attr-name">data-tooltip-placement</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>bottom<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+    Always visible
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>p</span><span class="token punctuation">></span></span></code></pre>
+        </div>
+      </div>
+    </section>
+    <div class="component-prose">
+      <h3>HTML and long content</h3>
+<p>The <code>data-tooltip=&quot;…&quot;</code> shorthand is intentionally plain text. For trusted HTML, use an explicit tooltip referenced by <code>aria-describedby</code>. Keep its content non-interactive and concise; long content wraps up to the tooltip's viewport-aware maximum width.</p>
+    </div>
+    <section class="component-section">
+      <div class="example-group">
+        <div class="example-render">
+          <button class="btn" type="button"
+        data-tooltip
+        aria-describedby="tip-rich-long"
+        data-tooltip-placement="bottom">
+  Long HTML tooltip
+</button>
+
+<div class="tooltip" role="tooltip" id="tip-rich-long" hidden>
+  <strong>Keyboard shortcut:</strong> press <kbd>Ctrl</kbd> + <kbd>K</kbd> to open search.
+  This longer explanation demonstrates wrapping when a supplemental label needs a little more context.
+</div>
+        </div>
+        <div class="example-code">
+          <pre><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>button</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>btn<span class="token punctuation">"</span></span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>button<span class="token punctuation">"</span></span>
+        <span class="token attr-name">data-tooltip</span>
+        <span class="token attr-name">aria-describedby</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>tip-rich-long<span class="token punctuation">"</span></span>
+        <span class="token attr-name">data-tooltip-placement</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>bottom<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+  Long HTML tooltip
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">></span></span>
+
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>tooltip<span class="token punctuation">"</span></span> <span class="token attr-name">role</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>tooltip<span class="token punctuation">"</span></span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>tip-rich-long<span class="token punctuation">"</span></span> <span class="token attr-name">hidden</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>strong</span><span class="token punctuation">></span></span>Keyboard shortcut:<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>strong</span><span class="token punctuation">></span></span> press <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>kbd</span><span class="token punctuation">></span></span>Ctrl<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>kbd</span><span class="token punctuation">></span></span> + <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>kbd</span><span class="token punctuation">></span></span>K<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>kbd</span><span class="token punctuation">></span></span> to open search.
+  This longer explanation demonstrates wrapping when a supplemental label needs a little more context.
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span></code></pre>
+        </div>
+      </div>
+    </section>
+    <div class="component-prose">
       <h3>Positioning</h3>
 <p>Set <code>data-tooltip-placement</code> to control where the tooltip appears relative to its trigger. The arrow follows the placement automatically.</p>
     </div>
@@ -123,7 +199,8 @@
             --tooltip-fg: white;
             padding: 0.4em 0.8em;
             font-weight: var(--font-weight-medium);">
-  Custom gradient tooltip → arrow matches
+  <strong>Custom gradient tooltip:</strong> the arrow matches the background, and this longer
+  sentence demonstrates how the tooltip wraps and flips when the preferred side lacks space.
 </div>
         </div>
         <div class="example-code">
@@ -140,14 +217,12 @@
             <span class="token property">--tooltip-fg</span><span class="token punctuation">:</span> white<span class="token punctuation">;</span>
             <span class="token property">padding</span><span class="token punctuation">:</span> 0.4em 0.8em<span class="token punctuation">;</span>
             <span class="token property">font-weight</span><span class="token punctuation">:</span> <span class="token function">var</span><span class="token punctuation">(</span>--font-weight-medium<span class="token punctuation">)</span><span class="token punctuation">;</span></span><span class="token punctuation">"</span></span></span><span class="token punctuation">></span></span>
-  Custom gradient tooltip → arrow matches
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>strong</span><span class="token punctuation">></span></span>Custom gradient tooltip:<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>strong</span><span class="token punctuation">></span></span> the arrow matches the background, and this longer
+  sentence demonstrates how the tooltip wraps and flips when the preferred side lacks space.
 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span></code></pre>
         </div>
       </div>
     </section>
-    <div class="component-prose">
-      <p>Note: added bonus, this is a long tooltip. If you don't have enough space to display it, it will automatically be moved to top/bottom instead</p>
-    </div>
     
   </section>
   </main>
