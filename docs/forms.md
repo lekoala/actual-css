@@ -1021,11 +1021,12 @@ Opt in with the `.needs-validation` class. Importing the module registers the be
 
   <div class="form-actions">
     <button class="btn primary" type="submit">Submit</button>
+    <button class="btn neutral outline" type="reset">Reset</button>
   </div>
 </form>
 ```
 
-On blur, the enhancer sets `aria-invalid="true"` on the invalid field so visual and assistive-tech state move together. On submit, it adds `.was-validated` to the form and marks every invalid field. When the form is invalid it prevents submission, focuses the first invalid field, and dispatches a bubbling `actual:invalid` event with `{ form, firstInvalid, message }`.
+On blur, the enhancer sets `aria-invalid="true"` on the invalid field so visual and assistive-tech state move together. On submit, it adds `.was-validated` to the form and marks every invalid field. When the form is invalid it prevents submission, focuses the first invalid field, and dispatches a bubbling `actual:invalid` event with `{ form, firstInvalid, message }`. On reset, it clears all validation state — `.was-validated`, `aria-invalid`, `.field.danger`, and custom-validity messages — which native reset alone would leave behind.
 
 The status bar (`actual-css/js/status`) auto-wires to that event: import it and add one status element, and the form's `data-validation-message` appears automatically on invalid submit — no manual listener.
 
@@ -1078,6 +1079,7 @@ The status bar (`actual-css/js/status`) auto-wires to that event: import it and 
     </div>
     <div class="form-actions">
       <button class="btn primary" type="submit">Submit</button>
+      <button class="btn neutral outline" type="reset">Reset</button>
     </div>
   </div>
 </form>
@@ -1148,6 +1150,7 @@ The `date` rule pairs naturally with `data-mask` — the mask structures input, 
 
   <div class="form-actions">
     <button class="btn primary" type="submit">Submit</button>
+    <button class="btn neutral outline" type="reset">Reset</button>
   </div>
 </form>
 ```
