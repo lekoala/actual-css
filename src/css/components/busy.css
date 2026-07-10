@@ -24,7 +24,7 @@
     inset: 0;
     z-index: 1;
     border-radius: inherit;
-    background: var(--surface);
+    background: var(--busy-overlay-bg, var(--surface));
   }
 
   [aria-busy="true"]:not(.btn) > .spinner:last-child {
@@ -39,6 +39,6 @@
 @supports (selector([aria-busy="true"]:has(> .spinner:last-child))) and
   (color: color-mix(in oklch, red, white)) {
   [aria-busy="true"]:not(.btn):has(> .spinner:last-child)::before {
-    background: color-mix(in oklch, var(--surface), transparent 20%);
+    background: color-mix(in oklch, var(--busy-overlay-bg, var(--surface)), transparent 20%);
   }
 }

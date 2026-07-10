@@ -1,14 +1,14 @@
 /*
  * Buttons for actions and button-like links.
  *
- * .btn is for actionable elements only: <button>, <a href>,
- * input[type="button"|"submit"|"reset"]. It is not a decorative box class.
+ * .btn is primarily for actionable elements: <button>, <a href>,
+ * input[type="button"|"submit"|"reset"].
  *
  * Keeps shared intent, variant, and size behavior with a solid default.
  *
  * Disabled state uses the native disabled attribute for buttons and inputs.
  * Anchors have no native disabled state, so a.btn uses aria-disabled="true"
- * instead — that is the one place this library relies on aria-disabled.
+ * for disabled styling and activation guards.
  */
 
 /* Intent boundary — inherited intents do not tint this component.

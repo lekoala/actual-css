@@ -46,6 +46,7 @@
   inline-size: fit-content;
   max-inline-size: min(calc(100vw - var(--space-6)), 32rem);
   margin-inline: auto;
+  overflow-wrap: anywhere;
 
   padding-block: var(--space-2);
   padding-inline: var(--space-3);

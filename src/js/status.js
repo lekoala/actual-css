@@ -42,24 +42,23 @@ import { CLASSES } from "./selectors.js";
 const STATUS_SELECTOR = `.${CLASSES.statusBar}[data-status]`;
 
 let statusTimer;
-const baselineClasses = new WeakMap();
+const transientIntentClasses = new WeakMap();
 
 function statusTarget() {
   if (typeof document === "undefined") return null;
   return document.querySelector(STATUS_SELECTOR);
 }
 
-function baselineFor(target) {
-  let baseline = baselineClasses.get(target);
-  if (!baseline) {
-    baseline = [...target.classList];
-    baselineClasses.set(target, baseline);
-  }
-  return baseline;
-}
-
 function intentClasses(value) {
   return typeof value === "string" ? value.trim().split(/\s+/).filter(Boolean) : [];
+}
+
+function clearIntentClasses(target) {
+  const previous = transientIntentClasses.get(target);
+  if (previous?.length) {
+    target.classList.remove(...previous);
+  }
+  transientIntentClasses.delete(target);
 }
 
 export function status(message, options = {}) {
@@ -68,9 +67,12 @@ export function status(message, options = {}) {
 
   clearTimeout(statusTimer);
 
-  target.className = baselineFor(target).join(" ");
+  clearIntentClasses(target);
   const intent = intentClasses(options.intent);
-  if (intent.length) target.classList.add(...intent);
+  if (intent.length) {
+    target.classList.add(...intent);
+    transientIntentClasses.set(target, intent);
+  }
 
   target.textContent = message;
 
@@ -81,7 +83,10 @@ export function status(message, options = {}) {
 
 status.clear = function clear() {
   const target = statusTarget();
-  if (target) target.textContent = "";
+  if (target) {
+    target.textContent = "";
+    clearIntentClasses(target);
+  }
   clearTimeout(statusTimer);
 };
 

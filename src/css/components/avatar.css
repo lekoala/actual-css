@@ -19,9 +19,9 @@
 }
 
 .avatar {
-  --avatar-size: 2.25rem;
+  --avatar-size: var(--avatar-stack-size, 2.25rem);
   --avatar-radius: var(--radius-full);
-  --avatar-font-size: var(--font-size-sm);
+  --avatar-font-size: var(--avatar-stack-font-size, var(--font-size-sm));
   --avatar-bg: var(--intent, var(--surface-subtle));
   --avatar-fg: var(--intent-fg, var(--tone-fg, var(--text-muted)));
 
@@ -128,30 +128,36 @@ a.avatar[aria-disabled="true"] {
 }
 
 .avatar.sm {
-  --avatar-size: 1.75rem;
-  --avatar-font-size: var(--font-size-xs);
+  --avatar-stack-size: 1.75rem;
+  --avatar-stack-font-size: var(--font-size-xs);
 }
 
 .avatar.lg {
-  --avatar-size: 3rem;
-  --avatar-font-size: var(--font-size-lg);
+  --avatar-stack-size: 3rem;
+  --avatar-stack-font-size: var(--font-size-lg);
 }
 
 /* Status dot: an empty .badge positioned at the avatar's bottom-end corner.
    The dot conveys no text — always pair it with an aria-label on the badge. */
 .avatar > .badge:empty {
+  --avatar-status-translate-x: 50%;
+
   position: absolute;
   inset-block-end: var(--indicator-offset);
   inset-inline-end: var(--indicator-offset);
   z-index: 1;
   box-shadow: 0 0 0 2px var(--indicator-ring);
-  transform: translate(50%, 50%);
+  transform: translate(var(--avatar-status-translate-x), 50%);
+}
+
+.avatar:dir(rtl) > .badge:empty {
+  --avatar-status-translate-x: -50%;
 }
 
 /* Avatar stack — explicit class for overlapping avatar groups.
    Does not rely on role="group" auto-detection. */
 .avatar-stack {
-  --avatar-stack-overlap: calc(var(--avatar-size, 2.25rem) / -4);
+  --avatar-stack-overlap: calc(var(--avatar-stack-size, 2.25rem) / -4);
   --avatar-stack-ring: 2px;
 
   display: inline-flex;
@@ -159,20 +165,24 @@ a.avatar[aria-disabled="true"] {
 }
 
 .avatar-stack.sm {
-  --avatar-size: 1.75rem;
+  --avatar-stack-size: 1.75rem;
+  --avatar-stack-font-size: var(--font-size-xs);
 }
 
 .avatar-stack.lg {
-  --avatar-size: 3rem;
+  --avatar-stack-size: 3rem;
+  --avatar-stack-font-size: var(--font-size-lg);
 }
 
 @supports selector(:has(> .avatar)) {
   .avatar-stack:has(> .avatar.sm) {
-    --avatar-size: 1.75rem;
+    --avatar-stack-size: 1.75rem;
+    --avatar-stack-font-size: var(--font-size-xs);
   }
 
   .avatar-stack:has(> .avatar.lg) {
-    --avatar-size: 3rem;
+    --avatar-stack-size: 3rem;
+    --avatar-stack-font-size: var(--font-size-lg);
   }
 }
 

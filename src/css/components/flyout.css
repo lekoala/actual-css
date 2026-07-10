@@ -187,10 +187,23 @@
   box-shadow: var(--focus-ring-shadow);
 }
 
+.flyout > :where(button, a, [role="menuitem"]):is(:disabled, [aria-disabled="true"]),
+.flyout > li > :where(button, a, [role="menuitem"]):is(:disabled, [aria-disabled="true"]),
+.flyout > section > ul > li > a[aria-disabled="true"] {
+  cursor: not-allowed;
+  opacity: var(--disabled-opacity);
+}
+
+.flyout > :where(a, [role="menuitem"])[aria-disabled="true"],
+.flyout > li > :where(a, [role="menuitem"])[aria-disabled="true"],
+.flyout > section > ul > li > a[aria-disabled="true"] {
+  pointer-events: none;
+}
+
 @media (hover: hover) {
-  .flyout > :where(button, a, [role="menuitem"]):hover:not(:focus-visible),
-  .flyout > li > :where(button, a, [role="menuitem"]):hover:not(:focus-visible),
-  .flyout > section > ul > li > a:hover:not(:focus-visible) {
+  .flyout > :where(button, a, [role="menuitem"]):hover:not(:where(:focus-visible, :disabled, [aria-disabled="true"])),
+  .flyout > li > :where(button, a, [role="menuitem"]):hover:not(:where(:focus-visible, :disabled, [aria-disabled="true"])),
+  .flyout > section > ul > li > a:hover:not(:where(:focus-visible, [aria-disabled="true"])) {
     background: var(--surface-subtle);
     outline: none;
   }
@@ -221,9 +234,9 @@
   }
 
   @media (hover: hover) {
-    .flyout > :where(button, a, [role="menuitem"]):hover,
-    .flyout > li > :where(button, a, [role="menuitem"]):hover,
-    .flyout > section > ul > li > a:hover {
+    .flyout > :where(button, a, [role="menuitem"]):hover:not(:where(:disabled, [aria-disabled="true"])),
+    .flyout > li > :where(button, a, [role="menuitem"]):hover:not(:where(:disabled, [aria-disabled="true"])),
+    .flyout > section > ul > li > a:hover:not([aria-disabled="true"]) {
       outline: var(--border-width) solid ButtonText;
       outline-offset: -1px;
       background: Canvas;

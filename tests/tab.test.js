@@ -109,6 +109,47 @@ test("vertical tablists ignore ArrowRight for selection", async () => {
   expect(document.activeElement).toBe(tabA);
 });
 
+test("keyboard navigation skips aria-disabled and disabled tabs", async () => {
+  await loadTabs(`
+    <div class="tabs" role="tablist">
+      <button id="tab-a" role="tab" aria-controls="panel-a" aria-selected="true">A</button>
+      <button id="tab-b" role="tab" aria-controls="panel-b" aria-disabled="true">B</button>
+      <button id="tab-c" role="tab" aria-controls="panel-c" disabled>C</button>
+      <button id="tab-d" role="tab" aria-controls="panel-d">D</button>
+    </div>
+    <section id="panel-a" role="tabpanel">A panel</section>
+    <section id="panel-b" role="tabpanel">B panel</section>
+    <section id="panel-c" role="tabpanel">C panel</section>
+    <section id="panel-d" role="tabpanel">D panel</section>
+  `);
+  const tabA = document.getElementById("tab-a");
+  const tabD = document.getElementById("tab-d");
+
+  tabA.focus();
+  press(tabA, "ArrowRight");
+
+  expect(tabD.getAttribute("aria-selected")).toBe("true");
+  expect(document.activeElement).toBe(tabD);
+});
+
+test("clicking aria-disabled tab does not activate it", async () => {
+  await loadTabs(`
+    <div class="tabs" role="tablist">
+      <button id="tab-a" role="tab" aria-controls="panel-a" aria-selected="true">A</button>
+      <button id="tab-b" role="tab" aria-controls="panel-b" aria-disabled="true">B</button>
+    </div>
+    <section id="panel-a" role="tabpanel">A panel</section>
+    <section id="panel-b" role="tabpanel">B panel</section>
+  `);
+  const tabA = document.getElementById("tab-a");
+  const tabB = document.getElementById("tab-b");
+
+  click(tabB);
+
+  expect(tabA.getAttribute("aria-selected")).toBe("true");
+  expect(tabB.getAttribute("aria-selected")).toBe("false");
+});
+
 test("dynamically inserted tablists are initialized", async () => {
   setupDOM("<main></main>");
   await import(`../src/js/tab.js?test=${++importId}`);

@@ -110,7 +110,7 @@ select {
   --indicator-ring: var(--surface);
 
   /* Shared backdrop — consumed by modal, drawer, and mobile flyout sheets. */
-  --backdrop-color: var(--surface-solid);
+  --backdrop-color: rgb(0 0 0);
   --backdrop-opacity: 0.45;
   --backdrop-fill: rgb(0 0 0 / var(--backdrop-opacity));
 
@@ -862,6 +862,26 @@ small {
   font-size: 0.875em;
 }
 
+.prose kbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-inline-size: 1.75em;
+  min-block-size: 1.6em;
+  padding-inline: 0.45em;
+  border: var(--border-width) solid var(--border);
+  border-block-end-width: calc(var(--border-width) * 2);
+  border-radius: var(--radius-sm);
+  background: var(--surface-raised);
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 0.875em;
+  font-weight: var(--font-weight-medium);
+  line-height: 1;
+  white-space: nowrap;
+  vertical-align: 0.08em;
+}
+
 .prose pre {
   overflow-x: auto;
   padding: 1em;
@@ -938,14 +958,14 @@ small {
 /*
  * Buttons for actions and button-like links.
  *
- * .btn is for actionable elements only: <button>, <a href>,
- * input[type="button"|"submit"|"reset"]. It is not a decorative box class.
+ * .btn is primarily for actionable elements: <button>, <a href>,
+ * input[type="button"|"submit"|"reset"].
  *
  * Keeps shared intent, variant, and size behavior with a solid default.
  *
  * Disabled state uses the native disabled attribute for buttons and inputs.
  * Anchors have no native disabled state, so a.btn uses aria-disabled="true"
- * instead — that is the one place this library relies on aria-disabled.
+ * for disabled styling and activation guards.
  */
 
 /* Intent boundary — inherited intents do not tint this component.
@@ -1522,6 +1542,7 @@ a.badge[aria-disabled="true"] {
   color: var(--surface);
   border-color: transparent;
   --heading: var(--surface);
+  --busy-overlay-bg: var(--surface-solid);
 }
 
 .card.compact {
@@ -1551,6 +1572,10 @@ a.badge[aria-disabled="true"] {
   display: block;
   inline-size: calc(100% + var(--card-pad) * 2);
   max-inline-size: none;
+}
+
+.card > picture.bleed {
+  overflow: hidden;
 }
 
 .card > picture.bleed > img {
@@ -1745,13 +1770,11 @@ dialog.modal[open]::backdrop {
 
 html.has-modal-open {
   overflow: hidden;
-  scrollbar-gutter: stable;
 }
 
 @supports selector(:has(dialog:modal)) {
   html:has(dialog:modal) {
     overflow: hidden;
-    scrollbar-gutter: stable;
   }
 }
 
@@ -2114,10 +2137,23 @@ dialog.drawer nav {
   box-shadow: var(--focus-ring-shadow);
 }
 
+.flyout > :where(button, a, [role="menuitem"]):is(:disabled, [aria-disabled="true"]),
+.flyout > li > :where(button, a, [role="menuitem"]):is(:disabled, [aria-disabled="true"]),
+.flyout > section > ul > li > a[aria-disabled="true"] {
+  cursor: not-allowed;
+  opacity: var(--disabled-opacity);
+}
+
+.flyout > :where(a, [role="menuitem"])[aria-disabled="true"],
+.flyout > li > :where(a, [role="menuitem"])[aria-disabled="true"],
+.flyout > section > ul > li > a[aria-disabled="true"] {
+  pointer-events: none;
+}
+
 @media (hover: hover) {
-  .flyout > :where(button, a, [role="menuitem"]):hover:not(:focus-visible),
-  .flyout > li > :where(button, a, [role="menuitem"]):hover:not(:focus-visible),
-  .flyout > section > ul > li > a:hover:not(:focus-visible) {
+  .flyout > :where(button, a, [role="menuitem"]):hover:not(:where(:focus-visible, :disabled, [aria-disabled="true"])),
+  .flyout > li > :where(button, a, [role="menuitem"]):hover:not(:where(:focus-visible, :disabled, [aria-disabled="true"])),
+  .flyout > section > ul > li > a:hover:not(:where(:focus-visible, [aria-disabled="true"])) {
     background: var(--surface-subtle);
     outline: none;
   }
@@ -2148,9 +2184,9 @@ dialog.drawer nav {
   }
 
   @media (hover: hover) {
-    .flyout > :where(button, a, [role="menuitem"]):hover,
-    .flyout > li > :where(button, a, [role="menuitem"]):hover,
-    .flyout > section > ul > li > a:hover {
+    .flyout > :where(button, a, [role="menuitem"]):hover:not(:where(:disabled, [aria-disabled="true"])),
+    .flyout > li > :where(button, a, [role="menuitem"]):hover:not(:where(:disabled, [aria-disabled="true"])),
+    .flyout > section > ul > li > a:hover:not([aria-disabled="true"]) {
       outline: var(--border-width) solid ButtonText;
       outline-offset: -1px;
       background: Canvas;
@@ -2524,7 +2560,7 @@ dialog.drawer nav {
     inset: 0;
     z-index: 1;
     border-radius: inherit;
-    background: var(--surface);
+    background: var(--busy-overlay-bg, var(--surface));
   }
 
   [aria-busy="true"]:not(.btn) > .spinner:last-child {
@@ -2539,7 +2575,7 @@ dialog.drawer nav {
 @supports (selector([aria-busy="true"]:has(> .spinner:last-child))) and
   (color: color-mix(in oklch, red, white)) {
   [aria-busy="true"]:not(.btn):has(> .spinner:last-child)::before {
-    background: color-mix(in oklch, var(--surface), transparent 20%);
+    background: color-mix(in oklch, var(--busy-overlay-bg, var(--surface)), transparent 20%);
   }
 }
 
@@ -2718,6 +2754,7 @@ dialog.drawer nav {
   inline-size: fit-content;
   max-inline-size: min(calc(100vw - var(--space-6)), 32rem);
   margin-inline: auto;
+  overflow-wrap: anywhere;
 
   padding-block: var(--space-2);
   padding-inline: var(--space-3);
@@ -2775,9 +2812,9 @@ dialog.drawer nav {
 }
 
 .avatar {
-  --avatar-size: 2.25rem;
+  --avatar-size: var(--avatar-stack-size, 2.25rem);
   --avatar-radius: var(--radius-full);
-  --avatar-font-size: var(--font-size-sm);
+  --avatar-font-size: var(--avatar-stack-font-size, var(--font-size-sm));
   --avatar-bg: var(--intent, var(--surface-subtle));
   --avatar-fg: var(--intent-fg, var(--tone-fg, var(--text-muted)));
 
@@ -2884,30 +2921,36 @@ a.avatar[aria-disabled="true"] {
 }
 
 .avatar.sm {
-  --avatar-size: 1.75rem;
-  --avatar-font-size: var(--font-size-xs);
+  --avatar-stack-size: 1.75rem;
+  --avatar-stack-font-size: var(--font-size-xs);
 }
 
 .avatar.lg {
-  --avatar-size: 3rem;
-  --avatar-font-size: var(--font-size-lg);
+  --avatar-stack-size: 3rem;
+  --avatar-stack-font-size: var(--font-size-lg);
 }
 
 /* Status dot: an empty .badge positioned at the avatar's bottom-end corner.
    The dot conveys no text — always pair it with an aria-label on the badge. */
 .avatar > .badge:empty {
+  --avatar-status-translate-x: 50%;
+
   position: absolute;
   inset-block-end: var(--indicator-offset);
   inset-inline-end: var(--indicator-offset);
   z-index: 1;
   box-shadow: 0 0 0 2px var(--indicator-ring);
-  transform: translate(50%, 50%);
+  transform: translate(var(--avatar-status-translate-x), 50%);
+}
+
+.avatar:dir(rtl) > .badge:empty {
+  --avatar-status-translate-x: -50%;
 }
 
 /* Avatar stack — explicit class for overlapping avatar groups.
    Does not rely on role="group" auto-detection. */
 .avatar-stack {
-  --avatar-stack-overlap: calc(var(--avatar-size, 2.25rem) / -4);
+  --avatar-stack-overlap: calc(var(--avatar-stack-size, 2.25rem) / -4);
   --avatar-stack-ring: 2px;
 
   display: inline-flex;
@@ -2915,20 +2958,24 @@ a.avatar[aria-disabled="true"] {
 }
 
 .avatar-stack.sm {
-  --avatar-size: 1.75rem;
+  --avatar-stack-size: 1.75rem;
+  --avatar-stack-font-size: var(--font-size-xs);
 }
 
 .avatar-stack.lg {
-  --avatar-size: 3rem;
+  --avatar-stack-size: 3rem;
+  --avatar-stack-font-size: var(--font-size-lg);
 }
 
 @supports selector(:has(> .avatar)) {
   .avatar-stack:has(> .avatar.sm) {
-    --avatar-size: 1.75rem;
+    --avatar-stack-size: 1.75rem;
+    --avatar-stack-font-size: var(--font-size-xs);
   }
 
   .avatar-stack:has(> .avatar.lg) {
-    --avatar-size: 3rem;
+    --avatar-stack-size: 3rem;
+    --avatar-stack-font-size: var(--font-size-lg);
   }
 }
 
@@ -3091,6 +3138,8 @@ a.avatar[aria-disabled="true"] {
 
 /* Nav list — a vertical navigation list. Used by .drawer for stacked links. */
 .nav-list {
+  display: grid;
+  gap: var(--gap);
   margin: 0;
   padding: 0;
   list-style: none;
@@ -3123,7 +3172,7 @@ a.avatar[aria-disabled="true"] {
  * Breadcrumb — current-location trail from the site root.
  *
  * Inline list separated by "/". Mark the current page with `aria-current="page"`
- * on its item — it's styled as inert (no hover/underline, not clickable).
+ * either on the item or on the current link.
  */
 .breadcrumb {
   display: flex;
@@ -3154,7 +3203,8 @@ a.avatar[aria-disabled="true"] {
 }
 
 @media (hover: hover) {
-  .breadcrumb a:hover:not(:where([aria-current]:not([aria-current="false"]))) {
+  .breadcrumb li:not(:where([aria-current]:not([aria-current="false"])))
+    > a:hover:not(:where([aria-current]:not([aria-current="false"]))) {
     color: var(--text);
     text-decoration: underline;
   }
@@ -3167,7 +3217,11 @@ a.avatar[aria-disabled="true"] {
 .breadcrumb a:where([aria-current]:not([aria-current="false"])) {
   color: var(--text);
   font-weight: var(--font-weight-medium);
-  pointer-events: none;
+}
+
+.breadcrumb li:where([aria-current]:not([aria-current="false"])) > :where(a, span) {
+  color: var(--text);
+  font-weight: var(--font-weight-medium);
 }
 
 /*
@@ -3231,6 +3285,13 @@ a.avatar[aria-disabled="true"] {
   list-style: none;
 }
 
+.tabs[aria-orientation="vertical"] {
+  display: grid;
+  justify-items: stretch;
+  border-block-end: 0;
+  border-inline-end: var(--border-width) solid var(--border);
+}
+
 .tab {
   display: inline-flex;
   align-items: center;
@@ -3245,6 +3306,13 @@ a.avatar[aria-disabled="true"] {
   font-weight: var(--font-weight-strong);
   text-decoration: none;
   cursor: pointer;
+}
+
+.tabs[aria-orientation="vertical"] .tab {
+  justify-content: flex-start;
+  border-block-end: 0;
+  border-inline-end: 2px solid transparent;
+  padding-inline-end: var(--space-4);
 }
 
 @media (hover: hover) {
@@ -3266,9 +3334,21 @@ a.avatar[aria-disabled="true"] {
   color: var(--intent, var(--primary));
 }
 
+.tabs[aria-orientation="vertical"] .tab[aria-selected="true"],
+.tabs[aria-orientation="vertical"] .tab[aria-current]:not([aria-current="false"]),
+.tabs[aria-orientation="vertical"] .tab[aria-pressed="true"] {
+  border-block-end-color: transparent;
+  border-inline-end-color: var(--intent, var(--primary));
+}
+
 @media (forced-colors: active) {
   .tabs {
     border-block-end-color: ButtonText;
+  }
+
+  .tabs[aria-orientation="vertical"] {
+    border-block-end-color: transparent;
+    border-inline-end-color: ButtonText;
   }
 
   .tab {
@@ -3289,6 +3369,13 @@ a.avatar[aria-disabled="true"] {
     border-block-end-color: Highlight;
     color: Highlight;
   }
+
+  .tabs[aria-orientation="vertical"] .tab[aria-selected="true"],
+  .tabs[aria-orientation="vertical"] .tab[aria-current]:not([aria-current="false"]),
+  .tabs[aria-orientation="vertical"] .tab[aria-pressed="true"] {
+    border-block-end-color: transparent;
+    border-inline-end-color: Highlight;
+  }
 }
 
 /*
@@ -3302,16 +3389,22 @@ a.avatar[aria-disabled="true"] {
  * [aria-current] yourself.
  *
  * Progressive enhancement: on browsers that support :target-current,
- * authors can set scroll-target-group: auto on .scrollspy and style
- * .scrollspy a:target-current to highlight the active link natively,
- * without JS.
+ * this file enables the native target group and marks the active link.
  *
  * Falls back gracefully: links still work when IntersectionObserver or
  * :target-current is unavailable.
- * Intentionally empty: no CSS rules needed. The class is kept in the bundle
- * so the selector is available for JS enhancement and for authors to hook
- * their own styling.
  */
+
+@supports selector(.scrollspy a:target-current) {
+	.scrollspy {
+		scroll-target-group: auto;
+	}
+
+	.scrollspy a:target-current {
+		color: var(--text);
+		font-weight: var(--font-weight-medium);
+	}
+}
 
 
 /* Data */
@@ -3859,7 +3952,7 @@ a.avatar[aria-disabled="true"] {
  * custom-select.css can be opted out independently. Add .native to a specific
  * select to opt out of the enhancement.
  */
-.select:not([multiple], [size]) {
+.select:is(:not([multiple], [size]), :not([multiple])[size="1"]) {
   appearance: none;
   padding-inline-end: calc(var(--space-3) + var(--space-6));
   background-image: var(--icon-chevron-image);
@@ -3870,7 +3963,7 @@ a.avatar[aria-disabled="true"] {
 
 /* The chevron sits on the inline-end side; flip it in RTL so it follows
    the padding-inline-end space reserved for it. */
-.select:not([multiple], [size]):dir(rtl) {
+.select:is(:not([multiple], [size]), :not([multiple])[size="1"]):dir(rtl) {
   background-position: center left var(--space-3);
 }
 
@@ -3879,7 +3972,7 @@ a.avatar[aria-disabled="true"] {
    simpler than maintaining contrast variants, and native rendering already
    matches whatever contrast mode the user picked. */
 @media (forced-colors: active), (prefers-contrast: more) {
-  .select:not([multiple], [size]) {
+  .select:is(:not([multiple], [size]), :not([multiple])[size="1"]) {
     appearance: auto;
     background-image: none;
     padding-inline-end: var(--space-3);
@@ -3898,12 +3991,12 @@ a.avatar[aria-disabled="true"] {
  */
 @media (forced-colors: none) and (hover: hover) and (pointer: fine) {
   @supports (appearance: base-select) {
-    .select:not([multiple], [size], .native) {
+    .select:is(:not([multiple], [size], .native), :not([multiple], .native)[size="1"]) {
       appearance: base-select;
       align-items: center;
     }
 
-    .select:not([multiple], [size], .native)::picker(select) {
+    .select:is(:not([multiple], [size], .native), :not([multiple], .native)[size="1"])::picker(select) {
       appearance: base-select;
       max-height: min(24rem, calc(var(--viewport-block) * 0.7));
       margin-block: var(--space-2);
@@ -3915,18 +4008,18 @@ a.avatar[aria-disabled="true"] {
       box-shadow: var(--shadow-popout);
     }
 
-    .select:not([multiple], [size], .native):open {
+    .select:is(:not([multiple], [size], .native), :not([multiple], .native)[size="1"]):open {
       --control-border: var(--border);
       --control-bg: var(--surface-raised);
       outline: none;
       box-shadow: var(--focus-ring-shadow);
     }
 
-    .select:not([multiple], [size], .native)::picker-icon {
+    .select:is(:not([multiple], [size], .native), :not([multiple], .native)[size="1"])::picker-icon {
       display: none;
     }
 
-    .select:not([multiple], [size], .native) option {
+    .select:is(:not([multiple], [size], .native), :not([multiple], .native)[size="1"]) option {
       position: relative;
       padding-block: var(--space-2);
       padding-inline: var(--space-3);
@@ -3935,24 +4028,24 @@ a.avatar[aria-disabled="true"] {
       transition-duration: var(--duration);
     }
 
-    .select:not([multiple], [size], .native) option:not(:disabled):hover {
+    .select:is(:not([multiple], [size], .native), :not([multiple], .native)[size="1"]) option:not(:disabled):hover {
       background-color: var(--surface-subtle);
       color: var(--text);
       cursor: pointer;
     }
 
-    .select:not([multiple], [size], .native) option:not(:disabled):focus-visible {
+    .select:is(:not([multiple], [size], .native), :not([multiple], .native)[size="1"]) option:not(:disabled):focus-visible {
       background-color: var(--primary);
       color: var(--primary-fg);
       outline: none;
     }
 
-    .select:not([multiple], [size], .native) option:active {
+    .select:is(:not([multiple], [size], .native), :not([multiple], .native)[size="1"]) option:active {
       background-color: var(--surface-subtle);
       color: var(--text);
     }
 
-    .select:not([multiple], [size], .native) option::checkmark {
+    .select:is(:not([multiple], [size], .native), :not([multiple], .native)[size="1"]) option::checkmark {
       content: "";
       display: block;
       inline-size: 1rem;
@@ -3968,11 +4061,11 @@ a.avatar[aria-disabled="true"] {
       mask-position: center;
     }
 
-    .select:not([multiple], [size], .native) optgroup {
+    .select:is(:not([multiple], [size], .native), :not([multiple], .native)[size="1"]) optgroup {
       padding-block-start: 0.5em;
     }
 
-    .select:not([multiple], [size], .native) optgroup option:first-child {
+    .select:is(:not([multiple], [size], .native), :not([multiple], .native)[size="1"]) optgroup option:first-child {
       margin-block-start: 0.5em;
     }
   }
@@ -4016,6 +4109,10 @@ a.avatar[aria-disabled="true"] {
     background-color var(--duration),
     border-color var(--duration),
     color var(--duration);
+}
+
+.file:disabled::file-selector-button {
+  cursor: not-allowed;
 }
 
 @media (hover: hover) {
@@ -4073,6 +4170,8 @@ a.avatar[aria-disabled="true"] {
   --switch-travel: calc(
     var(--switch-width) -
     var(--switch-knob-size) -
+    2 *
+    var(--border-width) -
     2 *
     var(--switch-knob-margin)
   );
@@ -4536,6 +4635,7 @@ a.avatar[aria-disabled="true"] {
   .flyout,
   .tooltip,
   .surface-backdrop,
+  .status-bar,
   .spinner,
   dialog.modal[open],
   dialog.drawer[open] {

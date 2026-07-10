@@ -9,13 +9,19 @@
  * [aria-current] yourself.
  *
  * Progressive enhancement: on browsers that support :target-current,
- * authors can set scroll-target-group: auto on .scrollspy and style
- * .scrollspy a:target-current to highlight the active link natively,
- * without JS.
+ * this file enables the native target group and marks the active link.
  *
  * Falls back gracefully: links still work when IntersectionObserver or
  * :target-current is unavailable.
- * Intentionally empty: no CSS rules needed. The class is kept in the bundle
- * so the selector is available for JS enhancement and for authors to hook
- * their own styling.
  */
+
+@supports selector(.scrollspy a:target-current) {
+	.scrollspy {
+		scroll-target-group: auto;
+	}
+
+	.scrollspy a:target-current {
+		color: var(--text);
+		font-weight: var(--font-weight-medium);
+	}
+}

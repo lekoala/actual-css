@@ -108,7 +108,7 @@ test("close buttons do not get dialog popup semantics", async () => {
 test("cancel closes without requiring view transitions", async () => {
   await loadDialog(`
     <button id="open" commandfor="prefs" command="show-modal">Open</button>
-    <dialog id="prefs"></dialog>
+    <dialog id="prefs" data-dialog-dismissible></dialog>
   `);
   const open = document.getElementById("open");
   const dialog = document.getElementById("prefs");
@@ -116,8 +116,9 @@ test("cancel closes without requiring view transitions", async () => {
   click(open);
   const event = new Event("cancel", { cancelable: true });
   dialog.dispatchEvent(event);
+  await nextMicrotask();
 
-  expect(event.defaultPrevented).toBe(true);
+  expect(event.defaultPrevented).toBe(false);
   expect(dialog.open).toBe(false);
   expect(document.activeElement).toBe(open);
 });
@@ -143,7 +144,7 @@ test("modal dialogs toggle the html scroll-lock hook", async () => {
 
 test("non-modal dialogs do not toggle the html scroll-lock hook", async () => {
   await loadDialog(
-    '<button commandfor="prefs" command="show-modal">Open</button><dialog id="prefs" data-dialog-modal="false"></dialog>',
+    '<button commandfor="prefs" command="show">Open</button><dialog id="prefs"></dialog>',
   );
 
   click(document.querySelector("button"));
@@ -152,8 +153,8 @@ test("non-modal dialogs do not toggle the html scroll-lock hook", async () => {
   expect(document.documentElement.classList.contains("has-modal-open")).toBe(false);
 });
 
-test("data-dialog-modal=false uses show instead of showModal", async () => {
-  setupDOM('<button commandfor="prefs" command="show-modal">Open</button><dialog id="prefs" data-dialog-modal="false"></dialog>');
+test("command=show opens non-modal even when data-dialog-modal is true", async () => {
+  setupDOM('<button commandfor="prefs" command="show">Open</button><dialog id="prefs" data-dialog-modal="true"></dialog>');
   patchDialogMethods();
   let showCalls = 0;
   let showModalCalls = 0;
@@ -173,6 +174,30 @@ test("data-dialog-modal=false uses show instead of showModal", async () => {
 
   expect(showCalls).toBe(1);
   expect(showModalCalls).toBe(0);
+  expect(document.getElementById("prefs").open).toBe(true);
+});
+
+test("command=show-modal opens modal even when data-dialog-modal is false", async () => {
+  setupDOM('<button commandfor="prefs" command="show-modal">Open</button><dialog id="prefs" data-dialog-modal="false"></dialog>');
+  patchDialogMethods();
+  let showCalls = 0;
+  let showModalCalls = 0;
+  HTMLDialogElement.prototype.show = function show() {
+    showCalls += 1;
+    this.open = true;
+    this.setAttribute("open", "");
+  };
+  HTMLDialogElement.prototype.showModal = function showModal() {
+    showModalCalls += 1;
+    this.open = true;
+    this.setAttribute("open", "");
+  };
+  await import(`../src/js/dialog.js?test=${++importId}`);
+
+  click(document.querySelector("button"));
+
+  expect(showCalls).toBe(0);
+  expect(showModalCalls).toBe(1);
   expect(document.getElementById("prefs").open).toBe(true);
 });
 
@@ -251,6 +276,36 @@ test("dismissible backdrop clicks close the dialog", async () => {
   click(dialog, { clientX: 0, clientY: 0 });
 
   expect(dialog.open).toBe(false);
+});
+
+test("non-dismissible dialog blocks Escape cancel requests", async () => {
+  await loadDialog('<button id="open" commandfor="prefs" command="show-modal">Open</button><dialog id="prefs" data-dialog-dismissible="false"></dialog>');
+  const trigger = document.getElementById("open");
+  const dialog = document.getElementById("prefs");
+
+  click(trigger);
+  const event = new Event("cancel", { cancelable: true });
+  dialog.dispatchEvent(event);
+  await nextMicrotask();
+
+  expect(event.defaultPrevented).toBe(true);
+  expect(dialog.open).toBe(true);
+});
+
+test("application can cancel dismissible dialog cancel event", async () => {
+  await loadDialog('<button id="open" commandfor="prefs" command="show-modal">Open</button><dialog id="prefs" data-dialog-dismissible></dialog>');
+  const trigger = document.getElementById("open");
+  const dialog = document.getElementById("prefs");
+
+  click(trigger);
+  dialog.addEventListener("cancel", (event) => event.preventDefault());
+
+  const event = new Event("cancel", { cancelable: true });
+  dialog.dispatchEvent(event);
+  await nextMicrotask();
+
+  expect(event.defaultPrevented).toBe(true);
+  expect(dialog.open).toBe(true);
 });
 
 test("view-transition opt-in does not throw when unsupported", async () => {

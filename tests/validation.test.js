@@ -74,6 +74,39 @@ test("valid form is not blocked on submit", async () => {
   expect(form.classList.contains("was-validated")).toBe(true);
 });
 
+test("required file inputs are validated on submit", async () => {
+  await loadValidation(`<form class="needs-validation">
+    <input name="attachment" type="file" required>
+  </form>`);
+
+  const form = document.querySelector("form");
+  const field = form.elements.attachment;
+  const event = new Event("submit", { bubbles: true, cancelable: true });
+  form.dispatchEvent(event);
+
+  expect(event.defaultPrevented).toBe(true);
+  expect(field.getAttribute("aria-invalid")).toBe("true");
+});
+
+test("submitter with formnovalidate bypasses enhancer submit blocking", async () => {
+  await loadValidation(`<form class="needs-validation">
+    <input name="email" type="email" required value="bad">
+    <button id="draft" type="submit" formnovalidate>Save draft</button>
+  </form>`);
+
+  const form = document.querySelector("form");
+  const draft = document.getElementById("draft");
+  const event = new Event("submit", { bubbles: true, cancelable: true });
+  Object.defineProperty(event, "submitter", {
+    configurable: true,
+    value: draft,
+  });
+  form.dispatchEvent(event);
+
+  expect(event.defaultPrevented).toBe(false);
+  expect(form.classList.contains("was-validated")).toBe(false);
+});
+
 test("number rule is fixed (digits valid, letters invalid)", async () => {
   await loadValidation(`<form class="needs-validation">
     <input name="qty" data-validation-rules="number" value="abc">
@@ -90,7 +123,7 @@ test("number rule is fixed (digits valid, letters invalid)", async () => {
   expect(field.getAttribute("aria-invalid")).toBeNull();
 });
 
-test("same rule is scoped to the form and tolerates a missing target", async () => {
+test("same rule is scoped to the form and fails when target is missing", async () => {
   await loadValidation(`<form class="needs-validation">
     <input id="password" name="password" value="secret">
     <input name="confirm" data-validation-rules="same #password" value="secret">
@@ -103,11 +136,25 @@ test("same rule is scoped to the form and tolerates a missing target", async () 
 
   form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
   expect(confirm.getAttribute("aria-invalid")).toBeNull();
-  expect(orphan.getAttribute("aria-invalid")).toBeNull();
+  expect(orphan.getAttribute("aria-invalid")).toBe("true");
 
   confirm.value = "nope";
   form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
   expect(confirm.getAttribute("aria-invalid")).toBe("true");
+});
+
+test("same rule with an invalid selector blocks submit instead of crashing", async () => {
+  await loadValidation(`<form class="needs-validation">
+    <input name="confirm" data-validation-rules="same [" value="x">
+  </form>`);
+
+  const form = document.querySelector("form");
+  const field = form.elements.confirm;
+  const event = new Event("submit", { bubbles: true, cancelable: true });
+
+  expect(() => form.dispatchEvent(event)).not.toThrow();
+  expect(event.defaultPrevented).toBe(true);
+  expect(field.getAttribute("aria-invalid")).toBe("true");
 });
 
 test("date rule accepts supported shapes and rejects impossible dates", async () => {
@@ -165,7 +212,7 @@ test("registerRule adds a custom rule", async () => {
   expect(field.getAttribute("aria-invalid")).toBe("true");
 });
 
-test("unknown rule is skipped with a warning and does not block the form", async () => {
+test("unknown rule warns once and fails closed", async () => {
   const warnings = [];
   const original = console.warn;
   console.warn = (message) => warnings.push(message);
@@ -177,14 +224,54 @@ test("unknown rule is skipped with a warning and does not block the form", async
 
     const form = document.querySelector("form");
     const event = new Event("submit", { bubbles: true, cancelable: true });
+    const field = form.elements.x;
     form.dispatchEvent(event);
     form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
 
-    expect(event.defaultPrevented).toBe(false);
+    expect(event.defaultPrevented).toBe(true);
+    expect(field.getAttribute("aria-invalid")).toBe("true");
     expect(warnings.filter((m) => /Unknown validation rule/.test(m))).toHaveLength(1);
   } finally {
     console.warn = original;
   }
+});
+
+test("initial aria-invalid fields are treated as server errors until input", async () => {
+  await loadValidation(`<form class="needs-validation">
+    <div class="field">
+      <input name="email" type="email" value="good@example.com" aria-invalid="true">
+      <span class="field-error">Server says no</span>
+    </div>
+  </form>`);
+
+  const form = document.querySelector("form");
+  const field = form.elements.email;
+
+  expect(field.dataset.validationErrors).toBe("server");
+
+  const blocked = new Event("submit", { bubbles: true, cancelable: true });
+  form.dispatchEvent(blocked);
+  expect(blocked.defaultPrevented).toBe(true);
+
+  field.dispatchEvent(new Event("input", { bubbles: true }));
+  const allowed = new Event("submit", { bubbles: true, cancelable: true });
+  form.dispatchEvent(allowed);
+  expect(allowed.defaultPrevented).toBe(false);
+});
+
+test("removing needs-validation disables runtime and restores novalidate", async () => {
+  await loadValidation(`<form class="needs-validation">
+    <input name="email" type="email" required value="bad">
+  </form>`);
+
+  const form = document.querySelector("form");
+  form.classList.remove("needs-validation");
+
+  const event = new Event("submit", { bubbles: true, cancelable: true });
+  form.dispatchEvent(event);
+
+  expect(event.defaultPrevented).toBe(false);
+  expect(form.hasAttribute("novalidate")).toBe(false);
 });
 
 test("setErrors bridges server validation back to fields", async () => {
@@ -236,11 +323,16 @@ test("re-validation on input clears errors once fixed", async () => {
 
 test("blur validation marks aria-invalid before submit", async () => {
   await loadValidation(`<form class="needs-validation">
-    <input name="email" type="email" required value="bad">
+    <div class="field">
+      <input name="email" type="email" required value="bad">
+      <span class="field-error"></span>
+    </div>
   </form>`);
 
   const field = document.querySelector("input");
+  const wrapper = document.querySelector(".field");
   field.dispatchEvent(new FocusEvent("focusout", { bubbles: true }));
 
   expect(field.getAttribute("aria-invalid")).toBe("true");
+  expect(wrapper.classList.contains("danger")).toBe(true);
 });

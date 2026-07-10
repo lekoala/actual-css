@@ -10,12 +10,12 @@
  */
 @media (forced-colors: none) and (hover: hover) and (pointer: fine) {
   @supports (appearance: base-select) {
-    .select:not([multiple], [size], .native) {
+    .select:is(:not([multiple], [size], .native), :not([multiple], .native)[size="1"]) {
       appearance: base-select;
       align-items: center;
     }
 
-    .select:not([multiple], [size], .native)::picker(select) {
+    .select:is(:not([multiple], [size], .native), :not([multiple], .native)[size="1"])::picker(select) {
       appearance: base-select;
       max-height: min(24rem, calc(var(--viewport-block) * 0.7));
       margin-block: var(--space-2);
@@ -27,18 +27,18 @@
       box-shadow: var(--shadow-popout);
     }
 
-    .select:not([multiple], [size], .native):open {
+    .select:is(:not([multiple], [size], .native), :not([multiple], .native)[size="1"]):open {
       --control-border: var(--border);
       --control-bg: var(--surface-raised);
       outline: none;
       box-shadow: var(--focus-ring-shadow);
     }
 
-    .select:not([multiple], [size], .native)::picker-icon {
+    .select:is(:not([multiple], [size], .native), :not([multiple], .native)[size="1"])::picker-icon {
       display: none;
     }
 
-    .select:not([multiple], [size], .native) option {
+    .select:is(:not([multiple], [size], .native), :not([multiple], .native)[size="1"]) option {
       position: relative;
       padding-block: var(--space-2);
       padding-inline: var(--space-3);
@@ -47,24 +47,24 @@
       transition-duration: var(--duration);
     }
 
-    .select:not([multiple], [size], .native) option:not(:disabled):hover {
+    .select:is(:not([multiple], [size], .native), :not([multiple], .native)[size="1"]) option:not(:disabled):hover {
       background-color: var(--surface-subtle);
       color: var(--text);
       cursor: pointer;
     }
 
-    .select:not([multiple], [size], .native) option:not(:disabled):focus-visible {
+    .select:is(:not([multiple], [size], .native), :not([multiple], .native)[size="1"]) option:not(:disabled):focus-visible {
       background-color: var(--primary);
       color: var(--primary-fg);
       outline: none;
     }
 
-    .select:not([multiple], [size], .native) option:active {
+    .select:is(:not([multiple], [size], .native), :not([multiple], .native)[size="1"]) option:active {
       background-color: var(--surface-subtle);
       color: var(--text);
     }
 
-    .select:not([multiple], [size], .native) option::checkmark {
+    .select:is(:not([multiple], [size], .native), :not([multiple], .native)[size="1"]) option::checkmark {
       content: "";
       display: block;
       inline-size: 1rem;
@@ -80,11 +80,11 @@
       mask-position: center;
     }
 
-    .select:not([multiple], [size], .native) optgroup {
+    .select:is(:not([multiple], [size], .native), :not([multiple], .native)[size="1"]) optgroup {
       padding-block-start: 0.5em;
     }
 
-    .select:not([multiple], [size], .native) optgroup option:first-child {
+    .select:is(:not([multiple], [size], .native), :not([multiple], .native)[size="1"]) optgroup option:first-child {
       margin-block-start: 0.5em;
     }
   }

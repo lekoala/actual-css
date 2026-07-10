@@ -231,6 +231,11 @@ function ensureSurfaceWired(menu) {
     "click",
     (e) => {
       const state = surfaceMap.get(menu);
+      const disabledItem = e.target.closest?.(":disabled, [aria-disabled='true']");
+      if (disabledItem && menu.contains(disabledItem)) {
+        e.preventDefault();
+        return;
+      }
       if (!state || state.autoClose === "outside" || state.autoClose === "false") return;
       if (hasMenuItem(e.target)) closeSurface(menu);
     },
@@ -300,18 +305,18 @@ export function closeSurface(menu, opts = {}) {
 
   const state = surfaceMap.get(menu);
   const closeId = state ? ++state.closeId : 0;
+  const wasSheet = state?.isSheet === true;
   const activeElement = menu.ownerDocument.activeElement;
   const shouldRestoreFocus = opts.restoreFocus ?? menu.contains(activeElement);
   menu.classList.remove(CLASSES.open);
-  menu.classList.remove(CLASSES.sheet);
+  if (!wasSheet) {
+    menu.classList.remove(CLASSES.sheet);
+  }
   menu.hidden = true;
   const backdrop = state?.backdrop || null;
   if (backdrop) backdrop.hidden = true;
   openSurfaces.delete(menu);
   syncExpanded(menu, false);
-  if (state) {
-    state.isSheet = false;
-  }
 
   if (shouldRestoreFocus && state?.restoreFocusTo?.isConnected) {
     state.restoreFocusTo.focus({ preventScroll: true });
@@ -319,6 +324,8 @@ export function closeSurface(menu, opts = {}) {
 
   waitForAnimations(menu, backdrop).then(() => {
     if (!state || state.closeId !== closeId) return;
+    state.isSheet = false;
+    menu.classList.remove(CLASSES.sheet);
     backdrop?.remove();
     if (state.backdrop === backdrop) state.backdrop = null;
     restoreSurface(menu);

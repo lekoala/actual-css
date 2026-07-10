@@ -53,7 +53,7 @@ test("openSurface reveals a menu and syncs linked triggers", () => {
   expect(isSurfaceOpen(menu)).toBe(true);
 });
 
-test("closeSurface hides a menu and resets presentation state", () => {
+test("closeSurface hides a menu and resets presentation state", async () => {
   setBody('<button aria-controls="menu" aria-expanded="false">Open</button><div id="menu" class="flyout" data-flyout-mobile="sheet"></div>');
   const trigger = document.querySelector("button");
   const menu = document.getElementById("menu");
@@ -65,8 +65,11 @@ test("closeSurface hides a menu and resets presentation state", () => {
   expect(menu.hidden).toBe(true);
   expect(menu.style.display).toBe("");
   expect(menu.classList.contains("is-open")).toBe(false);
-  expect(menu.classList.contains("is-sheet")).toBe(false);
+  expect(menu.classList.contains("is-sheet")).toBe(true);
   expect(trigger.getAttribute("aria-expanded")).toBe("false");
+
+  await nextMicrotask();
+  expect(menu.classList.contains("is-sheet")).toBe(false);
 });
 
 test("opening one surface closes another open surface", () => {
@@ -397,5 +400,27 @@ test("disabled auto-close keeps inside and outside clicks open", () => {
   click(item);
   click(document.getElementById("outside"));
 
+  expect(isSurfaceOpen(menu)).toBe(true);
+});
+
+test("clicking aria-disabled flyout links does not navigate or close", () => {
+  setBody(`
+    <button aria-controls="menu"></button>
+    <menu id="menu" class="flyout">
+      <li><a id="disabled" href="/blocked" aria-disabled="true">Blocked</a></li>
+      <li><a href="/ok">OK</a></li>
+    </menu>
+  `);
+  const trigger = document.querySelector("button[aria-controls]");
+  const menu = document.getElementById("menu");
+  const disabled = document.getElementById("disabled");
+  mockPlacement(trigger, menu);
+
+  openSurface(menu, { trigger });
+
+  const event = new MouseEvent("click", { bubbles: true, cancelable: true });
+  disabled.dispatchEvent(event);
+
+  expect(event.defaultPrevented).toBe(true);
   expect(isSurfaceOpen(menu)).toBe(true);
 });

@@ -19,7 +19,9 @@ import { CLASSES } from "./selectors.js";
 const NOVALIDATE = "novalidate";
 const WAS_VALIDATED_CLASS = CLASSES.wasValidated;
 const NEEDS_VALIDATION_CLASS = CLASSES.needsValidation;
+const FIELD_CLASS = "field";
 const connectedForms = new WeakMap();
+const managedNoValidateForms = new WeakSet();
 const warnedRules = new WeakMap();
 
 function validDateParts(year, month, day) {
@@ -57,8 +59,14 @@ function warnUnknownRuleOnce(el, name) {
 
 const rules = {
   same(v, el, selector) {
-    const target = el.form?.querySelector(selector);
-    return !target || v === target.value;
+    if (!selector) return false;
+    try {
+      const target = el.form?.querySelector(selector);
+      if (!target) return false;
+      return v === target.value;
+    } catch {
+      return false;
+    }
   },
   number(v) {
     return !Number.isNaN(Number(v));
@@ -82,9 +90,25 @@ function ignoreField(field) {
   return (
     !field ||
     field.disabled ||
+    field.willValidate === false ||
     typeof field.checkValidity !== "function" ||
-    ["file", "reset", "submit", "button", "image"].includes(field.type)
+    typeof field.setCustomValidity !== "function"
   );
+}
+
+function fieldContainer(el) {
+  return el.closest?.(`.${FIELD_CLASS}`) || null;
+}
+
+function syncFieldDangerState(el) {
+  const field = fieldContainer(el);
+  if (!field) return;
+
+  if (field.querySelector('[aria-invalid="true"], [data-validation-errors]')) {
+    field.classList.add("danger");
+  } else {
+    field.classList.remove("danger");
+  }
 }
 
 function checkRules(el) {
@@ -108,9 +132,18 @@ function checkRules(el) {
       const handler = rules[name];
       if (!handler) {
         warnUnknownRuleOnce(el, name);
+        failed.push(name);
         continue;
       }
-      if (!handler(el.value, el, ...opts)) {
+
+      let result = false;
+      try {
+        result = handler(el.value, el, ...opts);
+      } catch (error) {
+        console.warn(`Validation rule "${name}" failed on ${el.name || el.id || "field"}`, error);
+      }
+
+      if (!result) {
         failed.push(name);
       }
     }
@@ -138,11 +171,23 @@ function errorEl(el) {
 
 function markInvalid(el) {
   el.setAttribute("aria-invalid", "true");
+  fieldContainer(el)?.classList.add("danger");
 }
 
 function markValid(el) {
   el.removeAttribute("aria-invalid");
   delete el.dataset.validationErrors;
+  syncFieldDangerState(el);
+}
+
+function hydrateServerErrors(form) {
+  for (const el of form.elements) {
+    if (ignoreField(el)) continue;
+    if (el.getAttribute("aria-invalid") === "true" && !el.dataset.validationErrors) {
+      el.dataset.validationErrors = "server";
+    }
+    syncFieldDangerState(el);
+  }
 }
 
 function validateField(el, trigger) {
@@ -177,13 +222,23 @@ function connectForm(form) {
 
   if (!form.hasAttribute(NOVALIDATE)) {
     form.setAttribute(NOVALIDATE, "");
+    managedNoValidateForms.add(form);
   }
+
+  hydrateServerErrors(form);
 
   form.addEventListener(
     "focusout",
     (event) => {
       const el = event.target;
       if (el instanceof Element && el.form === form) {
+        if (!form.classList.contains(NEEDS_VALIDATION_CLASS)) {
+          if (managedNoValidateForms.has(form)) {
+            form.removeAttribute(NOVALIDATE);
+            managedNoValidateForms.delete(form);
+          }
+          return;
+        }
         validateField(el, "blur");
       }
     },
@@ -195,6 +250,13 @@ function connectForm(form) {
     (event) => {
       const el = event.target;
       if (el instanceof Element && el.form === form) {
+        if (!form.classList.contains(NEEDS_VALIDATION_CLASS)) {
+          if (managedNoValidateForms.has(form)) {
+            form.removeAttribute(NOVALIDATE);
+            managedNoValidateForms.delete(form);
+          }
+          return;
+        }
         validateField(el, "input");
       }
     },
@@ -204,6 +266,16 @@ function connectForm(form) {
   form.addEventListener(
     "submit",
     (event) => {
+      if (event.submitter?.formNoValidate) return;
+
+      if (!form.classList.contains(NEEDS_VALIDATION_CLASS)) {
+        if (managedNoValidateForms.has(form)) {
+          form.removeAttribute(NOVALIDATE);
+          managedNoValidateForms.delete(form);
+        }
+        return;
+      }
+
       let firstInvalid = null;
 
       for (const el of form.elements) {
@@ -247,6 +319,10 @@ function connectForm(form) {
 
   const cleanup = () => {
     controller.abort();
+    if (managedNoValidateForms.has(form)) {
+      form.removeAttribute(NOVALIDATE);
+      managedNoValidateForms.delete(form);
+    }
     connectedForms.delete(form);
   };
   connectedForms.set(form, cleanup);

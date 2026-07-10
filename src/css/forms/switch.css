@@ -29,6 +29,8 @@
     var(--switch-width) -
     var(--switch-knob-size) -
     2 *
+    var(--border-width) -
+    2 *
     var(--switch-knob-margin)
   );
 

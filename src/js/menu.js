@@ -1,16 +1,18 @@
 import { firstItem, lastItem, nextItem } from "./keys.js";
+import { isElementVisible } from "./focus.js";
 
 const MENU_ITEM_TARGET_SELECTORS = ["button", "a", '[role="menuitem"]'];
 export const MENU_ITEM_SELECTOR = MENU_ITEM_TARGET_SELECTORS.flatMap((target) => [
   `.flyout > ${target}`,
   `.flyout > li > ${target}`,
+  `.flyout > section > ul > li > ${target}`,
 ]).join(",");
 
 function isUsableMenuItem(item) {
   return (
     !item.disabled &&
     item.getAttribute("aria-disabled") !== "true" &&
-    item.checkVisibility?.() !== false &&
+    isElementVisible(item) &&
     !item.closest("[hidden], [inert], [aria-hidden='true']")
   );
 }
