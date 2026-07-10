@@ -116,26 +116,30 @@ Use `.list-reset` only when markers are not part of the content. Combine `.stack
   <figcaption><strong>Most played songs this week</strong></figcaption>
 
   <ul class="list-reset stack gap-none">
-    <li class="media py" style="border-block-end: var(--border-width) solid var(--border)">
+    <li class="media items-center py" style="border-block-end: var(--border-width) solid var(--border)">
       <div class="avatar">
         <img src="https://i.pravatar.cc/48?img=5" alt="Dio Lupa" />
       </div>
-      <div class="stack">
-        <strong>Dio Lupa</strong>
-        <span class="muted">Remaining Reason</span>
+      <div class="cluster">
+        <div class="stack grow" style="--gap: var(--space-1)">
+          <strong>Dio Lupa</strong>
+          <span class="muted">Remaining Reason</span>
+        </div>
+        <span class="muted">3:45</span>
       </div>
-      <span class="muted" style="margin-inline-start: auto">3:45</span>
     </li>
 
-    <li class="media py" style="border-block-end: var(--border-width) solid var(--border)">
+    <li class="media items-center py" style="border-block-end: var(--border-width) solid var(--border)">
       <div class="avatar">
         <img src="https://i.pravatar.cc/48?img=10" alt="Astral Planes" />
       </div>
-      <div class="stack">
-        <strong>Astral Planes</strong>
-        <span class="muted">Neon Drift</span>
+      <div class="cluster">
+        <div class="stack grow" style="--gap: var(--space-1)">
+          <strong>Astral Planes</strong>
+          <span class="muted">Neon Drift</span>
+        </div>
+        <span class="muted">4:12</span>
       </div>
-      <span class="muted" style="margin-inline-start: auto">4:12</span>
     </li>
   </ul>
 </figure>
@@ -301,6 +305,8 @@ Tune the side width with `--sidebar-layout-size`.
 > Fixed-width leading element (avatar, icon, image) paired with flexible trailing content.
 
 `.media` is the media object: a grid with `auto minmax(0, 1fr)` columns. Use it for author cards, comments, meta rows, and any composition that pairs a small leading element with a flexible content block. The trailing column takes the remaining space and never overflows.
+
+Give `.media` exactly two children. Trailing metadata or actions go inside the content column — nest a `.cluster` and put `.grow` on the flexible part — never as additional children, which silently wrap onto a second grid row.
 
 Add `.items-center` to align the leading element with short trailing content. For multi-line content, the default `align-items: start` is more comfortable.
 
