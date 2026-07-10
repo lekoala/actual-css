@@ -38,9 +38,9 @@ function resolvePasswordInput(trigger) {
 
 function linkedTriggers(input) {
   if (!input.id) return [];
-  return input.ownerDocument.querySelectorAll(
-    `${TRIGGER_SELECTOR}[commandfor="${CSS.escape(input.id)}"]`,
-  );
+  return input
+    .getRootNode()
+    .querySelectorAll(`${TRIGGER_SELECTOR}[commandfor="${CSS.escape(input.id)}"]`);
 }
 
 function setRevealed(input, reveal) {
