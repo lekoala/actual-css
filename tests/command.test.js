@@ -80,6 +80,42 @@ test("the target is resolved again for every action", () => {
   expect(targets[2]).not.toBe(targets[1]);
 });
 
+test("an already canceled click does not run its command", () => {
+  setupDOM('<div id="target"></div><button commandfor="target" command="--action"></button>');
+  let calls = 0;
+  const trigger = document.querySelector("button");
+  trigger.addEventListener("click", (event) => event.preventDefault());
+  registerCommands("--action", { handle: () => calls++ });
+
+  click(trigger);
+
+  expect(calls).toBe(0);
+});
+
+test("native command names are ASCII case-insensitive", () => {
+  setupDOM('<div id="target"></div><button commandfor="target" command="SHOW-MODAL"></button>');
+  let handledCommand = null;
+  registerCommands("show-modal", {
+    handle: (_event, _trigger, _target, command) => {
+      handledCommand = command;
+    },
+  });
+
+  click(document.querySelector("button"));
+
+  expect(handledCommand).toBe("show-modal");
+});
+
+test("custom command names remain case-sensitive", () => {
+  setupDOM('<div id="target"></div><button commandfor="target" command="--ACTION"></button>');
+  let calls = 0;
+  registerCommands("--action", { handle: () => calls++ });
+
+  click(document.querySelector("button"));
+
+  expect(calls).toBe(0);
+});
+
 test("disconnect removes only its command registration", () => {
   setupDOM('<div id="target"></div><button commandfor="target" command="--once"></button>');
   let calls = 0;
