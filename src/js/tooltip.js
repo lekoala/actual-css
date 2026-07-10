@@ -25,9 +25,9 @@
  * Hide:       blur, pointer leave, Escape
  */
 
-import { track, reposition } from "./floating.js";
-import { EVENTS } from "./events.js";
 import enhance from "./enhance.js";
+import { EVENTS } from "./events.js";
+import { reposition, track } from "./floating.js";
 
 const SHOW_DELAY_MS = 150;
 const HIDE_DELAY_MS = 100;
@@ -47,12 +47,12 @@ const HIDE_DELAY_MS = 100;
  */
 
 let uid = 0;
-const triggerStates = new WeakMap(); // trigger -> { tip, cleanup } | { tip: null }
+const triggerStates = new WeakMap(); // trigger -> { tip, cleanup }
 /** @type {WeakMap<Element, TooltipState>} */
 const tipStates = new WeakMap(); // tip -> { refs, activeRef, controller, untrack, generated, mount, timer }
 
 function mountTip(tip, trigger) {
-  const root = trigger.closest("dialog") || document.body;
+  const root = trigger.closest("dialog") || trigger.ownerDocument.body;
   const parent = tip.parentNode;
   if (!root || !parent || parent === root) return null;
 
@@ -75,6 +75,44 @@ function restoreTip(tip, state) {
 
 function placementFor(ref) {
   return ref?.getAttribute("data-tooltip-placement") || "top";
+}
+
+function describedByIds(trigger) {
+  return (trigger.getAttribute("aria-describedby") || "").split(/\s+/).filter(Boolean);
+}
+
+function addDescription(trigger, id) {
+  const ids = describedByIds(trigger);
+  if (ids.includes(id)) return false;
+  trigger.setAttribute("aria-describedby", [...ids, id].join(" "));
+  return true;
+}
+
+function removeDescription(trigger, id) {
+  const ids = describedByIds(trigger).filter((candidate) => candidate !== id);
+  if (ids.length) {
+    trigger.setAttribute("aria-describedby", ids.join(" "));
+  } else {
+    trigger.removeAttribute("aria-describedby");
+  }
+}
+
+function explicitTipFor(trigger) {
+  const doc = trigger.ownerDocument;
+  for (const id of describedByIds(trigger)) {
+    const candidate = doc.getElementById(id);
+    if (candidate?.getAttribute("role") === "tooltip") return candidate;
+  }
+  return null;
+}
+
+function nextTooltipId(doc) {
+  let id;
+  do {
+    uid++;
+    id = `tooltip-${uid}`;
+  } while (doc.getElementById(id));
+  return id;
 }
 
 function repositionTip(ref, tip) {
@@ -174,36 +212,30 @@ function ensureTip(trigger) {
   let tip;
   let generated = false;
   let mount = null;
+  let descriptionAdded = false;
   const text = trigger.getAttribute("data-tooltip");
+  const doc = trigger.ownerDocument;
 
   // shorthand: data-tooltip="text" → create element lazily
   if (text) {
-    uid++;
-    tip = document.createElement("div");
+    tip = doc.createElement("div");
     tip.className = "tooltip";
     tip.role = "tooltip";
-    tip.id = `tooltip-${uid}`;
+    tip.id = nextTooltipId(doc);
     tip.textContent = text;
     tip.hidden = true;
     tip.style.position = "fixed";
     generated = true;
 
-    const parent = trigger.closest("dialog") || document.body;
+    const parent = trigger.closest("dialog") || doc.body;
     parent.appendChild(tip);
-    const existing = trigger.getAttribute("aria-describedby");
-    if (!existing) trigger.setAttribute("aria-describedby", tip.id);
+    descriptionAdded = addDescription(trigger, tip.id);
   }
 
   // explicit: data-tooltip (empty) + aria-describedby → find existing element
   if (!tip) {
-    const tipId = trigger.getAttribute("aria-describedby");
-    if (!tipId) {
-      return null;
-    }
-    tip = document.getElementById(tipId);
-    if (!tip || tip.getAttribute("role") !== "tooltip") {
-      return null;
-    }
+    tip = explicitTipFor(trigger);
+    if (!tip) return null;
     tip.hidden = true;
     tip.style.position = "fixed";
 
@@ -226,6 +258,7 @@ function ensureTip(trigger) {
   const cleanup = () => {
     triggerController.abort();
     triggerStates.delete(trigger);
+    if (descriptionAdded) removeDescription(trigger, tip.id);
 
     state.refs.delete(trigger);
     if (state.activeRef === trigger) {
@@ -274,7 +307,12 @@ const SEL = "[data-tooltip]";
 function handleTriggerIntent(e) {
   const trigger = e.target.closest?.(SEL);
   if (!trigger) return;
-  if (e.type === "mouseover" && e.relatedTarget instanceof Node && trigger.contains(e.relatedTarget)) return;
+  if (
+    e.type === "mouseover" &&
+    e.relatedTarget instanceof Node &&
+    trigger.contains(e.relatedTarget)
+  )
+    return;
 
   const tip = ensureTip(trigger);
   if (tip) show(tip, trigger);

@@ -28,12 +28,20 @@ export function onTextInput(el, handler, signal) {
     handler(event);
   }
 
-  el.addEventListener("compositionstart", () => {
-    composing = true;
-  }, { signal });
-  el.addEventListener("compositionend", (event) => {
-    composing = false;
-    run(event);
-  }, { signal });
+  el.addEventListener(
+    "compositionstart",
+    () => {
+      composing = true;
+    },
+    { signal },
+  );
+  el.addEventListener(
+    "compositionend",
+    (event) => {
+      composing = false;
+      run(event);
+    },
+    { signal },
+  );
   el.addEventListener("input", run, { signal });
 }

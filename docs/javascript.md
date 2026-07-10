@@ -22,7 +22,10 @@ run cleanup.
 
 `enhance()` observes DOM insertions and removals, not attribute changes. If an
 already-connected element receives a behavior attribute later, call the returned
-`refresh(node)` handle or reinsert the element.
+`refresh(node)` handle. Behavior attributes are setup-time contracts: removing
+one does not disconnect an active behavior. If an application needs a live
+enable/disable switch, keep that state inside its enhancer and clean it up when
+the element leaves the DOM.
 
 ### Side-effect modules
 

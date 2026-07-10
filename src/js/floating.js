@@ -59,10 +59,8 @@ function computeCoords(reference, floating, placement, rtl) {
 
   const align = getAlignment(placement);
   const isVertical = mainAxis === "x";
-  if (align === "start")
-    coords[mainAxis] -= commonAlign * (rtl && isVertical ? -1 : 1);
-  if (align === "end")
-    coords[mainAxis] += commonAlign * (rtl && isVertical ? -1 : 1);
+  if (align === "start") coords[mainAxis] -= commonAlign * (rtl && isVertical ? -1 : 1);
+  if (align === "end") coords[mainAxis] += commonAlign * (rtl && isVertical ? -1 : 1);
 
   return coords;
 }
@@ -85,10 +83,7 @@ function applyOffset(coords, side, offset, rtl) {
 }
 
 function getInlineOverflow(coords, floating, minX, maxX) {
-  return (
-    Math.max(minX - coords.x, 0) +
-    Math.max(coords.x + floating.width - maxX, 0)
-  );
+  return Math.max(minX - coords.x, 0) + Math.max(coords.x + floating.width - maxX, 0);
 }
 
 function toBoundary(rect) {
@@ -102,8 +97,7 @@ function toBoundary(rect) {
   };
 }
 
-const supportsDirSelector =
-  typeof CSS !== "undefined" && CSS.supports("selector(:dir(rtl))");
+const supportsDirSelector = typeof CSS !== "undefined" && CSS.supports("selector(:dir(rtl))");
 
 function isRTL(el) {
   if (el.dir === "rtl") return true;
@@ -323,8 +317,7 @@ export function reposition(ref, float, opts = {}) {
   const rtl = isRTL(ref);
 
   const rects = ref.getClientRects();
-  const refRect =
-    placement.startsWith("bottom") ? rects[rects.length - 1] : rects[0];
+  const refRect = placement.startsWith("bottom") ? rects[rects.length - 1] : rects[0];
   if (!refRect) return;
 
   const boundary = getBoundary(ref, opts);

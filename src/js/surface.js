@@ -1,5 +1,5 @@
-import { track, reposition, repositionAt } from "./floating.js";
 import { EVENTS } from "./events.js";
+import { reposition, repositionAt, track } from "./floating.js";
 import { hasMenuItem, onMenuKeydown } from "./menu.js";
 
 const DEFAULT_BREAKPOINT = 768;
@@ -95,9 +95,7 @@ function shouldUseSheet(menu, mode) {
 
 function linkedTriggers(menu) {
   if (!menu.id) return [];
-  return [
-    ...menu.ownerDocument.querySelectorAll(`[aria-controls="${CSS.escape(menu.id)}"]`),
-  ];
+  return [...menu.ownerDocument.querySelectorAll(`[aria-controls="${CSS.escape(menu.id)}"]`)];
 }
 
 function syncExpanded(menu, expanded) {
@@ -129,26 +127,6 @@ function ensureBackdrop(menu, state) {
   state.backdrop = backdrop;
 }
 
-function applySheetSemantics(menu, state) {
-  if (!state.sheetSemanticsApplied) return;
-
-  if (state.previousRole == null) {
-    menu.removeAttribute("role");
-  } else {
-    menu.setAttribute("role", state.previousRole);
-  }
-
-  if (state.previousAriaModal == null) {
-    menu.removeAttribute("aria-modal");
-  } else {
-    menu.setAttribute("aria-modal", state.previousAriaModal);
-  }
-
-  state.previousRole = null;
-  state.previousAriaModal = null;
-  state.sheetSemanticsApplied = false;
-}
-
 function applyPresentation(menu, state) {
   state.isSheet = shouldUseSheet(menu, state.mobile);
   if (state.isSheet) {
@@ -156,7 +134,6 @@ function applyPresentation(menu, state) {
     menu.style.removeProperty("top");
   }
   menu.classList.toggle("is-sheet", state.isSheet);
-  applySheetSemantics(menu, state);
   ensureBackdrop(menu, state);
 }
 
@@ -208,9 +185,6 @@ function ensureSurfaceWired(menu) {
     shiftPadding: 4,
     autoClose: "true",
     isSheet: false,
-    sheetSemanticsApplied: false,
-    previousRole: null,
-    previousAriaModal: null,
     closeId: 0,
   };
 
@@ -278,7 +252,7 @@ export function prepareSurface(menu) {
 }
 
 export function openSurface(menu, opts = {}) {
-  if (!menu || !menu.isConnected) return false;
+  if (!menu?.isConnected) return false;
   if (isSurfaceOpen(menu)) return false;
 
   const beforeOpen = new CustomEvent(EVENTS.surfaceOpen, {
@@ -299,9 +273,7 @@ export function openSurface(menu, opts = {}) {
   state.trigger = opts.trigger || null;
   state.source = opts.source || null;
   state.point =
-    Number.isFinite(opts.x) && Number.isFinite(opts.y)
-      ? { x: opts.x, y: opts.y }
-      : null;
+    Number.isFinite(opts.x) && Number.isFinite(opts.y) ? { x: opts.x, y: opts.y } : null;
   state.mobile = getMobileMode(menu, opts.mobile);
   state.autoClose = getAutoCloseMode(menu, opts.autoClose);
   state.placement = getPlacement(menu, opts.placement);
@@ -338,7 +310,6 @@ export function closeSurface(menu, opts = {}) {
   syncExpanded(menu, false);
   if (state) {
     state.isSheet = false;
-    applySheetSemantics(menu, state);
   }
 
   if (shouldRestoreFocus && state?.restoreFocusTo?.isConnected) {

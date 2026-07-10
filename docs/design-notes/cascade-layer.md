@@ -16,7 +16,7 @@ Replace `actual.css` with `actual.layer.css`:
 @import "actual-css";
 
 /* After — all Actual rules are scoped to the `actual` layer */
-@import "actual-css/dist/actual.layer.css";
+@import "actual-css/css/layer";
 ```
 
 Author styles outside any layer will win over layer styles with equal specificity.

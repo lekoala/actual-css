@@ -58,7 +58,7 @@
   }
 }
 
-.table > :last-child > tr:last-child > *,
-.table > tr:last-child > * {
+.table > tr:last-child > *,
+.table > :last-child > tr:last-child > * {
   border-block-end: 0;
 }

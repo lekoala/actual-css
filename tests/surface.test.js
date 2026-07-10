@@ -222,7 +222,7 @@ test("sheet mode adds sheet class and backdrop", () => {
   expect(document.querySelector(".surface-backdrop")).not.toBeNull();
 });
 
-test("closing sheet mode restores previous semantic attributes", () => {
+test("sheet mode preserves author-provided semantic attributes", () => {
   setBody('<button aria-controls="menu"></button><div id="menu" class="flyout" data-flyout-mobile="sheet" role="menu" aria-modal="false"></div>');
   const trigger = document.querySelector("button");
   const menu = document.getElementById("menu");

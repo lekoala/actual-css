@@ -15,8 +15,8 @@
  *   baseline: the dialog simply opens and closes.
  */
 
-import enhance from "./enhance.js";
 import { commandSelector, commandTrigger, targetFor } from "./command.js";
+import enhance from "./enhance.js";
 
 const dialogMap = new WeakMap();
 const wiredDialogs = new Set();
@@ -37,9 +37,7 @@ function supportsDialog() {
 
 function isDialogElement(el) {
   return (
-    typeof Node !== "undefined" &&
-    el?.nodeType === Node.ELEMENT_NODE &&
-    el.localName === "dialog"
+    typeof Node !== "undefined" && el?.nodeType === Node.ELEMENT_NODE && el.localName === "dialog"
   );
 }
 
@@ -93,7 +91,7 @@ function syncDialogSemantics(dialog) {
   }
 }
 
-function notifyUnsupportedDialog(dialog, trigger) {
+function notifyUnsupportedDialog(trigger) {
   const win = trigger.ownerDocument.defaultView;
   win?.alert?.(DEFAULT_UNSUPPORTED_MESSAGE);
 }
@@ -443,7 +441,7 @@ const dialogTriggers = commandTrigger(DIALOG_COMMANDS, {
 
     if (!isDialog(dialog)) {
       if (command === "show-modal" || command === "show") {
-        notifyUnsupportedDialog(dialog, trigger);
+        notifyUnsupportedDialog(trigger);
       }
       return;
     }

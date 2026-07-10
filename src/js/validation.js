@@ -40,10 +40,7 @@ function isValidDate(value) {
   const first = Number(local[1]);
   const second = Number(local[3]);
   const year = Number(local[4]);
-  return (
-    validDateParts(year, second, first) ||
-    validDateParts(year, first, second)
-  );
+  return validDateParts(year, second, first) || validDateParts(year, first, second);
 }
 
 function warnUnknownRuleOnce(el, name) {
@@ -131,7 +128,7 @@ function errorEl(el) {
   if (!ids) return null;
   for (const id of ids.split(/\s+/)) {
     const node = el.ownerDocument.getElementById(id);
-    if (node && node.classList.contains("field-error")) {
+    if (node?.classList.contains("field-error")) {
       return node;
     }
   }
@@ -149,7 +146,7 @@ function markValid(el) {
 
 function validateField(el, trigger) {
   const form = el.form;
-  if (!form || !form.classList.contains(NEEDS_VALIDATION_CLASS)) return;
+  if (!form?.classList.contains(NEEDS_VALIDATION_CLASS)) return;
   if (ignoreField(el)) return;
 
   if (trigger === "input" && el.dataset.validationErrors === "server") {
@@ -158,8 +155,7 @@ function validateField(el, trigger) {
   }
 
   const validationTrigger = el.dataset.validationTrigger || "";
-  const alreadyInvalid =
-    el.getAttribute("aria-invalid") === "true" || el.dataset.validationErrors;
+  const alreadyInvalid = el.getAttribute("aria-invalid") === "true" || el.dataset.validationErrors;
   const wantsTrigger =
     trigger === "blur" || (validationTrigger.includes(trigger) && el.value.length > 0);
 
@@ -190,7 +186,7 @@ function connectForm(form) {
         validateField(el, "blur");
       }
     },
-    { signal: controller.signal }
+    { signal: controller.signal },
   );
 
   form.addEventListener(
@@ -201,7 +197,7 @@ function connectForm(form) {
         validateField(el, "input");
       }
     },
-    { signal: controller.signal }
+    { signal: controller.signal },
   );
 
   form.addEventListener(
@@ -242,10 +238,10 @@ function connectForm(form) {
             firstInvalid,
             message: form.dataset.validationMessage ?? "",
           },
-        })
+        }),
       );
     },
-    { signal: controller.signal }
+    { signal: controller.signal },
   );
 
   const cleanup = () => {
@@ -256,6 +252,7 @@ function connectForm(form) {
   return cleanup;
 }
 
+// biome-ignore lint/complexity/noStaticOnlyClass: Stable public namespace for validation helpers and rules.
 export class FormValidator {
   static get rules() {
     return rules;
@@ -292,11 +289,11 @@ export class FormValidator {
       const found = form.elements[name];
       if (!found) continue;
       if (found instanceof Element) {
-        this.setFieldError(found, message);
+        FormValidator.setFieldError(found, message);
         continue;
       }
       for (const el of found) {
-        this.setFieldError(el, message);
+        FormValidator.setFieldError(el, message);
       }
     }
   }
