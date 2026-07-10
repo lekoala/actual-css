@@ -152,7 +152,7 @@
 
 .flyout > :where(button, a, [role="menuitem"]),
 .flyout > li > :where(button, a, [role="menuitem"]),
-.flyout > section > ul > li > a {
+.flyout > section > ul > li > :where(button, a, [role="menuitem"]) {
   display: flex;
   align-items: center;
   justify-content: flex-start;
@@ -174,13 +174,13 @@
 
 .flyout.is-sheet > :where(button, a, [role="menuitem"]),
 .flyout.is-sheet > li > :where(button, a, [role="menuitem"]),
-.flyout.is-sheet > section > ul > li > a {
+.flyout.is-sheet > section > ul > li > :where(button, a, [role="menuitem"]) {
   min-block-size: var(--control-size-lg);
 }
 
 .flyout > :where(button, a, [role="menuitem"]):focus-visible,
 .flyout > li > :where(button, a, [role="menuitem"]):focus-visible,
-.flyout > section > ul > li > a:focus-visible {
+.flyout > section > ul > li > :where(button, a, [role="menuitem"]):focus-visible {
   background: var(--surface-subtle);
   outline: var(--focus-outline);
   outline-offset: var(--focus-outline-offset);
@@ -189,21 +189,38 @@
 
 .flyout > :where(button, a, [role="menuitem"]):is(:disabled, [aria-disabled="true"]),
 .flyout > li > :where(button, a, [role="menuitem"]):is(:disabled, [aria-disabled="true"]),
-.flyout > section > ul > li > a[aria-disabled="true"] {
+.flyout
+  > section
+  > ul
+  > li
+  > :where(button, a, [role="menuitem"]):is(:disabled, [aria-disabled="true"]) {
   cursor: not-allowed;
   opacity: var(--disabled-opacity);
 }
 
 .flyout > :where(a, [role="menuitem"])[aria-disabled="true"],
 .flyout > li > :where(a, [role="menuitem"])[aria-disabled="true"],
-.flyout > section > ul > li > a[aria-disabled="true"] {
+.flyout > section > ul > li > :where(a, [role="menuitem"])[aria-disabled="true"] {
   pointer-events: none;
 }
 
 @media (hover: hover) {
-  .flyout > :where(button, a, [role="menuitem"]):hover:not(:where(:focus-visible, :disabled, [aria-disabled="true"])),
-  .flyout > li > :where(button, a, [role="menuitem"]):hover:not(:where(:focus-visible, :disabled, [aria-disabled="true"])),
-  .flyout > section > ul > li > a:hover:not(:where(:focus-visible, [aria-disabled="true"])) {
+  .flyout
+    > :where(button, a, [role="menuitem"]):hover:not(
+      :where(:focus-visible, :disabled, [aria-disabled="true"])
+    ),
+  .flyout
+    > li
+    > :where(button, a, [role="menuitem"]):hover:not(
+      :where(:focus-visible, :disabled, [aria-disabled="true"])
+    ),
+  .flyout
+    > section
+    > ul
+    > li
+    > :where(button, a, [role="menuitem"]):hover:not(
+      :where(:focus-visible, :disabled, [aria-disabled="true"])
+    ) {
     background: var(--surface-subtle);
     outline: none;
   }
@@ -228,15 +245,22 @@
 
   .flyout > :where(button, a, [role="menuitem"]):focus-visible,
   .flyout > li > :where(button, a, [role="menuitem"]):focus-visible,
-  .flyout > section > ul > li > a:focus-visible {
+  .flyout > section > ul > li > :where(button, a, [role="menuitem"]):focus-visible {
     background: Canvas;
     color: CanvasText;
   }
 
   @media (hover: hover) {
-    .flyout > :where(button, a, [role="menuitem"]):hover:not(:where(:disabled, [aria-disabled="true"])),
-    .flyout > li > :where(button, a, [role="menuitem"]):hover:not(:where(:disabled, [aria-disabled="true"])),
-    .flyout > section > ul > li > a:hover:not([aria-disabled="true"]) {
+    .flyout
+      > :where(button, a, [role="menuitem"]):hover:not(:where(:disabled, [aria-disabled="true"])),
+    .flyout
+      > li
+      > :where(button, a, [role="menuitem"]):hover:not(:where(:disabled, [aria-disabled="true"])),
+    .flyout
+      > section
+      > ul
+      > li
+      > :where(button, a, [role="menuitem"]):hover:not(:where(:disabled, [aria-disabled="true"])) {
       outline: var(--border-width) solid ButtonText;
       outline-offset: -1px;
       background: Canvas;

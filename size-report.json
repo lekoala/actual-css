@@ -1,18 +1,18 @@
 {
-  "timestamp": "2026-07-10T14:03:20.069Z",
-  "totalRaw": 159579,
-  "totalMinified": 80881,
-  "totalBrotli": 11805,
+  "timestamp": "2026-07-10T14:13:19.636Z",
+  "totalRaw": 160850,
+  "totalMinified": 81588,
+  "totalBrotli": 11868,
   "themesMinified": 28783,
   "themesBrotli": 3328,
-  "shippedMinified": 80881,
-  "shippedBrotli": 11805,
+  "shippedMinified": 81588,
+  "shippedBrotli": 11868,
   "maxShippedBrotli": 13312,
   "fileCount": 70,
   "files": [
     {
       "file": "components/flyout.css",
-      "raw": 7076
+      "raw": 7508
     },
     {
       "file": "components/button.css",
@@ -56,7 +56,7 @@
     },
     {
       "file": "components/modal.css",
-      "raw": 3566
+      "raw": 3469
     },
     {
       "file": "themes/edge.css",
@@ -67,12 +67,16 @@
       "raw": 3398
     },
     {
+      "file": "components/tab.css",
+      "raw": 3254
+    },
+    {
       "file": "utilities.css",
       "raw": 3240
     },
     {
-      "file": "components/tab.css",
-      "raw": 3076
+      "file": "components/join.css",
+      "raw": 3082
     },
     {
       "file": "components/drawer.css",
@@ -91,16 +95,12 @@
       "raw": 2776
     },
     {
-      "file": "components/join.css",
-      "raw": 2741
+      "file": "forms/custom-select.css",
+      "raw": 2684
     },
     {
       "file": "themes/spruce.css",
       "raw": 2641
-    },
-    {
-      "file": "forms/custom-select.css",
-      "raw": 2638
     },
     {
       "file": "themes/petrol.css",
@@ -199,16 +199,16 @@
       "raw": 1440
     },
     {
+      "file": "forms/validation.css",
+      "raw": 1358
+    },
+    {
       "file": "components/surface.css",
       "raw": 1350
     },
     {
       "file": "components/table.css",
       "raw": 1337
-    },
-    {
-      "file": "forms/validation.css",
-      "raw": 1252
     },
     {
       "file": "components/busy.css",
@@ -221,6 +221,10 @@
     {
       "file": "components/breadcrumb.css",
       "raw": 1232
+    },
+    {
+      "file": "forms/input-icon.css",
+      "raw": 1151
     },
     {
       "file": "forms/form.css",
@@ -241,10 +245,6 @@
     {
       "file": "intents.css",
       "raw": 943
-    },
-    {
-      "file": "forms/input-icon.css",
-      "raw": 886
     },
     {
       "file": "components/scrollspy.css",

@@ -1774,12 +1774,6 @@ html.has-modal-open.had-scrollbar {
   scrollbar-gutter: stable;
 }
 
-@supports selector(:has(dialog:modal)) {
-  html:has(dialog:modal) {
-    overflow: hidden;
-  }
-}
-
 @starting-style {
   dialog.modal[open]::backdrop {
     opacity: 0;
@@ -2104,7 +2098,7 @@ dialog.drawer nav {
 
 .flyout > :where(button, a, [role="menuitem"]),
 .flyout > li > :where(button, a, [role="menuitem"]),
-.flyout > section > ul > li > a {
+.flyout > section > ul > li > :where(button, a, [role="menuitem"]) {
   display: flex;
   align-items: center;
   justify-content: flex-start;
@@ -2126,13 +2120,13 @@ dialog.drawer nav {
 
 .flyout.is-sheet > :where(button, a, [role="menuitem"]),
 .flyout.is-sheet > li > :where(button, a, [role="menuitem"]),
-.flyout.is-sheet > section > ul > li > a {
+.flyout.is-sheet > section > ul > li > :where(button, a, [role="menuitem"]) {
   min-block-size: var(--control-size-lg);
 }
 
 .flyout > :where(button, a, [role="menuitem"]):focus-visible,
 .flyout > li > :where(button, a, [role="menuitem"]):focus-visible,
-.flyout > section > ul > li > a:focus-visible {
+.flyout > section > ul > li > :where(button, a, [role="menuitem"]):focus-visible {
   background: var(--surface-subtle);
   outline: var(--focus-outline);
   outline-offset: var(--focus-outline-offset);
@@ -2141,21 +2135,38 @@ dialog.drawer nav {
 
 .flyout > :where(button, a, [role="menuitem"]):is(:disabled, [aria-disabled="true"]),
 .flyout > li > :where(button, a, [role="menuitem"]):is(:disabled, [aria-disabled="true"]),
-.flyout > section > ul > li > a[aria-disabled="true"] {
+.flyout
+  > section
+  > ul
+  > li
+  > :where(button, a, [role="menuitem"]):is(:disabled, [aria-disabled="true"]) {
   cursor: not-allowed;
   opacity: var(--disabled-opacity);
 }
 
 .flyout > :where(a, [role="menuitem"])[aria-disabled="true"],
 .flyout > li > :where(a, [role="menuitem"])[aria-disabled="true"],
-.flyout > section > ul > li > a[aria-disabled="true"] {
+.flyout > section > ul > li > :where(a, [role="menuitem"])[aria-disabled="true"] {
   pointer-events: none;
 }
 
 @media (hover: hover) {
-  .flyout > :where(button, a, [role="menuitem"]):hover:not(:where(:focus-visible, :disabled, [aria-disabled="true"])),
-  .flyout > li > :where(button, a, [role="menuitem"]):hover:not(:where(:focus-visible, :disabled, [aria-disabled="true"])),
-  .flyout > section > ul > li > a:hover:not(:where(:focus-visible, [aria-disabled="true"])) {
+  .flyout
+    > :where(button, a, [role="menuitem"]):hover:not(
+      :where(:focus-visible, :disabled, [aria-disabled="true"])
+    ),
+  .flyout
+    > li
+    > :where(button, a, [role="menuitem"]):hover:not(
+      :where(:focus-visible, :disabled, [aria-disabled="true"])
+    ),
+  .flyout
+    > section
+    > ul
+    > li
+    > :where(button, a, [role="menuitem"]):hover:not(
+      :where(:focus-visible, :disabled, [aria-disabled="true"])
+    ) {
     background: var(--surface-subtle);
     outline: none;
   }
@@ -2180,15 +2191,22 @@ dialog.drawer nav {
 
   .flyout > :where(button, a, [role="menuitem"]):focus-visible,
   .flyout > li > :where(button, a, [role="menuitem"]):focus-visible,
-  .flyout > section > ul > li > a:focus-visible {
+  .flyout > section > ul > li > :where(button, a, [role="menuitem"]):focus-visible {
     background: Canvas;
     color: CanvasText;
   }
 
   @media (hover: hover) {
-    .flyout > :where(button, a, [role="menuitem"]):hover:not(:where(:disabled, [aria-disabled="true"])),
-    .flyout > li > :where(button, a, [role="menuitem"]):hover:not(:where(:disabled, [aria-disabled="true"])),
-    .flyout > section > ul > li > a:hover:not([aria-disabled="true"]) {
+    .flyout
+      > :where(button, a, [role="menuitem"]):hover:not(:where(:disabled, [aria-disabled="true"])),
+    .flyout
+      > li
+      > :where(button, a, [role="menuitem"]):hover:not(:where(:disabled, [aria-disabled="true"])),
+    .flyout
+      > section
+      > ul
+      > li
+      > :where(button, a, [role="menuitem"]):hover:not(:where(:disabled, [aria-disabled="true"])) {
       outline: var(--border-width) solid ButtonText;
       outline-offset: -1px;
       background: Canvas;
@@ -3289,6 +3307,7 @@ a.avatar[aria-disabled="true"] {
 
 .tabs[aria-orientation="vertical"] {
   display: grid;
+  align-content: start;
   justify-items: stretch;
   border-block-end: 0;
   border-inline-end: var(--border-width) solid var(--border);
@@ -3317,8 +3336,13 @@ a.avatar[aria-disabled="true"] {
   padding-inline-end: var(--space-4);
 }
 
+.tab:is(:disabled, [aria-disabled="true"]) {
+  cursor: not-allowed;
+  opacity: var(--disabled-opacity);
+}
+
 @media (hover: hover) {
-  .tab:hover {
+  .tab:hover:not(:where(:disabled, [aria-disabled="true"])) {
     color: var(--text);
   }
 }
@@ -3743,7 +3767,14 @@ a.avatar[aria-disabled="true"] {
   pointer-events: none;
 }
 
-.input-icon .input {
+/* font-size only sizes text-metric icons (webfont <i>, <span>). An inline
+   <svg> with just a viewBox ignores it, so give it explicit dimensions. */
+.input-icon > svg:first-child {
+  inline-size: var(--input-icon-size);
+  block-size: var(--input-icon-size);
+}
+
+.input-icon > .input {
   padding-inline-start: calc(var(--space-3) * 2 + var(--input-icon-size));
 }
 
@@ -3991,7 +4022,9 @@ a.avatar[aria-disabled="true"] {
  * No layout or interaction contract may depend on appearance: base-select.
  * Arbitrary menu and popover behavior belongs elsewhere.
  */
-@media (forced-colors: none) and (hover: hover) and (pointer: fine) {
+@media (forced-colors: none) and (prefers-contrast: no-preference) and (hover: hover) and (
+    pointer: fine
+  ) {
   @supports (appearance: base-select) {
     .select:not([multiple], .native, [size]:not([size="1"])) {
       appearance: base-select;
@@ -4281,10 +4314,15 @@ a.avatar[aria-disabled="true"] {
   --form-invalid-border: var(--danger);
 }
 
-.field.danger > .field-error,
-.field:has([aria-invalid="true"]) > .field-error,
-.needs-validation.was-validated .field:has(:invalid) > .field-error {
+.field.danger > .field-error {
   display: block;
+}
+
+@supports selector(:has(*)) {
+  .field:has([aria-invalid="true"]) > .field-error,
+  .needs-validation.was-validated .field:has(:invalid) > .field-error {
+    display: block;
+  }
 }
 
 :where(.input, .textarea, .select, .check, .radio, .switch)[aria-invalid="true"],
@@ -4304,12 +4342,14 @@ a.avatar[aria-disabled="true"] {
 }
 
 @supports selector(:user-invalid) {
-  .needs-validation .field:has(:user-invalid) > .field-error {
-    display: block;
-  }
-
   .needs-validation :is(.input, .textarea, .select, .check, .radio, .switch):user-invalid {
     --form-invalid-border: var(--danger);
+  }
+}
+
+@supports selector(:has(:user-invalid)) {
+  .needs-validation .field:has(:user-invalid) > .field-error {
+    display: block;
   }
 }
 
@@ -4594,6 +4634,14 @@ a.avatar[aria-disabled="true"] {
    on platforms where clicking a button does not move focus from the input. */
 .join > :is(:focus, :focus-within) {
   z-index: 2;
+}
+
+/* An input's border must read as the "primary" edge against an attached
+   action (e.g. a password-reveal button) at all times, not only while
+   hovered or focused — otherwise the shared edge flips ownership as the
+   user's pointer moves, which reads as a rendering glitch. */
+.join > :is(.input, .textarea, .select) {
+  z-index: 3;
 }
 
 /* An input/select with an attached action reads as one composite field. Move

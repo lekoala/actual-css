@@ -30,6 +30,7 @@
 
 .tabs[aria-orientation="vertical"] {
   display: grid;
+  align-content: start;
   justify-items: stretch;
   border-block-end: 0;
   border-inline-end: var(--border-width) solid var(--border);
@@ -58,8 +59,13 @@
   padding-inline-end: var(--space-4);
 }
 
+.tab:is(:disabled, [aria-disabled="true"]) {
+  cursor: not-allowed;
+  opacity: var(--disabled-opacity);
+}
+
 @media (hover: hover) {
-  .tab:hover {
+  .tab:hover:not(:where(:disabled, [aria-disabled="true"])) {
     color: var(--text);
   }
 }

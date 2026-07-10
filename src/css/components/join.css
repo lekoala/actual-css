@@ -82,6 +82,14 @@
   z-index: 2;
 }
 
+/* An input's border must read as the "primary" edge against an attached
+   action (e.g. a password-reveal button) at all times, not only while
+   hovered or focused — otherwise the shared edge flips ownership as the
+   user's pointer moves, which reads as a rendering glitch. */
+.join > :is(.input, .textarea, .select) {
+  z-index: 3;
+}
+
 /* An input/select with an attached action reads as one composite field. Move
    its outer focus treatment to the join; button-only groups keep per-button
    focus, and unsupported :has() browsers retain the control's normal ring. */

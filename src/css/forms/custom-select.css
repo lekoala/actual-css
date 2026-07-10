@@ -8,7 +8,9 @@
  * No layout or interaction contract may depend on appearance: base-select.
  * Arbitrary menu and popover behavior belongs elsewhere.
  */
-@media (forced-colors: none) and (hover: hover) and (pointer: fine) {
+@media (forced-colors: none) and (prefers-contrast: no-preference) and (hover: hover) and (
+    pointer: fine
+  ) {
   @supports (appearance: base-select) {
     .select:not([multiple], .native, [size]:not([size="1"])) {
       appearance: base-select;
