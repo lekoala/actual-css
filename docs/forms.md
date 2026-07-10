@@ -535,6 +535,10 @@ When composing source files manually, import `components/join.css` after the con
 ```
 
 `.join` handles border-radius and border collapsing between adjacent children. It works with any direct child — `.input`, `.btn`, `.select`, or `.join-addon`.
+When an `.input`, `.textarea`, or `.select` receives keyboard-relevant focus,
+the focus ring surrounds the complete joined field. Attached buttons keep their
+own focus indicator when reached directly, so the actionable segment remains
+identifiable.
 
 ## Input Policy
 
@@ -646,7 +650,7 @@ to the field.
            autocomplete="current-password" required />
     <button class="btn outline" type="button" commandfor="pw"
             command="--password-toggle" aria-controls="pw"
-            aria-label="Show password" aria-pressed="false"></button>
+            aria-label="Show password" aria-pressed="false"><i class="ti ti-eye" aria-hidden="true"></i></button>
   </div>
 </div>
 ```
