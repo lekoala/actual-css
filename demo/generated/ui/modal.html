@@ -425,28 +425,7 @@
   <li><code>closedby=&quot;any&quot;</code> is the no-JavaScript light-dismiss path. The runtime rewrites it to <code>closedby=&quot;closerequest&quot;</code> where supported so dialog light-dismiss keeps the modal workflow intact — the same behavior, just stated in terms the platform understands.</li>
 </ul>
 <h3>Legacy browsers and polyfills</h3>
-<p>Actual CSS does not bundle a dialog polyfill. In browsers without <code>HTMLDialogElement.showModal()</code> support, such as Firefox 97, the runtime still wires <code>commandfor</code> triggers and shows a native alert when a user tries to open the dialog. This is a deliberate failure mode: the action is acknowledged, but the framework does not pretend to provide modal focus trapping without platform or polyfill support. To support those browsers, load a dialog polyfill and register each dialog before it is opened. The polyfill may load before or after the Actual CSS runtime; the runtime checks the target dialog when the trigger is used.</p>
-    </div>
-    <section class="component-section">
-      <div class="example-group">
-        <div class="example-code">
-          <pre><code class="language-js"><span class="token keyword">import</span> <span class="token string">"actual-css/js"</span><span class="token punctuation">;</span>
-<span class="token keyword">import</span> dialogPolyfill <span class="token keyword">from</span> <span class="token string">"dialog-polyfill"</span><span class="token punctuation">;</span>
-
-document<span class="token punctuation">.</span><span class="token function">querySelectorAll</span><span class="token punctuation">(</span><span class="token string">"dialog"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">forEach</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token parameter">dialog</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
-  dialogPolyfill<span class="token punctuation">.</span><span class="token function">registerDialog</span><span class="token punctuation">(</span>dialog<span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
-        </div>
-      </div>
-    </section>
-    <script>try{import "actual-css/js";
-import dialogPolyfill from "dialog-polyfill";
-
-document.querySelectorAll("dialog").forEach((dialog) => {
-  dialogPolyfill.registerDialog(dialog);
-});}catch(e){console.error(e)}</script>
-    <div class="component-prose">
-      <p>For conditional loading, register the polyfill before the first unsupported dialog open:</p>
+<p>Actual CSS does not bundle a dialog polyfill. In browsers without <code>HTMLDialogElement.showModal()</code> support (Safari 15.3 and older, Firefox 97 and older — all below the Baseline 2023 floor), the runtime applies a rudimentary built-in fallback instead: each dialog element is shimmed with <code>show()</code>, <code>showModal()</code>, and <code>close()</code>, and a small style block in the reset displays the open modal as a fixed, horizontally centered box with a simulated backdrop. Backdrop click, Escape, <code>close</code> events, <code>returnValue</code>, focus restoration, and the scroll lock all work through the normal runtime wiring. The fallback is deliberately not a polyfill: there is no top layer, no focus trap, and the page behind the modal is not inert (though the simulated backdrop blocks pointer interaction with it). The dialog opens and closes — degraded, but functional, matching the experience those browsers get from the rest of the framework. For full modal fidelity on those browsers, load a dialog polyfill instead. One caveat: the runtime shims every dialog it finds when it loads, and <code>dialogPolyfill.registerDialog()</code> skips elements that already expose <code>showModal()</code> — including shimmed ones. Use <code>forceRegisterDialog()</code> so the polyfill replaces the built-in fallback; the runtime never overwrites a patched element afterwards:</p>
     </div>
     <section class="component-section">
       <div class="example-group">
@@ -457,7 +436,7 @@ document.querySelectorAll("dialog").forEach((dialog) => {
   <span class="token keyword">const</span> <span class="token punctuation">{</span> <span class="token keyword">default</span><span class="token operator">:</span> dialogPolyfill <span class="token punctuation">}</span> <span class="token operator">=</span> <span class="token keyword">await</span> <span class="token keyword">import</span><span class="token punctuation">(</span><span class="token string">"dialog-polyfill"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
   document<span class="token punctuation">.</span><span class="token function">querySelectorAll</span><span class="token punctuation">(</span><span class="token string">"dialog"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">forEach</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token parameter">dialog</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
-    dialogPolyfill<span class="token punctuation">.</span><span class="token function">registerDialog</span><span class="token punctuation">(</span>dialog<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    dialogPolyfill<span class="token punctuation">.</span><span class="token function">forceRegisterDialog</span><span class="token punctuation">(</span>dialog<span class="token punctuation">)</span><span class="token punctuation">;</span>
   <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span></code></pre>
         </div>
@@ -469,11 +448,11 @@ if (!("HTMLDialogElement" in window) || !HTMLDialogElement.prototype.showModal) 
   const { default: dialogPolyfill } = await import("dialog-polyfill");
 
   document.querySelectorAll("dialog").forEach((dialog) => {
-    dialogPolyfill.registerDialog(dialog);
+    dialogPolyfill.forceRegisterDialog(dialog);
   });
 }}catch(e){console.error(e)}</script>
     <div class="component-prose">
-      <p>If dialogs are injected later, register those new dialog elements before their open trigger is used.</p>
+      <p>If dialogs are injected later, force-register those new dialog elements before their open trigger is used.</p>
 <h3>Animation</h3>
 <p>The base CSS gives supporting browsers small enter and exit transitions. Exit motion relies on <code>transition-behavior: allow-discrete</code> so the native dialog can remain in the top layer while <code>display</code> and <code>overlay</code> transition out. Browsers without that support keep native close behavior. The open dialog root intentionally ends at <code>transform: none</code>; fixed flyouts and tooltips mounted inside a modal dialog rely on viewport coordinates.</p>
 <h4>View transition</h4>
