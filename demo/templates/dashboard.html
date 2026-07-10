@@ -351,7 +351,7 @@
     <div class="dashboard-main">
       <header class="topbar dashboard-topbar">
         <button class="btn neutral ghost dashboard-menu-button" type="button" commandfor="navigation-drawer" command="show-modal"
-          aria-label="Open navigation">
+          aria-haspopup="dialog" aria-controls="navigation-drawer" aria-label="Open navigation">
           <i class="ti ti-menu-2" aria-hidden="true"></i>
         </button>
 
@@ -422,7 +422,8 @@
               <i class="ti ti-download" aria-hidden="true"></i>
               Export
             </button>
-            <button class="btn primary" type="button" commandfor="forecast-modal" command="show-modal">
+            <button class="btn primary" type="button" commandfor="forecast-modal" command="show-modal"
+              aria-haspopup="dialog" aria-controls="forecast-modal">
               <i class="ti ti-plus" aria-hidden="true"></i>
               New forecast
             </button>

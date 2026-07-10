@@ -15,13 +15,12 @@
  *   baseline: the dialog simply opens and closes.
  */
 
-import { commandSelector, commandTrigger, targetFor } from "./command.js";
+import { registerCommands, targetFor } from "./command.js";
 import enhance from "./enhance.js";
 
 const dialogMap = new WeakMap();
 const wiredDialogs = new Set();
 const DIALOG_COMMANDS = ["show-modal", "show", "request-close", "close"];
-const DIALOG_TRIGGER_SELECTOR = commandSelector(DIALOG_COMMANDS);
 const DIALOG_SELECTOR = "dialog";
 const DIALOG_TITLE_SELECTOR = "[data-title], h1, h2, h3, h4, h5, h6";
 const DEFAULT_UNSUPPORTED_MESSAGE =
@@ -387,14 +386,6 @@ function ensureDialogWired(dialog) {
 
 function connectDialog(dialog) {
   ensureDialogWired(dialog);
-  if (!dialog.id) return;
-
-  const triggers = dialog.ownerDocument.querySelectorAll(
-    `${DIALOG_TRIGGER_SELECTOR}[commandfor="${CSS.escape(dialog.id)}"]`,
-  );
-  for (const trigger of triggers) {
-    dialogTriggers.connectOne(trigger);
-  }
 }
 
 function disconnectDialog(dialog) {
@@ -413,19 +404,18 @@ function disconnectDialog(dialog) {
   syncModalOpenClass(dialog.ownerDocument);
 }
 
-const dialogTriggers = commandTrigger(DIALOG_COMMANDS, {
+registerCommands(DIALOG_COMMANDS, {
   resolve: (trigger) => {
     const dialog = targetFor(trigger);
     return isDialogElement(dialog) ? dialog : null;
   },
-  connect: (trigger, dialog) => {
+  prepare: (trigger, dialog, command) => {
     if (isDialog(dialog)) {
       ensureDialogWired(dialog);
     }
 
     trigger.setAttribute("aria-controls", dialog.id);
 
-    const command = trigger.getAttribute("command")?.toLowerCase();
     if (
       !trigger.hasAttribute("aria-haspopup") &&
       (command === "show-modal" || command === "show") &&
@@ -434,9 +424,7 @@ const dialogTriggers = commandTrigger(DIALOG_COMMANDS, {
       trigger.setAttribute("aria-haspopup", "dialog");
     }
   },
-  click: (event, trigger, dialog) => {
-    const command = trigger.getAttribute("command").toLowerCase();
-
+  handle: (event, trigger, dialog, command) => {
     event.preventDefault();
 
     if (!isDialog(dialog)) {

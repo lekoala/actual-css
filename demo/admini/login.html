@@ -58,10 +58,15 @@
             <input class="input" type="text" name="username" autocomplete="username" required spellcheck="false" placeholder="Enter username">
           </label>
 
-          <label class="field">
-            <span class="field-label">Password</span>
-            <input class="input" type="password" name="password" autocomplete="current-password" required placeholder="Enter password">
-          </label>
+          <div class="field">
+            <label class="field-label" for="login-password">Password</label>
+            <div class="join" style="inline-size: 100%;">
+              <input class="input" type="password" id="login-password" name="password" autocomplete="current-password" required placeholder="Enter password" style="flex: 1;">
+              <button class="btn outline" type="button" commandfor="login-password" command="--password-toggle" aria-label="Show password">
+                <i class="ti ti-eye" aria-hidden="true"></i>
+              </button>
+            </div>
+          </div>
 
           <div class="cluster" style="--cluster-justify: space-between;">
             <label class="choice sm">

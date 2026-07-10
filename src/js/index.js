@@ -19,5 +19,6 @@ import "./tooltip.js";
 import "./scrollspy.js";
 import "./filter.js";
 import "./mask.js";
+import "./password.js";
 import "./validation.js";
 import "./status.js";
