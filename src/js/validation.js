@@ -19,9 +19,10 @@ import { CLASSES } from "./selectors.js";
 const NOVALIDATE = "novalidate";
 const WAS_VALIDATED_CLASS = CLASSES.wasValidated;
 const NEEDS_VALIDATION_CLASS = CLASSES.needsValidation;
-const FIELD_CLASS = "field";
+const FIELD_CLASS = CLASSES.field;
+const DANGER_CLASS = CLASSES.danger;
+const MANAGED_NOVALIDATE_ATTR = "validationManagedNovalidate";
 const connectedForms = new WeakMap();
-const managedNoValidateForms = new WeakSet();
 const warnedRules = new WeakMap();
 
 function validDateParts(year, month, day) {
@@ -105,9 +106,9 @@ function syncFieldDangerState(el) {
   if (!field) return;
 
   if (field.querySelector('[aria-invalid="true"], [data-validation-errors]')) {
-    field.classList.add("danger");
+    field.classList.add(DANGER_CLASS);
   } else {
-    field.classList.remove("danger");
+    field.classList.remove(DANGER_CLASS);
   }
 }
 
@@ -171,7 +172,7 @@ function errorEl(el) {
 
 function markInvalid(el) {
   el.setAttribute("aria-invalid", "true");
-  fieldContainer(el)?.classList.add("danger");
+  fieldContainer(el)?.classList.add(DANGER_CLASS);
 }
 
 function markValid(el) {
@@ -195,7 +196,13 @@ function ensureManagedNoValidate(form) {
   if (form.hasAttribute(NOVALIDATE)) return;
 
   form.setAttribute(NOVALIDATE, "");
-  managedNoValidateForms.add(form);
+  form.dataset[MANAGED_NOVALIDATE_ATTR] = "";
+}
+
+function releaseManagedNoValidate(form) {
+  if (form.dataset[MANAGED_NOVALIDATE_ATTR] === undefined) return;
+  form.removeAttribute(NOVALIDATE);
+  delete form.dataset[MANAGED_NOVALIDATE_ATTR];
 }
 
 function validateField(el, trigger) {
@@ -230,7 +237,7 @@ function connectForm(form) {
 
   if (!form.hasAttribute(NOVALIDATE)) {
     form.setAttribute(NOVALIDATE, "");
-    managedNoValidateForms.add(form);
+    form.dataset[MANAGED_NOVALIDATE_ATTR] = "";
   }
 
   hydrateServerErrors(form);
@@ -241,10 +248,7 @@ function connectForm(form) {
       const el = event.target;
       if (el instanceof Element && el.form === form) {
         if (!form.classList.contains(NEEDS_VALIDATION_CLASS)) {
-          if (managedNoValidateForms.has(form)) {
-            form.removeAttribute(NOVALIDATE);
-            managedNoValidateForms.delete(form);
-          }
+          releaseManagedNoValidate(form);
           return;
         }
         ensureManagedNoValidate(form);
@@ -260,10 +264,7 @@ function connectForm(form) {
       const el = event.target;
       if (el instanceof Element && el.form === form) {
         if (!form.classList.contains(NEEDS_VALIDATION_CLASS)) {
-          if (managedNoValidateForms.has(form)) {
-            form.removeAttribute(NOVALIDATE);
-            managedNoValidateForms.delete(form);
-          }
+          releaseManagedNoValidate(form);
           return;
         }
         ensureManagedNoValidate(form);
@@ -279,10 +280,7 @@ function connectForm(form) {
       if (event.submitter?.formNoValidate) return;
 
       if (!form.classList.contains(NEEDS_VALIDATION_CLASS)) {
-        if (managedNoValidateForms.has(form)) {
-          form.removeAttribute(NOVALIDATE);
-          managedNoValidateForms.delete(form);
-        }
+        releaseManagedNoValidate(form);
         return;
       }
 
@@ -331,10 +329,7 @@ function connectForm(form) {
 
   const cleanup = () => {
     controller.abort();
-    if (managedNoValidateForms.has(form)) {
-      form.removeAttribute(NOVALIDATE);
-      managedNoValidateForms.delete(form);
-    }
+    releaseManagedNoValidate(form);
     connectedForms.delete(form);
   };
   connectedForms.set(form, cleanup);

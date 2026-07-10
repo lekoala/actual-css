@@ -25,6 +25,11 @@ export const CLASSES = {
   wasValidated: "was-validated",
   // validation.js — read on the element an aria-describedby id resolves to.
   fieldError: "field-error",
+  // validation.js — ancestor container searched for aria-invalid/danger state.
+  field: "field",
+  // validation.js — intents.css vocabulary class toggled on the field
+  // container while any control inside it is invalid.
+  danger: "danger",
   // surface.js — state class on the open flyout/menu/dialog surface.
   open: "is-open",
   // surface.js — state class while the surface renders as a mobile sheet.
