@@ -251,20 +251,11 @@ Available options:
 
 ### Legacy browsers and polyfills
 
-Actual CSS does not bundle a dialog polyfill. In browsers without `HTMLDialogElement.showModal()` support, such as Firefox 97, the runtime still wires `commandfor` triggers and shows a native alert when a user tries to open the dialog. This is a deliberate failure mode: the action is acknowledged, but the framework does not pretend to provide modal focus trapping without platform or polyfill support.
+Actual CSS does not bundle a dialog polyfill. In browsers without `HTMLDialogElement.showModal()` support (Safari 15.3 and older, Firefox 97 and older — all below the Baseline 2023 floor), the runtime applies a rudimentary built-in fallback instead: each dialog element is shimmed with `show()`, `showModal()`, and `close()`, and a small style block in the reset displays the open modal as a fixed, horizontally centered box with a simulated backdrop. Backdrop click, Escape, `close` events, `returnValue`, focus restoration, and the scroll lock all work through the normal runtime wiring.
 
-To support those browsers, load a dialog polyfill and register each dialog before it is opened. The polyfill may load before or after the Actual CSS runtime; the runtime checks the target dialog when the trigger is used.
+The fallback is deliberately not a polyfill: there is no top layer, no focus trap, and the page behind the modal is not inert (though the simulated backdrop blocks pointer interaction with it). The dialog opens and closes — degraded, but functional, matching the experience those browsers get from the rest of the framework.
 
-```js
-import "actual-css/js";
-import dialogPolyfill from "dialog-polyfill";
-
-document.querySelectorAll("dialog").forEach((dialog) => {
-  dialogPolyfill.registerDialog(dialog);
-});
-```
-
-For conditional loading, register the polyfill before the first unsupported dialog open:
+For full modal fidelity on those browsers, load a dialog polyfill instead. One caveat: the runtime shims every dialog it finds when it loads, and `dialogPolyfill.registerDialog()` skips elements that already expose `showModal()` — including shimmed ones. Use `forceRegisterDialog()` so the polyfill replaces the built-in fallback; the runtime never overwrites a patched element afterwards:
 
 ```js
 import "actual-css/js";
@@ -273,12 +264,12 @@ if (!("HTMLDialogElement" in window) || !HTMLDialogElement.prototype.showModal) 
   const { default: dialogPolyfill } = await import("dialog-polyfill");
 
   document.querySelectorAll("dialog").forEach((dialog) => {
-    dialogPolyfill.registerDialog(dialog);
+    dialogPolyfill.forceRegisterDialog(dialog);
   });
 }
 ```
 
-If dialogs are injected later, register those new dialog elements before their open trigger is used.
+If dialogs are injected later, force-register those new dialog elements before their open trigger is used.
 
 ### Animation
 

@@ -38,6 +38,13 @@ export const CLASSES = {
   backdrop: "surface-backdrop",
   // dialog.js — transient class for the "can't dismiss" shake animation.
   static: "is-static",
+  // dialog-fallback.js — marker written on a dialog controlled by the legacy
+  // shim (browsers without native <dialog>); reset.css keys its emulated
+  // dialog presentation on it.
+  dialogFallback: "dialog-fallback",
+  // dialog-fallback.js — state class on a shimmed dialog while it is open as
+  // a modal; carries the fixed positioning and simulated backdrop.
+  fallbackModal: "is-fallback-modal",
   // dialog.js — written on <html> while any modal dialog is open.
   modalOpen: "has-modal-open",
   // dialog.js — written on <html> when the viewport had a classic scrollbar
