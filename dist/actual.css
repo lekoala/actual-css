@@ -1979,6 +1979,9 @@ dialog.drawer nav {
 
 .flyout {
   z-index: var(--z-menu);
+  /* No-JS fallback: below the trigger inside the relative .flyout-trigger.
+     surface.js switches an open flyout to position: fixed with measured
+     coordinates; this only covers a flyout revealed without the runtime. */
   position: absolute;
   inset-block-start: calc(100% + var(--space-1));
   inset-inline-start: 0;
@@ -2096,9 +2099,12 @@ dialog.drawer nav {
   margin: 0;
 }
 
-.flyout > :where(button, a, [role="menuitem"]),
-.flyout > li > :where(button, a, [role="menuitem"]),
-.flyout > section > ul > li > :where(button, a, [role="menuitem"]) {
+/* Item contract: a button, link, or menuitem placed directly in the flyout
+   or directly in any of its <li> (bare list, or grouped section > ul > li).
+   menu.js mirrors this contract in MENU_ITEM_SELECTOR — keep them in sync.
+   :where(li) keeps specificity at a single class (0,1,0) so consumer
+   overrides behave the same as a plain .flyout > rule. */
+:is(.flyout, .flyout :where(li)) > :where(button, a, [role="menuitem"]) {
   display: flex;
   align-items: center;
   justify-content: flex-start;
@@ -2118,52 +2124,29 @@ dialog.drawer nav {
   cursor: pointer;
 }
 
-.flyout.is-sheet > :where(button, a, [role="menuitem"]),
-.flyout.is-sheet > li > :where(button, a, [role="menuitem"]),
-.flyout.is-sheet > section > ul > li > :where(button, a, [role="menuitem"]) {
+:is(.flyout.is-sheet, .flyout.is-sheet :where(li)) > :where(button, a, [role="menuitem"]) {
   min-block-size: var(--control-size-lg);
 }
 
-.flyout > :where(button, a, [role="menuitem"]):focus-visible,
-.flyout > li > :where(button, a, [role="menuitem"]):focus-visible,
-.flyout > section > ul > li > :where(button, a, [role="menuitem"]):focus-visible {
+:is(.flyout, .flyout :where(li)) > :where(button, a, [role="menuitem"]):focus-visible {
   background: var(--surface-subtle);
   outline: var(--focus-outline);
   outline-offset: var(--focus-outline-offset);
   box-shadow: var(--focus-ring-shadow);
 }
 
-.flyout > :where(button, a, [role="menuitem"]):is(:disabled, [aria-disabled="true"]),
-.flyout > li > :where(button, a, [role="menuitem"]):is(:disabled, [aria-disabled="true"]),
-.flyout
-  > section
-  > ul
-  > li
+:is(.flyout, .flyout :where(li))
   > :where(button, a, [role="menuitem"]):is(:disabled, [aria-disabled="true"]) {
   cursor: not-allowed;
   opacity: var(--disabled-opacity);
 }
 
-.flyout > :where(a, [role="menuitem"])[aria-disabled="true"],
-.flyout > li > :where(a, [role="menuitem"])[aria-disabled="true"],
-.flyout > section > ul > li > :where(a, [role="menuitem"])[aria-disabled="true"] {
+:is(.flyout, .flyout :where(li)) > :where(a, [role="menuitem"])[aria-disabled="true"] {
   pointer-events: none;
 }
 
 @media (hover: hover) {
-  .flyout
-    > :where(button, a, [role="menuitem"]):hover:not(
-      :where(:focus-visible, :disabled, [aria-disabled="true"])
-    ),
-  .flyout
-    > li
-    > :where(button, a, [role="menuitem"]):hover:not(
-      :where(:focus-visible, :disabled, [aria-disabled="true"])
-    ),
-  .flyout
-    > section
-    > ul
-    > li
+  :is(.flyout, .flyout :where(li))
     > :where(button, a, [role="menuitem"]):hover:not(
       :where(:focus-visible, :disabled, [aria-disabled="true"])
     ) {
@@ -2189,23 +2172,13 @@ dialog.drawer nav {
     box-shadow: none;
   }
 
-  .flyout > :where(button, a, [role="menuitem"]):focus-visible,
-  .flyout > li > :where(button, a, [role="menuitem"]):focus-visible,
-  .flyout > section > ul > li > :where(button, a, [role="menuitem"]):focus-visible {
+  :is(.flyout, .flyout :where(li)) > :where(button, a, [role="menuitem"]):focus-visible {
     background: Canvas;
     color: CanvasText;
   }
 
   @media (hover: hover) {
-    .flyout
-      > :where(button, a, [role="menuitem"]):hover:not(:where(:disabled, [aria-disabled="true"])),
-    .flyout
-      > li
-      > :where(button, a, [role="menuitem"]):hover:not(:where(:disabled, [aria-disabled="true"])),
-    .flyout
-      > section
-      > ul
-      > li
+    :is(.flyout, .flyout :where(li))
       > :where(button, a, [role="menuitem"]):hover:not(:where(:disabled, [aria-disabled="true"])) {
       outline: var(--border-width) solid ButtonText;
       outline-offset: -1px;

@@ -1,18 +1,18 @@
 {
-  "timestamp": "2026-07-10T14:13:19.636Z",
-  "totalRaw": 160850,
-  "totalMinified": 81588,
-  "totalBrotli": 11868,
+  "timestamp": "2026-07-10T15:01:11.028Z",
+  "totalRaw": 160149,
+  "totalMinified": 80403,
+  "totalBrotli": 11810,
   "themesMinified": 28783,
   "themesBrotli": 3328,
-  "shippedMinified": 81588,
-  "shippedBrotli": 11868,
+  "shippedMinified": 80403,
+  "shippedBrotli": 11810,
   "maxShippedBrotli": 13312,
   "fileCount": 70,
   "files": [
     {
       "file": "components/flyout.css",
-      "raw": 7508
+      "raw": 6807
     },
     {
       "file": "components/button.css",
