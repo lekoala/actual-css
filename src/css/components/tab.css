@@ -105,7 +105,7 @@
   }
 
   @media (hover: hover) {
-    .tab:hover {
+    .tab:hover:not(:where(:disabled, [aria-disabled="true"])) {
       color: ButtonText;
       text-decoration: underline;
       text-underline-offset: 0.18em;
