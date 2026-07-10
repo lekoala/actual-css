@@ -33,7 +33,8 @@
 }
 
 @media (hover: hover) {
-  .breadcrumb li:not(:where([aria-current]:not([aria-current="false"])))
+  .breadcrumb
+    li:not(:where([aria-current]:not([aria-current="false"])))
     > a:hover:not(:where([aria-current]:not([aria-current="false"]))) {
     color: var(--text);
     text-decoration: underline;
