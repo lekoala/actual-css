@@ -9,7 +9,8 @@
  * reinserted in the same batch) survives without a spurious disconnect.
  *
  * Attribute changes are intentionally not observed. Call refresh(node) after
- * adding/removing behavior attributes on an already-connected element.
+ * adding a behavior attribute to an already-connected element. Behavior
+ * attributes are setup-time contracts, not live enable/disable switches.
  *
  * enhancers: { [selector]: (el) => cleanup | void }
  * Returns: { refresh, forget, disconnect }
@@ -88,7 +89,9 @@ function createRegistry(root) {
     if (!canScan(node)) return;
     if (node instanceof Element) start(record, node);
     if (record.selectorString) {
-      node.querySelectorAll?.(record.selectorString).forEach((el) => start(record, el));
+      node.querySelectorAll?.(record.selectorString).forEach((el) => {
+        start(record, el);
+      });
     }
   }
 

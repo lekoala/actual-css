@@ -66,7 +66,10 @@ status.clear = function clear() {
 
 const STATUS_SHOW_COMMANDS = ["--status"];
 const STATUS_CLEAR_COMMANDS = ["--status-clear"];
-const STATUS_TRIGGER_SELECTOR = commandSelector([...STATUS_SHOW_COMMANDS, ...STATUS_CLEAR_COMMANDS]);
+const STATUS_TRIGGER_SELECTOR = commandSelector([
+  ...STATUS_SHOW_COMMANDS,
+  ...STATUS_CLEAR_COMMANDS,
+]);
 let statusShowTriggers;
 let statusClearTriggers;
 

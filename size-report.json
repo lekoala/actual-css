@@ -1,12 +1,12 @@
 {
-  "timestamp": "2026-07-09T23:44:10.136Z",
-  "totalRaw": 155699,
+  "timestamp": "2026-07-10T09:41:02.850Z",
+  "totalRaw": 155698,
   "totalMinified": 77972,
-  "totalBrotli": 11478,
+  "totalBrotli": 11482,
   "themesMinified": 29280,
   "themesBrotli": 3398,
   "shippedMinified": 77972,
-  "shippedBrotli": 11478,
+  "shippedBrotli": 11482,
   "maxShippedBrotli": 13312,
   "fileCount": 69,
   "files": [
@@ -24,7 +24,7 @@
     },
     {
       "file": "tokens.css",
-      "raw": 5360
+      "raw": 5359
     },
     {
       "file": "forms/choice.css",

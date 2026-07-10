@@ -9,18 +9,50 @@ import { dispatchInput, onTextInput, selectionStart, setCaret } from "./input.js
 
 const SELECTOR = "input[data-mask]";
 const TOKEN_TESTS = {
-  "9": (char) => /^\d$/u.test(char),
+  9: (char) => /^\d$/u.test(char),
   a: (char) => /^\p{L}$/u.test(char),
   "*": () => true,
 };
 
 function isToken(char) {
-  return Object.prototype.hasOwnProperty.call(TOKEN_TESTS, char);
+  return Object.hasOwn(TOKEN_TESTS, char);
+}
+
+function parseMaskValue(value, mask) {
+  const pattern = [...mask];
+  const raw = [];
+  const positions = [];
+  let maskIndex = 0;
+  let valueIndex = 0;
+
+  valueLoop: for (const char of value) {
+    valueIndex += char.length;
+
+    while (maskIndex < pattern.length) {
+      const part = pattern[maskIndex];
+
+      if (!isToken(part)) {
+        maskIndex++;
+        if (char === part) continue valueLoop;
+        continue;
+      }
+
+      if (TOKEN_TESTS[part](char)) {
+        raw.push(char);
+        positions.push(valueIndex);
+        maskIndex++;
+      }
+      continue valueLoop;
+    }
+
+    break;
+  }
+
+  return { positions, raw };
 }
 
 function rawMaskChars(value, mask) {
-  const tokens = [...mask].filter(isToken);
-  return [...value].filter((char) => tokens.some((token) => TOKEN_TESTS[token](char)));
+  return parseMaskValue(value, mask).raw;
 }
 
 function appendFollowingLiterals(mask, start) {
@@ -73,20 +105,25 @@ function applyMask(value, mask, inputType = "") {
 function caretForMask(value, mask, rawCount) {
   if (rawCount <= 0) return 0;
 
-  let count = 0;
-  for (let i = 0; i < value.length; i++) {
-    const char = value[i];
-    if (rawMaskChars(char, mask).length > 0) count++;
-    if (count >= rawCount) {
-      let caret = i + 1;
-      while (caret < value.length && !rawMaskChars(value[caret], mask).length) {
-        caret++;
-      }
-      return caret;
-    }
+  const position = parseMaskValue(value, mask).positions[rawCount - 1];
+  if (position == null) return value.length;
+
+  const pattern = [...mask];
+  let tokenCount = 0;
+  let patternIndex = 0;
+  for (; patternIndex < pattern.length; patternIndex++) {
+    if (!isToken(pattern[patternIndex])) continue;
+    tokenCount++;
+    if (tokenCount === rawCount) break;
   }
 
-  return value.length;
+  let caret = position;
+  for (patternIndex++; patternIndex < pattern.length; patternIndex++) {
+    const literal = pattern[patternIndex];
+    if (isToken(literal) || !value.startsWith(literal, caret)) break;
+    caret += literal.length;
+  }
+  return caret;
 }
 
 function connectMask(el) {
@@ -99,41 +136,45 @@ function connectMask(el) {
   // that removed raw characters (just reformat, literals may come back).
   let lastValue = el.value;
 
-  onTextInput(el, (event) => {
-    if (masking) return;
+  onTextInput(
+    el,
+    (event) => {
+      if (masking) return;
 
-    const inputType = event.inputType || "";
-    const caret = selectionStart(el);
-    let rawBeforeCaret = rawMaskChars(el.value.slice(0, caret), mask).length;
-    const previous = el.value;
-    let next = applyMask(previous, mask, inputType);
-    const onlyLiteralsRemoved =
-      rawMaskChars(previous, mask).length === rawMaskChars(lastValue, mask).length;
+      const inputType = event.inputType || "";
+      const caret = selectionStart(el);
+      let rawBeforeCaret = rawMaskChars(el.value.slice(0, caret), mask).length;
+      const previous = el.value;
+      let next = applyMask(previous, mask, inputType);
+      const onlyLiteralsRemoved =
+        rawMaskChars(previous, mask).length === rawMaskChars(lastValue, mask).length;
 
-    if (inputType.startsWith("delete") && onlyLiteralsRemoved && next.length > previous.length) {
-      const raw = rawMaskChars(previous, mask);
-      const deleteIndex =
-        inputType === "deleteContentForward" ? rawBeforeCaret : rawBeforeCaret - 1;
+      if (inputType.startsWith("delete") && onlyLiteralsRemoved && next.length > previous.length) {
+        const raw = rawMaskChars(previous, mask);
+        const deleteIndex =
+          inputType === "deleteContentForward" ? rawBeforeCaret : rawBeforeCaret - 1;
 
-      if (deleteIndex >= 0 && deleteIndex < raw.length) {
-        raw.splice(deleteIndex, 1);
-        rawBeforeCaret = Math.max(0, deleteIndex);
-        next = formatRaw(raw, mask, inputType);
+        if (deleteIndex >= 0 && deleteIndex < raw.length) {
+          raw.splice(deleteIndex, 1);
+          rawBeforeCaret = Math.max(0, deleteIndex);
+          next = formatRaw(raw, mask, inputType);
+        }
       }
-    }
 
-    lastValue = next;
-    if (next === previous) return;
+      lastValue = next;
+      if (next === previous) return;
 
-    el.value = next;
-    setCaret(el, caretForMask(next, mask, rawBeforeCaret));
-    try {
-      masking = true;
-      dispatchInput(el);
-    } finally {
-      masking = false;
-    }
-  }, controller.signal);
+      el.value = next;
+      setCaret(el, caretForMask(next, mask, rawBeforeCaret));
+      try {
+        masking = true;
+        dispatchInput(el);
+      } finally {
+        masking = false;
+      }
+    },
+    controller.signal,
+  );
 
   return () => controller.abort();
 }

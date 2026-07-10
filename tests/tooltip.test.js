@@ -151,7 +151,7 @@ test("explicit tooltip resolution retries after the target is inserted", async (
   expect(tip.hidden).toBe(false);
 });
 
-test("shorthand tooltip does not append to an existing describedby value", async () => {
+test("shorthand tooltip preserves and extends an existing describedby value", async () => {
   await loadTooltip(`
     <button data-tooltip="Help" aria-describedby="help">Trigger</button>
     <p id="help">Existing help.</p>
@@ -161,8 +161,29 @@ test("shorthand tooltip does not append to an existing describedby value", async
   hover(trigger);
   await waitForShow();
 
+  const tip = document.querySelector('[role="tooltip"]');
+  expect(trigger.getAttribute("aria-describedby")).toBe(`help ${tip.id}`);
+  expect(tip.hidden).toBe(false);
+
+  trigger.remove();
+  await nextMicrotask();
   expect(trigger.getAttribute("aria-describedby")).toBe("help");
-  expect(document.querySelector('[role="tooltip"]').hidden).toBe(false);
+});
+
+test("explicit tooltip resolves from multiple describedby ids", async () => {
+  await loadTooltip(`
+    <button data-tooltip aria-describedby="help tip1">Trigger</button>
+    <p id="help">Existing help.</p>
+    <div role="tooltip" id="tip1" hidden>Tooltip help.</div>
+  `);
+  const trigger = document.querySelector("button");
+  const tip = document.getElementById("tip1");
+
+  hover(trigger);
+  await waitForShow();
+
+  expect(tip.hidden).toBe(false);
+  expect(trigger.getAttribute("aria-describedby")).toBe("help tip1");
 });
 
 test("tooltip stays open while the pointer moves from trigger to tip", async () => {

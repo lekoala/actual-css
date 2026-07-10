@@ -100,16 +100,18 @@ function requestContextMenu(context, menu, opts = {}) {
 function openContextMenu(context, menu, opts = {}) {
   if (!requestContextMenu(context, menu, opts)) return;
   if (isSurfaceOpen(menu)) closeSurface(menu);
-  if (openSurface(menu, {
-    source: context,
-    x: opts.x,
-    y: opts.y,
-    placement: opts.placement || "bottom-start",
-    distance: opts.distance ?? 2,
-    mobile: opts.mobile || menu.dataset.flyoutMobile || "auto",
-    scope: opts.scope || getContextScope(context),
-    restoreFocusTo: opts.restoreFocusTo,
-  })) {
+  if (
+    openSurface(menu, {
+      source: context,
+      x: opts.x,
+      y: opts.y,
+      placement: opts.placement || "bottom-start",
+      distance: opts.distance ?? 2,
+      mobile: opts.mobile || menu.dataset.flyoutMobile || "auto",
+      scope: opts.scope || getContextScope(context),
+      restoreFocusTo: opts.restoreFocusTo,
+    })
+  ) {
     focusMenu(menu, opts.focus);
   }
 }

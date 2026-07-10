@@ -63,6 +63,24 @@ test("mask accepts a fixed literal typed by hand", async () => {
   expect(el.value).toBe("123-4");
 });
 
+test("wildcard tokens do not consume fixed literals", async () => {
+  await loadMask('<input data-mask="**-**">');
+  const el = document.querySelector("input");
+
+  input(el, "ab-cd");
+
+  expect(el.value).toBe("ab-cd");
+});
+
+test("wildcard tokens still accept a literal as user data", async () => {
+  await loadMask('<input data-mask="*-9">');
+  const el = document.querySelector("input");
+
+  input(el, "-1");
+
+  expect(el.value).toBe("--1");
+});
+
 test("mask deletion does not re-add trailing literals", async () => {
   await loadMask('<input data-mask="aa-99">');
   const el = document.querySelector("input");

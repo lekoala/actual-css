@@ -190,7 +190,6 @@ select {
       --icon-chevron-image: var(--icon-chevron-image-contrast-dark);
     }
   }
-
 }
 
 :root {
@@ -3391,8 +3390,8 @@ a.avatar[aria-disabled="true"] {
   }
 }
 
-.table > :last-child > tr:last-child > *,
-.table > tr:last-child > * {
+.table > tr:last-child > *,
+.table > :last-child > tr:last-child > * {
   border-block-end: 0;
 }
 

@@ -58,8 +58,7 @@ function normalizeText(value) {
 }
 
 function filterSlug(value, event) {
-  const keepTrailingSeparator =
-    event?.inputType === "insertText" && /[^\p{L}\p{N}]$/u.test(value);
+  const keepTrailingSeparator = event?.inputType === "insertText" && /[^\p{L}\p{N}]$/u.test(value);
   const slug = normalizeText(value)
     .toLocaleLowerCase()
     .replace(/[^\p{L}\p{N}]+/gu, "-")
@@ -92,24 +91,28 @@ function connectFilter(el) {
   const controller = new AbortController();
   let filtering = false;
 
-  onTextInput(el, (event) => {
-    if (filtering) return;
+  onTextInput(
+    el,
+    (event) => {
+      if (filtering) return;
 
-    const caret = selectionStart(el);
-    const previous = el.value;
-    const next = filterValue(previous, modes, event);
+      const caret = selectionStart(el);
+      const previous = el.value;
+      const next = filterValue(previous, modes, event);
 
-    if (next === previous) return;
+      if (next === previous) return;
 
-    el.value = next;
-    setCaret(el, filterValue(previous.slice(0, caret), modes, event).length);
-    try {
-      filtering = true;
-      dispatchInput(el);
-    } finally {
-      filtering = false;
-    }
-  }, controller.signal);
+      el.value = next;
+      setCaret(el, filterValue(previous.slice(0, caret), modes, event).length);
+      try {
+        filtering = true;
+        dispatchInput(el);
+      } finally {
+        filtering = false;
+      }
+    },
+    controller.signal,
+  );
 
   return () => controller.abort();
 }

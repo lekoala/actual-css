@@ -35,7 +35,13 @@ Or import only the pieces you use:
 @import "actual-css/css/components/flyout";
 @import "actual-css/css/utilities";
 @import "actual-css/css/components/join";
+/* Keep the focus baseline after components and controls. */
+@import "actual-css/css/focus";
 ```
+
+`focus` is the final interactive baseline in modular builds: older browsers
+retain a visible `:focus` outline, while browsers with `:focus-visible` avoid
+showing it for pointer focus.
 
 You can also use the compiled file directly:
 
