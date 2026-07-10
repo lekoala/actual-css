@@ -28,7 +28,16 @@
 
   border-block-start: var(--border-width) solid var(--border);
   background: var(--surface);
-  background: color-mix(in oklch, var(--surface) 88%, transparent);
   -webkit-backdrop-filter: blur(1rem);
   backdrop-filter: blur(1rem);
+}
+
+/* The translucent surface needs @supports, not a double declaration: the
+   value contains var(), so a browser without color-mix() cannot reject it at
+   parse time — it wins the cascade, then fails at computed-value time and
+   the background disappears instead of falling back to the opaque line. */
+@supports (background: color-mix(in oklch, red 50%, transparent)) {
+  .form-actions.sticky {
+    background: color-mix(in oklch, var(--surface) 88%, transparent);
+  }
 }

@@ -40,7 +40,13 @@
   background: var(--surface);
 }
 
-@supports ((backdrop-filter: blur(1rem)) or (-webkit-backdrop-filter: blur(1rem))) {
+/* Both conditions are required: the translucent background contains var(),
+   so a browser with backdrop-filter but not color-mix (e.g. Safari < 16.2)
+   would accept the declaration at parse time, fail it at computed-value
+   time, and lose the background entirely instead of keeping the opaque
+   fallback above. */
+@supports ((backdrop-filter: blur(1rem)) or (-webkit-backdrop-filter: blur(1rem))) and
+  (background: color-mix(in oklch, red 50%, transparent)) {
   .topbar {
     background: color-mix(in oklch, var(--surface) 88%, transparent);
     backdrop-filter: blur(0.75rem);
