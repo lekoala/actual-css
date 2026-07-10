@@ -16,7 +16,10 @@
  * only takes effect on the next focusout/input event, not immediately. A
  * submit that races that window can still bypass native validation (the
  * managed novalidate attribute is still present). Treat the class as fixed
- * for a form's lifetime rather than something toggled at runtime.
+ * for a form's lifetime rather than something toggled at runtime. Removing
+ * the form from the DOM, however, is fully supported: the enhance() sweep
+ * runs the cleanup below, which aborts all listeners, removes the managed
+ * novalidate attribute, and releases the form's internal state.
  */
 
 import enhance from "./enhance.js";
