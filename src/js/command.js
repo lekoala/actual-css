@@ -9,6 +9,9 @@
  * listener.
  */
 
+/* One registry per document owns its delegated listener and command handlers.
+ * The WeakMap does not retain discarded documents; registry entries contain
+ * behavior definitions only, never DOM triggers or resolved targets. */
 const registries = new WeakMap();
 
 function commandNames(commands, caller) {
@@ -19,6 +22,13 @@ function commandNames(commands, caller) {
   return [...new Set(names)];
 }
 
+/**
+ * Resolve a trigger's current `commandfor` target in the same document or
+ * shadow root.
+ *
+ * @param {Element} trigger Element carrying the `commandfor` attribute.
+ * @returns {Element | null} The current target, or `null` when it cannot be resolved.
+ */
 export function targetFor(trigger) {
   const id = trigger.getAttribute("commandfor");
   if (!id) return null;
@@ -27,6 +37,13 @@ export function targetFor(trigger) {
   return root.getElementById?.(id) ?? null;
 }
 
+/**
+ * Build the button selector corresponding to one or more command names.
+ *
+ * @param {string | string[]} commands Command name or names to include.
+ * @returns {string} A selector matching command buttons with `commandfor`.
+ * @throws {TypeError} When no valid command name is provided.
+ */
 export function commandSelector(commands) {
   const attributes = commandNames(commands, "commandSelector()").map(
     (name) => `[command="${name.replaceAll("\\", "\\\\").replaceAll('"', '\\"')}"]`,
@@ -76,6 +93,18 @@ function createRegistry(doc) {
  * `prepare`, when present, runs immediately before `handle` on every matching
  * action. It must be idempotent; it is useful for semantics derived from the
  * resolved target, without introducing a connection lifecycle.
+ *
+ * @param {string | string[]} commands Command name or names owned by this behavior.
+ * @param {object} options Behavior callbacks.
+ * @param {(trigger: HTMLButtonElement) => Element | null} [options.resolve=targetFor]
+ * Resolver evaluated for every action.
+ * @param {(trigger: HTMLButtonElement, target: Element, command: string) => void} [options.prepare]
+ * Optional idempotent callback run immediately before the handler.
+ * @param {(event: MouseEvent, trigger: HTMLButtonElement, target: Element, command: string) => void} options.handle
+ * Command handler.
+ * @returns {{ disconnect: () => void }} An idempotent registration teardown handle.
+ * @throws {TypeError} When command names or callbacks are invalid.
+ * @throws {Error} When a command already has an owner in the current document.
  */
 export function registerCommands(commands, { resolve = targetFor, prepare, handle } = {}) {
   const names = commandNames(commands, "registerCommands()");
