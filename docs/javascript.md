@@ -15,10 +15,11 @@ import "actual-css/js/filter";
 import "actual-css/js/mask";
 ```
 
-The runtime does not require `DOMContentLoaded` or manual init calls. Each module
-uses the shared `enhance()` lifecycle helper: initial matching elements are
-connected, inserted matching elements are connected later, and removed elements
-run cleanup.
+The runtime does not require `DOMContentLoaded` or manual init calls. Components
+with a real element lifecycle use the shared `enhance()` helper: initial matching
+elements are connected, inserted matching elements are connected later, and
+removed elements run cleanup. Declarative `command` / `commandfor` actions use a
+single delegated click listener instead; triggers and targets are never tracked.
 
 `enhance()` observes DOM insertions and removals, not attribute changes. If an
 already-connected element receives a behavior attribute later, call the returned
@@ -30,8 +31,8 @@ the element leaves the DOM.
 ### Side-effect modules
 
 All JS modules are side-effect modules: importing them registers behavior
-automatically. There is no init call, no global registry, and nothing to
-configure. This keeps imports declarative and tree-shakeable.
+automatically. There is no init call, public global object, or configuration.
+This keeps imports declarative and tree-shakeable.
 
 ```js
 import "actual-css/js";        // complete default runtime (all enhancers)
@@ -65,6 +66,44 @@ DOM. The runtime remains active until the page unloads. There is no teardown
 handle; cleanup is per-element when an element leaves the DOM.
 
 ## Extending The Runtime
+
+### Stateless commands
+
+Use `registerCommands()` for a target-oriented action that can be fully resolved
+when it happens. The command router keeps one handler per command name and one
+click listener per document; it does not scan, observe, or retain buttons and
+targets. Injected markup, changed `commandfor` values, and replacement targets
+therefore work immediately.
+
+Custom command names start with `--`, following the native invoker convention.
+Keep accessibility state that must exist before interaction in the HTML itself.
+
+```html
+<button type="button" commandfor="details" command="--toggle-hidden"
+        aria-controls="details">Toggle details</button>
+<section id="details" hidden>Details…</section>
+```
+
+```js
+import { registerCommands } from "actual-css/js/command";
+
+registerCommands("--toggle-hidden", {
+  handle(event, trigger, target) {
+    event.preventDefault();
+    target.hidden = !target.hidden;
+    trigger.setAttribute("aria-expanded", String(!target.hidden));
+  },
+});
+```
+
+The default resolver looks up `commandfor` by ID in the trigger's document or
+shadow root. Supply `resolve(trigger)` to validate or replace that lookup.
+An optional idempotent `prepare(trigger, target, command)` callback runs directly
+before `handle`; built-in behaviors use it for target-derived semantics.
+The returned handle has an idempotent `disconnect()` method for applications
+that unload the module owning the command.
+
+### Stateful enhancers
 
 Use `enhance()` for project-specific behavior. It accepts a selector map where
 each function receives the matched element and may return a cleanup function.

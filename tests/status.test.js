@@ -1,5 +1,5 @@
 import { afterEach, expect, test } from "bun:test";
-import { cleanupDOM, click, nextMicrotask, setupDOM } from "./helpers/dom.js";
+import { cleanupDOM, click, setupDOM } from "./helpers/dom.js";
 
 let importId = 0;
 
@@ -186,7 +186,7 @@ test("command=--status trigger ignores a commandfor pointing elsewhere", async (
   expect(target.textContent).toBe("");
 });
 
-test("command trigger connects when the status bar is inserted later", async () => {
+test("a command sees a status bar inserted immediately before the click", async () => {
   await loadStatus(`
     <main>
       <button commandfor="app-status" command="--status" data-status-message="Saved.">Show</button>
@@ -196,7 +196,6 @@ test("command trigger connects when the status bar is inserted later", async () 
   document
     .querySelector("main")
     .insertAdjacentHTML("beforeend", '<div class="status-bar" data-status id="app-status" role="status"></div>');
-  await nextMicrotask();
   const target = document.getElementById("app-status");
   const trigger = document.querySelector("button");
 

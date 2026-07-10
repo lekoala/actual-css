@@ -31,6 +31,10 @@ Modals use the platform-native `<dialog class="modal">` element with `commandfor
 
 Use `command="show-modal"` to open a modal dialog.
 
+Add `aria-haspopup="dialog"` and `aria-controls="<id>"` to opening buttons so
+their semantics are present before either native or framework JavaScript runs.
+The command runtime is stateless and does not pre-scan triggers.
+
 Use `command="request-close"` for cancel-style buttons so close requests go through the dialog’s cancel lifecycle.
 
 Use `closedby="any"` as the no-JavaScript light-dismiss path. Add `data-dialog-dismissible` so the optional runtime can provide the same behavior in browsers that need a small fallback.
@@ -43,7 +47,9 @@ Use this shape when the dialog interrupts the flow and asks for a decision. It h
 <button class="btn"
         type="button"
         commandfor="delete-dialog"
-        command="show-modal">
+        command="show-modal"
+        aria-haspopup="dialog"
+        aria-controls="delete-dialog">
   Delete project
 </button>
 
@@ -62,7 +68,8 @@ Use this shape when the dialog interrupts the flow and asks for a decision. It h
       <button class="btn outline"
               type="button"
               commandfor="delete-dialog"
-              command="request-close">
+              command="request-close"
+              aria-controls="delete-dialog">
         Cancel
       </button>
 
@@ -83,7 +90,9 @@ Use this shape for contextual information or lightweight secondary content. It h
 <button class="btn"
         type="button"
         commandfor="details-dialog"
-        command="show-modal">
+        command="show-modal"
+        aria-haspopup="dialog"
+        aria-controls="details-dialog">
   View details
 </button>
 
@@ -102,6 +111,7 @@ Use this shape for contextual information or lightweight secondary content. It h
               type="button"
               commandfor="details-dialog"
               command="request-close"
+              aria-controls="details-dialog"
               aria-label="Close dialog">
         <i class="ti ti-x" aria-hidden="true"></i>
       </button>
@@ -123,7 +133,9 @@ Use `modal scrollable` when the header and footer should stay visible while the 
 <button class="btn"
         type="button"
         commandfor="scroll-dialog"
-        command="show-modal">
+        command="show-modal"
+        aria-haspopup="dialog"
+        aria-controls="scroll-dialog">
   Open scrollable modal
 </button>
 
@@ -152,7 +164,8 @@ Use `modal scrollable` when the header and footer should stay visible while the 
       <button class="btn outline"
               type="button"
               commandfor="scroll-dialog"
-              command="request-close">
+              command="request-close"
+              aria-controls="scroll-dialog">
         Cancel
       </button>
 
@@ -172,7 +185,9 @@ Flyouts and tooltips opened from inside a modal dialog are mounted inside the di
 <button class="btn"
         type="button"
         commandfor="overlay-dialog"
-        command="show-modal">
+        command="show-modal"
+        aria-haspopup="dialog"
+        aria-controls="overlay-dialog">
   Open modal overlays
 </button>
 
@@ -191,6 +206,7 @@ Flyouts and tooltips opened from inside a modal dialog are mounted inside the di
               type="button"
               commandfor="overlay-dialog"
               command="request-close"
+              aria-controls="overlay-dialog"
               aria-label="Close dialog">
         <i class="ti ti-x" aria-hidden="true"></i>
       </button>
@@ -280,7 +296,9 @@ The effect is progressive: it only runs when the browser supports `document.star
 <button class="btn"
         type="button"
         commandfor="vt-dialog"
-        command="show-modal">
+        command="show-modal"
+        aria-haspopup="dialog"
+        aria-controls="vt-dialog">
   Open modal
 </button>
 
@@ -298,7 +316,8 @@ The effect is progressive: it only runs when the browser supports `document.star
       <button class="btn outline"
               type="button"
               commandfor="vt-dialog"
-              command="request-close">
+              command="request-close"
+              aria-controls="vt-dialog">
         Cancel
       </button>
       <button class="btn primary" value="confirm">Confirm</button>
@@ -328,6 +347,8 @@ Prefer native dialog behavior whenever possible. The framework runtime should no
         type="button"
         command="show-modal"
         commandfor="main-drawer"
+        aria-haspopup="dialog"
+        aria-controls="main-drawer"
         aria-label="Open navigation">
   <i class="ti ti-menu-2" aria-hidden="true"></i>
 </button>
@@ -366,7 +387,9 @@ For drawers with unsaved settings or critical actions, omit the dismiss attribut
 <button class="btn"
         type="button"
         command="show-modal"
-        commandfor="settings-drawer">
+        commandfor="settings-drawer"
+        aria-haspopup="dialog"
+        aria-controls="settings-drawer">
   Edit settings
 </button>
 
@@ -850,11 +873,14 @@ Submitting the empty form blocks submission and shows `data-validation-message` 
 ```html
 <div class="cluster">
   <button class="btn" type="button" commandfor="sb-status" command="--status"
+          aria-controls="sb-status"
           data-status-message="Saved." data-status-intent="success">Show success</button>
   <button class="btn" type="button" commandfor="sb-status" command="--status"
+          aria-controls="sb-status"
           data-status-message="Could not save." data-status-intent="danger"
           data-status-duration="6000">Show danger</button>
-  <button class="btn outline" type="button" commandfor="sb-status" command="--status-clear">Clear</button>
+  <button class="btn outline" type="button" commandfor="sb-status" command="--status-clear"
+          aria-controls="sb-status">Clear</button>
 </div>
 
 <div class="status-bar" data-status id="sb-status" role="status" aria-live="polite" aria-atomic="true"></div>

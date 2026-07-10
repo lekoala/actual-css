@@ -389,7 +389,7 @@
     <div class="app-layout-main">
       <header class="topbar app-layout-topbar">
         <button class="btn neutral ghost app-layout-hamburger" type="button" commandfor="main-drawer" command="show-modal"
-          aria-label="Open navigation">
+          aria-haspopup="dialog" aria-controls="main-drawer" aria-label="Open navigation">
           <i class="ti ti-menu-2" aria-hidden="true"></i>
         </button>
 
@@ -472,7 +472,8 @@
               <i class="ti ti-download" aria-hidden="true"></i>
               Export
             </button>
-            <button class="btn primary" type="button" commandfor="create-dialog" command="show-modal">
+            <button class="btn primary" type="button" commandfor="create-dialog" command="show-modal"
+              aria-haspopup="dialog" aria-controls="create-dialog">
               <i class="ti ti-plus" aria-hidden="true"></i>
               Create new
             </button>

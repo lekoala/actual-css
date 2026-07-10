@@ -99,6 +99,8 @@ test("close buttons do not get dialog popup semantics", async () => {
     </dialog>
   `);
 
+  click(document.getElementById("open"));
+
   expect(document.getElementById("open").getAttribute("aria-haspopup")).toBe("dialog");
   expect(document.getElementById("close").getAttribute("aria-haspopup")).toBeNull();
 });
@@ -174,13 +176,12 @@ test("data-dialog-modal=false uses show instead of showModal", async () => {
   expect(document.getElementById("prefs").open).toBe(true);
 });
 
-test("dialog triggers connect when the dialog is inserted later", async () => {
+test("a trigger handles a dialog inserted immediately before the click", async () => {
   setupDOM('<main><button commandfor="prefs" command="show-modal">Open</button></main>');
   patchDialogMethods();
   await import(`../src/js/dialog.js?test=${++importId}`);
 
   document.querySelector("main").insertAdjacentHTML("beforeend", '<dialog id="prefs"></dialog>');
-  await nextMicrotask();
   const trigger = document.querySelector("button");
   const dialog = document.getElementById("prefs");
 
@@ -223,7 +224,7 @@ test("a dialog with a bare open attribute is not treated as an open modal", asyn
   expect(document.documentElement.classList.contains("has-modal-open")).toBe(false);
 });
 
-test("dialog triggers connect when the trigger is inserted later", async () => {
+test("a dialog trigger inserted immediately before the click works", async () => {
   setupDOM('<main><dialog id="prefs"></dialog></main>');
   patchDialogMethods();
   await import(`../src/js/dialog.js?test=${++importId}`);
@@ -231,7 +232,6 @@ test("dialog triggers connect when the trigger is inserted later", async () => {
   document
     .querySelector("main")
     .insertAdjacentHTML("beforeend", '<button commandfor="prefs" command="show-modal">Open</button>');
-  await nextMicrotask();
   const trigger = document.querySelector("button");
   const dialog = document.getElementById("prefs");
 

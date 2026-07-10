@@ -24,8 +24,7 @@
  *   - Any other code, without importing this module: dispatch `actual:status`
  *     directly — `detail: { message, intent, duration }`, or `{}` to clear.
  */
-import { commandSelector, commandTrigger, targetFor } from "./command.js";
-import enhance from "./enhance.js";
+import { registerCommands, targetFor } from "./command.js";
 import { EVENTS } from "./events.js";
 
 const INTENTS = ["neutral", "success", "danger", "warning"];
@@ -66,12 +65,6 @@ status.clear = function clear() {
 
 const STATUS_SHOW_COMMANDS = ["--status"];
 const STATUS_CLEAR_COMMANDS = ["--status-clear"];
-const STATUS_TRIGGER_SELECTOR = commandSelector([
-  ...STATUS_SHOW_COMMANDS,
-  ...STATUS_CLEAR_COMMANDS,
-]);
-let statusShowTriggers;
-let statusClearTriggers;
 
 function dispatchStatusEvent(source, detail) {
   source.dispatchEvent(new CustomEvent(EVENTS.status, { bubbles: true, detail }));
@@ -94,17 +87,6 @@ function connectStatusTrigger(trigger, target) {
   trigger.setAttribute("aria-controls", target.id);
 }
 
-function connectStatusTarget(target) {
-  if (!target.id) return;
-  const triggers = target.ownerDocument.querySelectorAll(
-    `${STATUS_TRIGGER_SELECTOR}[commandfor="${CSS.escape(target.id)}"]`,
-  );
-  for (const trigger of triggers) {
-    statusShowTriggers.connectOne(trigger);
-    statusClearTriggers.connectOne(trigger);
-  }
-}
-
 if (typeof document !== "undefined") {
   document.addEventListener(EVENTS.invalid, (event) => {
     const message = event.detail?.message;
@@ -122,10 +104,10 @@ if (typeof document !== "undefined") {
     }
   });
 
-  statusShowTriggers = commandTrigger(STATUS_SHOW_COMMANDS, {
+  registerCommands(STATUS_SHOW_COMMANDS, {
     resolve: resolveStatusTrigger,
-    connect: connectStatusTrigger,
-    click: (event, trigger) => {
+    prepare: connectStatusTrigger,
+    handle: (event, trigger) => {
       event.preventDefault();
       dispatchStatusEvent(trigger, {
         message: trigger.getAttribute("data-status-message"),
@@ -135,17 +117,13 @@ if (typeof document !== "undefined") {
     },
   });
 
-  statusClearTriggers = commandTrigger(STATUS_CLEAR_COMMANDS, {
+  registerCommands(STATUS_CLEAR_COMMANDS, {
     resolve: resolveStatusTrigger,
-    connect: connectStatusTrigger,
-    click: (event, trigger) => {
+    prepare: connectStatusTrigger,
+    handle: (event, trigger) => {
       event.preventDefault();
       dispatchStatusEvent(trigger, {});
     },
-  });
-
-  enhance({
-    [STATUS_SELECTOR]: (target) => connectStatusTarget(target),
   });
 }
 

@@ -25,7 +25,7 @@
       <p>Centered modal overlay for focused tasks, confirmations, or forms, built on the native `&lt;dialog&gt;` element.</p>
     </header>
         <div class="component-prose">
-      <p>Modals use the platform-native <code>&lt;dialog class=&quot;modal&quot;&gt;</code> element with <code>commandfor</code> and <code>command</code> buttons. Use <code>command=&quot;show-modal&quot;</code> to open a modal dialog. Use <code>command=&quot;request-close&quot;</code> for cancel-style buttons so close requests go through the dialog’s cancel lifecycle. Use <code>closedby=&quot;any&quot;</code> as the no-JavaScript light-dismiss path. Add <code>data-dialog-dismissible</code> so the optional runtime can provide the same behavior in browsers that need a small fallback.</p>
+      <p>Modals use the platform-native <code>&lt;dialog class=&quot;modal&quot;&gt;</code> element with <code>commandfor</code> and <code>command</code> buttons. Use <code>command=&quot;show-modal&quot;</code> to open a modal dialog. Add <code>aria-haspopup=&quot;dialog&quot;</code> and <code>aria-controls=&quot;&lt;id&gt;&quot;</code> to opening buttons so their semantics are present before either native or framework JavaScript runs. The command runtime is stateless and does not pre-scan triggers. Use <code>command=&quot;request-close&quot;</code> for cancel-style buttons so close requests go through the dialog’s cancel lifecycle. Use <code>closedby=&quot;any&quot;</code> as the no-JavaScript light-dismiss path. Add <code>data-dialog-dismissible</code> so the optional runtime can provide the same behavior in browsers that need a small fallback.</p>
 <h3>Alert dialog</h3>
 <p>Use this shape when the dialog interrupts the flow and asks for a decision. It has no close icon and no light dismiss; the footer actions are the way out. With the optional runtime, backdrop clicks give a small static feedback instead of closing.</p>
     </div>
@@ -35,7 +35,9 @@
           <button class="btn"
         type="button"
         commandfor="delete-dialog"
-        command="show-modal">
+        command="show-modal"
+        aria-haspopup="dialog"
+        aria-controls="delete-dialog">
   Delete project
 </button>
 
@@ -54,7 +56,8 @@
       <button class="btn outline"
               type="button"
               commandfor="delete-dialog"
-              command="request-close">
+              command="request-close"
+              aria-controls="delete-dialog">
         Cancel
       </button>
 
@@ -70,7 +73,9 @@
           <pre><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>button</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>btn<span class="token punctuation">"</span></span>
         <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>button<span class="token punctuation">"</span></span>
         <span class="token attr-name">commandfor</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>delete-dialog<span class="token punctuation">"</span></span>
-        <span class="token attr-name">command</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>show-modal<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+        <span class="token attr-name">command</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>show-modal<span class="token punctuation">"</span></span>
+        <span class="token attr-name">aria-haspopup</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>dialog<span class="token punctuation">"</span></span>
+        <span class="token attr-name">aria-controls</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>delete-dialog<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
   Delete project
 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">></span></span>
 
@@ -89,7 +94,8 @@
       <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>button</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>btn outline<span class="token punctuation">"</span></span>
               <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>button<span class="token punctuation">"</span></span>
               <span class="token attr-name">commandfor</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>delete-dialog<span class="token punctuation">"</span></span>
-              <span class="token attr-name">command</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>request-close<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+              <span class="token attr-name">command</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>request-close<span class="token punctuation">"</span></span>
+              <span class="token attr-name">aria-controls</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>delete-dialog<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
         Cancel
       <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">></span></span>
 
@@ -113,7 +119,9 @@
           <button class="btn"
         type="button"
         commandfor="details-dialog"
-        command="show-modal">
+        command="show-modal"
+        aria-haspopup="dialog"
+        aria-controls="details-dialog">
   View details
 </button>
 
@@ -132,6 +140,7 @@
               type="button"
               commandfor="details-dialog"
               command="request-close"
+              aria-controls="details-dialog"
               aria-label="Close dialog">
         <i class="ti ti-x" aria-hidden="true"></i>
       </button>
@@ -148,7 +157,9 @@
           <pre><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>button</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>btn<span class="token punctuation">"</span></span>
         <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>button<span class="token punctuation">"</span></span>
         <span class="token attr-name">commandfor</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>details-dialog<span class="token punctuation">"</span></span>
-        <span class="token attr-name">command</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>show-modal<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+        <span class="token attr-name">command</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>show-modal<span class="token punctuation">"</span></span>
+        <span class="token attr-name">aria-haspopup</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>dialog<span class="token punctuation">"</span></span>
+        <span class="token attr-name">aria-controls</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>details-dialog<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
   View details
 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">></span></span>
 
@@ -167,6 +178,7 @@
               <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>button<span class="token punctuation">"</span></span>
               <span class="token attr-name">commandfor</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>details-dialog<span class="token punctuation">"</span></span>
               <span class="token attr-name">command</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>request-close<span class="token punctuation">"</span></span>
+              <span class="token attr-name">aria-controls</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>details-dialog<span class="token punctuation">"</span></span>
               <span class="token attr-name">aria-label</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>Close dialog<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
         <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>i</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>ti ti-x<span class="token punctuation">"</span></span> <span class="token attr-name">aria-hidden</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>true<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>i</span><span class="token punctuation">></span></span>
       <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">></span></span>
@@ -191,7 +203,9 @@
           <button class="btn"
         type="button"
         commandfor="scroll-dialog"
-        command="show-modal">
+        command="show-modal"
+        aria-haspopup="dialog"
+        aria-controls="scroll-dialog">
   Open scrollable modal
 </button>
 
@@ -220,7 +234,8 @@
       <button class="btn outline"
               type="button"
               commandfor="scroll-dialog"
-              command="request-close">
+              command="request-close"
+              aria-controls="scroll-dialog">
         Cancel
       </button>
 
@@ -235,7 +250,9 @@
           <pre><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>button</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>btn<span class="token punctuation">"</span></span>
         <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>button<span class="token punctuation">"</span></span>
         <span class="token attr-name">commandfor</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>scroll-dialog<span class="token punctuation">"</span></span>
-        <span class="token attr-name">command</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>show-modal<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+        <span class="token attr-name">command</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>show-modal<span class="token punctuation">"</span></span>
+        <span class="token attr-name">aria-haspopup</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>dialog<span class="token punctuation">"</span></span>
+        <span class="token attr-name">aria-controls</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>scroll-dialog<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
   Open scrollable modal
 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">></span></span>
 
@@ -264,7 +281,8 @@
       <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>button</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>btn outline<span class="token punctuation">"</span></span>
               <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>button<span class="token punctuation">"</span></span>
               <span class="token attr-name">commandfor</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>scroll-dialog<span class="token punctuation">"</span></span>
-              <span class="token attr-name">command</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>request-close<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+              <span class="token attr-name">command</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>request-close<span class="token punctuation">"</span></span>
+              <span class="token attr-name">aria-controls</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>scroll-dialog<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
         Cancel
       <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">></span></span>
 
@@ -287,7 +305,9 @@
           <button class="btn"
         type="button"
         commandfor="overlay-dialog"
-        command="show-modal">
+        command="show-modal"
+        aria-haspopup="dialog"
+        aria-controls="overlay-dialog">
   Open modal overlays
 </button>
 
@@ -306,6 +326,7 @@
               type="button"
               commandfor="overlay-dialog"
               command="request-close"
+              aria-controls="overlay-dialog"
               aria-label="Close dialog">
         <i class="ti ti-x" aria-hidden="true"></i>
       </button>
@@ -340,7 +361,9 @@
           <pre><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>button</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>btn<span class="token punctuation">"</span></span>
         <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>button<span class="token punctuation">"</span></span>
         <span class="token attr-name">commandfor</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>overlay-dialog<span class="token punctuation">"</span></span>
-        <span class="token attr-name">command</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>show-modal<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+        <span class="token attr-name">command</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>show-modal<span class="token punctuation">"</span></span>
+        <span class="token attr-name">aria-haspopup</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>dialog<span class="token punctuation">"</span></span>
+        <span class="token attr-name">aria-controls</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>overlay-dialog<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
   Open modal overlays
 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">></span></span>
 
@@ -359,6 +382,7 @@
               <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>button<span class="token punctuation">"</span></span>
               <span class="token attr-name">commandfor</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>overlay-dialog<span class="token punctuation">"</span></span>
               <span class="token attr-name">command</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>request-close<span class="token punctuation">"</span></span>
+              <span class="token attr-name">aria-controls</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>overlay-dialog<span class="token punctuation">"</span></span>
               <span class="token attr-name">aria-label</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>Close dialog<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
         <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>i</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>ti ti-x<span class="token punctuation">"</span></span> <span class="token attr-name">aria-hidden</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>true<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>i</span><span class="token punctuation">></span></span>
       <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">></span></span>
@@ -461,7 +485,9 @@ if (!("HTMLDialogElement" in window) || !HTMLDialogElement.prototype.showModal) 
           <button class="btn"
         type="button"
         commandfor="vt-dialog"
-        command="show-modal">
+        command="show-modal"
+        aria-haspopup="dialog"
+        aria-controls="vt-dialog">
   Open modal
 </button>
 
@@ -479,7 +505,8 @@ if (!("HTMLDialogElement" in window) || !HTMLDialogElement.prototype.showModal) 
       <button class="btn outline"
               type="button"
               commandfor="vt-dialog"
-              command="request-close">
+              command="request-close"
+              aria-controls="vt-dialog">
         Cancel
       </button>
       <button class="btn primary" value="confirm">Confirm</button>
@@ -491,7 +518,9 @@ if (!("HTMLDialogElement" in window) || !HTMLDialogElement.prototype.showModal) 
           <pre><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>button</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>btn<span class="token punctuation">"</span></span>
         <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>button<span class="token punctuation">"</span></span>
         <span class="token attr-name">commandfor</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>vt-dialog<span class="token punctuation">"</span></span>
-        <span class="token attr-name">command</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>show-modal<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+        <span class="token attr-name">command</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>show-modal<span class="token punctuation">"</span></span>
+        <span class="token attr-name">aria-haspopup</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>dialog<span class="token punctuation">"</span></span>
+        <span class="token attr-name">aria-controls</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>vt-dialog<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
   Open modal
 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">></span></span>
 
@@ -509,7 +538,8 @@ if (!("HTMLDialogElement" in window) || !HTMLDialogElement.prototype.showModal) 
       <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>button</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>btn outline<span class="token punctuation">"</span></span>
               <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>button<span class="token punctuation">"</span></span>
               <span class="token attr-name">commandfor</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>vt-dialog<span class="token punctuation">"</span></span>
-              <span class="token attr-name">command</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>request-close<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+              <span class="token attr-name">command</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>request-close<span class="token punctuation">"</span></span>
+              <span class="token attr-name">aria-controls</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>vt-dialog<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
         Cancel
       <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">></span></span>
       <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>button</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>btn primary<span class="token punctuation">"</span></span> <span class="token attr-name">value</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>confirm<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Confirm<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">></span></span>
