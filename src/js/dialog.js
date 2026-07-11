@@ -16,12 +16,13 @@
  *   view-transition-name. Otherwise native dialog behavior remains the
  *   baseline: the dialog simply opens and closes.
  *
- * Browsers without native <dialog> get a rudimentary per-element shim
- * (dialog-fallback.js) instead of a full polyfill; see that module.
+ * Browsers without native <dialog> can get a rudimentary per-element shim
+ * from the optional, standalone dialog-fallback.js module; this module has
+ * no dependency on it and alerts when no shim or polyfill made the target
+ * controllable.
  */
 
 import { registerCommands, targetFor } from "./command.js";
-import shimDialog from "./dialog-fallback.js";
 import enhance from "./enhance.js";
 import { EVENTS } from "./events.js";
 import { CLASSES } from "./selectors.js";
@@ -41,7 +42,6 @@ function supportsDialog() {
     typeof HTMLDialogElement.prototype.showModal === "function"
   );
 }
-
 function isDialogElement(el) {
   return (
     typeof Node !== "undefined" && el?.nodeType === Node.ELEMENT_NODE && el.localName === "dialog"
@@ -98,8 +98,8 @@ function syncDialogSemantics(dialog, modal = isModal(dialog)) {
   }
 }
 
-// Last resort only: the legacy shim normally makes every resolved dialog
-// controllable, so this fires only when even the shim could not apply.
+// Reached only when neither the optional dialog-fallback module nor an
+// adopter polyfill made the target controllable on a legacy browser.
 function notifyUnsupportedDialog(trigger) {
   const win = trigger.ownerDocument.defaultView;
   win?.alert?.(DEFAULT_UNSUPPORTED_MESSAGE);
@@ -451,11 +451,7 @@ function disconnectDialog(dialog) {
 registerCommands(DIALOG_COMMANDS, {
   resolve: (trigger) => {
     const dialog = targetFor(trigger);
-    if (!isDialogElement(dialog)) return null;
-    // A dialog inserted right before the click may not be scanned by
-    // enhance() yet, so the legacy shim also applies at resolve time.
-    if (!supportsDialog()) shimDialog(dialog);
-    return dialog;
+    return isDialogElement(dialog) ? dialog : null;
   },
   prepare: (trigger, dialog, command) => {
     if (isDialog(dialog)) {
@@ -497,10 +493,11 @@ registerCommands(DIALOG_COMMANDS, {
   },
 });
 
-enhance({
-  [DIALOG_SELECTOR]: (dialog) => {
-    if (!supportsDialog()) shimDialog(dialog);
-    connectDialog(dialog);
-    return () => disconnectDialog(dialog);
-  },
-});
+if (supportsDialog()) {
+  enhance({
+    [DIALOG_SELECTOR]: (dialog) => {
+      connectDialog(dialog);
+      return () => disconnectDialog(dialog);
+    },
+  });
+}

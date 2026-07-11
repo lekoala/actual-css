@@ -38,6 +38,7 @@
     "./js/command": "./src/js/command.js",
     "./js/context-menu": "./src/js/context-menu.js",
     "./js/dialog": "./src/js/dialog.js",
+    "./js/dialog-fallback": "./src/js/dialog-fallback.js",
     "./js/enhance": "./src/js/enhance.js",
     "./js/filter": "./src/js/filter.js",
     "./js/floating": "./src/js/floating.js",

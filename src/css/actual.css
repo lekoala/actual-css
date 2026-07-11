@@ -1,4 +1,5 @@
 @import "./reset.css";
+@import "./dialog-fallback.css";
 @import "./tokens.css";
 @import "./theme.css";
 @import "./base.css";

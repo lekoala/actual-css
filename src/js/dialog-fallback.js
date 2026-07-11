@@ -2,23 +2,37 @@
  * Dialog fallback — minimal per-element shim for browsers without native
  * <dialog> support (Safari <= 15.3, Firefox <= 97, both below Baseline 2023).
  *
+ * Standalone side-effect module: the default runtime imports it, a custom
+ * build opts out by omitting it — dialog.js has no dependency on this file
+ * and falls back to its acknowledgement alert without it. On supporting
+ * browsers importing this module registers nothing.
+ *
  * Not a polyfill: no top layer, no focus trap, no inert background. It only
  * provides show()/showModal()/close() and an `open` property so dialog.js can
  * run its normal wiring — backdrop click, Escape cancel, close events, focus
  * restore, and the scroll lock all come from that wiring, not from here.
  *
- * Presentation lives in the legacy @supports block of reset.css, keyed on the
- * classes written below. The simulated backdrop is split in two there: a
- * spread box-shadow for the dimming, and a transparent ::before covering the
- * viewport for hit-testing — clicks on it target the dialog element outside
- * its own box, which dialog.js already treats as a backdrop click, and it
- * blocks pointer interaction with the page behind the modal.
+ * Presentation lives in dialog-fallback.css, keyed on the classes written
+ * below. The simulated backdrop is split in two there: a spread box-shadow
+ * for the dimming, and a transparent ::before covering the viewport for
+ * hit-testing — clicks on it target the dialog element outside its own box,
+ * which dialog.js already treats as a backdrop click, and it blocks pointer
+ * interaction with the page behind the modal.
  *
  * An adopter-provided polyfill (e.g. dialog-polyfill) still wins: elements it
  * already patched expose showModal() and are left untouched.
  */
 
+import { targetFor } from "./command.js";
+import enhance from "./enhance.js";
 import { CLASSES } from "./selectors.js";
+
+function supportsDialog() {
+  return (
+    typeof HTMLDialogElement !== "undefined" &&
+    typeof HTMLDialogElement.prototype.showModal === "function"
+  );
+}
 
 function focusInitial(dialog) {
   const target = dialog.querySelector("[autofocus]") || dialog;
@@ -95,4 +109,28 @@ export default function shimDialog(dialog) {
     dialog.classList.remove(CLASSES.fallbackModal);
     dialog.dispatchEvent(new Event("close"));
   };
+}
+
+if (typeof document !== "undefined" && !supportsDialog()) {
+  enhance({
+    dialog: (el) => {
+      shimDialog(el);
+    },
+  });
+
+  // A dialog inserted right before its trigger's click may not be scanned by
+  // enhance() yet, so shim command targets in capture phase too — before the
+  // delegated command routing resolves them.
+  document.addEventListener(
+    "click",
+    (event) => {
+      const trigger = event.target?.closest?.("button[commandfor][command]");
+      if (!trigger) return;
+      const dialog = targetFor(trigger);
+      if (dialog?.localName === "dialog") {
+        shimDialog(dialog);
+      }
+    },
+    true,
+  );
 }

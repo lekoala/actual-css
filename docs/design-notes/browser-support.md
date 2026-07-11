@@ -15,7 +15,7 @@ Works everywhere, works best on modern browsers. Wide browser support (even olde
 | Layout (flex, grid, position) | Baseline 2023 | —                  |
 | CSS custom properties         | Baseline 2023 | —                  |
 | `:has()`                      | Baseline 2023 | —                  |
-| `<dialog>` element            | Baseline 2023 | Below that: built-in rudimentary shim (`dialog-fallback.js` + reset block), no top layer or focus trap |
+| `<dialog>` element            | Baseline 2023 | Below that: rudimentary shim (`dialog-fallback.js` + `dialog-fallback.css`, both standalone and omittable in custom builds), no top layer or focus trap |
 | `color-mix()`                 | Baseline 2023 | Fallback flat color |
 | `light-dark()`                | 2024+        | Manual theme override |
 | `:user-invalid`               | 2024+        | `[aria-invalid]` attribute |
