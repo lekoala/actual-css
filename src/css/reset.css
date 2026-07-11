@@ -51,24 +51,28 @@ select {
 
   /* Open modally: fixed near the top (no fit-content in the block axis on
      these browsers, so no vertical centering) and above menus, below
-     tooltips. Legacy-only layer, hence no z-index token. */
+     tooltips. Legacy-only layer, hence no z-index token. The spread shadow is
+     the visible backdrop: the dialog is its own stacking context, where a
+     negative z-index child paints above the element's background, so the
+     dimming cannot live on the ::before. */
   dialog[open].is-fallback-modal {
     position: fixed;
     inset-block: 8vh auto;
     max-block-size: 84vh;
     overflow: auto;
     z-index: 40;
+    box-shadow: 0 0 0 100vmax var(--backdrop-fill, rgb(0 0 0 / 35%));
   }
 
-  /* Stand-in for ::backdrop. Clicks on it hit the dialog element outside its
-     own box, which dialog.js already treats as a backdrop click, and it
-     blocks pointer interaction with the page behind the modal. */
+  /* Transparent stand-in for ::backdrop, hit-testing only. Clicks on it hit
+     the dialog element outside its own box, which dialog.js already treats as
+     a backdrop click, and it blocks pointer interaction with the page behind
+     the modal. */
   dialog[open].is-fallback-modal::before {
     content: "";
     position: fixed;
     inset: 0;
     z-index: -1;
-    background: var(--backdrop-fill, rgb(0 0 0 / 35%));
   }
 }
 

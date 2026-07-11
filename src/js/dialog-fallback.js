@@ -8,10 +8,11 @@
  * restore, and the scroll lock all come from that wiring, not from here.
  *
  * Presentation lives in the legacy @supports block of reset.css, keyed on the
- * classes written below. The simulated backdrop is a ::before pseudo-element
- * covering the viewport: clicks on it target the dialog element outside its
- * own box, which dialog.js already treats as a backdrop click, and it blocks
- * pointer interaction with the page behind the modal.
+ * classes written below. The simulated backdrop is split in two there: a
+ * spread box-shadow for the dimming, and a transparent ::before covering the
+ * viewport for hit-testing — clicks on it target the dialog element outside
+ * its own box, which dialog.js already treats as a backdrop click, and it
+ * blocks pointer interaction with the page behind the modal.
  *
  * An adopter-provided polyfill (e.g. dialog-polyfill) still wins: elements it
  * already patched expose showModal() and are left untouched.
