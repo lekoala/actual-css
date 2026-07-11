@@ -926,8 +926,7 @@ A sticky footer can cover the last field on short pages. That is a page-layout c
 > Card-style radio and checkbox labels where the whole card acts as a clickable target.
 
 - Use `.choice-card` on a `<label>` wrapping a hidden native `<input type="radio">` or `<input type="checkbox">`.
-- Radio items show selection through a primary border and subtle background tint.
-- Checkbox items additionally show a checkmark badge at the top-right corner.
+- Selected items show a primary border, subtle background tint, and a checkmark badge at the top-right corner — round for radio, rounded square for checkbox.
 - Pair with grid or flex utilities for group layout.
 - Supports disabled, checked, and focus-visible states.
 

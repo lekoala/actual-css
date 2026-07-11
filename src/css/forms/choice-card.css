@@ -1,9 +1,9 @@
 /*
  * Choice cards — card-style radio and checkbox labels.
  *
- * Each .choice-card is a <label> with a hidden native input. Radio items
- * show selection via border change; checkbox items add a checkmark badge.
- * Pair with grid or flex utilities for group layout.
+ * Each .choice-card is a <label> with a hidden native input. Both radio and
+ * checkbox show a checkmark badge on selection: round for radio, rounded
+ * square for checkbox. Pair with grid or flex utilities for group layout.
  */
 :where(.choice-card) {
   /* @sync intent-boundary */
@@ -81,21 +81,28 @@
   }
 }
 
-/* Checkbox checkmark badge — circle + check icon */
-.choice-card:has(input[type="checkbox"]:checked)::before {
+/* Checkmark badge — circle for radio, rounded square for checkbox */
+.choice-card:has(:checked)::before {
   content: "";
   position: absolute;
   inset-inline-end: -0.375em;
   inset-block-start: -0.375em;
   inline-size: var(--choice-card-check-size);
   block-size: var(--choice-card-check-size);
-  border-radius: var(--radius-full);
   background: var(--intent, var(--primary));
   z-index: 1;
   box-shadow: 0 0 0 2px var(--surface);
 }
 
-.choice-card:has(input[type="checkbox"]:checked)::after {
+.choice-card:has(input[type="radio"]:checked)::before {
+  border-radius: var(--radius-full);
+}
+
+.choice-card:has(input[type="checkbox"]:checked)::before {
+  border-radius: var(--radius-sm);
+}
+
+.choice-card:has(:checked)::after {
   content: "";
   position: absolute;
   inset-inline-end: -0.375em;
@@ -119,11 +126,20 @@
     forced-color-adjust: none;
   }
 
-  .choice-card:has(input[type="checkbox"]:checked)::before {
+  .choice-card:has(:checked)::before {
     background: Highlight;
+    box-shadow: 0 0 0 2px Canvas;
   }
 
-  .choice-card:has(input[type="checkbox"]:checked)::after {
+  .choice-card:has(input[type="radio"]:checked)::before {
+    border-radius: var(--radius-full);
+  }
+
+  .choice-card:has(input[type="checkbox"]:checked)::before {
+    border-radius: var(--radius-sm);
+  }
+
+  .choice-card:has(:checked)::after {
     background: HighlightText;
   }
 }

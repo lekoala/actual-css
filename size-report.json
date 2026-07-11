@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-07-11T23:35:29.388Z",
-  "totalRaw": 165134,
-  "totalMinified": 81607,
-  "totalBrotli": 12016,
-  "themesMinified": 29151,
-  "themesBrotli": 3414,
-  "shippedMinified": 81607,
-  "shippedBrotli": 12016,
+  "timestamp": "2026-07-11T23:53:02.963Z",
+  "totalRaw": 170227,
+  "totalMinified": 84600,
+  "totalBrotli": 12278,
+  "themesMinified": 29471,
+  "themesBrotli": 3480,
+  "shippedMinified": 84600,
+  "shippedBrotli": 12278,
   "maxShippedBrotli": 13312,
-  "fileCount": 71,
+  "fileCount": 72,
   "files": [
     {
       "file": "components/flyout.css",
@@ -16,11 +16,15 @@
     },
     {
       "file": "components/button.css",
-      "raw": 6389
+      "raw": 6450
     },
     {
       "file": "theme.css",
       "raw": 6048
+    },
+    {
+      "file": "themes/edge.css",
+      "raw": 5698
     },
     {
       "file": "forms/choice.css",
@@ -29,10 +33,6 @@
     {
       "file": "components/avatar.css",
       "raw": 4768
-    },
-    {
-      "file": "themes/edge.css",
-      "raw": 4600
     },
     {
       "file": "variants.css",
@@ -49,6 +49,10 @@
     {
       "file": "components/alert.css",
       "raw": 4008
+    },
+    {
+      "file": "forms/choice-card.css",
+      "raw": 3905
     },
     {
       "file": "prose.css",
@@ -272,7 +276,7 @@
     },
     {
       "file": "forms/index.css",
-      "raw": 529
+      "raw": 558
     },
     {
       "file": "actual.css",
