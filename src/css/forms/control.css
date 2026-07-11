@@ -10,6 +10,10 @@
  * State selectors only flip tokens; non-text controls do not consume them, so
  * matching those selectors is a no-op. The .field wrapper uses --field-*
  * (form.css).
+ *
+ * --control-border-block-end-color/-width are unset extension points, mirroring
+ * --btn-border-block-end-* (button.css), for themes that give text controls an
+ * underline-style lower edge instead of a uniform border.
  */
 .input,
 .textarea,
@@ -26,6 +30,11 @@
   min-block-size: var(--control-size);
   padding-inline: var(--space-3);
   border: var(--border-width) solid var(--form-invalid-border, var(--control-border));
+  border-block-end-color: var(
+    --form-invalid-border,
+    var(--control-border-block-end-color, var(--control-border))
+  );
+  border-block-end-width: var(--control-border-block-end-width, var(--border-width));
   border-radius: var(--radius);
   background: var(--control-bg);
   color: var(--control-fg);

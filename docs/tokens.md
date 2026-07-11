@@ -294,6 +294,20 @@ that change button grammar, such as turning the default solid button into a
 surface button with an intent-colored lower edge. Keep them local until the
 same need appears across multiple components.
 
+Text controls (`.input`/`.textarea`/`.select`, forms/control.css) expose the
+same lower-edge extension point: `--control-border-block-end-color` and
+`--control-border-block-end-width` are unset by default and fall back to the
+regular border, so a theme can give inputs an underline-style lower edge the
+same way `edge.css` does for buttons, without fighting the hover/focus/disabled
+state rules that still own `--control-border` itself.
+
+Alerts (components/alert.css) expose the same idea on the leading edge instead
+of the lower one: `--alert-border-inline-start-color` and
+`--alert-border-inline-start-width` are unset by default and fall back to the
+regular `--ui-border`, so a theme can turn an alert into a callout with a
+colored flag on the inline-start side, matching the classic notice pattern,
+without a per-variant override.
+
 Rules:
 
 - Prefix internal component tokens with the component name (`--btn-*`, `--alert-*`, `--card-*`).

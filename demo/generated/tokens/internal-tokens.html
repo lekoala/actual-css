@@ -60,7 +60,7 @@
       </div>
     </section>
     <div class="component-prose">
-      <p>Button-local defaults are intentionally inherited extension points for themes that change button grammar, such as turning the default solid button into a surface button with an intent-colored lower edge. Keep them local until the same need appears across multiple components. Rules:</p>
+      <p>Button-local defaults are intentionally inherited extension points for themes that change button grammar, such as turning the default solid button into a surface button with an intent-colored lower edge. Keep them local until the same need appears across multiple components. Text controls (<code>.input</code>/<code>.textarea</code>/<code>.select</code>, forms/control.css) expose the same lower-edge extension point: <code>--control-border-block-end-color</code> and <code>--control-border-block-end-width</code> are unset by default and fall back to the regular border, so a theme can give inputs an underline-style lower edge the same way <code>edge.css</code> does for buttons, without fighting the hover/focus/disabled state rules that still own <code>--control-border</code> itself. Rules:</p>
 <ul>
   <li>Prefix internal component tokens with the component name (<code>--btn-<em></code>, <code>--alert-</em></code>, <code>--card-*</code>).</li>
   <li>Prefix shared variant plumbing with <code>--ui-*</code>.</li>

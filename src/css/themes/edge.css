@@ -1,6 +1,9 @@
-/* Edge - paired light/dark theme that demonstrates component-local button
- * tokens. Buttons become surface controls with an intent-colored lower edge;
- * .solid remains available when an action needs a filled treatment. */
+/* Edge - paired light/dark theme that demonstrates component-local
+ * border-accent tokens. Buttons become surface controls with an
+ * intent-colored lower edge (.solid remains available when an action needs a
+ * filled treatment), text controls (input/textarea/select) pick up the same
+ * lower-edge accent via --control-border-block-end-*, and alerts get an
+ * intent-colored leading flag via --alert-border-inline-start-*. */
 [data-theme="edge"] {
   color-scheme: light dark;
 
@@ -39,6 +42,9 @@
   --btn-default-border: transparent;
   --btn-border-color: transparent;
   --btn-border-block-end-width: 2px;
+
+  --control-border-block-end-color: var(--primary);
+  --control-border-block-end-width: 2px;
 }
 
 /* Intent-dependent button tokens must resolve on the button itself. If these
@@ -60,6 +66,14 @@
     ):hover {
     box-shadow: none;
   }
+}
+
+/* Intent-dependent alert token, same reasoning as the button rule above:
+   must resolve on the alert itself so local intent classes (.danger, etc.)
+   win over the bare --primary fallback. */
+[data-theme="edge"] .alert {
+  --alert-border-inline-start-color: var(--intent, var(--primary));
+  --alert-border-inline-start-width: 4px;
 }
 
 @supports (color: light-dark(red, blue)) {

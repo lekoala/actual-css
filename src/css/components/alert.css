@@ -3,6 +3,10 @@
  *
  * Keeps alert defaults local while consuming the shared --ui-* variant
  * plumbing for emphasis.
+ *
+ * --alert-border-inline-start-color/-width are unset extension points, mirroring
+ * --btn-border-block-end-* (button.css), for themes that give alerts a
+ * callout-style colored flag on the leading edge instead of a uniform border.
  */
 /* Intent boundary — inherited intents do not tint this component.
    Local intent classes still win because :where() has zero specificity. */
@@ -33,6 +37,11 @@
   background: var(--ui-bg, transparent);
   color: var(--ui-fg, var(--text));
   border: var(--border-width) solid var(--ui-border, var(--border));
+  border-inline-start-color: var(
+    --alert-border-inline-start-color,
+    var(--ui-border, var(--border))
+  );
+  border-inline-start-width: var(--alert-border-inline-start-width, var(--border-width));
   border-radius: var(--radius-lg);
   font-size: var(--alert-font-size);
 }
