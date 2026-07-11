@@ -1047,6 +1047,7 @@ small {
   --btn-border: var(--ui-border, var(--btn-default-border, transparent));
   --btn-radius: var(--radius);
   --btn-focus-color: var(--intent, var(--focus));
+  --btn-focus-outline-width: calc(var(--border-width) * 2);
   --btn-hover-bg: var(--ui-hover-bg, var(--btn-bg));
   --btn-hover-overlay: var(--hover-overlay, rgb(0 0 0 / 0.08));
 
@@ -1146,7 +1147,7 @@ small {
 }
 
 .btn:focus-visible {
-  outline: calc(var(--border-width) * 2) solid var(--btn-focus-color);
+  outline: var(--btn-focus-outline-width) solid var(--btn-focus-color);
   outline-offset: var(--focus-outline-offset);
   box-shadow: 0 0 0 3px var(--btn-focus-ring-color, var(--focus-ring));
 }
@@ -4023,6 +4024,136 @@ a.avatar[aria-disabled="true"] {
     --choice-border: GrayText;
     --choice-bg: Canvas;
     --choice-mark: GrayText;
+  }
+}
+
+/*
+ * Choice cards — card-style radio and checkbox labels.
+ *
+ * Each .choice-card is a <label> with a hidden native input. Radio items
+ * show selection via border change; checkbox items add a checkmark badge.
+ * Pair with grid or flex utilities for group layout.
+ */
+:where(.choice-card) {
+  /* @sync intent-boundary */
+  --intent: initial;
+  --intent-fg: initial;
+  --ui-bg: initial;
+  --ui-fg: initial;
+  --ui-border: initial;
+  --ui-hover-bg: initial;
+  /* @sync intent-boundary */
+}
+
+.choice-card {
+  --choice-card-pad: var(--variant-space, var(--space-4));
+  --choice-card-radius: var(--radius);
+  --choice-card-border: var(--border);
+  --choice-card-bg: var(--surface);
+  --choice-card-check-size: 1.5em;
+
+  position: relative;
+  display: block;
+  padding: var(--choice-card-pad);
+  border: var(--border-width) solid var(--choice-card-border);
+  border-radius: var(--choice-card-radius);
+  background: var(--choice-card-bg);
+  color: var(--text);
+  cursor: pointer;
+  transition:
+    border-color var(--duration),
+    background-color var(--duration),
+    box-shadow var(--duration);
+}
+
+/* The native input is visually hidden but stays focusable and participates in
+   form submission and keyboard navigation (sr-only pattern). */
+.choice-card > input {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Focus ring on the label follows the hidden input's focus. */
+.choice-card:has(:focus-visible) {
+  outline: var(--focus-outline);
+  outline-offset: var(--focus-outline-offset);
+  box-shadow: var(--focus-ring-shadow);
+}
+
+.choice-card:has(:disabled) {
+  opacity: var(--disabled-opacity);
+  cursor: not-allowed;
+}
+
+@media (hover: hover) {
+  .choice-card:hover:not(:has(:disabled)) {
+    --choice-card-border: var(--text-subtle);
+  }
+}
+
+/* Checked border — shared by radio and checkbox */
+.choice-card:has(:checked) {
+  --choice-card-border: var(--intent, var(--primary));
+}
+
+/* Subtle background tint on checked — modern browsers only */
+@supports (color: color-mix(in oklch, red, white)) {
+  .choice-card:has(:checked) {
+    --choice-card-bg: color-mix(in oklch, var(--surface) 96%, var(--intent, var(--primary)));
+  }
+}
+
+/* Checkbox checkmark badge — circle + check icon */
+.choice-card:has(input[type="checkbox"]:checked)::before {
+  content: "";
+  position: absolute;
+  inset-inline-end: -0.375em;
+  inset-block-start: -0.375em;
+  inline-size: var(--choice-card-check-size);
+  block-size: var(--choice-card-check-size);
+  border-radius: var(--radius-full);
+  background: var(--intent, var(--primary));
+  z-index: 1;
+  box-shadow: 0 0 0 2px var(--surface);
+}
+
+.choice-card:has(input[type="checkbox"]:checked)::after {
+  content: "";
+  position: absolute;
+  inset-inline-end: -0.375em;
+  inset-block-start: -0.375em;
+  inline-size: var(--choice-card-check-size);
+  block-size: var(--choice-card-check-size);
+  background: var(--intent-fg, var(--primary-fg));
+  mask: var(--icon-check-mask) center / 60% no-repeat;
+  -webkit-mask: var(--icon-check-mask) center / 60% no-repeat;
+  z-index: 2;
+}
+
+@media (forced-colors: active) {
+  .choice-card {
+    --choice-card-border: ButtonText;
+    --choice-card-bg: Canvas;
+  }
+
+  .choice-card:has(:checked) {
+    --choice-card-border: Highlight;
+    forced-color-adjust: none;
+  }
+
+  .choice-card:has(input[type="checkbox"]:checked)::before {
+    background: Highlight;
+  }
+
+  .choice-card:has(input[type="checkbox"]:checked)::after {
+    background: HighlightText;
   }
 }
 
