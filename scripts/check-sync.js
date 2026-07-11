@@ -27,6 +27,7 @@ const GROUPS = [
       "src/css/components/spinner.css",
       "src/css/components/tab.css",
       "src/css/forms/choice.css",
+      "src/css/forms/choice-card.css",
       "src/css/forms/native.css",
       "src/css/forms/switch.css",
     ],

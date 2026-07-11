@@ -921,6 +921,61 @@ Knobs:
 
 A sticky footer can cover the last field on short pages. That is a page-layout concern, not a framework concern. Add bottom padding to the page or scroll container if needed.
 
+## Choice Cards
+
+> Card-style radio and checkbox labels where the whole card acts as a clickable target.
+
+- Use `.choice-card` on a `<label>` wrapping a hidden native `<input type="radio">` or `<input type="checkbox">`.
+- Radio items show selection through a primary border and subtle background tint.
+- Checkbox items additionally show a checkmark badge at the top-right corner.
+- Pair with grid or flex utilities for group layout.
+- Supports disabled, checked, and focus-visible states.
+
+```html
+<div class="grid-3">
+  <label class="choice-card">
+    <input type="radio" name="cpu" value="1" checked />
+    <strong>8-core CPU</strong>
+    <span class="muted">32 GB RAM</span>
+  </label>
+  <label class="choice-card">
+    <input type="radio" name="cpu" value="2" />
+    <strong>6-core CPU</strong>
+    <span class="muted">24 GB RAM</span>
+  </label>
+  <label class="choice-card">
+    <input type="radio" name="cpu" value="3" />
+    <strong>4-core CPU</strong>
+    <span class="muted">16 GB RAM</span>
+  </label>
+</div>
+```
+
+```html
+<fieldset class="field-group">
+  <legend class="field-label">Features</legend>
+  <div class="grid-3">
+    <label class="choice-card">
+      <input type="checkbox" name="features" value="wifi" checked />
+      <strong>WiFi</strong>
+      <span class="muted">Dual-band 2.4/5 GHz</span>
+    </label>
+    <label class="choice-card">
+      <input type="checkbox" name="features" value="bluetooth" />
+      <strong>Bluetooth</strong>
+      <span class="muted">5.3, low energy</span>
+    </label>
+    <label class="choice-card">
+      <input type="checkbox" name="features" value="nfc" disabled />
+      <strong>NFC</strong>
+      <span class="muted">Coming soon</span>
+    </label>
+  </div>
+</fieldset>
+```
+
+Sizes follow the shared `.sm` and `.lg` modifiers. Intent classes (`.primary`, `.secondary`) are supported on the `.choice-card` element.
+
 ## Switches
 
 > Toggle controls that share a native checkbox at the markup level, with a switch visual.
