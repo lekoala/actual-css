@@ -1,12 +1,12 @@
 {
-  "timestamp": "2026-07-11T12:32:22.176Z",
-  "totalRaw": 163081,
-  "totalMinified": 81217,
-  "totalBrotli": 11961,
-  "themesMinified": 28783,
-  "themesBrotli": 3328,
-  "shippedMinified": 81217,
-  "shippedBrotli": 11961,
+  "timestamp": "2026-07-11T23:35:29.388Z",
+  "totalRaw": 165134,
+  "totalMinified": 81607,
+  "totalBrotli": 12016,
+  "themesMinified": 29151,
+  "themesBrotli": 3414,
+  "shippedMinified": 81607,
+  "shippedBrotli": 12016,
   "maxShippedBrotli": 13312,
   "fileCount": 71,
   "files": [
@@ -31,6 +31,10 @@
       "raw": 4768
     },
     {
+      "file": "themes/edge.css",
+      "raw": 4600
+    },
+    {
       "file": "variants.css",
       "raw": 4584
     },
@@ -43,6 +47,10 @@
       "raw": 4014
     },
     {
+      "file": "components/alert.css",
+      "raw": 4008
+    },
+    {
       "file": "prose.css",
       "raw": 3881
     },
@@ -51,16 +59,8 @@
       "raw": 3608
     },
     {
-      "file": "components/alert.css",
-      "raw": 3568
-    },
-    {
       "file": "components/modal.css",
       "raw": 3469
-    },
-    {
-      "file": "themes/edge.css",
-      "raw": 3424
     },
     {
       "file": "forms/switch.css",
@@ -85,6 +85,10 @@
     {
       "file": "components/card.css",
       "raw": 2962
+    },
+    {
+      "file": "forms/control.css",
+      "raw": 2876
     },
     {
       "file": "components/tooltip.css",
@@ -121,10 +125,6 @@
     {
       "file": "themes/neon.css",
       "raw": 2460
-    },
-    {
-      "file": "forms/control.css",
-      "raw": 2439
     },
     {
       "file": "grid.css",

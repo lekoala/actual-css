@@ -308,6 +308,34 @@ regular `--ui-border`, so a theme can turn an alert into a callout with a
 colored flag on the inline-start side, matching the classic notice pattern,
 without a per-variant override.
 
+A theme is not limited to the tokens above; it can restate any component-local
+token under a state selector to change the interaction recipe itself, not just
+the palette. `edge.css` does this for focus: the base input recipe
+(forms/control.css) flips `--control-border` to `--focus` on top of the shared
+outline + ring, which triples up with the lower-edge accent above. Edge drops
+the border-color flip under `:focus-visible` (thickening the accent edge
+instead) and also thins `--focus-outline` and tightens `--focus-outline-offset`
+so the outline hugs the control rather than floating a second ring around it.
+
+Buttons don't consume `--focus-outline` — button.css computes its own outline
+inline so the color can follow `--btn-focus-color` (intent-aware, unlike the
+plain `--focus` the shared token is hardcoded to), so it exposes a matching
+local token, `--btn-focus-outline-width`, defaulting to the same
+`calc(var(--border-width) * 2)` the old hardcoded value used. `edge.css`
+overrides it the same way it overrides `--focus-outline` for inputs.
+
+The outline overrides are gated in `@media not (forced-colors: active)`. Under
+forced-colors, `theme.css` repoints `--focus-outline` to a Highlight-colored
+system outline via a `:root, [data-theme="light"], [data-theme="dark"]` rule —
+`:root` always matches the root element regardless of its `data-theme`
+attribute, so that fallback reaches every theme, edge included. But it is a
+lower-specificity, inherited value: an unguarded same-property override
+declared directly on `.input` would out-specificity it in every color mode,
+including forced-colors, because direct beats inherited regardless of the
+media condition either rule was written under. Any theme that restyles
+`--focus-outline`, `--btn-focus-outline-width`, or `--focus-ring-shadow` needs
+the same guard.
+
 Rules:
 
 - Prefix internal component tokens with the component name (`--btn-*`, `--alert-*`, `--card-*`).
