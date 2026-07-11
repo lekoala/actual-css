@@ -168,6 +168,76 @@ test("the shim applies to a dialog inserted immediately before the click", async
   expect(dialog.classList.contains("is-fallback-modal")).toBe(true);
 });
 
+test("closing a shimmed modal restores the scroll position", async () => {
+  await loadLegacyDialog(`
+    <button id="open" commandfor="prefs" command="show-modal">Open</button>
+    <dialog id="prefs">
+      <button id="close" commandfor="prefs" command="request-close">Close</button>
+    </dialog>
+  `);
+  Object.defineProperty(window, "scrollX", { configurable: true, value: 0 });
+  Object.defineProperty(window, "scrollY", { configurable: true, value: 480 });
+  const calls = [];
+  window.scrollTo = (x, y) => calls.push([x, y]);
+
+  click(document.getElementById("open"));
+  click(document.getElementById("close"));
+
+  expect(calls.at(-1)).toEqual([0, 480]);
+});
+
+test("closing a shimmed non-modal dialog does not touch the scroll position", async () => {
+  await loadLegacyDialog(`
+    <button id="open" commandfor="prefs" command="show">Open</button>
+    <dialog id="prefs">
+      <button id="close" commandfor="prefs" command="request-close">Close</button>
+    </dialog>
+  `);
+  const calls = [];
+  window.scrollTo = (x, y) => calls.push([x, y]);
+
+  click(document.getElementById("open"));
+  click(document.getElementById("close"));
+
+  expect(calls.length).toBe(0);
+});
+
+test("method=dialog submit closes a shimmed modal instead of navigating", async () => {
+  await loadLegacyDialog(`
+    <button id="open" commandfor="prefs" command="show-modal">Open</button>
+    <dialog id="prefs">
+      <form method="dialog"><button id="ok" value="confirm">OK</button></form>
+    </dialog>
+  `);
+  const dialog = document.getElementById("prefs");
+
+  click(document.getElementById("open"));
+  document.getElementById("ok").focus();
+  const submitEvent = new Event("submit", { bubbles: true, cancelable: true });
+  document.querySelector("form").dispatchEvent(submitEvent);
+
+  expect(submitEvent.defaultPrevented).toBe(true);
+  expect(dialog.open).toBe(false);
+  expect(dialog.returnValue).toBe("confirm");
+});
+
+test("a regular form inside a shimmed modal is not intercepted", async () => {
+  await loadLegacyDialog(`
+    <button id="open" commandfor="prefs" command="show-modal">Open</button>
+    <dialog id="prefs">
+      <form action="/save" method="post"><button id="ok">Save</button></form>
+    </dialog>
+  `);
+  const dialog = document.getElementById("prefs");
+
+  click(document.getElementById("open"));
+  const submitEvent = new Event("submit", { bubbles: true, cancelable: true });
+  document.querySelector("form").dispatchEvent(submitEvent);
+
+  expect(submitEvent.defaultPrevented).toBe(false);
+  expect(dialog.open).toBe(true);
+});
+
 test("an element-level polyfill is left untouched by the shim", async () => {
   setupDOM('<button commandfor="prefs" command="show-modal">Open</button><dialog id="prefs"></dialog>');
   stripDialogSupport();

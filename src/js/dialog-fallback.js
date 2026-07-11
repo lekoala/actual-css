@@ -8,9 +8,11 @@
  * browsers importing this module registers nothing.
  *
  * Not a polyfill: no top layer, no focus trap, no inert background. It only
- * provides show()/showModal()/close() and an `open` property so dialog.js can
- * run its normal wiring — backdrop click, Escape cancel, close events, focus
- * restore, and the scroll lock all come from that wiring, not from here.
+ * provides show()/showModal()/close(), an `open` property, and the
+ * form[method=dialog] close-on-submit contract (otherwise those forms really
+ * navigate on legacy browsers), so dialog.js can run its normal wiring —
+ * backdrop click, Escape cancel, close events, focus restore, and the scroll
+ * lock all come from that wiring, not from here.
  *
  * Presentation lives in dialog-fallback.css, keyed on the classes written
  * below. The simulated backdrop is split in two there: a spread box-shadow
@@ -59,10 +61,23 @@ export default function shimDialog(dialog) {
 
   const doc = dialog.ownerDocument;
   let escController = null;
+  let savedScroll = null;
 
   function stopEscapeListener() {
     escController?.abort();
     escController = null;
+  }
+
+  function handleSubmit(event) {
+    const form = event.target;
+    // Read the attribute: on these browsers "dialog" is an invalid method
+    // value, so the reflected form.method property reports "get" and the
+    // form would otherwise really submit and navigate away.
+    if (form?.getAttribute?.("method")?.toLowerCase() !== "dialog") return;
+    event.preventDefault();
+    const submitter =
+      event.submitter || (doc.activeElement?.form === form ? doc.activeElement : null);
+    dialog.close(submitter?.value || "");
   }
 
   function handleEscape(event) {
@@ -78,6 +93,11 @@ export default function shimDialog(dialog) {
 
   function open(modal) {
     if (dialog.open) return;
+    // Old WebKit clamps the scroll position to 0 when the root element gains
+    // overflow:hidden (the has-modal-open lock applied right after this),
+    // losing the user's place. Remember it and put it back after close.
+    const win = doc.defaultView;
+    savedScroll = modal && win ? { x: win.scrollX, y: win.scrollY } : null;
     dialog.setAttribute("open", "");
     dialog.classList.toggle(CLASSES.fallbackModal, modal);
     if (modal) {
@@ -99,6 +119,7 @@ export default function shimDialog(dialog) {
 
   dialog.returnValue = "";
   dialog.classList.add(CLASSES.dialogFallback);
+  dialog.addEventListener("submit", handleSubmit);
   dialog.show = () => open(false);
   dialog.showModal = () => open(true);
   dialog.close = (returnValue = "") => {
@@ -108,6 +129,12 @@ export default function shimDialog(dialog) {
     dialog.removeAttribute("open");
     dialog.classList.remove(CLASSES.fallbackModal);
     dialog.dispatchEvent(new Event("close"));
+    // After the close event: dialog.js has lifted the scroll lock and moved
+    // focus back to the trigger, so the restored position sticks.
+    if (savedScroll) {
+      doc.defaultView?.scrollTo?.(savedScroll.x, savedScroll.y);
+      savedScroll = null;
+    }
   };
 }
 
