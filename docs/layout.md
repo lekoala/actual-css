@@ -46,7 +46,7 @@ Use `.stack` for vertical flow with consistent spacing.
 <section class="stack">
   <h2>Account</h2>
   <p class="muted">Manage profile and billing settings.</p>
-  <form
+  <form>
     <label class="field">
       <span class="field-label">Email</span>
       <input type="email" placeholder="you@example.com" />
