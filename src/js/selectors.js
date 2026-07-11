@@ -39,8 +39,8 @@ export const CLASSES = {
   // dialog.js — transient class for the "can't dismiss" shake animation.
   static: "is-static",
   // dialog-fallback.js — marker written on a dialog controlled by the legacy
-  // shim (browsers without native <dialog>); reset.css keys its emulated
-  // dialog presentation on it.
+  // shim (browsers without native <dialog>); dialog-fallback.css keys its
+  // emulated dialog presentation on it.
   dialogFallback: "dialog-fallback",
   // dialog-fallback.js — state class on a shimmed dialog while it is open as
   // a modal; carries the fixed positioning and simulated backdrop.

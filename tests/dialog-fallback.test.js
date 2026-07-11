@@ -5,7 +5,7 @@ let importId = 0;
 
 /* Simulate a browser without native <dialog>: happy-dom implements the
  * methods on HTMLDialogElement.prototype, so deleting them makes
- * supportsDialog() false and forces dialog.js onto the shim path. */
+ * supportsDialog() false and forces the shim path. */
 function stripDialogSupport() {
   delete HTMLDialogElement.prototype.show;
   delete HTMLDialogElement.prototype.showModal;
@@ -13,10 +13,18 @@ function stripDialogSupport() {
   delete HTMLDialogElement.prototype.requestClose;
 }
 
+async function importRuntime(withFallback = true) {
+  importId++;
+  if (withFallback) {
+    await import(`../src/js/dialog-fallback.js?fallback=${importId}`);
+  }
+  await import(`../src/js/dialog.js?fallback=${importId}`);
+}
+
 async function loadLegacyDialog(html) {
   setupDOM(html);
   stripDialogSupport();
-  await import(`../src/js/dialog.js?fallback=${++importId}`);
+  await importRuntime();
 }
 
 afterEach(() => {
@@ -41,6 +49,25 @@ test("show-modal opens through the shim instead of alerting", async () => {
   expect(dialog.classList.contains("dialog-fallback")).toBe(true);
   expect(dialog.classList.contains("is-fallback-modal")).toBe(true);
   expect(document.documentElement.classList.contains("has-modal-open")).toBe(true);
+});
+
+test("without the fallback module unsupported browsers keep the alert", async () => {
+  setupDOM(
+    '<button commandfor="prefs" command="show-modal">Open</button><dialog id="prefs"></dialog>',
+  );
+  stripDialogSupport();
+  let alerts = 0;
+  window.alert = () => {
+    alerts += 1;
+  };
+  await importRuntime(false);
+  const dialog = document.getElementById("prefs");
+
+  click(document.querySelector("button"));
+
+  expect(alerts).toBe(1);
+  expect(dialog.hasAttribute("open")).toBe(false);
+  expect(dialog.classList.contains("dialog-fallback")).toBe(false);
 });
 
 test("request-close closes a shimmed dialog and restores focus", async () => {
@@ -130,7 +157,7 @@ test("a shimmed dialog focuses its autofocus element on open", async () => {
 test("the shim applies to a dialog inserted immediately before the click", async () => {
   setupDOM('<main><button commandfor="prefs" command="show-modal">Open</button></main>');
   stripDialogSupport();
-  await import(`../src/js/dialog.js?fallback=${++importId}`);
+  await importRuntime();
 
   document.querySelector("main").insertAdjacentHTML("beforeend", '<dialog id="prefs"></dialog>');
   const dialog = document.getElementById("prefs");
@@ -153,7 +180,7 @@ test("an element-level polyfill is left untouched by the shim", async () => {
     dialog.setAttribute("open", "");
   };
   dialog.close = () => {};
-  await import(`../src/js/dialog.js?fallback=${++importId}`);
+  await importRuntime();
 
   await nextMicrotask();
   click(document.querySelector("button"));

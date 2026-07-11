@@ -1,0 +1,56 @@
+/*
+ * Legacy dialog fallback — presentation for the dialog-fallback.js shim
+ * (browsers without native <dialog>: Safari <= 15.3, Firefox <= 97).
+ *
+ * Isolated in its own file so a custom bundle can opt out by dropping this
+ * import; the JS side is disabled with data-dialog-fallback="false" on the
+ * root element or on a dialog. Must load before component styles so ties
+ * such as dialog.modal's padding resolve in the component's favor.
+ *
+ * The whole file is inert on modern browsers: rules key on the
+ * .dialog-fallback marker written by the shim, so browsers that support
+ * <dialog> but not :modal are never affected either.
+ */
+@supports not (selector(dialog:modal)) {
+  /* Browsers without native <dialog> ship no UA dialog styles at all;
+     approximate them. :where() keeps specificity at dialog[open] level so
+     component styles such as dialog.modal still override the emulation. */
+  dialog[open]:where(.dialog-fallback) {
+    position: absolute;
+    inset-inline: 0;
+    width: -moz-fit-content;
+    width: fit-content;
+    max-inline-size: calc(100% - 2rem);
+    margin: auto;
+    padding: var(--space-4, 1em);
+    border: var(--border-width, 1px) solid var(--border, currentColor);
+    background: var(--surface-raised, #fff);
+    color: var(--text, inherit);
+  }
+
+  /* Open modally: fixed near the top (no fit-content in the block axis on
+     these browsers, so no vertical centering) and above menus, below
+     tooltips. Legacy-only layer, hence no z-index token. The spread shadow is
+     the visible backdrop: the dialog is its own stacking context, where a
+     negative z-index child paints above the element's background, so the
+     dimming cannot live on the ::before. */
+  dialog[open].is-fallback-modal {
+    position: fixed;
+    inset-block: 8vh auto;
+    max-block-size: 84vh;
+    overflow: auto;
+    z-index: 40;
+    box-shadow: 0 0 0 100vmax var(--backdrop-fill, rgb(0 0 0 / 35%));
+  }
+
+  /* Transparent stand-in for ::backdrop, hit-testing only. Clicks on it hit
+     the dialog element outside its own box, which dialog.js already treats as
+     a backdrop click, and it blocks pointer interaction with the page behind
+     the modal. */
+  dialog[open].is-fallback-modal::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+  }
+}

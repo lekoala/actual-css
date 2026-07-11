@@ -25,16 +25,52 @@ select {
 }
 
 /* Legacy dialog fallback only. Modern dialogs keep the browser's native closed
-   state so display/overlay transitions are not flattened by the reset. */
+   state so display/overlay transitions are not flattened by the reset.
+   The presentation for the dialog-fallback.js shim lives in the separate
+   dialog-fallback.css, so it can be dropped from custom bundles. */
 @supports not (selector(dialog:modal)) {
   dialog:not([open]) {
     display: none;
   }
+}
 
-  /* Presentation for the dialog-fallback.js shim (browsers without native
-     <dialog> ship no UA dialog styles at all). The .dialog-fallback marker is
-     written by the shim, so browsers that support <dialog> but not :modal are
-     never affected. :where() keeps specificity at dialog[open] level so
+:where(img, svg, video) {
+  max-inline-size: 100%;
+  block-size: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto !important;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0s !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0s !important;
+  }
+}
+
+/*
+ * Legacy dialog fallback — presentation for the dialog-fallback.js shim
+ * (browsers without native <dialog>: Safari <= 15.3, Firefox <= 97).
+ *
+ * Isolated in its own file so a custom bundle can opt out by dropping this
+ * import; the JS side is disabled with data-dialog-fallback="false" on the
+ * root element or on a dialog. Must load before component styles so ties
+ * such as dialog.modal's padding resolve in the component's favor.
+ *
+ * The whole file is inert on modern browsers: rules key on the
+ * .dialog-fallback marker written by the shim, so browsers that support
+ * <dialog> but not :modal are never affected either.
+ */
+@supports not (selector(dialog:modal)) {
+  /* Browsers without native <dialog> ship no UA dialog styles at all;
+     approximate them. :where() keeps specificity at dialog[open] level so
      component styles such as dialog.modal still override the emulation. */
   dialog[open]:where(.dialog-fallback) {
     position: absolute;
@@ -73,27 +109,6 @@ select {
     position: fixed;
     inset: 0;
     z-index: -1;
-  }
-}
-
-:where(img, svg, video) {
-  max-inline-size: 100%;
-  block-size: auto;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto !important;
-  }
-
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-delay: 0s !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    transition-delay: 0s !important;
   }
 }
 
