@@ -178,14 +178,21 @@
     }
 
     /* Cells drop the control's own box entirely — no border, no radius, in
-       any state. States surface as background tints and label color instead:
-       validation.css publishes --form-invalid-border on invalid controls, and
-       with borders hidden the block repurposes it as a danger tint. */
+       any state. States surface as background tints and label color instead.
+       The invalid tint must key on per-control signals (aria-invalid,
+       :invalid): the shared .field wrapper gets .danger from validation.js
+       when any one cell is invalid, so anything inherited from the wrapper
+       (like --form-invalid-border) would paint every cell. */
     .block-float-form :is(.input, .textarea) {
-      --control-bg: color-mix(in srgb, var(--form-invalid-border, transparent) 12%, transparent);
+      --control-bg: transparent;
 
       border-color: transparent;
       border-radius: 0;
+    }
+
+    .block-float-form :is(.input, .textarea):is([aria-invalid="true"], :user-invalid),
+    .was-validated .block-float-form :is(.input, .textarea):invalid {
+      --control-bg: color-mix(in srgb, var(--danger) 12%, transparent);
     }
 
     @media (hover: hover) {
