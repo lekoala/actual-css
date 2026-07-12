@@ -4030,9 +4030,15 @@ a.avatar[aria-disabled="true"] {
 /*
  * Choice cards — card-style radio and checkbox labels.
  *
- * Each .choice-card is a <label> with a hidden native input. Both radio and
- * checkbox show a checkmark badge on selection: round for radio, rounded
- * square for checkbox. Pair with grid or flex utilities for group layout.
+ * Each .choice-card is a <label> wrapping a native radio or checkbox. When
+ * :has() is supported the input is visually hidden and the card mirrors its
+ * state: checked border and tint, checkmark badge (round for radio, rounded
+ * square for checkbox), focus ring, disabled dimming. Without :has() the
+ * native input stays visible so selection state never disappears.
+ *
+ * The badge overhangs the top-right corner by 0.375em; ancestors with
+ * overflow: hidden will clip it. Pair with grid or flex utilities for group
+ * layout.
  */
 :where(.choice-card) {
   /* @sync intent-boundary */
@@ -4055,7 +4061,7 @@ a.avatar[aria-disabled="true"] {
   position: relative;
   display: block;
   padding: var(--choice-card-pad);
-  border: var(--border-width) solid var(--choice-card-border);
+  border: var(--border-width) solid var(--form-invalid-border, var(--choice-card-border));
   border-radius: var(--choice-card-radius);
   background: var(--choice-card-bg);
   color: var(--text);
@@ -4067,17 +4073,21 @@ a.avatar[aria-disabled="true"] {
 }
 
 /* The native input is visually hidden but stays focusable and participates in
-   form submission and keyboard navigation (sr-only pattern). */
-.choice-card > input {
-  position: absolute;
-  inline-size: 1px;
-  block-size: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
+   form submission and keyboard navigation (sr-only pattern). Guarded: without
+   :has() the card cannot mirror the input's state, so the visible native
+   control is the fallback affordance. */
+@supports selector(:has(*)) {
+  .choice-card > :is(input[type="radio"], input[type="checkbox"]) {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
 }
 
 /* Focus ring on the label follows the hidden input's focus. */
@@ -4110,38 +4120,46 @@ a.avatar[aria-disabled="true"] {
   }
 }
 
-/* Checkmark badge — circle for radio, rounded square for checkbox */
-.choice-card:has(:checked)::before {
+/* Checkmark badge — always rendered at scale(0) and scaled in on check, so
+   the entrance can transition (a pseudo created on :checked could not). */
+.choice-card::before,
+.choice-card::after {
   content: "";
   position: absolute;
   inset-inline-end: -0.375em;
   inset-block-start: -0.375em;
   inline-size: var(--choice-card-check-size);
   block-size: var(--choice-card-check-size);
-  background: var(--intent, var(--primary));
-  z-index: 1;
-  box-shadow: 0 0 0 2px var(--surface);
+  transform: scale(0);
+  transition: transform var(--duration);
 }
 
-.choice-card:has(input[type="radio"]:checked)::before {
+/* Badge disc — circle for radio, rounded square for checkbox */
+.choice-card::before {
+  background: var(--intent, var(--primary));
+  box-shadow: 0 0 0 2px var(--surface);
+  z-index: 1;
+}
+
+.choice-card:has(input[type="radio"])::before {
   border-radius: var(--radius-full);
 }
 
-.choice-card:has(input[type="checkbox"]:checked)::before {
+.choice-card:has(input[type="checkbox"])::before {
   border-radius: var(--radius-sm);
 }
 
-.choice-card:has(:checked)::after {
-  content: "";
-  position: absolute;
-  inset-inline-end: -0.375em;
-  inset-block-start: -0.375em;
-  inline-size: var(--choice-card-check-size);
-  block-size: var(--choice-card-check-size);
+/* Check mark */
+.choice-card::after {
   background: var(--intent-fg, var(--primary-fg));
-  mask: var(--icon-check-mask) center / 60% no-repeat;
   -webkit-mask: var(--icon-check-mask) center / 60% no-repeat;
+  mask: var(--icon-check-mask) center / 60% no-repeat;
   z-index: 2;
+}
+
+.choice-card:has(:checked)::before,
+.choice-card:has(:checked)::after {
+  transform: scale(1);
 }
 
 @media (forced-colors: active) {
@@ -4152,20 +4170,15 @@ a.avatar[aria-disabled="true"] {
 
   .choice-card:has(:checked) {
     --choice-card-border: Highlight;
+    /* Pin the background: with forced-color-adjust: none the color-mix tint
+       above would actually render, uncontrolled in high-contrast themes. */
+    --choice-card-bg: Canvas;
     forced-color-adjust: none;
   }
 
   .choice-card:has(:checked)::before {
     background: Highlight;
     box-shadow: 0 0 0 2px Canvas;
-  }
-
-  .choice-card:has(input[type="radio"]:checked)::before {
-    border-radius: var(--radius-full);
-  }
-
-  .choice-card:has(input[type="checkbox"]:checked)::before {
-    border-radius: var(--radius-sm);
   }
 
   .choice-card:has(:checked)::after {
@@ -4539,6 +4552,16 @@ a.avatar[aria-disabled="true"] {
   --switch-bg: var(--danger);
 }
 
+/* Choice cards hide their native input, so invalid state must surface on the
+   card itself. Sets the same --form-invalid-border hook the card's border
+   consumes. */
+@supports selector(:has(*)) {
+  .choice-card:has([aria-invalid="true"]),
+  .needs-validation.was-validated .choice-card:has(:invalid) {
+    --form-invalid-border: var(--danger);
+  }
+}
+
 @supports selector(:user-invalid) {
   .needs-validation :is(.input, .textarea, .select, .check, .radio, .switch):user-invalid {
     --form-invalid-border: var(--danger);
@@ -4548,6 +4571,10 @@ a.avatar[aria-disabled="true"] {
 @supports selector(:has(:user-invalid)) {
   .needs-validation .field:has(:user-invalid) > .field-error {
     display: block;
+  }
+
+  .needs-validation .choice-card:has(:user-invalid) {
+    --form-invalid-border: var(--danger);
   }
 }
 
