@@ -8,7 +8,7 @@ Hand-authored demo sources live in:
 
 - `styles/` for demo-only CSS.
 - `templates/` for standalone static HTML examples.
-- `admini/` for a multi-page recreation of the [admini](../thirdparty/admini-master) Bootstrap 5 admin template — dashboard, tables, forms, settings, login, and 404 — built entirely on Actual CSS. Each page is self-contained (no shared-layout mechanism yet); the sidebar/topbar block is identical across pages and delimited with `<!-- admini-shell:… -->` comments so it can be extracted behind htmx/Turbo/etc. later.
+- `admini/` for a multi-page recreation of the [admini](https://github.com/lekoala/admini) Bootstrap 5 admin template — dashboard, tables, forms, settings, login, and 404 — built entirely on Actual CSS. Each page is self-contained (no shared-layout mechanism yet); the sidebar/topbar block is identical across pages and delimited with `<!-- admini-shell:… -->` comments so it can be extracted behind htmx/Turbo/etc. later.
 - `preview.svg` for the demo preview image.
 
 `index.html` is a generated convenience redirect to `generated/index.html`.

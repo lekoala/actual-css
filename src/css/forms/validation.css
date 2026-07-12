@@ -36,6 +36,16 @@
   --switch-bg: var(--danger);
 }
 
+/* Choice cards hide their native input, so invalid state must surface on the
+   card itself. Sets the same --form-invalid-border hook the card's border
+   consumes. */
+@supports selector(:has(*)) {
+  .choice-card:has([aria-invalid="true"]),
+  .needs-validation.was-validated .choice-card:has(:invalid) {
+    --form-invalid-border: var(--danger);
+  }
+}
+
 @supports selector(:user-invalid) {
   .needs-validation :is(.input, .textarea, .select, .check, .radio, .switch):user-invalid {
     --form-invalid-border: var(--danger);
@@ -45,5 +55,9 @@
 @supports selector(:has(:user-invalid)) {
   .needs-validation .field:has(:user-invalid) > .field-error {
     display: block;
+  }
+
+  .needs-validation .choice-card:has(:user-invalid) {
+    --form-invalid-border: var(--danger);
   }
 }
