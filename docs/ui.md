@@ -662,7 +662,7 @@ Long press is opt-in with `data-context-menu-long-press`. Empty uses the default
 
 ```html
 <div class="tabset">
-  <div class="tabs" role="tablist" aria-label="Settings">
+  <div class="tabs" data-enhance="tabs" role="tablist" aria-label="Settings">
     <button class="tab primary"
             type="button"
             role="tab"

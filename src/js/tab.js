@@ -1,7 +1,7 @@
 /*
  * Tabs — in-place panel switcher using real tab semantics.
  *
- * Tab list:  .tabs[role="tablist"]
+ * Tab list:  [data-enhance="tabs"] with role="tablist"
  * Tab:       [role="tab"]  with aria-selected, aria-controls, id, tabindex
  * Panel:     [role="tabpanel"]  with id matching aria-controls
  *
@@ -9,17 +9,16 @@
  *            ArrowUp/Down for aria-orientation="vertical"
  *            ArrowDown (focus selected panel)
  *
- * Self-registers via enhance: injected tablists wire automatically.
+ * Self-registers via registerEnhancement: injected tablists wire automatically.
  * The tab→panel map is rebuilt from the live tablist on each interaction,
  * so tabs added after connect are picked up with no extra work.
  * Cleanup is the AbortController.abort() returned to enhance.
  */
 
-import enhance from "./enhance.js";
+import { registerEnhancement } from "./enhance.js";
 import { firstItem, lastItem, nextItem } from "./keys.js";
-import { CLASSES } from "./selectors.js";
 
-const TABLIST_SELECTOR = `.${CLASSES.tabs}[role="tablist"]`;
+const TABLIST_SELECTOR = '[data-enhance~="tabs"]';
 
 function tabsOf(list) {
   return [...list.querySelectorAll('[role="tab"]')];
@@ -162,12 +161,10 @@ function onClick(e) {
   tab.focus();
 }
 
-enhance({
-  [TABLIST_SELECTOR]: (list) => {
-    const controller = new AbortController();
-    initialize(list);
-    list.addEventListener("click", onClick, { signal: controller.signal });
-    list.addEventListener("keydown", onKeydown, { signal: controller.signal });
-    return () => controller.abort();
-  },
+registerEnhancement("tabs", (list) => {
+  const controller = new AbortController();
+  initialize(list);
+  list.addEventListener("click", onClick, { signal: controller.signal });
+  list.addEventListener("keydown", onKeydown, { signal: controller.signal });
+  return () => controller.abort();
 });
