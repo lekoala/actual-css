@@ -114,3 +114,28 @@ test("modal uses scrollbar gutter only for measured classic-scrollbar locks", ()
   expect(css).toContain("scrollbar-gutter: stable;");
   expect(resetCss.includes("scrollbar-gutter: stable;")).toBe(false);
 });
+
+test("alert.callout is excluded from the soft-tint recipe and uses ::before inset band", () => {
+  const css = readCss("src/css/components/alert.css");
+
+  expect(css).toContain(':not(.solid, .outline, .callout)');
+  expect(css).toContain(".alert.callout::before");
+  expect(css).toContain("background: var(--intent, var(--neutral));");
+});
+
+test("alert.admonition neutralizes root padding and gap, and defines alert-title/alert-body", () => {
+  const css = readCss("src/css/components/alert.css");
+
+  expect(css).toContain(".alert.admonition");
+  expect(css).toMatch(/\.alert\.admonition\s*\{[\s\S]*padding:\s*0;/);
+  expect(css).toMatch(/\.alert\.admonition\s*\{[\s\S]*gap:\s*0;/);
+  expect(css).toContain(".alert-title");
+  expect(css).toContain(".alert-body");
+});
+
+test("alert-title margins are reset inside alert-body", () => {
+  const css = readCss("src/css/components/alert.css");
+
+  expect(css).toContain(".alert-body > :first-child");
+  expect(css).toContain(".alert-body > :last-child");
+});

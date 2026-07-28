@@ -1,7 +1,10 @@
 [
   "accordion",
   "actions",
+  "admonition",
   "alert",
+  "alert-body",
+  "alert-title",
   "app-shell",
   "avatar-stack",
   "join",
@@ -11,6 +14,7 @@
   "bleed",
   "breadcrumb",
   "btn",
+  "callout",
   "card",
   "center",
   "check",
