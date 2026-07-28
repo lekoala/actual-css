@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-07-28T15:25:52.439Z",
-  "totalRaw": 173431,
-  "totalMinified": 86652,
-  "totalBrotli": 12588,
+  "timestamp": "2026-07-28T16:02:50.292Z",
+  "totalRaw": 176056,
+  "totalMinified": 88319,
+  "totalBrotli": 12753,
   "themesMinified": 29151,
   "themesBrotli": 3414,
-  "shippedMinified": 86652,
-  "shippedBrotli": 12588,
+  "shippedMinified": 88319,
+  "shippedBrotli": 12753,
   "maxShippedBrotli": 13312,
-  "fileCount": 72,
+  "fileCount": 73,
   "files": [
     {
       "file": "components/flyout.css",
@@ -16,7 +16,7 @@
     },
     {
       "file": "components/button.css",
-      "raw": 6340
+      "raw": 6309
     },
     {
       "file": "components/alert.css",
@@ -24,19 +24,19 @@
     },
     {
       "file": "theme.css",
-      "raw": 6043
+      "raw": 6009
     },
     {
       "file": "forms/choice.css",
       "raw": 4930
     },
     {
-      "file": "components/avatar.css",
-      "raw": 4768
+      "file": "tokens.css",
+      "raw": 4817
     },
     {
-      "file": "tokens.css",
-      "raw": 4764
+      "file": "components/avatar.css",
+      "raw": 4768
     },
     {
       "file": "themes/edge.css",
@@ -72,7 +72,7 @@
     },
     {
       "file": "components/tab.css",
-      "raw": 3301
+      "raw": 3332
     },
     {
       "file": "utilities.css",
@@ -109,6 +109,10 @@
     {
       "file": "themes/spruce.css",
       "raw": 2641
+    },
+    {
+      "file": "forms/range.css",
+      "raw": 2586
     },
     {
       "file": "themes/petrol.css",
@@ -187,12 +191,12 @@
       "raw": 1789
     },
     {
-      "file": "forms/form-actions.css",
-      "raw": 1647
+      "file": "focus.css",
+      "raw": 1735
     },
     {
-      "file": "forms/native.css",
-      "raw": 1558
+      "file": "forms/form-actions.css",
+      "raw": 1647
     },
     {
       "file": "components/overline.css",
@@ -223,10 +227,6 @@
       "raw": 1337
     },
     {
-      "file": "focus.css",
-      "raw": 1309
-    },
-    {
       "file": "components/busy.css",
       "raw": 1269
     },
@@ -237,6 +237,10 @@
     {
       "file": "forms/input-icon.css",
       "raw": 1151
+    },
+    {
+      "file": "forms/native.css",
+      "raw": 1129
     },
     {
       "file": "forms/form.css",
@@ -280,7 +284,7 @@
     },
     {
       "file": "forms/index.css",
-      "raw": 558
+      "raw": 581
     },
     {
       "file": "actual.css",

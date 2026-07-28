@@ -65,13 +65,7 @@ Use this shape when the dialog interrupts the flow and asks for a decision. It h
     </div>
 
     <footer>
-      <button class="btn outline"
-              type="button"
-              commandfor="delete-dialog"
-              command="request-close"
-              aria-controls="delete-dialog">
-        Cancel
-      </button>
+      <button class="btn outline" value="cancel">Cancel</button>
 
       <button class="btn danger"
               value="delete">
@@ -161,13 +155,7 @@ Use `modal scrollable` when the header and footer should stay visible while the 
     </div>
 
     <footer>
-      <button class="btn outline"
-              type="button"
-              commandfor="scroll-dialog"
-              command="request-close"
-              aria-controls="scroll-dialog">
-        Cancel
-      </button>
+      <button class="btn outline" value="cancel">Cancel</button>
 
       <button class="btn primary" value="accept">
         Accept
@@ -309,13 +297,7 @@ The effect is progressive: it only runs when the browser supports `document.star
     </header>
 
     <footer>
-      <button class="btn outline"
-              type="button"
-              commandfor="vt-dialog"
-              command="request-close"
-              aria-controls="vt-dialog">
-        Cancel
-      </button>
+      <button class="btn outline" value="cancel">Cancel</button>
       <button class="btn primary" value="confirm">Confirm</button>
     </footer>
   </form>
