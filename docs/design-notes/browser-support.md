@@ -90,4 +90,13 @@ only through background color.
 
 - Grouping works with `role="group"` and `:has()`: it is a progressive enhancement; UI should still be functional without it.
 - Keep `:has()` out of selector lists that also contain legacy-safe selectors. Put the `:has()` branch in `@supports selector(...)` if necessary.
+
+## Native-first audit (0.2)
+
+`dialog.js`, `surface.js`, and the drawer keep the modern path thin
+(`<dialog>` with `showModal` / `close`) and the fallback contained
+(`dialog-fallback.js` shim). The JS runtime's baseline is far below
+Chrome 130 / Safari 18: no `FocusTrap` or `ScrollBarHelper` shim deletion,
+no `@property { inherits: false }` for utility locals. Every native-feature
+removal must clear a stated floor — not follow a competitor's.
 - Use `:has()` to improve simple structure, but do not turn it into a monolithic selector.

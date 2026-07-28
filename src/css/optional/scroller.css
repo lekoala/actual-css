@@ -16,6 +16,12 @@
   scrollbar-width: thin;
 }
 
+/* Opt-in gutter: reserves space so the layout does not shift when
+   the scrollbar appears. Use alongside a known-overflow container. */
+.scroller.stable-gutter {
+  scrollbar-gutter: stable;
+}
+
 .scroller::-webkit-scrollbar {
   width: var(--scroller-size);
   height: var(--scroller-size);

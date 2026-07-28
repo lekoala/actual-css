@@ -133,6 +133,20 @@ test("alert.admonition neutralizes root padding and gap, and defines alert-title
   expect(css).toContain(".alert-body");
 });
 
+test("every intent-consuming component declares its @sync intent-boundary block", () => {
+  const components = [
+    { file: "alert.css", name: "alert" },
+    { file: "badge.css", name: "badge" },
+    { file: "button.css", name: "btn" },
+    { file: "card.css", name: "card" },
+  ];
+
+  for (const { file, name } of components) {
+    const css = readCss(`src/css/components/${file}`);
+    expect(css).toContain("@sync intent-boundary");
+  }
+});
+
 test("alert-title margins are reset inside alert-body", () => {
   const css = readCss("src/css/components/alert.css");
 
