@@ -4515,7 +4515,7 @@ a.avatar[aria-disabled="true"] {
   border: 0;
   background: var(--range-thumb-bg);
   margin-block-start: calc((var(--range-track-height) - var(--range-thumb-size)) / 2);
-  cursor: pointer;
+  cursor: inherit;
   transition: box-shadow var(--duration);
 }
 
@@ -4525,7 +4525,7 @@ a.avatar[aria-disabled="true"] {
   border-radius: var(--radius-full);
   border: 0;
   background: var(--range-thumb-bg);
-  cursor: pointer;
+  cursor: inherit;
   transition: box-shadow var(--duration);
 }
 
