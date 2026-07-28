@@ -63,8 +63,7 @@
 
 /* Focus ring on the label follows the hidden input's focus. */
 .choice-card:has(:focus-visible) {
-  outline: var(--focus-outline);
-  outline-offset: var(--focus-outline-offset);
+  outline: none;
   box-shadow: var(--focus-ring-shadow);
 }
 

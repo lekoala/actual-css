@@ -1,21 +1,11 @@
 /*
- * Native-only control polish: file and range inputs that defeat most custom
- * styling, so the framework stays out of their way and just keeps them readable
- * and theme-aware.
+ * Native-only control polish: file input that mostly defeats custom styling,
+ * so the framework stays out of the way and just keeps it readable and
+ * theme-aware.
+ *
+ * Range has its own custom-styled file (range.css) so the focus ring can
+ * target the thumb pseudo-element rather than the rectangular CSS box.
  */
-/* Intent boundary — inherited intents do not tint this component.
-   Local intent classes still win because :where() has zero specificity. */
-:where(.range) {
-  /* @sync intent-boundary */
-  --intent: initial;
-  --intent-fg: initial;
-  --ui-bg: initial;
-  --ui-fg: initial;
-  --ui-border: initial;
-  --ui-hover-bg: initial;
-  /* @sync intent-boundary */
-}
-
 .file {
   color: var(--text-muted);
 }
@@ -48,21 +38,7 @@
   }
 }
 
-.range {
-  inline-size: 100%;
-  accent-color: var(--intent, var(--primary));
-}
-
-.file:focus-visible,
-.range:focus-visible {
-  outline: var(--focus-outline);
-  outline-offset: var(--focus-outline-offset);
+.file:focus-visible {
+  outline: none;
   box-shadow: var(--focus-ring-shadow);
-}
-
-@media (forced-colors: active) {
-  .file:focus-visible,
-  .range:focus-visible {
-    box-shadow: none;
-  }
 }

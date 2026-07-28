@@ -71,8 +71,7 @@
 .textarea:focus-visible,
 .select:focus-visible {
   --control-border: var(--focus);
-  outline: var(--focus-outline);
-  outline-offset: var(--focus-outline-offset);
+  outline: none;
   box-shadow: var(--focus-ring-shadow);
 }
 
@@ -95,12 +94,4 @@
 .input::placeholder,
 .textarea::placeholder {
   color: var(--text-muted);
-}
-
-@media (forced-colors: active) {
-  .input:focus-visible,
-  .textarea:focus-visible,
-  .select:focus-visible {
-    box-shadow: none;
-  }
 }

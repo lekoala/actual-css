@@ -1,0 +1,95 @@
+/*
+ * Range slider — custom-styled so the focus ring always targets the
+ * user-manipulated surface (the thumb) rather than the CSS box.
+ *
+ * appearance: none gives us full control over track and thumb; without it,
+ * pseudo-element rules for ::-webkit-slider-thumb and ::-moz-range-thumb
+ * are not reliably applied across browsers.
+ */
+
+/* Intent boundary — inherited intents do not tint this component.
+   Local intent classes still win because :where() has zero specificity. */
+:where(.range) {
+  /* @sync intent-boundary */
+  --intent: initial;
+  --intent-fg: initial;
+  --ui-bg: initial;
+  --ui-fg: initial;
+  --ui-border: initial;
+  --ui-hover-bg: initial;
+  /* @sync intent-boundary */
+}
+
+.range {
+  --range-thumb-size: 1.25rem;
+  --range-track-height: 0.25rem;
+  --range-thumb-bg: var(--intent, var(--primary));
+  --range-track-bg: var(--border);
+
+  appearance: none;
+  inline-size: 100%;
+  block-size: var(--range-thumb-size);
+  background: transparent;
+  cursor: pointer;
+}
+
+.range::-webkit-slider-runnable-track {
+  block-size: var(--range-track-height);
+  border-radius: var(--radius-full);
+  background: var(--range-track-bg);
+}
+
+.range::-moz-range-track {
+  block-size: var(--range-track-height);
+  border-radius: var(--radius-full);
+  background: var(--range-track-bg);
+}
+
+.range::-webkit-slider-thumb {
+  appearance: none;
+  inline-size: var(--range-thumb-size);
+  block-size: var(--range-thumb-size);
+  border-radius: var(--radius-full);
+  border: 0;
+  background: var(--range-thumb-bg);
+  margin-block-start: calc((var(--range-track-height) - var(--range-thumb-size)) / 2);
+  cursor: pointer;
+  transition: box-shadow var(--duration);
+}
+
+.range::-moz-range-thumb {
+  inline-size: var(--range-thumb-size);
+  block-size: var(--range-thumb-size);
+  border-radius: var(--radius-full);
+  border: 0;
+  background: var(--range-thumb-bg);
+  cursor: pointer;
+  transition: box-shadow var(--duration);
+}
+
+.range:focus-visible {
+  outline: none;
+}
+
+/*
+ * The 1px surface-coloured separator keeps the ring visually distinct from
+ * the small, coloured thumb — unlike a full-size input where the same gap
+ * would read as an unwanted void.
+ */
+.range:focus-visible::-webkit-slider-thumb {
+  box-shadow:
+    0 0 0 1px var(--surface),
+    0 0 0 calc(1px + var(--focus-ring-width)) var(--focus-ring);
+}
+
+.range:focus-visible::-moz-range-thumb {
+  box-shadow:
+    0 0 0 1px var(--surface),
+    0 0 0 calc(1px + var(--focus-ring-width)) var(--focus-ring);
+}
+
+.range:disabled {
+  --range-thumb-bg: var(--text-subtle);
+  cursor: not-allowed;
+  opacity: var(--disabled-opacity);
+}
