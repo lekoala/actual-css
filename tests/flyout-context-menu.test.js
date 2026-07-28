@@ -40,7 +40,7 @@ afterEach(() => {
 test("context menu targets require a native .flyout menu", async () => {
   await loadContextMenu(`
     <div id="target" data-context-menu="menu" tabindex="0">File.pdf</div>
-    <div id="menu" class="flyout" role="menu" hidden></div>
+    <div id="menu" class="flyout" data-enhance="flyout" role="menu" hidden></div>
   `);
   const target = document.getElementById("target");
 
@@ -51,7 +51,7 @@ test("context menu targets require a native .flyout menu", async () => {
 test("flyout trigger arrow key opens and focuses direct action items", async () => {
   await loadFlyout(`
     <button id="trigger" type="button" aria-controls="menu" aria-expanded="false">Open</button>
-    <menu id="menu" class="flyout" hidden>
+    <menu id="menu" class="flyout" data-enhance="flyout" hidden>
       <li><button id="first" type="button">First</button></li>
       <li><button id="second" type="button">Second</button></li>
     </menu>
@@ -71,7 +71,7 @@ test("flyout trigger arrow key opens and focuses direct action items", async () 
 test("grouped flyout items in section lists support ArrowDown roving", async () => {
   await loadFlyout(`
     <button id="trigger" type="button" aria-controls="menu" aria-expanded="false">Open</button>
-    <menu id="menu" class="flyout" hidden>
+    <menu id="menu" class="flyout" data-enhance="flyout" hidden>
       <section>
         <ul>
           <li><a id="first" href="/first">First</a></li>
@@ -96,7 +96,7 @@ test("grouped flyout items in section lists support ArrowDown roving", async () 
 test("flyout trigger gets initial disclosure attributes", async () => {
   await loadFlyout(`
     <button id="trigger" type="button" aria-controls="menu" aria-expanded="false">Open</button>
-    <menu id="menu" class="flyout" hidden>
+    <menu id="menu" class="flyout" data-enhance="flyout" hidden>
       <li><button type="button">First</button></li>
     </menu>
   `);
@@ -109,7 +109,7 @@ test("flyout trigger gets initial disclosure attributes", async () => {
 test("aria-haspopup alone does not opt into flyout behavior", async () => {
   await loadFlyout(`
     <button id="trigger" type="button" aria-controls="menu" aria-haspopup="menu">Open</button>
-    <menu id="menu" class="flyout" hidden>
+    <menu id="menu" class="flyout" data-enhance="flyout" hidden>
       <li><button type="button">First</button></li>
     </menu>
   `);
@@ -124,7 +124,7 @@ test("aria-haspopup alone does not opt into flyout behavior", async () => {
 test("only native menu flyouts get menu popup semantics", async () => {
   await loadFlyout(`
     <button id="trigger" type="button" aria-controls="menu" aria-expanded="false">Open</button>
-    <div id="menu" class="flyout" role="menu" hidden></div>
+    <div id="menu" class="flyout" data-enhance="flyout" role="menu" hidden></div>
   `);
   const trigger = document.getElementById("trigger");
 
@@ -134,7 +134,7 @@ test("only native menu flyouts get menu popup semantics", async () => {
 test("flyout stays at its markup position until it is opened", async () => {
   await loadFlyout(`
     <main><button id="trigger" type="button" aria-controls="menu" aria-expanded="false">Open</button>
-    <menu id="menu" class="flyout" hidden>
+    <menu id="menu" class="flyout" data-enhance="flyout" hidden>
       <li><button type="button">Item</button></li>
     </menu></main>
   `);
@@ -157,7 +157,7 @@ test("removing one trigger does not disconnect a shared flyout", async () => {
   await loadFlyout(`
     <button id="first-trigger" type="button" aria-controls="menu" aria-expanded="false">First</button>
     <button id="second-trigger" type="button" aria-controls="menu" aria-expanded="false">Second</button>
-    <menu id="menu" class="flyout" hidden>
+    <menu id="menu" class="flyout" data-enhance="flyout" hidden>
       <li><button type="button">Item</button></li>
     </menu>
   `);
@@ -179,7 +179,7 @@ test("flyout connects when the menu is inserted after its trigger", async () => 
 
   document.querySelector("main").insertAdjacentHTML(
     "beforeend",
-    '<menu id="menu" class="flyout" hidden><li><button type="button">Item</button></li></menu>',
+    '<menu id="menu" class="flyout" data-enhance="flyout" hidden><li><button type="button">Item</button></li></menu>',
   );
   await nextMicrotask();
   const trigger = document.getElementById("trigger");
@@ -195,7 +195,7 @@ test("flyout trigger re-resolves a same-id replacement", async () => {
   await loadFlyout(`
     <main>
       <button id="trigger" type="button" aria-controls="menu" aria-expanded="false">Open</button>
-      <menu id="menu" class="flyout" hidden><li><button type="button">Old</button></li></menu>
+      <menu id="menu" class="flyout" data-enhance="flyout" hidden><li><button type="button">Old</button></li></menu>
     </main>
   `);
   const trigger = document.getElementById("trigger");
@@ -203,7 +203,7 @@ test("flyout trigger re-resolves a same-id replacement", async () => {
 
   first.replaceWith(
     document.createRange().createContextualFragment(
-      '<menu id="menu" class="flyout" hidden><li><button type="button">New</button></li></menu>',
+      '<menu id="menu" class="flyout" data-enhance="flyout" hidden><li><button type="button">New</button></li></menu>',
     ),
   );
   await nextMicrotask();
@@ -220,7 +220,7 @@ test("flyout trigger re-resolves a same-id replacement", async () => {
 test("flyout trigger opens nav panels and focuses the first link", async () => {
   await loadFlyout(`
     <button id="trigger" type="button" aria-controls="panel" aria-expanded="false">Products</button>
-    <div id="panel" class="flyout" hidden>
+    <div id="panel" class="flyout" data-enhance="flyout" hidden>
       <section>
         <h3>Design</h3>
         <a id="first" href="/figma">Figma integration</a>
@@ -245,7 +245,7 @@ test("flyout trigger opens nav panels and focuses the first link", async () => {
 test("nav panel fallback skips invisible items when checkVisibility is unavailable", async () => {
   await loadFlyout(`
     <button id="trigger" type="button" aria-controls="panel" aria-expanded="false">Products</button>
-    <div id="panel" class="flyout" hidden>
+    <div id="panel" class="flyout" data-enhance="flyout" hidden>
       <section>
         <button id="hidden" type="button" style="display:none">Hidden</button>
         <a id="visible" href="/visible">Visible</a>
@@ -271,7 +271,7 @@ test("nav panel fallback skips invisible items when checkVisibility is unavailab
 test("tab from an open nav panel trigger enters the panel", async () => {
   await loadFlyout(`
     <button id="trigger" type="button" aria-controls="panel" aria-expanded="false">Products</button>
-    <div id="panel" class="flyout" hidden>
+    <div id="panel" class="flyout" data-enhance="flyout" hidden>
       <section>
         <a id="first" href="/figma">Figma integration</a>
       </section>
@@ -292,7 +292,7 @@ test("tab from an open nav panel trigger enters the panel", async () => {
 test("keyboard context menu focuses the first direct action item", async () => {
   await loadContextMenu(`
     <div id="target" data-context-menu="menu" tabindex="0">File.pdf</div>
-    <menu id="menu" class="flyout" hidden>
+    <menu id="menu" class="flyout" data-enhance="flyout" hidden>
       <li><button id="first" type="button">First</button></li>
       <li><button id="second" type="button">Second</button></li>
     </menu>
@@ -312,7 +312,7 @@ test("keyboard context menu focuses the first direct action item", async () => {
 test("context menu targets do not claim button disclosure semantics", async () => {
   await loadContextMenu(`
     <div id="target" data-context-menu="menu" tabindex="0">File.pdf</div>
-    <menu id="menu" class="flyout" hidden>
+    <menu id="menu" class="flyout" data-enhance="flyout" hidden>
       <li><button type="button">First</button></li>
     </menu>
   `);
@@ -326,7 +326,7 @@ test("context menu targets do not claim button disclosure semantics", async () =
 test("context menu opening exposes the context and exact origin", async () => {
   const { contextFor } = await loadContextMenu(`
     <div id="target" data-context-menu="menu" tabindex="0"><span id="name">File.pdf</span></div>
-    <menu id="menu" class="flyout" hidden>
+    <menu id="menu" class="flyout" data-enhance="flyout" hidden>
       <li><button type="button">Open</button></li>
     </menu>
   `);
@@ -352,7 +352,7 @@ test("context menu opening exposes the context and exact origin", async () => {
 test("a context menu opening can be cancelled", async () => {
   await loadContextMenu(`
     <div id="target" data-context-menu="menu" tabindex="0">File.pdf</div>
-    <menu id="menu" class="flyout" hidden>
+    <menu id="menu" class="flyout" data-enhance="flyout" hidden>
       <li><button type="button">Open</button></li>
     </menu>
   `);
@@ -373,7 +373,7 @@ test("a flyout trigger opens the menu with its enclosing context", async () => {
     <div id="target" data-context-menu="menu" tabindex="0">
       <button id="trigger" type="button" aria-controls="menu" aria-expanded="false">More</button>
     </div>
-    <menu id="menu" class="flyout" hidden>
+    <menu id="menu" class="flyout" data-enhance="flyout" hidden>
       <li><button id="first" type="button">Open</button></li>
     </menu>
   `);
@@ -398,7 +398,7 @@ test("a flyout trigger opens the menu with its enclosing context", async () => {
 test("pointer context menu focuses the menu container, not the first item", async () => {
   await loadContextMenu(`
     <div id="target" data-context-menu="menu" tabindex="0">File.pdf</div>
-    <menu id="menu" class="flyout" hidden>
+    <menu id="menu" class="flyout" data-enhance="flyout" hidden>
       <li><button id="first" type="button">First</button></li>
       <li><button id="second" type="button">Second</button></li>
     </menu>
@@ -423,7 +423,7 @@ test("pointer context menu focuses the menu container, not the first item", asyn
 test("removing an open context menu cleans up its surface state", async () => {
   await loadContextMenu(`
     <div id="target" data-context-menu="menu" tabindex="0">File.pdf</div>
-    <menu id="menu" class="flyout" hidden>
+    <menu id="menu" class="flyout" data-enhance="flyout" hidden>
       <li><button type="button">First</button></li>
     </menu>
   `);
