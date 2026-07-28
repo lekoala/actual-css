@@ -11,8 +11,8 @@
  * Progressive enhancement: on browsers that support :target-current,
  * this file enables the native target group and marks the active link.
  *
- * Falls back gracefully: links still work when IntersectionObserver or
- * :target-current is unavailable.
+ * Falls back gracefully: links still work when :target-current is unavailable
+ * and when the JavaScript enhancer is not loaded at all.
  */
 
 @supports selector(.scrollspy a:target-current) {
