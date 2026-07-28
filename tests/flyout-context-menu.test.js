@@ -442,3 +442,31 @@ test("removing an open context menu cleans up its surface state", async () => {
   expect(menu.hidden).toBe(true);
   expect(menu.classList.contains("is-open")).toBe(false);
 });
+
+// Guards the import-time binding trap: surface.js is pulled in transitively
+// here (no cache-busting query), so its document-level listener and its
+// data-actual-surface reaper must attach to the document that owns the surface,
+// not to whichever document existed when the module was first imported. Both
+// were silently inert through this path before they became per-document.
+test("an outside click closes a context menu opened through the shared surface", async () => {
+  await loadContextMenu(`
+    <div id="target" data-context-menu="menu" tabindex="0">File.pdf</div>
+    <menu id="menu" class="flyout" data-enhance="flyout" hidden>
+      <li><button type="button">First</button></li>
+    </menu>
+    <span id="elsewhere">elsewhere</span>
+  `);
+  const target = document.getElementById("target");
+  const menu = document.getElementById("menu");
+  setupGeometry(target, menu);
+
+  target.dispatchEvent(
+    new MouseEvent("contextmenu", { bubbles: true, cancelable: true, clientX: 20, clientY: 30 }),
+  );
+  expect(menu.hidden).toBe(false);
+
+  click(document.getElementById("elsewhere"));
+
+  expect(menu.hidden).toBe(true);
+  expect(menu.classList.contains("is-open")).toBe(false);
+});

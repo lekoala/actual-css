@@ -476,6 +476,7 @@ Flyout covers two distinct patterns:
   </button>
 
   <menu class="flyout sm"
+        data-enhance="flyout"
         id="account-actions"
         aria-labelledby="account-flyout-trigger"
         hidden>
@@ -549,6 +550,7 @@ Use `class="flyout grid-3"` when a nav panel needs multiple link groups. Keep li
       </button>
 
       <div class="flyout grid-3"
+           data-enhance="flyout"
            id="product-mega-menu"
            aria-label="Platform"
            data-flyout-mobile="auto"
@@ -626,6 +628,7 @@ Long press is opt-in with `data-context-menu-long-press`. Empty uses the default
   <output id="context-result" class="text-sm text-muted" aria-live="polite">No context selected.</output>
 
   <menu class="flyout"
+        data-enhance="flyout"
         id="file-actions"
         aria-labelledby="file-actions-trigger"
         hidden>

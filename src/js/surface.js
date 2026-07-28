@@ -13,15 +13,35 @@ const BREAKPOINTS = {
 const openSurfaces = new Set();
 const surfaceMap = new WeakMap();
 const mountedSurfaces = new WeakMap();
+const clickBoundDocuments = new WeakSet();
 
 // data-actual-surface is written by the runtime, never by an author, and never
 // selected on by CSS. It is namespaced because "data-surface" is a name an
 // application may already own. surface.js reaps its own surfaces so consumers
 // do not have to maintain panel-side lifecycle hooks.
 const SURFACE_MARKER = "data-actual-surface";
-const surfaces = enhance({
-  [`[${SURFACE_MARKER}]`]: (el) => () => disconnectSurface(el, { restore: false }),
-});
+const reapers = new WeakMap();
+
+// Registered lazily, per owning document, and never at import time: enhance()
+// binds its observer to the root it is given, so a module-scope
+// enhance() would watch whichever document existed when this module was first
+// imported. Surfaces in any other document (an iframe, or a fresh test
+// document) would then never be swept. Keyed by Document, so nothing is
+// retained once a document is gone.
+function reaperFor(menu) {
+  const root = menu.ownerDocument?.documentElement;
+  if (!root) return null;
+
+  let reaper = reapers.get(root);
+  if (!reaper) {
+    reaper = enhance(
+      { [`[${SURFACE_MARKER}]`]: (el) => () => disconnectSurface(el, { restore: false }) },
+      root,
+    );
+    reapers.set(root, reaper);
+  }
+  return reaper;
+}
 
 function waitForAnimations(...elements) {
   const animations = elements
@@ -180,6 +200,7 @@ function positionSurface(menu) {
 function ensureSurfaceWired(menu) {
   if (surfaceMap.has(menu)) return surfaceMap.get(menu);
 
+  ensureDocumentClick(menu);
   const controller = new AbortController();
   const state = {
     controller,
@@ -265,10 +286,10 @@ export function prepareSurface(menu) {
   menu.style.position = "fixed";
   menu.hidden = true;
   syncExpanded(menu, false);
-  if (!menu.hasAttribute(SURFACE_MARKER)) {
-    menu.setAttribute(SURFACE_MARKER, "");
-    surfaces.refresh(menu);
-  }
+  // Both steps are idempotent, so they run unguarded: that also keeps the
+  // reaper correct if a surface is ever adopted into another document.
+  menu.setAttribute(SURFACE_MARKER, "");
+  reaperFor(menu)?.refresh(menu);
 }
 
 export function openSurface(menu, opts = {}) {
@@ -360,14 +381,23 @@ export function disconnectSurface(menu, { restore = true } = {}) {
   restoreSurface(menu);
 }
 
-// Global outside-click listener runs at import time; keep SSR imports inert.
-if (typeof document !== "undefined") {
-  document.addEventListener("click", (e) => {
-    for (const menu of openSurfaces) {
-      const state = surfaceMap.get(menu);
-      if (!state || state.autoClose === "inside" || state.autoClose === "false") continue;
-      if (menu.contains(e.target) || state?.trigger?.contains(e.target)) continue;
-      closeSurface(menu);
-    }
-  });
+function onDocumentClick(e) {
+  for (const menu of openSurfaces) {
+    const state = surfaceMap.get(menu);
+    if (!state || state.autoClose === "inside" || state.autoClose === "false") continue;
+    if (menu.contains(e.target) || state?.trigger?.contains(e.target)) continue;
+    closeSurface(menu);
+  }
+}
+
+// Bound per owning document on first use, not at import time — same reason as
+// reaperFor(): an import-time listener attaches to whichever document existed
+// then, and stays attached to it. Nothing can need this listener before a
+// surface has been wired, so binding here costs nothing and keeps SSR imports
+// inert without a typeof guard.
+function ensureDocumentClick(menu) {
+  const doc = menu.ownerDocument;
+  if (!doc || clickBoundDocuments.has(doc)) return;
+  clickBoundDocuments.add(doc);
+  doc.addEventListener("click", onDocumentClick);
 }

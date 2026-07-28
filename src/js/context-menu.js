@@ -1,18 +1,11 @@
 import enhance from "./enhance.js";
 import { EVENTS } from "./events.js";
 import { focusFirstMenuItem, hasMenuItems } from "./menu.js";
-import { CLASSES } from "./selectors.js";
-import {
-  closeSurface,
-  disconnectSurface,
-  isSurfaceOpen,
-  openSurface,
-  prepareSurface,
-} from "./surface.js";
+import { closeSurface, isSurfaceOpen, openSurface, prepareSurface } from "./surface.js";
 
 const LONG_PRESS_MS = 450;
 const MOVE_TOLERANCE = 10;
-const CONTEXT_MENU_SELECTOR = `menu.${CLASSES.flyout}`;
+const CONTEXT_MENU_SELECTOR = 'menu, [role="menu"]';
 const CONTEXT_TARGET_SELECTOR = "[data-context-menu]";
 const contextMap = new WeakMap();
 const contextByMenu = new WeakMap();
@@ -257,29 +250,17 @@ function disconnectContextTarget(target) {
   contextMap.delete(target);
 }
 
-function connectContextMenu(menu) {
-  const controller = new AbortController();
-  menu.addEventListener(
-    EVENTS.surfaceOpen,
-    (event) => {
-      const options = event.detail?.options;
-      const trigger = options?.trigger;
-      const context = trigger?.closest?.(CONTEXT_TARGET_SELECTOR);
-      if (!context || menuFor(context) !== menu) return;
-      if (!requestContextMenu(context, menu, { origin: trigger, trigger: "button" })) {
-        event.preventDefault();
-        return;
-      }
-      options.source = context;
-      options.restoreFocusTo = trigger;
-    },
-    { signal: controller.signal },
-  );
-  return () => {
-    controller.abort();
-    contextByMenu.delete(menu);
-    disconnectSurface(menu);
-  };
+function onSurfaceOpen(event) {
+  const options = event.detail?.options;
+  const trigger = options?.trigger;
+  const context = trigger?.closest?.(CONTEXT_TARGET_SELECTOR);
+  if (!context || menuFor(context) !== event.detail?.surface) return;
+  if (!requestContextMenu(context, event.detail.surface, { origin: trigger, trigger: "button" })) {
+    event.preventDefault();
+    return;
+  }
+  options.source = context;
+  options.restoreFocusTo = trigger;
 }
 
 enhance({
@@ -287,5 +268,8 @@ enhance({
     connectContextTarget(target);
     return () => disconnectContextTarget(target);
   },
-  [CONTEXT_MENU_SELECTOR]: (menu) => connectContextMenu(menu),
 });
+
+if (typeof document !== "undefined") {
+  document.addEventListener(EVENTS.surfaceOpen, onSurfaceOpen);
+}

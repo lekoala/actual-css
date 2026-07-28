@@ -5,8 +5,7 @@
  * same surface lifecycle without menu semantics.
  */
 
-import enhance from "./enhance.js";
-import { registerEnhancement } from "./enhance.js";
+import enhance, { registerEnhancement } from "./enhance.js";
 import { focusFirstDescendant } from "./focus.js";
 import { focusFirstMenuItem, focusLastMenuItem, getMenuItems } from "./menu.js";
 import { closeSurface, isSurfaceOpen, openSurface, prepareSurface } from "./surface.js";
