@@ -22,5 +22,7 @@ Start here when using or changing Actual CSS.
 
 - [References](design-notes/references.md): positioning, tradeoffs, non-goals, and research links.
 - [Browser support](design-notes/browser-support.md): progressive enhancement strategy, feature gating, and fallbacks.
+- [Enhancement contract](design-notes/enhancement-contract.md): the class/data-enhance/ARIA split, token grammar, and design decisions.
 - [Naming conventions](design-notes/naming.md): class grammar, component naming rules, and JS attribute namespacing.
+- [Widget primitives](design-notes/widget-primitives.md): composition guide for building custom widgets on Actual's runtime.
 - [Accessibility decisions](design-notes/accessibility-decisions.md): guarantees, author responsibilities, and interactive states.
