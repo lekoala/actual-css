@@ -79,36 +79,12 @@
 }
 
 /* Focus recipe override — the base recipe (control.css) flips --control-border
-   to --focus on top of the outline + ring, which triples up with the lower-edge
-   accent already visible here. Edge drops the border-color flip and thickens
-   the accent edge instead; the ring stays untouched. */
+   to --focus and draws a box-shadow ring. Edge drops the border-color flip and
+   thickens the accent edge instead so the intent-coloured lower edge stays
+   dominant; the focus ring and its 3px width remain the same as the default. */
 [data-theme="edge"] :is(.input, .textarea, .select):focus-visible {
   --control-border: var(--border);
   --control-border-block-end-width: 3px;
-}
-
-/* The shared 2px-solid/2px-offset outline reads as a second ring on top of
-   the accent edge (inputs) or the box-shadow ring (buttons). Edge thins both
-   to the border width and tightens the offset so the outline hugs the
-   control instead of floating a second halo around it. Gated outside
-   forced-colors so that mode's Highlight-colored --focus-outline (theme.css)
-   stays in charge for inputs — a direct property on the element would
-   otherwise out-specificity that fallback regardless of the media condition
-   it was declared under. Buttons don't consume --focus-outline (they compute
-   their own outline so it can use --btn-focus-color's intent awareness), so
-   they get their own local width token, --btn-focus-outline-width. */
-@media not (forced-colors: active) {
-  [data-theme="edge"] :is(.input, .textarea, .select, .btn) {
-    --focus-outline-offset: 1px;
-  }
-
-  [data-theme="edge"] :is(.input, .textarea, .select) {
-    --focus-outline: var(--border-width) solid var(--focus);
-  }
-
-  [data-theme="edge"] .btn {
-    --btn-focus-outline-width: var(--border-width);
-  }
 }
 
 @supports (color: light-dark(red, blue)) {

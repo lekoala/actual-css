@@ -44,8 +44,10 @@
   --ease: ease;
 
   /* Focus ring — shared by every interactive component's :focus-visible */
-  --focus-outline: calc(var(--border-width) * 2) solid var(--focus);
+  --focus-outline-color: currentColor;
+  --focus-outline: calc(var(--border-width) * 2) solid var(--focus-outline-color);
   --focus-outline-offset: 2px;
+  --focus-ring-width: 3px;
 
   /* Status dot positioning — used by .avatar > .badge:empty. The offset is
      the circle-aware inset (1 - 1/√2) / 2 ≈ 14.65%; the ring surrounds the

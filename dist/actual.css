@@ -158,8 +158,10 @@ select {
   --ease: ease;
 
   /* Focus ring — shared by every interactive component's :focus-visible */
-  --focus-outline: calc(var(--border-width) * 2) solid var(--focus);
+  --focus-outline-color: currentColor;
+  --focus-outline: calc(var(--border-width) * 2) solid var(--focus-outline-color);
   --focus-outline-offset: 2px;
+  --focus-ring-width: 3px;
 
   /* Status dot positioning — used by .avatar > .badge:empty. The offset is
      the circle-aware inset (1 - 1/√2) / 2 ≈ 14.65%; the ring surrounds the
@@ -302,11 +304,11 @@ select {
 
   /* Lines and focus */
   --border: hsl(260 15% 88%);
-  --focus: var(--primary);
+  --focus: var(--neutral);
   /* Pre-color-mix fallback only — superseded below by a derivation from
-     --focus so overriding --primary/--focus never leaves a stale ring. */
-  --focus-ring: hsl(268 32% 33% / 0.22);
-  --focus-ring-shadow: 0 0 0 3px var(--focus-ring);
+     --focus so overriding --neutral/--focus never leaves a stale ring. */
+  --focus-ring: hsl(258 7% 43% / 0.3);
+  --focus-ring-shadow: 0 0 0 var(--focus-ring-width) var(--focus-ring);
   --hover-overlay: hsl(260 20% 10% / 0.04);
 
   /* Radius scale — themes may override the whole scale (e.g. [data-theme="square"]) */
@@ -347,7 +349,7 @@ select {
   :root,
   [data-theme="light"],
   [data-theme="dark"] {
-    --focus-ring: color-mix(in oklch, var(--focus) 22%, transparent);
+    --focus-ring: color-mix(in oklch, var(--focus) 30%, transparent);
   }
 }
 
@@ -387,7 +389,7 @@ select {
     --text-subtle: light-dark(hsl(258 7% 57%), hsl(258 7% 54%));
 
     --border: light-dark(hsl(260 15% 88%), hsl(262 12% 24%));
-    --focus-ring: light-dark(hsl(268 32% 33% / 0.22), hsl(268 42% 76% / 0.28));
+    --focus-ring: light-dark(hsl(258 7% 43% / 0.3), hsl(258 10% 72% / 0.28));
     --hover-overlay: light-dark(hsl(260 20% 10% / 0.04), hsl(0 0% 100% / 0.06));
     --shadow-color: light-dark(hsl(260 25% 10%), hsl(262 40% 2%));
   }
@@ -397,7 +399,7 @@ select {
   :root,
   [data-theme="light"] {
     --focus-ring: light-dark(
-      color-mix(in oklch, var(--focus) 22%, transparent),
+      color-mix(in oklch, var(--focus) 30%, transparent),
       color-mix(in oklch, var(--focus) 28%, transparent)
     );
   }
@@ -407,7 +409,7 @@ select {
   :root,
   [data-theme="light"],
   [data-theme="dark"] {
-    --focus-outline: calc(var(--border-width) * 2) solid Highlight;
+    --focus-outline-color: Highlight;
     --focus-ring-shadow: none;
 
     --backdrop-fill: Canvas;
@@ -420,7 +422,7 @@ select {
   [data-theme="dark"] {
     --border-width: 2px;
     --focus-outline-offset: 3px;
-    --focus-ring-shadow: 0 0 0 4px var(--focus-ring);
+    --focus-ring-width: 4px;
     --text-muted: var(--text);
     --text-subtle: var(--text);
   }
@@ -443,10 +445,6 @@ body {
 a {
   color: inherit;
   text-underline-offset: 0.18em;
-}
-
-a:focus-visible {
-  box-shadow: var(--focus-ring-shadow);
 }
 
 @media (hover: hover) {
@@ -1051,7 +1049,6 @@ small {
   --btn-border: var(--ui-border, var(--btn-default-border, transparent));
   --btn-radius: var(--radius);
   --btn-focus-color: var(--intent, var(--focus));
-  --btn-focus-outline-width: calc(var(--border-width) * 2);
   --btn-hover-bg: var(--ui-hover-bg, var(--btn-bg));
   --btn-hover-overlay: var(--hover-overlay, rgb(0 0 0 / 0.08));
 
@@ -1151,14 +1148,14 @@ small {
 }
 
 .btn:focus-visible {
-  outline: var(--btn-focus-outline-width) solid var(--btn-focus-color);
-  outline-offset: var(--focus-outline-offset);
-  box-shadow: 0 0 0 3px var(--btn-focus-ring-color, var(--focus-ring));
+  outline: none;
+  box-shadow: 0 0 0 var(--focus-ring-width) var(--btn-focus-ring-color, var(--focus-ring));
 }
 
 .btn.link:focus-visible {
-  outline-color: currentColor;
+  outline: var(--focus-outline);
   outline-offset: 0.2em;
+  box-shadow: none;
 }
 
 .btn:disabled {
@@ -2313,7 +2310,6 @@ dialog.drawer nav {
   background: var(--surface-subtle);
   outline: var(--focus-outline);
   outline-offset: var(--focus-outline-offset);
-  box-shadow: var(--focus-ring-shadow);
 }
 
 :is(.flyout, .flyout :where(li))
@@ -3504,6 +3500,7 @@ a.avatar[aria-disabled="true"] {
 
 .tab:focus-visible {
   outline: var(--focus-outline);
+  outline-color: var(--focus);
   outline-offset: -2px;
   border-radius: var(--radius-sm) var(--radius-sm) 0 0;
 }
@@ -3871,8 +3868,7 @@ a.avatar[aria-disabled="true"] {
 .textarea:focus-visible,
 .select:focus-visible {
   --control-border: var(--focus);
-  outline: var(--focus-outline);
-  outline-offset: var(--focus-outline-offset);
+  outline: none;
   box-shadow: var(--focus-ring-shadow);
 }
 
@@ -3895,14 +3891,6 @@ a.avatar[aria-disabled="true"] {
 .input::placeholder,
 .textarea::placeholder {
   color: var(--text-muted);
-}
-
-@media (forced-colors: active) {
-  .input:focus-visible,
-  .textarea:focus-visible,
-  .select:focus-visible {
-    box-shadow: none;
-  }
 }
 
 /*
@@ -4100,8 +4088,7 @@ a.avatar[aria-disabled="true"] {
 .check:focus-visible,
 .radio:focus-visible {
   --choice-border: var(--focus);
-  outline: var(--focus-outline);
-  outline-offset: var(--focus-outline-offset);
+  outline: none;
   box-shadow: var(--focus-ring-shadow);
 }
 
@@ -4204,8 +4191,7 @@ a.avatar[aria-disabled="true"] {
 
 /* Focus ring on the label follows the hidden input's focus. */
 .choice-card:has(:focus-visible) {
-  outline: var(--focus-outline);
-  outline-offset: var(--focus-outline-offset);
+  outline: none;
   box-shadow: var(--focus-ring-shadow);
 }
 
@@ -4430,23 +4416,13 @@ a.avatar[aria-disabled="true"] {
 }
 
 /*
- * Native-only control polish: file and range inputs that defeat most custom
- * styling, so the framework stays out of their way and just keeps them readable
- * and theme-aware.
+ * Native-only control polish: file input that mostly defeats custom styling,
+ * so the framework stays out of the way and just keeps it readable and
+ * theme-aware.
+ *
+ * Range has its own custom-styled file (range.css) so the focus ring can
+ * target the thumb pseudo-element rather than the rectangular CSS box.
  */
-/* Intent boundary — inherited intents do not tint this component.
-   Local intent classes still win because :where() has zero specificity. */
-:where(.range) {
-  /* @sync intent-boundary */
-  --intent: initial;
-  --intent-fg: initial;
-  --ui-bg: initial;
-  --ui-fg: initial;
-  --ui-border: initial;
-  --ui-hover-bg: initial;
-  /* @sync intent-boundary */
-}
-
 .file {
   color: var(--text-muted);
 }
@@ -4479,23 +4455,105 @@ a.avatar[aria-disabled="true"] {
   }
 }
 
-.range {
-  inline-size: 100%;
-  accent-color: var(--intent, var(--primary));
-}
-
-.file:focus-visible,
-.range:focus-visible {
-  outline: var(--focus-outline);
-  outline-offset: var(--focus-outline-offset);
+.file:focus-visible {
+  outline: none;
   box-shadow: var(--focus-ring-shadow);
 }
 
-@media (forced-colors: active) {
-  .file:focus-visible,
-  .range:focus-visible {
-    box-shadow: none;
-  }
+/*
+ * Range slider — custom-styled so the focus ring always targets the
+ * user-manipulated surface (the thumb) rather than the CSS box.
+ *
+ * appearance: none gives us full control over track and thumb; without it,
+ * pseudo-element rules for ::-webkit-slider-thumb and ::-moz-range-thumb
+ * are not reliably applied across browsers.
+ */
+
+/* Intent boundary — inherited intents do not tint this component.
+   Local intent classes still win because :where() has zero specificity. */
+:where(.range) {
+  /* @sync intent-boundary */
+  --intent: initial;
+  --intent-fg: initial;
+  --ui-bg: initial;
+  --ui-fg: initial;
+  --ui-border: initial;
+  --ui-hover-bg: initial;
+  /* @sync intent-boundary */
+}
+
+.range {
+  --range-thumb-size: 1.25rem;
+  --range-track-height: 0.25rem;
+  --range-thumb-bg: var(--intent, var(--primary));
+  --range-track-bg: var(--border);
+
+  appearance: none;
+  inline-size: 100%;
+  block-size: var(--range-thumb-size);
+  background: transparent;
+  cursor: pointer;
+}
+
+.range::-webkit-slider-runnable-track {
+  block-size: var(--range-track-height);
+  border-radius: var(--radius-full);
+  background: var(--range-track-bg);
+}
+
+.range::-moz-range-track {
+  block-size: var(--range-track-height);
+  border-radius: var(--radius-full);
+  background: var(--range-track-bg);
+}
+
+.range::-webkit-slider-thumb {
+  appearance: none;
+  inline-size: var(--range-thumb-size);
+  block-size: var(--range-thumb-size);
+  border-radius: var(--radius-full);
+  border: 0;
+  background: var(--range-thumb-bg);
+  margin-block-start: calc((var(--range-track-height) - var(--range-thumb-size)) / 2);
+  cursor: pointer;
+  transition: box-shadow var(--duration);
+}
+
+.range::-moz-range-thumb {
+  inline-size: var(--range-thumb-size);
+  block-size: var(--range-thumb-size);
+  border-radius: var(--radius-full);
+  border: 0;
+  background: var(--range-thumb-bg);
+  cursor: pointer;
+  transition: box-shadow var(--duration);
+}
+
+.range:focus-visible {
+  outline: none;
+}
+
+/*
+ * The 1px surface-coloured separator keeps the ring visually distinct from
+ * the small, coloured thumb — unlike a full-size input where the same gap
+ * would read as an unwanted void.
+ */
+.range:focus-visible::-webkit-slider-thumb {
+  box-shadow:
+    0 0 0 1px var(--surface),
+    0 0 0 calc(1px + var(--focus-ring-width)) var(--focus-ring);
+}
+
+.range:focus-visible::-moz-range-thumb {
+  box-shadow:
+    0 0 0 1px var(--surface),
+    0 0 0 calc(1px + var(--focus-ring-width)) var(--focus-ring);
+}
+
+.range:disabled {
+  --range-thumb-bg: var(--text-subtle);
+  cursor: not-allowed;
+  opacity: var(--disabled-opacity);
 }
 
 /*
@@ -4586,8 +4644,7 @@ a.avatar[aria-disabled="true"] {
 
 .switch:focus-visible {
   --switch-border: var(--focus);
-  outline: var(--focus-outline);
-  outline-offset: var(--focus-outline-offset);
+  outline: none;
   box-shadow: var(--focus-ring-shadow);
 }
 
@@ -4995,8 +5052,7 @@ a.avatar[aria-disabled="true"] {
    focus, and unsupported :has() browsers retain the control's normal ring. */
 .join:has(> :is(.input, .textarea, .select):focus-visible) {
   border-radius: var(--join-radius);
-  outline: var(--focus-outline);
-  outline-offset: var(--focus-outline-offset);
+  outline: none;
   box-shadow: var(--focus-ring-shadow);
 }
 
@@ -5016,6 +5072,43 @@ a.avatar[aria-disabled="true"] {
 @supports selector(:focus-visible) {
   :focus:not(:focus-visible) {
     outline: none;
+  }
+}
+
+/*
+ * Forced-colors focus — centralised so individual components do not need
+ * their own fallback.  The double :focus keeps specificity high enough
+ * (0,0,2,0) to beat a single :focus-visible; against a class selector like
+ * .input:focus-visible it ties, but this file loads last so it wins on
+ * source order.
+ *
+ * .choice-card and .join receive focus indirectly (:has on a wrapper that
+ * never matches :focus), so they are listed explicitly.
+ *
+ * .range is excluded from the rectangular fallback: its focus is drawn on
+ * the thumb pseudo-element, which is the manipulated surface.
+ *
+ * box-shadow: none is redundant when forced-color-adjust is auto, but safe
+ * when a component uses forced-color-adjust: none (e.g. checked switches /
+ * checkboxes).
+ */
+@media (forced-colors: active) {
+  :focus:focus-visible:not(.range),
+  .choice-card:has(:focus-visible),
+  .join:has(> :is(.input, .textarea, .select):focus-visible) {
+    outline: var(--focus-outline);
+    outline-offset: var(--focus-outline-offset);
+    box-shadow: none;
+  }
+
+  .range:focus-visible::-webkit-slider-thumb {
+    outline: var(--focus-outline);
+    outline-offset: var(--focus-outline-offset);
+  }
+
+  .range:focus-visible::-moz-range-thumb {
+    outline: var(--focus-outline);
+    outline-offset: var(--focus-outline-offset);
   }
 }
 

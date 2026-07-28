@@ -1,22 +1,22 @@
 {
-  "timestamp": "2026-07-28T14:32:44.183Z",
-  "totalRaw": 174307,
-  "totalMinified": 87063,
-  "totalBrotli": 12607,
-  "themesMinified": 29471,
-  "themesBrotli": 3480,
-  "shippedMinified": 87063,
-  "shippedBrotli": 12607,
+  "timestamp": "2026-07-28T15:25:52.439Z",
+  "totalRaw": 173431,
+  "totalMinified": 86652,
+  "totalBrotli": 12588,
+  "themesMinified": 29151,
+  "themesBrotli": 3414,
+  "shippedMinified": 86652,
+  "shippedBrotli": 12588,
   "maxShippedBrotli": 13312,
   "fileCount": 72,
   "files": [
     {
       "file": "components/flyout.css",
-      "raw": 6807
+      "raw": 6767
     },
     {
       "file": "components/button.css",
-      "raw": 6429
+      "raw": 6340
     },
     {
       "file": "components/alert.css",
@@ -24,15 +24,11 @@
     },
     {
       "file": "theme.css",
-      "raw": 6048
-    },
-    {
-      "file": "themes/edge.css",
-      "raw": 5698
+      "raw": 6043
     },
     {
       "file": "forms/choice.css",
-      "raw": 4993
+      "raw": 4930
     },
     {
       "file": "components/avatar.css",
@@ -40,15 +36,19 @@
     },
     {
       "file": "tokens.css",
-      "raw": 4737
+      "raw": 4764
     },
     {
-      "file": "forms/choice-card.css",
-      "raw": 4588
+      "file": "themes/edge.css",
+      "raw": 4623
     },
     {
       "file": "variants.css",
       "raw": 4584
+    },
+    {
+      "file": "forms/choice-card.css",
+      "raw": 4525
     },
     {
       "file": "components/badge.css",
@@ -68,7 +68,7 @@
     },
     {
       "file": "forms/switch.css",
-      "raw": 3398
+      "raw": 3335
     },
     {
       "file": "components/tab.css",
@@ -79,20 +79,16 @@
       "raw": 3240
     },
     {
-      "file": "components/join.css",
-      "raw": 3082
-    },
-    {
       "file": "components/drawer.css",
       "raw": 3064
     },
     {
-      "file": "components/card.css",
-      "raw": 2962
+      "file": "components/join.css",
+      "raw": 3019
     },
     {
-      "file": "forms/control.css",
-      "raw": 2876
+      "file": "components/card.css",
+      "raw": 2962
     },
     {
       "file": "components/tooltip.css",
@@ -105,6 +101,10 @@
     {
       "file": "forms/custom-select.css",
       "raw": 2684
+    },
+    {
+      "file": "forms/control.css",
+      "raw": 2674
     },
     {
       "file": "themes/spruce.css",
@@ -192,7 +192,7 @@
     },
     {
       "file": "forms/native.css",
-      "raw": 1627
+      "raw": 1558
     },
     {
       "file": "components/overline.css",
@@ -212,7 +212,7 @@
     },
     {
       "file": "base.css",
-      "raw": 1440
+      "raw": 1379
     },
     {
       "file": "components/surface.css",
@@ -221,6 +221,10 @@
     {
       "file": "components/table.css",
       "raw": 1337
+    },
+    {
+      "file": "focus.css",
+      "raw": 1309
     },
     {
       "file": "components/busy.css",
@@ -281,10 +285,6 @@
     {
       "file": "actual.css",
       "raw": 497
-    },
-    {
-      "file": "focus.css",
-      "raw": 419
     },
     {
       "file": "components/actions.css",

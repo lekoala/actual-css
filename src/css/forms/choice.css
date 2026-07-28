@@ -156,8 +156,7 @@
 .check:focus-visible,
 .radio:focus-visible {
   --choice-border: var(--focus);
-  outline: var(--focus-outline);
-  outline-offset: var(--focus-outline-offset);
+  outline: none;
   box-shadow: var(--focus-ring-shadow);
 }
 

@@ -33,7 +33,6 @@
   --btn-border: var(--ui-border, var(--btn-default-border, transparent));
   --btn-radius: var(--radius);
   --btn-focus-color: var(--intent, var(--focus));
-  --btn-focus-outline-width: calc(var(--border-width) * 2);
   --btn-hover-bg: var(--ui-hover-bg, var(--btn-bg));
   --btn-hover-overlay: var(--hover-overlay, rgb(0 0 0 / 0.08));
 
@@ -133,14 +132,14 @@
 }
 
 .btn:focus-visible {
-  outline: var(--btn-focus-outline-width) solid var(--btn-focus-color);
-  outline-offset: var(--focus-outline-offset);
-  box-shadow: 0 0 0 3px var(--btn-focus-ring-color, var(--focus-ring));
+  outline: none;
+  box-shadow: 0 0 0 var(--focus-ring-width) var(--btn-focus-ring-color, var(--focus-ring));
 }
 
 .btn.link:focus-visible {
-  outline-color: currentColor;
+  outline: var(--focus-outline);
   outline-offset: 0.2em;
+  box-shadow: none;
 }
 
 .btn:disabled {
