@@ -1085,7 +1085,7 @@ Actual CSS ships validation *styles*. Invalid fields are marked with `aria-inval
 Opt in with the `.needs-validation` class. Importing the module registers the behavior; there is no init call.
 
 ```html
-<form class="needs-validation" data-validation-message="Please check the highlighted fields.">
+<form class="needs-validation" data-enhance="validation" data-validation-message="Please check the highlighted fields.">
   <div class="stack">
     <label class="field">
       <span class="field-label">Password</span>
@@ -1116,7 +1116,7 @@ On blur, the enhancer sets `aria-invalid="true"` on the invalid field so visual 
 The status bar (`actual-css/js/status`) auto-wires to that event: import it and add one status element, and the form's `data-validation-message` appears automatically on invalid submit — no manual listener.
 
 ```html
-<form class="needs-validation" data-validation-message="Please check the highlighted fields.">
+<form class="needs-validation" data-enhance="validation" data-validation-message="Please check the highlighted fields.">
   <div class="stack">
     <label class="field">
       <span class="field-label">Email</span>
@@ -1196,7 +1196,7 @@ Add your own with `FormValidator.registerRule(name, (value, el, ...opts) => bool
 The `date` rule pairs naturally with `data-mask` — the mask structures input, the rule validates meaning. Same rule, different formats:
 
 ```html
-<form class="stack needs-validation" novalidate>
+<form class="stack needs-validation" data-enhance="validation" novalidate>
   <label class="field">
     <span class="field-label">Date (ISO)</span>
     <input class="input" name="date-iso"

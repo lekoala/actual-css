@@ -13,7 +13,7 @@ afterEach(() => {
 });
 
 test("adds novalidate to opted-in forms", async () => {
-  await loadValidation(`<form class="needs-validation">
+  await loadValidation(`<form class="needs-validation" data-enhance="validation">
     <input name="email" type="email" required>
   </form>`);
 
@@ -22,7 +22,7 @@ test("adds novalidate to opted-in forms", async () => {
 });
 
 test("invalid field is marked on submit and actual:invalid fires", async () => {
-  const { default: FormValidator } = await loadValidation(`<form class="needs-validation" data-validation-message="Check fields">
+  const { default: FormValidator } = await loadValidation(`<form class="needs-validation" data-enhance="validation" data-validation-message="Check fields">
     <input name="email" type="email" required value="not-an-email">
     <span id="email-error" class="field-error"></span>
   </form>`);
@@ -45,7 +45,7 @@ test("invalid field is marked on submit and actual:invalid fires", async () => {
 });
 
 test("manual init does not connect an already enhanced form twice", async () => {
-  const { default: FormValidator } = await loadValidation(`<form class="needs-validation">
+  const { default: FormValidator } = await loadValidation(`<form class="needs-validation" data-enhance="validation">
     <input name="email" type="email" required value="bad">
   </form>`);
 
@@ -62,7 +62,7 @@ test("manual init does not connect an already enhanced form twice", async () => 
 });
 
 test("valid form is not blocked on submit", async () => {
-  await loadValidation(`<form class="needs-validation">
+  await loadValidation(`<form class="needs-validation" data-enhance="validation">
     <input name="email" type="email" required value="a@b.com">
   </form>`);
 
@@ -75,7 +75,7 @@ test("valid form is not blocked on submit", async () => {
 });
 
 test("required file inputs are validated on submit", async () => {
-  await loadValidation(`<form class="needs-validation">
+  await loadValidation(`<form class="needs-validation" data-enhance="validation">
     <input name="attachment" type="file" required>
   </form>`);
 
@@ -89,7 +89,7 @@ test("required file inputs are validated on submit", async () => {
 });
 
 test("submitter with formnovalidate bypasses enhancer submit blocking", async () => {
-  await loadValidation(`<form class="needs-validation">
+  await loadValidation(`<form class="needs-validation" data-enhance="validation">
     <input name="email" type="email" required value="bad">
     <button id="draft" type="submit" formnovalidate>Save draft</button>
   </form>`);
@@ -108,7 +108,7 @@ test("submitter with formnovalidate bypasses enhancer submit blocking", async ()
 });
 
 test("number rule is fixed (digits valid, letters invalid)", async () => {
-  await loadValidation(`<form class="needs-validation">
+  await loadValidation(`<form class="needs-validation" data-enhance="validation">
     <input name="qty" data-validation-rules="number" value="abc">
   </form>`);
 
@@ -124,7 +124,7 @@ test("number rule is fixed (digits valid, letters invalid)", async () => {
 });
 
 test("same rule is scoped to the form and fails when target is missing", async () => {
-  await loadValidation(`<form class="needs-validation">
+  await loadValidation(`<form class="needs-validation" data-enhance="validation">
     <input id="password" name="password" value="secret">
     <input name="confirm" data-validation-rules="same #password" value="secret">
     <input name="orphan" data-validation-rules="same #does-not-exist" value="x">
@@ -144,7 +144,7 @@ test("same rule is scoped to the form and fails when target is missing", async (
 });
 
 test("same rule with an invalid selector blocks submit instead of crashing", async () => {
-  await loadValidation(`<form class="needs-validation">
+  await loadValidation(`<form class="needs-validation" data-enhance="validation">
     <input name="confirm" data-validation-rules="same [" value="x">
   </form>`);
 
@@ -158,7 +158,7 @@ test("same rule with an invalid selector blocks submit instead of crashing", asy
 });
 
 test("date rule accepts supported shapes and rejects impossible dates", async () => {
-  await loadValidation(`<form class="needs-validation">
+  await loadValidation(`<form class="needs-validation" data-enhance="validation">
     <input name="date" data-validation-rules="date">
   </form>`);
 
@@ -181,7 +181,7 @@ test("date rule accepts supported shapes and rejects impossible dates", async ()
 });
 
 test("empty fields skip custom rules and leave required as the only empty gate", async () => {
-  await loadValidation(`<form class="needs-validation">
+  await loadValidation(`<form class="needs-validation" data-enhance="validation">
     <input name="optional" data-validation-rules="digits" value="">
     <input name="required" required data-validation-rules="digits" value="">
   </form>`);
@@ -199,7 +199,7 @@ test("empty fields skip custom rules and leave required as the only empty gate",
 });
 
 test("registerRule adds a custom rule", async () => {
-  const { default: FormValidator } = await loadValidation(`<form class="needs-validation">
+  const { default: FormValidator } = await loadValidation(`<form class="needs-validation" data-enhance="validation">
     <input name="code" data-validation-rules="uppercase" value="abc">
   </form>`);
 
@@ -218,7 +218,7 @@ test("unknown rule warns once and fails closed", async () => {
   console.warn = (message) => warnings.push(message);
 
   try {
-    await loadValidation(`<form class="needs-validation">
+    await loadValidation(`<form class="needs-validation" data-enhance="validation">
       <input name="x" data-validation-rules="nope" value="y" required>
     </form>`);
 
@@ -237,7 +237,7 @@ test("unknown rule warns once and fails closed", async () => {
 });
 
 test("initial aria-invalid fields are treated as server errors until input", async () => {
-  await loadValidation(`<form class="needs-validation">
+  await loadValidation(`<form class="needs-validation" data-enhance="validation">
     <div class="field">
       <input name="email" type="email" value="good@example.com" aria-invalid="true">
       <span class="field-error">Server says no</span>
@@ -259,30 +259,23 @@ test("initial aria-invalid fields are treated as server errors until input", asy
   expect(allowed.defaultPrevented).toBe(false);
 });
 
-test("removing needs-validation disables runtime and restores novalidate", async () => {
-  await loadValidation(`<form class="needs-validation">
+test("marker is read once at connect — removing it after does not disable validation", async () => {
+  await loadValidation(`<form class="needs-validation" data-enhance="validation">
     <input name="email" type="email" required value="bad">
   </form>`);
 
   const form = document.querySelector("form");
   form.classList.remove("needs-validation");
+  form.removeAttribute("data-enhance");
 
   const event = new Event("submit", { bubbles: true, cancelable: true });
   form.dispatchEvent(event);
 
-  expect(event.defaultPrevented).toBe(false);
-  expect(form.hasAttribute("novalidate")).toBe(false);
-
-  form.classList.add("needs-validation");
-  const reenabled = new Event("submit", { bubbles: true, cancelable: true });
-  form.dispatchEvent(reenabled);
-
-  expect(form.hasAttribute("novalidate")).toBe(true);
-  expect(reenabled.defaultPrevented).toBe(true);
+  expect(event.defaultPrevented).toBe(true);
 });
 
 test("setErrors bridges server validation back to fields", async () => {
-  const { default: FormValidator } = await loadValidation(`<form class="needs-validation">
+  const { default: FormValidator } = await loadValidation(`<form class="needs-validation" data-enhance="validation">
     <input id="email" name="email" type="email" required value="a@b.com" aria-describedby="email-error">
     <span id="email-error" class="field-error"></span>
   </form>`);
@@ -311,7 +304,7 @@ test("setErrors bridges server validation back to fields", async () => {
 });
 
 test("re-validation on input clears errors once fixed", async () => {
-  await loadValidation(`<form class="needs-validation">
+  await loadValidation(`<form class="needs-validation" data-enhance="validation">
     <input name="email" type="email" required value="bad">
   </form>`);
 
@@ -329,7 +322,7 @@ test("re-validation on input clears errors once fixed", async () => {
 });
 
 test("blur validation marks aria-invalid before submit", async () => {
-  await loadValidation(`<form class="needs-validation">
+  await loadValidation(`<form class="needs-validation" data-enhance="validation">
     <div class="field">
       <input name="email" type="email" required value="bad">
       <span class="field-error"></span>

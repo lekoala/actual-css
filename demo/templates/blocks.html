@@ -682,7 +682,7 @@
       <p class="block-note">Validates a small standalone form: field labels, help text, checkboxes, full-width actions, secondary navigation, and native constraint validation via `.needs-validation`.</p>
 
       <div class="block-example">
-        <form class="card stack block-auth needs-validation" data-validation-message="Please check the highlighted fields." onsubmit="event.preventDefault();">
+        <form class="card stack block-auth needs-validation" data-enhance="validation" data-validation-message="Please check the highlighted fields." onsubmit="event.preventDefault();">
           <header>
             <span class="avatar primary"><abbr>AC</abbr></span>
             <h3>Sign in to Actual Cloud</h3>
@@ -723,7 +723,7 @@
       <p class="block-note">Validates a userland recipe built on the control hooks: fields joined into a single bordered block, floating labels driven by <code>:placeholder-shown</code>. The framework itself ships no floating labels. Every control needs <code>placeholder=" "</code> for emptiness detection, so the pattern excludes selects and date inputs, and field messages move below the block.</p>
 
       <div class="block-example">
-        <form class="stack block-float-shell needs-validation" data-validation-message="Please check the highlighted fields." onsubmit="event.preventDefault();">
+        <form class="stack block-float-shell needs-validation" data-enhance="validation" data-validation-message="Please check the highlighted fields." onsubmit="event.preventDefault();">
           <header>
             <h3>Contact us</h3>
             <p class="muted">The team replies within one business day.</p>
