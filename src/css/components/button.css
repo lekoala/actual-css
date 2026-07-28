@@ -41,7 +41,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5em;
+  gap: 0.375em;
   min-block-size: var(--btn-min-size);
   padding-block: var(--space-2);
   padding-block: max(var(--space-1), calc((var(--btn-min-size) - 1lh) / 2));
@@ -57,7 +57,7 @@
   color: var(--btn-fg);
   font: inherit;
   font-size: var(--btn-font-size);
-  font-weight: var(--font-weight-strong);
+  font-weight: var(--font-weight-medium);
   line-height: 1;
   text-decoration: none;
   cursor: pointer;
@@ -164,7 +164,6 @@ a.btn[aria-disabled="true"] {
 }
 
 .btn[aria-busy="true"] > .spinner {
-  --spinner-size: 1em;
   --spinner-width: 0.15em;
 }
 
