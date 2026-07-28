@@ -413,3 +413,92 @@ If list chrome should be removed, use an explicit pattern.
   <li><a href="/components">Components</a></li>
 </ul>
 ```
+
+## Hierarchical scrollable nav
+
+App shell with a collapsible nav tree. Uses existing primitives only — no
+treeview component.
+
+```html
+<aside class="sidebar">
+  <nav class="nav-list scroller" data-enhance="scrollspy" aria-label="Docs">
+    <details open>
+      <summary class="nav-heading">Getting started</summary>
+      <a class="nav-link" href="#intro">Introduction</a>
+      <a class="nav-link" href="#install">Installation</a>
+    </details>
+    <details>
+      <summary class="nav-heading">Components</summary>
+      <a class="nav-link" href="#alert">Alert</a>
+      <a class="nav-link" href="#badge">Badge</a>
+    </details>
+  </nav>
+</aside>
+```
+
+- `.nav-list` + `.nav-link`: Actual's nav chrome
+- Native `<details>`: exclusive accordion with `<details name>` (no JS engine)
+- `data-enhance="scrollspy"`: scroll-driven `aria-current`
+- `.scroller`: thin, theme-aware scrollbar
+- No `.nav-heading` / `.nav-sublist` classes — the existing primitives are enough
+
+## Code block with copy button
+
+```html
+<div class="code-block">
+  <pre><code>npm install actual-css</code></pre>
+  <button class="btn sm ghost" data-copy>Copy</button>
+</div>
+```
+
+```css
+.code-block { position: relative; }
+.code-block > [data-copy] {
+  position: absolute;
+  inset-block-start: var(--space-2);
+  inset-inline-end: var(--space-2);
+}
+```
+
+```js
+import enhance from "actual-css/js/enhance";
+
+enhance({
+  "[data-copy]": (button) => {
+    const controller = new AbortController();
+    button.addEventListener("click", async () => {
+      const code = button.closest(".code-block")?.querySelector("code");
+      if (code) await navigator.clipboard.writeText(code.textContent);
+    }, { signal: controller.signal });
+    return () => controller.abort();
+  },
+});
+```
+
+No core JS, no syntax highlighter — the recipe is the documentation.
+
+## `<details name>` exclusive accordion
+
+Browsers that support the `name` attribute on `<details>` get native exclusive
+accordions — no JS engine needed. Omit `name` to allow several open at once.
+
+```html
+<details name="faq" open>
+  <summary>What is this?</summary>
+  <p>A CSS framework.</p>
+</details>
+<details name="faq">
+  <summary>Does it need JS?</summary>
+  <p>Only the progressive enhancers you import.</p>
+</details>
+```
+
+Not shipping an accordion JS engine is a design decision, not a gap.
+
+## Intent nesting
+
+Intent on an ancestor must not tint nested components, and a local intent inside
+an intent-carrying ancestor must win. Both directions are verified in
+`tests/css-audit.test.js` and the kitchen-sink demo template. Every
+intent-consuming component must declare its `@sync intent-boundary` block —
+that is what prevents inheritance from leaking across components.
