@@ -3,11 +3,11 @@ import { expect, test } from "bun:test";
 const PUBLIC_EXPORTS = {
   enhance: ["default", "enhancementSelector", "hasEnhancement", "registerEnhancement"],
   events: ["EVENTS"],
-  floating: ["track", "reposition", "repositionAt"],
+  floating: ["autoUpdate", "reposition", "repositionAt"],
   focus: ["isElementVisible", "getFocusable", "focusFirstDescendant"],
   keys: ["firstItem", "lastItem", "nextItem"],
   menu: ["getMenuItems", "hasMenuItems", "hasMenuItem", "focusFirstMenuItem", "focusLastMenuItem", "onMenuKeydown", "connectMenu"],
-  surface: ["isSurfaceOpen", "prepareSurface", "openSurface", "closeSurface", "disconnectSurface"],
+  surface: ["isSurfaceOpen", "prepareSurface", "openSurface", "closeSurface", "disconnectSurface", "registerEscapeDismissal"],
 };
 
 for (const [subpath, symbols] of Object.entries(PUBLIC_EXPORTS)) {

@@ -122,26 +122,9 @@ test("closeSurface restores focus by default when focus is inside the surface", 
   expect(document.activeElement).toBe(trigger);
 });
 
-test("out-of-view closes without restoring focus", () => {
-  setBody('<button aria-controls="menu">Open</button><button id="next">Next</button><div id="menu" class="flyout"></div>');
-  const trigger = document.querySelector("button[aria-controls]");
-  const next = document.getElementById("next");
-  const menu = document.getElementById("menu");
-  mockPlacement(trigger, menu);
-  openSurface(menu, { trigger });
-  next.focus();
-
-  menu.dispatchEvent(
-    new CustomEvent(EVENTS.outOfView, { detail: { type: "out-of-view" } }),
-  );
-
-  expect(isSurfaceOpen(menu)).toBe(false);
-  expect(document.activeElement).toBe(next);
-});
-
-test("escape hide closes and restores focus without scrolling", () => {
-  setBody('<button aria-controls="menu">Open</button><button id="next">Next</button><div id="menu" class="flyout"></div>');
-  const trigger = document.querySelector("button[aria-controls]");
+test("Escape key closes the top surface and restores focus", () => {
+  setBody('<button id="trigger" aria-controls="menu">Open</button><button id="next">Next</button><div id="menu" class="flyout"></div>');
+  const trigger = document.getElementById("trigger");
   const next = document.getElementById("next");
   const menu = document.getElementById("menu");
   let preventScroll;
@@ -153,7 +136,7 @@ test("escape hide closes and restores focus without scrolling", () => {
   openSurface(menu, { trigger });
   next.focus();
 
-  menu.dispatchEvent(new CustomEvent(EVENTS.hide, { detail: { type: "escape" } }));
+  document.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
 
   expect(isSurfaceOpen(menu)).toBe(false);
   expect(document.activeElement).toBe(trigger);

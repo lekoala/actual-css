@@ -1,11 +1,10 @@
 /*
  * Compact positioning engine for menus, tooltips, and popovers.
  *
- * Core math ported from Floating UI. Uses a single global scroll/resize
- * listener to reposition all registered floating elements via rAF.
+ * Core math ported from Floating UI. autoUpdate() batches scroll, resize,
+ * and element-resize callbacks per ownerDocument so each document owns its
+ * own listener set — no global import-time side effects.
  */
-
-import { EVENTS } from "./events.js";
 
 /* ── Placement parsing ────────────────────────────────── */
 
@@ -134,8 +133,6 @@ function getViewportBoundary(doc) {
       doc.compatMode === "CSS1Compat"
         ? toNumber(bodyStyle?.marginLeft) + toNumber(bodyStyle?.marginRight)
         : 0;
-    // Classic stable scrollbars reserve inline space on the body. Subtract only
-    // plausible scrollbar widths so unusual body sizing does not shrink the viewport.
     const stableScrollbar = Math.abs(docEl.clientWidth - body.clientWidth - bodyMargin);
     if (stableScrollbar <= STABLE_SCROLLBAR_MAX_WIDTH) {
       width -= stableScrollbar;
@@ -181,15 +178,6 @@ function isVisible(el) {
   return el.getClientRects().length > 0;
 }
 
-function topVisibleTracked() {
-  const elements = [...tracked];
-  for (let i = elements.length - 1; i >= 0; i--) {
-    const el = elements[i];
-    if (el.isConnected && isVisible(el)) return el;
-  }
-  return null;
-}
-
 function getFloatingSize(float) {
   const rect = float.getBoundingClientRect();
   return {
@@ -198,116 +186,90 @@ function getFloatingSize(float) {
   };
 }
 
-/* ── Global scroll / resize tracking ──────────────────── */
+/* ── Per-document batched callbacks ────────────────────── */
 
-const tracked = new Set();
-let resizeObserver = null;
-let tick = false;
-const pendingTypes = new Set();
+const trackers = new WeakMap();
 
-function notify(type) {
-  if (type === "escape") {
-    const el = topVisibleTracked();
-    if (!el) return;
-    el.dispatchEvent(
-      new CustomEvent(EVENTS.hide, {
-        bubbles: false,
-        detail: { type: "escape" },
-      }),
-    );
-    return;
-  }
+function createTracker(doc) {
+  const win = doc.defaultView;
+  const ResizeObserver = win?.ResizeObserver;
 
-  for (const el of tracked) {
-    el.dispatchEvent(
-      new CustomEvent(EVENTS.reposition, {
-        bubbles: false,
-        detail: { type },
-      }),
-    );
-  }
-}
+  const entries = new Map();
+  let resizeObserver = null;
+  let tick = false;
+  const pendingTypes = new Set();
 
-function hasOpenSurface() {
-  return topVisibleTracked() !== null;
-}
+  function getResizeObserver() {
+    if (resizeObserver || !ResizeObserver) return resizeObserver;
 
-function rafNotify(e) {
-  if (e?.type) pendingTypes.add(e.type);
-  if (!tick) {
-    requestAnimationFrame(() => {
-      const types = [...pendingTypes];
-      pendingTypes.clear();
-      for (const type of types) notify(type);
-      tick = false;
+    resizeObserver = new ResizeObserver((entries, observer) => {
+      for (const entry of entries) {
+        observer.unobserve(entry.target);
+        rafNotify("element-resize");
+        win.requestAnimationFrame(() => {
+          if (tracker.entries.has(entry.target)) observer.observe(entry.target);
+        });
+      }
     });
-  }
-  tick = true;
-}
-
-function getResizeObserver() {
-  if (resizeObserver || typeof window === "undefined" || !window.ResizeObserver) {
     return resizeObserver;
   }
 
-  resizeObserver = new window.ResizeObserver((entries, observer) => {
-    for (const entry of entries) {
-      observer.unobserve(entry.target);
-      rafNotify({ type: "element-resize" });
-      requestAnimationFrame(() => {
-        if (tracked.has(entry.target)) observer.observe(entry.target);
+  function rafNotify(type) {
+    pendingTypes.add(type);
+    if (!tick) {
+      win.requestAnimationFrame(() => {
+        const types = [...pendingTypes];
+        pendingTypes.clear();
+        for (const [element, cb] of entries) {
+          if (element.isConnected) {
+            for (const type of types) cb({ type });
+          }
+        }
+        tick = false;
       });
     }
+    tick = true;
+  }
+
+  doc.addEventListener("scroll", (e) => rafNotify(e.type), {
+    passive: true,
+    capture: true,
   });
-  return resizeObserver;
-}
+  win.addEventListener("resize", () => rafNotify("resize"), { passive: true });
 
-// Global document listeners run at import time; keep SSR imports inert.
-if (typeof document !== "undefined") {
-  document.addEventListener("scroll", rafNotify, { passive: true, capture: true });
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && !e.ctrlKey && !e.altKey && !e.shiftKey) {
-      if (!hasOpenSurface()) return;
-      e.preventDefault();
-      notify("escape");
-    }
-  });
-}
-// Global window listener runs at import time; keep SSR imports inert.
-if (typeof window !== "undefined") {
-  window.addEventListener("resize", rafNotify, { passive: true });
-}
-
-/* ── Public API ────────────────────────────────────────── */
-
-/**
- * Register a floating element for auto-reposition on scroll/resize.
- * Returns a cleanup function that removes the element from tracking.
- */
-export function track(el) {
-  tracked.add(el);
-  getResizeObserver()?.observe(el);
-  return () => {
-    tracked.delete(el);
-    resizeObserver?.unobserve(el);
+  const tracker = {
+    entries,
+    add(element, callback) {
+      entries.set(element, callback);
+      getResizeObserver()?.observe(element);
+      return () => {
+        entries.delete(element);
+        resizeObserver?.unobserve(element);
+      };
+    },
   };
+
+  return tracker;
 }
 
-/**
- * Compute and apply position for a floating element relative to a reference.
- *
- * @param {Element} ref
- * @param {HTMLElement} float
- * @param {object} [opts]
- * @param {string} [opts.placement]  default "bottom-start"
- * @param {number} [opts.distance]   px offset from reference
- * @param {boolean} [opts.flip]      flip if overflows viewport
- * @param {boolean} [opts.shift]     shift if overflows x-axis
- * @param {number} [opts.shiftPadding] px padding when shifting
- * @param {Element} [opts.scope]     constrain to a bounding element
- */
+function trackerFor(element) {
+  const doc = element.ownerDocument;
+  let tracker = trackers.get(doc);
+  if (!tracker) {
+    tracker = createTracker(doc);
+    trackers.set(doc, tracker);
+  }
+  return tracker;
+}
+
+export function autoUpdate(element, callback) {
+  return trackerFor(element).add(element, callback);
+}
+
+/* ── Positioning ──────────────────────────────────────── */
+
 export function reposition(ref, float, opts = {}) {
-  if (!isVisible(float)) return;
+  if (!isVisible(float)) return false;
 
   const placement = opts.placement || "bottom-start";
   const distance = opts.distance || 0;
@@ -318,18 +280,10 @@ export function reposition(ref, float, opts = {}) {
 
   const rects = ref.getClientRects();
   const refRect = placement.startsWith("bottom") ? rects[rects.length - 1] : rects[0];
-  if (!refRect) return;
+  if (!refRect) return false;
 
   const boundary = getBoundary(ref, opts);
-  if (isOutsideBoundary(refRect, boundary)) {
-    float.dispatchEvent(
-      new CustomEvent(EVENTS.outOfView, {
-        bubbles: false,
-        detail: { type: "out-of-view" },
-      }),
-    );
-    return;
-  }
+  if (isOutsideBoundary(refRect, boundary)) return false;
 
   const floatRect = getFloatingSize(float);
   const sx = boundary.x;
@@ -358,8 +312,6 @@ export function reposition(ref, float, opts = {}) {
       applyOffset(coords, side, distance, rtl);
     }
 
-    // Narrow side placements can fit neither left nor right. In that case,
-    // fall back to top so compact mobile layouts get a usable placement.
     if (
       axis === "y" &&
       (coords.x < sx || coords.x + floatRect.width > cw) &&
@@ -391,7 +343,6 @@ export function reposition(ref, float, opts = {}) {
     }
   }
 
-  // shift on x axis
   let p = 50;
   if (shift || floatRect.width > refRect.width) {
     const minX = sx + shiftPad;
@@ -433,6 +384,8 @@ export function reposition(ref, float, opts = {}) {
     left: `${coords.x}px`,
     top: `${coords.y}px`,
   });
+
+  return true;
 }
 
 export function repositionAt(x, y, float, opts = {}) {
@@ -458,5 +411,5 @@ export function repositionAt(x, y, float, opts = {}) {
     ],
   };
 
-  reposition(ref, float, opts);
+  return reposition(ref, float, opts);
 }

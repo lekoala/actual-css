@@ -29,7 +29,7 @@
 
 import enhance from "./enhance.js";
 import { EVENTS } from "./events.js";
-import { reposition, track } from "./floating.js";
+import { autoUpdate, reposition } from "./floating.js";
 import { CLASSES } from "./selectors.js";
 
 const SHOW_DELAY_MS = 150;
@@ -132,7 +132,7 @@ function nextTooltipId(doc) {
 }
 
 function repositionTip(ref, tip) {
-  reposition(ref, tip, {
+  return reposition(ref, tip, {
     placement: placementFor(ref),
     distance: 6,
     flip: true,
@@ -185,7 +185,12 @@ function wireTip(tip, options = {}) {
     refs: new Set(),
     activeRef: null,
     controller,
-    untrack: track(tip),
+    stopTracking: autoUpdate(tip, () => {
+      if (isAlwaysVisible(state.activeRef)) tip.hidden = false;
+      if (!tip.hidden && state.activeRef) {
+        if (!repositionTip(state.activeRef, tip)) hideTip(tip, true);
+      }
+    }),
     generated: options.generated === true,
     mount: options.mount || null,
     timer: null,
@@ -194,16 +199,6 @@ function wireTip(tip, options = {}) {
     overTip: false,
   };
 
-  const onHide = () => hideTip(tip);
-  const onOutOfView = () => hideTip(tip, true);
-  const onReposition = () => {
-    if (isAlwaysVisible(state.activeRef)) tip.hidden = false;
-    if (!tip.hidden && state.activeRef) repositionTip(state.activeRef, tip);
-  };
-
-  tip.addEventListener(EVENTS.reposition, onReposition, { signal: controller.signal });
-  tip.addEventListener(EVENTS.hide, onHide, { signal: controller.signal });
-  tip.addEventListener(EVENTS.outOfView, onOutOfView, { signal: controller.signal });
   tip.addEventListener(
     "mouseenter",
     () => {
@@ -217,6 +212,17 @@ function wireTip(tip, options = {}) {
     () => {
       state.overTip = false;
       scheduleHide(tip);
+    },
+    { signal: controller.signal },
+  );
+
+  tip.ownerDocument.addEventListener(
+    "keydown",
+    (event) => {
+      if (event.key !== "Escape" || event.ctrlKey || event.altKey || event.shiftKey) return;
+      if (tip.hidden) return;
+      event.preventDefault();
+      hideTip(tip);
     },
     { signal: controller.signal },
   );
@@ -290,7 +296,7 @@ function ensureTip(trigger) {
 
     hideTip(tip, true);
     state.controller.abort();
-    state.untrack();
+    state.stopTracking();
     tipStates.delete(tip);
     if (state.generated) tip.remove();
     else restoreTip(tip, state);
