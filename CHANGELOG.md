@@ -4,7 +4,7 @@ All notable changes will be documented here.
 
 This project follows Keep a Changelog and uses semver, including during 0.x.
 
-## [0.2.0] - Unreleased
+## [0.2.0] - 2026-07-28
 
 ### Added
 - Enhancement contract: `class` = presentation, `data-enhance` = behaviour,
