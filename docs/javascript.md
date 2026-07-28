@@ -88,6 +88,65 @@ The JS is designed to be usable on its own, without Actual's stylesheet.
   Its `intent` option applies whatever class names the caller passes, so
   `.danger`, `.success`, and the rest of intents.css are never hardcoded.
 
+## The Runtime as a Primitive Kit
+
+For building custom widgets (select, tags, date picker) on Actual's primitives,
+see [Widget primitives](design-notes/widget-primitives.md). Every primitive
+subpath is published in `package.json#exports`:
+
+```
+actual-css/js/enhance    actual-css/js/events    actual-css/js/floating
+actual-css/js/focus      actual-css/js/keys      actual-css/js/menu
+actual-css/js/surface
+```
+
+The exports map is explicit — it *is* the statement of what is public.
+
+## Floating Contract
+
+`floating` is a positioning-only primitive with zero CSS dependency: no
+`classList`, no `selectors.js` import, no Actual class anywhere. It computes and
+exposes `left`/`top`, `data-placement`, `--available-height`,
+`--arrow-x`/`--arrow-y`. The caller owns the floating element's presentation
+entirely.
+
+A third-party widget importing only `floating` with no Actual stylesheet must
+be able to position a listbox under an input — that is the test.
+
+## Surface Contract
+
+`surface` has documented presentation coupling. A foreign consumer must supply
+or account for:
+
+```css
+.my-panel              { position: absolute; z-index: 100; }
+.my-panel[hidden]      { display: none; }
+/* surface.js sets position:fixed + inline left/top on open —
+   do not override with !important */
+/* .is-open / .is-sheet / .surface-backdrop are written by surface.js
+   — style or ignore them */
+/* --flyout-trigger-width is set while an open surface is positioned */
+/* data-actual-surface is written by surface.js for teardown
+   — never select on it */
+```
+
+Two non-obvious requirements:
+1. `[hidden] { display: none }` must not be defeated by a higher-specificity
+   `display` rule — `surface.js` toggles `hidden`, not `display`.
+2. The open state switches to `position: fixed` with measured inline
+   coordinates.
+
+Lifecycle: `prepareSurface` → `openSurface` → `closeSurface` →
+`disconnectSurface`. `openSurface` dispatches a cancelable
+`actual:surface-open` event: widgets can veto or decorate opens, and context
+menus inject their own source/restoreFocusTo through it.
+
+Extension seam: a `[role="listbox"]` surface with `[role="option"]` children
+gets no keyboard handling and no click-autoclose from `surface.js`.
+`[role="option"]` is deliberately not in the menu-item vocabulary — a combobox
+reuses the surface lifecycle while retaining full control of its own keyboard
+and selection.
+
 ## Extending The Runtime
 
 ### Stateless commands

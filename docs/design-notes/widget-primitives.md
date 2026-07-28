@@ -1,24 +1,22 @@
 # Widget primitives
 
-The JS runtime doubles as a primitive kit for building custom widgets. This page
-inventories what is available and how to compose them. It is written **before** the
-code moves so the outcome is a target, not a rationalization.
+The JS runtime doubles as a primitive kit for building custom widgets.
 
 ## Primitives
 
-| Need | Primitive | State after 0.2 |
-|------|-----------|-----------------|
-| Opt-in discovery + lifecycle + cleanup | `enhance`, `registerEnhancement` | Track A Step 2 |
-| Positioning, flip/shift, `--available-height`, `data-placement` | `floating` (`track`, `reposition`, `repositionAt`) | Already class-free, no change |
-| Open/close, sheet on mobile, backdrop, outside-click, Escape, focus restore | `surface` | Contract documented (A/5b) + exported (D12) |
-| Roving focus over a list | `keys` (`firstItem`, `lastItem`, `nextItem`) | Exported (D12) |
-| Menu-item vocabulary, usable-item filtering | `menu` | Declassed (D11) + exported |
-| Focusable lookup, visibility | `focus` | Exported |
-| Caret-safe value rewriting | `input` (`onTextInput`, `setCaret`, `dispatchInput`) | Already exported |
-| Character policies | `filter` | Already exported |
-| Event namespace | `events` (`EVENTS`, `ACTUAL_EVENT_PREFIX`) | Exported |
-| Declarative triggers | `command` (`registerCommands`) | Already exported |
-| State classes the runtime writes | `selectors` (`CLASSES`) | Rescoped in A/Step 4 |
+| Need | Primitive | Import |
+|------|-----------|--------|
+| Opt-in discovery + lifecycle + cleanup | `enhance`, `registerEnhancement` | `actual-css/js/enhance` |
+| Positioning, flip/shift, `--available-height`, `data-placement` | `floating` (`track`, `reposition`, `repositionAt`) | `actual-css/js/floating` |
+| Open/close, sheet on mobile, backdrop, outside-click, Escape, focus restore | `surface` | `actual-css/js/surface` |
+| Roving focus over a list | `keys` (`firstItem`, `lastItem`, `nextItem`) | `actual-css/js/keys` |
+| Menu-item vocabulary, usable-item filtering | `menu` | `actual-css/js/menu` |
+| Focusable lookup, visibility | `focus` | `actual-css/js/focus` |
+| Caret-safe value rewriting | `input` (`onTextInput`, `setCaret`, `dispatchInput`) | `actual-css/js/input` |
+| Character policies | `filter` | `actual-css/js/filter` |
+| Event namespace | `events` (`EVENTS`, `ACTUAL_EVENT_PREFIX`) | `actual-css/js/events` |
+| Declarative triggers | `command` (`registerCommands`) | `actual-css/js/command` |
+| State classes the runtime writes | `selectors` (`CLASSES`) | `actual-css/js/selectors` |
 
 ## Compositions
 
