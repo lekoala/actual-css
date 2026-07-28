@@ -88,6 +88,7 @@
     "build:dist": "bun scripts/build-dist.js",
     "build:js": "bun scripts/build-js.js",
     "build:size": "bun scripts/build-size.js",
+    "check:enhance": "bun run scripts/check-enhance.js",
     "check:reserved": "bun scripts/check-reserved.js",
     "check:links": "bun scripts/check-doc-links.js",
     "check:templates": "bun scripts/check-templates.js",
@@ -95,7 +96,7 @@
     "shot:page": "bun scripts/page-shot.js",
     "check:sync": "bun scripts/check-sync.js",
     "test": "bun test",
-    "build:all": "bun run build:demo && bun run build:dist && bun run check:reserved && bun run check:sync && bun run check:links && bun run check:templates && bun run test && bun run build:js && bun run build:size",
+    "build:all": "bun run build:demo && bun run build:dist && bun run check:enhance && bun run check:reserved && bun run check:sync && bun run check:links && bun run check:templates && bun run test && bun run build:js && bun run build:size",
     "prepublishOnly": "bun run build:all"
   },
   "devDependencies": {
