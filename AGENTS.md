@@ -22,6 +22,15 @@ Add relevant guards for future-us when needed based on traps and discoveries.
 - Do not run build:demo, unless you worked on the build script (we have a watcher that build it)
 - After editing demo/templates/*.html, run `bun run check:templates` (balanced `<style>` braces) — it's cheap and doesn't touch dist or generated demo output, unlike build:all
 - Playwright is not installed, build based on specifications
+- Never rewrite a source file through a shell pipeline. PowerShell
+  `(Get-Content x) -replace ... | Set-Content x` truncated `blocks.html`,
+  `forms.md` and `javascript.md` to 0 bytes (the read is lazy, so the write
+  empties the file before it is read). Same trap with `sed -i`, `>` and `tee`.
+  Use the edit tool, which fails loudly instead of silently emptying a file.
+- Bulk markup migrations need a verification pass, not a careful replace: a
+  replace over `class="flyout"` cannot see markup whose attributes span several
+  lines. Write the inverse check (`tmp/enhance-audit.js` is the 0.2 example) and
+  run it after each step.
 
 No need to mention that you didn't do anything
 

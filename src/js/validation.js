@@ -17,8 +17,7 @@
  * DOM tears down everything, including the managed novalidate attribute.
  */
 
-import enhance from "./enhance.js";
-import { enhancementSelector } from "./enhance.js";
+import enhance, { enhancementSelector } from "./enhance.js";
 import { EVENTS } from "./events.js";
 import { CLASSES } from "./selectors.js";
 
