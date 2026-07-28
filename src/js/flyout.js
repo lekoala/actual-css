@@ -9,13 +9,7 @@ import enhance from "./enhance.js";
 import { registerEnhancement } from "./enhance.js";
 import { focusFirstDescendant } from "./focus.js";
 import { focusFirstMenuItem, focusLastMenuItem, getMenuItems } from "./menu.js";
-import {
-  closeSurface,
-  disconnectSurface,
-  isSurfaceOpen,
-  openSurface,
-  prepareSurface,
-} from "./surface.js";
+import { closeSurface, isSurfaceOpen, openSurface, prepareSurface } from "./surface.js";
 
 // trigger -> { flyout, controller }
 const triggerMap = new WeakMap();
@@ -170,11 +164,6 @@ function connectFlyout(flyout) {
   }
 }
 
-function disconnectFlyout(flyout) {
-  if (!flyout) return;
-  disconnectSurface(flyout);
-}
-
 enhance({
   [FLYOUT_TRIGGER_SELECTOR]: (trigger) => {
     connectTrigger(trigger);
@@ -184,5 +173,6 @@ enhance({
 
 registerEnhancement("flyout", (flyout) => {
   connectFlyout(flyout);
-  return () => disconnectFlyout(flyout);
+  // Surface owns its own teardown; the marker enhancer in surface.js
+  // calls disconnectSurface(el, { restore: false }) on sweep.
 });
