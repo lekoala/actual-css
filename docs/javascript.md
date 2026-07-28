@@ -389,7 +389,7 @@ event with `{ form, firstInvalid, message }`. Valid fields are not marked
 automatically.
 
 ```html
-<form class="needs-validation" data-validation-message="Please check the fields.">
+<form class="needs-validation" data-enhance="validation" data-validation-message="Please check the fields.">
   <input class="input" name="email" type="email" required
          aria-describedby="email-error" />
   <span class="field-error" id="email-error">Enter a valid email.</span>

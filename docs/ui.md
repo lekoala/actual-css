@@ -893,7 +893,7 @@ portable fallback — the same markup serves both paths.
 - Intents: `danger`, `success`, `warning`, `neutral`. The default (no intent) is a neutral dark pill.
 
 ```html
-<form class="needs-validation" data-validation-message="Please check the highlighted fields.">
+<form class="needs-validation" data-enhance="validation" data-validation-message="Please check the highlighted fields.">
   <label class="field">
     <span class="field-label">Email</span>
     <input class="input" type="email" name="email" required

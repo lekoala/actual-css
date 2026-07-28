@@ -8,27 +8,23 @@
  * framework: server / AJAX validation lives in app code and feeds results
  * back through FormValidator.setErrors().
  *
- * Opt in with the .needs-validation class. Importing the module registers
- * the behavior; there is no init call.
+ * Opt in with data-enhance="validation". The .needs-validation class
+ * remains valid for presentation-only (CSS :user-invalid feedback without
+ * the JS behavior). Importing the module registers the behavior; there is
+ * no init call.
  *
- * The .needs-validation class is a static, init-time contract: this module
- * does not observe attribute mutations, so toggling the class after connect
- * only takes effect on the next focusout/input event, not immediately. A
- * submit that races that window can still bypass native validation (the
- * managed novalidate attribute is still present). Treat the class as fixed
- * for a form's lifetime rather than something toggled at runtime. Removing
- * the form from the DOM, however, is fully supported: the enhance() sweep
- * runs the cleanup below, which aborts all listeners, removes the managed
- * novalidate attribute, and releases the form's internal state.
+ * The marker is a static, init-time contract. Removing the form from the
+ * DOM tears down everything, including the managed novalidate attribute.
  */
 
 import enhance from "./enhance.js";
+import { enhancementSelector } from "./enhance.js";
 import { EVENTS } from "./events.js";
 import { CLASSES } from "./selectors.js";
 
 const NOVALIDATE = "novalidate";
 const WAS_VALIDATED_CLASS = CLASSES.wasValidated;
-const NEEDS_VALIDATION_CLASS = CLASSES.needsValidation;
+const VALIDATION_SELECTOR = enhancementSelector("validation");
 const FIELD_CLASS = CLASSES.field;
 const DANGER_CLASS = CLASSES.danger;
 const MANAGED_NOVALIDATE_ATTR = "validationManagedNovalidate";
@@ -205,14 +201,6 @@ function hydrateServerErrors(form) {
   }
 }
 
-function ensureManagedNoValidate(form) {
-  if (!form.classList.contains(NEEDS_VALIDATION_CLASS)) return;
-  if (form.hasAttribute(NOVALIDATE)) return;
-
-  form.setAttribute(NOVALIDATE, "");
-  form.dataset[MANAGED_NOVALIDATE_ATTR] = "";
-}
-
 function releaseManagedNoValidate(form) {
   if (form.dataset[MANAGED_NOVALIDATE_ATTR] === undefined) return;
   form.removeAttribute(NOVALIDATE);
@@ -220,8 +208,6 @@ function releaseManagedNoValidate(form) {
 }
 
 function validateField(el, trigger) {
-  const form = el.form;
-  if (!form?.classList.contains(NEEDS_VALIDATION_CLASS)) return;
   if (ignoreField(el)) return;
 
   if (trigger === "input" && el.dataset.validationErrors === "server") {
@@ -261,11 +247,6 @@ function connectForm(form) {
     (event) => {
       const el = event.target;
       if (el instanceof Element && el.form === form) {
-        if (!form.classList.contains(NEEDS_VALIDATION_CLASS)) {
-          releaseManagedNoValidate(form);
-          return;
-        }
-        ensureManagedNoValidate(form);
         validateField(el, "blur");
       }
     },
@@ -277,11 +258,6 @@ function connectForm(form) {
     (event) => {
       const el = event.target;
       if (el instanceof Element && el.form === form) {
-        if (!form.classList.contains(NEEDS_VALIDATION_CLASS)) {
-          releaseManagedNoValidate(form);
-          return;
-        }
-        ensureManagedNoValidate(form);
         validateField(el, "input");
       }
     },
@@ -305,13 +281,6 @@ function connectForm(form) {
     "submit",
     (event) => {
       if (event.submitter?.formNoValidate) return;
-
-      if (!form.classList.contains(NEEDS_VALIDATION_CLASS)) {
-        releaseManagedNoValidate(form);
-        return;
-      }
-
-      ensureManagedNoValidate(form);
 
       let firstInvalid = null;
 
@@ -373,7 +342,7 @@ export class FormValidator {
     rules[name] = callback;
   }
 
-  static init(selector = `.${NEEDS_VALIDATION_CLASS}`) {
+  static init(selector = VALIDATION_SELECTOR) {
     if (typeof document === "undefined") return;
     for (const form of document.querySelectorAll(selector)) {
       if (isFormElement(form)) connectForm(form);
@@ -412,7 +381,7 @@ export class FormValidator {
 
 if (typeof document !== "undefined") {
   enhance({
-    [`form.${NEEDS_VALIDATION_CLASS}`]: (form) => connectForm(form),
+    [`form${VALIDATION_SELECTOR}`]: (form) => connectForm(form),
   });
 }
 
