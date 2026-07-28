@@ -1,8 +1,9 @@
 /*
  * Badges for compact labels, counts, and state hints.
  *
- * Solid by default. Shared .soft/.outline variants stay available for quieter
- * tags without adding a badge-specific color API.
+ * Soft by default. .solid for counters and notification badges. The dot
+ * (.badge:empty) stays solid regardless — a soft dot is pointless.
+ * Shared .outline variant stays available.
  */
 /* Intent boundary — inherited intents do not tint this component.
    Local intent classes still win because :where() has zero specificity. */
@@ -22,9 +23,9 @@
   --badge-pad-x: 0.55em;
   --badge-font-size: var(--variant-compact-font-size, 0.8125rem);
   --badge-dot-size: 0.5rem;
-  --badge-bg: var(--ui-bg, var(--intent, var(--neutral)));
-  --badge-fg: var(--ui-fg, var(--intent-fg, var(--neutral-fg)));
-  --badge-border: var(--ui-border, transparent);
+  --badge-bg: var(--ui-bg, transparent);
+  --badge-fg: var(--ui-fg, var(--intent, var(--text)));
+  --badge-border: var(--ui-border, var(--intent, var(--border)));
   --badge-radius: 999px;
 
   display: inline-flex;
@@ -47,6 +48,26 @@
     border-color var(--duration),
     color var(--duration),
     box-shadow var(--duration);
+}
+
+/* Soft by default — duplicated here with @sync markers for check-sync.js
+   to guard, the same way alert.css guards its own soft recipe. */
+@supports (color: color-mix(in oklch, red, white)) {
+  .badge:where(:not(.solid, .outline)) {
+    /* @sync soft-recipe */
+    --badge-bg: color-mix(
+      in oklch,
+      var(--surface) var(--soft-bg-mix),
+      var(--intent, var(--neutral))
+    );
+    --badge-fg: var(--intent, var(--text));
+    --badge-border: color-mix(
+      in oklch,
+      var(--surface) var(--soft-border-mix),
+      var(--intent, var(--neutral))
+    );
+    /* @sync soft-recipe */
+  }
 }
 
 .badge:empty {
@@ -83,8 +104,7 @@
 }
 
 /* .solid/.soft/.outline are shared via variants.css, including the
-   .soft/.outline hover recipe (--ui-hover-bg). The --badge-* fallbacks make
-   .badge solid by default. */
+   .soft/.outline hover recipe (--ui-hover-bg). */
 @media (hover: hover) {
   :where(a.badge, button.badge):not(:where(:disabled, [aria-disabled="true"])):hover {
     background: var(--ui-hover-bg, var(--badge-bg));

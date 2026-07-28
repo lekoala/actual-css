@@ -18,8 +18,8 @@
 }
 
 .spinner {
-  --spinner-size: 1.5rem;
-  --spinner-width: 2px;
+  --spinner-size: 1em;
+  --spinner-width: 0.125em;
   --spinner-track: currentColor;
   --spinner-value: transparent;
 
@@ -45,11 +45,11 @@
 }
 
 .spinner.sm {
-  --spinner-size: 1rem;
+  --spinner-size: 0.75em;
 }
 
 .spinner.lg {
-  --spinner-size: 3rem;
+  --spinner-size: 2rem;
   --spinner-width: 3px;
 }
 

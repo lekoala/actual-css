@@ -28,6 +28,7 @@
   }
 
   [aria-busy="true"]:not(.btn) > .spinner:last-child {
+    --spinner-size: 2rem;
     position: absolute;
     inset: 0;
     z-index: 2;

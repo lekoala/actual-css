@@ -29,7 +29,8 @@
   /* Shape */
   --border-width: 1px;
   --radius-full: 9999px;
-  --shadow: 0 0.5rem 1.5rem rgb(0 0 0 / 0.08);
+  --shadow-xs: 0 1px 2px rgb(0 0 0 / 0.04);
+  --shadow: 0 1px 3px rgb(0 0 0 / 0.05), 0 4px 12px rgb(0 0 0 / 0.04);
   --shadow-popout: 0 0.25rem 0.75rem rgb(0 0 0 / 0.15);
 
   /* Motion — see reset.css for the prefers-reduced-motion hard reset.
@@ -111,7 +112,10 @@
 
 @supports (color: color-mix(in oklch, red, white)) {
   :root {
-    --shadow: 0 0.5rem 1.5rem color-mix(in oklch, var(--shadow-color) 8%, transparent);
+    --shadow-xs: 0 1px 2px color-mix(in oklch, var(--shadow-color) 4%, transparent);
+    --shadow:
+      0 1px 3px color-mix(in oklch, var(--shadow-color) 5%, transparent),
+      0 4px 12px color-mix(in oklch, var(--shadow-color) 4%, transparent);
     --shadow-popout: 0 0.25rem 0.75rem color-mix(in oklch, var(--shadow-color) 15%, transparent);
     --backdrop-fill: color-mix(
       in oklch,
