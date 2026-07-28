@@ -227,9 +227,7 @@ Flyouts and tooltips opened from inside a modal dialog are mounted inside the di
       </button>
     </div>
 
-    <menu class="flyout"
-          id="dialog-actions-menu"
-          hidden>
+    <menu class="flyout" data-enhance="flyout" id="dialog-actions-menu" hidden>
       <li><button type="button">Archive</button></li>
       <li><button type="button">Duplicate</button></li>
       <li><button type="button">Share</button></li>
@@ -501,7 +499,7 @@ Flyout covers two distinct patterns:
         <i class="ti ti-chevron-down" aria-hidden="true"></i>
       </button>
 
-      <div class="flyout"
+      <div class="flyout" data-enhance="flyout"
            id="products-panel"
            aria-label="Products"
            data-flyout-mobile="auto"
