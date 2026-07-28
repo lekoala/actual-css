@@ -14,6 +14,15 @@
  *
  * enhancers: { [selector]: (el) => cleanup | void }
  * Returns: { refresh, forget, disconnect }
+ *
+ * Enhancement tokens — the data-enhance layer on top of enhance().
+ *
+ * enhancementSelector("tabs") returns [data-enhance~="tabs"], the generic
+ * opt-in for root-controller behaviors. registerEnhancement() is a stateless
+ * wrapper around enhance() — no central registry, no double-registration
+ * warning. Third-party behaviors register exactly like built-in ones.
+ *
+ * See docs/design-notes/enhancement-contract.md.
  */
 
 const registries = new WeakMap();
@@ -170,6 +179,23 @@ function createRegistry(root) {
       }
     },
   };
+}
+
+const ENHANCEMENT_NAME = /^[a-z][a-z0-9-]*$/;
+
+export function enhancementSelector(name) {
+  if (!ENHANCEMENT_NAME.test(name)) {
+    throw new TypeError(`Invalid enhancement name: ${name}`);
+  }
+  return `[data-enhance~="${name}"]`;
+}
+
+export function hasEnhancement(el, name) {
+  return el.matches(enhancementSelector(name));
+}
+
+export function registerEnhancement(name, init, root) {
+  return enhance({ [enhancementSelector(name)]: init }, root);
 }
 
 function registryFor(root) {
