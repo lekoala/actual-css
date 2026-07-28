@@ -8,11 +8,11 @@
   "author": "Thomas <thomas@lekoala.be>",
   "repository": {
     "type": "git",
-    "url": "https://onedev.kalyptus.ovh/actual-css.git"
+    "url": "https://github.com/lekoala/actual-css.git"
   },
-  "homepage": "https://onedev.kalyptus.ovh/actual-css",
+  "homepage": "https://github.com/lekoala/actual-css",
   "bugs": {
-    "url": "https://onedev.kalyptus.ovh/actual-css/issues"
+    "url": "https://github.com/lekoala/actual-css/issues"
   },
   "keywords": [
     "css",
