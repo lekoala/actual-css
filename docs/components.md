@@ -262,7 +262,7 @@ Composed
 ```html
 <button type="button" class="btn ghost" aria-label="Notifications">
   <i class="ti ti-bell" aria-hidden="true"></i>
-  <span class="badge danger" aria-label="12 unread notifications">12</span>
+  <span class="badge danger solid" aria-label="12 unread notifications">12</span>
 </button>
 
 <button type="button" class="btn secondary soft" aria-label="Notifications">
