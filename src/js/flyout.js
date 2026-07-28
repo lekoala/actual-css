@@ -150,6 +150,9 @@ function disconnectTrigger(trigger) {
   const state = triggerMap.get(trigger);
   if (!state) return;
   state.controller.abort();
+  if (state.flyout?.isConnected && isSurfaceOpen(state.flyout)) {
+    closeSurface(state.flyout, { restoreFocus: false });
+  }
   triggerMap.delete(trigger);
 }
 

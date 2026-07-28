@@ -470,3 +470,57 @@ test("an outside click closes a context menu opened through the shared surface",
   expect(menu.hidden).toBe(true);
   expect(menu.classList.contains("is-open")).toBe(false);
 });
+
+// D9 — removing a context target while its context menu is open in <body>
+// closes the orphaned surface instead of leaving it open forever.
+test("D9 — removing a context target closes its open context menu", async () => {
+  await loadContextMenu(`
+    <div id="wrapper">
+      <div id="target" data-context-menu="menu" tabindex="0">File.pdf</div>
+    </div>
+    <menu id="menu" class="flyout" data-enhance="flyout" hidden>
+      <li><button type="button">First</button></li>
+    </menu>
+  `);
+  const wrapper = document.getElementById("wrapper");
+  const target = document.getElementById("target");
+  const menu = document.getElementById("menu");
+  setupGeometry(target, menu);
+
+  target.dispatchEvent(
+    new MouseEvent("contextmenu", { bubbles: true, cancelable: true, clientX: 20, clientY: 30 }),
+  );
+  expect(menu.hidden).toBe(false);
+  expect(menu.classList.contains("is-open")).toBe(true);
+
+  wrapper.remove();
+  await nextMicrotask();
+
+  expect(menu.classList.contains("is-open")).toBe(false);
+});
+
+// D9 — removing a flyout trigger while its panel is open in <body>
+// closes the orphaned panel.
+test("D9 — removing a flyout trigger closes its open panel", async () => {
+  await loadFlyout(`
+    <div id="container">
+      <button id="trigger" type="button" aria-controls="menu" aria-expanded="false">Open</button>
+    </div>
+    <menu id="menu" class="flyout" data-enhance="flyout" hidden>
+      <li><button type="button">First</button></li>
+    </menu>
+  `);
+  const container = document.getElementById("container");
+  const trigger = document.getElementById("trigger");
+  const menu = document.getElementById("menu");
+  setupGeometry(trigger, menu);
+
+  press(trigger, "Enter");
+  expect(menu.hidden).toBe(false);
+  expect(menu.classList.contains("is-open")).toBe(true);
+
+  container.remove();
+  await nextMicrotask();
+
+  expect(menu.classList.contains("is-open")).toBe(false);
+});

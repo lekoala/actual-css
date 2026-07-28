@@ -246,7 +246,10 @@ function disconnectContextTarget(target) {
   if (!state) return;
   clearLongPress(state);
   state.controller.abort();
-  if (contextFor(state.menu)?.context === target) contextByMenu.delete(state.menu);
+  if (contextFor(state.menu)?.context === target) {
+    contextByMenu.delete(state.menu);
+    closeSurface(state.menu, { restoreFocus: false });
+  }
   contextMap.delete(target);
 }
 
