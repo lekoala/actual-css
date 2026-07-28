@@ -1,6 +1,6 @@
 import enhance from "./enhance.js";
 import { EVENTS } from "./events.js";
-import { reposition, repositionAt, track } from "./floating.js";
+import { autoUpdate, reposition, repositionAt } from "./floating.js";
 
 import { CLASSES } from "./selectors.js";
 
@@ -189,12 +189,12 @@ function positionSurface(menu) {
   };
 
   if (state.point) {
-    repositionAt(state.point.x, state.point.y, menu, opts);
-    return;
+    return repositionAt(state.point.x, state.point.y, menu, opts);
   }
 
   const anchor = state.trigger || state.source;
-  if (anchor) reposition(anchor, menu, opts);
+  if (anchor) return reposition(anchor, menu, opts);
+  return true;
 }
 
 function ensureSurfaceWired(menu) {
@@ -204,7 +204,17 @@ function ensureSurfaceWired(menu) {
   const controller = new AbortController();
   const state = {
     controller,
-    untrack: track(menu),
+    stopTracking: autoUpdate(menu, ({ type }) => {
+      if (menu.hidden) return;
+      if (type === "scroll" && surfaceMap.get(menu)?.point) {
+        closeSurface(menu);
+        return;
+      }
+      const current = surfaceMap.get(menu);
+      if (!current) return;
+      applyPresentation(menu, current);
+      if (!positionSurface(menu)) closeSurface(menu);
+    }),
     backdrop: null,
     trigger: null,
     source: null,
@@ -220,39 +230,8 @@ function ensureSurfaceWired(menu) {
     closeId: 0,
   };
 
-  menu.addEventListener(
-    EVENTS.reposition,
-    (e) => {
-      if (menu.hidden) return;
-      if (e.detail?.type === "scroll" && surfaceMap.get(menu)?.point) {
-        closeSurface(menu);
-        return;
-      }
-      const state = surfaceMap.get(menu);
-      if (!state) return;
-      applyPresentation(menu, state);
-      positionSurface(menu);
-    },
-    { signal: controller.signal },
-  );
-
-  menu.addEventListener(
-    EVENTS.hide,
-    (e) => {
-      if (!menu.hidden) closeSurface(menu, { restoreFocus: e.detail?.type === "escape" });
-    },
-    { signal: controller.signal },
-  );
-
-  menu.addEventListener(
-    EVENTS.outOfView,
-    () => {
-      if (!menu.hidden) closeSurface(menu);
-    },
-    { signal: controller.signal },
-  );
-
   surfaceMap.set(menu, state);
+  ensureDocumentEscape(menu);
   return state;
 }
 
@@ -353,7 +332,8 @@ export function disconnectSurface(menu, { restore = true } = {}) {
   const state = surfaceMap.get(menu);
   if (state) {
     state.backdrop?.remove();
-    state.untrack();
+    state.unregisterEscape?.();
+    state.stopTracking?.();
     state.controller.abort();
     surfaceMap.delete(menu);
   }
@@ -379,4 +359,44 @@ function ensureDocumentClick(menu) {
   if (!doc || clickBoundDocuments.has(doc)) return;
   clickBoundDocuments.add(doc);
   doc.addEventListener("click", onDocumentClick);
+}
+
+// Escape dismissal stack, per document. Tooltips pushed after flyouts
+// naturally sit at the top: the most recently opened overlay dismisses first.
+const dismissableStacks = new WeakMap();
+
+export function registerEscapeDismissal(element, dismiss) {
+  const doc = element.ownerDocument;
+  let stack = dismissableStacks.get(doc);
+  if (!stack) {
+    stack = [];
+    dismissableStacks.set(doc, stack);
+    doc.addEventListener("keydown", onDocumentEscape);
+  }
+
+  const entry = { element, dismiss };
+  stack.push(entry);
+
+  return () => {
+    const index = stack.indexOf(entry);
+    if (index >= 0) stack.splice(index, 1);
+  };
+}
+
+function onDocumentEscape(event) {
+  if (event.key !== "Escape" || event.ctrlKey || event.altKey || event.shiftKey) return;
+
+  const stack = dismissableStacks.get(event.currentTarget);
+  const entry = stack?.at(-1);
+  if (!entry) return;
+
+  event.preventDefault();
+  entry.dismiss({ restoreFocus: true });
+}
+
+function ensureDocumentEscape(menu) {
+  if (!surfaceMap.has(menu)) return;
+
+  const state = surfaceMap.get(menu);
+  state.unregisterEscape = registerEscapeDismissal(menu, (opts) => closeSurface(menu, opts));
 }

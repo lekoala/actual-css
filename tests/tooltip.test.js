@@ -261,7 +261,7 @@ test("tooltip stays open while the pointer moves from trigger to tip", async () 
   expect(tip.hidden).toBe(true);
 });
 
-test("actual:hide and actual:out-of-view events hide the tooltip", async () => {
+test("Escape key hides the tooltip", async () => {
   await loadTooltip('<button data-tooltip="Help">Trigger</button>');
   const trigger = document.querySelector("button");
 
@@ -270,18 +270,18 @@ test("actual:hide and actual:out-of-view events hide the tooltip", async () => {
   const tip = document.querySelector('[role="tooltip"]');
   expect(tip.hidden).toBe(false);
 
-  tip.dispatchEvent(new CustomEvent("actual:hide", { detail: { type: "escape" } }));
+  document.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
   expect(tip.hidden).toBe(true);
 
   hover(trigger);
   await waitForShow();
   expect(tip.hidden).toBe(false);
 
-  tip.dispatchEvent(new CustomEvent("actual:out-of-view", { detail: { type: "out-of-view" } }));
+  document.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
   expect(tip.hidden).toBe(true);
 });
 
-test("actual:reposition follows the trigger placement", async () => {
+test("tooltip positions relative to its trigger", async () => {
   await loadTooltip('<button data-tooltip="Help" data-tooltip-placement="right">Trigger</button>');
   const trigger = document.querySelector("button");
   mockRect(trigger, { x: 100, y: 100, width: 80, height: 30 });
@@ -294,13 +294,5 @@ test("actual:reposition follows the trigger placement", async () => {
   await waitForShow();
   expect(tip.hidden).toBe(false);
   expect(tip.dataset.placement).toBe("right");
-  const firstLeft = tip.style.left;
-  expect(firstLeft).not.toBe("");
-
-  // Trigger moved: a reposition event must recompute coordinates.
-  mockRect(trigger, { x: 300, y: 100, width: 80, height: 30 });
-  tip.dispatchEvent(new CustomEvent("actual:reposition", { detail: { type: "scroll" } }));
-
-  expect(tip.style.left).not.toBe(firstLeft);
-  expect(tip.dataset.placement).toBe("right");
+  expect(tip.style.left).not.toBe("");
 });

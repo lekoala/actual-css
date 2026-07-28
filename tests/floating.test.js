@@ -1,5 +1,4 @@
 import { afterAll, afterEach, expect, test } from "bun:test";
-import { EVENTS } from "../src/js/events.js";
 import { cleanupDOM, mockRect, setupDOM } from "./helpers/dom.js";
 
 setupDOM();
@@ -23,7 +22,7 @@ window.ResizeObserver = class ResizeObserver {
   }
 };
 
-const { reposition, repositionAt, track } = await import(
+const { autoUpdate, reposition, repositionAt } = await import(
   `../src/js/floating.js?test=${Date.now()}`
 );
 
@@ -65,57 +64,53 @@ afterAll(() => {
   cleanupDOM();
 });
 
-test("track registers an element and cleanup unregisters it", async () => {
+test("autoUpdate registers an element and cleanup unregisters it", async () => {
   document.body.innerHTML = '<div id="float"></div>';
   const float = document.getElementById("float");
-  const events = [];
-  float.addEventListener(EVENTS.reposition, (event) => events.push(event.detail.type));
-  const untrack = track(float);
+  const calls = [];
+  const stop = autoUpdate(float, (detail) => calls.push(detail.type));
 
   window.dispatchEvent(new Event("resize"));
   await nextFrame();
-  untrack();
+  stop();
   window.dispatchEvent(new Event("resize"));
   await nextFrame();
 
-  expect(events).toEqual(["resize"]);
+  expect(calls).toEqual(["resize"]);
 });
 
-test("scroll and resize dispatch actual:reposition", async () => {
+test("scroll and resize trigger autoUpdate callbacks", async () => {
   document.body.innerHTML = '<div id="float"></div>';
   const float = document.getElementById("float");
-  const events = [];
-  untracks.push(track(float));
-  float.addEventListener(EVENTS.reposition, (event) => events.push(event.detail.type));
+  const calls = [];
+  untracks.push(autoUpdate(float, (detail) => calls.push(detail.type)));
 
   document.dispatchEvent(new Event("scroll"));
   await nextFrame();
   window.dispatchEvent(new Event("resize"));
   await nextFrame();
 
-  expect(events).toEqual(["scroll", "resize"]);
+  expect(calls).toEqual(["scroll", "resize"]);
 });
 
-test("scroll and resize in the same frame keep distinct event types", async () => {
+test("scroll and resize in the same frame keep distinct callback types", async () => {
   document.body.innerHTML = '<div id="float"></div>';
   const float = document.getElementById("float");
-  const events = [];
-  untracks.push(track(float));
-  float.addEventListener(EVENTS.reposition, (event) => events.push(event.detail.type));
+  const calls = [];
+  untracks.push(autoUpdate(float, (detail) => calls.push(detail.type)));
 
   window.dispatchEvent(new Event("resize"));
   document.dispatchEvent(new Event("scroll"));
   await nextFrame();
 
-  expect(events).toEqual(["resize", "scroll"]);
+  expect(calls).toEqual(["resize", "scroll"]);
 });
 
-test("track dispatches reposition when a floating element resizes", async () => {
+test("autoUpdate fires on floating element resize", async () => {
   document.body.innerHTML = '<div id="float"></div>';
   const float = document.getElementById("float");
-  const events = [];
-  untracks.push(track(float));
-  float.addEventListener(EVENTS.reposition, (event) => events.push(event.detail.type));
+  const calls = [];
+  untracks.push(autoUpdate(float, (detail) => calls.push(detail.type)));
 
   expect(resizeObserved.has(float)).toBe(true);
 
@@ -123,67 +118,19 @@ test("track dispatches reposition when a floating element resizes", async () => 
   await nextFrame();
   await nextFrame();
 
-  expect(events).toEqual(["element-resize"]);
+  expect(calls).toEqual(["element-resize"]);
   expect(resizeObserved.has(float)).toBe(true);
 });
 
-test("Escape dispatches actual:hide", () => {
+test("autoUpdate does not dispatch Escape (Escape moved to surface layer)", () => {
   document.body.innerHTML = '<div id="float"></div>';
   const float = document.getElementById("float");
-  let hides = 0;
-  untracks.push(track(float));
-  float.addEventListener(EVENTS.hide, () => {
-    hides += 1;
-  });
+  let called = false;
+  untracks.push(autoUpdate(float, () => { called = true; }));
 
   document.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape" }));
 
-  expect(hides).toBe(1);
-});
-
-test("Escape hides only the most recently tracked visible surface", () => {
-  document.body.innerHTML = '<div id="first"></div><div id="second"></div>';
-  const first = document.getElementById("first");
-  const second = document.getElementById("second");
-  const hides = [];
-  untracks.push(track(first));
-  untracks.push(track(second));
-  first.addEventListener(EVENTS.hide, () => hides.push("first"));
-  second.addEventListener(EVENTS.hide, () => hides.push("second"));
-
-  document.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape" }));
-
-  expect(hides).toEqual(["second"]);
-});
-
-test("Escape is not prevented when no tracked surface is open", () => {
-  const event = new KeyboardEvent("keydown", {
-    key: "Escape",
-    cancelable: true,
-  });
-
-  document.dispatchEvent(event);
-
-  expect(event.defaultPrevented).toBe(false);
-});
-
-test("Escape ignores hidden tracked surfaces", () => {
-  document.body.innerHTML = '<div id="float" hidden></div>';
-  const float = document.getElementById("float");
-  let hides = 0;
-  untracks.push(track(float));
-  float.addEventListener(EVENTS.hide, () => {
-    hides += 1;
-  });
-
-  const event = new KeyboardEvent("keydown", {
-    key: "Escape",
-    cancelable: true,
-  });
-  document.dispatchEvent(event);
-
-  expect(event.defaultPrevented).toBe(false);
-  expect(hides).toBe(0);
+  expect(called).toBe(false);
 });
 
 test("reposition sets coordinates, placement, and arrow position", () => {
@@ -283,21 +230,17 @@ test("reposition uses visual viewport offsets as the fixed boundary", () => {
   expect(float.style.left).toBe("416px");
 });
 
-test("reposition dispatches out-of-view when the reference is outside the boundary", () => {
+test("reposition returns false when the reference is outside the boundary", () => {
   setViewport();
   document.body.innerHTML = '<button id="ref"></button><div id="float"></div>';
   const ref = document.getElementById("ref");
   const float = document.getElementById("float");
-  let outOfView = 0;
-  float.addEventListener(EVENTS.outOfView, () => {
-    outOfView += 1;
-  });
   mockRect(ref, { x: -220, y: 100, width: 60, height: 24 });
   mockRect(float, { x: 0, y: 0, width: 120, height: 80 });
 
-  reposition(ref, float, { placement: "bottom-start", distance: 8 });
+  const result = reposition(ref, float, { placement: "bottom-start", distance: 8 });
 
-  expect(outOfView).toBe(1);
+  expect(result).toBe(false);
   expect(float.style.left).toBe("");
 });
 
