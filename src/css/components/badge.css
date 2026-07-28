@@ -72,6 +72,9 @@
 
 .badge:empty {
   --badge-size: var(--badge-dot-size);
+  --badge-bg: var(--intent, var(--neutral));
+  --badge-fg: var(--intent-fg, var(--neutral-fg));
+  --badge-border: transparent;
   padding: 0;
   border: 0;
   inline-size: var(--badge-size);

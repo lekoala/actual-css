@@ -1,11 +1,11 @@
 {
-  "timestamp": "2026-07-28T14:20:21.548Z",
-  "totalRaw": 174180,
-  "totalMinified": 86942,
+  "timestamp": "2026-07-28T14:32:44.183Z",
+  "totalRaw": 174307,
+  "totalMinified": 87063,
   "totalBrotli": 12607,
   "themesMinified": 29471,
   "themesBrotli": 3480,
-  "shippedMinified": 86942,
+  "shippedMinified": 87063,
   "shippedBrotli": 12607,
   "maxShippedBrotli": 13312,
   "fileCount": 72,
@@ -52,7 +52,7 @@
     },
     {
       "file": "components/badge.css",
-      "raw": 4204
+      "raw": 4331
     },
     {
       "file": "themes/gradient.css",
