@@ -72,12 +72,8 @@ test("grouped flyout items in section lists support ArrowDown roving", async () 
   await loadFlyout(`
     <button id="trigger" type="button" aria-controls="menu" aria-expanded="false">Open</button>
     <menu id="menu" class="flyout" data-enhance="flyout" hidden>
-      <section>
-        <ul>
-          <li><a id="first" href="/first">First</a></li>
-          <li><a id="second" href="/second">Second</a></li>
-        </ul>
-      </section>
+      <li role="none"><a id="first" href="/first">First</a></li>
+      <li role="none"><a id="second" href="/second">Second</a></li>
     </menu>
   `);
   const trigger = document.getElementById("trigger");

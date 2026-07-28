@@ -268,7 +268,7 @@ function ensureSurfaceWired(menu) {
         return;
       }
       if (!state || state.autoClose === "outside" || state.autoClose === "false") return;
-      if (hasMenuItem(e.target)) closeSurface(menu);
+      if (hasMenuItem(menu, e.target)) closeSurface(menu);
     },
     { signal: controller.signal },
   );

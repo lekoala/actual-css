@@ -1,15 +1,8 @@
 import { isElementVisible } from "./focus.js";
 import { firstItem, lastItem, nextItem } from "./keys.js";
 
-const MENU_ITEM_TARGET_SELECTORS = ["button", "a", '[role="menuitem"]'];
-// Item contract, mirrored from flyout.css: a button, link, or menuitem
-// directly in the flyout or directly in any of its <li>. Prefixed with
-// .flyout rather than :scope because hasMenuItem() matches it via closest(),
-// where :scope would resolve to the target element instead of the flyout.
-export const MENU_ITEM_SELECTOR = MENU_ITEM_TARGET_SELECTORS.flatMap((target) => [
-  `.flyout > ${target}`,
-  `.flyout li > ${target}`,
-]).join(",");
+const MENU_ITEM = 'button, a, [role="menuitem"]';
+const MENU_ITEM_SELECTOR = `:scope > :is(${MENU_ITEM}), :scope > li > :is(${MENU_ITEM})`;
 
 function isUsableMenuItem(item) {
   return (
@@ -40,8 +33,9 @@ export function hasMenuItems(menu) {
   return getMenuItems(menu).length > 0;
 }
 
-export function hasMenuItem(target) {
-  return !!target.closest?.(MENU_ITEM_SELECTOR);
+export function hasMenuItem(menu, target) {
+  const item = target?.closest?.(MENU_ITEM);
+  return !!item && getMenuItems(menu).includes(item);
 }
 
 export function focusFirstMenuItem(menu) {
