@@ -19,11 +19,9 @@ This project follows Keep a Changelog and uses semver, including during 0.x.
 - `data-scrollspy-offset` attribute with deterministic geometry-based
   activation (pixels or percentage, replaces IntersectionObserver).
 - Widget primitives catalogue (`docs/design-notes/widget-primitives.md`).
-- `check:enhance` guardrail script.
-
-### Added (cont.)
 - `.range` — fully custom-styled range slider (`appearance: none`) with
-  intent tinted thumb, focus ring on the thumb surface, and disabled state.
+  intent-tinted thumb, focus ring on the thumb surface, and disabled state.
+- `check:enhance` guardrail script.
 
 ### Changed
 - Behaviour discovery moved from presentation classes to `data-enhance` tokens
