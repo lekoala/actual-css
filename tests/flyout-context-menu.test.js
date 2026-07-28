@@ -72,8 +72,12 @@ test("grouped flyout items in section lists support ArrowDown roving", async () 
   await loadFlyout(`
     <button id="trigger" type="button" aria-controls="menu" aria-expanded="false">Open</button>
     <menu id="menu" class="flyout" data-enhance="flyout" hidden>
-      <li role="none"><a id="first" href="/first">First</a></li>
-      <li role="none"><a id="second" href="/second">Second</a></li>
+      <section>
+        <ul>
+          <li><a id="first" href="/first">First</a></li>
+          <li><a id="second" href="/second">Second</a></li>
+        </ul>
+      </section>
     </menu>
   `);
   const trigger = document.getElementById("trigger");
@@ -87,6 +91,41 @@ test("grouped flyout items in section lists support ArrowDown roving", async () 
 
   expect(menu.hidden).toBe(false);
   expect(document.activeElement).toBe(second);
+});
+
+// flyout.css's item contract lists three positions and asks menu.js to mirror
+// it. Assert all three in one place: a narrower JS selector silently removes
+// keyboard support from real markup (grouped menus in docs/ui.md) while every
+// other test keeps passing.
+test("roving focus covers every item position the flyout item contract allows", async () => {
+  await loadFlyout(`
+    <button id="trigger" type="button" aria-controls="menu" aria-expanded="false">Open</button>
+    <menu id="menu" class="flyout" data-enhance="flyout" hidden>
+      <button id="direct" type="button">Direct child</button>
+      <li><button id="bare" type="button">Bare list item</button></li>
+      <section>
+        <h3>Group</h3>
+        <ul>
+          <li><button id="grouped" type="button">Grouped item</button></li>
+        </ul>
+      </section>
+    </menu>
+  `);
+  const trigger = document.getElementById("trigger");
+  const menu = document.getElementById("menu");
+  setupGeometry(trigger, menu);
+
+  press(trigger, "ArrowDown");
+  expect(document.activeElement).toBe(document.getElementById("direct"));
+
+  press(menu, "ArrowDown");
+  expect(document.activeElement).toBe(document.getElementById("bare"));
+
+  press(menu, "ArrowDown");
+  expect(document.activeElement).toBe(document.getElementById("grouped"));
+
+  press(menu, "End");
+  expect(document.activeElement).toBe(document.getElementById("grouped"));
 });
 
 test("flyout trigger gets initial disclosure attributes", async () => {
