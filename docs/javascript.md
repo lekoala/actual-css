@@ -212,6 +212,33 @@ Prefer explicit app attributes such as `data-copy`, `data-autogrow`, or
 `data-ajax`. Actual's built-in attributes are intentionally small contracts; app
 behavior can be richer without overloading them.
 
+### Named behavior registration
+
+Use `registerEnhancement()` when author markup opts in with a `data-enhance`
+token instead of an app-specific attribute. A third-party behavior registers
+exactly like a built-in one:
+
+```js
+import { registerEnhancement } from "actual-css/js/enhance";
+
+registerEnhancement("autosubmit", (form) => {
+  const controller = new AbortController();
+
+  form.addEventListener("change", () => form.requestSubmit(), {
+    signal: controller.signal,
+  });
+
+  return () => controller.abort();
+});
+```
+
+```html
+<form data-enhance="validation autosubmit">
+```
+
+No core module list is modified. The test case in `tests/enhance.test.js`
+(*registers a third-party behavior without touching core*) proves the shape.
+
 ## Lifecycle Rules
 
 - Keep selectors opt-in.
