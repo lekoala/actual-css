@@ -100,8 +100,8 @@
     "prepublishOnly": "bun run build:all"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.4.0",
-    "happy-dom": "^20.10.6",
-    "prismjs": "^1.30.0"
+    "@biomejs/biome": "^2.5",
+    "happy-dom": "^20.11",
+    "prismjs": "^1.30"
   }
 }
