@@ -48,12 +48,12 @@ test("context menu targets require a native .flyout menu", async () => {
   expect(target.hasAttribute("aria-haspopup")).toBe(false);
 });
 
-test("flyout trigger arrow key opens and focuses direct action items", async () => {
+test("flyout trigger arrow key opens and focuses direct menu items", async () => {
   await loadFlyout(`
     <button id="trigger" type="button" aria-controls="menu" aria-expanded="false">Open</button>
-    <menu id="menu" class="flyout" data-enhance="flyout" hidden>
-      <li><button id="first" type="button">First</button></li>
-      <li><button id="second" type="button">Second</button></li>
+    <menu id="menu" class="flyout menu" data-enhance="flyout" hidden>
+      <li><button id="first" class="menu-item" type="button">First</button></li>
+      <li><button id="second" class="menu-item" type="button">Second</button></li>
     </menu>
   `);
   const trigger = document.getElementById("trigger");
@@ -68,47 +68,36 @@ test("flyout trigger arrow key opens and focuses direct action items", async () 
   expect(document.activeElement).toBe(first);
 });
 
-test("grouped flyout items in section lists support ArrowDown roving", async () => {
+test("nav panel flyout focuses first descendant, not menu items", async () => {
   await loadFlyout(`
     <button id="trigger" type="button" aria-controls="menu" aria-expanded="false">Open</button>
-    <menu id="menu" class="flyout" data-enhance="flyout" hidden>
+    <div id="menu" class="flyout" data-enhance="flyout" hidden>
       <section>
         <ul>
           <li><a id="first" href="/first">First</a></li>
           <li><a id="second" href="/second">Second</a></li>
         </ul>
       </section>
-    </menu>
+    </div>
   `);
   const trigger = document.getElementById("trigger");
   const menu = document.getElementById("menu");
   const first = document.getElementById("first");
-  const second = document.getElementById("second");
   setupGeometry(trigger, menu);
 
   press(trigger, "ArrowDown");
-  press(first, "ArrowDown");
 
   expect(menu.hidden).toBe(false);
-  expect(document.activeElement).toBe(second);
+  expect(document.activeElement).toBe(first);
 });
 
-// flyout.css's item contract lists three positions and asks menu.js to mirror
-// it. Assert all three in one place: a narrower JS selector silently removes
-// keyboard support from real markup (grouped menus in docs/ui.md) while every
-// other test keeps passing.
-test("roving focus covers every item position the flyout item contract allows", async () => {
+test("roving focus covers menu items under the strict .menu > li > .menu-item contract", async () => {
   await loadFlyout(`
     <button id="trigger" type="button" aria-controls="menu" aria-expanded="false">Open</button>
-    <menu id="menu" class="flyout" data-enhance="flyout" hidden>
-      <button id="direct" type="button">Direct child</button>
-      <li><button id="bare" type="button">Bare list item</button></li>
-      <section>
-        <h3>Group</h3>
-        <ul>
-          <li><button id="grouped" type="button">Grouped item</button></li>
-        </ul>
-      </section>
+    <menu id="menu" class="flyout menu" data-enhance="flyout" hidden>
+      <li><button id="a" class="menu-item" type="button">A</button></li>
+      <li><button id="b" class="menu-item" type="button">B</button></li>
+      <li><button id="c" class="menu-item" type="button">C</button></li>
     </menu>
   `);
   const trigger = document.getElementById("trigger");
@@ -116,16 +105,16 @@ test("roving focus covers every item position the flyout item contract allows", 
   setupGeometry(trigger, menu);
 
   press(trigger, "ArrowDown");
-  expect(document.activeElement).toBe(document.getElementById("direct"));
+  expect(document.activeElement).toBe(document.getElementById("a"));
 
   press(menu, "ArrowDown");
-  expect(document.activeElement).toBe(document.getElementById("bare"));
+  expect(document.activeElement).toBe(document.getElementById("b"));
 
   press(menu, "ArrowDown");
-  expect(document.activeElement).toBe(document.getElementById("grouped"));
+  expect(document.activeElement).toBe(document.getElementById("c"));
 
   press(menu, "End");
-  expect(document.activeElement).toBe(document.getElementById("grouped"));
+  expect(document.activeElement).toBe(document.getElementById("c"));
 });
 
 test("flyout trigger gets initial disclosure attributes", async () => {
@@ -324,12 +313,12 @@ test("tab from an open nav panel trigger enters the panel", async () => {
   expect(document.activeElement).toBe(first);
 });
 
-test("keyboard context menu focuses the first direct action item", async () => {
+test("keyboard context menu focuses the first direct menu item", async () => {
   await loadContextMenu(`
     <div id="target" data-context-menu="menu" tabindex="0">File.pdf</div>
-    <menu id="menu" class="flyout" data-enhance="flyout" hidden>
-      <li><button id="first" type="button">First</button></li>
-      <li><button id="second" type="button">Second</button></li>
+    <menu id="menu" class="flyout menu" data-enhance="flyout" hidden>
+      <li><button id="first" class="menu-item" type="button">First</button></li>
+      <li><button id="second" class="menu-item" type="button">Second</button></li>
     </menu>
   `);
   const target = document.getElementById("target");
@@ -434,8 +423,8 @@ test("pointer context menu focuses the menu container, not the first item", asyn
   await loadContextMenu(`
     <div id="target" data-context-menu="menu" tabindex="0">File.pdf</div>
     <menu id="menu" class="flyout" data-enhance="flyout" hidden>
-      <li><button id="first" type="button">First</button></li>
-      <li><button id="second" type="button">Second</button></li>
+      <li><button id="first" class="menu-item" type="button">First</button></li>
+      <li><button id="second" class="menu-item" type="button">Second</button></li>
     </menu>
   `);
   const target = document.getElementById("target");

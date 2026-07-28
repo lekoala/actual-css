@@ -7,7 +7,7 @@
 
 import enhance, { registerEnhancement } from "./enhance.js";
 import { focusFirstDescendant } from "./focus.js";
-import { focusFirstMenuItem, focusLastMenuItem, getMenuItems } from "./menu.js";
+import { connectMenu, focusFirstMenuItem, focusLastMenuItem, getMenuItems } from "./menu.js";
 import { closeSurface, isSurfaceOpen, openSurface, prepareSurface } from "./surface.js";
 
 // trigger -> { flyout, controller }
@@ -26,7 +26,7 @@ function flyoutFor(trigger) {
 }
 
 function isMenuFlyout(flyout) {
-  return flyout.matches("menu");
+  return flyout.matches("menu") || flyout.classList.contains("menu");
 }
 
 function resolveCurrentFlyout(trigger, state) {
@@ -135,6 +135,12 @@ function connectTrigger(trigger) {
   triggerMap.set(trigger, { flyout, controller });
 
   prepareSurface(flyout);
+  if (isMenuFlyout(flyout)) {
+    connectMenu(flyout, {
+      close: (menu) => closeSurface(menu),
+      signal: controller.signal,
+    });
+  }
   if (!trigger.hasAttribute("aria-expanded")) {
     trigger.setAttribute("aria-expanded", "false");
   }

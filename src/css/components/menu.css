@@ -1,0 +1,65 @@
+/*
+ * Menu — action list primitive consumed by flyout and context-menu.
+ *
+ * Strict anatomy: .menu > li > .menu-item. Separators and section labels
+ * sit directly under .menu as siblings of <li>.
+ */
+
+.menu {
+  display: grid;
+  gap: var(--space-1);
+  margin: 0;
+  padding: var(--space-1);
+  list-style: none;
+}
+
+.menu > li {
+  margin: 0;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  inline-size: 100%;
+  min-block-size: var(--menu-item-size, var(--control-size));
+  padding-inline: var(--space-2);
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  text-align: start;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.menu-item:focus-visible {
+  background: var(--surface-subtle);
+}
+
+.menu-item:is(:disabled, [aria-disabled="true"]) {
+  cursor: not-allowed;
+  opacity: var(--disabled-opacity);
+}
+
+.menu-label {
+  padding: var(--space-2);
+  color: var(--text-muted);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-strong);
+}
+
+.menu-separator {
+  border-block-start: var(--border-width) solid var(--border);
+}
+
+@media (forced-colors: active) {
+  .menu-item:focus-visible {
+    outline: var(--border-width) solid ButtonText;
+    outline-offset: -1px;
+    background: Canvas;
+    color: CanvasText;
+  }
+}

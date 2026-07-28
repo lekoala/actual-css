@@ -1,15 +1,7 @@
 import { isElementVisible } from "./focus.js";
 import { firstItem, lastItem, nextItem } from "./keys.js";
 
-const MENU_ITEM = 'button, a, [role="menuitem"]';
-// Mirrors the item contract in flyout.css: an item sits directly in the surface,
-// or directly in any of its <li> — bare list, or grouped section > ul > li.
-// `:scope li` must stay a *descendant* combinator for that second form; the
-// grouped flyouts in docs/ui.md lose roving focus with `:scope > li`.
-// Scoping is what keeps a neighbouring surface's items out: this selector only
-// ever runs against one surface, and hasMenuItem() resolves the clicked item
-// through this list rather than through a global closest().
-const MENU_ITEM_SELECTOR = `:scope > :is(${MENU_ITEM}), :scope li > :is(${MENU_ITEM})`;
+const MENU_ITEM_SELECTOR = ":scope > li > .menu-item";
 
 function isUsableMenuItem(item) {
   return (
@@ -40,9 +32,13 @@ export function hasMenuItems(menu) {
   return getMenuItems(menu).length > 0;
 }
 
+function getMenuItem(menu, target) {
+  const item = target?.closest?.(".menu-item");
+  return item?.parentElement?.parentElement === menu ? item : null;
+}
+
 export function hasMenuItem(menu, target) {
-  const item = target?.closest?.(MENU_ITEM);
-  return !!item && getMenuItems(menu).includes(item);
+  return !!getMenuItem(menu, target);
 }
 
 export function focusFirstMenuItem(menu) {
@@ -86,4 +82,33 @@ export function onMenuKeydown(e, { close }) {
       }
       break;
   }
+}
+
+const wiredMenus = new WeakSet();
+
+export function connectMenu(menu, { close, signal, autoClose }) {
+  if (wiredMenus.has(menu)) return;
+  wiredMenus.add(menu);
+
+  menu.addEventListener("keydown", (event) => onMenuKeydown(event, { close: () => close(menu) }), {
+    signal,
+  });
+
+  menu.addEventListener(
+    "click",
+    (event) => {
+      if (autoClose === "outside" || autoClose === "false") return;
+
+      const item = getMenuItem(menu, event.target);
+      if (!item) return;
+
+      if (item.matches(":disabled, [aria-disabled='true']")) {
+        event.preventDefault();
+        return;
+      }
+
+      close(menu);
+    },
+    { signal },
+  );
 }
