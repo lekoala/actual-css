@@ -71,11 +71,11 @@ test("busy overlay can inherit local surface background", () => {
   expect(cardCss).toContain("--busy-overlay-bg: var(--surface-solid);");
 });
 
-test("flyout styles include disabled item treatment", () => {
-  const css = readCss("src/css/components/flyout.css");
+test("menu item styles include disabled treatment", () => {
+  const css = readCss("src/css/components/menu.css");
 
   expect(css).toContain('[aria-disabled="true"]');
-  expect(css).toContain("pointer-events: none;");
+  expect(css).toContain("cursor: not-allowed;");
 });
 
 test("tabs include vertical orientation styling", () => {

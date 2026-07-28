@@ -6,7 +6,7 @@ const PUBLIC_EXPORTS = {
   floating: ["track", "reposition", "repositionAt"],
   focus: ["isElementVisible", "getFocusable", "focusFirstDescendant"],
   keys: ["firstItem", "lastItem", "nextItem"],
-  menu: ["getMenuItems", "hasMenuItems", "hasMenuItem", "focusFirstMenuItem", "focusLastMenuItem", "onMenuKeydown"],
+  menu: ["getMenuItems", "hasMenuItems", "hasMenuItem", "focusFirstMenuItem", "focusLastMenuItem", "onMenuKeydown", "connectMenu"],
   surface: ["isSurfaceOpen", "prepareSurface", "openSurface", "closeSurface", "disconnectSurface"],
 };
 

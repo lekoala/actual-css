@@ -1,6 +1,6 @@
 import enhance from "./enhance.js";
 import { EVENTS } from "./events.js";
-import { focusFirstMenuItem, hasMenuItems } from "./menu.js";
+import { connectMenu, focusFirstMenuItem, hasMenuItems } from "./menu.js";
 import { closeSurface, isSurfaceOpen, openSurface, prepareSurface } from "./surface.js";
 
 const LONG_PRESS_MS = 450;
@@ -66,9 +66,8 @@ function focusMenuContainer(menu) {
 // on the first/last item, matching native OS context menus. Keyboard-triggered
 // opens (openFromKeyboard) still focus the first item directly.
 function focusMenu(menu, mode) {
-  if (!hasMenuItems(menu)) return;
   if (mode === "first-item") {
-    focusFirstMenuItem(menu);
+    if (hasMenuItems(menu)) focusFirstMenuItem(menu);
   } else {
     focusMenuContainer(menu);
   }
@@ -139,6 +138,10 @@ function connectContextTarget(target) {
 
   prepareSurface(menu);
   const controller = new AbortController();
+  connectMenu(menu, {
+    close: (menu) => closeSurface(menu),
+    signal: controller.signal,
+  });
   const state = {
     controller,
     menu,

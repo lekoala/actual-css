@@ -32,6 +32,7 @@
 }
 
 .flyout {
+  --menu-item-size: var(--control-size);
   z-index: var(--z-menu);
   /* No-JS fallback: below the trigger inside the relative .flyout-trigger.
      surface.js switches an open flyout to position: fixed with measured
@@ -81,6 +82,7 @@
 /* Bottom-sheet presentation. surface.js toggles .is-sheet when the flyout is
    opened on coarse pointer / narrow viewports. */
 .flyout.is-sheet {
+  --menu-item-size: var(--control-size-lg);
   position: fixed;
   inset-inline: 0;
   inset-block-start: auto;
@@ -153,61 +155,6 @@
   margin: 0;
 }
 
-/* Item contract: a button, link, or menuitem placed directly in the flyout
-   or directly in any of its <li> (bare list, or grouped section > ul > li).
-   menu.js mirrors this contract in MENU_ITEM_SELECTOR — keep them in sync.
-   :where(li) keeps specificity at a single class (0,1,0) so consumer
-   overrides behave the same as a plain .flyout > rule. */
-:is(.flyout, .flyout :where(li)) > :where(button, a, [role="menuitem"]) {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  gap: var(--space-2);
-  inline-size: 100%;
-  min-block-size: var(--control-size);
-  padding-inline: var(--space-2);
-  border: 0;
-  border-radius: var(--radius-sm);
-  background: none;
-  color: var(--text);
-  font: inherit;
-  font-weight: var(--font-weight);
-  text-decoration: none;
-  text-align: start;
-  white-space: nowrap;
-  cursor: pointer;
-}
-
-:is(.flyout.is-sheet, .flyout.is-sheet :where(li)) > :where(button, a, [role="menuitem"]) {
-  min-block-size: var(--control-size-lg);
-}
-
-:is(.flyout, .flyout :where(li)) > :where(button, a, [role="menuitem"]):focus-visible {
-  background: var(--surface-subtle);
-  outline: var(--focus-outline);
-  outline-offset: var(--focus-outline-offset);
-}
-
-:is(.flyout, .flyout :where(li))
-  > :where(button, a, [role="menuitem"]):is(:disabled, [aria-disabled="true"]) {
-  cursor: not-allowed;
-  opacity: var(--disabled-opacity);
-}
-
-:is(.flyout, .flyout :where(li)) > :where(a, [role="menuitem"])[aria-disabled="true"] {
-  pointer-events: none;
-}
-
-@media (hover: hover) {
-  :is(.flyout, .flyout :where(li))
-    > :where(button, a, [role="menuitem"]):hover:not(
-      :where(:focus-visible, :disabled, [aria-disabled="true"])
-    ) {
-    background: var(--surface-subtle);
-    outline: none;
-  }
-}
-
 .flyout > hr,
 .flyout > li > hr {
   inline-size: 100%;
@@ -223,20 +170,5 @@
     background: Canvas;
     color: CanvasText;
     box-shadow: none;
-  }
-
-  :is(.flyout, .flyout :where(li)) > :where(button, a, [role="menuitem"]):focus-visible {
-    background: Canvas;
-    color: CanvasText;
-  }
-
-  @media (hover: hover) {
-    :is(.flyout, .flyout :where(li))
-      > :where(button, a, [role="menuitem"]):hover:not(:where(:disabled, [aria-disabled="true"])) {
-      outline: var(--border-width) solid ButtonText;
-      outline-offset: -1px;
-      background: Canvas;
-      color: CanvasText;
-    }
   }
 }

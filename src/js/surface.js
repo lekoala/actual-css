@@ -1,7 +1,7 @@
 import enhance from "./enhance.js";
 import { EVENTS } from "./events.js";
 import { reposition, repositionAt, track } from "./floating.js";
-import { hasMenuItem, onMenuKeydown } from "./menu.js";
+
 import { CLASSES } from "./selectors.js";
 
 const DEFAULT_BREAKPOINT = 768;
@@ -248,27 +248,6 @@ function ensureSurfaceWired(menu) {
     EVENTS.outOfView,
     () => {
       if (!menu.hidden) closeSurface(menu);
-    },
-    { signal: controller.signal },
-  );
-
-  menu.addEventListener(
-    "keydown",
-    (e) => onMenuKeydown(e, { close: (target) => closeSurface(target) }),
-    { signal: controller.signal },
-  );
-
-  menu.addEventListener(
-    "click",
-    (e) => {
-      const state = surfaceMap.get(menu);
-      const disabledItem = e.target.closest?.(":disabled, [aria-disabled='true']");
-      if (disabledItem && menu.contains(disabledItem)) {
-        e.preventDefault();
-        return;
-      }
-      if (!state || state.autoClose === "outside" || state.autoClose === "false") return;
-      if (hasMenuItem(menu, e.target)) closeSurface(menu);
     },
     { signal: controller.signal },
   );
