@@ -34,4 +34,5 @@ Actual CSS is intended for new projects. Existing projects with class collisions
 - Classes name roles and boolean modifiers; `data-*` carries configurable values.
 - `is-*` classes are runtime internals, not author API.
 - Public JS data attributes are namespaced by feature (`data-flyout-*`, `data-context-menu-*`, `data-dialog-*`, `data-tooltip-*`; `data-toast-*` is reserved). Do not expose shared implementation names such as `surface` unless they are meant as a stable author concept.
+- `data-enhance` is the one un-namespaced attribute — it carries *opt-in* for any feature, not *configuration* for one feature. Feature-namespaced attributes carry configuration.
 - Custom events use the `actual:*` namespace.
