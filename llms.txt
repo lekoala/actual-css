@@ -15,3 +15,9 @@ full CSS framework and `actual-css/js` for the complete runtime. The composition
 guides in [README](README.md) and [JavaScript](docs/javascript.md) show supported
 CSS modules and individual enhancer imports without duplicating the full export
 list here.
+
+In 0.2, presentation (`class`) and behavior (`data-enhance`) are separate layers.
+Behaviour primitives (`enhance`, `floating`, `surface`, `keys`, `menu`, `focus`,
+`events`) are independently importable for building custom widgets.
+See [enhancement contract](docs/design-notes/enhancement-contract.md) and
+[widget primitives](docs/design-notes/widget-primitives.md).
