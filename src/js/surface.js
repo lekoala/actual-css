@@ -1,3 +1,4 @@
+import enhance from "./enhance.js";
 import { EVENTS } from "./events.js";
 import { reposition, repositionAt, track } from "./floating.js";
 import { hasMenuItem, onMenuKeydown } from "./menu.js";
@@ -12,6 +13,15 @@ const BREAKPOINTS = {
 const openSurfaces = new Set();
 const surfaceMap = new WeakMap();
 const mountedSurfaces = new WeakMap();
+
+// data-actual-surface is written by the runtime, never by an author, and never
+// selected on by CSS. It is namespaced because "data-surface" is a name an
+// application may already own. surface.js reaps its own surfaces so consumers
+// do not have to maintain panel-side lifecycle hooks.
+const SURFACE_MARKER = "data-actual-surface";
+const surfaces = enhance({
+  [`[${SURFACE_MARKER}]`]: (el) => () => disconnectSurface(el, { restore: false }),
+});
 
 function waitForAnimations(...elements) {
   const animations = elements
@@ -255,6 +265,10 @@ export function prepareSurface(menu) {
   menu.style.position = "fixed";
   menu.hidden = true;
   syncExpanded(menu, false);
+  if (!menu.hasAttribute(SURFACE_MARKER)) {
+    menu.setAttribute(SURFACE_MARKER, "");
+    surfaces.refresh(menu);
+  }
 }
 
 export function openSurface(menu, opts = {}) {
@@ -332,8 +346,9 @@ export function closeSurface(menu, opts = {}) {
   });
 }
 
-export function disconnectSurface(menu) {
+export function disconnectSurface(menu, { restore = true } = {}) {
   if (!menu) return;
+  if (!restore) mountedSurfaces.delete(menu);
   closeSurface(menu);
   const state = surfaceMap.get(menu);
   if (state) {

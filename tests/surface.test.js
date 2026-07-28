@@ -424,3 +424,52 @@ test("clicking aria-disabled flyout links does not navigate or close", () => {
   expect(event.defaultPrevented).toBe(true);
   expect(isSurfaceOpen(menu)).toBe(true);
 });
+
+test("D8 — disconnectSurface({ restore: false }) does not resurrect the element", async () => {
+  setBody('<section id="parent"><div id="menu" class="flyout" hidden></div></section><button id="outside">x</button>');
+  const menu = document.getElementById("menu");
+  const parent = document.getElementById("parent");
+  const outside = document.getElementById("outside");
+  mockPlacement(outside, menu);
+
+  openSurface(menu, { trigger: outside });
+
+  expect(menu.parentNode).toBe(document.body);
+  expect(isSurfaceOpen(menu)).toBe(true);
+
+  menu.remove();
+  await nextMicrotask();
+
+  expect(menu.isConnected).toBe(false);
+  expect(document.querySelector(".surface-backdrop")).toBe(null);
+});
+
+test("D8 — deliberate disconnectSurface on a still-present component restores it", () => {
+  setBody('<section id="parent"><div id="menu" class="flyout" hidden></div></section><button id="outside">x</button>');
+  const menu = document.getElementById("menu");
+  const parent = document.getElementById("parent");
+  const outside = document.getElementById("outside");
+  mockPlacement(outside, menu);
+
+  openSurface(menu, { trigger: outside });
+  expect(menu.parentNode).toBe(document.body);
+
+  disconnectSurface(menu);
+
+  expect(menu.parentNode).toBe(parent);
+  expect(isSurfaceOpen(menu)).toBe(false);
+});
+
+test("D8 — mountSurface moving to body does not run teardown", () => {
+  setBody('<section id="parent"><div id="menu" class="flyout" hidden></div></section><button id="outside">x</button>');
+  const menu = document.getElementById("menu");
+  const parent = document.getElementById("parent");
+  const outside = document.getElementById("outside");
+  mockPlacement(outside, menu);
+
+  openSurface(menu, { trigger: outside });
+
+  expect(menu.parentNode).toBe(document.body);
+  expect(isSurfaceOpen(menu)).toBe(true);
+  expect(menu.hasAttribute("data-actual-surface")).toBe(true);
+});
