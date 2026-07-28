@@ -29,7 +29,7 @@ function isAriaMenuItem(item) {
 }
 
 function activateCurrentItem(menu) {
-  const item = document.activeElement;
+  const item = menu.ownerDocument.activeElement;
   if (!menu.contains(item) || !isAriaMenuItem(item)) return false;
 
   item.click();
@@ -61,11 +61,11 @@ export function onMenuKeydown(e, { close }) {
   switch (e.key) {
     case "ArrowDown":
       e.preventDefault();
-      nextItem(items, document.activeElement, 1, { wrap: true })?.focus();
+      nextItem(items, menu.ownerDocument.activeElement, 1, { wrap: true })?.focus();
       break;
     case "ArrowUp":
       e.preventDefault();
-      nextItem(items, document.activeElement, -1, { wrap: true })?.focus();
+      nextItem(items, menu.ownerDocument.activeElement, -1, { wrap: true })?.focus();
       break;
     case "Home":
       e.preventDefault();
