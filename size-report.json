@@ -1,12 +1,12 @@
 {
-  "timestamp": "2026-07-12T21:45:53.561Z",
-  "totalRaw": 171365,
-  "totalMinified": 84788,
-  "totalBrotli": 12329,
+  "timestamp": "2026-07-28T14:20:21.548Z",
+  "totalRaw": 174180,
+  "totalMinified": 86942,
+  "totalBrotli": 12607,
   "themesMinified": 29471,
   "themesBrotli": 3480,
-  "shippedMinified": 84788,
-  "shippedBrotli": 12329,
+  "shippedMinified": 86942,
+  "shippedBrotli": 12607,
   "maxShippedBrotli": 13312,
   "fileCount": 72,
   "files": [
@@ -16,7 +16,11 @@
     },
     {
       "file": "components/button.css",
-      "raw": 6450
+      "raw": 6429
+    },
+    {
+      "file": "components/alert.css",
+      "raw": 6090
     },
     {
       "file": "theme.css",
@@ -35,6 +39,10 @@
       "raw": 4768
     },
     {
+      "file": "tokens.css",
+      "raw": 4737
+    },
+    {
       "file": "forms/choice-card.css",
       "raw": 4588
     },
@@ -43,24 +51,16 @@
       "raw": 4584
     },
     {
-      "file": "tokens.css",
-      "raw": 4509
+      "file": "components/badge.css",
+      "raw": 4204
     },
     {
       "file": "themes/gradient.css",
       "raw": 4014
     },
     {
-      "file": "components/alert.css",
-      "raw": 4008
-    },
-    {
       "file": "prose.css",
       "raw": 3881
-    },
-    {
-      "file": "components/badge.css",
-      "raw": 3608
     },
     {
       "file": "components/modal.css",
@@ -139,10 +139,6 @@
       "raw": 2394
     },
     {
-      "file": "components/status-bar.css",
-      "raw": 2383
-    },
-    {
       "file": "dialog-fallback.css",
       "raw": 2302
     },
@@ -157,6 +153,10 @@
     {
       "file": "themes/ocean.css",
       "raw": 2265
+    },
+    {
+      "file": "components/status-bar.css",
+      "raw": 2254
     },
     {
       "file": "components/navbar.css",
@@ -208,7 +208,7 @@
     },
     {
       "file": "components/spinner.css",
-      "raw": 1464
+      "raw": 1467
     },
     {
       "file": "base.css",
@@ -224,7 +224,7 @@
     },
     {
       "file": "components/busy.css",
-      "raw": 1243
+      "raw": 1269
     },
     {
       "file": "components/breadcrumb.css",
@@ -256,7 +256,7 @@
     },
     {
       "file": "components/scrollspy.css",
-      "raw": 853
+      "raw": 883
     },
     {
       "file": "components/pagination.css",

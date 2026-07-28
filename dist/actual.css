@@ -143,7 +143,8 @@ select {
   /* Shape */
   --border-width: 1px;
   --radius-full: 9999px;
-  --shadow: 0 0.5rem 1.5rem rgb(0 0 0 / 0.08);
+  --shadow-xs: 0 1px 2px rgb(0 0 0 / 0.04);
+  --shadow: 0 1px 3px rgb(0 0 0 / 0.05), 0 4px 12px rgb(0 0 0 / 0.04);
   --shadow-popout: 0 0.25rem 0.75rem rgb(0 0 0 / 0.15);
 
   /* Motion — see reset.css for the prefers-reduced-motion hard reset.
@@ -225,7 +226,10 @@ select {
 
 @supports (color: color-mix(in oklch, red, white)) {
   :root {
-    --shadow: 0 0.5rem 1.5rem color-mix(in oklch, var(--shadow-color) 8%, transparent);
+    --shadow-xs: 0 1px 2px color-mix(in oklch, var(--shadow-color) 4%, transparent);
+    --shadow:
+      0 1px 3px color-mix(in oklch, var(--shadow-color) 5%, transparent),
+      0 4px 12px color-mix(in oklch, var(--shadow-color) 4%, transparent);
     --shadow-popout: 0 0.25rem 0.75rem color-mix(in oklch, var(--shadow-color) 15%, transparent);
     --backdrop-fill: color-mix(
       in oklch,
@@ -1055,7 +1059,7 @@ small {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5em;
+  gap: 0.375em;
   min-block-size: var(--btn-min-size);
   padding-block: var(--space-2);
   padding-block: max(var(--space-1), calc((var(--btn-min-size) - 1lh) / 2));
@@ -1071,7 +1075,7 @@ small {
   color: var(--btn-fg);
   font: inherit;
   font-size: var(--btn-font-size);
-  font-weight: var(--font-weight-strong);
+  font-weight: var(--font-weight-medium);
   line-height: 1;
   text-decoration: none;
   cursor: pointer;
@@ -1178,7 +1182,6 @@ a.btn[aria-disabled="true"] {
 }
 
 .btn[aria-busy="true"] > .spinner {
-  --spinner-size: 1em;
   --spinner-width: 0.15em;
 }
 
@@ -1232,8 +1235,9 @@ a.btn[aria-disabled="true"] {
 /*
  * Badges for compact labels, counts, and state hints.
  *
- * Solid by default. Shared .soft/.outline variants stay available for quieter
- * tags without adding a badge-specific color API.
+ * Soft by default. .solid for counters and notification badges. The dot
+ * (.badge:empty) stays solid regardless — a soft dot is pointless.
+ * Shared .outline variant stays available.
  */
 /* Intent boundary — inherited intents do not tint this component.
    Local intent classes still win because :where() has zero specificity. */
@@ -1253,9 +1257,9 @@ a.btn[aria-disabled="true"] {
   --badge-pad-x: 0.55em;
   --badge-font-size: var(--variant-compact-font-size, 0.8125rem);
   --badge-dot-size: 0.5rem;
-  --badge-bg: var(--ui-bg, var(--intent, var(--neutral)));
-  --badge-fg: var(--ui-fg, var(--intent-fg, var(--neutral-fg)));
-  --badge-border: var(--ui-border, transparent);
+  --badge-bg: var(--ui-bg, transparent);
+  --badge-fg: var(--ui-fg, var(--intent, var(--text)));
+  --badge-border: var(--ui-border, var(--intent, var(--border)));
   --badge-radius: 999px;
 
   display: inline-flex;
@@ -1278,6 +1282,26 @@ a.btn[aria-disabled="true"] {
     border-color var(--duration),
     color var(--duration),
     box-shadow var(--duration);
+}
+
+/* Soft by default — duplicated here with @sync markers for check-sync.js
+   to guard, the same way alert.css guards its own soft recipe. */
+@supports (color: color-mix(in oklch, red, white)) {
+  .badge:where(:not(.solid, .outline)) {
+    /* @sync soft-recipe */
+    --badge-bg: color-mix(
+      in oklch,
+      var(--surface) var(--soft-bg-mix),
+      var(--intent, var(--neutral))
+    );
+    --badge-fg: var(--intent, var(--text));
+    --badge-border: color-mix(
+      in oklch,
+      var(--surface) var(--soft-border-mix),
+      var(--intent, var(--neutral))
+    );
+    /* @sync soft-recipe */
+  }
 }
 
 .badge:empty {
@@ -1314,8 +1338,7 @@ a.btn[aria-disabled="true"] {
 }
 
 /* .solid/.soft/.outline are shared via variants.css, including the
-   .soft/.outline hover recipe (--ui-hover-bg). The --badge-* fallbacks make
-   .badge solid by default. */
+   .soft/.outline hover recipe (--ui-hover-bg). */
 @media (hover: hover) {
   :where(a.badge, button.badge):not(:where(:disabled, [aria-disabled="true"])):hover {
     background: var(--ui-hover-bg, var(--badge-bg));
@@ -1397,7 +1420,7 @@ a.badge[aria-disabled="true"] {
 }
 
 .alert {
-  --alert-pad-block: var(--variant-pad-block, var(--space-4));
+  --alert-pad-block: var(--variant-pad-block, var(--space-3));
   --alert-pad-inline: var(--space-4);
   --alert-font-size: var(--variant-font-size, var(--font-size-md));
   --alert-icon-size: var(--variant-icon-size, 1.25rem);
@@ -1447,7 +1470,7 @@ a.badge[aria-disabled="true"] {
 }
 
 @supports (color: color-mix(in oklch, red, white)) {
-  .alert:where(:not(.solid, .outline)) {
+  .alert:where(:not(.solid, .outline, .callout)) {
     /* @sync soft-recipe */
     --ui-bg: color-mix(in oklch, var(--surface) var(--soft-bg-mix), var(--intent, var(--neutral)));
     --ui-border: color-mix(
@@ -1510,6 +1533,92 @@ a.badge[aria-disabled="true"] {
    readable color, and text on a Highlight surface would trigger Chromium's
    Canvas backplate (unreadable) — so .solid intentionally falls back to the
    default look. */
+
+/* Callout — neutral surface with an inset accent band on the leading edge.
+   The ::before pseudo is absolutely positioned and inset to respect the
+   outer border-radius, so it never needs its own radius. */
+.alert.callout {
+  --alert-bg: var(--surface-subtle);
+  --ui-bg: var(--alert-bg);
+  --ui-fg: var(--text);
+  --ui-border: var(--border);
+  position: relative;
+  padding-inline-start: calc(var(--alert-pad-inline) + var(--space-3));
+}
+
+.alert.callout::before {
+  content: "";
+  position: absolute;
+  inset-block: var(--space-2);
+  inset-inline-start: var(--space-2);
+  inline-size: 0.25rem;
+  border-radius: var(--radius-full);
+  background: var(--intent, var(--neutral));
+}
+
+/* Admonition — structured title/body anatomy with a tinted title band.
+   The root is layout-neutralized: no padding, no gap, no icon grid. */
+.alert.admonition {
+  padding: 0;
+  gap: 0;
+  display: block;
+  overflow: clip;
+}
+
+.alert-title {
+  padding-block: var(--alert-pad-block);
+  padding-inline: var(--alert-pad-inline);
+
+  @supports (color: color-mix(in oklch, red, white)) {
+    background: color-mix(
+      in oklch,
+      var(--surface) var(--soft-bg-mix),
+      var(--intent, var(--neutral))
+    );
+  }
+
+  @supports not (color: color-mix(in oklch, red, white)) {
+    background: var(--intent, var(--neutral));
+  }
+
+  border-start-start-radius: calc(var(--radius-lg) - var(--border-width));
+  border-start-end-radius: calc(var(--radius-lg) - var(--border-width));
+}
+
+.alert-title:where(summary) {
+  cursor: pointer;
+  user-select: none;
+  list-style: none;
+}
+
+.alert-title:where(summary)::-webkit-details-marker {
+  display: none;
+}
+
+.alert-title[aria-hidden] {
+  display: inline-flex;
+  gap: var(--space-2);
+  align-items: center;
+}
+
+.alert-body {
+  padding-block: var(--alert-pad-block);
+  padding-inline: var(--alert-pad-inline);
+  color: var(--text);
+}
+
+.alert-body > :first-child {
+  margin-block-start: 0;
+}
+
+.alert-body > :last-child {
+  margin-block-end: 0;
+}
+
+details.alert.admonition[open] .alert-title {
+  border-end-start-radius: 0;
+  border-end-end-radius: 0;
+}
 
 /*
  * Actions — a horizontal action-button cluster.
@@ -2487,8 +2596,8 @@ dialog.drawer nav {
 }
 
 .spinner {
-  --spinner-size: 1.5rem;
-  --spinner-width: 2px;
+  --spinner-size: 1em;
+  --spinner-width: 0.125em;
   --spinner-track: currentColor;
   --spinner-value: transparent;
 
@@ -2514,11 +2623,11 @@ dialog.drawer nav {
 }
 
 .spinner.sm {
-  --spinner-size: 1rem;
+  --spinner-size: 0.75em;
 }
 
 .spinner.lg {
-  --spinner-size: 3rem;
+  --spinner-size: 2rem;
   --spinner-width: 3px;
 }
 
@@ -2626,6 +2735,7 @@ dialog.drawer nav {
   }
 
   [aria-busy="true"]:not(.btn) > .spinner:last-child {
+    --spinner-size: 2rem;
     position: absolute;
     inset: 0;
     z-index: 2;
@@ -2780,10 +2890,9 @@ dialog.drawer nav {
  * the coloring via --intent / --intent-fg. status.js applies these as plain
  * classes on the target; it does not know their names or that they exist.
  *
- * Public API: .status-bar + [data-status], both required — status.js reads
- * the class name from js/selectors.js rather than hardcoding it, but still
- * needs it to scope its document-wide lookup away from unrelated elements
- * that carry their own generic `data-status`.
+ * CSS API:            .status-bar
+ * JS target contract:  [data-status][role="status"]
+ * Normally combined, but they describe separate concerns.
  */
 
 /* Intent boundary — inherited intents do not tint this component.
@@ -3460,8 +3569,8 @@ a.avatar[aria-disabled="true"] {
  * Progressive enhancement: on browsers that support :target-current,
  * this file enables the native target group and marks the active link.
  *
- * Falls back gracefully: links still work when IntersectionObserver or
- * :target-current is unavailable.
+ * Falls back gracefully: links still work when :target-current is unavailable
+ * and when the JavaScript enhancer is not loaded at all.
  */
 
 @supports selector(.scrollspy a:target-current) {
