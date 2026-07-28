@@ -5,7 +5,7 @@ let importId = 0;
 
 function tabsMarkup() {
   return `
-    <div class="tabs" role="tablist">
+    <div class="tabs" data-enhance="tabs" role="tablist">
       <button id="tab-a" role="tab" aria-controls="panel-a" aria-selected="true">A</button>
       <button id="tab-b" role="tab" aria-controls="panel-b">B</button>
       <button id="tab-c" role="tab" aria-controls="panel-c">C</button>
@@ -111,7 +111,7 @@ test("vertical tablists ignore ArrowRight for selection", async () => {
 
 test("keyboard navigation skips aria-disabled and disabled tabs", async () => {
   await loadTabs(`
-    <div class="tabs" role="tablist">
+    <div class="tabs" data-enhance="tabs" role="tablist">
       <button id="tab-a" role="tab" aria-controls="panel-a" aria-selected="true">A</button>
       <button id="tab-b" role="tab" aria-controls="panel-b" aria-disabled="true">B</button>
       <button id="tab-c" role="tab" aria-controls="panel-c" disabled>C</button>
@@ -134,7 +134,7 @@ test("keyboard navigation skips aria-disabled and disabled tabs", async () => {
 
 test("clicking aria-disabled tab does not activate it", async () => {
   await loadTabs(`
-    <div class="tabs" role="tablist">
+    <div class="tabs" data-enhance="tabs" role="tablist">
       <button id="tab-a" role="tab" aria-controls="panel-a" aria-selected="true">A</button>
       <button id="tab-b" role="tab" aria-controls="panel-b" aria-disabled="true">B</button>
     </div>
@@ -167,8 +167,8 @@ test("dynamically inserted tablists are initialized", async () => {
   expect(document.getElementById("panel-b").hidden).toBe(false);
 });
 
-test("ignores a tablist without the .tabs component class", async () => {
-  await loadTabs(tabsMarkup().replace('class="tabs" ', ""));
+test("ignores a tablist without the data-enhance token", async () => {
+  await loadTabs(tabsMarkup().replace('data-enhance="tabs" ', ""));
 
   const tabA = document.getElementById("tab-a");
   const tabB = document.getElementById("tab-b");
@@ -178,9 +178,20 @@ test("ignores a tablist without the .tabs component class", async () => {
   expect(tabB.getAttribute("aria-selected")).toBe(null);
 });
 
+test("token without presentation class still works", async () => {
+  await loadTabs(tabsMarkup().replace('class="tabs" ', ""));
+
+  const tabA = document.getElementById("tab-a");
+  const tabB = document.getElementById("tab-b");
+  click(tabB);
+
+  expect(tabA.getAttribute("aria-selected")).toBe("false");
+  expect(tabB.getAttribute("aria-selected")).toBe("true");
+});
+
 test("initialization skips a selected tab with a missing panel", async () => {
   await loadTabs(`
-    <div class="tabs" role="tablist">
+    <div class="tabs" data-enhance="tabs" role="tablist">
       <button id="tab-a" role="tab" aria-controls="missing-panel" aria-selected="true">A</button>
       <button id="tab-b" role="tab" aria-controls="panel-b">B</button>
     </div>
