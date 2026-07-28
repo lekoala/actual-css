@@ -41,7 +41,7 @@ afterEach(() => {
 
 test("scrollspy marks the visible section link", async () => {
   await loadScrollspy(`
-    <nav class="scrollspy">
+    <nav class="scrollspy" data-enhance="scrollspy">
       <a href="#alpha">Alpha</a>
       <a href="#beta">Beta</a>
     </nav>
@@ -65,7 +65,7 @@ test("scrollspy marks the visible section link", async () => {
 test("scrollspy uses data-scrollspy-root and picks up dynamic links", async () => {
   await loadScrollspy(`
     <main id="viewport">
-      <nav class="scrollspy" data-scrollspy-root="#viewport">
+      <nav class="scrollspy" data-enhance="scrollspy" data-scrollspy-root="#viewport">
         <a href="#alpha">Alpha</a>
       </nav>
       <section id="alpha"></section>
@@ -87,7 +87,7 @@ test("scrollspy uses data-scrollspy-root and picks up dynamic links", async () =
 
 test("scrollspy ignores unrelated body mutations", async () => {
   await loadScrollspy(`
-    <nav class="scrollspy">
+    <nav class="scrollspy" data-enhance="scrollspy">
       <a href="#alpha">Alpha</a>
     </nav>
     <section id="alpha"></section>
@@ -104,7 +104,7 @@ test("scrollspy ignores unrelated body mutations", async () => {
 
 test("scrollspy keeps intersection state across callback batches", async () => {
   await loadScrollspy(`
-    <nav class="scrollspy">
+    <nav class="scrollspy" data-enhance="scrollspy">
       <a href="#alpha">Alpha</a>
       <a href="#beta">Beta</a>
     </nav>

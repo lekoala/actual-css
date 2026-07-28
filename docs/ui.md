@@ -838,7 +838,7 @@ or style `[aria-current]` yourself.
 - The same markup also works with the CSS-native scroll markers path (see below).
 
 ```html
-<nav class="scrollspy" aria-label="Page sections">
+<nav class="scrollspy" data-enhance="scrollspy" aria-label="Page sections">
   <ol class="nav-list stack">
     <li><a class="nav-link" href="#overview" aria-current="location">Overview</a></li>
     <li><a class="nav-link" href="#tokens">Tokens</a></li>

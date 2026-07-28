@@ -10,13 +10,16 @@
  * Optional root: data-scrollspy-root="#scroll-container" observes section
  * visibility within a scroll container instead of the viewport.
  *
- * Self-registers via enhance: injected .scrollspy navs wire automatically.
- * Cleanup disconnects the IntersectionObserver and the small MutationObserver
- * that refreshes the link→section map as nav links or sections are injected.
+ * Self-registers via registerEnhancement: injected .scrollspy navs wire
+ * automatically. Cleanup disconnects the IntersectionObserver and the small
+ * MutationObserver that refreshes the link→section map as nav links or
+ * sections are injected.
+ *
+ * The .scrollspy class alone still gives :target-current behavior via CSS —
+ * now a documented no-JS mode, not a fallback remark.
  */
 
-import enhance from "./enhance.js";
-import { CLASSES } from "./selectors.js";
+import { registerEnhancement } from "./enhance.js";
 
 function rootFor(nav) {
   const selector = nav.getAttribute("data-scrollspy-root");
@@ -116,6 +119,4 @@ function setupNav(nav) {
   };
 }
 
-enhance({
-  [`.${CLASSES.scrollspy}`]: setupNav,
-});
+registerEnhancement("scrollspy", setupNav);
