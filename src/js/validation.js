@@ -173,7 +173,7 @@ function errorEl(el) {
   if (!ids) return null;
   for (const id of ids.split(/\s+/)) {
     const node = el.ownerDocument.getElementById(id);
-    if (node?.classList.contains(CLASSES.fieldError)) {
+    if (node?.matches(`.${CLASSES.fieldError}, [data-field-error]`)) {
       return node;
     }
   }
