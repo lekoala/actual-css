@@ -16,9 +16,14 @@ This project follows Keep a Changelog and uses semver, including during 0.x.
 - `.alert.admonition` + `.alert-title` / `.alert-body` — structured anatomy.
 - `.scroller.stable-gutter` — opt-in `scrollbar-gutter: stable`.
 - `--shadow-xs` and two-layer `--shadow` token.
-- `data-scrollspy-offset` attribute (parseable per docs, algorithm deferred).
+- `data-scrollspy-offset` attribute with deterministic geometry-based
+  activation (pixels or percentage, replaces IntersectionObserver).
 - Widget primitives catalogue (`docs/design-notes/widget-primitives.md`).
 - `check:enhance` guardrail script.
+
+### Added (cont.)
+- `.range` — fully custom-styled range slider (`appearance: none`) with
+  intent tinted thumb, focus ring on the thumb surface, and disabled state.
 
 ### Changed
 - Behaviour discovery moved from presentation classes to `data-enhance` tokens
@@ -33,6 +38,9 @@ This project follows Keep a Changelog and uses semver, including during 0.x.
   `.lg` = `2rem`.
 - `--shadow` is a two-layer shadow (was single-layer), `--shadow-popout`
   unchanged.
+- Focus ring is now neutral (`--neutral:focus`), with a single consistent recipe
+  across all interactive controls. `forced-colors` fallback is centralised, and
+  theme-specific exceptions (Edge) removed.
 - `selectors.js` holds written-state vocabulary only (discovery entries removed).
 - `surface.js` owns its own teardown via `data-actual-surface` marker and
   per-document binding.

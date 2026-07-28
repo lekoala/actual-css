@@ -22,7 +22,9 @@
  *
  * Self-registers via registerEnhancement: injected navs wire automatically.
  * Cleanup removes the scroll/resize listeners and the small MutationObserver
- * that refreshes the link->section map as nav links or sections are injected.
+ * that refreshes the link->section map as nav links are injected. New sections
+ * outside the nav subtree are not observed — call refreshScrollspy(nav) after
+ * those mutations.
  *
  * The .scrollspy class alone still gives :target-current behavior via CSS —
  * a documented no-JS mode, not a fallback remark.
@@ -159,6 +161,8 @@ function setupNav(nav) {
     signal: controller.signal,
   });
 
+  // Observer is scoped to the nav subtree — link injection is caught;
+  // section-only DOM mutations elsewhere need an explicit refreshScrollspy().
   const mo = new MutationObserver(() => schedule(rebuild));
   mo.observe(nav, { childList: true, subtree: true });
   navState.set(nav, { rebuild });
