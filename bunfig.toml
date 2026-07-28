@@ -1,3 +1,5 @@
 [test]
 root = "./tests"
+# Keeps failed DOM assertions to one line instead of dumping the whole window.
+preload = ["./tests/helpers/inspect.js"]
 
