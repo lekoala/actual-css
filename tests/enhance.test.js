@@ -1,5 +1,6 @@
 import { afterEach, expect, test } from "bun:test";
 import enhance from "../src/js/enhance.js";
+import { enhancementSelector, hasEnhancement, registerEnhancement } from "../src/js/enhance.js";
 import { cleanupDOM, nextMicrotask, setupDOM } from "./helpers/dom.js";
 
 afterEach(() => {
@@ -199,4 +200,113 @@ test("a throwing enhancer does not stop sibling enhancers", () => {
   } finally {
     console.error = original;
   }
+});
+
+test("enhancementSelector returns [data-enhance~=\"name\"]", () => {
+  expect(enhancementSelector("tabs")).toBe('[data-enhance~="tabs"]');
+});
+
+test("enhancementSelector throws TypeError on invalid names", () => {
+  for (const name of ["de mo", "Demo", "1tabs", ""]) {
+    expect(() => enhancementSelector(name)).toThrow(TypeError);
+  }
+});
+
+test("hasEnhancement returns true when token is present", () => {
+  setupDOM('<div data-enhance="tabs flyout"></div>');
+  const el = document.querySelector("div");
+  expect(hasEnhancement(el, "tabs")).toBe(true);
+  expect(hasEnhancement(el, "flyout")).toBe(true);
+  expect(hasEnhancement(el, "validation")).toBe(false);
+});
+
+test("hasEnhancement does not match substrings (~= word matching)", () => {
+  setupDOM('<div data-enhance="demoish"></div>');
+  const el = document.querySelector("div");
+  expect(hasEnhancement(el, "demo")).toBe(false);
+  expect(hasEnhancement(el, "demoish")).toBe(true);
+});
+
+test("registerEnhancement connects an element already in the DOM", () => {
+  setupDOM('<div data-enhance="demo"></div>');
+  const calls = [];
+  const runtime = registerEnhancement("demo", (el) => calls.push(el));
+  expect(calls).toHaveLength(1);
+  expect(calls[0]).toBe(document.querySelector("[data-enhance~=demo]"));
+  runtime.disconnect();
+});
+
+test("registerEnhancement connects an element inserted later", async () => {
+  setupDOM("<section></section>");
+  const calls = [];
+  const runtime = registerEnhancement("demo", (el) => calls.push(el));
+
+  document.querySelector("section").innerHTML = '<div data-enhance="demo"></div>';
+  await nextMicrotask();
+
+  expect(calls).toHaveLength(1);
+  runtime.disconnect();
+});
+
+test("registerEnhancement: token added after registration needs refresh", () => {
+  setupDOM('<div id="target"></div>');
+  const calls = [];
+  const runtime = registerEnhancement("demo", (el) => calls.push(el));
+
+  const el = document.getElementById("target");
+  el.setAttribute("data-enhance", "demo");
+  // Not connected automatically — attribute changes are not observed
+  expect(calls).toHaveLength(0);
+
+  runtime.refresh(el);
+  expect(calls).toHaveLength(1);
+  expect(calls[0]).toBe(el);
+  runtime.disconnect();
+});
+
+test("registerEnhancement runs cleanup when element is removed", async () => {
+  setupDOM('<div data-enhance="demo"></div>');
+  const cleanupCalls = [];
+  const el = document.querySelector("div");
+  const runtime = registerEnhancement("demo", () => () => cleanupCalls.push(el));
+
+  el.remove();
+  await nextMicrotask();
+
+  expect(cleanupCalls).toEqual([el]);
+  runtime.disconnect();
+});
+
+test("multiple tokens on one element run both registered inits", () => {
+  setupDOM('<div data-enhance="demo other"></div>');
+  const calls = [];
+  const el = document.querySelector("div");
+
+  const a = registerEnhancement("demo", (el) => calls.push("demo"));
+  const b = registerEnhancement("other", (el) => calls.push("other"));
+
+  expect(calls).toContain("demo");
+  expect(calls).toContain("other");
+  a.disconnect();
+  b.disconnect();
+});
+
+test("registers a third-party behavior without touching core", async () => {
+  setupDOM('<div data-enhance="third-party"></div>');
+  let connected = null;
+  const runtime = registerEnhancement("third-party", (el) => {
+    connected = el;
+    el.setAttribute("data-hooked", "");
+    return () => el.removeAttribute("data-hooked");
+  });
+
+  const el = document.querySelector("[data-enhance~=third-party]");
+  expect(connected).toBe(el);
+  expect(el.hasAttribute("data-hooked")).toBe(true);
+
+  el.remove();
+  await nextMicrotask();
+
+  expect(el.hasAttribute("data-hooked")).toBe(false);
+  runtime.disconnect();
 });
