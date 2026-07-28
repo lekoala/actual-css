@@ -24,23 +24,23 @@
  *   - Any other code, without importing this module: dispatch `actual:status`
  *     directly — `detail: { message, intent, duration }`, or `{}` to clear.
  *
- * The element contract is `.status-bar[data-status]`. Both are required:
- * "status" is a generic domain word, so the class keeps the document-wide
- * lookup from matching an unrelated app element that happens to carry its own
- * `data-status`. `intent` is applied verbatim as one or more classes on the
- * target (space-separated for more than one, e.g. "danger uppercase").
- * status.js does not know or validate any specific names — .danger, .success,
- * and friends are Actual's own intents.css vocabulary, not something this
- * module hardcodes. Each call removes the intent classes the previous call
- * added (tracked in data-status-classes on the target itself), then adds the
- * current call's, so stale intent classes never accumulate and classes the
- * app added independently are left alone.
+ * The element contract is `[data-status][role="status"]`. Both are required:
+ * "status" is a generic domain word, so `role="status"` keeps the
+ * document-wide lookup from matching an unrelated app element that happens to
+ * carry its own `data-status`. `intent` is applied verbatim as one or more
+ * classes on the target (space-separated for more than one, e.g. "danger
+ * uppercase"). status.js does not know or validate any specific names —
+ * .danger, .success, and friends are Actual's own intents.css vocabulary, not
+ * something this module hardcodes. Each call removes the intent classes the
+ * previous call added (tracked in data-status-classes on the target itself),
+ * then adds the current call's, so stale intent classes never accumulate and
+ * classes the app added independently are left alone.
  */
+
 import { registerCommands, targetFor } from "./command.js";
 import { EVENTS } from "./events.js";
-import { CLASSES } from "./selectors.js";
 
-const STATUS_SELECTOR = `.${CLASSES.statusBar}[data-status]`;
+const STATUS_SELECTOR = '[data-status][role="status"]';
 const STATUS_CLASSES_ATTR = "statusClasses";
 
 let statusTimer;

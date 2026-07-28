@@ -16,34 +16,34 @@ afterEach(() => {
   cleanupDOM();
 });
 
-test("writes the message into the .status-bar[data-status] target", async () => {
+test("writes the message into the [data-status][role=\"status\"] target", async () => {
   const { status } = await loadStatus(`<div class="status-bar" data-status role="status"></div>`);
 
-  const target = document.querySelector(".status-bar[data-status]");
+  const target = document.querySelector('[data-status][role="status"]');
   status("Saved.");
 
   expect(target.textContent).toBe("Saved.");
 });
 
-test("requires both the class and data-status, ignoring an unrelated data-status elsewhere", async () => {
+test("requires both data-status and role=status, ignoring an unrelated data-status elsewhere", async () => {
   const { status } = await loadStatus(`
     <div class="task-row" data-status="pending"></div>
     <div class="status-bar" role="status"></div>
     <div class="status-bar" data-status role="status"></div>
   `);
 
-  const target = document.querySelector(".status-bar[data-status]");
+  const target = document.querySelector('[data-status][role="status"]');
   status("Copied.");
 
   expect(target.textContent).toBe("Copied.");
   expect(document.querySelector(".task-row").textContent).toBe("");
-  expect(document.querySelector(".status-bar:not([data-status])").textContent).toBe("");
+  expect(document.querySelector('[role="status"]:not([data-status])').textContent).toBe("");
 });
 
 test("applies the intent as a plain class, with no built-in whitelist", async () => {
   const { status } = await loadStatus(`<div class="status-bar" data-status role="status"></div>`);
 
-  const target = document.querySelector(".status-bar[data-status]");
+  const target = document.querySelector('[data-status][role="status"]');
   status("Failed.", { intent: "totally-unknown-name" });
 
   expect(target.classList.contains("totally-unknown-name")).toBe(true);
@@ -52,7 +52,7 @@ test("applies the intent as a plain class, with no built-in whitelist", async ()
 test("supports more than one intent class, space-separated", async () => {
   const { status } = await loadStatus(`<div class="status-bar" data-status role="status"></div>`);
 
-  const target = document.querySelector(".status-bar[data-status]");
+  const target = document.querySelector('[data-status][role="status"]');
   status("Failed.", { intent: "danger uppercase" });
 
   expect(target.classList.contains("danger")).toBe(true);
@@ -62,7 +62,7 @@ test("supports more than one intent class, space-separated", async () => {
 test("omitting intent removes the previous call's intent classes", async () => {
   const { status } = await loadStatus(`<div class="status-bar" data-status role="status"></div>`);
 
-  const target = document.querySelector(".status-bar[data-status]");
+  const target = document.querySelector('[data-status][role="status"]');
   status("Failed.", { intent: "danger" });
   status("Saved.");
 
@@ -75,7 +75,7 @@ test("preserves classes the target already had before the first call", async () 
     `<div class="status-bar local-app-class" data-status role="status"></div>`,
   );
 
-  const target = document.querySelector(".status-bar[data-status]");
+  const target = document.querySelector('[data-status][role="status"]');
   status("Failed.", { intent: "danger" });
   status("Saved.");
 
@@ -87,7 +87,7 @@ test("preserves classes the target already had before the first call", async () 
 test("clear empties the target and cancels the timer", async () => {
   const { status } = await loadStatus(`<div class="status-bar" data-status role="status"></div>`);
 
-  const target = document.querySelector(".status-bar[data-status]");
+  const target = document.querySelector('[data-status][role="status"]');
   status("Saving…", { duration: false });
   status.clear();
 
@@ -98,7 +98,7 @@ test("clear empties the target and cancels the timer", async () => {
 test("classes added after first show are preserved on subsequent status calls", async () => {
   const { status } = await loadStatus(`<div class="status-bar" data-status role="status"></div>`);
 
-  const target = document.querySelector(".status-bar[data-status]");
+  const target = document.querySelector('[data-status][role="status"]');
   status("Saving…", { intent: "danger", duration: false });
   target.classList.add("sticky-app-class");
   status("Saved.", { intent: "success", duration: false });
@@ -111,7 +111,7 @@ test("classes added after first show are preserved on subsequent status calls", 
 test("auto-dismisses after the duration", async () => {
   const { status } = await loadStatus(`<div class="status-bar" data-status role="status"></div>`);
 
-  const target = document.querySelector(".status-bar[data-status]");
+  const target = document.querySelector('[data-status][role="status"]');
   status("Reconnected.", { duration: 30 });
 
   expect(target.textContent).toBe("Reconnected.");
@@ -128,7 +128,7 @@ test("is a no-op when no status target exists", async () => {
 test("auto-shows validation errors as danger", async () => {
   await loadStatus(`<div class="status-bar" data-status role="status"></div>`);
 
-  const target = document.querySelector(".status-bar[data-status]");
+  const target = document.querySelector('[data-status][role="status"]');
   document.dispatchEvent(
     new CustomEvent("actual:invalid", {
       bubbles: true,
@@ -143,7 +143,7 @@ test("auto-shows validation errors as danger", async () => {
 test("ignores actual:invalid events without a message", async () => {
   await loadStatus(`<div class="status-bar" data-status role="status"></div>`);
 
-  const target = document.querySelector(".status-bar[data-status]");
+  const target = document.querySelector('[data-status][role="status"]');
   document.dispatchEvent(
     new CustomEvent("actual:invalid", {
       bubbles: true,
@@ -157,7 +157,7 @@ test("ignores actual:invalid events without a message", async () => {
 test("ignores actual:invalid events without detail", async () => {
   await loadStatus(`<div class="status-bar" data-status role="status"></div>`);
 
-  const target = document.querySelector(".status-bar[data-status]");
+  const target = document.querySelector('[data-status][role="status"]');
 
   expect(() => {
     document.dispatchEvent(new CustomEvent("actual:invalid", { bubbles: true }));
@@ -168,7 +168,7 @@ test("ignores actual:invalid events without detail", async () => {
 test("actual:status event shows a message", async () => {
   await loadStatus(`<div class="status-bar" data-status role="status"></div>`);
 
-  const target = document.querySelector(".status-bar[data-status]");
+  const target = document.querySelector('[data-status][role="status"]');
   document.dispatchEvent(
     new CustomEvent("actual:status", {
       bubbles: true,
@@ -183,7 +183,7 @@ test("actual:status event shows a message", async () => {
 test("actual:status event without a message clears the bar", async () => {
   const { status } = await loadStatus(`<div class="status-bar" data-status role="status"></div>`);
 
-  const target = document.querySelector(".status-bar[data-status]");
+  const target = document.querySelector('[data-status][role="status"]');
   status("Saving…", { duration: false });
   document.dispatchEvent(new CustomEvent("actual:status", { bubbles: true, detail: {} }));
 

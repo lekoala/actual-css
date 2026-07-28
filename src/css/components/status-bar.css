@@ -10,10 +10,9 @@
  * the coloring via --intent / --intent-fg. status.js applies these as plain
  * classes on the target; it does not know their names or that they exist.
  *
- * Public API: .status-bar + [data-status], both required — status.js reads
- * the class name from js/selectors.js rather than hardcoding it, but still
- * needs it to scope its document-wide lookup away from unrelated elements
- * that carry their own generic `data-status`.
+ * CSS API:            .status-bar
+ * JS target contract:  [data-status][role="status"]
+ * Normally combined, but they describe separate concerns.
  */
 
 /* Intent boundary — inherited intents do not tint this component.
