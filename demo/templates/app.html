@@ -274,14 +274,14 @@
       <!-- Workspace switcher -->
       <div class="flyout-trigger stretch">
         <button class="btn outline sm" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="workspace-menu"
-          id="workspace-flyout-trigger" style="justify-content: space-between;">
+          id="workspace-flyout-trigger" data-enhance="flyout" style="justify-content: space-between;">
           <span class="cluster" style="gap: 0.5rem;">
             <span class="avatar sm"><abbr>OC</abbr></span>
             <span>Ocean Beach</span>
           </span>
           <i class="ti ti-chevron-down" aria-hidden="true"></i>
         </button>
-        <menu class="flyout sm" data-enhance="flyout" role="menu" id="workspace-menu" aria-labelledby="workspace-flyout-trigger" hidden>
+        <menu class="flyout sm" role="menu" id="workspace-menu" aria-labelledby="workspace-flyout-trigger" hidden>
           <li><button type="button" role="menuitem">
               <span class="avatar sm primary" style="margin-inline-end: 0.5rem;"><abbr>OC</abbr></span>
               Ocean Beach
@@ -370,11 +370,11 @@
       <!-- Account pinned to the bottom -->
       <div class="flyout-trigger stretch">
         <button class="btn neutral ghost sm" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="sidebar-account-menu"
-          id="sidebar-account-trigger" style="justify-content: flex-start;">
+          id="sidebar-account-trigger" data-enhance="flyout" style="justify-content: flex-start;">
           <span class="avatar sm"><abbr>LW</abbr></span>
           <span>Laura Williams</span>
         </button>
-        <menu class="flyout sm" data-enhance="flyout" role="menu" id="sidebar-account-menu" aria-labelledby="sidebar-account-trigger" hidden>
+        <menu class="flyout sm" role="menu" id="sidebar-account-menu" aria-labelledby="sidebar-account-trigger" hidden>
           <li><button type="button" role="menuitem">View profile</button></li>
           <li><button type="button" role="menuitem">Settings</button></li>
           <li>
@@ -434,10 +434,10 @@
 
         <div class="flyout-trigger app-layout-hide-mobile">
           <button class="btn neutral ghost sm" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="help-menu"
-            id="help-flyout-trigger" aria-label="Help">
+            id="help-flyout-trigger" data-enhance="flyout" aria-label="Help">
             <i class="ti ti-help" aria-hidden="true"></i>
           </button>
-          <menu class="flyout sm" data-enhance="flyout" role="menu" id="help-menu" aria-labelledby="help-flyout-trigger" hidden>
+          <menu class="flyout sm" role="menu" id="help-menu" aria-labelledby="help-flyout-trigger" hidden>
             <li><a href="#" role="menuitem">Documentation</a></li>
             <li><a href="#" role="menuitem">Keyboard shortcuts</a></li>
             <li><a href="#" role="menuitem">Contact support</a></li>
@@ -446,10 +446,10 @@
 
         <div class="flyout-trigger">
           <button class="btn neutral ghost sm" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="user-menu"
-            id="user-flyout-trigger" aria-label="Account menu">
+            id="user-flyout-trigger" data-enhance="flyout" aria-label="Account menu">
             <span class="avatar sm"><abbr>LW</abbr></span>
           </button>
-          <menu class="flyout sm" data-enhance="flyout" role="menu" id="user-menu" aria-labelledby="user-flyout-trigger" hidden>
+          <menu class="flyout sm" role="menu" id="user-menu" aria-labelledby="user-flyout-trigger" hidden>
             <li><button type="button" role="menuitem">View profile</button></li>
             <li><button type="button" role="menuitem">Settings</button></li>
             <li>
@@ -544,11 +544,11 @@
               </label>
               <div class="flyout-trigger">
                 <button class="btn neutral outline sm" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="bulk-menu"
-                  id="bulk-flyout-trigger">
+                  id="bulk-flyout-trigger" data-enhance="flyout">
                   Bulk actions
                   <i class="ti ti-chevron-down" aria-hidden="true"></i>
                 </button>
-                <menu class="flyout sm" data-enhance="flyout" role="menu" id="bulk-menu" aria-labelledby="bulk-flyout-trigger" hidden>
+                <menu class="flyout sm" role="menu" id="bulk-menu" aria-labelledby="bulk-flyout-trigger" hidden>
                   <li><button type="button" role="menuitem">Export selected</button></li>
                   <li><button type="button" role="menuitem">Mark as paid</button></li>
                   <li>
@@ -585,10 +585,10 @@
                   <td>
                     <div class="flyout-trigger">
                       <button class="btn neutral ghost sm" type="button" aria-haspopup="menu" aria-expanded="false"
-                        aria-controls="row-1-menu" id="row-1-trigger" aria-label="Row actions">
+                        aria-controls="row-1-menu" id="row-1-trigger" data-enhance="flyout" aria-label="Row actions">
                         <i class="ti ti-dots-vertical" aria-hidden="true"></i>
                       </button>
-                      <menu class="flyout sm" data-enhance="flyout" role="menu" id="row-1-menu" aria-labelledby="row-1-trigger" hidden>
+                      <menu class="flyout sm" role="menu" id="row-1-menu" aria-labelledby="row-1-trigger" hidden>
                         <li><button type="button" role="menuitem">View details</button></li>
                         <li><button type="button" role="menuitem">Copy link</button></li>
                         <li>
@@ -610,10 +610,10 @@
                   <td>
                     <div class="flyout-trigger">
                       <button class="btn neutral ghost sm" type="button" aria-haspopup="menu" aria-expanded="false"
-                        aria-controls="row-2-menu" id="row-2-trigger" aria-label="Row actions">
+                        aria-controls="row-2-menu" id="row-2-trigger" data-enhance="flyout" aria-label="Row actions">
                         <i class="ti ti-dots-vertical" aria-hidden="true"></i>
                       </button>
-                      <menu class="flyout sm" data-enhance="flyout" role="menu" id="row-2-menu" aria-labelledby="row-2-trigger" hidden>
+                      <menu class="flyout sm" role="menu" id="row-2-menu" aria-labelledby="row-2-trigger" hidden>
                         <li><button type="button" role="menuitem">View details</button></li>
                         <li><button type="button" role="menuitem">Copy link</button></li>
                         <li>
@@ -635,10 +635,10 @@
                   <td>
                     <div class="flyout-trigger">
                       <button class="btn neutral ghost sm" type="button" aria-haspopup="menu" aria-expanded="false"
-                        aria-controls="row-3-menu" id="row-3-trigger" aria-label="Row actions">
+                        aria-controls="row-3-menu" id="row-3-trigger" data-enhance="flyout" aria-label="Row actions">
                         <i class="ti ti-dots-vertical" aria-hidden="true"></i>
                       </button>
-                      <menu class="flyout sm" data-enhance="flyout" role="menu" id="row-3-menu" aria-labelledby="row-3-trigger" hidden>
+                      <menu class="flyout sm" role="menu" id="row-3-menu" aria-labelledby="row-3-trigger" hidden>
                         <li><button type="button" role="menuitem">View details</button></li>
                         <li><button type="button" role="menuitem">Copy link</button></li>
                         <li>
@@ -660,10 +660,10 @@
                   <td>
                     <div class="flyout-trigger">
                       <button class="btn neutral ghost sm" type="button" aria-haspopup="menu" aria-expanded="false"
-                        aria-controls="row-4-menu" id="row-4-trigger" aria-label="Row actions">
+                        aria-controls="row-4-menu" id="row-4-trigger" data-enhance="flyout" aria-label="Row actions">
                         <i class="ti ti-dots-vertical" aria-hidden="true"></i>
                       </button>
-                      <menu class="flyout sm" data-enhance="flyout" role="menu" id="row-4-menu" aria-labelledby="row-4-trigger" hidden>
+                      <menu class="flyout sm" role="menu" id="row-4-menu" aria-labelledby="row-4-trigger" hidden>
                         <li><button type="button" role="menuitem">View details</button></li>
                         <li><button type="button" role="menuitem">Copy link</button></li>
                         <li>
@@ -685,10 +685,10 @@
                   <td>
                     <div class="flyout-trigger">
                       <button class="btn neutral ghost sm" type="button" aria-haspopup="menu" aria-expanded="false"
-                        aria-controls="row-5-menu" id="row-5-trigger" aria-label="Row actions">
+                        aria-controls="row-5-menu" id="row-5-trigger" data-enhance="flyout" aria-label="Row actions">
                         <i class="ti ti-dots-vertical" aria-hidden="true"></i>
                       </button>
-                      <menu class="flyout sm" data-enhance="flyout" role="menu" id="row-5-menu" aria-labelledby="row-5-trigger" hidden>
+                      <menu class="flyout sm" role="menu" id="row-5-menu" aria-labelledby="row-5-trigger" hidden>
                         <li><button type="button" role="menuitem">View details</button></li>
                         <li><button type="button" role="menuitem">Copy link</button></li>
                         <li>

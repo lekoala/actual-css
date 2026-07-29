@@ -54,11 +54,11 @@ test("openSurface reveals a menu and syncs linked triggers", () => {
 });
 
 test("closeSurface hides a menu and resets presentation state", async () => {
-  setBody('<button aria-controls="menu" aria-expanded="false">Open</button><div id="menu" class="flyout" data-flyout-mobile="sheet"></div>');
+  setBody('<button aria-controls="menu" aria-expanded="false">Open</button><div id="menu" class="flyout"></div>');
   const trigger = document.querySelector("button");
   const menu = document.getElementById("menu");
   mockPlacement(trigger, menu);
-  openSurface(menu, { trigger });
+  openSurface(menu, { trigger, mobile: "sheet" });
 
   closeSurface(menu);
 
@@ -195,12 +195,12 @@ test("closeSurface restores the surface to its original position once animations
 });
 
 test("sheet mode adds sheet class and backdrop", () => {
-  setBody('<button aria-controls="menu"></button><div id="menu" class="flyout" data-flyout-mobile="sheet"></div>');
+  setBody('<button aria-controls="menu"></button><div id="menu" class="flyout"></div>');
   const trigger = document.querySelector("button");
   const menu = document.getElementById("menu");
   mockPlacement(trigger, menu);
 
-  openSurface(menu, { trigger });
+  openSurface(menu, { trigger, mobile: "sheet" });
 
   expect(menu.classList.contains("is-sheet")).toBe(true);
   expect(menu.getAttribute("role")).toBeNull();
@@ -209,12 +209,12 @@ test("sheet mode adds sheet class and backdrop", () => {
 });
 
 test("sheet mode preserves author-provided semantic attributes", () => {
-  setBody('<button aria-controls="menu"></button><div id="menu" class="flyout" data-flyout-mobile="sheet" role="menu" aria-modal="false"></div>');
+  setBody('<button aria-controls="menu"></button><div id="menu" class="flyout" role="menu" aria-modal="false"></div>');
   const trigger = document.querySelector("button");
   const menu = document.getElementById("menu");
   mockPlacement(trigger, menu);
 
-  openSurface(menu, { trigger });
+  openSurface(menu, { trigger, mobile: "sheet" });
   closeSurface(menu);
 
   expect(menu.getAttribute("role")).toBe("menu");
@@ -222,11 +222,11 @@ test("sheet mode preserves author-provided semantic attributes", () => {
 });
 
 test("sheet close hides the backdrop immediately and removes it after animations", async () => {
-  setBody('<button aria-controls="menu"></button><div id="menu" class="flyout" data-flyout-mobile="sheet"></div>');
+  setBody('<button aria-controls="menu"></button><div id="menu" class="flyout"></div>');
   const trigger = document.querySelector("button");
   const menu = document.getElementById("menu");
   mockPlacement(trigger, menu);
-  openSurface(menu, { trigger });
+  openSurface(menu, { trigger, mobile: "sheet" });
 
   const backdrop = document.querySelector(".surface-backdrop");
   let finish;
@@ -249,11 +249,11 @@ test("sheet close hides the backdrop immediately and removes it after animations
 });
 
 test("reopening a sheet cancels stale close cleanup", async () => {
-  setBody('<button aria-controls="menu"></button><div id="menu" class="flyout" data-flyout-mobile="sheet"></div>');
+  setBody('<button aria-controls="menu"></button><div id="menu" class="flyout"></div>');
   const trigger = document.querySelector("button");
   const menu = document.getElementById("menu");
   mockPlacement(trigger, menu);
-  openSurface(menu, { trigger });
+  openSurface(menu, { trigger, mobile: "sheet" });
 
   const backdrop = document.querySelector(".surface-backdrop");
   let finish;
@@ -264,7 +264,7 @@ test("reopening a sheet cancels stale close cleanup", async () => {
   backdrop.getAnimations = () => [];
 
   closeSurface(menu);
-  openSurface(menu, { trigger });
+  openSurface(menu, { trigger, mobile: "sheet" });
 
   expect(backdrop.hidden).toBe(false);
   expect(backdrop.isConnected).toBe(true);
@@ -306,13 +306,13 @@ test("default auto-close closes from outside clicks", () => {
 });
 
 test("outside-only auto-close keeps inside clicks open", () => {
-  setBody('<button aria-controls="menu"></button><div id="menu" class="flyout" data-flyout-auto-close="outside"><button>Item</button></div><span id="outside"></span>');
+  setBody('<button aria-controls="menu"></button><div id="menu" class="flyout"><button>Item</button></div><span id="outside"></span>');
   const trigger = document.querySelector("button[aria-controls]");
   const item = document.querySelector(".flyout button");
   const menu = document.getElementById("menu");
   mockPlacement(trigger, menu);
 
-  openSurface(menu, { trigger });
+  openSurface(menu, { trigger, autoClose: "outside" });
   click(item);
   expect(isSurfaceOpen(menu)).toBe(true);
 
@@ -321,13 +321,13 @@ test("outside-only auto-close keeps inside clicks open", () => {
 });
 
 test("disabled auto-close keeps inside and outside clicks open", () => {
-  setBody('<button aria-controls="menu"></button><div id="menu" class="flyout" data-flyout-auto-close="false"><button>Item</button></div><span id="outside"></span>');
+  setBody('<button aria-controls="menu"></button><div id="menu" class="flyout"><button>Item</button></div><span id="outside"></span>');
   const trigger = document.querySelector("button[aria-controls]");
   const item = document.querySelector(".flyout button");
   const menu = document.getElementById("menu");
   mockPlacement(trigger, menu);
 
-  openSurface(menu, { trigger });
+  openSurface(menu, { trigger, autoClose: "false" });
   click(item);
   click(document.getElementById("outside"));
 

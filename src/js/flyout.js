@@ -1,46 +1,49 @@
-/*
- * Flyout trigger — trigger adapter over the shared action-surface runtime.
- *
- * App menus keep roving focus and menuitem activation. Nav panels reuse the
- * same surface lifecycle without menu semantics.
- */
-
 import enhance, { registerEnhancement } from "./enhance.js";
 import { focusFirstDescendant } from "./focus.js";
 import { connectMenu, focusFirstMenuItem, focusLastMenuItem, getMenuItems } from "./menu.js";
-import { closeSurface, isSurfaceOpen, openSurface, prepareSurface } from "./surface.js";
+import { closeSurface, isSurfaceOpen, openSurface, retainSurface } from "./surface.js";
 
-// trigger -> { flyout, controller }
+const panelRefs = new WeakMap();
 const triggerMap = new WeakMap();
-const FLYOUT_SELECTOR = '[data-enhance~="flyout"]';
-const FLYOUT_TRIGGER_SELECTOR = "[aria-controls][aria-expanded]";
 
-function openFlyout(flyout, trigger) {
-  openSurface(flyout, { trigger, source: trigger });
+function normalizeBreakpoint(raw) {
+  const BREAKPOINTS = { sm: 640, md: 768, lg: 1024 };
+  const value = Number.parseInt(BREAKPOINTS[raw] || raw, 10);
+  return Number.isFinite(value) ? value : undefined;
 }
 
-function flyoutFor(trigger) {
-  const flyoutId = trigger.getAttribute("aria-controls");
-  const flyout = flyoutId && trigger.ownerDocument.getElementById(flyoutId);
-  return flyout?.matches(FLYOUT_SELECTOR) ? flyout : null;
-}
-
-function isMenuFlyout(flyout) {
-  return flyout.matches("menu") || flyout.classList.contains("menu");
-}
-
-function resolveCurrentFlyout(trigger, state) {
-  if (state.flyout?.isConnected) return state.flyout;
-
-  const flyout = flyoutFor(trigger);
-  if (!flyout) return null;
-
-  state.flyout = flyout;
-  prepareSurface(flyout);
-  if (!trigger.hasAttribute("aria-haspopup") && isMenuFlyout(flyout)) {
-    trigger.setAttribute("aria-haspopup", "menu");
+function readFlyoutOptions(panel) {
+  const opts = {};
+  const ds = panel.dataset;
+  if (ds.flyoutPlacement) opts.placement = ds.flyoutPlacement;
+  if (ds.flyoutDistance != null) {
+    const d = Number.parseFloat(ds.flyoutDistance);
+    if (Number.isFinite(d)) opts.distance = d;
   }
-  return flyout;
+  if (ds.flyoutMobile) opts.mobile = ds.flyoutMobile;
+  if (ds.flyoutBreakpoint) {
+    const bp = normalizeBreakpoint(ds.flyoutBreakpoint);
+    if (bp != null) opts.breakpoint = bp;
+  }
+  if (ds.flyoutAutoClose) opts.autoClose = ds.flyoutAutoClose;
+  return opts;
+}
+
+function panelFor(trigger) {
+  const id = trigger.getAttribute("aria-controls");
+  return id ? trigger.ownerDocument.getElementById(id) : null;
+}
+
+function isMenuFlyout(panel) {
+  return panel.matches("menu") || panel.classList.contains("menu");
+}
+
+function openFlyout(panel, trigger) {
+  openSurface(panel, {
+    trigger,
+    source: trigger,
+    ...readFlyoutOptions(panel),
+  });
 }
 
 function openAndFocusPanel(flyout, trigger) {
@@ -53,35 +56,35 @@ function onTriggerClick(e) {
   const state = triggerMap.get(trigger);
   if (!state) return;
   e.stopPropagation();
-  const flyout = resolveCurrentFlyout(trigger, state);
-  if (!flyout) return;
-  if (isSurfaceOpen(flyout)) closeSurface(flyout);
-  else openFlyout(flyout, trigger);
+  const panel = resolvePanel(trigger, state);
+  if (!panel) return;
+  if (isSurfaceOpen(panel)) closeSurface(panel);
+  else openFlyout(panel, trigger);
 }
 
 function onTriggerKeydown(e) {
   const trigger = e.currentTarget;
   const state = triggerMap.get(trigger);
   if (!state) return;
-  const flyout = resolveCurrentFlyout(trigger, state);
-  if (!flyout) return;
-  const items = getMenuItems(flyout);
+  const panel = resolvePanel(trigger, state);
+  if (!panel) return;
+  const items = getMenuItems(panel);
   const isActionList = items.length > 0;
 
   if (!isActionList) {
     switch (e.key) {
       case "ArrowDown":
         e.preventDefault();
-        openAndFocusPanel(flyout, trigger);
+        openAndFocusPanel(panel, trigger);
         break;
       case "Enter":
       case " ":
         e.preventDefault();
-        if (isSurfaceOpen(flyout)) closeSurface(flyout);
-        else openAndFocusPanel(flyout, trigger);
+        if (isSurfaceOpen(panel)) closeSurface(panel);
+        else openAndFocusPanel(panel, trigger);
         break;
       case "Tab":
-        if (isSurfaceOpen(flyout) && !e.shiftKey && focusFirstDescendant(flyout)) {
+        if (isSurfaceOpen(panel) && !e.shiftKey && focusFirstDescendant(panel)) {
           e.preventDefault();
         }
         break;
@@ -92,95 +95,105 @@ function onTriggerKeydown(e) {
   switch (e.key) {
     case "ArrowDown":
       e.preventDefault();
-      if (!isSurfaceOpen(flyout)) openFlyout(flyout, trigger);
-      focusFirstMenuItem(flyout);
+      if (!isSurfaceOpen(panel)) openFlyout(panel, trigger);
+      focusFirstMenuItem(panel);
       break;
     case "ArrowUp":
       e.preventDefault();
-      if (!isSurfaceOpen(flyout)) openFlyout(flyout, trigger);
-      focusLastMenuItem(flyout);
+      if (!isSurfaceOpen(panel)) openFlyout(panel, trigger);
+      focusLastMenuItem(panel);
       break;
     case "Home":
       e.preventDefault();
-      if (!isSurfaceOpen(flyout)) openFlyout(flyout, trigger);
-      focusFirstMenuItem(flyout);
+      if (!isSurfaceOpen(panel)) openFlyout(panel, trigger);
+      focusFirstMenuItem(panel);
       break;
     case "End":
       e.preventDefault();
-      if (!isSurfaceOpen(flyout)) openFlyout(flyout, trigger);
-      focusLastMenuItem(flyout);
+      if (!isSurfaceOpen(panel)) openFlyout(panel, trigger);
+      focusLastMenuItem(panel);
       break;
     case "Enter":
     case " ":
       e.preventDefault();
-      if (!isSurfaceOpen(flyout)) {
-        openFlyout(flyout, trigger);
-        focusFirstMenuItem(flyout);
+      if (!isSurfaceOpen(panel)) {
+        openFlyout(panel, trigger);
+        focusFirstMenuItem(panel);
       } else {
-        closeSurface(flyout);
+        closeSurface(panel);
       }
       break;
     case "Tab":
-      if (isSurfaceOpen(flyout)) closeSurface(flyout);
+      if (isSurfaceOpen(panel)) closeSurface(panel);
       break;
   }
 }
 
 function connectTrigger(trigger) {
   if (triggerMap.has(trigger)) return;
-  const flyout = flyoutFor(trigger);
-  if (!flyout) return;
 
   const controller = new AbortController();
-  triggerMap.set(trigger, { flyout, controller });
+  const state = { panel: null, controller };
+  triggerMap.set(trigger, state);
 
-  prepareSurface(flyout);
-  if (isMenuFlyout(flyout)) {
-    connectMenu(flyout, {
-      close: (menu) => closeSurface(menu),
-      signal: controller.signal,
-    });
-  }
+  resolvePanel(trigger, state);
+
   if (!trigger.hasAttribute("aria-expanded")) {
     trigger.setAttribute("aria-expanded", "false");
-  }
-  if (!trigger.hasAttribute("aria-haspopup") && isMenuFlyout(flyout)) {
-    trigger.setAttribute("aria-haspopup", "menu");
   }
 
   trigger.addEventListener("click", onTriggerClick, { signal: controller.signal });
   trigger.addEventListener("keydown", onTriggerKeydown, { signal: controller.signal });
 }
 
+function resolvePanel(trigger, state) {
+  if (state.panel?.isConnected) return state.panel;
+
+  const panel = panelFor(trigger);
+  if (!panel) return null;
+
+  let panelEntry = panelRefs.get(panel);
+  if (!panelEntry) {
+    const release = retainSurface(panel);
+    panelEntry = { triggers: new Set(), release };
+    panelRefs.set(panel, panelEntry);
+  }
+  panelEntry.triggers.add(trigger);
+  state.panel = panel;
+
+  if (isMenuFlyout(panel)) {
+    connectMenu(panel, {
+      close: (menu) => closeSurface(menu),
+      signal: state.controller.signal,
+    });
+  }
+  if (!trigger.hasAttribute("aria-haspopup") && isMenuFlyout(panel)) {
+    trigger.setAttribute("aria-haspopup", "menu");
+  }
+
+  return panel;
+}
+
 function disconnectTrigger(trigger) {
   const state = triggerMap.get(trigger);
   if (!state) return;
   state.controller.abort();
-  if (state.flyout?.isConnected && isSurfaceOpen(state.flyout)) {
-    closeSurface(state.flyout, { restoreFocus: false });
+  if (state.panel?.isConnected && isSurfaceOpen(state.panel)) {
+    closeSurface(state.panel, { restoreFocus: false });
   }
   triggerMap.delete(trigger);
-}
 
-function connectFlyout(flyout) {
-  if (!flyout.id) return;
-  const triggers = flyout.ownerDocument.querySelectorAll(
-    `${FLYOUT_TRIGGER_SELECTOR}[aria-controls="${CSS.escape(flyout.id)}"]`,
-  );
-  for (const trigger of triggers) {
-    if (!triggerMap.has(trigger)) connectTrigger(trigger);
+  const panelEntry = state.panel ? panelRefs.get(state.panel) : undefined;
+  if (panelEntry) {
+    panelEntry.triggers.delete(trigger);
+    if (panelEntry.triggers.size === 0) {
+      panelEntry.release();
+      panelRefs.delete(state.panel);
+    }
   }
 }
 
-enhance({
-  [FLYOUT_TRIGGER_SELECTOR]: (trigger) => {
-    connectTrigger(trigger);
-    return () => disconnectTrigger(trigger);
-  },
-});
-
-registerEnhancement("flyout", (flyout) => {
-  connectFlyout(flyout);
-  // Surface owns its own teardown; the marker enhancer in surface.js
-  // calls disconnectSurface(el, { restore: false }) on sweep.
+registerEnhancement("flyout", (trigger) => {
+  connectTrigger(trigger);
+  return () => disconnectTrigger(trigger);
 });

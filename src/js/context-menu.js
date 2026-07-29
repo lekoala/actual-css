@@ -1,7 +1,7 @@
 import enhance from "./enhance.js";
 import { EVENTS } from "./events.js";
 import { connectMenu, focusFirstMenuItem, hasMenuItems } from "./menu.js";
-import { closeSurface, isSurfaceOpen, openSurface, prepareSurface } from "./surface.js";
+import { closeSurface, isSurfaceOpen, openSurface, retainSurface } from "./surface.js";
 
 const LONG_PRESS_MS = 450;
 const MOVE_TOLERANCE = 10;
@@ -10,8 +10,6 @@ const CONTEXT_TARGET_SELECTOR = "[data-context-menu]";
 const contextMap = new WeakMap();
 const contextByMenu = new WeakMap();
 
-// Returns the detail from the last accepted `actual:context-menu` event for a
-// menu. This is intentionally optional: static menus need no application JS.
 export function contextFor(menu) {
   return contextByMenu.get(menu) || null;
 }
@@ -51,6 +49,14 @@ function getLongPressDelay(target, menu) {
   return Number.isFinite(delay) ? delay : LONG_PRESS_MS;
 }
 
+function readPanelOptions(menu) {
+  const opts = {};
+  const ds = menu.dataset;
+  if (ds.flyoutMobile) opts.mobile = ds.flyoutMobile;
+  if (ds.flyoutAutoClose) opts.autoClose = ds.flyoutAutoClose;
+  return opts;
+}
+
 function focusMenuContainer(menu) {
   if (!menu.hasAttribute("tabindex")) {
     menu.tabIndex = -1;
@@ -58,13 +64,6 @@ function focusMenuContainer(menu) {
   menu.focus();
 }
 
-// Pointer-triggered opens (right-click, long-press) focus the menu container,
-// not the first item: a pointer-set focus ring is invisible (:focus-visible
-// doesn't match), so focusing "Open" makes the first ArrowDown look like it
-// skips to the second item. Focusing the container keeps the ring hidden and
-// lets keys.js's out-of-list fallback (indexOf === -1) land ArrowDown/ArrowUp
-// on the first/last item, matching native OS context menus. Keyboard-triggered
-// opens (openFromKeyboard) still focus the first item directly.
 function focusMenu(menu, mode) {
   if (mode === "first-item") {
     if (hasMenuItems(menu)) focusFirstMenuItem(menu);
@@ -100,9 +99,10 @@ function openContextMenu(context, menu, opts = {}) {
       y: opts.y,
       placement: opts.placement || "bottom-start",
       distance: opts.distance ?? 2,
-      mobile: opts.mobile || menu.dataset.flyoutMobile || "auto",
+      mobile: opts.mobile || "auto",
       scope: opts.scope || getContextScope(context),
       restoreFocusTo: opts.restoreFocusTo,
+      ...readPanelOptions(menu),
     })
   ) {
     focusMenu(menu, opts.focus);
@@ -136,7 +136,7 @@ function connectContextTarget(target) {
   const menu = menuFor(target);
   if (!menu) return;
 
-  prepareSurface(menu);
+  const release = retainSurface(menu);
   const controller = new AbortController();
   connectMenu(menu, {
     close: (menu) => closeSurface(menu),
@@ -145,6 +145,7 @@ function connectContextTarget(target) {
   const state = {
     controller,
     menu,
+    release,
     timer: null,
     pointerId: null,
     startX: 0,
@@ -253,6 +254,7 @@ function disconnectContextTarget(target) {
     contextByMenu.delete(state.menu);
     closeSurface(state.menu, { restoreFocus: false });
   }
+  state.release();
   contextMap.delete(target);
 }
 
