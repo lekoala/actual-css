@@ -1,12 +1,12 @@
 {
-  "timestamp": "2026-07-29T06:31:02.407Z",
-  "totalRaw": 174021,
-  "totalMinified": 87369,
-  "totalBrotli": 12707,
+  "timestamp": "2026-07-29T08:00:01.051Z",
+  "totalRaw": 174538,
+  "totalMinified": 87698,
+  "totalBrotli": 12746,
   "themesMinified": 29151,
   "themesBrotli": 3414,
-  "shippedMinified": 87369,
-  "shippedBrotli": 12707,
+  "shippedMinified": 87698,
+  "shippedBrotli": 12746,
   "maxShippedBrotli": 13312,
   "fileCount": 74,
   "files": [
@@ -191,6 +191,10 @@
       "raw": 1789
     },
     {
+      "file": "forms/input-icon.css",
+      "raw": 1668
+    },
+    {
       "file": "forms/form-actions.css",
       "raw": 1647
     },
@@ -233,10 +237,6 @@
     {
       "file": "components/pagination.css",
       "raw": 1215
-    },
-    {
-      "file": "forms/input-icon.css",
-      "raw": 1151
     },
     {
       "file": "forms/native.css",
