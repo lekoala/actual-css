@@ -156,14 +156,9 @@
   margin: 0;
 }
 
-.flyout > hr,
-.flyout > li > hr {
-  inline-size: 100%;
-  margin: 0;
-  margin-block: var(--space-1);
-  border: 0;
-  border-block-start: var(--border-width) solid var(--border);
-}
+/* Vertical dividers — .menu-separator (menu.css) is the canonical way to
+   separate menu items. Flyout panels that are not menus use auto grid gap
+   declared on .flyout itself. */
 
 @media (forced-colors: active) {
   .flyout {
