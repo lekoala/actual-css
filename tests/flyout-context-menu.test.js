@@ -395,10 +395,10 @@ test("a context menu opening can be cancelled", async () => {
 test("a flyout trigger opens the menu with its enclosing context", async () => {
   await loadContextMenuAndFlyout(`
     <div id="target" data-context-menu="menu" tabindex="0">
-      <button id="trigger" type="button" data-enhance="flyout" aria-controls="menu" aria-expanded="false">More</button>
+      <button id="trigger" type="button" data-context-menu-trigger aria-controls="menu">More</button>
     </div>
-    <menu id="menu" class="flyout" hidden>
-      <li><button id="first" type="button">Open</button></li>
+    <menu id="menu" class="flyout menu" hidden>
+      <li><button id="first" class="menu-item" type="button">Open</button></li>
     </menu>
   `);
   const target = document.getElementById("target");
@@ -413,7 +413,7 @@ test("a flyout trigger opens the menu with its enclosing context", async () => {
   click(trigger);
 
   expect(menu.hidden).toBe(false);
-  expect(trigger.getAttribute("aria-controls")).toBe("menu");
+  expect(document.activeElement).toBe(menu);
   expect(detail.context).toBe(target);
   expect(detail.origin).toBe(trigger);
   expect(detail.trigger).toBe("button");
