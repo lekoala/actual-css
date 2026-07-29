@@ -52,6 +52,8 @@
 }
 
 .menu-separator {
+  margin: 0;
+  border: 0;
   border-block-start: var(--border-width) solid var(--border);
 }
 

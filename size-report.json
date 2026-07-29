@@ -1,12 +1,12 @@
 {
-  "timestamp": "2026-07-29T08:00:01.051Z",
-  "totalRaw": 174538,
-  "totalMinified": 87698,
-  "totalBrotli": 12746,
+  "timestamp": "2026-07-29T09:05:51.081Z",
+  "totalRaw": 174564,
+  "totalMinified": 87720,
+  "totalBrotli": 12745,
   "themesMinified": 29151,
   "themesBrotli": 3414,
-  "shippedMinified": 87698,
-  "shippedBrotli": 12746,
+  "shippedMinified": 87720,
+  "shippedBrotli": 12745,
   "maxShippedBrotli": 13312,
   "fileCount": 74,
   "files": [
@@ -219,12 +219,12 @@
       "raw": 1379
     },
     {
-      "file": "components/surface.css",
-      "raw": 1350
+      "file": "components/menu.css",
+      "raw": 1373
     },
     {
-      "file": "components/menu.css",
-      "raw": 1347
+      "file": "components/surface.css",
+      "raw": 1350
     },
     {
       "file": "components/table.css",
