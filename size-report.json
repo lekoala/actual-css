@@ -1,15 +1,23 @@
 {
-  "timestamp": "2026-07-29T11:15:30.853Z",
-  "totalRaw": 171215,
-  "totalMinified": 84998,
-  "totalBrotli": 12506,
+  "timestamp": "2026-07-29T13:37:50.086Z",
+  "totalRaw": 180319,
+  "totalMinified": 84935,
+  "totalBrotli": 12479,
   "themesMinified": 29125,
   "themesBrotli": 3399,
-  "shippedMinified": 84998,
-  "shippedBrotli": 12506,
+  "shippedMinified": 84935,
+  "shippedBrotli": 12479,
   "maxShippedBrotli": 13312,
   "fileCount": 74,
   "files": [
+    {
+      "file": "tokens.css",
+      "raw": 8438
+    },
+    {
+      "file": "forms/validation.css",
+      "raw": 7507
+    },
     {
       "file": "components/button.css",
       "raw": 6994
@@ -21,10 +29,6 @@
     {
       "file": "components/alert.css",
       "raw": 5563
-    },
-    {
-      "file": "tokens.css",
-      "raw": 5021
     },
     {
       "file": "forms/choice.css",
@@ -144,7 +148,7 @@
     },
     {
       "file": "dialog-fallback.css",
-      "raw": 2302
+      "raw": 2295
     },
     {
       "file": "themes/cyberpunk.css",
@@ -177,10 +181,6 @@
     {
       "file": "components/accordion.css",
       "raw": 1989
-    },
-    {
-      "file": "forms/validation.css",
-      "raw": 1813
     },
     {
       "file": "layout.css",

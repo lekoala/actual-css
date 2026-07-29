@@ -166,3 +166,22 @@ test("alert-title margins are reset inside alert-body", () => {
   expect(css).toContain(".alert-body > :first-child");
   expect(css).toContain(".alert-body > :last-child");
 });
+
+test("controls inside a disabled fieldset match :disabled by inheritance", () => {
+  const choiceCss = readCss("src/css/forms/choice.css");
+  const switchCss = readCss("src/css/forms/switch.css");
+  const choiceCardCss = readCss("src/css/forms/choice-card.css");
+  const controlCss = readCss("src/css/forms/control.css");
+
+  expect(choiceCss).toContain(".check:disabled");
+  expect(choiceCss).toContain(".radio:disabled");
+  expect(choiceCss).toContain(".choice:has(:disabled)");
+
+  expect(switchCss).toContain(".switch:disabled");
+
+  expect(choiceCardCss).toContain(".choice-card:has(:disabled)");
+
+  expect(controlCss).toContain(".input:disabled");
+  expect(controlCss).toContain(".textarea:disabled");
+  expect(controlCss).toContain(".select:disabled");
+});

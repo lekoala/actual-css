@@ -60,8 +60,7 @@ select {
  * (browsers without native <dialog>: Safari <= 15.3, Firefox <= 97).
  *
  * Isolated in its own file so a custom bundle can opt out by dropping this
- * import; the JS side is disabled with data-dialog-fallback="false" on the
- * root element or on a dialog. Must load before component styles so ties
+ * import. Must load before component styles so ties
  * such as dialog.modal's padding resolve in the component's favor.
  *
  * The whole file is inert on modern browsers: rules key on the
@@ -86,9 +85,10 @@ select {
   }
 
   /* Open modally: fixed near the top (no fit-content in the block axis on
-     these browsers, so no vertical centering) and above menus, below
-     tooltips. Legacy-only layer, hence no z-index token. The spread shadow is
-     the visible backdrop: the dialog is its own stacking context, where a
+     these browsers, so no vertical centering) and above menus (--z-menu: 20),
+     below tooltips (--z-tooltip: 50). Legacy-only layer — no token exported
+     because the file is dead code on every modern browser. The spread shadow
+     is the visible backdrop: the dialog is its own stacking context, where a
      negative z-index child paints above the element's background, so the
      dimming cannot live on the ::before. */
   dialog[open].is-fallback-modal {
@@ -113,6 +113,36 @@ select {
 }
 
 :root {
+  /*
+   * Variable classification — not enforced at the parser level, but every
+   * token in this file falls into one of three categories:
+   *
+   * Public global
+   *   Set once (in a theme or user root) and consumed across the framework.
+   *   Stable API. Examples:
+   *     --primary, --radius, --space-4, --control-size, --duration
+   *
+   * Public component hook
+   *   Declared on a component class, tunable per instance or globally.
+   *   Stable API. Examples:
+   *     --accordion-marker-color, --modal-size, --btn-bg, --card-pad
+   *
+   * Internal state relay
+   *   Declared on a component class and flipped by state selectors
+   *   (:hover, :checked, :disabled, :invalid, etc.). These are NOT an
+   *   API — overriding them globally breaks the state machine.
+   *   Examples:
+   *     --control-border, --control-bg, --choice-bg, --switch-knob
+   *
+   * Internal-only tokens are named the same way as public hooks because
+   * they share the component prefix (--control-*, --choice-*, --switch-*,
+   * --btn-*). The distinction is documented here, not enforced by a name
+   * prefix (e.g. --_), to keep custom properties short and grep-friendly.
+   *
+   * When introducing a new variable, ask: "is this a customisation point
+   * or just a convenience to avoid repeating a value internally?"
+   */
+
   /* Typography */
   --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
@@ -200,8 +230,17 @@ select {
   --soft-border-mix: 65%;
   --soft-hover-alpha: 12%;
 
-  /* Shared icons */
-  /* The embedded stroke is the fallback color when used as a background-image
+  /* Shared icons — two data URIs used as background-image (native select)
+     and mask-image (accordion marker, choice-card badge, base-select
+     checkmark). For environments with a strict Content-Security-Policy that
+     blocks `data:`, redefine these tokens with local URLs:
+       --icon-chevron: url("/assets/chevron-down.svg");
+       --icon-check: url("/assets/check.svg");
+     The required CSP directive is `img-src data:` (for background-image) or
+     `mask-src data:` (for mask backgrounds). In practice `default-src data:`
+     or `img-src data:` is sufficient because mask-image inherits from
+     default-src when mask-src is absent.
+     The embedded stroke is the fallback color when used as a background-image
      (native select). Components using it as a mask provide their own color. */
   --icon-chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%238a8594' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
   --icon-check: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E");
@@ -213,11 +252,38 @@ select {
   --viewport-block: 100vh;
   --viewport-inline: 100vw;
 
-  /* Layering */
-  --z-sticky: 10;
-  --z-menu: 20;
-  --z-tooltip: 50;
-  --z-status: 60;
+  /*
+   * Layering — the stacking model.
+   *
+   * Native <dialog> elements (modal, drawer) render on the platform top-layer.
+   * The top-layer has no numeric z-index and always paints above the page.
+   * This means dialogs never compete with the z-index scale below.
+   *
+   * The 4-token z-index scale is used ONLY by non-dialog overlays:
+   *
+   *   --z-sticky:  10  form-actions.sticky, topbar
+   *   --z-menu:    20  flyout, menus, surface-backdrop (at z-menu - 1)
+   *   --z-tooltip: 50  tooltips
+   *   --z-status:  60  status-bar, toasts
+   *
+   * No token is provided for dialog (browser top-layer) or dialog-fallback
+   * (dead-code z-index: 40, between menu and tooltip — see dialog-fallback.css).
+   *
+   * Stacking-context traps:
+   *   A flyout or tooltip that is a DOM descendant of a dialog, a container
+   *   with `transform`, `filter`, `contain`, `isolation`, or `will-change`
+   *   is confined to that ancestor's stacking context. Its z-index token only
+   *   orders it against siblings *within that context*. When a dialog's
+   *   top-layer clips a descendant flyout, move the flyout markup outside the
+   *   dialog or use a portal/popover to escape the stacking context.
+   *
+   * Scrollbar gutter:
+   *   Modal opening and closing can shift page layout when the classic
+   *   scrollbar disappears/reappears. When a measured scrollbar is present
+   *   (js writes html.had-scrollbar), modal.css applies
+   *   `scrollbar-gutter: stable` so the viewport reserves the gutter space
+   *   and the page doesn't jump.
+   */
 }
 
 @media (forced-colors: active) {
@@ -4556,6 +4622,81 @@ a.avatar[aria-disabled="true"] {
  *
  * Imported by default through forms/index.css. Custom builds may omit this
  * file when an app wants to own validation styling completely.
+ *
+ * ── State matrix ─────────────────────────────────────────────────────────
+ * Audit tool, not an implementation guide. States that apply to a component
+ * carry a ✓ when covered by CSS in this codebase; blank means the state is
+ * either irrelevant or a known gap.
+ *
+ *   ✓ default  —— every styled component
+ *   ✓ hover    —— :hover (touch devices inherit this safely in modern browsers)
+ *   ✓ active   —— :active on buttons, not used on text inputs
+ *   ✓ focus-visible —— :focus-visible ring on every interactive component
+ *   ✓ checked  —— :checked on .check, .radio, .switch, .choice-card
+ *   ✓ cur/pg   —— [aria-current] on breadcrumb, pagination, nav-link
+ *   ✓ open     —— [open] on dialog, details/summary (accordion)
+ *   ✓ disabled —— :disabled (handles direct, fieldset-inherited, and nested)
+ *   ✓ aria-disabled —— [aria-disabled="true"] on .btn, .menu-item, .tab
+ *   ✓ disabled-fieldset —— child :disabled covers this; no fieldset rule needed
+ *   ✓ invalid  —— .needs-validation.was-validated :invalid
+ *   ✓ user-invalid —— :user-invalid (progressive, @supports gated)
+ *   ✓ aria-invalid —— [aria-invalid="true"]
+ *   ✓ indeterminate —— :indeterminate on .check, .progress
+ *   ✓ readonly —— [readonly] on .input, .textarea
+ *   ✓ forced-colors —— @media (forced-colors: active) per component
+ *   ✓ reduced-motion —— @media (prefers-reduced-motion: reduce) in reset.css
+ *   ✓ RTL   —— [dir="rtl"] or :dir(rtl) on positional rules
+ *
+ *   Coverage per component (✓ = styled, · = irrelevant, ? = possible gap):
+ *
+ *   Component       hover  active  focus  checked  cur/pg  open  disabled
+ *   ─────────────   ─────  ──────  ─────  ───────  ──────  ────  ────────
+ *   .input           ✓       ·       ✓       ·        ·      ·      ✓
+ *   .textarea        ✓       ·       ✓       ·        ·      ·      ✓
+ *   .select          ✓       ·       ✓       ·        ·      ·      ✓
+ *   .check           ✓       ·       ✓       ✓        ·      ·      ✓
+ *   .radio           ✓       ·       ✓       ✓        ·      ·      ✓
+ *   .switch          ✓       ·       ✓       ✓        ·      ·      ✓
+ *   .range           ·       ·       ✓       ·        ·      ·      ✓
+ *   .file            ✓       ·       ✓       ·        ·      ·      ✓
+ *   .choice-card     ✓       ·       ✓       ✓        ·      ·      ✓
+ *   .btn             ✓       ✓       ✓       ·        ·      ·      ✓
+ *   .tab             ✓       ·       ✓       ·        ✓      ·      ✓
+ *   .menu-item       ✓       ·       ✓       ·        ✓      ·      ✓
+ *   .nav-link        ✓       ·       ✓       ·        ✓      ·      ·
+ *   .breadcrumb      ✓       ·       ✓       ·        ✓      ·      ·
+ *   .pagination      ✓       ·       ✓       ·        ✓      ·      ·
+ *   .accordion       ✓       ·       ✓       ·        ·      ✓      ·
+ *   .select(bs)      ✓       ·       ✓       ·        ·      ·      ✓
+ *
+ *   Component       a-disabled  invalid  user-inv  a-invalid  indet  ro
+ *   ─────────────   ──────────  ───────  ────────  ─────────  ─────  ──
+ *   .input              ·          ✓         ✓         ✓        ·     ✓
+ *   .textarea           ·          ✓         ✓         ✓        ·     ✓
+ *   .select             ·          ✓         ✓         ✓        ·     ·
+ *   .check              ·          ✓         ✓         ✓        ✓     ·
+ *   .radio              ·          ✓         ✓         ✓        ·     ·
+ *   .switch             ·          ✓         ✓         ✓        ·     ·
+ *   .range              ·          ·         ·         ·        ·     ·
+ *   .file               ·          ·         ·         ·        ·     ·
+ *   .choice-card        ·          ✓         ✓         ✓        ·     ·
+ *   .btn                ✓          ·         ·         ·        ·     ·
+ *   .tab                ✓          ·         ·         ·        ·     ·
+ *   .menu-item          ✓          ·         ·         ·        ·     ·
+ *   .nav-link           ·          ·         ·         ·        ·     ·
+ *   .breadcrumb         ·          ·         ·         ·        ·     ·
+ *   .pagination         ·          ·         ·         ·        ·     ·
+ *   .accordion          ·          ·         ·         ·        ·     ·
+ *   .select(bs)         ·          ·         ·         ·        ·     ·
+ *
+ *   Notes:
+ *   - select(bs) = appearance: base-select picker (custom-select.css)
+ *   - <fieldset disabled> needs NO explicit rule: child :disabled covers it
+ *   - a-disabled = [aria-disabled="true"] (non-native controls)
+ *   - forced-colors / reduced-motion / RTL are omitted from the matrix above
+ *     for brevity; every component that ships custom geometry or color also
+ *     supplies its own forced-colors block.
+ * ─────────────────────────────────────────────────────────────────────────
  */
 
 .field.danger {
