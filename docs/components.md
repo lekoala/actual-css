@@ -182,20 +182,26 @@ Use `.callout` for a neutral panel with a thick accent border on the leading edg
 
 ### Admonition
 
-An admonition is a structured box with a tinted title bar and body content, like the `!!! note` callouts in mkdocs. Use `.alert-title` for the header and `.alert-body` for the content. Intent classes tint the title bar background.
+An admonition is a structured box with a tinted title bar, an optional icon, and body content on the page surface — like the `!!! note` callouts in mkdocs. Use `.alert-title` for the header and `.alert-body` for the content. Intent classes tint the title bar background and the border.
 
 ```html{.stack}
 <div class="alert admonition">
-  <div class="alert-title">Note</div>
+  <div class="alert-title">
+    <i class="ti ti-info-circle" aria-hidden="true"></i>
+    Note
+  </div>
   <div class="alert-body">
-    <p>An admonition with a tinted title bar. Use <code>.alert-title</code> and <code>.alert-body</code> to structure the content.</p>
+    <p>An admonition with a tinted title bar. The body rests on the page background.</p>
   </div>
 </div>
 
 <div class="alert warning admonition">
-  <div class="alert-title">Warning</div>
+  <div class="alert-title">
+    <i class="ti ti-alert-triangle" aria-hidden="true"></i>
+    Warning
+  </div>
   <div class="alert-body">
-    <p>The intent class tints the title bar background automatically. The body stays neutral.</p>
+    <p>The intent tints the title bar, the border, and the body uses <code>var(--surface)</code>.</p>
   </div>
 </div>
 ```
