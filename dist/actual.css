@@ -1579,16 +1579,21 @@ a.badge[aria-disabled="true"] {
   border-inline-start: 4px solid var(--intent, var(--neutral));
 }
 
-/* Admonition — structured title/body anatomy with a tinted title band.
-   The root is layout-neutralized: no padding, no gap, no icon grid. */
+/* Admonition — structured title/body anatomy with a tinted title band
+   and a body that rests on the page surface. The border color follows
+   the intent. */
 .alert.admonition {
   padding: 0;
   gap: 0;
   display: block;
   overflow: clip;
+  border-color: var(--intent, var(--border));
 }
 
 .alert-title {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
   padding-block: var(--alert-pad-block);
   padding-inline: var(--alert-pad-inline);
 
@@ -1618,15 +1623,10 @@ a.badge[aria-disabled="true"] {
   display: none;
 }
 
-.alert-title[aria-hidden] {
-  display: inline-flex;
-  gap: var(--space-2);
-  align-items: center;
-}
-
 .alert-body {
   padding-block: var(--alert-pad-block);
   padding-inline: var(--alert-pad-inline);
+  background: var(--surface);
   color: var(--text);
 }
 
