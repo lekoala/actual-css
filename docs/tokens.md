@@ -229,13 +229,12 @@ Icons used by CSS-only controls are public tokens because users may need to repl
 
 ```css
 :root {
-  --icon-chevron-mask: url("data:image/svg+xml,...stroke='black'...");
+  --icon-chevron: url("data:image/svg+xml,...");
   --icon-check-mask: url("data:image/svg+xml,...stroke='black'...");
-  --icon-chevron-image: url("data:image/svg+xml,...");
 }
 ```
 
-Prefer `*-mask` tokens for CSS icons so components can color them with `background-color: currentColor` or a semantic token. Use image tokens only where the platform requires `background-image` (native select chevrons cannot use `currentColor`). Only add an icon token when CSS needs the icon. Markup icons should stay in markup.
+A single icon token can serve both `background-image` (native select) and `mask-image` (accordion, custom select) — the embedded stroke color is the fallback for image use; mask consumers provide their own color via `background-color`. Only add an icon token when CSS needs the icon. Markup icons should stay in markup.
 
 ### Composition tokens
 

@@ -11,7 +11,7 @@
 .select:is(:not([multiple], [size]), :not([multiple])[size="1"]) {
   appearance: none;
   padding-inline-end: calc(var(--space-3) + var(--space-6));
-  background-image: var(--icon-chevron-image);
+  background-image: var(--icon-chevron);
   background-position: center right var(--space-3);
   background-size: 1rem auto;
   background-repeat: no-repeat;

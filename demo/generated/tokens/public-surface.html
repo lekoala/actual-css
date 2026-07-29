@@ -261,15 +261,14 @@
       <div class="example-group">
         <div class="example-code">
           <pre><code class="language-css"><span class="token selector">:root</span> <span class="token punctuation">{</span>
-  <span class="token property">--icon-chevron-mask</span><span class="token punctuation">:</span> <span class="token url"><span class="token function">url</span><span class="token punctuation">(</span><span class="token string url">"data:image/svg+xml,...stroke='black'..."</span><span class="token punctuation">)</span></span><span class="token punctuation">;</span>
+  <span class="token property">--icon-chevron</span><span class="token punctuation">:</span> <span class="token url"><span class="token function">url</span><span class="token punctuation">(</span><span class="token string url">"data:image/svg+xml,..."</span><span class="token punctuation">)</span></span><span class="token punctuation">;</span>
   <span class="token property">--icon-check-mask</span><span class="token punctuation">:</span> <span class="token url"><span class="token function">url</span><span class="token punctuation">(</span><span class="token string url">"data:image/svg+xml,...stroke='black'..."</span><span class="token punctuation">)</span></span><span class="token punctuation">;</span>
-  <span class="token property">--icon-chevron-image</span><span class="token punctuation">:</span> <span class="token url"><span class="token function">url</span><span class="token punctuation">(</span><span class="token string url">"data:image/svg+xml,..."</span><span class="token punctuation">)</span></span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span></code></pre>
         </div>
       </div>
     </section>
     <div class="component-prose">
-      <p>Prefer <code>*-mask</code> tokens for CSS icons so components can color them with <code>background-color: currentColor</code> or a semantic token. Use image tokens only where the platform requires <code>background-image</code> (native select chevrons cannot use <code>currentColor</code>). Only add an icon token when CSS needs the icon. Markup icons should stay in markup.</p>
+      <p>A single icon token can serve both <code>background-image</code> (native select) and <code>mask-image</code> (accordion, custom select) — the embedded stroke color is the fallback for image use; mask consumers provide their own color via <code>background-color</code>. Only add an icon token when CSS needs the icon. Markup icons should stay in markup.</p>
 <h3>Composition tokens</h3>
 <p>A few cross-component helpers:</p>
 <ul>
