@@ -1,38 +1,42 @@
 {
-  "timestamp": "2026-07-28T16:26:51.400Z",
-  "totalRaw": 176056,
-  "totalMinified": 88319,
-  "totalBrotli": 12756,
+  "timestamp": "2026-07-29T06:09:12.665Z",
+  "totalRaw": 174384,
+  "totalMinified": 87604,
+  "totalBrotli": 12735,
   "themesMinified": 29151,
   "themesBrotli": 3414,
-  "shippedMinified": 88319,
-  "shippedBrotli": 12756,
+  "shippedMinified": 87604,
+  "shippedBrotli": 12735,
   "maxShippedBrotli": 13312,
-  "fileCount": 73,
+  "fileCount": 74,
   "files": [
     {
-      "file": "components/flyout.css",
-      "raw": 6767
-    },
-    {
       "file": "components/button.css",
-      "raw": 6309
+      "raw": 7102
     },
     {
       "file": "components/alert.css",
-      "raw": 6090
+      "raw": 6156
     },
     {
       "file": "theme.css",
       "raw": 6009
     },
     {
-      "file": "forms/choice.css",
-      "raw": 4930
+      "file": "tokens.css",
+      "raw": 5306
     },
     {
-      "file": "tokens.css",
-      "raw": 4817
+      "file": "components/badge.css",
+      "raw": 5166
+    },
+    {
+      "file": "forms/choice.css",
+      "raw": 4936
+    },
+    {
+      "file": "components/flyout.css",
+      "raw": 4770
     },
     {
       "file": "components/avatar.css",
@@ -43,16 +47,8 @@
       "raw": 4623
     },
     {
-      "file": "variants.css",
-      "raw": 4584
-    },
-    {
       "file": "forms/choice-card.css",
       "raw": 4525
-    },
-    {
-      "file": "components/badge.css",
-      "raw": 4331
     },
     {
       "file": "themes/gradient.css",
@@ -68,11 +64,7 @@
     },
     {
       "file": "forms/switch.css",
-      "raw": 3335
-    },
-    {
-      "file": "components/tab.css",
-      "raw": 3332
+      "raw": 3338
     },
     {
       "file": "utilities.css",
@@ -91,6 +83,10 @@
       "raw": 2962
     },
     {
+      "file": "components/tab.css",
+      "raw": 2905
+    },
+    {
       "file": "components/tooltip.css",
       "raw": 2855
     },
@@ -99,12 +95,16 @@
       "raw": 2776
     },
     {
+      "file": "variants.css",
+      "raw": 2687
+    },
+    {
       "file": "forms/custom-select.css",
       "raw": 2684
     },
     {
       "file": "forms/control.css",
-      "raw": 2674
+      "raw": 2677
     },
     {
       "file": "themes/spruce.css",
@@ -112,7 +112,7 @@
     },
     {
       "file": "forms/range.css",
-      "raw": 2586
+      "raw": 2606
     },
     {
       "file": "themes/petrol.css",
@@ -191,10 +191,6 @@
       "raw": 1789
     },
     {
-      "file": "focus.css",
-      "raw": 1735
-    },
-    {
       "file": "forms/form-actions.css",
       "raw": 1647
     },
@@ -223,6 +219,10 @@
       "raw": 1350
     },
     {
+      "file": "components/menu.css",
+      "raw": 1347
+    },
+    {
       "file": "components/table.css",
       "raw": 1337
     },
@@ -231,8 +231,8 @@
       "raw": 1269
     },
     {
-      "file": "components/breadcrumb.css",
-      "raw": 1236
+      "file": "components/pagination.css",
+      "raw": 1215
     },
     {
       "file": "forms/input-icon.css",
@@ -255,6 +255,10 @@
       "raw": 1099
     },
     {
+      "file": "components/breadcrumb.css",
+      "raw": 1038
+    },
+    {
       "file": "themes/dark.css",
       "raw": 1018
     },
@@ -267,16 +271,12 @@
       "raw": 883
     },
     {
-      "file": "components/pagination.css",
-      "raw": 785
-    },
-    {
       "file": "components/key.css",
       "raw": 735
     },
     {
       "file": "components/index.css",
-      "raw": 711
+      "raw": 731
     },
     {
       "file": "print.css",
@@ -285,6 +285,10 @@
     {
       "file": "forms/index.css",
       "raw": 581
+    },
+    {
+      "file": "focus.css",
+      "raw": 570
     },
     {
       "file": "actual.css",
