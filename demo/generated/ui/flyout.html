@@ -73,12 +73,14 @@
           type="button"
           aria-expanded="false"
           aria-controls="account-actions"
-          id="account-flyout-trigger" data-enhance="flyout">
+          id="account-flyout-trigger">
     Account
     <i class="ti ti-chevron-down" aria-hidden="true"></i>
   </button>
 
-  <menu class="flyout sm" id="account-actions"
+  <menu class="flyout sm"
+        data-enhance="flyout"
+        id="account-actions"
         aria-labelledby="account-flyout-trigger"
         hidden>
     <li><button type="button">Profile</button></li>
@@ -122,12 +124,13 @@
       <button class="btn ghost"
               type="button"
               aria-expanded="false"
-              aria-controls="products-panel" data-enhance="flyout">
+              aria-controls="products-panel">
         Products
         <i class="ti ti-chevron-down" aria-hidden="true"></i>
       </button>
 
-      <div class="flyout" id="products-panel"
+      <div class="flyout" data-enhance="flyout"
+           id="products-panel"
            aria-label="Products"
            data-flyout-mobile="auto"
            hidden>
@@ -217,12 +220,14 @@
       <button class="btn ghost"
               type="button"
               aria-expanded="false"
-              aria-controls="product-mega-menu" data-enhance="flyout">
+              aria-controls="product-mega-menu">
         Platform
         <i class="ti ti-chevron-down" aria-hidden="true"></i>
       </button>
 
-      <div class="flyout grid-3" id="product-mega-menu"
+      <div class="flyout grid-3"
+           data-enhance="flyout"
+           id="product-mega-menu"
            aria-label="Platform"
            data-flyout-mobile="auto"
            style="--flyout-inline-size: 42rem; --flyout-max-inline-size: 42rem"
@@ -339,7 +344,7 @@
             type="button"
             aria-expanded="false"
             aria-controls="file-actions"
-              id="file-actions-trigger" data-context-menu-trigger>
+            id="file-actions-trigger">
       More
     </button>
   </div>
@@ -350,7 +355,9 @@
   </div>
   <output id="context-result" class="text-sm text-muted" aria-live="polite">No context selected.</output>
 
-  <menu class="flyout" id="file-actions"
+  <menu class="flyout"
+        data-enhance="flyout"
+        id="file-actions"
         aria-labelledby="file-actions-trigger"
         hidden>
     <li><button type="button">Open</button></li>

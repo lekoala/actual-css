@@ -201,6 +201,7 @@ Variants
 <div class="flyout-trigger">
   <button type="button"
           class="avatar"
+          data-enhance="flyout"
           aria-haspopup="menu"
           aria-expanded="false"
           aria-controls="profile-menu"
@@ -208,7 +209,7 @@ Variants
           aria-label="Jane Doe, open profile menu">
     <img src="https://mockmind-api.uifaces.co/content/human/219.jpg" alt="" />
   </button>
-  <menu class="flyout" data-enhance="flyout" id="profile-menu" aria-labelledby="profile-trigger" hidden>
+  <menu class="flyout" id="profile-menu" aria-labelledby="profile-trigger" hidden>
     <li><a href="#profile">View profile</a></li>
     <li><button type="button">Sign out</button></li>
   </menu>

@@ -187,6 +187,13 @@ select {
   --control-font-size: var(--font-size-md);
   --disabled-opacity: 0.65;
 
+  /* State tokens — semantic colors for selected/pressed/current and disabled.
+     Components consume these instead of hard-wiring --primary/--text-subtle
+     so forced-colors can override them in one place. */
+  --state-selected: var(--primary);
+  --state-selected-fg: var(--primary-fg);
+  --state-disabled: var(--text-subtle);
+
   /* Variant tuning — themes may adjust generated soft surfaces without
      replacing the component rules. */
   --soft-bg-mix: 88%;
@@ -212,6 +219,14 @@ select {
   --z-menu: 20;
   --z-tooltip: 50;
   --z-status: 60;
+}
+
+@media (forced-colors: active) {
+  :root {
+    --state-selected: Highlight;
+    --state-selected-fg: HighlightText;
+    --state-disabled: GrayText;
+  }
 }
 
 @supports (block-size: 100dvh) {
@@ -711,9 +726,9 @@ small {
  *
  * Variant scope: .solid/.soft/.outline set --ui-* for components that opt into
  * shared variants. Component-specific defaults (.btn solid-by-default, .badge
- * solid-by-default, .alert soft-by-default) live with their components:
+ * soft-by-default, .alert soft-by-default) live with their components:
  *   components/button.css — .btn default solid + .btn.ghost + .btn.link
- *   components/badge.css   — .badge default solid
+ *   components/badge.css   — .badge default soft
  *   components/alert.css   — .alert default + .alert.solid/.alert.outline
  *
  * .sm/.lg set shared size tokens. Controls consume --control-*; non-control
@@ -782,48 +797,8 @@ small {
   }
 }
 
-/* Interactive hover recipe shared by .btn and .badge. Declared outside :hover
-   on purpose: --ui-hover-bg is only consumed inside their @media (hover: hover)
-   rules, so these values are inert until hovered. :is() carries real
-   specificity so the components' :where() intent boundaries
-   (--ui-hover-bg: initial) cannot override the recipe. The solid/soft overlay
-   darkening lives in the consuming components. */
-:is(.btn, a.badge, button.badge):is(.outline, .ghost) {
-  --ui-hover-bg: var(--surface-subtle);
-}
-
-@supports (color: color-mix(in oklch, red, white)) {
-  /* Solid has no literal class requirement: bare .btn/.badge default to solid,
-     so this must match anything that isn't one of the other variants rather
-     than an explicit .solid class. Stacks with the box-shadow overlay the
-     consuming components apply on top for extra depth. */
-  :is(.btn, a.badge, button.badge):not(:where(.soft, .outline, .ghost, .link)) {
-    --ui-hover-bg: color-mix(in oklch, var(--intent, var(--neutral)) 88%, black);
-  }
-
-  /* Same recipe as the resting .soft bg with the surface share reduced by
-     --soft-hover-alpha: stays opaque, so it reads on any backdrop instead of
-     letting the container show through on hover. */
-  :is(.btn, a.badge, button.badge):is(.soft) {
-    --ui-hover-bg: color-mix(
-      in oklch,
-      var(--surface) calc(var(--soft-bg-mix) - var(--soft-hover-alpha)),
-      var(--intent, var(--neutral))
-    );
-  }
-
-  /* Mixed against the opaque --surface-subtle rather than transparent: a
-     transparent-based tint reads clean on light surfaces but goes muddy and
-     low-contrast on dark ones, since the same low alpha lands very
-     differently over a light vs. a near-black backdrop. */
-  :is(.btn, a.badge, button.badge):is(.outline) {
-    --ui-hover-bg: color-mix(in oklch, var(--surface-subtle) 92%, var(--intent, var(--neutral)));
-  }
-
-  :is(.btn, a.badge, button.badge):is(.ghost) {
-    --ui-hover-bg: color-mix(in oklch, var(--intent, var(--text)) 8%, transparent);
-  }
-}
+/* Interactive hover recipes live in the components that consume them:
+     components/button.css and components/badge.css. */
 
 /*
  * Prose is the opt-in rich text scope for authored content.
@@ -1108,8 +1083,37 @@ small {
   --btn-hover-overlay: transparent;
 }
 
-/* The .soft/.outline/.ghost hover recipe (--ui-hover-bg) is shared with
-   .badge in variants.css; the overlay darkening for solid/soft is .btn-specific. */
+/* Shared hover recipe — sets --ui-hover-bg consumed by the hover rule below.
+   Declared outside :hover: the variables resolve only when the hover rule
+   reads them, so the values are inert until interaction. */
+.btn:is(.outline, .ghost) {
+  --ui-hover-bg: var(--surface-subtle);
+}
+
+@supports (color: color-mix(in oklch, red, white)) {
+  .btn:not(:where(.soft, .outline, .ghost, .link)) {
+    --ui-hover-bg: color-mix(in oklch, var(--intent, var(--neutral)) 88%, black);
+  }
+
+  .btn.soft {
+    --ui-hover-bg: color-mix(
+      in oklch,
+      var(--surface) calc(var(--soft-bg-mix) - var(--soft-hover-alpha)),
+      var(--intent, var(--neutral))
+    );
+  }
+
+  .btn.outline {
+    --ui-hover-bg: color-mix(in oklch, var(--surface-subtle) 92%, var(--intent, var(--neutral)));
+  }
+
+  .btn.ghost {
+    --ui-hover-bg: color-mix(in oklch, var(--intent, var(--text)) 8%, transparent);
+  }
+}
+
+/* The .soft/.outline/.ghost hover recipe (--ui-hover-bg) is set locally above;
+   the overlay darkening for solid/soft is .btn-specific. */
 @media (hover: hover) {
   .btn:not(:where(:disabled, [aria-disabled="true"])):hover {
     background: var(--btn-hover-bg);
@@ -1185,10 +1189,10 @@ a.btn[aria-disabled="true"] {
 /* Toggle */
 /* State must outrank the shared .outline/.ghost hover recipes: a pressed
    button keeps its intent background and foreground while hovered. */
-.btn:is([aria-pressed="true"], [aria-current]:not([aria-current="false"])):not(.link) {
-  --btn-bg: var(--intent, var(--primary));
-  --btn-fg: var(--intent-fg, var(--primary-fg));
-  --btn-border: var(--intent, var(--primary));
+.btn[aria-pressed="true"]:not(.link) {
+  --btn-bg: var(--intent, var(--state-selected));
+  --btn-fg: var(--intent-fg, var(--state-selected-fg));
+  --btn-border: var(--intent, var(--state-selected));
   --ui-hover-bg: var(--btn-bg);
 }
 
@@ -1206,7 +1210,7 @@ a.btn[aria-disabled="true"] {
     color: LinkText;
   }
 
-  .btn:is([aria-pressed="true"], [aria-current]:not([aria-current="false"])):not(.link) {
+  .btn[aria-pressed="true"]:not(.link) {
     border-color: Highlight;
     background: Highlight;
     color: HighlightText;
@@ -1337,8 +1341,35 @@ a.btn[aria-disabled="true"] {
   }
 }
 
-/* .solid/.soft/.outline are shared via variants.css, including the
-   .soft/.outline hover recipe (--ui-hover-bg). */
+/* Hover recipes — sets --ui-hover-bg consumed by the hover rule below.
+   Declared outside :hover like button.css for the same reason. */
+:is(a.badge, button.badge):is(.outline, .ghost) {
+  --ui-hover-bg: var(--surface-subtle);
+}
+
+@supports (color: color-mix(in oklch, red, white)) {
+  :is(a.badge, button.badge):is(.solid, :empty) {
+    --ui-hover-bg: color-mix(in oklch, var(--intent, var(--neutral)) 88%, black);
+  }
+
+  :is(a.badge, button.badge).soft {
+    --ui-hover-bg: color-mix(
+      in oklch,
+      var(--surface) calc(var(--soft-bg-mix) - var(--soft-hover-alpha)),
+      var(--intent, var(--neutral))
+    );
+  }
+
+  :is(a.badge, button.badge).outline {
+    --ui-hover-bg: color-mix(in oklch, var(--surface-subtle) 92%, var(--intent, var(--neutral)));
+  }
+
+  :is(a.badge, button.badge).ghost {
+    --ui-hover-bg: color-mix(in oklch, var(--intent, var(--text)) 8%, transparent);
+  }
+}
+
+/* .solid/.soft/.outline are shared via variants.css. */
 @media (hover: hover) {
   :where(a.badge, button.badge):not(:where(:disabled, [aria-disabled="true"])):hover {
     background: var(--ui-hover-bg, var(--badge-bg));
@@ -1482,8 +1513,8 @@ a.badge[aria-disabled="true"] {
   }
 }
 
-/* Decorative leading icon */
-.alert > :first-child[aria-hidden="true"] {
+/* Decorative leading icon — use .alert-icon on the icon element. */
+.alert > .alert-icon {
   display: inline-block;
   flex: none;
   inline-size: var(--alert-icon-size);
@@ -1493,15 +1524,20 @@ a.badge[aria-disabled="true"] {
   vertical-align: -0.125em;
 }
 
+/* Content wrapper — use .alert-content to wrap text content after the icon. */
+.alert > .alert-content {
+  min-inline-size: 0;
+}
+
 @supports selector(.alert:has(> *)) {
-  .alert:has(> :first-child[aria-hidden="true"]) {
+  .alert:has(> .alert-icon) {
     display: grid;
     grid-template-columns: auto minmax(0, 1fr);
     align-items: var(--items-align, start);
     column-gap: var(--space-3);
   }
 
-  .alert:has(> :first-child[aria-hidden="true"]) > :first-child {
+  .alert:has(> .alert-icon) > .alert-icon {
     grid-column: 1;
     grid-row: 1 / -1;
     display: inline-grid;
@@ -1513,12 +1549,12 @@ a.badge[aria-disabled="true"] {
     line-height: 1;
   }
 
-  .alert:has(> :first-child[aria-hidden="true"]) > :first-child:is(svg, i) {
+  .alert:has(> .alert-icon) > .alert-icon:is(svg, i) {
     inline-size: var(--alert-icon-size);
     block-size: var(--alert-icon-size);
   }
 
-  .alert:has(> :first-child[aria-hidden="true"]) > :not(:first-child) {
+  .alert:has(> .alert-icon) > :not(.alert-icon) {
     grid-column: 2;
   }
 }
@@ -2133,7 +2169,8 @@ dialog.drawer nav {
  * .is-sheet marks "auto" resolved to bottom-sheet presentation on coarse
  * pointers. Authors opt into mobile behavior with
  * [data-flyout-mobile="sheet|auto|none|anchored"].
- * --flyout-trigger-width is set by surface.js while an open flyout is positioned.
+ * --surface-anchor-width is set by surface.js while an open flyout is positioned.
+ * --flyout-trigger-width is an alias kept for backward compatibility.
  */
 
 .flyout-trigger {
@@ -2156,6 +2193,7 @@ dialog.drawer nav {
 }
 
 .flyout {
+  --menu-item-size: var(--control-size);
   z-index: var(--z-menu);
   /* No-JS fallback: below the trigger inside the relative .flyout-trigger.
      surface.js switches an open flyout to position: fixed with measured
@@ -2167,7 +2205,7 @@ dialog.drawer nav {
   gap: var(--space-1);
   inline-size: var(--flyout-inline-size, max-content);
   min-inline-size: min(
-    var(--flyout-trigger-width, 0px),
+    var(--flyout-trigger-width, var(--surface-anchor-width, 0px)),
     min(var(--flyout-max-inline-size, 20rem), calc(var(--viewport-inline) - var(--space-6)))
   );
   max-inline-size: min(
@@ -2205,6 +2243,7 @@ dialog.drawer nav {
 /* Bottom-sheet presentation. surface.js toggles .is-sheet when the flyout is
    opened on coarse pointer / narrow viewports. */
 .flyout.is-sheet {
+  --menu-item-size: var(--control-size-lg);
   position: fixed;
   inset-inline: 0;
   inset-block-start: auto;
@@ -2277,69 +2316,9 @@ dialog.drawer nav {
   margin: 0;
 }
 
-/* Item contract: a button, link, or menuitem placed directly in the flyout
-   or directly in any of its <li> (bare list, or grouped section > ul > li).
-   menu.js mirrors this contract in MENU_ITEM_SELECTOR — keep them in sync.
-   :where(li) keeps specificity at a single class (0,1,0) so consumer
-   overrides behave the same as a plain .flyout > rule. */
-:is(.flyout, .flyout :where(li)) > :where(button, a, [role="menuitem"]) {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  gap: var(--space-2);
-  inline-size: 100%;
-  min-block-size: var(--control-size);
-  padding-inline: var(--space-2);
-  border: 0;
-  border-radius: var(--radius-sm);
-  background: none;
-  color: var(--text);
-  font: inherit;
-  font-weight: var(--font-weight);
-  text-decoration: none;
-  text-align: start;
-  white-space: nowrap;
-  cursor: pointer;
-}
-
-:is(.flyout.is-sheet, .flyout.is-sheet :where(li)) > :where(button, a, [role="menuitem"]) {
-  min-block-size: var(--control-size-lg);
-}
-
-:is(.flyout, .flyout :where(li)) > :where(button, a, [role="menuitem"]):focus-visible {
-  background: var(--surface-subtle);
-  outline: var(--focus-outline);
-  outline-offset: var(--focus-outline-offset);
-}
-
-:is(.flyout, .flyout :where(li))
-  > :where(button, a, [role="menuitem"]):is(:disabled, [aria-disabled="true"]) {
-  cursor: not-allowed;
-  opacity: var(--disabled-opacity);
-}
-
-:is(.flyout, .flyout :where(li)) > :where(a, [role="menuitem"])[aria-disabled="true"] {
-  pointer-events: none;
-}
-
-@media (hover: hover) {
-  :is(.flyout, .flyout :where(li))
-    > :where(button, a, [role="menuitem"]):hover:not(
-      :where(:focus-visible, :disabled, [aria-disabled="true"])
-    ) {
-    background: var(--surface-subtle);
-    outline: none;
-  }
-}
-
-.flyout > hr,
-.flyout > li > hr {
-  inline-size: 100%;
-  margin: 0;
-  margin-block: var(--space-1);
-  border: 0;
-  border-block-start: var(--border-width) solid var(--border);
-}
+/* Vertical dividers — .menu-separator (menu.css) is the canonical way to
+   separate menu items. Flyout panels that are not menus use auto grid gap
+   declared on .flyout itself. */
 
 @media (forced-colors: active) {
   .flyout {
@@ -2348,20 +2327,71 @@ dialog.drawer nav {
     color: CanvasText;
     box-shadow: none;
   }
+}
 
-  :is(.flyout, .flyout :where(li)) > :where(button, a, [role="menuitem"]):focus-visible {
+/*
+ * Menu — action list primitive consumed by flyout and context-menu.
+ *
+ * Strict anatomy: .menu > li > .menu-item. Separators and section labels
+ * sit directly under .menu as siblings of <li>.
+ */
+
+.menu {
+  display: grid;
+  gap: var(--space-1);
+  margin: 0;
+  padding: var(--space-1);
+  list-style: none;
+}
+
+.menu > li {
+  margin: 0;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  inline-size: 100%;
+  min-block-size: var(--menu-item-size, var(--control-size));
+  padding-inline: var(--space-2);
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  text-align: start;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.menu-item:focus-visible {
+  background: var(--surface-subtle);
+}
+
+.menu-item:is(:disabled, [aria-disabled="true"]) {
+  cursor: not-allowed;
+  opacity: var(--disabled-opacity);
+}
+
+.menu-label {
+  padding: var(--space-2);
+  color: var(--text-muted);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-strong);
+}
+
+.menu-separator {
+  border-block-start: var(--border-width) solid var(--border);
+}
+
+@media (forced-colors: active) {
+  .menu-item:focus-visible {
+    outline: var(--border-width) solid ButtonText;
+    outline-offset: -1px;
     background: Canvas;
     color: CanvasText;
-  }
-
-  @media (hover: hover) {
-    :is(.flyout, .flyout :where(li))
-      > :where(button, a, [role="menuitem"]):hover:not(:where(:disabled, [aria-disabled="true"])) {
-      outline: var(--border-width) solid ButtonText;
-      outline-offset: -1px;
-      background: Canvas;
-      color: CanvasText;
-    }
   }
 }
 
@@ -3373,9 +3403,8 @@ a.avatar[aria-disabled="true"] {
 }
 
 @media (hover: hover) {
-  .breadcrumb
-    li:not(:where([aria-current]:not([aria-current="false"])))
-    > a:hover:not(:where([aria-current]:not([aria-current="false"]))) {
+  .breadcrumb a:not([aria-current]):hover,
+  .breadcrumb a[aria-current="false"]:hover {
     color: var(--text);
     text-decoration: underline;
   }
@@ -3385,12 +3414,7 @@ a.avatar[aria-disabled="true"] {
   border-radius: var(--radius-sm);
 }
 
-.breadcrumb a:where([aria-current]:not([aria-current="false"])) {
-  color: var(--text);
-  font-weight: var(--font-weight-medium);
-}
-
-.breadcrumb li:where([aria-current]:not([aria-current="false"])) > :where(a, span) {
+.breadcrumb :where(a, span):where([aria-current]:not([aria-current="false"])) {
   color: var(--text);
   font-weight: var(--font-weight-medium);
 }
@@ -3419,11 +3443,27 @@ a.avatar[aria-disabled="true"] {
   min-inline-size: var(--control-size);
 }
 
+.pagination .btn[aria-current="page"] {
+  --btn-bg: var(--intent, var(--state-selected));
+  --btn-fg: var(--intent-fg, var(--state-selected-fg));
+  --btn-border: var(--intent, var(--state-selected));
+  --ui-hover-bg: var(--btn-bg);
+}
+
 .pagination > li > [aria-hidden="true"] {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   min-inline-size: var(--control-size);
+}
+
+@media (forced-colors: active) {
+  .pagination .btn[aria-current="page"] {
+    border-color: Highlight;
+    background: Highlight;
+    color: HighlightText;
+    forced-color-adjust: none;
+  }
 }
 
 /*
@@ -3505,18 +3545,14 @@ a.avatar[aria-disabled="true"] {
   border-radius: var(--radius-sm) var(--radius-sm) 0 0;
 }
 
-.tab[aria-selected="true"],
-.tab[aria-current]:not([aria-current="false"]),
-.tab[aria-pressed="true"] {
-  border-block-end-color: var(--intent, var(--primary));
-  color: var(--intent, var(--primary));
+.tab[aria-selected="true"] {
+  border-block-end-color: var(--intent, var(--state-selected));
+  color: var(--intent, var(--state-selected));
 }
 
-.tabs[aria-orientation="vertical"] .tab[aria-selected="true"],
-.tabs[aria-orientation="vertical"] .tab[aria-current]:not([aria-current="false"]),
-.tabs[aria-orientation="vertical"] .tab[aria-pressed="true"] {
+.tabs[aria-orientation="vertical"] .tab[aria-selected="true"] {
   border-block-end-color: transparent;
-  border-inline-end-color: var(--intent, var(--primary));
+  border-inline-end-color: var(--intent, var(--state-selected));
 }
 
 @media (forced-colors: active) {
@@ -3541,16 +3577,12 @@ a.avatar[aria-disabled="true"] {
     }
   }
 
-  .tab[aria-selected="true"],
-  .tab[aria-current]:not([aria-current="false"]),
-  .tab[aria-pressed="true"] {
+  .tab[aria-selected="true"] {
     border-block-end-color: Highlight;
     color: Highlight;
   }
 
-  .tabs[aria-orientation="vertical"] .tab[aria-selected="true"],
-  .tabs[aria-orientation="vertical"] .tab[aria-current]:not([aria-current="false"]),
-  .tabs[aria-orientation="vertical"] .tab[aria-pressed="true"] {
+  .tabs[aria-orientation="vertical"] .tab[aria-selected="true"] {
     border-block-end-color: transparent;
     border-inline-end-color: Highlight;
   }
@@ -3882,7 +3914,7 @@ a.avatar[aria-disabled="true"] {
 .textarea:disabled,
 .select:disabled {
   --control-bg: var(--surface-subtle);
-  --control-fg: var(--text-subtle);
+  --control-fg: var(--state-disabled);
   --control-border: var(--border);
   --control-cursor: not-allowed;
   --control-opacity: 1;
@@ -3990,7 +4022,7 @@ a.avatar[aria-disabled="true"] {
 }
 
 .choice:has(:disabled) {
-  color: var(--text-subtle);
+  color: var(--state-disabled);
   cursor: not-allowed;
 }
 
@@ -4096,7 +4128,7 @@ a.avatar[aria-disabled="true"] {
 .radio:disabled {
   --choice-bg: var(--surface-subtle);
   --choice-border: var(--border);
-  --choice-mark: var(--text-subtle);
+  --choice-mark: var(--state-disabled);
   cursor: not-allowed;
   opacity: 1;
 }
@@ -4530,7 +4562,7 @@ a.avatar[aria-disabled="true"] {
 }
 
 .range:focus-visible {
-  outline: none;
+  outline: 2px solid transparent;
 }
 
 /*
@@ -4551,7 +4583,7 @@ a.avatar[aria-disabled="true"] {
 }
 
 .range:disabled {
-  --range-thumb-bg: var(--text-subtle);
+  --range-thumb-bg: var(--state-disabled);
   cursor: not-allowed;
   opacity: var(--disabled-opacity);
 }
@@ -4651,7 +4683,7 @@ a.avatar[aria-disabled="true"] {
 .switch:disabled {
   --switch-bg: var(--surface-subtle);
   --switch-border: var(--border);
-  --switch-knob: var(--text-subtle);
+  --switch-knob: var(--state-disabled);
   opacity: 1;
   cursor: not-allowed;
 }
@@ -5063,7 +5095,10 @@ a.avatar[aria-disabled="true"] {
 
 /* Focus baseline — loaded after components so its legacy fallback also covers
    controls that reset their native outline. Modern browsers hide it for focus
-   that is not keyboard-relevant; components layer local state on top. */
+   that is not keyboard-relevant; components layer local state on top.
+
+   In forced-colors mode the transparent outline renders in the system focus
+   color, providing an accessible focus ring without explicit HCM rules. */
 :focus {
   outline: var(--focus-outline);
   outline-offset: var(--focus-outline-offset);
@@ -5072,43 +5107,6 @@ a.avatar[aria-disabled="true"] {
 @supports selector(:focus-visible) {
   :focus:not(:focus-visible) {
     outline: none;
-  }
-}
-
-/*
- * Forced-colors focus — centralised so individual components do not need
- * their own fallback.  The double :focus keeps specificity high enough
- * (0,0,2,0) to beat a single :focus-visible; against a class selector like
- * .input:focus-visible it ties, but this file loads last so it wins on
- * source order.
- *
- * .choice-card and .join receive focus indirectly (:has on a wrapper that
- * never matches :focus), so they are listed explicitly.
- *
- * .range is excluded from the rectangular fallback: its focus is drawn on
- * the thumb pseudo-element, which is the manipulated surface.
- *
- * box-shadow: none is redundant when forced-color-adjust is auto, but safe
- * when a component uses forced-color-adjust: none (e.g. checked switches /
- * checkboxes).
- */
-@media (forced-colors: active) {
-  :focus:focus-visible:not(.range),
-  .choice-card:has(:focus-visible),
-  .join:has(> :is(.input, .textarea, .select):focus-visible) {
-    outline: var(--focus-outline);
-    outline-offset: var(--focus-outline-offset);
-    box-shadow: none;
-  }
-
-  .range:focus-visible::-webkit-slider-thumb {
-    outline: var(--focus-outline);
-    outline-offset: var(--focus-outline-offset);
-  }
-
-  .range:focus-visible::-moz-range-thumb {
-    outline: var(--focus-outline);
-    outline-offset: var(--focus-outline-offset);
   }
 }
 
