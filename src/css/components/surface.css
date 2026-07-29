@@ -40,9 +40,3 @@
       display var(--duration) allow-discrete;
   }
 }
-
-@media (forced-colors: active) {
-  .surface-backdrop {
-    background: Canvas;
-  }
-}

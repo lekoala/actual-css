@@ -61,7 +61,5 @@
   .menu-item:focus-visible {
     outline: var(--border-width) solid ButtonText;
     outline-offset: -1px;
-    background: Canvas;
-    color: CanvasText;
   }
 }

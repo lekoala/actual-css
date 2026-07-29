@@ -97,8 +97,6 @@
   .tooltip {
     --tooltip-bg: Canvas;
     --tooltip-fg: CanvasText;
-
-    border: var(--border-width) solid ButtonText;
   }
 
   .tooltip::before {

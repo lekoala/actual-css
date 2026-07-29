@@ -134,7 +134,6 @@
   }
 }
 
-/* .solid/.soft/.outline are shared via variants.css. */
 @media (hover: hover) {
   :where(a.badge, button.badge):not(:where(:disabled, [aria-disabled="true"])):hover {
     background: var(--ui-hover-bg, var(--badge-bg));
@@ -161,13 +160,6 @@ a.badge[aria-disabled="true"] {
 }
 
 @media (forced-colors: active) {
-  .badge {
-    border-color: ButtonText;
-    background: Canvas;
-    color: CanvasText;
-    box-shadow: none;
-  }
-
   .badge:empty {
     background: ButtonText;
   }
