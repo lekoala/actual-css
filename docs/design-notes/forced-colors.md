@@ -15,14 +15,18 @@ these properties in a forced-colors block.
 
 ## What the browser cannot understand
 
-The browser sees `background-color`, `box-shadow`, `border-color` — it remaps
-them all. It does **not** understand:
+The browser sees `background-color`, `box-shadow`, `border-color`, `text-shadow`,
+and non-URL `background-image` — it remaps or drops them all. It does **not**
+understand:
 
 - `mask-image` (SVG masks applied via `background-color`)
 - Pseudo-elements whose `background-color` is used as a mask fill
-- `box-shadow` used as a focus ring (the browser drops them)
+- `box-shadow` used as a focus ring or shape indicator (the browser drops them)
+- `background-image` carrying essential state or shape
 
-These are the **only** cases that need explicit forced-colors rules.
+These are the most common cases that need explicit forced-colors rules.
+Add local overrides only when testing shows that browser remapping removes
+an essential shape, state, or affordance.
 
 ## Pattern: custom property + single override
 

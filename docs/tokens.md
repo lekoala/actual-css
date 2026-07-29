@@ -411,10 +411,12 @@ Because the native select chevron is an SVG background image and cannot inherit
 shipping a recolored chevron per theme — one native fallback covers every
 theme without a high-contrast icon variant to maintain.
 
-In `forced-colors: active`, the default theme maps the public color tokens to
-system colors (`Canvas`, `CanvasText`, `ButtonText`, `Highlight`, and
-`HighlightText`) and removes decorative shadows. Components should inherit
-that token mode by default; keep local forced-color rules only for custom
+Under `forced-colors: active`, the browser automatically remaps `color`,
+`background`, and `border` properties to system colors. The default theme
+provides the few necessary system-color overrides for cases the browser
+cannot handle — `--focus-outline`, `--state-selected`/`--state-selected-fg`,
+`--state-disabled`, and decorative shadow removal. Components should inherit
+that baseline; keep local forced-color rules only for custom
 control geometry, native bar parts, disabled states, or selected states that
 would otherwise be communicated only by background color.
 
