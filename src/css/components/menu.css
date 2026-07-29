@@ -39,6 +39,12 @@
   background: var(--surface-subtle);
 }
 
+@media (hover: hover) {
+  .menu-item:hover:not(:where(:disabled, [aria-disabled="true"])) {
+    background: var(--surface-subtle);
+  }
+}
+
 .menu-item:is(:disabled, [aria-disabled="true"]) {
   cursor: not-allowed;
   opacity: var(--disabled-opacity);
