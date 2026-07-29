@@ -84,8 +84,8 @@
   }
 }
 
-/* Decorative leading icon */
-.alert > :first-child[aria-hidden="true"] {
+/* Decorative leading icon — use .alert-icon on the icon element. */
+.alert > .alert-icon {
   display: inline-block;
   flex: none;
   inline-size: var(--alert-icon-size);
@@ -95,15 +95,20 @@
   vertical-align: -0.125em;
 }
 
+/* Content wrapper — use .alert-content to wrap text content after the icon. */
+.alert > .alert-content {
+  min-inline-size: 0;
+}
+
 @supports selector(.alert:has(> *)) {
-  .alert:has(> :first-child[aria-hidden="true"]) {
+  .alert:has(> .alert-icon) {
     display: grid;
     grid-template-columns: auto minmax(0, 1fr);
     align-items: var(--items-align, start);
     column-gap: var(--space-3);
   }
 
-  .alert:has(> :first-child[aria-hidden="true"]) > :first-child {
+  .alert:has(> .alert-icon) > .alert-icon {
     grid-column: 1;
     grid-row: 1 / -1;
     display: inline-grid;
@@ -115,12 +120,12 @@
     line-height: 1;
   }
 
-  .alert:has(> :first-child[aria-hidden="true"]) > :first-child:is(svg, i) {
+  .alert:has(> .alert-icon) > .alert-icon:is(svg, i) {
     inline-size: var(--alert-icon-size);
     block-size: var(--alert-icon-size);
   }
 
-  .alert:has(> :first-child[aria-hidden="true"]) > :not(:first-child) {
+  .alert:has(> .alert-icon) > :not(.alert-icon) {
     grid-column: 2;
   }
 }

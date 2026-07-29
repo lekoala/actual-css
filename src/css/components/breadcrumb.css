@@ -33,9 +33,8 @@
 }
 
 @media (hover: hover) {
-  .breadcrumb
-    li:not(:where([aria-current]:not([aria-current="false"])))
-    > a:hover:not(:where([aria-current]:not([aria-current="false"]))) {
+  .breadcrumb a:not([aria-current]):hover,
+  .breadcrumb a[aria-current="false"]:hover {
     color: var(--text);
     text-decoration: underline;
   }
@@ -45,12 +44,7 @@
   border-radius: var(--radius-sm);
 }
 
-.breadcrumb a:where([aria-current]:not([aria-current="false"])) {
-  color: var(--text);
-  font-weight: var(--font-weight-medium);
-}
-
-.breadcrumb li:where([aria-current]:not([aria-current="false"])) > :where(a, span) {
+.breadcrumb :where(a, span):where([aria-current]:not([aria-current="false"])) {
   color: var(--text);
   font-weight: var(--font-weight-medium);
 }

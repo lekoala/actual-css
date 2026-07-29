@@ -73,6 +73,13 @@
   --control-font-size: var(--font-size-md);
   --disabled-opacity: 0.65;
 
+  /* State tokens — semantic colors for selected/pressed/current and disabled.
+     Components consume these instead of hard-wiring --primary/--text-subtle
+     so forced-colors can override them in one place. */
+  --state-selected: var(--primary);
+  --state-selected-fg: var(--primary-fg);
+  --state-disabled: var(--text-subtle);
+
   /* Variant tuning — themes may adjust generated soft surfaces without
      replacing the component rules. */
   --soft-bg-mix: 88%;
@@ -98,6 +105,14 @@
   --z-menu: 20;
   --z-tooltip: 50;
   --z-status: 60;
+}
+
+@media (forced-colors: active) {
+  :root {
+    --state-selected: Highlight;
+    --state-selected-fg: HighlightText;
+    --state-disabled: GrayText;
+  }
 }
 
 @supports (block-size: 100dvh) {

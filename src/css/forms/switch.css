@@ -93,7 +93,7 @@
 .switch:disabled {
   --switch-bg: var(--surface-subtle);
   --switch-border: var(--border);
-  --switch-knob: var(--text-subtle);
+  --switch-knob: var(--state-disabled);
   opacity: 1;
   cursor: not-allowed;
 }
