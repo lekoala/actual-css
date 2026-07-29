@@ -26,3 +26,29 @@ for (const [subpath, symbols] of Object.entries(PUBLIC_EXPORTS)) {
     });
   }
 }
+
+const REMAINING_MODULES = [
+  "command",
+  "context-menu",
+  "dialog",
+  "dialog-fallback",
+  "filter",
+  "flyout",
+  "input",
+  "mask",
+  "password",
+  "scrollspy",
+  "selectors",
+  "tab",
+  "tooltip",
+  "validation",
+  "status",
+];
+
+for (const subpath of REMAINING_MODULES) {
+  test(`actual-css/js/${subpath} resolves`, async () => {
+    const mod = await import(`actual-css/js/${subpath}`);
+    expect(mod).toBeDefined();
+    expect(typeof mod).toBe("object");
+  });
+}

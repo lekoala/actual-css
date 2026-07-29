@@ -1,4 +1,34 @@
 :root {
+  /*
+   * Variable classification — not enforced at the parser level, but every
+   * token in this file falls into one of three categories:
+   *
+   * Public global
+   *   Set once (in a theme or user root) and consumed across the framework.
+   *   Stable API. Examples:
+   *     --primary, --radius, --space-4, --control-size, --duration
+   *
+   * Public component hook
+   *   Declared on a component class, tunable per instance or globally.
+   *   Stable API. Examples:
+   *     --accordion-marker-color, --modal-size, --btn-bg, --card-pad
+   *
+   * Internal state relay
+   *   Declared on a component class and flipped by state selectors
+   *   (:hover, :checked, :disabled, :invalid, etc.). These are NOT an
+   *   API — overriding them globally breaks the state machine.
+   *   Examples:
+   *     --control-border, --control-bg, --choice-bg, --switch-knob
+   *
+   * Internal-only tokens are named the same way as public hooks because
+   * they share the component prefix (--control-*, --choice-*, --switch-*,
+   * --btn-*). The distinction is documented here, not enforced by a name
+   * prefix (e.g. --_), to keep custom properties short and grep-friendly.
+   *
+   * When introducing a new variable, ask: "is this a customisation point
+   * or just a convenience to avoid repeating a value internally?"
+   */
+
   /* Typography */
   --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
@@ -86,8 +116,17 @@
   --soft-border-mix: 65%;
   --soft-hover-alpha: 12%;
 
-  /* Shared icons */
-  /* The embedded stroke is the fallback color when used as a background-image
+  /* Shared icons — two data URIs used as background-image (native select)
+     and mask-image (accordion marker, choice-card badge, base-select
+     checkmark). For environments with a strict Content-Security-Policy that
+     blocks `data:`, redefine these tokens with local URLs:
+       --icon-chevron: url("/assets/chevron-down.svg");
+       --icon-check: url("/assets/check.svg");
+     The required CSP directive is `img-src data:` (for background-image) or
+     `mask-src data:` (for mask backgrounds). In practice `default-src data:`
+     or `img-src data:` is sufficient because mask-image inherits from
+     default-src when mask-src is absent.
+     The embedded stroke is the fallback color when used as a background-image
      (native select). Components using it as a mask provide their own color. */
   --icon-chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%238a8594' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
   --icon-check: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E");
@@ -99,11 +138,38 @@
   --viewport-block: 100vh;
   --viewport-inline: 100vw;
 
-  /* Layering */
-  --z-sticky: 10;
-  --z-menu: 20;
-  --z-tooltip: 50;
-  --z-status: 60;
+  /*
+   * Layering — the stacking model.
+   *
+   * Native <dialog> elements (modal, drawer) render on the platform top-layer.
+   * The top-layer has no numeric z-index and always paints above the page.
+   * This means dialogs never compete with the z-index scale below.
+   *
+   * The 4-token z-index scale is used ONLY by non-dialog overlays:
+   *
+   *   --z-sticky:  10  form-actions.sticky, topbar
+   *   --z-menu:    20  flyout, menus, surface-backdrop (at z-menu - 1)
+   *   --z-tooltip: 50  tooltips
+   *   --z-status:  60  status-bar, toasts
+   *
+   * No token is provided for dialog (browser top-layer) or dialog-fallback
+   * (dead-code z-index: 40, between menu and tooltip — see dialog-fallback.css).
+   *
+   * Stacking-context traps:
+   *   A flyout or tooltip that is a DOM descendant of a dialog, a container
+   *   with `transform`, `filter`, `contain`, `isolation`, or `will-change`
+   *   is confined to that ancestor's stacking context. Its z-index token only
+   *   orders it against siblings *within that context*. When a dialog's
+   *   top-layer clips a descendant flyout, move the flyout markup outside the
+   *   dialog or use a portal/popover to escape the stacking context.
+   *
+   * Scrollbar gutter:
+   *   Modal opening and closing can shift page layout when the classic
+   *   scrollbar disappears/reappears. When a measured scrollbar is present
+   *   (js writes html.had-scrollbar), modal.css applies
+   *   `scrollbar-gutter: stable` so the viewport reserves the gutter space
+   *   and the page doesn't jump.
+   */
 }
 
 @media (forced-colors: active) {
