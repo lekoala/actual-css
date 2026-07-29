@@ -105,17 +105,6 @@ dialog.drawer nav {
 }
 
 @media (forced-colors: active) {
-  dialog.drawer {
-    border-inline-end-color: ButtonText;
-    background: Canvas;
-    color: CanvasText;
-    box-shadow: none;
-  }
-
-  dialog.drawer[data-side="end"] {
-    border-inline-start-color: ButtonText;
-  }
-
   dialog.drawer::backdrop {
     background: Canvas;
   }

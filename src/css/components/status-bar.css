@@ -72,10 +72,3 @@
   translate: 0 var(--space-2);
   pointer-events: none;
 }
-
-@media (forced-colors: active) {
-  .status-bar {
-    border: var(--border-width) solid ButtonText;
-    box-shadow: none;
-  }
-}

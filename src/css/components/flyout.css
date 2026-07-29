@@ -158,12 +158,3 @@
 /* Vertical dividers — .menu-separator (menu.css) is the canonical way to
    separate menu items. Flyout panels that are not menus use auto grid gap
    declared on .flyout itself. */
-
-@media (forced-colors: active) {
-  .flyout {
-    border-color: ButtonText;
-    background: Canvas;
-    color: CanvasText;
-    box-shadow: none;
-  }
-}
