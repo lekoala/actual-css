@@ -95,22 +95,22 @@ Components are presented alphabetically.
 - Use `role="alert"` only when the alert is injected dynamically and should be announced.
 - Not a toast.
 - Could have simple or complex html content.
-- Alerts may include a decorative leading icon. Place an `aria-hidden="true"` element as the first direct child.
+- Alerts may include a decorative leading icon. Use `.alert-icon` on the icon element, and wrap the content in `.alert-content`.
 - Use `.sm` or `.lg` for density changes. The inline padding stays stable.
 
 ```html{.stack}
 <div class="alert success">
-  <i class="ti ti-circle-check" aria-hidden="true"></i>
+  <i class="ti ti-circle-check alert-icon" aria-hidden="true"></i>
   <div>Your changes have been saved. <a href="#">View activity</a>.</div>
 </div>
 
 <div class="alert warning" role="alert">
-  <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
+  <svg class="alert-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
   <div>Please review the <a href="#">failed checks</a> before continuing.</div>
 </div>
 
 <div class="alert">
-  <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286m1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94"/></svg>
+  <svg class="alert-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286m1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94"/></svg>
   <div>This is a default alert message.</div>
 </div>
 
@@ -130,7 +130,7 @@ Components are presented alphabetically.
 
 ```html
 <div class="alert danger" role="alert">
-  <i class="ti ti-alert-triangle" aria-hidden="true"></i>
+  <i class="ti ti-alert-triangle alert-icon" aria-hidden="true"></i>
 
   <div class="stack">
     <strong>Payment failed.</strong>
