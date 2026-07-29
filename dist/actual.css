@@ -3913,13 +3913,12 @@ a.avatar[aria-disabled="true"] {
 }
 
 /*
- * Input Icon — leading decorative icon inside a relative wrapper.
+ * Input Icon — decorative icon inside a relative wrapper, leading or trailing.
  *
- * Icon-library agnostic: selects the wrapper's first child rather than a
- * specific tag, so it works with an <i> webfont icon, an inline <svg>, or a
- * <span>. Sizes with --variant-icon-size (variants.css) so .sm/.lg pick up
- * the same icon scale used elsewhere (alert.css); the input's start padding
- * grows to match so text never runs under the icon.
+ * Icon-library agnostic: detects position by DOM order. First child that is
+ * not .input = leading icon; icon after .input = trailing. Sizes with
+ * --variant-icon-size (variants.css) so .sm/.lg pick up the same icon scale
+ * used elsewhere (alert.css).
  */
 .input-icon {
   --input-icon-size: var(--variant-icon-size, 1.25rem);
@@ -3928,25 +3927,41 @@ a.avatar[aria-disabled="true"] {
   position: relative;
 }
 
-.input-icon > :first-child {
+/* Icon — shared by leading and trailing */
+.input-icon > :where(:not(.input)) {
   position: absolute;
   inset-block-start: 50%;
-  inset-inline-start: var(--space-3);
   transform: translateY(-50%);
   font-size: var(--input-icon-size);
   color: var(--text-muted);
   pointer-events: none;
 }
 
+/* Leading: icon is the first child */
+.input-icon > :first-child:where(:not(.input)) {
+  inset-inline-start: var(--space-3);
+}
+
+/* Trailing: input is the first child, icon follows */
+.input-icon > .input:first-child ~ :where(:not(.input)) {
+  inset-inline-end: var(--space-3);
+}
+
 /* font-size only sizes text-metric icons (webfont <i>, <span>). An inline
    <svg> with just a viewBox ignores it, so give it explicit dimensions. */
-.input-icon > svg:first-child {
+.input-icon > svg:where(:not(.input)) {
   inline-size: var(--input-icon-size);
   block-size: var(--input-icon-size);
 }
 
-.input-icon > .input {
+/* Leading: input gets start padding to clear the icon */
+.input-icon > :first-child:where(:not(.input)) ~ .input {
   padding-inline-start: calc(var(--space-3) * 2 + var(--input-icon-size));
+}
+
+/* Trailing: input is first child and has a sibling → end padding */
+.input-icon > .input:first-child:where(:not(:last-child)) {
+  padding-inline-end: calc(var(--space-3) * 2 + var(--input-icon-size));
 }
 
 /*
