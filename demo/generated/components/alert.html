@@ -42,17 +42,17 @@
       <div class="example-group">
         <div class="example-render stack">
           <div class="alert success">
-  <i class="ti ti-circle-check" aria-hidden="true"></i>
+  <i class="ti ti-circle-check alert-icon" aria-hidden="true"></i>
   <div>Your changes have been saved. <a href="#">View activity</a>.</div>
 </div>
 
 <div class="alert warning" role="alert">
-  <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
+  <svg class="alert-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
   <div>Please review the <a href="#">failed checks</a> before continuing.</div>
 </div>
 
 <div class="alert">
-  <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286m1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94"/></svg>
+  <svg class="alert-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286m1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94"/></svg>
   <div>This is a default alert message.</div>
 </div>
 
@@ -104,7 +104,7 @@
       <div class="example-group">
         <div class="example-render">
           <div class="alert danger" role="alert">
-  <i class="ti ti-alert-triangle" aria-hidden="true"></i>
+  <i class="ti ti-alert-triangle alert-icon" aria-hidden="true"></i>
 
   <div class="stack">
     <strong>Payment failed.</strong>
@@ -172,6 +172,73 @@
 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>alert danger solid<span class="token punctuation">"</span></span> <span class="token attr-name">role</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>alert<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
   I'm a solid error <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>a</span> <span class="token attr-name">href</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>#<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>with a link<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>a</span><span class="token punctuation">></span></span>
 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span></code></pre>
+        </div>
+      </div>
+    </section>
+    <div class="component-prose">
+      <p>Callout</p>
+    </div>
+    <section class="component-section">
+      <div class="example-group">
+        <div class="example-render stack">
+          <div class="alert callout">
+  <strong>Note</strong>
+  <p>This is a callout — a neutral panel with an inset accent bar. The leading edge bar uses the intent color.</p>
+</div>
+
+<div class="alert warning callout" role="alert">
+  <strong>Heads up</strong>
+  <p>Callouts work with intents too. The accent bar inherits the intent color.</p>
+</div>
+        </div>
+        <div class="example-code">
+          <pre><code class="language-html">&lt;div class="alert callout"&gt;
+  &lt;strong&gt;Note&lt;/strong&gt;
+  &lt;p&gt;This is a callout — a neutral panel with an inset accent bar.&lt;/p&gt;
+&lt;/div&gt;
+
+&lt;div class="alert warning callout" role="alert"&gt;
+  &lt;strong&gt;Heads up&lt;/strong&gt;
+  &lt;p&gt;Callouts work with intents too.&lt;/p&gt;
+&lt;/div&gt;</code></pre>
+        </div>
+      </div>
+    </section>
+    <div class="component-prose">
+      <p>Admonition</p>
+    </div>
+    <section class="component-section">
+      <div class="example-group">
+        <div class="example-render stack">
+          <details class="alert admonition">
+  <summary class="alert-title">What is an admonition?</summary>
+  <div class="alert-body">
+    <p>An admonition is a collapsible alert with a tinted title bar. Use it for expandable notes, tips, or warnings.</p>
+    <p>The <code>.alert-title</code> and <code>.alert-body</code> sub-components define the structure.</p>
+  </div>
+</details>
+
+<details class="alert warning admonition" open>
+  <summary class="alert-title">Important notice</summary>
+  <div class="alert-body">
+    <p>This admonition starts open because of the <code>open</code> attribute. Intent classes tint the title bar background.</p>
+  </div>
+</details>
+        </div>
+        <div class="example-code">
+          <pre><code class="language-html">&lt;details class="alert admonition"&gt;
+  &lt;summary class="alert-title"&gt;What is an admonition?&lt;/summary&gt;
+  &lt;div class="alert-body"&gt;
+    &lt;p&gt;An admonition is a collapsible alert...&lt;/p&gt;
+  &lt;/div&gt;
+&lt;/details&gt;
+
+&lt;details class="alert warning admonition" open&gt;
+  &lt;summary class="alert-title"&gt;Important notice&lt;/summary&gt;
+  &lt;div class="alert-body"&gt;
+    &lt;p&gt;This admonition starts open...&lt;/p&gt;
+  &lt;/div&gt;
+&lt;/details&gt;</code></pre>
         </div>
       </div>
     </section>
