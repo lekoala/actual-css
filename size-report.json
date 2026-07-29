@@ -1,12 +1,12 @@
 {
-  "timestamp": "2026-07-29T11:13:38.130Z",
-  "totalRaw": 171240,
-  "totalMinified": 85023,
-  "totalBrotli": 12520,
+  "timestamp": "2026-07-29T11:15:30.853Z",
+  "totalRaw": 171215,
+  "totalMinified": 84998,
+  "totalBrotli": 12506,
   "themesMinified": 29125,
   "themesBrotli": 3399,
-  "shippedMinified": 85023,
-  "shippedBrotli": 12520,
+  "shippedMinified": 84998,
+  "shippedBrotli": 12506,
   "maxShippedBrotli": 13312,
   "fileCount": 74,
   "files": [
@@ -24,7 +24,7 @@
     },
     {
       "file": "tokens.css",
-      "raw": 5026
+      "raw": 5021
     },
     {
       "file": "forms/choice.css",
@@ -48,7 +48,7 @@
     },
     {
       "file": "forms/choice-card.css",
-      "raw": 4493
+      "raw": 4483
     },
     {
       "file": "themes/gradient.css",
@@ -88,7 +88,7 @@
     },
     {
       "file": "forms/custom-select.css",
-      "raw": 2684
+      "raw": 2674
     },
     {
       "file": "components/card.css",

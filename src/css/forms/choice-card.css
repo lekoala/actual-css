@@ -120,8 +120,8 @@
 /* Check mark */
 .choice-card::after {
   background: var(--intent-fg, var(--primary-fg));
-  -webkit-mask: var(--icon-check-mask) center / 60% no-repeat;
-  mask: var(--icon-check-mask) center / 60% no-repeat;
+  -webkit-mask: var(--icon-check) center / 60% no-repeat;
+  mask: var(--icon-check) center / 60% no-repeat;
   z-index: 2;
 }
 
