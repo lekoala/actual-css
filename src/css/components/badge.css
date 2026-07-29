@@ -100,10 +100,8 @@
   cursor: pointer;
 }
 
-@media (hover: hover) {
-  .badge > button:not(:disabled):hover {
-    background: var(--hover-overlay);
-  }
+.badge > button:not(:disabled):hover {
+  background: var(--hover-overlay);
 }
 
 /* Hover recipes — sets --ui-hover-bg consumed by the hover rule below.
@@ -134,14 +132,12 @@
   }
 }
 
-@media (hover: hover) {
-  :where(a.badge, button.badge):not(:where(:disabled, [aria-disabled="true"])):hover {
-    background: var(--ui-hover-bg, var(--badge-bg));
-  }
+:where(a.badge, button.badge):not(:where(:disabled, [aria-disabled="true"])):hover {
+  background: var(--ui-hover-bg, var(--badge-bg));
+}
 
-  :where(a.badge, button.badge):not(:where(:disabled, [aria-disabled="true"], .outline)):hover {
-    box-shadow: inset 0 0 0 999px var(--hover-overlay);
-  }
+:where(a.badge, button.badge):not(:where(:disabled, [aria-disabled="true"], .outline)):hover {
+  box-shadow: inset 0 0 0 999px var(--hover-overlay);
 }
 
 button.badge {
@@ -164,16 +160,14 @@ a.badge[aria-disabled="true"] {
     background: ButtonText;
   }
 
-  @media (hover: hover) {
-    :where(a.badge, button.badge):hover:not(:where(:disabled, [aria-disabled="true"])) {
-      outline: var(--border-width) solid ButtonText;
-      outline-offset: 2px;
-    }
+  :where(a.badge, button.badge):hover:not(:where(:disabled, [aria-disabled="true"])) {
+    outline: var(--border-width) solid ButtonText;
+    outline-offset: 2px;
+  }
 
-    .badge > button:not(:disabled):hover {
-      outline: var(--border-width) solid currentColor;
-      outline-offset: 1px;
-    }
+  .badge > button:not(:disabled):hover {
+    outline: var(--border-width) solid currentColor;
+    outline-offset: 1px;
   }
 
   button.badge:disabled,

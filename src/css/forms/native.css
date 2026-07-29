@@ -32,10 +32,8 @@
   cursor: not-allowed;
 }
 
-@media (hover: hover) {
-  .file:not(:disabled)::file-selector-button:hover {
-    background: var(--border);
-  }
+.file:not(:disabled)::file-selector-button:hover {
+  background: var(--border);
 }
 
 .file:focus-visible {

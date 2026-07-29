@@ -66,15 +66,13 @@
   text-underline-offset: 0.18em;
 }
 
-@media (hover: hover) {
-  .prose a:hover {
-    text-decoration-thickness: 0.12em;
-  }
+.prose a:hover {
+  text-decoration-thickness: 0.12em;
+}
 
-  @supports (color: color-mix(in oklch, red, white)) {
-    .prose a:hover {
-      color: color-mix(in oklch, var(--primary), var(--text) 15%);
-    }
+@supports (color: color-mix(in oklch, red, white)) {
+  .prose a:hover {
+    color: color-mix(in oklch, var(--primary), var(--text) 15%);
   }
 }
 

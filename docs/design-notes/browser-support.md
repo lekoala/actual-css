@@ -75,7 +75,19 @@ Every `color-mix()` declaration needs a flat fallback outside `@supports` (older
 
 ### Hover rules
 
-Hover rules that change surface colors go inside `@media (hover: hover)`. `:active` feedback stays unguarded.
+Use `:hover` directly for standard interactive feedback (links, buttons, table rows,
+form controls, menu items, tabs, badges). The browser already knows when `:hover` can
+apply; guarding it behind `@media (hover: hover)` needlessly suppresses hover on hybrid
+devices whose primary pointer is touch but that also have a mouse or trackpad.
+
+Reserve `@media (hover: hover)` only when hover:
+
+- reveals controls or content,
+- triggers heavy animation,
+- changes layout,
+- or is part of an interaction specifically designed for a mouse.
+
+`:active` feedback stays unguarded.
 
 ### forced-colors
 

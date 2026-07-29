@@ -72,10 +72,8 @@
   cursor: not-allowed;
 }
 
-@media (hover: hover) {
-  .choice-card:hover:not(:has(:disabled)) {
-    --choice-card-border: var(--text-subtle);
-  }
+.choice-card:hover:not(:has(:disabled)) {
+  --choice-card-border: var(--text-subtle);
 }
 
 /* Checked border — shared by radio and checkbox */

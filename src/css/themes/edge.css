@@ -61,13 +61,11 @@
   --ui-hover-bg: var(--surface-raised);
 }
 
-@media (hover: hover) {
-  [data-theme="edge"]
-    .btn:not(
-      :where(:disabled, [aria-disabled="true"], .solid, .soft, .outline, .ghost, .link)
-    ):hover {
-    box-shadow: none;
-  }
+[data-theme="edge"]
+  .btn:not(
+    :where(:disabled, [aria-disabled="true"], .solid, .soft, .outline, .ghost, .link)
+  ):hover {
+  box-shadow: none;
 }
 
 /* Intent-dependent alert token, same reasoning as the button rule above:
