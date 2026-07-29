@@ -242,6 +242,44 @@ function connectContextTarget(target) {
     { signal: controller.signal, capture: true },
   );
 
+  target.addEventListener(
+    "click",
+    (e) => {
+      const trigger = e.target.closest("[data-context-menu-trigger]");
+      if (
+        !trigger ||
+        trigger.getAttribute("aria-controls") !== target.getAttribute("data-context-menu")
+      )
+        return;
+
+      e.preventDefault();
+      e.stopPropagation();
+
+      if (isSurfaceOpen(menu)) {
+        closeSurface(menu);
+        return;
+      }
+
+      if (!requestContextMenu(target, menu, { origin: trigger, trigger: "button" })) return;
+
+      const rect = trigger.getBoundingClientRect();
+      if (
+        openSurface(menu, {
+          source: target,
+          x: rect.left,
+          y: rect.bottom,
+          placement: "bottom-start",
+          distance: 4,
+          restoreFocusTo: trigger,
+          ...readPanelOptions(menu),
+        })
+      ) {
+        focusMenuContainer(menu);
+      }
+    },
+    { signal: controller.signal },
+  );
+
   contextMap.set(target, state);
 }
 
@@ -258,26 +296,9 @@ function disconnectContextTarget(target) {
   contextMap.delete(target);
 }
 
-function onSurfaceOpen(event) {
-  const options = event.detail?.options;
-  const trigger = options?.trigger;
-  const context = trigger?.closest?.(CONTEXT_TARGET_SELECTOR);
-  if (!context || menuFor(context) !== event.detail?.surface) return;
-  if (!requestContextMenu(context, event.detail.surface, { origin: trigger, trigger: "button" })) {
-    event.preventDefault();
-    return;
-  }
-  options.source = context;
-  options.restoreFocusTo = trigger;
-}
-
 enhance({
   [CONTEXT_TARGET_SELECTOR]: (target) => {
     connectContextTarget(target);
     return () => disconnectContextTarget(target);
   },
 });
-
-if (typeof document !== "undefined") {
-  document.addEventListener(EVENTS.surfaceOpen, onSurfaceOpen);
-}
