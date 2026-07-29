@@ -204,13 +204,6 @@ An admonition is a structured box with a tinted title bar, an optional icon, and
     <p>The intent tints the title bar, the border, and the body uses <code>var(--surface)</code>.</p>
   </div>
 </div>
-
-<details class="alert admonition">
-  <summary class="alert-title">Expandable note</summary>
-  <div class="alert-body">
-    <p>Wrap the admonition in a <code>&lt;details&gt;</code> element and use <code>&lt;summary&gt;</code> as the title to make it collapsible. Add <code>open</code> to start expanded.</p>
-  </div>
-</details>
 ```
 
 ## Avatar
