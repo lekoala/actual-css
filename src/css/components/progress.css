@@ -103,11 +103,9 @@
 @media (forced-colors: active) {
   .progress::-webkit-progress-value {
     background: Highlight;
-    forced-color-adjust: none;
   }
 
   .progress::-moz-progress-bar {
     background: Highlight;
-    forced-color-adjust: none;
   }
 }
