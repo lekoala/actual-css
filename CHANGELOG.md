@@ -12,7 +12,7 @@ This project follows Keep a Changelog and uses semver, including during 0.x.
 - `enhancementSelector()`, `hasEnhancement()`, `registerEnhancement()` in
   `actual-css/js/enhance`.
 - Primitive subpath exports: `events`, `focus`, `keys`, `menu`, `surface`.
-- `.alert.callout` — neutral surface with inset intent accent band.
+- `.alert.callout` — neutral surface with 4px accent border on the leading edge.
 - `.alert.admonition` + `.alert-title` / `.alert-body` — structured anatomy.
 - `.scroller.stable-gutter` — opt-in `scrollbar-gutter: stable`.
 - `--shadow-xs` and two-layer `--shadow` token.

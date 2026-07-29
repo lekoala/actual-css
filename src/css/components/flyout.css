@@ -10,7 +10,6 @@
  * pointers. Authors opt into mobile behavior with
  * [data-flyout-mobile="sheet|auto|none|anchored"].
  * --surface-anchor-width is set by surface.js while an open flyout is positioned.
- * --flyout-trigger-width is an alias kept for backward compatibility.
  */
 
 .flyout-trigger {
@@ -45,7 +44,7 @@
   gap: var(--space-1);
   inline-size: var(--flyout-inline-size, max-content);
   min-inline-size: min(
-    var(--flyout-trigger-width, var(--surface-anchor-width, 0px)),
+    var(--surface-anchor-width, 0px),
     min(var(--flyout-max-inline-size, 20rem), calc(var(--viewport-inline) - var(--space-6)))
   );
   max-inline-size: min(
