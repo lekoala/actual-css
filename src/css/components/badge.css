@@ -106,8 +106,35 @@
   }
 }
 
-/* .solid/.soft/.outline are shared via variants.css, including the
-   .soft/.outline hover recipe (--ui-hover-bg). */
+/* Hover recipes — sets --ui-hover-bg consumed by the hover rule below.
+   Declared outside :hover like button.css for the same reason. */
+:is(a.badge, button.badge):is(.outline, .ghost) {
+  --ui-hover-bg: var(--surface-subtle);
+}
+
+@supports (color: color-mix(in oklch, red, white)) {
+  :is(a.badge, button.badge):is(.solid, :empty) {
+    --ui-hover-bg: color-mix(in oklch, var(--intent, var(--neutral)) 88%, black);
+  }
+
+  :is(a.badge, button.badge).soft {
+    --ui-hover-bg: color-mix(
+      in oklch,
+      var(--surface) calc(var(--soft-bg-mix) - var(--soft-hover-alpha)),
+      var(--intent, var(--neutral))
+    );
+  }
+
+  :is(a.badge, button.badge).outline {
+    --ui-hover-bg: color-mix(in oklch, var(--surface-subtle) 92%, var(--intent, var(--neutral)));
+  }
+
+  :is(a.badge, button.badge).ghost {
+    --ui-hover-bg: color-mix(in oklch, var(--intent, var(--text)) 8%, transparent);
+  }
+}
+
+/* .solid/.soft/.outline are shared via variants.css. */
 @media (hover: hover) {
   :where(a.badge, button.badge):not(:where(:disabled, [aria-disabled="true"])):hover {
     background: var(--ui-hover-bg, var(--badge-bg));

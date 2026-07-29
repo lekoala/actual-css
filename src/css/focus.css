@@ -1,6 +1,9 @@
 /* Focus baseline — loaded after components so its legacy fallback also covers
    controls that reset their native outline. Modern browsers hide it for focus
-   that is not keyboard-relevant; components layer local state on top. */
+   that is not keyboard-relevant; components layer local state on top.
+
+   In forced-colors mode the transparent outline renders in the system focus
+   color, providing an accessible focus ring without explicit HCM rules. */
 :focus {
   outline: var(--focus-outline);
   outline-offset: var(--focus-outline-offset);
@@ -9,42 +12,5 @@
 @supports selector(:focus-visible) {
   :focus:not(:focus-visible) {
     outline: none;
-  }
-}
-
-/*
- * Forced-colors focus — centralised so individual components do not need
- * their own fallback.  The double :focus keeps specificity high enough
- * (0,0,2,0) to beat a single :focus-visible; against a class selector like
- * .input:focus-visible it ties, but this file loads last so it wins on
- * source order.
- *
- * .choice-card and .join receive focus indirectly (:has on a wrapper that
- * never matches :focus), so they are listed explicitly.
- *
- * .range is excluded from the rectangular fallback: its focus is drawn on
- * the thumb pseudo-element, which is the manipulated surface.
- *
- * box-shadow: none is redundant when forced-color-adjust is auto, but safe
- * when a component uses forced-color-adjust: none (e.g. checked switches /
- * checkboxes).
- */
-@media (forced-colors: active) {
-  :focus:focus-visible:not(.range),
-  .choice-card:has(:focus-visible),
-  .join:has(> :is(.input, .textarea, .select):focus-visible) {
-    outline: var(--focus-outline);
-    outline-offset: var(--focus-outline-offset);
-    box-shadow: none;
-  }
-
-  .range:focus-visible::-webkit-slider-thumb {
-    outline: var(--focus-outline);
-    outline-offset: var(--focus-outline-offset);
-  }
-
-  .range:focus-visible::-moz-range-thumb {
-    outline: var(--focus-outline);
-    outline-offset: var(--focus-outline-offset);
   }
 }

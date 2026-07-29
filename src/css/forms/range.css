@@ -68,7 +68,7 @@
 }
 
 .range:focus-visible {
-  outline: none;
+  outline: 2px solid transparent;
 }
 
 /*
@@ -89,7 +89,7 @@
 }
 
 .range:disabled {
-  --range-thumb-bg: var(--text-subtle);
+  --range-thumb-bg: var(--state-disabled);
   cursor: not-allowed;
   opacity: var(--disabled-opacity);
 }

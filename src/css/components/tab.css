@@ -77,18 +77,14 @@
   border-radius: var(--radius-sm) var(--radius-sm) 0 0;
 }
 
-.tab[aria-selected="true"],
-.tab[aria-current]:not([aria-current="false"]),
-.tab[aria-pressed="true"] {
-  border-block-end-color: var(--intent, var(--primary));
-  color: var(--intent, var(--primary));
+.tab[aria-selected="true"] {
+  border-block-end-color: var(--intent, var(--state-selected));
+  color: var(--intent, var(--state-selected));
 }
 
-.tabs[aria-orientation="vertical"] .tab[aria-selected="true"],
-.tabs[aria-orientation="vertical"] .tab[aria-current]:not([aria-current="false"]),
-.tabs[aria-orientation="vertical"] .tab[aria-pressed="true"] {
+.tabs[aria-orientation="vertical"] .tab[aria-selected="true"] {
   border-block-end-color: transparent;
-  border-inline-end-color: var(--intent, var(--primary));
+  border-inline-end-color: var(--intent, var(--state-selected));
 }
 
 @media (forced-colors: active) {
@@ -113,16 +109,12 @@
     }
   }
 
-  .tab[aria-selected="true"],
-  .tab[aria-current]:not([aria-current="false"]),
-  .tab[aria-pressed="true"] {
+  .tab[aria-selected="true"] {
     border-block-end-color: Highlight;
     color: Highlight;
   }
 
-  .tabs[aria-orientation="vertical"] .tab[aria-selected="true"],
-  .tabs[aria-orientation="vertical"] .tab[aria-current]:not([aria-current="false"]),
-  .tabs[aria-orientation="vertical"] .tab[aria-pressed="true"] {
+  .tabs[aria-orientation="vertical"] .tab[aria-selected="true"] {
     border-block-end-color: transparent;
     border-inline-end-color: Highlight;
   }

@@ -85,10 +85,10 @@ test("tabs include vertical orientation styling", () => {
   expect(css).toContain("border-inline-end");
 });
 
-test("breadcrumb supports aria-current on list items", () => {
+test("breadcrumb supports aria-current on the link or span", () => {
   const css = readCss("src/css/components/breadcrumb.css");
 
-  expect(css).toContain('.breadcrumb li:where([aria-current]:not([aria-current="false"]))');
+  expect(css).toContain('.breadcrumb :where(a, span):where([aria-current]:not([aria-current="false"]))');
   expect(css.includes("pointer-events: none")).toBe(false);
 });
 

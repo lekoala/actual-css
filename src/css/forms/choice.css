@@ -58,7 +58,7 @@
 }
 
 .choice:has(:disabled) {
-  color: var(--text-subtle);
+  color: var(--state-disabled);
   cursor: not-allowed;
 }
 
@@ -164,7 +164,7 @@
 .radio:disabled {
   --choice-bg: var(--surface-subtle);
   --choice-border: var(--border);
-  --choice-mark: var(--text-subtle);
+  --choice-mark: var(--state-disabled);
   cursor: not-allowed;
   opacity: 1;
 }

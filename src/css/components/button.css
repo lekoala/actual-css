@@ -92,8 +92,37 @@
   --btn-hover-overlay: transparent;
 }
 
-/* The .soft/.outline/.ghost hover recipe (--ui-hover-bg) is shared with
-   .badge in variants.css; the overlay darkening for solid/soft is .btn-specific. */
+/* Shared hover recipe — sets --ui-hover-bg consumed by the hover rule below.
+   Declared outside :hover: the variables resolve only when the hover rule
+   reads them, so the values are inert until interaction. */
+.btn:is(.outline, .ghost) {
+  --ui-hover-bg: var(--surface-subtle);
+}
+
+@supports (color: color-mix(in oklch, red, white)) {
+  .btn:not(:where(.soft, .outline, .ghost, .link)) {
+    --ui-hover-bg: color-mix(in oklch, var(--intent, var(--neutral)) 88%, black);
+  }
+
+  .btn.soft {
+    --ui-hover-bg: color-mix(
+      in oklch,
+      var(--surface) calc(var(--soft-bg-mix) - var(--soft-hover-alpha)),
+      var(--intent, var(--neutral))
+    );
+  }
+
+  .btn.outline {
+    --ui-hover-bg: color-mix(in oklch, var(--surface-subtle) 92%, var(--intent, var(--neutral)));
+  }
+
+  .btn.ghost {
+    --ui-hover-bg: color-mix(in oklch, var(--intent, var(--text)) 8%, transparent);
+  }
+}
+
+/* The .soft/.outline/.ghost hover recipe (--ui-hover-bg) is set locally above;
+   the overlay darkening for solid/soft is .btn-specific. */
 @media (hover: hover) {
   .btn:not(:where(:disabled, [aria-disabled="true"])):hover {
     background: var(--btn-hover-bg);
@@ -169,10 +198,10 @@ a.btn[aria-disabled="true"] {
 /* Toggle */
 /* State must outrank the shared .outline/.ghost hover recipes: a pressed
    button keeps its intent background and foreground while hovered. */
-.btn:is([aria-pressed="true"], [aria-current]:not([aria-current="false"])):not(.link) {
-  --btn-bg: var(--intent, var(--primary));
-  --btn-fg: var(--intent-fg, var(--primary-fg));
-  --btn-border: var(--intent, var(--primary));
+.btn[aria-pressed="true"]:not(.link) {
+  --btn-bg: var(--intent, var(--state-selected));
+  --btn-fg: var(--intent-fg, var(--state-selected-fg));
+  --btn-border: var(--intent, var(--state-selected));
   --ui-hover-bg: var(--btn-bg);
 }
 
@@ -190,7 +219,7 @@ a.btn[aria-disabled="true"] {
     color: LinkText;
   }
 
-  .btn:is([aria-pressed="true"], [aria-current]:not([aria-current="false"])):not(.link) {
+  .btn[aria-pressed="true"]:not(.link) {
     border-color: Highlight;
     background: Highlight;
     color: HighlightText;
