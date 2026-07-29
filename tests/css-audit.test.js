@@ -14,12 +14,25 @@ test("avatar stack sizing uses stack tokens and RTL status-dot direction", () =>
   expect(css).toContain(".avatar:dir(rtl) > .badge:empty");
 });
 
-test("single selects include size=1 in native and custom select paths", () => {
+test("size=1 selects follow the single-select paths", () => {
   const selectCss = readCss("src/css/forms/select.css");
   const customSelectCss = readCss("src/css/forms/custom-select.css");
 
   expect(selectCss).toContain(':not([multiple])[size="1"]');
   expect(customSelectCss).toContain('[size]:not([size="1"])');
+});
+
+test("accordion and select share the chevron asset", () => {
+  const tokensCss = readCss("src/css/tokens.css");
+  const selectCss = readCss("src/css/forms/select.css");
+  const accordionCss = readCss("src/css/components/accordion.css");
+
+  expect(tokensCss).toContain("--icon-chevron:");
+  expect(tokensCss).not.toContain("--icon-chevron-mask:");
+  expect(tokensCss).not.toContain("--icon-chevron-image:");
+
+  expect(selectCss).toContain("background-image: var(--icon-chevron);");
+  expect(accordionCss).toContain("mask-image: var(--icon-chevron);");
 });
 
 test("nav-list is self-laid out with grid gap", () => {
