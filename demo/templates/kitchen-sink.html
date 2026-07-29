@@ -7,6 +7,7 @@
   <meta name="description" content="Every component rendered together in one page for visual regression and layout review.">
   <link rel="stylesheet" href="../../src/css/actual.css">
   <link rel="stylesheet" href="../../src/css/themes/index.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3/dist/tabler-icons.min.css">
   <style>
     body { padding: 2rem; }
     section { margin-block: 2rem; }
@@ -288,7 +289,7 @@
       </div>
       <div class="field">
         <label class="field-label">Choice cards</label>
-        <fieldset class="grid grid-3" role="radiogroup" aria-label="Plan">
+        <form class="grid grid-3">
           <label class="choice-card">
             <input class="radio" type="radio" name="plan" checked>
             <span class="choice-card-label">Starter</span>
@@ -313,7 +314,7 @@
               <span class="choice-card-text">SSO + dedicated support</span>
             </span>
           </label>
-        </fieldset>
+        </form>
       </div>
       <div class="field">
         <label class="field-label" for="vol">Range slider</label>
@@ -496,13 +497,13 @@
         <button class="tab" type="button" role="tab"
                 aria-selected="false" aria-controls="sink-panel-billing" id="sink-tab-billing" tabindex="-1">Billing</button>
       </div>
-      <section class="py" role="tabpanel" id="sink-panel-general" aria-labelledby="sink-tab-general" tabindex="-1">
+      <section role="tabpanel" id="sink-panel-general" aria-labelledby="sink-tab-general" tabindex="-1">
         <p>General settings panel. <a href="#">Edit profile</a>.</p>
       </section>
-      <section class="py" role="tabpanel" id="sink-panel-security" aria-labelledby="sink-tab-security" tabindex="-1" hidden>
+      <section role="tabpanel" id="sink-panel-security" aria-labelledby="sink-tab-security" tabindex="-1" hidden>
         <p>Security settings: 2FA, password, sessions.</p>
       </section>
-      <section class="py" role="tabpanel" id="sink-panel-billing" aria-labelledby="sink-tab-billing" tabindex="-1" hidden>
+      <section role="tabpanel" id="sink-panel-billing" aria-labelledby="sink-tab-billing" tabindex="-1" hidden>
         <p>Billing panel: plan, invoices, payment method.</p>
       </section>
     </div>
