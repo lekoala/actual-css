@@ -29,6 +29,10 @@
   font-weight: var(--font-weight-bold);
 }
 
+.accordion summary:hover {
+  color: var(--primary);
+}
+
 .accordion summary::-webkit-details-marker {
   display: none;
 }

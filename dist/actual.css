@@ -1369,7 +1369,6 @@ a.btn[aria-disabled="true"] {
   }
 }
 
-/* .solid/.soft/.outline are shared via variants.css. */
 @media (hover: hover) {
   :where(a.badge, button.badge):not(:where(:disabled, [aria-disabled="true"])):hover {
     background: var(--ui-hover-bg, var(--badge-bg));
@@ -1396,13 +1395,6 @@ a.badge[aria-disabled="true"] {
 }
 
 @media (forced-colors: active) {
-  .badge {
-    border-color: ButtonText;
-    background: Canvas;
-    color: CanvasText;
-    box-shadow: none;
-  }
-
   .badge:empty {
     background: ButtonText;
   }
@@ -1773,26 +1765,6 @@ a.badge[aria-disabled="true"] {
   padding: var(--card-pad);
 }
 
-@media (forced-colors: active) {
-  .card {
-    border-color: ButtonText;
-    background: Canvas;
-    color: CanvasText;
-  }
-
-  .card.raised {
-    box-shadow: none;
-  }
-
-  .card.inverted {
-    --heading: CanvasText;
-
-    border-color: ButtonText;
-    background: Canvas;
-    color: CanvasText;
-  }
-}
-
 /*
  * Surface — shared modal scrim and backdrop for flyout and drawer.
  *
@@ -1833,12 +1805,6 @@ a.badge[aria-disabled="true"] {
     transition:
       opacity var(--duration) var(--ease, ease),
       display var(--duration) allow-discrete;
-  }
-}
-
-@media (forced-colors: active) {
-  .surface-backdrop {
-    background: Canvas;
   }
 }
 
@@ -2112,17 +2078,6 @@ dialog.drawer nav {
 }
 
 @media (forced-colors: active) {
-  dialog.drawer {
-    border-inline-end-color: ButtonText;
-    background: Canvas;
-    color: CanvasText;
-    box-shadow: none;
-  }
-
-  dialog.drawer[data-side="end"] {
-    border-inline-start-color: ButtonText;
-  }
-
   dialog.drawer::backdrop {
     background: Canvas;
   }
@@ -2142,7 +2097,6 @@ dialog.drawer nav {
  * pointers. Authors opt into mobile behavior with
  * [data-flyout-mobile="sheet|auto|none|anchored"].
  * --surface-anchor-width is set by surface.js while an open flyout is positioned.
- * --flyout-trigger-width is an alias kept for backward compatibility.
  */
 
 .flyout-trigger {
@@ -2177,7 +2131,7 @@ dialog.drawer nav {
   gap: var(--space-1);
   inline-size: var(--flyout-inline-size, max-content);
   min-inline-size: min(
-    var(--flyout-trigger-width, var(--surface-anchor-width, 0px)),
+    var(--surface-anchor-width, 0px),
     min(var(--flyout-max-inline-size, 20rem), calc(var(--viewport-inline) - var(--space-6)))
   );
   max-inline-size: min(
@@ -2292,15 +2246,6 @@ dialog.drawer nav {
    separate menu items. Flyout panels that are not menus use auto grid gap
    declared on .flyout itself. */
 
-@media (forced-colors: active) {
-  .flyout {
-    border-color: ButtonText;
-    background: Canvas;
-    color: CanvasText;
-    box-shadow: none;
-  }
-}
-
 /*
  * Menu — action list primitive consumed by flyout and context-menu.
  *
@@ -2364,8 +2309,6 @@ dialog.drawer nav {
   .menu-item:focus-visible {
     outline: var(--border-width) solid ButtonText;
     outline-offset: -1px;
-    background: Canvas;
-    color: CanvasText;
   }
 }
 
@@ -2468,8 +2411,6 @@ dialog.drawer nav {
   .tooltip {
     --tooltip-bg: Canvas;
     --tooltip-fg: CanvasText;
-
-    border: var(--border-width) solid ButtonText;
   }
 
   .tooltip::before {
@@ -2488,6 +2429,7 @@ dialog.drawer nav {
  */
 .accordion {
   --accordion-radius: var(--radius);
+  --accordion-marker-color: var(--text-muted);
 
   border: var(--border-width) solid var(--border);
   border-radius: var(--accordion-radius);
@@ -2509,6 +2451,10 @@ dialog.drawer nav {
   font-weight: var(--font-weight-bold);
 }
 
+.accordion summary:hover {
+  color: var(--primary);
+}
+
 .accordion summary::-webkit-details-marker {
   display: none;
 }
@@ -2519,7 +2465,7 @@ dialog.drawer nav {
   margin-inline-start: auto;
   inline-size: 1rem;
   block-size: 1rem;
-  background-color: var(--text-muted);
+  background-color: var(--accordion-marker-color);
   -webkit-mask-image: var(--icon-chevron-mask);
   mask-image: var(--icon-chevron-mask);
   -webkit-mask-repeat: no-repeat;
@@ -2558,22 +2504,7 @@ dialog.drawer nav {
 
 @media (forced-colors: active) {
   .accordion {
-    border-color: ButtonText;
-    background: Canvas;
-    color: CanvasText;
-  }
-
-  .accordion > details + details {
-    border-block-start-color: ButtonText;
-  }
-
-  .accordion summary {
-    color: CanvasText;
-  }
-
-  .accordion summary::after {
-    background-color: ButtonText;
-    forced-color-adjust: none;
+    --accordion-marker-color: CanvasText;
   }
 }
 
@@ -2857,15 +2788,6 @@ dialog.drawer nav {
 }
 
 @media (forced-colors: active) {
-  .progress {
-    border: var(--border-width) solid ButtonText;
-    background: Canvas;
-  }
-
-  .progress::-webkit-progress-bar {
-    background: Canvas;
-  }
-
   .progress::-webkit-progress-value {
     background: Highlight;
     forced-color-adjust: none;
@@ -2874,10 +2796,6 @@ dialog.drawer nav {
   .progress::-moz-progress-bar {
     background: Highlight;
     forced-color-adjust: none;
-  }
-
-  .progress:indeterminate {
-    background: Canvas;
   }
 }
 
@@ -2954,13 +2872,6 @@ dialog.drawer nav {
   scale: 0.96;
   translate: 0 var(--space-2);
   pointer-events: none;
-}
-
-@media (forced-colors: active) {
-  .status-bar {
-    border: var(--border-width) solid ButtonText;
-    box-shadow: none;
-  }
 }
 
 
@@ -3530,22 +3441,8 @@ a.avatar[aria-disabled="true"] {
 }
 
 @media (forced-colors: active) {
-  .tabs {
-    border-block-end-color: ButtonText;
-  }
-
-  .tabs[aria-orientation="vertical"] {
-    border-block-end-color: transparent;
-    border-inline-end-color: ButtonText;
-  }
-
-  .tab {
-    color: ButtonText;
-  }
-
   @media (hover: hover) {
     .tab:hover:not(:where(:disabled, [aria-disabled="true"])) {
-      color: ButtonText;
       text-decoration: underline;
       text-underline-offset: 0.18em;
     }
@@ -3720,16 +3617,6 @@ a.avatar[aria-disabled="true"] {
 }
 
 @media (forced-colors: active) {
-  .meter {
-    border: var(--border-width) solid ButtonText;
-    background: Canvas;
-  }
-
-  .meter::-webkit-meter-bar {
-    border: 0;
-    background: Canvas;
-  }
-
   .meter::-webkit-meter-optimum-value,
   .meter::-webkit-meter-suboptimum-value,
   .meter::-webkit-meter-even-less-good-value,

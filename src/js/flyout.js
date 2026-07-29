@@ -1,4 +1,4 @@
-import enhance, { registerEnhancement } from "./enhance.js";
+import { registerEnhancement } from "./enhance.js";
 import { focusFirstDescendant } from "./focus.js";
 import { connectMenu, focusFirstMenuItem, focusLastMenuItem, getMenuItems } from "./menu.js";
 import { closeSurface, isSurfaceOpen, openSurface, retainSurface } from "./surface.js";

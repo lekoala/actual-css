@@ -28,7 +28,6 @@
  */
 
 import enhance from "./enhance.js";
-import { EVENTS } from "./events.js";
 import { autoUpdate, reposition } from "./floating.js";
 import { CLASSES } from "./selectors.js";
 
