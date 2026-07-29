@@ -3,8 +3,7 @@
  * (browsers without native <dialog>: Safari <= 15.3, Firefox <= 97).
  *
  * Isolated in its own file so a custom bundle can opt out by dropping this
- * import; the JS side is disabled with data-dialog-fallback="false" on the
- * root element or on a dialog. Must load before component styles so ties
+ * import. Must load before component styles so ties
  * such as dialog.modal's padding resolve in the component's favor.
  *
  * The whole file is inert on modern browsers: rules key on the
