@@ -230,7 +230,7 @@ Icons used by CSS-only controls are public tokens because users may need to repl
 ```css
 :root {
   --icon-chevron: url("data:image/svg+xml,...");
-  --icon-check-mask: url("data:image/svg+xml,...stroke='black'...");
+  --icon-check: url("data:image/svg+xml,...stroke='black'...");
 }
 ```
 
