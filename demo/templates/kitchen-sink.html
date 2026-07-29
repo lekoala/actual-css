@@ -144,6 +144,36 @@
       <div class="alert outline primary">Outline primary</div>
       <div class="alert sm primary">Small alert</div>
       <div class="alert lg primary">Large alert</div>
+      <div class="alert success">
+        <i class="ti ti-circle-check alert-icon" aria-hidden="true"></i>
+        <div>Alert with an icon using <code>.alert-icon</code>.</div>
+      </div>
+      <div class="alert warning callout" role="alert">
+        <strong>Callout</strong>
+        <p>Thick accent border on the leading edge. No other borders. Intent tints the bar.</p>
+      </div>
+      <div class="alert danger callout" role="alert">
+        <strong>Danger callout</strong>
+        <p>The border color follows the intent class.</p>
+      </div>
+      <div class="alert admonition">
+        <div class="alert-title">
+          <i class="ti ti-info-circle" aria-hidden="true"></i>
+          Note
+        </div>
+        <div class="alert-body">
+          <p>Admonition with a tinted title bar and body on the page surface. The border follows the intent.</p>
+        </div>
+      </div>
+      <div class="alert warning admonition">
+        <div class="alert-title">
+          <i class="ti ti-alert-triangle" aria-hidden="true"></i>
+          Warning
+        </div>
+        <div class="alert-body">
+          <p>Intent tints the title bar, border, and icon. The body uses <code>var(--surface)</code>.</p>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -256,6 +286,51 @@
         <input class="input" id="danger" type="text" value="Invalid value">
         <span class="field-error">This field has an error</span>
       </div>
+      <div class="field">
+        <label class="field-label">Choice cards</label>
+        <fieldset class="grid grid-3" role="radiogroup" aria-label="Plan">
+          <label class="choice-card">
+            <input class="radio" type="radio" name="plan" checked>
+            <span class="choice-card-label">Starter</span>
+            <span class="choice-card-body">
+              <span class="choice-card-value">$0</span>
+              <span class="choice-card-text">Up to 3 projects</span>
+            </span>
+          </label>
+          <label class="choice-card">
+            <input class="radio" type="radio" name="plan">
+            <span class="choice-card-label">Pro</span>
+            <span class="choice-card-body">
+              <span class="choice-card-value">$12</span>
+              <span class="choice-card-text">Unlimited projects</span>
+            </span>
+          </label>
+          <label class="choice-card">
+            <input class="radio" type="radio" name="plan">
+            <span class="choice-card-label">Enterprise</span>
+            <span class="choice-card-body">
+              <span class="choice-card-value">$49</span>
+              <span class="choice-card-text">SSO + dedicated support</span>
+            </span>
+          </label>
+        </fieldset>
+      </div>
+      <div class="field">
+        <label class="field-label" for="vol">Range slider</label>
+        <input class="range" id="vol" type="range" min="0" max="100" value="65">
+      </div>
+      <div class="field">
+        <label class="field-label" for="disabled-range">Range disabled</label>
+        <input class="range" id="disabled-range" type="range" min="0" max="100" value="30" disabled>
+      </div>
+      <div class="input-icon">
+        <i class="ti ti-search" aria-hidden="true"></i>
+        <input class="input" type="search" placeholder="Search with icon">
+      </div>
+      <div class="input-icon">
+        <input class="input" type="email" placeholder="Email with trailing icon">
+        <i class="ti ti-mail" aria-hidden="true"></i>
+      </div>
       <div class="form-actions">
         <button class="btn primary">Submit</button>
         <button class="btn">Cancel</button>
@@ -338,15 +413,15 @@
               id="demo-flyout-trigger" data-enhance="flyout">
         Toggle flyout
       </button>
-      <menu class="flyout"
+      <menu class="flyout menu"
             role="menu"
             id="demo-flyout"
             aria-labelledby="demo-flyout-trigger"
             hidden>
-        <li><button type="button" role="menuitem">First action</button></li>
-        <li><button type="button" role="menuitem">Second action</button></li>
+        <li><button class="menu-item" type="button" role="menuitem">First action</button></li>
+        <li><button class="menu-item" type="button" role="menuitem">Second action</button></li>
         <hr class="menu-separator" role="separator">
-        <li><button type="button" role="menuitem">Last action</button></li>
+        <li><button class="menu-item" type="button" role="menuitem">Last action</button></li>
       </menu>
     </div>
   </section>
@@ -377,13 +452,176 @@
       <menu class="flyout" id="demo-context-menu" aria-labelledby="demo-context-trigger" hidden>
         <li><button type="button">Open</button></li>
         <li><button type="button">Rename</button></li>
-        <li><hr></li>
+        <hr class="menu-separator" role="separator">
         <li><button class="danger" type="button">Delete</button></li>
       </menu>
     </div>
   </section>
 
-  <!-- 10. Dark mode -->
+  <!-- 11. Accordion -->
+  <section>
+    <h2>Accordion</h2>
+    <div style="max-inline-size:30rem">
+      <div class="accordion">
+        <details open>
+          <summary>Getting started</summary>
+          <p>Create a project and invite your team. The dashboard shows activity at a glance.</p>
+        </details>
+        <details>
+          <summary>Billing &amp; plans</summary>
+          <p>Manage your subscription, update payment methods, and view invoices.</p>
+        </details>
+        <details>
+          <summary>
+            <i class="ti ti-settings" aria-hidden="true"></i>
+            <span>Advanced settings</span>
+          </summary>
+          <div>
+            <p>Configure webhooks, API keys, and custom domains.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- 12. Tabs -->
+  <section>
+    <h2>Tabs</h2>
+    <div class="tabset" style="max-inline-size:36rem">
+      <div class="tabs" data-enhance="tabs" role="tablist" aria-label="Settings">
+        <button class="tab primary" type="button" role="tab"
+                aria-selected="true" aria-controls="sink-panel-general" id="sink-tab-general">General</button>
+        <button class="tab" type="button" role="tab"
+                aria-selected="false" aria-controls="sink-panel-security" id="sink-tab-security" tabindex="-1">Security</button>
+        <button class="tab" type="button" role="tab"
+                aria-selected="false" aria-controls="sink-panel-billing" id="sink-tab-billing" tabindex="-1">Billing</button>
+      </div>
+      <section class="py" role="tabpanel" id="sink-panel-general" aria-labelledby="sink-tab-general" tabindex="-1">
+        <p>General settings panel. <a href="#">Edit profile</a>.</p>
+      </section>
+      <section class="py" role="tabpanel" id="sink-panel-security" aria-labelledby="sink-tab-security" tabindex="-1" hidden>
+        <p>Security settings: 2FA, password, sessions.</p>
+      </section>
+      <section class="py" role="tabpanel" id="sink-panel-billing" aria-labelledby="sink-tab-billing" tabindex="-1" hidden>
+        <p>Billing panel: plan, invoices, payment method.</p>
+      </section>
+    </div>
+  </section>
+
+  <!-- 13. Spinner -->
+  <section>
+    <h2>Spinner</h2>
+    <div class="sink-grid">
+      <span class="spinner"></span>
+      <span class="spinner sm primary"></span>
+      <span class="spinner lg danger"></span>
+    </div>
+    <div class="sink-grid" style="margin-block-start:var(--space-2)">
+      <button class="btn primary" type="button" aria-busy="true" disabled>
+        <span class="spinner" aria-hidden="true"></span>
+        Saving…
+      </button>
+      <article class="card" style="max-inline-size:18rem" aria-busy="true" aria-label="Loading card">
+        <hgroup><h3>Card loading</h3><p class="muted">Please wait</p></hgroup>
+        <p>Content obscured while loading.</p>
+        <span class="spinner lg" aria-hidden="true"></span>
+      </article>
+    </div>
+  </section>
+
+  <!-- 14. Skeleton -->
+  <section>
+    <h2>Skeleton</h2>
+    <div class="sink-grid">
+      <article class="card" style="max-inline-size:18rem" role="status" aria-label="Loading profile">
+        <div class="cluster">
+          <div class="skeleton" data-shape="avatar" aria-hidden="true"></div>
+          <div class="stack grow">
+            <div class="skeleton" data-shape="title" aria-hidden="true"></div>
+            <div class="skeleton" data-shape="text" aria-hidden="true"></div>
+            <div class="skeleton" data-shape="text" aria-hidden="true"></div>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- 15. Progress / Meter -->
+  <section>
+    <h2>Progress / Meter</h2>
+    <div style="display:grid;gap:var(--space-3);max-inline-size:20rem">
+      <progress class="progress" value="60" max="100"></progress>
+      <progress class="progress" value="30" max="100"></progress>
+      <progress class="progress primary" value="85" max="100"></progress>
+      <progress class="progress"></progress>
+    </div>
+    <div style="display:grid;gap:var(--space-2);max-inline-size:16rem;margin-block-start:var(--space-3)">
+      <meter class="meter" min="0" max="100" value="25" low="33" optimum="80" high="66"></meter>
+      <meter class="meter" min="0" max="100" value="50" low="33" optimum="80" high="66"></meter>
+      <meter class="meter" min="0" max="100" value="85" low="33" optimum="80" high="66"></meter>
+    </div>
+  </section>
+
+  <!-- 16. Navbar -->
+  <section>
+    <h2>Navbar</h2>
+    <nav class="navbar">
+      <a class="navbar-brand" href="#">Logo</a>
+      <ul class="navbar-nav">
+        <li><a class="nav-link" aria-current="page" href="#">Home</a></li>
+        <li><a class="nav-link" href="#">Docs</a></li>
+        <li><a class="nav-link" href="#">About</a></li>
+      </ul>
+    </nav>
+  </section>
+
+  <!-- 17. Breadcrumb -->
+  <section>
+    <h2>Breadcrumb</h2>
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <ol>
+        <li><a href="#">Home</a></li>
+        <li><a href="#">Components</a></li>
+        <li><span aria-current="page">Breadcrumb</span></li>
+      </ol>
+    </nav>
+  </section>
+
+  <!-- 18. Pagination -->
+  <section>
+    <h2>Pagination</h2>
+    <nav aria-label="Page navigation">
+      <ol class="pagination">
+        <li><a class="btn ghost" href="#" aria-label="Previous page">&larr;</a></li>
+        <li><a class="btn" href="#">1</a></li>
+        <li><a class="btn" href="#" aria-current="page">2</a></li>
+        <li><a class="btn" href="#">3</a></li>
+        <li><span aria-hidden="true" class="muted">&hellip;</span></li>
+        <li><a class="btn" href="#">8</a></li>
+        <li><a class="btn ghost" href="#" aria-label="Next page">&rarr;</a></li>
+      </ol>
+    </nav>
+  </section>
+
+  <!-- 19. Key / Overline -->
+  <section>
+    <h2>Key / Overline</h2>
+    <div class="sink-grid">
+      <p>Press <kbd class="key">Ctrl</kbd> + <kbd class="key sm">K</kbd> to open.</p>
+      <p class="overline">Section label</p>
+    </div>
+  </section>
+
+  <!-- 20. Status bar -->
+  <section>
+    <h2>Status bar</h2>
+    <p>
+      <button class="btn sm" type="button" id="show-status">Show status</button>
+      <button class="btn sm secondary" type="button" id="clear-status">Clear</button>
+    </p>
+  </section>
+
+  <!-- 21. Dark mode -->
   <section>
     <h2>Dark mode</h2>
     <p>Use the theme selector at the top to switch <code>data-theme</code>.</p>
@@ -410,6 +648,17 @@
       const item = event.detail.origin.closest?.("[data-context-item]");
       const label = item?.dataset.contextItem ?? "the card";
       contextResult.textContent = `Menu opened for ${label} (${event.detail.trigger}).`;
+    });
+
+    const showStatus = document.getElementById("show-status");
+    const clearStatus = document.getElementById("clear-status");
+    showStatus?.addEventListener("click", () => {
+      document.dispatchEvent(new CustomEvent("actual:status", {
+        detail: { message: "File saved successfully.", intent: "success", duration: 3000 }
+      }));
+    });
+    clearStatus?.addEventListener("click", () => {
+      document.dispatchEvent(new CustomEvent("actual:status", { detail: {} }));
     });
   </script>
 </body>
