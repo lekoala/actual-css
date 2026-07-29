@@ -1,18 +1,18 @@
 {
-  "timestamp": "2026-07-29T09:58:32.663Z",
-  "totalRaw": 172307,
-  "totalMinified": 85845,
-  "totalBrotli": 12581,
-  "themesMinified": 29151,
-  "themesBrotli": 3414,
-  "shippedMinified": 85845,
-  "shippedBrotli": 12581,
+  "timestamp": "2026-07-29T10:38:27.890Z",
+  "totalRaw": 171536,
+  "totalMinified": 85321,
+  "totalBrotli": 12521,
+  "themesMinified": 29125,
+  "themesBrotli": 3399,
+  "shippedMinified": 85321,
+  "shippedBrotli": 12521,
   "maxShippedBrotli": 13312,
   "fileCount": 74,
   "files": [
     {
       "file": "components/button.css",
-      "raw": 7102
+      "raw": 6994
     },
     {
       "file": "theme.css",
@@ -27,28 +27,28 @@
       "raw": 5306
     },
     {
-      "file": "components/badge.css",
-      "raw": 4994
+      "file": "forms/choice.css",
+      "raw": 4902
     },
     {
-      "file": "forms/choice.css",
-      "raw": 4936
+      "file": "components/badge.css",
+      "raw": 4878
     },
     {
       "file": "components/avatar.css",
-      "raw": 4768
+      "raw": 4736
     },
     {
       "file": "themes/edge.css",
-      "raw": 4623
-    },
-    {
-      "file": "forms/choice-card.css",
-      "raw": 4525
+      "raw": 4585
     },
     {
       "file": "components/flyout.css",
       "raw": 4519
+    },
+    {
+      "file": "forms/choice-card.css",
+      "raw": 4493
     },
     {
       "file": "themes/gradient.css",
@@ -56,7 +56,7 @@
     },
     {
       "file": "prose.css",
-      "raw": 3881
+      "raw": 3839
     },
     {
       "file": "components/modal.css",
@@ -64,11 +64,11 @@
     },
     {
       "file": "forms/switch.css",
-      "raw": 3338
+      "raw": 3306
     },
     {
       "file": "utilities.css",
-      "raw": 3240
+      "raw": 3208
     },
     {
       "file": "components/join.css",
@@ -91,15 +91,7 @@
       "raw": 2684
     },
     {
-      "file": "forms/control.css",
-      "raw": 2677
-    },
-    {
       "file": "components/card.css",
-      "raw": 2662
-    },
-    {
-      "file": "components/tab.css",
       "raw": 2662
     },
     {
@@ -107,8 +99,16 @@
       "raw": 2641
     },
     {
+      "file": "forms/control.css",
+      "raw": 2637
+    },
+    {
       "file": "forms/range.css",
       "raw": 2606
+    },
+    {
+      "file": "components/tab.css",
+      "raw": 2592
     },
     {
       "file": "themes/petrol.css",
@@ -119,12 +119,12 @@
       "raw": 2573
     },
     {
-      "file": "components/progress.css",
-      "raw": 2561
-    },
-    {
       "file": "themes/sunset.css",
       "raw": 2503
+    },
+    {
+      "file": "components/progress.css",
+      "raw": 2499
     },
     {
       "file": "themes/lavender.css",
@@ -159,12 +159,12 @@
       "raw": 2265
     },
     {
-      "file": "components/navbar.css",
-      "raw": 2218
-    },
-    {
       "file": "themes/mono.css",
       "raw": 2213
+    },
+    {
+      "file": "components/navbar.css",
+      "raw": 2142
     },
     {
       "file": "components/status-bar.css",
@@ -188,7 +188,7 @@
     },
     {
       "file": "components/meter.css",
-      "raw": 1757
+      "raw": 1726
     },
     {
       "file": "forms/input-icon.css",
@@ -215,16 +215,16 @@
       "raw": 1467
     },
     {
+      "file": "components/menu.css",
+      "raw": 1432
+    },
+    {
       "file": "base.css",
-      "raw": 1379
+      "raw": 1347
     },
     {
       "file": "components/table.css",
-      "raw": 1337
-    },
-    {
-      "file": "components/menu.css",
-      "raw": 1326
+      "raw": 1305
     },
     {
       "file": "components/busy.css",
@@ -239,10 +239,6 @@
       "raw": 1215
     },
     {
-      "file": "forms/native.css",
-      "raw": 1129
-    },
-    {
       "file": "forms/form.css",
       "raw": 1114
     },
@@ -255,12 +251,16 @@
       "raw": 1099
     },
     {
-      "file": "components/breadcrumb.css",
-      "raw": 1038
+      "file": "forms/native.css",
+      "raw": 1097
     },
     {
       "file": "themes/dark.css",
       "raw": 1018
+    },
+    {
+      "file": "components/breadcrumb.css",
+      "raw": 1002
     },
     {
       "file": "intents.css",

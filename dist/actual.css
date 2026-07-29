@@ -462,10 +462,8 @@ a {
   text-underline-offset: 0.18em;
 }
 
-@media (hover: hover) {
-  a:hover {
-    text-decoration-thickness: 0.12em;
-  }
+a:hover {
+  text-decoration-thickness: 0.12em;
 }
 
 /* Global heading chrome: color (--heading or inherit), a tight line-height,
@@ -868,15 +866,13 @@ small {
   text-underline-offset: 0.18em;
 }
 
-@media (hover: hover) {
-  .prose a:hover {
-    text-decoration-thickness: 0.12em;
-  }
+.prose a:hover {
+  text-decoration-thickness: 0.12em;
+}
 
-  @supports (color: color-mix(in oklch, red, white)) {
-    .prose a:hover {
-      color: color-mix(in oklch, var(--primary), var(--text) 15%);
-    }
+@supports (color: color-mix(in oklch, red, white)) {
+  .prose a:hover {
+    color: color-mix(in oklch, var(--primary), var(--text) 15%);
   }
 }
 
@@ -1114,11 +1110,9 @@ small {
 
 /* The .soft/.outline/.ghost hover recipe (--ui-hover-bg) is set locally above;
    the overlay darkening for solid/soft is .btn-specific. */
-@media (hover: hover) {
-  .btn:not(:where(:disabled, [aria-disabled="true"])):hover {
-    background: var(--btn-hover-bg);
-    box-shadow: inset 0 0 0 999px var(--btn-hover-overlay);
-  }
+.btn:not(:where(:disabled, [aria-disabled="true"])):hover {
+  background: var(--btn-hover-bg);
+  box-shadow: inset 0 0 0 999px var(--btn-hover-overlay);
 }
 
 .btn:not(:where(:disabled, [aria-disabled="true"])):active {
@@ -1143,12 +1137,10 @@ small {
 /* .btn.circle needs no local rule: the .circle utility (utilities.css) loads
    after components and overrides border-radius at equal specificity. */
 
-@media (hover: hover) {
-  .btn.link:not(:where(:disabled, [aria-disabled="true"])):hover {
-    background: transparent;
-    color: var(--intent, var(--text));
-    text-decoration-thickness: 0.12em;
-  }
+.btn.link:not(:where(:disabled, [aria-disabled="true"])):hover {
+  background: transparent;
+  color: var(--intent, var(--text));
+  text-decoration-thickness: 0.12em;
 }
 
 .btn:focus-visible {
@@ -1217,11 +1209,9 @@ a.btn[aria-disabled="true"] {
     forced-color-adjust: none;
   }
 
-  @media (hover: hover) {
-    .btn:hover:not(:where(:disabled, [aria-disabled="true"], .link)) {
-      outline: var(--border-width) solid ButtonText;
-      outline-offset: 2px;
-    }
+  .btn:hover:not(:where(:disabled, [aria-disabled="true"], .link)) {
+    outline: var(--border-width) solid ButtonText;
+    outline-offset: 2px;
   }
 
   .btn:disabled,
@@ -1335,10 +1325,8 @@ a.btn[aria-disabled="true"] {
   cursor: pointer;
 }
 
-@media (hover: hover) {
-  .badge > button:not(:disabled):hover {
-    background: var(--hover-overlay);
-  }
+.badge > button:not(:disabled):hover {
+  background: var(--hover-overlay);
 }
 
 /* Hover recipes — sets --ui-hover-bg consumed by the hover rule below.
@@ -1369,14 +1357,12 @@ a.btn[aria-disabled="true"] {
   }
 }
 
-@media (hover: hover) {
-  :where(a.badge, button.badge):not(:where(:disabled, [aria-disabled="true"])):hover {
-    background: var(--ui-hover-bg, var(--badge-bg));
-  }
+:where(a.badge, button.badge):not(:where(:disabled, [aria-disabled="true"])):hover {
+  background: var(--ui-hover-bg, var(--badge-bg));
+}
 
-  :where(a.badge, button.badge):not(:where(:disabled, [aria-disabled="true"], .outline)):hover {
-    box-shadow: inset 0 0 0 999px var(--hover-overlay);
-  }
+:where(a.badge, button.badge):not(:where(:disabled, [aria-disabled="true"], .outline)):hover {
+  box-shadow: inset 0 0 0 999px var(--hover-overlay);
 }
 
 button.badge {
@@ -1399,16 +1385,14 @@ a.badge[aria-disabled="true"] {
     background: ButtonText;
   }
 
-  @media (hover: hover) {
-    :where(a.badge, button.badge):hover:not(:where(:disabled, [aria-disabled="true"])) {
-      outline: var(--border-width) solid ButtonText;
-      outline-offset: 2px;
-    }
+  :where(a.badge, button.badge):hover:not(:where(:disabled, [aria-disabled="true"])) {
+    outline: var(--border-width) solid ButtonText;
+    outline-offset: 2px;
+  }
 
-    .badge > button:not(:disabled):hover {
-      outline: var(--border-width) solid currentColor;
-      outline-offset: 1px;
-    }
+  .badge > button:not(:disabled):hover {
+    outline: var(--border-width) solid currentColor;
+    outline-offset: 1px;
   }
 
   button.badge:disabled,
@@ -2287,6 +2271,10 @@ dialog.drawer nav {
   background: var(--surface-subtle);
 }
 
+.menu-item:hover:not(:where(:disabled, [aria-disabled="true"])) {
+  background: var(--surface-subtle);
+}
+
 .menu-item:is(:disabled, [aria-disabled="true"]) {
   cursor: not-allowed;
   opacity: var(--disabled-opacity);
@@ -2790,12 +2778,10 @@ dialog.drawer nav {
 @media (forced-colors: active) {
   .progress::-webkit-progress-value {
     background: Highlight;
-    forced-color-adjust: none;
   }
 
   .progress::-moz-progress-bar {
     background: Highlight;
-    forced-color-adjust: none;
   }
 }
 
@@ -2985,10 +2971,8 @@ button.avatar {
   transition: opacity var(--duration);
 }
 
-@media (hover: hover) {
-  :where(a.avatar, button.avatar):not(:where(:disabled, [aria-disabled="true"])):hover::after {
-    opacity: 1;
-  }
+:where(a.avatar, button.avatar):not(:where(:disabled, [aria-disabled="true"])):hover::after {
+  opacity: 1;
 }
 
 :where(a.avatar, button.avatar):not(:where(:disabled, [aria-disabled="true"])):active {
@@ -3214,11 +3198,9 @@ a.avatar[aria-disabled="true"] {
   color: var(--text);
 }
 
-@media (hover: hover) {
-  .nav-link:hover {
-    background: var(--surface-subtle);
-    color: var(--text);
-  }
+.nav-link:hover {
+  background: var(--surface-subtle);
+  color: var(--text);
 }
 
 /* Nav list — a vertical navigation list. Used by .drawer for stacked links. */
@@ -3243,13 +3225,11 @@ a.avatar[aria-disabled="true"] {
     forced-color-adjust: none;
   }
 
-  @media (hover: hover) {
-    .nav-link:hover:not(:where([aria-current]:not([aria-current="false"]))) {
-      outline: var(--border-width) solid ButtonText;
-      outline-offset: 2px;
-      background: Canvas;
-      color: CanvasText;
-    }
+  .nav-link:hover:not(:where([aria-current]:not([aria-current="false"]))) {
+    outline: var(--border-width) solid ButtonText;
+    outline-offset: 2px;
+    background: Canvas;
+    color: CanvasText;
   }
 }
 
@@ -3287,12 +3267,10 @@ a.avatar[aria-disabled="true"] {
   text-decoration: none;
 }
 
-@media (hover: hover) {
-  .breadcrumb a:not([aria-current]):hover,
-  .breadcrumb a[aria-current="false"]:hover {
-    color: var(--text);
-    text-decoration: underline;
-  }
+.breadcrumb a:not([aria-current]):hover,
+.breadcrumb a[aria-current="false"]:hover {
+  color: var(--text);
+  text-decoration: underline;
 }
 
 .breadcrumb a:focus-visible {
@@ -3417,10 +3395,8 @@ a.avatar[aria-disabled="true"] {
   opacity: var(--disabled-opacity);
 }
 
-@media (hover: hover) {
-  .tab:hover:not(:where(:disabled, [aria-disabled="true"])) {
-    color: var(--text);
-  }
+.tab:hover:not(:where(:disabled, [aria-disabled="true"])) {
+  color: var(--text);
 }
 
 .tab:focus-visible {
@@ -3441,11 +3417,9 @@ a.avatar[aria-disabled="true"] {
 }
 
 @media (forced-colors: active) {
-  @media (hover: hover) {
-    .tab:hover:not(:where(:disabled, [aria-disabled="true"])) {
-      text-decoration: underline;
-      text-underline-offset: 0.18em;
-    }
+  .tab:hover:not(:where(:disabled, [aria-disabled="true"])) {
+    text-decoration: underline;
+    text-underline-offset: 0.18em;
   }
 
   .tab[aria-selected="true"] {
@@ -3543,10 +3517,8 @@ a.avatar[aria-disabled="true"] {
   background: var(--surface-subtle);
 }
 
-@media (hover: hover) {
-  .table tbody tr:hover {
-    background-color: var(--hover-overlay);
-  }
+.table tbody tr:hover {
+  background-color: var(--hover-overlay);
 }
 
 .table > tr:last-child > *,
@@ -3622,7 +3594,6 @@ a.avatar[aria-disabled="true"] {
   .meter::-webkit-meter-even-less-good-value,
   .meter::-moz-meter-bar {
     background: Highlight;
-    forced-color-adjust: none;
   }
 }
 
@@ -3746,15 +3717,13 @@ a.avatar[aria-disabled="true"] {
   resize: vertical;
 }
 
-@media (hover: hover) {
-  .input:hover:not(:disabled),
-  .textarea:hover:not(:disabled) {
-    --control-border: var(--text-subtle);
-  }
+.input:hover:not(:disabled),
+.textarea:hover:not(:disabled) {
+  --control-border: var(--text-subtle);
+}
 
-  .select:hover:not(:disabled) {
-    --control-bg: var(--surface-subtle);
-  }
+.select:hover:not(:disabled) {
+  --control-bg: var(--surface-subtle);
 }
 
 .input:focus-visible,
@@ -3986,11 +3955,9 @@ a.avatar[aria-disabled="true"] {
   transform: scale(1);
 }
 
-@media (hover: hover) {
-  .check:hover:not(:checked, :indeterminate, :disabled),
-  .radio:hover:not(:checked, :indeterminate, :disabled) {
-    --choice-border: var(--text-subtle);
-  }
+.check:hover:not(:checked, :indeterminate, :disabled),
+.radio:hover:not(:checked, :indeterminate, :disabled) {
+  --choice-border: var(--text-subtle);
 }
 
 .check:focus-visible,
@@ -4108,10 +4075,8 @@ a.avatar[aria-disabled="true"] {
   cursor: not-allowed;
 }
 
-@media (hover: hover) {
-  .choice-card:hover:not(:has(:disabled)) {
-    --choice-card-border: var(--text-subtle);
-  }
+.choice-card:hover:not(:has(:disabled)) {
+  --choice-card-border: var(--text-subtle);
 }
 
 /* Checked border — shared by radio and checkbox */
@@ -4357,10 +4322,8 @@ a.avatar[aria-disabled="true"] {
   cursor: not-allowed;
 }
 
-@media (hover: hover) {
-  .file:not(:disabled)::file-selector-button:hover {
-    background: var(--border);
-  }
+.file:not(:disabled)::file-selector-button:hover {
+  background: var(--border);
 }
 
 .file:focus-visible {
@@ -4528,10 +4491,8 @@ a.avatar[aria-disabled="true"] {
     box-shadow var(--duration);
 }
 
-@media (hover: hover) {
-  .switch:hover:not(:disabled) {
-    --switch-border: var(--intent, var(--primary));
-  }
+.switch:hover:not(:disabled) {
+  --switch-border: var(--intent, var(--primary));
 }
 
 .switch:checked {
@@ -4826,10 +4787,8 @@ a.avatar[aria-disabled="true"] {
   text-decoration: none;
 }
 
-@media (hover: hover) {
-  .link-muted:hover {
-    color: var(--text);
-  }
+.link-muted:hover {
+  color: var(--text);
 }
 
 /* Spacing step helpers — semantic scale (sm / default / lg).
