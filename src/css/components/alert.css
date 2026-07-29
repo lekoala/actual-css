@@ -141,26 +141,13 @@
    Canvas backplate (unreadable) — so .solid intentionally falls back to the
    default look. */
 
-/* Callout — neutral surface with an inset accent band on the leading edge.
-   The ::before pseudo is absolutely positioned and inset to respect the
-   outer border-radius, so it never needs its own radius. */
+/* Callout — neutral surface with a thick accent border on the leading edge. */
 .alert.callout {
   --alert-bg: var(--surface-subtle);
   --ui-bg: var(--alert-bg);
   --ui-fg: var(--text);
-  --ui-border: var(--border);
-  position: relative;
-  padding-inline-start: calc(var(--alert-pad-inline) + var(--space-3));
-}
-
-.alert.callout::before {
-  content: "";
-  position: absolute;
-  inset-block: var(--space-2);
-  inset-inline-start: var(--space-2);
-  inline-size: 0.25rem;
-  border-radius: var(--radius-full);
-  background: var(--intent, var(--neutral));
+  border: 0;
+  border-inline-start: 4px solid var(--intent, var(--neutral));
 }
 
 /* Admonition — structured title/body anatomy with a tinted title band.

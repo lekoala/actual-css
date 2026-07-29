@@ -164,6 +164,42 @@ Variants
 </div>
 ```
 
+### Callout
+
+Use `.callout` for a neutral panel with a thick accent border on the leading edge. Intent classes tint the border color.
+
+```html{.stack}
+<div class="alert callout">
+  <strong>Note</strong>
+  <p>This is a callout — a neutral panel with a thick accent border on the leading edge.</p>
+</div>
+
+<div class="alert warning callout" role="alert">
+  <strong>Heads up</strong>
+  <p>The border color follows the intent. No other borders are drawn.</p>
+</div>
+```
+
+### Admonition
+
+An admonition is a structured box with a tinted title bar and body content, like the `!!! note` callouts in mkdocs. Use `.alert-title` for the header and `.alert-body` for the content. Intent classes tint the title bar background.
+
+```html{.stack}
+<div class="alert admonition">
+  <div class="alert-title">Note</div>
+  <div class="alert-body">
+    <p>An admonition with a tinted title bar. Use <code>.alert-title</code> and <code>.alert-body</code> to structure the content.</p>
+  </div>
+</div>
+
+<div class="alert warning admonition">
+  <div class="alert-title">Warning</div>
+  <div class="alert-body">
+    <p>The intent class tints the title bar background automatically. The body stays neutral.</p>
+  </div>
+</div>
+```
+
 ## Avatar
 
 > Initials or image representing a person or entity, composable with a status dot.
