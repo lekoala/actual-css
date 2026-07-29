@@ -1,5 +1,6 @@
 import { isElementVisible } from "./focus.js";
 import { firstItem, lastItem, nextItem } from "./keys.js";
+import { getSurfaceAutoClose } from "./surface.js";
 
 const MENU_ITEM_SELECTOR = ":scope > li > .menu-item";
 
@@ -84,12 +85,7 @@ export function onMenuKeydown(e, { close }) {
   }
 }
 
-const wiredMenus = new WeakSet();
-
-export function connectMenu(menu, { close, signal, autoClose }) {
-  if (wiredMenus.has(menu)) return;
-  wiredMenus.add(menu);
-
+export function connectMenu(menu, { close, signal }) {
   menu.addEventListener("keydown", (event) => onMenuKeydown(event, { close: () => close(menu) }), {
     signal,
   });
@@ -97,6 +93,7 @@ export function connectMenu(menu, { close, signal, autoClose }) {
   menu.addEventListener(
     "click",
     (event) => {
+      const autoClose = getSurfaceAutoClose(menu);
       if (autoClose === "outside" || autoClose === "false") return;
 
       const item = getMenuItem(menu, event.target);

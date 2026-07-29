@@ -4,30 +4,15 @@ import { autoUpdate, reposition, repositionAt } from "./floating.js";
 
 import { CLASSES } from "./selectors.js";
 
-const DEFAULT_BREAKPOINT = 768;
-const BREAKPOINTS = {
-  sm: 640,
-  md: 768,
-  lg: 1024,
-};
 const openSurfaces = new Set();
 const surfaceMap = new WeakMap();
+const surfaceRetainers = new WeakMap();
 const mountedSurfaces = new WeakMap();
 const clickBoundDocuments = new WeakSet();
 
-// data-actual-surface is written by the runtime, never by an author, and never
-// selected on by CSS. It is namespaced because "data-surface" is a name an
-// application may already own. surface.js reaps its own surfaces so consumers
-// do not have to maintain panel-side lifecycle hooks.
 const SURFACE_MARKER = "data-actual-surface";
 const reapers = new WeakMap();
 
-// Registered lazily, per owning document, and never at import time: enhance()
-// binds its observer to the root it is given, so a module-scope
-// enhance() would watch whichever document existed when this module was first
-// imported. Surfaces in any other document (an iframe, or a fresh test
-// document) would then never be swept. Keyed by Document, so nothing is
-// retained once a document is gone.
 function reaperFor(menu) {
   const root = menu.ownerDocument?.documentElement;
   if (!root) return null;
@@ -82,34 +67,8 @@ function restoreSurface(menu) {
   mountedSurfaces.delete(menu);
 }
 
-function getBreakpoint(menu) {
-  const value = menu.dataset.flyoutBreakpoint || "";
-  const raw = Number.parseInt(BREAKPOINTS[value] || value, 10);
-  return Number.isFinite(raw) ? raw : DEFAULT_BREAKPOINT;
-}
-
-function getMobileMode(menu, mode) {
-  return mode || menu.dataset.flyoutMobile || "auto";
-}
-
-function getPlacement(menu, placement) {
-  return placement || menu.dataset.flyoutPlacement || "bottom-start";
-}
-
-function getDistance(menu, distance) {
-  if (distance != null) return distance;
-  const value = Number.parseFloat(menu.dataset.flyoutDistance);
-  return Number.isFinite(value) ? value : 4;
-}
-
-function getAutoCloseMode(menu, value) {
-  const mode = String(value ?? menu.dataset.flyoutAutoClose ?? "true").toLowerCase();
-  if (mode === "inside" || mode === "outside" || mode === "false") return mode;
-  return "true";
-}
-
-function shouldUseSheet(menu, mode) {
-  const mobile = getMobileMode(menu, mode);
+function shouldUseSheet(state) {
+  const mobile = state.mobile || "auto";
   if (mobile === "none" || mobile === "anchored") return false;
   if (mobile === "sheet") return true;
 
@@ -117,7 +76,7 @@ function shouldUseSheet(menu, mode) {
     return false;
   }
 
-  const breakpoint = getBreakpoint(menu);
+  const breakpoint = state.breakpoint ?? 768;
   return (
     window.matchMedia("(pointer: coarse)").matches &&
     window.matchMedia(`(max-width: ${breakpoint}px)`).matches
@@ -159,7 +118,7 @@ function ensureBackdrop(menu, state) {
 }
 
 function applyPresentation(menu, state) {
-  state.isSheet = shouldUseSheet(menu, state.mobile);
+  state.isSheet = shouldUseSheet(state);
   if (state.isSheet) {
     menu.style.removeProperty("left");
     menu.style.removeProperty("top");
@@ -174,9 +133,9 @@ function positionSurface(menu) {
 
   if (state.trigger) {
     const triggerWidth = state.trigger.getBoundingClientRect().width;
-    menu.style.setProperty("--flyout-trigger-width", `${triggerWidth}px`);
+    menu.style.setProperty("--surface-anchor-width", `${triggerWidth}px`);
   } else {
-    menu.style.removeProperty("--flyout-trigger-width");
+    menu.style.removeProperty("--surface-anchor-width");
   }
 
   const opts = {
@@ -220,6 +179,7 @@ function ensureSurfaceWired(menu) {
     source: null,
     point: null,
     mobile: "auto",
+    breakpoint: 768,
     placement: "bottom-start",
     distance: 4,
     flip: true,
@@ -244,10 +204,31 @@ export function prepareSurface(menu) {
   menu.style.position = "fixed";
   menu.hidden = true;
   syncExpanded(menu, false);
-  // Both steps are idempotent, so they run unguarded: that also keeps the
-  // reaper correct if a surface is ever adopted into another document.
   menu.setAttribute(SURFACE_MARKER, "");
   reaperFor(menu)?.refresh(menu);
+}
+
+export function retainSurface(panel) {
+  if (!panel) return () => {};
+
+  let entry = surfaceRetainers.get(panel);
+  if (!entry) {
+    prepareSurface(panel);
+    entry = { count: 0 };
+    surfaceRetainers.set(panel, entry);
+  }
+  entry.count++;
+
+  let released = false;
+  return () => {
+    if (released) return;
+    released = true;
+    entry.count--;
+    if (entry.count <= 0) {
+      disconnectSurface(panel, { restore: false });
+      surfaceRetainers.delete(panel);
+    }
+  };
 }
 
 export function openSurface(menu, opts = {}) {
@@ -273,10 +254,11 @@ export function openSurface(menu, opts = {}) {
   state.source = opts.source || null;
   state.point =
     Number.isFinite(opts.x) && Number.isFinite(opts.y) ? { x: opts.x, y: opts.y } : null;
-  state.mobile = getMobileMode(menu, opts.mobile);
-  state.autoClose = getAutoCloseMode(menu, opts.autoClose);
-  state.placement = getPlacement(menu, opts.placement);
-  state.distance = getDistance(menu, opts.distance);
+  state.mobile = opts.mobile || "auto";
+  state.breakpoint = opts.breakpoint ?? 768;
+  state.autoClose = String(opts.autoClose ?? "true");
+  state.placement = opts.placement || "bottom-start";
+  state.distance = opts.distance ?? 4;
   state.flip = opts.flip !== false;
   state.shift = opts.shift !== false;
   state.shiftPadding = opts.shiftPadding ?? 4;
@@ -349,11 +331,6 @@ function onDocumentClick(e) {
   }
 }
 
-// Bound per owning document on first use, not at import time — same reason as
-// reaperFor(): an import-time listener attaches to whichever document existed
-// then, and stays attached to it. Nothing can need this listener before a
-// surface has been wired, so binding here costs nothing and keeps SSR imports
-// inert without a typeof guard.
 function ensureDocumentClick(menu) {
   const doc = menu.ownerDocument;
   if (!doc || clickBoundDocuments.has(doc)) return;
@@ -361,8 +338,6 @@ function ensureDocumentClick(menu) {
   doc.addEventListener("click", onDocumentClick);
 }
 
-// Escape dismissal stack, per document. Tooltips pushed after flyouts
-// naturally sit at the top: the most recently opened overlay dismisses first.
 const dismissableStacks = new WeakMap();
 
 export function registerEscapeDismissal(element, dismiss) {
@@ -392,6 +367,10 @@ function onDocumentEscape(event) {
 
   event.preventDefault();
   entry.dismiss({ restoreFocus: true });
+}
+
+export function getSurfaceAutoClose(menu) {
+  return surfaceMap.get(menu)?.autoClose ?? "true";
 }
 
 function ensureDocumentEscape(menu) {
