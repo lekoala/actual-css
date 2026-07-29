@@ -56,15 +56,13 @@
   resize: vertical;
 }
 
-@media (hover: hover) {
-  .input:hover:not(:disabled),
-  .textarea:hover:not(:disabled) {
-    --control-border: var(--text-subtle);
-  }
+.input:hover:not(:disabled),
+.textarea:hover:not(:disabled) {
+  --control-border: var(--text-subtle);
+}
 
-  .select:hover:not(:disabled) {
-    --control-bg: var(--surface-subtle);
-  }
+.select:hover:not(:disabled) {
+  --control-bg: var(--surface-subtle);
 }
 
 .input:focus-visible,

@@ -411,10 +411,8 @@
   background: var(--surface-subtle);
 }
 
-@media (hover: hover) {
-  .admini-chat-item:hover {
-    background: var(--surface-subtle);
-  }
+.admini-chat-item:hover {
+  background: var(--surface-subtle);
 }
 
 .admini-chat-item-body {

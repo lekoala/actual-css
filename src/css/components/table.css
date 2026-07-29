@@ -52,10 +52,8 @@
   background: var(--surface-subtle);
 }
 
-@media (hover: hover) {
-  .table tbody tr:hover {
-    background-color: var(--hover-overlay);
-  }
+.table tbody tr:hover {
+  background-color: var(--hover-overlay);
 }
 
 .table > tr:last-child > *,

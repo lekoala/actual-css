@@ -123,11 +123,9 @@
 
 /* The .soft/.outline/.ghost hover recipe (--ui-hover-bg) is set locally above;
    the overlay darkening for solid/soft is .btn-specific. */
-@media (hover: hover) {
-  .btn:not(:where(:disabled, [aria-disabled="true"])):hover {
-    background: var(--btn-hover-bg);
-    box-shadow: inset 0 0 0 999px var(--btn-hover-overlay);
-  }
+.btn:not(:where(:disabled, [aria-disabled="true"])):hover {
+  background: var(--btn-hover-bg);
+  box-shadow: inset 0 0 0 999px var(--btn-hover-overlay);
 }
 
 .btn:not(:where(:disabled, [aria-disabled="true"])):active {
@@ -152,12 +150,10 @@
 /* .btn.circle needs no local rule: the .circle utility (utilities.css) loads
    after components and overrides border-radius at equal specificity. */
 
-@media (hover: hover) {
-  .btn.link:not(:where(:disabled, [aria-disabled="true"])):hover {
-    background: transparent;
-    color: var(--intent, var(--text));
-    text-decoration-thickness: 0.12em;
-  }
+.btn.link:not(:where(:disabled, [aria-disabled="true"])):hover {
+  background: transparent;
+  color: var(--intent, var(--text));
+  text-decoration-thickness: 0.12em;
 }
 
 .btn:focus-visible {
@@ -226,11 +222,9 @@ a.btn[aria-disabled="true"] {
     forced-color-adjust: none;
   }
 
-  @media (hover: hover) {
-    .btn:hover:not(:where(:disabled, [aria-disabled="true"], .link)) {
-      outline: var(--border-width) solid ButtonText;
-      outline-offset: 2px;
-    }
+  .btn:hover:not(:where(:disabled, [aria-disabled="true"], .link)) {
+    outline: var(--border-width) solid ButtonText;
+    outline-offset: 2px;
   }
 
   .btn:disabled,

@@ -62,10 +62,8 @@
     box-shadow var(--duration);
 }
 
-@media (hover: hover) {
-  .switch:hover:not(:disabled) {
-    --switch-border: var(--intent, var(--primary));
-  }
+.switch:hover:not(:disabled) {
+  --switch-border: var(--intent, var(--primary));
 }
 
 .switch:checked {

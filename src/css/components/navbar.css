@@ -58,11 +58,9 @@
   color: var(--text);
 }
 
-@media (hover: hover) {
-  .nav-link:hover {
-    background: var(--surface-subtle);
-    color: var(--text);
-  }
+.nav-link:hover {
+  background: var(--surface-subtle);
+  color: var(--text);
 }
 
 /* Nav list — a vertical navigation list. Used by .drawer for stacked links. */
@@ -87,12 +85,10 @@
     forced-color-adjust: none;
   }
 
-  @media (hover: hover) {
-    .nav-link:hover:not(:where([aria-current]:not([aria-current="false"]))) {
-      outline: var(--border-width) solid ButtonText;
-      outline-offset: 2px;
-      background: Canvas;
-      color: CanvasText;
-    }
+  .nav-link:hover:not(:where([aria-current]:not([aria-current="false"]))) {
+    outline: var(--border-width) solid ButtonText;
+    outline-offset: 2px;
+    background: Canvas;
+    color: CanvasText;
   }
 }

@@ -125,10 +125,8 @@
   text-decoration: none;
 }
 
-@media (hover: hover) {
-  .link-muted:hover {
-    color: var(--text);
-  }
+.link-muted:hover {
+  color: var(--text);
 }
 
 /* Spacing step helpers — semantic scale (sm / default / lg).

@@ -146,11 +146,9 @@
   transform: scale(1);
 }
 
-@media (hover: hover) {
-  .check:hover:not(:checked, :indeterminate, :disabled),
-  .radio:hover:not(:checked, :indeterminate, :disabled) {
-    --choice-border: var(--text-subtle);
-  }
+.check:hover:not(:checked, :indeterminate, :disabled),
+.radio:hover:not(:checked, :indeterminate, :disabled) {
+  --choice-border: var(--text-subtle);
 }
 
 .check:focus-visible,

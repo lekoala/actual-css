@@ -32,12 +32,10 @@
   text-decoration: none;
 }
 
-@media (hover: hover) {
-  .breadcrumb a:not([aria-current]):hover,
-  .breadcrumb a[aria-current="false"]:hover {
-    color: var(--text);
-    text-decoration: underline;
-  }
+.breadcrumb a:not([aria-current]):hover,
+.breadcrumb a[aria-current="false"]:hover {
+  color: var(--text);
+  text-decoration: underline;
 }
 
 .breadcrumb a:focus-visible {

@@ -38,11 +38,9 @@
   background-clip: content-box;
 }
 
-@media (hover: hover) {
-  .scroller::-webkit-scrollbar-thumb:hover {
-    background: var(--scroller-thumb-hover);
-    background-clip: content-box;
-  }
+.scroller::-webkit-scrollbar-thumb:hover {
+  background: var(--scroller-thumb-hover);
+  background-clip: content-box;
 }
 
 .scroller::-webkit-scrollbar-corner {

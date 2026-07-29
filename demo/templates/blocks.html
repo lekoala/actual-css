@@ -195,10 +195,8 @@
       --control-bg: color-mix(in srgb, var(--danger) 12%, transparent);
     }
 
-    @media (hover: hover) {
-      .block-float-form :is(.input, .textarea):hover:not(:disabled) {
-        --control-bg: var(--surface-subtle);
-      }
+    .block-float-form :is(.input, .textarea):hover:not(:disabled) {
+      --control-bg: var(--surface-subtle);
     }
 
     /* Focus is a bottom accent line instead of a ring — a ring's corners get

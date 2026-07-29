@@ -107,10 +107,8 @@ button.avatar {
   transition: opacity var(--duration);
 }
 
-@media (hover: hover) {
-  :where(a.avatar, button.avatar):not(:where(:disabled, [aria-disabled="true"])):hover::after {
-    opacity: 1;
-  }
+:where(a.avatar, button.avatar):not(:where(:disabled, [aria-disabled="true"])):hover::after {
+  opacity: 1;
 }
 
 :where(a.avatar, button.avatar):not(:where(:disabled, [aria-disabled="true"])):active {
