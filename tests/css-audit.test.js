@@ -115,12 +115,12 @@ test("modal uses scrollbar gutter only for measured classic-scrollbar locks", ()
   expect(resetCss.includes("scrollbar-gutter: stable;")).toBe(false);
 });
 
-test("alert.callout is excluded from the soft-tint recipe and uses ::before inset band", () => {
+test("alert.callout is excluded from the soft-tint recipe and uses a thick leading border", () => {
   const css = readCss("src/css/components/alert.css");
 
   expect(css).toContain(':not(.solid, .outline, .callout)');
-  expect(css).toContain(".alert.callout::before");
-  expect(css).toContain("background: var(--intent, var(--neutral));");
+  expect(css).toContain("border-inline-start: 4px solid var(--intent, var(--neutral))");
+  expect(css).toContain("border: 0");
 });
 
 test("alert.admonition neutralizes root padding and gap, and defines alert-title/alert-body", () => {
