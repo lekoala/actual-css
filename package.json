@@ -40,6 +40,8 @@
     "./js/dialog": "./src/js/dialog.js",
     "./js/dialog-fallback": "./src/js/dialog-fallback.js",
     "./js/enhance": "./src/js/enhance.js",
+    "./js/enhancement-loader": "./src/js/enhancement-loader.js",
+    "./js/parse-config": "./src/js/parse-config.js",
     "./js/events": "./src/js/events.js",
     "./js/filter": "./src/js/filter.js",
     "./js/floating": "./src/js/floating.js",

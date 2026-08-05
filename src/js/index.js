@@ -24,3 +24,14 @@ import "./mask.js";
 import "./password.js";
 import "./validation.js";
 import "./status.js";
+import { loadEnhancements } from "./enhancement-loader.js";
+
+if (typeof document !== "undefined") {
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", () => loadEnhancements(), {
+      once: true,
+    });
+  } else {
+    loadEnhancements();
+  }
+}
