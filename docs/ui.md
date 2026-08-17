@@ -95,20 +95,18 @@ Use this shape for contextual information or lightweight secondary content. It h
         closedby="any"
         data-dialog-dismissible>
   <div class="stack">
-    <header class="cluster" style="--cluster-justify: space-between">
+    <header>
       <hgroup>
         <h3>Release details</h3>
         <p>Changes included in this version.</p>
       </hgroup>
 
-      <button class="btn ghost"
+      <button class="dialog-close"
               type="button"
               commandfor="details-dialog"
               command="request-close"
               aria-controls="details-dialog"
-              aria-label="Close dialog">
-        <i class="ti ti-x" aria-hidden="true"></i>
-      </button>
+              aria-label="Close dialog"></button>
     </header>
 
     <div>
@@ -184,20 +182,18 @@ Flyouts and tooltips opened from inside a modal dialog are mounted inside the di
         closedby="any"
         data-dialog-dismissible>
   <div class="stack">
-    <header class="cluster" style="--cluster-justify: space-between">
+    <header>
       <hgroup>
         <h3>Modal overlays</h3>
         <p>Flyouts and tooltips remain above the dialog surface.</p>
       </hgroup>
 
-      <button class="btn ghost"
+      <button class="dialog-close"
               type="button"
               commandfor="overlay-dialog"
               command="request-close"
               aria-controls="overlay-dialog"
-              aria-label="Close dialog">
-        <i class="ti ti-x" aria-hidden="true"></i>
-      </button>
+              aria-label="Close dialog"></button>
     </header>
 
     <div class="cluster">
@@ -314,13 +310,11 @@ Prefer native dialog behavior whenever possible. The framework runtime should no
         aria-label="Main navigation"
         closedby="any"
         data-dialog-dismissible>
-  <header class="cluster" style="--cluster-justify: space-between">
+  <header>
     <strong>Menu</strong>
 
     <form method="dialog">
-      <button class="btn ghost" type="submit" aria-label="Close navigation">
-        <i class="ti ti-x" aria-hidden="true"></i>
-      </button>
+      <button class="dialog-close" type="submit" aria-label="Close navigation"></button>
     </form>
   </header>
 
@@ -354,13 +348,9 @@ For drawers with unsaved settings or critical actions, omit the dismiss attribut
         aria-label="Settings"
         data-side="end">
   <form method="dialog">
-    <header class="cluster" style="--cluster-justify: space-between">
+    <header>
       <strong>Settings</strong>
-      <button class="btn ghost"
-              type="submit"
-              aria-label="Close settings">
-        <i class="ti ti-x" aria-hidden="true"></i>
-      </button>
+      <button class="dialog-close" type="submit" aria-label="Close settings"></button>
     </header>
 
     <div class="stack">

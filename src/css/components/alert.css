@@ -76,12 +76,19 @@
   vertical-align: -0.125em;
 }
 
+/* Grid anatomy — activated by a leading icon, a trailing dismiss button, or
+   both. Icon and dismiss are pinned to the outer columns; anything else (the
+   message content) flows into the remaining text column. */
 @supports selector(.alert:has(> *)) {
-  .alert:has(> .alert-icon) {
+  .alert:has(> .alert-icon, > .alert-dismiss) {
     display: grid;
-    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1fr);
     align-items: var(--items-align, start);
     column-gap: var(--space-3);
+  }
+
+  .alert:has(> .alert-icon) {
+    grid-template-columns: auto minmax(0, 1fr);
   }
 
   .alert:has(> .alert-icon) > .alert-icon {
@@ -92,8 +99,21 @@
     margin-block-start: 0.125em;
   }
 
-  .alert:has(> .alert-icon) > :not(.alert-icon) {
+  .alert:has(> .alert-icon) > :not(.alert-icon, .alert-dismiss) {
     grid-column: 2;
+  }
+
+  .alert:has(> .alert-dismiss) {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .alert:has(> .alert-icon):has(> .alert-dismiss) {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+  }
+
+  .alert:has(> .alert-dismiss) > .alert-dismiss {
+    grid-column: -2 / -1;
+    grid-row: 1;
   }
 }
 
@@ -101,6 +121,46 @@
 .alert :where(a:not(.btn)) {
   color: inherit;
   font-weight: var(--font-weight-strong);
+}
+
+/* Dismiss — compact close button for inline alerts. Transparent at rest with
+   a reduced opacity glyph so it stays secondary inside an already-colored
+   alert; hover reinforces it via the shared overlay. Uses the shared
+   --icon-close mask, so no icon font or text glyph is required in the markup.
+   Standard alerts place it as a direct trailing child; admonitions place it
+   inside .alert-title (see below). */
+.alert-dismiss {
+  --dismiss-size: 1.75rem;
+  --dismiss-icon-size: 0.875rem;
+
+  display: inline-grid;
+  place-items: center;
+  inline-size: var(--dismiss-size);
+  block-size: var(--dismiss-size);
+  flex: none;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius);
+  background: transparent;
+  color: currentColor;
+  opacity: 0.65;
+  cursor: pointer;
+}
+
+.alert-dismiss::before {
+  content: "";
+  inline-size: var(--dismiss-icon-size);
+  block-size: var(--dismiss-icon-size);
+  background: currentColor;
+  -webkit-mask: var(--icon-close) center / contain no-repeat;
+  mask: var(--icon-close) center / contain no-repeat;
+}
+
+@media (hover: hover) {
+  .alert-dismiss:hover {
+    background: var(--hover-overlay);
+    opacity: 1;
+  }
 }
 
 /* Forced colors: no override needed. The always-on border gets a forced
@@ -136,6 +196,11 @@
   padding-inline: var(--alert-pad-inline);
   border-start-start-radius: calc(var(--radius-lg) - var(--border-width));
   border-start-end-radius: calc(var(--radius-lg) - var(--border-width));
+}
+
+/* Dismiss inside an admonition title bar rides the inline end. */
+.alert.admonition > .alert-title > .alert-dismiss {
+  margin-inline-start: auto;
 }
 
 @supports (color: color-mix(in oklch, red, white)) {

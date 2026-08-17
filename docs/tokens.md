@@ -238,6 +238,7 @@ Icons used by CSS-only controls are public tokens because users may need to repl
 :root {
   --icon-chevron: url("data:image/svg+xml,...");
   --icon-check: url("data:image/svg+xml,...stroke='black'...");
+  --icon-close: url("data:image/svg+xml,...stroke='black'...");
 }
 ```
 
