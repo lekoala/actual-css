@@ -68,6 +68,52 @@ test("file selector button reflects disabled cursor", () => {
   expect(css).toContain("cursor: not-allowed;");
 });
 
+test("generic grid exposes an override without changing fixed grids", () => {
+  const css = readCss("src/css/grid.css");
+
+  expect(css.replace(/\s+/g, " ")).toContain(
+    "grid-template-columns: var( --grid-columns, repeat(auto-fit, minmax(min(100%, var(--grid-min, 16rem)), 1fr)) );",
+  );
+  expect(css).toContain("--grid-min");
+  expect(css).toContain("--grid-columns");
+  expect(css).toContain(".grid-2 {\n  grid-template-columns: repeat(2, minmax(0, 1fr));");
+  expect(css).toContain(".grid-3 {\n  grid-template-columns: repeat(3, minmax(0, 1fr));");
+  expect(css).toContain(".grid-4 {\n  grid-template-columns: repeat(4, minmax(0, 1fr));");
+  expect(css).toContain(".grid-6 {\n  grid-template-columns: repeat(6, minmax(0, 1fr));");
+  expect(css).toContain(".container-query .grid-6 {\n    grid-template-columns: repeat(3, minmax(0, 1fr));");
+});
+
+test("gap utilities set independent semantic steps directly", () => {
+  const css = readCss("src/css/utilities.css");
+
+  expect(css).toContain(".gap-sm {\n  gap: var(--space-2);\n}");
+  expect(css).toContain(".gap-lg {\n  gap: var(--space-5);\n}");
+  expect(css).not.toContain(".gap-md");
+});
+
+test("form-actions exposes alignment hooks while sticky behavior remains intact", () => {
+  const css = readCss("src/css/forms/form-actions.css");
+
+  expect(css).toContain("align-items: var(--form-actions-align, center);");
+  expect(css).toContain("justify-content: var(--form-actions-justify, flex-start);");
+  expect(css).toContain("margin-block-start: var(--form-actions-margin-block-start, var(--space-5));");
+  expect(css).toContain(".form-actions.sticky {");
+  expect(css).toContain("position: sticky;");
+});
+
+test("native color control has normal, disabled, focus, and forced-colors states", () => {
+  const css = readCss("src/css/forms/native.css");
+
+  expect(css).toContain(".color {");
+  expect(css).toContain("inline-size: var(--control-size);");
+  expect(css).toContain("block-size: var(--control-size);");
+  expect(css).toContain(".color:disabled");
+  expect(css).toContain(".color:focus-visible");
+  expect(css).toContain("@media (forced-colors: active)");
+  expect(css).toContain(".color::-webkit-color-swatch-wrapper");
+  expect(css).toContain(".color::-moz-color-swatch");
+});
+
 test("status bar supports long tokens and is hidden in print", () => {
   const statusCss = readCss("src/css/components/status-bar.css");
   const printCss = readCss("src/css/print.css");

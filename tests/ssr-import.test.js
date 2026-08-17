@@ -14,6 +14,7 @@ test("javascript modules import without a DOM", async () => {
     "index",
     "context-menu",
     "dialog",
+    "dismiss",
     "enhance",
     "filter",
     "floating",

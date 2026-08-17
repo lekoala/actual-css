@@ -19,4 +19,7 @@ export const EVENTS = {
   // Cancelable: dispatched by dialog.js before handling native cancel close.
   // detail: { dialog, sourceEvent }
   dialogCancel: `${ACTUAL_EVENT_PREFIX}:dialog-cancel`,
+  // Dispatched after a command hides its target.
+  // detail: { trigger }
+  dismiss: `${ACTUAL_EVENT_PREFIX}:dismiss`,
 };

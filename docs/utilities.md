@@ -260,6 +260,12 @@ Override the default gap from layout primitives (`.stack`, `.cluster`, `.grid`):
 ```
 
 - `.gap-none` → `gap: 0`
+- `.gap-sm` → `gap: var(--space-2)`
+- `.gap-lg` → `gap: var(--space-5)`
+
+These classes set the element's own gap directly and do not change `--gap`
+for nested layouts. There is no `.gap-md`; omitting a gap modifier keeps the
+layout's default `gap: var(--gap)`.
 
 ### Padding
 

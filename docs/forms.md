@@ -5,7 +5,7 @@
 > Cohesive set of form elements that share focus styles, helpers, and validation patterns.
 
 - Form controls are styled with explicit classes, not by parent scope.
-- Control classes: `.input`, `.textarea`, `.select`, `.check`, `.radio`, `.switch`, `.range`, `.file`.
+- Control classes: `.input`, `.textarea`, `.select`, `.check`, `.radio`, `.switch`, `.range`, `.file`, `.color`.
 - Reusable layout classes: `.field`, `.field-label`, `.field-help`, `.field-error`, `.field-group`, `.choice`, `.form-actions`, `.form-actions.sticky`.
 - No floating labels shipped — the blocks demo shows a userland recipe for teams that want them.
 - Proper focus style that preserves keyboard navigation.
@@ -146,7 +146,7 @@
 - `.choice` is the choice-label API. Use `.check` or `.radio` on the nested control. The control goes first, the label group second, so multi-line labels align the control with the first line.
 - For a switch, use `class="switch"` and `role="switch"`.
 - Core range controls stay native and are enhanced by `accent-color`. An optional richer range skin may come later if real projects need it.
-- `.form-actions` carries a default top margin. Override it with `--form-actions-margin-block-start`. It is class-only and may live inside or outside `<form>`. See Detached Actions below.
+- `.form-actions` carries a default top margin. Override it with `--form-actions-margin-block-start`, `--form-actions-align`, or `--form-actions-justify`. It is class-only and may live inside or outside `<form>`. See Detached Actions below.
 - `.join` visually joins adjacent controls into a single unit. Use `.join-addon` for static prefix/suffix content. The container still carries `role="group"` for accessibility.
 
 ### Optional automatic required marks
@@ -163,6 +163,28 @@ form[data-required-marks="auto"]
 ```
 
 `required` remains the accessible source of truth; this recipe adds only a visual cue. Use `data-required-mark="none"` on a `.field` when a required control should not receive the generated marker.
+
+## Color
+
+> Small, theme-aware chrome for the native color picker.
+
+Use `.color` on an `input[type="color"]` to give the native picker a control-sized
+box with the framework's border, radius, surface, disabled, and focus styles.
+The color dialog and selected-color swatch remain browser-native.
+
+```html
+<label class="field">
+  <span class="field-label">Accent color</span>
+  <input class="color" type="color" value="#6d5dfc" />
+</label>
+```
+
+## Form Actions
+
+`.form-actions` defaults to centered cross-axis alignment and start
+justification. Override `--form-actions-align` and `--form-actions-justify`
+when the action row needs a different arrangement. Its top margin remains
+controlled by `--form-actions-margin-block-start`.
 
 ## States And Sizes
 

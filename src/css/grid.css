@@ -1,7 +1,17 @@
+/*
+ * Responsive equal-width grids, with fixed-column presets below.
+ *
+ * Public hooks:
+ * --grid-min
+ * --grid-columns
+ */
 .grid {
   display: grid;
   gap: var(--gap);
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--grid-min, 16rem)), 1fr));
+  grid-template-columns: var(
+      --grid-columns,
+      repeat(auto-fit, minmax(min(100%, var(--grid-min, 16rem)), 1fr))
+    );
 }
 
 /* Query-container wrapper that opts .grid-2/3/4/6 into responsive
