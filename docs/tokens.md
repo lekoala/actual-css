@@ -15,6 +15,18 @@ The surface stays small by keeping most tokens semantic, not component-specific.
 
 > Tokens exposed as the public theming API, kept small and semantic.
 
+Component custom properties intended for author customization are public hooks.
+State, variant, derived, and runtime-written properties are internal
+implementation details. Documentation focuses on discovering the right hook and
+on non-obvious usage; the CSS source remains canonical for exact defaults and
+fallback chains.
+
+As a convention, component-prefixed properties owned by the component's base
+rule are *usually* author hooks. Properties owned by states/variants, derived
+from other hooks, or written by JavaScript are not. This convention is
+indicative, not algorithmic: runtime-written, derived, and state-relay
+properties stay internal even when their form resembles a hook.
+
 ### Color
 
 Intent tokens are used by `.primary`, `.secondary`, `.success`, `.warning`, `.danger`, and `.neutral`.

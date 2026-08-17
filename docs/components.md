@@ -83,6 +83,10 @@ Components are presented alphabetically.
 </div>
 ```
 
+### Hooks
+
+- `--accordion-radius` — outer corner radius.
+
 ## Alert
 
 > Inline status messages for confirmations, warnings, and errors, with intents, icons, and action lists.
@@ -246,6 +250,17 @@ An admonition is a structured box with a tinted title bar, an optional icon, and
 </div>
 ```
 
+### Hooks
+
+- `--alert-pad-inline` — inline padding. Stays stable across `.sm`/`.lg`.
+- `--alert-pad-block` — block padding.
+- `--alert-icon-size` — size of a leading `.alert-icon`.
+- `--alert-dismiss-size` — inline and block size of the `.alert-dismiss` button.
+- `--alert-dismiss-icon-size` — size of the dismiss glyph.
+
+Prefer intents and shared variants for alert colors rather than overriding the
+internal color plumbing directly.
+
 ## Avatar
 
 > Initials or image representing a person or entity, composable with a status dot.
@@ -311,6 +326,18 @@ An admonition is a structured box with a tinted title bar, an optional icon, and
   </div>
 </div>
 ```
+
+### Hooks
+
+- `--avatar-size` — inline and block size.
+- `--avatar-radius` — corner radius; set a smaller value for squared avatars.
+- `--avatar-stack-overlap` — how far stacked avatars overlap.
+- `--avatar-stack-ring` — separating ring width inside `.avatar-stack`.
+
+Prefer intents for avatar colors. Inside `.avatar-stack`, `--avatar-size` falls
+back to a stack-scoped value so the whole group resizes together with `.sm`/`.lg`;
+set `--avatar-size` on an individual avatar to opt one out.
+`--avatar-stack-overlap` is derived from `--avatar-stack-size`, not `--avatar-size`.
 
 ## Badge
 
@@ -386,6 +413,12 @@ Use `.badge soft` for tag visuals. Add a direct dismiss button only when the tag
   Design
 </span>
 ```
+
+### Hooks
+
+- `--badge-radius` — corner radius.
+- `--badge-size` — minimum block size; also the square size of an `:empty` dot badge.
+- `--badge-dot-size` — size of an `:empty` dot badge.
 
 ## Breadcrumb
 
@@ -505,6 +538,13 @@ With icons, loading state...
   Saving…
 </button>
 ```
+
+### Hooks
+
+- `--btn-radius` — corner radius.
+- `--btn-focus-color` — focus ring base color; the ring itself is derived from it.
+
+Prefer `.sm` / `.lg` over setting sizes directly.
 
 ## Card
 
@@ -679,6 +719,12 @@ With icons, loading state...
 </section>
 ```
 
+### Hooks
+
+- `--card-radius` — corner radius.
+- `--card-max-inline-size` — maximum width.
+- `--card-pad` — inner padding; also drives the negative offsets that let a `.bleed` child reach the card edge. `.compact` lowers it.
+
 ## Key
 
 > Keyboard keys and shortcut tokens for app UI, command palettes, menus, and help text.
@@ -723,6 +769,29 @@ In menus, keep the command label and shortcut in the same interactive item.
 <meter class="meter" value="0.5" min="0" max="1" low="0.3" high="0.7" optimum="1"></meter>
 <meter class="meter" value="0.2" min="0" max="1" low="0.3" high="0.7" optimum="1"></meter>
 ```
+
+## Navbar
+
+> Horizontal top-level navigation bar with a brand, an inline link list, and a vertical nav-list for drawers.
+
+- Use `.navbar` for the horizontal bar shell.
+- `.navbar-brand` is the brand link at the inline start.
+- `.navbar-nav` is the horizontal link list; its items are `.nav-link`.
+- `.nav-list` is the shared vertical navigation list, reused by `.drawer` for stacked links.
+- Mark the current page with `aria-current="page"` on the active `.nav-link`.
+
+```html
+<nav class="navbar" aria-label="Main">
+  <a class="navbar-brand" href="/">Actual CSS</a>
+  <ul class="navbar-nav">
+    <li><a class="nav-link" href="/docs" aria-current="page">Docs</a></li>
+    <li><a class="nav-link" href="/components">Components</a></li>
+    <li><a class="nav-link" href="/examples">Examples</a></li>
+  </ul>
+</nav>
+```
+
+For a vertical sidebar nav, use `.nav-list` inside the drawer or sidebar; see [Layout → Header And Footer](layout.md#header-and-footer) and [Patterns → Navigation List](patterns.md#navigation-list).
 
 ## Pagination
 
@@ -788,6 +857,11 @@ In menus, keep the command label and shortcut in the same interactive item.
 </section>
 ```
 
+### Hooks
+
+- `--progress-track` — unfilled track color.
+- `--progress-value` — filled bar color. Prefer an intent class over setting this directly.
+
 ## Spinner
 
 > Loading indicator for actions or regions that may take noticeable time.
@@ -838,6 +912,39 @@ In menus, keep the command label and shortcut in the same interactive item.
 </div>
 ```
 
+### Hooks
+
+- `--spinner-track` — the ring color.
+- `--spinner-value` — the moving gap; swap the two for an inverted spinner.
+
+Size follows the font (`1em`); use `.sm` / `.lg` rather than sizing it directly.
+
+### Busy state
+
+A container-wide loading state that keeps the underlying content in place. It is
+driven by `aria-busy="true"` plus a direct last-child `.spinner` — there is no
+separate `.busy` class. The spinner is shown as a centered overlay over a faded
+surface; buttons keep their spinners inline instead (see [Button](#button)).
+
+- Set `aria-busy="true"` on the container and add `<span class="spinner" aria-hidden="true"></span>` as its last direct child.
+- The overlay uses `--busy-overlay-bg`; components like `.card.inverted` already compose with it.
+- Decorative spinners stay `aria-hidden="true"`; announce progress on the region with `role="status"` and a label when needed.
+
+```html
+<article class="card" aria-busy="true" aria-label="Loading card content">
+  <h3>Card Title</h3>
+  <p>This is the card content.</p>
+  <span class="spinner" aria-hidden="true"></span>
+</article>
+```
+
+### Hooks
+
+- `--busy-overlay-bg` — background of the busy overlay. Components such as
+  `.card.inverted` override it to blend with their surface.
+
+See also: [Spinner](#spinner).
+
 ## Skeleton
 
 > Placeholder shapes for content that is loading.
@@ -859,6 +966,12 @@ In menus, keep the command label and shortcut in the same interactive item.
   </div>
 </article>
 ```
+
+### Hooks
+
+- `--skeleton-track` — base placeholder color.
+- `--skeleton-highlight` — sweeping highlight color.
+- `--skeleton-radius` — corner radius; `data-shape` presets override it.
 
 ## Table
 
@@ -941,3 +1054,8 @@ In menus, keep the command label and shortcut in the same interactive item.
   </table>
 </div>
 ```
+
+### Hooks
+
+- `--table-cell-pad` — cell padding.
+- `--table-min` — minimum table width before `.table-wrap` scrolls horizontally.

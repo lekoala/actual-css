@@ -141,7 +141,7 @@
 - `required` is the semantic source of truth. Add `<span class="required-mark" aria-hidden="true">*</span>` inside a label only when a visual required marker is wanted; the framework does not add one automatically.
 - `.field` is the canonical field wrapper. It works on `<label>` and `<div>`.
 - `.field-label` is element-agnostic. Use it on `<span>` inside a wrapped label, on `<label for="…">` in a detached layout, or on `<legend>` inside a fieldset.
-- `.field-group` styles a `<fieldset class="field-group">` as a grouped field container.
+- `.field-group` styles a `<fieldset class="field-group">` as a grouped field container. Its legend gutter is tunable with `--fieldset-legend-padding-inline` (`var(--space-1)`).
 - Use native `<optgroup>` and `disabled` options in `.select` controls when applicable; the customizable picker preserves both as a progressive enhancement.
 - `.choice` is the choice-label API. Use `.check` or `.radio` on the nested control. The control goes first, the label group second, so multi-line labels align the control with the first line.
 - For a switch, use `class="switch"` and `role="switch"`.
@@ -612,6 +612,11 @@ the focus ring surrounds the complete joined field. Attached buttons keep their
 own focus indicator when reached directly, so the actionable segment remains
 identifiable.
 
+### Hooks
+
+- `--join-radius` — outer corner radius of the joined group. The per-corner
+  values of each child are derived from it.
+
 ## Input Policy
 
 > Native input intent first. Actual's runtime filters values only when explicitly asked, and fixed-shape masks stay opt-in through `data-mask`.
@@ -1078,6 +1083,17 @@ Validation follows the shared pattern: `aria-invalid="true"` on the input (set m
 
 Sizes follow the shared `.sm` and `.lg` modifiers. Intent classes (`.primary`, `.secondary`) are supported on the `.choice-card` element.
 
+### Hooks
+
+- `--choice-card-pad` — inner padding.
+- `--choice-card-radius` — corner radius.
+- `--choice-card-check-size` — size of the check indicator.
+
+Plain `.check` / `.radio` controls expose one hook:
+
+- `--choice-control-offset` — top offset that aligns the control with the first
+  line of a multi-line label.
+
 ## Switches
 
 > Toggle controls that share a native checkbox at the markup level, with a switch visual.
@@ -1101,6 +1117,15 @@ Sizes follow the shared `.sm` and `.lg` modifiers. Intent classes (`.primary`, `
        onchange="this.setAttribute('aria-checked', this.checked)" />
 ```
 
+### Hooks
+
+- `--switch-width` — track width.
+- `--switch-block-size` — track height.
+- `--switch-knob-margin` — inset between knob and track.
+
+Knob size and travel distance are derived from these three; set the three rather
+than the derived values. Prefer `.sm` / `.lg`, which change `--control-size`.
+
 ## Range
 
 > Native range inputs with theme-aware accent color.
@@ -1113,6 +1138,11 @@ Core: native range, enhanced by `accent-color`. Optional richer skin may come la
   <input class="range" type="range" min="0" max="100" value="50" />
 </label>
 ```
+
+### Hooks
+
+- `--range-thumb-size` — thumb diameter.
+- `--range-track-height` — track thickness.
 
 ## Validation
 

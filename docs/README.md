@@ -16,6 +16,7 @@ Start here when using or changing Actual CSS.
 - [UI](ui.md): JS-enhanced component behavior.
 - [JavaScript](javascript.md): runtime imports, `enhance()`, custom filters, and app-level extensions.
 - [Utilities](utilities.md): small one-purpose helpers.
+- [Customization](customization.md): problem-oriented index to the right hook.
 - [Patterns](patterns.md): common app compositions.
 
 ## Design Notes

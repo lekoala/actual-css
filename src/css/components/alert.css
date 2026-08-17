@@ -130,13 +130,13 @@
    Standard alerts place it as a direct trailing child; admonitions place it
    inside .alert-title (see below). */
 .alert-dismiss {
-  --dismiss-size: 1.75rem;
-  --dismiss-icon-size: 0.875rem;
+  --alert-dismiss-size: 1.75rem;
+  --alert-dismiss-icon-size: 0.875rem;
 
   display: inline-grid;
   place-items: center;
-  inline-size: var(--dismiss-size);
-  block-size: var(--dismiss-size);
+  inline-size: var(--alert-dismiss-size);
+  block-size: var(--alert-dismiss-size);
   flex: none;
   padding: 0;
   border: 0;
@@ -149,8 +149,8 @@
 
 .alert-dismiss::before {
   content: "";
-  inline-size: var(--dismiss-icon-size);
-  block-size: var(--dismiss-icon-size);
+  inline-size: var(--alert-dismiss-icon-size);
+  block-size: var(--alert-dismiss-icon-size);
   background: currentColor;
   -webkit-mask: var(--icon-close) center / contain no-repeat;
   mask: var(--icon-close) center / contain no-repeat;

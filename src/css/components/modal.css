@@ -166,13 +166,13 @@ html.has-modal-open.had-scrollbar {
    shared hover overlay. The glyph comes from --icon-close, masked to
    currentColor, so no icon font or text glyph is required in the markup. */
 .dialog-close {
-  --close-size: 2.25rem;
-  --close-icon-size: 1rem;
+  --dialog-close-size: 2.25rem;
+  --dialog-close-icon-size: 1rem;
 
   display: inline-grid;
   place-items: center;
-  inline-size: var(--close-size);
-  block-size: var(--close-size);
+  inline-size: var(--dialog-close-size);
+  block-size: var(--dialog-close-size);
   flex: none;
   padding: 0;
   border: 0;
@@ -184,8 +184,8 @@ html.has-modal-open.had-scrollbar {
 
 .dialog-close::before {
   content: "";
-  inline-size: var(--close-icon-size);
-  block-size: var(--close-icon-size);
+  inline-size: var(--dialog-close-icon-size);
+  block-size: var(--dialog-close-icon-size);
   background: currentColor;
   -webkit-mask: var(--icon-close) center / contain no-repeat;
   mask: var(--icon-close) center / contain no-repeat;

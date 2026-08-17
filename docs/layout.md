@@ -36,6 +36,8 @@ Most layout primitives should read `--gap` and allow local overrides.
 
 Prefer a local custom property over adding many one-off utility classes. Use inline styles only for demos, prototypes, or truly dynamic values.
 
+There are no `.gap-sm` / `.gap-md` / `.gap-lg` density variants on layout primitives; set `--gap` locally when only spacing should change.
+
 ## Stack
 
 > Vertical flow with consistent spacing, ideal for forms, card content, and content blocks.
@@ -72,6 +74,37 @@ Use `.cluster` for inline groups that wrap naturally.
 ```
 
 Use cluster for action rows, tags, toolbar sections, metadata, and compact navigation.
+
+### Hooks
+
+- `--cluster-justify` — main-axis distribution (`justify-content`).
+- `--cluster-align` — cross-axis alignment (`align-items`).
+- `--gap` — space between items.
+
+For split/spread layouts — two items apart, at opposite ends, or “one left / one
+right” — use `.cluster` with `--cluster-justify: space-between`. There is no
+separate `.split` or `.spread` primitive; this is the same relationship.
+
+```html
+<div class="cluster" style="--cluster-justify: space-between">
+  <h2>Results</h2>
+  <button class="btn primary" type="button">New search</button>
+</div>
+```
+
+To align a row to its top edge instead of centering it — useful when one item
+wraps to several lines — set `--cluster-align`.
+
+```css
+.filters {
+  --cluster-align: start;
+  --cluster-justify: space-between;
+}
+```
+
+The optional utility layer ships `.justify-content-start`, `.justify-content-center`,
+`.justify-content-end` and `.justify-content-space-between`, which set
+`--cluster-justify` for you. See [Utilities](utilities.md).
 
 ## Center
 
@@ -369,6 +402,16 @@ This is useful for small sets of panels, not large card collections. Use `.grid`
 
 The `.switcher` class is defined in `src/css/optional/layout-extra.css`. Import it when needed.
 
+### Hooks
+
+- `--switcher-threshold` — container width at which the row becomes a column.
+
+```css
+.settings-panels {
+  --switcher-threshold: 55rem;
+}
+```
+
 ## Topbar
 
 > Sticky, frosted top bar shell for app/dashboard layouts with a persistent sidebar.
@@ -428,6 +471,15 @@ Items snap to the inline start edge by default. Use `data-snap="center"` for vis
   <article class="card">Five</article>
 </div>
 ```
+
+### Hooks
+
+- `--scroll-snap-item-size` — item `flex` basis; set it for card rails.
+- `--scroll-snap-gap` — space between items.
+- `--scroll-snap-padding` — inline scroll padding, so a snapped item does not sit
+  flush against the container edge. Not declared; falls back to `--scroll-snap-gap`.
+- `--scroll-snap-align` — item snap alignment. Prefer `data-snap="center"`
+  over setting this directly.
 
 Keep scrollbars visible by default. If a product deliberately hides them, make that choice explicit with `data-scrollbar="hidden"`.
 
