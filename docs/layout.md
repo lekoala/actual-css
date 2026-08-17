@@ -170,9 +170,7 @@ Use `.grid` for responsive equal-width item grids.
 </section>
 ```
 
-Tune the minimum item width with `--grid-min`, or replace the responsive
-template entirely with `--grid-columns` when the layout needs an asymmetric
-ratio.
+Tune the minimum item width with `--grid-min`.
 
 ```css
 .pricing-grid {
@@ -180,9 +178,19 @@ ratio.
 }
 ```
 
+Or replace the responsive template entirely with `--grid-columns` for a
+custom or asymmetric layout. Because this overrides the intrinsic
+`auto-fit/minmax` algorithm, you own any narrow-container collapse:
+
 ```css
 .feature-grid {
   --grid-columns: minmax(0, 2fr) minmax(0, 1fr);
+}
+
+@container (width < 40rem) {
+  .feature-grid {
+    --grid-columns: 1fr;
+  }
 }
 ```
 

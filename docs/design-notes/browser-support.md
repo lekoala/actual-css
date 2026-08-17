@@ -105,9 +105,9 @@ only through background color.
 
 ## JavaScript runtime floor
 
-The JS runtime requires the **Minimum** browser tier (Firefox 98+, Safari 15.4+,
-Chromium 99+). Below that floor the degraded CSS experience still applies; the
-progressive JavaScript enhancements simply do not run.
+The JavaScript runtime is supported from the **Minimum** browser tier
+(Firefox 98+, Safari 15.4+, Chromium 99+). Below it, the degraded CSS
+experience remains available but JavaScript enhancements are unsupported.
 
 The floor matches the runtime's actual syntax: `Array.prototype.at()`,
 `Object.hasOwn()`, optional chaining, and nullish coalescing all land at or
