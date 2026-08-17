@@ -97,6 +97,7 @@ Components are presented alphabetically.
 - Could have simple or complex html content.
 - Alerts may include a decorative leading icon. Use `.alert-icon` on the icon element, and wrap the content in `.alert-content`.
 - Use `.sm` or `.lg` for density changes. The inline padding stays stable.
+- Use `.alert-dismiss` for a compact dismiss button. It is a direct trailing child in standard alerts and lives inside `.alert-title` in admonitions. It uses the shared `--icon-close` mask and the `--dismiss` runtime command — no icon font or custom JS.
 
 ```html{.stack}
 <div class="alert success">
@@ -161,6 +162,45 @@ Variants
 
 <div class="alert danger solid" role="alert">
   I'm a solid error <a href="#">with a link</a>
+</div>
+```
+
+### Dismiss
+
+Use `.alert-dismiss` to let a user remove an inline alert. The button is transparent at rest with a muted glyph; it works with any intent because it uses `currentColor` and reduced opacity. It relies on the runtime `--dismiss` command — no custom script.
+
+```html
+<div class="alert warning" id="warning-alert">
+  <i class="ti ti-alert-triangle alert-icon" aria-hidden="true"></i>
+  <div>
+    <strong>Warning</strong>
+    <p>Something needs your attention.</p>
+  </div>
+  <button
+    class="alert-dismiss"
+    type="button"
+    commandfor="warning-alert"
+    command="--dismiss"
+    aria-label="Dismiss alert"
+  ></button>
+</div>
+```
+
+In an admonition, place `.alert-dismiss` inside `.alert-title`; it rides the inline end of the title bar:
+
+```html
+<div class="alert admonition warning" id="notice">
+  <div class="alert-title">
+    <span>Warning</span>
+    <button
+      class="alert-dismiss"
+      type="button"
+      commandfor="notice"
+      command="--dismiss"
+      aria-label="Dismiss alert"
+    ></button>
+  </div>
+  <div class="alert-body">...</div>
 </div>
 ```
 

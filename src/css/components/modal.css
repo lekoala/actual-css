@@ -160,3 +160,56 @@ html.has-modal-open.had-scrollbar {
     background: Canvas;
   }
 }
+
+/* Close icon button for modal/drawer headers. A small, rounded control with a
+   subtle resting surface that anchors the glyph; hover deepens it via the
+   shared hover overlay. The glyph comes from --icon-close, masked to
+   currentColor, so no icon font or text glyph is required in the markup. */
+.dialog-close {
+  --close-size: 2.25rem;
+  --close-icon-size: 1rem;
+
+  display: inline-grid;
+  place-items: center;
+  inline-size: var(--close-size);
+  block-size: var(--close-size);
+  flex: none;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius);
+  background: var(--surface-subtle);
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.dialog-close::before {
+  content: "";
+  inline-size: var(--close-icon-size);
+  block-size: var(--close-icon-size);
+  background: currentColor;
+  -webkit-mask: var(--icon-close) center / contain no-repeat;
+  mask: var(--icon-close) center / contain no-repeat;
+}
+
+/* A header containing a close button becomes an aligned two-column grid:
+   title column + close column, with the close riding the title line rather
+   than centering against the whole title+subtitle block. Matches a direct
+   child (modal) or the form-wrapped submit close used by drawers. */
+header:has(> .dialog-close, > form:has(> .dialog-close)) {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+  gap: var(--space-4);
+}
+
+@media (hover: hover) {
+  .dialog-close:hover {
+    box-shadow: inset 0 0 0 999px var(--hover-overlay);
+    color: var(--text);
+  }
+}
+
+.dialog-close:focus-visible {
+  outline: 2px solid transparent;
+  box-shadow: var(--focus-ring-shadow);
+}
