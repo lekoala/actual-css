@@ -166,25 +166,25 @@ Size modifiers swap the shared control tokens:
 .sm {
   --control-size: var(--control-size-sm);
   --control-font-size: var(--font-size-sm);
-  --variant-font-size: var(--font-size-sm);
-  --variant-icon-size: 1rem;
-  --variant-pad-block: var(--space-3);
-  --variant-compact-size: 1.25rem;
-  --variant-compact-font-size: 0.75rem;
+  --density-font-size: var(--font-size-sm);
+  --density-icon-size: 1rem;
+  --density-pad-block: var(--space-3);
+  --density-compact-size: 1.25rem;
+  --density-compact-font-size: 0.75rem;
 }
 
 .lg {
   --control-size: var(--control-size-lg);
   --control-font-size: var(--font-size-lg);
-  --variant-font-size: var(--font-size-lg);
-  --variant-icon-size: 1.5rem;
-  --variant-pad-block: var(--space-5);
-  --variant-compact-size: 1.875rem;
-  --variant-compact-font-size: var(--font-size-sm);
+  --density-font-size: var(--font-size-lg);
+  --density-icon-size: 1.5rem;
+  --density-pad-block: var(--space-5);
+  --density-compact-size: 1.875rem;
+  --density-compact-font-size: var(--font-size-sm);
 }
 ```
 
-Content components can consume `--variant-*` for local density. Compact labels such as `.badge` consume `--variant-compact-*`; display elements with special geometry, such as avatar and spinner, keep their own size scales.
+Content components can consume `--density-*` for local density. Compact labels such as `.badge` consume `--density-compact-*`; display elements with special geometry, such as avatar and spinner, keep their own size scales.
 
 ### Elevation
 

@@ -23,7 +23,7 @@
 }
 
 .choice-card {
-  --choice-card-pad: var(--variant-space, var(--space-4));
+  --choice-card-pad: var(--density-space, var(--space-4));
   --choice-card-radius: var(--radius);
   --choice-card-border: var(--border);
   --choice-card-bg: var(--surface);

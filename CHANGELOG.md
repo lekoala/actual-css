@@ -22,6 +22,12 @@ This project follows Keep a Changelog and uses semver, including during 0.x.
   connected.
 - JS runtime floor is now the **Minimum** tier (Firefox 98+, Safari 15.4+,
   Chromium 99+).
+- Size-related `--variant-*` tokens were renamed to `--density-*`
+  (`--density-space`, `--density-font-size`, `--density-icon-size`,
+  `--density-pad-block`, `--density-compact-size`,
+  `--density-compact-font-size`). The `.sm`/`.lg` density model is unchanged;
+  this renames the shared tokens only, to separate density from visual
+  variants (`--ui-*`) (breaking).
 
 ### Removed
 - `forget()` from the `enhance()` return value.

@@ -141,20 +141,20 @@
 
 /* Padding — block (vertical) */
 .py {
-  padding-block: var(--variant-space);
+  padding-block: var(--density-space);
 }
 
 /* Padding — inline (horizontal) */
 .px {
-  padding-inline: var(--variant-space);
+  padding-inline: var(--density-space);
 }
 
 /* Margin — block-start */
 .mbs {
-  margin-block-start: var(--variant-space);
+  margin-block-start: var(--density-space);
 }
 
 /* Margin — block-end */
 .mbe {
-  margin-block-end: var(--variant-space);
+  margin-block-end: var(--density-space);
 }

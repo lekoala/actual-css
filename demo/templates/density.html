@@ -1,0 +1,419 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Density - Actual CSS</title>
+  <meta name="description" content="How .sm and .lg density contexts inherit through a subtree, which components opt in, and how to tune a single dimension locally.">
+  <link rel="stylesheet" href="../../src/css/actual.css">
+  <link rel="stylesheet" href="../../src/css/themes/index.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+  <link rel="stylesheet" href="../styles/demo.css">
+  <style>
+    .density-page {
+      padding-block: var(--space-6);
+    }
+
+    .density-intro {
+      --center-size: 72rem;
+
+      margin-block-end: var(--space-5);
+    }
+
+    .density-section {
+      --center-size: 72rem;
+
+      padding-block: var(--space-6);
+      border-block-start: var(--border-width) solid var(--border);
+    }
+
+    .density-note {
+      max-inline-size: 64ch;
+      color: var(--text-muted);
+    }
+
+    .density-stage {
+      margin-block-start: var(--space-4);
+      padding: var(--space-4);
+      border: var(--border-width) solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+    }
+
+    .density-switcher {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-2);
+      align-items: center;
+      margin-block-start: var(--space-3);
+    }
+
+    .density-cols {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+      gap: var(--gap);
+      align-items: start;
+      margin-block-start: var(--space-4);
+    }
+
+    .density-col {
+      display: grid;
+      gap: var(--space-3);
+    }
+
+    .density-col > h3 {
+      margin: 0;
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-strong);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--text-muted);
+    }
+
+    .density-sample {
+      display: grid;
+      gap: var(--space-3);
+      padding: var(--space-4);
+      border: var(--border-width) solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+    }
+
+    .density-code {
+      margin-block-start: var(--space-4);
+    }
+
+    .density-code pre {
+      margin: 0;
+      padding: var(--space-4);
+      background: var(--surface-subtle);
+      border-radius: var(--radius-sm);
+      overflow-x: auto;
+      font-size: var(--font-size-sm);
+    }
+
+    .density-legend {
+      display: grid;
+      gap: var(--space-2);
+      margin-block-start: var(--space-4);
+    }
+
+    .density-legend ul {
+      margin: 0;
+      padding-inline-start: 1.25rem;
+    }
+  </style>
+</head>
+
+<body>
+  <main class="density-page">
+    <header class="center stack density-intro">
+      <p class="overline">Actual CSS</p>
+      <h1>Density</h1>
+      <p class="lead">
+        `.sm` and `.lg` establish inherited density tokens. A single class on a
+        wrapper tightens or loosens the rhythm and control sizes of everything
+        inside it that opts in.
+      </p>
+      <select class="select sm fit" id="theme-switcher" aria-label="Switch theme">
+        <option value="">System</option>
+        <option value="light">Light</option>
+        <option value="dark">Dark</option>
+        <option value="dim">Dim</option>
+        <option value="corporate">Corporate</option>
+        <option value="forest">Forest</option>
+        <option value="ocean">Ocean</option>
+        <option value="spruce">Spruce</option>
+        <option value="petrol">Petrol</option>
+        <option value="sunset">Sunset</option>
+        <option value="lavender">Lavender</option>
+        <option value="mono">Mono</option>
+        <option value="square">Square</option>
+        <option value="edge">Edge</option>
+        <option value="cyberpunk">Cyberpunk</option>
+        <option value="neon">Neon</option>
+        <option value="gradient">Gradient</option>
+      </select>
+    </header>
+
+    <section class="center density-section" id="live-context">
+      <h2>Live density context</h2>
+      <p class="density-note">
+        Switch the density of the panel below. One class on the wrapper changes
+        the layout gap, the spacing helpers, and every participating component
+        at once — no class on the children.
+      </p>
+
+      <div class="density-switcher" role="radiogroup" aria-label="Density context">
+        <label class="choice">
+          <input class="radio" type="radio" name="density" value="sm">
+          <span>.sm</span>
+        </label>
+        <label class="choice">
+          <input class="radio" type="radio" name="density" value="" checked>
+          <span>default</span>
+        </label>
+        <label class="choice">
+          <input class="radio" type="radio" name="density" value="lg">
+          <span>.lg</span>
+        </label>
+      </div>
+
+      <div id="density-stage" class="density-stage">
+        <div class="stack">
+          <div class="cluster">
+            <button class="btn primary" type="button">
+              <i class="ti ti-plus" aria-hidden="true"></i>
+              New deployment
+            </button>
+            <input class="input" type="search" placeholder="Search accounts" aria-label="Search">
+            <span class="badge success soft">Healthy</span>
+          </div>
+
+          <div class="alert" role="status">
+            <strong>Deployment completed.</strong>
+            <span>Version 0.3.0 is live in production.</span>
+          </div>
+
+          <nav aria-label="Pages">
+            <ol class="pagination">
+              <li><a class="btn outline" href="#" rel="prev">Previous</a></li>
+              <li><a class="btn" href="#" aria-current="page">1</a></li>
+              <li><a class="btn outline" href="#">2</a></li>
+              <li><a class="btn outline" href="#" rel="next">Next</a></li>
+            </ol>
+          </nav>
+        </div>
+      </div>
+    </section>
+
+    <section class="center density-section" id="inherited-context">
+      <h2>Same markup, different density</h2>
+      <p class="density-note">
+        The exact same fragment rendered in three contexts. The only difference
+        is the class on the wrapper: `<code>.sm</code>`, nothing, `<code>.lg</code>`.
+      </p>
+
+      <div class="density-cols">
+        <div class="density-col">
+          <h3>.sm</h3>
+          <div class="sm density-sample">
+            <div class="cluster">
+              <button class="btn">Save</button>
+              <span class="badge">Active</span>
+            </div>
+            <input class="input" value="Compact input">
+            <div class="alert">Compact alert rhythm.</div>
+          </div>
+        </div>
+
+        <div class="density-col">
+          <h3>default</h3>
+          <div class="density-sample">
+            <div class="cluster">
+              <button class="btn">Save</button>
+              <span class="badge">Active</span>
+            </div>
+            <input class="input" value="Default input">
+            <div class="alert">Default alert rhythm.</div>
+          </div>
+        </div>
+
+        <div class="density-col">
+          <h3>.lg</h3>
+          <div class="lg density-sample">
+            <div class="cluster">
+              <button class="btn">Save</button>
+              <span class="badge">Active</span>
+            </div>
+            <input class="input" value="Spacious input">
+            <div class="alert">Spacious alert rhythm.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="density-code">
+        <pre><code>&lt;div class="sm"&gt;
+  &lt;button class="btn"&gt;Save&lt;/button&gt;
+  &lt;input class="input"&gt;
+  &lt;span class="badge"&gt;Active&lt;/span&gt;
+  &lt;div class="alert"&gt;Compact alert.&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+      </div>
+    </section>
+
+    <section class="center density-section" id="local-sizing">
+      <h2>Local sizing</h2>
+      <p class="density-note">
+        The same class on a component is local sizing, not a second meaning.
+        `.sm` always establishes the same density tokens — only the scope
+        changes.
+      </p>
+
+      <div class="density-cols">
+        <div class="density-col">
+          <h3>.btn</h3>
+          <div class="cluster">
+            <button class="btn sm">Small</button>
+            <button class="btn">Default</button>
+            <button class="btn lg">Large</button>
+          </div>
+        </div>
+
+        <div class="density-col">
+          <h3>.badge</h3>
+          <div class="cluster">
+            <span class="badge sm">Small</span>
+            <span class="badge">Default</span>
+            <span class="badge lg">Large</span>
+          </div>
+        </div>
+
+        <div class="density-col">
+          <h3>.input</h3>
+          <div class="cluster">
+            <input class="input sm" placeholder="Small">
+            <input class="input" placeholder="Default">
+            <input class="input lg" placeholder="Large">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="center density-section" id="participants">
+      <h2>What participates</h2>
+      <p class="density-note">
+        Density is opt-in, not a global scale multiplier. Components consume
+        the dimensions that make sense for them; page chrome like cards,
+        tables, and accordions stays put. Compare the same set of components
+        at default and inside a `.sm` context.
+      </p>
+
+      <div class="density-cols">
+        <div class="density-col">
+          <h3>default</h3>
+          <div class="density-sample">
+            <div class="cluster">
+              <button class="btn">Button</button>
+              <span class="badge">Badge</span>
+              <input class="input" value="Input">
+            </div>
+            <div class="alert">Alert</div>
+            <div class="card" style="max-inline-size: 16rem;">
+              <div class="card-body">
+                Card padding is fixed by its own contract.
+              </div>
+            </div>
+            <div class="table-wrap" role="region" aria-label="Table" tabindex="0">
+              <table class="table">
+                <thead>
+                  <tr><th>Row</th><th>Value</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>One</td><td>1</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="density-col">
+          <h3>.sm</h3>
+          <div class="sm density-sample">
+            <div class="cluster">
+              <button class="btn">Button</button>
+              <span class="badge">Badge</span>
+              <input class="input" value="Input">
+            </div>
+            <div class="alert">Alert</div>
+            <div class="card" style="max-inline-size: 16rem;">
+              <div class="card-body">
+                Card padding is fixed by its own contract.
+              </div>
+            </div>
+            <div class="table-wrap" role="region" aria-label="Table" tabindex="0">
+              <table class="table">
+                <thead>
+                  <tr><th>Row</th><th>Value</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>One</td><td>1</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="density-legend">
+        <p><strong>Opt in</strong> — button, badge, alert, input, select, checkbox/radio/switch, pagination, tabs, choice cards, flyout menus, spacing helpers (<code>.py</code> / <code>.px</code> / <code>.mbs</code> / <code>.mbe</code>), and layout primitives via <code>--gap</code>.</p>
+        <ul>
+          <li>Controls (<code>.btn</code>, <code>.input</code>, <code>.select</code>, …) consume <code>--control-size</code> and <code>--control-font-size</code>.</li>
+          <li>Compact labels (<code>.badge</code>) consume <code>--density-compact-*</code>.</li>
+          <li>Content components (<code>.alert</code>) consume <code>--density-*</code> for their rhythm.</li>
+        </ul>
+        <p><strong>No-op</strong> — card, dialog, table, accordion, navbar, and page sections keep their size. The card above is identical in both columns even though its inner button and badge shrank.</p>
+      </div>
+    </section>
+
+    <section class="center density-section" id="local-overrides">
+      <h2>Local overrides</h2>
+      <p class="density-note">
+        When only one dimension needs tuning, configure that dimension on the
+        layout instance instead of adding a new utility family.
+      </p>
+
+      <div class="density-cols">
+        <div class="density-col">
+          <h3>default</h3>
+          <div class="density-sample">
+            <div class="cluster">
+              <button class="btn">Save</button>
+              <button class="btn outline">Cancel</button>
+            </div>
+            <p class="py">Block padding follows <code>--density-space</code> (default <code>--space-4</code>).</p>
+          </div>
+        </div>
+
+        <div class="density-col">
+          <h3>tuned per dimension</h3>
+          <div class="density-sample">
+            <div class="cluster" style="--gap: var(--space-2);">
+              <button class="btn">Save</button>
+              <button class="btn outline">Cancel</button>
+            </div>
+            <p class="py" style="--density-space: var(--space-3);">Gap tightened to <code>--space-2</code>, padding to <code>--space-3</code>. The buttons keep their default size.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="../../dist/actual.js"></script>
+  <script>
+    const switcher = document.getElementById("theme-switcher");
+
+    if (switcher) {
+      switcher.addEventListener("change", () => {
+        if (switcher.value) {
+          document.documentElement.dataset.theme = switcher.value;
+        } else {
+          document.documentElement.removeAttribute("data-theme");
+        }
+      });
+    }
+
+    const stage = document.getElementById("density-stage");
+    const radios = document.querySelectorAll('input[name="density"]');
+
+    for (const radio of radios) {
+      radio.addEventListener("change", () => {
+        const value = document.querySelector('input[name="density"]:checked').value;
+        stage.className = `density-stage${value ? ` ${value}` : ""}`;
+      });
+    }
+  </script>
+</body>
+
+</html>

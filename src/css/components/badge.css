@@ -19,9 +19,9 @@
 }
 
 .badge {
-  --badge-size: var(--variant-compact-size, 1.5rem);
+  --badge-size: var(--density-compact-size, 1.5rem);
   --badge-pad-x: 0.55em;
-  --badge-font-size: var(--variant-compact-font-size, 0.8125rem);
+  --badge-font-size: var(--density-compact-font-size, 0.8125rem);
   --badge-dot-size: 0.5rem;
   --badge-bg: var(--ui-bg, transparent);
   --badge-fg: var(--ui-fg, var(--intent, var(--text)));

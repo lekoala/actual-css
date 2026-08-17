@@ -315,7 +315,7 @@ Use `.input-icon` for a search or filter input with a leading icon.
 
 It positions the wrapper's first child absolutely inside a relative container and grows the input's start padding to clear it. `pointer-events: none` on the icon keeps clicks passing through to the input underneath. It is icon-library agnostic — an `<i>` webfont icon, an inline `<svg>`, or a `<span>` all work as the wrapper's first child.
 
-The icon is sized with `--variant-icon-size` (variants.css), the same token `.alert` uses, so `.sm`/`.lg` scale it automatically. Apply the size class to the wrapper so the icon picks it up, and to the input so its own height/font-size follow:
+The icon is sized with `--density-icon-size` (variants.css), the same token `.alert` uses, so `.sm`/`.lg` scale it automatically. Apply the size class to the wrapper so the icon picks it up, and to the input so its own height/font-size follow:
 
 ```html{.stack}
 <label class="input-icon sm">
