@@ -156,6 +156,7 @@ select {
   /* Shared icon assets. Override these URLs when a strict CSP disallows data:. */
   --icon-chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%238a8594' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
   --icon-check: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E");
+  --icon-close: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='6' y1='6' x2='18' y2='18'/%3E%3Cline x1='18' y1='6' x2='6' y2='18'/%3E%3C/svg%3E");
 
   /* Viewport size tokens — fallback vh/vw with dvh/vi enhancement.
      Consumed by full-viewport components (app-shell, drawer, modal, flyout).
@@ -1426,12 +1427,19 @@ a.badge[aria-disabled="true"] {
   vertical-align: -0.125em;
 }
 
+/* Grid anatomy — activated by a leading icon, a trailing dismiss button, or
+   both. Icon and dismiss are pinned to the outer columns; anything else (the
+   message content) flows into the remaining text column. */
 @supports selector(.alert:has(> *)) {
-  .alert:has(> .alert-icon) {
+  .alert:has(> .alert-icon, > .alert-dismiss) {
     display: grid;
-    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1fr);
     align-items: var(--items-align, start);
     column-gap: var(--space-3);
+  }
+
+  .alert:has(> .alert-icon) {
+    grid-template-columns: auto minmax(0, 1fr);
   }
 
   .alert:has(> .alert-icon) > .alert-icon {
@@ -1442,8 +1450,21 @@ a.badge[aria-disabled="true"] {
     margin-block-start: 0.125em;
   }
 
-  .alert:has(> .alert-icon) > :not(.alert-icon) {
+  .alert:has(> .alert-icon) > :not(.alert-icon, .alert-dismiss) {
     grid-column: 2;
+  }
+
+  .alert:has(> .alert-dismiss) {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .alert:has(> .alert-icon):has(> .alert-dismiss) {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+  }
+
+  .alert:has(> .alert-dismiss) > .alert-dismiss {
+    grid-column: -2 / -1;
+    grid-row: 1;
   }
 }
 
@@ -1451,6 +1472,46 @@ a.badge[aria-disabled="true"] {
 .alert :where(a:not(.btn)) {
   color: inherit;
   font-weight: var(--font-weight-strong);
+}
+
+/* Dismiss — compact close button for inline alerts. Transparent at rest with
+   a reduced opacity glyph so it stays secondary inside an already-colored
+   alert; hover reinforces it via the shared overlay. Uses the shared
+   --icon-close mask, so no icon font or text glyph is required in the markup.
+   Standard alerts place it as a direct trailing child; admonitions place it
+   inside .alert-title (see below). */
+.alert-dismiss {
+  --dismiss-size: 1.75rem;
+  --dismiss-icon-size: 0.875rem;
+
+  display: inline-grid;
+  place-items: center;
+  inline-size: var(--dismiss-size);
+  block-size: var(--dismiss-size);
+  flex: none;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius);
+  background: transparent;
+  color: currentColor;
+  opacity: 0.65;
+  cursor: pointer;
+}
+
+.alert-dismiss::before {
+  content: "";
+  inline-size: var(--dismiss-icon-size);
+  block-size: var(--dismiss-icon-size);
+  background: currentColor;
+  -webkit-mask: var(--icon-close) center / contain no-repeat;
+  mask: var(--icon-close) center / contain no-repeat;
+}
+
+@media (hover: hover) {
+  .alert-dismiss:hover {
+    background: var(--hover-overlay);
+    opacity: 1;
+  }
 }
 
 /* Forced colors: no override needed. The always-on border gets a forced
@@ -1486,6 +1547,11 @@ a.badge[aria-disabled="true"] {
   padding-inline: var(--alert-pad-inline);
   border-start-start-radius: calc(var(--radius-lg) - var(--border-width));
   border-start-end-radius: calc(var(--radius-lg) - var(--border-width));
+}
+
+/* Dismiss inside an admonition title bar rides the inline end. */
+.alert.admonition > .alert-title > .alert-dismiss {
+  margin-inline-start: auto;
 }
 
 @supports (color: color-mix(in oklch, red, white)) {
@@ -1864,6 +1930,59 @@ html.has-modal-open.had-scrollbar {
   dialog.modal::backdrop {
     background: Canvas;
   }
+}
+
+/* Close icon button for modal/drawer headers. A small, rounded control with a
+   subtle resting surface that anchors the glyph; hover deepens it via the
+   shared hover overlay. The glyph comes from --icon-close, masked to
+   currentColor, so no icon font or text glyph is required in the markup. */
+.dialog-close {
+  --close-size: 2.25rem;
+  --close-icon-size: 1rem;
+
+  display: inline-grid;
+  place-items: center;
+  inline-size: var(--close-size);
+  block-size: var(--close-size);
+  flex: none;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius);
+  background: var(--surface-subtle);
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.dialog-close::before {
+  content: "";
+  inline-size: var(--close-icon-size);
+  block-size: var(--close-icon-size);
+  background: currentColor;
+  -webkit-mask: var(--icon-close) center / contain no-repeat;
+  mask: var(--icon-close) center / contain no-repeat;
+}
+
+/* A header containing a close button becomes an aligned two-column grid:
+   title column + close column, with the close riding the title line rather
+   than centering against the whole title+subtitle block. Matches a direct
+   child (modal) or the form-wrapped submit close used by drawers. */
+header:has(> .dialog-close, > form:has(> .dialog-close)) {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+  gap: var(--space-4);
+}
+
+@media (hover: hover) {
+  .dialog-close:hover {
+    box-shadow: inset 0 0 0 999px var(--hover-overlay);
+    color: var(--text);
+  }
+}
+
+.dialog-close:focus-visible {
+  outline: 2px solid transparent;
+  box-shadow: var(--focus-ring-shadow);
 }
 
 /*

@@ -291,9 +291,9 @@ An admonition is a structured box with a tinted title bar, an optional icon, and
           aria-label="Jane Doe, open profile menu">
     <img src="https://mockmind-api.uifaces.co/content/human/219.jpg" alt="" />
   </button>
-  <menu class="flyout" id="profile-menu" aria-labelledby="profile-trigger" hidden>
-    <li><a href="#profile">View profile</a></li>
-    <li><button type="button">Sign out</button></li>
+  <menu class="flyout menu" id="profile-menu" aria-labelledby="profile-trigger" hidden>
+    <li><a class="menu-item" href="#profile">View profile</a></li>
+    <li><button class="menu-item" type="button">Sign out</button></li>
   </menu>
 </div>
 ```

@@ -22,10 +22,75 @@
   <section class="component-section">
     <header class="component-header">
       <h1>Form Actions</h1>
-      
+      <p>`.form-actions` is a class-only flex row that closes a form. It may live</p>
     </header>
         <div class="component-prose">
-      <p><code>.form-actions</code> defaults to centered cross-axis alignment and start justification. Override <code>--form-actions-align</code> and <code>--form-actions-justify</code> when the action row needs a different arrangement. Its top margin remains controlled by <code>--form-actions-margin-block-start</code>.</p>
+      <p>> inside or outside the <code>&lt;form&gt;</code> (see Detached Actions) and has an opt-in > sticky variant (see Sticky Actions). The default layout is a wrapping flex row: items are centered on the cross axis and start-aligned on the main axis, with a default top margin that separates the actions from the fields above.</p>
+    </div>
+    <section class="component-section">
+      <div class="example-group">
+        <div class="example-render">
+          <form novalidate>
+  <div class="stack">
+    <!-- fields -->
+  </div>
+
+  <div class="form-actions">
+    <button type="button" class="btn outline">Cancel</button>
+    <button type="submit" class="btn primary">Save changes</button>
+  </div>
+</form>
+        </div>
+        <div class="example-code">
+          <pre><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>form</span> <span class="token attr-name">novalidate</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>stack<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+    <span class="token comment">&lt;!-- fields --></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
+
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>form-actions<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>button</span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>button<span class="token punctuation">"</span></span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>btn outline<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Cancel<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>button</span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>submit<span class="token punctuation">"</span></span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>btn primary<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Save changes<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>form</span><span class="token punctuation">></span></span></code></pre>
+        </div>
+      </div>
+    </section>
+    <div class="component-prose">
+      <h3>Hooks</h3>
+<p>The three layout hooks are unset by default and fall back to the values below.</p>
+<ul>
+  <li><code>--form-actions-align</code> — <code>center</code> — cross-axis alignment (<code>align-items</code>).</li>
+  <li><code>--form-actions-justify</code> — <code>flex-start</code> — main-axis distribution (<code>justify-content</code>).</li>
+  <li><code>--form-actions-margin-block-start</code> — <code>var(--space-5)</code> — top margin separating actions from the form.</li>
+</ul>
+<h3>Common arrangements</h3>
+<p>Right-align the submit on wide rows:</p>
+    </div>
+    <section class="component-section">
+      <h2>CSS</h2>
+      <div class="example-group">
+        <div class="example-code">
+          <pre><code class="language-css"><span class="token selector">.form-actions</span> <span class="token punctuation">{</span>
+  <span class="token property">--form-actions-justify</span><span class="token punctuation">:</span> flex-end<span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+        </div>
+      </div>
+    </section>
+    <div class="component-prose">
+      <p>Stretch each action to fill the full row width:</p>
+    </div>
+    <section class="component-section">
+      <h2>CSS</h2>
+      <div class="example-group">
+        <div class="example-code">
+          <pre><code class="language-css"><span class="token selector">.form-actions</span> <span class="token punctuation">{</span>
+  <span class="token property">--form-actions-align</span><span class="token punctuation">:</span> stretch<span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+        </div>
+      </div>
+    </section>
+    <div class="component-prose">
+      <p>Because the hooks are inherited custom properties, set them on a page or container to apply one arrangement to every <code>.form-actions</code> inside it. > The sticky variant adds <code>--form-actions-sticky-block-offset</code>, > <code>--form-actions-sticky-padding</code>, and <code>--form-actions-sticky-inline-offset</code> — > see Sticky Actions. <code>.form-actions</code> is class-only and works inside or > outside the form — see Detached Actions.</p>
     </div>
     
   </section>
