@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-08-17T13:27:03.422Z",
-  "totalRaw": 171404,
-  "totalMinified": 83242,
-  "totalBrotli": 12452,
+  "timestamp": "2026-08-17T15:13:07.109Z",
+  "totalRaw": 168691,
+  "totalMinified": 82489,
+  "totalBrotli": 12295,
   "themesMinified": 29127,
   "themesBrotli": 3404,
-  "shippedMinified": 83242,
-  "shippedBrotli": 12452,
+  "shippedMinified": 82489,
+  "shippedBrotli": 12295,
   "maxShippedBrotli": 13312,
-  "fileCount": 74,
+  "fileCount": 73,
   "files": [
     {
       "file": "components/button.css",
@@ -143,10 +143,6 @@
       "raw": 2349
     },
     {
-      "file": "dialog-fallback.css",
-      "raw": 2295
-    },
-    {
       "file": "themes/cyberpunk.css",
       "raw": 2274
     },
@@ -247,10 +243,6 @@
       "raw": 1110
     },
     {
-      "file": "reset.css",
-      "raw": 1099
-    },
-    {
       "file": "themes/indigo.css",
       "raw": 1051
     },
@@ -283,6 +275,10 @@
       "raw": 731
     },
     {
+      "file": "reset.css",
+      "raw": 714
+    },
+    {
       "file": "print.css",
       "raw": 695
     },
@@ -292,7 +288,7 @@
     },
     {
       "file": "actual.css",
-      "raw": 497
+      "raw": 464
     },
     {
       "file": "components/actions.css",
