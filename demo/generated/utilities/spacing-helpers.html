@@ -25,13 +25,7 @@
       <p>Semantic step helpers for gap, padding, and margin — the most common inline-style escape hatches.</p>
     </header>
         <div class="component-prose">
-      <p>Spacing helpers use a restrained semantic scale:</p>
-<ul>
-  <li><code>-sm</code> — small step, <code>--space-2</code> (0.5rem)</li>
-  <li>Default — standard step, <code>--space-4</code> (1rem)</li>
-  <li><code>-lg</code> — large step, <code>--space-5</code> (1.5rem)</li>
-</ul>
-<p>All map to logical properties (<code>padding-block</code>, <code>margin-block-end</code>, etc.) for writing-direction safety.</p>
+      <p>Spacing helpers follow the density context. The default step is <code>--space-4</code> (1rem); the <code>.sm</code> context tightens it to <code>--space-2</code> (0.5rem) and the <code>.lg</code> context loosens it to <code>--space-5</code> (1.5rem). All helpers read <code>--density-space</code> and map to logical properties (<code>padding-block</code>, <code>margin-block-end</code>, etc.) for writing-direction safety.</p>
 <h3>Gap</h3>
 <p>Override the default gap from layout primitives (<code>.stack</code>, <code>.cluster</code>, <code>.grid</code>):</p>
     </div>
@@ -55,8 +49,9 @@
       <ul>
   <li><code>.gap-none</code> → <code>gap: 0</code></li>
 </ul>
+<p><code>.gap-none</code> sets the element's own gap directly and does not change <code>--gap</code> for nested layouts. For a denser or roomier rhythm, use the <code>.sm</code> / <code>.lg</code> density contexts or override <code>--gap</code> on the layout instance.</p>
 <h3>Padding</h3>
-<p>Block (vertical) and inline (horizontal) padding. Values respond to the <code>.sm</code> / <code>.lg</code> modifiers.</p>
+<p>Block (vertical) and inline (horizontal) padding. Values respond to the density context.</p>
     </div>
     <section class="component-section">
       <div class="example-group">
@@ -74,8 +69,8 @@
     </section>
     <div class="component-prose">
       <ul>
-  <li><code>.py</code> → <code>padding-block: var(--variant-space)</code></li>
-  <li><code>.px</code> → <code>padding-inline: var(--variant-space)</code></li>
+  <li><code>.py</code> → <code>padding-block: var(--density-space)</code></li>
+  <li><code>.px</code> → <code>padding-inline: var(--density-space)</code></li>
 </ul>
 <h3>Margin</h3>
 <p>Block-start and block-end margin for giving elements room:</p>
@@ -92,8 +87,8 @@
     </section>
     <div class="component-prose">
       <ul>
-  <li><code>.mbs</code> → <code>margin-block-start: var(--variant-space)</code></li>
-  <li><code>.mbe</code> → <code>margin-block-end: var(--variant-space)</code></li>
+  <li><code>.mbs</code> → <code>margin-block-start: var(--density-space)</code></li>
+  <li><code>.mbe</code> → <code>margin-block-end: var(--density-space)</code></li>
 </ul>
 <p>No <code>mbs-none</code> / <code>mbe-none</code> — use <code>margin: 0</code> via <code>.list-reset</code> for lists, or a layout primitive that already resets margins (<code>.stack &gt; *</code>).</p>
     </div>

@@ -45,25 +45,38 @@ Custom intents need no framework support — define `--intent` and `--intent-fg`
 <div class="alert solid warning">Solid warning</div>
 ```
 
-## Sizes
+## Density
 
-`.sm` and `.lg` are contextual modifiers. They set inherited size tokens (`--control-size`, `--variant-font-size`, etc.) that components opt into.
+`.sm` and `.lg` establish inherited density tokens. Components opt into the
+density dimensions that make sense for them. The same modifiers can also be
+applied directly to a component for local sizing.
+
+As inherited contexts, one class tightens or loosens the whole subtree:
 
 ```html
 <div class="sm">
   <button class="btn">Small button</button>
+  <input class="input">
   <span class="badge">Small badge</span>
 </div>
 ```
 
-Works locally too:
+The same class on a component is local sizing, not a second meaning:
 
 ```html
 <button class="btn sm">Small button</button>
 <span class="badge lg">Large badge</span>
 ```
 
-Components with bespoke sizing (`.avatar`, `.spinner`) define local `.sm`/`.lg` instead.
+This is not "`.sm` sometimes means density and sometimes size": `.sm` always
+establishes the same density tokens — only the scope changes. The density
+tokens are `--gap`, `--density-space`, `--control-size`, `--density-font-size`,
+`--density-icon-size`, `--density-pad-block`, and `--density-compact-*`.
+Components consume the dimensions that make sense for them and opt out of the
+rest.
+
+Components with bespoke sizing (`.avatar`, `.spinner`) define local `.sm`/`.lg`
+instead of consuming the shared tokens.
 
 ## Child semantics
 

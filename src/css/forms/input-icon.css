@@ -3,11 +3,11 @@
  *
  * Icon-library agnostic: detects position by DOM order. First child that is
  * not .input = leading icon; icon after .input = trailing. Sizes with
- * --variant-icon-size (variants.css) so .sm/.lg pick up the same icon scale
+ * --density-icon-size (variants.css) so .sm/.lg pick up the same icon scale
  * used elsewhere (alert.css).
  */
 .input-icon {
-  --input-icon-size: var(--variant-icon-size, 1.25rem);
+  --input-icon-size: var(--density-icon-size, 1.25rem);
 
   display: block;
   position: relative;

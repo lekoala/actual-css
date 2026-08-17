@@ -162,7 +162,7 @@ select {
 
   /* Spacing */
   --gap: 0.75rem;
-  --variant-space: var(--space-4);
+  --density-space: var(--space-4);
   --space-1: 0.25rem;
   --space-2: 0.5rem;
   --space-3: 0.75rem;
@@ -688,10 +688,20 @@ small {
   }
 }
 
+/*
+ * Responsive equal-width grids, with fixed-column presets below.
+ *
+ * Public hooks:
+ * --grid-min
+ * --grid-columns
+ */
 .grid {
   display: grid;
   gap: var(--gap);
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--grid-min, 16rem)), 1fr));
+  grid-template-columns: var(
+      --grid-columns,
+      repeat(auto-fit, minmax(min(100%, var(--grid-min, 16rem)), 1fr))
+    );
 }
 
 /* Query-container wrapper that opts .grid-2/3/4/6 into responsive
@@ -794,9 +804,9 @@ small {
  *   components/badge.css   — .badge default soft
  *   components/alert.css   — .alert default + .alert.solid/.alert.outline
  *
- * .sm/.lg set shared size tokens. Controls consume --control-*; non-control
- * components may consume --variant-* when the variant should affect their
- * local density. Compact components may consume --variant-compact-*.
+ * .sm/.lg set shared density tokens. Controls consume --control-*; non-control
+ * components may consume --density-* when the density context should affect
+ * their local rhythm. Compact components may consume --density-compact-*.
  * Components with bespoke sizing (spinner, avatar) define local .sm/.lg;
  * applying .sm/.lg to card, dialog, accordion, navbar, table is
  * a no-op.
@@ -824,25 +834,25 @@ small {
 
 .sm {
   --gap: var(--space-2);
-  --variant-space: var(--space-2);
+  --density-space: var(--space-2);
   --control-size: var(--control-size-sm);
   --control-font-size: var(--font-size-sm);
-  --variant-font-size: var(--font-size-sm);
-  --variant-icon-size: 1rem;
-  --variant-pad-block: var(--space-3);
-  --variant-compact-size: 1.25rem;
-  --variant-compact-font-size: 0.75rem;
+  --density-font-size: var(--font-size-sm);
+  --density-icon-size: 1rem;
+  --density-pad-block: var(--space-3);
+  --density-compact-size: 1.25rem;
+  --density-compact-font-size: 0.75rem;
 }
 .lg {
   --gap: var(--space-5);
-  --variant-space: var(--space-5);
+  --density-space: var(--space-5);
   --control-size: var(--control-size-lg);
   --control-font-size: var(--font-size-lg);
-  --variant-font-size: var(--font-size-lg);
-  --variant-icon-size: 1.5rem;
-  --variant-pad-block: var(--space-5);
-  --variant-compact-size: 1.875rem;
-  --variant-compact-font-size: var(--font-size-sm);
+  --density-font-size: var(--font-size-lg);
+  --density-icon-size: 1.5rem;
+  --density-pad-block: var(--space-5);
+  --density-compact-size: 1.875rem;
+  --density-compact-font-size: var(--font-size-sm);
 }
 
 /* Modern color enhancement. Baseline variant values above remain usable
@@ -1309,9 +1319,9 @@ a.btn[aria-disabled="true"] {
 }
 
 .badge {
-  --badge-size: var(--variant-compact-size, 1.5rem);
+  --badge-size: var(--density-compact-size, 1.5rem);
   --badge-pad-x: 0.55em;
-  --badge-font-size: var(--variant-compact-font-size, 0.8125rem);
+  --badge-font-size: var(--density-compact-font-size, 0.8125rem);
   --badge-dot-size: 0.5rem;
   --badge-bg: var(--ui-bg, transparent);
   --badge-fg: var(--ui-fg, var(--intent, var(--text)));
@@ -1492,10 +1502,10 @@ a.badge[aria-disabled="true"] {
 }
 
 .alert {
-  --alert-pad-block: var(--variant-pad-block, var(--space-3));
+  --alert-pad-block: var(--density-pad-block, var(--space-3));
   --alert-pad-inline: var(--space-4);
-  --alert-font-size: var(--variant-font-size, var(--font-size-md));
-  --alert-icon-size: var(--variant-icon-size, 1.25rem);
+  --alert-font-size: var(--density-font-size, var(--font-size-md));
+  --alert-icon-size: var(--density-icon-size, 1.25rem);
   --alert-bg: var(--surface-subtle);
   --alert-border: var(--border);
   --ui-bg: var(--alert-bg);
@@ -3825,11 +3835,11 @@ a.avatar[aria-disabled="true"] {
  *
  * Icon-library agnostic: detects position by DOM order. First child that is
  * not .input = leading icon; icon after .input = trailing. Sizes with
- * --variant-icon-size (variants.css) so .sm/.lg pick up the same icon scale
+ * --density-icon-size (variants.css) so .sm/.lg pick up the same icon scale
  * used elsewhere (alert.css).
  */
 .input-icon {
-  --input-icon-size: var(--variant-icon-size, 1.25rem);
+  --input-icon-size: var(--density-icon-size, 1.25rem);
 
   display: block;
   position: relative;
@@ -4091,7 +4101,7 @@ a.avatar[aria-disabled="true"] {
 }
 
 .choice-card {
-  --choice-card-pad: var(--variant-space, var(--space-4));
+  --choice-card-pad: var(--density-space, var(--space-4));
   --choice-card-radius: var(--radius);
   --choice-card-border: var(--border);
   --choice-card-bg: var(--surface);
@@ -4394,6 +4404,47 @@ a.avatar[aria-disabled="true"] {
 .file:focus-visible {
   outline: none;
   box-shadow: var(--focus-ring-shadow);
+}
+
+/* Native color picker — keep the browser's dialog and selected-color UI. */
+.color {
+  inline-size: var(--control-size);
+  block-size: var(--control-size);
+  padding: var(--space-1);
+  border: var(--border-width) solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  cursor: pointer;
+}
+
+.color::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+
+.color::-webkit-color-swatch {
+  border: 0;
+}
+
+.color::-moz-color-swatch {
+  border: 0;
+}
+
+.color:disabled {
+  cursor: not-allowed;
+  opacity: var(--disabled-opacity);
+}
+
+.color:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring-shadow);
+}
+
+@media (forced-colors: active) {
+  .color {
+    border-color: ButtonText;
+    background: ButtonFace;
+    forced-color-adjust: none;
+  }
 }
 
 /*
@@ -4762,12 +4813,18 @@ a.avatar[aria-disabled="true"] {
  * A flex cluster of buttons/actions that closes a form. The sticky variant
  * docks to the viewport bottom with a translucent blur where supported; at
  * rest it stays visually neutral so it does not double as a separator.
+ *
+ * Public hooks:
+ * --form-actions-align
+ * --form-actions-justify
+ * --form-actions-margin-block-start
  */
 .form-actions {
   display: flex;
   flex-wrap: wrap;
   gap: var(--gap);
-  align-items: center;
+  align-items: var(--form-actions-align, center);
+  justify-content: var(--form-actions-justify, flex-start);
   margin-block-start: var(--form-actions-margin-block-start, var(--space-5));
 }
 
@@ -4943,22 +5000,22 @@ a.avatar[aria-disabled="true"] {
 
 /* Padding — block (vertical) */
 .py {
-  padding-block: var(--variant-space);
+  padding-block: var(--density-space);
 }
 
 /* Padding — inline (horizontal) */
 .px {
-  padding-inline: var(--variant-space);
+  padding-inline: var(--density-space);
 }
 
 /* Margin — block-start */
 .mbs {
-  margin-block-start: var(--variant-space);
+  margin-block-start: var(--density-space);
 }
 
 /* Margin — block-end */
 .mbe {
-  margin-block-end: var(--variant-space);
+  margin-block-end: var(--density-space);
 }
 
 /* Joined controls are a component, but must load after the controls it groups. */

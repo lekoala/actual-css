@@ -240,13 +240,11 @@ Use `.items-center` when a flex or grid layout should center its children on the
 
 > Semantic step helpers for gap, padding, and margin — the most common inline-style escape hatches.
 
-Spacing helpers use a restrained semantic scale:
-
-- `-sm` — small step, `--space-2` (0.5rem)
-- Default — standard step, `--space-4` (1rem)
-- `-lg` — large step, `--space-5` (1.5rem)
-
-All map to logical properties (`padding-block`, `margin-block-end`, etc.) for writing-direction safety.
+Spacing helpers follow the density context. The default step is
+`--space-4` (1rem); the `.sm` context tightens it to `--space-2` (0.5rem)
+and the `.lg` context loosens it to `--space-5` (1.5rem). All helpers read
+`--density-space` and map to logical properties (`padding-block`,
+`margin-block-end`, etc.) for writing-direction safety.
 
 ### Gap
 
@@ -267,7 +265,7 @@ density contexts or override `--gap` on the layout instance.
 
 ### Padding
 
-Block (vertical) and inline (horizontal) padding. Values respond to the `.sm` / `.lg` modifiers.
+Block (vertical) and inline (horizontal) padding. Values respond to the density context.
 
 ```html
 <section role="tabpanel" class="py">
@@ -275,8 +273,8 @@ Block (vertical) and inline (horizontal) padding. Values respond to the `.sm` / 
 </section>
 ```
 
-- `.py` → `padding-block: var(--variant-space)`
-- `.px` → `padding-inline: var(--variant-space)`
+- `.py` → `padding-block: var(--density-space)`
+- `.px` → `padding-inline: var(--density-space)`
 
 ### Margin
 
@@ -286,8 +284,8 @@ Block-start and block-end margin for giving elements room:
 <h2 class="mbs">A section heading with space above</h2>
 ```
 
-- `.mbs` → `margin-block-start: var(--variant-space)`
-- `.mbe` → `margin-block-end: var(--variant-space)`
+- `.mbs` → `margin-block-start: var(--density-space)`
+- `.mbe` → `margin-block-end: var(--density-space)`
 
 No `mbs-none` / `mbe-none` — use `margin: 0` via `.list-reset` for lists, or a layout primitive that already resets margins (`.stack > *`).
 

@@ -27,7 +27,7 @@
         <div class="component-prose">
       <ul>
   <li>Form controls are styled with explicit classes, not by parent scope.</li>
-  <li>Control classes: <code>.input</code>, <code>.textarea</code>, <code>.select</code>, <code>.check</code>, <code>.radio</code>, <code>.switch</code>, <code>.range</code>, <code>.file</code>.</li>
+  <li>Control classes: <code>.input</code>, <code>.textarea</code>, <code>.select</code>, <code>.check</code>, <code>.radio</code>, <code>.switch</code>, <code>.range</code>, <code>.file</code>, <code>.color</code>.</li>
   <li>Reusable layout classes: <code>.field</code>, <code>.field-label</code>, <code>.field-help</code>, <code>.field-error</code>, <code>.field-group</code>, <code>.choice</code>, <code>.form-actions</code>, <code>.form-actions.sticky</code>.</li>
   <li>No floating labels shipped — the blocks demo shows a userland recipe for teams that want them.</li>
   <li>Proper focus style that preserves keyboard navigation.</li>
@@ -295,7 +295,7 @@
   <li><code>.choice</code> is the choice-label API. Use <code>.check</code> or <code>.radio</code> on the nested control. The control goes first, the label group second, so multi-line labels align the control with the first line.</li>
   <li>For a switch, use <code>class=&quot;switch&quot;</code> and <code>role=&quot;switch&quot;</code>.</li>
   <li>Core range controls stay native and are enhanced by <code>accent-color</code>. An optional richer range skin may come later if real projects need it.</li>
-  <li><code>.form-actions</code> carries a default top margin. Override it with <code>--form-actions-margin-block-start</code>. It is class-only and may live inside or outside <code>&lt;form&gt;</code>. See Detached Actions below.</li>
+  <li><code>.form-actions</code> carries a default top margin. Override it with <code>--form-actions-margin-block-start</code>, <code>--form-actions-align</code>, or <code>--form-actions-justify</code>. It is class-only and may live inside or outside <code>&lt;form&gt;</code>. See Detached Actions below.</li>
   <li><code>.join</code> visually joins adjacent controls into a single unit. Use <code>.join-addon</code> for static prefix/suffix content. The container still carries <code>role=&quot;group&quot;</code> for accessibility.</li>
 </ul>
 <h3>Optional automatic required marks</h3>

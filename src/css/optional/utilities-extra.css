@@ -5,7 +5,7 @@
  * They are escape hatches for layout nudges, not a full atomic scale.
  *
  * Core principle:
- * - .sm / .lg provide local rhythm through --gap and --variant-space.
+ * - .sm / .lg provide local rhythm through --gap and --density-space.
  * - utilities consume the current context instead of defining their own -sm/-lg scale.
  * - optional utilities extend core utilities, they do not re-express them.
  * - follow verbose .{property}-{value} naming.
@@ -117,7 +117,7 @@
 
 /* Spacing */
 .padding-context {
-  padding: var(--variant-space);
+  padding: var(--density-space);
 }
 
 .margin-inline-auto {

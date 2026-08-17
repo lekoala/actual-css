@@ -77,7 +77,27 @@
       </div>
     </section>
     <div class="component-prose">
-      <h3>Fixed Columns</h3>
+      <p>Or replace the responsive template entirely with <code>--grid-columns</code> for a custom or asymmetric layout. Because this overrides the intrinsic <code>auto-fit/minmax</code> algorithm, you own any narrow-container collapse:</p>
+    </div>
+    <section class="component-section">
+      <h2>CSS</h2>
+      <div class="example-group">
+        <div class="example-code">
+          <pre><code class="language-css"><span class="token selector">.feature-grid</span> <span class="token punctuation">{</span>
+  <span class="token property">--grid-columns</span><span class="token punctuation">:</span> <span class="token function">minmax</span><span class="token punctuation">(</span>0<span class="token punctuation">,</span> 2fr<span class="token punctuation">)</span> <span class="token function">minmax</span><span class="token punctuation">(</span>0<span class="token punctuation">,</span> 1fr<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token atrule"><span class="token rule">@container</span> <span class="token punctuation">(</span>width &lt; 40rem<span class="token punctuation">)</span></span> <span class="token punctuation">{</span>
+  <span class="token selector">.feature-grid</span> <span class="token punctuation">{</span>
+    <span class="token property">--grid-columns</span><span class="token punctuation">:</span> 1fr<span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+        </div>
+      </div>
+    </section>
+    <div class="component-prose">
+      <p><code>--grid-columns</code> applies to <code>.grid</code> only. The <code>.grid-2</code>, <code>.grid-3</code>, <code>.grid-4</code>, and <code>.grid-6</code> presets retain their fixed-column contracts.</p>
+<h3>Fixed Columns</h3>
 <p>Predictable 2/3/4/6-column grids. Full count by default; wrap in <code>.container-query</code> to make the column count collapse on narrow wrappers. Use <code>.grid-2</code>, <code>.grid-3</code>, <code>.grid-4</code>, and <code>.grid-6</code> when the column count matters more than the item minimum width — for example, when a row should always read as "three items side by side", or when an empty cell should not stretch to fill space. Unlike <code>.grid</code>, the columns are fixed; if you have only two items in a <code>.grid-3</code>, the third cell stays empty rather than redistributing. A <code>.grid-2/3/4/6</code> without a wrapper is a <strong>fixed grid</strong> (always at its full column count); with a <code>.container-query</code> wrapper, it's a <strong>responsive grid</strong> (the column count collapses on narrow wrappers). The wrapper is the query container; the grid itself is a plain block grid.</p>
     </div>
     <section class="component-section">

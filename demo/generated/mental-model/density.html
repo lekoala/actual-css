@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Sizes — Actual CSS</title>
+  <title>Density — Actual CSS</title>
   <link rel="stylesheet" href="../../../src/css/actual.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3/dist/tabler-icons.min.css">
   <link rel="stylesheet" href="../../styles/demo.css">
@@ -21,30 +21,32 @@
   <main class="center">
   <section class="component-section">
     <header class="component-header">
-      <h1>Sizes</h1>
+      <h1>Density</h1>
       
     </header>
         <div class="component-prose">
-      <p><code>.sm</code> and <code>.lg</code> are contextual modifiers. They set inherited size tokens (<code>--control-size</code>, <code>--variant-font-size</code>, etc.) that components opt into.</p>
+      <p><code>.sm</code> and <code>.lg</code> establish inherited density tokens. Components opt into the density dimensions that make sense for them. The same modifiers can also be applied directly to a component for local sizing. As inherited contexts, one class tightens or loosens the whole subtree:</p>
     </div>
     <section class="component-section">
       <div class="example-group">
         <div class="example-render">
           <div class="sm">
   <button class="btn">Small button</button>
+  <input class="input">
   <span class="badge">Small badge</span>
 </div>
         </div>
         <div class="example-code">
           <pre><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>sm<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
   <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>button</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>btn<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Small button<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>input<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
   <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>badge<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Small badge<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span>
 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span></code></pre>
         </div>
       </div>
     </section>
     <div class="component-prose">
-      <p>Works locally too:</p>
+      <p>The same class on a component is local sizing, not a second meaning:</p>
     </div>
     <section class="component-section">
       <div class="example-group">
@@ -59,7 +61,7 @@
       </div>
     </section>
     <div class="component-prose">
-      <p>Components with bespoke sizing (<code>.avatar</code>, <code>.spinner</code>) define local <code>.sm</code>/<code>.lg</code> instead.</p>
+      <p>This is not "<code>.sm</code> sometimes means density and sometimes size": <code>.sm</code> always establishes the same density tokens — only the scope changes. The density tokens are <code>--gap</code>, <code>--density-space</code>, <code>--control-size</code>, <code>--density-font-size</code>, <code>--density-icon-size</code>, <code>--density-pad-block</code>, and <code>--density-compact-*</code>. Components consume the dimensions that make sense for them and opt out of the rest. Components with bespoke sizing (<code>.avatar</code>, <code>.spinner</code>) define local <code>.sm</code>/<code>.lg</code> instead of consuming the shared tokens.</p>
     </div>
     
   </section>
