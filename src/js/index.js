@@ -14,8 +14,6 @@
 import "./flyout.js";
 import "./context-menu.js";
 import "./dialog.js";
-// Legacy <dialog> shim for browsers below Baseline 2023; omit in custom builds.
-import "./dialog-fallback.js";
 import "./dismiss.js";
 import "./tab.js";
 import "./tooltip.js";

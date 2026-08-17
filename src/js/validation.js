@@ -111,16 +111,23 @@ function fieldContainer(el) {
 
 // .field.danger added by validation is tracked in a WeakSet so that only
 // validation-owned state is removed. A .danger applied manually by app code
-// for an unrelated reason is left alone.
+// for an unrelated reason is left alone: validation claims ownership only
+// when it introduces the class itself.
 const dangerOwned = new WeakSet();
+
+function markDangerOwned(field) {
+  if (!field.classList.contains(DANGER_CLASS)) {
+    dangerOwned.add(field);
+  }
+  field.classList.add(DANGER_CLASS);
+}
 
 function syncFieldDangerState(el) {
   const field = fieldContainer(el);
   if (!field) return;
 
   if (field.querySelector('[aria-invalid="true"], [data-validation-errors]')) {
-    field.classList.add(DANGER_CLASS);
-    dangerOwned.add(field);
+    markDangerOwned(field);
   } else if (dangerOwned.has(field)) {
     field.classList.remove(DANGER_CLASS);
     dangerOwned.delete(field);
@@ -189,8 +196,7 @@ function markInvalid(el) {
   el.setAttribute("aria-invalid", "true");
   const field = fieldContainer(el);
   if (field) {
-    field.classList.add(DANGER_CLASS);
-    dangerOwned.add(field);
+    markDangerOwned(field);
   }
 }
 

@@ -20,10 +20,13 @@ This project follows Keep a Changelog and uses semver, including during 0.x.
   root throws, and `disconnect()` releases it (breaking).
 - `enhance()` cleans up elements moved out of their custom root while still
   connected.
-- JS runtime floor is now the **Degraded** tier (Firefox 78+, Safari 14+,
-  Chromium 88+), matching the core CSS experience; logical assignment
-  operators, `Array.prototype.at()`, and `Object.hasOwn()` are dropped from
-  the runtime and enforced by a static `js-compat` test.
+- The JavaScript runtime now targets the **Minimal** tier (Firefox 98+,
+  Safari 15.4+, Chromium 99+) instead of Degraded. Modern syntax and built-ins
+  available across that baseline (`??=`, `Array.prototype.at()`,
+  `Object.hasOwn()`) may be used directly; no transpilation or legacy
+  compatibility layer is shipped.
+- Abortable event listeners (`addEventListener({ signal })`) are the standard
+  cleanup mechanism — one `AbortController` per owned lifecycle.
 - Size-related `--variant-*` tokens become the `--density-*` family:
   `--variant-space` → `--density-space`, `--variant-compact-size` →
   `--density-compact-size`. `--variant-pad-block` is removed — the alert no
@@ -35,6 +38,11 @@ This project follows Keep a Changelog and uses semver, including during 0.x.
 
 ### Removed
 - `forget()` from the `enhance()` return value.
+- The legacy `<dialog>` fallback (`dialog-fallback.js`, `dialog-fallback.css`,
+  and their tests and internal classes). The runtime assumes native `<dialog>`
+  across the Minimal tier.
+- The static `js-compat` floor test; the browser floor is now a codebase
+  decision enforced by review.
 
 ## [0.2.0] - 2026-07-28
 

@@ -130,7 +130,7 @@ function setupNav(nav) {
     // Scrolled to the end: the last section wins even when its top never
     // crosses the line. This is the case IntersectionObserver cannot express.
     if (scrollHeight > height && scrollTop + height >= scrollHeight - 1) {
-      activate(sections[sections.length - 1].section);
+      activate(sections.at(-1).section);
       return;
     }
 

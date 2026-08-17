@@ -24,16 +24,6 @@ select {
   display: none !important;
 }
 
-/* Legacy dialog fallback only. Modern dialogs keep the browser's native closed
-   state so display/overlay transitions are not flattened by the reset.
-   The presentation for the dialog-fallback.js shim lives in the separate
-   dialog-fallback.css, so it can be dropped from custom bundles. */
-@supports not (selector(dialog:modal)) {
-  dialog:not([open]) {
-    display: none;
-  }
-}
-
 :where(img, svg, video) {
   max-inline-size: 100%;
   block-size: auto;

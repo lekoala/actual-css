@@ -16,10 +16,9 @@
  *   view-transition-name. Otherwise native dialog behavior remains the
  *   baseline: the dialog simply opens and closes.
  *
- * Browsers without native <dialog> can get a rudimentary per-element shim
- * from the optional, standalone dialog-fallback.js module; this module has
- * no dependency on it and alerts when no shim or polyfill made the target
- * controllable.
+ * The runtime assumes native <dialog> with show()/showModal()/close() — the
+ * Minimal browser tier. requestClose() is newer than the floor and is used
+ * when present, falling back to close() otherwise.
  */
 
 import { registerCommands, targetFor } from "./command.js";
@@ -32,29 +31,10 @@ const wiredDialogs = new Set();
 const DIALOG_COMMANDS = ["show-modal", "show", "request-close", "close"];
 const DIALOG_SELECTOR = "dialog";
 const DIALOG_TITLE_SELECTOR = "[data-title], h1, h2, h3, h4, h5, h6";
-const DEFAULT_UNSUPPORTED_MESSAGE =
-  "This dialog cannot open because this browser does not support this feature.";
 let uid = 0;
 
 function isDialogElement(el) {
-  return (
-    typeof Node !== "undefined" && el?.nodeType === Node.ELEMENT_NODE && el.localName === "dialog"
-  );
-}
-
-function canControlDialog(el) {
-  // Optional polyfills may patch registered <dialog> elements without making
-  // supportsDialog() true globally, so check the actual element before opening.
-  return (
-    isDialogElement(el) &&
-    typeof el.show === "function" &&
-    typeof el.showModal === "function" &&
-    typeof el.close === "function"
-  );
-}
-
-function isDialog(el) {
-  return canControlDialog(el);
+  return el?.nodeType === 1 && el.localName === "dialog";
 }
 
 function boolData(el, name) {
@@ -90,13 +70,6 @@ function syncDialogSemantics(dialog, modal = isModal(dialog)) {
   if (title) {
     dialog.setAttribute("aria-labelledby", ensureId(title, "dialog-title"));
   }
-}
-
-// Reached only when neither the optional dialog-fallback module nor an
-// adopter polyfill made the target controllable on a legacy browser.
-function notifyUnsupportedDialog(trigger) {
-  const win = trigger.ownerDocument.defaultView;
-  win?.alert?.(DEFAULT_UNSUPPORTED_MESSAGE);
 }
 
 function isModal(dialog) {
@@ -251,7 +224,7 @@ function finishClose(dialog, returnValue = "") {
 }
 
 export function closeDialog(dialog, returnValue = "") {
-  if (!isDialog(dialog) || !dialog.open) return;
+  if (!isDialogElement(dialog) || !dialog.open) return;
 
   const state = ensureDialogWired(dialog);
   if (state.closing) return;
@@ -280,7 +253,7 @@ export function closeDialog(dialog, returnValue = "") {
 }
 
 export function requestDialogClose(dialog, returnValue = "") {
-  if (!isDialog(dialog) || !dialog.open) return;
+  if (!isDialogElement(dialog) || !dialog.open) return;
 
   if (typeof dialog.requestClose === "function") {
     ensureDialogWired(dialog).returnValue = returnValue;
@@ -292,7 +265,7 @@ export function requestDialogClose(dialog, returnValue = "") {
 }
 
 export function openDialog(dialog, trigger = null, forcedModal = null) {
-  if (!isDialog(dialog) || dialog.open || !dialog.isConnected) return;
+  if (!isDialogElement(dialog) || dialog.open || !dialog.isConnected) return;
 
   const state = ensureDialogWired(dialog);
   const modal = resolveModalMode(dialog, forcedModal);
@@ -455,7 +428,7 @@ registerCommands(DIALOG_COMMANDS, {
     return isDialogElement(dialog) ? dialog : null;
   },
   prepare: (trigger, dialog, command) => {
-    if (isDialog(dialog)) {
+    if (isDialogElement(dialog)) {
       ensureDialogWired(dialog);
     }
 
@@ -471,10 +444,7 @@ registerCommands(DIALOG_COMMANDS, {
   handle: (event, trigger, dialog, command) => {
     event.preventDefault();
 
-    if (!isDialog(dialog)) {
-      if (command === "show-modal" || command === "show") {
-        notifyUnsupportedDialog(trigger);
-      }
+    if (!isDialogElement(dialog)) {
       return;
     }
 
@@ -494,10 +464,6 @@ registerCommands(DIALOG_COMMANDS, {
   },
 });
 
-// Register the dialog enhancement unconditionally so cleanup is uniform on
-// every browser. On legacy browsers the optional dialog-fallback shim supplies
-// show()/showModal()/close(); the wiring here (backdrop, Escape, events) works
-// regardless of whether the element is natively controllable.
 enhance({
   [DIALOG_SELECTOR]: (dialog) => {
     connectDialog(dialog);

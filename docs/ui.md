@@ -236,34 +236,11 @@ Available options:
 * `data-dialog-view-transition` enables a view transition that morphs the dialog to/from its trigger. Only active when the browser supports `document.startViewTransition` and the user allows motion.
 * `closedby="any"` is the no-JavaScript light-dismiss path. The runtime rewrites it to `closedby="closerequest"` where supported so dialog light-dismiss keeps the modal workflow intact — the same behavior, just stated in terms the platform understands.
 
-### Legacy browsers and polyfills
+### Browser support
 
-Actual CSS does not bundle a dialog polyfill. In browsers without `HTMLDialogElement.showModal()` support (Safari 15.3 and older, Firefox 97 and older — all below the Baseline 2023 floor), the runtime applies a rudimentary built-in fallback instead: each dialog element is shimmed with `show()`, `showModal()`, and `close()`, and a dedicated stylesheet (`dialog-fallback.css`) displays the open modal as a fixed, horizontally centered box with a simulated backdrop. Backdrop click, Escape, `close` events, `returnValue`, focus restoration, and the scroll lock all work through the normal runtime wiring.
-
-The fallback is deliberately not a polyfill: there is no top layer, no focus trap, and the page behind the modal is not inert (though the simulated backdrop blocks pointer interaction with it). The dialog opens and closes — degraded, but functional, matching the experience those browsers get from the rest of the framework.
-
-Both halves of the fallback are standalone, omittable files. The JS shim is its own side-effect module — `actual-css/js/dialog` has no dependency on it — and the CSS is a separate import in `actual.css`. The default runtime and stylesheet include them; a custom build opts out by leaving them out, and triggers then fall back to the acknowledgement alert on unsupported browsers. Both halves are inert on modern browsers either way.
-
-```js
-import "actual-css/js/dialog";          // dialog behavior only, no legacy fallback
-import "actual-css/js/dialog-fallback"; // optional legacy shim
-```
-
-For full modal fidelity on those browsers, load a dialog polyfill instead. One caveat: the runtime shims every dialog it finds when it loads, and `dialogPolyfill.registerDialog()` skips elements that already expose `showModal()` — including shimmed ones. Use `forceRegisterDialog()` so the polyfill replaces the built-in fallback; the runtime never overwrites a patched element afterwards:
-
-```js
-import "actual-css/js";
-
-if (!("HTMLDialogElement" in window) || !HTMLDialogElement.prototype.showModal) {
-  const { default: dialogPolyfill } = await import("dialog-polyfill");
-
-  document.querySelectorAll("dialog").forEach((dialog) => {
-    dialogPolyfill.forceRegisterDialog(dialog);
-  });
-}
-```
-
-If dialogs are injected later, force-register those new dialog elements before their open trigger is used.
+Actual relies on the native `<dialog>` API in its supported JavaScript range
+(Safari 15.4+, Firefox 98+, Chromium 99+). No dialog polyfill or fallback shim
+is shipped.
 
 ### Animation
 

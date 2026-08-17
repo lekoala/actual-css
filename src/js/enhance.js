@@ -209,7 +209,7 @@ export function registerEnhancement(name, init, root) {
     throw new TypeError("registerEnhancement() requires a function init.");
   }
 
-  root = root ?? document.documentElement;
+  root ??= document.documentElement;
   let names = ownedNames.get(root);
   if (!names) {
     names = new Map();
@@ -251,7 +251,7 @@ export default function enhance(enhancers, root) {
     return noopRuntime();
   }
 
-  root = root ?? document.documentElement;
+  root ??= document.documentElement;
   const registry = registryFor(root);
   const record = registry.add(enhancers);
   if (!record) return noopRuntime();

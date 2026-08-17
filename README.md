@@ -146,12 +146,22 @@ For more conservative fallbacks, import and compose the source entrypoints direc
 
 Actual CSS is built around progressive enhancement.
 
-* **Degraded** — Firefox 78+, Safari 14+, Chromium 88+. Core layout, typography, forms, and components.
-* **Minimum** — Firefox 98+, Safari 15.4+, Chromium 99+. Dialog, drawer, and top-layer behavior.
-* **Intermediate** — Firefox 121+, Safari 16+, Chromium 106+. `:has()`, container queries, alert icon layout, and intent tints.
-* **Recommended** — Firefox 129+, Safari 17.5+, Chromium 123+. `light-dark()`, `color-mix()`, and full theming.
+| Tier         | Firefox |    Safari | Chromium |
+| ------------ | ------: | --------: | -------: |
+| Degraded     |     78+ |       14+ |      88+ |
+| **Minimal**  | **98+** | **15.4+** |  **99+** |
+| Intermediate |    121+ |       16+ |     106+ |
+| Recommended  |    129+ |     17.5+ |     123+ |
 
-The JavaScript runtime is supported from the **Minimum** tier. Below it, the degraded CSS experience remains available but JavaScript enhancements are unsupported.
+**Degraded** — semantic HTML and core CSS remain usable. JavaScript
+enhancements are outside the supported contract.
+
+**Minimal** — full Actual support, including the JavaScript runtime. The
+runtime assumes modern browser APIs and does not ship legacy compatibility
+layers or polyfills.
+
+Degraded browsers may execute some enhancements successfully, but this
+behavior is not tested or preserved.
 
 ## Cascade layers
 
