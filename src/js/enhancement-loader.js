@@ -10,8 +10,10 @@
  * handles URL dedup. Script/style helpers fill the gap for non-ESM assets.
  */
 
-import { registerEnhancement } from "./enhance.js";
+import enhance, { registerEnhancement } from "./enhance.js";
 import { parseConfig } from "./parse-config.js";
+
+const MANIFEST_SELECTOR = 'script[type="application/json"][data-enhance-modules]';
 
 const enhancements = new Map();
 
@@ -189,7 +191,7 @@ function parseManifestEntries(text) {
 }
 
 export async function loadEnhancements(root = document) {
-  const blocks = root.querySelectorAll('script[type="application/json"][data-enhance-modules]');
+  const blocks = root.querySelectorAll(MANIFEST_SELECTOR);
 
   const manifest = new Map();
 
@@ -215,6 +217,31 @@ export async function loadEnhancements(root = document) {
   }
 
   return result;
+}
+
+async function loadManifestBlock(block) {
+  const entries = parseManifestEntries(block.textContent);
+  const result = await loadManifest(Object.fromEntries(entries));
+
+  for (const failure of result.failed) {
+    console.error(`Enhancement "${failure.name}" failed to load:`, failure.error);
+  }
+  if (result.failed.length === 0) block.remove();
+
+  return result;
+}
+
+export function watchEnhancementManifests(root) {
+  return enhance(
+    {
+      [MANIFEST_SELECTOR]: (block) => {
+        loadManifestBlock(block).catch((error) => {
+          console.error("Failed to parse enhancement manifest:", error);
+        });
+      },
+    },
+    root,
+  );
 }
 
 export async function loadResponse(response) {
