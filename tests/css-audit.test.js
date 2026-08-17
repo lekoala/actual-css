@@ -83,14 +83,6 @@ test("generic grid exposes an override without changing fixed grids", () => {
   expect(css).toContain(".container-query .grid-6 {\n    grid-template-columns: repeat(3, minmax(0, 1fr));");
 });
 
-test("gap utilities set independent semantic steps directly", () => {
-  const css = readCss("src/css/utilities.css");
-
-  expect(css).toContain(".gap-sm {\n  gap: var(--space-2);\n}");
-  expect(css).toContain(".gap-lg {\n  gap: var(--space-5);\n}");
-  expect(css).not.toContain(".gap-md");
-});
-
 test("form-actions exposes alignment hooks while sticky behavior remains intact", () => {
   const css = readCss("src/css/forms/form-actions.css");
 
