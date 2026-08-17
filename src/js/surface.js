@@ -67,19 +67,20 @@ function restoreSurface(menu) {
   mountedSurfaces.delete(menu);
 }
 
-function shouldUseSheet(state) {
+function shouldUseSheet(menu, state) {
   const mobile = state.mobile || "auto";
   if (mobile === "none" || mobile === "anchored") return false;
   if (mobile === "sheet") return true;
 
-  if (typeof window === "undefined" || typeof window.matchMedia !== "function") {
+  const view = menu.ownerDocument?.defaultView;
+  if (!view || typeof view.matchMedia !== "function") {
     return false;
   }
 
   const breakpoint = state.breakpoint ?? 768;
   return (
-    window.matchMedia("(pointer: coarse)").matches &&
-    window.matchMedia(`(max-width: ${breakpoint}px)`).matches
+    view.matchMedia("(pointer: coarse)").matches &&
+    view.matchMedia(`(max-width: ${breakpoint}px)`).matches
   );
 }
 
@@ -118,7 +119,7 @@ function ensureBackdrop(menu, state) {
 }
 
 function applyPresentation(menu, state) {
-  state.isSheet = shouldUseSheet(state);
+  state.isSheet = shouldUseSheet(menu, state);
   if (state.isSheet) {
     menu.style.removeProperty("left");
     menu.style.removeProperty("top");
