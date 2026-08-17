@@ -92,6 +92,7 @@
   font-size: 0.875em;
 }
 
+/* Visual twin of .key (components/key.css) — keep the two recipes in sync. */
 .prose kbd {
   display: inline-flex;
   align-items: center;

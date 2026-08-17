@@ -7,14 +7,7 @@
 /* Intent boundary — inherited intents do not tint this component.
    Local intent classes still win because :where() has zero specificity. */
 :where(.progress) {
-  /* @sync intent-boundary */
   --intent: initial;
-  --intent-fg: initial;
-  --ui-bg: initial;
-  --ui-fg: initial;
-  --ui-border: initial;
-  --ui-hover-bg: initial;
-  /* @sync intent-boundary */
 }
 
 .progress {
@@ -101,11 +94,13 @@
 }
 
 @media (forced-colors: active) {
-  .progress::-webkit-progress-value {
+  .progress::-webkit-progress-value,
+  .progress:indeterminate::-webkit-progress-value {
     background: Highlight;
   }
 
-  .progress::-moz-progress-bar {
+  .progress::-moz-progress-bar,
+  .progress:indeterminate::-moz-progress-bar {
     background: Highlight;
   }
 }

@@ -44,14 +44,8 @@
   inline-size: 1rem;
   block-size: 1rem;
   background-color: var(--accordion-marker-color);
-  -webkit-mask-image: var(--icon-chevron);
-  mask-image: var(--icon-chevron);
-  -webkit-mask-repeat: no-repeat;
-  mask-repeat: no-repeat;
-  -webkit-mask-size: contain;
-  mask-size: contain;
-  -webkit-mask-position: center;
-  mask-position: center;
+  -webkit-mask: var(--icon-chevron) center / contain no-repeat;
+  mask: var(--icon-chevron) center / contain no-repeat;
   transition: transform var(--duration);
 }
 

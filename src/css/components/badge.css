@@ -8,14 +8,12 @@
 /* Intent boundary — inherited intents do not tint this component.
    Local intent classes still win because :where() has zero specificity. */
 :where(.badge) {
-  /* @sync intent-boundary */
   --intent: initial;
   --intent-fg: initial;
   --ui-bg: initial;
   --ui-fg: initial;
   --ui-border: initial;
   --ui-hover-bg: initial;
-  /* @sync intent-boundary */
 }
 
 .badge {
@@ -106,7 +104,7 @@
 
 /* Hover recipes — sets --ui-hover-bg consumed by the hover rule below.
    Declared outside :hover like button.css for the same reason. */
-:is(a.badge, button.badge):is(.outline, .ghost) {
+:is(a.badge, button.badge).outline {
   --ui-hover-bg: var(--surface-subtle);
 }
 
@@ -126,10 +124,6 @@
   :is(a.badge, button.badge).outline {
     --ui-hover-bg: color-mix(in oklch, var(--surface-subtle) 92%, var(--intent, var(--neutral)));
   }
-
-  :is(a.badge, button.badge).ghost {
-    --ui-hover-bg: color-mix(in oklch, var(--intent, var(--text)) 8%, transparent);
-  }
 }
 
 :where(a.badge, button.badge):not(:where(:disabled, [aria-disabled="true"])):hover {
@@ -142,7 +136,6 @@
 
 button.badge {
   cursor: pointer;
-  font: inherit;
 }
 
 button.badge:disabled,

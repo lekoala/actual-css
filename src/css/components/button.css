@@ -14,14 +14,12 @@
 /* Intent boundary — inherited intents do not tint this component.
    Local intent classes still win because :where() has zero specificity. */
 :where(.btn) {
-  /* @sync intent-boundary */
   --intent: initial;
   --intent-fg: initial;
   --ui-bg: initial;
   --ui-fg: initial;
   --ui-border: initial;
   --ui-hover-bg: initial;
-  /* @sync intent-boundary */
 }
 
 .btn {
@@ -157,7 +155,7 @@
 }
 
 .btn:focus-visible {
-  outline: none;
+  outline: 2px solid transparent;
   box-shadow: 0 0 0 var(--focus-ring-width) var(--btn-focus-ring-color, var(--focus-ring));
 }
 
@@ -191,10 +189,13 @@ a.btn[aria-disabled="true"] {
   --spinner-width: 0.15em;
 }
 
-/* Toggle */
-/* State must outrank the shared .outline/.ghost hover recipes: a pressed
-   button keeps its intent background and foreground while hovered. */
-.btn[aria-pressed="true"]:not(.link) {
+/* Toggle and current state
+/* State must outrank the shared .outline/.ghost hover recipes: a pressed or
+   current button keeps its intent background and foreground while hovered.
+   aria-current="page" is the pagination current-page marker; aria-pressed
+   covers toggle buttons. */
+.btn[aria-pressed="true"]:not(.link),
+.btn[aria-current="page"]:not(.link) {
   --btn-bg: var(--intent, var(--state-selected));
   --btn-fg: var(--intent-fg, var(--state-selected-fg));
   --btn-border: var(--intent, var(--state-selected));
@@ -215,7 +216,8 @@ a.btn[aria-disabled="true"] {
     color: LinkText;
   }
 
-  .btn[aria-pressed="true"]:not(.link) {
+  .btn[aria-pressed="true"]:not(.link),
+  .btn[aria-current="page"]:not(.link) {
     border-color: Highlight;
     background: Highlight;
     color: HighlightText;

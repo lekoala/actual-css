@@ -3,9 +3,9 @@
  * intent-colored lower edge (.solid remains available when an action needs a
  * filled treatment), text controls (input/textarea/select) pick up the same
  * lower-edge accent via --control-border-block-end-*, alerts get an
- * intent-colored leading flag via --alert-border-inline-start-*, and text
- * controls and buttons both get a thinner, tighter focus outline than the
- * shared recipe. */
+ * intent-colored leading flag via --alert-border-inline-start-*. The focus
+ * ring keeps the shared width — edge only drops the border-color flip so the
+ * intent-colored lower edge stays dominant. */
 [data-theme="edge"] {
   color-scheme: light dark;
 

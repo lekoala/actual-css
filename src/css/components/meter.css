@@ -4,18 +4,8 @@
  * Maps the three standard meter zones (optimum / suboptimum / even-less-good)
  * to the shared success / warning / danger intent colors.
  */
-/* Intent boundary — inherited intents do not tint this component.
-   Local intent classes still win because :where() has zero specificity. */
-:where(.meter) {
-  /* @sync intent-boundary */
-  --intent: initial;
-  --intent-fg: initial;
-  --ui-bg: initial;
-  --ui-fg: initial;
-  --ui-border: initial;
-  --ui-hover-bg: initial;
-  /* @sync intent-boundary */
-}
+/* Intent boundary — not needed: meter maps its zones to --success/warning/
+   danger directly and never consumes --intent or --ui-*. */
 
 .meter {
   appearance: none;

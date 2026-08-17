@@ -7,14 +7,8 @@
 /* Intent boundary — inherited intents do not tint this component.
    Local intent classes still win because :where() has zero specificity. */
 :where(.switch) {
-  /* @sync intent-boundary */
   --intent: initial;
   --intent-fg: initial;
-  --ui-bg: initial;
-  --ui-fg: initial;
-  --ui-border: initial;
-  --ui-hover-bg: initial;
-  /* @sync intent-boundary */
 }
 
 .switch {
@@ -84,7 +78,7 @@
 
 .switch:focus-visible {
   --switch-border: var(--focus);
-  outline: none;
+  outline: 2px solid transparent;
   box-shadow: var(--focus-ring-shadow);
 }
 

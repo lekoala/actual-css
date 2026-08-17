@@ -4,80 +4,9 @@
  * Imported by default through forms/index.css. Custom builds may omit this
  * file when an app wants to own validation styling completely.
  *
- * ── State matrix ─────────────────────────────────────────────────────────
- * Audit tool, not an implementation guide. States that apply to a component
- * carry a ✓ when covered by CSS in this codebase; blank means the state is
- * either irrelevant or a known gap.
- *
- *   ✓ default  —— every styled component
- *   ✓ hover    —— :hover (touch devices inherit this safely in modern browsers)
- *   ✓ active   —— :active on buttons, not used on text inputs
- *   ✓ focus-visible —— :focus-visible ring on every interactive component
- *   ✓ checked  —— :checked on .check, .radio, .switch, .choice-card
- *   ✓ cur/pg   —— [aria-current] on breadcrumb, pagination, nav-link
- *   ✓ open     —— [open] on dialog, details/summary (accordion)
- *   ✓ disabled —— :disabled (handles direct, fieldset-inherited, and nested)
- *   ✓ aria-disabled —— [aria-disabled="true"] on .btn, .menu-item, .tab
- *   ✓ disabled-fieldset —— child :disabled covers this; no fieldset rule needed
- *   ✓ invalid  —— .needs-validation.was-validated :invalid
- *   ✓ user-invalid —— :user-invalid (progressive, @supports gated)
- *   ✓ aria-invalid —— [aria-invalid="true"]
- *   ✓ indeterminate —— :indeterminate on .check, .progress
- *   ✓ readonly —— [readonly] on .input, .textarea
- *   ✓ forced-colors —— @media (forced-colors: active) per component
- *   ✓ reduced-motion —— @media (prefers-reduced-motion: reduce) in reset.css
- *   ✓ RTL   —— [dir="rtl"] or :dir(rtl) on positional rules
- *
- *   Coverage per component (✓ = styled, · = irrelevant, ? = possible gap):
- *
- *   Component       hover  active  focus  checked  cur/pg  open  disabled
- *   ─────────────   ─────  ──────  ─────  ───────  ──────  ────  ────────
- *   .input           ✓       ·       ✓       ·        ·      ·      ✓
- *   .textarea        ✓       ·       ✓       ·        ·      ·      ✓
- *   .select          ✓       ·       ✓       ·        ·      ·      ✓
- *   .check           ✓       ·       ✓       ✓        ·      ·      ✓
- *   .radio           ✓       ·       ✓       ✓        ·      ·      ✓
- *   .switch          ✓       ·       ✓       ✓        ·      ·      ✓
- *   .range           ·       ·       ✓       ·        ·      ·      ✓
- *   .file            ✓       ·       ✓       ·        ·      ·      ✓
- *   .choice-card     ✓       ·       ✓       ✓        ·      ·      ✓
- *   .btn             ✓       ✓       ✓       ·        ·      ·      ✓
- *   .tab             ✓       ·       ✓       ·        ✓      ·      ✓
- *   .menu-item       ✓       ·       ✓       ·        ✓      ·      ✓
- *   .nav-link        ✓       ·       ✓       ·        ✓      ·      ·
- *   .breadcrumb      ✓       ·       ✓       ·        ✓      ·      ·
- *   .pagination      ✓       ·       ✓       ·        ✓      ·      ·
- *   .accordion       ✓       ·       ✓       ·        ·      ✓      ·
- *   .select(bs)      ✓       ·       ✓       ·        ·      ·      ✓
- *
- *   Component       a-disabled  invalid  user-inv  a-invalid  indet  ro
- *   ─────────────   ──────────  ───────  ────────  ─────────  ─────  ──
- *   .input              ·          ✓         ✓         ✓        ·     ✓
- *   .textarea           ·          ✓         ✓         ✓        ·     ✓
- *   .select             ·          ✓         ✓         ✓        ·     ·
- *   .check              ·          ✓         ✓         ✓        ✓     ·
- *   .radio              ·          ✓         ✓         ✓        ·     ·
- *   .switch             ·          ✓         ✓         ✓        ·     ·
- *   .range              ·          ·         ·         ·        ·     ·
- *   .file               ·          ·         ·         ·        ·     ·
- *   .choice-card        ·          ✓         ✓         ✓        ·     ·
- *   .btn                ✓          ·         ·         ·        ·     ·
- *   .tab                ✓          ·         ·         ·        ·     ·
- *   .menu-item          ✓          ·         ·         ·        ·     ·
- *   .nav-link           ·          ·         ·         ·        ·     ·
- *   .breadcrumb         ·          ·         ·         ·        ·     ·
- *   .pagination         ·          ·         ·         ·        ·     ·
- *   .accordion          ·          ·         ·         ·        ·     ·
- *   .select(bs)         ·          ·         ·         ·        ·     ·
- *
- *   Notes:
- *   - select(bs) = appearance: base-select picker (custom-select.css)
- *   - <fieldset disabled> needs NO explicit rule: child :disabled covers it
- *   - a-disabled = [aria-disabled="true"] (non-native controls)
- *   - forced-colors / reduced-motion / RTL are omitted from the matrix above
- *     for brevity; every component that ships custom geometry or color also
- *     supplies its own forced-colors block.
- * ─────────────────────────────────────────────────────────────────────────
+ * State coverage (which states each component ships) is audited in
+ * tests/validation.test.js and summarized in docs/forms.md — not kept as a
+ * source comment that can drift from the implementation.
  */
 
 .field.danger {
@@ -100,15 +29,31 @@
   --form-invalid-border: var(--danger);
 }
 
-/* Override checked/indeterminate background so both border and fill signal
-   danger instead of showing a red border around a primary-colored control. */
-.check[aria-invalid="true"]:is(:checked, :indeterminate),
-.radio[aria-invalid="true"]:checked {
+/* Override checked/indeterminate fill so both border and fill signal danger
+   instead of a red border around a primary-colored control. All three
+   invalid routes must converge: aria-invalid, was-validated :invalid, and
+   :user-invalid. */
+.check:is(:checked, :indeterminate)[aria-invalid="true"],
+.needs-validation.was-validated .check:is(:checked, :indeterminate):invalid,
+.radio:checked[aria-invalid="true"],
+.needs-validation.was-validated .radio:checked:invalid {
   --choice-bg: var(--danger);
 }
 
-.switch[aria-invalid="true"]:checked {
+.switch:checked[aria-invalid="true"],
+.needs-validation.was-validated .switch:checked:invalid {
   --switch-bg: var(--danger);
+}
+
+@supports selector(:user-invalid) {
+  .needs-validation .check:is(:checked, :indeterminate):user-invalid,
+  .needs-validation .radio:checked:user-invalid {
+    --choice-bg: var(--danger);
+  }
+
+  .needs-validation .switch:checked:user-invalid {
+    --switch-bg: var(--danger);
+  }
 }
 
 /* Choice cards hide their native input, so invalid state must surface on the

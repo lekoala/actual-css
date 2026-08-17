@@ -254,6 +254,41 @@ A few cross-component helpers:
 }
 ```
 
+### Layering
+
+A small z-index scale orders non-dialog overlays. Native `<dialog>` elements
+(modal, drawer) render on the platform top-layer, which has no numeric z-index
+and always paints above the page — they never compete with this scale.
+
+```css
+:root {
+  --z-sticky: 10;
+  --z-menu: 20;
+  --z-tooltip: 50;
+  --z-status: 60;
+}
+```
+
+- `--z-sticky` — 10, sticky page chrome (`form-actions.sticky`, `topbar`).
+- `--z-menu` — 20, floating menus (`flyout`, menus; `surface-backdrop` sits at `calc(var(--z-menu) - 1)`).
+- `--z-tooltip` — 50, tooltips.
+- `--z-status` — 60, `status-bar` and toasts.
+
+No token is provided for dialog (browser top-layer) or dialog-fallback
+(dead-code z-index 40, between menu and tooltip).
+
+Stacking-context traps: a flyout or tooltip that is a DOM descendant of a
+dialog, or of a container with `transform`, `filter`, `contain`, `isolation`,
+or `will-change`, is confined to that ancestor's stacking context. Its
+z-index token only orders it against siblings within that context. When a
+dialog's top-layer clips a descendant flyout, move the flyout markup outside
+the dialog or use a portal/popover to escape the stacking context.
+
+Scrollbar gutter: modal open/close can shift page layout when the classic
+scrollbar disappears. When a measured scrollbar is present (js writes
+`html.had-scrollbar`), modal.css applies `scrollbar-gutter: stable` so the
+viewport reserves the gutter space and the page doesn't jump.
+
 ## Internal Tokens
 
 > Component-local tokens allowed when they reduce duplication or make component code clearer.

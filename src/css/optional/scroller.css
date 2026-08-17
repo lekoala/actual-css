@@ -2,8 +2,9 @@
  * Scroller — optional custom scrollbar styling for overflow regions.
  *
  * Apply to any scroll container (.overflow-auto, sidebars, long tables). Both
- * stable-color (Firefox) and ::-webkit-scrollbar (Safari/Chromium) are styled;
- * the thumb lands as a thin, theme-aware affordance with a hover state.
+ * scrollbar-color (Firefox) and ::-webkit-scrollbar (Safari/Chromium) are
+ * styled; the thumb lands as a thin, theme-aware affordance with a hover
+ * state.
  */
 .scroller {
   --scroller-size: 0.625rem;

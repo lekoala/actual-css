@@ -21,9 +21,7 @@
   --control-border: var(--border);
   --control-bg: var(--surface);
   --control-fg: var(--text);
-  --control-ring: none;
   --control-cursor: auto;
-  --control-opacity: 1;
 
   appearance: none;
   inline-size: 100%;
@@ -39,9 +37,7 @@
   background: var(--control-bg);
   color: var(--control-fg);
   font-size: var(--control-font-size);
-  box-shadow: var(--control-ring);
   cursor: var(--control-cursor);
-  opacity: var(--control-opacity);
   outline: none;
   transition:
     border-color var(--duration),
@@ -69,7 +65,7 @@
 .textarea:focus-visible,
 .select:focus-visible {
   --control-border: var(--focus);
-  outline: none;
+  outline: 2px solid transparent;
   box-shadow: var(--focus-ring-shadow);
 }
 
@@ -86,7 +82,6 @@
   --control-fg: var(--state-disabled);
   --control-border: var(--border);
   --control-cursor: not-allowed;
-  --control-opacity: 1;
 }
 
 .input::placeholder,
