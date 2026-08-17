@@ -124,7 +124,7 @@ html.has-modal-open.had-scrollbar {
 
 @media (prefers-reduced-motion: no-preference) {
   dialog.modal.is-static {
-    animation: actual-modal-static 180ms var(--ease);
+    animation: actual-modal-static var(--duration-slow) var(--ease);
   }
 
   ::view-transition-group(actual-dialog) {

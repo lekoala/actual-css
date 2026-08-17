@@ -1,7 +1,7 @@
 /*
- * Native-only control polish: file input that mostly defeats custom styling,
- * so the framework stays out of the way and just keeps it readable and
- * theme-aware.
+ * Native-only control polish: the file input and color picker mostly defeat
+ * custom styling, so the framework stays out of the way and just keeps them
+ * readable and theme-aware.
  *
  * Range has its own custom-styled file (range.css) so the focus ring can
  * target the thumb pseudo-element rather than the rectangular CSS box.
@@ -37,7 +37,7 @@
 }
 
 .file:focus-visible {
-  outline: none;
+  outline: 2px solid transparent;
   box-shadow: var(--focus-ring-shadow);
 }
 
@@ -70,7 +70,7 @@
 }
 
 .color:focus-visible {
-  outline: none;
+  outline: 2px solid transparent;
   box-shadow: var(--focus-ring-shadow);
 }
 

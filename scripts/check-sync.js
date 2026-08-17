@@ -13,25 +13,6 @@ const GROUPS = [
       "src/css/components/alert.css",
     ],
   },
-  {
-    name: "intent-boundary",
-    files: [
-      "src/css/components/alert.css",
-      "src/css/components/avatar.css",
-      "src/css/components/badge.css",
-      "src/css/components/button.css",
-      "src/css/components/card.css",
-      "src/css/components/meter.css",
-      "src/css/components/overline.css",
-      "src/css/components/progress.css",
-      "src/css/components/spinner.css",
-      "src/css/components/tab.css",
-      "src/css/forms/choice.css",
-      "src/css/forms/choice-card.css",
-      "src/css/forms/range.css",
-      "src/css/forms/switch.css",
-    ],
-  },
 ];
 
 function normalizeBlock(block) {

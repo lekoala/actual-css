@@ -1,9 +1,11 @@
-/* Focus baseline — loaded after components so its legacy fallback also covers
-   controls that reset their native outline. Modern browsers hide it for focus
-   that is not keyboard-relevant; components layer local state on top.
+/* Focus baseline — a visible outline is the guaranteed focus affordance. The
+   :focus outline covers legacy browsers; modern browsers hide it for
+   pointer/mouse focus and interactive components layer their ring on top.
 
-   In forced-colors mode the transparent outline renders in the system focus
-   color, providing an accessible focus ring without explicit HCM rules. */
+   Invariant: an interactive component must never rely on box-shadow alone
+   for its keyboard focus indicator. Components that remove the native
+   outline on :focus-visible replace it with a transparent outline — invisible
+   normally, forced to the system focus color under forced-colors. */
 :focus {
   outline: var(--focus-outline);
   outline-offset: var(--focus-outline-offset);
@@ -12,5 +14,13 @@
 @supports selector(:focus-visible) {
   :focus:not(:focus-visible) {
     outline: none;
+  }
+
+  /* Pointer focus must still signal in high-contrast mode, where the shared
+     box-shadow rings are disabled (--focus-ring-shadow: none). */
+  @media (forced-colors: active) {
+    :focus:not(:focus-visible) {
+      outline: var(--focus-outline);
+    }
   }
 }

@@ -6,7 +6,7 @@
  * soft-by-default, .alert soft-by-default) live with their components:
  *   components/button.css — .btn default solid + .btn.ghost + .btn.link
  *   components/badge.css   — .badge default soft
- *   components/alert.css   — .alert default + .alert.solid/.alert.outline
+ *   components/alert.css   — .alert default soft (consumes --ui-* directly)
  *
  * .sm/.lg set shared density tokens: spacing rhythm and geometry only.
  * Density never changes typography — controls keep their font-size and

@@ -22,25 +22,9 @@
   min-inline-size: var(--control-size);
 }
 
-.pagination .btn[aria-current="page"] {
-  --btn-bg: var(--intent, var(--state-selected));
-  --btn-fg: var(--intent-fg, var(--state-selected-fg));
-  --btn-border: var(--intent, var(--state-selected));
-  --ui-hover-bg: var(--btn-bg);
-}
-
 .pagination > li > [aria-hidden="true"] {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   min-inline-size: var(--control-size);
-}
-
-@media (forced-colors: active) {
-  .pagination .btn[aria-current="page"] {
-    border-color: Highlight;
-    background: Highlight;
-    color: HighlightText;
-    forced-color-adjust: none;
-  }
 }

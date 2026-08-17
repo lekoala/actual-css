@@ -18,14 +18,8 @@
 /* Intent boundary — inherited intents do not tint this component.
    Local intent classes still win because :where() has zero specificity. */
 :where(.status-bar) {
-  /* @sync intent-boundary */
   --intent: initial;
   --intent-fg: initial;
-  --ui-bg: initial;
-  --ui-fg: initial;
-  --ui-border: initial;
-  --ui-hover-bg: initial;
-  /* @sync intent-boundary */
 }
 
 .status-bar {
@@ -35,7 +29,7 @@
   position: fixed;
   inset-block-end: var(--space-4);
   inset-inline: var(--space-4);
-  z-index: var(--z-status, 60);
+  z-index: var(--z-status);
 
   display: inline-flex;
   align-items: center;
@@ -43,7 +37,7 @@
   gap: var(--space-2);
 
   inline-size: fit-content;
-  max-inline-size: min(calc(100vw - var(--space-6)), 32rem);
+  max-inline-size: min(calc(var(--viewport-inline) - var(--space-6)), 32rem);
   margin-inline: auto;
   overflow-wrap: anywhere;
 
@@ -61,9 +55,9 @@
   pointer-events: none;
 
   transition:
-    opacity var(--duration-slow) var(--ease, ease),
-    scale var(--duration-slow) var(--ease, ease),
-    translate var(--duration-slow) var(--ease, ease);
+    opacity var(--duration-slow) var(--ease),
+    scale var(--duration-slow) var(--ease),
+    translate var(--duration-slow) var(--ease);
 }
 
 .status-bar:empty {

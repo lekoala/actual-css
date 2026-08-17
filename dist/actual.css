@@ -174,7 +174,6 @@ select {
   /* Shape */
   --border-width: 1px;
   --radius-full: 9999px;
-  --shadow-xs: 0 1px 2px rgb(0 0 0 / 0.04);
   --shadow: 0 1px 3px rgb(0 0 0 / 0.05), 0 4px 12px rgb(0 0 0 / 0.04);
   --shadow-popout: 0 0.25rem 0.75rem rgb(0 0 0 / 0.15);
 
@@ -254,38 +253,12 @@ select {
   --viewport-block: 100vh;
   --viewport-inline: 100vw;
 
-  /*
-   * Layering — the stacking model.
-   *
-   * Native <dialog> elements (modal, drawer) render on the platform top-layer.
-   * The top-layer has no numeric z-index and always paints above the page.
-   * This means dialogs never compete with the z-index scale below.
-   *
-   * The 4-token z-index scale is used ONLY by non-dialog overlays:
-   *
-   *   --z-sticky:  10  form-actions.sticky, topbar
-   *   --z-menu:    20  flyout, menus, surface-backdrop (at z-menu - 1)
-   *   --z-tooltip: 50  tooltips
-   *   --z-status:  60  status-bar, toasts
-   *
-   * No token is provided for dialog (browser top-layer) or dialog-fallback
-   * (dead-code z-index: 40, between menu and tooltip — see dialog-fallback.css).
-   *
-   * Stacking-context traps:
-   *   A flyout or tooltip that is a DOM descendant of a dialog, a container
-   *   with `transform`, `filter`, `contain`, `isolation`, or `will-change`
-   *   is confined to that ancestor's stacking context. Its z-index token only
-   *   orders it against siblings *within that context*. When a dialog's
-   *   top-layer clips a descendant flyout, move the flyout markup outside the
-   *   dialog or use a portal/popover to escape the stacking context.
-   *
-   * Scrollbar gutter:
-   *   Modal opening and closing can shift page layout when the classic
-   *   scrollbar disappears/reappears. When a measured scrollbar is present
-   *   (js writes html.had-scrollbar), modal.css applies
-   *   `scrollbar-gutter: stable` so the viewport reserves the gutter space
-   *   and the page doesn't jump.
-   */
+  /* Z-index scale — used ONLY by non-dialog overlays (see the layering
+     note below for the full model). */
+  --z-sticky: 10;
+  --z-menu: 20;
+  --z-tooltip: 50;
+  --z-status: 60;
 }
 
 @media (forced-colors: active) {
@@ -310,7 +283,6 @@ select {
 
 @supports (color: color-mix(in oklch, red, white)) {
   :root {
-    --shadow-xs: 0 1px 2px color-mix(in oklch, var(--shadow-color) 4%, transparent);
     --shadow:
       0 1px 3px color-mix(in oklch, var(--shadow-color) 5%, transparent),
       0 4px 12px color-mix(in oklch, var(--shadow-color) 4%, transparent);
@@ -579,8 +551,8 @@ small {
  * Intent classes do not style elements directly.
  * They only expose --intent and --intent-fg.
  * Components and variants decide how to consume them. Each component that
- * consumes --intent or --ui-* must open a local intent boundary in a :where()
- * block that resets --intent / --intent-fg / --ui-* to initial. Parent intents
+ * consumes --intent or --ui-* opens a local intent boundary in a :where()
+ * block that resets exactly the tokens it consumes to initial. Parent intents
  * do not leak into nested components. Local intent classes (.primary, .danger,
  * etc.) still apply because they have higher specificity than :where().
  */
@@ -706,23 +678,11 @@ small {
     );
 }
 
-/* Query-container wrapper that opts .grid-2/3/4/6 into responsive
- * collapse. Wrap a .grid-2/3/4/6 inside .container-query to make the
- * column count collapse on narrow wrappers. Without this wrapper,
- * .grid-2/3/4/6 stay at their full column count. */
-/* Fixed-column grids at their full count by default.
- *   .grid-2: 2 cols
- *   .grid-3: 3 cols
- *   .grid-4: 4 cols
- *   .grid-6: 6 cols
- * When placed inside .container-query, the column count collapses
- * on narrow wrappers. The intermediate 2-col step applies to
- * .grid-3/.grid-4; .grid-6 starts at 2 columns because it is meant
- * for compact items that do not need a full single-column stack.
- *   .grid-2: 1 col -> 2 cols
- *   .grid-3: 1 col -> 2 cols -> 3 cols
- *   .grid-4: 1 col -> 2 cols -> 4 cols
- *   .grid-6: 2 cols -> 3 cols -> 6 cols */
+/* Fixed-column grids at their full count by default: .grid-2/3/4/6 stay at
+   2/3/4/6 columns unless wrapped in .container-query, which collapses the
+   column count on narrow wrappers (a 2-col intermediate step for
+   .grid-3/.grid-4; .grid-6 starts at 2 columns because it is meant for
+   compact items that do not need a full single-column stack). */
 .grid-2,
 .grid-3,
 .grid-4,
@@ -804,7 +764,7 @@ small {
  * soft-by-default, .alert soft-by-default) live with their components:
  *   components/button.css — .btn default solid + .btn.ghost + .btn.link
  *   components/badge.css   — .badge default soft
- *   components/alert.css   — .alert default + .alert.solid/.alert.outline
+ *   components/alert.css   — .alert default soft (consumes --ui-* directly)
  *
  * .sm/.lg set shared density tokens: spacing rhythm and geometry only.
  * Density never changes typography — controls keep their font-size and
@@ -961,6 +921,7 @@ small {
   font-size: 0.875em;
 }
 
+/* Visual twin of .key (components/key.css) — keep the two recipes in sync. */
 .prose kbd {
   display: inline-flex;
   align-items: center;
@@ -1070,14 +1031,12 @@ small {
 /* Intent boundary — inherited intents do not tint this component.
    Local intent classes still win because :where() has zero specificity. */
 :where(.btn) {
-  /* @sync intent-boundary */
   --intent: initial;
   --intent-fg: initial;
   --ui-bg: initial;
   --ui-fg: initial;
   --ui-border: initial;
   --ui-hover-bg: initial;
-  /* @sync intent-boundary */
 }
 
 .btn {
@@ -1213,7 +1172,7 @@ small {
 }
 
 .btn:focus-visible {
-  outline: none;
+  outline: 2px solid transparent;
   box-shadow: 0 0 0 var(--focus-ring-width) var(--btn-focus-ring-color, var(--focus-ring));
 }
 
@@ -1247,10 +1206,13 @@ a.btn[aria-disabled="true"] {
   --spinner-width: 0.15em;
 }
 
-/* Toggle */
-/* State must outrank the shared .outline/.ghost hover recipes: a pressed
-   button keeps its intent background and foreground while hovered. */
-.btn[aria-pressed="true"]:not(.link) {
+/* Toggle and current state
+/* State must outrank the shared .outline/.ghost hover recipes: a pressed or
+   current button keeps its intent background and foreground while hovered.
+   aria-current="page" is the pagination current-page marker; aria-pressed
+   covers toggle buttons. */
+.btn[aria-pressed="true"]:not(.link),
+.btn[aria-current="page"]:not(.link) {
   --btn-bg: var(--intent, var(--state-selected));
   --btn-fg: var(--intent-fg, var(--state-selected-fg));
   --btn-border: var(--intent, var(--state-selected));
@@ -1271,7 +1233,8 @@ a.btn[aria-disabled="true"] {
     color: LinkText;
   }
 
-  .btn[aria-pressed="true"]:not(.link) {
+  .btn[aria-pressed="true"]:not(.link),
+  .btn[aria-current="page"]:not(.link) {
     border-color: Highlight;
     background: Highlight;
     color: HighlightText;
@@ -1302,14 +1265,12 @@ a.btn[aria-disabled="true"] {
 /* Intent boundary — inherited intents do not tint this component.
    Local intent classes still win because :where() has zero specificity. */
 :where(.badge) {
-  /* @sync intent-boundary */
   --intent: initial;
   --intent-fg: initial;
   --ui-bg: initial;
   --ui-fg: initial;
   --ui-border: initial;
   --ui-hover-bg: initial;
-  /* @sync intent-boundary */
 }
 
 .badge {
@@ -1400,7 +1361,7 @@ a.btn[aria-disabled="true"] {
 
 /* Hover recipes — sets --ui-hover-bg consumed by the hover rule below.
    Declared outside :hover like button.css for the same reason. */
-:is(a.badge, button.badge):is(.outline, .ghost) {
+:is(a.badge, button.badge).outline {
   --ui-hover-bg: var(--surface-subtle);
 }
 
@@ -1420,10 +1381,6 @@ a.btn[aria-disabled="true"] {
   :is(a.badge, button.badge).outline {
     --ui-hover-bg: color-mix(in oklch, var(--surface-subtle) 92%, var(--intent, var(--neutral)));
   }
-
-  :is(a.badge, button.badge).ghost {
-    --ui-hover-bg: color-mix(in oklch, var(--intent, var(--text)) 8%, transparent);
-  }
 }
 
 :where(a.badge, button.badge):not(:where(:disabled, [aria-disabled="true"])):hover {
@@ -1436,7 +1393,6 @@ a.btn[aria-disabled="true"] {
 
 button.badge {
   cursor: pointer;
-  font: inherit;
 }
 
 button.badge:disabled,
@@ -1485,14 +1441,11 @@ a.badge[aria-disabled="true"] {
 /* Intent boundary — inherited intents do not tint this component.
    Local intent classes still win because :where() has zero specificity. */
 :where(.alert) {
-  /* @sync intent-boundary */
   --intent: initial;
   --intent-fg: initial;
   --ui-bg: initial;
   --ui-fg: initial;
   --ui-border: initial;
-  --ui-hover-bg: initial;
-  /* @sync intent-boundary */
 }
 
 .alert {
@@ -1500,21 +1453,16 @@ a.badge[aria-disabled="true"] {
   --alert-pad-inline: var(--space-4);
   --alert-font-size: var(--font-size-md);
   --alert-icon-size: 1.25rem;
-  --alert-bg: var(--surface-subtle);
-  --alert-border: var(--border);
-  --ui-bg: var(--alert-bg);
-  --ui-border: var(--alert-border);
-  --ui-fg: var(--intent, var(--text));
+  --alert-bg: var(--ui-bg, var(--surface-subtle));
+  --alert-fg: var(--ui-fg, var(--intent, var(--text)));
+  --alert-border: var(--ui-border, var(--border));
 
   padding-block: var(--alert-pad-block);
   padding-inline: var(--alert-pad-inline);
-  background: var(--ui-bg, transparent);
-  color: var(--ui-fg, var(--text));
-  border: var(--border-width) solid var(--ui-border, var(--border));
-  border-inline-start-color: var(
-    --alert-border-inline-start-color,
-    var(--ui-border, var(--border))
-  );
+  background: var(--alert-bg);
+  color: var(--alert-fg);
+  border: var(--border-width) solid var(--alert-border);
+  border-inline-start-color: var(--alert-border-inline-start-color, var(--alert-border));
   border-inline-start-width: var(--alert-border-inline-start-width, var(--border-width));
   border-radius: var(--radius-lg);
   font-size: var(--alert-font-size);
@@ -1532,19 +1480,8 @@ a.badge[aria-disabled="true"] {
   margin-block-end: 0;
 }
 
-/* Alerts are soft by default. Use .solid or .outline for stronger emphasis. */
-.alert.solid {
-  --ui-bg: var(--intent, var(--neutral));
-  --ui-fg: var(--intent-fg, var(--neutral-fg));
-  --ui-border: transparent;
-}
-
-.alert.outline {
-  --ui-bg: transparent;
-  --ui-fg: var(--intent, var(--text));
-  --ui-border: var(--intent, var(--border));
-}
-
+/* Alerts are soft by default. .solid and .outline need no local rules — the
+   shared variant plumbing in variants.css sets --ui-* that alert consumes. */
 @supports (color: color-mix(in oklch, red, white)) {
   .alert:where(:not(.solid, .outline, .callout)) {
     /* @sync soft-recipe */
@@ -1569,11 +1506,6 @@ a.badge[aria-disabled="true"] {
   vertical-align: -0.125em;
 }
 
-/* Content wrapper — use .alert-content to wrap text content after the icon. */
-.alert > .alert-content {
-  min-inline-size: 0;
-}
-
 @supports selector(.alert:has(> *)) {
   .alert:has(> .alert-icon) {
     display: grid;
@@ -1587,16 +1519,7 @@ a.badge[aria-disabled="true"] {
     grid-row: 1 / -1;
     display: inline-grid;
     place-items: center;
-    inline-size: var(--alert-icon-size);
-    block-size: var(--alert-icon-size);
     margin-block-start: 0.125em;
-    font-size: var(--alert-icon-size);
-    line-height: 1;
-  }
-
-  .alert:has(> .alert-icon) > .alert-icon:is(svg, i) {
-    inline-size: var(--alert-icon-size);
-    block-size: var(--alert-icon-size);
   }
 
   .alert:has(> .alert-icon) > :not(.alert-icon) {
@@ -1615,13 +1538,14 @@ a.badge[aria-disabled="true"] {
    Canvas backplate (unreadable) — so .solid intentionally falls back to the
    default look. */
 
-/* Callout — neutral surface with a thick accent border on the leading edge. */
+/* Callout — neutral surface with a thick accent border on the leading edge.
+   The thickness follows the shared --alert-border-inline-start-width hook. */
 .alert.callout {
   --alert-bg: var(--surface-subtle);
-  --ui-bg: var(--alert-bg);
-  --ui-fg: var(--text);
+  --alert-fg: var(--text);
   border: 0;
-  border-inline-start: 4px solid var(--intent, var(--neutral));
+  border-inline-start-width: var(--alert-border-inline-start-width, 4px);
+  border-inline-start-color: var(--alert-border-inline-start-color, var(--intent, var(--neutral)));
 }
 
 /* Admonition — structured static box with a tinted title bar and a body
@@ -1629,7 +1553,6 @@ a.badge[aria-disabled="true"] {
    the body if the content needs to be expandable. */
 .alert.admonition {
   padding: 0;
-  gap: 0;
   display: block;
   overflow: clip;
   border-color: var(--intent, var(--border));
@@ -1641,21 +1564,25 @@ a.badge[aria-disabled="true"] {
   gap: var(--space-2);
   padding-block: var(--alert-pad-block);
   padding-inline: var(--alert-pad-inline);
+  border-start-start-radius: calc(var(--radius-lg) - var(--border-width));
+  border-start-end-radius: calc(var(--radius-lg) - var(--border-width));
+}
 
-  @supports (color: color-mix(in oklch, red, white)) {
+@supports (color: color-mix(in oklch, red, white)) {
+  .alert-title {
     background: color-mix(
       in oklch,
       var(--surface) var(--soft-bg-mix),
       var(--intent, var(--neutral))
     );
   }
+}
 
-  @supports not (color: color-mix(in oklch, red, white)) {
+@supports not (color: color-mix(in oklch, red, white)) {
+  .alert-title {
     background: var(--intent, var(--neutral));
+    color: var(--intent-fg, var(--neutral-fg));
   }
-
-  border-start-start-radius: calc(var(--radius-lg) - var(--border-width));
-  border-start-end-radius: calc(var(--radius-lg) - var(--border-width));
 }
 
 .alert-body {
@@ -1707,14 +1634,9 @@ a.badge[aria-disabled="true"] {
 /* Intent boundary — inherited intents do not tint this component.
    Local intent classes still win because :where() has zero specificity. */
 :where(.card) {
-  /* @sync intent-boundary */
-  --intent: initial;
-  --intent-fg: initial;
   --ui-bg: initial;
   --ui-fg: initial;
   --ui-border: initial;
-  --ui-hover-bg: initial;
-  /* @sync intent-boundary */
 }
 
 .card {
@@ -1839,7 +1761,7 @@ a.badge[aria-disabled="true"] {
   z-index: calc(var(--z-menu) - 1);
   background: var(--backdrop-fill);
   opacity: 1;
-  transition: opacity var(--duration) var(--ease, ease);
+  transition: opacity var(--duration) var(--ease);
 }
 
 .surface-backdrop[hidden] {
@@ -1856,7 +1778,7 @@ a.badge[aria-disabled="true"] {
 @supports (transition-behavior: allow-discrete) {
   .surface-backdrop {
     transition:
-      opacity var(--duration) var(--ease, ease),
+      opacity var(--duration) var(--ease),
       display var(--duration) allow-discrete;
   }
 }
@@ -1987,7 +1909,7 @@ html.has-modal-open.had-scrollbar {
 
 @media (prefers-reduced-motion: no-preference) {
   dialog.modal.is-static {
-    animation: actual-modal-static 180ms var(--ease);
+    animation: actual-modal-static var(--duration-slow) var(--ease);
   }
 
   ::view-transition-group(actual-dialog) {
@@ -2203,9 +2125,9 @@ dialog.drawer nav {
   opacity: 1;
   scale: 1;
   transition:
-    opacity var(--duration-fast, var(--duration)) var(--ease, ease),
-    scale var(--duration-fast, var(--duration)) var(--ease, ease),
-    translate var(--duration-fast, var(--duration)) var(--ease, ease);
+    opacity var(--duration-fast) var(--ease),
+    scale var(--duration-fast) var(--ease),
+    translate var(--duration-fast) var(--ease);
 }
 
 .flyout.is-open:not(.is-sheet) {
@@ -2260,10 +2182,10 @@ dialog.drawer nav {
 @supports (transition-behavior: allow-discrete) {
   .flyout {
     transition:
-      opacity var(--duration-fast, var(--duration)) var(--ease, ease),
-      scale var(--duration-fast, var(--duration)) var(--ease, ease),
-      translate var(--duration-fast, var(--duration)) var(--ease, ease),
-      display var(--duration-fast, var(--duration)) allow-discrete;
+      opacity var(--duration-fast) var(--ease),
+      scale var(--duration-fast) var(--ease),
+      translate var(--duration-fast) var(--ease),
+      display var(--duration-fast) allow-discrete;
   }
 }
 
@@ -2396,8 +2318,8 @@ dialog.drawer nav {
   opacity: 1;
   scale: 1;
   transition:
-    opacity var(--duration-fast, var(--duration)) var(--ease, ease),
-    scale var(--duration-fast, var(--duration)) var(--ease, ease);
+    opacity var(--duration-fast) var(--ease),
+    scale var(--duration-fast) var(--ease);
 }
 
 .tooltip[hidden] {
@@ -2416,9 +2338,9 @@ dialog.drawer nav {
 @supports (transition-behavior: allow-discrete) {
   .tooltip {
     transition:
-      opacity var(--duration-fast, var(--duration)) var(--ease, ease),
-      scale var(--duration-fast, var(--duration)) var(--ease, ease),
-      display var(--duration-fast, var(--duration)) allow-discrete;
+      opacity var(--duration-fast) var(--ease),
+      scale var(--duration-fast) var(--ease),
+      display var(--duration-fast) allow-discrete;
   }
 }
 
@@ -2523,14 +2445,8 @@ dialog.drawer nav {
   inline-size: 1rem;
   block-size: 1rem;
   background-color: var(--accordion-marker-color);
-  -webkit-mask-image: var(--icon-chevron);
-  mask-image: var(--icon-chevron);
-  -webkit-mask-repeat: no-repeat;
-  mask-repeat: no-repeat;
-  -webkit-mask-size: contain;
-  mask-size: contain;
-  -webkit-mask-position: center;
-  mask-position: center;
+  -webkit-mask: var(--icon-chevron) center / contain no-repeat;
+  mask: var(--icon-chevron) center / contain no-repeat;
   transition: transform var(--duration);
 }
 
@@ -2576,14 +2492,7 @@ dialog.drawer nav {
 /* Intent boundary — inherited intents do not tint this component.
    Local intent classes still win because :where() has zero specificity. */
 :where(.spinner) {
-  /* @sync intent-boundary */
   --intent: initial;
-  --intent-fg: initial;
-  --ui-bg: initial;
-  --ui-fg: initial;
-  --ui-border: initial;
-  --ui-hover-bg: initial;
-  /* @sync intent-boundary */
 }
 
 .spinner {
@@ -2751,14 +2660,7 @@ dialog.drawer nav {
 /* Intent boundary — inherited intents do not tint this component.
    Local intent classes still win because :where() has zero specificity. */
 :where(.progress) {
-  /* @sync intent-boundary */
   --intent: initial;
-  --intent-fg: initial;
-  --ui-bg: initial;
-  --ui-fg: initial;
-  --ui-border: initial;
-  --ui-hover-bg: initial;
-  /* @sync intent-boundary */
 }
 
 .progress {
@@ -2845,11 +2747,13 @@ dialog.drawer nav {
 }
 
 @media (forced-colors: active) {
-  .progress::-webkit-progress-value {
+  .progress::-webkit-progress-value,
+  .progress:indeterminate::-webkit-progress-value {
     background: Highlight;
   }
 
-  .progress::-moz-progress-bar {
+  .progress::-moz-progress-bar,
+  .progress:indeterminate::-moz-progress-bar {
     background: Highlight;
   }
 }
@@ -2874,14 +2778,8 @@ dialog.drawer nav {
 /* Intent boundary — inherited intents do not tint this component.
    Local intent classes still win because :where() has zero specificity. */
 :where(.status-bar) {
-  /* @sync intent-boundary */
   --intent: initial;
   --intent-fg: initial;
-  --ui-bg: initial;
-  --ui-fg: initial;
-  --ui-border: initial;
-  --ui-hover-bg: initial;
-  /* @sync intent-boundary */
 }
 
 .status-bar {
@@ -2891,7 +2789,7 @@ dialog.drawer nav {
   position: fixed;
   inset-block-end: var(--space-4);
   inset-inline: var(--space-4);
-  z-index: var(--z-status, 60);
+  z-index: var(--z-status);
 
   display: inline-flex;
   align-items: center;
@@ -2899,7 +2797,7 @@ dialog.drawer nav {
   gap: var(--space-2);
 
   inline-size: fit-content;
-  max-inline-size: min(calc(100vw - var(--space-6)), 32rem);
+  max-inline-size: min(calc(var(--viewport-inline) - var(--space-6)), 32rem);
   margin-inline: auto;
   overflow-wrap: anywhere;
 
@@ -2917,9 +2815,9 @@ dialog.drawer nav {
   pointer-events: none;
 
   transition:
-    opacity var(--duration-slow) var(--ease, ease),
-    scale var(--duration-slow) var(--ease, ease),
-    translate var(--duration-slow) var(--ease, ease);
+    opacity var(--duration-slow) var(--ease),
+    scale var(--duration-slow) var(--ease),
+    translate var(--duration-slow) var(--ease);
 }
 
 .status-bar:empty {
@@ -2941,14 +2839,8 @@ dialog.drawer nav {
 /* Intent boundary — inherited intents do not tint this component.
    Local intent classes still win because :where() has zero specificity. */
 :where(.avatar) {
-  /* @sync intent-boundary */
   --intent: initial;
   --intent-fg: initial;
-  --ui-bg: initial;
-  --ui-fg: initial;
-  --ui-border: initial;
-  --ui-hover-bg: initial;
-  /* @sync intent-boundary */
 }
 
 .avatar {
@@ -3134,6 +3026,8 @@ a.avatar[aria-disabled="true"] {
  *
  * Use .key outside prose. Plain kbd inside .prose gets the same visual
  * treatment from prose.css so authored content stays convenient.
+ *
+ * Visual twin of .prose kbd (prose.css) — keep the two recipes in sync.
  */
 .key {
   display: inline-flex;
@@ -3165,14 +3059,7 @@ a.avatar[aria-disabled="true"] {
 /* Intent boundary — inherited intents do not tint this component.
    Local intent classes still win because :where() has zero specificity. */
 :where(.overline) {
-  /* @sync intent-boundary */
   --intent: initial;
-  --intent-fg: initial;
-  --ui-bg: initial;
-  --ui-fg: initial;
-  --ui-border: initial;
-  --ui-hover-bg: initial;
-  /* @sync intent-boundary */
 }
 
 .overline {
@@ -3275,11 +3162,11 @@ a.avatar[aria-disabled="true"] {
 /* Nav list — a vertical navigation list. Used by .drawer for stacked links. */
 .nav-list {
   display: grid;
+  --gap: var(--space-2);
   gap: var(--gap);
   margin: 0;
   padding: 0;
   list-style: none;
-  --gap: var(--space-2);
 }
 
 .nav-list > li {
@@ -3375,27 +3262,11 @@ a.avatar[aria-disabled="true"] {
   min-inline-size: var(--control-size);
 }
 
-.pagination .btn[aria-current="page"] {
-  --btn-bg: var(--intent, var(--state-selected));
-  --btn-fg: var(--intent-fg, var(--state-selected-fg));
-  --btn-border: var(--intent, var(--state-selected));
-  --ui-hover-bg: var(--btn-bg);
-}
-
 .pagination > li > [aria-hidden="true"] {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   min-inline-size: var(--control-size);
-}
-
-@media (forced-colors: active) {
-  .pagination .btn[aria-current="page"] {
-    border-color: Highlight;
-    background: Highlight;
-    color: HighlightText;
-    forced-color-adjust: none;
-  }
 }
 
 /*
@@ -3408,14 +3279,7 @@ a.avatar[aria-disabled="true"] {
 /* Intent boundary — inherited intents do not tint this component.
    Local intent classes still win because :where() has zero specificity. */
 :where(.tab) {
-  /* @sync intent-boundary */
   --intent: initial;
-  --intent-fg: initial;
-  --ui-bg: initial;
-  --ui-fg: initial;
-  --ui-border: initial;
-  --ui-hover-bg: initial;
-  /* @sync intent-boundary */
 }
 
 .tabs {
@@ -3601,18 +3465,8 @@ a.avatar[aria-disabled="true"] {
  * Maps the three standard meter zones (optimum / suboptimum / even-less-good)
  * to the shared success / warning / danger intent colors.
  */
-/* Intent boundary — inherited intents do not tint this component.
-   Local intent classes still win because :where() has zero specificity. */
-:where(.meter) {
-  /* @sync intent-boundary */
-  --intent: initial;
-  --intent-fg: initial;
-  --ui-bg: initial;
-  --ui-fg: initial;
-  --ui-border: initial;
-  --ui-hover-bg: initial;
-  /* @sync intent-boundary */
-}
+/* Intent boundary — not needed: meter maps its zones to --success/warning/
+   danger directly and never consumes --intent or --ui-*. */
 
 .meter {
   appearance: none;
@@ -3666,10 +3520,10 @@ a.avatar[aria-disabled="true"] {
   }
 }
 
-/* Forms — import order matters: switch.css must follow choice.css so its
-   :not([role="switch"]) exclusion in choice.css still applies.
-   validation.css is part of the default forms bundle, but custom builds may
-   omit it when validation styling is app-owned. */
+/* Forms — import order matters: switch.css follows choice.css so its rules
+   land after the shared choice recipe. validation.css is part of the default
+   forms bundle, but custom builds may omit it when validation styling is
+   app-owned. */
 /*
  * Form layout and supporting text.
  *
@@ -3751,9 +3605,7 @@ a.avatar[aria-disabled="true"] {
   --control-border: var(--border);
   --control-bg: var(--surface);
   --control-fg: var(--text);
-  --control-ring: none;
   --control-cursor: auto;
-  --control-opacity: 1;
 
   appearance: none;
   inline-size: 100%;
@@ -3769,9 +3621,7 @@ a.avatar[aria-disabled="true"] {
   background: var(--control-bg);
   color: var(--control-fg);
   font-size: var(--control-font-size);
-  box-shadow: var(--control-ring);
   cursor: var(--control-cursor);
-  opacity: var(--control-opacity);
   outline: none;
   transition:
     border-color var(--duration),
@@ -3799,7 +3649,7 @@ a.avatar[aria-disabled="true"] {
 .textarea:focus-visible,
 .select:focus-visible {
   --control-border: var(--focus);
-  outline: none;
+  outline: 2px solid transparent;
   box-shadow: var(--focus-ring-shadow);
 }
 
@@ -3816,7 +3666,6 @@ a.avatar[aria-disabled="true"] {
   --control-fg: var(--state-disabled);
   --control-border: var(--border);
   --control-cursor: not-allowed;
-  --control-opacity: 1;
 }
 
 .input::placeholder,
@@ -3890,14 +3739,8 @@ a.avatar[aria-disabled="true"] {
 /* Intent boundary — inherited intents do not tint this component.
    Local intent classes still win because :where() has zero specificity. */
 :where(.choice, .check, .radio) {
-  /* @sync intent-boundary */
   --intent: initial;
   --intent-fg: initial;
-  --ui-bg: initial;
-  --ui-fg: initial;
-  --ui-border: initial;
-  --ui-hover-bg: initial;
-  /* @sync intent-boundary */
 }
 
 /* A classed .choice is the component surface. Let its nested input consume a
@@ -4032,7 +3875,7 @@ a.avatar[aria-disabled="true"] {
 .check:focus-visible,
 .radio:focus-visible {
   --choice-border: var(--focus);
-  outline: none;
+  outline: 2px solid transparent;
   box-shadow: var(--focus-ring-shadow);
 }
 
@@ -4084,14 +3927,8 @@ a.avatar[aria-disabled="true"] {
  * layout.
  */
 :where(.choice-card) {
-  /* @sync intent-boundary */
   --intent: initial;
   --intent-fg: initial;
-  --ui-bg: initial;
-  --ui-fg: initial;
-  --ui-border: initial;
-  --ui-hover-bg: initial;
-  /* @sync intent-boundary */
 }
 
 .choice-card {
@@ -4135,7 +3972,7 @@ a.avatar[aria-disabled="true"] {
 
 /* Focus ring on the label follows the hidden input's focus. */
 .choice-card:has(:focus-visible) {
-  outline: none;
+  outline: 2px solid transparent;
   box-shadow: var(--focus-ring-shadow);
 }
 
@@ -4236,7 +4073,7 @@ a.avatar[aria-disabled="true"] {
  * custom-select.css can be opted out independently. Add .native to a specific
  * select to opt out of the enhancement.
  */
-.select:is(:not([multiple], [size]), :not([multiple])[size="1"]) {
+.select:not([multiple], [size]:not([size="1"])) {
   appearance: none;
   padding-inline-end: calc(var(--space-3) + var(--space-6));
   background-image: var(--icon-chevron);
@@ -4247,7 +4084,7 @@ a.avatar[aria-disabled="true"] {
 
 /* The chevron sits on the inline-end side; flip it in RTL so it follows
    the padding-inline-end space reserved for it. */
-.select:is(:not([multiple], [size]), :not([multiple])[size="1"]):dir(rtl) {
+.select:not([multiple], [size]:not([size="1"])):dir(rtl) {
   background-position: center left var(--space-3);
 }
 
@@ -4256,7 +4093,7 @@ a.avatar[aria-disabled="true"] {
    simpler than maintaining contrast variants, and native rendering already
    matches whatever contrast mode the user picked. */
 @media (forced-colors: active), (prefers-contrast: more) {
-  .select:is(:not([multiple], [size]), :not([multiple])[size="1"]) {
+  .select:not([multiple], [size]:not([size="1"])) {
     appearance: auto;
     background-image: none;
     padding-inline-end: var(--space-3);
@@ -4335,14 +4172,8 @@ a.avatar[aria-disabled="true"] {
           inline-size: 1rem;
           block-size: 1rem;
           background-color: currentColor;
-          -webkit-mask-image: var(--icon-check);
-          mask-image: var(--icon-check);
-          -webkit-mask-repeat: no-repeat;
-          mask-repeat: no-repeat;
-          -webkit-mask-size: contain;
-          mask-size: contain;
-          -webkit-mask-position: center;
-          mask-position: center;
+          -webkit-mask: var(--icon-check) center / contain no-repeat;
+          mask: var(--icon-check) center / contain no-repeat;
         }
       }
 
@@ -4358,9 +4189,9 @@ a.avatar[aria-disabled="true"] {
 }
 
 /*
- * Native-only control polish: file input that mostly defeats custom styling,
- * so the framework stays out of the way and just keeps it readable and
- * theme-aware.
+ * Native-only control polish: the file input and color picker mostly defeat
+ * custom styling, so the framework stays out of the way and just keeps them
+ * readable and theme-aware.
  *
  * Range has its own custom-styled file (range.css) so the focus ring can
  * target the thumb pseudo-element rather than the rectangular CSS box.
@@ -4396,7 +4227,7 @@ a.avatar[aria-disabled="true"] {
 }
 
 .file:focus-visible {
-  outline: none;
+  outline: 2px solid transparent;
   box-shadow: var(--focus-ring-shadow);
 }
 
@@ -4429,7 +4260,7 @@ a.avatar[aria-disabled="true"] {
 }
 
 .color:focus-visible {
-  outline: none;
+  outline: 2px solid transparent;
   box-shadow: var(--focus-ring-shadow);
 }
 
@@ -4453,14 +4284,7 @@ a.avatar[aria-disabled="true"] {
 /* Intent boundary — inherited intents do not tint this component.
    Local intent classes still win because :where() has zero specificity. */
 :where(.range) {
-  /* @sync intent-boundary */
   --intent: initial;
-  --intent-fg: initial;
-  --ui-bg: initial;
-  --ui-fg: initial;
-  --ui-border: initial;
-  --ui-hover-bg: initial;
-  /* @sync intent-boundary */
 }
 
 .range {
@@ -4537,6 +4361,15 @@ a.avatar[aria-disabled="true"] {
   opacity: var(--disabled-opacity);
 }
 
+/* Forced colors: map the custom thumb/track to system colors. The focus
+   indicator stays visible through the transparent outline on :focus-visible. */
+@media (forced-colors: active) {
+  .range {
+    --range-thumb-bg: ButtonText;
+    --range-track-bg: Canvas;
+  }
+}
+
 /*
  * Switch controls for checkbox inputs with switch semantics.
  *
@@ -4546,14 +4379,8 @@ a.avatar[aria-disabled="true"] {
 /* Intent boundary — inherited intents do not tint this component.
    Local intent classes still win because :where() has zero specificity. */
 :where(.switch) {
-  /* @sync intent-boundary */
   --intent: initial;
   --intent-fg: initial;
-  --ui-bg: initial;
-  --ui-fg: initial;
-  --ui-border: initial;
-  --ui-hover-bg: initial;
-  /* @sync intent-boundary */
 }
 
 .switch {
@@ -4623,7 +4450,7 @@ a.avatar[aria-disabled="true"] {
 
 .switch:focus-visible {
   --switch-border: var(--focus);
-  outline: none;
+  outline: 2px solid transparent;
   box-shadow: var(--focus-ring-shadow);
 }
 
@@ -4668,80 +4495,9 @@ a.avatar[aria-disabled="true"] {
  * Imported by default through forms/index.css. Custom builds may omit this
  * file when an app wants to own validation styling completely.
  *
- * ── State matrix ─────────────────────────────────────────────────────────
- * Audit tool, not an implementation guide. States that apply to a component
- * carry a ✓ when covered by CSS in this codebase; blank means the state is
- * either irrelevant or a known gap.
- *
- *   ✓ default  —— every styled component
- *   ✓ hover    —— :hover (touch devices inherit this safely in modern browsers)
- *   ✓ active   —— :active on buttons, not used on text inputs
- *   ✓ focus-visible —— :focus-visible ring on every interactive component
- *   ✓ checked  —— :checked on .check, .radio, .switch, .choice-card
- *   ✓ cur/pg   —— [aria-current] on breadcrumb, pagination, nav-link
- *   ✓ open     —— [open] on dialog, details/summary (accordion)
- *   ✓ disabled —— :disabled (handles direct, fieldset-inherited, and nested)
- *   ✓ aria-disabled —— [aria-disabled="true"] on .btn, .menu-item, .tab
- *   ✓ disabled-fieldset —— child :disabled covers this; no fieldset rule needed
- *   ✓ invalid  —— .needs-validation.was-validated :invalid
- *   ✓ user-invalid —— :user-invalid (progressive, @supports gated)
- *   ✓ aria-invalid —— [aria-invalid="true"]
- *   ✓ indeterminate —— :indeterminate on .check, .progress
- *   ✓ readonly —— [readonly] on .input, .textarea
- *   ✓ forced-colors —— @media (forced-colors: active) per component
- *   ✓ reduced-motion —— @media (prefers-reduced-motion: reduce) in reset.css
- *   ✓ RTL   —— [dir="rtl"] or :dir(rtl) on positional rules
- *
- *   Coverage per component (✓ = styled, · = irrelevant, ? = possible gap):
- *
- *   Component       hover  active  focus  checked  cur/pg  open  disabled
- *   ─────────────   ─────  ──────  ─────  ───────  ──────  ────  ────────
- *   .input           ✓       ·       ✓       ·        ·      ·      ✓
- *   .textarea        ✓       ·       ✓       ·        ·      ·      ✓
- *   .select          ✓       ·       ✓       ·        ·      ·      ✓
- *   .check           ✓       ·       ✓       ✓        ·      ·      ✓
- *   .radio           ✓       ·       ✓       ✓        ·      ·      ✓
- *   .switch          ✓       ·       ✓       ✓        ·      ·      ✓
- *   .range           ·       ·       ✓       ·        ·      ·      ✓
- *   .file            ✓       ·       ✓       ·        ·      ·      ✓
- *   .choice-card     ✓       ·       ✓       ✓        ·      ·      ✓
- *   .btn             ✓       ✓       ✓       ·        ·      ·      ✓
- *   .tab             ✓       ·       ✓       ·        ✓      ·      ✓
- *   .menu-item       ✓       ·       ✓       ·        ✓      ·      ✓
- *   .nav-link        ✓       ·       ✓       ·        ✓      ·      ·
- *   .breadcrumb      ✓       ·       ✓       ·        ✓      ·      ·
- *   .pagination      ✓       ·       ✓       ·        ✓      ·      ·
- *   .accordion       ✓       ·       ✓       ·        ·      ✓      ·
- *   .select(bs)      ✓       ·       ✓       ·        ·      ·      ✓
- *
- *   Component       a-disabled  invalid  user-inv  a-invalid  indet  ro
- *   ─────────────   ──────────  ───────  ────────  ─────────  ─────  ──
- *   .input              ·          ✓         ✓         ✓        ·     ✓
- *   .textarea           ·          ✓         ✓         ✓        ·     ✓
- *   .select             ·          ✓         ✓         ✓        ·     ·
- *   .check              ·          ✓         ✓         ✓        ✓     ·
- *   .radio              ·          ✓         ✓         ✓        ·     ·
- *   .switch             ·          ✓         ✓         ✓        ·     ·
- *   .range              ·          ·         ·         ·        ·     ·
- *   .file               ·          ·         ·         ·        ·     ·
- *   .choice-card        ·          ✓         ✓         ✓        ·     ·
- *   .btn                ✓          ·         ·         ·        ·     ·
- *   .tab                ✓          ·         ·         ·        ·     ·
- *   .menu-item          ✓          ·         ·         ·        ·     ·
- *   .nav-link           ·          ·         ·         ·        ·     ·
- *   .breadcrumb         ·          ·         ·         ·        ·     ·
- *   .pagination         ·          ·         ·         ·        ·     ·
- *   .accordion          ·          ·         ·         ·        ·     ·
- *   .select(bs)         ·          ·         ·         ·        ·     ·
- *
- *   Notes:
- *   - select(bs) = appearance: base-select picker (custom-select.css)
- *   - <fieldset disabled> needs NO explicit rule: child :disabled covers it
- *   - a-disabled = [aria-disabled="true"] (non-native controls)
- *   - forced-colors / reduced-motion / RTL are omitted from the matrix above
- *     for brevity; every component that ships custom geometry or color also
- *     supplies its own forced-colors block.
- * ─────────────────────────────────────────────────────────────────────────
+ * State coverage (which states each component ships) is audited in
+ * tests/validation.test.js and summarized in docs/forms.md — not kept as a
+ * source comment that can drift from the implementation.
  */
 
 .field.danger {
@@ -4764,15 +4520,31 @@ a.avatar[aria-disabled="true"] {
   --form-invalid-border: var(--danger);
 }
 
-/* Override checked/indeterminate background so both border and fill signal
-   danger instead of showing a red border around a primary-colored control. */
-.check[aria-invalid="true"]:is(:checked, :indeterminate),
-.radio[aria-invalid="true"]:checked {
+/* Override checked/indeterminate fill so both border and fill signal danger
+   instead of a red border around a primary-colored control. All three
+   invalid routes must converge: aria-invalid, was-validated :invalid, and
+   :user-invalid. */
+.check:is(:checked, :indeterminate)[aria-invalid="true"],
+.needs-validation.was-validated .check:is(:checked, :indeterminate):invalid,
+.radio:checked[aria-invalid="true"],
+.needs-validation.was-validated .radio:checked:invalid {
   --choice-bg: var(--danger);
 }
 
-.switch[aria-invalid="true"]:checked {
+.switch:checked[aria-invalid="true"],
+.needs-validation.was-validated .switch:checked:invalid {
   --switch-bg: var(--danger);
+}
+
+@supports selector(:user-invalid) {
+  .needs-validation .check:is(:checked, :indeterminate):user-invalid,
+  .needs-validation .radio:checked:user-invalid {
+    --choice-bg: var(--danger);
+  }
+
+  .needs-validation .switch:checked:user-invalid {
+    --switch-bg: var(--danger);
+  }
 }
 
 /* Choice cards hide their native input, so invalid state must surface on the
@@ -5110,7 +4882,7 @@ a.avatar[aria-disabled="true"] {
    focus, and unsupported :has() browsers retain the control's normal ring. */
 .join:has(> :is(.input, .textarea, .select):focus-visible) {
   border-radius: var(--join-radius);
-  outline: none;
+  outline: 2px solid transparent;
   box-shadow: var(--focus-ring-shadow);
 }
 
@@ -5119,12 +4891,14 @@ a.avatar[aria-disabled="true"] {
   box-shadow: none;
 }
 
-/* Focus baseline — loaded after components so its legacy fallback also covers
-   controls that reset their native outline. Modern browsers hide it for focus
-   that is not keyboard-relevant; components layer local state on top.
+/* Focus baseline — a visible outline is the guaranteed focus affordance. The
+   :focus outline covers legacy browsers; modern browsers hide it for
+   pointer/mouse focus and interactive components layer their ring on top.
 
-   In forced-colors mode the transparent outline renders in the system focus
-   color, providing an accessible focus ring without explicit HCM rules. */
+   Invariant: an interactive component must never rely on box-shadow alone
+   for its keyboard focus indicator. Components that remove the native
+   outline on :focus-visible replace it with a transparent outline — invisible
+   normally, forced to the system focus color under forced-colors. */
 :focus {
   outline: var(--focus-outline);
   outline-offset: var(--focus-outline-offset);
@@ -5133,6 +4907,14 @@ a.avatar[aria-disabled="true"] {
 @supports selector(:focus-visible) {
   :focus:not(:focus-visible) {
     outline: none;
+  }
+
+  /* Pointer focus must still signal in high-contrast mode, where the shared
+     box-shadow rings are disabled (--focus-ring-shadow: none). */
+  @media (forced-colors: active) {
+    :focus:not(:focus-visible) {
+      outline: var(--focus-outline);
+    }
   }
 }
 

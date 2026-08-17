@@ -283,6 +283,32 @@
         </div>
       </div>
     </section>
+    <div class="component-prose">
+      <h3>Layering</h3>
+<p>A small z-index scale orders non-dialog overlays. Native <code>&lt;dialog&gt;</code> elements (modal, drawer) render on the platform top-layer, which has no numeric z-index and always paints above the page — they never compete with this scale.</p>
+    </div>
+    <section class="component-section">
+      <h2>CSS</h2>
+      <div class="example-group">
+        <div class="example-code">
+          <pre><code class="language-css"><span class="token selector">:root</span> <span class="token punctuation">{</span>
+  <span class="token property">--z-sticky</span><span class="token punctuation">:</span> 10<span class="token punctuation">;</span>
+  <span class="token property">--z-menu</span><span class="token punctuation">:</span> 20<span class="token punctuation">;</span>
+  <span class="token property">--z-tooltip</span><span class="token punctuation">:</span> 50<span class="token punctuation">;</span>
+  <span class="token property">--z-status</span><span class="token punctuation">:</span> 60<span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+        </div>
+      </div>
+    </section>
+    <div class="component-prose">
+      <ul>
+  <li><code>--z-sticky</code> — 10, sticky page chrome (<code>form-actions.sticky</code>, <code>topbar</code>).</li>
+  <li><code>--z-menu</code> — 20, floating menus (<code>flyout</code>, menus; <code>surface-backdrop</code> sits at <code>calc(var(--z-menu) - 1)</code>).</li>
+  <li><code>--z-tooltip</code> — 50, tooltips.</li>
+  <li><code>--z-status</code> — 60, <code>status-bar</code> and toasts.</li>
+</ul>
+<p>No token is provided for dialog (browser top-layer) or dialog-fallback (dead-code z-index 40, between menu and tooltip). Stacking-context traps: a flyout or tooltip that is a DOM descendant of a dialog, or of a container with <code>transform</code>, <code>filter</code>, <code>contain</code>, <code>isolation</code>, or <code>will-change</code>, is confined to that ancestor's stacking context. Its z-index token only orders it against siblings within that context. When a dialog's top-layer clips a descendant flyout, move the flyout markup outside the dialog or use a portal/popover to escape the stacking context. Scrollbar gutter: modal open/close can shift page layout when the classic scrollbar disappears. When a measured scrollbar is present (js writes <code>html.had-scrollbar</code>), modal.css applies <code>scrollbar-gutter: stable</code> so the viewport reserves the gutter space and the page doesn't jump.</p>
+    </div>
     
   </section>
   </main>

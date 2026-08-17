@@ -2,8 +2,8 @@
  * Intent classes do not style elements directly.
  * They only expose --intent and --intent-fg.
  * Components and variants decide how to consume them. Each component that
- * consumes --intent or --ui-* must open a local intent boundary in a :where()
- * block that resets --intent / --intent-fg / --ui-* to initial. Parent intents
+ * consumes --intent or --ui-* opens a local intent boundary in a :where()
+ * block that resets exactly the tokens it consumes to initial. Parent intents
  * do not leak into nested components. Local intent classes (.primary, .danger,
  * etc.) still apply because they have higher specificity than :where().
  */

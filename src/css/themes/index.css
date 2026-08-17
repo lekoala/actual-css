@@ -5,7 +5,7 @@
  * The themes are illustrative: each one demonstrates a different set of knobs
  * the token contract exposes, beyond recoloring.
  *
- *   dark       — canonical dark (single block, color-scheme: dark only)
+ *   indigo     — deep blue/violet dark palette (single block)
  *   dim        — dark variant with lifted surface tones
  *   corporate  — reference paired light/dark recolor via light-dark()
  *   forest     — paired recolor + scaled-up radius tokens
@@ -24,9 +24,9 @@
  *   gradient   — paired recolor + Bootstrap 4 style gradient on solid buttons
  *                via component-local button tokens
  *
- * Single-block themes (dark, dim, cyberpunk, neon) pin one color-scheme and
+ * Single-block themes (indigo, dim, cyberpunk, neon) pin one color-scheme and
  * cannot adapt to prefers-color-scheme; the paired ones follow the OS. */
-@import "./dark.css";
+@import "./indigo.css";
 @import "./dim.css";
 @import "./corporate.css";
 @import "./forest.css";

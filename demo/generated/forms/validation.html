@@ -425,6 +425,8 @@ FormValidator.setErrors(form, { email: "Already taken" });
 FormValidator.clearFieldError(form.elements.email);}catch(e){console.error(e)}</script>
     <div class="component-prose">
       <p><code>setErrors</code> resolves each name to a field, sets <code>aria-invalid</code>, the field's <code>.field-error</code> text, and <code>setCustomValidity</code> so the next submit stays blocked until corrected.</p>
+<h4>State coverage</h4>
+<p>Invalid visuals converge across the three ways a field can be flagged: <code>aria-invalid=&quot;true&quot;</code>, <code>.needs-validation.was-validated :invalid</code>, and <code>:user-invalid</code>. Each sets the danger border, and a checked or indeterminate <code>.check</code>, <code>.radio</code>, or <code>.switch</code> also flips its fill to danger so border and fill signal together. Choice cards surface the same invalid state on the card border. The exact selector coverage is asserted by <code>tests/validation.test.js</code>.</p>
     </div>
     
   </section>

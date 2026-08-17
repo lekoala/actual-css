@@ -10,14 +10,7 @@
 /* Intent boundary — inherited intents do not tint this component.
    Local intent classes still win because :where() has zero specificity. */
 :where(.range) {
-  /* @sync intent-boundary */
   --intent: initial;
-  --intent-fg: initial;
-  --ui-bg: initial;
-  --ui-fg: initial;
-  --ui-border: initial;
-  --ui-hover-bg: initial;
-  /* @sync intent-boundary */
 }
 
 .range {
@@ -92,4 +85,13 @@
   --range-thumb-bg: var(--state-disabled);
   cursor: not-allowed;
   opacity: var(--disabled-opacity);
+}
+
+/* Forced colors: map the custom thumb/track to system colors. The focus
+   indicator stays visible through the transparent outline on :focus-visible. */
+@media (forced-colors: active) {
+  .range {
+    --range-thumb-bg: ButtonText;
+    --range-track-bg: Canvas;
+  }
 }

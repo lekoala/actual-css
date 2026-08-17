@@ -60,7 +60,6 @@
   /* Shape */
   --border-width: 1px;
   --radius-full: 9999px;
-  --shadow-xs: 0 1px 2px rgb(0 0 0 / 0.04);
   --shadow: 0 1px 3px rgb(0 0 0 / 0.05), 0 4px 12px rgb(0 0 0 / 0.04);
   --shadow-popout: 0 0.25rem 0.75rem rgb(0 0 0 / 0.15);
 
@@ -140,38 +139,12 @@
   --viewport-block: 100vh;
   --viewport-inline: 100vw;
 
-  /*
-   * Layering — the stacking model.
-   *
-   * Native <dialog> elements (modal, drawer) render on the platform top-layer.
-   * The top-layer has no numeric z-index and always paints above the page.
-   * This means dialogs never compete with the z-index scale below.
-   *
-   * The 4-token z-index scale is used ONLY by non-dialog overlays:
-   *
-   *   --z-sticky:  10  form-actions.sticky, topbar
-   *   --z-menu:    20  flyout, menus, surface-backdrop (at z-menu - 1)
-   *   --z-tooltip: 50  tooltips
-   *   --z-status:  60  status-bar, toasts
-   *
-   * No token is provided for dialog (browser top-layer) or dialog-fallback
-   * (dead-code z-index: 40, between menu and tooltip — see dialog-fallback.css).
-   *
-   * Stacking-context traps:
-   *   A flyout or tooltip that is a DOM descendant of a dialog, a container
-   *   with `transform`, `filter`, `contain`, `isolation`, or `will-change`
-   *   is confined to that ancestor's stacking context. Its z-index token only
-   *   orders it against siblings *within that context*. When a dialog's
-   *   top-layer clips a descendant flyout, move the flyout markup outside the
-   *   dialog or use a portal/popover to escape the stacking context.
-   *
-   * Scrollbar gutter:
-   *   Modal opening and closing can shift page layout when the classic
-   *   scrollbar disappears/reappears. When a measured scrollbar is present
-   *   (js writes html.had-scrollbar), modal.css applies
-   *   `scrollbar-gutter: stable` so the viewport reserves the gutter space
-   *   and the page doesn't jump.
-   */
+  /* Z-index scale — used ONLY by non-dialog overlays (see the layering
+     note below for the full model). */
+  --z-sticky: 10;
+  --z-menu: 20;
+  --z-tooltip: 50;
+  --z-status: 60;
 }
 
 @media (forced-colors: active) {
@@ -196,7 +169,6 @@
 
 @supports (color: color-mix(in oklch, red, white)) {
   :root {
-    --shadow-xs: 0 1px 2px color-mix(in oklch, var(--shadow-color) 4%, transparent);
     --shadow:
       0 1px 3px color-mix(in oklch, var(--shadow-color) 5%, transparent),
       0 4px 12px color-mix(in oklch, var(--shadow-color) 4%, transparent);

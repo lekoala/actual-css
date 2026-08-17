@@ -12,14 +12,8 @@
  * layout.
  */
 :where(.choice-card) {
-  /* @sync intent-boundary */
   --intent: initial;
   --intent-fg: initial;
-  --ui-bg: initial;
-  --ui-fg: initial;
-  --ui-border: initial;
-  --ui-hover-bg: initial;
-  /* @sync intent-boundary */
 }
 
 .choice-card {
@@ -63,7 +57,7 @@
 
 /* Focus ring on the label follows the hidden input's focus. */
 .choice-card:has(:focus-visible) {
-  outline: none;
+  outline: 2px solid transparent;
   box-shadow: var(--focus-ring-shadow);
 }
 

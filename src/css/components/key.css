@@ -3,6 +3,8 @@
  *
  * Use .key outside prose. Plain kbd inside .prose gets the same visual
  * treatment from prose.css so authored content stays convenient.
+ *
+ * Visual twin of .prose kbd (prose.css) — keep the two recipes in sync.
  */
 .key {
   display: inline-flex;

@@ -95,7 +95,7 @@
    focus, and unsupported :has() browsers retain the control's normal ring. */
 .join:has(> :is(.input, .textarea, .select):focus-visible) {
   border-radius: var(--join-radius);
-  outline: none;
+  outline: 2px solid transparent;
   box-shadow: var(--focus-ring-shadow);
 }
 

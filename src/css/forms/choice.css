@@ -12,14 +12,8 @@
 /* Intent boundary — inherited intents do not tint this component.
    Local intent classes still win because :where() has zero specificity. */
 :where(.choice, .check, .radio) {
-  /* @sync intent-boundary */
   --intent: initial;
   --intent-fg: initial;
-  --ui-bg: initial;
-  --ui-fg: initial;
-  --ui-border: initial;
-  --ui-hover-bg: initial;
-  /* @sync intent-boundary */
 }
 
 /* A classed .choice is the component surface. Let its nested input consume a
@@ -154,7 +148,7 @@
 .check:focus-visible,
 .radio:focus-visible {
   --choice-border: var(--focus);
-  outline: none;
+  outline: 2px solid transparent;
   box-shadow: var(--focus-ring-shadow);
 }
 

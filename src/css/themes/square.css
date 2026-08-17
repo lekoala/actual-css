@@ -34,9 +34,6 @@
 }
 
 @supports (color: light-dark(red, blue)) {
-  /* Square — paired light/dark theme that demonstrates overriding the full
- * --radius scale to 0 for sharp-cornered applications. The recolor is close to
- * the default blue palette; the radius override is the point. */
   [data-theme="square"] {
     --primary: light-dark(hsl(220 90% 56%), hsl(220 75% 80%));
     --primary-fg: light-dark(white, hsl(220 30% 12%));

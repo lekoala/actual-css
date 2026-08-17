@@ -1285,3 +1285,12 @@ FormValidator.clearFieldError(form.elements.email);
 ```
 
 `setErrors` resolves each name to a field, sets `aria-invalid`, the field's `.field-error` text, and `setCustomValidity` so the next submit stays blocked until corrected.
+
+#### State coverage
+
+Invalid visuals converge across the three ways a field can be flagged:
+`aria-invalid="true"`, `.needs-validation.was-validated :invalid`, and
+`:user-invalid`. Each sets the danger border, and a checked or indeterminate
+`.check`, `.radio`, or `.switch` also flips its fill to danger so border and
+fill signal together. Choice cards surface the same invalid state on the card
+border. The exact selector coverage is asserted by `tests/validation.test.js`.

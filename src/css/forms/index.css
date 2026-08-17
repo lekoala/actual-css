@@ -1,7 +1,7 @@
-/* Forms — import order matters: switch.css must follow choice.css so its
-   :not([role="switch"]) exclusion in choice.css still applies.
-   validation.css is part of the default forms bundle, but custom builds may
-   omit it when validation styling is app-owned. */
+/* Forms — import order matters: switch.css follows choice.css so its rules
+   land after the shared choice recipe. validation.css is part of the default
+   forms bundle, but custom builds may omit it when validation styling is
+   app-owned. */
 @import "./form.css";
 @import "./control.css";
 @import "./input-icon.css";

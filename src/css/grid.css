@@ -14,23 +14,11 @@
     );
 }
 
-/* Query-container wrapper that opts .grid-2/3/4/6 into responsive
- * collapse. Wrap a .grid-2/3/4/6 inside .container-query to make the
- * column count collapse on narrow wrappers. Without this wrapper,
- * .grid-2/3/4/6 stay at their full column count. */
-/* Fixed-column grids at their full count by default.
- *   .grid-2: 2 cols
- *   .grid-3: 3 cols
- *   .grid-4: 4 cols
- *   .grid-6: 6 cols
- * When placed inside .container-query, the column count collapses
- * on narrow wrappers. The intermediate 2-col step applies to
- * .grid-3/.grid-4; .grid-6 starts at 2 columns because it is meant
- * for compact items that do not need a full single-column stack.
- *   .grid-2: 1 col -> 2 cols
- *   .grid-3: 1 col -> 2 cols -> 3 cols
- *   .grid-4: 1 col -> 2 cols -> 4 cols
- *   .grid-6: 2 cols -> 3 cols -> 6 cols */
+/* Fixed-column grids at their full count by default: .grid-2/3/4/6 stay at
+   2/3/4/6 columns unless wrapped in .container-query, which collapses the
+   column count on narrow wrappers (a 2-col intermediate step for
+   .grid-3/.grid-4; .grid-6 starts at 2 columns because it is meant for
+   compact items that do not need a full single-column stack). */
 .grid-2,
 .grid-3,
 .grid-4,
