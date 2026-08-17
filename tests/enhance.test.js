@@ -310,3 +310,74 @@ test("registers a third-party behavior without touching core", async () => {
   expect(el.hasAttribute("data-hooked")).toBe(false);
   runtime.disconnect();
 });
+
+test("registerEnhancement: duplicate name on the same root throws", () => {
+  setupDOM('<div data-enhance="demo"></div>');
+  const runtime = registerEnhancement("demo", () => {});
+
+  expect(() => registerEnhancement("demo", () => {})).toThrow(/already registered/);
+  runtime.disconnect();
+});
+
+test("registerEnhancement: same name on different roots works", () => {
+  setupDOM(`
+    <section id="a"><div data-enhance="demo"></div></section>
+    <section id="b"><div data-enhance="demo"></div></section>
+  `);
+  const calls = [];
+  const a = registerEnhancement("demo", () => calls.push("a"), document.getElementById("a"));
+  const b = registerEnhancement("demo", () => calls.push("b"), document.getElementById("b"));
+
+  expect(calls).toEqual(["a", "b"]);
+  a.disconnect();
+  b.disconnect();
+});
+
+test("registerEnhancement: disconnect releases the name for re-registration", () => {
+  setupDOM('<div data-enhance="demo"></div>');
+  const first = registerEnhancement("demo", () => {});
+  first.disconnect();
+
+  const second = registerEnhancement("demo", () => {});
+  expect(second.disconnect).toBeTypeOf("function");
+  second.disconnect();
+});
+
+test("enhance() remains multi-registration for the same selector", () => {
+  setupDOM('<div data-test></div>');
+  const calls = [];
+  const first = enhance({ "[data-test]": () => calls.push("first") });
+  const second = enhance({ "[data-test]": () => calls.push("second") });
+
+  expect(calls).toEqual(["first", "second"]);
+  first.disconnect();
+  second.disconnect();
+});
+
+test("cleans up an element moved out of its custom root while staying connected", async () => {
+  setupDOM('<section id="root"><div data-test></div></section><section id="elsewhere"></section>');
+  const cleanupCalls = [];
+  const el = document.querySelector("[data-test]");
+  const runtime = enhance({ "[data-test]": () => () => cleanupCalls.push(el) }, document.getElementById("root"));
+
+  document.getElementById("elsewhere").append(el);
+  await nextMicrotask();
+
+  expect(el.isConnected).toBe(true);
+  expect(cleanupCalls).toEqual([el]);
+  runtime.disconnect();
+});
+
+test("does not clean up an element moved within its custom root", async () => {
+  setupDOM('<section id="root"><div id="a"><div data-test></div></div><div id="b"></div></section>');
+  const cleanupCalls = [];
+  const el = document.querySelector("[data-test]");
+  const runtime = enhance({ "[data-test]": () => () => cleanupCalls.push(el) }, document.getElementById("root"));
+
+  document.getElementById("b").append(el);
+  await nextMicrotask();
+
+  expect(el.isConnected).toBe(true);
+  expect(cleanupCalls).toHaveLength(0);
+  runtime.disconnect();
+});
