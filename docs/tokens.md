@@ -156,35 +156,38 @@ Controls share sizing so buttons, inputs, selects, and compact app UI always ali
 }
 ```
 
-- `.lg` — 44px control height, `--font-size-lg` (18px)
-- default — 38px control height, `--font-size-md` (16px, the baseline)
-- `.sm` — 32px control height, `--font-size-sm` (14px)
+- `.lg` — 44px control height
+- default — 38px control height
+- `.sm` — 32px control height
 
-Size modifiers swap the shared control tokens:
+The font size stays at the baseline (`--control-font-size` =
+`--font-size-md`) in every density — density changes how much space controls
+consume, not how large their text is.
+
+Density modifiers swap the shared control geometry:
 
 ```css
 .sm {
+  --gap: var(--space-2);
+  --density-space: var(--space-2);
   --control-size: var(--control-size-sm);
-  --control-font-size: var(--font-size-sm);
-  --density-font-size: var(--font-size-sm);
-  --density-icon-size: 1rem;
   --density-pad-block: var(--space-3);
   --density-compact-size: 1.25rem;
-  --density-compact-font-size: 0.75rem;
 }
 
 .lg {
+  --gap: var(--space-5);
+  --density-space: var(--space-5);
   --control-size: var(--control-size-lg);
-  --control-font-size: var(--font-size-lg);
-  --density-font-size: var(--font-size-lg);
-  --density-icon-size: 1.5rem;
   --density-pad-block: var(--space-5);
   --density-compact-size: 1.875rem;
-  --density-compact-font-size: var(--font-size-sm);
 }
 ```
 
-Content components can consume `--density-*` for local density. Compact labels such as `.badge` consume `--density-compact-*`; display elements with special geometry, such as avatar and spinner, keep their own size scales.
+Density covers spacing and geometry only — it never touches typography or
+icon size. Content components consume `--density-*` for local rhythm; compact
+labels such as `.badge` consume `--density-compact-size`; display elements
+with special geometry, such as avatar and spinner, keep their own size scales.
 
 ### Elevation
 

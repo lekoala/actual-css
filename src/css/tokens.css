@@ -94,7 +94,8 @@
   --bar-height: 0.65rem;
 
   /* Controls — inputs and buttons share --control-size so heights always match.
-     .sm/.lg (variants.css) switch --control-size and --control-font-size. */
+     .sm/.lg (variants.css) switch --control-size; --control-font-size stays
+     at its baseline because density does not change typography. */
   --control-size-sm: 2rem;
   --control-size-md: 2.375rem;
   --control-size-lg: 2.75rem;

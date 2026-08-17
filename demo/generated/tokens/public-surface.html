@@ -179,40 +179,36 @@
     </section>
     <div class="component-prose">
       <ul>
-  <li><code>.lg</code> — 44px control height, <code>--font-size-lg</code> (18px)</li>
-  <li>default — 38px control height, <code>--font-size-md</code> (16px, the baseline)</li>
-  <li><code>.sm</code> — 32px control height, <code>--font-size-sm</code> (14px)</li>
+  <li><code>.lg</code> — 44px control height</li>
+  <li>default — 38px control height</li>
+  <li><code>.sm</code> — 32px control height</li>
 </ul>
-<p>Size modifiers swap the shared control tokens:</p>
+<p>The font size stays at the baseline (<code>--control-font-size</code> = <code>--font-size-md</code>) in every density — density changes how much space controls consume, not how large their text is. Density modifiers swap the shared control geometry:</p>
     </div>
     <section class="component-section">
       <h2>CSS</h2>
       <div class="example-group">
         <div class="example-code">
           <pre><code class="language-css"><span class="token selector">.sm</span> <span class="token punctuation">{</span>
+  <span class="token property">--gap</span><span class="token punctuation">:</span> <span class="token function">var</span><span class="token punctuation">(</span>--space-2<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token property">--density-space</span><span class="token punctuation">:</span> <span class="token function">var</span><span class="token punctuation">(</span>--space-2<span class="token punctuation">)</span><span class="token punctuation">;</span>
   <span class="token property">--control-size</span><span class="token punctuation">:</span> <span class="token function">var</span><span class="token punctuation">(</span>--control-size-sm<span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token property">--control-font-size</span><span class="token punctuation">:</span> <span class="token function">var</span><span class="token punctuation">(</span>--font-size-sm<span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token property">--density-font-size</span><span class="token punctuation">:</span> <span class="token function">var</span><span class="token punctuation">(</span>--font-size-sm<span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token property">--density-icon-size</span><span class="token punctuation">:</span> 1rem<span class="token punctuation">;</span>
   <span class="token property">--density-pad-block</span><span class="token punctuation">:</span> <span class="token function">var</span><span class="token punctuation">(</span>--space-3<span class="token punctuation">)</span><span class="token punctuation">;</span>
   <span class="token property">--density-compact-size</span><span class="token punctuation">:</span> 1.25rem<span class="token punctuation">;</span>
-  <span class="token property">--density-compact-font-size</span><span class="token punctuation">:</span> 0.75rem<span class="token punctuation">;</span>
 <span class="token punctuation">}</span>
 
 <span class="token selector">.lg</span> <span class="token punctuation">{</span>
+  <span class="token property">--gap</span><span class="token punctuation">:</span> <span class="token function">var</span><span class="token punctuation">(</span>--space-5<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token property">--density-space</span><span class="token punctuation">:</span> <span class="token function">var</span><span class="token punctuation">(</span>--space-5<span class="token punctuation">)</span><span class="token punctuation">;</span>
   <span class="token property">--control-size</span><span class="token punctuation">:</span> <span class="token function">var</span><span class="token punctuation">(</span>--control-size-lg<span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token property">--control-font-size</span><span class="token punctuation">:</span> <span class="token function">var</span><span class="token punctuation">(</span>--font-size-lg<span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token property">--density-font-size</span><span class="token punctuation">:</span> <span class="token function">var</span><span class="token punctuation">(</span>--font-size-lg<span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token property">--density-icon-size</span><span class="token punctuation">:</span> 1.5rem<span class="token punctuation">;</span>
   <span class="token property">--density-pad-block</span><span class="token punctuation">:</span> <span class="token function">var</span><span class="token punctuation">(</span>--space-5<span class="token punctuation">)</span><span class="token punctuation">;</span>
   <span class="token property">--density-compact-size</span><span class="token punctuation">:</span> 1.875rem<span class="token punctuation">;</span>
-  <span class="token property">--density-compact-font-size</span><span class="token punctuation">:</span> <span class="token function">var</span><span class="token punctuation">(</span>--font-size-sm<span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span></code></pre>
         </div>
       </div>
     </section>
     <div class="component-prose">
-      <p>Content components can consume <code>--density-<em></code> for local density. Compact labels such as <code>.badge</code> consume <code>--density-compact-</em></code>; display elements with special geometry, such as avatar and spinner, keep their own size scales.</p>
+      <p>Density covers spacing and geometry only — it never touches typography or icon size. Content components consume <code>--density-*</code> for local rhythm; compact labels such as <code>.badge</code> consume <code>--density-compact-size</code>; display elements with special geometry, such as avatar and spinner, keep their own size scales.</p>
 <h3>Elevation</h3>
 <p>Use a tiny elevation surface. Components should not invent their own shadow scales.</p>
     </div>

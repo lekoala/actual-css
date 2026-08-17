@@ -208,7 +208,8 @@ select {
   --bar-height: 0.65rem;
 
   /* Controls — inputs and buttons share --control-size so heights always match.
-     .sm/.lg (variants.css) switch --control-size and --control-font-size. */
+     .sm/.lg (variants.css) switch --control-size; --control-font-size stays
+     at its baseline because density does not change typography. */
   --control-size-sm: 2rem;
   --control-size-md: 2.375rem;
   --control-size-lg: 2.75rem;
@@ -804,9 +805,11 @@ small {
  *   components/badge.css   — .badge default soft
  *   components/alert.css   — .alert default + .alert.solid/.alert.outline
  *
- * .sm/.lg set shared density tokens. Controls consume --control-*; non-control
+ * .sm/.lg set shared density tokens: spacing rhythm and geometry only.
+ * Density never changes typography — controls keep their font-size and
+ * content components keep theirs. Controls consume --control-size; non-control
  * components may consume --density-* when the density context should affect
- * their local rhythm. Compact components may consume --density-compact-*.
+ * their local rhythm. Compact components may consume --density-compact-size.
  * Components with bespoke sizing (spinner, avatar) define local .sm/.lg;
  * applying .sm/.lg to card, dialog, accordion, navbar, table is
  * a no-op.
@@ -836,23 +839,15 @@ small {
   --gap: var(--space-2);
   --density-space: var(--space-2);
   --control-size: var(--control-size-sm);
-  --control-font-size: var(--font-size-sm);
-  --density-font-size: var(--font-size-sm);
-  --density-icon-size: 1rem;
   --density-pad-block: var(--space-3);
   --density-compact-size: 1.25rem;
-  --density-compact-font-size: 0.75rem;
 }
 .lg {
   --gap: var(--space-5);
   --density-space: var(--space-5);
   --control-size: var(--control-size-lg);
-  --control-font-size: var(--font-size-lg);
-  --density-font-size: var(--font-size-lg);
-  --density-icon-size: 1.5rem;
   --density-pad-block: var(--space-5);
   --density-compact-size: 1.875rem;
-  --density-compact-font-size: var(--font-size-sm);
 }
 
 /* Modern color enhancement. Baseline variant values above remain usable
@@ -1321,7 +1316,7 @@ a.btn[aria-disabled="true"] {
 .badge {
   --badge-size: var(--density-compact-size, 1.5rem);
   --badge-pad-x: 0.55em;
-  --badge-font-size: var(--density-compact-font-size, 0.8125rem);
+  --badge-font-size: 0.8125rem;
   --badge-dot-size: 0.5rem;
   --badge-bg: var(--ui-bg, transparent);
   --badge-fg: var(--ui-fg, var(--intent, var(--text)));
@@ -1504,8 +1499,8 @@ a.badge[aria-disabled="true"] {
 .alert {
   --alert-pad-block: var(--density-pad-block, var(--space-3));
   --alert-pad-inline: var(--space-4);
-  --alert-font-size: var(--density-font-size, var(--font-size-md));
-  --alert-icon-size: var(--density-icon-size, 1.25rem);
+  --alert-font-size: var(--font-size-md);
+  --alert-icon-size: 1.25rem;
   --alert-bg: var(--surface-subtle);
   --alert-border: var(--border);
   --ui-bg: var(--alert-bg);
@@ -3834,12 +3829,12 @@ a.avatar[aria-disabled="true"] {
  * Input Icon — decorative icon inside a relative wrapper, leading or trailing.
  *
  * Icon-library agnostic: detects position by DOM order. First child that is
- * not .input = leading icon; icon after .input = trailing. Sizes with
- * --density-icon-size (variants.css) so .sm/.lg pick up the same icon scale
- * used elsewhere (alert.css).
+ * not .input = leading icon; icon after .input = trailing. The icon keeps a
+ * fixed size; density contexts shrink the control geometry around it, not
+ * the pictogram.
  */
 .input-icon {
-  --input-icon-size: var(--density-icon-size, 1.25rem);
+  --input-icon-size: 1.25rem;
 
   display: block;
   position: relative;
