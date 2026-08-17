@@ -13,9 +13,7 @@
 .progress {
   --progress-track: var(--surface-subtle);
   --progress-value: var(--intent, var(--primary));
-}
 
-.progress {
   appearance: none;
   -webkit-appearance: none;
   display: block;

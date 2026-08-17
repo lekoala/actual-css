@@ -73,7 +73,7 @@ native `<dialog>`, and Chromium already had it. ([WebKit][4])
 
 Works everywhere, works best on modern browsers. Wide browser support (even older browsers, not IE 11).
 
-- No compile or build step (just CSS).
+- No consumer build step is required (just CSS).
 - No post-processing — use only necessary browser-specific prefixes and engine hooks.
 - CSS nesting is not used — code must be findable in the inspector. Rules are organized as if nesting were used, grouped together without nesting syntax. Exception: see [CSS nesting inside @supports](#css-nesting-inside-supports).
 
@@ -120,7 +120,7 @@ Modern features are gated with `@supports`; unsupported browsers keep the core l
 
 ### @supports usage
 
-Use `@supports` positively (no `@supports not`) only when it protects a dependent group of rules or a real fallback/modern branch. Do not gate a single progressive declaration whose unsupported value is simply ignored by the browser, such as `text-wrap: balance`.
+Use positive `@supports` by default. Use `@supports not` only for a genuine fallback branch that cannot safely coexist with the enhanced rules. Do not gate a single progressive declaration whose unsupported value is simply ignored by the browser, such as `text-wrap: balance`.
 
 When a baseline declaration is already a valid fallback, prefer the normal cascade to an `@supports` wrapper. For example, older browsers keep the opaque surface here, while newer ones replace it with the translucent value:
 

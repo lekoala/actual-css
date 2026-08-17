@@ -47,33 +47,9 @@ select {
 
 :root {
   /*
-   * Variable classification — not enforced at the parser level, but every
-   * token in this file falls into one of three categories:
-   *
-   * Public global
-   *   Set once (in a theme or user root) and consumed across the framework.
-   *   Stable API. Examples:
-   *     --primary, --radius, --space-4, --control-size, --duration
-   *
-   * Public component hook
-   *   Declared on a component class, tunable per instance or globally.
-   *   Stable API. Examples:
-   *     --accordion-marker-color, --modal-size, --btn-bg, --card-pad
-   *
-   * Internal state relay
-   *   Declared on a component class and flipped by state selectors
-   *   (:hover, :checked, :disabled, :invalid, etc.). These are NOT an
-   *   API — overriding them globally breaks the state machine.
-   *   Examples:
-   *     --control-border, --control-bg, --choice-bg, --switch-knob
-   *
-   * Internal-only tokens are named the same way as public hooks because
-   * they share the component prefix (--control-*, --choice-*, --switch-*,
-   * --btn-*). The distinction is documented here, not enforced by a name
-   * prefix (e.g. --_), to keep custom properties short and grep-friendly.
-   *
-   * When introducing a new variable, ask: "is this a customisation point
-   * or just a convenience to avoid repeating a value internally?"
+   * Global framework tokens.
+   * Component-local hooks and internal state relays live with their
+   * components. See docs/tokens.md for the public/internal token contract.
    */
 
   /* Typography */
@@ -130,7 +106,6 @@ select {
      the circle-aware inset (1 - 1/√2) / 2 ≈ 14.65%; the ring surrounds the
      dot with the parent surface color. */
   --indicator-offset: 14.65%;
-  --indicator-ring: var(--surface);
 
   /* Shared backdrop — consumed by modal, drawer, and mobile flyout sheets. */
   --backdrop-color: rgb(0 0 0);
@@ -150,7 +125,16 @@ select {
   --control-pad-x: 1em;
   --control-font-size: var(--font-size-md);
   --disabled-opacity: 0.65;
+}
 
+/* Theme-derived aliases. These reference intent/surface tokens, so they must
+   be re-declared on every theme boundary: a custom property resolves its
+   var() references at computed-value time on the element that declares it,
+   so an alias declared only on :root is inherited as an already-resolved
+   value and would not follow a [data-theme] island's overridden tokens.
+   Themes that want a distinct alias override it explicitly afterwards. */
+:root,
+[data-theme] {
   /* State tokens — semantic colors for selected/pressed/current and disabled.
      Components consume these instead of hard-wiring --primary/--text-subtle
      so forced-colors can override them in one place. */
@@ -158,24 +142,18 @@ select {
   --state-selected-fg: var(--primary-fg);
   --state-disabled: var(--text-subtle);
 
+  /* Status dot ring — follows the island's surface. */
+  --indicator-ring: var(--surface);
+}
+
+:root {
   /* Variant tuning — themes may adjust generated soft surfaces without
      replacing the component rules. */
   --soft-bg-mix: 88%;
   --soft-border-mix: 65%;
   --soft-hover-alpha: 12%;
 
-  /* Shared icons — two data URIs used as background-image (native select)
-     and mask-image (accordion marker, choice-card badge, base-select
-     checkmark). For environments with a strict Content-Security-Policy that
-     blocks `data:`, redefine these tokens with local URLs:
-       --icon-chevron: url("/assets/chevron-down.svg");
-       --icon-check: url("/assets/check.svg");
-     The required CSP directive is `img-src data:` (for background-image) or
-     `mask-src data:` (for mask backgrounds). In practice `default-src data:`
-     or `img-src data:` is sufficient because mask-image inherits from
-     default-src when mask-src is absent.
-     The embedded stroke is the fallback color when used as a background-image
-     (native select). Components using it as a mask provide their own color. */
+  /* Shared icon assets. Override these URLs when a strict CSP disallows data:. */
   --icon-chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%238a8594' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
   --icon-check: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E");
 
@@ -215,11 +193,17 @@ select {
 }
 
 @supports (color: color-mix(in oklch, red, white)) {
-  :root {
+  :root,
+  [data-theme] {
+    /* Shadows derive from --shadow-color (theme.css) — re-declared on every
+       theme boundary so islands follow their own shadow-color. */
     --shadow:
       0 1px 3px color-mix(in oklch, var(--shadow-color) 5%, transparent),
       0 4px 12px color-mix(in oklch, var(--shadow-color) 4%, transparent);
     --shadow-popout: 0 0.25rem 0.75rem color-mix(in oklch, var(--shadow-color) 15%, transparent);
+  }
+
+  :root {
     --backdrop-fill: color-mix(
       in oklch,
       var(--backdrop-color) calc(var(--backdrop-opacity) * 100%),
@@ -295,7 +279,6 @@ select {
   /* Pre-color-mix fallback only — superseded below by a derivation from
      --focus so overriding --neutral/--focus never leaves a stale ring. */
   --focus-ring: hsl(258 7% 43% / 0.3);
-  --focus-ring-shadow: 0 0 0 var(--focus-ring-width) var(--focus-ring);
   --hover-overlay: hsl(260 20% 10% / 0.04);
 
   /* Radius scale — themes may override the whole scale (e.g. [data-theme="square"]) */
@@ -306,13 +289,19 @@ select {
   /* Shadow color — consumed by --shadow / --shadow-popout in tokens.css */
   --shadow-color: hsl(260 25% 10%);
 
-  /* Heading and selection — derived from theme color tokens */
+  /* hgroup internal gap */
+  --hgroup-gap: 0.25em;
+}
+
+/* Theme-derived aliases — re-declared on every theme boundary (see tokens.css
+   for the custom-property resolution rationale): islands recompute these from
+   their own tokens instead of inheriting :root's resolved values. */
+:root,
+[data-theme] {
   --heading: var(--text);
   --selection-bg: var(--primary);
   --selection-fg: var(--primary-fg);
-
-  /* hgroup internal gap */
-  --hgroup-gap: 0.25em;
+  --focus-ring-shadow: 0 0 0 var(--focus-ring-width) var(--focus-ring);
 }
 
 /* Tone subsystem — fixed-backdrop foreground for components placed over media
@@ -981,9 +970,9 @@ small {
   --btn-border: var(--ui-border, var(--btn-default-border, transparent));
   --btn-radius: var(--radius);
   --btn-focus-color: var(--intent, var(--focus));
-  --btn-hover-bg: var(--ui-hover-bg, var(--btn-bg));
   --btn-hover-overlay: var(--hover-overlay, rgb(0 0 0 / 0.08));
 
+  /* Positioning context for indicators, overlays, and grouped states. */
   position: relative;
   display: inline-flex;
   align-items: center;
@@ -1072,7 +1061,7 @@ small {
 /* The .soft/.outline/.ghost hover recipe (--ui-hover-bg) is set locally above;
    the overlay darkening for solid/soft is .btn-specific. */
 .btn:not(:where(:disabled, [aria-disabled="true"])):hover {
-  background: var(--btn-hover-bg);
+  background: var(--ui-hover-bg, var(--btn-bg));
   box-shadow: inset 0 0 0 999px var(--btn-hover-overlay);
 }
 
@@ -1139,13 +1128,12 @@ a.btn[aria-disabled="true"] {
   --spinner-width: 0.15em;
 }
 
-/* Toggle and current state
-/* State must outrank the shared .outline/.ghost hover recipes: a pressed or
+/* Toggle and current state.
+   State must outrank the shared .outline/.ghost hover recipes: a pressed or
    current button keeps its intent background and foreground while hovered.
    aria-current="page" is the pagination current-page marker; aria-pressed
    covers toggle buttons. */
-.btn[aria-pressed="true"]:not(.link),
-.btn[aria-current="page"]:not(.link) {
+.btn:is([aria-pressed="true"], [aria-current="page"]):not(.link) {
   --btn-bg: var(--intent, var(--state-selected));
   --btn-fg: var(--intent-fg, var(--state-selected-fg));
   --btn-border: var(--intent, var(--state-selected));
@@ -1166,8 +1154,7 @@ a.btn[aria-disabled="true"] {
     color: LinkText;
   }
 
-  .btn[aria-pressed="true"]:not(.link),
-  .btn[aria-current="page"]:not(.link) {
+  .btn:is([aria-pressed="true"], [aria-current="page"]):not(.link) {
     border-color: Highlight;
     background: Highlight;
     color: HighlightText;
@@ -1211,10 +1198,10 @@ a.btn[aria-disabled="true"] {
   --badge-pad-x: 0.55em;
   --badge-font-size: 0.8125rem;
   --badge-dot-size: 0.5rem;
-  --badge-bg: var(--ui-bg, transparent);
+  --badge-bg: var(--ui-bg, var(--surface-subtle));
   --badge-fg: var(--ui-fg, var(--intent, var(--text)));
-  --badge-border: var(--ui-border, var(--intent, var(--border)));
-  --badge-radius: 999px;
+  --badge-border: var(--ui-border, var(--border));
+  --badge-radius: var(--radius-full);
 
   display: inline-flex;
   align-items: center;
@@ -1303,7 +1290,7 @@ a.btn[aria-disabled="true"] {
     --ui-hover-bg: color-mix(in oklch, var(--intent, var(--neutral)) 88%, black);
   }
 
-  :is(a.badge, button.badge).soft {
+  :is(a.badge, button.badge):where(:not(.solid, .outline, :empty)) {
     --ui-hover-bg: color-mix(
       in oklch,
       var(--surface) calc(var(--soft-bg-mix) - var(--soft-hover-alpha)),
@@ -1477,8 +1464,8 @@ a.badge[aria-disabled="true"] {
   --alert-bg: var(--surface-subtle);
   --alert-fg: var(--text);
   border: 0;
-  border-inline-start-width: var(--alert-border-inline-start-width, 4px);
-  border-inline-start-color: var(--alert-border-inline-start-color, var(--intent, var(--neutral)));
+  border-inline-start: var(--alert-border-inline-start-width, 4px) solid
+    var(--alert-border-inline-start-color, var(--intent, var(--neutral)));
 }
 
 /* Admonition — structured static box with a tinted title bar and a body
@@ -1491,7 +1478,7 @@ a.badge[aria-disabled="true"] {
   border-color: var(--intent, var(--border));
 }
 
-.alert-title {
+.alert.admonition > .alert-title {
   display: flex;
   align-items: center;
   gap: var(--space-2);
@@ -1502,7 +1489,7 @@ a.badge[aria-disabled="true"] {
 }
 
 @supports (color: color-mix(in oklch, red, white)) {
-  .alert-title {
+  .alert.admonition > .alert-title {
     background: color-mix(
       in oklch,
       var(--surface) var(--soft-bg-mix),
@@ -1512,24 +1499,24 @@ a.badge[aria-disabled="true"] {
 }
 
 @supports not (color: color-mix(in oklch, red, white)) {
-  .alert-title {
+  .alert.admonition > .alert-title {
     background: var(--intent, var(--neutral));
     color: var(--intent-fg, var(--neutral-fg));
   }
 }
 
-.alert-body {
+.alert.admonition > .alert-body {
   padding-block: var(--alert-pad-block);
   padding-inline: var(--alert-pad-inline);
   background: var(--surface);
   color: var(--text);
 }
 
-.alert-body > :first-child {
+.alert.admonition > .alert-body > :first-child {
   margin-block-start: 0;
 }
 
-.alert-body > :last-child {
+.alert.admonition > .alert-body > :last-child {
   margin-block-end: 0;
 }
 
@@ -2599,9 +2586,7 @@ dialog.drawer nav {
 .progress {
   --progress-track: var(--surface-subtle);
   --progress-value: var(--intent, var(--primary));
-}
 
-.progress {
   appearance: none;
   -webkit-appearance: none;
   display: block;
@@ -3398,8 +3383,6 @@ a.avatar[aria-disabled="true"] {
  * Maps the three standard meter zones (optimum / suboptimum / even-less-good)
  * to the shared success / warning / danger intent colors.
  */
-/* Intent boundary — not needed: meter maps its zones to --success/warning/
-   danger directly and never consumes --intent or --ui-*. */
 
 .meter {
   appearance: none;
@@ -3676,9 +3659,9 @@ a.avatar[aria-disabled="true"] {
   --intent-fg: initial;
 }
 
-/* A classed .choice is the component surface. Let its nested input consume a
+/* A classed .choice is the component surface. Let its direct input consume a
    local intent without reopening inherited page-level intents. */
-:where(.choice) :where(input[type="checkbox"]:not([role="switch"]), input[type="radio"]) {
+:where(.choice) > :where(input[type="checkbox"]:not([role="switch"]), input[type="radio"]) {
   --intent: inherit;
   --intent-fg: inherit;
 }
@@ -3711,7 +3694,7 @@ a.avatar[aria-disabled="true"] {
   display: block;
 }
 
-.choice:has(:disabled) {
+.choice:has(> :disabled) {
   color: var(--state-disabled);
   cursor: not-allowed;
 }
@@ -3729,8 +3712,7 @@ a.avatar[aria-disabled="true"] {
   place-content: center;
   inline-size: 1.125em;
   block-size: 1.125em;
-  margin-inline: 0;
-  margin-block-end: 0;
+  margin: 0;
   border: var(--border-width) solid var(--form-invalid-border, var(--choice-border));
   background: var(--choice-bg);
   color: var(--choice-mark);
@@ -3771,7 +3753,7 @@ a.avatar[aria-disabled="true"] {
   background: currentColor;
 }
 
-.check:checked,
+.check:is(:checked, :indeterminate),
 .radio:checked {
   --choice-border: var(--intent, var(--primary));
   --choice-bg: var(--intent, var(--primary));
@@ -3780,12 +3762,6 @@ a.avatar[aria-disabled="true"] {
 
 .check:checked::before {
   transform: translateY(-0.06em) rotate(-45deg) scale(1);
-}
-
-.check:indeterminate {
-  --choice-border: var(--intent, var(--primary));
-  --choice-bg: var(--intent, var(--primary));
-  --choice-mark: var(--intent-fg, var(--primary-fg));
 }
 
 .check:indeterminate::before {

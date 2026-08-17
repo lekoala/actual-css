@@ -25,7 +25,7 @@
       <p>Centered modal overlay for focused tasks, confirmations, or forms, built on the native `&lt;dialog&gt;` element.</p>
     </header>
         <div class="component-prose">
-      <p>Modals use the platform-native <code>&lt;dialog class=&quot;modal&quot;&gt;</code> element with <code>commandfor</code> and <code>command</code> buttons. Use <code>command=&quot;show-modal&quot;</code> to open a modal dialog. Add <code>aria-haspopup=&quot;dialog&quot;</code> and <code>aria-controls=&quot;&lt;id&gt;&quot;</code> to opening buttons so their semantics are present before either native or framework JavaScript runs. The command runtime is stateless and does not pre-scan triggers. Use <code>command=&quot;request-close&quot;</code> for cancel-style buttons so close requests go through the dialog’s cancel lifecycle. Use <code>closedby=&quot;any&quot;</code> as the no-JavaScript light-dismiss path. Add <code>data-dialog-dismissible</code> so the optional runtime can provide the same behavior in browsers that need a small fallback.</p>
+      <p>Modals use the platform-native <code>&lt;dialog class=&quot;modal&quot;&gt;</code> element with <code>commandfor</code> and <code>command</code> buttons. Use <code>command=&quot;show-modal&quot;</code> to open a modal dialog. Add <code>aria-haspopup=&quot;dialog&quot;</code> and <code>aria-controls=&quot;&lt;id&gt;&quot;</code> to opening buttons so their semantics are present before either native or framework JavaScript runs. The command runtime is stateless and does not pre-scan triggers. Use <code>command=&quot;request-close&quot;</code> for cancel-style buttons so close requests go through the dialog’s cancel lifecycle. Use <code>closedby=&quot;any&quot;</code> as the no-JavaScript light-dismiss path. Add <code>data-dialog-dismissible</code> so the optional runtime provides Actual's controlled backdrop-dismiss behavior.</p>
 <h3>Alert dialog</h3>
 <p>Use this shape when the dialog interrupts the flow and asks for a decision. It has no close icon and no light dismiss; the footer actions are the way out. With the optional runtime, backdrop clicks give a small static feedback instead of closing.</p>
     </div>
@@ -183,7 +183,7 @@
     </section>
     <div class="component-prose">
       <h3>Scrollable modal</h3>
-<p>Use <code>modal scrollable</code> when the header and footer should stay visible while the dialog body scrolls. Modal dialogs lock page scroll through <code>:has()</code> and <code>:modal</code> in modern CSS, and through the runtime-managed <code>html.has-modal-open</code> hook when the optional dialog helper opens the modal.</p>
+<p>Use <code>modal scrollable</code> when the header and footer should stay visible while the dialog body scrolls. Modal dialogs lock page scroll while a modal is open: the runtime writes <code>html.has-modal-open</code>, and the stylesheet applies <code>overflow: hidden</code> (and reserves the scrollbar gutter with <code>scrollbar-gutter: stable</code> when one was present).</p>
     </div>
     <section class="component-section">
       <div class="example-group">
@@ -391,7 +391,7 @@
     </section>
     <div class="component-prose">
       <h3>JavaScript options</h3>
-<p>Add options directly on the dialog element. Without JavaScript, modern browsers still use the native dialog behavior; the runtime only adds fallback opening, focus restoration, light dismiss, and optional view transitions. Available options:</p>
+<p>Add options directly on the dialog element. Without JavaScript, modern browsers still use the native dialog behavior; the runtime adds declarative command handling, focus restoration, controlled light dismiss, and optional view transitions. Available options:</p>
 <ul>
   <li><code>data-dialog-dismissible</code> enables backdrop click dismissal.</li>
   <li><code>data-dialog-modal=&quot;false&quot;</code> opens with <code>show()</code> instead of <code>showModal()</code>.</li>

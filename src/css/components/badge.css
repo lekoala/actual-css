@@ -21,10 +21,10 @@
   --badge-pad-x: 0.55em;
   --badge-font-size: 0.8125rem;
   --badge-dot-size: 0.5rem;
-  --badge-bg: var(--ui-bg, transparent);
+  --badge-bg: var(--ui-bg, var(--surface-subtle));
   --badge-fg: var(--ui-fg, var(--intent, var(--text)));
-  --badge-border: var(--ui-border, var(--intent, var(--border)));
-  --badge-radius: 999px;
+  --badge-border: var(--ui-border, var(--border));
+  --badge-radius: var(--radius-full);
 
   display: inline-flex;
   align-items: center;
@@ -113,7 +113,7 @@
     --ui-hover-bg: color-mix(in oklch, var(--intent, var(--neutral)) 88%, black);
   }
 
-  :is(a.badge, button.badge).soft {
+  :is(a.badge, button.badge):where(:not(.solid, .outline, :empty)) {
     --ui-hover-bg: color-mix(
       in oklch,
       var(--surface) calc(var(--soft-bg-mix) - var(--soft-hover-alpha)),

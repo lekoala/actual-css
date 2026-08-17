@@ -73,7 +73,12 @@ halo helps.
 
 ### Default theme philosophy
 
-The default theme is intentionally calm. `primary` is a near-neutral dark grey rather than a saturated brand color, `secondary` is a neutral surface rather than a colored intent, and the semantic states are desaturated. Optional themes can re-introduce vivid intent palettes on top of this foundation; the default is meant to be the adult, editorial baseline.
+The default palette is **Ink & Terra**: a near-neutral aubergine `primary`,
+terracotta `secondary`, and pigment-toned statuses (sage, ochre, brick) tuned
+to equal perceived weight. The neutral ramp (text, borders, subtle surfaces)
+is tinted toward the primary hue so the whole page quietly carries the
+identity. Optional themes can re-introduce vivid intent palettes on top of
+this foundation.
 
 Soft surfaces (`.btn.soft`, `.badge.soft`, and the default `.alert`) are generated from intent colors through `color-mix()`. Themes can tune the mix globally instead of rewriting component selectors.
 
@@ -352,12 +357,13 @@ the border-color flip under `:focus-visible` (thickening the accent edge
 instead) and also thins `--focus-outline` and tightens `--focus-outline-offset`
 so the outline hugs the control rather than floating a second ring around it.
 
-Buttons don't consume `--focus-outline` — button.css computes its own outline
+Buttons don't consume `--focus-outline` — button.css computes its own ring
 inline so the color can follow `--btn-focus-color` (intent-aware, unlike the
-plain `--focus` the shared token is hardcoded to), so it exposes a matching
-local token, `--btn-focus-outline-width`, defaulting to the same
-`calc(var(--border-width) * 2)` the old hardcoded value used. `edge.css`
-overrides it the same way it overrides `--focus-outline` for inputs.
+plain `--focus` the shared token is hardcoded to). It reuses the shared
+`--focus-ring-width` for the ring thickness and derives the color through
+`--btn-focus-ring-color` (a `color-mix()` of `--btn-focus-color` when
+supported, falling back to the shared `--focus-ring`). `edge.css` tunes the
+same shared tokens so the accent edge, not a second ring, carries the focus.
 
 The outline overrides are gated in `@media not (forced-colors: active)`. Under
 forced-colors, `theme.css` repoints `--focus-outline` to a Highlight-colored
@@ -368,7 +374,7 @@ lower-specificity, inherited value: an unguarded same-property override
 declared directly on `.input` would out-specificity it in every color mode,
 including forced-colors, because direct beats inherited regardless of the
 media condition either rule was written under. Any theme that restyles
-`--focus-outline`, `--btn-focus-outline-width`, or `--focus-ring-shadow` needs
+`--focus-outline`, `--focus-ring-width`, or `--focus-ring-shadow` needs
 the same guard.
 
 Rules:
@@ -434,6 +440,17 @@ A full theme can override:
 }
 ```
 
+Several tokens are **theme-derived aliases** that reference other tokens —
+`--state-selected`/`--state-selected-fg`/`--state-disabled`, `--indicator-ring`,
+`--shadow`/`--shadow-popout`, `--heading`, `--selection-bg`/`--selection-fg`,
+and `--focus-ring-shadow`. They are declared on `:root, [data-theme]` so they
+recompute on every theme boundary: a custom property resolves its `var()`
+references at computed-value time on the element that declares it, so an alias
+declared only on `:root` would be inherited as an already-resolved value and
+would not follow a `[data-theme]` island's overridden tokens. A theme that
+wants a distinct alias (e.g. sunset's `--selection-bg`) overrides it
+explicitly afterwards, which wins by cascade order.
+
 Without `data-theme`, the default theme advertises `color-scheme: light dark`
 and follows the user's OS preference in browsers that support `light-dark()`.
 Dark themes should set `color-scheme: dark`. Light themes should set
@@ -466,10 +483,9 @@ Components should map global tokens once at the top of the component and use loc
   --alert-bg: var(--ui-bg, var(--surface-subtle));
   --alert-fg: var(--ui-fg, var(--text));
   --alert-border: var(--ui-border, var(--border));
-  --alert-radius: var(--radius-lg);
 
   border: var(--border-width) solid var(--alert-border);
-  border-radius: var(--alert-radius);
+  border-radius: var(--radius-lg);
   background: var(--alert-bg);
   color: var(--alert-fg);
 }

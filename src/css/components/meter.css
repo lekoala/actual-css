@@ -4,8 +4,6 @@
  * Maps the three standard meter zones (optimum / suboptimum / even-less-good)
  * to the shared success / warning / danger intent colors.
  */
-/* Intent boundary — not needed: meter maps its zones to --success/warning/
-   danger directly and never consumes --intent or --ui-*. */
 
 .meter {
   appearance: none;

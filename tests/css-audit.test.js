@@ -166,28 +166,52 @@ test("modal uses scrollbar gutter only for measured classic-scrollbar locks", ()
   expect(resetCss.includes("scrollbar-gutter: stable;")).toBe(false);
 });
 
-test("alert.callout is excluded from the soft-tint recipe and uses a thick leading border", () => {
+test("alert.callout is excluded from the soft-tint recipe and uses a thick solid leading border", () => {
   const css = readCss("src/css/components/alert.css");
 
   expect(css).toContain(':not(.solid, .outline, .callout)');
-  expect(css).toContain("border-inline-start-width: var(--alert-border-inline-start-width, 4px);");
+  expect(css).toContain(
+    "border-inline-start: var(--alert-border-inline-start-width, 4px) solid",
+  );
   expect(css).toContain("border: 0");
 });
 
-test("alert.admonition neutralizes root padding and gap, and defines alert-title/alert-body", () => {
+test("alert.admonition neutralizes root padding and gap, and scopes alert-title/alert-body", () => {
   const css = readCss("src/css/components/alert.css");
 
   expect(css).toContain(".alert.admonition");
   expect(css).toMatch(/\.alert\.admonition\s*\{[\s\S]*padding:\s*0;/);
-  expect(css).toContain(".alert-title");
-  expect(css).toContain(".alert-body");
+  expect(css).toContain(".alert.admonition > .alert-title");
+  expect(css).toContain(".alert.admonition > .alert-body");
+  expect(css).not.toMatch(/(^|\n)\.alert-title\s*\{/);
 });
 
-test("alert-title margins are reset inside alert-body", () => {
+test("alert-title margins are reset inside a scoped alert-body", () => {
   const css = readCss("src/css/components/alert.css");
 
-  expect(css).toContain(".alert-body > :first-child");
-  expect(css).toContain(".alert-body > :last-child");
+  expect(css).toContain(".alert.admonition > .alert-body > :first-child");
+  expect(css).toContain(".alert.admonition > .alert-body > :last-child");
+});
+
+test("theme-derived aliases are declared on :root, [data-theme] so islands recompute them", () => {
+  const tokensCss = readCss("src/css/tokens.css");
+  const themeCss = readCss("src/css/theme.css");
+
+  const inThemeBoundary = (source, prop) => {
+    const block = source.match(/^:root,\s*\n\[data-theme\]\s*\{([\s\S]*?)\n\}/m)?.[1] ?? "";
+    return block.includes(prop);
+  };
+
+  // tokens.css aliases
+  for (const prop of ["--state-selected", "--state-disabled", "--indicator-ring"]) {
+    expect(inThemeBoundary(tokensCss, prop), `${prop} on [data-theme] in tokens.css`).toBe(true);
+  }
+  // theme.css aliases
+  for (const prop of ["--heading", "--selection-bg", "--selection-fg", "--focus-ring-shadow"]) {
+    expect(inThemeBoundary(themeCss, prop), `${prop} on [data-theme] in theme.css`).toBe(true);
+  }
+  // color-mix shadows re-derive from --shadow-color on the theme boundary
+  expect(tokensCss).toMatch(/@supports \(color: color-mix\(in oklch, red, white\)\)\s*\{\s*:root,\s*\n\s*\[data-theme\]\s*\{[\s\S]*--shadow:/);
 });
 
 test("controls inside a disabled fieldset match :disabled by inheritance", () => {
@@ -198,7 +222,7 @@ test("controls inside a disabled fieldset match :disabled by inheritance", () =>
 
   expect(choiceCss).toContain(".check:disabled");
   expect(choiceCss).toContain(".radio:disabled");
-  expect(choiceCss).toContain(".choice:has(:disabled)");
+  expect(choiceCss).toContain(".choice:has(> :disabled)");
 
   expect(switchCss).toContain(".switch:disabled");
 

@@ -65,7 +65,6 @@
   /* Pre-color-mix fallback only — superseded below by a derivation from
      --focus so overriding --neutral/--focus never leaves a stale ring. */
   --focus-ring: hsl(258 7% 43% / 0.3);
-  --focus-ring-shadow: 0 0 0 var(--focus-ring-width) var(--focus-ring);
   --hover-overlay: hsl(260 20% 10% / 0.04);
 
   /* Radius scale — themes may override the whole scale (e.g. [data-theme="square"]) */
@@ -76,13 +75,19 @@
   /* Shadow color — consumed by --shadow / --shadow-popout in tokens.css */
   --shadow-color: hsl(260 25% 10%);
 
-  /* Heading and selection — derived from theme color tokens */
+  /* hgroup internal gap */
+  --hgroup-gap: 0.25em;
+}
+
+/* Theme-derived aliases — re-declared on every theme boundary (see tokens.css
+   for the custom-property resolution rationale): islands recompute these from
+   their own tokens instead of inheriting :root's resolved values. */
+:root,
+[data-theme] {
   --heading: var(--text);
   --selection-bg: var(--primary);
   --selection-fg: var(--primary-fg);
-
-  /* hgroup internal gap */
-  --hgroup-gap: 0.25em;
+  --focus-ring-shadow: 0 0 0 var(--focus-ring-width) var(--focus-ring);
 }
 
 /* Tone subsystem — fixed-backdrop foreground for components placed over media
