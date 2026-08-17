@@ -32,6 +32,7 @@ const REMAINING_MODULES = [
   "context-menu",
   "dialog",
   "dialog-fallback",
+  "dismiss",
   "filter",
   "flyout",
   "input",

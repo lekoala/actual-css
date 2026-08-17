@@ -4,12 +4,18 @@
  * A flex cluster of buttons/actions that closes a form. The sticky variant
  * docks to the viewport bottom with a translucent blur where supported; at
  * rest it stays visually neutral so it does not double as a separator.
+ *
+ * Public hooks:
+ * --form-actions-align
+ * --form-actions-justify
+ * --form-actions-margin-block-start
  */
 .form-actions {
   display: flex;
   flex-wrap: wrap;
   gap: var(--gap);
-  align-items: center;
+  align-items: var(--form-actions-align, center);
+  justify-content: var(--form-actions-justify, flex-start);
   margin-block-start: var(--form-actions-margin-block-start, var(--space-5));
 }
 

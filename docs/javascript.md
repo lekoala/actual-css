@@ -185,6 +185,24 @@ before `handle`; built-in behaviors use it for target-derived semantics.
 The returned handle has an idempotent `disconnect()` method for applications
 that unload the module owning the command.
 
+### Dismiss command
+
+The runtime includes a generic `--dismiss` command for hiding any resolved
+target. It prevents the trigger's default action, sets `hidden`, and emits a
+bubbling `actual:dismiss` event with the trigger in `event.detail.trigger`.
+
+```html
+<section id="notice">
+  <p>Changes saved.</p>
+  <button type="button" commandfor="notice" command="--dismiss">
+    Dismiss
+  </button>
+</section>
+```
+
+Listen for `actual:dismiss` when application code needs to remove persisted
+state or perform another action after the target is hidden.
+
 ### Stateful enhancers
 
 Use `enhance()` for project-specific behavior. It accepts a selector map where

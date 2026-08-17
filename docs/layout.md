@@ -170,13 +170,24 @@ Use `.grid` for responsive equal-width item grids.
 </section>
 ```
 
-Tune the minimum item width with `--grid-min`.
+Tune the minimum item width with `--grid-min`, or replace the responsive
+template entirely with `--grid-columns` when the layout needs an asymmetric
+ratio.
 
 ```css
 .pricing-grid {
   --grid-min: 20rem;
 }
 ```
+
+```css
+.feature-grid {
+  --grid-columns: minmax(0, 2fr) minmax(0, 1fr);
+}
+```
+
+`--grid-columns` applies to `.grid` only. The `.grid-2`, `.grid-3`,
+`.grid-4`, and `.grid-6` presets retain their fixed-column contracts.
 
 ### Fixed Columns
 
