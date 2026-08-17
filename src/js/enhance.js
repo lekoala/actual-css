@@ -13,24 +13,25 @@
  * attributes are setup-time contracts, not live enable/disable switches.
  *
  * enhancers: { [selector]: (el) => cleanup | void }
- * Returns: { refresh, forget, disconnect }
+ * Returns: { refresh, disconnect }
  *
  * Enhancement tokens — the data-enhance layer on top of enhance().
  *
  * enhancementSelector("tabs") returns [data-enhance~="tabs"], the generic
- * opt-in for root-controller behaviors. registerEnhancement() is a stateless
- * wrapper around enhance() — no central registry, no double-registration
- * warning. Third-party behaviors register exactly like built-in ones.
+ * opt-in for root-controller behaviors. registerEnhancement() owns a name per
+ * root — a second registration for the same name on the same root throws, and
+ * disconnect() releases ownership. Third-party behaviors register exactly
+ * like built-in ones.
  *
  * See docs/design-notes/enhancement-contract.md.
  */
 
 const registries = new WeakMap();
+const ownedNames = new WeakMap();
 
 function noopRuntime() {
   return {
     refresh() {},
-    forget() {},
     disconnect() {},
   };
 }
@@ -117,7 +118,7 @@ function createRegistry(root) {
   function sweepDisconnected() {
     for (const record of records) {
       for (const el of Array.from(record.instances.keys())) {
-        if (!el.isConnected) stop(record, el);
+        if (!el.isConnected || !root.contains(el)) stop(record, el);
       }
     }
   }
@@ -161,10 +162,6 @@ function createRegistry(root) {
       if (record.disconnected) return;
       scanFor(record, node);
     },
-    forget(record, el) {
-      if (record.disconnected) return;
-      record.instances.delete(el);
-    },
     remove(record) {
       if (record.disconnected) return;
       record.disconnected = true;
@@ -195,7 +192,31 @@ export function hasEnhancement(el, name) {
 }
 
 export function registerEnhancement(name, init, root) {
-  return enhance({ [enhancementSelector(name)]: init }, root);
+  if (typeof document === "undefined") return noopRuntime();
+
+  enhancementSelector(name);
+
+  root ??= document.documentElement;
+  let names = ownedNames.get(root);
+  if (!names) {
+    names = new Map();
+    ownedNames.set(root, names);
+  }
+  if (names.has(name)) {
+    throw new Error(`Enhancement "${name}" is already registered on this root.`);
+  }
+
+  const runtime = enhance({ [enhancementSelector(name)]: init }, root);
+  names.set(name, runtime);
+
+  return {
+    refresh: (node) => runtime.refresh(node),
+    disconnect: () => {
+      runtime.disconnect();
+      if (names.get(name) === runtime) names.delete(name);
+      if (names.size === 0) ownedNames.delete(root);
+    },
+  };
 }
 
 function registryFor(root) {
@@ -210,7 +231,7 @@ function registryFor(root) {
 /**
  * @param {Record<string, (el: Element) => (() => void) | void>} enhancers
  * @param {Document | Element | DocumentFragment} [root]
- * @returns {{ refresh: (node: Node) => void, forget: (el: Element) => void, disconnect: () => void }}
+ * @returns {{ refresh: (node: Node) => void, disconnect: () => void }}
  */
 export default function enhance(enhancers, root) {
   if (typeof document === "undefined") {
@@ -224,9 +245,6 @@ export default function enhance(enhancers, root) {
 
   return {
     refresh: (node) => registry.refresh(record, node),
-    forget: (el) => {
-      registry.forget(record, el);
-    },
     disconnect: () => {
       registry.remove(record);
     },
