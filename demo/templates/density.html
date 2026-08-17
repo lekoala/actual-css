@@ -114,7 +114,7 @@
       <p class="lead">
         `.sm` and `.lg` establish inherited density tokens. A single class on a
         wrapper tightens or loosens the rhythm and control sizes of everything
-        inside it that opts in.
+        inside it that opts in — typography and icons never change.
       </p>
       <select class="select sm fit" id="theme-switcher" aria-label="Switch theme">
         <option value="">System</option>
@@ -243,39 +243,40 @@
       </div>
     </section>
 
-    <section class="center density-section" id="local-sizing">
-      <h2>Local sizing</h2>
+    <section class="center density-section" id="local-density">
+      <h2>Local density</h2>
       <p class="density-note">
-        The same class on a component is local sizing, not a second meaning.
+        The same class on a component is local density, not a second meaning.
         `.sm` always establishes the same density tokens — only the scope
-        changes.
+        changes. Typography and icons stay the same; only the envelope
+        tightens or loosens.
       </p>
 
       <div class="density-cols">
         <div class="density-col">
           <h3>.btn</h3>
           <div class="cluster">
-            <button class="btn sm">Small</button>
+            <button class="btn sm">Compact</button>
             <button class="btn">Default</button>
-            <button class="btn lg">Large</button>
+            <button class="btn lg">Spacious</button>
           </div>
         </div>
 
         <div class="density-col">
           <h3>.badge</h3>
           <div class="cluster">
-            <span class="badge sm">Small</span>
+            <span class="badge sm">Compact</span>
             <span class="badge">Default</span>
-            <span class="badge lg">Large</span>
+            <span class="badge lg">Spacious</span>
           </div>
         </div>
 
         <div class="density-col">
           <h3>.input</h3>
           <div class="cluster">
-            <input class="input sm" placeholder="Small">
+            <input class="input sm" placeholder="Compact">
             <input class="input" placeholder="Default">
-            <input class="input lg" placeholder="Large">
+            <input class="input lg" placeholder="Spacious">
           </div>
         </div>
       </div>
@@ -349,8 +350,8 @@
       <div class="density-legend">
         <p><strong>Opt in</strong> — button, badge, alert, input, select, checkbox/radio/switch, pagination, tabs, choice cards, flyout menus, spacing helpers (<code>.py</code> / <code>.px</code> / <code>.mbs</code> / <code>.mbe</code>), and layout primitives via <code>--gap</code>.</p>
         <ul>
-          <li>Controls (<code>.btn</code>, <code>.input</code>, <code>.select</code>, …) consume <code>--control-size</code> and <code>--control-font-size</code>.</li>
-          <li>Compact labels (<code>.badge</code>) consume <code>--density-compact-*</code>.</li>
+          <li>Controls (<code>.btn</code>, <code>.input</code>, <code>.select</code>, …) consume <code>--control-size</code>.</li>
+          <li>Compact labels (<code>.badge</code>) consume <code>--density-compact-size</code>.</li>
           <li>Content components (<code>.alert</code>) consume <code>--density-*</code> for their rhythm.</li>
         </ul>
         <p><strong>No-op</strong> — card, dialog, table, accordion, navbar, and page sections keep their size. The card above is identical in both columns even though its inner button and badge shrank.</p>

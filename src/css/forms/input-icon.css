@@ -2,12 +2,12 @@
  * Input Icon — decorative icon inside a relative wrapper, leading or trailing.
  *
  * Icon-library agnostic: detects position by DOM order. First child that is
- * not .input = leading icon; icon after .input = trailing. Sizes with
- * --density-icon-size (variants.css) so .sm/.lg pick up the same icon scale
- * used elsewhere (alert.css).
+ * not .input = leading icon; icon after .input = trailing. The icon keeps a
+ * fixed size; density contexts shrink the control geometry around it, not
+ * the pictogram.
  */
 .input-icon {
-  --input-icon-size: var(--density-icon-size, 1.25rem);
+  --input-icon-size: 1.25rem;
 
   display: block;
   position: relative;

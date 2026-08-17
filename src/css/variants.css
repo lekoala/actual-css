@@ -8,9 +8,11 @@
  *   components/badge.css   — .badge default soft
  *   components/alert.css   — .alert default + .alert.solid/.alert.outline
  *
- * .sm/.lg set shared density tokens. Controls consume --control-*; non-control
+ * .sm/.lg set shared density tokens: spacing rhythm and geometry only.
+ * Density never changes typography — controls keep their font-size and
+ * content components keep theirs. Controls consume --control-size; non-control
  * components may consume --density-* when the density context should affect
- * their local rhythm. Compact components may consume --density-compact-*.
+ * their local rhythm. Compact components may consume --density-compact-size.
  * Components with bespoke sizing (spinner, avatar) define local .sm/.lg;
  * applying .sm/.lg to card, dialog, accordion, navbar, table is
  * a no-op.
@@ -40,23 +42,15 @@
   --gap: var(--space-2);
   --density-space: var(--space-2);
   --control-size: var(--control-size-sm);
-  --control-font-size: var(--font-size-sm);
-  --density-font-size: var(--font-size-sm);
-  --density-icon-size: 1rem;
   --density-pad-block: var(--space-3);
   --density-compact-size: 1.25rem;
-  --density-compact-font-size: 0.75rem;
 }
 .lg {
   --gap: var(--space-5);
   --density-space: var(--space-5);
   --control-size: var(--control-size-lg);
-  --control-font-size: var(--font-size-lg);
-  --density-font-size: var(--font-size-lg);
-  --density-icon-size: 1.5rem;
   --density-pad-block: var(--space-5);
   --density-compact-size: 1.875rem;
-  --density-compact-font-size: var(--font-size-sm);
 }
 
 /* Modern color enhancement. Baseline variant values above remain usable
