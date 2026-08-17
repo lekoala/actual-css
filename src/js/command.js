@@ -25,9 +25,7 @@ function commandNames(commands, caller) {
 // Native command keywords are ASCII case-insensitive. Custom commands keep
 // their exact spelling, as required by the command invoker contract.
 function commandKey(command) {
-  return command.startsWith("--")
-    ? command
-    : command.replace(/[A-Z]/g, (character) => character.toLowerCase());
+  return command.startsWith("--") ? command : command.toLowerCase();
 }
 
 /**

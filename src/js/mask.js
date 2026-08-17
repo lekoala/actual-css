@@ -15,7 +15,10 @@ const TOKEN_TESTS = {
 };
 
 function isToken(char) {
-  return Object.hasOwn(TOKEN_TESTS, char);
+  // The hasOwn static method is Safari 15.4+; the runtime targets the
+  // Degraded floor (Safari 14+), so use the prototype-call form instead.
+  // biome-ignore lint/suspicious/noPrototypeBuiltins: degraded-floor compatibility.
+  return Object.prototype.hasOwnProperty.call(TOKEN_TESTS, char);
 }
 
 function parseMaskValue(value, mask) {
@@ -55,21 +58,22 @@ function rawMaskChars(value, mask) {
   return parseMaskValue(value, mask).raw;
 }
 
-function appendFollowingLiterals(mask, start) {
+function appendFollowingLiterals(pattern, start) {
   let out = "";
-  for (let i = start; i < mask.length && !isToken(mask[i]); i++) {
-    out += mask[i];
+  for (let i = start; i < pattern.length && !isToken(pattern[i]); i++) {
+    out += pattern[i];
   }
   return out;
 }
 
 function formatRaw(raw, mask, inputType = "") {
   const autoLiteral = inputType.startsWith("insert");
+  const pattern = [...mask];
   let rawIndex = 0;
   let out = "";
 
-  for (let i = 0; i < mask.length; i++) {
-    const token = mask[i];
+  for (let i = 0; i < pattern.length; i++) {
+    const token = pattern[i];
 
     if (!isToken(token)) {
       if (rawIndex < raw.length) out += token;
@@ -89,7 +93,7 @@ function formatRaw(raw, mask, inputType = "") {
     if (!matched) break;
 
     if (autoLiteral && rawIndex >= raw.length) {
-      out += appendFollowingLiterals(mask, i + 1);
+      out += appendFollowingLiterals(pattern, i + 1);
       break;
     }
   }

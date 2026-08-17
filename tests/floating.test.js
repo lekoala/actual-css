@@ -271,7 +271,7 @@ test("repositionAt positions a floating element from a point reference", () => {
   expect(float.dataset.placement).toBe("right");
 });
 
-test("repositionAt follows document RTL for side offsets", () => {
+test("physical side offsets are not flipped by RTL", () => {
   setViewport();
   document.documentElement.dir = "rtl";
   document.body.innerHTML = '<div id="float"></div>';
@@ -280,7 +280,8 @@ test("repositionAt follows document RTL for side offsets", () => {
 
   repositionAt(200, 160, float, { placement: "right", distance: 10 });
 
-  expect(float.style.left).toBe("190px");
+  // `right` is a physical direction; RTL must not reverse its offset.
+  expect(float.style.left).toBe("210px");
   document.documentElement.dir = "";
 });
 

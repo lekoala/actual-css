@@ -74,8 +74,11 @@ const rules = {
       return false;
     }
   },
+  // A user-entered decimal: optional sign, digits with optional fraction,
+  // optional exponent. Rejects JS-isms that Number() would accept (0x10,
+  // Infinity, scientific shorthand, whitespace).
   number(v) {
-    return !Number.isNaN(Number(v));
+    return /^[+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+)?$/.test(v);
   },
   digits(v) {
     return /^\d+$/.test(v);
@@ -106,18 +109,21 @@ function fieldContainer(el) {
   return el.closest?.(`.${FIELD_CLASS}`) || null;
 }
 
-// .field.danger is validation-owned state, added/removed here based on
-// aria-invalid/data-validation-errors on the field's controls. A .danger
-// applied manually by app code for an unrelated reason will be removed the
-// next time this runs.
+// .field.danger added by validation is tracked in a WeakSet so that only
+// validation-owned state is removed. A .danger applied manually by app code
+// for an unrelated reason is left alone.
+const dangerOwned = new WeakSet();
+
 function syncFieldDangerState(el) {
   const field = fieldContainer(el);
   if (!field) return;
 
   if (field.querySelector('[aria-invalid="true"], [data-validation-errors]')) {
     field.classList.add(DANGER_CLASS);
-  } else {
+    dangerOwned.add(field);
+  } else if (dangerOwned.has(field)) {
     field.classList.remove(DANGER_CLASS);
+    dangerOwned.delete(field);
   }
 }
 
@@ -181,7 +187,11 @@ function errorEl(el) {
 
 function markInvalid(el) {
   el.setAttribute("aria-invalid", "true");
-  fieldContainer(el)?.classList.add(DANGER_CLASS);
+  const field = fieldContainer(el);
+  if (field) {
+    field.classList.add(DANGER_CLASS);
+    dangerOwned.add(field);
+  }
 }
 
 function markValid(el) {
@@ -322,6 +332,10 @@ function connectForm(form) {
     { signal: controller.signal },
   );
 
+  // Disconnect contract: release resources only. Validation-owned classes,
+  // aria-invalid, custom validity, and rendered errors are intentionally left
+  // in place, so a move/remove/reinsert of the form does not erase business
+  // state. A full reset goes through the reset event, not teardown.
   const cleanup = () => {
     controller.abort();
     releaseManagedNoValidate(form);
@@ -338,6 +352,12 @@ export class FormValidator {
   }
 
   static registerRule(name, callback) {
+    if (typeof name !== "string" || name.trim() === "") {
+      throw new TypeError("registerRule() requires a non-empty rule name.");
+    }
+    if (typeof callback !== "function") {
+      throw new TypeError(`registerRule("${name}") requires a function callback.`);
+    }
     rules[name] = callback;
   }
 

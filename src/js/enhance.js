@@ -29,6 +29,12 @@
 const registries = new WeakMap();
 const ownedNames = new WeakMap();
 
+// Node type constants as literals, not the realm's Node global, so nodes from
+// another document/window compare correctly.
+const ELEMENT_NODE = 1;
+const DOCUMENT_NODE = 9;
+const DOCUMENT_FRAGMENT_NODE = 11;
+
 function noopRuntime() {
   return {
     refresh() {},
@@ -38,9 +44,9 @@ function noopRuntime() {
 
 function canScan(node) {
   return (
-    node?.nodeType === Node.ELEMENT_NODE ||
-    node?.nodeType === Node.DOCUMENT_NODE ||
-    node?.nodeType === Node.DOCUMENT_FRAGMENT_NODE
+    node?.nodeType === ELEMENT_NODE ||
+    node?.nodeType === DOCUMENT_NODE ||
+    node?.nodeType === DOCUMENT_FRAGMENT_NODE
   );
 }
 
@@ -51,7 +57,7 @@ function createRegistry(root) {
   function isValidSelector(selector) {
     try {
       root.querySelector?.(selector);
-      if (root instanceof Element) root.matches(selector);
+      if (root.nodeType === ELEMENT_NODE) root.matches(selector);
       return true;
     } catch (error) {
       console.error(`Invalid enhancer selector "${selector}"`, error);
@@ -64,7 +70,7 @@ function createRegistry(root) {
   }
 
   function start(record, el) {
-    if (!(el instanceof Element)) return;
+    if (el?.nodeType !== ELEMENT_NODE) return;
     let active = record.instances.get(el);
 
     for (const selector of record.selectors) {
@@ -101,7 +107,7 @@ function createRegistry(root) {
 
   function scanFor(record, node) {
     if (!canScan(node)) return;
-    if (node instanceof Element) start(record, node);
+    if (node.nodeType === ELEMENT_NODE) start(record, node);
     if (record.selectorString) {
       node.querySelectorAll?.(record.selectorString).forEach((el) => {
         start(record, el);
@@ -111,7 +117,7 @@ function createRegistry(root) {
 
   function scan(node) {
     if (!canScan(node) || !selectorString) return;
-    if (node instanceof Element) {
+    if (node.nodeType === ELEMENT_NODE) {
       for (const record of records) start(record, node);
     }
     node.querySelectorAll?.(selectorString).forEach((el) => {
@@ -203,7 +209,7 @@ export function registerEnhancement(name, init, root) {
     throw new TypeError("registerEnhancement() requires a function init.");
   }
 
-  root ??= document.documentElement;
+  root = root ?? document.documentElement;
   let names = ownedNames.get(root);
   if (!names) {
     names = new Map();
@@ -245,7 +251,7 @@ export default function enhance(enhancers, root) {
     return noopRuntime();
   }
 
-  root ??= document.documentElement;
+  root = root ?? document.documentElement;
   const registry = registryFor(root);
   const record = registry.add(enhancers);
   if (!record) return noopRuntime();

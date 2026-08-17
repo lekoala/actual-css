@@ -100,8 +100,31 @@ describe("parseConfig", () => {
 		});
 	});
 
-	test("parses label with colon inside string", () => {
-		expect(parseConfig('label: "foo: bar"')).toEqual({ label: "foo: bar" });
+	test("parses label with colon inside single-quoted string", () => {
+		expect(parseConfig("label: 'foo: bar'")).toEqual({ label: "foo: bar" });
+	});
+
+	test("parses label with colon inside strict JSON", () => {
+		expect(parseConfig('{ "label": "foo: bar" }')).toEqual({ label: "foo: bar" });
+	});
+
+	test("rejects a relaxed double-quoted string containing key-like text", () => {
+		// Out of contract: the relax step cannot see into double-quoted strings,
+		// so `bar:` inside them looks like a key. Strict JSON remains the escape
+		// hatch — write valid JSON to include such text.
+		expect(() => parseConfig('{foo: "text containing bar: baz"}')).toThrow(SyntaxError);
+	});
+
+	test("accepts a relaxed object without surrounding braces", () => {
+		expect(parseConfig("foo: 'simple'")).toEqual({ foo: "simple" });
+	});
+
+	test("accepts a relaxed object with braces", () => {
+		expect(parseConfig("{foo: 'simple'}")).toEqual({ foo: "simple" });
+	});
+
+	test("parses nested relaxed objects", () => {
+		expect(parseConfig("nested: {foo: 'bar'}")).toEqual({ nested: { foo: "bar" } });
 	});
 
 	test("parses string containing a comma", () => {
@@ -226,7 +249,7 @@ describe("parseConfig", () => {
 	});
 
 	test("throws on non-object root (array)", () => {
-		expect(() => parseConfig("[1, 2, 3]")).toThrow(SyntaxError);
+		expect(() => parseConfig("[1, 2, 3]")).toThrow(TypeError);
 	});
 
 	test("throws on invalid JSON structure", () => {

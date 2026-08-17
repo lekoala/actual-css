@@ -130,7 +130,7 @@ function applyPresentation(menu, state) {
 
 function positionSurface(menu) {
   const state = surfaceMap.get(menu);
-  if (!state || state.isSheet) return;
+  if (!state || state.isSheet) return true;
 
   if (state.trigger) {
     const triggerWidth = state.trigger.getBoundingClientRect().width;
@@ -161,20 +161,9 @@ function ensureSurfaceWired(menu) {
   if (surfaceMap.has(menu)) return surfaceMap.get(menu);
 
   ensureDocumentClick(menu);
-  const controller = new AbortController();
   const state = {
-    controller,
-    stopTracking: autoUpdate(menu, ({ type }) => {
-      if (menu.hidden) return;
-      if (type === "scroll" && surfaceMap.get(menu)?.point) {
-        closeSurface(menu);
-        return;
-      }
-      const current = surfaceMap.get(menu);
-      if (!current) return;
-      applyPresentation(menu, current);
-      if (!positionSurface(menu)) closeSurface(menu);
-    }),
+    stopTracking: null,
+    unregisterEscape: null,
     backdrop: null,
     trigger: null,
     source: null,
@@ -192,8 +181,24 @@ function ensureSurfaceWired(menu) {
   };
 
   surfaceMap.set(menu, state);
-  ensureDocumentEscape(menu);
   return state;
+}
+
+// Escape and positional tracking belong to the *open* surface, not to the
+// wiring. They start when the surface opens and stop when it closes, so a
+// closed surface never participates in the dismissable stack or in
+// scroll/resize work. Reopening re-registers in the correct order.
+function startSurfaceResources(menu, state) {
+  state.unregisterEscape = registerEscapeDismissal(menu, (opts) => closeSurface(menu, opts));
+  state.stopTracking = autoUpdate(menu, ({ type }) => {
+    if (menu.hidden) return;
+    if (type === "scroll" && state.point) {
+      closeSurface(menu);
+      return;
+    }
+    applyPresentation(menu, state);
+    if (!positionSurface(menu)) closeSurface(menu);
+  });
 }
 
 export function isSurfaceOpen(menu) {
@@ -267,12 +272,17 @@ export function openSurface(menu, opts = {}) {
   state.restoreFocusTo = opts.restoreFocusTo || opts.trigger || opts.source || null;
   state.closeId++;
 
+  startSurfaceResources(menu, state);
   menu.classList.add(CLASSES.open);
   menu.hidden = false;
   openSurfaces.add(menu);
   applyPresentation(menu, state);
   syncExpanded(menu, true);
-  positionSurface(menu);
+
+  if (!positionSurface(menu)) {
+    closeSurface(menu, { restoreFocus: false });
+    return false;
+  }
   return true;
 }
 
@@ -293,6 +303,8 @@ export function closeSurface(menu, opts = {}) {
   if (backdrop) backdrop.hidden = true;
   openSurfaces.delete(menu);
   syncExpanded(menu, false);
+  state?.unregisterEscape?.();
+  state?.stopTracking?.();
 
   if (shouldRestoreFocus && state?.restoreFocusTo?.isConnected) {
     state.restoreFocusTo.focus({ preventScroll: true });
@@ -317,7 +329,6 @@ export function disconnectSurface(menu, { restore = true } = {}) {
     state.backdrop?.remove();
     state.unregisterEscape?.();
     state.stopTracking?.();
-    state.controller.abort();
     surfaceMap.delete(menu);
   }
   restoreSurface(menu);
@@ -363,7 +374,7 @@ function onDocumentEscape(event) {
   if (event.key !== "Escape" || event.ctrlKey || event.altKey || event.shiftKey) return;
 
   const stack = dismissableStacks.get(event.currentTarget);
-  const entry = stack?.at(-1);
+  const entry = stack[stack.length - 1];
   if (!entry) return;
 
   event.preventDefault();
@@ -372,11 +383,4 @@ function onDocumentEscape(event) {
 
 export function getSurfaceAutoClose(menu) {
   return surfaceMap.get(menu)?.autoClose ?? "true";
-}
-
-function ensureDocumentEscape(menu) {
-  if (!surfaceMap.has(menu)) return;
-
-  const state = surfaceMap.get(menu);
-  state.unregisterEscape = registerEscapeDismissal(menu, (opts) => closeSurface(menu, opts));
 }

@@ -48,7 +48,14 @@ function focusInitial(dialog) {
  * Patch one dialog element with rudimentary show/showModal/close support.
  * No-op when the element is already controllable (native or polyfilled).
  *
+ * Returns a cleanup that tears the shim down if the dialog is removed from
+ * the DOM while open: the submit listener and any document Escape listener
+ * are removed, and an open dialog is closed first so the modal state
+ * (scroll lock, fallback-modal class) is released and the element is clean
+ * if it is ever re-inserted.
+ *
  * @param {HTMLElement} dialog A <dialog> element.
+ * @returns {() => void | undefined} Cleanup, or undefined when already controllable.
  */
 export default function shimDialog(dialog) {
   if (
@@ -60,6 +67,7 @@ export default function shimDialog(dialog) {
   }
 
   const doc = dialog.ownerDocument;
+  const controller = new AbortController();
   let escController = null;
   let savedScroll = null;
 
@@ -119,7 +127,7 @@ export default function shimDialog(dialog) {
 
   dialog.returnValue = "";
   dialog.classList.add(CLASSES.dialogFallback);
-  dialog.addEventListener("submit", handleSubmit);
+  dialog.addEventListener("submit", handleSubmit, { signal: controller.signal });
   dialog.show = () => open(false);
   dialog.showModal = () => open(true);
   dialog.close = (returnValue = "") => {
@@ -136,13 +144,17 @@ export default function shimDialog(dialog) {
       savedScroll = null;
     }
   };
+
+  return () => {
+    controller.abort();
+    if (dialog.open) dialog.close();
+    dialog.classList.remove(CLASSES.fallbackModal);
+  };
 }
 
 if (typeof document !== "undefined" && !supportsDialog()) {
   enhance({
-    dialog: (el) => {
-      shimDialog(el);
-    },
+    dialog: (el) => shimDialog(el),
   });
 
   // A dialog inserted right before its trigger's click may not be scanned by

@@ -60,12 +60,12 @@ function normalizeText(value) {
 function filterSlug(value, event) {
   const keepTrailingSeparator = event?.inputType === "insertText" && /[^\p{L}\p{N}]$/u.test(value);
   const slug = normalizeText(value)
-    .toLocaleLowerCase()
+    .toLowerCase()
     .replace(/[^\p{L}\p{N}]+/gu, "-")
     .replace(/-{2,}/g, "-")
-    .replace(/^-+/g, "");
+    .replace(/^-+/, "");
 
-  return keepTrailingSeparator ? slug : slug.replace(/-+$/g, "");
+  return keepTrailingSeparator ? slug : slug.replace(/-+$/, "");
 }
 
 function filterValue(value, modes, event) {

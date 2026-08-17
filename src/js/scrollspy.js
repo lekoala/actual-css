@@ -75,12 +75,15 @@ function measureRoot(nav, root) {
     };
   }
 
-  const html = nav.ownerDocument.documentElement;
+  // scrollingElement is the real scroll container in standards mode; fall
+  // back to documentElement (quirks mode, or older engines without it).
+  const doc = nav.ownerDocument;
+  const el = doc.scrollingElement || doc.documentElement;
   return {
     top: 0,
-    height: html.clientHeight,
-    scrollTop: html.scrollTop,
-    scrollHeight: html.scrollHeight,
+    height: el.clientHeight,
+    scrollTop: el.scrollTop,
+    scrollHeight: el.scrollHeight,
   };
 }
 
@@ -127,7 +130,7 @@ function setupNav(nav) {
     // Scrolled to the end: the last section wins even when its top never
     // crosses the line. This is the case IntersectionObserver cannot express.
     if (scrollHeight > height && scrollTop + height >= scrollHeight - 1) {
-      activate(sections.at(-1).section);
+      activate(sections[sections.length - 1].section);
       return;
     }
 
@@ -151,6 +154,11 @@ function setupNav(nav) {
     measure();
   }
 
+  // The scroll root (custom container or the document viewport) is resolved
+  // once at connect and is stable for the lifetime of the connection; measure
+  // still re-reads the current root element so a replaced *element* under a
+  // stable container is handled, but swapping the container itself is out of
+  // contract (re-inject the nav or call refreshScrollspy after such a move).
   const scrollTarget = rootFor(nav) ?? nav.ownerDocument.defaultView;
   scrollTarget?.addEventListener("scroll", () => schedule(), {
     passive: true,

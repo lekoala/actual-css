@@ -64,7 +64,7 @@ function computeCoords(reference, floating, placement, rtl) {
   return coords;
 }
 
-function applyOffset(coords, side, offset, rtl) {
+function applyOffset(coords, side, offset) {
   switch (side) {
     case "top":
       coords.y -= offset;
@@ -73,10 +73,10 @@ function applyOffset(coords, side, offset, rtl) {
       coords.y += offset;
       break;
     case "left":
-      coords.x += rtl ? offset : -offset;
+      coords.x -= offset;
       break;
     case "right":
-      coords.x += rtl ? -offset : offset;
+      coords.x += offset;
       break;
   }
 }
@@ -102,7 +102,8 @@ function isRTL(el) {
   if (el.dir === "rtl") return true;
   if (el.dir === "ltr") return false;
   if (supportsDirSelector) return el.matches(":dir(rtl)");
-  return el.ownerDocument?.dir === "rtl";
+  const style = el.ownerDocument?.defaultView?.getComputedStyle?.(el);
+  return style?.direction === "rtl";
 }
 
 function getDocEl(doc) {
@@ -275,7 +276,7 @@ export function reposition(ref, float, opts = {}) {
   const distance = opts.distance || 0;
   const flip = opts.flip !== false;
   const shift = opts.shift !== false;
-  const shiftPad = opts.shiftPadding || 4;
+  const shiftPad = opts.shiftPadding ?? 4;
   const rtl = isRTL(ref);
 
   const rects = ref.getClientRects();
@@ -296,7 +297,7 @@ export function reposition(ref, float, opts = {}) {
   let axis = getMainAxis(placement);
   let current = placement;
   let coords = computeCoords(refRect, floatRect, current, rtl);
-  applyOffset(coords, side, distance, rtl);
+  applyOffset(coords, side, distance);
 
   if (flip) {
     const cx = Math.ceil(coords.x);
@@ -309,7 +310,7 @@ export function reposition(ref, float, opts = {}) {
       side = flipSide(side);
       current = align ? `${side}-${align}` : side;
       coords = computeCoords(refRect, floatRect, current, rtl);
-      applyOffset(coords, side, distance, rtl);
+      applyOffset(coords, side, distance);
     }
 
     if (
@@ -321,7 +322,7 @@ export function reposition(ref, float, opts = {}) {
       axis = "x";
       current = align ? `${side}-${align}` : side;
       coords = computeCoords(refRect, floatRect, current, rtl);
-      applyOffset(coords, side, distance, rtl);
+      applyOffset(coords, side, distance);
     }
   }
 
@@ -334,7 +335,7 @@ export function reposition(ref, float, opts = {}) {
       const nextAlign = getAlignment(current) === "end" ? "start" : "end";
       const candidatePlacement = `${side}-${nextAlign}`;
       const candidate = computeCoords(refRect, floatRect, candidatePlacement, rtl);
-      applyOffset(candidate, side, distance, rtl);
+      applyOffset(candidate, side, distance);
 
       if (getInlineOverflow(candidate, floatRect, minX, maxX) < currentOverflow) {
         current = candidatePlacement;

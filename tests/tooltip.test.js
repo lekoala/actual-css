@@ -243,6 +243,36 @@ test("explicit tooltip resolves from multiple describedby ids", async () => {
   expect(trigger.getAttribute("aria-describedby")).toBe("help tip1");
 });
 
+test("tooltip stays visible when focus is kept after the pointer leaves", async () => {
+  await loadTooltip('<button data-tooltip="Help">Trigger</button>');
+  const trigger = document.querySelector("button");
+
+  trigger.dispatchEvent(new FocusEvent("focusin", { bubbles: true }));
+  await waitForShow();
+  expect(document.querySelector('[role="tooltip"]').hidden).toBe(false);
+
+  leave(trigger);
+  await waitForHide();
+
+  // Still focused: the tooltip must not hide on pointer leave alone.
+  expect(document.querySelector('[role="tooltip"]').hidden).toBe(false);
+});
+
+test("tooltip hides only when both focus and hover are gone", async () => {
+  await loadTooltip('<button data-tooltip="Help">Trigger</button>');
+  const trigger = document.querySelector("button");
+
+  hover(trigger);
+  await waitForShow();
+  trigger.dispatchEvent(new FocusEvent("focusin", { bubbles: true }));
+
+  leave(trigger);
+  trigger.dispatchEvent(new FocusEvent("blur"));
+  await waitForHide();
+
+  expect(document.querySelector('[role="tooltip"]').hidden).toBe(true);
+});
+
 test("tooltip stays open while the pointer moves from trigger to tip", async () => {
   await loadTooltip('<button data-tooltip="Help">Trigger</button>');
   const trigger = document.querySelector("button");
