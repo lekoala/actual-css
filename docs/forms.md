@@ -206,11 +206,9 @@ separates the actions from the fields above.
 
 The three layout hooks are unset by default and fall back to the values below.
 
-| Hook                                | Default             | Purpose                                  |
-| ----------------------------------- | ------------------- | ---------------------------------------- |
-| `--form-actions-align`              | `center`            | Cross-axis alignment (`align-items`).    |
-| `--form-actions-justify`            | `flex-start`        | Main-axis distribution (`justify-content`). |
-| `--form-actions-margin-block-start` | `var(--space-5)`    | Top margin separating actions from the form. |
+- `--form-actions-align` — `center` — cross-axis alignment (`align-items`).
+- `--form-actions-justify` — `flex-start` — main-axis distribution (`justify-content`).
+- `--form-actions-margin-block-start` — `var(--space-5)` — top margin separating actions from the form.
 
 ### Common arrangements
 

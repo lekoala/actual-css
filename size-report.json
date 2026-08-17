@@ -1,12 +1,12 @@
 {
-  "timestamp": "2026-08-17T16:20:49.963Z",
-  "totalRaw": 167551,
-  "totalMinified": 82461,
-  "totalBrotli": 12330,
+  "timestamp": "2026-08-17T18:15:44.658Z",
+  "totalRaw": 171410,
+  "totalMinified": 84850,
+  "totalBrotli": 12556,
   "themesMinified": 29127,
   "themesBrotli": 3404,
-  "shippedMinified": 82461,
-  "shippedBrotli": 12330,
+  "shippedMinified": 84850,
+  "shippedBrotli": 12556,
   "maxShippedBrotli": 13312,
   "fileCount": 73,
   "files": [
@@ -15,16 +15,20 @@
       "raw": 7170
     },
     {
+      "file": "components/alert.css",
+      "raw": 6985
+    },
+    {
+      "file": "tokens.css",
+      "raw": 6214
+    },
+    {
       "file": "theme.css",
       "raw": 6197
     },
     {
-      "file": "tokens.css",
-      "raw": 5900
-    },
-    {
-      "file": "components/alert.css",
-      "raw": 5054
+      "file": "components/modal.css",
+      "raw": 5098
     },
     {
       "file": "components/badge.css",
@@ -57,10 +61,6 @@
     {
       "file": "prose.css",
       "raw": 3920
-    },
-    {
-      "file": "components/modal.css",
-      "raw": 3484
     },
     {
       "file": "utilities.css",

@@ -212,10 +212,10 @@ Flyouts and tooltips opened from inside a modal dialog are mounted inside the di
       </button>
     </div>
 
-    <menu class="flyout" id="dialog-actions-menu" hidden>
-      <li><button type="button">Archive</button></li>
-      <li><button type="button">Duplicate</button></li>
-      <li><button type="button">Share</button></li>
+    <menu class="flyout menu" id="dialog-actions-menu" hidden>
+      <li><button class="menu-item" type="button">Archive</button></li>
+      <li><button class="menu-item" type="button">Duplicate</button></li>
+      <li><button class="menu-item" type="button">Share</button></li>
     </menu>
   </div>
 </dialog>
@@ -400,6 +400,7 @@ Flyout covers two distinct patterns, detected by the `<menu>` element or `.menu`
 
 ### Action list
 - A list of *actions* the user can take: sign out, copy, delete.
+- Flyout triggers are opt-in: add `data-enhance="flyout"` to the trigger.
 - Wrap the trigger and flyout in `.flyout-trigger` when the flyout should have a local absolute-position fallback before JavaScript positions it. Add `.stretch` when the trigger must span its container, such as the last row of a full-width sidebar nav list.
 - Use `<menu class="flyout menu">` with strict anatomy: `.menu > li > .menu-item`. Items must carry the `.menu-item` class to participate in roving focus — keyboard navigation (ArrowUp/Down, Home, End) cycles through them, and Enter/Space activates and closes the menu.
 - Items are regular `<button>` or `<a>` elements.
@@ -417,6 +418,7 @@ Flyout covers two distinct patterns, detected by the `<menu>` element or `.menu`
 <div class="flyout-trigger">
   <button class="btn outline"
           type="button"
+          data-enhance="flyout"
           aria-expanded="false"
           aria-controls="account-actions"
           id="account-flyout-trigger">
@@ -544,6 +546,8 @@ Use `class="flyout grid-3"` when a nav panel needs multiple link groups. Keep li
 
 ### Context menu
 
+Context menus use the same `.menu > li > .menu-item` presentation primitive as action-list flyouts.
+
 Put `data-context-menu` on the smallest unit the actions operate on: a file row, card, or canvas item. Several units may reference the same `<menu class="flyout">`. An explicit trigger button inside the unit, marked with `data-context-menu-trigger` and `aria-controls`, opens the menu through the same context-aware path — its `aria-controls` must match the `data-context-menu` id of the host.
 
 Before opening, the context element dispatches the cancelable `actual:context-menu` event. Its `detail` contains the shared `menu`, the owning `context`, the exact `origin`, and the opening `trigger` (`pointer`, `touch`, `keyboard`, or `button`). Use it to tailor the static menu to the selected item, or cancel the event to keep it closed. `contextFor(menu)` from `actual-css/js/context-menu` returns that detail while handling a menu action.
@@ -576,14 +580,14 @@ Long press is opt-in with `data-context-menu-long-press`. Empty uses the default
   </div>
   <output id="context-result" class="text-sm text-muted" aria-live="polite">No context selected.</output>
 
-  <menu class="flyout"
+  <menu class="flyout menu"
         id="file-actions"
         aria-labelledby="file-actions-trigger"
         hidden>
-    <li><button type="button">Open</button></li>
-    <li><button type="button">Rename</button></li>
+    <li><button class="menu-item" type="button">Open</button></li>
+    <li><button class="menu-item" type="button">Rename</button></li>
     <hr class="menu-separator" role="separator">
-    <li><button class="danger" type="button">Delete</button></li>
+    <li><button class="menu-item danger" type="button">Delete</button></li>
   </menu>
 </div>
 
