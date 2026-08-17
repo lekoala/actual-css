@@ -282,6 +282,12 @@ The effect is progressive: it only runs when the browser supports `document.star
 
 Prefer native dialog behavior whenever possible. The framework runtime should not replace the platform modal system; it should only make dialogs declarative, animation-friendly, and consistent across supported browsers.
 
+### Hooks
+
+- `--modal-size` — maximum dialog width.
+- `--dialog-close-size` — inline and block size of the `.dialog-close` button.
+- `--dialog-close-icon-size` — size of the close glyph.
+
 ## Drawer
 
 > Modal side-sheet that overlays the page for navigation or filters.
@@ -366,6 +372,11 @@ For drawers with unsaved settings or critical actions, omit the dismiss attribut
 
 Backdrop click dismissal and Escape are provided by the native dialog element when `closedby="any"` is set. Add `data-dialog-dismissible` when you want the optional runtime to wire the same behavior. When both are omitted, clicking the backdrop briefly flashes the drawer instead of closing it — useful for drawers that should not be dismissed accidentally.
 
+### Hooks
+
+- `--drawer-size` — panel width.
+- `--drawer-pad` — panel padding.
+
 ## Flyout
 
 > Positioned surface attached to a trigger, commonly used for action lists and small panels.
@@ -403,6 +414,7 @@ Flyout covers two distinct patterns, detected by the `<menu>` element or `.menu`
 - Flyout triggers are opt-in: add `data-enhance="flyout"` to the trigger.
 - Wrap the trigger and flyout in `.flyout-trigger` when the flyout should have a local absolute-position fallback before JavaScript positions it. Add `.stretch` when the trigger must span its container, such as the last row of a full-width sidebar nav list.
 - Use `<menu class="flyout menu">` with strict anatomy: `.menu > li > .menu-item`. Items must carry the `.menu-item` class to participate in roving focus — keyboard navigation (ArrowUp/Down, Home, End) cycles through them, and Enter/Space activates and closes the menu.
+- Use `.menu-label` on a `li` for a muted section heading inside a menu (e.g. a group title before its items). It is non-interactive and does not participate in roving focus. Use `.menu-separator` (`<hr role="separator">`) between groups.
 - Items are regular `<button>` or `<a>` elements.
 - Use `.sm` or `.lg` for density changes.
 - Add `role="menu"` / `role="menuitem"` only when you intentionally need the ARIA menu pattern.
@@ -603,6 +615,15 @@ Long press is opt-in with `data-context-menu-long-press`. Empty uses the default
 </script>
 ```
 
+### Hooks
+
+- `--flyout-inline-size` — panel width.
+- `--flyout-max-inline-size` — panel width cap.
+- `--menu-item-size` — minimum row height of `.menu-item`.
+
+`--available-height` and `--surface-anchor-width` are written by the positioner at
+runtime, not set by the author. See [JavaScript](javascript.md).
+
 ## Tabs
 
 > In-place panel switcher using real tab semantics, with roving tabindex and arrow-key navigation.
@@ -775,6 +796,15 @@ Override `--tooltip-bg` and `--tooltip-fg` on the tooltip element to change the 
 </div>
 ```
 
+### Hooks
+
+- `--tooltip-bg` — bubble background (defaults to `var(--surface-solid)`); the arrow follows it.
+- `--tooltip-fg` — text color.
+- `--tooltip-arrow-size` — arrow size.
+
+`--arrow-x` and `--arrow-y` are written by the positioner at runtime, not set by
+the author. See [JavaScript](javascript.md).
+
 ## Scrollspy
 
 > Behavior hook for navigation that marks the active section while the page scrolls.
@@ -897,3 +927,10 @@ document.dispatchEvent(new CustomEvent("actual:status", {
 ```
 
 The runtime auto-wires the status bar to Actual's form validation: a form that fails to submit shows its `data-validation-message` in the status bar with the `danger` intent. No target in the DOM means the call is a no-op, so the markup stays optional.
+
+### Hooks
+
+- `--status-bg` — bar background.
+- `--status-fg` — bar text color.
+
+Prefer an intent class over setting these directly.

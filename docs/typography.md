@@ -99,6 +99,13 @@ The framework exposes three line-height tokens:
 
 There is no `--line-height-normal`. It would be redundant with `--line-height`. Prose overrides line-height through `--prose-line-height` and `--prose-heading-line-height` because the readable values for long-form text are different from app UI.
 
+### Prose hooks
+
+- `--prose-measure` — readable line length cap, shared with `.measure`.
+- `--prose-line-height` — body line height inside `.prose`.
+- `--prose-heading-line-height` — heading line height inside `.prose`.
+- `--prose-flow` — vertical rhythm between sibling blocks inside `.prose`.
+
 ## text-wrap
 
 `text-wrap: balance` and `text-wrap: pretty` are used at three levels:

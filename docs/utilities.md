@@ -236,6 +236,16 @@ Use `.items-start` on flex or grid layouts when children should keep their natur
 
 Use `.items-center` when a flex or grid layout should center its children on the cross axis. Use `.items-end` when children should align to the block-end edge.
 
+These helpers work by setting a custom property that participating components read,
+so they also apply inside a component's own grid anatomy rather than only on plain
+flex containers:
+
+- `.items-start` / `.items-center` / `.items-end` set `--items-align`, read by `.alert` and `.card`.
+- `.text-start` / `.text-center` / `.text-end` set `--text-align`, read by `.table` cells.
+- `.justify-content-*` (optional layer) set `--cluster-justify`, read by `.cluster`.
+
+Set the property directly when you need a value the helpers do not ship.
+
 ## Spacing Helpers
 
 > Semantic step helpers for gap, padding, and margin — the most common inline-style escape hatches.
