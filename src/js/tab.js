@@ -35,7 +35,7 @@ function panelsOf(tabs) {
 
 function panelFor(tab) {
   const panelId = tab.getAttribute("aria-controls");
-  return panelId ? document.getElementById(panelId) : null;
+  return panelId ? tab.ownerDocument.getElementById(panelId) : null;
 }
 
 function isTabDisabled(tab) {
