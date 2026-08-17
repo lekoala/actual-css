@@ -39,7 +39,7 @@ function isMenuFlyout(panel) {
 }
 
 function openFlyout(panel, trigger) {
-  openSurface(panel, {
+  return openSurface(panel, {
     trigger,
     source: trigger,
     ...readFlyoutOptions(panel),
@@ -47,8 +47,8 @@ function openFlyout(panel, trigger) {
 }
 
 function openAndFocusPanel(flyout, trigger) {
-  if (!isSurfaceOpen(flyout)) openFlyout(flyout, trigger);
-  focusFirstDescendant(flyout);
+  if (!isSurfaceOpen(flyout) && !openFlyout(flyout, trigger)) return false;
+  return focusFirstDescendant(flyout);
 }
 
 function onTriggerClick(e) {
@@ -95,30 +95,29 @@ function onTriggerKeydown(e) {
   switch (e.key) {
     case "ArrowDown":
       e.preventDefault();
-      if (!isSurfaceOpen(panel)) openFlyout(panel, trigger);
+      if (!isSurfaceOpen(panel) && !openFlyout(panel, trigger)) break;
       focusFirstMenuItem(panel);
       break;
     case "ArrowUp":
       e.preventDefault();
-      if (!isSurfaceOpen(panel)) openFlyout(panel, trigger);
+      if (!isSurfaceOpen(panel) && !openFlyout(panel, trigger)) break;
       focusLastMenuItem(panel);
       break;
     case "Home":
       e.preventDefault();
-      if (!isSurfaceOpen(panel)) openFlyout(panel, trigger);
+      if (!isSurfaceOpen(panel) && !openFlyout(panel, trigger)) break;
       focusFirstMenuItem(panel);
       break;
     case "End":
       e.preventDefault();
-      if (!isSurfaceOpen(panel)) openFlyout(panel, trigger);
+      if (!isSurfaceOpen(panel) && !openFlyout(panel, trigger)) break;
       focusLastMenuItem(panel);
       break;
     case "Enter":
     case " ":
       e.preventDefault();
       if (!isSurfaceOpen(panel)) {
-        openFlyout(panel, trigger);
-        focusFirstMenuItem(panel);
+        if (openFlyout(panel, trigger)) focusFirstMenuItem(panel);
       } else {
         closeSurface(panel);
       }
@@ -133,7 +132,7 @@ function connectTrigger(trigger) {
   if (triggerMap.has(trigger)) return;
 
   const controller = new AbortController();
-  const state = { panel: null, controller };
+  const state = { panel: null, controller, releaseMenu: null };
   triggerMap.set(trigger, state);
 
   resolvePanel(trigger, state);
@@ -162,9 +161,8 @@ function resolvePanel(trigger, state) {
   state.panel = panel;
 
   if (isMenuFlyout(panel)) {
-    connectMenu(panel, {
+    state.releaseMenu = connectMenu(panel, {
       close: (menu) => closeSurface(menu),
-      signal: state.controller.signal,
     });
   }
   if (!trigger.hasAttribute("aria-haspopup") && isMenuFlyout(panel)) {
@@ -177,6 +175,7 @@ function resolvePanel(trigger, state) {
 function disconnectTrigger(trigger) {
   const state = triggerMap.get(trigger);
   if (!state) return;
+  state.releaseMenu?.();
   state.controller.abort();
   if (state.panel?.isConnected && isSurfaceOpen(state.panel)) {
     closeSurface(state.panel, { restoreFocus: false });

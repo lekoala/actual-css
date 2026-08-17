@@ -36,12 +36,6 @@ const DEFAULT_UNSUPPORTED_MESSAGE =
   "This dialog cannot open because this browser does not support this feature.";
 let uid = 0;
 
-function supportsDialog() {
-  return (
-    typeof HTMLDialogElement !== "undefined" &&
-    typeof HTMLDialogElement.prototype.showModal === "function"
-  );
-}
 function isDialogElement(el) {
   return (
     typeof Node !== "undefined" && el?.nodeType === Node.ELEMENT_NODE && el.localName === "dialog"
@@ -227,16 +221,17 @@ function isOutsideDialog(dialog, event) {
 
 function flashStatic(dialog) {
   const state = ensureDialogWired(dialog);
+  const win = dialog.ownerDocument.defaultView;
 
   if (state.staticTimer) {
-    window.clearTimeout(state.staticTimer);
+    win?.clearTimeout(state.staticTimer);
   }
 
   dialog.classList.remove(CLASSES.static);
   void dialog.offsetWidth;
   dialog.classList.add(CLASSES.static);
 
-  state.staticTimer = window.setTimeout(() => {
+  state.staticTimer = win?.setTimeout(() => {
     dialog.classList.remove(CLASSES.static);
     state.staticTimer = null;
   }, 250);
@@ -304,7 +299,7 @@ export function openDialog(dialog, trigger = null, forcedModal = null) {
   syncDialogSemantics(dialog, modal);
 
   state.closing = false;
-  state.restoreFocusTo = trigger || document.activeElement;
+  state.restoreFocusTo = trigger || dialog.ownerDocument.activeElement;
 
   if (modal) {
     dialog.showModal();
@@ -346,10 +341,12 @@ function handleDialogSubmit(event) {
 
 function handleDialogCancel(event) {
   const dialog = event.currentTarget;
+  const state = dialogMap.get(dialog);
 
   if (!isDismissible(dialog)) {
     event.preventDefault();
     flashStatic(dialog);
+    if (state) state.returnValue = "";
     return;
   }
 
@@ -359,12 +356,14 @@ function handleDialogCancel(event) {
     detail: { dialog, sourceEvent: event },
   });
   if (!dialog.dispatchEvent(request)) {
+    // Close was prevented; drop any returnValue staged for it.
     event.preventDefault();
+    if (state) state.returnValue = "";
     return;
   }
 
   event.preventDefault();
-  closeDialog(dialog, dialogMap.get(dialog)?.returnValue || "");
+  closeDialog(dialog, state?.returnValue || "");
 }
 
 function handleDialogClose(event) {
@@ -376,7 +375,7 @@ function handleDialogClose(event) {
   if (!state) return;
 
   if (state.staticTimer) {
-    window.clearTimeout(state.staticTimer);
+    dialog.ownerDocument.defaultView?.clearTimeout(state.staticTimer);
     state.staticTimer = null;
   }
 
@@ -407,7 +406,9 @@ function ensureDialogWired(dialog) {
     staticTimer: null,
   };
 
-  syncDialogSemantics(dialog);
+  // A dialog that is already `open` in the markup is non-modal per spec,
+  // whatever data-dialog-modal says; infer semantics from its actual state.
+  syncDialogSemantics(dialog, dialog.open ? isModalOpen(dialog) : isModal(dialog));
 
   dialog.addEventListener("click", handleDialogClick, { signal: controller.signal });
   dialog.addEventListener("submit", handleDialogSubmit, { signal: controller.signal });
@@ -437,7 +438,7 @@ function disconnectDialog(dialog) {
   if (!state) return;
 
   if (state.staticTimer) {
-    window.clearTimeout(state.staticTimer);
+    dialog.ownerDocument.defaultView?.clearTimeout(state.staticTimer);
   }
 
   state.controller.abort();
@@ -493,11 +494,13 @@ registerCommands(DIALOG_COMMANDS, {
   },
 });
 
-if (supportsDialog()) {
-  enhance({
-    [DIALOG_SELECTOR]: (dialog) => {
-      connectDialog(dialog);
-      return () => disconnectDialog(dialog);
-    },
-  });
-}
+// Register the dialog enhancement unconditionally so cleanup is uniform on
+// every browser. On legacy browsers the optional dialog-fallback shim supplies
+// show()/showModal()/close(); the wiring here (backdrop, Escape, events) works
+// regardless of whether the element is natively controllable.
+enhance({
+  [DIALOG_SELECTOR]: (dialog) => {
+    connectDialog(dialog);
+    return () => disconnectDialog(dialog);
+  },
+});

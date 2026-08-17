@@ -105,13 +105,19 @@ only through background color.
 
 ## JavaScript runtime floor
 
-The JavaScript runtime is supported from the **Minimum** browser tier
-(Firefox 98+, Safari 15.4+, Chromium 99+). Below it, the degraded CSS
-experience remains available but JavaScript enhancements are unsupported.
+The JavaScript runtime is supported from the **Degraded** browser tier
+(Firefox 78+, Safari 14+, Chromium 88+), matching the core CSS experience.
+Below it, no JavaScript enhancements are provided.
 
-The floor matches the runtime's actual syntax: `Array.prototype.at()`,
-`Object.hasOwn()`, optional chaining, and nullish coalescing all land at or
-below Safari 15.4. No transpilation, polyfills, or legacy bundle is shipped.
+The floor sits below the syntax ceiling the runtime must not cross: no
+logical assignment operators (`??=`, `||=`, `&&=` — Firefox 79+), no
+`Array.prototype.at()` and no `Object.hasOwn()` (both Safari 15.4+).
+Optional chaining, nullish coalescing, and `String.prototype.replaceAll`
+all land at or below the Degraded floor and are allowed. No transpilation,
+polyfills, or legacy bundle is shipped.
+
+The floor is enforced statically by `tests/js-compat.test.js`, which scans
+the runtime modules for the banned token set.
 
 ## Native-first audit (0.2)
 

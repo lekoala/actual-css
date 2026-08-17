@@ -12,7 +12,12 @@ const FOCUSABLE_SELECTOR = [
 export function isElementVisible(el) {
   if (!el || el.hidden) return false;
   if (typeof el.checkVisibility === "function") return el.checkVisibility();
-  return el.getClientRects().length > 0;
+  if (el.getClientRects().length === 0) return false;
+  // checkVisibility() covers visibility:hidden; without it, read the
+  // computed direction of the cascade so a hidden element is not focusable.
+  const style = el.ownerDocument?.defaultView?.getComputedStyle?.(el);
+  if (!style) return true;
+  return style.visibility !== "hidden" && style.visibility !== "collapse";
 }
 
 function isFocusable(el) {

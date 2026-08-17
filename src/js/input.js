@@ -7,7 +7,7 @@ export function selectionStart(el) {
 }
 
 export function setCaret(el, position) {
-  if (document.activeElement !== el) return;
+  if (el.ownerDocument.activeElement !== el) return;
   if (typeof el.setSelectionRange !== "function") return;
   try {
     el.setSelectionRange(position, position);

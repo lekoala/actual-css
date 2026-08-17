@@ -38,7 +38,6 @@ export function loadScript(url) {
       new Promise((resolve, reject) => {
         const script = document.createElement("script");
         script.src = absoluteUrl;
-        script.defer = true;
         script.onload = resolve;
         script.onerror = () => {
           scriptLoads.delete(absoluteUrl);
@@ -92,11 +91,18 @@ function makeInit(name, connect) {
         }),
       );
 
-    const cleanup = connect(element, {
-      config,
-      signal: controller.signal,
-      emit,
-    });
+    let cleanup;
+    try {
+      cleanup = connect(element, {
+        config,
+        signal: controller.signal,
+        emit,
+      });
+    } catch (error) {
+      // A throwing connect() must not leak the local controller's listeners.
+      controller.abort();
+      throw error;
+    }
 
     if (cleanup?.then) {
       controller.abort();
@@ -117,7 +123,14 @@ function makeInit(name, connect) {
   };
 }
 
+function assertManifestUrl(name, url) {
+  if (typeof url !== "string" || url.trim() === "") {
+    throw new TypeError(`Enhancement "${name}" must declare a non-empty module URL.`);
+  }
+}
+
 export function loadEnhancement(name, url) {
+  assertManifestUrl(name, url);
   const absoluteUrl = new URL(url, document.baseURI).href;
   const existing = enhancements.get(name);
 
@@ -214,6 +227,7 @@ export async function loadEnhancements(scope = document) {
     const entries = parseManifestEntries(block.textContent);
 
     for (const [name, rawUrl] of entries) {
+      assertManifestUrl(name, rawUrl);
       const url = new URL(rawUrl, document.baseURI).href;
       const existing = manifest.get(name);
 

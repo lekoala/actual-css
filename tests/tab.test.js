@@ -25,6 +25,37 @@ afterEach(() => {
   cleanupDOM();
 });
 
+test("a nested tablist is operated independently of its outer tablist", async () => {
+  await loadTabs(`
+    <div class="tabs" data-enhance="tabs" role="tablist">
+      <button id="outer-a" role="tab" aria-controls="outer-panel-a" aria-selected="true">A</button>
+      <button id="outer-b" role="tab" aria-controls="outer-panel-b">B</button>
+      <section id="outer-panel-a" role="tabpanel">
+        <div class="tabs" data-enhance="tabs" role="tablist">
+          <button id="inner-a" role="tab" aria-controls="inner-panel-a" aria-selected="true">1</button>
+          <button id="inner-b" role="tab" aria-controls="inner-panel-b">2</button>
+        </div>
+        <section id="inner-panel-a" role="tabpanel">Inner 1</section>
+        <section id="inner-panel-b" role="tabpanel">Inner 2</section>
+      </section>
+      <section id="outer-panel-b" role="tabpanel">B panel</section>
+    </div>
+  `);
+  const outerA = document.getElementById("outer-a");
+  const outerB = document.getElementById("outer-b");
+  const innerA = document.getElementById("inner-a");
+  const innerB = document.getElementById("inner-b");
+
+  // ArrowRight on the inner tab moves only the inner tablist (single step).
+  press(innerA, "ArrowRight");
+  expect(innerA.getAttribute("aria-selected")).toBe("false");
+  expect(innerB.getAttribute("aria-selected")).toBe("true");
+
+  // The outer tablist is untouched by the inner interaction.
+  expect(outerA.getAttribute("aria-selected")).toBe("true");
+  expect(outerB.getAttribute("aria-selected")).toBe("false");
+});
+
 test("clicking a tab selects it and reveals its panel", async () => {
   await loadTabs(tabsMarkup());
   const tabA = document.getElementById("tab-a");

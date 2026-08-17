@@ -20,8 +20,13 @@ import { firstItem, lastItem, nextItem } from "./keys.js";
 
 const TABLIST_SELECTOR = '[data-enhance~="tabs"]';
 
+// A tablist owns only the tabs directly beneath it, not those of a nested
+// tablist. Filtering by closest owner keeps the outer list from operating on
+// (and re-reacting to events from) tabs that belong to an inner list.
 function tabsOf(list) {
-  return [...list.querySelectorAll('[role="tab"]')];
+  return [...list.querySelectorAll('[role="tab"]')].filter(
+    (tab) => tab.closest(TABLIST_SELECTOR) === list,
+  );
 }
 
 function panelsOf(tabs) {
@@ -89,10 +94,9 @@ function initialize(list) {
 }
 
 function onKeydown(e) {
+  const list = e.currentTarget;
   const tab = e.target.closest('[role="tab"]');
-  if (!tab) return;
-  const list = tab.closest(TABLIST_SELECTOR);
-  if (!list) return;
+  if (!tab || tab.closest(TABLIST_SELECTOR) !== list) return;
 
   const tabs = activatableTabs(list);
   if (!tabs.length || !tabs.includes(tab)) return;
@@ -103,13 +107,13 @@ function onKeydown(e) {
     case "ArrowRight":
       if (isVertical) break;
       e.preventDefault();
-      next = nextItem(tabs, tab, 1, { wrap: true });
+      next = nextItem(tabs, tab, 1);
       if (next) activateAndFocus(next);
       break;
     case "ArrowLeft":
       if (isVertical) break;
       e.preventDefault();
-      next = nextItem(tabs, tab, -1, { wrap: true });
+      next = nextItem(tabs, tab, -1);
       if (next) activateAndFocus(next);
       break;
     case "ArrowDown":
@@ -123,13 +127,13 @@ function onKeydown(e) {
         break;
       }
       e.preventDefault();
-      next = nextItem(tabs, tab, 1, { wrap: true });
+      next = nextItem(tabs, tab, 1);
       if (next) activateAndFocus(next);
       break;
     case "ArrowUp":
       if (!isVertical) break;
       e.preventDefault();
-      next = nextItem(tabs, tab, -1, { wrap: true });
+      next = nextItem(tabs, tab, -1);
       if (next) activateAndFocus(next);
       break;
     case "Home":
@@ -149,8 +153,9 @@ function onKeydown(e) {
 }
 
 function onClick(e) {
+  const list = e.currentTarget;
   const tab = e.target.closest('[role="tab"]');
-  if (!tab) return;
+  if (!tab || tab.closest(TABLIST_SELECTOR) !== list) return;
   if (isTabDisabled(tab)) {
     e.preventDefault();
     return;

@@ -68,6 +68,36 @@ test("flyout trigger arrow key opens and focuses direct menu items", async () =>
   expect(document.activeElement).toBe(first);
 });
 
+test("a shared menu is wired once across two triggers", async () => {
+  await loadFlyout(`
+    <button id="a" type="button" data-enhance="flyout" aria-controls="menu" aria-expanded="false">A</button>
+    <button id="b" type="button" data-enhance="flyout" aria-controls="menu" aria-expanded="false">B</button>
+    <menu id="menu" class="flyout menu" hidden>
+      <li><button id="one" class="menu-item" type="button">One</button></li>
+      <li><button id="two" class="menu-item" type="button">Two</button></li>
+      <li><button id="three" class="menu-item" type="button">Three</button></li>
+    </menu>
+  `);
+  const a = document.getElementById("a");
+  const b = document.getElementById("b");
+  const menu = document.getElementById("menu");
+  const one = document.getElementById("one");
+  const two = document.getElementById("two");
+  setupGeometry(a, menu);
+
+  press(a, "ArrowDown");
+  expect(document.activeElement).toBe(one);
+
+  // Both triggers now reference the same shared menu.
+  press(b, "ArrowDown");
+  expect(menu.hidden).toBe(false);
+
+  // A single ArrowDown moves by exactly one item. With duplicated wiring it
+  // would skip an item (two handlers each moving focus).
+  press(one, "ArrowDown");
+  expect(document.activeElement).toBe(two);
+});
+
 test("nav panel flyout focuses first descendant, not menu items", async () => {
   await loadFlyout(`
     <button id="trigger" type="button" data-enhance="flyout" aria-controls="menu" aria-expanded="false">Open</button>

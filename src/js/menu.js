@@ -58,11 +58,11 @@ export function onMenuKeydown(e, { close }) {
   switch (e.key) {
     case "ArrowDown":
       e.preventDefault();
-      nextItem(items, menu.ownerDocument.activeElement, 1, { wrap: true })?.focus();
+      nextItem(items, menu.ownerDocument.activeElement, 1)?.focus();
       break;
     case "ArrowUp":
       e.preventDefault();
-      nextItem(items, menu.ownerDocument.activeElement, -1, { wrap: true })?.focus();
+      nextItem(items, menu.ownerDocument.activeElement, -1)?.focus();
       break;
     case "Home":
       e.preventDefault();
@@ -85,27 +85,53 @@ export function onMenuKeydown(e, { close }) {
   }
 }
 
-export function connectMenu(menu, { close, signal }) {
-  menu.addEventListener("keydown", (event) => onMenuKeydown(event, { close: () => close(menu) }), {
-    signal,
-  });
+// Menu wiring is a shared, ref-counted resource: a menu may be retained by
+// several triggers (or by flyout and context-menu at once), so the listeners
+// and their AbortController belong to the menu, not to any single caller.
+// Each retain returns a release(); the wiring is torn down on the last one.
+const menuConnections = new WeakMap();
 
-  menu.addEventListener(
-    "click",
-    (event) => {
-      const autoClose = getSurfaceAutoClose(menu);
-      if (autoClose === "outside" || autoClose === "false") return;
+export function connectMenu(menu, { close }) {
+  let entry = menuConnections.get(menu);
 
-      const item = getMenuItem(menu, event.target);
-      if (!item) return;
+  if (!entry) {
+    const controller = new AbortController();
+    menu.addEventListener(
+      "keydown",
+      (event) => onMenuKeydown(event, { close: () => close(menu) }),
+      { signal: controller.signal },
+    );
+    menu.addEventListener(
+      "click",
+      (event) => {
+        const autoClose = getSurfaceAutoClose(menu);
+        if (autoClose === "outside" || autoClose === "false") return;
 
-      if (item.matches(":disabled, [aria-disabled='true']")) {
-        event.preventDefault();
-        return;
-      }
+        const item = getMenuItem(menu, event.target);
+        if (!item) return;
 
-      close(menu);
-    },
-    { signal },
-  );
+        if (item.matches(":disabled, [aria-disabled='true']")) {
+          event.preventDefault();
+          return;
+        }
+
+        close(menu);
+      },
+      { signal: controller.signal },
+    );
+    entry = { count: 0, controller };
+    menuConnections.set(menu, entry);
+  }
+
+  entry.count++;
+  let released = false;
+  return () => {
+    if (released) return;
+    released = true;
+    entry.count--;
+    if (entry.count <= 0) {
+      entry.controller.abort();
+      menuConnections.delete(menu);
+    }
+  };
 }

@@ -143,6 +143,41 @@ test("Escape key closes the top surface and restores focus", () => {
   expect(preventScroll).toBe(true);
 });
 
+test("Escape closes the surface that is open, not a stale closed one", () => {
+  setBody(
+    '<button id="a" aria-controls="menuA">A</button><button id="b" aria-controls="menuB">B</button><div id="menuA" class="flyout"></div><div id="menuB" class="flyout"></div>',
+  );
+  const triggerA = document.getElementById("a");
+  const triggerB = document.getElementById("b");
+  const menuA = document.getElementById("menuA");
+  const menuB = document.getElementById("menuB");
+  mockPlacement(triggerA, menuA);
+  mockPlacement(triggerB, menuB);
+
+  openSurface(menuA, { trigger: triggerA });
+  closeSurface(menuA);
+  openSurface(menuB, { trigger: triggerB });
+  closeSurface(menuB);
+  openSurface(menuA, { trigger: triggerA });
+
+  document.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
+
+  expect(isSurfaceOpen(menuA)).toBe(false);
+});
+
+test("positionSurface failure leaves the surface closed", () => {
+  setBody('<button id="trigger" aria-controls="menu">Open</button><div id="menu" class="flyout"></div>');
+  const trigger = document.getElementById("trigger");
+  const menu = document.getElementById("menu");
+  mockRect(trigger, { x: -220, y: 100, width: 60, height: 24 });
+  mockRect(menu, { x: 0, y: 0, width: 120, height: 80 });
+
+  const result = openSurface(menu, { trigger });
+
+  expect(result).toBe(false);
+  expect(isSurfaceOpen(menu)).toBe(false);
+});
+
 test("prepareSurface leaves the surface at its original position", () => {
   setBody('<section id="host"><button id="next"></button><div id="menu" class="flyout"></div></section>');
   const host = document.getElementById("host");

@@ -39,12 +39,13 @@ const HIDE_DELAY_MS = 100;
  * @property {Set<Element>} refs Triggers that currently reference this tip.
  * @property {Element | null} activeRef Trigger that last showed this tip.
  * @property {AbortController} controller Tip-level event listener cleanup.
- * @property {() => void} untrack Floating-position cleanup.
+ * @property {() => void} stopTracking Floating-position cleanup.
  * @property {boolean} generated True when the tip was created from data-tooltip text.
  * @property {{ parent: Node, next: ChildNode | null } | null} mount Original DOM position for explicit tips moved into a dialog/body root.
  * @property {ReturnType<typeof setTimeout> | null} timer Pending delayed show.
  * @property {ReturnType<typeof setTimeout> | null} hideTimer Pending delayed hide.
- * @property {boolean} overRef Pointer is over the active trigger.
+ * @property {boolean} hovered Pointer is over the active trigger.
+ * @property {boolean} focused The active trigger has keyboard focus.
  * @property {boolean} overTip Pointer is over the tooltip.
  */
 
@@ -164,11 +165,11 @@ function scheduleHide(tip) {
   const state = tipStates.get(tip);
   if (!state) return;
   if (isClickTrigger(state.activeRef) || isAlwaysVisible(state.activeRef)) return;
-  if (state.overRef || state.overTip) return;
+  if (state.hovered || state.focused || state.overTip) return;
   if (state.hideTimer) clearTimeout(state.hideTimer);
   state.hideTimer = setTimeout(() => {
     state.hideTimer = null;
-    if (!state.overRef && !state.overTip) hideTip(tip);
+    if (!state.hovered && !state.focused && !state.overTip) hideTip(tip);
   }, HIDE_DELAY_MS);
 }
 
@@ -194,7 +195,8 @@ function wireTip(tip, options = {}) {
     mount: options.mount || null,
     timer: null,
     hideTimer: null,
-    overRef: false,
+    hovered: false,
+    focused: false,
     overTip: false,
   };
 
@@ -261,10 +263,11 @@ function ensureTip(trigger) {
   if (!tip) {
     tip = explicitTipFor(trigger);
     if (!tip) return null;
-    tip.hidden = true;
-    tip.style.position = "fixed";
-
+    // Wire and mount the shared tip only on first retain. A later trigger
+    // must not re-hide a tooltip that is currently visible for another.
     if (!tipStates.has(tip)) {
+      tip.hidden = true;
+      tip.style.position = "fixed";
       mount = mountTip(tip, trigger);
     }
   }
@@ -273,12 +276,22 @@ function ensureTip(trigger) {
   state.refs.add(trigger);
 
   const triggerController = new AbortController();
-  const onLeave = () => {
-    state.overRef = false;
-    scheduleHide(tip);
-  };
-  trigger.addEventListener("mouseleave", onLeave, { signal: triggerController.signal });
-  trigger.addEventListener("blur", onLeave, { signal: triggerController.signal });
+  trigger.addEventListener(
+    "mouseleave",
+    () => {
+      state.hovered = false;
+      scheduleHide(tip);
+    },
+    { signal: triggerController.signal },
+  );
+  trigger.addEventListener(
+    "blur",
+    () => {
+      state.focused = false;
+      scheduleHide(tip);
+    },
+    { signal: triggerController.signal },
+  );
 
   const cleanup = () => {
     triggerController.abort();
@@ -315,7 +328,6 @@ function show(tip, ref, immediate = false) {
   if (!state) return;
 
   state.activeRef = ref;
-  state.overRef = true;
   clearHide(tip);
   if (state.timer) clearTimeout(state.timer);
   const reveal = () => {
@@ -344,7 +356,12 @@ function handleTriggerIntent(e) {
     return;
 
   const tip = ensureTip(trigger);
-  if (tip) show(tip, trigger);
+  if (!tip) return;
+
+  const state = tipStates.get(tip);
+  if (e.type === "focusin") state.focused = true;
+  else state.hovered = true;
+  show(tip, trigger);
 }
 
 function handleTriggerClick(e) {

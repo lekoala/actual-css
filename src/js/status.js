@@ -125,7 +125,9 @@ if (typeof document !== "undefined") {
   // importing this module. A message shows it; omitting one clears it.
   document.addEventListener(EVENTS.status, (event) => {
     const { message, intent, duration } = event.detail ?? {};
-    if (message) {
+    // `message != null` keeps "" (an intentional empty message) on the show
+    // path, consistent with status() itself; an absent message clears.
+    if (message != null) {
       status(message, { intent, duration });
     } else {
       status.clear();

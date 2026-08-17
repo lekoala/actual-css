@@ -46,7 +46,7 @@ function getLongPressDelay(target, menu) {
   if (value === "") return LONG_PRESS_MS;
 
   const delay = Number.parseInt(value, 10);
-  return Number.isFinite(delay) ? delay : LONG_PRESS_MS;
+  return Number.isFinite(delay) ? Math.max(0, delay) : LONG_PRESS_MS;
 }
 
 function readPanelOptions(menu) {
@@ -138,12 +138,12 @@ function connectContextTarget(target) {
 
   const release = retainSurface(menu);
   const controller = new AbortController();
-  connectMenu(menu, {
+  const releaseMenu = connectMenu(menu, {
     close: (menu) => closeSurface(menu),
-    signal: controller.signal,
   });
   const state = {
     controller,
+    releaseMenu,
     menu,
     release,
     timer: null,
@@ -288,6 +288,7 @@ function disconnectContextTarget(target) {
   if (!state) return;
   clearLongPress(state);
   state.controller.abort();
+  state.releaseMenu?.();
   if (contextFor(state.menu)?.context === target) {
     contextByMenu.delete(state.menu);
     closeSurface(state.menu, { restoreFocus: false });

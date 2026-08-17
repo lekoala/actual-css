@@ -93,6 +93,14 @@ if (typeof document !== "undefined") {
   document.addEventListener("submit", handleSubmit);
 
   window.addEventListener("pagehide", () => {
-    for (const input of revealed) setRevealed(input, false);
+    for (const input of revealed) {
+      // Opportunistic housekeeping: an input removed from the DOM before
+      // navigation no longer needs reverting and can leave the set.
+      if (!input.isConnected) {
+        revealed.delete(input);
+        continue;
+      }
+      setRevealed(input, false);
+    }
   });
 }
