@@ -143,7 +143,7 @@ Components can use local font variables for their own mapping, but should inheri
 
 ### Controls
 
-Controls share sizing so buttons, inputs, selects, and compact app UI always align. `.sm`/`.lg` set shared density tokens for controls, content components, and compact labels.
+Controls share sizing so buttons, inputs, selects, and compact app UI always align. `.sm`/`.lg` set shared density tokens for controls, compact labels, and spacing helpers.
 
 ```css
 :root {
@@ -171,7 +171,6 @@ Density modifiers swap the shared control geometry:
   --gap: var(--space-2);
   --density-space: var(--space-2);
   --control-size: var(--control-size-sm);
-  --density-pad-block: var(--space-3);
   --density-compact-size: 1.25rem;
 }
 
@@ -179,15 +178,15 @@ Density modifiers swap the shared control geometry:
   --gap: var(--space-5);
   --density-space: var(--space-5);
   --control-size: var(--control-size-lg);
-  --density-pad-block: var(--space-5);
   --density-compact-size: 1.875rem;
 }
 ```
 
 Density covers spacing and geometry only — it never touches typography or
-icon size. Content components consume `--density-*` for local rhythm; compact
-labels such as `.badge` consume `--density-compact-size`; display elements
-with special geometry, such as avatar and spinner, keep their own size scales.
+icon size. Compact labels such as `.badge` consume `--density-compact-size`;
+display elements with special geometry, such as avatar and spinner, keep their
+own size scales. Content blocks like alert, card, dialog, table, and accordion
+do not participate.
 
 ### Elevation
 

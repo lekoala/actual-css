@@ -204,7 +204,7 @@
               <span class="badge">Active</span>
             </div>
             <input class="input" value="Compact input">
-            <div class="alert">Compact alert rhythm.</div>
+            <div class="alert">Alert stays fixed.</div>
           </div>
         </div>
 
@@ -216,7 +216,7 @@
               <span class="badge">Active</span>
             </div>
             <input class="input" value="Default input">
-            <div class="alert">Default alert rhythm.</div>
+            <div class="alert">Alert stays fixed.</div>
           </div>
         </div>
 
@@ -228,7 +228,7 @@
               <span class="badge">Active</span>
             </div>
             <input class="input" value="Spacious input">
-            <div class="alert">Spacious alert rhythm.</div>
+            <div class="alert">Alert stays fixed.</div>
           </div>
         </div>
       </div>
@@ -238,7 +238,7 @@
   &lt;button class="btn"&gt;Save&lt;/button&gt;
   &lt;input class="input"&gt;
   &lt;span class="badge"&gt;Active&lt;/span&gt;
-  &lt;div class="alert"&gt;Compact alert.&lt;/div&gt;
+  &lt;div class="alert"&gt;Alert stays fixed.&lt;/div&gt;
 &lt;/div&gt;</code></pre>
       </div>
     </section>
@@ -286,9 +286,9 @@
       <h2>What participates</h2>
       <p class="density-note">
         Density is opt-in, not a global scale multiplier. Components consume
-        the dimensions that make sense for them; page chrome like cards,
-        tables, and accordions stays put. Compare the same set of components
-        at default and inside a `.sm` context.
+        the dimensions that make sense for them; page chrome like alerts,
+        cards, tables, and accordions stays put. Compare the same set of
+        components at default and inside a `.sm` context.
       </p>
 
       <div class="density-cols">
@@ -348,13 +348,13 @@
       </div>
 
       <div class="density-legend">
-        <p><strong>Opt in</strong> — button, badge, alert, input, select, checkbox/radio/switch, pagination, tabs, choice cards, flyout menus, spacing helpers (<code>.py</code> / <code>.px</code> / <code>.mbs</code> / <code>.mbe</code>), and layout primitives via <code>--gap</code>.</p>
+        <p><strong>Opt in</strong> — button, badge, input, select, checkbox/radio/switch, pagination, tabs, choice cards, flyout menus, spacing helpers (<code>.py</code> / <code>.px</code> / <code>.mbs</code> / <code>.mbe</code>), and layout primitives via <code>--gap</code>.</p>
         <ul>
           <li>Controls (<code>.btn</code>, <code>.input</code>, <code>.select</code>, …) consume <code>--control-size</code>.</li>
           <li>Compact labels (<code>.badge</code>) consume <code>--density-compact-size</code>.</li>
-          <li>Content components (<code>.alert</code>) consume <code>--density-*</code> for their rhythm.</li>
+          <li>Spacing helpers and <code>.choice-card</code> consume <code>--density-space</code>; layouts consume <code>--gap</code>.</li>
         </ul>
-        <p><strong>No-op</strong> — card, dialog, table, accordion, navbar, and page sections keep their size. The card above is identical in both columns even though its inner button and badge shrank.</p>
+        <p><strong>No-op</strong> — alert, card, dialog, table, accordion, navbar, and page sections keep their size. The alert and card above are identical in both columns even though their inner button and badge shrank.</p>
       </div>
     </section>
 

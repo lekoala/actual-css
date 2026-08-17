@@ -19,7 +19,7 @@
 }
 
 .badge {
-  --badge-size: var(--density-compact-size, 1.5rem);
+  --badge-size: var(--density-compact-size);
   --badge-pad-x: 0.55em;
   --badge-font-size: 0.8125rem;
   --badge-dot-size: 0.5rem;

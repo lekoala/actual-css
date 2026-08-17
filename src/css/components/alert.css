@@ -22,7 +22,7 @@
 }
 
 .alert {
-  --alert-pad-block: var(--density-pad-block, var(--space-3));
+  --alert-pad-block: var(--space-3);
   --alert-pad-inline: var(--space-4);
   --alert-font-size: var(--font-size-md);
   --alert-icon-size: 1.25rem;
