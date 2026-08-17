@@ -261,6 +261,55 @@ describe("enhancement-loader", () => {
 		});
 	});
 
+	describe("watchEnhancementManifests", () => {
+		test("watches dynamically inserted manifest blocks", async () => {
+			setupTestDOM('<div data-enhance="my-widget"></div>');
+
+			const connectFn = mock(() => () => {});
+			const { watchEnhancementManifests, __setModuleImporter } = await import(
+				"../src/js/enhancement-loader.js"
+			);
+			__setModuleImporter(() => Promise.resolve({ default: connectFn }));
+
+			const watcher = watchEnhancementManifests();
+			document.body.insertAdjacentHTML(
+				"beforeend",
+				'<script type="application/json" data-enhance-modules>{"my-widget": "https://example.test/widget.js"}</script>',
+			);
+			await new Promise((resolve) => setTimeout(resolve, 10));
+
+			expect(connectFn).toHaveBeenCalled();
+			expect(document.querySelector("script[data-enhance-modules]")).toBeNull();
+			watcher.disconnect();
+		});
+
+		test("keeps a failing manifest block for retry", async () => {
+			setupTestDOM("");
+
+			const originalError = console.error;
+			console.error = () => {};
+
+			try {
+				const { watchEnhancementManifests, __setModuleImporter } = await import(
+					"../src/js/enhancement-loader.js"
+				);
+				__setModuleImporter(() => Promise.reject(new Error("404")));
+
+				const watcher = watchEnhancementManifests();
+				document.body.insertAdjacentHTML(
+					"beforeend",
+					'<script type="application/json" data-enhance-modules>{"broken": "https://example.test/broken.js"}</script>',
+				);
+				await new Promise((resolve) => setTimeout(resolve, 10));
+
+				expect(document.querySelector("script[data-enhance-modules]")).not.toBeNull();
+				watcher.disconnect();
+			} finally {
+				console.error = originalError;
+			}
+		});
+	});
+
 	describe("loadResponse (HTTP header)", () => {
 		test("reads Enhance-Modules header", async () => {
 			setupTestDOM("");
