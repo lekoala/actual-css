@@ -21,7 +21,7 @@ Replace `actual.css` with `actual.layer.css`:
 
 Author styles outside any layer will win over layer styles with equal specificity.
 
-## Layer structure (v0.1)
+## Layer structure
 
 A single `actual` layer. The internal import order is a contract: later imports
 can override earlier ones within the layer. Sublayers (`actual.reset`,

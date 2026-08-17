@@ -109,7 +109,7 @@ Browse [`src/css/optional/`](src/css/optional/) for available modules such as cu
 
 Some components can be enhanced with JavaScript: dialog/drawer, flyout, tooltip, tabs, scrollspy, context menu, floating UI, opt-in `data-filter` input filtering, and input masks.
 
-In 0.2, presentation (`class`) and behaviour (`data-enhance`) are separate layers — import any primitive independently to build custom widgets. See [enhancement contract](docs/design-notes/enhancement-contract.md) and [widget primitives](docs/design-notes/widget-primitives.md).
+Presentation (`class`) and behaviour (`data-enhance`) are separate layers — import any primitive independently to build custom widgets. See [enhancement contract](docs/design-notes/enhancement-contract.md) and [widget primitives](docs/design-notes/widget-primitives.md).
 
 Use the full module:
 

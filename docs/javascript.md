@@ -90,8 +90,8 @@ The JS is designed to be usable on its own, without Actual's stylesheet.
   `data-tooltip`, `data-context-menu`) stay framework-neutral by construction.
 - **`selectors.js`** lists state classes the runtime *writes* (`is-open`,
   `was-validated`, `is-sheet`, …). Edit this file (or alias it in a bundler)
-  to match a different CSS framework's state vocabulary. Discovery selectors
-  were removed in 0.2 — the file no longer bridges CSS class names to JS
+  to match a different CSS framework's state vocabulary. It is a
+  read-side-only adapter — it does not bridge CSS class names to JS
   initialization.
 - **One documented exception:** validation reads `.field-error` (or its alias
   `[data-field-error]`) and the optional `.field` ancestor to connect error
