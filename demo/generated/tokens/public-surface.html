@@ -160,7 +160,7 @@
     <div class="component-prose">
       <p>Components can use local font variables for their own mapping, but should inherit by default. <code>--font-size-md</code> is the baseline — going smaller (<code>.sm</code>/<code>--font-size-sm</code>/<code>-xs</code>) is the easy direction; going larger adjusts line-heights and surrounding paddings, so prefer keeping base body text at <code>--font-size-md</code>.</p>
 <h3>Controls</h3>
-<p>Controls share sizing so buttons, inputs, selects, and compact app UI always align. <code>.sm</code>/<code>.lg</code> set shared density tokens for controls, content components, and compact labels.</p>
+<p>Controls share sizing so buttons, inputs, selects, and compact app UI always align. <code>.sm</code>/<code>.lg</code> set shared density tokens for controls, compact labels, and spacing helpers.</p>
     </div>
     <section class="component-section">
       <h2>CSS</h2>
@@ -193,7 +193,6 @@
   <span class="token property">--gap</span><span class="token punctuation">:</span> <span class="token function">var</span><span class="token punctuation">(</span>--space-2<span class="token punctuation">)</span><span class="token punctuation">;</span>
   <span class="token property">--density-space</span><span class="token punctuation">:</span> <span class="token function">var</span><span class="token punctuation">(</span>--space-2<span class="token punctuation">)</span><span class="token punctuation">;</span>
   <span class="token property">--control-size</span><span class="token punctuation">:</span> <span class="token function">var</span><span class="token punctuation">(</span>--control-size-sm<span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token property">--density-pad-block</span><span class="token punctuation">:</span> <span class="token function">var</span><span class="token punctuation">(</span>--space-3<span class="token punctuation">)</span><span class="token punctuation">;</span>
   <span class="token property">--density-compact-size</span><span class="token punctuation">:</span> 1.25rem<span class="token punctuation">;</span>
 <span class="token punctuation">}</span>
 
@@ -201,14 +200,13 @@
   <span class="token property">--gap</span><span class="token punctuation">:</span> <span class="token function">var</span><span class="token punctuation">(</span>--space-5<span class="token punctuation">)</span><span class="token punctuation">;</span>
   <span class="token property">--density-space</span><span class="token punctuation">:</span> <span class="token function">var</span><span class="token punctuation">(</span>--space-5<span class="token punctuation">)</span><span class="token punctuation">;</span>
   <span class="token property">--control-size</span><span class="token punctuation">:</span> <span class="token function">var</span><span class="token punctuation">(</span>--control-size-lg<span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token property">--density-pad-block</span><span class="token punctuation">:</span> <span class="token function">var</span><span class="token punctuation">(</span>--space-5<span class="token punctuation">)</span><span class="token punctuation">;</span>
   <span class="token property">--density-compact-size</span><span class="token punctuation">:</span> 1.875rem<span class="token punctuation">;</span>
 <span class="token punctuation">}</span></code></pre>
         </div>
       </div>
     </section>
     <div class="component-prose">
-      <p>Density covers spacing and geometry only — it never touches typography or icon size. Content components consume <code>--density-*</code> for local rhythm; compact labels such as <code>.badge</code> consume <code>--density-compact-size</code>; display elements with special geometry, such as avatar and spinner, keep their own size scales.</p>
+      <p>Density covers spacing and geometry only — it never touches typography or icon size. Compact labels such as <code>.badge</code> consume <code>--density-compact-size</code>; display elements with special geometry, such as avatar and spinner, keep their own size scales. Content blocks like alert, card, dialog, table, and accordion do not participate.</p>
 <h3>Elevation</h3>
 <p>Use a tiny elevation surface. Components should not invent their own shadow scales.</p>
     </div>

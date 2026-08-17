@@ -72,8 +72,8 @@ The same class on a component is local density, not a second meaning:
 
 This is not "`.sm` sometimes means density and sometimes size": `.sm` always
 establishes the same density tokens — only the scope changes. The density
-tokens are `--gap`, `--density-space`, `--control-size`, `--density-pad-block`,
-and `--density-compact-size`. Components consume the dimensions that make sense
+tokens are `--gap`, `--density-space`, `--control-size`, and
+`--density-compact-size`. Components consume the dimensions that make sense
 for them and opt out of the rest.
 
 Components with bespoke sizing (`.avatar`, `.spinner`) define local `.sm`/`.lg`

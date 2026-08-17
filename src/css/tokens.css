@@ -49,6 +49,7 @@
   /* Spacing */
   --gap: 0.75rem;
   --density-space: var(--space-4);
+  --density-compact-size: 1.5rem;
   --space-1: 0.25rem;
   --space-2: 0.5rem;
   --space-3: 0.75rem;

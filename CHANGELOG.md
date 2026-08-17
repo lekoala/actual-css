@@ -23,11 +23,11 @@ This project follows Keep a Changelog and uses semver, including during 0.x.
 - JS runtime floor is now the **Minimum** tier (Firefox 98+, Safari 15.4+,
   Chromium 99+).
 - Size-related `--variant-*` tokens become the `--density-*` family:
-  `--variant-space` → `--density-space`, `--variant-pad-block` →
-  `--density-pad-block`, `--variant-compact-size` →
-  `--density-compact-size`. Density covers spacing and geometry only:
-  `.sm`/`.lg` no longer change typography or icon size, and
-  `--variant-font-size`, `--variant-icon-size`, and
+  `--variant-space` → `--density-space`, `--variant-compact-size` →
+  `--density-compact-size`. `--variant-pad-block` is removed — the alert no
+  longer participates in density and keeps a fixed padding. Density covers
+  spacing and geometry only: `.sm`/`.lg` no longer change typography or icon
+  size, and `--variant-font-size`, `--variant-icon-size`, and
   `--variant-compact-font-size` are removed (`--control-font-size` stays at
   its baseline) (breaking).
 
