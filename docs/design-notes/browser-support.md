@@ -1,5 +1,74 @@
 # Browser support strategy
 
+## Actual tiers
+
+The compatibility contract is expressed in browser versions, not ECMAScript
+edition labels. Each tier is defined by what it guarantees.
+
+| Actual tier  | Firefox |    Safari | Chromium | Contract                                       |
+| ------------ | ------: | --------: | -------: | ---------------------------------------------- |
+| Degraded     |     78+ |       14+ |      88+ | Semantic HTML + core CSS; JS unsupported       |
+| **Minimal**  | **98+** | **15.4+** |  **99+** | Full supported Actual experience, including JS |
+| Intermediate |    121+ |       16+ |     106+ | More modern platform enhancements              |
+| Recommended  |    129+ |     17.5+ |     123+ | Target experience                              |
+
+- **Degraded** keeps useful HTML and CSS on older browsers. JavaScript is
+  explicitly outside the supported contract there.
+- **Minimal** is the JavaScript baseline: the complete Actual experience,
+  including the runtime, is supported from this tier up. The runtime assumes
+  modern platform primitives available across the whole tier and ships no
+  legacy compatibility layer or polyfill.
+
+Degraded browsers may still run some JavaScript successfully, but that
+behavior is not tested, documented as supported, or preserved when the
+runtime evolves.
+
+## JavaScript philosophy
+
+> The Degraded tier exists primarily to preserve useful HTML and CSS on older
+> browsers. It does not constrain the JavaScript runtime.
+
+> Minimal is the JavaScript baseline.
+
+Modern JavaScript supported by all Minimal browsers may be used directly.
+Actual does not transpile, polyfill, or wrap platform APIs solely to extend
+JavaScript support below Minimal.
+
+### Abortable listeners
+
+Abortable event listeners predate the Minimal floor: Firefox 86, Chrome 88,
+and WebKit (early 2021) all shipped the capability before the Safari 15.4
+threshold. ([Bugzilla][1], [Chrome][2], [WebKit][3])
+
+> `addEventListener({ signal })` is a baseline runtime primitive.
+
+Do not introduce compatibility wrappers (`listen`, `on`,
+`addAbortableListener`, `supportsSignal`) solely to reproduce a capability
+that is already native throughout Minimal.
+
+### Native `<dialog>`
+
+The Minimal floor sits at the point where Safari 15.4 and Firefox 98 ship
+native `<dialog>`, and Chromium already had it. ([WebKit][4])
+
+> Native dialog is assumed by the runtime; no dialog polyfill is shipped.
+
+### Future-direction invariants
+
+1. **Minimal drives JavaScript compatibility; Degraded does not.**
+2. **Prefer native platform APIs over compatibility abstractions when they are
+   available throughout Minimal.**
+3. **Browser versions are the compatibility contract, not ECMAScript edition
+   labels.**
+4. **Raise Minimal only when doing so buys a concrete simplification, removal
+   of a fallback, or materially better implementation.**
+
+> Do not preserve an older JavaScript idiom solely because it happens to run
+> in the Degraded tier. If the clearer native alternative is supported
+> throughout Minimal, prefer it.
+
+---
+
 ## Philosophy
 
 Works everywhere, works best on modern browsers. Wide browser support (even older browsers, not IE 11).
@@ -8,14 +77,18 @@ Works everywhere, works best on modern browsers. Wide browser support (even olde
 - No post-processing — use only necessary browser-specific prefixes and engine hooks.
 - CSS nesting is not used — code must be findable in the inspector. Rules are organized as if nesting were used, grouped together without nesting syntax. Exception: see [CSS nesting inside @supports](#css-nesting-inside-supports).
 
-## Baseline
+## Platform feature baseline
+
+The tiers above are Actual's own contract. The table below tracks the Web
+Platform Baseline of the individual CSS features the framework uses; it is a
+different notion from an Actual tier.
 
 | Feature area     | Baseline    | Progressive enhancement       |
 |------------------|-------------|-------------------------------|
 | Layout (flex, grid, position) | Baseline 2023 | —                  |
 | CSS custom properties         | Baseline 2023 | —                  |
 | `:has()`                      | Baseline 2023 | —                  |
-| `<dialog>` element            | Baseline 2023 | Below that: rudimentary shim (`dialog-fallback.js` + `dialog-fallback.css`, both standalone and omittable in custom builds), no top layer or focus trap |
+| `<dialog>` element            | Baseline 2023 | —                  |
 | `color-mix()`                 | Baseline 2023 | Fallback flat color |
 | `light-dark()`                | 2024+        | Manual theme override |
 | `:user-invalid`               | 2024+        | `[aria-invalid]` attribute |
@@ -103,28 +176,7 @@ only through background color.
 - Grouping works with `role="group"` and `:has()`: it is a progressive enhancement; UI should still be functional without it.
 - Keep `:has()` out of selector lists that also contain legacy-safe selectors. Put the `:has()` branch in `@supports selector(...)` if necessary.
 
-## JavaScript runtime floor
-
-The JavaScript runtime is supported from the **Degraded** browser tier
-(Firefox 78+, Safari 14+, Chromium 88+), matching the core CSS experience.
-Below it, no JavaScript enhancements are provided.
-
-The floor sits below the syntax ceiling the runtime must not cross: no
-logical assignment operators (`??=`, `||=`, `&&=` — Firefox 79+), no
-`Array.prototype.at()` and no `Object.hasOwn()` (both Safari 15.4+).
-Optional chaining, nullish coalescing, and `String.prototype.replaceAll`
-all land at or below the Degraded floor and are allowed. No transpilation,
-polyfills, or legacy bundle is shipped.
-
-The floor is enforced statically by `tests/js-compat.test.js`, which scans
-the runtime modules for the banned token set.
-
-## Native-first audit (0.2)
-
-`dialog.js`, `surface.js`, and the drawer keep the modern path thin
-(`<dialog>` with `showModal` / `close`) and the fallback contained
-(`dialog-fallback.js` shim). The JS runtime's floor is the Minimum tier (see
-JavaScript runtime floor above): no `FocusTrap` or `ScrollBarHelper` shim
-deletion, no `@property { inherits: false }` for utility locals. Every
-native-feature removal must clear a stated floor — not follow a competitor's.
-- Use `:has()` to improve simple structure, but do not turn it into a monolithic selector.
+[1]: https://bugzilla.mozilla.org/show_bug.cgi?id=1679204 "1679204 - Consider to add signal to addEventListener"
+[2]: https://developer.chrome.com/blog/new-in-chrome-88 "New in Chrome 88 | Blog"
+[3]: https://trac.webkit.org/timeline "WebKit timeline, January 2021"
+[4]: https://webkit.org/blog/12209/introducing-the-dialog-element/ "Introducing the Dialog Element"

@@ -249,7 +249,7 @@ export function openSurface(menu, opts = {}) {
   if (!menu.dispatchEvent(beforeOpen)) return false;
 
   for (const other of openSurfaces) {
-    if (other !== menu) closeSurface(other);
+    if (other !== menu && other.ownerDocument === menu.ownerDocument) closeSurface(other);
   }
 
   const anchor = opts.trigger || opts.source || null;
@@ -336,6 +336,7 @@ export function disconnectSurface(menu, { restore = true } = {}) {
 
 function onDocumentClick(e) {
   for (const menu of openSurfaces) {
+    if (menu.ownerDocument !== e.currentTarget) continue;
     const state = surfaceMap.get(menu);
     if (!state || state.autoClose === "inside" || state.autoClose === "false") continue;
     if (menu.contains(e.target) || state?.trigger?.contains(e.target)) continue;
@@ -374,7 +375,7 @@ function onDocumentEscape(event) {
   if (event.key !== "Escape" || event.ctrlKey || event.altKey || event.shiftKey) return;
 
   const stack = dismissableStacks.get(event.currentTarget);
-  const entry = stack[stack.length - 1];
+  const entry = stack.at(-1);
   if (!entry) return;
 
   event.preventDefault();

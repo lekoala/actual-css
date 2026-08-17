@@ -38,7 +38,6 @@
     "./js/command": "./src/js/command.js",
     "./js/context-menu": "./src/js/context-menu.js",
     "./js/dialog": "./src/js/dialog.js",
-    "./js/dialog-fallback": "./src/js/dialog-fallback.js",
     "./js/dismiss": "./src/js/dismiss.js",
     "./js/enhance": "./src/js/enhance.js",
     "./js/enhancement-loader": "./src/js/enhancement-loader.js",

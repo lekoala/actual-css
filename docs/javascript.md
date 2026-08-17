@@ -1,5 +1,19 @@
 # JavaScript
 
+## Runtime support
+
+```text
+Firefox 98+
+Safari 15.4+
+Chromium 99+
+```
+
+The JavaScript runtime targets the **Minimal** tier (see
+[design-notes/browser-support.md](design-notes/browser-support.md)). Browsers
+in the Degraded tier may still run some enhancements, but JavaScript behavior
+below Minimal is unsupported — it is not tested, documented as supported, or
+preserved when the runtime evolves.
+
 ## Overview
 
 > Small progressive enhancers that attach to semantic HTML and clean themselves up when the DOM changes.
@@ -265,7 +279,8 @@ registered again.
 
 - Keep selectors opt-in.
 - Return cleanup for every listener, observer, timer, or pending controller.
-- Use `AbortController` for event listeners whenever possible.
+- Prefer one `AbortController` per owned lifecycle; abortable event listeners
+  are the standard cleanup mechanism for enhancer-owned listeners.
 - Make the unenhanced HTML useful first, then add behavior.
 - Dispatch a custom event when app code may need to react.
 - Keep modules safe to import without a DOM.

@@ -274,8 +274,7 @@ and always paints above the page — they never compete with this scale.
 - `--z-tooltip` — 50, tooltips.
 - `--z-status` — 60, `status-bar` and toasts.
 
-No token is provided for dialog (browser top-layer) or dialog-fallback
-(dead-code z-index 40, between menu and tooltip).
+No token is provided for dialog (browser top-layer).
 
 Stacking-context traps: a flyout or tooltip that is a DOM descendant of a
 dialog, or of a container with `transform`, `filter`, `contain`, `isolation`,

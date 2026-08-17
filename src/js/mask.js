@@ -15,10 +15,7 @@ const TOKEN_TESTS = {
 };
 
 function isToken(char) {
-  // The hasOwn static method is Safari 15.4+; the runtime targets the
-  // Degraded floor (Safari 14+), so use the prototype-call form instead.
-  // biome-ignore lint/suspicious/noPrototypeBuiltins: degraded-floor compatibility.
-  return Object.prototype.hasOwnProperty.call(TOKEN_TESTS, char);
+  return Object.hasOwn(TOKEN_TESTS, char);
 }
 
 function parseMaskValue(value, mask) {
