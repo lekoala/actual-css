@@ -381,3 +381,100 @@ test("does not clean up an element moved within its custom root", async () => {
   expect(cleanupCalls).toHaveLength(0);
   runtime.disconnect();
 });
+
+test("a throwing cleanup does not stop sibling cleanups on the same element", async () => {
+  setupDOM('<div data-test data-other></div>');
+  const cleanupCalls = [];
+  const el = document.querySelector("div");
+  const originalError = console.error;
+  console.error = () => {};
+
+  try {
+    const runtime = enhance({
+      "[data-test]": () => () => {
+        cleanupCalls.push("test");
+        throw new Error("boom");
+      },
+      "[data-other]": () => () => cleanupCalls.push("other"),
+    });
+
+    el.remove();
+    await nextMicrotask();
+
+    expect(cleanupCalls).toEqual(["test", "other"]);
+    runtime.disconnect();
+  } finally {
+    console.error = originalError;
+  }
+});
+
+test("an element is forgotten even when its cleanup throws", async () => {
+  setupDOM("<main></main>");
+  const originalError = console.error;
+  console.error = () => {};
+  let initCalls = 0;
+
+  try {
+    const runtime = enhance({
+      "[data-test]": () => {
+        initCalls++;
+        return () => {
+          throw new Error("boom");
+        };
+      },
+    });
+
+    const el = document.createElement("div");
+    el.setAttribute("data-test", "");
+    document.querySelector("main").append(el);
+    await nextMicrotask();
+    expect(initCalls).toBe(1);
+
+    el.remove();
+    await nextMicrotask();
+
+    document.querySelector("main").append(el);
+    await nextMicrotask();
+    expect(initCalls).toBe(2);
+    runtime.disconnect();
+  } finally {
+    console.error = originalError;
+  }
+});
+
+test("a throwing cleanup does not block disconnect cleanup of sibling elements", () => {
+  setupDOM('<div data-test id="one"></div><div data-test id="two"></div>');
+  const cleanupCalls = [];
+  const originalError = console.error;
+  console.error = () => {};
+
+  try {
+    const runtime = enhance({
+      "[data-test]": (el) => () => {
+        cleanupCalls.push(el.id);
+        if (el.id === "one") throw new Error("boom");
+      },
+    });
+
+    runtime.disconnect();
+
+    expect(cleanupCalls).toEqual(["one", "two"]);
+  } finally {
+    console.error = originalError;
+  }
+});
+
+test("registerEnhancement throws TypeError for a non-function init", () => {
+  setupDOM('<div data-enhance="demo"></div>');
+
+  expect(() => registerEnhancement("demo", null)).toThrow(TypeError);
+  expect(() => registerEnhancement("demo", "not a function")).toThrow(TypeError);
+});
+
+test("a rejected init does not reserve the name", () => {
+  setupDOM('<div data-enhance="demo"></div>');
+
+  expect(() => registerEnhancement("demo", null)).toThrow(TypeError);
+  const runtime = registerEnhancement("demo", () => {});
+  runtime.disconnect();
+});

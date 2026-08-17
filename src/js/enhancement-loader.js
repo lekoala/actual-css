@@ -5,9 +5,16 @@
  * the Enhance-Modules HTTP header, dynamically imports the declared ES
  * module entrypoints, and registers them with the Actual lifecycle engine.
  *
+ * Manifests declare document-wide modules: dynamically loaded enhancements
+ * always register on the default document root. A scope passed to
+ * loadEnhancements() only limits where manifest blocks are looked up.
+ *
  * One map keyed by name reserves the slot immediately, so concurrent calls
  * for the same name share one promise. The browser's native module cache
  * handles URL dedup. Script/style helpers fill the gap for non-ESM assets.
+ *
+ * Exports prefixed with `__` are test hooks and are not part of the
+ * supported public API or SemVer contract.
  */
 
 import enhance, { registerEnhancement } from "./enhance.js";
@@ -190,8 +197,16 @@ function parseManifestEntries(text) {
   return Object.entries(data);
 }
 
-export async function loadEnhancements(root = document) {
-  const blocks = root.querySelectorAll(MANIFEST_SELECTOR);
+/**
+ * Load every enhancement declared in the manifest blocks under `scope`.
+ *
+ * @param {Document | Element | DocumentFragment} [scope] Where to look for
+ * manifest blocks. It only limits discovery; loaded enhancements register on
+ * the default document root.
+ * @returns {Promise<{ names: string[], failed: { name: string, error: Error }[], skipped: string[] }>}
+ */
+export async function loadEnhancements(scope = document) {
+  const blocks = scope.querySelectorAll(MANIFEST_SELECTOR);
 
   const manifest = new Map();
 
@@ -231,17 +246,14 @@ async function loadManifestBlock(block) {
   return result;
 }
 
-export function watchEnhancementManifests(root) {
-  return enhance(
-    {
-      [MANIFEST_SELECTOR]: (block) => {
-        loadManifestBlock(block).catch((error) => {
-          console.error("Failed to parse enhancement manifest:", error);
-        });
-      },
+export function watchEnhancementManifests() {
+  return enhance({
+    [MANIFEST_SELECTOR]: (block) => {
+      loadManifestBlock(block).catch((error) => {
+        console.error("Failed to parse enhancement manifest:", error);
+      });
     },
-    root,
-  );
+  });
 }
 
 export async function loadResponse(response) {

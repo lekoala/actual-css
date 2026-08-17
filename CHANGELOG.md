@@ -7,7 +7,8 @@ This project follows Keep a Changelog and uses semver, including during 0.x.
 ## [0.3.0] - 2026-08-17
 
 ### Added
-- `--grid-columns` hook for asymmetric responsive `.grid` layouts.
+- `--grid-columns` hook to override the generic `.grid` template for
+  custom/asymmetric layouts; the author owns any narrow-container collapse.
 - `.gap-sm` and `.gap-lg` gap-only spacing utilities.
 - `--form-actions-align` and `--form-actions-justify` hooks.
 - `.color` styling for native color inputs, including disabled and forced-colors states.

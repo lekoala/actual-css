@@ -90,7 +90,11 @@ function createRegistry(root) {
     const active = record.instances.get(el);
     if (!active) return;
     for (const cleanup of active.values()) {
-      cleanup?.();
+      try {
+        cleanup?.();
+      } catch (error) {
+        console.error("Enhancer cleanup failed", error);
+      }
     }
     record.instances.delete(el);
   }
@@ -195,6 +199,9 @@ export function registerEnhancement(name, init, root) {
   if (typeof document === "undefined") return noopRuntime();
 
   enhancementSelector(name);
+  if (typeof init !== "function") {
+    throw new TypeError("registerEnhancement() requires a function init.");
+  }
 
   root ??= document.documentElement;
   let names = ownedNames.get(root);
