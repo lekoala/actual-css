@@ -52,6 +52,9 @@ No need to mention that you didn't do anything
   duplicate current defaults into docs merely to restate them; explain which
   hook to use, non-obvious relationships, and what is derived, state-owned, or
   runtime-written.
+- Docs and comments always describe the current state, not history. Version
+  references ("in 0.2", "introduced in", "removed in", "previously") belong in
+  the changelog or a migration guide, never in user documentation.
 - A component-prefixed custom property owned by the component's base rule is
   generally an author hook. Properties owned by state/variant rules, derived
   from other properties, or written by JavaScript are internal unless documented
