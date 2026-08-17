@@ -62,9 +62,15 @@ and must match `[a-z][a-z0-9-]*`. Order is irrelevant; duplicates are harmless.
 
 ## One registration per enhancement per root
 
-No core mechanism prevents registering the same token twice on the same root; doing so
-creates two independent records that both run. This is documented behaviour, not guarded
-at runtime.
+`registerEnhancement()` owns a name per root. Registering the same token twice
+on the same root throws; `disconnect()` releases the name; re-registration
+after disconnect is allowed; the same token on a different root is independent.
+
+`enhance()` stays generic and unguarded — registering the same selector twice
+creates two independent records that both run.
+
+The owner of a custom enhancement root must call `disconnect()` when disposing
+that root; the default `document.documentElement` root is not affected.
 
 ## CSS must never select on `data-enhance`
 

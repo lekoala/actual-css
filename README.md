@@ -151,6 +151,8 @@ Actual CSS is built around progressive enhancement.
 * **Intermediate** — Firefox 121+, Safari 16+, Chromium 106+. `:has()`, container queries, alert icon layout, and intent tints.
 * **Recommended** — Firefox 129+, Safari 17.5+, Chromium 123+. `light-dark()`, `color-mix()`, and full theming.
 
+The JavaScript runtime requires the **Minimum** tier; below it the degraded CSS experience still applies while the JS enhancements do not run.
+
 ## Cascade layers
 
 Actual CSS is layer-compatible, not layer-dependent. The default `actual.css` file is unlayered. See [`docs/design-notes/cascade-layer.md`](docs/design-notes/cascade-layer.md) for details.

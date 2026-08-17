@@ -257,6 +257,10 @@ registerEnhancement("autosubmit", (form) => {
 No core module list is modified. The test case in `tests/enhance.test.js`
 (*registers a third-party behavior without touching core*) proves the shape.
 
+A name is owned once per root: a second `registerEnhancement("autosubmit", …)`
+on the same root throws, and `disconnect()` releases the name so it can be
+registered again.
+
 ## Lifecycle Rules
 
 - Keep selectors opt-in.

@@ -103,12 +103,22 @@ only through background color.
 - Grouping works with `role="group"` and `:has()`: it is a progressive enhancement; UI should still be functional without it.
 - Keep `:has()` out of selector lists that also contain legacy-safe selectors. Put the `:has()` branch in `@supports selector(...)` if necessary.
 
+## JavaScript runtime floor
+
+The JS runtime requires the **Minimum** browser tier (Firefox 98+, Safari 15.4+,
+Chromium 99+). Below that floor the degraded CSS experience still applies; the
+progressive JavaScript enhancements simply do not run.
+
+The floor matches the runtime's actual syntax: `Array.prototype.at()`,
+`Object.hasOwn()`, optional chaining, and nullish coalescing all land at or
+below Safari 15.4. No transpilation, polyfills, or legacy bundle is shipped.
+
 ## Native-first audit (0.2)
 
 `dialog.js`, `surface.js`, and the drawer keep the modern path thin
 (`<dialog>` with `showModal` / `close`) and the fallback contained
-(`dialog-fallback.js` shim). The JS runtime's baseline is far below
-Chrome 130 / Safari 18: no `FocusTrap` or `ScrollBarHelper` shim deletion,
-no `@property { inherits: false }` for utility locals. Every native-feature
-removal must clear a stated floor — not follow a competitor's.
+(`dialog-fallback.js` shim). The JS runtime's floor is the Minimum tier (see
+JavaScript runtime floor above): no `FocusTrap` or `ScrollBarHelper` shim
+deletion, no `@property { inherits: false }` for utility locals. Every
+native-feature removal must clear a stated floor — not follow a competitor's.
 - Use `:has()` to improve simple structure, but do not turn it into a monolithic selector.
