@@ -1481,13 +1481,13 @@ a.badge[aria-disabled="true"] {
    Standard alerts place it as a direct trailing child; admonitions place it
    inside .alert-title (see below). */
 .alert-dismiss {
-  --dismiss-size: 1.75rem;
-  --dismiss-icon-size: 0.875rem;
+  --alert-dismiss-size: 1.75rem;
+  --alert-dismiss-icon-size: 0.875rem;
 
   display: inline-grid;
   place-items: center;
-  inline-size: var(--dismiss-size);
-  block-size: var(--dismiss-size);
+  inline-size: var(--alert-dismiss-size);
+  block-size: var(--alert-dismiss-size);
   flex: none;
   padding: 0;
   border: 0;
@@ -1500,8 +1500,8 @@ a.badge[aria-disabled="true"] {
 
 .alert-dismiss::before {
   content: "";
-  inline-size: var(--dismiss-icon-size);
-  block-size: var(--dismiss-icon-size);
+  inline-size: var(--alert-dismiss-icon-size);
+  block-size: var(--alert-dismiss-icon-size);
   background: currentColor;
   -webkit-mask: var(--icon-close) center / contain no-repeat;
   mask: var(--icon-close) center / contain no-repeat;
@@ -1937,13 +1937,13 @@ html.has-modal-open.had-scrollbar {
    shared hover overlay. The glyph comes from --icon-close, masked to
    currentColor, so no icon font or text glyph is required in the markup. */
 .dialog-close {
-  --close-size: 2.25rem;
-  --close-icon-size: 1rem;
+  --dialog-close-size: 2.25rem;
+  --dialog-close-icon-size: 1rem;
 
   display: inline-grid;
   place-items: center;
-  inline-size: var(--close-size);
-  block-size: var(--close-size);
+  inline-size: var(--dialog-close-size);
+  block-size: var(--dialog-close-size);
   flex: none;
   padding: 0;
   border: 0;
@@ -1955,8 +1955,8 @@ html.has-modal-open.had-scrollbar {
 
 .dialog-close::before {
   content: "";
-  inline-size: var(--close-icon-size);
-  block-size: var(--close-icon-size);
+  inline-size: var(--dialog-close-icon-size);
+  block-size: var(--dialog-close-icon-size);
   background: currentColor;
   -webkit-mask: var(--icon-close) center / contain no-repeat;
   mask: var(--icon-close) center / contain no-repeat;

@@ -25,7 +25,8 @@
       <p>Tokens exposed as the public theming API, kept small and semantic.</p>
     </header>
         <div class="component-prose">
-      <h3>Color</h3>
+      <p>Component custom properties intended for author customization are public hooks. State, variant, derived, and runtime-written properties are internal implementation details. Documentation focuses on discovering the right hook and on non-obvious usage; the CSS source remains canonical for exact defaults and fallback chains. As a convention, component-prefixed properties owned by the component's base rule are <em>usually</em> author hooks. Properties owned by states/variants, derived from other hooks, or written by JavaScript are not. This convention is indicative, not algorithmic: runtime-written, derived, and state-relay properties stay internal even when their form resembles a hook.</p>
+<h3>Color</h3>
 <p>Intent tokens are used by <code>.primary</code>, <code>.secondary</code>, <code>.success</code>, <code>.warning</code>, <code>.danger</code>, and <code>.neutral</code>. They are curated color/foreground pairs. Actual CSS does not compute foregrounds automatically in the core theme contract.</p>
     </div>
     <section class="component-section">

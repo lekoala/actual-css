@@ -47,6 +47,46 @@
     </section>
     <div class="component-prose">
       <p>Use cluster for action rows, tags, toolbar sections, metadata, and compact navigation.</p>
+<h3>Hooks</h3>
+<ul>
+  <li><code>--cluster-justify</code> — main-axis distribution (<code>justify-content</code>).</li>
+  <li><code>--cluster-align</code> — cross-axis alignment (<code>align-items</code>).</li>
+  <li><code>--gap</code> — space between items.</li>
+</ul>
+<p>For split/spread layouts — two items apart, at opposite ends, or “one left / one right” — use <code>.cluster</code> with <code>--cluster-justify: space-between</code>. There is no separate <code>.split</code> or <code>.spread</code> primitive; this is the same relationship.</p>
+    </div>
+    <section class="component-section">
+      <div class="example-group">
+        <div class="example-render">
+          <div class="cluster" style="--cluster-justify: space-between">
+  <h2>Results</h2>
+  <button class="btn primary" type="button">New search</button>
+</div>
+        </div>
+        <div class="example-code">
+          <pre><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>cluster<span class="token punctuation">"</span></span> <span class="token special-attr"><span class="token attr-name">style</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span><span class="token value css language-css"><span class="token property">--cluster-justify</span><span class="token punctuation">:</span> space-between</span><span class="token punctuation">"</span></span></span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>h2</span><span class="token punctuation">></span></span>Results<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>h2</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>button</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>btn primary<span class="token punctuation">"</span></span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>button<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>New search<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span></code></pre>
+        </div>
+      </div>
+    </section>
+    <div class="component-prose">
+      <p>To align a row to its top edge instead of centering it — useful when one item wraps to several lines — set <code>--cluster-align</code>.</p>
+    </div>
+    <section class="component-section">
+      <h2>CSS</h2>
+      <div class="example-group">
+        <div class="example-code">
+          <pre><code class="language-css"><span class="token selector">.filters</span> <span class="token punctuation">{</span>
+  <span class="token property">--cluster-align</span><span class="token punctuation">:</span> start<span class="token punctuation">;</span>
+  <span class="token property">--cluster-justify</span><span class="token punctuation">:</span> space-between<span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+        </div>
+      </div>
+    </section>
+    <div class="component-prose">
+      <p>The optional utility layer ships <code>.justify-content-start</code>, <code>.justify-content-center</code>, <code>.justify-content-end</code> and <code>.justify-content-space-between</code>, which set <code>--cluster-justify</code> for you. See <a href="utilities.md">Utilities</a>.</p>
     </div>
     
   </section>

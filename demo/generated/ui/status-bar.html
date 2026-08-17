@@ -118,6 +118,12 @@
 }));}catch(e){console.error(e)}</script>
     <div class="component-prose">
       <p>The runtime auto-wires the status bar to Actual's form validation: a form that fails to submit shows its <code>data-validation-message</code> in the status bar with the <code>danger</code> intent. No target in the DOM means the call is a no-op, so the markup stays optional.</p>
+<h3>Hooks</h3>
+<ul>
+  <li><code>--status-bg</code> — bar background.</li>
+  <li><code>--status-fg</code> — bar text color.</li>
+</ul>
+<p>Prefer an intent class over setting these directly.</p>
     </div>
     
   </section>

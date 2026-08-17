@@ -96,7 +96,13 @@
       </div>
     </section>
     <div class="component-prose">
-      <p>Use <code>.items-center</code> when a flex or grid layout should center its children on the cross axis. Use <code>.items-end</code> when children should align to the block-end edge.</p>
+      <p>Use <code>.items-center</code> when a flex or grid layout should center its children on the cross axis. Use <code>.items-end</code> when children should align to the block-end edge. These helpers work by setting a custom property that participating components read, so they also apply inside a component's own grid anatomy rather than only on plain flex containers:</p>
+<ul>
+  <li><code>.items-start</code> / <code>.items-center</code> / <code>.items-end</code> set <code>--items-align</code>, read by <code>.alert</code> and <code>.card</code>.</li>
+  <li><code>.text-start</code> / <code>.text-center</code> / <code>.text-end</code> set <code>--text-align</code>, read by <code>.table</code> cells.</li>
+  <li><code>.justify-content-*</code> (optional layer) set <code>--cluster-justify</code>, read by <code>.cluster</code>.</li>
+</ul>
+<p>Set the property directly when you need a value the helpers do not ship.</p>
     </div>
     
   </section>

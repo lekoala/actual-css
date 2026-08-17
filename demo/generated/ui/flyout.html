@@ -52,6 +52,7 @@
   <li>Flyout triggers are opt-in: add <code>data-enhance=&quot;flyout&quot;</code> to the trigger.</li>
   <li>Wrap the trigger and flyout in <code>.flyout-trigger</code> when the flyout should have a local absolute-position fallback before JavaScript positions it. Add <code>.stretch</code> when the trigger must span its container, such as the last row of a full-width sidebar nav list.</li>
   <li>Use <code>&lt;menu class=&quot;flyout menu&quot;&gt;</code> with strict anatomy: <code>.menu &gt; li &gt; .menu-item</code>. Items must carry the <code>.menu-item</code> class to participate in roving focus — keyboard navigation (ArrowUp/Down, Home, End) cycles through them, and Enter/Space activates and closes the menu.</li>
+  <li>Use <code>.menu-label</code> on a <code>li</code> for a muted section heading inside a menu (e.g. a group title before its items). It is non-interactive and does not participate in roving focus. Use <code>.menu-separator</code> (<code>&lt;hr role=&quot;separator&quot;&gt;</code>) between groups.</li>
   <li>Items are regular <code>&lt;button&gt;</code> or <code>&lt;a&gt;</code> elements.</li>
   <li>Use <code>.sm</code> or <code>.lg</code> for density changes.</li>
   <li>Add <code>role=&quot;menu&quot;</code> / <code>role=&quot;menuitem&quot;</code> only when you intentionally need the ARIA menu pattern.</li>
@@ -427,6 +428,15 @@
         </div>
       </div>
     </section>
+    <div class="component-prose">
+      <h3>Hooks</h3>
+<ul>
+  <li><code>--flyout-inline-size</code> — panel width.</li>
+  <li><code>--flyout-max-inline-size</code> — panel width cap.</li>
+  <li><code>--menu-item-size</code> — minimum row height of <code>.menu-item</code>.</li>
+</ul>
+<p><code>--available-height</code> and <code>--surface-anchor-width</code> are written by the positioner at runtime, not set by the author. See <a href="javascript.md">JavaScript</a>.</p>
+    </div>
     
   </section>
   </main>

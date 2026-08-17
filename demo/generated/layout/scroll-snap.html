@@ -83,7 +83,17 @@
       </div>
     </section>
     <div class="component-prose">
-      <p>Keep scrollbars visible by default. If a product deliberately hides them, make that choice explicit with <code>data-scrollbar=&quot;hidden&quot;</code>.</p>
+      <h3>Hooks</h3>
+<ul>
+  <li><code>--scroll-snap-item-size</code> — item <code>flex</code> basis; set it for card rails.</li>
+  <li><code>--scroll-snap-gap</code> — space between items.</li>
+  <li><code>--scroll-snap-padding</code> — inline scroll padding, so a snapped item does not sit</li>
+</ul>
+<p>flush against the container edge. Not declared; falls back to <code>--scroll-snap-gap</code>.</p>
+<ul>
+  <li><code>--scroll-snap-align</code> — item snap alignment. Prefer <code>data-snap=&quot;center&quot;</code></li>
+</ul>
+<p>over setting this directly. Keep scrollbars visible by default. If a product deliberately hides them, make that choice explicit with <code>data-scrollbar=&quot;hidden&quot;</code>.</p>
     </div>
     <section class="component-section">
       <div class="example-group">

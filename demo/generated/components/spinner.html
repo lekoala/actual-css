@@ -119,6 +119,46 @@
         </div>
       </div>
     </section>
+    <div class="component-prose">
+      <h3>Hooks</h3>
+<ul>
+  <li><code>--spinner-track</code> — the ring color.</li>
+  <li><code>--spinner-value</code> — the moving gap; swap the two for an inverted spinner.</li>
+</ul>
+<p>Size follows the font (<code>1em</code>); use <code>.sm</code> / <code>.lg</code> rather than sizing it directly.</p>
+<h3>Busy state</h3>
+<p>A container-wide loading state that keeps the underlying content in place. It is driven by <code>aria-busy=&quot;true&quot;</code> plus a direct last-child <code>.spinner</code> — there is no separate <code>.busy</code> class. The spinner is shown as a centered overlay over a faded surface; buttons keep their spinners inline instead (see <a href="#button">Button</a>).</p>
+<ul>
+  <li>Set <code>aria-busy=&quot;true&quot;</code> on the container and add <code>&lt;span class=&quot;spinner&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;</code> as its last direct child.</li>
+  <li>The overlay uses <code>--busy-overlay-bg</code>; components like <code>.card.inverted</code> already compose with it.</li>
+  <li>Decorative spinners stay <code>aria-hidden=&quot;true&quot;</code>; announce progress on the region with <code>role=&quot;status&quot;</code> and a label when needed.</li>
+</ul>
+    </div>
+    <section class="component-section">
+      <div class="example-group">
+        <div class="example-render">
+          <article class="card" aria-busy="true" aria-label="Loading card content">
+  <h3>Card Title</h3>
+  <p>This is the card content.</p>
+  <span class="spinner" aria-hidden="true"></span>
+</article>
+        </div>
+        <div class="example-code">
+          <pre><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>article</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>card<span class="token punctuation">"</span></span> <span class="token attr-name">aria-busy</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>true<span class="token punctuation">"</span></span> <span class="token attr-name">aria-label</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>Loading card content<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>h3</span><span class="token punctuation">></span></span>Card Title<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>h3</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">></span></span>This is the card content.<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>p</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>spinner<span class="token punctuation">"</span></span> <span class="token attr-name">aria-hidden</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>true<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>article</span><span class="token punctuation">></span></span></code></pre>
+        </div>
+      </div>
+    </section>
+    <div class="component-prose">
+      <h3>Hooks</h3>
+<ul>
+  <li><code>--busy-overlay-bg</code> — background of the busy overlay. Components such as</li>
+</ul>
+<p><code>.card.inverted</code> override it to blend with their surface. See also: <a href="#spinner">Spinner</a>.</p>
+    </div>
     
   </section>
   </main>

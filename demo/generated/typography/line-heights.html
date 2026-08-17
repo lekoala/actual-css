@@ -32,6 +32,13 @@
   <li><code>--line-height-relaxed</code> (1.75) — used by <code>.lead</code> and <code>.text-lead</code> for intro text</li>
 </ul>
 <p>There is no <code>--line-height-normal</code>. It would be redundant with <code>--line-height</code>. Prose overrides line-height through <code>--prose-line-height</code> and <code>--prose-heading-line-height</code> because the readable values for long-form text are different from app UI.</p>
+<h3>Prose hooks</h3>
+<ul>
+  <li><code>--prose-measure</code> — readable line length cap, shared with <code>.measure</code>.</li>
+  <li><code>--prose-line-height</code> — body line height inside <code>.prose</code>.</li>
+  <li><code>--prose-heading-line-height</code> — heading line height inside <code>.prose</code>.</li>
+  <li><code>--prose-flow</code> — vertical rhythm between sibling blocks inside <code>.prose</code>.</li>
+</ul>
     </div>
     
   </section>

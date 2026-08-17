@@ -149,6 +149,16 @@
         </div>
       </div>
     </section>
+    <div class="component-prose">
+      <h3>Hooks</h3>
+<ul>
+  <li><code>--avatar-size</code> — inline and block size.</li>
+  <li><code>--avatar-radius</code> — corner radius; set a smaller value for squared avatars.</li>
+  <li><code>--avatar-stack-overlap</code> — how far stacked avatars overlap.</li>
+  <li><code>--avatar-stack-ring</code> — separating ring width inside <code>.avatar-stack</code>.</li>
+</ul>
+<p>Prefer intents for avatar colors. Inside <code>.avatar-stack</code>, <code>--avatar-size</code> falls back to a stack-scoped value so the whole group resizes together with <code>.sm</code>/<code>.lg</code>; set <code>--avatar-size</code> on an individual avatar to opt one out. <code>--avatar-stack-overlap</code> is derived from <code>--avatar-stack-size</code>, not <code>--avatar-size</code>.</p>
+    </div>
     
   </section>
   </main>
