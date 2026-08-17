@@ -12,6 +12,19 @@ This project follows Keep a Changelog and uses semver, including during 0.x.
 - `--form-actions-align` and `--form-actions-justify` hooks.
 - `.color` styling for native color inputs, including disabled and forced-colors states.
 - Generic `command="--dismiss"` routing with the `actual:dismiss` event.
+- Manifest blocks (`script[data-enhance-modules]`) auto-wire through the
+  `enhance()` observer; the `DOMContentLoaded` bootstrap is gone.
+
+### Changed
+- `registerEnhancement()` owns a name per root — a duplicate name on the same
+  root throws, and `disconnect()` releases it (breaking).
+- `enhance()` cleans up elements moved out of their custom root while still
+  connected.
+- JS runtime floor is now the **Minimum** tier (Firefox 98+, Safari 15.4+,
+  Chromium 99+).
+
+### Removed
+- `forget()` from the `enhance()` return value.
 
 ## [0.2.0] - 2026-07-28
 
