@@ -1,32 +1,8 @@
 :root {
   /*
-   * Variable classification — not enforced at the parser level, but every
-   * token in this file falls into one of three categories:
-   *
-   * Public global
-   *   Set once (in a theme or user root) and consumed across the framework.
-   *   Stable API. Examples:
-   *     --primary, --radius, --space-4, --control-size, --duration
-   *
-   * Public component hook
-   *   Declared on a component class, tunable per instance or globally.
-   *   Stable API. Examples:
-   *     --accordion-marker-color, --modal-size, --btn-bg, --card-pad
-   *
-   * Internal state relay
-   *   Declared on a component class and flipped by state selectors
-   *   (:hover, :checked, :disabled, :invalid, etc.). These are NOT an
-   *   API — overriding them globally breaks the state machine.
-   *   Examples:
-   *     --control-border, --control-bg, --choice-bg, --switch-knob
-   *
-   * Internal-only tokens are named the same way as public hooks because
-   * they share the component prefix (--control-*, --choice-*, --switch-*,
-   * --btn-*). The distinction is documented here, not enforced by a name
-   * prefix (e.g. --_), to keep custom properties short and grep-friendly.
-   *
-   * When introducing a new variable, ask: "is this a customisation point
-   * or just a convenience to avoid repeating a value internally?"
+   * Global framework tokens.
+   * Component-local hooks and internal state relays live with their
+   * components. See docs/tokens.md for the public/internal token contract.
    */
 
   /* Typography */
@@ -83,7 +59,6 @@
      the circle-aware inset (1 - 1/√2) / 2 ≈ 14.65%; the ring surrounds the
      dot with the parent surface color. */
   --indicator-offset: 14.65%;
-  --indicator-ring: var(--surface);
 
   /* Shared backdrop — consumed by modal, drawer, and mobile flyout sheets. */
   --backdrop-color: rgb(0 0 0);
@@ -103,7 +78,16 @@
   --control-pad-x: 1em;
   --control-font-size: var(--font-size-md);
   --disabled-opacity: 0.65;
+}
 
+/* Theme-derived aliases. These reference intent/surface tokens, so they must
+   be re-declared on every theme boundary: a custom property resolves its
+   var() references at computed-value time on the element that declares it,
+   so an alias declared only on :root is inherited as an already-resolved
+   value and would not follow a [data-theme] island's overridden tokens.
+   Themes that want a distinct alias override it explicitly afterwards. */
+:root,
+[data-theme] {
   /* State tokens — semantic colors for selected/pressed/current and disabled.
      Components consume these instead of hard-wiring --primary/--text-subtle
      so forced-colors can override them in one place. */
@@ -111,24 +95,18 @@
   --state-selected-fg: var(--primary-fg);
   --state-disabled: var(--text-subtle);
 
+  /* Status dot ring — follows the island's surface. */
+  --indicator-ring: var(--surface);
+}
+
+:root {
   /* Variant tuning — themes may adjust generated soft surfaces without
      replacing the component rules. */
   --soft-bg-mix: 88%;
   --soft-border-mix: 65%;
   --soft-hover-alpha: 12%;
 
-  /* Shared icons — two data URIs used as background-image (native select)
-     and mask-image (accordion marker, choice-card badge, base-select
-     checkmark). For environments with a strict Content-Security-Policy that
-     blocks `data:`, redefine these tokens with local URLs:
-       --icon-chevron: url("/assets/chevron-down.svg");
-       --icon-check: url("/assets/check.svg");
-     The required CSP directive is `img-src data:` (for background-image) or
-     `mask-src data:` (for mask backgrounds). In practice `default-src data:`
-     or `img-src data:` is sufficient because mask-image inherits from
-     default-src when mask-src is absent.
-     The embedded stroke is the fallback color when used as a background-image
-     (native select). Components using it as a mask provide their own color. */
+  /* Shared icon assets. Override these URLs when a strict CSP disallows data:. */
   --icon-chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%238a8594' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
   --icon-check: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E");
 
@@ -168,11 +146,17 @@
 }
 
 @supports (color: color-mix(in oklch, red, white)) {
-  :root {
+  :root,
+  [data-theme] {
+    /* Shadows derive from --shadow-color (theme.css) — re-declared on every
+       theme boundary so islands follow their own shadow-color. */
     --shadow:
       0 1px 3px color-mix(in oklch, var(--shadow-color) 5%, transparent),
       0 4px 12px color-mix(in oklch, var(--shadow-color) 4%, transparent);
     --shadow-popout: 0 0.25rem 0.75rem color-mix(in oklch, var(--shadow-color) 15%, transparent);
+  }
+
+  :root {
     --backdrop-fill: color-mix(
       in oklch,
       var(--backdrop-color) calc(var(--backdrop-opacity) * 100%),

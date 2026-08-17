@@ -16,9 +16,9 @@
   --intent-fg: initial;
 }
 
-/* A classed .choice is the component surface. Let its nested input consume a
+/* A classed .choice is the component surface. Let its direct input consume a
    local intent without reopening inherited page-level intents. */
-:where(.choice) :where(input[type="checkbox"]:not([role="switch"]), input[type="radio"]) {
+:where(.choice) > :where(input[type="checkbox"]:not([role="switch"]), input[type="radio"]) {
   --intent: inherit;
   --intent-fg: inherit;
 }
@@ -51,7 +51,7 @@
   display: block;
 }
 
-.choice:has(:disabled) {
+.choice:has(> :disabled) {
   color: var(--state-disabled);
   cursor: not-allowed;
 }
@@ -69,8 +69,7 @@
   place-content: center;
   inline-size: 1.125em;
   block-size: 1.125em;
-  margin-inline: 0;
-  margin-block-end: 0;
+  margin: 0;
   border: var(--border-width) solid var(--form-invalid-border, var(--choice-border));
   background: var(--choice-bg);
   color: var(--choice-mark);
@@ -111,7 +110,7 @@
   background: currentColor;
 }
 
-.check:checked,
+.check:is(:checked, :indeterminate),
 .radio:checked {
   --choice-border: var(--intent, var(--primary));
   --choice-bg: var(--intent, var(--primary));
@@ -120,12 +119,6 @@
 
 .check:checked::before {
   transform: translateY(-0.06em) rotate(-45deg) scale(1);
-}
-
-.check:indeterminate {
-  --choice-border: var(--intent, var(--primary));
-  --choice-bg: var(--intent, var(--primary));
-  --choice-mark: var(--intent-fg, var(--primary-fg));
 }
 
 .check:indeterminate::before {

@@ -37,7 +37,7 @@ The command runtime is stateless and does not pre-scan triggers.
 
 Use `command="request-close"` for cancel-style buttons so close requests go through the dialog’s cancel lifecycle.
 
-Use `closedby="any"` as the no-JavaScript light-dismiss path. Add `data-dialog-dismissible` so the optional runtime can provide the same behavior in browsers that need a small fallback.
+Use `closedby="any"` as the no-JavaScript light-dismiss path. Add `data-dialog-dismissible` so the optional runtime provides Actual's controlled backdrop-dismiss behavior.
 
 ### Alert dialog
 
@@ -121,7 +121,7 @@ Use this shape for contextual information or lightweight secondary content. It h
 
 ### Scrollable modal
 
-Use `modal scrollable` when the header and footer should stay visible while the dialog body scrolls. Modal dialogs lock page scroll through `:has()` and `:modal` in modern CSS, and through the runtime-managed `html.has-modal-open` hook when the optional dialog helper opens the modal.
+Use `modal scrollable` when the header and footer should stay visible while the dialog body scrolls. Modal dialogs lock page scroll while a modal is open: the runtime writes `html.has-modal-open`, and the stylesheet applies `overflow: hidden` (and reserves the scrollbar gutter with `scrollbar-gutter: stable` when one was present).
 
 ```html
 <button class="btn"
@@ -227,7 +227,7 @@ Flyouts and tooltips opened from inside a modal dialog are mounted inside the di
 
 ### JavaScript options
 
-Add options directly on the dialog element. Without JavaScript, modern browsers still use the native dialog behavior; the runtime only adds fallback opening, focus restoration, light dismiss, and optional view transitions.
+Add options directly on the dialog element. Without JavaScript, modern browsers still use the native dialog behavior; the runtime adds declarative command handling, focus restoration, controlled light dismiss, and optional view transitions.
 
 Available options:
 
@@ -374,7 +374,7 @@ For drawers with unsaved settings or critical actions, omit the dismiss attribut
 </dialog>
 ```
 
-Backdrop click dismissal and Escape are provided by the native dialog element when `closedby="any"` is set. Add `data-dialog-dismissible` when you want the optional runtime to wire the same behavior in browsers that need a small fallback. When both are omitted, clicking the backdrop briefly flashes the drawer instead of closing it — useful for drawers that should not be dismissed accidentally.
+Backdrop click dismissal and Escape are provided by the native dialog element when `closedby="any"` is set. Add `data-dialog-dismissible` when you want the optional runtime to wire the same behavior. When both are omitted, clicking the backdrop briefly flashes the drawer instead of closing it — useful for drawers that should not be dismissed accidentally.
 
 ## Flyout
 

@@ -1,42 +1,42 @@
 {
-  "timestamp": "2026-08-17T15:13:07.109Z",
-  "totalRaw": 168691,
-  "totalMinified": 82489,
-  "totalBrotli": 12295,
+  "timestamp": "2026-08-17T16:20:49.963Z",
+  "totalRaw": 167551,
+  "totalMinified": 82461,
+  "totalBrotli": 12330,
   "themesMinified": 29127,
   "themesBrotli": 3404,
-  "shippedMinified": 82489,
-  "shippedBrotli": 12295,
+  "shippedMinified": 82461,
+  "shippedBrotli": 12330,
   "maxShippedBrotli": 13312,
   "fileCount": 73,
   "files": [
     {
       "file": "components/button.css",
-      "raw": 7156
-    },
-    {
-      "file": "tokens.css",
-      "raw": 7043
+      "raw": 7170
     },
     {
       "file": "theme.css",
-      "raw": 6009
+      "raw": 6197
+    },
+    {
+      "file": "tokens.css",
+      "raw": 5900
     },
     {
       "file": "components/alert.css",
-      "raw": 4960
-    },
-    {
-      "file": "forms/choice.css",
-      "raw": 4769
+      "raw": 5054
     },
     {
       "file": "components/badge.css",
-      "raw": 4620
+      "raw": 4661
     },
     {
       "file": "themes/edge.css",
       "raw": 4618
+    },
+    {
+      "file": "forms/choice.css",
+      "raw": 4588
     },
     {
       "file": "components/avatar.css",
@@ -127,12 +127,12 @@
       "raw": 2442
     },
     {
-      "file": "components/progress.css",
-      "raw": 2422
-    },
-    {
       "file": "components/tab.css",
       "raw": 2418
+    },
+    {
+      "file": "components/progress.css",
+      "raw": 2408
     },
     {
       "file": "themes/forest.css",
@@ -195,10 +195,6 @@
       "raw": 1633
     },
     {
-      "file": "components/meter.css",
-      "raw": 1506
-    },
-    {
       "file": "components/skeleton.css",
       "raw": 1495
     },
@@ -209,6 +205,10 @@
     {
       "file": "components/menu.css",
       "raw": 1432
+    },
+    {
+      "file": "components/meter.css",
+      "raw": 1367
     },
     {
       "file": "components/overline.css",

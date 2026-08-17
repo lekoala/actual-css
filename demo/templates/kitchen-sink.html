@@ -628,6 +628,36 @@
     <p>Use the theme selector at the top to switch <code>data-theme</code>.</p>
   </section>
 
+  <!-- 22. Theme island -->
+  <section>
+    <h2>Theme island</h2>
+    <p>A nested <code>[data-theme="forest"]</code> island must recompute the
+      theme-derived aliases from its own tokens, not inherit the parent's
+      resolved values: pressed button, selected/disabled choices, card shadow,
+      focus ring, and text selection should all follow the island's green
+      palette.</p>
+    <div class="sink-grid" data-theme="forest">
+      <button class="btn" type="button" aria-pressed="true">Pressed</button>
+      <label class="choice">
+        <input class="check" type="checkbox" checked />
+        <span>Selected choice</span>
+      </label>
+      <label class="choice">
+        <input class="check" type="checkbox" disabled />
+        <span>Disabled choice</span>
+      </label>
+      <input class="input" type="text" value="Select this text to check the island selection color" />
+      <article class="card raised">
+        <header>
+          <hgroup>
+            <h3>Forest card</h3>
+          </hgroup>
+        </header>
+        <p>Its shadow follows the island's <code>--shadow-color</code>.</p>
+      </article>
+    </div>
+  </section>
+
   <div class="status-bar" data-status role="status" aria-live="polite" aria-atomic="true"></div>
   <script src="../../dist/actual.js"></script>
   <script>

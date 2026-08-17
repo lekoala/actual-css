@@ -404,3 +404,30 @@ test("remove/reinsert keeps the dialog wiring working", async () => {
   expect(dialog.returnValue).toBe("done");
   expect(document.activeElement).toBe(open);
 });
+
+test("removing a dialog while open and reinserting leaves it controllable", async () => {
+  await loadDialog(`
+    <button id="open" commandfor="prefs" command="show-modal">Open</button>
+    <dialog id="prefs" data-dialog-dismissible>
+      <button id="close" commandfor="prefs" command="request-close" value="done">Close</button>
+    </dialog>
+  `);
+  const open = document.getElementById("open");
+  const dialog = document.getElementById("prefs");
+  const close = document.getElementById("close");
+
+  click(open);
+  expect(dialog.open).toBe(true);
+  expect(document.documentElement.classList.contains("has-modal-open")).toBe(true);
+
+  dialog.remove();
+  await flushMutationObserver();
+  expect(document.documentElement.classList.contains("has-modal-open")).toBe(false);
+
+  document.body.append(dialog);
+  await flushMutationObserver();
+
+  click(close);
+  expect(dialog.open).toBe(false);
+  expect(dialog.returnValue).toBe("done");
+});
