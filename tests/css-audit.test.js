@@ -172,6 +172,9 @@ test("dialog surfaces stay fixed to the viewport", () => {
 
   expect(modalCss).toMatch(/dialog\.modal\s*\{[^}]*position:\s*fixed;/);
   expect(drawerCss).toMatch(/dialog\.drawer\s*\{[^}]*position:\s*fixed;/);
+  expect(drawerCss).toMatch(/dialog\.drawer\s*\{[^}]*inset-block-start:\s*0;/);
+  expect(drawerCss).toMatch(/dialog\.drawer\s*\{[^}]*block-size:\s*100%;/);
+  expect(drawerCss).toMatch(/dialog\.drawer\s*\{[^}]*max-block-size:\s*100%;/);
 });
 
 test("confirmation dialog composes media alignment with an intent-aware icon well", () => {

@@ -36,7 +36,7 @@
             </select>
           </label>
           <button class="btn sm" type="button" data-docs-search>Search <kbd class="key">Ctrl K</kbd></button>
-          <button class="btn sm ghost docs-menu-toggle" type="button" data-docs-nav-toggle
+          <button class="btn sm ghost docs-menu-toggle" type="button" commandfor="docs-nav-drawer" command="show-modal"
             aria-haspopup="dialog" aria-controls="docs-nav-drawer" aria-label="Open navigation">Menu</button>
         </div>
       </div>
@@ -94,8 +94,6 @@
             <button type="button" class="btn outline">Outline</button>
             <button type="button" class="btn ghost">Ghost</button>
             <button type="button" class="btn danger">Danger</button>
-            <button type="button" class="btn sm">Small</button>
-            <button type="button" class="btn lg">Large</button>
           </div>
           <div class="cluster">
             <span class="badge soft">Badge</span>
@@ -115,22 +113,68 @@
       </section>
 
       <section class="docs-section center stack">
+        <h2>Density, not scaling</h2>
+        <p class="muted">Compact or comfortable without shrinking your type.</p>
+        <div class="grid docs-density-grid">
+          <article class="card stack">
+            <h3>Compact</h3>
+            <div class="stack sm">
+              <label class="field">
+                <span class="field-label">Email</span>
+                <input class="input" type="email" value="hello@example.com" readonly>
+              </label>
+              <div class="cluster">
+                <button class="btn primary" type="button">Save</button>
+                <span class="badge success">Ready</span>
+              </div>
+            </div>
+          </article>
+          <article class="card stack">
+            <h3>Default</h3>
+            <div class="stack">
+              <label class="field">
+                <span class="field-label">Email</span>
+                <input class="input" type="email" value="hello@example.com" readonly>
+              </label>
+              <div class="cluster">
+                <button class="btn primary" type="button">Save</button>
+                <span class="badge success">Ready</span>
+              </div>
+            </div>
+          </article>
+          <article class="card stack">
+            <h3>Comfortable</h3>
+            <div class="stack lg">
+              <label class="field">
+                <span class="field-label">Email</span>
+                <input class="input" type="email" value="hello@example.com" readonly>
+              </label>
+              <div class="cluster">
+                <button class="btn primary" type="button">Save</button>
+                <span class="badge success">Ready</span>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="docs-section center stack">
         <h2>Layout that reads like the markup</h2>
         <p class="muted">A handful of primitives that compose — the docs are built with the same ones.</p>
         <div class="grid docs-layout-grid">
           <article class="card stack">
             <h3>Stack</h3>
             <p class="muted">Spacing follows the markup, top to bottom.</p>
-            <div class="stack docs-demo-boxes">
-              <div class="docs-box"></div>
-              <div class="docs-box"></div>
-              <div class="docs-box"></div>
+            <div class="stack docs-layout-preview">
+              <div class="docs-layout-line"></div>
+              <div class="docs-layout-line"></div>
+              <div class="docs-layout-line"></div>
             </div>
           </article>
           <article class="card stack">
             <h3>Cluster</h3>
             <p class="muted">A row that wraps and centers itself.</p>
-            <div class="cluster docs-demo-boxes docs-demo-cluster">
+            <div class="cluster docs-layout-preview">
               <span class="badge soft">one</span>
               <span class="badge soft">two</span>
               <span class="badge soft">three</span>
@@ -138,19 +182,19 @@
               <span class="badge soft">five</span>
             </div>
           </article>
+          <article class="card stack">
+            <h3>Grid</h3>
+            <p class="muted">Responsive columns without media queries.</p>
+            <div class="grid docs-demo-grid docs-layout-preview">
+              <div class="docs-layout-cell"></div>
+              <div class="docs-layout-cell"></div>
+              <div class="docs-layout-cell"></div>
+              <div class="docs-layout-cell"></div>
+              <div class="docs-layout-cell"></div>
+              <div class="docs-layout-cell"></div>
+            </div>
+          </article>
         </div>
-        <article class="card stack">
-          <h3>Grid</h3>
-          <p class="muted">Responsive columns without media queries.</p>
-          <div class="grid docs-demo-grid">
-            <div class="docs-box"></div>
-            <div class="docs-box"></div>
-            <div class="docs-box"></div>
-            <div class="docs-box"></div>
-            <div class="docs-box"></div>
-            <div class="docs-box"></div>
-          </div>
-        </article>
       </section>
 
       <section class="docs-section center stack">
@@ -171,7 +215,7 @@
         </div>
       </section>
 
-      <section class="docs-section center stack">
+      <section class="docs-section docs-theme-showcase center stack">
         <h2>Pick a theme</h2>
         <p class="muted">Light, dark and fifteen named themes. Each card below previews one — that is a <code>data-theme</code> island doing its job.</p>
         <div class="grid docs-theme-grid">
@@ -215,7 +259,9 @@
         <button class="drawer-close" type="submit" aria-label="Close navigation"></button>
       </form>
     </div>
-    {{navGroups}}
+    <nav aria-label="Documentation">
+      {{navGroups}}
+    </nav>
   </dialog>
 
   <dialog class="modal docs-search-dialog" id="docs-search-dialog" closedby="any" aria-label="Search documentation">
@@ -232,7 +278,7 @@
       <form method="dialog" data-docs-search-form>
         <input class="input docs-search-input" type="search" placeholder="Search docs…" autocomplete="off" />
       </form>
-      <ul class="docs-search-results" data-docs-search-results></ul>
+      <ul class="docs-search-results stack" data-docs-search-results></ul>
     </div>
   </dialog>
 

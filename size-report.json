@@ -1,12 +1,12 @@
 {
-  "timestamp": "2026-08-18T21:29:20.079Z",
-  "totalRaw": 181834,
-  "totalMinified": 87363,
-  "totalBrotli": 12864,
+  "timestamp": "2026-08-18T21:48:38.608Z",
+  "totalRaw": 181966,
+  "totalMinified": 87351,
+  "totalBrotli": 12871,
   "themesMinified": 29127,
   "themesBrotli": 3404,
-  "shippedMinified": 87363,
-  "shippedBrotli": 12864,
+  "shippedMinified": 87351,
+  "shippedBrotli": 12871,
   "maxShippedBrotli": 13312,
   "fileCount": 73,
   "files": [
@@ -64,7 +64,7 @@
     },
     {
       "file": "components/drawer.css",
-      "raw": 3645
+      "raw": 3777
     },
     {
       "file": "forms/switch.css",

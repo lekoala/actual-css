@@ -109,13 +109,13 @@ export function renderThemeInit(themes) {
 export function renderThemeCards(themes) {
   return themes
     .map(
-      (theme) => `          <article class="card stack docs-theme-card" data-theme="${theme.name}">
+      (theme) => `          <article class="card compact stack docs-theme-card" data-theme="${theme.name}">
             <div class="docs-theme-preview" aria-hidden="true">
-              <span class="docs-theme-chip"></span>
-              <span class="docs-theme-chip docs-theme-chip-accent"></span>
+              <span class="docs-theme-line"></span>
+              <span class="docs-theme-line docs-theme-line-primary"></span>
+              <span class="docs-theme-line docs-theme-line-secondary"></span>
             </div>
             <h3>${escapeHtml(theme.label)}</h3>
-            <p class="muted">${escapeHtml(theme.description)}</p>
           </article>`,
     )
     .join("\n");
