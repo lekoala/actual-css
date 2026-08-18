@@ -194,8 +194,8 @@
   gap: var(--space-20);
   padding-block: var(--alert-pad-block);
   padding-inline: var(--alert-pad-inline);
-  border-start-start-radius: calc(var(--radius-lg) - var(--border-width));
-  border-start-end-radius: calc(var(--radius-lg) - var(--border-width));
+  border-start-start-radius: calc(var(--alert-radius, var(--radius-lg)) - var(--border-width));
+  border-start-end-radius: calc(var(--alert-radius, var(--radius-lg)) - var(--border-width));
 }
 
 /* Dismiss inside an admonition title bar rides the inline end. */

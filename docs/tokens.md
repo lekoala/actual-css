@@ -174,6 +174,7 @@ Controls share sizing so buttons, inputs, selects, and compact app UI always ali
   --control-size: var(--control-size-md);
   --control-pad-x: 1em;
   --control-font-size: var(--font-size-md);
+  --disabled-opacity: 0.65;
 }
 ```
 
@@ -184,6 +185,10 @@ Controls share sizing so buttons, inputs, selects, and compact app UI always ali
 The font size stays at the baseline (`--control-font-size` =
 `--font-size-md`) in every density — density changes how much space controls
 consume, not how large their text is.
+
+Disabled controls and disabled-prone components read `--disabled-opacity` for
+their dimmed state — buttons, tabs, menu items, badges, avatars, choice cards,
+native inputs, and range sliders.
 
 Density modifiers swap the shared control geometry:
 
