@@ -69,6 +69,12 @@ knob size and travel are derived from them. Prefer `.sm` / `.lg` first.
 
 → [Forms → Switches](forms.md#switches)
 
+### Dim disabled controls
+
+Set `--disabled-opacity`. All disabled-prone components — buttons, tabs, menu
+items, badges, avatars, choice cards, native inputs, and range sliders — read it
+for their dimmed state.
+
 ### Loading / busy overlay on a container
 
 Use `aria-busy="true"` with a direct last-child `.spinner`; tint the overlay with

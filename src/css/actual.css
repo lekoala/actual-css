@@ -18,6 +18,11 @@
 /*
  * NOTE: The 'optional/' directory contains layout and utility extensions
  * (such as optional grids, split, visual effects, and extra utility classes
- * like .gap-sm, .shadow-sm, etc.). These are intentionally not bundled here.
- * Import them natively in your project if you need them.
+ * like .gap-sm, .flex-nowrap, .shadow-sm, etc.). These are intentionally not
+ * bundled here. Two entry points ship them:
+ *
+ *   actual-css/css/optional/index   optional layer only
+ *   actual-css/css/actual.full      core + optional
+ *
+ * Import one of these paths in your project when you need them.
  */

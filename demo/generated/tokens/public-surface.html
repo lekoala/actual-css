@@ -174,6 +174,7 @@
   <span class="token property">--control-size</span><span class="token punctuation">:</span> <span class="token function">var</span><span class="token punctuation">(</span>--control-size-md<span class="token punctuation">)</span><span class="token punctuation">;</span>
   <span class="token property">--control-pad-x</span><span class="token punctuation">:</span> 1em<span class="token punctuation">;</span>
   <span class="token property">--control-font-size</span><span class="token punctuation">:</span> <span class="token function">var</span><span class="token punctuation">(</span>--font-size-md<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token property">--disabled-opacity</span><span class="token punctuation">:</span> 0.65<span class="token punctuation">;</span>
 <span class="token punctuation">}</span></code></pre>
         </div>
       </div>
@@ -184,7 +185,7 @@
   <li>default — 38px control height</li>
   <li><code>.sm</code> — 32px control height</li>
 </ul>
-<p>The font size stays at the baseline (<code>--control-font-size</code> = <code>--font-size-md</code>) in every density — density changes how much space controls consume, not how large their text is. Density modifiers swap the shared control geometry:</p>
+<p>The font size stays at the baseline (<code>--control-font-size</code> = <code>--font-size-md</code>) in every density — density changes how much space controls consume, not how large their text is. Disabled controls and disabled-prone components read <code>--disabled-opacity</code> for their dimmed state — buttons, tabs, menu items, badges, avatars, choice cards, native inputs, and range sliders. Density modifiers swap the shared control geometry:</p>
     </div>
     <section class="component-section">
       <h2>CSS</h2>

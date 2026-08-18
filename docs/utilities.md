@@ -244,6 +244,7 @@ flex containers:
 - `.items-start` / `.items-center` / `.items-end` set `--items-align`, read by `.alert` and `.card`.
 - `.text-start` / `.text-center` / `.text-end` set `--text-align`, read by `.table` cells.
 - `.justify-content-*` (optional layer) set `--cluster-justify`, read by `.cluster`.
+- `.flex-wrap` / `.flex-nowrap` (optional layer) set `flex-wrap` directly on any flex container.
 
 Set the property directly when you need a value the helpers do not ship.
 

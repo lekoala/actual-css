@@ -1554,8 +1554,8 @@ a.badge[aria-disabled="true"] {
   gap: var(--space-20);
   padding-block: var(--alert-pad-block);
   padding-inline: var(--alert-pad-inline);
-  border-start-start-radius: calc(var(--radius-lg) - var(--border-width));
-  border-start-end-radius: calc(var(--radius-lg) - var(--border-width));
+  border-start-start-radius: calc(var(--alert-radius, var(--radius-lg)) - var(--border-width));
+  border-start-end-radius: calc(var(--alert-radius, var(--radius-lg)) - var(--border-width));
 }
 
 /* Dismiss inside an admonition title bar rides the inline end. */
@@ -5011,6 +5011,11 @@ a.avatar[aria-disabled="true"] {
 /*
  * NOTE: The 'optional/' directory contains layout and utility extensions
  * (such as optional grids, split, visual effects, and extra utility classes
- * like .gap-sm, .shadow-sm, etc.). These are intentionally not bundled here.
- * Import them natively in your project if you need them.
+ * like .gap-sm, .flex-nowrap, .shadow-sm, etc.). These are intentionally not
+ * bundled here. Two entry points ship them:
+ *
+ *   actual-css/css/optional/index   optional layer only
+ *   actual-css/css/actual.full      core + optional
+ *
+ * Import one of these paths in your project when you need them.
  */
