@@ -6,16 +6,27 @@
  *
  * Public hooks:
  * --modal-size
- * --dialog-close-size
+ * --dialog-viewport-gap
+ * --dialog-icon-size
+ * --dialog-icon-glyph-size
  *
  * Internal:
  * --dialog-close-icon-size
+ * --dialog-viewport-gap-2x
  */
 dialog.modal {
   --modal-size: 32rem;
+  --dialog-viewport-gap: var(--space-40);
+  /* calc() multiplication is not in the supported browser range, so the
+     doubled gap is spelled out with an additive calc. */
+  --dialog-viewport-gap-2x: calc(var(--dialog-viewport-gap) + var(--dialog-viewport-gap));
 
-  max-inline-size: min(100% - 2rem, var(--modal-size));
-  max-block-size: calc(var(--viewport-block) - 2rem);
+  /* Keep the surface anchored to the viewport in the top layer. This also
+     provides the containing block for the absolutely positioned close button. */
+  position: fixed;
+
+  max-inline-size: min(calc(100% - var(--dialog-viewport-gap-2x)), var(--modal-size));
+  max-block-size: calc(var(--viewport-block) - var(--dialog-viewport-gap-2x));
   border: var(--border-width) solid var(--border);
   border-radius: var(--radius-lg);
   background: var(--surface-raised);
@@ -40,10 +51,17 @@ dialog.modal > form,
 dialog.modal > .stack {
   display: grid;
   gap: var(--space-40);
-  max-block-size: calc(var(--viewport-block) - 2rem);
+  max-block-size: calc(var(--viewport-block) - var(--dialog-viewport-gap-2x));
   overflow: auto;
   overscroll-behavior: contain;
   padding: var(--space-40);
+}
+
+/* Keep the dialog off the viewport edges on small screens. */
+@media (max-width: 30rem) {
+  dialog.modal {
+    --dialog-viewport-gap: var(--space-30);
+  }
 }
 
 dialog.modal.scrollable > form,
@@ -69,11 +87,77 @@ dialog.modal footer > :last-child {
   margin-block-end: 0;
 }
 
+/* The close button is anchored to the dialog at top inline-end, out of the
+   content flow; headers reserve inline room so titles never run under it. */
+dialog.modal > form > header,
+dialog.modal > .stack > header {
+  padding-inline-end: calc(var(--control-size) + var(--space-30));
+}
+
 dialog.modal footer {
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-end;
   gap: var(--gap);
+}
+
+/* Confirmation layout — a focused message followed by a visually distinct
+   action band. The media primitive owns icon/content alignment; this variant
+   only removes the standard form inset so both regions can own their padding. */
+dialog.modal.dialog-confirmation > form {
+  gap: 0;
+  padding: 0;
+}
+
+dialog.modal.dialog-confirmation > form > .media {
+  gap: var(--space-40);
+  padding: var(--space-50);
+}
+
+dialog.modal.dialog-confirmation > form > footer {
+  padding: var(--space-40) var(--space-50);
+  border-end-start-radius: calc(var(--radius-lg) - var(--border-width));
+  border-end-end-radius: calc(var(--radius-lg) - var(--border-width));
+  background: var(--surface-subtle);
+}
+
+/* Intent boundary — inherited intents do not tint the icon well. A local
+   intent plus .soft opts into the shared soft-variant recipe. */
+:where(.dialog-icon) {
+  --intent: initial;
+  --intent-fg: initial;
+  --ui-bg: initial;
+  --ui-fg: initial;
+}
+
+.dialog-icon {
+  --dialog-icon-size: 3rem;
+  --dialog-icon-glyph-size: 1.5rem;
+
+  display: inline-grid;
+  place-items: center;
+  inline-size: var(--dialog-icon-size);
+  block-size: var(--dialog-icon-size);
+  flex: none;
+  border-radius: var(--radius-full);
+  background: var(--ui-bg, var(--surface-subtle));
+  color: var(--ui-fg, var(--intent, var(--text-muted)));
+}
+
+.dialog-icon > * {
+  display: inline-grid;
+  place-items: center;
+  inline-size: var(--dialog-icon-glyph-size);
+  block-size: var(--dialog-icon-glyph-size);
+  font-size: var(--dialog-icon-glyph-size);
+  line-height: 1;
+}
+
+@media (max-width: 30rem) {
+  dialog.modal.dialog-confirmation > form > .media,
+  dialog.modal.dialog-confirmation > form > footer {
+    padding: var(--space-40);
+  }
 }
 
 dialog.modal[open] {
@@ -131,7 +215,7 @@ html.has-modal-open.had-scrollbar {
 
 @media (prefers-reduced-motion: no-preference) {
   dialog.modal.is-static {
-    animation: actual-modal-static var(--duration-slow) var(--ease);
+    animation: actual-dialog-static var(--duration-slow) var(--ease);
   }
 
   ::view-transition-group(actual-dialog) {
@@ -140,7 +224,7 @@ html.has-modal-open.had-scrollbar {
   }
 }
 
-@keyframes actual-modal-static {
+@keyframes actual-dialog-static {
   0%,
   100% {
     transform: none;
@@ -166,30 +250,45 @@ html.has-modal-open.had-scrollbar {
   dialog.modal::backdrop {
     background: Canvas;
   }
+
+  .dialog-icon {
+    border: var(--border-width) solid CanvasText;
+  }
 }
 
-/* Close icon button for modal/drawer headers. A small, rounded control with a
-   subtle resting surface that anchors the glyph; hover deepens it via the
-   shared hover overlay. The glyph comes from --icon-close, masked to
-   currentColor, so no icon font or text glyph is required in the markup. */
-.dialog-close {
-  --dialog-close-size: 2.25rem;
+/* Close controls. A close button is an action attached to a surface, so it
+   never participates in the content flow. The modal and the drawer share the
+   same simple placement — absolute at the panel's top inline-end, inside the
+   surface — so both close buttons look and behave identically. The glyph comes
+   from --icon-close, masked to currentColor, so no icon font or text glyph is
+   required in the markup. */
+.dialog-close,
+.drawer-close {
   --dialog-close-icon-size: 1rem;
 
   display: inline-grid;
   place-items: center;
-  inline-size: var(--dialog-close-size);
-  block-size: var(--dialog-close-size);
-  flex: none;
   padding: 0;
   border: 0;
   border-radius: var(--radius);
-  background: var(--surface-subtle);
   color: var(--text-muted);
   cursor: pointer;
+
+  /* Out of flow, anchored to the positioned dialog surface, not the header or
+     any scroll container inside it. */
+  position: absolute;
+  z-index: 1;
+  inset-block-start: var(--space-20);
+  inset-inline-end: var(--space-20);
+
+  inline-size: var(--control-size);
+  block-size: var(--control-size);
+
+  background: var(--surface-subtle);
 }
 
-.dialog-close::before {
+.dialog-close::before,
+.drawer-close::before {
   content: "";
   inline-size: var(--dialog-close-icon-size);
   block-size: var(--dialog-close-icon-size);
@@ -198,28 +297,21 @@ html.has-modal-open.had-scrollbar {
   mask: var(--icon-close) center / contain no-repeat;
 }
 
-/* Progressive enhancement: with :has() a header that owns a close button
-   becomes an aligned two-column grid. Without :has() the header stays block
-   and the close simply follows the title — functional, just not aligned.
-   Two selectors because the form-wrapped close (used by drawers) cannot be
-   expressed in one: :has() must not nest, so
-   `:has(> form:has(> .dialog-close))` would invalidate the whole rule. */
-header:has(> .dialog-close),
-header:has(> form > .dialog-close) {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  align-items: start;
-  gap: var(--space-40);
-}
-
 @media (hover: hover) {
-  .dialog-close:hover {
+  .dialog-close:hover,
+  .drawer-close:hover {
     box-shadow: inset 0 0 0 999px var(--hover-overlay);
     color: var(--text);
   }
 }
 
-.dialog-close:focus-visible {
+.dialog-close:active,
+.drawer-close:active {
+  box-shadow: inset 0 0 0 999px var(--hover-overlay);
+}
+
+.dialog-close:focus-visible,
+.drawer-close:focus-visible {
   outline: 2px solid transparent;
   box-shadow: var(--focus-ring-shadow);
 }

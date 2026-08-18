@@ -19,6 +19,10 @@ dialog.drawer {
   --drawer-pad: var(--space-40);
   --drawer-closed-translate: -100%;
 
+  /* Keep the surface anchored to the viewport in the top layer. This also
+     provides the containing block for the absolutely positioned close button. */
+  position: fixed;
+
   inline-size: min(calc(var(--viewport-inline) * 0.9), var(--drawer-size));
   block-size: var(--viewport-block);
   max-inline-size: none;
@@ -115,4 +119,18 @@ dialog.drawer nav {
   dialog.drawer::backdrop {
     background: Canvas;
   }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  dialog.drawer.is-static {
+    animation: actual-dialog-static var(--duration-slow) var(--ease);
+  }
+}
+
+/* The close button shares the modal's interior placement (modal.css): absolute
+   at the panel's top inline-end, out of the content flow. The header reserves
+   inline room so the title never runs under it. */
+dialog.drawer > header,
+dialog.drawer > form > header {
+  padding-inline-end: calc(var(--control-size) + var(--space-30));
 }

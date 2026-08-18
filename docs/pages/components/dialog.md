@@ -8,7 +8,9 @@
 |---|---|---|
 | `.modal` | Component | Centered modal surface built on the native `<dialog>` element. |
 | `.scrollable` | Variant | Keeps the header and footer visible while the dialog body scrolls. |
-| `.dialog-close` | Component | Icon-only close button for modal and drawer headers. |
+| `.dialog-confirmation` | Variant | Separates a confirmation message from its full-width action band. |
+| `.dialog-icon` | Component | Circular intent-aware icon well for confirmation messages. |
+| `.dialog-close` | Component | Icon-only close button anchored to the modal's top end, out of the content flow. |
 
 ## Usage
 
@@ -23,16 +25,21 @@ The command runtime is stateless and does not pre-scan triggers.
 Use `command="request-close"` for cancel-style buttons so close requests go
 through the dialog's cancel lifecycle.
 
-Use `closedby="any"` as the no-JavaScript light-dismiss path. Add
-`data-dialog-dismissible` so the optional runtime provides Actual's controlled
-backdrop-dismiss behavior.
+Use `closedby="any"` as the no-JavaScript light-dismiss path: the native dialog
+closes on backdrop click and Escape. Add `data-dialog-dismissible` so the
+optional runtime takes over backdrop click and closes with the dialog's
+transition; it rewrites `closedby="any"` to `closedby="closerequest"` so the
+native dialog and the runtime never double-handle. `data-dialog-dismissible`
+only gates backdrop click — Escape and explicit close requests always close,
+unless the application cancels the `actual:dialog-cancel` event.
 
 ## Alert dialog
 
 Use this shape when the dialog interrupts the flow and asks for a decision. It
 has no close icon and no light dismiss; the footer actions are the way out.
-With the optional runtime, backdrop clicks give a small static feedback instead
-of closing.
+`closedby="none"` keeps Escape and backdrop clicks from closing it, so a
+critical confirmation cannot be dismissed accidentally. With the optional
+runtime, backdrop clicks give a small static feedback instead of closing.
 
 ```html demo
 <button class="btn"
@@ -44,7 +51,7 @@ of closing.
   Delete project
 </button>
 
-<dialog class="modal" id="delete-dialog">
+<dialog class="modal" id="delete-dialog" closedby="none">
   <form method="dialog">
     <header>
       <h3>Delete project?</h3>
@@ -62,6 +69,46 @@ of closing.
               value="delete">
         Delete
       </button>
+    </footer>
+  </form>
+</dialog>
+```
+
+For a compact destructive confirmation with a leading status icon, compose
+`dialog-confirmation` with the media object. The icon well accepts the shared
+intent and emphasis classes; `dialog-icon danger soft` creates the tinted red
+circle while keeping the glyph centered. The footer becomes a separate action
+band without changing the semantics of the form or its buttons.
+
+```html demo
+<button class="btn danger"
+        type="button"
+        commandfor="deactivate-dialog"
+        command="show-modal"
+        aria-haspopup="dialog"
+        aria-controls="deactivate-dialog">
+  Deactivate account
+</button>
+
+<dialog class="modal dialog-confirmation"
+        id="deactivate-dialog"
+        closedby="none"
+        style="--modal-size: 40rem">
+  <form method="dialog">
+    <div class="media">
+      <span class="dialog-icon danger soft" aria-hidden="true">
+        <i class="ti ti-alert-triangle"></i>
+      </span>
+
+      <header>
+        <h3>Deactivate account</h3>
+        <p class="muted">Are you sure you want to deactivate your account? All of your data will be permanently removed. This action cannot be undone.</p>
+      </header>
+    </div>
+
+    <footer>
+      <button class="btn outline" value="cancel">Cancel</button>
+      <button class="btn danger" value="deactivate">Deactivate</button>
     </footer>
   </form>
 </dialog>
@@ -86,19 +133,19 @@ has no action button; the header close button dismisses the dialog.
         id="details-dialog"
         closedby="any"
         data-dialog-dismissible>
+  <button class="dialog-close"
+          type="button"
+          commandfor="details-dialog"
+          command="request-close"
+          aria-controls="details-dialog"
+          aria-label="Close dialog"></button>
+
   <div class="stack">
     <header>
       <hgroup>
         <h3>Release details</h3>
         <p>Changes included in this version.</p>
       </hgroup>
-
-      <button class="dialog-close"
-              type="button"
-              commandfor="details-dialog"
-              command="request-close"
-              aria-controls="details-dialog"
-              aria-label="Close dialog"></button>
     </header>
 
     <div>
@@ -178,19 +225,19 @@ dialog so they stay in the same top-layer context.
         id="overlay-dialog"
         closedby="any"
         data-dialog-dismissible>
+  <button class="dialog-close"
+          type="button"
+          commandfor="overlay-dialog"
+          command="request-close"
+          aria-controls="overlay-dialog"
+          aria-label="Close dialog"></button>
+
   <div class="stack">
     <header>
       <hgroup>
         <h3>Modal overlays</h3>
         <p>Flyouts and tooltips remain above the dialog surface.</p>
       </hgroup>
-
-      <button class="dialog-close"
-              type="button"
-              commandfor="overlay-dialog"
-              command="request-close"
-              aria-controls="overlay-dialog"
-              aria-label="Close dialog"></button>
     </header>
 
     <div class="cluster">
@@ -227,10 +274,18 @@ transitions.
 
 Available options:
 
-* `data-dialog-dismissible` enables backdrop click dismissal.
+* `data-dialog-dismissible` gates backdrop click only: the runtime takes over
+  light dismiss and closes the dialog (or rewrites `closedby="any"` to
+  `closedby="closerequest"` so the native dialog does not double-handle).
+  It never affects Escape or explicit close requests.
 * `data-dialog-modal="false"` opens with `show()` instead of `showModal()`.
 * `data-dialog-view-transition` enables a view transition that morphs the dialog to/from its trigger. Only active when the browser supports `document.startViewTransition` and the user allows motion.
-* `closedby="any"` is the no-JavaScript light-dismiss path. The runtime rewrites it to `closedby="closerequest"` where supported so dialog light-dismiss keeps the modal workflow intact — the same behavior, just stated in terms the platform understands.
+* `closedby` keeps its native meaning: `"any"` closes on backdrop click and
+  Escape, `"closerequest"` closes on Escape only, `"none"` disables both. The
+  runtime rewrites `closedby="any"` to `closedby="closerequest"` only when
+  `data-dialog-dismissible` opts it into light dismiss, and never overrides
+  `closedby="none"`. Use `closedby="none"` for critical dialogs that must be
+  closed by an explicit action.
 
 ## Browser support
 
@@ -294,8 +349,19 @@ Prefer native dialog behavior whenever possible. The framework runtime should
 not replace the platform modal system; it should only make dialogs declarative,
 animation-friendly, and consistent across supported browsers.
 
+The close button is anchored to the dialog surface, not the content flow: it
+sits at the top `inline-end`, inside the panel. The button itself is out of
+flow, while the header reserves enough inline padding to keep its title clear.
+Keep the button a direct child of `dialog.modal` so the scrolling content
+(`> form` or `> .stack`) never competes with it.
+
 ## CSS hooks
 
 - `--modal-size` — maximum dialog width.
-- `--dialog-close-size` — inline and block size of the `.dialog-close` button.
+- `--dialog-viewport-gap` — distance kept between the dialog and the viewport edges.
+- `--dialog-icon-size` — diameter of the `.dialog-icon` circle.
+- `--dialog-icon-glyph-size` — size of the glyph centered inside `.dialog-icon`.
+- `--control-size` — inline and block size of the `.dialog-close` button. The
+  header reserves `calc(var(--control-size) + var(--space-30))` on its inline
+  end so the title never runs under the close.
 - `--dialog-close-icon-size` — size of the close glyph.

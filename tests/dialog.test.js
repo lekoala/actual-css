@@ -92,6 +92,28 @@ test("request-close buttons close an open dialog and restore focus", async () =>
   expect(document.activeElement).toBe(open);
 });
 
+test("a request-close button closes a non-dismissible dialog", async () => {
+  await loadDialog(`
+    <button id="open" commandfor="prefs" command="show-modal">Open</button>
+    <dialog id="prefs" data-dialog-dismissible="false">
+      <button id="close" commandfor="prefs" command="request-close" value="done">Close</button>
+    </dialog>
+  `);
+  const open = document.getElementById("open");
+  const close = document.getElementById("close");
+  const dialog = document.getElementById("prefs");
+
+  // Escape and explicit close requests always close, whatever the dismissible
+  // flag; only backdrop click is gated by it. The mocked requestClose fires
+  // the native cancel lifecycle, which the runtime lets through.
+  click(open);
+  click(close);
+
+  expect(dialog.open).toBe(false);
+  expect(dialog.returnValue).toBe("done");
+  expect(document.activeElement).toBe(open);
+});
+
 test("close buttons do not get dialog popup semantics", async () => {
   await loadDialog(`
     <button id="open" commandfor="prefs" command="show-modal">Open</button>
@@ -304,7 +326,7 @@ test("dismissible backdrop clicks close the dialog", async () => {
   expect(dialog.open).toBe(false);
 });
 
-test("non-dismissible dialog blocks Escape cancel requests", async () => {
+test("non-dismissible dialog still closes on Escape cancel requests", async () => {
   await loadDialog('<button id="open" commandfor="prefs" command="show-modal">Open</button><dialog id="prefs" data-dialog-dismissible="false"></dialog>');
   const trigger = document.getElementById("open");
   const dialog = document.getElementById("prefs");
@@ -315,7 +337,21 @@ test("non-dismissible dialog blocks Escape cancel requests", async () => {
   await nextMicrotask();
 
   expect(event.defaultPrevented).toBe(true);
+  expect(dialog.open).toBe(false);
+  expect(document.activeElement).toBe(trigger);
+});
+
+test("non-dismissible dialog backdrop click stays open with static feedback", async () => {
+  await loadDialog('<button id="open" commandfor="prefs" command="show-modal">Open</button><dialog id="prefs" data-dialog-dismissible="false"></dialog>');
+  const trigger = document.getElementById("open");
+  const dialog = document.getElementById("prefs");
+  mockRect(dialog, { x: 20, y: 20, width: 200, height: 120 });
+
+  click(trigger);
+  click(dialog, { clientX: 0, clientY: 0 });
+
   expect(dialog.open).toBe(true);
+  expect(dialog.classList.contains("is-static")).toBe(true);
 });
 
 test("application can cancel dismissible dialog cancel event", async () => {

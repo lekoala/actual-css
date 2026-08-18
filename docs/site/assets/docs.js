@@ -83,11 +83,11 @@
   let activeIndex = -1;
 
   // The site root seen from the current page: "../" on a subpage, "" on the
-  // homepage. Deriving it from the docs.css link keeps result links correct
-  // no matter where the site is hosted (file:// or any subpath).
+  // homepage. The builder writes it on <html data-site-root>, which keeps
+  // result links correct no matter where the site is hosted (file:// or any
+  // subpath) without guessing the structure from a stylesheet URL.
   function siteRoot() {
-    const cssLink = document.querySelector('link[href*="docs.css"]');
-    return cssLink ? cssLink.getAttribute("href").split("assets/")[0] : "";
+    return document.documentElement.getAttribute("data-site-root") ?? "";
   }
 
   // Loaded as a script, not fetched: fetch() of a local file is blocked from
@@ -98,8 +98,8 @@
     if (!indexLoading) {
       indexLoading = (async () => {
         try {
-          const cssLink = document.querySelector('link[href*="docs.css"]');
-          const assetsDir = cssLink ? new URL(cssLink.href, document.baseURI) : document.baseURI;
+          const root = siteRoot();
+          const assetsDir = new URL(`${root}assets/`, document.baseURI);
           await new Promise((resolve) => {
             const script = document.createElement("script");
             script.src = new URL("search-index.js", assetsDir).href;

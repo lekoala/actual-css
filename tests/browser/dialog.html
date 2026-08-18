@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dialog lifecycle fixture</title>
+  <link rel="stylesheet" href="../../src/css/actual.css">
+</head>
+<body>
+  <div style="height: 1200px"></div>
+
+  <button id="open-dismissible" type="button" commandfor="dlg-dismissible" command="show-modal">Open dismissible</button>
+  <button id="open-nondismiss" type="button" commandfor="dlg-nondismiss" command="show-modal">Open non-dismissible</button>
+  <button id="open-drawer" type="button" commandfor="drawer" command="show-modal">Open drawer</button>
+
+  <dialog class="modal" id="dlg-dismissible" closedby="any" data-dialog-dismissible aria-label="Dismissible dialog">
+    <button class="dialog-close"
+            type="button"
+            commandfor="dlg-dismissible"
+            command="request-close"
+            aria-label="Close"></button>
+    <div class="stack">
+      <header><h3>Dismissible dialog</h3></header>
+      <p>Body content.</p>
+    </div>
+  </dialog>
+
+  <dialog class="modal" id="dlg-nondismiss" aria-label="Non dismissible dialog">
+    <button class="dialog-close"
+            type="button"
+            commandfor="dlg-nondismiss"
+            command="request-close"
+            aria-label="Close"></button>
+    <div class="stack">
+      <header><h3>Non-dismissible dialog</h3></header>
+      <p>Body content.</p>
+    </div>
+  </dialog>
+
+  <dialog class="drawer" id="drawer" aria-label="Drawer">
+    <header>
+      <strong>Drawer</strong>
+      <form method="dialog">
+        <button class="drawer-close" type="submit" aria-label="Close"></button>
+      </form>
+    </header>
+    <nav>
+      <ul class="nav-list"><li><a href="#">Item</a></li></ul>
+    </nav>
+  </dialog>
+
+  <div style="height: 2000px"></div>
+
+  <script src="../../dist/actual.js" defer></script>
+</body>
+</html>
