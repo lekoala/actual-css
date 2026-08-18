@@ -9,6 +9,9 @@
  * - utilities consume the current context instead of defining their own -sm/-lg scale.
  * - optional utilities extend core utilities, they do not re-express them.
  * - follow verbose .{property}-{value} naming.
+ *
+ * Internal:
+ * --cluster-justify (local relay consumed by .cluster)
  */
 
 /* Display */

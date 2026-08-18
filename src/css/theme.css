@@ -1,3 +1,14 @@
+/*
+ * Theme tokens — the palette, surfaces, text, borders, radius and shadow
+ * color. Named themes (themes/*.css) override this file; authors can set the
+ * same tokens on :root or on [data-theme="…"] islands.
+ *
+ * Public: Intent colors, Surfaces, Text, Lines and focus, Radius scale,
+ * Shadow color, Focus ring derivation.
+ * Derived: "Theme-derived aliases", Tone subsystem, Backdrop fill — reference
+ * other tokens; hard-coded overrides on a custom theme will break the intent.
+ * Internal: --hgroup-gap.
+ */
 :root {
   color-scheme: light dark;
 }

@@ -1,0 +1,174 @@
+import { describe, expect, it } from "bun:test";
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
+import {
+  extractToc,
+  parseCodeInfo,
+  render,
+  scanCodeFences,
+  wrapTables,
+} from "../scripts/docs/markdown.js";
+
+const fixture = readFileSync(
+  join(import.meta.dir, "fixtures", "docs", "sample.md"),
+  "utf8",
+);
+
+describe("parseCodeInfo", () => {
+  it("parses language and demo flag", () => {
+    expect(parseCodeInfo("html demo")).toEqual({
+      language: "html",
+      flags: ["demo"],
+      demo: true,
+    });
+  });
+
+  it("parses source-only fences", () => {
+    expect(parseCodeInfo("css")).toEqual({
+      language: "css",
+      flags: [],
+      demo: false,
+    });
+  });
+
+  it("handles empty info", () => {
+    expect(parseCodeInfo("")).toEqual({
+      language: "",
+      flags: [],
+      demo: false,
+    });
+  });
+});
+
+describe("scanCodeFences", () => {
+  it("returns every fence in order with raw content", () => {
+    const fences = scanCodeFences(fixture);
+    expect(fences).toHaveLength(4);
+    expect(fences.map((f) => f.language)).toEqual(["css", "js", "html", "html"]);
+    expect(fences[3].demo).toBe(true);
+    expect(fences[3].content).toContain('<button class="btn primary"');
+    expect(fences[3].content).toContain("<script>");
+  });
+
+  it("ignores tildes as an alternative marker", () => {
+    const fences = scanCodeFences("~~~\n<b>x</b>\n~~~\n");
+    expect(fences).toHaveLength(1);
+    expect(fences[0].content).toBe("<b>x</b>");
+  });
+
+  it("keeps unclosed fences to the end of the document", () => {
+    const fences = scanCodeFences("```js\nlet x = 1;\n");
+    expect(fences).toHaveLength(1);
+    expect(fences[0].content).toBe("let x = 1;");
+  });
+});
+
+describe("render", () => {
+  const result = render(fixture);
+
+  it("produces an h1 with a heading id", () => {
+    expect(result.html).toContain('<h1 id="sample-page">Sample page</h1>');
+  });
+
+  it("keeps strong, emphasis, and raw HTML", () => {
+    expect(result.html).toContain("<strong>strong</strong>");
+    expect(result.html).toContain("<em>emphasis</em>");
+    expect(result.html).toContain("<b>raw HTML</b>");
+  });
+
+  it("renders inline code", () => {
+    expect(result.html).toContain("<code>inline code</code>");
+  });
+
+  it("renders lists, task lists, and ordered lists", () => {
+    expect(result.html).toContain("<ul>");
+    expect(result.html).toContain(
+      '<li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled checked>done task</li>',
+    );
+    expect(result.html).toContain(
+      '<li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled>open task</li>',
+    );
+    expect(result.html).toContain("<ol>");
+  });
+
+  it("renders GFM tables wrapped in .table-wrap with .table", () => {
+    const tables = result.html.match(/<table class="table">/g) ?? [];
+    expect(tables).toHaveLength(1);
+    expect(result.html).toContain("<thead>");
+    expect(result.html).toContain("<th>Class</th>");
+    expect(result.html).toContain(".btn");
+  });
+
+  it("renders a blockquote and horizontal rule", () => {
+    expect(result.html).toContain("<blockquote>");
+    expect(result.html).toMatch(/<hr\s*\/?>/);
+  });
+
+  it("renders source-only css/js/html fences as escaped code", () => {
+    expect(result.html).toContain('<code class="language-css">');
+    expect(result.html).toContain(
+      "&lt;span&gt;plain source&lt;/span&gt;",
+    );
+  });
+
+  it("renders a demo fence with live preview and escaped source", () => {
+    expect(result.html).toContain('<div class="docs-example">');
+    expect(result.html).toContain('<div class="docs-preview">');
+    expect(result.html).toContain('<div class="docs-code">');
+
+    const preview = result.html.match(
+      /class="docs-preview">([\s\S]*?)\n  <\/div>/,
+    )?.[1];
+    expect(preview).toContain('<button class="btn primary" type="button">');
+    expect(preview).toContain("<script>window.__demoRan = true;</script>");
+
+    const source = result.html.match(
+      /<div class="docs-example">[\s\S]*?<pre><code class="language-html">([\s\S]*?)<\/code><\/pre>/,
+    )?.[1];
+    expect(source).toContain("Save &amp; continue");
+    expect(source).toContain("title=&quot;A &lt; B &amp; C&quot;");
+    expect(source).not.toContain("<script>");
+  });
+
+  it("dedupes duplicate heading ids", () => {
+    expect(result.html).toContain('<h2 id="variants">');
+    expect(result.html).toContain('<h2 id="variants-1">');
+  });
+
+  it("extracts title, description, and TOC", () => {
+    expect(result.title).toBe("Sample page");
+    expect(result.description).toContain("This is a lead paragraph");
+    expect(result.toc[0]).toEqual({
+      level: 2,
+      id: "basic-usage",
+      label: "Basic usage",
+    });
+    expect(result.toc.map((t) => t.label)).toEqual([
+      "Basic usage",
+      "Variants",
+      "Variants",
+    ]);
+    expect(result.toc.map((t) => t.id)).toEqual([
+      "basic-usage",
+      "variants",
+      "variants-1",
+    ]);
+  });
+});
+
+describe("wrapTables", () => {
+  it("leaves HTML without tables untouched", () => {
+    const html = "<p>Hello</p>";
+    expect(wrapTables(html)).toBe(html);
+  });
+});
+
+describe("link rewriting", () => {
+  it("rewrites internal links through the resolver", () => {
+    const html = render(fixture, {
+      resolveLink: (href) => (href.endsWith(".md") ? "layout/stack.html" : null),
+    }).html;
+    expect(html).toContain('href="layout/stack.html"');
+    expect(html).toContain('href="https://example.com"');
+  });
+});

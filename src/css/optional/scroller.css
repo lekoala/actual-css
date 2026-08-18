@@ -5,6 +5,13 @@
  * scrollbar-color (Firefox) and ::-webkit-scrollbar (Safari/Chromium) are
  * styled; the thumb lands as a thin, theme-aware affordance with a hover
  * state.
+ *
+ * Public hooks:
+ * --scroller-size
+ * --scroller-padding
+ * --scroller-track
+ * --scroller-thumb
+ * --scroller-thumb-hover
  */
 .scroller {
   --scroller-size: 0.625rem;

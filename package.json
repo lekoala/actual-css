@@ -80,13 +80,16 @@
     "README.md"
   ],
   "engines": {
-    "bun": ">=1.0.0"
+    "bun": ">=1.3.14"
   },
   "scripts": {
     "lint": "biome check",
     "lint:fix": "biome check --write",
-    "build:demo": "bun scripts/build-demo.js",
-    "watch:demo": "bun scripts/build-demo.js --watch",
+    "build:docs": "bun scripts/build-docs.js",
+    "watch:docs": "bun scripts/build-docs.js --watch",
+    "check:docs": "bun scripts/check-docs.js",
+    "check:compat": "bun scripts/check-compat.js",
+    "check:css-api": "bun scripts/check-css-api.js",
     "build:dist": "bun scripts/build-dist.js",
     "build:js": "bun scripts/build-js.js",
     "build:size": "bun scripts/build-size.js",
@@ -96,14 +99,14 @@
     "check:templates": "bun scripts/check-templates.js",
     "shot:forced": "bun scripts/forced-colors-shot.js",
     "shot:page": "bun scripts/page-shot.js",
+    "probe": "bun scripts/probe.js",
     "check:sync": "bun scripts/check-sync.js",
     "test": "bun test",
-    "build:all": "bun run build:demo && bun run build:dist && bun run check:enhance && bun run check:reserved && bun run check:sync && bun run check:links && bun run check:templates && bun run test && bun run build:js && bun run build:size",
+    "build:all": "bun run build:dist && bun run build:js && bun run build:docs && bun run check:docs && bun run check:compat && bun run check:css-api && bun run check:enhance && bun run check:reserved && bun run check:sync && bun run check:links && bun run check:templates && bun run test && bun run build:size",
     "prepublishOnly": "bun run build:all"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.5",
-    "happy-dom": "^20.11",
-    "prismjs": "^1.30"
+    "happy-dom": "^20.11"
   }
 }

@@ -7,6 +7,31 @@ This project follows Keep a Changelog and uses semver, including during 0.x.
 ## [0.3.0 - unreleased]
 
 ### Added
+- Official documentation site in `docs/site/`, built from `docs/pages/**/*.md`
+  by `bun run build:docs` (75+ pages, search, theme switcher over all 15 named
+  themes, generated landing page). Replaces the legacy `docs/*.md` + generated
+  `demo/` workflow.
+- `check:compat` — capability floor audit: unguarded above-Minimal structural
+  CSS fails the pipeline unless justified in the source or the audit ledger.
+- `check:css-api` — validates `Public hooks:` headers: every listed hook must
+  be referenced by its file, with an `--audit` mode listing unclassified
+  component-prefixed properties.
+- `Public hooks:` headers and child/cascade contracts across documented
+  component and layout files (`layout.css`, `card.css`, `button.css`,
+  `badge.css`, `alert.css`, `modal.css`, `tooltip.css`, `switch.css`,
+  `control.css`, `choice-card.css`, `choice.css`, `range.css`,
+  `scroll-snap.css`), plus Public/Derived/Internal markers in `theme.css` and
+  `tokens.css`.
+- Examples section in the docs, featuring `demo/admini/` and `demo/templates/`.
+- `scripts/utils/chrome-shot.js` — shared headless-Chrome screenshot plumbing
+  used by `shot:page` and `shot:forced`.
+
+### Changed
+- The docs site copies the shipped bundles (`dist/actual.css`,
+  `dist/actual.js`, `dist/actual-themes.min.css`) and errors clearly when
+  `dist/` is missing.
+- Docs navigation gains an Examples group; the root `index.html` redirects to
+  `docs/site/index.html`.
 - `--grid-columns` hook to override the generic `.grid` template for
   custom/asymmetric layouts; the author owns any narrow-container collapse.
 - `--form-actions-align` and `--form-actions-justify` hooks.
@@ -48,6 +73,10 @@ This project follows Keep a Changelog and uses semver, including during 0.x.
   across the Minimal tier.
 - The static `js-compat` floor test; the browser floor is now a codebase
   decision enforced by review.
+- The legacy docs workflow: `build-demo.js`, generated `demo/generated/`,
+  `demo/styles/prism.css`, and the old `docs/*.md` reference pages (migrated
+  into `docs/pages/`). `build:demo` / `watch:demo` and the `prismjs` devDep
+  are gone; `build:all` now runs the docs pipeline.
 
 ## [0.2.0] - 2026-07-28
 

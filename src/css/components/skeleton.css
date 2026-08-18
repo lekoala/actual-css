@@ -3,6 +3,13 @@
  *
  * Shows approximate loading structure without implying real content hierarchy.
  * Geometry, animation, and color stay theme-aware.
+ *
+ * Public hooks:
+ * --skeleton-size
+ * --skeleton-width
+ * --skeleton-radius
+ * --skeleton-track
+ * --skeleton-highlight
  */
 .skeleton {
   --skeleton-size: 1rem;

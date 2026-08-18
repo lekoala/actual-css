@@ -4,6 +4,12 @@
  * A non-button element with aria-busy="true" and a direct last-child .spinner
  * shows that spinner as a centered overlay over a faded surface. Buttons keep
  * their spinners inline (e.g. .btn[aria-busy] > .spinner stays inline-flex).
+ *
+ * Public hooks:
+ * --busy-overlay-bg
+ *
+ * Internal:
+ * --spinner-size (overlay copy of the shared spinner hook)
  */
 [aria-busy] > .spinner:last-child {
   display: none;

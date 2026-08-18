@@ -1,3 +1,23 @@
+/*
+ * Core layout primitives: stack, cluster, center, frame, app-shell, media,
+ * sidebar-layout. Each primitive owns a single, readable behavior; they are
+ * meant to compose in markup.
+ *
+ * Public hooks:
+ * --cluster-align
+ * --cluster-justify
+ * --cluster-wrap
+ * --center-size
+ * --center-pad
+ * --frame-ratio
+ * --sidebar-layout-size
+ *
+ * Child contracts:
+ * .stack owns vertical rhythm: direct-child margins are reset, spacing comes
+ *   from --gap.
+ * .frame sizes direct media children (img/video/iframe/canvas/svg) to fill the
+ *   frame.
+ */
 .container-query {
   container-type: inline-size;
 }
@@ -63,6 +83,8 @@
   grid-template-columns: minmax(0, 1fr);
 }
 
+/* Container queries are the preferred path; without them the @supports not
+   block below restores the same columns at the same viewport breakpoint. */
 @container (width >= 64rem) {
   .container-query .sidebar-layout {
     grid-template-columns: minmax(0, 1fr) var(--sidebar-layout-size, 18rem);

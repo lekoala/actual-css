@@ -3,6 +3,9 @@
  *
  * Composes with .btn (or any inline element) and feeds layout via the shared
  * --gap token.
+ *
+ * Internal:
+ * --gap (local value for the shared gap token)
  */
 .actions {
   --gap: var(--space-20);

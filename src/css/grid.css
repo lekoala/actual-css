@@ -40,6 +40,9 @@
   grid-template-columns: repeat(6, minmax(0, 1fr));
 }
 
+/* Container queries are the preferred responsive path; browsers without them
+   ignore these rules and get the equivalent @media rules from the
+   @supports not (container-type) block below — same columns, same breakpoints. */
 @container (width < 28rem) {
   .container-query .grid-2,
   .container-query .grid-3,

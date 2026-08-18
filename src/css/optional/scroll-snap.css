@@ -5,6 +5,11 @@
  * This is not a full carousel. For previous/next controls, pagination,
  * active state, drag behavior, looping, or robust desktop mouse interaction,
  * use a dedicated carousel library.
+ *
+ * Public hooks:
+ * --scroll-snap-gap
+ * --scroll-snap-align
+ * --scroll-snap-item-size
  */
 .scroll-snap {
   --scroll-snap-gap: var(--gap);

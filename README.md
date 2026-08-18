@@ -129,7 +129,7 @@ import "actual-css/js/tooltip";
 
 The package does not maintain separate partial bundles. Modular entrypoints map to source files, so each project can compose the framework shape it needs. To customize the full runtime, comment the imports you do not want in `src/js/index.js` and rebuild the JavaScript bundle. JavaScript modules are safe to import during server-side rendering; outside a browser, registration is a no-op.
 
-For project-specific behavior, use `actual-css/js/enhance` and the small input helpers rather than patching built-in modules. See [JavaScript](docs/javascript.md) for custom filters, textarea autogrow, ajax forms, and htmx-like patterns.
+For project-specific behavior, use `actual-css/js/enhance` and the small input helpers rather than patching built-in modules. See [Progressive Enhancements](docs/pages/enhancements/overview.md) for custom filters, textarea autogrow, ajax forms, and htmx-like patterns.
 
 ## Distribution
 
@@ -177,4 +177,7 @@ MIT
 
 ## Docs
 
-Start with [`docs/README.md`](docs/README.md).
+The documentation site is generated into [`docs/site/`](docs/site/) from the
+source pages under [`docs/pages/`](docs/pages/). Start at
+[`docs/site/index.html`](docs/site/index.html), or build it locally with
+`bun run build:docs`.

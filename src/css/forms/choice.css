@@ -8,6 +8,12 @@
  *
  * Switches (input[role="switch"]) are excluded so switch.css owns their
  * geometry and states. switch.css is imported after this file.
+ *
+ * Public hooks:
+ * --choice-control-offset
+ * --choice-border
+ * --choice-bg
+ * --choice-mark
  */
 /* Intent boundary — inherited intents do not tint this component.
    Local intent classes still win because :where() has zero specificity. */
@@ -51,6 +57,9 @@
   display: block;
 }
 
+/* Progressive enhancement: dim the whole row when one of its controls is
+   disabled. Without :has() the native disabled control keeps its own state
+   styling — the row-level dim is lost but the field stays clearly disabled. */
 .choice:has(> :disabled) {
   color: var(--state-disabled);
   cursor: not-allowed;

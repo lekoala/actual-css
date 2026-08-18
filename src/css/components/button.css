@@ -9,6 +9,23 @@
  * Disabled state uses the native disabled attribute for buttons and inputs.
  * Anchors have no native disabled state, so a.btn uses aria-disabled="true"
  * for disabled styling and activation guards.
+ *
+ * Public hooks:
+ * --btn-font-size
+ * --btn-min-size
+ * --btn-pad-x
+ * --btn-radius
+ * --btn-focus-color
+ * --btn-hover-overlay
+ *
+ * Internal:
+ * --btn-bg
+ * --btn-fg
+ * --btn-border
+ * --btn-focus-ring-color
+ * --btn-border-block-end-color
+ * --btn-border-block-end-width
+ * --spinner-width
  */
 
 /* Intent boundary — inherited intents do not tint this component.

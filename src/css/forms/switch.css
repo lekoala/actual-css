@@ -3,6 +3,16 @@
  *
  * The switch remains an input control, not a decorative toggle. Checked, hover,
  * focus-visible, and disabled states stay clear.
+ *
+ * Public hooks:
+ * --switch-bg
+ * --switch-border
+ * --switch-knob
+ * --switch-width
+ * --switch-block-size
+ * --switch-knob-margin
+ * --switch-knob-size
+ * --switch-travel
  */
 /* Intent boundary — inherited intents do not tint this component.
    Local intent classes still win because :where() has zero specificity. */

@@ -1,0 +1,192 @@
+/*
+ * Page assembly: builds the site chrome fragments (nav, TOC, prev/next,
+ * source links) and fills the docs-page.html template.
+ */
+import { readFileSync } from "node:fs";
+import { dirname, join, relative, sep } from "node:path";
+import { fileURLToPath } from "node:url";
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const REPO = "https://github.com/lekoala/actual-css";
+
+function escapeHtml(str) {
+  return String(str)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
+let templateCache;
+let homeTemplateCache;
+
+export function loadTemplate() {
+  if (!templateCache) {
+    templateCache = readFileSync(
+      join(__dirname, "..", "templates", "docs-page.html"),
+      "utf8",
+    );
+  }
+  return templateCache;
+}
+
+export function loadHomeTemplate() {
+  if (!homeTemplateCache) {
+    homeTemplateCache = readFileSync(
+      join(__dirname, "..", "templates", "docs-home.html"),
+      "utf8",
+    );
+  }
+  return homeTemplateCache;
+}
+
+/* Relative href between two site-relative URLs ("components/button.html" -> "../layout/stack.html"). */
+export function relHref(fromUrl, toUrl) {
+  const fromDir = fromUrl === "index.html" ? "." : dirname(fromUrl);
+  return relative(fromDir, toUrl).replaceAll(sep, "/");
+}
+
+export function renderNavGroups(navigation, current) {
+  return navigation.groups
+    .map((group) => {
+      const links = group.pages
+        .map((page) => {
+          const entry = page.entry;
+          const active = entry === current;
+          const title = escapeHtml(entry.title ?? entry.slug);
+          const href = current ? relHref(current.url, entry.url) : entry.url;
+          return `        <li><a class="nav-link" href="${href}"${active ? ' aria-current="page"' : ""}>${title}</a></li>`;
+        })
+        .join("\n");
+      return `      <p class="docs-nav-group">${escapeHtml(group.title)}</p>
+      <ul class="nav-list">
+${links}
+      </ul>`;
+    })
+    .join("\n");
+}
+
+export function renderToc(toc) {
+  return toc
+    .map(
+      (item) =>
+        `        <li><a class="nav-link" href="#${item.id}" data-docs-toc-item data-level="${item.level}">${escapeHtml(item.label)}</a></li>`,
+    )
+    .join("\n");
+}
+
+const SCHEME_VALUES = ["system", "light", "dark"];
+
+export function renderThemeOptions(themes) {
+  const scheme = SCHEME_VALUES.map(
+    (name) => `            <option value="${name}">${escapeHtml(name.charAt(0).toUpperCase() + name.slice(1))}</option>`,
+  ).join("\n");
+  const named = themes
+    .map((theme) => `            <option value="${theme.name}">${escapeHtml(theme.label)}</option>`)
+    .join("\n");
+  return `${scheme}
+            <optgroup label="Themes">
+${named}
+            </optgroup>`;
+}
+
+export function renderThemeInit(themes) {
+  const valid = JSON.stringify([...SCHEME_VALUES, ...themes.map((theme) => theme.name)]);
+  return `<script>
+  (function () {
+    var valid = ${valid};
+    var saved = null;
+    try { saved = localStorage.getItem("actual-docs-theme"); } catch (e) {}
+    if (saved === "system" || !valid.includes(saved)) {
+      try { localStorage.removeItem("actual-docs-theme"); } catch (e) {}
+    } else if (saved) {
+      document.documentElement.setAttribute("data-theme", saved);
+    }
+  })();
+</script>`;
+}
+
+export function renderThemeCards(themes) {
+  return themes
+    .map(
+      (theme) => `          <article class="card stack docs-theme-card" data-theme="${theme.name}">
+            <div class="docs-theme-preview" aria-hidden="true">
+              <span class="docs-theme-chip"></span>
+              <span class="docs-theme-chip docs-theme-chip-accent"></span>
+            </div>
+            <h3>${escapeHtml(theme.label)}</h3>
+            <p class="muted">${escapeHtml(theme.description)}</p>
+          </article>`,
+    )
+    .join("\n");
+}
+
+const COMPONENT_FEATURED = [
+  "button",
+  "card",
+  "badge",
+  "alert",
+  "dialog",
+  "drawer",
+  "table",
+  "navbar",
+  "accordion",
+  "breadcrumb",
+  "meter",
+  "pagination",
+];
+
+export function renderComponentsGrid(navigation) {
+  return navigation.pages
+    .filter((page) => page.groupSlug === "components" && COMPONENT_FEATURED.includes(page.slug))
+    .sort((a, b) => COMPONENT_FEATURED.indexOf(a.slug) - COMPONENT_FEATURED.indexOf(b.slug))
+    .map(
+      (page) => `          <a class="card stack docs-component-card" href="${page.url}">
+            <h3>${escapeHtml(page.title)}</h3>
+            <p class="muted">${escapeHtml(page.description)}</p>
+          </a>`,
+    )
+    .join("\n");
+}
+
+export function renderHome({ navigation, themes }) {
+  return loadHomeTemplate()
+    .replace(/\{\{themeOptions\}\}/g, renderThemeOptions(themes))
+    .replace(/\{\{themeInit\}\}/g, renderThemeInit(themes))
+    .replace(/\{\{themeCards\}\}/g, renderThemeCards(themes))
+    .replace(/\{\{componentsGrid\}\}/g, renderComponentsGrid(navigation))
+    .replace(/\{\{navGroups\}\}/g, renderNavGroups(navigation, null));
+}
+
+function renderPrev(page) {
+  return page.previous
+    ? `          <a class="btn outline" href="${relHref(page.url, page.previous.url)}">&larr; ${escapeHtml(page.previous.title)}</a>`
+    : "";
+}
+
+function renderNext(page) {
+  return page.next
+    ? `          <a class="btn outline" href="${relHref(page.url, page.next.url)}">${escapeHtml(page.next.title)} &rarr;</a>`
+    : "";
+}
+
+export function renderPage({ title, description, content, toc, navGroups, assets, url, previous, next, file, themes }) {
+  const tpl = loadTemplate();
+  const page = { url, previous, next };
+  const home = relHref(url, "index.html");
+
+  return tpl
+    .replace(/\{\{title\}\}/g, escapeHtml(title))
+    .replace(/\{\{description\}\}/g, escapeHtml(description))
+    .replace(/\{\{assets\}\}/g, assets)
+    .replace(/\{\{home\}\}/g, home)
+    .replace(/\{\{navGroups\}\}/g, navGroups)
+    .replace(/\{\{themeOptions\}\}/g, renderThemeOptions(themes))
+    .replace(/\{\{themeInit\}\}/g, renderThemeInit(themes))
+    .replace(/\{\{content\}\}/g, `<div class="prose docs-prose">\n${content}\n</div>`)
+    .replace(/\{\{toc\}\}/g, renderToc(toc))
+    .replace(/\{\{prev\}\}/g, renderPrev(page))
+    .replace(/\{\{next\}\}/g, renderNext(page))
+    .replace(/\{\{editUrl\}\}/g, `${REPO}/edit/master/docs/pages/${file}`)
+    .replace(/\{\{markdownUrl\}\}/g, `${REPO}/blob/master/docs/pages/${file}`);
+}

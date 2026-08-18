@@ -10,6 +10,13 @@
  * The badge overhangs the top-right corner by 0.375em; ancestors with
  * overflow: hidden will clip it. Pair with grid or flex utilities for group
  * layout.
+ *
+ * Public hooks:
+ * --choice-card-pad
+ * --choice-card-radius
+ * --choice-card-border
+ * --choice-card-bg
+ * --choice-card-check-size
  */
 :where(.choice-card) {
   --intent: initial;

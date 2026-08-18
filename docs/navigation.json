@@ -1,0 +1,124 @@
+{
+  "groups": [
+    {
+      "title": "Guides",
+      "slug": "guides",
+      "pages": ["introduction", "progressive-enhancement"]
+    },
+    {
+      "title": "Foundations",
+      "slug": "foundations",
+      "pages": ["philosophy", "typography", "tokens", "theming"]
+    },
+    {
+      "title": "Layout",
+      "slug": "layout",
+      "pages": [
+        "overview",
+        "stack",
+        "cluster",
+        "grid",
+        "center",
+        "sidebar-layout",
+        "media",
+        "switcher",
+        "topbar",
+        "scroll-snap",
+        "frame",
+        "app-shell",
+        "list"
+      ]
+    },
+    {
+      "title": "Components",
+      "slug": "components",
+      "pages": [
+        "accordion",
+        "alert",
+        "avatar",
+        "badge",
+        "breadcrumb",
+        "button",
+        "card",
+        "dialog",
+        "drawer",
+        "key",
+        "meter",
+        "navbar",
+        "pagination",
+        "progress",
+        "skeleton",
+        "spinner",
+        "table"
+      ]
+    },
+    {
+      "title": "Forms",
+      "slug": "forms",
+      "pages": [
+        "overview",
+        "controls",
+        "labels",
+        "states-and-sizes",
+        "form-actions",
+        "joined-controls",
+        "choice-cards",
+        "switch",
+        "range",
+        "password",
+        "input-policy",
+        "validation",
+        "detached-actions",
+        "sticky-actions"
+      ]
+    },
+    {
+      "title": "Patterns",
+      "slug": "patterns",
+      "pages": [
+        "overview",
+        "actions",
+        "navigation-list",
+        "icon-input",
+        "structured-lists",
+        "hierarchical-nav",
+        "code-block",
+        "exclusive-accordion",
+        "intent-nesting"
+      ]
+    },
+    {
+      "title": "Utilities",
+      "slug": "utilities",
+      "pages": [
+        "overview",
+        "accessibility",
+        "overflow",
+        "sizing-wrapping",
+        "flex",
+        "spacing",
+        "text",
+        "shape",
+        "list",
+        "links"
+      ]
+    },
+    {
+      "title": "Enhancements",
+      "slug": "enhancements",
+      "pages": [
+        "overview",
+        "flyout",
+        "tooltip",
+        "tabs",
+        "scrollspy",
+        "status-bar"
+      ]
+    },
+    {
+      "title": "Examples",
+      "slug": "examples",
+      "pages": ["overview"]
+    }
+  ]
+}

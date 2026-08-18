@@ -14,6 +14,11 @@
  *   --fluid-display, --fluid-title, --fluid-lead  (size tokens, clamp())
  *   .text-display, .text-title, .text-lead        (composed classes)
  *
+ * Public hooks:
+ * --fluid-display
+ * --fluid-title
+ * --fluid-lead
+ *
  * Values are generated from scripts/rfs.ts over the 360px -> 1440px range.
  */
 :root {

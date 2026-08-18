@@ -4,6 +4,18 @@
  * Soft by default. .solid for counters and notification badges. The dot
  * (.badge:empty) stays solid regardless — a soft dot is pointless.
  * Shared .outline variant stays available.
+ *
+ * Public hooks:
+ * --badge-size
+ * --badge-pad-x
+ * --badge-font-size
+ * --badge-dot-size
+ * --badge-radius
+ *
+ * Internal:
+ * --badge-bg
+ * --badge-fg
+ * --badge-border
  */
 /* Intent boundary — inherited intents do not tint this component.
    Local intent classes still win because :where() has zero specificity. */
