@@ -14,6 +14,12 @@
  * --control-border-block-end-color/-width are unset extension points, mirroring
  * --btn-border-block-end-* (button.css), for themes that give text controls an
  * underline-style lower edge instead of a uniform border.
+ *
+ * Public hooks:
+ * --control-border
+ * --control-bg
+ * --control-fg
+ * --control-cursor
  */
 .input,
 .textarea,

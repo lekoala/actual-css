@@ -10,6 +10,9 @@
  * pointers. Authors opt into mobile behavior with
  * [data-flyout-mobile="sheet|auto|none|anchored"].
  * --surface-anchor-width is set by surface.js while an open flyout is positioned.
+ *
+ * Internal:
+ * --menu-item-size (derived from --control-size for menu rows)
  */
 
 .flyout-trigger {

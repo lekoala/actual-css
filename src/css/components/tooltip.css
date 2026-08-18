@@ -4,6 +4,11 @@
  * Position, placement, and arrow position are managed by JavaScript
  * via position: fixed, left, top, data-placement, and --arrow-x.
  * Visibility is managed with hidden; CSS owns entry and exit animation.
+ *
+ * Public hooks:
+ * --tooltip-bg
+ * --tooltip-fg
+ * --tooltip-arrow-size
  */
 .tooltip {
   --tooltip-bg: var(--surface-solid);

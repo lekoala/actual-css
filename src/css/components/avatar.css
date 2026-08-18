@@ -4,6 +4,20 @@
  * The visual box stays the same across semantic elements. Grouping and status
  * dots (an empty .badge child) compose around the avatar without changing its
  * meaning.
+ *
+ * Public hooks:
+ * --avatar-size
+ * --avatar-radius
+ * --avatar-font-size
+ * --avatar-stack-size
+ * --avatar-stack-font-size
+ * --avatar-stack-overlap
+ * --avatar-stack-ring
+ *
+ * Internal:
+ * --avatar-bg
+ * --avatar-fg
+ * --avatar-status-translate-x
  */
 /* Intent boundary — inherited intents do not tint this component.
    Local intent classes still win because :where() has zero specificity. */

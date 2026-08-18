@@ -3,6 +3,17 @@
  *
  * Global element styles stay mild so app UI is not shaped accidentally. Page
  * layout, forms, cards, navigation, and app tables remain outside this scope.
+ *
+ * Public hooks:
+ * --prose-size
+ * --prose-line-height
+ * --prose-measure
+ * --prose-flow
+ * --prose-heading-line-height
+ * --prose-h1
+ * --prose-h2
+ * --prose-h3
+ * --prose-h4
  */
 
 .prose {

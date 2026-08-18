@@ -1,0 +1,3 @@
+# Intent Nesting
+
+Intent on an ancestor must not tint nested components, and a local intent inside an intent-carrying ancestor must win. Both directions are verified in `tests/css-audit.test.js` and the kitchen-sink demo template. Intent classes only expose `--intent` and `--intent-fg`; each consuming component opens a local intent boundary in a `:where()` block that resets exactly the tokens it consumes to initial. Parent intents do not leak into nested components, and a local intent class still wins because it has higher specificity than `:where()`.

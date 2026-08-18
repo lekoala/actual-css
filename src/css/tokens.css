@@ -1,8 +1,19 @@
 :root {
   /*
    * Global framework tokens.
+   *
+   * Public: properties in the named groups below are public API (typography,
+   * spacing, shape, motion, focus, controls, viewport, z-index, icons) unless
+   * a group is explicitly marked Internal or Derived.
+   *
+   * Derived: "Theme-derived aliases" and "State tokens" reference intent and
+   * surface tokens and follow the theme; do not hard-code values into them.
+   * Internal: indicator offsets, --bar-height, --disabled-opacity and the
+   * like are consumed by components, not authored.
+   *
    * Component-local hooks and internal state relays live with their
-   * components. See docs/tokens.md for the public/internal token contract.
+   * components. See docs/pages/foundations/tokens.md for the public/internal
+   * token contract.
    */
 
   /* Typography */

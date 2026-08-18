@@ -19,9 +19,10 @@ Add relevant guards for future-us when needed based on traps and discoveries.
 
 - Do not lint yourself, this is done by config and use biome
 - Do not run build:dist, unless you want to test if build script works (the user build it)
-- Do not run build:demo, unless you worked on the build script (we have a watcher that build it)
+- Do not run build:docs unless you worked on the build scripts or docs sources (it needs dist/ first; the user runs it)
 - After editing demo/templates/*.html, run `bun run check:templates` (balanced `<style>` braces) — it's cheap and doesn't touch dist or generated demo output, unlike build:all
 - Playwright is not installed, build based on specifications
+- For number-only visual checks (rects, computed styles, class lists) use `bun run probe <page> --script tmp/x.js` instead of improvising a headless-Chrome script — it runs the file as an async program in the page and prints its `return` value as JSON
 - Never rewrite a source file through a shell pipeline. PowerShell
   `(Get-Content x) -replace ... | Set-Content x` truncated `blocks.html`,
   `forms.md` and `javascript.md` to 0 bytes (the read is lazy, so the write

@@ -5,6 +5,12 @@
  * appearance: none gives us full control over track and thumb; without it,
  * pseudo-element rules for ::-webkit-slider-thumb and ::-moz-range-thumb
  * are not reliably applied across browsers.
+ *
+ * Public hooks:
+ * --range-thumb-size
+ * --range-track-height
+ * --range-thumb-bg
+ * --range-track-bg
  */
 
 /* Intent boundary — inherited intents do not tint this component.

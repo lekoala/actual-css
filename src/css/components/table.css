@@ -3,6 +3,10 @@
  *
  * .table-wrap provides the scroll container and outer chrome; .table owns row
  * and cell rules. Tokens are sourced from the shared scale.
+ *
+ * Public hooks:
+ * --table-min
+ * --table-cell-pad
  */
 .table-wrap {
   inline-size: 100%;

@@ -4,6 +4,10 @@
  * Keeps the clickable summary affordance aligned and usable without JavaScript
  * or demo styles. Decorative palettes and custom markers belong outside the
  * base component.
+ *
+ * Public hooks:
+ * --accordion-radius
+ * --accordion-marker-color
  */
 .accordion {
   --accordion-radius: var(--radius);

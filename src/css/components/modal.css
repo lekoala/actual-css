@@ -3,6 +3,13 @@
  *
  * Spacing, radius, transitions, and focus treatment come from shared tokens.
  * Opening behavior and intent-specific decisions stay outside this component.
+ *
+ * Public hooks:
+ * --modal-size
+ * --dialog-close-size
+ *
+ * Internal:
+ * --dialog-close-icon-size
  */
 dialog.modal {
   --modal-size: 32rem;
@@ -191,11 +198,14 @@ html.has-modal-open.had-scrollbar {
   mask: var(--icon-close) center / contain no-repeat;
 }
 
-/* A header containing a close button becomes an aligned two-column grid:
-   title column + close column, with the close riding the title line rather
-   than centering against the whole title+subtitle block. Matches a direct
-   child (modal) or the form-wrapped submit close used by drawers. */
-header:has(> .dialog-close, > form:has(> .dialog-close)) {
+/* Progressive enhancement: with :has() a header that owns a close button
+   becomes an aligned two-column grid. Without :has() the header stays block
+   and the close simply follows the title — functional, just not aligned.
+   Two selectors because the form-wrapped close (used by drawers) cannot be
+   expressed in one: :has() must not nest, so
+   `:has(> form:has(> .dialog-close))` would invalidate the whole rule. */
+header:has(> .dialog-close),
+header:has(> form > .dialog-close) {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   align-items: start;

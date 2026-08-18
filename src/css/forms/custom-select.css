@@ -7,6 +7,10 @@
  *
  * No layout or interaction contract may depend on appearance: base-select.
  * Arbitrary menu and popover behavior belongs elsewhere.
+ *
+ * Internal:
+ * --control-border
+ * --control-bg
  */
 @media (forced-colors: none) and (prefers-contrast: no-preference) and (hover: hover) and (
     pointer: fine

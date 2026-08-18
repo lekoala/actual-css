@@ -13,6 +13,10 @@
  * CSS API:            .status-bar
  * JS target contract:  [data-status][role="status"]
  * Normally combined, but they describe separate concerns.
+ *
+ * Internal:
+ * --status-bg
+ * --status-fg
  */
 
 /* Intent boundary — inherited intents do not tint this component.

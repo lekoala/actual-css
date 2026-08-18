@@ -5,8 +5,15 @@
  * file when an app wants to own validation styling completely.
  *
  * State coverage (which states each component ships) is audited in
- * tests/validation.test.js and summarized in docs/forms.md — not kept as a
- * source comment that can drift from the implementation.
+ * tests/validation.test.js and summarized in docs/pages/forms/validation.md —
+ * not kept as a source comment that can drift from the implementation.
+ *
+ * Public hooks:
+ * --form-invalid-border
+ *
+ * Internal:
+ * --choice-bg
+ * --switch-bg
  */
 
 .field.danger {

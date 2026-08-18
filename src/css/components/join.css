@@ -7,6 +7,18 @@
  * Cascade note: .join writes border-radius longhands on its direct children.
  * Keep this file loaded after control/component styles so those corners win at
  * equal specificity.
+ *
+ * Public hooks:
+ * --join-radius
+ *
+ * Internal:
+ * --join-ss
+ * --join-se
+ * --join-es
+ * --join-ee
+ * --control-border
+ * --control-bg
+ * --control-fg
  */
 .join {
   --join-radius: var(--radius);

@@ -4,6 +4,19 @@
  * Surface, border, radius, padding, density, and elevation stay local here.
  * Direct header/footer children are structural slots. Page layout remains the
  * job of markup and layout primitives outside the card.
+ *
+ * Public hooks:
+ * --card-pad
+ * --card-radius
+ * --card-max-inline-size
+ *
+ * Child contract:
+ * Direct .bleed children escape --card-pad (negative inset, wider media);
+ * edge children inherit the card corners. .bleed must be a direct child.
+ *
+ * Internal:
+ * --heading
+ * --busy-overlay-bg
  */
 /* Intent boundary — inherited intents do not tint this component.
    Local intent classes still win because :where() has zero specificity. */

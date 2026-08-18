@@ -6,6 +6,13 @@
  * discrete display/overlay transitions. The drawer is a layout shell only —
  * navigation content inside uses .nav-link and .accordion, which carry their
  * own link/summary styling.
+ *
+ * Public hooks:
+ * --drawer-size
+ * --drawer-pad
+ *
+ * Internal:
+ * --drawer-closed-translate (side/RTL positioning state)
  */
 dialog.drawer {
   --drawer-size: 20rem;

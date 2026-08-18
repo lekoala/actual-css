@@ -6,15 +6,15 @@ Actual CSS uses a small public grammar: `.component [intent] [variant] [size] [m
 
 ## Documentation
 
-- [Docs index](docs/README.md): the maintained map of user docs and design notes.
+- [Documentation source](docs/pages/): the docs pages, generated into `docs/site/` by `bun run build:docs` (start at `docs/site/index.html`).
 
 ## Package Entrypoints
 
 `package.json#exports` is the canonical package surface. Use `actual-css` for the
 full CSS framework and `actual-css/js` for the complete runtime. The composition
-guides in [README](README.md) and [JavaScript](docs/javascript.md) show supported
-CSS modules and individual enhancer imports without duplicating the full export
-list here.
+guides in [README](README.md) and [Progressive Enhancements](docs/pages/enhancements/overview.md)
+show supported CSS modules and individual enhancer imports without duplicating
+the full export list here.
 
 In 0.2, presentation (`class`) and behavior (`data-enhance`) are separate layers.
 Behaviour primitives (`enhance`, `floating`, `surface`, `keys`, `menu`, `focus`,
