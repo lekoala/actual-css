@@ -21,10 +21,10 @@
 .accordion summary {
   display: flex;
   align-items: center;
-  gap: var(--space-3);
+  gap: var(--space-30);
   cursor: pointer;
   list-style: none;
-  padding: var(--space-4);
+  padding: var(--space-40);
   color: var(--text);
   font-weight: var(--font-weight-bold);
 }
@@ -54,14 +54,14 @@
 }
 
 .accordion details > summary + * {
-  padding-block: 0 var(--space-4);
-  padding-inline: var(--space-4);
+  padding-block: 0 var(--space-40);
+  padding-inline: var(--space-40);
   color: var(--text-muted);
   margin-block: 0;
 }
 
 .accordion details[open] > summary + * {
-  padding-block-start: var(--space-1);
+  padding-block-start: var(--space-10);
 }
 
 .accordion details > summary + * > :first-child {

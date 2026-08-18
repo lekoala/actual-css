@@ -25,12 +25,12 @@
 
 /* Leading: icon is the first child */
 .input-icon > :first-child:where(:not(.input)) {
-  inset-inline-start: var(--space-3);
+  inset-inline-start: var(--space-30);
 }
 
 /* Trailing: input is the first child, icon follows */
 .input-icon > .input:first-child ~ :where(:not(.input)) {
-  inset-inline-end: var(--space-3);
+  inset-inline-end: var(--space-30);
 }
 
 /* font-size only sizes text-metric icons (webfont <i>, <span>). An inline
@@ -42,10 +42,10 @@
 
 /* Leading: input gets start padding to clear the icon */
 .input-icon > :first-child:where(:not(.input)) ~ .input {
-  padding-inline-start: calc(var(--space-3) * 2 + var(--input-icon-size));
+  padding-inline-start: calc(var(--space-30) * 2 + var(--input-icon-size));
 }
 
 /* Trailing: input is first child and has a sibling → end padding */
 .input-icon > .input:first-child:where(:not(:last-child)) {
-  padding-inline-end: calc(var(--space-3) * 2 + var(--input-icon-size));
+  padding-inline-end: calc(var(--space-30) * 2 + var(--input-icon-size));
 }

@@ -22,16 +22,18 @@
   --font-size-md: 1rem;
   --font-size-lg: 1.125rem;
 
-  /* Spacing */
+  /* Spacing — official steps are named in tens so the scale stays open for
+     application themes to intercalate intermediate values (--space-15,
+     --space-45…) without colliding with future framework steps. */
   --gap: 0.75rem;
-  --density-space: var(--space-4);
+  --density-space: var(--space-40);
   --density-compact-size: 1.5rem;
-  --space-1: 0.25rem;
-  --space-2: 0.5rem;
-  --space-3: 0.75rem;
-  --space-4: 1rem;
-  --space-5: 1.5rem;
-  --space-6: 2rem;
+  --space-10: 0.25rem;
+  --space-20: 0.5rem;
+  --space-30: 0.75rem;
+  --space-40: 1rem;
+  --space-50: 1.5rem;
+  --space-60: 2rem;
 
   /* Shape */
   --border-width: 1px;
@@ -119,7 +121,9 @@
   --viewport-inline: 100vw;
 
   /* Z-index scale — used ONLY by non-dialog overlays (see the layering
-     note below for the full model). */
+     note below for the full model). Actual CSS reserves multiples of 10 for
+     framework layers; applications may use intermediate values for local
+     layering. */
   --z-sticky: 10;
   --z-menu: 20;
   --z-tooltip: 50;

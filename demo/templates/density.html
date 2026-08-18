@@ -12,19 +12,19 @@
   <link rel="stylesheet" href="../styles/demo.css">
   <style>
     .density-page {
-      padding-block: var(--space-6);
+      padding-block: var(--space-60);
     }
 
     .density-intro {
       --center-size: 72rem;
 
-      margin-block-end: var(--space-5);
+      margin-block-end: var(--space-50);
     }
 
     .density-section {
       --center-size: 72rem;
 
-      padding-block: var(--space-6);
+      padding-block: var(--space-60);
       border-block-start: var(--border-width) solid var(--border);
     }
 
@@ -34,8 +34,8 @@
     }
 
     .density-stage {
-      margin-block-start: var(--space-4);
-      padding: var(--space-4);
+      margin-block-start: var(--space-40);
+      padding: var(--space-40);
       border: var(--border-width) solid var(--border);
       border-radius: var(--radius);
       background: var(--surface);
@@ -44,9 +44,9 @@
     .density-switcher {
       display: flex;
       flex-wrap: wrap;
-      gap: var(--space-2);
+      gap: var(--space-20);
       align-items: center;
-      margin-block-start: var(--space-3);
+      margin-block-start: var(--space-30);
     }
 
     .density-cols {
@@ -54,12 +54,12 @@
       grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
       gap: var(--gap);
       align-items: start;
-      margin-block-start: var(--space-4);
+      margin-block-start: var(--space-40);
     }
 
     .density-col {
       display: grid;
-      gap: var(--space-3);
+      gap: var(--space-30);
     }
 
     .density-col > h3 {
@@ -73,20 +73,20 @@
 
     .density-sample {
       display: grid;
-      gap: var(--space-3);
-      padding: var(--space-4);
+      gap: var(--space-30);
+      padding: var(--space-40);
       border: var(--border-width) solid var(--border);
       border-radius: var(--radius);
       background: var(--surface);
     }
 
     .density-code {
-      margin-block-start: var(--space-4);
+      margin-block-start: var(--space-40);
     }
 
     .density-code pre {
       margin: 0;
-      padding: var(--space-4);
+      padding: var(--space-40);
       background: var(--surface-subtle);
       border-radius: var(--radius-sm);
       overflow-x: auto;
@@ -95,8 +95,8 @@
 
     .density-legend {
       display: grid;
-      gap: var(--space-2);
-      margin-block-start: var(--space-4);
+      gap: var(--space-20);
+      margin-block-start: var(--space-40);
     }
 
     .density-legend ul {
@@ -373,18 +373,18 @@
               <button class="btn">Save</button>
               <button class="btn outline">Cancel</button>
             </div>
-            <p class="py">Block padding follows <code>--density-space</code> (default <code>--space-4</code>).</p>
+            <p class="py">Block padding follows <code>--density-space</code> (default <code>--space-40</code>).</p>
           </div>
         </div>
 
         <div class="density-col">
           <h3>tuned per dimension</h3>
           <div class="density-sample">
-            <div class="cluster" style="--gap: var(--space-2);">
+            <div class="cluster" style="--gap: var(--space-20);">
               <button class="btn">Save</button>
               <button class="btn outline">Cancel</button>
             </div>
-            <p class="py" style="--density-space: var(--space-3);">Gap tightened to <code>--space-2</code>, padding to <code>--space-3</code>. The buttons keep their default size.</p>
+            <p class="py" style="--density-space: var(--space-30);">Gap tightened to <code>--space-20</code>, padding to <code>--space-30</code>. The buttons keep their default size.</p>
           </div>
         </div>
       </div>

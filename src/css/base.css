@@ -44,7 +44,7 @@ hgroup > * {
 hr {
   border: 0;
   border-block-start: var(--border-width) solid var(--border);
-  margin-block: var(--space-6);
+  margin-block: var(--space-60);
 }
 
 code,

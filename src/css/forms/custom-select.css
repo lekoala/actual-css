@@ -19,7 +19,7 @@
       &::picker(select) {
         appearance: base-select;
         max-height: min(24rem, calc(var(--viewport-block) * 0.7));
-        margin-block: var(--space-2);
+        margin-block: var(--space-20);
         padding: 0;
         border: var(--border-width) solid var(--border);
         border-radius: var(--radius);
@@ -41,8 +41,8 @@
 
       & option {
         position: relative;
-        padding-block: var(--space-2);
-        padding-inline: var(--space-3);
+        padding-block: var(--space-20);
+        padding-inline: var(--space-30);
         white-space: normal;
         transition-property: color, background-color;
         transition-duration: var(--duration);

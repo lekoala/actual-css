@@ -14,13 +14,13 @@
 }
 
 .card {
-  --card-pad: var(--space-4);
+  --card-pad: var(--space-40);
   --card-radius: var(--radius-lg);
   --card-max-inline-size: none;
 
   max-inline-size: var(--card-max-inline-size);
   padding: var(--card-pad);
-  background: var(--ui-bg, var(--surface));
+  background: var(--ui-bg, var(--surface-raised));
   color: var(--ui-fg, var(--text));
   border: var(--border-width) solid var(--ui-border, var(--border));
   border-radius: var(--card-radius);
@@ -35,7 +35,7 @@
   flex-wrap: wrap;
   align-items: var(--items-align, center);
   justify-content: space-between;
-  gap: var(--space-3);
+  gap: var(--space-30);
   min-inline-size: 0;
 }
 
@@ -71,7 +71,7 @@
 }
 
 .card.compact {
-  --card-pad: var(--space-2);
+  --card-pad: var(--space-20);
 }
 
 /* Full-bleed children */

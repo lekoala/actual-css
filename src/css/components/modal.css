@@ -32,11 +32,11 @@ dialog.modal {
 dialog.modal > form,
 dialog.modal > .stack {
   display: grid;
-  gap: var(--space-4);
+  gap: var(--space-40);
   max-block-size: calc(var(--viewport-block) - 2rem);
   overflow: auto;
   overscroll-behavior: contain;
-  padding: var(--space-4);
+  padding: var(--space-40);
 }
 
 dialog.modal.scrollable > form,
@@ -199,7 +199,7 @@ header:has(> .dialog-close, > form:has(> .dialog-close)) {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   align-items: start;
-  gap: var(--space-4);
+  gap: var(--space-40);
 }
 
 @media (hover: hover) {

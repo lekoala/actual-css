@@ -16,7 +16,7 @@
   gap: var(--gap);
   align-items: var(--form-actions-align, center);
   justify-content: var(--form-actions-justify, flex-start);
-  margin-block-start: var(--form-actions-margin-block-start, var(--space-5));
+  margin-block-start: var(--form-actions-margin-block-start, var(--space-50));
 }
 
 /* Opt-in sticky variant. When the bar is not stuck (at rest) the translucent
@@ -30,7 +30,7 @@
   isolation: isolate;
 
   margin-inline: calc(var(--form-actions-sticky-inline-offset, 0px) * -1);
-  padding: var(--form-actions-sticky-padding, var(--space-3));
+  padding: var(--form-actions-sticky-padding, var(--space-30));
 
   border-block-start: var(--border-width) solid var(--border);
   background: var(--surface);

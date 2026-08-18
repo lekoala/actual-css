@@ -10,9 +10,9 @@
  */
 .select:not([multiple], [size]:not([size="1"])) {
   appearance: none;
-  padding-inline-end: calc(var(--space-3) + var(--space-6));
+  padding-inline-end: calc(var(--space-30) + var(--space-60));
   background-image: var(--icon-chevron);
-  background-position: center right var(--space-3);
+  background-position: center right var(--space-30);
   background-size: 1rem auto;
   background-repeat: no-repeat;
 }
@@ -20,7 +20,7 @@
 /* The chevron sits on the inline-end side; flip it in RTL so it follows
    the padding-inline-end space reserved for it. */
 .select:not([multiple], [size]:not([size="1"])):dir(rtl) {
-  background-position: center left var(--space-3);
+  background-position: center left var(--space-30);
 }
 
 /* Both forced-colors and prefers-contrast hand the arrow back to the
@@ -31,6 +31,6 @@
   .select:not([multiple], [size]:not([size="1"])) {
     appearance: auto;
     background-image: none;
-    padding-inline-end: var(--space-3);
+    padding-inline-end: var(--space-30);
   }
 }

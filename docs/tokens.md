@@ -124,14 +124,18 @@ Spacing should be useful without becoming a design-token encyclopedia.
 ```css
 :root {
   --gap: 0.75rem;
-  --space-1: 0.25rem;
-  --space-2: 0.5rem;
-  --space-3: 0.75rem;
-  --space-4: 1rem;
-  --space-5: 1.5rem;
-  --space-6: 2rem;
+  --space-10: 0.25rem;
+  --space-20: 0.5rem;
+  --space-30: 0.75rem;
+  --space-40: 1rem;
+  --space-50: 1.5rem;
+  --space-60: 2rem;
 }
 ```
+
+Official steps are named in tens so the scale stays extensible: Actual CSS only
+publishes multiples of 10, and applications can intercalate intermediate values
+(`--space-15`, `--space-45`, …) without colliding with a future framework step.
 
 Use `em` for spacing that should scale with the component text size, such as button gaps and inline padding. Use `rem` for global rhythm, layouts, and fixed density.
 
@@ -185,15 +189,15 @@ Density modifiers swap the shared control geometry:
 
 ```css
 .sm {
-  --gap: var(--space-2);
-  --density-space: var(--space-2);
+  --gap: var(--space-20);
+  --density-space: var(--space-20);
   --control-size: var(--control-size-sm);
   --density-compact-size: 1.25rem;
 }
 
 .lg {
-  --gap: var(--space-5);
-  --density-space: var(--space-5);
+  --gap: var(--space-50);
+  --density-space: var(--space-50);
   --control-size: var(--control-size-lg);
   --density-compact-size: 1.875rem;
 }

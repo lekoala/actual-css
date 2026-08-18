@@ -16,7 +16,7 @@
 
 .table {
   --table-min: 100%;
-  --table-cell-pad: var(--space-3);
+  --table-cell-pad: var(--space-30);
 
   inline-size: max(var(--table-min), 100%);
   border-collapse: collapse;

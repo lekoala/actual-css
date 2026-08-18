@@ -38,23 +38,26 @@
      surface.js switches an open flyout to position: fixed with measured
      coordinates; this only covers a flyout revealed without the runtime. */
   position: absolute;
-  inset-block-start: calc(100% + var(--space-1));
+  inset-block-start: calc(100% + var(--space-10));
   inset-inline-start: 0;
   display: grid;
-  gap: var(--space-1);
+  gap: var(--space-10);
   inline-size: var(--flyout-inline-size, max-content);
   min-inline-size: min(
     var(--surface-anchor-width, 0px),
-    min(var(--flyout-max-inline-size, 20rem), calc(var(--viewport-inline) - var(--space-6)))
+    min(var(--flyout-max-inline-size, 20rem), calc(var(--viewport-inline) - var(--space-60)))
   );
   max-inline-size: min(
     var(--flyout-max-inline-size, 20rem),
-    calc(var(--viewport-inline) - var(--space-6))
+    calc(var(--viewport-inline) - var(--space-60))
   );
-  max-block-size: min(24rem, var(--available-height, calc(var(--viewport-block) - var(--space-6))));
+  max-block-size: min(
+    24rem,
+    var(--available-height, calc(var(--viewport-block) - var(--space-60)))
+  );
   overflow: auto;
   margin: 0;
-  padding: var(--space-1);
+  padding: var(--space-10);
   border: var(--border-width) solid var(--border);
   border-radius: var(--radius);
   background: var(--surface-raised);
@@ -93,8 +96,8 @@
   max-block-size: min(calc(var(--viewport-block) * 0.75), 32rem);
   overflow: auto;
   grid-template-columns: 1fr;
-  padding: max(var(--space-3), env(safe-area-inset-top)) var(--space-3)
-    max(var(--space-3), env(safe-area-inset-bottom));
+  padding: max(var(--space-30), env(safe-area-inset-top)) var(--space-30)
+    max(var(--space-30), env(safe-area-inset-bottom));
   border-end-start-radius: 0;
   border-end-end-radius: 0;
 }
@@ -107,13 +110,13 @@
 
 .flyout.is-sheet[hidden] {
   scale: 1;
-  translate: 0 var(--space-3);
+  translate: 0 var(--space-30);
 }
 
 @starting-style {
   .flyout.is-sheet.is-open {
     scale: 1;
-    translate: 0 var(--space-3);
+    translate: 0 var(--space-30);
   }
 }
 
@@ -133,7 +136,7 @@
 
 .flyout > :where(section, footer) {
   min-inline-size: 0;
-  padding: var(--space-2);
+  padding: var(--space-20);
 }
 
 .flyout > section > :where(h1, h2, h3, h4, h5, h6) {
@@ -145,8 +148,8 @@
 
 .flyout > section > ul {
   display: grid;
-  gap: var(--space-1);
-  margin: var(--space-1) 0 0;
+  gap: var(--space-10);
+  margin: var(--space-10) 0 0;
   padding: 0;
   list-style: none;
 }

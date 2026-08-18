@@ -9,7 +9,7 @@
  */
 dialog.drawer {
   --drawer-size: 20rem;
-  --drawer-pad: var(--space-4);
+  --drawer-pad: var(--space-40);
   --drawer-closed-translate: -100%;
 
   inline-size: min(calc(var(--viewport-inline) * 0.9), var(--drawer-size));
@@ -34,7 +34,7 @@ dialog.drawer {
 dialog.drawer[open] {
   display: grid;
   grid-template-rows: auto minmax(0, 1fr) auto;
-  gap: var(--space-4);
+  gap: var(--space-40);
   opacity: 1;
   transform: translateX(0);
 }

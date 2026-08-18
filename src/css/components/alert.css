@@ -19,8 +19,8 @@
 }
 
 .alert {
-  --alert-pad-block: var(--space-3);
-  --alert-pad-inline: var(--space-4);
+  --alert-pad-block: var(--space-30);
+  --alert-pad-inline: var(--space-40);
   --alert-font-size: var(--font-size-md);
   --alert-icon-size: 1.25rem;
   --alert-bg: var(--ui-bg, var(--surface-subtle));
@@ -34,7 +34,7 @@
   border: var(--border-width) solid var(--alert-border);
   border-inline-start-color: var(--alert-border-inline-start-color, var(--alert-border));
   border-inline-start-width: var(--alert-border-inline-start-width, var(--border-width));
-  border-radius: var(--radius-lg);
+  border-radius: var(--alert-radius, var(--radius-lg));
   font-size: var(--alert-font-size);
 }
 
@@ -84,7 +84,7 @@
     display: grid;
     grid-template-columns: minmax(0, 1fr);
     align-items: var(--items-align, start);
-    column-gap: var(--space-3);
+    column-gap: var(--space-30);
   }
 
   .alert:has(> .alert-icon) {
@@ -191,7 +191,7 @@
 .alert.admonition > .alert-title {
   display: flex;
   align-items: center;
-  gap: var(--space-2);
+  gap: var(--space-20);
   padding-block: var(--alert-pad-block);
   padding-inline: var(--alert-pad-inline);
   border-start-start-radius: calc(var(--radius-lg) - var(--border-width));

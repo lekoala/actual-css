@@ -80,10 +80,12 @@ Use `.fit` when a control or element should shrink to its content instead of fil
 </select>
 ```
 
-Use `.nowrap` on a flex layout such as `.cluster` when the group must stay on one line.
+Use `.text-nowrap` to keep text on one line inside a cell or label. To stop a
+layout primitive from wrapping — for example to force a `.cluster` onto a single
+row — set `--cluster-wrap: nowrap`.
 
 ```html
-<div class="cluster nowrap sm">
+<div class="cluster sm" style="--cluster-wrap: nowrap;">
   <select class="select sm fit" aria-label="Segment">
     <option>All segments</option>
   </select>
@@ -94,7 +96,7 @@ Use `.nowrap` on a flex layout such as `.cluster` when the group must stay on on
 Use `.truncate` on the flexible item that should ellipsize inside a constrained row.
 
 ```html
-<header class="cluster nowrap">
+<header class="cluster" style="--cluster-wrap: nowrap;">
   <strong class="truncate">A long account name that should not push actions away</strong>
   <button class="btn sm ghost" type="button">Open</button>
 </header>
@@ -106,8 +108,7 @@ Use `.truncate` on the flexible item that should ellipsize inside a constrained 
   max-inline-size: 100%;
 }
 
-.nowrap {
-  flex-wrap: nowrap;
+.text-nowrap {
   white-space: nowrap;
 }
 
@@ -251,8 +252,8 @@ Set the property directly when you need a value the helpers do not ship.
 > Semantic step helpers for gap, padding, and margin — the most common inline-style escape hatches.
 
 Spacing helpers follow the density context. The default step is
-`--space-4` (1rem); the `.sm` context tightens it to `--space-2` (0.5rem)
-and the `.lg` context loosens it to `--space-5` (1.5rem). All helpers read
+`--space-40` (1rem); the `.sm` context tightens it to `--space-20` (0.5rem)
+and the `.lg` context loosens it to `--space-50` (1.5rem). All helpers read
 `--density-space` and map to logical properties (`padding-block`,
 `margin-block-end`, etc.) for writing-direction safety.
 

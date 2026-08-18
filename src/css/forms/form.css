@@ -9,20 +9,20 @@
  */
 .field {
   display: grid;
-  gap: var(--space-1);
+  gap: var(--space-10);
   color: var(--text);
 }
 
 .field-group {
   min-inline-size: 0;
   margin: 0;
-  padding: var(--space-3);
+  padding: var(--space-30);
   border: var(--border-width) solid var(--border);
   border-radius: var(--radius);
 }
 
 .field-group + .field-group {
-  margin-block-start: var(--space-4);
+  margin-block-start: var(--space-40);
 }
 
 .field-label,
@@ -33,7 +33,7 @@
 
 .field-group > legend {
   padding-block: 0;
-  padding-inline: var(--fieldset-legend-padding-inline, var(--space-1));
+  padding-inline: var(--fieldset-legend-padding-inline, var(--space-10));
   font-size: var(--font-size-xs);
 }
 

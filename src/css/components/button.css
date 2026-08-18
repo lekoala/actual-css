@@ -38,10 +38,10 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.375em;
+  gap: var(--btn-gap, 0.375em);
   min-block-size: var(--btn-min-size);
-  padding-block: var(--space-2);
-  padding-block: max(var(--space-1), calc((var(--btn-min-size) - 1lh) / 2));
+  padding-block: var(--space-20);
+  padding-block: max(var(--space-10), calc((var(--btn-min-size) - 1lh) / 2));
   padding-inline: var(--btn-pad-x);
   border: var(--border-width) solid var(--btn-border-color, var(--btn-border));
   border-block-end-color: var(
@@ -64,6 +64,11 @@
     color var(--duration),
     box-shadow var(--duration),
     transform var(--duration);
+}
+
+.btn.icon-only {
+  inline-size: var(--btn-min-size);
+  padding-inline: 0;
 }
 
 @supports (color: color-mix(in oklch, red, white)) {
