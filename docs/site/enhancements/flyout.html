@@ -66,7 +66,7 @@
             </select>
           </label>
           <button class="btn sm" type="button" data-docs-search>Search <kbd class="key">Ctrl K</kbd></button>
-          <button class="btn sm ghost docs-menu-toggle" type="button" data-docs-nav-toggle
+          <button class="btn sm ghost docs-menu-toggle" type="button" commandfor="docs-nav-drawer" command="show-modal"
             aria-haspopup="dialog" aria-controls="docs-nav-drawer" aria-label="Open navigation">Menu</button>
         </div>
       </div>
@@ -679,10 +679,11 @@ at runtime, not set by the author. See the JavaScript runtime documentation.</p>
         </nav>
       </main>
 
-      <aside class="docs-toc" aria-label="On this page">
-        <p class="docs-nav-group">On this page</p>
-        <ul class="nav-list docs-toc-list" data-docs-toc>
-                  <li><a class="nav-link" href="#class-reference" data-docs-toc-item data-level="2">Class reference</a></li>
+      <aside class="docs-toc">
+        <nav class="scrollspy" data-enhance="scrollspy" data-scrollspy-offset="80" aria-label="On this page">
+          <p class="docs-nav-group">On this page</p>
+          <ul class="nav-list docs-toc-list" data-docs-toc>
+        <li><a class="nav-link" href="#class-reference" data-docs-toc-item data-level="2">Class reference</a></li>
         <li><a class="nav-link" href="#usage" data-docs-toc-item data-level="2">Usage</a></li>
         <li><a class="nav-link" href="#trigger-wiring" data-docs-toc-item data-level="3">Trigger wiring</a></li>
         <li><a class="nav-link" href="#action-list" data-docs-toc-item data-level="2">Action list</a></li>
@@ -695,7 +696,8 @@ at runtime, not set by the author. See the JavaScript runtime documentation.</p>
         <li><a class="nav-link" href="#mega-operate" data-docs-toc-item data-level="3">Operate</a></li>
         <li><a class="nav-link" href="#context-menu" data-docs-toc-item data-level="2">Context menu</a></li>
         <li><a class="nav-link" href="#css-hooks" data-docs-toc-item data-level="2">CSS hooks</a></li>
-        </ul>
+          </ul>
+        </nav>
       </aside>
     </div>
 
@@ -711,7 +713,8 @@ at runtime, not set by the author. See the JavaScript runtime documentation.</p>
         <button class="drawer-close" type="submit" aria-label="Close navigation"></button>
       </form>
     </div>
-          <p class="docs-nav-group">Guides</p>
+    <nav aria-label="Documentation">
+            <p class="docs-nav-group">Guides</p>
       <ul class="nav-list">
         <li><a class="nav-link" href="../guides/introduction.html">Introduction</a></li>
         <li><a class="nav-link" href="../guides/progressive-enhancement.html">The JavaScript Runtime</a></li>
@@ -814,6 +817,7 @@ at runtime, not set by the author. See the JavaScript runtime documentation.</p>
       <ul class="nav-list">
         <li><a class="nav-link" href="../examples/overview.html">Examples</a></li>
       </ul>
+    </nav>
   </dialog>
 
   <dialog class="modal docs-search-dialog" id="docs-search-dialog" closedby="any" aria-label="Search documentation">
@@ -830,7 +834,7 @@ at runtime, not set by the author. See the JavaScript runtime documentation.</p>
       <form method="dialog" data-docs-search-form>
         <input class="input docs-search-input" type="search" placeholder="Search docs…" autocomplete="off" />
       </form>
-      <ul class="docs-search-results" data-docs-search-results></ul>
+      <ul class="docs-search-results stack" data-docs-search-results></ul>
     </div>
   </dialog>
 </body>

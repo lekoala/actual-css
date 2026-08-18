@@ -66,7 +66,7 @@
             </select>
           </label>
           <button class="btn sm" type="button" data-docs-search>Search <kbd class="key">Ctrl K</kbd></button>
-          <button class="btn sm ghost docs-menu-toggle" type="button" data-docs-nav-toggle
+          <button class="btn sm ghost docs-menu-toggle" type="button" commandfor="docs-nav-drawer" command="show-modal"
             aria-haspopup="dialog" aria-controls="docs-nav-drawer" aria-label="Open navigation">Menu</button>
         </div>
       </div>
@@ -124,8 +124,6 @@
             <button type="button" class="btn outline">Outline</button>
             <button type="button" class="btn ghost">Ghost</button>
             <button type="button" class="btn danger">Danger</button>
-            <button type="button" class="btn sm">Small</button>
-            <button type="button" class="btn lg">Large</button>
           </div>
           <div class="cluster">
             <span class="badge soft">Badge</span>
@@ -145,22 +143,68 @@
       </section>
 
       <section class="docs-section center stack">
+        <h2>Density, not scaling</h2>
+        <p class="muted">Compact or comfortable without shrinking your type.</p>
+        <div class="grid docs-density-grid">
+          <article class="card stack">
+            <h3>Compact</h3>
+            <div class="stack sm">
+              <label class="field">
+                <span class="field-label">Email</span>
+                <input class="input" type="email" value="hello@example.com" readonly>
+              </label>
+              <div class="cluster">
+                <button class="btn primary" type="button">Save</button>
+                <span class="badge success">Ready</span>
+              </div>
+            </div>
+          </article>
+          <article class="card stack">
+            <h3>Default</h3>
+            <div class="stack">
+              <label class="field">
+                <span class="field-label">Email</span>
+                <input class="input" type="email" value="hello@example.com" readonly>
+              </label>
+              <div class="cluster">
+                <button class="btn primary" type="button">Save</button>
+                <span class="badge success">Ready</span>
+              </div>
+            </div>
+          </article>
+          <article class="card stack">
+            <h3>Comfortable</h3>
+            <div class="stack lg">
+              <label class="field">
+                <span class="field-label">Email</span>
+                <input class="input" type="email" value="hello@example.com" readonly>
+              </label>
+              <div class="cluster">
+                <button class="btn primary" type="button">Save</button>
+                <span class="badge success">Ready</span>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="docs-section center stack">
         <h2>Layout that reads like the markup</h2>
         <p class="muted">A handful of primitives that compose — the docs are built with the same ones.</p>
         <div class="grid docs-layout-grid">
           <article class="card stack">
             <h3>Stack</h3>
             <p class="muted">Spacing follows the markup, top to bottom.</p>
-            <div class="stack docs-demo-boxes">
-              <div class="docs-box"></div>
-              <div class="docs-box"></div>
-              <div class="docs-box"></div>
+            <div class="stack docs-layout-preview">
+              <div class="docs-layout-line"></div>
+              <div class="docs-layout-line"></div>
+              <div class="docs-layout-line"></div>
             </div>
           </article>
           <article class="card stack">
             <h3>Cluster</h3>
             <p class="muted">A row that wraps and centers itself.</p>
-            <div class="cluster docs-demo-boxes docs-demo-cluster">
+            <div class="cluster docs-layout-preview">
               <span class="badge soft">one</span>
               <span class="badge soft">two</span>
               <span class="badge soft">three</span>
@@ -168,19 +212,19 @@
               <span class="badge soft">five</span>
             </div>
           </article>
+          <article class="card stack">
+            <h3>Grid</h3>
+            <p class="muted">Responsive columns without media queries.</p>
+            <div class="grid docs-demo-grid docs-layout-preview">
+              <div class="docs-layout-cell"></div>
+              <div class="docs-layout-cell"></div>
+              <div class="docs-layout-cell"></div>
+              <div class="docs-layout-cell"></div>
+              <div class="docs-layout-cell"></div>
+              <div class="docs-layout-cell"></div>
+            </div>
+          </article>
         </div>
-        <article class="card stack">
-          <h3>Grid</h3>
-          <p class="muted">Responsive columns without media queries.</p>
-          <div class="grid docs-demo-grid">
-            <div class="docs-box"></div>
-            <div class="docs-box"></div>
-            <div class="docs-box"></div>
-            <div class="docs-box"></div>
-            <div class="docs-box"></div>
-            <div class="docs-box"></div>
-          </div>
-        </article>
       </section>
 
       <section class="docs-section center stack">
@@ -201,129 +245,129 @@
         </div>
       </section>
 
-      <section class="docs-section center stack">
+      <section class="docs-section docs-theme-showcase center stack">
         <h2>Pick a theme</h2>
         <p class="muted">Light, dark and fifteen named themes. Each card below previews one — that is a <code>data-theme</code> island doing its job.</p>
         <div class="grid docs-theme-grid">
-                    <article class="card stack docs-theme-card" data-theme="indigo">
+                    <article class="card compact stack docs-theme-card" data-theme="indigo">
             <div class="docs-theme-preview" aria-hidden="true">
-              <span class="docs-theme-chip"></span>
-              <span class="docs-theme-chip docs-theme-chip-accent"></span>
+              <span class="docs-theme-line"></span>
+              <span class="docs-theme-line docs-theme-line-primary"></span>
+              <span class="docs-theme-line docs-theme-line-secondary"></span>
             </div>
             <h3>Indigo</h3>
-            <p class="muted">deep blue/violet dark palette (single block)</p>
           </article>
-          <article class="card stack docs-theme-card" data-theme="dim">
+          <article class="card compact stack docs-theme-card" data-theme="dim">
             <div class="docs-theme-preview" aria-hidden="true">
-              <span class="docs-theme-chip"></span>
-              <span class="docs-theme-chip docs-theme-chip-accent"></span>
+              <span class="docs-theme-line"></span>
+              <span class="docs-theme-line docs-theme-line-primary"></span>
+              <span class="docs-theme-line docs-theme-line-secondary"></span>
             </div>
             <h3>Dim</h3>
-            <p class="muted">dark variant with lifted surface tones</p>
           </article>
-          <article class="card stack docs-theme-card" data-theme="corporate">
+          <article class="card compact stack docs-theme-card" data-theme="corporate">
             <div class="docs-theme-preview" aria-hidden="true">
-              <span class="docs-theme-chip"></span>
-              <span class="docs-theme-chip docs-theme-chip-accent"></span>
+              <span class="docs-theme-line"></span>
+              <span class="docs-theme-line docs-theme-line-primary"></span>
+              <span class="docs-theme-line docs-theme-line-secondary"></span>
             </div>
             <h3>Corporate</h3>
-            <p class="muted">reference paired light/dark recolor via light-dark()</p>
           </article>
-          <article class="card stack docs-theme-card" data-theme="forest">
+          <article class="card compact stack docs-theme-card" data-theme="forest">
             <div class="docs-theme-preview" aria-hidden="true">
-              <span class="docs-theme-chip"></span>
-              <span class="docs-theme-chip docs-theme-chip-accent"></span>
+              <span class="docs-theme-line"></span>
+              <span class="docs-theme-line docs-theme-line-primary"></span>
+              <span class="docs-theme-line docs-theme-line-secondary"></span>
             </div>
             <h3>Forest</h3>
-            <p class="muted">paired recolor + scaled-up radius tokens</p>
           </article>
-          <article class="card stack docs-theme-card" data-theme="ocean">
+          <article class="card compact stack docs-theme-card" data-theme="ocean">
             <div class="docs-theme-preview" aria-hidden="true">
-              <span class="docs-theme-chip"></span>
-              <span class="docs-theme-chip docs-theme-chip-accent"></span>
+              <span class="docs-theme-line"></span>
+              <span class="docs-theme-line docs-theme-line-primary"></span>
+              <span class="docs-theme-line docs-theme-line-secondary"></span>
             </div>
             <h3>Ocean</h3>
-            <p class="muted">reference paired recolor</p>
           </article>
-          <article class="card stack docs-theme-card" data-theme="spruce">
+          <article class="card compact stack docs-theme-card" data-theme="spruce">
             <div class="docs-theme-preview" aria-hidden="true">
-              <span class="docs-theme-chip"></span>
-              <span class="docs-theme-chip docs-theme-chip-accent"></span>
+              <span class="docs-theme-line"></span>
+              <span class="docs-theme-line docs-theme-line-primary"></span>
+              <span class="docs-theme-line docs-theme-line-secondary"></span>
             </div>
             <h3>Spruce</h3>
-            <p class="muted">deep spruce-green primary + copper secondary</p>
           </article>
-          <article class="card stack docs-theme-card" data-theme="petrol">
+          <article class="card compact stack docs-theme-card" data-theme="petrol">
             <div class="docs-theme-preview" aria-hidden="true">
-              <span class="docs-theme-chip"></span>
-              <span class="docs-theme-chip docs-theme-chip-accent"></span>
+              <span class="docs-theme-line"></span>
+              <span class="docs-theme-line docs-theme-line-primary"></span>
+              <span class="docs-theme-line docs-theme-line-secondary"></span>
             </div>
             <h3>Petrol</h3>
-            <p class="muted">desaturated petrol-blue primary + apricot secondary</p>
           </article>
-          <article class="card stack docs-theme-card" data-theme="sunset">
+          <article class="card compact stack docs-theme-card" data-theme="sunset">
             <div class="docs-theme-preview" aria-hidden="true">
-              <span class="docs-theme-chip"></span>
-              <span class="docs-theme-chip docs-theme-chip-accent"></span>
+              <span class="docs-theme-line"></span>
+              <span class="docs-theme-line docs-theme-line-primary"></span>
+              <span class="docs-theme-line docs-theme-line-secondary"></span>
             </div>
             <h3>Sunset</h3>
-            <p class="muted">paired recolor + selection and shadow-color theming</p>
           </article>
-          <article class="card stack docs-theme-card" data-theme="lavender">
+          <article class="card compact stack docs-theme-card" data-theme="lavender">
             <div class="docs-theme-preview" aria-hidden="true">
-              <span class="docs-theme-chip"></span>
-              <span class="docs-theme-chip docs-theme-chip-accent"></span>
+              <span class="docs-theme-line"></span>
+              <span class="docs-theme-line docs-theme-line-primary"></span>
+              <span class="docs-theme-line docs-theme-line-secondary"></span>
             </div>
             <h3>Lavender</h3>
-            <p class="muted">paired recolor + soft-variant tuning, tinted shadows</p>
           </article>
-          <article class="card stack docs-theme-card" data-theme="mono">
+          <article class="card compact stack docs-theme-card" data-theme="mono">
             <div class="docs-theme-preview" aria-hidden="true">
-              <span class="docs-theme-chip"></span>
-              <span class="docs-theme-chip docs-theme-chip-accent"></span>
+              <span class="docs-theme-line"></span>
+              <span class="docs-theme-line docs-theme-line-primary"></span>
+              <span class="docs-theme-line docs-theme-line-secondary"></span>
             </div>
             <h3>Mono</h3>
-            <p class="muted">grayscale palette, colored status intents only</p>
           </article>
-          <article class="card stack docs-theme-card" data-theme="square">
+          <article class="card compact stack docs-theme-card" data-theme="square">
             <div class="docs-theme-preview" aria-hidden="true">
-              <span class="docs-theme-chip"></span>
-              <span class="docs-theme-chip docs-theme-chip-accent"></span>
+              <span class="docs-theme-line"></span>
+              <span class="docs-theme-line docs-theme-line-primary"></span>
+              <span class="docs-theme-line docs-theme-line-secondary"></span>
             </div>
             <h3>Square</h3>
-            <p class="muted">paired recolor + full radius scale forced to 0</p>
           </article>
-          <article class="card stack docs-theme-card" data-theme="edge">
+          <article class="card compact stack docs-theme-card" data-theme="edge">
             <div class="docs-theme-preview" aria-hidden="true">
-              <span class="docs-theme-chip"></span>
-              <span class="docs-theme-chip docs-theme-chip-accent"></span>
+              <span class="docs-theme-line"></span>
+              <span class="docs-theme-line docs-theme-line-primary"></span>
+              <span class="docs-theme-line docs-theme-line-secondary"></span>
             </div>
             <h3>Edge</h3>
-            <p class="muted">paired recolor + intent-colored button lower edge</p>
           </article>
-          <article class="card stack docs-theme-card" data-theme="cyberpunk">
+          <article class="card compact stack docs-theme-card" data-theme="cyberpunk">
             <div class="docs-theme-preview" aria-hidden="true">
-              <span class="docs-theme-chip"></span>
-              <span class="docs-theme-chip docs-theme-chip-accent"></span>
+              <span class="docs-theme-line"></span>
+              <span class="docs-theme-line docs-theme-line-primary"></span>
+              <span class="docs-theme-line docs-theme-line-secondary"></span>
             </div>
             <h3>Cyberpunk</h3>
-            <p class="muted">light-only stress test: yellow canvas, dark-on-bright</p>
           </article>
-          <article class="card stack docs-theme-card" data-theme="neon">
+          <article class="card compact stack docs-theme-card" data-theme="neon">
             <div class="docs-theme-preview" aria-hidden="true">
-              <span class="docs-theme-chip"></span>
-              <span class="docs-theme-chip docs-theme-chip-accent"></span>
+              <span class="docs-theme-line"></span>
+              <span class="docs-theme-line docs-theme-line-primary"></span>
+              <span class="docs-theme-line docs-theme-line-secondary"></span>
             </div>
             <h3>Neon</h3>
-            <p class="muted">dark-only + wide-gamut P3 upgrade via oklch(), glow</p>
           </article>
-          <article class="card stack docs-theme-card" data-theme="gradient">
+          <article class="card compact stack docs-theme-card" data-theme="gradient">
             <div class="docs-theme-preview" aria-hidden="true">
-              <span class="docs-theme-chip"></span>
-              <span class="docs-theme-chip docs-theme-chip-accent"></span>
+              <span class="docs-theme-line"></span>
+              <span class="docs-theme-line docs-theme-line-primary"></span>
+              <span class="docs-theme-line docs-theme-line-secondary"></span>
             </div>
             <h3>Gradient</h3>
-            <p class="muted">paired recolor + Bootstrap 4 style gradient on solid buttons</p>
           </article>
         </div>
       </section>
@@ -411,7 +455,8 @@
         <button class="drawer-close" type="submit" aria-label="Close navigation"></button>
       </form>
     </div>
-          <p class="docs-nav-group">Guides</p>
+    <nav aria-label="Documentation">
+            <p class="docs-nav-group">Guides</p>
       <ul class="nav-list">
         <li><a class="nav-link" href="guides/introduction.html">Introduction</a></li>
         <li><a class="nav-link" href="guides/progressive-enhancement.html">The JavaScript Runtime</a></li>
@@ -514,6 +559,7 @@
       <ul class="nav-list">
         <li><a class="nav-link" href="examples/overview.html">Examples</a></li>
       </ul>
+    </nav>
   </dialog>
 
   <dialog class="modal docs-search-dialog" id="docs-search-dialog" closedby="any" aria-label="Search documentation">
@@ -530,7 +576,7 @@
       <form method="dialog" data-docs-search-form>
         <input class="input docs-search-input" type="search" placeholder="Search docs…" autocomplete="off" />
       </form>
-      <ul class="docs-search-results" data-docs-search-results></ul>
+      <ul class="docs-search-results stack" data-docs-search-results></ul>
     </div>
   </dialog>
 

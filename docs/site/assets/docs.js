@@ -1,7 +1,7 @@
 /*
  * Docs site runtime — progressive enhancement only. The documentation and its
  * examples are fully usable without this script; it adds search, theme
- * persistence, copy buttons, the mobile drawer, and the "On this page" state.
+ * persistence, and copy buttons.
  */
 (() => {
   "use strict";
@@ -39,16 +39,6 @@
     });
   }
 
-  /* --- Mobile navigation drawer --- */
-
-  const drawer = document.getElementById("docs-nav-drawer");
-  const drawerToggle = document.querySelector("[data-docs-nav-toggle]");
-  if (drawer && drawerToggle && typeof drawer.showModal === "function") {
-    drawerToggle.addEventListener("click", () => {
-      if (!drawer.open) drawer.showModal();
-    });
-  }
-
   /* --- Copy code blocks --- */
 
   for (const codeBlock of document.querySelectorAll(".docs-code")) {
@@ -73,7 +63,6 @@
   /* --- Search --- */
 
   const searchDialog = document.getElementById("docs-search-dialog");
-  const searchForm = document.querySelector("[data-docs-search-form]");
   const searchInput = searchDialog?.querySelector("input[type='search']");
   const searchResults = document.querySelector("[data-docs-search-results]");
 
@@ -222,26 +211,4 @@
     searchDialog.addEventListener("close", () => runSearch(""));
   }
 
-  /* --- On this page: active heading --- */
-
-  const tocItems = [...document.querySelectorAll("[data-docs-toc-item]")];
-  if (tocItems.length > 0 && "IntersectionObserver" in window) {
-    const headings = tocItems
-      .map((item) => document.getElementById(item.getAttribute("href").slice(1)))
-      .filter(Boolean);
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const visible = entries.filter((entry) => entry.isIntersecting);
-        if (visible.length === 0) return;
-        const top = visible.sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)[0];
-        for (const item of tocItems) {
-          item.setAttribute("aria-current", item.getAttribute("href").slice(1) === top.target.id ? "true" : "false");
-        }
-      },
-      { rootMargin: "-80px 0px -70% 0px" },
-    );
-
-    for (const heading of headings) observer.observe(heading);
-  }
 })();

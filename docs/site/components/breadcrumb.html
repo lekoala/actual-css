@@ -66,7 +66,7 @@
             </select>
           </label>
           <button class="btn sm" type="button" data-docs-search>Search <kbd class="key">Ctrl K</kbd></button>
-          <button class="btn sm ghost docs-menu-toggle" type="button" data-docs-nav-toggle
+          <button class="btn sm ghost docs-menu-toggle" type="button" commandfor="docs-nav-drawer" command="show-modal"
             aria-haspopup="dialog" aria-controls="docs-nav-drawer" aria-label="Open navigation">Menu</button>
         </div>
       </div>
@@ -236,11 +236,13 @@
         </nav>
       </main>
 
-      <aside class="docs-toc" aria-label="On this page">
-        <p class="docs-nav-group">On this page</p>
-        <ul class="nav-list docs-toc-list" data-docs-toc>
-          
-        </ul>
+      <aside class="docs-toc">
+        <nav class="scrollspy" data-enhance="scrollspy" data-scrollspy-offset="80" aria-label="On this page">
+          <p class="docs-nav-group">On this page</p>
+          <ul class="nav-list docs-toc-list" data-docs-toc>
+
+          </ul>
+        </nav>
       </aside>
     </div>
 
@@ -256,7 +258,8 @@
         <button class="drawer-close" type="submit" aria-label="Close navigation"></button>
       </form>
     </div>
-          <p class="docs-nav-group">Guides</p>
+    <nav aria-label="Documentation">
+            <p class="docs-nav-group">Guides</p>
       <ul class="nav-list">
         <li><a class="nav-link" href="../guides/introduction.html">Introduction</a></li>
         <li><a class="nav-link" href="../guides/progressive-enhancement.html">The JavaScript Runtime</a></li>
@@ -359,6 +362,7 @@
       <ul class="nav-list">
         <li><a class="nav-link" href="../examples/overview.html">Examples</a></li>
       </ul>
+    </nav>
   </dialog>
 
   <dialog class="modal docs-search-dialog" id="docs-search-dialog" closedby="any" aria-label="Search documentation">
@@ -375,7 +379,7 @@
       <form method="dialog" data-docs-search-form>
         <input class="input docs-search-input" type="search" placeholder="Search docs…" autocomplete="off" />
       </form>
-      <ul class="docs-search-results" data-docs-search-results></ul>
+      <ul class="docs-search-results stack" data-docs-search-results></ul>
     </div>
   </dialog>
 </body>

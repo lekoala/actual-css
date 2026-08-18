@@ -20,13 +20,16 @@ dialog.drawer {
   --drawer-closed-translate: -100%;
 
   /* Keep the surface anchored to the viewport in the top layer. This also
-     provides the containing block for the absolutely positioned close button. */
+     provides the containing block for the absolutely positioned close button.
+     A percentage height resolves against the fixed containing viewport, while
+     dynamic viewport units can be stale in embedded previews. */
   position: fixed;
+  inset-block-start: 0;
 
   inline-size: min(calc(var(--viewport-inline) * 0.9), var(--drawer-size));
-  block-size: var(--viewport-block);
+  block-size: 100%;
   max-inline-size: none;
-  max-block-size: var(--viewport-block);
+  max-block-size: 100%;
   margin: 0;
   padding: var(--drawer-pad);
   border: 0;

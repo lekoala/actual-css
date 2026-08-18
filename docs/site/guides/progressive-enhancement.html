@@ -66,7 +66,7 @@
             </select>
           </label>
           <button class="btn sm" type="button" data-docs-search>Search <kbd class="key">Ctrl K</kbd></button>
-          <button class="btn sm ghost docs-menu-toggle" type="button" data-docs-nav-toggle
+          <button class="btn sm ghost docs-menu-toggle" type="button" commandfor="docs-nav-drawer" command="show-modal"
             aria-haspopup="dialog" aria-controls="docs-nav-drawer" aria-label="Open navigation">Menu</button>
         </div>
       </div>
@@ -821,10 +821,11 @@ FormValidator.setErrors(form, { email: &quot;Already taken&quot; });
         </nav>
       </main>
 
-      <aside class="docs-toc" aria-label="On this page">
-        <p class="docs-nav-group">On this page</p>
-        <ul class="nav-list docs-toc-list" data-docs-toc>
-                  <li><a class="nav-link" href="#browser-support" data-docs-toc-item data-level="2">Browser support</a></li>
+      <aside class="docs-toc">
+        <nav class="scrollspy" data-enhance="scrollspy" data-scrollspy-offset="80" aria-label="On this page">
+          <p class="docs-nav-group">On this page</p>
+          <ul class="nav-list docs-toc-list" data-docs-toc>
+        <li><a class="nav-link" href="#browser-support" data-docs-toc-item data-level="2">Browser support</a></li>
         <li><a class="nav-link" href="#overview" data-docs-toc-item data-level="2">Overview</a></li>
         <li><a class="nav-link" href="#the-default-runtime" data-docs-toc-item data-level="2">The default runtime</a></li>
         <li><a class="nav-link" href="#using-the-runtime-with-another-css-framework" data-docs-toc-item data-level="2">Using the runtime with another CSS framework</a></li>
@@ -844,7 +845,8 @@ FormValidator.setErrors(form, { email: &quot;Already taken&quot; });
         <li><a class="nav-link" href="#textarea-autogrow" data-docs-toc-item data-level="2">Textarea autogrow</a></li>
         <li><a class="nav-link" href="#ajax-forms" data-docs-toc-item data-level="2">Ajax forms</a></li>
         <li><a class="nav-link" href="#form-validation" data-docs-toc-item data-level="2">Form validation</a></li>
-        </ul>
+          </ul>
+        </nav>
       </aside>
     </div>
 
@@ -860,7 +862,8 @@ FormValidator.setErrors(form, { email: &quot;Already taken&quot; });
         <button class="drawer-close" type="submit" aria-label="Close navigation"></button>
       </form>
     </div>
-          <p class="docs-nav-group">Guides</p>
+    <nav aria-label="Documentation">
+            <p class="docs-nav-group">Guides</p>
       <ul class="nav-list">
         <li><a class="nav-link" href="introduction.html">Introduction</a></li>
         <li><a class="nav-link" href="progressive-enhancement.html" aria-current="page">The JavaScript Runtime</a></li>
@@ -963,6 +966,7 @@ FormValidator.setErrors(form, { email: &quot;Already taken&quot; });
       <ul class="nav-list">
         <li><a class="nav-link" href="../examples/overview.html">Examples</a></li>
       </ul>
+    </nav>
   </dialog>
 
   <dialog class="modal docs-search-dialog" id="docs-search-dialog" closedby="any" aria-label="Search documentation">
@@ -979,7 +983,7 @@ FormValidator.setErrors(form, { email: &quot;Already taken&quot; });
       <form method="dialog" data-docs-search-form>
         <input class="input docs-search-input" type="search" placeholder="Search docs…" autocomplete="off" />
       </form>
-      <ul class="docs-search-results" data-docs-search-results></ul>
+      <ul class="docs-search-results stack" data-docs-search-results></ul>
     </div>
   </dialog>
 </body>
