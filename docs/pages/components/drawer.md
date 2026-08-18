@@ -7,15 +7,17 @@
 | Class | Kind | Description |
 |---|---|---|
 | `.drawer` | Component | Modal side-sheet built on the native `<dialog>` element. |
-| `.dialog-close` | Component | Icon-only close button for the drawer header (shared with Dialog). |
+| `.drawer-close` | Component | Icon-only close button that sits inside the drawer header. |
 
 ## Usage
 
 - Use `dialog.drawer` for modal side-sheets that overlay the page.
 - Use `command="show-modal"` and `commandfor="<id>"` to open the drawer without JavaScript.
 - Use `form method="dialog"` for close buttons inside the drawer.
-- Use `data-dialog-dismissible` and `closedby="any"` when backdrop click should close the drawer.
-- Omit those attributes when the drawer requires an explicit action (e.g. a form with unsaved changes).
+- Use `data-dialog-dismissible` when backdrop click should close the drawer. It
+  only gates backdrop click: Escape and the close button always close.
+- Use `closedby="none"` when the drawer must not be dismissed by the user at all
+  (e.g. a form with unsaved changes): no backdrop close and no Escape close.
 - Use `[data-side="end"]` for a right-side drawer.
 - Permanent desktop sidebars belong in layout, not here.
 
@@ -39,7 +41,7 @@
     <strong>Menu</strong>
 
     <form method="dialog">
-      <button class="dialog-close" type="submit" aria-label="Close navigation"></button>
+      <button class="drawer-close" type="submit" aria-label="Close navigation"></button>
     </form>
   </header>
 
@@ -56,9 +58,10 @@
 
 ## Non-dismissible drawer
 
-For drawers with unsaved settings or critical actions, omit the dismiss
-attributes. Backdrop click shows a static indicator instead of closing. Escape
-key still works natively.
+For drawers with unsaved settings or critical actions, use `closedby="none"` so
+the user cannot dismiss the drawer by accident: backdrop click shows a static
+indicator instead of closing, and Escape does nothing. Only the explicit footer
+actions and the close button can close the drawer.
 
 ```html demo
 <button class="btn"
@@ -73,11 +76,12 @@ key still works natively.
 <dialog class="drawer"
         id="settings-drawer"
         aria-label="Settings"
-        data-side="end">
+        data-side="end"
+        closedby="none">
   <form method="dialog">
     <header>
       <strong>Settings</strong>
-      <button class="dialog-close" type="submit" aria-label="Close settings"></button>
+      <button class="drawer-close" type="submit" aria-label="Close settings"></button>
     </header>
 
     <div class="stack">
@@ -91,13 +95,19 @@ key still works natively.
 </dialog>
 ```
 
-Backdrop click dismissal and Escape are provided by the native dialog element
-when `closedby="any"` is set. Add `data-dialog-dismissible` when you want the
-optional runtime to wire the same behavior. When both are omitted, clicking the
-backdrop briefly flashes the drawer instead of closing it — useful for drawers
-that should not be dismissed accidentally.
+Backdrop click dismissal and Escape come from the native dialog element and
+follow its `closedby` value. Add `data-dialog-dismissible` when you want the
+optional runtime to take over backdrop click and close with the drawer's
+transition; the runtime rewrites `closedby="any"` to `closedby="closerequest"`
+so the two never double-handle. Without `data-dialog-dismissible`, a native
+`closedby="any"` dialog keeps its own light dismiss, and dialogs without
+light dismiss briefly flash instead of closing when the backdrop is clicked —
+useful for drawers that should not be dismissed accidentally.
 
 ## CSS hooks
 
 - `--drawer-size` — panel width.
 - `--drawer-pad` — panel padding.
+- `--control-size` — size of the `.drawer-close` button. The drawer header
+  reserves `calc(var(--control-size) + var(--space-30))` on its inline end so
+  the title never runs under the close.

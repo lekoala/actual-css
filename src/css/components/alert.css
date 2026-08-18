@@ -89,6 +89,46 @@
   vertical-align: -0.125em;
 }
 
+/* Dismiss — compact close button for inline alerts. Transparent at rest with
+   a reduced opacity glyph so it stays secondary inside an already-colored
+   alert; hover reinforces it via the shared overlay. Uses the shared
+   --icon-close mask, so no icon font or text glyph is required in the markup.
+   Standard alerts place it as a direct trailing child; admonitions place it
+   inside .alert-title (see below). */
+.alert-dismiss {
+  --alert-dismiss-size: 1.75rem;
+  --alert-dismiss-icon-size: 0.875rem;
+
+  display: inline-grid;
+  place-items: center;
+  inline-size: var(--alert-dismiss-size);
+  block-size: var(--alert-dismiss-size);
+  flex: none;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius);
+  background: transparent;
+  color: currentColor;
+  opacity: 0.65;
+  cursor: pointer;
+}
+
+.alert-dismiss::before {
+  content: "";
+  inline-size: var(--alert-dismiss-icon-size);
+  block-size: var(--alert-dismiss-icon-size);
+  background: currentColor;
+  -webkit-mask: var(--icon-close) center / contain no-repeat;
+  mask: var(--icon-close) center / contain no-repeat;
+}
+
+@media (hover: hover) {
+  .alert-dismiss:hover {
+    background: var(--hover-overlay);
+    opacity: 1;
+  }
+}
+
 /* Grid anatomy — activated by a leading icon, a trailing dismiss button, or
    both. Icon and dismiss are pinned to the outer columns; anything else (the
    message content) flows into the remaining text column. */
@@ -134,46 +174,6 @@
 .alert :where(a:not(.btn)) {
   color: inherit;
   font-weight: var(--font-weight-strong);
-}
-
-/* Dismiss — compact close button for inline alerts. Transparent at rest with
-   a reduced opacity glyph so it stays secondary inside an already-colored
-   alert; hover reinforces it via the shared overlay. Uses the shared
-   --icon-close mask, so no icon font or text glyph is required in the markup.
-   Standard alerts place it as a direct trailing child; admonitions place it
-   inside .alert-title (see below). */
-.alert-dismiss {
-  --alert-dismiss-size: 1.75rem;
-  --alert-dismiss-icon-size: 0.875rem;
-
-  display: inline-grid;
-  place-items: center;
-  inline-size: var(--alert-dismiss-size);
-  block-size: var(--alert-dismiss-size);
-  flex: none;
-  padding: 0;
-  border: 0;
-  border-radius: var(--radius);
-  background: transparent;
-  color: currentColor;
-  opacity: 0.65;
-  cursor: pointer;
-}
-
-.alert-dismiss::before {
-  content: "";
-  inline-size: var(--alert-dismiss-icon-size);
-  block-size: var(--alert-dismiss-icon-size);
-  background: currentColor;
-  -webkit-mask: var(--icon-close) center / contain no-repeat;
-  mask: var(--icon-close) center / contain no-repeat;
-}
-
-@media (hover: hover) {
-  .alert-dismiss:hover {
-    background: var(--hover-overlay);
-    opacity: 1;
-  }
 }
 
 /* Forced colors: no override needed. The always-on border gets a forced

@@ -1,15 +1,19 @@
 {
-  "timestamp": "2026-08-18T19:40:32.454Z",
-  "totalRaw": 178449,
-  "totalMinified": 85249,
-  "totalBrotli": 12630,
+  "timestamp": "2026-08-18T21:29:20.079Z",
+  "totalRaw": 181834,
+  "totalMinified": 87363,
+  "totalBrotli": 12864,
   "themesMinified": 29127,
   "themesBrotli": 3404,
-  "shippedMinified": 85249,
-  "shippedBrotli": 12630,
+  "shippedMinified": 87363,
+  "shippedBrotli": 12864,
   "maxShippedBrotli": 13312,
   "fileCount": 73,
   "files": [
+    {
+      "file": "components/modal.css",
+      "raw": 8099
+    },
     {
       "file": "components/button.css",
       "raw": 7562
@@ -25,10 +29,6 @@
     {
       "file": "theme.css",
       "raw": 6719
-    },
-    {
-      "file": "components/modal.css",
-      "raw": 5382
     },
     {
       "file": "forms/choice.css",
@@ -63,6 +63,10 @@
       "raw": 4014
     },
     {
+      "file": "components/drawer.css",
+      "raw": 3645
+    },
+    {
       "file": "forms/switch.css",
       "raw": 3350
     },
@@ -73,10 +77,6 @@
     {
       "file": "components/join.css",
       "raw": 3194
-    },
-    {
-      "file": "components/drawer.css",
-      "raw": 2977
     },
     {
       "file": "components/card.css",

@@ -8,13 +8,17 @@ function readJson(path) {
   return JSON.parse(readFileSync(join(ROOT, path), "utf8"));
 }
 
-test("package.json files array excludes themes", () => {
+test("package ships built assets without raw theme sources", () => {
   const pkg = readJson("package.json");
   const files = pkg.files;
 
-  expect(files).toContain("!dist/actual-themes.min.css");
-  expect(files).toContain("!dist/actual-themes.min.css.map");
-  expect(files).toContain("!src/css/themes");
+  expect(files).toContain("dist");
+  expect(files).toContain("src/css/*.css");
+  expect(files).toContain("src/css/components");
+  expect(files).toContain("src/css/forms");
+  expect(files).toContain("src/css/optional");
+  expect(files).not.toContain("src/css");
+  expect(files.some((path) => path.startsWith("src/css/themes"))).toBe(false);
 });
 
 test("dist directory exists and contains actual.min.css", () => {

@@ -198,6 +198,10 @@ export function patchDialogMethods() {
     this.dispatchEvent(new Event("close"));
   };
   HTMLDialogElement.prototype.requestClose = function requestClose(returnValue = "") {
+    // Mirrors the native lifecycle: a cancelable cancel event fires first and
+    // the dialog only closes when it is not prevented.
+    const event = new Event("cancel", { cancelable: true });
+    if (!this.dispatchEvent(event)) return;
     this.close(returnValue);
   };
 }

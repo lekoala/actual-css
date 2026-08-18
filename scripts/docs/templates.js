@@ -149,8 +149,15 @@ export function renderComponentsGrid(navigation) {
     .join("\n");
 }
 
-export function renderHome({ navigation, themes }) {
+export function renderHome({ navigation, themes, actualCss, optionalCss, themesCss, docsCss, actualJs, docsJs, siteRoot }) {
   return loadHomeTemplate()
+    .replace(/\{\{actualCss\}\}/g, actualCss)
+    .replace(/\{\{optionalCss\}\}/g, optionalCss)
+    .replace(/\{\{themesCss\}\}/g, themesCss)
+    .replace(/\{\{docsCss\}\}/g, docsCss)
+    .replace(/\{\{actualJs\}\}/g, actualJs)
+    .replace(/\{\{docsJs\}\}/g, docsJs)
+    .replace(/\{\{siteRoot\}\}/g, siteRoot)
     .replace(/\{\{themeOptions\}\}/g, renderThemeOptions(themes))
     .replace(/\{\{themeInit\}\}/g, renderThemeInit(themes))
     .replace(/\{\{themeCards\}\}/g, renderThemeCards(themes))
@@ -170,7 +177,7 @@ function renderNext(page) {
     : "";
 }
 
-export function renderPage({ title, description, content, toc, navGroups, assets, url, previous, next, file, themes }) {
+export function renderPage({ title, description, content, toc, navGroups, actualCss, optionalCss, themesCss, docsCss, actualJs, docsJs, siteRoot, url, previous, next, file, themes }) {
   const tpl = loadTemplate();
   const page = { url, previous, next };
   const home = relHref(url, "index.html");
@@ -178,7 +185,13 @@ export function renderPage({ title, description, content, toc, navGroups, assets
   return tpl
     .replace(/\{\{title\}\}/g, escapeHtml(title))
     .replace(/\{\{description\}\}/g, escapeHtml(description))
-    .replace(/\{\{assets\}\}/g, assets)
+    .replace(/\{\{actualCss\}\}/g, actualCss)
+    .replace(/\{\{optionalCss\}\}/g, optionalCss)
+    .replace(/\{\{themesCss\}\}/g, themesCss)
+    .replace(/\{\{docsCss\}\}/g, docsCss)
+    .replace(/\{\{actualJs\}\}/g, actualJs)
+    .replace(/\{\{docsJs\}\}/g, docsJs)
+    .replace(/\{\{siteRoot\}\}/g, siteRoot)
     .replace(/\{\{home\}\}/g, home)
     .replace(/\{\{navGroups\}\}/g, navGroups)
     .replace(/\{\{themeOptions\}\}/g, renderThemeOptions(themes))

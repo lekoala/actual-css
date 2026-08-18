@@ -8,7 +8,13 @@
  * Command semantics are explicit: show-modal calls showModal(), show calls
  * show(). data-dialog-modal still defines the default for direct openDialog()
  * calls when no command mode is forced.
- * Dismissible means backdrop click/light dismiss is allowed.
+ * data-dialog-dismissible gates backdrop click only: with it, the runtime
+ * handles light dismiss (rewriting closedby="any" to "closerequest" so the
+ * native dialog does not double-handle). Without it, a native closedby="any"
+ * dialog keeps its own light dismiss and other dialogs flash a static
+ * indicator on backdrop click. Escape and explicit close requests always
+ * close, unless an application cancels the actual:dialog-cancel event, and
+ * closedby="none" keeps its native meaning (no Escape, no backdrop close).
  *
  * View transitions (opt-in via data-dialog-view-transition):
  *   When the browser supports document.startViewTransition and the user allows
@@ -274,12 +280,22 @@ export function openDialog(dialog, trigger = null, forcedModal = null) {
   state.closing = false;
   state.restoreFocusTo = trigger || dialog.ownerDocument.activeElement;
 
+  // showModal()/show() focus the dialog, and Chrome resets the viewport scroll
+  // while doing so; capture the position first and restore it so the page does
+  // not jump to the top behind the modal.
+  const viewport = dialog.ownerDocument.defaultView;
+  const scrollY = viewport?.scrollY ?? 0;
+
   if (modal) {
     dialog.showModal();
     state.modalOpen = true;
   } else {
     dialog.show();
     state.modalOpen = false;
+  }
+
+  if (scrollY > 0) {
+    viewport?.scrollTo(0, scrollY);
   }
 
   syncModalOpenClass(dialog.ownerDocument);
@@ -290,14 +306,19 @@ function handleDialogClick(event) {
 
   if (event.target !== dialog || !isOutsideDialog(dialog, event)) return;
 
-  event.preventDefault();
-
-  if (isDismissible(dialog)) {
-    requestDialogClose(dialog);
+  // A native closedby="any" dialog owns its light dismiss; the runtime only
+  // takes over when the author opted in via data-dialog-dismissible (which
+  // rewrites "any" to "closerequest"). Leave the native close alone.
+  if (!isDismissible(dialog)) {
+    const closedBy = "closedBy" in dialog ? dialog.closedBy : "";
+    if (closedBy === "any") return;
+    event.preventDefault();
+    flashStatic(dialog);
     return;
   }
 
-  flashStatic(dialog);
+  event.preventDefault();
+  requestDialogClose(dialog);
 }
 
 function handleDialogSubmit(event) {
@@ -316,13 +337,9 @@ function handleDialogCancel(event) {
   const dialog = event.currentTarget;
   const state = dialogMap.get(dialog);
 
-  if (!isDismissible(dialog)) {
-    event.preventDefault();
-    flashStatic(dialog);
-    if (state) state.returnValue = "";
-    return;
-  }
-
+  // Escape and close requests always close, whatever the dismissible flag:
+  // data-dialog-dismissible only gates light dismiss (backdrop click, handled
+  // in handleDialogClick). Applications intercept via actual:dialog-cancel.
   const request = new CustomEvent(EVENTS.dialogCancel, {
     bubbles: true,
     cancelable: true,
@@ -361,8 +378,11 @@ function handleDialogClose(event) {
   const restoreFocusTo = state.restoreFocusTo;
   state.restoreFocusTo = null;
 
-  if (restoreFocusTo?.isConnected) {
-    restoreFocusTo.focus();
+  // The native dialog restores focus to the previously focused element on
+  // close; only step in when it has not (e.g. an explicit trigger we tracked)
+  // and avoid scrolling the viewport while doing so.
+  if (restoreFocusTo?.isConnected && dialog.ownerDocument.activeElement !== restoreFocusTo) {
+    restoreFocusTo.focus({ preventScroll: true });
   }
 }
 
@@ -388,11 +408,11 @@ function ensureDialogWired(dialog) {
   dialog.addEventListener("cancel", handleDialogCancel, { signal: controller.signal });
   dialog.addEventListener("close", handleDialogClose, { signal: controller.signal });
 
-  // Let modern browsers know the intended native close policy. Backdrop click
-  // is still handled above so animation remains consistent across browsers.
-  if ("closedBy" in dialog) {
-    // Keep native Esc/back close requests, but handle backdrop clicks ourselves
-    // so animated light dismiss behaves consistently across browsers.
+  // Only rewrite "any" when the runtime owns light dismiss (dismissible
+  // backdrop): the author opted into Actual's controlled behavior. Otherwise
+  // closedby keeps its native meaning — "any" closes on backdrop click,
+  // "closerequest" on Escape, "none" disables both. Never override "none".
+  if (isDismissible(dialog) && "closedBy" in dialog && dialog.closedBy === "any") {
     dialog.closedBy = "closerequest";
   }
 

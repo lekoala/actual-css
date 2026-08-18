@@ -166,6 +166,24 @@ test("modal uses scrollbar gutter only for measured classic-scrollbar locks", ()
   expect(resetCss.includes("scrollbar-gutter: stable;")).toBe(false);
 });
 
+test("dialog surfaces stay fixed to the viewport", () => {
+  const modalCss = readCss("src/css/components/modal.css");
+  const drawerCss = readCss("src/css/components/drawer.css");
+
+  expect(modalCss).toMatch(/dialog\.modal\s*\{[^}]*position:\s*fixed;/);
+  expect(drawerCss).toMatch(/dialog\.drawer\s*\{[^}]*position:\s*fixed;/);
+});
+
+test("confirmation dialog composes media alignment with an intent-aware icon well", () => {
+  const css = readCss("src/css/components/modal.css");
+
+  expect(css).toContain("dialog.modal.dialog-confirmation > form > .media");
+  expect(css).toMatch(/\.dialog-icon\s*\{[^}]*place-items:\s*center;/);
+  expect(css).toMatch(/\.dialog-icon\s*\{[^}]*border-radius:\s*var\(--radius-full\);/);
+  expect(css).toContain("background: var(--ui-bg, var(--surface-subtle));");
+  expect(css).toContain("color: var(--ui-fg, var(--intent, var(--text-muted)));");
+});
+
 test("alert.callout is excluded from the soft-tint recipe and uses a thick solid leading border", () => {
   const css = readCss("src/css/components/alert.css");
 
