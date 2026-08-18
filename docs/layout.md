@@ -17,12 +17,12 @@ Layout uses the shared spacing surface.
 ```css
 :root {
   --gap: 0.75rem;
-  --space-1: 0.25rem;
-  --space-2: 0.5rem;
-  --space-3: 0.75rem;
-  --space-4: 1rem;
-  --space-5: 1.5rem;
-  --space-6: 2rem;
+  --space-10: 0.25rem;
+  --space-20: 0.5rem;
+  --space-30: 0.75rem;
+  --space-40: 1rem;
+  --space-50: 1.5rem;
+  --space-60: 2rem;
 }
 ```
 
@@ -30,13 +30,13 @@ Most layout primitives should read `--gap` and allow local overrides.
 
 ```css
 .settings-form {
-  --gap: var(--space-5);
+  --gap: var(--space-50);
 }
 ```
 
 Prefer a local custom property over adding many one-off utility classes. Use inline styles only for demos, prototypes, or truly dynamic values.
 
-There are no `.gap-sm` / `.gap-md` / `.gap-lg` density variants on layout primitives; set `--gap` locally when only spacing should change.
+There are no `.gap-sm` / `.gap-md` / `.gap-lg` density variants on the core layout primitives; set `--gap` locally when only spacing should change. The optional `utilities-extra.css` layer ships those gap utilities for row/column containers.
 
 ## Stack
 
@@ -79,6 +79,7 @@ Use cluster for action rows, tags, toolbar sections, metadata, and compact navig
 
 - `--cluster-justify` — main-axis distribution (`justify-content`).
 - `--cluster-align` — cross-axis alignment (`align-items`).
+- `--cluster-wrap` — wrapping behavior (`flex-wrap`); set to `nowrap` to force a single row.
 - `--gap` — space between items.
 
 For split/spread layouts — two items apart, at opposite ends, or “one left / one
@@ -130,7 +131,7 @@ Tune width and side padding with local variables.
 ```css
 .docs-page {
   --center-size: 48rem;
-  --center-pad: var(--space-4);
+  --center-pad: var(--space-40);
 }
 ```
 
@@ -154,7 +155,7 @@ Use `.list-reset` only when markers are not part of the content. Combine `.stack
         <img src="https://i.pravatar.cc/48?img=5" alt="Dio Lupa" />
       </div>
       <div class="cluster">
-        <div class="stack grow" style="--gap: var(--space-1)">
+        <div class="stack grow" style="--gap: var(--space-10)">
           <strong>Dio Lupa</strong>
           <span class="muted">Remaining Reason</span>
         </div>
@@ -167,7 +168,7 @@ Use `.list-reset` only when markers are not part of the content. Combine `.stack
         <img src="https://i.pravatar.cc/48?img=10" alt="Astral Planes" />
       </div>
       <div class="cluster">
-        <div class="stack grow" style="--gap: var(--space-1)">
+        <div class="stack grow" style="--gap: var(--space-10)">
           <strong>Astral Planes</strong>
           <span class="muted">Neon Drift</span>
         </div>

@@ -290,7 +290,7 @@
   <li><code>required</code> is the semantic source of truth. Add <code>&lt;span class=&quot;required-mark&quot; aria-hidden=&quot;true&quot;&gt;*&lt;/span&gt;</code> inside a label only when a visual required marker is wanted; the framework does not add one automatically.</li>
   <li><code>.field</code> is the canonical field wrapper. It works on <code>&lt;label&gt;</code> and <code>&lt;div&gt;</code>.</li>
   <li><code>.field-label</code> is element-agnostic. Use it on <code>&lt;span&gt;</code> inside a wrapped label, on <code>&lt;label for=&quot;…&quot;&gt;</code> in a detached layout, or on <code>&lt;legend&gt;</code> inside a fieldset.</li>
-  <li><code>.field-group</code> styles a <code>&lt;fieldset class=&quot;field-group&quot;&gt;</code> as a grouped field container. Its legend gutter is tunable with <code>--fieldset-legend-padding-inline</code> (<code>var(--space-1)</code>).</li>
+  <li><code>.field-group</code> styles a <code>&lt;fieldset class=&quot;field-group&quot;&gt;</code> as a grouped field container. Its legend gutter is tunable with <code>--fieldset-legend-padding-inline</code> (<code>var(--space-10)</code>).</li>
   <li>Use native <code>&lt;optgroup&gt;</code> and <code>disabled</code> options in <code>.select</code> controls when applicable; the customizable picker preserves both as a progressive enhancement.</li>
   <li><code>.choice</code> is the choice-label API. Use <code>.check</code> or <code>.radio</code> on the nested control. The control goes first, the label group second, so multi-line labels align the control with the first line.</li>
   <li>For a switch, use <code>class=&quot;switch&quot;</code> and <code>role=&quot;switch&quot;</code>.</li>

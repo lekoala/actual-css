@@ -5,7 +5,7 @@
  * --gap token.
  */
 .actions {
-  --gap: var(--space-2);
+  --gap: var(--space-20);
 
   display: flex;
   flex-wrap: wrap;

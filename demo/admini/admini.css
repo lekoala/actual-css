@@ -26,9 +26,9 @@
 .admini-sidebar {
   display: none;
   flex-direction: column;
-  gap: var(--space-4);
+  gap: var(--space-40);
   inline-size: 17rem;
-  padding: var(--space-4);
+  padding: var(--space-40);
   border-inline-end: var(--border-width) solid var(--border);
   background: var(--surface-raised);
 }
@@ -39,9 +39,9 @@
 
 .admini-content {
   --center-size: 76rem;
-  --gap: var(--space-4);
+  --gap: var(--space-40);
 
-  padding-block: var(--space-4) var(--space-6);
+  padding-block: var(--space-40) var(--space-60);
 }
 
 .admini-hide-mobile {
@@ -67,9 +67,9 @@
 .admini-nav .nav-link {
   inline-size: 100%;
   justify-content: flex-start;
-  gap: var(--space-2);
+  gap: var(--space-20);
   min-block-size: 2.35rem;
-  padding-inline: var(--space-3);
+  padding-inline: var(--space-30);
 }
 
 .admini-nav .nav-link i {
@@ -129,7 +129,7 @@
 
 .admini-stat {
   display: grid;
-  gap: var(--space-3);
+  gap: var(--space-30);
   align-content: space-between;
   min-block-size: 9rem;
 }
@@ -138,7 +138,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--space-2);
+  gap: var(--space-20);
   color: var(--text-muted);
   font-size: var(--font-size-sm);
 }
@@ -163,14 +163,14 @@
 .admini-stat-meta {
   display: flex;
   align-items: center;
-  gap: var(--space-2);
+  gap: var(--space-20);
   color: var(--text-muted);
   font-size: var(--font-size-sm);
 }
 
 .admini-board {
   display: grid;
-  gap: var(--space-4);
+  gap: var(--space-40);
   grid-template-columns: minmax(0, 1fr);
   align-items: start;
 }
@@ -181,18 +181,18 @@
 
 .admini-feed {
   display: grid;
-  gap: var(--space-3);
+  gap: var(--space-30);
 }
 
 .admini-feed-item {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
-  gap: var(--space-3);
+  gap: var(--space-30);
   align-items: start;
 }
 
 .admini-feed-item + .admini-feed-item {
-  padding-block-start: var(--space-3);
+  padding-block-start: var(--space-30);
   border-block-start: var(--border-width) solid var(--border);
 }
 
@@ -207,7 +207,7 @@
 
 .admini-account {
   display: grid;
-  gap: var(--space-1);
+  gap: var(--space-10);
 }
 
 @media (min-width: 72rem) {
@@ -220,7 +220,7 @@
 
 .admini-settings {
   display: grid;
-  gap: var(--space-4);
+  gap: var(--space-40);
   grid-template-columns: minmax(0, 1fr);
 }
 
@@ -245,12 +245,12 @@
     overflow-x: visible;
     border-block-end: 0;
     border-inline-end: var(--border-width) solid var(--border);
-    padding-inline-end: var(--space-3);
+    padding-inline-end: var(--space-30);
   }
 
   .admini-settings-tabs .tab {
     justify-content: flex-start;
-    gap: var(--space-2);
+    gap: var(--space-20);
     border-block-end: 0;
     border-inline-start: 2px solid transparent;
     border-radius: 0;
@@ -273,8 +273,8 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: var(--space-6);
-  padding: var(--space-6) var(--space-4);
+  gap: var(--space-60);
+  padding: var(--space-60) var(--space-40);
   background: var(--surface-solid);
   color: var(--surface);
 }
@@ -287,7 +287,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: var(--space-6) var(--space-4);
+  padding: var(--space-60) var(--space-40);
 }
 
 .admini-auth-form-inner {
@@ -307,7 +307,7 @@
   display: grid;
   place-items: center;
   min-block-size: 100dvh;
-  padding: var(--space-6) var(--space-4);
+  padding: var(--space-60) var(--space-40);
   text-align: center;
 }
 
@@ -324,16 +324,16 @@
 .admini-kanban {
   display: flex;
   align-items: flex-start;
-  gap: var(--space-4);
+  gap: var(--space-40);
   overflow-x: auto;
-  padding-block-end: var(--space-2);
+  padding-block-end: var(--space-20);
 }
 
 .admini-kanban-column {
   display: flex;
   flex: 0 0 auto;
   flex-direction: column;
-  gap: var(--space-3);
+  gap: var(--space-30);
   inline-size: 19rem;
   max-block-size: calc(100dvh - 14rem);
 }
@@ -347,10 +347,10 @@
 .admini-kanban-list {
   display: flex;
   flex-direction: column;
-  gap: var(--space-2);
+  gap: var(--space-20);
   min-block-size: 3rem;
   overflow-y: auto;
-  padding: var(--space-1);
+  padding: var(--space-10);
   border-radius: var(--radius-lg);
 }
 
@@ -399,8 +399,8 @@
 .admini-chat-item {
   display: flex;
   align-items: flex-start;
-  gap: var(--space-3);
-  padding: var(--space-3) var(--space-4);
+  gap: var(--space-30);
+  padding: var(--space-30) var(--space-40);
   border: 0;
   background: none;
   text-align: start;
@@ -425,7 +425,7 @@
 .admini-chat-item-top {
   display: flex;
   justify-content: space-between;
-  gap: var(--space-2);
+  gap: var(--space-20);
 }
 
 .admini-chat-thread {
@@ -436,8 +436,8 @@
 .admini-chat-thread-header {
   display: flex;
   align-items: center;
-  gap: var(--space-3);
-  padding: var(--space-3) var(--space-4);
+  gap: var(--space-30);
+  padding: var(--space-30) var(--space-40);
   border-block-end: var(--border-width) solid var(--border);
 }
 
@@ -445,9 +445,9 @@
   display: flex;
   flex: 1 1 auto;
   flex-direction: column;
-  gap: var(--space-3);
+  gap: var(--space-30);
   overflow-y: auto;
-  padding: var(--space-4);
+  padding: var(--space-40);
 }
 
 .admini-bubble-row {
@@ -463,7 +463,7 @@
 .admini-bubble {
   display: grid;
   gap: 0.25rem;
-  padding: var(--space-2) var(--space-3);
+  padding: var(--space-20) var(--space-30);
   border-radius: var(--radius-lg);
   background: var(--surface-raised);
   border: var(--border-width) solid var(--border);
@@ -482,8 +482,8 @@
 .admini-composer {
   display: flex;
   align-items: flex-end;
-  gap: var(--space-2);
-  padding: var(--space-3) var(--space-4);
+  gap: var(--space-20);
+  padding: var(--space-30) var(--space-40);
   border-block-start: var(--border-width) solid var(--border);
 }
 
@@ -521,7 +521,7 @@
 }
 
 .admini-calendar-weekday {
-  padding: var(--space-2) var(--space-3);
+  padding: var(--space-20) var(--space-30);
   border-inline-end: var(--border-width) solid var(--border);
   border-block-end: var(--border-width) solid var(--border);
   background: var(--surface-subtle);
@@ -533,9 +533,9 @@
 .admini-calendar-day {
   display: flex;
   flex-direction: column;
-  gap: var(--space-1);
+  gap: var(--space-10);
   min-block-size: 6.5rem;
-  padding: var(--space-2);
+  padding: var(--space-20);
   border-inline-end: var(--border-width) solid var(--border);
   border-block-end: var(--border-width) solid var(--border);
 }
@@ -605,7 +605,7 @@
 
 .admini-invoice-totals {
   display: grid;
-  gap: var(--space-2);
+  gap: var(--space-20);
   justify-items: end;
   margin-inline-start: auto;
   inline-size: min(100%, 18rem);
@@ -614,7 +614,7 @@
 .admini-invoice-totals-row {
   display: flex;
   justify-content: space-between;
-  gap: var(--space-4);
+  gap: var(--space-40);
   inline-size: 100%;
 }
 

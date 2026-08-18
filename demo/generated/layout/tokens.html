@@ -33,12 +33,12 @@
         <div class="example-code">
           <pre><code class="language-css"><span class="token selector">:root</span> <span class="token punctuation">{</span>
   <span class="token property">--gap</span><span class="token punctuation">:</span> 0.75rem<span class="token punctuation">;</span>
-  <span class="token property">--space-1</span><span class="token punctuation">:</span> 0.25rem<span class="token punctuation">;</span>
-  <span class="token property">--space-2</span><span class="token punctuation">:</span> 0.5rem<span class="token punctuation">;</span>
-  <span class="token property">--space-3</span><span class="token punctuation">:</span> 0.75rem<span class="token punctuation">;</span>
-  <span class="token property">--space-4</span><span class="token punctuation">:</span> 1rem<span class="token punctuation">;</span>
-  <span class="token property">--space-5</span><span class="token punctuation">:</span> 1.5rem<span class="token punctuation">;</span>
-  <span class="token property">--space-6</span><span class="token punctuation">:</span> 2rem<span class="token punctuation">;</span>
+  <span class="token property">--space-10</span><span class="token punctuation">:</span> 0.25rem<span class="token punctuation">;</span>
+  <span class="token property">--space-20</span><span class="token punctuation">:</span> 0.5rem<span class="token punctuation">;</span>
+  <span class="token property">--space-30</span><span class="token punctuation">:</span> 0.75rem<span class="token punctuation">;</span>
+  <span class="token property">--space-40</span><span class="token punctuation">:</span> 1rem<span class="token punctuation">;</span>
+  <span class="token property">--space-50</span><span class="token punctuation">:</span> 1.5rem<span class="token punctuation">;</span>
+  <span class="token property">--space-60</span><span class="token punctuation">:</span> 2rem<span class="token punctuation">;</span>
 <span class="token punctuation">}</span></code></pre>
         </div>
       </div>
@@ -51,13 +51,13 @@
       <div class="example-group">
         <div class="example-code">
           <pre><code class="language-css"><span class="token selector">.settings-form</span> <span class="token punctuation">{</span>
-  <span class="token property">--gap</span><span class="token punctuation">:</span> <span class="token function">var</span><span class="token punctuation">(</span>--space-5<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token property">--gap</span><span class="token punctuation">:</span> <span class="token function">var</span><span class="token punctuation">(</span>--space-50<span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span></code></pre>
         </div>
       </div>
     </section>
     <div class="component-prose">
-      <p>Prefer a local custom property over adding many one-off utility classes. Use inline styles only for demos, prototypes, or truly dynamic values. There are no <code>.gap-sm</code> / <code>.gap-md</code> / <code>.gap-lg</code> density variants on layout primitives; set <code>--gap</code> locally when only spacing should change.</p>
+      <p>Prefer a local custom property over adding many one-off utility classes. Use inline styles only for demos, prototypes, or truly dynamic values. There are no <code>.gap-sm</code> / <code>.gap-md</code> / <code>.gap-lg</code> density variants on the core layout primitives; set <code>--gap</code> locally when only spacing should change. The optional <code>utilities-extra.css</code> layer ships those gap utilities for row/column containers.</p>
     </div>
     
   </section>

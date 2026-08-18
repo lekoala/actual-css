@@ -14,9 +14,9 @@
     section h2 {
       font-size: var(--font-size-lg);
       font-weight: var(--font-weight-strong);
-      margin-block-end: var(--space-3);
+      margin-block-end: var(--space-30);
       border-block-end: var(--border-width) solid var(--border);
-      padding-block-end: var(--space-2);
+      padding-block-end: var(--space-20);
     }
     .sink-grid {
       display: flex;
@@ -24,7 +24,7 @@
       gap: var(--gap);
       align-items: start;
     }
-    .sink-col { display: grid; gap: var(--space-2); }
+    .sink-col { display: grid; gap: var(--space-20); }
   </style>
 </head>
 <body>
@@ -135,7 +135,7 @@
   <!-- 3. Alerts -->
   <section>
     <h2>Alerts</h2>
-    <div style="display:grid;gap:var(--space-3);max-inline-size:40rem">
+    <div style="display:grid;gap:var(--space-30);max-inline-size:40rem">
       <div class="alert">Default alert</div>
       <div class="alert primary">Primary alert</div>
       <div class="alert success">Success alert</div>
@@ -227,7 +227,7 @@
   <!-- 6. Forms -->
   <section>
     <h2>Forms</h2>
-    <div style="max-inline-size:30rem;display:grid;gap:var(--space-4)">
+    <div style="max-inline-size:30rem;display:grid;gap:var(--space-40)">
       <div class="field">
         <label class="field-label" for="name">Name</label>
         <input class="input" id="name" type="text" placeholder="Enter your name">
@@ -517,7 +517,7 @@
       <span class="spinner sm primary"></span>
       <span class="spinner lg danger"></span>
     </div>
-    <div class="sink-grid" style="margin-block-start:var(--space-2)">
+    <div class="sink-grid" style="margin-block-start:var(--space-20)">
       <button class="btn primary" type="button" aria-busy="true" disabled>
         <span class="spinner" aria-hidden="true"></span>
         Saving…
@@ -550,13 +550,13 @@
   <!-- 15. Progress / Meter -->
   <section>
     <h2>Progress / Meter</h2>
-    <div style="display:grid;gap:var(--space-3);max-inline-size:20rem">
+    <div style="display:grid;gap:var(--space-30);max-inline-size:20rem">
       <progress class="progress" value="60" max="100"></progress>
       <progress class="progress" value="30" max="100"></progress>
       <progress class="progress primary" value="85" max="100"></progress>
       <progress class="progress"></progress>
     </div>
-    <div style="display:grid;gap:var(--space-2);max-inline-size:16rem;margin-block-start:var(--space-3)">
+    <div style="display:grid;gap:var(--space-20);max-inline-size:16rem;margin-block-start:var(--space-30)">
       <meter class="meter" min="0" max="100" value="25" low="33" optimum="80" high="66"></meter>
       <meter class="meter" min="0" max="100" value="50" low="33" optimum="80" high="66"></meter>
       <meter class="meter" min="0" max="100" value="85" low="33" optimum="80" high="66"></meter>

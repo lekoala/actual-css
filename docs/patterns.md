@@ -62,7 +62,7 @@ Prefer composition over making each component reimplement action-list layout.
 /* Avoid */
 .alert > menu {
   display: flex;
-  gap: var(--space-2);
+  gap: var(--space-20);
   padding: 0;
   list-style: none;
 }
@@ -200,7 +200,7 @@ A project may add `.site-header` when it needs a visual shell.
   flex-direction: column;
   gap: var(--gap);
   inline-size: var(--shell-sidebar-size, 16rem);
-  padding: var(--space-4);
+  padding: var(--space-40);
   border-inline-end: var(--border-width) solid var(--border);
   background: var(--surface-raised);
 }
@@ -282,9 +282,9 @@ A project may add `.side-nav` only when it needs specific visual behavior such a
 .nav-list a {
   display: flex;
   align-items: center;
-  gap: var(--space-2);
+  gap: var(--space-20);
   min-block-size: 2rem;
-  padding-inline: var(--space-2);
+  padding-inline: var(--space-20);
   border-radius: var(--radius-sm);
   color: inherit;
   text-decoration: none;
@@ -342,7 +342,7 @@ Use native lists plus layout primitives for rich content rows. Reset list chrome
         <img src="https://i.pravatar.cc/48?img=5" alt="Dio Lupa" />
       </div>
       <div class="cluster">
-        <div class="stack grow" style="--gap: var(--space-1)">
+        <div class="stack grow" style="--gap: var(--space-10)">
           <strong>Dio Lupa</strong>
           <span class="muted">Remaining Reason</span>
         </div>
@@ -358,7 +358,7 @@ Use native lists plus layout primitives for rich content rows. Reset list chrome
         <img src="https://i.pravatar.cc/48?img=10" alt="Astral Planes" />
       </div>
       <div class="cluster">
-        <div class="stack grow" style="--gap: var(--space-1)">
+        <div class="stack grow" style="--gap: var(--space-10)">
           <strong>Astral Planes</strong>
           <span class="muted">Neon Drift</span>
         </div>
@@ -457,8 +457,8 @@ treeview component.
 .code-block { position: relative; }
 .code-block > [data-copy] {
   position: absolute;
-  inset-block-start: var(--space-2);
-  inset-inline-end: var(--space-2);
+  inset-block-start: var(--space-20);
+  inset-inline-end: var(--space-20);
 }
 ```
 

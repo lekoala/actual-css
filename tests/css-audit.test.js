@@ -88,7 +88,7 @@ test("form-actions exposes alignment hooks while sticky behavior remains intact"
 
   expect(css).toContain("align-items: var(--form-actions-align, center);");
   expect(css).toContain("justify-content: var(--form-actions-justify, flex-start);");
-  expect(css).toContain("margin-block-start: var(--form-actions-margin-block-start, var(--space-5));");
+  expect(css).toContain("margin-block-start: var(--form-actions-margin-block-start, var(--space-50));");
   expect(css).toContain(".form-actions.sticky {");
   expect(css).toContain("position: sticky;");
 });

@@ -122,18 +122,18 @@
         <div class="example-code">
           <pre><code class="language-css"><span class="token selector">:root</span> <span class="token punctuation">{</span>
   <span class="token property">--gap</span><span class="token punctuation">:</span> 0.75rem<span class="token punctuation">;</span>
-  <span class="token property">--space-1</span><span class="token punctuation">:</span> 0.25rem<span class="token punctuation">;</span>
-  <span class="token property">--space-2</span><span class="token punctuation">:</span> 0.5rem<span class="token punctuation">;</span>
-  <span class="token property">--space-3</span><span class="token punctuation">:</span> 0.75rem<span class="token punctuation">;</span>
-  <span class="token property">--space-4</span><span class="token punctuation">:</span> 1rem<span class="token punctuation">;</span>
-  <span class="token property">--space-5</span><span class="token punctuation">:</span> 1.5rem<span class="token punctuation">;</span>
-  <span class="token property">--space-6</span><span class="token punctuation">:</span> 2rem<span class="token punctuation">;</span>
+  <span class="token property">--space-10</span><span class="token punctuation">:</span> 0.25rem<span class="token punctuation">;</span>
+  <span class="token property">--space-20</span><span class="token punctuation">:</span> 0.5rem<span class="token punctuation">;</span>
+  <span class="token property">--space-30</span><span class="token punctuation">:</span> 0.75rem<span class="token punctuation">;</span>
+  <span class="token property">--space-40</span><span class="token punctuation">:</span> 1rem<span class="token punctuation">;</span>
+  <span class="token property">--space-50</span><span class="token punctuation">:</span> 1.5rem<span class="token punctuation">;</span>
+  <span class="token property">--space-60</span><span class="token punctuation">:</span> 2rem<span class="token punctuation">;</span>
 <span class="token punctuation">}</span></code></pre>
         </div>
       </div>
     </section>
     <div class="component-prose">
-      <p>Use <code>em</code> for spacing that should scale with the component text size, such as button gaps and inline padding. Use <code>rem</code> for global rhythm, layouts, and fixed density.</p>
+      <p>Official steps are named in tens so the scale stays extensible: Actual CSS only publishes multiples of 10, and applications can intercalate intermediate values (<code>--space-15</code>, <code>--space-45</code>, …) without colliding with a future framework step. Use <code>em</code> for spacing that should scale with the component text size, such as button gaps and inline padding. Use <code>rem</code> for global rhythm, layouts, and fixed density.</p>
 <h3>Typography</h3>
 <p>Typography tokens should cover the document baseline and common component needs.</p>
     </div>
@@ -191,15 +191,15 @@
       <div class="example-group">
         <div class="example-code">
           <pre><code class="language-css"><span class="token selector">.sm</span> <span class="token punctuation">{</span>
-  <span class="token property">--gap</span><span class="token punctuation">:</span> <span class="token function">var</span><span class="token punctuation">(</span>--space-2<span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token property">--density-space</span><span class="token punctuation">:</span> <span class="token function">var</span><span class="token punctuation">(</span>--space-2<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token property">--gap</span><span class="token punctuation">:</span> <span class="token function">var</span><span class="token punctuation">(</span>--space-20<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token property">--density-space</span><span class="token punctuation">:</span> <span class="token function">var</span><span class="token punctuation">(</span>--space-20<span class="token punctuation">)</span><span class="token punctuation">;</span>
   <span class="token property">--control-size</span><span class="token punctuation">:</span> <span class="token function">var</span><span class="token punctuation">(</span>--control-size-sm<span class="token punctuation">)</span><span class="token punctuation">;</span>
   <span class="token property">--density-compact-size</span><span class="token punctuation">:</span> 1.25rem<span class="token punctuation">;</span>
 <span class="token punctuation">}</span>
 
 <span class="token selector">.lg</span> <span class="token punctuation">{</span>
-  <span class="token property">--gap</span><span class="token punctuation">:</span> <span class="token function">var</span><span class="token punctuation">(</span>--space-5<span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token property">--density-space</span><span class="token punctuation">:</span> <span class="token function">var</span><span class="token punctuation">(</span>--space-5<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token property">--gap</span><span class="token punctuation">:</span> <span class="token function">var</span><span class="token punctuation">(</span>--space-50<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token property">--density-space</span><span class="token punctuation">:</span> <span class="token function">var</span><span class="token punctuation">(</span>--space-50<span class="token punctuation">)</span><span class="token punctuation">;</span>
   <span class="token property">--control-size</span><span class="token punctuation">:</span> <span class="token function">var</span><span class="token punctuation">(</span>--control-size-lg<span class="token punctuation">)</span><span class="token punctuation">;</span>
   <span class="token property">--density-compact-size</span><span class="token punctuation">:</span> 1.875rem<span class="token punctuation">;</span>
 <span class="token punctuation">}</span></code></pre>

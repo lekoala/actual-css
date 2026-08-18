@@ -633,6 +633,7 @@ runtime, not set by the author. See [JavaScript](javascript.md).
 - JavaScript owns roving `tabindex`, `aria-selected`, `hidden`, and keyboard behavior.
 - Left/Right select tabs and wrap at the ends. Home/End jump to first/last. Down moves focus into the selected panel.
 - A tab list needs both `.tabs` and `role="tablist"`; `.tab` styles each trigger.
+- A `.tab` with an icon uses `--tab-gap` (default `0.375em`) for the space between icon and label.
 
 ```html
 <div class="tabset">

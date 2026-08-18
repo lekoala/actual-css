@@ -34,7 +34,7 @@
   display: inline-flex;
   justify-content: center;
   min-block-size: var(--control-size);
-  padding-inline: var(--space-3);
+  padding-inline: var(--space-30);
   border: var(--border-width) solid var(--control-border);
   border-radius: var(--radius);
   background: var(--control-bg);

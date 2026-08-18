@@ -30,7 +30,7 @@
   min-inline-size: 0;
 }
 
-.nowrap {
+.text-nowrap {
   white-space: nowrap;
 }
 
@@ -131,7 +131,7 @@
 
 /* Spacing step helpers — semantic scale (sm / default / lg).
    Names map to logical properties for writing-direction safety. The default
-   step uses --space-4, which matches the framework's built-in padding on
+   step uses --space-40, which matches the framework's built-in padding on
    cards, dialogs, and form-actions. */
 
 /* Gap */

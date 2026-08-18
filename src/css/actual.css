@@ -14,3 +14,10 @@
 @import "./components/join.css";
 @import "./focus.css";
 @import "./print.css";
+
+/*
+ * NOTE: The 'optional/' directory contains layout and utility extensions
+ * (such as optional grids, split, visual effects, and extra utility classes
+ * like .gap-sm, .shadow-sm, etc.). These are intentionally not bundled here.
+ * Import them natively in your project if you need them.
+ */

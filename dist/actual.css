@@ -69,16 +69,18 @@ select {
   --font-size-md: 1rem;
   --font-size-lg: 1.125rem;
 
-  /* Spacing */
+  /* Spacing — official steps are named in tens so the scale stays open for
+     application themes to intercalate intermediate values (--space-15,
+     --space-45…) without colliding with future framework steps. */
   --gap: 0.75rem;
-  --density-space: var(--space-4);
+  --density-space: var(--space-40);
   --density-compact-size: 1.5rem;
-  --space-1: 0.25rem;
-  --space-2: 0.5rem;
-  --space-3: 0.75rem;
-  --space-4: 1rem;
-  --space-5: 1.5rem;
-  --space-6: 2rem;
+  --space-10: 0.25rem;
+  --space-20: 0.5rem;
+  --space-30: 0.75rem;
+  --space-40: 1rem;
+  --space-50: 1.5rem;
+  --space-60: 2rem;
 
   /* Shape */
   --border-width: 1px;
@@ -166,7 +168,9 @@ select {
   --viewport-inline: 100vw;
 
   /* Z-index scale — used ONLY by non-dialog overlays (see the layering
-     note below for the full model). */
+     note below for the full model). Actual CSS reserves multiples of 10 for
+     framework layers; applications may use intermediate values for local
+     layering. */
   --z-sticky: 10;
   --z-menu: 20;
   --z-tooltip: 50;
@@ -451,7 +455,7 @@ hgroup > * {
 hr {
   border: 0;
   border-block-start: var(--border-width) solid var(--border);
-  margin-block: var(--space-6);
+  margin-block: var(--space-60);
 }
 
 code,
@@ -520,7 +524,7 @@ small {
 
 .cluster {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: var(--cluster-wrap, wrap);
   align-items: var(--cluster-align, center);
   justify-content: var(--cluster-justify, flex-start);
   gap: var(--gap);
@@ -720,14 +724,14 @@ small {
 }
 
 .sm {
-  --gap: var(--space-2);
-  --density-space: var(--space-2);
+  --gap: var(--space-20);
+  --density-space: var(--space-20);
   --control-size: var(--control-size-sm);
   --density-compact-size: 1.25rem;
 }
 .lg {
-  --gap: var(--space-5);
-  --density-space: var(--space-5);
+  --gap: var(--space-50);
+  --density-space: var(--space-50);
   --control-size: var(--control-size-lg);
   --density-compact-size: 1.875rem;
 }
@@ -978,10 +982,10 @@ small {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.375em;
+  gap: var(--btn-gap, 0.375em);
   min-block-size: var(--btn-min-size);
-  padding-block: var(--space-2);
-  padding-block: max(var(--space-1), calc((var(--btn-min-size) - 1lh) / 2));
+  padding-block: var(--space-20);
+  padding-block: max(var(--space-10), calc((var(--btn-min-size) - 1lh) / 2));
   padding-inline: var(--btn-pad-x);
   border: var(--border-width) solid var(--btn-border-color, var(--btn-border));
   border-block-end-color: var(
@@ -1004,6 +1008,11 @@ small {
     color var(--duration),
     box-shadow var(--duration),
     transform var(--duration);
+}
+
+.btn.icon-only {
+  inline-size: var(--btn-min-size);
+  padding-inline: 0;
 }
 
 @supports (color: color-mix(in oklch, red, white)) {
@@ -1370,8 +1379,8 @@ a.badge[aria-disabled="true"] {
 }
 
 .alert {
-  --alert-pad-block: var(--space-3);
-  --alert-pad-inline: var(--space-4);
+  --alert-pad-block: var(--space-30);
+  --alert-pad-inline: var(--space-40);
   --alert-font-size: var(--font-size-md);
   --alert-icon-size: 1.25rem;
   --alert-bg: var(--ui-bg, var(--surface-subtle));
@@ -1385,7 +1394,7 @@ a.badge[aria-disabled="true"] {
   border: var(--border-width) solid var(--alert-border);
   border-inline-start-color: var(--alert-border-inline-start-color, var(--alert-border));
   border-inline-start-width: var(--alert-border-inline-start-width, var(--border-width));
-  border-radius: var(--radius-lg);
+  border-radius: var(--alert-radius, var(--radius-lg));
   font-size: var(--alert-font-size);
 }
 
@@ -1435,7 +1444,7 @@ a.badge[aria-disabled="true"] {
     display: grid;
     grid-template-columns: minmax(0, 1fr);
     align-items: var(--items-align, start);
-    column-gap: var(--space-3);
+    column-gap: var(--space-30);
   }
 
   .alert:has(> .alert-icon) {
@@ -1542,7 +1551,7 @@ a.badge[aria-disabled="true"] {
 .alert.admonition > .alert-title {
   display: flex;
   align-items: center;
-  gap: var(--space-2);
+  gap: var(--space-20);
   padding-block: var(--alert-pad-block);
   padding-inline: var(--alert-pad-inline);
   border-start-start-radius: calc(var(--radius-lg) - var(--border-width));
@@ -1593,7 +1602,7 @@ a.badge[aria-disabled="true"] {
  * --gap token.
  */
 .actions {
-  --gap: var(--space-2);
+  --gap: var(--space-20);
 
   display: flex;
   flex-wrap: wrap;
@@ -1626,13 +1635,13 @@ a.badge[aria-disabled="true"] {
 }
 
 .card {
-  --card-pad: var(--space-4);
+  --card-pad: var(--space-40);
   --card-radius: var(--radius-lg);
   --card-max-inline-size: none;
 
   max-inline-size: var(--card-max-inline-size);
   padding: var(--card-pad);
-  background: var(--ui-bg, var(--surface));
+  background: var(--ui-bg, var(--surface-raised));
   color: var(--ui-fg, var(--text));
   border: var(--border-width) solid var(--ui-border, var(--border));
   border-radius: var(--card-radius);
@@ -1647,7 +1656,7 @@ a.badge[aria-disabled="true"] {
   flex-wrap: wrap;
   align-items: var(--items-align, center);
   justify-content: space-between;
-  gap: var(--space-3);
+  gap: var(--space-30);
   min-inline-size: 0;
 }
 
@@ -1683,7 +1692,7 @@ a.badge[aria-disabled="true"] {
 }
 
 .card.compact {
-  --card-pad: var(--space-2);
+  --card-pad: var(--space-20);
 }
 
 /* Full-bleed children */
@@ -1803,11 +1812,11 @@ dialog.modal {
 dialog.modal > form,
 dialog.modal > .stack {
   display: grid;
-  gap: var(--space-4);
+  gap: var(--space-40);
   max-block-size: calc(var(--viewport-block) - 2rem);
   overflow: auto;
   overscroll-behavior: contain;
-  padding: var(--space-4);
+  padding: var(--space-40);
 }
 
 dialog.modal.scrollable > form,
@@ -1970,7 +1979,7 @@ header:has(> .dialog-close, > form:has(> .dialog-close)) {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   align-items: start;
-  gap: var(--space-4);
+  gap: var(--space-40);
 }
 
 @media (hover: hover) {
@@ -1996,7 +2005,7 @@ header:has(> .dialog-close, > form:has(> .dialog-close)) {
  */
 dialog.drawer {
   --drawer-size: 20rem;
-  --drawer-pad: var(--space-4);
+  --drawer-pad: var(--space-40);
   --drawer-closed-translate: -100%;
 
   inline-size: min(calc(var(--viewport-inline) * 0.9), var(--drawer-size));
@@ -2021,7 +2030,7 @@ dialog.drawer {
 dialog.drawer[open] {
   display: grid;
   grid-template-rows: auto minmax(0, 1fr) auto;
-  gap: var(--space-4);
+  gap: var(--space-40);
   opacity: 1;
   transform: translateX(0);
 }
@@ -2139,23 +2148,26 @@ dialog.drawer nav {
      surface.js switches an open flyout to position: fixed with measured
      coordinates; this only covers a flyout revealed without the runtime. */
   position: absolute;
-  inset-block-start: calc(100% + var(--space-1));
+  inset-block-start: calc(100% + var(--space-10));
   inset-inline-start: 0;
   display: grid;
-  gap: var(--space-1);
+  gap: var(--space-10);
   inline-size: var(--flyout-inline-size, max-content);
   min-inline-size: min(
     var(--surface-anchor-width, 0px),
-    min(var(--flyout-max-inline-size, 20rem), calc(var(--viewport-inline) - var(--space-6)))
+    min(var(--flyout-max-inline-size, 20rem), calc(var(--viewport-inline) - var(--space-60)))
   );
   max-inline-size: min(
     var(--flyout-max-inline-size, 20rem),
-    calc(var(--viewport-inline) - var(--space-6))
+    calc(var(--viewport-inline) - var(--space-60))
   );
-  max-block-size: min(24rem, var(--available-height, calc(var(--viewport-block) - var(--space-6))));
+  max-block-size: min(
+    24rem,
+    var(--available-height, calc(var(--viewport-block) - var(--space-60)))
+  );
   overflow: auto;
   margin: 0;
-  padding: var(--space-1);
+  padding: var(--space-10);
   border: var(--border-width) solid var(--border);
   border-radius: var(--radius);
   background: var(--surface-raised);
@@ -2194,8 +2206,8 @@ dialog.drawer nav {
   max-block-size: min(calc(var(--viewport-block) * 0.75), 32rem);
   overflow: auto;
   grid-template-columns: 1fr;
-  padding: max(var(--space-3), env(safe-area-inset-top)) var(--space-3)
-    max(var(--space-3), env(safe-area-inset-bottom));
+  padding: max(var(--space-30), env(safe-area-inset-top)) var(--space-30)
+    max(var(--space-30), env(safe-area-inset-bottom));
   border-end-start-radius: 0;
   border-end-end-radius: 0;
 }
@@ -2208,13 +2220,13 @@ dialog.drawer nav {
 
 .flyout.is-sheet[hidden] {
   scale: 1;
-  translate: 0 var(--space-3);
+  translate: 0 var(--space-30);
 }
 
 @starting-style {
   .flyout.is-sheet.is-open {
     scale: 1;
-    translate: 0 var(--space-3);
+    translate: 0 var(--space-30);
   }
 }
 
@@ -2234,7 +2246,7 @@ dialog.drawer nav {
 
 .flyout > :where(section, footer) {
   min-inline-size: 0;
-  padding: var(--space-2);
+  padding: var(--space-20);
 }
 
 .flyout > section > :where(h1, h2, h3, h4, h5, h6) {
@@ -2246,8 +2258,8 @@ dialog.drawer nav {
 
 .flyout > section > ul {
   display: grid;
-  gap: var(--space-1);
-  margin: var(--space-1) 0 0;
+  gap: var(--space-10);
+  margin: var(--space-10) 0 0;
   padding: 0;
   list-style: none;
 }
@@ -2269,9 +2281,9 @@ dialog.drawer nav {
 
 .menu {
   display: grid;
-  gap: var(--space-1);
+  gap: var(--space-10);
   margin: 0;
-  padding: var(--space-1);
+  padding: var(--space-10);
   list-style: none;
 }
 
@@ -2282,10 +2294,10 @@ dialog.drawer nav {
 .menu-item {
   display: flex;
   align-items: center;
-  gap: var(--space-2);
+  gap: var(--space-20);
   inline-size: 100%;
   min-block-size: var(--menu-item-size, var(--control-size));
-  padding-inline: var(--space-2);
+  padding-inline: var(--space-20);
   border: 0;
   border-radius: var(--radius-sm);
   background: transparent;
@@ -2311,7 +2323,7 @@ dialog.drawer nav {
 }
 
 .menu-label {
-  padding: var(--space-2);
+  padding: var(--space-20);
   color: var(--text-muted);
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-strong);
@@ -2461,10 +2473,10 @@ dialog.drawer nav {
 .accordion summary {
   display: flex;
   align-items: center;
-  gap: var(--space-3);
+  gap: var(--space-30);
   cursor: pointer;
   list-style: none;
-  padding: var(--space-4);
+  padding: var(--space-40);
   color: var(--text);
   font-weight: var(--font-weight-bold);
 }
@@ -2494,14 +2506,14 @@ dialog.drawer nav {
 }
 
 .accordion details > summary + * {
-  padding-block: 0 var(--space-4);
-  padding-inline: var(--space-4);
+  padding-block: 0 var(--space-40);
+  padding-inline: var(--space-40);
   color: var(--text-muted);
   margin-block: 0;
 }
 
 .accordion details[open] > summary + * {
-  padding-block-start: var(--space-1);
+  padding-block-start: var(--space-10);
 }
 
 .accordion details > summary + * > :first-child {
@@ -2824,22 +2836,22 @@ dialog.drawer nav {
   --status-fg: var(--intent-fg, var(--surface));
 
   position: fixed;
-  inset-block-end: var(--space-4);
-  inset-inline: var(--space-4);
+  inset-block-end: var(--space-40);
+  inset-inline: var(--space-40);
   z-index: var(--z-status);
 
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: var(--space-2);
+  gap: var(--space-20);
 
   inline-size: fit-content;
-  max-inline-size: min(calc(var(--viewport-inline) - var(--space-6)), 32rem);
+  max-inline-size: min(calc(var(--viewport-inline) - var(--space-60)), 32rem);
   margin-inline: auto;
   overflow-wrap: anywhere;
 
-  padding-block: var(--space-2);
-  padding-inline: var(--space-3);
+  padding-block: var(--space-20);
+  padding-inline: var(--space-30);
 
   border-radius: var(--radius-full);
   background: var(--status-bg);
@@ -2860,7 +2872,7 @@ dialog.drawer nav {
 .status-bar:empty {
   opacity: 0;
   scale: 0.96;
-  translate: 0 var(--space-2);
+  translate: 0 var(--space-20);
   pointer-events: none;
 }
 
@@ -3144,8 +3156,8 @@ a.avatar[aria-disabled="true"] {
   align-items: center;
   justify-content: space-between;
   gap: var(--gap);
-  padding-block: var(--space-3);
-  padding-inline: var(--space-4);
+  padding-block: var(--space-30);
+  padding-inline: var(--space-40);
   border: var(--border-width) solid var(--border);
   border-radius: var(--radius-lg);
   background: var(--surface-raised);
@@ -3155,7 +3167,7 @@ a.avatar[aria-disabled="true"] {
 .navbar-brand {
   display: inline-flex;
   align-items: center;
-  gap: var(--space-2);
+  gap: var(--space-20);
   color: var(--text);
   font-weight: var(--font-weight-bold);
   text-decoration: none;
@@ -3169,7 +3181,7 @@ a.avatar[aria-disabled="true"] {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--space-1);
+  gap: var(--space-10);
   margin: 0;
   padding: 0;
   list-style: none;
@@ -3179,7 +3191,7 @@ a.avatar[aria-disabled="true"] {
   display: inline-flex;
   align-items: center;
   min-block-size: var(--control-size-sm);
-  padding-inline: var(--space-2);
+  padding-inline: var(--space-20);
   border-radius: var(--radius);
   color: var(--text-muted);
   font-weight: var(--font-weight-medium);
@@ -3199,7 +3211,7 @@ a.avatar[aria-disabled="true"] {
 /* Nav list — a vertical navigation list. Used by .drawer for stacked links. */
 .nav-list {
   display: grid;
-  --gap: var(--space-2);
+  --gap: var(--space-20);
   gap: var(--gap);
   margin: 0;
   padding: 0;
@@ -3236,7 +3248,7 @@ a.avatar[aria-disabled="true"] {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--space-1);
+  gap: var(--space-10);
   margin: 0;
   padding: 0;
   color: var(--text-subtle);
@@ -3247,7 +3259,7 @@ a.avatar[aria-disabled="true"] {
 .breadcrumb li {
   display: inline-flex;
   align-items: center;
-  gap: var(--space-1);
+  gap: var(--space-10);
 }
 
 .breadcrumb li + li::before {
@@ -3289,7 +3301,7 @@ a.avatar[aria-disabled="true"] {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--space-1);
+  gap: var(--space-10);
   margin: 0;
   padding: 0;
   list-style: none;
@@ -3322,7 +3334,7 @@ a.avatar[aria-disabled="true"] {
 .tabs {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-1);
+  gap: var(--space-10);
   margin: 0;
   padding: 0;
   border-block-end: var(--border-width) solid var(--border);
@@ -3340,8 +3352,9 @@ a.avatar[aria-disabled="true"] {
 .tab {
   display: inline-flex;
   align-items: center;
+  gap: var(--tab-gap, 0.375em);
   min-block-size: var(--control-size);
-  padding-inline: var(--space-3);
+  padding-inline: var(--space-30);
   border: 0;
   border-block-end: 2px solid transparent;
   border-radius: 0;
@@ -3357,7 +3370,7 @@ a.avatar[aria-disabled="true"] {
   justify-content: flex-start;
   border-block-end: 0;
   border-inline-end: 2px solid transparent;
-  padding-inline-end: var(--space-4);
+  padding-inline-end: var(--space-40);
 }
 
 .tab:is(:disabled, [aria-disabled="true"]) {
@@ -3451,7 +3464,7 @@ a.avatar[aria-disabled="true"] {
 
 .table {
   --table-min: 100%;
-  --table-cell-pad: var(--space-3);
+  --table-cell-pad: var(--space-30);
 
   inline-size: max(var(--table-min), 100%);
   border-collapse: collapse;
@@ -3570,20 +3583,20 @@ a.avatar[aria-disabled="true"] {
  */
 .field {
   display: grid;
-  gap: var(--space-1);
+  gap: var(--space-10);
   color: var(--text);
 }
 
 .field-group {
   min-inline-size: 0;
   margin: 0;
-  padding: var(--space-3);
+  padding: var(--space-30);
   border: var(--border-width) solid var(--border);
   border-radius: var(--radius);
 }
 
 .field-group + .field-group {
-  margin-block-start: var(--space-4);
+  margin-block-start: var(--space-40);
 }
 
 .field-label,
@@ -3594,7 +3607,7 @@ a.avatar[aria-disabled="true"] {
 
 .field-group > legend {
   padding-block: 0;
-  padding-inline: var(--fieldset-legend-padding-inline, var(--space-1));
+  padding-inline: var(--fieldset-legend-padding-inline, var(--space-10));
   font-size: var(--font-size-xs);
 }
 
@@ -3645,7 +3658,7 @@ a.avatar[aria-disabled="true"] {
   appearance: none;
   inline-size: 100%;
   min-block-size: var(--control-size);
-  padding-inline: var(--space-3);
+  padding-inline: var(--space-30);
   border: var(--border-width) solid var(--form-invalid-border, var(--control-border));
   border-block-end-color: var(
     --form-invalid-border,
@@ -3667,7 +3680,7 @@ a.avatar[aria-disabled="true"] {
 
 .textarea {
   min-block-size: 6rem;
-  padding-block: var(--space-2);
+  padding-block: var(--space-20);
   resize: vertical;
 }
 
@@ -3735,12 +3748,12 @@ a.avatar[aria-disabled="true"] {
 
 /* Leading: icon is the first child */
 .input-icon > :first-child:where(:not(.input)) {
-  inset-inline-start: var(--space-3);
+  inset-inline-start: var(--space-30);
 }
 
 /* Trailing: input is the first child, icon follows */
 .input-icon > .input:first-child ~ :where(:not(.input)) {
-  inset-inline-end: var(--space-3);
+  inset-inline-end: var(--space-30);
 }
 
 /* font-size only sizes text-metric icons (webfont <i>, <span>). An inline
@@ -3752,12 +3765,12 @@ a.avatar[aria-disabled="true"] {
 
 /* Leading: input gets start padding to clear the icon */
 .input-icon > :first-child:where(:not(.input)) ~ .input {
-  padding-inline-start: calc(var(--space-3) * 2 + var(--input-icon-size));
+  padding-inline-start: calc(var(--space-30) * 2 + var(--input-icon-size));
 }
 
 /* Trailing: input is first child and has a sibling → end padding */
 .input-icon > .input:first-child:where(:not(:last-child)) {
-  padding-inline-end: calc(var(--space-3) * 2 + var(--input-icon-size));
+  padding-inline-end: calc(var(--space-30) * 2 + var(--input-icon-size));
 }
 
 /*
@@ -3790,7 +3803,7 @@ a.avatar[aria-disabled="true"] {
 
   display: inline-flex;
   align-items: flex-start;
-  gap: var(--space-2);
+  gap: var(--space-20);
   color: var(--text);
   font-size: var(--control-font-size);
   cursor: pointer;
@@ -3960,7 +3973,7 @@ a.avatar[aria-disabled="true"] {
 }
 
 .choice-card {
-  --choice-card-pad: var(--density-space, var(--space-4));
+  --choice-card-pad: var(--density-space, var(--space-40));
   --choice-card-radius: var(--radius);
   --choice-card-border: var(--border);
   --choice-card-bg: var(--surface);
@@ -4103,9 +4116,9 @@ a.avatar[aria-disabled="true"] {
  */
 .select:not([multiple], [size]:not([size="1"])) {
   appearance: none;
-  padding-inline-end: calc(var(--space-3) + var(--space-6));
+  padding-inline-end: calc(var(--space-30) + var(--space-60));
   background-image: var(--icon-chevron);
-  background-position: center right var(--space-3);
+  background-position: center right var(--space-30);
   background-size: 1rem auto;
   background-repeat: no-repeat;
 }
@@ -4113,7 +4126,7 @@ a.avatar[aria-disabled="true"] {
 /* The chevron sits on the inline-end side; flip it in RTL so it follows
    the padding-inline-end space reserved for it. */
 .select:not([multiple], [size]:not([size="1"])):dir(rtl) {
-  background-position: center left var(--space-3);
+  background-position: center left var(--space-30);
 }
 
 /* Both forced-colors and prefers-contrast hand the arrow back to the
@@ -4124,7 +4137,7 @@ a.avatar[aria-disabled="true"] {
   .select:not([multiple], [size]:not([size="1"])) {
     appearance: auto;
     background-image: none;
-    padding-inline-end: var(--space-3);
+    padding-inline-end: var(--space-30);
   }
 }
 
@@ -4149,7 +4162,7 @@ a.avatar[aria-disabled="true"] {
       &::picker(select) {
         appearance: base-select;
         max-height: min(24rem, calc(var(--viewport-block) * 0.7));
-        margin-block: var(--space-2);
+        margin-block: var(--space-20);
         padding: 0;
         border: var(--border-width) solid var(--border);
         border-radius: var(--radius);
@@ -4171,8 +4184,8 @@ a.avatar[aria-disabled="true"] {
 
       & option {
         position: relative;
-        padding-block: var(--space-2);
-        padding-inline: var(--space-3);
+        padding-block: var(--space-20);
+        padding-inline: var(--space-30);
         white-space: normal;
         transition-property: color, background-color;
         transition-duration: var(--duration);
@@ -4229,9 +4242,9 @@ a.avatar[aria-disabled="true"] {
 }
 
 .file::file-selector-button {
-  margin-inline-end: var(--space-3);
-  padding-block: var(--space-1);
-  padding-inline: var(--space-2);
+  margin-inline-end: var(--space-30);
+  padding-block: var(--space-10);
+  padding-inline: var(--space-20);
   border: var(--border-width) solid var(--border);
   border-radius: var(--radius-sm);
   background: var(--surface-subtle);
@@ -4263,7 +4276,7 @@ a.avatar[aria-disabled="true"] {
 .color {
   inline-size: var(--control-size);
   block-size: var(--control-size);
-  padding: var(--space-1);
+  padding: var(--space-10);
   border: var(--border-width) solid var(--border);
   border-radius: var(--radius);
   background: var(--surface);
@@ -4619,7 +4632,7 @@ a.avatar[aria-disabled="true"] {
   gap: var(--gap);
   align-items: var(--form-actions-align, center);
   justify-content: var(--form-actions-justify, flex-start);
-  margin-block-start: var(--form-actions-margin-block-start, var(--space-5));
+  margin-block-start: var(--form-actions-margin-block-start, var(--space-50));
 }
 
 /* Opt-in sticky variant. When the bar is not stuck (at rest) the translucent
@@ -4633,7 +4646,7 @@ a.avatar[aria-disabled="true"] {
   isolation: isolate;
 
   margin-inline: calc(var(--form-actions-sticky-inline-offset, 0px) * -1);
-  padding: var(--form-actions-sticky-padding, var(--space-3));
+  padding: var(--form-actions-sticky-padding, var(--space-30));
 
   border-block-start: var(--border-width) solid var(--border);
   background: var(--surface);
@@ -4683,7 +4696,7 @@ a.avatar[aria-disabled="true"] {
   min-inline-size: 0;
 }
 
-.nowrap {
+.text-nowrap {
   white-space: nowrap;
 }
 
@@ -4784,7 +4797,7 @@ a.avatar[aria-disabled="true"] {
 
 /* Spacing step helpers — semantic scale (sm / default / lg).
    Names map to logical properties for writing-direction safety. The default
-   step uses --space-4, which matches the framework's built-in padding on
+   step uses --space-40, which matches the framework's built-in padding on
    cards, dialogs, and form-actions. */
 
 /* Gap */
@@ -4849,7 +4862,7 @@ a.avatar[aria-disabled="true"] {
   display: inline-flex;
   justify-content: center;
   min-block-size: var(--control-size);
-  padding-inline: var(--space-3);
+  padding-inline: var(--space-30);
   border: var(--border-width) solid var(--control-border);
   border-radius: var(--radius);
   background: var(--control-bg);
@@ -4993,3 +5006,11 @@ a.avatar[aria-disabled="true"] {
     break-after: avoid;
   }
 }
+
+
+/*
+ * NOTE: The 'optional/' directory contains layout and utility extensions
+ * (such as optional grids, split, visual effects, and extra utility classes
+ * like .gap-sm, .shadow-sm, etc.). These are intentionally not bundled here.
+ * Import them natively in your project if you need them.
+ */

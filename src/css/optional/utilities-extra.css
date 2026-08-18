@@ -83,6 +83,18 @@
   flex-wrap: nowrap;
 }
 
+.gap-sm {
+  gap: var(--space-20);
+}
+
+.gap-md {
+  gap: var(--space-40);
+}
+
+.gap-lg {
+  gap: var(--space-50);
+}
+
 .justify-content-start {
   --cluster-justify: flex-start;
   justify-content: flex-start;

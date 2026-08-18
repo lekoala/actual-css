@@ -21,9 +21,9 @@
     .dashboard-sidebar {
       display: none;
       flex-direction: column;
-      gap: var(--space-4);
+      gap: var(--space-40);
       inline-size: 17rem;
-      padding: var(--space-4);
+      padding: var(--space-40);
       border-inline-end: var(--border-width) solid var(--border);
       background: var(--surface-raised);
     }
@@ -40,9 +40,9 @@
 
     .dashboard-content {
       --center-size: 86rem;
-      --gap: var(--space-4);
+      --gap: var(--space-40);
 
-      padding-block: var(--space-4) var(--space-6);
+      padding-block: var(--space-40) var(--space-60);
     }
 
     .dashboard-search {
@@ -86,9 +86,9 @@
     .dashboard-nav .nav-link {
       inline-size: 100%;
       justify-content: flex-start;
-      gap: var(--space-2);
+      gap: var(--space-20);
       min-block-size: 2.35rem;
-      padding-inline: var(--space-3);
+      padding-inline: var(--space-30);
     }
 
     .dashboard-nav .nav-link i {
@@ -116,7 +116,7 @@
 
     .dashboard-stat {
       display: grid;
-      gap: var(--space-4);
+      gap: var(--space-40);
       align-content: space-between;
       min-block-size: 11rem;
     }
@@ -125,7 +125,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: var(--space-2);
+      gap: var(--space-20);
       color: var(--text-muted);
       font-size: var(--font-size-sm);
     }
@@ -142,7 +142,7 @@
 
     .dashboard-stat-body {
       display: grid;
-      gap: var(--space-2);
+      gap: var(--space-20);
     }
 
     .dashboard-stat-value {
@@ -156,14 +156,14 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: var(--space-2);
+      gap: var(--space-20);
       color: var(--text-muted);
       font-size: var(--font-size-sm);
     }
 
     .dashboard-board {
       display: grid;
-      gap: var(--space-4);
+      gap: var(--space-40);
       grid-template-columns: minmax(0, 1fr);
       align-items: start;
     }
@@ -174,41 +174,41 @@
 
     .dashboard-account {
       display: grid;
-      gap: var(--space-1);
+      gap: var(--space-10);
     }
 
     .dashboard-progress-list {
       display: grid;
-      gap: var(--space-3);
+      gap: var(--space-30);
     }
 
     .dashboard-progress-row {
       display: grid;
-      gap: var(--space-2);
+      gap: var(--space-20);
     }
 
     .dashboard-progress-label {
       display: flex;
       justify-content: space-between;
-      gap: var(--space-2);
+      gap: var(--space-20);
       color: var(--text-muted);
       font-size: var(--font-size-sm);
     }
 
     .dashboard-feed {
       display: grid;
-      gap: var(--space-3);
+      gap: var(--space-30);
     }
 
     .dashboard-feed-item {
       display: grid;
       grid-template-columns: auto minmax(0, 1fr);
-      gap: var(--space-3);
+      gap: var(--space-30);
       align-items: start;
     }
 
     .dashboard-feed-item + .dashboard-feed-item {
-      padding-block-start: var(--space-3);
+      padding-block-start: var(--space-30);
       border-block-start: var(--border-width) solid var(--border);
     }
 
@@ -222,7 +222,7 @@
     }
 
     .dashboard-template-note {
-      padding-block: var(--space-4);
+      padding-block: var(--space-40);
       border-block-start: var(--border-width) solid var(--border);
       color: var(--text-muted);
       font-size: var(--font-size-sm);
@@ -355,7 +355,7 @@
           <i class="ti ti-menu-2" aria-hidden="true"></i>
         </button>
 
-        <ol class="breadcrumb nowrap dashboard-hide-mobile" aria-label="Breadcrumb">
+        <ol class="breadcrumb text-nowrap dashboard-hide-mobile" aria-label="Breadcrumb">
           <li><a href="#overview">Actual Cloud</a></li>
           <li><a href="#revenue">Revenue</a></li>
           <li class="truncate" aria-current="page">Overview</li>
@@ -417,7 +417,7 @@
             <p class="muted">A focused view of recurring revenue, collection risk, and expansion work for Q3.</p>
           </hgroup>
 
-          <div class="cluster" style="gap: var(--space-2);">
+          <div class="cluster" style="gap: var(--space-20);">
             <button class="btn neutral outline" type="button">
               <i class="ti ti-download" aria-hidden="true"></i>
               Export
@@ -499,7 +499,7 @@
             <section class="card stack" id="accounts">
               <header>
                 <h2>Priority accounts</h2>
-                <div class="cluster nowrap sm">
+                <div class="cluster sm" style="--cluster-wrap: nowrap;">
                   <select class="select sm fit" aria-label="Filter accounts">
                     <option>All segments</option>
                     <option>Enterprise</option>
@@ -523,7 +523,7 @@
                       <th scope="col" class="text-end">ARR</th>
                       <th scope="col">Stage</th>
                       <th scope="col">Health</th>
-                      <th scope="col" class="nowrap">Next step</th>
+                      <th scope="col" class="text-nowrap">Next step</th>
                       <th scope="col"><span class="sr-only">Actions</span></th>
                     </tr>
                   </thead>
@@ -536,15 +536,15 @@
                         </div>
                       </td>
                       <td>
-                        <span class="cluster" style="gap: var(--space-2);">
+                        <span class="cluster" style="gap: var(--space-20);">
                           <span class="avatar sm"><abbr>AM</abbr></span>
                           Ada
                         </span>
                       </td>
-                      <td class="text-end nowrap">$428K</td>
+                      <td class="text-end text-nowrap">$428K</td>
                       <td><span class="badge primary soft">Negotiation</span></td>
                       <td><span class="badge warning soft">Watch</span></td>
-                      <td class="nowrap">Legal review</td>
+                      <td class="text-nowrap">Legal review</td>
                       <td>
                         <button class="btn neutral ghost sm" type="button" aria-label="Open account">
                           <i class="ti ti-arrow-right" aria-hidden="true"></i>
@@ -559,15 +559,15 @@
                         </div>
                       </td>
                       <td>
-                        <span class="cluster" style="gap: var(--space-2);">
+                        <span class="cluster" style="gap: var(--space-20);">
                           <span class="avatar sm"><abbr>JL</abbr></span>
                           Jana
                         </span>
                       </td>
-                      <td class="text-end nowrap">$216K</td>
+                      <td class="text-end text-nowrap">$216K</td>
                       <td><span class="badge success soft">Commit</span></td>
                       <td><span class="badge success soft">Strong</span></td>
-                      <td class="nowrap">Security call</td>
+                      <td class="text-nowrap">Security call</td>
                       <td>
                         <button class="btn neutral ghost sm" type="button" aria-label="Open account">
                           <i class="ti ti-arrow-right" aria-hidden="true"></i>
@@ -582,15 +582,15 @@
                         </div>
                       </td>
                       <td>
-                        <span class="cluster" style="gap: var(--space-2);">
+                        <span class="cluster" style="gap: var(--space-20);">
                           <span class="avatar sm"><abbr>RM</abbr></span>
                           Rin
                         </span>
                       </td>
-                      <td class="text-end nowrap">$184K</td>
+                      <td class="text-end text-nowrap">$184K</td>
                       <td><span class="badge warning soft">Procurement</span></td>
                       <td><span class="badge danger soft">At risk</span></td>
-                      <td class="nowrap">Exec sponsor</td>
+                      <td class="text-nowrap">Exec sponsor</td>
                       <td>
                         <button class="btn neutral ghost sm" type="button" aria-label="Open account">
                           <i class="ti ti-arrow-right" aria-hidden="true"></i>
@@ -605,15 +605,15 @@
                         </div>
                       </td>
                       <td>
-                        <span class="cluster" style="gap: var(--space-2);">
+                        <span class="cluster" style="gap: var(--space-20);">
                           <span class="avatar sm"><abbr>TS</abbr></span>
                           Theo
                         </span>
                       </td>
-                      <td class="text-end nowrap">$132K</td>
+                      <td class="text-end text-nowrap">$132K</td>
                       <td><span class="badge neutral soft">Discovery</span></td>
                       <td><span class="badge neutral soft">New</span></td>
-                      <td class="nowrap">ROI workshop</td>
+                      <td class="text-nowrap">ROI workshop</td>
                       <td>
                         <button class="btn neutral ghost sm" type="button" aria-label="Open account">
                           <i class="ti ti-arrow-right" aria-hidden="true"></i>
@@ -627,7 +627,7 @@
               <footer>
                 <span class="muted">Showing 4 of 28 priority accounts</span>
                 <nav aria-label="Account pages">
-                  <ol class="pagination sm nowrap">
+                  <ol class="pagination sm text-nowrap">
                     <li>
                       <button disabled class="btn outline" aria-label="Previous page">
                         <i class="ti ti-chevron-left" aria-hidden="true"></i>

@@ -141,7 +141,7 @@
 - `required` is the semantic source of truth. Add `<span class="required-mark" aria-hidden="true">*</span>` inside a label only when a visual required marker is wanted; the framework does not add one automatically.
 - `.field` is the canonical field wrapper. It works on `<label>` and `<div>`.
 - `.field-label` is element-agnostic. Use it on `<span>` inside a wrapped label, on `<label for="…">` in a detached layout, or on `<legend>` inside a fieldset.
-- `.field-group` styles a `<fieldset class="field-group">` as a grouped field container. Its legend gutter is tunable with `--fieldset-legend-padding-inline` (`var(--space-1)`).
+- `.field-group` styles a `<fieldset class="field-group">` as a grouped field container. Its legend gutter is tunable with `--fieldset-legend-padding-inline` (`var(--space-10)`).
 - Use native `<optgroup>` and `disabled` options in `.select` controls when applicable; the customizable picker preserves both as a progressive enhancement.
 - `.choice` is the choice-label API. Use `.check` or `.radio` on the nested control. The control goes first, the label group second, so multi-line labels align the control with the first line.
 - For a switch, use `class="switch"` and `role="switch"`.
@@ -208,7 +208,7 @@ The three layout hooks are unset by default and fall back to the values below.
 
 - `--form-actions-align` — `center` — cross-axis alignment (`align-items`).
 - `--form-actions-justify` — `flex-start` — main-axis distribution (`justify-content`).
-- `--form-actions-margin-block-start` — `var(--space-5)` — top margin separating actions from the form.
+- `--form-actions-margin-block-start` — `var(--space-50)` — top margin separating actions from the form.
 
 ### Common arrangements
 
@@ -987,12 +987,12 @@ Scroll the page to see the detached footer stay reachable.
 Knobs:
 
 - `--z-sticky` — layering token, defaults to `10`.
-- `--form-actions-sticky-padding` — inner padding, defaults to `--space-3`.
+- `--form-actions-sticky-padding` — inner padding, defaults to `--space-30`.
 - `--form-actions-sticky-inline-offset` — full-bleed escape hatch for sticky actions inside padded containers. Set this on the page, not the form.
 
 ```css
 .settings-page {
-  --form-actions-sticky-inline-offset: var(--space-4);
+  --form-actions-sticky-inline-offset: var(--space-40);
 }
 ```
 

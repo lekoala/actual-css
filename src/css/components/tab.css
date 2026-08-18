@@ -14,7 +14,7 @@
 .tabs {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-1);
+  gap: var(--space-10);
   margin: 0;
   padding: 0;
   border-block-end: var(--border-width) solid var(--border);
@@ -32,8 +32,9 @@
 .tab {
   display: inline-flex;
   align-items: center;
+  gap: var(--tab-gap, 0.375em);
   min-block-size: var(--control-size);
-  padding-inline: var(--space-3);
+  padding-inline: var(--space-30);
   border: 0;
   border-block-end: 2px solid transparent;
   border-radius: 0;
@@ -49,7 +50,7 @@
   justify-content: flex-start;
   border-block-end: 0;
   border-inline-end: 2px solid transparent;
-  padding-inline-end: var(--space-4);
+  padding-inline-end: var(--space-40);
 }
 
 .tab:is(:disabled, [aria-disabled="true"]) {

@@ -1,26 +1,26 @@
 {
-  "timestamp": "2026-08-17T20:07:57.139Z",
-  "totalRaw": 171488,
-  "totalMinified": 84928,
-  "totalBrotli": 12561,
+  "timestamp": "2026-08-18T13:16:57.904Z",
+  "totalRaw": 172406,
+  "totalMinified": 85200,
+  "totalBrotli": 12623,
   "themesMinified": 29127,
   "themesBrotli": 3404,
-  "shippedMinified": 84928,
-  "shippedBrotli": 12561,
+  "shippedMinified": 85200,
+  "shippedBrotli": 12623,
   "maxShippedBrotli": 13312,
   "fileCount": 73,
   "files": [
     {
       "file": "components/button.css",
-      "raw": 7170
+      "raw": 7265
     },
     {
       "file": "components/alert.css",
-      "raw": 7021
+      "raw": 7046
     },
     {
       "file": "tokens.css",
-      "raw": 6214
+      "raw": 6554
     },
     {
       "file": "theme.css",
@@ -28,7 +28,7 @@
     },
     {
       "file": "components/modal.css",
-      "raw": 5140
+      "raw": 5143
     },
     {
       "file": "components/badge.css",
@@ -40,7 +40,7 @@
     },
     {
       "file": "forms/choice.css",
-      "raw": 4588
+      "raw": 4589
     },
     {
       "file": "components/avatar.css",
@@ -48,11 +48,11 @@
     },
     {
       "file": "components/flyout.css",
-      "raw": 4364
+      "raw": 4390
     },
     {
       "file": "forms/choice-card.css",
-      "raw": 4350
+      "raw": 4351
     },
     {
       "file": "themes/gradient.css",
@@ -64,7 +64,7 @@
     },
     {
       "file": "utilities.css",
-      "raw": 3208
+      "raw": 3214
     },
     {
       "file": "forms/switch.css",
@@ -72,11 +72,11 @@
     },
     {
       "file": "components/join.css",
-      "raw": 3036
+      "raw": 3037
     },
     {
       "file": "components/drawer.css",
-      "raw": 2848
+      "raw": 2850
     },
     {
       "file": "forms/range.css",
@@ -100,11 +100,11 @@
     },
     {
       "file": "components/card.css",
-      "raw": 2531
+      "raw": 2541
     },
     {
       "file": "forms/control.css",
-      "raw": 2512
+      "raw": 2514
     },
     {
       "file": "themes/sunset.css",
@@ -112,7 +112,7 @@
     },
     {
       "file": "forms/custom-select.css",
-      "raw": 2498
+      "raw": 2501
     },
     {
       "file": "themes/lavender.css",
@@ -123,12 +123,12 @@
       "raw": 2464
     },
     {
-      "file": "variants.css",
-      "raw": 2442
+      "file": "components/tab.css",
+      "raw": 2453
     },
     {
-      "file": "components/tab.css",
-      "raw": 2418
+      "file": "variants.css",
+      "raw": 2446
     },
     {
       "file": "components/progress.css",
@@ -160,7 +160,7 @@
     },
     {
       "file": "components/navbar.css",
-      "raw": 2142
+      "raw": 2148
     },
     {
       "file": "grid.css",
@@ -172,27 +172,27 @@
     },
     {
       "file": "components/status-bar.css",
-      "raw": 1971
+      "raw": 1978
     },
     {
       "file": "forms/native.css",
-      "raw": 1919
+      "raw": 1923
     },
     {
       "file": "components/accordion.css",
-      "raw": 1861
+      "raw": 1866
     },
     {
       "file": "forms/form-actions.css",
-      "raw": 1841
+      "raw": 1843
     },
     {
       "file": "layout.css",
-      "raw": 1789
+      "raw": 1810
     },
     {
       "file": "forms/input-icon.css",
-      "raw": 1633
+      "raw": 1637
     },
     {
       "file": "components/skeleton.css",
@@ -200,11 +200,11 @@
     },
     {
       "file": "forms/select.css",
-      "raw": 1459
+      "raw": 1464
     },
     {
       "file": "components/menu.css",
-      "raw": 1432
+      "raw": 1437
     },
     {
       "file": "components/meter.css",
@@ -216,11 +216,11 @@
     },
     {
       "file": "base.css",
-      "raw": 1347
+      "raw": 1348
     },
     {
       "file": "components/table.css",
-      "raw": 1305
+      "raw": 1306
     },
     {
       "file": "components/spinner.css",
@@ -236,7 +236,7 @@
     },
     {
       "file": "forms/form.css",
-      "raw": 1114
+      "raw": 1118
     },
     {
       "file": "themes/dim.css",
@@ -248,7 +248,7 @@
     },
     {
       "file": "components/breadcrumb.css",
-      "raw": 1002
+      "raw": 1004
     },
     {
       "file": "focus.css",
@@ -268,7 +268,11 @@
     },
     {
       "file": "components/pagination.css",
-      "raw": 785
+      "raw": 786
+    },
+    {
+      "file": "actual.css",
+      "raw": 759
     },
     {
       "file": "components/index.css",
@@ -287,12 +291,8 @@
       "raw": 559
     },
     {
-      "file": "actual.css",
-      "raw": 464
-    },
-    {
       "file": "components/actions.css",
-      "raw": 351
+      "raw": 352
     },
     {
       "file": "actual.layer.css",

@@ -11,9 +11,9 @@
 }
 
 .file::file-selector-button {
-  margin-inline-end: var(--space-3);
-  padding-block: var(--space-1);
-  padding-inline: var(--space-2);
+  margin-inline-end: var(--space-30);
+  padding-block: var(--space-10);
+  padding-inline: var(--space-20);
   border: var(--border-width) solid var(--border);
   border-radius: var(--radius-sm);
   background: var(--surface-subtle);
@@ -45,7 +45,7 @@
 .color {
   inline-size: var(--control-size);
   block-size: var(--control-size);
-  padding: var(--space-1);
+  padding: var(--space-10);
   border: var(--border-width) solid var(--border);
   border-radius: var(--radius);
   background: var(--surface);

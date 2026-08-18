@@ -257,6 +257,7 @@ An admonition is a structured box with a tinted title bar, an optional icon, and
 - `--alert-icon-size` — size of a leading `.alert-icon`.
 - `--alert-dismiss-size` — inline and block size of the `.alert-dismiss` button.
 - `--alert-dismiss-icon-size` — size of the dismiss glyph.
+- `--alert-radius` — corner radius, when the default `--radius-lg` does not fit.
 
 Prefer intents and shared variants for alert colors rather than overriding the
 internal color plumbing directly.
@@ -539,10 +540,25 @@ With icons, loading state...
 </button>
 ```
 
+Square icon-only buttons
+
+```html{.cluster}
+<button class="btn icon-only" type="button" aria-label="Add">
+  <i class="ti ti-plus" aria-hidden="true"></i>
+</button>
+<button class="btn primary icon-only" type="button" aria-label="Search">
+  <i class="ti ti-search" aria-hidden="true"></i>
+</button>
+```
+
+Use `.btn.icon-only` for a square icon button sized to the control height. Always
+name the button with an `aria-label` since there is no visible text.
+
 ### Hooks
 
 - `--btn-radius` — corner radius.
 - `--btn-focus-color` — focus ring base color; the ring itself is derived from it.
+- `--btn-gap` — space between an icon and the label text (default `0.375em`).
 
 Prefer `.sm` / `.lg` over setting sizes directly.
 
@@ -979,7 +995,7 @@ See also: [Spinner](#spinner).
 
 - Use native `<table class="table">` inside a `.table-wrap` for surface, border, radius, and overflow.
 - Use `<caption>`, `scope="col"`, and `scope="row"` for accessibility.
-- Use `.text-end` for numeric columns and `.nowrap` for non-wrapping cells.
+- Use `.text-end` for numeric columns and `.text-nowrap` for non-wrapping cells.
 - For wide tables, make the wrapper an accessible scroll region with `role="region"`, `aria-labelledby`, and `tabindex="0"`.
 - Tables stay content-first and neutral by default.
 

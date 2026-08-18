@@ -26,7 +26,7 @@
   appearance: none;
   inline-size: 100%;
   min-block-size: var(--control-size);
-  padding-inline: var(--space-3);
+  padding-inline: var(--space-30);
   border: var(--border-width) solid var(--form-invalid-border, var(--control-border));
   border-block-end-color: var(
     --form-invalid-border,
@@ -48,7 +48,7 @@
 
 .textarea {
   min-block-size: 6rem;
-  padding-block: var(--space-2);
+  padding-block: var(--space-20);
   resize: vertical;
 }
 

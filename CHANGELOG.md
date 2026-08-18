@@ -4,7 +4,7 @@ All notable changes will be documented here.
 
 This project follows Keep a Changelog and uses semver, including during 0.x.
 
-## [0.3.0] - 2026-08-17
+## [0.3.0 - unreleased]
 
 ### Added
 - `--grid-columns` hook to override the generic `.grid` template for
@@ -14,6 +14,11 @@ This project follows Keep a Changelog and uses semver, including during 0.x.
 - Generic `command="--dismiss"` routing with the `actual:dismiss` event.
 - Manifest blocks (`script[data-enhance-modules]`) auto-wire through the
   `enhance()` observer; the `DOMContentLoaded` bootstrap is gone.
+- `--cluster-wrap` on `.cluster` — override wrapping (`flex-wrap`) per instance.
+- `.btn.icon-only` — square icon-only buttons sized to the control height.
+- `--btn-gap`, `--tab-gap`, and `--alert-radius` hooks for gap and radius tuning.
+- `.gap-sm`, `.gap-md`, `.gap-lg` optional utilities in
+  `optional/utilities-extra.css`.
 
 ### Changed
 - `registerEnhancement()` owns a name per root — a duplicate name on the same
@@ -82,6 +87,14 @@ This project follows Keep a Changelog and uses semver, including during 0.x.
 - `selectors.js` holds written-state vocabulary only (discovery entries removed).
 - `surface.js` owns its own teardown via `data-actual-surface` marker and
   per-document binding.
+- Spacing tokens move to an extensible tens namespace: `--space-1`…`--space-6`
+  become `--space-10`…`--space-60`. Actual CSS reserves multiples of 10;
+  applications can intercalate intermediate values (`--space-15`, `--space-45`)
+  without colliding with a future framework step (breaking).
+- `.nowrap` is renamed `.text-nowrap` (text wrapping only); keeping a
+  `.cluster` on one row is now `--cluster-wrap: nowrap` (breaking).
+- `.card` background now falls back to `--surface-raised` instead of `--surface`
+  (breaking where the two differ).
 
 ### Fixed
 - Menu-item detection no longer matches items of a neighbouring surface (D11).

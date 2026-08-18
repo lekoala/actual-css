@@ -12,19 +12,19 @@
   <link rel="stylesheet" href="../styles/demo.css">
   <style>
     .blocks-page {
-      padding-block: var(--space-6);
+      padding-block: var(--space-60);
     }
 
     .blocks-intro {
       --center-size: 72rem;
 
-      margin-block-end: var(--space-5);
+      margin-block-end: var(--space-50);
     }
 
     .block-section {
       --center-size: 72rem;
 
-      padding-block: var(--space-6);
+      padding-block: var(--space-60);
       border-block-start: var(--border-width) solid var(--border);
     }
 
@@ -34,8 +34,8 @@
     }
 
     .block-example {
-      margin-block-start: var(--space-4);
-      padding: var(--space-4);
+      margin-block-start: var(--space-40);
+      padding: var(--space-40);
       border: var(--border-width) solid var(--border);
       border-radius: var(--radius);
       background: var(--surface);
@@ -43,7 +43,7 @@
 
     .block-page-header {
       display: grid;
-      gap: var(--space-3);
+      gap: var(--space-30);
     }
 
     .block-page-header-main {
@@ -51,13 +51,13 @@
       flex-wrap: wrap;
       align-items: flex-start;
       justify-content: space-between;
-      gap: var(--space-4);
+      gap: var(--space-40);
     }
 
     .block-toolbar {
       display: flex;
       flex-wrap: wrap;
-      gap: var(--space-2);
+      gap: var(--space-20);
       align-items: center;
       justify-content: space-between;
     }
@@ -65,7 +65,7 @@
     .block-filter-group {
       display: flex;
       flex-wrap: wrap;
-      gap: var(--space-2);
+      gap: var(--space-20);
       align-items: center;
     }
 
@@ -76,15 +76,15 @@
 
     .block-account {
       display: grid;
-      gap: var(--space-1);
+      gap: var(--space-10);
     }
 
     .block-empty {
       display: grid;
       place-items: center;
-      gap: var(--space-3);
+      gap: var(--space-30);
       min-block-size: 18rem;
-      padding: var(--space-5);
+      padding: var(--space-50);
       text-align: center;
     }
 
@@ -105,31 +105,31 @@
     .block-detail {
       display: grid;
       grid-template-columns: minmax(0, 1fr);
-      gap: var(--space-4);
+      gap: var(--space-40);
       align-items: start;
     }
 
     .block-meta-list {
       display: grid;
-      gap: var(--space-3);
+      gap: var(--space-30);
     }
 
     .block-meta-row {
       display: flex;
       justify-content: space-between;
-      gap: var(--space-3);
-      padding-block-end: var(--space-3);
+      gap: var(--space-30);
+      padding-block-end: var(--space-30);
       border-block-end: var(--border-width) solid var(--border);
     }
 
     .block-message-list {
       display: grid;
-      gap: var(--space-3);
+      gap: var(--space-30);
     }
 
     /* .media (framework) provides the auto/1fr grid shape. */
     .block-message {
-      padding-block-end: var(--space-3);
+      padding-block-end: var(--space-30);
       border-block-end: var(--border-width) solid var(--border);
     }
 
@@ -231,13 +231,13 @@
     /* Space for the shrunk label is always reserved, so the value never
        jumps when the label floats. */
     .block-float-field > :is(.input, .textarea) {
-      padding-block: var(--space-5) var(--space-2);
+      padding-block: var(--space-50) var(--space-20);
     }
 
     .block-float-label {
       position: absolute;
       inset-block-start: 50%;
-      inset-inline-start: calc(var(--space-3) + var(--border-width));
+      inset-inline-start: calc(var(--space-30) + var(--border-width));
       translate: 0 -50%;
       color: var(--text-muted);
       font-size: var(--control-font-size);
@@ -252,14 +252,14 @@
     /* A textarea's resting label aligns with the first text line instead of
        centering in the (tall) control. */
     .block-float-field > .textarea + .block-float-label {
-      inset-block-start: var(--space-5);
+      inset-block-start: var(--space-50);
       translate: none;
     }
 
     /* placeholder=" " on every control makes :placeholder-shown a reliable
        emptiness probe; :autofill covers prefilled values before interaction. */
     .block-float-field > :is(.input, .textarea):is(:focus, :autofill, :not(:placeholder-shown)) + .block-float-label {
-      inset-block-start: var(--space-2);
+      inset-block-start: var(--space-20);
       translate: none;
       font-size: var(--font-size-xs);
     }
@@ -382,7 +382,7 @@
         <div class="block-toolbar">
           <div class="block-filter-group">
             <input class="input sm" type="search" aria-label="Search accounts" placeholder="Search accounts">
-            <div class="cluster nowrap sm">
+            <div class="cluster sm" style="--cluster-wrap: nowrap;">
               <select class="select sm" aria-label="Filter by status">
                 <option>All statuses</option>
                 <option>Healthy</option>
@@ -437,9 +437,9 @@
                     <span class="avatar sm primary"><abbr>JL</abbr></span>
                   </div>
                 </td>
-                <td class="text-end nowrap">$428K</td>
+                <td class="text-end text-nowrap">$428K</td>
                 <td><span class="badge warning soft">Watch</span></td>
-                <td class="nowrap">Legal review</td>
+                <td class="text-nowrap">Legal review</td>
                 <td>
                   <div class="flyout-trigger">
                     <button class="btn neutral ghost sm" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="row-menu-1" id="row-trigger-1" data-enhance="flyout" aria-label="Row actions">
@@ -463,9 +463,9 @@
                   </div>
                 </td>
                 <td><span class="avatar sm"><abbr>JL</abbr></span> Jana</td>
-                <td class="text-end nowrap">$216K</td>
+                <td class="text-end text-nowrap">$216K</td>
                 <td><span class="badge success soft">Healthy</span></td>
-                <td class="nowrap">Security call</td>
+                <td class="text-nowrap">Security call</td>
                 <td><button class="btn neutral ghost sm" type="button">Open</button></td>
               </tr>
               <tr>
@@ -477,9 +477,9 @@
                   </div>
                 </td>
                 <td><span class="avatar sm"><abbr>RM</abbr></span> Rin</td>
-                <td class="text-end nowrap">$184K</td>
+                <td class="text-end text-nowrap">$184K</td>
                 <td><span class="badge danger soft">Blocked</span></td>
-                <td class="nowrap">Sponsor call</td>
+                <td class="text-nowrap">Sponsor call</td>
                 <td><button class="btn neutral ghost sm" type="button">Open</button></td>
               </tr>
             </tbody>
@@ -659,14 +659,14 @@
         <div class="block-message-list" aria-label="Recent messages">
           <article class="media block-message">
             <span class="avatar success sm"><abbr>OK</abbr></span>
-            <div class="stack" style="--gap: var(--space-1);">
+            <div class="stack" style="--gap: var(--space-10);">
               <strong>Exports are ready</strong>
               <p class="muted">Three CSV exports can be downloaded from the reports page.</p>
             </div>
           </article>
           <article class="media block-message">
             <span class="avatar warning sm"><abbr>!</abbr></span>
-            <div class="stack" style="--gap: var(--space-1);">
+            <div class="stack" style="--gap: var(--space-10);">
               <strong>Two invoices need review</strong>
               <p class="muted">The tax region changed for accounts in the EU segment.</p>
             </div>
