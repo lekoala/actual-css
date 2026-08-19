@@ -926,3 +926,30 @@ test("data-flyout-close dismisses a manual rich panel", async () => {
   click(document.getElementById("close"));
   expect(panel.hidden).toBe(true);
 });
+
+for (const [role, key] of [
+  ["menuitemcheckbox", "Enter"],
+  ["menuitemradio", " "],
+]) {
+  test(`keyboard activation recognizes ${role} with ${key === " " ? "Space" : key} without owning its state`, async () => {
+    await loadFlyout(`
+      <button id="trigger" type="button" data-enhance="flyout" aria-controls="menu">Open</button>
+      <menu id="menu" class="flyout menu" data-flyout-auto-close="outside" role="menu" hidden>
+        <li><button id="item" type="button" class="menu-item" role="${role}" aria-checked="false">Option</button></li>
+      </menu>
+    `);
+    const trigger = document.getElementById("trigger");
+    const menu = document.getElementById("menu");
+    const item = document.getElementById("item");
+    let activations = 0;
+    item.addEventListener("click", () => activations++);
+    setupGeometry(trigger, menu);
+
+    press(trigger, "ArrowDown");
+    press(menu, key);
+
+    expect(activations).toBe(1);
+    expect(item.getAttribute("aria-checked")).toBe("false");
+    expect(menu.hidden).toBe(false);
+  });
+}

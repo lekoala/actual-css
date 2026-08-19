@@ -151,6 +151,17 @@ test("menu item styles include disabled treatment", () => {
   expect(css).toContain("cursor: not-allowed;");
 });
 
+test("rich menu slots and checkable states share the leading column", () => {
+  const css = readCss("src/css/components/menu.css");
+
+  expect(css).toContain(".menu-item-icon");
+  expect(css).toContain(".menu-item-text");
+  expect(css).toContain(".menu-item-end");
+  expect(css).toContain('[role="menuitemcheckbox"][aria-checked="true"]');
+  expect(css).toContain('[role="menuitemradio"][aria-checked="true"]');
+  expect(css).toContain("var(--menu-item-icon-size)");
+});
+
 test("tabs include vertical orientation styling", () => {
   const css = readCss("src/css/components/tab.css");
 
