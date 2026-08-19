@@ -12,11 +12,43 @@ The JS runtime doubles as a primitive kit for building custom widgets.
 | Directional item lookup, edges, wrapping, RTL | `keys` (`itemForKey`, `firstItem`, `lastItem`, `nextItem`) | `actual-css/js/keys` |
 | Menu-item vocabulary, usable-item filtering | `menu` | `actual-css/js/menu` |
 | Focusable lookup, visibility | `focus` | `actual-css/js/focus` |
+| One remembered tab stop with directional navigation | `focus-group` (`connectFocusGroup`) | `actual-css/js/focus-group` |
 | Caret-safe value rewriting | `input` (`onTextInput`, `setCaret`, `dispatchInput`) | `actual-css/js/input` |
 | Character policies | `filter` | `actual-css/js/filter` |
 | Event namespace | `events` (`EVENTS`, `ACTUAL_EVENT_PREFIX`) | `actual-css/js/events` |
 | Declarative triggers | `command` (`registerCommands`) | `actual-css/js/command` |
 | State classes the runtime writes | `selectors` (`CLASSES`) | `actual-css/js/selectors` |
+
+## Focus group
+
+`connectFocusGroup(root, options)` gives a composite one remembered tab stop and
+Arrow/Home/End navigation. The consumer supplies `getItems()` because candidate
+discovery and disabled semantics belong to the widget, not to the controller.
+The controller updates only `tabindex` and focus; it does not activate controls
+or write ARIA and application state.
+
+```js
+import { connectFocusGroup } from "actual-css/js/focus-group";
+
+const focusGroup = connectFocusGroup(toolbar, {
+  getItems: () => toolbar.querySelectorAll(":scope > button:not(:disabled)"),
+  orientation: "horizontal",
+  wrap: false,
+  signal,
+});
+
+// Call this after changing which controls belong to the group.
+focusGroup.sync();
+```
+
+Candidates are re-read when focus or keyboard input occurs. A consumer that
+changes the candidate list calls `focusGroup.sync()` explicitly; the primitive
+does not observe the subtree. A plain `sync()` preserves the remembered item
+when possible; `sync(item)` explicitly makes an item the group's tab stop.
+Horizontal navigation follows the root's effective text direction.
+`focusGroup.disconnect()` removes its listeners and restores authored
+`tabindex` values. This is a JavaScript responsibility primitive, not a
+`focusgroup` attribute or enhancement token.
 
 ## Compositions
 
