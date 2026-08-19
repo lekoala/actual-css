@@ -33,7 +33,7 @@ migration:
 
 `actual.layer.css` wraps every Actual rule in a single `@layer actual`, so
 unlayered Bootstrap and project CSS keep precedence while the migration runs.
-See [Cascade layer strategy](../../design-notes/cascade-layer.md) for the
+See [Cascade layer strategy](https://github.com/lekoala/actual-css/blob/master/docs/design-notes/cascade-layer.md) for the
 limitations of the approach.
 
 Remove the compatibility mechanism when Bootstrap is gone. The public Actual API remains unprefixed.

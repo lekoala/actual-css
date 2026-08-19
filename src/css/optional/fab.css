@@ -25,6 +25,13 @@
   display: none;
 }
 
+/* A lone decorative plus can communicate the open/close state without
+   requiring a second icon or JavaScript-managed content. */
+.fab > summary > [aria-hidden="true"]:only-child {
+  display: inline-block;
+  transition: transform var(--duration);
+}
+
 .fab-actions {
   position: absolute;
   inset-inline-end: 0;
@@ -43,12 +50,51 @@
     visibility 0s linear var(--duration);
 }
 
+/* One action is one compact row. Keeping this relationship inside FAB avoids
+   wrapping and prevents labels from becoming visually associated with the
+   preceding or following button. */
+.fab-action {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--fab-gap);
+  inline-size: max-content;
+  max-inline-size: calc(var(--viewport-inline) - var(--fab-offset) - var(--fab-offset));
+}
+
+.fab-label {
+  flex: 0 1 auto;
+  overflow: hidden;
+  max-inline-size: 16rem;
+  padding: var(--space-10) var(--space-20);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: var(--shadow);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-tight);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .fab[open] > .fab-actions {
   opacity: 1;
   visibility: visible;
   pointer-events: auto;
   transform: translateY(0);
   transition-delay: 0s;
+}
+
+.fab[open] > summary > [aria-hidden="true"]:only-child {
+  transform: rotate(45deg);
+}
+
+@media (forced-colors: active) {
+  .fab-label {
+    border: var(--border-width) solid CanvasText;
+    box-shadow: none;
+  }
 }
 
 @media print {

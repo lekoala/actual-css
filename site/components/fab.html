@@ -211,22 +211,135 @@ The existing button component owns its size, shape, intent, and interaction.</p>
 <p>Use native <code>details</code> for a no-JavaScript speed dial. List actions in their
 visual top-to-bottom order so keyboard focus follows the same sequence.</p>
 <pre><code class="language-html">&lt;details class=&quot;fab&quot;&gt;
-  &lt;summary class=&quot;btn circle primary lg icon-only&quot; aria-label=&quot;Create&quot;&gt;
+  &lt;summary
+    class=&quot;btn circle primary icon-only&quot;
+    style=&quot;--btn-min-size: 3.5rem&quot;
+    aria-label=&quot;Create&quot;
+  &gt;
     &lt;span aria-hidden=&quot;true&quot;&gt;+&lt;/span&gt;
   &lt;/summary&gt;
 
   &lt;div class=&quot;fab-actions&quot;&gt;
-    &lt;button class=&quot;btn circle lg icon-only&quot; type=&quot;button&quot; aria-label=&quot;New document&quot;&gt;…&lt;/button&gt;
-    &lt;button class=&quot;btn circle lg icon-only&quot; type=&quot;button&quot; aria-label=&quot;Upload file&quot;&gt;…&lt;/button&gt;
-    &lt;button class=&quot;btn circle lg icon-only&quot; type=&quot;button&quot; aria-label=&quot;New folder&quot;&gt;…&lt;/button&gt;
+    &lt;div class=&quot;fab-action&quot;&gt;
+      &lt;span class=&quot;fab-label&quot;&gt;Document&lt;/span&gt;
+      &lt;button class=&quot;btn circle lg icon-only&quot; type=&quot;button&quot; aria-label=&quot;New document&quot;&gt;…&lt;/button&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;fab-action&quot;&gt;
+      &lt;span class=&quot;fab-label&quot;&gt;Upload&lt;/span&gt;
+      &lt;button class=&quot;btn circle lg icon-only&quot; type=&quot;button&quot; aria-label=&quot;Upload file&quot;&gt;…&lt;/button&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;fab-action&quot;&gt;
+      &lt;span class=&quot;fab-label&quot;&gt;Folder&lt;/span&gt;
+      &lt;button class=&quot;btn circle lg icon-only&quot; type=&quot;button&quot; aria-label=&quot;New folder&quot;&gt;…&lt;/button&gt;
+    &lt;/div&gt;
   &lt;/div&gt;
 &lt;/details&gt;
 </code></pre>
+<h2 id="preview">Preview</h2>
+<p>This documentation-only surface simulates a viewport by replacing the FAB's
+fixed positioning with absolute positioning. The card is background content,
+not the FAB's containing component. Production <code>.fab</code> remains viewport-fixed.</p>
+<div class="docs-example">
+  <div class="docs-preview">
+<div class="docs-fab-preview">
+  <article class="card">
+    <h3>Documents</h3>
+    <p>Your recent documents will appear here.</p>
+  </article>
+
+  <details class="fab" open>
+    <summary
+      class="btn circle primary icon-only"
+      style="--btn-min-size: 3.5rem"
+      aria-label="Create"
+    >
+      <span aria-hidden="true">+</span>
+    </summary>
+
+    <div class="fab-actions">
+      <div class="fab-action">
+        <span class="fab-label">Document</span>
+        <button class="btn circle lg icon-only" type="button" aria-label="New document">
+          <i class="ti ti-file-plus" aria-hidden="true"></i>
+        </button>
+      </div>
+      <div class="fab-action">
+        <span class="fab-label">Upload</span>
+        <button class="btn circle lg icon-only" type="button" aria-label="Upload file">
+          <i class="ti ti-upload" aria-hidden="true"></i>
+        </button>
+      </div>
+      <div class="fab-action">
+        <span class="fab-label">Folder</span>
+        <button class="btn circle lg icon-only" type="button" aria-label="New folder">
+          <i class="ti ti-folder-plus" aria-hidden="true"></i>
+        </button>
+      </div>
+    </div>
+  </details>
+</div>
+  </div>
+  <div class="docs-code">
+    <pre><code class="language-html">&lt;div class=&quot;docs-fab-preview&quot;&gt;
+  &lt;article class=&quot;card&quot;&gt;
+    &lt;h3&gt;Documents&lt;/h3&gt;
+    &lt;p&gt;Your recent documents will appear here.&lt;/p&gt;
+  &lt;/article&gt;
+
+  &lt;details class=&quot;fab&quot; open&gt;
+    &lt;summary
+      class=&quot;btn circle primary icon-only&quot;
+      style=&quot;--btn-min-size: 3.5rem&quot;
+      aria-label=&quot;Create&quot;
+    &gt;
+      &lt;span aria-hidden=&quot;true&quot;&gt;+&lt;/span&gt;
+    &lt;/summary&gt;
+
+    &lt;div class=&quot;fab-actions&quot;&gt;
+      &lt;div class=&quot;fab-action&quot;&gt;
+        &lt;span class=&quot;fab-label&quot;&gt;Document&lt;/span&gt;
+        &lt;button class=&quot;btn circle lg icon-only&quot; type=&quot;button&quot; aria-label=&quot;New document&quot;&gt;
+          &lt;i class=&quot;ti ti-file-plus&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;
+        &lt;/button&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;fab-action&quot;&gt;
+        &lt;span class=&quot;fab-label&quot;&gt;Upload&lt;/span&gt;
+        &lt;button class=&quot;btn circle lg icon-only&quot; type=&quot;button&quot; aria-label=&quot;Upload file&quot;&gt;
+          &lt;i class=&quot;ti ti-upload&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;
+        &lt;/button&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;fab-action&quot;&gt;
+        &lt;span class=&quot;fab-label&quot;&gt;Folder&lt;/span&gt;
+        &lt;button class=&quot;btn circle lg icon-only&quot; type=&quot;button&quot; aria-label=&quot;New folder&quot;&gt;
+          &lt;i class=&quot;ti ti-folder-plus&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;
+        &lt;/button&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/details&gt;
+&lt;/div&gt;</code></pre>
+  </div>
+</div>
 <p>The native baseline manages click, keyboard activation, and the open state. It
 does not close automatically after an action, on outside click, or on Escape;
 add application behavior only when the product requires those policies.</p>
-<p>For labeled actions, compose each button and label with <code>.cluster</code> inside
-<code>.fab-actions</code>. FAB deliberately does not provide an action-label component.</p>
+<p>Each <code>.fab-action</code> keeps its <code>.fab-label</code> and secondary button on one compact
+line. The example uses the button's existing <code>.lg</code> density for 44px secondary
+actions and its <code>--btn-min-size</code> hook for a dominant 56px trigger. Size still
+belongs to Button rather than introducing FAB-specific size modifiers.
+When the summary contains one decorative icon, FAB rotates it by 45 degrees in
+the open state so a plus naturally becomes a close symbol.</p>
+<h2 id="class-reference">Class reference</h2>
+<div class="table-wrap"><table class="table">
+<thead>
+<tr><th>Class</th><th>Description</th></tr>
+</thead>
+<tbody>
+<tr><td><code>.fab</code></td><td>Fixed viewport placement; use <code>details</code> for a speed dial.</td></tr>
+<tr><td><code>.fab-actions</code></td><td>Collapsible vertical action list.</td></tr>
+<tr><td><code>.fab-action</code></td><td>One horizontal label-and-button unit.</td></tr>
+<tr><td><code>.fab-label</code></td><td>Compact floating label for an action.</td></tr>
+</tbody>
+</table></div>
 <h2 id="css-hooks">CSS hooks</h2>
 <ul>
 <li><code>--fab-offset</code> — minimum viewport-edge offset.</li>
@@ -253,6 +366,8 @@ it. Dialogs remain in the browser's top layer.</p>
         <nav class="scrollspy" data-enhance="scrollspy" data-scrollspy-offset="80" aria-label="On this page">
           <p class="docs-nav-group">On this page</p>
           <ul class="nav-list docs-toc-list" data-docs-toc>
+        <li><a class="nav-link" href="#preview" data-docs-toc-item data-level="2">Preview</a></li>
+        <li><a class="nav-link" href="#class-reference" data-docs-toc-item data-level="2">Class reference</a></li>
         <li><a class="nav-link" href="#css-hooks" data-docs-toc-item data-level="2">CSS hooks</a></li>
           </ul>
         </nav>

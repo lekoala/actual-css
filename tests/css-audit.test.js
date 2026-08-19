@@ -310,5 +310,9 @@ test("optional FAB preserves DOM order and stays out of print", () => {
   expect(css).toContain("flex-direction: column;");
   expect(css).not.toContain("column-reverse");
   expect(css).toContain(".fab[open] > .fab-actions");
+  expect(css).toContain('.fab[open] > summary > [aria-hidden="true"]:only-child');
+  expect(css).toContain("transform: rotate(45deg);");
+  expect(css).toMatch(/\.fab-action\s*\{[\s\S]*inline-size:\s*max-content;/);
+  expect(css).toMatch(/\.fab-label\s*\{[\s\S]*box-shadow:\s*var\(--shadow\);/);
   expect(css).toContain("@media print");
 });
