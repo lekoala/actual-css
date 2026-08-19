@@ -34,7 +34,7 @@ migration:
 
 `actual.layer.css` wraps every Actual rule in a single `@layer actual`, so
 unlayered Tailwind output and project CSS keep precedence while the migration
-runs. See [Cascade layer strategy](../../design-notes/cascade-layer.md) for the
+runs. See [Cascade layer strategy](https://github.com/lekoala/actual-css/blob/master/docs/design-notes/cascade-layer.md) for the
 limitations of the approach.
 
 Do not assume that loading both complete stylesheets is automatically safe.

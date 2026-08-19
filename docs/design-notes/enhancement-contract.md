@@ -1,6 +1,6 @@
 # Enhancement contract
 
-Actual CSS 0.2 splits CSS and JavaScript into two independent layers with a shared
+Actual CSS splits CSS and JavaScript into two independent layers with a shared
 opt-in mechanism. Every component uses the same grammar.
 
 ## The four-layer contract
@@ -98,7 +98,7 @@ afterwards via `flyoutFor()`). It is already ARIA-only and stays as-is:
 > Broad trigger discovery is intentional for dynamically inserted triggers.
 > Revisit only if profiling or interoperability shows a real problem.
 
-## Token vocabulary (0.2.0)
+## Token vocabulary
 
 | Token | Behavior | Existing class |
 |-------|----------|---------------|

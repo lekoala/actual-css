@@ -6,6 +6,7 @@
   <title>Actual CSS — Kitchen Sink</title>
   <meta name="description" content="Every component rendered together in one page for visual regression and layout review.">
   <link rel="stylesheet" href="../../src/css/actual.css">
+  <link rel="stylesheet" href="../../src/css/optional/index.css">
   <link rel="stylesheet" href="../../src/css/themes/index.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3/dist/tabler-icons.min.css">
   <style>
@@ -607,9 +608,12 @@
   <!-- 19. Key / Overline -->
   <section>
     <h2>Key / Overline</h2>
-    <div class="sink-grid">
+    <div class="stack">
       <p>Press <kbd class="key">Ctrl</kbd> + <kbd class="key sm">K</kbd> to open.</p>
-      <p class="overline">Section label</p>
+      <div class="stack" style="--gap:var(--space-10)">
+        <p class="overline">Section label</p>
+        <h3>Section heading</h3>
+      </div>
     </div>
   </section>
 
@@ -622,13 +626,47 @@
     </p>
   </section>
 
-  <!-- 21. Dark mode -->
+  <!-- 21. Floating action button -->
+  <section>
+    <h2>Floating action button</h2>
+    <p>The speed dial is fixed to the viewport's bottom-end corner. Activate the
+      primary button to open its native <code>&lt;details&gt;</code> action list.</p>
+
+    <details class="fab">
+      <summary class="btn circle primary icon-only" style="--btn-min-size:3.5rem" aria-label="Create">
+        <i class="ti ti-plus" aria-hidden="true"></i>
+      </summary>
+
+      <div class="fab-actions">
+        <div class="fab-action">
+          <span class="fab-label">Document</span>
+          <button class="btn circle lg icon-only" type="button" aria-label="New document">
+            <i class="ti ti-file-plus" aria-hidden="true"></i>
+          </button>
+        </div>
+        <div class="fab-action">
+          <span class="fab-label">Upload</span>
+          <button class="btn circle lg icon-only" type="button" aria-label="Upload file">
+            <i class="ti ti-upload" aria-hidden="true"></i>
+          </button>
+        </div>
+        <div class="fab-action">
+          <span class="fab-label">Folder</span>
+          <button class="btn circle lg icon-only" type="button" aria-label="New folder">
+            <i class="ti ti-folder-plus" aria-hidden="true"></i>
+          </button>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <!-- 22. Dark mode -->
   <section>
     <h2>Dark mode</h2>
     <p>Use the theme selector at the top to switch <code>data-theme</code>.</p>
   </section>
 
-  <!-- 22. Theme island -->
+  <!-- 23. Theme island -->
   <section>
     <h2>Theme island</h2>
     <p>A nested <code>[data-theme="forest"]</code> island must recompute the

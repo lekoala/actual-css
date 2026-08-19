@@ -13,6 +13,14 @@ It claims a small public grammar: `.component [intent] [variant] [size] [modifie
 - No compatibility build that rewrites the product.
 - No complex widgets.
 
+## Previous work
+
+Prior Actual CSS libraries:
+
+- https://github.com/lekoala/liveinit
+- https://github.com/lekoala/modern-now
+- unpublished css library
+
 ## Research links
 
 ### Forms

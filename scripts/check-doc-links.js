@@ -1,11 +1,13 @@
 import { existsSync } from "node:fs";
 import { readdir, readFile } from "node:fs/promises";
-import { dirname, extname, join, normalize, resolve } from "node:path";
+import { dirname, extname, join, normalize, relative, resolve, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, "..");
 const DOC_ROOTS = ["README.md", "llms.txt", "docs"];
+const PAGES = join(ROOT, "docs", "pages");
+const SITE = join(ROOT, "site");
 
 function relativePath(file) {
   return normalize(file).replace(normalize(ROOT), ".");
@@ -35,10 +37,39 @@ function isExternal(href) {
   return /^(?:[a-z]+:)?\/\//iu.test(href) || /^(?:mailto|tel):/iu.test(href);
 }
 
+/*
+ * The builder re-roots relative links into the generated site (site/), so links
+ * in a docs page are consumed from its site output path, not its markdown
+ * source path (docs/pages is one level deeper). Resolve relative links from the
+ * site output to match what the built page actually points at; otherwise an
+ * off-by-one in a relative link (e.g. after a site relocation) slips past.
+ */
+function isDocsPage(file) {
+  return file.startsWith(PAGES + sep);
+}
+
+function siteOutputFor(file) {
+  const rel = relative(PAGES, file).replace(/\.md$/, ".html");
+  return join(SITE, rel);
+}
+
 function linkTarget(file, href) {
-  const [target] = href.split("#");
-  if (!target || isExternal(target)) return null;
-  return resolve(dirname(file), decodeURI(target));
+  const [rawTarget] = href.split("#");
+  if (!rawTarget || isExternal(rawTarget)) return null;
+  const target = decodeURI(rawTarget);
+
+  if (!isDocsPage(file)) {
+    return resolve(dirname(file), target);
+  }
+
+  const base = siteOutputFor(file);
+  if (target.endsWith(".md")) {
+    const mdTarget = resolve(dirname(file), target);
+    if (mdTarget.startsWith(PAGES) && existsSync(mdTarget)) {
+      return join(SITE, relative(PAGES, mdTarget).replace(/\.md$/, ".html"));
+    }
+  }
+  return resolve(dirname(base), target);
 }
 
 function exportTarget(specifier, packageJson) {
@@ -68,8 +99,9 @@ function exportTarget(specifier, packageJson) {
 async function main() {
   const files = (await Promise.all(DOC_ROOTS.map(markdownFiles))).flat();
   const packageJson = JSON.parse(await readFile(join(ROOT, "package.json"), "utf8"));
+  const escapedPackageName = packageJson.name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
   const packagePattern = new RegExp(
-    `${packageJson.name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}(?:/[A-Za-z0-9._-]+)*`,
+    `(?<![A-Za-z0-9_./-])${escapedPackageName}(?:/[A-Za-z0-9._-]+)*`,
     "g",
   );
   const failures = [];

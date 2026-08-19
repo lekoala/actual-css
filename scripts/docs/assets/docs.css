@@ -131,6 +131,29 @@
   overflow-x: auto;
 }
 
+/* Preview-only viewport for the fixed FAB. Production keeps .fab fixed to the
+   real viewport; the docs replace only its positioning context. */
+.docs-fab-preview {
+  position: relative;
+  isolation: isolate;
+  min-block-size: 22rem;
+  max-inline-size: 32rem;
+  margin-inline: auto;
+  padding: var(--space-40);
+  overflow: hidden;
+  border: var(--border-width) solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface-subtle);
+}
+
+.docs-fab-preview > .fab {
+  position: absolute;
+}
+
+.docs-fab-preview > .card {
+  --card-max-inline-size: 18rem;
+}
+
 .docs-code {
   position: relative;
   border-block-start: var(--border-width) solid var(--border);
