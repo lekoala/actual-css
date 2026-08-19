@@ -2,6 +2,7 @@ import { isElementVisible } from "./focus.js";
 import { firstItem, itemForKey, lastItem } from "./keys.js";
 
 const MENU_ITEM_SELECTOR = ":scope > li > .menu-item";
+const MENU_ITEM_ROLES = new Set(["menuitem", "menuitemcheckbox", "menuitemradio"]);
 
 function isUsableMenuItem(item) {
   return (
@@ -17,7 +18,7 @@ export function getMenuItems(menu) {
 }
 
 function isAriaMenuItem(item) {
-  return item.getAttribute("role") === "menuitem";
+  return MENU_ITEM_ROLES.has(item.getAttribute("role"));
 }
 
 function activateCurrentItem(menu) {

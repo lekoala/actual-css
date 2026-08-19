@@ -11,6 +11,9 @@
 | `.flyout` | Component | Floating action or nav surface, positioned by JavaScript. |
 | `.menu` | Component | Action-list primitive with strict `.menu > li > .menu-item` anatomy. |
 | `.menu-item` | Component | One action row; participates in roving focus. |
+| `.menu-item-icon` | Slot | Fixed leading column for a decorative icon. |
+| `.menu-item-text` | Slot | Flexible label column; truncates when the row is constrained. |
+| `.menu-item-end` | Slot | Trailing metadata such as a shortcut, badge, or status. |
 | `.menu-label` | Variant | Muted section heading inside a menu; not interactive. |
 | `.menu-separator` | Variant | Divider between menu groups (`<hr role="separator">`). |
 | `.sm` / `.lg` | Variant | Compact or large density. |
@@ -129,6 +132,45 @@ A list of *actions* the user can take: sign out, copy, delete.
   </menu>
 </div>
 ```
+
+### Rich items and selection state
+
+Wrap rich item content in the three optional slots when a menu needs aligned
+icons or trailing metadata. Keep decorative icons hidden from assistive
+technology. Plain text directly inside `.menu-item` remains valid for simple
+actions.
+
+```html
+<li>
+  <button class="menu-item" type="button" role="menuitem">
+    <span class="menu-item-icon" aria-hidden="true">…</span>
+    <span class="menu-item-text">Duplicate</span>
+    <span class="menu-item-end"><kbd>⌘D</kbd></span>
+  </button>
+</li>
+```
+
+Use `role="menuitemcheckbox"` for independent options and
+`role="menuitemradio"` for an exclusive choice. Put `aria-checked` on the menu
+item itself; do not nest a checkbox, radio, or switch inside it. The runtime
+recognizes all three menu-item roles for keyboard activation and the CSS draws
+their state indicator. The application remains responsible for updating
+`aria-checked`, just as it owns the state behind the command.
+
+```html
+<li>
+  <button class="menu-item"
+          type="button"
+          role="menuitemcheckbox"
+          aria-checked="true">
+    <span class="menu-item-text">Show weekends</span>
+  </button>
+</li>
+```
+
+Badges and shortcuts are passive trailing metadata. If a trailing pin, switch,
+or button is independently interactive, use a rich flyout panel with normal
+Tab navigation instead of `role="menu"`: a menu item must remain one command.
 
 ## Nav panel
 
@@ -328,6 +370,7 @@ delay; a number sets the delay in milliseconds.
 - `--flyout-inline-size` — panel width.
 - `--flyout-max-inline-size` — panel width cap.
 - `--menu-item-size` — minimum row height of `.menu-item`.
+- `--menu-item-icon-size` — shared leading-column width for icons and checked-state indicators.
 
 `--available-height` and `--surface-anchor-width` are written by the positioner
 at runtime, not set by the author. See the JavaScript runtime documentation.

@@ -292,6 +292,43 @@
             <li><button class="menu-item danger" type="button" role="menuitem" data-demo-action="Remove">Remove</button></li>
           </menu>
         </article>
+
+        <article class="keyboard-fixture">
+          <h3>Rich and checkable items</h3>
+          <p class="keyboard-steps">
+            Arrow keys visit every item. Enter or Space toggles the checkbox or
+            selects one radio item; the application updates <code>aria-checked</code>.
+          </p>
+          <div class="flyout-trigger">
+            <button class="btn outline" type="button" data-enhance="flyout" aria-controls="keyboard-rich-menu">Display</button>
+            <menu class="flyout menu keyboard-flyout" id="keyboard-rich-menu" data-flyout-auto-close="outside" role="menu" hidden>
+              <li>
+                <button class="menu-item" type="button" role="menuitem">
+                  <span class="menu-item-icon" aria-hidden="true"><i class="ti ti-copy"></i></span>
+                  <span class="menu-item-text">Copy current view</span>
+                  <span class="menu-item-end"><kbd>⌘C</kbd></span>
+                </button>
+              </li>
+              <hr class="menu-separator" role="separator">
+              <li>
+                <button class="menu-item" type="button" role="menuitemcheckbox" aria-checked="true">
+                  <span class="menu-item-text">Show weekends</span>
+                  <span class="menu-item-end"><span class="badge sm">View</span></span>
+                </button>
+              </li>
+              <li>
+                <button class="menu-item" type="button" role="menuitemradio" aria-checked="true">
+                  <span class="menu-item-text">Comfortable density</span>
+                </button>
+              </li>
+              <li>
+                <button class="menu-item" type="button" role="menuitemradio" aria-checked="false">
+                  <span class="menu-item-text">Compact density</span>
+                </button>
+              </li>
+            </menu>
+          </div>
+        </article>
       </div>
 
       <h3>Auto-close policies</h3>
@@ -489,6 +526,18 @@
     document.addEventListener("click", (event) => {
       const action = event.target.closest("[data-demo-action]")?.dataset.demoAction;
       if (action) actionResult.value = `${action} invoked.`;
+
+      const checkable = event.target.closest('[role="menuitemcheckbox"]');
+      if (checkable) {
+        checkable.setAttribute("aria-checked", checkable.getAttribute("aria-checked") !== "true");
+      }
+
+      const radio = event.target.closest('[role="menuitemradio"]');
+      if (radio) {
+        for (const item of radio.closest('[role="menu"]').querySelectorAll('[role="menuitemradio"]')) {
+          item.setAttribute("aria-checked", item === radio ? "true" : "false");
+        }
+      }
     });
 
     record("ready");
