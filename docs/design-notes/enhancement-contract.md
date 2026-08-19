@@ -89,15 +89,6 @@ defeating the split.
 | D7 | Context-menu reuses `surface`, not `flyout` | The panel gets no token; `menuFor()` validates semantically (`menu, [role="menu"]`). A context menu may legitimately want the flyout *look* without the flyout *behavior*. |
 | D9 | Orphaned mounted surfaces closed from the origin's disconnect handler | A `fix:`, not part of the contract itself. Landed independently. |
 
-### Accepted debt
-
-`flyout.js`'s trigger selector `[aria-controls][aria-expanded]` is the broadest selector
-in the runtime and matches unrelated application disclosures (`connectTrigger` bails
-afterwards via `flyoutFor()`). It is already ARIA-only and stays as-is:
-
-> Broad trigger discovery is intentional for dynamically inserted triggers.
-> Revisit only if profiling or interoperability shows a real problem.
-
 ## Token vocabulary
 
 | Token | Behavior | Existing class |

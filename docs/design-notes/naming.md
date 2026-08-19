@@ -33,6 +33,7 @@ Actual CSS is intended for new projects. Existing projects with class collisions
 - Prefer the shortest established term when it improves searchability without drifting from the component vocabulary (`.btn`, not `.button`).
 - Classes name roles and boolean modifiers; `data-*` carries configurable values.
 - `is-*` classes are runtime internals, not author API.
-- Public JS data attributes are namespaced by feature (`data-flyout-*`, `data-context-menu-*`, `data-dialog-*`, `data-tooltip-*`; `data-toast-*` is reserved). Do not expose shared implementation names such as `surface` unless they are meant as a stable author concept.
+- Public JS data attributes are namespaced by feature (`data-flyout-*`, `data-context-menu-*`, `data-dialog-*`, `data-tooltip-*`; `data-toast-*` is reserved).
+- Shared runtime primitives may have public JavaScript APIs without becoming author-facing CSS or HTML vocabulary. Do not introduce `.surface` or `data-surface-*`; components keep their feature-specific author APIs (`data-flyout-*`, `data-context-menu-*`, CSS `.flyout`, `.menu`, …).
 - `data-enhance` is the one un-namespaced attribute — it carries *opt-in* for any feature, not *configuration* for one feature. Feature-namespaced attributes carry configuration.
 - Custom events use the `actual:*` namespace.
