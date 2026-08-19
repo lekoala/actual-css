@@ -5,7 +5,7 @@ const PUBLIC_EXPORTS = {
   events: ["EVENTS"],
   floating: ["autoUpdate", "reposition", "repositionAt"],
   focus: ["isElementVisible", "getFocusable", "focusFirstDescendant"],
-  keys: ["firstItem", "lastItem", "nextItem"],
+  keys: ["firstItem", "lastItem", "nextItem", "itemForKey"],
   menu: ["getMenuItems", "hasMenuItems", "hasMenuItem", "focusFirstMenuItem", "focusLastMenuItem", "onMenuKeydown", "connectMenu"],
   surface: ["isSurfaceOpen", "prepareSurface", "openSurface", "closeSurface", "disconnectSurface", "registerEscapeDismissal"],
 };

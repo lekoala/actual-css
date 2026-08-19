@@ -9,7 +9,7 @@ The JS runtime doubles as a primitive kit for building custom widgets.
 | Opt-in discovery + lifecycle + cleanup | `enhance`, `registerEnhancement` | `actual-css/js/enhance` |
 | Positioning, flip/shift, `--available-height`, `data-placement` | `floating` (`track`, `reposition`, `repositionAt`) | `actual-css/js/floating` |
 | Open/close, sheet on mobile, backdrop, outside-click, Escape, focus restore | `surface` | `actual-css/js/surface` |
-| Roving focus over a list | `keys` (`firstItem`, `lastItem`, `nextItem`) | `actual-css/js/keys` |
+| Directional item lookup, edges, wrapping, RTL | `keys` (`itemForKey`, `firstItem`, `lastItem`, `nextItem`) | `actual-css/js/keys` |
 | Menu-item vocabulary, usable-item filtering | `menu` | `actual-css/js/menu` |
 | Focusable lookup, visibility | `focus` | `actual-css/js/focus` |
 | Caret-safe value rewriting | `input` (`onTextInput`, `setCaret`, `dispatchInput`) | `actual-css/js/input` |

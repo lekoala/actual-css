@@ -29,6 +29,7 @@ tables, forms, dialogs, and feedback states.
 `demo/templates/` are standalone pages covering common page shapes.
 
 - [Kitchen sink](../../demo/templates/kitchen-sink.html) - every component and variant on one page
+- [Keyboard controls](../../demo/templates/keyboard-controls.html) - hands-on keyboard support matrix and focus test bench
 - [Dashboard](../../demo/templates/dashboard.html) - data-heavy overview page
 - [App](../../demo/templates/app.html) - application shell with sidebar
 - [Marketing](../../demo/templates/marketing.html) - landing page with typography and fluid type

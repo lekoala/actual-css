@@ -1,5 +1,6 @@
 import { afterEach, expect, test } from "bun:test";
 import { cleanupDOM, click, mockRect, nextMicrotask, press, setupDOM } from "./helpers/dom.js";
+import { nextFrame } from "./helpers/layout.js";
 
 let importId = 0;
 
@@ -66,6 +67,55 @@ test("flyout trigger arrow key opens and focuses direct menu items", async () =>
   expect(menu.hidden).toBe(false);
   expect(menu.classList.contains("is-open")).toBe(true);
   expect(document.activeElement).toBe(first);
+});
+
+test("flyout keeps the first menu item focused after opening settles", async () => {
+  await loadFlyout(`
+    <button id="trigger" type="button" data-enhance="flyout" aria-controls="menu">Open</button>
+    <menu id="menu" class="flyout menu" hidden>
+      <li><button id="first" class="menu-item" type="button">First</button></li>
+      <li><button class="menu-item" type="button">Second</button></li>
+    </menu>
+  `);
+  const trigger = document.getElementById("trigger");
+  const menu = document.getElementById("menu");
+  const first = document.getElementById("first");
+  setupGeometry(trigger, menu);
+
+  press(trigger, "ArrowDown");
+  expect(document.activeElement).toBe(first);
+
+  await nextMicrotask();
+  await nextFrame();
+
+  expect(menu.hidden).toBe(false);
+  expect(menu.classList.contains("is-open")).toBe(true);
+  expect(document.activeElement).toBe(first);
+});
+
+test("a hidden action menu is classified by semantics before its items are visible", async () => {
+  await loadFlyout(`
+    <button id="trigger" type="button" data-enhance="flyout" aria-controls="menu">Open</button>
+    <menu id="menu" class="flyout menu" hidden>
+      <li><button id="first" class="menu-item" type="button">First</button></li>
+      <li><button id="last" class="menu-item" type="button">Last</button></li>
+    </menu>
+  `);
+  const trigger = document.getElementById("trigger");
+  const menu = document.getElementById("menu");
+  const first = document.getElementById("first");
+  const last = document.getElementById("last");
+  setupGeometry(trigger, menu);
+
+  // Browsers report descendants of a hidden panel as not visible. Menu
+  // classification must not depend on that transient presentation state.
+  first.checkVisibility = () => !menu.hidden;
+  last.checkVisibility = () => !menu.hidden;
+
+  press(trigger, "ArrowUp");
+
+  expect(menu.hidden).toBe(false);
+  expect(document.activeElement).toBe(last);
 });
 
 test("a shared menu is wired once across two triggers", async () => {
@@ -141,6 +191,12 @@ test("roving focus covers menu items under the strict .menu > li > .menu-item co
   expect(document.activeElement).toBe(document.getElementById("b"));
 
   press(menu, "ArrowDown");
+  expect(document.activeElement).toBe(document.getElementById("c"));
+
+  press(menu, "ArrowDown");
+  expect(document.activeElement).toBe(document.getElementById("a"));
+
+  press(menu, "ArrowUp");
   expect(document.activeElement).toBe(document.getElementById("c"));
 
   press(menu, "End");

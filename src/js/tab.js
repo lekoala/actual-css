@@ -16,7 +16,7 @@
  */
 
 import { registerEnhancement } from "./enhance.js";
-import { firstItem, lastItem, nextItem } from "./keys.js";
+import { itemForKey } from "./keys.js";
 
 const TABLIST_SELECTOR = '[data-enhance~="tabs"]';
 
@@ -101,55 +101,33 @@ function onKeydown(e) {
   const tabs = activatableTabs(list);
   if (!tabs.length || !tabs.includes(tab)) return;
   const isVertical = list.getAttribute("aria-orientation") === "vertical";
-  let next;
 
-  switch (e.key) {
-    case "ArrowRight":
-      if (isVertical) break;
+  if (e.key === "ArrowDown" && !isVertical) {
+    const panel = panelFor(tab);
+    if (panel) {
       e.preventDefault();
-      next = nextItem(tabs, tab, 1);
-      if (next) activateAndFocus(next);
-      break;
-    case "ArrowLeft":
-      if (isVertical) break;
-      e.preventDefault();
-      next = nextItem(tabs, tab, -1);
-      if (next) activateAndFocus(next);
-      break;
-    case "ArrowDown":
-      if (!isVertical) {
-        e.preventDefault();
-        const panel = panelFor(tab);
-        if (panel) {
-          makePanelFocusable(panel);
-          panel.focus();
-        }
-        break;
-      }
-      e.preventDefault();
-      next = nextItem(tabs, tab, 1);
-      if (next) activateAndFocus(next);
-      break;
-    case "ArrowUp":
-      if (!isVertical) break;
-      e.preventDefault();
-      next = nextItem(tabs, tab, -1);
-      if (next) activateAndFocus(next);
-      break;
-    case "Home":
-      e.preventDefault();
-      activateAndFocus(firstItem(tabs));
-      break;
-    case "End":
-      e.preventDefault();
-      activateAndFocus(lastItem(tabs));
-      break;
-    case "Enter":
-    case " ":
-      e.preventDefault();
-      activate(tab);
-      break;
+      makePanelFocusable(panel);
+      panel.focus();
+    }
+    return;
   }
+
+  if (e.key === "Enter" || e.key === " ") {
+    e.preventDefault();
+    activate(tab);
+    return;
+  }
+
+  const direction = list.ownerDocument.defaultView?.getComputedStyle(list).direction || "ltr";
+  const target = itemForKey(tabs, tab, e.key, {
+    orientation: isVertical ? "vertical" : "horizontal",
+    wrap: true,
+    direction,
+  });
+  if (!target) return;
+
+  e.preventDefault();
+  activateAndFocus(target);
 }
 
 function onClick(e) {

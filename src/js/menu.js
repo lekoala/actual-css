@@ -1,5 +1,5 @@
 import { isElementVisible } from "./focus.js";
-import { firstItem, lastItem, nextItem } from "./keys.js";
+import { firstItem, itemForKey, lastItem } from "./keys.js";
 import { getSurfaceAutoClose } from "./surface.js";
 
 const MENU_ITEM_SELECTOR = ":scope > li > .menu-item";
@@ -55,23 +55,17 @@ export function onMenuKeydown(e, { close }) {
   const items = getMenuItems(menu);
   if (!items.length) return;
 
+  const target = itemForKey(items, menu.ownerDocument.activeElement, e.key, {
+    orientation: "vertical",
+    wrap: true,
+  });
+  if (target) {
+    e.preventDefault();
+    target.focus();
+    return;
+  }
+
   switch (e.key) {
-    case "ArrowDown":
-      e.preventDefault();
-      nextItem(items, menu.ownerDocument.activeElement, 1)?.focus();
-      break;
-    case "ArrowUp":
-      e.preventDefault();
-      nextItem(items, menu.ownerDocument.activeElement, -1)?.focus();
-      break;
-    case "Home":
-      e.preventDefault();
-      firstItem(items)?.focus();
-      break;
-    case "End":
-      e.preventDefault();
-      lastItem(items)?.focus();
-      break;
     case "Tab":
       close(menu);
       break;
