@@ -63,7 +63,7 @@ export function connectFocusGroup(root, opts = {}) {
         originalTabIndex.set(item, item.getAttribute("tabindex"));
       }
       const tabIndex = item === target ? 0 : -1;
-      if (item.tabIndex !== tabIndex) item.tabIndex = tabIndex;
+      item.tabIndex = tabIndex;
     }
     remembered = target;
     return items;

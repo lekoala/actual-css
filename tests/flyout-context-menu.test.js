@@ -171,7 +171,7 @@ test("nav panel flyout focuses first descendant, not menu items", async () => {
   expect(document.activeElement).toBe(first);
 });
 
-test("roving focus covers menu items under the strict .menu > li > .menu-item contract", async () => {
+test("lightweight navigation covers the strict .menu > li > .menu-item contract", async () => {
   await loadFlyout(`
     <button id="trigger" type="button" data-enhance="flyout" aria-controls="menu" aria-expanded="false">Open</button>
     <menu id="menu" class="flyout menu" hidden>
@@ -201,6 +201,7 @@ test("roving focus covers menu items under the strict .menu > li > .menu-item co
 
   press(menu, "End");
   expect(document.activeElement).toBe(document.getElementById("c"));
+  expect([...menu.querySelectorAll(".menu-item")].map((item) => item.tabIndex)).toEqual([0, 0, 0]);
 });
 
 test("flyout trigger gets initial disclosure attributes", async () => {
