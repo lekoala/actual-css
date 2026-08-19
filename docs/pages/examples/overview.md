@@ -30,6 +30,7 @@ tables, forms, dialogs, and feedback states.
 
 - [Kitchen sink](../../demo/templates/kitchen-sink.html) - every component and variant on one page
 - [Keyboard controls](../../demo/templates/keyboard-controls.html) - hands-on keyboard support matrix and focus test bench
+- [Surface contracts](../../demo/templates/surfaces.html) - .inverted, cascade precedence, and the intent boundary
 - [Dashboard](../../demo/templates/dashboard.html) - data-heavy overview page
 - [App](../../demo/templates/app.html) - application shell with sidebar
 - [Marketing](../../demo/templates/marketing.html) - landing page with typography and fluid type

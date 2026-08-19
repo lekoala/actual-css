@@ -8,6 +8,14 @@
  * Internal:
  * --gap (local value for the shared gap token)
  */
+/* Intent boundary — inherited intents do not tint this component.
+   Local intent classes still win because :where() has zero specificity. */
+:where(.navbar) {
+  --ui-bg: initial;
+  --ui-fg: initial;
+  --ui-border: initial;
+}
+
 .navbar {
   display: flex;
   flex-wrap: wrap;
@@ -16,17 +24,17 @@
   gap: var(--gap);
   padding-block: var(--space-30);
   padding-inline: var(--space-40);
-  border: var(--border-width) solid var(--border);
+  border: var(--border-width) solid var(--ui-border, var(--border));
   border-radius: var(--radius-lg);
-  background: var(--surface-raised);
-  color: var(--text);
+  background: var(--ui-bg, var(--surface-raised));
+  color: var(--ui-fg, var(--text));
 }
 
 .navbar-brand {
   display: inline-flex;
   align-items: center;
   gap: var(--space-20);
-  color: var(--text);
+  color: var(--ui-fg, var(--text));
   font-weight: var(--font-weight-bold);
   text-decoration: none;
 }
@@ -51,7 +59,7 @@
   min-block-size: var(--control-size-sm);
   padding-inline: var(--space-20);
   border-radius: var(--radius);
-  color: var(--text-muted);
+  color: var(--ui-fg, var(--text-muted));
   font-weight: var(--font-weight-medium);
   text-decoration: none;
 }

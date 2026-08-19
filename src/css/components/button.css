@@ -18,11 +18,16 @@
  * --btn-focus-color
  * --btn-gap
  * --btn-hover-overlay
+ * --btn-default-bg
+ * --btn-default-fg
+ * --btn-default-border
+ * --btn-border-color
  *
  * Internal:
  * --btn-bg
  * --btn-fg
  * --btn-border
+ * --btn-default-hover-bg
  * --btn-focus-ring-color
  * --btn-border-block-end-color
  * --btn-border-block-end-width
@@ -47,6 +52,7 @@
   --btn-bg: var(--ui-bg, var(--btn-default-bg, var(--intent, var(--neutral))));
   --btn-fg: var(--ui-fg, var(--btn-default-fg, var(--intent-fg, var(--neutral-fg))));
   --btn-border: var(--ui-border, var(--btn-default-border, transparent));
+  --btn-default-hover-bg: var(--btn-bg);
   --btn-radius: var(--radius);
   --btn-focus-color: var(--intent, var(--focus));
   --btn-hover-overlay: var(--hover-overlay, rgb(0 0 0 / 0.08));
@@ -99,7 +105,7 @@
    fallbacks make .btn solid by default; .ghost/.link are .btn-only variants. */
 .btn.ghost {
   --ui-bg: transparent;
-  --ui-fg: var(--intent, var(--text));
+  --ui-fg: var(--intent, currentColor);
   --ui-border: transparent;
 }
 
@@ -117,12 +123,12 @@
    Declared outside :hover: the variables resolve only when the hover rule
    reads them, so the values are inert until interaction. */
 .btn:is(.outline, .ghost) {
-  --ui-hover-bg: var(--surface-subtle);
+  --ui-hover-bg: transparent;
 }
 
 @supports (color: color-mix(in oklch, red, white)) {
-  .btn:not(:where(.soft, .outline, .ghost, .link)) {
-    --ui-hover-bg: color-mix(in oklch, var(--intent, var(--neutral)) 88%, black);
+  .btn {
+    --btn-default-hover-bg: color-mix(in oklch, var(--btn-bg) 88%, black);
   }
 
   .btn.soft {
@@ -133,19 +139,16 @@
     );
   }
 
-  .btn.outline {
-    --ui-hover-bg: color-mix(in oklch, var(--surface-subtle) 92%, var(--intent, var(--neutral)));
-  }
-
+  .btn.outline,
   .btn.ghost {
-    --ui-hover-bg: color-mix(in oklch, var(--intent, var(--text)) 8%, transparent);
+    --ui-hover-bg: color-mix(in oklch, currentColor 10%, transparent);
   }
 }
 
 /* The .soft/.outline/.ghost hover recipe (--ui-hover-bg) is set locally above;
    the overlay darkening for solid/soft is .btn-specific. */
 .btn:not(:where(:disabled, [aria-disabled="true"])):hover {
-  background: var(--ui-hover-bg, var(--btn-bg));
+  background: var(--ui-hover-bg, var(--btn-default-hover-bg));
   box-shadow: inset 0 0 0 999px var(--btn-hover-overlay);
 }
 
@@ -155,7 +158,7 @@
 
 .btn.link {
   --ui-bg: transparent;
-  --ui-fg: var(--intent, var(--text));
+  --ui-fg: var(--intent, currentColor);
   --ui-border: transparent;
   --btn-radius: var(--radius-sm);
   --btn-border-block-end-color: transparent;
@@ -163,6 +166,8 @@
 
   min-block-size: auto;
   padding-inline: 0;
+  inline-size: fit-content;
+  max-inline-size: 100%;
   border-color: transparent;
   text-decoration: underline;
   text-underline-offset: 0.18em;
@@ -173,7 +178,6 @@
 
 .btn.link:not(:where(:disabled, [aria-disabled="true"])):hover {
   background: transparent;
-  color: var(--intent, var(--text));
   text-decoration-thickness: 0.12em;
 }
 

@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Surface contracts — Actual CSS</title>
+  <meta name="description" content="Hands-on demo of .inverted, cascade precedence, and the intent boundary for Actual CSS surface treatments.">
+  <link rel="stylesheet" href="../../dist/actual.css">
+  <link rel="stylesheet" href="../../dist/actual-themes.min.css">
+  <style>
+    .surface-page {
+      --center-size: 72rem;
+
+      padding-block: var(--space-60);
+    }
+
+    .surface-intro,
+    .surface-section {
+      display: grid;
+      gap: var(--space-30);
+    }
+
+    .surface-intro {
+      padding-block-end: var(--space-40);
+    }
+
+    .surface-section {
+      padding-block: var(--space-60);
+      border-block-start: var(--border-width) solid var(--border);
+    }
+
+    .surface-section > :is(h2, p) {
+      margin: 0;
+    }
+
+    .surface-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
+      gap: var(--gap);
+      align-items: start;
+    }
+
+    .surface-bare {
+      padding: var(--space-50);
+      border-radius: var(--radius-lg);
+    }
+
+    .surface-bare > :is(h3, h4, p) {
+      margin: 0;
+    }
+
+    .surface-note {
+      color: var(--text-muted);
+    }
+
+    @media (max-width: 40rem) {
+      .surface-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="center surface-page">
+    <header class="surface-intro">
+      <p class="overline">Surface contracts</p>
+      <h1>Inverted, precedence, intent boundary</h1>
+      <p class="lead">
+        <code>.inverted</code> creates a contrasting surface context. Bare
+        content and transparent treatments follow its foreground; components
+        with their own surface keep it unless the treatment is applied directly
+        to a component that consumes <code>--ui-*</code>. Use
+        <code>data-theme</code> when a whole subtree needs another theme.
+      </p>
+      <select class="select sm fit" id="theme-switcher" aria-label="Switch theme">
+        <option value="">System</option>
+        <option value="light">Light</option>
+        <option value="indigo">Indigo</option>
+        <option value="dim">Dim</option>
+        <option value="corporate">Corporate</option>
+      </select>
+    </header>
+
+    <section class="surface-section" aria-labelledby="bare-title">
+      <h2 id="bare-title">Bare inverted</h2>
+      <p>
+        <code>.inverted</code> works on any block. The base paint flips the
+        background and foreground; headings follow through <code>--heading</code>.
+      </p>
+      <div class="surface-grid">
+        <header class="inverted surface-bare">
+          <h3>Inverted header</h3>
+          <p>This is a bare <code>&lt;header class="inverted"&gt;</code>. Text and headings inherit the contrasting foreground.</p>
+        </header>
+        <section class="inverted surface-bare stack">
+          <h3>Generic block</h3>
+          <p>The base paint makes this work on any element — no card, no navbar required.</p>
+          <div class="cluster">
+            <button class="btn primary" type="button">Action</button>
+            <button class="btn outline" type="button">Outline</button>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <section class="surface-section" aria-labelledby="opt-in-title">
+      <h2 id="opt-in-title">Direct component opt-in through --ui-*</h2>
+      <p>
+        Components that consume the shared <code>--ui-*</code> surface contract
+        invert as a whole when <code>.inverted</code> is on them.
+      </p>
+      <div class="surface-grid">
+        <article class="card inverted stack">
+          <h3>.card.inverted</h3>
+          <p>The card consumes <code>--ui-*</code>, so it inverts as a surface.</p>
+          <button class="btn primary" type="button">Action</button>
+        </article>
+
+        <nav class="navbar inverted" aria-label="Inverted navbar">
+          <a class="navbar-brand" href="#">Brand</a>
+          <ul class="navbar-nav">
+            <li><a class="nav-link" href="#">Link</a></li>
+            <li><a class="nav-link" href="#" aria-current="page">Active</a></li>
+            <li><a class="nav-link" href="#">Link</a></li>
+          </ul>
+        </nav>
+
+        <div class="alert inverted">
+          <strong>Inverted alert</strong>
+          <p>The alert composes through <code>--ui-*</code> too.</p>
+        </div>
+      </div>
+      <p class="surface-note">A compact component with the treatment applied directly:</p>
+      <div class="cluster">
+        <span class="badge inverted">Badge</span>
+      </div>
+    </section>
+
+    <section class="surface-section" aria-labelledby="precedence-title">
+      <h2 id="precedence-title">Cascade precedence</h2>
+      <div class="alert primary callout">
+        <strong>More specific wins</strong>
+        <p>
+          <code>.inverted</code> paints the base surface and remaps the tokens,
+          but explicit variants and component states outrank it by specificity.
+          <code>.card.subtle</code> (0,2,0) beats the base paint, and an active
+          <code>.nav-link</code> keeps its own chip.
+        </p>
+      </div>
+      <div class="surface-grid">
+        <article class="card inverted stack">
+          <h3>.card.inverted</h3>
+          <p>The whole surface inverts.</p>
+        </article>
+
+        <article class="card inverted subtle stack">
+          <h3>.card.inverted.subtle</h3>
+          <p>
+            Competing treatments — <strong>do not combine</strong>. Shown here to
+            fix precedence: <code>.subtle</code> keeps the background while the
+            foreground stays inverted.
+          </p>
+        </article>
+
+        <nav class="navbar inverted" aria-label="Precedence navbar">
+          <a class="navbar-brand" href="#">Brand</a>
+          <ul class="navbar-nav">
+            <li><a class="nav-link" href="#">Link</a></li>
+            <li><a class="nav-link" href="#" aria-current="page">Active</a></li>
+          </ul>
+        </nav>
+      </div>
+      <p class="surface-note">
+        The active <code>.nav-link[aria-current]</code> keeps its explicit chip on
+        an inverted navbar — a more specific state outranks the base paint.
+      </p>
+    </section>
+
+    <section class="surface-section" aria-labelledby="boundary-title">
+      <h2 id="boundary-title">Intent boundary</h2>
+      <p>
+        Surface-owning components reset <code>--ui-*</code> with a
+        <code>:where()</code> boundary. Their own surface stops the contrasting
+        treatment; transparent descendants then follow that local foreground.
+      </p>
+      <div class="inverted surface-bare stack">
+        <h3>Inverted wrapper</h3>
+        <p>This paragraph is bare content, so it inherits the inverted foreground.</p>
+        <div class="card">
+          <h4>Card inside inverted</h4>
+          <p>The card keeps its raised surface; its outline follows the card.</p>
+          <div class="cluster">
+            <button class="btn" type="button">Action</button>
+            <button class="btn outline" type="button">Outline</button>
+          </div>
+        </div>
+        <div class="accordion">
+          <details open>
+            <summary>Accordion inside inverted</summary>
+            <p>Its raised surface and text establish another local context.</p>
+          </details>
+        </div>
+        <nav class="navbar" aria-label="Boundary navbar">
+          <a class="navbar-brand" href="#">Brand</a>
+          <ul class="navbar-nav">
+            <li><a class="nav-link" href="#">Link</a></li>
+          </ul>
+        </nav>
+      </div>
+    </section>
+
+    <section class="surface-section" aria-labelledby="theme-island-title">
+      <h2 id="theme-island-title">Need a complete theme island?</h2>
+      <p>
+        Use <code>data-theme="dark"</code>, <code>data-theme="light"</code>, or a
+        named theme when every surface, form control, intent, and state in a
+        subtree must use another palette. <code>.inverted</code> is deliberately
+        narrower: it creates one contrasting surface context.
+      </p>
+    </section>
+  </main>
+
+  <script>
+    const switcher = document.getElementById("theme-switcher");
+
+    if (switcher) {
+      switcher.addEventListener("change", () => {
+        if (switcher.value) {
+          document.documentElement.dataset.theme = switcher.value;
+        } else {
+          document.documentElement.removeAttribute("data-theme");
+        }
+      });
+    }
+  </script>
+</body>
+</html>

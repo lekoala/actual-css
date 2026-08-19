@@ -1,0 +1,12 @@
+/*
+ * Reference theme declaring AND classifying the hook as a public hook.
+ * A theme classification must never satisfy a core contract: the core button
+ * below uses --example-hook without classifying it, so the check must fail
+ * even though this theme "owns" it.
+ *
+ * Public hooks:
+ * --example-hook
+ */
+[data-theme="edge"] {
+  --example-hook: blue;
+}

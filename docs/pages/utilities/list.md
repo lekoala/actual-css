@@ -29,3 +29,4 @@ The overline exists because categories, kicker labels, and section markers recur
 ## CSS hooks
 
 - `--prose-measure` — the readable measure `.measure` caps at; defaults to `70ch`.
+- `--overline-radius` — the pill chip's corner radius; defaults to `--radius-full`.

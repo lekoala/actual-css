@@ -94,11 +94,36 @@ function declaredProps(css) {
 }
 
 function fallbackOnlyUses(css) {
-  return [...css.matchAll(/var\(\s*(--[a-z0-9-]+)\s*,\s*[^)]*\)/gi)].map((m) => m[1]);
+  /* First argument of any var(): catches nested fallbacks too (e.g.
+     var(--ui-bg, var(--btn-default-bg, …))), not just the outermost var. */
+  return [...css.matchAll(/var\(\s*(--[a-z0-9-]+)\s*,/gi)].map((m) => m[1]);
 }
 
 function rel(file) {
   return relative(ROOT, file).replaceAll(sep, "/");
+}
+
+/* Path-segment helpers so both the real src tree and fixture roots (e.g.
+   tests/fixtures/css-api/*) classify the same way. */
+function pathSegments(relPath) {
+  return relPath.split("/");
+}
+
+function isThemeFile(relPath) {
+  return pathSegments(relPath).includes("themes");
+}
+
+const CORE_CATALOGUE = new Set([
+  "src/css/tokens.css",
+  "src/css/theme.css",
+  "src/css/variants.css",
+  "src/css/utilities.css",
+  "src/css/intents.css",
+  "src/css/focus.css",
+]);
+
+function isCataloguePath(relPath) {
+  return isThemeFile(relPath) || CORE_CATALOGUE.has(relPath);
 }
 
 /* Resolve a property's single best classification across every file's
@@ -113,7 +138,12 @@ function classify(hooksByFile, prop) {
   return null;
 }
 
-function main() {
+/* Analyze every CSS file under `root`. Theme files never satisfy a core
+   contract: they are excluded from global declarations, from the fallback-only
+   scan, and from the classifications consulted to satisfy the fallback-only
+   guard. A property consumed by the core must be classified in the core even
+   if a demo theme also defines or classifies it. */
+export function analyzeCss(root) {
   const issues = [];
   const unclassified = [];
   const hooksByFile = new Map();
@@ -121,15 +151,19 @@ function main() {
   /* Per-file data (reused for both the header contract and the global
      fallback-only inventory). */
   const declaredGlobal = new Set();
-  const files = walkCss(SRC);
+  const files = walkCss(root);
+  const coreFiles = files.filter((file) => !isThemeFile(rel(file)));
 
   for (const file of files) {
+    const relPath = rel(file);
     const css = readFileSync(file, "utf8");
     const sections = parseHookSections(css);
     const { public: hooks, internal, plumbing } = sections;
     hooksByFile.set(file, sections);
 
-    for (const prop of declaredProps(css)) declaredGlobal.add(prop);
+    if (!isThemeFile(relPath)) {
+      for (const prop of declaredProps(css)) declaredGlobal.add(prop);
+    }
 
     for (const hook of hooks) {
       const referenced = new RegExp(`var\\(\\s*${hook}|${hook}\\s*:`).test(css);
@@ -146,11 +180,7 @@ function main() {
     }
 
     if (audit) {
-      const relPath = rel(file);
-      const isCatalogue =
-        relPath.startsWith("src/css/themes/") ||
-        ["src/css/tokens.css", "src/css/theme.css", "src/css/variants.css", "src/css/utilities.css", "src/css/intents.css", "src/css/focus.css"].includes(relPath);
-      if (!isCatalogue) {
+      if (!isCataloguePath(relPath)) {
         const classified = new Set([...hooks, ...internal, ...plumbing]);
         for (const prop of declaredProps(css)) {
           if (classified.has(prop)) continue;
@@ -162,11 +192,16 @@ function main() {
   }
 
   /* Fallback-only guard: every property used only in a fallback position and
-     never declared must be classified somewhere. Scanned after declaredGlobal
-     is complete so a prop declared in any file is never mistaken for
-     fallback-only. */
+     never declared must be classified somewhere in the core. Scanned after
+     declaredGlobal is complete so a prop declared in any non-theme file is
+     never mistaken for fallback-only. Theme files are excluded entirely: a
+     theme-private fallback must not fail the core, and a theme classification
+     must not satisfy it. */
+  const coreHooksByFile = new Map(
+    [...hooksByFile].filter(([file]) => !isThemeFile(rel(file)))
+  );
   const fallbackUses = new Map(); // prop -> { file: n }
-  for (const file of files) {
+  for (const file of coreFiles) {
     const css = readFileSync(file, "utf8");
     for (const use of fallbackOnlyUses(css)) {
       if (declaredGlobal.has(use)) continue;
@@ -179,22 +214,29 @@ function main() {
   const categoryCounts = { "Public hooks": 0, "Framework plumbing": 0, Internal: 0, Unclassified: 0 };
   const unclassifiedFallback = [];
   for (const [prop, files] of fallbackUses) {
-    const cat = classify(hooksByFile, prop);
+    const cat = classify(coreHooksByFile, prop);
     categoryCounts[cat ?? "Unclassified"] += 1;
     if (!cat) {
       unclassifiedFallback.push(`${prop} (${[...files.keys()].map(rel).join(", ")})`);
     }
   }
 
-  console.log("Fallback-only custom properties:");
-  for (const [cat, n] of Object.entries(categoryCounts)) {
-    console.log(`  ${cat}: ${n}`);
-  }
   if (unclassifiedFallback.length > 0) {
     issues.push(
       `Unclassified fallback-only custom properties (declare as public, framework plumbing, or internal):`
     );
     for (const line of unclassifiedFallback) issues.push(`- ${line}`);
+  }
+
+  return { issues, unclassified, categoryCounts, fileCount: files.length };
+}
+
+function main() {
+  const { issues, unclassified, categoryCounts, fileCount } = analyzeCss(SRC);
+
+  console.log("Fallback-only custom properties:");
+  for (const [cat, n] of Object.entries(categoryCounts)) {
+    console.log(`  ${cat}: ${n}`);
   }
 
   if (issues.length > 0) {
@@ -203,11 +245,11 @@ function main() {
     process.exit(1);
   }
 
-  console.log(`CSS API check passed (${hooksByFile.size} files with public hooks).`);
+  console.log(`CSS API check passed (${fileCount} CSS files checked).`);
   if (audit) {
     console.log(`\nUnclassified component-prefixed properties (declare public or internal):`);
     for (const line of unclassified) console.log(`  ${line}`);
   }
 }
 
-main();
+if (import.meta.main) main();

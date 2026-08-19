@@ -1,0 +1,7 @@
+/*
+ * Core component consuming an extension point it never classifies.
+ * The theme below declares it, which must NOT satisfy the core contract.
+ */
+.btn {
+  color: var(--example-hook, red);
+}

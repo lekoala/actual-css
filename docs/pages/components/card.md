@@ -133,9 +133,21 @@ Cards display nicely in grids with equal-height behavior.
 
 ## Surfaces
 
-`.inverted` is the generic inverse surface treatment, not a card-specific class:
-it works on any block (`<header class="inverted">`, `<section class="inverted">`,
-or `class="card inverted"`) through the shared `--ui-*` contract.
+`.inverted` creates a contrasting surface context, not a complete theme island.
+On a bare block (`<header class="inverted">`, `<section class="inverted">`) it
+paints the surface directly; contextual content and transparent treatments such
+as `.btn.outline`, `.btn.ghost`, and `.btn.link` follow its foreground.
+
+Apply it directly to a component that consumes the shared `--ui-*` surface
+contract (`.card`, `.navbar`, `.alert`, `.badge`) to treat that component as the
+contrasting surface. A surface-owning component nested inside an inverted block
+keeps its own surface and establishes a new context for its descendants. Use a
+`data-theme` island when every component and form control in a subtree must use
+another theme.
+
+More specific component states or explicit surface variants still take
+precedence: `.card.inverted.subtle` keeps the `.subtle` background while the
+foreground stays inverted.
 
 `.inverted` and `.subtle` are competing surface treatments — do not combine
 them. `.subtle` paints the card's background directly while `.inverted` swaps

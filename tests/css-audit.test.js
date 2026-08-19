@@ -1,5 +1,5 @@
 import { expect, test } from "bun:test";
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 
 function readCss(path) {
@@ -128,12 +128,79 @@ test("badge is content-sized and never stretches in a stack", () => {
   expect(css).toMatch(/\.badge \{[\s\S]*max-inline-size: 100%;/);
 });
 
-test("inverted is a generic inverse surface treatment via --ui-*", () => {
-  const css = readCss("src/css/variants.css");
+test("inverted maps tokens and paints early in variants.css (no late paint)", () => {
+  const variants = readCss("src/css/variants.css");
 
-  expect(css).toMatch(/\.inverted \{[\s\S]*--ui-bg: var\(--surface-solid\);/);
-  expect(css).toMatch(/\.inverted \{[\s\S]*--ui-fg: var\(--surface\);/);
-  expect(css).toMatch(/\.inverted \{[\s\S]*--heading: var\(--surface\);/);
+  expect(variants).toMatch(/\.inverted \{[\s\S]*--ui-bg: var\(--surface-solid\);/);
+  expect(variants).toMatch(/\.inverted \{[\s\S]*--ui-fg: var\(--surface\);/);
+  expect(variants).toMatch(/\.inverted \{[\s\S]*--heading: var\(--surface\);/);
+  // the direct paint must live on the same early rule, not in a late file
+  expect(variants).toMatch(/\.inverted \{[\s\S]*background: var\(--ui-bg\);/);
+  expect(variants).toMatch(/\.inverted \{[\s\S]*color: var\(--ui-fg\);/);
+  expect(variants).toMatch(/\.inverted \{[\s\S]*border-color: var\(--ui-border\);/);
+  // a late paint file must never reappear (it forces non-participants)
+  expect(existsSync(join(import.meta.dir, "..", "src", "css", "variants-late.css"))).toBe(false);
+});
+
+test("card derives contextual tokens from the surface it owns", () => {
+  const css = readCss("src/css/components/card.css");
+
+  expect(css).toMatch(/\.card \{[\s\S]*--card-bg: var\(--ui-bg, var\(--surface-raised\)\);/);
+  expect(css).toMatch(/\.card \{[\s\S]*--card-fg: var\(--ui-fg, var\(--text\)\);/);
+  expect(css).toMatch(/\.card \{[\s\S]*--heading: var\(--card-fg\);/);
+  expect(css).toMatch(/\.card \{[\s\S]*--busy-overlay-bg: var\(--card-bg\);/);
+});
+
+test("transparent treatments follow currentColor, including hover", () => {
+  const variants = readCss("src/css/variants.css");
+  const button = readCss("src/css/components/button.css");
+  const badge = readCss("src/css/components/badge.css");
+
+  expect(variants).toMatch(/\.outline \{[\s\S]*--ui-fg: var\(--intent, currentColor\);/);
+  expect(variants).toMatch(/\.outline \{[\s\S]*--ui-border: var\(--intent, currentColor\);/);
+  expect(button).toMatch(/\.btn\.ghost \{[\s\S]*--ui-fg: var\(--intent, currentColor\);/);
+  expect(button).toMatch(/\.btn\.link \{[\s\S]*--ui-fg: var\(--intent, currentColor\);/);
+  expect(button).toContain("color-mix(in oklch, currentColor 10%, transparent)");
+  expect(badge).toContain("color-mix(in oklch, currentColor 10%, transparent)");
+});
+
+test("alert and badge defaults stay behind explicit shared treatments", () => {
+  const alert = readCss("src/css/components/alert.css");
+  const badge = readCss("src/css/components/badge.css");
+
+  expect(alert).toContain("--alert-bg: var(--ui-bg, var(--alert-default-bg));");
+  expect(alert).toContain("--alert-border: var(--ui-border, var(--alert-default-border));");
+  expect(alert).not.toMatch(/\.alert \{[\s\S]*--ui-bg: color-mix/);
+  expect(badge).toContain("--badge-bg: var(--ui-bg, var(--badge-default-bg));");
+  expect(badge).toContain("--badge-fg: var(--ui-fg, var(--badge-default-fg));");
+  expect(badge).not.toMatch(/\.badge \{[\s\S]*--badge-bg: color-mix/);
+});
+
+test("navbar consumes the shared surface contract with an intent boundary", () => {
+  const css = readCss("src/css/components/navbar.css");
+
+  expect(css).toMatch(/:where\(\.navbar\) \{[\s\S]*--ui-bg: initial;/);
+  expect(css).toMatch(/\.navbar \{[\s\S]*background: var\(--ui-bg, var\(--surface-raised\)\);/);
+  expect(css).toMatch(/\.navbar \{[\s\S]*color: var\(--ui-fg, var\(--text\)\);/);
+  expect(css).toMatch(/\.navbar-brand \{[\s\S]*color: var\(--ui-fg, var\(--text\)\);/);
+  expect(css).toMatch(/\.nav-link \{[\s\S]*color: var\(--ui-fg, var\(--text-muted\)\);/);
+});
+
+test("overline is content-sized only on the pill and exposes a radius hook", () => {
+  const css = readCss("src/css/components/overline.css");
+
+  expect(css).not.toMatch(/\.overline \{[\s\S]*align-self: flex-start;/);
+  expect(css).toMatch(/\.overline\.pill \{[\s\S]*inline-size: fit-content;/);
+  expect(css).toMatch(/\.overline\.pill \{[\s\S]*max-inline-size: 100%;/);
+  expect(css).toMatch(/\.overline\.pill \{[\s\S]*--overline-radius: var\(--radius-full\);/);
+  expect(css).toMatch(/border-radius: var\(--overline-radius\);/);
+});
+
+test("btn.link is intrinsically content-sized", () => {
+  const css = readCss("src/css/components/button.css");
+
+  expect(css).toMatch(/\.btn\.link \{[\s\S]*inline-size: fit-content;/);
+  expect(css).toMatch(/\.btn\.link \{[\s\S]*max-inline-size: 100%;/);
 });
 
 test("busy overlay can inherit local surface background", () => {
@@ -220,10 +287,11 @@ test("confirmation dialog composes media alignment with an intent-aware icon wel
   expect(css).toContain("color: var(--ui-fg, var(--intent, var(--text-muted)));");
 });
 
-test("alert.callout is excluded from the soft-tint recipe and uses a thick solid leading border", () => {
+test("alert.callout overrides local defaults with its final surface recipe", () => {
   const css = readCss("src/css/components/alert.css");
 
-  expect(css).toContain(':not(.solid, .outline, .callout)');
+  expect(css).toContain("--alert-bg: var(--ui-bg, var(--alert-default-bg));");
+  expect(css).toMatch(/\.alert\.callout \{[\s\S]*--alert-bg: var\(--surface-subtle\);/);
   expect(css).toContain(
     "border-inline-start: var(--alert-border-inline-start-width, 4px) solid",
   );

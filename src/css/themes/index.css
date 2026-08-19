@@ -1,4 +1,8 @@
-/* Opt-in theme bundle. Importing this file pulls in every theme below, each
+/*
+ * Reference theme presets. Shipped for inspection and copying; not public
+ * package entry points (package.json blocks ./css/themes exports).
+ *
+ * Opt-in theme bundle. Importing this file pulls in every theme below, each
  * gated by [data-theme="…"]. The light baseline is :root in src/css/theme.css —
  * there is no light.css here.
  *
