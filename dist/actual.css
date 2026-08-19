@@ -547,6 +547,8 @@ small {
  * Child contracts:
  * .stack owns vertical rhythm: direct-child margins are reset, spacing comes
  *   from --gap.
+ * .cluster owns inline rhythm: direct-child margins are reset, spacing comes
+ *   from --gap.
  * .frame sizes direct media children (img/video/iframe/canvas/svg) to fill the
  *   frame.
  */
@@ -570,6 +572,10 @@ small {
   align-items: var(--cluster-align, center);
   justify-content: var(--cluster-justify, flex-start);
   gap: var(--gap);
+}
+
+.cluster > * {
+  margin: 0;
 }
 
 .center {
@@ -1018,6 +1024,7 @@ small {
  * --btn-pad-x
  * --btn-radius
  * --btn-focus-color
+ * --btn-gap
  * --btn-hover-overlay
  *
  * Internal:
@@ -1459,6 +1466,7 @@ a.badge[aria-disabled="true"] {
  * --alert-pad-block
  * --alert-pad-inline
  * --alert-font-size
+ * --alert-radius
  * --alert-icon-size
  * --alert-dismiss-size
  *
@@ -2367,8 +2375,14 @@ dialog.drawer > form > header {
  * [data-flyout-mobile="sheet|auto|none|anchored"].
  * --surface-anchor-width is set by surface.js while an open flyout is positioned.
  *
+ * Public hooks:
+ * --flyout-inline-size
+ * --flyout-max-inline-size
+ *
  * Internal:
  * --menu-item-size (derived from --control-size for menu rows)
+ * --available-height (measured by floating.js)
+ * --surface-anchor-width (measured by surface.js)
  */
 
 .flyout-trigger {
@@ -2602,6 +2616,10 @@ dialog.drawer > form > header {
  * --tooltip-bg
  * --tooltip-fg
  * --tooltip-arrow-size
+ *
+ * Internal:
+ * --arrow-x (arrow position, written by floating.js)
+ * --arrow-y (arrow position, written by floating.js)
  */
 .tooltip {
   --tooltip-bg: var(--surface-solid);
@@ -3626,6 +3644,9 @@ a.avatar[aria-disabled="true"] {
  * JavaScript owns roving tabindex, aria-selected, panel visibility,
  * and arrow-key navigation. CSS owns the tab strip appearance and
  * active indicator.
+ *
+ * Public hooks:
+ * --tab-gap
  */
 /* Intent boundary — inherited intents do not tint this component.
    Local intent classes still win because :where() has zero specificity. */
@@ -3886,6 +3907,9 @@ a.avatar[aria-disabled="true"] {
  *
  * Public API: .field, .field-label, .field-help, .field-error, .field-group,
  * .required-mark.
+ *
+ * Public hooks:
+ * --fieldset-legend-padding-inline
  */
 .field {
   display: grid;
@@ -4983,6 +5007,11 @@ a.avatar[aria-disabled="true"] {
  * --form-actions-align
  * --form-actions-justify
  * --form-actions-margin-block-start
+ *
+ * Internal:
+ * --form-actions-sticky-block-offset (owned by .form-actions.sticky)
+ * --form-actions-sticky-inline-offset (owned by .form-actions.sticky)
+ * --form-actions-sticky-padding (owned by .form-actions.sticky)
  */
 .form-actions {
   display: flex;

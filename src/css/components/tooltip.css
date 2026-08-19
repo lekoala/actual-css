@@ -9,6 +9,10 @@
  * --tooltip-bg
  * --tooltip-fg
  * --tooltip-arrow-size
+ *
+ * Internal:
+ * --arrow-x (arrow position, written by floating.js)
+ * --arrow-y (arrow position, written by floating.js)
  */
 .tooltip {
   --tooltip-bg: var(--surface-solid);

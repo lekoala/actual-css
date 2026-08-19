@@ -208,6 +208,8 @@
   </div>
 </div>
 <p>Use cluster for action rows, tags, toolbar sections, metadata, and compact navigation.</p>
+<p>Like <code>.stack</code>, cluster owns its children's spacing: direct-child margins are
+reset, so spacing between items always comes from <code>--gap</code>.</p>
 <h2 id="css-hooks">CSS hooks</h2>
 <ul>
 <li><code>--cluster-justify</code> — main-axis distribution (<code>justify-content</code>).</li>
@@ -243,6 +245,11 @@ wraps to several lines — set <code>--cluster-align</code>.</p>
 <p>The optional utility layer ships <code>.justify-content-start</code>, <code>.justify-content-center</code>,
 <code>.justify-content-end</code> and <code>.justify-content-space-between</code>, which set
 <code>--cluster-justify</code> for you. See the utilities page.</p>
+<h2 id="controls-inside-a-wrapping-cluster">Controls inside a wrapping cluster</h2>
+<p>A form control (<code>--control-size</code>, full width) inside a <strong>wrapping</strong> cluster claims
+the full line and pushes every sibling to its own row. To keep a row of controls
+under one label, set <code>--cluster-wrap: nowrap</code> and give the controls
+<code>min-inline-size: 0</code> (and <code>flex: 1 1 0%</code> to share the row evenly).</p>
 
 </div>
 
@@ -264,6 +271,7 @@ wraps to several lines — set <code>--cluster-align</code>.</p>
           <ul class="nav-list docs-toc-list" data-docs-toc>
         <li><a class="nav-link" href="#css-hooks" data-docs-toc-item data-level="2">CSS hooks</a></li>
         <li><a class="nav-link" href="#split-spread" data-docs-toc-item data-level="2">Split / spread</a></li>
+        <li><a class="nav-link" href="#controls-inside-a-wrapping-cluster" data-docs-toc-item data-level="2">Controls inside a wrapping cluster</a></li>
           </ul>
         </nav>
       </aside>

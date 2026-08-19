@@ -9,6 +9,11 @@
  * --form-actions-align
  * --form-actions-justify
  * --form-actions-margin-block-start
+ *
+ * Internal:
+ * --form-actions-sticky-block-offset (owned by .form-actions.sticky)
+ * --form-actions-sticky-inline-offset (owned by .form-actions.sticky)
+ * --form-actions-sticky-padding (owned by .form-actions.sticky)
  */
 .form-actions {
   display: flex;

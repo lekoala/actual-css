@@ -1,19 +1,31 @@
 /*
  * CSS API contract check. Run with bun run check:css-api.
  *
- * Verifies the "Public hooks:" headers that declare each file's author-facing
- * customization points:
+ * Each component file may declare three header sections that classify its
+ * custom properties:
  *
- *   - every listed hook is actually referenced by the file (declared or used);
- *   - no hook is listed twice within a file.
+ *   - "Public hooks:"    — author-facing customization points (a real
+ *     contract: every listed hook must be referenced by the file, and each
+ *     listed once).
+ *   - "Framework plumbing:" — shared relays consumed across components
+ *     (--ui-*, --intent*, --density-*). Classified once at framework level,
+ *     not repeated in every file.
+ *   - "Internal:"        — properties derived from hooks, owned by
+ *     state/variant rules, or written by JavaScript.
  *
- * "Internal:" headers list properties that are derived from other hooks or
- * shared tokens, owned by state/variant rules, or positioning plumbing. They
- * are not validated (no author contract) but count as classified.
+ * The framework-plumbing families are also recognized by prefix so a shared
+ * relay can never drift into an unclassified state without an explicit header
+ * entry: /^--ui-/, /^--density-/, /^--intent(?:-|$)/.
  *
- * In audit mode (--audit) it lists component-prefixed custom properties that
- * are neither listed as public hooks nor marked internal — these are
- * candidates that should be classified one way or the other.
+ * Every custom property used ONLY in a fallback position (var(--x, default))
+ * and never declared anywhere must have at least one classification. These are
+ * unset extension points; leaving one unclassified means nobody owns the
+ * contract, so the check fails. This deliberately does NOT force an artificial
+ * declaration — a fallback-only hook like --btn-gap is intentional.
+ *
+ * In audit mode (--audit) it lists declared-but-unclassified component-prefixed
+ * properties (declare public or internal), and prints the fallback-only
+ * inventory grouped by classification.
  */
 import { readdirSync, readFileSync } from "node:fs";
 import { dirname, join, relative, sep } from "node:path";
@@ -26,6 +38,12 @@ const PAGES = join(ROOT, "docs", "pages");
 
 const audit = process.argv.includes("--audit");
 
+/* Shared variant/intent/density relays are framework plumbing by prefix, so a
+   fallback-only use of one can never be "unclassified" without an explicit
+   header entry. Kept as prefixes, not startsWith("--intent"), so --intent-fg
+   matches but a hypothetical --intentions-x would not. */
+const PLUMBING_PREFIXES = [/^--ui-/, /^--density-/, /^--intent(?:-|$)/];
+
 function walkCss(dir) {
   const files = [];
   for (const entry of readdirSync(dir, { withFileTypes: true })) {
@@ -36,18 +54,22 @@ function walkCss(dir) {
   return files;
 }
 
-/* { public: [hook, ...], internal: [hook, ...] } from every
-   "Public hooks:" / "Internal:" block in the file. A section ends at the next
+/* { public, internal, plumbing } from every "Public hooks:" / "Framework
+   plumbing:" / "Internal:" block in the file. A section ends at the next
    label-like line ("Child contract:", "Intent boundary —" is not label-like
    because it has no trailing colon, but "JS target contract:" is). */
 function parseHookSections(css) {
-  const sections = { public: [], internal: [] };
+  const sections = { public: [], internal: [], plumbing: [] };
   for (const block of css.matchAll(/\/\*[\s\S]*?\*\//g)) {
     let active = null;
     for (const rawLine of block[0].split("\n")) {
       const line = rawLine.trim().replace(/^\*\s?/, "").trim();
       if (/^Public hooks:$/.test(line)) {
         active = "public";
+        continue;
+      }
+      if (/^Framework plumbing:$/.test(line)) {
+        active = "plumbing";
         continue;
       }
       if (/^Internal:$/.test(line)) {
@@ -71,8 +93,24 @@ function declaredProps(css) {
   return new Set([...css.matchAll(/(?<![-\w])(--[a-z0-9-]+)\s*:/gi)].map((m) => m[1]));
 }
 
+function fallbackOnlyUses(css) {
+  return [...css.matchAll(/var\(\s*(--[a-z0-9-]+)\s*,\s*[^)]*\)/gi)].map((m) => m[1]);
+}
+
 function rel(file) {
   return relative(ROOT, file).replaceAll(sep, "/");
+}
+
+/* Resolve a property's single best classification across every file's
+   headers, then the framework-plumbing prefixes. */
+function classify(hooksByFile, prop) {
+  for (const [, s] of hooksByFile) {
+    if (s.public.includes(prop)) return "Public hooks";
+    if (s.internal.includes(prop)) return "Internal";
+    if (s.plumbing.includes(prop)) return "Framework plumbing";
+  }
+  if (PLUMBING_PREFIXES.some((re) => re.test(prop))) return "Framework plumbing";
+  return null;
 }
 
 function main() {
@@ -80,10 +118,18 @@ function main() {
   const unclassified = [];
   const hooksByFile = new Map();
 
-  for (const file of walkCss(SRC)) {
+  /* Per-file data (reused for both the header contract and the global
+     fallback-only inventory). */
+  const declaredGlobal = new Set();
+  const files = walkCss(SRC);
+
+  for (const file of files) {
     const css = readFileSync(file, "utf8");
-    const { public: hooks, internal } = parseHookSections(css);
-    hooksByFile.set(rel(file), new Set(hooks));
+    const sections = parseHookSections(css);
+    const { public: hooks, internal, plumbing } = sections;
+    hooksByFile.set(file, sections);
+
+    for (const prop of declaredProps(css)) declaredGlobal.add(prop);
 
     for (const hook of hooks) {
       const referenced = new RegExp(`var\\(\\s*${hook}|${hook}\\s*:`).test(css);
@@ -105,15 +151,50 @@ function main() {
         relPath.startsWith("src/css/themes/") ||
         ["src/css/tokens.css", "src/css/theme.css", "src/css/variants.css", "src/css/utilities.css", "src/css/intents.css", "src/css/focus.css"].includes(relPath);
       if (!isCatalogue) {
-        const classified = new Set([...hooks, ...internal]);
-        const declared = declaredProps(css);
-        for (const prop of declared) {
+        const classified = new Set([...hooks, ...internal, ...plumbing]);
+        for (const prop of declaredProps(css)) {
           if (classified.has(prop)) continue;
-          if (prop.startsWith("--ui-") || prop.startsWith("--intent")) continue; // variant relay, not authored
+          if (PLUMBING_PREFIXES.some((re) => re.test(prop))) continue; // shared relay, not authored
           unclassified.push(`${relPath}: ${prop}`);
         }
       }
     }
+  }
+
+  /* Fallback-only guard: every property used only in a fallback position and
+     never declared must be classified somewhere. Scanned after declaredGlobal
+     is complete so a prop declared in any file is never mistaken for
+     fallback-only. */
+  const fallbackUses = new Map(); // prop -> { file: n }
+  for (const file of files) {
+    const css = readFileSync(file, "utf8");
+    for (const use of fallbackOnlyUses(css)) {
+      if (declaredGlobal.has(use)) continue;
+      const entry = fallbackUses.get(use) ?? new Map();
+      entry.set(file, (entry.get(file) ?? 0) + 1);
+      fallbackUses.set(use, entry);
+    }
+  }
+
+  const categoryCounts = { "Public hooks": 0, "Framework plumbing": 0, Internal: 0, Unclassified: 0 };
+  const unclassifiedFallback = [];
+  for (const [prop, files] of fallbackUses) {
+    const cat = classify(hooksByFile, prop);
+    categoryCounts[cat ?? "Unclassified"] += 1;
+    if (!cat) {
+      unclassifiedFallback.push(`${prop} (${[...files.keys()].map(rel).join(", ")})`);
+    }
+  }
+
+  console.log("Fallback-only custom properties:");
+  for (const [cat, n] of Object.entries(categoryCounts)) {
+    console.log(`  ${cat}: ${n}`);
+  }
+  if (unclassifiedFallback.length > 0) {
+    issues.push(
+      `Unclassified fallback-only custom properties (declare as public, framework plumbing, or internal):`
+    );
+    for (const line of unclassifiedFallback) issues.push(`- ${line}`);
   }
 
   if (issues.length > 0) {

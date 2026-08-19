@@ -12,6 +12,9 @@ Inline groups that wrap naturally, useful for action rows, tags, and toolbars.
 
 Use cluster for action rows, tags, toolbar sections, metadata, and compact navigation.
 
+Like `.stack`, cluster owns its children's spacing: direct-child margins are
+reset, so spacing between items always comes from `--gap`.
+
 ## CSS hooks
 
 - `--cluster-justify` — main-axis distribution (`justify-content`).
@@ -45,3 +48,10 @@ wraps to several lines — set `--cluster-align`.
 The optional utility layer ships `.justify-content-start`, `.justify-content-center`,
 `.justify-content-end` and `.justify-content-space-between`, which set
 `--cluster-justify` for you. See the utilities page.
+
+## Controls inside a wrapping cluster
+
+A form control (`--control-size`, full width) inside a **wrapping** cluster claims
+the full line and pushes every sibling to its own row. To keep a row of controls
+under one label, set `--cluster-wrap: nowrap` and give the controls
+`min-inline-size: 0` (and `flex: 1 1 0%` to share the row evenly).

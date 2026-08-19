@@ -4,6 +4,9 @@
  * JavaScript owns roving tabindex, aria-selected, panel visibility,
  * and arrow-key navigation. CSS owns the tab strip appearance and
  * active indicator.
+ *
+ * Public hooks:
+ * --tab-gap
  */
 /* Intent boundary — inherited intents do not tint this component.
    Local intent classes still win because :where() has zero specificity. */

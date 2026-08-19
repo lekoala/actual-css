@@ -11,8 +11,14 @@
  * [data-flyout-mobile="sheet|auto|none|anchored"].
  * --surface-anchor-width is set by surface.js while an open flyout is positioned.
  *
+ * Public hooks:
+ * --flyout-inline-size
+ * --flyout-max-inline-size
+ *
  * Internal:
  * --menu-item-size (derived from --control-size for menu rows)
+ * --available-height (measured by floating.js)
+ * --surface-anchor-width (measured by surface.js)
  */
 
 .flyout-trigger {

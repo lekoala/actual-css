@@ -2,6 +2,9 @@
  * Additional layout primitives not included in the core bundle.
  *
  * Import this file explicitly when a project needs these patterns.
+ *
+ * Public hooks:
+ * --switcher-threshold
  */
 .switcher {
   display: flex;

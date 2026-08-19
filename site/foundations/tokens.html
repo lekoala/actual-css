@@ -201,7 +201,7 @@
 <li>Modern enhancements can derive better values with <code>color-mix()</code>, <code>light-dark()</code>, or container queries.</li>
 </ul>
 <h2 id="public-surface">Public surface</h2>
-<p>Component custom properties intended for author customization are public hooks. State, variant, derived, and runtime-written properties are internal implementation details. Documentation focuses on discovering the right hook and on non-obvious usage; the CSS source remains canonical for exact defaults and fallback chains.</p>
+<p>Component custom properties fall into three header categories in the source: <strong>Public hooks</strong> (author-facing customization points), <strong>Framework plumbing</strong> (shared relays consumed across components — <code>--ui-*</code>, <code>--intent*</code>, <code>--density-*</code>), and <strong>Internal</strong> (derived, state/variant-owned, or runtime-written). Documentation focuses on discovering the right hook and on non-obvious usage; the CSS source remains canonical for exact defaults and fallback chains.</p>
 <p>As a convention, component-prefixed properties owned by the component's base rule are usually author hooks. Properties owned by states/variants, derived from other hooks, or written by JavaScript are not. This convention is indicative, not algorithmic: runtime-written, derived, and state-relay properties stay internal even when their form resembles a hook.</p>
 <h3 id="color">Color</h3>
 <p>Intent tokens are used by <code>.primary</code>, <code>.secondary</code>, <code>.success</code>, <code>.warning</code>, <code>.danger</code>, and <code>.neutral</code>. They are curated color/foreground pairs. Actual CSS does not compute foregrounds automatically in the core theme contract.</p>
@@ -433,12 +433,14 @@
 <ul>
 <li>Prefix internal component tokens with the component name (<code>--btn-*</code>, <code>--alert-*</code>, <code>--card-*</code>).</li>
 <li>Prefix shared variant plumbing with <code>--ui-*</code>.</li>
+<li>The shared relays <code>--ui-*</code>, <code>--intent*</code>, and <code>--density-*</code> are framework plumbing: they are classified once at framework level, not restated in every component file.</li>
 <li>Keep component-specific variants in component code when they do not generalize.</li>
 <li>Do not require users to override internal tokens for ordinary theming.</li>
 <li>Promote an internal token to public only when there is a repeated, reasonable customization need.</li>
+<li>A custom property used only in a fallback position (<code>var(--x, default)</code>) and never declared is an unset extension point and must carry a classification — public, framework plumbing, or internal. <code>check:css-api</code> fails on any unclassified fallback-only property; it does not force an artificial declaration to satisfy the audit.</li>
 </ul>
 <h2 id="theme-contract">Theme contract</h2>
-<p>Themes override tokens, not selectors. The themes in <code>src/css/themes/</code> are demo examples, not shipped by the default stylesheet; they exist to show valid ways to use this contract.</p>
+<p>Themes override tokens, not selectors. The themes in <code>src/css/themes/</code> are demo examples, not included in the default stylesheet; they exist to show valid ways to use this contract. They ship in the package as <strong>reference sources for copying</strong> — the <code>./css/themes</code> exports are intentionally <code>null</code>, so they are not supported import entrypoints.</p>
 <p>A minimal recolor theme overrides the intent pairs, surfaces, text colors, border, focus, focus ring, and hover overlay.</p>
 <p>Shape, shadow, motion, typography, and soft-variant mix tokens are optional knobs. Override them only when the theme actually changes that part of the system.</p>
 <p>A full theme can override:</p>
