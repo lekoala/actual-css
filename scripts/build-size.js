@@ -47,7 +47,7 @@ async function main() {
     rows.push({ file: rel, raw: st.size });
   }
 
-  rows.sort((a, b) => b.raw - a.raw);
+  rows.sort((a, b) => b.raw - a.raw || a.file.localeCompare(b.file, "en"));
 
   // ── Dist sizes ──────────────────────────────────────────
   let devSize = 0;
@@ -135,7 +135,6 @@ async function main() {
 
   // ── Write report ───────────────────────────────────────
   const report = {
-    timestamp: new Date().toISOString(),
     totalRaw,
     totalMinified: minSize,
     totalBrotli: brotliSize,
@@ -148,11 +147,20 @@ async function main() {
     files: rows,
   };
 
-  await writeFile(
-    join(ROOT, "size-report.json"),
-    JSON.stringify(report, null, 2) + "\n",
-  );
-  console.log("Report written to size-report.json\n");
+  const reportPath = join(ROOT, "size-report.json");
+  const next = JSON.stringify(report, null, 2) + "\n";
+  let previous = null;
+  try {
+    previous = await readFile(reportPath, "utf8");
+  } catch {
+    // no previous report yet
+  }
+  if (previous === next) {
+    console.log("Report unchanged");
+  } else {
+    await writeFile(reportPath, next);
+    console.log("Report written to size-report.json");
+  }
 
   if (hasDist && report.shippedBrotli > MAX_SHIPPED_BROTLI) {
     console.error(
