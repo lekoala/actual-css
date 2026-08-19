@@ -21,8 +21,10 @@ test("package ships built assets and theme reference sources", () => {
   expect(files).not.toContain("src/css");
 });
 
-test("dist directory exists and contains actual.min.css", () => {
+test("dist directory exists and contains actual.min.css and optional.min.css", () => {
   expect(existsSync(join(ROOT, "dist", "actual.min.css"))).toBe(true);
+  expect(existsSync(join(ROOT, "dist", "optional.min.css"))).toBe(true);
+  expect(existsSync(join(ROOT, "dist", "optional.css"))).toBe(true);
 });
 
 test("every JS export path resolves to an existing source file", () => {

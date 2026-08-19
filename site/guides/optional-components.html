@@ -135,6 +135,7 @@ global design tokens and require no JavaScript.">
         <li><a class="nav-link" href="../forms/overview.html">Forms</a></li>
         <li><a class="nav-link" href="../forms/controls.html">Controls</a></li>
         <li><a class="nav-link" href="../forms/labels.html">Labels</a></li>
+        <li><a class="nav-link" href="../forms/floating-field.html">Floating labels</a></li>
         <li><a class="nav-link" href="../forms/states-and-sizes.html">States And Sizes</a></li>
         <li><a class="nav-link" href="../forms/form-actions.html">Form Actions</a></li>
         <li><a class="nav-link" href="../forms/joined-controls.html">Joined Controls</a></li>
@@ -204,9 +205,14 @@ same tokens, intents, variants, and density grammar as the core. They add no
 global design tokens and require no JavaScript.</p>
 <p>Import the complete optional layer after the core:</p>
 <pre><code class="language-css">@import &quot;actual-css/css&quot;;
-@import &quot;actual-css/css/optional/index&quot;;
+@import &quot;actual-css/css/optional&quot;;
 </code></pre>
-<p>Alternatively, import only the modules a project uses.</p>
+<p><code>actual-css/css/optional</code> resolves to the minified optional bundle
+(<code>dist/optional.min.css</code>). Alternatively, import only the modules a project
+uses from the source tree:</p>
+<pre><code class="language-css">@import &quot;actual-css/css/optional/fab&quot;;
+@import &quot;actual-css/css/optional/floating-field&quot;;
+</code></pre>
 <div class="table-wrap"><table class="table">
 <thead>
 <tr><th>Module</th><th>Use</th><th>Import</th><th>Documentation</th></tr>
@@ -216,6 +222,7 @@ global design tokens and require no JavaScript.</p>
 <tr><td>Chat</td><td>Start/end message rows and bubbles</td><td><code>actual-css/css/optional/chat</code></td><td><a href="../components/chat.html">Chat</a></td></tr>
 <tr><td>Aura</td><td>Decorative intent-colored frame and glow</td><td><code>actual-css/css/optional/aura</code></td><td><a href="../components/aura.html">Aura</a></td></tr>
 <tr><td>FAB</td><td>Fixed action placement and native speed dial</td><td><code>actual-css/css/optional/fab</code></td><td><a href="../components/fab.html">FAB</a></td></tr>
+<tr><td>Floating field</td><td>Floating labels over the text controls</td><td><code>actual-css/css/optional/floating-field</code></td><td><a href="../forms/floating-field.html">Floating labels</a></td></tr>
 </tbody>
 </table></div>
 <p>Component-prefixed custom properties documented on each page are author hooks.
@@ -318,6 +325,7 @@ and button APIs.</p>
         <li><a class="nav-link" href="../forms/overview.html">Forms</a></li>
         <li><a class="nav-link" href="../forms/controls.html">Controls</a></li>
         <li><a class="nav-link" href="../forms/labels.html">Labels</a></li>
+        <li><a class="nav-link" href="../forms/floating-field.html">Floating labels</a></li>
         <li><a class="nav-link" href="../forms/states-and-sizes.html">States And Sizes</a></li>
         <li><a class="nav-link" href="../forms/form-actions.html">Form Actions</a></li>
         <li><a class="nav-link" href="../forms/joined-controls.html">Joined Controls</a></li>

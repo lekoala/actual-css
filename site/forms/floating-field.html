@@ -5,8 +5,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Tooltip — Actual CSS</title>
-  <meta name="description" content="Supplemental label for a trigger, shown on hover and focus, hidden on dismissal.">
+  <title>Floating labels — Actual CSS</title>
+  <meta name="description" content="Optional — import actual-css/css/optional/floating-field or actual-css/css/optional.">
   <link rel="stylesheet" href="../../src/css/actual.css">
   <link rel="stylesheet" href="../../src/css/optional/index.css">
   <link rel="stylesheet" href="../../dist/actual-themes.min.css">
@@ -130,22 +130,22 @@
       </ul>
       <p class="docs-nav-group">Forms</p>
       <ul class="nav-list">
-        <li><a class="nav-link" href="../forms/overview.html">Forms</a></li>
-        <li><a class="nav-link" href="../forms/controls.html">Controls</a></li>
-        <li><a class="nav-link" href="../forms/labels.html">Labels</a></li>
-        <li><a class="nav-link" href="../forms/floating-field.html">Floating labels</a></li>
-        <li><a class="nav-link" href="../forms/states-and-sizes.html">States And Sizes</a></li>
-        <li><a class="nav-link" href="../forms/form-actions.html">Form Actions</a></li>
-        <li><a class="nav-link" href="../forms/joined-controls.html">Joined Controls</a></li>
-        <li><a class="nav-link" href="../forms/choice-cards.html">Choice Cards</a></li>
-        <li><a class="nav-link" href="../forms/switch.html">Switches</a></li>
-        <li><a class="nav-link" href="../forms/range.html">Range</a></li>
-        <li><a class="nav-link" href="../forms/otp.html">One-time code input</a></li>
-        <li><a class="nav-link" href="../forms/password.html">Password Toggle</a></li>
-        <li><a class="nav-link" href="../forms/input-policy.html">Input Policy</a></li>
-        <li><a class="nav-link" href="../forms/validation.html">Validation</a></li>
-        <li><a class="nav-link" href="../forms/detached-actions.html">Detached Actions</a></li>
-        <li><a class="nav-link" href="../forms/sticky-actions.html">Sticky Actions</a></li>
+        <li><a class="nav-link" href="overview.html">Forms</a></li>
+        <li><a class="nav-link" href="controls.html">Controls</a></li>
+        <li><a class="nav-link" href="labels.html">Labels</a></li>
+        <li><a class="nav-link" href="floating-field.html" aria-current="page">Floating labels</a></li>
+        <li><a class="nav-link" href="states-and-sizes.html">States And Sizes</a></li>
+        <li><a class="nav-link" href="form-actions.html">Form Actions</a></li>
+        <li><a class="nav-link" href="joined-controls.html">Joined Controls</a></li>
+        <li><a class="nav-link" href="choice-cards.html">Choice Cards</a></li>
+        <li><a class="nav-link" href="switch.html">Switches</a></li>
+        <li><a class="nav-link" href="range.html">Range</a></li>
+        <li><a class="nav-link" href="otp.html">One-time code input</a></li>
+        <li><a class="nav-link" href="password.html">Password Toggle</a></li>
+        <li><a class="nav-link" href="input-policy.html">Input Policy</a></li>
+        <li><a class="nav-link" href="validation.html">Validation</a></li>
+        <li><a class="nav-link" href="detached-actions.html">Detached Actions</a></li>
+        <li><a class="nav-link" href="sticky-actions.html">Sticky Actions</a></li>
       </ul>
       <p class="docs-nav-group">Patterns</p>
       <ul class="nav-list">
@@ -174,12 +174,12 @@
       </ul>
       <p class="docs-nav-group">Enhancements</p>
       <ul class="nav-list">
-        <li><a class="nav-link" href="overview.html">Progressive Enhancements</a></li>
-        <li><a class="nav-link" href="flyout.html">Flyout</a></li>
-        <li><a class="nav-link" href="tooltip.html" aria-current="page">Tooltip</a></li>
-        <li><a class="nav-link" href="tabs.html">Tabs</a></li>
-        <li><a class="nav-link" href="scrollspy.html">Scrollspy</a></li>
-        <li><a class="nav-link" href="status-bar.html">Status Bar</a></li>
+        <li><a class="nav-link" href="../enhancements/overview.html">Progressive Enhancements</a></li>
+        <li><a class="nav-link" href="../enhancements/flyout.html">Flyout</a></li>
+        <li><a class="nav-link" href="../enhancements/tooltip.html">Tooltip</a></li>
+        <li><a class="nav-link" href="../enhancements/tabs.html">Tabs</a></li>
+        <li><a class="nav-link" href="../enhancements/scrollspy.html">Scrollspy</a></li>
+        <li><a class="nav-link" href="../enhancements/status-bar.html">Status Bar</a></li>
       </ul>
       <p class="docs-nav-group">Examples</p>
       <ul class="nav-list">
@@ -192,224 +192,141 @@
           <nav aria-label="Breadcrumb">
             <ol class="breadcrumb">
               <li><a href="../index.html">Docs</a></li>
-              <li><span aria-current="page">Tooltip</span></li>
+              <li><span aria-current="page">Floating labels</span></li>
             </ol>
           </nav>
 
           <div class="prose docs-prose">
-<h1 id="tooltip">Tooltip</h1>
+<h1 id="floating-labels">Floating labels</h1>
 <blockquote>
-<p>Supplemental label for a trigger, shown on hover and focus, hidden on dismissal.</p>
+<p><strong>Optional</strong> — import <code>actual-css/css/optional/floating-field</code> or <code>actual-css/css/optional</code>.</p>
 </blockquote>
-<p>Tooltips are supplemental: <code>data-tooltip</code> on the trigger wires a <code>.tooltip</code>
-element (<code>role=&quot;tooltip&quot;</code>) that appears near the trigger. Position, placement,
-and arrow position are written by JavaScript; the element is shown and hidden
-with the <code>hidden</code> attribute.</p>
-<ul>
-<li>Use <code>data-tooltip</code> on the trigger. With text (<code>data-tooltip=&quot;Help&quot;</code>), the tooltip element is generated. Empty (<code>data-tooltip</code>) marks an explicit tooltip connected via <code>aria-describedby</code>.</li>
-<li>Tooltips are supplemental. Do not put required information or interactive controls inside them.</li>
-<li>Show on hover and focus. Hide on Escape, blur, pointer leave, or scroll when appropriate.</li>
-<li>JavaScript can generate tooltip elements from <code>data-tooltip</code>.</li>
-<li>Add <code>data-tooltip-click</code> to toggle it on click instead of hover/focus.</li>
-<li>Add <code>data-tooltip-visible</code> to show it immediately and keep it visible while its trigger is in view.</li>
-<li>Use <code>data-tooltip-placement</code> to set the preferred placement (default <code>top</code>).</li>
-<li>The arrow inherits the tooltip background — custom gradients carry through automatically.</li>
-<li>Avoid relying on the native <code>title</code> attribute as the primary implementation.</li>
-</ul>
+<p><code>.floating-field</code> turns a control and its label into a floating-label cell:
+the label rests inside the control and floats to the top when the control is
+focused or filled. It composes the existing <code>.field</code> layout and the text
+controls (<code>.input</code>, <code>.textarea</code>, <code>.select</code>) with zero JavaScript.</p>
+<p>The cell holds the control and its label only. Help and error messages stay in
+the surrounding <code>.field</code>, otherwise the resting label centers on the whole
+field instead of the control.</p>
 <div class="docs-example">
   <div class="docs-preview">
-<button class="btn ghost"
-        type="button"
-        data-tooltip
-        aria-describedby="tooltip-save"
-        aria-label="Save">
-  <i class="ti ti-device-floppy" aria-hidden="true"></i>
-</button>
-
-<div class="tooltip" role="tooltip" id="tooltip-save" hidden>
-  Save changes
+<div class="field">
+  <label class="floating-field">
+    <input class="input" type="email" placeholder=" " aria-describedby="email-help" />
+    <span class="field-label">Email</span>
+  </label>
+  <span class="field-help" id="email-help">We'll never share your email.</span>
 </div>
   </div>
   <div class="docs-code">
-    <pre><code class="language-html">&lt;button class=&quot;btn ghost&quot;
-        type=&quot;button&quot;
-        data-tooltip
-        aria-describedby=&quot;tooltip-save&quot;
-        aria-label=&quot;Save&quot;&gt;
-  &lt;i class=&quot;ti ti-device-floppy&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;
-&lt;/button&gt;
-
-&lt;div class=&quot;tooltip&quot; role=&quot;tooltip&quot; id=&quot;tooltip-save&quot; hidden&gt;
-  Save changes
+    <pre><code class="language-html">&lt;div class=&quot;field&quot;&gt;
+  &lt;label class=&quot;floating-field&quot;&gt;
+    &lt;input class=&quot;input&quot; type=&quot;email&quot; placeholder=&quot; &quot; aria-describedby=&quot;email-help&quot; /&gt;
+    &lt;span class=&quot;field-label&quot;&gt;Email&lt;/span&gt;
+  &lt;/label&gt;
+  &lt;span class=&quot;field-help&quot; id=&quot;email-help&quot;&gt;We'll never share your email.&lt;/span&gt;
 &lt;/div&gt;</code></pre>
   </div>
 </div>
+<p>Every <code>.input</code> and <code>.textarea</code> needs <code>placeholder=&quot; &quot;</code> so <code>:placeholder-shown</code>
+can detect emptiness — the space keeps the placeholder invisible while making
+the state detectable. <code>:autofill</code> is covered too, so a password manager that
+prefills a field still lifts the label.</p>
+<h2 id="textarea">Textarea</h2>
+<p>A textarea's resting label aligns with the first text line instead of centering
+in the tall control.</p>
 <div class="docs-example">
   <div class="docs-preview">
-<button class="btn" type="button" data-tooltip="Save changes">
-  Save
-</button>
-  </div>
-  <div class="docs-code">
-    <pre><code class="language-html">&lt;button class=&quot;btn&quot; type=&quot;button&quot; data-tooltip=&quot;Save changes&quot;&gt;
-  Save
-&lt;/button&gt;</code></pre>
-  </div>
-</div>
-<h2 id="display-modes">Display modes</h2>
-<p>Click tooltips stay open when the pointer leaves and close on a second click or
-Escape. They remain supplemental, non-interactive content; use a flyout when the
-floating content contains controls.</p>
-<div class="docs-example">
-  <div class="docs-preview">
-<p class="cluster">
-  <button class="btn outline" type="button"
-          data-tooltip="Click again or press Escape to close"
-          data-tooltip-click>
-    Toggle on click
-  </button>
-
-  <button class="btn outline" type="button"
-          data-tooltip="Always visible while this trigger is in view"
-          data-tooltip-visible
-          data-tooltip-placement="bottom">
-    Always visible
-  </button>
-</p>
-  </div>
-  <div class="docs-code">
-    <pre><code class="language-html">&lt;p class=&quot;cluster&quot;&gt;
-  &lt;button class=&quot;btn outline&quot; type=&quot;button&quot;
-          data-tooltip=&quot;Click again or press Escape to close&quot;
-          data-tooltip-click&gt;
-    Toggle on click
-  &lt;/button&gt;
-
-  &lt;button class=&quot;btn outline&quot; type=&quot;button&quot;
-          data-tooltip=&quot;Always visible while this trigger is in view&quot;
-          data-tooltip-visible
-          data-tooltip-placement=&quot;bottom&quot;&gt;
-    Always visible
-  &lt;/button&gt;
-&lt;/p&gt;</code></pre>
-  </div>
-</div>
-<h2 id="html-and-long-content">HTML and long content</h2>
-<p>The <code>data-tooltip=&quot;…&quot;</code> shorthand is intentionally plain text. For trusted HTML,
-use an explicit tooltip referenced by <code>aria-describedby</code>. Keep its content
-non-interactive and concise; long content wraps up to the tooltip's
-viewport-aware maximum width.</p>
-<div class="docs-example">
-  <div class="docs-preview">
-<button class="btn" type="button"
-        data-tooltip
-        aria-describedby="tip-rich-long"
-        data-tooltip-placement="bottom">
-  Long HTML tooltip
-</button>
-
-<div class="tooltip" role="tooltip" id="tip-rich-long" hidden>
-  <strong>Keyboard shortcut:</strong> press <kbd>Ctrl</kbd> + <kbd>K</kbd> to open search.
-  This longer explanation demonstrates wrapping when a supplemental label needs a little more context.
+<div class="field">
+  <label class="floating-field">
+    <textarea class="textarea" rows="4" placeholder=" "></textarea>
+    <span class="field-label">Message</span>
+  </label>
 </div>
   </div>
   <div class="docs-code">
-    <pre><code class="language-html">&lt;button class=&quot;btn&quot; type=&quot;button&quot;
-        data-tooltip
-        aria-describedby=&quot;tip-rich-long&quot;
-        data-tooltip-placement=&quot;bottom&quot;&gt;
-  Long HTML tooltip
-&lt;/button&gt;
-
-&lt;div class=&quot;tooltip&quot; role=&quot;tooltip&quot; id=&quot;tip-rich-long&quot; hidden&gt;
-  &lt;strong&gt;Keyboard shortcut:&lt;/strong&gt; press &lt;kbd&gt;Ctrl&lt;/kbd&gt; + &lt;kbd&gt;K&lt;/kbd&gt; to open search.
-  This longer explanation demonstrates wrapping when a supplemental label needs a little more context.
+    <pre><code class="language-html">&lt;div class=&quot;field&quot;&gt;
+  &lt;label class=&quot;floating-field&quot;&gt;
+    &lt;textarea class=&quot;textarea&quot; rows=&quot;4&quot; placeholder=&quot; &quot;&gt;&lt;/textarea&gt;
+    &lt;span class=&quot;field-label&quot;&gt;Message&lt;/span&gt;
+  &lt;/label&gt;
 &lt;/div&gt;</code></pre>
   </div>
 </div>
-<h2 id="positioning">Positioning</h2>
-<p>Set <code>data-tooltip-placement</code> to control where the tooltip appears relative to
-its trigger. The arrow follows the placement automatically.</p>
+<h2 id="select-and-datetime-inputs">Select and date/time inputs</h2>
+<p>Selects have no <code>:placeholder-shown</code> signal, and date/time inputs render their
+placeholder inconsistently (Firefox shows none). These controls stay floated in
+every state, so their label always sits at the top.</p>
 <div class="docs-example">
   <div class="docs-preview">
-<p>
-  <button class="btn outline" type="button" data-tooltip="Above the button" data-tooltip-placement="top">Top</button>
-  <button class="btn outline" type="button" data-tooltip="To the right" data-tooltip-placement="right">Right</button>
-  <button class="btn outline" type="button" data-tooltip="Below the button" data-tooltip-placement="bottom">Bottom</button>
-  <button class="btn outline" type="button" data-tooltip="To the left" data-tooltip-placement="left">Left</button>
-</p>
-  </div>
-  <div class="docs-code">
-    <pre><code class="language-html">&lt;p&gt;
-  &lt;button class=&quot;btn outline&quot; type=&quot;button&quot; data-tooltip=&quot;Above the button&quot; data-tooltip-placement=&quot;top&quot;&gt;Top&lt;/button&gt;
-  &lt;button class=&quot;btn outline&quot; type=&quot;button&quot; data-tooltip=&quot;To the right&quot; data-tooltip-placement=&quot;right&quot;&gt;Right&lt;/button&gt;
-  &lt;button class=&quot;btn outline&quot; type=&quot;button&quot; data-tooltip=&quot;Below the button&quot; data-tooltip-placement=&quot;bottom&quot;&gt;Bottom&lt;/button&gt;
-  &lt;button class=&quot;btn outline&quot; type=&quot;button&quot; data-tooltip=&quot;To the left&quot; data-tooltip-placement=&quot;left&quot;&gt;Left&lt;/button&gt;
-&lt;/p&gt;</code></pre>
-  </div>
-</div>
-<h2 id="custom-styling">Custom styling</h2>
-<p>Override <code>--tooltip-bg</code> and <code>--tooltip-fg</code> on the tooltip element to change the
-background and text color. The arrow picks up <code>background: inherit</code> so gradients
-and solid colors both work.</p>
-<div class="docs-example">
-  <div class="docs-preview">
-<button class="btn primary" type="button"
-        data-tooltip
-        aria-describedby="tip-grad"
-        data-tooltip-placement="right">
-  Hover for gradient
-</button>
+<div class="stack">
+  <label class="floating-field">
+    <select class="select">
+      <option value="">Choose a country</option>
+      <option>Belgium</option>
+      <option>France</option>
+      <option>Netherlands</option>
+    </select>
+    <span class="field-label">Country</span>
+  </label>
 
-<div class="tooltip" role="tooltip" id="tip-grad" hidden
-     style="background-color: #5b2d9e;
-            --tooltip-bg: linear-gradient(135deg, oklch(0.45 0.22 280), oklch(0.5 0.2 10));
-            --tooltip-fg: white;
-            padding: 0.4em 0.8em;
-            font-weight: var(--font-weight-medium);">
-  <strong>Custom gradient tooltip:</strong> the arrow matches the background, and this longer
-  sentence demonstrates how the tooltip wraps and flips when the preferred side lacks space.
+  <label class="floating-field">
+    <input class="input" type="date" />
+    <span class="field-label">Start date</span>
+  </label>
 </div>
   </div>
   <div class="docs-code">
-    <pre><code class="language-html">&lt;button class=&quot;btn primary&quot; type=&quot;button&quot;
-        data-tooltip
-        aria-describedby=&quot;tip-grad&quot;
-        data-tooltip-placement=&quot;right&quot;&gt;
-  Hover for gradient
-&lt;/button&gt;
+    <pre><code class="language-html">&lt;div class=&quot;stack&quot;&gt;
+  &lt;label class=&quot;floating-field&quot;&gt;
+    &lt;select class=&quot;select&quot;&gt;
+      &lt;option value=&quot;&quot;&gt;Choose a country&lt;/option&gt;
+      &lt;option&gt;Belgium&lt;/option&gt;
+      &lt;option&gt;France&lt;/option&gt;
+      &lt;option&gt;Netherlands&lt;/option&gt;
+    &lt;/select&gt;
+    &lt;span class=&quot;field-label&quot;&gt;Country&lt;/span&gt;
+  &lt;/label&gt;
 
-&lt;div class=&quot;tooltip&quot; role=&quot;tooltip&quot; id=&quot;tip-grad&quot; hidden
-     style=&quot;background-color: #5b2d9e;
-            --tooltip-bg: linear-gradient(135deg, oklch(0.45 0.22 280), oklch(0.5 0.2 10));
-            --tooltip-fg: white;
-            padding: 0.4em 0.8em;
-            font-weight: var(--font-weight-medium);&quot;&gt;
-  &lt;strong&gt;Custom gradient tooltip:&lt;/strong&gt; the arrow matches the background, and this longer
-  sentence demonstrates how the tooltip wraps and flips when the preferred side lacks space.
+  &lt;label class=&quot;floating-field&quot;&gt;
+    &lt;input class=&quot;input&quot; type=&quot;date&quot; /&gt;
+    &lt;span class=&quot;field-label&quot;&gt;Start date&lt;/span&gt;
+  &lt;/label&gt;
 &lt;/div&gt;</code></pre>
   </div>
 </div>
+<h2 id="density">Density</h2>
+<p>The reserved headroom responds to control density through <code>--control-size</code>:
+<code>.sm</code> and <code>.lg</code> on the cell or an ancestor resize the control geometry and the
+label spacing with it. Typography is untouched, as everywhere in the framework.
+The floating label does add height — the headroom reserves a second vertical
+line on top of the control's minimum size.</p>
 <h2 id="css-hooks">CSS hooks</h2>
 <ul>
-<li><code>--tooltip-bg</code> — bubble background (defaults to <code>var(--surface-solid)</code>); the arrow follows it.</li>
-<li><code>--tooltip-fg</code> — text color.</li>
-<li><code>--tooltip-arrow-size</code> — arrow size.</li>
+<li><code>--floating-pad-block-start</code> — headroom reserved above the control for the
+floated label; defaults to half the control height plus one spacing step.</li>
 </ul>
-<p><code>--arrow-x</code> and <code>--arrow-y</code> are written by the positioner at runtime, not set by
-the author. See the JavaScript runtime documentation.</p>
+<p>Validation and focus come from the existing form contracts: the control's
+border and focus ring flip through <code>--form-invalid-border</code> and the shared
+control focus rules. Coloring the label itself on focus or invalid state is
+left to the surrounding recipe — the joined floating form in the
+<a href="../../demo/templates/blocks.html">blocks demo</a> shows one such recipe.</p>
+<blockquote>
+<p>Not currently compatible with <code>.input-icon</code>; use standard labels when an
+embedded leading icon is required.</p>
+</blockquote>
 
 </div>
 
           <div class="cluster docs-source-links">
-            <a class="btn sm ghost" href="https://github.com/lekoala/actual-css/edit/master/docs/pages/enhancements\tooltip.md" rel="noopener noreferrer">Edit on GitHub</a>
-            <a class="btn sm ghost" href="https://github.com/lekoala/actual-css/blob/master/docs/pages/enhancements\tooltip.md" rel="noopener noreferrer">View Markdown</a>
+            <a class="btn sm ghost" href="https://github.com/lekoala/actual-css/edit/master/docs/pages/forms\floating-field.md" rel="noopener noreferrer">Edit on GitHub</a>
+            <a class="btn sm ghost" href="https://github.com/lekoala/actual-css/blob/master/docs/pages/forms\floating-field.md" rel="noopener noreferrer">View Markdown</a>
           </div>
         </article>
 
         <nav class="cluster docs-prevnext" aria-label="Page navigation">
-                    <a class="btn outline" href="flyout.html">&larr; Flyout</a>
-                    <a class="btn outline" href="tabs.html">Tabs &rarr;</a>
+                    <a class="btn outline" href="labels.html">&larr; Labels</a>
+                    <a class="btn outline" href="states-and-sizes.html">States And Sizes &rarr;</a>
         </nav>
       </main>
 
@@ -417,10 +334,9 @@ the author. See the JavaScript runtime documentation.</p>
         <nav class="scrollspy" data-enhance="scrollspy" data-scrollspy-offset="80" aria-label="On this page">
           <p class="docs-nav-group">On this page</p>
           <ul class="nav-list docs-toc-list" data-docs-toc>
-        <li><a class="nav-link" href="#display-modes" data-docs-toc-item data-level="2">Display modes</a></li>
-        <li><a class="nav-link" href="#html-and-long-content" data-docs-toc-item data-level="2">HTML and long content</a></li>
-        <li><a class="nav-link" href="#positioning" data-docs-toc-item data-level="2">Positioning</a></li>
-        <li><a class="nav-link" href="#custom-styling" data-docs-toc-item data-level="2">Custom styling</a></li>
+        <li><a class="nav-link" href="#textarea" data-docs-toc-item data-level="2">Textarea</a></li>
+        <li><a class="nav-link" href="#select-and-datetime-inputs" data-docs-toc-item data-level="2">Select and date/time inputs</a></li>
+        <li><a class="nav-link" href="#density" data-docs-toc-item data-level="2">Density</a></li>
         <li><a class="nav-link" href="#css-hooks" data-docs-toc-item data-level="2">CSS hooks</a></li>
           </ul>
         </nav>
@@ -496,22 +412,22 @@ the author. See the JavaScript runtime documentation.</p>
       </ul>
       <p class="docs-nav-group">Forms</p>
       <ul class="nav-list">
-        <li><a class="nav-link" href="../forms/overview.html">Forms</a></li>
-        <li><a class="nav-link" href="../forms/controls.html">Controls</a></li>
-        <li><a class="nav-link" href="../forms/labels.html">Labels</a></li>
-        <li><a class="nav-link" href="../forms/floating-field.html">Floating labels</a></li>
-        <li><a class="nav-link" href="../forms/states-and-sizes.html">States And Sizes</a></li>
-        <li><a class="nav-link" href="../forms/form-actions.html">Form Actions</a></li>
-        <li><a class="nav-link" href="../forms/joined-controls.html">Joined Controls</a></li>
-        <li><a class="nav-link" href="../forms/choice-cards.html">Choice Cards</a></li>
-        <li><a class="nav-link" href="../forms/switch.html">Switches</a></li>
-        <li><a class="nav-link" href="../forms/range.html">Range</a></li>
-        <li><a class="nav-link" href="../forms/otp.html">One-time code input</a></li>
-        <li><a class="nav-link" href="../forms/password.html">Password Toggle</a></li>
-        <li><a class="nav-link" href="../forms/input-policy.html">Input Policy</a></li>
-        <li><a class="nav-link" href="../forms/validation.html">Validation</a></li>
-        <li><a class="nav-link" href="../forms/detached-actions.html">Detached Actions</a></li>
-        <li><a class="nav-link" href="../forms/sticky-actions.html">Sticky Actions</a></li>
+        <li><a class="nav-link" href="overview.html">Forms</a></li>
+        <li><a class="nav-link" href="controls.html">Controls</a></li>
+        <li><a class="nav-link" href="labels.html">Labels</a></li>
+        <li><a class="nav-link" href="floating-field.html" aria-current="page">Floating labels</a></li>
+        <li><a class="nav-link" href="states-and-sizes.html">States And Sizes</a></li>
+        <li><a class="nav-link" href="form-actions.html">Form Actions</a></li>
+        <li><a class="nav-link" href="joined-controls.html">Joined Controls</a></li>
+        <li><a class="nav-link" href="choice-cards.html">Choice Cards</a></li>
+        <li><a class="nav-link" href="switch.html">Switches</a></li>
+        <li><a class="nav-link" href="range.html">Range</a></li>
+        <li><a class="nav-link" href="otp.html">One-time code input</a></li>
+        <li><a class="nav-link" href="password.html">Password Toggle</a></li>
+        <li><a class="nav-link" href="input-policy.html">Input Policy</a></li>
+        <li><a class="nav-link" href="validation.html">Validation</a></li>
+        <li><a class="nav-link" href="detached-actions.html">Detached Actions</a></li>
+        <li><a class="nav-link" href="sticky-actions.html">Sticky Actions</a></li>
       </ul>
       <p class="docs-nav-group">Patterns</p>
       <ul class="nav-list">
@@ -540,12 +456,12 @@ the author. See the JavaScript runtime documentation.</p>
       </ul>
       <p class="docs-nav-group">Enhancements</p>
       <ul class="nav-list">
-        <li><a class="nav-link" href="overview.html">Progressive Enhancements</a></li>
-        <li><a class="nav-link" href="flyout.html">Flyout</a></li>
-        <li><a class="nav-link" href="tooltip.html" aria-current="page">Tooltip</a></li>
-        <li><a class="nav-link" href="tabs.html">Tabs</a></li>
-        <li><a class="nav-link" href="scrollspy.html">Scrollspy</a></li>
-        <li><a class="nav-link" href="status-bar.html">Status Bar</a></li>
+        <li><a class="nav-link" href="../enhancements/overview.html">Progressive Enhancements</a></li>
+        <li><a class="nav-link" href="../enhancements/flyout.html">Flyout</a></li>
+        <li><a class="nav-link" href="../enhancements/tooltip.html">Tooltip</a></li>
+        <li><a class="nav-link" href="../enhancements/tabs.html">Tabs</a></li>
+        <li><a class="nav-link" href="../enhancements/scrollspy.html">Scrollspy</a></li>
+        <li><a class="nav-link" href="../enhancements/status-bar.html">Status Bar</a></li>
       </ul>
       <p class="docs-nav-group">Examples</p>
       <ul class="nav-list">

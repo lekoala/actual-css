@@ -6,10 +6,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Interface Blocks - Actual CSS</title>
   <meta name="description" content="A catalog of interface blocks: data tables, forms, empty states, notifications, and more.">
-  <link rel="stylesheet" href="../../src/css/actual.css">
-  <link rel="stylesheet" href="../../src/css/themes/index.css">
+  <link rel="stylesheet" href="../../dist/actual.css?v=9c7e5fe6">
+  <link rel="stylesheet" href="../../dist/optional.css?v=d117f91f">
+  <link rel="stylesheet" href="../../dist/actual-themes.min.css?v=7660a4ac">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
-  <link rel="stylesheet" href="../styles/demo.css">
+  <link rel="stylesheet" href="../styles/demo.css?v=d2f2048c">
   <style>
     .blocks-page {
       padding-block: var(--space-60);
@@ -139,10 +140,10 @@
     }
 
     /*
-     * Floating label + joined fields — userland recipe, nothing here ships.
-     * The framework keeps "no floating labels" (docs/pages/forms/overview.md);
-     * this block proves the control hooks can express the pattern without new
-     * API.
+     * Floating labels + joined fields — the floating mechanics come from the
+     * optional .floating-field module (src/css/optional/floating-field.css);
+     * this recipe only owns the joined-frame presentation: outer border,
+     * responsive separators, cell tints, and the focus bottom line.
      */
     .block-float-shell {
       max-inline-size: 36rem;
@@ -184,96 +185,53 @@
        :invalid): the shared .field wrapper gets .danger from validation.js
        when any one cell is invalid, so anything inherited from the wrapper
        (like --form-invalid-border) would paint every cell. */
-    .block-float-form :is(.input, .textarea) {
+    .block-float-form :is(.input, .textarea, .select) {
       --control-bg: transparent;
 
       border-color: transparent;
       border-radius: 0;
     }
 
-    .block-float-form :is(.input, .textarea):is([aria-invalid="true"], :user-invalid),
-    .was-validated .block-float-form :is(.input, .textarea):invalid {
+    .block-float-form :is(.input, .textarea, .select):is([aria-invalid="true"], :user-invalid),
+    .was-validated .block-float-form :is(.input, .textarea, .select):invalid {
       --control-bg: color-mix(in srgb, var(--danger) 12%, transparent);
     }
 
-    .block-float-form :is(.input, .textarea):hover:not(:disabled) {
+    .block-float-form :is(.input, .textarea, .select):hover:not(:disabled) {
       --control-bg: var(--surface-subtle);
     }
 
     /* Focus is a bottom accent line instead of a ring — a ring's corners get
        eaten by the frame's rounded clip. The inset shadow adds no layout
        shift and transitions like the ring it replaces. */
-    .block-float-form :is(.input, .textarea):focus {
+    .block-float-form :is(.input, .textarea, .select):focus {
       --control-bg: var(--surface-subtle);
 
       box-shadow: inset 0 calc(var(--border-width) * -2) 0 var(--focus);
     }
 
-    .block-float-form :is(.input, .textarea):focus-visible {
+    .block-float-form :is(.input, .textarea, .select):focus-visible {
       outline: none;
     }
 
     /* Forced colors drops box-shadow, so keyboard focus needs its outline
        back; inverted offset keeps it inside the cell. */
     @media (forced-colors: active) {
-      .block-float-form :is(.input, .textarea):focus-visible {
+      .block-float-form :is(.input, .textarea, .select):focus-visible {
         outline: var(--focus-outline);
         outline-offset: calc(var(--focus-outline-offset) * -1);
       }
     }
 
-    /* Grid, like .field: blockifies the control, which removes the inline
-       descender gap a textarea would otherwise leave under itself. */
-    .block-float-field {
-      position: relative;
-      display: grid;
-    }
-
-    /* Space for the shrunk label is always reserved, so the value never
-       jumps when the label floats. */
-    .block-float-field > :is(.input, .textarea) {
-      padding-block: var(--space-50) var(--space-20);
-    }
-
-    .block-float-label {
-      position: absolute;
-      inset-block-start: 50%;
-      inset-inline-start: calc(var(--space-30) + var(--border-width));
-      translate: 0 -50%;
-      color: var(--text-muted);
-      font-size: var(--control-font-size);
-      pointer-events: none;
-      transition:
-        inset-block-start var(--duration),
-        translate var(--duration),
-        font-size var(--duration),
-        color var(--duration);
-    }
-
-    /* A textarea's resting label aligns with the first text line instead of
-       centering in the (tall) control. */
-    .block-float-field > .textarea + .block-float-label {
-      inset-block-start: var(--space-50);
-      translate: none;
-    }
-
-    /* placeholder=" " on every control makes :placeholder-shown a reliable
-       emptiness probe; :autofill covers prefilled values before interaction. */
-    .block-float-field > :is(.input, .textarea):is(:focus, :autofill, :not(:placeholder-shown)) + .block-float-label {
-      inset-block-start: var(--space-20);
-      translate: none;
-      font-size: var(--font-size-xs);
-    }
-
-    .block-float-field > :is([aria-invalid="true"], :user-invalid) + .block-float-label,
-    .was-validated .block-float-field > :invalid + .block-float-label {
+    .block-float-form .floating-field > :is([aria-invalid="true"], :user-invalid) + .field-label,
+    .was-validated .block-float-form .floating-field > :invalid + .field-label {
       color: var(--danger);
     }
 
     /* Declared after the danger rule so an invalid field reads as "being
        edited" while focused (equal specificity with the .was-validated line,
        source order wins). */
-    .block-float-field > :is(.input, .textarea):focus + .block-float-label {
+    .block-float-form .floating-field > :is(.input, .textarea, .select):focus + .field-label {
       color: var(--focus);
     }
 
@@ -719,7 +677,7 @@
 
     <section class="center block-section" id="floating-label-form">
       <h2>Floating label form</h2>
-      <p class="block-note">Validates a userland recipe built on the control hooks: fields joined into a single bordered block, floating labels driven by <code>:placeholder-shown</code>. The framework itself ships no floating labels. Every control needs <code>placeholder=" "</code> for emptiness detection, so the pattern excludes selects and date inputs, and field messages move below the block.</p>
+      <p class="block-note">Fields joined into a single bordered block. The floating labels come from the optional <code>.floating-field</code> module; every text control needs <code>placeholder=" "</code> for emptiness detection, selects and date inputs stay floated, and field messages live below the block.</p>
 
       <div class="block-example">
         <form class="stack block-float-shell needs-validation" data-enhance="validation" data-validation-message="Please check the highlighted fields." onsubmit="event.preventDefault();">
@@ -731,25 +689,36 @@
           <div class="field">
             <div class="block-float-form" role="group" aria-label="Contact details">
               <div class="block-float-row">
-                <label class="block-float-field">
+                <label class="floating-field">
                   <input class="input" type="text" name="given-name" autocomplete="given-name" placeholder=" " required>
-                  <span class="block-float-label">First name</span>
+                  <span class="field-label">First name</span>
                 </label>
-                <label class="block-float-field">
+                <label class="floating-field">
                   <input class="input" type="text" name="family-name" autocomplete="family-name" placeholder=" " required>
-                  <span class="block-float-label">Last name</span>
+                  <span class="field-label">Last name</span>
                 </label>
               </div>
               <div class="block-float-row">
-                <label class="block-float-field">
+                <label class="floating-field">
                   <input class="input" type="email" name="email" autocomplete="email" placeholder=" " required>
-                  <span class="block-float-label">Email</span>
+                  <span class="field-label">Email</span>
                 </label>
               </div>
               <div class="block-float-row">
-                <label class="block-float-field">
+                <label class="floating-field">
+                  <select class="select" name="country" autocomplete="country-name" required>
+                    <option value="">Choose a country</option>
+                    <option>Belgium</option>
+                    <option>France</option>
+                    <option>Netherlands</option>
+                  </select>
+                  <span class="field-label">Country</span>
+                </label>
+              </div>
+              <div class="block-float-row">
+                <label class="floating-field">
                   <textarea class="textarea" name="message" rows="4" placeholder=" " required></textarea>
-                  <span class="block-float-label">Message</span>
+                  <span class="field-label">Message</span>
                 </label>
               </div>
             </div>
@@ -821,7 +790,7 @@
        on invalid submit, no manual listener (see auth-card block). -->
   <div class="status-bar" data-status role="status" aria-live="polite" aria-atomic="true"></div>
 
-  <script src="../../dist/actual.js"></script>
+  <script src="../../dist/actual.js?v=6e0b334a"></script>
   <script>
     const switcher = document.getElementById("theme-switcher");
 

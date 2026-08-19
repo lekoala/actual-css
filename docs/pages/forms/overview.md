@@ -5,7 +5,7 @@
 - Form controls are styled with explicit classes, not by parent scope.
 - Control classes: `.input`, `.textarea`, `.select`, `.check`, `.radio`, `.switch`, `.range`, `.file`, `.color`.
 - Reusable layout classes: `.field`, `.field-label`, `.field-help`, `.field-error`, `.field-group`, `.choice`, `.form-actions`, `.form-actions.sticky`.
-- No floating labels shipped — the blocks demo shows a userland recipe for teams that want them.
+- Floating labels available as optional CSS via `.floating-field` — standard `.field` labels remain the recommended default.
 - Proper focus style that preserves keyboard navigation.
 - `.field-group` and `.choice` provide layout without depending on parent scope.
 - Customizable select is progressive enhancement only — the native select remains the baseline.

@@ -1,0 +1,87 @@
+/*
+ * Floating labels — optional composition over the text controls
+ * (.input, .textarea, .select) and .field-label.
+ *
+ * The cell owns a control plus its label; the label overlays the control and
+ * floats to the top when the control is focused or non-empty. Help and error
+ * messages stay in the surrounding .field, not inside the cell, so the
+ * resting label can center on the control alone.
+ *
+ * The control must precede the label: the float is driven by the sibling
+ * combinator and :placeholder-shown. Every .input/.textarea needs
+ * placeholder=" " to expose a reliable empty state — without it the label
+ * only reacts to focus.
+ *
+ * Density flows through --control-size: .sm/.lg shrink the control geometry
+ * and the reserved headroom with it, leaving typography untouched.
+ *
+ * Public hooks:
+ * --floating-pad-block-start
+ */
+.floating-field {
+  --floating-pad-block-start: calc(var(--control-size) / 2 + var(--space-20));
+
+  /* Grid blockifies the control, removing the inline descender gap a textarea
+     would otherwise leave under itself. */
+  position: relative;
+  display: grid;
+}
+
+.floating-field > :is(.input, .textarea, .select) {
+  /* Headroom for the floated label is always reserved, so the value never
+     jumps when the label floats. Half the control centers the resting label;
+     the extra step clears the floated label's bottom edge. */
+  padding-block-start: var(--floating-pad-block-start);
+  padding-block-end: var(--space-10);
+}
+
+.floating-field > .field-label {
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-start: calc(var(--space-30) + var(--border-width));
+  transform: translateY(-50%);
+  color: var(--text-muted);
+  font-size: var(--control-font-size);
+  font-weight: var(--font-weight);
+  pointer-events: none;
+  transition:
+    inset-block-start var(--duration),
+    transform var(--duration),
+    font-size var(--duration),
+    color var(--duration);
+}
+
+/* A textarea's resting label aligns with the first text line instead of
+   centering in the (tall) control. */
+.floating-field > .textarea + .field-label {
+  inset-block-start: var(--floating-pad-block-start);
+  transform: none;
+}
+
+/* :autofill covers prefilled values before interaction, when the browser may
+   not have propagated the value to the placeholder state yet. */
+.floating-field
+  > :is(.input, .textarea):is(:focus, :autofill, :not(:placeholder-shown))
+  + .field-label {
+  inset-block-start: var(--space-10);
+  transform: none;
+  font-size: var(--font-size-xs);
+}
+
+/* Controls without a dependable :placeholder-shown empty state stay floated:
+   select always, and date/time inputs whose placeholder rendering is
+   inconsistent across engines (Firefox shows none). */
+.floating-field
+  > :is(
+    .select,
+    .input[type="date"],
+    .input[type="time"],
+    .input[type="datetime-local"],
+    .input[type="month"],
+    .input[type="week"]
+  )
+  + .field-label {
+  inset-block-start: var(--space-10);
+  transform: none;
+  font-size: var(--font-size-xs);
+}
