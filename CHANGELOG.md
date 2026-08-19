@@ -32,11 +32,11 @@ This project follows Keep a Changelog and uses semver, including during 0.x.
 - Optional layer ships as a bundle: `dist/optional.css` /
   `dist/optional.min.css`, exposed as `actual-css/css/optional` next to the
   existing per-module source imports.
-- Demo pages load the shipped `dist/` bundles and version-stamp every local
-  asset with a content hash (`?v=…`), so the browser cache can never mix CSS
-  from different generations.
 
 ### Changed
+- The JS bundle build is byte-deterministic: `build:js` no longer emits a
+  sourcemap (or Bun's per-build `debugId`), so rebuilding unchanged sources
+  produces no diff.
 - The docs site copies the shipped bundles (`dist/actual.css`,
   `dist/actual.js`, `dist/actual-themes.min.css`) and errors clearly when
   `dist/` is missing.

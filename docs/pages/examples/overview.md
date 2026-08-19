@@ -4,8 +4,7 @@
 
 The examples live in the repository under `demo/` and load the shipped bundles
 from `dist/` (`actual.css`, `optional.css`, `actual-themes.min.css`,
-`actual.js`), version-stamped with a content hash so each asset is only
-refetched when its bytes change.
+`actual.js`), referenced with stable URLs.
 
 ## Admin application
 
