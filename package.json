@@ -48,6 +48,7 @@
     "./js/floating": "./src/js/floating.js",
     "./js/flyout": "./src/js/flyout.js",
     "./js/focus": "./src/js/focus.js",
+    "./js/focus-group": "./src/js/focus-group.js",
     "./js/input": "./src/js/input.js",
     "./js/keys": "./src/js/keys.js",
     "./js/mask": "./src/js/mask.js",

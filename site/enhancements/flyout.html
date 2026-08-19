@@ -212,6 +212,9 @@
 <tr><td><code>.flyout</code></td><td>Component</td><td>Floating action or nav surface, positioned by JavaScript.</td></tr>
 <tr><td><code>.menu</code></td><td>Component</td><td>Action-list primitive with strict <code>.menu &gt; li &gt; .menu-item</code> anatomy.</td></tr>
 <tr><td><code>.menu-item</code></td><td>Component</td><td>One action row; participates in roving focus.</td></tr>
+<tr><td><code>.menu-item-icon</code></td><td>Slot</td><td>Fixed leading column for a decorative icon.</td></tr>
+<tr><td><code>.menu-item-text</code></td><td>Slot</td><td>Flexible label column; truncates when the row is constrained.</td></tr>
+<tr><td><code>.menu-item-end</code></td><td>Slot</td><td>Trailing metadata such as a shortcut, badge, or status.</td></tr>
 <tr><td><code>.menu-label</code></td><td>Variant</td><td>Muted section heading inside a menu; not interactive.</td></tr>
 <tr><td><code>.menu-separator</code></td><td>Variant</td><td>Divider between menu groups (<code>&lt;hr role=&quot;separator&quot;&gt;</code>).</td></tr>
 <tr><td><code>.sm</code> / <code>.lg</code></td><td>Variant</td><td>Compact or large density.</td></tr>
@@ -265,11 +268,24 @@ placement strings supported by the floating runtime, such as <code>bottom-start<
 <p>Use <code>data-flyout-auto-close</code> when the default click dismissal behavior is not
 right. Escape still follows the shared surface lifecycle.</p>
 <ul>
-<li><code>true</code> is the default. Action items close on activation and outside clicks close the flyout.</li>
-<li><code>inside</code> closes on action item activation only.</li>
+<li><code>true</code> is the default. Clicks inside or outside close the flyout.</li>
+<li><code>inside</code> closes on inside clicks only.</li>
 <li><code>outside</code> closes on outside click only.</li>
 <li><code>false</code> disables automatic click closing.</li>
 </ul>
+<p>These values follow Bootstrap's auto-close vocabulary. They apply to action
+menus and rich panels alike. Add <code>data-flyout-close</code> to a control inside the
+flyout when that specific control must close it regardless of the automatic
+policy. This is useful for an Apply or Done action in an <code>outside</code> or <code>false</code>
+panel. The trigger and Escape continue to close the flyout in every mode.</p>
+<pre><code class="language-html">&lt;div class=&quot;flyout&quot;
+     id=&quot;filters&quot;
+     data-flyout-auto-close=&quot;outside&quot;
+     hidden&gt;
+  &lt;label&gt;&lt;input type=&quot;checkbox&quot;&gt; Available only&lt;/label&gt;
+  &lt;button type=&quot;button&quot; data-flyout-close&gt;Done&lt;/button&gt;
+&lt;/div&gt;
+</code></pre>
 <p>Flyout covers two distinct patterns, detected by the <code>&lt;menu&gt;</code> element or
 <code>.menu</code> class on the panel:</p>
 <h2 id="action-list">Action list</h2>
@@ -331,6 +347,37 @@ right. Escape still follows the shared surface lifecycle.</p>
 &lt;/div&gt;</code></pre>
   </div>
 </div>
+<h3 id="rich-items-and-selection-state">Rich items and selection state</h3>
+<p>Wrap rich item content in the three optional slots when a menu needs aligned
+icons or trailing metadata. Keep decorative icons hidden from assistive
+technology. Plain text directly inside <code>.menu-item</code> remains valid for simple
+actions.</p>
+<pre><code class="language-html">&lt;li&gt;
+  &lt;button class=&quot;menu-item&quot; type=&quot;button&quot; role=&quot;menuitem&quot;&gt;
+    &lt;span class=&quot;menu-item-icon&quot; aria-hidden=&quot;true&quot;&gt;…&lt;/span&gt;
+    &lt;span class=&quot;menu-item-text&quot;&gt;Duplicate&lt;/span&gt;
+    &lt;span class=&quot;menu-item-end&quot;&gt;&lt;kbd&gt;⌘D&lt;/kbd&gt;&lt;/span&gt;
+  &lt;/button&gt;
+&lt;/li&gt;
+</code></pre>
+<p>Use <code>role=&quot;menuitemcheckbox&quot;</code> for independent options and
+<code>role=&quot;menuitemradio&quot;</code> for an exclusive choice. Put <code>aria-checked</code> on the menu
+item itself; do not nest a checkbox, radio, or switch inside it. The runtime
+recognizes all three menu-item roles for keyboard activation and the CSS draws
+their state indicator. The application remains responsible for updating
+<code>aria-checked</code>, just as it owns the state behind the command.</p>
+<pre><code class="language-html">&lt;li&gt;
+  &lt;button class=&quot;menu-item&quot;
+          type=&quot;button&quot;
+          role=&quot;menuitemcheckbox&quot;
+          aria-checked=&quot;true&quot;&gt;
+    &lt;span class=&quot;menu-item-text&quot;&gt;Show weekends&lt;/span&gt;
+  &lt;/button&gt;
+&lt;/li&gt;
+</code></pre>
+<p>Badges and shortcuts are passive trailing metadata. If a trailing pin, switch,
+or button is independently interactive, use a rich flyout panel with normal
+Tab navigation instead of <code>role=&quot;menu&quot;</code>: a menu item must remain one command.</p>
 <h2 id="nav-panel">Nav panel</h2>
 <p>A panel of <em>links</em> to other pages: product categories, docs sections. Nav panels
 can be multi-column with <code>&lt;section&gt;</code> / <code>&lt;ul&gt;</code> groups.</p>
@@ -562,7 +609,10 @@ of the host.</p>
 <code>context</code>, the exact <code>origin</code>, and the opening <code>trigger</code> (<code>pointer</code>, <code>touch</code>,
 <code>keyboard</code>, or <code>button</code>). Use it to tailor the static menu to the selected item,
 or cancel the event to keep it closed. <code>contextFor(menu)</code> from
-<code>actual-css/js/context-menu</code> returns that detail while handling a menu action.</p>
+<code>actual-css/js/context-menu</code> returns that detail while handling a menu action.
+Context menus dismiss when a new user interaction scrolls their surrounding
+content. Scroll caused by opening focus, and scrolling inside the menu itself,
+do not dismiss it.</p>
 <p>Add <code>data-context-menu-scope</code> only when the flyout should stay inside a specific
 region. Empty or <code>self</code> constrains to the target itself, <code>parent</code> constrains to
 the parent, and a selector constrains to the closest matching ancestor or first
@@ -669,6 +719,7 @@ delay; a number sets the delay in milliseconds.</p>
 <li><code>--flyout-inline-size</code> — panel width.</li>
 <li><code>--flyout-max-inline-size</code> — panel width cap.</li>
 <li><code>--menu-item-size</code> — minimum row height of <code>.menu-item</code>.</li>
+<li><code>--menu-item-icon-size</code> — shared leading-column width for icons and checked-state indicators.</li>
 </ul>
 <p><code>--available-height</code> and <code>--surface-anchor-width</code> are written by the positioner
 at runtime, not set by the author. See the JavaScript runtime documentation.</p>
@@ -695,6 +746,7 @@ at runtime, not set by the author. See the JavaScript runtime documentation.</p>
         <li><a class="nav-link" href="#usage" data-docs-toc-item data-level="2">Usage</a></li>
         <li><a class="nav-link" href="#trigger-wiring" data-docs-toc-item data-level="3">Trigger wiring</a></li>
         <li><a class="nav-link" href="#action-list" data-docs-toc-item data-level="2">Action list</a></li>
+        <li><a class="nav-link" href="#rich-items-and-selection-state" data-docs-toc-item data-level="3">Rich items and selection state</a></li>
         <li><a class="nav-link" href="#nav-panel" data-docs-toc-item data-level="2">Nav panel</a></li>
         <li><a class="nav-link" href="#products-design" data-docs-toc-item data-level="3">Design</a></li>
         <li><a class="nav-link" href="#products-dev" data-docs-toc-item data-level="3">Development</a></li>

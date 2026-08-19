@@ -76,6 +76,7 @@ calling into a global — `actual:status` for the status bar, for example:
 |---|---|
 | `actual-css/js/flyout` | Trigger → panel surface: positioning, open/close, sheet mode (token `flyout`) |
 | `actual-css/js/context-menu` | Context menus on `data-context-menu` |
+| `actual-css/js/focus-group` | Reusable roving-focus controller; no automatic discovery |
 | `actual-css/js/dialog` | Native `<dialog>` behavior, focus management, dismissal |
 | `actual-css/js/dismiss` | The generic `--dismiss` command |
 | `actual-css/js/tab` | Tab panels and arrow-key navigation (token `tabs`) |

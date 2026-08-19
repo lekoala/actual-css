@@ -267,6 +267,7 @@ calling into a global — <code>actual:status</code> for the status bar, for exa
 <tbody>
 <tr><td><code>actual-css/js/flyout</code></td><td>Trigger → panel surface: positioning, open/close, sheet mode (token <code>flyout</code>)</td></tr>
 <tr><td><code>actual-css/js/context-menu</code></td><td>Context menus on <code>data-context-menu</code></td></tr>
+<tr><td><code>actual-css/js/focus-group</code></td><td>Reusable roving-focus controller; no automatic discovery</td></tr>
 <tr><td><code>actual-css/js/dialog</code></td><td>Native <code>&lt;dialog&gt;</code> behavior, focus management, dismissal</td></tr>
 <tr><td><code>actual-css/js/dismiss</code></td><td>The generic <code>--dismiss</code> command</td></tr>
 <tr><td><code>actual-css/js/tab</code></td><td>Tab panels and arrow-key navigation (token <code>tabs</code>)</td></tr>
@@ -391,7 +392,7 @@ widgets can veto or decorate opens, and context menus inject their own
 <tbody>
 <tr><td><code>trigger</code></td><td>—</td><td>Anchoring element; also the focus-restore target by default</td></tr>
 <tr><td><code>source</code></td><td>—</td><td>Alternate anchor when there is no trigger</td></tr>
-<tr><td><code>x</code>, <code>y</code></td><td>—</td><td>Position at a fixed viewport point instead of an anchor (context menus); scrolling does not imply dismissal</td></tr>
+<tr><td><code>x</code>, <code>y</code></td><td>—</td><td>Position at a fixed viewport point instead of an anchor (context menus)</td></tr>
 <tr><td><code>placement</code></td><td><code>&quot;bottom-start&quot;</code></td><td>Preferred placement</td></tr>
 <tr><td><code>distance</code></td><td><code>4</code></td><td>Gap between anchor and surface</td></tr>
 <tr><td><code>flip</code></td><td><code>true</code></td><td>Flip when the preferred side is out of view</td></tr>
@@ -400,12 +401,19 @@ widgets can veto or decorate opens, and context menus inject their own
 <tr><td><code>scope</code></td><td>viewport</td><td>Boundary element</td></tr>
 <tr><td><code>mobile</code></td><td><code>&quot;auto&quot;</code></td><td><code>&quot;auto&quot;</code>, <code>&quot;sheet&quot;</code>, <code>&quot;none&quot;</code>, or <code>&quot;anchored&quot;</code> sheet behavior</td></tr>
 <tr><td><code>breakpoint</code></td><td><code>768</code></td><td>Max viewport width for an automatic sheet</td></tr>
-<tr><td><code>autoClose</code></td><td><code>&quot;true&quot;</code></td><td><code>&quot;true&quot;</code>, <code>&quot;inside&quot;</code>, <code>&quot;outside&quot;</code>, or <code>&quot;false&quot;</code> click autoclose</td></tr>
+<tr><td><code>autoClose</code></td><td><code>&quot;outside&quot;</code></td><td><code>&quot;true&quot;</code> closes for inside and outside clicks; <code>&quot;inside&quot;</code> and <code>&quot;outside&quot;</code> limit the side; <code>&quot;false&quot;</code> disables automatic click closing. Invalid values use <code>&quot;true&quot;</code></td></tr>
+<tr><td><code>dismissOnScroll</code></td><td><code>false</code></td><td>Close when scrolling outside the surface follows a new user input; opening/focus scroll is ignored</td></tr>
 <tr><td><code>restoreFocusTo</code></td><td><code>trigger</code> or <code>source</code></td><td>Element focused on close</td></tr>
 </tbody>
 </table></div>
+<p>The click policy belongs to the surface rather than to a particular menu
+anatomy. The generic primitive defaults to outside-click dismissal; flyout and
+context-menu choose <code>&quot;true&quot;</code> as their component default. A descendant carrying
+<code>data-flyout-close</code> closes its surface regardless of that policy. A custom
+widget that owns selection without dismissing — such as a combobox listbox —
+can keep the primitive default or open with <code>autoClose: &quot;false&quot;</code>.</p>
 <p>Extension seam: a <code>[role=&quot;listbox&quot;]</code> surface with <code>[role=&quot;option&quot;]</code> children
-gets no keyboard handling and no click-autoclose from the runtime.
+gets no menu keyboard handling or inside-click dismissal by default.
 <code>[role=&quot;option&quot;]</code> is deliberately not in the menu-item vocabulary — a combobox
 reuses the surface lifecycle while retaining full control of its own keyboard
 and selection.</p>
