@@ -1,0 +1,115 @@
+/*
+ * One-time code input with visual cells and one native input.
+ *
+ * Add one direct span per accepted character. The cells determine the
+ * component width; the overlaid input remains the only interactive control.
+ *
+ * Public hooks:
+ * --otp-cell-size
+ * --otp-gap
+ * --otp-font-size
+ *
+ * Internal:
+ * --otp-cell-border
+ * --otp-cell-bg
+ */
+.otp {
+  --otp-cell-size: var(--control-size);
+  --otp-gap: var(--space-10);
+  --otp-font-size: 1.5rem;
+  --otp-cell-border: var(--border);
+  --otp-cell-bg: var(--surface);
+
+  position: relative;
+  display: inline-grid;
+  grid-auto-flow: column;
+  grid-auto-columns: var(--otp-cell-size);
+  inline-size: fit-content;
+  max-inline-size: 100%;
+  gap: var(--otp-gap);
+  border-radius: var(--radius);
+  direction: ltr;
+}
+
+.otp > span {
+  inline-size: var(--otp-cell-size);
+  block-size: var(--otp-cell-size);
+  border: var(--border-width) solid var(--otp-cell-border);
+  border-radius: var(--radius);
+  background: var(--otp-cell-bg);
+  transition:
+    border-color var(--duration),
+    background-color var(--duration),
+    box-shadow var(--duration);
+}
+
+/* The native input owns focus, selection, autofill, paste, and one-time-code
+   integration. Its spacing aligns monospace glyphs with the visual cells. */
+.otp > input {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  margin: 0;
+  padding: 0 calc((var(--otp-cell-size) - 1ch) / 2);
+  border: 0;
+  outline: 2px solid transparent;
+  box-shadow: none;
+  background: transparent;
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: var(--otp-font-size);
+  font-variant-numeric: tabular-nums;
+  line-height: var(--otp-cell-size);
+  letter-spacing: calc(var(--otp-cell-size) + var(--otp-gap) - 1ch);
+  text-align: start;
+  appearance: none;
+}
+
+.otp:focus-within {
+  box-shadow: var(--focus-ring-shadow);
+}
+
+.otp > input:focus ~ span {
+  --otp-cell-border: var(--focus);
+}
+
+.otp > input[aria-invalid="true"] ~ span,
+.needs-validation.was-validated .otp > input:invalid ~ span {
+  --otp-cell-border: var(--danger);
+}
+
+@supports selector(:user-invalid) {
+  .needs-validation .otp > input:user-invalid ~ span {
+    --otp-cell-border: var(--danger);
+  }
+}
+
+.otp > input:disabled {
+  color: var(--state-disabled);
+  cursor: not-allowed;
+}
+
+.otp > input:disabled ~ span {
+  --otp-cell-bg: var(--surface-subtle);
+
+  opacity: var(--disabled-opacity);
+}
+
+@media (forced-colors: active) {
+  .otp:focus-within {
+    outline: var(--focus-outline);
+    outline-offset: var(--focus-outline-offset);
+    box-shadow: none;
+  }
+
+  .otp > input:focus ~ span {
+    --otp-cell-border: Highlight;
+  }
+
+  .otp > input[aria-invalid="true"] ~ span,
+  .needs-validation.was-validated .otp > input:invalid ~ span {
+    --otp-cell-border: Mark;
+  }
+}
