@@ -293,11 +293,11 @@ panel. The trigger and Escape continue to close the flyout in every mode.</p>
 <ul>
 <li>Flyout triggers are opt-in: add <code>data-enhance=&quot;flyout&quot;</code> to the trigger.</li>
 <li>Wrap the trigger and flyout in <code>.flyout-trigger</code> when the flyout should have a local absolute-position fallback before JavaScript positions it. Add <code>.stretch</code> when the trigger must span its container, such as the last row of a full-width sidebar nav list.</li>
-<li>Use <code>&lt;menu class=&quot;flyout menu&quot;&gt;</code> with strict anatomy: <code>.menu &gt; li &gt; .menu-item</code>. Items must carry the <code>.menu-item</code> class to participate in roving focus — keyboard navigation (ArrowUp/Down, Home, End) cycles through them, and Enter/Space activates and closes the menu.</li>
+<li>Use <code>&lt;menu class=&quot;flyout menu&quot;&gt;</code> with strict anatomy: <code>.menu &gt; li &gt; .menu-item</code>. Items must carry the <code>.menu-item</code> class to participate in directional keyboard navigation. ArrowUp/Down and Home/End move focus without rewriting their normal tab stops.</li>
 <li>Use <code>.menu-label</code> on a <code>li</code> for a muted section heading inside a menu (e.g. a group title before its items). It is non-interactive and does not participate in roving focus. Use <code>.menu-separator</code> (<code>&lt;hr role=&quot;separator&quot;&gt;</code>) between groups.</li>
 <li>Items are regular <code>&lt;button&gt;</code> or <code>&lt;a&gt;</code> elements.</li>
 <li>Use <code>.sm</code> or <code>.lg</code> for density changes.</li>
-<li>Add <code>role=&quot;menu&quot;</code> / <code>role=&quot;menuitem&quot;</code> only when you intentionally need the ARIA menu pattern.</li>
+<li>Add <code>role=&quot;menu&quot;</code> / <code>role=&quot;menuitem&quot;</code> only when you intentionally need the ARIA menu pattern described below.</li>
 </ul>
 <div class="docs-example">
   <div class="docs-preview">
@@ -347,6 +347,15 @@ panel. The trigger and Escape continue to close the flyout in every mode.</p>
 &lt;/div&gt;</code></pre>
   </div>
 </div>
+<h3 id="aria-menu-pattern">ARIA menu pattern</h3>
+<p>Adding <code>role=&quot;menu&quot;</code> opts the action list into a composite with one roving tab
+stop. Its usable <code>.menu-item</code> children with <code>role=&quot;menuitem&quot;</code>,
+<code>role=&quot;menuitemcheckbox&quot;</code>, or <code>role=&quot;menuitemradio&quot;</code> participate in vertical,
+wrapping Arrow/Home/End navigation. Items without one of those roles are not
+part of the focus group. Plain <code>.menu</code> action lists keep every item's normal
+tab stop instead.</p>
+<p>The runtime owns only focus movement and <code>tabindex</code>. The application still owns
+command state and updates attributes such as <code>aria-checked</code>.</p>
 <h3 id="rich-items-and-selection-state">Rich items and selection state</h3>
 <p>Wrap rich item content in the three optional slots when a menu needs aligned
 icons or trailing metadata. Keep decorative icons hidden from assistive
@@ -746,6 +755,7 @@ at runtime, not set by the author. See the JavaScript runtime documentation.</p>
         <li><a class="nav-link" href="#usage" data-docs-toc-item data-level="2">Usage</a></li>
         <li><a class="nav-link" href="#trigger-wiring" data-docs-toc-item data-level="3">Trigger wiring</a></li>
         <li><a class="nav-link" href="#action-list" data-docs-toc-item data-level="2">Action list</a></li>
+        <li><a class="nav-link" href="#aria-menu-pattern" data-docs-toc-item data-level="3">ARIA menu pattern</a></li>
         <li><a class="nav-link" href="#rich-items-and-selection-state" data-docs-toc-item data-level="3">Rich items and selection state</a></li>
         <li><a class="nav-link" href="#nav-panel" data-docs-toc-item data-level="2">Nav panel</a></li>
         <li><a class="nav-link" href="#products-design" data-docs-toc-item data-level="3">Design</a></li>
