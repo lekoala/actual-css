@@ -85,6 +85,38 @@ test("arrow keys move selection and focus", async () => {
   expect(document.activeElement).toBe(tabB);
 });
 
+test("arrow keys wrap on the active axis", async () => {
+  await loadTabs(tabsMarkup());
+  const tabA = document.getElementById("tab-a");
+  const tabC = document.getElementById("tab-c");
+
+  tabA.focus();
+  press(tabA, "ArrowLeft");
+  expect(tabC.getAttribute("aria-selected")).toBe("true");
+
+  press(tabC, "ArrowRight");
+  expect(tabA.getAttribute("aria-selected")).toBe("true");
+});
+
+test("horizontal arrows follow inherited RTL direction", async () => {
+  await loadTabs(`<main dir="rtl">${tabsMarkup()}</main>`);
+  const tabA = document.getElementById("tab-a");
+  const tabC = document.getElementById("tab-c");
+  const tablist = tabA.closest('[role="tablist"]');
+  const getComputedStyle = window.getComputedStyle.bind(window);
+
+  // Happy DOM does not compute inherited direction, so model the browser's
+  // effective computed value at the tablist boundary.
+  window.getComputedStyle = (element) =>
+    element === tablist ? { direction: "rtl" } : getComputedStyle(element);
+
+  tabA.focus();
+  press(tabA, "ArrowRight");
+
+  expect(tabC.getAttribute("aria-selected")).toBe("true");
+  expect(document.activeElement).toBe(tabC);
+});
+
 test("Home and End move to first and last tabs", async () => {
   await loadTabs(tabsMarkup());
   const tabA = document.getElementById("tab-a");

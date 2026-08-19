@@ -1,6 +1,6 @@
 import { registerEnhancement } from "./enhance.js";
 import { focusFirstDescendant } from "./focus.js";
-import { connectMenu, focusFirstMenuItem, focusLastMenuItem, getMenuItems } from "./menu.js";
+import { connectMenu, focusFirstMenuItem, focusLastMenuItem } from "./menu.js";
 import { closeSurface, isSurfaceOpen, openSurface, retainSurface } from "./surface.js";
 
 const panelRefs = new WeakMap();
@@ -68,8 +68,7 @@ function onTriggerKeydown(e) {
   if (!state) return;
   const panel = resolvePanel(trigger, state);
   if (!panel) return;
-  const items = getMenuItems(panel);
-  const isActionList = items.length > 0;
+  const isActionList = isMenuFlyout(panel);
 
   if (!isActionList) {
     switch (e.key) {

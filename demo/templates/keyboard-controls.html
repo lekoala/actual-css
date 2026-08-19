@@ -1,0 +1,420 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Keyboard controls — Actual CSS</title>
+  <meta name="description" content="Hands-on keyboard support matrix and test fixtures for Actual CSS interactive controls.">
+  <link rel="stylesheet" href="../../src/css/actual.css">
+  <link rel="stylesheet" href="../../src/css/themes/index.css">
+  <style>
+    .keyboard-page {
+      --center-size: 72rem;
+
+      padding-block: var(--space-60);
+    }
+
+    .keyboard-intro,
+    .keyboard-section {
+      display: grid;
+      gap: var(--space-30);
+    }
+
+    .keyboard-section {
+      padding-block: var(--space-60);
+      border-block-start: var(--border-width) solid var(--border);
+    }
+
+    .keyboard-section > :is(h2, p) {
+      margin: 0;
+    }
+
+    .keyboard-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
+      gap: var(--gap);
+      align-items: start;
+    }
+
+    .keyboard-fixture {
+      display: grid;
+      gap: var(--space-30);
+      padding: var(--space-40);
+      border: var(--border-width) solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+    }
+
+    .keyboard-fixture > :is(h3, p) {
+      margin: 0;
+    }
+
+    .keyboard-steps {
+      color: var(--text-muted);
+    }
+
+    .keyboard-monitor {
+      position: sticky;
+      inset-block-start: var(--space-20);
+      z-index: 2;
+      display: grid;
+      gap: var(--space-20);
+      padding: var(--space-30);
+      border: var(--border-width) solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface-raised);
+      box-shadow: var(--shadow);
+    }
+
+    .keyboard-monitor p {
+      margin: 0;
+    }
+
+    .keyboard-log {
+      max-block-size: 8rem;
+      margin: 0;
+      padding-inline-start: 1.5rem;
+      overflow: auto;
+      color: var(--text-muted);
+      font-family: var(--font-mono);
+      font-size: var(--font-size-sm);
+    }
+
+    .keyboard-context-target {
+      padding: var(--space-40);
+      border: var(--border-width) dashed var(--border);
+      border-radius: var(--radius);
+    }
+
+    .keyboard-vertical-tabs {
+      display: grid;
+      grid-template-columns: minmax(8rem, max-content) 1fr;
+      gap: var(--space-40);
+      align-items: start;
+    }
+
+    .keyboard-result {
+      min-block-size: 1.5em;
+      color: var(--text-muted);
+    }
+
+    .keyboard-flyout {
+      --flyout-inline-size: 15rem;
+    }
+
+    @media (max-width: 40rem) {
+      .keyboard-vertical-tabs {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="center keyboard-page">
+    <header class="keyboard-intro">
+      <p class="overline">Interaction test bench</p>
+      <h1>Keyboard controls</h1>
+      <p>
+        Use only the keyboard to exercise Actual's supported composite-control
+        behavior. The focus monitor makes delayed focus changes visible.
+      </p>
+    </header>
+
+    <section class="keyboard-section" aria-labelledby="focus-monitor-title">
+      <div class="keyboard-monitor" aria-live="polite">
+        <p id="focus-monitor-title"><strong>Current focus:</strong> <output id="focus-current">document body</output></p>
+        <ol class="keyboard-log" id="focus-log" aria-label="Recent focus changes"></ol>
+      </div>
+    </section>
+
+    <section class="keyboard-section" aria-labelledby="support-title">
+      <h2 id="support-title">Support matrix</h2>
+      <div class="table-wrap">
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">Pattern</th>
+              <th scope="col">Entry / open</th>
+              <th scope="col">Within the control</th>
+              <th scope="col">Exit / dismiss</th>
+              <th scope="col">Owner</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">Action menu Flyout</th>
+              <td>Arrow Down / Up, Home / End</td>
+              <td>Arrow Up / Down, Home / End, Enter / Space</td>
+              <td>Tab, Escape, outside click</td>
+              <td>Actual</td>
+            </tr>
+            <tr>
+              <th scope="row">Navigation Flyout</th>
+              <td>Arrow Down, Enter / Space, Tab when open</td>
+              <td>Normal link tab order</td>
+              <td>Escape, outside click</td>
+              <td>Actual + native links</td>
+            </tr>
+            <tr>
+              <th scope="row">Context menu</th>
+              <td>Context Menu key or Shift + F10</td>
+              <td>Arrow Up / Down, Home / End, Enter / Space</td>
+              <td>Tab, Escape, outside click</td>
+              <td>Actual</td>
+            </tr>
+            <tr>
+              <th scope="row">Tabs</th>
+              <td>One tab stop</td>
+              <td>Active-axis arrows, Home / End; RTL-aware</td>
+              <td>Tab; Arrow Down enters a horizontal panel</td>
+              <td>Actual</td>
+            </tr>
+            <tr>
+              <th scope="row">Tooltip</th>
+              <td>Focus trigger</td>
+              <td>Supplemental content is not interactive</td>
+              <td>Escape or blur</td>
+              <td>Actual</td>
+            </tr>
+            <tr>
+              <th scope="row">Dialog</th>
+              <td>Activate trigger</td>
+              <td>Native dialog focus behavior</td>
+              <td>Escape or close command</td>
+              <td>Browser + Actual trigger wiring</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="keyboard-section" aria-labelledby="flyout-title">
+      <h2 id="flyout-title">Flyouts and menus</h2>
+      <div class="alert primary callout">
+        <strong>Two different keyboard contracts</strong>
+        <p>
+          An <strong>action menu</strong> uses <kbd>Arrow Down</kbd> to open, then
+          <kbd>Arrow Up</kbd> and <kbd>Arrow Down</kbd> to move between actions.
+          A <strong>navigation panel</strong> uses <kbd>Arrow Down</kbd> to open
+          and focus its first link, then <kbd>Tab</kbd> to move through links in
+          their normal HTML tab order. Arrow keys intentionally do not navigate
+          inside a navigation panel.
+        </p>
+      </div>
+      <p>Start on the control immediately before each trigger so the complete tab sequence is observable.</p>
+
+      <div class="keyboard-grid">
+        <article class="keyboard-fixture">
+          <h3>Action menu</h3>
+          <p class="keyboard-steps">
+            Focus “Actions”, then press Arrow Down. Focus must remain on “Rename”
+            after the menu has opened and positioned. Press Arrow Down again to
+            move to “Duplicate”; continue with arrows and test wrapping at both
+            ends.
+          </p>
+          <div class="cluster">
+            <button class="btn" type="button">Before</button>
+            <div class="flyout-trigger">
+              <button
+                class="btn outline"
+                type="button"
+                id="keyboard-actions-trigger"
+                data-enhance="flyout"
+                aria-controls="keyboard-actions-menu"
+                aria-expanded="false"
+              >Actions</button>
+              <menu
+                class="flyout menu keyboard-flyout"
+                id="keyboard-actions-menu"
+                role="menu"
+                aria-labelledby="keyboard-actions-trigger"
+                hidden
+              >
+                <li><button class="menu-item" type="button" role="menuitem" data-demo-action="Rename">Rename</button></li>
+                <li><button class="menu-item" type="button" role="menuitem" data-demo-action="Duplicate">Duplicate</button></li>
+                <li><button class="menu-item" type="button" role="menuitem" aria-disabled="true">Unavailable action</button></li>
+                <hr class="menu-separator" role="separator">
+                <li><button class="menu-item danger" type="button" role="menuitem" data-demo-action="Delete">Delete</button></li>
+              </menu>
+            </div>
+            <button class="btn" type="button">After</button>
+          </div>
+          <output class="keyboard-result" id="action-result">No action invoked.</output>
+        </article>
+
+        <article class="keyboard-fixture">
+          <h3>Navigation panel</h3>
+          <p class="keyboard-steps">
+            Arrow Down opens and focuses the first link. Inside the panel, normal
+            Tab order applies; arrow keys intentionally do not navigate between links.
+          </p>
+          <p><strong>Sequence: Arrow Down to open, then Tab to continue.</strong></p>
+          <div class="cluster">
+            <button class="btn" type="button">Before</button>
+            <div class="flyout-trigger">
+              <button
+                class="btn outline"
+                type="button"
+                id="keyboard-nav-trigger"
+                data-enhance="flyout"
+                aria-controls="keyboard-nav-panel"
+                aria-expanded="false"
+              >Browse</button>
+              <nav class="flyout keyboard-flyout" id="keyboard-nav-panel" aria-labelledby="keyboard-nav-trigger" hidden>
+                <section aria-labelledby="keyboard-nav-heading">
+                  <h3 id="keyboard-nav-heading">Test sections</h3>
+                  <ul>
+                    <li><a href="#horizontal-tabs">Horizontal tabs</a></li>
+                    <li><a href="#vertical-tabs">Vertical tabs</a></li>
+                    <li><a href="#rtl-tabs">RTL tabs</a></li>
+                  </ul>
+                </section>
+              </nav>
+            </div>
+            <button class="btn" type="button">After</button>
+          </div>
+        </article>
+
+        <article class="keyboard-fixture">
+          <h3>Context menu</h3>
+          <p class="keyboard-steps">
+            Focus the dashed target and press the Context Menu key or Shift + F10.
+            The first item should receive and retain focus.
+          </p>
+          <div
+            class="keyboard-context-target"
+            tabindex="0"
+            data-context-menu="keyboard-context-menu"
+          >Keyboard-addressable file.txt</div>
+          <menu class="flyout menu keyboard-flyout" id="keyboard-context-menu" role="menu" hidden>
+            <li><button class="menu-item" type="button" role="menuitem" data-demo-action="Open">Open</button></li>
+            <li><button class="menu-item" type="button" role="menuitem" data-demo-action="Download">Download</button></li>
+            <li><button class="menu-item danger" type="button" role="menuitem" data-demo-action="Remove">Remove</button></li>
+          </menu>
+        </article>
+      </div>
+    </section>
+
+    <section class="keyboard-section" id="horizontal-tabs" aria-labelledby="horizontal-tabs-title">
+      <h2 id="horizontal-tabs-title">Horizontal tabs</h2>
+      <p>Left and Right wrap. Home and End select edges. Arrow Down moves into the selected panel.</p>
+      <div class="keyboard-fixture">
+        <div class="tabs" data-enhance="tabs" role="tablist" aria-label="Horizontal test tabs">
+          <button class="tab primary" type="button" role="tab" id="horizontal-tab-a" aria-selected="true" aria-controls="horizontal-panel-a">Alpha</button>
+          <button class="tab" type="button" role="tab" id="horizontal-tab-b" aria-selected="false" aria-controls="horizontal-panel-b">Beta</button>
+          <button class="tab" type="button" role="tab" id="horizontal-tab-disabled" aria-selected="false" aria-controls="horizontal-panel-disabled" aria-disabled="true">Unavailable</button>
+          <button class="tab" type="button" role="tab" id="horizontal-tab-c" aria-selected="false" aria-controls="horizontal-panel-c">Gamma</button>
+        </div>
+        <section role="tabpanel" id="horizontal-panel-a" aria-labelledby="horizontal-tab-a"><a href="#horizontal-tabs-title">Focusable Alpha content</a></section>
+        <section role="tabpanel" id="horizontal-panel-b" aria-labelledby="horizontal-tab-b" hidden><button class="btn" type="button">Focusable Beta content</button></section>
+        <section role="tabpanel" id="horizontal-panel-disabled" aria-labelledby="horizontal-tab-disabled" hidden>Unavailable content</section>
+        <section role="tabpanel" id="horizontal-panel-c" aria-labelledby="horizontal-tab-c" hidden><input class="input" aria-label="Focusable Gamma content" value="Gamma content"></section>
+      </div>
+    </section>
+
+    <section class="keyboard-section" id="vertical-tabs" aria-labelledby="vertical-tabs-title">
+      <h2 id="vertical-tabs-title">Vertical tabs</h2>
+      <p>Up and Down wrap. Left and Right are intentionally ignored.</p>
+      <div class="keyboard-fixture keyboard-vertical-tabs">
+        <div class="tabs" data-enhance="tabs" role="tablist" aria-label="Vertical test tabs" aria-orientation="vertical">
+          <button class="tab primary" type="button" role="tab" id="vertical-tab-a" aria-selected="true" aria-controls="vertical-panel-a">One</button>
+          <button class="tab" type="button" role="tab" id="vertical-tab-b" aria-selected="false" aria-controls="vertical-panel-b">Two</button>
+          <button class="tab" type="button" role="tab" id="vertical-tab-c" aria-selected="false" aria-controls="vertical-panel-c">Three</button>
+        </div>
+        <div>
+          <section role="tabpanel" id="vertical-panel-a" aria-labelledby="vertical-tab-a">First vertical panel.</section>
+          <section role="tabpanel" id="vertical-panel-b" aria-labelledby="vertical-tab-b" hidden>Second vertical panel.</section>
+          <section role="tabpanel" id="vertical-panel-c" aria-labelledby="vertical-tab-c" hidden>Third vertical panel.</section>
+        </div>
+      </div>
+    </section>
+
+    <section class="keyboard-section" id="rtl-tabs" aria-labelledby="rtl-tabs-title">
+      <h2 id="rtl-tabs-title">Inherited RTL tabs</h2>
+      <p>The tablist inherits RTL from its container: Right moves visually left and Left moves visually right.</p>
+      <div class="keyboard-fixture" dir="rtl">
+        <div class="tabs" data-enhance="tabs" role="tablist" aria-label="RTL test tabs">
+          <button class="tab primary" type="button" role="tab" id="rtl-tab-a" aria-selected="true" aria-controls="rtl-panel-a">Alef</button>
+          <button class="tab" type="button" role="tab" id="rtl-tab-b" aria-selected="false" aria-controls="rtl-panel-b">Bet</button>
+          <button class="tab" type="button" role="tab" id="rtl-tab-c" aria-selected="false" aria-controls="rtl-panel-c">Gimel</button>
+        </div>
+        <section role="tabpanel" id="rtl-panel-a" aria-labelledby="rtl-tab-a">First RTL panel.</section>
+        <section role="tabpanel" id="rtl-panel-b" aria-labelledby="rtl-tab-b" hidden>Second RTL panel.</section>
+        <section role="tabpanel" id="rtl-panel-c" aria-labelledby="rtl-tab-c" hidden>Third RTL panel.</section>
+      </div>
+    </section>
+
+    <section class="keyboard-section" aria-labelledby="other-controls-title">
+      <h2 id="other-controls-title">Dismissal and native behavior</h2>
+      <div class="keyboard-grid">
+        <article class="keyboard-fixture">
+          <h3>Tooltip</h3>
+          <p class="keyboard-steps">Tab to the trigger, then press Escape. Focus stays on the trigger while the tooltip closes.</p>
+          <button class="btn outline" type="button" data-tooltip="Supplemental keyboard help">Focus for tooltip</button>
+        </article>
+
+        <article class="keyboard-fixture">
+          <h3>Dialog</h3>
+          <p class="keyboard-steps">Activate the trigger, inspect native focus movement, then press Escape or use the close button.</p>
+          <button class="btn primary" type="button" commandfor="keyboard-dialog" command="show-modal">Open dialog</button>
+          <dialog class="modal" id="keyboard-dialog">
+            <button
+              class="dialog-close"
+              type="button"
+              commandfor="keyboard-dialog"
+              command="request-close"
+              aria-controls="keyboard-dialog"
+              aria-label="Close dialog"
+            ></button>
+            <form method="dialog">
+              <header>
+                <h3>Keyboard dialog</h3>
+              </header>
+              <p>Tab through this button and the footer actions, then dismiss the dialog.</p>
+              <button class="btn" type="button">Focusable dialog action</button>
+              <footer class="actions end">
+                <button class="btn primary" type="button" commandfor="keyboard-dialog" command="request-close">Done</button>
+              </footer>
+            </form>
+          </dialog>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <script src="../../dist/actual.js"></script>
+  <script>
+    const current = document.getElementById("focus-current");
+    const log = document.getElementById("focus-log");
+    const actionResult = document.getElementById("action-result");
+
+    function describe(element) {
+      if (!element || element === document.body) return "document body";
+      const name = element.getAttribute("aria-label") || element.textContent.trim().replace(/\s+/g, " ").slice(0, 48);
+      return `${element.localName}${element.id ? `#${element.id}` : ""}${name ? ` — ${name}` : ""}`;
+    }
+
+    function record(label) {
+      const description = describe(document.activeElement);
+      current.value = description;
+      const item = document.createElement("li");
+      item.textContent = `${label}: ${description}`;
+      log.prepend(item);
+      while (log.children.length > 8) log.lastElementChild.remove();
+    }
+
+    document.addEventListener("focusin", () => record("focusin"));
+    document.addEventListener("actual:surface-open", () => {
+      queueMicrotask(() => record("after microtask"));
+      requestAnimationFrame(() => requestAnimationFrame(() => record("after two frames")));
+    });
+
+    document.addEventListener("click", (event) => {
+      const action = event.target.closest("[data-demo-action]")?.dataset.demoAction;
+      if (action) actionResult.value = `${action} invoked.`;
+    });
+
+    record("ready");
+  </script>
+</body>
+</html>
