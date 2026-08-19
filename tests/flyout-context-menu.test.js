@@ -802,6 +802,53 @@ test("D9 — removing a flyout trigger closes its open panel", async () => {
   expect(menu.classList.contains("is-open")).toBe(false);
 });
 
+test("removing an open flyout with its original parent removes the mounted panel", async () => {
+  await loadFlyout(`
+    <div id="container">
+      <button id="trigger" type="button" data-enhance="flyout" aria-controls="menu">Open</button>
+      <menu id="menu" class="flyout menu" hidden>
+        <li><button type="button" class="menu-item">Action</button></li>
+      </menu>
+    </div>
+  `);
+  const container = document.getElementById("container");
+  const trigger = document.getElementById("trigger");
+  const menu = document.getElementById("menu");
+  setupGeometry(trigger, menu);
+
+  click(trigger);
+  expect(menu.parentElement).toBe(document.body);
+
+  container.remove();
+  await nextMicrotask();
+
+  expect(menu.isConnected).toBe(false);
+});
+
+test("removing the last flyout trigger restores its panel when the original parent survives", async () => {
+  await loadFlyout(`
+    <div id="container">
+      <button id="trigger" type="button" data-enhance="flyout" aria-controls="menu">Open</button>
+      <menu id="menu" class="flyout menu" hidden>
+        <li><button type="button" class="menu-item">Action</button></li>
+      </menu>
+    </div>
+  `);
+  const container = document.getElementById("container");
+  const trigger = document.getElementById("trigger");
+  const menu = document.getElementById("menu");
+  setupGeometry(trigger, menu);
+
+  click(trigger);
+  expect(menu.parentElement).toBe(document.body);
+
+  trigger.remove();
+  await nextMicrotask();
+
+  expect(menu.parentElement).toBe(container);
+  expect(menu.hidden).toBe(true);
+});
+
 test("multi-trigger — two triggers control the same panel independently", async () => {
   await loadFlyout(`
     <button id="first-trigger" type="button" data-enhance="flyout" aria-controls="menu" aria-expanded="false">First</button>

@@ -14,9 +14,9 @@
  *             treated as a tooltip trigger.
  *
  * Sharing:    an explicit tooltip may be referenced by several triggers. The
- *             tooltip element is wired once (floating listeners + tracking);
- *             each trigger only registers itself and the wiring is torn down
- *             when the last trigger leaves the DOM.
+ *             tooltip element is wired once; each trigger only registers
+ *             itself. Positional tracking runs only while the tip is visible,
+ *             and all wiring is torn down when the last trigger leaves the DOM.
  *
  * Lazy:       tooltip elements are created (shorthand) or wired (explicit) on
  *             first mouseover / focusin. No page-load scan, no DOM overhead
@@ -39,7 +39,7 @@ const HIDE_DELAY_MS = 100;
  * @property {Set<Element>} refs Triggers that currently reference this tip.
  * @property {Element | null} activeRef Trigger that last showed this tip.
  * @property {AbortController} controller Tip-level event listener cleanup.
- * @property {() => void} stopTracking Floating-position cleanup.
+ * @property {(() => void) | null} stopTracking Floating-position cleanup while visible.
  * @property {boolean} generated True when the tip was created from data-tooltip text.
  * @property {{ parent: Node, next: ChildNode | null } | null} mount Original DOM position for explicit tips moved into a dialog/body root.
  * @property {ReturnType<typeof setTimeout> | null} timer Pending delayed show.
@@ -52,7 +52,7 @@ const HIDE_DELAY_MS = 100;
 let uid = 0;
 const triggerStates = new WeakMap(); // trigger -> { tip, cleanup }
 /** @type {WeakMap<Element, TooltipState>} */
-const tipStates = new WeakMap(); // tip -> { refs, activeRef, controller, untrack, generated, mount, timer }
+const tipStates = new WeakMap(); // tip -> { refs, activeRef, controller, stopTracking, generated, mount, timer }
 
 function mountTip(tip, trigger) {
   const root = trigger.closest("dialog") || trigger.ownerDocument.body;
@@ -140,6 +140,22 @@ function repositionTip(ref, tip) {
   });
 }
 
+function startTracking(tip, state) {
+  if (state.stopTracking) return;
+
+  state.stopTracking = autoUpdate(tip, () => {
+    if (isAlwaysVisible(state.activeRef)) tip.hidden = false;
+    if (state.activeRef && !tip.hidden && !repositionTip(state.activeRef, tip)) {
+      hideTip(tip, true);
+    }
+  });
+}
+
+function stopTracking(state) {
+  state?.stopTracking?.();
+  if (state) state.stopTracking = null;
+}
+
 function hideTip(tip, force = false) {
   const state = tipStates.get(tip);
   if (!force && isAlwaysVisible(state?.activeRef)) return;
@@ -152,6 +168,7 @@ function hideTip(tip, force = false) {
     state.hideTimer = null;
   }
   tip.hidden = true;
+  stopTracking(state);
 }
 
 function clearHide(tip) {
@@ -185,12 +202,7 @@ function wireTip(tip, options = {}) {
     refs: new Set(),
     activeRef: null,
     controller,
-    stopTracking: autoUpdate(tip, () => {
-      if (isAlwaysVisible(state.activeRef)) tip.hidden = false;
-      if (!tip.hidden && state.activeRef) {
-        if (!repositionTip(state.activeRef, tip)) hideTip(tip, true);
-      }
-    }),
+    stopTracking: null,
     generated: options.generated === true,
     mount: options.mount || null,
     timer: null,
@@ -308,7 +320,7 @@ function ensureTip(trigger) {
 
     hideTip(tip, true);
     state.controller.abort();
-    state.stopTracking();
+    stopTracking(state);
     tipStates.delete(tip);
     if (state.generated) tip.remove();
     else restoreTip(tip, state);
@@ -334,6 +346,7 @@ function show(tip, ref, immediate = false) {
     state.timer = null;
     tip.hidden = false;
     repositionTip(ref, tip);
+    startTracking(tip, state);
   };
 
   if (immediate) reveal();

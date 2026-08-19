@@ -105,6 +105,62 @@ test("data-tooltip-visible eagerly creates and keeps a tooltip visible", async (
   expect(tip.hidden).toBe(false);
 });
 
+test("tooltip tracking only runs while the tooltip is visible", async () => {
+  await loadTooltip('<button data-tooltip="Help">Trigger</button>');
+  const observed = new Set();
+  window.ResizeObserver = class ResizeObserver {
+    observe(element) {
+      observed.add(element);
+    }
+
+    unobserve(element) {
+      observed.delete(element);
+    }
+  };
+  const trigger = document.querySelector("button");
+
+  hover(trigger);
+  const tip = document.querySelector('[role="tooltip"]');
+  expect(observed.size).toBe(0);
+
+  await waitForShow();
+  expect(observed.has(tip)).toBe(true);
+
+  leave(trigger);
+  await waitForHide();
+  expect(observed.size).toBe(0);
+});
+
+test("activated tooltip replacements release their tracking", async () => {
+  await loadTooltip("<main></main>");
+  const observed = new Set();
+  window.ResizeObserver = class ResizeObserver {
+    observe(element) {
+      observed.add(element);
+    }
+
+    unobserve(element) {
+      observed.delete(element);
+    }
+  };
+  const main = document.querySelector("main");
+
+  for (let index = 0; index < 3; index++) {
+    main.insertAdjacentHTML(
+      "beforeend",
+      `<button data-tooltip="Help ${index}" data-tooltip-click>Trigger</button>`,
+    );
+    const trigger = main.lastElementChild;
+    click(trigger);
+
+    expect(observed.size).toBe(1);
+
+    trigger.remove();
+    await nextMicrotask();
+    expect(observed.size).toBe(0);
+  }
+});
+
 test("an explicit tooltip via aria-describedby is wired, not recreated", async () => {
   await loadTooltip(`
     <button data-tooltip aria-describedby="tip1">Trigger</button>
