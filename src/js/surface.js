@@ -12,6 +12,17 @@ const clickBoundDocuments = new WeakSet();
 
 const SURFACE_MARKER = "data-actual-surface";
 const AUTO_CLOSE_VALUES = new Set(["true", "inside", "outside", "false"]);
+const SCROLL_KEYS = new Set([
+  "ArrowDown",
+  "ArrowLeft",
+  "ArrowRight",
+  "ArrowUp",
+  "End",
+  "Home",
+  "PageDown",
+  "PageUp",
+  " ",
+]);
 const reapers = new WeakMap();
 
 function normalizeAutoClose(value) {
@@ -166,6 +177,7 @@ function ensureSurfaceWired(menu) {
   ensureDocumentClick(menu);
   const state = {
     stopTracking: null,
+    stopScrollIntent: null,
     unregisterEscape: null,
     backdrop: null,
     trigger: null,
@@ -179,6 +191,8 @@ function ensureSurfaceWired(menu) {
     shift: true,
     shiftPadding: 4,
     autoClose: "outside",
+    dismissOnScroll: false,
+    scrollIntentAt: null,
     isSheet: false,
     closeId: 0,
   };
@@ -193,10 +207,38 @@ function ensureSurfaceWired(menu) {
 // scroll/resize work. Reopening re-registers in the correct order.
 function startSurfaceResources(menu, state) {
   state.unregisterEscape = registerEscapeDismissal(menu, (opts) => closeSurface(menu, opts));
-  state.stopTracking = autoUpdate(menu, () => {
+  if (state.dismissOnScroll) {
+    const controller = new AbortController();
+    const arm = (event) => {
+      state.scrollIntentAt = event.timeStamp;
+    };
+    const armExternalPointer = (event) => {
+      if (!menu.contains(event.target)) arm(event);
+    };
+    const armKey = (event) => {
+      if (!event.defaultPrevented && SCROLL_KEYS.has(event.key)) arm(event);
+    };
+    const captureOptions = { signal: controller.signal, capture: true };
+    const passiveCaptureOptions = { ...captureOptions, passive: true };
+    const doc = menu.ownerDocument;
+    doc.addEventListener("pointerdown", armExternalPointer, passiveCaptureOptions);
+    doc.addEventListener("touchmove", arm, passiveCaptureOptions);
+    doc.addEventListener("wheel", arm, passiveCaptureOptions);
+    doc.addEventListener("keydown", armKey, { signal: controller.signal });
+    state.stopScrollIntent = () => controller.abort();
+  }
+  state.stopTracking = autoUpdate(menu, ({ type, targets, timeStamp }) => {
     if (menu.hidden) return;
-    // A point is expressed in viewport coordinates and remains valid while the
-    // document scrolls. Dismissal is an interaction policy, not positioning.
+    if (
+      type === "scroll" &&
+      state.dismissOnScroll &&
+      state.scrollIntentAt != null &&
+      timeStamp >= state.scrollIntentAt &&
+      [...targets].some((target) => target !== menu && !menu.contains(target))
+    ) {
+      closeSurface(menu);
+      return;
+    }
     applyPresentation(menu, state);
     if (!positionSurface(menu)) closeSurface(menu);
   });
@@ -264,6 +306,8 @@ export function openSurface(menu, opts = {}) {
   state.mobile = opts.mobile || "auto";
   state.breakpoint = opts.breakpoint ?? 768;
   state.autoClose = normalizeAutoClose(opts.autoClose);
+  state.dismissOnScroll = opts.dismissOnScroll === true;
+  state.scrollIntentAt = null;
   state.placement = opts.placement || "bottom-start";
   state.distance = opts.distance ?? 4;
   state.flip = opts.flip !== false;
@@ -306,6 +350,7 @@ export function closeSurface(menu, opts = {}) {
   openSurfaces.delete(menu);
   syncExpanded(menu, false);
   state?.unregisterEscape?.();
+  state?.stopScrollIntent?.();
   state?.stopTracking?.();
 
   if (shouldRestoreFocus && state?.restoreFocusTo?.isConnected) {
@@ -330,6 +375,7 @@ export function disconnectSurface(menu, { restore = true } = {}) {
   if (state) {
     state.backdrop?.remove();
     state.unregisterEscape?.();
+    state.stopScrollIntent?.();
     state.stopTracking?.();
     surfaceMap.delete(menu);
   }

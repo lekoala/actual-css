@@ -1,5 +1,6 @@
 import { afterAll, afterEach, expect, test } from "bun:test";
 import { cleanupDOM, click, mockRect, nextMicrotask, press, setupDOM } from "./helpers/dom.js";
+import { nextFrame } from "./helpers/layout.js";
 import { EVENTS } from "../src/js/events.js";
 
 setupDOM();
@@ -428,6 +429,37 @@ test("manual auto-close also applies to the sheet backdrop", () => {
 
   openSurface(menu, { trigger, mobile: "sheet", autoClose: false });
   click(document.querySelector(".surface-backdrop"));
+
+  expect(isSurfaceOpen(menu)).toBe(true);
+});
+
+test("scroll dismissal ignores opening scroll and closes after new user input", async () => {
+  setBody('<button id="source"></button><div id="menu" class="flyout"></div>');
+  const source = document.getElementById("source");
+  const menu = document.getElementById("menu");
+  mockPlacement(source, menu);
+
+  openSurface(menu, { source, x: 20, y: 30, dismissOnScroll: true });
+  document.dispatchEvent(new Event("scroll"));
+  await nextFrame();
+  expect(isSurfaceOpen(menu)).toBe(true);
+
+  document.dispatchEvent(new Event("wheel"));
+  document.dispatchEvent(new Event("scroll"));
+  await nextFrame();
+  expect(isSurfaceOpen(menu)).toBe(false);
+});
+
+test("scroll dismissal is opt-in", async () => {
+  setBody('<button id="source"></button><div id="menu" class="flyout"></div>');
+  const source = document.getElementById("source");
+  const menu = document.getElementById("menu");
+  mockPlacement(source, menu);
+
+  openSurface(menu, { source, x: 20, y: 30 });
+  document.dispatchEvent(new Event("wheel"));
+  document.dispatchEvent(new Event("scroll"));
+  await nextFrame();
 
   expect(isSurfaceOpen(menu)).toBe(true);
 });

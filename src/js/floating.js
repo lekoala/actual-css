@@ -206,7 +206,7 @@ function createTracker(doc) {
     resizeObserver = new ResizeObserver((entries, observer) => {
       for (const entry of entries) {
         observer.unobserve(entry.target);
-        rafNotify("element-resize");
+        rafNotify("element-resize", entry);
         win.requestAnimationFrame(() => {
           if (tracker.entries.has(entry.target)) observer.observe(entry.target);
         });
@@ -215,14 +215,20 @@ function createTracker(doc) {
     return resizeObserver;
   }
 
-  function rafNotify(type) {
+  function rafNotify(type, source) {
     for (const element of entries.keys()) {
-      let types = pending.get(element);
-      if (!types) {
-        types = new Set();
-        pending.set(element, types);
+      let notifications = pending.get(element);
+      if (!notifications) {
+        notifications = new Map();
+        pending.set(element, notifications);
       }
-      types.add(type);
+      let notification = notifications.get(type);
+      if (!notification) {
+        notification = { targets: new Set(), timeStamp: 0 };
+        notifications.set(type, notification);
+      }
+      if (source?.target) notification.targets.add(source.target);
+      notification.timeStamp = Math.max(notification.timeStamp, source?.timeStamp || 0);
     }
     if (!tick) {
       win.requestAnimationFrame(() => {
@@ -231,8 +237,8 @@ function createTracker(doc) {
         for (const [element, types] of notifications) {
           const cb = entries.get(element);
           if (!cb || !element.isConnected) continue;
-          for (const pendingType of types) {
-            cb({ type: pendingType });
+          for (const [pendingType, detail] of types) {
+            cb({ type: pendingType, ...detail });
           }
         }
         tick = false;
@@ -241,11 +247,11 @@ function createTracker(doc) {
     tick = true;
   }
 
-  doc.addEventListener("scroll", (e) => rafNotify(e.type), {
+  doc.addEventListener("scroll", (e) => rafNotify(e.type, e), {
     passive: true,
     capture: true,
   });
-  win.addEventListener("resize", () => rafNotify("resize"), { passive: true });
+  win.addEventListener("resize", (e) => rafNotify("resize", e), { passive: true });
 
   const tracker = {
     entries,

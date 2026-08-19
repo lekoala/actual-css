@@ -62,9 +62,8 @@ function focusMenuContainer(menu) {
   if (!menu.hasAttribute("tabindex")) {
     menu.tabIndex = -1;
   }
-  // Pointer-positioned menus close on scroll. Mounting one in the surface root
-  // can make a plain focus() scroll on its first opening and immediately
-  // dismiss the menu through its own positional tracking.
+  // Moving the mounted menu into the surface root must not scroll the page.
+  // Genuine user scrolling is handled separately by the surface policy.
   menu.focus({ preventScroll: true });
 }
 
@@ -103,6 +102,7 @@ function openContextMenu(context, menu, opts = {}) {
       y: opts.y,
       placement: opts.placement || "bottom-start",
       distance: opts.distance ?? 2,
+      dismissOnScroll: true,
       mobile: opts.mobile || "auto",
       scope: opts.scope || getContextScope(context),
       restoreFocusTo: opts.restoreFocusTo,
@@ -274,6 +274,7 @@ function connectContextTarget(target) {
           y: rect.bottom,
           placement: "bottom-start",
           distance: 4,
+          dismissOnScroll: true,
           restoreFocusTo: trigger,
           ...readPanelOptions(menu),
         })

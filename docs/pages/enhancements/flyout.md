@@ -308,6 +308,9 @@ Before opening, the context element dispatches the cancelable
 `keyboard`, or `button`). Use it to tailor the static menu to the selected item,
 or cancel the event to keep it closed. `contextFor(menu)` from
 `actual-css/js/context-menu` returns that detail while handling a menu action.
+Context menus dismiss when a new user interaction scrolls their surrounding
+content. Scroll caused by opening focus, and scrolling inside the menu itself,
+do not dismiss it.
 
 Add `data-context-menu-scope` only when the flyout should stay inside a specific
 region. Empty or `self` constrains to the target itself, `parent` constrains to

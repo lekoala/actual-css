@@ -530,7 +530,7 @@ test("pointer context menu focuses the menu container, not the first item", asyn
   expect(document.activeElement).toBe(first);
 });
 
-test("pointer context menu focuses without scrolling its first mounted position", async () => {
+test("focus-induced scroll does not dismiss a pointer context menu", async () => {
   await loadContextMenu(`
     <article>
       <div id="target" data-context-menu="menu" tabindex="0">File.pdf</div>
@@ -546,16 +546,45 @@ test("pointer context menu focuses without scrolling its first mounted position"
   menu.focus = (options) => {
     focusOptions = options;
     nativeFocus(options);
-    if (!options?.preventScroll) document.dispatchEvent(new Event("scroll"));
+    document.dispatchEvent(new Event("scroll"));
   };
   setupGeometry(target, menu);
 
   target.dispatchEvent(
     new MouseEvent("contextmenu", { bubbles: true, cancelable: true, clientX: 20, clientY: 30 }),
   );
+  await nextFrame();
 
   expect(focusOptions).toEqual({ preventScroll: true });
   expect(menu.parentNode).toBe(document.body);
+  expect(menu.hidden).toBe(false);
+  expect(menu.classList.contains("is-open")).toBe(true);
+});
+
+test("handled menu navigation does not arm scroll dismissal", async () => {
+  await loadContextMenu(`
+    <div id="target" data-context-menu="menu" tabindex="0">File.pdf</div>
+    <menu id="menu" class="flyout menu" hidden>
+      <li><button id="first" class="menu-item" type="button">First</button></li>
+    </menu>
+  `);
+  const target = document.getElementById("target");
+  const menu = document.getElementById("menu");
+  const first = document.getElementById("first");
+  const nativeFocus = first.focus.bind(first);
+  first.focus = (options) => {
+    nativeFocus(options);
+    document.dispatchEvent(new Event("scroll"));
+  };
+  setupGeometry(target, menu);
+
+  target.dispatchEvent(
+    new MouseEvent("contextmenu", { bubbles: true, cancelable: true, clientX: 20, clientY: 30 }),
+  );
+  press(menu, "ArrowDown");
+  await nextFrame();
+
+  expect(document.activeElement).toBe(first);
   expect(menu.hidden).toBe(false);
   expect(menu.classList.contains("is-open")).toBe(true);
 });
@@ -590,14 +619,45 @@ test("surface tracking starts after a context menu becomes visible", async () =>
   expect(hiddenWhenObserved).toBe(false);
 });
 
-test("context menu stays open when its document scrolls", async () => {
+test("a scroll queued before context-menu opening does not close the new menu", async () => {
   await loadContextMenu(`
     <article>
-      <div id="target" data-context-menu="menu" tabindex="0">File.pdf</div>
+      <div id="first-target" data-context-menu="first-menu" tabindex="0">First.pdf</div>
+      <menu id="first-menu" class="flyout menu" hidden>
+        <li><button class="menu-item" type="button">Open</button></li>
+      </menu>
+      <div id="target" data-context-menu="menu" tabindex="0">Second.pdf</div>
       <menu id="menu" class="flyout menu" hidden>
         <li><button class="menu-item" type="button">Open</button></li>
       </menu>
     </article>
+  `);
+  const firstTarget = document.getElementById("first-target");
+  const firstMenu = document.getElementById("first-menu");
+  const target = document.getElementById("target");
+  const menu = document.getElementById("menu");
+  setupGeometry(firstTarget, firstMenu);
+  setupGeometry(target, menu);
+
+  firstTarget.dispatchEvent(
+    new MouseEvent("contextmenu", { bubbles: true, cancelable: true, clientX: 10, clientY: 20 }),
+  );
+  document.dispatchEvent(new Event("scroll"));
+  target.dispatchEvent(
+    new MouseEvent("contextmenu", { bubbles: true, cancelable: true, clientX: 20, clientY: 30 }),
+  );
+  await nextFrame();
+
+  expect(menu.hidden).toBe(false);
+  expect(menu.classList.contains("is-open")).toBe(true);
+});
+
+test("user scrolling after context-menu opening closes the menu", async () => {
+  await loadContextMenu(`
+    <div id="target" data-context-menu="menu" tabindex="0">File.pdf</div>
+    <menu id="menu" class="flyout menu" hidden>
+      <li><button class="menu-item" type="button">Open</button></li>
+    </menu>
   `);
   const target = document.getElementById("target");
   const menu = document.getElementById("menu");
@@ -606,7 +666,30 @@ test("context menu stays open when its document scrolls", async () => {
   target.dispatchEvent(
     new MouseEvent("contextmenu", { bubbles: true, cancelable: true, clientX: 20, clientY: 30 }),
   );
+  document.dispatchEvent(new Event("wheel"));
   document.dispatchEvent(new Event("scroll"));
+  await nextFrame();
+
+  expect(menu.hidden).toBe(true);
+  expect(menu.classList.contains("is-open")).toBe(false);
+});
+
+test("scrolling inside a context menu does not dismiss it", async () => {
+  await loadContextMenu(`
+    <div id="target" data-context-menu="menu" tabindex="0">File.pdf</div>
+    <menu id="menu" class="flyout menu" hidden>
+      <li><button class="menu-item" type="button">Open</button></li>
+    </menu>
+  `);
+  const target = document.getElementById("target");
+  const menu = document.getElementById("menu");
+  setupGeometry(target, menu);
+
+  target.dispatchEvent(
+    new MouseEvent("contextmenu", { bubbles: true, cancelable: true, clientX: 20, clientY: 30 }),
+  );
+  menu.dispatchEvent(new Event("wheel"));
+  menu.dispatchEvent(new Event("scroll"));
   await nextFrame();
 
   expect(menu.hidden).toBe(false);
