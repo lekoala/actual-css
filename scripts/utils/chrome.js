@@ -93,6 +93,7 @@ export async function withChromePage(
   try {
     // Chrome writes the picked port to DevToolsActivePort inside the profile.
     let port;
+    let stderrPort;
     for (let i = 0; i < 50 && !port; i++) {
       await wait(200);
       if (spawnError) {
@@ -109,8 +110,18 @@ export async function withChromePage(
       port = await readFile(join(profile, "DevToolsActivePort"), "utf8")
         .then((text) => text.split("\n")[0].trim())
         .catch(() => undefined);
+      // stderr can announce the port before the profile file and endpoint are ready.
+      stderrPort ??= stderr.match(
+        /DevTools listening on ws:\/\/127\.0\.0\.1:(\d+)\//,
+      )?.[1];
     }
-    if (!port) throw new Error("Chrome did not expose a DevTools port.");
+    port ??= stderrPort;
+    if (!port) {
+      const details = stderr.trim();
+      throw new Error(
+        `Chrome did not expose a DevTools port${details ? `:\n${details}` : "."}`,
+      );
+    }
 
     const targets = await (await fetch(`http://127.0.0.1:${port}/json`)).json();
     const target = targets.find((t) => t.type === "page");
