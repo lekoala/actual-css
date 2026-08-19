@@ -50,6 +50,10 @@ Horizontal navigation follows the root's effective text direction.
 `tabindex` values. This is a JavaScript responsibility primitive, not a
 `focusgroup` attribute or enhancement token.
 
+`menu` consumes this primitive only for `[role="menu"]`. Plain `.menu` action
+lists retain normal tab stops and use the menu layer's lighter directional
+focus behavior.
+
 ## Compositions
 
 ### Custom select — A. Owns its popup

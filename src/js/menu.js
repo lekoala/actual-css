@@ -1,4 +1,5 @@
 import { isElementVisible } from "./focus.js";
+import { connectFocusGroup } from "./focus-group.js";
 import { firstItem, itemForKey, lastItem } from "./keys.js";
 
 const MENU_ITEM_SELECTOR = ":scope > li > .menu-item";
@@ -50,19 +51,19 @@ export function focusLastMenuItem(menu) {
   lastItem(getMenuItems(menu))?.focus();
 }
 
-export function onMenuKeydown(e, { close }) {
+export function onMenuKeydown(e, { close, navigate = true }) {
   const menu = e.currentTarget;
-  const items = getMenuItems(menu);
-  if (!items.length) return;
-
-  const target = itemForKey(items, menu.ownerDocument.activeElement, e.key, {
-    orientation: "vertical",
-    wrap: true,
-  });
-  if (target) {
-    e.preventDefault();
-    target.focus();
-    return;
+  if (navigate) {
+    const items = getMenuItems(menu);
+    const target = itemForKey(items, menu.ownerDocument.activeElement, e.key, {
+      orientation: "vertical",
+      wrap: true,
+    });
+    if (target) {
+      e.preventDefault();
+      target.focus();
+      return;
+    }
   }
 
   switch (e.key) {
@@ -89,9 +90,21 @@ export function connectMenu(menu, { close }) {
 
   if (!entry) {
     const controller = new AbortController();
+    const focusGroup = menu.matches('[role="menu"]')
+      ? connectFocusGroup(menu, {
+          getItems: () => getMenuItems(menu).filter(isAriaMenuItem),
+          orientation: "vertical",
+          wrap: true,
+          signal: controller.signal,
+        })
+      : null;
     menu.addEventListener(
       "keydown",
-      (event) => onMenuKeydown(event, { close: () => close(menu) }),
+      (event) =>
+        onMenuKeydown(event, {
+          close: () => close(menu),
+          navigate: !focusGroup,
+        }),
       { signal: controller.signal },
     );
     menu.addEventListener(
@@ -110,7 +123,7 @@ export function connectMenu(menu, { close }) {
       },
       { signal: controller.signal },
     );
-    entry = { count: 0, controller };
+    entry = { count: 0, controller, focusGroup };
     menuConnections.set(menu, entry);
   }
 
@@ -121,6 +134,7 @@ export function connectMenu(menu, { close }) {
     released = true;
     entry.count--;
     if (entry.count <= 0) {
+      entry.focusGroup?.disconnect();
       entry.controller.abort();
       menuConnections.delete(menu);
     }

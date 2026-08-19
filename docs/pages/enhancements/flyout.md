@@ -103,11 +103,11 @@ A list of *actions* the user can take: sign out, copy, delete.
 
 - Flyout triggers are opt-in: add `data-enhance="flyout"` to the trigger.
 - Wrap the trigger and flyout in `.flyout-trigger` when the flyout should have a local absolute-position fallback before JavaScript positions it. Add `.stretch` when the trigger must span its container, such as the last row of a full-width sidebar nav list.
-- Use `<menu class="flyout menu">` with strict anatomy: `.menu > li > .menu-item`. Items must carry the `.menu-item` class to participate in roving focus — keyboard navigation (ArrowUp/Down, Home, End) cycles through them, and Enter/Space activates and closes the menu.
+- Use `<menu class="flyout menu">` with strict anatomy: `.menu > li > .menu-item`. Items must carry the `.menu-item` class to participate in directional keyboard navigation. ArrowUp/Down and Home/End move focus without rewriting their normal tab stops.
 - Use `.menu-label` on a `li` for a muted section heading inside a menu (e.g. a group title before its items). It is non-interactive and does not participate in roving focus. Use `.menu-separator` (`<hr role="separator">`) between groups.
 - Items are regular `<button>` or `<a>` elements.
 - Use `.sm` or `.lg` for density changes.
-- Add `role="menu"` / `role="menuitem"` only when you intentionally need the ARIA menu pattern.
+- Add `role="menu"` / `role="menuitem"` only when you intentionally need the ARIA menu pattern described below.
 
 ```html demo
 <div class="flyout-trigger">
@@ -132,6 +132,18 @@ A list of *actions* the user can take: sign out, copy, delete.
   </menu>
 </div>
 ```
+
+### ARIA menu pattern
+
+Adding `role="menu"` opts the action list into a composite with one roving tab
+stop. Its usable `.menu-item` children with `role="menuitem"`,
+`role="menuitemcheckbox"`, or `role="menuitemradio"` participate in vertical,
+wrapping Arrow/Home/End navigation. Items without one of those roles are not
+part of the focus group. Plain `.menu` action lists keep every item's normal
+tab stop instead.
+
+The runtime owns only focus movement and `tabindex`. The application still owns
+command state and updates attributes such as `aria-checked`.
 
 ### Rich items and selection state
 
