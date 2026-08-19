@@ -430,9 +430,19 @@ colored headers, or footers.</p>
   </div>
 </div>
 <h2 id="surfaces">Surfaces</h2>
-<p><code>.inverted</code> is the generic inverse surface treatment, not a card-specific class:
-it works on any block (<code>&lt;header class=&quot;inverted&quot;&gt;</code>, <code>&lt;section class=&quot;inverted&quot;&gt;</code>,
-or <code>class=&quot;card inverted&quot;</code>) through the shared <code>--ui-*</code> contract.</p>
+<p><code>.inverted</code> creates a contrasting surface context, not a complete theme island.
+On a bare block (<code>&lt;header class=&quot;inverted&quot;&gt;</code>, <code>&lt;section class=&quot;inverted&quot;&gt;</code>) it
+paints the surface directly; contextual content and transparent treatments such
+as <code>.btn.outline</code>, <code>.btn.ghost</code>, and <code>.btn.link</code> follow its foreground.</p>
+<p>Apply it directly to a component that consumes the shared <code>--ui-*</code> surface
+contract (<code>.card</code>, <code>.navbar</code>, <code>.alert</code>, <code>.badge</code>) to treat that component as the
+contrasting surface. A surface-owning component nested inside an inverted block
+keeps its own surface and establishes a new context for its descendants. Use a
+<code>data-theme</code> island when every component and form control in a subtree must use
+another theme.</p>
+<p>More specific component states or explicit surface variants still take
+precedence: <code>.card.inverted.subtle</code> keeps the <code>.subtle</code> background while the
+foreground stays inverted.</p>
 <p><code>.inverted</code> and <code>.subtle</code> are competing surface treatments — do not combine
 them. <code>.subtle</code> paints the card's background directly while <code>.inverted</code> swaps
 the surface tokens, so <code>.card.subtle.inverted</code> renders a subtle background with

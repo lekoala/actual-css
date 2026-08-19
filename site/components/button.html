@@ -270,6 +270,10 @@
 <h2 id="variants">Variants</h2>
 <p><code>.ghost</code> and <code>.link</code> are button-only; <code>.soft</code>, <code>.outline</code>, and <code>.solid</code> are
 shared with other components.</p>
+<p>Transparent treatments (<code>.outline</code>, <code>.ghost</code>, <code>.link</code>) follow the surrounding
+foreground by default, including on a contrasting <code>.inverted</code> surface. A local
+intent class still wins: <code>.danger.outline</code> uses the danger color in either
+context. Filled buttons own their surface and keep their normal intent recipe.</p>
 <div class="docs-example">
   <div class="docs-preview">
 <div class="cluster">

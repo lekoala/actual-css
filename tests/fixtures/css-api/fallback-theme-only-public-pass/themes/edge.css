@@ -1,0 +1,4 @@
+/* Reference theme declaring the hook — must not hide it from the core guard. */
+[data-theme="edge"] {
+  --example-hook: blue;
+}

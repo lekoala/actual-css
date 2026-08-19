@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Inverted surface contract fixture</title>
+  <link rel="stylesheet" href="../../src/css/actual.css">
+  <style>* { transition-duration: 0s !important; }</style>
+</head>
+<body>
+  <!-- Token references keep assertions independent from the active palette. -->
+  <div id="ref-solid" style="background: var(--surface-solid)"></div>
+  <div id="ref-surface" style="background: var(--surface)"></div>
+  <div id="ref-subtle" style="background: var(--surface-subtle)"></div>
+  <div id="ref-raised" style="background: var(--surface-raised)"></div>
+  <div id="ref-neutral" style="background: var(--neutral)"></div>
+  <div id="ref-primary" style="background: var(--primary)"></div>
+  <div id="ref-text" style="color: var(--text)"></div>
+  <div id="ref-text-muted" style="color: var(--text-muted)"></div>
+  <div id="ref-neutral-fg" style="color: var(--neutral-fg)"></div>
+  <div id="ref-primary-fg" style="color: var(--primary-fg)"></div>
+  <div
+    id="ref-context-hover"
+    style="color: var(--surface); background: color-mix(in oklch, currentColor 10%, transparent)"
+  ></div>
+  <div
+    id="ref-raised-overlay"
+    style="background: color-mix(in oklch, var(--surface-raised), transparent 20%)"
+  ></div>
+  <div
+    id="ref-solid-overlay"
+    style="background: color-mix(in oklch, var(--surface-solid), transparent 20%)"
+  ></div>
+
+  <button id="normal-outline" class="btn outline" type="button">Normal outline</button>
+
+  <!-- Contrasting context: bare content and transparent treatments follow it. -->
+  <section id="wrapper" class="inverted">
+    <h2>Context heading</h2>
+    <p>Context text with a <a id="context-link" href="#">link</a>.</p>
+    <button id="context-outline" class="btn outline" type="button">Outline</button>
+    <button id="context-ghost" class="btn ghost" type="button">Ghost</button>
+    <button id="context-link-button" class="btn link" type="button">Link</button>
+    <button id="context-primary-outline" class="btn primary outline" type="button">
+      Primary outline
+    </button>
+    <button id="context-default" class="btn" type="button">Default</button>
+    <button id="context-primary" class="btn primary" type="button">Primary</button>
+
+    <!-- A surface-owning descendant is a boundary. Its transparent child
+         follows the card foreground, not the outside inverted foreground. -->
+    <article id="nested-card" class="card">
+      <h3>Nested heading</h3>
+      <button id="nested-outline" class="btn outline" type="button">Nested outline</button>
+    </article>
+
+    <article id="nested-busy" class="card" aria-busy="true" aria-label="Loading nested card">
+      Nested busy card
+      <span class="spinner" aria-hidden="true"></span>
+    </article>
+
+    <div id="nested-accordion" class="accordion">
+      <details open>
+        <summary>Nested surface</summary>
+        <p>Content</p>
+      </details>
+    </div>
+  </section>
+
+  <!-- Applying the treatment directly opts shared-surface components in. -->
+  <article id="inverted-card" class="card inverted" aria-busy="true" aria-label="Loading inverted card">
+    <h3>Inverted card</h3>
+    <span class="spinner" aria-hidden="true"></span>
+  </article>
+
+  <article id="card-subtle" class="card inverted subtle">Competing explicit surface</article>
+
+  <div id="inverted-alert" class="alert inverted">Inverted alert</div>
+  <span id="inverted-badge" class="badge inverted">Inverted badge</span>
+
+  <nav id="navbar" class="navbar inverted" aria-label="Test">
+    <a class="navbar-brand" href="#">Brand</a>
+    <ul class="navbar-nav">
+      <li><a class="nav-link" href="#">Link</a></li>
+      <li><a class="nav-link" href="#" aria-current="page">Current</a></li>
+    </ul>
+  </nav>
+</body>
+</html>

@@ -20,6 +20,8 @@
  * --control-bg
  * --control-fg
  * --control-cursor
+ * --control-border-block-end-color
+ * --control-border-block-end-width
  */
 .input,
 .textarea,

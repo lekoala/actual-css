@@ -15,6 +15,8 @@
  * edge children inherit the card corners. .bleed must be a direct child.
  *
  * Internal:
+ * --card-bg
+ * --card-fg
  * --heading
  * --busy-overlay-bg
  */
@@ -30,11 +32,17 @@
   --card-pad: var(--space-40);
   --card-radius: var(--radius-lg);
   --card-max-inline-size: none;
+  --card-bg: var(--ui-bg, var(--surface-raised));
+  --card-fg: var(--ui-fg, var(--text));
+
+  /* Keep contextual descendants tied to the surface this card actually owns. */
+  --heading: var(--card-fg);
+  --busy-overlay-bg: var(--card-bg);
 
   max-inline-size: var(--card-max-inline-size);
   padding: var(--card-pad);
-  background: var(--ui-bg, var(--surface-raised));
-  color: var(--ui-fg, var(--text));
+  background: var(--card-bg);
+  color: var(--card-fg);
   border: var(--border-width) solid var(--ui-border, var(--border));
   border-radius: var(--card-radius);
 }

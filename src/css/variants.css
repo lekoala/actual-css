@@ -2,14 +2,18 @@
  * Cross-cutting variant token mapping.
  *
  * Variant scope: .solid/.soft/.outline set --ui-* for components that opt into
- * shared variants. .inverted is a surface modifier, not a variant: it also
- * paints the element directly (background/color/border-color) so it works on
- * any block, competing with component surface treatments (.card.subtle).
+ * shared variants. .inverted is a surface modifier, not a variant: it paints
+ * the element directly (background/color/border-color) so it works on any bare
+ * block, and remaps the shared --ui-* tokens so participating components
+ * (.card, .navbar, .alert, .badge) invert through their own rules. Loaded
+ * before components, so a component with its own explicit surface (e.g.
+ * .accordion) naturally keeps that surface — .inverted never forces a
+ * non-participant.
  * Component-specific defaults (.btn solid-by-default, .badge
  * soft-by-default, .alert soft-by-default) live with their components:
  *   components/button.css — .btn default solid + .btn.ghost + .btn.link
- *   components/badge.css   — .badge default soft
- *   components/alert.css   — .alert default soft (consumes --ui-* directly)
+ *   components/badge.css   — .badge default soft behind explicit --ui-*
+ *   components/alert.css   — .alert default soft behind explicit --ui-*
  *
  * .sm/.lg set shared density tokens: spacing rhythm and geometry only.
  * Density never changes typography — controls keep their font-size and
@@ -37,18 +41,23 @@
 
 .outline {
   --ui-bg: transparent;
-  --ui-fg: var(--intent, var(--text));
-  --ui-border: var(--intent, var(--border));
+  --ui-fg: var(--intent, currentColor);
+  --ui-border: var(--intent, currentColor);
 }
 
-/* Inverse surface treatment. Components (e.g. .card) compose through --ui-*;
-   the direct background/color/border-color also make .inverted useful on a
-   generic element. --heading is set so global headings (var(--heading, inherit))
-   do not inherit an outside heading color onto the dark surface. */
+/* Inverse surface treatment. Paints the element directly (so it works on any
+   bare block) and remaps the shared --ui-* tokens so opt-in components
+   (.card, .navbar) invert through their own rules. Because this loads before
+   component base surfaces, components with their own explicit surface
+   (e.g. .accordion) keep it — participation is opt-in, never forced. --heading
+   is set so global headings (var(--heading, inherit)) do not inherit an outside
+   heading color onto the dark surface; surface-owning descendants derive
+   their contextual aliases from their own local surface. */
 .inverted {
   --ui-bg: var(--surface-solid);
   --ui-fg: var(--surface);
   --ui-border: transparent;
+  --ui-hover-bg: var(--surface-solid);
 
   --heading: var(--surface);
   --busy-overlay-bg: var(--surface-solid);
@@ -83,6 +92,10 @@
       var(--intent, var(--neutral))
     );
     /* @sync soft-recipe */
+  }
+
+  .inverted {
+    --ui-hover-bg: color-mix(in oklch, var(--surface-solid) 88%, black);
   }
 }
 

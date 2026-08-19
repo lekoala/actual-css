@@ -13,6 +13,10 @@
  * --badge-radius
  *
  * Internal:
+ * --badge-default-bg
+ * --badge-default-fg
+ * --badge-default-border
+ * --badge-default-hover-bg
  * --badge-bg
  * --badge-fg
  * --badge-border
@@ -33,9 +37,13 @@
   --badge-pad-x: 0.55em;
   --badge-font-size: 0.8125rem;
   --badge-dot-size: 0.5rem;
-  --badge-bg: var(--ui-bg, var(--surface-subtle));
-  --badge-fg: var(--ui-fg, var(--intent, var(--text)));
-  --badge-border: var(--ui-border, var(--border));
+  --badge-default-bg: var(--surface-subtle);
+  --badge-default-fg: var(--intent, var(--text));
+  --badge-default-border: var(--border);
+  --badge-default-hover-bg: var(--badge-bg);
+  --badge-bg: var(--ui-bg, var(--badge-default-bg));
+  --badge-fg: var(--ui-fg, var(--badge-default-fg));
+  --badge-border: var(--ui-border, var(--badge-default-border));
   --badge-radius: var(--radius-full);
 
   display: inline-flex;
@@ -62,18 +70,17 @@
     box-shadow var(--duration);
 }
 
-/* Soft by default — duplicated here with @sync markers for check-sync.js
-   to guard, the same way alert.css guards its own soft recipe. */
+/* Soft by default. Local defaults remain behind --ui-* in the resolution
+   chain, so explicit shared treatments compose without selector exclusions. */
 @supports (color: color-mix(in oklch, red, white)) {
-  .badge:where(:not(.solid, .outline)) {
+  .badge {
     /* @sync soft-recipe */
-    --badge-bg: color-mix(
+    --badge-default-bg: color-mix(
       in oklch,
       var(--surface) var(--soft-bg-mix),
       var(--intent, var(--neutral))
     );
-    --badge-fg: var(--intent, var(--text));
-    --badge-border: color-mix(
+    --badge-default-border: color-mix(
       in oklch,
       var(--surface) var(--soft-border-mix),
       var(--intent, var(--neutral))
@@ -119,7 +126,7 @@
 /* Hover recipes — sets --ui-hover-bg consumed by the hover rule below.
    Declared outside :hover like button.css for the same reason. */
 :is(a.badge, button.badge).outline {
-  --ui-hover-bg: var(--surface-subtle);
+  --ui-hover-bg: transparent;
 }
 
 @supports (color: color-mix(in oklch, red, white)) {
@@ -128,7 +135,7 @@
   }
 
   :is(a.badge, button.badge):where(:not(.solid, .outline, :empty)) {
-    --ui-hover-bg: color-mix(
+    --badge-default-hover-bg: color-mix(
       in oklch,
       var(--surface) calc(var(--soft-bg-mix) - var(--soft-hover-alpha)),
       var(--intent, var(--neutral))
@@ -136,12 +143,12 @@
   }
 
   :is(a.badge, button.badge).outline {
-    --ui-hover-bg: color-mix(in oklch, var(--surface-subtle) 92%, var(--intent, var(--neutral)));
+    --ui-hover-bg: color-mix(in oklch, currentColor 10%, transparent);
   }
 }
 
 :where(a.badge, button.badge):not(:where(:disabled, [aria-disabled="true"])):hover {
-  background: var(--ui-hover-bg, var(--badge-bg));
+  background: var(--ui-hover-bg, var(--badge-default-hover-bg));
 }
 
 :where(a.badge, button.badge):not(:where(:disabled, [aria-disabled="true"], .outline)):hover {

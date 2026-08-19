@@ -240,10 +240,16 @@
 <p>Set <code>--avatar-size</code> / <code>--avatar-radius</code>; tune overlap with <code>--avatar-stack-overlap</code> and <code>--avatar-stack-ring</code>.</p>
 <p>→ Components · Avatar</p>
 <h3 id="make-an-inverted-contrasting-surface">Make an inverted / contrasting surface</h3>
-<p>Apply <code>.inverted</code> to any block (<code>&lt;header class=&quot;inverted&quot;&gt;</code>, <code>&lt;section class=&quot;inverted&quot;&gt;</code>,
-<code>&lt;div class=&quot;card inverted&quot;&gt;</code>) for the inverse surface treatment: it paints
-<code>--surface-solid</code> and swaps the foreground to <code>--surface</code>, so in a dark theme the
-surface relationship inverts instead of staying dark.</p>
+<p>Apply <code>.inverted</code> to create one contrasting surface context. It paints a bare
+block (<code>&lt;header class=&quot;inverted&quot;&gt;</code>, <code>&lt;section class=&quot;inverted&quot;&gt;</code>) with
+<code>--surface-solid</code> and <code>--surface</code>; contextual content and transparent treatments
+follow that foreground. Apply it directly to a component that consumes the
+shared <code>--ui-*</code> contract when that component itself is the contrasting surface.</p>
+<p>Surface-owning descendants keep their own component surface and establish a new
+foreground context. Use <code>data-theme=&quot;dark&quot;</code>, <code>data-theme=&quot;light&quot;</code>, or a named
+theme instead when an entire subtree — including forms, states, and nested
+surfaces — must use another palette. More specific component states or explicit
+surface variants (<code>.card.subtle</code>) still take precedence.</p>
 <p>→ Components · Card · Foundations · Tokens (theme contract)</p>
 
 </div>

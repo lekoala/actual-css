@@ -740,14 +740,18 @@ small {
  * Cross-cutting variant token mapping.
  *
  * Variant scope: .solid/.soft/.outline set --ui-* for components that opt into
- * shared variants. .inverted is a surface modifier, not a variant: it also
- * paints the element directly (background/color/border-color) so it works on
- * any block, competing with component surface treatments (.card.subtle).
+ * shared variants. .inverted is a surface modifier, not a variant: it paints
+ * the element directly (background/color/border-color) so it works on any bare
+ * block, and remaps the shared --ui-* tokens so participating components
+ * (.card, .navbar, .alert, .badge) invert through their own rules. Loaded
+ * before components, so a component with its own explicit surface (e.g.
+ * .accordion) naturally keeps that surface — .inverted never forces a
+ * non-participant.
  * Component-specific defaults (.btn solid-by-default, .badge
  * soft-by-default, .alert soft-by-default) live with their components:
  *   components/button.css — .btn default solid + .btn.ghost + .btn.link
- *   components/badge.css   — .badge default soft
- *   components/alert.css   — .alert default soft (consumes --ui-* directly)
+ *   components/badge.css   — .badge default soft behind explicit --ui-*
+ *   components/alert.css   — .alert default soft behind explicit --ui-*
  *
  * .sm/.lg set shared density tokens: spacing rhythm and geometry only.
  * Density never changes typography — controls keep their font-size and
@@ -775,18 +779,23 @@ small {
 
 .outline {
   --ui-bg: transparent;
-  --ui-fg: var(--intent, var(--text));
-  --ui-border: var(--intent, var(--border));
+  --ui-fg: var(--intent, currentColor);
+  --ui-border: var(--intent, currentColor);
 }
 
-/* Inverse surface treatment. Components (e.g. .card) compose through --ui-*;
-   the direct background/color/border-color also make .inverted useful on a
-   generic element. --heading is set so global headings (var(--heading, inherit))
-   do not inherit an outside heading color onto the dark surface. */
+/* Inverse surface treatment. Paints the element directly (so it works on any
+   bare block) and remaps the shared --ui-* tokens so opt-in components
+   (.card, .navbar) invert through their own rules. Because this loads before
+   component base surfaces, components with their own explicit surface
+   (e.g. .accordion) keep it — participation is opt-in, never forced. --heading
+   is set so global headings (var(--heading, inherit)) do not inherit an outside
+   heading color onto the dark surface; surface-owning descendants derive
+   their contextual aliases from their own local surface. */
 .inverted {
   --ui-bg: var(--surface-solid);
   --ui-fg: var(--surface);
   --ui-border: transparent;
+  --ui-hover-bg: var(--surface-solid);
 
   --heading: var(--surface);
   --busy-overlay-bg: var(--surface-solid);
@@ -821,6 +830,10 @@ small {
       var(--intent, var(--neutral))
     );
     /* @sync soft-recipe */
+  }
+
+  .inverted {
+    --ui-hover-bg: color-mix(in oklch, var(--surface-solid) 88%, black);
   }
 }
 
@@ -1046,11 +1059,16 @@ small {
  * --btn-focus-color
  * --btn-gap
  * --btn-hover-overlay
+ * --btn-default-bg
+ * --btn-default-fg
+ * --btn-default-border
+ * --btn-border-color
  *
  * Internal:
  * --btn-bg
  * --btn-fg
  * --btn-border
+ * --btn-default-hover-bg
  * --btn-focus-ring-color
  * --btn-border-block-end-color
  * --btn-border-block-end-width
@@ -1075,6 +1093,7 @@ small {
   --btn-bg: var(--ui-bg, var(--btn-default-bg, var(--intent, var(--neutral))));
   --btn-fg: var(--ui-fg, var(--btn-default-fg, var(--intent-fg, var(--neutral-fg))));
   --btn-border: var(--ui-border, var(--btn-default-border, transparent));
+  --btn-default-hover-bg: var(--btn-bg);
   --btn-radius: var(--radius);
   --btn-focus-color: var(--intent, var(--focus));
   --btn-hover-overlay: var(--hover-overlay, rgb(0 0 0 / 0.08));
@@ -1127,7 +1146,7 @@ small {
    fallbacks make .btn solid by default; .ghost/.link are .btn-only variants. */
 .btn.ghost {
   --ui-bg: transparent;
-  --ui-fg: var(--intent, var(--text));
+  --ui-fg: var(--intent, currentColor);
   --ui-border: transparent;
 }
 
@@ -1145,12 +1164,12 @@ small {
    Declared outside :hover: the variables resolve only when the hover rule
    reads them, so the values are inert until interaction. */
 .btn:is(.outline, .ghost) {
-  --ui-hover-bg: var(--surface-subtle);
+  --ui-hover-bg: transparent;
 }
 
 @supports (color: color-mix(in oklch, red, white)) {
-  .btn:not(:where(.soft, .outline, .ghost, .link)) {
-    --ui-hover-bg: color-mix(in oklch, var(--intent, var(--neutral)) 88%, black);
+  .btn {
+    --btn-default-hover-bg: color-mix(in oklch, var(--btn-bg) 88%, black);
   }
 
   .btn.soft {
@@ -1161,19 +1180,16 @@ small {
     );
   }
 
-  .btn.outline {
-    --ui-hover-bg: color-mix(in oklch, var(--surface-subtle) 92%, var(--intent, var(--neutral)));
-  }
-
+  .btn.outline,
   .btn.ghost {
-    --ui-hover-bg: color-mix(in oklch, var(--intent, var(--text)) 8%, transparent);
+    --ui-hover-bg: color-mix(in oklch, currentColor 10%, transparent);
   }
 }
 
 /* The .soft/.outline/.ghost hover recipe (--ui-hover-bg) is set locally above;
    the overlay darkening for solid/soft is .btn-specific. */
 .btn:not(:where(:disabled, [aria-disabled="true"])):hover {
-  background: var(--ui-hover-bg, var(--btn-bg));
+  background: var(--ui-hover-bg, var(--btn-default-hover-bg));
   box-shadow: inset 0 0 0 999px var(--btn-hover-overlay);
 }
 
@@ -1183,7 +1199,7 @@ small {
 
 .btn.link {
   --ui-bg: transparent;
-  --ui-fg: var(--intent, var(--text));
+  --ui-fg: var(--intent, currentColor);
   --ui-border: transparent;
   --btn-radius: var(--radius-sm);
   --btn-border-block-end-color: transparent;
@@ -1191,6 +1207,8 @@ small {
 
   min-block-size: auto;
   padding-inline: 0;
+  inline-size: fit-content;
+  max-inline-size: 100%;
   border-color: transparent;
   text-decoration: underline;
   text-underline-offset: 0.18em;
@@ -1201,7 +1219,6 @@ small {
 
 .btn.link:not(:where(:disabled, [aria-disabled="true"])):hover {
   background: transparent;
-  color: var(--intent, var(--text));
   text-decoration-thickness: 0.12em;
 }
 
@@ -1302,6 +1319,10 @@ a.btn[aria-disabled="true"] {
  * --badge-radius
  *
  * Internal:
+ * --badge-default-bg
+ * --badge-default-fg
+ * --badge-default-border
+ * --badge-default-hover-bg
  * --badge-bg
  * --badge-fg
  * --badge-border
@@ -1322,9 +1343,13 @@ a.btn[aria-disabled="true"] {
   --badge-pad-x: 0.55em;
   --badge-font-size: 0.8125rem;
   --badge-dot-size: 0.5rem;
-  --badge-bg: var(--ui-bg, var(--surface-subtle));
-  --badge-fg: var(--ui-fg, var(--intent, var(--text)));
-  --badge-border: var(--ui-border, var(--border));
+  --badge-default-bg: var(--surface-subtle);
+  --badge-default-fg: var(--intent, var(--text));
+  --badge-default-border: var(--border);
+  --badge-default-hover-bg: var(--badge-bg);
+  --badge-bg: var(--ui-bg, var(--badge-default-bg));
+  --badge-fg: var(--ui-fg, var(--badge-default-fg));
+  --badge-border: var(--ui-border, var(--badge-default-border));
   --badge-radius: var(--radius-full);
 
   display: inline-flex;
@@ -1351,18 +1376,17 @@ a.btn[aria-disabled="true"] {
     box-shadow var(--duration);
 }
 
-/* Soft by default — duplicated here with @sync markers for check-sync.js
-   to guard, the same way alert.css guards its own soft recipe. */
+/* Soft by default. Local defaults remain behind --ui-* in the resolution
+   chain, so explicit shared treatments compose without selector exclusions. */
 @supports (color: color-mix(in oklch, red, white)) {
-  .badge:where(:not(.solid, .outline)) {
+  .badge {
     /* @sync soft-recipe */
-    --badge-bg: color-mix(
+    --badge-default-bg: color-mix(
       in oklch,
       var(--surface) var(--soft-bg-mix),
       var(--intent, var(--neutral))
     );
-    --badge-fg: var(--intent, var(--text));
-    --badge-border: color-mix(
+    --badge-default-border: color-mix(
       in oklch,
       var(--surface) var(--soft-border-mix),
       var(--intent, var(--neutral))
@@ -1408,7 +1432,7 @@ a.btn[aria-disabled="true"] {
 /* Hover recipes — sets --ui-hover-bg consumed by the hover rule below.
    Declared outside :hover like button.css for the same reason. */
 :is(a.badge, button.badge).outline {
-  --ui-hover-bg: var(--surface-subtle);
+  --ui-hover-bg: transparent;
 }
 
 @supports (color: color-mix(in oklch, red, white)) {
@@ -1417,7 +1441,7 @@ a.btn[aria-disabled="true"] {
   }
 
   :is(a.badge, button.badge):where(:not(.solid, .outline, :empty)) {
-    --ui-hover-bg: color-mix(
+    --badge-default-hover-bg: color-mix(
       in oklch,
       var(--surface) calc(var(--soft-bg-mix) - var(--soft-hover-alpha)),
       var(--intent, var(--neutral))
@@ -1425,12 +1449,12 @@ a.btn[aria-disabled="true"] {
   }
 
   :is(a.badge, button.badge).outline {
-    --ui-hover-bg: color-mix(in oklch, var(--surface-subtle) 92%, var(--intent, var(--neutral)));
+    --ui-hover-bg: color-mix(in oklch, currentColor 10%, transparent);
   }
 }
 
 :where(a.badge, button.badge):not(:where(:disabled, [aria-disabled="true"])):hover {
-  background: var(--ui-hover-bg, var(--badge-bg));
+  background: var(--ui-hover-bg, var(--badge-default-hover-bg));
 }
 
 :where(a.badge, button.badge):not(:where(:disabled, [aria-disabled="true"], .outline)):hover {
@@ -1491,8 +1515,12 @@ a.badge[aria-disabled="true"] {
  * --alert-radius
  * --alert-icon-size
  * --alert-dismiss-size
+ * --alert-border-inline-start-color
+ * --alert-border-inline-start-width
  *
  * Internal:
+ * --alert-default-bg
+ * --alert-default-border
  * --alert-bg
  * --alert-fg
  * --alert-border
@@ -1513,9 +1541,11 @@ a.badge[aria-disabled="true"] {
   --alert-pad-inline: var(--space-40);
   --alert-font-size: var(--font-size-md);
   --alert-icon-size: 1.25rem;
-  --alert-bg: var(--ui-bg, var(--surface-subtle));
+  --alert-default-bg: var(--surface-subtle);
+  --alert-default-border: var(--border);
+  --alert-bg: var(--ui-bg, var(--alert-default-bg));
   --alert-fg: var(--ui-fg, var(--intent, var(--text)));
-  --alert-border: var(--ui-border, var(--border));
+  --alert-border: var(--ui-border, var(--alert-default-border));
 
   padding-block: var(--alert-pad-block);
   padding-inline: var(--alert-pad-inline);
@@ -1540,13 +1570,17 @@ a.badge[aria-disabled="true"] {
   margin-block-end: 0;
 }
 
-/* Alerts are soft by default. .solid and .outline need no local rules — the
-   shared variant plumbing in variants.css sets --ui-* that alert consumes. */
+/* Alerts are soft by default. The recipe writes local defaults rather than
+   --ui-* so an explicit shared treatment always wins without exclusions. */
 @supports (color: color-mix(in oklch, red, white)) {
-  .alert:where(:not(.solid, .outline, .callout)) {
+  .alert {
     /* @sync soft-recipe */
-    --ui-bg: color-mix(in oklch, var(--surface) var(--soft-bg-mix), var(--intent, var(--neutral)));
-    --ui-border: color-mix(
+    --alert-default-bg: color-mix(
+      in oklch,
+      var(--surface) var(--soft-bg-mix),
+      var(--intent, var(--neutral))
+    );
+    --alert-default-border: color-mix(
       in oklch,
       var(--surface) var(--soft-border-mix),
       var(--intent, var(--neutral))
@@ -1769,6 +1803,8 @@ a.badge[aria-disabled="true"] {
  * edge children inherit the card corners. .bleed must be a direct child.
  *
  * Internal:
+ * --card-bg
+ * --card-fg
  * --heading
  * --busy-overlay-bg
  */
@@ -1784,11 +1820,17 @@ a.badge[aria-disabled="true"] {
   --card-pad: var(--space-40);
   --card-radius: var(--radius-lg);
   --card-max-inline-size: none;
+  --card-bg: var(--ui-bg, var(--surface-raised));
+  --card-fg: var(--ui-fg, var(--text));
+
+  /* Keep contextual descendants tied to the surface this card actually owns. */
+  --heading: var(--card-fg);
+  --busy-overlay-bg: var(--card-bg);
 
   max-inline-size: var(--card-max-inline-size);
   padding: var(--card-pad);
-  background: var(--ui-bg, var(--surface-raised));
-  color: var(--ui-fg, var(--text));
+  background: var(--card-bg);
+  color: var(--card-fg);
   border: var(--border-width) solid var(--ui-border, var(--border));
   border-radius: var(--card-radius);
 }
@@ -3491,6 +3533,9 @@ a.avatar[aria-disabled="true"] {
  * Base form is unstyled chrome that takes its surrounding color. Add .pill for
  * the bordered rounded shape, and combine with an intent class (.primary,
  * .success, etc.) to tint the text, border, and background.
+ *
+ * Public hooks:
+ * --overline-radius
  */
 /* Intent boundary — inherited intents do not tint this component.
    Local intent classes still win because :where() has zero specificity. */
@@ -3499,7 +3544,6 @@ a.avatar[aria-disabled="true"] {
 }
 
 .overline {
-  align-self: flex-start;
   color: var(--text-muted);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
@@ -3508,14 +3552,18 @@ a.avatar[aria-disabled="true"] {
 }
 
 .overline.pill {
+  --overline-radius: var(--radius-full);
+
   display: inline-flex;
   align-items: center;
   gap: 0.5em;
   padding-inline: 0.6em;
   padding-block: 0.25em;
+  inline-size: fit-content;
+  max-inline-size: 100%;
   color: var(--intent, var(--text-muted));
   border: var(--border-width) solid var(--border);
-  border-radius: var(--radius-full);
+  border-radius: var(--overline-radius);
   background: var(--surface);
 }
 
@@ -3540,6 +3588,14 @@ a.avatar[aria-disabled="true"] {
  * Internal:
  * --gap (local value for the shared gap token)
  */
+/* Intent boundary — inherited intents do not tint this component.
+   Local intent classes still win because :where() has zero specificity. */
+:where(.navbar) {
+  --ui-bg: initial;
+  --ui-fg: initial;
+  --ui-border: initial;
+}
+
 .navbar {
   display: flex;
   flex-wrap: wrap;
@@ -3548,17 +3604,17 @@ a.avatar[aria-disabled="true"] {
   gap: var(--gap);
   padding-block: var(--space-30);
   padding-inline: var(--space-40);
-  border: var(--border-width) solid var(--border);
+  border: var(--border-width) solid var(--ui-border, var(--border));
   border-radius: var(--radius-lg);
-  background: var(--surface-raised);
-  color: var(--text);
+  background: var(--ui-bg, var(--surface-raised));
+  color: var(--ui-fg, var(--text));
 }
 
 .navbar-brand {
   display: inline-flex;
   align-items: center;
   gap: var(--space-20);
-  color: var(--text);
+  color: var(--ui-fg, var(--text));
   font-weight: var(--font-weight-bold);
   text-decoration: none;
 }
@@ -3583,7 +3639,7 @@ a.avatar[aria-disabled="true"] {
   min-block-size: var(--control-size-sm);
   padding-inline: var(--space-20);
   border-radius: var(--radius);
-  color: var(--text-muted);
+  color: var(--ui-fg, var(--text-muted));
   font-weight: var(--font-weight-medium);
   text-decoration: none;
 }
@@ -4052,6 +4108,8 @@ a.avatar[aria-disabled="true"] {
  * --control-bg
  * --control-fg
  * --control-cursor
+ * --control-border-block-end-color
+ * --control-border-block-end-width
  */
 .input,
 .textarea,

@@ -1,0 +1,8 @@
+/*
+ * Theme-private fallback-only use. --theme-private is never declared anywhere
+ * and never classified — but because it is consumed only inside a theme file,
+ * it must not fail the core contract.
+ */
+[data-theme="edge"] .accent {
+  color: var(--theme-private, red);
+}

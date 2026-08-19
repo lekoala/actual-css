@@ -4,6 +4,9 @@
  * Base form is unstyled chrome that takes its surrounding color. Add .pill for
  * the bordered rounded shape, and combine with an intent class (.primary,
  * .success, etc.) to tint the text, border, and background.
+ *
+ * Public hooks:
+ * --overline-radius
  */
 /* Intent boundary — inherited intents do not tint this component.
    Local intent classes still win because :where() has zero specificity. */
@@ -12,7 +15,6 @@
 }
 
 .overline {
-  align-self: flex-start;
   color: var(--text-muted);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
@@ -21,14 +23,18 @@
 }
 
 .overline.pill {
+  --overline-radius: var(--radius-full);
+
   display: inline-flex;
   align-items: center;
   gap: 0.5em;
   padding-inline: 0.6em;
   padding-block: 0.25em;
+  inline-size: fit-content;
+  max-inline-size: 100%;
   color: var(--intent, var(--text-muted));
   border: var(--border-width) solid var(--border);
-  border-radius: var(--radius-full);
+  border-radius: var(--overline-radius);
   background: var(--surface);
 }
 

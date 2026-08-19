@@ -1,0 +1,10 @@
+/*
+ * Core component classifying the extension point as a public hook. The theme
+ * may still override it; classifying it here satisfies the core contract.
+ *
+ * Public hooks:
+ * --example-hook
+ */
+.btn {
+  color: var(--example-hook, red);
+}

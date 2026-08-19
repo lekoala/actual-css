@@ -15,8 +15,12 @@
  * --alert-radius
  * --alert-icon-size
  * --alert-dismiss-size
+ * --alert-border-inline-start-color
+ * --alert-border-inline-start-width
  *
  * Internal:
+ * --alert-default-bg
+ * --alert-default-border
  * --alert-bg
  * --alert-fg
  * --alert-border
@@ -37,9 +41,11 @@
   --alert-pad-inline: var(--space-40);
   --alert-font-size: var(--font-size-md);
   --alert-icon-size: 1.25rem;
-  --alert-bg: var(--ui-bg, var(--surface-subtle));
+  --alert-default-bg: var(--surface-subtle);
+  --alert-default-border: var(--border);
+  --alert-bg: var(--ui-bg, var(--alert-default-bg));
   --alert-fg: var(--ui-fg, var(--intent, var(--text)));
-  --alert-border: var(--ui-border, var(--border));
+  --alert-border: var(--ui-border, var(--alert-default-border));
 
   padding-block: var(--alert-pad-block);
   padding-inline: var(--alert-pad-inline);
@@ -64,13 +70,17 @@
   margin-block-end: 0;
 }
 
-/* Alerts are soft by default. .solid and .outline need no local rules — the
-   shared variant plumbing in variants.css sets --ui-* that alert consumes. */
+/* Alerts are soft by default. The recipe writes local defaults rather than
+   --ui-* so an explicit shared treatment always wins without exclusions. */
 @supports (color: color-mix(in oklch, red, white)) {
-  .alert:where(:not(.solid, .outline, .callout)) {
+  .alert {
     /* @sync soft-recipe */
-    --ui-bg: color-mix(in oklch, var(--surface) var(--soft-bg-mix), var(--intent, var(--neutral)));
-    --ui-border: color-mix(
+    --alert-default-bg: color-mix(
+      in oklch,
+      var(--surface) var(--soft-bg-mix),
+      var(--intent, var(--neutral))
+    );
+    --alert-default-border: color-mix(
       in oklch,
       var(--surface) var(--soft-border-mix),
       var(--intent, var(--neutral))

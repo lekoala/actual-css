@@ -84,9 +84,16 @@ Set `--avatar-size` / `--avatar-radius`; tune overlap with `--avatar-stack-overl
 
 ### Make an inverted / contrasting surface
 
-Apply `.inverted` to any block (`<header class="inverted">`, `<section class="inverted">`,
-`<div class="card inverted">`) for the inverse surface treatment: it paints
-`--surface-solid` and swaps the foreground to `--surface`, so in a dark theme the
-surface relationship inverts instead of staying dark.
+Apply `.inverted` to create one contrasting surface context. It paints a bare
+block (`<header class="inverted">`, `<section class="inverted">`) with
+`--surface-solid` and `--surface`; contextual content and transparent treatments
+follow that foreground. Apply it directly to a component that consumes the
+shared `--ui-*` contract when that component itself is the contrasting surface.
+
+Surface-owning descendants keep their own component surface and establish a new
+foreground context. Use `data-theme="dark"`, `data-theme="light"`, or a named
+theme instead when an entire subtree — including forms, states, and nested
+surfaces — must use another palette. More specific component states or explicit
+surface variants (`.card.subtle`) still take precedence.
 
 → Components · Card · Foundations · Tokens (theme contract)

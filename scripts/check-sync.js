@@ -11,6 +11,7 @@ const GROUPS = [
     files: [
       "src/css/variants.css",
       "src/css/components/alert.css",
+      "src/css/components/badge.css",
     ],
   },
 ];
@@ -18,6 +19,7 @@ const GROUPS = [
 function normalizeBlock(block) {
   return block
     .replace(/\/\*[\s\S]*?\*\//g, "")
+    .replace(/--(?:ui|alert-default|badge-default)-(bg|border)\s*:/g, "--soft-$1:")
     .replace(/\s+/g, " ")
     .replace(/\s*([:;,()])\s*/g, "$1")
     .trim();

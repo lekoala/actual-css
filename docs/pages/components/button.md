@@ -56,6 +56,11 @@ Shared intent classes set color meaning. They compose with every variant.
 `.ghost` and `.link` are button-only; `.soft`, `.outline`, and `.solid` are
 shared with other components.
 
+Transparent treatments (`.outline`, `.ghost`, `.link`) follow the surrounding
+foreground by default, including on a contrasting `.inverted` surface. A local
+intent class still wins: `.danger.outline` uses the danger color in either
+context. Filled buttons own their surface and keep their normal intent recipe.
+
 ```html demo
 <div class="cluster">
   <button class="btn outline" type="button">Outline</button>
