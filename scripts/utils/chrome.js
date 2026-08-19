@@ -78,8 +78,16 @@ export async function withChromePage(
       `--window-size=${width},${height}`,
       "about:blank",
     ],
-    { stdio: "ignore" },
+    { stdio: ["ignore", "ignore", "pipe"] },
   );
+  let spawnError;
+  let stderr = "";
+  proc.once("error", (error) => {
+    spawnError = error;
+  });
+  proc.stderr?.on("data", (chunk) => {
+    stderr = `${stderr}${chunk.toString()}`.slice(-8000);
+  });
 
   let ws = null;
   try {
@@ -87,6 +95,17 @@ export async function withChromePage(
     let port;
     for (let i = 0; i < 50 && !port; i++) {
       await wait(200);
+      if (spawnError) {
+        throw new Error(`Chrome failed to start: ${spawnError.message}`);
+      }
+      if (proc.exitCode !== null) {
+        const details = stderr.trim();
+        throw new Error(
+          `Chrome exited before exposing DevTools (code ${proc.exitCode})${
+            details ? `:\n${details}` : "."
+          }`,
+        );
+      }
       port = await readFile(join(profile, "DevToolsActivePort"), "utf8")
         .then((text) => text.split("\n")[0].trim())
         .catch(() => undefined);
