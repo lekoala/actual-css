@@ -7,7 +7,7 @@ This project follows Keep a Changelog and uses semver, including during 0.x.
 ## [0.3.0 - unreleased]
 
 ### Added
-- Official documentation site in `docs/site/`, built from `docs/pages/**/*.md`
+- Official documentation site in `site/`, built from `docs/pages/**/*.md`
   by `bun run build:docs` (75+ pages, search, theme switcher over all 15 named
   themes, generated landing page). Replaces the legacy `docs/*.md` + generated
   `demo/` workflow.
@@ -31,7 +31,10 @@ This project follows Keep a Changelog and uses semver, including during 0.x.
   `dist/actual.js`, `dist/actual-themes.min.css`) and errors clearly when
   `dist/` is missing.
 - Docs navigation gains an Examples group; the root `index.html` redirects to
-  `docs/site/index.html`.
+  `site/index.html`.
+- The docs site lives in `site/` (generated output only); its chrome
+  (`docs.css`, `docs.js`) moved to `scripts/docs/assets/` and is referenced in
+  place from the generated pages, so `site/` never stores a copy.
 - `--grid-columns` hook to override the generic `.grid` template for
   custom/asymmetric layouts; the author owns any narrow-container collapse.
 - `--form-actions-align` and `--form-actions-justify` hooks.

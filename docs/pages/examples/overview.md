@@ -37,4 +37,4 @@ tables, forms, dialogs, and feedback states.
 - [Density](../../../demo/templates/density.html) - compact control density
 
 > Note: the examples reference the repository's source files, so they open from
-> the checkout, not from a standalone copy of `docs/site`.
+> the checkout, not from a standalone copy of `site`.

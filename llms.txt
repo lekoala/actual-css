@@ -6,7 +6,7 @@ Actual CSS uses a small public grammar: `.component [intent] [variant] [size] [m
 
 ## Documentation
 
-- [Documentation source](docs/pages/): the docs pages, generated into `docs/site/` by `bun run build:docs` (start at `docs/site/index.html`).
+- [Documentation source](docs/pages/): the docs pages, generated into `site/` by `bun run build:docs` (start at `site/index.html`).
 
 ## Package Entrypoints
 

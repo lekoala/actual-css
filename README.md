@@ -177,7 +177,7 @@ MIT
 
 ## Docs
 
-The documentation site is generated into [`docs/site/`](docs/site/) from the
+The documentation site is generated into [`site/`](site/) from the
 source pages under [`docs/pages/`](docs/pages/). Start at
-[`docs/site/index.html`](docs/site/index.html), or build it locally with
+[`site/index.html`](site/index.html), or build it locally with
 `bun run build:docs`.

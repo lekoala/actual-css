@@ -9,5 +9,5 @@ Hand-authored example sources:
 - `preview.svg` for the demo preview image.
 
 These examples are featured on the documentation site
-(`docs/site/examples/overview.html`), which is the entry point to the project.
+(`site/examples/overview.html`), which is the entry point to the project.
 `index.html` redirects there.
