@@ -15,6 +15,7 @@ import { existsSync } from "node:fs";
 import { findChrome, toFileUrl, withChromePage } from "../../scripts/utils/chrome.js";
 
 const FIXTURE = "tests/browser/dialog.html";
+const BROWSER_TIMEOUT = 25_000;
 
 let hasChrome = true;
 try {
@@ -25,7 +26,8 @@ try {
 const distReady = existsSync("dist/actual.js");
 const skip = !hasChrome || !distReady;
 
-const it = skip ? test.skip : test;
+const baseTest = skip ? test.skip : test;
+const it = (name, run) => baseTest(name, run, BROWSER_TIMEOUT);
 
 async function withPage(run) {
   await withChromePage(
@@ -228,6 +230,17 @@ it("drawer: scroll preserved, close button and Escape close, backdrop gated by d
   await withPage(async ({ evalIn, settle, pressEscape, snapshot }) => {
     const y0 = await scrollTo1200(evalIn);
 
+    await evalIn(`(() => {
+      const list = document.querySelector('#drawer .nav-list');
+      list.replaceChildren(...Array.from({ length: 100 }, (_, index) => {
+        const item = document.createElement('li');
+        const link = document.createElement('a');
+        link.href = '#';
+        link.textContent = \`Item \${index + 1}\`;
+        item.append(link);
+        return item;
+      }));
+    })()`);
     await evalIn("document.getElementById('open-drawer').click()");
     await settle();
     let state = await snapshot("drawer");
@@ -235,6 +248,25 @@ it("drawer: scroll preserved, close button and Escape close, backdrop gated by d
     expect(state.position).toBe("fixed");
     expect(state.inViewport).toBe(true);
     expect(state.scrollY).toBe(y0);
+
+    const layout = await evalIn(`(() => {
+      const drawer = document.getElementById('drawer');
+      const nav = drawer.querySelector('nav');
+      const rect = drawer.getBoundingClientRect();
+      nav.scrollTop = nav.scrollHeight;
+      return {
+        top: rect.top,
+        bottom: rect.bottom,
+        viewportHeight: innerHeight,
+        scrollHeight: nav.scrollHeight,
+        clientHeight: nav.clientHeight,
+        scrollTop: nav.scrollTop,
+      };
+    })()`);
+    expect(layout.top).toBe(0);
+    expect(layout.bottom).toBe(layout.viewportHeight);
+    expect(layout.scrollHeight).toBeGreaterThan(layout.clientHeight);
+    expect(layout.scrollTop).toBeGreaterThan(0);
 
     state = await evalIn(`(() => {
       const d = document.getElementById('drawer');
