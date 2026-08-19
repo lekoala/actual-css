@@ -36,3 +36,57 @@ flex list, `.nav-list` a vertical grid. Putting both on one element resolves to
 ```
 
 For a vertical sidebar nav, use `.nav-list` inside the drawer or sidebar.
+
+## Responsive: navbar + drawer
+
+There is no collapse/toggler mechanism. For a responsive navigation, keep the
+horizontal `.navbar` for the desktop bar and compose the mobile experience from
+a `.drawer` with a vertical `.nav-list`, opened by a `command="show-modal"` /
+`commandfor` trigger.
+
+```html demo
+<nav class="navbar" aria-label="Main">
+  <a class="navbar-brand" href="/">Actual CSS</a>
+  <ul class="navbar-nav">
+    <li><a class="nav-link" href="/" aria-current="page">Home</a></li>
+    <li><a class="nav-link" href="/docs">Docs</a></li>
+  </ul>
+</nav>
+
+<button class="btn ghost"
+        type="button"
+        command="show-modal"
+        commandfor="site-nav"
+        aria-haspopup="dialog"
+        aria-controls="site-nav"
+        aria-label="Open menu">
+  <i class="ti ti-menu-2" aria-hidden="true"></i>
+</button>
+
+<dialog class="drawer"
+        id="site-nav"
+        aria-label="Main navigation"
+        closedby="any"
+        data-dialog-dismissible>
+  <header>
+    <strong>Menu</strong>
+    <form method="dialog">
+      <button class="drawer-close" type="submit" aria-label="Close navigation"></button>
+    </form>
+  </header>
+
+  <nav>
+    <ul class="nav-list stack">
+      <li><a href="#" aria-current="page">Home</a></li>
+      <li><a href="#">Docs</a></li>
+      <li><a href="#">Components</a></li>
+    </ul>
+  </nav>
+</dialog>
+```
+
+The drawer can be hidden until opened: give the `dialog` the `hidden` attribute
+in the HTML and let the command runtime manage it, or rely on the drawer being
+rendered only on the mobile layout. `command` and `commandfor` work without
+JavaScript, and the drawer follows the same `closedby` / `data-dialog-dismissible`
+rules as the [Drawer component](drawer.md).
