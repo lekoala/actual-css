@@ -1,5 +1,5 @@
 {
-  "totalRaw": 183167,
+  "totalRaw": 183378,
   "totalMinified": 87500,
   "totalBrotli": 12874,
   "themesMinified": 29127,
@@ -70,16 +70,16 @@
       "raw": 3350
     },
     {
+      "file": "variants.css",
+      "raw": 3224
+    },
+    {
       "file": "utilities.css",
       "raw": 3214
     },
     {
       "file": "components/join.css",
       "raw": 3194
-    },
-    {
-      "file": "variants.css",
-      "raw": 3013
     },
     {
       "file": "components/tooltip.css",

@@ -740,7 +740,10 @@ small {
  * Cross-cutting variant token mapping.
  *
  * Variant scope: .solid/.soft/.outline set --ui-* for components that opt into
- * shared variants. Component-specific defaults (.btn solid-by-default, .badge
+ * shared variants. .inverted is a surface modifier, not a variant: it also
+ * paints the element directly (background/color/border-color) so it works on
+ * any block, competing with component surface treatments (.card.subtle).
+ * Component-specific defaults (.btn solid-by-default, .badge
  * soft-by-default, .alert soft-by-default) live with their components:
  *   components/button.css — .btn default solid + .btn.ghost + .btn.link
  *   components/badge.css   — .badge default soft
