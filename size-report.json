@@ -1,11 +1,11 @@
 {
-  "totalRaw": 181966,
-  "totalMinified": 87351,
-  "totalBrotli": 12871,
+  "totalRaw": 182729,
+  "totalMinified": 87379,
+  "totalBrotli": 12866,
   "themesMinified": 29127,
   "themesBrotli": 3404,
-  "shippedMinified": 87351,
-  "shippedBrotli": 12871,
+  "shippedMinified": 87379,
+  "shippedBrotli": 12866,
   "maxShippedBrotli": 13312,
   "fileCount": 73,
   "files": [
@@ -15,11 +15,11 @@
     },
     {
       "file": "components/button.css",
-      "raw": 7562
+      "raw": 7575
     },
     {
       "file": "components/alert.css",
-      "raw": 7308
+      "raw": 7326
     },
     {
       "file": "tokens.css",
@@ -42,16 +42,16 @@
       "raw": 4835
     },
     {
+      "file": "components/flyout.css",
+      "raw": 4641
+    },
+    {
       "file": "themes/edge.css",
       "raw": 4618
     },
     {
       "file": "forms/choice-card.css",
       "raw": 4488
-    },
-    {
-      "file": "components/flyout.css",
-      "raw": 4470
     },
     {
       "file": "prose.css",
@@ -78,6 +78,10 @@
       "raw": 3194
     },
     {
+      "file": "components/tooltip.css",
+      "raw": 2895
+    },
+    {
       "file": "components/card.css",
       "raw": 2839
     },
@@ -86,12 +90,12 @@
       "raw": 2807
     },
     {
-      "file": "components/tooltip.css",
-      "raw": 2771
-    },
-    {
       "file": "forms/validation.css",
       "raw": 2690
+    },
+    {
+      "file": "layout.css",
+      "raw": 2643
     },
     {
       "file": "themes/spruce.css",
@@ -110,12 +114,12 @@
       "raw": 2553
     },
     {
-      "file": "layout.css",
-      "raw": 2517
-    },
-    {
       "file": "themes/sunset.css",
       "raw": 2503
+    },
+    {
+      "file": "components/tab.css",
+      "raw": 2486
     },
     {
       "file": "themes/lavender.css",
@@ -128,10 +132,6 @@
     {
       "file": "themes/neon.css",
       "raw": 2464
-    },
-    {
-      "file": "components/tab.css",
-      "raw": 2453
     },
     {
       "file": "variants.css",
@@ -170,6 +170,10 @@
       "raw": 2212
     },
     {
+      "file": "forms/form-actions.css",
+      "raw": 2065
+    },
+    {
       "file": "components/status-bar.css",
       "raw": 2024
     },
@@ -184,10 +188,6 @@
     {
       "file": "forms/native.css",
       "raw": 1923
-    },
-    {
-      "file": "forms/form-actions.css",
-      "raw": 1843
     },
     {
       "file": "forms/input-icon.css",
@@ -235,7 +235,7 @@
     },
     {
       "file": "forms/form.css",
-      "raw": 1118
+      "raw": 1174
     },
     {
       "file": "themes/dim.css",

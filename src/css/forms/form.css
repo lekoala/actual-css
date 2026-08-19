@@ -6,6 +6,9 @@
  *
  * Public API: .field, .field-label, .field-help, .field-error, .field-group,
  * .required-mark.
+ *
+ * Public hooks:
+ * --fieldset-legend-padding-inline
  */
 .field {
   display: grid;

@@ -10,6 +10,7 @@
  * --scroll-snap-gap
  * --scroll-snap-align
  * --scroll-snap-item-size
+ * --scroll-snap-padding
  */
 .scroll-snap {
   --scroll-snap-gap: var(--gap);

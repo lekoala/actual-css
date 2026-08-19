@@ -13,7 +13,7 @@ The surface stays small by keeping most tokens semantic, not component-specific.
 
 ## Public surface
 
-Component custom properties intended for author customization are public hooks. State, variant, derived, and runtime-written properties are internal implementation details. Documentation focuses on discovering the right hook and on non-obvious usage; the CSS source remains canonical for exact defaults and fallback chains.
+Component custom properties fall into three header categories in the source: **Public hooks** (author-facing customization points), **Framework plumbing** (shared relays consumed across components — `--ui-*`, `--intent*`, `--density-*`), and **Internal** (derived, state/variant-owned, or runtime-written). Documentation focuses on discovering the right hook and on non-obvious usage; the CSS source remains canonical for exact defaults and fallback chains.
 
 As a convention, component-prefixed properties owned by the component's base rule are usually author hooks. Properties owned by states/variants, derived from other hooks, or written by JavaScript are not. This convention is indicative, not algorithmic: runtime-written, derived, and state-relay properties stay internal even when their form resembles a hook.
 
@@ -322,13 +322,15 @@ Rules:
 
 - Prefix internal component tokens with the component name (`--btn-*`, `--alert-*`, `--card-*`).
 - Prefix shared variant plumbing with `--ui-*`.
+- The shared relays `--ui-*`, `--intent*`, and `--density-*` are framework plumbing: they are classified once at framework level, not restated in every component file.
 - Keep component-specific variants in component code when they do not generalize.
 - Do not require users to override internal tokens for ordinary theming.
 - Promote an internal token to public only when there is a repeated, reasonable customization need.
+- A custom property used only in a fallback position (`var(--x, default)`) and never declared is an unset extension point and must carry a classification — public, framework plumbing, or internal. `check:css-api` fails on any unclassified fallback-only property; it does not force an artificial declaration to satisfy the audit.
 
 ## Theme contract
 
-Themes override tokens, not selectors. The themes in `src/css/themes/` are demo examples, not shipped by the default stylesheet; they exist to show valid ways to use this contract.
+Themes override tokens, not selectors. The themes in `src/css/themes/` are demo examples, not included in the default stylesheet; they exist to show valid ways to use this contract. They ship in the package as **reference sources for copying** — the `./css/themes` exports are intentionally `null`, so they are not supported import entrypoints.
 
 A minimal recolor theme overrides the intent pairs, surfaces, text colors, border, focus, focus ring, and hover overlay.
 

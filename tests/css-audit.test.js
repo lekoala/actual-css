@@ -93,6 +93,13 @@ test("form-actions exposes alignment hooks while sticky behavior remains intact"
   expect(css).toContain("position: sticky;");
 });
 
+test("cluster resets direct-child margins like stack", () => {
+  const css = readCss("src/css/layout.css");
+
+  expect(css).toMatch(/\.stack > \* \{\s*margin: 0;\s*\}/);
+  expect(css).toMatch(/\.cluster > \* \{\s*margin: 0;\s*\}/);
+});
+
 test("native color control has normal, disabled, focus, and forced-colors states", () => {
   const css = readCss("src/css/forms/native.css");
 
