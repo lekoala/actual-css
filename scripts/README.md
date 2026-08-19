@@ -6,7 +6,7 @@ script in `package.json`; `bun run build:all` chains the full pipeline
 
 | npm script | file | purpose |
 | --- | --- | --- |
-| `build:docs` / `watch:docs` | `build-docs.js` | Build the static documentation site in `docs/site/` from `docs/pages/` + `docs/navigation.json`. Requires `dist/` (runs `build:dist` + `build:js` first in `build:all`). |
+| `build:docs` / `watch:docs` | `build-docs.js` | Build the static documentation site in `site/` from `docs/pages/` + `docs/navigation.json`. Requires `dist/` (runs `build:dist` + `build:js` first in `build:all`). |
 | `build:dist` | `build-dist.js` | Build the CSS bundles in `dist/`. |
 | `build:js` | `build-js.js` | Bundle `src/js/` into `dist/actual.js` (+ sourcemap). |
 | `build:size` | `build-size.js` | Write `size-report.json` (per-file, minified, brotli). |
@@ -32,10 +32,10 @@ passes every text-based check and only shows up visually).
 bun run shot:page
 
 # a docs page
-bun run shot:page docs/site/components/button.html
+bun run shot:page site/components/button.html
 
 # dark scheme, custom output
-bun run shot:page docs/site/index.html --scheme dark --out tmp/home-dark.png
+bun run shot:page site/index.html --scheme dark --out tmp/home-dark.png
 ```
 
 `shot:forced` captures the same kind of screenshot with forced-colors
@@ -62,8 +62,8 @@ as the body of an async function, so it can click and `await sleep(...)` before
 
 ```sh
 # open the search dialog, wait for it to settle, return the close button rect
-bun run probe docs/site/index.html --expr "document.querySelector('[data-docs-search]').click(); await sleep(400); return document.getElementById('docs-search-dialog').querySelector('.dialog-close').getBoundingClientRect();"
+bun run probe site/index.html --expr "document.querySelector('[data-docs-search]').click(); await sleep(400); return document.getElementById('docs-search-dialog').querySelector('.dialog-close').getBoundingClientRect();"
 
 # or keep the program in tmp/ when it gets long
-bun run probe --url docs/site/index.html --script tmp/search-probe.js
+bun run probe --url site/index.html --script tmp/search-probe.js
 ```

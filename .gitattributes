@@ -15,6 +15,9 @@
 dist/*.css linguist-generated=true
 dist/*.min.css linguist-generated=true
 dist/*.js linguist-generated=true
+site/**/*.html linguist-generated=true
+site/assets/search-index.js linguist-generated=true
+site/README.md linguist-generated=true
 
 # Binary files
 *.png binary

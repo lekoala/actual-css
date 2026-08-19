@@ -27,7 +27,7 @@ const flags = readFlags(args, {
   "--window-size": { fallback: "1100,900" },
 });
 
-const page = flags["--url"] ?? args[0] ?? "docs/site/index.html";
+const page = flags["--url"] ?? args[0] ?? "site/index.html";
 const settleMs = Number(flags["--settle"]);
 
 const program =
