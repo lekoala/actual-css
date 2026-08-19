@@ -23,8 +23,18 @@ This project follows Keep a Changelog and uses semver, including during 0.x.
   `scroll-snap.css`), plus Public/Derived/Internal markers in `theme.css` and
   `tokens.css`.
 - Examples section in the docs, featuring `demo/admini/` and `demo/templates/`.
-- `scripts/utils/chrome-shot.js` — shared headless-Chrome screenshot plumbing
+- `scripts/utils/chrome-shot.js` - shared headless-Chrome screenshot plumbing
   used by `shot:page` and `shot:forced`.
+- Optional `.floating-field` — floating labels over the text controls
+  (`.input`, `.textarea`, `.select`), driven by `:placeholder-shown` with no
+  JavaScript. Date/time inputs stay floated, and the reserved headroom follows
+  control density through `--control-size`.
+- Optional layer ships as a bundle: `dist/optional.css` /
+  `dist/optional.min.css`, exposed as `actual-css/css/optional` next to the
+  existing per-module source imports.
+- Demo pages load the shipped `dist/` bundles and version-stamp every local
+  asset with a content hash (`?v=…`), so the browser cache can never mix CSS
+  from different generations.
 
 ### Changed
 - The docs site copies the shipped bundles (`dist/actual.css`,

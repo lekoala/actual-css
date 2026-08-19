@@ -428,7 +428,8 @@ Expect additional work when the application relies heavily on:
 * offsets and breakpoint-specific ordering;
 * extensive responsive utility combinations;
 * Bootstrap navbar collapse behavior;
-* floating labels;
+* floating labels — covered by the optional `.floating-field` module, so the
+  cost is an import rather than a custom recipe;
 * specialized Bootstrap JavaScript plugins;
 * Sass-generated application utility classes.
 

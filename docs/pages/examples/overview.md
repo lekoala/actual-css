@@ -2,9 +2,10 @@
 
 > Real pages built with Actual CSS - an admin application and a set of standalone templates - to see the primitives, components, and patterns composed the way they are meant to be used.
 
-The examples live in the repository under `demo/` and load the framework straight
-from the source (`src/css`, `dist/actual.js`), so they always match the checked
-out version of the library.
+The examples live in the repository under `demo/` and load the shipped bundles
+from `dist/` (`actual.css`, `optional.css`, `actual-themes.min.css`,
+`actual.js`), version-stamped with a content hash so each asset is only
+refetched when its bytes change.
 
 ## Admin application
 
