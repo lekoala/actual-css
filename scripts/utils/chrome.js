@@ -33,6 +33,18 @@ export function findChrome() {
   return path;
 }
 
+export function shouldRunChromeTests() {
+  // Windows headless rendering depends on the installed GPU stack; requiring an
+  // explicit binary keeps the Linux CI suite authoritative and local runs stable.
+  if (process.platform === "win32" && !process.env.CHROME) return false;
+  try {
+    findChrome();
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 export function toFileUrl(page, cwd = process.cwd()) {
   if (/^https?:/.test(page)) return page;
   return pathToFileURL(isAbsolute(page) ? page : join(cwd, page)).href;
@@ -73,6 +85,7 @@ export async function withChromePage(
     [
       "--headless=new",
       "--disable-gpu",
+      "--disable-software-rasterizer",
       "--remote-debugging-port=0",
       `--user-data-dir=${profile}`,
       `--window-size=${width},${height}`,
@@ -94,7 +107,9 @@ export async function withChromePage(
     // Chrome writes the picked port to DevToolsActivePort inside the profile.
     let port;
     let stderrPort;
-    for (let i = 0; i < 50 && !port; i++) {
+    let targets;
+    let endpointError;
+    for (let i = 0; i < 50 && !targets; i++) {
       await wait(200);
       if (spawnError) {
         throw new Error(`Chrome failed to start: ${spawnError.message}`);
@@ -114,6 +129,22 @@ export async function withChromePage(
       stderrPort ??= stderr.match(
         /DevTools listening on ws:\/\/127\.0\.0\.1:(\d+)\//,
       )?.[1];
+
+      const candidatePort = port ?? stderrPort;
+      if (!candidatePort) continue;
+      try {
+        const response = await fetch(
+          `http://127.0.0.1:${candidatePort}/json`,
+          { signal: AbortSignal.timeout(200) },
+        );
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}`);
+        }
+        targets = await response.json();
+      } catch (error) {
+        // The port can be published shortly before DevTools accepts connections.
+        endpointError = error;
+      }
     }
     port ??= stderrPort;
     if (!port) {
@@ -122,8 +153,17 @@ export async function withChromePage(
         `Chrome did not expose a DevTools port${details ? `:\n${details}` : "."}`,
       );
     }
+    if (!targets) {
+      const reason =
+        endpointError instanceof Error ? endpointError.message : endpointError;
+      const details = stderr.trim();
+      throw new Error(
+        `Chrome DevTools did not become ready${reason ? ` (${reason})` : ""}${
+          details ? `:\n${details}` : "."
+        }`,
+      );
+    }
 
-    const targets = await (await fetch(`http://127.0.0.1:${port}/json`)).json();
     const target = targets.find((t) => t.type === "page");
     if (!target) throw new Error("No page target found.");
 
@@ -137,20 +177,41 @@ export async function withChromePage(
     const send = (method, params = {}) =>
       new Promise((resolve, reject) => {
         const id = ++messageId;
-        pending.set(id, { resolve, reject });
+        const timeout = setTimeout(() => {
+          pending.delete(id);
+          reject(new Error(`Chrome DevTools did not answer ${method}.`));
+        }, 5000);
+        pending.set(id, { resolve, reject, timeout });
         ws.send(JSON.stringify({ id, method, params }));
       });
     ws.onmessage = (event) => {
       const msg = JSON.parse(event.data);
       if (msg.method === "Page.loadEventFired") loaded();
       if (msg.id && pending.has(msg.id)) {
-        const { resolve, reject } = pending.get(msg.id);
+        const { resolve, reject, timeout } = pending.get(msg.id);
         pending.delete(msg.id);
+        clearTimeout(timeout);
         msg.error ? reject(new Error(msg.error.message)) : resolve(msg.result);
       }
     };
-    await new Promise((resolve) => {
-      ws.onopen = resolve;
+    await new Promise((resolve, reject) => {
+      const timeout = setTimeout(() => {
+        reject(new Error("Chrome DevTools WebSocket did not open."));
+      }, 5000);
+      ws.onopen = () => {
+        clearTimeout(timeout);
+        resolve();
+      };
+      ws.onerror = () => {
+        clearTimeout(timeout);
+        reject(new Error("Chrome DevTools WebSocket failed to open."));
+      };
+      ws.onclose = () => {
+        clearTimeout(timeout);
+        reject(
+          new Error("Chrome DevTools WebSocket closed before opening."),
+        );
+      };
     });
 
     if (mediaFeatures.length > 0) {

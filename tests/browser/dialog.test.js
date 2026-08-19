@@ -12,17 +12,16 @@
 
 import { expect, test } from "bun:test";
 import { existsSync } from "node:fs";
-import { findChrome, toFileUrl, withChromePage } from "../../scripts/utils/chrome.js";
+import {
+  shouldRunChromeTests,
+  toFileUrl,
+  withChromePage,
+} from "../../scripts/utils/chrome.js";
 
 const FIXTURE = "tests/browser/dialog.html";
 const BROWSER_TIMEOUT = 25_000;
 
-let hasChrome = true;
-try {
-  findChrome();
-} catch {
-  hasChrome = false;
-}
+const hasChrome = shouldRunChromeTests();
 const distReady = existsSync("dist/actual.js");
 const skip = !hasChrome || !distReady;
 

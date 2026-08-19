@@ -4,19 +4,16 @@
  * boundaries, direct component opt-in, and local busy/heading derivation.
  */
 import { expect, test } from "bun:test";
-import { findChrome, toFileUrl, withChromePage } from "../../scripts/utils/chrome.js";
+import {
+  shouldRunChromeTests,
+  toFileUrl,
+  withChromePage,
+} from "../../scripts/utils/chrome.js";
 
 const FIXTURE = "tests/browser/inverted.html";
 const BROWSER_TIMEOUT = 25_000;
 
-let hasChrome = true;
-try {
-  findChrome();
-} catch {
-  hasChrome = false;
-}
-
-const baseTest = hasChrome ? test : test.skip;
+const baseTest = shouldRunChromeTests() ? test : test.skip;
 const it = (name, run) => baseTest(name, run, BROWSER_TIMEOUT);
 
 it("inverted contrasting-surface contract over one browser pass", async () => {
