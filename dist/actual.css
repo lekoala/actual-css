@@ -776,6 +776,23 @@ small {
   --ui-border: var(--intent, var(--border));
 }
 
+/* Inverse surface treatment. Components (e.g. .card) compose through --ui-*;
+   the direct background/color/border-color also make .inverted useful on a
+   generic element. --heading is set so global headings (var(--heading, inherit))
+   do not inherit an outside heading color onto the dark surface. */
+.inverted {
+  --ui-bg: var(--surface-solid);
+  --ui-fg: var(--surface);
+  --ui-border: transparent;
+
+  --heading: var(--surface);
+  --busy-overlay-bg: var(--surface-solid);
+
+  background: var(--ui-bg);
+  color: var(--ui-fg);
+  border-color: var(--ui-border);
+}
+
 .sm {
   --gap: var(--space-20);
   --density-space: var(--space-20);
@@ -1311,6 +1328,8 @@ a.btn[aria-disabled="true"] {
   align-items: center;
   justify-content: center;
   gap: 0.35em;
+  inline-size: fit-content;
+  max-inline-size: 100%;
   min-block-size: var(--badge-size);
   padding-inline: var(--badge-pad-x);
   border: var(--border-width) solid var(--badge-border);
@@ -1807,14 +1826,6 @@ a.badge[aria-disabled="true"] {
 .card.subtle {
   background: var(--surface-subtle);
 }
-.card.inverted {
-  background: var(--surface-solid);
-  color: var(--surface);
-  border-color: transparent;
-  --heading: var(--surface);
-  --busy-overlay-bg: var(--surface-solid);
-}
-
 .card.compact {
   --card-pad: var(--space-20);
 }

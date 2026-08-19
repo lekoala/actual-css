@@ -8,6 +8,10 @@
 - `.nav-list` is the shared vertical navigation list, reused by `.drawer` for stacked links.
 - Mark the current page with `aria-current="page"` on the active `.nav-link`.
 
+`.navbar-nav` and `.nav-list` are mutually exclusive: `.navbar-nav` is a horizontal
+flex list, `.nav-list` a vertical grid. Putting both on one element resolves to
+`.nav-list` (vertical) — pick one per container.
+
 ## Class reference
 
 | Class | Kind | Description |

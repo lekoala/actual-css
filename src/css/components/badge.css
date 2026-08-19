@@ -42,6 +42,8 @@
   align-items: center;
   justify-content: center;
   gap: 0.35em;
+  inline-size: fit-content;
+  max-inline-size: 100%;
   min-block-size: var(--badge-size);
   padding-inline: var(--badge-pad-x);
   border: var(--border-width) solid var(--badge-border);

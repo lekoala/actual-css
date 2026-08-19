@@ -121,12 +121,27 @@ test("status bar supports long tokens and is hidden in print", () => {
   expect(printCss).toContain(".status-bar");
 });
 
+test("badge is content-sized and never stretches in a stack", () => {
+  const css = readCss("src/css/components/badge.css");
+
+  expect(css).toMatch(/\.badge \{[\s\S]*inline-size: fit-content;/);
+  expect(css).toMatch(/\.badge \{[\s\S]*max-inline-size: 100%;/);
+});
+
+test("inverted is a generic inverse surface treatment via --ui-*", () => {
+  const css = readCss("src/css/variants.css");
+
+  expect(css).toMatch(/\.inverted \{[\s\S]*--ui-bg: var\(--surface-solid\);/);
+  expect(css).toMatch(/\.inverted \{[\s\S]*--ui-fg: var\(--surface\);/);
+  expect(css).toMatch(/\.inverted \{[\s\S]*--heading: var\(--surface\);/);
+});
+
 test("busy overlay can inherit local surface background", () => {
   const busyCss = readCss("src/css/components/busy.css");
-  const cardCss = readCss("src/css/components/card.css");
+  const variantsCss = readCss("src/css/variants.css");
 
   expect(busyCss).toContain("var(--busy-overlay-bg, var(--surface))");
-  expect(cardCss).toContain("--busy-overlay-bg: var(--surface-solid);");
+  expect(variantsCss).toContain("--busy-overlay-bg: var(--surface-solid);");
 });
 
 test("menu item styles include disabled treatment", () => {

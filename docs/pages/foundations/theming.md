@@ -81,3 +81,10 @@ Set `--scroll-snap-item-size`.
 Set `--avatar-size` / `--avatar-radius`; tune overlap with `--avatar-stack-overlap` and `--avatar-stack-ring`.
 
 → Components · Avatar
+
+### Make a dark / inverted surface
+
+Apply `.inverted` to any block (`<header class="inverted">`, `<section class="inverted">`,
+`<div class="card inverted">`) for the dark `--surface-solid` treatment with light text.
+
+→ Components · Card · Foundations · Tokens (theme contract)

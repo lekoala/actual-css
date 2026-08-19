@@ -243,6 +243,12 @@
 <p>There is no exposed type scale.</p>
 <p>The framework exposes font weights, line heights, and the prose-specific overrides. It does not expose <code>fs-1</code> through <code>fs-7</code>, heading-level tokens, or heading-level utility classes. The reason is the same as for the baseline: a public scale is a contract, and adding it now would lock in choices before theme work and real component use tell us what is actually needed.</p>
 <p>When a scale is needed, the optional fluid module is the right place to start. A future theme can override its tokens, not invent a parallel scale in components.</p>
+<h2 id="font-families">Font families</h2>
+<p>The framework exposes two family slots, <code>--font-sans</code> (the default, applied to
+the document) and <code>--font-mono</code> (for <code>code</code> / <code>kbd</code> / <code>samp</code> / <code>pre</code>). There is no
+<code>--font-serif</code> or separate display slot. Add a serif or display family as a
+theme-level token in your own theme when a project actually needs one; the
+baseline stays sans so app UI inherits predictably.</p>
 <h2 id="font-weights">Font weights</h2>
 <p>The framework exposes a small set of weights:</p>
 <ul>
@@ -332,6 +338,7 @@
         <li><a class="nav-link" href="#optional-fluid-module" data-docs-toc-item data-level="3">Optional fluid module</a></li>
         <li><a class="nav-link" href="#link-treatment" data-docs-toc-item data-level="2">Link treatment</a></li>
         <li><a class="nav-link" href="#type-scale" data-docs-toc-item data-level="2">Type scale</a></li>
+        <li><a class="nav-link" href="#font-families" data-docs-toc-item data-level="2">Font families</a></li>
         <li><a class="nav-link" href="#font-weights" data-docs-toc-item data-level="2">Font weights</a></li>
         <li><a class="nav-link" href="#line-heights" data-docs-toc-item data-level="2">Line heights</a></li>
         <li><a class="nav-link" href="#prose-hooks" data-docs-toc-item data-level="3">Prose hooks</a></li>

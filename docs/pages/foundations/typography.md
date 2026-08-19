@@ -80,6 +80,14 @@ The framework exposes font weights, line heights, and the prose-specific overrid
 
 When a scale is needed, the optional fluid module is the right place to start. A future theme can override its tokens, not invent a parallel scale in components.
 
+## Font families
+
+The framework exposes two family slots, `--font-sans` (the default, applied to
+the document) and `--font-mono` (for `code` / `kbd` / `samp` / `pre`). There is no
+`--font-serif` or separate display slot. Add a serif or display family as a
+theme-level token in your own theme when a project actually needs one; the
+baseline stays sans so app UI inherits predictably.
+
 ## Font weights
 
 The framework exposes a small set of weights:

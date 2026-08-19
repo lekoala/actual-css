@@ -9,7 +9,7 @@ Flexible content container with optional header, body, and footer regions, plus 
 | `.card` | Component | Neutral raised surface for grouped content. |
 | `.raised` | Variant | Elevated surface with a soft shadow. |
 | `.subtle` | Variant | Lower contrast against the page surface. |
-| `.inverted` | Variant | Dark surface for emphasis; text inherits the light surface color. |
+| `.inverted` | Variant | Dark surface for emphasis; text inherits the light surface color. Shared surface treatment — apply as `class="card inverted"`, or on any block. |
 | `.compact` | Variant | Tighter padding for dense contexts. |
 
 ## Basic usage
@@ -132,6 +132,10 @@ Cards display nicely in grids with equal-height behavior.
 ```
 
 ## Surfaces
+
+`.inverted` is the generic inverse surface treatment, not a card-specific class:
+it works on any block (`<header class="inverted">`, `<section class="inverted">`,
+or `class="card inverted"`) through the shared `--ui-*` contract.
 
 ```html demo
 <section class="grid">

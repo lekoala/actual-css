@@ -75,14 +75,6 @@
 .card.subtle {
   background: var(--surface-subtle);
 }
-.card.inverted {
-  background: var(--surface-solid);
-  color: var(--surface);
-  border-color: transparent;
-  --heading: var(--surface);
-  --busy-overlay-bg: var(--surface-solid);
-}
-
 .card.compact {
   --card-pad: var(--space-20);
 }

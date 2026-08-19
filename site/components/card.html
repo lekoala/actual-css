@@ -200,7 +200,7 @@
 <tr><td><code>.card</code></td><td>Component</td><td>Neutral raised surface for grouped content.</td></tr>
 <tr><td><code>.raised</code></td><td>Variant</td><td>Elevated surface with a soft shadow.</td></tr>
 <tr><td><code>.subtle</code></td><td>Variant</td><td>Lower contrast against the page surface.</td></tr>
-<tr><td><code>.inverted</code></td><td>Variant</td><td>Dark surface for emphasis; text inherits the light surface color.</td></tr>
+<tr><td><code>.inverted</code></td><td>Variant</td><td>Dark surface for emphasis; text inherits the light surface color. Shared surface treatment — apply as <code>class=&quot;card inverted&quot;</code>, or on any block.</td></tr>
 <tr><td><code>.compact</code></td><td>Variant</td><td>Tighter padding for dense contexts.</td></tr>
 </tbody>
 </table></div>
@@ -422,6 +422,9 @@ colored headers, or footers.</p>
   </div>
 </div>
 <h2 id="surfaces">Surfaces</h2>
+<p><code>.inverted</code> is the generic inverse surface treatment, not a card-specific class:
+it works on any block (<code>&lt;header class=&quot;inverted&quot;&gt;</code>, <code>&lt;section class=&quot;inverted&quot;&gt;</code>,
+or <code>class=&quot;card inverted&quot;</code>) through the shared <code>--ui-*</code> contract.</p>
 <div class="docs-example">
   <div class="docs-preview">
 <section class="grid">

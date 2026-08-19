@@ -11,6 +11,10 @@
 - Can be used as a stable dot badge when empty and given an accessible name.
 - Empty badges render as dots. The element must be truly empty: no text and no whitespace.
 
+A badge is **content-sized**: it never stretches to fill its container, even as a
+direct child of `.stack` (where flex children otherwise stretch). Use `.grow` or a
+utility to force a full-width badge if a layout needs it.
+
 ## Class reference
 
 | Class | Kind | Description |

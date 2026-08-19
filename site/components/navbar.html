@@ -200,6 +200,9 @@
 <li><code>.nav-list</code> is the shared vertical navigation list, reused by <code>.drawer</code> for stacked links.</li>
 <li>Mark the current page with <code>aria-current=&quot;page&quot;</code> on the active <code>.nav-link</code>.</li>
 </ul>
+<p><code>.navbar-nav</code> and <code>.nav-list</code> are mutually exclusive: <code>.navbar-nav</code> is a horizontal
+flex list, <code>.nav-list</code> a vertical grid. Putting both on one element resolves to
+<code>.nav-list</code> (vertical) — pick one per container.</p>
 <h2 id="class-reference">Class reference</h2>
 <div class="table-wrap"><table class="table">
 <thead>

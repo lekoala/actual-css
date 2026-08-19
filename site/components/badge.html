@@ -203,6 +203,9 @@
 <li>Can be used as a stable dot badge when empty and given an accessible name.</li>
 <li>Empty badges render as dots. The element must be truly empty: no text and no whitespace.</li>
 </ul>
+<p>A badge is <strong>content-sized</strong>: it never stretches to fill its container, even as a
+direct child of <code>.stack</code> (where flex children otherwise stretch). Use <code>.grow</code> or a
+utility to force a full-width badge if a layout needs it.</p>
 <h2 id="class-reference">Class reference</h2>
 <div class="table-wrap"><table class="table">
 <thead>

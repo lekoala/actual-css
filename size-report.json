@@ -1,11 +1,11 @@
 {
-  "totalRaw": 182729,
-  "totalMinified": 87379,
-  "totalBrotli": 12866,
+  "totalRaw": 183167,
+  "totalMinified": 87500,
+  "totalBrotli": 12874,
   "themesMinified": 29127,
   "themesBrotli": 3404,
-  "shippedMinified": 87379,
-  "shippedBrotli": 12866,
+  "shippedMinified": 87500,
+  "shippedBrotli": 12874,
   "maxShippedBrotli": 13312,
   "fileCount": 73,
   "files": [
@@ -34,12 +34,12 @@
       "raw": 4919
     },
     {
-      "file": "components/avatar.css",
-      "raw": 4841
+      "file": "components/badge.css",
+      "raw": 4888
     },
     {
-      "file": "components/badge.css",
-      "raw": 4835
+      "file": "components/avatar.css",
+      "raw": 4841
     },
     {
       "file": "components/flyout.css",
@@ -78,12 +78,12 @@
       "raw": 3194
     },
     {
-      "file": "components/tooltip.css",
-      "raw": 2895
+      "file": "variants.css",
+      "raw": 3013
     },
     {
-      "file": "components/card.css",
-      "raw": 2839
+      "file": "components/tooltip.css",
+      "raw": 2895
     },
     {
       "file": "forms/range.css",
@@ -92,6 +92,10 @@
     {
       "file": "forms/validation.css",
       "raw": 2690
+    },
+    {
+      "file": "components/card.css",
+      "raw": 2657
     },
     {
       "file": "layout.css",
@@ -132,10 +136,6 @@
     {
       "file": "themes/neon.css",
       "raw": 2464
-    },
-    {
-      "file": "variants.css",
-      "raw": 2446
     },
     {
       "file": "themes/forest.css",
