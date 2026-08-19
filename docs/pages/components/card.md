@@ -9,7 +9,7 @@ Flexible content container with optional header, body, and footer regions, plus 
 | `.card` | Component | Neutral raised surface for grouped content. |
 | `.raised` | Variant | Elevated surface with a soft shadow. |
 | `.subtle` | Variant | Lower contrast against the page surface. |
-| `.inverted` | Variant | Dark surface for emphasis; text inherits the light surface color. Shared surface treatment — apply as `class="card inverted"`, or on any block. |
+| `.inverted` | Surface modifier | Inverse surface treatment: paints `--surface-solid` and swaps the foreground to `--surface`, so it inverts in dark themes instead of always reading as dark. Apply as `class="card inverted"`, or on any block. |
 | `.compact` | Variant | Tighter padding for dense contexts. |
 
 ## Basic usage
@@ -137,6 +137,12 @@ Cards display nicely in grids with equal-height behavior.
 it works on any block (`<header class="inverted">`, `<section class="inverted">`,
 or `class="card inverted"`) through the shared `--ui-*` contract.
 
+`.inverted` and `.subtle` are competing surface treatments — do not combine
+them. `.subtle` paints the card's background directly while `.inverted` swaps
+the surface tokens, so `.card.subtle.inverted` renders a subtle background with
+inverted foreground. Treat them as mutually exclusive, like two competing
+variants.
+
 ```html demo
 <section class="grid">
   <article class="card raised">
@@ -156,7 +162,7 @@ or `class="card inverted"`) through the shared `--ui-*` contract.
   <article class="card inverted stack">
     <hgroup>
       <h3>Inverted</h3>
-      <p>Dark surface for emphasis. Text inherits the light surface color.</p>
+      <p>Inverse surface for emphasis. Text inherits the contrasting surface color.</p>
     </hgroup>
     <button type="button" class="btn">Action</button>
   </article>

@@ -78,6 +78,8 @@
       <ul class="nav-list">
         <li><a class="nav-link" href="../guides/introduction.html">Introduction</a></li>
         <li><a class="nav-link" href="../guides/progressive-enhancement.html">The JavaScript Runtime</a></li>
+        <li><a class="nav-link" href="../guides/bootstrap.html">Migrating from Bootstrap to Actual CSS</a></li>
+        <li><a class="nav-link" href="../guides/tailwind.html">Migrating from Tailwind CSS to Actual CSS</a></li>
       </ul>
       <p class="docs-nav-group">Foundations</p>
       <ul class="nav-list">
@@ -240,6 +242,98 @@ flex list, <code>.nav-list</code> a vertical grid. Putting both on one element r
   </div>
 </div>
 <p>For a vertical sidebar nav, use <code>.nav-list</code> inside the drawer or sidebar.</p>
+<h2 id="responsive-navbar-drawer">Responsive: navbar + drawer</h2>
+<p>There is no collapse/toggler mechanism. For a responsive navigation, keep the
+horizontal <code>.navbar</code> for the desktop bar and compose the mobile experience from
+a <code>.drawer</code> with a vertical <code>.nav-list</code>, opened by a <code>command=&quot;show-modal&quot;</code> /
+<code>commandfor</code> trigger.</p>
+<div class="docs-example">
+  <div class="docs-preview">
+<nav class="navbar" aria-label="Main">
+  <a class="navbar-brand" href="/">Actual CSS</a>
+  <ul class="navbar-nav">
+    <li><a class="nav-link" href="/" aria-current="page">Home</a></li>
+    <li><a class="nav-link" href="/docs">Docs</a></li>
+  </ul>
+</nav>
+
+<button class="btn ghost"
+        type="button"
+        command="show-modal"
+        commandfor="site-nav"
+        aria-haspopup="dialog"
+        aria-controls="site-nav"
+        aria-label="Open menu">
+  <i class="ti ti-menu-2" aria-hidden="true"></i>
+</button>
+
+<dialog class="drawer"
+        id="site-nav"
+        aria-label="Main navigation"
+        closedby="any"
+        data-dialog-dismissible>
+  <header>
+    <strong>Menu</strong>
+    <form method="dialog">
+      <button class="drawer-close" type="submit" aria-label="Close navigation"></button>
+    </form>
+  </header>
+
+  <nav>
+    <ul class="nav-list stack">
+      <li><a href="#" aria-current="page">Home</a></li>
+      <li><a href="#">Docs</a></li>
+      <li><a href="#">Components</a></li>
+    </ul>
+  </nav>
+</dialog>
+  </div>
+  <div class="docs-code">
+    <pre><code class="language-html">&lt;nav class=&quot;navbar&quot; aria-label=&quot;Main&quot;&gt;
+  &lt;a class=&quot;navbar-brand&quot; href=&quot;/&quot;&gt;Actual CSS&lt;/a&gt;
+  &lt;ul class=&quot;navbar-nav&quot;&gt;
+    &lt;li&gt;&lt;a class=&quot;nav-link&quot; href=&quot;/&quot; aria-current=&quot;page&quot;&gt;Home&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a class=&quot;nav-link&quot; href=&quot;/docs&quot;&gt;Docs&lt;/a&gt;&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/nav&gt;
+
+&lt;button class=&quot;btn ghost&quot;
+        type=&quot;button&quot;
+        command=&quot;show-modal&quot;
+        commandfor=&quot;site-nav&quot;
+        aria-haspopup=&quot;dialog&quot;
+        aria-controls=&quot;site-nav&quot;
+        aria-label=&quot;Open menu&quot;&gt;
+  &lt;i class=&quot;ti ti-menu-2&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;
+&lt;/button&gt;
+
+&lt;dialog class=&quot;drawer&quot;
+        id=&quot;site-nav&quot;
+        aria-label=&quot;Main navigation&quot;
+        closedby=&quot;any&quot;
+        data-dialog-dismissible&gt;
+  &lt;header&gt;
+    &lt;strong&gt;Menu&lt;/strong&gt;
+    &lt;form method=&quot;dialog&quot;&gt;
+      &lt;button class=&quot;drawer-close&quot; type=&quot;submit&quot; aria-label=&quot;Close navigation&quot;&gt;&lt;/button&gt;
+    &lt;/form&gt;
+  &lt;/header&gt;
+
+  &lt;nav&gt;
+    &lt;ul class=&quot;nav-list stack&quot;&gt;
+      &lt;li&gt;&lt;a href=&quot;#&quot; aria-current=&quot;page&quot;&gt;Home&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#&quot;&gt;Docs&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#&quot;&gt;Components&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/nav&gt;
+&lt;/dialog&gt;</code></pre>
+  </div>
+</div>
+<p>The drawer can be hidden until opened: give the <code>dialog</code> the <code>hidden</code> attribute
+in the HTML and let the command runtime manage it, or rely on the drawer being
+rendered only on the mobile layout. <code>command</code> and <code>commandfor</code> work without
+JavaScript, and the drawer follows the same <code>closedby</code> / <code>data-dialog-dismissible</code>
+rules as the <a href="drawer.html">Drawer component</a>.</p>
 
 </div>
 
@@ -261,6 +355,7 @@ flex list, <code>.nav-list</code> a vertical grid. Putting both on one element r
           <ul class="nav-list docs-toc-list" data-docs-toc>
         <li><a class="nav-link" href="#class-reference" data-docs-toc-item data-level="2">Class reference</a></li>
         <li><a class="nav-link" href="#basic-usage" data-docs-toc-item data-level="2">Basic usage</a></li>
+        <li><a class="nav-link" href="#responsive-navbar-drawer" data-docs-toc-item data-level="2">Responsive: navbar + drawer</a></li>
           </ul>
         </nav>
       </aside>
@@ -283,6 +378,8 @@ flex list, <code>.nav-list</code> a vertical grid. Putting both on one element r
       <ul class="nav-list">
         <li><a class="nav-link" href="../guides/introduction.html">Introduction</a></li>
         <li><a class="nav-link" href="../guides/progressive-enhancement.html">The JavaScript Runtime</a></li>
+        <li><a class="nav-link" href="../guides/bootstrap.html">Migrating from Bootstrap to Actual CSS</a></li>
+        <li><a class="nav-link" href="../guides/tailwind.html">Migrating from Tailwind CSS to Actual CSS</a></li>
       </ul>
       <p class="docs-nav-group">Foundations</p>
       <ul class="nav-list">

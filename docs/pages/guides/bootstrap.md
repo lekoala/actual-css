@@ -20,6 +20,22 @@ For an incremental migration, use one of these approaches:
 * control precedence with cascade layers or import order;
 * use a project-side prefix transform for Actual while both frameworks coexist.
 
+The layered import is the cleanest way to keep both stylesheets during the
+migration:
+
+```css
+/* Migration setup — Actual rules sit in @layer actual */
+@import "bootstrap.css";
+@import "actual-css/css/layer";
+/* Unlayered project overrides stay on top */
+@import "app.css";
+```
+
+`actual.layer.css` wraps every Actual rule in a single `@layer actual`, so
+unlayered Bootstrap and project CSS keep precedence while the migration runs.
+See [Cascade layer strategy](../../design-notes/cascade-layer.md) for the
+limitations of the approach.
+
 Remove the compatibility mechanism when Bootstrap is gone. The public Actual API remains unprefixed.
 
 ## Components
@@ -229,8 +245,8 @@ Keep Actual helpers for common composition needs and put application-specific be
 ```css
 .account-actions {
   display: none;
-  margin-block-start: var(--space-4);
-  padding-inline: var(--space-3);
+  margin-block-start: var(--space-40);
+  padding-inline: var(--space-30);
   text-align: end;
 }
 
@@ -248,6 +264,17 @@ This is especially relevant for:
 * unusual widths and positioning;
 * decorative text/background colors;
 * one-off spacing combinations.
+
+> **Need something more specific?**
+>
+> 1. Tune the component or layout primitive with a public custom property.
+> 2. Compose an Actual layout primitive.
+> 3. Add a project class for application-specific CSS.
+> 4. Only reach for an optional utility when the rule is genuinely generic.
+
+Actual deliberately keeps its utility surface small and grows it only for needs
+that recur across real migrations — a one-off is project CSS, not a new
+framework class.
 
 ## JavaScript components
 
@@ -269,7 +296,13 @@ Bootstrap:
 Actual:
 
 ```html
-<button command="show-modal" commandfor="settings">
+<button
+  type="button"
+  command="show-modal"
+  commandfor="settings"
+  aria-haspopup="dialog"
+  aria-controls="settings"
+>
   Settings
 </button>
 
@@ -283,7 +316,13 @@ Actual:
 Use a native dialog with the `.drawer` component.
 
 ```html
-<button command="show-modal" commandfor="navigation">
+<button
+  type="button"
+  command="show-modal"
+  commandfor="navigation"
+  aria-haspopup="dialog"
+  aria-controls="navigation"
+>
   Menu
 </button>
 
@@ -318,7 +357,17 @@ A Bootstrap responsive navbar often combines several responsibilities:
 
 Actual's navbar is intentionally a simpler navigation pattern.
 
-Keep the desktop navigation as a navbar and compose the mobile experience from a drawer or flyout rather than looking for a `.navbar-expand-lg` equivalent.
+Keep the desktop navigation as a navbar and compose the mobile experience from a
+drawer or flyout rather than looking for a `.navbar-expand-lg` equivalent:
+
+* desktop → `.navbar` with `.navbar-nav`;
+* mobile → `.drawer` with `.nav-list`;
+* trigger → a `command="show-modal"` / `commandfor` button.
+
+The [Navbar component page](../components/navbar.md) shows this composition
+as *the Actual way*: a horizontal `.navbar-nav` on the desktop bar and a vertical
+`.nav-list` inside the mobile drawer, opened with the native dialog command
+pattern. There is no collapse/toggler state to keep in sync.
 
 This usually produces simpler behavior, but it is not a class-for-class migration.
 
@@ -343,7 +392,7 @@ If your Bootstrap project mainly customizes Sass variables and theme maps, move 
 
 Instead of generating additional framework classes such as:
 
-```scss
+```text
 $theme-colors: map-merge(...);
 ```
 
@@ -352,7 +401,7 @@ prefer project tokens:
 ```css
 :root {
   --primary: ...;
-  --radius-md: ...;
+  --radius: ...;
 }
 ```
 

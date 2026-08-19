@@ -82,9 +82,11 @@ Set `--avatar-size` / `--avatar-radius`; tune overlap with `--avatar-stack-overl
 
 → Components · Avatar
 
-### Make a dark / inverted surface
+### Make an inverted / contrasting surface
 
 Apply `.inverted` to any block (`<header class="inverted">`, `<section class="inverted">`,
-`<div class="card inverted">`) for the dark `--surface-solid` treatment with light text.
+`<div class="card inverted">`) for the inverse surface treatment: it paints
+`--surface-solid` and swaps the foreground to `--surface`, so in a dark theme the
+surface relationship inverts instead of staying dark.
 
 → Components · Card · Foundations · Tokens (theme contract)

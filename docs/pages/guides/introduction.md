@@ -79,8 +79,9 @@ Actual CSS uses a small unprefixed class grammar:
 
 Intents are `.primary`, `.secondary`, `.success`, `.warning`, and `.danger`, and
 work across components. Variants such as `.solid`, `.soft`, and `.outline` are
-shared by buttons, badges, alerts, and cards; `.ghost` and `.link` are
-button-only. Size variants `.sm` and `.lg` scale controls consistently.
+shared by buttons, badges, alerts, and cards; `.inverted` is a shared surface
+modifier that paints any block with the inverse surface. `.ghost` and `.link`
+are button-only. Size variants `.sm` and `.lg` scale controls consistently.
 Undocumented `is-*` classes are runtime internals.
 
 ```html
@@ -128,9 +129,10 @@ the runtime — is documented in [The JavaScript Runtime guide](progressive-enha
 - **Enhancements** — JS-enhanced component behavior: flyout, tooltip, tabs,
   scrollspy, and the status bar, each with its own page. See the
   [Enhancements overview](../enhancements/overview.md).
-- **Guides** — [The JavaScript Runtime](progressive-enhancement.md): the
-  optional runtime that completes interactive components, including how to
-  extend it.
+- **Guides** — [Migrating from Bootstrap](bootstrap.md) and
+  [Migrating from Tailwind](tailwind.md) walk through moving an existing
+  project; [The JavaScript Runtime](progressive-enhancement.md) documents the
+  optional runtime that completes interactive components.
 
 Beyond the pages, the repository keeps its design notes — browser support,
 cascade layers, naming, the enhancement contract, and widget primitives — as

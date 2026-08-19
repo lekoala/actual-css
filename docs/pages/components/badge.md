@@ -12,8 +12,9 @@
 - Empty badges render as dots. The element must be truly empty: no text and no whitespace.
 
 A badge is **content-sized**: it never stretches to fill its container, even as a
-direct child of `.stack` (where flex children otherwise stretch). Use `.grow` or a
-utility to force a full-width badge if a layout needs it.
+direct child of `.stack` (where flex children otherwise stretch). Use
+`inline-size: 100%` — or the optional `.inline-size-full` utility — when a
+full-width badge is intentional.
 
 ## Class reference
 

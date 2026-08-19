@@ -21,6 +21,22 @@ Examples include layout and flex-related names such as `.grid`, `.grow`, and `.i
 
 For a staged migration, use cascade layers, controlled import order, or a project-side Actual prefix transform where necessary.
 
+The layered import is the cleanest way to keep both stylesheets during the
+migration:
+
+```css
+/* Migration setup — Actual rules sit in @layer actual */
+@import "tailwind.css";        /* your compiled Tailwind output */
+@import "actual-css/css/layer";
+/* Unlayered project overrides stay on top */
+@import "app.css";
+```
+
+`actual.layer.css` wraps every Actual rule in a single `@layer actual`, so
+unlayered Tailwind output and project CSS keep precedence while the migration
+runs. See [Cascade layer strategy](../../design-notes/cascade-layer.md) for the
+limitations of the approach.
+
 Do not assume that loading both complete stylesheets is automatically safe.
 
 ## Start with components, not utilities
@@ -175,7 +191,7 @@ write project CSS:
 ```css
 .account-header {
   display: grid;
-  gap: var(--space-4);
+  gap: var(--space-40);
 }
 
 @media (width >= 48rem) {
@@ -233,12 +249,23 @@ Use a small semantic project rule when the spacing genuinely belongs to an appli
 
 ```css
 .account-section {
-  padding-inline: var(--space-4);
-  margin-block-end: var(--space-6);
+  padding-inline: var(--space-40);
+  margin-block-end: var(--space-60);
 }
 ```
 
 The goal is not zero custom CSS. The goal is CSS attached to meaningful structures instead of reconstructing every declaration in HTML.
+
+> **Need something more specific?**
+>
+> 1. Tune the component or layout primitive with a public custom property.
+> 2. Compose an Actual layout primitive.
+> 3. Add a project class for application-specific CSS.
+> 4. Only reach for an optional utility when the rule is genuinely generic.
+
+Actual deliberately keeps its utility surface small and grows it only for needs
+that recur across real migrations — a one-off is project CSS, not a new
+framework class.
 
 ## Arbitrary values move back into CSS
 

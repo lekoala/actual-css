@@ -5,8 +5,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Introduction — Actual CSS</title>
-  <meta name="description" content="Actual CSS is a plain CSS component framework for new projects — semantic classes, small tokens, universal variants, theme hooks, and progressive enhancement, with no build step and no framework dependency.">
+  <title>Migrating from Bootstrap to Actual CSS — Actual CSS</title>
+  <meta name="description" content="This guide targets Bootstrap 5.x. Actual CSS is not a drop-in Bootstrap replacement, but many Bootstrap concepts have direct or close equivalents.">
   <link rel="stylesheet" href="../../src/css/actual.css">
   <link rel="stylesheet" href="../../src/css/optional/index.css">
   <link rel="stylesheet" href="../../dist/actual-themes.min.css">
@@ -76,9 +76,9 @@
       <aside class="docs-sidebar" aria-label="Documentation">
               <p class="docs-nav-group">Guides</p>
       <ul class="nav-list">
-        <li><a class="nav-link" href="introduction.html" aria-current="page">Introduction</a></li>
+        <li><a class="nav-link" href="introduction.html">Introduction</a></li>
         <li><a class="nav-link" href="progressive-enhancement.html">The JavaScript Runtime</a></li>
-        <li><a class="nav-link" href="bootstrap.html">Migrating from Bootstrap to Actual CSS</a></li>
+        <li><a class="nav-link" href="bootstrap.html" aria-current="page">Migrating from Bootstrap to Actual CSS</a></li>
         <li><a class="nav-link" href="tailwind.html">Migrating from Tailwind CSS to Actual CSS</a></li>
       </ul>
       <p class="docs-nav-group">Foundations</p>
@@ -186,150 +186,354 @@
           <nav aria-label="Breadcrumb">
             <ol class="breadcrumb">
               <li><a href="../index.html">Docs</a></li>
-              <li><span aria-current="page">Introduction</span></li>
+              <li><span aria-current="page">Migrating from Bootstrap to Actual CSS</span></li>
             </ol>
           </nav>
 
           <div class="prose docs-prose">
-<h1 id="introduction">Introduction</h1>
-<blockquote>
-<p>Actual CSS is a plain CSS component framework for new projects — semantic classes, small tokens, universal variants, theme hooks, and progressive enhancement, with no build step and no framework dependency.</p>
-</blockquote>
-<p>Actual CSS claims a small set of global class names and keeps everything opt-in:
-components define structure, variants change the style, and intents set the
-color. It is designed for new projects and works as-is in existing ones through
-cascade layers, import order, or an optional prefix transform.</p>
-<h2 id="css-first-philosophy">CSS-first philosophy</h2>
+<h1 id="migrating-from-bootstrap-to-actual-css">Migrating from Bootstrap to Actual CSS</h1>
+<p>This guide targets Bootstrap 5.x. Actual CSS is not a drop-in Bootstrap replacement, but many Bootstrap concepts have direct or close equivalents.</p>
+<p>The main migration is:</p>
+<p><strong>Bootstrap components → Actual components</strong>
+<strong>Bootstrap grid and utilities → Actual layout primitives + small project CSS</strong>
+<strong>Bootstrap JavaScript plugins → native HTML + Actual enhancements</strong></p>
+<h2 id="before-you-start-running-both-frameworks">Before you start: running both frameworks</h2>
+<p>Actual CSS and Bootstrap both use short global class names such as <code>.btn</code>, <code>.card</code>, <code>.alert</code>, and <code>.table</code>.</p>
+<p>Do not assume both complete stylesheets can be loaded side by side without interaction.</p>
+<p>For an incremental migration, use one of these approaches:</p>
 <ul>
-<li>CSS owns layout, surfaces, state styling, and transitions.</li>
-<li>JavaScript is optional and completes the interactive components — dialog,
-flyout, tooltip, tabs, scrollspy, status bar, and more.</li>
-<li>Semantic markup comes first; behavior is a progressive enhancement layered on
-top of it.</li>
-<li>Prefer native platform features when they fit, with small helpers where
-browser support or ergonomics need it.</li>
-<li>Markup stays understandable without JavaScript, and modern features are gated
-with <code>@supports</code> so older browsers keep the core layout and controls.</li>
+<li>migrate isolated pages or application areas;</li>
+<li>control precedence with cascade layers or import order;</li>
+<li>use a project-side prefix transform for Actual while both frameworks coexist.</li>
 </ul>
-<p>The distinction is structural, not stylistic: presentation lives in classes,
-JavaScript behavior opts in through <code>data-enhance</code> tokens, semantics come from
-ARIA and native HTML, and per-widget configuration uses self-describing
-<code>data-*</code> attributes.</p>
-<h2 id="install">Install</h2>
-<pre><code class="language-text">npm install actual-css
+<p>The layered import is the cleanest way to keep both stylesheets during the
+migration:</p>
+<pre><code class="language-css">/* Migration setup — Actual rules sit in @layer actual */
+@import &quot;bootstrap.css&quot;;
+@import &quot;actual-css/css/layer&quot;;
+/* Unlayered project overrides stay on top */
+@import &quot;app.css&quot;;
 </code></pre>
-<p>Import the full framework in your CSS:</p>
-<pre><code class="language-css">@import &quot;actual-css&quot;;
-</code></pre>
-<p>Or compose only the pieces you use:</p>
-<pre><code class="language-css">@import &quot;actual-css/css/reset&quot;;
-@import &quot;actual-css/css/base&quot;;
-@import &quot;actual-css/css/tokens&quot;;
-@import &quot;actual-css/css/theme&quot;;
-@import &quot;actual-css/css/intents&quot;;
-@import &quot;actual-css/css/variants&quot;;
-@import &quot;actual-css/css/layout&quot;;
-@import &quot;actual-css/css/grid&quot;;
-@import &quot;actual-css/css/forms&quot;;
-@import &quot;actual-css/css/components/button&quot;;
-@import &quot;actual-css/css/components/card&quot;;
-@import &quot;actual-css/css/components/flyout&quot;;
-@import &quot;actual-css/css/utilities&quot;;
-/* Keep the focus baseline after components and controls. */
-@import &quot;actual-css/css/focus&quot;;
-</code></pre>
-<p><code>focus</code> is the final interactive baseline in modular builds: older browsers
-retain a visible <code>:focus</code> outline, while browsers with <code>:focus-visible</code> avoid
-showing it for pointer focus.</p>
-<p>You can also use the compiled file directly:</p>
-<pre><code class="language-html">&lt;link rel=&quot;stylesheet&quot; href=&quot;actual.min.css&quot;&gt;
-</code></pre>
-<p>The package does not maintain separate partial bundles. Modular entrypoints map
-to source files, so each project composes the framework shape it needs.</p>
-<h2 id="class-grammar">Class grammar</h2>
-<p>Actual CSS uses a small unprefixed class grammar:</p>
-<pre><code class="language-text">.component [intent] [variant] [size] [modifier]
-</code></pre>
-<p>Intents are <code>.primary</code>, <code>.secondary</code>, <code>.success</code>, <code>.warning</code>, and <code>.danger</code>, and
-work across components. Variants such as <code>.solid</code>, <code>.soft</code>, and <code>.outline</code> are
-shared by buttons, badges, alerts, and cards; <code>.inverted</code> is a shared surface
-modifier that paints any block with the inverse surface. <code>.ghost</code> and <code>.link</code>
-are button-only. Size variants <code>.sm</code> and <code>.lg</code> scale controls consistently.
-Undocumented <code>is-*</code> classes are runtime internals.</p>
-<pre><code class="language-html">&lt;button class=&quot;btn&quot;&gt;Click me&lt;/button&gt;
-&lt;button class=&quot;btn primary&quot;&gt;Save&lt;/button&gt;
-&lt;button class=&quot;btn primary outline lg&quot;&gt;Publish&lt;/button&gt;
-&lt;button class=&quot;btn success soft sm&quot;&gt;Confirm&lt;/button&gt;
-</code></pre>
-<h2 id="the-javascript-runtime">The JavaScript runtime</h2>
-<p>Some components can be enhanced with JavaScript: dialog, drawer, flyout,
-tooltip, tabs, scrollspy, context menu, floating UI, opt-in <code>data-filter</code> input
-filtering, and input masks. Presentation and behavior are separate layers —
-import the full runtime or any primitive independently to build custom widgets.</p>
-<pre><code class="language-html">&lt;script src=&quot;actual.js&quot; type=&quot;module&quot;&gt;&lt;/script&gt;
-</code></pre>
-<pre><code class="language-js">import &quot;actual-css/js/dialog&quot;;
-import &quot;actual-css/js/flyout&quot;;
-import &quot;actual-css/js/filter&quot;;
-import &quot;actual-css/js/mask&quot;;
-</code></pre>
-<p>JavaScript modules are safe to import during server-side rendering; outside a
-browser, registration is a no-op. The complete runtime contract — lifecycle
-rules, command routing, the floating and surface contracts, and how to extend
-the runtime — is documented in <a href="progressive-enhancement.html">The JavaScript Runtime guide</a>.</p>
-<h2 id="api-surface">API surface</h2>
-<ul>
-<li><strong>Layout</strong> — the layout primitives: stack, cluster, grid, switcher, center,
-media, frame, app-shell, sidebar-layout, and more. See the
-<a href="../layout/overview.html">Layout overview</a>.</li>
-<li><strong>Components</strong> — native and CSS-only component classes and examples: button,
-card, badge, alert, table, accordion, breadcrumb, pagination, skeleton,
-spinner, avatar, key, meter, progress, navbar, and more. Each component has
-its own page.</li>
-<li><strong>Forms</strong> — field layout, controls, validation states, switches, selects,
-custom selects, and form actions. See the
-<a href="../forms/overview.html">Forms overview</a>.</li>
-<li><strong>Enhancements</strong> — JS-enhanced component behavior: flyout, tooltip, tabs,
-scrollspy, and the status bar, each with its own page. See the
-<a href="../enhancements/overview.html">Enhancements overview</a>.</li>
-<li><strong>Guides</strong> — <a href="bootstrap.html">Migrating from Bootstrap</a> and
-<a href="tailwind.html">Migrating from Tailwind</a> walk through moving an existing
-project; <a href="progressive-enhancement.html">The JavaScript Runtime</a> documents the
-optional runtime that completes interactive components.</li>
-</ul>
-<p>Beyond the pages, the repository keeps its design notes — browser support,
-cascade layers, naming, the enhancement contract, and widget primitives — as
-internal design documents for contributors.</p>
-<h2 id="browser-support">Browser support</h2>
-<p>Actual CSS is built around progressive enhancement.</p>
+<p><code>actual.layer.css</code> wraps every Actual rule in a single <code>@layer actual</code>, so
+unlayered Bootstrap and project CSS keep precedence while the migration runs.
+See <a href="../../design-notes/cascade-layer.md">Cascade layer strategy</a> for the
+limitations of the approach.</p>
+<p>Remove the compatibility mechanism when Bootstrap is gone. The public Actual API remains unprefixed.</p>
+<h2 id="components">Components</h2>
+<p>Many common Bootstrap components translate directly.</p>
 <div class="table-wrap"><table class="table">
 <thead>
-<tr><th>Tier</th><th>Firefox</th><th>Safari</th><th>Chromium</th></tr>
+<tr><th>Bootstrap</th><th>Actual CSS</th></tr>
 </thead>
 <tbody>
-<tr><td>Degraded</td><td>78+</td><td>14+</td><td>88+</td></tr>
-<tr><td><strong>Minimal</strong></td><td><strong>98+</strong></td><td><strong>15.4+</strong></td><td><strong>99+</strong></td></tr>
-<tr><td>Intermediate</td><td>121+</td><td>16+</td><td>106+</td></tr>
-<tr><td>Recommended</td><td>129+</td><td>17.5+</td><td>123+</td></tr>
+<tr><td><code>.btn .btn-primary</code></td><td><code>.btn .primary</code></td></tr>
+<tr><td><code>.btn .btn-outline-danger</code></td><td><code>.btn .danger .outline</code></td></tr>
+<tr><td><code>.btn .btn-sm</code></td><td><code>.btn .sm</code></td></tr>
+<tr><td><code>.btn .btn-lg</code></td><td><code>.btn .lg</code></td></tr>
+<tr><td><code>.badge</code></td><td><code>.badge</code></td></tr>
+<tr><td><code>.alert</code></td><td><code>.alert</code></td></tr>
+<tr><td><code>.card</code></td><td><code>.card</code></td></tr>
+<tr><td><code>.table</code></td><td><code>.table</code></td></tr>
+<tr><td><code>.spinner-*</code></td><td><code>.spinner</code></td></tr>
+<tr><td><code>.breadcrumb</code></td><td><code>.breadcrumb</code></td></tr>
+<tr><td><code>.pagination</code></td><td><code>.pagination</code></td></tr>
 </tbody>
 </table></div>
-<p><strong>Degraded</strong> — semantic HTML and core CSS remain usable. JavaScript
-enhancements are outside the supported contract.</p>
-<p><strong>Minimal</strong> — full Actual support, including the JavaScript runtime. The
-runtime assumes modern browser APIs and ships no legacy compatibility layers or
-polyfills.</p>
+<p>Bootstrap commonly combines the intent with the component name:</p>
+<pre><code class="language-html">&lt;button class=&quot;btn btn-primary btn-lg&quot;&gt;Save&lt;/button&gt;
+</code></pre>
+<p>Actual separates component, intent, variant, and size:</p>
+<pre><code class="language-html">&lt;button class=&quot;btn primary lg&quot;&gt;Save&lt;/button&gt;
+</code></pre>
+<p>The same intent classes can be reused across compatible components:</p>
+<pre><code class="language-html">&lt;button class=&quot;btn danger outline&quot;&gt;Delete&lt;/button&gt;
+&lt;span class=&quot;badge success soft&quot;&gt;Active&lt;/span&gt;
+&lt;div class=&quot;alert warning&quot;&gt;Check these values.&lt;/div&gt;
+</code></pre>
+<p>Do not mechanically translate every Bootstrap modifier. First check whether the distinction belongs to the component, the theme, or the surrounding layout.</p>
+<h2 id="forms">Forms</h2>
+<p>Bootstrap:</p>
+<pre><code class="language-html">&lt;div class=&quot;mb-3&quot;&gt;
+  &lt;label class=&quot;form-label&quot; for=&quot;email&quot;&gt;Email&lt;/label&gt;
+  &lt;input class=&quot;form-control&quot; id=&quot;email&quot; type=&quot;email&quot;&gt;
+&lt;/div&gt;
+</code></pre>
+<p>Actual:</p>
+<pre><code class="language-html">&lt;label class=&quot;field&quot;&gt;
+  &lt;span class=&quot;field-label&quot;&gt;Email&lt;/span&gt;
+  &lt;input class=&quot;input&quot; type=&quot;email&quot;&gt;
+&lt;/label&gt;
+</code></pre>
+<p>Common translations include:</p>
+<div class="table-wrap"><table class="table">
+<thead>
+<tr><th>Bootstrap</th><th>Actual CSS</th></tr>
+</thead>
+<tbody>
+<tr><td><code>.form-control</code> on an input</td><td><code>.input</code></td></tr>
+<tr><td><code>.form-control</code> on a textarea</td><td><code>.textarea</code></td></tr>
+<tr><td><code>.form-select</code></td><td><code>.select</code></td></tr>
+<tr><td>checkbox</td><td><code>.check</code></td></tr>
+<tr><td>radio</td><td><code>.radio</code></td></tr>
+<tr><td><code>.form-switch</code></td><td><code>.switch</code></td></tr>
+<tr><td>validation feedback</td><td><code>.field-error</code> / <code>.field-help</code></td></tr>
+<tr><td>grouped actions</td><td><code>.form-actions</code></td></tr>
+</tbody>
+</table></div>
+<p>Actual uses explicit control classes instead of one generic <code>.form-control</code>.</p>
+<p>Floating labels do not have a built-in Actual component. Keep them as project CSS if the design requires them.</p>
+<h2 id="replace-rows-and-columns-with-layout-intent">Replace rows and columns with layout intent</h2>
+<p>Bootstrap's twelve-column grid does not have a one-to-one equivalent.</p>
+<p>A Bootstrap layout such as:</p>
+<pre><code class="language-html">&lt;div class=&quot;row g-4&quot;&gt;
+  &lt;div class=&quot;col-12 col-md-6&quot;&gt;...&lt;/div&gt;
+  &lt;div class=&quot;col-12 col-md-6&quot;&gt;...&lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+<p>usually becomes an Actual grid:</p>
+<pre><code class="language-html">&lt;div class=&quot;container-query&quot;&gt;
+  &lt;div class=&quot;grid-2&quot;&gt;
+    &lt;div&gt;...&lt;/div&gt;
+    &lt;div&gt;...&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+<p>Or use the intrinsic grid when the real requirement is simply “fit as many useful columns as there is room for”:</p>
+<pre><code class="language-html">&lt;div class=&quot;grid&quot; style=&quot;--grid-min: 18rem&quot;&gt;
+  ...
+&lt;/div&gt;
+</code></pre>
+<p>For asymmetric layouts, express the layout directly:</p>
+<pre><code class="language-html">&lt;div class=&quot;dashboard-grid grid&quot;&gt;
+  ...
+&lt;/div&gt;
+</code></pre>
+<pre><code class="language-css">.dashboard-grid {
+  --grid-columns: minmax(0, 2fr) minmax(0, 1fr);
+}
+
+@container (width &lt; 48rem) {
+  .dashboard-grid {
+    --grid-columns: 1fr;
+  }
+}
+</code></pre>
+<p>This is intentionally different from recreating <code>col-md-8 col-md-4</code>.</p>
+<p>If your Bootstrap markup uses offsets, ordering, and several breakpoint-specific column widths, expect to write some project CSS during migration.</p>
+<h2 id="translate-flex-utility-clusters-into-layout-primitives">Translate flex utility clusters into layout primitives</h2>
+<p>Bootstrap:</p>
+<pre><code class="language-html">&lt;div class=&quot;d-flex align-items-center justify-content-between gap-3&quot;&gt;
+  ...
+&lt;/div&gt;
+</code></pre>
+<p>Actual:</p>
+<pre><code class="language-html">&lt;div class=&quot;cluster&quot;&gt;
+  ...
+&lt;/div&gt;
+</code></pre>
+<p>Tune the primitive when necessary:</p>
+<pre><code class="language-html">&lt;div
+  class=&quot;cluster&quot;
+  style=&quot;--cluster-justify: space-between; --cluster-align: center&quot;
+&gt;
+  ...
+&lt;/div&gt;
+</code></pre>
+<p>For vertical flows:</p>
+<pre><code class="language-html">&lt;div class=&quot;stack&quot;&gt;
+  ...
+&lt;/div&gt;
+</code></pre>
+<p>Think in terms of the relationship between children rather than translating each CSS declaration into another class.</p>
+<p>Typical choices are:</p>
+<div class="table-wrap"><table class="table">
+<thead>
+<tr><th>Bootstrap pattern</th><th>Actual approach</th></tr>
+</thead>
+<tbody>
+<tr><td>flex row that may wrap</td><td><code>.cluster</code></td></tr>
+<tr><td>vertical flex stack</td><td><code>.stack</code></td></tr>
+<tr><td>equal columns</td><td><code>.grid-2</code>, <code>.grid-3</code>, <code>.grid-4</code>, <code>.grid-6</code></td></tr>
+<tr><td>intrinsically responsive cards</td><td><code>.grid</code></td></tr>
+<tr><td>row that becomes a column when constrained</td><td><code>.switcher</code></td></tr>
+<tr><td>sidebar/content layout</td><td><code>.sidebar-layout</code></td></tr>
+<tr><td>readable centered content</td><td><code>.center</code>, <code>.measure</code></td></tr>
+</tbody>
+</table></div>
+<h2 id="do-not-recreate-bootstraps-utility-api">Do not recreate Bootstrap's utility API</h2>
+<p>Bootstrap offers responsive utilities for spacing, display, flexbox, visibility, sizing, and many other properties.</p>
+<p>Actual deliberately does not provide an equivalent utility for every declaration.</p>
+<p>For example:</p>
+<pre><code class="language-html">&lt;div class=&quot;d-none d-lg-flex mt-4 px-3 text-end&quot;&gt;
+</code></pre>
+<p>should not become a collection of newly invented Actual classes.</p>
+<p>Keep Actual helpers for common composition needs and put application-specific behavior in project CSS:</p>
+<pre><code class="language-html">&lt;div class=&quot;account-actions&quot;&gt;
+</code></pre>
+<pre><code class="language-css">.account-actions {
+  display: none;
+  margin-block-start: var(--space-40);
+  padding-inline: var(--space-30);
+  text-align: end;
+}
+
+@media (width &gt;= 64rem) {
+  .account-actions {
+    display: flex;
+  }
+}
+</code></pre>
+<p>This is especially relevant for:</p>
+<ul>
+<li>breakpoint-specific display;</li>
+<li>responsive ordering;</li>
+<li>unusual widths and positioning;</li>
+<li>decorative text/background colors;</li>
+<li>one-off spacing combinations.</li>
+</ul>
+<blockquote>
+<p><strong>Need something more specific?</strong></p>
+<ol>
+<li>Tune the component or layout primitive with a public custom property.</li>
+<li>Compose an Actual layout primitive.</li>
+<li>Add a project class for application-specific CSS.</li>
+<li>Only reach for an optional utility when the rule is genuinely generic.</li>
+</ol>
+</blockquote>
+<p>Actual deliberately keeps its utility surface small and grows it only for needs
+that recur across real migrations — a one-off is project CSS, not a new
+framework class.</p>
+<h2 id="javascript-components">JavaScript components</h2>
+<p>Do not translate <code>data-bs-*</code> attributes mechanically. Actual generally starts from native platform behavior and adds enhancement only where useful.</p>
+<h3 id="modal">Modal</h3>
+<p>Bootstrap:</p>
+<pre><code class="language-html">&lt;button
+  data-bs-toggle=&quot;modal&quot;
+  data-bs-target=&quot;#settings&quot;
+&gt;
+  Settings
+&lt;/button&gt;
+</code></pre>
+<p>Actual:</p>
+<pre><code class="language-html">&lt;button
+  type=&quot;button&quot;
+  command=&quot;show-modal&quot;
+  commandfor=&quot;settings&quot;
+  aria-haspopup=&quot;dialog&quot;
+  aria-controls=&quot;settings&quot;
+&gt;
+  Settings
+&lt;/button&gt;
+
+&lt;dialog class=&quot;modal&quot; id=&quot;settings&quot;&gt;
+  ...
+&lt;/dialog&gt;
+</code></pre>
+<h3 id="offcanvas">Offcanvas</h3>
+<p>Use a native dialog with the <code>.drawer</code> component.</p>
+<pre><code class="language-html">&lt;button
+  type=&quot;button&quot;
+  command=&quot;show-modal&quot;
+  commandfor=&quot;navigation&quot;
+  aria-haspopup=&quot;dialog&quot;
+  aria-controls=&quot;navigation&quot;
+&gt;
+  Menu
+&lt;/button&gt;
+
+&lt;dialog class=&quot;drawer&quot; id=&quot;navigation&quot;&gt;
+  ...
+&lt;/dialog&gt;
+</code></pre>
+<h3 id="dropdown">Dropdown</h3>
+<p>Bootstrap dropdowns normally migrate to an Actual flyout.</p>
+<h3 id="tabs">Tabs</h3>
+<p>Bootstrap's tab plugin normally migrates to <code>.tabs</code> / <code>.tab</code> markup with the tabs enhancer.</p>
+<h3 id="tooltip-and-scrollspy">Tooltip and scrollspy</h3>
+<p>Actual provides dedicated enhancements for both.</p>
+<p>The important difference is architectural: presentation classes and behavior are separate. <code>data-enhance</code> opts an element into Actual behavior instead of making every styled component implicitly dependent on a JavaScript plugin.</p>
+<h2 id="navbar-migration">Navbar migration</h2>
+<p>A Bootstrap responsive navbar often combines several responsibilities:</p>
+<ul>
+<li>horizontal navigation;</li>
+<li>breakpoint logic;</li>
+<li>collapse;</li>
+<li>toggler state;</li>
+<li>optionally offcanvas behavior.</li>
+</ul>
+<p>Actual's navbar is intentionally a simpler navigation pattern.</p>
+<p>Keep the desktop navigation as a navbar and compose the mobile experience from a
+drawer or flyout rather than looking for a <code>.navbar-expand-lg</code> equivalent:</p>
+<ul>
+<li>desktop → <code>.navbar</code> with <code>.navbar-nav</code>;</li>
+<li>mobile → <code>.drawer</code> with <code>.nav-list</code>;</li>
+<li>trigger → a <code>command=&quot;show-modal&quot;</code> / <code>commandfor</code> button.</li>
+</ul>
+<p>The <a href="../components/navbar.html">Navbar component page</a> shows this composition
+as <em>the Actual way</em>: a horizontal <code>.navbar-nav</code> on the desktop bar and a vertical
+<code>.nav-list</code> inside the mobile drawer, opened with the native dialog command
+pattern. There is no collapse/toggler state to keep in sync.</p>
+<p>This usually produces simpler behavior, but it is not a class-for-class migration.</p>
+<h2 id="components-without-a-direct-replacement">Components without a direct replacement</h2>
+<p>Do not expect complete Bootstrap widget parity.</p>
+<p>For specialized widgets, first decide whether they are still needed, can use a native platform primitive, or should remain application code.</p>
+<p>Examples that may require a different solution include:</p>
+<ul>
+<li>carousels;</li>
+<li>toast-style transient notifications;</li>
+<li>generic arbitrary collapse regions;</li>
+<li>Bootstrap-specific popover behavior.</li>
+</ul>
+<p>A flyout may replace many popover-style interactive surfaces, but it is not intended as API compatibility with Bootstrap Popover.</p>
+<h2 id="themes-and-sass-customization">Themes and Sass customization</h2>
+<p>If your Bootstrap project mainly customizes Sass variables and theme maps, move stable design decisions into Actual theme tokens and public hooks.</p>
+<p>Instead of generating additional framework classes such as:</p>
+<pre><code class="language-text">$theme-colors: map-merge(...);
+</code></pre>
+<p>prefer project tokens:</p>
+<pre><code class="language-css">:root {
+  --primary: ...;
+  --radius: ...;
+}
+</code></pre>
+<p>and semantic project CSS where a value is application-specific.</p>
+<p>Do not rebuild Bootstrap's generated utility matrix on top of Actual.</p>
+<h2 id="recommended-migration-order">Recommended migration order</h2>
+<ol>
+<li>Establish a safe coexistence strategy if both stylesheets must temporarily remain.</li>
+<li>Migrate buttons, badges, alerts, cards, and basic content components.</li>
+<li>Migrate forms.</li>
+<li>Replace Bootstrap JavaScript widgets with native HTML and Actual enhancements.</li>
+<li>Replace repeated flex utility clusters with layout primitives.</li>
+<li>Migrate the Bootstrap grid.</li>
+<li>Replace the remaining utility-heavy markup with small semantic project classes.</li>
+<li>Remove Bootstrap and any temporary prefix or cascade compatibility layer.</li>
+</ol>
+<h2 id="where-migration-is-genuinely-harder">Where migration is genuinely harder</h2>
+<p>Expect additional work when the application relies heavily on:</p>
+<ul>
+<li>twelve-column grid arithmetic;</li>
+<li>offsets and breakpoint-specific ordering;</li>
+<li>extensive responsive utility combinations;</li>
+<li>Bootstrap navbar collapse behavior;</li>
+<li>floating labels;</li>
+<li>specialized Bootstrap JavaScript plugins;</li>
+<li>Sass-generated application utility classes.</li>
+</ul>
+<p>Those are real migration costs, not syntax differences.</p>
+<p>For component-oriented application UI, however, most Bootstrap usage maps naturally to Actual components, layouts, tokens, and enhancements.</p>
 
 </div>
 
           <div class="cluster docs-source-links">
-            <a class="btn sm ghost" href="https://github.com/lekoala/actual-css/edit/master/docs/pages/guides\introduction.md" rel="noopener noreferrer">Edit on GitHub</a>
-            <a class="btn sm ghost" href="https://github.com/lekoala/actual-css/blob/master/docs/pages/guides\introduction.md" rel="noopener noreferrer">View Markdown</a>
+            <a class="btn sm ghost" href="https://github.com/lekoala/actual-css/edit/master/docs/pages/guides\bootstrap.md" rel="noopener noreferrer">Edit on GitHub</a>
+            <a class="btn sm ghost" href="https://github.com/lekoala/actual-css/blob/master/docs/pages/guides\bootstrap.md" rel="noopener noreferrer">View Markdown</a>
           </div>
         </article>
 
         <nav class="cluster docs-prevnext" aria-label="Page navigation">
-          
-                    <a class="btn outline" href="progressive-enhancement.html">The JavaScript Runtime &rarr;</a>
+                    <a class="btn outline" href="progressive-enhancement.html">&larr; The JavaScript Runtime</a>
+                    <a class="btn outline" href="tailwind.html">Migrating from Tailwind CSS to Actual CSS &rarr;</a>
         </nav>
       </main>
 
@@ -337,12 +541,23 @@ polyfills.</p>
         <nav class="scrollspy" data-enhance="scrollspy" data-scrollspy-offset="80" aria-label="On this page">
           <p class="docs-nav-group">On this page</p>
           <ul class="nav-list docs-toc-list" data-docs-toc>
-        <li><a class="nav-link" href="#css-first-philosophy" data-docs-toc-item data-level="2">CSS-first philosophy</a></li>
-        <li><a class="nav-link" href="#install" data-docs-toc-item data-level="2">Install</a></li>
-        <li><a class="nav-link" href="#class-grammar" data-docs-toc-item data-level="2">Class grammar</a></li>
-        <li><a class="nav-link" href="#the-javascript-runtime" data-docs-toc-item data-level="2">The JavaScript runtime</a></li>
-        <li><a class="nav-link" href="#api-surface" data-docs-toc-item data-level="2">API surface</a></li>
-        <li><a class="nav-link" href="#browser-support" data-docs-toc-item data-level="2">Browser support</a></li>
+        <li><a class="nav-link" href="#before-you-start-running-both-frameworks" data-docs-toc-item data-level="2">Before you start: running both frameworks</a></li>
+        <li><a class="nav-link" href="#components" data-docs-toc-item data-level="2">Components</a></li>
+        <li><a class="nav-link" href="#forms" data-docs-toc-item data-level="2">Forms</a></li>
+        <li><a class="nav-link" href="#replace-rows-and-columns-with-layout-intent" data-docs-toc-item data-level="2">Replace rows and columns with layout intent</a></li>
+        <li><a class="nav-link" href="#translate-flex-utility-clusters-into-layout-primitives" data-docs-toc-item data-level="2">Translate flex utility clusters into layout primitives</a></li>
+        <li><a class="nav-link" href="#do-not-recreate-bootstraps-utility-api" data-docs-toc-item data-level="2">Do not recreate Bootstrap's utility API</a></li>
+        <li><a class="nav-link" href="#javascript-components" data-docs-toc-item data-level="2">JavaScript components</a></li>
+        <li><a class="nav-link" href="#modal" data-docs-toc-item data-level="3">Modal</a></li>
+        <li><a class="nav-link" href="#offcanvas" data-docs-toc-item data-level="3">Offcanvas</a></li>
+        <li><a class="nav-link" href="#dropdown" data-docs-toc-item data-level="3">Dropdown</a></li>
+        <li><a class="nav-link" href="#tabs" data-docs-toc-item data-level="3">Tabs</a></li>
+        <li><a class="nav-link" href="#tooltip-and-scrollspy" data-docs-toc-item data-level="3">Tooltip and scrollspy</a></li>
+        <li><a class="nav-link" href="#navbar-migration" data-docs-toc-item data-level="2">Navbar migration</a></li>
+        <li><a class="nav-link" href="#components-without-a-direct-replacement" data-docs-toc-item data-level="2">Components without a direct replacement</a></li>
+        <li><a class="nav-link" href="#themes-and-sass-customization" data-docs-toc-item data-level="2">Themes and Sass customization</a></li>
+        <li><a class="nav-link" href="#recommended-migration-order" data-docs-toc-item data-level="2">Recommended migration order</a></li>
+        <li><a class="nav-link" href="#where-migration-is-genuinely-harder" data-docs-toc-item data-level="2">Where migration is genuinely harder</a></li>
           </ul>
         </nav>
       </aside>
@@ -363,9 +578,9 @@ polyfills.</p>
     <nav aria-label="Documentation">
             <p class="docs-nav-group">Guides</p>
       <ul class="nav-list">
-        <li><a class="nav-link" href="introduction.html" aria-current="page">Introduction</a></li>
+        <li><a class="nav-link" href="introduction.html">Introduction</a></li>
         <li><a class="nav-link" href="progressive-enhancement.html">The JavaScript Runtime</a></li>
-        <li><a class="nav-link" href="bootstrap.html">Migrating from Bootstrap to Actual CSS</a></li>
+        <li><a class="nav-link" href="bootstrap.html" aria-current="page">Migrating from Bootstrap to Actual CSS</a></li>
         <li><a class="nav-link" href="tailwind.html">Migrating from Tailwind CSS to Actual CSS</a></li>
       </ul>
       <p class="docs-nav-group">Foundations</p>

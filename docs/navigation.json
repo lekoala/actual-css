@@ -3,7 +3,12 @@
     {
       "title": "Guides",
       "slug": "guides",
-      "pages": ["introduction", "progressive-enhancement"]
+      "pages": [
+        "introduction",
+        "progressive-enhancement",
+        "bootstrap",
+        "tailwind"
+      ]
     },
     {
       "title": "Foundations",
