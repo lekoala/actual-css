@@ -275,3 +275,40 @@ test("controls inside a disabled fieldset match :disabled by inheritance", () =>
   expect(controlCss).toContain(".textarea:disabled");
   expect(controlCss).toContain(".select:disabled");
 });
+
+test("optional OTP keeps one native input and covers validation states", () => {
+  const css = readCss("src/css/optional/otp.css");
+
+  expect(css).toContain(".otp > input");
+  expect(css).toMatch(/\.otp\s*\{[\s\S]*inline-size:\s*fit-content;/);
+  expect(css).toMatch(/\.otp\s*\{[\s\S]*border-radius:\s*var\(--radius\);/);
+  expect(css).toContain('input[aria-invalid="true"] ~ span');
+  expect(css).toContain(".needs-validation.was-validated .otp > input:invalid ~ span");
+  expect(css).toContain("input:user-invalid ~ span");
+  expect(css).toContain("input:disabled ~ span");
+});
+
+test("optional chat bubbles consume shared intents and variants", () => {
+  const css = readCss("src/css/optional/chat.css");
+
+  expect(css).toContain(":where(.chat-bubble)");
+  expect(css).toContain("var(--ui-bg, var(--intent, var(--surface-subtle)))");
+  expect(css).toContain("overflow-wrap: anywhere;");
+});
+
+test("optional aura only animates when motion is allowed", () => {
+  const css = readCss("src/css/optional/aura.css");
+
+  expect(css).toContain("@media (prefers-reduced-motion: no-preference)");
+  expect(css).toContain(".aura:not(.aura-glow)");
+  expect(css).toContain("@media (forced-colors: active)");
+});
+
+test("optional FAB preserves DOM order and stays out of print", () => {
+  const css = readCss("src/css/optional/fab.css");
+
+  expect(css).toContain("flex-direction: column;");
+  expect(css).not.toContain("column-reverse");
+  expect(css).toContain(".fab[open] > .fab-actions");
+  expect(css).toContain("@media print");
+});

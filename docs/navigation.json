@@ -5,6 +5,7 @@
       "slug": "guides",
       "pages": [
         "introduction",
+        "optional-components",
         "progressive-enhancement",
         "bootstrap",
         "tailwind"
@@ -40,13 +41,16 @@
       "pages": [
         "accordion",
         "alert",
+        "aura",
         "avatar",
         "badge",
         "breadcrumb",
         "button",
         "card",
+        "chat",
         "dialog",
         "drawer",
+        "fab",
         "key",
         "meter",
         "navbar",
@@ -70,6 +74,7 @@
         "choice-cards",
         "switch",
         "range",
+        "otp",
         "password",
         "input-policy",
         "validation",

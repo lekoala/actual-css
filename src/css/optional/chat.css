@@ -1,0 +1,105 @@
+/*
+ * Message rows composed from an optional avatar, metadata, and bubble.
+ *
+ * Public hooks:
+ * --chat-gap
+ * --chat-max-size
+ *
+ * Internal:
+ * --chat-bubble-bg
+ * --chat-bubble-fg
+ * --chat-bubble-border
+ */
+.chat {
+  --chat-gap: var(--space-30);
+  --chat-max-size: min(85%, 40rem);
+
+  display: grid;
+  grid-auto-rows: min-content;
+  column-gap: var(--chat-gap);
+}
+
+.chat-start {
+  grid-template-columns: auto minmax(0, 1fr);
+  justify-items: start;
+}
+
+.chat-end {
+  grid-template-columns: minmax(0, 1fr) auto;
+  justify-items: end;
+}
+
+.chat-avatar {
+  grid-row: 1 / span 3;
+  align-self: end;
+}
+
+.chat-start > .chat-avatar {
+  grid-column: 1;
+}
+
+.chat-end > .chat-avatar {
+  grid-column: 2;
+}
+
+.chat-header,
+.chat-footer {
+  display: flex;
+  gap: var(--space-10);
+  color: var(--text-muted);
+  font-size: var(--font-size-xs);
+}
+
+.chat-start > :is(.chat-header, .chat-bubble, .chat-footer) {
+  grid-column: 2;
+}
+
+.chat-end > :is(.chat-header, .chat-bubble, .chat-footer) {
+  grid-column: 1;
+}
+
+/* Intent boundary — an outer intent does not tint nested messages. */
+:where(.chat-bubble) {
+  --intent: initial;
+  --intent-fg: initial;
+  --ui-bg: initial;
+  --ui-fg: initial;
+  --ui-border: initial;
+}
+
+.chat-bubble {
+  --chat-bubble-bg: var(--ui-bg, var(--intent, var(--surface-subtle)));
+  --chat-bubble-fg: var(--ui-fg, var(--intent-fg, var(--text)));
+  --chat-bubble-border: var(--ui-border, transparent);
+
+  inline-size: fit-content;
+  max-inline-size: var(--chat-max-size);
+  padding: var(--space-20) var(--space-30);
+  border: var(--border-width) solid var(--chat-bubble-border);
+  border-radius: var(--radius-lg);
+  background: var(--chat-bubble-bg);
+  color: var(--chat-bubble-fg);
+  overflow-wrap: anywhere;
+}
+
+.chat-start > .chat-bubble {
+  border-end-start-radius: var(--radius-sm);
+}
+
+.chat-end > .chat-bubble {
+  border-end-end-radius: var(--radius-sm);
+}
+
+/* Remove the reserved avatar gutter when a message has no avatar. This is a
+   cosmetic enhancement; the two-column baseline remains fully readable. */
+@supports selector(:has(*)) {
+  .chat:not(:has(> .chat-avatar)) {
+    column-gap: 0;
+  }
+}
+
+@media (forced-colors: active) {
+  .chat-bubble {
+    border-color: CanvasText;
+  }
+}

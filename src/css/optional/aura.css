@@ -1,0 +1,93 @@
+/*
+ * Decorative intent-colored frame for one direct child.
+ *
+ * Public hooks:
+ * --aura-color
+ * --aura-width
+ * --aura-blur
+ * --aura-radius
+ * --aura-duration
+ */
+@property --aura-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+/* Intent boundary — an outer intent does not tint nested aura frames. */
+:where(.aura) {
+  --intent: initial;
+  --intent-fg: initial;
+}
+
+.aura {
+  --aura-color: var(--intent, var(--primary));
+  --aura-width: 2px;
+  --aura-blur: 0.75rem;
+  --aura-radius: var(--radius-lg);
+  --aura-duration: 6s;
+
+  position: relative;
+  isolation: isolate;
+  display: inline-grid;
+  padding: var(--aura-width);
+  border-radius: calc(var(--aura-radius) + var(--aura-width));
+  background: var(--aura-color);
+  background: conic-gradient(from var(--aura-angle), transparent 0 65%, var(--aura-color));
+}
+
+.aura::before {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  border-radius: inherit;
+  background: inherit;
+  filter: blur(var(--aura-blur));
+  opacity: 0.45;
+  pointer-events: none;
+  content: "";
+}
+
+.aura > * {
+  position: relative;
+}
+
+.aura-glow {
+  background: var(--aura-color);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .aura:not(.aura-glow) {
+    animation: aura-rotate var(--aura-duration) linear infinite;
+  }
+}
+
+@keyframes aura-rotate {
+  to {
+    --aura-angle: 360deg;
+  }
+}
+
+@supports selector(:has(*)) {
+  .aura:has(> .btn) {
+    --aura-radius: var(--radius);
+  }
+
+  .aura:has(> :is(.card, .alert)) {
+    --aura-radius: var(--radius-lg);
+  }
+
+  .aura:has(> .badge) {
+    --aura-radius: var(--radius-full);
+  }
+}
+
+@media (forced-colors: active) {
+  .aura {
+    background: CanvasText;
+  }
+
+  .aura::before {
+    display: none;
+  }
+}
