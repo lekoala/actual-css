@@ -54,6 +54,19 @@ in the standard install locations; set the `CHROME` env variable to point at
 another Chromium binary. After a docs or template change, run the relevant
 build first so the generated pages are current before you screenshot them.
 
+Real-browser tests are authoritative on the Linux CI runner. They run locally
+when Chromium is available, except on Windows where `CHROME` must explicitly
+point to a compatible Chromium binary; the remaining test suite still runs by
+default.
+
+```powershell
+$env:CHROME = "C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe"
+bun test tests/browser
+```
+
+Close existing Edge instances before running this command so the isolated
+profile can own the remote-debugging session.
+
 `probe` is the "measure without looking" counterpart: it runs a program in the
 page and prints the return value as JSON, which is handy for assertions that
 only need numbers (a rect, a computed style, a class list). The program runs
