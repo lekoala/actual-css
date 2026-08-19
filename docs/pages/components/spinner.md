@@ -74,7 +74,7 @@ separate `.busy` class. The spinner is shown as a centered overlay over a faded
 surface; buttons keep their spinners inline instead (see Button).
 
 - Set `aria-busy="true"` on the container and add `<span class="spinner" aria-hidden="true"></span>` as its last direct child.
-- The overlay uses `--busy-overlay-bg`; components like `.card.inverted` already compose with it.
+- The overlay uses `--busy-overlay-bg`; an inverted surface (`.inverted`) already composes with it.
 - Decorative spinners stay `aria-hidden="true"`; announce progress on the region with `role="status"` and a label when needed.
 
 ```html demo
@@ -89,5 +89,5 @@ surface; buttons keep their spinners inline instead (see Button).
 
 - `--spinner-track` — the ring color.
 - `--spinner-value` — the moving gap; swap the two for an inverted spinner.
-- `--busy-overlay-bg` — background of the busy overlay. Components such as
-  `.card.inverted` override it to blend with their surface.
+- `--busy-overlay-bg` — background of the busy overlay. An inverted surface
+  (`.inverted`) overrides it to blend with its own surface.

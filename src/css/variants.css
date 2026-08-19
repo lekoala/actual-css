@@ -38,6 +38,23 @@
   --ui-border: var(--intent, var(--border));
 }
 
+/* Inverse surface treatment. Components (e.g. .card) compose through --ui-*;
+   the direct background/color/border-color also make .inverted useful on a
+   generic element. --heading is set so global headings (var(--heading, inherit))
+   do not inherit an outside heading color onto the dark surface. */
+.inverted {
+  --ui-bg: var(--surface-solid);
+  --ui-fg: var(--surface);
+  --ui-border: transparent;
+
+  --heading: var(--surface);
+  --busy-overlay-bg: var(--surface-solid);
+
+  background: var(--ui-bg);
+  color: var(--ui-fg);
+  border-color: var(--ui-border);
+}
+
 .sm {
   --gap: var(--space-20);
   --density-space: var(--space-20);
