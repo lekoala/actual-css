@@ -849,3 +849,80 @@ test("autoClose — menu-item click closes surface with data-flyout-auto-close='
   click(item);
   expect(menu.hidden).toBe(true);
 });
+
+test("autoClose — rich panel inside clicks follow data-flyout-auto-close='inside'", async () => {
+  await loadFlyout(`
+    <button id="trigger" type="button" data-enhance="flyout" aria-controls="panel">Open</button>
+    <div id="panel" class="flyout" data-flyout-auto-close="inside" hidden>
+      <button id="item" type="button">Apply</button>
+    </div>
+    <button id="outside" type="button">Outside</button>
+  `);
+  const trigger = document.getElementById("trigger");
+  const panel = document.getElementById("panel");
+  setupGeometry(trigger, panel);
+
+  click(trigger);
+  click(document.getElementById("outside"));
+  expect(panel.hidden).toBe(false);
+
+  click(document.getElementById("item"));
+  expect(panel.hidden).toBe(true);
+});
+
+test("autoClose — keyboard activation follows the outside-only policy", async () => {
+  await loadFlyout(`
+    <button id="trigger" type="button" data-enhance="flyout" aria-controls="menu">Open</button>
+    <menu id="menu" class="flyout menu" data-flyout-auto-close="outside" hidden>
+      <li><button id="item" type="button" class="menu-item" role="menuitem">Stay open</button></li>
+    </menu>
+  `);
+  const trigger = document.getElementById("trigger");
+  const menu = document.getElementById("menu");
+  const item = document.getElementById("item");
+  setupGeometry(trigger, menu);
+
+  press(trigger, "ArrowDown");
+  press(menu, "Enter");
+
+  expect(menu.hidden).toBe(false);
+  expect(document.activeElement).toBe(item);
+});
+
+test("autoClose — disabled menu items do not dismiss the surface", async () => {
+  await loadFlyout(`
+    <button id="trigger" type="button" data-enhance="flyout" aria-controls="menu">Open</button>
+    <menu id="menu" class="flyout menu" hidden>
+      <li><button id="item" type="button" class="menu-item" aria-disabled="true">Unavailable</button></li>
+    </menu>
+  `);
+  const trigger = document.getElementById("trigger");
+  const menu = document.getElementById("menu");
+  const item = document.getElementById("item");
+  setupGeometry(trigger, menu);
+
+  click(trigger);
+  click(item);
+
+  expect(menu.hidden).toBe(false);
+});
+
+test("data-flyout-close dismisses a manual rich panel", async () => {
+  await loadFlyout(`
+    <button id="trigger" type="button" data-enhance="flyout" aria-controls="panel">Open</button>
+    <div id="panel" class="flyout" data-flyout-auto-close="false" hidden>
+      <button id="keep" type="button">Keep open</button>
+      <button id="close" type="button" data-flyout-close>Close</button>
+    </div>
+  `);
+  const trigger = document.getElementById("trigger");
+  const panel = document.getElementById("panel");
+  setupGeometry(trigger, panel);
+
+  click(trigger);
+  click(document.getElementById("keep"));
+  expect(panel.hidden).toBe(false);
+
+  click(document.getElementById("close"));
+  expect(panel.hidden).toBe(true);
+});
