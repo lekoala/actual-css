@@ -206,7 +206,7 @@ widgets can veto or decorate opens, and context menus inject their own
 |---|---|---|
 | `trigger` | — | Anchoring element; also the focus-restore target by default |
 | `source` | — | Alternate anchor when there is no trigger |
-| `x`, `y` | — | Position at a fixed point instead of an anchor (context menus) |
+| `x`, `y` | — | Position at a fixed viewport point instead of an anchor (context menus); scrolling does not imply dismissal |
 | `placement` | `"bottom-start"` | Preferred placement |
 | `distance` | `4` | Gap between anchor and surface |
 | `flip` | `true` | Flip when the preferred side is out of view |
