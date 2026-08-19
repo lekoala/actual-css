@@ -4,92 +4,34 @@ All notable changes will be documented here.
 
 This project follows Keep a Changelog and uses semver, including during 0.x.
 
-## [0.3.0 - unreleased]
+## [0.3.0] - 2026-08-19
 
 ### Added
-- Official documentation site in `site/`, built from `docs/pages/**/*.md`
-  by `bun run build:docs` (75+ pages, search, theme switcher over all 15 named
-  themes, generated landing page). Replaces the legacy `docs/*.md` + generated
-  `demo/` workflow.
-- `check:compat` — capability floor audit: unguarded above-Minimal structural
-  CSS fails the pipeline unless justified in the source or the audit ledger.
-- `check:css-api` — validates `Public hooks:` headers: every listed hook must
-  be referenced by its file, with an `--audit` mode listing unclassified
-  component-prefixed properties.
-- `Public hooks:` headers and child/cascade contracts across documented
-  component and layout files (`layout.css`, `card.css`, `button.css`,
-  `badge.css`, `alert.css`, `modal.css`, `tooltip.css`, `switch.css`,
-  `control.css`, `choice-card.css`, `choice.css`, `range.css`,
-  `scroll-snap.css`), plus Public/Derived/Internal markers in `theme.css` and
-  `tokens.css`.
-- Examples section in the docs, featuring `demo/admini/` and `demo/templates/`.
-- `scripts/utils/chrome-shot.js` - shared headless-Chrome screenshot plumbing
-  used by `shot:page` and `shot:forced`.
-- Optional `.floating-field` — floating labels over the text controls
-  (`.input`, `.textarea`, `.select`), driven by `:placeholder-shown` with no
-  JavaScript. Date/time inputs stay floated, and the reserved headroom follows
-  control density through `--control-size`.
-- Optional layer ships as a bundle: `dist/optional.css` /
-  `dist/optional.min.css`, exposed as `actual-css/css/optional` next to the
-  existing per-module source imports.
+
+* New documentation site with search, theme switching, examples, and documented public CSS hooks.
+* New optional CSS bundle with OTP, Chat, Aura, FAB, and floating-field components.
+* Built-in dismiss handling for dialogs and alerts with the generic `--dismiss` command.
+* Richer menus and context menus with improved keyboard, focus, and touch interactions.
 
 ### Changed
-- The JS bundle build is byte-deterministic: `build:js` no longer emits a
-  sourcemap (or Bun's per-build `debugId`), so rebuilding unchanged sources
-  produces no diff.
-- The docs site copies the shipped bundles (`dist/actual.css`,
-  `dist/actual.js`, `dist/actual-themes.min.css`) and errors clearly when
-  `dist/` is missing.
-- Docs navigation gains an Examples group; the root `index.html` redirects to
-  `site/index.html`.
-- The docs site lives in `site/` (generated output only); its chrome
-  (`docs.css`, `docs.js`) moved to `scripts/docs/assets/` and is referenced in
-  place from the generated pages, so `site/` never stores a copy.
-- `--grid-columns` hook to override the generic `.grid` template for
-  custom/asymmetric layouts; the author owns any narrow-container collapse.
-- `--form-actions-align` and `--form-actions-justify` hooks.
-- `.color` styling for native color inputs, including disabled and forced-colors states.
-- Generic `command="--dismiss"` routing with the `actual:dismiss` event.
-- Manifest blocks (`script[data-enhance-modules]`) auto-wire through the
-  `enhance()` observer; the `DOMContentLoaded` bootstrap is gone.
-- `--cluster-wrap` on `.cluster` — override wrapping (`flex-wrap`) per instance.
-- `.btn.icon-only` — square icon-only buttons sized to the control height.
-- `--btn-gap`, `--tab-gap`, and `--alert-radius` hooks for gap and radius tuning.
-- `.gap-sm`, `.gap-md`, `.gap-lg` optional utilities in
-  `optional/utilities-extra.css`.
 
-### Changed
-- `registerEnhancement()` owns a name per root — a duplicate name on the same
-  root throws, and `disconnect()` releases it (breaking).
-- `enhance()` cleans up elements moved out of their custom root while still
-  connected.
-- The JavaScript runtime now targets the **Minimal** tier (Firefox 98+,
-  Safari 15.4+, Chromium 99+) instead of Degraded. Modern syntax and built-ins
-  available across that baseline (`??=`, `Array.prototype.at()`,
-  `Object.hasOwn()`) may be used directly; no transpilation or legacy
-  compatibility layer is shipped.
-- Abortable event listeners (`addEventListener({ signal })`) are the standard
-  cleanup mechanism — one `AbortController` per owned lifecycle.
-- Size-related `--variant-*` tokens become the `--density-*` family:
-  `--variant-space` → `--density-space`, `--variant-compact-size` →
-  `--density-compact-size`. `--variant-pad-block` is removed — the alert no
-  longer participates in density and keeps a fixed padding. Density covers
-  spacing and geometry only: `.sm`/`.lg` no longer change typography or icon
-  size, and `--variant-font-size`, `--variant-icon-size`, and
-  `--variant-compact-font-size` are removed (`--control-font-size` stays at
-  its baseline) (breaking).
+* Expanded component and layout customization hooks, including grid, cluster, form actions, buttons, tabs, and alerts.
+* Added native color input styling and icon-only button support.
+* Enhancement lifecycle and cleanup are stricter and more predictable.
 
-### Removed
-- `forget()` from the `enhance()` return value.
-- The legacy `<dialog>` fallback (`dialog-fallback.js`, `dialog-fallback.css`,
-  and their tests and internal classes). The runtime assumes native `<dialog>`
-  across the Minimal tier.
-- The static `js-compat` floor test; the browser floor is now a codebase
-  decision enforced by review.
-- The legacy docs workflow: `build-demo.js`, generated `demo/generated/`,
-  `demo/styles/prism.css`, and the old `docs/*.md` reference pages (migrated
-  into `docs/pages/`). `build:demo` / `watch:demo` and the `prismjs` devDep
-  are gone; `build:all` now runs the docs pipeline.
+### Breaking
+
+* Spacing tokens move from `--space-1`…`--space-6` to the extensible `--space-10`…`--space-60` scale.
+* Size-related `--variant-*` tokens become `--density-*`; density now affects spacing and geometry, not typography or icon size.
+* `.nowrap` becomes `.text-nowrap`; cards now use `--surface-raised`.
+* The named `dark` theme becomes `indigo`; `data-theme="dark"` now forces the default theme into dark mode.
+* The JavaScript runtime now targets the Minimal tier (Firefox 98+, Safari 15.4+, Chromium 99+); the legacy dialog fallback and `enhance().forget()` are removed.
+
+### Fixed
+
+* Improved focus, forced-colors, validation, and control accessibility.
+* Improved menu, surface, and context-menu lifecycle and dismissal behavior.
+
 
 ## [0.2.0] - 2026-07-28
 
