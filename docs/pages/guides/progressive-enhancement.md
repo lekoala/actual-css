@@ -206,7 +206,7 @@ widgets can veto or decorate opens, and context menus inject their own
 |---|---|---|
 | `trigger` | — | Anchoring element; also the focus-restore target by default |
 | `source` | — | Alternate anchor when there is no trigger |
-| `x`, `y` | — | Position at a fixed viewport point instead of an anchor (context menus); scrolling does not imply dismissal |
+| `x`, `y` | — | Position at a fixed viewport point instead of an anchor (context menus) |
 | `placement` | `"bottom-start"` | Preferred placement |
 | `distance` | `4` | Gap between anchor and surface |
 | `flip` | `true` | Flip when the preferred side is out of view |
@@ -216,6 +216,7 @@ widgets can veto or decorate opens, and context menus inject their own
 | `mobile` | `"auto"` | `"auto"`, `"sheet"`, `"none"`, or `"anchored"` sheet behavior |
 | `breakpoint` | `768` | Max viewport width for an automatic sheet |
 | `autoClose` | `"outside"` | `"true"` closes for inside and outside clicks; `"inside"` and `"outside"` limit the side; `"false"` disables automatic click closing. Invalid values use `"true"` |
+| `dismissOnScroll` | `false` | Close when scrolling outside the surface follows a new user input; opening/focus scroll is ignored |
 | `restoreFocusTo` | `trigger` or `source` | Element focused on close |
 
 The click policy belongs to the surface rather than to a particular menu
