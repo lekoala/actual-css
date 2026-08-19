@@ -190,12 +190,10 @@ function ensureSurfaceWired(menu) {
 // scroll/resize work. Reopening re-registers in the correct order.
 function startSurfaceResources(menu, state) {
   state.unregisterEscape = registerEscapeDismissal(menu, (opts) => closeSurface(menu, opts));
-  state.stopTracking = autoUpdate(menu, ({ type }) => {
+  state.stopTracking = autoUpdate(menu, () => {
     if (menu.hidden) return;
-    if (type === "scroll" && state.point) {
-      closeSurface(menu);
-      return;
-    }
+    // A point is expressed in viewport coordinates and remains valid while the
+    // document scrolls. Dismissal is an interaction policy, not positioning.
     applyPresentation(menu, state);
     if (!positionSurface(menu)) closeSurface(menu);
   });
@@ -272,10 +270,8 @@ export function openSurface(menu, opts = {}) {
   state.restoreFocusTo = opts.restoreFocusTo || opts.trigger || opts.source || null;
   state.closeId++;
 
-  startSurfaceResources(menu, state);
   menu.classList.add(CLASSES.open);
   menu.hidden = false;
-  openSurfaces.add(menu);
   applyPresentation(menu, state);
   syncExpanded(menu, true);
 
@@ -283,6 +279,9 @@ export function openSurface(menu, opts = {}) {
     closeSurface(menu, { restoreFocus: false });
     return false;
   }
+
+  openSurfaces.add(menu);
+  startSurfaceResources(menu, state);
   return true;
 }
 

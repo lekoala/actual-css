@@ -106,6 +106,22 @@ test("scroll and resize in the same frame keep distinct callback types", async (
   expect(calls).toEqual(["resize", "scroll"]);
 });
 
+test("an element registered after an event does not receive that pending event", async () => {
+  document.body.innerHTML = '<div id="existing"></div><div id="late"></div>';
+  const existing = document.getElementById("existing");
+  const late = document.getElementById("late");
+  const existingCalls = [];
+  const lateCalls = [];
+  untracks.push(autoUpdate(existing, (detail) => existingCalls.push(detail.type)));
+
+  document.dispatchEvent(new Event("scroll"));
+  untracks.push(autoUpdate(late, (detail) => lateCalls.push(detail.type)));
+  await nextFrame();
+
+  expect(existingCalls).toEqual(["scroll"]);
+  expect(lateCalls).toEqual([]);
+});
+
 test("autoUpdate fires on floating element resize", async () => {
   document.body.innerHTML = '<div id="float"></div>';
   const float = document.getElementById("float");

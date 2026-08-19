@@ -4,6 +4,7 @@ import { connectMenu, focusFirstMenuItem, hasMenuItems } from "./menu.js";
 import { closeSurface, isSurfaceOpen, openSurface, retainSurface } from "./surface.js";
 
 const LONG_PRESS_MS = 450;
+const LONG_PRESS_CLICK_SUPPRESSION_MS = 750;
 const MOVE_TOLERANCE = 10;
 const CONTEXT_MENU_SELECTOR = 'menu, [role="menu"]';
 const CONTEXT_TARGET_SELECTOR = "[data-context-menu]";
@@ -61,7 +62,10 @@ function focusMenuContainer(menu) {
   if (!menu.hasAttribute("tabindex")) {
     menu.tabIndex = -1;
   }
-  menu.focus();
+  // Pointer-positioned menus close on scroll. Mounting one in the surface root
+  // can make a plain focus() scroll on its first opening and immediately
+  // dismiss the menu through its own positional tracking.
+  menu.focus({ preventScroll: true });
 }
 
 function focusMenu(menu, mode) {
@@ -194,7 +198,7 @@ function connectContextTarget(target) {
       state.startY = e.clientY;
       state.timer = setTimeout(() => {
         state.timer = null;
-        state.suppressClickUntil = Date.now() + 750;
+        state.suppressClickUntil = Date.now() + LONG_PRESS_CLICK_SUPPRESSION_MS;
         openContextMenu(target, menu, {
           x: state.startX,
           y: state.startY,

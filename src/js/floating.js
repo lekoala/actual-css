@@ -198,7 +198,7 @@ function createTracker(doc) {
   const entries = new Map();
   let resizeObserver = null;
   let tick = false;
-  const pendingTypes = new Set();
+  const pending = new Map();
 
   function getResizeObserver() {
     if (resizeObserver || !ResizeObserver) return resizeObserver;
@@ -216,14 +216,23 @@ function createTracker(doc) {
   }
 
   function rafNotify(type) {
-    pendingTypes.add(type);
+    for (const element of entries.keys()) {
+      let types = pending.get(element);
+      if (!types) {
+        types = new Set();
+        pending.set(element, types);
+      }
+      types.add(type);
+    }
     if (!tick) {
       win.requestAnimationFrame(() => {
-        const types = [...pendingTypes];
-        pendingTypes.clear();
-        for (const [element, cb] of entries) {
-          if (element.isConnected) {
-            for (const type of types) cb({ type });
+        const notifications = [...pending];
+        pending.clear();
+        for (const [element, types] of notifications) {
+          const cb = entries.get(element);
+          if (!cb || !element.isConnected) continue;
+          for (const pendingType of types) {
+            cb({ type: pendingType });
           }
         }
         tick = false;
@@ -245,6 +254,7 @@ function createTracker(doc) {
       getResizeObserver()?.observe(element);
       return () => {
         entries.delete(element);
+        pending.delete(element);
         resizeObserver?.unobserve(element);
       };
     },
