@@ -4,11 +4,14 @@ All notable changes will be documented here.
 
 This project follows Keep a Changelog and uses semver, including during 0.x.
 
-## [0.3.1]
+## [0.3.1] - unreleased
 
 ### Changed
 
 * Improved `.inverted` contract
+* Tooltip performance when not visible
+* Flyout edge cases are better handled
+
 
 ## [0.3.0] - 2026-08-19
 

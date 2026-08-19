@@ -274,7 +274,9 @@ export function retainSurface(panel) {
     released = true;
     entry.count--;
     if (entry.count <= 0) {
-      disconnectSurface(panel, { restore: false });
+      // A released retainer may leave a mounted panel whose original parent
+      // either still needs it back or has disappeared along with the trigger.
+      disconnectSurface(panel);
       surfaceRetainers.delete(panel);
     }
   };
