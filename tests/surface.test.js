@@ -340,6 +340,35 @@ test("default auto-close closes from outside clicks", () => {
   expect(isSurfaceOpen(menu)).toBe(false);
 });
 
+test("inside-and-outside auto-close closes from inside clicks in rich panels", () => {
+  setBody('<button aria-controls="menu"></button><div id="menu" class="flyout"><button id="item">Item</button></div>');
+  const trigger = document.querySelector("button[aria-controls]");
+  const item = document.getElementById("item");
+  const menu = document.getElementById("menu");
+  mockPlacement(trigger, menu);
+
+  openSurface(menu, { trigger, autoClose: "true" });
+  click(item);
+
+  expect(isSurfaceOpen(menu)).toBe(false);
+});
+
+test("inside-only auto-close closes inside clicks and ignores outside clicks", () => {
+  setBody('<button aria-controls="menu"></button><div id="menu" class="flyout"><button id="item">Item</button></div><span id="outside"></span>');
+  const trigger = document.querySelector("button[aria-controls]");
+  const item = document.getElementById("item");
+  const outside = document.getElementById("outside");
+  const menu = document.getElementById("menu");
+  mockPlacement(trigger, menu);
+
+  openSurface(menu, { trigger, autoClose: "inside" });
+  click(outside);
+  expect(isSurfaceOpen(menu)).toBe(true);
+
+  click(item);
+  expect(isSurfaceOpen(menu)).toBe(false);
+});
+
 test("outside-only auto-close keeps inside clicks open", () => {
   setBody('<button aria-controls="menu"></button><div id="menu" class="flyout"><button>Item</button></div><span id="outside"></span>');
   const trigger = document.querySelector("button[aria-controls]");
@@ -367,6 +396,53 @@ test("disabled auto-close keeps inside and outside clicks open", () => {
   click(document.getElementById("outside"));
 
   expect(isSurfaceOpen(menu)).toBe(true);
+});
+
+test("data-flyout-close explicitly closes a manual surface", () => {
+  setBody(`
+    <button aria-controls="menu"></button>
+    <div id="menu" class="flyout">
+      <button id="keep-open">Keep open</button>
+      <button id="close" data-flyout-close>Close</button>
+    </div>
+  `);
+  const trigger = document.querySelector("button[aria-controls]");
+  const keepOpen = document.getElementById("keep-open");
+  const close = document.getElementById("close");
+  const menu = document.getElementById("menu");
+  mockPlacement(trigger, menu);
+
+  openSurface(menu, { trigger, autoClose: false });
+  click(keepOpen);
+  expect(isSurfaceOpen(menu)).toBe(true);
+
+  click(close);
+  expect(isSurfaceOpen(menu)).toBe(false);
+});
+
+test("manual auto-close also applies to the sheet backdrop", () => {
+  setBody('<button aria-controls="menu"></button><div id="menu" class="flyout"></div>');
+  const trigger = document.querySelector("button");
+  const menu = document.getElementById("menu");
+  mockPlacement(trigger, menu);
+
+  openSurface(menu, { trigger, mobile: "sheet", autoClose: false });
+  click(document.querySelector(".surface-backdrop"));
+
+  expect(isSurfaceOpen(menu)).toBe(true);
+});
+
+test("unknown auto-close values fall back to the default policy", () => {
+  setBody('<button aria-controls="menu"></button><div id="menu" class="flyout"><button id="item">Item</button></div>');
+  const trigger = document.querySelector("button[aria-controls]");
+  const item = document.getElementById("item");
+  const menu = document.getElementById("menu");
+  mockPlacement(trigger, menu);
+
+  openSurface(menu, { trigger, autoClose: "typo" });
+  click(item);
+
+  expect(isSurfaceOpen(menu)).toBe(false);
 });
 
 test("D8 — disconnectSurface({ restore: false }) does not resurrect the element", async () => {

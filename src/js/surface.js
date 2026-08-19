@@ -11,7 +11,13 @@ const mountedSurfaces = new WeakMap();
 const clickBoundDocuments = new WeakSet();
 
 const SURFACE_MARKER = "data-actual-surface";
+const AUTO_CLOSE_VALUES = new Set(["true", "inside", "outside", "false"]);
 const reapers = new WeakMap();
+
+function normalizeAutoClose(value) {
+  const normalized = String(value ?? "outside");
+  return AUTO_CLOSE_VALUES.has(normalized) ? normalized : "true";
+}
 
 function reaperFor(menu) {
   const root = menu.ownerDocument?.documentElement;
@@ -110,9 +116,6 @@ function ensureBackdrop(menu, state) {
   const backdrop = menu.ownerDocument.createElement("div");
   backdrop.className = CLASSES.backdrop;
   backdrop.hidden = false;
-  backdrop.addEventListener("click", () => {
-    closeSurface(menu);
-  });
 
   menu.before(backdrop);
   state.backdrop = backdrop;
@@ -175,7 +178,7 @@ function ensureSurfaceWired(menu) {
     flip: true,
     shift: true,
     shiftPadding: 4,
-    autoClose: "true",
+    autoClose: "outside",
     isSheet: false,
     closeId: 0,
   };
@@ -260,7 +263,7 @@ export function openSurface(menu, opts = {}) {
     Number.isFinite(opts.x) && Number.isFinite(opts.y) ? { x: opts.x, y: opts.y } : null;
   state.mobile = opts.mobile || "auto";
   state.breakpoint = opts.breakpoint ?? 768;
-  state.autoClose = String(opts.autoClose ?? "true");
+  state.autoClose = normalizeAutoClose(opts.autoClose);
   state.placement = opts.placement || "bottom-start";
   state.distance = opts.distance ?? 4;
   state.flip = opts.flip !== false;
@@ -334,12 +337,29 @@ export function disconnectSurface(menu, { restore = true } = {}) {
 }
 
 function onDocumentClick(e) {
+  const path = e.composedPath();
+
   for (const menu of openSurfaces) {
     if (menu.ownerDocument !== e.currentTarget) continue;
     const state = surfaceMap.get(menu);
-    if (!state || state.autoClose === "inside" || state.autoClose === "false") continue;
-    if (menu.contains(e.target) || state?.trigger?.contains(e.target)) continue;
-    closeSurface(menu);
+    if (!state) continue;
+
+    const menuIndex = path.indexOf(menu);
+    const isInside = menuIndex >= 0;
+    const hasCloseTrigger =
+      isInside &&
+      path
+        .slice(0, menuIndex)
+        .some((node) => node instanceof Element && node.hasAttribute("data-flyout-close"));
+
+    if (hasCloseTrigger) {
+      closeSurface(menu);
+      continue;
+    }
+
+    const closesInside = state.autoClose === "true" || state.autoClose === "inside";
+    const closesOutside = state.autoClose === "true" || state.autoClose === "outside";
+    if ((isInside && closesInside) || (!isInside && closesOutside)) closeSurface(menu);
   }
 }
 
@@ -382,5 +402,5 @@ function onDocumentEscape(event) {
 }
 
 export function getSurfaceAutoClose(menu) {
-  return surfaceMap.get(menu)?.autoClose ?? "true";
+  return surfaceMap.get(menu)?.autoClose ?? "outside";
 }

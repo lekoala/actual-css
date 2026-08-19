@@ -215,11 +215,18 @@ widgets can veto or decorate opens, and context menus inject their own
 | `scope` | viewport | Boundary element |
 | `mobile` | `"auto"` | `"auto"`, `"sheet"`, `"none"`, or `"anchored"` sheet behavior |
 | `breakpoint` | `768` | Max viewport width for an automatic sheet |
-| `autoClose` | `"true"` | `"true"`, `"inside"`, `"outside"`, or `"false"` click autoclose |
+| `autoClose` | `"outside"` | `"true"` closes for inside and outside clicks; `"inside"` and `"outside"` limit the side; `"false"` disables automatic click closing. Invalid values use `"true"` |
 | `restoreFocusTo` | `trigger` or `source` | Element focused on close |
 
+The click policy belongs to the surface rather than to a particular menu
+anatomy. The generic primitive defaults to outside-click dismissal; flyout and
+context-menu choose `"true"` as their component default. A descendant carrying
+`data-flyout-close` closes its surface regardless of that policy. A custom
+widget that owns selection without dismissing — such as a combobox listbox —
+can keep the primitive default or open with `autoClose: "false"`.
+
 Extension seam: a `[role="listbox"]` surface with `[role="option"]` children
-gets no keyboard handling and no click-autoclose from the runtime.
+gets no menu keyboard handling or inside-click dismissal by default.
 `[role="option"]` is deliberately not in the menu-item vocabulary — a combobox
 reuses the surface lifecycle while retaining full control of its own keyboard
 and selection.

@@ -70,10 +70,26 @@ Use `data-flyout-distance` for the trigger gap in pixels. The default is `4`.
 Use `data-flyout-auto-close` when the default click dismissal behavior is not
 right. Escape still follows the shared surface lifecycle.
 
-- `true` is the default. Action items close on activation and outside clicks close the flyout.
-- `inside` closes on action item activation only.
+- `true` is the default. Clicks inside or outside close the flyout.
+- `inside` closes on inside clicks only.
 - `outside` closes on outside click only.
 - `false` disables automatic click closing.
+
+These values follow Bootstrap's auto-close vocabulary. They apply to action
+menus and rich panels alike. Add `data-flyout-close` to a control inside the
+flyout when that specific control must close it regardless of the automatic
+policy. This is useful for an Apply or Done action in an `outside` or `false`
+panel. The trigger and Escape continue to close the flyout in every mode.
+
+```html
+<div class="flyout"
+     id="filters"
+     data-flyout-auto-close="outside"
+     hidden>
+  <label><input type="checkbox"> Available only</label>
+  <button type="button" data-flyout-close>Done</button>
+</div>
+```
 
 Flyout covers two distinct patterns, detected by the `<menu>` element or
 `.menu` class on the panel:

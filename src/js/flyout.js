@@ -13,7 +13,7 @@ function normalizeBreakpoint(raw) {
 }
 
 function readFlyoutOptions(panel) {
-  const opts = {};
+  const opts = { autoClose: "true" };
   const ds = panel.dataset;
   if (ds.flyoutPlacement) opts.placement = ds.flyoutPlacement;
   if (ds.flyoutDistance != null) {

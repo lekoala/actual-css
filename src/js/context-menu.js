@@ -51,7 +51,7 @@ function getLongPressDelay(target, menu) {
 }
 
 function readPanelOptions(menu) {
-  const opts = {};
+  const opts = { autoClose: "true" };
   const ds = menu.dataset;
   if (ds.flyoutMobile) opts.mobile = ds.flyoutMobile;
   if (ds.flyoutAutoClose) opts.autoClose = ds.flyoutAutoClose;

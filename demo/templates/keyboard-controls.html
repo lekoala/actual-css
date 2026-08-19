@@ -45,7 +45,7 @@
       background: var(--surface);
     }
 
-    .keyboard-fixture > :is(h3, p) {
+    .keyboard-fixture > :is(h3, h4, p) {
       margin: 0;
     }
 
@@ -291,6 +291,83 @@
             <li><button class="menu-item" type="button" role="menuitem" data-demo-action="Download">Download</button></li>
             <li><button class="menu-item danger" type="button" role="menuitem" data-demo-action="Remove">Remove</button></li>
           </menu>
+        </article>
+      </div>
+
+      <h3>Auto-close policies</h3>
+      <p>
+        Each fixture has one button inside its flyout and one outside target.
+        Escape and clicking the disclosure always remain available. The manual
+        fixture also demonstrates an explicit <code>data-flyout-close</code> control.
+      </p>
+      <div class="keyboard-grid">
+        <article class="keyboard-fixture">
+          <h4>Default: inside and outside</h4>
+          <p class="keyboard-steps">Either “Inside action” or “Outside target” closes the panel.</p>
+          <div class="cluster">
+            <div class="flyout-trigger">
+              <button class="btn outline" type="button" data-enhance="flyout" aria-controls="close-default-panel">Open</button>
+              <div class="flyout keyboard-flyout" id="close-default-panel" hidden>
+                <section class="stack">
+                  <strong>Default policy</strong>
+                  <button class="btn" type="button">Inside action</button>
+                </section>
+              </div>
+            </div>
+            <button class="btn" type="button">Outside target</button>
+          </div>
+        </article>
+
+        <article class="keyboard-fixture">
+          <h4>Inside only</h4>
+          <p class="keyboard-steps">The inside action closes; the outside target leaves the panel open.</p>
+          <div class="cluster">
+            <div class="flyout-trigger">
+              <button class="btn outline" type="button" data-enhance="flyout" aria-controls="close-inside-panel">Open</button>
+              <div class="flyout keyboard-flyout" id="close-inside-panel" data-flyout-auto-close="inside" hidden>
+                <section class="stack">
+                  <strong>Inside policy</strong>
+                  <button class="btn" type="button">Inside action</button>
+                </section>
+              </div>
+            </div>
+            <button class="btn" type="button">Outside target</button>
+          </div>
+        </article>
+
+        <article class="keyboard-fixture">
+          <h4>Outside only</h4>
+          <p class="keyboard-steps">The inside action leaves the panel open; the outside target closes it.</p>
+          <div class="cluster">
+            <div class="flyout-trigger">
+              <button class="btn outline" type="button" data-enhance="flyout" aria-controls="close-outside-panel">Open</button>
+              <div class="flyout keyboard-flyout" id="close-outside-panel" data-flyout-auto-close="outside" hidden>
+                <section class="stack">
+                  <strong>Outside policy</strong>
+                  <button class="btn" type="button">Inside action</button>
+                </section>
+              </div>
+            </div>
+            <button class="btn" type="button">Outside target</button>
+          </div>
+        </article>
+
+        <article class="keyboard-fixture">
+          <h4>Manual</h4>
+          <p class="keyboard-steps">Inside and outside clicks leave it open. Only “Done”, Escape, or the disclosure closes it.</p>
+          <div class="cluster">
+            <div class="flyout-trigger">
+              <button class="btn outline" type="button" data-enhance="flyout" aria-controls="close-manual-panel">Open</button>
+              <div class="flyout keyboard-flyout" id="close-manual-panel" data-flyout-auto-close="false" hidden>
+                <section class="stack">
+                  <strong>Manual policy</strong>
+                  <button class="btn" type="button">Keep open</button>
+                  <button class="btn primary" type="button" data-flyout-close>Done</button>
+                </section>
+              </div>
+            </div>
+            <button class="btn" type="button">Outside target</button>
+          </div>
         </article>
       </div>
     </section>

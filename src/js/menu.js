@@ -1,6 +1,5 @@
 import { isElementVisible } from "./focus.js";
 import { firstItem, itemForKey, lastItem } from "./keys.js";
-import { getSurfaceAutoClose } from "./surface.js";
 
 const MENU_ITEM_SELECTOR = ":scope > li > .menu-item";
 
@@ -73,7 +72,6 @@ export function onMenuKeydown(e, { close }) {
     case " ":
       if (activateCurrentItem(menu)) {
         e.preventDefault();
-        close(menu);
       }
       break;
   }
@@ -98,18 +96,16 @@ export function connectMenu(menu, { close }) {
     menu.addEventListener(
       "click",
       (event) => {
-        const autoClose = getSurfaceAutoClose(menu);
-        if (autoClose === "outside" || autoClose === "false") return;
-
         const item = getMenuItem(menu, event.target);
         if (!item) return;
 
         if (item.matches(":disabled, [aria-disabled='true']")) {
           event.preventDefault();
+          // A disabled command must not reach the surface-level inside-click
+          // policy and dismiss the menu as if it had been activated.
+          event.stopPropagation();
           return;
         }
-
-        close(menu);
       },
       { signal: controller.signal },
     );
