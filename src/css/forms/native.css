@@ -41,11 +41,13 @@
   box-shadow: var(--focus-ring-shadow);
 }
 
-/* Native color picker — keep the browser's dialog and selected-color UI. */
+/* Native color picker — keep the browser's dialog and selected-color UI. The
+   swatch fills almost the whole control so it reads as a color, not as a tiny
+   square inside a button; the 1px padding keeps a hair of --surface around it. */
 .color {
   inline-size: var(--control-size);
   block-size: var(--control-size);
-  padding: var(--space-10);
+  padding: var(--border-width);
   border: var(--border-width) solid var(--border);
   border-radius: var(--radius);
   background: var(--surface);
@@ -56,12 +58,10 @@
   padding: 0;
 }
 
-.color::-webkit-color-swatch {
-  border: 0;
-}
-
+.color::-webkit-color-swatch,
 .color::-moz-color-swatch {
   border: 0;
+  border-radius: calc(var(--radius) - var(--border-width));
 }
 
 .color:disabled {
