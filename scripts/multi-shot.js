@@ -18,9 +18,8 @@
  * headless Chrome clamps --window-size to a platform minimum (e.g. ~512px on
  * Windows), so the window flag alone cannot reach mobile widths reliably.
  */
-import { mkdir, writeFile } from "node:fs/promises";
-import { basename, dirname, join } from "node:path";
-import { readFlags, toFileUrl, withChromePage } from "./utils/chrome-shot.js";
+import { basename, join } from "node:path";
+import { capture, fixtureUrl, readFlags } from "./utils/browser.js";
 
 const ROOT = join(import.meta.dirname, "..");
 
@@ -36,7 +35,7 @@ const {
 });
 
 const page = args[0] ?? join(ROOT, "demo", "templates", "kitchen-sink.html");
-const pageUrl = toFileUrl(page);
+const pageUrl = fixtureUrl(page);
 const widths = widthsArg.split(",").map((w) => Number(w.trim()));
 
 const mediaFeatures =
@@ -48,24 +47,7 @@ const stem = basename(page).replace(/\.[^.]+$/, "");
 const saved = [];
 for (const width of widths) {
   const out = join(outDir, `${stem}-${width}.png`);
-  await withChromePage(
-    pageUrl,
-    { windowSize: `${width},900`, mediaFeatures, settleMs: 400 },
-    async ({ send }) => {
-      await send("Emulation.setDeviceMetricsOverride", {
-        width,
-        height: 900,
-        deviceScaleFactor: 1,
-        mobile: false,
-      });
-      const shot = await send("Page.captureScreenshot", {
-        format: "png",
-        captureBeyondViewport: true,
-      });
-      await mkdir(dirname(out), { recursive: true });
-      await writeFile(out, Buffer.from(shot.data, "base64"));
-    },
-  );
+  await capture(pageUrl, { out, mediaFeatures, width });
   saved.push(out);
 }
 

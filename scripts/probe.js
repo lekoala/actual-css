@@ -21,7 +21,7 @@
  */
 
 import { readFile } from "node:fs/promises";
-import { readFlags, toFileUrl, withChromePage } from "./utils/chrome.js";
+import { fixtureUrl, readFlags, withBrowserPage } from "./utils/browser.js";
 
 const args = process.argv.slice(2);
 const flags = readFlags(args, {
@@ -29,7 +29,6 @@ const flags = readFlags(args, {
   "--script": { fallback: undefined },
   "--expr": { fallback: undefined },
   "--settle": { fallback: "400" },
-  "--window-size": { fallback: "1100,900" },
   "--width": { fallback: undefined },
 });
 
@@ -52,12 +51,11 @@ const expression = `(async () => {
 
 let ok = false;
 try {
-  await withChromePage(
-    toFileUrl(page),
-    { windowSize: flags["--window-size"], settleMs },
-    async ({ send }) => {
+  await withBrowserPage(
+    fixtureUrl(page),
+    async (view) => {
       if (flags["--width"]) {
-        await send("Emulation.setDeviceMetricsOverride", {
+        await view.cdp("Emulation.setDeviceMetricsOverride", {
           width: Number(flags["--width"]),
           height: 900,
           deviceScaleFactor: 1,
@@ -65,23 +63,16 @@ try {
         });
       }
 
-      const result = await send("Runtime.evaluate", {
-        expression,
-        awaitPromise: true,
-        returnByValue: true,
-      });
-
-      if (result.exceptionDetails) {
-        console.error(
-          result.exceptionDetails.exception?.description ??
-            result.exceptionDetails.text,
-        );
-        process.exitCode = 1;
-      } else {
-        console.log(JSON.stringify(result.result?.value ?? null, null, 2));
+      try {
+        const result = await view.evaluate(expression);
+        console.log(JSON.stringify(result ?? null, null, 2));
         ok = true;
+      } catch (error) {
+        console.error(error.message ?? error);
+        process.exitCode = 1;
       }
     },
+    { settleMs },
   );
 } catch (error) {
   console.error(error);

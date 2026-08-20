@@ -47,25 +47,21 @@ does not trigger it). Use it after touching focus styles, outlines, or any
 bun run shot:forced demo/templates/kitchen-sink.html --scheme dark
 ```
 
-Both scripts share their Chrome/DevTools plumbing in `utils/chrome-shot.js`
-(`capture()` with media emulation and a `beforeShot` hook), so a new
-screenshot script only describes its emulation and output. Chrome is looked up
-in the standard install locations; set the `CHROME` env variable to point at
-another Chromium binary. After a docs or template change, run the relevant
-build first so the generated pages are current before you screenshot them.
+Both scripts share their browser plumbing in `utils/browser.js` (`capture()`
+with media emulation and a `beforeShot` hook), so a new screenshot script only
+describes its emulation and output. Browser work runs on Bun.WebView with the
+Chrome backend: Bun locates Chrome/Chromium/Edge automatically (override with
+the `BUN_CHROME_PATH` env variable or `backend.path`). After a docs or template
+change, run the relevant build first so the generated pages are current before
+you screenshot them.
 
 Real-browser tests are authoritative on the Linux CI runner. They run locally
-when Chromium is available, except on Windows where `CHROME` must explicitly
-point to a compatible Chromium binary; the remaining test suite still runs by
-default.
+whenever a Chrome-family binary is available (Bun auto-detects it), and skip
+gracefully otherwise, so the remaining test suite still runs by default.
 
-```powershell
-$env:CHROME = "C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe"
+```sh
 bun test tests/browser
 ```
-
-Close existing Edge instances before running this command so the isolated
-profile can own the remote-debugging session.
 
 `probe` is the "measure without looking" counterpart: it runs a program in the
 page and prints the return value as JSON, which is handy for assertions that

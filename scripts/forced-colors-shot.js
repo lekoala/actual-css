@@ -11,7 +11,7 @@
  *   --out     output file (default: tmp/forced-colors-<scheme>.png)
  */
 import { join } from "node:path";
-import { capture, readFlags, toFileUrl } from "./utils/chrome-shot.js";
+import { capture, fixtureUrl, readFlags } from "./utils/browser.js";
 
 const ROOT = join(import.meta.dirname, "..");
 
@@ -25,7 +25,7 @@ const {
 });
 const resolvedScheme = scheme === "dark" ? "dark" : "light";
 const page = args[0] ?? join(ROOT, "demo", "templates", "kitchen-sink.html");
-const pageUrl = toFileUrl(page);
+const pageUrl = fixtureUrl(page);
 
 const saved = await capture(pageUrl, {
   out: out || join(ROOT, "tmp", `forced-colors-${resolvedScheme}.png`),

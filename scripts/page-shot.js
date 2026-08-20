@@ -11,7 +11,7 @@
  *   --out     output file (default: tmp/page-shot.png)
  */
 import { join } from "node:path";
-import { capture, readFlags, toFileUrl } from "./utils/chrome-shot.js";
+import { capture, fixtureUrl, readFlags } from "./utils/browser.js";
 
 const ROOT = join(import.meta.dirname, "..");
 
@@ -22,7 +22,7 @@ const { "--scheme": scheme = "", "--out": out = join(ROOT, "tmp", "page-shot.png
     "--out": { fallback: join(ROOT, "tmp", "page-shot.png") },
   });
 const page = args[0] ?? join(ROOT, "demo", "templates", "kitchen-sink.html");
-const pageUrl = toFileUrl(page);
+const pageUrl = fixtureUrl(page);
 
 const mediaFeatures =
   scheme === "light" || scheme === "dark"

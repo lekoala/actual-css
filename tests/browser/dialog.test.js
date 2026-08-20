@@ -1,5 +1,5 @@
 /*
- * Real-browser Dialog lifecycle suite, driven over CDP against a tall fixture.
+ * Real-browser Dialog lifecycle suite, driven over Bun.WebView.
  *
  * These tests validate what the happy-dom unit suite cannot: the native
  * <dialog> lifecycle (requestClose fires cancel before closing), native Escape,
@@ -7,62 +7,31 @@
  *
  * They skip gracefully when Chrome or a fresh dist/actual.full.js is unavailable
  * (the fixture loads the bundled runtime), and run for real in CI where Chrome
- * is present and build:all has produced dist.
+ * is present and build:all has produced dist. The browser lifecycle (one
+ * headless Chrome per Bun process, one tab per view) is owned by Bun.WebView.
  */
-
 import { expect, test } from "bun:test";
 import { existsSync } from "node:fs";
-import {
-  shouldRunChromeTests,
-  toFileUrl,
-  withChromePage,
-} from "../../scripts/utils/chrome.js";
+import { browserAvailable, fixtureUrl, withBrowserPage } from "../../scripts/utils/browser.js";
 
 const FIXTURE = "tests/browser/dialog.html";
-const BROWSER_TIMEOUT = 25_000;
+const TIMEOUT = 60_000;
 
-const hasChrome = shouldRunChromeTests();
+const hasBrowser = await browserAvailable();
 const distReady = existsSync("dist/actual.full.js");
-const skip = !hasChrome || !distReady;
+const skip = !hasBrowser || !distReady;
 
 const baseTest = skip ? test.skip : test;
-const it = (name, run) => baseTest(name, run, BROWSER_TIMEOUT);
+const it = (name, run) => baseTest(name, run, TIMEOUT);
 
 async function withPage(run) {
-  await withChromePage(
-    toFileUrl(FIXTURE),
-    { mediaFeatures: [{ name: "prefers-reduced-motion", value: "reduce" }] },
-    async ({ send }) => {
-      const evalIn = async (expression) => {
-        const result = await send("Runtime.evaluate", {
-          expression,
-          awaitPromise: true,
-          returnByValue: true,
-        });
-        if (result.exceptionDetails) {
-          throw new Error(
-            result.exceptionDetails.exception?.description ??
-              result.exceptionDetails.text,
-          );
-        }
-        return result.result?.value;
-      };
+  await withBrowserPage(
+    fixtureUrl(FIXTURE),
+    async (view) => {
+      const evalIn = (expression) => view.evaluate(expression);
       const settle = () => evalIn("new Promise((r) => setTimeout(r, 60))");
       const pressEscape = async () => {
-        await send("Input.dispatchKeyEvent", {
-          type: "keyDown",
-          key: "Escape",
-          code: "Escape",
-          windowsVirtualKeyCode: 27,
-          nativeVirtualKeyCode: 27,
-        });
-        await send("Input.dispatchKeyEvent", {
-          type: "keyUp",
-          key: "Escape",
-          code: "Escape",
-          windowsVirtualKeyCode: 27,
-          nativeVirtualKeyCode: 27,
-        });
+        await view.press("Escape");
         await settle();
       };
       const snapshot = (id) =>
@@ -83,11 +52,15 @@ async function withPage(run) {
         })()`);
       await run({ evalIn, settle, pressEscape, snapshot });
     },
+    {
+      mediaFeatures: [{ name: "prefers-reduced-motion", value: "reduce" }],
+      artifactName: "dialog",
+    },
   );
 }
 
 const scrollTo1200 = (evalIn) =>
-  evalIn("window.scrollTo(0, 1200); window.scrollY");
+  evalIn("(() => { window.scrollTo(0, 1200); return window.scrollY; })()");
 
 it("open from a scrolled page keeps the scroll position and locks the page", async () => {
   await withPage(async ({ evalIn, settle, snapshot }) => {
