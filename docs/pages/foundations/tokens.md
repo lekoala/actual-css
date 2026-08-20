@@ -389,6 +389,8 @@ Without `data-theme`, the default theme advertises `color-scheme: light dark` an
 
 Because the native select chevron is an SVG background image and cannot inherit `currentColor`, the select hands the arrow back to the browser under `prefers-contrast: more` (same treatment as `forced-colors: active`) instead of shipping a recolored chevron per theme — one native fallback covers every theme without a high-contrast icon variant to maintain.
 
+Under `prefers-contrast: more`, the user's contrast preference wins over a theme's palette by contract: the core collapses `--text-muted`/`--text-subtle` to `--text` and thickens borders and focus so no theme can defeat a legibility requirement. This is a deliberate decision, not a specificity quirk — the repeated `[data-theme][data-theme]` attribute only outranks a preset theme stylesheet loaded after the core.
+
 Under `forced-colors: active`, the browser automatically remaps `color`, `background`, and `border` properties to system colors. The default theme provides the few necessary system-color overrides for cases the browser cannot handle — `--focus-outline-color`, `--state-selected`/`--state-selected-fg`, `--state-disabled`, `--backdrop-fill`, and decorative shadow removal. Because that rule targets `:root` (which always matches regardless of `data-theme`) and the `[data-theme]` attributes, it reaches every theme. Components should inherit that baseline; keep local forced-color rules only for custom control geometry, native bar parts, disabled states, or selected states that would otherwise be communicated only by background color.
 
 ## Component mapping

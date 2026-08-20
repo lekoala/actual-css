@@ -41,6 +41,12 @@ test("package ships built assets and theme reference sources", () => {
   expect(files).not.toContain("src/css/optional");
   expect(pkg.exports["./reserved-classes.json"]).toBe("./scripts/reserved-classes.json");
   expect(existsSync(join(ROOT, pkg.exports["./reserved-classes.json"]))).toBe(true);
+
+  // Reference presets ship for inspection and copying, never as importable
+  // entrypoints: the theme contract is the deliverable, the presets are demo
+  // material. Asserted so restoring the exports has to be a deliberate change.
+  expect(pkg.exports["./css/themes"]).toBeNull();
+  expect(pkg.exports["./css/themes/*"]).toBeNull();
 });
 
 test("dist directory contains the full bundle and no optional artifacts", () => {

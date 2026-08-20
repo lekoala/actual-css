@@ -101,8 +101,10 @@
 }
 
 @media (forced-colors: active) {
-  /* Forced colors remap the fills, but the custom knob has no native edge.
-     A system-color border keeps it distinct from the remapped track. */
+  /* The host intentionally stays under UA control for platform contrast and
+     focus. The custom knob has no native edge, so this system-color border
+     keeps it distinct from the remapped track. If real HCM testing ever needs
+     an opt-out, scope it to ::before—never to the interactive input host. */
   .switch::before {
     border: var(--border-width) solid ButtonText;
   }

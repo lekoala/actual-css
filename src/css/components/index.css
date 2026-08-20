@@ -1,47 +1,47 @@
 /* Controls */
-@import "button.css";
-@import "badge.css";
-@import "alert.css";
-@import "actions.css";
+@import "./button.css";
+@import "./badge.css";
+@import "./alert.css";
+@import "./actions.css";
 
 /* Surfaces */
-@import "card.css";
-@import "surface.css";
-@import "modal.css";
-@import "drawer.css";
+@import "./card.css";
+@import "./surface.css";
+@import "./modal.css";
+@import "./drawer.css";
 
 /* Overlays */
-@import "flyout.css";
-@import "menu.css";
-@import "tooltip.css";
+@import "./flyout.css";
+@import "./menu.css";
+@import "./tooltip.css";
 
 /* Disclosure */
-@import "accordion.css";
+@import "./accordion.css";
 
 /* Feedback */
-@import "spinner.css";
-@import "skeleton.css";
-@import "busy.css";
-@import "progress.css";
-@import "status-bar.css";
+@import "./spinner.css";
+@import "./skeleton.css";
+@import "./busy.css";
+@import "./progress.css";
+@import "./status-bar.css";
 
 /* Display */
-@import "avatar.css";
-@import "key.css";
-@import "chat.css";
-@import "fab.css";
+@import "./avatar.css";
+@import "./key.css";
+@import "./chat.css";
+@import "./fab.css";
 
 /* Navigation */
-@import "navbar.css";
-@import "breadcrumb.css";
-@import "pagination.css";
-@import "tab.css";
-@import "scrollspy.css";
+@import "./navbar.css";
+@import "./breadcrumb.css";
+@import "./pagination.css";
+@import "./tab.css";
+@import "./scrollspy.css";
 
 /* Data */
-@import "table.css";
-@import "meter.css";
+@import "./table.css";
+@import "./meter.css";
 
 /* Composed controls — imported last so equal-specificity corner rules remain
    later than the controls they group. */
-@import "join.css";
+@import "./join.css";
