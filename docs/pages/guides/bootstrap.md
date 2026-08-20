@@ -131,11 +131,9 @@ A Bootstrap layout such as:
 usually becomes an Actual grid:
 
 ```html
-<div class="container-query">
-  <div class="grid-2">
-    <div>...</div>
-    <div>...</div>
-  </div>
+<div class="grid" style="--grid-min: 18rem">
+  <div>...</div>
+  <div>...</div>
 </div>
 ```
 
@@ -150,8 +148,10 @@ Or use the intrinsic grid when the real requirement is simply “fit as many use
 For asymmetric layouts, express the layout directly:
 
 ```html
-<div class="dashboard-grid grid">
-  ...
+<div class="container-query">
+  <div class="dashboard-grid grid">
+    ...
+  </div>
 </div>
 ```
 
@@ -216,7 +216,7 @@ Typical choices are:
 |--------------------------------------------|--------------------------------------------|
 | flex row that may wrap                     | `.cluster`                                 |
 | vertical flex stack                        | `.stack`                                   |
-| equal columns                              | `.grid-2`, `.grid-3`, `.grid-4`, `.grid-6` |
+| exact structural columns                   | `.grid-2`, `.grid-3`, `.grid-4`, `.grid-6` |
 | intrinsically responsive cards             | `.grid`                                    |
 | row that becomes a column when constrained | `.switcher`                                |
 | sidebar/content layout                     | `.sidebar-layout`                          |

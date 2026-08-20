@@ -70,3 +70,8 @@
   translate: 0 var(--space-20);
   pointer-events: none;
 }
+@media print {
+  .status-bar {
+    display: none !important;
+  }
+}

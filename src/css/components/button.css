@@ -262,3 +262,13 @@ a.btn[aria-disabled="true"] {
     forced-color-adjust: auto;
   }
 }
+@media print {
+  :is(button, input[type="button"], input[type="submit"], input[type="reset"]).btn {
+    display: none !important;
+  }
+
+  a.btn[href^="http"]::after {
+    content: " (" attr(href) ")";
+    font-size: 0.875em;
+  }
+}

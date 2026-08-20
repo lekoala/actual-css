@@ -92,6 +92,7 @@
       <p class="docs-nav-group">Layout</p>
       <ul class="nav-list">
         <li><a class="nav-link" href="../layout/overview.html">Layout Overview</a></li>
+        <li><a class="nav-link" href="../layout/choosing.html">Choosing a layout</a></li>
         <li><a class="nav-link" href="../layout/stack.html">Stack</a></li>
         <li><a class="nav-link" href="../layout/cluster.html">Cluster</a></li>
         <li><a class="nav-link" href="../layout/grid.html">Grid</a></li>
@@ -297,11 +298,9 @@ limitations of the approach.</p>
 &lt;/div&gt;
 </code></pre>
 <p>usually becomes an Actual grid:</p>
-<pre><code class="language-html">&lt;div class=&quot;container-query&quot;&gt;
-  &lt;div class=&quot;grid-2&quot;&gt;
-    &lt;div&gt;...&lt;/div&gt;
-    &lt;div&gt;...&lt;/div&gt;
-  &lt;/div&gt;
+<pre><code class="language-html">&lt;div class=&quot;grid&quot; style=&quot;--grid-min: 18rem&quot;&gt;
+  &lt;div&gt;...&lt;/div&gt;
+  &lt;div&gt;...&lt;/div&gt;
 &lt;/div&gt;
 </code></pre>
 <p>Or use the intrinsic grid when the real requirement is simply “fit as many useful columns as there is room for”:</p>
@@ -310,8 +309,10 @@ limitations of the approach.</p>
 &lt;/div&gt;
 </code></pre>
 <p>For asymmetric layouts, express the layout directly:</p>
-<pre><code class="language-html">&lt;div class=&quot;dashboard-grid grid&quot;&gt;
-  ...
+<pre><code class="language-html">&lt;div class=&quot;container-query&quot;&gt;
+  &lt;div class=&quot;dashboard-grid grid&quot;&gt;
+    ...
+  &lt;/div&gt;
 &lt;/div&gt;
 </code></pre>
 <pre><code class="language-css">.dashboard-grid {
@@ -359,7 +360,7 @@ limitations of the approach.</p>
 <tbody>
 <tr><td>flex row that may wrap</td><td><code>.cluster</code></td></tr>
 <tr><td>vertical flex stack</td><td><code>.stack</code></td></tr>
-<tr><td>equal columns</td><td><code>.grid-2</code>, <code>.grid-3</code>, <code>.grid-4</code>, <code>.grid-6</code></td></tr>
+<tr><td>exact structural columns</td><td><code>.grid-2</code>, <code>.grid-3</code>, <code>.grid-4</code>, <code>.grid-6</code></td></tr>
 <tr><td>intrinsically responsive cards</td><td><code>.grid</code></td></tr>
 <tr><td>row that becomes a column when constrained</td><td><code>.switcher</code></td></tr>
 <tr><td>sidebar/content layout</td><td><code>.sidebar-layout</code></td></tr>
@@ -601,6 +602,7 @@ cost is an import rather than a custom recipe;</li>
       <p class="docs-nav-group">Layout</p>
       <ul class="nav-list">
         <li><a class="nav-link" href="../layout/overview.html">Layout Overview</a></li>
+        <li><a class="nav-link" href="../layout/choosing.html">Choosing a layout</a></li>
         <li><a class="nav-link" href="../layout/stack.html">Stack</a></li>
         <li><a class="nav-link" href="../layout/cluster.html">Cluster</a></li>
         <li><a class="nav-link" href="../layout/grid.html">Grid</a></li>

@@ -21,6 +21,7 @@
       "slug": "layout",
       "pages": [
         "overview",
+        "choosing",
         "stack",
         "cluster",
         "grid",

@@ -8,14 +8,15 @@
 
 /* --grid-columns replaces the intrinsic auto-fit template: once set, the
    grid no longer collapses on its own — the author owns narrow-container
-   collapse. Prefer .sidebar-layout inside .container-query for content +
-   aside layouts; reserve --grid-columns for genuinely fixed or asymmetric
-   templates. */
+   collapse. Prefer .sidebar-layout for content + aside layouts; reserve
+   --grid-columns for genuinely fixed or asymmetric templates. */
 
 /* Recipe:
-   - N equal cards that collapse when narrow -> .grid (auto-fit, tune
-     --grid-min) or .grid-2/3/4/6 inside .container-query
-   - content + aside -> .sidebar-layout inside .container-query
+   - N equal cards that reflow when narrow -> .grid (auto-fit, tune
+     --grid-min)
+   - exact structural columns -> .grid-2/3/4/6
+   - peer regions that switch as a group -> .switcher
+   - content + aside -> .sidebar-layout
    - fixed or asymmetric columns -> --grid-columns with an explicit collapse
      rule of your own */
 .grid {
@@ -27,11 +28,9 @@
     );
 }
 
-/* Fixed-column grids at their full count by default: .grid-2/3/4/6 stay at
-   2/3/4/6 columns unless wrapped in .container-query, which collapses the
-   column count on narrow wrappers (a 2-col intermediate step for
-   .grid-3/.grid-4; .grid-6 starts at 2 columns because it is meant for
-   compact items that do not need a full single-column stack). */
+/* Fixed structural grids. Their exact column count is the contract and no
+   ancestor changes it. Use .grid for responsive collections, or .switcher
+   when peer regions must switch together without a partial final row. */
 .grid-2,
 .grid-3,
 .grid-4,
@@ -51,59 +50,4 @@
 }
 .grid-6 {
   grid-template-columns: repeat(6, minmax(0, 1fr));
-}
-
-/* Container queries are the preferred responsive path; browsers without them
-   ignore these rules and get the equivalent @media rules from the
-   @supports not (container-type) block below — same columns, same breakpoints. */
-@container (width < 28rem) {
-  .container-query .grid-2,
-  .container-query .grid-3,
-  .container-query .grid-4 {
-    grid-template-columns: 1fr;
-  }
-
-  .container-query .grid-6 {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-@container (28rem <= width < 48rem) {
-  .container-query .grid-3,
-  .container-query .grid-4 {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-@container (28rem <= width < 64rem) {
-  .container-query .grid-6 {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-}
-
-@supports not (container-type: inline-size) {
-  @media (max-width: 63.999rem) {
-    .container-query .grid-6 {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-    }
-  }
-
-  @media (max-width: 47.999rem) {
-    .container-query .grid-3,
-    .container-query .grid-4 {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-  }
-
-  @media (max-width: 27.999rem) {
-    .container-query .grid-2,
-    .container-query .grid-3,
-    .container-query .grid-4 {
-      grid-template-columns: 1fr;
-    }
-
-    .container-query .grid-6 {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-  }
 }

@@ -7,35 +7,6 @@
     color: #000;
   }
 
-  .flyout,
-  .tooltip,
-  .surface-backdrop,
-  .status-bar,
-  .spinner,
-  dialog.modal[open],
-  dialog.drawer[open] {
-    display: none !important;
-  }
-
-  button.btn,
-  input[type="button"].btn,
-  input[type="submit"].btn,
-  input[type="reset"].btn {
-    display: none !important;
-  }
-
-  a.btn[href^="http"]::after {
-    content: " (" attr(href) ")";
-    font-size: 0.875em;
-  }
-
-  .card,
-  .alert,
-  .badge {
-    border: var(--border-width) solid CanvasText;
-    break-inside: avoid;
-  }
-
   h1,
   h2,
   h3,

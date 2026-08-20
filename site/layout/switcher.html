@@ -6,7 +6,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Switcher — Actual CSS</title>
-  <meta name="description" content="Row that becomes a column when space gets tight, useful for small sets of panels.">
+  <meta name="description" content="Use .switcher for a small set of peer regions that should switch together
+between one row and a vertical stack. Unlike .grid, it never produces a
+partial row such as two items followed by one orphan.">
   <link rel="stylesheet" href="../../src/css/actual.css">
   <link rel="stylesheet" href="../../src/css/optional/index.css">
   <link rel="stylesheet" href="../../dist/actual-themes.min.css">
@@ -92,6 +94,7 @@
       <p class="docs-nav-group">Layout</p>
       <ul class="nav-list">
         <li><a class="nav-link" href="overview.html">Layout Overview</a></li>
+        <li><a class="nav-link" href="choosing.html">Choosing a layout</a></li>
         <li><a class="nav-link" href="stack.html">Stack</a></li>
         <li><a class="nav-link" href="cluster.html">Cluster</a></li>
         <li><a class="nav-link" href="grid.html">Grid</a></li>
@@ -198,54 +201,31 @@
 
           <div class="prose docs-prose">
 <h1 id="switcher">Switcher</h1>
-<p>Row that becomes a column when space gets tight, useful for small sets of panels.</p>
-<blockquote>
-<p><strong>Optional</strong> — import <code>actual-css/css/optional/layout-extra</code> or <code>actual-css/css/optional/index</code>.</p>
-</blockquote>
-<p>Use <code>.switcher</code> for rows that should become columns when space gets tight.</p>
+<p>Use <code>.switcher</code> for a small set of peer regions that should switch together
+between one row and a vertical stack. Unlike <code>.grid</code>, it never produces a
+partial row such as two items followed by one orphan.</p>
 <div class="docs-example">
   <div class="docs-preview">
 <section class="switcher">
-  <article class="card">
-    <h3>Profile</h3>
-    <p>Personal details and preferences.</p>
-  </article>
-  <article class="card">
-    <h3>Security</h3>
-    <p>Password and login settings.</p>
-  </article>
-  <article class="card">
-    <h3>Billing</h3>
-    <p>Invoices and payment methods.</p>
-  </article>
+  <article class="card"><h3>Profile</h3><p>Personal details.</p></article>
+  <article class="card"><h3>Security</h3><p>Login settings.</p></article>
+  <article class="card"><h3>Billing</h3><p>Payment details.</p></article>
 </section>
   </div>
   <div class="docs-code">
     <pre><code class="language-html">&lt;section class=&quot;switcher&quot;&gt;
-  &lt;article class=&quot;card&quot;&gt;
-    &lt;h3&gt;Profile&lt;/h3&gt;
-    &lt;p&gt;Personal details and preferences.&lt;/p&gt;
-  &lt;/article&gt;
-  &lt;article class=&quot;card&quot;&gt;
-    &lt;h3&gt;Security&lt;/h3&gt;
-    &lt;p&gt;Password and login settings.&lt;/p&gt;
-  &lt;/article&gt;
-  &lt;article class=&quot;card&quot;&gt;
-    &lt;h3&gt;Billing&lt;/h3&gt;
-    &lt;p&gt;Invoices and payment methods.&lt;/p&gt;
-  &lt;/article&gt;
+  &lt;article class=&quot;card&quot;&gt;&lt;h3&gt;Profile&lt;/h3&gt;&lt;p&gt;Personal details.&lt;/p&gt;&lt;/article&gt;
+  &lt;article class=&quot;card&quot;&gt;&lt;h3&gt;Security&lt;/h3&gt;&lt;p&gt;Login settings.&lt;/p&gt;&lt;/article&gt;
+  &lt;article class=&quot;card&quot;&gt;&lt;h3&gt;Billing&lt;/h3&gt;&lt;p&gt;Payment details.&lt;/p&gt;&lt;/article&gt;
 &lt;/section&gt;</code></pre>
   </div>
 </div>
-<p>This is useful for small sets of panels, not large card collections. Use <code>.grid</code> for repeatable collections.</p>
-<h2 id="css-hooks">CSS hooks</h2>
+<p>Use <code>.grid</code> instead for repeatable collections whose items can reflow
+independently.</p>
+<h3 id="hooks">Hooks</h3>
 <ul>
-<li><code>--switcher-threshold</code> — container width at which the row becomes a column.</li>
+<li><code>--switcher-threshold</code> controls the space needed before all peers share a row.</li>
 </ul>
-<pre><code class="language-css">.settings-panels {
-  --switcher-threshold: 55rem;
-}
-</code></pre>
 
 </div>
 
@@ -265,7 +245,7 @@
         <nav class="scrollspy" data-enhance="scrollspy" data-scrollspy-offset="80" aria-label="On this page">
           <p class="docs-nav-group">On this page</p>
           <ul class="nav-list docs-toc-list" data-docs-toc>
-        <li><a class="nav-link" href="#css-hooks" data-docs-toc-item data-level="2">CSS hooks</a></li>
+        <li><a class="nav-link" href="#hooks" data-docs-toc-item data-level="3">Hooks</a></li>
           </ul>
         </nav>
       </aside>
@@ -302,6 +282,7 @@
       <p class="docs-nav-group">Layout</p>
       <ul class="nav-list">
         <li><a class="nav-link" href="overview.html">Layout Overview</a></li>
+        <li><a class="nav-link" href="choosing.html">Choosing a layout</a></li>
         <li><a class="nav-link" href="stack.html">Stack</a></li>
         <li><a class="nav-link" href="cluster.html">Cluster</a></li>
         <li><a class="nav-link" href="grid.html">Grid</a></li>

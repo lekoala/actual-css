@@ -315,3 +315,8 @@ html.has-modal-open.had-scrollbar {
   outline: 2px solid transparent;
   box-shadow: var(--focus-ring-shadow);
 }
+@media print {
+  dialog.modal[open] {
+    display: none !important;
+  }
+}

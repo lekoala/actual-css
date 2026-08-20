@@ -4,6 +4,17 @@ All notable changes will be documented here.
 
 This project follows Keep a Changelog and uses semver, including during 0.x.
 
+## [Unreleased]
+
+### Added
+
+* `.switcher` is part of the standard layout primitives.
+* `.sidebar-layout` adapts intrinsically to its allocated width and exposes `--sidebar-content-min`.
+
+### Breaking
+
+* `.grid-2`, `.grid-3`, `.grid-4`, and `.grid-6` are always fixed structural grids. A `.container-query` ancestor no longer changes their column count. Use `.grid` with `--grid-min` for responsive collections.
+
 ## [0.3.1] - 2026-08-20
 
 ### Changed

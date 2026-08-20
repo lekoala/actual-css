@@ -80,7 +80,28 @@ test("generic grid exposes an override without changing fixed grids", () => {
   expect(css).toContain(".grid-3 {\n  grid-template-columns: repeat(3, minmax(0, 1fr));");
   expect(css).toContain(".grid-4 {\n  grid-template-columns: repeat(4, minmax(0, 1fr));");
   expect(css).toContain(".grid-6 {\n  grid-template-columns: repeat(6, minmax(0, 1fr));");
-  expect(css).toContain(".container-query .grid-6 {\n    grid-template-columns: repeat(3, minmax(0, 1fr));");
+  expect(css).not.toContain(".container-query .grid-");
+  expect(css).not.toContain("@container");
+});
+
+test("intrinsic composition primitives do not depend on an ancestor opt-in", () => {
+  const css = readCss("src/css/layout.css");
+
+  expect(css).toMatch(/\.switcher\s*\{[\s\S]*display:\s*flex;[\s\S]*flex-wrap:\s*wrap;/);
+  expect(css).toMatch(
+    /\.switcher > \*\s*\{[\s\S]*var\(--switcher-threshold, 40rem\)[\s\S]*flex-grow:\s*1;/,
+  );
+  expect(css).toMatch(/\.sidebar-layout\s*\{[\s\S]*display:\s*flex;[\s\S]*flex-wrap:\s*wrap;/);
+  expect(css).toMatch(
+    /\.sidebar-layout > :first-child\s*\{[\s\S]*flex-grow:\s*999;[\s\S]*var\(--sidebar-content-min, 30rem\)/,
+  );
+  expect(css).toMatch(
+    /\.sidebar-layout > :last-child\s*\{[\s\S]*var\(--sidebar-layout-size, 18rem\)/,
+  );
+  expect(css).not.toContain(".container-query .sidebar-layout");
+
+  const optionalCss = readCss("src/css/optional/layout-extra.css");
+  expect(optionalCss).not.toContain(".switcher");
 });
 
 test("form-actions exposes alignment hooks while sticky behavior remains intact", () => {
@@ -124,12 +145,33 @@ test("native color control has normal, disabled, focus, and forced-colors states
   expect(css).toContain(".color::-moz-color-swatch");
 });
 
-test("status bar supports long tokens and is hidden in print", () => {
+test("status bar supports long tokens and owns its print behavior", () => {
   const statusCss = readCss("src/css/components/status-bar.css");
   const printCss = readCss("src/css/print.css");
 
   expect(statusCss).toContain("overflow-wrap: anywhere;");
-  expect(printCss).toContain(".status-bar");
+  expect(statusCss).toMatch(/@media print\s*\{[\s\S]*\.status-bar/);
+  expect(printCss).not.toContain(".status-bar");
+});
+
+test("global print defaults do not know component selectors", () => {
+  const printCss = readCss("src/css/print.css");
+
+  for (const selector of [
+    ".alert",
+    ".badge",
+    ".btn",
+    ".card",
+    ".drawer",
+    ".flyout",
+    ".modal",
+    ".spinner",
+    ".status-bar",
+    ".surface-backdrop",
+    ".tooltip",
+  ]) {
+    expect(printCss).not.toContain(selector);
+  }
 });
 
 test("badge is content-sized and never stretches in a stack", () => {

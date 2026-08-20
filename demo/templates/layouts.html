@@ -7,7 +7,6 @@
   <title>Layout Reference - Actual CSS</title>
   <meta name="description" content="Canonical layout compositions built with the current layout primitives — a reference for what each primitive does and where its limits are.">
   <link rel="stylesheet" href="../../dist/actual.css">
-  <link rel="stylesheet" href="../../dist/optional.css">
   <link rel="stylesheet" href="../../dist/actual-themes.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
   <style>
@@ -198,9 +197,8 @@
     <section class="center layout-section" id="grid-fixed">
       <h2>6. Fixed grid — <code>.grid-3</code> alone</h2>
       <p class="layout-note">
-        As-is: <code>.grid-3</code> is a fixed three-column grid at every
-        width. Nothing collapses it without a <code>.container-query</code>
-        wrapper — the three columns stay cramped on narrow viewports.
+        <code>.grid-3</code> is intentionally a fixed three-column structure at
+        every width. Use <code>.grid</code> for a responsive collection.
       </p>
 
       <div class="layout-example">
@@ -213,12 +211,11 @@
     </section>
 
     <section class="center layout-section" id="grid-responsive">
-      <h2>7. Fixed grid — <code>.grid-3</code> under <code>.container-query</code></h2>
+      <h2>7. Fixed grid — ancestor invariance</h2>
       <p class="layout-note">
-        The current contract: the same <code>.grid-3</code> inside a
-        <code>.container-query</code> collapses 3 &rarr; 2 &rarr; 1 columns as
-        the container narrows. The behaviour depends on the wrapper, not the
-        grid itself.
+        A <code>.container-query</code> ancestor does not alter a layout
+        primitive. This remains exactly three columns and protects the stable
+        meaning of <code>.grid-3</code>.
       </p>
 
       <div class="layout-example container-query">
@@ -231,11 +228,10 @@
     </section>
 
     <section class="center layout-section" id="sidebar-fixed">
-      <h2>8. Content + aside — <code>.sidebar-layout</code> alone</h2>
+      <h2>8. Content + aside — enough local space</h2>
       <p class="layout-note">
-        As-is: <code>.sidebar-layout</code> alone stays stacked at every
-        width. The horizontal switch depends on a
-        <code>.container-query</code> ancestor.
+        <code>.sidebar-layout</code> uses its own allocated width. Here the
+        main region and aside sit side by side when their viable widths fit.
       </p>
 
       <div class="layout-example">
@@ -254,15 +250,13 @@
     </section>
 
     <section class="center layout-section" id="sidebar-responsive">
-      <h2>9. Content + aside — <code>.sidebar-layout</code> under <code>.container-query</code></h2>
+      <h2>9. Content + aside — constrained locally</h2>
       <p class="layout-note">
-        The current contract: inside a <code>.container-query</code> the aside
-        appears beside the content once the container reaches 64rem, and stacks
-        below it below that. The switch point is a container width, not a
-        viewport width.
+        The same primitive stacks when its wrapper is narrow, even on a wide
+        viewport. No container-query opt-in or viewport threshold is involved.
       </p>
 
-      <div class="layout-example container-query">
+      <div class="layout-example" style="max-inline-size: 40rem;">
         <div class="sidebar-layout" style="--sidebar-layout-size: 18rem;">
           <section class="layout-pane">
             <h3>Main content</h3>
@@ -362,11 +356,11 @@
     </section>
 
     <section class="center layout-section" id="switcher">
-      <h2>13. Two equivalent zones</h2>
+      <h2>13. Peer regions that switch together</h2>
       <p class="layout-note">
-        <code>.switcher</code> places two or more zones side by side when the
-        container has room and stacks them when it does not. Lives in the
-        optional module, not the core bundle.
+        <code>.switcher</code> places peers side by side when they all fit and
+        otherwise stacks every peer. With three children it can produce one
+        row or three rows, never an orphaned <code>2 + 1</code> arrangement.
       </p>
 
       <div class="layout-example">
@@ -379,6 +373,11 @@
           <article class="card layout-pane">
             <h3>Shipping address</h3>
             <p class="muted">Where goods are delivered.</p>
+          </article>
+
+          <article class="card layout-pane">
+            <h3>Delivery options</h3>
+            <p class="muted">When and how goods arrive.</p>
           </article>
         </div>
       </div>

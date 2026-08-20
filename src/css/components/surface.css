@@ -40,3 +40,8 @@
       display var(--duration) allow-discrete;
   }
 }
+@media print {
+  .surface-backdrop {
+    display: none !important;
+  }
+}

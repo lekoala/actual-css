@@ -8,6 +8,9 @@ Layout provides a small set of composable building blocks for common page, app, 
 - Keep class names semantic enough to remember and generic enough to reuse.
 - Add a new layout primitive only when a pattern appears often and is awkward to express with existing primitives.
 
+See [Choosing a layout](./choosing.md) for the distinctions between responsive
+collections, fixed structural grids, all-or-nothing peer regions, and sidebars.
+
 ## Spacing tokens
 
 Layout shares the global spacing surface and exposes a small set of gap and rhythm tokens.

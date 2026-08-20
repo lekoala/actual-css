@@ -258,3 +258,9 @@
 .alert.admonition > .alert-body > :last-child {
   margin-block-end: 0;
 }
+@media print {
+  .alert {
+    border: var(--border-width) solid CanvasText;
+    break-inside: avoid;
+  }
+}

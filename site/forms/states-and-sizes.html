@@ -92,6 +92,7 @@
       <p class="docs-nav-group">Layout</p>
       <ul class="nav-list">
         <li><a class="nav-link" href="../layout/overview.html">Layout Overview</a></li>
+        <li><a class="nav-link" href="../layout/choosing.html">Choosing a layout</a></li>
         <li><a class="nav-link" href="../layout/stack.html">Stack</a></li>
         <li><a class="nav-link" href="../layout/cluster.html">Cluster</a></li>
         <li><a class="nav-link" href="../layout/grid.html">Grid</a></li>
@@ -218,8 +219,8 @@
 <form novalidate>
   <fieldset class="field-group">
     <legend class="field-label">Text control states</legend>
-    <div class="stack container-query">
-      <div class="grid-3 items-start">
+    <div class="stack" style="--grid-min: 14rem;">
+      <div class="grid items-start">
         <label class="field">
           <span class="field-label">Editable</span>
           <input class="input" type="text" value="Ocean Beach Clinic" />
@@ -238,7 +239,7 @@
         </label>
       </div>
 
-      <div class="grid-3 items-start">
+      <div class="grid items-start">
         <label class="field">
           <span class="field-label">Editable notes</span>
           <textarea class="textarea">Patient asked for an invoice copy.</textarea>
@@ -259,8 +260,8 @@
 
   <fieldset class="field-group">
     <legend class="field-label">Choice and select states</legend>
-    <div class="stack container-query">
-      <div class="grid-3 items-start">
+    <div class="stack" style="--grid-min: 14rem;">
+      <div class="grid items-start">
         <label class="field">
           <span class="field-label">Editable select</span>
           <select class="select">
@@ -332,7 +333,7 @@
         </label>
       </div>
 
-      <div class="grid-4 items-start">
+      <div class="grid items-start">
         <label class="choice">
           <input class="radio" type="radio" name="demo-radio-state" />
           <span>
@@ -366,7 +367,7 @@
         </label>
       </div>
 
-      <div class="grid-4 items-start">
+      <div class="grid items-start">
         <label class="choice">
           <input class="switch" type="checkbox" role="switch" />
           <span>
@@ -404,8 +405,8 @@
 
   <fieldset class="field-group">
     <legend class="field-label">Control sizes</legend>
-    <div class="stack container-query">
-      <div class="grid-3 items-start">
+    <div class="stack" style="--grid-min: 14rem;">
+      <div class="grid items-start">
         <label class="field sm">
           <span class="field-label">Small field</span>
           <input class="input" type="text" value="sm" />
@@ -422,7 +423,7 @@
         </label>
       </div>
 
-      <div class="grid-3 items-start">
+      <div class="grid items-start">
         <label class="field sm">
           <span class="field-label">Small select</span>
           <select class="select">
@@ -445,7 +446,7 @@
         </label>
       </div>
 
-      <div class="grid-3 items-start">
+      <div class="grid items-start">
         <label class="field sm">
           <span class="field-label">Small textarea</span>
           <textarea class="textarea" rows="2">Short note</textarea>
@@ -462,13 +463,13 @@
         </label>
       </div>
 
-      <div class="grid-3 items-start">
+      <div class="grid items-start">
         <button class="btn outline sm" type="button">Small</button>
         <button class="btn outline" type="button">Default</button>
         <button class="btn outline lg" type="button">Large</button>
       </div>
 
-      <div class="grid-4 items-start">
+      <div class="grid items-start">
         <label class="choice sm">
           <input class="check" type="checkbox" checked />
           <span>Small checkbox</span>
@@ -487,7 +488,7 @@
         </label>
       </div>
 
-      <div class="grid-3 items-start">
+      <div class="grid items-start">
         <label class="choice sm">
           <input class="radio" type="radio" name="demo-radio-size" checked />
           <span>Small radio</span>
@@ -502,7 +503,7 @@
         </label>
       </div>
 
-      <div class="grid-3 items-start">
+      <div class="grid items-start">
         <label class="choice sm">
           <input class="switch" type="checkbox" role="switch" checked />
           <span>Small switch</span>
@@ -524,8 +525,8 @@
     <pre><code class="language-html">&lt;form novalidate&gt;
   &lt;fieldset class=&quot;field-group&quot;&gt;
     &lt;legend class=&quot;field-label&quot;&gt;Text control states&lt;/legend&gt;
-    &lt;div class=&quot;stack container-query&quot;&gt;
-      &lt;div class=&quot;grid-3 items-start&quot;&gt;
+    &lt;div class=&quot;stack&quot; style=&quot;--grid-min: 14rem;&quot;&gt;
+      &lt;div class=&quot;grid items-start&quot;&gt;
         &lt;label class=&quot;field&quot;&gt;
           &lt;span class=&quot;field-label&quot;&gt;Editable&lt;/span&gt;
           &lt;input class=&quot;input&quot; type=&quot;text&quot; value=&quot;Ocean Beach Clinic&quot; /&gt;
@@ -544,7 +545,7 @@
         &lt;/label&gt;
       &lt;/div&gt;
 
-      &lt;div class=&quot;grid-3 items-start&quot;&gt;
+      &lt;div class=&quot;grid items-start&quot;&gt;
         &lt;label class=&quot;field&quot;&gt;
           &lt;span class=&quot;field-label&quot;&gt;Editable notes&lt;/span&gt;
           &lt;textarea class=&quot;textarea&quot;&gt;Patient asked for an invoice copy.&lt;/textarea&gt;
@@ -565,8 +566,8 @@
 
   &lt;fieldset class=&quot;field-group&quot;&gt;
     &lt;legend class=&quot;field-label&quot;&gt;Choice and select states&lt;/legend&gt;
-    &lt;div class=&quot;stack container-query&quot;&gt;
-      &lt;div class=&quot;grid-3 items-start&quot;&gt;
+    &lt;div class=&quot;stack&quot; style=&quot;--grid-min: 14rem;&quot;&gt;
+      &lt;div class=&quot;grid items-start&quot;&gt;
         &lt;label class=&quot;field&quot;&gt;
           &lt;span class=&quot;field-label&quot;&gt;Editable select&lt;/span&gt;
           &lt;select class=&quot;select&quot;&gt;
@@ -638,7 +639,7 @@
         &lt;/label&gt;
       &lt;/div&gt;
 
-      &lt;div class=&quot;grid-4 items-start&quot;&gt;
+      &lt;div class=&quot;grid items-start&quot;&gt;
         &lt;label class=&quot;choice&quot;&gt;
           &lt;input class=&quot;radio&quot; type=&quot;radio&quot; name=&quot;demo-radio-state&quot; /&gt;
           &lt;span&gt;
@@ -672,7 +673,7 @@
         &lt;/label&gt;
       &lt;/div&gt;
 
-      &lt;div class=&quot;grid-4 items-start&quot;&gt;
+      &lt;div class=&quot;grid items-start&quot;&gt;
         &lt;label class=&quot;choice&quot;&gt;
           &lt;input class=&quot;switch&quot; type=&quot;checkbox&quot; role=&quot;switch&quot; /&gt;
           &lt;span&gt;
@@ -710,8 +711,8 @@
 
   &lt;fieldset class=&quot;field-group&quot;&gt;
     &lt;legend class=&quot;field-label&quot;&gt;Control sizes&lt;/legend&gt;
-    &lt;div class=&quot;stack container-query&quot;&gt;
-      &lt;div class=&quot;grid-3 items-start&quot;&gt;
+    &lt;div class=&quot;stack&quot; style=&quot;--grid-min: 14rem;&quot;&gt;
+      &lt;div class=&quot;grid items-start&quot;&gt;
         &lt;label class=&quot;field sm&quot;&gt;
           &lt;span class=&quot;field-label&quot;&gt;Small field&lt;/span&gt;
           &lt;input class=&quot;input&quot; type=&quot;text&quot; value=&quot;sm&quot; /&gt;
@@ -728,7 +729,7 @@
         &lt;/label&gt;
       &lt;/div&gt;
 
-      &lt;div class=&quot;grid-3 items-start&quot;&gt;
+      &lt;div class=&quot;grid items-start&quot;&gt;
         &lt;label class=&quot;field sm&quot;&gt;
           &lt;span class=&quot;field-label&quot;&gt;Small select&lt;/span&gt;
           &lt;select class=&quot;select&quot;&gt;
@@ -751,7 +752,7 @@
         &lt;/label&gt;
       &lt;/div&gt;
 
-      &lt;div class=&quot;grid-3 items-start&quot;&gt;
+      &lt;div class=&quot;grid items-start&quot;&gt;
         &lt;label class=&quot;field sm&quot;&gt;
           &lt;span class=&quot;field-label&quot;&gt;Small textarea&lt;/span&gt;
           &lt;textarea class=&quot;textarea&quot; rows=&quot;2&quot;&gt;Short note&lt;/textarea&gt;
@@ -768,13 +769,13 @@
         &lt;/label&gt;
       &lt;/div&gt;
 
-      &lt;div class=&quot;grid-3 items-start&quot;&gt;
+      &lt;div class=&quot;grid items-start&quot;&gt;
         &lt;button class=&quot;btn outline sm&quot; type=&quot;button&quot;&gt;Small&lt;/button&gt;
         &lt;button class=&quot;btn outline&quot; type=&quot;button&quot;&gt;Default&lt;/button&gt;
         &lt;button class=&quot;btn outline lg&quot; type=&quot;button&quot;&gt;Large&lt;/button&gt;
       &lt;/div&gt;
 
-      &lt;div class=&quot;grid-4 items-start&quot;&gt;
+      &lt;div class=&quot;grid items-start&quot;&gt;
         &lt;label class=&quot;choice sm&quot;&gt;
           &lt;input class=&quot;check&quot; type=&quot;checkbox&quot; checked /&gt;
           &lt;span&gt;Small checkbox&lt;/span&gt;
@@ -793,7 +794,7 @@
         &lt;/label&gt;
       &lt;/div&gt;
 
-      &lt;div class=&quot;grid-3 items-start&quot;&gt;
+      &lt;div class=&quot;grid items-start&quot;&gt;
         &lt;label class=&quot;choice sm&quot;&gt;
           &lt;input class=&quot;radio&quot; type=&quot;radio&quot; name=&quot;demo-radio-size&quot; checked /&gt;
           &lt;span&gt;Small radio&lt;/span&gt;
@@ -808,7 +809,7 @@
         &lt;/label&gt;
       &lt;/div&gt;
 
-      &lt;div class=&quot;grid-3 items-start&quot;&gt;
+      &lt;div class=&quot;grid items-start&quot;&gt;
         &lt;label class=&quot;choice sm&quot;&gt;
           &lt;input class=&quot;switch&quot; type=&quot;checkbox&quot; role=&quot;switch&quot; checked /&gt;
           &lt;span&gt;Small switch&lt;/span&gt;
@@ -883,6 +884,7 @@
       <p class="docs-nav-group">Layout</p>
       <ul class="nav-list">
         <li><a class="nav-link" href="../layout/overview.html">Layout Overview</a></li>
+        <li><a class="nav-link" href="../layout/choosing.html">Choosing a layout</a></li>
         <li><a class="nav-link" href="../layout/stack.html">Stack</a></li>
         <li><a class="nav-link" href="../layout/cluster.html">Cluster</a></li>
         <li><a class="nav-link" href="../layout/grid.html">Grid</a></li>

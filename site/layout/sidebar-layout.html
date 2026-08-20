@@ -6,7 +6,10 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Sidebar Layout — Actual CSS</title>
-  <meta name="description" content="Two-column layout where one side has a preferred width and the other takes the remaining space.">
+  <meta name="description" content="Use .sidebar-layout for a main region followed by a secondary region. It
+switches intrinsically according to its own available width: the regions sit
+side by side when the main minimum, preferred aside width, and gap fit; they
+otherwise stack. No .container-query ancestor is required.">
   <link rel="stylesheet" href="../../src/css/actual.css">
   <link rel="stylesheet" href="../../src/css/optional/index.css">
   <link rel="stylesheet" href="../../dist/actual-themes.min.css">
@@ -92,6 +95,7 @@
       <p class="docs-nav-group">Layout</p>
       <ul class="nav-list">
         <li><a class="nav-link" href="overview.html">Layout Overview</a></li>
+        <li><a class="nav-link" href="choosing.html">Choosing a layout</a></li>
         <li><a class="nav-link" href="stack.html">Stack</a></li>
         <li><a class="nav-link" href="cluster.html">Cluster</a></li>
         <li><a class="nav-link" href="grid.html">Grid</a></li>
@@ -198,46 +202,45 @@
 
           <div class="prose docs-prose">
 <h1 id="sidebar-layout">Sidebar Layout</h1>
-<p>Two-column layout where one side has a preferred width and the other takes the remaining space.</p>
-<p>Use <code>.sidebar-layout</code> for two-column layouts where the aside should align to the top of the content, stay sticky, or keep a predictable declared width.</p>
-<p>Wrap it in <code>.container-query</code> to make the switch depend on the container width. Below 64rem the columns stack; at and above it the aside takes <code>--sidebar-layout-size</code> and the content takes the remaining space. Older browsers use the viewport fallback.</p>
+<p>Use <code>.sidebar-layout</code> for a main region followed by a secondary region. It
+switches intrinsically according to its own available width: the regions sit
+side by side when the main minimum, preferred aside width, and gap fit; they
+otherwise stack. No <code>.container-query</code> ancestor is required.</p>
 <div class="docs-example">
   <div class="docs-preview">
-<div class="container-query">
-  <div class="sidebar-layout" style="--sidebar-layout-size: 18rem">
-    <article class="stack">
-      <h1>Long-form article</h1>
-      <p>Article body that benefits from a sticky table of contents.</p>
-    </article>
+<div class="sidebar-layout">
+  <article class="stack">
+    <h1>Long-form article</h1>
+    <p>Article body that benefits from a related table of contents.</p>
+  </article>
 
-    <aside class="stack">
-      <h3>On this page</h3>
-      <ol class="list-reset">
-        <li><a class="link-muted" href="#">Section</a></li>
-      </ol>
-    </aside>
-  </div>
+  <aside class="stack">
+    <h3>On this page</h3>
+    <ol class="list-reset"><li><a class="link-muted" href="#">Section</a></li></ol>
+  </aside>
 </div>
   </div>
   <div class="docs-code">
-    <pre><code class="language-html">&lt;div class=&quot;container-query&quot;&gt;
-  &lt;div class=&quot;sidebar-layout&quot; style=&quot;--sidebar-layout-size: 18rem&quot;&gt;
-    &lt;article class=&quot;stack&quot;&gt;
-      &lt;h1&gt;Long-form article&lt;/h1&gt;
-      &lt;p&gt;Article body that benefits from a sticky table of contents.&lt;/p&gt;
-    &lt;/article&gt;
+    <pre><code class="language-html">&lt;div class=&quot;sidebar-layout&quot;&gt;
+  &lt;article class=&quot;stack&quot;&gt;
+    &lt;h1&gt;Long-form article&lt;/h1&gt;
+    &lt;p&gt;Article body that benefits from a related table of contents.&lt;/p&gt;
+  &lt;/article&gt;
 
-    &lt;aside class=&quot;stack&quot;&gt;
-      &lt;h3&gt;On this page&lt;/h3&gt;
-      &lt;ol class=&quot;list-reset&quot;&gt;
-        &lt;li&gt;&lt;a class=&quot;link-muted&quot; href=&quot;#&quot;&gt;Section&lt;/a&gt;&lt;/li&gt;
-      &lt;/ol&gt;
-    &lt;/aside&gt;
-  &lt;/div&gt;
+  &lt;aside class=&quot;stack&quot;&gt;
+    &lt;h3&gt;On this page&lt;/h3&gt;
+    &lt;ol class=&quot;list-reset&quot;&gt;&lt;li&gt;&lt;a class=&quot;link-muted&quot; href=&quot;#&quot;&gt;Section&lt;/a&gt;&lt;/li&gt;&lt;/ol&gt;
+  &lt;/aside&gt;
 &lt;/div&gt;</code></pre>
   </div>
 </div>
-<p>Tune the side width with <code>--sidebar-layout-size</code>.</p>
+<p>The first child is the flexible main region and the last child is the aside.
+Use a custom <code>.grid</code> template only when an exact editorial ratio is structural.</p>
+<h3 id="hooks">Hooks</h3>
+<ul>
+<li><code>--sidebar-layout-size</code> sets the aside's preferred width.</li>
+<li><code>--sidebar-content-min</code> sets the main region's minimum viable width.</li>
+</ul>
 
 </div>
 
@@ -257,7 +260,7 @@
         <nav class="scrollspy" data-enhance="scrollspy" data-scrollspy-offset="80" aria-label="On this page">
           <p class="docs-nav-group">On this page</p>
           <ul class="nav-list docs-toc-list" data-docs-toc>
-
+        <li><a class="nav-link" href="#hooks" data-docs-toc-item data-level="3">Hooks</a></li>
           </ul>
         </nav>
       </aside>
@@ -294,6 +297,7 @@
       <p class="docs-nav-group">Layout</p>
       <ul class="nav-list">
         <li><a class="nav-link" href="overview.html">Layout Overview</a></li>
+        <li><a class="nav-link" href="choosing.html">Choosing a layout</a></li>
         <li><a class="nav-link" href="stack.html">Stack</a></li>
         <li><a class="nav-link" href="cluster.html">Cluster</a></li>
         <li><a class="nav-link" href="grid.html">Grid</a></li>

@@ -1,7 +1,7 @@
 /*
  * Core layout primitives: stack, cluster, center, frame, app-shell, media,
- * sidebar-layout. Each primitive owns a single, readable behavior; they are
- * meant to compose in markup.
+ * switcher, sidebar-layout. Each primitive owns a single, readable behavior;
+ * they are meant to compose in markup.
  *
  * Public hooks:
  * --cluster-align
@@ -10,7 +10,9 @@
  * --center-size
  * --center-pad
  * --frame-ratio
+ * --switcher-threshold
  * --sidebar-layout-size
+ * --sidebar-content-min
  *
  * Child contracts:
  * .stack owns vertical rhythm: direct-child block-axis margins are reset,
@@ -21,11 +23,11 @@
  *   frame.
  */
 
-/* Responsive recipes:
+/* Composition recipes:
    - avatar/icon + flexible content -> .media
    - inline items that wrap when space runs out -> .cluster (keep wrapping)
-   - content + aside -> .sidebar-layout inside .container-query
-   - row that becomes a column when constrained -> .switcher (optional module)
+   - content + aside -> .sidebar-layout
+   - peer regions that all stack when constrained -> .switcher
 
    Anti-patterns:
    - viewport breakpoints for ordinary composition
@@ -33,6 +35,9 @@
      the layout
    - nowrap on page-level compositions; prefer wrapping and container-aware
      primitives */
+/* Local container-query opt-in. Use it for a component that explicitly
+   changes representation according to its allocated inline size. Layout
+   primitives are intrinsic and do not require this wrapper. */
 .container-query {
   container-type: inline-size;
 }
@@ -95,29 +100,38 @@
   align-items: start;
 }
 
-/* Sidebar layout: content + aside using grid. Use this when the aside is
-   sticky or the content is multi-section. The aside width is tunable with
-   --sidebar-layout-size. */
-.sidebar-layout {
-  display: grid;
+/* Peer regions switch as a group between a row and a stack. Unlike .grid,
+   this recipe cannot create a partial row such as two items plus one orphan. */
+.switcher {
+  display: flex;
+  flex-wrap: wrap;
   gap: var(--gap);
-  grid-template-columns: minmax(0, 1fr);
 }
 
-/* Container queries are the preferred path; without them the @supports not
-   block below restores the same columns at the same viewport breakpoint. */
-@container (width >= 64rem) {
-  .container-query .sidebar-layout {
-    grid-template-columns: minmax(0, 1fr) var(--sidebar-layout-size, 18rem);
-    align-items: start;
-  }
+.switcher > * {
+  flex-basis: calc((var(--switcher-threshold, 40rem) - 100%) * 999);
+  flex-grow: 1;
+  min-inline-size: 0;
 }
 
-@supports not (container-type: inline-size) {
-  @media (min-width: 64rem) {
-    .container-query .sidebar-layout {
-      grid-template-columns: minmax(0, 1fr) var(--sidebar-layout-size, 18rem);
-      align-items: start;
-    }
-  }
+/* Main content + secondary region. The children wrap according to the space
+   allocated to this layout, without an ancestor opt-in or viewport threshold.
+   The large growth ratio lets the main region reclaim the full row when the
+   aside wraps instead of remaining at its minimum viable width. */
+.sidebar-layout {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap);
+  align-items: flex-start;
+}
+
+.sidebar-layout > :first-child {
+  flex-basis: 0;
+  flex-grow: 999;
+  min-inline-size: min(100%, var(--sidebar-content-min, 30rem));
+}
+
+.sidebar-layout > :last-child {
+  flex-basis: var(--sidebar-layout-size, 18rem);
+  flex-grow: 1;
 }
