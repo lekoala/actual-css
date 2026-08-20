@@ -1729,6 +1729,11 @@ small {
   opacity: 1;
 }
 
+/* Forced colors intentionally stay under UA control: the visible check/dot
+   carries state while native remapping preserves platform contrast and focus.
+   If real HCM testing ever loses a mark, opt out on that pseudo only—never on
+   the interactive input host. */
+
 /*
  * Select — chevron and appearance layer on top of the shared text-control
  * recipe.
@@ -2167,8 +2172,10 @@ small {
 }
 
 @media (forced-colors: active) {
-  /* Forced colors remap the fills, but the custom knob has no native edge.
-     A system-color border keeps it distinct from the remapped track. */
+  /* The host intentionally stays under UA control for platform contrast and
+     focus. The custom knob has no native edge, so this system-color border
+     keeps it distinct from the remapped track. If real HCM testing ever needs
+     an opt-out, scope it to ::before—never to the interactive input host. */
   .switch::before {
     border: var(--border-width) solid ButtonText;
   }

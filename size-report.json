@@ -1,5 +1,5 @@
 {
-  "totalRaw": 214822,
+  "totalRaw": 215314,
   "core": {
     "minified": 10475,
     "brotli": 2487
@@ -45,12 +45,12 @@
       "raw": 6815
     },
     {
-      "file": "components/badge.css",
-      "raw": 5228
+      "file": "forms/choice.css",
+      "raw": 5286
     },
     {
-      "file": "forms/choice.css",
-      "raw": 5015
+      "file": "components/badge.css",
+      "raw": 5228
     },
     {
       "file": "typography/prose.css",
@@ -106,7 +106,7 @@
     },
     {
       "file": "forms/switch.css",
-      "raw": 3005
+      "raw": 3168
     },
     {
       "file": "components/card.css",
@@ -309,12 +309,12 @@
       "raw": 968
     },
     {
-      "file": "core/intents.css",
-      "raw": 938
+      "file": "components/index.css",
+      "raw": 947
     },
     {
-      "file": "components/index.css",
-      "raw": 889
+      "file": "core/intents.css",
+      "raw": 938
     },
     {
       "file": "components/scrollspy.css",
