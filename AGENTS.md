@@ -25,14 +25,12 @@ Add relevant guards for future-us when needed based on traps and discoveries.
 - Do not run build:docs unless you worked on the build scripts or docs sources (it needs dist/ first; the user runs it)
 - After editing demo/templates/*.html, run `bun run check:templates` (balanced `<style>` braces) — it's cheap and doesn't touch dist or generated demo output, unlike build:all
 - Playwright is not installed, build based on specifications
-- Never pass a shell glob as an rg path (`rg "x" dir/*.ext`). bash expands it
-  but PowerShell passes it literally and rg fails with "os error 123". Always
-  pass the directory plus rg's own `-g`, which works on every shell:
-  `rg "x" tests -g "*.test.js"`. When in doubt, the safe form is `rg "x" <dir>`.
-- Quote rg patterns with single quotes, not `\"`: PowerShell has no backslash
-  escaping (an unescaped `"` ends the string, truncating the pattern into a
-  regex parse error), and bash needs no escaping inside single quotes either.
-  `rg 'class="ln"'` works on every shell.
+- On every shell, pass rg a directory plus rg's own `-g` glob — never a shell
+  glob (`rg "x" dir/*.ext` passes the literal path and fails with os error 123).
+  Wrap the pattern in single quotes and never escape a quote with `\"`
+  (PowerShell double-quoted strings end at an unescaped `"`; bash needs no
+  escaping inside single quotes). One safe universal form:
+  `rg 'pattern' tests -g '*.test.js'`
 - For the rare quick number-only check (a rect, a computed style, a class
   list) use `bun run probe <page> --script tmp/x.js` instead of improvising a
   headless-Chrome script — it runs the file as an async program in the page and
