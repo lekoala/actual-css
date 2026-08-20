@@ -105,6 +105,16 @@ test("data-tooltip-visible eagerly creates and keeps a tooltip visible", async (
   expect(tip.hidden).toBe(false);
 });
 
+test("data-tooltip-visible starts hidden when its trigger is outside the viewport", async () => {
+  setupDOM('<button data-tooltip="Persistent help" data-tooltip-visible>Trigger</button>');
+  const trigger = document.querySelector("button");
+  mockRect(trigger, { x: 0, y: window.innerHeight + 100, width: 100, height: 40 });
+
+  await import(`../src/js/tooltip.js?test=${++importId}`);
+
+  expect(document.querySelector('[role="tooltip"]').hidden).toBe(true);
+});
+
 test("tooltip tracking only runs while the tooltip is visible", async () => {
   await loadTooltip('<button data-tooltip="Help">Trigger</button>');
   const observed = new Set();
