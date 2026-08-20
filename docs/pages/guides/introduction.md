@@ -4,8 +4,8 @@
 
 Actual CSS claims a small set of global class names and keeps everything opt-in:
 components define structure, variants change the style, and intents set the
-color. It is designed for new projects and works as-is in existing ones through
-cascade layers, import order, or an optional prefix transform.
+color. It is designed for new projects and can coexist in existing ones through
+cascade layers, import order, or a project-owned build-time prefix transform.
 
 ## CSS-first philosophy
 

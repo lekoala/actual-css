@@ -127,6 +127,7 @@ see the widget-primitives design note. Every primitive subpath is published in
 | Subpath | Purpose |
 |---|---|
 | `actual-css/js/enhance` | DOM lifecycle engine: `enhance()`, `registerEnhancement`, tokens |
+| `actual-css/js/escape` | Per-document LIFO Escape dismissal stack |
 | `actual-css/js/events` | The `actual:*` event name constants |
 | `actual-css/js/floating` | Positioning engine (`reposition`, `repositionAt`, `autoUpdate`) |
 | `actual-css/js/focus` | Focusable-item lookup and helpers |
@@ -197,9 +198,9 @@ Two non-obvious requirements:
 
 Lifecycle: `prepareSurface` → `openSurface` → `closeSurface` →
 `disconnectSurface`. `retainSurface(panel)` reference-counts a surface shared by
-several triggers and returns a release function; `registerEscapeDismissal` adds
-an element to the per-document Escape dismiss stack; `isSurfaceOpen` and
-`getSurfaceAutoClose` read current state.
+several triggers and returns a release function; `isSurfaceOpen` and
+`getSurfaceAutoClose` read current state. The separate `escape` primitive adds
+visible dismissable UI to the shared per-document Escape stack.
 
 `openSurface(menu, opts)` dispatches a cancelable `actual:surface-open` event —
 widgets can veto or decorate opens, and context menus inject their own

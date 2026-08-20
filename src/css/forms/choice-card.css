@@ -139,18 +139,19 @@
 
   .choice-card:has(:checked) {
     --choice-card-border: Highlight;
-    /* Pin the background: with forced-color-adjust: none the color-mix tint
-       above would actually render, uncontrolled in high-contrast themes. */
+    /* Pin the selected surface to the system canvas: only the essential
+       marker pseudos opt out of remapping, never the interactive card host. */
     --choice-card-bg: Canvas;
-    forced-color-adjust: none;
   }
 
   .choice-card:has(:checked)::before {
     background: Highlight;
     box-shadow: 0 0 0 2px Canvas;
+    forced-color-adjust: none;
   }
 
   .choice-card:has(:checked)::after {
     background: HighlightText;
+    forced-color-adjust: none;
   }
 }

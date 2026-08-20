@@ -1,4 +1,5 @@
 import enhance from "./enhance.js";
+import { registerEscapeDismissal } from "./escape.js";
 import { EVENTS } from "./events.js";
 import { autoUpdate, reposition, repositionAt } from "./floating.js";
 
@@ -416,37 +417,6 @@ function ensureDocumentClick(menu) {
   if (!doc || clickBoundDocuments.has(doc)) return;
   clickBoundDocuments.add(doc);
   doc.addEventListener("click", onDocumentClick);
-}
-
-const dismissableStacks = new WeakMap();
-
-export function registerEscapeDismissal(element, dismiss) {
-  const doc = element.ownerDocument;
-  let stack = dismissableStacks.get(doc);
-  if (!stack) {
-    stack = [];
-    dismissableStacks.set(doc, stack);
-    doc.addEventListener("keydown", onDocumentEscape);
-  }
-
-  const entry = { element, dismiss };
-  stack.push(entry);
-
-  return () => {
-    const index = stack.indexOf(entry);
-    if (index >= 0) stack.splice(index, 1);
-  };
-}
-
-function onDocumentEscape(event) {
-  if (event.key !== "Escape" || event.ctrlKey || event.altKey || event.shiftKey) return;
-
-  const stack = dismissableStacks.get(event.currentTarget);
-  const entry = stack.at(-1);
-  if (!entry) return;
-
-  event.preventDefault();
-  entry.dismiss({ restoreFocus: true });
 }
 
 export function getSurfaceAutoClose(menu) {

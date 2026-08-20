@@ -1,12 +1,12 @@
 {
-  "totalRaw": 214311,
+  "totalRaw": 214822,
   "core": {
-    "minified": 10507,
-    "brotli": 2482
+    "minified": 10475,
+    "brotli": 2487
   },
   "full": {
-    "minified": 104106,
-    "brotli": 15368
+    "minified": 103810,
+    "brotli": 15294
   },
   "themes": {
     "minified": 29127,
@@ -18,8 +18,8 @@
       "brotli": 2203
     },
     "full": {
-      "bytes": 54995,
-      "brotli": 15947
+      "bytes": 55250,
+      "brotli": 15986
     }
   },
   "fileCount": 97,
@@ -30,7 +30,7 @@
     },
     {
       "file": "components/button.css",
-      "raw": 7812
+      "raw": 7957
     },
     {
       "file": "components/alert.css",
@@ -38,23 +38,23 @@
     },
     {
       "file": "core/tokens.css",
-      "raw": 7086
+      "raw": 7102
     },
     {
       "file": "core/theme.css",
-      "raw": 6719
-    },
-    {
-      "file": "forms/choice.css",
-      "raw": 5485
+      "raw": 6815
     },
     {
       "file": "components/badge.css",
       "raw": 5228
     },
     {
+      "file": "forms/choice.css",
+      "raw": 5015
+    },
+    {
       "file": "typography/prose.css",
-      "raw": 4966
+      "raw": 5012
     },
     {
       "file": "components/avatar.css",
@@ -70,7 +70,7 @@
     },
     {
       "file": "forms/choice-card.css",
-      "raw": 4488
+      "raw": 4518
     },
     {
       "file": "utilities/extra.css",
@@ -97,12 +97,16 @@
       "raw": 3517
     },
     {
-      "file": "forms/switch.css",
-      "raw": 3350
+      "file": "forms/otp.css",
+      "raw": 3494
     },
     {
       "file": "utilities/base.css",
       "raw": 3214
+    },
+    {
+      "file": "forms/switch.css",
+      "raw": 3005
     },
     {
       "file": "components/card.css",
@@ -111,10 +115,6 @@
     {
       "file": "components/tooltip.css",
       "raw": 2959
-    },
-    {
-      "file": "forms/otp.css",
-      "raw": 2920
     },
     {
       "file": "forms/control.css",
@@ -161,6 +161,10 @@
       "raw": 2483
     },
     {
+      "file": "forms/native.css",
+      "raw": 2473
+    },
+    {
       "file": "components/progress.css",
       "raw": 2468
     },
@@ -203,10 +207,6 @@
     {
       "file": "themes/index.css",
       "raw": 2174
-    },
-    {
-      "file": "forms/native.css",
-      "raw": 2133
     },
     {
       "file": "components/status-bar.css",
@@ -261,12 +261,12 @@
       "raw": 1452
     },
     {
-      "file": "components/busy.css",
-      "raw": 1386
+      "file": "components/meter.css",
+      "raw": 1400
     },
     {
-      "file": "components/meter.css",
-      "raw": 1367
+      "file": "components/busy.css",
+      "raw": 1386
     },
     {
       "file": "components/table.css",
@@ -322,7 +322,7 @@
     },
     {
       "file": "components/key.css",
-      "raw": 813
+      "raw": 859
     },
     {
       "file": "components/pagination.css",

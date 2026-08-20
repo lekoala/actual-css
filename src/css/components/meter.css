@@ -51,7 +51,10 @@
 @media (forced-colors: active) {
   .meter::-webkit-meter-optimum-value,
   .meter::-webkit-meter-suboptimum-value,
-  .meter::-webkit-meter-even-less-good-value,
+  .meter::-webkit-meter-even-less-good-value {
+    background: Highlight;
+  }
+
   .meter::-moz-meter-bar {
     background: Highlight;
   }

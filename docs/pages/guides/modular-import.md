@@ -55,7 +55,7 @@ Each family is a directory under `src/css/` with an `index.css` manifest:
 | Layout | `actual-css/css/layout` | stack, cluster, center, frame, media, switcher, sidebar-layout, grid, scroller, scroll-snap, topbar, container-query, app-shell |
 | Typography | `actual-css/css/typography` | prose, overline, fluid |
 | Forms | `actual-css/css/forms` | native controls; `actual-css/css/forms/all` for the complete family (input-icon, switch, range, choice-card, custom-select, floating-field, otp) |
-| Components | `actual-css/css/components` | button, card, badge, alert, dialog, drawer, flyout, menu, tab, tooltip, chat, fab, join, … |
+| Components | `actual-css/css/components` | button, card, badge, alert, modal, drawer, flyout, menu, tab, tooltip, chat, fab, join, … |
 | Effects | `actual-css/css/effects` | aura |
 | Utilities | `actual-css/css/utilities` | base, extra |
 
@@ -70,6 +70,20 @@ piece:
 @import "actual-css/css/typography/fluid";
 @import "actual-css/css/utilities/extra";
 ```
+
+## Cascade layer recipes
+
+`actual-css/css/layer` contains the minimal core only. To place the complete
+framework in one project-owned layer, import the full bundle with a layer:
+
+```css
+@layer actual;
+@import "actual-css/full" layer(actual);
+```
+
+There is no separate full-layer bundle. When composing families individually,
+put the same `layer(actual)` modifier on every core or family import so none of
+the selected modules escapes the layer.
 
 ## Migrating from 0.3
 

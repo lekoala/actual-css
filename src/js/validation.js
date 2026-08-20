@@ -391,7 +391,7 @@ export class FormValidator {
   static setErrors(form, errors) {
     if (!isFormElement(form)) return;
     for (const [name, message] of Object.entries(errors)) {
-      const found = form.elements[name];
+      const found = form.elements.namedItem(name);
       if (!found) continue;
       if (found instanceof Element) {
         FormValidator.setFieldError(found, message);

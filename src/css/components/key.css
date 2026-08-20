@@ -6,6 +6,7 @@
  *
  * Visual twin of .prose kbd (prose.css) — keep the two recipes in sync.
  */
+/* @sync key-recipe */
 .key {
   display: inline-flex;
   align-items: center;
@@ -25,3 +26,4 @@
   white-space: nowrap;
   vertical-align: 0.08em;
 }
+/* @sync key-recipe */

@@ -72,6 +72,9 @@ Only use when the color **must not** be remapped — e.g., a `background-color`
 whose value is `currentColor` (the system would turn it into `Canvas` and make
 the element invisible). Every `forced-color-adjust: none` blocks the browser
 from fixing contrast issues automatically. Most components need zero instances.
+When only a pseudo-element carries essential color information, put the
+declaration on that pseudo-element so the interactive host keeps native color
+and focus adaptation.
 
 ### Redundant rules
 ```css

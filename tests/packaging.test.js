@@ -36,8 +36,11 @@ test("package ships built assets and theme reference sources", () => {
   expect(files).toContain("src/css/effects");
   expect(files).toContain("src/css/utilities");
   expect(files).toContain("src/css/themes");
+  expect(files).toContain("scripts/reserved-classes.json");
   expect(files).not.toContain("src/css");
   expect(files).not.toContain("src/css/optional");
+  expect(pkg.exports["./reserved-classes.json"]).toBe("./scripts/reserved-classes.json");
+  expect(existsSync(join(ROOT, pkg.exports["./reserved-classes.json"]))).toBe(true);
 });
 
 test("dist directory contains the full bundle and no optional artifacts", () => {

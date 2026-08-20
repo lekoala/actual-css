@@ -111,15 +111,87 @@ function rel(file) {
   return relative(ROOT, file).replaceAll(sep, "/");
 }
 
+function splitSelectorList(prelude) {
+  const selectors = [];
+  let start = 0;
+  let depth = 0;
+  let quote = null;
+  let escaped = false;
+
+  for (let index = 0; index < prelude.length; index++) {
+    const char = prelude[index];
+    if (escaped) {
+      escaped = false;
+      continue;
+    }
+    if (char === "\\") {
+      escaped = true;
+      continue;
+    }
+    if (quote) {
+      if (char === quote) quote = null;
+      continue;
+    }
+    if (char === '"' || char === "'") {
+      quote = char;
+      continue;
+    }
+    if (char === "(" || char === "[") depth++;
+    else if (char === ")" || char === "]") depth--;
+    else if (char === "," && depth === 0) {
+      selectors.push(prelude.slice(start, index).trim());
+      start = index + 1;
+    }
+  }
+
+  selectors.push(prelude.slice(start).trim());
+  return selectors.filter(Boolean);
+}
+
+function vendorSignature(selector) {
+  const prefixes = new Set(
+    [...selector.matchAll(/::-(moz|webkit)-/gi)].map((match) => match[1].toLowerCase()),
+  );
+  return prefixes.size === 0 ? "standard" : [...prefixes].sort().join("+");
+}
+
+export function mixedVendorSelectorLists(css) {
+  const violations = [];
+  const withoutComments = css.replace(/\/\*[\s\S]*?\*\//g, (comment) => " ".repeat(comment.length));
+
+  for (const match of withoutComments.matchAll(/([^{}]+)\{/g)) {
+    const prelude = match[1].trim();
+    if (prelude.startsWith("@") || !prelude.includes("::-")) continue;
+
+    const signatures = new Set(splitSelectorList(prelude).map(vendorSignature));
+    const signature = [...signatures].join(", ");
+    if (signatures.size === 1 && !signature.includes("+")) continue;
+
+    const selectorOffset = match[1].search(/\S/);
+    violations.push({
+      line: lineNo(css, match.index + Math.max(selectorOffset, 0)),
+      selector: prelude,
+    });
+  }
+
+  return violations;
+}
+
 function main() {
   const files = walkCss(SRC);
   const violations = [];
   const progressive = [];
   const optional = [];
+  const vendorViolations = [];
 
   for (const file of files) {
     const css = readFileSync(file, "utf8");
     const guarded = supportsRanges(css);
+    vendorViolations.push(
+      ...mixedVendorSelectorLists(css).map(
+        ({ line, selector }) => `${rel(file)}:${line}  mixed vendor pseudo-elements: ${selector}`,
+      ),
+    );
 
     for (const feature of FEATURES) {
       const grandfathered = (PROGRESSIVE[rel(file)] ?? []).includes(feature.name);
@@ -143,10 +215,12 @@ function main() {
   console.log(`Optional enhancements: ${optional.length}`);
   console.log(`Unguarded structural above floor: ${violations.length}`);
   for (const line of violations) console.log(`  ✗ ${line}`);
+  console.log(`Mixed vendor selector lists: ${vendorViolations.length}`);
+  for (const line of vendorViolations) console.log(`  ✗ ${line}`);
 
-  if (violations.length > 0) {
-    console.error("\ncheck:compat failed — unguarded structural capabilities above the Minimal");
-    console.error("floor must live in @supports or be justified by a comment on the lines above.");
+  if (violations.length > 0 || vendorViolations.length > 0) {
+    console.error("\ncheck:compat failed — structural capabilities need a guarded fallback, and");
+    console.error("selector lists must not mix browser-specific pseudo-elements.");
     process.exit(1);
   }
   console.log("\ncheck:compat passed.");
@@ -156,4 +230,4 @@ function lineNo(css, index) {
   return css.slice(0, index).split("\n").length;
 }
 
-main();
+if (import.meta.main) main();

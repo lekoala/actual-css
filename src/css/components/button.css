@@ -249,6 +249,11 @@ a.btn[aria-disabled="true"] {
     forced-color-adjust: none;
   }
 
+  .btn:is([aria-pressed="true"], [aria-current="page"]):not(.link):focus-visible {
+    outline: var(--focus-outline);
+    box-shadow: none;
+  }
+
   .btn:hover:not(:where(:disabled, [aria-disabled="true"], .link)) {
     outline: var(--border-width) solid ButtonText;
     outline-offset: 2px;

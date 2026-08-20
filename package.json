@@ -52,6 +52,7 @@
     "./js/context-menu": "./src/js/context-menu.js",
     "./js/dialog": "./src/js/dialog.js",
     "./js/dismiss": "./src/js/dismiss.js",
+    "./js/escape": "./src/js/escape.js",
     "./js/enhance": "./src/js/enhance.js",
     "./js/enhancement-loader": "./src/js/enhancement-loader.js",
     "./js/parse-config": "./src/js/parse-config.js",
@@ -73,6 +74,7 @@
     "./js/validation": "./src/js/validation.js",
     "./js/status": "./src/js/status.js",
     "./js/surface": "./src/js/surface.js",
+    "./reserved-classes.json": "./scripts/reserved-classes.json",
     "./package.json": "./package.json"
   },
   "main": "./dist/actual.js",
@@ -92,6 +94,7 @@
     "src/css/utilities",
     "src/css/themes",
     "src/js",
+    "scripts/reserved-classes.json",
     "docs",
     "CHANGELOG.md",
     "llms.txt",

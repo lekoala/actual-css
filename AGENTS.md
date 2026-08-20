@@ -17,14 +17,13 @@ Add relevant guards for future-us when needed based on traps and discoveries.
 
 ## Tools
 
-- Do not lint yourself, this is done by config and use biome
 - Never ignore biome diagnostics: warnings and info-level findings must be
   fixed or explicitly accepted, never dismissed. `bun run lint` must end clean
   before the work is considered done
 - Do not run build:dist, unless you want to test if build script works (the user build it)
 - Do not run build:docs unless you worked on the build scripts or docs sources (it needs dist/ first; the user runs it)
 - After editing demo/templates/*.html, run `bun run check:templates` (balanced `<style>` braces) — it's cheap and doesn't touch dist or generated demo output, unlike build:all
-- Playwright is not installed, build based on specifications
+- Playwright is not installed, build based on specifications or implement a test with `Bun.WebView`
 - On every shell, pass rg a directory plus rg's own `-g` glob — never a shell
   glob (`rg "x" dir/*.ext` passes the literal path and fails with os error 123).
   Wrap the pattern in single quotes and never escape a quote with `\"`
@@ -43,10 +42,7 @@ Add relevant guards for future-us when needed based on traps and discoveries.
   Use the edit tool, which fails loudly instead of silently emptying a file.
 - Bulk markup migrations need a verification pass, not a careful replace: a
   replace over `class="flyout"` cannot see markup whose attributes span several
-  lines. Write the inverse check (`tmp/enhance-audit.js` is the 0.2 example) and
-  run it after each step.
-
-No need to mention that you didn't do anything
+  lines.
 
 ## Rules
 
@@ -59,6 +55,10 @@ No need to mention that you didn't do anything
   intentional local deviations. Add application CSS only when the difference is
   genuinely product-specific. Do not preserve incidental mockup pixel values by
   default.
+
+## CSS
+
+- Never merge vendor rules (rule becomes invalid and is discarded)
 
 ### Documentation and implementation
 

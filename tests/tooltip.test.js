@@ -1,5 +1,6 @@
 import { afterEach, expect, test } from "bun:test";
 import { cleanupDOM, mockRect, nextMicrotask, setupDOM } from "./helpers/dom.js";
+import { nextFrame } from "./helpers/layout.js";
 
 let importId = 0;
 
@@ -101,8 +102,14 @@ test("data-tooltip-visible eagerly creates and keeps a tooltip visible", async (
   await waitForHide();
   expect(tip.hidden).toBe(false);
 
-  tip.dispatchEvent(new CustomEvent("actual:hide", { detail: { type: "escape" } }));
+  const escape = new KeyboardEvent("keydown", {
+    key: "Escape",
+    bubbles: true,
+    cancelable: true,
+  });
+  document.dispatchEvent(escape);
   expect(tip.hidden).toBe(false);
+  expect(escape.defaultPrevented).toBe(false);
 });
 
 test("data-tooltip-visible starts hidden when its trigger is outside the viewport", async () => {
@@ -375,6 +382,63 @@ test("Escape key hides the tooltip", async () => {
 
   document.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
   expect(tip.hidden).toBe(true);
+});
+
+test("Escape closes a tooltip above a flyout without closing the flyout", async () => {
+  await loadTooltip(`
+    <button id="open" aria-controls="menu">Open</button>
+    <div id="menu" class="flyout" hidden>
+      <button id="help" data-tooltip="Help">Help</button>
+    </div>
+  `);
+  const { disconnectSurface, isSurfaceOpen, openSurface } = await import("../src/js/surface.js");
+  const trigger = document.getElementById("open");
+  const menu = document.getElementById("menu");
+  const help = document.getElementById("help");
+  mockRect(trigger, { x: 20, y: 20, width: 80, height: 30 });
+  mockRect(menu, { x: 0, y: 0, width: 160, height: 80 });
+  mockRect(help, { x: 30, y: 60, width: 60, height: 30 });
+
+  expect(openSurface(menu, { trigger })).toBe(true);
+  hover(help);
+  await waitForShow();
+  const tip = document.querySelector('[role="tooltip"]');
+  expect(tip.hidden).toBe(false);
+
+  document.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
+
+  expect(tip.hidden).toBe(true);
+  expect(isSurfaceOpen(menu)).toBe(true);
+  disconnectSurface(menu);
+});
+
+test("tooltip tracking does not jump above a flyout opened later", async () => {
+  await loadTooltip(`
+    <button id="help" data-tooltip="Help">Help</button>
+    <button id="open" aria-controls="menu">Open</button>
+    <div id="menu" class="flyout" hidden>Menu</div>
+  `);
+  const { disconnectSurface, isSurfaceOpen, openSurface } = await import("../src/js/surface.js");
+  const help = document.getElementById("help");
+  const trigger = document.getElementById("open");
+  const menu = document.getElementById("menu");
+  mockRect(help, { x: 20, y: 20, width: 60, height: 30 });
+  mockRect(trigger, { x: 100, y: 20, width: 80, height: 30 });
+  mockRect(menu, { x: 0, y: 0, width: 160, height: 80 });
+
+  hover(help);
+  await waitForShow();
+  const tip = document.querySelector('[role="tooltip"]');
+  expect(tip.hidden).toBe(false);
+  expect(openSurface(menu, { trigger })).toBe(true);
+
+  window.dispatchEvent(new Event("scroll"));
+  await nextFrame();
+  document.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
+
+  expect(isSurfaceOpen(menu)).toBe(false);
+  expect(tip.hidden).toBe(false);
+  disconnectSurface(menu);
 });
 
 test("tooltip positions relative to its trigger", async () => {

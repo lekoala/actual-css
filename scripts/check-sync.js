@@ -14,11 +14,16 @@ const GROUPS = [
       "src/css/components/badge.css",
     ],
   },
+  {
+    name: "key-recipe",
+    files: ["src/css/typography/prose.css", "src/css/components/key.css"],
+  },
 ];
 
 function normalizeBlock(block) {
   return block
     .replace(/\/\*[\s\S]*?\*\//g, "")
+    .replace(/(?:\.key|\.prose :where\(kbd\))\s*\{/g, ".key {")
     .replace(/--(?:ui|alert-default|badge-default)-(bg|border)\s*:/g, "--soft-$1:")
     .replace(/\s+/g, " ")
     .replace(/\s*([:;,()])\s*/g, "$1")

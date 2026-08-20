@@ -2,13 +2,14 @@ import { expect, test } from "bun:test";
 
 const PUBLIC_EXPORTS = {
   enhance: ["default", "enhancementSelector", "hasEnhancement", "registerEnhancement"],
+  escape: ["registerEscapeDismissal"],
   events: ["EVENTS"],
   floating: ["autoUpdate", "reposition", "repositionAt"],
   focus: ["isElementVisible", "getFocusable", "focusFirstDescendant"],
   "focus-group": ["connectFocusGroup"],
   keys: ["firstItem", "lastItem", "nextItem", "itemForKey"],
   menu: ["getMenuItems", "hasMenuItems", "hasMenuItem", "focusFirstMenuItem", "focusLastMenuItem", "onMenuKeydown", "connectMenu"],
-  surface: ["isSurfaceOpen", "prepareSurface", "openSurface", "closeSurface", "disconnectSurface", "registerEscapeDismissal"],
+  surface: ["isSurfaceOpen", "prepareSurface", "openSurface", "closeSurface", "disconnectSurface"],
 };
 
 for (const [subpath, symbols] of Object.entries(PUBLIC_EXPORTS)) {

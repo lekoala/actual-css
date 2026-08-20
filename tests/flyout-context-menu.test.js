@@ -326,6 +326,13 @@ test("flyout trigger re-resolves a same-id replacement", async () => {
   expect(first.hidden).toBe(true);
   expect(replacement.hidden).toBe(false);
   expect(replacement.classList.contains("is-open")).toBe(true);
+
+  // Reconnecting the replacement must release the detached menu's listeners.
+  document.body.append(first);
+  first.hidden = false;
+  const staleItem = first.querySelector("button");
+  press(first, "ArrowDown");
+  expect(document.activeElement).not.toBe(staleItem);
 });
 
 test("flyout trigger opens nav panels and focuses the first link", async () => {

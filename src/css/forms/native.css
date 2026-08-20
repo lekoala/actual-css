@@ -58,7 +58,11 @@
   padding: 0;
 }
 
-.color::-webkit-color-swatch,
+.color::-webkit-color-swatch {
+  border: 0;
+  border-radius: calc(var(--radius) - var(--border-width));
+}
+
 .color::-moz-color-swatch {
   border: 0;
   border-radius: calc(var(--radius) - var(--border-width));
@@ -78,6 +82,15 @@
   .color {
     border-color: ButtonText;
     background: ButtonFace;
+  }
+
+  /* The swatch color is content, so preserve it without disabling the host's
+     native forced-color focus treatment. Vendor pseudos cannot share a rule. */
+  .color::-webkit-color-swatch {
+    forced-color-adjust: none;
+  }
+
+  .color::-moz-color-swatch {
     forced-color-adjust: none;
   }
 }

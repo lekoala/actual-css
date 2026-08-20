@@ -7,6 +7,7 @@ The JS runtime doubles as a primitive kit for building custom widgets.
 | Need | Primitive | Import |
 |------|-----------|--------|
 | Opt-in discovery + lifecycle + cleanup | `enhance`, `registerEnhancement` | `actual-css/js/enhance` |
+| Per-document LIFO Escape dismissal | `escape` (`registerEscapeDismissal`) | `actual-css/js/escape` |
 | Positioning, flip/shift, `--available-height`, `data-placement` | `floating` (`track`, `reposition`, `repositionAt`) | `actual-css/js/floating` |
 | Open/close, sheet on mobile, backdrop, outside-click, Escape, focus restore | `surface` | `actual-css/js/surface` |
 | Directional item lookup, edges, wrapping, RTL | `keys` (`itemForKey`, `firstItem`, `lastItem`, `nextItem`) | `actual-css/js/keys` |
