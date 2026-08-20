@@ -717,19 +717,23 @@ small {
   --prose-h4: 1.125rem;
 
   max-inline-size: var(--prose-measure);
-  color: var(--text);
   font-size: var(--prose-size);
   line-height: var(--prose-line-height);
   overflow-wrap: break-word;
 }
 
-.prose :where(p, ul, ol, dl, blockquote, pre, table, figure) {
-  margin-block: var(--prose-flow) 0;
+/* Vertical rhythm belongs to the direct block that participates in the
+   document, so it must not be injected into the internals of a nested
+   component (e.g. a .table-wrap around a .table would trap the margin). */
+.prose > * + * {
+  margin-block-start: var(--prose-flow);
 }
 
+/* Heading hierarchy remains low-specificity and contextual: a surface may
+   remap --heading without prose repainting it with the root text color. */
 .prose :where(h1, h2, h3, h4, h5, h6) {
   margin-block: 1.5em 0;
-  color: var(--text);
+  color: var(--heading, var(--text));
   font-weight: var(--font-weight-strong);
   line-height: var(--prose-heading-line-height);
 }
@@ -742,48 +746,54 @@ small {
   margin-block-start: 0;
 }
 
-.prose h1 {
+/* Element recipes are wrapped in :where() so every .prose rule is 0-1-0.
+   An explicit component/util class can therefore override prose defaults
+   regardless of the underlying element — a .btn or .alert link must not be
+   reshaped just because it lives inside authored content. */
+.prose :where(h1) {
   font-size: var(--prose-h1);
 }
 
-.prose h2 {
+.prose :where(h2) {
   font-size: var(--prose-h2);
 }
 
-.prose h3 {
+.prose :where(h3) {
   font-size: var(--prose-h3);
 }
 
-.prose h4 {
+.prose :where(h4) {
   font-size: var(--prose-h4);
 }
 
-.prose a {
+.prose :where(a) {
   color: var(--primary);
   text-decoration-line: underline;
   text-decoration-thickness: 0.08em;
   text-underline-offset: 0.18em;
 }
 
-.prose a:hover {
+.prose :where(a:hover) {
   text-decoration-thickness: 0.12em;
 }
 
 @supports (color: color-mix(in oklch, red, white)) {
-  .prose a:hover {
+  .prose :where(a:hover) {
     color: color-mix(in oklch, var(--primary), var(--text) 15%);
   }
 }
 
+/* Rich-text descendants are intentional here. Components and application UI
+   belong outside the prose boundary. */
 .prose :where(ul, ol) {
   padding-inline-start: 1.5em;
 }
 
-.prose li + li {
+.prose :where(li + li) {
   margin-block-start: 0.35em;
 }
 
-.prose code {
+.prose :where(code) {
   padding: 0.15em 0.3em;
   border-radius: var(--radius-sm);
   background: var(--surface-subtle);
@@ -792,7 +802,7 @@ small {
 }
 
 /* Visual twin of .key (components/key.css) — keep the two recipes in sync. */
-.prose kbd {
+.prose :where(kbd) {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -812,7 +822,7 @@ small {
   vertical-align: 0.08em;
 }
 
-.prose pre {
+.prose :where(pre) {
   overflow-x: auto;
   padding: 1em;
   border: var(--border-width) solid var(--border);
@@ -820,34 +830,33 @@ small {
   background: var(--surface-subtle);
 }
 
-.prose pre code {
+.prose :where(pre) :where(code) {
   padding: 0;
   background: transparent;
 }
 
-.prose blockquote {
+.prose :where(blockquote) {
   padding-inline-start: 1em;
   border-inline-start: var(--border-width) solid var(--border);
   color: var(--text-muted);
 }
 
-.prose figure {
+.prose :where(figure) {
   margin-inline: 0;
 }
 
-.prose figcaption {
+.prose :where(figcaption) {
   margin-block-start: 0.5em;
   color: var(--text-muted);
   font-size: 0.875em;
 }
 
-.prose table {
+.prose :where(table) {
   inline-size: 100%;
   border-collapse: collapse;
 }
 
-.prose th,
-.prose td {
+.prose :where(th, td) {
   padding: 0.5em;
   border-block-end: var(--border-width) solid var(--border);
   text-align: start;
@@ -1592,6 +1601,21 @@ small {
   margin-block-start: var(--choice-control-offset);
 }
 
+/* The switch is excluded from --choice-control-offset (that would be far too
+   much) — it is almost exactly one line tall, so it only needs a sub-pixel
+   optical nudge. When 1lh is available, center the switch's real height on
+   the first line-box so .sm/.lg (which change --control-size, not the
+   typography) keep the control top-aligned automatically. */
+.choice > .switch {
+  margin-block-start: 0.0625em;
+}
+
+@supports (margin-block-start: 1lh) {
+  .choice > .switch {
+    margin-block-start: calc((1lh - var(--switch-block-size)) / 2 + 0.0625em);
+  }
+}
+
 .choice > span > .field-help {
   display: block;
 }
@@ -1807,11 +1831,13 @@ small {
   box-shadow: var(--focus-ring-shadow);
 }
 
-/* Native color picker — keep the browser's dialog and selected-color UI. */
+/* Native color picker — keep the browser's dialog and selected-color UI. The
+   swatch fills almost the whole control so it reads as a color, not as a tiny
+   square inside a button; the 1px padding keeps a hair of --surface around it. */
 .color {
   inline-size: var(--control-size);
   block-size: var(--control-size);
-  padding: var(--space-10);
+  padding: var(--border-width);
   border: var(--border-width) solid var(--border);
   border-radius: var(--radius);
   background: var(--surface);
@@ -1822,12 +1848,10 @@ small {
   padding: 0;
 }
 
-.color::-webkit-color-swatch {
-  border: 0;
-}
-
+.color::-webkit-color-swatch,
 .color::-moz-color-swatch {
   border: 0;
+  border-radius: calc(var(--radius) - var(--border-width));
 }
 
 .color:disabled {
@@ -2549,9 +2573,13 @@ small {
  * and the reserved headroom with it, leaving typography untouched.
  *
  * Public hooks:
+ * --floating-label-top
+ * --floating-label-opacity
  * --floating-pad-block-start
  */
 .floating-field {
+  --floating-label-top: var(--space-10);
+  --floating-label-opacity: 0.8;
   --floating-pad-block-start: calc(var(--control-size) / 2 + var(--space-20));
 
   /* Grid blockifies the control, removing the inline descender gap a textarea
@@ -2570,24 +2598,30 @@ small {
 
 .floating-field > .field-label {
   position: absolute;
-  inset-block-start: 50%;
   inset-inline-start: calc(var(--space-30) + var(--border-width));
-  transform: translateY(-50%);
   color: var(--text-muted);
   font-size: var(--control-font-size);
   font-weight: var(--font-weight);
+  opacity: var(--floating-label-opacity);
   pointer-events: none;
   transition:
     inset-block-start var(--duration),
     transform var(--duration),
     font-size var(--duration),
+    opacity var(--duration),
     color var(--duration);
 }
 
-/* A textarea's resting label aligns with the first text line instead of
-   centering in the (tall) control. */
+/* Single-line controls rest in the middle until they receive a value. */
+.floating-field > :is(.input, .select) + .field-label {
+  inset-block-start: 50%;
+  transform: translateY(-50%);
+}
+
+/* An empty textarea label follows the control's normal first-line position;
+   the control itself keeps the extra headroom reserved for its floated state. */
 .floating-field > .textarea + .field-label {
-  inset-block-start: var(--floating-pad-block-start);
+  inset-block-start: calc(1em + var(--border-width));
   transform: none;
 }
 
@@ -2596,9 +2630,10 @@ small {
 .floating-field
   > :is(.input, .textarea):is(:focus, :autofill, :not(:placeholder-shown))
   + .field-label {
-  inset-block-start: var(--space-10);
+  inset-block-start: var(--floating-label-top);
   transform: none;
   font-size: var(--font-size-xs);
+  opacity: 1;
 }
 
 /* Controls without a dependable :placeholder-shown empty state stay floated:
@@ -2614,9 +2649,16 @@ small {
     .input[type="week"]
   )
   + .field-label {
-  inset-block-start: var(--space-10);
+  inset-block-start: var(--floating-label-top);
   transform: none;
   font-size: var(--font-size-xs);
+  opacity: 1;
+}
+
+@media (forced-colors: active) {
+  .floating-field > .field-label {
+    opacity: 1;
+  }
 }
 
 /*
@@ -2633,6 +2675,7 @@ small {
  * Internal:
  * --otp-cell-border
  * --otp-cell-bg
+ * --otp-caret-space
  */
 .otp {
   --otp-cell-size: var(--control-size);
@@ -2640,6 +2683,7 @@ small {
   --otp-font-size: 1.5rem;
   --otp-cell-border: var(--border);
   --otp-cell-bg: var(--surface);
+  --otp-caret-space: calc((var(--otp-cell-size) - 1ch) / 2 + var(--otp-gap) + 1px);
 
   position: relative;
   display: inline-grid;
@@ -2649,6 +2693,9 @@ small {
   max-inline-size: 100%;
   gap: var(--otp-gap);
   border-radius: var(--radius);
+  /* Unlike hidden, clip cannot become a scroll container when the caret moves
+     into the input extension. */
+  overflow: clip;
   direction: ltr;
 }
 
@@ -2660,20 +2707,21 @@ small {
   background: var(--otp-cell-bg);
   transition:
     border-color var(--duration),
-    background-color var(--duration),
-    box-shadow var(--duration);
+    background-color var(--duration);
 }
 
 /* The native input owns focus, selection, autofill, paste, and one-time-code
-   integration. Its spacing aligns monospace glyphs with the visual cells. */
+   integration. Its clipped extension accommodates the trailing letter-space
+   and final caret so the browser never scrolls the glyphs out of alignment. */
 .otp > input {
   position: absolute;
   z-index: 1;
   inset: 0;
-  inline-size: 100%;
+  inline-size: calc(100% + var(--otp-caret-space));
   block-size: 100%;
   margin: 0;
-  padding: 0 calc((var(--otp-cell-size) - 1ch) / 2);
+  padding-block: 0;
+  padding-inline: calc((var(--otp-cell-size) - 1ch) / 2) 0;
   border: 0;
   outline: 2px solid transparent;
   box-shadow: none;
@@ -2686,10 +2734,6 @@ small {
   letter-spacing: calc(var(--otp-cell-size) + var(--otp-gap) - 1ch);
   text-align: start;
   appearance: none;
-}
-
-.otp:focus-within {
-  box-shadow: var(--focus-ring-shadow);
 }
 
 .otp > input:focus ~ span {
@@ -2719,12 +2763,6 @@ small {
 }
 
 @media (forced-colors: active) {
-  .otp:focus-within {
-    outline: var(--focus-outline);
-    outline-offset: var(--focus-outline-offset);
-    box-shadow: none;
-  }
-
   .otp > input:focus ~ span {
     --otp-cell-border: Highlight;
   }
@@ -5650,7 +5688,7 @@ a.avatar[aria-disabled="true"] {
   border-radius: var(--radius-sm);
 }
 
-.breadcrumb :where(a, span):where([aria-current]:not([aria-current="false"])) {
+.breadcrumb :where(li, a, span):where([aria-current]:not([aria-current="false"])) {
   color: var(--text);
   font-weight: var(--font-weight-medium);
 }
@@ -6062,6 +6100,13 @@ a.avatar[aria-disabled="true"] {
 .join:has(> :is(.input, .textarea, .select)) > :is(.input, .textarea, .select):focus-visible {
   outline: none;
   box-shadow: none;
+}
+
+/* A default outline action belongs to the composite field border. An explicit
+   intent still provides its own outline color — --intent is guaranteed-invalid
+   for a neutral button (the :where(.btn) boundary), so the fallback applies. */
+.join:has(> :is(.input, .textarea, .select)) > .btn.outline {
+  --btn-border-color: var(--intent, var(--border));
 }
 
 /* Effects — purely visual enrichments. */

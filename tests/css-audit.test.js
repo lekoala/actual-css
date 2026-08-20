@@ -425,6 +425,12 @@ test("optional OTP keeps one native input and covers validation states", () => {
   expect(css).toContain(".otp > input");
   expect(css).toMatch(/\.otp\s*\{[\s\S]*inline-size:\s*fit-content;/);
   expect(css).toMatch(/\.otp\s*\{[\s\S]*border-radius:\s*var\(--radius\);/);
+  expect(css).toContain("overflow: clip;");
+  expect(css).not.toContain("overflow: hidden;");
+  expect(css).not.toContain(".otp:focus-within");
+  expect(css).toContain(".otp > input:focus ~ span");
+  expect(css).toContain("inline-size: calc(100% + var(--otp-caret-space));");
+  expect(css).toContain("padding-inline: calc((var(--otp-cell-size) - 1ch) / 2) 0;");
   expect(css).toContain('input[aria-invalid="true"] ~ span');
   expect(css).toContain(".needs-validation.was-validated .otp > input:invalid ~ span");
   expect(css).toContain("input:user-invalid ~ span");

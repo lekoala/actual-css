@@ -53,6 +53,21 @@
   margin-block-start: var(--choice-control-offset);
 }
 
+/* The switch is excluded from --choice-control-offset (that would be far too
+   much) — it is almost exactly one line tall, so it only needs a sub-pixel
+   optical nudge. When 1lh is available, center the switch's real height on
+   the first line-box so .sm/.lg (which change --control-size, not the
+   typography) keep the control top-aligned automatically. */
+.choice > .switch {
+  margin-block-start: 0.0625em;
+}
+
+@supports (margin-block-start: 1lh) {
+  .choice > .switch {
+    margin-block-start: calc((1lh - var(--switch-block-size)) / 2 + 0.0625em);
+  }
+}
+
 .choice > span > .field-help {
   display: block;
 }

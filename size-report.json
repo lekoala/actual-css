@@ -1,12 +1,12 @@
 {
-  "totalRaw": 211528,
+  "totalRaw": 214193,
   "core": {
     "minified": 10507,
     "brotli": 2482
   },
   "full": {
-    "minified": 103391,
-    "brotli": 15248
+    "minified": 104106,
+    "brotli": 15368
   },
   "themes": {
     "minified": 29127,
@@ -45,12 +45,16 @@
       "raw": 6719
     },
     {
+      "file": "forms/choice.css",
+      "raw": 5485
+    },
+    {
       "file": "components/badge.css",
       "raw": 5228
     },
     {
-      "file": "forms/choice.css",
-      "raw": 4919
+      "file": "typography/prose.css",
+      "raw": 4966
     },
     {
       "file": "components/avatar.css",
@@ -73,10 +77,6 @@
       "raw": 4403
     },
     {
-      "file": "typography/prose.css",
-      "raw": 4101
-    },
-    {
       "file": "themes/gradient.css",
       "raw": 4014
     },
@@ -89,20 +89,20 @@
       "raw": 3852
     },
     {
+      "file": "components/join.css",
+      "raw": 3553
+    },
+    {
+      "file": "forms/floating-field.css",
+      "raw": 3517
+    },
+    {
       "file": "forms/switch.css",
       "raw": 3350
     },
     {
       "file": "utilities/base.css",
       "raw": 3214
-    },
-    {
-      "file": "components/join.css",
-      "raw": 3194
-    },
-    {
-      "file": "forms/floating-field.css",
-      "raw": 3001
     },
     {
       "file": "components/card.css",
@@ -113,16 +113,16 @@
       "raw": 2959
     },
     {
+      "file": "forms/otp.css",
+      "raw": 2920
+    },
+    {
       "file": "forms/control.css",
       "raw": 2909
     },
     {
       "file": "forms/range.css",
       "raw": 2807
-    },
-    {
-      "file": "forms/otp.css",
-      "raw": 2775
     },
     {
       "file": "forms/validation.css",
@@ -205,6 +205,10 @@
       "raw": 2174
     },
     {
+      "file": "forms/native.css",
+      "raw": 2133
+    },
+    {
       "file": "components/status-bar.css",
       "raw": 2091
     },
@@ -215,10 +219,6 @@
     {
       "file": "components/accordion.css",
       "raw": 1936
-    },
-    {
-      "file": "forms/native.css",
-      "raw": 1923
     },
     {
       "file": "layout/scroller.css",
@@ -302,7 +302,7 @@
     },
     {
       "file": "components/breadcrumb.css",
-      "raw": 1004
+      "raw": 1008
     },
     {
       "file": "core/focus.css",

@@ -238,6 +238,77 @@
   </div>
 </div>
 <div class="prose docs-prose">
+<p>Wrap a switch in <code>.choice</code> to pair it with a label. The switch stays
+top-aligned with the first line of text, so labels that wrap onto two lines —
+naturally or via an explicit line break — still sit cleanly.</p>
+</div>
+<div class="docs-example">
+  <div class="docs-preview">
+<label class="choice">
+  <input class="switch" type="checkbox" role="switch" checked />
+  <span>
+    Release alerts
+    <span class="field-help">Send status changes to the release channel.</span>
+  </span>
+</label>
+  </div>
+  <div class="docs-code">
+    <pre><code class="language-html">&lt;label class=&quot;choice&quot;&gt;
+  &lt;input class=&quot;switch&quot; type=&quot;checkbox&quot; role=&quot;switch&quot; checked /&gt;
+  &lt;span&gt;
+    Release alerts
+    &lt;span class=&quot;field-help&quot;&gt;Send status changes to the release channel.&lt;/span&gt;
+  &lt;/span&gt;
+&lt;/label&gt;</code></pre>
+  </div>
+</div>
+<div class="docs-example">
+  <div class="docs-preview">
+<!-- Multi-line labels keep the switch aligned with the first line. -->
+<label class="choice">
+  <input class="switch" type="checkbox" role="switch" />
+  <span>
+    Send a summary of account activity for the past month, including any
+    unusual sign-ins, to the address on file.
+    <span class="field-help">A long label that wraps onto a second line.</span>
+  </span>
+</label>
+  </div>
+  <div class="docs-code">
+    <pre><code class="language-html">&lt;!-- Multi-line labels keep the switch aligned with the first line. --&gt;
+&lt;label class=&quot;choice&quot;&gt;
+  &lt;input class=&quot;switch&quot; type=&quot;checkbox&quot; role=&quot;switch&quot; /&gt;
+  &lt;span&gt;
+    Send a summary of account activity for the past month, including any
+    unusual sign-ins, to the address on file.
+    &lt;span class=&quot;field-help&quot;&gt;A long label that wraps onto a second line.&lt;/span&gt;
+  &lt;/span&gt;
+&lt;/label&gt;</code></pre>
+  </div>
+</div>
+<div class="docs-example">
+  <div class="docs-preview">
+<!-- Explicit line break, top-aligned with the first line. -->
+<label class="choice">
+  <input class="switch" type="checkbox" role="switch" />
+  <span>
+    Weekly summary with a<br />manual line break
+    <span class="field-help">A forced two-line label.</span>
+  </span>
+</label>
+  </div>
+  <div class="docs-code">
+    <pre><code class="language-html">&lt;!-- Explicit line break, top-aligned with the first line. --&gt;
+&lt;label class=&quot;choice&quot;&gt;
+  &lt;input class=&quot;switch&quot; type=&quot;checkbox&quot; role=&quot;switch&quot; /&gt;
+  &lt;span&gt;
+    Weekly summary with a&lt;br /&gt;manual line break
+    &lt;span class=&quot;field-help&quot;&gt;A forced two-line label.&lt;/span&gt;
+  &lt;/span&gt;
+&lt;/label&gt;</code></pre>
+  </div>
+</div>
+<div class="prose docs-prose">
 <h2 id="css-hooks">CSS hooks</h2>
 <ul>
 <li><code>--switch-width</code> — track width.</li>
