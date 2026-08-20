@@ -68,7 +68,7 @@ test("file selector button reflects disabled cursor", () => {
   expect(css).toContain("cursor: not-allowed;");
 });
 
-test("generic grid exposes an override without changing fixed grids", () => {
+test("generic grid exposes an override and stays space-driven", () => {
   const css = readCss("src/css/layout/grid.css");
 
   expect(css.replace(/\s+/g, " ")).toContain(
@@ -76,12 +76,51 @@ test("generic grid exposes an override without changing fixed grids", () => {
   );
   expect(css).toContain("--grid-min");
   expect(css).toContain("--grid-columns");
-  expect(css).toContain(".grid-2 {\n  grid-template-columns: repeat(2, minmax(0, 1fr));");
-  expect(css).toContain(".grid-3 {\n  grid-template-columns: repeat(3, minmax(0, 1fr));");
-  expect(css).toContain(".grid-4 {\n  grid-template-columns: repeat(4, minmax(0, 1fr));");
-  expect(css).toContain(".grid-6 {\n  grid-template-columns: repeat(6, minmax(0, 1fr));");
-  expect(css).not.toContain(".container-query .grid-");
-  expect(css).not.toContain("@container");
+});
+
+test("density presets declare a count and collapse through divisors of it", () => {
+  const css = readCss("src/css/layout/grid.css");
+  const ENHANCEMENT = "@supports (container-type: inline-size)";
+
+  /* Baseline: bounded auto-fill, so a preset is responsive and overflow-safe
+     with no wrapper at all. auto-fit would stretch the items of a partial
+     final page beyond the width their peers have on a full page. */
+  const baseline = css.slice(css.indexOf(":where(.grid-2"), css.indexOf(ENHANCEMENT));
+  expect(baseline).toContain("auto-fill");
+  for (const [preset, count] of [
+    ["grid-2", 2],
+    ["grid-3", 3],
+    ["grid-4", 4],
+    ["grid-6", 6],
+  ]) {
+    expect(css).toContain(`.${preset} {\n  --grid-count: ${count};`);
+  }
+
+  /* --grid-min must not reach the presets. @container thresholds cannot
+     resolve a custom property, so honoring the hook in the baseline alone
+     would make it fall silent the moment a query container is added. */
+  expect(baseline).not.toContain("--grid-min");
+
+  /* Subdivision is an enhancement gated on container queries, and every step
+     must land on a divisor of its preset — never 5 + 1, never 4 + 2. */
+  expect(css).toContain(ENHANCEMENT);
+  const enhancement = css.slice(css.indexOf(ENHANCEMENT));
+  const steps = [...enhancement.matchAll(/@container \(min-width: (\d+)rem\)([\s\S]*?)\n  \}/g)];
+  expect(steps.length).toBeGreaterThan(0);
+  const seen = [];
+  for (const [, threshold, body] of steps) {
+    for (const rule of body.matchAll(/:where\(([^)]*)\)\s*\{\s*grid-template-columns: repeat\((\d+),/g)) {
+      const columns = Number(rule[2]);
+      for (const preset of rule[1].matchAll(/\.grid-(\d)/g)) {
+        const count = Number(preset[1]);
+        seen.push(`grid-${count}@${threshold}`);
+        expect(`grid-${count} @${threshold}rem enters ${columns}: ${count % columns}`).toBe(
+          `grid-${count} @${threshold}rem enters ${columns}: 0`,
+        );
+      }
+    }
+  }
+  expect(seen.length).toBeGreaterThanOrEqual(6);
 });
 
 test("intrinsic composition primitives do not depend on an ancestor opt-in", () => {

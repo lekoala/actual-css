@@ -13,10 +13,10 @@
 
 ## Class reference
 
-| Class | Kind | Description |
-|---|---|---|
+| Class         | Kind      | Description                    |
+|---------------|-----------|--------------------------------|
 | `.pagination` | Component | Ordered list of page controls. |
-| `.sm` / `.lg` | Size | Control density. |
+| `.sm` / `.lg` | Size      | Control density.               |
 
 ## Basic usage
 

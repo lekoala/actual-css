@@ -4,15 +4,15 @@ Lightweight helpers for muted or secondary text without a full color scale.
 
 ## Class reference
 
-| Class | Kind | Description |
-|---|---|---|
-| `.muted` | Utility | Secondary text color. |
-| `.text-start` | Utility | Logical start-aligned text; sets `--text-align`. |
-| `.text-center` | Utility | Centered text; sets `--text-align`. |
-| `.text-end` | Utility | Logical end-aligned text; sets `--text-align`. |
-| `.text-balance` | Utility | Balanced line wrapping (`text-wrap: balance`). |
-| `.text-pretty` | Utility | Pretty line wrapping (`text-wrap: pretty`). |
-| `.lead` | Utility | Slightly larger, relaxed reading-introduction paragraph. |
+| Class           | Kind    | Description                                              |
+|-----------------|---------|----------------------------------------------------------|
+| `.muted`        | Utility | Secondary text color.                                    |
+| `.text-start`   | Utility | Logical start-aligned text; sets `--text-align`.         |
+| `.text-center`  | Utility | Centered text; sets `--text-align`.                      |
+| `.text-end`     | Utility | Logical end-aligned text; sets `--text-align`.           |
+| `.text-balance` | Utility | Balanced line wrapping (`text-wrap: balance`).           |
+| `.text-pretty`  | Utility | Pretty line wrapping (`text-wrap: pretty`).              |
+| `.lead`         | Utility | Slightly larger, relaxed reading-introduction paragraph. |
 
 ## Muted
 

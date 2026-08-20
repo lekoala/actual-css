@@ -18,13 +18,13 @@ full-width badge is intentional.
 
 ## Class reference
 
-| Class | Kind | Description |
-|---|---|---|
-| `.badge` | Component | Compact label; soft by default. |
-| `.badge:empty` | Composition | Truly-empty badge renders as a solid dot. |
-| Shared intents | Intent | `.primary`, `.secondary`, `.success`, `.warning`, `.danger`. |
-| Shared variants | Variant | `.solid` (filled) and `.outline` (bordered) emphasis. |
-| `.sm` / `.lg` | Size | Compact density. |
+| Class           | Kind        | Description                                                  |
+|-----------------|-------------|--------------------------------------------------------------|
+| `.badge`        | Component   | Compact label; soft by default.                              |
+| `.badge:empty`  | Composition | Truly-empty badge renders as a solid dot.                    |
+| Shared intents  | Intent      | `.primary`, `.secondary`, `.success`, `.warning`, `.danger`. |
+| Shared variants | Variant     | `.solid` (filled) and `.outline` (bordered) emphasis.        |
+| `.sm` / `.lg`   | Size        | Compact density.                                             |
 
 ## Basic usage
 

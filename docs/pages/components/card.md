@@ -4,13 +4,13 @@ Flexible content container with optional header, body, and footer regions, plus 
 
 ## Class reference
 
-| Class | Kind | Description |
-|---|---|---|
-| `.card` | Component | Neutral raised surface for grouped content. |
-| `.raised` | Variant | Elevated surface with a soft shadow. |
-| `.subtle` | Variant | Lower contrast against the page surface. |
+| Class       | Kind             | Description                                                                                                                                                                                                     |
+|-------------|------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `.card`     | Component        | Neutral raised surface for grouped content.                                                                                                                                                                     |
+| `.raised`   | Variant          | Elevated surface with a soft shadow.                                                                                                                                                                            |
+| `.subtle`   | Variant          | Lower contrast against the page surface.                                                                                                                                                                        |
 | `.inverted` | Surface modifier | Inverse surface treatment: paints `--surface-solid` and swaps the foreground to `--surface`, so it inverts in dark themes instead of always reading as dark. Apply as `class="card inverted"`, or on any block. |
-| `.compact` | Variant | Tighter padding for dense contexts. |
+| `.compact`  | Variant          | Tighter padding for dense contexts.                                                                                                                                                                             |
 
 ## Basic usage
 

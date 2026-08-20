@@ -1006,8 +1006,9 @@ small {
  * .media          fixed media + flexible content
  * .switcher       peer regions: all horizontal or all stacked
  * .sidebar-layout main content + secondary aside
- * .grid           responsive collection of independent items
- * .grid-N         fixed N-column structural grid (in grid.css)
+ * .grid           responsive collection; item width is the contract
+ * .grid-N         structural density of N; wrap in .container-query for
+ *                 balanced subdivision (in grid.css)
  * .scroller       quiet custom scrollbar chrome
  * .scroll-snap    snap rails
  * .topbar         sticky app-shell top bar
@@ -1015,9 +1016,16 @@ small {
  *
  * Prefer these compositions over viewport breakpoint utilities.
  */
-/* Local container-query opt-in. Use it for a component that explicitly
-   changes representation according to its allocated inline size. Layout
-   primitives are intrinsic and do not require this wrapper. */
+/* Local container-query opt-in: establishes an inline-size query context for
+   descendants. Use it for a component that changes representation according
+   to its allocated inline size, and to opt .grid-N into balanced subdivision
+   (see grid.css). Layout primitives are responsive without it — this adds
+   precision, it is never a prerequisite.
+
+   The element takes inline-size containment, so put it on a normal
+   block-level wrapper, never on a shrink-to-fit item (a .cluster child, a
+   float, an inline-block): its contents would stop contributing to its own
+   inline size and it would collapse. */
 .container-query {
   container-type: inline-size;
 }
@@ -1161,11 +1169,18 @@ small {
 }
 
 /*
- * Responsive equal-width grids, with fixed-column presets below.
+ * Responsive equal-width grids.
+ *
+ * .grid is space-driven: it fits as many tracks as --grid-min allows.
+ * .grid-N is count-driven: it declares a structural density of N and collapses
+ * through natural divisors of N (see the subdivision block below).
  *
  * Public hooks:
  * --grid-min
  * --grid-columns
+ *
+ * Internal:
+ * --grid-count
  */
 
 /* --grid-columns replaces the intrinsic auto-fit template: once set, the
@@ -1174,9 +1189,9 @@ small {
    --grid-columns for genuinely fixed or asymmetric templates. */
 
 /* Recipe:
-   - N equal cards that reflow when narrow -> .grid (auto-fit, tune
-     --grid-min)
-   - exact structural columns -> .grid-2/3/4/6
+   - collection whose item width is the contract -> .grid, tune --grid-min
+   - collection whose column density is the contract -> .grid-2/3/4/6
+   - balanced subdivision of that density -> wrap it in .container-query
    - peer regions that switch as a group -> .switcher
    - content + aside -> .sidebar-layout
    - fixed or asymmetric columns -> --grid-columns with an explicit collapse
@@ -1190,28 +1205,97 @@ small {
     );
 }
 
-/* Fixed structural grids. Their exact column count is the contract and no
-   ancestor changes it. Use .grid for responsive collections, or .switcher
-   when peer regions must switch together without a partial final row. */
-.grid-2,
-.grid-3,
-.grid-4,
-.grid-6 {
+/* Structural density presets. The baseline is an auto-fill grid bounded at N
+   tracks: responsive and overflow-safe on its own, so a preset used without a
+   query container is never a trap — it simply reaches its balanced states less
+   precisely. auto-fill rather than auto-fit keeps item width stable when a
+   partial final page holds fewer items than the grid's capacity.
+
+   --grid-min is deliberately NOT read here. The subdivision below runs on
+   @container thresholds, which cannot resolve a custom property, so a hook
+   honored in the baseline would fall silent the moment a query container is
+   added. Item width is .grid's contract; column density is .grid-N's. */
+:where(.grid-2, .grid-3, .grid-4, .grid-6) {
   display: grid;
   gap: var(--gap);
+  grid-template-columns: repeat(
+      auto-fill,
+      minmax(
+        min(
+          100%,
+          max(16rem, calc((100% - (var(--grid-count) - 1) * var(--gap)) / var(--grid-count)))
+        ),
+        1fr
+      )
+    );
 }
 
 .grid-2 {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  --grid-count: 2;
 }
 .grid-3 {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  --grid-count: 3;
 }
 .grid-4 {
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  --grid-count: 4;
 }
 .grid-6 {
-  grid-template-columns: repeat(6, minmax(0, 1fr));
+  --grid-count: 6;
+}
+
+/* Balanced subdivision, opted into by an ancestor query container.
+ *
+ *   .grid-2   2 -> 1
+ *   .grid-3   3 -> 1
+ *   .grid-4   4 -> 2 -> 1
+ *   .grid-6   6 -> 3 -> 2 -> 1
+ *
+ * Every state is a divisor of N, so all items keep the same width and no
+ * state produces a visibly uneven split such as 5 + 1 or 4 + 2. Intermediate
+ * counts are skipped on purpose: do not "complete" these chains with the
+ * missing integers, and do not replace them with an unbounded auto-fit.
+ *
+ * The query container must be an ancestor. An element cannot query its own
+ * size without taking inline-size containment, which destroys its intrinsic
+ * inline contribution and collapses it inside .cluster, .topbar, floats, and
+ * any shrink-to-fit box. See docs/design-notes/grid.md.
+ *
+ * Three shared thresholds, not one calibrated per preset: 28rem opens the
+ * first horizontal density, 48rem opens three columns, 64rem opens the dense
+ * 4 and 6. N already carries the author's statement about item size, so
+ * tuning every step to land the same item width would erase that signal —
+ * .grid-6 at 64rem gives ~161px per tile, which is the point of choosing it.
+ * Probed with the content each preset targets: large cards for .grid-2 down
+ * to stats, avatars, and thumbnails for .grid-6.
+ *
+ * Ascending min-width only: the last matching step wins by cascade order.
+ */
+@supports (container-type: inline-size) {
+  .container-query :where(.grid-2, .grid-3, .grid-4, .grid-6) {
+    grid-template-columns: 1fr;
+  }
+
+  @container (min-width: 28rem) {
+    .container-query :where(.grid-2, .grid-4, .grid-6) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @container (min-width: 48rem) {
+    .container-query :where(.grid-3, .grid-6) {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  @container (min-width: 64rem) {
+    .container-query :where(.grid-4) {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .container-query :where(.grid-6) {
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+    }
+  }
 }
 
 /*

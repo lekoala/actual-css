@@ -1,8 +1,16 @@
 # Grid
 
-Use `.grid` for responsive collections of equivalent items. It fits as many
-columns as the available inline space permits; incomplete final rows are part
-of the contract.
+Two contracts sit behind these classes. Pick by asking what determines the
+column count.
+
+- The **item width** is what matters — use `.grid` and tune `--grid-min`.
+- The **column density** is what matters — use `.grid-2`, `.grid-3`, `.grid-4`,
+  or `.grid-6`.
+
+## Space-driven collection
+
+`.grid` fits as many columns as the available inline space permits. Incomplete
+final rows are part of the contract.
 
 ```html demo
 <section class="grid">
@@ -20,25 +28,69 @@ Tune the item minimum with `--grid-min`.
 }
 ```
 
-## Fixed structural grids
+## Count-driven density
 
-Use `.grid-2`, `.grid-3`, `.grid-4`, or `.grid-6` only when the exact number
-of columns is part of the composition. These presets never collapse, including
-inside `.container-query`. That stable meaning is useful for comparison rows,
-fixed matrices, and other structures where an empty cell must remain empty.
+`.grid-N` declares a structural density of N columns. It is responsive on its
+own: it never exceeds N columns, never overflows, and every item keeps the same
+width.
 
 ```html demo
-<div class="grid-3">
-  <div class="card">Name</div>
-  <div class="card">Plan</div>
-  <div class="card">Status</div>
+<div class="grid-4">
+  <div class="card">Exercitation</div>
+  <div class="card">Amet mollit</div>
+  <div class="card">Aute cillum</div>
+  <div class="card">Duis non </div>
 </div>
 ```
 
-Do not use a fixed preset for a responsive collection of cards, stats, tiles,
-or swatches. Use `.grid` and tune `--grid-min` instead. Use `.switcher` when a
-small group of peer regions must be either entirely horizontal or entirely
-stacked.
+`--grid-min` does not apply here. Item width is `.grid`'s contract; column
+density is `.grid-N`'s. Choose the preset that suits your item size:
+
+| Item                              | Preset               |
+|-----------------------------------|----------------------|
+| large card                        | `.grid-2`            |
+| card with a heading and a summary | `.grid-3`, `.grid-4` |
+| compact tile, stat, avatar        | `.grid-6`            |
+
+## Balanced subdivision
+
+Left alone, a preset collapses one column at a time, so a six-item `.grid-6`
+can pass through five columns — five items and a lone sixth. Wrap it in
+`.container-query` and it only ever enters a **divisor of N**:
+
+```text
+.grid-2   2 → 1
+.grid-3   3 → 1
+.grid-4   4 → 2 → 1
+.grid-6   6 → 3 → 2 → 1
+```
+
+Every state splits the collection evenly, and all items keep the same width.
+
+```html demo
+<div class="container-query">
+  <div class="grid-6">
+    <div class="card">1</div>
+    <div class="card">2</div>
+    <div class="card">3</div>
+    <div class="card">4</div>
+    <div class="card">5</div>
+    <div class="card">6</div>
+  </div>
+</div>
+```
+
+The wrapper is an opt-in for precision, never a prerequisite for responsive
+behavior — forgetting it costs you the exact chain, nothing else. It has to be
+an ancestor: an element cannot query its own size without taking inline-size
+containment, which would collapse the grid inside a `.cluster`, a float, or any
+shrink-to-fit box. Put `.container-query` on a normal block-level wrapper for
+the same reason.
+
+The chain balances the **declared density**, not your actual item count. Eight
+items in `.grid-6` still give `6 + 2`. For a paginated collection, choose a page
+size that suits the density — 12, 20, and 24 divide well. A partial final page
+is normal.
 
 ## Exact templates
 
@@ -64,9 +116,12 @@ behavior.
 }
 ```
 
-For an ordinary main region plus an aside, prefer `.sidebar-layout`.
+For an ordinary main region plus an aside, prefer `.sidebar-layout`. When a
+small group of peer regions must be either entirely horizontal or entirely
+stacked, prefer `.switcher`.
 
 ### Hooks
 
 - `--grid-min` tunes the minimum item width of the intrinsic `.grid` recipe.
+  It does not apply to `.grid-N`.
 - `--grid-columns` replaces that recipe with an author-owned template.

@@ -4,9 +4,9 @@
 
 ## Class reference
 
-| Class | Kind | Description |
-|---|---|---|
-| `.join` | Composition | Visually joins adjacent controls into a single unit. |
+| Class         | Kind        | Description                                                                     |
+|---------------|-------------|---------------------------------------------------------------------------------|
+| `.join`       | Composition | Visually joins adjacent controls into a single unit.                            |
 | `.join-addon` | Composition | Static prefix/suffix content such as currency symbols, units, or protocol text. |
 
 Add `.join` to the wrapper that groups the controls. Use `.join-addon` for static prefix/suffix content such as currency symbols, units, or protocol text. Action buttons inside the group should use `.btn`. The wrapper should still carry `role="group"` with a label for accessibility.

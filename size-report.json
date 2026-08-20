@@ -1,12 +1,12 @@
 {
-  "totalRaw": 215435,
+  "totalRaw": 218831,
   "core": {
     "minified": 10475,
     "brotli": 2487
   },
   "full": {
-    "minified": 103804,
-    "brotli": 15307
+    "minified": 104450,
+    "brotli": 15417
   },
   "themes": {
     "minified": 29127,
@@ -71,6 +71,10 @@
     {
       "file": "forms/choice-card.css",
       "raw": 4518
+    },
+    {
+      "file": "layout/grid.css",
+      "raw": 4410
     },
     {
       "file": "utilities/extra.css",
@@ -241,10 +245,6 @@
       "raw": 1613
     },
     {
-      "file": "layout/grid.css",
-      "raw": 1488
-    },
-    {
       "file": "layout/topbar.css",
       "raw": 1477
     },
@@ -277,16 +277,16 @@
       "raw": 1348
     },
     {
+      "file": "layout/index.css",
+      "raw": 1348
+    },
+    {
       "file": "components/surface.css",
       "raw": 1325
     },
     {
       "file": "layout/scroll-snap.css",
       "raw": 1304
-    },
-    {
-      "file": "layout/index.css",
-      "raw": 1278
     },
     {
       "file": "forms/form.css",
@@ -337,6 +337,10 @@
       "raw": 714
     },
     {
+      "file": "layout/container-query.css",
+      "raw": 665
+    },
+    {
       "file": "forms/index.css",
       "raw": 544
     },
@@ -379,10 +383,6 @@
     {
       "file": "layout/center.css",
       "raw": 262
-    },
-    {
-      "file": "layout/container-query.css",
-      "raw": 261
     },
     {
       "file": "forms/base.css",

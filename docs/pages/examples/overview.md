@@ -37,6 +37,7 @@ tables, forms, dialogs, and feedback states.
 - [Blog](../../demo/templates/blog.html) - article page with prose
 - [Blocks](../../demo/templates/blocks.html) - layout building blocks
 - [Layout reference](../../demo/templates/layouts.html) - canonical compositions built only with the layout primitives
+- [Grid density](../../demo/templates/grid.html) - the grid contracts on resizable stages, with the pitfalls called out
 - [Density](../../demo/templates/density.html) - compact control density
 
 > Note: the examples reference the repository's source files, so they open from

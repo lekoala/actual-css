@@ -4,12 +4,12 @@ Small layout corrections for controls, labels, and compact rails.
 
 ## Class reference
 
-| Class | Kind | Description |
-|---|---|---|
-| `.fit` | Utility | Shrinks a control or element to its content width. |
-| `.text-nowrap` | Utility | Keeps text on one line. |
-| `.truncate` | Utility | Ellipsizes overflowing single-line text. |
-| `.scroller` | Utility | Quiet custom scrollbar chrome for scroll containers. Optional layer. |
+| Class                     | Kind    | Description                                                               |
+|---------------------------|---------|---------------------------------------------------------------------------|
+| `.fit`                    | Utility | Shrinks a control or element to its content width.                        |
+| `.text-nowrap`            | Utility | Keeps text on one line.                                                   |
+| `.truncate`               | Utility | Ellipsizes overflowing single-line text.                                  |
+| `.scroller`               | Utility | Quiet custom scrollbar chrome for scroll containers. Optional layer.      |
 | `.scroller.stable-gutter` | Variant | Reserves scrollbar gutter space so layout does not shift. Optional layer. |
 
 Use `.fit` when a control or element should shrink to its content instead of filling the available inline space.

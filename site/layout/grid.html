@@ -6,9 +6,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Grid — Actual CSS</title>
-  <meta name="description" content="Use .grid for responsive collections of equivalent items. It fits as many
-columns as the available inline space permits; incomplete final rows are part
-of the contract.">
+  <meta name="description" content="Two contracts sit behind these classes. Pick by asking what determines the
+column count.">
   <link rel="stylesheet" href="../../src/css/actual.full.css">
   <link rel="stylesheet" href="../../dist/actual-themes.min.css">
   <link rel="stylesheet" href="../../scripts/docs/assets/docs.css">
@@ -200,9 +199,16 @@ of the contract.">
 
           <div class="prose docs-prose">
 <h1 id="grid">Grid</h1>
-<p>Use <code>.grid</code> for responsive collections of equivalent items. It fits as many
-columns as the available inline space permits; incomplete final rows are part
-of the contract.</p>
+<p>Two contracts sit behind these classes. Pick by asking what determines the
+column count.</p>
+<ul>
+<li>The <strong>item width</strong> is what matters — use <code>.grid</code> and tune <code>--grid-min</code>.</li>
+<li>The <strong>column density</strong> is what matters — use <code>.grid-2</code>, <code>.grid-3</code>, <code>.grid-4</code>,
+or <code>.grid-6</code>.</li>
+</ul>
+<h2 id="space-driven-collection">Space-driven collection</h2>
+<p><code>.grid</code> fits as many columns as the available inline space permits. Incomplete
+final rows are part of the contract.</p>
 </div>
 <div class="docs-example">
   <div class="docs-preview">
@@ -226,33 +232,90 @@ of the contract.</p>
   --grid-min: 20rem;
 }
 </code></pre>
-<h2 id="fixed-structural-grids">Fixed structural grids</h2>
-<p>Use <code>.grid-2</code>, <code>.grid-3</code>, <code>.grid-4</code>, or <code>.grid-6</code> only when the exact number
-of columns is part of the composition. These presets never collapse, including
-inside <code>.container-query</code>. That stable meaning is useful for comparison rows,
-fixed matrices, and other structures where an empty cell must remain empty.</p>
+<h2 id="count-driven-density">Count-driven density</h2>
+<p><code>.grid-N</code> declares a structural density of N columns. It is responsive on its
+own: it never exceeds N columns, never overflows, and every item keeps the same
+width.</p>
 </div>
 <div class="docs-example">
   <div class="docs-preview">
-<div class="grid-3">
-  <div class="card">Name</div>
-  <div class="card">Plan</div>
-  <div class="card">Status</div>
+<div class="grid-4">
+  <div class="card">Exercitation</div>
+  <div class="card">Amet mollit</div>
+  <div class="card">Aute cillum</div>
+  <div class="card">Duis non </div>
 </div>
   </div>
   <div class="docs-code">
-    <pre><code class="language-html">&lt;div class=&quot;grid-3&quot;&gt;
-  &lt;div class=&quot;card&quot;&gt;Name&lt;/div&gt;
-  &lt;div class=&quot;card&quot;&gt;Plan&lt;/div&gt;
-  &lt;div class=&quot;card&quot;&gt;Status&lt;/div&gt;
+    <pre><code class="language-html">&lt;div class=&quot;grid-4&quot;&gt;
+  &lt;div class=&quot;card&quot;&gt;Exercitation&lt;/div&gt;
+  &lt;div class=&quot;card&quot;&gt;Amet mollit&lt;/div&gt;
+  &lt;div class=&quot;card&quot;&gt;Aute cillum&lt;/div&gt;
+  &lt;div class=&quot;card&quot;&gt;Duis non &lt;/div&gt;
 &lt;/div&gt;</code></pre>
   </div>
 </div>
 <div class="prose docs-prose">
-<p>Do not use a fixed preset for a responsive collection of cards, stats, tiles,
-or swatches. Use <code>.grid</code> and tune <code>--grid-min</code> instead. Use <code>.switcher</code> when a
-small group of peer regions must be either entirely horizontal or entirely
-stacked.</p>
+<p><code>--grid-min</code> does not apply here. Item width is <code>.grid</code>'s contract; column
+density is <code>.grid-N</code>'s. Choose the preset that suits your item size:</p>
+<div class="table-wrap"><table class="table">
+<thead>
+<tr><th>Item</th><th>Preset</th></tr>
+</thead>
+<tbody>
+<tr><td>large card</td><td><code>.grid-2</code></td></tr>
+<tr><td>card with a heading and a summary</td><td><code>.grid-3</code>, <code>.grid-4</code></td></tr>
+<tr><td>compact tile, stat, avatar</td><td><code>.grid-6</code></td></tr>
+</tbody>
+</table></div>
+<h2 id="balanced-subdivision">Balanced subdivision</h2>
+<p>Left alone, a preset collapses one column at a time, so a six-item <code>.grid-6</code>
+can pass through five columns — five items and a lone sixth. Wrap it in
+<code>.container-query</code> and it only ever enters a <strong>divisor of N</strong>:</p>
+<pre><code class="language-text">.grid-2   2 → 1
+.grid-3   3 → 1
+.grid-4   4 → 2 → 1
+.grid-6   6 → 3 → 2 → 1
+</code></pre>
+<p>Every state splits the collection evenly, and all items keep the same width.</p>
+</div>
+<div class="docs-example">
+  <div class="docs-preview">
+<div class="container-query">
+  <div class="grid-6">
+    <div class="card">1</div>
+    <div class="card">2</div>
+    <div class="card">3</div>
+    <div class="card">4</div>
+    <div class="card">5</div>
+    <div class="card">6</div>
+  </div>
+</div>
+  </div>
+  <div class="docs-code">
+    <pre><code class="language-html">&lt;div class=&quot;container-query&quot;&gt;
+  &lt;div class=&quot;grid-6&quot;&gt;
+    &lt;div class=&quot;card&quot;&gt;1&lt;/div&gt;
+    &lt;div class=&quot;card&quot;&gt;2&lt;/div&gt;
+    &lt;div class=&quot;card&quot;&gt;3&lt;/div&gt;
+    &lt;div class=&quot;card&quot;&gt;4&lt;/div&gt;
+    &lt;div class=&quot;card&quot;&gt;5&lt;/div&gt;
+    &lt;div class=&quot;card&quot;&gt;6&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+  </div>
+</div>
+<div class="prose docs-prose">
+<p>The wrapper is an opt-in for precision, never a prerequisite for responsive
+behavior — forgetting it costs you the exact chain, nothing else. It has to be
+an ancestor: an element cannot query its own size without taking inline-size
+containment, which would collapse the grid inside a <code>.cluster</code>, a float, or any
+shrink-to-fit box. Put <code>.container-query</code> on a normal block-level wrapper for
+the same reason.</p>
+<p>The chain balances the <strong>declared density</strong>, not your actual item count. Eight
+items in <code>.grid-6</code> still give <code>6 + 2</code>. For a paginated collection, choose a page
+size that suits the density — 12, 20, and 24 divide well. A partial final page
+is normal.</p>
 <h2 id="exact-templates">Exact templates</h2>
 <p><code>--grid-columns</code> replaces <code>.grid</code>'s intrinsic recipe. This is an escape hatch
 for exact or asymmetric templates; once set, the author owns their responsive
@@ -271,10 +334,13 @@ behavior.</p>
   }
 }
 </code></pre>
-<p>For an ordinary main region plus an aside, prefer <code>.sidebar-layout</code>.</p>
+<p>For an ordinary main region plus an aside, prefer <code>.sidebar-layout</code>. When a
+small group of peer regions must be either entirely horizontal or entirely
+stacked, prefer <code>.switcher</code>.</p>
 <h3 id="hooks">Hooks</h3>
 <ul>
-<li><code>--grid-min</code> tunes the minimum item width of the intrinsic <code>.grid</code> recipe.</li>
+<li><code>--grid-min</code> tunes the minimum item width of the intrinsic <code>.grid</code> recipe.
+It does not apply to <code>.grid-N</code>.</li>
 <li><code>--grid-columns</code> replaces that recipe with an author-owned template.</li>
 </ul>
 
@@ -296,7 +362,9 @@ behavior.</p>
         <nav class="scrollspy" data-enhance="scrollspy" data-scrollspy-offset="80" aria-label="On this page">
           <p class="docs-nav-group">On this page</p>
           <ul class="nav-list docs-toc-list" data-docs-toc>
-        <li><a class="nav-link" href="#fixed-structural-grids" data-docs-toc-item data-level="2">Fixed structural grids</a></li>
+        <li><a class="nav-link" href="#space-driven-collection" data-docs-toc-item data-level="2">Space-driven collection</a></li>
+        <li><a class="nav-link" href="#count-driven-density" data-docs-toc-item data-level="2">Count-driven density</a></li>
+        <li><a class="nav-link" href="#balanced-subdivision" data-docs-toc-item data-level="2">Balanced subdivision</a></li>
         <li><a class="nav-link" href="#exact-templates" data-docs-toc-item data-level="2">Exact templates</a></li>
         <li><a class="nav-link" href="#hooks" data-docs-toc-item data-level="3">Hooks</a></li>
           </ul>

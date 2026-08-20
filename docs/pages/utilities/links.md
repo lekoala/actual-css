@@ -4,10 +4,10 @@ Link styling for chrome that is conceptually a link but should not look like pro
 
 ## Class reference
 
-| Class | Kind | Description |
-|---|---|---|
+| Class         | Kind    | Description                                               |
+|---------------|---------|-----------------------------------------------------------|
 | `.link-plain` | Utility | Removes the underline and inherits the surrounding color. |
-| `.link-muted` | Utility | Muted link that shifts to the full text color on hover. |
+| `.link-muted` | Utility | Muted link that shifts to the full text color on hover.   |
 
 ## Plain
 

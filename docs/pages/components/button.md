@@ -4,22 +4,22 @@ Actions and navigation with shared intents, variants, sizes, and loading, presse
 
 ## Class reference
 
-| Class | Kind | Description |
-|---|---|---|
-| `.btn` | Component | Base button. Solid by default; works on `<button>`, `<a href>`, and button-like `<input>`. |
-| `.primary` | Intent | Primary action. |
-| `.secondary` | Intent | Secondary action. |
-| `.success` | Intent | Positive outcome. |
-| `.warning` | Intent | Caution. |
-| `.danger` | Intent | Destructive action. |
-| `.neutral` | Intent | Neutral tone (the `.btn` default). |
-| `.soft` | Variant | Muted intent-tinted surface. |
-| `.outline` | Variant | Transparent with an intent-colored border. |
-| `.solid` | Variant | Filled intent background — the `.btn` default. |
-| `.ghost` | Variant | Borderless text button (button-only). |
-| `.link` | Variant | Underlined text button (button-only). |
-| `.sm` / `.lg` | Size | Compact or large control height. |
-| `.icon-only` | Variant | Square icon button sized to the control height. |
+| Class         | Kind      | Description                                                                                |
+|---------------|-----------|--------------------------------------------------------------------------------------------|
+| `.btn`        | Component | Base button. Solid by default; works on `<button>`, `<a href>`, and button-like `<input>`. |
+| `.primary`    | Intent    | Primary action.                                                                            |
+| `.secondary`  | Intent    | Secondary action.                                                                          |
+| `.success`    | Intent    | Positive outcome.                                                                          |
+| `.warning`    | Intent    | Caution.                                                                                   |
+| `.danger`     | Intent    | Destructive action.                                                                        |
+| `.neutral`    | Intent    | Neutral tone (the `.btn` default).                                                         |
+| `.soft`       | Variant   | Muted intent-tinted surface.                                                               |
+| `.outline`    | Variant   | Transparent with an intent-colored border.                                                 |
+| `.solid`      | Variant   | Filled intent background — the `.btn` default.                                             |
+| `.ghost`      | Variant   | Borderless text button (button-only).                                                      |
+| `.link`       | Variant   | Underlined text button (button-only).                                                      |
+| `.sm` / `.lg` | Size      | Compact or large control height.                                                           |
+| `.icon-only`  | Variant   | Square icon button sized to the control height.                                            |
 
 ## Basic usage
 

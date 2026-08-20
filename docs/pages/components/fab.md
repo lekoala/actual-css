@@ -102,12 +102,12 @@ the open state so a plus naturally becomes a close symbol.
 
 ## Class reference
 
-| Class | Description |
-|---|---|
-| `.fab` | Fixed viewport placement; use `details` for a speed dial. |
-| `.fab-actions` | Collapsible vertical action list. |
-| `.fab-action` | One horizontal label-and-button unit. |
-| `.fab-label` | Compact floating label for an action. |
+| Class          | Description                                               |
+|----------------|-----------------------------------------------------------|
+| `.fab`         | Fixed viewport placement; use `details` for a speed dial. |
+| `.fab-actions` | Collapsible vertical action list.                         |
+| `.fab-action`  | One horizontal label-and-button unit.                     |
+| `.fab-label`   | Compact floating label for an action.                     |
 
 ## CSS hooks
 

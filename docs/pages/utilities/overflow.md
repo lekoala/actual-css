@@ -4,13 +4,13 @@ Explicit overflow handling for content that may exceed its container.
 
 ## Class reference
 
-| Class | Kind | Description |
-|---|---|---|
-| `.overflow-auto` | Utility | Enables scrolling when content exceeds the container. |
-| `.overflow-hidden` | Utility | Clips overflowing content. Optional layer. |
-| `.overflow-clip` | Utility | Clips overflowing content without a scroll container. Optional layer. |
-| `.overflow-x-auto` | Utility | Horizontal scrolling only. Optional layer. |
-| `.overflow-y-auto` | Utility | Vertical scrolling only. Optional layer. |
+| Class              | Kind    | Description                                                           |
+|--------------------|---------|-----------------------------------------------------------------------|
+| `.overflow-auto`   | Utility | Enables scrolling when content exceeds the container.                 |
+| `.overflow-hidden` | Utility | Clips overflowing content. Optional layer.                            |
+| `.overflow-clip`   | Utility | Clips overflowing content without a scroll container. Optional layer. |
+| `.overflow-x-auto` | Utility | Horizontal scrolling only. Optional layer.                            |
+| `.overflow-y-auto` | Utility | Vertical scrolling only. Optional layer.                              |
 
 Use `.overflow-auto` when content may overflow its container, especially tables and code-like regions.
 

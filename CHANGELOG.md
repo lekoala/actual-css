@@ -4,21 +4,46 @@ All notable changes will be documented here.
 
 This project follows Keep a Changelog and uses semver, including during 0.x.
 
-## [Unreleased]
+# 0.4.0 — unreleased
 
 ### Added
 
-* `.switcher` is part of the standard layout primitives.
-* `.sidebar-layout` adapts intrinsically to its allocated width and exposes `--sidebar-content-min`.
+* Modular CSS architecture with `core`, `layout`, `typography`, `forms`, `components`, `effects`, and `utilities` families, each exposing manifests and individual modules.
+* `actual-css/full` and `actual.full.*` bundles for the complete framework.
+* `.switcher` as a core layout primitive and intrinsic `.sidebar-layout`.
+* Generated and published `reserved-classes.json`.
+* Dedicated `typography/lead.css` and `layout/measure.css` modules; `.measure` now exposes `--measure`.
+* Architecture, compatibility, vendor-selector, browser-layout, and package guardrails.
+
+### Changed
+
+* The bare `actual-css` entrypoint is now the minimal core; use `actual-css/full` for all functional families.
+* `.grid` remains the space-driven intrinsic grid using `--grid-min`.
+* `.grid-2/3/4/6` are bounded responsive grids by default; inside `.container-query` they use balanced structural subdivisions (`2→1`, `3→1`, `4→2→1`, `6→3→2→1`).
+* `.container-query` is now an optional balanced-layout enhancement rather than a requirement for responsive grids.
+* Focus is a core invariant and no longer depends on loading focus styles after components.
+* Utilities now explicitly distinguish compact base shortcuts from verbose optional property/value helpers.
+* `.lead` and `.measure` are independent from `.prose`.
+* CI and browser diagnostics updated for Bun 1.4.
+
+### Fixed
+
+* Forced-colors and theme-island focus/state handling.
+* Vendor pseudo-element rules for color inputs and meters.
+* Tooltip Escape handling and LIFO surface dismissal, including pinned tooltips.
+* OTP and switch focus/state rendering.
+* Joined-control focus stacking and floating-field behavior.
+* Native color control rendering.
+* Flyout panel lifecycle cleanup.
+* Validation for fields with names such as `length`.
+* Prose spacing and component focus regressions.
 
 ### Breaking
 
-* The package is reorganized around a minimal core and composable families. `actual-css` is now only the core (reset, tokens, theme, base, intents, variants, focus, print); the all-in bundle moves to `actual-css/full` (the successor to 0.3's `actual.full.css`, now including the former `optional/` modules). The `optional` family is removed; its modules moved into their domain (see the [modular import guide](docs/pages/guides/modular-import.md)).
-* The JavaScript entry is split: `actual-css/js` now only starts the enhancement-manifest loader; the built-in behaviors (flyout, dialog, tabs, validation, status, …) move to `actual-css/js/full`.
-* `actual-css/css/forms` is now the native-controls base; the complete Forms family (switch, range, choice-card, custom-select, floating-field, otp) is `actual-css/css/forms/all`.
-* The root CSS files (`grid`, `prose`, `utilities`, …) are no longer exported at the root; they live in their family paths (`actual-css/css/layout/grid`, `actual-css/css/typography/prose`, …).
-* `actual-css/css/layer` now layers only the core instead of the whole standard framework.
-* `.grid-2`, `.grid-3`, `.grid-4`, and `.grid-6` are always fixed structural grids. A `.container-query` ancestor no longer changes their column count. Use `.grid` with `--grid-min` for responsive collections.
+* `actual-css` now contains only the core; replace it with `actual-css/full` when the previous full framework behavior is required.
+* `.grid-N` no longer means a fixed N-column grid at every width: it now degrades responsively, with balanced divisor-based layouts available under `.container-query`.
+* Direct imports of `typography/prose` no longer include `.lead` or `.measure`; import `typography/lead` and `layout/measure` explicitly when needed.
+
 
 ## [0.3.1] - 2026-08-20
 
