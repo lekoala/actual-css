@@ -299,7 +299,9 @@
 }
 
 /* The preview consumes only theme tokens, making each card a compact visual
-   contract check for surfaces, accents, and radius. */
+   contract check for surfaces, accents, radius, and elevation. Bars take
+   --radius-sm so square themes read as square; the border token is carried by
+   the surrounding .card (--border / --border-width). */
 .docs-theme-preview {
   display: grid;
   align-content: end;
@@ -308,12 +310,13 @@
   padding: var(--space-30);
   border-radius: var(--radius);
   background: var(--surface-solid);
+  box-shadow: var(--shadow-popout);
 }
 
 .docs-theme-line {
   inline-size: 70%;
-  block-size: 0.4rem;
-  border-radius: var(--radius-full);
+  block-size: 0.7rem;
+  border-radius: var(--radius-sm);
   background: var(--surface);
   opacity: 0.9;
 }
