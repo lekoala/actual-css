@@ -1,12 +1,12 @@
 {
-  "totalRaw": 215314,
+  "totalRaw": 215435,
   "core": {
     "minified": 10475,
     "brotli": 2487
   },
   "full": {
-    "minified": 103810,
-    "brotli": 15294
+    "minified": 103804,
+    "brotli": 15307
   },
   "themes": {
     "minified": 29127,
@@ -22,7 +22,7 @@
       "brotli": 15986
     }
   },
-  "fileCount": 97,
+  "fileCount": 99,
   "files": [
     {
       "file": "components/modal.css",
@@ -53,10 +53,6 @@
       "raw": 5228
     },
     {
-      "file": "typography/prose.css",
-      "raw": 5012
-    },
-    {
       "file": "components/avatar.css",
       "raw": 4841
     },
@@ -67,6 +63,10 @@
     {
       "file": "themes/edge.css",
       "raw": 4618
+    },
+    {
+      "file": "typography/prose.css",
+      "raw": 4546
     },
     {
       "file": "forms/choice-card.css",
@@ -286,7 +286,7 @@
     },
     {
       "file": "layout/index.css",
-      "raw": 1205
+      "raw": 1278
     },
     {
       "file": "forms/form.css",
@@ -369,6 +369,10 @@
       "raw": 278
     },
     {
+      "file": "typography/lead.css",
+      "raw": 275
+    },
+    {
       "file": "core/index.css",
       "raw": 269
     },
@@ -385,16 +389,20 @@
       "raw": 235
     },
     {
+      "file": "layout/measure.css",
+      "raw": 217
+    },
+    {
       "file": "core/print.css",
       "raw": 206
     },
     {
-      "file": "layout/app-shell.css",
-      "raw": 136
+      "file": "typography/index.css",
+      "raw": 155
     },
     {
-      "file": "typography/index.css",
-      "raw": 133
+      "file": "layout/app-shell.css",
+      "raw": 136
     },
     {
       "file": "utilities/index.css",

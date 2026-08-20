@@ -176,20 +176,6 @@
   text-align: start;
 }
 
-/* Lead paragraph: a slightly larger, more relaxed reading-introduction text.
-   Non-fluid and always available — use .text-lead from the optional fluid
-   module for marketing/display surfaces. */
-.lead {
-  font-size: 1.125em;
-  line-height: var(--line-height-relaxed);
-}
-
-/* Readable content measure. Composes with .center for centering or with
-   margin-inline: auto for a one-off centered block. */
-.measure {
-  max-inline-size: var(--prose-measure, 70ch);
-}
-
 .prose.sm {
   --prose-size: 0.9375rem;
   --prose-h1: 1.75rem;

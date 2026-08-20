@@ -206,21 +206,21 @@
 </thead>
 <tbody>
 <tr><td><code>.list-reset</code></td><td>Utility</td><td>Removes native list margin, padding, and markers.</td></tr>
-<tr><td><code>.measure</code></td><td>Utility</td><td>Caps a block at a readable width via <code>--prose-measure</code>.</td></tr>
+<tr><td><code>.measure</code></td><td>Utility</td><td>Caps a block at a readable width via <code>--measure</code>.</td></tr>
 <tr><td><code>.overline</code></td><td>Component</td><td>Small editorial kicker label: muted, uppercase, letterspaced.</td></tr>
 </tbody>
 </table></div>
 <h2 id="list-reset">List reset</h2>
 <p><code>.list-reset</code> removes the native list chrome (margin, padding, markers) from any list. It is the generic version of <code>.nav-list</code> — use <code>.nav-list</code> when the list is a navigation list for semantic intent, and <code>.list-reset</code> for everything else (tag clouds, footer columns, related items, comment threads, embedded controls).</p>
 <h2 id="measure">Measure</h2>
-<p><code>.measure</code> caps a block at a readable width using <code>--prose-measure</code>. It does not center — combine with <code>.center</code> for the common centered reading column, or with <code>margin-inline: auto</code> for a one-off centered block.</p>
+<p><code>.measure</code> caps a block at a readable width using <code>--measure</code>. It does not center — combine with <code>.center</code> for the common centered reading column, or with <code>margin-inline: auto</code> for a one-off centered block.</p>
 <p>Use it for any content that needs a comfortable measure: prose articles, TOC lists, form fields, callouts. Avoid using it for full-bleed surfaces.</p>
 <h2 id="editorial-labels">Editorial labels</h2>
 <p><code>.overline</code> is a small editorial label: muted color, smaller size, uppercase, slight letter-spacing. It does not impose a shape by itself. Add <code>.pill</code> for a bordered rounded chip, and combine with an intent class (<code>.primary</code>, <code>.success</code>, etc.) to tint the chip's text, border, and background.</p>
 <p>The overline exists because categories, kicker labels, and section markers recur across editorial surfaces, and <code>.badge</code> is the wrong shape for them. <code>.badge</code> is a status indicator; <code>.overline</code> is metadata.</p>
 <h2 id="css-hooks">CSS hooks</h2>
 <ul>
-<li><code>--prose-measure</code> — the readable measure <code>.measure</code> caps at; defaults to <code>70ch</code>.</li>
+<li><code>--measure</code> — the readable measure <code>.measure</code> caps at; defaults to <code>70ch</code>.</li>
 <li><code>--overline-radius</code> — the pill chip's corner radius; defaults to <code>--radius-full</code>.</li>
 </ul>
 

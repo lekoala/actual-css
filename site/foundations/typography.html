@@ -282,7 +282,7 @@ baseline stays sans so app UI inherits predictably.</p>
 <p>There is no <code>--line-height-normal</code>. It would be redundant with <code>--line-height</code>. Prose overrides line-height through <code>--prose-line-height</code> and <code>--prose-heading-line-height</code> because the readable values for long-form text are different from app UI.</p>
 <h3 id="prose-hooks">Prose hooks</h3>
 <ul>
-<li><code>--prose-measure</code> — readable line length cap, shared with <code>.measure</code>.</li>
+<li><code>--prose-measure</code> — readable line length cap for <code>.prose</code> (the standalone <code>.measure</code> helper reads its own <code>--measure</code>).</li>
 <li><code>--prose-line-height</code> — body line height inside <code>.prose</code>.</li>
 <li><code>--prose-heading-line-height</code> — heading line height inside <code>.prose</code>.</li>
 <li><code>--prose-flow</code> — vertical rhythm between sibling blocks inside <code>.prose</code>.</li>

@@ -16,6 +16,7 @@
  * .scroller       quiet custom scrollbar chrome
  * .scroll-snap    snap rails
  * .topbar         sticky app-shell top bar
+ * .measure        readable content measure cap
  *
  * Prefer these compositions over viewport breakpoint utilities.
  */
@@ -32,3 +33,4 @@
 @import "./scroller.css";
 @import "./scroll-snap.css";
 @import "./topbar.css";
+@import "./measure.css";

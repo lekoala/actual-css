@@ -120,7 +120,7 @@ There is no `--line-height-normal`. It would be redundant with `--line-height`. 
 
 ### Prose hooks
 
-- `--prose-measure` — readable line length cap, shared with `.measure`.
+- `--prose-measure` — readable line length cap for `.prose` (the standalone `.measure` helper reads its own `--measure`).
 - `--prose-line-height` — body line height inside `.prose`.
 - `--prose-heading-line-height` — heading line height inside `.prose`.
 - `--prose-flow` — vertical rhythm between sibling blocks inside `.prose`.
