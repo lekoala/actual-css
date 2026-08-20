@@ -188,7 +188,7 @@
       </aside>
 
       <main class="docs-main">
-        <article class="docs-article">
+        <article class="docs-article stack">
           <nav aria-label="Breadcrumb">
             <ol class="breadcrumb">
               <li><a href="../index.html">Docs</a></li>
@@ -214,6 +214,7 @@ runtime targets, empty by default.</p>
 fails to submit shows its <code>data-validation-message</code> in the status bar with the
 <code>danger</code> intent. No target in the DOM means the call is a no-op, so the markup
 stays optional.</p>
+</div>
 <div class="docs-example">
   <div class="docs-preview">
 <form class="needs-validation" data-enhance="validation" data-validation-message="Please check the highlighted fields.">
@@ -242,8 +243,10 @@ stays optional.</p>
 &lt;/form&gt;</code></pre>
   </div>
 </div>
+<div class="prose docs-prose">
 <p>Submitting the empty form blocks submission and shows <code>data-validation-message</code>
 in the status bar below — no JavaScript required beyond the runtime.</p>
+</div>
 <div class="docs-example">
   <div class="docs-preview">
 <div class="cluster">
@@ -276,6 +279,7 @@ in the status bar below — no JavaScript required beyond the runtime.</p>
 &lt;div class=&quot;status-bar&quot; data-status id=&quot;sb-status&quot; role=&quot;status&quot; aria-live=&quot;polite&quot; aria-atomic=&quot;true&quot;&gt;&lt;/div&gt;</code></pre>
   </div>
 </div>
+<div class="prose docs-prose">
 <p>No script required beyond the runtime: <code>command=&quot;--status&quot;</code> reads its message
 from <code>data-status-message</code> (plus optional <code>data-status-intent</code> /
 <code>data-status-duration</code>), <code>command=&quot;--status-clear&quot;</code> empties the bar.

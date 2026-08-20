@@ -188,7 +188,7 @@
       </aside>
 
       <main class="docs-main">
-        <article class="docs-article">
+        <article class="docs-article stack">
           <nav aria-label="Breadcrumb">
             <ol class="breadcrumb">
               <li><a href="../index.html">Docs</a></li>
@@ -199,6 +199,7 @@
           <div class="prose docs-prose">
 <h1 id="icon-input">Icon Input</h1>
 <p>Use <code>.input-icon</code> for a search or filter input with a leading icon.</p>
+</div>
 <div class="docs-example">
   <div class="docs-preview">
 <label class="input-icon">
@@ -213,8 +214,10 @@
 &lt;/label&gt;</code></pre>
   </div>
 </div>
+<div class="prose docs-prose">
 <p>It positions the wrapper's first child absolutely inside a relative container and grows the input's start padding to clear it. <code>pointer-events: none</code> on the icon keeps clicks passing through to the input underneath. It is icon-library agnostic — an <code>&lt;i&gt;</code> webfont icon, an inline <code>&lt;svg&gt;</code>, or a <code>&lt;span&gt;</code> all work as the wrapper's first child.</p>
 <p>The icon keeps a fixed <code>--input-icon-size</code> (1.25rem); density contexts shrink the control geometry around it, not the pictogram. Apply the density class to the wrapper and to the input so the control height follows:</p>
+</div>
 <div class="docs-example">
   <div class="docs-preview">
 <div class="stack">
@@ -233,6 +236,7 @@
 &lt;/div&gt;</code></pre>
   </div>
 </div>
+<div class="prose docs-prose">
 <p>Trailing icons are supported too: an icon that follows the input is positioned at the end and the input grows its end padding. It stays decorative — <code>pointer-events: none</code> means an interactive trailing control such as a clear button is not covered by this class.</p>
 
 </div>

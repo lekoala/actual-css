@@ -188,7 +188,7 @@
       </aside>
 
       <main class="docs-main">
-        <article class="docs-article">
+        <article class="docs-article stack">
           <nav aria-label="Breadcrumb">
             <ol class="breadcrumb">
               <li><a href="../index.html">Docs</a></li>
@@ -221,6 +221,7 @@
 <li>Set <code>aria-invalid=&quot;true&quot;</code> on the input. The <code>.field-error</code> element is linked via <code>aria-describedby</code>.</li>
 <li><code>role=&quot;alert&quot;</code> on <code>.field-error</code> is only required when the message is inserted dynamically. Static messages do not need it.</li>
 </ul>
+</div>
 <div class="docs-example">
   <div class="docs-preview">
 <form novalidate>
@@ -271,10 +272,12 @@
 &lt;/form&gt;</code></pre>
   </div>
 </div>
+<div class="prose docs-prose">
 <h2 id="optional-javascript-enhancer">Optional JavaScript enhancer</h2>
 <p>Native validation first; the enhancer only adds state and focus behavior.</p>
 <p>Actual CSS ships validation <em>styles</em>. Invalid fields are marked with <code>aria-invalid=&quot;true&quot;</code> (or the manual <code>.field.danger</code> wrapper class). The default forms bundle imports <code>forms/validation.css</code>; custom builds may omit that file when validation styling is app-owned. A small enhancer (<code>actual-css/js/validation</code>), included in the default runtime (<code>actual-css/js</code>) and also importable on its own, prevents premature error display, marks invalid fields on blur and submit, focuses the first invalid field on submit, and supports a few custom rules. It is not a validation framework — server and AJAX validation stay in app code.</p>
 <p>Opt in with the <code>.needs-validation</code> class. Importing the module registers the behavior; there is no init call.</p>
+</div>
 <div class="docs-example">
   <div class="docs-preview">
 <form class="needs-validation" data-enhance="validation" data-validation-message="Please check the highlighted fields.">
@@ -329,8 +332,10 @@
 &lt;/form&gt;</code></pre>
   </div>
 </div>
+<div class="prose docs-prose">
 <p>On blur, the enhancer sets <code>aria-invalid=&quot;true&quot;</code> on the invalid field so visual and assistive-tech state move together. On submit, it adds <code>.was-validated</code> to the form and marks every invalid field. When the form is invalid it prevents submission, focuses the first invalid field, and dispatches a bubbling <code>actual:invalid</code> event with <code>{ form, firstInvalid, message }</code>. On reset, it clears all validation state — <code>.was-validated</code>, <code>aria-invalid</code>, <code>.field.danger</code>, and custom-validity messages — which native reset alone would leave behind.</p>
 <p>The status bar (<code>actual-css/js/status</code>) auto-wires to that event: import it and add one status element, and the form's <code>data-validation-message</code> appears automatically on invalid submit — no manual listener.</p>
+</div>
 <div class="docs-example">
   <div class="docs-preview">
 <form class="needs-validation" data-enhance="validation" data-validation-message="Please check the highlighted fields.">
@@ -445,6 +450,7 @@
 &lt;div class=&quot;status-bar&quot; data-status role=&quot;status&quot; aria-live=&quot;polite&quot; aria-atomic=&quot;true&quot;&gt;&lt;/div&gt;</code></pre>
   </div>
 </div>
+<div class="prose docs-prose">
 <p>If you prefer to handle the summary yourself, listen for <code>actual:invalid</code> instead of importing the status module:</p>
 <pre><code class="language-js">document.addEventListener(&quot;actual:invalid&quot;, (event) =&gt; {
   const { firstInvalid, message } = event.detail;
@@ -462,6 +468,7 @@
 </ul>
 <p>Add your own with <code>FormValidator.registerRule(name, (value, el, ...opts) =&gt; boolean)</code>. The built-in rules treat empty values as valid so optional fields stay optional; custom rules should do the same when that behavior is wanted.</p>
 <p>The <code>date</code> rule pairs naturally with <code>data-mask</code> — the mask structures input, the rule validates meaning. Same rule, different formats:</p>
+</div>
 <div class="docs-example">
   <div class="docs-preview">
 <form class="stack needs-validation" data-enhance="validation" novalidate>
@@ -552,6 +559,7 @@
 &lt;/form&gt;</code></pre>
   </div>
 </div>
+<div class="prose docs-prose">
 <p>Custom rules only run when the field has a value. Empty fields skip all custom rules — <code>required</code> is the sole gatekeeper for empty values. A custom date rule for a stricter app-specific format could look like:</p>
 <pre><code class="language-js">FormValidator.registerRule(&quot;iso-date&quot;, (value) =&gt; {
   return /^\d{4}-\d{2}-\d{2}$/.test(value) &amp;&amp; !Number.isNaN(Date.parse(value));

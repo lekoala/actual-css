@@ -188,7 +188,7 @@
       </aside>
 
       <main class="docs-main">
-        <article class="docs-article">
+        <article class="docs-article stack">
           <nav aria-label="Breadcrumb">
             <ol class="breadcrumb">
               <li><a href="../index.html">Docs</a></li>
@@ -200,6 +200,7 @@
 <h1 id="actions">Actions</h1>
 <p>Use <code>.actions</code> for a semantic list of actions.</p>
 <p>It removes native list chrome and provides a baseline row layout (<code>display: flex</code>, wrap, shared gap). Compose with layout primitives only when you need a different direction or distribution.</p>
+</div>
 <div class="docs-example">
   <div class="docs-preview">
 <div class="stack">
@@ -228,6 +229,7 @@
 &lt;/div&gt;</code></pre>
   </div>
 </div>
+<div class="prose docs-prose">
 <p>Use <code>.actions</code> for:</p>
 <ul>
 <li>dialog actions</li>
@@ -237,6 +239,7 @@
 <li>form submit/cancel groups</li>
 </ul>
 <p>Use layout primitives for contextual spacing.</p>
+</div>
 <div class="docs-example">
   <div class="docs-preview">
 <div class="alert warning stack">
@@ -259,6 +262,7 @@
 &lt;/div&gt;</code></pre>
   </div>
 </div>
+<div class="prose docs-prose">
 <p>Prefer composition over making each component reimplement action-list layout.</p>
 <pre><code class="language-css">/* Avoid */
 .alert &gt; menu {

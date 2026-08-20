@@ -8,43 +8,22 @@
   <style>* { transition-duration: 0s !important; }</style>
 </head>
 <body>
-  <!-- A component link inside .prose must not be reshaped by prose element
-       recipes. .prose brings low-specificity content defaults (0-1-0); an
-       explicit component class wins at equal specificity because components
-       load after typography. -->
+  <!-- Authored rich text only: application components belong outside prose. -->
   <div id="prose-link-ref" class="prose">
     <a id="prose-link" href="#">Plain prose link</a>
   </div>
 
-  <div id="prose-alert" class="prose">
-    <div id="ref-alert" class="alert danger">
-      Error <a id="plain" href="#">Contact support</a>
-      <a id="button" class="btn danger" href="#">Update billing</a>
-    </div>
-  </div>
-
-  <!-- Direct-child flow: rhythm lands on the direct block (.table-wrap), not
-       on a <table> nested two levels down. -->
+  <!-- Direct-child flow composes the authored blocks. -->
   <div id="prose-flow" class="prose">
     <p id="flow-p1">First paragraph</p>
     <p id="flow-p2">Second paragraph</p>
-    <div id="flow-wrap" class="table-wrap">
-      <table id="flow-table" class="table">
-        <tbody><tr><td>Cell</td></tr></tbody>
-      </table>
-    </div>
     <h2 id="flow-h2">Heading</h2>
   </div>
 
-  <!-- Prose list recipes leave classed lists alone: a direct-child .breadcrumb
-       keeps its own item rhythm and supports aria-current on the item. -->
-  <div id="prose-breadcrumb" class="prose">
-    <ol id="bc" class="breadcrumb">
-      <li><a href="#">Overview</a></li>
-      <li id="bc-current" aria-current="page">Accounts</li>
-    </ol>
-  </div>
-
-  <div id="bc-ref-text" style="color: var(--text)"></div>
+  <!-- Prose itself may opt into a contextual surface. -->
+  <section id="inverted-prose" class="prose inverted">
+    <h2 id="inverted-prose-heading">Contextual heading</h2>
+    <p id="inverted-prose-copy">Inverted authored content</p>
+  </section>
 </body>
 </html>

@@ -188,7 +188,7 @@
       </aside>
 
       <main class="docs-main">
-        <article class="docs-article">
+        <article class="docs-article stack">
           <nav aria-label="Breadcrumb">
             <ol class="breadcrumb">
               <li><a href="../index.html">Docs</a></li>
@@ -223,6 +223,7 @@ only gates backdrop click: Escape and the close button always close.</li>
 <li>Use <code>[data-side=&quot;end&quot;]</code> for a right-side drawer.</li>
 <li>Permanent desktop sidebars belong in layout, not here.</li>
 </ul>
+</div>
 <div class="docs-example">
   <div class="docs-preview">
 <button class="btn ghost"
@@ -293,11 +294,13 @@ only gates backdrop click: Escape and the close button always close.</li>
 &lt;/dialog&gt;</code></pre>
   </div>
 </div>
+<div class="prose docs-prose">
 <h2 id="non-dismissible-drawer">Non-dismissible drawer</h2>
 <p>For drawers with unsaved settings or critical actions, use <code>closedby=&quot;none&quot;</code> so
 the user cannot dismiss the drawer by accident: backdrop click shows a static
 indicator instead of closing, and Escape does nothing. Only the explicit footer
 actions and the close button can close the drawer.</p>
+</div>
 <div class="docs-example">
   <div class="docs-preview">
 <button class="btn"
@@ -362,6 +365,7 @@ actions and the close button can close the drawer.</p>
 &lt;/dialog&gt;</code></pre>
   </div>
 </div>
+<div class="prose docs-prose">
 <p>Backdrop click dismissal and Escape come from the native dialog element and
 follow its <code>closedby</code> value. Add <code>data-dialog-dismissible</code> when you want the
 optional runtime to take over backdrop click and close with the drawer's

@@ -188,7 +188,7 @@
       </aside>
 
       <main class="docs-main">
-        <article class="docs-article">
+        <article class="docs-article stack">
           <nav aria-label="Breadcrumb">
             <ol class="breadcrumb">
               <li><a href="../index.html">Docs</a></li>
@@ -231,6 +231,7 @@ and the <code>.lg</code> context loosens it to <code>--space-50</code> (1.5rem).
 <code>margin-block-end</code>, etc.) for writing-direction safety.</p>
 <h2 id="gap">Gap</h2>
 <p>Override the default gap from layout primitives (<code>.stack</code>, <code>.cluster</code>, <code>.grid</code>):</p>
+</div>
 <div class="docs-example">
   <div class="docs-preview">
 <ul class="cluster">
@@ -245,6 +246,7 @@ and the <code>.lg</code> context loosens it to <code>--space-50</code> (1.5rem).
 &lt;/ul&gt;</code></pre>
   </div>
 </div>
+<div class="prose docs-prose">
 <ul>
 <li><code>.gap-none</code> → <code>gap: 0</code></li>
 </ul>
@@ -253,6 +255,7 @@ for nested layouts. For a denser or roomier rhythm, use the <code>.sm</code> / <
 density contexts or override <code>--gap</code> on the layout instance.</p>
 <h2 id="padding">Padding</h2>
 <p>Block (vertical) and inline (horizontal) padding. Values respond to the density context.</p>
+</div>
 <div class="docs-example">
   <div class="docs-preview">
 <section role="tabpanel" class="py">
@@ -265,12 +268,14 @@ density contexts or override <code>--gap</code> on the layout instance.</p>
 &lt;/section&gt;</code></pre>
   </div>
 </div>
+<div class="prose docs-prose">
 <ul>
 <li><code>.py</code> → <code>padding-block: var(--density-space)</code></li>
 <li><code>.px</code> → <code>padding-inline: var(--density-space)</code></li>
 </ul>
 <h2 id="margin">Margin</h2>
 <p>Block-start and block-end margin for giving elements room:</p>
+</div>
 <div class="docs-example">
   <div class="docs-preview">
 <h2 class="mbs">A section heading with space above</h2>
@@ -279,6 +284,7 @@ density contexts or override <code>--gap</code> on the layout instance.</p>
     <pre><code class="language-html">&lt;h2 class=&quot;mbs&quot;&gt;A section heading with space above&lt;/h2&gt;</code></pre>
   </div>
 </div>
+<div class="prose docs-prose">
 <ul>
 <li><code>.mbs</code> → <code>margin-block-start: var(--density-space)</code></li>
 <li><code>.mbe</code> → <code>margin-block-end: var(--density-space)</code></li>

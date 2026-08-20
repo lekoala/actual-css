@@ -188,7 +188,7 @@
       </aside>
 
       <main class="docs-main">
-        <article class="docs-article">
+        <article class="docs-article stack">
           <nav aria-label="Breadcrumb">
             <ol class="breadcrumb">
               <li><a href="../index.html">Docs</a></li>
@@ -199,6 +199,7 @@
           <div class="prose docs-prose">
 <h1 id="stack">Stack</h1>
 <p>Vertical flow with consistent spacing, ideal for forms, card content, and content blocks.</p>
+</div>
 <div class="docs-example">
   <div class="docs-preview">
 <section class="stack">
@@ -225,6 +226,7 @@
 &lt;/section&gt;</code></pre>
   </div>
 </div>
+<div class="prose docs-prose">
 <p>Use stack for forms, card content, modal bodies, side panels, and documentation blocks.</p>
 <p>Like <code>.cluster</code>, stack owns its children's block-axis spacing: direct-child
 block margins are reset, so vertical rhythm always comes from <code>--gap</code>. Inline
@@ -234,6 +236,7 @@ without fighting the primitive.</p>
 <p>Stack spacing is a <code>--gap</code> between every direct child; the primitive cannot
 tighten two specific children by itself. To group a few items into one unit
 (a title and its description), nest a <code>.stack gap-none</code>:</p>
+</div>
 <div class="docs-example">
   <div class="docs-preview">
 <div class="stack">
@@ -254,6 +257,7 @@ tighten two specific children by itself. To group a few items into one unit
 &lt;/div&gt;</code></pre>
   </div>
 </div>
+<div class="prose docs-prose">
 <p>The outer stack keeps its rhythm between groups; the inner <code>gap-none</code> unit owns
 the tight pairing.</p>
 <p>For a one-off adjacency — pull a single child closer to its neighbour without

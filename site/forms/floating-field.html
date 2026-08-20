@@ -188,7 +188,7 @@
       </aside>
 
       <main class="docs-main">
-        <article class="docs-article">
+        <article class="docs-article stack">
           <nav aria-label="Breadcrumb">
             <ol class="breadcrumb">
               <li><a href="../index.html">Docs</a></li>
@@ -208,6 +208,7 @@ controls (<code>.input</code>, <code>.textarea</code>, <code>.select</code>) wit
 <p>The cell holds the control and its label only. Help and error messages stay in
 the surrounding <code>.field</code>, otherwise the resting label centers on the whole
 field instead of the control.</p>
+</div>
 <div class="docs-example">
   <div class="docs-preview">
 <div class="field">
@@ -228,6 +229,7 @@ field instead of the control.</p>
 &lt;/div&gt;</code></pre>
   </div>
 </div>
+<div class="prose docs-prose">
 <p>Every <code>.input</code> and <code>.textarea</code> needs <code>placeholder=&quot; &quot;</code> so <code>:placeholder-shown</code>
 can detect emptiness — the space keeps the placeholder invisible while making
 the state detectable. <code>:autofill</code> is covered too, so a password manager that
@@ -235,6 +237,7 @@ prefills a field still lifts the label.</p>
 <h2 id="textarea">Textarea</h2>
 <p>A textarea's resting label aligns with the first text line instead of centering
 in the tall control.</p>
+</div>
 <div class="docs-example">
   <div class="docs-preview">
 <div class="field">
@@ -253,10 +256,12 @@ in the tall control.</p>
 &lt;/div&gt;</code></pre>
   </div>
 </div>
+<div class="prose docs-prose">
 <h2 id="select-and-datetime-inputs">Select and date/time inputs</h2>
 <p>Selects have no <code>:placeholder-shown</code> signal, and date/time inputs render their
 placeholder inconsistently (Firefox shows none). These controls stay floated in
 every state, so their label always sits at the top.</p>
+</div>
 <div class="docs-example">
   <div class="docs-preview">
 <div class="stack">
@@ -295,6 +300,7 @@ every state, so their label always sits at the top.</p>
 &lt;/div&gt;</code></pre>
   </div>
 </div>
+<div class="prose docs-prose">
 <h2 id="density">Density</h2>
 <p>The reserved headroom responds to control density through <code>--control-size</code>:
 <code>.sm</code> and <code>.lg</code> on the cell or an ancestor resize the control geometry and the

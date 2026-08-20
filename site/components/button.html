@@ -188,7 +188,7 @@
       </aside>
 
       <main class="docs-main">
-        <article class="docs-article">
+        <article class="docs-article stack">
           <nav aria-label="Breadcrumb">
             <ol class="breadcrumb">
               <li><a href="../index.html">Docs</a></li>
@@ -225,6 +225,7 @@
 <p>Use <code>.btn</code> on actionable elements: <code>&lt;button&gt;</code>, <code>&lt;a href&gt;</code>, or
 <code>input[type=&quot;button&quot;|&quot;submit&quot;|&quot;reset&quot;]</code>. Use a real <code>&lt;button&gt;</code> for actions and
 <code>&lt;a class=&quot;btn&quot;&gt;</code> for navigation.</p>
+</div>
 <div class="docs-example">
   <div class="docs-preview">
 <div class="cluster">
@@ -243,8 +244,10 @@
 &lt;/div&gt;</code></pre>
   </div>
 </div>
+<div class="prose docs-prose">
 <h2 id="intents">Intents</h2>
 <p>Shared intent classes set color meaning. They compose with every variant.</p>
+</div>
 <div class="docs-example">
   <div class="docs-preview">
 <div class="cluster">
@@ -267,6 +270,7 @@
 &lt;/div&gt;</code></pre>
   </div>
 </div>
+<div class="prose docs-prose">
 <h2 id="variants">Variants</h2>
 <p><code>.ghost</code> and <code>.link</code> are button-only; <code>.soft</code>, <code>.outline</code>, and <code>.solid</code> are
 shared with other components.</p>
@@ -274,6 +278,7 @@ shared with other components.</p>
 foreground by default, including on a contrasting <code>.inverted</code> surface. A local
 intent class still wins: <code>.danger.outline</code> uses the danger color in either
 context. Filled buttons own their surface and keep their normal intent recipe.</p>
+</div>
 <div class="docs-example">
   <div class="docs-preview">
 <div class="cluster">
@@ -296,7 +301,9 @@ context. Filled buttons own their surface and keep their normal intent recipe.</
 &lt;/div&gt;</code></pre>
   </div>
 </div>
+<div class="prose docs-prose">
 <h3 id="icon-and-icon-only-buttons">Icon and icon-only buttons</h3>
+</div>
 <div class="docs-example">
   <div class="docs-preview">
 <div class="cluster">
@@ -321,11 +328,13 @@ context. Filled buttons own their surface and keep their normal intent recipe.</
 &lt;/div&gt;</code></pre>
   </div>
 </div>
+<div class="prose docs-prose">
 <p>Use <code>.btn.icon-only</code> for a square icon button sized to the control height.
 Always name it with an <code>aria-label</code> since there is no visible text.</p>
 <h3 id="button-groups">Button groups</h3>
 <p>Join adjacent buttons with <code>.join</code>. The joined group is not a new component —
 the buttons keep their own variants.</p>
+</div>
 <div class="docs-example">
   <div class="docs-preview">
 <div class="join" role="group" aria-label="Text alignment">
@@ -342,9 +351,11 @@ the buttons keep their own variants.</p>
 &lt;/div&gt;</code></pre>
   </div>
 </div>
+<div class="prose docs-prose">
 <h2 id="sizes">Sizes</h2>
 <p>Prefer <code>.sm</code> and <code>.lg</code> over setting sizes directly. Density variants never
 change typography.</p>
+</div>
 <div class="docs-example">
   <div class="docs-preview">
 <div class="cluster">
@@ -361,12 +372,14 @@ change typography.</p>
 &lt;/div&gt;</code></pre>
   </div>
 </div>
+<div class="prose docs-prose">
 <h2 id="states">States</h2>
 <h3 id="disabled">Disabled</h3>
 <p>Disable a <code>&lt;button&gt;</code> or <code>&lt;input&gt;</code> with the native <code>disabled</code> attribute. Anchors
 have no native disabled state, so <code>&lt;a class=&quot;btn&quot; aria-disabled=&quot;true&quot;&gt;</code> is the
 supported way to style a disabled link button; application code must also
 prevent the click since <code>aria-disabled</code> does not stop navigation on its own.</p>
+</div>
 <div class="docs-example">
   <div class="docs-preview">
 <div class="cluster">
@@ -383,9 +396,11 @@ prevent the click since <code>aria-disabled</code> does not stop navigation on i
 &lt;/div&gt;</code></pre>
   </div>
 </div>
+<div class="prose docs-prose">
 <h3 id="loading">Loading</h3>
 <p>Set <code>aria-busy=&quot;true&quot;</code> on the button and add a <code>.spinner</code>. The spinner inherits
 the button size.</p>
+</div>
 <div class="docs-example">
   <div class="docs-preview">
 <div class="cluster">
@@ -404,10 +419,12 @@ the button size.</p>
 &lt;/div&gt;</code></pre>
   </div>
 </div>
+<div class="prose docs-prose">
 <h3 id="toggle">Toggle</h3>
 <p>Use <code>aria-pressed</code> for toggle buttons. Actual styles the pressed state;
 application code owns changing the attribute. The example scopes its script to
 its own preview so repeated demos on a page cannot cross-bind.</p>
+</div>
 <div class="docs-example">
   <div class="docs-preview">
 <div class="cluster">
@@ -444,7 +461,9 @@ its own preview so repeated demos on a page cannot cross-bind.</p>
 &lt;/script&gt;</code></pre>
   </div>
 </div>
+<div class="prose docs-prose">
 <p>For exclusive groups, manage a single pressed button:</p>
+</div>
 <div class="docs-example">
   <div class="docs-preview">
 <div class="join" role="group" aria-label="Text alignment" data-docs-toggle-group>
@@ -487,6 +506,7 @@ its own preview so repeated demos on a page cannot cross-bind.</p>
 &lt;/script&gt;</code></pre>
   </div>
 </div>
+<div class="prose docs-prose">
 <h2 id="accessibility">Accessibility</h2>
 <ul>
 <li>Always set <code>type=&quot;button&quot;</code> when a button is not submitting a form.</li>

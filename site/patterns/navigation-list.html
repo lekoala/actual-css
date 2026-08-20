@@ -188,7 +188,7 @@
       </aside>
 
       <main class="docs-main">
-        <article class="docs-article">
+        <article class="docs-article stack">
           <nav aria-label="Breadcrumb">
             <ol class="breadcrumb">
               <li><a href="../index.html">Docs</a></li>
@@ -200,6 +200,7 @@
 <h1 id="navigation-list">Navigation List</h1>
 <p>Use <code>.nav-list</code> for a semantic list of navigation links.</p>
 <p>It removes native list chrome but does not force a direction. Combine it with layout primitives depending on context.</p>
+</div>
 <div class="docs-example">
   <div class="docs-preview">
 <div class="stack">
@@ -244,6 +245,7 @@
 &lt;/div&gt;</code></pre>
   </div>
 </div>
+<div class="prose docs-prose">
 <p>Use <code>.nav-list</code> for:</p>
 <ul>
 <li>header navigation</li>
@@ -262,6 +264,7 @@ nav ul {
 </code></pre>
 <p>This is too broad and removes native list behavior from every navigation context, including nested documentation trees or rich content.</p>
 <p>Prefer an explicit pattern class.</p>
+</div>
 <div class="docs-example">
   <div class="docs-preview">
 <nav aria-label="Footer">
@@ -282,8 +285,10 @@ nav ul {
 &lt;/nav&gt;</code></pre>
   </div>
 </div>
+<div class="prose docs-prose">
 <h3 id="header-navigation">Header Navigation</h3>
 <p>Header navigation is usually a composition of landmarks, layout primitives, and patterns.</p>
+</div>
 <div class="docs-example">
   <div class="docs-preview">
 <header class="site-header">
@@ -316,6 +321,7 @@ nav ul {
 &lt;/header&gt;</code></pre>
   </div>
 </div>
+<div class="prose docs-prose">
 <p>In this example:</p>
 <ul>
 <li><code>header</code> provides the document landmark.</li>
@@ -388,6 +394,7 @@ nav ul {
 <p>Below the breakpoint, mirror the sidebar into a <code>.drawer</code> (see Components Drawer) for mobile access — the two are separate elements, not a responsive transform of one.</p>
 <h3 id="side-navigation">Side Navigation</h3>
 <p>Side navigation is usually a <code>.nav-list</code> composed with <code>.stack</code>.</p>
+</div>
 <div class="docs-example">
   <div class="docs-preview">
 <aside>
@@ -414,7 +421,9 @@ nav ul {
 &lt;/aside&gt;</code></pre>
   </div>
 </div>
+<div class="prose docs-prose">
 <p>A project may add <code>.side-nav</code> only when it needs specific visual behavior such as indentation, sticky positioning, section labels, or active states.</p>
+</div>
 <div class="docs-example">
   <div class="docs-preview">
 <aside class="side-nav">
@@ -439,6 +448,7 @@ nav ul {
 &lt;/aside&gt;</code></pre>
   </div>
 </div>
+<div class="prose docs-prose">
 <pre><code class="language-css">.side-nav {
   font-size: var(--font-size-sm);
 }

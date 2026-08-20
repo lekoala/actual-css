@@ -188,7 +188,7 @@
       </aside>
 
       <main class="docs-main">
-        <article class="docs-article">
+        <article class="docs-article stack">
           <nav aria-label="Breadcrumb">
             <ol class="breadcrumb">
               <li><a href="../index.html">Docs</a></li>
@@ -204,6 +204,7 @@
 <p>OTP presents one native input as separate visual cells. Keeping a single input
 preserves paste, selection, autofill, password-manager, and
 <code>autocomplete=&quot;one-time-code&quot;</code> behavior without JavaScript.</p>
+</div>
 <div class="docs-example">
   <div class="docs-preview">
 <label class="field">
@@ -254,6 +255,7 @@ preserves paste, selection, autofill, password-manager, and
 &lt;/label&gt;</code></pre>
   </div>
 </div>
+<div class="prose docs-prose">
 <p>Add exactly one visual <code>span</code> per expected character. Their count must match
 <code>maxlength</code> and the input's validation pattern. <code>inputmode=&quot;numeric&quot;</code> requests
 a numeric keyboard but does not enforce numeric input; validate the submitted

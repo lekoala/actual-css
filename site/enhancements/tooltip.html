@@ -188,7 +188,7 @@
       </aside>
 
       <main class="docs-main">
-        <article class="docs-article">
+        <article class="docs-article stack">
           <nav aria-label="Breadcrumb">
             <ol class="breadcrumb">
               <li><a href="../index.html">Docs</a></li>
@@ -216,6 +216,7 @@ with the <code>hidden</code> attribute.</p>
 <li>The arrow inherits the tooltip background — custom gradients carry through automatically.</li>
 <li>Avoid relying on the native <code>title</code> attribute as the primary implementation.</li>
 </ul>
+</div>
 <div class="docs-example">
   <div class="docs-preview">
 <button class="btn ghost"
@@ -256,10 +257,12 @@ with the <code>hidden</code> attribute.</p>
 &lt;/button&gt;</code></pre>
   </div>
 </div>
+<div class="prose docs-prose">
 <h2 id="display-modes">Display modes</h2>
 <p>Click tooltips stay open when the pointer leaves and close on a second click or
 Escape. They remain supplemental, non-interactive content; use a flyout when the
 floating content contains controls.</p>
+</div>
 <div class="docs-example">
   <div class="docs-preview">
 <p class="cluster">
@@ -294,11 +297,13 @@ floating content contains controls.</p>
 &lt;/p&gt;</code></pre>
   </div>
 </div>
+<div class="prose docs-prose">
 <h2 id="html-and-long-content">HTML and long content</h2>
 <p>The <code>data-tooltip=&quot;…&quot;</code> shorthand is intentionally plain text. For trusted HTML,
 use an explicit tooltip referenced by <code>aria-describedby</code>. Keep its content
 non-interactive and concise; long content wraps up to the tooltip's
 viewport-aware maximum width.</p>
+</div>
 <div class="docs-example">
   <div class="docs-preview">
 <button class="btn" type="button"
@@ -327,9 +332,11 @@ viewport-aware maximum width.</p>
 &lt;/div&gt;</code></pre>
   </div>
 </div>
+<div class="prose docs-prose">
 <h2 id="positioning">Positioning</h2>
 <p>Set <code>data-tooltip-placement</code> to control where the tooltip appears relative to
 its trigger. The arrow follows the placement automatically.</p>
+</div>
 <div class="docs-example">
   <div class="docs-preview">
 <p>
@@ -348,10 +355,12 @@ its trigger. The arrow follows the placement automatically.</p>
 &lt;/p&gt;</code></pre>
   </div>
 </div>
+<div class="prose docs-prose">
 <h2 id="custom-styling">Custom styling</h2>
 <p>Override <code>--tooltip-bg</code> and <code>--tooltip-fg</code> on the tooltip element to change the
 background and text color. The arrow picks up <code>background: inherit</code> so gradients
 and solid colors both work.</p>
+</div>
 <div class="docs-example">
   <div class="docs-preview">
 <button class="btn primary" type="button"
@@ -390,6 +399,7 @@ and solid colors both work.</p>
 &lt;/div&gt;</code></pre>
   </div>
 </div>
+<div class="prose docs-prose">
 <h2 id="css-hooks">CSS hooks</h2>
 <ul>
 <li><code>--tooltip-bg</code> — bubble background (defaults to <code>var(--surface-solid)</code>); the arrow follows it.</li>

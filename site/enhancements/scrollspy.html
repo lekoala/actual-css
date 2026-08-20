@@ -188,7 +188,7 @@
       </aside>
 
       <main class="docs-main">
-        <article class="docs-article">
+        <article class="docs-article stack">
           <nav aria-label="Breadcrumb">
             <ol class="breadcrumb">
               <li><a href="../index.html">Docs</a></li>
@@ -225,6 +225,7 @@ or style <code>[aria-current]</code> yourself.</p>
 <li><code>data-scrollspy-offset</code> moves the activation line: a bare number or <code>px</code> value is pixels, a <code>%</code> value is a share of the root's visible height. Invalid values fall back to <code>20%</code>, and negatives clamp to <code>0</code>.</li>
 <li>The same markup also works with the CSS-native scroll markers path (see below).</li>
 </ul>
+</div>
 <div class="docs-example">
   <div class="docs-preview">
 <nav class="scrollspy" data-enhance="scrollspy" aria-label="Page sections">
@@ -273,6 +274,7 @@ or style <code>[aria-current]</code> yourself.</p>
 &lt;/main&gt;</code></pre>
   </div>
 </div>
+<div class="prose docs-prose">
 <h2 id="native-scroll-markers">Native scroll markers</h2>
 <p>Modern browsers are starting to support CSS-native scroll markers with
 <code>scroll-target-group</code> and <code>:target-current</code>. This can style the active link

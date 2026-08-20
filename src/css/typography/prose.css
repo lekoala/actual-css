@@ -29,7 +29,6 @@
   --prose-h4: 1.125rem;
 
   max-inline-size: var(--prose-measure);
-  color: var(--text);
   font-size: var(--prose-size);
   line-height: var(--prose-line-height);
   overflow-wrap: break-word;
@@ -42,9 +41,11 @@
   margin-block-start: var(--prose-flow);
 }
 
+/* Heading hierarchy remains low-specificity and contextual: a surface may
+   remap --heading without prose repainting it with the root text color. */
 .prose :where(h1, h2, h3, h4, h5, h6) {
   margin-block: 1.5em 0;
-  color: var(--text);
+  color: var(--heading, var(--text));
   font-weight: var(--font-weight-strong);
   line-height: var(--prose-heading-line-height);
 }
@@ -94,14 +95,13 @@
   }
 }
 
-/* List recipes target class-less lists only: a classed list is a component or
-   a deliberate custom list, so prose must not reach into its items (e.g. a
-   .breadcrumb). */
-.prose :where(ul:not([class]), ol:not([class])) {
+/* Rich-text descendants are intentional here. Components and application UI
+   belong outside the prose boundary. */
+.prose :where(ul, ol) {
   padding-inline-start: 1.5em;
 }
 
-.prose > :where(ul:not([class]), ol:not([class])) > li + li {
+.prose :where(li + li) {
   margin-block-start: 0.35em;
 }
 

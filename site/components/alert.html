@@ -188,7 +188,7 @@
       </aside>
 
       <main class="docs-main">
-        <article class="docs-article">
+        <article class="docs-article stack">
           <nav aria-label="Breadcrumb">
             <ol class="breadcrumb">
               <li><a href="../index.html">Docs</a></li>
@@ -233,6 +233,7 @@
 </tbody>
 </table></div>
 <h2 id="basic-usage">Basic usage</h2>
+</div>
 <div class="docs-example">
   <div class="docs-preview">
 <div class="stack">
@@ -297,7 +298,9 @@
 &lt;/div&gt;</code></pre>
   </div>
 </div>
+<div class="prose docs-prose">
 <h2 id="content-and-actions">Content and actions</h2>
+</div>
 <div class="docs-example">
   <div class="docs-preview">
 <div class="alert danger" role="alert">
@@ -330,7 +333,9 @@
 &lt;/div&gt;</code></pre>
   </div>
 </div>
+<div class="prose docs-prose">
 <h2 id="variants">Variants</h2>
+</div>
 <div class="docs-example">
   <div class="docs-preview">
 <div class="stack">
@@ -371,8 +376,10 @@
 &lt;/div&gt;</code></pre>
   </div>
 </div>
+<div class="prose docs-prose">
 <h2 id="dismiss">Dismiss</h2>
 <p>Use <code>.alert-dismiss</code> to let a user remove an inline alert. The button is transparent at rest with a muted glyph; it works with any intent because it uses <code>currentColor</code> and reduced opacity. It relies on the runtime <code>--dismiss</code> command — no custom script.</p>
+</div>
 <div class="docs-example">
   <div class="docs-preview">
 <div class="alert warning" id="warning-alert">
@@ -407,6 +414,7 @@
 &lt;/div&gt;</code></pre>
   </div>
 </div>
+<div class="prose docs-prose">
 <p>In an admonition, place <code>.alert-dismiss</code> inside <code>.alert-title</code>; it rides the inline end of the title bar:</p>
 <pre><code class="language-html">&lt;div class=&quot;alert admonition warning&quot; id=&quot;notice&quot;&gt;
   &lt;div class=&quot;alert-title&quot;&gt;
@@ -424,6 +432,7 @@
 </code></pre>
 <h2 id="callout">Callout</h2>
 <p>Use <code>.callout</code> for a neutral panel with a thick accent border on the leading edge. Intent classes tint the border color.</p>
+</div>
 <div class="docs-example">
   <div class="docs-preview">
 <div class="stack">
@@ -452,8 +461,10 @@
 &lt;/div&gt;</code></pre>
   </div>
 </div>
+<div class="prose docs-prose">
 <h2 id="admonition">Admonition</h2>
 <p>An admonition is a structured box with a tinted title bar, an optional icon, and body content on the page surface — like the <code>!!! note</code> callouts in mkdocs. Use <code>.alert-title</code> for the header and <code>.alert-body</code> for the content. Intent classes tint the title bar background and the border.</p>
+</div>
 <div class="docs-example">
   <div class="docs-preview">
 <div class="stack">
@@ -502,6 +513,7 @@
 &lt;/div&gt;</code></pre>
   </div>
 </div>
+<div class="prose docs-prose">
 <h2 id="css-hooks">CSS hooks</h2>
 <ul>
 <li><code>--alert-pad-inline</code> — inline padding. Stays stable across <code>.sm</code>/<code>.lg</code>.</li>

@@ -188,7 +188,7 @@
       </aside>
 
       <main class="docs-main">
-        <article class="docs-article">
+        <article class="docs-article stack">
           <nav aria-label="Breadcrumb">
             <ol class="breadcrumb">
               <li><a href="../index.html">Docs</a></li>
@@ -470,6 +470,7 @@ applications that unload the module owning the command.</p>
 <p>The runtime includes a generic <code>--dismiss</code> command for hiding any resolved
 target. It prevents the trigger's default action, sets <code>hidden</code>, and emits a
 bubbling <code>actual:dismiss</code> event with the trigger in <code>event.detail.trigger</code>.</p>
+</div>
 <div class="docs-example">
   <div class="docs-preview">
 <section id="notice" class="alert">
@@ -488,6 +489,7 @@ bubbling <code>actual:dismiss</code> event with the trigger in <code>event.detai
 &lt;/section&gt;</code></pre>
   </div>
 </div>
+<div class="prose docs-prose">
 <p>Listen for <code>actual:dismiss</code> when application code needs to remove persisted
 state or perform another action after the target is hidden.</p>
 <h3 id="stateful-enhancers">Stateful enhancers</h3>
@@ -777,6 +779,7 @@ behavior). Native HTML constraint validation runs first, then the enhancer adds
 <code>aria-invalid=&quot;true&quot;</code> to invalid fields on submit, focuses the first invalid
 field, and dispatches a bubbling <code>actual:invalid</code> event with
 <code>{ form, firstInvalid, message }</code>. Valid fields are not marked automatically.</p>
+</div>
 <div class="docs-example">
   <div class="docs-preview">
 <form class="needs-validation" data-enhance="validation"
@@ -801,6 +804,7 @@ field, and dispatches a bubbling <code>actual:invalid</code> event with
 &lt;div class=&quot;status-bar&quot; data-status role=&quot;status&quot; aria-live=&quot;polite&quot; aria-atomic=&quot;true&quot;&gt;&lt;/div&gt;</code></pre>
   </div>
 </div>
+<div class="prose docs-prose">
 <p>The status bar auto-wires to <code>actual:invalid</code>: the form's
 <code>data-validation-message</code> appears with the <code>danger</code> intent, no manual listener.
 To handle the summary yourself instead, omit the status import and listen for

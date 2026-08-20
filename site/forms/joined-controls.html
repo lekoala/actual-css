@@ -188,7 +188,7 @@
       </aside>
 
       <main class="docs-main">
-        <article class="docs-article">
+        <article class="docs-article stack">
           <nav aria-label="Breadcrumb">
             <ol class="breadcrumb">
               <li><a href="../index.html">Docs</a></li>
@@ -213,6 +213,7 @@
 </table></div>
 <p>Add <code>.join</code> to the wrapper that groups the controls. Use <code>.join-addon</code> for static prefix/suffix content such as currency symbols, units, or protocol text. Action buttons inside the group should use <code>.btn</code>. The wrapper should still carry <code>role=&quot;group&quot;</code> with a label for accessibility.</p>
 <p>When composing source files manually, import <code>components/join.css</code> after the controls it groups. <code>.join</code> writes child border-radius longhands directly so joined corners win at equal specificity.</p>
+</div>
 <div class="docs-example">
   <div class="docs-preview">
 <div class="field">
@@ -237,6 +238,7 @@
 &lt;/div&gt;</code></pre>
   </div>
 </div>
+<div class="prose docs-prose">
 <p><code>.join</code> handles border-radius and border collapsing between adjacent children. It works with any direct child — <code>.input</code>, <code>.btn</code>, <code>.select</code>, or <code>.join-addon</code>.
 When an <code>.input</code>, <code>.textarea</code>, or <code>.select</code> receives keyboard-relevant focus,
 the focus ring surrounds the complete joined field. Attached buttons keep their

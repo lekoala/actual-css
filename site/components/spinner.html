@@ -188,7 +188,7 @@
       </aside>
 
       <main class="docs-main">
-        <article class="docs-article">
+        <article class="docs-article stack">
           <nav aria-label="Breadcrumb">
             <ol class="breadcrumb">
               <li><a href="../index.html">Docs</a></li>
@@ -222,6 +222,7 @@
 </tbody>
 </table></div>
 <h2 id="basic-usage">Basic usage</h2>
+</div>
 <div class="docs-example">
   <div class="docs-preview">
 <span class="spinner"></span>
@@ -234,7 +235,9 @@
 &lt;span class=&quot;spinner lg danger&quot;&gt;&lt;/span&gt;</code></pre>
   </div>
 </div>
+<div class="prose docs-prose">
 <p>In buttons, the spinner stays inline and inherits the button size.</p>
+</div>
 <div class="docs-example">
   <div class="docs-preview">
 <button class="btn primary" type="submit" aria-busy="true" disabled>
@@ -249,7 +252,9 @@
 &lt;/button&gt;</code></pre>
   </div>
 </div>
+<div class="prose docs-prose">
 <p>A direct last-child <code>.spinner</code> in a busy container becomes a centered overlay.</p>
+</div>
 <div class="docs-example">
   <div class="docs-preview">
 <article class="card" aria-busy="true" aria-label="Loading card content">
@@ -286,7 +291,9 @@
 &lt;/article&gt;</code></pre>
   </div>
 </div>
+<div class="prose docs-prose">
 <p>Announce the loading state when it needs to be spoken.</p>
+</div>
 <div class="docs-example">
   <div class="docs-preview">
 <div role="status">
@@ -301,6 +308,7 @@
 &lt;/div&gt;</code></pre>
   </div>
 </div>
+<div class="prose docs-prose">
 <p>Size follows the font (<code>1em</code>); use <code>.sm</code> / <code>.lg</code> rather than sizing it directly.</p>
 <h2 id="busy-state">Busy state</h2>
 <p>A container-wide loading state that keeps the underlying content in place. It is
@@ -312,6 +320,7 @@ surface; buttons keep their spinners inline instead (see Button).</p>
 <li>The overlay uses <code>--busy-overlay-bg</code>; an inverted surface (<code>.inverted</code>) already composes with it.</li>
 <li>Decorative spinners stay <code>aria-hidden=&quot;true&quot;</code>; announce progress on the region with <code>role=&quot;status&quot;</code> and a label when needed.</li>
 </ul>
+</div>
 <div class="docs-example">
   <div class="docs-preview">
 <article class="card" aria-busy="true" aria-label="Loading card content">
@@ -328,6 +337,7 @@ surface; buttons keep their spinners inline instead (see Button).</p>
 &lt;/article&gt;</code></pre>
   </div>
 </div>
+<div class="prose docs-prose">
 <h2 id="css-hooks">CSS hooks</h2>
 <ul>
 <li><code>--spinner-track</code> — the ring color.</li>

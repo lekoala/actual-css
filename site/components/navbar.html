@@ -188,7 +188,7 @@
       </aside>
 
       <main class="docs-main">
-        <article class="docs-article">
+        <article class="docs-article stack">
           <nav aria-label="Breadcrumb">
             <ol class="breadcrumb">
               <li><a href="../index.html">Docs</a></li>
@@ -225,6 +225,7 @@ flex list, <code>.nav-list</code> a vertical grid. Putting both on one element r
 </tbody>
 </table></div>
 <h2 id="basic-usage">Basic usage</h2>
+</div>
 <div class="docs-example">
   <div class="docs-preview">
 <nav class="navbar" aria-label="Main">
@@ -247,12 +248,14 @@ flex list, <code>.nav-list</code> a vertical grid. Putting both on one element r
 &lt;/nav&gt;</code></pre>
   </div>
 </div>
+<div class="prose docs-prose">
 <p>For a vertical sidebar nav, use <code>.nav-list</code> inside the drawer or sidebar.</p>
 <h2 id="responsive-navbar-drawer">Responsive: navbar + drawer</h2>
 <p>There is no collapse/toggler mechanism. For a responsive navigation, keep the
 horizontal <code>.navbar</code> for the desktop bar and compose the mobile experience from
 a <code>.drawer</code> with a vertical <code>.nav-list</code>, opened by a <code>command=&quot;show-modal&quot;</code> /
 <code>commandfor</code> trigger.</p>
+</div>
 <div class="docs-example">
   <div class="docs-preview">
 <nav class="navbar" aria-label="Main">
@@ -335,6 +338,7 @@ a <code>.drawer</code> with a vertical <code>.nav-list</code>, opened by a <code
 &lt;/dialog&gt;</code></pre>
   </div>
 </div>
+<div class="prose docs-prose">
 <p>The drawer can be hidden until opened: give the <code>dialog</code> the <code>hidden</code> attribute
 in the HTML and let the command runtime manage it, or rely on the drawer being
 rendered only on the mobile layout. <code>command</code> and <code>commandfor</code> work without

@@ -303,6 +303,17 @@ test("prose styles native kbd elements", () => {
   expect(css).toContain("font-family: var(--font-mono);");
 });
 
+test("prose keeps contextual colors and low-specificity element recipes", () => {
+  const css = readCss("src/css/typography/prose.css");
+  const proseBase = css.match(/\.prose \{([\s\S]*?)\n\}/)?.[1] ?? "";
+
+  expect(proseBase).not.toContain("color:");
+  expect(css).toContain(".prose :where(a)");
+  expect(css).toMatch(
+    /\.prose :where\(h1, h2, h3, h4, h5, h6\) \{[\s\S]*color: var\(--heading, var\(--text\)\);/,
+  );
+});
+
 test("scrollspy CSS exposes native target-current enhancement", () => {
   const css = readCss("src/css/components/scrollspy.css");
 

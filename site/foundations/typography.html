@@ -188,7 +188,7 @@
       </aside>
 
       <main class="docs-main">
-        <article class="docs-article">
+        <article class="docs-article stack">
           <nav aria-label="Breadcrumb">
             <ol class="breadcrumb">
               <li><a href="../index.html">Docs</a></li>
@@ -206,7 +206,7 @@
 <li>a small optional fluid module for display, title, and lead sizes that scale with the viewport</li>
 </ul>
 <p>Components must not depend on <code>.prose</code>. App screens, forms, cards, tables, navigation, dashboards, and component examples should use their own component or layout rules.</p>
-<p>Use <code>.prose</code> directly on a semantic content container, usually an <code>article</code>.</p>
+<p>Use <code>.prose</code> directly on a semantic content container, usually an <code>article</code>. It is not a page-level wrapper: component demos, navigation, forms, and other application UI belong outside it. Compose prose sections with those siblings using a layout primitive such as <code>.stack</code>.</p>
 <h2 id="why-this-shape">Why this shape</h2>
 <p>The framework is a components-oriented, theme-oriented library, not a classless stylesheet and not a utility-first framework. The typography system reflects that.</p>
 <p>Global typography should stay mild because:</p>
@@ -227,9 +227,9 @@
 <p>Global links inherit color. The visual affordance of a link is the responsibility of <code>.prose</code> (for authored content) or of a component (for nav links, button-like links, tabs, breadcrumbs, etc.). Underlining every <code>a</code> globally would collide with all of those.</p>
 <h3 id="prose-scope"><code>.prose</code> scope</h3>
 <p><code>.prose</code> is the opt-in rich-text scope. It owns the visual hierarchy of authored content.</p>
-<p>It owns: readable measure, vertical rhythm between common text elements, heading hierarchy, link affordance, list spacing, code and keyboard treatment, blockquote treatment, table treatment, image / figure / figcaption treatment, mark, and <code>text-wrap</code> balance / pretty for prose elements.</p>
+<p>It owns: readable measure, vertical rhythm, heading hierarchy, link affordance, list spacing, code and keyboard treatment, blockquote treatment, table treatment, image / figure / figcaption treatment, mark, and <code>text-wrap</code> balance / pretty for authored or generated rich-text descendants.</p>
 <p>It does not own: page layout, app cards, alerts, forms, app tables, navigation, component variants, or any automatic styling outside the <code>.prose</code> subtree.</p>
-<p>The reason for that boundary: a dialog title, a card heading, or a sidebar section heading should not become a &quot;prose h1&quot;. Components own those. If a card or a dialog wants a richer heading, it can use a component-level rule, not a global selector.</p>
+<p>The reason for that boundary: a dialog title, a card heading, or a sidebar section heading should not become a &quot;prose h1&quot;. Components own those. Put the component next to the prose section in a layout container; do not ask <code>.prose</code> to infer where an embedded component begins.</p>
 <h3 id="fluid-module">Fluid module</h3>
 <p><code>src/css/typography/fluid.css</code> is a small module that is not imported by
 <code>actual.css</code>. Projects that need display, title, and lead sizes that scale
@@ -298,7 +298,7 @@ baseline stays sans so app UI inherits predictably.</p>
 <h2 id="headings">Headings</h2>
 <p>Headings are split between the global baseline and <code>.prose</code>.</p>
 <p>Globally, headings get a tight line-height, a color from <code>--heading</code> (or inherited), and progressive <code>text-wrap: balance</code>. They do not get a <code>font-size</code>, a <code>font-weight</code>, or margins. The reason is that a card heading, a dialog title, or a sidebar section should not be auto-magically enlarged by selector.</p>
-<p>Inside <code>.prose</code>, headings get a <code>font-weight</code> from <code>--font-weight-strong</code>, a tighter line-height from <code>--prose-heading-line-height</code>, a margin-block rhythm, and keep the global <code>text-wrap: balance</code>. The <code>h1</code> to <code>h4</code> font sizes are also scoped to <code>.prose</code> and are not exposed as a public scale.</p>
+<p>Inside <code>.prose</code>, headings get a <code>font-weight</code> from <code>--font-weight-strong</code>, a tighter line-height from <code>--prose-heading-line-height</code>, margin rhythm, and keep the global <code>text-wrap: balance</code>. Their color follows the contextual <code>--heading</code> alias, so prose also composes correctly with a contextual surface. The <code>h1</code> to <code>h4</code> font sizes are scoped to <code>.prose</code>, remain low-specificity, and are not exposed as a public scale.</p>
 <p>The <code>hgroup</code> element gets only structural styling: a grid layout, a gap, and a reset of internal margins. No font-size, no color, no weight. Its visual identity is the responsibility of the headings and paragraphs it contains.</p>
 <h2 id="links-and-text-utilities">Links and text utilities</h2>
 <p>Three logical alignment utilities exist (<code>.text-start</code>, <code>.text-center</code>, <code>.text-end</code>) because alignment is independent of typography hierarchy and is useful in many contexts. They use logical properties so they follow writing direction.</p>
@@ -308,7 +308,7 @@ baseline stays sans so app UI inherits predictably.</p>
 <p><code>small</code> gets a smaller font size globally (<code>0.875em</code>) because it is a semantic element, not a utility. There is no <code>.small</code> class competing with the element.</p>
 <p><code>code</code>, <code>kbd</code>, <code>samp</code>, and <code>pre</code> get the mono font family globally. Visual treatment (background, padding, radius) is left to <code>.prose</code> or to code-block components.</p>
 <h2 id="tables">Tables</h2>
-<p>Prose tables are a different concern from app data tables. Long-form content can contain a small table, but a sortable, dense, row-actionable app table belongs to the table component. The <code>.prose table</code> rule is intentionally minimal: it does not define sticky headers, selection states, row actions, or density variants.</p>
+<p>Prose tables are a different concern from app data tables. Long-form content can contain a small table, but a sortable, dense, row-actionable app table belongs to the table component outside the prose boundary. The prose table recipe is intentionally minimal: it does not define sticky headers, selection states, row actions, or density variants.</p>
 <h2 id="fluid-module-how-to-use-it">Fluid module — how to use it</h2>
 <p>To enable fluid display type on a marketing or documentation surface, import the module after <code>actual.css</code> in the project's stylesheet entry point:</p>
 <pre><code class="language-css">@import &quot;actual-css/css&quot;;

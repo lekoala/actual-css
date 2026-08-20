@@ -188,7 +188,7 @@
       </aside>
 
       <main class="docs-main">
-        <article class="docs-article">
+        <article class="docs-article stack">
           <nav aria-label="Breadcrumb">
             <ol class="breadcrumb">
               <li><a href="../index.html">Docs</a></li>
@@ -220,10 +220,11 @@
 </tbody>
 </table></div>
 <h2 id="basic-usage">Basic usage</h2>
+</div>
 <div class="docs-example">
   <div class="docs-preview">
 <div class="table-wrap">
-  <div class="table-wrap"><table class="table" class="table">
+  <table class="table">
     <caption>Team members</caption>
     <thead>
       <tr>
@@ -253,7 +254,7 @@
         <td><span class="badge secondary soft">Pending</span></td>
       </tr>
     </tbody>
-  </table></div>
+  </table>
 </div>
   </div>
   <div class="docs-code">
@@ -292,14 +293,16 @@
 &lt;/div&gt;</code></pre>
   </div>
 </div>
+<div class="prose docs-prose">
 <h2 id="accessible-scroll-region">Accessible scroll region</h2>
 <p>For wide tables, add <code>role=&quot;region&quot;</code>, <code>aria-labelledby</code>, and <code>tabindex=&quot;0&quot;</code> to
 the wrapper so keyboard users can scroll it. <code>--table-min</code> sets the minimum
 table width before the wrapper scrolls horizontally.</p>
+</div>
 <div class="docs-example">
   <div class="docs-preview">
 <div class="table-wrap" role="region" aria-labelledby="revenue-table" tabindex="0">
-  <div class="table-wrap"><table class="table" class="table" style="--table-min: 64rem">
+  <table class="table" style="--table-min: 64rem">
     <caption id="revenue-table">Revenue by month</caption>
     <thead>
       <tr>
@@ -329,7 +332,7 @@ table width before the wrapper scrolls horizontally.</p>
         <td class="text-end text-nowrap">0.7%</td>
       </tr>
     </tbody>
-  </table></div>
+  </table>
 </div>
   </div>
   <div class="docs-code">
@@ -368,6 +371,7 @@ table width before the wrapper scrolls horizontally.</p>
 &lt;/div&gt;</code></pre>
   </div>
 </div>
+<div class="prose docs-prose">
 <h2 id="css-hooks">CSS hooks</h2>
 <ul>
 <li><code>--table-cell-pad</code> — cell padding.</li>

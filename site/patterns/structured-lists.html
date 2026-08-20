@@ -188,7 +188,7 @@
       </aside>
 
       <main class="docs-main">
-        <article class="docs-article">
+        <article class="docs-article stack">
           <nav aria-label="Breadcrumb">
             <ol class="breadcrumb">
               <li><a href="../index.html">Docs</a></li>
@@ -199,6 +199,7 @@
           <div class="prose docs-prose">
 <h1 id="structured-lists">Structured Lists</h1>
 <p>Use native lists plus layout primitives for rich content rows. Reset list chrome only when markers are not part of the content.</p>
+</div>
 <div class="docs-example">
   <div class="docs-preview">
 <figure class="stack">
@@ -279,6 +280,7 @@
 &lt;/figure&gt;</code></pre>
   </div>
 </div>
+<div class="prose docs-prose">
 <p>Use <code>.actions</code> for action controls and <code>.nav-list</code> for navigation links. For structured content items, compose <code>.list-reset</code>, <code>.stack</code>, <code>.cluster</code>, <code>.media</code>, and components directly.</p>
 <p><code>.media</code> is a two-slot object: it lays out exactly two children — the leading element and one content column. Trailing metadata and actions belong inside the content column (nest a <code>.cluster</code> and put <code>.grow</code> on the flexible part), never as extra row children: additional children silently wrap onto a second grid row.</p>
 

@@ -190,7 +190,7 @@ of the contract.">
       </aside>
 
       <main class="docs-main">
-        <article class="docs-article">
+        <article class="docs-article stack">
           <nav aria-label="Breadcrumb">
             <ol class="breadcrumb">
               <li><a href="../index.html">Docs</a></li>
@@ -203,6 +203,7 @@ of the contract.">
 <p>Use <code>.grid</code> for responsive collections of equivalent items. It fits as many
 columns as the available inline space permits; incomplete final rows are part
 of the contract.</p>
+</div>
 <div class="docs-example">
   <div class="docs-preview">
 <section class="grid">
@@ -219,6 +220,7 @@ of the contract.</p>
 &lt;/section&gt;</code></pre>
   </div>
 </div>
+<div class="prose docs-prose">
 <p>Tune the item minimum with <code>--grid-min</code>.</p>
 <pre><code class="language-css">.pricing-grid {
   --grid-min: 20rem;
@@ -229,6 +231,7 @@ of the contract.</p>
 of columns is part of the composition. These presets never collapse, including
 inside <code>.container-query</code>. That stable meaning is useful for comparison rows,
 fixed matrices, and other structures where an empty cell must remain empty.</p>
+</div>
 <div class="docs-example">
   <div class="docs-preview">
 <div class="grid-3">
@@ -245,6 +248,7 @@ fixed matrices, and other structures where an empty cell must remain empty.</p>
 &lt;/div&gt;</code></pre>
   </div>
 </div>
+<div class="prose docs-prose">
 <p>Do not use a fixed preset for a responsive collection of cards, stats, tiles,
 or swatches. Use <code>.grid</code> and tune <code>--grid-min</code> instead. Use <code>.switcher</code> when a
 small group of peer regions must be either entirely horizontal or entirely

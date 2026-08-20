@@ -188,7 +188,7 @@
       </aside>
 
       <main class="docs-main">
-        <article class="docs-article">
+        <article class="docs-article stack">
           <nav aria-label="Breadcrumb">
             <ol class="breadcrumb">
               <li><a href="../index.html">Docs</a></li>
@@ -220,6 +220,7 @@
 </table></div>
 <h2 id="grow">Grow</h2>
 <p>Use <code>.grow</code> when one item in a flex layout should take available space without overflowing.</p>
+</div>
 <div class="docs-example">
   <div class="docs-preview">
 <header class="cluster">
@@ -242,6 +243,7 @@
 &lt;/header&gt;</code></pre>
   </div>
 </div>
+<div class="prose docs-prose">
 <pre><code class="language-css">.grow {
   flex: 1 1 auto;
   min-inline-size: 0;
@@ -249,6 +251,7 @@
 </code></pre>
 <h2 id="item-alignment">Item alignment</h2>
 <p>Use <code>.items-start</code> on flex or grid layouts when children should keep their natural height and align to the block-start edge. This is especially useful for form fields in a grid, where the default grid stretch would make short fields as tall as taller neighbors.</p>
+</div>
 <div class="docs-example">
   <div class="docs-preview">
 <div class="grid items-start">
@@ -275,6 +278,7 @@
 &lt;/div&gt;</code></pre>
   </div>
 </div>
+<div class="prose docs-prose">
 <p>Use <code>.items-center</code> when a flex or grid layout should center its children on the cross axis. Use <code>.items-end</code> when children should align to the block-end edge.</p>
 <p>These helpers work by setting a custom property that participating components read,
 so they also apply inside a component's own grid anatomy rather than only on plain
@@ -291,6 +295,7 @@ flex containers:</p>
 <p>A small inline dot for separating facts in a metadata row.</p>
 </blockquote>
 <p>Use <code>.dot</code> between short facts in a byline, timestamp row, or breadcrumb-like list of details — anywhere a plain <code>·</code> character would otherwise be typed as text (which screen readers announce awkwardly).</p>
+</div>
 <div class="docs-example">
   <div class="docs-preview">
 <p class="cluster" style="--cluster-justify: flex-start;">
@@ -311,6 +316,7 @@ flex containers:</p>
 &lt;/p&gt;</code></pre>
   </div>
 </div>
+<div class="prose docs-prose">
 <pre><code class="language-css">.dot {
   flex: none;
   inline-size: 0.25rem;

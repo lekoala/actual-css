@@ -188,7 +188,7 @@
       </aside>
 
       <main class="docs-main">
-        <article class="docs-article">
+        <article class="docs-article stack">
           <nav aria-label="Breadcrumb">
             <ol class="breadcrumb">
               <li><a href="../index.html">Docs</a></li>
@@ -213,6 +213,7 @@ even when it is <code>numeric</code> or <code>decimal</code>. <code>data-filter=
 <code>data-filter=&quot;decimal&quot;</code> are intentionally destructive (they rewrite the
 value as the user types), unlike <code>inputmode</code>, which only hints the virtual
 keyboard.</p>
+</div>
 <div class="docs-example">
   <div class="docs-preview">
 <label class="field">
@@ -241,6 +242,7 @@ keyboard.</p>
 &lt;/label&gt;</code></pre>
   </div>
 </div>
+<div class="prose docs-prose">
 <h3 id="built-in-filters">Built-in filters</h3>
 <p>The built-in filters are intentionally narrow. They are input helpers, not
 domain validation.</p>
@@ -256,6 +258,7 @@ domain validation.</p>
 words do not merge while the user is still entering text.</p>
 <p>Filters can be piped with <code>|</code> when a field needs more than one transform. They
 run from left to right.</p>
+</div>
 <div class="docs-example">
   <div class="docs-preview">
 <label class="field">
@@ -284,6 +287,7 @@ run from left to right.</p>
 &lt;/label&gt;</code></pre>
   </div>
 </div>
+<div class="prose docs-prose">
 <p>For signed numbers, locale formatting, currency rules, time ranges, or
 app-specific character policies, use application code. Those rules are domain
 policy, not a framework default. See the JavaScript docs for custom filter
@@ -291,6 +295,7 @@ patterns built on <code>enhance()</code>.</p>
 <h3 id="pattern-mask">Pattern mask</h3>
 <p>Use <code>data-mask</code> when the input has a fixed shape. Tokens are <code>9</code> for a digit,
 <code>a</code> for a letter, and <code>*</code> for any character.</p>
+</div>
 <div class="docs-example">
   <div class="docs-preview">
 <label class="field">
@@ -319,6 +324,7 @@ patterns built on <code>enhance()</code>.</p>
 &lt;/label&gt;</code></pre>
   </div>
 </div>
+<div class="prose docs-prose">
 <p>Masks enforce shape, not domain validity. Use application validation when a date
 must reject impossible values such as <code>2026-13-40</code>.</p>
 

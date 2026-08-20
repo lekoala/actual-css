@@ -188,7 +188,7 @@
       </aside>
 
       <main class="docs-main">
-        <article class="docs-article">
+        <article class="docs-article stack">
           <nav aria-label="Breadcrumb">
             <ol class="breadcrumb">
               <li><a href="../index.html">Docs</a></li>
@@ -204,6 +204,7 @@
 <h2 id="inside-the-form">Inside the form</h2>
 <p>The <code>&lt;form&gt;</code> is the bounding parent. The sticky stays pinned to the viewport bottom while the form is taller than the viewport, then releases when the form's bottom edge reaches it.</p>
 <p>Scroll the page to see the actions stay reachable.</p>
+</div>
 <div class="docs-example">
   <div class="docs-preview">
 <form novalidate>
@@ -360,9 +361,11 @@
 &lt;/form&gt;</code></pre>
   </div>
 </div>
+<div class="prose docs-prose">
 <h2 id="detached-from-the-form">Detached from the form</h2>
 <p>For a sticky page footer, dialog footer, or card footer, detach the actions and connect the submit button with the <code>form</code> attribute. The bounding parent becomes the wrapper that holds both the form and the actions.</p>
 <p>Scroll the page to see the detached footer stay reachable.</p>
+</div>
 <div class="docs-example">
   <div class="docs-preview">
 <form id="account-form" novalidate>
@@ -523,6 +526,7 @@
 &lt;/footer&gt;</code></pre>
   </div>
 </div>
+<div class="prose docs-prose">
 <h2 id="css-hooks">CSS hooks</h2>
 <ul>
 <li><code>--z-sticky</code> — layering token, defaults to <code>10</code>.</li>

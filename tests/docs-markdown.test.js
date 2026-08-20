@@ -8,6 +8,7 @@ import {
   scanCodeFences,
   wrapTables,
 } from "../scripts/docs/markdown.js";
+import { wrapDocsContent } from "../scripts/docs/templates.js";
 
 const fixture = readFileSync(
   join(import.meta.dir, "fixtures", "docs", "sample.md"),
@@ -128,6 +129,31 @@ describe("render", () => {
     expect(source).toContain("Save &amp; continue");
     expect(source).toContain("title=&quot;A &lt; B &amp; C&quot;");
     expect(source).not.toContain("<script>");
+  });
+
+  it("keeps live demos outside prose sections", () => {
+    const content = wrapDocsContent(result.html);
+    expect(content).toContain('</div>\n<div class="docs-example">');
+    expect(content).toContain('</div>\n<div class="prose docs-prose">');
+
+    const proseSections = content.match(/<div class="prose docs-prose">[\s\S]*?<\/div>/g) ?? [];
+    expect(proseSections).toHaveLength(2);
+    expect(proseSections.every((section) => !section.includes("docs-example"))).toBe(true);
+    expect(content).not.toMatch(/<div class="prose docs-prose">\s*<\/div>/);
+  });
+
+  it("does not emit empty prose between consecutive demos", () => {
+    const result = render("```html demo\n<button>One</button>\n```\n\n```html demo\n<button>Two</button>\n```");
+    const content = wrapDocsContent(result.html);
+    expect(content).not.toMatch(/<div class="prose docs-prose">\s*<\/div>/);
+    expect(content.match(/class="docs-example"/g)).toHaveLength(2);
+  });
+
+  it("does not rewrite tables owned by live demos", () => {
+    const demo = render("```html demo\n<table class=\"comparison\"><tr><td>Demo</td></tr></table>\n```");
+    expect(demo.html).toContain('<table class="comparison">');
+    expect(demo.html).not.toContain('<table class="table" class="comparison">');
+    expect(demo.html).not.toContain('<div class="table-wrap"><table class="comparison">');
   });
 
   it("dedupes duplicate heading ids", () => {

@@ -188,7 +188,7 @@
       </aside>
 
       <main class="docs-main">
-        <article class="docs-article">
+        <article class="docs-article stack">
           <nav aria-label="Breadcrumb">
             <ol class="breadcrumb">
               <li><a href="../index.html">Docs</a></li>
@@ -216,6 +216,7 @@
 <p>Use semantic elements inside the card. A direct <code>&lt;header&gt;</code> or <code>&lt;footer&gt;</code> is the
 card's structural slot. Cards do not own page spacing — compose them with
 layout primitives like <code>.grid</code>.</p>
+</div>
 <div class="docs-example">
   <div class="docs-preview">
 <div style="max-inline-size: 32rem">
@@ -268,9 +269,11 @@ layout primitives like <code>.grid</code>.</p>
 &lt;/div&gt;</code></pre>
   </div>
 </div>
+<div class="prose docs-prose">
 <h2 id="bleed">Bleed</h2>
 <p>Use <code>.bleed</code> on a direct child to escape the card padding — full-width images,
 colored headers, or footers.</p>
+</div>
 <div class="docs-example">
   <div class="docs-preview">
 <div style="max-inline-size: 32rem">
@@ -359,8 +362,10 @@ colored headers, or footers.</p>
 &lt;/article&gt;</code></pre>
   </div>
 </div>
+<div class="prose docs-prose">
 <h2 id="in-grids">In grids</h2>
 <p>Cards display nicely in grids with equal-height behavior.</p>
+</div>
 <div class="docs-example">
   <div class="docs-preview">
 <section class="grid">
@@ -429,6 +434,7 @@ colored headers, or footers.</p>
 &lt;/section&gt;</code></pre>
   </div>
 </div>
+<div class="prose docs-prose">
 <h2 id="surfaces">Surfaces</h2>
 <p><code>.inverted</code> creates a contrasting surface context, not a complete theme island.
 On a bare block (<code>&lt;header class=&quot;inverted&quot;&gt;</code>, <code>&lt;section class=&quot;inverted&quot;&gt;</code>) it
@@ -448,6 +454,7 @@ them. <code>.subtle</code> paints the card's background directly while <code>.in
 the surface tokens, so <code>.card.subtle.inverted</code> renders a subtle background with
 inverted foreground. Treat them as mutually exclusive, like two competing
 variants.</p>
+</div>
 <div class="docs-example">
   <div class="docs-preview">
 <section class="grid">
@@ -514,6 +521,7 @@ variants.</p>
 &lt;/section&gt;</code></pre>
   </div>
 </div>
+<div class="prose docs-prose">
 <h2 id="css-hooks">CSS hooks</h2>
 <ul>
 <li><code>--card-radius</code> — corner radius.</li>

@@ -188,7 +188,7 @@
       </aside>
 
       <main class="docs-main">
-        <article class="docs-article">
+        <article class="docs-article stack">
           <nav aria-label="Breadcrumb">
             <ol class="breadcrumb">
               <li><a href="../index.html">Docs</a></li>
@@ -203,6 +203,7 @@
 <p>Components are semantic boxes: <code>.btn</code>, <code>.badge</code>, <code>.alert</code>, <code>.card</code>, <code>.avatar</code>, etc. Each component owns its intrinsic layout and visual defaults.</p>
 <h2 id="intents">Intents</h2>
 <p><code>.primary</code>, <code>.secondary</code>, <code>.success</code>, <code>.warning</code>, <code>.danger</code> do not style elements directly. They only expose <code>--intent</code> and <code>--intent-fg</code>. Components and variants decide how to consume them.</p>
+</div>
 <div class="docs-example">
   <div class="docs-preview">
 <button class="btn primary">Primary</button>
@@ -213,6 +214,7 @@
 &lt;span class=&quot;badge success&quot;&gt;Success&lt;/span&gt;</code></pre>
   </div>
 </div>
+<div class="prose docs-prose">
 <p>There is no <code>.btn-primary</code> or <code>.badge-success</code>. Intents are generic and reusable across any component that supports them.</p>
 <p>Components fall back to their own default intent when no intent class is set. Buttons, badges, and alerts use the neutral palette (<code>--neutral</code> / <code>--neutral-fg</code>) by default.</p>
 <p>Custom intents need no framework support — define <code>--intent</code> and <code>--intent-fg</code> on a class:</p>
@@ -221,6 +223,7 @@
   --intent-fg: var(--tertiary-fg);
 }
 </code></pre>
+</div>
 <div class="docs-example">
   <div class="docs-preview">
 <button class="btn tertiary">Tertiary</button>
@@ -231,10 +234,12 @@
 &lt;span class=&quot;badge tertiary&quot;&gt;Tertiary&lt;/span&gt;</code></pre>
   </div>
 </div>
+<div class="prose docs-prose">
 <h2 id="variants">Variants</h2>
 <p><code>.solid</code>, <code>.soft</code>, <code>.outline</code> define the visual treatment by setting <code>--ui-bg</code>, <code>--ui-fg</code>, <code>--ui-border</code>. Components consume these tokens with sensible fallbacks. Interactive components also set a <code>--ui-hover-bg</code> recipe that their hover rule reads.</p>
 <p><code>.btn</code> defaults to <code>.solid</code>; <code>.badge</code> and <code>.alert</code> default to <code>.soft</code>.</p>
 <p><code>.ghost</code> and <code>.link</code> are button-only variants.</p>
+</div>
 <div class="docs-example">
   <div class="docs-preview">
 <button class="btn soft primary">Soft primary</button>
@@ -247,6 +252,7 @@
 &lt;div class=&quot;alert solid warning&quot;&gt;Solid warning&lt;/div&gt;</code></pre>
   </div>
 </div>
+<div class="prose docs-prose">
 <h2 id="density">Density</h2>
 <p><code>.sm</code> and <code>.lg</code> establish inherited density tokens. Density adjusts how much
 space UI consumes — spacing and component geometry — not how large its content
@@ -254,6 +260,7 @@ is: typography and icon size never change. Components opt into the density
 dimensions that make sense for them. The same modifiers can also be applied
 directly to a component for local density.</p>
 <p>As inherited contexts, one class tightens or loosens the whole subtree:</p>
+</div>
 <div class="docs-example">
   <div class="docs-preview">
 <div class="sm">
@@ -270,7 +277,9 @@ directly to a component for local density.</p>
 &lt;/div&gt;</code></pre>
   </div>
 </div>
+<div class="prose docs-prose">
 <p>The same class on a component is local density, not a second meaning:</p>
+</div>
 <div class="docs-example">
   <div class="docs-preview">
 <button class="btn sm">Compact button</button>
@@ -281,6 +290,7 @@ directly to a component for local density.</p>
 &lt;span class=&quot;badge lg&quot;&gt;Spacious badge&lt;/span&gt;</code></pre>
   </div>
 </div>
+<div class="prose docs-prose">
 <p>This is not &quot;<code>.sm</code> sometimes means density and sometimes size&quot;: <code>.sm</code> always
 establishes the same density tokens — only the scope changes. The density
 tokens are <code>--gap</code>, <code>--density-space</code>, <code>--control-size</code>, and

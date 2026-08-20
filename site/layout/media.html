@@ -188,7 +188,7 @@
       </aside>
 
       <main class="docs-main">
-        <article class="docs-article">
+        <article class="docs-article stack">
           <nav aria-label="Breadcrumb">
             <ol class="breadcrumb">
               <li><a href="../index.html">Docs</a></li>
@@ -202,6 +202,7 @@
 <p><code>.media</code> is the media object: a grid with <code>auto minmax(0, 1fr)</code> columns. Use it for author cards, comments, meta rows, and any composition that pairs a small leading element with a flexible content block. The trailing column takes the remaining space and never overflows.</p>
 <p>Give <code>.media</code> exactly two children. Trailing metadata or actions go inside the content column — nest a <code>.cluster</code> and put <code>.grow</code> on the flexible part — never as additional children, which silently wrap onto a second grid row.</p>
 <p>Add <code>.items-center</code> to align the leading element with short trailing content. For multi-line content, the default <code>align-items: start</code> is more comfortable.</p>
+</div>
 <div class="docs-example">
   <div class="docs-preview">
 <article class="card media">
@@ -236,6 +237,7 @@
 &lt;/div&gt;</code></pre>
   </div>
 </div>
+<div class="prose docs-prose">
 <p>The media object is the underlying pattern of <code>.blog-author</code>, <code>.blog-comment</code>, and similar compositions in templates. Components can adopt it instead of repeating the grid rule.</p>
 
 </div>

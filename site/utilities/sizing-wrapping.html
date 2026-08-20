@@ -188,7 +188,7 @@
       </aside>
 
       <main class="docs-main">
-        <article class="docs-article">
+        <article class="docs-article stack">
           <nav aria-label="Breadcrumb">
             <ol class="breadcrumb">
               <li><a href="../index.html">Docs</a></li>
@@ -213,6 +213,7 @@
 </tbody>
 </table></div>
 <p>Use <code>.fit</code> when a control or element should shrink to its content instead of filling the available inline space.</p>
+</div>
 <div class="docs-example">
   <div class="docs-preview">
 <select class="select fit" aria-label="Theme">
@@ -229,9 +230,11 @@
 &lt;/select&gt;</code></pre>
   </div>
 </div>
+<div class="prose docs-prose">
 <p>Use <code>.text-nowrap</code> to keep text on one line inside a cell or label. To stop a
 layout primitive from wrapping — for example to force a <code>.cluster</code> onto a single
 row — set <code>--cluster-wrap: nowrap</code>.</p>
+</div>
 <div class="docs-example">
   <div class="docs-preview">
 <div class="cluster sm" style="--cluster-wrap: nowrap;">
@@ -250,7 +253,9 @@ row — set <code>--cluster-wrap: nowrap</code>.</p>
 &lt;/div&gt;</code></pre>
   </div>
 </div>
+<div class="prose docs-prose">
 <p>Use <code>.truncate</code> on the flexible item that should ellipsize inside a constrained row.</p>
+</div>
 <div class="docs-example">
   <div class="docs-preview">
 <header class="cluster" style="--cluster-wrap: nowrap;">
@@ -265,6 +270,7 @@ row — set <code>--cluster-wrap: nowrap</code>.</p>
 &lt;/header&gt;</code></pre>
   </div>
 </div>
+<div class="prose docs-prose">
 <pre><code class="language-css">.fit {
   inline-size: fit-content;
   max-inline-size: 100%;
@@ -286,6 +292,7 @@ row — set <code>--cluster-wrap: nowrap</code>.</p>
 <p><code>scroller</code> is not imported by <code>actual.css</code>. Import it explicitly when a project wants Actual CSS scrollbar chrome instead of the native OS default:</p>
 <pre><code class="language-css">@import &quot;actual-css/css/layout/scroller&quot;;
 </code></pre>
+</div>
 <div class="docs-example">
   <div class="docs-preview">
 <div class="overflow-auto scroller" style="max-block-size: 12rem">
@@ -306,6 +313,7 @@ row — set <code>--cluster-wrap: nowrap</code>.</p>
 &lt;/div&gt;</code></pre>
   </div>
 </div>
+<div class="prose docs-prose">
 <pre><code class="language-css">.scroller {
   --scroller-size: 0.625rem;
   --scroller-padding: 0.125rem;

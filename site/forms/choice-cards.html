@@ -188,7 +188,7 @@
       </aside>
 
       <main class="docs-main">
-        <article class="docs-article">
+        <article class="docs-article stack">
           <nav aria-label="Breadcrumb">
             <ol class="breadcrumb">
               <li><a href="../index.html">Docs</a></li>
@@ -217,6 +217,7 @@
 <li>Pair with grid or flex utilities for group layout. The badge overhangs the top-right corner, so avoid <code>overflow: hidden</code> on the direct container.</li>
 <li>Supports disabled, checked, focus-visible, and invalid states.</li>
 </ul>
+</div>
 <div class="docs-example">
   <div class="docs-preview">
 <div class="grid-3">
@@ -303,7 +304,9 @@
 &lt;/fieldset&gt;</code></pre>
   </div>
 </div>
+<div class="prose docs-prose">
 <p>Validation follows the shared pattern: <code>aria-invalid=&quot;true&quot;</code> on the input (set manually or by the <code>.needs-validation</code> enhancer) turns the card border to danger, and a <code>.field-error</code> inside a <code>.field</code> wrapper is shown.</p>
+</div>
 <div class="docs-example">
   <div class="docs-preview">
 <fieldset class="field field-group">
@@ -362,6 +365,7 @@
 &lt;/fieldset&gt;</code></pre>
   </div>
 </div>
+<div class="prose docs-prose">
 <p>Sizes follow the shared <code>.sm</code> and <code>.lg</code> modifiers. Intent classes (<code>.primary</code>, <code>.secondary</code>) are supported on the <code>.choice-card</code> element.</p>
 <h2 id="css-hooks">CSS hooks</h2>
 <ul>

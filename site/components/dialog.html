@@ -188,7 +188,7 @@
       </aside>
 
       <main class="docs-main">
-        <article class="docs-article">
+        <article class="docs-article stack">
           <nav aria-label="Breadcrumb">
             <ol class="breadcrumb">
               <li><a href="../index.html">Docs</a></li>
@@ -235,6 +235,7 @@ has no close icon and no light dismiss; the footer actions are the way out.
 <code>closedby=&quot;none&quot;</code> keeps Escape and backdrop clicks from closing it, so a
 critical confirmation cannot be dismissed accidentally. With the optional
 runtime, backdrop clicks give a small static feedback instead of closing.</p>
+</div>
 <div class="docs-example">
   <div class="docs-preview">
 <button class="btn"
@@ -301,11 +302,13 @@ runtime, backdrop clicks give a small static feedback instead of closing.</p>
 &lt;/dialog&gt;</code></pre>
   </div>
 </div>
+<div class="prose docs-prose">
 <p>For a compact destructive confirmation with a leading status icon, compose
 <code>dialog-confirmation</code> with the media object. The icon well accepts the shared
 intent and emphasis classes; <code>dialog-icon danger soft</code> creates the tinted red
 circle while keeping the glyph centered. The footer becomes a separate action
 band without changing the semantics of the form or its buttons.</p>
+</div>
 <div class="docs-example">
   <div class="docs-preview">
 <button class="btn danger"
@@ -374,9 +377,11 @@ band without changing the semantics of the form or its buttons.</p>
 &lt;/dialog&gt;</code></pre>
   </div>
 </div>
+<div class="prose docs-prose">
 <h2 id="information-modal">Information modal</h2>
 <p>Use this shape for contextual information or lightweight secondary content. It
 has no action button; the header close button dismisses the dialog.</p>
+</div>
 <div class="docs-example">
   <div class="docs-preview">
 <button class="btn"
@@ -451,11 +456,13 @@ has no action button; the header close button dismisses the dialog.</p>
 &lt;/dialog&gt;</code></pre>
   </div>
 </div>
+<div class="prose docs-prose">
 <h2 id="scrollable-modal">Scrollable modal</h2>
 <p>Use <code>modal scrollable</code> when the header and footer should stay visible while the
 dialog body scrolls. Modal dialogs lock page scroll while a modal is open: the
 runtime writes <code>html.has-modal-open</code>, and the stylesheet applies <code>overflow: hidden</code> (and reserves the scrollbar gutter with <code>scrollbar-gutter: stable</code> when
 one was present).</p>
+</div>
 <div class="docs-example">
   <div class="docs-preview">
 <button class="btn"
@@ -540,9 +547,11 @@ one was present).</p>
 &lt;/dialog&gt;</code></pre>
   </div>
 </div>
+<div class="prose docs-prose">
 <h2 id="overlays-inside-modals">Overlays inside modals</h2>
 <p>Flyouts and tooltips opened from inside a modal dialog are mounted inside the
 dialog so they stay in the same top-layer context.</p>
+</div>
 <div class="docs-example">
   <div class="docs-preview">
 <button class="btn"
@@ -651,6 +660,7 @@ dialog so they stay in the same top-layer context.</p>
 &lt;/dialog&gt;</code></pre>
   </div>
 </div>
+<div class="prose docs-prose">
 <h2 id="javascript-options">JavaScript options</h2>
 <p>Add options directly on the dialog element. Without JavaScript, modern browsers
 still use the native dialog behavior; the runtime adds declarative command
@@ -691,6 +701,7 @@ two.</p>
 <code>document.startViewTransition</code> and the user has not requested reduced motion.
 Otherwise the dialog simply opens and closes with the baseline dialog
 transition.</p>
+</div>
 <div class="docs-example">
   <div class="docs-preview">
 <button class="btn"
@@ -747,6 +758,7 @@ transition.</p>
 &lt;/dialog&gt;</code></pre>
   </div>
 </div>
+<div class="prose docs-prose">
 <h2 id="notes">Notes</h2>
 <p>Prefer native dialog behavior whenever possible. The framework runtime should
 not replace the platform modal system; it should only make dialogs declarative,

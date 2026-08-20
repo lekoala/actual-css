@@ -188,7 +188,7 @@
       </aside>
 
       <main class="docs-main">
-        <article class="docs-article">
+        <article class="docs-article stack">
           <nav aria-label="Breadcrumb">
             <ol class="breadcrumb">
               <li><a href="../index.html">Docs</a></li>
@@ -299,6 +299,7 @@ panel. The trigger and Escape continue to close the flyout in every mode.</p>
 <li>Use <code>.sm</code> or <code>.lg</code> for density changes.</li>
 <li>Add <code>role=&quot;menu&quot;</code> / <code>role=&quot;menuitem&quot;</code> only when you intentionally need the ARIA menu pattern described below.</li>
 </ul>
+</div>
 <div class="docs-example">
   <div class="docs-preview">
 <div class="flyout-trigger">
@@ -347,6 +348,7 @@ panel. The trigger and Escape continue to close the flyout in every mode.</p>
 &lt;/div&gt;</code></pre>
   </div>
 </div>
+<div class="prose docs-prose">
 <h3 id="aria-menu-pattern">ARIA menu pattern</h3>
 <p>Adding <code>role=&quot;menu&quot;</code> opts the action list into a composite with one roving tab
 stop. Its usable <code>.menu-item</code> children with <code>role=&quot;menuitem&quot;</code>,
@@ -396,6 +398,7 @@ can be multi-column with <code>&lt;section&gt;</code> / <code>&lt;ul&gt;</code> 
 <li>Just a toggle with outside-click and Escape dismissal.</li>
 <li>Use grid utilities, such as <code>.grid-3</code>, for wider multi-column flyouts.</li>
 </ul>
+</div>
 <div class="docs-example">
   <div class="docs-preview">
 <nav aria-label="Main navigation">
@@ -488,10 +491,12 @@ can be multi-column with <code>&lt;section&gt;</code> / <code>&lt;ul&gt;</code> 
 &lt;/nav&gt;</code></pre>
   </div>
 </div>
+<div class="prose docs-prose">
 <h2 id="mega-menu">Mega menu</h2>
 <p>Use <code>class=&quot;flyout grid-3&quot;</code> when a nav panel needs multiple link groups. Keep
 links regular anchors and let the panel collapse to a one-column sheet on mobile
 with <code>data-flyout-mobile=&quot;auto&quot;</code>.</p>
+</div>
 <div class="docs-example">
   <div class="docs-preview">
 <nav aria-label="Product navigation">
@@ -604,6 +609,7 @@ with <code>data-flyout-mobile=&quot;auto&quot;</code>.</p>
 &lt;/nav&gt;</code></pre>
   </div>
 </div>
+<div class="prose docs-prose">
 <h2 id="context-menu">Context menu</h2>
 <p>Context menus use the same <code>.menu &gt; li &gt; .menu-item</code> presentation primitive as
 action-list flyouts.</p>
@@ -629,6 +635,7 @@ matching element. The scope also constrains the available height, so omit it
 when the menu is allowed to escape the card or list item.</p>
 <p>Long press is opt-in with <code>data-context-menu-long-press</code>. Empty uses the default
 delay; a number sets the delay in milliseconds.</p>
+</div>
 <div class="docs-example">
   <div class="docs-preview">
 <div class="card stack"
@@ -723,6 +730,7 @@ delay; a number sets the delay in milliseconds.</p>
 &lt;/script&gt;</code></pre>
   </div>
 </div>
+<div class="prose docs-prose">
 <h2 id="css-hooks">CSS hooks</h2>
 <ul>
 <li><code>--flyout-inline-size</code> — panel width.</li>
