@@ -22,11 +22,20 @@ it("prose element recipes stay low-specificity so components override them", asy
     async (view) => {
       const result = await view.evaluate(`(() => {
         const color = (sel) => getComputedStyle(document.querySelector(sel)).color;
+        const marginTop = (sel) => getComputedStyle(document.querySelector(sel)).marginTop;
         return {
           alert: color("#ref-alert"),
           plain: color("#plain"),
           button: color("#button"),
           proseLink: color("#prose-link"),
+          p1: marginTop("#flow-p1"),
+          p2: marginTop("#flow-p2"),
+          wrap: marginTop("#flow-wrap"),
+          table: marginTop("#flow-table"),
+          h2: marginTop("#flow-h2"),
+          bcCurrentMargin: marginTop("#bc-current"),
+          bcCurrentColor: color("#bc-current"),
+          bcTextRef: color("#bc-ref-text"),
         };
       })()`);
 
@@ -34,6 +43,20 @@ it("prose element recipes stay low-specificity so components override them", asy
       expect(result.plain).toBe(result.alert);
       // The .btn link keeps its own foreground and is not prose-tinted.
       expect(result.button).not.toBe(result.proseLink);
+
+      // Direct-child rhythm: the wrapper gets the sibling flow, while the
+      // nested table inside it no longer carries a trapped top margin.
+      expect(result.table).toBe("0px");
+      expect(result.wrap).toBe(result.p2);
+      expect(result.wrap).not.toBe("0px");
+      // Headings keep their wider rhythm; the first child is reset.
+      expect(parseFloat(result.h2)).toBeGreaterThan(parseFloat(result.wrap));
+      expect(result.p1).toBe("0px");
+
+      // A classed list inside prose keeps its own item rhythm (no li + li leak).
+      expect(result.bcCurrentMargin).toBe("0px");
+      // aria-current on the breadcrumb item receives the current style.
+      expect(result.bcCurrentColor).toBe(result.bcTextRef);
     },
     { artifactName: "prose" },
   );

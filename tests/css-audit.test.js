@@ -292,7 +292,7 @@ test("tabs include vertical orientation styling", () => {
 test("breadcrumb supports aria-current on the link or span", () => {
   const css = readCss("src/css/components/breadcrumb.css");
 
-  expect(css).toContain('.breadcrumb :where(a, span):where([aria-current]:not([aria-current="false"]))');
+  expect(css).toContain('.breadcrumb :where(li, a, span):where([aria-current]:not([aria-current="false"]))');
   expect(css.includes("pointer-events: none")).toBe(false);
 });
 

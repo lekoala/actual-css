@@ -22,5 +22,29 @@
       <a id="button" class="btn danger" href="#">Update billing</a>
     </div>
   </div>
+
+  <!-- Direct-child flow: rhythm lands on the direct block (.table-wrap), not
+       on a <table> nested two levels down. -->
+  <div id="prose-flow" class="prose">
+    <p id="flow-p1">First paragraph</p>
+    <p id="flow-p2">Second paragraph</p>
+    <div id="flow-wrap" class="table-wrap">
+      <table id="flow-table" class="table">
+        <tbody><tr><td>Cell</td></tr></tbody>
+      </table>
+    </div>
+    <h2 id="flow-h2">Heading</h2>
+  </div>
+
+  <!-- Prose list recipes leave classed lists alone: a direct-child .breadcrumb
+       keeps its own item rhythm and supports aria-current on the item. -->
+  <div id="prose-breadcrumb" class="prose">
+    <ol id="bc" class="breadcrumb">
+      <li><a href="#">Overview</a></li>
+      <li id="bc-current" aria-current="page">Accounts</li>
+    </ol>
+  </div>
+
+  <div id="bc-ref-text" style="color: var(--text)"></div>
 </body>
 </html>

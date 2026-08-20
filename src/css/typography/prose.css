@@ -35,8 +35,11 @@
   overflow-wrap: break-word;
 }
 
-.prose :where(p, ul, ol, dl, blockquote, pre, table, figure) {
-  margin-block: var(--prose-flow) 0;
+/* Vertical rhythm belongs to the direct block that participates in the
+   document, so it must not be injected into the internals of a nested
+   component (e.g. a .table-wrap around a .table would trap the margin). */
+.prose > * + * {
+  margin-block-start: var(--prose-flow);
 }
 
 .prose :where(h1, h2, h3, h4, h5, h6) {
@@ -91,11 +94,14 @@
   }
 }
 
-.prose :where(ul, ol) {
+/* List recipes target class-less lists only: a classed list is a component or
+   a deliberate custom list, so prose must not reach into its items (e.g. a
+   .breadcrumb). */
+.prose :where(ul:not([class]), ol:not([class])) {
   padding-inline-start: 1.5em;
 }
 
-.prose li + li {
+.prose > :where(ul:not([class]), ol:not([class])) > li + li {
   margin-block-start: 0.35em;
 }
 
