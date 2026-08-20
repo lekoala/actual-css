@@ -4,9 +4,9 @@
 
 ## Class reference
 
-| Class | Kind | Description |
-|---|---|---|
-| `.drawer` | Component | Modal side-sheet built on the native `<dialog>` element. |
+| Class           | Kind      | Description                                                |
+|-----------------|-----------|------------------------------------------------------------|
+| `.drawer`       | Component | Modal side-sheet built on the native `<dialog>` element.   |
 | `.drawer-close` | Component | Icon-only close button that sits inside the drawer header. |
 
 ## Usage

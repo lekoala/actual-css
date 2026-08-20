@@ -4,25 +4,25 @@ Semantic step helpers for gap, padding, and margin — the most common inline-st
 
 ## Class reference
 
-| Class | Kind | Description |
-|---|---|---|
-| `.gap-none` | Utility | `gap: 0` on the element itself. |
-| `.py` | Utility | Block (vertical) padding at the current density step. |
-| `.px` | Utility | Inline (horizontal) padding at the current density step. |
-| `.mbs` | Utility | Block-start margin at the current density step. |
-| `.mbe` | Utility | Block-end margin at the current density step. |
-| `.gap-sm` | Utility | `gap: var(--space-20)` — denser row rhythm. Optional layer. |
-| `.gap-md` | Utility | `gap: var(--space-40)` — default row rhythm. Optional layer. |
-| `.gap-lg` | Utility | `gap: var(--space-50)` — roomier row rhythm. Optional layer. |
-| `.padding-context` | Utility | All-side padding at the current density step. Optional layer. |
-| `.gap-context` | Utility | `gap: var(--gap)`. Optional layer. |
-| `.row-gap-context` | Utility | `row-gap: var(--gap)`. Optional layer. |
-| `.column-gap-context` | Utility | `column-gap: var(--gap)`. Optional layer. |
-| `.margin-inline-auto` | Utility | Horizontally centers a block. Optional layer. |
-| `.margin-inline-start-auto` | Utility | Pushes a block toward the inline end. Optional layer. |
-| `.margin-inline-end-auto` | Utility | Pushes a block toward the inline start. Optional layer. |
-| `.margin-block-start-auto` | Utility | Pushes content toward the block end. Optional layer. |
-| `.margin-block-end-auto` | Utility | Pushes content toward the block start. Optional layer. |
+| Class                       | Kind    | Description                                                   |
+|-----------------------------|---------|---------------------------------------------------------------|
+| `.gap-none`                 | Utility | `gap: 0` on the element itself.                               |
+| `.py`                       | Utility | Block (vertical) padding at the current density step.         |
+| `.px`                       | Utility | Inline (horizontal) padding at the current density step.      |
+| `.mbs`                      | Utility | Block-start margin at the current density step.               |
+| `.mbe`                      | Utility | Block-end margin at the current density step.                 |
+| `.gap-sm`                   | Utility | `gap: var(--space-20)` — denser row rhythm. Optional layer.   |
+| `.gap-md`                   | Utility | `gap: var(--space-40)` — default row rhythm. Optional layer.  |
+| `.gap-lg`                   | Utility | `gap: var(--space-50)` — roomier row rhythm. Optional layer.  |
+| `.padding-context`          | Utility | All-side padding at the current density step. Optional layer. |
+| `.gap-context`              | Utility | `gap: var(--gap)`. Optional layer.                            |
+| `.row-gap-context`          | Utility | `row-gap: var(--gap)`. Optional layer.                        |
+| `.column-gap-context`       | Utility | `column-gap: var(--gap)`. Optional layer.                     |
+| `.margin-inline-auto`       | Utility | Horizontally centers a block. Optional layer.                 |
+| `.margin-inline-start-auto` | Utility | Pushes a block toward the inline end. Optional layer.         |
+| `.margin-inline-end-auto`   | Utility | Pushes a block toward the inline start. Optional layer.       |
+| `.margin-block-start-auto`  | Utility | Pushes content toward the block end. Optional layer.          |
+| `.margin-block-end-auto`    | Utility | Pushes content toward the block start. Optional layer.        |
 
 Spacing helpers follow the density context. The default step is
 `--space-40` (1rem); the `.sm` context tightens it to `--space-20` (0.5rem)

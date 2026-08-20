@@ -11,8 +11,9 @@
  * .media          fixed media + flexible content
  * .switcher       peer regions: all horizontal or all stacked
  * .sidebar-layout main content + secondary aside
- * .grid           responsive collection of independent items
- * .grid-N         fixed N-column structural grid (in grid.css)
+ * .grid           responsive collection; item width is the contract
+ * .grid-N         structural density of N; wrap in .container-query for
+ *                 balanced subdivision (in grid.css)
  * .scroller       quiet custom scrollbar chrome
  * .scroll-snap    snap rails
  * .topbar         sticky app-shell top bar

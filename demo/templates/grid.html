@@ -1,0 +1,639 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Grid Density - Actual CSS</title>
+  <meta name="description" content="The grid contracts side by side: space-driven .grid, count-driven .grid-N, balanced subdivision inside a query container, and how gap and density interact with them.">
+  <link rel="stylesheet" href="../../dist/actual.full.css">
+  <link rel="stylesheet" href="../../dist/actual-themes.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+  <style>
+    /* Template-local demo chrome. Nothing here papers over a framework gap —
+     * it is the instrumentation that makes a container-driven contract
+     * visible: a reader-resizable stage plus a live column-count readout.
+     *
+     *   .stage         resizable box; the grids read ITS width, so the browser
+     *                  window never has to move to prove the point.
+     *   .stage-meter   live "container width -> column count" readout.
+     *   .tile          placeholder item at the densities the presets target.
+     *   .mosaic-cell   flush image cell for the gap-none section.
+     */
+
+    .grid-page {
+      padding-block: var(--space-60);
+    }
+
+    .grid-intro,
+    .grid-section {
+      --center-size: 76rem;
+    }
+
+    .grid-section {
+      padding-block: var(--space-60);
+      border-block-start: var(--border-width) solid var(--border);
+    }
+
+    .grid-note {
+      max-inline-size: 72ch;
+      color: var(--text-muted);
+    }
+
+    /* The point of the page: a box the reader drags. resize needs a scroll
+       container, hence the overflow. */
+    .stage {
+      overflow: auto;
+      resize: horizontal;
+      min-inline-size: 17rem;
+      max-inline-size: 100%;
+      padding: var(--space-40);
+      border: var(--border-width) dashed var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+    }
+
+    .stage-meter {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-20);
+      align-items: baseline;
+      margin-block: 0 var(--space-30);
+      font-size: var(--font-size-sm);
+      color: var(--text-muted);
+    }
+
+    .stage-meter b,
+    .stage-meter .badge {
+      color: var(--text);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .tile {
+      display: grid;
+      place-items: center;
+      gap: var(--space-10);
+      min-block-size: 4.5rem;
+      padding: var(--space-30);
+      border-radius: var(--radius);
+      background: var(--surface-subtle);
+      color: var(--text-muted);
+      font-size: var(--font-size-sm);
+      text-align: center;
+    }
+
+    .tile strong {
+      color: var(--text);
+      font-size: var(--font-size-lg);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .tile .swatch {
+      aspect-ratio: 1;
+      inline-size: 100%;
+      border-radius: var(--radius);
+      background: var(--surface-raised);
+    }
+
+    /* Flush mosaic: no gap, no radius, no padding — the cells must touch. */
+    .mosaic-cell {
+      display: grid;
+      place-items: center;
+      aspect-ratio: 4 / 3;
+      background: var(--surface-subtle);
+      color: var(--text-muted);
+      font-size: var(--font-size-sm);
+    }
+
+    .mosaic-cell:nth-child(even) {
+      background: var(--surface-raised);
+    }
+
+    .grid-pitfall {
+      max-inline-size: 72ch;
+    }
+
+    .compare {
+      display: grid;
+      gap: var(--space-40);
+    }
+
+    @media (min-width: 60rem) {
+      .compare {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      /* The bare/wrapped chains only diverge above 64rem, so this pair has to
+         keep the full measure instead of splitting it in two. */
+      .compare-stacked {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .compare-col > h3 {
+      margin-block: 0 var(--space-20);
+    }
+  </style>
+</head>
+
+<body>
+  <main class="grid-page">
+    <header class="center stack grid-intro">
+      <p class="overline">Actual CSS</p>
+      <h1>Grid density</h1>
+      <p class="lead">
+        One question decides which class you want. Does the <em>item width</em>
+        determine the column count, or does the <em>column density</em>?
+      </p>
+      <p class="grid-note">
+        Every stage below is resizable — drag its bottom-right corner. The
+        readout follows the stage, never the window. That is the contract:
+        these grids react to the space they are given, not to the viewport.
+      </p>
+    </header>
+
+    <section class="center stack grid-section">
+      <h2>1. Item width is the contract — <code>.grid</code></h2>
+      <p class="grid-note">
+        <code>.grid</code> fits as many columns as <code>--grid-min</code>
+        allows. An incomplete final row is expected: the items are independent,
+        so nothing is wrong with a row of two under a row of four.
+      </p>
+      <div class="stage" data-stage>
+        <p class="stage-meter">
+          <span>container <b data-width>&mdash;</b></span>
+          <span class="badge" data-count>&mdash;</span>
+        </p>
+        <div class="grid" data-grid style="--grid-min: 12rem">
+          <div class="tile">1</div>
+          <div class="tile">2</div>
+          <div class="tile">3</div>
+          <div class="tile">4</div>
+          <div class="tile">5</div>
+          <div class="tile">6</div>
+        </div>
+      </div>
+      <p class="grid-note">
+        <code>--grid-min: 12rem</code> here. Raise it for wider items, lower it
+        for denser ones. It is the only knob, and it belongs to
+        <code>.grid</code> alone.
+      </p>
+      <div class="alert admonition grid-pitfall" role="note">
+        <div class="alert-title">
+          <i class="ti ti-info-circle" aria-hidden="true"></i>
+          Pitfall &mdash; <code>--grid-min</code> is not a <code>.grid-N</code> hook
+        </div>
+        <div class="alert-body">
+          <p>
+            It tunes <code>.grid</code> only. The presets deliberately ignore
+            it: their subdivision runs on <code>@container</code> thresholds,
+            which cannot resolve a custom property, so a hook honored in the
+            unwrapped baseline would fall silent the moment you added a query
+            container. Item width is <code>.grid</code>'s contract; column
+            density is <code>.grid-N</code>'s.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="center stack grid-section">
+      <h2>2. Density is the contract — <code>.grid-N</code></h2>
+      <p class="grid-note">
+        <code>.grid-4</code> says <em>this content suits four columns</em>. It
+        never exceeds four, never overflows, and keeps every item the same
+        width — with no wrapper and nothing to configure.
+      </p>
+      <div class="stage" data-stage>
+        <p class="stage-meter">
+          <span>container <b data-width>&mdash;</b></span>
+          <span class="badge" data-count>&mdash;</span>
+        </p>
+        <div class="grid-4" data-grid>
+          <div class="tile">1</div>
+          <div class="tile">2</div>
+          <div class="tile">3</div>
+          <div class="tile">4</div>
+          <div class="tile">5</div>
+          <div class="tile">6</div>
+        </div>
+      </div>
+      <p class="grid-note">
+        Drag it slowly: the count walks down one column at a time. With six
+        items that means you pass through three columns — a row of three above
+        a row of three is fine — but a five-column state would have left a lone
+        sixth item. That is what the next section removes.
+      </p>
+      <div class="alert admonition grid-pitfall" role="note">
+        <div class="alert-title">
+          <i class="ti ti-info-circle" aria-hidden="true"></i>
+          Pitfall &mdash; a bare preset is not a fixed <code>N</code>-column grid
+        </div>
+        <div class="alert-body">
+          <p>
+            If the exact track structure <em>is</em> the contract &mdash; a
+            comparison matrix, a form row where an empty cell must stay empty
+            &mdash; a preset is the wrong tool. It will collapse. Use
+            <code>--grid-columns</code> on <code>.grid</code> and own the
+            responsive behavior yourself.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="center stack grid-section">
+      <h2>3. Balanced subdivision — <code>.container-query</code></h2>
+      <p class="grid-note">
+        Wrap the preset in <code>.container-query</code> and it only ever enters
+        a <strong>divisor of N</strong>. Both stages hold six items. Drag either
+        and compare.
+      </p>
+      <div class="compare compare-stacked">
+        <div class="compare-col">
+          <h3>Bare — <code>.grid-6</code></h3>
+          <div class="stage" data-stage>
+            <p class="stage-meter">
+              <span>container <b data-width>&mdash;</b></span>
+              <span class="badge" data-count>&mdash;</span>
+            </p>
+            <div class="grid-6" data-grid>
+              <div class="tile">1</div>
+              <div class="tile">2</div>
+              <div class="tile">3</div>
+              <div class="tile">4</div>
+              <div class="tile">5</div>
+              <div class="tile">6</div>
+            </div>
+          </div>
+        </div>
+        <div class="compare-col">
+          <h3>Wrapped — <code>.container-query &gt; .grid-6</code></h3>
+          <div class="stage container-query" data-stage>
+            <p class="stage-meter">
+              <span>container <b data-width>&mdash;</b></span>
+              <span class="badge" data-count>&mdash;</span>
+            </p>
+            <div class="grid-6" data-grid>
+              <div class="tile">1</div>
+              <div class="tile">2</div>
+              <div class="tile">3</div>
+              <div class="tile">4</div>
+              <div class="tile">5</div>
+              <div class="tile">6</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="grid-note">
+        The chains are <code>2 &rarr; 1</code>, <code>3 &rarr; 1</code>,
+        <code>4 &rarr; 2 &rarr; 1</code>, and
+        <code>6 &rarr; 3 &rarr; 2 &rarr; 1</code>. Intermediate counts are
+        skipped on purpose. The wrapper has to be an ancestor: an element cannot
+        query its own size without taking inline-size containment, which would
+        collapse it inside a <code>.cluster</code> or any shrink-to-fit box.
+      </p>
+      <p class="grid-note">
+        Forgetting the wrapper costs you the exact chain and nothing else — the
+        bare preset on the left is still responsive and still overflow-safe.
+      </p>
+      <div class="alert warning admonition grid-pitfall" role="note">
+        <div class="alert-title">
+          <i class="ti ti-alert-triangle" aria-hidden="true"></i>
+          Pitfall &mdash; where <code>.container-query</code> may sit
+        </div>
+        <div class="alert-body">
+          <p>
+            The wrapper takes inline-size containment, so its contents stop
+            contributing to its own inline size. On a normal block-level
+            wrapper that is free. On a shrink-to-fit box &mdash; a
+            <code>.cluster</code> child, a <code>.topbar</code> child, a float,
+            an <code>inline-block</code>, a <code>width: fit-content</code>
+            element &mdash; it collapses to roughly nothing.
+          </p>
+          <p>
+            Nested containers resolve to the <strong>nearest</strong> ancestor.
+            A preset inside an inner <code>.container-query</code> measures that
+            inner box, not the page.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="center stack grid-section">
+      <h2>4. N is a statement about your content</h2>
+      <p class="grid-note">
+        The presets are a density scale, not a column counter. Pick the one your
+        items are sized for; the framework then guarantees a clean collapse of
+        that density. All four stages are wrapped and start at the same width.
+      </p>
+
+      <div class="stack" style="--gap: var(--space-50)">
+        <div class="stack">
+          <h3><code>.grid-2</code> — large cards</h3>
+          <div class="stage container-query" data-stage>
+            <p class="stage-meter">
+              <span>container <b data-width>&mdash;</b></span>
+              <span class="badge" data-count>&mdash;</span>
+            </p>
+            <div class="grid-2" data-grid>
+              <article class="card stack">
+                <h4>Starter</h4>
+                <p>Everything a small team needs to ship a first project, billed by usage with no seat minimum.</p>
+                <button class="btn primary margin-block-start-auto" type="button">Choose plan</button>
+              </article>
+              <article class="card stack">
+                <h4>Scale</h4>
+                <p>Dedicated capacity, priority support, and audit logs for larger organisations.</p>
+                <button class="btn primary margin-block-start-auto" type="button">Choose plan</button>
+              </article>
+            </div>
+          </div>
+        </div>
+
+        <p class="grid-note">
+          The cards are equal width because the grid says so, and equal height
+          because grid items stretch by default. Aligning the two actions on top
+          of that takes one utility: <code>.margin-block-start-auto</code> on the
+          button pushes it to the bottom of its <code>.stack</code>, so a
+          two-line summary next to a one-line summary no longer staggers them.
+        </p>
+
+        <div class="stack">
+          <h3><code>.grid-3</code> — standard cards</h3>
+          <div class="stage container-query" data-stage>
+            <p class="stage-meter">
+              <span>container <b data-width>&mdash;</b></span>
+              <span class="badge" data-count>&mdash;</span>
+            </p>
+            <div class="grid-3" data-grid>
+              <article class="card stack">
+                <h4>Documentation</h4>
+                <p>Guides, references, and runnable examples.</p>
+              </article>
+              <article class="card stack">
+                <h4>Changelog</h4>
+                <p>Every release, with migration notes.</p>
+              </article>
+              <article class="card stack">
+                <h4>Playground</h4>
+                <p>Try a component without installing anything.</p>
+              </article>
+            </div>
+          </div>
+        </div>
+
+        <div class="stack">
+          <h3><code>.grid-4</code> — compact cards and stats</h3>
+          <div class="stage container-query" data-stage>
+            <p class="stage-meter">
+              <span>container <b data-width>&mdash;</b></span>
+              <span class="badge" data-count>&mdash;</span>
+            </p>
+            <div class="grid-4" data-grid>
+              <div class="tile"><strong>1 248</strong>Projects</div>
+              <div class="tile"><strong>99.9%</strong>Uptime</div>
+              <div class="tile"><strong>17</strong>Open issues</div>
+              <div class="tile"><strong>4.8</strong>Rating</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="stack">
+          <h3><code>.grid-6</code> — compact tiles</h3>
+          <div class="stage container-query" data-stage>
+            <p class="stage-meter">
+              <span>container <b data-width>&mdash;</b></span>
+              <span class="badge" data-count>&mdash;</span>
+            </p>
+            <div class="grid-6" data-grid>
+              <div class="tile"><span class="swatch"></span>Box A</div>
+              <div class="tile"><span class="swatch"></span>Box B</div>
+              <div class="tile"><span class="swatch"></span>Box C</div>
+              <div class="tile"><span class="swatch"></span>Box D</div>
+              <div class="tile"><span class="swatch"></span>Box E</div>
+              <div class="tile"><span class="swatch"></span>Box F</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <p class="grid-note">
+        Three shared thresholds drive all of them — 28rem opens the first
+        horizontal density, 48rem opens three columns, 64rem opens the dense
+        four and six. They are deliberately <em>not</em> tuned per preset to
+        land the same item width: that would erase the information N carries. At
+        64rem <code>.grid-6</code> gives roughly 160px per tile, which is the
+        point of choosing it. If your items need 250px, you wanted
+        <code>.grid-4</code>.
+      </p>
+      <div class="alert admonition grid-pitfall" role="note">
+        <div class="alert-title">
+          <i class="ti ti-info-circle" aria-hidden="true"></i>
+          Pitfall &mdash; the chain balances the density, not your item count
+        </div>
+        <div class="alert-body">
+          <p>
+            <code>.grid-6</code> guarantees that every column count divides
+            <strong>six</strong>. It cannot know how many children you passed
+            it. Eight items still give <code>6 + 2</code>, and three columns
+            give <code>3 + 3 + 2</code>.
+          </p>
+          <p>
+            For a paginated collection, pick a page size that suits the density
+            &mdash; 12, 20, and 24 divide well. A partial final page is normal
+            and needs no fixing.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="center stack grid-section">
+      <h2>5. No gap — flush mosaics</h2>
+      <p class="grid-note">
+        The presets read <code>--gap</code> like every other layout primitive,
+        so a flush grid is just <code>.gap-none</code>. Cells touch, the density
+        chain is untouched, and items still share one width — which is what
+        makes a seamless mosaic possible at all.
+      </p>
+      <div class="stage container-query" data-stage>
+        <p class="stage-meter">
+          <span>container <b data-width>&mdash;</b></span>
+          <span class="badge" data-count>&mdash;</span>
+        </p>
+        <div class="grid-6 gap-none" data-grid>
+          <div class="mosaic-cell">01</div>
+          <div class="mosaic-cell">02</div>
+          <div class="mosaic-cell">03</div>
+          <div class="mosaic-cell">04</div>
+          <div class="mosaic-cell">05</div>
+          <div class="mosaic-cell">06</div>
+          <div class="mosaic-cell">07</div>
+          <div class="mosaic-cell">08</div>
+          <div class="mosaic-cell">09</div>
+          <div class="mosaic-cell">10</div>
+          <div class="mosaic-cell">11</div>
+          <div class="mosaic-cell">12</div>
+        </div>
+      </div>
+      <p class="grid-note">
+        Twelve cells, so every state in the <code>6 &rarr; 3 &rarr; 2 &rarr; 1</code>
+        chain divides the collection exactly — no partial row at any width. That
+        is the pairing to aim for: choose a collection size that is a multiple of
+        the density you declared.
+      </p>
+    </section>
+
+    <section class="center stack grid-section">
+      <h2>6. Density — <code>--gap</code> and the spacing utilities</h2>
+      <p class="grid-note">
+        Set <code>--gap</code> to change the rhythm of a grid. It is the same
+        relay <code>.stack</code>, <code>.cluster</code>, and
+        <code>.switcher</code> read, so one declaration retunes a whole
+        composition rather than one class.
+      </p>
+      <div class="compare">
+        <div class="compare-col">
+          <h3>Tight — <code>--gap: var(--space-15)</code></h3>
+          <div class="stage container-query" data-stage>
+            <p class="stage-meter">
+              <span>container <b data-width>&mdash;</b></span>
+              <span class="badge" data-count>&mdash;</span>
+            </p>
+            <div class="grid-4" data-grid style="--gap: var(--space-15)">
+              <div class="tile">1</div>
+              <div class="tile">2</div>
+              <div class="tile">3</div>
+              <div class="tile">4</div>
+              <div class="tile">5</div>
+              <div class="tile">6</div>
+              <div class="tile">7</div>
+              <div class="tile">8</div>
+            </div>
+          </div>
+        </div>
+        <div class="compare-col">
+          <h3>Airy — <code>--gap: var(--space-50)</code></h3>
+          <div class="stage container-query" data-stage>
+            <p class="stage-meter">
+              <span>container <b data-width>&mdash;</b></span>
+              <span class="badge" data-count>&mdash;</span>
+            </p>
+            <div class="grid-4" data-grid style="--gap: var(--space-50)">
+              <div class="tile">1</div>
+              <div class="tile">2</div>
+              <div class="tile">3</div>
+              <div class="tile">4</div>
+              <div class="tile">5</div>
+              <div class="tile">6</div>
+              <div class="tile">7</div>
+              <div class="tile">8</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="grid-note">
+        Both stages keep the same <code>4 &rarr; 2 &rarr; 1</code> chain at the
+        same thresholds: spacing is independent of density.
+      </p>
+      <div class="alert warning admonition grid-pitfall" role="note">
+        <div class="alert-title">
+          <i class="ti ti-alert-triangle" aria-hidden="true"></i>
+          Pitfall &mdash; prefer <code>--gap</code> to the gap utilities on a bare preset
+        </div>
+        <div class="alert-body">
+          <p>
+            <code>.gap-sm</code> and <code>.gap-lg</code> set the
+            <code>gap</code> property without updating <code>--gap</code>, and
+            the unwrapped baseline sizes its tracks from <code>--gap</code>. The
+            two then disagree, and a bare <code>.grid-4.gap-lg</code> stops one
+            column short of four.
+          </p>
+          <p>
+            <code>.gap-none</code> is safe at every width, and inside
+            <code>.container-query</code> the column count is fixed per step, so
+            any form is exact. Setting <code>--gap</code> directly is exact
+            everywhere &mdash; and it retunes the whole composition, since
+            <code>.stack</code>, <code>.cluster</code>, and
+            <code>.switcher</code> read the same relay.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="center stack grid-section">
+      <h2>7. When none of them is the answer</h2>
+      <p class="grid-note">
+        A grid preset balances a collection of peers. Three shapes are not that,
+        and each has its own primitive.
+      </p>
+      <ul class="grid-note">
+        <li>
+          <strong>Main content plus an aside</strong> —
+          <code>.sidebar-layout</code>, not
+          <code>--grid-columns: 2fr 1fr</code>.
+        </li>
+        <li>
+          <strong>Peer regions that must be all horizontal or all stacked</strong>
+          — <code>.switcher</code>. A grid may leave a partial final row; a
+          switcher never can.
+        </li>
+        <li>
+          <strong>An exact or asymmetric template</strong> —
+          <code>--grid-columns</code> on <code>.grid</code>. Once you set it,
+          the collapse behavior is yours to write.
+        </li>
+      </ul>
+      <div class="stage" data-stage>
+        <p class="stage-meter">
+          <span>container <b data-width>&mdash;</b></span>
+          <span>three peers &mdash; never two plus one</span>
+        </p>
+        <div class="switcher">
+          <section class="card stack">
+            <h4>01 / Install</h4>
+            <p>Add the stylesheet.</p>
+          </section>
+          <section class="card stack">
+            <h4>02 / Compose</h4>
+            <p>Reach for a primitive.</p>
+          </section>
+          <section class="card stack">
+            <h4>03 / Ship</h4>
+            <p>No build step required.</p>
+          </section>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    /* Live readout. The observed box is the stage, so the numbers demonstrate
+       that the grids follow their allocated width rather than the viewport. */
+    const columnsOf = (grid) => {
+      const items = [...grid.children];
+      if (items.length === 0) return 0;
+      const top = Math.round(items[0].getBoundingClientRect().top);
+      return items.filter((el) => Math.round(el.getBoundingClientRect().top) === top).length;
+    };
+
+    for (const stage of document.querySelectorAll("[data-stage]")) {
+      const widthOut = stage.querySelector("[data-width]");
+      const countOut = stage.querySelector("[data-count]");
+      const grid = stage.querySelector("[data-grid]");
+
+      const update = () => {
+        if (widthOut) {
+          widthOut.textContent = `${Math.round(stage.getBoundingClientRect().width)}px`;
+        }
+        if (countOut && grid) {
+          const count = columnsOf(grid);
+          countOut.textContent = count === 1 ? "1 column" : `${count} columns`;
+        }
+      };
+
+      new ResizeObserver(update).observe(stage);
+      update();
+    }
+  </script>
+</body>
+
+</html>

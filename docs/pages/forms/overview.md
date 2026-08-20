@@ -12,23 +12,23 @@
 
 ## Class reference
 
-| Class | Kind | Description |
-|---|---|---|
-| `.input` | Component | Text input; shares the text-control recipe with `.textarea` and `.select`. |
-| `.textarea` | Component | Multi-line text control. |
-| `.select` | Component | Dropdown — native baseline with a CSS chevron and an opt-in enhanced picker. |
-| `.check` | Component | Styled checkbox. |
-| `.radio` | Component | Styled radio button. |
-| `.switch` | Component | Toggle switch on a checkbox input with `role="switch"`. |
-| `.range` | Component | Native range slider with a theme-aware accent color. |
-| `.file` | Component | Native file input with a themed picker button. |
-| `.color` | Component | Native color picker in a control-sized box. |
-| `.field` | Composition | Field wrapper that works on `<label>` and `<div>`. |
-| `.field-label` | Composition | Label text; element-agnostic — `<span>`, detached `<label>`, or `<legend>`. |
-| `.field-help` | Composition | Supporting helper text under a control. |
-| `.field-error` | Composition | Inline error message shown while the field is invalid. |
-| `.field-group` | Composition | Grouped `<fieldset>` container with a tunable legend gutter. |
-| `.choice` | Composition | Choice-label layout wrapping a `.check`, `.radio`, or `.switch`. |
+| Class           | Kind        | Description                                                                   |
+|-----------------|-------------|-------------------------------------------------------------------------------|
+| `.input`        | Component   | Text input; shares the text-control recipe with `.textarea` and `.select`.    |
+| `.textarea`     | Component   | Multi-line text control.                                                      |
+| `.select`       | Component   | Dropdown — native baseline with a CSS chevron and an opt-in enhanced picker.  |
+| `.check`        | Component   | Styled checkbox.                                                              |
+| `.radio`        | Component   | Styled radio button.                                                          |
+| `.switch`       | Component   | Toggle switch on a checkbox input with `role="switch"`.                       |
+| `.range`        | Component   | Native range slider with a theme-aware accent color.                          |
+| `.file`         | Component   | Native file input with a themed picker button.                                |
+| `.color`        | Component   | Native color picker in a control-sized box.                                   |
+| `.field`        | Composition | Field wrapper that works on `<label>` and `<div>`.                            |
+| `.field-label`  | Composition | Label text; element-agnostic — `<span>`, detached `<label>`, or `<legend>`.   |
+| `.field-help`   | Composition | Supporting helper text under a control.                                       |
+| `.field-error`  | Composition | Inline error message shown while the field is invalid.                        |
+| `.field-group`  | Composition | Grouped `<fieldset>` container with a tunable legend gutter.                  |
+| `.choice`       | Composition | Choice-label layout wrapping a `.check`, `.radio`, or `.switch`.              |
 | `.form-actions` | Composition | Class-only flex row that closes a form; works inside or outside the `<form>`. |
 
 ## Example form

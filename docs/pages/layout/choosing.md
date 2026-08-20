@@ -3,15 +3,15 @@
 Choose a primitive from the relationship between its children, not from the
 number of children visible in one mockup.
 
-| Situation | Primitive |
-| --- | --- |
-| Vertical flow | `.stack` |
-| Inline actions, tags, or navigation that may wrap | `.cluster` |
-| Responsive collection; an incomplete final row is acceptable | `.grid` |
-| Exact structural column count | `.grid-N` |
-| Peer regions that must switch together | `.switcher` |
-| Main content followed by a secondary region | `.sidebar-layout` |
-| Fixed media followed by flexible content | `.media` |
+| Situation                                                    | Primitive         |
+|--------------------------------------------------------------|-------------------|
+| Vertical flow                                                | `.stack`          |
+| Inline actions, tags, or navigation that may wrap            | `.cluster`        |
+| Responsive collection; an incomplete final row is acceptable | `.grid`           |
+| Exact structural column count                                | `.grid-N`         |
+| Peer regions that must switch together                       | `.switcher`       |
+| Main content followed by a secondary region                  | `.sidebar-layout` |
+| Fixed media followed by flexible content                     | `.media`          |
 
 For cards, products, results, and galleries, start with `.grid`. Use a fixed
 `.grid-N` only when N columns remain part of the structure at every width. If

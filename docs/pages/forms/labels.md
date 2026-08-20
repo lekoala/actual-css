@@ -4,11 +4,11 @@
 
 ## Class reference
 
-| Class | Kind | Description |
-|---|---|---|
-| `.field` | Composition | Field wrapper; canonical on `<label>` or `<div>`. |
-| `.field-label` | Composition | Label text, element-agnostic — works on `<span>`, a detached `<label for>`, or a `<legend>`. |
-| `.required-mark` | Composition | Visual required marker (`aria-hidden`) added inside a label. |
+| Class            | Kind        | Description                                                                                  |
+|------------------|-------------|----------------------------------------------------------------------------------------------|
+| `.field`         | Composition | Field wrapper; canonical on `<label>` or `<div>`.                                            |
+| `.field-label`   | Composition | Label text, element-agnostic — works on `<span>`, a detached `<label for>`, or a `<legend>`. |
+| `.required-mark` | Composition | Visual required marker (`aria-hidden`) added inside a label.                                 |
 
 Use a **wrapped label** for simple hand-authored forms. The whole label area becomes the click target, there is no `id` noise, and the markup is harder to break.
 

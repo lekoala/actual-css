@@ -10,10 +10,10 @@
 
 ## Class reference
 
-| Class | Kind | Description |
-|---|---|---|
-| `.skeleton` | Component | Animated placeholder shape. |
-| `data-shape` | Modifier | Geometry presets: `text`, `title`, `avatar`, `box`. |
+| Class        | Kind      | Description                                         |
+|--------------|-----------|-----------------------------------------------------|
+| `.skeleton`  | Component | Animated placeholder shape.                         |
+| `data-shape` | Modifier  | Geometry presets: `text`, `title`, `avatar`, `box`. |
 
 ## Basic usage
 

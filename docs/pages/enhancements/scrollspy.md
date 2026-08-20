@@ -8,11 +8,11 @@ or style `[aria-current]` yourself.
 
 ## Class reference
 
-| Class | Kind | Description |
-|---|---|---|
-| `.scrollspy` | Component | Marks the nav region for the enhancer; adds no visual styles. |
-| `.nav-list` | Composition | Vertical list of navigation links. |
-| `.nav-link` | Component | Navigation link whose active state comes from `[aria-current]`. |
+| Class        | Kind        | Description                                                     |
+|--------------|-------------|-----------------------------------------------------------------|
+| `.scrollspy` | Component   | Marks the nav region for the enhancer; adds no visual styles.   |
+| `.nav-list`  | Composition | Vertical list of navigation links.                              |
+| `.nav-link`  | Component   | Navigation link whose active state comes from `[aria-current]`. |
 
 ## Usage
 

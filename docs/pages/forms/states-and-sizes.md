@@ -4,10 +4,10 @@
 
 ## Class reference
 
-| Class | Kind | Description |
-|---|---|---|
+| Class | Kind     | Description                                                                              |
+|-------|----------|------------------------------------------------------------------------------------------|
 | `.sm` | Modifier | Compact control height and spacing rhythm; sets `--control-size` to `--control-size-sm`. |
-| `.lg` | Modifier | Large control height and spacing rhythm; sets `--control-size` to `--control-size-lg`. |
+| `.lg` | Modifier | Large control height and spacing rhythm; sets `--control-size` to `--control-size-lg`.   |
 
 Use `readonly` for text-like values that can still be focused, selected, and submitted. Use `disabled` for unavailable controls that should not receive focus or submit a value.
 

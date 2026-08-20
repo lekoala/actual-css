@@ -4,10 +4,10 @@
 
 ## Class reference
 
-| Class | Kind | Description |
-|---|---|---|
-| `.choice-card` | Component | Card-style `<label>` wrapping a native radio or checkbox; the whole card is the click target. |
-| `.primary` / `.secondary` | Intent | Intent accent for the selected state (supported on the card). |
+| Class                     | Kind      | Description                                                   |
+|---------------------------|-----------|---------------------------------------------------------------|
+| `.choice-card`            | Component | Card-style `<label>` wrapping a native radio or checkbox.     |
+| `.primary` / `.secondary` | Intent    | Intent accent for the selected state (supported on the card). |
 
 - Use `.choice-card` on a `<label>` wrapping a native `<input type="radio">` or `<input type="checkbox">`. The input is visually hidden; in browsers without `:has()` it stays visible so selection state never disappears.
 - Selected items show a primary border, subtle background tint, and a checkmark badge at the top-right corner — round for radio, rounded square for checkbox.

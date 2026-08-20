@@ -194,11 +194,14 @@
       </div>
     </section>
 
-    <section class="center layout-section" id="grid-fixed">
-      <h2>6. Fixed grid — <code>.grid-3</code> alone</h2>
+    <section class="center layout-section" id="grid-density">
+      <h2>6. Density preset — <code>.grid-3</code> alone</h2>
       <p class="layout-note">
-        <code>.grid-3</code> is intentionally a fixed three-column structure at
-        every width. Use <code>.grid</code> for a responsive collection.
+        <code>.grid-3</code> declares a structural density of three columns. It
+        never exceeds three, never overflows, and keeps every item the same
+        width — with no wrapper. Left alone it steps down one column at a time.
+        Use <code>.grid</code> when the item width, not the density, is the
+        contract.
       </p>
 
       <div class="layout-example">
@@ -210,12 +213,15 @@
       </div>
     </section>
 
-    <section class="center layout-section" id="grid-responsive">
-      <h2>7. Fixed grid — ancestor invariance</h2>
+    <section class="center layout-section" id="grid-subdivision">
+      <h2>7. Density preset — balanced subdivision</h2>
       <p class="layout-note">
-        A <code>.container-query</code> ancestor does not alter a layout
-        primitive. This remains exactly three columns and protects the stable
-        meaning of <code>.grid-3</code>.
+        Inside a <code>.container-query</code> ancestor, the same preset only
+        enters a divisor of its density: <code>3 → 1</code>. Two columns are
+        skipped on purpose, because three items in two columns would leave a
+        lone third. The wrapper is an opt-in for that precision, never a
+        prerequisite for responsive behavior — see the
+        <a href="./grid.html">grid density</a> page for the full chains.
       </p>
 
       <div class="layout-example container-query">

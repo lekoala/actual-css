@@ -4,13 +4,13 @@
 
 ## Class reference
 
-| Class | Kind | Description |
-|---|---|---|
-| `.modal` | Component | Centered modal surface built on the native `<dialog>` element. |
-| `.scrollable` | Variant | Keeps the header and footer visible while the dialog body scrolls. |
-| `.dialog-confirmation` | Variant | Separates a confirmation message from its full-width action band. |
-| `.dialog-icon` | Component | Circular intent-aware icon well for confirmation messages. |
-| `.dialog-close` | Component | Icon-only close button anchored to the modal's top end, out of the content flow. |
+| Class                  | Kind      | Description                                                                      |
+|------------------------|-----------|----------------------------------------------------------------------------------|
+| `.modal`               | Component | Centered modal surface built on the native `<dialog>` element.                   |
+| `.scrollable`          | Variant   | Keeps the header and footer visible while the dialog body scrolls.               |
+| `.dialog-confirmation` | Variant   | Separates a confirmation message from its full-width action band.                |
+| `.dialog-icon`         | Component | Circular intent-aware icon well for confirmation messages.                       |
+| `.dialog-close`        | Component | Icon-only close button anchored to the modal's top end, out of the content flow. |
 
 ## Usage
 

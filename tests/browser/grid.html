@@ -5,16 +5,35 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Grid reflow fixture</title>
   <link rel="stylesheet" href="../../src/css/actual.full.css">
-  <style>* { transition-duration: 0s !important; }</style>
+  <style>
+    * { transition-duration: 0s !important; }
+    /* Fixed-width wrappers: every assertion is about the space allocated to
+       the grid, never about the viewport. */
+    .probe { width: var(--w); }
+  </style>
 </head>
 <body>
   <div class="grid">
-    <div>1</div>
-    <div>2</div>
-    <div>3</div>
-    <div>4</div>
-    <div>5</div>
-    <div>6</div>
+    <div>1</div><div>2</div><div>3</div><div>4</div><div>5</div><div>6</div>
   </div>
+
+  <div id="presets"></div>
+
+  <script>
+    const WIDTHS = [320, 400, 530, 640, 790, 900, 1040, 1200, 1400, 1560];
+    const host = document.getElementById("presets");
+    for (const w of WIDTHS) {
+      for (const n of [2, 3, 4, 6]) {
+        for (const wrapped of [false, true]) {
+          const probe = document.createElement("div");
+          probe.className = "probe";
+          probe.style.setProperty("--w", w + "px");
+          const grid = `<div class="grid-${n}" data-preset="${n}" data-width="${w}" data-mode="${wrapped ? "cq" : "bare"}">${"<div>i</div>".repeat(6)}</div>`;
+          probe.innerHTML = wrapped ? `<div class="container-query">${grid}</div>` : grid;
+          host.append(probe);
+        }
+      }
+    }
+  </script>
 </body>
 </html>

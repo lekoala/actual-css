@@ -65,11 +65,11 @@ documentation homepages) import it manually:
 
 The module exposes three size tokens and three composed classes. It is deliberately not the foundation: body text, app UI, and the default prose scale stay static.
 
-| Token | Class | Purpose |
-|---|---|---|
-| `--fluid-display` | `.text-display` | Hero / display sizes. |
-| `--fluid-title` | `.text-title` | Section titles. |
-| `--fluid-lead` | `.text-lead` | Intro paragraphs on display surfaces. |
+| Token             | Class           | Purpose                               |
+|-------------------|-----------------|---------------------------------------|
+| `--fluid-display` | `.text-display` | Hero / display sizes.                 |
+| `--fluid-title`   | `.text-title`   | Section titles.                       |
+| `--fluid-lead`    | `.text-lead`    | Intro paragraphs on display surfaces. |
 
 There is also a non-fluid `.lead` utility in the core, for a simple readable intro paragraph. The fluid module does not redefine `.lead`; it adds a separate `.text-lead` for display contexts. This avoids a fluid import silently changing how existing markup renders.
 

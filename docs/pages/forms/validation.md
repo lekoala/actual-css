@@ -4,14 +4,14 @@
 
 ## Class reference
 
-| Class | Kind | Description |
-|---|---|---|
-| `.field-error` | Composition | Canonical inline error message; shown while the field is invalid. |
-| `.field-help` | Composition | Canonical helper text; carries supporting copy before and after validation. |
-| `.field.danger` | Modifier | Manual invalid marking on the field wrapper. |
-| `.needs-validation` | Modifier | Opt-in class for the validation enhancer and `:user-invalid` styling. |
-| `.was-validated` | Modifier | Added to the form by the enhancer after the first submit attempt. |
-| `.status-bar` | Component | Optional status element that shows `data-validation-message` on invalid submit. |
+| Class               | Kind        | Description                                                                     |
+|---------------------|-------------|---------------------------------------------------------------------------------|
+| `.field-error`      | Composition | Canonical inline error message; shown while the field is invalid.               |
+| `.field-help`       | Composition | Canonical helper text; carries supporting copy before and after validation.     |
+| `.field.danger`     | Modifier    | Manual invalid marking on the field wrapper.                                    |
+| `.needs-validation` | Modifier    | Opt-in class for the validation enhancer and `:user-invalid` styling.           |
+| `.was-validated`    | Modifier    | Added to the form by the enhancer after the first submit attempt.               |
+| `.status-bar`       | Component   | Optional status element that shows `data-validation-message` on invalid submit. |
 
 - `.field-error` is the canonical error message. It is wired to `aria-invalid="true"` via the input, so the visual border and the assistive-tech announcement move together.
 - `.field-help` is the canonical helper text. It carries supporting copy before and after validation.

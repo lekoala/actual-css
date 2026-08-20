@@ -16,18 +16,18 @@
 
 ## Class reference
 
-| Class | Kind | Description |
-|---|---|---|
-| `.alert` | Component | Inline status surface; soft by default. |
-| `.alert-icon` | Composition | Decorative leading icon; pins to the first grid column. |
-| `.alert-dismiss` | Modifier | Compact dismiss button using the `--icon-close` mask and the `--dismiss` command. |
-| `.callout` | Variant | Neutral panel with a thick accent border on the leading edge. |
-| `.admonition` | Variant | Structured box with a tinted title bar and body on the page surface. |
-| `.alert-title` | Composition | Admonition title bar; hosts the dismiss button. |
-| `.alert-body` | Composition | Admonition body resting on the page surface. |
-| Shared intents | Intent | `.primary`, `.secondary`, `.success`, `.warning`, `.danger`. |
-| Shared variants | Variant | `.solid` and `.outline` emphasis. |
-| `.sm` / `.lg` | Size | Density; inline padding stays stable. |
+| Class            | Kind        | Description                                                                       |
+|------------------|-------------|-----------------------------------------------------------------------------------|
+| `.alert`         | Component   | Inline status surface; soft by default.                                           |
+| `.alert-icon`    | Composition | Decorative leading icon; pins to the first grid column.                           |
+| `.alert-dismiss` | Modifier    | Compact dismiss button using the `--icon-close` mask and the `--dismiss` command. |
+| `.callout`       | Variant     | Neutral panel with a thick accent border on the leading edge.                     |
+| `.admonition`    | Variant     | Structured box with a tinted title bar and body on the page surface.              |
+| `.alert-title`   | Composition | Admonition title bar; hosts the dismiss button.                                   |
+| `.alert-body`    | Composition | Admonition body resting on the page surface.                                      |
+| Shared intents   | Intent      | `.primary`, `.secondary`, `.success`, `.warning`, `.danger`.                      |
+| Shared variants  | Variant     | `.solid` and `.outline` emphasis.                                                 |
+| `.sm` / `.lg`    | Size        | Density; inline padding stays stable.                                             |
 
 ## Basic usage
 

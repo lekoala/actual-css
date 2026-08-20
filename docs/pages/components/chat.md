@@ -36,13 +36,13 @@ put `role="log"` on individual messages.
 
 ## Class reference
 
-| Class | Description |
-|---|---|
-| `.chat` | Message row grid. |
-| `.chat-start` / `.chat-end` | Logical inline placement. |
-| `.chat-avatar` | Avatar grid slot; compose it with `.avatar`. |
-| `.chat-header` / `.chat-footer` | Muted message metadata. |
-| `.chat-bubble` | Content-sized message surface. |
+| Class                           | Description                                  |
+|---------------------------------|----------------------------------------------|
+| `.chat`                         | Message row grid.                            |
+| `.chat-start` / `.chat-end`     | Logical inline placement.                    |
+| `.chat-avatar`                  | Avatar grid slot; compose it with `.avatar`. |
+| `.chat-header` / `.chat-footer` | Muted message metadata.                      |
+| `.chat-bubble`                  | Content-sized message surface.               |
 
 ## CSS hooks
 

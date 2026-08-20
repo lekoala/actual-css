@@ -1,6 +1,13 @@
-/* Local container-query opt-in. Use it for a component that explicitly
-   changes representation according to its allocated inline size. Layout
-   primitives are intrinsic and do not require this wrapper. */
+/* Local container-query opt-in: establishes an inline-size query context for
+   descendants. Use it for a component that changes representation according
+   to its allocated inline size, and to opt .grid-N into balanced subdivision
+   (see grid.css). Layout primitives are responsive without it — this adds
+   precision, it is never a prerequisite.
+
+   The element takes inline-size containment, so put it on a normal
+   block-level wrapper, never on a shrink-to-fit item (a .cluster child, a
+   float, an inline-block): its contents would stop contributing to its own
+   inline size and it would collapse. */
 .container-query {
   container-type: inline-size;
 }
