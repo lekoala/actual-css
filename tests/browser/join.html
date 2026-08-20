@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Join outline border contract fixture</title>
+  <link rel="stylesheet" href="../../src/css/actual.full.css">
+  <style>* { transition-duration: 0s !important; }</style>
+</head>
+<body>
+  <!-- In a field join, a default outline action adopts the field border; an
+       explicit intent (.danger, .neutral) keeps its own outline color. -->
+  <div class="join" role="group">
+    <input class="input" id="join-input" value="x">
+    <button class="btn outline" id="join-default" type="button">Clear</button>
+  </div>
+
+  <div class="join" role="group">
+    <input class="input">
+    <button class="btn danger outline" id="join-danger" type="button">Delete</button>
+  </div>
+
+  <div class="join" role="group">
+    <input class="input">
+    <button class="btn neutral outline" id="join-neutral" type="button">Other</button>
+  </div>
+</body>
+</html>

@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Intent boundary fallback contract fixture</title>
+  <link rel="stylesheet" href="../../src/css/actual.full.css">
+  <style>* { transition-duration: 0s !important; }</style>
+</head>
+<body>
+  <!-- Token references keep assertions independent from the active palette. -->
+  <div id="ref-neutral" style="background: var(--neutral)"></div>
+  <div id="ref-primary" style="background: var(--primary)"></div>
+
+  <!-- The :where(.btn) intent boundary sets --intent to its guaranteed-invalid
+       initial value, so a neutral button falls back to --neutral rather than
+       substituting the literal keyword initial (which would be transparent). -->
+  <button id="btn-default" class="btn" type="button">Default</button>
+  <button id="btn-primary" class="btn primary" type="button">Primary</button>
+
+  <!-- The boundary also blocks an intent inherited from an ancestor context. -->
+  <div class="danger">
+    <button id="btn-inherit" class="btn" type="button">Inside danger wrapper</button>
+  </div>
+</body>
+</html>

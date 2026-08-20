@@ -16,9 +16,13 @@
  * and the reserved headroom with it, leaving typography untouched.
  *
  * Public hooks:
+ * --floating-label-top
+ * --floating-label-opacity
  * --floating-pad-block-start
  */
 .floating-field {
+  --floating-label-top: var(--space-10);
+  --floating-label-opacity: 0.8;
   --floating-pad-block-start: calc(var(--control-size) / 2 + var(--space-20));
 
   /* Grid blockifies the control, removing the inline descender gap a textarea
@@ -37,24 +41,30 @@
 
 .floating-field > .field-label {
   position: absolute;
-  inset-block-start: 50%;
   inset-inline-start: calc(var(--space-30) + var(--border-width));
-  transform: translateY(-50%);
   color: var(--text-muted);
   font-size: var(--control-font-size);
   font-weight: var(--font-weight);
+  opacity: var(--floating-label-opacity);
   pointer-events: none;
   transition:
     inset-block-start var(--duration),
     transform var(--duration),
     font-size var(--duration),
+    opacity var(--duration),
     color var(--duration);
 }
 
-/* A textarea's resting label aligns with the first text line instead of
-   centering in the (tall) control. */
+/* Single-line controls rest in the middle until they receive a value. */
+.floating-field > :is(.input, .select) + .field-label {
+  inset-block-start: 50%;
+  transform: translateY(-50%);
+}
+
+/* An empty textarea label follows the control's normal first-line position;
+   the control itself keeps the extra headroom reserved for its floated state. */
 .floating-field > .textarea + .field-label {
-  inset-block-start: var(--floating-pad-block-start);
+  inset-block-start: calc(1em + var(--border-width));
   transform: none;
 }
 
@@ -63,9 +73,10 @@
 .floating-field
   > :is(.input, .textarea):is(:focus, :autofill, :not(:placeholder-shown))
   + .field-label {
-  inset-block-start: var(--space-10);
+  inset-block-start: var(--floating-label-top);
   transform: none;
   font-size: var(--font-size-xs);
+  opacity: 1;
 }
 
 /* Controls without a dependable :placeholder-shown empty state stay floated:
@@ -81,7 +92,14 @@
     .input[type="week"]
   )
   + .field-label {
-  inset-block-start: var(--space-10);
+  inset-block-start: var(--floating-label-top);
   transform: none;
   font-size: var(--font-size-xs);
+  opacity: 1;
+}
+
+@media (forced-colors: active) {
+  .floating-field > .field-label {
+    opacity: 1;
+  }
 }

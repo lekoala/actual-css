@@ -115,3 +115,10 @@
   outline: none;
   box-shadow: none;
 }
+
+/* A default outline action belongs to the composite field border. An explicit
+   intent still provides its own outline color — --intent is guaranteed-invalid
+   for a neutral button (the :where(.btn) boundary), so the fallback applies. */
+.join:has(> :is(.input, .textarea, .select)) > .btn.outline {
+  --btn-border-color: var(--intent, var(--border));
+}

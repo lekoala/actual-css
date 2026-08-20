@@ -28,8 +28,9 @@ prefills a field still lifts the label.
 
 ## Textarea
 
-A textarea's resting label aligns with the first text line instead of centering
-in the tall control.
+A textarea's empty label starts at the control's normal first-line position,
+then floats to the same top anchor as the other controls when focused or
+filled. The control still reserves headroom so its text position never jumps.
 
 ```html demo
 <div class="field">
@@ -75,8 +76,12 @@ line on top of the control's minimum size.
 
 ## CSS hooks
 
+- `--floating-label-top` — shared top anchor for floated labels.
+- `--floating-label-opacity` — resting label opacity; floated labels return to
+  full opacity.
 - `--floating-pad-block-start` — headroom reserved above the control for the
-  floated label; defaults to half the control height plus one spacing step.
+  floated label; it also anchors an empty textarea label to its first text
+  line.
 
 Validation and focus come from the existing form contracts: the control's
 border and focus ring flip through `--form-invalid-border` and the shared
