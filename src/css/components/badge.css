@@ -191,3 +191,9 @@ a.badge[aria-disabled="true"] {
     color: GrayText;
   }
 }
+@media print {
+  .badge {
+    border: var(--border-width) solid CanvasText;
+    break-inside: avoid;
+  }
+}

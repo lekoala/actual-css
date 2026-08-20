@@ -137,3 +137,8 @@ dialog.drawer > header,
 dialog.drawer > form > header {
   padding-inline-end: calc(var(--control-size) + var(--space-30));
 }
+@media print {
+  dialog.drawer[open] {
+    display: none !important;
+  }
+}

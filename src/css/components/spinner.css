@@ -57,3 +57,8 @@
     transform: rotate(360deg);
   }
 }
+@media print {
+  .spinner {
+    display: none !important;
+  }
+}

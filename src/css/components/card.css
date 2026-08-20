@@ -126,3 +126,9 @@
 .card > :where(header, footer, figure).bleed {
   padding: var(--card-pad);
 }
+@media print {
+  .card {
+    border: var(--border-width) solid CanvasText;
+    break-inside: avoid;
+  }
+}

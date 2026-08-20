@@ -301,10 +301,10 @@
 
     <section class="center block-section" id="compact-metrics">
       <h2>Compact metrics</h2>
-      <p class="block-note">Validates `.grid-6` for small repeated items: two columns when narrow, three columns in medium containers, six columns when the row has room.</p>
+      <p class="block-note">Compact repeated items use the intrinsic grid with a smaller useful item width; the column count follows available space.</p>
 
-      <div class="block-example container-query">
-        <div class="grid-6">
+      <div class="block-example">
+        <div class="grid" style="--grid-min: 7rem;">
           <article class="card compact">
             <span class="muted">Open</span>
             <strong>18</strong>

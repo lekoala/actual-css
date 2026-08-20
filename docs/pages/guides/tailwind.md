@@ -128,13 +128,11 @@ Actual:
 </div>
 ```
 
-If the grid should respond to its container:
+If these are independent items that should reflow with available space:
 
 ```html
-<div class="container-query">
-  <div class="grid-3">
-    ...
-  </div>
+<div class="grid" style="--grid-min: 16rem">
+  ...
 </div>
 ```
 

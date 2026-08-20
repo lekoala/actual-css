@@ -17,8 +17,8 @@ The `.sm` and `.lg` modifiers set the shared control tokens used by inputs, sele
 <form novalidate>
   <fieldset class="field-group">
     <legend class="field-label">Text control states</legend>
-    <div class="stack container-query">
-      <div class="grid-3 items-start">
+    <div class="stack" style="--grid-min: 14rem;">
+      <div class="grid items-start">
         <label class="field">
           <span class="field-label">Editable</span>
           <input class="input" type="text" value="Ocean Beach Clinic" />
@@ -37,7 +37,7 @@ The `.sm` and `.lg` modifiers set the shared control tokens used by inputs, sele
         </label>
       </div>
 
-      <div class="grid-3 items-start">
+      <div class="grid items-start">
         <label class="field">
           <span class="field-label">Editable notes</span>
           <textarea class="textarea">Patient asked for an invoice copy.</textarea>
@@ -58,8 +58,8 @@ The `.sm` and `.lg` modifiers set the shared control tokens used by inputs, sele
 
   <fieldset class="field-group">
     <legend class="field-label">Choice and select states</legend>
-    <div class="stack container-query">
-      <div class="grid-3 items-start">
+    <div class="stack" style="--grid-min: 14rem;">
+      <div class="grid items-start">
         <label class="field">
           <span class="field-label">Editable select</span>
           <select class="select">
@@ -131,7 +131,7 @@ The `.sm` and `.lg` modifiers set the shared control tokens used by inputs, sele
         </label>
       </div>
 
-      <div class="grid-4 items-start">
+      <div class="grid items-start">
         <label class="choice">
           <input class="radio" type="radio" name="demo-radio-state" />
           <span>
@@ -165,7 +165,7 @@ The `.sm` and `.lg` modifiers set the shared control tokens used by inputs, sele
         </label>
       </div>
 
-      <div class="grid-4 items-start">
+      <div class="grid items-start">
         <label class="choice">
           <input class="switch" type="checkbox" role="switch" />
           <span>
@@ -203,8 +203,8 @@ The `.sm` and `.lg` modifiers set the shared control tokens used by inputs, sele
 
   <fieldset class="field-group">
     <legend class="field-label">Control sizes</legend>
-    <div class="stack container-query">
-      <div class="grid-3 items-start">
+    <div class="stack" style="--grid-min: 14rem;">
+      <div class="grid items-start">
         <label class="field sm">
           <span class="field-label">Small field</span>
           <input class="input" type="text" value="sm" />
@@ -221,7 +221,7 @@ The `.sm` and `.lg` modifiers set the shared control tokens used by inputs, sele
         </label>
       </div>
 
-      <div class="grid-3 items-start">
+      <div class="grid items-start">
         <label class="field sm">
           <span class="field-label">Small select</span>
           <select class="select">
@@ -244,7 +244,7 @@ The `.sm` and `.lg` modifiers set the shared control tokens used by inputs, sele
         </label>
       </div>
 
-      <div class="grid-3 items-start">
+      <div class="grid items-start">
         <label class="field sm">
           <span class="field-label">Small textarea</span>
           <textarea class="textarea" rows="2">Short note</textarea>
@@ -261,13 +261,13 @@ The `.sm` and `.lg` modifiers set the shared control tokens used by inputs, sele
         </label>
       </div>
 
-      <div class="grid-3 items-start">
+      <div class="grid items-start">
         <button class="btn outline sm" type="button">Small</button>
         <button class="btn outline" type="button">Default</button>
         <button class="btn outline lg" type="button">Large</button>
       </div>
 
-      <div class="grid-4 items-start">
+      <div class="grid items-start">
         <label class="choice sm">
           <input class="check" type="checkbox" checked />
           <span>Small checkbox</span>
@@ -286,7 +286,7 @@ The `.sm` and `.lg` modifiers set the shared control tokens used by inputs, sele
         </label>
       </div>
 
-      <div class="grid-3 items-start">
+      <div class="grid items-start">
         <label class="choice sm">
           <input class="radio" type="radio" name="demo-radio-size" checked />
           <span>Small radio</span>
@@ -301,7 +301,7 @@ The `.sm` and `.lg` modifiers set the shared control tokens used by inputs, sele
         </label>
       </div>
 
-      <div class="grid-3 items-start">
+      <div class="grid items-start">
         <label class="choice sm">
           <input class="switch" type="checkbox" role="switch" checked />
           <span>Small switch</span>
