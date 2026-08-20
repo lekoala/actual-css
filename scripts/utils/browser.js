@@ -1,17 +1,15 @@
 /*
- * Actual CSS browser-test ergonomics on top of Bun.WebView.
+ * Actual CSS browser ergonomics on top of Bun.WebView.
  *
  * Bun owns the Chrome lifecycle (one headless Chrome per Bun process, one tab
- * per view, temp profile, cleanup at exit). This helper only encodes the
- * project's conventions: fixture URLs, availability gating, reduced-motion
- * emulation, and failure artifacts (screenshot + page console).
- *
- * Contrast with scripts/utils/chrome.js: that module is the hand-rolled CDP
- * browser runtime; this one assumes Bun.WebView is the runtime.
+ * per view, temp profile, cleanup at exit). This module only encodes the
+ * project's conventions on top of it: fixture URLs, availability gating,
+ * reduced-motion/color-scheme emulation, failure artifacts (screenshot + page
+ * console), and the full-page `capture` used by the shot: scripts.
  */
 
-import { mkdir } from "node:fs/promises";
-import { isAbsolute, join } from "node:path";
+import { mkdir, writeFile } from "node:fs/promises";
+import { dirname, isAbsolute, join } from "node:path";
 import { pathToFileURL } from "node:url";
 
 const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -19,6 +17,20 @@ const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 export function fixtureUrl(page, cwd = process.cwd()) {
   if (/^https?:/.test(page)) return page;
   return pathToFileURL(isAbsolute(page) ? page : join(cwd, page)).href;
+}
+
+/*
+ * Consumes `--flag value` pairs out of `args` (in place) and returns them keyed
+ * by flag, falling back to `fallback` when the flag is absent.
+ */
+export function readFlags(args, spec) {
+  const values = {};
+  for (const [flag, { fallback }] of Object.entries(spec)) {
+    const index = args.indexOf(flag);
+    values[flag] = index === -1 ? fallback : args[index + 1];
+    if (index !== -1) args.splice(index, 2);
+  }
+  return values;
 }
 
 let available;
@@ -86,4 +98,41 @@ export async function withBrowserPage(
     }
     throw error;
   }
+}
+
+/*
+ * Opens a headless-Chrome tab, navigates to `pageUrl`, applies the given media
+ * emulation, and saves a full-page screenshot to `out`. Returns `out`.
+ *
+ * `width` forces the exact layout viewport with device metrics — more reliable
+ * than the view size alone, because headless Chrome clamps window dimensions
+ * to a platform minimum. `beforeShot(view)` runs after load/settle and before
+ * the capture — use it to set state a screenshot needs (e.g. a theme).
+ */
+export async function capture(
+  pageUrl,
+  { out, mediaFeatures = [], settleMs = 400, width, beforeShot } = {},
+) {
+  await withBrowserPage(
+    pageUrl,
+    async (view) => {
+      if (width) {
+        await view.cdp("Emulation.setDeviceMetricsOverride", {
+          width,
+          height: 900,
+          deviceScaleFactor: 1,
+          mobile: false,
+        });
+      }
+      if (beforeShot) await beforeShot(view);
+      const shot = await view.cdp("Page.captureScreenshot", {
+        format: "png",
+        captureBeyondViewport: true,
+      });
+      await mkdir(dirname(out), { recursive: true });
+      await writeFile(out, Buffer.from(shot.data, "base64"));
+    },
+    { mediaFeatures, settleMs },
+  );
+  return out;
 }
