@@ -230,6 +230,41 @@
 block margins are reset, so vertical rhythm always comes from <code>--gap</code>. Inline
 margins stay free — for example <code>margin-inline: auto</code> on a child centers it
 without fighting the primitive.</p>
+<h2 id="grouping-items-tightly">Grouping items tightly</h2>
+<p>Stack spacing is a <code>--gap</code> between every direct child; the primitive cannot
+tighten two specific children by itself. To group a few items into one unit
+(a title and its description), nest a <code>.stack gap-none</code>:</p>
+<div class="docs-example">
+  <div class="docs-preview">
+<div class="stack">
+  <div class="stack gap-none">
+    <strong>Ada Meridian</strong>
+    <span class="muted">Senior designer working on design systems.</span>
+  </div>
+  <span class="badge success soft">Active</span>
+</div>
+  </div>
+  <div class="docs-code">
+    <pre><code class="language-html">&lt;div class=&quot;stack&quot;&gt;
+  &lt;div class=&quot;stack gap-none&quot;&gt;
+    &lt;strong&gt;Ada Meridian&lt;/strong&gt;
+    &lt;span class=&quot;muted&quot;&gt;Senior designer working on design systems.&lt;/span&gt;
+  &lt;/div&gt;
+  &lt;span class=&quot;badge success soft&quot;&gt;Active&lt;/span&gt;
+&lt;/div&gt;</code></pre>
+  </div>
+</div>
+<p>The outer stack keeps its rhythm between groups; the inner <code>gap-none</code> unit owns
+the tight pairing.</p>
+<p>For a one-off adjacency — pull a single child closer to its neighbour without
+adding a wrapper — the escape hatch is app CSS. <code>gap</code> and <code>margin-block</code> are
+additive, so a negative block margin on the child cancels the following gap:</p>
+<pre><code class="language-css">.stack &gt; .profile-row {
+  margin-block-end: calc(var(--gap) * -1);
+}
+</code></pre>
+<p>The stack resets child block margins to zero, so this re-adds a margin on that
+one child only; the rest of the stack keeps its rhythm.</p>
 
 </div>
 
@@ -249,7 +284,7 @@ without fighting the primitive.</p>
         <nav class="scrollspy" data-enhance="scrollspy" data-scrollspy-offset="80" aria-label="On this page">
           <p class="docs-nav-group">On this page</p>
           <ul class="nav-list docs-toc-list" data-docs-toc>
-
+        <li><a class="nav-link" href="#grouping-items-tightly" data-docs-toc-item data-level="2">Grouping items tightly</a></li>
           </ul>
         </nav>
       </aside>

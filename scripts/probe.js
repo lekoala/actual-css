@@ -13,6 +13,11 @@
  *
  * Anything JSON-serializable may be returned; exceptions are printed with a
  * non-zero exit. Chrome is located the same way as the shot: scripts.
+ *
+ * --width forces the exact layout viewport width with device metrics. It is
+ * more reliable than --window-size alone: headless Chrome clamps the window
+ * flag to a platform minimum (e.g. ~512px on Windows), which makes a
+ * "360px" probe silently render at ~512px.
  */
 
 import { readFile } from "node:fs/promises";
@@ -25,6 +30,7 @@ const flags = readFlags(args, {
   "--expr": { fallback: undefined },
   "--settle": { fallback: "400" },
   "--window-size": { fallback: "1100,900" },
+  "--width": { fallback: undefined },
 });
 
 const page = flags["--url"] ?? args[0] ?? "site/index.html";
@@ -50,6 +56,15 @@ try {
     toFileUrl(page),
     { windowSize: flags["--window-size"], settleMs },
     async ({ send }) => {
+      if (flags["--width"]) {
+        await send("Emulation.setDeviceMetricsOverride", {
+          width: Number(flags["--width"]),
+          height: 900,
+          deviceScaleFactor: 1,
+          mobile: false,
+        });
+      }
+
       const result = await send("Runtime.evaluate", {
         expression,
         awaitPromise: true,
