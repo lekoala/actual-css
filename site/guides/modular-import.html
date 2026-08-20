@@ -241,7 +241,7 @@ typography, layout, forms, components, effects, utilities.</p>
 <tr><td>Layout</td><td><code>actual-css/css/layout</code></td><td>stack, cluster, center, frame, media, switcher, sidebar-layout, grid, scroller, scroll-snap, topbar, container-query, app-shell</td></tr>
 <tr><td>Typography</td><td><code>actual-css/css/typography</code></td><td>prose, overline, fluid</td></tr>
 <tr><td>Forms</td><td><code>actual-css/css/forms</code></td><td>native controls; <code>actual-css/css/forms/all</code> for the complete family (input-icon, switch, range, choice-card, custom-select, floating-field, otp)</td></tr>
-<tr><td>Components</td><td><code>actual-css/css/components</code></td><td>button, card, badge, alert, dialog, drawer, flyout, menu, tab, tooltip, chat, fab, join, …</td></tr>
+<tr><td>Components</td><td><code>actual-css/css/components</code></td><td>button, card, badge, alert, modal, drawer, flyout, menu, tab, tooltip, chat, fab, join, …</td></tr>
 <tr><td>Effects</td><td><code>actual-css/css/effects</code></td><td>aura</td></tr>
 <tr><td>Utilities</td><td><code>actual-css/css/utilities</code></td><td>base, extra</td></tr>
 </tbody>
@@ -255,6 +255,15 @@ piece:</p>
 @import &quot;actual-css/css/typography/fluid&quot;;
 @import &quot;actual-css/css/utilities/extra&quot;;
 </code></pre>
+<h2 id="cascade-layer-recipes">Cascade layer recipes</h2>
+<p><code>actual-css/css/layer</code> contains the minimal core only. To place the complete
+framework in one project-owned layer, import the full bundle with a layer:</p>
+<pre><code class="language-css">@layer actual;
+@import &quot;actual-css/full&quot; layer(actual);
+</code></pre>
+<p>There is no separate full-layer bundle. When composing families individually,
+put the same <code>layer(actual)</code> modifier on every core or family import so none of
+the selected modules escapes the layer.</p>
 <h2 id="migrating-from-03">Migrating from 0.3</h2>
 <p>In 0.3 the bare <code>actual-css</code> import shipped the standard framework, but
 <strong>excluded</strong> the <code>optional</code> family; the all-in bundle was the separate
@@ -350,6 +359,7 @@ and button APIs.</p>
         <li><a class="nav-link" href="#the-two-entrypoints" data-docs-toc-item data-level="2">The two entrypoints</a></li>
         <li><a class="nav-link" href="#focus-is-a-core-invariant" data-docs-toc-item data-level="3">Focus is a core invariant</a></li>
         <li><a class="nav-link" href="#family-manifests" data-docs-toc-item data-level="2">Family manifests</a></li>
+        <li><a class="nav-link" href="#cascade-layer-recipes" data-docs-toc-item data-level="2">Cascade layer recipes</a></li>
         <li><a class="nav-link" href="#migrating-from-03" data-docs-toc-item data-level="2">Migrating from 0.3</a></li>
         <li><a class="nav-link" href="#entrypoint-map" data-docs-toc-item data-level="3">Entrypoint map</a></li>
         <li><a class="nav-link" href="#same-import-path-changed-semantics" data-docs-toc-item data-level="3">Same import path, changed semantics</a></li>

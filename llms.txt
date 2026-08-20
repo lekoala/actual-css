@@ -8,6 +8,11 @@ Actual CSS uses a small public grammar: `.component [intent] [variant] [size] [m
 
 - [Documentation source](docs/pages/): the docs pages, generated into `site/` by `bun run build:docs` (start at `site/index.html`).
 
+For responsive card/item collections, use `.grid`, not `.grid-N`.
+Use `.switcher` for all-or-nothing peer layouts and `.sidebar-layout`
+for main + aside compositions.
+See docs/pages/layout/choosing.md.
+
 ## Package Entrypoints
 
 `package.json#exports` is the canonical package surface. Use `actual-css` for the

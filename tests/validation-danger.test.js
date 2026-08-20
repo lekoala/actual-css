@@ -5,7 +5,7 @@ let importId = 0;
 
 async function loadValidation(html) {
   setupDOM(html);
-  await import(`../src/js/validation.js?danger=${++importId}`);
+  return import(`../src/js/validation.js?danger=${++importId}`);
 }
 
 afterEach(() => {
@@ -84,4 +84,25 @@ test("an application-supplied .danger is not removed by a blur-validated valid f
 
   expect(input.getAttribute("aria-invalid")).toBeNull();
   expect(field.classList.contains("danger")).toBe(true);
+});
+
+test("setErrors resolves collection property names and radio groups by field name", async () => {
+  const { default: FormValidator } = await loadValidation(`
+    <form data-enhance="validation">
+      <input name="length" />
+      <input type="radio" name="plan" value="monthly" />
+      <input type="radio" name="plan" value="yearly" />
+    </form>
+  `);
+  const form = document.querySelector("form");
+  const length = form.querySelector('[name="length"]');
+  const radios = [...form.querySelectorAll('[name="plan"]')];
+
+  FormValidator.setErrors(form, {
+    length: "Invalid length",
+    plan: "Choose a plan",
+  });
+
+  expect(length.getAttribute("aria-invalid")).toBe("true");
+  expect(radios.every((radio) => radio.getAttribute("aria-invalid") === "true")).toBe(true);
 });

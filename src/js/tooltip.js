@@ -28,6 +28,7 @@
  */
 
 import enhance from "./enhance.js";
+import { registerEscapeDismissal } from "./escape.js";
 import { autoUpdate, reposition } from "./floating.js";
 import { CLASSES } from "./selectors.js";
 
@@ -40,6 +41,8 @@ const HIDE_DELAY_MS = 100;
  * @property {Element | null} activeRef Trigger that last showed this tip.
  * @property {AbortController} controller Tip-level event listener cleanup.
  * @property {(() => void) | null} stopTracking Floating-position cleanup while visible.
+ * @property {(() => void) | null} unregisterEscape Escape-stack cleanup while visible and dismissable.
+ * @property {Element | null} escapeRef Trigger represented by the current Escape-stack entry.
  * @property {boolean} generated True when the tip was created from data-tooltip text.
  * @property {{ parent: Node, next: ChildNode | null } | null} mount Original DOM position for explicit tips moved into a dialog/body root.
  * @property {ReturnType<typeof setTimeout> | null} timer Pending delayed show.
@@ -148,7 +151,10 @@ function updateTrackedTip(tip, state) {
   // Reveal before measuring: an always-visible tooltip may currently be
   // hidden because its trigger was outside the positioning boundary.
   if (alwaysVisible) tip.hidden = false;
-  if (tip.hidden || repositionTip(ref, tip)) return;
+  if (tip.hidden || repositionTip(ref, tip)) {
+    syncEscapeDismissal(tip, state);
+    return;
+  }
 
   if (alwaysVisible) tip.hidden = true;
   else hideTip(tip, true);
@@ -165,6 +171,22 @@ function stopTracking(state) {
   if (state) state.stopTracking = null;
 }
 
+function syncEscapeDismissal(tip, state) {
+  const ref = state.activeRef;
+  const dismissable = !tip.hidden && !isAlwaysVisible(ref);
+  // Position tracking calls this after every successful update. Preserve the
+  // current entry so a scroll/resize tick cannot reorder the LIFO stack.
+  if (dismissable && state.unregisterEscape && state.escapeRef === ref) return;
+
+  state.unregisterEscape?.();
+  state.unregisterEscape = null;
+  state.escapeRef = null;
+  if (!dismissable) return;
+
+  state.unregisterEscape = registerEscapeDismissal(tip, () => hideTip(tip, true));
+  state.escapeRef = ref;
+}
+
 function hideTip(tip, force = false) {
   const state = tipStates.get(tip);
   if (!force && isAlwaysVisible(state?.activeRef)) return;
@@ -177,6 +199,11 @@ function hideTip(tip, force = false) {
     state.hideTimer = null;
   }
   tip.hidden = true;
+  state?.unregisterEscape?.();
+  if (state) {
+    state.unregisterEscape = null;
+    state.escapeRef = null;
+  }
   stopTracking(state);
 }
 
@@ -212,6 +239,8 @@ function wireTip(tip, options = {}) {
     activeRef: null,
     controller,
     stopTracking: null,
+    unregisterEscape: null,
+    escapeRef: null,
     generated: options.generated === true,
     mount: options.mount || null,
     timer: null,
@@ -234,17 +263,6 @@ function wireTip(tip, options = {}) {
     () => {
       state.overTip = false;
       scheduleHide(tip);
-    },
-    { signal: controller.signal },
-  );
-
-  tip.ownerDocument.addEventListener(
-    "keydown",
-    (event) => {
-      if (event.key !== "Escape" || event.ctrlKey || event.altKey || event.shiftKey) return;
-      if (tip.hidden) return;
-      event.preventDefault();
-      hideTip(tip);
     },
     { signal: controller.signal },
   );
@@ -349,6 +367,7 @@ function show(tip, ref, immediate = false) {
   if (!state) return;
 
   state.activeRef = ref;
+  syncEscapeDismissal(tip, state);
   clearHide(tip);
   if (state.timer) clearTimeout(state.timer);
   const reveal = () => {

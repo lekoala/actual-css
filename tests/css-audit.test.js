@@ -398,6 +398,17 @@ test("theme-derived aliases are declared on :root, [data-theme] so islands recom
   }
   // color-mix shadows re-derive from --shadow-color on the theme boundary
   expect(tokensCss).toMatch(/@supports \(color: color-mix\(in oklch, red, white\)\)\s*\{\s*:root,\s*\n\s*\[data-theme\]\s*\{[\s\S]*--shadow:/);
+
+  // Accessibility overrides must cross every named theme boundary too.
+  expect(tokensCss).toMatch(
+    /@media \(forced-colors: active\)\s*\{\s*:root,\s*\n\s*\[data-theme\]\s*\{[\s\S]*--state-selected:/,
+  );
+  expect(themeCss).toMatch(
+    /@media \(forced-colors: active\)\s*\{\s*:root,\s*\n\s*\[data-theme\]\s*\{[\s\S]*--focus-ring-shadow:/,
+  );
+  expect(themeCss).toMatch(
+    /@media \(prefers-contrast: more\)\s*\{\s*:root,[\s\S]*\[data-theme\]\[data-theme\]\s*\{[\s\S]*--text-muted:/,
+  );
 });
 
 test("controls inside a disabled fieldset match :disabled by inheritance", () => {
@@ -427,8 +438,17 @@ test("optional OTP keeps one native input and covers validation states", () => {
   expect(css).toMatch(/\.otp\s*\{[\s\S]*border-radius:\s*var\(--radius\);/);
   expect(css).toContain("overflow: clip;");
   expect(css).not.toContain("overflow: hidden;");
+  // Focus is carried by the cell edge, never by a ring around the whole group.
   expect(css).not.toContain(".otp:focus-within");
+  expect(css).not.toContain(".otp:has(");
+  expect(css).not.toContain("--focus-ring-shadow");
   expect(css).toContain(".otp > input:focus ~ span");
+  expect(css).toMatch(
+    /\.otp > input:focus ~ span\s*\{[\s\S]*?--otp-cell-border-width:\s*calc\(var\(--border-width\) \* 2\);/,
+  );
+  expect(css).toMatch(
+    /\.otp > span\s*\{[\s\S]*?border:\s*var\(--otp-cell-border-width, var\(--border-width\)\) solid/,
+  );
   expect(css).toContain("inline-size: calc(100% + var(--otp-caret-space));");
   expect(css).toContain("padding-inline: calc((var(--otp-cell-size) - 1ch) / 2) 0;");
   expect(css).toContain('input[aria-invalid="true"] ~ span');

@@ -190,7 +190,8 @@ select {
 }
 
 @media (forced-colors: active) {
-  :root {
+  :root,
+  [data-theme] {
     --state-selected: Highlight;
     --state-selected-fg: HighlightText;
     --state-disabled: GrayText;
@@ -411,8 +412,7 @@ select {
 
 @media (forced-colors: active) {
   :root,
-  [data-theme="light"],
-  [data-theme="dark"] {
+  [data-theme] {
     --focus-outline-color: Highlight;
     --focus-ring-shadow: none;
 
@@ -422,8 +422,9 @@ select {
 
 @media (prefers-contrast: more) {
   :root,
-  [data-theme="light"],
-  [data-theme="dark"] {
+  /* The repeated attribute intentionally outranks single-attribute preset
+     palettes, including a preset stylesheet loaded after the core. */
+  [data-theme][data-theme] {
     --border-width: 2px;
     --focus-outline-offset: 3px;
     --focus-ring-width: 4px;

@@ -91,7 +91,7 @@
 /* Keep an active focus ring above an adjacent hovered control. This matters
    on platforms where clicking a button does not move focus from the input. */
 .join > :is(:focus, :focus-within) {
-  z-index: 2;
+  z-index: 4;
 }
 
 /* An input's border must read as the "primary" edge against an attached

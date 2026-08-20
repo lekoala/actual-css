@@ -144,10 +144,29 @@ function connectTrigger(trigger) {
   trigger.addEventListener("keydown", onTriggerKeydown, { signal: controller.signal });
 }
 
-function resolvePanel(trigger, state) {
-  if (state.panel?.isConnected) return state.panel;
+function releasePanelReference(trigger, state) {
+  state.releaseMenu?.();
+  state.releaseMenu = null;
 
+  const panel = state.panel;
+  state.panel = null;
+  if (!panel) return;
+
+  const panelEntry = panelRefs.get(panel);
+  if (!panelEntry) return;
+
+  panelEntry.triggers.delete(trigger);
+  if (panelEntry.triggers.size === 0) {
+    panelEntry.release();
+    panelRefs.delete(panel);
+  }
+}
+
+function resolvePanel(trigger, state) {
   const panel = panelFor(trigger);
+  if (state.panel === panel && panel?.isConnected) return panel;
+
+  releasePanelReference(trigger, state);
   if (!panel) return null;
 
   let panelEntry = panelRefs.get(panel);
@@ -174,21 +193,12 @@ function resolvePanel(trigger, state) {
 function disconnectTrigger(trigger) {
   const state = triggerMap.get(trigger);
   if (!state) return;
-  state.releaseMenu?.();
   state.controller.abort();
   if (state.panel?.isConnected && isSurfaceOpen(state.panel)) {
     closeSurface(state.panel, { restoreFocus: false });
   }
+  releasePanelReference(trigger, state);
   triggerMap.delete(trigger);
-
-  const panelEntry = state.panel ? panelRefs.get(state.panel) : undefined;
-  if (panelEntry) {
-    panelEntry.triggers.delete(trigger);
-    if (panelEntry.triggers.size === 0) {
-      panelEntry.release();
-      panelRefs.delete(state.panel);
-    }
-  }
 }
 
 registerEnhancement("flyout", (trigger) => {

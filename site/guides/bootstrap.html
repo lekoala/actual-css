@@ -214,13 +214,13 @@
 </ul>
 <p>The layered import is the cleanest way to keep both stylesheets during the
 migration:</p>
-<pre><code class="language-css">/* Migration setup — Actual rules sit in @layer actual */
-@import &quot;bootstrap.css&quot;;
-@import &quot;actual-css/css/layer&quot;;
+<pre><code class="language-css">@import &quot;bootstrap.css&quot;;
+@layer actual;
+@import &quot;actual-css/full&quot; layer(actual);
 /* Unlayered project overrides stay on top */
 @import &quot;app.css&quot;;
 </code></pre>
-<p><code>actual.layer.css</code> wraps every Actual rule in a single <code>@layer actual</code>, so
+<p>The full import places every Actual rule in a single <code>actual</code> layer, so
 unlayered Bootstrap and project CSS keep precedence while the migration runs.
 See <a href="https://github.com/lekoala/actual-css/blob/master/docs/design-notes/cascade-layer.md">Cascade layer strategy</a> for the
 limitations of the approach.</p>

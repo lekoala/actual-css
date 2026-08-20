@@ -194,7 +194,8 @@ select {
 }
 
 @media (forced-colors: active) {
-  :root {
+  :root,
+  [data-theme] {
     --state-selected: Highlight;
     --state-selected-fg: HighlightText;
     --state-disabled: GrayText;
@@ -415,8 +416,7 @@ select {
 
 @media (forced-colors: active) {
   :root,
-  [data-theme="light"],
-  [data-theme="dark"] {
+  [data-theme] {
     --focus-outline-color: Highlight;
     --focus-ring-shadow: none;
 
@@ -426,8 +426,9 @@ select {
 
 @media (prefers-contrast: more) {
   :root,
-  [data-theme="light"],
-  [data-theme="dark"] {
+  /* The repeated attribute intentionally outranks single-attribute preset
+     palettes, including a preset stylesheet loaded after the core. */
+  [data-theme][data-theme] {
     --border-width: 2px;
     --focus-outline-offset: 3px;
     --focus-ring-width: 4px;
@@ -802,6 +803,7 @@ small {
 }
 
 /* Visual twin of .key (components/key.css) — keep the two recipes in sync. */
+/* @sync key-recipe */
 .prose :where(kbd) {
   display: inline-flex;
   align-items: center;
@@ -821,6 +823,7 @@ small {
   white-space: nowrap;
   vertical-align: 0.08em;
 }
+/* @sync key-recipe */
 
 .prose :where(pre) {
   overflow-x: auto;
@@ -1726,31 +1729,6 @@ small {
   opacity: 1;
 }
 
-@media (forced-colors: active) {
-  .check,
-  .radio {
-    --choice-border: ButtonText;
-    --choice-bg: Canvas;
-    --choice-mark: ButtonText;
-  }
-
-  .check:checked,
-  .radio:checked,
-  .check:indeterminate {
-    --choice-border: Highlight;
-    --choice-bg: Highlight;
-    --choice-mark: HighlightText;
-    forced-color-adjust: none;
-  }
-
-  .check:disabled,
-  .radio:disabled {
-    --choice-border: GrayText;
-    --choice-bg: Canvas;
-    --choice-mark: GrayText;
-  }
-}
-
 /*
  * Select — chevron and appearance layer on top of the shared text-control
  * recipe.
@@ -1848,7 +1826,11 @@ small {
   padding: 0;
 }
 
-.color::-webkit-color-swatch,
+.color::-webkit-color-swatch {
+  border: 0;
+  border-radius: calc(var(--radius) - var(--border-width));
+}
+
 .color::-moz-color-swatch {
   border: 0;
   border-radius: calc(var(--radius) - var(--border-width));
@@ -1868,6 +1850,15 @@ small {
   .color {
     border-color: ButtonText;
     background: ButtonFace;
+  }
+
+  /* The swatch color is content, so preserve it without disabling the host's
+     native forced-color focus treatment. Vendor pseudos cannot share a rule. */
+  .color::-webkit-color-swatch {
+    forced-color-adjust: none;
+  }
+
+  .color::-moz-color-swatch {
     forced-color-adjust: none;
   }
 }
@@ -2176,29 +2167,10 @@ small {
 }
 
 @media (forced-colors: active) {
-  /* --switch-knob must be set on the element, not on ::before: a custom
-     property declared on the pseudo would shadow the :checked override. */
-  .switch {
-    --switch-border: ButtonText;
-    --switch-knob: ButtonText;
-  }
-
+  /* Forced colors remap the fills, but the custom knob has no native edge.
+     A system-color border keeps it distinct from the remapped track. */
   .switch::before {
-    box-shadow: none;
-  }
-
-  .switch:checked {
-    --switch-bg: Highlight;
-    --switch-border: Highlight;
-    --switch-knob: HighlightText;
-    forced-color-adjust: none;
-  }
-
-  .switch:disabled {
-    --switch-bg: Canvas;
-    --switch-border: GrayText;
-    --switch-knob: GrayText;
-    forced-color-adjust: auto;
+    border: var(--border-width) solid ButtonText;
   }
 }
 
@@ -2447,19 +2419,20 @@ small {
 
   .choice-card:has(:checked) {
     --choice-card-border: Highlight;
-    /* Pin the background: with forced-color-adjust: none the color-mix tint
-       above would actually render, uncontrolled in high-contrast themes. */
+    /* Pin the selected surface to the system canvas: only the essential
+       marker pseudos opt out of remapping, never the interactive card host. */
     --choice-card-bg: Canvas;
-    forced-color-adjust: none;
   }
 
   .choice-card:has(:checked)::before {
     background: Highlight;
     box-shadow: 0 0 0 2px Canvas;
+    forced-color-adjust: none;
   }
 
   .choice-card:has(:checked)::after {
     background: HighlightText;
+    forced-color-adjust: none;
   }
 }
 
@@ -2676,6 +2649,7 @@ small {
  *
  * Internal:
  * --otp-cell-border
+ * --otp-cell-border-width
  * --otp-cell-bg
  * --otp-caret-space
  */
@@ -2704,7 +2678,7 @@ small {
 .otp > span {
   inline-size: var(--otp-cell-size);
   block-size: var(--otp-cell-size);
-  border: var(--border-width) solid var(--otp-cell-border);
+  border: var(--otp-cell-border-width, var(--border-width)) solid var(--otp-cell-border);
   border-radius: var(--radius);
   background: var(--otp-cell-bg);
   transition:
@@ -2738,8 +2712,15 @@ small {
   appearance: none;
 }
 
+/* Deliberately no group ring: a box around all the cells reads as a second
+   component. The caret already carries focus while the code is being typed,
+   but it sits in the clipped input extension once every cell is filled, so
+   the focused edge must be unambiguous on its own — hence the doubled width,
+   not only the color swap. Width is safe to change: box-sizing is border-box
+   and the cells have a fixed inline/block size, so nothing reflows. */
 .otp > input:focus ~ span {
   --otp-cell-border: var(--focus);
+  --otp-cell-border-width: calc(var(--border-width) * 2);
 }
 
 .otp > input[aria-invalid="true"] ~ span,
@@ -3025,6 +3006,11 @@ a.btn[aria-disabled="true"] {
     background: Highlight;
     color: HighlightText;
     forced-color-adjust: none;
+  }
+
+  .btn:is([aria-pressed="true"], [aria-current="page"]):not(.link):focus-visible {
+    outline: var(--focus-outline);
+    box-shadow: none;
   }
 
   .btn:hover:not(:where(:disabled, [aria-disabled="true"], .link)) {
@@ -5307,6 +5293,7 @@ a.avatar[aria-disabled="true"] {
  *
  * Visual twin of .prose kbd (prose.css) — keep the two recipes in sync.
  */
+/* @sync key-recipe */
 .key {
   display: inline-flex;
   align-items: center;
@@ -5326,6 +5313,7 @@ a.avatar[aria-disabled="true"] {
   white-space: nowrap;
   vertical-align: 0.08em;
 }
+/* @sync key-recipe */
 
 /*
  * Message rows composed from an optional avatar, metadata, and bubble.
@@ -5977,7 +5965,10 @@ a.avatar[aria-disabled="true"] {
 @media (forced-colors: active) {
   .meter::-webkit-meter-optimum-value,
   .meter::-webkit-meter-suboptimum-value,
-  .meter::-webkit-meter-even-less-good-value,
+  .meter::-webkit-meter-even-less-good-value {
+    background: Highlight;
+  }
+
   .meter::-moz-meter-bar {
     background: Highlight;
   }
@@ -6079,7 +6070,7 @@ a.avatar[aria-disabled="true"] {
 /* Keep an active focus ring above an adjacent hovered control. This matters
    on platforms where clicking a button does not move focus from the input. */
 .join > :is(:focus, :focus-within) {
-  z-index: 2;
+  z-index: 4;
 }
 
 /* An input's border must read as the "primary" edge against an attached

@@ -318,6 +318,7 @@ see the widget-primitives design note. Every primitive subpath is published in
 </thead>
 <tbody>
 <tr><td><code>actual-css/js/enhance</code></td><td>DOM lifecycle engine: <code>enhance()</code>, <code>registerEnhancement</code>, tokens</td></tr>
+<tr><td><code>actual-css/js/escape</code></td><td>Per-document LIFO Escape dismissal stack</td></tr>
 <tr><td><code>actual-css/js/events</code></td><td>The <code>actual:*</code> event name constants</td></tr>
 <tr><td><code>actual-css/js/floating</code></td><td>Positioning engine (<code>reposition</code>, <code>repositionAt</code>, <code>autoUpdate</code>)</td></tr>
 <tr><td><code>actual-css/js/focus</code></td><td>Focusable-item lookup and helpers</td></tr>
@@ -381,9 +382,9 @@ coordinates.</li>
 </ol>
 <p>Lifecycle: <code>prepareSurface</code> → <code>openSurface</code> → <code>closeSurface</code> →
 <code>disconnectSurface</code>. <code>retainSurface(panel)</code> reference-counts a surface shared by
-several triggers and returns a release function; <code>registerEscapeDismissal</code> adds
-an element to the per-document Escape dismiss stack; <code>isSurfaceOpen</code> and
-<code>getSurfaceAutoClose</code> read current state.</p>
+several triggers and returns a release function; <code>isSurfaceOpen</code> and
+<code>getSurfaceAutoClose</code> read current state. The separate <code>escape</code> primitive adds
+visible dismissable UI to the shared per-document Escape stack.</p>
 <p><code>openSurface(menu, opts)</code> dispatches a cancelable <code>actual:surface-open</code> event —
 widgets can veto or decorate opens, and context menus inject their own
 <code>source</code>/<code>restoreFocusTo</code> through it.</p>

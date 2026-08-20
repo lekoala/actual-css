@@ -114,6 +114,7 @@
 }
 
 /* Visual twin of .key (components/key.css) — keep the two recipes in sync. */
+/* @sync key-recipe */
 .prose :where(kbd) {
   display: inline-flex;
   align-items: center;
@@ -133,6 +134,7 @@
   white-space: nowrap;
   vertical-align: 0.08em;
 }
+/* @sync key-recipe */
 
 .prose :where(pre) {
   overflow-x: auto;
