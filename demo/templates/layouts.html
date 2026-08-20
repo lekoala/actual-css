@@ -1,0 +1,454 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Layout Reference - Actual CSS</title>
+  <meta name="description" content="Canonical layout compositions built with the current layout primitives — a reference for what each primitive does and where its limits are.">
+  <link rel="stylesheet" href="../../dist/actual.css">
+  <link rel="stylesheet" href="../../dist/optional.css">
+  <link rel="stylesheet" href="../../dist/actual-themes.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+  <style>
+    .layouts-page {
+      padding-block: var(--space-60);
+    }
+
+    .layouts-intro {
+      --center-size: 72rem;
+
+      margin-block-end: var(--space-50);
+    }
+
+    .layout-section {
+      --center-size: 72rem;
+
+      padding-block: var(--space-60);
+      border-block-start: var(--border-width) solid var(--border);
+    }
+
+    .layout-note {
+      max-inline-size: 72ch;
+      color: var(--text-muted);
+    }
+
+    .layout-example {
+      margin-block-start: var(--space-40);
+      padding: var(--space-40);
+      border: var(--border-width) solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+    }
+
+    /* Placeholder cell so grid column counts stay visible without card chrome
+       getting in the way. */
+    .layout-cell {
+      display: grid;
+      place-items: center;
+      min-block-size: 5rem;
+      padding: var(--space-30);
+      border-radius: var(--radius);
+      background: var(--surface-subtle);
+      color: var(--text-muted);
+      font-size: var(--font-size-sm);
+      text-align: center;
+    }
+
+    .layout-pane {
+      padding: var(--space-40);
+      border-radius: var(--radius);
+      background: var(--surface-subtle);
+    }
+
+    .layout-pane h3 {
+      margin-block-start: 0;
+    }
+  </style>
+</head>
+
+<body>
+  <main class="layouts-page">
+    <header class="center stack layouts-intro">
+      <p class="overline">Actual CSS</p>
+      <h1>Layout reference</h1>
+      <p class="lead">
+        The canonical layout compositions, each built only with the current
+        layout primitives. This page is a reference for what each primitive
+        does today — and where its limits are.
+      </p>
+      <select class="select sm fit" id="theme-switcher" aria-label="Switch theme">
+        <option value="">System</option>
+        <option value="light">Light</option>
+        <option value="indigo">Indigo</option>
+        <option value="dim">Dim</option>
+        <option value="corporate">Corporate</option>
+        <option value="forest">Forest</option>
+        <option value="ocean">Ocean</option>
+        <option value="spruce">Spruce</option>
+        <option value="petrol">Petrol</option>
+        <option value="sunset">Sunset</option>
+        <option value="lavender">Lavender</option>
+        <option value="mono">Mono</option>
+        <option value="square">Square</option>
+        <option value="edge">Edge</option>
+        <option value="cyberpunk">Cyberpunk</option>
+        <option value="neon">Neon</option>
+        <option value="gradient">Gradient</option>
+      </select>
+    </header>
+
+    <section class="center layout-section" id="page-header">
+      <h2>1. Page header</h2>
+      <p class="layout-note">
+        Title on the left, actions on the right. <code>.cluster</code> with
+        <code>--cluster-justify: space-between</code>; the row wraps into two
+        rows when it runs out of room — no viewport decision needed.
+      </p>
+
+      <div class="layout-example">
+        <header class="cluster" style="--cluster-justify: space-between;">
+          <hgroup>
+            <h2 style="margin-block-start: 0;">Deployments</h2>
+            <p class="muted">Review production releases, failed jobs, and pending approvals.</p>
+          </hgroup>
+
+          <menu class="actions cluster">
+            <li><button class="btn neutral outline" type="button">Export</button></li>
+            <li><button class="btn primary" type="button">New deployment</button></li>
+          </menu>
+        </header>
+      </div>
+    </section>
+
+    <section class="center layout-section" id="stack">
+      <h2>2. Vertical rhythm</h2>
+      <p class="layout-note">
+        <code>.stack</code> owns the block axis: direct-child margins are reset,
+        spacing comes from <code>--gap</code>. To group a few items tightly (a
+        title and its description), nest a <code>.stack gap-none</code> — the
+        outer stack keeps its rhythm between groups.
+      </p>
+
+      <div class="layout-example">
+        <div class="stack layout-pane" style="max-inline-size: 32rem;">
+          <div class="stack gap-none">
+            <strong>Ada Meridian</strong>
+            <span class="muted">Senior designer working on design systems.</span>
+          </div>
+          <span class="badge success soft">Active</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="center layout-section" id="cluster">
+      <h2>3. Inline group</h2>
+      <p class="layout-note">
+        <code>.cluster</code> is the inline group: action rows, tags, toolbars.
+        Its responsiveness is the wrapping itself — it never needs a
+        breakpoint.
+      </p>
+
+      <div class="layout-example">
+        <div class="cluster">
+          <button class="btn neutral outline" type="button">Edit</button>
+          <button class="btn neutral outline" type="button">Archive</button>
+          <button class="btn danger outline" type="button">Delete</button>
+          <a class="btn neutral ghost" href="#">Read docs</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="center layout-section" id="split">
+      <h2>4. Split / one left, one right</h2>
+      <p class="layout-note">
+        The same <code>.cluster</code> relationship with
+        <code>--cluster-justify: space-between</code>. No separate split
+        primitive.
+      </p>
+
+      <div class="layout-example">
+        <div class="cluster" style="--cluster-justify: space-between;">
+          <h2 style="margin-block-start: 0;">Results</h2>
+          <menu class="actions cluster">
+            <li><button class="btn primary" type="button">New search</button></li>
+          </menu>
+        </div>
+      </div>
+    </section>
+
+    <section class="center layout-section" id="grid">
+      <h2>5. Free equal cards</h2>
+      <p class="layout-note">
+        <code>.grid</code> fits as many <code>--grid-min</code>-wide columns as
+        the row allows and wraps the rest. The number of columns follows the
+        container width.
+      </p>
+
+      <div class="layout-example">
+        <div class="grid" style="--grid-min: 14rem;">
+          <div class="layout-cell">Card A</div>
+          <div class="layout-cell">Card B</div>
+          <div class="layout-cell">Card C</div>
+          <div class="layout-cell">Card D</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="center layout-section" id="grid-fixed">
+      <h2>6. Fixed grid — <code>.grid-3</code> alone</h2>
+      <p class="layout-note">
+        As-is: <code>.grid-3</code> is a fixed three-column grid at every
+        width. Nothing collapses it without a <code>.container-query</code>
+        wrapper — the three columns stay cramped on narrow viewports.
+      </p>
+
+      <div class="layout-example">
+        <div class="grid-3">
+          <div class="layout-cell">Item 1</div>
+          <div class="layout-cell">Item 2</div>
+          <div class="layout-cell">Item 3</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="center layout-section" id="grid-responsive">
+      <h2>7. Fixed grid — <code>.grid-3</code> under <code>.container-query</code></h2>
+      <p class="layout-note">
+        The current contract: the same <code>.grid-3</code> inside a
+        <code>.container-query</code> collapses 3 &rarr; 2 &rarr; 1 columns as
+        the container narrows. The behaviour depends on the wrapper, not the
+        grid itself.
+      </p>
+
+      <div class="layout-example container-query">
+        <div class="grid-3">
+          <div class="layout-cell">Item 1</div>
+          <div class="layout-cell">Item 2</div>
+          <div class="layout-cell">Item 3</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="center layout-section" id="sidebar-fixed">
+      <h2>8. Content + aside — <code>.sidebar-layout</code> alone</h2>
+      <p class="layout-note">
+        As-is: <code>.sidebar-layout</code> alone stays stacked at every
+        width. The horizontal switch depends on a
+        <code>.container-query</code> ancestor.
+      </p>
+
+      <div class="layout-example">
+        <div class="sidebar-layout">
+          <section class="layout-pane">
+            <h3>Main content</h3>
+            <p class="muted">Long-form content that benefits from a related aside.</p>
+          </section>
+
+          <aside class="stack">
+            <article class="card">Card one</article>
+            <article class="card">Card two</article>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <section class="center layout-section" id="sidebar-responsive">
+      <h2>9. Content + aside — <code>.sidebar-layout</code> under <code>.container-query</code></h2>
+      <p class="layout-note">
+        The current contract: inside a <code>.container-query</code> the aside
+        appears beside the content once the container reaches 64rem, and stacks
+        below it below that. The switch point is a container width, not a
+        viewport width.
+      </p>
+
+      <div class="layout-example container-query">
+        <div class="sidebar-layout" style="--sidebar-layout-size: 18rem;">
+          <section class="layout-pane">
+            <h3>Main content</h3>
+            <p class="muted">Long-form content that benefits from a related aside.</p>
+          </section>
+
+          <aside class="stack">
+            <article class="card">Card one</article>
+            <article class="card">Card two</article>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <section class="center layout-section" id="asymmetric">
+      <h2>10. Asymmetric 2/3 + 1/3</h2>
+      <p class="layout-note">
+        <code>--grid-columns</code> replaces the intrinsic auto-fit template,
+        so nothing restores collapse: the two columns stay cramped on narrow
+        screens unless the author adds their own collapse rule. For content +
+        aside this is usually <code>.sidebar-layout</code> instead.
+      </p>
+
+      <div class="layout-example">
+        <div class="grid" style="--grid-columns: minmax(0, 2fr) minmax(0, 1fr);">
+          <section class="layout-pane">
+            <h3>Checklist</h3>
+            <div class="stack">
+              <span>Upload consent form</span>
+              <span>Schedule follow-up call</span>
+              <span>Verify insurance</span>
+            </div>
+          </section>
+
+          <aside class="stack">
+            <article class="card">Patient card</article>
+            <article class="card">Notes card</article>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <section class="center layout-section" id="media">
+      <h2>11. Media rows</h2>
+      <p class="layout-note">
+        <code>.media</code> pairs a fixed leading element with flexible
+        trailing content. The content column takes the remaining space and
+        shrinks instead of overflowing.
+      </p>
+
+      <div class="layout-example stack">
+        <article class="media items-center">
+          <span class="avatar"><abbr>AM</abbr></span>
+          <div class="stack gap-none">
+            <strong>Ada Meridian</strong>
+            <span class="muted">Senior designer</span>
+          </div>
+        </article>
+
+        <article class="media items-center">
+          <span class="avatar primary"><abbr>JL</abbr></span>
+          <div class="stack gap-none">
+            <strong>Jana Lindgren</strong>
+            <span class="muted">Platform engineer</span>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="center layout-section" id="checklist">
+      <h2>12. Checklist item</h2>
+      <p class="layout-note">
+        Icon + content + actions as a <code>nowrap</code> row — the shape the
+        POC generator produced. The framework keeps the row on one line; the
+        author owns what happens when the row is too narrow.
+      </p>
+
+      <div class="layout-example stack">
+        <div class="cluster" style="--cluster-wrap: nowrap;">
+          <span class="circle layout-cell" style="min-block-size: 2.5rem; inline-size: 2.5rem;">✓</span>
+          <div class="stack gap-none grow">
+            <strong>Upload consent form</strong>
+            <span class="muted">Due today</span>
+          </div>
+          <span class="badge success soft">Done</span>
+        </div>
+
+        <div class="cluster" style="--cluster-wrap: nowrap;">
+          <span class="circle layout-cell" style="min-block-size: 2.5rem; inline-size: 2.5rem;">2</span>
+          <div class="stack gap-none grow">
+            <strong>Schedule follow-up call</strong>
+            <span class="muted">Tomorrow 09:00</span>
+          </div>
+          <span class="badge warning soft">Pending</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="center layout-section" id="switcher">
+      <h2>13. Two equivalent zones</h2>
+      <p class="layout-note">
+        <code>.switcher</code> places two or more zones side by side when the
+        container has room and stacks them when it does not. Lives in the
+        optional module, not the core bundle.
+      </p>
+
+      <div class="layout-example">
+        <div class="switcher">
+          <article class="card layout-pane">
+            <h3>Billing address</h3>
+            <p class="muted">Main invoice recipient.</p>
+          </article>
+
+          <article class="card layout-pane">
+            <h3>Shipping address</h3>
+            <p class="muted">Where goods are delivered.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="center layout-section" id="doctor-row">
+      <h2>14. Avatar + text + actions</h2>
+      <p class="layout-note">
+        <code>.media</code> for the avatar/text pair, with the actions nested
+        inside the flexible column so they wrap under the text when the row
+        narrows. The avatar aligns to the top (<code>start</code>, the default)
+        because the content column is multi-line; centering is only for short
+        single-line pairs.
+      </p>
+
+      <div class="layout-example stack">
+        <article class="media">
+          <span class="avatar"><abbr>AM</abbr></span>
+          <div class="stack gap-none grow">
+            <strong>Dr. Ada Meridian</strong>
+            <span class="muted">Cardiology</span>
+            <div class="cluster" style="margin-block-start: var(--space-20);">
+              <button class="btn neutral outline sm" type="button">Message</button>
+              <button class="btn primary sm" type="button">Book</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="media">
+          <span class="avatar primary"><abbr>JL</abbr></span>
+          <div class="stack gap-none grow">
+            <strong>Dr. Jana Lindgren</strong>
+            <span class="muted">Neurology</span>
+            <div class="cluster" style="margin-block-start: var(--space-20);">
+              <button class="btn neutral outline sm" type="button">Message</button>
+              <button class="btn primary sm" type="button">Book</button>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <footer class="center layout-section">
+      <div class="cluster" style="--cluster-justify: space-between;">
+        <span class="muted">Built with the current layout primitives only.</span>
+        <nav aria-label="Footer">
+          <ol class="cluster">
+            <li><a class="link-muted" href="#grid">Grid</a></li>
+            <li><a class="link-muted" href="#sidebar-responsive">Sidebar</a></li>
+            <li><a class="link-muted" href="#switcher">Switcher</a></li>
+          </ol>
+        </nav>
+      </div>
+    </footer>
+  </main>
+
+  <script src="../../dist/actual.js"></script>
+  <script>
+    const switcher = document.getElementById("theme-switcher");
+
+    if (switcher) {
+      switcher.addEventListener("change", () => {
+        if (switcher.value) {
+          document.documentElement.dataset.theme = switcher.value;
+        } else {
+          document.documentElement.removeAttribute("data-theme");
+        }
+      });
+    }
+  </script>
+</body>
+
+</html>

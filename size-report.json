@@ -1,5 +1,5 @@
 {
-  "totalRaw": 187021,
+  "totalRaw": 188193,
   "totalMinified": 89024,
   "totalBrotli": 13102,
   "themesMinified": 29127,
@@ -70,6 +70,10 @@
       "raw": 3777
     },
     {
+      "file": "layout.css",
+      "raw": 3387
+    },
+    {
       "file": "forms/switch.css",
       "raw": 3350
     },
@@ -82,16 +86,16 @@
       "raw": 3194
     },
     {
+      "file": "grid.css",
+      "raw": 2973
+    },
+    {
       "file": "components/tooltip.css",
       "raw": 2895
     },
     {
       "file": "components/card.css",
       "raw": 2889
-    },
-    {
-      "file": "layout.css",
-      "raw": 2838
     },
     {
       "file": "forms/range.css",
@@ -148,10 +152,6 @@
     {
       "file": "themes/forest.css",
       "raw": 2394
-    },
-    {
-      "file": "grid.css",
-      "raw": 2350
     },
     {
       "file": "themes/square.css",

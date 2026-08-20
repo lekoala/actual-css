@@ -36,6 +36,7 @@ tables, forms, dialogs, and feedback states.
 - [Marketing](../../demo/templates/marketing.html) - landing page with typography and fluid type
 - [Blog](../../demo/templates/blog.html) - article page with prose
 - [Blocks](../../demo/templates/blocks.html) - layout building blocks
+- [Layout reference](../../demo/templates/layouts.html) - canonical compositions built only with the layout primitives
 - [Density](../../demo/templates/density.html) - compact control density
 
 > Note: the examples reference the repository's source files, so they open from
