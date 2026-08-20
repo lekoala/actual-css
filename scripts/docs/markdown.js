@@ -18,6 +18,11 @@ const escapeHtml = (str) =>
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;");
 
+/* Page assembly consumes these boundaries to keep live component demos out of
+   prose while leaving authored Markdown in rich-text sections. */
+export const DOCS_PROSE_END = "<!--docs-prose-end-->";
+export const DOCS_PROSE_START = "<!--docs-prose-start-->";
+
 /**
  * Parse a fence info string: "html demo" -> { language: "html", demo: true }.
  */
@@ -119,14 +124,16 @@ export function prepareMarkdown(markdown) {
 function renderDemoBlock(entry) {
   const language = escapeHtml(entry.language || "html");
   const source = escapeHtml(entry.content);
-  return `<div class="docs-example">
+  return `${DOCS_PROSE_END}
+<div class="docs-example">
   <div class="docs-preview">
 ${entry.content}
   </div>
   <div class="docs-code">
     <pre><code class="language-${language}">${source}</code></pre>
   </div>
-</div>`;
+</div>
+${DOCS_PROSE_START}`;
 }
 
 /**
@@ -181,11 +188,12 @@ export function render(markdown, { resolveLink } = {}) {
     headings: { ids: true },
   });
 
+  // Only authored Markdown tables become the editorial table composition.
+  // Live demos own their markup and are inserted after this transformation.
+  html = wrapTables(html);
   for (let i = 0; i < demos.length; i++) {
     html = html.replace(`<!--docs-demo-${i}-->`, renderDemoBlock(demos[i]));
   }
-
-  html = wrapTables(html);
   if (resolveLink) html = rewriteLinks(html, resolveLink);
 
   return {

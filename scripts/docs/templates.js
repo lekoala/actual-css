@@ -5,6 +5,7 @@
 import { readFileSync } from "node:fs";
 import { dirname, join, relative, sep } from "node:path";
 import { fileURLToPath } from "node:url";
+import { DOCS_PROSE_END, DOCS_PROSE_START } from "./markdown.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const REPO = "https://github.com/lekoala/actual-css";
@@ -176,6 +177,24 @@ function renderNext(page) {
     : "";
 }
 
+/** Compose narrative Markdown sections with component demos at page level. */
+export function wrapDocsContent(content) {
+  const ends = content.split(DOCS_PROSE_END).length - 1;
+  const starts = content.split(DOCS_PROSE_START).length - 1;
+  if (ends !== starts) {
+    throw new Error("Unbalanced documentation prose boundaries");
+  }
+
+  const open = '<div class="prose docs-prose">';
+  const sections = content
+    .replaceAll(DOCS_PROSE_END, "</div>")
+    .replaceAll(DOCS_PROSE_START, open);
+  return `${open}\n${sections}\n</div>`.replace(
+    /<div class="prose docs-prose">\s*<\/div>\s*/g,
+    "",
+  );
+}
+
 export function renderPage({ title, description, content, toc, navGroups, actualCss, themesCss, docsCss, actualJs, docsJs, siteRoot, url, previous, next, file, themes }) {
   const tpl = loadTemplate();
   const page = { url, previous, next };
@@ -194,7 +213,7 @@ export function renderPage({ title, description, content, toc, navGroups, actual
     .replace(/\{\{navGroups\}\}/g, navGroups)
     .replace(/\{\{themeOptions\}\}/g, renderThemeOptions(themes))
     .replace(/\{\{themeInit\}\}/g, renderThemeInit(themes))
-    .replace(/\{\{content\}\}/g, `<div class="prose docs-prose">\n${content}\n</div>`)
+    .replace(/\{\{content\}\}/g, wrapDocsContent(content))
     .replace(/\{\{toc\}\}/g, renderToc(toc))
     .replace(/\{\{prev\}\}/g, renderPrev(page))
     .replace(/\{\{next\}\}/g, renderNext(page))

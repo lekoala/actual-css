@@ -10,7 +10,7 @@ Typography has three layers:
 
 Components must not depend on `.prose`. App screens, forms, cards, tables, navigation, dashboards, and component examples should use their own component or layout rules.
 
-Use `.prose` directly on a semantic content container, usually an `article`.
+Use `.prose` directly on a semantic content container, usually an `article`. It is not a page-level wrapper: component demos, navigation, forms, and other application UI belong outside it. Compose prose sections with those siblings using a layout primitive such as `.stack`.
 
 ## Why this shape
 
@@ -46,11 +46,11 @@ Global links inherit color. The visual affordance of a link is the responsibilit
 
 `.prose` is the opt-in rich-text scope. It owns the visual hierarchy of authored content.
 
-It owns: readable measure, vertical rhythm between common text elements, heading hierarchy, link affordance, list spacing, code and keyboard treatment, blockquote treatment, table treatment, image / figure / figcaption treatment, mark, and `text-wrap` balance / pretty for prose elements.
+It owns: readable measure, vertical rhythm, heading hierarchy, link affordance, list spacing, code and keyboard treatment, blockquote treatment, table treatment, image / figure / figcaption treatment, mark, and `text-wrap` balance / pretty for authored or generated rich-text descendants.
 
 It does not own: page layout, app cards, alerts, forms, app tables, navigation, component variants, or any automatic styling outside the `.prose` subtree.
 
-The reason for that boundary: a dialog title, a card heading, or a sidebar section heading should not become a "prose h1". Components own those. If a card or a dialog wants a richer heading, it can use a component-level rule, not a global selector.
+The reason for that boundary: a dialog title, a card heading, or a sidebar section heading should not become a "prose h1". Components own those. Put the component next to the prose section in a layout container; do not ask `.prose` to infer where an embedded component begins.
 
 ### Fluid module
 
@@ -141,7 +141,7 @@ Headings are split between the global baseline and `.prose`.
 
 Globally, headings get a tight line-height, a color from `--heading` (or inherited), and progressive `text-wrap: balance`. They do not get a `font-size`, a `font-weight`, or margins. The reason is that a card heading, a dialog title, or a sidebar section should not be auto-magically enlarged by selector.
 
-Inside `.prose`, headings get a `font-weight` from `--font-weight-strong`, a tighter line-height from `--prose-heading-line-height`, a margin-block rhythm, and keep the global `text-wrap: balance`. The `h1` to `h4` font sizes are also scoped to `.prose` and are not exposed as a public scale.
+Inside `.prose`, headings get a `font-weight` from `--font-weight-strong`, a tighter line-height from `--prose-heading-line-height`, margin rhythm, and keep the global `text-wrap: balance`. Their color follows the contextual `--heading` alias, so prose also composes correctly with a contextual surface. The `h1` to `h4` font sizes are scoped to `.prose`, remain low-specificity, and are not exposed as a public scale.
 
 The `hgroup` element gets only structural styling: a grid layout, a gap, and a reset of internal margins. No font-size, no color, no weight. Its visual identity is the responsibility of the headings and paragraphs it contains.
 
@@ -161,7 +161,7 @@ Three logical alignment utilities exist (`.text-start`, `.text-center`, `.text-e
 
 ## Tables
 
-Prose tables are a different concern from app data tables. Long-form content can contain a small table, but a sortable, dense, row-actionable app table belongs to the table component. The `.prose table` rule is intentionally minimal: it does not define sticky headers, selection states, row actions, or density variants.
+Prose tables are a different concern from app data tables. Long-form content can contain a small table, but a sortable, dense, row-actionable app table belongs to the table component outside the prose boundary. The prose table recipe is intentionally minimal: it does not define sticky headers, selection states, row actions, or density variants.
 
 ## Fluid module — how to use it
 

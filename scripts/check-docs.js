@@ -67,6 +67,25 @@ function main() {
 
     const markdown = readFileSync(file, "utf8");
     const fences = scanCodeFences(markdown);
+    const fencedLines = new Set(
+      fences.flatMap((fence) =>
+        Array.from(
+          { length: fence.end - fence.start + 1 },
+          (_, offset) => fence.start + offset,
+        ),
+      ),
+    );
+
+    for (const [index, line] of markdown.split(/\r?\n/u).entries()) {
+      if (
+        !fencedLines.has(index) &&
+        /^\s*<(?:article|aside|button|dialog|div|form|header|main|nav|section|table)\b/iu.test(line)
+      ) {
+        issues.push(
+          `${rel(file)}:${index + 1}: live component markup must use an \`\`\`html demo fence so it stays outside .prose`,
+        );
+      }
+    }
 
     for (const fence of fences) {
       if (!fence.language) {

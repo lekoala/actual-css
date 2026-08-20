@@ -83,6 +83,7 @@
 /* --- Content --- */
 
 .docs-article {
+  --gap: var(--space-50);
   min-inline-size: 0;
 }
 
@@ -96,10 +97,6 @@
   border-inline-start: 0;
   color: var(--text-muted);
   font-size: var(--font-size-lg);
-}
-
-.docs-source-links {
-  margin-block-start: var(--space-50);
 }
 
 .docs-prevnext {
@@ -119,7 +116,6 @@
 /* --- Demo examples --- */
 
 .docs-example {
-  margin-block: var(--space-40) var(--space-50);
   border: var(--border-width) solid var(--border);
   border-radius: var(--radius);
   background: var(--surface-raised);
