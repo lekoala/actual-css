@@ -37,3 +37,18 @@ Actual CSS is intended for new projects. Existing projects with class collisions
 - Shared runtime primitives may have public JavaScript APIs without becoming author-facing CSS or HTML vocabulary. Do not introduce `.surface` or `data-surface-*`; components keep their feature-specific author APIs (`data-flyout-*`, `data-context-menu-*`, CSS `.flyout`, `.menu`, …).
 - `data-enhance` is the one un-namespaced attribute — it carries *opt-in* for any feature, not *configuration* for one feature. Feature-namespaced attributes carry configuration.
 - Custom events use the `actual:*` namespace.
+
+## Utilities
+
+Utilities ship in two layers that follow the same class grammar.
+
+- **Base utilities** are a curated set of common ergonomic shortcuts
+  (`.overflow-auto`, `.gap-none`, `.text-nowrap`, `.px`, `.py`).
+- **Optional utilities** use explicit property/value names
+  (`.overflow-hidden`, `.gap-sm`, `.white-space-normal`).
+
+Base utilities may use compact names for a small set of frequent operations
+(`.px`, `.py`, `.mbs`, `.mbe`). Extra utilities use explicit property/value
+names and must not duplicate an operation already provided by base. The two
+sets may cover the same CSS property, but must not expose competing names for
+the same declaration.
