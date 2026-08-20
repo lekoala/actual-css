@@ -299,7 +299,7 @@ test("breadcrumb supports aria-current on the link or span", () => {
 test("prose styles native kbd elements", () => {
   const css = readCss("src/css/typography/prose.css");
 
-  expect(css).toContain(".prose kbd");
+  expect(css).toContain(".prose :where(kbd)");
   expect(css).toContain("font-family: var(--font-mono);");
 });
 
