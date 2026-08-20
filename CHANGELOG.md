@@ -13,6 +13,11 @@ This project follows Keep a Changelog and uses semver, including during 0.x.
 
 ### Breaking
 
+* The package is reorganized around a minimal core and composable families. `actual-css` is now only the core (reset, tokens, theme, base, intents, variants, focus, print); the all-in bundle moves to `actual-css/full` (the successor to 0.3's `actual.full.css`, now including the former `optional/` modules). The `optional` family is removed; its modules moved into their domain (see the [modular import guide](docs/pages/guides/modular-import.md)).
+* The JavaScript entry is split: `actual-css/js` now only starts the enhancement-manifest loader; the built-in behaviors (flyout, dialog, tabs, validation, status, …) move to `actual-css/js/full`.
+* `actual-css/css/forms` is now the native-controls base; the complete Forms family (switch, range, choice-card, custom-select, floating-field, otp) is `actual-css/css/forms/all`.
+* The root CSS files (`grid`, `prose`, `utilities`, …) are no longer exported at the root; they live in their family paths (`actual-css/css/layout/grid`, `actual-css/css/typography/prose`, …).
+* `actual-css/css/layer` now layers only the core instead of the whole standard framework.
 * `.grid-2`, `.grid-3`, `.grid-4`, and `.grid-6` are always fixed structural grids. A `.container-query` ancestor no longer changes their column count. Use `.grid` with `--grid-min` for responsive collections.
 
 ## [0.3.1] - 2026-08-20

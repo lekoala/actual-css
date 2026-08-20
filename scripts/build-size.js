@@ -8,7 +8,16 @@ const ROOT = join(__dirname, "..");
 const SRC = join(ROOT, "src", "css");
 const DIST = join(ROOT, "dist");
 
-const CORE_BROTLI_TOLERANCE = 0.1;
+/*
+ * Absolute brotli budgets. Edited by hand when the project deliberately grows;
+ * build:size never rewrites its own limits, so a committed report cannot
+ * silently raise the bar.
+ */
+const BUDGETS = {
+  coreCssBrotli: 2800, // actual.min.css (current ~2482)
+  fullCssBrotli: 17500, // actual.full.min.css (current ~15239)
+  fullJsBrotli: 18500, // actual.full.js (current ~16025)
+};
 
 async function collectCSS(root, base = "") {
   const entries = await readdir(root, { withFileTypes: true });
@@ -122,12 +131,11 @@ async function main() {
   }
   console.log();
 
-  // ── Baseline guard ─────────────────────────────────────
-  const core = dist["actual.min.css"];
+  // ── Budget guard ────────────────────────────────────────
   const report = {
     totalRaw,
-    core: core
-      ? { minified: core.bytes, brotli: core.brotli, tolerance: CORE_BROTLI_TOLERANCE }
+    core: dist["actual.min.css"]
+      ? { minified: dist["actual.min.css"].bytes, brotli: dist["actual.min.css"].brotli }
       : null,
     full: dist["actual.full.min.css"]
       ? { minified: dist["actual.full.min.css"].bytes, brotli: dist["actual.full.min.css"].brotli }
@@ -147,25 +155,31 @@ async function main() {
     files: rows,
   };
 
+  const guarded = [
+    ["core CSS (actual.min.css)", dist["actual.min.css"]?.brotli, BUDGETS.coreCssBrotli],
+    ["full CSS (actual.full.min.css)", dist["actual.full.min.css"]?.brotli, BUDGETS.fullCssBrotli],
+    ["full JS (actual.full.js)", dist["actual.full.js"]?.brotli, BUDGETS.fullJsBrotli],
+  ];
+
+  const exceeded = [];
+  for (const [label, brotli, limit] of guarded) {
+    if (brotli == null) continue;
+    const ok = brotli <= limit;
+    console.log(`  ${label}: ${formatBytes(brotli)} brotli (budget ${formatBytes(limit)})${ok ? "" : " — EXCEEDED"}`);
+    if (!ok) exceeded.push(label);
+  }
+
+  if (exceeded.length > 0) {
+    console.error(`Size budget exceeded: ${exceeded.join(", ")}.`);
+    process.exit(1);
+  }
+
   const reportPath = join(ROOT, "size-report.json");
   let previous = null;
   try {
     previous = JSON.parse(await readFile(reportPath, "utf8"));
   } catch {
     // no previous report yet
-  }
-
-  if (core) {
-    const baseline = previous?.core?.brotli ?? core.brotli;
-    const limit = Math.ceil(baseline * (1 + CORE_BROTLI_TOLERANCE));
-    report.core.baseline = baseline;
-    report.core.withinBudget = core.brotli <= limit;
-    console.log(`Core Brotli baseline: ${formatBytes(baseline)}, current ${formatBytes(core.brotli)} (limit ${formatBytes(limit)})`);
-
-    if (!report.core.withinBudget) {
-      console.error(`Core size budget exceeded: ${formatBytes(core.brotli)} > ${formatBytes(limit)}.`);
-      process.exit(1);
-    }
   }
 
   const next = JSON.stringify(report, null, 2) + "\n";

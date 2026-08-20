@@ -448,3 +448,11 @@ test("optional FAB preserves DOM order and stays out of print", () => {
   expect(css).toMatch(/\.fab-label\s*\{[\s\S]*box-shadow:\s*var\(--shadow\);/);
   expect(css).toContain("@media print");
 });
+
+test("controls never zero the outline in their base style", () => {
+  const css = readCss("src/css/forms/control.css").replace(/\/\*[\s\S]*?\*\//g, "");
+
+  expect(css).toContain(".input:focus-visible");
+  expect(css).toContain("outline: 2px solid transparent;");
+  expect(css).not.toMatch(/outline\s*:\s*(none|0)\b/);
+});

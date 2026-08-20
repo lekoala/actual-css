@@ -8,6 +8,20 @@ function readJson(path) {
   return JSON.parse(readFileSync(join(ROOT, path), "utf8"));
 }
 
+function exportTarget(spec, exact, wildcards) {
+  if (exact[spec]) return exact[spec];
+  const matches = wildcards
+    .filter(([key]) => {
+      const [prefix, suffix] = key.split("*");
+      return spec.startsWith(prefix) && spec.endsWith(suffix);
+    })
+    .sort(([a], [b]) => b.replace("*", "").length - a.replace("*", "").length);
+  if (matches.length === 0) return null;
+  const [key, target] = matches[0];
+  const [prefix, suffix] = key.split("*");
+  return target.replace("*", spec.slice(prefix.length, spec.length - suffix.length));
+}
+
 test("package ships built assets and theme reference sources", () => {
   const pkg = readJson("package.json");
   const files = pkg.files;
@@ -39,7 +53,7 @@ test("every JS export path resolves to an existing source file", () => {
 
   for (const [exportPath, target] of Object.entries(pkg.exports)) {
     if (target === null) continue;
-    if (!exportPath.startsWith("./js/")) continue;
+    if (!(exportPath === "./js" || exportPath.startsWith("./js/"))) continue;
 
     const filePath = join(ROOT, target);
     expect(existsSync(filePath)).toBe(true);
@@ -58,6 +72,81 @@ test("every non-null CSS export path resolves to an existing source file", () =>
     const filePath = join(ROOT, target);
     expect(existsSync(filePath)).toBe(true);
   }
+});
+
+test("every CSS family leaf resolves through an export", () => {
+  const pkg = readJson("package.json");
+  const exact = {};
+  const wildcards = [];
+  for (const [exportPath, target] of Object.entries(pkg.exports)) {
+    if (target === null || !exportPath.startsWith("./css")) continue;
+    if (exportPath.includes("*")) wildcards.push([exportPath, target]);
+    else exact[exportPath] = target;
+  }
+
+  const cssDir = join(ROOT, "src", "css");
+  for (const family of ["layout", "typography", "forms", "components", "effects", "utilities"]) {
+    const dir = join(cssDir, family);
+    for (const entry of readdirSync(dir)) {
+      if (!entry.endsWith(".css")) continue;
+      const basename = entry.replace(/\.css$/, "");
+      const spec = `./css/${family}/${basename}`;
+      const target = exportTarget(spec, exact, wildcards);
+      expect(target, `${spec} must resolve through an export`).toBeTruthy();
+      expect(existsSync(join(ROOT, target)), `${spec} must resolve to an existing file`).toBe(true);
+    }
+  }
+});
+
+test("every public CSS wildcard export matches existing files", () => {
+  const pkg = readJson("package.json");
+
+  for (const [exportPath, target] of Object.entries(pkg.exports)) {
+    if (target === null || !exportPath.startsWith("./css")) continue;
+    if (!exportPath.includes("*")) continue;
+
+    const [prefix, suffix] = exportPath.split("*");
+    const [targetPrefix, targetSuffix] = target.split("*");
+    const dir = join(ROOT, targetPrefix);
+    expect(existsSync(dir), `directory for ${exportPath} must exist`).toBe(true);
+
+    const files = readdirSync(dir).filter((file) => file.endsWith(targetSuffix));
+    expect(files.length, `${exportPath} must match at least one file`).toBeGreaterThan(0);
+
+    for (const file of files) {
+      const basename = file.slice(0, -targetSuffix.length);
+      const spec = `${prefix}${basename}${suffix}`;
+      const resolved = join(ROOT, `${targetPrefix}${basename}${targetSuffix}`);
+      expect(existsSync(resolved), `${spec} must resolve to an existing file`).toBe(true);
+    }
+  }
+});
+
+test("the js entry split keeps the loader and built-ins separate", () => {
+  const indexJs = readFileSync(join(ROOT, "src/js/index.js"), "utf8");
+  const fullJs = readFileSync(join(ROOT, "src/js/full.js"), "utf8");
+  const imports = (src) =>
+    [...src.matchAll(/import\s+(?:[^"']+\s+from\s+)?["']([^"']+)["']/g)].map((match) => match[1]);
+
+  expect(imports(indexJs)).toEqual(["./enhancement-loader.js"]);
+
+  const builtins = [
+    "./flyout.js",
+    "./context-menu.js",
+    "./dialog.js",
+    "./dismiss.js",
+    "./tab.js",
+    "./tooltip.js",
+    "./scrollspy.js",
+    "./filter.js",
+    "./mask.js",
+    "./password.js",
+    "./validation.js",
+    "./status.js",
+  ];
+  const fullImports = imports(fullJs);
+  expect(fullImports.slice(0, -1)).toEqual(builtins);
+  expect(fullImports.at(-1)).toBe("./index.js");
 });
 
 test("no demo or template file is present in the dist directory", () => {

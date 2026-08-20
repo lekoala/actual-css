@@ -1,15 +1,12 @@
 {
-  "totalRaw": 211297,
+  "totalRaw": 211528,
   "core": {
     "minified": 10507,
-    "brotli": 2482,
-    "tolerance": 0.1,
-    "baseline": 2482,
-    "withinBudget": true
+    "brotli": 2482
   },
   "full": {
-    "minified": 103406,
-    "brotli": 15239
+    "minified": 103391,
+    "brotli": 15248
   },
   "themes": {
     "minified": 29127,
@@ -18,11 +15,11 @@
   "js": {
     "core": {
       "bytes": 6079,
-      "brotli": 2224
+      "brotli": 2203
     },
     "full": {
-      "bytes": 54956,
-      "brotli": 16025
+      "bytes": 54939,
+      "brotli": 15925
     }
   },
   "fileCount": 97,
@@ -116,6 +113,10 @@
       "raw": 2959
     },
     {
+      "file": "forms/control.css",
+      "raw": 2909
+    },
+    {
       "file": "forms/range.css",
       "raw": 2807
     },
@@ -126,10 +127,6 @@
     {
       "file": "forms/validation.css",
       "raw": 2690
-    },
-    {
-      "file": "forms/control.css",
-      "raw": 2678
     },
     {
       "file": "components/menu.css",

@@ -33,8 +33,10 @@ Or import only the pieces you use:
 ```
 
 `actual-css/css` is the minimal core. Family manifests (`css/layout`,
-`css/forms`, `css/components`, `css/typography`, `css/effects`,
-`css/utilities`) and their modules map one-to-one to `src/css/`. See the
+`css/components`, `css/typography`, `css/effects`, `css/utilities`) and
+their modules map one-to-one to `src/css/`; `css/forms` is the exception —
+it points at the native-controls base, with `css/forms/all` exposing the
+complete Forms family. See the
 [modular import guide](docs/pages/guides/modular-import.md) for the full map.
 
 You can also use the compiled full bundle directly:
@@ -134,7 +136,7 @@ For project-specific behavior, use `actual-css/js/enhance` and the small input h
 
 Modern syntax such as `light-dark()`, `color-mix()`, `@container`, `:has()`, `100dvh`, and `100vi` is preserved in the distributed files.
 
-Actual CSS does not currently ship a separate compatibility build. It is designed as progressive enhancement: modern features are guarded with `@supports` where needed, while older browsers still receive core layout, forms, and components.
+Actual CSS does not currently ship a separate compatibility build. It is designed as progressive enhancement: modern features are guarded with `@supports` where needed, while older browsers still receive the core styles and the layout, forms, and components.
 
 For more conservative fallbacks, import and compose the source entrypoints directly.
 

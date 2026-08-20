@@ -11,17 +11,36 @@ the families you need from `actual-css/css/*` outside the layer.
 
 ## Usage
 
-Replace `actual.css` with `actual.layer.css`:
+`actual.layer.css` wraps only the core entrypoint in the layer. The family
+manifests (components, forms, layout, …) are imported separately, outside the
+layer by default:
 
 ```css
 /* Before — classes may override existing project styles */
 @import "actual-css";
 
-/* After — all Actual rules are scoped to the `actual` layer */
+/* After — core rules are scoped to the `actual` layer */
 @import "actual-css/css/layer";
+@import "actual-css/css/layout";
+@import "actual-css/css/forms";
+@import "actual-css/css/components";
 ```
 
-Author styles outside any layer will win over layer styles with equal specificity.
+Author styles outside any layer will win over layer styles with equal
+specificity.
+
+For an existing project, the collisions that matter are component classes
+(`.card`, `.btn`, `.grid`, `.input`, `.navbar`), not the core tokens. If the
+whole framework must sit below the project's own styles, layer the full bundle
+in the project entrypoint:
+
+```css
+@layer actual;
+@import "actual-css/full" layer(actual);
+```
+
+There is no separate `full`-layer bundle; the two declarations above are the
+official recipe.
 
 ## Layer structure
 

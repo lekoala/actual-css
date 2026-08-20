@@ -110,6 +110,24 @@ test("an import in a leaf module is reported", async () => {
   expect(issues.join("\n")).toContain("core/reset.css: leaf modules cannot import");
 });
 
+test("a utilities/base.css leaf that imports is reported", async () => {
+  const files = { ...base, "utilities/base.css": '@import "./spacing.css";' };
+  const issues = await fixture(files).then(analyzeCss).then((r) => r.issues);
+  expect(issues.join("\n")).toContain("utilities/base.css: leaf modules cannot import");
+});
+
+test("a leaf importing with a layer() modifier is still reported", async () => {
+  const files = { ...base, "layout/stack.css": '@import "./cluster.css" layer(layout);' };
+  const issues = await fixture(files).then(analyzeCss).then((r) => r.issues);
+  expect(issues.join("\n")).toContain("layout/stack.css: leaf modules cannot import");
+});
+
+test("a manifest importing with layer() is still parsed into the graph", async () => {
+  const files = { ...base, "layout/index.css": '@import "./stack.css" layer(layout);' };
+  const issues = await fixture(files).then(analyzeCss).then((r) => r.issues);
+  expect(issues).toEqual([]);
+});
+
 afterAll(async () => {
   await Promise.all(roots.map((root) => rm(root, { recursive: true, force: true })));
 });
