@@ -140,15 +140,24 @@ function repositionTip(ref, tip) {
   });
 }
 
+function updateTrackedTip(tip, state) {
+  const ref = state.activeRef;
+  if (!ref) return;
+
+  const alwaysVisible = isAlwaysVisible(ref);
+  // Reveal before measuring: an always-visible tooltip may currently be
+  // hidden because its trigger was outside the positioning boundary.
+  if (alwaysVisible) tip.hidden = false;
+  if (tip.hidden || repositionTip(ref, tip)) return;
+
+  if (alwaysVisible) tip.hidden = true;
+  else hideTip(tip, true);
+}
+
 function startTracking(tip, state) {
   if (state.stopTracking) return;
 
-  state.stopTracking = autoUpdate(tip, () => {
-    if (isAlwaysVisible(state.activeRef)) tip.hidden = false;
-    if (state.activeRef && !tip.hidden && !repositionTip(state.activeRef, tip)) {
-      hideTip(tip, true);
-    }
-  });
+  state.stopTracking = autoUpdate(tip, () => updateTrackedTip(tip, state));
 }
 
 function stopTracking(state) {
@@ -345,8 +354,8 @@ function show(tip, ref, immediate = false) {
   const reveal = () => {
     state.timer = null;
     tip.hidden = false;
-    repositionTip(ref, tip);
     startTracking(tip, state);
+    updateTrackedTip(tip, state);
   };
 
   if (immediate) reveal();

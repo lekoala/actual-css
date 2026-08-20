@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tooltip always-visible fixture</title>
+  <link rel="stylesheet" href="../../src/css/actual.full.css">
+  <script src="../../dist/actual.full.js" defer></script>
+</head>
+<body>
+  <!-- The trigger starts below the fold so the always-visible tooltip is out
+       of view at load. It must re-show when scrolled into view and hide when
+       scrolled away again, without ever getting stuck hidden. -->
+  <div style="height: 2000px"></div>
+  <button class="btn outline" type="button"
+          id="trigger"
+          data-tooltip="Always visible while this trigger is in view"
+          data-tooltip-visible
+          data-tooltip-placement="bottom">
+    Always visible
+  </button>
+  <div style="height: 2000px"></div>
+</body>
+</html>
