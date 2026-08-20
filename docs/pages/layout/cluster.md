@@ -12,8 +12,10 @@ Inline groups that wrap naturally, useful for action rows, tags, and toolbars.
 
 Use cluster for action rows, tags, toolbar sections, metadata, and compact navigation.
 
-Like `.stack`, cluster owns its children's spacing: direct-child margins are
-reset, so spacing between items always comes from `--gap`.
+Cluster owns its children's spacing: direct-child margins are reset, so spacing
+between items always comes from `--gap`. Unlike `.stack`, which resets only the
+block axis, cluster resets margins on both axes — a wrapping cluster's `gap`
+controls inline spacing between items and block spacing between wrapped rows.
 
 ## CSS hooks
 

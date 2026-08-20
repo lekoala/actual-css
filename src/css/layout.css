@@ -13,8 +13,8 @@
  * --sidebar-layout-size
  *
  * Child contracts:
- * .stack owns vertical rhythm: direct-child margins are reset, spacing comes
- *   from --gap.
+ * .stack owns vertical rhythm: direct-child block-axis margins are reset,
+ *   spacing comes from --gap, inline margins stay free.
  * .cluster owns inline rhythm: direct-child margins are reset, spacing comes
  *   from --gap.
  * .frame sizes direct media children (img/video/iframe/canvas/svg) to fill the
@@ -30,8 +30,10 @@
   gap: var(--gap);
 }
 
+/* .stack owns the block axis only: block margins reset, inline margins stay
+   free (self-centering children via margin-inline: auto keep working). */
 .stack > * {
-  margin: 0;
+  margin-block: 0;
 }
 
 .cluster {
