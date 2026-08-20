@@ -5,6 +5,19 @@
  * --grid-min
  * --grid-columns
  */
+
+/* --grid-columns replaces the intrinsic auto-fit template: once set, the
+   grid no longer collapses on its own — the author owns narrow-container
+   collapse. Prefer .sidebar-layout inside .container-query for content +
+   aside layouts; reserve --grid-columns for genuinely fixed or asymmetric
+   templates. */
+
+/* Recipe:
+   - N equal cards that collapse when narrow -> .grid (auto-fit, tune
+     --grid-min) or .grid-2/3/4/6 inside .container-query
+   - content + aside -> .sidebar-layout inside .container-query
+   - fixed or asymmetric columns -> --grid-columns with an explicit collapse
+     rule of your own */
 .grid {
   display: grid;
   gap: var(--gap);

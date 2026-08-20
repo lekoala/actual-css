@@ -20,6 +20,19 @@
  * .frame sizes direct media children (img/video/iframe/canvas/svg) to fill the
  *   frame.
  */
+
+/* Responsive recipes:
+   - avatar/icon + flexible content -> .media
+   - inline items that wrap when space runs out -> .cluster (keep wrapping)
+   - content + aside -> .sidebar-layout inside .container-query
+   - row that becomes a column when constrained -> .switcher (optional module)
+
+   Anti-patterns:
+   - viewport breakpoints for ordinary composition
+   - fixed grid templates (--grid-columns) where .grid/.sidebar-layout express
+     the layout
+   - nowrap on page-level compositions; prefer wrapping and container-aware
+     primitives */
 .container-query {
   container-type: inline-size;
 }
