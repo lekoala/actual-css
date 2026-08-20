@@ -12,6 +12,7 @@
  * Internal:
  * --otp-cell-border
  * --otp-cell-bg
+ * --otp-caret-space
  */
 .otp {
   --otp-cell-size: var(--control-size);
@@ -19,6 +20,7 @@
   --otp-font-size: 1.5rem;
   --otp-cell-border: var(--border);
   --otp-cell-bg: var(--surface);
+  --otp-caret-space: calc((var(--otp-cell-size) - 1ch) / 2 + var(--otp-gap) + 1px);
 
   position: relative;
   display: inline-grid;
@@ -28,6 +30,9 @@
   max-inline-size: 100%;
   gap: var(--otp-gap);
   border-radius: var(--radius);
+  /* Unlike hidden, clip cannot become a scroll container when the caret moves
+     into the input extension. */
+  overflow: clip;
   direction: ltr;
 }
 
@@ -39,20 +44,21 @@
   background: var(--otp-cell-bg);
   transition:
     border-color var(--duration),
-    background-color var(--duration),
-    box-shadow var(--duration);
+    background-color var(--duration);
 }
 
 /* The native input owns focus, selection, autofill, paste, and one-time-code
-   integration. Its spacing aligns monospace glyphs with the visual cells. */
+   integration. Its clipped extension accommodates the trailing letter-space
+   and final caret so the browser never scrolls the glyphs out of alignment. */
 .otp > input {
   position: absolute;
   z-index: 1;
   inset: 0;
-  inline-size: 100%;
+  inline-size: calc(100% + var(--otp-caret-space));
   block-size: 100%;
   margin: 0;
-  padding: 0 calc((var(--otp-cell-size) - 1ch) / 2);
+  padding-block: 0;
+  padding-inline: calc((var(--otp-cell-size) - 1ch) / 2) 0;
   border: 0;
   outline: 2px solid transparent;
   box-shadow: none;
@@ -65,10 +71,6 @@
   letter-spacing: calc(var(--otp-cell-size) + var(--otp-gap) - 1ch);
   text-align: start;
   appearance: none;
-}
-
-.otp:focus-within {
-  box-shadow: var(--focus-ring-shadow);
 }
 
 .otp > input:focus ~ span {
@@ -98,12 +100,6 @@
 }
 
 @media (forced-colors: active) {
-  .otp:focus-within {
-    outline: var(--focus-outline);
-    outline-offset: var(--focus-outline-offset);
-    box-shadow: none;
-  }
-
   .otp > input:focus ~ span {
     --otp-cell-border: Highlight;
   }
