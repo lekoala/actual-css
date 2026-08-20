@@ -42,7 +42,7 @@
   border-radius: var(--radius-sm);
 }
 
-.breadcrumb :where(a, span):where([aria-current]:not([aria-current="false"])) {
+.breadcrumb :where(li, a, span):where([aria-current]:not([aria-current="false"])) {
   color: var(--text);
   font-weight: var(--font-weight-medium);
 }
