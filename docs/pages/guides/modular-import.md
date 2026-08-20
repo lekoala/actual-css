@@ -15,6 +15,33 @@ under `src/css/`.
 intents, universal variants, generic focus, and generic print. It contains no
 forms, layout, typography module, component, effect, or utility bundle.
 
+### Focus is a core invariant
+
+Unlike 0.3, the focus stylesheet is part of the core baseline and does not
+need to be imported after components.
+
+The core provides a visible `:focus` outline as the compatibility baseline.
+Modern browsers limit it to `:focus-visible`, hiding the pointer-focus
+outline. Components may enhance or replace that treatment in their
+interactive states, but their base styles must not cancel the shared
+fallback.
+
+This keeps focus independent from global source order:
+
+core → typography → layout → forms → components → effects → utilities
+
+Loading families after the core does not rely on source order to preserve
+the shared focus baseline.
+
+#### Component rule
+
+Never remove the shared outline in a component's resting/base state.
+
+When an interactive state replaces the outline, it must preserve a visible
+focus indicator in forced-colors: either retain an outline-based fallback
+(such as a transparent outline), or scope the replacement out of
+forced-colors entirely.
+
 `actual-css/full` starts from the core and adds every family in cascade order:
 typography, layout, forms, components, effects, utilities.
 
@@ -56,6 +83,8 @@ into the core + families model:
   (the all-in bundle), not to the 0.3 bare import — it is slightly wider,
   because the former `optional/` modules now ship with the full bundle.
 - The `optional` family is gone. Its modules live in their domain.
+- `focus.css` is now part of the core baseline and no longer requires
+  last-in-bundle ordering.
 
 ### Entrypoint map
 

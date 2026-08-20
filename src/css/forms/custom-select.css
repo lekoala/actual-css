@@ -12,6 +12,8 @@
  * --control-border
  * --control-bg
  */
+/* This enhancement is excluded from forced-colors, where the native/shared
+   outline remains the focus fallback. */
 @media (forced-colors: none) and (prefers-contrast: no-preference) and (hover: hover) and (
     pointer: fine
   ) {
