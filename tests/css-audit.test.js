@@ -93,10 +93,10 @@ test("form-actions exposes alignment hooks while sticky behavior remains intact"
   expect(css).toContain("position: sticky;");
 });
 
-test("cluster resets direct-child margins like stack", () => {
+test("stack resets block margins, cluster resets all margins", () => {
   const css = readCss("src/css/layout.css");
 
-  expect(css).toMatch(/\.stack > \* \{\s*margin: 0;\s*\}/);
+  expect(css).toMatch(/\.stack > \* \{\s*margin-block: 0;\s*\}/);
   expect(css).toMatch(/\.cluster > \* \{\s*margin: 0;\s*\}/);
 });
 

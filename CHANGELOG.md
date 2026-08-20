@@ -8,6 +8,7 @@ This project follows Keep a Changelog and uses semver, including during 0.x.
 
 ### Changed
 
+* `.stack` children keep their inline margins; only block-axis margins are reset (`margin-block: 0`), so self-centering children via `margin-inline: auto` work inside a stack.
 * Improved `.inverted` contract
 * Tooltip performance when not visible
 * Flyout edge cases are better handled
