@@ -1483,7 +1483,10 @@ small {
   color: var(--control-fg);
   font-size: var(--control-font-size);
   cursor: var(--control-cursor);
-  outline: none;
+  /* No outline: none here — the core :focus fallback must survive for browsers
+     without :focus-visible. Pointer focus is hidden by core's
+     :focus:not(:focus-visible); keyboard focus swaps in the transparent
+     outline + ring below. */
   transition:
     border-color var(--duration),
     box-shadow var(--duration),

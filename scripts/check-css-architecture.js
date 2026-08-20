@@ -17,11 +17,21 @@ import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { dirname, join, relative, resolve, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 
-const IMPORT_RE = /^\s*@import\s+(?:url\(\s*)?["']([^"')]+)["']\s*\)?\s*;?\s*$/;
+/*
+ * An @import in a leaf is a contract violation in any syntax — layer(),
+ * supports(), or media modifiers included — so leaves are checked with a
+ * detector, not a parser. Only manifests and root entrypoints need the
+ * specifier, so those go through parseImports.
+ */
+const IMPORT_DETECT_RE = /^\s*@import\b/m;
+const IMPORT_RE = /^\s*@import\s+(?:url\(\s*)?["']([^"')]+)["']/;
+
+function isManifest(rel) {
+  return rel.endsWith("/index.css") || rel === "forms/base.css";
+}
 
 const FAMILIES = ["core", "layout", "typography", "forms", "components", "effects", "utilities"];
 const ROOT_ENTRYPOINTS = new Set(["actual.css", "actual.full.css", "actual.layer.css"]);
-const FAMILY_MANIFESTS = new Set(["index.css", "base.css"]);
 
 const FULL_ENTRYPOINTS = [
   "./actual.css",
@@ -128,21 +138,20 @@ export function analyzeCss(root) {
   }
 
   const leaves = files.filter((file) => {
-    const [family, name] = relPath(file).split("/");
-    return FAMILIES.includes(family) && !FAMILY_MANIFESTS.has(name);
+    const rel = relPath(file);
+    return FAMILIES.includes(rel.split("/")[0]) && !isManifest(rel);
   });
 
   for (const leaf of leaves) {
-    const imports = parseImports(leaf);
-    if (imports.length > 0) {
-      issues.push(`${relPath(leaf)}: leaf modules cannot import (${imports.join(", ")})`);
+    if (IMPORT_DETECT_RE.test(readFileSync(leaf, "utf8"))) {
+      issues.push(`${relPath(leaf)}: leaf modules cannot import`);
     }
   }
 
   for (const file of files) {
     const rel = relPath(file);
-    const [family, name] = rel.split("/");
-    if (!FAMILIES.includes(family) || !FAMILY_MANIFESTS.has(name)) continue;
+    const family = rel.split("/")[0];
+    if (!FAMILIES.includes(family) || !isManifest(rel)) continue;
     for (const spec of parseImports(file)) {
       const targetRel = relPath(importTarget(file, spec));
       const targetFamily = targetRel.split("/")[0];

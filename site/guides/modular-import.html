@@ -238,13 +238,56 @@ piece:</p>
 @import &quot;actual-css/css/utilities/extra&quot;;
 </code></pre>
 <h2 id="migrating-from-03">Migrating from 0.3</h2>
-<p>In 0.3 the bare <code>actual-css</code> import shipped the all-in experience, and the
-<code>optional</code> family carried the less-common modules. In 0.4:</p>
+<p>In 0.3 the bare <code>actual-css</code> import shipped the standard framework, but
+<strong>excluded</strong> the <code>optional</code> family; the all-in bundle was the separate
+<code>actual-css/css/actual.full</code> entrypoint. In 0.4 the framework is reorganized
+into the core + families model:</p>
 <ul>
 <li><code>actual-css</code> is the minimal core.</li>
-<li><code>actual-css/full</code> preserves the 0.3 all-in behavior.</li>
+<li><code>actual-css/full</code> is the closest successor to 0.3's <code>actual.full.css</code>
+(the all-in bundle), not to the 0.3 bare import — it is slightly wider,
+because the former <code>optional/</code> modules now ship with the full bundle.</li>
 <li>The <code>optional</code> family is gone. Its modules live in their domain.</li>
 </ul>
+<h3 id="entrypoint-map">Entrypoint map</h3>
+<div class="table-wrap"><table class="table">
+<thead>
+<tr><th>0.3</th><th>0.4</th></tr>
+</thead>
+<tbody>
+<tr><td><code>actual-css</code></td><td><code>actual-css/full</code> for a simple migration (slightly wider than the 0.3 bare import), or <code>actual-css/css</code> for the new minimal core</td></tr>
+<tr><td><code>actual-css/css/actual.full</code></td><td><code>actual-css/full</code> or <code>actual-css/css/full</code></td></tr>
+<tr><td><code>actual-css/js</code></td><td><code>actual-css/js/full</code> to keep the built-in behaviors (see below)</td></tr>
+<tr><td><code>actual-css/css/forms</code></td><td><code>actual-css/css/forms/all</code> for the same coverage</td></tr>
+<tr><td><code>actual-css/css/grid</code></td><td><code>actual-css/css/layout/grid</code></td></tr>
+<tr><td><code>actual-css/css/prose</code></td><td><code>actual-css/css/typography/prose</code></td></tr>
+<tr><td><code>actual-css/css/optional</code> (bundle)</td><td><code>actual-css/full</code></td></tr>
+<tr><td>the root core files (<code>reset</code>, <code>tokens</code>, <code>theme</code>, <code>base</code>, <code>intents</code>, <code>variants</code>, <code>focus</code>, <code>print</code>)</td><td>no longer exported individually; compose the core atomically via <code>actual-css/css</code></td></tr>
+</tbody>
+</table></div>
+<p>The distributed bundle names changed too: <code>actual.min.css</code> is now the minimal
+core (in 0.3 it was the standard framework), the full CSS is
+<code>actual.full.min.css</code>, and the full JavaScript runtime is <code>actual.full.js</code>
+(in 0.3 it was <code>actual.js</code>). The <code>dist/optional*.css</code> bundles no longer exist.</p>
+<h3 id="same-import-path-changed-semantics">Same import path, changed semantics</h3>
+<p>These specifiers still resolve, but they mean something different now — the
+easiest breaking change to miss:</p>
+<div class="table-wrap"><table class="table">
+<thead>
+<tr><th>Path</th><th>0.3</th><th>0.4</th></tr>
+</thead>
+<tbody>
+<tr><td><code>actual-css</code></td><td>the standard framework (all but <code>optional/</code>)</td><td>the minimal core</td></tr>
+<tr><td><code>actual-css/js</code></td><td>the full runtime (flyout, dialog, tabs, validation, status, …)</td><td>only the enhancement-manifest loader; the built-ins move to <code>actual-css/js/full</code></td></tr>
+<tr><td><code>actual-css/css/forms</code></td><td>the complete Forms family</td><td>the native-controls base (<code>forms/base.css</code>)</td></tr>
+<tr><td><code>actual-css/css/layout</code></td><td>one layout file</td><td>the layout family manifest</td></tr>
+<tr><td><code>actual-css/css/utilities</code></td><td>the utility leaf</td><td>the utilities family: base plus the former <code>utilities-extra</code></td></tr>
+<tr><td><code>actual-css/css/components</code></td><td>the component manifest</td><td>the same, plus chat, fab, and join; overline now lives in <code>actual-css/css/typography/overline</code></td></tr>
+<tr><td><code>actual-css/css/layer</code></td><td>the standard framework wrapped in <code>@layer actual</code></td><td>only the core wrapped in <code>@layer actual</code>; layer the families yourself with the full-layer recipe</td></tr>
+</tbody>
+</table></div>
+<h3 id="former-optional-modules">Former optional modules</h3>
+<p>The <code>optional</code> family is gone; each module moved to its domain:</p>
 <div class="table-wrap"><table class="table">
 <thead>
 <tr><th>0.3 path</th><th>0.4 path</th></tr>
@@ -260,7 +303,6 @@ piece:</p>
 <tr><td><code>actual-css/css/optional/layout-extra</code></td><td><code>actual-css/css/layout/topbar</code></td></tr>
 <tr><td><code>actual-css/css/optional/typography-fluid</code></td><td><code>actual-css/css/typography/fluid</code></td></tr>
 <tr><td><code>actual-css/css/optional/utilities-extra</code></td><td><code>actual-css/css/utilities/extra</code></td></tr>
-<tr><td><code>actual-css/css/optional</code> (bundle)</td><td><code>actual-css/full</code></td></tr>
 </tbody>
 </table></div>
 <p>Component-prefixed custom properties documented on each page are author hooks.
@@ -288,6 +330,9 @@ and button APIs.</p>
         <li><a class="nav-link" href="#the-two-entrypoints" data-docs-toc-item data-level="2">The two entrypoints</a></li>
         <li><a class="nav-link" href="#family-manifests" data-docs-toc-item data-level="2">Family manifests</a></li>
         <li><a class="nav-link" href="#migrating-from-03" data-docs-toc-item data-level="2">Migrating from 0.3</a></li>
+        <li><a class="nav-link" href="#entrypoint-map" data-docs-toc-item data-level="3">Entrypoint map</a></li>
+        <li><a class="nav-link" href="#same-import-path-changed-semantics" data-docs-toc-item data-level="3">Same import path, changed semantics</a></li>
+        <li><a class="nav-link" href="#former-optional-modules" data-docs-toc-item data-level="3">Former optional modules</a></li>
           </ul>
         </nav>
       </aside>
