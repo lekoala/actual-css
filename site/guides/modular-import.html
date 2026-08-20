@@ -210,6 +210,24 @@ under <code>src/css/</code>.</p>
 <p><code>actual-css</code> is the minimal core: reset, tokens, theme, document defaults,
 intents, universal variants, generic focus, and generic print. It contains no
 forms, layout, typography module, component, effect, or utility bundle.</p>
+<h3 id="focus-is-a-core-invariant">Focus is a core invariant</h3>
+<p>Unlike 0.3, the focus stylesheet is part of the core baseline and does not
+need to be imported after components.</p>
+<p>The core provides a visible <code>:focus</code> outline as the compatibility baseline.
+Modern browsers limit it to <code>:focus-visible</code>, hiding the pointer-focus
+outline. Components may enhance or replace that treatment in their
+interactive states, but their base styles must not cancel the shared
+fallback.</p>
+<p>This keeps focus independent from global source order:</p>
+<p>core → typography → layout → forms → components → effects → utilities</p>
+<p>Loading families after the core does not rely on source order to preserve
+the shared focus baseline.</p>
+<h4 id="component-rule">Component rule</h4>
+<p>Never remove the shared outline in a component's resting/base state.</p>
+<p>When an interactive state replaces the outline, it must preserve a visible
+focus indicator in forced-colors: either retain an outline-based fallback
+(such as a transparent outline), or scope the replacement out of
+forced-colors entirely.</p>
 <p><code>actual-css/full</code> starts from the core and adds every family in cascade order:
 typography, layout, forms, components, effects, utilities.</p>
 <h2 id="family-manifests">Family manifests</h2>
@@ -248,6 +266,8 @@ into the core + families model:</p>
 (the all-in bundle), not to the 0.3 bare import — it is slightly wider,
 because the former <code>optional/</code> modules now ship with the full bundle.</li>
 <li>The <code>optional</code> family is gone. Its modules live in their domain.</li>
+<li><code>focus.css</code> is now part of the core baseline and no longer requires
+last-in-bundle ordering.</li>
 </ul>
 <h3 id="entrypoint-map">Entrypoint map</h3>
 <div class="table-wrap"><table class="table">
@@ -328,6 +348,7 @@ and button APIs.</p>
           <p class="docs-nav-group">On this page</p>
           <ul class="nav-list docs-toc-list" data-docs-toc>
         <li><a class="nav-link" href="#the-two-entrypoints" data-docs-toc-item data-level="2">The two entrypoints</a></li>
+        <li><a class="nav-link" href="#focus-is-a-core-invariant" data-docs-toc-item data-level="3">Focus is a core invariant</a></li>
         <li><a class="nav-link" href="#family-manifests" data-docs-toc-item data-level="2">Family manifests</a></li>
         <li><a class="nav-link" href="#migrating-from-03" data-docs-toc-item data-level="2">Migrating from 0.3</a></li>
         <li><a class="nav-link" href="#entrypoint-map" data-docs-toc-item data-level="3">Entrypoint map</a></li>

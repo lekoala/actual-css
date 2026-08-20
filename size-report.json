@@ -1,5 +1,5 @@
 {
-  "totalRaw": 214193,
+  "totalRaw": 214311,
   "core": {
     "minified": 10507,
     "brotli": 2482
@@ -18,8 +18,8 @@
       "brotli": 2203
     },
     "full": {
-      "bytes": 54939,
-      "brotli": 15925
+      "bytes": 54995,
+      "brotli": 15947
     }
   },
   "fileCount": 97,
@@ -129,6 +129,10 @@
       "raw": 2690
     },
     {
+      "file": "forms/custom-select.css",
+      "raw": 2671
+    },
+    {
       "file": "components/menu.css",
       "raw": 2652
     },
@@ -139,10 +143,6 @@
     {
       "file": "themes/petrol.css",
       "raw": 2581
-    },
-    {
-      "file": "forms/custom-select.css",
-      "raw": 2553
     },
     {
       "file": "components/navbar.css",
