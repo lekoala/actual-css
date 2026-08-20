@@ -1,0 +1,9 @@
+/* Readable content measure. Composes with .center for centering or with
+   margin-inline: auto for a one-off centered block.
+ *
+ * Public hooks:
+ * --measure
+ */
+.measure {
+  max-inline-size: var(--measure, 70ch);
+}

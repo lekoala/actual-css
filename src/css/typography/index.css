@@ -1,4 +1,5 @@
 /* Typography — prose scope and typographic treatments. */
 @import "./prose.css";
+@import "./lead.css";
 @import "./overline.css";
 @import "./fluid.css";
