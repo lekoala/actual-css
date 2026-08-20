@@ -12,7 +12,8 @@ script in `package.json`; `bun run build:all` chains the full pipeline
 | `build:size` | `build-size.js` | Write `size-report.json` (per-file, minified, brotli). |
 | `check:docs` | `check-docs.js` | Structural checks for the docs site: page/IA consistency, fence contract, internal links + anchors, and that referenced `src/css` / `src/js` files exist. |
 | `check:compat` | `check-compat.js` | Capability floor audit: flags unguarded above-Minimal structural CSS. |
-| `check:reserved` | `check-reserved.js` | Compare compiled class names against `reserved-classes.json`. |
+| `generate:reserved` | `generate-reserved-classes.js` | Regenerate `reserved-classes.json` from the class selectors in `src/css/**/*.css`. |
+| `check:reserved` | `check-reserved.js` | Verify `reserved-classes.json` is in sync with the classes extracted from `src/css/**/*.css`. |
 | `check:links` | `check-doc-links.js` | Validate doc links and `actual-css` entrypoints against `package.json#exports`. |
 | `check:templates` | `check-templates.js` | Sanity-check the demo template pages. |
 | `check:sync` | `check-sync.js` | Verify files that must stay in sync with each other. |
