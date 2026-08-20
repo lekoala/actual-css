@@ -70,8 +70,10 @@
   <i class="ti ti-alert-triangle alert-icon" aria-hidden="true"></i>
 
   <div class="stack">
-    <strong>Payment failed.</strong>
-    <p>Check your billing details or try another card.</p>
+    <div class="stack" style="--gap: var(--space-10)">
+      <strong>Payment failed.</strong>
+      <p>Check your billing details or try another card.</p>
+    </div>
 
     <menu class="actions cluster">
       <li><a class="btn danger sm" href="/billing">Update billing</a></li>
