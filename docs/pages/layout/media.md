@@ -9,13 +9,20 @@ Give `.media` exactly two children. Trailing metadata or actions go inside the c
 Add `.items-center` to align the leading element with short trailing content. For multi-line content, the default `align-items: start` is more comfortable.
 
 ```html demo
-<article class="card media items-center">
+<article class="card media">
   <span class="avatar"><abbr>AM</abbr></span>
-  <div class="stack">
+  <div class="stack gap-none">
     <strong>Ada Meridian</strong>
     <p class="muted">Senior designer working on design systems.</p>
   </div>
 </article>
+```
+
+```html demo
+<div class="media items-center">
+  <span class="avatar"><abbr>AM</abbr></span>
+  <span>Ada Meridian</span>
+</div>
 ```
 
 The media object is the underlying pattern of `.blog-author`, `.blog-comment`, and similar compositions in templates. Components can adopt it instead of repeating the grid rule.

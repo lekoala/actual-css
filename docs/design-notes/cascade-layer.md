@@ -34,11 +34,12 @@ Within `actual.css` the order is:
 
 1. Reset and base
 2. Tokens and theme
-3. Layout (container, layout, grid)
-4. Variants and prose
-5. Components
-6. Forms and utilities
-7. Print
+3. Prose
+4. Layout (container, layout, grid)
+5. Variants
+6. Components
+7. Forms and utilities
+8. Print
 
 This order is stable. If a future version introduces sublayers, the relative
 order will be preserved.

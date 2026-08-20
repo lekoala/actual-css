@@ -100,6 +100,17 @@ test("stack resets block margins, cluster resets all margins", () => {
   expect(css).toMatch(/\.cluster > \* \{\s*margin: 0;\s*\}/);
 });
 
+test("prose is imported before layout so stack/cluster own vertical rhythm inside prose", () => {
+  const css = readCss("src/css/actual.css");
+  const order = [
+    ...css.matchAll(/@import\s+(?:url\(\s*)?["'][^"']*?\/([^"']+)["']/g),
+  ].map((match) => match[1]);
+
+  expect(order).toContain("prose.css");
+  expect(order).toContain("layout.css");
+  expect(order.indexOf("prose.css")).toBeLessThan(order.indexOf("layout.css"));
+});
+
 test("native color control has normal, disabled, focus, and forced-colors states", () => {
   const css = readCss("src/css/forms/native.css");
 
