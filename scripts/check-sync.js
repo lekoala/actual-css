@@ -9,7 +9,7 @@ const GROUPS = [
   {
     name: "soft-recipe",
     files: [
-      "src/css/variants.css",
+      "src/css/core/variants.css",
       "src/css/components/alert.css",
       "src/css/components/badge.css",
     ],

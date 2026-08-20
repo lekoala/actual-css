@@ -1,16 +1,13 @@
-/* Forms — import order matters: switch.css follows choice.css so its rules
-   land after the shared choice recipe. validation.css is part of the default
-   forms bundle, but custom builds may omit it when validation styling is
-   app-owned. */
-@import "./form.css";
-@import "./control.css";
+/* Forms — the complete Forms family. base covers the ordinary native
+   controls; the leaves below add opt-in control skins. switch.css follows
+   choice.css (via base) so its rules land after the shared choice recipe.
+   validation.css stays part of base, but custom builds may omit it when
+   validation styling is app-owned. */
+@import "./base.css";
 @import "./input-icon.css";
-@import "./choice.css";
-@import "./choice-card.css";
-@import "./select.css";
-@import "./custom-select.css";
-@import "./native.css";
-@import "./range.css";
 @import "./switch.css";
-@import "./validation.css";
-@import "./form-actions.css";
+@import "./range.css";
+@import "./choice-card.css";
+@import "./custom-select.css";
+@import "./floating-field.css";
+@import "./otp.css";

@@ -33,37 +33,34 @@ npm install actual-css
 Import the full framework in your CSS:
 
 ```css
-@import "actual-css";
+@import "actual-css/full";
 ```
+
+`actual-css/full` ships every functional family. The bare `actual-css` entrypoint
+is the minimal core (reset, tokens, theme, base, intents, variants, focus,
+print).
 
 Or compose only the pieces you use:
 
 ```css
-@import "actual-css/css/reset";
-@import "actual-css/css/base";
-@import "actual-css/css/tokens";
-@import "actual-css/css/theme";
-@import "actual-css/css/intents";
-@import "actual-css/css/variants";
+@import "actual-css/css";
 @import "actual-css/css/layout";
-@import "actual-css/css/grid";
-@import "actual-css/css/forms";
 @import "actual-css/css/components/button";
 @import "actual-css/css/components/card";
+@import "actual-css/css/forms";
 @import "actual-css/css/components/flyout";
 @import "actual-css/css/utilities";
-/* Keep the focus baseline after components and controls. */
-@import "actual-css/css/focus";
 ```
 
-`focus` is the final interactive baseline in modular builds: older browsers
-retain a visible `:focus` outline, while browsers with `:focus-visible` avoid
-showing it for pointer focus.
+`actual-css/css` is the minimal core. Family manifests (`css/layout`,
+`css/forms`, `css/components`, `css/typography`, `css/effects`,
+`css/utilities`) and their modules map one-to-one to `src/css/`. See the
+[modular import guide](modular-import.md) for the full map.
 
-You can also use the compiled file directly:
+You can also use the compiled full bundle directly:
 
 ```html
-<link rel="stylesheet" href="actual.min.css">
+<link rel="stylesheet" href="actual.full.min.css">
 ```
 
 The package does not maintain separate partial bundles. Modular entrypoints map
@@ -99,7 +96,7 @@ filtering, and input masks. Presentation and behavior are separate layers —
 import the full runtime or any primitive independently to build custom widgets.
 
 ```html
-<script src="actual.js" type="module"></script>
+<script src="actual.full.js" type="module"></script>
 ```
 
 ```js

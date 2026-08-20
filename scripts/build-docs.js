@@ -36,7 +36,7 @@ const DIST = join(ROOT, "dist");
 // on each build; the site chrome (docs.css, docs.js) is edited in
 // scripts/docs/assets/ and referenced in place, so site/ never stores a copy.
 const REQUIRED_DIST = [
-  join(DIST, "actual.js"),
+  join(DIST, "actual.full.js"),
   join(DIST, "actual-themes.min.css"),
 ];
 
@@ -101,11 +101,10 @@ function writePages(navigation, rendered, themes) {
       content: result.html,
       toc: result.toc,
       navGroups: renderNavGroups(navigation, page),
-      actualCss: repoAsset(from, join(ROOT, "src", "css", "actual.css")),
-      optionalCss: repoAsset(from, join(ROOT, "src", "css", "optional", "index.css")),
+      actualCss: repoAsset(from, join(ROOT, "src", "css", "actual.full.css")),
       themesCss: repoAsset(from, join(DIST, "actual-themes.min.css")),
       docsCss: repoAsset(from, join(CHROME, "docs.css")),
-      actualJs: repoAsset(from, join(DIST, "actual.js")),
+      actualJs: repoAsset(from, join(DIST, "actual.full.js")),
       docsJs: repoAsset(from, join(CHROME, "docs.js")),
       siteRoot: siteRoot(from),
       url: page.url,
@@ -126,11 +125,10 @@ function writeHome(navigation, themes) {
     renderHome({
       navigation,
       themes,
-      actualCss: repoAsset(from, join(ROOT, "src", "css", "actual.css")),
-      optionalCss: repoAsset(from, join(ROOT, "src", "css", "optional", "index.css")),
+      actualCss: repoAsset(from, join(ROOT, "src", "css", "actual.full.css")),
       themesCss: repoAsset(from, join(DIST, "actual-themes.min.css")),
       docsCss: repoAsset(from, join(CHROME, "docs.css")),
-      actualJs: repoAsset(from, join(DIST, "actual.js")),
+      actualJs: repoAsset(from, join(DIST, "actual.full.js")),
       docsJs: repoAsset(from, join(CHROME, "docs.js")),
       siteRoot: siteRoot(from),
     }),

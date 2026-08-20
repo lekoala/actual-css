@@ -52,8 +52,8 @@ const PROGRESSIVE = {
   "src/css/components/modal.css": [":has()"],
   "src/css/forms/choice-card.css": [":has()"],
   "src/css/forms/choice.css": [":has()"],
-  "src/css/grid.css": ["@container queries"],
-  "src/css/layout.css": ["@container queries"],
+  "src/css/layout/grid.css": ["@container queries"],
+  "src/css/layout/container-query.css": ["@container queries"],
 };
 
 function walkCss(dir) {

@@ -2,7 +2,7 @@
 
 Horizontal rails that stay useful without JavaScript and snap in modern browsers.
 
-> **Optional** — import `actual-css/css/optional/scroll-snap` or `actual-css/css/optional/index`.
+> **Module** — import `actual-css/css/layout/scroll-snap` or `actual-css/css/layout`.
 
 Use `.scroll-snap` for a niche row of items that should scroll horizontally, such as card rails, media strips, overflow tabs, or a simple touch-friendly carousel baseline. Scrolling only appears when the items are wider than the container; set `--scroll-snap-item-size` for card rails.
 

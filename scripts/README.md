@@ -8,7 +8,7 @@ script in `package.json`; `bun run build:all` chains the full pipeline
 | --- | --- | --- |
 | `build:docs` / `watch:docs` | `build-docs.js` | Build the static documentation site in `site/` from `docs/pages/` + `docs/navigation.json`. Requires `dist/` (runs `build:dist` + `build:js` first in `build:all`). |
 | `build:dist` | `build-dist.js` | Build the CSS bundles in `dist/`. |
-| `build:js` | `build-js.js` | Bundle `src/js/` into `dist/actual.js` (no sourcemap; byte-deterministic across rebuilds). |
+| `build:js` | `build-js.js` | Bundle `src/js/` into `dist/actual.js` (loader only) and `dist/actual.full.js` (full runtime); no sourcemap; byte-deterministic across rebuilds. |
 | `build:size` | `build-size.js` | Write `size-report.json` (per-file, minified, brotli). |
 | `check:docs` | `check-docs.js` | Structural checks for the docs site: page/IA consistency, fence contract, internal links + anchors, and that referenced `src/css` / `src/js` files exist. |
 | `check:compat` | `check-compat.js` | Capability floor audit: flags unguarded above-Minimal structural CSS. |

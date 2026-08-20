@@ -4,8 +4,10 @@
 
 Actual CSS is designed for new projects where its bare class names don't
 conflict. For existing projects that need coexistence, `actual.layer.css`
-wraps the entire framework in a single `@layer actual` so its specificity
-is lower than unlayered author styles.
+wraps the core entrypoint in a single `@layer actual` so its specificity
+is lower than unlayered author styles. `actual.layer.css` is layered core —
+it does not include the functional families. Use it as the base and import
+the families you need from `actual-css/css/*` outside the layer.
 
 ## Usage
 
@@ -30,15 +32,15 @@ causes real-world override issues.
 
 ## Import order contract
 
-Within `actual.css` the order is:
+Within `actual.css` (the minimal core) the order is:
 
-1. Reset and base
-2. Tokens and theme
-3. Prose
-4. Layout (container, layout, grid)
-5. Variants
-6. Components
-7. Forms and utilities
+1. Reset
+2. Tokens
+3. Theme
+4. Base (document defaults)
+5. Intents
+6. Variants
+7. Focus
 8. Print
 
 This order is stable. If a future version introduces sublayers, the relative

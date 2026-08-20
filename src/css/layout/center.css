@@ -1,0 +1,13 @@
+/*
+ * Centered content column with a maximum measure.
+ *
+ * Public hooks:
+ * --center-size
+ * --center-pad
+ */
+.center {
+  box-sizing: content-box;
+  max-inline-size: var(--center-size, 72rem);
+  margin-inline: auto;
+  padding-inline: var(--center-pad, 1rem);
+}

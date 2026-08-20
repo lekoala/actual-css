@@ -28,7 +28,8 @@
 /* Display */
 @import "avatar.css";
 @import "key.css";
-@import "overline.css";
+@import "chat.css";
+@import "fab.css";
 
 /* Navigation */
 @import "navbar.css";
@@ -40,3 +41,7 @@
 /* Data */
 @import "table.css";
 @import "meter.css";
+
+/* Composed controls — imported last so equal-specificity corner rules remain
+   later than the controls they group. */
+@import "join.css";

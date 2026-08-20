@@ -1,0 +1,6 @@
+/* Full-height application shell. */
+.app-shell {
+  min-block-size: var(--viewport-block);
+  display: flex;
+  flex-direction: column;
+}

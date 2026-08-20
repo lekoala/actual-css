@@ -23,7 +23,7 @@ test("size=1 selects follow the single-select paths", () => {
 });
 
 test("accordion and select share the chevron asset", () => {
-  const tokensCss = readCss("src/css/tokens.css");
+  const tokensCss = readCss("src/css/core/tokens.css");
   const selectCss = readCss("src/css/forms/select.css");
   const accordionCss = readCss("src/css/components/accordion.css");
 
@@ -49,7 +49,7 @@ test("card picture bleed clips children", () => {
 });
 
 test("backdrop token remains dark independent from surface-solid", () => {
-  const css = readCss("src/css/tokens.css");
+  const css = readCss("src/css/core/tokens.css");
 
   expect(css).toContain("--backdrop-color: rgb(0 0 0);");
 });
@@ -69,7 +69,7 @@ test("file selector button reflects disabled cursor", () => {
 });
 
 test("generic grid exposes an override without changing fixed grids", () => {
-  const css = readCss("src/css/grid.css");
+  const css = readCss("src/css/layout/grid.css");
 
   expect(css.replace(/\s+/g, " ")).toContain(
     "grid-template-columns: var( --grid-columns, repeat(auto-fit, minmax(min(100%, var(--grid-min, 16rem)), 1fr)) );",
@@ -85,23 +85,24 @@ test("generic grid exposes an override without changing fixed grids", () => {
 });
 
 test("intrinsic composition primitives do not depend on an ancestor opt-in", () => {
-  const css = readCss("src/css/layout.css");
+  const switcherCss = readCss("src/css/layout/switcher.css");
+  const sidebarCss = readCss("src/css/layout/sidebar-layout.css");
 
-  expect(css).toMatch(/\.switcher\s*\{[\s\S]*display:\s*flex;[\s\S]*flex-wrap:\s*wrap;/);
-  expect(css).toMatch(
+  expect(switcherCss).toMatch(/\.switcher\s*\{[\s\S]*display:\s*flex;[\s\S]*flex-wrap:\s*wrap;/);
+  expect(switcherCss).toMatch(
     /\.switcher > \*\s*\{[\s\S]*var\(--switcher-threshold, 40rem\)[\s\S]*flex-grow:\s*1;/,
   );
-  expect(css).toMatch(/\.sidebar-layout\s*\{[\s\S]*display:\s*flex;[\s\S]*flex-wrap:\s*wrap;/);
-  expect(css).toMatch(
+  expect(sidebarCss).toMatch(/\.sidebar-layout\s*\{[\s\S]*display:\s*flex;[\s\S]*flex-wrap:\s*wrap;/);
+  expect(sidebarCss).toMatch(
     /\.sidebar-layout > :first-child\s*\{[\s\S]*flex-grow:\s*999;[\s\S]*var\(--sidebar-content-min, 30rem\)/,
   );
-  expect(css).toMatch(
+  expect(sidebarCss).toMatch(
     /\.sidebar-layout > :last-child\s*\{[\s\S]*var\(--sidebar-layout-size, 18rem\)/,
   );
-  expect(css).not.toContain(".container-query .sidebar-layout");
+  expect(sidebarCss).not.toContain(".container-query .sidebar-layout");
 
-  const optionalCss = readCss("src/css/optional/layout-extra.css");
-  expect(optionalCss).not.toContain(".switcher");
+  const topbarCss = readCss("src/css/layout/topbar.css");
+  expect(topbarCss).not.toContain(".switcher");
 });
 
 test("form-actions exposes alignment hooks while sticky behavior remains intact", () => {
@@ -115,21 +116,20 @@ test("form-actions exposes alignment hooks while sticky behavior remains intact"
 });
 
 test("stack resets block margins, cluster resets all margins", () => {
-  const css = readCss("src/css/layout.css");
+  const stackCss = readCss("src/css/layout/stack.css");
+  const clusterCss = readCss("src/css/layout/cluster.css");
 
-  expect(css).toMatch(/\.stack > \* \{\s*margin-block: 0;\s*\}/);
-  expect(css).toMatch(/\.cluster > \* \{\s*margin: 0;\s*\}/);
+  expect(stackCss).toMatch(/\.stack > \* \{\s*margin-block: 0;\s*\}/);
+  expect(clusterCss).toMatch(/\.cluster > \* \{\s*margin: 0;\s*\}/);
 });
 
-test("prose is imported before layout so stack/cluster own vertical rhythm inside prose", () => {
-  const css = readCss("src/css/actual.css");
-  const order = [
-    ...css.matchAll(/@import\s+(?:url\(\s*)?["'][^"']*?\/([^"']+)["']/g),
-  ].map((match) => match[1]);
+test("typography is imported before layout so stack/cluster own vertical rhythm inside prose", () => {
+  const css = readCss("src/css/actual.full.css");
+  const typographyIndex = css.indexOf("./typography/index.css");
+  const layoutIndex = css.indexOf("./layout/index.css");
 
-  expect(order).toContain("prose.css");
-  expect(order).toContain("layout.css");
-  expect(order.indexOf("prose.css")).toBeLessThan(order.indexOf("layout.css"));
+  expect(typographyIndex).toBeGreaterThan(-1);
+  expect(layoutIndex).toBeGreaterThan(typographyIndex);
 });
 
 test("native color control has normal, disabled, focus, and forced-colors states", () => {
@@ -147,7 +147,7 @@ test("native color control has normal, disabled, focus, and forced-colors states
 
 test("status bar supports long tokens and owns its print behavior", () => {
   const statusCss = readCss("src/css/components/status-bar.css");
-  const printCss = readCss("src/css/print.css");
+  const printCss = readCss("src/css/core/print.css");
 
   expect(statusCss).toContain("overflow-wrap: anywhere;");
   expect(statusCss).toMatch(/@media print\s*\{[\s\S]*\.status-bar/);
@@ -155,7 +155,7 @@ test("status bar supports long tokens and owns its print behavior", () => {
 });
 
 test("global print defaults do not know component selectors", () => {
-  const printCss = readCss("src/css/print.css");
+  const printCss = readCss("src/css/core/print.css");
 
   for (const selector of [
     ".alert",
@@ -182,7 +182,7 @@ test("badge is content-sized and never stretches in a stack", () => {
 });
 
 test("inverted maps tokens and paints early in variants.css (no late paint)", () => {
-  const variants = readCss("src/css/variants.css");
+  const variants = readCss("src/css/core/variants.css");
 
   expect(variants).toMatch(/\.inverted \{[\s\S]*--ui-bg: var\(--surface-solid\);/);
   expect(variants).toMatch(/\.inverted \{[\s\S]*--ui-fg: var\(--surface\);/);
@@ -205,7 +205,7 @@ test("card derives contextual tokens from the surface it owns", () => {
 });
 
 test("transparent treatments follow currentColor, including hover", () => {
-  const variants = readCss("src/css/variants.css");
+  const variants = readCss("src/css/core/variants.css");
   const button = readCss("src/css/components/button.css");
   const badge = readCss("src/css/components/badge.css");
 
@@ -240,7 +240,7 @@ test("navbar consumes the shared surface contract with an intent boundary", () =
 });
 
 test("overline is content-sized only on the pill and exposes a radius hook", () => {
-  const css = readCss("src/css/components/overline.css");
+  const css = readCss("src/css/typography/overline.css");
 
   expect(css).not.toMatch(/\.overline \{[\s\S]*align-self: flex-start;/);
   expect(css).toMatch(/\.overline\.pill \{[\s\S]*inline-size: fit-content;/);
@@ -258,7 +258,7 @@ test("btn.link is intrinsically content-sized", () => {
 
 test("busy overlay can inherit local surface background", () => {
   const busyCss = readCss("src/css/components/busy.css");
-  const variantsCss = readCss("src/css/variants.css");
+  const variantsCss = readCss("src/css/core/variants.css");
 
   expect(busyCss).toContain("var(--busy-overlay-bg, var(--surface))");
   expect(variantsCss).toContain("--busy-overlay-bg: var(--surface-solid);");
@@ -297,7 +297,7 @@ test("breadcrumb supports aria-current on the link or span", () => {
 });
 
 test("prose styles native kbd elements", () => {
-  const css = readCss("src/css/prose.css");
+  const css = readCss("src/css/typography/prose.css");
 
   expect(css).toContain(".prose kbd");
   expect(css).toContain("font-family: var(--font-mono);");
@@ -312,7 +312,7 @@ test("scrollspy CSS exposes native target-current enhancement", () => {
 
 test("modal uses scrollbar gutter only for measured classic-scrollbar locks", () => {
   const css = readCss("src/css/components/modal.css");
-  const resetCss = readCss("src/css/reset.css");
+  const resetCss = readCss("src/css/core/reset.css");
 
   expect(css).toContain("html.has-modal-open.had-scrollbar");
   expect(css).toContain("scrollbar-gutter: stable;");
@@ -369,8 +369,8 @@ test("alert-title margins are reset inside a scoped alert-body", () => {
 });
 
 test("theme-derived aliases are declared on :root, [data-theme] so islands recompute them", () => {
-  const tokensCss = readCss("src/css/tokens.css");
-  const themeCss = readCss("src/css/theme.css");
+  const tokensCss = readCss("src/css/core/tokens.css");
+  const themeCss = readCss("src/css/core/theme.css");
 
   const inThemeBoundary = (source, prop) => {
     const block = source.match(/^:root,\s*\n\[data-theme\]\s*\{([\s\S]*?)\n\}/m)?.[1] ?? "";
@@ -409,7 +409,7 @@ test("controls inside a disabled fieldset match :disabled by inheritance", () =>
 });
 
 test("optional OTP keeps one native input and covers validation states", () => {
-  const css = readCss("src/css/optional/otp.css");
+  const css = readCss("src/css/forms/otp.css");
 
   expect(css).toContain(".otp > input");
   expect(css).toMatch(/\.otp\s*\{[\s\S]*inline-size:\s*fit-content;/);
@@ -421,7 +421,7 @@ test("optional OTP keeps one native input and covers validation states", () => {
 });
 
 test("optional chat bubbles consume shared intents and variants", () => {
-  const css = readCss("src/css/optional/chat.css");
+  const css = readCss("src/css/components/chat.css");
 
   expect(css).toContain(":where(.chat-bubble)");
   expect(css).toContain("var(--ui-bg, var(--intent, var(--surface-subtle)))");
@@ -429,7 +429,7 @@ test("optional chat bubbles consume shared intents and variants", () => {
 });
 
 test("optional aura only animates when motion is allowed", () => {
-  const css = readCss("src/css/optional/aura.css");
+  const css = readCss("src/css/effects/aura.css");
 
   expect(css).toContain("@media (prefers-reduced-motion: no-preference)");
   expect(css).toContain(".aura:not(.aura-glow)");
@@ -437,7 +437,7 @@ test("optional aura only animates when motion is allowed", () => {
 });
 
 test("optional FAB preserves DOM order and stays out of print", () => {
-  const css = readCss("src/css/optional/fab.css");
+  const css = readCss("src/css/components/fab.css");
 
   expect(css).toContain("flex-direction: column;");
   expect(css).not.toContain("column-reverse");

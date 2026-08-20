@@ -14,17 +14,24 @@ test("package ships built assets and theme reference sources", () => {
 
   expect(files).toContain("dist");
   expect(files).toContain("src/css/*.css");
-  expect(files).toContain("src/css/components");
+  expect(files).toContain("src/css/core");
+  expect(files).toContain("src/css/layout");
+  expect(files).toContain("src/css/typography");
   expect(files).toContain("src/css/forms");
-  expect(files).toContain("src/css/optional");
+  expect(files).toContain("src/css/components");
+  expect(files).toContain("src/css/effects");
+  expect(files).toContain("src/css/utilities");
   expect(files).toContain("src/css/themes");
   expect(files).not.toContain("src/css");
+  expect(files).not.toContain("src/css/optional");
 });
 
-test("dist directory exists and contains actual.min.css and optional.min.css", () => {
+test("dist directory contains the full bundle and no optional artifacts", () => {
   expect(existsSync(join(ROOT, "dist", "actual.min.css"))).toBe(true);
-  expect(existsSync(join(ROOT, "dist", "optional.min.css"))).toBe(true);
-  expect(existsSync(join(ROOT, "dist", "optional.css"))).toBe(true);
+  expect(existsSync(join(ROOT, "dist", "actual.full.css"))).toBe(true);
+  expect(existsSync(join(ROOT, "dist", "actual.full.min.css"))).toBe(true);
+  expect(existsSync(join(ROOT, "dist", "optional.css"))).toBe(false);
+  expect(existsSync(join(ROOT, "dist", "optional.min.css"))).toBe(false);
 });
 
 test("every JS export path resolves to an existing source file", () => {

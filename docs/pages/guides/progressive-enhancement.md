@@ -2,11 +2,12 @@
 
 > The optional JavaScript runtime that progressively enhances Actual's semantic markup — self-registering side-effect modules, the `enhance()` DOM lifecycle, stateless command routing, and the floating and surface contracts for custom widgets.
 
-Actual's JavaScript modules are optional. Importing `actual-css/js` registers the
-complete default runtime — every built-in enhancer, including validation and
-status; importing a specific module registers only that behavior. The runtime
-does not require `DOMContentLoaded` or manual init calls, and it never touches
-`window`: there is no global object to call into.
+Actual's JavaScript modules are optional. Importing `actual-css/js/full`
+registers the complete default runtime — every built-in enhancer, including
+validation and status. Importing `actual-css/js` registers only the enhancement
+manifest loader; importing a specific module registers only that behavior. The
+runtime does not require `DOMContentLoaded` or manual init calls, and it never
+touches `window`: there is no global object to call into.
 
 ## Browser support
 
@@ -57,13 +58,14 @@ handle, and cleanup happens per element when an element leaves the DOM.
 
 ## The default runtime
 
-Loading `dist/actual.js` as a plain `<script>` (no `type="module"`, no bundler,
-no `import`) gets the full runtime. Static HTML that needs to trigger something
-from its own inline `<script>` dispatches the module's public event instead of
-calling into a global — `actual:status` for the status bar, for example:
+Loading `dist/actual.full.js` as a plain `<script>` (no `type="module"`, no
+bundler, no `import`) gets the full runtime. Static HTML that needs to trigger
+something from its own inline `<script>` dispatches the module's public event
+instead of calling into a global — `actual:status` for the status bar, for
+example:
 
 ```html
-<script src="actual.js"></script>
+<script src="actual.full.js"></script>
 <script>
   document.dispatchEvent(new CustomEvent("actual:status", {
     bubbles: true,
@@ -89,7 +91,7 @@ calling into a global — `actual:status` for the status bar, for example:
 | `actual-css/js/status` | Singleton status bar on `[data-status][role="status"]` |
 | `actual-css/js/enhancement-loader` | Declared enhancement manifests (`data-enhance-modules`, `Enhance-Modules`) |
 
-Use `actual-css/js` for demos, playgrounds, and smoke tests where one import
+Use `actual-css/js/full` for demos, playgrounds, and smoke tests where one import
 enables every built-in behavior. Production apps can import individual modules
 such as `actual-css/js/validation` or `actual-css/js/status` when only those are
 needed.

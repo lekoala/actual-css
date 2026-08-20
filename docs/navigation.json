@@ -5,7 +5,7 @@
       "slug": "guides",
       "pages": [
         "introduction",
-        "optional-components",
+        "modular-import",
         "progressive-enhancement",
         "bootstrap",
         "tailwind"

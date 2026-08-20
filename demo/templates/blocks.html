@@ -6,8 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Interface Blocks - Actual CSS</title>
   <meta name="description" content="A catalog of interface blocks: data tables, forms, empty states, notifications, and more.">
-  <link rel="stylesheet" href="../../dist/actual.css">
-  <link rel="stylesheet" href="../../dist/optional.css">
+  <link rel="stylesheet" href="../../dist/actual.full.css">
   <link rel="stylesheet" href="../../dist/actual-themes.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
   <link rel="stylesheet" href="../styles/demo.css">
@@ -141,7 +140,8 @@
 
     /*
      * Floating labels + joined fields — the floating mechanics come from the
-     * optional .floating-field module (src/css/optional/floating-field.css);
+     * Floating labels + joined fields — the floating mechanics come from the
+     * .floating-field module (src/css/forms/floating-field.css);
      * this recipe only owns the joined-frame presentation: outer border,
      * responsive separators, cell tints, and the focus bottom line.
      */
@@ -790,7 +790,7 @@
        on invalid submit, no manual listener (see auth-card block). -->
   <div class="status-bar" data-status role="status" aria-live="polite" aria-atomic="true"></div>
 
-  <script src="../../dist/actual.js"></script>
+  <script src="../../dist/actual.full.js"></script>
   <script>
     const switcher = document.getElementById("theme-switcher");
 

@@ -96,6 +96,27 @@ function exportTarget(specifier, packageJson) {
   return null;
 }
 
+/*
+ * The 0.3 -> 0.4 modular-import guide documents the removed optional family by
+ * design. A documented removal is not a broken link, so these historical
+ * entrypoints are allowed to appear there — and only there, so a legacy path
+ * in any other document still fails as unsupported.
+ */
+const MODULAR_IMPORT_GUIDE = join("docs", "pages", "guides", "modular-import.md");
+const REMOVED_ENTRYPOINTS = new Set([
+  "actual-css/css/optional",
+  "actual-css/css/optional/otp",
+  "actual-css/css/optional/floating-field",
+  "actual-css/css/optional/chat",
+  "actual-css/css/optional/fab",
+  "actual-css/css/optional/aura",
+  "actual-css/css/optional/scroller",
+  "actual-css/css/optional/scroll-snap",
+  "actual-css/css/optional/layout-extra",
+  "actual-css/css/optional/typography-fluid",
+  "actual-css/css/optional/utilities-extra",
+]);
+
 async function main() {
   const files = (await Promise.all(DOC_ROOTS.map(markdownFiles))).flat();
   const packageJson = JSON.parse(await readFile(join(ROOT, "package.json"), "utf8"));
@@ -121,6 +142,7 @@ async function main() {
     for (const match of source.matchAll(packagePattern)) {
       const specifier = match[0];
       entrypoints.add(specifier);
+      if (relative(ROOT, file) === MODULAR_IMPORT_GUIDE && REMOVED_ENTRYPOINTS.has(specifier)) continue;
       const target = exportTarget(specifier, packageJson);
       if (typeof target !== "string" || !existsSync(resolve(ROOT, target))) {
         failures.push(`${relativePath(file)}: unsupported package entrypoint ${specifier}`);

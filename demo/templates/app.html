@@ -6,9 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Application — Actual CSS</title>
   <meta name="description" content="Full application layout with sidebar navigation, topbar, and content area.">
-  <link rel="stylesheet" href="../../dist/actual.css">
+  <link rel="stylesheet" href="../../dist/actual.full.css">
   <link rel="stylesheet" href="../../dist/actual-themes.min.css">
-  <link rel="stylesheet" href="../../dist/optional.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
   <style>
     /* Template-local layout. Each rule papers over a known framework gap.
@@ -61,8 +60,8 @@
       min-block-size: 100dvh;
     }
 
-    /* Sticky/blur shell comes from the framework's .topbar (optional
-       layout-extra.css). Only the tighter block padding stays local. */
+    /* Sticky/blur shell comes from the framework's .topbar
+       (src/css/layout/topbar.css). Only the tighter block padding stays local. */
     .app-layout-topbar {
       padding-block: 0.65rem;
     }
@@ -836,7 +835,7 @@
        public actual:status event instead of a hand-rolled toast stack. -->
   <div class="status-bar" data-status role="status" aria-live="polite" aria-atomic="true"></div>
 
-  <script src="../../dist/actual.js"></script>
+  <script src="../../dist/actual.full.js"></script>
   <script>
     const switcher = document.getElementById("theme-switcher");
 

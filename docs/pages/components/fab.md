@@ -1,6 +1,6 @@
 # Floating action button
 
-> **Optional** — import `actual-css/css/optional/fab` or `actual-css/css/optional/index`.
+> **Module** — import `actual-css/css/components/fab` or `actual-css/css/components`.
 
 FAB fixes a primary action near the viewport's block-end and inline-end edges.
 The existing button component owns its size, shape, intent, and interaction.

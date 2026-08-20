@@ -6,7 +6,7 @@ import { fileURLToPath } from "node:url";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, "..");
 const ENTRY = join(ROOT, "src", "css", "actual.css");
-const OPTIONAL_ENTRY = join(ROOT, "src", "css", "optional", "index.css");
+const FULL_ENTRY = join(ROOT, "src", "css", "actual.full.css");
 const THEMES_ENTRY = join(ROOT, "src", "css", "themes", "index.css");
 const DIST = join(ROOT, "dist");
 
@@ -131,8 +131,8 @@ async function verifyDist(distDir) {
   const distFiles = [
     "actual.css",
     "actual.min.css",
-    "optional.css",
-    "optional.min.css",
+    "actual.full.css",
+    "actual.full.min.css",
     "actual-themes.min.css",
   ];
   let ok = true;
@@ -180,8 +180,7 @@ async function main() {
 
   for (const f of await readdir(DIST)) {
     if (
-      (f.startsWith("actual") && f.endsWith(".css")) ||
-      f.startsWith("optional") ||
+      f.startsWith("actual") && f.endsWith(".css") ||
       f.endsWith(".css.map")
     ) {
       await rm(join(DIST, f), { force: true });
@@ -190,15 +189,15 @@ async function main() {
 
   const devPath = await build({ minify: false, naming: "actual.css" });
   const minPath = await build({ minify: true, naming: "actual.min.css" });
-  const optionalPath = await build({
-    entry: OPTIONAL_ENTRY,
+  const fullDevPath = await build({
+    entry: FULL_ENTRY,
     minify: false,
-    naming: "optional.css",
+    naming: "actual.full.css",
   });
-  const optionalMinPath = await build({
-    entry: OPTIONAL_ENTRY,
+  const fullMinPath = await build({
+    entry: FULL_ENTRY,
     minify: true,
-    naming: "optional.min.css",
+    naming: "actual.full.min.css",
   });
   const themesPath = await build({
     entry: THEMES_ENTRY,
@@ -206,21 +205,21 @@ async function main() {
     naming: "actual-themes.min.css",
   });
 
-  const [devStat, minStat, optionalStat, optionalMinStat, themesStat] =
+  const [devStat, minStat, fullDevStat, fullMinStat, themesStat] =
     await Promise.all([
       stat(devPath),
       stat(minPath),
-      stat(optionalPath),
-      stat(optionalMinPath),
+      stat(fullDevPath),
+      stat(fullMinPath),
       stat(themesPath),
     ]);
   const ratio = ((1 - minStat.size / devStat.size) * 100).toFixed(1);
-  const optionalRatio = ((1 - optionalMinStat.size / optionalStat.size) * 100).toFixed(1);
+  const fullRatio = ((1 - fullMinStat.size / fullDevStat.size) * 100).toFixed(1);
 
   console.log(`Built ${devPath} (${formatBytes(devStat.size)})`);
   console.log(`Built ${minPath} (${formatBytes(minStat.size)}) - ${ratio}% smaller`);
-  console.log(`Built ${optionalPath} (${formatBytes(optionalStat.size)})`);
-  console.log(`Built ${optionalMinPath} (${formatBytes(optionalMinStat.size)}) - ${optionalRatio}% smaller`);
+  console.log(`Built ${fullDevPath} (${formatBytes(fullDevStat.size)})`);
+  console.log(`Built ${fullMinPath} (${formatBytes(fullMinStat.size)}) - ${fullRatio}% smaller`);
   console.log(`Built ${themesPath} (${formatBytes(themesStat.size)})`);
 
   await verifyDist(DIST);

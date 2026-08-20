@@ -5,7 +5,7 @@ import { fileURLToPath } from "node:url";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, "..");
-const CSS_FILE = join(ROOT, "dist", "actual.css");
+const CSS_FILE = join(ROOT, "dist", "actual.full.css");
 
 const RESERVED = new Set(
   JSON.parse(readFileSync(join(__dirname, "reserved-classes.json"), "utf8")),

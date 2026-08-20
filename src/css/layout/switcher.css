@@ -1,0 +1,21 @@
+/*
+ * Peer regions that switch as a group.
+ *
+ * All children sit side by side when they all fit; otherwise every child
+ * stacks. Unlike .grid, this recipe cannot create a partial row such as two
+ * items plus one orphan.
+ *
+ * Public hooks:
+ * --switcher-threshold
+ */
+.switcher {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap);
+}
+
+.switcher > * {
+  flex-basis: calc((var(--switcher-threshold, 40rem) - 100%) * 999);
+  flex-grow: 1;
+  min-inline-size: 0;
+}

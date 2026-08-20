@@ -1,0 +1,6 @@
+/* Local container-query opt-in. Use it for a component that explicitly
+   changes representation according to its allocated inline size. Layout
+   primitives are intrinsic and do not require this wrapper. */
+.container-query {
+  container-type: inline-size;
+}

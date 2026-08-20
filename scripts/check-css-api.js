@@ -114,12 +114,12 @@ function isThemeFile(relPath) {
 }
 
 const CORE_CATALOGUE = new Set([
-  "src/css/tokens.css",
-  "src/css/theme.css",
-  "src/css/variants.css",
-  "src/css/utilities.css",
-  "src/css/intents.css",
-  "src/css/focus.css",
+  "src/css/core/tokens.css",
+  "src/css/core/theme.css",
+  "src/css/core/variants.css",
+  "src/css/utilities/base.css",
+  "src/css/core/intents.css",
+  "src/css/core/focus.css",
 ]);
 
 function isCataloguePath(relPath) {

@@ -15,38 +15,32 @@ npm install actual-css
 Import the full framework in your CSS:
 
 ```css
-@import "actual-css";
+@import "actual-css/full";
 ```
+
+`actual-css/full` ships every functional family. The bare `actual-css` entrypoint is the minimal core (reset, tokens, theme, base, intents, variants, focus, print).
 
 Or import only the pieces you use:
 
 ```css
-@import "actual-css/css/reset";
-@import "actual-css/css/base";
-@import "actual-css/css/tokens";
-@import "actual-css/css/theme";
-@import "actual-css/css/intents";
-@import "actual-css/css/variants";
+@import "actual-css/css";
 @import "actual-css/css/layout";
-@import "actual-css/css/grid";
 @import "actual-css/css/components/button";
 @import "actual-css/css/components/card";
 @import "actual-css/css/forms";
 @import "actual-css/css/components/flyout";
 @import "actual-css/css/utilities";
-@import "actual-css/css/components/join";
-/* Keep the focus baseline after components and controls. */
-@import "actual-css/css/focus";
 ```
 
-`focus` is the final interactive baseline in modular builds: older browsers
-retain a visible `:focus` outline, while browsers with `:focus-visible` avoid
-showing it for pointer focus.
+`actual-css/css` is the minimal core. Family manifests (`css/layout`,
+`css/forms`, `css/components`, `css/typography`, `css/effects`,
+`css/utilities`) and their modules map one-to-one to `src/css/`. See the
+[modular import guide](docs/pages/guides/modular-import.md) for the full map.
 
-You can also use the compiled file directly:
+You can also use the compiled full bundle directly:
 
 ```html
-<link rel="stylesheet" href="actual.min.css">
+<link rel="stylesheet" href="actual.full.min.css">
 ```
 
 ## Usage
@@ -96,14 +90,14 @@ Undocumented `is-*` classes are runtime internals.
 
 **Theme hooks** — public tokens for color, radius, shadow, motion, and typography. Reference presets in `src/css/themes/` are demo material, not default CSS or public package entrypoints.
 
-## Optional CSS
+## Modular CSS
 
-```css
-@import "actual-css/css/layer";
-@import "actual-css/css/optional/index";
-```
-
-Browse [`src/css/optional/`](src/css/optional/) for available modules such as custom scrollbars, scroll snap rails, extra utilities, and optional layout helpers.
+The family manifests are the module catalog: `core`, `layout`, `typography`,
+`forms`, `components`, `effects`, and `utilities` under `src/css/`, each with
+an `index.css` manifest and per-module files. Import a manifest to get the
+family, or a single file for one module. See the
+[modular import guide](docs/pages/guides/modular-import.md) for the full map
+of module names to import paths.
 
 ## JavaScript enhancers
 
@@ -114,7 +108,7 @@ Presentation (`class`) and behaviour (`data-enhance`) are separate layers — im
 Use the full module:
 
 ```html
-<script src="actual.js" type="module"></script>
+<script src="actual.full.js" type="module"></script>
 ```
 
 Or import only the enhancers you need:
@@ -127,14 +121,16 @@ import "actual-css/js/mask";
 import "actual-css/js/tooltip";
 ```
 
-The package does not maintain separate partial bundles. Modular entrypoints map to source files, so each project can compose the framework shape it needs. To customize the full runtime, comment the imports you do not want in `src/js/index.js` and rebuild the JavaScript bundle. JavaScript modules are safe to import during server-side rendering; outside a browser, registration is a no-op.
+The package does not maintain separate partial bundles. Modular entrypoints map to source files, so each project can compose the framework shape it needs. To customize the full runtime, comment the imports you do not want in `src/js/full.js` and rebuild the JavaScript bundle. JavaScript modules are safe to import during server-side rendering; outside a browser, registration is a no-op.
 
 For project-specific behavior, use `actual-css/js/enhance` and the small input helpers rather than patching built-in modules. See [Progressive Enhancements](docs/pages/enhancements/overview.md) for custom filters, textarea autogrow, ajax forms, and htmx-like patterns.
 
 ## Distribution
 
-* `dist/actual.css` — readable modern CSS.
-* `dist/actual.min.css` — the same CSS, minified for production.
+* `dist/actual.css` — readable core CSS.
+* `dist/actual.min.css` — the core, minified for production.
+* `dist/actual.full.css` — readable full-bundle CSS (every family).
+* `dist/actual.full.min.css` — the full bundle, minified for production.
 
 Modern syntax such as `light-dark()`, `color-mix()`, `@container`, `:has()`, `100dvh`, and `100vi` is preserved in the distributed files.
 
