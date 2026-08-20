@@ -530,6 +530,207 @@ small {
   --intent-fg: var(--neutral-fg);
 }
 
+/* Prose before layout: layout primitives (.stack, .cluster) reset child
+   margins and must win over .prose's flow margins at equal specificity —
+   source order is the tie-breaker, so prose loads first. */
+/*
+ * Prose is the opt-in rich text scope for authored content.
+ *
+ * Global element styles stay mild so app UI is not shaped accidentally. Page
+ * layout, forms, cards, navigation, and app tables remain outside this scope.
+ *
+ * Public hooks:
+ * --prose-size
+ * --prose-line-height
+ * --prose-measure
+ * --prose-flow
+ * --prose-heading-line-height
+ * --prose-h1
+ * --prose-h2
+ * --prose-h3
+ * --prose-h4
+ */
+
+.prose {
+  /* Prose scale */
+  --prose-size: 1rem;
+  --prose-line-height: 1.7;
+  --prose-measure: 70ch;
+  --prose-flow: 1em;
+  --prose-heading-line-height: 1.2;
+  --prose-h1: 2rem;
+  --prose-h2: 1.5rem;
+  --prose-h3: 1.25rem;
+  --prose-h4: 1.125rem;
+
+  max-inline-size: var(--prose-measure);
+  color: var(--text);
+  font-size: var(--prose-size);
+  line-height: var(--prose-line-height);
+  overflow-wrap: break-word;
+}
+
+.prose :where(p, ul, ol, dl, blockquote, pre, table, figure) {
+  margin-block: var(--prose-flow) 0;
+}
+
+.prose :where(h1, h2, h3, h4, h5, h6) {
+  margin-block: 1.5em 0;
+  color: var(--text);
+  font-weight: var(--font-weight-strong);
+  line-height: var(--prose-heading-line-height);
+}
+
+.prose :where(p, li, blockquote) {
+  text-wrap: pretty;
+}
+
+.prose > :first-child {
+  margin-block-start: 0;
+}
+
+.prose h1 {
+  font-size: var(--prose-h1);
+}
+
+.prose h2 {
+  font-size: var(--prose-h2);
+}
+
+.prose h3 {
+  font-size: var(--prose-h3);
+}
+
+.prose h4 {
+  font-size: var(--prose-h4);
+}
+
+.prose a {
+  color: var(--primary);
+  text-decoration-line: underline;
+  text-decoration-thickness: 0.08em;
+  text-underline-offset: 0.18em;
+}
+
+.prose a:hover {
+  text-decoration-thickness: 0.12em;
+}
+
+@supports (color: color-mix(in oklch, red, white)) {
+  .prose a:hover {
+    color: color-mix(in oklch, var(--primary), var(--text) 15%);
+  }
+}
+
+.prose :where(ul, ol) {
+  padding-inline-start: 1.5em;
+}
+
+.prose li + li {
+  margin-block-start: 0.35em;
+}
+
+.prose code {
+  padding: 0.15em 0.3em;
+  border-radius: var(--radius-sm);
+  background: var(--surface-subtle);
+  color: var(--text);
+  font-size: 0.875em;
+}
+
+/* Visual twin of .key (components/key.css) — keep the two recipes in sync. */
+.prose kbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-inline-size: 1.75em;
+  min-block-size: 1.6em;
+  padding-inline: 0.45em;
+  border: var(--border-width) solid var(--border);
+  border-block-end-width: calc(var(--border-width) * 2);
+  border-radius: var(--radius-sm);
+  background: var(--surface-raised);
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 0.875em;
+  font-weight: var(--font-weight-medium);
+  line-height: 1;
+  white-space: nowrap;
+  vertical-align: 0.08em;
+}
+
+.prose pre {
+  overflow-x: auto;
+  padding: 1em;
+  border: var(--border-width) solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface-subtle);
+}
+
+.prose pre code {
+  padding: 0;
+  background: transparent;
+}
+
+.prose blockquote {
+  padding-inline-start: 1em;
+  border-inline-start: var(--border-width) solid var(--border);
+  color: var(--text-muted);
+}
+
+.prose figure {
+  margin-inline: 0;
+}
+
+.prose figcaption {
+  margin-block-start: 0.5em;
+  color: var(--text-muted);
+  font-size: 0.875em;
+}
+
+.prose table {
+  inline-size: 100%;
+  border-collapse: collapse;
+}
+
+.prose th,
+.prose td {
+  padding: 0.5em;
+  border-block-end: var(--border-width) solid var(--border);
+  text-align: start;
+}
+
+/* Lead paragraph: a slightly larger, more relaxed reading-introduction text.
+   Non-fluid and always available — use .text-lead from the optional fluid
+   module for marketing/display surfaces. */
+.lead {
+  font-size: 1.125em;
+  line-height: var(--line-height-relaxed);
+}
+
+/* Readable content measure. Composes with .center for centering or with
+   margin-inline: auto for a one-off centered block. */
+.measure {
+  max-inline-size: var(--prose-measure, 70ch);
+}
+
+.prose.sm {
+  --prose-size: 0.9375rem;
+  --prose-h1: 1.75rem;
+  --prose-h2: 1.375rem;
+  --prose-h3: 1.125rem;
+  --prose-h4: 1rem;
+}
+
+.prose.lg {
+  --prose-size: 1.125rem;
+  --prose-measure: 72ch;
+  --prose-h1: 2.25rem;
+  --prose-h2: 1.625rem;
+  --prose-h3: 1.375rem;
+  --prose-h4: 1.25rem;
+}
+
 /*
  * Core layout primitives: stack, cluster, center, frame, app-shell, media,
  * sidebar-layout. Each primitive owns a single, readable behavior; they are
@@ -545,8 +746,8 @@ small {
  * --sidebar-layout-size
  *
  * Child contracts:
- * .stack owns vertical rhythm: direct-child margins are reset, spacing comes
- *   from --gap.
+ * .stack owns vertical rhythm: direct-child block-axis margins are reset,
+ *   spacing comes from --gap, inline margins stay free.
  * .cluster owns inline rhythm: direct-child margins are reset, spacing comes
  *   from --gap.
  * .frame sizes direct media children (img/video/iframe/canvas/svg) to fill the
@@ -562,8 +763,10 @@ small {
   gap: var(--gap);
 }
 
+/* .stack owns the block axis only: block margins reset, inline margins stay
+   free (self-centering children via margin-inline: auto keep working). */
 .stack > * {
-  margin: 0;
+  margin-block: 0;
 }
 
 .cluster {
@@ -839,204 +1042,6 @@ small {
 
 /* Interactive hover recipes live in the components that consume them:
      components/button.css and components/badge.css. */
-
-/*
- * Prose is the opt-in rich text scope for authored content.
- *
- * Global element styles stay mild so app UI is not shaped accidentally. Page
- * layout, forms, cards, navigation, and app tables remain outside this scope.
- *
- * Public hooks:
- * --prose-size
- * --prose-line-height
- * --prose-measure
- * --prose-flow
- * --prose-heading-line-height
- * --prose-h1
- * --prose-h2
- * --prose-h3
- * --prose-h4
- */
-
-.prose {
-  /* Prose scale */
-  --prose-size: 1rem;
-  --prose-line-height: 1.7;
-  --prose-measure: 70ch;
-  --prose-flow: 1em;
-  --prose-heading-line-height: 1.2;
-  --prose-h1: 2rem;
-  --prose-h2: 1.5rem;
-  --prose-h3: 1.25rem;
-  --prose-h4: 1.125rem;
-
-  max-inline-size: var(--prose-measure);
-  color: var(--text);
-  font-size: var(--prose-size);
-  line-height: var(--prose-line-height);
-  overflow-wrap: break-word;
-}
-
-.prose :where(p, ul, ol, dl, blockquote, pre, table, figure) {
-  margin-block: var(--prose-flow) 0;
-}
-
-.prose :where(h1, h2, h3, h4, h5, h6) {
-  margin-block: 1.5em 0;
-  color: var(--text);
-  font-weight: var(--font-weight-strong);
-  line-height: var(--prose-heading-line-height);
-}
-
-.prose :where(p, li, blockquote) {
-  text-wrap: pretty;
-}
-
-.prose > :first-child {
-  margin-block-start: 0;
-}
-
-.prose h1 {
-  font-size: var(--prose-h1);
-}
-
-.prose h2 {
-  font-size: var(--prose-h2);
-}
-
-.prose h3 {
-  font-size: var(--prose-h3);
-}
-
-.prose h4 {
-  font-size: var(--prose-h4);
-}
-
-.prose a {
-  color: var(--primary);
-  text-decoration-line: underline;
-  text-decoration-thickness: 0.08em;
-  text-underline-offset: 0.18em;
-}
-
-.prose a:hover {
-  text-decoration-thickness: 0.12em;
-}
-
-@supports (color: color-mix(in oklch, red, white)) {
-  .prose a:hover {
-    color: color-mix(in oklch, var(--primary), var(--text) 15%);
-  }
-}
-
-.prose :where(ul, ol) {
-  padding-inline-start: 1.5em;
-}
-
-.prose li + li {
-  margin-block-start: 0.35em;
-}
-
-.prose code {
-  padding: 0.15em 0.3em;
-  border-radius: var(--radius-sm);
-  background: var(--surface-subtle);
-  color: var(--text);
-  font-size: 0.875em;
-}
-
-/* Visual twin of .key (components/key.css) — keep the two recipes in sync. */
-.prose kbd {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-inline-size: 1.75em;
-  min-block-size: 1.6em;
-  padding-inline: 0.45em;
-  border: var(--border-width) solid var(--border);
-  border-block-end-width: calc(var(--border-width) * 2);
-  border-radius: var(--radius-sm);
-  background: var(--surface-raised);
-  color: var(--text);
-  font-family: var(--font-mono);
-  font-size: 0.875em;
-  font-weight: var(--font-weight-medium);
-  line-height: 1;
-  white-space: nowrap;
-  vertical-align: 0.08em;
-}
-
-.prose pre {
-  overflow-x: auto;
-  padding: 1em;
-  border: var(--border-width) solid var(--border);
-  border-radius: var(--radius);
-  background: var(--surface-subtle);
-}
-
-.prose pre code {
-  padding: 0;
-  background: transparent;
-}
-
-.prose blockquote {
-  padding-inline-start: 1em;
-  border-inline-start: var(--border-width) solid var(--border);
-  color: var(--text-muted);
-}
-
-.prose figure {
-  margin-inline: 0;
-}
-
-.prose figcaption {
-  margin-block-start: 0.5em;
-  color: var(--text-muted);
-  font-size: 0.875em;
-}
-
-.prose table {
-  inline-size: 100%;
-  border-collapse: collapse;
-}
-
-.prose th,
-.prose td {
-  padding: 0.5em;
-  border-block-end: var(--border-width) solid var(--border);
-  text-align: start;
-}
-
-/* Lead paragraph: a slightly larger, more relaxed reading-introduction text.
-   Non-fluid and always available — use .text-lead from the optional fluid
-   module for marketing/display surfaces. */
-.lead {
-  font-size: 1.125em;
-  line-height: var(--line-height-relaxed);
-}
-
-/* Readable content measure. Composes with .center for centering or with
-   margin-inline: auto for a one-off centered block. */
-.measure {
-  max-inline-size: var(--prose-measure, 70ch);
-}
-
-.prose.sm {
-  --prose-size: 0.9375rem;
-  --prose-h1: 1.75rem;
-  --prose-h2: 1.375rem;
-  --prose-h3: 1.125rem;
-  --prose-h4: 1rem;
-}
-
-.prose.lg {
-  --prose-size: 1.125rem;
-  --prose-measure: 72ch;
-  --prose-h1: 2.25rem;
-  --prose-h2: 1.625rem;
-  --prose-h3: 1.375rem;
-  --prose-h4: 1.25rem;
-}
 
 /* Controls */
 /*

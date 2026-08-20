@@ -3,10 +3,13 @@
 @import "./theme.css";
 @import "./base.css";
 @import "./intents.css";
+/* Prose before layout: layout primitives (.stack, .cluster) reset child
+   margins and must win over .prose's flow margins at equal specificity —
+   source order is the tie-breaker, so prose loads first. */
+@import "./prose.css";
 @import "./layout.css";
 @import "./grid.css";
 @import "./variants.css";
-@import "./prose.css";
 @import "./components/index.css";
 @import "./forms/index.css";
 @import "./utilities.css";

@@ -216,8 +216,10 @@
   </div>
 </div>
 <p>Use cluster for action rows, tags, toolbar sections, metadata, and compact navigation.</p>
-<p>Like <code>.stack</code>, cluster owns its children's spacing: direct-child margins are
-reset, so spacing between items always comes from <code>--gap</code>.</p>
+<p>Cluster owns its children's spacing: direct-child margins are reset, so spacing
+between items always comes from <code>--gap</code>. Unlike <code>.stack</code>, which resets only the
+block axis, cluster resets margins on both axes — a wrapping cluster's <code>gap</code>
+controls inline spacing between items and block spacing between wrapped rows.</p>
 <h2 id="css-hooks">CSS hooks</h2>
 <ul>
 <li><code>--cluster-justify</code> — main-axis distribution (<code>justify-content</code>).</li>

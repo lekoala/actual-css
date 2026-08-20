@@ -204,22 +204,36 @@
 <p>Add <code>.items-center</code> to align the leading element with short trailing content. For multi-line content, the default <code>align-items: start</code> is more comfortable.</p>
 <div class="docs-example">
   <div class="docs-preview">
-<article class="card media items-center">
+<article class="card media">
   <span class="avatar"><abbr>AM</abbr></span>
-  <div class="stack">
+  <div class="stack gap-none">
     <strong>Ada Meridian</strong>
     <p class="muted">Senior designer working on design systems.</p>
   </div>
 </article>
   </div>
   <div class="docs-code">
-    <pre><code class="language-html">&lt;article class=&quot;card media items-center&quot;&gt;
+    <pre><code class="language-html">&lt;article class=&quot;card media&quot;&gt;
   &lt;span class=&quot;avatar&quot;&gt;&lt;abbr&gt;AM&lt;/abbr&gt;&lt;/span&gt;
-  &lt;div class=&quot;stack&quot;&gt;
+  &lt;div class=&quot;stack gap-none&quot;&gt;
     &lt;strong&gt;Ada Meridian&lt;/strong&gt;
     &lt;p class=&quot;muted&quot;&gt;Senior designer working on design systems.&lt;/p&gt;
   &lt;/div&gt;
 &lt;/article&gt;</code></pre>
+  </div>
+</div>
+<div class="docs-example">
+  <div class="docs-preview">
+<div class="media items-center">
+  <span class="avatar"><abbr>AM</abbr></span>
+  <span>Ada Meridian</span>
+</div>
+  </div>
+  <div class="docs-code">
+    <pre><code class="language-html">&lt;div class=&quot;media items-center&quot;&gt;
+  &lt;span class=&quot;avatar&quot;&gt;&lt;abbr&gt;AM&lt;/abbr&gt;&lt;/span&gt;
+  &lt;span&gt;Ada Meridian&lt;/span&gt;
+&lt;/div&gt;</code></pre>
   </div>
 </div>
 <p>The media object is the underlying pattern of <code>.blog-author</code>, <code>.blog-comment</code>, and similar compositions in templates. Components can adopt it instead of repeating the grid rule.</p>
