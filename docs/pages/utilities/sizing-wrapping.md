@@ -69,7 +69,7 @@ Use `.scroller` to apply optional framework scrollbar treatment to a scroll cont
 `scroller` is not imported by `actual.css`. Import it explicitly when a project wants Actual CSS scrollbar chrome instead of the native OS default:
 
 ```css
-@import "actual-css/css/optional/scroller";
+@import "actual-css/css/layout/scroller";
 ```
 
 ```html demo

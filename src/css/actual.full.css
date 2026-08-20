@@ -1,2 +1,11 @@
-@import "actual.css";
-@import "optional/index.css";
+/* Core, then every shipped functional family in cascade order. Typography
+   precedes Layout because direct-child layout resets intentionally win over
+   equal-specificity prose flow margins. Forms precede Components because of
+   join. Do not alphabetize these top-level imports. */
+@import "./actual.css";
+@import "./typography/index.css";
+@import "./layout/index.css";
+@import "./forms/index.css";
+@import "./components/index.css";
+@import "./effects/index.css";
+@import "./utilities/index.css";

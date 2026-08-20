@@ -12,6 +12,7 @@ test("javascript modules import without a DOM", async () => {
 
   const modules = [
     "index",
+    "full",
     "context-menu",
     "dialog",
     "dismiss",

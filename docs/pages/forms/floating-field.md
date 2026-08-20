@@ -1,6 +1,6 @@
 # Floating labels
 
-> **Optional** — import `actual-css/css/optional/floating-field` or `actual-css/css/optional`.
+> **Module** — import `actual-css/css/forms/floating-field` or `actual-css/css/forms/all`.
 
 `.floating-field` turns a control and its label into a floating-label cell:
 the label rests inside the control and floats to the top when the control is

@@ -5,18 +5,17 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Optional components — Actual CSS</title>
-  <meta name="description" content="Optional components extend Actual with specialized patterns while keeping the
-same tokens, intents, variants, and density grammar as the core. They add no
-global design tokens and require no JavaScript.">
-  <link rel="stylesheet" href="../../src/css/actual.css">
-  <link rel="stylesheet" href="../../src/css/optional/index.css">
+  <title>Modular imports — Actual CSS</title>
+  <meta name="description" content="Actual ships one minimal core (actual-css) and one all-in entrypoint
+(actual-css/full); everything else is composed from the family manifests
+under src/css/.">
+  <link rel="stylesheet" href="../../src/css/actual.full.css">
   <link rel="stylesheet" href="../../dist/actual-themes.min.css">
   <link rel="stylesheet" href="../../scripts/docs/assets/docs.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3/dist/tabler-icons.min.css">
   <script src="https://cdn.jsdelivr.net/npm/prismjs@1.30.0/components/prism-core.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/prismjs@1.30.0/plugins/autoloader/prism-autoloader.min.js"></script>
-  <script src="../../dist/actual.js" defer></script>
+  <script src="../../dist/actual.full.js" defer></script>
   <script src="../../scripts/docs/assets/docs.js" defer></script>
   <script>
   (function () {
@@ -79,7 +78,7 @@ global design tokens and require no JavaScript.">
               <p class="docs-nav-group">Guides</p>
       <ul class="nav-list">
         <li><a class="nav-link" href="introduction.html">Introduction</a></li>
-        <li><a class="nav-link" href="optional-components.html" aria-current="page">Optional components</a></li>
+        <li><a class="nav-link" href="modular-import.html" aria-current="page">Modular imports</a></li>
         <li><a class="nav-link" href="progressive-enhancement.html">The JavaScript Runtime</a></li>
         <li><a class="nav-link" href="bootstrap.html">Migrating from Bootstrap to Actual CSS</a></li>
         <li><a class="nav-link" href="tailwind.html">Migrating from Tailwind CSS to Actual CSS</a></li>
@@ -195,35 +194,73 @@ global design tokens and require no JavaScript.">
           <nav aria-label="Breadcrumb">
             <ol class="breadcrumb">
               <li><a href="../index.html">Docs</a></li>
-              <li><span aria-current="page">Optional components</span></li>
+              <li><span aria-current="page">Modular imports</span></li>
             </ol>
           </nav>
 
           <div class="prose docs-prose">
-<h1 id="optional-components">Optional components</h1>
-<p>Optional components extend Actual with specialized patterns while keeping the
-same tokens, intents, variants, and density grammar as the core. They add no
-global design tokens and require no JavaScript.</p>
-<p>Import the complete optional layer after the core:</p>
-<pre><code class="language-css">@import &quot;actual-css/css&quot;;
-@import &quot;actual-css/css/optional&quot;;
+<h1 id="modular-imports">Modular imports</h1>
+<p>Actual ships one minimal core (<code>actual-css</code>) and one all-in entrypoint
+(<code>actual-css/full</code>); everything else is composed from the family manifests
+under <code>src/css/</code>.</p>
+<h2 id="the-two-entrypoints">The two entrypoints</h2>
+<pre><code class="language-css">@import &quot;actual-css&quot;;        /* minimal core only */
+@import &quot;actual-css/full&quot;;   /* every shipped functional family */
 </code></pre>
-<p><code>actual-css/css/optional</code> resolves to the minified optional bundle
-(<code>dist/optional.min.css</code>). Alternatively, import only the modules a project
-uses from the source tree:</p>
-<pre><code class="language-css">@import &quot;actual-css/css/optional/fab&quot;;
-@import &quot;actual-css/css/optional/floating-field&quot;;
-</code></pre>
+<p><code>actual-css</code> is the minimal core: reset, tokens, theme, document defaults,
+intents, universal variants, generic focus, and generic print. It contains no
+forms, layout, typography module, component, effect, or utility bundle.</p>
+<p><code>actual-css/full</code> starts from the core and adds every family in cascade order:
+typography, layout, forms, components, effects, utilities.</p>
+<h2 id="family-manifests">Family manifests</h2>
+<p>Each family is a directory under <code>src/css/</code> with an <code>index.css</code> manifest:</p>
 <div class="table-wrap"><table class="table">
 <thead>
-<tr><th>Module</th><th>Use</th><th>Import</th><th>Documentation</th></tr>
+<tr><th>Family</th><th>Manifest import</th><th>Modules</th></tr>
 </thead>
 <tbody>
-<tr><td>OTP</td><td>One native one-time-code input with visual cells</td><td><code>actual-css/css/optional/otp</code></td><td><a href="../forms/otp.html">OTP</a></td></tr>
-<tr><td>Chat</td><td>Start/end message rows and bubbles</td><td><code>actual-css/css/optional/chat</code></td><td><a href="../components/chat.html">Chat</a></td></tr>
-<tr><td>Aura</td><td>Decorative intent-colored frame and glow</td><td><code>actual-css/css/optional/aura</code></td><td><a href="../components/aura.html">Aura</a></td></tr>
-<tr><td>FAB</td><td>Fixed action placement and native speed dial</td><td><code>actual-css/css/optional/fab</code></td><td><a href="../components/fab.html">FAB</a></td></tr>
-<tr><td>Floating field</td><td>Floating labels over the text controls</td><td><code>actual-css/css/optional/floating-field</code></td><td><a href="../forms/floating-field.html">Floating labels</a></td></tr>
+<tr><td>Core</td><td><code>actual-css/css</code></td><td>reset, tokens, theme, base, intents, variants, focus, print</td></tr>
+<tr><td>Layout</td><td><code>actual-css/css/layout</code></td><td>stack, cluster, center, frame, media, switcher, sidebar-layout, grid, scroller, scroll-snap, topbar, container-query, app-shell</td></tr>
+<tr><td>Typography</td><td><code>actual-css/css/typography</code></td><td>prose, overline, fluid</td></tr>
+<tr><td>Forms</td><td><code>actual-css/css/forms</code></td><td>native controls; <code>actual-css/css/forms/all</code> for the complete family (input-icon, switch, range, choice-card, custom-select, floating-field, otp)</td></tr>
+<tr><td>Components</td><td><code>actual-css/css/components</code></td><td>button, card, badge, alert, dialog, drawer, flyout, menu, tab, tooltip, chat, fab, join, …</td></tr>
+<tr><td>Effects</td><td><code>actual-css/css/effects</code></td><td>aura</td></tr>
+<tr><td>Utilities</td><td><code>actual-css/css/utilities</code></td><td>base, extra</td></tr>
+</tbody>
+</table></div>
+<p>Import a single module with its domain path when a project only needs that
+piece:</p>
+<pre><code class="language-css">@import &quot;actual-css/css/forms/otp&quot;;
+@import &quot;actual-css/css/components/chat&quot;;
+@import &quot;actual-css/css/effects/aura&quot;;
+@import &quot;actual-css/css/layout/scroller&quot;;
+@import &quot;actual-css/css/typography/fluid&quot;;
+@import &quot;actual-css/css/utilities/extra&quot;;
+</code></pre>
+<h2 id="migrating-from-03">Migrating from 0.3</h2>
+<p>In 0.3 the bare <code>actual-css</code> import shipped the all-in experience, and the
+<code>optional</code> family carried the less-common modules. In 0.4:</p>
+<ul>
+<li><code>actual-css</code> is the minimal core.</li>
+<li><code>actual-css/full</code> preserves the 0.3 all-in behavior.</li>
+<li>The <code>optional</code> family is gone. Its modules live in their domain.</li>
+</ul>
+<div class="table-wrap"><table class="table">
+<thead>
+<tr><th>0.3 path</th><th>0.4 path</th></tr>
+</thead>
+<tbody>
+<tr><td><code>actual-css/css/optional/otp</code></td><td><code>actual-css/css/forms/otp</code></td></tr>
+<tr><td><code>actual-css/css/optional/floating-field</code></td><td><code>actual-css/css/forms/floating-field</code></td></tr>
+<tr><td><code>actual-css/css/optional/chat</code></td><td><code>actual-css/css/components/chat</code></td></tr>
+<tr><td><code>actual-css/css/optional/fab</code></td><td><code>actual-css/css/components/fab</code></td></tr>
+<tr><td><code>actual-css/css/optional/aura</code></td><td><code>actual-css/css/effects/aura</code></td></tr>
+<tr><td><code>actual-css/css/optional/scroller</code></td><td><code>actual-css/css/layout/scroller</code></td></tr>
+<tr><td><code>actual-css/css/optional/scroll-snap</code></td><td><code>actual-css/css/layout/scroll-snap</code></td></tr>
+<tr><td><code>actual-css/css/optional/layout-extra</code></td><td><code>actual-css/css/layout/topbar</code></td></tr>
+<tr><td><code>actual-css/css/optional/typography-fluid</code></td><td><code>actual-css/css/typography/fluid</code></td></tr>
+<tr><td><code>actual-css/css/optional/utilities-extra</code></td><td><code>actual-css/css/utilities/extra</code></td></tr>
+<tr><td><code>actual-css/css/optional</code> (bundle)</td><td><code>actual-css/full</code></td></tr>
 </tbody>
 </table></div>
 <p>Component-prefixed custom properties documented on each page are author hooks.
@@ -233,8 +270,8 @@ and button APIs.</p>
 </div>
 
           <div class="cluster docs-source-links">
-            <a class="btn sm ghost" href="https://github.com/lekoala/actual-css/edit/master/docs/pages/guides\optional-components.md" rel="noopener noreferrer">Edit on GitHub</a>
-            <a class="btn sm ghost" href="https://github.com/lekoala/actual-css/blob/master/docs/pages/guides\optional-components.md" rel="noopener noreferrer">View Markdown</a>
+            <a class="btn sm ghost" href="https://github.com/lekoala/actual-css/edit/master/docs/pages/guides\modular-import.md" rel="noopener noreferrer">Edit on GitHub</a>
+            <a class="btn sm ghost" href="https://github.com/lekoala/actual-css/blob/master/docs/pages/guides\modular-import.md" rel="noopener noreferrer">View Markdown</a>
           </div>
         </article>
 
@@ -248,7 +285,9 @@ and button APIs.</p>
         <nav class="scrollspy" data-enhance="scrollspy" data-scrollspy-offset="80" aria-label="On this page">
           <p class="docs-nav-group">On this page</p>
           <ul class="nav-list docs-toc-list" data-docs-toc>
-
+        <li><a class="nav-link" href="#the-two-entrypoints" data-docs-toc-item data-level="2">The two entrypoints</a></li>
+        <li><a class="nav-link" href="#family-manifests" data-docs-toc-item data-level="2">Family manifests</a></li>
+        <li><a class="nav-link" href="#migrating-from-03" data-docs-toc-item data-level="2">Migrating from 0.3</a></li>
           </ul>
         </nav>
       </aside>
@@ -270,7 +309,7 @@ and button APIs.</p>
             <p class="docs-nav-group">Guides</p>
       <ul class="nav-list">
         <li><a class="nav-link" href="introduction.html">Introduction</a></li>
-        <li><a class="nav-link" href="optional-components.html" aria-current="page">Optional components</a></li>
+        <li><a class="nav-link" href="modular-import.html" aria-current="page">Modular imports</a></li>
         <li><a class="nav-link" href="progressive-enhancement.html">The JavaScript Runtime</a></li>
         <li><a class="nav-link" href="bootstrap.html">Migrating from Bootstrap to Actual CSS</a></li>
         <li><a class="nav-link" href="tailwind.html">Migrating from Tailwind CSS to Actual CSS</a></li>

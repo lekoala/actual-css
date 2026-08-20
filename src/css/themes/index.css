@@ -3,7 +3,7 @@
  * package entry points (package.json blocks ./css/themes exports).
  *
  * Opt-in theme bundle. Importing this file pulls in every theme below, each
- * gated by [data-theme="…"]. The light baseline is :root in src/css/theme.css —
+ * gated by [data-theme="…"]. The light baseline is :root in src/css/core/theme.css —
  * there is no light.css here.
  *
  * The themes are illustrative: each one demonstrates a different set of knobs

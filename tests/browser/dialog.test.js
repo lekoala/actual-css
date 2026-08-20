@@ -5,7 +5,7 @@
  * <dialog> lifecycle (requestClose fires cancel before closing), native Escape,
  * real focus restoration, and page scroll preservation across open/close.
  *
- * They skip gracefully when Chrome or a fresh dist/actual.js is unavailable
+ * They skip gracefully when Chrome or a fresh dist/actual.full.js is unavailable
  * (the fixture loads the bundled runtime), and run for real in CI where Chrome
  * is present and build:all has produced dist.
  */
@@ -22,7 +22,7 @@ const FIXTURE = "tests/browser/dialog.html";
 const BROWSER_TIMEOUT = 25_000;
 
 const hasChrome = shouldRunChromeTests();
-const distReady = existsSync("dist/actual.js");
+const distReady = existsSync("dist/actual.full.js");
 const skip = !hasChrome || !distReady;
 
 const baseTest = skip ? test.skip : test;

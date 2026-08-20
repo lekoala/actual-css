@@ -1,6 +1,6 @@
 # Chat
 
-> **Optional** — import `actual-css/css/optional/chat` or `actual-css/css/optional/index`.
+> **Module** — import `actual-css/css/components/chat` or `actual-css/css/components`.
 
 Chat lays out message metadata, an optional avatar, and a content-sized bubble
 at either edge of a conversation.

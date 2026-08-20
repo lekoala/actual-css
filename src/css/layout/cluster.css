@@ -1,0 +1,21 @@
+/*
+ * Inline group that wraps when space runs out.
+ *
+ * Public hooks:
+ * --cluster-align
+ * --cluster-justify
+ * --cluster-wrap
+ *
+ * Child contract: direct-child margins are reset, spacing comes from --gap.
+ */
+.cluster {
+  display: flex;
+  flex-wrap: var(--cluster-wrap, wrap);
+  align-items: var(--cluster-align, center);
+  justify-content: var(--cluster-justify, flex-start);
+  gap: var(--gap);
+}
+
+.cluster > * {
+  margin: 0;
+}

@@ -1,0 +1,19 @@
+/*
+ * Media frame with a fixed ratio.
+ *
+ * Public hooks:
+ * --frame-ratio
+ *
+ * Child contract: direct media children (img/video/iframe/canvas/svg) are
+ * sized to fill the frame.
+ */
+.frame {
+  overflow: hidden;
+  aspect-ratio: var(--frame-ratio, 16 / 9);
+}
+
+.frame > :where(img, video, iframe, canvas, svg) {
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+}

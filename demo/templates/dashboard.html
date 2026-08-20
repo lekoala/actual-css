@@ -6,9 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Revenue Operations Dashboard - Actual CSS</title>
   <meta name="description" content="Data dashboard with cards, tables, metrics, and responsive grid layout.">
-  <link rel="stylesheet" href="../../dist/actual.css">
+  <link rel="stylesheet" href="../../dist/actual.full.css">
   <link rel="stylesheet" href="../../dist/actual-themes.min.css">
-  <link rel="stylesheet" href="../../dist/optional.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
   <style>
     .dashboard-shell {
@@ -32,8 +31,8 @@
       min-inline-size: 0;
     }
 
-    /* Sticky/blur shell comes from the framework's .topbar (optional
-       layout-extra.css). Only the taller min-height stays local. */
+    /* Sticky/blur shell comes from the framework's .topbar
+       (src/css/layout/topbar.css). Only the taller min-height stays local. */
     .dashboard-topbar {
       min-block-size: 4rem;
     }
@@ -782,7 +781,7 @@
     </form>
   </dialog>
 
-  <script src="../../dist/actual.js"></script>
+  <script src="../../dist/actual.full.js"></script>
   <script>
     const switcher = document.getElementById("theme-switcher");
 

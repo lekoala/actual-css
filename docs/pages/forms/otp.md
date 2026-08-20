@@ -1,6 +1,6 @@
 # One-time code input
 
-> **Optional** — import `actual-css/css/optional/otp` or `actual-css/css/optional/index`.
+> **Module** — import `actual-css/css/forms/otp` or `actual-css/css/forms/all`.
 
 OTP presents one native input as separate visual cells. Keeping a single input
 preserves paste, selection, autofill, password-manager, and

@@ -1,0 +1,12 @@
+/* Vertical flow. .stack owns the block axis only: block margins reset, inline
+   margins stay free (self-centering children via margin-inline: auto keep
+   working). */
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap);
+}
+
+.stack > * {
+  margin-block: 0;
+}

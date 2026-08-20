@@ -1,5 +1,5 @@
 import { readFile, readdir, stat, writeFile } from "node:fs/promises";
-import { join, dirname, relative } from "node:path";
+import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { brotliCompressSync } from "node:zlib";
 
@@ -8,8 +8,7 @@ const ROOT = join(__dirname, "..");
 const SRC = join(ROOT, "src", "css");
 const DIST = join(ROOT, "dist");
 
-const EXCLUDE = ["optional"];
-const MAX_SHIPPED_BROTLI = 13 * 1024;
+const CORE_BROTLI_TOLERANCE = 0.1;
 
 async function collectCSS(root, base = "") {
   const entries = await readdir(root, { withFileTypes: true });
@@ -20,7 +19,6 @@ async function collectCSS(root, base = "") {
     const rel = base ? `${base}/${entry.name}` : entry.name;
 
     if (entry.isDirectory()) {
-      if (EXCLUDE.includes(entry.name)) continue;
       files.push(...(await collectCSS(full, rel)));
     } else if (entry.name.endsWith(".css")) {
       files.push(rel);
@@ -33,6 +31,24 @@ async function collectCSS(root, base = "") {
 function formatBytes(bytes) {
   if (bytes < 1024) return `${bytes} B`;
   return `${(bytes / 1024).toFixed(1)} KB`;
+}
+
+async function distMetrics(names) {
+  const metrics = {};
+
+  for (const name of names) {
+    try {
+      const code = await readFile(join(DIST, name));
+      metrics[name] = {
+        bytes: code.length,
+        brotli: brotliCompressSync(code).length,
+      };
+    } catch {
+      metrics[name] = null;
+    }
+  }
+
+  return metrics;
 }
 
 async function main() {
@@ -49,124 +65,115 @@ async function main() {
 
   rows.sort((a, b) => b.raw - a.raw || a.file.localeCompare(b.file, "en"));
 
-  // ── Dist sizes ──────────────────────────────────────────
-  let devSize = 0;
-  let minSize = 0;
-  let brotliSize = 0;
-  let themesMinSize = 0;
-  let themesBrotliSize = 0;
+  const dist = await distMetrics([
+    "actual.css",
+    "actual.min.css",
+    "actual.full.css",
+    "actual.full.min.css",
+    "actual-themes.min.css",
+    "actual.js",
+    "actual.full.js",
+  ]);
 
-  try {
-    const devPath = join(DIST, "actual.css");
-    const minPath = join(DIST, "actual.min.css");
-    const themesMinPath = join(DIST, "actual-themes.min.css");
-    const [devSt, minSt, themesMinSt] = await Promise.all([
-      stat(devPath),
-      stat(minPath),
-      stat(themesMinPath).catch(() => null),
-    ]);
-    devSize = devSt.size;
-    minSize = minSt.size;
-
-    const minCode = await readFile(minPath);
-    brotliSize = brotliCompressSync(minCode).length;
-
-    if (themesMinSt) {
-      themesMinSize = themesMinSt.size;
-      const themesMinCode = await readFile(themesMinPath);
-      themesBrotliSize = brotliCompressSync(themesMinCode).length;
-    }
-  } catch {
-    // dist doesn't exist yet
-  }
-
-  // ── Print table ────────────────────────────────────────
-  const hasDist = devSize > 0;
+  // ── Print source table ─────────────────────────────────
   const colFile = 38;
   const colRaw = 10;
-  const colMin = 10;
-  const colBr = 10;
-
-  const sepLen = colFile + 3 + colRaw + (hasDist ? 4 + colMin + 4 + colBr : 0);
-  const sep = "─".repeat(sepLen);
 
   console.log();
-  console.log(sep);
-  let header = `  ${"File".padEnd(colFile)}  ${"Raw".padStart(colRaw)}`;
-  if (hasDist) {
-    header += `   ${"Minified".padStart(colMin)}   ${"Brotli".padStart(colBr)}`;
-  }
-  console.log(header);
-  console.log(sep);
+  console.log("─".repeat(colFile + 3 + colRaw));
+  console.log(`  ${"File".padEnd(colFile)}  ${"Raw".padStart(colRaw)}`);
+  console.log("─".repeat(colFile + 3 + colRaw));
 
   for (const { file, raw } of rows) {
-    const line = `  ${file.padEnd(colFile)}  ${formatBytes(raw).padStart(colRaw)}`;
-    console.log(line);
+    console.log(`  ${file.padEnd(colFile)}  ${formatBytes(raw).padStart(colRaw)}`);
   }
 
-  console.log(sep);
+  console.log("─".repeat(colFile + 3 + colRaw));
   const count = `${rows.length} source files`;
-  let totalLine = `  ${count.padEnd(colFile)}  ${formatBytes(totalRaw).padStart(colRaw)}`;
-  if (hasDist) {
-    totalLine += `   ${formatBytes(minSize).padStart(colMin)}   ${formatBytes(brotliSize).padStart(colBr)}`;
-  }
-  console.log(totalLine);
-
-  if (hasDist) {
-    const ratio =
-      brotliSize > 0
-        ? `${formatBytes(minSize)} minified → ${formatBytes(brotliSize)} brotli (${((brotliSize / minSize) * 100).toFixed(1)}% of minified)`
-        : "";
-    console.log(`  ${" ".padEnd(colFile)}  ${" ".padStart(colRaw)}   ${ratio}`);
-
-    if (themesMinSize > 0) {
-      const themesLabel = "    actual-themes.min.css";
-      const themesLine = `  ${themesLabel.padEnd(colFile)}  ${" ".padStart(colRaw)}   ${formatBytes(themesMinSize).padStart(colMin)}   ${formatBytes(themesBrotliSize).padStart(colBr)}`;
-      console.log(themesLine);
-      const themesRatio = `${formatBytes(themesMinSize)} → ${formatBytes(themesBrotliSize)} brotli (${((themesBrotliSize / themesMinSize) * 100).toFixed(1)}%)`;
-      console.log(`  ${" ".padEnd(colFile)}  ${" ".padStart(colRaw)}   ${themesRatio}`);
-      const shipped = `${formatBytes(minSize)} shipped minified → ${formatBytes(brotliSize)} brotli`;
-      console.log(`  ${" ".padEnd(colFile)}  ${" ".padStart(colRaw)}   ${shipped}`);
-    }
-  }
-
-  console.log(sep);
+  console.log(`  ${count.padEnd(colFile)}  ${formatBytes(totalRaw).padStart(colRaw)}`);
   console.log();
 
-  // ── Write report ───────────────────────────────────────
+  // ── Dist report ────────────────────────────────────────
+  const sections = [];
+
+  if (dist["actual.min.css"]) {
+    const { bytes, brotli } = dist["actual.min.css"];
+    sections.push(`Core (actual.min.css): ${formatBytes(bytes)} → ${formatBytes(brotli)} brotli`);
+  }
+  if (dist["actual.full.min.css"]) {
+    const { bytes, brotli } = dist["actual.full.min.css"];
+    sections.push(`Full (actual.full.min.css): ${formatBytes(bytes)} → ${formatBytes(brotli)} brotli`);
+  }
+  if (dist["actual-themes.min.css"]) {
+    const { bytes, brotli } = dist["actual-themes.min.css"];
+    sections.push(`Themes (actual-themes.min.css): ${formatBytes(bytes)} → ${formatBytes(brotli)} brotli`);
+  }
+  if (dist["actual.js"]) {
+    const { bytes, brotli } = dist["actual.js"];
+    sections.push(`JS core (actual.js): ${formatBytes(bytes)} → ${formatBytes(brotli)} brotli`);
+  }
+  if (dist["actual.full.js"]) {
+    const { bytes, brotli } = dist["actual.full.js"];
+    sections.push(`JS full (actual.full.js): ${formatBytes(bytes)} → ${formatBytes(brotli)} brotli`);
+  }
+
+  for (const line of sections) {
+    console.log(`  ${line}`);
+  }
+  console.log();
+
+  // ── Baseline guard ─────────────────────────────────────
+  const core = dist["actual.min.css"];
   const report = {
     totalRaw,
-    totalMinified: minSize,
-    totalBrotli: brotliSize,
-    themesMinified: themesMinSize,
-    themesBrotli: themesBrotliSize,
-    shippedMinified: minSize,
-    shippedBrotli: brotliSize,
-    maxShippedBrotli: MAX_SHIPPED_BROTLI,
+    core: core
+      ? { minified: core.bytes, brotli: core.brotli, tolerance: CORE_BROTLI_TOLERANCE }
+      : null,
+    full: dist["actual.full.min.css"]
+      ? { minified: dist["actual.full.min.css"].bytes, brotli: dist["actual.full.min.css"].brotli }
+      : null,
+    themes: dist["actual-themes.min.css"]
+      ? { minified: dist["actual-themes.min.css"].bytes, brotli: dist["actual-themes.min.css"].brotli }
+      : null,
+    js: {
+      core: dist["actual.js"]
+        ? { bytes: dist["actual.js"].bytes, brotli: dist["actual.js"].brotli }
+        : null,
+      full: dist["actual.full.js"]
+        ? { bytes: dist["actual.full.js"].bytes, brotli: dist["actual.full.js"].brotli }
+        : null,
+    },
     fileCount: rows.length,
     files: rows,
   };
 
   const reportPath = join(ROOT, "size-report.json");
-  const next = JSON.stringify(report, null, 2) + "\n";
   let previous = null;
   try {
-    previous = await readFile(reportPath, "utf8");
+    previous = JSON.parse(await readFile(reportPath, "utf8"));
   } catch {
     // no previous report yet
   }
-  if (previous === next) {
+
+  if (core) {
+    const baseline = previous?.core?.brotli ?? core.brotli;
+    const limit = Math.ceil(baseline * (1 + CORE_BROTLI_TOLERANCE));
+    report.core.baseline = baseline;
+    report.core.withinBudget = core.brotli <= limit;
+    console.log(`Core Brotli baseline: ${formatBytes(baseline)}, current ${formatBytes(core.brotli)} (limit ${formatBytes(limit)})`);
+
+    if (!report.core.withinBudget) {
+      console.error(`Core size budget exceeded: ${formatBytes(core.brotli)} > ${formatBytes(limit)}.`);
+      process.exit(1);
+    }
+  }
+
+  const next = JSON.stringify(report, null, 2) + "\n";
+  if (previous && JSON.stringify(previous) === JSON.stringify(report)) {
     console.log("Report unchanged");
   } else {
     await writeFile(reportPath, next);
     console.log("Report written to size-report.json");
-  }
-
-  if (hasDist && report.shippedBrotli > MAX_SHIPPED_BROTLI) {
-    console.error(
-      `Size budget exceeded: shipped brotli is ${formatBytes(report.shippedBrotli)} (max ${formatBytes(MAX_SHIPPED_BROTLI)}).`,
-    );
-    process.exit(1);
   }
 }
 

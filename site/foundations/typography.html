@@ -7,14 +7,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Typography — Actual CSS</title>
   <meta name="description" content="Quiet global defaults plus an opt-in prose scope for long-form content, with a separate optional module for fluid display type.">
-  <link rel="stylesheet" href="../../src/css/actual.css">
-  <link rel="stylesheet" href="../../src/css/optional/index.css">
+  <link rel="stylesheet" href="../../src/css/actual.full.css">
   <link rel="stylesheet" href="../../dist/actual-themes.min.css">
   <link rel="stylesheet" href="../../scripts/docs/assets/docs.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3/dist/tabler-icons.min.css">
   <script src="https://cdn.jsdelivr.net/npm/prismjs@1.30.0/components/prism-core.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/prismjs@1.30.0/plugins/autoloader/prism-autoloader.min.js"></script>
-  <script src="../../dist/actual.js" defer></script>
+  <script src="../../dist/actual.full.js" defer></script>
   <script src="../../scripts/docs/assets/docs.js" defer></script>
   <script>
   (function () {
@@ -77,7 +76,7 @@
               <p class="docs-nav-group">Guides</p>
       <ul class="nav-list">
         <li><a class="nav-link" href="../guides/introduction.html">Introduction</a></li>
-        <li><a class="nav-link" href="../guides/optional-components.html">Optional components</a></li>
+        <li><a class="nav-link" href="../guides/modular-import.html">Modular imports</a></li>
         <li><a class="nav-link" href="../guides/progressive-enhancement.html">The JavaScript Runtime</a></li>
         <li><a class="nav-link" href="../guides/bootstrap.html">Migrating from Bootstrap to Actual CSS</a></li>
         <li><a class="nav-link" href="../guides/tailwind.html">Migrating from Tailwind CSS to Actual CSS</a></li>
@@ -231,8 +230,13 @@
 <p>It owns: readable measure, vertical rhythm between common text elements, heading hierarchy, link affordance, list spacing, code and keyboard treatment, blockquote treatment, table treatment, image / figure / figcaption treatment, mark, and <code>text-wrap</code> balance / pretty for prose elements.</p>
 <p>It does not own: page layout, app cards, alerts, forms, app tables, navigation, component variants, or any automatic styling outside the <code>.prose</code> subtree.</p>
 <p>The reason for that boundary: a dialog title, a card heading, or a sidebar section heading should not become a &quot;prose h1&quot;. Components own those. If a card or a dialog wants a richer heading, it can use a component-level rule, not a global selector.</p>
-<h3 id="optional-fluid-module">Optional fluid module</h3>
-<p><code>src/css/optional/typography-fluid.css</code> is a small file that is not imported by <code>actual.css</code>. Projects that need display, title, and lead sizes that scale with the viewport (landing pages, marketing pages, hero sections, documentation homepages) import it manually after <code>actual.css</code>.</p>
+<h3 id="fluid-module">Fluid module</h3>
+<p><code>src/css/typography/fluid.css</code> is a small module that is not imported by
+<code>actual.css</code>. Projects that need display, title, and lead sizes that scale
+with the viewport (landing pages, marketing pages, hero sections,
+documentation homepages) import it manually:</p>
+<pre><code class="language-css">@import &quot;actual-css/css/typography/fluid&quot;;
+</code></pre>
 <p>The module exposes three size tokens and three composed classes. It is deliberately not the foundation: body text, app UI, and the default prose scale stay static.</p>
 <div class="table-wrap"><table class="table">
 <thead>
@@ -244,7 +248,7 @@
 <tr><td><code>--fluid-lead</code></td><td><code>.text-lead</code></td><td>Intro paragraphs on display surfaces.</td></tr>
 </tbody>
 </table></div>
-<p>There is also a non-fluid <code>.lead</code> utility in the core, for a simple readable intro paragraph. The optional module does not redefine <code>.lead</code>; it adds a separate <code>.text-lead</code> for display contexts. This avoids an optional import silently changing how existing markup renders.</p>
+<p>There is also a non-fluid <code>.lead</code> utility in the core, for a simple readable intro paragraph. The fluid module does not redefine <code>.lead</code>; it adds a separate <code>.text-lead</code> for display contexts. This avoids a fluid import silently changing how existing markup renders.</p>
 <h2 id="link-treatment">Link treatment</h2>
 <p>Global links are intentionally neutral. Only <code>.prose</code> styles them as prose links, and only components style their own link-like elements (nav links, button-as-link, tabs, breadcrumbs, etc.). The reason is that underlining every <code>a</code> globally fights against button-like links, nav links, clickable cards, menu items, and tab triggers. Components that need link semantics should opt in with their own rule.</p>
 <p>There are no <code>--link-decoration-thickness</code>, <code>--link-decoration-thickness-hover</code>, or <code>--link-underline-offset</code> tokens; no global rule consumes them. Prose and components set their own underline metrics inline.</p>
@@ -305,9 +309,13 @@ baseline stays sans so app UI inherits predictably.</p>
 <p><code>code</code>, <code>kbd</code>, <code>samp</code>, and <code>pre</code> get the mono font family globally. Visual treatment (background, padding, radius) is left to <code>.prose</code> or to code-block components.</p>
 <h2 id="tables">Tables</h2>
 <p>Prose tables are a different concern from app data tables. Long-form content can contain a small table, but a sortable, dense, row-actionable app table belongs to the table component. The <code>.prose table</code> rule is intentionally minimal: it does not define sticky headers, selection states, row actions, or density variants.</p>
-<h2 id="optional-module-how-to-use-it">Optional module — how to use it</h2>
-<p>To enable fluid display type on a marketing or documentation surface, import the optional module after <code>actual.css</code> in the project's stylesheet entry point. The module does not change anything in the core: it adds three size tokens and three classes. Body text, app UI, and the default prose scale are not affected.</p>
-<p>Projects that do not need fluid display type do nothing — the optional module is not part of the default bundle.</p>
+<h2 id="fluid-module-how-to-use-it">Fluid module — how to use it</h2>
+<p>To enable fluid display type on a marketing or documentation surface, import the module after <code>actual.css</code> in the project's stylesheet entry point:</p>
+<pre><code class="language-css">@import &quot;actual-css/css&quot;;
+@import &quot;actual-css/css/typography/fluid&quot;;
+</code></pre>
+<p>The module does not change anything in the core: it adds three size tokens and three classes. Body text, app UI, and the default prose scale are not affected.</p>
+<p>Projects that do not need fluid display type do nothing — the module is not part of the default bundle.</p>
 <h2 id="what-not-to-reintroduce">What not to reintroduce</h2>
 <p>These are decisions that the framework has already made. Re-introducing them silently would regress the system.</p>
 <ul>
@@ -317,7 +325,7 @@ baseline stays sans so app UI inherits predictably.</p>
 <li>Do not add <code>transition: all</code>. Transitions target specific properties.</li>
 <li>Do not add a <code>--font-weight-light</code>. It is rarely a good default and depends on the typeface.</li>
 <li>Do not add a <code>text-align: center</code> shortcut to <code>.text-balance</code>. Balance is about wrapping, not alignment.</li>
-<li>Do not add RFS-style fluid type to the foundation. Fluid sizing is for display text in the optional module.</li>
+<li>Do not add RFS-style fluid type to the foundation. Fluid sizing is for display text in the fluid module.</li>
 <li>Do not add heading-level utility classes (<code>h1</code>, <code>h2</code>, …) or a public <code>fs-*</code> scale until theme work and real components prove they are needed.</li>
 <li>Do not extend <code>.prose</code> to style cards, alerts, app tables, or navigation. Those belong to their components.</li>
 </ul>
@@ -344,7 +352,7 @@ baseline stays sans so app UI inherits predictably.</p>
         <li><a class="nav-link" href="#boundaries" data-docs-toc-item data-level="2">Boundaries</a></li>
         <li><a class="nav-link" href="#global-baseline" data-docs-toc-item data-level="3">Global baseline</a></li>
         <li><a class="nav-link" href="#prose-scope" data-docs-toc-item data-level="3">.prose scope</a></li>
-        <li><a class="nav-link" href="#optional-fluid-module" data-docs-toc-item data-level="3">Optional fluid module</a></li>
+        <li><a class="nav-link" href="#fluid-module" data-docs-toc-item data-level="3">Fluid module</a></li>
         <li><a class="nav-link" href="#link-treatment" data-docs-toc-item data-level="2">Link treatment</a></li>
         <li><a class="nav-link" href="#type-scale" data-docs-toc-item data-level="2">Type scale</a></li>
         <li><a class="nav-link" href="#font-families" data-docs-toc-item data-level="2">Font families</a></li>
@@ -356,7 +364,7 @@ baseline stays sans so app UI inherits predictably.</p>
         <li><a class="nav-link" href="#links-and-text-utilities" data-docs-toc-item data-level="2">Links and text utilities</a></li>
         <li><a class="nav-link" href="#small-elements" data-docs-toc-item data-level="2">Small elements</a></li>
         <li><a class="nav-link" href="#tables" data-docs-toc-item data-level="2">Tables</a></li>
-        <li><a class="nav-link" href="#optional-module-how-to-use-it" data-docs-toc-item data-level="2">Optional module — how to use it</a></li>
+        <li><a class="nav-link" href="#fluid-module-how-to-use-it" data-docs-toc-item data-level="2">Fluid module — how to use it</a></li>
         <li><a class="nav-link" href="#what-not-to-reintroduce" data-docs-toc-item data-level="2">What not to reintroduce</a></li>
           </ul>
         </nav>
@@ -379,7 +387,7 @@ baseline stays sans so app UI inherits predictably.</p>
             <p class="docs-nav-group">Guides</p>
       <ul class="nav-list">
         <li><a class="nav-link" href="../guides/introduction.html">Introduction</a></li>
-        <li><a class="nav-link" href="../guides/optional-components.html">Optional components</a></li>
+        <li><a class="nav-link" href="../guides/modular-import.html">Modular imports</a></li>
         <li><a class="nav-link" href="../guides/progressive-enhancement.html">The JavaScript Runtime</a></li>
         <li><a class="nav-link" href="../guides/bootstrap.html">Migrating from Bootstrap to Actual CSS</a></li>
         <li><a class="nav-link" href="../guides/tailwind.html">Migrating from Tailwind CSS to Actual CSS</a></li>

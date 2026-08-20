@@ -15,4 +15,4 @@ Utilities are a small escape hatch for common single-purpose needs. They should 
 - No color scales such as `.text-primary` or `.bg-success` — intent colors belong to components and state.
 - No breakpoint utility variants — use container queries or layout primitives.
 - No utility variants for hover, focus, dark mode, or arbitrary selectors — use component states.
-- No full spacing scale with every step and direction — the 17 spacing helpers across the core and optional layers cover the most common escape hatches.
+- No full spacing scale with every step and direction — the 17 spacing helpers across the core and extra utilities cover the most common escape hatches.

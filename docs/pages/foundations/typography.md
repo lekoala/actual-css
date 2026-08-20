@@ -52,9 +52,16 @@ It does not own: page layout, app cards, alerts, forms, app tables, navigation, 
 
 The reason for that boundary: a dialog title, a card heading, or a sidebar section heading should not become a "prose h1". Components own those. If a card or a dialog wants a richer heading, it can use a component-level rule, not a global selector.
 
-### Optional fluid module
+### Fluid module
 
-`src/css/optional/typography-fluid.css` is a small file that is not imported by `actual.css`. Projects that need display, title, and lead sizes that scale with the viewport (landing pages, marketing pages, hero sections, documentation homepages) import it manually after `actual.css`.
+`src/css/typography/fluid.css` is a small module that is not imported by
+`actual.css`. Projects that need display, title, and lead sizes that scale
+with the viewport (landing pages, marketing pages, hero sections,
+documentation homepages) import it manually:
+
+```css
+@import "actual-css/css/typography/fluid";
+```
 
 The module exposes three size tokens and three composed classes. It is deliberately not the foundation: body text, app UI, and the default prose scale stay static.
 
@@ -64,7 +71,7 @@ The module exposes three size tokens and three composed classes. It is deliberat
 | `--fluid-title` | `.text-title` | Section titles. |
 | `--fluid-lead` | `.text-lead` | Intro paragraphs on display surfaces. |
 
-There is also a non-fluid `.lead` utility in the core, for a simple readable intro paragraph. The optional module does not redefine `.lead`; it adds a separate `.text-lead` for display contexts. This avoids an optional import silently changing how existing markup renders.
+There is also a non-fluid `.lead` utility in the core, for a simple readable intro paragraph. The fluid module does not redefine `.lead`; it adds a separate `.text-lead` for display contexts. This avoids a fluid import silently changing how existing markup renders.
 
 ## Link treatment
 
@@ -156,11 +163,18 @@ Three logical alignment utilities exist (`.text-start`, `.text-center`, `.text-e
 
 Prose tables are a different concern from app data tables. Long-form content can contain a small table, but a sortable, dense, row-actionable app table belongs to the table component. The `.prose table` rule is intentionally minimal: it does not define sticky headers, selection states, row actions, or density variants.
 
-## Optional module — how to use it
+## Fluid module — how to use it
 
-To enable fluid display type on a marketing or documentation surface, import the optional module after `actual.css` in the project's stylesheet entry point. The module does not change anything in the core: it adds three size tokens and three classes. Body text, app UI, and the default prose scale are not affected.
+To enable fluid display type on a marketing or documentation surface, import the module after `actual.css` in the project's stylesheet entry point:
 
-Projects that do not need fluid display type do nothing — the optional module is not part of the default bundle.
+```css
+@import "actual-css/css";
+@import "actual-css/css/typography/fluid";
+```
+
+The module does not change anything in the core: it adds three size tokens and three classes. Body text, app UI, and the default prose scale are not affected.
+
+Projects that do not need fluid display type do nothing — the module is not part of the default bundle.
 
 ## What not to reintroduce
 
@@ -172,6 +186,6 @@ These are decisions that the framework has already made. Re-introducing them sil
 - Do not add `transition: all`. Transitions target specific properties.
 - Do not add a `--font-weight-light`. It is rarely a good default and depends on the typeface.
 - Do not add a `text-align: center` shortcut to `.text-balance`. Balance is about wrapping, not alignment.
-- Do not add RFS-style fluid type to the foundation. Fluid sizing is for display text in the optional module.
+- Do not add RFS-style fluid type to the foundation. Fluid sizing is for display text in the fluid module.
 - Do not add heading-level utility classes (`h1`, `h2`, …) or a public `fs-*` scale until theme work and real components prove they are needed.
 - Do not extend `.prose` to style cards, alerts, app tables, or navigation. Those belong to their components.

@@ -20,7 +20,7 @@ Set `--cluster-align`.
 
 ### Change spacing without changing control size
 
-Set `--gap` locally on the layout primitive. The optional `utilities-extra.css` layer ships `.gap-sm` / `.gap-md` / `.gap-lg` for row/column containers.
+Set `--gap` locally on the layout primitive. The extra utilities (`src/css/utilities/extra.css`) ship `.gap-sm` / `.gap-md` / `.gap-lg` for row/column containers.
 
 → Layout
 

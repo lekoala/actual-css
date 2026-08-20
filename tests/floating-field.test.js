@@ -7,7 +7,7 @@ function read(path) {
 }
 
 test("floating-field derives geometry from --control-size", () => {
-  const css = read("src/css/optional/floating-field.css");
+  const css = read("src/css/forms/floating-field.css");
 
   expect(css).toContain(
     "--floating-pad-block-start: calc(var(--control-size) / 2 + var(--space-20));",
@@ -16,7 +16,7 @@ test("floating-field derives geometry from --control-size", () => {
 });
 
 test("floating-field is CSS-only with placeholder-shown and always-floated controls", () => {
-  const css = read("src/css/optional/floating-field.css");
+  const css = read("src/css/forms/floating-field.css");
 
   expect(css).toContain(":not(:placeholder-shown)");
   expect(css).toContain(":autofill");

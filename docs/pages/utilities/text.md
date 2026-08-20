@@ -40,4 +40,4 @@ Use `.text-start`, `.text-center`, or `.text-end` when a component or layout pri
 
 ## Lead
 
-`.lead` is a slightly larger, more relaxed reading-introduction paragraph (`1.125em`, `--line-height-relaxed`). Use it for introductory text in editorial surfaces. For fluid headline sizing, use `src/css/optional/typography-fluid.css`.
+`.lead` is a slightly larger, more relaxed reading-introduction paragraph (`1.125em`, `--line-height-relaxed`). Use it for introductory text in editorial surfaces. For fluid headline sizing, use `src/css/typography/fluid.css`.

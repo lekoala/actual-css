@@ -1,0 +1,29 @@
+/*
+ * Main content + secondary region.
+ *
+ * The children wrap according to the space allocated to this layout, without
+ * an ancestor opt-in or viewport threshold. The large growth ratio lets the
+ * main region reclaim the full row when the aside wraps instead of remaining
+ * at its minimum viable width.
+ *
+ * Public hooks:
+ * --sidebar-content-min
+ * --sidebar-layout-size
+ */
+.sidebar-layout {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap);
+  align-items: flex-start;
+}
+
+.sidebar-layout > :first-child {
+  flex-basis: 0;
+  flex-grow: 999;
+  min-inline-size: min(100%, var(--sidebar-content-min, 30rem));
+}
+
+.sidebar-layout > :last-child {
+  flex-basis: var(--sidebar-layout-size, 18rem);
+  flex-grow: 1;
+}

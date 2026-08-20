@@ -1,0 +1,9 @@
+/* Media object: fixed-width leading element (avatar, icon, image) + flexible
+   trailing content. Replaces the repeated "auto minmax(0, 1fr)" pattern in
+   author cards, comments, meta rows, and similar compositions. */
+.media {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: var(--gap);
+  align-items: start;
+}

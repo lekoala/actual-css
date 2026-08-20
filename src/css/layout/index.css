@@ -1,0 +1,34 @@
+/*
+ * Layout — composition primitives. Readable cascade order: container-query
+ * first (a local opt-in, unrelated to the primitives), then the primitives.
+ *
+ * Selection:
+ * .stack          vertical flow
+ * .cluster        wrapping inline group
+ * .center         centered content column
+ * .frame          fixed-ratio media frame
+ * .app-shell      full-height application shell
+ * .media          fixed media + flexible content
+ * .switcher       peer regions: all horizontal or all stacked
+ * .sidebar-layout main content + secondary aside
+ * .grid           responsive collection of independent items
+ * .grid-N         fixed N-column structural grid (in grid.css)
+ * .scroller       quiet custom scrollbar chrome
+ * .scroll-snap    snap rails
+ * .topbar         sticky app-shell top bar
+ *
+ * Prefer these compositions over viewport breakpoint utilities.
+ */
+@import "./container-query.css";
+@import "./stack.css";
+@import "./cluster.css";
+@import "./center.css";
+@import "./frame.css";
+@import "./app-shell.css";
+@import "./media.css";
+@import "./switcher.css";
+@import "./sidebar-layout.css";
+@import "./grid.css";
+@import "./scroller.css";
+@import "./scroll-snap.css";
+@import "./topbar.css";

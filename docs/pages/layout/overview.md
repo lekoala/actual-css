@@ -37,4 +37,4 @@ Most layout primitives read `--gap` and allow local overrides.
 
 Prefer a local custom property over adding many one-off utility classes. Use inline styles only for demos, prototypes, or truly dynamic values.
 
-There are no `.gap-sm` / `.gap-md` / `.gap-lg` density variants on the core layout primitives; set `--gap` locally when only spacing should change. The optional `utilities-extra.css` layer ships those gap utilities for row/column containers.
+There are no `.gap-sm` / `.gap-md` / `.gap-lg` density variants on the core layout primitives; set `--gap` locally when only spacing should change. The extra utilities (`src/css/utilities/extra.css`) ship those gap utilities for row/column containers.

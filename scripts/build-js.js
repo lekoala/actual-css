@@ -8,6 +8,7 @@ const ROOT = join(__dirname, "..");
 const DIST = join(ROOT, "dist");
 
 export const ENTRY = join(ROOT, "src", "js", "index.js");
+export const FULL_ENTRY = join(ROOT, "src", "js", "full.js");
 
 function formatBytes(bytes) {
   if (bytes < 1024) return `${bytes} B`;
@@ -41,14 +42,22 @@ async function build() {
     }
   }
 
-  await buildBundle({ entrypoint: ENTRY, naming: "actual.[ext]" });
+  const bundles = [
+    { entry: ENTRY, naming: "actual.[ext]" },
+    { entry: FULL_ENTRY, naming: "actual.full.[ext]" },
+  ];
 
-  const path = join(DIST, "actual.js");
-  const st = await stat(path);
-  const code = await new Response(Bun.file(path)).bytes();
-  const brotli = brotliCompressSync(code).length;
+  for (const { entry, naming } of bundles) {
+    await buildBundle({ entrypoint: entry, naming });
 
-  console.log(`Built actual.js (${formatBytes(st.size)}) — brotli ${formatBytes(brotli)}`);
+    const outName = naming.replace(".[ext]", ".js");
+    const path = join(DIST, outName);
+    const st = await stat(path);
+    const code = await new Response(Bun.file(path)).bytes();
+    const brotli = brotliCompressSync(code).length;
+
+    console.log(`Built ${outName} (${formatBytes(st.size)}) — brotli ${formatBytes(brotli)}`);
+  }
 }
 
 if (import.meta.main) {
