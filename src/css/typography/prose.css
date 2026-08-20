@@ -54,35 +54,39 @@
   margin-block-start: 0;
 }
 
-.prose h1 {
+/* Element recipes are wrapped in :where() so every .prose rule is 0-1-0.
+   An explicit component/util class can therefore override prose defaults
+   regardless of the underlying element — a .btn or .alert link must not be
+   reshaped just because it lives inside authored content. */
+.prose :where(h1) {
   font-size: var(--prose-h1);
 }
 
-.prose h2 {
+.prose :where(h2) {
   font-size: var(--prose-h2);
 }
 
-.prose h3 {
+.prose :where(h3) {
   font-size: var(--prose-h3);
 }
 
-.prose h4 {
+.prose :where(h4) {
   font-size: var(--prose-h4);
 }
 
-.prose a {
+.prose :where(a) {
   color: var(--primary);
   text-decoration-line: underline;
   text-decoration-thickness: 0.08em;
   text-underline-offset: 0.18em;
 }
 
-.prose a:hover {
+.prose :where(a:hover) {
   text-decoration-thickness: 0.12em;
 }
 
 @supports (color: color-mix(in oklch, red, white)) {
-  .prose a:hover {
+  .prose :where(a:hover) {
     color: color-mix(in oklch, var(--primary), var(--text) 15%);
   }
 }
@@ -95,7 +99,7 @@
   margin-block-start: 0.35em;
 }
 
-.prose code {
+.prose :where(code) {
   padding: 0.15em 0.3em;
   border-radius: var(--radius-sm);
   background: var(--surface-subtle);
@@ -104,7 +108,7 @@
 }
 
 /* Visual twin of .key (components/key.css) — keep the two recipes in sync. */
-.prose kbd {
+.prose :where(kbd) {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -124,7 +128,7 @@
   vertical-align: 0.08em;
 }
 
-.prose pre {
+.prose :where(pre) {
   overflow-x: auto;
   padding: 1em;
   border: var(--border-width) solid var(--border);
@@ -132,34 +136,33 @@
   background: var(--surface-subtle);
 }
 
-.prose pre code {
+.prose :where(pre) :where(code) {
   padding: 0;
   background: transparent;
 }
 
-.prose blockquote {
+.prose :where(blockquote) {
   padding-inline-start: 1em;
   border-inline-start: var(--border-width) solid var(--border);
   color: var(--text-muted);
 }
 
-.prose figure {
+.prose :where(figure) {
   margin-inline: 0;
 }
 
-.prose figcaption {
+.prose :where(figcaption) {
   margin-block-start: 0.5em;
   color: var(--text-muted);
   font-size: 0.875em;
 }
 
-.prose table {
+.prose :where(table) {
   inline-size: 100%;
   border-collapse: collapse;
 }
 
-.prose th,
-.prose td {
+.prose :where(th, td) {
   padding: 0.5em;
   border-block-end: var(--border-width) solid var(--border);
   text-align: start;
