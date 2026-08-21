@@ -19,7 +19,7 @@
 /* --grid-columns replaces the intrinsic auto-fit template: once set, the
    grid no longer collapses on its own — the author owns narrow-container
    collapse. Prefer .sidebar-layout for content + aside layouts; reserve
-   --grid-columns for genuinely fixed or asymmetric templates. */
+   --grid-columns for exact custom track templates. */
 
 /* Recipe:
    - collection whose item width is the contract -> .grid, tune --grid-min
@@ -27,7 +27,7 @@
    - balanced subdivision of that density -> wrap it in .container-query
    - peer regions that switch as a group -> .switcher
    - content + aside -> .sidebar-layout
-   - fixed or asymmetric columns -> --grid-columns with an explicit collapse
+   - exact custom track templates -> --grid-columns with an explicit collapse
      rule of your own */
 .grid {
   display: grid;
@@ -79,7 +79,8 @@
 /* Grid items keep an automatic minimum inline size (min-content), which can
    overflow a track sized minmax(0, 1fr). Layout primitives remove that
    intrinsic floor so their overflow-safe track sizing holds; authors only
-   reach for .min-inline-size-0 when they need the floor back. */
+   need .min-inline-size-0 outside primitives that do not already remove this
+   floor. */
 :where(.grid, .grid-2, .grid-3, .grid-4, .grid-6) > * {
   min-inline-size: 0;
 }

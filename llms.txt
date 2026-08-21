@@ -34,7 +34,7 @@ See [enhancement contract](docs/design-notes/enhancement-contract.md) and
 Pick from the relationship between children, not the number of children in one mockup:
 
 - Responsive collection of cards/items where an incomplete final row is acceptable → `.grid`
-- Exact structural column count at every width → `.grid-N`
+- Known structural density, at most N columns → `.grid-N`
 - Peer regions that must switch together → `.switcher`
 - Main content plus a secondary region (content + aside) → `.sidebar-layout`
 - Fixed media followed by flexible content → `.media`
