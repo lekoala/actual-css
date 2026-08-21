@@ -286,12 +286,16 @@ test("removing one trigger does not disconnect a shared flyout", async () => {
 });
 
 test("flyout connects when the menu is inserted after its trigger", async () => {
-  await loadFlyout('<main><button id="trigger" type="button" data-enhance="flyout" aria-controls="menu" aria-expanded="false">Open</button></main>');
-
-  document.querySelector("main").insertAdjacentHTML(
-    "beforeend",
-    '<menu id="menu" class="flyout" hidden><li><button type="button">Item</button></li></menu>',
+  await loadFlyout(
+    '<main><button id="trigger" type="button" data-enhance="flyout" aria-controls="menu" aria-expanded="false">Open</button></main>',
   );
+
+  document
+    .querySelector("main")
+    .insertAdjacentHTML(
+      "beforeend",
+      '<menu id="menu" class="flyout" hidden><li><button type="button">Item</button></li></menu>',
+    );
   await nextMicrotask();
   const trigger = document.getElementById("trigger");
   const menu = document.getElementById("menu");
@@ -313,9 +317,11 @@ test("flyout trigger re-resolves a same-id replacement", async () => {
   const first = document.getElementById("menu");
 
   first.replaceWith(
-    document.createRange().createContextualFragment(
-      '<menu id="menu" class="flyout" hidden><li><button type="button">New</button></li></menu>',
-    ),
+    document
+      .createRange()
+      .createContextualFragment(
+        '<menu id="menu" class="flyout" hidden><li><button type="button">New</button></li></menu>',
+      ),
   );
   await nextMicrotask();
   const replacement = document.getElementById("menu");

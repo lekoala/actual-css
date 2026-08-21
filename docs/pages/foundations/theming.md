@@ -97,3 +97,12 @@ surfaces — must use another palette. More specific component states or explici
 surface variants (`.card.subtle`) still take precedence.
 
 → Components · Card · Foundations · Tokens (theme contract)
+
+### Use or adapt a preset palette
+
+`src/css/themes/` holds example palettes (`ocean`, `spruce`, `neon`, …) as
+reference material to copy into your own `[data-theme]` island — they are demo
+assets, not package entrypoints. Each sets the intent/surface/text tokens and
+lets the core derive everything else. In browsers with `color-mix()` support,
+`--focus-ring` follows each island's `--focus` automatically; re-declare it only
+for a deliberate visual override or a matching legacy fallback.

@@ -330,9 +330,9 @@ Rules:
 
 ## Theme contract
 
-Themes override tokens, not selectors. The themes in `src/css/themes/` are demo examples, not included in the default stylesheet; they exist to show valid ways to use this contract. They ship in the package as **reference sources for copying** — the `./css/themes` exports are intentionally `null`, so they are not supported import entrypoints.
+Themes override tokens, not selectors. The themes in `src/css/themes/` are repository-only demo examples, not included in the default stylesheet or the npm package; they exist to show valid ways to use this contract.
 
-A minimal recolor theme overrides the intent pairs, surfaces, text colors, border, focus, focus ring, and hover overlay.
+A minimal recolor theme overrides the intent pairs, surfaces, text colors, border, focus, and hover overlay. In browsers with `color-mix()` support, the core derives `--focus-ring` from the island's `--focus`; override the ring only for a deliberate visual treatment or when a matching pre-`color-mix()` fallback is required.
 
 Shape, shadow, motion, typography, and soft-variant mix tokens are optional knobs. Override them only when the theme actually changes that part of the system.
 
@@ -372,7 +372,6 @@ A minimal recolor theme (illustrative, not a shipped theme):
   --text-subtle: hsl(260 8% 56%);
   --border: hsl(260 24% 84%);
   --focus: var(--primary);
-  --focus-ring: hsl(260 70% 54% / 0.22);
   --hover-overlay: hsl(260 30% 10% / 0.04);
   --soft-bg-mix: 84%;
   --soft-border-mix: 58%;

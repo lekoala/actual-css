@@ -1,5 +1,5 @@
-import { readFile, readdir, stat, writeFile } from "node:fs/promises";
-import { join, dirname } from "node:path";
+import { readdir, readFile, stat, writeFile } from "node:fs/promises";
+import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { brotliCompressSync } from "node:zlib";
 
@@ -79,7 +79,6 @@ async function main() {
     "actual.min.css",
     "actual.full.css",
     "actual.full.min.css",
-    "actual-themes.min.css",
     "actual.js",
     "actual.full.js",
   ]);
@@ -111,11 +110,9 @@ async function main() {
   }
   if (dist["actual.full.min.css"]) {
     const { bytes, brotli } = dist["actual.full.min.css"];
-    sections.push(`Full (actual.full.min.css): ${formatBytes(bytes)} → ${formatBytes(brotli)} brotli`);
-  }
-  if (dist["actual-themes.min.css"]) {
-    const { bytes, brotli } = dist["actual-themes.min.css"];
-    sections.push(`Themes (actual-themes.min.css): ${formatBytes(bytes)} → ${formatBytes(brotli)} brotli`);
+    sections.push(
+      `Full (actual.full.min.css): ${formatBytes(bytes)} → ${formatBytes(brotli)} brotli`,
+    );
   }
   if (dist["actual.js"]) {
     const { bytes, brotli } = dist["actual.js"];
@@ -123,7 +120,9 @@ async function main() {
   }
   if (dist["actual.full.js"]) {
     const { bytes, brotli } = dist["actual.full.js"];
-    sections.push(`JS full (actual.full.js): ${formatBytes(bytes)} → ${formatBytes(brotli)} brotli`);
+    sections.push(
+      `JS full (actual.full.js): ${formatBytes(bytes)} → ${formatBytes(brotli)} brotli`,
+    );
   }
 
   for (const line of sections) {
@@ -139,9 +138,6 @@ async function main() {
       : null,
     full: dist["actual.full.min.css"]
       ? { minified: dist["actual.full.min.css"].bytes, brotli: dist["actual.full.min.css"].brotli }
-      : null,
-    themes: dist["actual-themes.min.css"]
-      ? { minified: dist["actual-themes.min.css"].bytes, brotli: dist["actual-themes.min.css"].brotli }
       : null,
     js: {
       core: dist["actual.js"]
@@ -165,7 +161,9 @@ async function main() {
   for (const [label, brotli, limit] of guarded) {
     if (brotli == null) continue;
     const ok = brotli <= limit;
-    console.log(`  ${label}: ${formatBytes(brotli)} brotli (budget ${formatBytes(limit)})${ok ? "" : " — EXCEEDED"}`);
+    console.log(
+      `  ${label}: ${formatBytes(brotli)} brotli (budget ${formatBytes(limit)})${ok ? "" : " — EXCEEDED"}`,
+    );
     if (!ok) exceeded.push(label);
   }
 
@@ -182,7 +180,7 @@ async function main() {
     // no previous report yet
   }
 
-  const next = JSON.stringify(report, null, 2) + "\n";
+  const next = `${JSON.stringify(report, null, 2)}\n`;
   if (previous && JSON.stringify(previous) === JSON.stringify(report)) {
     console.log("Report unchanged");
   } else {

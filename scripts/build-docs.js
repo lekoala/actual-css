@@ -8,19 +8,19 @@
 import {
   existsSync,
   mkdirSync,
-  readFileSync,
   readdirSync,
+  readFileSync,
   rmSync,
-  writeFileSync,
   watch,
+  writeFileSync,
 } from "node:fs";
 import { dirname, join, relative, resolve, sep } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
-import { loadNavigation } from "./docs/navigation.js";
 import { render } from "./docs/markdown.js";
+import { loadNavigation } from "./docs/navigation.js";
 import { buildSearchIndex } from "./docs/search.js";
+import { renderHome, renderNavGroups, renderPage } from "./docs/templates.js";
 import { loadThemes } from "./docs/themes.js";
-import { renderNavGroups, renderPage, renderHome } from "./docs/templates.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, "..");
@@ -29,23 +29,24 @@ const SITE = join(ROOT, "site");
 const ASSETS = join(SITE, "assets");
 const CHROME = join(__dirname, "docs", "assets");
 const DIST = join(ROOT, "dist");
+const THEMES_BUNDLE = join(ROOT, "demo", "assets", "actual-themes.min.css");
 
 // The docs site previews the framework from its source locations: pages link
 // src/css/*.css (so CSS edits are visible without a compile step) and the dist
 // bundles the site depends on. assets/ holds only search-index.js, regenerated
 // on each build; the site chrome (docs.css, docs.js) is edited in
 // scripts/docs/assets/ and referenced in place, so site/ never stores a copy.
-const REQUIRED_DIST = [
-  join(DIST, "actual.full.js"),
-  join(DIST, "actual-themes.min.css"),
+// The theme palettes bundle lives in demo/assets/ (build-themes.js): it is a
+// demo asset, not package surface.
+const REQUIRED_ASSETS = [
+  { path: join(DIST, "actual.full.js"), command: "bun run build:js" },
+  { path: THEMES_BUNDLE, command: "bun run build:themes" },
 ];
 
-function requireDist() {
-  for (const file of REQUIRED_DIST) {
-    if (!existsSync(file)) {
-      throw new Error(
-        `Missing ${relative(ROOT, file)}. Run the distribution build first.`,
-      );
+function requireAssets() {
+  for (const asset of REQUIRED_ASSETS) {
+    if (!existsSync(asset.path)) {
+      throw new Error(`Missing ${relative(ROOT, asset.path)}. Run ${asset.command} first.`);
     }
   }
 }
@@ -102,7 +103,7 @@ function writePages(navigation, rendered, themes) {
       toc: result.toc,
       navGroups: renderNavGroups(navigation, page),
       actualCss: repoAsset(from, join(ROOT, "src", "css", "actual.full.css")),
-      themesCss: repoAsset(from, join(DIST, "actual-themes.min.css")),
+      themesCss: repoAsset(from, THEMES_BUNDLE),
       docsCss: repoAsset(from, join(CHROME, "docs.css")),
       actualJs: repoAsset(from, join(DIST, "actual.full.js")),
       docsJs: repoAsset(from, join(CHROME, "docs.js")),
@@ -126,7 +127,7 @@ function writeHome(navigation, themes) {
       navigation,
       themes,
       actualCss: repoAsset(from, join(ROOT, "src", "css", "actual.full.css")),
-      themesCss: repoAsset(from, join(DIST, "actual-themes.min.css")),
+      themesCss: repoAsset(from, THEMES_BUNDLE),
       docsCss: repoAsset(from, join(CHROME, "docs.css")),
       actualJs: repoAsset(from, join(DIST, "actual.full.js")),
       docsJs: repoAsset(from, join(CHROME, "docs.js")),
@@ -185,7 +186,7 @@ export function buildDocs() {
   const themes = loadThemes(ROOT);
   const rendered = renderAllPages(navigation);
   mkdirSync(SITE, { recursive: true });
-  requireDist();
+  requireAssets();
   mkdirSync(ASSETS, { recursive: true });
   writePages(navigation, rendered, themes);
   writeSearchIndex(navigation, rendered);
@@ -248,12 +249,12 @@ const directRun =
 if (directRun) {
   try {
     buildDocs();
+    if (process.argv.includes("--watch")) {
+      watchMode();
+    }
   } catch (error) {
     console.error("Docs build failed:");
     console.error(error);
-  }
-
-  if (process.argv.includes("--watch")) {
-    watchMode();
+    process.exitCode = 1;
   }
 }

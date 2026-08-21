@@ -12,9 +12,7 @@ const generated = await collectReservedClasses(ROOT);
 
 if (JSON.stringify(committed) !== JSON.stringify(generated)) {
   console.error("Reserved class check failed.");
-  console.error(
-    `Run "bun run generate:reserved" to refresh ${JSON_FILE} from src/css.`,
-  );
+  console.error(`Run "bun run generate:reserved" to refresh ${JSON_FILE} from src/css.`);
   process.exit(1);
 }
 

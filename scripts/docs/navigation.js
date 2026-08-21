@@ -7,9 +7,7 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 
 export function loadNavigation(root) {
-  const raw = JSON.parse(
-    readFileSync(join(root, "docs", "navigation.json"), "utf8"),
-  );
+  const raw = JSON.parse(readFileSync(join(root, "docs", "navigation.json"), "utf8"));
 
   const groups = raw.groups.map((group) => ({
     title: group.title,

@@ -5,6 +5,7 @@ package-lock.json
 # Build output
 out/
 *.tgz
+demo/assets/
 
 # OS files
 .DS_Store

@@ -36,9 +36,7 @@ const page = flags["--url"] ?? args[0] ?? "site/index.html";
 const settleMs = Number(flags["--settle"]);
 
 const program =
-  flags["--script"] !== undefined
-    ? await readFile(flags["--script"], "utf8")
-    : flags["--expr"];
+  flags["--script"] !== undefined ? await readFile(flags["--script"], "utf8") : flags["--expr"];
 if (program === undefined) {
   console.error("probe: pass a program via --expr or --script.");
   process.exit(1);

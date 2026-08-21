@@ -133,7 +133,9 @@ test("Home and End move to first and last tabs", async () => {
 });
 
 test("vertical tablists use ArrowDown and ArrowUp for selection", async () => {
-  await loadTabs(tabsMarkup().replace('role="tablist"', 'role="tablist" aria-orientation="vertical"'));
+  await loadTabs(
+    tabsMarkup().replace('role="tablist"', 'role="tablist" aria-orientation="vertical"'),
+  );
   const tabA = document.getElementById("tab-a");
   const tabB = document.getElementById("tab-b");
 
@@ -162,7 +164,9 @@ test("horizontal ArrowDown moves focus to the selected panel", async () => {
 });
 
 test("vertical tablists ignore ArrowRight for selection", async () => {
-  await loadTabs(tabsMarkup().replace('role="tablist"', 'role="tablist" aria-orientation="vertical"'));
+  await loadTabs(
+    tabsMarkup().replace('role="tablist"', 'role="tablist" aria-orientation="vertical"'),
+  );
   const tabA = document.getElementById("tab-a");
 
   tabA.focus();

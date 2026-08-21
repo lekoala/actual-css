@@ -39,9 +39,7 @@ const pageUrl = fixtureUrl(page);
 const widths = widthsArg.split(",").map((w) => Number(w.trim()));
 
 const mediaFeatures =
-  scheme === "light" || scheme === "dark"
-    ? [{ name: "prefers-color-scheme", value: scheme }]
-    : [];
+  scheme === "light" || scheme === "dark" ? [{ name: "prefers-color-scheme", value: scheme }] : [];
 
 const stem = basename(page).replace(/\.[^.]+$/, "");
 const saved = [];

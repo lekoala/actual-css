@@ -1,5 +1,5 @@
 import { readdir, readFile } from "node:fs/promises";
-import { join, dirname } from "node:path";
+import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -75,7 +75,8 @@ async function checkJsDiscovery() {
         if (isStateWrite(line)) continue;
         if (ALLOWED.has(line.trim())) continue;
         // Allow data-flyout-* dataset references.
-        if (line.includes(`dataset.${cls.slice(1)}`) || line.includes(`dataset${cls.slice(1)}`)) continue;
+        if (line.includes(`dataset.${cls.slice(1)}`) || line.includes(`dataset${cls.slice(1)}`))
+          continue;
         // Allow comments and variable names referencing the class name.
         if (/^\s*[/][/*]/.test(line.trim())) continue;
         if (line.includes(`"${cls.slice(1)}"`) || line.includes(`'${cls.slice(1)}'`)) {
@@ -109,18 +110,11 @@ async function checkCssSelectors() {
 
 async function checkTokens() {
   const offenders = [];
-  const patterns = [
-    /data-enhance="([^"]*)"/g,
-  ];
+  const patterns = [/data-enhance="([^"]*)"/g];
 
-  const dirs = [
-    join(ROOT, "demo", "templates"),
-  ];
+  const dirs = [join(ROOT, "demo", "templates")];
 
-  const tokenFiles = [
-    join(ROOT, "README.md"),
-    join(ROOT, "llms.txt"),
-  ];
+  const tokenFiles = [join(ROOT, "README.md"), join(ROOT, "llms.txt")];
 
   async function scanDir(dir) {
     const entries = await readdir(dir, { withFileTypes: true });
@@ -131,14 +125,15 @@ async function checkTokens() {
       } else if (/\.(html|md)$/.test(entry.name)) {
         const content = await readFile(path, "utf8");
         for (const pattern of patterns) {
-          let match;
-          while ((match = pattern.exec(content)) !== null) {
+          let match = pattern.exec(content);
+          while (match !== null) {
             const tokens = match[1].split(/\s+/);
             for (const token of tokens) {
               if (!TOKENS.has(token) && token) {
                 offenders.push(`${path}: unknown token "${token}"`);
               }
             }
+            match = pattern.exec(content);
           }
         }
       }
@@ -153,14 +148,15 @@ async function checkTokens() {
     try {
       const content = await readFile(file, "utf8");
       for (const pattern of patterns) {
-        let match;
-        while ((match = pattern.exec(content)) !== null) {
+        let match = pattern.exec(content);
+        while (match !== null) {
           const tokens = match[1].split(/\s+/);
           for (const token of tokens) {
             if (!TOKENS.has(token) && token) {
               offenders.push(`${file}: unknown token "${token}"`);
             }
           }
+          match = pattern.exec(content);
         }
       }
     } catch {

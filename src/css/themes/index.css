@@ -1,6 +1,6 @@
 /*
- * Reference theme presets. Shipped for inspection and copying; not public
- * package entry points (package.json blocks ./css/themes exports).
+ * Repository-only reference theme presets for inspection and copying. They
+ * are demo material, not npm package files or public entrypoints.
  *
  * Opt-in theme bundle. Importing this file pulls in every theme below, each
  * gated by [data-theme="…"]. The light baseline is :root in src/css/core/theme.css —

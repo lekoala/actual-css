@@ -6,17 +6,23 @@ script in `package.json`; `bun run build:all` chains the full pipeline
 
 | npm script | file | purpose |
 | --- | --- | --- |
-| `build:docs` / `watch:docs` | `build-docs.js` | Build the static documentation site in `site/` from `docs/pages/` + `docs/navigation.json`. Requires `dist/` (runs `build:dist` + `build:js` first in `build:all`). |
-| `build:dist` | `build-dist.js` | Build the CSS bundles in `dist/`. |
+| `lint` / `lint:fix` | Biome | Lint + format `src/`, `scripts/`, and `tests/`. Runs first in `build:all` and must end clean. |
+| `build:docs` / `watch:docs` | `build-docs.js` | Build the static documentation site in `site/` from `docs/pages/` + `docs/navigation.json`. Builds the demo themes prerequisite; `build:all` creates the required JS bundle first. |
+| `build:dist` | `build-dist.js` | Build the CSS bundles in `dist/` — the npm-published surface. |
 | `build:js` | `build-js.js` | Bundle `src/js/` into `dist/actual.js` (loader only) and `dist/actual.full.js` (full runtime); no sourcemap; byte-deterministic across rebuilds. |
+| `build:themes` | `build-themes.js` | Bundle the preset palettes into `demo/assets/actual-themes.min.css` for the demo pages and docs site. Demo asset only — never in `dist/`. |
 | `build:size` | `build-size.js` | Write `size-report.json` (per-file, minified, brotli). |
 | `check:docs` | `check-docs.js` | Structural checks for the docs site: page/IA consistency, fence contract, internal links + anchors, and that referenced `src/css` / `src/js` files exist. |
 | `check:compat` | `check-compat.js` | Capability floor audit: flags unguarded above-Minimal structural CSS. |
+| `check:css-api` | `check-css-api.js` | Enforce the public/internal custom-property contract against fixtures. |
+| `check:architecture` | `check-css-architecture.js` | Structural CSS architecture rules (layer order, selector discipline). |
+| `check:enhance` | `check-enhance.js` | Verify `data-enhance` tokens used in docs/demos exist in the enhancer contract. |
 | `generate:reserved` | `generate-reserved-classes.js` | Regenerate `reserved-classes.json` from the class selectors in `src/css/**/*.css`. |
 | `check:reserved` | `check-reserved.js` | Verify `reserved-classes.json` is in sync with the classes extracted from `src/css/**/*.css`. |
 | `check:links` | `check-doc-links.js` | Validate doc links and `actual-css` entrypoints against `package.json#exports`. |
 | `check:templates` | `check-templates.js` | Sanity-check the demo template pages. |
 | `check:sync` | `check-sync.js` | Verify files that must stay in sync with each other. |
+| `test` | — | Full bun test suite (`tests/`, browser tests skip gracefully without Chrome). |
 | `shot:page` | `page-shot.js` | Full-page screenshot of any page in headless Chrome. |
 | `shot:forced` | `forced-colors-shot.js` | Same, with forced-colors emulation (DevTools pipeline). |
 | `probe` | `probe.js` | Run a JS program inside a headless-Chrome page and print its return value as JSON. |

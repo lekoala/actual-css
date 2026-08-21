@@ -14,6 +14,9 @@ This project follows Keep a Changelog and uses semver, including during 0.x.
 * Generated and published `reserved-classes.json`.
 * Dedicated `typography/lead.css` and `layout/measure.css` modules; `.measure` now exposes `--measure`.
 * Architecture, compatibility, vendor-selector, browser-layout, and package guardrails.
+* `build:themes` generates the preset-palette bundle into `demo/assets/`; `dist/` now contains only npm-published artifacts.
+* Browser test proving custom `[data-theme]` islands re-derive `--focus-ring` from their own `--focus`.
+* CI verifies committed `dist/`, `site/`, and `size-report.json` match a fresh build.
 
 ### Changed
 
@@ -25,10 +28,18 @@ This project follows Keep a Changelog and uses semver, including during 0.x.
 * Utilities now explicitly distinguish compact base shortcuts from verbose optional property/value helpers.
 * `.lead` and `.measure` are independent from `.prose`.
 * CI and browser diagnostics updated for Bun 1.4.
+* The focus-ring color-mix derivation applies to every `[data-theme]` island; preset palettes no longer hardcode formulaic ring literals (neon keeps its intentional glow override).
+* Preset theme palettes are demo reference material: removed from the npm package, bundled only for demos/docs via `build:themes`.
+* Biome now lints and formats `scripts/` and `tests/` alongside `src/`; `lint` runs first in `build:all`.
+* `llms.txt` states the real entrypoint contract (core vs `/full`, loader vs `/js/full`) and the layout-primitive selection guide.
 
 ### Fixed
 
 * Forced-colors and theme-island focus/state handling.
+* Drawer RTL flip now follows resolved direction via `:dir(rtl)`.
+* Badge uses shared font-size and density tokens instead of private literals.
+* `.sr-only` hides through `clip-path` in addition to legacy `clip`.
+* `dim` and `indigo` shadows use their own blue hue instead of inheriting the default aubergine ink.
 * Vendor pseudo-element rules for color inputs and meters.
 * Tooltip Escape handling and LIFO surface dismissal, including pinned tooltips.
 * OTP and switch focus/state rendering.

@@ -29,7 +29,6 @@
 
   --border: hsl(170 12% 86%);
   --focus: var(--primary);
-  --focus-ring: hsl(174 45% 24% / 0.22);
 }
 
 @supports (color: light-dark(red, blue)) {
@@ -57,7 +56,6 @@
     --text-subtle: light-dark(hsl(182 7% 55%), hsl(180 7% 52%));
 
     --border: light-dark(hsl(170 12% 86%), hsl(182 12% 23%));
-    --focus-ring: light-dark(hsl(174 45% 24% / 0.22), hsl(170 35% 66% / 0.28));
     --hover-overlay: light-dark(hsl(185 30% 10% / 0.04), hsl(0 0% 100% / 0.06));
     --shadow-color: light-dark(hsl(185 30% 10%), hsl(0 0% 0%));
   }

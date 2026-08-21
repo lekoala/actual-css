@@ -23,20 +23,14 @@ let homeTemplateCache;
 
 export function loadTemplate() {
   if (!templateCache) {
-    templateCache = readFileSync(
-      join(__dirname, "..", "templates", "docs-page.html"),
-      "utf8",
-    );
+    templateCache = readFileSync(join(__dirname, "..", "templates", "docs-page.html"), "utf8");
   }
   return templateCache;
 }
 
 export function loadHomeTemplate() {
   if (!homeTemplateCache) {
-    homeTemplateCache = readFileSync(
-      join(__dirname, "..", "templates", "docs-home.html"),
-      "utf8",
-    );
+    homeTemplateCache = readFileSync(join(__dirname, "..", "templates", "docs-home.html"), "utf8");
   }
   return homeTemplateCache;
 }
@@ -80,7 +74,8 @@ const SCHEME_VALUES = ["system", "light", "dark"];
 
 export function renderThemeOptions(themes) {
   const scheme = SCHEME_VALUES.map(
-    (name) => `            <option value="${name}">${escapeHtml(name.charAt(0).toUpperCase() + name.slice(1))}</option>`,
+    (name) =>
+      `            <option value="${name}">${escapeHtml(name.charAt(0).toUpperCase() + name.slice(1))}</option>`,
   ).join("\n");
   const named = themes
     .map((theme) => `            <option value="${theme.name}">${escapeHtml(theme.label)}</option>`)
@@ -110,7 +105,9 @@ export function renderThemeInit(themes) {
 export function renderThemeCards(themes) {
   return themes
     .map(
-      (theme) => `          <article class="card compact stack docs-theme-card" data-theme="${theme.name}">
+      (
+        theme,
+      ) => `          <article class="card compact stack docs-theme-card" data-theme="${theme.name}">
             <div class="docs-theme-preview" aria-hidden="true">
               <span class="docs-theme-line"></span>
               <span class="docs-theme-line docs-theme-line-primary"></span>
@@ -150,7 +147,16 @@ export function renderComponentsGrid(navigation) {
     .join("\n");
 }
 
-export function renderHome({ navigation, themes, actualCss, themesCss, docsCss, actualJs, docsJs, siteRoot }) {
+export function renderHome({
+  navigation,
+  themes,
+  actualCss,
+  themesCss,
+  docsCss,
+  actualJs,
+  docsJs,
+  siteRoot,
+}) {
   return loadHomeTemplate()
     .replace(/\{\{actualCss\}\}/g, actualCss)
     .replace(/\{\{themesCss\}\}/g, themesCss)
@@ -186,16 +192,28 @@ export function wrapDocsContent(content) {
   }
 
   const open = '<div class="prose docs-prose">';
-  const sections = content
-    .replaceAll(DOCS_PROSE_END, "</div>")
-    .replaceAll(DOCS_PROSE_START, open);
-  return `${open}\n${sections}\n</div>`.replace(
-    /<div class="prose docs-prose">\s*<\/div>\s*/g,
-    "",
-  );
+  const sections = content.replaceAll(DOCS_PROSE_END, "</div>").replaceAll(DOCS_PROSE_START, open);
+  return `${open}\n${sections}\n</div>`.replace(/<div class="prose docs-prose">\s*<\/div>\s*/g, "");
 }
 
-export function renderPage({ title, description, content, toc, navGroups, actualCss, themesCss, docsCss, actualJs, docsJs, siteRoot, url, previous, next, file, themes }) {
+export function renderPage({
+  title,
+  description,
+  content,
+  toc,
+  navGroups,
+  actualCss,
+  themesCss,
+  docsCss,
+  actualJs,
+  docsJs,
+  siteRoot,
+  url,
+  previous,
+  next,
+  file,
+  themes,
+}) {
   const tpl = loadTemplate();
   const page = { url, previous, next };
   const home = relHref(url, "index.html");

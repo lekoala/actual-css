@@ -120,7 +120,7 @@ it("close button closes, restores focus, and keeps the scroll position", async (
 });
 
 it("dismissible backdrop click closes the dialog", async () => {
-  await withPage(async ({ evalIn, settle, snapshot }) => {
+  await withPage(async ({ evalIn, settle }) => {
     await scrollTo1200(evalIn);
     await evalIn("document.getElementById('open-dismissible').click()");
     await settle();
@@ -149,7 +149,7 @@ it("non-dismissible backdrop click stays open with static feedback", async () =>
 });
 
 it("a prevented actual:dialog-cancel keeps the dialog open", async () => {
-  await withPage(async ({ evalIn, settle, snapshot }) => {
+  await withPage(async ({ evalIn, settle }) => {
     await scrollTo1200(evalIn);
     await evalIn("document.getElementById('open-nondismiss').click()");
     await settle();
@@ -168,17 +168,12 @@ it("a prevented actual:dialog-cancel keeps the dialog open", async () => {
     // A close button goes through requestClose(), whose cancel event is
     // cancelable — unlike Chrome's closedby-driven Escape close. The contract
     // (preventable actual:dialog-cancel) is exercised on this path.
-    await evalIn(
-      "document.querySelector('#dlg-nondismiss .dialog-close').click()",
-    );
+    await evalIn("document.querySelector('#dlg-nondismiss .dialog-close').click()");
     await settle();
     const report = await evalIn(
       "({ seen: window.__seen, open: document.getElementById('dlg-nondismiss').open })",
     );
-    expect(report.seen.map((e) => e[0])).toEqual([
-      "actual-cancel",
-      "native-cancel",
-    ]);
+    expect(report.seen.map((e) => e[0])).toEqual(["actual-cancel", "native-cancel"]);
     expect(report.seen[1][1]).toBe(true);
     expect(report.open).toBe(true);
   });

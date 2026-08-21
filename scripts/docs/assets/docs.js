@@ -4,8 +4,6 @@
  * persistence, and copy buttons.
  */
 (() => {
-  "use strict";
-
   const THEME_KEY = "actual-docs-theme";
 
   /* --- Theme persistence --- */
@@ -22,9 +20,10 @@
 
   if (themeSelect) {
     const storedTheme = localStorage.getItem(THEME_KEY);
-    const current = storedTheme && themeSelect.querySelector(`option[value="${storedTheme}"]`)
-      ? storedTheme
-      : "system";
+    const current =
+      storedTheme && themeSelect.querySelector(`option[value="${storedTheme}"]`)
+        ? storedTheme
+        : "system";
     themeSelect.value = current;
     applyTheme(current);
 
@@ -133,7 +132,9 @@
       .map(
         (entry, i) =>
           `<li data-index="${i}"><a href="${siteRoot()}${entry.url}">${entry.title}` +
-          (entry.description ? `<span class="docs-search-match"> — ${entry.description}</span>` : "") +
+          (entry.description
+            ? `<span class="docs-search-match"> — ${entry.description}</span>`
+            : "") +
           `</a></li>`,
       )
       .join("");
@@ -210,5 +211,4 @@
 
     searchDialog.addEventListener("close", () => runSearch(""));
   }
-
 })();

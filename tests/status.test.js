@@ -16,7 +16,7 @@ afterEach(() => {
   cleanupDOM();
 });
 
-test("writes the message into the [data-status][role=\"status\"] target", async () => {
+test('writes the message into the [data-status][role="status"] target', async () => {
   const { status } = await loadStatus(`<div class="status-bar" data-status role="status"></div>`);
 
   const target = document.querySelector('[data-status][role="status"]');
@@ -133,7 +133,7 @@ test("auto-shows validation errors as danger", async () => {
     new CustomEvent("actual:invalid", {
       bubbles: true,
       detail: { message: "Please check the highlighted fields." },
-    })
+    }),
   );
 
   expect(target.textContent).toBe("Please check the highlighted fields.");
@@ -148,7 +148,7 @@ test("ignores actual:invalid events without a message", async () => {
     new CustomEvent("actual:invalid", {
       bubbles: true,
       detail: { message: "" },
-    })
+    }),
   );
 
   expect(target.textContent).toBe("");
@@ -173,7 +173,7 @@ test("actual:status event shows a message", async () => {
     new CustomEvent("actual:status", {
       bubbles: true,
       detail: { message: "Saved.", intent: "success" },
-    })
+    }),
   );
 
   expect(target.textContent).toBe("Saved.");
@@ -244,7 +244,10 @@ test("a command sees a status bar inserted immediately before the click", async 
 
   document
     .querySelector("main")
-    .insertAdjacentHTML("beforeend", '<div class="status-bar" data-status id="app-status" role="status"></div>');
+    .insertAdjacentHTML(
+      "beforeend",
+      '<div class="status-bar" data-status id="app-status" role="status"></div>',
+    );
   const target = document.getElementById("app-status");
   const trigger = document.querySelector("button");
 

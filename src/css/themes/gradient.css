@@ -32,7 +32,6 @@
 
   --border: hsl(210 14% 89%);
   --focus: var(--primary);
-  --focus-ring: hsl(211 100% 50% / 0.25);
   --hover-overlay: hsl(210 30% 10% / 0.04);
 
   --radius: 0.25rem;
@@ -65,7 +64,6 @@
     --text-subtle: light-dark(hsl(210 9% 62%), hsl(210 7% 55%));
 
     --border: light-dark(hsl(210 14% 89%), hsl(210 12% 24%));
-    --focus-ring: light-dark(hsl(211 100% 50% / 0.25), hsl(211 90% 72% / 0.3));
     --hover-overlay: light-dark(hsl(210 30% 10% / 0.04), hsl(0 0% 100% / 0.06));
     --shadow-color: light-dark(hsl(210 30% 10%), hsl(0 0% 0%));
   }

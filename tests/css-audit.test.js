@@ -105,11 +105,13 @@ test("density presets declare a count and collapse through divisors of it", () =
      must land on a divisor of its preset — never 5 + 1, never 4 + 2. */
   expect(css).toContain(ENHANCEMENT);
   const enhancement = css.slice(css.indexOf(ENHANCEMENT));
-  const steps = [...enhancement.matchAll(/@container \(min-width: (\d+)rem\)([\s\S]*?)\n  \}/g)];
+  const steps = [...enhancement.matchAll(/@container \(min-width: (\d+)rem\)([\s\S]*?)\n {2}\}/g)];
   expect(steps.length).toBeGreaterThan(0);
   const seen = [];
   for (const [, threshold, body] of steps) {
-    for (const rule of body.matchAll(/:where\(([^)]*)\)\s*\{\s*grid-template-columns: repeat\((\d+),/g)) {
+    for (const rule of body.matchAll(
+      /:where\(([^)]*)\)\s*\{\s*grid-template-columns: repeat\((\d+),/g,
+    )) {
       const columns = Number(rule[2]);
       for (const preset of rule[1].matchAll(/\.grid-(\d)/g)) {
         const count = Number(preset[1]);
@@ -131,7 +133,9 @@ test("intrinsic composition primitives do not depend on an ancestor opt-in", () 
   expect(switcherCss).toMatch(
     /\.switcher > \*\s*\{[\s\S]*var\(--switcher-threshold, 40rem\)[\s\S]*flex-grow:\s*1;/,
   );
-  expect(sidebarCss).toMatch(/\.sidebar-layout\s*\{[\s\S]*display:\s*flex;[\s\S]*flex-wrap:\s*wrap;/);
+  expect(sidebarCss).toMatch(
+    /\.sidebar-layout\s*\{[\s\S]*display:\s*flex;[\s\S]*flex-wrap:\s*wrap;/,
+  );
   expect(sidebarCss).toMatch(
     /\.sidebar-layout > :first-child\s*\{[\s\S]*flex-grow:\s*999;[\s\S]*var\(--sidebar-content-min, 30rem\)/,
   );
@@ -149,7 +153,9 @@ test("form-actions exposes alignment hooks while sticky behavior remains intact"
 
   expect(css).toContain("align-items: var(--form-actions-align, center);");
   expect(css).toContain("justify-content: var(--form-actions-justify, flex-start);");
-  expect(css).toContain("margin-block-start: var(--form-actions-margin-block-start, var(--space-50));");
+  expect(css).toContain(
+    "margin-block-start: var(--form-actions-margin-block-start, var(--space-50));",
+  );
   expect(css).toContain(".form-actions.sticky {");
   expect(css).toContain("position: sticky;");
 });
@@ -331,7 +337,9 @@ test("tabs include vertical orientation styling", () => {
 test("breadcrumb supports aria-current on the link or span", () => {
   const css = readCss("src/css/components/breadcrumb.css");
 
-  expect(css).toContain('.breadcrumb :where(li, a, span):where([aria-current]:not([aria-current="false"]))');
+  expect(css).toContain(
+    '.breadcrumb :where(li, a, span):where([aria-current]:not([aria-current="false"]))',
+  );
   expect(css.includes("pointer-events: none")).toBe(false);
 });
 
@@ -380,6 +388,16 @@ test("dialog surfaces stay fixed to the viewport", () => {
   expect(drawerCss).toMatch(/dialog\.drawer\s*\{[^}]*max-block-size:\s*100%;/);
 });
 
+test("drawer RTL keeps the Minimal fallback and enhances inherited direction", () => {
+  const css = readCss("src/css/components/drawer.css");
+
+  expect(css).toContain('[dir="rtl"] dialog.drawer {');
+  expect(css).toContain('[dir="rtl"] dialog.drawer[data-side="end"] {');
+  expect(css).toContain("@supports selector(:dir(rtl))");
+  expect(css).toContain("dialog.drawer:dir(ltr) {");
+  expect(css).toContain('dialog.drawer[data-side="end"]:dir(rtl) {');
+});
+
 test("confirmation dialog composes media alignment with an intent-aware icon well", () => {
   const css = readCss("src/css/components/modal.css");
 
@@ -395,9 +413,7 @@ test("alert.callout overrides local defaults with its final surface recipe", () 
 
   expect(css).toContain("--alert-bg: var(--ui-bg, var(--alert-default-bg));");
   expect(css).toMatch(/\.alert\.callout \{[\s\S]*--alert-bg: var\(--surface-subtle\);/);
-  expect(css).toContain(
-    "border-inline-start: var(--alert-border-inline-start-width, 4px) solid",
-  );
+  expect(css).toContain("border-inline-start: var(--alert-border-inline-start-width, 4px) solid");
   expect(css).toContain("border: 0");
 });
 
@@ -436,7 +452,9 @@ test("theme-derived aliases are declared on :root, [data-theme] so islands recom
     expect(inThemeBoundary(themeCss, prop), `${prop} on [data-theme] in theme.css`).toBe(true);
   }
   // color-mix shadows re-derive from --shadow-color on the theme boundary
-  expect(tokensCss).toMatch(/@supports \(color: color-mix\(in oklch, red, white\)\)\s*\{\s*:root,\s*\n\s*\[data-theme\]\s*\{[\s\S]*--shadow:/);
+  expect(tokensCss).toMatch(
+    /@supports \(color: color-mix\(in oklch, red, white\)\)\s*\{\s*:root,\s*\n\s*\[data-theme\]\s*\{[\s\S]*--shadow:/,
+  );
 
   // Accessibility overrides must cross every named theme boundary too.
   expect(tokensCss).toMatch(

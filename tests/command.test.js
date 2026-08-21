@@ -71,7 +71,9 @@ test("the target is resolved again for every action", () => {
   click(trigger);
   trigger.setAttribute("commandfor", "second");
   click(trigger);
-  document.getElementById("second").replaceWith(document.createRange().createContextualFragment('<div id="second"></div>'));
+  document
+    .getElementById("second")
+    .replaceWith(document.createRange().createContextualFragment('<div id="second"></div>'));
   click(trigger);
 
   expect(targets[0].id).toBe("first");
@@ -155,9 +157,9 @@ test("commands resolve within their shadow root", () => {
     },
   });
 
-  shadow.querySelector("span").dispatchEvent(
-    new MouseEvent("click", { bubbles: true, cancelable: true, composed: true }),
-  );
+  shadow
+    .querySelector("span")
+    .dispatchEvent(new MouseEvent("click", { bubbles: true, cancelable: true, composed: true }));
 
   expect(handledTarget).toBe(shadow.getElementById("target"));
 });

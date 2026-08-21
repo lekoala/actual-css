@@ -142,7 +142,11 @@ test("autoUpdate does not dispatch Escape (Escape moved to surface layer)", () =
   document.body.innerHTML = '<div id="float"></div>';
   const float = document.getElementById("float");
   let called = false;
-  untracks.push(autoUpdate(float, () => { called = true; }));
+  untracks.push(
+    autoUpdate(float, () => {
+      called = true;
+    }),
+  );
 
   document.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape" }));
 
@@ -190,7 +194,8 @@ test("reposition measures transformed floating elements from layout size", () =>
 
 test("reposition skips hidden elements without rejecting visible fixed elements", () => {
   setViewport();
-  document.body.innerHTML = '<button id="ref"></button><div id="hidden" hidden></div><div id="fixed"></div>';
+  document.body.innerHTML =
+    '<button id="ref"></button><div id="hidden" hidden></div><div id="fixed"></div>';
   const ref = document.getElementById("ref");
   const hidden = document.getElementById("hidden");
   const fixed = document.getElementById("fixed");

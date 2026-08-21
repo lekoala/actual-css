@@ -6,9 +6,9 @@
  * links (including anchors) resolve.
  */
 import { existsSync, readdirSync, readFileSync } from "node:fs";
-import { dirname, extname, join, normalize, relative, resolve, sep } from "node:path";
+import { dirname, join, normalize, relative, resolve, sep } from "node:path";
 import { fileURLToPath } from "node:url";
-import { scanCodeFences, render } from "./docs/markdown.js";
+import { render, scanCodeFences } from "./docs/markdown.js";
 import { loadNavigation } from "./docs/navigation.js";
 import { relHref } from "./docs/templates.js";
 
@@ -40,10 +40,7 @@ function main() {
   const issues = [];
   const navigation = loadNavigation(ROOT);
   const manifestFiles = new Map(
-    navigation.pages.map((page) => [
-      join(PAGES, page.file),
-      { page, toc: [] },
-    ]),
+    navigation.pages.map((page) => [join(PAGES, page.file), { page, toc: [] }]),
   );
 
   const actualFiles = walkMarkdown(PAGES);
@@ -69,10 +66,7 @@ function main() {
     const fences = scanCodeFences(markdown);
     const fencedLines = new Set(
       fences.flatMap((fence) =>
-        Array.from(
-          { length: fence.end - fence.start + 1 },
-          (_, offset) => fence.start + offset,
-        ),
+        Array.from({ length: fence.end - fence.start + 1 }, (_, offset) => fence.start + offset),
       ),
     );
 
@@ -91,9 +85,7 @@ function main() {
       if (!fence.language) {
         issues.push(`${rel(file)}: fence without a language (use \`\`\`html, \`\`\`css, ...)`);
       } else if (!FENCE_LANGUAGES.has(fence.language)) {
-        issues.push(
-          `${rel(file)}: unsupported fence language "${fence.language}"`,
-        );
+        issues.push(`${rel(file)}: unsupported fence language "${fence.language}"`);
       }
       if (fence.language.includes("{")) {
         issues.push(
@@ -101,14 +93,10 @@ function main() {
         );
       }
       if (fence.demo && fence.language !== "html") {
-        issues.push(
-          `${rel(file)}: the demo flag is only supported on html fences`,
-        );
+        issues.push(`${rel(file)}: the demo flag is only supported on html fences`);
       }
       if (fence.flags.some((flag) => flag !== "demo")) {
-        issues.push(
-          `${rel(file)}: unknown fence flag "${fence.flags.find((f) => f !== "demo")}"`,
-        );
+        issues.push(`${rel(file)}: unknown fence flag "${fence.flags.find((f) => f !== "demo")}"`);
       }
       if (fence.language === "html") {
         for (const match of fence.content.matchAll(/<(input|select|textarea)\b([^>]*)>/gu)) {
@@ -193,9 +181,7 @@ function main() {
     process.exit(1);
   }
 
-  console.log(
-    `Docs check passed (${navigation.pages.length} pages, ${actualFiles.length} files).`,
-  );
+  console.log(`Docs check passed (${navigation.pages.length} pages, ${actualFiles.length} files).`);
 }
 
 main();

@@ -13,9 +13,7 @@ import { join } from "node:path";
 export function loadThemes(root) {
   const source = readFileSync(join(root, "src", "css", "themes", "index.css"), "utf8");
 
-  const names = [...source.matchAll(/@import\s+"\.\/([^"]+)\.css";/g)].map(
-    (match) => match[1],
-  );
+  const names = [...source.matchAll(/@import\s+"\.\/([^"]+)\.css";/g)].map((match) => match[1]);
 
   const descriptions = new Map();
   for (const line of source.split("\n")) {
