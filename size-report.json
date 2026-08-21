@@ -1,12 +1,12 @@
 {
-  "totalRaw": 224901,
+  "totalRaw": 226221,
   "core": {
     "minified": 10492,
     "brotli": 2500
   },
   "full": {
-    "minified": 106514,
-    "brotli": 15653
+    "minified": 106676,
+    "brotli": 15660
   },
   "js": {
     "core": {
@@ -49,6 +49,10 @@
       "raw": 5286
     },
     {
+      "file": "layout/grid.css",
+      "raw": 4882
+    },
+    {
       "file": "typography/prose.css",
       "raw": 4869
     },
@@ -61,20 +65,16 @@
       "raw": 4704
     },
     {
+      "file": "layout/column-layout.css",
+      "raw": 4590
+    },
+    {
       "file": "forms/choice-card.css",
       "raw": 4518
     },
     {
       "file": "themes/edge.css",
       "raw": 4497
-    },
-    {
-      "file": "layout/column-layout.css",
-      "raw": 4477
-    },
-    {
-      "file": "layout/grid.css",
-      "raw": 4410
     },
     {
       "file": "utilities/extra.css",
@@ -105,16 +105,16 @@
       "raw": 3494
     },
     {
+      "file": "components/card.css",
+      "raw": 3394
+    },
+    {
       "file": "utilities/base.css",
       "raw": 3316
     },
     {
       "file": "forms/switch.css",
       "raw": 3168
-    },
-    {
-      "file": "components/card.css",
-      "raw": 2995
     },
     {
       "file": "components/tooltip.css",
@@ -325,12 +325,12 @@
       "raw": 859
     },
     {
-      "file": "components/pagination.css",
-      "raw": 786
+      "file": "layout/sidebar-layout.css",
+      "raw": 800
     },
     {
-      "file": "layout/sidebar-layout.css",
-      "raw": 719
+      "file": "components/pagination.css",
+      "raw": 786
     },
     {
       "file": "core/reset.css",
@@ -345,16 +345,16 @@
       "raw": 637
     },
     {
+      "file": "layout/switcher.css",
+      "raw": 549
+    },
+    {
       "file": "forms/index.css",
       "raw": 544
     },
     {
       "file": "actual.full.css",
       "raw": 500
-    },
-    {
-      "file": "layout/switcher.css",
-      "raw": 466
     },
     {
       "file": "layout/cluster.css",
@@ -365,16 +365,16 @@
       "raw": 416
     },
     {
+      "file": "layout/media.css",
+      "raw": 410
+    },
+    {
       "file": "layout/frame.css",
       "raw": 376
     },
     {
-      "file": "layout/media.css",
-      "raw": 336
-    },
-    {
       "file": "layout/stack.css",
-      "raw": 278
+      "raw": 376
     },
     {
       "file": "typography/lead.css",

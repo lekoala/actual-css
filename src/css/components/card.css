@@ -2,8 +2,10 @@
  * Cards provide a neutral raised surface for grouped content.
  *
  * Surface, border, radius, padding, density, and elevation stay local here.
- * Direct header/footer children are structural slots. Page layout remains the
- * job of markup and layout primitives outside the card.
+ * Direct header/footer children are structural slots; a direct footer is
+ * anchored to the card's bottom edge when extra block space is available (so
+ * price/action rows align across equal-height cards in a grid). Page layout
+ * remains the job of markup and layout primitives outside the card.
  *
  * Public hooks:
  * --card-pad
@@ -39,6 +41,8 @@
   --heading: var(--card-fg);
   --busy-overlay-bg: var(--card-bg);
 
+  display: flex;
+  flex-direction: column;
   max-inline-size: var(--card-max-inline-size);
   padding: var(--card-pad);
   background: var(--card-bg);
@@ -67,6 +71,12 @@
 
 .card > header {
   align-items: var(--items-align, flex-start);
+}
+
+/* A direct footer is pinned to the bottom when the card has free space.
+   Specificity beats .stack > * so a .card.stack keeps this contract. */
+.card > footer {
+  margin-block-start: auto;
 }
 
 .card > :first-child {

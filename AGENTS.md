@@ -30,9 +30,20 @@ Add relevant guards for future-us when needed based on traps and discoveries.
   (PowerShell double-quoted strings end at an unescaped `"`; bash needs no
   escaping inside single quotes). One safe universal form:
   `rg 'pattern' tests -g '*.test.js'`
-- To list several directories in one call, use PowerShell's array form:
-  `dir src/css/layout, src/css/forms 2>&1`. Space-separated paths
-  (`dir a b`) fail with "A positional parameter cannot be found".
+- Keep each shell command to one plain invocation, on every shell. Control flow
+  (loops, `if`, `do ... done`, `{ ... }`) and multi-path argument forms are the
+  least portable things you can write, and they fail before touching a file, on
+  grammar or on argument binding — so nothing runs and the error describes the
+  syntax rather than the task. Both directions bite: `for f in a b; do ...;
+  done` is a bash reflex that PowerShell rejects, and space-separated
+  `dir a b` is a bash reflex that PowerShell answers with "A positional
+  parameter cannot be found that accepts argument". A loop over N files is N
+  separate calls, or one call to a tool that documents how it takes several
+  paths.
+- Read file contents with the read tool, not a shell command. It works on every
+  shell, labels each file, and takes an offset and a limit, so it replaces the
+  usual reasons to reach for a loop or for `head` / `tail` / `wc`. Assume no
+  utility exists beyond the one you are calling.
 - For the rare quick number-only check (a rect, a computed style, a class
   list) use `bun run probe <page> --script tmp/x.js` instead of improvising a
   headless-Chrome script — it runs the file as an async program in the page and

@@ -76,6 +76,7 @@
               <p class="docs-nav-group">Guides</p>
       <ul class="nav-list">
         <li><a class="nav-link" href="../guides/introduction.html">Introduction</a></li>
+        <li><a class="nav-link" href="../guides/integrating-actual-css.html">Building with Actual CSS</a></li>
         <li><a class="nav-link" href="../guides/modular-import.html">Modular imports</a></li>
         <li><a class="nav-link" href="../guides/progressive-enhancement.html">The JavaScript Runtime</a></li>
         <li><a class="nav-link" href="../guides/bootstrap.html">Migrating from Bootstrap to Actual CSS</a></li>
@@ -216,8 +217,10 @@
 </table></div>
 <h2 id="basic-usage">Basic usage</h2>
 <p>Use semantic elements inside the card. A direct <code>&lt;header&gt;</code> or <code>&lt;footer&gt;</code> is the
-card's structural slot. Cards do not own page spacing — compose them with
-layout primitives like <code>.grid</code>.</p>
+card's structural slot. A direct <code>&lt;footer&gt;</code> is anchored to the bottom of the
+card when extra block space is available, so prices and actions line up across
+equal-height cards. Cards do not own page spacing — compose them with layout
+primitives like <code>.grid</code>.</p>
 </div>
 <div class="docs-example">
   <div class="docs-preview">
@@ -366,7 +369,9 @@ colored headers, or footers.</p>
 </div>
 <div class="prose docs-prose">
 <h2 id="in-grids">In grids</h2>
-<p>Cards display nicely in grids with equal-height behavior.</p>
+<p>Cards display nicely in grids with equal-height behavior. Each card in a row
+stretches to the row height, and a direct <code>&lt;footer&gt;</code> anchors to the bottom, so
+all footers in the row line up regardless of body length.</p>
 </div>
 <div class="docs-example">
   <div class="docs-preview">
@@ -576,6 +581,7 @@ variants.</p>
             <p class="docs-nav-group">Guides</p>
       <ul class="nav-list">
         <li><a class="nav-link" href="../guides/introduction.html">Introduction</a></li>
+        <li><a class="nav-link" href="../guides/integrating-actual-css.html">Building with Actual CSS</a></li>
         <li><a class="nav-link" href="../guides/modular-import.html">Modular imports</a></li>
         <li><a class="nav-link" href="../guides/progressive-enhancement.html">The JavaScript Runtime</a></li>
         <li><a class="nav-link" href="../guides/bootstrap.html">Migrating from Bootstrap to Actual CSS</a></li>

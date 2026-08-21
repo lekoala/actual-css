@@ -7,6 +7,8 @@
  *
  * Public hooks:
  * --switcher-threshold
+ *
+ * Child contract: every direct child is a peer; the flex-basis applies to all.
  */
 .switcher {
   display: flex;

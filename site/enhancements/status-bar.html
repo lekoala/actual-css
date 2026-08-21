@@ -76,6 +76,7 @@
               <p class="docs-nav-group">Guides</p>
       <ul class="nav-list">
         <li><a class="nav-link" href="../guides/introduction.html">Introduction</a></li>
+        <li><a class="nav-link" href="../guides/integrating-actual-css.html">Building with Actual CSS</a></li>
         <li><a class="nav-link" href="../guides/modular-import.html">Modular imports</a></li>
         <li><a class="nav-link" href="../guides/progressive-enhancement.html">The JavaScript Runtime</a></li>
         <li><a class="nav-link" href="../guides/bootstrap.html">Migrating from Bootstrap to Actual CSS</a></li>
@@ -203,6 +204,9 @@
 <blockquote>
 <p>Singleton floating area for short, non-critical, transient feedback.</p>
 </blockquote>
+<p><code>status-bar</code> is for transient feedback, not persistent application status. For
+persistent status, metrics, or operational state, compose regular content
+primitives such as cards, badges, and clusters.</p>
 <p>A status bar is a single live region, not a stacked toaster. New messages
 replace the previous one. Keep one element in the HTML, styled with
 <code>.status-bar</code> and carrying the <code>[data-status][role=&quot;status&quot;]</code> contract that the
@@ -340,6 +344,7 @@ event the commands use under the hood:</p>
             <p class="docs-nav-group">Guides</p>
       <ul class="nav-list">
         <li><a class="nav-link" href="../guides/introduction.html">Introduction</a></li>
+        <li><a class="nav-link" href="../guides/integrating-actual-css.html">Building with Actual CSS</a></li>
         <li><a class="nav-link" href="../guides/modular-import.html">Modular imports</a></li>
         <li><a class="nav-link" href="../guides/progressive-enhancement.html">The JavaScript Runtime</a></li>
         <li><a class="nav-link" href="../guides/bootstrap.html">Migrating from Bootstrap to Actual CSS</a></li>

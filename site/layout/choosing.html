@@ -77,6 +77,7 @@ number of children visible in one mockup.">
               <p class="docs-nav-group">Guides</p>
       <ul class="nav-list">
         <li><a class="nav-link" href="../guides/introduction.html">Introduction</a></li>
+        <li><a class="nav-link" href="../guides/integrating-actual-css.html">Building with Actual CSS</a></li>
         <li><a class="nav-link" href="../guides/modular-import.html">Modular imports</a></li>
         <li><a class="nav-link" href="../guides/progressive-enhancement.html">The JavaScript Runtime</a></li>
         <li><a class="nav-link" href="../guides/bootstrap.html">Migrating from Bootstrap to Actual CSS</a></li>
@@ -223,14 +224,17 @@ number of children visible in one mockup.</p>
 all peers should move together rather than form a partial row, use <code>.switcher</code>.</p>
 <p>For a main region plus an aside, use <code>.sidebar-layout</code>.</p>
 <p>Use <code>.column-layout</code> when the placement of each region is itself part of the
-design — an 8 / 4 split, a 10-column article starting on column 2, a 3 / 6 / 3
-shell. It is the one layout primitive with no automatic responsive behavior: the
-canvas stays twelve columns and the application owns narrow-container
-recomposition. Choose it because placement is the design, not because a mockup
-happens to contain columns.</p>
-<p>Reserve <code>--grid-columns</code> for track templates whose sizes carry meaning rather
-than twelve interchangeable units, such as <code>minmax(12rem, 18rem) 1fr</code>. Its
-narrow behavior is yours to write.</p>
+design — a 10-column article starting on column 2, regions in separate sibling
+sections that must share the same column lines, an editorial composition whose
+starts and spans are deliberately aligned across the page. It is the one layout
+primitive with no automatic responsive behavior: the canvas stays twelve
+columns and the application owns narrow-container recomposition. Choose it
+because placement is the design, not because a mockup happens to contain
+columns.</p>
+<p>Use <code>--grid-columns</code> for exact track templates that do not match a built-in
+layout contract: arbitrary structural counts such as seven calendar days,
+asymmetric fractional tracks, or mixed intrinsic/flexible tracks. Once set, the
+application owns narrow-container behavior.</p>
 <p><code>.container-query</code> is a low-level opt-in for a component that changes its own
 representation according to allocated space. It does not enable responsive
 behavior for layout primitives and never changes their meaning.</p>
@@ -275,6 +279,7 @@ behavior for layout primitives and never changes their meaning.</p>
             <p class="docs-nav-group">Guides</p>
       <ul class="nav-list">
         <li><a class="nav-link" href="../guides/introduction.html">Introduction</a></li>
+        <li><a class="nav-link" href="../guides/integrating-actual-css.html">Building with Actual CSS</a></li>
         <li><a class="nav-link" href="../guides/modular-import.html">Modular imports</a></li>
         <li><a class="nav-link" href="../guides/progressive-enhancement.html">The JavaScript Runtime</a></li>
         <li><a class="nav-link" href="../guides/bootstrap.html">Migrating from Bootstrap to Actual CSS</a></li>

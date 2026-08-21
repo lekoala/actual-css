@@ -42,7 +42,8 @@ For a vertical sidebar nav, use `.nav-list` inside the drawer or sidebar.
 There is no collapse/toggler mechanism. For a responsive navigation, keep the
 horizontal `.navbar` for the desktop bar and compose the mobile experience from
 a `.drawer` with a vertical `.nav-list`, opened by a `command="show-modal"` /
-`commandfor` trigger.
+`commandfor` trigger. Keep that trigger outside the `<nav>` subtree you hide at
+narrow widths, or hiding the nav hides the control that opens it.
 
 ```html demo
 <nav class="navbar" aria-label="Main">

@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Card footer anchor fixture</title>
+  <link rel="stylesheet" href="../../src/css/actual.full.css">
+  <style>* { transition-duration: 0s !important; }</style>
+</head>
+<body>
+  <!-- Equal-height grid: three bare cards of varying body length. Their
+       direct footers must land on the same bottom line. -->
+  <section id="equal" class="grid">
+    <article class="card">
+      <header><h3>Short</h3></header>
+      <p>A short body.</p>
+      <footer><strong>HK$78</strong><a class="btn primary sm">Order</a></footer>
+    </article>
+    <article class="card">
+      <header><h3>Medium</h3></header>
+      <p>A somewhat longer body that wraps onto two lines so this card is taller than the first.</p>
+      <footer><strong>HK$82</strong><a class="btn primary sm">Order</a></footer>
+    </article>
+    <article class="card">
+      <header><h3>Long</h3></header>
+      <p>The longest body, spanning multiple lines so this card is clearly the tallest of the three.</p>
+      <p>A second paragraph adding even more height to this third card.</p>
+      <footer><strong>HK$86</strong><a class="btn primary sm">Order</a></footer>
+    </article>
+  </section>
+
+  <!-- .card.stack keeps the anchored footer (specificity over .stack > *).
+       Fixed height guarantees free space for the anchor to act. -->
+  <section id="stack" class="grid">
+    <article class="card stack" style="block-size: 16rem">
+      <header><h3>Stack</h3></header>
+      <p>Body text.</p>
+      <footer><a class="btn primary sm">Go</a></footer>
+    </article>
+  </section>
+
+  <!-- A .bleed footer is still anchored to the bottom (it bleeds to the
+       card's bottom edge). Fixed height guarantees free space. -->
+  <section id="bleed" class="grid">
+    <article class="card" style="block-size: 16rem">
+      <header><h3>Bleed</h3></header>
+      <p>Body text.</p>
+      <footer class="bleed"><a class="btn primary sm">Go</a></footer>
+    </article>
+  </section>
+</body>
+</html>

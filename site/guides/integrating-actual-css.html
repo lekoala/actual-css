@@ -5,8 +5,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Migrating from Bootstrap to Actual CSS — Actual CSS</title>
-  <meta name="description" content="This guide targets Bootstrap 5.x. Actual CSS is not a drop-in Bootstrap replacement, but many Bootstrap concepts have direct or close equivalents.">
+  <title>Building with Actual CSS — Actual CSS</title>
+  <meta name="description" content="Use Actual CSS as a vocabulary before writing application CSS.">
   <link rel="stylesheet" href="../../src/css/actual.full.css">
   <link rel="stylesheet" href="../../demo/assets/actual-themes.min.css">
   <link rel="stylesheet" href="../../scripts/docs/assets/docs.css">
@@ -76,10 +76,10 @@
               <p class="docs-nav-group">Guides</p>
       <ul class="nav-list">
         <li><a class="nav-link" href="introduction.html">Introduction</a></li>
-        <li><a class="nav-link" href="integrating-actual-css.html">Building with Actual CSS</a></li>
+        <li><a class="nav-link" href="integrating-actual-css.html" aria-current="page">Building with Actual CSS</a></li>
         <li><a class="nav-link" href="modular-import.html">Modular imports</a></li>
         <li><a class="nav-link" href="progressive-enhancement.html">The JavaScript Runtime</a></li>
-        <li><a class="nav-link" href="bootstrap.html" aria-current="page">Migrating from Bootstrap to Actual CSS</a></li>
+        <li><a class="nav-link" href="bootstrap.html">Migrating from Bootstrap to Actual CSS</a></li>
         <li><a class="nav-link" href="tailwind.html">Migrating from Tailwind CSS to Actual CSS</a></li>
       </ul>
       <p class="docs-nav-group">Foundations</p>
@@ -195,355 +195,158 @@
           <nav aria-label="Breadcrumb">
             <ol class="breadcrumb">
               <li><a href="../index.html">Docs</a></li>
-              <li><span aria-current="page">Migrating from Bootstrap to Actual CSS</span></li>
+              <li><span aria-current="page">Building with Actual CSS</span></li>
             </ol>
           </nav>
 
           <div class="prose docs-prose">
-<h1 id="migrating-from-bootstrap-to-actual-css">Migrating from Bootstrap to Actual CSS</h1>
-<p>This guide targets Bootstrap 5.x. Actual CSS is not a drop-in Bootstrap replacement, but many Bootstrap concepts have direct or close equivalents.</p>
-<p>The main migration is:</p>
-<p><strong>Bootstrap components → Actual components</strong>
-<strong>Bootstrap grid and utilities → Actual layout primitives + small project CSS</strong>
-<strong>Bootstrap JavaScript plugins → native HTML + Actual enhancements</strong></p>
-<h2 id="before-you-start-running-both-frameworks">Before you start: running both frameworks</h2>
-<p>Actual CSS and Bootstrap both use short global class names such as <code>.btn</code>, <code>.card</code>, <code>.alert</code>, and <code>.table</code>.</p>
-<p>Do not assume both complete stylesheets can be loaded side by side without interaction.</p>
-<p>For an incremental migration, use one of these approaches:</p>
-<ul>
-<li>migrate isolated pages or application areas;</li>
-<li>control precedence with cascade layers or import order;</li>
-<li>use a project-side prefix transform for Actual while both frameworks coexist.</li>
-</ul>
-<p>The layered import is the cleanest way to keep both stylesheets during the
-migration:</p>
-<pre><code class="language-css">@import &quot;bootstrap.css&quot;;
-@layer actual;
-@import &quot;actual-css/full&quot; layer(actual);
-/* Unlayered project overrides stay on top */
-@import &quot;app.css&quot;;
+<h1 id="building-with-actual-css">Building with Actual CSS</h1>
+<p>Use Actual CSS as a vocabulary before writing application CSS.</p>
+<p>The goal is not to eliminate custom CSS. The goal is to keep framework concerns in the framework and application identity in the application.</p>
+<h2 id="1-start-with-the-theme">1. Start with the theme</h2>
+<p>Define palette values once, then derive decorative colors from them.</p>
+<pre><code class="language-css">[data-theme=&quot;brand&quot;] {
+  --primary: hsl(326 100% 60%);
+  --secondary: hsl(187 100% 52%);
+
+  --brand-glow:
+    color-mix(in oklch, var(--primary) 40%, transparent);
+  --brand-line:
+    color-mix(in oklch, var(--secondary) 25%, transparent);
+}
 </code></pre>
-<p>The full import places every Actual rule in a single <code>actual</code> layer, so
-unlayered Bootstrap and project CSS keep precedence while the migration runs.
-See <a href="https://github.com/lekoala/actual-css/blob/master/docs/design-notes/cascade-layer.md">Cascade layer strategy</a> for the
-limitations of the approach.</p>
-<p>Remove the compatibility mechanism when Bootstrap is gone. The public Actual API remains unprefixed.</p>
-<h2 id="components">Components</h2>
-<p>Many common Bootstrap components translate directly.</p>
-<div class="table-wrap"><table class="table">
-<thead>
-<tr><th>Bootstrap</th><th>Actual CSS</th></tr>
-</thead>
-<tbody>
-<tr><td><code>.btn .btn-primary</code></td><td><code>.btn .primary</code></td></tr>
-<tr><td><code>.btn .btn-outline-danger</code></td><td><code>.btn .danger .outline</code></td></tr>
-<tr><td><code>.btn .btn-sm</code></td><td><code>.btn .sm</code></td></tr>
-<tr><td><code>.btn .btn-lg</code></td><td><code>.btn .lg</code></td></tr>
-<tr><td><code>.badge</code></td><td><code>.badge</code></td></tr>
-<tr><td><code>.alert</code></td><td><code>.alert</code></td></tr>
-<tr><td><code>.card</code></td><td><code>.card</code></td></tr>
-<tr><td><code>.table</code></td><td><code>.table</code></td></tr>
-<tr><td><code>.spinner-*</code></td><td><code>.spinner</code></td></tr>
-<tr><td><code>.breadcrumb</code></td><td><code>.breadcrumb</code></td></tr>
-<tr><td><code>.pagination</code></td><td><code>.pagination</code></td></tr>
-</tbody>
-</table></div>
-<p>Bootstrap commonly combines the intent with the component name:</p>
-<pre><code class="language-html">&lt;button class=&quot;btn btn-primary btn-lg&quot;&gt;Save&lt;/button&gt;
-</code></pre>
-<p>Actual separates component, intent, variant, and size:</p>
-<pre><code class="language-html">&lt;button class=&quot;btn primary lg&quot;&gt;Save&lt;/button&gt;
-</code></pre>
-<p>The same intent classes can be reused across compatible components:</p>
-<pre><code class="language-html">&lt;button class=&quot;btn danger outline&quot;&gt;Delete&lt;/button&gt;
-&lt;span class=&quot;badge success soft&quot;&gt;Active&lt;/span&gt;
-&lt;div class=&quot;alert warning&quot;&gt;Check these values.&lt;/div&gt;
-</code></pre>
-<p>Do not mechanically translate every Bootstrap modifier. First check whether the distinction belongs to the component, the theme, or the surrounding layout.</p>
-<h2 id="forms">Forms</h2>
-<p>Bootstrap:</p>
-<pre><code class="language-html">&lt;div class=&quot;mb-3&quot;&gt;
-  &lt;label class=&quot;form-label&quot; for=&quot;email&quot;&gt;Email&lt;/label&gt;
-  &lt;input class=&quot;form-control&quot; id=&quot;email&quot; type=&quot;email&quot;&gt;
-&lt;/div&gt;
-</code></pre>
-<p>Actual:</p>
-<pre><code class="language-html">&lt;label class=&quot;field&quot;&gt;
-  &lt;span class=&quot;field-label&quot;&gt;Email&lt;/span&gt;
-  &lt;input class=&quot;input&quot; type=&quot;email&quot;&gt;
-&lt;/label&gt;
-</code></pre>
-<p>Common translations include:</p>
-<div class="table-wrap"><table class="table">
-<thead>
-<tr><th>Bootstrap</th><th>Actual CSS</th></tr>
-</thead>
-<tbody>
-<tr><td><code>.form-control</code> on an input</td><td><code>.input</code></td></tr>
-<tr><td><code>.form-control</code> on a textarea</td><td><code>.textarea</code></td></tr>
-<tr><td><code>.form-select</code></td><td><code>.select</code></td></tr>
-<tr><td>checkbox</td><td><code>.check</code></td></tr>
-<tr><td>radio</td><td><code>.radio</code></td></tr>
-<tr><td><code>.form-switch</code></td><td><code>.switch</code></td></tr>
-<tr><td>validation feedback</td><td><code>.field-error</code> / <code>.field-help</code></td></tr>
-<tr><td>grouped actions</td><td><code>.form-actions</code></td></tr>
-</tbody>
-</table></div>
-<p>Actual uses explicit control classes instead of one generic <code>.form-control</code>.</p>
-<p>Floating labels do not have a built-in Actual component. Keep them as project CSS if the design requires them.</p>
-<h2 id="replace-rows-and-columns-with-layout-intent">Replace rows and columns with layout intent</h2>
-<p>Bootstrap's twelve-column grid does not have a one-to-one equivalent.</p>
-<p>A Bootstrap layout such as:</p>
-<pre><code class="language-html">&lt;div class=&quot;row g-4&quot;&gt;
-  &lt;div class=&quot;col-12 col-md-6&quot;&gt;...&lt;/div&gt;
-  &lt;div class=&quot;col-12 col-md-6&quot;&gt;...&lt;/div&gt;
-&lt;/div&gt;
-</code></pre>
-<p>usually becomes an Actual grid:</p>
-<pre><code class="language-html">&lt;div class=&quot;grid&quot; style=&quot;--grid-min: 18rem&quot;&gt;
-  &lt;div&gt;...&lt;/div&gt;
-  &lt;div&gt;...&lt;/div&gt;
-&lt;/div&gt;
-</code></pre>
-<p>Or use the intrinsic grid when the real requirement is simply “fit as many useful columns as there is room for”:</p>
-<pre><code class="language-html">&lt;div class=&quot;grid&quot; style=&quot;--grid-min: 18rem&quot;&gt;
-  ...
-&lt;/div&gt;
-</code></pre>
-<p>For asymmetric layouts, express the layout directly:</p>
-<pre><code class="language-html">&lt;div class=&quot;container-query&quot;&gt;
-  &lt;div class=&quot;dashboard-grid grid&quot;&gt;
-    ...
-  &lt;/div&gt;
-&lt;/div&gt;
-</code></pre>
-<pre><code class="language-css">.dashboard-grid {
-  --grid-columns: minmax(0, 2fr) minmax(0, 1fr);
+<p>Avoid repeating literal palette colors elsewhere:</p>
+<pre><code class="language-css">/* Avoid */
+.hero {
+  box-shadow: 0 0 2rem hsl(326 100% 60% / 0.4);
 }
 
-@container (width &lt; 48rem) {
-  .dashboard-grid {
-    --grid-columns: 1fr;
-  }
+/* Prefer */
+.hero {
+  box-shadow: 0 0 2rem var(--brand-glow);
 }
 </code></pre>
-<p>This is intentionally different from recreating <code>col-md-8 col-md-4</code>.</p>
-<p>If your Bootstrap markup uses offsets, ordering, and several breakpoint-specific column widths, expect to write some project CSS during migration.</p>
-<h2 id="translate-flex-utility-clusters-into-layout-primitives">Translate flex utility clusters into layout primitives</h2>
-<p>Bootstrap:</p>
-<pre><code class="language-html">&lt;div class=&quot;d-flex align-items-center justify-content-between gap-3&quot;&gt;
-  ...
-&lt;/div&gt;
+<p><strong>Rule:</strong> keep palette literals inside the theme/token layer. Application styles should consume or derive tokens.</p>
+<h2 id="2-choose-layout-by-relationship">2. Choose layout by relationship</h2>
+<p>Do not choose a primitive because of the number of visible columns.</p>
+<pre><code class="language-text">Repeated items, intrinsic reflow   → .grid
+Known equal peer density           → .grid-N
+Peers that switch together         → .switcher
+Main content + secondary region    → .sidebar-layout
+Media + flexible content           → .media
+Explicit 12-column placement       → .column-layout
+Custom exact track template        → --grid-columns
 </code></pre>
-<p>Actual:</p>
-<pre><code class="language-html">&lt;div class=&quot;cluster&quot;&gt;
-  ...
-&lt;/div&gt;
+<p>For example, three panels that must all stack together are a <code>.switcher</code>, not automatically a <code>.grid-3</code>.</p>
+<p>If local CSS mainly makes one layout primitive behave like another, reconsider the primitive first.</p>
+<h2 id="3-tune-before-replacing">3. Tune before replacing</h2>
+<p>Actual primitives expose public hooks for common adjustments.</p>
+<p>Prefer:</p>
+<pre><code class="language-css">.feature-grid {
+  --grid-min: 18rem;
+  --gap: var(--space-50);
+}
+
+.product-card {
+  --card-pad: var(--space-50);
+}
+
+.actions {
+  --cluster-justify: space-between;
+}
 </code></pre>
-<p>Tune the primitive when necessary:</p>
+<p>over reimplementing their layout:</p>
+<pre><code class="language-css">/* Avoid when an Actual primitive already owns this behavior */
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(...);
+}
+</code></pre>
+<p><strong>Rule:</strong> tune the recipe before replacing the recipe.</p>
+<h2 id="4-reuse-the-existing-vocabulary">4. Reuse the existing vocabulary</h2>
+<p>Before introducing a generic application class, check whether Actual already expresses the idea.</p>
+<p>Examples:</p>
+<pre><code class="language-text">Small uppercase label     → .overline
+Unstyled list             → .list-reset
+Readable line length      → .measure
+Simple separator/dot      → .dot
+Small alignment change    → existing utility
+</code></pre>
+<p>Application classes should primarily describe product-specific concepts, not recreate generic framework utilities.</p>
+<h2 id="5-use-structural-component-markup">5. Use structural component markup</h2>
+<p>When a component exposes meaningful structure, use it.</p>
+<p>For cards, prefer semantic regions such as direct <code>header</code> and <code>footer</code> elements instead of reproducing their behavior inside arbitrary wrappers.</p>
+<p>For transient application feedback, use <code>.status-bar</code>.</p>
 <pre><code class="language-html">&lt;div
-  class=&quot;cluster&quot;
-  style=&quot;--cluster-justify: space-between; --cluster-align: center&quot;
-&gt;
-  ...
-&lt;/div&gt;
+  class=&quot;status-bar&quot;
+  data-status
+  role=&quot;status&quot;
+  aria-live=&quot;polite&quot;
+  aria-atomic=&quot;true&quot;&gt;&lt;/div&gt;
 </code></pre>
-<p>For vertical flows:</p>
-<pre><code class="language-html">&lt;div class=&quot;stack&quot;&gt;
-  ...
-&lt;/div&gt;
+<p>A status bar is for messages such as:</p>
+<pre><code class="language-text">Saved.
+Item added.
+Connection restored.
 </code></pre>
-<p>Think in terms of the relationship between children rather than translating each CSS declaration into another class.</p>
-<p>Typical choices are:</p>
-<div class="table-wrap"><table class="table">
-<thead>
-<tr><th>Bootstrap pattern</th><th>Actual approach</th></tr>
-</thead>
-<tbody>
-<tr><td>flex row that may wrap</td><td><code>.cluster</code></td></tr>
-<tr><td>vertical flex stack</td><td><code>.stack</code></td></tr>
-<tr><td>exact structural columns</td><td><code>.grid-2</code>, <code>.grid-3</code>, <code>.grid-4</code>, <code>.grid-6</code></td></tr>
-<tr><td>intrinsically responsive cards</td><td><code>.grid</code></td></tr>
-<tr><td>row that becomes a column when constrained</td><td><code>.switcher</code></td></tr>
-<tr><td>sidebar/content layout</td><td><code>.sidebar-layout</code></td></tr>
-<tr><td>readable centered content</td><td><code>.center</code>, <code>.measure</code></td></tr>
-</tbody>
-</table></div>
-<h2 id="do-not-recreate-bootstraps-utility-api">Do not recreate Bootstrap's utility API</h2>
-<p>Bootstrap offers responsive utilities for spacing, display, flexbox, visibility, sizing, and many other properties.</p>
-<p>Actual deliberately does not provide an equivalent utility for every declaration.</p>
-<p>For example:</p>
-<pre><code class="language-html">&lt;div class=&quot;d-none d-lg-flex mt-4 px-3 text-end&quot;&gt;
-</code></pre>
-<p>should not become a collection of newly invented Actual classes.</p>
-<p>Keep Actual helpers for common composition needs and put application-specific behavior in project CSS:</p>
-<pre><code class="language-html">&lt;div class=&quot;account-actions&quot;&gt;
-</code></pre>
-<pre><code class="language-css">.account-actions {
-  display: none;
-  margin-block-start: var(--space-40);
-  padding-inline: var(--space-30);
-  text-align: end;
-}
-
-@media (width &gt;= 64rem) {
-  .account-actions {
-    display: flex;
-  }
-}
-</code></pre>
-<p>This is especially relevant for:</p>
+<p>Persistent state such as metrics, availability, queue size or account information belongs in normal page content.</p>
+<h2 id="6-keep-application-css-for-application-identity">6. Keep application CSS for application identity</h2>
+<p>Custom CSS is expected for things such as:</p>
 <ul>
-<li>breakpoint-specific display;</li>
-<li>responsive ordering;</li>
-<li>unusual widths and positioning;</li>
-<li>decorative text/background colors;</li>
-<li>one-off spacing combinations.</li>
+<li>brand marks and decorative treatments;</li>
+<li>unusual geometry;</li>
+<li>illustrations and visual effects;</li>
+<li>bespoke animation;</li>
+<li>product-specific compositions;</li>
+<li>product-specific responsive decisions.</li>
 </ul>
+<p>These are healthy application styles:</p>
+<pre><code class="language-css">.brand-mark { ... }
+.neon-glow { ... }
+.ticket-cut { ... }
+.signal-animation { ... }
+</code></pre>
+<p>The target is <strong>not zero custom CSS</strong>.</p>
+<p>A better target is:</p>
 <blockquote>
-<p><strong>Need something more specific?</strong></p>
-<ol>
-<li>Tune the component or layout primitive with a public custom property.</li>
-<li>Compose an Actual layout primitive.</li>
-<li>Add a project class for application-specific CSS.</li>
-<li>Only reach for an optional utility when the rule is genuinely generic.</li>
-</ol>
+<p>No duplicated framework behavior and no palette literals outside the token layer.</p>
 </blockquote>
-<p>Actual deliberately keeps its utility surface small and grows it only for needs
-that recur across real migrations — a one-off is project CSS, not a new
-framework class.</p>
-<h2 id="javascript-components">JavaScript components</h2>
-<p>Do not translate <code>data-bs-*</code> attributes mechanically. Actual generally starts from native platform behavior and adds enhancement only where useful.</p>
-<h3 id="modal">Modal</h3>
-<p>Bootstrap:</p>
-<pre><code class="language-html">&lt;button
-  data-bs-toggle=&quot;modal&quot;
-  data-bs-target=&quot;#settings&quot;
-&gt;
-  Settings
-&lt;/button&gt;
-</code></pre>
-<p>Actual:</p>
-<pre><code class="language-html">&lt;button
-  type=&quot;button&quot;
-  command=&quot;show-modal&quot;
-  commandfor=&quot;settings&quot;
-  aria-haspopup=&quot;dialog&quot;
-  aria-controls=&quot;settings&quot;
-&gt;
-  Settings
-&lt;/button&gt;
-
-&lt;dialog class=&quot;modal&quot; id=&quot;settings&quot;&gt;
-  ...
-&lt;/dialog&gt;
-</code></pre>
-<h3 id="offcanvas">Offcanvas</h3>
-<p>Use a native dialog with the <code>.drawer</code> component.</p>
-<pre><code class="language-html">&lt;button
-  type=&quot;button&quot;
-  command=&quot;show-modal&quot;
-  commandfor=&quot;navigation&quot;
-  aria-haspopup=&quot;dialog&quot;
-  aria-controls=&quot;navigation&quot;
-&gt;
-  Menu
-&lt;/button&gt;
-
-&lt;dialog class=&quot;drawer&quot; id=&quot;navigation&quot;&gt;
-  ...
-&lt;/dialog&gt;
-</code></pre>
-<h3 id="dropdown">Dropdown</h3>
-<p>Bootstrap dropdowns normally migrate to an Actual flyout.</p>
-<h3 id="tabs">Tabs</h3>
-<p>Bootstrap's tab plugin normally migrates to <code>.tabs</code> / <code>.tab</code> markup with the tabs enhancer.</p>
-<h3 id="tooltip-and-scrollspy">Tooltip and scrollspy</h3>
-<p>Actual provides dedicated enhancements for both.</p>
-<p>The important difference is architectural: presentation classes and behavior are separate. <code>data-enhance</code> opts an element into Actual behavior instead of making every styled component implicitly dependent on a JavaScript plugin.</p>
-<h2 id="navbar-migration">Navbar migration</h2>
-<p>A Bootstrap responsive navbar often combines several responsibilities:</p>
-<ul>
-<li>horizontal navigation;</li>
-<li>breakpoint logic;</li>
-<li>collapse;</li>
-<li>toggler state;</li>
-<li>optionally offcanvas behavior.</li>
-</ul>
-<p>Actual's navbar is intentionally a simpler navigation pattern.</p>
-<p>Keep the desktop navigation as a navbar and compose the mobile experience from a
-drawer or flyout rather than looking for a <code>.navbar-expand-lg</code> equivalent:</p>
-<ul>
-<li>desktop → <code>.navbar</code> with <code>.navbar-nav</code>;</li>
-<li>mobile → <code>.drawer</code> with <code>.nav-list</code>;</li>
-<li>trigger → a <code>command=&quot;show-modal&quot;</code> / <code>commandfor</code> button.</li>
-</ul>
-<p>The <a href="../components/navbar.html">Navbar component page</a> shows this composition
-as <em>the Actual way</em>: a horizontal <code>.navbar-nav</code> on the desktop bar and a vertical
-<code>.nav-list</code> inside the mobile drawer, opened with the native dialog command
-pattern. There is no collapse/toggler state to keep in sync.</p>
-<p>This usually produces simpler behavior, but it is not a class-for-class migration.</p>
-<h2 id="components-without-a-direct-replacement">Components without a direct replacement</h2>
-<p>Do not expect complete Bootstrap widget parity.</p>
-<p>For specialized widgets, first decide whether they are still needed, can use a native platform primitive, or should remain application code.</p>
-<p>Examples that may require a different solution include:</p>
-<ul>
-<li>carousels;</li>
-<li>toast-style transient notifications;</li>
-<li>generic arbitrary collapse regions;</li>
-<li>Bootstrap-specific popover behavior.</li>
-</ul>
-<p>A flyout may replace many popover-style interactive surfaces, but it is not intended as API compatibility with Bootstrap Popover.</p>
-<h2 id="themes-and-sass-customization">Themes and Sass customization</h2>
-<p>If your Bootstrap project mainly customizes Sass variables and theme maps, move stable design decisions into Actual theme tokens and public hooks.</p>
-<p>Instead of generating additional framework classes such as:</p>
-<pre><code class="language-text">$theme-colors: map-merge(...);
-</code></pre>
-<p>prefer project tokens:</p>
-<pre><code class="language-css">:root {
-  --primary: ...;
-  --radius: ...;
-}
-</code></pre>
-<p>and semantic project CSS where a value is application-specific.</p>
-<p>Do not rebuild Bootstrap's generated utility matrix on top of Actual.</p>
-<h2 id="recommended-migration-order">Recommended migration order</h2>
+<h2 id="7-before-adding-a-css-rule">7. Before adding a CSS rule</h2>
+<p>Ask, in this order:</p>
 <ol>
-<li>Establish a safe coexistence strategy if both stylesheets must temporarily remain.</li>
-<li>Migrate buttons, badges, alerts, cards, and basic content components.</li>
-<li>Migrate forms.</li>
-<li>Replace Bootstrap JavaScript widgets with native HTML and Actual enhancements.</li>
-<li>Replace repeated flex utility clusters with layout primitives.</li>
-<li>Migrate the Bootstrap grid.</li>
-<li>Replace the remaining utility-heavy markup with small semantic project classes.</li>
-<li>Remove Bootstrap and any temporary prefix or cascade compatibility layer.</li>
+<li>Is there already a suitable layout primitive?</li>
+<li>Is there already a component for this structure?</li>
+<li>Can a public hook configure it?</li>
+<li>Does an existing utility express the adjustment?</li>
+<li>Can the color be derived from a theme token?</li>
+<li>Is this genuinely application-specific CSS?</li>
 </ol>
-<h2 id="where-migration-is-genuinely-harder">Where migration is genuinely harder</h2>
-<p>Expect additional work when the application relies heavily on:</p>
-<ul>
-<li>twelve-column grid arithmetic;</li>
-<li>offsets and breakpoint-specific ordering;</li>
-<li>extensive responsive utility combinations;</li>
-<li>Bootstrap navbar collapse behavior;</li>
-<li>floating labels — covered by the optional <code>.floating-field</code> module, so the
-cost is an import rather than a custom recipe;</li>
-<li>specialized Bootstrap JavaScript plugins;</li>
-<li>Sass-generated application utility classes.</li>
-</ul>
-<p>Those are real migration costs, not syntax differences.</p>
-<p>For component-oriented application UI, however, most Bootstrap usage maps naturally to Actual components, layouts, tokens, and enhancements.</p>
+<p>If the answer reaches step 6, write the CSS.</p>
+<p>That is the intended integration model:</p>
+<pre><code class="language-text">Theme
+  ↓
+Choose the relationship
+  ↓
+Use the component
+  ↓
+Tune its hooks
+  ↓
+Use small utilities
+  ↓
+Add application identity
+</code></pre>
 
 </div>
 
           <div class="cluster docs-source-links">
-            <a class="btn sm ghost" href="https://github.com/lekoala/actual-css/edit/master/docs/pages/guides/bootstrap.md" rel="noopener noreferrer">Edit on GitHub</a>
-            <a class="btn sm ghost" href="https://github.com/lekoala/actual-css/blob/master/docs/pages/guides/bootstrap.md" rel="noopener noreferrer">View Markdown</a>
+            <a class="btn sm ghost" href="https://github.com/lekoala/actual-css/edit/master/docs/pages/guides/integrating-actual-css.md" rel="noopener noreferrer">Edit on GitHub</a>
+            <a class="btn sm ghost" href="https://github.com/lekoala/actual-css/blob/master/docs/pages/guides/integrating-actual-css.md" rel="noopener noreferrer">View Markdown</a>
           </div>
         </article>
 
         <nav class="cluster docs-prevnext" aria-label="Page navigation">
-                    <a class="btn outline" href="progressive-enhancement.html">&larr; The JavaScript Runtime</a>
-                    <a class="btn outline" href="tailwind.html">Migrating from Tailwind CSS to Actual CSS &rarr;</a>
+                    <a class="btn outline" href="introduction.html">&larr; Introduction</a>
+                    <a class="btn outline" href="modular-import.html">Modular imports &rarr;</a>
         </nav>
       </main>
 
@@ -551,23 +354,13 @@ cost is an import rather than a custom recipe;</li>
         <nav class="scrollspy" data-enhance="scrollspy" data-scrollspy-offset="80" aria-label="On this page">
           <p class="docs-nav-group">On this page</p>
           <ul class="nav-list docs-toc-list" data-docs-toc>
-        <li><a class="nav-link" href="#before-you-start-running-both-frameworks" data-docs-toc-item data-level="2">Before you start: running both frameworks</a></li>
-        <li><a class="nav-link" href="#components" data-docs-toc-item data-level="2">Components</a></li>
-        <li><a class="nav-link" href="#forms" data-docs-toc-item data-level="2">Forms</a></li>
-        <li><a class="nav-link" href="#replace-rows-and-columns-with-layout-intent" data-docs-toc-item data-level="2">Replace rows and columns with layout intent</a></li>
-        <li><a class="nav-link" href="#translate-flex-utility-clusters-into-layout-primitives" data-docs-toc-item data-level="2">Translate flex utility clusters into layout primitives</a></li>
-        <li><a class="nav-link" href="#do-not-recreate-bootstraps-utility-api" data-docs-toc-item data-level="2">Do not recreate Bootstrap's utility API</a></li>
-        <li><a class="nav-link" href="#javascript-components" data-docs-toc-item data-level="2">JavaScript components</a></li>
-        <li><a class="nav-link" href="#modal" data-docs-toc-item data-level="3">Modal</a></li>
-        <li><a class="nav-link" href="#offcanvas" data-docs-toc-item data-level="3">Offcanvas</a></li>
-        <li><a class="nav-link" href="#dropdown" data-docs-toc-item data-level="3">Dropdown</a></li>
-        <li><a class="nav-link" href="#tabs" data-docs-toc-item data-level="3">Tabs</a></li>
-        <li><a class="nav-link" href="#tooltip-and-scrollspy" data-docs-toc-item data-level="3">Tooltip and scrollspy</a></li>
-        <li><a class="nav-link" href="#navbar-migration" data-docs-toc-item data-level="2">Navbar migration</a></li>
-        <li><a class="nav-link" href="#components-without-a-direct-replacement" data-docs-toc-item data-level="2">Components without a direct replacement</a></li>
-        <li><a class="nav-link" href="#themes-and-sass-customization" data-docs-toc-item data-level="2">Themes and Sass customization</a></li>
-        <li><a class="nav-link" href="#recommended-migration-order" data-docs-toc-item data-level="2">Recommended migration order</a></li>
-        <li><a class="nav-link" href="#where-migration-is-genuinely-harder" data-docs-toc-item data-level="2">Where migration is genuinely harder</a></li>
+        <li><a class="nav-link" href="#1-start-with-the-theme" data-docs-toc-item data-level="2">1. Start with the theme</a></li>
+        <li><a class="nav-link" href="#2-choose-layout-by-relationship" data-docs-toc-item data-level="2">2. Choose layout by relationship</a></li>
+        <li><a class="nav-link" href="#3-tune-before-replacing" data-docs-toc-item data-level="2">3. Tune before replacing</a></li>
+        <li><a class="nav-link" href="#4-reuse-the-existing-vocabulary" data-docs-toc-item data-level="2">4. Reuse the existing vocabulary</a></li>
+        <li><a class="nav-link" href="#5-use-structural-component-markup" data-docs-toc-item data-level="2">5. Use structural component markup</a></li>
+        <li><a class="nav-link" href="#6-keep-application-css-for-application-identity" data-docs-toc-item data-level="2">6. Keep application CSS for application identity</a></li>
+        <li><a class="nav-link" href="#7-before-adding-a-css-rule" data-docs-toc-item data-level="2">7. Before adding a CSS rule</a></li>
           </ul>
         </nav>
       </aside>
@@ -589,10 +382,10 @@ cost is an import rather than a custom recipe;</li>
             <p class="docs-nav-group">Guides</p>
       <ul class="nav-list">
         <li><a class="nav-link" href="introduction.html">Introduction</a></li>
-        <li><a class="nav-link" href="integrating-actual-css.html">Building with Actual CSS</a></li>
+        <li><a class="nav-link" href="integrating-actual-css.html" aria-current="page">Building with Actual CSS</a></li>
         <li><a class="nav-link" href="modular-import.html">Modular imports</a></li>
         <li><a class="nav-link" href="progressive-enhancement.html">The JavaScript Runtime</a></li>
-        <li><a class="nav-link" href="bootstrap.html" aria-current="page">Migrating from Bootstrap to Actual CSS</a></li>
+        <li><a class="nav-link" href="bootstrap.html">Migrating from Bootstrap to Actual CSS</a></li>
         <li><a class="nav-link" href="tailwind.html">Migrating from Tailwind CSS to Actual CSS</a></li>
       </ul>
       <p class="docs-nav-group">Foundations</p>

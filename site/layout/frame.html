@@ -76,6 +76,7 @@
               <p class="docs-nav-group">Guides</p>
       <ul class="nav-list">
         <li><a class="nav-link" href="../guides/introduction.html">Introduction</a></li>
+        <li><a class="nav-link" href="../guides/integrating-actual-css.html">Building with Actual CSS</a></li>
         <li><a class="nav-link" href="../guides/modular-import.html">Modular imports</a></li>
         <li><a class="nav-link" href="../guides/progressive-enhancement.html">The JavaScript Runtime</a></li>
         <li><a class="nav-link" href="../guides/bootstrap.html">Migrating from Bootstrap to Actual CSS</a></li>
@@ -231,6 +232,10 @@
   --frame-ratio: 1;
 }
 </code></pre>
+<p><code>overflow: hidden</code> is what makes the frame a media frame: it clips the media to
+the ratio and its corners. Floating decorations (badges, live dots, captions
+that overhang) therefore cannot live inside the frame — they are clipped too.
+Place them in a sibling or wrapper around the frame instead.</p>
 
 </div>
 
@@ -272,6 +277,7 @@
             <p class="docs-nav-group">Guides</p>
       <ul class="nav-list">
         <li><a class="nav-link" href="../guides/introduction.html">Introduction</a></li>
+        <li><a class="nav-link" href="../guides/integrating-actual-css.html">Building with Actual CSS</a></li>
         <li><a class="nav-link" href="../guides/modular-import.html">Modular imports</a></li>
         <li><a class="nav-link" href="../guides/progressive-enhancement.html">The JavaScript Runtime</a></li>
         <li><a class="nav-link" href="../guides/bootstrap.html">Migrating from Bootstrap to Actual CSS</a></li>

@@ -19,6 +19,9 @@
  *   media + flexible content        -> .media
  *   meaningful asymmetric tracks    -> --grid-columns on .grid
  *
+ * Child contract: each direct child is placed on the canvas via its own
+ * .column-span-N / .column-start-N.
+ *
  * Unlike .grid-N, the track template does not read --gap, so the gap
  * utilities are exact here at every width.
  */

@@ -1059,7 +1059,9 @@ small {
 
 /* Vertical flow. .stack owns the block axis only: block margins reset, inline
    margins stay free (self-centering children via margin-inline: auto keep
-   working). */
+   working).
+   Child contract: direct children become flex items; margins reset, spacing
+   comes from --gap. */
 .stack {
   display: flex;
   flex-direction: column;
@@ -1135,7 +1137,8 @@ small {
 
 /* Media object: fixed-width leading element (avatar, icon, image) + flexible
    trailing content. Replaces the repeated "auto minmax(0, 1fr)" pattern in
-   author cards, comments, meta rows, and similar compositions. */
+   author cards, comments, meta rows, and similar compositions.
+   Child contract: exactly two direct children (leading media + content). */
 .media {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
@@ -1152,6 +1155,8 @@ small {
  *
  * Public hooks:
  * --switcher-threshold
+ *
+ * Child contract: every direct child is a peer; the flex-basis applies to all.
  */
 .switcher {
   display: flex;
@@ -1176,6 +1181,8 @@ small {
  * Public hooks:
  * --sidebar-content-min
  * --sidebar-layout-size
+ *
+ * Child contract: the first and last direct children carry the sizing roles.
  */
 .sidebar-layout {
   display: flex;
@@ -1208,6 +1215,9 @@ small {
  *
  * Internal:
  * --grid-count
+ *
+ * Child contract: each direct child is a grid item placed in the tracks the
+ * recipe generates.
  */
 
 /* --grid-columns replaces the intrinsic auto-fit template: once set, the
@@ -1268,6 +1278,14 @@ small {
 }
 .grid-6 {
   --grid-count: 6;
+}
+
+/* Grid items keep an automatic minimum inline size (min-content), which can
+   overflow a track sized minmax(0, 1fr). Layout primitives remove that
+   intrinsic floor so their overflow-safe track sizing holds; authors only
+   reach for .min-inline-size-0 when they need the floor back. */
+:where(.grid, .grid-2, .grid-3, .grid-4, .grid-6) > * {
+  min-inline-size: 0;
 }
 
 /* Balanced subdivision, opted into by an ancestor query container.
@@ -1345,6 +1363,9 @@ small {
  *   content + secondary region      -> .sidebar-layout
  *   media + flexible content        -> .media
  *   meaningful asymmetric tracks    -> --grid-columns on .grid
+ *
+ * Child contract: each direct child is placed on the canvas via its own
+ * .column-span-N / .column-start-N.
  *
  * Unlike .grid-N, the track template does not read --gap, so the gap
  * utilities are exact here at every width.
@@ -3820,8 +3841,10 @@ a.badge[aria-disabled="true"] {
  * Cards provide a neutral raised surface for grouped content.
  *
  * Surface, border, radius, padding, density, and elevation stay local here.
- * Direct header/footer children are structural slots. Page layout remains the
- * job of markup and layout primitives outside the card.
+ * Direct header/footer children are structural slots; a direct footer is
+ * anchored to the card's bottom edge when extra block space is available (so
+ * price/action rows align across equal-height cards in a grid). Page layout
+ * remains the job of markup and layout primitives outside the card.
  *
  * Public hooks:
  * --card-pad
@@ -3857,6 +3880,8 @@ a.badge[aria-disabled="true"] {
   --heading: var(--card-fg);
   --busy-overlay-bg: var(--card-bg);
 
+  display: flex;
+  flex-direction: column;
   max-inline-size: var(--card-max-inline-size);
   padding: var(--card-pad);
   background: var(--card-bg);
@@ -3885,6 +3910,12 @@ a.badge[aria-disabled="true"] {
 
 .card > header {
   align-items: var(--items-align, flex-start);
+}
+
+/* A direct footer is pinned to the bottom when the card has free space.
+   Specificity beats .stack > * so a .card.stack keeps this contract. */
+.card > footer {
+  margin-block-start: auto;
 }
 
 .card > :first-child {

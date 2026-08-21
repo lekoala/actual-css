@@ -48,6 +48,13 @@ test("card picture bleed clips children", () => {
   expect(css).toMatch(/\.card > picture\.bleed\s*\{[\s\S]*overflow:\s*hidden;/);
 });
 
+test("card is a column and anchors a direct footer to the bottom", () => {
+  const css = readCss("src/css/components/card.css");
+
+  expect(css).toMatch(/\.card\s*\{[\s\S]*display:\s*flex;\s*flex-direction:\s*column;/);
+  expect(css).toMatch(/\.card > footer\s*\{[\s\S]*margin-block-start:\s*auto;/);
+});
+
 test("backdrop token remains dark independent from surface-solid", () => {
   const css = readCss("src/css/core/tokens.css");
 
@@ -76,6 +83,14 @@ test("generic grid exposes an override and stays space-driven", () => {
   );
   expect(css).toContain("--grid-min");
   expect(css).toContain("--grid-columns");
+});
+
+test("grid primitives remove the intrinsic child floor", () => {
+  const css = readCss("src/css/layout/grid.css");
+
+  expect(css.replace(/\s+/g, " ")).toContain(
+    ":where(.grid, .grid-2, .grid-3, .grid-4, .grid-6) > * { min-inline-size: 0; }",
+  );
 });
 
 test("density presets declare a count and collapse through divisors of it", () => {

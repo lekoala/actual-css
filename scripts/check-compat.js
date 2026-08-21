@@ -223,6 +223,9 @@ function main() {
   for (const file of files) {
     const css = readFileSync(file, "utf8");
     const guarded = supportsRanges(css);
+    // Comments must not trigger feature detection, but indices must stay in
+    // sync with the real source so line numbers and justification checks line up.
+    const masked = css.replace(/\/\*[\s\S]*?\*\//g, (comment) => " ".repeat(comment.length));
     vendorViolations.push(
       ...mixedVendorSelectorLists(css).map(
         ({ line, selector }) => `${rel(file)}:${line}  mixed vendor pseudo-elements: ${selector}`,
@@ -231,7 +234,7 @@ function main() {
 
     for (const feature of FEATURES) {
       const grandfathered = (PROGRESSIVE[rel(file)] ?? []).includes(feature.name);
-      for (const m of css.matchAll(feature.pattern)) {
+      for (const m of masked.matchAll(feature.pattern)) {
         const entry = `${rel(file)}:${lineNo(css, m.index)}  ${feature.name}`;
         if (feature.tier === "optional") {
           optional.push(entry);
