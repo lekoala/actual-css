@@ -550,3 +550,45 @@ test("controls never zero the outline in their base style", () => {
   expect(css).toContain("outline: 2px solid transparent;");
   expect(css).not.toMatch(/outline\s*:\s*(none|0)\b/);
 });
+
+/*
+ * .column-layout is three zero-specificity tiers, so only source order
+ * separates them. Both possible reorderings fail silently in a browser — the
+ * canvas still renders, it just renders the wrong composition — so the order
+ * is asserted here on the source text, and the geometry it produces is
+ * asserted in tests/browser/column-layout.test.js.
+ */
+test("column-layout keeps its placement tiers in cascade order", () => {
+  const css = readCss("src/css/layout/column-layout.css").replace(/\/\*[\s\S]*?\*\//g, "");
+
+  const reset = css.indexOf(":where(.column-layout) > *");
+  const firstStart = css.indexOf(":where(.column-start-1)");
+  const firstSpan = css.indexOf(":where(.column-span-1)");
+  const lastStart = css.indexOf(":where(.column-start-12)");
+  const lastSpan = css.indexOf(":where(.column-span-12)");
+
+  expect(reset).toBeGreaterThan(-1);
+  /* tier 1 < tier 2 < tier 3, with no interleaving of the two ladders. */
+  expect(reset).toBeLessThan(firstStart);
+  expect(lastStart).toBeLessThan(firstSpan);
+  expect(firstSpan).toBeLessThan(lastSpan);
+});
+
+test("column-layout keeps auto-placement available to its children", () => {
+  const css = readCss("src/css/layout/column-layout.css").replace(/\/\*[\s\S]*?\*\//g, "");
+
+  /* The child reset must span, never name a start line: `grid-column: 1 / -1`
+     gives every child a definite column position and disables auto-placement,
+     so `.column-span-8` beside `.column-span-4` would stack. */
+  expect(css).toMatch(/:where\(\.column-layout\) > \*\s*\{[^}]*grid-column-end:\s*span 12;/);
+  expect(css).not.toMatch(/:where\(\.column-layout\) > \*\s*\{[^}]*grid-column:\s*1 \/ -1;/);
+
+  /* A start with no span must stop at the canvas edge rather than inheriting
+     the reset's `span 12` and adding nine implicit columns. */
+  expect(css).toContain("grid-column: 9 / -1;");
+  expect(css).not.toMatch(/grid-column-start:\s*9;/);
+
+  /* Twelve tracks, fixed, with no min-content floor. */
+  expect(css).toContain("grid-template-columns: repeat(12, minmax(0, 1fr));");
+  expect(css).not.toContain("--column-count");
+});

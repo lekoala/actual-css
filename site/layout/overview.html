@@ -6,7 +6,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Layout Overview — Actual CSS</title>
-  <meta name="description" content="Layout provides a small set of composable building blocks for common page, app, and content structure. It is not a utility-first framework and it is not a twelve-column grid system.">
+  <meta name="description" content="Layout provides a small set of composable building blocks for common page, app, and content structure. It is not a utility-first framework, and the twelve-column canvas it does ship (.column-layout) is an opt-in vocabulary for deliberate composition rather than the default way to build a page.">
   <link rel="stylesheet" href="../../src/css/actual.full.css">
   <link rel="stylesheet" href="../../demo/assets/actual-themes.min.css">
   <link rel="stylesheet" href="../../scripts/docs/assets/docs.css">
@@ -95,6 +95,7 @@
         <li><a class="nav-link" href="stack.html">Stack</a></li>
         <li><a class="nav-link" href="cluster.html">Cluster</a></li>
         <li><a class="nav-link" href="grid.html">Grid</a></li>
+        <li><a class="nav-link" href="column-layout.html">Column Layout</a></li>
         <li><a class="nav-link" href="center.html">Center</a></li>
         <li><a class="nav-link" href="sidebar-layout.html">Sidebar Layout</a></li>
         <li><a class="nav-link" href="media.html">Media Object</a></li>
@@ -199,7 +200,7 @@
 
           <div class="prose docs-prose">
 <h1 id="layout-overview">Layout Overview</h1>
-<p>Layout provides a small set of composable building blocks for common page, app, and content structure. It is not a utility-first framework and it is not a twelve-column grid system.</p>
+<p>Layout provides a small set of composable building blocks for common page, app, and content structure. It is not a utility-first framework, and the twelve-column canvas it does ship (<code>.column-layout</code>) is an opt-in vocabulary for deliberate composition rather than the default way to build a page.</p>
 <ul>
 <li>Layout classes compose components; components do not own page spacing.</li>
 <li>Use custom properties to tune a layout instance.</li>
@@ -208,7 +209,8 @@
 <li>Add a new layout primitive only when a pattern appears often and is awkward to express with existing primitives.</li>
 </ul>
 <p>See <a href="choosing.html">Choosing a layout</a> for the distinctions between responsive
-collections, fixed structural grids, all-or-nothing peer regions, and sidebars.</p>
+collections, fixed structural grids, all-or-nothing peer regions, sidebars, and
+explicit column placement.</p>
 <h2 id="spacing-tokens">Spacing tokens</h2>
 <p>Layout shares the global spacing surface and exposes a small set of gap and rhythm tokens.</p>
 <pre><code class="language-css">:root {
@@ -288,6 +290,7 @@ collections, fixed structural grids, all-or-nothing peer regions, and sidebars.<
         <li><a class="nav-link" href="stack.html">Stack</a></li>
         <li><a class="nav-link" href="cluster.html">Cluster</a></li>
         <li><a class="nav-link" href="grid.html">Grid</a></li>
+        <li><a class="nav-link" href="column-layout.html">Column Layout</a></li>
         <li><a class="nav-link" href="center.html">Center</a></li>
         <li><a class="nav-link" href="sidebar-layout.html">Sidebar Layout</a></li>
         <li><a class="nav-link" href="media.html">Media Object</a></li>

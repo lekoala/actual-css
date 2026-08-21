@@ -393,6 +393,18 @@ It represents a real boundary imposed by the CSS containment model.
 
 Actual should not hide that boundary if hiding it requires changing the sizing semantics of the grid.
 
+## Out of scope: explicit per-region placement
+
+Editorial or application layouts that need arbitrary per-region spans and starts
+are outside the `.grid` / `.grid-N` collection contract. Both primitives lay out
+uniform peers; neither expresses "this region occupies seven units starting at
+the third".
+
+That case is answered by `.column-layout`, an opt-in twelve-column coordinate
+system with no automatic responsive behavior. See `column-layout.md`. It also
+narrows `--grid-columns` to its intended role: track templates whose sizes carry
+meaning, rather than a stand-in for a coordinate system.
+
 ## Progressive enhancement
 
 Container queries are newer than Actual's Minimal browser baseline.

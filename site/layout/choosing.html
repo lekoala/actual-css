@@ -96,6 +96,7 @@ number of children visible in one mockup.">
         <li><a class="nav-link" href="stack.html">Stack</a></li>
         <li><a class="nav-link" href="cluster.html">Cluster</a></li>
         <li><a class="nav-link" href="grid.html">Grid</a></li>
+        <li><a class="nav-link" href="column-layout.html">Column Layout</a></li>
         <li><a class="nav-link" href="center.html">Center</a></li>
         <li><a class="nav-link" href="sidebar-layout.html">Sidebar Layout</a></li>
         <li><a class="nav-link" href="media.html">Media Object</a></li>
@@ -214,14 +215,22 @@ number of children visible in one mockup.</p>
 <tr><td>Peer regions that must switch together</td><td><code>.switcher</code></td></tr>
 <tr><td>Main content followed by a secondary region</td><td><code>.sidebar-layout</code></td></tr>
 <tr><td>Fixed media followed by flexible content</td><td><code>.media</code></td></tr>
+<tr><td>Explicit region placement on a shared 12-column canvas</td><td><code>.column-layout</code></td></tr>
 </tbody>
 </table></div>
 <p>For cards, products, results, and galleries, start with <code>.grid</code>. Use a fixed
 <code>.grid-N</code> only when N columns remain part of the structure at every width. If
 all peers should move together rather than form a partial row, use <code>.switcher</code>.</p>
-<p>For a main region plus an aside, use <code>.sidebar-layout</code>. Reserve
-<code>--grid-columns</code> for exact editorial templates whose ratios are intentional and
-whose narrow behavior the application will own.</p>
+<p>For a main region plus an aside, use <code>.sidebar-layout</code>.</p>
+<p>Use <code>.column-layout</code> when the placement of each region is itself part of the
+design — an 8 / 4 split, a 10-column article starting on column 2, a 3 / 6 / 3
+shell. It is the one layout primitive with no automatic responsive behavior: the
+canvas stays twelve columns and the application owns narrow-container
+recomposition. Choose it because placement is the design, not because a mockup
+happens to contain columns.</p>
+<p>Reserve <code>--grid-columns</code> for track templates whose sizes carry meaning rather
+than twelve interchangeable units, such as <code>minmax(12rem, 18rem) 1fr</code>. Its
+narrow behavior is yours to write.</p>
 <p><code>.container-query</code> is a low-level opt-in for a component that changes its own
 representation according to allocated space. It does not enable responsive
 behavior for layout primitives and never changes their meaning.</p>
@@ -285,6 +294,7 @@ behavior for layout primitives and never changes their meaning.</p>
         <li><a class="nav-link" href="stack.html">Stack</a></li>
         <li><a class="nav-link" href="cluster.html">Cluster</a></li>
         <li><a class="nav-link" href="grid.html">Grid</a></li>
+        <li><a class="nav-link" href="column-layout.html">Column Layout</a></li>
         <li><a class="nav-link" href="center.html">Center</a></li>
         <li><a class="nav-link" href="sidebar-layout.html">Sidebar Layout</a></li>
         <li><a class="nav-link" href="media.html">Media Object</a></li>

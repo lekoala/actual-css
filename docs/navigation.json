@@ -25,6 +25,7 @@
         "stack",
         "cluster",
         "grid",
+        "column-layout",
         "center",
         "sidebar-layout",
         "media",

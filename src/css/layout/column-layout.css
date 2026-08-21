@@ -1,0 +1,141 @@
+/*
+ * Explicit 12-column composition canvas.
+ *
+ * Neither space-driven like .grid nor count-driven like .grid-N: this is a
+ * coordinate system. The author places regions with .column-span-N /
+ * .column-start-N and owns narrow-container recomposition. There is
+ * deliberately no automatic collapse — no threshold, no hidden
+ * .container-query behavior, no breakpoint variants. A single framework
+ * threshold cannot be right for arbitrary per-region compositions, and a
+ * hidden default would have to be undone rather than extended.
+ *
+ * See docs/design-notes/column-layout.md.
+ *
+ * Selection — reach for this only when placement is part of the design:
+ *   independent repeated items      -> .grid
+ *   a known peer density            -> .grid-N
+ *   peers switching together        -> .switcher
+ *   content + secondary region      -> .sidebar-layout
+ *   media + flexible content        -> .media
+ *   meaningful asymmetric tracks    -> --grid-columns on .grid
+ *
+ * Unlike .grid-N, the track template does not read --gap, so the gap
+ * utilities are exact here at every width.
+ */
+.column-layout {
+  display: grid;
+  gap: var(--gap);
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+}
+
+/* Three zero-specificity tiers, applied in this order and only ever separated
+ * by source order. ORDER IS LOAD-BEARING:
+ *
+ *   1. the child reset       auto-placed, spanning the whole canvas
+ *   2. .column-start-*       a definite start line, running to the canvas end
+ *   3. .column-span-*        the end only, so it refines either of the above
+ *
+ * Moving tier 3 above tier 2 makes every start+span pair run to column 12;
+ * moving either above tier 1 makes every placement full-span. Both failures
+ * are silent. tests/css-audit.test.js locks the order and
+ * tests/browser/column-layout.test.js locks the resulting geometry.
+ *
+ * Zero specificity is the point: an application's own container-query rules
+ * override placement additively, with a single-class selector and without
+ * having to undo framework specificity first.
+ */
+
+/* Tier 1. A child with no placement class stays a readable full-width region
+ * instead of collapsing to one twelfth. Expressed as a span, not as
+ * `1 / -1`: a definite start line would give every child a definite column
+ * position and disable auto-placement, so `.column-span-8` next to
+ * `.column-span-4` would stack instead of composing 8 + 4.
+ *
+ * min-inline-size: 0 keeps the item box inside its track so the canvas never
+ * grows past its container. It does not stop content from painting outside a
+ * narrow track — that distinction is the primitive's contract, not a bug. */
+:where(.column-layout) > * {
+  grid-column-end: span 12;
+  min-inline-size: 0;
+}
+
+/* Tier 2. A definite start line, running to the end of the canvas unless a
+ * .column-span-* refines the end. `column-start-9` alone is therefore the
+ * last four columns rather than an implicit 21-line overflow. */
+:where(.column-start-1) {
+  grid-column: 1 / -1;
+}
+:where(.column-start-2) {
+  grid-column: 2 / -1;
+}
+:where(.column-start-3) {
+  grid-column: 3 / -1;
+}
+:where(.column-start-4) {
+  grid-column: 4 / -1;
+}
+:where(.column-start-5) {
+  grid-column: 5 / -1;
+}
+:where(.column-start-6) {
+  grid-column: 6 / -1;
+}
+:where(.column-start-7) {
+  grid-column: 7 / -1;
+}
+:where(.column-start-8) {
+  grid-column: 8 / -1;
+}
+:where(.column-start-9) {
+  grid-column: 9 / -1;
+}
+:where(.column-start-10) {
+  grid-column: 10 / -1;
+}
+:where(.column-start-11) {
+  grid-column: 11 / -1;
+}
+:where(.column-start-12) {
+  grid-column: 12 / -1;
+}
+
+/* Tier 3. The end only. Combined with a start, keep the placement inside the
+ * canvas: S + N - 1 <= 12. Exceeding it adds an auto-sized implicit column,
+ * which reshapes every 1fr track — the whole canvas loses its alignment, not
+ * just the offending region. */
+:where(.column-span-1) {
+  grid-column-end: span 1;
+}
+:where(.column-span-2) {
+  grid-column-end: span 2;
+}
+:where(.column-span-3) {
+  grid-column-end: span 3;
+}
+:where(.column-span-4) {
+  grid-column-end: span 4;
+}
+:where(.column-span-5) {
+  grid-column-end: span 5;
+}
+:where(.column-span-6) {
+  grid-column-end: span 6;
+}
+:where(.column-span-7) {
+  grid-column-end: span 7;
+}
+:where(.column-span-8) {
+  grid-column-end: span 8;
+}
+:where(.column-span-9) {
+  grid-column-end: span 9;
+}
+:where(.column-span-10) {
+  grid-column-end: span 10;
+}
+:where(.column-span-11) {
+  grid-column-end: span 11;
+}
+:where(.column-span-12) {
+  grid-column-end: span 12;
+}

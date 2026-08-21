@@ -1,6 +1,6 @@
 # Layout Overview
 
-Layout provides a small set of composable building blocks for common page, app, and content structure. It is not a utility-first framework and it is not a twelve-column grid system.
+Layout provides a small set of composable building blocks for common page, app, and content structure. It is not a utility-first framework, and the twelve-column canvas it does ship (`.column-layout`) is an opt-in vocabulary for deliberate composition rather than the default way to build a page.
 
 - Layout classes compose components; components do not own page spacing.
 - Use custom properties to tune a layout instance.
@@ -9,7 +9,8 @@ Layout provides a small set of composable building blocks for common page, app, 
 - Add a new layout primitive only when a pattern appears often and is awkward to express with existing primitives.
 
 See [Choosing a layout](./choosing.md) for the distinctions between responsive
-collections, fixed structural grids, all-or-nothing peer regions, and sidebars.
+collections, fixed structural grids, all-or-nothing peer regions, sidebars, and
+explicit column placement.
 
 ## Spacing tokens
 
