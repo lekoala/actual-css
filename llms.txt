@@ -38,6 +38,28 @@ Pick from the relationship between children, not the number of children in one m
 - Peer regions that must switch together → `.switcher`
 - Main content plus a secondary region (content + aside) → `.sidebar-layout`
 - Fixed media followed by flexible content → `.media`
+- Explicit region placement on a shared 12-column canvas → `.column-layout`
 - Vertical flow → `.stack`; wrapping inline items → `.cluster`
 
-Reserve `--grid-columns` on `.grid` for exact editorial templates with intentional ratios. See [Choosing a layout](docs/pages/layout/choosing.md).
+Use `--grid-columns` on `.grid` for exact track templates that do not match a
+built-in layout contract: arbitrary structural counts (seven calendar days),
+asymmetric fractional tracks, or mixed intrinsic/flexible tracks. See
+[Choosing a layout](docs/pages/layout/choosing.md).
+
+`.status-bar` is transient feedback only; persistent metrics or application
+state belong in normal content such as cards, badges and alerts.
+
+## Before generating application CSS
+
+Read [Building with Actual CSS](docs/pages/guides/integrating-actual-css.md)
+before writing application styles.
+
+1. Start with Actual's vocabulary: theme tokens, then layout primitives, then components, then their public hooks, then small utilities, then application CSS.
+2. Choose layout primitives by relationship, not item count.
+3. Prefer component/layout hooks over replacement rules (tune before replacing).
+4. Search the class manifest before inventing generic utilities.
+5. Keep literal palette colors inside the theme/token block; derive decorative colors from tokens.
+6. Use application CSS for genuinely product-specific styling — brand marks, unusual geometry, bespoke animation.
+
+The goal is no duplicated framework behavior and no palette literals outside the
+token layer, not zero application CSS.

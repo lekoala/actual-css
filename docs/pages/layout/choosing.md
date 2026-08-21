@@ -21,15 +21,18 @@ all peers should move together rather than form a partial row, use `.switcher`.
 For a main region plus an aside, use `.sidebar-layout`.
 
 Use `.column-layout` when the placement of each region is itself part of the
-design — an 8 / 4 split, a 10-column article starting on column 2, a 3 / 6 / 3
-shell. It is the one layout primitive with no automatic responsive behavior: the
-canvas stays twelve columns and the application owns narrow-container
-recomposition. Choose it because placement is the design, not because a mockup
-happens to contain columns.
+design — a 10-column article starting on column 2, regions in separate sibling
+sections that must share the same column lines, an editorial composition whose
+starts and spans are deliberately aligned across the page. It is the one layout
+primitive with no automatic responsive behavior: the canvas stays twelve
+columns and the application owns narrow-container recomposition. Choose it
+because placement is the design, not because a mockup happens to contain
+columns.
 
-Reserve `--grid-columns` for track templates whose sizes carry meaning rather
-than twelve interchangeable units, such as `minmax(12rem, 18rem) 1fr`. Its
-narrow behavior is yours to write.
+Use `--grid-columns` for exact track templates that do not match a built-in
+layout contract: arbitrary structural counts such as seven calendar days,
+asymmetric fractional tracks, or mixed intrinsic/flexible tracks. Once set, the
+application owns narrow-container behavior.
 
 `.container-query` is a low-level opt-in for a component that changes its own
 representation according to allocated space. It does not enable responsive

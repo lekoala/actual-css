@@ -11,6 +11,9 @@
  *
  * Internal:
  * --grid-count
+ *
+ * Child contract: each direct child is a grid item placed in the tracks the
+ * recipe generates.
  */
 
 /* --grid-columns replaces the intrinsic auto-fit template: once set, the
@@ -71,6 +74,14 @@
 }
 .grid-6 {
   --grid-count: 6;
+}
+
+/* Grid items keep an automatic minimum inline size (min-content), which can
+   overflow a track sized minmax(0, 1fr). Layout primitives remove that
+   intrinsic floor so their overflow-safe track sizing holds; authors only
+   reach for .min-inline-size-0 when they need the floor back. */
+:where(.grid, .grid-2, .grid-3, .grid-4, .grid-6) > * {
+  min-inline-size: 0;
 }
 
 /* Balanced subdivision, opted into by an ancestor query container.

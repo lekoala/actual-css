@@ -73,6 +73,32 @@ is not. Exceeding the canvas adds a thirteenth, content-sized column, and every
 other region shrinks with it — the failure is canvas-wide, not local to the
 region you got wrong.
 
+## Cross-section alignment
+
+The canvas is shared across sibling sections, so regions in different sections
+can line up on the same columns — something a collection or a sidebar cannot
+guarantee. This is the case no other primitive can replace.
+
+```html demo
+<div class="stack">
+  <div class="column-layout">
+    <h3 class="column-span-8 column-start-3">Feature title</h3>
+    <p class="muted column-span-8 column-start-3">Kicker aligned to the same line.</p>
+  </div>
+
+  <div class="column-layout">
+    <p class="column-span-8 column-start-3">
+      Body copy starts on the same column as the title above and spans the same
+      eight columns.
+    </p>
+    <aside class="column-span-2 column-start-11 card">Inline note</aside>
+  </div>
+</div>
+```
+
+Both sections name the same `column-start-3` / `column-span-8`, so their content
+shares a left edge and an alignment gutter without a wrapping grid.
+
 ## The responsive contract
 
 `.column-layout` has **no automatic collapse**. The canvas stays twelve columns

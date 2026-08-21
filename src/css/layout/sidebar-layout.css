@@ -9,6 +9,8 @@
  * Public hooks:
  * --sidebar-content-min
  * --sidebar-layout-size
+ *
+ * Child contract: the first and last direct children carry the sizing roles.
  */
 .sidebar-layout {
   display: flex;

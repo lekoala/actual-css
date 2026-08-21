@@ -2,6 +2,10 @@
 
 > Singleton floating area for short, non-critical, transient feedback.
 
+`status-bar` is for transient feedback, not persistent application status. For
+persistent status, metrics, or operational state, compose regular content
+primitives such as cards, badges, and clusters.
+
 A status bar is a single live region, not a stacked toaster. New messages
 replace the previous one. Keep one element in the HTML, styled with
 `.status-bar` and carrying the `[data-status][role="status"]` contract that the

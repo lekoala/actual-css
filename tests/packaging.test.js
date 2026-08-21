@@ -1,5 +1,6 @@
 import { expect, test } from "bun:test";
-import { existsSync, readdirSync, readFileSync } from "node:fs";
+import { existsSync, mkdtempSync, readdirSync, readFileSync, rmSync } from "node:fs";
+import { tmpdir } from "node:os";
 import { join } from "node:path";
 
 const ROOT = join(import.meta.dir, "..");
@@ -160,4 +161,64 @@ test("the js entry split keeps the loader and built-ins separate", () => {
   const fullImports = imports(fullJs);
   expect(fullImports.slice(0, -1)).toEqual(builtins);
   expect(fullImports.at(-1)).toBe("./index.js");
+});
+
+/*
+ * End-to-end packaging check: actually pack the package (npm pack honors the
+ * `files` allowlist and runs no prepublishOnly), then inspect the tarball for
+ * the files backing the critical public exports. This guards the real
+ * distribution, not just the package.json manifest.
+ */
+async function spawn(cmd, args, opts = {}) {
+  const proc = Bun.spawn([cmd, ...args], { stdout: "pipe", stderr: "pipe", ...opts });
+  const [stdout, stderr] = await Promise.all([
+    new Response(proc.stdout).text(),
+    new Response(proc.stderr).text(),
+  ]);
+  return { code: await proc.exited, stdout, stderr };
+}
+
+let packTools;
+async function packAvailable() {
+  if (packTools !== undefined) return packTools;
+  try {
+    const npm = await spawn("npm", ["--version"]);
+    const tar = await spawn("tar", ["--version"]);
+    packTools = npm.code === 0 && tar.code === 0;
+  } catch {
+    packTools = false;
+  }
+  return packTools;
+}
+
+const packTest = (await packAvailable()) ? test : test.skip;
+
+packTest("packed tarball ships every critical public export", async () => {
+  const dir = mkdtempSync(join(tmpdir(), "actual-pack-"));
+  try {
+    const pack = await spawn("npm", ["pack", "--pack-destination", dir], { cwd: ROOT });
+    expect(pack.code, `npm pack failed:\n${pack.stderr}`).toBe(0);
+
+    const tarball = readdirSync(dir).find((file) => file.endsWith(".tgz"));
+    expect(tarball, "npm pack must produce a tarball").toBeTruthy();
+
+    const list = await spawn("tar", ["-tzf", join(dir, tarball)]);
+    expect(list.code, "tar must list the tarball").toBe(0);
+    const entries = list.stdout.split(/\r?\n/);
+
+    const critical = [
+      "package/dist/actual.css", // actual-css
+      "package/dist/actual.full.css", // actual-css/full
+      "package/dist/actual.js", // actual-css/js
+      "package/dist/actual.full.js", // actual-css/js/full
+      "package/src/css/layout/index.css", // actual-css/css/layout
+      "package/src/css/layout/column-layout.css", // actual-css/css/layout/column-layout
+      "package/scripts/reserved-classes.json", // actual-css/reserved-classes.json
+    ];
+    for (const entry of critical) {
+      expect(entries, `tarball must contain ${entry}`).toContain(entry);
+    }
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
 });

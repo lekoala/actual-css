@@ -15,8 +15,10 @@ Flexible content container with optional header, body, and footer regions, plus 
 ## Basic usage
 
 Use semantic elements inside the card. A direct `<header>` or `<footer>` is the
-card's structural slot. Cards do not own page spacing — compose them with
-layout primitives like `.grid`.
+card's structural slot. A direct `<footer>` is anchored to the bottom of the
+card when extra block space is available, so prices and actions line up across
+equal-height cards. Cards do not own page spacing — compose them with layout
+primitives like `.grid`.
 
 ```html demo
 <div style="max-inline-size: 32rem">
@@ -95,7 +97,9 @@ colored headers, or footers.
 
 ## In grids
 
-Cards display nicely in grids with equal-height behavior.
+Cards display nicely in grids with equal-height behavior. Each card in a row
+stretches to the row height, and a direct `<footer>` anchors to the bottom, so
+all footers in the row line up regardless of body length.
 
 ```html demo
 <section class="grid">

@@ -94,9 +94,22 @@ is normal.
 
 ## Exact templates
 
-`--grid-columns` replaces `.grid`'s intrinsic recipe. This is an escape hatch
-for exact or asymmetric templates; once set, the author owns their responsive
+`--grid-columns` replaces `.grid`'s intrinsic recipe. Use it for exact track
+templates that do not match a built-in layout contract: arbitrary structural
+counts such as seven calendar days, asymmetric fractional tracks, or mixed
+intrinsic/flexible tracks. Once set, the application owns narrow-container
 behavior.
+
+```css
+/* Semantic count not represented by .grid-N */
+--grid-columns: repeat(7, minmax(0, 1fr));
+
+/* Meaningful asymmetric ratio */
+--grid-columns: 2fr 1fr 1fr 1fr;
+
+/* Intrinsic trailing control */
+--grid-columns: repeat(4, minmax(0, 1fr)) auto;
+```
 
 ```html
 <div class="container-query">
