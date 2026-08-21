@@ -1,12 +1,12 @@
 {
-  "totalRaw": 220269,
+  "totalRaw": 224901,
   "core": {
     "minified": 10492,
     "brotli": 2500
   },
   "full": {
-    "minified": 105111,
-    "brotli": 15505
+    "minified": 106514,
+    "brotli": 15653
   },
   "js": {
     "core": {
@@ -18,7 +18,7 @@
       "brotli": 15986
     }
   },
-  "fileCount": 100,
+  "fileCount": 101,
   "files": [
     {
       "file": "components/modal.css",
@@ -67,6 +67,10 @@
     {
       "file": "themes/edge.css",
       "raw": 4497
+    },
+    {
+      "file": "layout/column-layout.css",
+      "raw": 4477
     },
     {
       "file": "layout/grid.css",
@@ -241,6 +245,10 @@
       "raw": 1613
     },
     {
+      "file": "layout/index.css",
+      "raw": 1593
+    },
+    {
       "file": "layout/topbar.css",
       "raw": 1477
     },
@@ -255,10 +263,6 @@
     {
       "file": "components/spinner.css",
       "raw": 1452
-    },
-    {
-      "file": "layout/index.css",
-      "raw": 1438
     },
     {
       "file": "components/meter.css",

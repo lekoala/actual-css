@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Column layout placement fixture</title>
+  <link rel="stylesheet" href="../../src/css/actual.full.css">
+  <style>
+    * { transition-duration: 0s !important; }
+    /* Fixed-width canvases: every assertion is about the twelve tracks of the
+       canvas, never about the viewport. */
+    .probe { width: var(--w); }
+    .column-layout > * { outline: 1px solid; }
+  </style>
+</head>
+<body>
+  <!-- Auto-placement: no start line anywhere, so peers must flow across the
+       canvas rather than stack. This is what a `1 / -1` default breaks. -->
+  <div class="probe" style="--w: 1200px">
+    <div class="column-layout" data-case="auto-8-4">
+      <section class="column-span-8">a</section>
+      <aside class="column-span-4">b</aside>
+    </div>
+  </div>
+
+  <!-- An unplaced child spans the canvas and still lets placed peers flow. -->
+  <div class="probe" style="--w: 1200px">
+    <div class="column-layout" data-case="mixed">
+      <h2>head</h2>
+      <div class="column-span-4">1</div>
+      <div class="column-span-4">2</div>
+      <div class="column-span-4">3</div>
+    </div>
+  </div>
+
+  <!-- start + span: tier 3 must refine tier 2's end line. -->
+  <div class="probe" style="--w: 1200px">
+    <div class="column-layout" data-case="start-span">
+      <main class="column-span-8">m</main>
+      <aside class="column-span-4 column-start-9">s</aside>
+    </div>
+  </div>
+
+  <!-- A start with no span runs to the canvas end, not to line 21. -->
+  <div class="probe" style="--w: 1200px">
+    <div class="column-layout" data-case="start-only">
+      <aside class="column-start-9">s</aside>
+    </div>
+  </div>
+
+  <!-- Centered article: 2 through 11. -->
+  <div class="probe" style="--w: 1200px">
+    <div class="column-layout" data-case="centered">
+      <article class="column-span-10 column-start-2">a</article>
+    </div>
+  </div>
+
+  <!-- Sixteen units do not fit twelve: the second region wraps. -->
+  <div class="probe" style="--w: 1200px">
+    <div class="column-layout" data-case="wrap">
+      <div class="column-span-8">x</div>
+      <div class="column-span-8">y</div>
+    </div>
+  </div>
+
+  <!-- Mid-canvas placement. -->
+  <div class="probe" style="--w: 1200px">
+    <div class="column-layout" data-case="mid">
+      <div class="column-span-4 column-start-3">g</div>
+    </div>
+  </div>
+
+  <!-- Every span, alone on its own canvas, to check the full ladder. -->
+  <div id="spans"></div>
+
+  <!-- Narrow canvases: the tracks must shrink rather than force the canvas
+       wider than its container. -->
+  <div id="narrow"></div>
+
+  <!-- Gap utilities are exact here: the track count never reads --gap. -->
+  <div class="probe" style="--w: 1200px">
+    <div class="column-layout gap-none" data-case="gap-none">
+      <div class="column-span-6">1</div>
+      <div class="column-span-6">2</div>
+    </div>
+  </div>
+
+  <script>
+    const spans = document.getElementById("spans");
+    for (let n = 1; n <= 12; n += 1) {
+      const probe = document.createElement("div");
+      probe.className = "probe";
+      probe.style.setProperty("--w", "1200px");
+      probe.innerHTML = `<div class="column-layout"><div class="column-span-${n}" data-span="${n}">s</div></div>`;
+      spans.append(probe);
+    }
+
+    const narrow = document.getElementById("narrow");
+    for (const w of [1200, 640, 360, 280]) {
+      const probe = document.createElement("div");
+      probe.className = "probe";
+      probe.style.setProperty("--w", w + "px");
+      probe.innerHTML = `<div class="column-layout" data-narrow="${w}">
+        <div class="column-span-8">m</div><div class="column-span-4">s</div>
+      </div>`;
+      narrow.append(probe);
+    }
+  </script>
+</body>
+</html>

@@ -14,6 +14,8 @@
  * .grid           responsive collection; item width is the contract
  * .grid-N         structural density of N; wrap in .container-query for
  *                 balanced subdivision (in grid.css)
+ * .column-layout  explicit 12-column region composition; the author owns
+ *                 narrow-container recomposition
  * .scroller       quiet custom scrollbar chrome
  * .scroll-snap    snap rails
  * .scroll-target  anchor scroll offset for sticky headers
@@ -32,6 +34,7 @@
 @import "./switcher.css";
 @import "./sidebar-layout.css";
 @import "./grid.css";
+@import "./column-layout.css";
 @import "./scroller.css";
 @import "./scroll-snap.css";
 @import "./scroll-target.css";

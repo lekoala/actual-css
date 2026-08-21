@@ -1,0 +1,434 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Column Layout - Actual CSS</title>
+  <meta name="description" content="The twelve-column composition canvas: spans, starts, and the one thing the framework deliberately does not decide - what happens when the container gets narrow.">
+  <link rel="stylesheet" href="../../dist/actual.full.css">
+  <link rel="stylesheet" href="../assets/actual-themes.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+  <style>
+    /* Template-local demo chrome, plus the application-owned recomposition
+     * rules that are the whole point of this page. Nothing here papers over a
+     * framework gap: sections 4 and 5 are what an adopter writes, because
+     * .column-layout deliberately ships no narrow behavior at all.
+     *
+     *   .stage        reader-resizable box; the canvas reads ITS width
+     *   .stage-meter  live container-width and unit-width readout
+     *   .unit         column-ruler cell
+     *   .region       labelled placeholder region
+     */
+
+    .cl-page {
+      padding-block: var(--space-60);
+    }
+
+    .cl-intro,
+    .cl-section {
+      --center-size: 76rem;
+    }
+
+    .cl-section {
+      padding-block: var(--space-60);
+      border-block-start: var(--border-width) solid var(--border);
+    }
+
+    .cl-note {
+      max-inline-size: 72ch;
+      color: var(--text-muted);
+    }
+
+    /* resize needs a scroll container, hence the overflow. */
+    .stage {
+      overflow: auto;
+      resize: horizontal;
+      min-inline-size: 17rem;
+      max-inline-size: 100%;
+      padding: var(--space-40);
+      border: var(--border-width) dashed var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+    }
+
+    .stage-meter {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-20);
+      align-items: baseline;
+      margin-block: 0 var(--space-30);
+      font-size: var(--font-size-sm);
+      color: var(--text-muted);
+    }
+
+    .stage-meter b {
+      color: var(--text);
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* The ruler: twelve units of the same canvas, so a span below can be
+       counted against it by eye. */
+    .ruler {
+      margin-block-end: var(--space-30);
+    }
+
+    .unit {
+      padding-block: var(--space-10);
+      border-radius: var(--radius);
+      background: var(--surface-subtle);
+      color: var(--text-muted);
+      font-size: var(--font-size-sm);
+      font-variant-numeric: tabular-nums;
+      text-align: center;
+    }
+
+    .region {
+      display: grid;
+      place-items: center;
+      gap: var(--space-10);
+      min-block-size: 4rem;
+      padding: var(--space-30);
+      border-radius: var(--radius);
+      background: var(--surface-subtle);
+      color: var(--text-muted);
+      font-size: var(--font-size-sm);
+      text-align: center;
+    }
+
+    .region strong {
+      color: var(--text);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .region.accent {
+      background: var(--surface-raised);
+    }
+
+    /* ---- Application-owned recomposition, section 4 ---------------------
+       Stack everything below 40rem of container. The simplest contract an
+       author can write, and the one most compositions want. */
+    @container (width < 40rem) {
+      .stack-all > * {
+        grid-column: 1 / -1;
+      }
+    }
+
+    /* ---- Application-owned recomposition, section 5 ---------------------
+       Keep the coordinate system through an intermediate state: 8 + 4 becomes
+       6 + 6 before it stacks. A framework threshold could not have guessed
+       this, which is the argument for owning it here. */
+    @container (width < 48rem) {
+      .recompose-main {
+        grid-column: 1 / span 6;
+      }
+
+      .recompose-aside {
+        grid-column: 7 / span 6;
+      }
+    }
+
+    @container (width < 32rem) {
+      .recompose-main,
+      .recompose-aside {
+        grid-column: 1 / -1;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="cl-page">
+    <header class="center stack cl-intro">
+      <p class="overline">Actual CSS</p>
+      <h1>Column layout</h1>
+      <p class="lead">
+        Twelve units, and nothing else. <code>.column-layout</code> is the one
+        layout primitive that makes <em>no</em> responsive decision &mdash; you
+        place regions on the canvas, and you own what happens when it gets
+        narrow.
+      </p>
+      <p class="cl-note">
+        Every stage below is resizable &mdash; drag its bottom-right corner.
+        Sections 1 through 3 never change shape, however far you drag: that is
+        the contract, not a missing feature. Sections 4 and 5 do change, because
+        this page's own stylesheet says so.
+      </p>
+    </header>
+
+    <section class="center stack cl-section">
+      <h2>1. The canvas</h2>
+      <p class="cl-note">
+        Twelve <code>minmax(0, 1fr)</code> tracks. The ruler and the regions
+        below share the same canvas, so a span can be counted by eye.
+      </p>
+      <div class="stage" data-stage>
+        <p class="stage-meter">
+          <span>container <b data-width>&mdash;</b></span>
+          <span>unit <b data-unit>&mdash;</b></span>
+        </p>
+        <div class="column-layout ruler" aria-hidden="true">
+          <div class="unit">1</div>
+          <div class="unit">2</div>
+          <div class="unit">3</div>
+          <div class="unit">4</div>
+          <div class="unit">5</div>
+          <div class="unit">6</div>
+          <div class="unit">7</div>
+          <div class="unit">8</div>
+          <div class="unit">9</div>
+          <div class="unit">10</div>
+          <div class="unit">11</div>
+          <div class="unit">12</div>
+        </div>
+        <div class="column-layout">
+          <section class="region column-span-8"><strong>column-span-8</strong>main</section>
+          <aside class="region accent column-span-4"><strong>column-span-4</strong>aside</aside>
+        </div>
+      </div>
+      <p class="cl-note">
+        Neither region names a start line. Grid auto-placement flows the aside
+        into columns 9 through 12 on its own &mdash; the same way
+        <code>col-8</code> and <code>col-4</code> compose in any twelve-column
+        system you have used before.
+      </p>
+      <div class="alert admonition cl-note" role="note">
+        <div class="alert-title">
+          <i class="ti ti-info-circle" aria-hidden="true"></i>
+          Unit width shrinks fast
+        </div>
+        <div class="alert-body">
+          <p>
+            Watch the unit readout as you drag. Eleven gaps are a fixed cost, so
+            they take a growing share of a shrinking canvas. Around 280px a unit
+            is roughly 12px and a <code>column-span-4</code> region is 84px.
+            Twelve columns is a wide-context tool; the readout is here to make
+            that concrete rather than theoretical.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="center stack cl-section">
+      <h2>2. Unplaced children span the canvas</h2>
+      <p class="cl-note">
+        A child with no placement class is a full-width region. A heading, an
+        intro, or a footer shares the canvas with placed regions without
+        carrying a class of its own &mdash; and a forgotten class stays readable
+        instead of collapsing to one twelfth.
+      </p>
+      <div class="stage" data-stage>
+        <p class="stage-meter">
+          <span>container <b data-width>&mdash;</b></span>
+          <span>unit <b data-unit>&mdash;</b></span>
+        </p>
+        <div class="column-layout">
+          <h3>No class &mdash; full canvas</h3>
+          <div class="region column-span-4"><strong>4</strong></div>
+          <div class="region accent column-span-4"><strong>4</strong></div>
+          <div class="region column-span-4"><strong>4</strong></div>
+        </div>
+      </div>
+      <div class="alert admonition cl-note" role="note">
+        <div class="alert-title">
+          <i class="ti ti-info-circle" aria-hidden="true"></i>
+          Why the default is a span, not <code>1 / -1</code>
+        </div>
+        <div class="alert-body">
+          <p>
+            The default is <code>grid-column-end: span 12</code>. Writing it as
+            <code>grid-column: 1 / -1</code> would look equivalent but sets a
+            <em>definite</em> start line on every child, removing them all from
+            column auto-placement. Section 1 would then stack &mdash; both
+            regions would resolve to column 1 &mdash; and every composition
+            would need an explicit <code>column-start-*</code>.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="center stack cl-section">
+      <h2>3. Starts</h2>
+      <p class="cl-note">
+        A start names the line a region begins on. This is why there are no
+        offset utilities: <code>grid-column-start</code> is what an offset was
+        always approximating, and it flips in a right-to-left context for free.
+      </p>
+      <div class="stage" data-stage>
+        <p class="stage-meter">
+          <span>container <b data-width>&mdash;</b></span>
+          <span>unit <b data-unit>&mdash;</b></span>
+        </p>
+        <div class="column-layout" style="--gap: var(--space-40)">
+          <article class="region column-span-10 column-start-2">
+            <strong>column-span-10 column-start-2</strong>columns 2&ndash;11
+          </article>
+          <aside class="region accent column-start-9">
+            <strong>column-start-9</strong>no span &mdash; runs to the edge
+          </aside>
+          <div class="region column-span-4 column-start-3">
+            <strong>column-start-3 column-span-4</strong>columns 3&ndash;6
+          </div>
+        </div>
+      </div>
+      <p class="cl-note">
+        A start with no span runs to the end of the canvas, so a single class is
+        always a valid placement. Combining the two is where you have to keep
+        the arithmetic inside the canvas.
+      </p>
+      <div class="alert warning admonition cl-note" role="note">
+        <div class="alert-title">
+          <i class="ti ti-alert-triangle" aria-hidden="true"></i>
+          Pitfall &mdash; exceeding the canvas is not a local mistake
+        </div>
+        <div class="alert-body">
+          <p>
+            Keep <code>S + N - 1 &le; 12</code>.
+            <code>column-start-9 column-span-4</code> is valid;
+            <code>column-start-10 column-span-4</code> is not.
+          </p>
+          <p>
+            Exceeding it adds a thirteenth, content-sized implicit column, and
+            the twelve <code>1fr</code> tracks then divide whatever is left. So
+            <strong>every</strong> region in the canvas shifts, not just the one
+            you got wrong. Actual CSS does not guard against this: a coordinate
+            system that silently corrected your coordinates would be worse.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="center stack cl-section">
+      <h2>4. You own the narrow behavior</h2>
+      <p class="cl-note">
+        This stage collapses, and none of that behavior comes from Actual. It
+        comes from four lines in this page's own stylesheet:
+      </p>
+      <pre><code>@container (width &lt; 40rem) {
+  .stack-all &gt; * {
+    grid-column: 1 / -1;
+  }
+}</code></pre>
+      <div class="stage container-query" data-stage>
+        <p class="stage-meter">
+          <span>container <b data-width>&mdash;</b></span>
+          <span>stacks below 40rem &mdash; because this page says so</span>
+        </p>
+        <div class="column-layout stack-all">
+          <div class="region column-span-3"><strong>3</strong></div>
+          <div class="region accent column-span-6"><strong>6</strong></div>
+          <div class="region column-span-3"><strong>3</strong></div>
+        </div>
+      </div>
+      <p class="cl-note">
+        The <code>.container-query</code> wrapper is here because
+        <em>this page</em> wrote a <code>@container</code> rule. Delete the rule
+        and the wrapper stops mattering. That is the difference from a primitive
+        whose responsive contract depends on a wrapper someone else has to
+        remember: here, the person who needs the wrapper is the person who wrote
+        the rule that needs it.
+      </p>
+      <p class="cl-note">
+        Placement classes carry zero specificity, so
+        <code>.stack-all &gt; *</code> wins on its own. No
+        <code>!important</code>, and nothing to undo first.
+      </p>
+    </section>
+
+    <section class="center stack cl-section">
+      <h2>5. Recomposition is the point</h2>
+      <p class="cl-note">
+        Stacking everything is the least interesting thing a coordinate system
+        can do. This stage keeps the canvas through an intermediate state:
+      </p>
+      <pre><code>8 + 4   &rarr;   6 + 6   &rarr;   stacked</code></pre>
+      <div class="stage container-query" data-stage>
+        <p class="stage-meter">
+          <span>container <b data-width>&mdash;</b></span>
+          <span>8+4, then 6+6 below 48rem, then stacked below 32rem</span>
+        </p>
+        <div class="column-layout">
+          <main class="region column-span-8 recompose-main">
+            <strong>main</strong>8 &rarr; 6 &rarr; 12
+          </main>
+          <aside class="region accent column-span-4 column-start-9 recompose-aside">
+            <strong>aside</strong>4 &rarr; 6 &rarr; 12
+          </aside>
+        </div>
+      </div>
+      <p class="cl-note">
+        Two thresholds, chosen for this composition. A single framework
+        threshold could not have produced the middle state, and a hidden
+        framework default would have had to be undone before writing it. That
+        asymmetry &mdash; additive versus corrective &mdash; is why the
+        primitive ships no responsive behavior at all.
+      </p>
+    </section>
+
+    <section class="center stack cl-section">
+      <h2>6. When this is the wrong primitive</h2>
+      <p class="cl-note">
+        <code>.column-layout</code> is easy to reach for and easy to overuse. It
+        is the right answer only when the placement is part of the design. If
+        another primitive already names the relationship, that primitive is
+        better, because it brings intrinsic responsive behavior this one does
+        not have.
+      </p>
+      <ul class="cl-note">
+        <li>
+          <strong>Independent repeated items</strong> &mdash;
+          <code>.grid</code>.
+        </li>
+        <li>
+          <strong>A known peer density</strong> &mdash; <code>.grid-N</code>,
+          not three <code>column-span-4</code> regions.
+        </li>
+        <li>
+          <strong>Peers that must switch together</strong> &mdash;
+          <code>.switcher</code>.
+        </li>
+        <li>
+          <strong>Main content plus an aside</strong> &mdash;
+          <code>.sidebar-layout</code>, which already collapses on its own.
+        </li>
+        <li>
+          <strong>Tracks whose sizes carry meaning</strong> &mdash;
+          <code>--grid-columns</code> on <code>.grid</code>, for example
+          <code>minmax(12rem, 18rem) 1fr</code>. Twelve interchangeable units
+          are not that.
+        </li>
+      </ul>
+      <p class="cl-note">
+        The useful diagnostic: if your local CSS mostly makes one primitive
+        behave like another, change the primitive rather than adding more CSS.
+      </p>
+    </section>
+  </main>
+
+  <script>
+    /* Live readout. The observed box is the stage, so the numbers show the
+       canvas following its allocated width - and make the unit cost of eleven
+       gaps concrete as the stage narrows. */
+    for (const stage of document.querySelectorAll("[data-stage]")) {
+      const widthOut = stage.querySelector("[data-width]");
+      const unitOut = stage.querySelector("[data-unit]");
+      const canvas = stage.querySelector(".column-layout");
+
+      const update = () => {
+        if (widthOut) {
+          widthOut.textContent = `${Math.round(stage.getBoundingClientRect().width)}px`;
+        }
+        if (unitOut && canvas) {
+          const box = canvas.getBoundingClientRect();
+          const gap = Number.parseFloat(getComputedStyle(canvas).columnGap) || 0;
+          unitOut.textContent = `${Math.round((box.width - gap * 11) / 12)}px`;
+        }
+      };
+
+      new ResizeObserver(update).observe(stage);
+      update();
+    }
+  </script>
+</body>
+
+</html>
