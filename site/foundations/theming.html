@@ -101,6 +101,7 @@
         <li><a class="nav-link" href="../layout/switcher.html">Switcher</a></li>
         <li><a class="nav-link" href="../layout/topbar.html">Topbar</a></li>
         <li><a class="nav-link" href="../layout/scroll-snap.html">Scroll Snap</a></li>
+        <li><a class="nav-link" href="../layout/scroll-target.html">Scroll Target</a></li>
         <li><a class="nav-link" href="../layout/frame.html">Frame</a></li>
         <li><a class="nav-link" href="../layout/app-shell.html">App Shell</a></li>
         <li><a class="nav-link" href="../layout/list.html">List</a></li>
@@ -230,6 +231,9 @@
 <p>→ Forms · Switch</p>
 <h3 id="dim-disabled-controls">Dim disabled controls</h3>
 <p>Set <code>--disabled-opacity</code>. All disabled-prone components — buttons, tabs, menu items, badges, avatars, choice cards, native inputs, and range sliders — read it for their dimmed state.</p>
+<h3 id="keep-bare-native-controls-on-theme-accent-color">Keep bare native controls on-theme / accent-color</h3>
+<p>Native controls that no component class restyles — a bare checkbox, radio, range, or <code>&lt;progress&gt;</code> — follow the theme through <code>accent-color: var(--primary)</code>, declared on <code>:root</code> and every <code>[data-theme]</code> island so each island recomputes it from its own palette. Component classes (<code>.check</code>, <code>.radio</code>, <code>.range</code>) paint their own rendering and do not read it.</p>
+<p>→ Forms · Overview · Foundations · Tokens (theme contract)</p>
 <h3 id="loading-busy-overlay-on-a-container">Loading / busy overlay on a container</h3>
 <p>Use <code>aria-busy=&quot;true&quot;</code> with a direct last-child <code>.spinner</code>; tint the overlay with <code>--busy-overlay-bg</code>.</p>
 <p>→ Components · Card</p>
@@ -262,8 +266,8 @@ for a deliberate visual override or a matching legacy fallback.</p>
 </div>
 
           <div class="cluster docs-source-links">
-            <a class="btn sm ghost" href="https://github.com/lekoala/actual-css/edit/master/docs/pages/foundations\theming.md" rel="noopener noreferrer">Edit on GitHub</a>
-            <a class="btn sm ghost" href="https://github.com/lekoala/actual-css/blob/master/docs/pages/foundations\theming.md" rel="noopener noreferrer">View Markdown</a>
+            <a class="btn sm ghost" href="https://github.com/lekoala/actual-css/edit/master/docs/pages/foundations/theming.md" rel="noopener noreferrer">Edit on GitHub</a>
+            <a class="btn sm ghost" href="https://github.com/lekoala/actual-css/blob/master/docs/pages/foundations/theming.md" rel="noopener noreferrer">View Markdown</a>
           </div>
         </article>
 
@@ -288,6 +292,7 @@ for a deliberate visual override or a matching legacy fallback.</p>
         <li><a class="nav-link" href="#right-or-center-align-form-actions" data-docs-toc-item data-level="3">Right- or center-align form actions</a></li>
         <li><a class="nav-link" href="#customize-a-switchs-size" data-docs-toc-item data-level="3">Customize a switch's size</a></li>
         <li><a class="nav-link" href="#dim-disabled-controls" data-docs-toc-item data-level="3">Dim disabled controls</a></li>
+        <li><a class="nav-link" href="#keep-bare-native-controls-on-theme-accent-color" data-docs-toc-item data-level="3">Keep bare native controls on-theme / accent-color</a></li>
         <li><a class="nav-link" href="#loading-busy-overlay-on-a-container" data-docs-toc-item data-level="3">Loading / busy overlay on a container</a></li>
         <li><a class="nav-link" href="#set-card-rail-item-width-in-a-scroll-snap-row" data-docs-toc-item data-level="3">Set card-rail item width in a scroll-snap row</a></li>
         <li><a class="nav-link" href="#resize-an-avatar-or-its-stack" data-docs-toc-item data-level="3">Resize an avatar or its stack</a></li>
@@ -339,6 +344,7 @@ for a deliberate visual override or a matching legacy fallback.</p>
         <li><a class="nav-link" href="../layout/switcher.html">Switcher</a></li>
         <li><a class="nav-link" href="../layout/topbar.html">Topbar</a></li>
         <li><a class="nav-link" href="../layout/scroll-snap.html">Scroll Snap</a></li>
+        <li><a class="nav-link" href="../layout/scroll-target.html">Scroll Target</a></li>
         <li><a class="nav-link" href="../layout/frame.html">Frame</a></li>
         <li><a class="nav-link" href="../layout/app-shell.html">App Shell</a></li>
         <li><a class="nav-link" href="../layout/list.html">List</a></li>

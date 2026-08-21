@@ -101,6 +101,7 @@
         <li><a class="nav-link" href="../layout/switcher.html">Switcher</a></li>
         <li><a class="nav-link" href="../layout/topbar.html">Topbar</a></li>
         <li><a class="nav-link" href="../layout/scroll-snap.html">Scroll Snap</a></li>
+        <li><a class="nav-link" href="../layout/scroll-target.html">Scroll Target</a></li>
         <li><a class="nav-link" href="../layout/frame.html">Frame</a></li>
         <li><a class="nav-link" href="../layout/app-shell.html">App Shell</a></li>
         <li><a class="nav-link" href="../layout/list.html">List</a></li>
@@ -227,7 +228,7 @@
 <p>Global links inherit color. The visual affordance of a link is the responsibility of <code>.prose</code> (for authored content) or of a component (for nav links, button-like links, tabs, breadcrumbs, etc.). Underlining every <code>a</code> globally would collide with all of those.</p>
 <h3 id="prose-scope"><code>.prose</code> scope</h3>
 <p><code>.prose</code> is the opt-in rich-text scope. It owns the visual hierarchy of authored content.</p>
-<p>It owns: readable measure, vertical rhythm, heading hierarchy, link affordance, list spacing, code and keyboard treatment, blockquote treatment, table treatment, image / figure / figcaption treatment, mark, and <code>text-wrap</code> balance / pretty for authored or generated rich-text descendants.</p>
+<p>It owns: readable measure, vertical rhythm, heading hierarchy, link affordance, list spacing, description-list treatment, code and keyboard treatment, blockquote treatment, table treatment, image / figure / figcaption treatment, mark, and <code>text-wrap</code> balance / pretty for authored or generated rich-text descendants.</p>
 <p>It does not own: page layout, app cards, alerts, forms, app tables, navigation, component variants, or any automatic styling outside the <code>.prose</code> subtree.</p>
 <p>The reason for that boundary: a dialog title, a card heading, or a sidebar section heading should not become a &quot;prose h1&quot;. Components own those. Put the component next to the prose section in a layout container; do not ask <code>.prose</code> to infer where an embedded component begins.</p>
 <h3 id="fluid-module">Fluid module</h3>
@@ -309,6 +310,9 @@ baseline stays sans so app UI inherits predictably.</p>
 <p><code>code</code>, <code>kbd</code>, <code>samp</code>, and <code>pre</code> get the mono font family globally. Visual treatment (background, padding, radius) is left to <code>.prose</code> or to code-block components.</p>
 <h2 id="tables">Tables</h2>
 <p>Prose tables are a different concern from app data tables. Long-form content can contain a small table, but a sortable, dense, row-actionable app table belongs to the table component outside the prose boundary. The prose table recipe is intentionally minimal: it does not define sticky headers, selection states, row actions, or density variants.</p>
+<h2 id="description-lists">Description lists</h2>
+<p><code>.prose</code> renders <code>dl</code> / <code>dt</code> / <code>dd</code> in document flow: terms take the strong weight, definitions keep a modest indent, and a term that follows a definition gets breathing room.</p>
+<p>There is no grid-based key/value layout by default. A valid <code>&lt;dl&gt;</code> may pair several terms with one definition or the reverse, and a two-column grid silently assumes strict pairs. For true key/value metadata, compose a grid layout around the list yourself.</p>
 <h2 id="fluid-module-how-to-use-it">Fluid module — how to use it</h2>
 <p>To enable fluid display type on a marketing or documentation surface, import the module after <code>actual.css</code> in the project's stylesheet entry point:</p>
 <pre><code class="language-css">@import &quot;actual-css/css&quot;;
@@ -333,8 +337,8 @@ baseline stays sans so app UI inherits predictably.</p>
 </div>
 
           <div class="cluster docs-source-links">
-            <a class="btn sm ghost" href="https://github.com/lekoala/actual-css/edit/master/docs/pages/foundations\typography.md" rel="noopener noreferrer">Edit on GitHub</a>
-            <a class="btn sm ghost" href="https://github.com/lekoala/actual-css/blob/master/docs/pages/foundations\typography.md" rel="noopener noreferrer">View Markdown</a>
+            <a class="btn sm ghost" href="https://github.com/lekoala/actual-css/edit/master/docs/pages/foundations/typography.md" rel="noopener noreferrer">Edit on GitHub</a>
+            <a class="btn sm ghost" href="https://github.com/lekoala/actual-css/blob/master/docs/pages/foundations/typography.md" rel="noopener noreferrer">View Markdown</a>
           </div>
         </article>
 
@@ -364,6 +368,7 @@ baseline stays sans so app UI inherits predictably.</p>
         <li><a class="nav-link" href="#links-and-text-utilities" data-docs-toc-item data-level="2">Links and text utilities</a></li>
         <li><a class="nav-link" href="#small-elements" data-docs-toc-item data-level="2">Small elements</a></li>
         <li><a class="nav-link" href="#tables" data-docs-toc-item data-level="2">Tables</a></li>
+        <li><a class="nav-link" href="#description-lists" data-docs-toc-item data-level="2">Description lists</a></li>
         <li><a class="nav-link" href="#fluid-module-how-to-use-it" data-docs-toc-item data-level="2">Fluid module — how to use it</a></li>
         <li><a class="nav-link" href="#what-not-to-reintroduce" data-docs-toc-item data-level="2">What not to reintroduce</a></li>
           </ul>
@@ -412,6 +417,7 @@ baseline stays sans so app UI inherits predictably.</p>
         <li><a class="nav-link" href="../layout/switcher.html">Switcher</a></li>
         <li><a class="nav-link" href="../layout/topbar.html">Topbar</a></li>
         <li><a class="nav-link" href="../layout/scroll-snap.html">Scroll Snap</a></li>
+        <li><a class="nav-link" href="../layout/scroll-target.html">Scroll Target</a></li>
         <li><a class="nav-link" href="../layout/frame.html">Frame</a></li>
         <li><a class="nav-link" href="../layout/app-shell.html">App Shell</a></li>
         <li><a class="nav-link" href="../layout/list.html">List</a></li>

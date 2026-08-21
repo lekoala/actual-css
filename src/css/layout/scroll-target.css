@@ -1,0 +1,15 @@
+/* Anchor scroll offset. A #hash link or scrollIntoView() places the target
+ * flush at the scroll container's start edge, which hides it behind a sticky
+ * header (.topbar) or underlaps it; scroll-margin reserves space on the
+ * target itself so the browser stops early.
+ *
+ * Apply to the elements that are link targets: <section id="...">, headings,
+ * etc. The scrollspy enhancer only reads ids — this offset is what actually
+ * shapes where the page lands, and the two are independent.
+ *
+ * Public hooks:
+ * --scroll-target-offset
+ */
+.scroll-target {
+  scroll-margin-block-start: var(--scroll-target-offset, var(--space-60));
+}

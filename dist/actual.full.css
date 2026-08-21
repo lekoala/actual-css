@@ -337,6 +337,16 @@ select {
   --focus-ring-shadow: 0 0 0 var(--focus-ring-width) var(--focus-ring);
 }
 
+/* Native platform controls (checkbox, radio, range, progress) that are not
+   restyled by a component class still follow the theme accent. Declared on
+   every island: accent-color inherits as a computed value, so islands must
+   recompute it from their own --primary (same resolution rule as above).
+   Unsupported browsers ignore it; forced-colors keeps browser control. */
+:root,
+[data-theme] {
+  accent-color: var(--primary);
+}
+
 /* Tone subsystem — fixed-backdrop foreground for components placed over media
    or other surfaces outside the theme token stack. Use data-theme islands for
    full dark/light subtree inversion. */
@@ -794,6 +804,20 @@ small {
   margin-block-start: 0.35em;
 }
 
+/* Description lists keep document flow: a valid <dl> may pair several <dt>
+   with one <dd> or the reverse, so no grid layout is imposed here. */
+.prose :where(dt) {
+  font-weight: var(--font-weight-strong);
+}
+
+.prose :where(dd) {
+  margin-inline-start: 1.5em;
+}
+
+.prose :where(dd + dt) {
+  margin-block-start: 0.75em;
+}
+
 .prose :where(code) {
   padding: 0.15em 0.3em;
   border-radius: var(--radius-sm);
@@ -1011,6 +1035,7 @@ small {
  *                 balanced subdivision (in grid.css)
  * .scroller       quiet custom scrollbar chrome
  * .scroll-snap    snap rails
+ * .scroll-target  anchor scroll offset for sticky headers
  * .topbar         sticky app-shell top bar
  * .measure        readable content measure cap
  *
@@ -1418,6 +1443,22 @@ small {
 
 .scroll-snap[data-scrollbar="hidden"]::-webkit-scrollbar {
   display: none;
+}
+
+/* Anchor scroll offset. A #hash link or scrollIntoView() places the target
+ * flush at the scroll container's start edge, which hides it behind a sticky
+ * header (.topbar) or underlaps it; scroll-margin reserves space on the
+ * target itself so the browser stops early.
+ *
+ * Apply to the elements that are link targets: <section id="...">, headings,
+ * etc. The scrollspy enhancer only reads ids — this offset is what actually
+ * shapes where the page lands, and the two are independent.
+ *
+ * Public hooks:
+ * --scroll-target-offset
+ */
+.scroll-target {
+  scroll-margin-block-start: var(--scroll-target-offset, var(--space-60));
 }
 
 /*

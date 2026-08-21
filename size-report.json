@@ -1,12 +1,12 @@
 {
-  "totalRaw": 218785,
+  "totalRaw": 220269,
   "core": {
-    "minified": 10438,
-    "brotli": 2485
+    "minified": 10492,
+    "brotli": 2500
   },
   "full": {
-    "minified": 104798,
-    "brotli": 15463
+    "minified": 105111,
+    "brotli": 15505
   },
   "js": {
     "core": {
@@ -18,7 +18,7 @@
       "brotli": 15986
     }
   },
-  "fileCount": 99,
+  "fileCount": 100,
   "files": [
     {
       "file": "components/modal.css",
@@ -33,12 +33,12 @@
       "raw": 7658
     },
     {
-      "file": "core/tokens.css",
-      "raw": 7102
+      "file": "core/theme.css",
+      "raw": 7286
     },
     {
-      "file": "core/theme.css",
-      "raw": 6852
+      "file": "core/tokens.css",
+      "raw": 7102
     },
     {
       "file": "components/badge.css",
@@ -49,16 +49,16 @@
       "raw": 5286
     },
     {
+      "file": "typography/prose.css",
+      "raw": 4869
+    },
+    {
       "file": "components/avatar.css",
       "raw": 4841
     },
     {
       "file": "components/flyout.css",
       "raw": 4704
-    },
-    {
-      "file": "typography/prose.css",
-      "raw": 4546
     },
     {
       "file": "forms/choice-card.css",
@@ -257,6 +257,10 @@
       "raw": 1452
     },
     {
+      "file": "layout/index.css",
+      "raw": 1438
+    },
+    {
       "file": "components/meter.css",
       "raw": 1400
     },
@@ -270,10 +274,6 @@
     },
     {
       "file": "core/base.css",
-      "raw": 1348
-    },
-    {
-      "file": "layout/index.css",
       "raw": 1348
     },
     {
@@ -335,6 +335,10 @@
     {
       "file": "layout/container-query.css",
       "raw": 665
+    },
+    {
+      "file": "layout/scroll-target.css",
+      "raw": 637
     },
     {
       "file": "forms/index.css",

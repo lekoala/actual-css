@@ -217,6 +217,9 @@ export function renderPage({
   const tpl = loadTemplate();
   const page = { url, previous, next };
   const home = relHref(url, "index.html");
+  // Callers normally provide a POSIX repository path, but normalize again at
+  // the URL boundary so an OS-native path can never leak into generated hrefs.
+  const sourceFile = file.replaceAll("\\", "/");
 
   return tpl
     .replace(/\{\{title\}\}/g, escapeHtml(title))
@@ -235,6 +238,6 @@ export function renderPage({
     .replace(/\{\{toc\}\}/g, renderToc(toc))
     .replace(/\{\{prev\}\}/g, renderPrev(page))
     .replace(/\{\{next\}\}/g, renderNext(page))
-    .replace(/\{\{editUrl\}\}/g, `${REPO}/edit/master/docs/pages/${file}`)
-    .replace(/\{\{markdownUrl\}\}/g, `${REPO}/blob/master/docs/pages/${file}`);
+    .replace(/\{\{editUrl\}\}/g, `${REPO}/edit/master/docs/pages/${sourceFile}`)
+    .replace(/\{\{markdownUrl\}\}/g, `${REPO}/blob/master/docs/pages/${sourceFile}`);
 }

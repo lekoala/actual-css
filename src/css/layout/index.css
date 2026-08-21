@@ -16,6 +16,7 @@
  *                 balanced subdivision (in grid.css)
  * .scroller       quiet custom scrollbar chrome
  * .scroll-snap    snap rails
+ * .scroll-target  anchor scroll offset for sticky headers
  * .topbar         sticky app-shell top bar
  * .measure        readable content measure cap
  *
@@ -33,5 +34,6 @@
 @import "./grid.css";
 @import "./scroller.css";
 @import "./scroll-snap.css";
+@import "./scroll-target.css";
 @import "./topbar.css";
 @import "./measure.css";
