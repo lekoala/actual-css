@@ -64,6 +64,12 @@ Change `--switch-width`, `--switch-block-size`, and `--switch-knob-margin`; knob
 
 Set `--disabled-opacity`. All disabled-prone components — buttons, tabs, menu items, badges, avatars, choice cards, native inputs, and range sliders — read it for their dimmed state.
 
+### Keep bare native controls on-theme / accent-color
+
+Native controls that no component class restyles — a bare checkbox, radio, range, or `<progress>` — follow the theme through `accent-color: var(--primary)`, declared on `:root` and every `[data-theme]` island so each island recomputes it from its own palette. Component classes (`.check`, `.radio`, `.range`) paint their own rendering and do not read it.
+
+→ Forms · Overview · Foundations · Tokens (theme contract)
+
 ### Loading / busy overlay on a container
 
 Use `aria-busy="true"` with a direct last-child `.spinner`; tint the overlay with `--busy-overlay-bg`.

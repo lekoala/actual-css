@@ -101,6 +101,16 @@
   --focus-ring-shadow: 0 0 0 var(--focus-ring-width) var(--focus-ring);
 }
 
+/* Native platform controls (checkbox, radio, range, progress) that are not
+   restyled by a component class still follow the theme accent. Declared on
+   every island: accent-color inherits as a computed value, so islands must
+   recompute it from their own --primary (same resolution rule as above).
+   Unsupported browsers ignore it; forced-colors keeps browser control. */
+:root,
+[data-theme] {
+  accent-color: var(--primary);
+}
+
 /* Tone subsystem — fixed-backdrop foreground for components placed over media
    or other surfaces outside the theme token stack. Use data-theme islands for
    full dark/light subtree inversion. */

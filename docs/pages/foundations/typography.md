@@ -46,7 +46,7 @@ Global links inherit color. The visual affordance of a link is the responsibilit
 
 `.prose` is the opt-in rich-text scope. It owns the visual hierarchy of authored content.
 
-It owns: readable measure, vertical rhythm, heading hierarchy, link affordance, list spacing, code and keyboard treatment, blockquote treatment, table treatment, image / figure / figcaption treatment, mark, and `text-wrap` balance / pretty for authored or generated rich-text descendants.
+It owns: readable measure, vertical rhythm, heading hierarchy, link affordance, list spacing, description-list treatment, code and keyboard treatment, blockquote treatment, table treatment, image / figure / figcaption treatment, mark, and `text-wrap` balance / pretty for authored or generated rich-text descendants.
 
 It does not own: page layout, app cards, alerts, forms, app tables, navigation, component variants, or any automatic styling outside the `.prose` subtree.
 
@@ -162,6 +162,12 @@ Three logical alignment utilities exist (`.text-start`, `.text-center`, `.text-e
 ## Tables
 
 Prose tables are a different concern from app data tables. Long-form content can contain a small table, but a sortable, dense, row-actionable app table belongs to the table component outside the prose boundary. The prose table recipe is intentionally minimal: it does not define sticky headers, selection states, row actions, or density variants.
+
+## Description lists
+
+`.prose` renders `dl` / `dt` / `dd` in document flow: terms take the strong weight, definitions keep a modest indent, and a term that follows a definition gets breathing room.
+
+There is no grid-based key/value layout by default. A valid `<dl>` may pair several terms with one definition or the reverse, and a two-column grid silently assumes strict pairs. For true key/value metadata, compose a grid layout around the list yourself.
 
 ## Fluid module — how to use it
 

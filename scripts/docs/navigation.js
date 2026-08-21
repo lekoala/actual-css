@@ -4,7 +4,7 @@
  */
 
 import { readFileSync } from "node:fs";
-import { join } from "node:path";
+import { join, posix } from "node:path";
 
 export function loadNavigation(root) {
   const raw = JSON.parse(readFileSync(join(root, "docs", "navigation.json"), "utf8"));
@@ -23,7 +23,9 @@ export function loadNavigation(root) {
         groupTitle: group.title,
         groupSlug: group.slug,
         slug: page.slug,
-        file: join(group.slug, `${page.slug}.md`),
+        // This value is both a repository path and a URL suffix. Keep it
+        // platform-neutral; filesystem consumers join it onto an absolute root.
+        file: posix.join(group.slug, `${page.slug}.md`),
         url: `${group.slug}/${page.slug}.html`,
       };
       page.entry = entry;

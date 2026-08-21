@@ -105,6 +105,20 @@
   margin-block-start: 0.35em;
 }
 
+/* Description lists keep document flow: a valid <dl> may pair several <dt>
+   with one <dd> or the reverse, so no grid layout is imposed here. */
+.prose :where(dt) {
+  font-weight: var(--font-weight-strong);
+}
+
+.prose :where(dd) {
+  margin-inline-start: 1.5em;
+}
+
+.prose :where(dd + dt) {
+  margin-block-start: 0.75em;
+}
+
 .prose :where(code) {
   padding: 0.15em 0.3em;
   border-radius: var(--radius-sm);

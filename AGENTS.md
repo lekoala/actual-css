@@ -30,6 +30,9 @@ Add relevant guards for future-us when needed based on traps and discoveries.
   (PowerShell double-quoted strings end at an unescaped `"`; bash needs no
   escaping inside single quotes). One safe universal form:
   `rg 'pattern' tests -g '*.test.js'`
+- To list several directories in one call, use PowerShell's array form:
+  `dir src/css/layout, src/css/forms 2>&1`. Space-separated paths
+  (`dir a b`) fail with "A positional parameter cannot be found".
 - For the rare quick number-only check (a rect, a computed style, a class
   list) use `bun run probe <page> --script tmp/x.js` instead of improvising a
   headless-Chrome script — it runs the file as an async program in the page and
@@ -46,6 +49,7 @@ Add relevant guards for future-us when needed based on traps and discoveries.
 
 ## Rules
 
+- All code, comments, commit messages, and documentation are written in English
 - Don't open the browser
 - Don't create file outside the project
 - Temp files can be created in `./tmp`

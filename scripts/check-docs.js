@@ -15,6 +15,7 @@ import { relHref } from "./docs/templates.js";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, "..");
 const PAGES = join(ROOT, "docs", "pages");
+const SITE = join(ROOT, "site");
 
 const FENCE_LANGUAGES = new Set(["html", "css", "js", "javascript", "text"]);
 
@@ -157,6 +158,14 @@ function main() {
 
   const pagesByUrl = new Map(navigation.pages.map((page) => [page.url, page]));
   for (const page of navigation.pages) {
+    const generatedFile = join(SITE, page.url);
+    if (existsSync(generatedFile)) {
+      const html = readFileSync(generatedFile, "utf8");
+      for (const match of html.matchAll(/\bhref="([^"]*\\[^"]*)"/gu)) {
+        issues.push(`${page.url}: generated href contains a backslash: ${match[1]}`);
+      }
+    }
+
     const chain = [
       ["previous", page.previous],
       ["next", page.next],
