@@ -72,9 +72,9 @@ test("keeps linked triggers in a shadow root in sync", async () => {
   `;
   const input = shadow.getElementById("pw");
 
-  shadow.getElementById("a").dispatchEvent(
-    new MouseEvent("click", { bubbles: true, cancelable: true, composed: true }),
-  );
+  shadow
+    .getElementById("a")
+    .dispatchEvent(new MouseEvent("click", { bubbles: true, cancelable: true, composed: true }));
 
   expect(input.type).toBe("text");
   expect(shadow.getElementById("a").getAttribute("aria-pressed")).toBe("true");
@@ -91,9 +91,9 @@ test("form submit reverts a revealed input in a shadow root", async () => {
     </form>
   `;
   const input = shadow.getElementById("pw");
-  shadow.querySelector("button").dispatchEvent(
-    new MouseEvent("click", { bubbles: true, cancelable: true, composed: true }),
-  );
+  shadow
+    .querySelector("button")
+    .dispatchEvent(new MouseEvent("click", { bubbles: true, cancelable: true, composed: true }));
 
   shadow
     .querySelector("form")
@@ -163,9 +163,9 @@ test("pagehide reverts a revealed input in a closed shadow root", async () => {
     <button commandfor="pw" command="--password-toggle"></button>
   `;
   const input = shadow.getElementById("pw");
-  shadow.querySelector("button").dispatchEvent(
-    new MouseEvent("click", { bubbles: true, cancelable: true, composed: true }),
-  );
+  shadow
+    .querySelector("button")
+    .dispatchEvent(new MouseEvent("click", { bubbles: true, cancelable: true, composed: true }));
 
   window.dispatchEvent(new Event("pagehide"));
 
@@ -179,9 +179,7 @@ test("a trigger handles an input inserted immediately before the click", async (
     </main>
   `);
 
-  document
-    .querySelector("main")
-    .insertAdjacentHTML("beforeend", '<input type="password" id="pw">');
+  document.querySelector("main").insertAdjacentHTML("beforeend", '<input type="password" id="pw">');
   const input = document.getElementById("pw");
   const trigger = document.querySelector("button");
 

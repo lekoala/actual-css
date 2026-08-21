@@ -25,7 +25,6 @@
 
   --border: hsl(25 38% 84%);
   --focus: var(--primary);
-  --focus-ring: hsl(16 84% 43% / 0.22);
 
   /* Warm chrome — demonstrates selection and shadow-color theming. The
      selection pair rides the intent tokens, so it adapts to dark for free. */
@@ -59,7 +58,6 @@
     --text-subtle: light-dark(hsl(20 10% 55%), hsl(20 7% 55%));
 
     --border: light-dark(hsl(25 38% 84%), hsl(20 12% 24%));
-    --focus-ring: light-dark(hsl(16 84% 43% / 0.22), hsl(16 75% 80% / 0.28));
     --hover-overlay: light-dark(hsl(220 30% 10% / 0.04), hsl(0 0% 100% / 0.06));
     --shadow-color: light-dark(hsl(20 60% 12%), hsl(20 40% 2%));
   }

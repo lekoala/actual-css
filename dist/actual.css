@@ -347,13 +347,13 @@ select {
 /* Focus ring derivation — color-mix tier. Runs whether or not light-dark()
    is also supported, so it covers the color-mix-without-light-dark browser
    tier on its own; the light-dark block below refines it further with the
-   light/dark alpha split once both features are available. Deriving from
-   --focus (not a literal) means overriding --primary/--focus, in the
-   default theme or any custom one, keeps the ring in sync automatically. */
+   light/dark alpha split once both features are available. Declared on every
+   [data-theme] island (not just the built-in light/dark pair) so custom
+   islands recolor the ring for free; a preset that re-declares --focus-ring
+   later in source order intentionally pins its own ring instead. */
 @supports (color: color-mix(in oklch, red, white)) {
   :root,
-  [data-theme="light"],
-  [data-theme="dark"] {
+  [data-theme] {
     --focus-ring: color-mix(in oklch, var(--focus) 30%, transparent);
   }
 }
@@ -402,7 +402,7 @@ select {
 
 @supports (color: color-mix(in oklch, red, white)) and (color: light-dark(red, blue)) {
   :root,
-  [data-theme="light"] {
+  [data-theme] {
     --focus-ring: light-dark(
       color-mix(in oklch, var(--focus) 30%, transparent),
       color-mix(in oklch, var(--focus) 28%, transparent)

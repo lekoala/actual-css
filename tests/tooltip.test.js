@@ -102,14 +102,14 @@ test("data-tooltip-visible eagerly creates and keeps a tooltip visible", async (
   await waitForHide();
   expect(tip.hidden).toBe(false);
 
-  const escape = new KeyboardEvent("keydown", {
+  const escapeEvent = new KeyboardEvent("keydown", {
     key: "Escape",
     bubbles: true,
     cancelable: true,
   });
-  document.dispatchEvent(escape);
+  document.dispatchEvent(escapeEvent);
   expect(tip.hidden).toBe(false);
-  expect(escape.defaultPrevented).toBe(false);
+  expect(escapeEvent.defaultPrevented).toBe(false);
 });
 
 test("data-tooltip-visible starts hidden when its trigger is outside the viewport", async () => {

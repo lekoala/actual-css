@@ -13,7 +13,7 @@
  *
  * The analyzer is exported so tests can run it against fixture trees.
  */
-import { existsSync, readFileSync, readdirSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { dirname, join, relative, resolve, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -31,7 +31,7 @@ function isManifest(rel) {
 }
 
 const FAMILIES = ["core", "layout", "typography", "forms", "components", "effects", "utilities"];
-const ROOT_ENTRYPOINTS = new Set(["actual.css", "actual.full.css", "actual.layer.css"]);
+const _ROOT_ENTRYPOINTS = new Set(["actual.css", "actual.full.css", "actual.layer.css"]);
 
 const FULL_ENTRYPOINTS = [
   "./actual.css",

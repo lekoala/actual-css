@@ -23,7 +23,9 @@ test("checked/indeterminate fill converges across the three invalid routes", () 
   expect(css).toContain('.radio:checked[aria-invalid="true"]');
   expect(css).toContain('.switch:checked[aria-invalid="true"]');
 
-  expect(css).toContain(".needs-validation.was-validated .check:is(:checked, :indeterminate):invalid");
+  expect(css).toContain(
+    ".needs-validation.was-validated .check:is(:checked, :indeterminate):invalid",
+  );
   expect(css).toContain(".needs-validation.was-validated .radio:checked:invalid");
   expect(css).toContain(".needs-validation.was-validated .switch:checked:invalid");
 

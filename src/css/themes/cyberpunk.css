@@ -36,7 +36,6 @@
 
   --border: hsl(56 60% 6%);
   --focus: hsl(330 100% 42%);
-  --focus-ring: hsl(330 100% 42% / 0.3);
   --hover-overlay: hsl(56 100% 8% / 0.08);
 
   /* Structure: sharp corners, thick strokes, print-like offset shadows.

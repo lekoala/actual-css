@@ -2,9 +2,9 @@ import { afterEach, expect, test } from "bun:test";
 import {
   cleanupDOM,
   click,
-  nextMicrotask,
-  mockRect,
   flushMutationObserver,
+  mockRect,
+  nextMicrotask,
   patchDialogMethods,
   setupDOM,
 } from "./helpers/dom.js";
@@ -22,7 +22,9 @@ afterEach(() => {
 });
 
 test("trigger with commandfor opens the target dialog", async () => {
-  await loadDialog('<button commandfor="prefs" command="show-modal">Open</button><dialog id="prefs"></dialog>');
+  await loadDialog(
+    '<button commandfor="prefs" command="show-modal">Open</button><dialog id="prefs"></dialog>',
+  );
   const trigger = document.querySelector("button");
   const dialog = document.getElementById("prefs");
 
@@ -34,7 +36,9 @@ test("trigger with commandfor opens the target dialog", async () => {
 });
 
 test("opening a modal dialog sets trigger-owned accessibility attributes", async () => {
-  await loadDialog('<button commandfor="prefs" command="show-modal">Open</button><dialog id="prefs"></dialog>');
+  await loadDialog(
+    '<button commandfor="prefs" command="show-modal">Open</button><dialog id="prefs"></dialog>',
+  );
   const trigger = document.querySelector("button");
   const dialog = document.getElementById("prefs");
 
@@ -202,7 +206,9 @@ test("non-modal dialogs do not toggle the html scroll-lock hook", async () => {
 });
 
 test("command=show opens non-modal even when data-dialog-modal is true", async () => {
-  setupDOM('<button commandfor="prefs" command="show">Open</button><dialog id="prefs" data-dialog-modal="true"></dialog>');
+  setupDOM(
+    '<button commandfor="prefs" command="show">Open</button><dialog id="prefs" data-dialog-modal="true"></dialog>',
+  );
   patchDialogMethods();
   let showCalls = 0;
   let showModalCalls = 0;
@@ -226,7 +232,9 @@ test("command=show opens non-modal even when data-dialog-modal is true", async (
 });
 
 test("command=show-modal opens modal even when data-dialog-modal is false", async () => {
-  setupDOM('<button commandfor="prefs" command="show-modal">Open</button><dialog id="prefs" data-dialog-modal="false"></dialog>');
+  setupDOM(
+    '<button commandfor="prefs" command="show-modal">Open</button><dialog id="prefs" data-dialog-modal="false"></dialog>',
+  );
   patchDialogMethods();
   let showCalls = 0;
   let showModalCalls = 0;
@@ -265,11 +273,15 @@ test("a trigger handles a dialog inserted immediately before the click", async (
 });
 
 test("dialog trigger re-resolves a same-id replacement", async () => {
-  await loadDialog('<main><button commandfor="prefs" command="show-modal">Open</button><dialog id="prefs"></dialog></main>');
+  await loadDialog(
+    '<main><button commandfor="prefs" command="show-modal">Open</button><dialog id="prefs"></dialog></main>',
+  );
   const trigger = document.querySelector("button");
   const first = document.getElementById("prefs");
 
-  first.replaceWith(document.createRange().createContextualFragment('<dialog id="prefs"></dialog>'));
+  first.replaceWith(
+    document.createRange().createContextualFragment('<dialog id="prefs"></dialog>'),
+  );
   await nextMicrotask();
   const replacement = document.getElementById("prefs");
 
@@ -280,7 +292,9 @@ test("dialog trigger re-resolves a same-id replacement", async () => {
 });
 
 test("dialog ignores application commands on dialog targets", async () => {
-  await loadDialog('<button commandfor="prefs" command="--app-command">Run</button><dialog id="prefs"></dialog>');
+  await loadDialog(
+    '<button commandfor="prefs" command="--app-command">Run</button><dialog id="prefs"></dialog>',
+  );
   const trigger = document.querySelector("button");
   const event = new MouseEvent("click", { bubbles: true, cancelable: true });
 
@@ -304,7 +318,10 @@ test("a dialog trigger inserted immediately before the click works", async () =>
 
   document
     .querySelector("main")
-    .insertAdjacentHTML("beforeend", '<button commandfor="prefs" command="show-modal">Open</button>');
+    .insertAdjacentHTML(
+      "beforeend",
+      '<button commandfor="prefs" command="show-modal">Open</button>',
+    );
   const trigger = document.querySelector("button");
   const dialog = document.getElementById("prefs");
 
@@ -315,7 +332,9 @@ test("a dialog trigger inserted immediately before the click works", async () =>
 });
 
 test("dismissible backdrop clicks close the dialog", async () => {
-  await loadDialog('<button commandfor="prefs" command="show-modal">Open</button><dialog id="prefs" data-dialog-dismissible></dialog>');
+  await loadDialog(
+    '<button commandfor="prefs" command="show-modal">Open</button><dialog id="prefs" data-dialog-dismissible></dialog>',
+  );
   const trigger = document.querySelector("button");
   const dialog = document.getElementById("prefs");
   mockRect(dialog, { x: 20, y: 20, width: 200, height: 120 });
@@ -327,7 +346,9 @@ test("dismissible backdrop clicks close the dialog", async () => {
 });
 
 test("non-dismissible dialog still closes on Escape cancel requests", async () => {
-  await loadDialog('<button id="open" commandfor="prefs" command="show-modal">Open</button><dialog id="prefs" data-dialog-dismissible="false"></dialog>');
+  await loadDialog(
+    '<button id="open" commandfor="prefs" command="show-modal">Open</button><dialog id="prefs" data-dialog-dismissible="false"></dialog>',
+  );
   const trigger = document.getElementById("open");
   const dialog = document.getElementById("prefs");
 
@@ -342,7 +363,9 @@ test("non-dismissible dialog still closes on Escape cancel requests", async () =
 });
 
 test("non-dismissible dialog backdrop click stays open with static feedback", async () => {
-  await loadDialog('<button id="open" commandfor="prefs" command="show-modal">Open</button><dialog id="prefs" data-dialog-dismissible="false"></dialog>');
+  await loadDialog(
+    '<button id="open" commandfor="prefs" command="show-modal">Open</button><dialog id="prefs" data-dialog-dismissible="false"></dialog>',
+  );
   const trigger = document.getElementById("open");
   const dialog = document.getElementById("prefs");
   mockRect(dialog, { x: 20, y: 20, width: 200, height: 120 });
@@ -355,7 +378,9 @@ test("non-dismissible dialog backdrop click stays open with static feedback", as
 });
 
 test("application can cancel dismissible dialog cancel event", async () => {
-  await loadDialog('<button id="open" commandfor="prefs" command="show-modal">Open</button><dialog id="prefs" data-dialog-dismissible></dialog>');
+  await loadDialog(
+    '<button id="open" commandfor="prefs" command="show-modal">Open</button><dialog id="prefs" data-dialog-dismissible></dialog>',
+  );
   const trigger = document.getElementById("open");
   const dialog = document.getElementById("prefs");
 
@@ -398,7 +423,9 @@ test("Escape cancel uses view-transition close path when enabled", async () => {
 });
 
 test("view-transition opt-in does not throw when unsupported", async () => {
-  await loadDialog('<button commandfor="prefs" command="show-modal">Open</button><dialog id="prefs" data-dialog-view-transition></dialog>');
+  await loadDialog(
+    '<button commandfor="prefs" command="show-modal">Open</button><dialog id="prefs" data-dialog-view-transition></dialog>',
+  );
   const trigger = document.querySelector("button");
   const dialog = document.getElementById("prefs");
 

@@ -1,16 +1,12 @@
 {
-  "totalRaw": 218831,
+  "totalRaw": 218785,
   "core": {
-    "minified": 10475,
-    "brotli": 2487
+    "minified": 10438,
+    "brotli": 2485
   },
   "full": {
-    "minified": 104450,
-    "brotli": 15417
-  },
-  "themes": {
-    "minified": 29127,
-    "brotli": 3404
+    "minified": 104798,
+    "brotli": 15463
   },
   "js": {
     "core": {
@@ -30,7 +26,7 @@
     },
     {
       "file": "components/button.css",
-      "raw": 7957
+      "raw": 8128
     },
     {
       "file": "components/alert.css",
@@ -42,15 +38,15 @@
     },
     {
       "file": "core/theme.css",
-      "raw": 6815
+      "raw": 6852
+    },
+    {
+      "file": "components/badge.css",
+      "raw": 5364
     },
     {
       "file": "forms/choice.css",
       "raw": 5286
-    },
-    {
-      "file": "components/badge.css",
-      "raw": 5228
     },
     {
       "file": "components/avatar.css",
@@ -61,16 +57,16 @@
       "raw": 4704
     },
     {
-      "file": "themes/edge.css",
-      "raw": 4618
-    },
-    {
       "file": "typography/prose.css",
       "raw": 4546
     },
     {
       "file": "forms/choice-card.css",
       "raw": 4518
+    },
+    {
+      "file": "themes/edge.css",
+      "raw": 4497
     },
     {
       "file": "layout/grid.css",
@@ -81,16 +77,16 @@
       "raw": 4403
     },
     {
-      "file": "themes/gradient.css",
-      "raw": 4014
+      "file": "components/drawer.css",
+      "raw": 4370
     },
     {
       "file": "core/variants.css",
       "raw": 3911
     },
     {
-      "file": "components/drawer.css",
-      "raw": 3852
+      "file": "themes/gradient.css",
+      "raw": 3892
     },
     {
       "file": "components/join.css",
@@ -106,7 +102,7 @@
     },
     {
       "file": "utilities/base.css",
-      "raw": 3214
+      "raw": 3316
     },
     {
       "file": "forms/switch.css",
@@ -133,6 +129,10 @@
       "raw": 2690
     },
     {
+      "file": "themes/neon.css",
+      "raw": 2674
+    },
+    {
       "file": "forms/custom-select.css",
       "raw": 2671
     },
@@ -142,27 +142,15 @@
     },
     {
       "file": "themes/spruce.css",
-      "raw": 2641
-    },
-    {
-      "file": "themes/petrol.css",
-      "raw": 2581
+      "raw": 2520
     },
     {
       "file": "components/navbar.css",
       "raw": 2516
     },
     {
-      "file": "themes/sunset.css",
-      "raw": 2503
-    },
-    {
       "file": "components/tab.css",
       "raw": 2486
-    },
-    {
-      "file": "themes/lavender.css",
-      "raw": 2483
     },
     {
       "file": "forms/native.css",
@@ -173,36 +161,32 @@
       "raw": 2468
     },
     {
-      "file": "themes/neon.css",
-      "raw": 2464
+      "file": "themes/petrol.css",
+      "raw": 2460
     },
     {
       "file": "components/fab.css",
       "raw": 2452
     },
     {
-      "file": "themes/forest.css",
-      "raw": 2394
+      "file": "themes/sunset.css",
+      "raw": 2385
     },
     {
-      "file": "themes/square.css",
-      "raw": 2349
+      "file": "themes/lavender.css",
+      "raw": 2362
+    },
+    {
+      "file": "themes/forest.css",
+      "raw": 2273
     },
     {
       "file": "themes/cyberpunk.css",
-      "raw": 2274
+      "raw": 2233
     },
     {
-      "file": "themes/corporate.css",
-      "raw": 2271
-    },
-    {
-      "file": "themes/ocean.css",
-      "raw": 2265
-    },
-    {
-      "file": "themes/mono.css",
-      "raw": 2213
+      "file": "themes/square.css",
+      "raw": 2228
     },
     {
       "file": "components/chat.css",
@@ -211,6 +195,18 @@
     {
       "file": "themes/index.css",
       "raw": 2174
+    },
+    {
+      "file": "themes/corporate.css",
+      "raw": 2150
+    },
+    {
+      "file": "themes/ocean.css",
+      "raw": 2144
+    },
+    {
+      "file": "themes/mono.css",
+      "raw": 2094
     },
     {
       "file": "components/status-bar.css",
@@ -289,16 +285,16 @@
       "raw": 1304
     },
     {
+      "file": "themes/dim.css",
+      "raw": 1184
+    },
+    {
       "file": "forms/form.css",
       "raw": 1174
     },
     {
-      "file": "themes/dim.css",
-      "raw": 1110
-    },
-    {
       "file": "themes/indigo.css",
-      "raw": 1051
+      "raw": 1125
     },
     {
       "file": "components/breadcrumb.css",

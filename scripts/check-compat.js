@@ -25,20 +25,56 @@ const SRC = join(ROOT, "src");
 
 const FEATURES = [
   { name: "color-mix()", pattern: /color-mix\(/gi, kind: "safe-drop", tier: "intermediate" },
-  { name: "oklch()/oklab()", pattern: /\bokl(?:ch|ab)\(/gi, kind: "safe-drop", tier: "intermediate" },
-  { name: "dvh/svh/lvh units", pattern: /\b(?:d|l|s)vh\b/gi, kind: "safe-drop", tier: "intermediate" },
-  { name: "scrollbar-gutter", pattern: /scrollbar-gutter\b/gi, kind: "safe-drop", tier: "intermediate" },
+  {
+    name: "oklch()/oklab()",
+    pattern: /\bokl(?:ch|ab)\(/gi,
+    kind: "safe-drop",
+    tier: "intermediate",
+  },
+  {
+    name: "dvh/svh/lvh units",
+    pattern: /\b(?:d|l|s)vh\b/gi,
+    kind: "safe-drop",
+    tier: "intermediate",
+  },
+  {
+    name: "scrollbar-gutter",
+    pattern: /scrollbar-gutter\b/gi,
+    kind: "safe-drop",
+    tier: "intermediate",
+  },
   { name: "light-dark()", pattern: /light-dark\(/gi, kind: "safe-drop", tier: "recommended" },
-  { name: "text-wrap: balance", pattern: /text-wrap:\s*balance/gi, kind: "safe-drop", tier: "recommended" },
+  {
+    name: "text-wrap: balance",
+    pattern: /text-wrap:\s*balance/gi,
+    kind: "safe-drop",
+    tier: "recommended",
+  },
   { name: "field-sizing", pattern: /field-sizing\b/gi, kind: "safe-drop", tier: "recommended" },
   { name: ":has()", pattern: /:has\(/gi, kind: "structural", tier: "recommended" },
-  { name: "@container queries", pattern: /@container\b/gi, kind: "structural", tier: "recommended" },
+  {
+    name: "@container queries",
+    pattern: /@container\b/gi,
+    kind: "structural",
+    tier: "recommended",
+  },
   { name: "subgrid", pattern: /subgrid/gi, kind: "structural", tier: "recommended" },
-  { name: "anchor positioning", pattern: /(?:position-anchor|position-area|anchor-name|anchor-size)\b/gi, kind: "safe-drop", tier: "optional" },
-  { name: "popover", pattern: /(?:popovertarget|popover-open|\[popover\])/gi, kind: "safe-drop", tier: "optional" },
+  {
+    name: "anchor positioning",
+    pattern: /(?:position-anchor|position-area|anchor-name|anchor-size)\b/gi,
+    kind: "safe-drop",
+    tier: "optional",
+  },
+  {
+    name: "popover",
+    pattern: /(?:popovertarget|popover-open|\[popover\])/gi,
+    kind: "safe-drop",
+    tier: "optional",
+  },
 ];
 
-const JUSTIFIED = /(?:progressive|minimal|enhancement|fallback|unsupported|without|retain|degrade|optional|justif|why|browsers)/i;
+const JUSTIFIED =
+  /(?:progressive|minimal|enhancement|fallback|unsupported|without|retain|degrade|optional|justif|why|browsers)/i;
 
 /*
  * Grandfathered progressive decisions: features used above the Minimal floor
@@ -199,7 +235,12 @@ function main() {
         const entry = `${rel(file)}:${lineNo(css, m.index)}  ${feature.name}`;
         if (feature.tier === "optional") {
           optional.push(entry);
-        } else if (feature.kind === "safe-drop" || isGuarded(m.index, guarded) || grandfathered || isJustified(css, m.index)) {
+        } else if (
+          feature.kind === "safe-drop" ||
+          isGuarded(m.index, guarded) ||
+          grandfathered ||
+          isJustified(css, m.index)
+        ) {
           progressive.push(entry);
         } else {
           violations.push(entry);

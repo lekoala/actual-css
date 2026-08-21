@@ -25,7 +25,7 @@ async function markdownFiles(path) {
   for (const entry of statEntries) {
     const child = join(path, entry.name);
     if (entry.isDirectory()) {
-      files.push(...await markdownFiles(child));
+      files.push(...(await markdownFiles(child)));
     } else if (entry.name.endsWith(".md")) {
       files.push(join(ROOT, child));
     }
@@ -73,9 +73,8 @@ function linkTarget(file, href) {
 }
 
 function exportTarget(specifier, packageJson) {
-  const subpath = specifier === packageJson.name
-    ? "."
-    : `.${specifier.slice(packageJson.name.length)}`;
+  const subpath =
+    specifier === packageJson.name ? "." : `.${specifier.slice(packageJson.name.length)}`;
   const entries = Object.entries(packageJson.exports);
   const exact = entries.find(([key]) => key === subpath);
   if (exact) return exact[1];
@@ -145,7 +144,8 @@ async function main() {
     for (const match of source.matchAll(packagePattern)) {
       const specifier = match[0];
       entrypoints.add(specifier);
-      if (relative(ROOT, file) === MODULAR_IMPORT_GUIDE && REMOVED_ENTRYPOINTS.has(specifier)) continue;
+      if (relative(ROOT, file) === MODULAR_IMPORT_GUIDE && REMOVED_ENTRYPOINTS.has(specifier))
+        continue;
       const target = exportTarget(specifier, packageJson);
       if (typeof target !== "string" || !existsSync(resolve(ROOT, target))) {
         failures.push(`${relativePath(file)}: unsupported package entrypoint ${specifier}`);

@@ -12,11 +12,7 @@
  */
 
 const escapeHtml = (str) =>
-  str
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;");
+  str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 
 /* Page assembly consumes these boundaries to keep live component demos out of
    prose while leaving authored Markdown in rich-text sections. */
@@ -145,14 +141,15 @@ export function wrapTables(html) {
   const re = /<table[^>]*>[\s\S]*?<\/table>/g;
   const out = [];
   let last = 0;
-  let match;
+  let match = re.exec(html);
 
-  while ((match = re.exec(html))) {
+  while (match) {
     out.push(html.slice(last, match.index));
     out.push('<div class="table-wrap">');
     out.push(match[0].replace("<table", '<table class="table"'));
     out.push("</div>");
     last = match.index + match[0].length;
+    match = re.exec(html);
   }
   out.push(html.slice(last));
   return out.join("");
@@ -167,7 +164,7 @@ export function rewriteLinks(html, resolve) {
     const raw = href.replace(/&amp;/g, "&");
     const target = resolve(raw);
     if (!target) return match;
-    const [path, fragment] = raw.split("#");
+    const [_path, fragment] = raw.split("#");
     const next = `${target}${fragment ? `#${fragment}` : ""}`;
     return `<a href="${escapeHtml(next)}"`;
   });
@@ -221,13 +218,14 @@ export function extractDescription(html) {
 export function extractToc(html) {
   const toc = [];
   const re = /<h([23]) id="([^"]+)">([\s\S]*?)<\/h\1>/g;
-  let match;
-  while ((match = re.exec(html))) {
+  let match = re.exec(html);
+  while (match) {
     toc.push({
       level: Number(match[1]),
       id: match[2],
       label: match[3].replace(/<[^>]+>/g, "").trim(),
     });
+    match = re.exec(html);
   }
   return toc;
 }

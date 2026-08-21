@@ -34,7 +34,7 @@ import { fileURLToPath } from "node:url";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, "..");
 const SRC = join(ROOT, "src", "css");
-const PAGES = join(ROOT, "docs", "pages");
+const _PAGES = join(ROOT, "docs", "pages");
 
 const audit = process.argv.includes("--audit");
 
@@ -63,7 +63,10 @@ function parseHookSections(css) {
   for (const block of css.matchAll(/\/\*[\s\S]*?\*\//g)) {
     let active = null;
     for (const rawLine of block[0].split("\n")) {
-      const line = rawLine.trim().replace(/^\*\s?/, "").trim();
+      const line = rawLine
+        .trim()
+        .replace(/^\*\s?/, "")
+        .trim();
       if (/^Public hooks:$/.test(line)) {
         active = "public";
         continue;
@@ -197,9 +200,7 @@ export function analyzeCss(root) {
      never mistaken for fallback-only. Theme files are excluded entirely: a
      theme-private fallback must not fail the core, and a theme classification
      must not satisfy it. */
-  const coreHooksByFile = new Map(
-    [...hooksByFile].filter(([file]) => !isThemeFile(rel(file)))
-  );
+  const coreHooksByFile = new Map([...hooksByFile].filter(([file]) => !isThemeFile(rel(file))));
   const fallbackUses = new Map(); // prop -> { file: n }
   for (const file of coreFiles) {
     const css = readFileSync(file, "utf8");
@@ -211,7 +212,12 @@ export function analyzeCss(root) {
     }
   }
 
-  const categoryCounts = { "Public hooks": 0, "Framework plumbing": 0, Internal: 0, Unclassified: 0 };
+  const categoryCounts = {
+    "Public hooks": 0,
+    "Framework plumbing": 0,
+    Internal: 0,
+    Unclassified: 0,
+  };
   const unclassifiedFallback = [];
   for (const [prop, files] of fallbackUses) {
     const cat = classify(coreHooksByFile, prop);
@@ -223,7 +229,7 @@ export function analyzeCss(root) {
 
   if (unclassifiedFallback.length > 0) {
     issues.push(
-      `Unclassified fallback-only custom properties (declare as public, framework plumbing, or internal):`
+      `Unclassified fallback-only custom properties (declare as public, framework plumbing, or internal):`,
     );
     for (const line of unclassifiedFallback) issues.push(`- ${line}`);
   }

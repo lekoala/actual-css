@@ -8,7 +8,7 @@
   <title>Theming — Actual CSS</title>
   <meta name="description" content="Find the right lever when you want to change how a component or layout looks, without knowing in advance which custom property to use.">
   <link rel="stylesheet" href="../../src/css/actual.full.css">
-  <link rel="stylesheet" href="../../dist/actual-themes.min.css">
+  <link rel="stylesheet" href="../../demo/assets/actual-themes.min.css">
   <link rel="stylesheet" href="../../scripts/docs/assets/docs.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3/dist/tabler-icons.min.css">
   <script src="https://cdn.jsdelivr.net/npm/prismjs@1.30.0/components/prism-core.min.js"></script>
@@ -251,6 +251,13 @@ theme instead when an entire subtree — including forms, states, and nested
 surfaces — must use another palette. More specific component states or explicit
 surface variants (<code>.card.subtle</code>) still take precedence.</p>
 <p>→ Components · Card · Foundations · Tokens (theme contract)</p>
+<h3 id="use-or-adapt-a-preset-palette">Use or adapt a preset palette</h3>
+<p><code>src/css/themes/</code> holds example palettes (<code>ocean</code>, <code>spruce</code>, <code>neon</code>, …) as
+reference material to copy into your own <code>[data-theme]</code> island — they are demo
+assets, not package entrypoints. Each sets the intent/surface/text tokens and
+lets the core derive everything else. In browsers with <code>color-mix()</code> support,
+<code>--focus-ring</code> follows each island's <code>--focus</code> automatically; re-declare it only
+for a deliberate visual override or a matching legacy fallback.</p>
 
 </div>
 
@@ -285,6 +292,7 @@ surface variants (<code>.card.subtle</code>) still take precedence.</p>
         <li><a class="nav-link" href="#set-card-rail-item-width-in-a-scroll-snap-row" data-docs-toc-item data-level="3">Set card-rail item width in a scroll-snap row</a></li>
         <li><a class="nav-link" href="#resize-an-avatar-or-its-stack" data-docs-toc-item data-level="3">Resize an avatar or its stack</a></li>
         <li><a class="nav-link" href="#make-an-inverted-contrasting-surface" data-docs-toc-item data-level="3">Make an inverted / contrasting surface</a></li>
+        <li><a class="nav-link" href="#use-or-adapt-a-preset-palette" data-docs-toc-item data-level="3">Use or adapt a preset palette</a></li>
           </ul>
         </nav>
       </aside>

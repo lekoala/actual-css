@@ -1,6 +1,6 @@
 import { afterAll, afterEach, expect, test } from "bun:test";
-import { cleanupDOM, press, setupDOM } from "./helpers/dom.js";
 import { connectMenu } from "../src/js/menu.js";
+import { cleanupDOM, press, setupDOM } from "./helpers/dom.js";
 
 setupDOM();
 

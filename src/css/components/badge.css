@@ -35,7 +35,7 @@
 .badge {
   --badge-size: var(--density-compact-size);
   --badge-pad-x: 0.55em;
-  --badge-font-size: 0.8125rem;
+  --badge-font-size: var(--font-size-xs);
   --badge-dot-size: 0.5rem;
   --badge-default-bg: var(--surface-subtle);
   --badge-default-fg: var(--intent, var(--text));
@@ -104,8 +104,8 @@
   display: inline-grid;
   place-items: center;
   flex: 0 0 auto;
-  min-inline-size: 1.5rem;
-  min-block-size: 1.5rem;
+  min-inline-size: var(--density-compact-size);
+  min-block-size: var(--density-compact-size);
   margin-block: -0.25rem;
   margin-inline-start: -0.15em;
   margin-inline-end: -0.45em;
@@ -152,6 +152,7 @@
 }
 
 :where(a.badge, button.badge):not(:where(:disabled, [aria-disabled="true"], .outline)):hover {
+  /* Huge inset spread paints the overlay over the pill radius (see button.css). */
   box-shadow: inset 0 0 0 999px var(--hover-overlay);
 }
 

@@ -1,19 +1,10 @@
 import { describe, expect, it } from "bun:test";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import {
-  extractToc,
-  parseCodeInfo,
-  render,
-  scanCodeFences,
-  wrapTables,
-} from "../scripts/docs/markdown.js";
+import { parseCodeInfo, render, scanCodeFences, wrapTables } from "../scripts/docs/markdown.js";
 import { wrapDocsContent } from "../scripts/docs/templates.js";
 
-const fixture = readFileSync(
-  join(import.meta.dir, "fixtures", "docs", "sample.md"),
-  "utf8",
-);
+const fixture = readFileSync(join(import.meta.dir, "fixtures", "docs", "sample.md"), "utf8");
 
 describe("parseCodeInfo", () => {
   it("parses language and demo flag", () => {
@@ -107,9 +98,7 @@ describe("render", () => {
 
   it("renders source-only css/js/html fences as escaped code", () => {
     expect(result.html).toContain('<code class="language-css">');
-    expect(result.html).toContain(
-      "&lt;span&gt;plain source&lt;/span&gt;",
-    );
+    expect(result.html).toContain("&lt;span&gt;plain source&lt;/span&gt;");
   });
 
   it("renders a demo fence with live preview and escaped source", () => {
@@ -117,9 +106,7 @@ describe("render", () => {
     expect(result.html).toContain('<div class="docs-preview">');
     expect(result.html).toContain('<div class="docs-code">');
 
-    const preview = result.html.match(
-      /class="docs-preview">([\s\S]*?)\n  <\/div>/,
-    )?.[1];
+    const preview = result.html.match(/class="docs-preview">([\s\S]*?)\n {2}<\/div>/)?.[1];
     expect(preview).toContain('<button class="btn primary" type="button">');
     expect(preview).toContain("<script>window.__demoRan = true;</script>");
 
@@ -143,14 +130,18 @@ describe("render", () => {
   });
 
   it("does not emit empty prose between consecutive demos", () => {
-    const result = render("```html demo\n<button>One</button>\n```\n\n```html demo\n<button>Two</button>\n```");
+    const result = render(
+      "```html demo\n<button>One</button>\n```\n\n```html demo\n<button>Two</button>\n```",
+    );
     const content = wrapDocsContent(result.html);
     expect(content).not.toMatch(/<div class="prose docs-prose">\s*<\/div>/);
     expect(content.match(/class="docs-example"/g)).toHaveLength(2);
   });
 
   it("does not rewrite tables owned by live demos", () => {
-    const demo = render("```html demo\n<table class=\"comparison\"><tr><td>Demo</td></tr></table>\n```");
+    const demo = render(
+      '```html demo\n<table class="comparison"><tr><td>Demo</td></tr></table>\n```',
+    );
     expect(demo.html).toContain('<table class="comparison">');
     expect(demo.html).not.toContain('<table class="table" class="comparison">');
     expect(demo.html).not.toContain('<div class="table-wrap"><table class="comparison">');
@@ -169,16 +160,8 @@ describe("render", () => {
       id: "basic-usage",
       label: "Basic usage",
     });
-    expect(result.toc.map((t) => t.label)).toEqual([
-      "Basic usage",
-      "Variants",
-      "Variants",
-    ]);
-    expect(result.toc.map((t) => t.id)).toEqual([
-      "basic-usage",
-      "variants",
-      "variants-1",
-    ]);
+    expect(result.toc.map((t) => t.label)).toEqual(["Basic usage", "Variants", "Variants"]);
+    expect(result.toc.map((t) => t.id)).toEqual(["basic-usage", "variants", "variants-1"]);
   });
 });
 

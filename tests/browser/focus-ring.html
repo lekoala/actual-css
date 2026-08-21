@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Focus ring derivation fixture</title>
+  <link rel="stylesheet" href="../../src/css/actual.css">
+  <link rel="stylesheet" href="../../src/css/themes/neon.css">
+</head>
+<body>
+  <!-- A custom island recolors only --focus; the ring must re-derive. -->
+  <div data-theme="custom" style="--focus: hsl(120 80% 40%)">
+    <div id="custom-island"></div>
+  </div>
+  <div id="root-island"></div>
+  <div data-theme="neon">
+    <div id="neon-island"></div>
+  </div>
+</body>
+</html>

@@ -35,12 +35,12 @@ test("floating-field is CSS-only with placeholder-shown and always-floated contr
   expect(css).not.toContain(".floating-form");
 });
 
-test("floating-field doc text-like examples carry placeholder=\" \"", () => {
+test('floating-field doc text-like examples carry placeholder=" "', () => {
   const md = read("docs/pages/forms/floating-field.md");
   const fences = [...md.matchAll(/```html demo\n([\s\S]*?)```/g)];
-  const textControls = fences.flatMap(([, body]) =>
-    [...body.matchAll(/<(input|textarea)\b([^>]*)>/g)],
-  );
+  const textControls = fences.flatMap(([, body]) => [
+    ...body.matchAll(/<(input|textarea)\b([^>]*)>/g),
+  ]);
 
   const alwaysFloated = new Set(["date", "time", "datetime-local", "month", "week"]);
   const textLike = textControls.filter(([, , attrs]) => {
@@ -50,7 +50,7 @@ test("floating-field doc text-like examples carry placeholder=\" \"", () => {
 
   expect(textLike.length).toBeGreaterThan(0);
   for (const [, , attrs] of textLike) {
-    expect(attrs, "text-like floating-field example must set placeholder=\" \"").toContain(
+    expect(attrs, 'text-like floating-field example must set placeholder=" "').toContain(
       'placeholder=" "',
     );
   }

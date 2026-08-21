@@ -8,7 +8,7 @@
   <title>Tokens — Actual CSS</title>
   <meta name="description" content="The public theming surface — small, semantic global tokens that make the library easy to restyle without understanding every component's internals.">
   <link rel="stylesheet" href="../../src/css/actual.full.css">
-  <link rel="stylesheet" href="../../dist/actual-themes.min.css">
+  <link rel="stylesheet" href="../../demo/assets/actual-themes.min.css">
   <link rel="stylesheet" href="../../scripts/docs/assets/docs.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3/dist/tabler-icons.min.css">
   <script src="https://cdn.jsdelivr.net/npm/prismjs@1.30.0/components/prism-core.min.js"></script>
@@ -448,8 +448,8 @@
 <li>A custom property used only in a fallback position (<code>var(--x, default)</code>) and never declared is an unset extension point and must carry a classification — public, framework plumbing, or internal. <code>check:css-api</code> fails on any unclassified fallback-only property; it does not force an artificial declaration to satisfy the audit.</li>
 </ul>
 <h2 id="theme-contract">Theme contract</h2>
-<p>Themes override tokens, not selectors. The themes in <code>src/css/themes/</code> are demo examples, not included in the default stylesheet; they exist to show valid ways to use this contract. They ship in the package as <strong>reference sources for copying</strong> — the <code>./css/themes</code> exports are intentionally <code>null</code>, so they are not supported import entrypoints.</p>
-<p>A minimal recolor theme overrides the intent pairs, surfaces, text colors, border, focus, focus ring, and hover overlay.</p>
+<p>Themes override tokens, not selectors. The themes in <code>src/css/themes/</code> are repository-only demo examples, not included in the default stylesheet or the npm package; they exist to show valid ways to use this contract.</p>
+<p>A minimal recolor theme overrides the intent pairs, surfaces, text colors, border, focus, and hover overlay. In browsers with <code>color-mix()</code> support, the core derives <code>--focus-ring</code> from the island's <code>--focus</code>; override the ring only for a deliberate visual treatment or when a matching pre-<code>color-mix()</code> fallback is required.</p>
 <p>Shape, shadow, motion, typography, and soft-variant mix tokens are optional knobs. Override them only when the theme actually changes that part of the system.</p>
 <p>A full theme can override:</p>
 <ul>
@@ -485,7 +485,6 @@
   --text-subtle: hsl(260 8% 56%);
   --border: hsl(260 24% 84%);
   --focus: var(--primary);
-  --focus-ring: hsl(260 70% 54% / 0.22);
   --hover-overlay: hsl(260 30% 10% / 0.04);
   --soft-bg-mix: 84%;
   --soft-border-mix: 58%;

@@ -1,8 +1,8 @@
+import { afterAll, expect, test } from "bun:test";
 import { mkdtemp, readFile, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { afterAll, expect, test } from "bun:test";
-import { ENTRY, buildBundle } from "../scripts/build-js.js";
+import { buildBundle, ENTRY } from "../scripts/build-js.js";
 
 const dirs = [];
 

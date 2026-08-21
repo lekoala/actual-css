@@ -10,9 +10,7 @@ test("vendor selector guard rejects a vendor pseudo mixed with a standard select
 
 test("vendor selector guard rejects different engines in one list or selector", () => {
   expect(
-    mixedVendorSelectorLists(
-      ".a::-webkit-slider-thumb, .a::-moz-range-thumb { color: red; }",
-    ),
+    mixedVendorSelectorLists(".a::-webkit-slider-thumb, .a::-moz-range-thumb { color: red; }"),
   ).toHaveLength(1);
   expect(
     mixedVendorSelectorLists(".a::-webkit-slider-thumb::-moz-range-thumb { color: red; }"),

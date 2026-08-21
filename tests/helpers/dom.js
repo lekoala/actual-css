@@ -43,12 +43,14 @@ function ensureCSS(window) {
   const css = window.CSS || {};
   if (typeof css.escape !== "function") {
     css.escape = (value) =>
+      // Control characters are exactly what CSS.escape must escape; the rule
+      // cannot apply to this polyfill.
+      // biome-ignore lint/suspicious/noControlCharactersInRegex: CSS escape polyfill
       String(value).replace(/[\0-\x1f\x7f]|^-?\d|^-$|[^\w-]/g, (char, index) => {
         if (char === "\0") return "\uFFFD";
         const hex = char.codePointAt(0).toString(16);
-        return index === 0 || /[\0-\x1f\x7f]/.test(char)
-          ? `\\${hex} `
-          : `\\${char}`;
+        // biome-ignore lint/suspicious/noControlCharactersInRegex: CSS escape polyfill
+        return index === 0 || /[\0-\x1f\x7f]/.test(char) ? `\\${hex} ` : `\\${char}`;
       });
   }
   return css;
@@ -205,4 +207,3 @@ export function patchDialogMethods() {
     this.close(returnValue);
   };
 }
-

@@ -108,14 +108,34 @@ dialog.drawer nav {
   }
 }
 
-/* RTL: swap closed transform directions so the drawer slides from the correct
-   inline side. */
+/* Safari before 16.4 does not support :dir(); keep the ancestor-attribute
+   path as the Minimal-tier fallback. */
 [dir="rtl"] dialog.drawer {
   --drawer-closed-translate: 100%;
 }
 
 [dir="rtl"] dialog.drawer[data-side="end"] {
   --drawer-closed-translate: -100%;
+}
+
+/* :dir() follows inherited HTML directionality and handles nested direction
+   changes. Explicit ltr rules neutralize an outer RTL fallback selector. */
+@supports selector(:dir(rtl)) {
+  dialog.drawer:dir(ltr) {
+    --drawer-closed-translate: -100%;
+  }
+
+  dialog.drawer[data-side="end"]:dir(ltr) {
+    --drawer-closed-translate: 100%;
+  }
+
+  dialog.drawer:dir(rtl) {
+    --drawer-closed-translate: 100%;
+  }
+
+  dialog.drawer[data-side="end"]:dir(rtl) {
+    --drawer-closed-translate: -100%;
+  }
 }
 
 @media (forced-colors: active) {

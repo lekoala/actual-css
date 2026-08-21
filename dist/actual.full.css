@@ -351,13 +351,13 @@ select {
 /* Focus ring derivation — color-mix tier. Runs whether or not light-dark()
    is also supported, so it covers the color-mix-without-light-dark browser
    tier on its own; the light-dark block below refines it further with the
-   light/dark alpha split once both features are available. Deriving from
-   --focus (not a literal) means overriding --primary/--focus, in the
-   default theme or any custom one, keeps the ring in sync automatically. */
+   light/dark alpha split once both features are available. Declared on every
+   [data-theme] island (not just the built-in light/dark pair) so custom
+   islands recolor the ring for free; a preset that re-declares --focus-ring
+   later in source order intentionally pins its own ring instead. */
 @supports (color: color-mix(in oklch, red, white)) {
   :root,
-  [data-theme="light"],
-  [data-theme="dark"] {
+  [data-theme] {
     --focus-ring: color-mix(in oklch, var(--focus) 30%, transparent);
   }
 }
@@ -406,7 +406,7 @@ select {
 
 @supports (color: color-mix(in oklch, red, white)) and (color: light-dark(red, blue)) {
   :root,
-  [data-theme="light"] {
+  [data-theme] {
     --focus-ring: light-dark(
       color-mix(in oklch, var(--focus) 30%, transparent),
       color-mix(in oklch, var(--focus) 28%, transparent)
@@ -3004,6 +3004,9 @@ small {
    the overlay darkening for solid/soft is .btn-specific. */
 .btn:not(:where(:disabled, [aria-disabled="true"])):hover {
   background: var(--ui-hover-bg, var(--btn-default-hover-bg));
+  /* Huge inset spread paints the overlay over any border-radius without a
+     pseudo-element; a plain background would replace the fill instead of
+     darkening it. */
   box-shadow: inset 0 0 0 999px var(--btn-hover-overlay);
 }
 
@@ -3170,7 +3173,7 @@ a.btn[aria-disabled="true"] {
 .badge {
   --badge-size: var(--density-compact-size);
   --badge-pad-x: 0.55em;
-  --badge-font-size: 0.8125rem;
+  --badge-font-size: var(--font-size-xs);
   --badge-dot-size: 0.5rem;
   --badge-default-bg: var(--surface-subtle);
   --badge-default-fg: var(--intent, var(--text));
@@ -3239,8 +3242,8 @@ a.btn[aria-disabled="true"] {
   display: inline-grid;
   place-items: center;
   flex: 0 0 auto;
-  min-inline-size: 1.5rem;
-  min-block-size: 1.5rem;
+  min-inline-size: var(--density-compact-size);
+  min-block-size: var(--density-compact-size);
   margin-block: -0.25rem;
   margin-inline-start: -0.15em;
   margin-inline-end: -0.45em;
@@ -3287,6 +3290,7 @@ a.btn[aria-disabled="true"] {
 }
 
 :where(a.badge, button.badge):not(:where(:disabled, [aria-disabled="true"], .outline)):hover {
+  /* Huge inset spread paints the overlay over the pill radius (see button.css). */
   box-shadow: inset 0 0 0 999px var(--hover-overlay);
 }
 
@@ -4243,14 +4247,34 @@ dialog.drawer nav {
   }
 }
 
-/* RTL: swap closed transform directions so the drawer slides from the correct
-   inline side. */
+/* Safari before 16.4 does not support :dir(); keep the ancestor-attribute
+   path as the Minimal-tier fallback. */
 [dir="rtl"] dialog.drawer {
   --drawer-closed-translate: 100%;
 }
 
 [dir="rtl"] dialog.drawer[data-side="end"] {
   --drawer-closed-translate: -100%;
+}
+
+/* :dir() follows inherited HTML directionality and handles nested direction
+   changes. Explicit ltr rules neutralize an outer RTL fallback selector. */
+@supports selector(:dir(rtl)) {
+  dialog.drawer:dir(ltr) {
+    --drawer-closed-translate: -100%;
+  }
+
+  dialog.drawer[data-side="end"]:dir(ltr) {
+    --drawer-closed-translate: 100%;
+  }
+
+  dialog.drawer:dir(rtl) {
+    --drawer-closed-translate: 100%;
+  }
+
+  dialog.drawer[data-side="end"]:dir(rtl) {
+    --drawer-closed-translate: -100%;
+  }
 }
 
 @media (forced-colors: active) {
@@ -6308,6 +6332,8 @@ a.avatar[aria-disabled="true"] {
   margin: -1px;
   overflow: hidden;
   clip: rect(0, 0, 0, 0);
+  /* clip alone is legacy-only; clip-path is the modern hiding mechanism. */
+  clip-path: inset(50%);
   white-space: nowrap;
   border: 0;
 }

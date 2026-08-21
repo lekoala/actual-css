@@ -149,6 +149,9 @@
    the overlay darkening for solid/soft is .btn-specific. */
 .btn:not(:where(:disabled, [aria-disabled="true"])):hover {
   background: var(--ui-hover-bg, var(--btn-default-hover-bg));
+  /* Huge inset spread paints the overlay over any border-radius without a
+     pseudo-element; a plain background would replace the fill instead of
+     darkening it. */
   box-shadow: inset 0 0 0 999px var(--btn-hover-overlay);
 }
 

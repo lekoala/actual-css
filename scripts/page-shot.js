@@ -16,18 +16,18 @@ import { capture, fixtureUrl, readFlags } from "./utils/browser.js";
 const ROOT = join(import.meta.dirname, "..");
 
 const args = process.argv.slice(2);
-const { "--scheme": scheme = "", "--out": out = join(ROOT, "tmp", "page-shot.png") } =
-  readFlags(args, {
+const { "--scheme": scheme = "", "--out": out = join(ROOT, "tmp", "page-shot.png") } = readFlags(
+  args,
+  {
     "--scheme": { fallback: "" },
     "--out": { fallback: join(ROOT, "tmp", "page-shot.png") },
-  });
+  },
+);
 const page = args[0] ?? join(ROOT, "demo", "templates", "kitchen-sink.html");
 const pageUrl = fixtureUrl(page);
 
 const mediaFeatures =
-  scheme === "light" || scheme === "dark"
-    ? [{ name: "prefers-color-scheme", value: scheme }]
-    : [];
+  scheme === "light" || scheme === "dark" ? [{ name: "prefers-color-scheme", value: scheme }] : [];
 
 const saved = await capture(pageUrl, { out, mediaFeatures });
 console.log(`Saved ${saved} (${pageUrl}${scheme ? `, ${scheme}` : ""})`);

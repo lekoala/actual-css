@@ -1,6 +1,6 @@
 import { afterAll, afterEach, expect, test } from "bun:test";
-import { cleanupDOM, press, setupDOM } from "./helpers/dom.js";
 import { connectFocusGroup } from "../src/js/focus-group.js";
+import { cleanupDOM, press, setupDOM } from "./helpers/dom.js";
 
 setupDOM();
 
@@ -183,7 +183,6 @@ test("unrelated keys are left to the consumer", () => {
   first.dispatchEvent(enter);
   expect(enter.defaultPrevented).toBe(false);
   expect(document.activeElement).toBe(first);
-
 });
 
 test("invalid contracts fail fast", () => {
@@ -192,7 +191,7 @@ test("invalid contracts fail fast", () => {
 
   expect(() => connectFocusGroup(null, { getItems: () => [] })).toThrow(TypeError);
   expect(() => connectFocusGroup(root)).toThrow(TypeError);
-  expect(() =>
-    connectFocusGroup(root, { getItems: () => [], orientation: "diagonal" }),
-  ).toThrow(TypeError);
+  expect(() => connectFocusGroup(root, { getItems: () => [], orientation: "diagonal" })).toThrow(
+    TypeError,
+  );
 });

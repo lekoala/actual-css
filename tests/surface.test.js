@@ -1,17 +1,11 @@
 import { afterAll, afterEach, expect, test } from "bun:test";
-import { cleanupDOM, click, mockRect, nextMicrotask, press, setupDOM } from "./helpers/dom.js";
+import { cleanupDOM, click, mockRect, nextMicrotask, setupDOM } from "./helpers/dom.js";
 import { nextFrame } from "./helpers/layout.js";
-import { EVENTS } from "../src/js/events.js";
 
 setupDOM();
 
-const {
-  closeSurface,
-  disconnectSurface,
-  isSurfaceOpen,
-  openSurface,
-  prepareSurface,
-} = await import(`../src/js/surface.js?test=${Date.now()}`);
+const { closeSurface, disconnectSurface, isSurfaceOpen, openSurface, prepareSurface } =
+  await import(`../src/js/surface.js?test=${Date.now()}`);
 
 function setBody(html) {
   document.body.innerHTML = html;
@@ -31,7 +25,9 @@ function mockPlacement(trigger, menu) {
 }
 
 afterEach(() => {
-  document.querySelectorAll(".flyout").forEach((menu) => disconnectSurface(menu));
+  document.querySelectorAll(".flyout").forEach((menu) => {
+    disconnectSurface(menu);
+  });
   document.body.innerHTML = "";
 });
 
@@ -40,7 +36,9 @@ afterAll(() => {
 });
 
 test("openSurface reveals a menu and syncs linked triggers", () => {
-  setBody('<button aria-controls="menu" aria-expanded="false">Open</button><div id="menu" class="flyout" hidden></div>');
+  setBody(
+    '<button aria-controls="menu" aria-expanded="false">Open</button><div id="menu" class="flyout" hidden></div>',
+  );
   const trigger = document.querySelector("button");
   const menu = document.getElementById("menu");
   mockPlacement(trigger, menu);
@@ -55,7 +53,9 @@ test("openSurface reveals a menu and syncs linked triggers", () => {
 });
 
 test("closeSurface hides a menu and resets presentation state", async () => {
-  setBody('<button aria-controls="menu" aria-expanded="false">Open</button><div id="menu" class="flyout"></div>');
+  setBody(
+    '<button aria-controls="menu" aria-expanded="false">Open</button><div id="menu" class="flyout"></div>',
+  );
   const trigger = document.querySelector("button");
   const menu = document.getElementById("menu");
   mockPlacement(trigger, menu);
@@ -110,7 +110,9 @@ test("closeSurface can restore focus to the opening trigger", () => {
 });
 
 test("closeSurface restores focus by default when focus is inside the surface", () => {
-  setBody('<button aria-controls="menu">Open</button><div id="menu" class="flyout"><button id="item">Item</button></div>');
+  setBody(
+    '<button aria-controls="menu">Open</button><div id="menu" class="flyout"><button id="item">Item</button></div>',
+  );
   const trigger = document.querySelector("button[aria-controls]");
   const item = document.getElementById("item");
   const menu = document.getElementById("menu");
@@ -124,7 +126,9 @@ test("closeSurface restores focus by default when focus is inside the surface", 
 });
 
 test("Escape key closes the top surface and restores focus", () => {
-  setBody('<button id="trigger" aria-controls="menu">Open</button><button id="next">Next</button><div id="menu" class="flyout"></div>');
+  setBody(
+    '<button id="trigger" aria-controls="menu">Open</button><button id="next">Next</button><div id="menu" class="flyout"></div>',
+  );
   const trigger = document.getElementById("trigger");
   const next = document.getElementById("next");
   const menu = document.getElementById("menu");
@@ -167,7 +171,9 @@ test("Escape closes the surface that is open, not a stale closed one", () => {
 });
 
 test("positionSurface failure leaves the surface closed", () => {
-  setBody('<button id="trigger" aria-controls="menu">Open</button><div id="menu" class="flyout"></div>');
+  setBody(
+    '<button id="trigger" aria-controls="menu">Open</button><div id="menu" class="flyout"></div>',
+  );
   const trigger = document.getElementById("trigger");
   const menu = document.getElementById("menu");
   mockRect(trigger, { x: -220, y: 100, width: 60, height: 24 });
@@ -180,7 +186,9 @@ test("positionSurface failure leaves the surface closed", () => {
 });
 
 test("prepareSurface leaves the surface at its original position", () => {
-  setBody('<section id="host"><button id="next"></button><div id="menu" class="flyout"></div></section>');
+  setBody(
+    '<section id="host"><button id="next"></button><div id="menu" class="flyout"></div></section>',
+  );
   const host = document.getElementById("host");
   const next = document.getElementById("next");
   const menu = document.getElementById("menu");
@@ -195,7 +203,9 @@ test("prepareSurface leaves the surface at its original position", () => {
 });
 
 test("openSurface mounts to the surface root and disconnectSurface restores it", () => {
-  setBody('<section id="host"><button id="next" aria-controls="menu"></button><div id="menu" class="flyout"></div></section>');
+  setBody(
+    '<section id="host"><button id="next" aria-controls="menu"></button><div id="menu" class="flyout"></div></section>',
+  );
   const host = document.getElementById("host");
   const next = document.getElementById("next");
   const menu = document.getElementById("menu");
@@ -212,7 +222,9 @@ test("openSurface mounts to the surface root and disconnectSurface restores it",
 });
 
 test("closeSurface restores the surface to its original position once animations finish", async () => {
-  setBody('<section id="host"><button id="trigger" aria-controls="menu"></button><div id="menu" class="flyout"></div></section>');
+  setBody(
+    '<section id="host"><button id="trigger" aria-controls="menu"></button><div id="menu" class="flyout"></div></section>',
+  );
   const host = document.getElementById("host");
   const trigger = document.getElementById("trigger");
   const menu = document.getElementById("menu");
@@ -245,7 +257,9 @@ test("sheet mode adds sheet class and backdrop", () => {
 });
 
 test("sheet mode preserves author-provided semantic attributes", () => {
-  setBody('<button aria-controls="menu"></button><div id="menu" class="flyout" role="menu" aria-modal="false"></div>');
+  setBody(
+    '<button aria-controls="menu"></button><div id="menu" class="flyout" role="menu" aria-modal="false"></div>',
+  );
   const trigger = document.querySelector("button");
   const menu = document.getElementById("menu");
   mockPlacement(trigger, menu);
@@ -331,7 +345,9 @@ test("openSurface mounts surfaces inside an open dialog root", () => {
 });
 
 test("default auto-close closes from outside clicks", () => {
-  setBody('<button aria-controls="menu"></button><div id="menu" class="flyout"><button>Item</button></div><span id="outside"></span>');
+  setBody(
+    '<button aria-controls="menu"></button><div id="menu" class="flyout"><button>Item</button></div><span id="outside"></span>',
+  );
   const trigger = document.querySelector("button[aria-controls]");
   const menu = document.getElementById("menu");
   mockPlacement(trigger, menu);
@@ -342,7 +358,9 @@ test("default auto-close closes from outside clicks", () => {
 });
 
 test("inside-and-outside auto-close closes from inside clicks in rich panels", () => {
-  setBody('<button aria-controls="menu"></button><div id="menu" class="flyout"><button id="item">Item</button></div>');
+  setBody(
+    '<button aria-controls="menu"></button><div id="menu" class="flyout"><button id="item">Item</button></div>',
+  );
   const trigger = document.querySelector("button[aria-controls]");
   const item = document.getElementById("item");
   const menu = document.getElementById("menu");
@@ -355,7 +373,9 @@ test("inside-and-outside auto-close closes from inside clicks in rich panels", (
 });
 
 test("inside-only auto-close closes inside clicks and ignores outside clicks", () => {
-  setBody('<button aria-controls="menu"></button><div id="menu" class="flyout"><button id="item">Item</button></div><span id="outside"></span>');
+  setBody(
+    '<button aria-controls="menu"></button><div id="menu" class="flyout"><button id="item">Item</button></div><span id="outside"></span>',
+  );
   const trigger = document.querySelector("button[aria-controls]");
   const item = document.getElementById("item");
   const outside = document.getElementById("outside");
@@ -371,7 +391,9 @@ test("inside-only auto-close closes inside clicks and ignores outside clicks", (
 });
 
 test("outside-only auto-close keeps inside clicks open", () => {
-  setBody('<button aria-controls="menu"></button><div id="menu" class="flyout"><button>Item</button></div><span id="outside"></span>');
+  setBody(
+    '<button aria-controls="menu"></button><div id="menu" class="flyout"><button>Item</button></div><span id="outside"></span>',
+  );
   const trigger = document.querySelector("button[aria-controls]");
   const item = document.querySelector(".flyout button");
   const menu = document.getElementById("menu");
@@ -386,7 +408,9 @@ test("outside-only auto-close keeps inside clicks open", () => {
 });
 
 test("disabled auto-close keeps inside and outside clicks open", () => {
-  setBody('<button aria-controls="menu"></button><div id="menu" class="flyout"><button>Item</button></div><span id="outside"></span>');
+  setBody(
+    '<button aria-controls="menu"></button><div id="menu" class="flyout"><button>Item</button></div><span id="outside"></span>',
+  );
   const trigger = document.querySelector("button[aria-controls]");
   const item = document.querySelector(".flyout button");
   const menu = document.getElementById("menu");
@@ -465,7 +489,9 @@ test("scroll dismissal is opt-in", async () => {
 });
 
 test("unknown auto-close values fall back to the default policy", () => {
-  setBody('<button aria-controls="menu"></button><div id="menu" class="flyout"><button id="item">Item</button></div>');
+  setBody(
+    '<button aria-controls="menu"></button><div id="menu" class="flyout"><button id="item">Item</button></div>',
+  );
   const trigger = document.querySelector("button[aria-controls]");
   const item = document.getElementById("item");
   const menu = document.getElementById("menu");
@@ -478,9 +504,11 @@ test("unknown auto-close values fall back to the default policy", () => {
 });
 
 test("D8 — disconnectSurface({ restore: false }) does not resurrect the element", async () => {
-  setBody('<section id="parent"><div id="menu" class="flyout" hidden></div></section><button id="outside">x</button>');
+  setBody(
+    '<section id="parent"><div id="menu" class="flyout" hidden></div></section><button id="outside">x</button>',
+  );
   const menu = document.getElementById("menu");
-  const parent = document.getElementById("parent");
+  const _parent = document.getElementById("parent");
   const outside = document.getElementById("outside");
   mockPlacement(outside, menu);
 
@@ -497,7 +525,9 @@ test("D8 — disconnectSurface({ restore: false }) does not resurrect the elemen
 });
 
 test("D8 — deliberate disconnectSurface on a still-present component restores it", () => {
-  setBody('<section id="parent"><div id="menu" class="flyout" hidden></div></section><button id="outside">x</button>');
+  setBody(
+    '<section id="parent"><div id="menu" class="flyout" hidden></div></section><button id="outside">x</button>',
+  );
   const menu = document.getElementById("menu");
   const parent = document.getElementById("parent");
   const outside = document.getElementById("outside");
@@ -513,9 +543,11 @@ test("D8 — deliberate disconnectSurface on a still-present component restores 
 });
 
 test("D8 — mountSurface moving to body does not run teardown", () => {
-  setBody('<section id="parent"><div id="menu" class="flyout" hidden></div></section><button id="outside">x</button>');
+  setBody(
+    '<section id="parent"><div id="menu" class="flyout" hidden></div></section><button id="outside">x</button>',
+  );
   const menu = document.getElementById("menu");
-  const parent = document.getElementById("parent");
+  const _parent = document.getElementById("parent");
   const outside = document.getElementById("outside");
   mockPlacement(outside, menu);
 

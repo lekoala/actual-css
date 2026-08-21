@@ -2,9 +2,9 @@
 
 > Real pages built with Actual CSS - an admin application and a set of standalone templates - to see the primitives, components, and patterns composed the way they are meant to be used.
 
-The examples live in the repository under `demo/` and load the shipped bundles
-from `dist/` (`actual.full.css`, `actual-themes.min.css`,
-`actual.full.js`), referenced with stable URLs.
+The examples live in the repository under `demo/` and load `actual.full.css`
+and `actual.full.js` from `dist/`, plus the theme palettes bundle from
+`demo/assets/` (`bun run build:themes`), referenced with stable URLs.
 
 ## Admin application
 

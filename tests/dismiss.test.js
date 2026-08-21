@@ -29,7 +29,9 @@ test("resolves the current target dynamically and hides it", async () => {
 });
 
 test("emits a bubbling actual:dismiss event with its trigger", async () => {
-  await loadDismiss('<div id="notice"></div><button commandfor="notice" command="--dismiss"></button>');
+  await loadDismiss(
+    '<div id="notice"></div><button commandfor="notice" command="--dismiss"></button>',
+  );
   const target = document.getElementById("notice");
   const trigger = document.querySelector("button");
   let received = null;

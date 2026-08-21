@@ -8,3 +8,9 @@ jobs:
       - uses: oven-sh/setup-bun@v2
       - run: bun install --frozen-lockfile
       - run: bun run build:all
+      # dist/, site/ and size-report.json are committed: a build that produces
+      # anything different from what is tracked must fail the pipeline.
+      - name: Verify committed build output
+        run: |
+          git diff --exit-code -- dist site size-report.json
+          test -z "$(git ls-files --others --exclude-standard -- dist site size-report.json)"

@@ -10,9 +10,7 @@ test("Escape dismissal is LIFO and released entries leave the stack", () => {
   setupDOM('<div id="a"></div><div id="b"></div>');
   const dismissed = [];
   registerEscapeDismissal(document.getElementById("a"), () => dismissed.push("a"));
-  const releaseB = registerEscapeDismissal(document.getElementById("b"), () =>
-    dismissed.push("b"),
-  );
+  const releaseB = registerEscapeDismissal(document.getElementById("b"), () => dismissed.push("b"));
 
   document.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", cancelable: true }));
   expect(dismissed).toEqual(["b"]);

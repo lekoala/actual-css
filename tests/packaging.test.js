@@ -1,5 +1,5 @@
 import { expect, test } from "bun:test";
-import { existsSync, readFileSync, readdirSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 
 const ROOT = join(import.meta.dir, "..");
@@ -22,7 +22,7 @@ function exportTarget(spec, exact, wildcards) {
   return target.replace("*", spec.slice(prefix.length, spec.length - suffix.length));
 }
 
-test("package ships built assets and theme reference sources", () => {
+test("package ships built assets, not theme demo sources", () => {
   const pkg = readJson("package.json");
   const files = pkg.files;
 
@@ -35,26 +35,30 @@ test("package ships built assets and theme reference sources", () => {
   expect(files).toContain("src/css/components");
   expect(files).toContain("src/css/effects");
   expect(files).toContain("src/css/utilities");
-  expect(files).toContain("src/css/themes");
+  expect(files).not.toContain("src/css/themes");
   expect(files).toContain("scripts/reserved-classes.json");
   expect(files).not.toContain("src/css");
   expect(files).not.toContain("src/css/optional");
   expect(pkg.exports["./reserved-classes.json"]).toBe("./scripts/reserved-classes.json");
   expect(existsSync(join(ROOT, pkg.exports["./reserved-classes.json"]))).toBe(true);
 
-  // Reference presets ship for inspection and copying, never as importable
-  // entrypoints: the theme contract is the deliverable, the presets are demo
-  // material. Asserted so restoring the exports has to be a deliberate change.
+  // The preset palettes are reference/demo material, not importable
+  // entrypoints and not shipped sources: the theme contract is the
+  // deliverable. Asserted so restoring either has to be a deliberate change.
   expect(pkg.exports["./css/themes"]).toBeNull();
   expect(pkg.exports["./css/themes/*"]).toBeNull();
 });
 
-test("dist directory contains the full bundle and no optional artifacts", () => {
-  expect(existsSync(join(ROOT, "dist", "actual.min.css"))).toBe(true);
-  expect(existsSync(join(ROOT, "dist", "actual.full.css"))).toBe(true);
-  expect(existsSync(join(ROOT, "dist", "actual.full.min.css"))).toBe(true);
-  expect(existsSync(join(ROOT, "dist", "optional.css"))).toBe(false);
-  expect(existsSync(join(ROOT, "dist", "optional.min.css"))).toBe(false);
+test("dist contains exactly the six published artifacts", () => {
+  const files = readdirSync(join(ROOT, "dist")).sort();
+  expect(files).toEqual([
+    "actual.css",
+    "actual.full.css",
+    "actual.full.js",
+    "actual.full.min.css",
+    "actual.js",
+    "actual.min.css",
+  ]);
 });
 
 test("every JS export path resolves to an existing source file", () => {
@@ -156,11 +160,4 @@ test("the js entry split keeps the loader and built-ins separate", () => {
   const fullImports = imports(fullJs);
   expect(fullImports.slice(0, -1)).toEqual(builtins);
   expect(fullImports.at(-1)).toBe("./index.js");
-});
-
-test("no demo or template file is present in the dist directory", () => {
-  const distDir = join(ROOT, "dist");
-  const files = readdirSync(distDir);
-  const demoFiles = files.filter((f) => f.includes("demo") || f.includes("kitchen") || f.includes("template"));
-  expect(demoFiles.length).toBe(0);
 });

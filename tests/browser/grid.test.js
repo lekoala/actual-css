@@ -129,7 +129,9 @@ it(".grid-N in a query container only enters divisors of N", async () => {
       expect(forbidden).toEqual([]);
       /* The chains must actually be reached, not merely never violated. */
       const reached = (preset) =>
-        [...new Set(probes.filter((p) => p.preset === preset).map((p) => p.columns))].sort((a, b) => b - a);
+        [...new Set(probes.filter((p) => p.preset === preset).map((p) => p.columns))].sort(
+          (a, b) => b - a,
+        );
       expect(reached(4)).toEqual([4, 2, 1]);
       expect(reached(6)).toEqual([6, 3, 2, 1]);
     },
