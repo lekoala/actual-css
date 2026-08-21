@@ -1,58 +1,63 @@
-# Changelog
-
-All notable changes will be documented here.
-
-This project follows Keep a Changelog and uses semver, including during 0.x.
+# Actual CSS 0.4.0 — Changelog
 
 # 0.4.0 — unreleased
 
 ### Added
 
-* Modular CSS architecture with `core`, `layout`, `typography`, `forms`, `components`, `effects`, and `utilities` families, each exposing manifests and individual modules.
-* `actual-css/full` and `actual.full.*` bundles for the complete framework.
-* `.switcher` as a core layout primitive and intrinsic `.sidebar-layout`.
-* Generated and published `reserved-classes.json`.
-* Dedicated `typography/lead.css` and `layout/measure.css` modules; `.measure` now exposes `--measure`.
-* Architecture, compatibility, vendor-selector, browser-layout, and package guardrails.
-* `build:themes` generates the preset-palette bundle into `demo/assets/`; `dist/` now contains only npm-published artifacts.
-* Browser test proving custom `[data-theme]` islands re-derive `--focus-ring` from their own `--focus`.
-* CI verifies committed `dist/`, `site/`, and `size-report.json` match a fresh build.
+* Modular CSS architecture with `core`, `layout`, `typography`, `forms`, `components`, `effects`, and `utilities` families, with family and individual-module imports.
+* `actual-css/full` / `actual.full.*` bundles for the complete CSS and JS framework.
+* `.column-layout` with `column-span-1…12` and `column-start-1…12` for explicit opt-in 12-column composition.
+* Intrinsic `.switcher` and `.sidebar-layout` layout recipes, plus explicit layout-selection guidance.
+* `.scroll-target` with `--scroll-target-offset` for hash links and `scrollIntoView()` below sticky UI.
+* Dedicated `typography/lead.css` and `layout/measure.css`; `.measure` exposes `--measure`.
+* Generated and published `reserved-classes.json` for the framework-owned class namespace.
+* Native `accent-color` theming for unstyled platform controls, recomputed across `[data-theme]` islands.
+* “Building with Actual CSS” integration guide covering theme tokens, layout selection, hooks, utilities, and application CSS.
+* Expanded build, architecture, compatibility, browser-layout, package, and generated-output guardrails, including real `npm pack` verification.
 
 ### Changed
 
-* The bare `actual-css` entrypoint is now the minimal core; use `actual-css/full` for all functional families.
-* `.grid` remains the space-driven intrinsic grid using `--grid-min`.
-* `.grid-2/3/4/6` are bounded responsive grids by default; inside `.container-query` they use balanced structural subdivisions (`2→1`, `3→1`, `4→2→1`, `6→3→2→1`).
-* `.container-query` is now an optional balanced-layout enhancement rather than a requirement for responsive grids.
+* The bare `actual-css` entrypoint is now the minimal core; use `actual-css/full` for all CSS families.
+* `actual-css/js` is now the enhancement loader only; use `actual-css/js/full` or `actual.full.js` for the complete pre-registered runtime.
+* `.grid` remains space-driven through `--grid-min`; `.grid-2/3/4/6` now express bounded structural density and degrade responsively.
+* `.container-query` optionally gives `.grid-N` balanced divisor-based subdivisions (`2→1`, `3→1`, `4→2→1`, `6→3→2→1`) instead of being required for responsiveness.
+* `--grid-columns` is the explicit escape hatch for exact custom tracks, including arbitrary structural counts, asymmetric ratios, and mixed intrinsic/flexible tracks; applications own their narrow behavior.
+* `.sidebar-layout` now uses intrinsic flex wrapping instead of a hidden container-query/viewport breakpoint contract.
+* Grid primitives remove the automatic `min-inline-size` floor from their direct children to preserve overflow-safe track sizing.
+* `.card` is now a column flex container; a direct `<footer>` anchors to the bottom when extra space is available, aligning actions across equal-height cards.
 * Focus is a core invariant and no longer depends on loading focus styles after components.
-* Utilities now explicitly distinguish compact base shortcuts from verbose optional property/value helpers.
+* Focus rings are derived from each `[data-theme]` island's own `--focus`; preset palettes only keep intentional overrides such as neon.
+* `.prose` now includes sane native description-list (`dt` / `dd`) styling.
 * `.lead` and `.measure` are independent from `.prose`.
-* CI and browser diagnostics updated for Bun 1.4.
-* The focus-ring color-mix derivation applies to every `[data-theme]` island; preset palettes no longer hardcode formulaic ring literals (neon keeps its intentional glow override).
-* Preset theme palettes are demo reference material: removed from the npm package, bundled only for demos/docs via `build:themes`.
-* Biome now lints and formats `scripts/` and `tests/` alongside `src/`; `lint` runs first in `build:all`.
-* `llms.txt` states the real entrypoint contract (core vs `/full`, loader vs `/js/full`) and the layout-primitive selection guide.
+* Utilities distinguish compact framework shortcuts from verbose optional property/value helpers; optional helpers include semantic gap sizes and common sizing, alignment, overflow, spacing, text, border, and surface escape hatches.
+* Preset theme palettes are reference/demo material rather than package API; their bundle is generated for demos/docs instead of `dist/`.
+* `llms.txt` now documents the core/full package split, layout-selection model, class manifest, and application-CSS integration workflow.
+* Biome now covers `src/`, `scripts/`, and `tests/`, and lint runs as part of `build:all`.
+* CI and browser diagnostics are updated for Bun 1.4 and verify committed `dist/`, `site/`, and `size-report.json` against fresh builds.
 
 ### Fixed
 
 * Forced-colors and theme-island focus/state handling.
-* Drawer RTL flip now follows resolved direction via `:dir(rtl)`.
-* Badge uses shared font-size and density tokens instead of private literals.
-* `.sr-only` hides through `clip-path` in addition to legacy `clip`.
-* `dim` and `indigo` shadows use their own blue hue instead of inheriting the default aubergine ink.
-* Vendor pseudo-element rules for color inputs and meters.
+* Grid child min-content overflow in narrow tracks.
+* Drawer RTL behavior now follows resolved direction through `:dir(rtl)`.
+* Badge typography uses shared font-size/density tokens instead of private literals.
+* `.sr-only` now combines modern `clip-path` hiding with the legacy `clip` fallback.
+* `dim` and `indigo` shadows use palette-appropriate shadow colors.
+* Vendor pseudo-element handling for color inputs and meters.
 * Tooltip Escape handling and LIFO surface dismissal, including pinned tooltips.
-* OTP and switch focus/state rendering.
-* Joined-control focus stacking and floating-field behavior.
-* Native color control rendering.
+* OTP, switch, joined-control, floating-field, validation, and native color-control focus/state edge cases.
 * Flyout panel lifecycle cleanup.
-* Validation for fields with names such as `length`.
 * Prose spacing and component focus regressions.
+* Compatibility checks ignore feature names appearing only in CSS comments.
+* Navbar and status-bar guidance now makes responsive trigger placement and transient-feedback semantics explicit.
 
 ### Breaking
 
-* `actual-css` now contains only the core; replace it with `actual-css/full` when the previous full framework behavior is required.
-* `.grid-N` no longer means a fixed N-column grid at every width: it now degrades responsively, with balanced divisor-based layouts available under `.container-query`.
+* `actual-css` now contains only the core. Replace it with `actual-css/full` when the previous full-framework behavior is required.
+* `actual-css/js` / `actual.js` now contain only the enhancement loader. Use `actual-css/js/full` / `actual.full.js` for the previous complete runtime.
+* `.grid-N` no longer means a fixed N-column grid at every width; it is a responsive structural-density preset, with balanced divisor layouts available through `.container-query`.
+* `.sidebar-layout` no longer depends on `.container-query` or the old fixed breakpoint; direct children now participate in its intrinsic flex sizing contract.
+* `.card` now establishes a column flex formatting context so direct structural footers can anchor to the bottom; code relying on block margin collapsing inside cards should be reviewed.
 * Direct imports of `typography/prose` no longer include `.lead` or `.measure`; import `typography/lead` and `layout/measure` explicitly when needed.
 
 

@@ -17,7 +17,7 @@
  *   peers switching together        -> .switcher
  *   content + secondary region      -> .sidebar-layout
  *   media + flexible content        -> .media
- *   meaningful asymmetric tracks    -> --grid-columns on .grid
+ *   exact custom track templates    -> --grid-columns on .grid
  *
  * Child contract: each direct child is placed on the canvas via its own
  * .column-span-N / .column-start-N.
