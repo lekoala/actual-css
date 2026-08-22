@@ -348,13 +348,14 @@
       </div>
 
       <div class="density-legend">
-        <p><strong>Opt in</strong> — button, badge, input, select, checkbox/radio/switch, pagination, tabs, choice cards, flyout menus, spacing helpers (<code>.py</code> / <code>.px</code> / <code>.mbs</code> / <code>.mbe</code>), and layout primitives via <code>--gap</code>.</p>
+        <p><strong>Opt in</strong> — button, badge, input, select, pagination, tabs, choice cards, flyout menus, spacing helpers (<code>.py</code> / <code>.px</code> / <code>.mbs</code> / <code>.mbe</code>), and layout primitives via <code>--gap</code>.</p>
         <ul>
           <li>Controls (<code>.btn</code>, <code>.input</code>, <code>.select</code>, …) consume <code>--control-size</code>.</li>
           <li>Compact labels (<code>.badge</code>) consume <code>--density-compact-size</code>.</li>
           <li>Spacing helpers and <code>.choice-card</code> consume <code>--density-space</code>; layouts consume <code>--gap</code>.</li>
         </ul>
         <p><strong>No-op</strong> — alert, card, dialog, table, accordion, navbar, and page sections keep their size. The alert and card above are identical in both columns even though their inner button and badge shrank.</p>
+        <p>Inline choices (<code>.check</code>, <code>.radio</code>, <code>.switch</code>) are a no-op too, and deliberately so: they sit on a line of text, so they follow <code>--choice-control-size</code> off the control typography, which density does not touch. Shrinking the checkbox but not its label would break the alignment density is not asking to change. Size them with <code>--control-font-size</code> or <code>--choice-control-size</code> instead.</p>
       </div>
     </section>
 

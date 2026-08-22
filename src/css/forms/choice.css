@@ -14,6 +14,10 @@
  * --choice-border
  * --choice-bg
  * --choice-mark
+ *
+ * --choice-control-size (tokens.css) is the shared typographic size for every
+ * inline choice; switch.css derives its track from it so a checkbox and a
+ * switch on the same line stay proportionate.
  */
 /* Intent boundary — inherited intents do not tint this component.
    Local intent classes still win because :where() has zero specificity. */
@@ -30,8 +34,6 @@
 }
 
 .choice {
-  --choice-control-offset: 0.25em;
-
   display: inline-flex;
   align-items: flex-start;
   gap: var(--space-20);
@@ -40,31 +42,46 @@
   cursor: pointer;
 }
 
-/* Optical alignment: nudge the control down so the checkbox/radio sits
-   visually centered with the first line of label text, not flush with the
-   top of the line-box. Default 0.25em (~4px at 16px) places the control just
-   below the cap-height, matching what Bootstrap, Material, and most polished
-   form libraries ship. Multi-line labels still keep the control at the top
-   thanks to align-items: flex-start. Override per-instance via
-   --choice-control-offset for themes with a different line-height or control
-   size. */
+/* Optical alignment: nudge the control down so it sits visually centered with
+   the first line of label text, not flush with the top of the line-box. Every
+   inline choice runs the same formula — center the control's own block size on
+   the first line box, then drop it 0.0625em so it reads level with the
+   cap-height rather than the em-box. A checkbox and a switch therefore stay
+   level with each other under any line-height or --choice-control-size, which
+   a per-control constant cannot do (a taller switch and a shorter checkbox
+   need different offsets to land on the same optical line).
+
+   The constants are what the formula yields at the default 1.5 line-height:
+   0.25em (4px) for a checkbox, 0.1875em (3px) for the taller switch track.
+   They serve browsers without lh units. Multi-line labels still keep the
+   control at the top thanks to align-items: flex-start.
+
+   --choice-control-offset stays fallback-only rather than declared here, so an
+   override placed anywhere up the tree — :root included — reaches the control
+   instead of losing to a component-level declaration. */
 .choice > :is(input[type="checkbox"]:not([role="switch"]), input[type="radio"]) {
   flex: 0 0 auto;
-  margin-block-start: var(--choice-control-offset);
+  margin-block-start: var(--choice-control-offset, 0.25em);
 }
 
-/* The switch is excluded from --choice-control-offset (that would be far too
-   much) — it is almost exactly one line tall, so it only needs a sub-pixel
-   optical nudge. When 1lh is available, center the switch's real height on
-   the first line-box so .sm/.lg (which change --control-size, not the
-   typography) keep the control top-aligned automatically. */
 .choice > .switch {
-  margin-block-start: 0.0625em;
+  flex: 0 0 auto;
+  margin-block-start: var(--choice-control-offset, 0.1875em);
 }
 
 @supports (margin-block-start: 1lh) {
+  .choice > :is(input[type="checkbox"]:not([role="switch"]), input[type="radio"]) {
+    margin-block-start: var(
+      --choice-control-offset,
+      calc((1lh - var(--choice-control-size)) / 2 + 0.0625em)
+    );
+  }
+
   .choice > .switch {
-    margin-block-start: calc((1lh - var(--switch-block-size)) / 2 + 0.0625em);
+    margin-block-start: var(
+      --choice-control-offset,
+      calc((1lh - var(--switch-block-size)) / 2 + 0.0625em)
+    );
   }
 }
 
@@ -91,8 +108,8 @@
   vertical-align: middle;
   display: inline-grid;
   place-content: center;
-  inline-size: 1.125em;
-  block-size: 1.125em;
+  inline-size: var(--choice-control-size);
+  block-size: var(--choice-control-size);
   margin: 0;
   border: var(--border-width) solid var(--form-invalid-border, var(--choice-border));
   background: var(--choice-bg);

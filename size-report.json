@@ -1,12 +1,12 @@
 {
-  "totalRaw": 226987,
+  "totalRaw": 228843,
   "core": {
-    "minified": 10492,
-    "brotli": 2500
+    "minified": 10524,
+    "brotli": 2501
   },
   "full": {
-    "minified": 106796,
-    "brotli": 15669
+    "minified": 107154,
+    "brotli": 15740
   },
   "js": {
     "core": {
@@ -33,20 +33,20 @@
       "raw": 7658
     },
     {
+      "file": "core/tokens.css",
+      "raw": 7568
+    },
+    {
       "file": "core/theme.css",
       "raw": 7286
     },
     {
-      "file": "core/tokens.css",
-      "raw": 7102
+      "file": "forms/choice.css",
+      "raw": 6028
     },
     {
       "file": "components/badge.css",
       "raw": 5364
-    },
-    {
-      "file": "forms/choice.css",
-      "raw": 5286
     },
     {
       "file": "layout/grid.css",
@@ -93,6 +93,10 @@
       "raw": 3892
     },
     {
+      "file": "forms/switch.css",
+      "raw": 3816
+    },
+    {
       "file": "components/join.css",
       "raw": 3553
     },
@@ -111,10 +115,6 @@
     {
       "file": "utilities/base.css",
       "raw": 3316
-    },
-    {
-      "file": "forms/switch.css",
-      "raw": 3168
     },
     {
       "file": "components/tooltip.css",

@@ -83,13 +83,21 @@
 
   /* Controls — inputs and buttons share --control-size so heights always match.
      .sm/.lg (variants.css) switch --control-size; --control-font-size stays
-     at its baseline because density does not change typography. */
+     at its baseline because density does not change typography.
+
+     Inline choices (checkbox, radio, switch) are typographic, not field-sized:
+     they sit on a line of text, so they follow --control-font-size through
+     --choice-control-size instead of --control-size. Being an em value in
+     :root is deliberate — an unregistered custom property resolves its units
+     at the element that consumes it, so one declaration tracks whatever font
+     size the choice actually renders at. */
   --control-size-sm: 2rem;
   --control-size-md: 2.375rem;
   --control-size-lg: 2.75rem;
   --control-size: var(--control-size-md);
   --control-pad-x: 1em;
   --control-font-size: var(--font-size-md);
+  --choice-control-size: 1.125em;
   --disabled-opacity: 0.65;
 }
 

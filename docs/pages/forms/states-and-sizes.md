@@ -11,7 +11,14 @@
 
 Use `readonly` for text-like values that can still be focused, selected, and submitted. Use `disabled` for unavailable controls that should not receive focus or submit a value.
 
-The `.sm` and `.lg` modifiers set the shared control tokens used by inputs, selects, textareas, buttons, and switches. Put the modifier on the control itself, or on a `.field` wrapper when the whole field should share that size.
+The `.sm` and `.lg` modifiers set the shared control tokens used by inputs, selects, textareas, and buttons. Put the modifier on the control itself, or on a `.field` wrapper when the whole field should share that size.
+
+Inline choices — `.check`, `.radio`, `.switch` — are the exception. They sit on
+a line of text rather than standing as a field, so they are sized off the
+control typography (`--choice-control-size`, an em value) and `.sm` / `.lg`
+leave them alone: density changes field heights, not type. Resizing the control
+without its label would only break the alignment. Scale them by scaling their
+type instead.
 
 ```html demo
 <form novalidate>
@@ -267,18 +274,20 @@ The `.sm` and `.lg` modifiers set the shared control tokens used by inputs, sele
         <button class="btn outline lg" type="button">Large</button>
       </div>
 
+      <!-- Density is a deliberate no-op on inline choices: these three are
+           identical even though the modifiers differ. -->
       <div class="grid items-start">
         <label class="choice sm">
           <input class="check" type="checkbox" checked />
-          <span>Small checkbox</span>
+          <span>.sm checkbox</span>
         </label>
         <label class="choice">
-          <input class="check" type="checkbox" checked />
-          <span>Default checkbox</span>
+          <input class="radio" type="radio" name="demo-radio-size" checked />
+          <span>Default radio</span>
         </label>
         <label class="choice lg">
-          <input class="check" type="checkbox" checked />
-          <span>Large checkbox</span>
+          <input class="switch" type="checkbox" role="switch" checked />
+          <span>.lg switch</span>
         </label>
         <label class="choice">
           <input class="check" type="checkbox" id="indet-size" />
@@ -286,33 +295,20 @@ The `.sm` and `.lg` modifiers set the shared control tokens used by inputs, sele
         </label>
       </div>
 
-      <div class="grid items-start">
-        <label class="choice sm">
-          <input class="radio" type="radio" name="demo-radio-size" checked />
-          <span>Small radio</span>
+      <!-- Typography is the knob that does resize them — control and label
+           together, so the alignment survives. -->
+      <div class="grid items-start" style="--control-font-size: var(--font-size-sm);">
+        <label class="choice">
+          <input class="check" type="checkbox" checked />
+          <span>Smaller type</span>
         </label>
         <label class="choice">
-          <input class="radio" type="radio" name="demo-radio-size" />
-          <span>Default radio</span>
-        </label>
-        <label class="choice lg">
-          <input class="radio" type="radio" name="demo-radio-size" />
-          <span>Large radio</span>
-        </label>
-      </div>
-
-      <div class="grid items-start">
-        <label class="choice sm">
-          <input class="switch" type="checkbox" role="switch" checked />
-          <span>Small switch</span>
+          <input class="radio" type="radio" name="demo-radio-type" checked />
+          <span>Smaller type</span>
         </label>
         <label class="choice">
           <input class="switch" type="checkbox" role="switch" checked />
-          <span>Default switch</span>
-        </label>
-        <label class="choice lg">
-          <input class="switch" type="checkbox" role="switch" checked />
-          <span>Large switch</span>
+          <span>Smaller type</span>
         </label>
       </div>
     </div>
