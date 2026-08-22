@@ -26,7 +26,7 @@ ARIA and native HTML, and per-widget configuration uses self-describing
 
 ## Install
 
-```text
+```sh
 npm install actual-css
 ```
 
