@@ -11,10 +11,11 @@
 
 ## Class reference
 
-| Class         | Kind      | Description                                                  |
-|---------------|-----------|--------------------------------------------------------------|
-| `.table-wrap` | Component | Scroll container and outer chrome (surface, border, radius). |
-| `.table`      | Component | The table itself; row and cell rules.                        |
+| Class           | Kind      | Description                                                  |
+|-----------------|-----------|--------------------------------------------------------------|
+| `.table-wrap`   | Component | Scroll container and outer chrome (surface, border, radius). |
+| `.table`        | Component | The table itself; row and cell rules.                        |
+| `.table.compact`| Density   | Tighter cell padding; typography is unchanged.               |
 
 ## Basic usage
 
@@ -96,7 +97,31 @@ table width before the wrapper scrolls horizontally.
 </div>
 ```
 
+## Compact tables
+
+`.compact` lowers the cell padding only — density never changes typography.
+It is the same vocabulary as `.card.compact`.
+
+```html demo
+<div class="table-wrap">
+  <table class="table compact">
+    <caption>Standings by position</caption>
+    <thead>
+      <tr>
+        <th scope="col">Pos</th>
+        <th scope="col">Name</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>1</td><td>John Nemo</td></tr>
+      <tr><td>2</td><td>Jane Doe</td></tr>
+      <tr><td>3</td><td>Ada Morgan</td></tr>
+    </tbody>
+  </table>
+</div>
+```
+
 ## CSS hooks
 
-- `--table-cell-pad` — cell padding.
+- `--table-cell-pad` — cell padding; `.compact` re-declares it tighter.
 - `--table-min` — minimum table width before `.table-wrap` scrolls horizontally.

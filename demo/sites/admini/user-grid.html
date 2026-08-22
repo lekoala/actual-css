@@ -6,16 +6,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>User grid - Admini on Actual CSS</title>
   <meta name="description" content="User grid with avatars, roles, status badges, and search filtering.">
-  <link rel="stylesheet" href="../../dist/actual.full.css">
-  <link rel="stylesheet" href="../assets/actual-themes.min.css">
+
+  <script src="admini-theme.js"></script>
+  <link rel="stylesheet" href="../../../dist/actual.full.css">
+  <link rel="stylesheet" href="../../assets/actual-themes.min.css">
   <link rel="stylesheet" href="admini.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.46.0/dist/tabler-icons.min.css">
 </head>
 
 <body>
   <div class="admini-shell">
     <!-- admini-shell:sidebar -->
-    <aside class="admini-sidebar" aria-label="Primary navigation">
+    <aside class="admini-sidebar scroller stable-gutter" aria-label="Primary navigation">
       <a class="navbar-brand" href="index.html">
         <span class="avatar primary"><abbr>AD</abbr></span>
         <span>Admini</span>
@@ -133,7 +135,7 @@
 
       <div class="flyout-trigger stretch">
         <button class="btn neutral ghost" data-enhance="flyout" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="sidebar-user-menu"
-          id="sidebar-user-trigger" style="justify-content: flex-start;">
+          id="sidebar-user-trigger">
           <span class="avatar sm"><abbr>JN</abbr></span>
           <span>John Nemo</span>
         </button>
@@ -204,24 +206,24 @@
       <!-- /admini-shell:topbar -->
 
     <main class="center stack admini-content">
-        <header class="cluster" style="--cluster-justify: space-between; align-items: flex-start;">
+        <header class="cluster" style="--cluster-justify: space-between; --cluster-align: flex-start;">
           <hgroup>
             <p class="overline">Team</p>
             <h1>User grid</h1>
-            <p class="muted">A card-per-person layout — the pattern the tables and lists elsewhere don't cover.</p>
+            <p class="muted">A card-per-person layout — search and the role filter narrow it live.</p>
           </hgroup>
-          <button class="btn primary" type="button">
+          <button class="btn primary" type="button" commandfor="invite-modal" command="show-modal">
             <i class="ti ti-user-plus" aria-hidden="true"></i>
             Invite member
           </button>
         </header>
 
-        <div class="cluster sm" style="--cluster-wrap: nowrap;" style="--cluster-justify: space-between;">
+        <div class="cluster sm" style="--cluster-wrap: nowrap; --cluster-justify: space-between;">
           <label class="field sm" style="flex: 0 1 20rem;">
             <span class="field-label sr-only">Search members</span>
-            <input class="input" type="search" placeholder="Search members" aria-label="Search members">
+            <input class="input" type="search" placeholder="Search members" aria-label="Search members" id="member-search">
           </label>
-          <select class="select sm fit" aria-label="Filter by role">
+          <select class="select sm fit" aria-label="Filter by role" id="member-role-filter">
             <option>All roles</option>
             <option>Admin</option>
             <option>Editor</option>
@@ -229,162 +231,148 @@
           </select>
         </div>
 
-        <div class="grid" style="--grid-min: 15rem;">
-          <article class="card raised stack" style="text-align: center;">
-            <div class="cluster" style="justify-content: center;">
-              <span class="avatar lg primary"><abbr>MO</abbr></span>
-            </div>
+        <div class="grid" style="--grid-min: 15rem;" id="member-grid">
+          <article class="card raised stack admini-user-card" data-role="Admin"
+            data-context-menu="member-menu" data-context-menu-long-press tabindex="0">
+            <span class="avatar lg primary"><abbr>MO</abbr></span>
             <div>
               <strong>Mark Otto</strong>
-              <p class="muted" style="margin: 0;">Admin</p>
+              <p class="muted">Admin</p>
             </div>
-            <div class="cluster" style="justify-content: center;">
-              <span class="badge success soft">Active</span>
-            </div>
-            <div class="cluster" style="justify-content: center;">
-              <button class="btn neutral outline sm" type="button">Message</button>
-              <button class="btn neutral ghost sm" type="button" aria-label="More options for Mark Otto">
+            <span class="badge success soft">Active</span>
+            <footer class="admini-user-card-actions">
+              <button class="btn neutral outline sm" type="button" data-tooltip="Send a message">Message</button>
+              <button class="btn neutral ghost sm" type="button" data-context-menu-trigger aria-controls="member-menu"
+                aria-label="More options for Mark Otto">
                 <i class="ti ti-dots" aria-hidden="true"></i>
               </button>
-            </div>
+            </footer>
           </article>
 
-          <article class="card raised stack" style="text-align: center;">
-            <div class="cluster" style="justify-content: center;">
-              <span class="avatar lg success"><abbr>JT</abbr></span>
-            </div>
+          <article class="card raised stack admini-user-card" data-role="Editor"
+            data-context-menu="member-menu" data-context-menu-long-press tabindex="0">
+            <span class="avatar lg success"><abbr>JT</abbr></span>
             <div>
               <strong>Jacob Thornton</strong>
-              <p class="muted" style="margin: 0;">Editor</p>
+              <p class="muted">Editor</p>
             </div>
-            <div class="cluster" style="justify-content: center;">
-              <span class="badge success soft">Active</span>
-            </div>
-            <div class="cluster" style="justify-content: center;">
-              <button class="btn neutral outline sm" type="button">Message</button>
-              <button class="btn neutral ghost sm" type="button" aria-label="More options for Jacob Thornton">
+            <span class="badge success soft">Active</span>
+            <footer class="admini-user-card-actions">
+              <button class="btn neutral outline sm" type="button" data-tooltip="Send a message">Message</button>
+              <button class="btn neutral ghost sm" type="button" data-context-menu-trigger aria-controls="member-menu"
+                aria-label="More options for Jacob Thornton">
                 <i class="ti ti-dots" aria-hidden="true"></i>
               </button>
-            </div>
+            </footer>
           </article>
 
-          <article class="card raised stack" style="text-align: center;">
-            <div class="cluster" style="justify-content: center;">
-              <span class="avatar lg warning"><abbr>LB</abbr></span>
-            </div>
+          <article class="card raised stack admini-user-card" data-role="Subscriber"
+            data-context-menu="member-menu" data-context-menu-long-press tabindex="0">
+            <span class="avatar lg warning"><abbr>LB</abbr></span>
             <div>
               <strong>Larry the Bird</strong>
-              <p class="muted" style="margin: 0;">Subscriber</p>
+              <p class="muted">Subscriber</p>
             </div>
-            <div class="cluster" style="justify-content: center;">
-              <span class="badge neutral soft">Away</span>
-            </div>
-            <div class="cluster" style="justify-content: center;">
-              <button class="btn neutral outline sm" type="button">Message</button>
-              <button class="btn neutral ghost sm" type="button" aria-label="More options for Larry the Bird">
+            <span class="badge neutral soft">Away</span>
+            <footer class="admini-user-card-actions">
+              <button class="btn neutral outline sm" type="button" data-tooltip="Send a message">Message</button>
+              <button class="btn neutral ghost sm" type="button" data-context-menu-trigger aria-controls="member-menu"
+                aria-label="More options for Larry the Bird">
                 <i class="ti ti-dots" aria-hidden="true"></i>
               </button>
-            </div>
+            </footer>
           </article>
 
-          <article class="card raised stack" style="text-align: center;">
-            <div class="cluster" style="justify-content: center;">
-              <span class="avatar lg"><abbr>RM</abbr></span>
-            </div>
+          <article class="card raised stack admini-user-card" data-role="Subscriber"
+            data-context-menu="member-menu" data-context-menu-long-press tabindex="0">
+            <span class="avatar lg"><abbr>RM</abbr></span>
             <div>
               <strong>Rin Moreau</strong>
-              <p class="muted" style="margin: 0;">Subscriber</p>
+              <p class="muted">Subscriber</p>
             </div>
-            <div class="cluster" style="justify-content: center;">
-              <span class="badge success soft">Active</span>
-            </div>
-            <div class="cluster" style="justify-content: center;">
-              <button class="btn neutral outline sm" type="button">Message</button>
-              <button class="btn neutral ghost sm" type="button" aria-label="More options for Rin Moreau">
+            <span class="badge success soft">Active</span>
+            <footer class="admini-user-card-actions">
+              <button class="btn neutral outline sm" type="button" data-tooltip="Send a message">Message</button>
+              <button class="btn neutral ghost sm" type="button" data-context-menu-trigger aria-controls="member-menu"
+                aria-label="More options for Rin Moreau">
                 <i class="ti ti-dots" aria-hidden="true"></i>
               </button>
-            </div>
+            </footer>
           </article>
 
-          <article class="card raised stack" style="text-align: center;">
-            <div class="cluster" style="justify-content: center;">
-              <span class="avatar lg primary"><abbr>AM</abbr></span>
-            </div>
+          <article class="card raised stack admini-user-card" data-role="Editor"
+            data-context-menu="member-menu" data-context-menu-long-press tabindex="0">
+            <span class="avatar lg primary"><abbr>AM</abbr></span>
             <div>
               <strong>Ada Morgan</strong>
-              <p class="muted" style="margin: 0;">Editor</p>
+              <p class="muted">Editor</p>
             </div>
-            <div class="cluster" style="justify-content: center;">
-              <span class="badge success soft">Active</span>
-            </div>
-            <div class="cluster" style="justify-content: center;">
-              <button class="btn neutral outline sm" type="button">Message</button>
-              <button class="btn neutral ghost sm" type="button" aria-label="More options for Ada Morgan">
+            <span class="badge success soft">Active</span>
+            <footer class="admini-user-card-actions">
+              <button class="btn neutral outline sm" type="button" data-tooltip="Send a message">Message</button>
+              <button class="btn neutral ghost sm" type="button" data-context-menu-trigger aria-controls="member-menu"
+                aria-label="More options for Ada Morgan">
                 <i class="ti ti-dots" aria-hidden="true"></i>
               </button>
-            </div>
+            </footer>
           </article>
 
-          <article class="card raised stack" style="text-align: center;">
-            <div class="cluster" style="justify-content: center;">
-              <span class="avatar lg warning"><abbr>TS</abbr></span>
-            </div>
+          <article class="card raised stack admini-user-card" data-role="Subscriber"
+            data-context-menu="member-menu" data-context-menu-long-press tabindex="0">
+            <span class="avatar lg warning"><abbr>TS</abbr></span>
             <div>
               <strong>Theo Silva</strong>
-              <p class="muted" style="margin: 0;">Subscriber</p>
+              <p class="muted">Subscriber</p>
             </div>
-            <div class="cluster" style="justify-content: center;">
-              <span class="badge neutral soft">Away</span>
-            </div>
-            <div class="cluster" style="justify-content: center;">
-              <button class="btn neutral outline sm" type="button">Message</button>
-              <button class="btn neutral ghost sm" type="button" aria-label="More options for Theo Silva">
+            <span class="badge neutral soft">Away</span>
+            <footer class="admini-user-card-actions">
+              <button class="btn neutral outline sm" type="button" data-tooltip="Send a message">Message</button>
+              <button class="btn neutral ghost sm" type="button" data-context-menu-trigger aria-controls="member-menu"
+                aria-label="More options for Theo Silva">
                 <i class="ti ti-dots" aria-hidden="true"></i>
               </button>
-            </div>
+            </footer>
           </article>
 
-          <article class="card raised stack" style="text-align: center;">
-            <div class="cluster" style="justify-content: center;">
-              <span class="avatar lg"><abbr>MH</abbr></span>
-            </div>
+          <article class="card raised stack admini-user-card" data-role="Subscriber"
+            data-context-menu="member-menu" data-context-menu-long-press tabindex="0">
+            <span class="avatar lg"><abbr>MH</abbr></span>
             <div>
               <strong>Mira Hart</strong>
-              <p class="muted" style="margin: 0;">Subscriber</p>
+              <p class="muted">Subscriber</p>
             </div>
-            <div class="cluster" style="justify-content: center;">
-              <span class="badge success soft">Active</span>
-            </div>
-            <div class="cluster" style="justify-content: center;">
-              <button class="btn neutral outline sm" type="button">Message</button>
-              <button class="btn neutral ghost sm" type="button" aria-label="More options for Mira Hart">
+            <span class="badge success soft">Active</span>
+            <footer class="admini-user-card-actions">
+              <button class="btn neutral outline sm" type="button" data-tooltip="Send a message">Message</button>
+              <button class="btn neutral ghost sm" type="button" data-context-menu-trigger aria-controls="member-menu"
+                aria-label="More options for Mira Hart">
                 <i class="ti ti-dots" aria-hidden="true"></i>
               </button>
-            </div>
+            </footer>
           </article>
 
-          <article class="card stack" style="text-align: center; border-style: dashed;">
-            <div class="cluster" style="justify-content: center;">
-              <span class="avatar lg neutral"><i class="ti ti-mail" aria-hidden="true"></i></span>
-            </div>
+          <article class="card stack admini-user-card is-pending">
+            <span class="avatar lg neutral"><i class="ti ti-mail" aria-hidden="true"></i></span>
             <div>
               <strong>invited@example.com</strong>
-              <p class="muted" style="margin: 0;">Pending invite</p>
+              <p class="muted">Pending invite</p>
             </div>
-            <div class="cluster" style="justify-content: center;">
-              <span class="badge warning soft">Invited</span>
-            </div>
-            <div class="cluster" style="justify-content: center;">
+            <span class="badge warning soft">Invited</span>
+            <footer class="admini-user-card-actions">
               <button class="btn neutral outline sm" type="button">Resend</button>
               <button class="btn danger ghost sm" type="button">Cancel</button>
-            </div>
+            </footer>
           </article>
+        </div>
+
+        <div class="card stack items-center" id="members-empty" hidden>
+          <p class="muted" style="margin: 0;">No members match your search or role filter.</p>
         </div>
       </main>
     </div>
   </div>
 
-  <dialog class="drawer" id="navigation-drawer" aria-label="Navigation">
+  <dialog class="drawer" data-theme="dim" id="navigation-drawer" aria-label="Navigation">
     <header class="cluster" style="--cluster-justify: space-between;">
       <strong>Admini</strong>
       <form method="dialog">
@@ -412,20 +400,58 @@
     </nav>
   </dialog>
 
-  <script src="../../dist/actual.full.js"></script>
-  <script>
-    const switcher = document.getElementById("theme-switcher");
+  <dialog class="modal" id="invite-modal" closedby="any" data-dialog-dismissible>
+    <form method="dialog" class="stack">
+      <header>
+        <h3>Invite member</h3>
+        <p class="muted">Send an email invitation to join this workspace.</p>
+      </header>
 
-    if (switcher) {
-      switcher.addEventListener("change", () => {
-        if (switcher.value) {
-          document.documentElement.dataset.theme = switcher.value;
-        } else {
-          document.documentElement.removeAttribute("data-theme");
-        }
+      <label class="field">
+        <span class="field-label">Email</span>
+        <input class="input" type="email" placeholder="name@company.com" required>
+      </label>
+
+      <footer>
+        <button class="btn neutral outline" value="cancel" formnovalidate>Cancel</button>
+        <button class="btn primary" value="invite">Send invite</button>
+      </footer>
+    </form>
+  </dialog>
+
+  <menu class="flyout sm menu" role="menu" id="member-menu" aria-label="Member actions" hidden>
+    <li><button class="menu-item" type="button" role="menuitem">View profile</button></li>
+    <li><button class="menu-item" type="button" role="menuitem">Change role</button></li>
+    <hr class="menu-separator" role="separator">
+    <li><button class="menu-item danger" type="button" role="menuitem">Remove from workspace</button></li>
+  </menu>
+
+  <script src="../../../dist/actual.full.js" defer></script>
+
+  <script>
+    const search = document.getElementById("member-search");
+    const roleFilter = document.getElementById("member-role-filter");
+    const cards = [...document.querySelectorAll("#member-grid .admini-user-card")];
+    const emptyState = document.getElementById("members-empty");
+
+    function applyFilters() {
+      const query = search.value.trim().toLowerCase();
+      const role = roleFilter.value;
+      let visible = 0;
+
+      cards.forEach((card) => {
+        const matchesRole = role === "All roles" || card.dataset.role === role;
+        const matchesText = !query || card.textContent.toLowerCase().includes(query);
+        const show = matchesRole && matchesText;
+        card.hidden = !show;
+        if (show) visible++;
       });
+
+      emptyState.hidden = visible > 0;
     }
 
+    search.addEventListener("input", applyFilters);
+    roleFilter.addEventListener("change", applyFilters);
   </script>
 </body>
 

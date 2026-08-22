@@ -6,16 +6,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Dashboard - Admini on Actual CSS</title>
   <meta name="description" content="Admin dashboard with metrics cards, activity feed, and navigation shell.">
-  <link rel="stylesheet" href="../../dist/actual.full.css">
-  <link rel="stylesheet" href="../assets/actual-themes.min.css">
+
+  <script src="admini-theme.js"></script>
+  <link rel="stylesheet" href="../../../dist/actual.full.css">
+  <link rel="stylesheet" href="../../assets/actual-themes.min.css">
   <link rel="stylesheet" href="admini.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.46.0/dist/tabler-icons.min.css">
 </head>
 
 <body>
   <div class="admini-shell">
     <!-- admini-shell:sidebar -->
-    <aside class="admini-sidebar" aria-label="Primary navigation">
+    <aside class="admini-sidebar scroller stable-gutter" aria-label="Primary navigation">
       <a class="navbar-brand" href="index.html">
         <span class="avatar primary"><abbr>AD</abbr></span>
         <span>Admini</span>
@@ -133,14 +135,14 @@
 
       <div class="flyout-trigger stretch">
         <button class="btn neutral ghost" data-enhance="flyout" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="sidebar-user-menu"
-          id="sidebar-user-trigger" style="justify-content: flex-start;">
+          id="sidebar-user-trigger">
           <span class="avatar sm"><abbr>JN</abbr></span>
           <span>John Nemo</span>
         </button>
         <menu class="flyout sm menu" role="menu" id="sidebar-user-menu" aria-labelledby="sidebar-user-trigger" hidden>
           <li><a class="menu-item" href="profile.html" role="menuitem">Profile</a></li>
           <li><a class="menu-item" href="settings.html" role="menuitem">Settings</a></li>
-            <hr class="menu-separator" role="separator">
+          <hr class="menu-separator" role="separator">
           <li><a class="menu-item danger" href="login.html" role="menuitem">Sign out</a></li>
         </menu>
       </div>
@@ -182,7 +184,7 @@
           <option value="gradient">Gradient</option>
         </select>
 
-        <button class="btn neutral ghost sm" type="button" aria-label="Notifications">
+        <button class="btn neutral ghost sm" type="button" aria-label="Notifications" data-tooltip="5 unread notifications">
           <i class="ti ti-bell" aria-hidden="true"></i>
           <span class="badge danger" aria-label="5 unread notifications"></span>
         </button>
@@ -194,9 +196,9 @@
             <i class="ti ti-chevron-down admini-hide-mobile" aria-hidden="true"></i>
           </button>
           <menu class="flyout sm menu" role="menu" id="account-menu" aria-labelledby="account-flyout-trigger" hidden>
-            <li><a class="menu-item" href="profile.html" role="menuitem">View profile</a></li>
+            <li><a class="menu-item" href="profile.html" role="menuitem">View profile<span class="menu-item-end"><kbd class="key">P</kbd></span></a></li>
             <li><a class="menu-item" href="settings.html" role="menuitem">Account settings</a></li>
-          <hr class="menu-separator" role="separator">
+            <hr class="menu-separator" role="separator">
             <li><a class="menu-item danger" href="login.html" role="menuitem">Sign out</a></li>
           </menu>
         </div>
@@ -204,83 +206,87 @@
       <!-- /admini-shell:topbar -->
 
       <main class="center stack admini-content">
-        <header class="cluster" style="--cluster-justify: space-between; align-items: flex-start;">
+        <header class="cluster" style="--cluster-justify: space-between; --cluster-align: flex-start;">
           <hgroup>
             <p class="overline">Admini demo</p>
             <h1>Welcome back, John</h1>
             <p class="muted">A recreation of the admini Bootstrap 5 admin template's dashboard, built entirely with Actual CSS.</p>
           </hgroup>
 
-          <button class="btn primary" type="button" commandfor="new-item-modal" command="show-modal">
-            <i class="ti ti-plus" aria-hidden="true"></i>
-            New item
-          </button>
+          <span class="aura primary">
+            <button class="btn primary" type="button" commandfor="new-item-modal" command="show-modal">
+              <i class="ti ti-plus" aria-hidden="true"></i>
+              New item
+            </button>
+          </span>
         </header>
 
-        <section class="grid" style="--grid-min: 13rem;" aria-label="Key metrics">
-          <article class="card raised admini-stat">
-            <div class="admini-stat-heading">
-              <span>Active users</span>
-              <span class="admini-stat-icon danger">
-                <i class="ti ti-users" aria-hidden="true"></i>
-              </span>
-            </div>
-            <data class="admini-stat-value" value="1000">1,000</data>
-            <div class="admini-stat-meta">
-              <span class="badge danger soft">
-                <i class="ti ti-trending-down" aria-hidden="true"></i>
-                -3.75%
-              </span>
-              <span>Since last week</span>
-            </div>
-          </article>
+        <section class="container-query" aria-label="Key metrics">
+          <div class="grid-4">
+            <article class="card raised admini-stat">
+              <div class="admini-stat-heading">
+                <span>Active users</span>
+                <span class="admini-stat-icon danger">
+                  <i class="ti ti-users" aria-hidden="true"></i>
+                </span>
+              </div>
+              <data class="admini-stat-value" value="1000">1,000</data>
+              <footer class="admini-stat-meta">
+                <span class="badge danger soft">
+                  <i class="ti ti-trending-down" aria-hidden="true"></i>
+                  -3.75%
+                </span>
+                <span>Since last week</span>
+              </footer>
+            </article>
 
-          <article class="card raised admini-stat">
-            <div class="admini-stat-heading">
-              <span>Revenue</span>
-              <span class="admini-stat-icon success">
-                <i class="ti ti-currency-dollar" aria-hidden="true"></i>
-              </span>
-            </div>
-            <data class="admini-stat-value" value="100000">$100,000</data>
-            <div class="admini-stat-meta">
-              <span class="badge success soft">
-                <i class="ti ti-trending-up" aria-hidden="true"></i>
-                +10.00%
-              </span>
-              <span>Since last week</span>
-            </div>
-          </article>
+            <article class="card raised admini-stat">
+              <div class="admini-stat-heading">
+                <span>Revenue</span>
+                <span class="admini-stat-icon success">
+                  <i class="ti ti-currency-dollar" aria-hidden="true"></i>
+                </span>
+              </div>
+              <data class="admini-stat-value" value="100000">$100,000</data>
+              <footer class="admini-stat-meta">
+                <span class="badge success soft">
+                  <i class="ti ti-trending-up" aria-hidden="true"></i>
+                  +10.00%
+                </span>
+                <span>Since last week</span>
+              </footer>
+            </article>
 
-          <article class="card raised admini-stat">
-            <div class="admini-stat-heading">
-              <span>Orders</span>
-              <span class="admini-stat-icon primary">
-                <i class="ti ti-shopping-cart" aria-hidden="true"></i>
-              </span>
-            </div>
-            <data class="admini-stat-value" value="2382">2,382</data>
-            <div class="admini-stat-meta">
-              <span class="badge primary solid">32 today</span>
-            </div>
-          </article>
+            <article class="card raised admini-stat">
+              <div class="admini-stat-heading">
+                <span>Orders</span>
+                <span class="admini-stat-icon primary">
+                  <i class="ti ti-shopping-cart" aria-hidden="true"></i>
+                </span>
+              </div>
+              <data class="admini-stat-value" value="2382">2,382</data>
+              <footer class="admini-stat-meta">
+                <span class="badge primary solid">32 today</span>
+              </footer>
+            </article>
 
-          <article class="card raised admini-stat">
-            <div class="admini-stat-heading">
-              <span>Refunds</span>
-              <span class="admini-stat-icon warning">
-                <i class="ti ti-receipt-refund" aria-hidden="true"></i>
-              </span>
-            </div>
-            <data class="admini-stat-value" value="2000">$2,000</data>
-            <div class="admini-stat-meta">
-              <span class="badge warning solid">6 pending</span>
-            </div>
-          </article>
+            <article class="card raised admini-stat">
+              <div class="admini-stat-heading">
+                <span>Refunds</span>
+                <span class="admini-stat-icon warning">
+                  <i class="ti ti-receipt-refund" aria-hidden="true"></i>
+                </span>
+              </div>
+              <data class="admini-stat-value" value="2000">$2,000</data>
+              <footer class="admini-stat-meta">
+                <span class="badge warning solid">6 pending</span>
+              </footer>
+            </article>
+          </div>
         </section>
 
-        <div class="admini-board">
-          <div class="stack admini-board-main">
+        <div class="sidebar-layout" style="--sidebar-content-min: 38rem; --sidebar-layout-size: 20rem;">
+          <div class="stack">
             <section class="card stack">
               <header>
                 <h2>Recent orders</h2>
@@ -306,13 +312,13 @@
                       <th scope="col">Customer</th>
                       <th scope="col" class="text-end">Amount</th>
                       <th scope="col">Status</th>
-                      <th scope="col"><span class="sr-only">Actions</span></th>
+                      <th scope="col" class="admini-table-action"><span class="sr-only">Actions</span></th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr>
                       <td>
-                        <span class="cluster" style="gap: var(--space-20);">
+                        <span class="cluster" style="--gap: var(--space-20);">
                           <span class="avatar sm"><abbr>MO</abbr></span>
                           <div class="admini-account">
                             <strong>Mark Otto</strong>
@@ -322,15 +328,15 @@
                       </td>
                       <td class="text-end text-nowrap">$428.00</td>
                       <td><span class="badge success soft">Paid</span></td>
-                      <td>
-                        <button class="btn neutral ghost sm" type="button" aria-label="Open order">
+                      <td class="admini-table-action">
+                        <button class="btn neutral ghost sm" type="button" aria-label="Open order" data-tooltip="Open order">
                           <i class="ti ti-arrow-right" aria-hidden="true"></i>
                         </button>
                       </td>
                     </tr>
                     <tr>
                       <td>
-                        <span class="cluster" style="gap: var(--space-20);">
+                        <span class="cluster" style="--gap: var(--space-20);">
                           <span class="avatar sm"><abbr>JT</abbr></span>
                           <div class="admini-account">
                             <strong>Jacob Thornton</strong>
@@ -340,15 +346,15 @@
                       </td>
                       <td class="text-end text-nowrap">$216.50</td>
                       <td><span class="badge warning soft">Pending</span></td>
-                      <td>
-                        <button class="btn neutral ghost sm" type="button" aria-label="Open order">
+                      <td class="admini-table-action">
+                        <button class="btn neutral ghost sm" type="button" aria-label="Open order" data-tooltip="Open order">
                           <i class="ti ti-arrow-right" aria-hidden="true"></i>
                         </button>
                       </td>
                     </tr>
                     <tr>
                       <td>
-                        <span class="cluster" style="gap: var(--space-20);">
+                        <span class="cluster" style="--gap: var(--space-20);">
                           <span class="avatar sm"><abbr>LB</abbr></span>
                           <div class="admini-account">
                             <strong>Larry the Bird</strong>
@@ -358,15 +364,15 @@
                       </td>
                       <td class="text-end text-nowrap">$84.00</td>
                       <td><span class="badge danger soft">Refunded</span></td>
-                      <td>
-                        <button class="btn neutral ghost sm" type="button" aria-label="Open order">
+                      <td class="admini-table-action">
+                        <button class="btn neutral ghost sm" type="button" aria-label="Open order" data-tooltip="Open order">
                           <i class="ti ti-arrow-right" aria-hidden="true"></i>
                         </button>
                       </td>
                     </tr>
                     <tr>
                       <td>
-                        <span class="cluster" style="gap: var(--space-20);">
+                        <span class="cluster" style="--gap: var(--space-20);">
                           <span class="avatar sm"><abbr>RM</abbr></span>
                           <div class="admini-account">
                             <strong>Rin Moreau</strong>
@@ -376,8 +382,8 @@
                       </td>
                       <td class="text-end text-nowrap">$132.20</td>
                       <td><span class="badge success soft">Paid</span></td>
-                      <td>
-                        <button class="btn neutral ghost sm" type="button" aria-label="Open order">
+                      <td class="admini-table-action">
+                        <button class="btn neutral ghost sm" type="button" aria-label="Open order" data-tooltip="Open order">
                           <i class="ti ti-arrow-right" aria-hidden="true"></i>
                         </button>
                       </td>
@@ -411,7 +417,13 @@
 
           <aside class="stack" aria-label="Dashboard sidebar">
             <section class="card stack">
-              <h2 style="margin: 0;">Team</h2>
+              <h2>Storage</h2>
+              <meter class="meter" min="0" max="100" value="68" low="60" high="85">68%</meter>
+              <p class="muted">6.8 GB of 10 GB used. Usage is billed on the Growth plan.</p>
+            </section>
+
+            <section class="card stack">
+              <h2>Team</h2>
               <div class="avatar-stack" role="group" aria-label="Team members">
                 <span class="avatar primary" title="Mark Otto"><abbr>MO</abbr></span>
                 <span class="avatar success" title="Jacob Thornton"><abbr>JT</abbr></span>
@@ -423,23 +435,23 @@
             </section>
 
             <section class="card stack">
-              <h2 style="margin: 0;">Activity</h2>
+              <h2>Activity</h2>
               <div class="admini-feed">
-                <div class="admini-feed-item">
+                <div class="media admini-feed-item">
                   <span class="admini-dot success" aria-hidden="true"></span>
                   <div>
                     <strong>Order #ORD-4821 was paid.</strong>
                     <p class="muted">Mark Otto completed checkout.</p>
                   </div>
                 </div>
-                <div class="admini-feed-item">
+                <div class="media admini-feed-item">
                   <span class="admini-dot warning" aria-hidden="true"></span>
                   <div>
                     <strong>Order #ORD-4820 is pending review.</strong>
                     <p class="muted">Awaiting payment confirmation.</p>
                   </div>
                 </div>
-                <div class="admini-feed-item">
+                <div class="media admini-feed-item">
                   <span class="admini-dot primary" aria-hidden="true"></span>
                   <div>
                     <strong>New signup: Rin Moreau.</strong>
@@ -454,7 +466,7 @@
     </div>
   </div>
 
-  <dialog class="drawer" id="navigation-drawer" aria-label="Navigation">
+  <dialog class="drawer" data-theme="dim" id="navigation-drawer" aria-label="Navigation">
     <header class="cluster" style="--cluster-justify: space-between;">
       <strong>Admini</strong>
       <form method="dialog">
@@ -511,20 +523,8 @@
     </form>
   </dialog>
 
-  <script src="../../dist/actual.full.js"></script>
-  <script>
-    const switcher = document.getElementById("theme-switcher");
+  <script src="../../../dist/actual.full.js" defer></script>
 
-    if (switcher) {
-      switcher.addEventListener("change", () => {
-        if (switcher.value) {
-          document.documentElement.dataset.theme = switcher.value;
-        } else {
-          document.documentElement.removeAttribute("data-theme");
-        }
-      });
-    }
-  </script>
 </body>
 
 </html>

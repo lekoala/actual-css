@@ -4,18 +4,20 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Invoice #INV-2050 - Admini on Actual CSS</title>
-  <meta name="description" content="Invoice page with billing details, line items, totals, and print styles.">
-  <link rel="stylesheet" href="../../dist/actual.full.css">
-  <link rel="stylesheet" href="../assets/actual-themes.min.css">
+  <title>Chat - Admini on Actual CSS</title>
+  <meta name="description" content="Chat interface with message bubbles, contact list, and input area.">
+
+  <script src="admini-theme.js"></script>
+  <link rel="stylesheet" href="../../../dist/actual.full.css">
+  <link rel="stylesheet" href="../../assets/actual-themes.min.css">
   <link rel="stylesheet" href="admini.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.46.0/dist/tabler-icons.min.css">
 </head>
 
 <body>
   <div class="admini-shell">
     <!-- admini-shell:sidebar -->
-    <aside class="admini-sidebar" aria-label="Primary navigation">
+    <aside class="admini-sidebar scroller stable-gutter" aria-label="Primary navigation">
       <a class="navbar-brand" href="index.html">
         <span class="avatar primary"><abbr>AD</abbr></span>
         <span>Admini</span>
@@ -91,7 +93,7 @@
             </a>
           </li>
           <li>
-            <a class="nav-link" href="chat.html">
+            <a class="nav-link" href="chat.html" aria-current="page">
               <i class="ti ti-message-circle" aria-hidden="true"></i>
               Chat
             </a>
@@ -103,7 +105,7 @@
         <p class="overline admini-section-title">Billing</p>
         <ul class="nav-list stack">
           <li>
-            <a class="nav-link" href="invoice.html" aria-current="page">
+            <a class="nav-link" href="invoice.html">
               <i class="ti ti-file-invoice" aria-hidden="true"></i>
               Invoice
             </a>
@@ -133,7 +135,7 @@
 
       <div class="flyout-trigger stretch">
         <button class="btn neutral ghost" data-enhance="flyout" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="sidebar-user-menu"
-          id="sidebar-user-trigger" style="justify-content: flex-start;">
+          id="sidebar-user-trigger">
           <span class="avatar sm"><abbr>JN</abbr></span>
           <span>John Nemo</span>
         </button>
@@ -157,7 +159,7 @@
 
         <ol class="breadcrumb text-nowrap admini-hide-mobile" aria-label="Breadcrumb">
           <li><a href="index.html">Admini</a></li>
-          <li class="truncate" aria-current="page">Invoice</li>
+          <li class="truncate" aria-current="page">Chat</li>
         </ol>
 
         <div class="grow"></div>
@@ -203,103 +205,126 @@
       </header>
       <!-- /admini-shell:topbar -->
 
-    <main class="center stack admini-content">
-        <header class="cluster" style="--cluster-justify: space-between; align-items: flex-start;">
-          <hgroup>
-            <p class="overline">Billing</p>
-            <h1>Invoice</h1>
-            <p class="muted">A print-friendly document layout. Actual's own <code>print.css</code> already hides buttons and dialogs; two rules in <code>admini.css</code> hide the app shell on top of that.</p>
-          </hgroup>
-          <div class="cluster sm" style="--cluster-wrap: nowrap;">
-            <button class="btn neutral outline" type="button" id="print-invoice">
-              <i class="ti ti-printer" aria-hidden="true"></i>
-              Print
-            </button>
-            <button class="btn primary" type="button">
-              <i class="ti ti-send" aria-hidden="true"></i>
-              Send invoice
-            </button>
-          </div>
-        </header>
+    <main class="admini-chat-shell" id="chat-shell">
+        <section class="admini-chat-list scroller stable-gutter" aria-label="Conversations">
+          <button class="media admini-chat-item" type="button" aria-current="true" data-chat-item>
+            <span class="avatar primary"><abbr>AM</abbr></span>
+            <span class="admini-chat-item-body">
+              <span class="admini-chat-item-top">
+                <strong>Ada Morgan</strong>
+                <span class="muted" style="font-size: var(--font-size-xs);">09:41</span>
+              </span>
+              <span class="muted truncate">Sounds good, see you then!</span>
+            </span>
+          </button>
+          <button class="media admini-chat-item" type="button" data-chat-item>
+            <span class="avatar success"><abbr>JT</abbr></span>
+            <span class="admini-chat-item-body">
+              <span class="admini-chat-item-top">
+                <strong>Jacob Thornton</strong>
+                <span class="badge primary sm solid">2</span>
+              </span>
+              <span class="muted truncate">Pushed the fix, can you review?</span>
+            </span>
+          </button>
+          <button class="media admini-chat-item" type="button" data-chat-item>
+            <span class="avatar warning"><abbr>LB</abbr></span>
+            <span class="admini-chat-item-body">
+              <span class="admini-chat-item-top">
+                <strong>Larry the Bird</strong>
+                <span class="muted" style="font-size: var(--font-size-xs);">Yesterday</span>
+              </span>
+              <span class="muted truncate">Thanks for the update.</span>
+            </span>
+          </button>
+          <button class="media admini-chat-item" type="button" data-chat-item>
+            <span class="avatar"><abbr>RM</abbr></span>
+            <span class="admini-chat-item-body">
+              <span class="admini-chat-item-top">
+                <strong>Rin Moreau</strong>
+                <span class="badge primary sm solid">1</span>
+              </span>
+              <span class="muted truncate">Typing…</span>
+            </span>
+          </button>
+          <button class="media admini-chat-item" type="button" data-chat-item>
+            <span class="avatar neutral"><abbr>TS</abbr></span>
+            <span class="admini-chat-item-body">
+              <span class="admini-chat-item-top">
+                <strong>Theo Silva</strong>
+                <span class="muted" style="font-size: var(--font-size-xs);">3d</span>
+              </span>
+              <span class="muted truncate">Let's sync tomorrow morning.</span>
+            </span>
+          </button>
+        </section>
 
-        <article class="card raised stack admini-invoice">
-          <header class="cluster" style="--cluster-justify: space-between; align-items: flex-start;">
-            <div class="cluster" style="gap: var(--space-30);">
-              <span class="avatar lg primary"><abbr>AD</abbr></span>
-              <div>
-                <strong>Admini Inc.</strong>
-                <p class="muted" style="margin: 0;">400 Market Street, Suite 200<br>San Francisco, CA 94105</p>
-              </div>
+        <section class="admini-chat-thread" aria-label="Conversation with Ada Morgan">
+          <header class="admini-chat-thread-header">
+            <button class="btn neutral ghost sm admini-chat-back" type="button" aria-label="Back to conversations" data-tooltip="Back">
+              <i class="ti ti-arrow-left" aria-hidden="true"></i>
+            </button>
+            <span class="avatar primary"><abbr>AM</abbr></span>
+            <div>
+              <strong>Ada Morgan</strong>
+              <p class="muted" style="margin: 0; font-size: var(--font-size-sm);">Online</p>
             </div>
-            <div style="text-align: end;">
-              <p class="overline" style="margin: 0;">Invoice</p>
-              <h2 style="margin: 0;">#INV-2050</h2>
-              <span class="badge danger soft">Overdue</span>
+            <div class="grow"></div>
+            <div class="flyout-trigger">
+              <button class="btn neutral ghost sm" data-enhance="flyout" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="thread-menu"
+                id="thread-flyout-trigger" aria-label="More options">
+                <i class="ti ti-dots" aria-hidden="true"></i>
+              </button>
+              <menu class="flyout sm menu" role="menu" id="thread-menu" aria-labelledby="thread-flyout-trigger" hidden>
+                <li><button class="menu-item" type="button" role="menuitem">View contact</button></li>
+                <li><button class="menu-item" type="button" role="menuitem">Mute conversation</button></li>
+                <hr class="menu-separator" role="separator">
+                <li><button class="menu-item danger" type="button" role="menuitem">Leave conversation</button></li>
+              </menu>
             </div>
           </header>
 
-          <div class="grid-2 items-start">
-            <div>
-              <p class="field-label" style="margin-block-end: var(--space-10);">Billed to</p>
-              <strong>Northstar Logistics</strong>
-              <p class="muted" style="margin: 0;">Ada Morgan &middot; ada@northstarlogistics.com<br>1200 Freight Way, Suite 500<br>Chicago, IL 60601</p>
+          <div class="admini-chat-messages scroller stable-gutter" id="chat-messages" role="log" aria-label="Messages" aria-live="polite">
+            <div class="chat chat-start">
+              <div class="chat-avatar avatar sm"><abbr>AM</abbr></div>
+              <div class="chat-header">Ada Morgan <time datetime="09:12">09:12</time></div>
+              <div class="chat-bubble">Hey! Are we still on for the pricing review at 2?</div>
             </div>
-            <div class="stack" style="gap: var(--space-10);">
-              <p class="field-label" style="margin: 0;">Details</p>
-              <div class="admini-invoice-totals-row"><span class="muted">Issue date</span><span>Jun 25, 2026</span></div>
-              <div class="admini-invoice-totals-row"><span class="muted">Due date</span><span>Jul 9, 2026</span></div>
-              <div class="admini-invoice-totals-row"><span class="muted">Terms</span><span>Net 14</span></div>
+            <div class="chat chat-end">
+              <div class="chat-header">You <time datetime="09:14">09:14</time></div>
+              <div class="chat-bubble primary">Yes, I'll bring the updated deck.</div>
+            </div>
+            <div class="chat chat-start">
+              <div class="chat-avatar avatar sm"><abbr>AM</abbr></div>
+              <div class="chat-header">Ada Morgan <time datetime="09:30">09:30</time></div>
+              <div class="chat-bubble">Perfect. Also — did the invoice page ship?</div>
+            </div>
+            <div class="chat chat-end">
+              <div class="chat-header">You <time datetime="09:35">09:35</time></div>
+              <div class="chat-bubble primary">Just finished it, want to take a look?</div>
+            </div>
+            <div class="chat chat-start">
+              <div class="chat-avatar avatar sm"><abbr>AM</abbr></div>
+              <div class="chat-header">Ada Morgan <time datetime="09:41">09:41</time></div>
+              <div class="chat-bubble">Sounds good, see you then!</div>
             </div>
           </div>
 
-          <div class="table-wrap">
-            <table class="table" style="--table-min: 32rem;">
-              <thead>
-                <tr>
-                  <th scope="col">Item</th>
-                  <th scope="col" class="text-end">Qty</th>
-                  <th scope="col" class="text-end">Price</th>
-                  <th scope="col" class="text-end">Total</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>Enterprise plan &mdash; July</td>
-                  <td class="text-end">1</td>
-                  <td class="text-end">$1,200.00</td>
-                  <td class="text-end">$1,200.00</td>
-                </tr>
-                <tr>
-                  <td>Priority support add-on</td>
-                  <td class="text-end">1</td>
-                  <td class="text-end">$150.00</td>
-                  <td class="text-end">$150.00</td>
-                </tr>
-                <tr>
-                  <td>Onboarding workshop</td>
-                  <td class="text-end">2</td>
-                  <td class="text-end">$300.00</td>
-                  <td class="text-end">$600.00</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <div class="admini-invoice-totals">
-            <div class="admini-invoice-totals-row"><span class="muted">Subtotal</span><span>$1,950.00</span></div>
-            <div class="admini-invoice-totals-row"><span class="muted">Tax (8%)</span><span>$156.00</span></div>
-            <div class="admini-invoice-totals-row"><strong>Total due</strong><strong>$2,106.00</strong></div>
-          </div>
-
-          <footer>
-            <p class="muted" style="margin: 0;">Thank you for your business. Payment is due within 14 days of the issue date.</p>
-          </footer>
-        </article>
+          <form class="admini-composer" id="composer-form">
+            <textarea class="textarea" id="composer-input" rows="1" placeholder="Write a message…" aria-label="Message"></textarea>
+            <button class="btn neutral ghost" type="button" aria-label="Attach file" data-tooltip="Attach file">
+              <i class="ti ti-paperclip" aria-hidden="true"></i>
+            </button>
+            <button class="btn primary" type="submit" aria-label="Send message" data-tooltip="Send">
+              <i class="ti ti-send" aria-hidden="true"></i>
+            </button>
+          </form>
+        </section>
       </main>
     </div>
   </div>
 
-  <dialog class="drawer" id="navigation-drawer" aria-label="Navigation">
+  <dialog class="drawer" data-theme="dim" id="navigation-drawer" aria-label="Navigation">
     <header class="cluster" style="--cluster-justify: space-between;">
       <strong>Admini</strong>
       <form method="dialog">
@@ -319,30 +344,51 @@
         <li><a class="nav-link" href="user-grid.html"><i class="ti ti-users-group" aria-hidden="true"></i> User grid</a></li>
         <li><a class="nav-link" href="kanban.html"><i class="ti ti-layout-kanban" aria-hidden="true"></i> Kanban</a></li>
         <li><a class="nav-link" href="calendar.html"><i class="ti ti-calendar" aria-hidden="true"></i> Calendar</a></li>
-        <li><a class="nav-link" href="chat.html"><i class="ti ti-message-circle" aria-hidden="true"></i> Chat</a></li>
-        <li><a class="nav-link" href="invoice.html" aria-current="page"><i class="ti ti-file-invoice" aria-hidden="true"></i> Invoice</a></li>
+        <li><a class="nav-link" href="chat.html" aria-current="page"><i class="ti ti-message-circle" aria-hidden="true"></i> Chat</a></li>
+        <li><a class="nav-link" href="invoice.html"><i class="ti ti-file-invoice" aria-hidden="true"></i> Invoice</a></li>
         <li><a class="nav-link" href="login.html"><i class="ti ti-login" aria-hidden="true"></i> Login</a></li>
         <li><a class="nav-link" href="404.html"><i class="ti ti-error-404" aria-hidden="true"></i> 404</a></li>
       </ul>
     </nav>
   </dialog>
 
-  <script src="../../dist/actual.full.js"></script>
+  <script src="../../../dist/actual.full.js" defer></script>
+
   <script>
-    const switcher = document.getElementById("theme-switcher");
+    // Selecting a conversation is visual state only here — swapping in the
+    // real thread for each contact is application/data logic, not a
+    // framework concern. On narrow viewports it also reveals the thread pane.
+    const chatShell = document.getElementById("chat-shell");
 
-    if (switcher) {
-      switcher.addEventListener("change", () => {
-        if (switcher.value) {
-          document.documentElement.dataset.theme = switcher.value;
-        } else {
-          document.documentElement.removeAttribute("data-theme");
-        }
+    chatShell.querySelectorAll("[data-chat-item]").forEach((item) => {
+      item.addEventListener("click", () => {
+        chatShell.querySelectorAll("[data-chat-item]").forEach((el) => el.removeAttribute("aria-current"));
+        item.setAttribute("aria-current", "true");
+        item.querySelector(".badge")?.remove();
+        chatShell.classList.add("is-thread-open");
       });
-    }
+    });
 
-    document.getElementById("print-invoice")?.addEventListener("click", () => window.print());
+    chatShell.querySelector(".admini-chat-back")?.addEventListener("click", () => {
+      chatShell.classList.remove("is-thread-open");
+    });
 
+    const composerForm = document.getElementById("composer-form");
+    const composerInput = document.getElementById("composer-input");
+    const messages = document.getElementById("chat-messages");
+
+    composerForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const value = composerInput.value.trim();
+      if (!value) return;
+      const row = document.createElement("div");
+      row.className = "chat chat-end";
+      row.innerHTML = `<div class="chat-header">You</div><div class="chat-bubble primary"></div>`;
+      row.querySelector(".chat-bubble").textContent = value;
+      messages.appendChild(row);
+      composerInput.value = "";
+      messages.scrollTop = messages.scrollHeight;
+    });
   </script>
 </body>
 

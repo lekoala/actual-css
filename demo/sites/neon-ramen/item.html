@@ -1,0 +1,217 @@
+<!doctype html>
+<html data-theme="dark" lang="en">
+  <head>
+    <!-- Reference app: expected at demo/sites/neon-ramen/ -->
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <title>Spicy Miso — Neon Ramen</title>
+    <link href="../../../dist/actual.full.css" rel="stylesheet">
+    <link href="neon-site.css" rel="stylesheet">
+  </head>
+  <body class="app-shell">
+    <header class="site-header">
+      <div class="center">
+        <nav aria-label="Main navigation" class="navbar">
+          <a class="navbar-brand brand-mark" href="index.html">NEONRAMEN <em>未来のラーメン</em></a>
+          <ul class="navbar-nav">
+            <li>
+              <a class="nav-link" href="index.html">Home</a>
+            </li>
+            <li>
+              <a class="nav-link" href="menu.html">Menu</a>
+            </li>
+            <li>
+              <a class="nav-link" href="locations.html">Locations</a>
+            </li>
+            <li>
+              <a aria-current="page" class="nav-link" href="item.html">Spicy Miso</a>
+            </li>
+          </ul>
+          <div class="cluster nav-order" style="--gap:.5rem">
+            <a class="btn primary cyber-btn sm" href="order.html">Order pickup</a>
+          </div>
+          <button aria-controls="site-drawer" aria-haspopup="dialog" aria-label="Open navigation" class="btn ghost secondary sm nav-toggle" command="show-modal" commandfor="site-drawer" type="button">Menu</button>
+        </nav>
+      </div>
+    </header>
+    <dialog aria-label="Main navigation" class="drawer" id="site-drawer">
+      <header>
+        <strong class="brand-mark">NEONRAMEN <em>未来のラーメン</em></strong>
+        <form method="dialog">
+          <button aria-label="Close navigation" class="drawer-close" type="submit"></button>
+        </form>
+      </header>
+      <nav>
+        <ul class="nav-list stack" style="--gap:.15rem">
+          <li>
+            <a class="nav-link" href="index.html">Home</a>
+          </li>
+          <li>
+            <a class="nav-link" href="menu.html">Menu</a>
+          </li>
+          <li>
+            <a class="nav-link" href="locations.html">Locations</a>
+          </li>
+          <li>
+            <a aria-current="page" class="nav-link" href="item.html">Spicy Miso</a>
+          </li>
+        </ul>
+      </nav>
+      <footer>
+        <a class="btn primary cyber-btn" href="order.html">Order pickup</a>
+      </footer>
+    </dialog>
+    <main class="page">
+      <div class="center">
+        <div class="stack page-stack">
+          <section class="grid" style="--grid-min:20rem; --gap:clamp(1.5rem,5vw,4rem); align-items:start">
+            <div class="aura" style="--aura-color:var(--primary); --aura-blur:1.2rem;">
+              <figure class="frame item-visual">
+                <img alt="Spicy miso ramen bowl with chili oil" src="assets/bowl-spicy-miso.webp">
+                <figcaption class="signal">
+                  Spicy miso // chili oil // 18hr broth
+                </figcaption>
+              </figure>
+              <span class="chip one"><i aria-hidden="true" class="dot dot-live"></i> <b>TOP</b> seller</span>
+              <span class="chip two">heat <b>4/5</b></span>
+            </div>
+            <form action="order.html" class="stack" method="get" style="--gap:1.5rem">
+              <div class="stack" style="--gap:.4rem">
+                <span class="overline brand-overline brand-overline-primary">Signature · Spicy · 味噌</span>
+                <h1 class="section-title">Spicy miso</h1>
+                <p class="lede measure">Miso broth, chili oil, ground pork, bamboo and bean sprouts. Fire the heat to your level.</p>
+                <div class="cluster">
+                  <span class="badge danger soft">SPICE 4/5</span>
+                  <strong class="price">HK$82</strong>
+                </div>
+              </div>
+              <div aria-hidden="true" class="signal-rule"><span class="signal-tris"><i></i><i></i><i></i><i></i><i></i><i></i></span><span class="signal-line"></span><span class="signal-code">BUILD//01</span></div>
+              <fieldset class="fieldset-cyber">
+                <legend class="overline brand-overline">Size</legend>
+                <div class="grid choice-grid">
+                  <label class="choice-card">
+                    <input checked name="size" type="radio" value="regular">
+                    <span class="stack" style="--gap:.2rem"><strong>Regular</strong><span class="muted">1 portion</span></span>
+                  </label>
+                  <label class="choice-card">
+                    <input name="size" type="radio" value="large">
+                    <span class="stack" style="--gap:.2rem"><strong>Large</strong><span class="muted">+HK$12</span></span>
+                  </label>
+                </div>
+              </fieldset>
+              <fieldset class="fieldset-cyber">
+                <legend class="overline brand-overline">Extra broth</legend>
+                <div class="grid choice-grid">
+                  <label class="choice-card">
+                    <input checked name="broth" type="radio" value="standard">
+                    <span class="stack" style="--gap:.2rem"><strong>Standard</strong><span class="muted">Included</span></span>
+                  </label>
+                  <label class="choice-card">
+                    <input name="broth" type="radio" value="rich">
+                    <span class="stack" style="--gap:.2rem"><strong>Rich</strong><span class="muted">+HK$8</span></span>
+                  </label>
+                </div>
+              </fieldset>
+              <fieldset class="fieldset-cyber">
+                <legend class="overline brand-overline">Toppings</legend>
+                <div class="grid choice-grid">
+                  <label class="choice-card">
+                    <input name="topping" type="checkbox" value="egg">
+                    <span class="stack" style="--gap:.2rem"><strong>Ajitama egg</strong><span class="muted">+HK$10</span></span>
+                  </label>
+                  <label class="choice-card">
+                    <input name="topping" type="checkbox" value="chashu">
+                    <span class="stack" style="--gap:.2rem"><strong>Extra chashu</strong><span class="muted">+HK$14</span></span>
+                  </label>
+                  <label class="choice-card">
+                    <input name="topping" type="checkbox" value="corn">
+                    <span class="stack" style="--gap:.2rem"><strong>Butter corn</strong><span class="muted">+HK$6</span></span>
+                  </label>
+                  <label class="choice-card">
+                    <input name="topping" type="checkbox" value="nori">
+                    <span class="stack" style="--gap:.2rem"><strong>Extra nori</strong><span class="muted">+HK$5</span></span>
+                  </label>
+                </div>
+              </fieldset>
+              <div class="cluster" style="--cluster-justify:space-between; --gap:1rem">
+                <label class="field qty-field">
+                  <span class="field-label">Quantity</span>
+                  <input class="input" inputmode="numeric" max="10" min="1" name="quantity" type="number" value="1">
+                </label>
+                <div class="cluster summary-row total">
+                  <span>Total</span>
+                  <strong class="price">HK$82</strong>
+                </div>
+              </div>
+              <div class="form-actions">
+                <div class="cluster" style="--gap:.65rem">
+                  <button class="btn primary cyber-btn lg" type="submit">Add to order →</button>
+                  <a class="btn ghost secondary lg" href="menu.html">Back to menu</a>
+                </div>
+              </div>
+            </form>
+          </section>
+        </div>
+      </div>
+    </main>
+    <footer class="site-footer">
+      <div class="center">
+        <div class="grid footer-grid">
+          <div class="stack" style="--gap:.65rem">
+            <strong class="brand-mark">NEONRAMEN <em>未来のラーメン</em></strong>
+            <p class="muted">Cyberpunk ramen running the night circuit. Hot broth, zero queues.</p>
+          </div>
+          <div>
+            <strong class="overline brand-overline">Navigate</strong>
+            <ul class="list-reset">
+              <li>
+                <a href="menu.html">Menu</a>
+              </li>
+              <li>
+                <a href="locations.html">Locations</a>
+              </li>
+              <li>
+                <a href="order.html">Pickup</a>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <strong class="overline brand-overline">Signal</strong>
+            <ul class="list-reset">
+              <li>
+                <a href="locations.html">Nearest cart</a>
+              </li>
+              <li>
+                <a href="item.html">Spicy Miso</a>
+              </li>
+              <li>
+                <span class="muted">NR-APP v2.4</span>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <strong class="overline brand-overline">Hours</strong>
+            <ul class="list-reset">
+              <li>
+                <span class="muted">Mon–Thu · 5PM–2AM</span>
+              </li>
+              <li>
+                <span class="muted">Fri–Sat · 5PM–4AM</span>
+              </li>
+              <li>
+                <span class="muted">Sun · closed</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="cluster footer-bottom">
+          <span>© 2026 Neon Ramen City Circuit</span>
+          <span>All carts <b>● LIVE</b> · avg pickup 12 min</span>
+        </div>
+      </div>
+    </footer>
+    <div aria-atomic="true" aria-live="polite" class="status-bar" data-status id="app-status" role="status"></div>
+    <script src="../../../dist/actual.full.js">
+    </script>
+  </body>
+</html>

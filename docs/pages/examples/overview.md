@@ -8,21 +8,21 @@ and `actual.full.js` from `dist/`, plus the theme palettes bundle from
 
 ## Admin application
 
-`demo/admini/` is a complete admin interface: application shell, navigation,
+`demo/sites/admini/` is a complete admin interface: application shell, navigation,
 tables, forms, dialogs, and feedback states.
 
-- [Dashboard](../../demo/admini/index.html) - app shell, navbar, stat cards, charts, recent activity
-- [Login](../../demo/admini/login.html) - centered auth card with social actions
-- [Forms](../../demo/admini/forms.html) - inputs, choice cards, validation, joined controls, sticky actions
-- [Tables](../../demo/admini/tables.html) - data tables, status badges, bulk actions
-- [Kanban](../../demo/admini/kanban.html) - drag-free column layout with cards
-- [Chat](../../demo/admini/chat.html) - conversation list, message thread, composer
-- [Calendar](../../demo/admini/calendar.html) - month grid with event cards
-- [Invoice](../../demo/admini/invoice.html) - structured document layout
-- [Profile](../../demo/admini/profile.html) - avatar, tabs, settings rows
-- [Settings](../../demo/admini/settings.html) - grouped settings with switches
-- [User grid](../../demo/admini/user-grid.html) - avatar grid, filters, pagination
-- [404](../../demo/admini/404.html) - empty state
+- [Dashboard](../../demo/sites/admini/index.html) - app shell, navbar, stat cards, quota meter, recent activity
+- [Login](../../demo/sites/admini/login.html) - centered auth card with social actions
+- [Forms](../../demo/sites/admini/forms.html) - inputs, choice cards, validation, joined controls
+- [Tables](../../demo/sites/admini/tables.html) - data tables, status badges, right-click row actions
+- [Kanban](../../demo/sites/admini/kanban.html) - drag-and-drop columns with card context menus
+- [Chat](../../demo/sites/admini/chat.html) - conversation list, message thread, composer
+- [Calendar](../../demo/sites/admini/calendar.html) - month grid with event chips and month navigation
+- [Invoice](../../demo/sites/admini/invoice.html) - structured document layout, print styles
+- [Profile](../../demo/sites/admini/profile.html) - avatar header, tabs, activity feed
+- [Settings](../../demo/sites/admini/settings.html) - vertical tabs, validation, confirmation dialog
+- [User grid](../../demo/sites/admini/user-grid.html) - avatar grid with live search and role filter
+- [404](../../demo/sites/admini/404.html) - error state
 
 ## Templates
 

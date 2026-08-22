@@ -1,0 +1,341 @@
+<!doctype html>
+<html data-theme="dark" lang="en">
+  <head>
+    <!-- Reference app: expected at demo/sites/neon-ramen/ -->
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <title>Neon Ramen — Hot bowls. Zero wait.</title>
+    <link href="../../../dist/actual.full.css" rel="stylesheet">
+    <link href="neon-site.css" rel="stylesheet">
+  </head>
+  <body class="app-shell">
+    <header class="site-header">
+      <div class="center">
+        <nav aria-label="Main navigation" class="navbar">
+          <a class="navbar-brand brand-mark" href="index.html">NEONRAMEN <em>未来のラーメン</em></a>
+          <ul class="navbar-nav">
+            <li>
+              <a aria-current="page" class="nav-link" href="index.html">Home</a>
+            </li>
+            <li>
+              <a class="nav-link" href="menu.html">Menu</a>
+            </li>
+            <li>
+              <a class="nav-link" href="locations.html">Locations</a>
+            </li>
+            <li>
+              <a class="nav-link" href="item.html">Spicy Miso</a>
+            </li>
+          </ul>
+          <div class="cluster nav-order" style="--gap:.5rem">
+            <a class="btn primary cyber-btn sm" href="order.html">Order pickup</a>
+          </div>
+          <button aria-controls="site-drawer" aria-haspopup="dialog" aria-label="Open navigation" class="btn ghost secondary sm nav-toggle" command="show-modal" commandfor="site-drawer" type="button">Menu</button>
+        </nav>
+      </div>
+    </header>
+    <dialog aria-label="Main navigation" class="drawer" id="site-drawer">
+      <header>
+        <strong class="brand-mark">NEONRAMEN <em>未来のラーメン</em></strong>
+        <form method="dialog">
+          <button aria-label="Close navigation" class="drawer-close" type="submit"></button>
+        </form>
+      </header>
+      <nav>
+        <ul class="nav-list stack" style="--gap:.15rem">
+          <li>
+            <a aria-current="page" class="nav-link" href="index.html">Home</a>
+          </li>
+          <li>
+            <a class="nav-link" href="menu.html">Menu</a>
+          </li>
+          <li>
+            <a class="nav-link" href="locations.html">Locations</a>
+          </li>
+          <li>
+            <a class="nav-link" href="item.html">Spicy Miso</a>
+          </li>
+        </ul>
+      </nav>
+      <footer>
+        <a class="btn primary cyber-btn" href="order.html">Order pickup</a>
+      </footer>
+    </dialog>
+    <main class="page">
+      <div class="center">
+        <div class="stack page-stack">
+          <section aria-labelledby="hero-title" class="grid hero">
+            <div class="stack hero-copy">
+              <span class="overline brand-overline">Night market ramen cart / HK-07</span>
+              <h1 class="hero-title" id="hero-title">Hot bowls. <em>Zero wait.</em></h1>
+              <p class="lede measure">Broth-forward ramen fired under neon. Order ahead, pick up street-side, and get back into the night.</p>
+              <label class="field hero-pickup">
+                <span class="field-label">Pickup point</span>
+                <select class="select">
+                  <option>Neo Kabuki Market · stall 17</option>
+                  <option>Sector 7 Arcade Alley · gate C</option>
+                  <option>Harbor Line Station · north exit</option>
+                </select>
+              </label>
+              <div class="cluster hero-actions">
+                <a class="btn primary cyber-btn lg" href="menu.html">Start an order</a>
+                <a class="btn outline secondary cyber-btn lg" href="locations.html">Find a cart</a>
+              </div>
+              <div aria-label="Service highlights" class="grid stats">
+                <div class="stat">
+                  <strong>3</strong>
+                  <span>Cart spots</span>
+                </div>
+                <div class="stat">
+                  <strong>12 min</strong>
+                  <span>Avg pickup</span>
+                </div>
+                <div class="stat">
+                  <strong>4.9★</strong>
+                  <span>2.1K ratings</span>
+                </div>
+              </div>
+            </div>
+            <div class="aura" style="--aura-color:var(--primary); --aura-blur:1.2rem;">
+              <figure class="frame hero-visual">
+                <img alt="Signature ramen bowl under pink and cyan neon light" src="assets/hero-bowl.webp">
+                <figcaption class="signal">
+                  Signal favorite // 18hr tonkotsu broth
+                </figcaption>
+              </figure>
+              <span class="chip one"><i aria-hidden="true" class="dot dot-live"></i> <b>OPEN NOW</b> · HK-07</span>
+              <span class="chip two">pickup <b>8 min</b></span>
+            </div>
+          </section>
+          <div aria-hidden="true" class="ticker">
+            <div class="ticker-track">
+              <span>⚡ order ahead · pickup hot · queue zero · carts online · broth 18hr · signal strong ·</span>
+              <span>⚡ order ahead · pickup hot · queue zero · carts online · broth 18hr · signal strong ·</span>
+            </div>
+          </div>
+          <section aria-label="Live cart status" class="card cart-status container-query">
+            <div class="grid-4 status-grid">
+              <div class="status-cell">
+                <i aria-hidden="true" class="dot dot-live"></i>
+                <div>
+                  <span class="status-k">Nearest cart</span>
+                  <strong class="status-v">Neo Kabuki · OPEN</strong>
+                  <span class="status-s">stall 17 · market row</span>
+                </div>
+              </div>
+              <div class="status-cell">
+                <i aria-hidden="true" class="dot dot-live"></i>
+                <div>
+                  <span class="status-k">Pickup wait</span>
+                  <strong class="status-v cyan">8–12 min</strong>
+                  <span class="status-s">signal strong</span>
+                </div>
+              </div>
+              <div class="status-cell">
+                <i aria-hidden="true" class="dot dot-live"></i>
+                <div>
+                  <span class="status-k">Queue ahead</span>
+                  <strong class="status-v green">0 orders</strong>
+                  <span class="status-s">skip the line</span>
+                </div>
+              </div>
+              <div class="status-cell status-action">
+                <div class="stack" style="--gap:.55rem">
+                  <span class="status-k">Locations</span>
+                  <button class="btn outline secondary cyber-btn sm" command="--status" commandfor="app-status" data-status-intent="success" data-status-message="Neo Kabuki cart is accepting pickup orders." type="button">Ping cart</button>
+                </div>
+              </div>
+            </div>
+          </section>
+          <section aria-labelledby="menu-title" id="menu">
+            <div class="cluster section-head">
+              <div class="stack" style="--gap:.4rem">
+                <span class="overline brand-overline">Signal favorites</span>
+                <h2 class="section-title" id="menu-title">Top bowls</h2>
+              </div>
+              <a class="btn ghost secondary" href="menu.html">Full menu →</a>
+            </div>
+            <div aria-hidden="true" class="signal-rule"><span class="signal-tris"><i></i><i></i><i></i><i></i><i></i><i></i></span><span class="signal-line"></span><span class="signal-code">NR//07</span></div>
+            <div class="grid menu-grid">
+              <article class="card ramen-card cut">
+                <div class="frame">
+                  <img alt="Tonkotsu ramen" src="assets/bowl-tonkotsu.webp">
+                </div>
+                <div class="stack ramen-card-body">
+                  <div class="cluster">
+                    <span class="badge primary soft">Signature</span>
+                    <span class="muted dish-jp">豚骨</span>
+                  </div>
+                  <h3>Tonkotsu</h3>
+                  <p class="muted">Pork broth, chashu, wood ear, scallions, ajitama and nori.</p>
+                </div>
+                <footer>
+                  <strong class="price">HK$78</strong>
+                  <a class="btn primary cyber-btn sm" href="item.html">+ Order</a>
+                </footer>
+              </article>
+              <article class="card ramen-card cut">
+                <div class="frame">
+                  <img alt="Spicy miso ramen" src="assets/bowl-spicy-miso.webp">
+                </div>
+                <div class="stack ramen-card-body">
+                  <div class="cluster">
+                    <span class="badge danger soft">Spicy</span>
+                    <span class="muted dish-jp">味噌</span>
+                  </div>
+                  <h3>Spicy miso</h3>
+                  <p class="muted">Miso broth, chili oil, ground pork, bamboo and bean sprouts.</p>
+                </div>
+                <footer>
+                  <strong class="price">HK$82</strong>
+                  <a class="btn danger cyber-btn sm" href="item.html">Customize</a>
+                </footer>
+              </article>
+              <article class="card ramen-card cut">
+                <div class="frame">
+                  <img alt="Veggie shoyu ramen" src="assets/bowl-veggie-shoyu.webp">
+                </div>
+                <div class="stack ramen-card-body">
+                  <div class="cluster">
+                    <span class="badge success soft">Veggie</span>
+                    <span class="muted dish-jp">醤油</span>
+                  </div>
+                  <h3>Veggie shoyu</h3>
+                  <p class="muted">Shoyu broth, tofu, spinach, mushrooms, corn and scallions.</p>
+                </div>
+                <footer>
+                  <strong class="price">HK$76</strong>
+                  <a class="btn success cyber-btn sm" href="menu.html">+ Order</a>
+                </footer>
+              </article>
+            </div>
+          </section>
+          <section aria-labelledby="locations-title" class="grid location-layout" id="locations">
+            <div class="stack location-copy">
+              <span class="overline brand-overline">Find the cart</span>
+              <h2 class="section-title" id="locations-title">Three spots. One signal.</h2>
+              <p class="lede measure">The cart moves with the night. Track live openings and pickup windows, then lock your pickup point at checkout.</p>
+              <ul class="location-list list-reset">
+                <li class="cluster location-row">
+                  <div>
+                    <strong>Neo Kabuki Market</strong>
+                    <span>Market row · stall 17</span>
+                  </div>
+                  <b class="status-open"><i aria-hidden="true" class="dot dot-live"></i> OPEN</b>
+                </li>
+                <li class="cluster location-row">
+                  <div>
+                    <strong>Sector 7 Arcade Alley</strong>
+                    <span>Lower arcade · gate C</span>
+                  </div>
+                  <b class="status-open"><i aria-hidden="true" class="dot dot-live"></i> OPEN</b>
+                </li>
+                <li class="cluster location-row">
+                  <div>
+                    <strong>Harbor Line Station</strong>
+                    <span>North exit · platform street</span>
+                  </div>
+                  <b class="status-open" style="color:var(--warning)">5PM</b>
+                </li>
+              </ul>
+              <div>
+                <a class="btn outline secondary cyber-btn" href="locations.html">All locations</a>
+              </div>
+            </div>
+            <div class="aura" style="--aura-color:var(--secondary); --aura-blur:1rem;">
+              <figure class="frame cart-visual">
+                <img alt="Neon ramen cart on a rain-slicked street at night" src="assets/cart.webp">
+                <figcaption class="signal">
+                  Causeway Bay // open now // pickup 8–12 min
+                </figcaption>
+              </figure>
+            </div>
+          </section>
+          <section aria-labelledby="pickup-title" id="pickup">
+            <div class="stack" style="--gap:.5rem; margin-block-end:1.5rem">
+              <span class="overline brand-overline">Pickup protocol</span>
+              <h2 class="section-title" id="pickup-title">How pickup works</h2>
+            </div>
+            <div aria-hidden="true" class="signal-rule"><span class="signal-tris"><i></i><i></i><i></i><i></i><i></i><i></i></span><span class="signal-line"></span><span class="signal-code">PROTO//03</span></div>
+            <div class="grid steps">
+              <article class="stack step" style="--gap:.65rem">
+                <span class="step-number">01 / CART</span>
+                <h3>Pick a cart</h3>
+                <p class="muted">Choose the stall nearest you. Live status and pickup windows stay visible.</p>
+              </article>
+              <article class="stack step" style="--gap:.65rem">
+                <span class="step-number">02 / ORDER</span>
+                <h3>Order on the wire</h3>
+                <p class="muted">Build your bowl, pay at the terminal, and get a pickup code.</p>
+              </article>
+              <article class="stack step" style="--gap:.65rem">
+                <span class="step-number">03 / GO</span>
+                <h3>Grab & go</h3>
+                <p class="muted">Show your code at the window. Average hand-off is twelve minutes.</p>
+              </article>
+            </div>
+          </section>
+        </div>
+      </div>
+    </main>
+    <footer class="site-footer">
+      <div class="center">
+        <div class="grid footer-grid">
+          <div class="stack" style="--gap:.65rem">
+            <strong class="brand-mark">NEONRAMEN <em>未来のラーメン</em></strong>
+            <p class="muted">Cyberpunk ramen running the night circuit. Hot broth, zero queues.</p>
+          </div>
+          <div>
+            <strong class="overline brand-overline">Navigate</strong>
+            <ul class="list-reset">
+              <li>
+                <a href="menu.html">Menu</a>
+              </li>
+              <li>
+                <a href="locations.html">Locations</a>
+              </li>
+              <li>
+                <a href="order.html">Pickup</a>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <strong class="overline brand-overline">Signal</strong>
+            <ul class="list-reset">
+              <li>
+                <a href="locations.html">Nearest cart</a>
+              </li>
+              <li>
+                <a href="item.html">Spicy Miso</a>
+              </li>
+              <li>
+                <span class="muted">NR-APP v2.4</span>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <strong class="overline brand-overline">Hours</strong>
+            <ul class="list-reset">
+              <li>
+                <span class="muted">Mon–Thu · 5PM–2AM</span>
+              </li>
+              <li>
+                <span class="muted">Fri–Sat · 5PM–4AM</span>
+              </li>
+              <li>
+                <span class="muted">Sun · closed</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="cluster footer-bottom">
+          <span>© 2026 Neon Ramen City Circuit</span>
+          <span>All carts <b>● LIVE</b> · avg pickup 12 min</span>
+        </div>
+      </div>
+    </footer>
+    <div aria-atomic="true" aria-live="polite" class="status-bar" data-status id="app-status" role="status"></div>
+    <script src="../../../dist/actual.full.js">
+    </script>
+  </body>
+</html>

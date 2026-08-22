@@ -1,0 +1,498 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Calendar - Admini on Actual CSS</title>
+  <meta name="description" content="Calendar view with events, date navigation, and scheduling interface.">
+
+  <script src="admini-theme.js"></script>
+  <link rel="stylesheet" href="../../../dist/actual.full.css">
+  <link rel="stylesheet" href="../../assets/actual-themes.min.css">
+  <link rel="stylesheet" href="admini.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.46.0/dist/tabler-icons.min.css">
+</head>
+
+<body>
+  <div class="admini-shell">
+    <!-- admini-shell:sidebar -->
+    <aside class="admini-sidebar scroller stable-gutter" aria-label="Primary navigation">
+      <a class="navbar-brand" href="index.html">
+        <span class="avatar primary"><abbr>AD</abbr></span>
+        <span>Admini</span>
+      </a>
+
+      <nav class="admini-nav stack" aria-label="Primary">
+        <p class="overline admini-section-title">Overview</p>
+        <ul class="nav-list stack">
+          <li>
+            <a class="nav-link" href="index.html">
+              <i class="ti ti-layout-dashboard" aria-hidden="true"></i>
+              Dashboard
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <nav class="admini-nav stack" aria-label="Manage">
+        <p class="overline admini-section-title">Manage</p>
+        <ul class="nav-list stack">
+          <li>
+            <a class="nav-link" href="tables.html">
+              <i class="ti ti-table" aria-hidden="true"></i>
+              Tables
+            </a>
+          </li>
+          <li>
+            <a class="nav-link" href="forms.html">
+              <i class="ti ti-forms" aria-hidden="true"></i>
+              Forms
+            </a>
+          </li>
+          <li>
+            <a class="nav-link" href="profile.html">
+              <i class="ti ti-user" aria-hidden="true"></i>
+              Profile
+            </a>
+          </li>
+          <li>
+            <a class="nav-link" href="settings.html">
+              <i class="ti ti-settings" aria-hidden="true"></i>
+              Settings
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <nav class="admini-nav stack" aria-label="Team">
+        <p class="overline admini-section-title">Team</p>
+        <ul class="nav-list stack">
+          <li>
+            <a class="nav-link" href="user-grid.html">
+              <i class="ti ti-users-group" aria-hidden="true"></i>
+              User grid
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <nav class="admini-nav stack" aria-label="Work">
+        <p class="overline admini-section-title">Work</p>
+        <ul class="nav-list stack">
+          <li>
+            <a class="nav-link" href="kanban.html">
+              <i class="ti ti-layout-kanban" aria-hidden="true"></i>
+              Kanban
+            </a>
+          </li>
+          <li>
+            <a class="nav-link" href="calendar.html" aria-current="page">
+              <i class="ti ti-calendar" aria-hidden="true"></i>
+              Calendar
+            </a>
+          </li>
+          <li>
+            <a class="nav-link" href="chat.html">
+              <i class="ti ti-message-circle" aria-hidden="true"></i>
+              Chat
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <nav class="admini-nav stack" aria-label="Billing">
+        <p class="overline admini-section-title">Billing</p>
+        <ul class="nav-list stack">
+          <li>
+            <a class="nav-link" href="invoice.html">
+              <i class="ti ti-file-invoice" aria-hidden="true"></i>
+              Invoice
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <nav class="admini-nav stack" aria-label="Pages">
+        <p class="overline admini-section-title">Pages</p>
+        <ul class="nav-list stack">
+          <li>
+            <a class="nav-link" href="login.html">
+              <i class="ti ti-login" aria-hidden="true"></i>
+              Login
+            </a>
+          </li>
+          <li>
+            <a class="nav-link" href="404.html">
+              <i class="ti ti-error-404" aria-hidden="true"></i>
+              404
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="grow"></div>
+
+      <div class="flyout-trigger stretch">
+        <button class="btn neutral ghost" data-enhance="flyout" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="sidebar-user-menu"
+          id="sidebar-user-trigger">
+          <span class="avatar sm"><abbr>JN</abbr></span>
+          <span>John Nemo</span>
+        </button>
+        <menu class="flyout sm menu" role="menu" id="sidebar-user-menu" aria-labelledby="sidebar-user-trigger" hidden>
+          <li><a class="menu-item" href="profile.html" role="menuitem">Profile</a></li>
+          <li><a class="menu-item" href="settings.html" role="menuitem">Settings</a></li>
+            <hr class="menu-separator" role="separator">
+          <li><a class="menu-item danger" href="login.html" role="menuitem">Sign out</a></li>
+        </menu>
+      </div>
+    </aside>
+    <!-- /admini-shell:sidebar -->
+
+    <div class="admini-main">
+      <!-- admini-shell:topbar -->
+      <header class="topbar admini-topbar">
+        <button class="btn neutral ghost admini-menu-button" type="button" commandfor="navigation-drawer" command="show-modal"
+          aria-label="Open navigation">
+          <i class="ti ti-menu-2" aria-hidden="true"></i>
+        </button>
+
+        <ol class="breadcrumb text-nowrap admini-hide-mobile" aria-label="Breadcrumb">
+          <li><a href="index.html">Admini</a></li>
+          <li class="truncate" aria-current="page">Calendar</li>
+        </ol>
+
+        <div class="grow"></div>
+
+        <select class="select sm admini-hide-mobile fit" id="theme-switcher" aria-label="Switch theme">
+          <option value="">System</option>
+          <option value="light">Light</option>
+          <option value="indigo">Indigo</option>
+          <option value="dim">Dim</option>
+          <option value="corporate">Corporate</option>
+          <option value="forest">Forest</option>
+          <option value="ocean">Ocean</option>
+          <option value="spruce">Spruce</option>
+          <option value="petrol">Petrol</option>
+          <option value="sunset">Sunset</option>
+          <option value="lavender">Lavender</option>
+          <option value="mono">Mono</option>
+          <option value="square">Square</option>
+          <option value="edge">Edge</option>
+          <option value="cyberpunk">Cyberpunk</option>
+          <option value="neon">Neon</option>
+          <option value="gradient">Gradient</option>
+        </select>
+
+        <button class="btn neutral ghost sm" type="button" aria-label="Notifications">
+          <i class="ti ti-bell" aria-hidden="true"></i>
+          <span class="badge danger" aria-label="5 unread notifications"></span>
+        </button>
+
+        <div class="flyout-trigger">
+          <button class="btn neutral ghost sm" data-enhance="flyout" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="account-menu"
+            id="account-flyout-trigger" aria-label="Account menu">
+            <span class="avatar sm"><abbr>JN</abbr></span>
+            <i class="ti ti-chevron-down admini-hide-mobile" aria-hidden="true"></i>
+          </button>
+          <menu class="flyout sm menu" role="menu" id="account-menu" aria-labelledby="account-flyout-trigger" hidden>
+            <li><a class="menu-item" href="profile.html" role="menuitem">View profile</a></li>
+            <li><a class="menu-item" href="settings.html" role="menuitem">Account settings</a></li>
+          <hr class="menu-separator" role="separator">
+            <li><a class="menu-item danger" href="login.html" role="menuitem">Sign out</a></li>
+          </menu>
+        </div>
+      </header>
+      <!-- /admini-shell:topbar -->
+
+      <main class="center stack admini-content">
+        <header class="cluster" style="--cluster-justify: space-between; --cluster-align: flex-start;">
+          <hgroup>
+            <p class="overline">Work</p>
+            <h1>Calendar</h1>
+            <p class="muted">A plain 7-column CSS grid — each event chip reuses <code>.badge</code>, just re-shaped to truncate and left-align.</p>
+          </hgroup>
+          <button class="btn primary" type="button" commandfor="new-event-modal" command="show-modal"
+            aria-haspopup="dialog" aria-controls="new-event-modal">
+            <i class="ti ti-plus" aria-hidden="true"></i>
+            New event
+          </button>
+        </header>
+
+        <div class="cluster" style="--cluster-justify: space-between;">
+          <div class="cluster sm" style="--cluster-wrap: nowrap;">
+            <button class="btn neutral outline sm" type="button" id="calendar-prev" aria-label="Previous month">
+              <i class="ti ti-chevron-left" aria-hidden="true"></i>
+            </button>
+            <strong id="calendar-month">July 2026</strong>
+            <button class="btn neutral outline sm" type="button" id="calendar-next" aria-label="Next month">
+              <i class="ti ti-chevron-right" aria-hidden="true"></i>
+            </button>
+          </div>
+          <button class="btn neutral ghost sm" type="button" id="calendar-today">Today</button>
+        </div>
+
+        <div class="card" style="padding: 0; overflow: hidden;">
+          <div class="admini-calendar-grid" id="calendar-grid">
+            <div class="admini-calendar-weekday">Sun</div>
+            <div class="admini-calendar-weekday">Mon</div>
+            <div class="admini-calendar-weekday">Tue</div>
+            <div class="admini-calendar-weekday">Wed</div>
+            <div class="admini-calendar-weekday">Thu</div>
+            <div class="admini-calendar-weekday">Fri</div>
+            <div class="admini-calendar-weekday">Sat</div>
+
+            <div class="admini-calendar-day is-muted" aria-label="June 28, 2026">
+              <span class="admini-calendar-day-number">28</span>
+            </div>
+            <div class="admini-calendar-day is-muted" aria-label="June 29, 2026">
+              <span class="admini-calendar-day-number">29</span>
+            </div>
+            <div class="admini-calendar-day is-muted" aria-label="June 30, 2026">
+              <span class="admini-calendar-day-number">30</span>
+            </div>
+
+            <div class="admini-calendar-day" aria-label="July 1, 2026">
+              <span class="admini-calendar-day-number">1</span>
+            </div>
+            <div class="admini-calendar-day" aria-label="July 2, 2026">
+              <span class="admini-calendar-day-number">2</span>
+              <div class="admini-calendar-events">
+                <div class="badge neutral soft admini-calendar-event" data-tooltip="Team standup"><span class="admini-calendar-event-label">Team standup</span></div>
+              </div>
+            </div>
+            <div class="admini-calendar-day" aria-label="July 3, 2026">
+              <span class="admini-calendar-day-number">3</span>
+            </div>
+            <div class="admini-calendar-day" aria-label="July 4, 2026">
+              <span class="admini-calendar-day-number">4</span>
+            </div>
+            <div class="admini-calendar-day" aria-label="July 5, 2026">
+              <span class="admini-calendar-day-number">5</span>
+            </div>
+            <div class="admini-calendar-day" aria-label="July 6, 2026">
+              <span class="admini-calendar-day-number">6</span>
+            </div>
+            <div class="admini-calendar-day" aria-label="July 7, 2026">
+              <span class="admini-calendar-day-number">7</span>
+              <div class="admini-calendar-events">
+                <div class="badge primary soft admini-calendar-event" data-tooltip="Design review"><span class="admini-calendar-event-label">Design review</span></div>
+              </div>
+            </div>
+            <div class="admini-calendar-day" aria-label="July 8, 2026">
+              <span class="admini-calendar-day-number">8</span>
+            </div>
+            <div class="admini-calendar-day is-today" aria-label="July 9, 2026">
+              <span class="admini-calendar-day-number">9</span>
+              <div class="admini-calendar-events">
+                <div class="badge success soft admini-calendar-event" data-tooltip="Sprint planning"><span class="admini-calendar-event-label">Sprint planning</span></div>
+                <div class="badge neutral soft admini-calendar-event" data-tooltip="1:1 Ada"><span class="admini-calendar-event-label">1:1 Ada</span></div>
+                <div class="muted" style="font-size: var(--font-size-xs);">+1 more</div>
+              </div>
+            </div>
+            <div class="admini-calendar-day" aria-label="July 10, 2026">
+              <span class="admini-calendar-day-number">10</span>
+              <div class="admini-calendar-events">
+                <div class="badge danger soft admini-calendar-event" data-tooltip="API rate limit due"><span class="admini-calendar-event-label">API rate limit due</span></div>
+              </div>
+            </div>
+            <div class="admini-calendar-day" aria-label="July 11, 2026">
+              <span class="admini-calendar-day-number">11</span>
+            </div>
+            <div class="admini-calendar-day" aria-label="July 12, 2026">
+              <span class="admini-calendar-day-number">12</span>
+            </div>
+            <div class="admini-calendar-day" aria-label="July 13, 2026">
+              <span class="admini-calendar-day-number">13</span>
+            </div>
+            <div class="admini-calendar-day" aria-label="July 14, 2026">
+              <span class="admini-calendar-day-number">14</span>
+              <div class="admini-calendar-events">
+                <div class="badge warning soft admini-calendar-event" data-tooltip="Client demo"><span class="admini-calendar-event-label">Client demo</span></div>
+              </div>
+            </div>
+            <div class="admini-calendar-day" aria-label="July 15, 2026">
+              <span class="admini-calendar-day-number">15</span>
+            </div>
+            <div class="admini-calendar-day" aria-label="July 16, 2026">
+              <span class="admini-calendar-day-number">16</span>
+            </div>
+            <div class="admini-calendar-day" aria-label="July 17, 2026">
+              <span class="admini-calendar-day-number">17</span>
+              <div class="admini-calendar-events">
+                <div class="badge danger soft admini-calendar-event" data-tooltip="Release cut"><span class="admini-calendar-event-label">Release cut</span></div>
+              </div>
+            </div>
+            <div class="admini-calendar-day" aria-label="July 18, 2026">
+              <span class="admini-calendar-day-number">18</span>
+            </div>
+            <div class="admini-calendar-day" aria-label="July 19, 2026">
+              <span class="admini-calendar-day-number">19</span>
+            </div>
+            <div class="admini-calendar-day" aria-label="July 20, 2026">
+              <span class="admini-calendar-day-number">20</span>
+            </div>
+            <div class="admini-calendar-day" aria-label="July 21, 2026">
+              <span class="admini-calendar-day-number">21</span>
+            </div>
+            <div class="admini-calendar-day" aria-label="July 22, 2026">
+              <span class="admini-calendar-day-number">22</span>
+              <div class="admini-calendar-events">
+                <div class="badge primary soft admini-calendar-event" data-tooltip="Team offsite"><span class="admini-calendar-event-label">Team offsite</span></div>
+              </div>
+            </div>
+            <div class="admini-calendar-day" aria-label="July 23, 2026">
+              <span class="admini-calendar-day-number">23</span>
+            </div>
+            <div class="admini-calendar-day" aria-label="July 24, 2026">
+              <span class="admini-calendar-day-number">24</span>
+            </div>
+            <div class="admini-calendar-day" aria-label="July 25, 2026">
+              <span class="admini-calendar-day-number">25</span>
+            </div>
+            <div class="admini-calendar-day" aria-label="July 26, 2026">
+              <span class="admini-calendar-day-number">26</span>
+            </div>
+            <div class="admini-calendar-day" aria-label="July 27, 2026">
+              <span class="admini-calendar-day-number">27</span>
+            </div>
+            <div class="admini-calendar-day" aria-label="July 28, 2026">
+              <span class="admini-calendar-day-number">28</span>
+              <div class="admini-calendar-events">
+                <div class="badge neutral soft admini-calendar-event" data-tooltip="Board meeting"><span class="admini-calendar-event-label">Board meeting</span></div>
+              </div>
+            </div>
+            <div class="admini-calendar-day" aria-label="July 29, 2026">
+              <span class="admini-calendar-day-number">29</span>
+            </div>
+            <div class="admini-calendar-day" aria-label="July 30, 2026">
+              <span class="admini-calendar-day-number">30</span>
+            </div>
+            <div class="admini-calendar-day" aria-label="July 31, 2026">
+              <span class="admini-calendar-day-number">31</span>
+              <div class="admini-calendar-events">
+                <div class="badge warning soft admini-calendar-event" data-tooltip="Month close"><span class="admini-calendar-event-label">Month close</span></div>
+              </div>
+            </div>
+
+            <div class="admini-calendar-day is-muted" aria-label="August 1, 2026">
+              <span class="admini-calendar-day-number">1</span>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <dialog class="drawer" data-theme="dim" id="navigation-drawer" aria-label="Navigation">
+    <header class="cluster" style="--cluster-justify: space-between;">
+      <strong>Admini</strong>
+      <form method="dialog">
+        <button class="btn ghost" type="submit" aria-label="Close navigation">
+          <i class="ti ti-x" aria-hidden="true"></i>
+        </button>
+      </form>
+    </header>
+
+    <nav class="admini-nav" aria-label="Mobile navigation">
+      <ul class="nav-list stack">
+        <li><a class="nav-link" href="index.html"><i class="ti ti-layout-dashboard" aria-hidden="true"></i> Dashboard</a></li>
+        <li><a class="nav-link" href="tables.html"><i class="ti ti-table" aria-hidden="true"></i> Tables</a></li>
+        <li><a class="nav-link" href="forms.html"><i class="ti ti-forms" aria-hidden="true"></i> Forms</a></li>
+        <li><a class="nav-link" href="profile.html"><i class="ti ti-user" aria-hidden="true"></i> Profile</a></li>
+        <li><a class="nav-link" href="settings.html"><i class="ti ti-settings" aria-hidden="true"></i> Settings</a></li>
+        <li><a class="nav-link" href="user-grid.html"><i class="ti ti-users-group" aria-hidden="true"></i> User grid</a></li>
+        <li><a class="nav-link" href="kanban.html"><i class="ti ti-layout-kanban" aria-hidden="true"></i> Kanban</a></li>
+        <li><a class="nav-link" href="calendar.html" aria-current="page"><i class="ti ti-calendar" aria-hidden="true"></i> Calendar</a></li>
+        <li><a class="nav-link" href="chat.html"><i class="ti ti-message-circle" aria-hidden="true"></i> Chat</a></li>
+        <li><a class="nav-link" href="invoice.html"><i class="ti ti-file-invoice" aria-hidden="true"></i> Invoice</a></li>
+        <li><a class="nav-link" href="login.html"><i class="ti ti-login" aria-hidden="true"></i> Login</a></li>
+        <li><a class="nav-link" href="404.html"><i class="ti ti-error-404" aria-hidden="true"></i> 404</a></li>
+      </ul>
+    </nav>
+  </dialog>
+
+  <dialog class="modal" id="new-event-modal" closedby="any" data-dialog-dismissible>
+    <form method="dialog" class="stack">
+      <header>
+        <h3>New event</h3>
+        <p class="muted">Add an event to the calendar.</p>
+      </header>
+
+      <label class="field">
+        <span class="field-label">Title</span>
+        <input class="input" type="text" placeholder="Event title">
+      </label>
+
+      <label class="field">
+        <span class="field-label">Date</span>
+        <input class="input" type="date" value="2026-07-09">
+      </label>
+
+      <footer>
+        <button class="btn neutral outline" value="cancel" formnovalidate>Cancel</button>
+        <button class="btn primary" value="create">Create event</button>
+      </footer>
+    </form>
+  </dialog>
+
+  <script src="../../../dist/actual.full.js" defer></script>
+
+  <script>
+    // The July 2026 grid is authored in HTML (progressive enhancement); the
+    // navigation renders other months as plain cells and restores the
+    // authored markup — events included — when July comes back into view.
+    const monthLabel = document.getElementById("calendar-month");
+    const grid = document.getElementById("calendar-grid");
+    const initial = grid.innerHTML;
+    const weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
+      .map((day) => `<div class="admini-calendar-weekday">${day}</div>`)
+      .join("");
+    let view = new Date(2026, 6, 1);
+
+    function render() {
+      monthLabel.textContent = view.toLocaleDateString("en-US", { month: "long", year: "numeric" });
+
+      if (view.getFullYear() === 2026 && view.getMonth() === 6) {
+        grid.innerHTML = initial;
+        return;
+      }
+
+      const cursor = new Date(view);
+      cursor.setDate(1 - view.getDay());
+
+      let cells = "";
+      for (let i = 0; i < 42; i++) {
+        const day = new Date(cursor);
+        day.setDate(cursor.getDate() + i);
+        const outside = day.getMonth() !== view.getMonth();
+        const today = day.toDateString() === new Date().toDateString();
+        const classes = ["admini-calendar-day"];
+        if (outside) classes.push("is-muted");
+        if (today) classes.push("is-today");
+        cells += `<div class="${classes.join(" ")}" aria-label="${day.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}">
+            <span class="admini-calendar-day-number">${day.getDate()}</span>
+          </div>`;
+      }
+
+      grid.innerHTML = weekdays + cells;
+    }
+
+    document.getElementById("calendar-prev").addEventListener("click", () => {
+      view.setMonth(view.getMonth() - 1);
+      render();
+    });
+
+    document.getElementById("calendar-next").addEventListener("click", () => {
+      view.setMonth(view.getMonth() + 1);
+      render();
+    });
+
+    document.getElementById("calendar-today").addEventListener("click", () => {
+      view = new Date();
+      render();
+    });
+  </script>
+</body>
+
+</html>

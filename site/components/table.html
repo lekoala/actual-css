@@ -220,6 +220,7 @@
 <tbody>
 <tr><td><code>.table-wrap</code></td><td>Component</td><td>Scroll container and outer chrome (surface, border, radius).</td></tr>
 <tr><td><code>.table</code></td><td>Component</td><td>The table itself; row and cell rules.</td></tr>
+<tr><td><code>.table.compact</code></td><td>Density</td><td>Tighter cell padding; typography is unchanged.</td></tr>
 </tbody>
 </table></div>
 <h2 id="basic-usage">Basic usage</h2>
@@ -375,9 +376,52 @@ table width before the wrapper scrolls horizontally.</p>
   </div>
 </div>
 <div class="prose docs-prose">
+<h2 id="compact-tables">Compact tables</h2>
+<p><code>.compact</code> lowers the cell padding only — density never changes typography.
+It is the same vocabulary as <code>.card.compact</code>.</p>
+</div>
+<div class="docs-example">
+  <div class="docs-preview">
+<div class="table-wrap">
+  <table class="table compact">
+    <caption>Standings by position</caption>
+    <thead>
+      <tr>
+        <th scope="col">Pos</th>
+        <th scope="col">Name</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>1</td><td>John Nemo</td></tr>
+      <tr><td>2</td><td>Jane Doe</td></tr>
+      <tr><td>3</td><td>Ada Morgan</td></tr>
+    </tbody>
+  </table>
+</div>
+  </div>
+  <div class="docs-code">
+    <pre><code class="language-html">&lt;div class=&quot;table-wrap&quot;&gt;
+  &lt;table class=&quot;table compact&quot;&gt;
+    &lt;caption&gt;Standings by position&lt;/caption&gt;
+    &lt;thead&gt;
+      &lt;tr&gt;
+        &lt;th scope=&quot;col&quot;&gt;Pos&lt;/th&gt;
+        &lt;th scope=&quot;col&quot;&gt;Name&lt;/th&gt;
+      &lt;/tr&gt;
+    &lt;/thead&gt;
+    &lt;tbody&gt;
+      &lt;tr&gt;&lt;td&gt;1&lt;/td&gt;&lt;td&gt;John Nemo&lt;/td&gt;&lt;/tr&gt;
+      &lt;tr&gt;&lt;td&gt;2&lt;/td&gt;&lt;td&gt;Jane Doe&lt;/td&gt;&lt;/tr&gt;
+      &lt;tr&gt;&lt;td&gt;3&lt;/td&gt;&lt;td&gt;Ada Morgan&lt;/td&gt;&lt;/tr&gt;
+    &lt;/tbody&gt;
+  &lt;/table&gt;
+&lt;/div&gt;</code></pre>
+  </div>
+</div>
+<div class="prose docs-prose">
 <h2 id="css-hooks">CSS hooks</h2>
 <ul>
-<li><code>--table-cell-pad</code> — cell padding.</li>
+<li><code>--table-cell-pad</code> — cell padding; <code>.compact</code> re-declares it tighter.</li>
 <li><code>--table-min</code> — minimum table width before <code>.table-wrap</code> scrolls horizontally.</li>
 </ul>
 
@@ -402,6 +446,7 @@ table width before the wrapper scrolls horizontally.</p>
         <li><a class="nav-link" href="#class-reference" data-docs-toc-item data-level="2">Class reference</a></li>
         <li><a class="nav-link" href="#basic-usage" data-docs-toc-item data-level="2">Basic usage</a></li>
         <li><a class="nav-link" href="#accessible-scroll-region" data-docs-toc-item data-level="2">Accessible scroll region</a></li>
+        <li><a class="nav-link" href="#compact-tables" data-docs-toc-item data-level="2">Compact tables</a></li>
         <li><a class="nav-link" href="#css-hooks" data-docs-toc-item data-level="2">CSS hooks</a></li>
           </ul>
         </nav>

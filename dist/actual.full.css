@@ -6038,9 +6038,20 @@ a.avatar[aria-disabled="true"] {
   margin: 0;
   padding: 0;
   list-style: none;
+
+  /* Arrows, page numbers, and truncation ellipses share one geometric
+     system: equal digit widths keep the row from re-flowing as numbers grow
+     (98 → 99 → 100). */
+  font-variant-numeric: tabular-nums;
 }
 
 .pagination .btn {
+  /* Every item gets the same min footprint; wider content (100, 1000,
+     text labels) grows past it naturally. The default 1em control padding
+     would let an icon-only arrow exceed the numbered items' footprint, so
+     the horizontal padding tightens here and the min size does the work. */
+  --btn-pad-x: var(--space-20);
+
   min-inline-size: var(--control-size);
 }
 
@@ -6247,6 +6258,12 @@ a.avatar[aria-disabled="true"] {
 .table > tr:last-child > *,
 .table > :last-child > tr:last-child > * {
   border-block-end: 0;
+}
+
+/* Same compact vocabulary as .card.compact: one hook change, no selector
+   duplication. Density is padding only — typography never changes. */
+.table.compact {
+  --table-cell-pad: var(--space-20);
 }
 
 /*

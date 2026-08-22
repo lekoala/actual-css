@@ -9,6 +9,7 @@
 - Numeric links may use `aria-label="Page N"` for clearer screen reader output.
 - Prefer text labels for Previous and Next. Icon-only controls need an accessible name.
 - Page links can compose with `.btn` for button-like hit targets.
+- Arrows, page numbers, and truncation ellipses share one geometric system: every item gets the same minimum footprint, and wider content (100, 1000, text labels) grows past it naturally.
 - Truncated ranges are plain text with `.muted` and `aria-hidden="true"`, not `.btn` — they are decorative, not actionable.
 
 ## Class reference
