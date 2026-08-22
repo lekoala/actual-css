@@ -55,10 +55,13 @@
   min-inline-size: 0;
 }
 
+/* Region rhythm goes on `gap`, not on --gap: this element is itself a .stack,
+   and --gap is inherited — setting it here would re-space every nested stack,
+   cluster and grid down to the radio lists inside a field-group. */
 .admini-content {
   --center-size: 76rem;
-  --gap: var(--space-40);
 
+  gap: var(--space-40);
   padding-block: var(--space-40) var(--space-60);
 }
 

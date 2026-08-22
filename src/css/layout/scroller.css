@@ -1,24 +1,28 @@
 /*
- * Scroller — optional custom scrollbar styling for overflow regions.
+ * Scroller — optional scrollbar treatment for overflow regions.
  *
- * Apply to any scroll container (.overflow-auto, sidebars, long tables). Both
- * scrollbar-color (Firefox) and ::-webkit-scrollbar (Safari/Chromium) are
- * styled; the thumb lands as a thin, theme-aware affordance with a hover
- * state.
+ * Apply to any scroll container (.overflow-auto, sidebars, long tables). Only
+ * the standard properties are used: the engine keeps drawing the scrollbar,
+ * this hands it the theme's density and colour. No ::-webkit-scrollbar chrome —
+ * rebuilding a thumb by hand means re-implementing the hover, the corner and
+ * the light/dark adaptation that color-scheme already gives for free, and the
+ * two never match anyway.
+ *
+ * Above the capability floor: scrollbar-color lands in Chromium 121 and
+ * Safari 18.2, the floor is Chromium 99 / Safari 15.4. Older engines ignore
+ * both declarations and draw their native scrollbar — the intended fallback,
+ * not a broken state.
+ *
+ * Styles the scrollbar only; it does not create the overflow. Pair it with
+ * .overflow-auto or a component that already scrolls.
  *
  * Public hooks:
- * --scroller-size
- * --scroller-padding
  * --scroller-track
  * --scroller-thumb
- * --scroller-thumb-hover
  */
 .scroller {
-  --scroller-size: 0.625rem;
-  --scroller-padding: 0.125rem;
   --scroller-track: transparent;
   --scroller-thumb: var(--border);
-  --scroller-thumb-hover: var(--text-muted);
 
   scrollbar-color: var(--scroller-thumb) var(--scroller-track);
   scrollbar-width: thin;
@@ -30,34 +34,8 @@
   scrollbar-gutter: stable;
 }
 
-.scroller::-webkit-scrollbar {
-  width: var(--scroller-size);
-  height: var(--scroller-size);
-}
-
-.scroller::-webkit-scrollbar-track {
-  background: var(--scroller-track);
-}
-
-.scroller::-webkit-scrollbar-thumb {
-  border: var(--scroller-padding) solid transparent;
-  border-radius: var(--radius-full);
-  background: var(--scroller-thumb);
-  background-clip: content-box;
-}
-
-.scroller::-webkit-scrollbar-thumb:hover {
-  background: var(--scroller-thumb-hover);
-  background-clip: content-box;
-}
-
-.scroller::-webkit-scrollbar-corner {
-  background: var(--scroller-track);
-}
-
 @supports (color: color-mix(in oklch, red, white)) {
   .scroller {
     --scroller-thumb: color-mix(in oklch, var(--text-muted), transparent 55%);
-    --scroller-thumb-hover: color-mix(in oklch, var(--text-muted), transparent 30%);
   }
 }

@@ -57,7 +57,7 @@ Scroll the page to see the actions stay reachable.
 
     <fieldset class="field-group">
       <legend class="field-label">Theme</legend>
-      <div class="stack">
+      <div class="stack sm">
         <label class="choice">
           <input class="radio" type="radio" name="theme" value="light" checked />
           <span>Light</span>
@@ -141,7 +141,7 @@ Scroll the page to see the detached footer stay reachable.
 
     <fieldset class="field-group">
       <legend class="field-label">Theme</legend>
-      <div class="stack">
+      <div class="stack sm">
         <label class="choice">
           <input class="radio" type="radio" name="theme-detached" value="light" checked />
           <span>Light</span>

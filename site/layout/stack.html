@@ -8,7 +8,7 @@
   <title>Stack — Actual CSS</title>
   <meta name="description" content="Vertical flow with consistent spacing, ideal for forms, card content, and content blocks.">
   <link rel="stylesheet" href="../../src/css/actual.full.css">
-  <link rel="stylesheet" href="../../demo/assets/actual-themes.min.css">
+  <link rel="stylesheet" href="../assets/actual-themes.min.css">
   <link rel="stylesheet" href="../../scripts/docs/assets/docs.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3/dist/tabler-icons.min.css">
   <script src="https://cdn.jsdelivr.net/npm/prismjs@1.30.0/components/prism-core.min.js"></script>
@@ -72,7 +72,7 @@
     </header>
 
     <div class="docs-shell center">
-      <aside class="docs-sidebar" aria-label="Documentation">
+      <aside class="docs-sidebar scroller stable-gutter" aria-label="Documentation">
               <p class="docs-nav-group">Guides</p>
       <ul class="nav-list">
         <li><a class="nav-link" href="../guides/introduction.html">Introduction</a></li>
@@ -235,6 +235,51 @@
 block margins are reset, so vertical rhythm always comes from <code>--gap</code>. Inline
 margins stay free — for example <code>margin-inline: auto</code> on a child centers it
 without fighting the primitive.</p>
+<h2 id="choosing-a-density">Choosing a density</h2>
+<p><code>--gap</code> is the primitive's channel, and the density variants set it at the point
+of use. Pick the one that matches how tightly the children belong together:</p>
+<div class="table-wrap"><table class="table">
+<thead>
+<tr><th>Markup</th><th>Gap</th><th>Use for</th></tr>
+</thead>
+<tbody>
+<tr><td><code>.stack gap-none</code></td><td>0</td><td>Lines that form one typographic unit — a name and a job title, a figure and its caption.</td></tr>
+<tr><td><code>.stack sm</code></td><td>8px</td><td>A homogeneous series of distinct controls — a radio list, a checkbox list, a compact vertical menu.</td></tr>
+<tr><td><code>.stack</code></td><td>12px</td><td>Normal flow between distinct elements.</td></tr>
+<tr><td><code>.stack lg</code></td><td>24px</td><td>Sections, or blocks that should read as separated.</td></tr>
+</tbody>
+</table></div>
+<p>The distinction between the first two matters. <code>42</code> above <code>Open issues</code> is
+almost a single block of text, so it takes <code>gap-none</code>. Three <code>.choice</code> labels
+stay three separate controls that happen to form one group, so they take <code>sm</code> —
+tighter than the default, but still spaced.</p>
+<p>A stack that mixes kinds keeps the default: five <code>.field</code> wrappers and one lone
+<code>.choice</code> is a form that contains a checkbox, not a list of options, and
+tightening it would squeeze the fields.</p>
+<h2 id="region-rhythm-goes-on-gap-not-on-gap">Region rhythm goes on <code>gap</code>, not on <code>--gap</code></h2>
+<p>A container that composes other primitives owns its rhythm through the <code>gap</code>
+property. Setting <code>--gap</code> on it instead re-spaces everything it contains, at any
+depth:</p>
+<pre><code class="language-css">/* Leaks: --gap is inherited, so every nested stack, cluster and grid — down to
+   a radio list inside a field-group — is pushed to 24px too. */
+.app-region {
+  --gap: var(--space-50);
+}
+
+/* Owns its own rhythm and nothing else. Nested primitives keep --gap. */
+.app-region {
+  gap: var(--space-50);
+}
+</code></pre>
+<p>Both give the region the same spacing; only the second stops there. This is what
+makes a nested <code>.stack sm</code> a real density choice — 12px down to 8px — rather
+than a patch cancelling a rhythm inherited from three levels up.</p>
+<p>Setting <code>--gap</code> is still the right move on the element that <em>consumes</em> it: a
+one-off <code>--gap</code> on a card body or an actions row tunes that primitive and
+nothing below it, because the setter is the consumer. The leak only appears when
+a container sets the token and its children read it.</p>
+<p><code>.sm</code> and <code>.lg</code> are the deliberate exception: they set <code>--gap</code> precisely so a
+density context reaches nested layouts.</p>
 <h2 id="grouping-items-tightly">Grouping items tightly</h2>
 <p>Stack spacing is a <code>--gap</code> between every direct child; the primitive cannot
 tighten two specific children by itself. To group a few items into one unit
@@ -287,10 +332,12 @@ one child only; the rest of the stack keeps its rhythm.</p>
         </nav>
       </main>
 
-      <aside class="docs-toc">
+      <aside class="docs-toc scroller stable-gutter">
         <nav class="scrollspy" data-enhance="scrollspy" data-scrollspy-offset="80" aria-label="On this page">
           <p class="docs-nav-group">On this page</p>
           <ul class="nav-list docs-toc-list" data-docs-toc>
+        <li><a class="nav-link" href="#choosing-a-density" data-docs-toc-item data-level="2">Choosing a density</a></li>
+        <li><a class="nav-link" href="#region-rhythm-goes-on-gap-not-on-gap" data-docs-toc-item data-level="2">Region rhythm goes on gap, not on --gap</a></li>
         <li><a class="nav-link" href="#grouping-items-tightly" data-docs-toc-item data-level="2">Grouping items tightly</a></li>
           </ul>
         </nav>

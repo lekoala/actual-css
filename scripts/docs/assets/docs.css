@@ -82,8 +82,12 @@
 
 /* --- Content --- */
 
+/* The article is a .stack; its own rhythm goes on `gap`, never on --gap.
+   The token inherits, so tuning it here re-spaced every .stack, .cluster and
+   .grid inside a demo preview — showing readers 24px where the framework
+   default is 12px, on every page of the site. */
 .docs-article {
-  --gap: var(--space-50);
+  gap: var(--space-50);
   min-inline-size: 0;
 }
 
@@ -370,6 +374,11 @@
     inset-block-start: var(--space-40);
     max-block-size: calc(var(--viewport-block) - 2 * var(--space-40));
     overflow-y: auto;
+    /* Keep the active nav link's background off the scrollbar thumb. The thumb
+       chrome and the reserved gutter come from .scroller.stable-gutter on the
+       elements themselves — the docs site uses the framework's own utility
+       rather than restating it here. */
+    padding-inline-end: var(--space-20);
   }
 
   .docs-menu-toggle {

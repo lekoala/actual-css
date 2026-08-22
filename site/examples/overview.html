@@ -6,9 +6,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Examples — Actual CSS</title>
-  <meta name="description" content="Real pages built with Actual CSS - an admin application and a set of standalone templates - to see the primitives, components, and patterns composed the way they are meant to be used.">
+  <meta name="description" content="Real pages built with Actual CSS to see the primitives, components, and patterns composed the way they are meant to be used.">
   <link rel="stylesheet" href="../../src/css/actual.full.css">
-  <link rel="stylesheet" href="../../demo/assets/actual-themes.min.css">
+  <link rel="stylesheet" href="../assets/actual-themes.min.css">
   <link rel="stylesheet" href="../../scripts/docs/assets/docs.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3/dist/tabler-icons.min.css">
   <script src="https://cdn.jsdelivr.net/npm/prismjs@1.30.0/components/prism-core.min.js"></script>
@@ -72,7 +72,7 @@
     </header>
 
     <div class="docs-shell center">
-      <aside class="docs-sidebar" aria-label="Documentation">
+      <aside class="docs-sidebar scroller stable-gutter" aria-label="Documentation">
               <p class="docs-nav-group">Guides</p>
       <ul class="nav-list">
         <li><a class="nav-link" href="../guides/introduction.html">Introduction</a></li>
@@ -202,12 +202,29 @@
           <div class="prose docs-prose">
 <h1 id="examples">Examples</h1>
 <blockquote>
-<p>Real pages built with Actual CSS - an admin application and a set of standalone templates - to see the primitives, components, and patterns composed the way they are meant to be used.</p>
+<p>Real pages built with Actual CSS to see the primitives, components, and patterns composed the way they are meant to be used.</p>
 </blockquote>
 <p>The examples live in the repository under <code>demo/</code> and load <code>actual.full.css</code>
 and <code>actual.full.js</code> from <code>dist/</code>, plus the theme palettes bundle from
-<code>demo/assets/</code> (<code>bun run build:themes</code>), referenced with stable URLs.</p>
-<h2 id="admin-application">Admin application</h2>
+<code>demo/assets/</code> (<code>bun run build:themes</code>).</p>
+<h2 id="templates">Templates</h2>
+<p><code>demo/templates/</code> are standalone pages covering common page shapes.</p>
+<ul>
+<li><a href="../../demo/templates/kitchen-sink.html">Kitchen sink</a> - every component and variant on one page</li>
+<li><a href="../../demo/templates/keyboard-controls.html">Keyboard controls</a> - hands-on keyboard support matrix and focus test bench</li>
+<li><a href="../../demo/templates/surfaces.html">Surface contracts</a> - .inverted, cascade precedence, and the intent boundary</li>
+<li><a href="../../demo/templates/dashboard.html">Dashboard</a> - data-heavy overview page</li>
+<li><a href="../../demo/templates/app.html">App</a> - application shell with sidebar</li>
+<li><a href="../../demo/templates/marketing.html">Marketing</a> - landing page with typography and fluid type</li>
+<li><a href="../../demo/templates/blog.html">Blog</a> - article page with prose</li>
+<li><a href="../../demo/templates/blocks.html">Blocks</a> - layout building blocks</li>
+<li><a href="../../demo/templates/layouts.html">Layout reference</a> - canonical compositions built only with the layout primitives</li>
+<li><a href="../../demo/templates/grid.html">Grid density</a> - the grid contracts on resizable stages, with the pitfalls called out</li>
+<li><a href="../../demo/templates/density.html">Density</a> - compact control density</li>
+</ul>
+<h2 id="sites">Sites</h2>
+<p>Full sites demo living in <code>demo/sites</code>.</p>
+<h3 id="admin-application">Admin application</h3>
 <p><code>demo/sites/admini/</code> is a complete admin interface: application shell, navigation,
 tables, forms, dialogs, and feedback states.</p>
 <ul>
@@ -224,20 +241,15 @@ tables, forms, dialogs, and feedback states.</p>
 <li><a href="../../demo/sites/admini/user-grid.html">User grid</a> - avatar grid with live search and role filter</li>
 <li><a href="../../demo/sites/admini/404.html">404</a> - error state</li>
 </ul>
-<h2 id="templates">Templates</h2>
-<p><code>demo/templates/</code> are standalone pages covering common page shapes.</p>
+<h3 id="neon-ramen">Neon ramen</h3>
+<p><code>demo/sites/neon-ramen/</code> is a complete restaurant storefront: campaign home,
+menu browsing, item customization, locations, and checkout validation flow.</p>
 <ul>
-<li><a href="../../demo/templates/kitchen-sink.html">Kitchen sink</a> - every component and variant on one page</li>
-<li><a href="../../demo/templates/keyboard-controls.html">Keyboard controls</a> - hands-on keyboard support matrix and focus test bench</li>
-<li><a href="../../demo/templates/surfaces.html">Surface contracts</a> - .inverted, cascade precedence, and the intent boundary</li>
-<li><a href="../../demo/templates/dashboard.html">Dashboard</a> - data-heavy overview page</li>
-<li><a href="../../demo/templates/app.html">App</a> - application shell with sidebar</li>
-<li><a href="../../demo/templates/marketing.html">Marketing</a> - landing page with typography and fluid type</li>
-<li><a href="../../demo/templates/blog.html">Blog</a> - article page with prose</li>
-<li><a href="../../demo/templates/blocks.html">Blocks</a> - layout building blocks</li>
-<li><a href="../../demo/templates/layouts.html">Layout reference</a> - canonical compositions built only with the layout primitives</li>
-<li><a href="../../demo/templates/grid.html">Grid density</a> - the grid contracts on resizable stages, with the pitfalls called out</li>
-<li><a href="../../demo/templates/density.html">Density</a> - compact control density</li>
+<li><a href="../../demo/sites/neon-ramen/index.html">Home</a> - campaign landing, hero story, live cart summary</li>
+<li><a href="../../demo/sites/neon-ramen/menu.html">Menu</a> - tabbed categories with equal-height product cards</li>
+<li><a href="../../demo/sites/neon-ramen/item.html">Item</a> - product configurator with choice cards and form controls</li>
+<li><a href="../../demo/sites/neon-ramen/locations.html">Locations</a> - responsive shop list with practical location metadata</li>
+<li><a href="../../demo/sites/neon-ramen/order.html">Order</a> - checkout form with validation feedback states</li>
 </ul>
 <blockquote>
 <p>Note: the examples reference the repository's source files, so they open from
@@ -258,12 +270,14 @@ the checkout, not from a standalone copy of <code>site</code>.</p>
         </nav>
       </main>
 
-      <aside class="docs-toc">
+      <aside class="docs-toc scroller stable-gutter">
         <nav class="scrollspy" data-enhance="scrollspy" data-scrollspy-offset="80" aria-label="On this page">
           <p class="docs-nav-group">On this page</p>
           <ul class="nav-list docs-toc-list" data-docs-toc>
-        <li><a class="nav-link" href="#admin-application" data-docs-toc-item data-level="2">Admin application</a></li>
         <li><a class="nav-link" href="#templates" data-docs-toc-item data-level="2">Templates</a></li>
+        <li><a class="nav-link" href="#sites" data-docs-toc-item data-level="2">Sites</a></li>
+        <li><a class="nav-link" href="#admin-application" data-docs-toc-item data-level="3">Admin application</a></li>
+        <li><a class="nav-link" href="#neon-ramen" data-docs-toc-item data-level="3">Neon ramen</a></li>
           </ul>
         </nav>
       </aside>

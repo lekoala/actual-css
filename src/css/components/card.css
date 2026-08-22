@@ -41,14 +41,23 @@
   --heading: var(--card-fg);
   --busy-overlay-bg: var(--card-bg);
 
-  display: flex;
-  flex-direction: column;
   max-inline-size: var(--card-max-inline-size);
   padding: var(--card-pad);
   background: var(--card-bg);
   color: var(--card-fg);
   border: var(--border-width) solid var(--ui-border, var(--border));
   border-radius: var(--card-radius);
+}
+
+/* The box lives at zero specificity so a layout primitive applied to the same
+   element owns it. components/ is imported after layout/, so a plain .card
+   declaration would beat .media (and any other non-column primitive) on source
+   order alone and silently flatten `class="card media"` into a column. The
+   column is still the default a bare .card gets, and > footer's margin-auto
+   bottom-anchoring depends on it. */
+:where(.card) {
+  display: flex;
+  flex-direction: column;
 }
 
 .card > * {

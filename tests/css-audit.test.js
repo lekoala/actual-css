@@ -51,7 +51,11 @@ test("card picture bleed clips children", () => {
 test("card is a column and anchors a direct footer to the bottom", () => {
   const css = readCss("src/css/components/card.css");
 
-  expect(css).toMatch(/\.card\s*\{[\s\S]*display:\s*flex;\s*flex-direction:\s*column;/);
+  // The box sits at zero specificity so a layout primitive on the same element
+  // owns it: components/ loads after layout/, so a plain .card declaration
+  // would beat .media on source order and flatten `class="card media"`.
+  expect(css).toMatch(/:where\(\.card\)\s*\{\s*display:\s*flex;\s*flex-direction:\s*column;\s*\}/);
+  expect(css).not.toMatch(/^\.card\s*\{[^}]*\bdisplay:/m);
   expect(css).toMatch(/\.card > footer\s*\{[\s\S]*margin-block-start:\s*auto;/);
 });
 

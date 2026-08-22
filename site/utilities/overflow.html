@@ -8,7 +8,7 @@
   <title>Overflow — Actual CSS</title>
   <meta name="description" content="Explicit overflow handling for content that may exceed its container.">
   <link rel="stylesheet" href="../../src/css/actual.full.css">
-  <link rel="stylesheet" href="../../demo/assets/actual-themes.min.css">
+  <link rel="stylesheet" href="../assets/actual-themes.min.css">
   <link rel="stylesheet" href="../../scripts/docs/assets/docs.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3/dist/tabler-icons.min.css">
   <script src="https://cdn.jsdelivr.net/npm/prismjs@1.30.0/components/prism-core.min.js"></script>
@@ -72,7 +72,7 @@
     </header>
 
     <div class="docs-shell center">
-      <aside class="docs-sidebar" aria-label="Documentation">
+      <aside class="docs-sidebar scroller stable-gutter" aria-label="Documentation">
               <p class="docs-nav-group">Guides</p>
       <ul class="nav-list">
         <li><a class="nav-link" href="../guides/introduction.html">Introduction</a></li>
@@ -262,7 +262,7 @@
   overflow: auto;
 }
 </code></pre>
-<p>The extra utilities extend the same concern with axis-specific and clipping variants. For quiet, custom scrollbar chrome instead of the native OS scrollbar, pair <code>.overflow-auto</code> with <code>.scroller</code> on the Sizing And Wrapping page.</p>
+<p>The extra utilities extend the same concern with axis-specific and clipping variants. To give the native scrollbar the theme's density and colour, pair <code>.overflow-auto</code> with <code>.scroller</code> on the Sizing And Wrapping page.</p>
 
 </div>
 
@@ -278,7 +278,7 @@
         </nav>
       </main>
 
-      <aside class="docs-toc">
+      <aside class="docs-toc scroller stable-gutter">
         <nav class="scrollspy" data-enhance="scrollspy" data-scrollspy-offset="80" aria-label="On this page">
           <p class="docs-nav-group">On this page</p>
           <ul class="nav-list docs-toc-list" data-docs-toc>

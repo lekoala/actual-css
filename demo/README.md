@@ -7,6 +7,7 @@ Hand-authored example sources:
   controls, surface contracts, dashboard, app, marketing, blog, blocks, density).
 - `sites/` for multi-page sites built on Actual CSS:
   - `admini/` — a recreation of the [admini](https://github.com/lekoala/admini) Bootstrap 5 admin template - dashboard, tables, forms, settings, login, and 404. Each page is self-contained (no shared-layout mechanism yet); the sidebar/topbar block is identical across pages and delimited with `<!-- admini-shell:. -->` comments so it can be extracted behind htmx/Turbo/etc. later.
+  - `neon-ramen/` - a cyberpunk themed ramen shop to showcase typical layouts and theme customization.
 - `preview.svg` for the demo preview image.
 
 These examples are featured on the documentation site

@@ -1,12 +1,12 @@
 {
-  "totalRaw": 228843,
+  "totalRaw": 229751,
   "core": {
     "minified": 10524,
     "brotli": 2501
   },
   "full": {
-    "minified": 107154,
-    "brotli": 15740
+    "minified": 106389,
+    "brotli": 15641
   },
   "js": {
     "core": {
@@ -85,6 +85,10 @@
       "raw": 4370
     },
     {
+      "file": "forms/switch.css",
+      "raw": 4121
+    },
+    {
       "file": "core/variants.css",
       "raw": 3911
     },
@@ -93,8 +97,8 @@
       "raw": 3892
     },
     {
-      "file": "forms/switch.css",
-      "raw": 3816
+      "file": "components/card.css",
+      "raw": 3839
     },
     {
       "file": "components/join.css",
@@ -107,10 +111,6 @@
     {
       "file": "forms/otp.css",
       "raw": 3494
-    },
-    {
-      "file": "components/card.css",
-      "raw": 3394
     },
     {
       "file": "utilities/base.css",
@@ -225,10 +225,6 @@
       "raw": 1936
     },
     {
-      "file": "layout/scroller.css",
-      "raw": 1730
-    },
-    {
       "file": "effects/aura.css",
       "raw": 1709
     },
@@ -246,7 +242,7 @@
     },
     {
       "file": "layout/index.css",
-      "raw": 1593
+      "raw": 1604
     },
     {
       "file": "components/table.css",
@@ -255,6 +251,10 @@
     {
       "file": "layout/topbar.css",
       "raw": 1477
+    },
+    {
+      "file": "layout/scroller.css",
+      "raw": 1470
     },
     {
       "file": "typography/overline.css",
@@ -333,6 +333,10 @@
       "raw": 800
     },
     {
+      "file": "layout/stack.css",
+      "raw": 783
+    },
+    {
       "file": "core/reset.css",
       "raw": 714
     },
@@ -370,10 +374,6 @@
     },
     {
       "file": "layout/frame.css",
-      "raw": 376
-    },
-    {
-      "file": "layout/stack.css",
       "raw": 376
     },
     {

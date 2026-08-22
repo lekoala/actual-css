@@ -40,4 +40,4 @@ Use `.overflow-auto` when content may overflow its container, especially tables 
 }
 ```
 
-The extra utilities extend the same concern with axis-specific and clipping variants. For quiet, custom scrollbar chrome instead of the native OS scrollbar, pair `.overflow-auto` with `.scroller` on the Sizing And Wrapping page.
+The extra utilities extend the same concern with axis-specific and clipping variants. To give the native scrollbar the theme's density and colour, pair `.overflow-auto` with `.scroller` on the Sizing And Wrapping page.

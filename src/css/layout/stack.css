@@ -2,7 +2,14 @@
    margins stay free (self-centering children via margin-inline: auto keep
    working).
    Child contract: direct children become flex items; margins reset, spacing
-   comes from --gap. */
+   comes from --gap.
+
+   --gap is inherited, so a container that composes other primitives sets its
+   own rhythm on the `gap` property, not on the token: setting --gap on a
+   region re-spaces every nested stack, cluster and grid at any depth. Setting
+   the token stays correct on the element that consumes it, and .sm/.lg set it
+   deliberately so a density context reaches nested layouts. See
+   docs/pages/layout/stack.md. */
 .stack {
   display: flex;
   flex-direction: column;

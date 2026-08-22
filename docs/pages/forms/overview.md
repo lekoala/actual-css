@@ -91,7 +91,7 @@ A full form using the control classes, field wrappers, and form actions:
 
     <fieldset class="field-group">
       <legend class="field-label">Availability</legend>
-      <div class="stack">
+      <div class="stack sm">
         <label class="choice">
           <input class="radio" type="radio" name="availability" value="available" checked />
           <span>Available for work</span>

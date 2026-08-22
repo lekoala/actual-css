@@ -9,7 +9,7 @@ Small layout corrections for controls, labels, and compact rails.
 | `.fit`                    | Utility | Shrinks a control or element to its content width.                        |
 | `.text-nowrap`            | Utility | Keeps text on one line.                                                   |
 | `.truncate`               | Utility | Ellipsizes overflowing single-line text.                                  |
-| `.scroller`               | Utility | Quiet custom scrollbar chrome for scroll containers. Optional layer.      |
+| `.scroller`               | Utility | Theme-aware scrollbar density and colour for scroll containers. Optional layer. |
 | `.scroller.stable-gutter` | Variant | Reserves scrollbar gutter space so layout does not shift. Optional layer. |
 
 Use `.fit` when a control or element should shrink to its content instead of filling the available inline space.
@@ -66,6 +66,18 @@ Use `.truncate` on the flexible item that should ellipsize inside a constrained 
 
 Use `.scroller` to apply optional framework scrollbar treatment to a scroll container. It styles the scrollbar only; pair it with `.overflow-auto` or a component that already creates overflow.
 
+The utility is two standard declarations and nothing else — the engine keeps
+drawing the scrollbar, `.scroller` only hands it a density and a colour that
+follow the theme. There is no `::-webkit-scrollbar` chrome: rebuilding a thumb
+by hand means re-implementing the hover, the corner and the light/dark
+adaptation that `color-scheme` already provides, and the hand-built version
+never quite matches the native one anyway.
+
+`scrollbar-color` and `scrollbar-width` land in Chromium 121 and Safari 18.2,
+above the capability floor. An engine that knows neither ignores both
+declarations and draws its native scrollbar — the intended fallback, not a
+broken state.
+
 `scroller` is not imported by `actual.css`. Import it explicitly when a project wants Actual CSS scrollbar chrome instead of the native OS default:
 
 ```css
@@ -84,11 +96,8 @@ Use `.scroller` to apply optional framework scrollbar treatment to a scroll cont
 
 ```css
 .scroller {
-  --scroller-size: 0.625rem;
-  --scroller-padding: 0.125rem;
   --scroller-track: transparent;
   --scroller-thumb: var(--border);
-  --scroller-thumb-hover: var(--text-muted);
 
   scrollbar-color: var(--scroller-thumb) var(--scroller-track);
   scrollbar-width: thin;
@@ -98,18 +107,16 @@ Use `.scroller` to apply optional framework scrollbar treatment to a scroll cont
 Customize locally when a scroll surface needs more contrast:
 
 ```html
-<div class="overflow-auto scroller"
-     style="--scroller-thumb: var(--text-muted); --scroller-thumb-hover: var(--text)">
+<div class="overflow-auto scroller" style="--scroller-thumb: var(--text-muted)">
   ...
 </div>
 ```
 
-For rounded scroll containers, keep the thumb visually away from the edge by tuning `--scroller-padding` rather than adding extra wrappers or masking pseudo-elements.
+Thickness is not a hook: `scrollbar-width` takes `thin` or `auto`, not a length.
+Hover is left to the engine — it varies by platform, and matching it by hand was
+the part of a custom scrollbar that never held up.
 
 ## CSS hooks
 
-- `--scroller-size` — scrollbar thickness.
-- `--scroller-padding` — inset between the thumb and the track edge.
 - `--scroller-track` — scrollbar track color.
 - `--scroller-thumb` — scrollbar thumb color.
-- `--scroller-thumb-hover` — scrollbar thumb color on hover.
