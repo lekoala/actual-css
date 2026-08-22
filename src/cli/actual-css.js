@@ -14,6 +14,7 @@ function usage() {
     "      --version    print the actual-css version",
     "",
     "Bundle plain CSS @import chains from relative files and actual-css/css/* subpaths.",
+    "A layer or layer(name) import is flattened into the @layer block it stands for.",
     "Remote imports are kept and hoisted to the top of the bundle.",
     "Leaves modern CSS syntax untouched; this is a bundler, not a transpiler.",
   ].join("\n");

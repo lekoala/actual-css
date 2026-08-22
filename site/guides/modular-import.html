@@ -6,9 +6,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Modular imports — Actual CSS</title>
-  <meta name="description" content="Actual ships one minimal core (actual-css) and one all-in entrypoint
-(actual-css/full); everything else is composed from the family manifests
-under src/css/.">
+  <meta name="description" content="Actual CSS ships one minimal core (actual-css) and one all-in entrypoint (actual-css/full). Projects can also compose the framework from family manifests or individual modules.">
   <link rel="stylesheet" href="../../src/css/actual.full.css">
   <link rel="stylesheet" href="../assets/actual-themes.min.css">
   <link rel="stylesheet" href="../../scripts/docs/assets/docs.css">
@@ -204,54 +202,37 @@ under src/css/.">
 
           <div class="prose docs-prose">
 <h1 id="modular-imports">Modular imports</h1>
-<p>Actual ships one minimal core (<code>actual-css</code>) and one all-in entrypoint
-(<code>actual-css/full</code>); everything else is composed from the family manifests
-under <code>src/css/</code>.</p>
-<h2 id="the-two-entrypoints">The two entrypoints</h2>
-<pre><code class="language-css">@import &quot;actual-css&quot;;        /* minimal core only */
-@import &quot;actual-css/full&quot;;   /* every shipped functional family */
+<p>Actual CSS ships one minimal core (<code>actual-css</code>) and one all-in entrypoint (<code>actual-css/full</code>). Projects can also compose the framework from family manifests or individual modules.</p>
+<h2 id="entrypoints">Entrypoints</h2>
+<pre><code class="language-css">@import &quot;actual-css&quot;;        /* minimal core */
+@import &quot;actual-css/full&quot;;   /* complete framework */
 </code></pre>
-<p><code>actual-css</code> is the minimal core: reset, tokens, theme, document defaults,
-intents, universal variants, generic focus, and generic print. It contains no
-forms, layout, typography module, component, effect, or utility bundle.</p>
+<p><code>actual-css</code> contains the shared baseline: reset, tokens, theme, document defaults, intents, universal variants, focus, and print.</p>
+<p>It contains no typography, layout, forms, components, effects, or utilities.</p>
+<p><code>actual-css/full</code> starts from the core and adds every family in cascade order:</p>
+<pre><code class="language-text">core → typography → layout → forms → components → effects → utilities
+</code></pre>
 <h3 id="focus-is-a-core-invariant">Focus is a core invariant</h3>
-<p>Unlike 0.3, the focus stylesheet is part of the core baseline and does not
-need to be imported after components.</p>
-<p>The core provides a visible <code>:focus</code> outline as the compatibility baseline.
-Modern browsers limit it to <code>:focus-visible</code>, hiding the pointer-focus
-outline. Components may enhance or replace that treatment in their
-interactive states, but their base styles must not cancel the shared
-fallback.</p>
-<p>This keeps focus independent from global source order:</p>
-<p>core → typography → layout → forms → components → effects → utilities</p>
-<p>Loading families after the core does not rely on source order to preserve
-the shared focus baseline.</p>
-<h4 id="component-rule">Component rule</h4>
-<p>Never remove the shared outline in a component's resting/base state.</p>
-<p>When an interactive state replaces the outline, it must preserve a visible
-focus indicator in forced-colors: either retain an outline-based fallback
-(such as a transparent outline), or scope the replacement out of
-forced-colors entirely.</p>
-<p><code>actual-css/full</code> starts from the core and adds every family in cascade order:
-typography, layout, forms, components, effects, utilities.</p>
+<p>The core provides a visible <code>:focus</code> outline as the compatibility baseline. Modern browsers limit it to <code>:focus-visible</code>, hiding the pointer-focus outline.</p>
+<p>Components may enhance or replace that treatment in interactive states, but their base styles must not cancel the shared fallback.</p>
+<p>When an interactive state replaces the outline, it must preserve a visible focus indicator in forced-colors, either with an outline-based fallback or by keeping the replacement out of forced-colors.</p>
 <h2 id="family-manifests">Family manifests</h2>
-<p>Each family is a directory under <code>src/css/</code> with an <code>index.css</code> manifest:</p>
 <div class="table-wrap"><table class="table">
 <thead>
-<tr><th>Family</th><th>Manifest import</th><th>Modules</th></tr>
+<tr><th>Family</th><th>Import</th><th>Contents</th></tr>
 </thead>
 <tbody>
 <tr><td>Core</td><td><code>actual-css/css</code></td><td>reset, tokens, theme, base, intents, variants, focus, print</td></tr>
-<tr><td>Layout</td><td><code>actual-css/css/layout</code></td><td>stack, cluster, center, frame, media, switcher, sidebar-layout, grid, scroller, scroll-snap, topbar, container-query, app-shell</td></tr>
 <tr><td>Typography</td><td><code>actual-css/css/typography</code></td><td>prose, overline, fluid</td></tr>
-<tr><td>Forms</td><td><code>actual-css/css/forms</code></td><td>native controls; <code>actual-css/css/forms/all</code> for the complete family (input-icon, switch, range, choice-card, custom-select, floating-field, otp)</td></tr>
-<tr><td>Components</td><td><code>actual-css/css/components</code></td><td>button, card, badge, alert, modal, drawer, flyout, menu, tab, tooltip, chat, fab, join, …</td></tr>
+<tr><td>Layout</td><td><code>actual-css/css/layout</code></td><td>stack, cluster, center, frame, media, switcher, sidebar-layout, grid, scroller, scroll-snap, topbar, container-query, app-shell</td></tr>
+<tr><td>Forms</td><td><code>actual-css/css/forms</code></td><td>native control baseline</td></tr>
+<tr><td>Forms (complete)</td><td><code>actual-css/css/forms/all</code></td><td>base plus input-icon, switch, range, choice-card, custom-select, floating-field, otp</td></tr>
+<tr><td>Components</td><td><code>actual-css/css/components</code></td><td>buttons, surfaces, overlays, feedback, navigation, data and composed controls</td></tr>
 <tr><td>Effects</td><td><code>actual-css/css/effects</code></td><td>aura</td></tr>
-<tr><td>Utilities</td><td><code>actual-css/css/utilities</code></td><td>base, extra</td></tr>
+<tr><td>Utilities</td><td><code>actual-css/css/utilities</code></td><td>base and extra utilities</td></tr>
 </tbody>
 </table></div>
-<p>Import a single module with its domain path when a project only needs that
-piece:</p>
+<p>Individual modules can be imported through their domain path:</p>
 <pre><code class="language-css">@import &quot;actual-css/css/forms/otp&quot;;
 @import &quot;actual-css/css/components/chat&quot;;
 @import &quot;actual-css/css/effects/aura&quot;;
@@ -259,116 +240,77 @@ piece:</p>
 @import &quot;actual-css/css/typography/fluid&quot;;
 @import &quot;actual-css/css/utilities/extra&quot;;
 </code></pre>
-<h2 id="custom-builds">Custom builds</h2>
-<p>The source entrypoints under <code>actual-css/css/*</code> are the contract for custom
-bundles. The compiled package entrypoints (<code>actual-css</code> and <code>actual-css/full</code>)
-already point at <code>dist/*.css</code>; use those when you want the shipped bundle as
-is, not when you want to reshape it.</p>
-<p>Create one project stylesheet that imports the families or leaf modules you
-want, then flatten it with the public bundler:</p>
+<h2 id="use-your-existing-css-pipeline">Use your existing CSS pipeline</h2>
+<p>Actual CSS is plain CSS and does not require its own build tool.</p>
+<p>If a project already uses Vite, PostCSS, Webpack, Parcel, Lightning CSS, or another CSS pipeline, keep using it and import the Actual CSS package exports directly.</p>
+<p>For example:</p>
 <pre><code class="language-css">@import &quot;actual-css/css&quot;;
 @import &quot;actual-css/css/layout&quot;;
 @import &quot;actual-css/css/forms/all&quot;;
 @import &quot;actual-css/css/components/button&quot;;
 @import &quot;actual-css/css/components/card&quot;;
+
 @import &quot;./theme.css&quot;;
 @import &quot;./app.css&quot;;
 </code></pre>
-<pre><code class="language-text">npx actual-css bundle src/app.css --out public/app.css --minify
+<p>The consuming pipeline remains responsible for features such as asset handling, URL rebasing, source maps, CSS Modules, import modifiers, transpilation, and browser targeting.</p>
+<p>Actual CSS intentionally does not require a particular bundler or transpiler.</p>
+<h2 id="optional-cli-bundler">Optional CLI bundler</h2>
+<p>For projects without a CSS pipeline, Actual CSS includes a small zero-dependency import flattener:</p>
+<pre><code class="language-sh">npx actual-css bundle src/app.css --out public/app.css
 </code></pre>
-<p>The same command works with <code>bunx actual-css ...</code>.</p>
-<p>The bundler resolves both relative files and published Actual CSS subpaths,
-inlines them in source order, and keeps modern CSS syntax intact. It is a
-bundler, not a transpiler: <code>color-mix()</code>, <code>light-dark()</code>, <code>@container</code>,
-<code>:has()</code>, and range media queries stay exactly as written.</p>
-<p>Remote imports such as <code>@import &quot;https://...&quot;</code> are kept, and moved to the top
-of the bundle: an <code>@import</code> that trails a rule is ignored by browsers, so
-hoisting is what keeps them working. Local and package imports must stay plain
-<code>@import &quot;...&quot;</code> (with or without a <code>./</code> prefix, and a trailing comment is
-fine); modified forms such as <code>layer(...)</code>, <code>supports(...)</code>, or media-query
-imports are rejected with an explicit error rather than silently flattened.</p>
-<h2 id="cascade-layer-recipes">Cascade layer recipes</h2>
-<p><code>actual-css/css/layer</code> contains the minimal core only. To place the complete
-framework in one project-owned layer, import the full bundle with a layer:</p>
+<p>or:</p>
+<pre><code class="language-sh">bunx actual-css bundle src/app.css --out public/app.css
+</code></pre>
+<p>Add <code>--minify</code> for lightweight whitespace/comment minification:</p>
+<pre><code class="language-sh">npx actual-css bundle src/app.css --out public/app.css --minify
+</code></pre>
+<p>The CLI resolves and inlines:</p>
+<pre><code class="language-css">@import &quot;./local.css&quot;;
+@import &quot;actual-css/css/layout&quot;;
+@import &quot;actual-css/css/components/card&quot;;
+</code></pre>
+<p>It deliberately does <strong>not</strong> transpile CSS. Modern syntax such as nesting, <code>@container</code>, <code>@scope</code>, <code>:has()</code>, <code>color-mix()</code>, <code>light-dark()</code>, and media-query range syntax is preserved for the browser.</p>
+<p>The CLI is a simple flattener, not a general-purpose CSS build pipeline.</p>
+<h3 id="limitations">Limitations</h3>
+<p>Local and package imports may be plain imports, or carry a layer modifier:</p>
+<pre><code class="language-css">@import &quot;./local.css&quot;;
+@import &quot;./local.css&quot; layer(components);
+@import &quot;./local.css&quot; layer;
+</code></pre>
+<p>A layered import is flattened into the block it stands for, so <code>@import &quot;actual-css/css&quot; layer(actual)</code> becomes <code>@layer actual { … }</code>. A layer declared inside the imported file becomes a sublayer of that wrapper, exactly as the import did.</p>
+<p>Conditional modifiers are not flattened:</p>
+<pre><code class="language-css">@import &quot;./local.css&quot; supports(display: grid);
+@import &quot;./local.css&quot; screen;
+@import &quot;./local.css&quot; layer(components) supports(display: grid);
+</code></pre>
+<p>Use an existing CSS pipeline when these features are required.</p>
+<p>One further case is refused rather than guessed: a remote import inside a layered subtree, because hoisting it before ordinary rules would move it out of its layer.</p>
+<p>The CLI also does not process or rebase asset URLs such as:</p>
+<pre><code class="language-css">background-image: url(&quot;../images/card.svg&quot;);
+</code></pre>
+<p>Those paths remain exactly as written, so projects with relative assets should generally let their existing build pipeline handle CSS imports.</p>
+<p>Remote and absolute imports are preserved rather than fetched and are moved before ordinary rules so they remain valid CSS.</p>
+<h2 id="cascade-layers">Cascade layers</h2>
+<p>Actual CSS can participate in a project-owned cascade layer:</p>
 <pre><code class="language-css">@layer actual;
+
 @import &quot;actual-css/full&quot; layer(actual);
 </code></pre>
-<p>There is no separate full-layer bundle. When composing families individually,
-put the same <code>layer(actual)</code> modifier on every core or family import so none of
-the selected modules escapes the layer.</p>
-<h2 id="migrating-from-03">Migrating from 0.3</h2>
-<p>In 0.3 the bare <code>actual-css</code> import shipped the standard framework, but
-<strong>excluded</strong> the <code>optional</code> family; the all-in bundle was the separate
-<code>actual-css/css/actual.full</code> entrypoint. In 0.4 the framework is reorganized
-into the core + families model:</p>
-<ul>
-<li><code>actual-css</code> is the minimal core.</li>
-<li><code>actual-css/full</code> is the closest successor to 0.3's <code>actual.full.css</code>
-(the all-in bundle), not to the 0.3 bare import — it is slightly wider,
-because the former <code>optional/</code> modules now ship with the full bundle.</li>
-<li>The <code>optional</code> family is gone. Its modules live in their domain.</li>
-<li><code>focus.css</code> is now part of the core baseline and no longer requires
-last-in-bundle ordering.</li>
-</ul>
-<h3 id="entrypoint-map">Entrypoint map</h3>
-<div class="table-wrap"><table class="table">
-<thead>
-<tr><th>0.3</th><th>0.4</th></tr>
-</thead>
-<tbody>
-<tr><td><code>actual-css</code></td><td><code>actual-css/full</code> for a simple migration (slightly wider than the 0.3 bare import), or <code>actual-css/css</code> for the new minimal core</td></tr>
-<tr><td><code>actual-css/css/actual.full</code></td><td><code>actual-css/full</code> or <code>actual-css/css/full</code></td></tr>
-<tr><td><code>actual-css/js</code></td><td><code>actual-css/js/full</code> to keep the built-in behaviors (see below)</td></tr>
-<tr><td><code>actual-css/css/forms</code></td><td><code>actual-css/css/forms/all</code> for the same coverage</td></tr>
-<tr><td><code>actual-css/css/grid</code></td><td><code>actual-css/css/layout/grid</code></td></tr>
-<tr><td><code>actual-css/css/prose</code></td><td><code>actual-css/css/typography/prose</code></td></tr>
-<tr><td><code>actual-css/css/optional</code> (bundle)</td><td><code>actual-css/full</code></td></tr>
-<tr><td>the root core files (<code>reset</code>, <code>tokens</code>, <code>theme</code>, <code>base</code>, <code>intents</code>, <code>variants</code>, <code>focus</code>, <code>print</code>)</td><td>no longer exported individually; compose the core atomically via <code>actual-css/css</code></td></tr>
-</tbody>
-</table></div>
-<p>The distributed bundle names changed too: <code>actual.min.css</code> is now the minimal
-core (in 0.3 it was the standard framework), the full CSS is
-<code>actual.full.min.css</code>, and the full JavaScript runtime is <code>actual.full.js</code>
-(in 0.3 it was <code>actual.js</code>). The <code>dist/optional*.css</code> bundles no longer exist.</p>
-<h3 id="same-import-path-changed-semantics">Same import path, changed semantics</h3>
-<p>These specifiers still resolve, but they mean something different now — the
-easiest breaking change to miss:</p>
-<div class="table-wrap"><table class="table">
-<thead>
-<tr><th>Path</th><th>0.3</th><th>0.4</th></tr>
-</thead>
-<tbody>
-<tr><td><code>actual-css</code></td><td>the standard framework (all but <code>optional/</code>)</td><td>the minimal core</td></tr>
-<tr><td><code>actual-css/js</code></td><td>the full runtime (flyout, dialog, tabs, validation, status, …)</td><td>only the enhancement-manifest loader; the built-ins move to <code>actual-css/js/full</code></td></tr>
-<tr><td><code>actual-css/css/forms</code></td><td>the complete Forms family</td><td>the native-controls base (<code>forms/base.css</code>)</td></tr>
-<tr><td><code>actual-css/css/layout</code></td><td>one layout file</td><td>the layout family manifest</td></tr>
-<tr><td><code>actual-css/css/utilities</code></td><td>the utility leaf</td><td>the utilities family: base plus the former <code>utilities-extra</code></td></tr>
-<tr><td><code>actual-css/css/components</code></td><td>the component manifest</td><td>the same, plus chat, fab, and join; overline now lives in <code>actual-css/css/typography/overline</code></td></tr>
-<tr><td><code>actual-css/css/layer</code></td><td>the standard framework wrapped in <code>@layer actual</code></td><td>only the core wrapped in <code>@layer actual</code>; layer the families yourself with the full-layer recipe</td></tr>
-</tbody>
-</table></div>
-<h3 id="former-optional-modules">Former optional modules</h3>
-<p>The <code>optional</code> family is gone; each module moved to its domain:</p>
-<div class="table-wrap"><table class="table">
-<thead>
-<tr><th>0.3 path</th><th>0.4 path</th></tr>
-</thead>
-<tbody>
-<tr><td><code>actual-css/css/optional/otp</code></td><td><code>actual-css/css/forms/otp</code></td></tr>
-<tr><td><code>actual-css/css/optional/floating-field</code></td><td><code>actual-css/css/forms/floating-field</code></td></tr>
-<tr><td><code>actual-css/css/optional/chat</code></td><td><code>actual-css/css/components/chat</code></td></tr>
-<tr><td><code>actual-css/css/optional/fab</code></td><td><code>actual-css/css/components/fab</code></td></tr>
-<tr><td><code>actual-css/css/optional/aura</code></td><td><code>actual-css/css/effects/aura</code></td></tr>
-<tr><td><code>actual-css/css/optional/scroller</code></td><td><code>actual-css/css/layout/scroller</code></td></tr>
-<tr><td><code>actual-css/css/optional/scroll-snap</code></td><td><code>actual-css/css/layout/scroll-snap</code></td></tr>
-<tr><td><code>actual-css/css/optional/layout-extra</code></td><td><code>actual-css/css/layout/topbar</code></td></tr>
-<tr><td><code>actual-css/css/optional/typography-fluid</code></td><td><code>actual-css/css/typography/fluid</code></td></tr>
-<tr><td><code>actual-css/css/optional/utilities-extra</code></td><td><code>actual-css/css/utilities/extra</code></td></tr>
-</tbody>
-</table></div>
-<p>Component-prefixed custom properties documented on each page are author hooks.
-Color and sizing otherwise stay with the existing intent, variant, control,
-and button APIs.</p>
+<p>Or, when composing families:</p>
+<pre><code class="language-css">@layer actual;
+
+@import &quot;actual-css/css&quot; layer(actual);
+@import &quot;actual-css/css/typography&quot; layer(actual);
+@import &quot;actual-css/css/layout&quot; layer(actual);
+@import &quot;actual-css/css/forms/all&quot; layer(actual);
+@import &quot;actual-css/css/components&quot; layer(actual);
+</code></pre>
+<p><code>actual-css/css/layer</code> also exposes the minimal core wrapped in <code>@layer actual</code>.</p>
+<p>All of these recipes flatten with <code>actual-css bundle</code>: the CLI understands layer modifiers, so a public entrypoint of the framework is never something its own bundler has to refuse.</p>
+<h2 id="custom-properties">Custom properties</h2>
+<p>Component-prefixed custom properties documented on component pages are author hooks.</p>
+<p>Color and sizing otherwise stay within the shared intent, variant, control, and button APIs.</p>
 
 </div>
 
@@ -388,15 +330,14 @@ and button APIs.</p>
         <nav class="scrollspy" data-enhance="scrollspy" data-scrollspy-offset="80" aria-label="On this page">
           <p class="docs-nav-group">On this page</p>
           <ul class="nav-list docs-toc-list" data-docs-toc>
-        <li><a class="nav-link" href="#the-two-entrypoints" data-docs-toc-item data-level="2">The two entrypoints</a></li>
+        <li><a class="nav-link" href="#entrypoints" data-docs-toc-item data-level="2">Entrypoints</a></li>
         <li><a class="nav-link" href="#focus-is-a-core-invariant" data-docs-toc-item data-level="3">Focus is a core invariant</a></li>
         <li><a class="nav-link" href="#family-manifests" data-docs-toc-item data-level="2">Family manifests</a></li>
-        <li><a class="nav-link" href="#custom-builds" data-docs-toc-item data-level="2">Custom builds</a></li>
-        <li><a class="nav-link" href="#cascade-layer-recipes" data-docs-toc-item data-level="2">Cascade layer recipes</a></li>
-        <li><a class="nav-link" href="#migrating-from-03" data-docs-toc-item data-level="2">Migrating from 0.3</a></li>
-        <li><a class="nav-link" href="#entrypoint-map" data-docs-toc-item data-level="3">Entrypoint map</a></li>
-        <li><a class="nav-link" href="#same-import-path-changed-semantics" data-docs-toc-item data-level="3">Same import path, changed semantics</a></li>
-        <li><a class="nav-link" href="#former-optional-modules" data-docs-toc-item data-level="3">Former optional modules</a></li>
+        <li><a class="nav-link" href="#use-your-existing-css-pipeline" data-docs-toc-item data-level="2">Use your existing CSS pipeline</a></li>
+        <li><a class="nav-link" href="#optional-cli-bundler" data-docs-toc-item data-level="2">Optional CLI bundler</a></li>
+        <li><a class="nav-link" href="#limitations" data-docs-toc-item data-level="3">Limitations</a></li>
+        <li><a class="nav-link" href="#cascade-layers" data-docs-toc-item data-level="2">Cascade layers</a></li>
+        <li><a class="nav-link" href="#custom-properties" data-docs-toc-item data-level="2">Custom properties</a></li>
           </ul>
         </nav>
       </aside>

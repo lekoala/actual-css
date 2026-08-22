@@ -261,8 +261,8 @@ packTest("the packed CLI bundles a consumer stylesheet from node_modules", async
     writeFileSync(
       join(dir, "entry.css"),
       [
-        '@import "actual-css/css";',
-        '@import "actual-css/css/components/button";',
+        '@import "actual-css/css" layer(actual);',
+        '@import "actual-css/css/components/button" layer(actual);',
         '@import "https://example.com/fonts.css";',
         '@import "app.css";',
         '@import "./theme.css";   /* project theme */',
@@ -289,6 +289,7 @@ packTest("the packed CLI bundles a consumer stylesheet from node_modules", async
     expect(bundled.match(/@import/g), "only the remote import may survive").toHaveLength(1);
     expect(bundled).toContain(".app { color: red; }");
     expect(bundled).toContain("--brand: teal;");
+    expect(bundled).toContain("@layer actual {");
     expect(bundled).toContain(".btn");
   } finally {
     rmSync(dir, { recursive: true, force: true });

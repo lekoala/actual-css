@@ -1,66 +1,46 @@
 # Modular imports
 
-Actual ships one minimal core (`actual-css`) and one all-in entrypoint
-(`actual-css/full`); everything else is composed from the family manifests
-under `src/css/`.
+Actual CSS ships one minimal core (`actual-css`) and one all-in entrypoint (`actual-css/full`). Projects can also compose the framework from family manifests or individual modules.
 
-## The two entrypoints
+## Entrypoints
 
 ```css
-@import "actual-css";        /* minimal core only */
-@import "actual-css/full";   /* every shipped functional family */
+@import "actual-css";        /* minimal core */
+@import "actual-css/full";   /* complete framework */
 ```
 
-`actual-css` is the minimal core: reset, tokens, theme, document defaults,
-intents, universal variants, generic focus, and generic print. It contains no
-forms, layout, typography module, component, effect, or utility bundle.
+`actual-css` contains the shared baseline: reset, tokens, theme, document defaults, intents, universal variants, focus, and print.
+
+It contains no typography, layout, forms, components, effects, or utilities.
+
+`actual-css/full` starts from the core and adds every family in cascade order:
+
+```text
+core → typography → layout → forms → components → effects → utilities
+```
 
 ### Focus is a core invariant
 
-Unlike 0.3, the focus stylesheet is part of the core baseline and does not
-need to be imported after components.
+The core provides a visible `:focus` outline as the compatibility baseline. Modern browsers limit it to `:focus-visible`, hiding the pointer-focus outline.
 
-The core provides a visible `:focus` outline as the compatibility baseline.
-Modern browsers limit it to `:focus-visible`, hiding the pointer-focus
-outline. Components may enhance or replace that treatment in their
-interactive states, but their base styles must not cancel the shared
-fallback.
+Components may enhance or replace that treatment in interactive states, but their base styles must not cancel the shared fallback.
 
-This keeps focus independent from global source order:
-
-core → typography → layout → forms → components → effects → utilities
-
-Loading families after the core does not rely on source order to preserve
-the shared focus baseline.
-
-#### Component rule
-
-Never remove the shared outline in a component's resting/base state.
-
-When an interactive state replaces the outline, it must preserve a visible
-focus indicator in forced-colors: either retain an outline-based fallback
-(such as a transparent outline), or scope the replacement out of
-forced-colors entirely.
-
-`actual-css/full` starts from the core and adds every family in cascade order:
-typography, layout, forms, components, effects, utilities.
+When an interactive state replaces the outline, it must preserve a visible focus indicator in forced-colors, either with an outline-based fallback or by keeping the replacement out of forced-colors.
 
 ## Family manifests
 
-Each family is a directory under `src/css/` with an `index.css` manifest:
+| Family           | Import                      | Contents                                                                                                                        |
+| ---------------- | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| Core             | `actual-css/css`            | reset, tokens, theme, base, intents, variants, focus, print                                                                     |
+| Typography       | `actual-css/css/typography` | prose, overline, fluid                                                                                                          |
+| Layout           | `actual-css/css/layout`     | stack, cluster, center, frame, media, switcher, sidebar-layout, grid, scroller, scroll-snap, topbar, container-query, app-shell |
+| Forms            | `actual-css/css/forms`      | native control baseline                                                                                                         |
+| Forms (complete) | `actual-css/css/forms/all`  | base plus input-icon, switch, range, choice-card, custom-select, floating-field, otp                                            |
+| Components       | `actual-css/css/components` | buttons, surfaces, overlays, feedback, navigation, data and composed controls                                                   |
+| Effects          | `actual-css/css/effects`    | aura                                                                                                                            |
+| Utilities        | `actual-css/css/utilities`  | base and extra utilities                                                                                                        |
 
-| Family     | Manifest import             | Modules                                                                                                                                          |
-|------------|-----------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------|
-| Core       | `actual-css/css`            | reset, tokens, theme, base, intents, variants, focus, print                                                                                      |
-| Layout     | `actual-css/css/layout`     | stack, cluster, center, frame, media, switcher, sidebar-layout, grid, scroller, scroll-snap, topbar, container-query, app-shell                  |
-| Typography | `actual-css/css/typography` | prose, overline, fluid                                                                                                                           |
-| Forms      | `actual-css/css/forms`      | native controls; `actual-css/css/forms/all` for the complete family (input-icon, switch, range, choice-card, custom-select, floating-field, otp) |
-| Components | `actual-css/css/components` | button, card, badge, alert, modal, drawer, flyout, menu, tab, tooltip, chat, fab, join, …                                                        |
-| Effects    | `actual-css/css/effects`    | aura                                                                                                                                             |
-| Utilities  | `actual-css/css/utilities`  | base, extra                                                                                                                                      |
-
-Import a single module with its domain path when a project only needs that
-piece:
+Individual modules can be imported through their domain path:
 
 ```css
 @import "actual-css/css/forms/otp";
@@ -71,15 +51,13 @@ piece:
 @import "actual-css/css/utilities/extra";
 ```
 
-## Custom builds
+## Use your existing CSS pipeline
 
-The source entrypoints under `actual-css/css/*` are the contract for custom
-bundles. The compiled package entrypoints (`actual-css` and `actual-css/full`)
-already point at `dist/*.css`; use those when you want the shipped bundle as
-is, not when you want to reshape it.
+Actual CSS is plain CSS and does not require its own build tool.
 
-Create one project stylesheet that imports the families or leaf modules you
-want, then flatten it with the public bundler:
+If a project already uses Vite, PostCSS, Webpack, Parcel, Lightning CSS, or another CSS pipeline, keep using it and import the Actual CSS package exports directly.
+
+For example:
 
 ```css
 @import "actual-css/css";
@@ -87,107 +65,109 @@ want, then flatten it with the public bundler:
 @import "actual-css/css/forms/all";
 @import "actual-css/css/components/button";
 @import "actual-css/css/components/card";
+
 @import "./theme.css";
 @import "./app.css";
 ```
 
-```text
+The consuming pipeline remains responsible for features such as asset handling, URL rebasing, source maps, CSS Modules, import modifiers, transpilation, and browser targeting.
+
+Actual CSS intentionally does not require a particular bundler or transpiler.
+
+## Optional CLI bundler
+
+For projects without a CSS pipeline, Actual CSS includes a small zero-dependency import flattener:
+
+```sh
+npx actual-css bundle src/app.css --out public/app.css
+```
+
+or:
+
+```sh
+bunx actual-css bundle src/app.css --out public/app.css
+```
+
+Add `--minify` for lightweight whitespace/comment minification:
+
+```sh
 npx actual-css bundle src/app.css --out public/app.css --minify
 ```
 
-The same command works with `bunx actual-css ...`.
+The CLI resolves and inlines:
 
-The bundler resolves both relative files and published Actual CSS subpaths,
-inlines them in source order, and keeps modern CSS syntax intact. It is a
-bundler, not a transpiler: `color-mix()`, `light-dark()`, `@container`,
-`:has()`, and range media queries stay exactly as written.
+```css
+@import "./local.css";
+@import "actual-css/css/layout";
+@import "actual-css/css/components/card";
+```
 
-Remote imports such as `@import "https://..."` are kept, and moved to the top
-of the bundle: an `@import` that trails a rule is ignored by browsers, so
-hoisting is what keeps them working. Local and package imports must stay plain
-`@import "..."` (with or without a `./` prefix, and a trailing comment is
-fine); modified forms such as `layer(...)`, `supports(...)`, or media-query
-imports are rejected with an explicit error rather than silently flattened.
+It deliberately does **not** transpile CSS. Modern syntax such as nesting, `@container`, `@scope`, `:has()`, `color-mix()`, `light-dark()`, and media-query range syntax is preserved for the browser.
 
-## Cascade layer recipes
+The CLI is a simple flattener, not a general-purpose CSS build pipeline.
 
-`actual-css/css/layer` contains the minimal core only. To place the complete
-framework in one project-owned layer, import the full bundle with a layer:
+### Limitations
+
+Local and package imports may be plain imports, or carry a layer modifier:
+
+```css
+@import "./local.css";
+@import "./local.css" layer(components);
+@import "./local.css" layer;
+```
+
+A layered import is flattened into the block it stands for, so `@import "actual-css/css" layer(actual)` becomes `@layer actual { … }`. A layer declared inside the imported file becomes a sublayer of that wrapper, exactly as the import did.
+
+Conditional modifiers are not flattened:
+
+```css
+@import "./local.css" supports(display: grid);
+@import "./local.css" screen;
+@import "./local.css" layer(components) supports(display: grid);
+```
+
+Use an existing CSS pipeline when these features are required.
+
+One further case is refused rather than guessed: a remote import inside a layered subtree, because hoisting it before ordinary rules would move it out of its layer.
+
+The CLI also does not process or rebase asset URLs such as:
+
+```css
+background-image: url("../images/card.svg");
+```
+
+Those paths remain exactly as written, so projects with relative assets should generally let their existing build pipeline handle CSS imports.
+
+Remote and absolute imports are preserved rather than fetched and are moved before ordinary rules so they remain valid CSS.
+
+## Cascade layers
+
+Actual CSS can participate in a project-owned cascade layer:
 
 ```css
 @layer actual;
+
 @import "actual-css/full" layer(actual);
 ```
 
-There is no separate full-layer bundle. When composing families individually,
-put the same `layer(actual)` modifier on every core or family import so none of
-the selected modules escapes the layer.
+Or, when composing families:
 
-## Migrating from 0.3
+```css
+@layer actual;
 
-In 0.3 the bare `actual-css` import shipped the standard framework, but
-**excluded** the `optional` family; the all-in bundle was the separate
-`actual-css/css/actual.full` entrypoint. In 0.4 the framework is reorganized
-into the core + families model:
+@import "actual-css/css" layer(actual);
+@import "actual-css/css/typography" layer(actual);
+@import "actual-css/css/layout" layer(actual);
+@import "actual-css/css/forms/all" layer(actual);
+@import "actual-css/css/components" layer(actual);
+```
 
-- `actual-css` is the minimal core.
-- `actual-css/full` is the closest successor to 0.3's `actual.full.css`
-  (the all-in bundle), not to the 0.3 bare import — it is slightly wider,
-  because the former `optional/` modules now ship with the full bundle.
-- The `optional` family is gone. Its modules live in their domain.
-- `focus.css` is now part of the core baseline and no longer requires
-  last-in-bundle ordering.
+`actual-css/css/layer` also exposes the minimal core wrapped in `@layer actual`.
 
-### Entrypoint map
+All of these recipes flatten with `actual-css bundle`: the CLI understands layer modifiers, so a public entrypoint of the framework is never something its own bundler has to refuse.
 
-| 0.3                                                                                               | 0.4                                                                                                                              |
-|---------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------|
-| `actual-css`                                                                                      | `actual-css/full` for a simple migration (slightly wider than the 0.3 bare import), or `actual-css/css` for the new minimal core |
-| `actual-css/css/actual.full`                                                                      | `actual-css/full` or `actual-css/css/full`                                                                                       |
-| `actual-css/js`                                                                                   | `actual-css/js/full` to keep the built-in behaviors (see below)                                                                  |
-| `actual-css/css/forms`                                                                            | `actual-css/css/forms/all` for the same coverage                                                                                 |
-| `actual-css/css/grid`                                                                             | `actual-css/css/layout/grid`                                                                                                     |
-| `actual-css/css/prose`                                                                            | `actual-css/css/typography/prose`                                                                                                |
-| `actual-css/css/optional` (bundle)                                                                | `actual-css/full`                                                                                                                |
-| the root core files (`reset`, `tokens`, `theme`, `base`, `intents`, `variants`, `focus`, `print`) | no longer exported individually; compose the core atomically via `actual-css/css`                                                |
+## Custom properties
 
-The distributed bundle names changed too: `actual.min.css` is now the minimal
-core (in 0.3 it was the standard framework), the full CSS is
-`actual.full.min.css`, and the full JavaScript runtime is `actual.full.js`
-(in 0.3 it was `actual.js`). The `dist/optional*.css` bundles no longer exist.
+Component-prefixed custom properties documented on component pages are author hooks.
 
-### Same import path, changed semantics
-
-These specifiers still resolve, but they mean something different now — the
-easiest breaking change to miss:
-
-| Path                        | 0.3                                                            | 0.4                                                                                              |
-|-----------------------------|----------------------------------------------------------------|--------------------------------------------------------------------------------------------------|
-| `actual-css`                | the standard framework (all but `optional/`)                   | the minimal core                                                                                 |
-| `actual-css/js`             | the full runtime (flyout, dialog, tabs, validation, status, …) | only the enhancement-manifest loader; the built-ins move to `actual-css/js/full`                 |
-| `actual-css/css/forms`      | the complete Forms family                                      | the native-controls base (`forms/base.css`)                                                      |
-| `actual-css/css/layout`     | one layout file                                                | the layout family manifest                                                                       |
-| `actual-css/css/utilities`  | the utility leaf                                               | the utilities family: base plus the former `utilities-extra`                                     |
-| `actual-css/css/components` | the component manifest                                         | the same, plus chat, fab, and join; overline now lives in `actual-css/css/typography/overline`   |
-| `actual-css/css/layer`      | the standard framework wrapped in `@layer actual`              | only the core wrapped in `@layer actual`; layer the families yourself with the full-layer recipe |
-
-### Former optional modules
-
-The `optional` family is gone; each module moved to its domain:
-
-| 0.3 path                                   | 0.4 path                              |
-|--------------------------------------------|---------------------------------------|
-| `actual-css/css/optional/otp`              | `actual-css/css/forms/otp`            |
-| `actual-css/css/optional/floating-field`   | `actual-css/css/forms/floating-field` |
-| `actual-css/css/optional/chat`             | `actual-css/css/components/chat`      |
-| `actual-css/css/optional/fab`              | `actual-css/css/components/fab`       |
-| `actual-css/css/optional/aura`             | `actual-css/css/effects/aura`         |
-| `actual-css/css/optional/scroller`         | `actual-css/css/layout/scroller`      |
-| `actual-css/css/optional/scroll-snap`      | `actual-css/css/layout/scroll-snap`   |
-| `actual-css/css/optional/layout-extra`     | `actual-css/css/layout/topbar`        |
-| `actual-css/css/optional/typography-fluid` | `actual-css/css/typography/fluid`     |
-| `actual-css/css/optional/utilities-extra`  | `actual-css/css/utilities/extra`      |
-
-Component-prefixed custom properties documented on each page are author hooks.
-Color and sizing otherwise stay with the existing intent, variant, control,
-and button APIs.
+Color and sizing otherwise stay within the shared intent, variant, control, and button APIs.

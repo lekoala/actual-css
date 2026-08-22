@@ -14,6 +14,7 @@ const IMPORT_PREFIX_RE = /^\s*@import\b/;
 // is a local path, not a URL scheme.
 const EXTERNAL_SPECIFIER_RE = /^(?:[a-z][a-z0-9+.-]+:|\/\/|\/)/i;
 const CHARSET_RE = /^\s*@charset\s+["'][^"']*["']\s*;[^\n]*\n?/;
+const LAYER_TRAILER_RE = /^layer(?:\(\s*([A-Za-z_-][\w-]*(?:\.[A-Za-z_-][\w-]*)*)?\s*\))?$/;
 const RESOLVER_STUB = "__actual_css_resolve__.js";
 
 function skipWhitespace(source, index) {
@@ -137,7 +138,26 @@ function preservedImportStatement(line) {
   return statement.endsWith(";") ? statement : `${statement};`;
 }
 
-async function inlineFile(path, stack, preserved) {
+// `layer`, `layer()` and `layer(name)` are the only modifiers this bundler
+// understands: dropping the @import means re-stating the layer, which an
+// @layer block does exactly. Conditional modifiers stay out of scope.
+function parseLayerTrailer(trailer) {
+  const match = trailer.match(LAYER_TRAILER_RE);
+  return match ? { name: match[1] ?? "" } : null;
+}
+
+function wrapInLayer(css, name) {
+  const body = css
+    .split("\n")
+    .map((line) => (line.trim() === "" ? "" : `  ${line}`))
+    .join("\n")
+    .replace(/\n+$/, "");
+  const head = name ? `@layer ${name} {` : "@layer {";
+
+  return `${head}\n${body}\n}\n`;
+}
+
+async function inlineFile(path, stack, preserved, layered) {
   if (stack.includes(path)) {
     const chain = [...stack, path].map((item) => item.replace(/.*[/\\]/, ""));
     throw new Error(`Circular CSS import: ${chain.join(" -> ")}`);
@@ -159,17 +179,28 @@ async function inlineFile(path, stack, preserved) {
     }
 
     if (isExternalImportSpecifier(parsed.specifier)) {
+      // Hoisting is what keeps a surviving @import valid, but hoisting it out
+      // of a layer would silently move its rules to another layer.
+      if (layered) {
+        throw new Error(
+          `Remote CSS @import inside a layered import cannot be hoisted in ${path}: ${line.trim()}`,
+        );
+      }
+
       const statement = preservedImportStatement(line);
       if (!preserved.includes(statement)) preserved.push(statement);
       continue;
     }
 
-    if (parsed.trailer) {
+    const layer = parsed.trailer ? parseLayerTrailer(parsed.trailer) : null;
+
+    if (parsed.trailer && !layer) {
       throw new Error(`Unsupported CSS @import modifiers in ${path}: ${line.trim()}`);
     }
 
     const target = resolveImportTarget(path, parsed.specifier);
-    chunks.push(await inlineFile(target, nextStack, preserved));
+    const inlined = await inlineFile(target, nextStack, preserved, layered || layer !== null);
+    chunks.push(layer ? wrapInLayer(inlined, layer.name) : inlined);
   }
 
   return `${chunks.join("\n").trim()}\n`;
@@ -177,7 +208,7 @@ async function inlineFile(path, stack, preserved) {
 
 export async function inlineImports(file) {
   const preserved = [];
-  const body = await inlineFile(resolve(file), [], preserved);
+  const body = await inlineFile(resolve(file), [], preserved, false);
 
   if (preserved.length === 0) return body;
 
