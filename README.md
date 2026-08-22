@@ -41,6 +41,11 @@ it points at the native-controls base, with `css/forms/all` exposing the
 complete Forms family. See the
 [modular import guide](docs/pages/guides/modular-import.md) for the full map.
 
+For a flattened custom bundle, import the source entrypoints you want from
+`actual-css/css` and run `npx actual-css bundle src/app.css --out public/app.css --minify`.
+The CLI resolves package subpaths and relative files, then inlines them without
+transpiling modern CSS.
+
 You can also use the compiled full bundle directly:
 
 ```html

@@ -1,5 +1,14 @@
 import { expect, test } from "bun:test";
-import { existsSync, mkdtempSync, readdirSync, readFileSync, rmSync } from "node:fs";
+import {
+  existsSync,
+  mkdirSync,
+  mkdtempSync,
+  readdirSync,
+  readFileSync,
+  renameSync,
+  rmSync,
+  writeFileSync,
+} from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
@@ -36,12 +45,16 @@ test("package ships built assets, not theme demo sources", () => {
   expect(files).toContain("src/css/components");
   expect(files).toContain("src/css/effects");
   expect(files).toContain("src/css/utilities");
+  expect(files).toContain("src/cli");
+  expect(files).toContain("src/tooling");
   expect(files).not.toContain("src/css/themes");
   expect(files).toContain("scripts/reserved-classes.json");
   expect(files).not.toContain("src/css");
   expect(files).not.toContain("src/css/optional");
   expect(pkg.exports["./reserved-classes.json"]).toBe("./scripts/reserved-classes.json");
   expect(existsSync(join(ROOT, pkg.exports["./reserved-classes.json"]))).toBe(true);
+  expect(pkg.bin["actual-css"]).toBe("./src/cli/actual-css.js");
+  expect(existsSync(join(ROOT, pkg.bin["actual-css"]))).toBe(true);
 
   // The preset palettes are reference/demo material, not importable
   // entrypoints and not shipped sources: the theme contract is the
@@ -202,8 +215,10 @@ packTest("packed tarball ships every critical public export", async () => {
     const tarball = readdirSync(dir).find((file) => file.endsWith(".tgz"));
     expect(tarball, "npm pack must produce a tarball").toBeTruthy();
 
-    const list = await spawn("tar", ["-tzf", join(dir, tarball)]);
-    expect(list.code, "tar must list the tarball").toBe(0);
+    // Relative name plus cwd: GNU tar reads an absolute Windows path
+    // ("C:\...") as a remote host spec and refuses to open it.
+    const list = await spawn("tar", ["-tzf", tarball], { cwd: dir });
+    expect(list.code, `tar must list the tarball:\n${list.stderr}`).toBe(0);
     const entries = list.stdout.split(/\r?\n/);
 
     const critical = [
@@ -211,13 +226,70 @@ packTest("packed tarball ships every critical public export", async () => {
       "package/dist/actual.full.css", // actual-css/full
       "package/dist/actual.js", // actual-css/js
       "package/dist/actual.full.js", // actual-css/js/full
+      "package/src/cli/actual-css.js", // actual-css bin
       "package/src/css/layout/index.css", // actual-css/css/layout
       "package/src/css/layout/column-layout.css", // actual-css/css/layout/column-layout
+      "package/src/tooling/css-bundle.js", // shared bundler for CLI and build scripts
       "package/scripts/reserved-classes.json", // actual-css/reserved-classes.json
     ];
     for (const entry of critical) {
       expect(entries, `tarball must contain ${entry}`).toContain(entry);
     }
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+// The CLI is only useful if bare specifiers resolve from an installed package:
+// inside the repo they would resolve by self-reference, which proves nothing
+// about what `files` and `exports` actually publish.
+packTest("the packed CLI bundles a consumer stylesheet from node_modules", async () => {
+  const dir = mkdtempSync(join(tmpdir(), "actual-consumer-"));
+  try {
+    const pack = await spawn("npm", ["pack", "--pack-destination", dir], { cwd: ROOT });
+    expect(pack.code, `npm pack failed:\n${pack.stderr}`).toBe(0);
+
+    const tarball = readdirSync(dir).find((file) => file.endsWith(".tgz"));
+    expect(tarball, "npm pack must produce a tarball").toBeTruthy();
+
+    const modules = join(dir, "node_modules");
+    mkdirSync(modules, { recursive: true });
+    const extract = await spawn("tar", ["-xzf", tarball, "-C", "node_modules"], { cwd: dir });
+    expect(extract.code, `tar failed:\n${extract.stderr}`).toBe(0);
+    renameSync(join(modules, "package"), join(modules, "actual-css"));
+
+    writeFileSync(
+      join(dir, "entry.css"),
+      [
+        '@import "actual-css/css";',
+        '@import "actual-css/css/components/button";',
+        '@import "https://example.com/fonts.css";',
+        '@import "app.css";',
+        '@import "./theme.css";   /* project theme */',
+      ].join("\n"),
+    );
+    writeFileSync(join(dir, "app.css"), ".app { color: red; }\n");
+    writeFileSync(join(dir, "theme.css"), ":root { --brand: teal; }\n");
+
+    const run = await spawn(
+      "node",
+      [
+        join(modules, "actual-css", "src", "cli", "actual-css.js"),
+        "bundle",
+        "entry.css",
+        "--out",
+        join(dir, "out", "bundle.css"),
+      ],
+      { cwd: dir },
+    );
+    expect(run.code, `CLI failed:\n${run.stderr}`).toBe(0);
+
+    const bundled = readFileSync(join(dir, "out", "bundle.css"), "utf8");
+    expect(bundled.split("\n")[0]).toBe('@import "https://example.com/fonts.css";');
+    expect(bundled.match(/@import/g), "only the remote import may survive").toHaveLength(1);
+    expect(bundled).toContain(".app { color: red; }");
+    expect(bundled).toContain("--brand: teal;");
+    expect(bundled).toContain(".btn");
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }

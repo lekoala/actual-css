@@ -71,6 +71,44 @@ piece:
 @import "actual-css/css/utilities/extra";
 ```
 
+## Custom builds
+
+The source entrypoints under `actual-css/css/*` are the contract for custom
+bundles. The compiled package entrypoints (`actual-css` and `actual-css/full`)
+already point at `dist/*.css`; use those when you want the shipped bundle as
+is, not when you want to reshape it.
+
+Create one project stylesheet that imports the families or leaf modules you
+want, then flatten it with the public bundler:
+
+```css
+@import "actual-css/css";
+@import "actual-css/css/layout";
+@import "actual-css/css/forms/all";
+@import "actual-css/css/components/button";
+@import "actual-css/css/components/card";
+@import "./theme.css";
+@import "./app.css";
+```
+
+```text
+npx actual-css bundle src/app.css --out public/app.css --minify
+```
+
+The same command works with `bunx actual-css ...`.
+
+The bundler resolves both relative files and published Actual CSS subpaths,
+inlines them in source order, and keeps modern CSS syntax intact. It is a
+bundler, not a transpiler: `color-mix()`, `light-dark()`, `@container`,
+`:has()`, and range media queries stay exactly as written.
+
+Remote imports such as `@import "https://..."` are kept, and moved to the top
+of the bundle: an `@import` that trails a rule is ignored by browsers, so
+hoisting is what keeps them working. Local and package imports must stay plain
+`@import "..."` (with or without a `./` prefix, and a trailing comment is
+fine); modified forms such as `layer(...)`, `supports(...)`, or media-query
+imports are rejected with an explicit error rather than silently flattened.
+
 ## Cascade layer recipes
 
 `actual-css/css/layer` contains the minimal core only. To place the complete
