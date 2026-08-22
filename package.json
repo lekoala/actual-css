@@ -77,6 +77,9 @@
     "./reserved-classes.json": "./scripts/reserved-classes.json",
     "./package.json": "./package.json"
   },
+  "bin": {
+    "actual-css": "./src/cli/actual-css.js"
+  },
   "main": "./dist/actual.js",
   "style": "./dist/actual.min.css",
   "unpkg": "./dist/actual.min.css",
@@ -92,7 +95,9 @@
     "src/css/components",
     "src/css/effects",
     "src/css/utilities",
+    "src/cli",
     "src/js",
+    "src/tooling",
     "scripts/reserved-classes.json",
     "docs",
     "CHANGELOG.md",
@@ -101,7 +106,8 @@
     "README.md"
   ],
   "engines": {
-    "bun": ">=1.4.0"
+    "bun": ">=1.4.0",
+    "node": ">=18"
   },
   "scripts": {
     "lint": "biome check",

@@ -259,6 +259,34 @@ piece:</p>
 @import &quot;actual-css/css/typography/fluid&quot;;
 @import &quot;actual-css/css/utilities/extra&quot;;
 </code></pre>
+<h2 id="custom-builds">Custom builds</h2>
+<p>The source entrypoints under <code>actual-css/css/*</code> are the contract for custom
+bundles. The compiled package entrypoints (<code>actual-css</code> and <code>actual-css/full</code>)
+already point at <code>dist/*.css</code>; use those when you want the shipped bundle as
+is, not when you want to reshape it.</p>
+<p>Create one project stylesheet that imports the families or leaf modules you
+want, then flatten it with the public bundler:</p>
+<pre><code class="language-css">@import &quot;actual-css/css&quot;;
+@import &quot;actual-css/css/layout&quot;;
+@import &quot;actual-css/css/forms/all&quot;;
+@import &quot;actual-css/css/components/button&quot;;
+@import &quot;actual-css/css/components/card&quot;;
+@import &quot;./theme.css&quot;;
+@import &quot;./app.css&quot;;
+</code></pre>
+<pre><code class="language-text">npx actual-css bundle src/app.css --out public/app.css --minify
+</code></pre>
+<p>The same command works with <code>bunx actual-css ...</code>.</p>
+<p>The bundler resolves both relative files and published Actual CSS subpaths,
+inlines them in source order, and keeps modern CSS syntax intact. It is a
+bundler, not a transpiler: <code>color-mix()</code>, <code>light-dark()</code>, <code>@container</code>,
+<code>:has()</code>, and range media queries stay exactly as written.</p>
+<p>Remote imports such as <code>@import &quot;https://...&quot;</code> are kept, and moved to the top
+of the bundle: an <code>@import</code> that trails a rule is ignored by browsers, so
+hoisting is what keeps them working. Local and package imports must stay plain
+<code>@import &quot;...&quot;</code> (with or without a <code>./</code> prefix, and a trailing comment is
+fine); modified forms such as <code>layer(...)</code>, <code>supports(...)</code>, or media-query
+imports are rejected with an explicit error rather than silently flattened.</p>
 <h2 id="cascade-layer-recipes">Cascade layer recipes</h2>
 <p><code>actual-css/css/layer</code> contains the minimal core only. To place the complete
 framework in one project-owned layer, import the full bundle with a layer:</p>
@@ -363,6 +391,7 @@ and button APIs.</p>
         <li><a class="nav-link" href="#the-two-entrypoints" data-docs-toc-item data-level="2">The two entrypoints</a></li>
         <li><a class="nav-link" href="#focus-is-a-core-invariant" data-docs-toc-item data-level="3">Focus is a core invariant</a></li>
         <li><a class="nav-link" href="#family-manifests" data-docs-toc-item data-level="2">Family manifests</a></li>
+        <li><a class="nav-link" href="#custom-builds" data-docs-toc-item data-level="2">Custom builds</a></li>
         <li><a class="nav-link" href="#cascade-layer-recipes" data-docs-toc-item data-level="2">Cascade layer recipes</a></li>
         <li><a class="nav-link" href="#migrating-from-03" data-docs-toc-item data-level="2">Migrating from 0.3</a></li>
         <li><a class="nav-link" href="#entrypoint-map" data-docs-toc-item data-level="3">Entrypoint map</a></li>

@@ -9,7 +9,7 @@
 import { mkdir, stat, writeFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { bundledCssIssues, inlineImports, minifyCss } from "./utils/css-bundle.js";
+import { bundledCssIssues, inlineImports, minifyCss } from "../src/tooling/css-bundle.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, "..");

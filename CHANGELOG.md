@@ -18,6 +18,7 @@
 * `--soft-fg-mix` tunes soft foreground ink; at its `100%` default soft text stays the raw intent, and lowering it rebates the ink toward `--text` for palettes whose intents are too light or too saturated to carry text on their own soft surface.
 * Optional `--link` overrides `.prose` link ink when a theme's `--primary` works as an accent but not as inline body text.
 * `check:color-space` guardrail: an intent tinted against a theme-controlled surface or border must interpolate in `oklab`, with an `intentional-oklch` escape hatch.
+* Bundle tool.
 
 ### Changed
 
