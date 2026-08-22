@@ -24,7 +24,7 @@ function normalizeBlock(block) {
   return block
     .replace(/\/\*[\s\S]*?\*\//g, "")
     .replace(/(?:\.key|\.prose :where\(kbd\))\s*\{/g, ".key {")
-    .replace(/--(?:ui|alert-default|badge-default)-(bg|border)\s*:/g, "--soft-$1:")
+    .replace(/--(?:ui|alert-default|badge-default)-(bg|border|fg)\s*:/g, "--soft-$1:")
     .replace(/\s+/g, " ")
     .replace(/\s*([:;,()])\s*/g, "$1")
     .trim();

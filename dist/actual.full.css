@@ -178,6 +178,10 @@ select {
   --soft-bg-mix: 88%;
   --soft-border-mix: 65%;
   --soft-hover-alpha: 12%;
+  /* Soft foreground: the share of raw intent in soft text. 100% keeps the
+     pure intent color; lower values rebate it toward --text, which vivid or
+     light intent palettes need to stay legible on their own soft surface. */
+  --soft-fg-mix: 100%;
 
   /* Shared icon assets. Override these URLs when a strict CSP disallows data:. */
   --icon-chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%238a8594' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
@@ -641,12 +645,13 @@ small {
 @supports (color: color-mix(in oklch, red, white)) {
   .soft {
     /* @sync soft-recipe */
-    --ui-bg: color-mix(in oklch, var(--surface) var(--soft-bg-mix), var(--intent, var(--neutral)));
+    --ui-bg: color-mix(in oklab, var(--surface) var(--soft-bg-mix), var(--intent, var(--neutral)));
     --ui-border: color-mix(
-      in oklch,
+      in oklab,
       var(--surface) var(--soft-border-mix),
       var(--intent, var(--neutral))
     );
+    --ui-fg: color-mix(in oklab, var(--text), var(--intent, var(--text)) var(--soft-fg-mix));
     /* @sync soft-recipe */
   }
 
@@ -721,6 +726,7 @@ small {
  * --prose-h2
  * --prose-h3
  * --prose-h4
+ * --link
  */
 
 .prose {
@@ -785,8 +791,11 @@ small {
   font-size: var(--prose-h4);
 }
 
+/* Link ink defaults to --primary. --link is an optional escape hatch: a
+   theme whose primary is too light or too vivid to read as inline text sets
+   it without having to restate the rule. */
 .prose :where(a) {
-  color: var(--primary);
+  color: var(--link, var(--primary));
   text-decoration-line: underline;
   text-decoration-thickness: 0.08em;
   text-underline-offset: 0.18em;
@@ -798,7 +807,7 @@ small {
 
 @supports (color: color-mix(in oklch, red, white)) {
   .prose :where(a:hover) {
-    color: color-mix(in oklch, var(--primary), var(--text) 15%);
+    color: color-mix(in oklab, var(--link, var(--primary)), var(--text) 15%);
   }
 }
 
@@ -966,8 +975,8 @@ small {
    keeps a readable bordered pill everywhere else. */
 @supports (color: color-mix(in oklch, red, white)) {
   .overline.pill {
-    border-color: color-mix(in oklch, var(--intent, var(--border)) 35%, var(--border));
-    background: color-mix(in oklch, var(--intent, transparent) 6%, var(--surface));
+    border-color: color-mix(in oklab, var(--intent, var(--border)) 35%, var(--border));
+    background: color-mix(in oklab, var(--intent, transparent) 6%, var(--surface));
   }
 }
 
@@ -2697,7 +2706,7 @@ small {
 /* Subtle background tint on checked — modern browsers only */
 @supports (color: color-mix(in oklch, red, white)) {
   .choice-card:has(:checked) {
-    --choice-card-bg: color-mix(in oklch, var(--surface) 96%, var(--intent, var(--primary)));
+    --choice-card-bg: color-mix(in oklab, var(--surface) 96%, var(--intent, var(--primary)));
   }
 }
 
@@ -3224,7 +3233,7 @@ small {
 
   .btn.soft {
     --ui-hover-bg: color-mix(
-      in oklch,
+      in oklab,
       var(--surface) calc(var(--soft-bg-mix) - var(--soft-hover-alpha)),
       var(--intent, var(--neutral))
     );
@@ -3450,14 +3459,19 @@ a.btn[aria-disabled="true"] {
   .badge {
     /* @sync soft-recipe */
     --badge-default-bg: color-mix(
-      in oklch,
+      in oklab,
       var(--surface) var(--soft-bg-mix),
       var(--intent, var(--neutral))
     );
     --badge-default-border: color-mix(
-      in oklch,
+      in oklab,
       var(--surface) var(--soft-border-mix),
       var(--intent, var(--neutral))
+    );
+    --badge-default-fg: color-mix(
+      in oklab,
+      var(--text),
+      var(--intent, var(--text)) var(--soft-fg-mix)
     );
     /* @sync soft-recipe */
   }
@@ -3510,7 +3524,7 @@ a.btn[aria-disabled="true"] {
 
   :is(a.badge, button.badge):where(:not(.solid, .outline, :empty)) {
     --badge-default-hover-bg: color-mix(
-      in oklch,
+      in oklab,
       var(--surface) calc(var(--soft-bg-mix) - var(--soft-hover-alpha)),
       var(--intent, var(--neutral))
     );
@@ -3595,6 +3609,7 @@ a.badge[aria-disabled="true"] {
  *
  * Internal:
  * --alert-default-bg
+ * --alert-default-fg
  * --alert-default-border
  * --alert-bg
  * --alert-fg
@@ -3617,9 +3632,10 @@ a.badge[aria-disabled="true"] {
   --alert-font-size: var(--font-size-md);
   --alert-icon-size: 1.25rem;
   --alert-default-bg: var(--surface-subtle);
+  --alert-default-fg: var(--intent, var(--text));
   --alert-default-border: var(--border);
   --alert-bg: var(--ui-bg, var(--alert-default-bg));
-  --alert-fg: var(--ui-fg, var(--intent, var(--text)));
+  --alert-fg: var(--ui-fg, var(--alert-default-fg));
   --alert-border: var(--ui-border, var(--alert-default-border));
 
   padding-block: var(--alert-pad-block);
@@ -3651,14 +3667,19 @@ a.badge[aria-disabled="true"] {
   .alert {
     /* @sync soft-recipe */
     --alert-default-bg: color-mix(
-      in oklch,
+      in oklab,
       var(--surface) var(--soft-bg-mix),
       var(--intent, var(--neutral))
     );
     --alert-default-border: color-mix(
-      in oklch,
+      in oklab,
       var(--surface) var(--soft-border-mix),
       var(--intent, var(--neutral))
+    );
+    --alert-default-fg: color-mix(
+      in oklab,
+      var(--text),
+      var(--intent, var(--text)) var(--soft-fg-mix)
     );
     /* @sync soft-recipe */
   }
@@ -3805,7 +3826,7 @@ a.badge[aria-disabled="true"] {
 @supports (color: color-mix(in oklch, red, white)) {
   .alert.admonition > .alert-title {
     background: color-mix(
-      in oklch,
+      in oklab,
       var(--surface) var(--soft-bg-mix),
       var(--intent, var(--neutral))
     );

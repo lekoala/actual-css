@@ -76,14 +76,19 @@
   .badge {
     /* @sync soft-recipe */
     --badge-default-bg: color-mix(
-      in oklch,
+      in oklab,
       var(--surface) var(--soft-bg-mix),
       var(--intent, var(--neutral))
     );
     --badge-default-border: color-mix(
-      in oklch,
+      in oklab,
       var(--surface) var(--soft-border-mix),
       var(--intent, var(--neutral))
+    );
+    --badge-default-fg: color-mix(
+      in oklab,
+      var(--text),
+      var(--intent, var(--text)) var(--soft-fg-mix)
     );
     /* @sync soft-recipe */
   }
@@ -136,7 +141,7 @@
 
   :is(a.badge, button.badge):where(:not(.solid, .outline, :empty)) {
     --badge-default-hover-bg: color-mix(
-      in oklch,
+      in oklab,
       var(--surface) calc(var(--soft-bg-mix) - var(--soft-hover-alpha)),
       var(--intent, var(--neutral))
     );

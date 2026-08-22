@@ -18,7 +18,7 @@ with .column-span-N and .column-start-N.">
   <script src="../../scripts/docs/assets/docs.js" defer></script>
   <script>
   (function () {
-    var valid = ["system","light","dark","indigo","dim","corporate","forest","ocean","spruce","petrol","sunset","lavender","mono","square","edge","cyberpunk","neon","gradient"];
+    var valid = ["system","light","dark","indigo","dim","corporate","forest","ocean","spruce","petrol","sunset","lavender","mono","square","brutalist","edge","cyberpunk","neon","gradient"];
     var saved = null;
     try { saved = localStorage.getItem("actual-docs-theme"); } catch (e) {}
     if (saved === "system" || !valid.includes(saved)) {
@@ -58,6 +58,7 @@ with .column-span-N and .column-start-N.">
             <option value="lavender">Lavender</option>
             <option value="mono">Mono</option>
             <option value="square">Square</option>
+            <option value="brutalist">Brutalist</option>
             <option value="edge">Edge</option>
             <option value="cyberpunk">Cyberpunk</option>
             <option value="neon">Neon</option>

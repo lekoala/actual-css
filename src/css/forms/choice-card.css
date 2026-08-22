@@ -85,7 +85,7 @@
 /* Subtle background tint on checked — modern browsers only */
 @supports (color: color-mix(in oklch, red, white)) {
   .choice-card:has(:checked) {
-    --choice-card-bg: color-mix(in oklch, var(--surface) 96%, var(--intent, var(--primary)));
+    --choice-card-bg: color-mix(in oklab, var(--surface) 96%, var(--intent, var(--primary)));
   }
 }
 

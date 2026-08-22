@@ -17,7 +17,7 @@
   <script src="../../scripts/docs/assets/docs.js" defer></script>
   <script>
   (function () {
-    var valid = ["system","light","dark","indigo","dim","corporate","forest","ocean","spruce","petrol","sunset","lavender","mono","square","edge","cyberpunk","neon","gradient"];
+    var valid = ["system","light","dark","indigo","dim","corporate","forest","ocean","spruce","petrol","sunset","lavender","mono","square","brutalist","edge","cyberpunk","neon","gradient"];
     var saved = null;
     try { saved = localStorage.getItem("actual-docs-theme"); } catch (e) {}
     if (saved === "system" || !valid.includes(saved)) {
@@ -57,6 +57,7 @@
             <option value="lavender">Lavender</option>
             <option value="mono">Mono</option>
             <option value="square">Square</option>
+            <option value="brutalist">Brutalist</option>
             <option value="edge">Edge</option>
             <option value="cyberpunk">Cyberpunk</option>
             <option value="neon">Neon</option>
@@ -254,7 +255,13 @@ documentation homepages) import it manually:</p>
 <p>There is also a non-fluid <code>.lead</code> utility in the core, for a simple readable intro paragraph. The fluid module does not redefine <code>.lead</code>; it adds a separate <code>.text-lead</code> for display contexts. This avoids a fluid import silently changing how existing markup renders.</p>
 <h2 id="link-treatment">Link treatment</h2>
 <p>Global links are intentionally neutral. Only <code>.prose</code> styles them as prose links, and only components style their own link-like elements (nav links, button-as-link, tabs, breadcrumbs, etc.). The reason is that underlining every <code>a</code> globally fights against button-like links, nav links, clickable cards, menu items, and tab triggers. Components that need link semantics should opt in with their own rule.</p>
-<p>There are no <code>--link-decoration-thickness</code>, <code>--link-decoration-thickness-hover</code>, or <code>--link-underline-offset</code> tokens; no global rule consumes them. Prose and components set their own underline metrics inline.</p>
+<p>Prose links take <code>--primary</code>. That breaks down for a theme whose primary is a light or fully saturated accent: it can carry a filled button, where it is the background under its own <code>--primary-fg</code>, but not inline body text, where it has to hold contrast against <code>--surface</code> on its own. <code>--link</code> is the optional override for exactly that case — a theme sets it and <code>.prose</code> link ink follows, hover included, with no rule to restate. Unset, it falls back to <code>--primary</code>, so existing themes are unaffected.</p>
+<pre><code class="language-css">[data-theme=&quot;vivid&quot;] {
+  --primary: hsl(48 100% 50%); /* fine as a button fill */
+  --link: hsl(215 100% 30%);   /* 1.4:1 as body ink, so lend a darker hue */
+}
+</code></pre>
+<p>It is a color token only. There are still no <code>--link-decoration-thickness</code>, <code>--link-decoration-thickness-hover</code>, or <code>--link-underline-offset</code> tokens; no global rule consumes them. Prose and components set their own underline metrics inline.</p>
 <h2 id="type-scale">Type scale</h2>
 <p>There is no exposed type scale.</p>
 <p>The framework exposes font weights, line heights, and the prose-specific overrides. It does not expose <code>fs-1</code> through <code>fs-7</code>, heading-level tokens, or heading-level utility classes. The reason is the same as for the baseline: a public scale is a contract, and adding it now would lock in choices before theme work and real component use tell us what is actually needed.</p>
@@ -289,6 +296,7 @@ baseline stays sans so app UI inherits predictably.</p>
 <li><code>--prose-line-height</code> — body line height inside <code>.prose</code>.</li>
 <li><code>--prose-heading-line-height</code> — heading line height inside <code>.prose</code>.</li>
 <li><code>--prose-flow</code> — vertical rhythm between sibling blocks inside <code>.prose</code>.</li>
+<li><code>--link</code> — prose link ink; falls back to <code>--primary</code> when a theme leaves it unset.</li>
 </ul>
 <h2 id="text-wrap">text-wrap</h2>
 <p><code>text-wrap: balance</code> and <code>text-wrap: pretty</code> are used at three levels:</p>

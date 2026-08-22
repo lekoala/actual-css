@@ -14,6 +14,10 @@
 * Native `accent-color` theming for unstyled platform controls, recomputed across `[data-theme]` islands.
 * “Building with Actual CSS” integration guide covering theme tokens, layout selection, hooks, utilities, and application CSS.
 * Expanded build, architecture, compatibility, browser-layout, package, and generated-output guardrails, including real `npm pack` verification.
+* `brutalist` theme.
+* `--soft-fg-mix` tunes soft foreground ink; at its `100%` default soft text stays the raw intent, and lowering it rebates the ink toward `--text` for palettes whose intents are too light or too saturated to carry text on their own soft surface.
+* Optional `--link` overrides `.prose` link ink when a theme's `--primary` works as an accent but not as inline body text.
+* `check:color-space` guardrail: an intent tinted against a theme-controlled surface or border must interpolate in `oklab`, with an `intentional-oklch` escape hatch.
 
 ### Changed
 
@@ -33,6 +37,8 @@
 * Preset theme palettes are reference/demo material rather than package API; their bundle is generated for demos/docs instead of `dist/`.
 * `llms.txt` now documents the core/full package split, layout-selection model, class manifest, and application-CSS integration workflow.
 * Biome now covers `src/`, `scripts/`, and `tests/`, and lint runs as part of `build:all`.
+* Use OKLab for intent/context color mixes to keep custom themes stable when surfaces or borders are chromatic.
+* Docs syntax highlighting uses a purpose-built local palette instead of the theme intents, which do not hold contrast as small text under most presets and are too close together on the monochromatic ones to stay distinguishable.
 * CI and browser diagnostics are updated for Bun 1.4 and verify committed `dist/`, `site/`, and `size-report.json` against fresh builds.
 
 ### Fixed

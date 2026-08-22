@@ -17,7 +17,7 @@
   <script src="../../scripts/docs/assets/docs.js" defer></script>
   <script>
   (function () {
-    var valid = ["system","light","dark","indigo","dim","corporate","forest","ocean","spruce","petrol","sunset","lavender","mono","square","edge","cyberpunk","neon","gradient"];
+    var valid = ["system","light","dark","indigo","dim","corporate","forest","ocean","spruce","petrol","sunset","lavender","mono","square","brutalist","edge","cyberpunk","neon","gradient"];
     var saved = null;
     try { saved = localStorage.getItem("actual-docs-theme"); } catch (e) {}
     if (saved === "system" || !valid.includes(saved)) {
@@ -57,6 +57,7 @@
             <option value="lavender">Lavender</option>
             <option value="mono">Mono</option>
             <option value="square">Square</option>
+            <option value="brutalist">Brutalist</option>
             <option value="edge">Edge</option>
             <option value="cyberpunk">Cyberpunk</option>
             <option value="neon">Neon</option>
@@ -267,8 +268,14 @@
   --soft-bg-mix: 88%;
   --soft-border-mix: 65%;
   --soft-hover-alpha: 12%;
+  --soft-fg-mix: 100%;
 }
 </code></pre>
+<p><code>--soft-fg-mix</code> is the share of raw intent in soft <em>text</em>. At its <code>100%</code> default soft ink is the intent color itself, which is what a palette of dark, muted intents wants. A vivid or light palette cannot afford that: a soft badge then paints intent-tinted ink on an intent-tinted surface, and the two converge. Lowering the mix rebates the ink toward <code>--text</code>, which is the right direction in both schemes because <code>--text</code> is dark on a light theme and light on a dark one. Around <code>45%</code> a fully saturated palette recovers AA while the ink still reads as its intent.</p>
+<p><strong>When an intent is tinted against a theme-controlled surface or border, the mix interpolates in <code>oklab</code>.</strong> That covers the soft recipe, the checked <code>.choice-card</code> tint, and the <code>.overline.pill</code> border.</p>
+<p>Not because rectangular interpolation is more faithful to the intent hue — across the shipped presets it is a few degrees <em>less</em> faithful. A browser treats hue as powerless below a small chroma epsilon, so for the low-chroma surfaces and borders the presets actually use, a polar mix snaps cleanly onto the intent and wins.</p>
+<p>The reason is continuity. A theme owns <code>--surface</code> and <code>--border</code>, and may put them anywhere from achromatic to vivid. Under polar interpolation that range contains a cliff: below the epsilon the mix tracks the intent, above it the surface hue starts winning, and crossing it moves the result into a different color family — 116 degrees, a soft <code>.secondary</code> landing in the greens. Cartesian interpolation responds smoothly across the whole range a public token allows. A recipe that is only correct while an adopter's surface stays under an unstated, implementation-defined threshold is not a contract, so the framework trades a small continuous error for a predictable one. The present cost is imperceptible: the largest difference the rule introduces in any preset is 3/255 on one channel.</p>
+<p>Mixing against <code>black</code>, <code>white</code>, <code>transparent</code>, or <code>currentColor</code> is exempt and stays in <code>oklch</code>: those have no hue to interpolate, so both spaces give byte-identical results. Polar interpolation also stays legitimate where hue rotation is the point, such as sweeping a gradient through hues. <code>bun run check:color-space</code> enforces the rule for contextual tints and takes an <code>intentional-oklch</code> comment as an escape hatch.</p>
 <h3 id="shape">Shape</h3>
 <p>Shape is intentionally small. Components can derive local radii from these.</p>
 <pre><code class="language-css">:root {
@@ -451,7 +458,7 @@
 <li>A custom property used only in a fallback position (<code>var(--x, default)</code>) and never declared is an unset extension point and must carry a classification — public, framework plumbing, or internal. <code>check:css-api</code> fails on any unclassified fallback-only property; it does not force an artificial declaration to satisfy the audit.</li>
 </ul>
 <h2 id="theme-contract">Theme contract</h2>
-<p>Themes override tokens, not selectors. The themes in <code>src/css/themes/</code> are repository-only demo examples, not included in the default stylesheet or the npm package; they exist to show valid ways to use this contract.</p>
+<p>Themes override tokens, not selectors. The themes in <code>src/css/themes/</code> are repository-only demo examples, not included in the default stylesheet or the npm package; they exist to show valid ways to use this contract, such as <code>ocean</code>, <code>square</code>, <code>cyberpunk</code>, and <code>brutalist</code>.</p>
 <p>A minimal recolor theme overrides the intent pairs, surfaces, text colors, border, focus, and hover overlay. In browsers with <code>color-mix()</code> support, the core derives <code>--focus-ring</code> from the island's <code>--focus</code>; override the ring only for a deliberate visual treatment or when a matching pre-<code>color-mix()</code> fallback is required.</p>
 <p>Shape, shadow, motion, typography, and soft-variant mix tokens are optional knobs. Override them only when the theme actually changes that part of the system.</p>
 <p>A full theme can override:</p>

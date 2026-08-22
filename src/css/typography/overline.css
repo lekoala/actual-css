@@ -42,7 +42,7 @@
    keeps a readable bordered pill everywhere else. */
 @supports (color: color-mix(in oklch, red, white)) {
   .overline.pill {
-    border-color: color-mix(in oklch, var(--intent, var(--border)) 35%, var(--border));
-    background: color-mix(in oklch, var(--intent, transparent) 6%, var(--surface));
+    border-color: color-mix(in oklab, var(--intent, var(--border)) 35%, var(--border));
+    background: color-mix(in oklab, var(--intent, transparent) 6%, var(--surface));
   }
 }

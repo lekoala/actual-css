@@ -77,7 +77,16 @@ There is also a non-fluid `.lead` utility in the core, for a simple readable int
 
 Global links are intentionally neutral. Only `.prose` styles them as prose links, and only components style their own link-like elements (nav links, button-as-link, tabs, breadcrumbs, etc.). The reason is that underlining every `a` globally fights against button-like links, nav links, clickable cards, menu items, and tab triggers. Components that need link semantics should opt in with their own rule.
 
-There are no `--link-decoration-thickness`, `--link-decoration-thickness-hover`, or `--link-underline-offset` tokens; no global rule consumes them. Prose and components set their own underline metrics inline.
+Prose links take `--primary`. That breaks down for a theme whose primary is a light or fully saturated accent: it can carry a filled button, where it is the background under its own `--primary-fg`, but not inline body text, where it has to hold contrast against `--surface` on its own. `--link` is the optional override for exactly that case — a theme sets it and `.prose` link ink follows, hover included, with no rule to restate. Unset, it falls back to `--primary`, so existing themes are unaffected.
+
+```css
+[data-theme="vivid"] {
+  --primary: hsl(48 100% 50%); /* fine as a button fill */
+  --link: hsl(215 100% 30%);   /* 1.4:1 as body ink, so lend a darker hue */
+}
+```
+
+It is a color token only. There are still no `--link-decoration-thickness`, `--link-decoration-thickness-hover`, or `--link-underline-offset` tokens; no global rule consumes them. Prose and components set their own underline metrics inline.
 
 ## Type scale
 
@@ -124,6 +133,7 @@ There is no `--line-height-normal`. It would be redundant with `--line-height`. 
 - `--prose-line-height` — body line height inside `.prose`.
 - `--prose-heading-line-height` — heading line height inside `.prose`.
 - `--prose-flow` — vertical rhythm between sibling blocks inside `.prose`.
+- `--link` — prose link ink; falls back to `--primary` when a theme leaves it unset.
 
 ## text-wrap
 

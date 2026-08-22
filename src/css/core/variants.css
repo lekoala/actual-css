@@ -85,12 +85,13 @@
 @supports (color: color-mix(in oklch, red, white)) {
   .soft {
     /* @sync soft-recipe */
-    --ui-bg: color-mix(in oklch, var(--surface) var(--soft-bg-mix), var(--intent, var(--neutral)));
+    --ui-bg: color-mix(in oklab, var(--surface) var(--soft-bg-mix), var(--intent, var(--neutral)));
     --ui-border: color-mix(
-      in oklch,
+      in oklab,
       var(--surface) var(--soft-border-mix),
       var(--intent, var(--neutral))
     );
+    --ui-fg: color-mix(in oklab, var(--text), var(--intent, var(--text)) var(--soft-fg-mix));
     /* @sync soft-recipe */
   }
 

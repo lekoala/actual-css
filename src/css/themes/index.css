@@ -20,6 +20,8 @@
  *   lavender   — paired recolor + soft-variant tuning, tinted shadows
  *   mono       — grayscale palette, colored status intents only
  *   square     — paired recolor + full radius scale forced to 0
+ *   brutalist  — light-only stress test: off-white canvas, black ink,
+ *                2px borders, hard offset shadows
  *   edge       — paired recolor + intent-colored button lower edge
  *   cyberpunk  — light-only stress test: yellow canvas, dark-on-bright
  *                intents, 2px borders, hard offset shadows
@@ -41,6 +43,7 @@
 @import "./lavender.css";
 @import "./mono.css";
 @import "./square.css";
+@import "./brutalist.css";
 @import "./edge.css";
 @import "./cyberpunk.css";
 @import "./neon.css";
