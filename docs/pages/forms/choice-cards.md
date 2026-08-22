@@ -96,7 +96,12 @@ Sizes follow the shared `.sm` and `.lg` modifiers. Intent classes (`.primary`, `
 - `--choice-card-radius` — corner radius.
 - `--choice-card-check-size` — size of the check indicator.
 
-Plain `.check` / `.radio` controls expose one hook:
+Plain `.check` / `.radio` controls expose two hooks:
 
+- `--choice-control-size` — the control's own size, in `em` off the surrounding
+  type. The switch track derives from it too, so a checkbox and a switch on the
+  same line stay proportionate. `.sm` / `.lg` do not touch it.
 - `--choice-control-offset` — top offset that aligns the control with the first
-  line of a multi-line label.
+  line of a multi-line label. Left unset, each control derives its own offset
+  from its height and the line box, which keeps a checkbox and a taller switch
+  level with each other. Setting one constant applies it to both.

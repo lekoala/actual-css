@@ -13,6 +13,10 @@
  * --switch-knob-margin
  * --switch-knob-size
  * --switch-travel
+ *
+ * The track is sized from --choice-control-size (tokens.css), not
+ * --control-size: a switch sits on a line of text next to a checkbox, so it
+ * follows the control typography rather than field density.
  */
 /* Intent boundary — inherited intents do not tint this component.
    Local intent classes still win because :where() has zero specificity. */
@@ -25,10 +29,22 @@
   --switch-bg: var(--border);
   --switch-border: var(--border);
   --switch-knob: var(--surface-raised);
-  --switch-width: calc(var(--control-size) * 1.16);
-  --switch-block-size: calc(var(--control-size) * 0.63);
-  --switch-knob-margin: calc(var(--switch-block-size) * 0.12);
-  --switch-knob-size: calc(var(--switch-block-size) - 2 * var(--switch-knob-margin));
+  --switch-block-size: calc(var(--choice-control-size) + 0.125em);
+  --switch-width: calc(var(--switch-block-size) * 1.8);
+  --switch-knob-margin: calc(var(--switch-block-size) * 0.08);
+
+  /* The knob is concentric in the track: --switch-block-size is a border-box
+     height, so the borders have to come out before the inset is applied on
+     both axes. Deriving from the outer height instead leaves the knob
+     --border-width closer to the rails than to the ends — a 1px error on a
+     ~1.6px inset, which reads as a knob squeezed against the track. */
+  --switch-knob-size: calc(
+    var(--switch-block-size) -
+    2 *
+    var(--border-width) -
+    2 *
+    var(--switch-knob-margin)
+  );
   --switch-travel: calc(
     var(--switch-width) -
     var(--switch-knob-size) -

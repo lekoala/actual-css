@@ -502,6 +502,48 @@ test("controls inside a disabled fieldset match :disabled by inheritance", () =>
   expect(controlCss).toContain(".select:disabled");
 });
 
+test("inline choices are sized by typography, not by field density", () => {
+  const tokensCss = readCss("src/css/core/tokens.css");
+  const choiceCss = readCss("src/css/forms/choice.css");
+  const switchCss = readCss("src/css/forms/switch.css");
+
+  expect(tokensCss).toMatch(/--choice-control-size:\s*[\d.]+em;/);
+  expect(choiceCss).toContain("inline-size: var(--choice-control-size);");
+  expect(choiceCss).toContain("block-size: var(--choice-control-size);");
+  expect(switchCss).toMatch(/--switch-block-size:\s*calc\(var\(--choice-control-size\)/);
+
+  // Density must not reach an inline choice: it would resize the control but
+  // not its label, which is exactly what the alignment depends on.
+  expect(switchCss).not.toContain("var(--control-size)");
+  expect(choiceCss).not.toContain("var(--control-size)");
+});
+
+test("every inline choice derives its first-line offset from its own height", () => {
+  const css = readCss("src/css/forms/choice.css");
+
+  // A per-control constant cannot keep an 18px checkbox and a 20px switch on
+  // the same optical line once the line-height or the control size changes,
+  // so both run the same 1lh formula over their own block size.
+  expect(css).toContain("calc((1lh - var(--choice-control-size)) / 2 + 0.0625em)");
+  expect(css).toContain("calc((1lh - var(--switch-block-size)) / 2 + 0.0625em)");
+
+  // Fallback-only, so an override anywhere up the tree still reaches the
+  // control instead of losing to a declaration on .choice itself.
+  expect(css).not.toMatch(/^\s*--choice-control-offset:/m);
+  expect(css).toMatch(/margin-block-start:\s*var\(\s*--choice-control-offset,/);
+});
+
+test("the switch knob is concentric inside its track", () => {
+  const css = readCss("src/css/forms/switch.css");
+
+  // --switch-block-size is a border-box height, so the knob has to clear the
+  // borders as well as the inset; deriving from the outer height alone leaves
+  // it --border-width closer to the rails than to the ends.
+  expect(css).toMatch(
+    /--switch-knob-size:\s*calc\([\s\S]*?var\(--border-width\)[\s\S]*?var\(--switch-knob-margin\)/,
+  );
+});
+
 test("optional OTP keeps one native input and covers validation states", () => {
   const css = readCss("src/css/forms/otp.css");
 

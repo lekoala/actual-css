@@ -312,14 +312,139 @@ naturally or via an explicit line break — still sit cleanly.</p>
   </div>
 </div>
 <div class="prose docs-prose">
+<h2 id="sizing-and-alignment">Sizing and alignment</h2>
+<p>A switch is sized off the control typography, not field density. Its track
+comes from <code>--choice-control-size</code> — the same token a checkbox and a radio use
+— so the three sit on a line of text at matching weight. <code>.sm</code> and <code>.lg</code> change
+<code>--control-size</code>, which is field height, and deliberately leave inline choices
+alone.</p>
+<p>The offset that centers each control on the first line of its label is derived
+from that control's own height, so a checkbox and a taller switch land on the
+same optical line. Change the type or the control size and they stay level:</p>
+</div>
+<div class="docs-example">
+  <div class="docs-preview">
+<!-- Same row, three heights: 18px checkbox, 18px radio, 20px switch track. -->
+<div class="cluster">
+  <label class="choice">
+    <input class="check" type="checkbox" checked />
+    <span>Checkbox</span>
+  </label>
+  <label class="choice">
+    <input class="radio" type="radio" name="align-default" checked />
+    <span>Radio</span>
+  </label>
+  <label class="choice">
+    <input class="switch" type="checkbox" role="switch" checked />
+    <span>Switch</span>
+  </label>
+</div>
+  </div>
+  <div class="docs-code">
+    <pre><code class="language-html">&lt;!-- Same row, three heights: 18px checkbox, 18px radio, 20px switch track. --&gt;
+&lt;div class=&quot;cluster&quot;&gt;
+  &lt;label class=&quot;choice&quot;&gt;
+    &lt;input class=&quot;check&quot; type=&quot;checkbox&quot; checked /&gt;
+    &lt;span&gt;Checkbox&lt;/span&gt;
+  &lt;/label&gt;
+  &lt;label class=&quot;choice&quot;&gt;
+    &lt;input class=&quot;radio&quot; type=&quot;radio&quot; name=&quot;align-default&quot; checked /&gt;
+    &lt;span&gt;Radio&lt;/span&gt;
+  &lt;/label&gt;
+  &lt;label class=&quot;choice&quot;&gt;
+    &lt;input class=&quot;switch&quot; type=&quot;checkbox&quot; role=&quot;switch&quot; checked /&gt;
+    &lt;span&gt;Switch&lt;/span&gt;
+  &lt;/label&gt;
+&lt;/div&gt;</code></pre>
+  </div>
+</div>
+<div class="docs-example">
+  <div class="docs-preview">
+<!-- A looser line-height re-centers every control by the same rule. -->
+<div class="cluster" style="line-height: 2.2;">
+  <label class="choice">
+    <input class="check" type="checkbox" checked />
+    <span>Checkbox</span>
+  </label>
+  <label class="choice">
+    <input class="radio" type="radio" name="align-tall" checked />
+    <span>Radio</span>
+  </label>
+  <label class="choice">
+    <input class="switch" type="checkbox" role="switch" checked />
+    <span>Switch</span>
+  </label>
+</div>
+  </div>
+  <div class="docs-code">
+    <pre><code class="language-html">&lt;!-- A looser line-height re-centers every control by the same rule. --&gt;
+&lt;div class=&quot;cluster&quot; style=&quot;line-height: 2.2;&quot;&gt;
+  &lt;label class=&quot;choice&quot;&gt;
+    &lt;input class=&quot;check&quot; type=&quot;checkbox&quot; checked /&gt;
+    &lt;span&gt;Checkbox&lt;/span&gt;
+  &lt;/label&gt;
+  &lt;label class=&quot;choice&quot;&gt;
+    &lt;input class=&quot;radio&quot; type=&quot;radio&quot; name=&quot;align-tall&quot; checked /&gt;
+    &lt;span&gt;Radio&lt;/span&gt;
+  &lt;/label&gt;
+  &lt;label class=&quot;choice&quot;&gt;
+    &lt;input class=&quot;switch&quot; type=&quot;checkbox&quot; role=&quot;switch&quot; checked /&gt;
+    &lt;span&gt;Switch&lt;/span&gt;
+  &lt;/label&gt;
+&lt;/div&gt;</code></pre>
+  </div>
+</div>
+<div class="docs-example">
+  <div class="docs-preview">
+<!-- Scaling --choice-control-size grows the checkbox and the switch
+     track together, and the row stays aligned. -->
+<div class="cluster" style="--choice-control-size: 1.5em;">
+  <label class="choice">
+    <input class="check" type="checkbox" checked />
+    <span>Checkbox</span>
+  </label>
+  <label class="choice">
+    <input class="radio" type="radio" name="align-big" checked />
+    <span>Radio</span>
+  </label>
+  <label class="choice">
+    <input class="switch" type="checkbox" role="switch" checked />
+    <span>Switch</span>
+  </label>
+</div>
+  </div>
+  <div class="docs-code">
+    <pre><code class="language-html">&lt;!-- Scaling --choice-control-size grows the checkbox and the switch
+     track together, and the row stays aligned. --&gt;
+&lt;div class=&quot;cluster&quot; style=&quot;--choice-control-size: 1.5em;&quot;&gt;
+  &lt;label class=&quot;choice&quot;&gt;
+    &lt;input class=&quot;check&quot; type=&quot;checkbox&quot; checked /&gt;
+    &lt;span&gt;Checkbox&lt;/span&gt;
+  &lt;/label&gt;
+  &lt;label class=&quot;choice&quot;&gt;
+    &lt;input class=&quot;radio&quot; type=&quot;radio&quot; name=&quot;align-big&quot; checked /&gt;
+    &lt;span&gt;Radio&lt;/span&gt;
+  &lt;/label&gt;
+  &lt;label class=&quot;choice&quot;&gt;
+    &lt;input class=&quot;switch&quot; type=&quot;checkbox&quot; role=&quot;switch&quot; checked /&gt;
+    &lt;span&gt;Switch&lt;/span&gt;
+  &lt;/label&gt;
+&lt;/div&gt;</code></pre>
+  </div>
+</div>
+<div class="prose docs-prose">
 <h2 id="css-hooks">CSS hooks</h2>
 <ul>
+<li><code>--choice-control-size</code> — shared size for inline choices; the switch track is
+this plus <code>0.125em</code>, so scaling it scales the checkbox and the switch together.</li>
 <li><code>--switch-width</code> — track width.</li>
 <li><code>--switch-block-size</code> — track height.</li>
 <li><code>--switch-knob-margin</code> — inset between knob and track.</li>
 </ul>
-<p>Knob size and travel distance are derived from these three; set the three rather
-than the derived values. Prefer <code>.sm</code> / <code>.lg</code>, which change <code>--control-size</code>.</p>
+<p>Knob size and travel distance are derived from the three <code>--switch-*</code> hooks; set
+those rather than the derived values. The knob is concentric in its track: the
+inset is measured inside the border on both axes, so it clears the rails by the
+same distance it clears the ends.</p>
 
 </div>
 
@@ -339,6 +464,7 @@ than the derived values. Prefer <code>.sm</code> / <code>.lg</code>, which chang
         <nav class="scrollspy" data-enhance="scrollspy" data-scrollspy-offset="80" aria-label="On this page">
           <p class="docs-nav-group">On this page</p>
           <ul class="nav-list docs-toc-list" data-docs-toc>
+        <li><a class="nav-link" href="#sizing-and-alignment" data-docs-toc-item data-level="2">Sizing and alignment</a></li>
         <li><a class="nav-link" href="#css-hooks" data-docs-toc-item data-level="2">CSS hooks</a></li>
           </ul>
         </nav>
