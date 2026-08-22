@@ -43,6 +43,21 @@ const FEATURES = [
     kind: "safe-drop",
     tier: "intermediate",
   },
+  /* scrollbar-width and scrollbar-color land in Chromium 121 / Safari 18.2,
+     both above the floor. An engine that knows neither draws its native
+     scrollbar, which is the intended fallback. */
+  {
+    name: "scrollbar-width",
+    pattern: /scrollbar-width\b/gi,
+    kind: "safe-drop",
+    tier: "intermediate",
+  },
+  {
+    name: "scrollbar-color",
+    pattern: /scrollbar-color\b/gi,
+    kind: "safe-drop",
+    tier: "intermediate",
+  },
   { name: "light-dark()", pattern: /light-dark\(/gi, kind: "safe-drop", tier: "recommended" },
   {
     name: "text-wrap: balance",

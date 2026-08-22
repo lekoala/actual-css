@@ -68,6 +68,11 @@
   cursor: pointer;
 }
 
+/* No elevation on the knob: --shadow is a surface elevation (card, modal,
+   drawer, fab), and at this size its 12px blur reads as a smudge that spills
+   past the rail while carrying no state. The range thumb — the same kind of
+   small moving part — stays flat for the same reason. The concentric inset
+   against the track is what makes the knob legible. */
 .switch::before {
   content: "";
   inline-size: var(--switch-knob-size);
@@ -75,11 +80,9 @@
   margin-inline: var(--switch-knob-margin);
   border-radius: var(--radius-full);
   background: var(--switch-knob);
-  box-shadow: var(--shadow);
   transition:
     transform var(--duration),
-    background-color var(--duration),
-    box-shadow var(--duration);
+    background-color var(--duration);
 }
 
 .switch:hover:not(:disabled) {

@@ -105,7 +105,10 @@ img { filter: saturate(1.06) contrast(1.03); }
 
 
 .page { padding-block: clamp(1rem, 3vw, 2rem) clamp(4rem, 8vw, 7rem); }
-.page-stack { --gap: clamp(3.5rem, 8vw, 6rem); }
+/* On `gap`, not --gap: .page-stack is a .stack wrapping whole page sections,
+   so the inherited token would push this section rhythm into every nested
+   primitive. */
+.page-stack { gap: clamp(3.5rem, 8vw, 6rem); }
 
 /* Mobile nav: inline links collapse into the drawer. */
 .nav-toggle { display: none; }

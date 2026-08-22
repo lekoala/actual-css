@@ -16,7 +16,7 @@
  *                 balanced subdivision (in grid.css)
  * .column-layout  explicit 12-column region composition; the author owns
  *                 narrow-container recomposition
- * .scroller       quiet custom scrollbar chrome
+ * .scroller       theme-aware scrollbar density and colour
  * .scroll-snap    snap rails
  * .scroll-target  anchor scroll offset for sticky headers
  * .topbar         sticky app-shell top bar

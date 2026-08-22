@@ -22,6 +22,58 @@ block margins are reset, so vertical rhythm always comes from `--gap`. Inline
 margins stay free — for example `margin-inline: auto` on a child centers it
 without fighting the primitive.
 
+## Choosing a density
+
+`--gap` is the primitive's channel, and the density variants set it at the point
+of use. Pick the one that matches how tightly the children belong together:
+
+| Markup | Gap | Use for |
+|--------------------|------|--------------------------------------------------------|
+| `.stack gap-none` | 0 | Lines that form one typographic unit — a name and a job title, a figure and its caption. |
+| `.stack sm` | 8px | A homogeneous series of distinct controls — a radio list, a checkbox list, a compact vertical menu. |
+| `.stack` | 12px | Normal flow between distinct elements. |
+| `.stack lg` | 24px | Sections, or blocks that should read as separated. |
+
+The distinction between the first two matters. `42` above `Open issues` is
+almost a single block of text, so it takes `gap-none`. Three `.choice` labels
+stay three separate controls that happen to form one group, so they take `sm` —
+tighter than the default, but still spaced.
+
+A stack that mixes kinds keeps the default: five `.field` wrappers and one lone
+`.choice` is a form that contains a checkbox, not a list of options, and
+tightening it would squeeze the fields.
+
+## Region rhythm goes on `gap`, not on `--gap`
+
+A container that composes other primitives owns its rhythm through the `gap`
+property. Setting `--gap` on it instead re-spaces everything it contains, at any
+depth:
+
+```css
+/* Leaks: --gap is inherited, so every nested stack, cluster and grid — down to
+   a radio list inside a field-group — is pushed to 24px too. */
+.app-region {
+  --gap: var(--space-50);
+}
+
+/* Owns its own rhythm and nothing else. Nested primitives keep --gap. */
+.app-region {
+  gap: var(--space-50);
+}
+```
+
+Both give the region the same spacing; only the second stops there. This is what
+makes a nested `.stack sm` a real density choice — 12px down to 8px — rather
+than a patch cancelling a rhythm inherited from three levels up.
+
+Setting `--gap` is still the right move on the element that *consumes* it: a
+one-off `--gap` on a card body or an actions row tunes that primitive and
+nothing below it, because the setter is the consumer. The leak only appears when
+a container sets the token and its children read it.
+
+`.sm` and `.lg` are the deliberate exception: they set `--gap` precisely so a
+density context reaches nested layouts.
+
 ## Grouping items tightly
 
 Stack spacing is a `--gap` between every direct child; the primitive cannot

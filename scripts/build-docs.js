@@ -6,6 +6,7 @@
  *   bun run watch:docs         rebuild on source changes
  */
 import {
+  copyFileSync,
   existsSync,
   mkdirSync,
   readdirSync,
@@ -29,18 +30,25 @@ const SITE = join(ROOT, "site");
 const ASSETS = join(SITE, "assets");
 const CHROME = join(__dirname, "docs", "assets");
 const DIST = join(ROOT, "dist");
-const THEMES_BUNDLE = join(ROOT, "demo", "assets", "actual-themes.min.css");
+const THEMES_SOURCE = join(ROOT, "demo", "assets", "actual-themes.min.css");
+const THEMES_BUNDLE = join(ASSETS, "actual-themes.min.css");
 
 // The docs site previews the framework from its source locations: pages link
 // src/css/*.css (so CSS edits are visible without a compile step) and the dist
-// bundles the site depends on. assets/ holds only search-index.js, regenerated
-// on each build; the site chrome (docs.css, docs.js) is edited in
-// scripts/docs/assets/ and referenced in place, so site/ never stores a copy.
-// The theme palettes bundle lives in demo/assets/ (build-themes.js): it is a
-// demo asset, not package surface.
+// bundles the site depends on — both committed, so they resolve when the repo
+// is served as-is. assets/ holds the generated files the site must carry
+// itself: search-index.js and the theme palettes bundle. The site chrome
+// (docs.css, docs.js) is edited in scripts/docs/assets/ and referenced in
+// place, so site/ never stores a copy.
+//
+// build-themes.js writes the palettes bundle to demo/assets/, which is
+// gitignored as demo build output. A page in site/ must never depend on an
+// ignored artifact: served from a fresh clone the link 404s, the theme
+// selector still sets data-theme, and no palette answers it. So the bundle is
+// copied into site/assets/ and linked from there.
 const REQUIRED_ASSETS = [
   { path: join(DIST, "actual.full.js"), command: "bun run build:js" },
-  { path: THEMES_BUNDLE, command: "bun run build:themes" },
+  { path: THEMES_SOURCE, command: "bun run build:themes" },
 ];
 
 function requireAssets() {
@@ -188,15 +196,47 @@ export function buildDocs() {
   mkdirSync(SITE, { recursive: true });
   requireAssets();
   mkdirSync(ASSETS, { recursive: true });
+  copyFileSync(THEMES_SOURCE, THEMES_BUNDLE);
   writePages(navigation, rendered, themes);
   writeSearchIndex(navigation, rendered);
   writeHome(navigation, themes);
   pruneStale(navigation);
   writeReadme();
+  checkGeneratedAssets(navigation);
 
   console.log(`Docs site generated (${navigation.pages.length} pages, ${themes.length} themes).`);
   for (const page of navigation.pages) {
     console.log(`  ${page.url}`);
+  }
+}
+
+/*
+ * Every local href/src a generated page emits must resolve to a file that
+ * exists. Pages link out of site/ into src/ and dist/, so a missing target is
+ * invisible locally the moment any build step has produced it once — and 404s
+ * for everyone served from a clean checkout. Absolute URLs, protocol-relative
+ * URLs, in-page fragments and mailto: are not ours to resolve.
+ */
+function checkGeneratedAssets(navigation) {
+  const outputs = [
+    join(SITE, "index.html"),
+    ...navigation.pages.map((page) => join(SITE, page.url)),
+  ];
+  const missing = [];
+
+  for (const output of outputs) {
+    if (!existsSync(output)) continue;
+    const html = readFileSync(output, "utf8");
+    for (const [, attr, url] of html.matchAll(/\b(href|src)="([^"]+)"/g)) {
+      if (/^(?:[a-z][a-z0-9+.-]*:|\/\/|#|\/)/i.test(url)) continue;
+      const target = resolve(dirname(output), url.split(/[?#]/)[0]);
+      if (!existsSync(target)) missing.push(`${relative(ROOT, output)} -> ${attr}="${url}"`);
+    }
+  }
+
+  if (missing.length > 0) {
+    const list = [...new Set(missing)].slice(0, 20).join("\n  ");
+    throw new Error(`Generated pages reference files that do not exist:\n  ${list}`);
   }
 }
 
