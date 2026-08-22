@@ -20,6 +20,7 @@
  *
  * Internal:
  * --alert-default-bg
+ * --alert-default-fg
  * --alert-default-border
  * --alert-bg
  * --alert-fg
@@ -42,9 +43,10 @@
   --alert-font-size: var(--font-size-md);
   --alert-icon-size: 1.25rem;
   --alert-default-bg: var(--surface-subtle);
+  --alert-default-fg: var(--intent, var(--text));
   --alert-default-border: var(--border);
   --alert-bg: var(--ui-bg, var(--alert-default-bg));
-  --alert-fg: var(--ui-fg, var(--intent, var(--text)));
+  --alert-fg: var(--ui-fg, var(--alert-default-fg));
   --alert-border: var(--ui-border, var(--alert-default-border));
 
   padding-block: var(--alert-pad-block);
@@ -76,14 +78,19 @@
   .alert {
     /* @sync soft-recipe */
     --alert-default-bg: color-mix(
-      in oklch,
+      in oklab,
       var(--surface) var(--soft-bg-mix),
       var(--intent, var(--neutral))
     );
     --alert-default-border: color-mix(
-      in oklch,
+      in oklab,
       var(--surface) var(--soft-border-mix),
       var(--intent, var(--neutral))
+    );
+    --alert-default-fg: color-mix(
+      in oklab,
+      var(--text),
+      var(--intent, var(--text)) var(--soft-fg-mix)
     );
     /* @sync soft-recipe */
   }
@@ -230,7 +237,7 @@
 @supports (color: color-mix(in oklch, red, white)) {
   .alert.admonition > .alert-title {
     background: color-mix(
-      in oklch,
+      in oklab,
       var(--surface) var(--soft-bg-mix),
       var(--intent, var(--neutral))
     );

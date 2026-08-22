@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Soft recipe fixture</title>
+  <link rel="stylesheet" href="../../src/css/actual.full.css">
+  <style>
+    * { transition-duration: 0s !important; }
+
+    /*
+     * The gap this fixture exists to cover: a CHROMATIC surface. Every preset
+     * ships a surface whose chroma is low enough that a polar mix still tracks
+     * the intent hue, and the default light surface is pure white, so no
+     * existing test can reach the case where the surface hue starts to win.
+     *
+     * This surface sits just above that point (oklab chroma ~0.023): a warm
+     * paper tint a theme could plausibly pick. Mixing it in a polar space
+     * rotates soft secondary by 116 degrees into green. The vivid, light intent
+     * palette is modelled on the brutalist preset.
+     */
+    [data-theme="chroma-stress"] {
+      color-scheme: light;
+
+      --surface: hsl(50 55% 93%);
+      --surface-raised: white;
+      --surface-subtle: hsl(48 100% 88%);
+      --surface-solid: hsl(0 0% 5%);
+      --text: hsl(0 0% 5%);
+
+      --primary: hsl(48 100% 50%);
+      --primary-fg: hsl(0 0% 4%);
+      --secondary: hsl(215 100% 55%);
+      --secondary-fg: white;
+      --success: hsl(135 70% 42%);
+      --success-fg: hsl(0 0% 4%);
+      --danger: hsl(0 85% 52%);
+      --danger-fg: white;
+
+      --border: hsl(0 0% 5%);
+      --soft-bg-mix: 72%;
+      --soft-border-mix: 25%;
+      --soft-fg-mix: 45%;
+    }
+
+    /* Same palette, default foreground mix — isolates what --soft-fg-mix does. */
+    [data-theme="chroma-raw"] {
+      --soft-fg-mix: 100%;
+    }
+  </style>
+</head>
+<body>
+  <!-- Palette references so assertions never hard-code sRGB values. -->
+  <div data-theme="chroma-stress">
+    <div id="ref-surface" style="background: var(--surface)"></div>
+    <div id="ref-text" style="color: var(--text)"></div>
+    <div id="ref-primary" style="color: var(--primary)"></div>
+    <div id="ref-secondary" style="color: var(--secondary)"></div>
+    <div id="ref-success" style="color: var(--success)"></div>
+    <div id="ref-danger" style="color: var(--danger)"></div>
+
+    <!-- Soft-by-default components on the chromatic surface. -->
+    <span class="badge primary" id="badge-primary">Primary</span>
+    <span class="badge secondary" id="badge-secondary">Secondary</span>
+    <span class="badge success" id="badge-success">Success</span>
+    <span class="badge danger" id="badge-danger">Danger</span>
+
+    <div class="alert danger" id="alert-danger">Danger alert</div>
+    <div class="alert secondary" id="alert-secondary">Secondary alert</div>
+
+    <!-- Explicit shared variant on a button. -->
+    <button class="btn soft primary" id="btn-primary" type="button">Soft primary</button>
+    <button class="btn soft secondary" id="btn-secondary" type="button">Soft secondary</button>
+
+    <!-- No intent: soft ink must collapse to plain --text, never a mix. -->
+    <span class="badge" id="badge-bare">Bare</span>
+
+    <!-- Nested island: same palette, --soft-fg-mix back at its 100% default. -->
+    <div data-theme="chroma-raw">
+      <span class="badge primary" id="raw-badge-primary">Primary</span>
+      <span class="badge danger" id="raw-badge-danger">Danger</span>
+    </div>
+  </div>
+
+  <!-- Achromatic control: the default theme, whose surface is pure white. The
+       100% default must leave soft ink exactly at the raw intent color. -->
+  <div id="plain">
+    <div id="plain-ref-primary" style="color: var(--primary)"></div>
+    <div id="plain-ref-danger" style="color: var(--danger)"></div>
+    <div id="plain-ref-text" style="color: var(--text)"></div>
+    <span class="badge primary" id="plain-badge-primary">Primary</span>
+    <span class="badge danger" id="plain-badge-danger">Danger</span>
+    <span class="badge" id="plain-badge-bare">Bare</span>
+  </div>
+</body>
+</html>

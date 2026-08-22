@@ -1,12 +1,12 @@
 {
-  "totalRaw": 229751,
+  "totalRaw": 232565,
   "core": {
-    "minified": 10524,
-    "brotli": 2501
+    "minified": 10635,
+    "brotli": 2520
   },
   "full": {
-    "minified": 106389,
-    "brotli": 15641
+    "minified": 106777,
+    "brotli": 15692
   },
   "js": {
     "core": {
@@ -18,7 +18,7 @@
       "brotli": 15986
     }
   },
-  "fileCount": 101,
+  "fileCount": 102,
   "files": [
     {
       "file": "components/modal.css",
@@ -30,11 +30,11 @@
     },
     {
       "file": "components/alert.css",
-      "raw": 7658
+      "raw": 7856
     },
     {
       "file": "core/tokens.css",
-      "raw": 7568
+      "raw": 7821
     },
     {
       "file": "core/theme.css",
@@ -46,15 +46,15 @@
     },
     {
       "file": "components/badge.css",
-      "raw": 5364
+      "raw": 5493
+    },
+    {
+      "file": "typography/prose.css",
+      "raw": 5100
     },
     {
       "file": "layout/grid.css",
       "raw": 4897
-    },
-    {
-      "file": "typography/prose.css",
-      "raw": 4869
     },
     {
       "file": "components/avatar.css",
@@ -90,7 +90,7 @@
     },
     {
       "file": "core/variants.css",
-      "raw": 3911
+      "raw": 4005
     },
     {
       "file": "themes/gradient.css",
@@ -181,6 +181,10 @@
       "raw": 2362
     },
     {
+      "file": "themes/index.css",
+      "raw": 2325
+    },
+    {
       "file": "themes/forest.css",
       "raw": 2273
     },
@@ -195,10 +199,6 @@
     {
       "file": "components/chat.css",
       "raw": 2205
-    },
-    {
-      "file": "themes/index.css",
-      "raw": 2174
     },
     {
       "file": "themes/corporate.css",
@@ -223,6 +223,10 @@
     {
       "file": "components/accordion.css",
       "raw": 1936
+    },
+    {
+      "file": "themes/brutalist.css",
+      "raw": 1758
     },
     {
       "file": "effects/aura.css",

@@ -106,7 +106,7 @@ surface variants (`.card.subtle`) still take precedence.
 
 ### Use or adapt a preset palette
 
-`src/css/themes/` holds example palettes (`ocean`, `spruce`, `neon`, …) as
+`src/css/themes/` holds example palettes (`ocean`, `spruce`, `neon`, `brutalist`, …) as
 reference material to copy into your own `[data-theme]` island — they are demo
 assets, not package entrypoints. Each sets the intent/surface/text tokens and
 lets the core derive everything else. In browsers with `color-mix()` support,

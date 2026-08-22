@@ -133,7 +133,7 @@
 
   .btn.soft {
     --ui-hover-bg: color-mix(
-      in oklch,
+      in oklab,
       var(--surface) calc(var(--soft-bg-mix) - var(--soft-hover-alpha)),
       var(--intent, var(--neutral))
     );

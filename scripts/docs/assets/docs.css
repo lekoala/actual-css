@@ -154,10 +154,20 @@
   --card-max-inline-size: 18rem;
 }
 
+/* --surface-subtle is an expressive tinted surface in several presets (a wide
+   yellow panel under brutalist), which is a lot to ask of a long code listing.
+   Keep a quarter of it so the block still carries the theme, over the neutral
+   raised surface. */
 .docs-code {
   position: relative;
   border-block-start: var(--border-width) solid var(--border);
-  background: var(--surface-subtle);
+  background: var(--surface-raised);
+}
+
+@supports (color: color-mix(in oklab, red, white)) {
+  .docs-code {
+    background: color-mix(in oklab, var(--surface-raised), var(--surface-subtle) 25%);
+  }
 }
 
 .docs-code pre {
@@ -403,12 +413,65 @@
 }
 
 /* --- Prism syntax tokens (progressive enhancement: no CDN = plain code) ---
-   Tokens map to Actual design tokens so highlighting follows light/dark/themes. */
+   A purpose-built palette, not a derivation of the theme intents.
+
+   Deriving it was tried and does not work. Raw intents are a component
+   palette — built to sit under their own --*-fg or to tint a surface, not to
+   carry 14px text — and across the 17 presets they fall below AA on 14 of them
+   (brutalist 1.36, gradient 1.45, sunset 1.55). Rebating them toward --text
+   fixes that but crushes lightness and chroma together, collapsing the tokens
+   onto each other: 0.023 oklab dE on the default theme, under the perceptual
+   threshold, which reads as plain dark text. And no derivation can do better,
+   because five semantic intents are not a syntax palette — on the monochromatic
+   presets (petrol, ocean, edge, mono) they are deliberately close, 0.064 apart
+   before any rebate.
+
+   So the hues are fixed and chosen for separation: 0/47/144/251/303 plus a
+   neutral, optimised so the tightest pair is as far apart as possible in BOTH
+   variants at once. That lands at 0.141 oklab dE — six times the derived
+   version, and twice the raw intents at their best.
+
+   Lightness is bounded by the surfaces the block actually gets, with headroom:
+   the targets are 5.2:1 rather than a bare 4.5, so a theme nudging its
+   --surface-subtle cannot quietly drop the block below AA. The binding cases
+   are cyberpunk's yellow code surface (luminance 0.833) for the light variant
+   and dim for the dark one; the dark variant is also capped so nothing glows.
+
+   The block still reads as part of the theme: its surface is theme-derived.
+   Only the ink is fixed. Private to the docs either way — syntax highlighting
+   belongs to Prism, not to the framework's public token contract.
+
+   light-dark() follows each preset's own color-scheme, so this needs no theme
+   list. Without support for it (below the framework's Safari floor) the light
+   variant applies everywhere, which is wrong on the three dark presets — a
+   demo-only degradation on a docs site. */
+
+:root,
+[data-theme] {
+  --syntax-keyword: #bd0063;
+  --syntax-string: #007013;
+  --syntax-function: #0061ac;
+  --syntax-property: #9001eb;
+  --syntax-operator: #a24500;
+  --syntax-comment: #606060;
+}
+
+@supports (color: light-dark(red, blue)) {
+  :root,
+  [data-theme] {
+    --syntax-keyword: light-dark(#bd0063, #ff639e);
+    --syntax-string: light-dark(#007013, #03cf2d);
+    --syntax-function: light-dark(#0061ac, #3b9fff);
+    --syntax-property: light-dark(#9001eb, #b980fe);
+    --syntax-operator: light-dark(#a24500, #ff7102);
+    --syntax-comment: light-dark(#606060, #b3b3b3);
+  }
+}
 
 .token.comment,
 .token.prolog,
 .token.cdata {
-  color: var(--text-muted);
+  color: var(--syntax-comment);
 }
 
 .token.property,
@@ -417,7 +480,7 @@
 .token.number,
 .token.constant,
 .token.symbol {
-  color: var(--primary);
+  color: var(--syntax-property);
 }
 
 .token.selector,
@@ -426,14 +489,14 @@
 .token.char,
 .token.builtin,
 .token.inserted {
-  color: var(--success);
+  color: var(--syntax-string);
 }
 
 .token.operator,
 .token.entity,
 .token.url,
 .token.attr-value {
-  color: var(--warning);
+  color: var(--syntax-operator);
 }
 
 .token.keyword,
@@ -441,10 +504,10 @@
 .token.rule,
 .token.important,
 .token.deleted {
-  color: var(--danger);
+  color: var(--syntax-keyword);
 }
 
 .token.function,
 .token.class-name {
-  color: var(--secondary);
+  color: var(--syntax-function);
 }
