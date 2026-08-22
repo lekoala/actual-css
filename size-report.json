@@ -1,12 +1,12 @@
 {
-  "totalRaw": 232565,
+  "totalRaw": 232945,
   "core": {
     "minified": 10635,
     "brotli": 2520
   },
   "full": {
-    "minified": 106777,
-    "brotli": 15692
+    "minified": 106856,
+    "brotli": 15700
   },
   "js": {
     "core": {
@@ -117,6 +117,10 @@
       "raw": 3316
     },
     {
+      "file": "components/menu.css",
+      "raw": 3032
+    },
+    {
       "file": "components/tooltip.css",
       "raw": 2959
     },
@@ -139,10 +143,6 @@
     {
       "file": "forms/custom-select.css",
       "raw": 2671
-    },
-    {
-      "file": "components/menu.css",
-      "raw": 2652
     },
     {
       "file": "themes/spruce.css",

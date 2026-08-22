@@ -4766,6 +4766,9 @@ dialog.drawer > form > header {
  *
  * Public hooks:
  * --menu-item-icon-size
+ *
+ * Intent: .menu-item consumes --intent as its text color, so intent classes
+ * (.danger, .success, …) tint an item without a per-intent variant.
  */
 
 .menu {
@@ -4780,6 +4783,13 @@ dialog.drawer > form > header {
   margin: 0;
 }
 
+/* Intent boundary — inherited intents do not tint this component.
+   Local intent classes still win because :where() has zero specificity. */
+:where(.menu-item) {
+  --intent: initial;
+  --intent-fg: initial;
+}
+
 .menu-item {
   --menu-item-icon-size: 1.25em;
 
@@ -4792,7 +4802,7 @@ dialog.drawer > form > header {
   border: 0;
   border-radius: var(--radius-sm);
   background: transparent;
-  color: var(--text);
+  color: var(--intent, var(--text));
   font: inherit;
   text-align: start;
   text-decoration: none;
