@@ -5,17 +5,19 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Tables - Admini on Actual CSS</title>
-  <meta name="description" content="Data tables with sorting, pagination, row selection, and responsive design.">
-  <link rel="stylesheet" href="../../dist/actual.full.css">
-  <link rel="stylesheet" href="../assets/actual-themes.min.css">
+  <meta name="description" content="Data tables with scroll regions, status badges, pagination, and right-click row actions.">
+
+  <script src="admini-theme.js"></script>
+  <link rel="stylesheet" href="../../../dist/actual.full.css">
+  <link rel="stylesheet" href="../../assets/actual-themes.min.css">
   <link rel="stylesheet" href="admini.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.46.0/dist/tabler-icons.min.css">
 </head>
 
 <body>
   <div class="admini-shell">
     <!-- admini-shell:sidebar -->
-    <aside class="admini-sidebar" aria-label="Primary navigation">
+    <aside class="admini-sidebar scroller stable-gutter" aria-label="Primary navigation">
       <a class="navbar-brand" href="index.html">
         <span class="avatar primary"><abbr>AD</abbr></span>
         <span>Admini</span>
@@ -133,7 +135,7 @@
 
       <div class="flyout-trigger stretch">
         <button class="btn neutral ghost" data-enhance="flyout" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="sidebar-user-menu"
-          id="sidebar-user-trigger" style="justify-content: flex-start;">
+          id="sidebar-user-trigger">
           <span class="avatar sm"><abbr>JN</abbr></span>
           <span>John Nemo</span>
         </button>
@@ -208,8 +210,9 @@
           <p class="overline">Manage</p>
           <h1>Tables</h1>
           <p class="muted">
-            Tables scroll inside <code>.table-wrap</code> rather than breaking the page layout. Resize the window to see the
-            wide table below scroll horizontally while everything around it stays put.
+            Tables scroll inside <code>.table-wrap</code> rather than breaking the page layout, and rows expose a
+            right-click menu (long-press on touch). Resize the window to see the wide table below scroll horizontally
+            while everything around it stays put.
           </p>
         </hgroup>
 
@@ -232,7 +235,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr>
+                <tr data-context-menu="row-menu" data-context-menu-long-press tabindex="0">
                   <th scope="row">1</th>
                   <td>Mark</td>
                   <td>Otto</td>
@@ -240,7 +243,7 @@
                   <td><span class="badge primary soft">Admin</span></td>
                   <td class="text-nowrap muted">2 minutes ago</td>
                 </tr>
-                <tr>
+                <tr data-context-menu="row-menu" data-context-menu-long-press tabindex="0">
                   <th scope="row">2</th>
                   <td>Jacob</td>
                   <td>Thornton</td>
@@ -248,14 +251,14 @@
                   <td><span class="badge neutral soft">Editor</span></td>
                   <td class="text-nowrap muted">1 hour ago</td>
                 </tr>
-                <tr>
+                <tr data-context-menu="row-menu" data-context-menu-long-press tabindex="0">
                   <th scope="row">3</th>
                   <td colspan="2">Larry the Bird</td>
                   <td>@twitter</td>
                   <td><span class="badge neutral soft">Subscriber</span></td>
                   <td class="text-nowrap muted">Yesterday</td>
                 </tr>
-                <tr>
+                <tr data-context-menu="row-menu" data-context-menu-long-press tabindex="0">
                   <th scope="row">4</th>
                   <td>Rin</td>
                   <td>Moreau</td>
@@ -289,7 +292,8 @@
               <h2>Compact table</h2>
             </header>
             <div class="table-wrap">
-              <table class="table">
+              <table class="table compact">
+                <caption class="sr-only">Standings by position</caption>
                 <thead>
                   <tr>
                     <th scope="col">Pos</th>
@@ -312,6 +316,7 @@
             </header>
             <div class="table-wrap">
               <table class="table">
+                <caption class="sr-only">Invoice payment status</caption>
                 <thead>
                   <tr>
                     <th scope="col">Invoice</th>
@@ -340,7 +345,7 @@
     </div>
   </div>
 
-  <dialog class="drawer" id="navigation-drawer" aria-label="Navigation">
+  <dialog class="drawer" data-theme="dim" id="navigation-drawer" aria-label="Navigation">
     <header class="cluster" style="--cluster-justify: space-between;">
       <strong>Admini</strong>
       <form method="dialog">
@@ -368,20 +373,15 @@
     </nav>
   </dialog>
 
-  <script src="../../dist/actual.full.js"></script>
-  <script>
-    const switcher = document.getElementById("theme-switcher");
+  <menu class="flyout sm menu" role="menu" id="row-menu" aria-label="Row actions" hidden>
+    <li><button class="menu-item" type="button" role="menuitem">View profile</button></li>
+    <li><button class="menu-item" type="button" role="menuitem">Copy handle<span class="menu-item-end"><kbd class="key">C</kbd></span></button></li>
+    <hr class="menu-separator" role="separator">
+    <li><button class="menu-item danger" type="button" role="menuitem">Remove member</button></li>
+  </menu>
 
-    if (switcher) {
-      switcher.addEventListener("change", () => {
-        if (switcher.value) {
-          document.documentElement.dataset.theme = switcher.value;
-        } else {
-          document.documentElement.removeAttribute("data-theme");
-        }
-      });
-    }
-  </script>
+  <script src="../../../dist/actual.full.js" defer></script>
+
 </body>
 
 </html>

@@ -64,3 +64,9 @@
 .table > :last-child > tr:last-child > * {
   border-block-end: 0;
 }
+
+/* Same compact vocabulary as .card.compact: one hook change, no selector
+   duplication. Density is padding only — typography never changes. */
+.table.compact {
+  --table-cell-pad: var(--space-20);
+}

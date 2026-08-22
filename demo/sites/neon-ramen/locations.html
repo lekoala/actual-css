@@ -1,0 +1,287 @@
+<!doctype html>
+<html data-theme="dark" lang="en">
+  <head>
+    <!-- Reference app: expected at demo/sites/neon-ramen/ -->
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <title>Locations — Neon Ramen</title>
+    <link href="../../../dist/actual.full.css" rel="stylesheet">
+    <link href="neon-site.css" rel="stylesheet">
+  </head>
+  <body class="app-shell">
+    <header class="site-header">
+      <div class="center">
+        <nav aria-label="Main navigation" class="navbar">
+          <a class="navbar-brand brand-mark" href="index.html">NEONRAMEN <em>未来のラーメン</em></a>
+          <ul class="navbar-nav">
+            <li>
+              <a class="nav-link" href="index.html">Home</a>
+            </li>
+            <li>
+              <a class="nav-link" href="menu.html">Menu</a>
+            </li>
+            <li>
+              <a aria-current="page" class="nav-link" href="locations.html">Locations</a>
+            </li>
+            <li>
+              <a class="nav-link" href="item.html">Spicy Miso</a>
+            </li>
+          </ul>
+          <div class="cluster nav-order" style="--gap:.5rem">
+            <a class="btn primary cyber-btn sm" href="order.html">Order pickup</a>
+          </div>
+          <button aria-controls="site-drawer" aria-haspopup="dialog" aria-label="Open navigation" class="btn ghost secondary sm nav-toggle" command="show-modal" commandfor="site-drawer" type="button">Menu</button>
+        </nav>
+      </div>
+    </header>
+    <dialog aria-label="Main navigation" class="drawer" id="site-drawer">
+      <header>
+        <strong class="brand-mark">NEONRAMEN <em>未来のラーメン</em></strong>
+        <form method="dialog">
+          <button aria-label="Close navigation" class="drawer-close" type="submit"></button>
+        </form>
+      </header>
+      <nav>
+        <ul class="nav-list stack" style="--gap:.15rem">
+          <li>
+            <a class="nav-link" href="index.html">Home</a>
+          </li>
+          <li>
+            <a class="nav-link" href="menu.html">Menu</a>
+          </li>
+          <li>
+            <a aria-current="page" class="nav-link" href="locations.html">Locations</a>
+          </li>
+          <li>
+            <a class="nav-link" href="item.html">Spicy Miso</a>
+          </li>
+        </ul>
+      </nav>
+      <footer>
+        <a class="btn primary cyber-btn" href="order.html">Order pickup</a>
+      </footer>
+    </dialog>
+    <main class="page">
+      <div class="center">
+        <div class="stack page-stack">
+          <section aria-labelledby="locations-title" class="grid location-layout">
+            <div class="stack location-copy">
+              <span class="overline brand-overline">Track the fleet</span>
+              <h1 class="section-title" id="locations-title">Cart board</h1>
+              <p class="lede measure">The cart moves with the night. Watch live openings and pickup windows, then lock your pickup point at checkout.</p>
+              <ul class="location-list list-reset">
+                <li class="cluster location-row">
+                  <div>
+                    <strong>Causeway Bay</strong>
+                    <span>Tin Lok Lane · Causeway Bay</span>
+                  </div>
+                  <b class="status-open"><i aria-hidden="true" class="dot dot-live"></i> OPEN</b>
+                </li>
+                <li class="cluster location-row">
+                  <div>
+                    <strong>Kowloon City</strong>
+                    <span>Carpenter Road Park</span>
+                  </div>
+                  <b class="status-open"><i aria-hidden="true" class="dot dot-live"></i> OPEN</b>
+                </li>
+                <li class="cluster location-row">
+                  <div>
+                    <strong>Central</strong>
+                    <span>D'Aguilar Street · Lan Kwai Fong</span>
+                  </div>
+                  <b class="status-open warning">5PM</b>
+                </li>
+              </ul>
+            </div>
+            <div class="aura" style="--aura-color:var(--primary); --aura-blur:1.2rem;">
+              <figure class="frame cart-visual">
+                <img alt="Neon ramen cart glowing on a night street" src="assets/hero-cart.webp">
+                <figcaption class="signal">
+                  Causeway Bay // open now // pickup 8–12 min
+                </figcaption>
+              </figure>
+              <span class="chip one"><i aria-hidden="true" class="dot dot-live"></i> <b>LIVE</b> · 3 carts</span>
+              <span class="chip two">avg <b>12 min</b> hand-off</span>
+            </div>
+          </section>
+          <section aria-labelledby="board-title">
+            <div class="stack" style="--gap:.4rem; margin-block-end:1.5rem">
+              <span class="overline brand-overline">Cart network</span>
+              <h2 class="section-title" id="board-title">Pick your point</h2>
+            </div>
+            <div aria-hidden="true" class="signal-rule"><span class="signal-tris"><i></i><i></i><i></i><i></i><i></i><i></i></span><span class="signal-line"></span><span class="signal-code">CART//03</span></div>
+            <div class="grid location-board">
+              <div class="stack location-cards">
+                <a class="location-choice active" href="order.html">
+                  <div class="cluster location-choice-head">
+                    <div>
+                      <strong>Causeway Bay</strong>
+                      <span>Tin Lok Lane · Causeway Bay</span>
+                    </div>
+                    <b class="status-open"><i aria-hidden="true" class="dot dot-live"></i> OPEN</b>
+                  </div>
+                  <div class="location-choice-meta">
+                    <div><b>Pickup</b><span>8–12 min</span></div>
+                    <div><b>Hours</b><span>11AM–11PM</span></div>
+                  </div>
+                </a>
+                <a class="location-choice" href="order.html">
+                  <div class="cluster location-choice-head">
+                    <div>
+                      <strong>Kowloon City</strong>
+                      <span>Carpenter Road Park</span>
+                    </div>
+                    <b class="status-open"><i aria-hidden="true" class="dot dot-live"></i> OPEN</b>
+                  </div>
+                  <div class="location-choice-meta">
+                    <div><b>Pickup</b><span>10–15 min</span></div>
+                    <div><b>Hours</b><span>12PM–11PM</span></div>
+                  </div>
+                </a>
+                <a class="location-choice" href="order.html">
+                  <div class="cluster location-choice-head">
+                    <div>
+                      <strong>Mong Kok</strong>
+                      <span>Sai Yeung Choi Street South</span>
+                    </div>
+                    <b class="status-open"><i aria-hidden="true" class="dot dot-live"></i> OPEN</b>
+                  </div>
+                  <div class="location-choice-meta">
+                    <div><b>Pickup</b><span>12–18 min</span></div>
+                    <div><b>Hours</b><span>12PM–12AM</span></div>
+                  </div>
+                </a>
+                <a class="location-choice" href="order.html">
+                  <div class="cluster location-choice-head">
+                    <div>
+                      <strong>Central</strong>
+                      <span>D'Aguilar Street · Lan Kwai Fong</span>
+                    </div>
+                    <b class="status-open warning">OPENS 5 PM</b>
+                  </div>
+                  <div class="location-choice-meta">
+                    <div><b>Pickup</b><span>15–20 min</span></div>
+                    <div><b>Hours</b><span>5PM–1AM</span></div>
+                  </div>
+                </a>
+              </div>
+              <div class="stack" style="--gap:1rem">
+                <figure class="frame map-frame">
+                  <img alt="Neon cyberpunk map of Hong Kong with ramen cart pins" src="assets/map-hong-kong.webp">
+                </figure>
+                <article class="card location-detail cut">
+                  <div class="location-detail-grid">
+                    <div class="frame">
+                      <img alt="Causeway Bay ramen cart at night" src="assets/cart-night.webp">
+                    </div>
+                    <div class="stack detail-right">
+                      <div class="stack detail-copy">
+                        <div class="cluster" style="--cluster-justify:space-between; --gap:1rem">
+                          <div>
+                            <span class="overline brand-overline">Pin 01</span>
+                            <h3 style="font-size:clamp(1.6rem,3vw,2.2rem); margin:0">Causeway Bay</h3>
+                            <p class="muted" style="margin:0">Tin Lok Lane, Causeway Bay</p>
+                          </div>
+                          <b class="status-open"><i aria-hidden="true" class="dot dot-live"></i> OPEN NOW</b>
+                        </div>
+                        <div class="detail-meta">
+                          <div class="detail-mini"><b>Status</b><span>Open now</span></div>
+                          <div class="detail-mini"><b>Pickup time</b><span>8–12 min</span></div>
+                          <div class="detail-mini"><b>Hours</b><span>11AM–11PM</span></div>
+                        </div>
+                        <p>Located in the heart of Causeway Bay. Easy pickup, bold flavors, zero wait. Lock the cart now and head straight to the terminal.</p>
+                        <div class="cluster detail-tags">
+                          <span class="badge secondary soft">Near shopping</span>
+                          <span class="badge secondary soft">Pedestrian area</span>
+                          <span class="badge secondary soft">Card only</span>
+                        </div>
+                      </div>
+                      <div class="stack detail-side">
+                        <div>
+                          <span class="overline brand-overline">Directions</span>
+                          <p class="muted" style="margin-block:.45rem 0">2-min walk from Causeway Bay MTR Exit E.</p>
+                        </div>
+                        <a class="btn outline secondary cyber-btn sm" href="order.html">View on map</a>
+                        <div>
+                          <span class="overline brand-overline">Featured ramen</span>
+                          <div class="feature-item">
+                            <div class="frame">
+                              <img alt="Spicy miso ramen" src="assets/bowl-spicy-miso.webp">
+                            </div>
+                            <div>
+                              <strong>Spicy miso</strong>
+                              <div class="price">HK$82</div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </article>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </main>
+    <footer class="site-footer">
+      <div class="center">
+        <div class="grid footer-grid">
+          <div class="stack" style="--gap:.65rem">
+            <strong class="brand-mark">NEONRAMEN <em>未来のラーメン</em></strong>
+            <p class="muted">Cyberpunk ramen running the night circuit. Hot broth, zero queues.</p>
+          </div>
+          <div>
+            <strong class="overline brand-overline">Navigate</strong>
+            <ul class="list-reset">
+              <li>
+                <a href="menu.html">Menu</a>
+              </li>
+              <li>
+                <a href="locations.html">Locations</a>
+              </li>
+              <li>
+                <a href="order.html">Pickup</a>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <strong class="overline brand-overline">Signal</strong>
+            <ul class="list-reset">
+              <li>
+                <a href="locations.html">Nearest cart</a>
+              </li>
+              <li>
+                <a href="item.html">Spicy Miso</a>
+              </li>
+              <li>
+                <span class="muted">NR-APP v2.4</span>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <strong class="overline brand-overline">Hours</strong>
+            <ul class="list-reset">
+              <li>
+                <span class="muted">Mon–Thu · 5PM–2AM</span>
+              </li>
+              <li>
+                <span class="muted">Fri–Sat · 5PM–4AM</span>
+              </li>
+              <li>
+                <span class="muted">Sun · closed</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="cluster footer-bottom">
+          <span>© 2026 Neon Ramen City Circuit</span>
+          <span>All carts <b>● LIVE</b> · avg pickup 12 min</span>
+        </div>
+      </div>
+    </footer>
+    <div aria-atomic="true" aria-live="polite" class="status-bar" data-status id="app-status" role="status"></div>
+    <script src="../../../dist/actual.full.js">
+    </script>
+  </body>
+</html>

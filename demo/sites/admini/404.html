@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>404 - Admini on Actual CSS</title>
+  <meta name="description" content="Custom 404 error page with navigation back to the dashboard.">
+
+  <script src="admini-theme.js"></script>
+  <link rel="stylesheet" href="../../../dist/actual.full.css">
+  <link rel="stylesheet" href="../../assets/actual-themes.min.css">
+  <link rel="stylesheet" href="admini.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.46.0/dist/tabler-icons.min.css">
+</head>
+
+<body>
+  <div class="admini-error stack items-center">
+    <p class="admini-error-code">404</p>
+    <hgroup>
+      <h1>Page not found</h1>
+      <p class="muted">The page you're looking for doesn't exist or was moved.</p>
+    </hgroup>
+
+    <div class="cluster" style="justify-content: center;">
+      <a class="btn primary" href="index.html">
+        <i class="ti ti-arrow-left" aria-hidden="true"></i>
+        Back to dashboard
+      </a>
+      <a class="btn neutral outline" href="mailto:support@example.com">Contact support</a>
+    </div>
+
+    <select class="select sm fit" id="theme-switcher" aria-label="Switch theme">
+      <option value="">System</option>
+      <option value="light">Light</option>
+      <option value="indigo">Indigo</option>
+      <option value="dim">Dim</option>
+      <option value="corporate">Corporate</option>
+      <option value="forest">Forest</option>
+      <option value="ocean">Ocean</option>
+      <option value="spruce">Spruce</option>
+      <option value="petrol">Petrol</option>
+      <option value="sunset">Sunset</option>
+      <option value="lavender">Lavender</option>
+      <option value="mono">Mono</option>
+      <option value="square">Square</option>
+      <option value="edge">Edge</option>
+      <option value="cyberpunk">Cyberpunk</option>
+      <option value="neon">Neon</option>
+      <option value="gradient">Gradient</option>
+    </select>
+  </div>
+
+  <script src="../../../dist/actual.full.js" defer></script>
+
+</body>
+
+</html>

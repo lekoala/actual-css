@@ -1,0 +1,306 @@
+<!doctype html>
+<html data-theme="dark" lang="en">
+  <head>
+    <!-- Reference app: expected at demo/sites/neon-ramen/ -->
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <title>Order pickup — Neon Ramen</title>
+    <link href="../../../dist/actual.full.css" rel="stylesheet">
+    <link href="neon-site.css" rel="stylesheet">
+  </head>
+  <body class="app-shell">
+    <header class="site-header">
+      <div class="center">
+        <nav aria-label="Main navigation" class="navbar">
+          <a class="navbar-brand brand-mark" href="index.html">NEONRAMEN <em>未来のラーメン</em></a>
+          <ul class="navbar-nav">
+            <li>
+              <a class="nav-link" href="index.html">Home</a>
+            </li>
+            <li>
+              <a class="nav-link" href="menu.html">Menu</a>
+            </li>
+            <li>
+              <a class="nav-link" href="locations.html">Locations</a>
+            </li>
+            <li>
+              <a class="nav-link" href="item.html">Spicy Miso</a>
+            </li>
+          </ul>
+          <div class="cluster nav-order" style="--gap:.5rem">
+            <a aria-current="page" class="btn primary cyber-btn sm" href="order.html">Order pickup</a>
+          </div>
+          <button aria-controls="site-drawer" aria-haspopup="dialog" aria-label="Open navigation" class="btn ghost secondary sm nav-toggle" command="show-modal" commandfor="site-drawer" type="button">Menu</button>
+        </nav>
+      </div>
+    </header>
+    <dialog aria-label="Main navigation" class="drawer" id="site-drawer">
+      <header>
+        <strong class="brand-mark">NEONRAMEN <em>未来のラーメン</em></strong>
+        <form method="dialog">
+          <button aria-label="Close navigation" class="drawer-close" type="submit"></button>
+        </form>
+      </header>
+      <nav>
+        <ul class="nav-list stack" style="--gap:.15rem">
+          <li>
+            <a class="nav-link" href="index.html">Home</a>
+          </li>
+          <li>
+            <a class="nav-link" href="menu.html">Menu</a>
+          </li>
+          <li>
+            <a class="nav-link" href="locations.html">Locations</a>
+          </li>
+          <li>
+            <a class="nav-link" href="item.html">Spicy Miso</a>
+          </li>
+        </ul>
+      </nav>
+      <footer>
+        <a class="btn primary cyber-btn" href="order.html">Order pickup</a>
+      </footer>
+    </dialog>
+    <main class="page">
+      <div class="center">
+        <div class="stack page-stack">
+          <section class="grid order-layout">
+            <div class="stack" style="--gap:1.25rem">
+              <div class="stack" style="--gap:.4rem">
+                <span class="overline brand-overline">Checkout · wire</span>
+                <h1 class="section-title">Order pickup</h1>
+                <p class="lede measure">Lock your cart, tune your pickup window, and send the signal. Pay at the terminal, grab and go.</p>
+              </div>
+              <div aria-hidden="true" class="signal-rule"><span class="signal-tris"><i></i><i></i><i></i><i></i><i></i><i></i></span><span class="signal-line"></span><span class="signal-code">WIRE//02</span></div>
+              <div class="stack" style="--gap:.85rem">
+                <span class="overline brand-overline">Your cart</span>
+                <article class="card stack" style="--gap:.75rem">
+                  <div class="cluster" style="--cluster-justify:space-between; --gap:.75rem">
+                    <div class="grow media items-center" style="--gap:.75rem">
+                      <div class="frame" style="--frame-ratio:1/1; inline-size:4rem; block-size:4rem; border-radius:var(--radius)">
+                        <img alt="Spicy miso ramen" src="assets/bowl-spicy-miso.webp">
+                      </div>
+                      <div class="stack" style="--gap:.15rem">
+                        <strong>Spicy miso</strong>
+                        <span class="muted">Regular · rich broth · +egg</span>
+                      </div>
+                    </div>
+                    <div class="stack text-end" style="--gap:.15rem">
+                      <strong class="price">HK$100</strong>
+                      <span class="muted">× 1</span>
+                    </div>
+                  </div>
+                </article>
+                <article class="card stack" style="--gap:.75rem">
+                  <div class="cluster" style="--cluster-justify:space-between; --gap:.75rem">
+                    <div class="grow media items-center" style="--gap:.75rem">
+                      <div class="frame" style="--frame-ratio:1/1; inline-size:4rem; block-size:4rem; border-radius:var(--radius)">
+                        <img alt="Shoyu chicken ramen" src="assets/bowl-shoyu-chicken.webp">
+                      </div>
+                      <div class="stack" style="--gap:.15rem">
+                        <strong>Shoyu chicken</strong>
+                        <span class="muted">Light broth · bamboo · corn</span>
+                      </div>
+                    </div>
+                    <div class="stack text-end" style="--gap:.15rem">
+                      <strong class="price">HK$76</strong>
+                      <span class="muted">× 1</span>
+                    </div>
+                  </div>
+                </article>
+                <article class="card stack" style="--gap:.75rem">
+                  <div class="cluster" style="--cluster-justify:space-between; --gap:.75rem">
+                    <div class="grow media items-center" style="--gap:.75rem">
+                      <div class="frame" style="--frame-ratio:1/1; inline-size:4rem; block-size:4rem; border-radius:var(--radius)">
+                        <img alt="Karaage fried chicken" src="assets/karaage.webp">
+                      </div>
+                      <div class="stack" style="--gap:.15rem">
+                        <strong>Karaage</strong>
+                        <span class="muted">Yuzu mayo</span>
+                      </div>
+                    </div>
+                    <div class="stack text-end" style="--gap:.15rem">
+                      <strong class="price">HK$42</strong>
+                      <span class="muted">× 1</span>
+                    </div>
+                  </div>
+                </article>
+                <div class="card field-card stack" style="--gap:.2rem">
+                  <div class="cluster summary-row"><span>Subtotal</span><span class="mono">HK$218</span></div>
+                  <div class="cluster summary-row"><span>Pickup fee</span><span class="mono">FREE</span></div>
+                  <div class="cluster summary-row"><span>Service charge</span><span class="mono">HK$6</span></div>
+                  <div class="cluster summary-row total"><span>Total</span><strong class="price">HK$224</strong></div>
+                </div>
+                <a class="btn ghost secondary" href="menu.html">← Add more items</a>
+              </div>
+            </div>
+            <form action="order.html" class="stack needs-validation" data-enhance="validation" data-validation-message="Please check the highlighted fields." method="get" style="--gap:1.25rem">
+              <article class="card field-card stack" style="--gap:1rem">
+                <span class="overline brand-overline">Retrieval details</span>
+                <div aria-hidden="true" class="signal-rule"><span class="signal-tris"><i></i><i></i><i></i><i></i><i></i><i></i></span><span class="signal-line"></span><span class="signal-code">INPUT//05</span></div>
+                <div class="grid field-grid">
+                  <label class="field">
+                    <span class="field-label">Name</span>
+                    <input aria-describedby="order-name-error" aria-invalid="false" autocomplete="name" class="input" name="name" required type="text">
+                    <span class="field-error" id="order-name-error" role="alert">Enter the name on the order.</span>
+                  </label>
+                  <label class="field">
+                    <span class="field-label">Phone</span>
+                    <input aria-describedby="order-phone-error" aria-invalid="false" autocomplete="tel" class="input" name="phone" required type="tel">
+                    <span class="field-error" id="order-phone-error" role="alert">We text you the pickup code.</span>
+                  </label>
+                  <label class="field">
+                    <span class="field-label">Email</span>
+                    <input autocomplete="email" class="input" name="email" type="email">
+                  </label>
+                </div>
+                <div class="grid field-grid">
+                  <label class="field">
+                    <span class="field-label">Pickup cart</span>
+                    <select aria-describedby="order-cart-error" aria-invalid="false" class="select" name="cart" required>
+                      <option disabled selected value>Select a cart…</option>
+                      <option>Causeway Bay · Tin Lok Lane</option>
+                      <option>Kowloon City · Carpenter Road Park</option>
+                      <option>Mong Kok · Sai Yeung Choi Street</option>
+                    </select>
+                    <span class="field-error" id="order-cart-error" role="alert">Pick a pickup point.</span>
+                  </label>
+                  <label class="field">
+                    <span class="field-label">Pickup day</span>
+                    <input class="input" name="day" type="date">
+                  </label>
+                  <label class="field">
+                    <span class="field-label">Pickup time</span>
+                    <input class="input" name="time" type="time">
+                  </label>
+                </div>
+              </article>
+              <article class="card field-card stack" style="--gap:1rem">
+                <span class="overline brand-overline">Pickup mode</span>
+                <div class="grid choice-grid">
+                  <label class="choice-row"><input checked class="radio" name="mode" type="radio" value="asap"><span><strong>ASAP</strong><span>Ready as soon as the cart clears. Est. 8–12 min.</span></span></label>
+                  <label class="choice-row"><input class="radio" name="mode" type="radio" value="schedule"><span><strong>Schedule</strong><span>Choose a narrower pickup slot for later tonight.</span></span></label>
+                </div>
+                <div class="grid choice-grid">
+                  <label class="choice-row"><input checked class="radio" name="window" type="radio" value="8-12"><span><strong>8–12 min</strong><span>First available</span></span></label>
+                  <label class="choice-row"><input class="radio" name="window" type="radio" value="15-20"><span><strong>15–20 min</strong><span>Slightly later</span></span></label>
+                  <label class="choice-row"><input class="radio" name="window" type="radio" value="25-30"><span><strong>25–30 min</strong><span>Quiet pickup</span></span></label>
+                </div>
+              </article>
+              <article class="card field-card stack" style="--gap:1rem">
+                <span class="overline brand-overline">Tune the bowl</span>
+                <div class="grid field-grid">
+                  <label class="field">
+                    <span class="field-label">Broth strength</span>
+                    <select class="select" name="broth">
+                      <option>Regular</option>
+                      <option>Rich</option>
+                      <option>Extra rich</option>
+                    </select>
+                  </label>
+                  <label class="field">
+                    <span class="field-label">Noodles</span>
+                    <select class="select" name="noodles">
+                      <option>Firm</option>
+                      <option>Regular</option>
+                      <option>Soft</option>
+                    </select>
+                  </label>
+                  <label class="field">
+                    <span class="field-label">Promo code</span>
+                    <input class="input" name="promo" placeholder="NIGHTOWL" type="text">
+                  </label>
+                </div>
+                <fieldset class="field-group">
+                  <legend class="field-label">Signal updates</legend>
+                  <div class="grid choice-grid">
+                    <label class="choice-row"><input checked class="check" name="sms" type="checkbox"><span><strong>Text me when it's ready</strong><span>Send the pickup code by SMS.</span></span></label>
+                    <label class="choice-row"><input class="check" name="promo-opt" type="checkbox"><span><strong>Night circuit deals</strong><span>Get specials on late carts.</span></span></label>
+                  </div>
+                </fieldset>
+                <label class="field">
+                  <span class="field-label">Note to the cart</span>
+                  <textarea class="textarea" name="note" placeholder="No cilantro, extra chili oil, call on arrival…" rows="4"></textarea>
+                </label>
+              </article>
+              <article class="card field-card stack" style="--gap:1rem">
+                <span class="overline brand-overline">Payment</span>
+                <div class="grid payment-grid">
+                  <label class="choice-row"><input checked class="radio" name="payment" type="radio" value="card"><span><strong>Card on pickup</strong><span>Visa, Mastercard, Amex</span></span></label>
+                  <label class="choice-row"><input class="radio" name="payment" type="radio" value="applepay"><span><strong>Apple Pay</strong><span>Fast lane at terminal</span></span></label>
+                  <label class="choice-row"><input class="radio" name="payment" type="radio" value="cash"><span><strong>Cash</strong><span>Exact amount preferred</span></span></label>
+                </div>
+                <label class="choice-row"><input class="check" required type="checkbox"><span><strong>Pickup confirmation</strong><span>I understand pickup orders are held for 10 minutes after the ready signal.</span></span></label>
+              </article>
+              <div class="form-actions sticky">
+                <div class="cluster" style="--gap:.65rem">
+                  <button class="btn primary cyber-btn lg" type="submit">Place order →</button>
+                  <a class="btn ghost secondary lg" href="menu.html">Keep browsing</a>
+                </div>
+              </div>
+            </form>
+          </section>
+        </div>
+      </div>
+    </main>
+    <footer class="site-footer">
+      <div class="center">
+        <div class="grid footer-grid">
+          <div class="stack" style="--gap:.65rem">
+            <strong class="brand-mark">NEONRAMEN <em>未来のラーメン</em></strong>
+            <p class="muted">Cyberpunk ramen running the night circuit. Hot broth, zero queues.</p>
+          </div>
+          <div>
+            <strong class="overline brand-overline">Navigate</strong>
+            <ul class="list-reset">
+              <li>
+                <a href="menu.html">Menu</a>
+              </li>
+              <li>
+                <a href="locations.html">Locations</a>
+              </li>
+              <li>
+                <a href="order.html">Pickup</a>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <strong class="overline brand-overline">Signal</strong>
+            <ul class="list-reset">
+              <li>
+                <a href="locations.html">Nearest cart</a>
+              </li>
+              <li>
+                <a href="item.html">Spicy Miso</a>
+              </li>
+              <li>
+                <span class="muted">NR-APP v2.4</span>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <strong class="overline brand-overline">Hours</strong>
+            <ul class="list-reset">
+              <li>
+                <span class="muted">Mon–Thu · 5PM–2AM</span>
+              </li>
+              <li>
+                <span class="muted">Fri–Sat · 5PM–4AM</span>
+              </li>
+              <li>
+                <span class="muted">Sun · closed</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="cluster footer-bottom">
+          <span>© 2026 Neon Ramen City Circuit</span>
+          <span>All carts <b>● LIVE</b> · avg pickup 12 min</span>
+        </div>
+      </div>
+    </footer>
+    <div aria-atomic="true" aria-live="polite" class="status-bar" data-status id="app-status" role="status"></div>
+    <script src="../../../dist/actual.full.js">
+    </script>
+  </body>
+</html>

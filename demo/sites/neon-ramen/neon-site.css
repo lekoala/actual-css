@@ -1,0 +1,1024 @@
+/*
+ * Neon Ramen — shared site stylesheet.
+ *
+ * Layer 1: theme tokens (one island, dark-only brand).
+ * Layer 2: application CSS composed on top of Actual primitives
+ *          (stack / cluster / grid / frame / card / navbar / btn / badge /
+ *          field / choice-card / tabs / drawer / aura).
+ *
+ * Cyberpunk accents are deliberately small utilities — .cut, .chip,
+ * .signal, .ticker — so pages stay declarative.
+ */
+
+/* ---------------------------------------------------------------- tokens */
+:root,
+[data-theme="dark"] {
+  color-scheme: dark;
+  --primary: hsl(326 100% 63%);
+  --primary-fg: hsl(250 35% 8%);
+  --secondary: hsl(187 100% 52%);
+  --secondary-fg: hsl(250 35% 8%);
+  --success: hsl(155 82% 52%);
+  --success-fg: hsl(250 35% 8%);
+  --warning: hsl(43 100% 58%);
+  --warning-fg: hsl(250 35% 8%);
+  --danger: hsl(6 100% 65%);
+  --danger-fg: hsl(250 35% 8%);
+  --neutral: hsl(250 10% 52%);
+  --neutral-fg: hsl(0 0% 100%);
+  --surface: hsl(245 30% 6%);
+  --surface-raised: hsl(245 25% 9%);
+  --surface-subtle: hsl(245 20% 13%);
+  --surface-solid: hsl(0 0% 96%);
+  --text: hsl(0 0% 96%);
+  --text-muted: hsl(250 9% 72%);
+  --text-subtle: hsl(250 7% 55%);
+  --border: hsl(250 18% 24%);
+  --focus: var(--secondary);
+  --shadow-color: hsl(326 100% 50%);
+
+  /* Derived brand tokens — decorative colors follow the theme tokens instead
+     of repeating literal palette values at various alphas. */
+  --brand-glow: color-mix(in oklch, var(--primary) 45%, transparent);
+  --brand-glow-soft: color-mix(in oklch, var(--primary) 30%, transparent);
+  --brand-glow-faint: color-mix(in oklch, var(--primary) 12%, transparent);
+  --brand-line: color-mix(in oklch, var(--secondary) 26%, transparent);
+  --brand-line-strong: color-mix(in oklch, var(--secondary) 40%, transparent);
+  --brand-line-faint: color-mix(in oklch, var(--secondary) 11%, transparent);
+  --brand-glass: color-mix(in oklch, var(--surface) 80%, transparent);
+  --brand-shadow: color-mix(in oklch, var(--surface) 55%, transparent);
+
+  --radius: 0.45rem;
+  --radius-sm: 0.25rem;
+  --radius-lg: 0.8rem;
+  --gap: 1rem;
+  --center-size: 74rem;
+  --center-pad: clamp(1rem, 4vw, 2rem);
+}
+
+/* ------------------------------------------------------------------ base */
+html { scroll-behavior: smooth; }
+
+body {
+  background:
+    radial-gradient(circle at 12% 12%, var(--brand-glow-faint), transparent 28rem),
+    radial-gradient(circle at 90% 32%, var(--brand-line-faint), transparent 26rem),
+    var(--surface);
+  color: var(--text);
+  font-family: var(--font-sans);
+}
+
+a { color: inherit; }
+figure { margin: 0; }
+img { filter: saturate(1.06) contrast(1.03); }
+
+::selection {
+  background: var(--primary);
+  color: var(--primary-fg);
+}
+
+/* ----------------------------------------------------------------- shell */
+.site-header {
+  position: sticky;
+  inset-block-start: 0;
+  z-index: var(--z-sticky);
+  padding-block: 0.75rem;
+}
+
+.site-header .navbar {
+  border-color: var(--brand-line);
+  background: var(--brand-glass);
+  backdrop-filter: blur(14px);
+}
+
+.brand-mark {
+  color: var(--primary);
+  letter-spacing: -0.04em;
+  font-size: 1.1rem;
+  text-decoration: none;
+}
+
+.brand-mark em {
+  color: var(--secondary);
+  font-style: normal;
+}
+
+
+.page { padding-block: clamp(1rem, 3vw, 2rem) clamp(4rem, 8vw, 7rem); }
+.page-stack { --gap: clamp(3.5rem, 8vw, 6rem); }
+
+/* Mobile nav: inline links collapse into the drawer. */
+.nav-toggle { display: none; }
+
+@media (max-width: 48rem) {
+  .site-header .navbar-nav,
+  .site-header .nav-order { display: none; }
+  .nav-toggle { display: inline-flex; }
+}
+
+.drawer .brand-mark {
+  display: block;
+  max-inline-size: 100%;
+  font-size: 1.05rem;
+  line-height: 0.96;
+  letter-spacing: -0.06em;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.drawer .brand-mark em {
+  display: block;
+  margin-block-start: 0.1rem;
+  font-size: 0.9em;
+}
+
+/* ------------------------------------------------------------ typography */
+/* Actual .overline owns the generic small-cap treatment; this modifier adds
+   Neon Ramen's mono/brand treatment without reimplementing the component. */
+.brand-overline {
+  inline-size: fit-content;
+  color: var(--secondary);
+  font-family: var(--font-mono);
+  letter-spacing: 0.1em;
+}
+
+.brand-overline-primary { color: var(--primary); }
+
+.hero-title {
+  max-inline-size: 10ch;
+  font-size: clamp(3.4rem, 11vw, 8.5rem);
+  line-height: 0.82;
+  letter-spacing: -0.075em;
+  text-transform: uppercase;
+  text-wrap: balance;
+}
+
+.hero-title em {
+  color: var(--primary);
+  font-style: normal;
+  text-shadow:
+    0 0 1.4rem var(--brand-glow),
+    0 0 4rem var(--brand-glow-soft);
+}
+
+
+.section-title {
+  font-size: clamp(2rem, 6vw, 4.2rem);
+  line-height: 0.95;
+  letter-spacing: -0.055em;
+  text-transform: uppercase;
+  text-wrap: balance;
+}
+
+.section-title em {
+  color: var(--primary);
+  font-style: normal;
+  text-shadow: 0 0 1.6rem var(--brand-glow-soft);
+}
+
+
+.lede {
+  color: var(--text-muted);
+  font-size: clamp(1rem, 2vw, 1.18rem);
+}
+
+.section-head {
+  --cluster-justify: space-between;
+  --cluster-align: end;
+  --gap: 1rem;
+  margin-block-end: 1.5rem;
+}
+
+.mono { font-family: var(--font-mono); }
+
+/* ------------------------------------------------------- cyber utilities */
+/* Chamfered corner — clip one corner off buttons and flat panels.
+   Clipping removes outer shadows and also clips the focus-visible outline, so
+   only use on shadowless elements and avoid on controls that need a visible
+   keyboard ring. */
+.cut {
+  --cut: 0.65rem;
+  clip-path: polygon(
+    var(--cut) 0,
+    100% 0,
+    100% calc(100% - var(--cut)),
+    calc(100% - var(--cut)) 100%,
+    0 100%,
+    0 var(--cut)
+  );
+}
+
+
+
+/* Floating status chips over hero media. */
+.chip {
+  position: absolute;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.45rem 0.7rem;
+  border: 1px solid var(--brand-line-strong);
+  background: var(--brand-glass);
+  backdrop-filter: blur(8px);
+  color: var(--secondary);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.chip b { color: var(--text); }
+.chip.one { inset-block-start: 1rem; inset-inline-start: -0.75rem; }
+.chip.two { inset-block-end: 1rem; inset-inline-end: -0.75rem; }
+
+@media (max-width: 30rem) {
+  .chip.one { inset-inline-start: 0.5rem; }
+  .chip.two { inset-inline-end: 0.5rem; }
+}
+
+/* Live signal caption pinned inside a frame. */
+.signal {
+  position: absolute;
+  inset: auto 0 0;
+  padding: 0.7rem 0.9rem;
+  background: var(--brand-glass);
+  border-block-start: 1px solid var(--brand-line);
+  color: var(--secondary);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* Pulsing live dot — Actual .dot owns the geometry; this adds state + motion. */
+.dot-live {
+  position: relative;
+  background: var(--success);
+}
+
+.dot-live::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: inherit;
+  animation: dot-pulse 2s ease-out infinite;
+}
+
+@keyframes dot-pulse {
+  0% { transform: scale(1); opacity: 0.7; }
+  70%, 100% { transform: scale(2.6); opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dot-live::after { animation: none; }
+}
+
+/* Marquee ticker — track holds the phrase twice for a seamless loop. */
+.ticker {
+  overflow: hidden;
+  padding-block: 0.75rem;
+  border-block: 1px solid var(--brand-glow-soft);
+  color: var(--primary);
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.ticker-track {
+  display: inline-flex;
+  animation: ticker-scroll 28s linear infinite;
+}
+
+.ticker-track > span { padding-inline-end: 2.5rem; }
+
+@keyframes ticker-scroll {
+  to { transform: translateX(-50%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ticker-track { animation: none; }
+}
+
+/* ------------------------------------------------------------- home hero */
+.hero,
+.location-layout {
+  --grid-min: 21rem;
+  --gap: clamp(1.5rem, 5vw, 4.5rem);
+  align-items: center;
+}
+
+.hero-copy { --gap: 1.2rem; }
+
+.hero-actions { --gap: 0.65rem; }
+
+.hero-pickup { max-inline-size: 26rem; }
+
+.hero-pickup .field-label {
+  color: var(--text-subtle);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.hero-visual,
+.cart-visual,
+.item-visual {
+  position: relative;
+  border: 1px solid var(--brand-line);
+  border-radius: var(--radius-lg);
+  box-shadow:
+    0 0 0 1px var(--brand-glow-faint),
+    0 1.5rem 5rem var(--brand-shadow);
+}
+
+.hero-visual { --frame-ratio: 4 / 5; }
+.cart-visual { --frame-ratio: 4 / 3; }
+.item-visual { --frame-ratio: 1 / 1; }
+
+.stats { --grid-min: 8.5rem; --gap: 0.75rem; }
+
+.stat {
+  padding: 0.9rem 1rem;
+  border-inline-start: 2px solid var(--border);
+}
+
+.stat strong {
+  display: block;
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: clamp(1.2rem, 3vw, 1.8rem);
+}
+
+.stat span {
+  color: var(--text-subtle);
+  font-size: 0.76rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* ------------------------------------------------------- live cart status */
+.cart-status {
+  --card-pad: 0;
+  overflow: hidden;
+}
+
+.status-grid {
+  --gap: 1px;
+  background: var(--border);
+}
+
+.status-cell {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 1.1rem 1.25rem;
+  background: var(--surface-raised);
+}
+
+.status-k {
+  color: var(--text-subtle);
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.status-v {
+  display: block;
+  color: var(--text);
+  font-weight: 700;
+}
+
+.status-v.green { color: var(--success); }
+.status-v.cyan { color: var(--secondary); }
+
+.status-s {
+  display: block;
+  color: var(--text-subtle);
+  font-size: 0.78rem;
+}
+
+/* ------------------------------------------------------------- menu grid */
+.menu-grid { --grid-min: 16rem; --gap: 1.1rem; }
+
+.ramen-card {
+  --card-pad: 0;
+  overflow: hidden;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.ramen-card:hover,
+.ramen-card:focus-within {
+  border-color: var(--brand-line-strong);
+  box-shadow: 0 0 0 1px var(--brand-glow-faint), 0 1rem 2.2rem rgb(0 0 0 / 0.28);
+}
+
+.ramen-card .frame { --frame-ratio: 1 / 1; overflow: hidden; }
+.ramen-card .frame img {
+  transition: transform 0.28s ease, filter 0.28s ease;
+  transform-origin: center center;
+}
+.ramen-card:hover .frame img,
+.ramen-card:focus-within .frame img {
+  transform: scale(1.06);
+  filter: saturate(1.08);
+}
+.ramen-card-body { padding: 1rem; --gap: 0.75rem; }
+
+/* The framework anchors direct card footers; the app only paints the slot. */
+.ramen-card > footer {
+  padding: 1rem;
+  border-block-start: 1px solid var(--border);
+}
+
+.ramen-card h3 {
+  font-size: 1.35rem;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+}
+
+
+.price {
+  color: var(--secondary);
+  font-family: var(--font-mono);
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+.dish-jp {
+  color: var(--text-subtle);
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+}
+
+.spice {
+  color: var(--text-subtle);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+}
+
+.spice b { color: var(--danger); font-weight: 400; }
+
+/* Placeholder frame for dishes without photography. */
+.frame-ph {
+  display: grid;
+  place-items: center;
+  background:
+    radial-gradient(circle at 30% 20%, var(--brand-glow-faint), transparent 60%),
+    linear-gradient(180deg, var(--surface-raised), var(--surface));
+  color: var(--text-subtle);
+  font-size: clamp(3rem, 8vw, 4.5rem);
+  user-select: none;
+}
+
+/* -------------------------------------------------------------- locations */
+.location-copy { --gap: 1rem; }
+
+.location-row {
+  --cluster-justify: space-between;
+  --cluster-align: center;
+  --gap: 1rem;
+  padding-block: 0.85rem;
+  border-block-end: 1px solid var(--border);
+}
+
+.location-list strong { display: block; }
+.location-list span { color: var(--text-subtle); font-size: 0.85rem; }
+
+.status-open {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--success);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+}
+
+.status-open.warning {
+  color: var(--warning);
+}
+
+.loc-card { --gap: 0.6rem; }
+
+.loc-meta {
+  display: grid;
+  gap: 0.3rem;
+  margin: 0;
+}
+
+.meta-row {
+  --cluster-justify: space-between;
+  --gap: 1rem;
+  border-block-end: 1px dashed var(--border);
+  padding-block: 0.3rem;
+}
+
+.loc-meta dt {
+  color: var(--text-subtle);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.loc-meta dd {
+  margin: 0;
+  color: var(--text);
+  font-size: 0.88rem;
+  text-align: end;
+}
+
+
+.location-board {
+  --grid-columns: minmax(18rem, 22rem) minmax(0, 1fr);
+  --gap: 1.25rem;
+  align-items: start;
+}
+
+.location-cards {
+  --gap: 1rem;
+}
+
+.location-choice {
+  display: block;
+  padding: 1rem 1rem 0.95rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: color-mix(in oklch, var(--surface-raised) 92%, transparent);
+  text-decoration: none;
+  box-shadow: 0 0 0 1px transparent;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.location-choice:hover,
+.location-choice:focus-visible,
+.location-choice.active {
+  border-color: var(--brand-line-strong);
+  box-shadow: 0 0 0 1px var(--brand-glow-faint), 0 0.8rem 1.8rem rgb(0 0 0 / 0.22);
+  background: color-mix(in oklch, var(--surface-raised) 82%, var(--secondary) 8%);
+}
+
+.location-choice-head {
+  --cluster-justify: space-between;
+  --cluster-align: start;
+  --gap: 0.85rem;
+}
+
+.location-choice strong {
+  display: block;
+  font-size: 1.05rem;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+}
+
+.location-choice span,
+.location-choice small {
+  color: var(--text-subtle);
+}
+
+.location-choice-meta {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.65rem;
+  margin-block-start: 0.85rem;
+}
+
+.location-choice-meta b,
+.detail-mini b {
+  display: block;
+  color: var(--secondary);
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.location-choice-meta span,
+.detail-mini span {
+  display: block;
+  font-size: 0.92rem;
+}
+
+.map-frame {
+  --frame-ratio: 16 / 9;
+  border: 1px solid var(--brand-line);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 0 0 1px var(--brand-glow-faint), 0 1.25rem 3.5rem var(--brand-shadow);
+}
+
+.location-detail {
+  --card-pad: 1rem;
+  overflow: hidden;
+}
+
+.location-detail-grid {
+  display: grid;
+  grid-template-columns: minmax(10rem, 14rem) minmax(0, 1fr);
+  gap: 1rem;
+  align-items: start;
+}
+
+.location-detail .frame {
+  --frame-ratio: 4 / 5;
+}
+
+.detail-right {
+  --gap: 1rem;
+}
+
+.detail-copy {
+  --gap: 0.85rem;
+}
+
+.detail-meta {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.8rem;
+  padding-block: 0.85rem;
+  border-block: 1px solid var(--border);
+}
+
+.detail-mini {
+  min-inline-size: 0;
+}
+
+.detail-tags { --gap: 0.5rem; }
+.detail-tags .badge { letter-spacing: 0.08em; }
+.detail-side {
+  --gap: 0.75rem;
+  padding-block-start: 0.5rem;
+  border-block-start: 1px solid var(--border);
+}
+
+.feature-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding-block-start: 0.4rem;
+}
+
+.feature-item .frame {
+  inline-size: 4rem;
+  block-size: 4rem;
+  flex: none;
+  border-radius: var(--radius);
+}
+
+@media (max-width: 56rem) {
+  .location-board {
+    --grid-columns: minmax(0, 1fr);
+  }
+
+  .location-detail-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .detail-meta {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.order-layout { --grid-min: 22rem; --gap: clamp(1.5rem,5vw,3.5rem); align-items: start; }
+.field-grid { --grid-min: 14rem; --gap: 1rem; }
+.field-card { --card-pad: 1rem; }
+.choice-grid { --grid-min: 12rem; --gap: 0.85rem; }
+.choice-row {
+  display: flex;
+  align-items: start;
+  gap: 0.65rem;
+  padding: 0.95rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: color-mix(in oklch, var(--surface-raised) 92%, transparent);
+}
+
+/* Keep the control and its descriptive text as separate flex items. The long
+   copy is fragile when it stays nested in the same flex item as the radio input,
+   because the browser compresses that text block unpredictably and the label
+   looks squashed. */
+.choice-row > :where(input[type="radio"], input[type="checkbox"]) {
+  flex: 0 0 auto;
+  margin-block-start: 0.15rem;
+}
+
+.choice-row > span {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.2rem;
+  flex: 1 1 auto;
+  min-inline-size: 0;
+}
+
+.choice-row strong {
+  display: block;
+}
+
+.choice-row > span > span {
+  display: block;
+  color: var(--text-subtle);
+  font-size: 0.9rem;
+}
+.payment-grid { --grid-min: 11rem; --gap: 0.85rem; }
+
+@media (max-width: 48rem) {
+  .location-choice-meta,
+  .detail-meta {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ------------------------------------------------------------------ steps */
+.steps { --grid-min: 14rem; --gap: 1rem; }
+
+.step {
+  padding-block-start: 1rem;
+  border-block-start: 1px solid var(--border);
+}
+
+.step-number {
+  color: var(--primary);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+}
+
+.step h3 { font-size: 1.15rem; text-transform: uppercase; }
+
+/* ------------------------------------------------------------------ forms */
+.fieldset-cyber {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.fieldset-cyber legend {
+  padding: 0;
+  margin-block-end: 0.75rem;
+}
+
+.choice-grid {
+  --grid-min: 9rem;
+  --gap: 0.6rem;
+}
+
+.choice-card {
+  --choice-card-bg: var(--surface-raised);
+}
+
+.summary-row {
+  --cluster-justify: space-between;
+  --gap: 1rem;
+  padding-block: 0.55rem;
+  border-block-end: 1px solid var(--border);
+}
+
+.summary-row.total {
+  border-block-end: 0;
+  padding-block-start: 0.9rem;
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+.summary-row.total .price { font-size: 1.3rem; }
+
+.qty-field { max-inline-size: 7rem; }
+
+.qty-field .input { text-align: center; }
+
+/* ----------------------------------------------------------------- footer */
+.site-footer {
+  padding-block: 2rem 2rem;
+  border-block-start: 1px solid var(--border);
+}
+
+.footer-grid {
+  --grid-min: 12rem;
+  --gap: 2rem;
+  align-items: start;
+}
+
+.footer-grid li + li { margin-block-start: 0.45rem; }
+
+.footer-grid a {
+  color: var(--text-muted);
+  text-decoration: none;
+}
+
+.footer-grid a:hover { color: var(--secondary); }
+
+.footer-bottom {
+  --cluster-justify: space-between;
+  --gap: 0.75rem;
+  margin-block-start: 2.5rem;
+  padding-block-start: 1.25rem;
+  border-block-start: 1px dashed var(--border);
+  color: var(--text-subtle);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.footer-bottom b { color: var(--success); font-weight: 700; }
+
+
+/* ----------------------------------------------------------- cut controls */
+/* Key CTAs keep a chamfered cyberpunk silhouette. Focus is restored with a
+   drop-shadow ring rather than relying on the clipped default outline. */
+.cyber-btn {
+  --cut: 0.72rem;
+  border-radius: 0;
+  clip-path: polygon(
+    var(--cut) 0,
+    100% 0,
+    100% calc(100% - var(--cut)),
+    calc(100% - var(--cut)) 100%,
+    0 100%,
+    0 var(--cut)
+  );
+}
+
+.cyber-btn:focus-visible {
+  outline: 0;
+  filter: drop-shadow(0 0 0.1rem var(--focus)) drop-shadow(0 0 0.35rem var(--focus));
+}
+
+.site-header .navbar,
+.card,
+.frame,
+.cart-status {
+  position: relative;
+}
+
+.site-header .navbar::before,
+.frame::before,
+.card::before,
+.cart-status::before {
+  content: "";
+  position: absolute;
+  inset: 0.55rem auto auto 0.55rem;
+  inline-size: 1rem;
+  block-size: 1rem;
+  border-inline-start: 1px solid var(--brand-line-strong);
+  border-block-start: 1px solid var(--brand-line-strong);
+  pointer-events: none;
+  opacity: 0.85;
+}
+
+.site-header .navbar::after,
+.frame::after,
+.card::after,
+.cart-status::after {
+  content: "";
+  position: absolute;
+  inset: auto 0.55rem 0.55rem auto;
+  inline-size: 1rem;
+  block-size: 1rem;
+  border-inline-end: 1px solid var(--brand-line-strong);
+  border-block-end: 1px solid var(--brand-line-strong);
+  pointer-events: none;
+  opacity: 0.85;
+}
+
+.hero-copy .lede,
+.location-copy .lede {
+  max-inline-size: 50ch;
+}
+
+.hero-copy::after {
+  content: "// FAST PICKUP PROTOCOL // BROTH ONLINE";
+  display: block;
+  color: var(--text-subtle);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.ramen-card h3,
+.section-title,
+.hero-title {
+  text-wrap: balance;
+}
+
+.status-action {
+  align-items: stretch;
+}
+
+.status-action > * {
+  inline-size: 100%;
+}
+
+.status-action .btn {
+  inline-size: fit-content;
+}
+
+
+/* ------------------------------------------------------ editorial signals */
+/* Editorial identity only: these markers do not replace Actual components. */
+.brand-overline::before {
+  content: "//";
+  margin-inline-end: 0.55em;
+  color: var(--primary);
+  font-weight: 800;
+}
+
+span.brand-overline::after {
+  content: " >>>";
+  color: var(--text-subtle);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.signal-rule {
+  display: grid;
+  grid-template-columns: auto minmax(2rem, 1fr) auto;
+  align-items: center;
+  gap: 0.8rem;
+  margin-block: 0.15rem 1.35rem;
+  color: var(--text-subtle);
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.signal-line {
+  block-size: 1px;
+  background: linear-gradient(
+    90deg,
+    var(--brand-line-strong),
+    var(--brand-glow-soft) 42%,
+    var(--brand-line-strong)
+  );
+  box-shadow: 0 0 0.7rem var(--brand-line);
+}
+
+.signal-tris {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.24rem;
+}
+
+.signal-tris i {
+  display: block;
+  inline-size: 0.42rem;
+  block-size: 0.42rem;
+  background: var(--primary);
+  clip-path: polygon(50% 0, 100% 100%, 0 100%);
+}
+
+.signal-tris i:nth-child(even) {
+  background: var(--secondary);
+  transform: rotate(180deg);
+}
+
+.signal-code {
+  color: var(--secondary);
+  white-space: nowrap;
+}
+
+/* Small technical readouts make the page feel like a live service surface. */
+.status-cell { position: relative; }
+
+.status-cell::before {
+  position: absolute;
+  inset-block-start: 0.42rem;
+  inset-inline-end: 0.55rem;
+}
+
+.status-cell::before,
+.step::before {
+  color: var(--primary);
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.12em;
+  opacity: 0.72;
+}
+
+.status-cell:nth-child(1)::before { content: "01 //"; }
+.status-cell:nth-child(2)::before { content: "02 //"; }
+.status-cell:nth-child(3)::before { content: "03 //"; }
+.status-cell:nth-child(4)::before { content: "04 //"; }
+
+.step:nth-child(1)::before { content: ">>> ROUTE"; }
+.step:nth-child(2)::before { content: ">>> WIRE"; }
+.step:nth-child(3)::before { content: ">>> HANDOFF"; }
+
+@media (max-width: 34rem) {
+  .signal-rule {
+    grid-template-columns: auto minmax(1rem, 1fr);
+  }
+
+  .signal-code { display: none; }
+}

@@ -2,10 +2,10 @@
  * Local, hand-authored CSS for the "admini" demo — a port of the
  * Bootstrap 5 admini template onto Actual CSS.
  *
- * Every page in this folder loads the framework core (+ optional
- * layout-extra.css for .topbar) plus this one file. Nothing here overrides
- * component internals — it only lays out the app shell and a few
- * page-specific arrangements with framework tokens and primitives.
+ * Every page in this folder loads the full Actual CSS bundle, the demo theme
+ * presets, and this one local file. Nothing here patches component internals:
+ * it only owns the Admini app shell and page-specific arrangements that are
+ * deliberately outside the framework's component/layout contracts.
  *
  * The sidebar/topbar markup block is identical, byte-for-byte, across every
  * shell page (see the "admini-shell" HTML comments in each file). That is
@@ -19,18 +19,36 @@
 .admini-shell {
   display: grid;
   grid-template-columns: 1fr;
-  min-block-size: 100dvh;
+  min-block-size: var(--viewport-block);
   background: var(--surface);
 }
 
 .admini-sidebar {
+  /* Theme-derived dark chrome. The sidebar stays structurally dark but takes
+     its chromatic character from the active theme: pinning the light scheme
+     resolves every token in this subtree to its branded-dark face
+     (--surface-solid is the preset's dark surface on the light branch). */
+  color-scheme: light;
   display: none;
   flex-direction: column;
   gap: var(--space-40);
   inline-size: 17rem;
   padding: var(--space-40);
   border-inline-end: var(--border-width) solid var(--border);
-  background: var(--surface-raised);
+  background: var(--surface-solid);
+  color: var(--surface);
+}
+
+/* A breath of the active primary in the chrome so each theme tints its rail.
+   The plain surface above is the no-color-mix fallback. */
+@supports (color: color-mix(in oklch, red, white)) {
+  .admini-sidebar {
+    background: color-mix(in oklch, var(--surface-solid) 90%, var(--primary));
+  }
+}
+
+.admini-sidebar .navbar-brand {
+  color: var(--surface);
 }
 
 .admini-main {
@@ -42,6 +60,16 @@
   --gap: var(--space-40);
 
   padding-block: var(--space-40) var(--space-60);
+}
+
+/* Headings inside stack cards are spaced by the stack gap, not margins. */
+.admini-content .card > :where(h1, h2, h3) {
+  margin: 0;
+}
+
+/* Tab panels hang below their tab list; the gap belongs to this layout. */
+.tabset > [role="tabpanel"] {
+  padding-block-start: var(--space-40);
 }
 
 .admini-hide-mobile {
@@ -70,25 +98,38 @@
   gap: var(--space-20);
   min-block-size: 2.35rem;
   padding-inline: var(--space-30);
+  /* The framework recipe derives link ink from --text-muted/--text, whose
+     light-branch values are dark and unreadable on the dark rail. */
+  color: var(--surface);
 }
 
 .admini-nav .nav-link i {
-  color: var(--text-muted);
+  color: var(--text-subtle);
   font-size: 1.125rem;
 }
 
-.admini-nav .nav-link[aria-current="page"] {
-  color: var(--text);
-  background: var(--surface-subtle);
+/* Neutral translucent hover on the dark rail; the framework's
+   --surface-subtle pill would read as a light block here. */
+.admini-sidebar .nav-link:hover:not([aria-current="page"]) {
+  background: rgb(255 255 255 / 0.08);
+  color: var(--surface);
 }
 
-.admini-nav .nav-link[aria-current="page"] i {
-  color: var(--intent, var(--primary));
+/* Active item is a primary pill: same accent the active icon already used,
+   now carried by the whole row. */
+.admini-nav .nav-link[aria-current="page"] {
+  background: var(--primary);
+  color: var(--primary-fg);
+}
+
+.admini-sidebar .flyout-trigger > .btn {
+  justify-content: flex-start;
 }
 
 /* Denser variant of .overline for a tight sidebar: no letter tracking. */
 .admini-section-title {
   margin: 0;
+  color: var(--text-subtle);
   font-weight: var(--font-weight-strong);
   letter-spacing: 0;
 }
@@ -96,10 +137,6 @@
 @media (min-width: 56rem) {
   .admini-hide-mobile {
     display: initial;
-  }
-
-  .admini-search.admini-hide-mobile {
-    display: block;
   }
 
   .admini-topbar .breadcrumb.admini-hide-mobile {
@@ -116,7 +153,7 @@
     position: sticky;
     inset-block-start: 0;
     display: flex;
-    block-size: 100dvh;
+    block-size: var(--viewport-block);
     overflow-y: auto;
   }
 
@@ -168,16 +205,6 @@
   font-size: var(--font-size-sm);
 }
 
-.admini-board {
-  display: grid;
-  gap: var(--space-40);
-  grid-template-columns: minmax(0, 1fr);
-  align-items: start;
-}
-
-.admini-board-main {
-  min-inline-size: 0;
-}
 
 .admini-feed {
   display: grid;
@@ -185,10 +212,18 @@
 }
 
 .admini-feed-item {
+  --gap: var(--space-30);
+}
+
+/* The feed text is one tight unit (title over description); the default
+   paragraph margins would stack on top of the media/stack gaps. */
+.admini-feed-item > div {
   display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
-  gap: var(--space-30);
-  align-items: start;
+  gap: var(--space-10);
+}
+
+.admini-feed-item p {
+  margin: 0;
 }
 
 .admini-feed-item + .admini-feed-item {
@@ -210,18 +245,79 @@
   gap: var(--space-10);
 }
 
-@media (min-width: 72rem) {
-  .admini-board {
-    grid-template-columns: minmax(0, 1fr) minmax(18rem, 21rem);
-  }
+
+/* --------------------------------------------------------------- users */
+
+.admini-user-card {
+  /* One centered axis for the whole card: avatar, name, role, status badge,
+     and actions all share it — a single off-axis element reads as a bug. */
+  align-items: center;
+  text-align: center;
 }
 
-/* ----------------------------------------------------------- settings */
+.admini-user-card > .avatar {
+  margin-inline: auto;
+}
+
+.admini-user-card p {
+  margin: 0;
+}
+
+.admini-user-card.is-pending {
+  border-style: dashed;
+}
+
+/* Pushes to the card bottom so action rows align across the grid even when
+   text blocks wrap to different heights. */
+.admini-user-card-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-20);
+  margin-block-start: auto;
+}
+
+/* --------------------------------------------------------- table columns */
+
+/* Action column: content-sized, pinned to the end edge instead of reading
+   as one more data column. The th gets the same class. */
+.admini-table-action {
+  inline-size: 1%;
+  white-space: nowrap;
+  text-align: end;
+}
+
+/* -------------------------------------------------------------- profile */
+
+/* The identity row pulls up by half the avatar so the avatar center sits
+   exactly on the banner junction; the actions row compensates back down.
+   One size source keeps both offsets in sync (--avatar-size itself is
+   re-declared by .avatar, so it must be set on the element, not here). */
+.admini-profile-header {
+  --profile-avatar-size: 5rem;
+
+  padding-inline: var(--space-40);
+  margin-block-start: calc(var(--profile-avatar-size) / -2);
+}
+
+.admini-profile-actions {
+  --cluster-wrap: nowrap;
+
+  /* Half the avatar keeps the row below the junction; the extra step
+     visually clears the avatar ring. */
+  margin-block-start: calc(var(--profile-avatar-size) / 2 + var(--space-20));
+}
+
+/* ------------------------------------------------------------- settings */
 
 .admini-settings {
   display: grid;
   gap: var(--space-40);
   grid-template-columns: minmax(0, 1fr);
+}
+
+.admini-settings form {
+  max-inline-size: 28rem;
 }
 
 .admini-settings-tabs {
@@ -256,6 +352,14 @@
     border-radius: 0;
   }
 
+  /* Matches the framework's vertical-tab accent rule (.tabs[attr] .tab[attr])
+     so this can turn its inline-end accent off: this composition keeps exactly
+     one accent bar (inline start) so the active item is not flanked by the
+     structural column separator. */
+  .tabs.admini-settings-tabs .tab[aria-selected="true"] {
+    border-inline-end-color: transparent;
+  }
+
   .admini-settings-tabs .tab[aria-selected="true"] {
     border-inline-start-color: var(--intent, var(--primary));
   }
@@ -266,7 +370,7 @@
 .admini-auth {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  min-block-size: 100dvh;
+  min-block-size: var(--viewport-block);
 }
 
 .admini-auth-panel {
@@ -306,7 +410,7 @@
 .admini-error {
   display: grid;
   place-items: center;
-  min-block-size: 100dvh;
+  min-block-size: var(--viewport-block);
   padding: var(--space-60) var(--space-40);
   text-align: center;
 }
@@ -329,13 +433,18 @@
   padding-block-end: var(--space-20);
 }
 
+.admini-kanban-column h2 {
+  margin: 0;
+  font-size: var(--font-size-md);
+}
+
 .admini-kanban-column {
   display: flex;
   flex: 0 0 auto;
   flex-direction: column;
   gap: var(--space-30);
   inline-size: 19rem;
-  max-block-size: calc(100dvh - 14rem);
+  max-block-size: calc(var(--viewport-block) - 14rem);
 }
 
 .admini-kanban-column.is-dragover {
@@ -352,6 +461,36 @@
   overflow-y: auto;
   padding: var(--space-10);
   border-radius: var(--radius-lg);
+}
+
+/* Empty-column affordance once the last card is dragged away. */
+.admini-kanban-list:not(:has(.admini-kanban-card))::after {
+  content: "Drop tasks here";
+  padding: var(--space-30);
+  border: var(--border-width) dashed var(--border);
+  border-radius: var(--radius-lg);
+  color: var(--text-muted);
+  font-size: var(--font-size-sm);
+  text-align: center;
+}
+
+.admini-kanban-card p {
+  margin: 0;
+}
+
+.admini-kanban-card-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-20);
+}
+
+.admini-kanban-card-side {
+  display: flex;
+  align-items: center;
+  gap: var(--space-20);
+  color: var(--text-muted);
+  font-size: var(--font-size-xs);
 }
 
 .admini-kanban-card {
@@ -371,7 +510,7 @@
 .admini-chat-shell {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  block-size: calc(100dvh - 4.2rem);
+  block-size: calc(var(--viewport-block) - 4.2rem);
 }
 
 .admini-chat-list {
@@ -397,9 +536,8 @@
 }
 
 .admini-chat-item {
-  display: flex;
-  align-items: flex-start;
-  gap: var(--space-30);
+  --gap: var(--space-30);
+
   padding: var(--space-30) var(--space-40);
   border: 0;
   background: none;
@@ -417,7 +555,6 @@
 
 .admini-chat-item-body {
   display: grid;
-  flex: 1 1 auto;
   gap: 0.125rem;
   min-inline-size: 0;
 }
@@ -448,35 +585,6 @@
   gap: var(--space-30);
   overflow-y: auto;
   padding: var(--space-40);
-}
-
-.admini-bubble-row {
-  display: flex;
-  max-inline-size: 34rem;
-}
-
-.admini-bubble-row.is-own {
-  align-self: flex-end;
-  flex-direction: row-reverse;
-}
-
-.admini-bubble {
-  display: grid;
-  gap: 0.25rem;
-  padding: var(--space-20) var(--space-30);
-  border-radius: var(--radius-lg);
-  background: var(--surface-raised);
-  border: var(--border-width) solid var(--border);
-}
-
-.admini-bubble-row.is-own .admini-bubble {
-  background: color-mix(in oklch, var(--primary) 14%, var(--surface-raised));
-  border-color: transparent;
-}
-
-.admini-bubble-time {
-  color: var(--text-muted);
-  font-size: var(--font-size-xs);
 }
 
 .admini-composer {

@@ -6,16 +6,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Kanban - Admini on Actual CSS</title>
   <meta name="description" content="Kanban board with columns, task cards, and progress tracking.">
-  <link rel="stylesheet" href="../../dist/actual.full.css">
-  <link rel="stylesheet" href="../assets/actual-themes.min.css">
+
+  <script src="admini-theme.js"></script>
+  <link rel="stylesheet" href="../../../dist/actual.full.css">
+  <link rel="stylesheet" href="../../assets/actual-themes.min.css">
   <link rel="stylesheet" href="admini.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.46.0/dist/tabler-icons.min.css">
 </head>
 
 <body>
   <div class="admini-shell">
     <!-- admini-shell:sidebar -->
-    <aside class="admini-sidebar" aria-label="Primary navigation">
+    <aside class="admini-sidebar scroller stable-gutter" aria-label="Primary navigation">
       <a class="navbar-brand" href="index.html">
         <span class="avatar primary"><abbr>AD</abbr></span>
         <span>Admini</span>
@@ -133,7 +135,7 @@
 
       <div class="flyout-trigger stretch">
         <button class="btn neutral ghost" data-enhance="flyout" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="sidebar-user-menu"
-          id="sidebar-user-trigger" style="justify-content: flex-start;">
+          id="sidebar-user-trigger">
           <span class="avatar sm"><abbr>JN</abbr></span>
           <span>John Nemo</span>
         </button>
@@ -204,161 +206,171 @@
       <!-- /admini-shell:topbar -->
 
     <main class="center stack admini-content" style="--center-size: 84rem;">
-        <header class="cluster" style="--cluster-justify: space-between; align-items: flex-start;">
+        <header class="cluster" style="--cluster-justify: space-between; --cluster-align: flex-start;">
           <hgroup>
             <p class="overline">Work</p>
             <h1>Kanban</h1>
-            <p class="muted">Cards use native HTML5 drag-and-drop — <code>draggable="true"</code> plus about 30 lines of JS below, no framework involvement.</p>
+            <p class="muted">Cards use native HTML5 drag-and-drop — right-click or long-press a card for quick actions.</p>
           </hgroup>
-          <button class="btn primary" type="button">
+          <button class="btn primary" type="button" commandfor="new-task-modal" command="show-modal">
             <i class="ti ti-plus" aria-hidden="true"></i>
             New task
           </button>
         </header>
 
-        <div class="admini-kanban" id="kanban-board">
+        <div class="admini-kanban scroller" id="kanban-board">
           <section class="admini-kanban-column" aria-label="Backlog">
             <header class="cluster" style="--cluster-justify: space-between;">
-              <h2 style="margin: 0; font-size: var(--font-size-md);">Backlog</h2>
-              <span class="badge neutral solid" data-count>3</span>
+              <h2>Backlog</h2>
+              <span class="badge neutral solid" data-count aria-live="polite">3</span>
             </header>
-            <div class="admini-kanban-list" data-column="backlog">
-              <article class="card compact stack admini-kanban-card" draggable="true" id="task-1">
+            <div class="admini-kanban-list scroller stable-gutter" data-column="backlog">
+              <article class="card compact stack admini-kanban-card" draggable="true" id="task-1"
+                data-context-menu="card-menu" data-context-menu-long-press tabindex="0">
                 <strong>Refactor billing webhook retries</strong>
-                <p class="muted" style="margin: 0;">Idempotency keys are missing on the retry path.</p>
-                <div class="cluster" style="--cluster-justify: space-between;">
+                <p class="muted">Idempotency keys are missing on the retry path.</p>
+                <footer class="admini-kanban-card-meta">
                   <span class="badge danger soft sm">High</span>
-                  <span class="cluster" style="gap: var(--space-20);">
-                    <span class="muted" style="font-size: var(--font-size-xs);">Jul 14</span>
+                  <span class="admini-kanban-card-side">
+                    <span>Jul 14</span>
                     <span class="avatar sm" title="Ada Morgan"><abbr>AM</abbr></span>
                   </span>
-                </div>
+                </footer>
               </article>
-              <article class="card compact stack admini-kanban-card" draggable="true" id="task-2">
+              <article class="card compact stack admini-kanban-card" draggable="true" id="task-2"
+                data-context-menu="card-menu" data-context-menu-long-press tabindex="0">
                 <strong>Write onboarding email sequence</strong>
-                <p class="muted" style="margin: 0;">Three emails covering setup, first invite, first report.</p>
-                <div class="cluster" style="--cluster-justify: space-between;">
+                <p class="muted">Three emails covering setup, first invite, first report.</p>
+                <footer class="admini-kanban-card-meta">
                   <span class="badge neutral soft sm">Low</span>
-                  <span class="cluster" style="gap: var(--space-20);">
-                    <span class="muted" style="font-size: var(--font-size-xs);">Jul 20</span>
+                  <span class="admini-kanban-card-side">
+                    <span>Jul 20</span>
                     <span class="avatar sm" title="Theo Silva"><abbr>TS</abbr></span>
                   </span>
-                </div>
+                </footer>
               </article>
-              <article class="card compact stack admini-kanban-card" draggable="true" id="task-3">
+              <article class="card compact stack admini-kanban-card" draggable="true" id="task-3"
+                data-context-menu="card-menu" data-context-menu-long-press tabindex="0">
                 <strong>Audit third-party scripts</strong>
-                <p class="muted" style="margin: 0;">List every external script and its purpose before the security review.</p>
-                <div class="cluster" style="--cluster-justify: space-between;">
+                <p class="muted">List every external script and its purpose before the security review.</p>
+                <footer class="admini-kanban-card-meta">
                   <span class="badge warning soft sm">Medium</span>
-                  <span class="cluster" style="gap: var(--space-20);">
-                    <span class="muted" style="font-size: var(--font-size-xs);">Jul 18</span>
+                  <span class="admini-kanban-card-side">
+                    <span>Jul 18</span>
                     <span class="avatar sm" title="Mira Hart"><abbr>MH</abbr></span>
                   </span>
-                </div>
+                </footer>
               </article>
             </div>
           </section>
 
           <section class="admini-kanban-column" aria-label="In progress">
             <header class="cluster" style="--cluster-justify: space-between;">
-              <h2 style="margin: 0; font-size: var(--font-size-md);">In progress</h2>
-              <span class="badge neutral solid" data-count>3</span>
+              <h2>In progress</h2>
+              <span class="badge neutral solid" data-count aria-live="polite">3</span>
             </header>
-            <div class="admini-kanban-list" data-column="in-progress">
-              <article class="card compact stack admini-kanban-card" draggable="true" id="task-4">
+            <div class="admini-kanban-list scroller stable-gutter" data-column="in-progress">
+              <article class="card compact stack admini-kanban-card" draggable="true" id="task-4"
+                data-context-menu="card-menu" data-context-menu-long-press tabindex="0">
                 <strong>Rebuild invoice PDF export</strong>
-                <p class="muted" style="margin: 0;">Current export drops the tax breakdown on multi-page invoices.</p>
-                <div class="cluster" style="--cluster-justify: space-between;">
+                <p class="muted">Current export drops the tax breakdown on multi-page invoices.</p>
+                <footer class="admini-kanban-card-meta">
                   <span class="badge danger soft sm">High</span>
-                  <span class="cluster" style="gap: var(--space-20);">
-                    <span class="muted" style="font-size: var(--font-size-xs);">Jul 11</span>
+                  <span class="admini-kanban-card-side">
+                    <span>Jul 11</span>
                     <span class="avatar sm" title="Jacob Thornton"><abbr>JT</abbr></span>
                   </span>
-                </div>
+                </footer>
               </article>
-              <article class="card compact stack admini-kanban-card" draggable="true" id="task-5">
+              <article class="card compact stack admini-kanban-card" draggable="true" id="task-5"
+                data-context-menu="card-menu" data-context-menu-long-press tabindex="0">
                 <strong>Dark mode contrast pass</strong>
-                <p class="muted" style="margin: 0;">A few badge/soft combinations read low-contrast in dim theme.</p>
-                <div class="cluster" style="--cluster-justify: space-between;">
+                <p class="muted">A few badge/soft combinations read low-contrast in dim theme.</p>
+                <footer class="admini-kanban-card-meta">
                   <span class="badge warning soft sm">Medium</span>
-                  <span class="cluster" style="gap: var(--space-20);">
-                    <span class="muted" style="font-size: var(--font-size-xs);">Jul 12</span>
+                  <span class="admini-kanban-card-side">
+                    <span>Jul 12</span>
                     <span class="avatar sm" title="Rin Moreau"><abbr>RM</abbr></span>
                   </span>
-                </div>
+                </footer>
               </article>
-              <article class="card compact stack admini-kanban-card" draggable="true" id="task-6">
+              <article class="card compact stack admini-kanban-card" draggable="true" id="task-6"
+                data-context-menu="card-menu" data-context-menu-long-press tabindex="0">
                 <strong>Kanban drag-and-drop demo</strong>
-                <p class="muted" style="margin: 0;">This very board — ship it as part of the admini demo.</p>
-                <div class="cluster" style="--cluster-justify: space-between;">
+                <p class="muted">This very board — ship it as part of the admini demo.</p>
+                <footer class="admini-kanban-card-meta">
                   <span class="badge warning soft sm">Medium</span>
-                  <span class="cluster" style="gap: var(--space-20);">
-                    <span class="muted" style="font-size: var(--font-size-xs);">Jul 9</span>
+                  <span class="admini-kanban-card-side">
+                    <span>Jul 9</span>
                     <span class="avatar sm" title="John Nemo"><abbr>JN</abbr></span>
                   </span>
-                </div>
+                </footer>
               </article>
             </div>
           </section>
 
           <section class="admini-kanban-column" aria-label="Review">
             <header class="cluster" style="--cluster-justify: space-between;">
-              <h2 style="margin: 0; font-size: var(--font-size-md);">Review</h2>
-              <span class="badge neutral solid" data-count>2</span>
+              <h2>Review</h2>
+              <span class="badge neutral solid" data-count aria-live="polite">2</span>
             </header>
-            <div class="admini-kanban-list" data-column="review">
-              <article class="card compact stack admini-kanban-card" draggable="true" id="task-7">
+            <div class="admini-kanban-list scroller stable-gutter" data-column="review">
+              <article class="card compact stack admini-kanban-card" draggable="true" id="task-7"
+                data-context-menu="card-menu" data-context-menu-long-press tabindex="0">
                 <strong>Add rate limiting to public API</strong>
-                <p class="muted" style="margin: 0;">Token bucket per API key, 60 req/min default.</p>
-                <div class="cluster" style="--cluster-justify: space-between;">
+                <p class="muted">Token bucket per API key, 60 req/min default.</p>
+                <footer class="admini-kanban-card-meta">
                   <span class="badge danger soft sm">High</span>
-                  <span class="cluster" style="gap: var(--space-20);">
-                    <span class="muted" style="font-size: var(--font-size-xs);">Jul 10</span>
+                  <span class="admini-kanban-card-side">
+                    <span>Jul 10</span>
                     <span class="avatar sm" title="Mark Otto"><abbr>MO</abbr></span>
                   </span>
-                </div>
+                </footer>
               </article>
-              <article class="card compact stack admini-kanban-card" draggable="true" id="task-8">
+              <article class="card compact stack admini-kanban-card" draggable="true" id="task-8"
+                data-context-menu="card-menu" data-context-menu-long-press tabindex="0">
                 <strong>Update pricing copy</strong>
-                <p class="muted" style="margin: 0;">Reflect the new Enterprise tier limits on the marketing site.</p>
-                <div class="cluster" style="--cluster-justify: space-between;">
+                <p class="muted">Reflect the new Enterprise tier limits on the marketing site.</p>
+                <footer class="admini-kanban-card-meta">
                   <span class="badge neutral soft sm">Low</span>
-                  <span class="cluster" style="gap: var(--space-20);">
-                    <span class="muted" style="font-size: var(--font-size-xs);">Jul 9</span>
+                  <span class="admini-kanban-card-side">
+                    <span>Jul 9</span>
                     <span class="avatar sm" title="Ada Morgan"><abbr>AM</abbr></span>
                   </span>
-                </div>
+                </footer>
               </article>
             </div>
           </section>
 
           <section class="admini-kanban-column" aria-label="Done">
             <header class="cluster" style="--cluster-justify: space-between;">
-              <h2 style="margin: 0; font-size: var(--font-size-md);">Done</h2>
-              <span class="badge neutral solid" data-count>2</span>
+              <h2>Done</h2>
+              <span class="badge neutral solid" data-count aria-live="polite">2</span>
             </header>
-            <div class="admini-kanban-list" data-column="done">
-              <article class="card compact stack admini-kanban-card" draggable="true" id="task-9">
+            <div class="admini-kanban-list scroller stable-gutter" data-column="done">
+              <article class="card compact stack admini-kanban-card" draggable="true" id="task-9"
+                data-context-menu="card-menu" data-context-menu-long-press tabindex="0">
                 <strong>Migrate sessions to Redis</strong>
-                <p class="muted" style="margin: 0;">Cut login latency under load, in production since Tuesday.</p>
-                <div class="cluster" style="--cluster-justify: space-between;">
+                <p class="muted">Cut login latency under load, in production since Tuesday.</p>
+                <footer class="admini-kanban-card-meta">
                   <span class="badge warning soft sm">Medium</span>
-                  <span class="cluster" style="gap: var(--space-20);">
-                    <span class="muted" style="font-size: var(--font-size-xs);">Jul 5</span>
+                  <span class="admini-kanban-card-side">
+                    <span>Jul 5</span>
                     <span class="avatar sm" title="Jacob Thornton"><abbr>JT</abbr></span>
                   </span>
-                </div>
+                </footer>
               </article>
-              <article class="card compact stack admini-kanban-card" draggable="true" id="task-10">
+              <article class="card compact stack admini-kanban-card" draggable="true" id="task-10"
+                data-context-menu="card-menu" data-context-menu-long-press tabindex="0">
                 <strong>Fix Safari date picker bug</strong>
-                <p class="muted" style="margin: 0;">Native date input rendered the wrong locale format.</p>
-                <div class="cluster" style="--cluster-justify: space-between;">
+                <p class="muted">Native date input rendered the wrong locale format.</p>
+                <footer class="admini-kanban-card-meta">
                   <span class="badge neutral soft sm">Low</span>
-                  <span class="cluster" style="gap: var(--space-20);">
-                    <span class="muted" style="font-size: var(--font-size-xs);">Jul 3</span>
+                  <span class="admini-kanban-card-side">
+                    <span>Jul 3</span>
                     <span class="avatar sm" title="Rin Moreau"><abbr>RM</abbr></span>
                   </span>
-                </div>
+                </footer>
               </article>
             </div>
           </section>
@@ -367,7 +379,7 @@
     </div>
   </div>
 
-  <dialog class="drawer" id="navigation-drawer" aria-label="Navigation">
+  <dialog class="drawer" data-theme="dim" id="navigation-drawer" aria-label="Navigation">
     <header class="cluster" style="--cluster-justify: space-between;">
       <strong>Admini</strong>
       <form method="dialog">
@@ -395,25 +407,73 @@
     </nav>
   </dialog>
 
-  <script src="../../dist/actual.full.js"></script>
+  <dialog class="modal" id="new-task-modal" closedby="any" data-dialog-dismissible>
+    <form method="dialog" class="stack">
+      <header>
+        <h3>New task</h3>
+        <p class="muted">Add a card to this board.</p>
+      </header>
+
+      <label class="field">
+        <span class="field-label">Title</span>
+        <input class="input" type="text" placeholder="Task title">
+      </label>
+
+      <div class="grid-2 items-end">
+        <label class="field">
+          <span class="field-label">Column</span>
+          <select class="select">
+            <option>Backlog</option>
+            <option>In progress</option>
+            <option>Review</option>
+            <option>Done</option>
+          </select>
+        </label>
+        <label class="field">
+          <span class="field-label">Priority</span>
+          <select class="select">
+            <option>Low</option>
+            <option selected>Medium</option>
+            <option>High</option>
+          </select>
+        </label>
+      </div>
+
+      <footer>
+        <button class="btn neutral outline" value="cancel" formnovalidate>Cancel</button>
+        <button class="btn primary" value="create">Create task</button>
+      </footer>
+    </form>
+  </dialog>
+
+  <menu class="flyout sm menu" role="menu" id="card-menu" aria-label="Task actions" hidden>
+    <li><button class="menu-item" type="button" role="menuitem">Open task</button></li>
+    <li><button class="menu-item" type="button" role="menuitem">Assign…</button></li>
+    <hr class="menu-separator" role="separator">
+    <li><button class="menu-item danger" type="button" role="menuitem" data-action="archive">Archive task</button></li>
+  </menu>
+
+  <script src="../../../dist/actual.full.js" defer></script>
+
   <script>
-    const switcher = document.getElementById("theme-switcher");
-
-    if (switcher) {
-      switcher.addEventListener("change", () => {
-        if (switcher.value) {
-          document.documentElement.dataset.theme = switcher.value;
-        } else {
-          document.documentElement.removeAttribute("data-theme");
-        }
-      });
-    }
-
     // Native HTML5 drag-and-drop — no framework JS involved. Note this API
-    // has no touch-device equivalent; a real app would add a pointer-based
-    // fallback for mobile.
+    // has no touch-device equivalent; the card context menu (right-click,
+    // long-press) covers those users for actions.
     const board = document.getElementById("kanban-board");
     let dragged = null;
+    let menuCard = null;
+
+    document.addEventListener("actual:context-menu", (e) => {
+      if (e.detail.menu.id === "card-menu") menuCard = e.detail.context;
+    });
+
+    document.getElementById("card-menu").addEventListener("click", (e) => {
+      const action = e.target.closest("[data-action]")?.dataset.action;
+      if (action === "archive" && menuCard) {
+        menuCard.remove();
+        updateCounts();
+      }
+    });
 
     board.addEventListener("dragstart", (e) => {
       const card = e.target.closest(".admini-kanban-card");

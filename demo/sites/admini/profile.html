@@ -4,18 +4,20 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Chat - Admini on Actual CSS</title>
-  <meta name="description" content="Chat interface with message bubbles, contact list, and input area.">
-  <link rel="stylesheet" href="../../dist/actual.full.css">
-  <link rel="stylesheet" href="../assets/actual-themes.min.css">
+  <title>Profile - Admini on Actual CSS</title>
+  <meta name="description" content="User profile with avatar, bio, activity timeline, and account details.">
+
+  <script src="admini-theme.js"></script>
+  <link rel="stylesheet" href="../../../dist/actual.full.css">
+  <link rel="stylesheet" href="../../assets/actual-themes.min.css">
   <link rel="stylesheet" href="admini.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.46.0/dist/tabler-icons.min.css">
 </head>
 
 <body>
   <div class="admini-shell">
     <!-- admini-shell:sidebar -->
-    <aside class="admini-sidebar" aria-label="Primary navigation">
+    <aside class="admini-sidebar scroller stable-gutter" aria-label="Primary navigation">
       <a class="navbar-brand" href="index.html">
         <span class="avatar primary"><abbr>AD</abbr></span>
         <span>Admini</span>
@@ -49,7 +51,7 @@
             </a>
           </li>
           <li>
-            <a class="nav-link" href="profile.html">
+            <a class="nav-link" href="profile.html" aria-current="page">
               <i class="ti ti-user" aria-hidden="true"></i>
               Profile
             </a>
@@ -91,7 +93,7 @@
             </a>
           </li>
           <li>
-            <a class="nav-link" href="chat.html" aria-current="page">
+            <a class="nav-link" href="chat.html">
               <i class="ti ti-message-circle" aria-hidden="true"></i>
               Chat
             </a>
@@ -133,7 +135,7 @@
 
       <div class="flyout-trigger stretch">
         <button class="btn neutral ghost" data-enhance="flyout" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="sidebar-user-menu"
-          id="sidebar-user-trigger" style="justify-content: flex-start;">
+          id="sidebar-user-trigger">
           <span class="avatar sm"><abbr>JN</abbr></span>
           <span>John Nemo</span>
         </button>
@@ -157,7 +159,7 @@
 
         <ol class="breadcrumb text-nowrap admini-hide-mobile" aria-label="Breadcrumb">
           <li><a href="index.html">Admini</a></li>
-          <li class="truncate" aria-current="page">Chat</li>
+          <li class="truncate" aria-current="page">Profile</li>
         </ol>
 
         <div class="grow"></div>
@@ -203,124 +205,123 @@
       </header>
       <!-- /admini-shell:topbar -->
 
-    <main class="admini-chat-shell" id="chat-shell">
-        <section class="admini-chat-list" aria-label="Conversations">
-          <button class="admini-chat-item" type="button" aria-current="true" data-chat-item>
-            <span class="avatar primary"><abbr>AM</abbr></span>
-            <span class="admini-chat-item-body">
-              <span class="admini-chat-item-top">
-                <strong>Ada Morgan</strong>
-                <span class="muted" style="font-size: var(--font-size-xs);">09:41</span>
-              </span>
-              <span class="muted truncate">Sounds good, see you then!</span>
-            </span>
-          </button>
-          <button class="admini-chat-item" type="button" data-chat-item>
-            <span class="avatar success"><abbr>JT</abbr></span>
-            <span class="admini-chat-item-body">
-              <span class="admini-chat-item-top">
-                <strong>Jacob Thornton</strong>
-                <span class="badge primary sm solid">2</span>
-              </span>
-              <span class="muted truncate">Pushed the fix, can you review?</span>
-            </span>
-          </button>
-          <button class="admini-chat-item" type="button" data-chat-item>
-            <span class="avatar warning"><abbr>LB</abbr></span>
-            <span class="admini-chat-item-body">
-              <span class="admini-chat-item-top">
-                <strong>Larry the Bird</strong>
-                <span class="muted" style="font-size: var(--font-size-xs);">Yesterday</span>
-              </span>
-              <span class="muted truncate">Thanks for the update.</span>
-            </span>
-          </button>
-          <button class="admini-chat-item" type="button" data-chat-item>
-            <span class="avatar"><abbr>RM</abbr></span>
-            <span class="admini-chat-item-body">
-              <span class="admini-chat-item-top">
-                <strong>Rin Moreau</strong>
-                <span class="badge primary sm solid">1</span>
-              </span>
-              <span class="muted truncate">Typing…</span>
-            </span>
-          </button>
-          <button class="admini-chat-item" type="button" data-chat-item>
-            <span class="avatar neutral"><abbr>TS</abbr></span>
-            <span class="admini-chat-item-body">
-              <span class="admini-chat-item-top">
-                <strong>Theo Silva</strong>
-                <span class="muted" style="font-size: var(--font-size-xs);">3d</span>
-              </span>
-              <span class="muted truncate">Let's sync tomorrow morning.</span>
-            </span>
-          </button>
-        </section>
-
-        <section class="admini-chat-thread" aria-label="Conversation with Ada Morgan">
-          <header class="admini-chat-thread-header">
-            <button class="btn neutral ghost sm admini-chat-back" type="button" aria-label="Back to conversations">
-              <i class="ti ti-arrow-left" aria-hidden="true"></i>
-            </button>
-            <span class="avatar primary"><abbr>AM</abbr></span>
-            <div>
-              <strong>Ada Morgan</strong>
-              <p class="muted" style="margin: 0; font-size: var(--font-size-sm);">Online</p>
-            </div>
-            <div class="grow"></div>
-            <button class="btn neutral ghost sm" type="button" aria-label="More options">
-              <i class="ti ti-dots" aria-hidden="true"></i>
-            </button>
-          </header>
-
-          <div class="admini-chat-messages" id="chat-messages">
-            <div class="admini-bubble-row">
-              <div class="admini-bubble">
-                <span>Hey! Are we still on for the pricing review at 2?</span>
-                <span class="admini-bubble-time">09:12</span>
-              </div>
-            </div>
-            <div class="admini-bubble-row is-own">
-              <div class="admini-bubble">
-                <span>Yes, I'll bring the updated deck.</span>
-                <span class="admini-bubble-time">09:14</span>
-              </div>
-            </div>
-            <div class="admini-bubble-row">
-              <div class="admini-bubble">
-                <span>Perfect. Also — did the invoice page ship?</span>
-                <span class="admini-bubble-time">09:30</span>
-              </div>
-            </div>
-            <div class="admini-bubble-row is-own">
-              <div class="admini-bubble">
-                <span>Just finished it, want to take a look?</span>
-                <span class="admini-bubble-time">09:35</span>
-              </div>
-            </div>
-            <div class="admini-bubble-row">
-              <div class="admini-bubble">
-                <span>Sounds good, see you then!</span>
-                <span class="admini-bubble-time">09:41</span>
-              </div>
+      <main class="center stack admini-content">
+        <div class="card stack" style="--card-pad: 0; --gap: 0;">
+          <div style="block-size: 8rem; background: linear-gradient(135deg, var(--primary), var(--secondary));"></div>
+          <div class="cluster admini-profile-header" style="--cluster-justify: space-between; --cluster-align: center;">
+            <span class="avatar primary" style="--avatar-size: var(--profile-avatar-size); --avatar-font-size: 1.5rem; border: 3px solid var(--surface);"><abbr>JN</abbr></span>
+            <div class="cluster sm admini-profile-actions">
+              <a class="btn neutral outline" href="chat.html">
+                <i class="ti ti-message-circle" aria-hidden="true"></i>
+                Message
+              </a>
+              <a class="btn primary" href="settings.html">
+                <i class="ti ti-pencil" aria-hidden="true"></i>
+                Edit profile
+              </a>
             </div>
           </div>
+          <div class="stack" style="padding: var(--space-30) var(--space-40) var(--space-40);">
+            <hgroup>
+              <h1 style="margin: 0;">John Nemo</h1>
+              <p class="muted" style="margin: 0;">Product Designer &middot; Admini Inc.</p>
+            </hgroup>
+            <div class="cluster" style="--gap: var(--space-40);">
+              <span class="muted"><i class="ti ti-map-pin" aria-hidden="true"></i> San Francisco, CA</span>
+              <span class="muted"><i class="ti ti-calendar" aria-hidden="true"></i> Joined March 2023</span>
+              <a class="link-plain" href="mailto:john@example.com"><i class="ti ti-mail" aria-hidden="true"></i> john@example.com</a>
+            </div>
+          </div>
+        </div>
 
-          <form class="admini-composer" id="composer-form">
-            <textarea class="textarea" id="composer-input" rows="1" placeholder="Write a message…" aria-label="Message"></textarea>
-            <button class="btn neutral ghost" type="button" aria-label="Attach file">
-              <i class="ti ti-paperclip" aria-hidden="true"></i>
-            </button>
-            <button class="btn primary" type="submit" aria-label="Send message">
-              <i class="ti ti-send" aria-hidden="true"></i>
-            </button>
-          </form>
+        <section class="grid-4" aria-label="Profile stats">
+          <article class="card compact stack gap-none items-center">
+            <data class="admini-stat-value" value="128">128</data>
+            <span class="muted">Projects</span>
+          </article>
+          <article class="card compact stack gap-none items-center">
+            <data class="admini-stat-value" value="2382">2,382</data>
+            <span class="muted">Contributions</span>
+          </article>
+          <article class="card compact stack gap-none items-center">
+            <data class="admini-stat-value" value="9">9</data>
+            <span class="muted">Teammates</span>
+          </article>
+          <article class="card compact stack gap-none items-center">
+            <data class="admini-stat-value" value="4.9">4.9</data>
+            <span class="muted">Rating</span>
+          </article>
         </section>
+
+        <div class="tabset">
+          <div class="tabs" data-enhance="tabs" role="tablist" aria-label="Profile sections">
+            <button class="tab primary" type="button" role="tab" aria-selected="true" aria-controls="panel-about" id="tab-about">About</button>
+            <button class="tab" type="button" role="tab" aria-selected="false" aria-controls="panel-activity" id="tab-activity" tabindex="-1">Activity</button>
+            <button class="tab" type="button" role="tab" aria-selected="false" aria-controls="panel-team" id="tab-team" tabindex="-1">Team</button>
+          </div>
+
+          <section role="tabpanel" id="panel-about" aria-labelledby="tab-about" tabindex="-1" class="stack">
+            <div class="card stack">
+              <h2>Bio</h2>
+              <p>Designs the dashboard and billing experience at Admini. Previously led design systems at two Series B startups. Based in San Francisco, working East Coast hours.</p>
+            </div>
+            <div class="card stack">
+              <h2 style="margin: 0;">Skills</h2>
+              <div class="cluster">
+                <span class="badge neutral soft">Design systems</span>
+                <span class="badge neutral soft">Figma</span>
+                <span class="badge neutral soft">Accessibility</span>
+                <span class="badge neutral soft">CSS</span>
+                <span class="badge neutral soft">Prototyping</span>
+              </div>
+            </div>
+          </section>
+
+          <section role="tabpanel" id="panel-activity" aria-labelledby="tab-activity" tabindex="-1" hidden class="stack">
+            <div class="card stack">
+              <div class="admini-feed">
+                <div class="media admini-feed-item">
+                  <span class="admini-dot success" aria-hidden="true"></span>
+                  <div>
+                    <strong>Shipped the invoice page redesign.</strong>
+                    <p class="muted">Merged 3 hours ago.</p>
+                  </div>
+                </div>
+                <div class="media admini-feed-item">
+                  <span class="admini-dot primary" aria-hidden="true"></span>
+                  <div>
+                    <strong>Commented on &ldquo;Kanban drag-and-drop demo&rdquo;.</strong>
+                    <p class="muted">Yesterday.</p>
+                  </div>
+                </div>
+                <div class="media admini-feed-item">
+                  <span class="admini-dot warning" aria-hidden="true"></span>
+                  <div>
+                    <strong>Flagged a contrast issue in dark theme.</strong>
+                    <p class="muted">2 days ago.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section role="tabpanel" id="panel-team" aria-labelledby="tab-team" tabindex="-1" hidden class="stack">
+            <div class="card stack">
+              <div class="avatar-stack" role="group" aria-label="Team members">
+                <span class="avatar primary" title="Mark Otto"><abbr>MO</abbr></span>
+                <span class="avatar success" title="Jacob Thornton"><abbr>JT</abbr></span>
+                <span class="avatar warning" title="Ada Morgan"><abbr>AM</abbr></span>
+                <span class="avatar" title="Rin Moreau"><abbr>RM</abbr></span>
+              </div>
+              <p class="muted">John works closely with 4 teammates on the platform squad. See the <a class="link-plain" href="user-grid.html">full directory</a>.</p>
+            </div>
+          </section>
+        </div>
       </main>
     </div>
   </div>
 
-  <dialog class="drawer" id="navigation-drawer" aria-label="Navigation">
+  <dialog class="drawer" data-theme="dim" id="navigation-drawer" aria-label="Navigation">
     <header class="cluster" style="--cluster-justify: space-between;">
       <strong>Admini</strong>
       <form method="dialog">
@@ -335,12 +336,12 @@
         <li><a class="nav-link" href="index.html"><i class="ti ti-layout-dashboard" aria-hidden="true"></i> Dashboard</a></li>
         <li><a class="nav-link" href="tables.html"><i class="ti ti-table" aria-hidden="true"></i> Tables</a></li>
         <li><a class="nav-link" href="forms.html"><i class="ti ti-forms" aria-hidden="true"></i> Forms</a></li>
-        <li><a class="nav-link" href="profile.html"><i class="ti ti-user" aria-hidden="true"></i> Profile</a></li>
+        <li><a class="nav-link" href="profile.html" aria-current="page"><i class="ti ti-user" aria-hidden="true"></i> Profile</a></li>
         <li><a class="nav-link" href="settings.html"><i class="ti ti-settings" aria-hidden="true"></i> Settings</a></li>
         <li><a class="nav-link" href="user-grid.html"><i class="ti ti-users-group" aria-hidden="true"></i> User grid</a></li>
         <li><a class="nav-link" href="kanban.html"><i class="ti ti-layout-kanban" aria-hidden="true"></i> Kanban</a></li>
         <li><a class="nav-link" href="calendar.html"><i class="ti ti-calendar" aria-hidden="true"></i> Calendar</a></li>
-        <li><a class="nav-link" href="chat.html" aria-current="page"><i class="ti ti-message-circle" aria-hidden="true"></i> Chat</a></li>
+        <li><a class="nav-link" href="chat.html"><i class="ti ti-message-circle" aria-hidden="true"></i> Chat</a></li>
         <li><a class="nav-link" href="invoice.html"><i class="ti ti-file-invoice" aria-hidden="true"></i> Invoice</a></li>
         <li><a class="nav-link" href="login.html"><i class="ti ti-login" aria-hidden="true"></i> Login</a></li>
         <li><a class="nav-link" href="404.html"><i class="ti ti-error-404" aria-hidden="true"></i> 404</a></li>
@@ -348,55 +349,8 @@
     </nav>
   </dialog>
 
-  <script src="../../dist/actual.full.js"></script>
-  <script>
-    const switcher = document.getElementById("theme-switcher");
+  <script src="../../../dist/actual.full.js" defer></script>
 
-    if (switcher) {
-      switcher.addEventListener("change", () => {
-        if (switcher.value) {
-          document.documentElement.dataset.theme = switcher.value;
-        } else {
-          document.documentElement.removeAttribute("data-theme");
-        }
-      });
-    }
-
-    // Selecting a conversation is visual state only here — swapping in the
-    // real thread for each contact is application/data logic, not a
-    // framework concern. On narrow viewports it also reveals the thread pane.
-    const chatShell = document.getElementById("chat-shell");
-
-    chatShell.querySelectorAll("[data-chat-item]").forEach((item) => {
-      item.addEventListener("click", () => {
-        chatShell.querySelectorAll("[data-chat-item]").forEach((el) => el.removeAttribute("aria-current"));
-        item.setAttribute("aria-current", "true");
-        chatShell.classList.add("is-thread-open");
-      });
-    });
-
-    chatShell.querySelector(".admini-chat-back")?.addEventListener("click", () => {
-      chatShell.classList.remove("is-thread-open");
-    });
-
-    const composerForm = document.getElementById("composer-form");
-    const composerInput = document.getElementById("composer-input");
-    const messages = document.getElementById("chat-messages");
-
-    composerForm.addEventListener("submit", (e) => {
-      e.preventDefault();
-      const value = composerInput.value.trim();
-      if (!value) return;
-      const row = document.createElement("div");
-      row.className = "admini-bubble-row is-own";
-      row.innerHTML = `<div class="admini-bubble"><span></span><span class="admini-bubble-time">Now</span></div>`;
-      row.querySelector("span").textContent = value;
-      messages.appendChild(row);
-      composerInput.value = "";
-      messages.scrollTop = messages.scrollHeight;
-    });
-
-  </script>
 </body>
 
 </html>

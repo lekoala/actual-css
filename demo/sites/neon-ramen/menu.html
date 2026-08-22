@@ -1,0 +1,364 @@
+<!doctype html>
+<html data-theme="dark" lang="en">
+  <head>
+    <!-- Reference app: expected at demo/sites/neon-ramen/ -->
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <title>Menu — Neon Ramen</title>
+    <link href="../../../dist/actual.full.css" rel="stylesheet">
+    <link href="neon-site.css" rel="stylesheet">
+  </head>
+  <body class="app-shell">
+    <header class="site-header">
+      <div class="center">
+        <nav aria-label="Main navigation" class="navbar">
+          <a class="navbar-brand brand-mark" href="index.html">NEONRAMEN <em>未来のラーメン</em></a>
+          <ul class="navbar-nav">
+            <li>
+              <a class="nav-link" href="index.html">Home</a>
+            </li>
+            <li>
+              <a aria-current="page" class="nav-link" href="menu.html">Menu</a>
+            </li>
+            <li>
+              <a class="nav-link" href="locations.html">Locations</a>
+            </li>
+            <li>
+              <a class="nav-link" href="item.html">Spicy Miso</a>
+            </li>
+          </ul>
+          <div class="cluster nav-order" style="--gap:.5rem">
+            <a class="btn primary cyber-btn sm" href="order.html">Order pickup</a>
+          </div>
+          <button aria-controls="site-drawer" aria-haspopup="dialog" aria-label="Open navigation" class="btn ghost secondary sm nav-toggle" command="show-modal" commandfor="site-drawer" type="button">Menu</button>
+        </nav>
+      </div>
+    </header>
+    <dialog aria-label="Main navigation" class="drawer" id="site-drawer">
+      <header>
+        <strong class="brand-mark">NEONRAMEN <em>未来のラーメン</em></strong>
+        <form method="dialog">
+          <button aria-label="Close navigation" class="drawer-close" type="submit"></button>
+        </form>
+      </header>
+      <nav>
+        <ul class="nav-list stack" style="--gap:.15rem">
+          <li>
+            <a class="nav-link" href="index.html">Home</a>
+          </li>
+          <li>
+            <a aria-current="page" class="nav-link" href="menu.html">Menu</a>
+          </li>
+          <li>
+            <a class="nav-link" href="locations.html">Locations</a>
+          </li>
+          <li>
+            <a class="nav-link" href="item.html">Spicy Miso</a>
+          </li>
+        </ul>
+      </nav>
+      <footer>
+        <a class="btn primary cyber-btn" href="order.html">Order pickup</a>
+      </footer>
+    </dialog>
+    <main class="page">
+      <div class="center">
+        <div class="stack page-stack">
+          <section aria-labelledby="menu-title">
+            <div class="stack" style="--gap:.4rem; margin-block-end:1.5rem">
+              <span class="overline brand-overline">Night circuit</span>
+              <h1 class="section-title" id="menu-title">Full menu</h1>
+              <p class="lede measure">Every bowl fired to order. Toggle the wire to your heat, then customize from the cart.</p>
+            </div>
+            <div aria-hidden="true" class="signal-rule"><span class="signal-tris"><i></i><i></i><i></i><i></i><i></i><i></i></span><span class="signal-line"></span><span class="signal-code">MENU//04</span></div>
+            <div aria-label="Menu sections" class="tabs" data-enhance="tabs" role="tablist">
+              <button aria-controls="panel-signature" aria-selected="true" class="tab primary" id="tab-signature" role="tab" type="button">Signature</button>
+              <button aria-controls="panel-spicy" aria-selected="false" class="tab danger" id="tab-spicy" role="tab" tabindex="-1" type="button">Spicy</button>
+              <button aria-controls="panel-veggie" aria-selected="false" class="tab success" id="tab-veggie" role="tab" tabindex="-1" type="button">Veggie</button>
+              <button aria-controls="panel-sides" aria-selected="false" class="tab" id="tab-sides" role="tab" tabindex="-1" type="button">Sides</button>
+            </div>
+            <section aria-labelledby="tab-signature" id="panel-signature" role="tabpanel" tabindex="-1" class="mbs">
+              <div class="grid menu-grid">
+                <article class="card ramen-card cut">
+                  <div class="frame">
+                    <img alt="Tonkotsu ramen" src="assets/bowl-tonkotsu.webp">
+                  </div>
+                  <div class="stack ramen-card-body">
+                    <div class="cluster">
+                      <span class="badge primary soft">Signature</span>
+                      <span class="muted dish-jp">豚骨</span>
+                    </div>
+                    <h3>Tonkotsu</h3>
+                    <p class="muted">Pork broth, chashu, wood ear, scallions, ajitama and nori.</p>
+                  </div>
+                  <footer>
+                    <strong class="price">HK$78</strong>
+                    <a class="btn primary cyber-btn sm" href="item.html">Customize</a>
+                  </footer>
+                </article>
+                <article class="card ramen-card cut">
+                  <div class="frame">
+                    <img alt="Shoyu chicken ramen" src="assets/bowl-shoyu-chicken.webp">
+                  </div>
+                  <div class="stack ramen-card-body">
+                    <div class="cluster">
+                      <span class="badge primary soft">Signature</span>
+                      <span class="muted dish-jp">醤油</span>
+                    </div>
+                    <h3>Shoyu</h3>
+                    <p class="muted">Clear soy broth, chicken, menma, scallions and a soft egg.</p>
+                  </div>
+                  <footer>
+                    <strong class="price">HK$72</strong>
+                    <a class="btn primary cyber-btn sm" href="item.html">Customize</a>
+                  </footer>
+                </article>
+                <article class="card ramen-card cut">
+                  <div class="frame">
+                    <img alt="Creamy miso classic ramen" src="assets/bowl-yasai-miso.webp">
+                  </div>
+                  <div class="stack ramen-card-body">
+                    <div class="cluster">
+                      <span class="badge primary soft">Signature</span>
+                      <span class="muted dish-jp">味噌</span>
+                    </div>
+                    <h3>Miso classic</h3>
+                    <p class="muted">Fermented miso broth, butter corn, bean sprouts and scallions.</p>
+                  </div>
+                  <footer>
+                    <strong class="price">HK$74</strong>
+                    <a class="btn primary cyber-btn sm" href="item.html">Customize</a>
+                  </footer>
+                </article>
+              </div>
+            </section>
+            <section aria-labelledby="tab-spicy" hidden id="panel-spicy" role="tabpanel" tabindex="-1" class="mbs">
+              <div class="grid menu-grid">
+                <article class="card ramen-card cut">
+                  <div class="frame">
+                    <img alt="Spicy miso ramen" src="assets/bowl-spicy-miso.webp">
+                  </div>
+                  <div class="stack ramen-card-body">
+                    <div class="cluster">
+                      <span class="badge danger soft">Spicy</span>
+                      <span class="spice">SPICE <b>4/5</b></span>
+                    </div>
+                    <h3>Spicy miso</h3>
+                    <p class="muted">Miso broth, chili oil, ground pork, bamboo and bean sprouts.</p>
+                  </div>
+                  <footer>
+                    <strong class="price">HK$82</strong>
+                    <a class="btn danger cyber-btn sm" href="item.html">Customize</a>
+                  </footer>
+                </article>
+                <article class="card ramen-card cut">
+                  <div class="frame">
+                    <img alt="Extra spicy tantanmen" src="assets/bowl-fire-miso.webp">
+                  </div>
+                  <div class="stack ramen-card-body">
+                    <div class="cluster">
+                      <span class="badge danger soft">Spicy</span>
+                      <span class="spice">SPICE <b>5/5</b></span>
+                    </div>
+                    <h3>Tantanmen</h3>
+                    <p class="muted">Sesame chili broth, minced pork, bok choy and chili threads.</p>
+                  </div>
+                  <footer>
+                    <strong class="price">HK$86</strong>
+                    <a class="btn danger cyber-btn sm" href="item.html">Customize</a>
+                  </footer>
+                </article>
+                <article class="card ramen-card cut">
+                  <div class="frame">
+                    <img alt="Fire tonkotsu ramen" src="assets/bowl-fire-miso.webp">
+                  </div>
+                  <div class="stack ramen-card-body">
+                    <div class="cluster">
+                      <span class="badge danger soft">Spicy</span>
+                      <span class="spice">SPICE <b>3/5</b></span>
+                    </div>
+                    <h3>Fire tonkotsu</h3>
+                    <p class="muted">Rich pork broth kicked with chili crisp and garlic oil.</p>
+                  </div>
+                  <footer>
+                    <strong class="price">HK$80</strong>
+                    <a class="btn danger cyber-btn sm" href="item.html">Customize</a>
+                  </footer>
+                </article>
+              </div>
+            </section>
+            <section aria-labelledby="tab-veggie" hidden id="panel-veggie" role="tabpanel" tabindex="-1" class="mbs">
+              <div class="grid menu-grid">
+                <article class="card ramen-card cut">
+                  <div class="frame">
+                    <img alt="Veggie shoyu ramen" src="assets/bowl-veggie-shoyu.webp">
+                  </div>
+                  <div class="stack ramen-card-body">
+                    <div class="cluster">
+                      <span class="badge success soft">Veggie</span>
+                      <span class="muted dish-jp">醤油</span>
+                    </div>
+                    <h3>Veggie shoyu</h3>
+                    <p class="muted">Shoyu broth, tofu, spinach, mushrooms, corn and scallions.</p>
+                  </div>
+                  <footer>
+                    <strong class="price">HK$76</strong>
+                    <a class="btn success cyber-btn sm" href="item.html">Customize</a>
+                  </footer>
+                </article>
+                <article class="card ramen-card cut">
+                  <div class="frame">
+                    <img alt="Yasai miso ramen" src="assets/bowl-yasai-miso.webp">
+                  </div>
+                  <div class="stack ramen-card-body">
+                    <div class="cluster">
+                      <span class="badge success soft">Veggie</span>
+                      <span class="muted dish-jp">野菜</span>
+                    </div>
+                    <h3>Yasai miso</h3>
+                    <p class="muted">Creamy miso, roasted squash, corn, greens and pickled ginger.</p>
+                  </div>
+                  <footer>
+                    <strong class="price">HK$74</strong>
+                    <a class="btn success cyber-btn sm" href="item.html">Customize</a>
+                  </footer>
+                </article>
+                <article class="card ramen-card cut">
+                  <div class="frame">
+                    <img alt="Mabo tofu noodles" src="assets/bowl-yasai-miso.webp">
+                  </div>
+                  <div class="stack ramen-card-body">
+                    <div class="cluster">
+                      <span class="badge success soft">Veggie</span>
+                      <span class="spice">SPICE <b>2/5</b></span>
+                    </div>
+                    <h3>Mabo tofu</h3>
+                    <p class="muted">Silken tofu in a mild chili-soy glaze over rice noodles.</p>
+                  </div>
+                  <footer>
+                    <strong class="price">HK$78</strong>
+                    <a class="btn success cyber-btn sm" href="item.html">Customize</a>
+                  </footer>
+                </article>
+              </div>
+            </section>
+            <section aria-labelledby="tab-sides" hidden id="panel-sides" role="tabpanel" tabindex="-1" class="mbs">
+              <div class="grid menu-grid">
+                <article class="card ramen-card cut">
+                  <div class="frame">
+                    <img alt="Karaage fried chicken" src="assets/karaage.webp">
+                  </div>
+                  <div class="stack ramen-card-body">
+                    <div class="cluster">
+                      <span class="badge neutral soft">Sides</span>
+                      <span class="muted dish-jp">唐揚げ</span>
+                    </div>
+                    <h3>Karaage</h3>
+                    <p class="muted">Crispy fried chicken, yuzu mayo and fresh lemon.</p>
+                  </div>
+                  <footer>
+                    <strong class="price">HK$42</strong>
+                    <a class="btn primary cyber-btn sm" href="order.html">+ Order</a>
+                  </footer>
+                </article>
+                <article class="card ramen-card cut">
+                  <div class="frame">
+                    <img alt="Pan-seared gyoza" src="assets/side-gyoza.webp">
+                  </div>
+                  <div class="stack ramen-card-body">
+                    <div class="cluster">
+                      <span class="badge neutral soft">Sides</span>
+                      <span class="muted dish-jp">餃子</span>
+                    </div>
+                    <h3>Gyoza</h3>
+                    <p class="muted">Pan-seared pork and chive dumplings, black vinegar dip.</p>
+                  </div>
+                  <footer>
+                    <strong class="price">HK$38</strong>
+                    <a class="btn primary cyber-btn sm" href="order.html">+ Order</a>
+                  </footer>
+                </article>
+                <article class="card ramen-card cut">
+                  <div class="frame">
+                    <img alt="Chashu rice bowl" src="assets/side-chashu-rice.webp">
+                  </div>
+                  <div class="stack ramen-card-body">
+                    <div class="cluster">
+                      <span class="badge neutral soft">Sides</span>
+                      <span class="muted dish-jp">丼</span>
+                    </div>
+                    <h3>Chashu rice</h3>
+                    <p class="muted">Charred pork over rice with scallion oil and ajitama.</p>
+                  </div>
+                  <footer>
+                    <strong class="price">HK$46</strong>
+                    <a class="btn primary cyber-btn sm" href="order.html">+ Order</a>
+                  </footer>
+                </article>
+              </div>
+            </section>
+          </section>
+        </div>
+      </div>
+    </main>
+    <footer class="site-footer">
+      <div class="center">
+        <div class="grid footer-grid">
+          <div class="stack" style="--gap:.65rem">
+            <strong class="brand-mark">NEONRAMEN <em>未来のラーメン</em></strong>
+            <p class="muted">Cyberpunk ramen running the night circuit. Hot broth, zero queues.</p>
+          </div>
+          <div>
+            <strong class="overline brand-overline">Navigate</strong>
+            <ul class="list-reset">
+              <li>
+                <a href="menu.html">Menu</a>
+              </li>
+              <li>
+                <a href="locations.html">Locations</a>
+              </li>
+              <li>
+                <a href="order.html">Pickup</a>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <strong class="overline brand-overline">Signal</strong>
+            <ul class="list-reset">
+              <li>
+                <a href="locations.html">Nearest cart</a>
+              </li>
+              <li>
+                <a href="item.html">Spicy Miso</a>
+              </li>
+              <li>
+                <span class="muted">NR-APP v2.4</span>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <strong class="overline brand-overline">Hours</strong>
+            <ul class="list-reset">
+              <li>
+                <span class="muted">Mon–Thu · 5PM–2AM</span>
+              </li>
+              <li>
+                <span class="muted">Fri–Sat · 5PM–4AM</span>
+              </li>
+              <li>
+                <span class="muted">Sun · closed</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="cluster footer-bottom">
+          <span>© 2026 Neon Ramen City Circuit</span>
+          <span>All carts <b>● LIVE</b> · avg pickup 12 min</span>
+        </div>
+      </div>
+    </footer>
+    <div aria-atomic="true" aria-live="polite" class="status-bar" data-status id="app-status" role="status"></div>
+    <script src="../../../dist/actual.full.js">
+    </script>
+  </body>
+</html>

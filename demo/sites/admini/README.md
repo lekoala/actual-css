@@ -1,0 +1,34 @@
+# Admini × Actual CSS
+
+Hand-authored multi-page admin demo using the current Actual CSS primitives and components.
+
+## Placement
+
+This folder lives at `demo/sites/admini/` inside an `actual-css` checkout. It loads:
+
+- `../../../dist/actual.full.css`
+- `../../assets/actual-themes.min.css` for the demo theme presets (built by `bun run build:themes`)
+- `../../../dist/actual.full.js`
+- Tabler Icons Webfont `3.46.0` from jsDelivr
+
+Serve the repository root over HTTP and open `demo/sites/admini/index.html`.
+
+## Refactor highlights
+
+- dashboard KPI row: `container-query` + `grid-4` for balanced 4 → 2 → 1 subdivision
+- dashboard body: `sidebar-layout` instead of a local breakpoint/grid implementation
+- activity/chat rows: `media` instead of local two-column recipes
+- scroll regions: `scroller` / `stable-gutter` layered on app-owned overflow
+- navigation: the desktop sidebar is theme-derived dark chrome (pinned `color-scheme: light`
+  resolves `--surface-solid` to the active preset's branded-dark face); the mobile drawer
+  keeps a fixed `data-theme="dim"` island
+- layout overrides use public hooks such as `--gap`, `--cluster-align`, and `--cluster-justify`
+- viewport-height rules use `--viewport-block`
+- theme persistence is applied before paint and tolerates unavailable `localStorage`
+- form state examples use native `disabled` / `readonly` attributes
+
+## Intentional local CSS
+
+`admini.css` still owns the persistent desktop sidebar shell and page-specific layouts such as calendar, chat, kanban, auth, and invoice. These are application compositions rather than framework component internals.
+
+The repeated shell markup is also intentional in this no-build demo. In a real application it should be extracted by the application's templating/component system rather than by Actual CSS.

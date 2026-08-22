@@ -1,12 +1,12 @@
 {
-  "totalRaw": 226236,
+  "totalRaw": 226987,
   "core": {
     "minified": 10492,
     "brotli": 2500
   },
   "full": {
-    "minified": 106676,
-    "brotli": 15660
+    "minified": 106796,
+    "brotli": 15669
   },
   "js": {
     "core": {
@@ -249,6 +249,10 @@
       "raw": 1593
     },
     {
+      "file": "components/table.css",
+      "raw": 1565
+    },
+    {
       "file": "layout/topbar.css",
       "raw": 1477
     },
@@ -273,12 +277,12 @@
       "raw": 1386
     },
     {
-      "file": "components/table.css",
-      "raw": 1361
-    },
-    {
       "file": "core/base.css",
       "raw": 1348
+    },
+    {
+      "file": "components/pagination.css",
+      "raw": 1333
     },
     {
       "file": "components/surface.css",
@@ -327,10 +331,6 @@
     {
       "file": "layout/sidebar-layout.css",
       "raw": 800
-    },
-    {
-      "file": "components/pagination.css",
-      "raw": 786
     },
     {
       "file": "core/reset.css",

@@ -6,10 +6,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Log in - Admini on Actual CSS</title>
   <meta name="description" content="Login page with centered card, form fields, and social authentication.">
-<link rel="stylesheet" href="../../dist/actual.full.css">
-  <link rel="stylesheet" href="../assets/actual-themes.min.css">
+<script src="admini-theme.js"></script>
+  <link rel="stylesheet" href="../../../dist/actual.full.css">
+  <link rel="stylesheet" href="../../assets/actual-themes.min.css">
   <link rel="stylesheet" href="admini.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.46.0/dist/tabler-icons.min.css">
 </head>
 
 <body>
@@ -73,7 +74,7 @@
               <input class="switch" type="checkbox" role="switch" name="remember">
               <span>Remember me</span>
             </label>
-            <a class="link-plain" href="#">Forgot password?</a>
+            <a class="link-plain" href="404.html">Forgot password?</a>
           </div>
 
           <div class="form-actions">
@@ -83,24 +84,26 @@
             </button>
           </div>
         </form>
+
+        <div class="cluster" style="--cluster-justify: center;">
+          <span class="muted">or continue with</span>
+        </div>
+
+        <div class="grid-2">
+          <button class="btn neutral outline" type="button">
+            <i class="ti ti-brand-github" aria-hidden="true"></i>
+            GitHub
+          </button>
+          <button class="btn neutral outline" type="button">
+            <i class="ti ti-brand-google" aria-hidden="true"></i>
+            Google
+          </button>
+        </div>
       </div>
     </div>
   </div>
 
-  <script src="../../dist/actual.full.js"></script>
-  <script>
-    const switcher = document.getElementById("theme-switcher");
-
-    if (switcher) {
-      switcher.addEventListener("change", () => {
-        if (switcher.value) {
-          document.documentElement.dataset.theme = switcher.value;
-        } else {
-          document.documentElement.removeAttribute("data-theme");
-        }
-      });
-    }
-  </script>
+  <script src="../../../dist/actual.full.js" defer></script>
 </body>
 
 </html>
