@@ -38,7 +38,7 @@
   /* .center's auto margins otherwise let fixed grid tracks shrink-wrap this
      flex item. Fill the shared 82rem shell so the sidebar starts with the
      header brand. */
-  inline-size: 100%;
+  inline-size: calc(100% - var(--center-pad, 1rem) * 2);
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   gap: var(--gap);
