@@ -55,13 +55,16 @@
         "dialog",
         "drawer",
         "fab",
+        "indicator",
         "key",
         "meter",
         "navbar",
         "pagination",
         "progress",
+        "rating",
         "skeleton",
         "spinner",
+        "steps",
         "table"
       ]
     },

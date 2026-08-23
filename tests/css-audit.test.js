@@ -608,6 +608,45 @@ test("optional FAB preserves DOM order and stays out of print", () => {
   expect(css).toContain("@media print");
 });
 
+test("indicator exposes only logical four-corner positioning", () => {
+  const css = readCss("src/css/components/indicator.css");
+
+  expect(css).toContain(".indicator-item.start");
+  expect(css).toContain(".indicator-item.bottom");
+  expect(css).toContain(".indicator-item:dir(rtl)");
+  expect(css).not.toMatch(
+    /\.indicator-item\s*\{[^}]*?(?:background|box-shadow|inline-size|block-size):/s,
+  );
+});
+
+test("steps derive markers from list order and keep state semantic", () => {
+  const css = readCss("src/css/components/steps.css");
+
+  expect(css).toContain("counter-increment: actual-step;");
+  expect(css).toContain("content: counter(actual-step);");
+  expect(css).toContain('[aria-current="step"]');
+  expect(css).toContain(".steps.vertical");
+});
+
+test("rating keeps radio order and cumulative fill progressive", () => {
+  const css = readCss("src/css/components/rating.css");
+
+  expect(css).toContain('.rating > input[type="radio"]');
+  expect(css).toContain("@supports selector(:has(*))");
+  expect(css).toContain(':has(~ input[type="radio"]:checked)');
+  expect(css).toContain(':hover ~ input[type="radio"]');
+  expect(css).toMatch(/\.rating\s*\{[^}]*?gap:\s*0;/s);
+  expect(css).toContain("inline-size: calc(var(--rating-size) + var(--rating-gap));");
+  expect(css).toContain("mask: var(--rating-star) center / var(--rating-size)");
+  expect(css).toContain("background: var(--rating-empty);");
+  expect(css).toContain("background: var(--rating-color);");
+  expect(css).not.toContain("opacity: 0.25");
+  expect(css).not.toContain("clip-path");
+  expect(css).not.toContain("row-reverse");
+  expect(css).toContain("@media (forced-colors: active)");
+  expect(css).toMatch(/@media \(forced-colors: active\)[\s\S]*?appearance:\s*auto;/);
+});
+
 test("controls never zero the outline in their base style", () => {
   const css = readCss("src/css/forms/control.css").replace(/\/\*[\s\S]*?\*\//g, "");
 

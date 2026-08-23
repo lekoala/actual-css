@@ -1,0 +1,47 @@
+/*
+ * Indicator — generic corner positioning for overlaid component content.
+ *
+ * The container only establishes the containing block. The item owns no
+ * paint, size, or ring so badges and other components keep their own visual
+ * contract.
+ *
+ * Internal:
+ * --indicator-translate-x
+ * --indicator-translate-y
+ */
+.indicator {
+  position: relative;
+}
+
+.indicator-item {
+  --indicator-translate-x: 50%;
+  --indicator-translate-y: -50%;
+
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-end: 0;
+  z-index: 1;
+  transform: translate(var(--indicator-translate-x), var(--indicator-translate-y));
+}
+
+.indicator-item.start {
+  --indicator-translate-x: -50%;
+
+  inset-inline-start: 0;
+  inset-inline-end: auto;
+}
+
+.indicator-item.bottom {
+  --indicator-translate-y: 50%;
+
+  inset-block-start: auto;
+  inset-block-end: 0;
+}
+
+.indicator-item:dir(rtl) {
+  --indicator-translate-x: -50%;
+}
+
+.indicator-item.start:dir(rtl) {
+  --indicator-translate-x: 50%;
+}

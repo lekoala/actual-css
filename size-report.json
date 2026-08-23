@@ -1,12 +1,12 @@
 {
-  "totalRaw": 232945,
+  "totalRaw": 240329,
   "core": {
     "minified": 10635,
     "brotli": 2520
   },
   "full": {
-    "minified": 106856,
-    "brotli": 15700
+    "minified": 112019,
+    "brotli": 16511
   },
   "js": {
     "core": {
@@ -18,7 +18,7 @@
       "brotli": 15986
     }
   },
-  "fileCount": 102,
+  "fileCount": 105,
   "files": [
     {
       "file": "components/modal.css",
@@ -50,7 +50,7 @@
     },
     {
       "file": "typography/prose.css",
-      "raw": 5100
+      "raw": 5139
     },
     {
       "file": "layout/grid.css",
@@ -89,16 +89,16 @@
       "raw": 4121
     },
     {
+      "file": "components/card.css",
+      "raw": 4103
+    },
+    {
       "file": "core/variants.css",
       "raw": 4005
     },
     {
       "file": "themes/gradient.css",
       "raw": 3892
-    },
-    {
-      "file": "components/card.css",
-      "raw": 3839
     },
     {
       "file": "components/join.css",
@@ -117,6 +117,10 @@
       "raw": 3316
     },
     {
+      "file": "components/rating.css",
+      "raw": 3174
+    },
+    {
       "file": "components/menu.css",
       "raw": 3032
     },
@@ -127,6 +131,10 @@
     {
       "file": "forms/control.css",
       "raw": 2909
+    },
+    {
+      "file": "components/steps.css",
+      "raw": 2870
     },
     {
       "file": "forms/range.css",
@@ -309,6 +317,10 @@
       "raw": 1125
     },
     {
+      "file": "components/index.css",
+      "raw": 1021
+    },
+    {
       "file": "components/breadcrumb.css",
       "raw": 1008
     },
@@ -317,8 +329,8 @@
       "raw": 968
     },
     {
-      "file": "components/index.css",
-      "raw": 947
+      "file": "components/indicator.css",
+      "raw": 963
     },
     {
       "file": "core/intents.css",

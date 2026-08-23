@@ -123,13 +123,16 @@
         <li><a class="nav-link" href="dialog.html">Dialog</a></li>
         <li><a class="nav-link" href="drawer.html">Drawer</a></li>
         <li><a class="nav-link" href="fab.html">Floating action button</a></li>
+        <li><a class="nav-link" href="indicator.html">Indicator</a></li>
         <li><a class="nav-link" href="key.html">Key</a></li>
         <li><a class="nav-link" href="meter.html">Meter</a></li>
         <li><a class="nav-link" href="navbar.html">Navbar</a></li>
         <li><a class="nav-link" href="pagination.html">Pagination</a></li>
         <li><a class="nav-link" href="progress.html">Progress</a></li>
+        <li><a class="nav-link" href="rating.html">Rating</a></li>
         <li><a class="nav-link" href="skeleton.html">Skeleton</a></li>
         <li><a class="nav-link" href="spinner.html">Spinner</a></li>
+        <li><a class="nav-link" href="steps.html">Steps</a></li>
         <li><a class="nav-link" href="table.html">Table</a></li>
       </ul>
       <p class="docs-nav-group">Forms</p>
@@ -221,7 +224,10 @@
 card's structural slot. A direct <code>&lt;footer&gt;</code> is anchored to the bottom of the
 card when extra block space is available, so prices and actions line up across
 equal-height cards. Cards do not own page spacing — compose them with layout
-primitives like <code>.grid</code>.</p>
+primitives like <code>.grid</code>. A bare card owns the rhythm between its direct
+children through <code>--card-gap</code>; applying a layout primitive such as <code>.stack</code> or
+<code>.media</code> to the same element gives that primitive control of the layout and
+gap.</p>
 </div>
 <div class="docs-example">
   <div class="docs-preview">
@@ -535,6 +541,7 @@ variants.</p>
 <li><code>--card-radius</code> — corner radius.</li>
 <li><code>--card-max-inline-size</code> — maximum width.</li>
 <li><code>--card-pad</code> — inner padding; also drives the negative offsets that let a <code>.bleed</code> child reach the card edge. <code>.compact</code> lowers it.</li>
+<li><code>--card-gap</code> — space between direct children of a bare card. A composed layout primitive owns its own gap instead. <code>.compact</code> does not change this hook.</li>
 </ul>
 
 </div>
@@ -628,13 +635,16 @@ variants.</p>
         <li><a class="nav-link" href="dialog.html">Dialog</a></li>
         <li><a class="nav-link" href="drawer.html">Drawer</a></li>
         <li><a class="nav-link" href="fab.html">Floating action button</a></li>
+        <li><a class="nav-link" href="indicator.html">Indicator</a></li>
         <li><a class="nav-link" href="key.html">Key</a></li>
         <li><a class="nav-link" href="meter.html">Meter</a></li>
         <li><a class="nav-link" href="navbar.html">Navbar</a></li>
         <li><a class="nav-link" href="pagination.html">Pagination</a></li>
         <li><a class="nav-link" href="progress.html">Progress</a></li>
+        <li><a class="nav-link" href="rating.html">Rating</a></li>
         <li><a class="nav-link" href="skeleton.html">Skeleton</a></li>
         <li><a class="nav-link" href="spinner.html">Spinner</a></li>
+        <li><a class="nav-link" href="steps.html">Steps</a></li>
         <li><a class="nav-link" href="table.html">Table</a></li>
       </ul>
       <p class="docs-nav-group">Forms</p>

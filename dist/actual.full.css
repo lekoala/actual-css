@@ -750,6 +750,10 @@ small {
 /* Vertical rhythm belongs to the direct block that participates in the
    document, so it must not be injected into the internals of a nested
    component (e.g. a .table-wrap around a .table would trap the margin). */
+.prose > * {
+  margin-block-end: 0;
+}
+
 .prose > * + * {
   margin-block-start: var(--prose-flow);
 }
@@ -3894,11 +3898,14 @@ a.badge[aria-disabled="true"] {
  * Surface, border, radius, padding, density, and elevation stay local here.
  * Direct header/footer children are structural slots; a direct footer is
  * anchored to the card's bottom edge when extra block space is available (so
- * price/action rows align across equal-height cards in a grid). Page layout
- * remains the job of markup and layout primitives outside the card.
+ * price/action rows align across equal-height cards in a grid). A bare card
+ * owns its direct-child rhythm; a layout primitive on the same element takes
+ * over that layout. Page layout remains the job of markup and layout
+ * primitives outside the card.
  *
  * Public hooks:
  * --card-pad
+ * --card-gap
  * --card-radius
  * --card-max-inline-size
  *
@@ -3922,6 +3929,7 @@ a.badge[aria-disabled="true"] {
 
 .card {
   --card-pad: var(--space-40);
+  --card-gap: var(--space-30);
   --card-radius: var(--radius-lg);
   --card-max-inline-size: none;
   --card-bg: var(--ui-bg, var(--surface-raised));
@@ -3948,10 +3956,14 @@ a.badge[aria-disabled="true"] {
 :where(.card) {
   display: flex;
   flex-direction: column;
+  gap: var(--card-gap);
 }
 
-.card > * {
+/* Native block margins would add to flex gap because flex-item margins never
+   collapse. Zero specificity keeps intentional child utilities available. */
+:where(.card) > * {
   min-inline-size: 0;
+  margin-block: 0;
 }
 
 .card > :where(header, footer) {
@@ -3976,14 +3988,6 @@ a.badge[aria-disabled="true"] {
    Specificity beats .stack > * so a .card.stack keeps this contract. */
 .card > footer {
   margin-block-start: auto;
-}
-
-.card > :first-child {
-  margin-block-start: 0;
-}
-
-.card > :last-child {
-  margin-block-end: 0;
 }
 
 .card.raised {
@@ -5692,6 +5696,54 @@ a.avatar[aria-disabled="true"] {
 }
 
 /*
+ * Indicator — generic corner positioning for overlaid component content.
+ *
+ * The container only establishes the containing block. The item owns no
+ * paint, size, or ring so badges and other components keep their own visual
+ * contract.
+ *
+ * Internal:
+ * --indicator-translate-x
+ * --indicator-translate-y
+ */
+.indicator {
+  position: relative;
+}
+
+.indicator-item {
+  --indicator-translate-x: 50%;
+  --indicator-translate-y: -50%;
+
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-end: 0;
+  z-index: 1;
+  transform: translate(var(--indicator-translate-x), var(--indicator-translate-y));
+}
+
+.indicator-item.start {
+  --indicator-translate-x: -50%;
+
+  inset-inline-start: 0;
+  inset-inline-end: auto;
+}
+
+.indicator-item.bottom {
+  --indicator-translate-y: 50%;
+
+  inset-block-start: auto;
+  inset-block-end: 0;
+}
+
+.indicator-item:dir(rtl) {
+  --indicator-translate-x: -50%;
+}
+
+.indicator-item.start:dir(rtl) {
+  --indicator-translate-x: 50%;
+}
+
+/*
  * Key — keyboard keys and shortcut tokens for UI chrome.
  *
  * Use .key outside prose. Plain kbd inside .prose gets the same visual
@@ -5930,6 +5982,228 @@ a.avatar[aria-disabled="true"] {
   .fab {
     display: none;
   }
+}
+
+/*
+ * Rating — integer star rating drawn on native radio inputs.
+ *
+ * The checked radio remains the functional baseline. :has() progressively
+ * fills preceding stars without reversing DOM or keyboard order. Forced
+ * colors restores the platform radio presentation.
+ *
+ * Public hooks:
+ * --rating-size
+ * --rating-gap
+ * --rating-color
+ * --rating-empty
+ * --rating-star
+ */
+:where(.rating) {
+  --intent: initial;
+}
+
+.rating {
+  --rating-size: 1.25rem;
+  --rating-gap: 0.1rem;
+  --rating-color: var(--intent, var(--warning));
+  --rating-empty: var(--border);
+  --rating-star: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='2 2 16 16'%3E%3Cpath d='M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 0 0 .95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 0 0-.364 1.118l1.07 3.292c.3.922-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 0 0-1.175 0l-2.8 2.034c-.783.57-1.838-.196-1.539-1.118l1.07-3.292a1 1 0 0 0-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 0 0 .951-.69l1.07-3.292Z'/%3E%3C/svg%3E");
+
+  display: inline-flex;
+  gap: 0;
+  color: var(--rating-color);
+}
+
+.rating > input[type="radio"] {
+  appearance: none;
+  flex: 0 0 auto;
+  inline-size: calc(var(--rating-size) + var(--rating-gap));
+  block-size: var(--rating-size);
+  margin: 0;
+  border: 0;
+  background: var(--rating-empty);
+  /* Contiguous radio boxes own hit-testing; the centered mask preserves the
+     star's proportions while leaving a purely visual gap between values. */
+  -webkit-mask: var(--rating-star) center / var(--rating-size) var(--rating-size) no-repeat;
+  mask: var(--rating-star) center / var(--rating-size) var(--rating-size) no-repeat;
+  cursor: pointer;
+  transition: background-color var(--duration);
+}
+
+.rating > input[type="radio"]:checked {
+  background: var(--rating-color);
+}
+
+.rating > input[type="radio"]:disabled {
+  cursor: not-allowed;
+  opacity: var(--disabled-opacity);
+}
+
+.rating > input[type="radio"]:focus-visible {
+  outline: var(--focus-outline);
+  outline-offset: var(--focus-outline-offset);
+  background: var(--rating-color);
+}
+
+/* Browsers without :has() still show the selected native radio as one filled
+   star. The enhancement only adds cumulative checked and hover previews. */
+@supports selector(:has(*)) {
+  .rating > input[type="radio"]:has(~ input[type="radio"]:checked) {
+    background: var(--rating-color);
+  }
+
+  @media (hover: hover) {
+    .rating > input[type="radio"]:not(:disabled):hover,
+    .rating > input[type="radio"]:has(~ input[type="radio"]:not(:disabled):hover) {
+      background: var(--rating-color);
+    }
+
+    /* A hovered value previews exactly that value: later stars are emptied,
+       including a previously checked star beyond the pointer. */
+    .rating > input[type="radio"]:not(:disabled):hover ~ input[type="radio"] {
+      background: var(--rating-empty);
+    }
+  }
+}
+
+.rating.sm {
+  --rating-size: 1rem;
+}
+
+.rating.lg {
+  --rating-size: 1.75rem;
+}
+
+@media (forced-colors: active) {
+  .rating > input[type="radio"] {
+    appearance: auto;
+    inline-size: auto;
+    block-size: auto;
+    background: Canvas;
+    -webkit-mask: none;
+    mask: none;
+    opacity: 1;
+  }
+}
+
+/*
+ * Steps — semantic ordered-list progression with horizontal and vertical
+ * layouts. Markers come from the list counter; state stays in .complete and
+ * aria-current="step", so the component needs no runtime.
+ *
+ * Public hooks:
+ * --step-size
+ * --step-gap
+ * --step-line-size
+ *
+ * Internal:
+ * --step-marker-bg
+ * --step-marker-border
+ * --step-marker-fg
+ * --step-line
+ */
+.steps {
+  --step-size: 1.75rem;
+  --step-gap: var(--space-20);
+  --step-line-size: var(--border-width);
+  --step-marker-bg: var(--surface);
+  --step-marker-border: var(--border);
+  --step-marker-fg: var(--text-muted);
+  --step-line: var(--border);
+
+  counter-reset: actual-step;
+  display: flex;
+  inline-size: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.steps > li {
+  position: relative;
+  display: grid;
+  flex: 1 1 0;
+  grid-template-rows: var(--step-size) auto;
+  gap: var(--step-gap);
+  justify-items: center;
+  min-inline-size: max(var(--step-size), 4rem);
+  color: var(--text-muted);
+  text-align: center;
+  counter-increment: actual-step;
+}
+
+.steps > li::before {
+  content: counter(actual-step);
+  position: relative;
+  z-index: 1;
+  display: inline-grid;
+  place-items: center;
+  inline-size: var(--step-size);
+  block-size: var(--step-size);
+  border: var(--border-width) solid var(--step-marker-border);
+  border-radius: var(--radius-full);
+  background: var(--step-marker-bg);
+  color: var(--step-marker-fg);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-strong);
+  line-height: 1;
+}
+
+.steps > li::after {
+  content: "";
+  position: absolute;
+  inset-block-start: calc((var(--step-size) - var(--step-line-size)) / 2);
+  inset-inline-start: calc(50% + var(--step-size) / 2);
+  inline-size: calc(100% - var(--step-size));
+  block-size: var(--step-line-size);
+  background: var(--step-line);
+}
+
+.steps > li:last-child::after {
+  content: none;
+}
+
+.steps > :is(.complete, [aria-current="step"]) {
+  --step-marker-bg: var(--state-selected);
+  --step-marker-border: var(--state-selected);
+  --step-marker-fg: var(--state-selected-fg);
+
+  color: var(--text);
+}
+
+.steps > .complete {
+  --step-line: var(--state-selected);
+}
+
+.steps:not(.vertical) {
+  overflow-x: auto;
+}
+
+.steps.vertical {
+  flex-direction: column;
+}
+
+.steps.vertical > li {
+  grid-template-rows: auto;
+  grid-template-columns: var(--step-size) minmax(0, 1fr);
+  align-items: center;
+  justify-items: start;
+  min-inline-size: 0;
+  min-block-size: calc(var(--step-size) + var(--step-gap));
+  padding-block-end: var(--step-gap);
+  text-align: start;
+}
+
+.steps.vertical > li:last-child {
+  min-block-size: var(--step-size);
+  padding-block-end: 0;
+}
+
+.steps.vertical > li::after {
+  inset-block-start: var(--step-size);
+  inset-inline-start: calc((var(--step-size) - var(--step-line-size)) / 2);
+  inline-size: var(--step-line-size);
+  block-size: calc(100% - var(--step-size));
 }
 
 

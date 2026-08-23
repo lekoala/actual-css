@@ -1,0 +1,119 @@
+/*
+ * Steps — semantic ordered-list progression with horizontal and vertical
+ * layouts. Markers come from the list counter; state stays in .complete and
+ * aria-current="step", so the component needs no runtime.
+ *
+ * Public hooks:
+ * --step-size
+ * --step-gap
+ * --step-line-size
+ *
+ * Internal:
+ * --step-marker-bg
+ * --step-marker-border
+ * --step-marker-fg
+ * --step-line
+ */
+.steps {
+  --step-size: 1.75rem;
+  --step-gap: var(--space-20);
+  --step-line-size: var(--border-width);
+  --step-marker-bg: var(--surface);
+  --step-marker-border: var(--border);
+  --step-marker-fg: var(--text-muted);
+  --step-line: var(--border);
+
+  counter-reset: actual-step;
+  display: flex;
+  inline-size: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.steps > li {
+  position: relative;
+  display: grid;
+  flex: 1 1 0;
+  grid-template-rows: var(--step-size) auto;
+  gap: var(--step-gap);
+  justify-items: center;
+  min-inline-size: max(var(--step-size), 4rem);
+  color: var(--text-muted);
+  text-align: center;
+  counter-increment: actual-step;
+}
+
+.steps > li::before {
+  content: counter(actual-step);
+  position: relative;
+  z-index: 1;
+  display: inline-grid;
+  place-items: center;
+  inline-size: var(--step-size);
+  block-size: var(--step-size);
+  border: var(--border-width) solid var(--step-marker-border);
+  border-radius: var(--radius-full);
+  background: var(--step-marker-bg);
+  color: var(--step-marker-fg);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-strong);
+  line-height: 1;
+}
+
+.steps > li::after {
+  content: "";
+  position: absolute;
+  inset-block-start: calc((var(--step-size) - var(--step-line-size)) / 2);
+  inset-inline-start: calc(50% + var(--step-size) / 2);
+  inline-size: calc(100% - var(--step-size));
+  block-size: var(--step-line-size);
+  background: var(--step-line);
+}
+
+.steps > li:last-child::after {
+  content: none;
+}
+
+.steps > :is(.complete, [aria-current="step"]) {
+  --step-marker-bg: var(--state-selected);
+  --step-marker-border: var(--state-selected);
+  --step-marker-fg: var(--state-selected-fg);
+
+  color: var(--text);
+}
+
+.steps > .complete {
+  --step-line: var(--state-selected);
+}
+
+.steps:not(.vertical) {
+  overflow-x: auto;
+}
+
+.steps.vertical {
+  flex-direction: column;
+}
+
+.steps.vertical > li {
+  grid-template-rows: auto;
+  grid-template-columns: var(--step-size) minmax(0, 1fr);
+  align-items: center;
+  justify-items: start;
+  min-inline-size: 0;
+  min-block-size: calc(var(--step-size) + var(--step-gap));
+  padding-block-end: var(--step-gap);
+  text-align: start;
+}
+
+.steps.vertical > li:last-child {
+  min-block-size: var(--step-size);
+  padding-block-end: 0;
+}
+
+.steps.vertical > li::after {
+  inset-block-start: var(--step-size);
+  inset-inline-start: calc((var(--step-size) - var(--step-line-size)) / 2);
+  inline-size: var(--step-line-size);
+  block-size: calc(100% - var(--step-size));
+}
