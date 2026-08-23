@@ -27,9 +27,12 @@
 
 /* Display */
 @import "./avatar.css";
+@import "./indicator.css";
 @import "./key.css";
 @import "./chat.css";
 @import "./fab.css";
+@import "./rating.css";
+@import "./steps.css";
 
 /* Navigation */
 @import "./navbar.css";
