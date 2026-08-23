@@ -362,8 +362,16 @@
   --grid-min: 15rem;
 }
 
+.docs-install-grid > * {
+  min-inline-size: 0;
+}
+
 .docs-install-grid pre {
   margin: 0;
+  min-inline-size: 0;
+  max-inline-size: 100%;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
 }
 
 /* --- Responsive chrome --- */
