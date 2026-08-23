@@ -48,14 +48,17 @@ test("card picture bleed clips children", () => {
   expect(css).toMatch(/\.card > picture\.bleed\s*\{[\s\S]*overflow:\s*hidden;/);
 });
 
-test("card is a column and anchors a direct footer to the bottom", () => {
+test("card owns bare flow and yields layout to composed primitives", () => {
   const css = readCss("src/css/components/card.css");
 
   // The box sits at zero specificity so a layout primitive on the same element
   // owns it: components/ loads after layout/, so a plain .card declaration
   // would beat .media on source order and flatten `class="card media"`.
-  expect(css).toMatch(/:where\(\.card\)\s*\{\s*display:\s*flex;\s*flex-direction:\s*column;\s*\}/);
+  expect(css).toMatch(
+    /:where\(\.card\)\s*\{\s*display:\s*flex;\s*flex-direction:\s*column;\s*gap:\s*var\(--card-gap\);\s*\}/,
+  );
   expect(css).not.toMatch(/^\.card\s*\{[^}]*\bdisplay:/m);
+  expect(css).toMatch(/:where\(\.card\) > \*\s*\{[^}]*margin-block:\s*0;/);
   expect(css).toMatch(/\.card > footer\s*\{[\s\S]*margin-block-start:\s*auto;/);
 });
 
@@ -378,6 +381,7 @@ test("prose keeps contextual colors and low-specificity element recipes", () => 
   expect(css).toMatch(
     /\.prose :where\(h1, h2, h3, h4, h5, h6\) \{[\s\S]*color: var\(--heading, var\(--text\)\);/,
   );
+  expect(css).toMatch(/\.prose > \*\s*\{\s*margin-block-end:\s*0;\s*\}/);
 });
 
 test("scrollspy CSS exposes native target-current enhancement", () => {

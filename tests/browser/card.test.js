@@ -78,3 +78,41 @@ it("card.stack and footer.bleed keep the anchored footer", async () => {
     { artifactName: "card-bleed" },
   );
 });
+
+it("bare cards own their flow while stack and media own composed layout", async () => {
+  await withBrowserPage(
+    fixtureUrl(FIXTURE),
+    async (view) => {
+      const result = await view.evaluate(`(() => {
+        const style = (selector) => getComputedStyle(document.querySelector(selector));
+        const bare = style("#bare-card");
+        const stack = style("#stack-card");
+        const media = style("#media-card");
+        return {
+          bareDisplay: bare.display,
+          bareGap: bare.gap,
+          bareMargins: [...document.querySelectorAll("#bare-card > *")].map((el) => {
+            const child = getComputedStyle(el);
+            return [child.marginBlockStart, child.marginBlockEnd];
+          }),
+          stackDisplay: stack.display,
+          stackGap: stack.gap,
+          mediaDisplay: media.display,
+          mediaGap: media.gap,
+        };
+      })()`);
+
+      expect(result.bareDisplay).toBe("flex");
+      expect(result.bareGap).toBe("19px");
+      expect(result.bareMargins).toEqual([
+        ["0px", "0px"],
+        ["0px", "0px"],
+      ]);
+      expect(result.stackDisplay).toBe("flex");
+      expect(result.stackGap).toBe("7px");
+      expect(result.mediaDisplay).toBe("grid");
+      expect(result.mediaGap).toBe("9px");
+    },
+    { artifactName: "card-composition" },
+  );
+});
