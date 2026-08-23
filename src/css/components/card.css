@@ -4,11 +4,14 @@
  * Surface, border, radius, padding, density, and elevation stay local here.
  * Direct header/footer children are structural slots; a direct footer is
  * anchored to the card's bottom edge when extra block space is available (so
- * price/action rows align across equal-height cards in a grid). Page layout
- * remains the job of markup and layout primitives outside the card.
+ * price/action rows align across equal-height cards in a grid). A bare card
+ * owns its direct-child rhythm; a layout primitive on the same element takes
+ * over that layout. Page layout remains the job of markup and layout
+ * primitives outside the card.
  *
  * Public hooks:
  * --card-pad
+ * --card-gap
  * --card-radius
  * --card-max-inline-size
  *
@@ -32,6 +35,7 @@
 
 .card {
   --card-pad: var(--space-40);
+  --card-gap: var(--space-30);
   --card-radius: var(--radius-lg);
   --card-max-inline-size: none;
   --card-bg: var(--ui-bg, var(--surface-raised));
@@ -58,10 +62,14 @@
 :where(.card) {
   display: flex;
   flex-direction: column;
+  gap: var(--card-gap);
 }
 
-.card > * {
+/* Native block margins would add to flex gap because flex-item margins never
+   collapse. Zero specificity keeps intentional child utilities available. */
+:where(.card) > * {
   min-inline-size: 0;
+  margin-block: 0;
 }
 
 .card > :where(header, footer) {
@@ -86,14 +94,6 @@
    Specificity beats .stack > * so a .card.stack keeps this contract. */
 .card > footer {
   margin-block-start: auto;
-}
-
-.card > :first-child {
-  margin-block-start: 0;
-}
-
-.card > :last-child {
-  margin-block-end: 0;
 }
 
 .card.raised {

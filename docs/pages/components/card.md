@@ -18,7 +18,10 @@ Use semantic elements inside the card. A direct `<header>` or `<footer>` is the
 card's structural slot. A direct `<footer>` is anchored to the bottom of the
 card when extra block space is available, so prices and actions line up across
 equal-height cards. Cards do not own page spacing — compose them with layout
-primitives like `.grid`.
+primitives like `.grid`. A bare card owns the rhythm between its direct
+children through `--card-gap`; applying a layout primitive such as `.stack` or
+`.media` to the same element gives that primitive control of the layout and
+gap.
 
 ```html demo
 <div style="max-inline-size: 32rem">
@@ -197,3 +200,4 @@ variants.
 - `--card-radius` — corner radius.
 - `--card-max-inline-size` — maximum width.
 - `--card-pad` — inner padding; also drives the negative offsets that let a `.bleed` child reach the card edge. `.compact` lowers it.
+- `--card-gap` — space between direct children of a bare card. A composed layout primitive owns its own gap instead. `.compact` does not change this hook.

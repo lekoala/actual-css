@@ -38,6 +38,10 @@
 /* Vertical rhythm belongs to the direct block that participates in the
    document, so it must not be injected into the internals of a nested
    component (e.g. a .table-wrap around a .table would trap the margin). */
+.prose > * {
+  margin-block-end: 0;
+}
+
 .prose > * + * {
   margin-block-start: var(--prose-flow);
 }

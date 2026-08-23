@@ -48,5 +48,22 @@
       <footer class="bleed"><a class="btn primary sm">Go</a></footer>
     </article>
   </section>
+
+  <!-- A bare card owns its direct flow, while layout primitives applied to the
+       card replace its default column recipe and gap. -->
+  <section id="composition" class="grid">
+    <article id="bare-card" class="card" style="--card-gap: 19px">
+      <h3>Bare card</h3>
+      <p>Bare body text.</p>
+    </article>
+    <article id="stack-card" class="card stack" style="--card-gap: 19px; --gap: 7px">
+      <h3>Stack card</h3>
+      <p>Stack body text.</p>
+    </article>
+    <article id="media-card" class="card media" style="--card-gap: 19px; --gap: 9px">
+      <span aria-hidden="true">◎</span>
+      <p>Media body text.</p>
+    </article>
+  </section>
 </body>
 </html>
