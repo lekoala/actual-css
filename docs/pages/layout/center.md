@@ -27,3 +27,7 @@ Tune width and side padding with local variables.
 `.center` intentionally uses `box-sizing: content-box`. The max inline size is
 the content measure, while inline padding is added outside that measure. This is
 deliberate even though the global reset uses `border-box`.
+
+Because the padding sits outside that content box, do not force a `.center`
+flex or grid item to `inline-size: 100%` without subtracting its inline padding.
+Otherwise its outer size becomes the available width plus both padding edges.
