@@ -19,8 +19,14 @@
 * Optional `--link` overrides `.prose` link ink when a theme's `--primary` works as an accent but not as inline body text.
 * `check:color-space` guardrail: an intent tinted against a theme-controlled surface or border must interpolate in `oklab`, with an `intentional-oklch` escape hatch.
 * Bundle tool.
+* `.sidebar-layout.reverse` places the aside on the inline start by swapping only the visual order (DOM stays main-content-first).
+* `.steps` visual hooks: `--step-marker-radius`, `--step-connector` (any background), and `--step-complete-mark` (replace the number on a finished step).
+* `check:doc-classes` guardrail: classes in documentation snippets must be Actual classes or an explicit demo whitelist.
+* `icon-slot` pattern documenting the contained-icon-zone contract, composed from existing pieces (no new primitive).
 
 ### Changed
+
+* **Breaking:** `.steps` is now a single intrinsically responsive component — items fill the row when they fit and hold `--step-min` otherwise, scrolling horizontally only when they cannot fit. The `.vertical` variant and its second geometry/API are removed.
 
 * The bare `actual-css` entrypoint is now the minimal core; use `actual-css/full` for all CSS families.
 * `actual-css/js` is now the enhancement loader only; use `actual-css/js/full` or `actual.full.js` for the complete pre-registered runtime.

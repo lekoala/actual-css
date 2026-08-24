@@ -11,6 +11,9 @@
  * --sidebar-layout-size
  *
  * Child contract: the first and last direct children carry the sizing roles.
+ * By default the main region is first and the aside second (aside on the
+ * inline end). .reverse swaps only the visual order via `order`; the DOM keeps
+ * main-content-first, so reading and keyboard order are unchanged.
  */
 .sidebar-layout {
   display: flex;
@@ -28,4 +31,12 @@
 .sidebar-layout > :last-child {
   flex-basis: var(--sidebar-layout-size, 18rem);
   flex-grow: 1;
+}
+
+.sidebar-layout.reverse > :first-child {
+  order: 2;
+}
+
+.sidebar-layout.reverse > :last-child {
+  order: 1;
 }
