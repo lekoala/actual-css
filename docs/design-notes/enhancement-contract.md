@@ -72,6 +72,31 @@ creates two independent records that both run.
 The owner of a custom enhancement root must call `disconnect()` when disposing
 that root; the default `document.documentElement` root is not affected.
 
+`enhance(…, root)` owns the lifecycle boundary. It scans additions inside that
+root, preserves instances moved within it, and requests cleanup once an instance
+leaves it—even when the element remains connected elsewhere. An enhancer's
+cleanup must therefore be authoritative and idempotent: it releases its state
+when called and must not repeat the root-membership decision.
+
+Core lifecycle primitives accept a `Document`, `Element`, or `DocumentFragment`
+root, and command targets resolve in the trigger's document or shadow root.
+Built-in auto-registration observes the document tree. It does not discover or
+manage built-ins created inside shadow roots. Applications that own a custom
+root can install their own enhancements with the core APIs and must dispose
+those registrations explicitly.
+
+## Choosing a JavaScript primitive
+
+- Use a command for an immediate trigger-to-current-target action. Commands
+  resolve the DOM at event time and do not own element lifecycle.
+- Use `registerEnhancement()` for an opted-in controller that owns listeners or
+  state for a subtree.
+- Use `enhance()` for a self-describing leaf behavior that needs connection and
+  cleanup lifecycle without a named token.
+- Prefer delegation when no persistent per-element state is required.
+- Give instance-owned listeners an `AbortController`, and abort it from the
+  instance cleanup.
+
 ## CSS must never select on `data-enhance`
 
 CSS rules must not select on `data-enhance` or the runtime marker
