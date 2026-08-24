@@ -33,13 +33,14 @@
 }
 
 .tab {
+  /* Positioning context for the selected indicator pseudo. */
+  position: relative;
   display: inline-flex;
   align-items: center;
   gap: var(--tab-gap, 0.375em);
   min-block-size: var(--control-size);
   padding-inline: var(--space-30);
   border: 0;
-  border-block-end: 2px solid transparent;
   border-radius: 0;
   background: transparent;
   color: var(--text-muted);
@@ -51,8 +52,6 @@
 
 .tabs[aria-orientation="vertical"] .tab {
   justify-content: flex-start;
-  border-block-end: 0;
-  border-inline-end: 2px solid transparent;
   padding-inline-end: var(--space-40);
 }
 
@@ -73,28 +72,27 @@
 }
 
 .tab[aria-selected="true"] {
-  border-block-end-color: var(--intent, var(--state-selected));
   color: var(--intent, var(--state-selected));
+  /* Second, layout-free selected cue — the underline alone is color-only in
+     forced colors. */
+  font-weight: var(--font-weight-bold);
 }
 
-.tabs[aria-orientation="vertical"] .tab[aria-selected="true"] {
-  border-block-end-color: transparent;
-  border-inline-end-color: var(--intent, var(--state-selected));
+/* The selected indicator lives on a positioned pseudo so that only the active
+   tab owns an underline: a transparent border on every tab would surface in
+   forced colors and erase the distinction. currentColor follows the palette the
+   UA forces, so no forced-colors block is needed. */
+.tab[aria-selected="true"]::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  inset-block-end: 0;
+  border-block-end: 2px solid currentColor;
 }
 
-@media (forced-colors: active) {
-  .tab:hover:not(:where(:disabled, [aria-disabled="true"])) {
-    text-decoration: underline;
-    text-underline-offset: 0.18em;
-  }
-
-  .tab[aria-selected="true"] {
-    border-block-end-color: Highlight;
-    color: Highlight;
-  }
-
-  .tabs[aria-orientation="vertical"] .tab[aria-selected="true"] {
-    border-block-end-color: transparent;
-    border-inline-end-color: Highlight;
-  }
+.tabs[aria-orientation="vertical"] .tab[aria-selected="true"]::after {
+  inset-block: 0;
+  inset-inline: auto 0;
+  border-block-end: 0;
+  border-inline-end: 2px solid currentColor;
 }

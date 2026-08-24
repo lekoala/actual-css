@@ -210,6 +210,22 @@ number of children visible in one mockup.">
 <h1 id="choosing-a-layout">Choosing a layout</h1>
 <p>Choose a primitive from the relationship between its children, not from the
 number of children visible in one mockup.</p>
+<h2 id="page-and-application-shells">Page and application shells</h2>
+<div class="table-wrap"><table class="table">
+<thead>
+<tr><th>Situation</th><th>Recipe</th></tr>
+</thead>
+<tbody>
+<tr><td>Public, marketing, editorial, or normally scrolling page</td><td>Semantic landmarks; optionally <code>.app-shell</code>, with <code>.navbar</code> for site navigation</td></tr>
+<tr><td>Persistent topbar + independently scrolling main + bottom-to-side primary navigation</td><td><code>.app-layout</code> with its exact direct-child contract</td></tr>
+</tbody>
+</table></div>
+<p>Do not choose <code>.app-layout</code> from the word &quot;app&quot; or from the presence of a
+header. Its viewport-sized grid, hidden shell overflow, internal main scroll,
+and adaptive <code>.app-nav</code> are one indivisible behavior. If any of those is not
+wanted, compose the ordinary page from semantic landmarks and the primitives
+below.</p>
+<h2 id="content-relationships">Content relationships</h2>
 <div class="table-wrap"><table class="table">
 <thead>
 <tr><th>Situation</th><th>Primitive</th></tr>
@@ -263,7 +279,8 @@ behavior for layout primitives and never changes their meaning.</p>
         <nav class="scrollspy" data-enhance="scrollspy" data-scrollspy-offset="80" aria-label="On this page">
           <p class="docs-nav-group">On this page</p>
           <ul class="nav-list docs-toc-list" data-docs-toc>
-
+        <li><a class="nav-link" href="#page-and-application-shells" data-docs-toc-item data-level="2">Page and application shells</a></li>
+        <li><a class="nav-link" href="#content-relationships" data-docs-toc-item data-level="2">Content relationships</a></li>
           </ul>
         </nav>
       </aside>

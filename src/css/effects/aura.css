@@ -32,6 +32,7 @@
   display: inline-grid;
   padding: var(--aura-width);
   border-radius: calc(var(--aura-radius) + var(--aura-width));
+  border: var(--border-width) solid transparent;
   background: var(--aura-color);
   background: conic-gradient(from var(--aura-angle), transparent 0 65%, var(--aura-color));
 }
@@ -79,15 +80,5 @@
 
   .aura:has(> .badge) {
     --aura-radius: var(--radius-full);
-  }
-}
-
-@media (forced-colors: active) {
-  .aura {
-    background: CanvasText;
-  }
-
-  .aura::before {
-    display: none;
   }
 }

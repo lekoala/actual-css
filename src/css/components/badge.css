@@ -180,21 +180,9 @@ a.badge[aria-disabled="true"] {
     background: ButtonText;
   }
 
-  :where(a.badge, button.badge):hover:not(:where(:disabled, [aria-disabled="true"])) {
-    outline: var(--border-width) solid ButtonText;
-    outline-offset: 2px;
-  }
-
-  .badge > button:not(:disabled):hover {
-    outline: var(--border-width) solid currentColor;
-    outline-offset: 1px;
-  }
-
-  button.badge:disabled,
   .badge[aria-disabled="true"] {
-    border-color: GrayText;
-    background: Canvas;
     color: GrayText;
+    border-color: GrayText;
   }
 }
 @media print {

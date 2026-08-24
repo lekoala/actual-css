@@ -165,14 +165,15 @@
   --ui-fg: var(--intent, currentColor);
   --ui-border: transparent;
   --btn-radius: var(--radius-sm);
-  --btn-border-block-end-color: transparent;
-  --btn-border-block-end-width: var(--border-width);
 
   min-block-size: auto;
   padding-inline: 0;
   inline-size: fit-content;
   max-inline-size: 100%;
-  border-color: transparent;
+  /* No border at all: a link reads through its underline, and the inherited
+     .btn border made transparent would turn into a visible box in forced
+     colors. :focus-visible keeps its own outline. */
+  border: 0;
   text-decoration: underline;
   text-underline-offset: 0.18em;
 }
@@ -233,44 +234,12 @@ a.btn[aria-disabled="true"] {
 }
 
 @media (forced-colors: active) {
-  .btn {
-    border-color: ButtonText;
-    background: ButtonFace;
-    color: ButtonText;
-    box-shadow: none;
-  }
-
-  .btn.link {
-    border-color: transparent;
-    background: Canvas;
-    color: LinkText;
-  }
-
-  .btn:is([aria-pressed="true"], [aria-current="page"]):not(.link) {
-    border-color: Highlight;
-    background: Highlight;
-    color: HighlightText;
-    forced-color-adjust: none;
-  }
-
-  .btn:is([aria-pressed="true"], [aria-current="page"]):not(.link):focus-visible {
-    outline: var(--focus-outline);
-    box-shadow: none;
-  }
-
-  .btn:hover:not(:where(:disabled, [aria-disabled="true"], .link)) {
-    outline: var(--border-width) solid ButtonText;
-    outline-offset: 2px;
-  }
-
-  .btn:disabled,
   a.btn[aria-disabled="true"] {
-    border-color: GrayText;
-    background: Canvas;
     color: GrayText;
-    forced-color-adjust: auto;
+    border-color: GrayText;
   }
 }
+
 @media print {
   :is(button, input[type="button"], input[type="submit"], input[type="reset"]).btn {
     display: none !important;

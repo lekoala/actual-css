@@ -15,12 +15,4 @@
   :focus:not(:focus-visible) {
     outline: none;
   }
-
-  /* Pointer focus must still signal in high-contrast mode, where the shared
-     box-shadow rings are disabled (--focus-ring-shadow: none). */
-  @media (forced-colors: active) {
-    :focus:not(:focus-visible) {
-      outline: var(--focus-outline);
-    }
-  }
 }

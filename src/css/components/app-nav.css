@@ -66,21 +66,7 @@
 .app-nav > a:where([aria-current]:not([aria-current="false"])) {
   background: var(--state-selected);
   color: var(--state-selected-fg);
-}
-
-@media (forced-colors: active) {
-  .app-nav {
-    border-color: CanvasText;
-    background: Canvas;
-    color: CanvasText;
-  }
-
-  .app-nav > a:where([aria-current]:not([aria-current="false"])) {
-    outline: var(--border-width) solid Highlight;
-    background: Highlight;
-    color: HighlightText;
-    forced-color-adjust: none;
-  }
+  font-weight: var(--font-weight-bold);
 }
 
 @media print {

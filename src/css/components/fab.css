@@ -68,6 +68,7 @@
   max-inline-size: 16rem;
   padding: var(--space-10) var(--space-20);
   border-radius: var(--radius);
+  border: var(--border-width) solid transparent;
   background: var(--surface);
   color: var(--text);
   box-shadow: var(--shadow);
@@ -88,13 +89,6 @@
 
 .fab[open] > summary > [aria-hidden="true"]:only-child {
   transform: rotate(45deg);
-}
-
-@media (forced-colors: active) {
-  .fab-label {
-    border: var(--border-width) solid CanvasText;
-    box-shadow: none;
-  }
 }
 
 @media print {

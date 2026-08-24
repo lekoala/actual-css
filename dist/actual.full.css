@@ -208,9 +208,8 @@ select {
 @media (forced-colors: active) {
   :root,
   [data-theme] {
-    --state-selected: Highlight;
-    --state-selected-fg: HighlightText;
     --state-disabled: GrayText;
+    --disabled-opacity: 1;
   }
 }
 
@@ -433,16 +432,6 @@ select {
       color-mix(in oklch, var(--focus) 30%, transparent),
       color-mix(in oklch, var(--focus) 28%, transparent)
     );
-  }
-}
-
-@media (forced-colors: active) {
-  :root,
-  [data-theme] {
-    --focus-outline-color: Highlight;
-    --focus-ring-shadow: none;
-
-    --backdrop-fill: Canvas;
   }
 }
 
@@ -679,14 +668,6 @@ small {
 @supports selector(:focus-visible) {
   :focus:not(:focus-visible) {
     outline: none;
-  }
-
-  /* Pointer focus must still signal in high-contrast mode, where the shared
-     box-shadow rings are disabled (--focus-ring-shadow: none). */
-  @media (forced-colors: active) {
-    :focus:not(:focus-visible) {
-      outline: var(--focus-outline);
-    }
   }
 }
 
@@ -1132,6 +1113,7 @@ small {
  */
 .center {
   box-sizing: content-box;
+  inline-size: calc(100% - var(--center-pad, 1rem) * 2);
   max-inline-size: var(--center-size, 72rem);
   margin-inline: auto;
   padding-inline: var(--center-pad, 1rem);
@@ -1157,7 +1139,7 @@ small {
   object-fit: cover;
 }
 
-/* Full-height application shell. */
+/* Full-height single-column document shell. */
 .app-shell {
   min-block-size: var(--viewport-block);
   display: flex;
@@ -1165,10 +1147,11 @@ small {
 }
 
 /*
- * Application shell recipe: one DOM structure uses a bottom navigation bar
- * when narrow and a labelled side navigation when space permits. The main
- * region owns scrolling, keeping both pieces of application chrome available
- * without fixed offsets.
+ * Specialized application shell recipe: one exact DOM structure uses a
+ * bottom navigation bar when narrow and a labelled side navigation when space
+ * permits. The main region owns scrolling, keeping both pieces of application
+ * chrome available without fixed offsets. This is not a generic page wrapper
+ * or a public-site layout; all three direct regions are part of the contract.
  *
  * Public hook:
  * --app-nav-side-size
@@ -1189,6 +1172,7 @@ small {
 
 .app-layout > .topbar {
   grid-area: topbar;
+  padding-block-start: calc(var(--space-30) + env(safe-area-inset-top));
 }
 
 .app-layout > .app-main {
@@ -1200,6 +1184,16 @@ small {
 
 .app-layout > .app-nav {
   grid-area: nav;
+}
+
+/* The main grid area keeps the FAB clear of bottom navigation without making
+   either component copy the other's geometry. */
+.app-layout > .fab {
+  position: relative;
+  grid-area: main;
+  place-self: end;
+  inset: auto;
+  margin: var(--fab-offset);
 }
 
 @media (min-width: 48rem) {
@@ -1235,6 +1229,11 @@ small {
     gap: var(--space-30);
     padding-inline: var(--space-30);
     text-align: start;
+  }
+
+  /* Side navigation no longer occupies the viewport's bottom safe area. */
+  .app-layout > .fab {
+    margin-block-end: max(var(--fab-offset), env(safe-area-inset-bottom));
   }
 }
 
@@ -2701,12 +2700,22 @@ small {
   opacity: var(--disabled-opacity);
 }
 
-/* Forced colors: map the custom thumb/track to system colors. The focus
-   indicator stays visible through the transparent outline on :focus-visible. */
+/* Forced colors: the track must stay a visible line against the page (Canvas
+   would merge with it) and the thumb needs a real boundary to remain
+   distinguishable from the track. Disabled keeps GrayText via :disabled.
+   Focus stays on the transparent outline of :focus-visible. */
 @media (forced-colors: active) {
   .range {
-    --range-thumb-bg: ButtonText;
-    --range-track-bg: Canvas;
+    --range-track-bg: CanvasText;
+    --range-thumb-bg: ButtonFace;
+  }
+
+  .range::-webkit-slider-thumb {
+    border: var(--border-width) solid ButtonText;
+  }
+
+  .range::-moz-range-thumb {
+    border: var(--border-width) solid ButtonText;
   }
 }
 
@@ -2843,28 +2852,19 @@ small {
   transform: scale(1);
 }
 
+/* The native input is hidden and the checked marker is custom-drawn: without
+   this repair, forced colors pushes disc and check to the same system color
+   and the state disappears. Highlight/Canvas/HighlightText are preserved as-is,
+   so no forced-color-adjust is needed. The pseudo is not focusable — the
+   outline is a separator against the card, not a focus channel. */
 @media (forced-colors: active) {
-  .choice-card {
-    --choice-card-border: ButtonText;
-    --choice-card-bg: Canvas;
-  }
-
-  .choice-card:has(:checked) {
-    --choice-card-border: Highlight;
-    /* Pin the selected surface to the system canvas: only the essential
-       marker pseudos opt out of remapping, never the interactive card host. */
-    --choice-card-bg: Canvas;
-  }
-
   .choice-card:has(:checked)::before {
     background: Highlight;
-    box-shadow: 0 0 0 2px Canvas;
-    forced-color-adjust: none;
+    outline: 2px solid Canvas;
   }
 
   .choice-card:has(:checked)::after {
     background: HighlightText;
-    forced-color-adjust: none;
   }
 }
 
@@ -3356,14 +3356,15 @@ small {
   --ui-fg: var(--intent, currentColor);
   --ui-border: transparent;
   --btn-radius: var(--radius-sm);
-  --btn-border-block-end-color: transparent;
-  --btn-border-block-end-width: var(--border-width);
 
   min-block-size: auto;
   padding-inline: 0;
   inline-size: fit-content;
   max-inline-size: 100%;
-  border-color: transparent;
+  /* No border at all: a link reads through its underline, and the inherited
+     .btn border made transparent would turn into a visible box in forced
+     colors. :focus-visible keeps its own outline. */
+  border: 0;
   text-decoration: underline;
   text-underline-offset: 0.18em;
 }
@@ -3424,44 +3425,12 @@ a.btn[aria-disabled="true"] {
 }
 
 @media (forced-colors: active) {
-  .btn {
-    border-color: ButtonText;
-    background: ButtonFace;
-    color: ButtonText;
-    box-shadow: none;
-  }
-
-  .btn.link {
-    border-color: transparent;
-    background: Canvas;
-    color: LinkText;
-  }
-
-  .btn:is([aria-pressed="true"], [aria-current="page"]):not(.link) {
-    border-color: Highlight;
-    background: Highlight;
-    color: HighlightText;
-    forced-color-adjust: none;
-  }
-
-  .btn:is([aria-pressed="true"], [aria-current="page"]):not(.link):focus-visible {
-    outline: var(--focus-outline);
-    box-shadow: none;
-  }
-
-  .btn:hover:not(:where(:disabled, [aria-disabled="true"], .link)) {
-    outline: var(--border-width) solid ButtonText;
-    outline-offset: 2px;
-  }
-
-  .btn:disabled,
   a.btn[aria-disabled="true"] {
-    border-color: GrayText;
-    background: Canvas;
     color: GrayText;
-    forced-color-adjust: auto;
+    border-color: GrayText;
   }
 }
+
 @media print {
   :is(button, input[type="button"], input[type="submit"], input[type="reset"]).btn {
     display: none !important;
@@ -3655,21 +3624,9 @@ a.badge[aria-disabled="true"] {
     background: ButtonText;
   }
 
-  :where(a.badge, button.badge):hover:not(:where(:disabled, [aria-disabled="true"])) {
-    outline: var(--border-width) solid ButtonText;
-    outline-offset: 2px;
-  }
-
-  .badge > button:not(:disabled):hover {
-    outline: var(--border-width) solid currentColor;
-    outline-offset: 1px;
-  }
-
-  button.badge:disabled,
   .badge[aria-disabled="true"] {
-    border-color: GrayText;
-    background: Canvas;
     color: GrayText;
+    border-color: GrayText;
   }
 }
 @media print {
@@ -4423,23 +4380,6 @@ html.has-modal-open.had-scrollbar {
   }
 }
 
-@media (forced-colors: active) {
-  dialog.modal {
-    border-color: ButtonText;
-    background: Canvas;
-    color: CanvasText;
-    box-shadow: none;
-  }
-
-  dialog.modal::backdrop {
-    background: Canvas;
-  }
-
-  .dialog-icon {
-    border: var(--border-width) solid CanvasText;
-  }
-}
-
 /* Close controls. A close button is an action attached to a surface, so it
    never participates in the content flow. The modal and the drawer share the
    same simple placement — absolute at the panel's top inline-end, inside the
@@ -4642,12 +4582,6 @@ dialog.drawer nav {
 
   dialog.drawer[data-side="end"]:dir(rtl) {
     --drawer-closed-translate: -100%;
-  }
-}
-
-@media (forced-colors: active) {
-  dialog.drawer::backdrop {
-    background: Canvas;
   }
 }
 
@@ -4979,13 +4913,6 @@ dialog.drawer > form > header {
   border-block-start: var(--border-width) solid var(--border);
 }
 
-@media (forced-colors: active) {
-  .menu-item:focus-visible {
-    outline: var(--border-width) solid ButtonText;
-    outline-offset: -1px;
-  }
-}
-
 /*
  * Tooltip — supplemental label overlaid near a trigger.
  *
@@ -5012,6 +4939,7 @@ dialog.drawer > form > header {
   max-inline-size: min(24rem, calc(var(--viewport-inline) - 2rem));
   padding: 0.25em 0.6em;
   border-radius: var(--radius-sm);
+  border: var(--border-width) solid transparent;
   background: var(--tooltip-bg);
   color: var(--tooltip-fg);
   font-size: var(--font-size-xs);
@@ -5090,16 +5018,6 @@ dialog.drawer > form > header {
   clip-path: polygon(0 50%, 100% 0, 100% 100%);
 }
 
-@media (forced-colors: active) {
-  .tooltip {
-    --tooltip-bg: Canvas;
-    --tooltip-fg: CanvasText;
-  }
-
-  .tooltip::before {
-    display: none;
-  }
-}
 @media print {
   .tooltip {
     display: none !important;
@@ -5961,12 +5879,6 @@ a.avatar[aria-disabled="true"] {
   }
 }
 
-@media (forced-colors: active) {
-  .chat-bubble {
-    border-color: CanvasText;
-  }
-}
-
 /*
  * Fixed floating action placement and a native-details speed dial.
  * Button owns the action's size, shape, and intent; FAB only owns placement.
@@ -6037,6 +5949,7 @@ a.avatar[aria-disabled="true"] {
   max-inline-size: 16rem;
   padding: var(--space-10) var(--space-20);
   border-radius: var(--radius);
+  border: var(--border-width) solid transparent;
   background: var(--surface);
   color: var(--text);
   box-shadow: var(--shadow);
@@ -6057,13 +5970,6 @@ a.avatar[aria-disabled="true"] {
 
 .fab[open] > summary > [aria-hidden="true"]:only-child {
   transform: rotate(45deg);
-}
-
-@media (forced-colors: active) {
-  .fab-label {
-    border: var(--border-width) solid CanvasText;
-    box-shadow: none;
-  }
 }
 
 @media print {
@@ -6259,6 +6165,12 @@ a.avatar[aria-disabled="true"] {
   color: var(--text);
 }
 
+/* Thicker border is the selected affordance in every mode — structural, and it
+   never competes with the outline channel owned by focus. */
+.steps > :is(.complete, [aria-current="step"])::before {
+  border-width: calc(var(--border-width) * 2);
+}
+
 .steps > .complete {
   --step-line: var(--state-selected);
 }
@@ -6352,6 +6264,8 @@ a.avatar[aria-disabled="true"] {
 .app-nav > a > :where(svg, img, [aria-hidden="true"]) {
   inline-size: 1.5rem;
   block-size: 1.5rem;
+  font-size: 1.5rem;
+  line-height: 1;
 }
 
 .app-nav > a:hover {
@@ -6362,21 +6276,7 @@ a.avatar[aria-disabled="true"] {
 .app-nav > a:where([aria-current]:not([aria-current="false"])) {
   background: var(--state-selected);
   color: var(--state-selected-fg);
-}
-
-@media (forced-colors: active) {
-  .app-nav {
-    border-color: CanvasText;
-    background: Canvas;
-    color: CanvasText;
-  }
-
-  .app-nav > a:where([aria-current]:not([aria-current="false"])) {
-    outline: var(--border-width) solid Highlight;
-    background: Highlight;
-    color: HighlightText;
-    forced-color-adjust: none;
-  }
+  font-weight: var(--font-weight-bold);
 }
 
 @media print {
@@ -6454,6 +6354,7 @@ a.avatar[aria-disabled="true"] {
 .nav-link:where([aria-current]:not([aria-current="false"])) {
   background: var(--surface-subtle);
   color: var(--text);
+  font-weight: var(--font-weight-bold);
 }
 
 .nav-link:hover {
@@ -6473,22 +6374,6 @@ a.avatar[aria-disabled="true"] {
 
 .nav-list > li {
   margin: 0;
-}
-
-@media (forced-colors: active) {
-  .nav-link:where([aria-current]:not([aria-current="false"])) {
-    outline: var(--border-width) solid Highlight;
-    background: Highlight;
-    color: HighlightText;
-    forced-color-adjust: none;
-  }
-
-  .nav-link:hover:not(:where([aria-current]:not([aria-current="false"]))) {
-    outline: var(--border-width) solid ButtonText;
-    outline-offset: 2px;
-    background: Canvas;
-    color: CanvasText;
-  }
 }
 
 /*
@@ -6617,13 +6502,14 @@ a.avatar[aria-disabled="true"] {
 }
 
 .tab {
+  /* Positioning context for the selected indicator pseudo. */
+  position: relative;
   display: inline-flex;
   align-items: center;
   gap: var(--tab-gap, 0.375em);
   min-block-size: var(--control-size);
   padding-inline: var(--space-30);
   border: 0;
-  border-block-end: 2px solid transparent;
   border-radius: 0;
   background: transparent;
   color: var(--text-muted);
@@ -6635,8 +6521,6 @@ a.avatar[aria-disabled="true"] {
 
 .tabs[aria-orientation="vertical"] .tab {
   justify-content: flex-start;
-  border-block-end: 0;
-  border-inline-end: 2px solid transparent;
   padding-inline-end: var(--space-40);
 }
 
@@ -6657,30 +6541,29 @@ a.avatar[aria-disabled="true"] {
 }
 
 .tab[aria-selected="true"] {
-  border-block-end-color: var(--intent, var(--state-selected));
   color: var(--intent, var(--state-selected));
+  /* Second, layout-free selected cue — the underline alone is color-only in
+     forced colors. */
+  font-weight: var(--font-weight-bold);
 }
 
-.tabs[aria-orientation="vertical"] .tab[aria-selected="true"] {
-  border-block-end-color: transparent;
-  border-inline-end-color: var(--intent, var(--state-selected));
+/* The selected indicator lives on a positioned pseudo so that only the active
+   tab owns an underline: a transparent border on every tab would surface in
+   forced colors and erase the distinction. currentColor follows the palette the
+   UA forces, so no forced-colors block is needed. */
+.tab[aria-selected="true"]::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  inset-block-end: 0;
+  border-block-end: 2px solid currentColor;
 }
 
-@media (forced-colors: active) {
-  .tab:hover:not(:where(:disabled, [aria-disabled="true"])) {
-    text-decoration: underline;
-    text-underline-offset: 0.18em;
-  }
-
-  .tab[aria-selected="true"] {
-    border-block-end-color: Highlight;
-    color: Highlight;
-  }
-
-  .tabs[aria-orientation="vertical"] .tab[aria-selected="true"] {
-    border-block-end-color: transparent;
-    border-inline-end-color: Highlight;
-  }
+.tabs[aria-orientation="vertical"] .tab[aria-selected="true"]::after {
+  inset-block: 0;
+  inset-inline: auto 0;
+  border-block-end: 0;
+  border-inline-end: 2px solid currentColor;
 }
 
 /*
@@ -6788,19 +6671,6 @@ a.list-item:hover {
 .list-item-trailing {
   justify-self: end;
   min-inline-size: 0;
-}
-
-@media (forced-colors: active) {
-  .list {
-    --list-divider: var(--border-width) solid CanvasText;
-  }
-
-  a.list-item:hover {
-    outline: var(--border-width) solid ButtonText;
-    outline-offset: calc(var(--border-width) * -1);
-    background: Canvas;
-    color: CanvasText;
-  }
 }
 
 @media print {
@@ -7108,6 +6978,7 @@ a.list-item:hover {
   display: inline-grid;
   padding: var(--aura-width);
   border-radius: calc(var(--aura-radius) + var(--aura-width));
+  border: var(--border-width) solid transparent;
   background: var(--aura-color);
   background: conic-gradient(from var(--aura-angle), transparent 0 65%, var(--aura-color));
 }
@@ -7155,16 +7026,6 @@ a.list-item:hover {
 
   .aura:has(> .badge) {
     --aura-radius: var(--radius-full);
-  }
-}
-
-@media (forced-colors: active) {
-  .aura {
-    background: CanvasText;
-  }
-
-  .aura::before {
-    display: none;
   }
 }
 

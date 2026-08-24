@@ -6,7 +6,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>App Layout — Actual CSS</title>
-  <meta name="description" content="Application recipe with a topbar, independently scrolling content, and one adaptive primary navigation landmark.">
+  <meta name="description" content="Specialized application recipe with a topbar, independently scrolling content, and one adaptive primary navigation landmark.">
   <link rel="stylesheet" href="../../src/css/actual.full.css">
   <link rel="stylesheet" href="../assets/actual-themes.min.css">
   <link rel="stylesheet" href="../../scripts/docs/assets/docs.css">
@@ -208,8 +208,19 @@
           <div class="prose docs-prose">
 <h1 id="app-layout">App Layout</h1>
 <blockquote>
-<p>Application recipe with a topbar, independently scrolling content, and one adaptive primary navigation landmark.</p>
+<p>Specialized application recipe with a topbar, independently scrolling content, and one adaptive primary navigation landmark.</p>
 </blockquote>
+<p>Use <code>.app-layout</code> only when all three direct regions are intentional:</p>
+<ul>
+<li><code>.topbar</code> is persistent application chrome;</li>
+<li><code>.app-main</code> is the page's independent scroll container;</li>
+<li><code>.app-nav</code> changes from bottom navigation to labelled side navigation.</li>
+</ul>
+<p>This is not a generic wrapper for a website, dashboard, or anything described
+as an &quot;app.&quot; It fixes the shell to the dynamic viewport and hides overflow on
+that shell. A public, marketing, editorial, or normally scrolling page should
+use semantic landmarks, optionally <code>.app-shell</code> for full-height document flow,
+and <code>.navbar</code> for top-level site navigation.</p>
 </div>
 <div class="docs-example">
   <div class="docs-preview">
@@ -228,6 +239,9 @@
     <a href="#tasks"><span aria-hidden="true">✓</span><span>Tasks</span></a>
     <a href="#settings"><span aria-hidden="true">⚙</span><span>Settings</span></a>
   </nav>
+  <div class="fab">
+    <button class="btn primary circle icon-only" type="button" aria-label="Add task">+</button>
+  </div>
 </div>
   </div>
   <div class="docs-code">
@@ -246,16 +260,26 @@
     &lt;a href=&quot;#tasks&quot;&gt;&lt;span aria-hidden=&quot;true&quot;&gt;✓&lt;/span&gt;&lt;span&gt;Tasks&lt;/span&gt;&lt;/a&gt;
     &lt;a href=&quot;#settings&quot;&gt;&lt;span aria-hidden=&quot;true&quot;&gt;⚙&lt;/span&gt;&lt;span&gt;Settings&lt;/span&gt;&lt;/a&gt;
   &lt;/nav&gt;
+  &lt;div class=&quot;fab&quot;&gt;
+    &lt;button class=&quot;btn primary circle icon-only&quot; type=&quot;button&quot; aria-label=&quot;Add task&quot;&gt;+&lt;/button&gt;
+  &lt;/div&gt;
 &lt;/div&gt;</code></pre>
   </div>
 </div>
 <div class="prose docs-prose">
-<p>The direct-child relationship is intentional: <code>.app-layout</code> owns the grid and
-changes <code>.app-nav</code> from a bottom bar to labelled side navigation. <code>.app-nav</code>
-does not make that application-level decision by itself.</p>
+<p>The direct-child relationship is required, not illustrative: <code>.app-layout</code>
+assigns those children to named grid areas and changes <code>.app-nav</code> from a bottom
+bar to labelled side navigation. Missing, renamed, or wrapped regions mean a
+different layout contract should be used.</p>
+<p>A direct-child <code>.fab</code> overlays the end of the main grid area. It therefore
+clears both bottom and side navigation without copying the navigation size or
+bottom safe-area inset. When navigation moves aside, the layout applies the
+bottom inset at the viewport edge. Outside this recipe, FAB keeps its
+viewport-fixed placement.</p>
 <p>The recipe uses the dynamic viewport token and gives scrolling to <code>.app-main</code>,
 which avoids fixed-position offsets and keeps mobile keyboard resizing within
-the same layout contract. It provides no routing or page lifecycle.</p>
+the same layout contract. The topbar preserves its normal spacing below the
+top safe-area inset. The recipe provides no routing or page lifecycle.</p>
 <h3 id="hooks">Hooks</h3>
 <ul>
 <li><code>--app-nav-side-size</code> controls the side navigation track.</li>

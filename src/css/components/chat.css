@@ -97,9 +97,3 @@
     column-gap: 0;
   }
 }
-
-@media (forced-colors: active) {
-  .chat-bubble {
-    border-color: CanvasText;
-  }
-}

@@ -6,7 +6,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>App Shell — Actual CSS</title>
-  <meta name="description" content="Document landmarks for top and bottom regions, composed with layout primitives.">
+  <meta name="description" content="Full-height, single-column document flow. Despite its historical name, this is
+the general shell for ordinary pages as well as simple applications.">
   <link rel="stylesheet" href="../../src/css/actual.full.css">
   <link rel="stylesheet" href="../assets/actual-themes.min.css">
   <link rel="stylesheet" href="../../scripts/docs/assets/docs.css">
@@ -207,23 +208,51 @@
 
           <div class="prose docs-prose">
 <h1 id="app-shell">App Shell</h1>
-<p>Document landmarks for top and bottom regions, composed with layout primitives.</p>
-<p>Header and footer are document landmarks, not required layout classes.</p>
-<p>Use semantic elements by default.</p>
+<p>Full-height, single-column document flow. Despite its historical name, this is
+the general shell for ordinary pages as well as simple applications.</p>
+<p>Header and footer are document landmarks, not required layout classes.
+Use semantic elements by default. <code>.app-shell</code> already supplies the outer
+column, so do not add a <code>.stack</code> solely to arrange the page landmarks.</p>
 </div>
 <div class="docs-example">
   <div class="docs-preview">
 <body class="app-shell">
-  <header>Actual CSS</header>
-  <main class="grow">Main content</main>
-  <footer>Footer links</footer>
+  <header>
+    <div class="center">
+      <nav class="navbar" aria-label="Main">
+        <a class="navbar-brand" href="/">Actual CSS</a>
+      </nav>
+    </div>
+  </header>
+  <main class="grow">
+    <div class="center stack">
+      <h1>Page title</h1>
+      <p>Main content</p>
+    </div>
+  </main>
+  <footer>
+    <div class="center">Footer links</div>
+  </footer>
 </body>
   </div>
   <div class="docs-code">
     <pre><code class="language-html">&lt;body class=&quot;app-shell&quot;&gt;
-  &lt;header&gt;Actual CSS&lt;/header&gt;
-  &lt;main class=&quot;grow&quot;&gt;Main content&lt;/main&gt;
-  &lt;footer&gt;Footer links&lt;/footer&gt;
+  &lt;header&gt;
+    &lt;div class=&quot;center&quot;&gt;
+      &lt;nav class=&quot;navbar&quot; aria-label=&quot;Main&quot;&gt;
+        &lt;a class=&quot;navbar-brand&quot; href=&quot;/&quot;&gt;Actual CSS&lt;/a&gt;
+      &lt;/nav&gt;
+    &lt;/div&gt;
+  &lt;/header&gt;
+  &lt;main class=&quot;grow&quot;&gt;
+    &lt;div class=&quot;center stack&quot;&gt;
+      &lt;h1&gt;Page title&lt;/h1&gt;
+      &lt;p&gt;Main content&lt;/p&gt;
+    &lt;/div&gt;
+  &lt;/main&gt;
+  &lt;footer&gt;
+    &lt;div class=&quot;center&quot;&gt;Footer links&lt;/div&gt;
+  &lt;/footer&gt;
 &lt;/body&gt;</code></pre>
   </div>
 </div>
@@ -234,10 +263,13 @@
   flex-direction: column;
 }
 </code></pre>
-<p>Sticky header/footer behavior should be opt-in and documented only if it becomes part of the shipped layout API.</p>
-<p>For a persistent topbar, independently scrolling main region, and one primary
-navigation landmark that changes from a bottom bar to a labelled side menu, use
-App Layout.</p>
+<p>Keep <code>.center</code> inside each full-width landmark when their backgrounds or
+borders should span the viewport. Sticky header/footer behavior remains an
+application choice.</p>
+<p>Do not upgrade this shell to <code>.app-layout</code> merely because the product is an
+application. Use App Layout only for its complete specialized contract: a
+direct-child <code>.topbar</code>, independently scrolling <code>.app-main</code>, and direct-child
+<code>.app-nav</code> that changes from a bottom bar to a labelled side menu.</p>
 
 </div>
 

@@ -244,10 +244,12 @@
 </code></pre>
 <p><code>.center</code> intentionally uses <code>box-sizing: content-box</code>. The max inline size is
 the content measure, while inline padding is added outside that measure. This is
-deliberate even though the global reset uses <code>border-box</code>.</p>
-<p>Because the padding sits outside that content box, do not force a <code>.center</code>
-flex or grid item to <code>inline-size: 100%</code> without subtracting its inline padding.
-Otherwise its outer size becomes the available width plus both padding edges.</p>
+deliberate even though the global reset uses <code>border-box</code>. Its explicit inline
+size subtracts that padding, so <code>.center</code> also keeps its available width as a
+flex or grid item instead of collapsing to its min-content width.</p>
+<p>Do not override it with <code>inline-size: 100%</code>: because the padding sits outside
+the content box, that would make its outer size exceed the available width by
+both padding edges.</p>
 
 </div>
 

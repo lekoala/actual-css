@@ -250,7 +250,9 @@ remain links, and <code>aria-current=&quot;page&quot;</code> is the only current
 <div class="prose docs-prose">
 <p>On its own, <code>.app-nav</code> is a sticky bottom bar. Compose it as a direct child of
 <code>.app-layout</code> to let the layout turn the same landmark into side navigation when space
-permits. The component contains no JavaScript and does not manage routing.</p>
+permits. The component contains no JavaScript and does not manage routing.
+The icon slot accepts SVGs, images, and decorative elements such as icon-font
+<code>i</code> elements marked with <code>aria-hidden=&quot;true&quot;</code>.</p>
 <h3 id="hooks">Hooks</h3>
 <ul>
 <li><code>--app-nav-size</code> controls the minimum bottom-bar size.</li>

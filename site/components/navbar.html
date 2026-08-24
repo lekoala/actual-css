@@ -217,6 +217,9 @@
 <li><code>.nav-list</code> is the shared vertical navigation list, reused by <code>.drawer</code> for stacked links.</li>
 <li>Mark the current page with <code>aria-current=&quot;page&quot;</code> on the active <code>.nav-link</code>.</li>
 </ul>
+<p>For a public or normally scrolling page, <code>.navbar</code> belongs inside the semantic
+site header. Do not use <code>.topbar</code> or <code>.app-layout</code> unless the page actually has
+the specialized persistent application-shell behavior those APIs describe.</p>
 <p><code>.navbar-nav</code> and <code>.nav-list</code> are mutually exclusive: <code>.navbar-nav</code> is a horizontal
 flex list, <code>.nav-list</code> a vertical grid. Putting both on one element resolves to
 <code>.nav-list</code> (vertical) — pick one per container.</p>

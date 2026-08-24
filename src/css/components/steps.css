@@ -83,6 +83,12 @@
   color: var(--text);
 }
 
+/* Thicker border is the selected affordance in every mode — structural, and it
+   never competes with the outline channel owned by focus. */
+.steps > :is(.complete, [aria-current="step"])::before {
+  border-width: calc(var(--border-width) * 2);
+}
+
 .steps > .complete {
   --step-line: var(--state-selected);
 }

@@ -204,9 +204,8 @@ select {
 @media (forced-colors: active) {
   :root,
   [data-theme] {
-    --state-selected: Highlight;
-    --state-selected-fg: HighlightText;
     --state-disabled: GrayText;
+    --disabled-opacity: 1;
   }
 }
 
@@ -429,16 +428,6 @@ select {
       color-mix(in oklch, var(--focus) 30%, transparent),
       color-mix(in oklch, var(--focus) 28%, transparent)
     );
-  }
-}
-
-@media (forced-colors: active) {
-  :root,
-  [data-theme] {
-    --focus-outline-color: Highlight;
-    --focus-ring-shadow: none;
-
-    --backdrop-fill: Canvas;
   }
 }
 
@@ -675,14 +664,6 @@ small {
 @supports selector(:focus-visible) {
   :focus:not(:focus-visible) {
     outline: none;
-  }
-
-  /* Pointer focus must still signal in high-contrast mode, where the shared
-     box-shadow rings are disabled (--focus-ring-shadow: none). */
-  @media (forced-colors: active) {
-    :focus:not(:focus-visible) {
-      outline: var(--focus-outline);
-    }
   }
 }
 

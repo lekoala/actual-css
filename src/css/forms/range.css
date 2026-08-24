@@ -93,11 +93,21 @@
   opacity: var(--disabled-opacity);
 }
 
-/* Forced colors: map the custom thumb/track to system colors. The focus
-   indicator stays visible through the transparent outline on :focus-visible. */
+/* Forced colors: the track must stay a visible line against the page (Canvas
+   would merge with it) and the thumb needs a real boundary to remain
+   distinguishable from the track. Disabled keeps GrayText via :disabled.
+   Focus stays on the transparent outline of :focus-visible. */
 @media (forced-colors: active) {
   .range {
-    --range-thumb-bg: ButtonText;
-    --range-track-bg: Canvas;
+    --range-track-bg: CanvasText;
+    --range-thumb-bg: ButtonFace;
+  }
+
+  .range::-webkit-slider-thumb {
+    border: var(--border-width) solid ButtonText;
+  }
+
+  .range::-moz-range-thumb {
+    border: var(--border-width) solid ButtonText;
   }
 }

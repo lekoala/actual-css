@@ -211,7 +211,9 @@
 <p><strong>Module</strong> — import <code>actual-css/css/components/fab</code> or <code>actual-css/css/components</code>.</p>
 </blockquote>
 <p>FAB fixes a primary action near the viewport's block-end and inline-end edges.
-The existing button component owns its size, shape, intent, and interaction.</p>
+The existing button component owns its size, shape, intent, and interaction.
+As a direct child of <code>.app-layout</code>, it instead overlays the main grid area so
+the layout keeps it clear of adaptive application navigation and safe areas.</p>
 <pre><code class="language-html">&lt;div class=&quot;fab&quot;&gt;
   &lt;button class=&quot;btn circle primary lg icon-only&quot; type=&quot;button&quot; aria-label=&quot;Create&quot;&gt;
     &lt;span aria-hidden=&quot;true&quot;&gt;+&lt;/span&gt;
