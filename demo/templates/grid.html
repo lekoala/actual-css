@@ -241,11 +241,13 @@
     </section>
 
     <section class="center stack grid-section">
-      <h2>3. Balanced subdivision — <code>.container-query</code></h2>
+      <h2>3. Balanced subdivision — inside an <code>actual-grid</code> container</h2>
       <p class="grid-note">
-        Wrap the preset in <code>.container-query</code> and it only ever enters
-        a <strong>divisor of N</strong>. Both stages hold six items. Drag either
-        and compare.
+        Place the preset inside a container named <code>actual-grid</code> — the
+        <code>.container-query</code> helper, or a region of your own that
+        declares <code>container: actual-grid / inline-size</code> — and it only
+        ever enters a <strong>divisor of N</strong>. Both stages hold six items.
+        Drag either and compare.
       </p>
       <div class="compare compare-stacked">
         <div class="compare-col">
@@ -287,22 +289,22 @@
         The chains are <code>2 &rarr; 1</code>, <code>3 &rarr; 1</code>,
         <code>4 &rarr; 2 &rarr; 1</code>, and
         <code>6 &rarr; 3 &rarr; 2 &rarr; 1</code>. Intermediate counts are
-        skipped on purpose. The wrapper has to be an ancestor: an element cannot
+        skipped on purpose. The container has to be an ancestor: an element cannot
         query its own size without taking inline-size containment, which would
         collapse it inside a <code>.cluster</code> or any shrink-to-fit box.
       </p>
       <p class="grid-note">
-        Forgetting the wrapper costs you the exact chain and nothing else — the
+        Forgetting the container costs you the exact chain and nothing else — the
         bare preset on the left is still responsive and still overflow-safe.
       </p>
       <div class="alert warning admonition grid-pitfall" role="note">
         <div class="alert-title">
           <i class="ti ti-alert-triangle" aria-hidden="true"></i>
-          Pitfall &mdash; where <code>.container-query</code> may sit
+          Pitfall &mdash; where the query container may sit
         </div>
         <div class="alert-body">
           <p>
-            The wrapper takes inline-size containment, so its contents stop
+            The container takes inline-size containment, so its contents stop
             contributing to its own inline size. On a normal block-level
             wrapper that is free. On a shrink-to-fit box &mdash; a
             <code>.cluster</code> child, a <code>.topbar</code> child, a float,
@@ -311,8 +313,8 @@
           </p>
           <p>
             Nested containers resolve to the <strong>nearest</strong> ancestor.
-            A preset inside an inner <code>.container-query</code> measures that
-            inner box, not the page.
+            A preset inside an inner container measures that inner box, not the
+            page.
           </p>
         </div>
       </div>

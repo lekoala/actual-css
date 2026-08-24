@@ -1,12 +1,12 @@
 {
-  "totalRaw": 246796,
+  "totalRaw": 247829,
   "core": {
     "minified": 10351,
     "brotli": 2485
   },
   "full": {
-    "minified": 113701,
-    "brotli": 16860
+    "minified": 113727,
+    "brotli": 16861
   },
   "js": {
     "core": {
@@ -34,7 +34,7 @@
     },
     {
       "file": "components/button.css",
-      "raw": 7458
+      "raw": 7482
     },
     {
       "file": "core/theme.css",
@@ -43,6 +43,10 @@
     {
       "file": "forms/choice.css",
       "raw": 6028
+    },
+    {
+      "file": "layout/grid.css",
+      "raw": 5749
     },
     {
       "file": "components/badge.css",
@@ -55,10 +59,6 @@
     {
       "file": "components/avatar.css",
       "raw": 5067
-    },
-    {
-      "file": "layout/grid.css",
-      "raw": 4897
     },
     {
       "file": "components/flyout.css",
@@ -246,7 +246,7 @@
     },
     {
       "file": "layout/index.css",
-      "raw": 1704
+      "raw": 1702
     },
     {
       "file": "layout/sidebar-layout.css",
@@ -357,6 +357,10 @@
       "raw": 859
     },
     {
+      "file": "layout/container-query.css",
+      "raw": 824
+    },
+    {
       "file": "layout/stack.css",
       "raw": 783
     },
@@ -367,10 +371,6 @@
     {
       "file": "core/focus.css",
       "raw": 708
-    },
-    {
-      "file": "layout/container-query.css",
-      "raw": 665
     },
     {
       "file": "layout/scroll-target.css",

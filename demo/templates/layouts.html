@@ -220,12 +220,13 @@
     <section class="center layout-section" id="grid-subdivision">
       <h2>7. Density preset — balanced subdivision</h2>
       <p class="layout-note">
-        Inside a <code>.container-query</code> ancestor, the same preset only
-        enters a divisor of its density: <code>3 → 1</code>. Two columns are
-        skipped on purpose, because three items in two columns would leave a
-        lone third. The wrapper is an opt-in for that precision, never a
-        prerequisite for responsive behavior — see the
-        <a href="./grid.html">grid density</a> page for the full chains.
+        Inside a container named <code>actual-grid</code> — here the
+        <code>.container-query</code> helper — the same preset only enters a
+        divisor of its density: <code>3 → 1</code>. Two columns are skipped on
+        purpose, because three items in two columns would leave a lone third.
+        The container is precision, never a prerequisite for responsive
+        behavior — see the <a href="./grid.html">grid density</a> page for the
+        full chains.
       </p>
 
       <div class="layout-example container-query">

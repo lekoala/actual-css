@@ -18,6 +18,7 @@ const PAGES = join(ROOT, "docs", "pages");
 const SITE = join(ROOT, "site");
 
 const FENCE_LANGUAGES = new Set(["html", "css", "js", "javascript", "sh", "text"]);
+const KNOWN_FENCE_FLAGS = new Set(["demo", "bare"]);
 
 function isExternal(href) {
   return /^(?:[a-z]+:)?\/\//iu.test(href) || /^(?:mailto|tel):/iu.test(href);
@@ -96,8 +97,10 @@ function main() {
       if (fence.demo && fence.language !== "html") {
         issues.push(`${rel(file)}: the demo flag is only supported on html fences`);
       }
-      if (fence.flags.some((flag) => flag !== "demo")) {
-        issues.push(`${rel(file)}: unknown fence flag "${fence.flags.find((f) => f !== "demo")}"`);
+      if (fence.flags.some((flag) => !KNOWN_FENCE_FLAGS.has(flag))) {
+        issues.push(
+          `${rel(file)}: unknown fence flag "${fence.flags.find((f) => !KNOWN_FENCE_FLAGS.has(f))}"`,
+        );
       }
       if (fence.language === "html") {
         for (const match of fence.content.matchAll(/<(input|select|textarea)\b([^>]*)>/gu)) {

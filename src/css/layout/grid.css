@@ -24,7 +24,8 @@
 /* Recipe:
    - collection whose item width is the contract -> .grid, tune --grid-min
    - collection whose column density is the contract -> .grid-2/3/4/6
-   - balanced subdivision of that density -> wrap it in .container-query
+   - balanced subdivision of that density -> place it inside any size query
+     container (.container-query is the convenience helper for that context)
    - peer regions that switch as a group -> .switcher
    - content + aside -> .sidebar-layout
    - exact custom track templates -> --grid-columns with an explicit collapse
@@ -85,7 +86,13 @@
   min-inline-size: 0;
 }
 
-/* Balanced subdivision, opted into by an ancestor query container.
+/* Balanced subdivision, activated by an ancestor container named actual-grid.
+ * A .grid-N inside such a container enters only divisor states of N. The name
+ * is deliberate: a grid must not key off the nearest anonymous query container,
+ * or a region that sets container-type: inline-size for an unrelated reason
+ * would silently change the grid. The author opts the grid in by naming the
+ * context — .container-query is the official helper, or declare
+ * container: actual-grid / inline-size on your own region.
  *
  *   .grid-2   2 -> 1
  *   .grid-3   3 -> 1
@@ -102,6 +109,11 @@
  * inline contribution and collapses it inside .cluster, .topbar, floats, and
  * any shrink-to-fit box. See docs/design-notes/grid.md.
  *
+ * Without an actual-grid ancestor none of these @container rules resolve, so
+ * the auto-fill baseline above stays. The min-width: 0 rule is the lowest
+ * step: it pins the grid to one column inside a container before any larger
+ * threshold fires (a bare grid would otherwise show a 2 + 1 orphan at 28-48rem).
+ *
  * Three shared thresholds, not one calibrated per preset: 28rem opens the
  * first horizontal density, 48rem opens three columns, 64rem opens the dense
  * 4 and 6. N already carries the author's statement about item size, so
@@ -113,28 +125,30 @@
  * Ascending min-width only: the last matching step wins by cascade order.
  */
 @supports (container-type: inline-size) {
-  .container-query :where(.grid-2, .grid-3, .grid-4, .grid-6) {
-    grid-template-columns: 1fr;
+  @container actual-grid (min-width: 0px) {
+    :where(.grid-2, .grid-3, .grid-4, .grid-6) {
+      grid-template-columns: 1fr;
+    }
   }
 
-  @container (min-width: 28rem) {
-    .container-query :where(.grid-2, .grid-4, .grid-6) {
+  @container actual-grid (min-width: 28rem) {
+    :where(.grid-2, .grid-4, .grid-6) {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
   }
 
-  @container (min-width: 48rem) {
-    .container-query :where(.grid-3, .grid-6) {
+  @container actual-grid (min-width: 48rem) {
+    :where(.grid-3, .grid-6) {
       grid-template-columns: repeat(3, minmax(0, 1fr));
     }
   }
 
-  @container (min-width: 64rem) {
-    .container-query :where(.grid-4) {
+  @container actual-grid (min-width: 64rem) {
+    :where(.grid-4) {
       grid-template-columns: repeat(4, minmax(0, 1fr));
     }
 
-    .container-query :where(.grid-6) {
+    :where(.grid-6) {
       grid-template-columns: repeat(6, minmax(0, 1fr));
     }
   }
