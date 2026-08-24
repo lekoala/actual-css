@@ -23,6 +23,7 @@
 
 .app-layout > .topbar {
   grid-area: topbar;
+  padding-block-start: calc(var(--space-30) + env(safe-area-inset-top));
 }
 
 .app-layout > .app-main {
@@ -34,6 +35,16 @@
 
 .app-layout > .app-nav {
   grid-area: nav;
+}
+
+/* The main grid area keeps the FAB clear of bottom navigation without making
+   either component copy the other's geometry. */
+.app-layout > .fab {
+  position: relative;
+  grid-area: main;
+  place-self: end;
+  inset: auto;
+  margin: var(--fab-offset);
 }
 
 @media (min-width: 48rem) {
@@ -69,6 +80,11 @@
     gap: var(--space-30);
     padding-inline: var(--space-30);
     text-align: start;
+  }
+
+  /* Side navigation no longer occupies the viewport's bottom safe area. */
+  .app-layout > .fab {
+    margin-block-end: max(var(--fab-offset), env(safe-area-inset-bottom));
   }
 }
 

@@ -25,6 +25,8 @@ remain links, and `aria-current="page"` is the only current-page state.
 On its own, `.app-nav` is a sticky bottom bar. Compose it as a direct child of
 `.app-layout` to let the layout turn the same landmark into side navigation when space
 permits. The component contains no JavaScript and does not manage routing.
+The icon slot accepts SVGs, images, and decorative elements such as icon-font
+`i` elements marked with `aria-hidden="true"`.
 
 ### Hooks
 

@@ -32,12 +32,15 @@ test("mobile demo uses one adaptive navigation landmark and semantic compact con
   ).not.toBeNull();
   expect(shell.querySelector("#compact-mode")).toBeNull();
   expect(shell.querySelectorAll(":scope > .fab.mobile-fab > .btn.icon-only")).toHaveLength(1);
+  expect(shell.querySelector("[data-page='tasks'] .mobile-page-heading .btn")).toBeNull();
   expect(shell.querySelector(".chip, .snackbar")).toBeNull();
 
   const appCss = readFileSync(resolve(appRoot, "app.css"), "utf8");
   const appJs = readFileSync(resolve(appRoot, "app.js"), "utf8");
-  expect(appCss).toMatch(/\.mobile-icon,[\s\S]*?inline-size:\s*1\.5rem;/);
-  expect(appCss).toMatch(/\.mobile-icon,[\s\S]*?block-size:\s*1\.5rem;/);
+  expect(appCss).toMatch(/\.mobile-icon\s*\{[\s\S]*?inline-size:\s*1\.5rem;/);
+  expect(appCss).toMatch(/\.mobile-icon\s*\{[\s\S]*?block-size:\s*1\.5rem;/);
+  expect(appCss).not.toContain("safe-area-inset");
+  expect(shell.querySelectorAll(".mobile-page.stack")).toHaveLength(5);
   expect(html).toContain("@tabler/icons-webfont@3.46.0");
   expect(html).not.toContain("<symbol");
   expect(appCss).not.toContain("body.sm");

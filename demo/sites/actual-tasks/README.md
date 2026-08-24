@@ -24,8 +24,8 @@ full-page demos.
 | `.mobile-brand`, `.mobile-page`, task metadata and empty state | Product-specific | Keep local. |
 | `.mobile-filters > .btn` | Product shape | Existing `.btn.sm` and `aria-pressed` cover the behavior; no chip component. |
 | Three-zone task/settings rows | Repeated framework gap | Promoted to `.list` / `.list-item`; no local row geometry remains. |
-| `.mobile-topbar` safe-area padding | Framework integration gap | Keep local until device testing establishes whether topbar or app-layout owns it. |
-| `.mobile-fab` bottom offset | Composition gap | FAB cannot currently account for an app navigation bar; keep local pending a general composition contract. |
+| Topbar safe-area padding | Framework integration gap | Promoted to `.app-layout`, which owns chrome touching the physical viewport edge. |
+| FAB/app-nav avoidance | Composition gap | Promoted to `.app-layout`; a direct-child FAB overlays the main grid area instead of copying navigation geometry. |
 
 The app uses `.status-bar` for passive create, delete, completion, and
 preference feedback. It intentionally does not add an actionable snackbar.

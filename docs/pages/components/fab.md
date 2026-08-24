@@ -4,6 +4,8 @@
 
 FAB fixes a primary action near the viewport's block-end and inline-end edges.
 The existing button component owns its size, shape, intent, and interaction.
+As a direct child of `.app-layout`, it instead overlays the main grid area so
+the layout keeps it clear of adaptive application navigation and safe areas.
 
 ```html
 <div class="fab">
