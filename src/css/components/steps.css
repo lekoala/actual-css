@@ -32,7 +32,6 @@
   --step-marker-fg: var(--text-muted);
   --step-marker-radius: var(--radius-full);
   --step-line: var(--border);
-  --step-connector: var(--step-line);
 
   counter-reset: actual-step;
   display: flex;
@@ -85,7 +84,12 @@
   inset-inline-start: calc(50% + var(--step-size) / 2);
   inline-size: calc(100% - var(--step-size));
   block-size: var(--step-line-size);
-  background: var(--step-connector);
+  /* A custom property resolves its var() before inheritance, so a default
+     --step-connector: var(--step-line) on .steps would freeze the parent line
+     color and a .complete child's connector would never follow its own line.
+     Falling back to the local --step-line here keeps each connector in sync;
+     an explicit --step-connector still wins when the author sets one. */
+  background: var(--step-connector, var(--step-line));
 }
 
 .steps > li:last-child::after {

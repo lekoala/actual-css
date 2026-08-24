@@ -1,12 +1,12 @@
 {
-  "totalRaw": 245715,
+  "totalRaw": 246796,
   "core": {
     "minified": 10351,
     "brotli": 2485
   },
   "full": {
-    "minified": 113523,
-    "brotli": 16821
+    "minified": 113701,
+    "brotli": 16860
   },
   "js": {
     "core": {
@@ -34,7 +34,7 @@
     },
     {
       "file": "components/button.css",
-      "raw": 7482
+      "raw": 7458
     },
     {
       "file": "core/theme.css",
@@ -101,6 +101,10 @@
       "raw": 3892
     },
     {
+      "file": "components/steps.css",
+      "raw": 3836
+    },
+    {
       "file": "forms/otp.css",
       "raw": 3783
     },
@@ -111,10 +115,6 @@
     {
       "file": "forms/floating-field.css",
       "raw": 3517
-    },
-    {
-      "file": "components/steps.css",
-      "raw": 3472
     },
     {
       "file": "utilities/base.css",
@@ -193,6 +193,10 @@
       "raw": 2325
     },
     {
+      "file": "components/navbar.css",
+      "raw": 2290
+    },
+    {
       "file": "themes/forest.css",
       "raw": 2273
     },
@@ -215,10 +219,6 @@
     {
       "file": "components/chat.css",
       "raw": 2118
-    },
-    {
-      "file": "components/navbar.css",
-      "raw": 2114
     },
     {
       "file": "themes/mono.css",
@@ -247,6 +247,10 @@
     {
       "file": "layout/index.css",
       "raw": 1704
+    },
+    {
+      "file": "layout/sidebar-layout.css",
+      "raw": 1698
     },
     {
       "file": "forms/input-icon.css",
@@ -323,10 +327,6 @@
     {
       "file": "forms/form.css",
       "raw": 1174
-    },
-    {
-      "file": "layout/sidebar-layout.css",
-      "raw": 1133
     },
     {
       "file": "themes/indigo.css",

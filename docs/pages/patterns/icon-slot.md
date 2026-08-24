@@ -32,11 +32,10 @@ centers its glyph, and clips overflow:
 }
 ```
 
-For a round disc, add the `.circle` utility:
+For a round disc, add the `.circle` utility — it supplies the `border-radius`:
 
 ```css
-.product-icon {
-  border-radius: var(--radius-full);
+.product-icon.circle {
   background: var(--surface-subtle);
 }
 ```

@@ -78,20 +78,22 @@ function main() {
 
     for (const fence of scanCodeFences(markdown)) {
       if (fence.language !== "html") continue;
-      const offset = fence.start + 1;
-      const lines = fence.content.split("\n");
-
-      for (const [index, line] of lines.entries()) {
-        for (const match of line.matchAll(/class\s*=\s*"([^"]*)"/g)) {
-          for (const name of match[1].split(/\s+/)) {
-            if (!name) continue;
-            if (known.has(name) || DOC_DEMO_CLASSES.has(name) || isExternalIcon(name)) {
-              continue;
-            }
-            issues.push(
-              `${relFile}:${offset + index}: unknown class "${name}" in snippet — add it to Actual (generate:reserved) or whitelist it as demo-only`,
-            );
+      // Scan the whole fence as one string so the class attribute regex can
+      // span multiple lines and accept either quote style — a single-line,
+      // double-quote-only pass would miss class='…' and folded attributes.
+      const attrRe = /class\s*=\s*(["'])([\s\S]*?)\1/g;
+      let match;
+      for (match = attrRe.exec(fence.content); match; match = attrRe.exec(fence.content)) {
+        const before = fence.content.slice(0, match.index);
+        const line = fence.start + 1 + (before.match(/\n/g)?.length ?? 0);
+        for (const name of match[2].split(/\s+/)) {
+          if (!name) continue;
+          if (known.has(name) || DOC_DEMO_CLASSES.has(name) || isExternalIcon(name)) {
+            continue;
           }
+          issues.push(
+            `${relFile}:${line}: unknown class "${name}" in snippet — add it to Actual (generate:reserved) or whitelist it as demo-only`,
+          );
         }
       }
     }

@@ -61,6 +61,18 @@ foreground by default, including on a contrasting `.inverted` surface. A local
 intent class still wins: `.danger.outline` uses the danger color in either
 context. Filled buttons own their surface and keep their normal intent recipe.
 
+`.btn.link` is a link-style action: it keeps button behavior and states, but
+remains intrinsically sized like text instead of stretching with its layout
+container. For a plain text link, use a bare `<a>` with no class.
+
+```html demo
+<div class="cluster">
+  <a href="#">Normal link</a>
+  <a class="btn link" href="#">Button-like link</a>
+  <button class="btn link" type="button">Button with link appearance</button>
+</div>
+```
+
 ```html demo
 <div class="cluster">
   <button class="btn outline" type="button">Outline</button>
