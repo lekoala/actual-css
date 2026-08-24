@@ -35,6 +35,7 @@
 @import "./steps.css";
 
 /* Navigation */
+@import "./app-nav.css";
 @import "./navbar.css";
 @import "./breadcrumb.css";
 @import "./pagination.css";
@@ -42,6 +43,7 @@
 @import "./scrollspy.css";
 
 /* Data */
+@import "./list.css";
 @import "./table.css";
 @import "./meter.css";
 

@@ -1048,6 +1048,7 @@ small {
  * .center         centered content column
  * .frame          fixed-ratio media frame
  * .app-shell      full-height application shell
+ * .app-layout     topbar + scrolling main + bottom/side app navigation
  * .media          fixed media + flexible content
  * .switcher       peer regions: all horizontal or all stacked
  * .sidebar-layout main content + secondary aside
@@ -1161,6 +1162,92 @@ small {
   min-block-size: var(--viewport-block);
   display: flex;
   flex-direction: column;
+}
+
+/*
+ * Application shell recipe: one DOM structure uses a bottom navigation bar
+ * when narrow and a labelled side navigation when space permits. The main
+ * region owns scrolling, keeping both pieces of application chrome available
+ * without fixed offsets.
+ *
+ * Public hook:
+ * --app-nav-side-size
+ */
+.app-layout {
+  --app-nav-side-size: 12rem;
+
+  display: grid;
+  grid-template:
+    "topbar" auto
+    "main" minmax(0, 1fr)
+    "nav" auto
+    / minmax(0, 1fr);
+  block-size: var(--viewport-block);
+  min-inline-size: 0;
+  overflow: hidden;
+}
+
+.app-layout > .topbar {
+  grid-area: topbar;
+}
+
+.app-layout > .app-main {
+  grid-area: main;
+  min-inline-size: 0;
+  min-block-size: 0;
+  overflow: auto;
+}
+
+.app-layout > .app-nav {
+  grid-area: nav;
+}
+
+@media (min-width: 48rem) {
+  .app-layout {
+    grid-template:
+      "nav topbar" auto
+      "nav main" minmax(0, 1fr)
+      / var(--app-nav-side-size) minmax(0, 1fr);
+  }
+
+  .app-layout > .app-nav {
+    position: sticky;
+    inset-block: 0;
+    grid-auto-flow: row;
+    grid-auto-rows: minmax(var(--control-size-lg), auto);
+    grid-auto-columns: auto;
+    align-content: start;
+    gap: var(--space-20);
+    min-block-size: 0;
+    padding-block: max(var(--space-20), env(safe-area-inset-top))
+      max(var(--space-20), env(safe-area-inset-bottom));
+    padding-inline: var(--space-20);
+    border-block-start: 0;
+    border-inline-end: var(--border-width) solid var(--ui-border, var(--border));
+  }
+
+  .app-layout > .app-nav > a {
+    grid-template-rows: auto;
+    grid-template-columns: 1.5rem minmax(0, 1fr);
+    place-content: center start;
+    align-items: center;
+    justify-items: start;
+    gap: var(--space-30);
+    padding-inline: var(--space-30);
+    text-align: start;
+  }
+}
+
+@media print {
+  .app-layout {
+    display: block;
+    block-size: auto;
+    overflow: visible;
+  }
+
+  .app-layout > .app-main {
+    overflow: visible;
+  }
 }
 
 /* Media object: fixed-width leading element (avatar, icon, image) + flexible
@@ -3196,7 +3283,8 @@ small {
 
 .btn.icon-only {
   inline-size: var(--btn-min-size);
-  padding-inline: 0;
+  block-size: var(--btn-min-size);
+  padding: 0;
 }
 
 @supports (color: color-mix(in oklch, red, white)) {
@@ -6209,6 +6297,95 @@ a.avatar[aria-disabled="true"] {
 
 /* Navigation */
 /*
+ * Primary application navigation. The component owns the navigation surface
+ * and item states; app-layout owns whether that surface is a bottom bar or
+ * labelled side navigation.
+ *
+ * Public hooks:
+ * --app-nav-size
+ * --app-nav-gap
+ */
+:where(.app-nav) {
+  --ui-bg: initial;
+  --ui-fg: initial;
+  --ui-border: initial;
+}
+
+.app-nav {
+  --app-nav-size: 4rem;
+  --app-nav-gap: var(--space-10);
+
+  position: sticky;
+  inset-block-end: 0;
+  z-index: var(--z-sticky);
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
+  gap: var(--app-nav-gap);
+  min-block-size: calc(var(--app-nav-size) + env(safe-area-inset-bottom));
+  padding-block: var(--space-10) max(var(--space-10), env(safe-area-inset-bottom));
+  padding-inline: var(--space-10);
+  border-block-start: var(--border-width) solid var(--ui-border, var(--border));
+  background: var(--ui-bg, var(--surface));
+  color: var(--ui-fg, var(--text-muted));
+}
+
+.app-nav > a {
+  display: grid;
+  grid-template-rows: auto auto;
+  place-content: center;
+  justify-items: center;
+  gap: var(--space-10);
+  min-inline-size: 0;
+  min-block-size: var(--control-size-lg);
+  padding-inline: var(--space-10);
+  border-radius: var(--radius);
+  color: inherit;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-tight);
+  text-align: center;
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+
+.app-nav > a > :where(svg, img, [aria-hidden="true"]) {
+  inline-size: 1.5rem;
+  block-size: 1.5rem;
+}
+
+.app-nav > a:hover {
+  background: var(--surface-subtle);
+  color: var(--text);
+}
+
+.app-nav > a:where([aria-current]:not([aria-current="false"])) {
+  background: var(--state-selected);
+  color: var(--state-selected-fg);
+}
+
+@media (forced-colors: active) {
+  .app-nav {
+    border-color: CanvasText;
+    background: Canvas;
+    color: CanvasText;
+  }
+
+  .app-nav > a:where([aria-current]:not([aria-current="false"])) {
+    outline: var(--border-width) solid Highlight;
+    background: Highlight;
+    color: HighlightText;
+    forced-color-adjust: none;
+  }
+}
+
+@media print {
+  .app-nav {
+    display: none;
+  }
+}
+
+/*
  * Navbar — top-level navigation bar.
  *
  * .navbar is a horizontal bar; .navbar-brand is the brand link; .navbar-nav is
@@ -6536,6 +6713,103 @@ a.avatar[aria-disabled="true"] {
 
 
 /* Data */
+/*
+ * Application list — repeated rows with optional leading and trailing regions.
+ * Content determines the number of lines; the component only owns the row
+ * geometry, dividers, and supporting-text treatment.
+ *
+ * Public hooks:
+ * --list-item-min-size
+ * --list-item-pad-block
+ * --list-item-pad-inline
+ * --list-item-gap
+ * --list-divider
+ */
+.list {
+  --list-item-min-size: var(--control-size-lg);
+  --list-item-pad-block: var(--space-30);
+  --list-item-pad-inline: 0;
+  --list-item-gap: var(--gap);
+  --list-divider: var(--border-width) solid var(--border);
+
+  display: grid;
+  gap: 0;
+  margin: 0;
+  padding: 0;
+  border-block-start: var(--list-divider);
+  list-style: none;
+}
+
+.list > li {
+  margin: 0;
+}
+
+.list > :where(.list-item),
+.list > li > .list-item {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--list-item-gap);
+  min-block-size: var(--list-item-min-size);
+  padding-block: var(--list-item-pad-block);
+  padding-inline: var(--list-item-pad-inline);
+}
+
+.list > .list-item + .list-item,
+.list > li + li {
+  border-block-start: var(--list-divider);
+}
+
+a.list-item {
+  color: inherit;
+  text-decoration: none;
+}
+
+a.list-item:hover {
+  background: var(--surface-subtle);
+}
+
+.list-item-content {
+  min-inline-size: 0;
+}
+
+.list-item-title,
+.list-item-text {
+  display: block;
+  margin: 0;
+}
+
+.list-item-text {
+  color: var(--text-muted);
+  font-size: var(--font-size-sm);
+  overflow-wrap: anywhere;
+}
+
+.list-item-trailing {
+  justify-self: end;
+  min-inline-size: 0;
+}
+
+@media (forced-colors: active) {
+  .list {
+    --list-divider: var(--border-width) solid CanvasText;
+  }
+
+  a.list-item:hover {
+    outline: var(--border-width) solid ButtonText;
+    outline-offset: calc(var(--border-width) * -1);
+    background: Canvas;
+    color: CanvasText;
+  }
+}
+
+@media print {
+  .list > :where(.list-item),
+  .list > li > .list-item {
+    break-inside: avoid;
+  }
+}
+
 /*
  * Table — structured tabular data.
  *

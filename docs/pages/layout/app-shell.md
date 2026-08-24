@@ -23,3 +23,7 @@ Use semantic elements by default.
 ```
 
 Sticky header/footer behavior should be opt-in and documented only if it becomes part of the shipped layout API.
+
+For a persistent topbar, independently scrolling main region, and one primary
+navigation landmark that changes from a bottom bar to a labelled side menu, use
+App Layout.

@@ -117,6 +117,24 @@ change typography.
 
 ## States
 
+### Compact filters and actions
+
+A compact filter is still a button, not a separate chip semantic. Compose the
+small size with `aria-pressed`; application code owns the state change.
+
+```html demo
+<div class="cluster" aria-label="Task filters">
+  <button class="btn sm" type="button" aria-pressed="true">All</button>
+  <button class="btn sm outline" type="button" aria-pressed="false">Open</button>
+  <button class="btn sm outline" type="button" aria-pressed="false">Done</button>
+</div>
+```
+
+Use `.badge` for a passive category or count and the removable-tag composition
+when a displayed value needs its own remove action. Actual intentionally has no
+generic `.chip` component: action, selection, and information retain their HTML
+semantics.
+
 ### Disabled
 
 Disable a `<button>` or `<input>` with the native `disabled` attribute. Anchors

@@ -8,6 +8,7 @@
  * .center         centered content column
  * .frame          fixed-ratio media frame
  * .app-shell      full-height application shell
+ * .app-layout     topbar + scrolling main + bottom/side app navigation
  * .media          fixed media + flexible content
  * .switcher       peer regions: all horizontal or all stacked
  * .sidebar-layout main content + secondary aside
@@ -30,6 +31,7 @@
 @import "./center.css";
 @import "./frame.css";
 @import "./app-shell.css";
+@import "./app-layout.css";
 @import "./media.css";
 @import "./switcher.css";
 @import "./sidebar-layout.css";

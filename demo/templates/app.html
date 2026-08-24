@@ -12,7 +12,7 @@
   <style>
     /* Template-local layout. Each rule papers over a known framework gap.
      *
-     *   .app-layout / .app-layout-sidebar / .app-layout-main
+     *   .app-sidebar-shell / .app-layout-sidebar / .app-layout-main
      *     -> app shell with persistent sidebar (gap: layout primitive).
      *   .app-layout-hamburger / .app-layout-hide-mobile
      *     -> sidebar -> drawer handoff at 64rem (gap: responsive sidebar swap).
@@ -36,7 +36,7 @@
      * fixed toast stack.
      */
 
-    .app-layout {
+    .app-sidebar-shell {
       display: grid;
       grid-template-columns: 1fr;
       min-block-size: 100dvh;
@@ -239,7 +239,7 @@
     }
 
     @media (min-width: 64rem) {
-      .app-layout {
+      .app-sidebar-shell {
         grid-template-columns: auto 1fr;
       }
 
@@ -262,7 +262,7 @@
 </head>
 
 <body>
-  <div class="app-layout">
+  <div class="app-sidebar-shell">
     <!-- Sidebar (visible >= 64rem); mirrored inside the drawer for mobile. -->
     <aside class="app-layout-sidebar app-sidebar" aria-label="Primary">
       <a class="navbar-brand" href="#" style="text-decoration: none; color: inherit;">

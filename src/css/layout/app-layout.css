@@ -1,0 +1,85 @@
+/*
+ * Application shell recipe: one DOM structure uses a bottom navigation bar
+ * when narrow and a labelled side navigation when space permits. The main
+ * region owns scrolling, keeping both pieces of application chrome available
+ * without fixed offsets.
+ *
+ * Public hook:
+ * --app-nav-side-size
+ */
+.app-layout {
+  --app-nav-side-size: 12rem;
+
+  display: grid;
+  grid-template:
+    "topbar" auto
+    "main" minmax(0, 1fr)
+    "nav" auto
+    / minmax(0, 1fr);
+  block-size: var(--viewport-block);
+  min-inline-size: 0;
+  overflow: hidden;
+}
+
+.app-layout > .topbar {
+  grid-area: topbar;
+}
+
+.app-layout > .app-main {
+  grid-area: main;
+  min-inline-size: 0;
+  min-block-size: 0;
+  overflow: auto;
+}
+
+.app-layout > .app-nav {
+  grid-area: nav;
+}
+
+@media (min-width: 48rem) {
+  .app-layout {
+    grid-template:
+      "nav topbar" auto
+      "nav main" minmax(0, 1fr)
+      / var(--app-nav-side-size) minmax(0, 1fr);
+  }
+
+  .app-layout > .app-nav {
+    position: sticky;
+    inset-block: 0;
+    grid-auto-flow: row;
+    grid-auto-rows: minmax(var(--control-size-lg), auto);
+    grid-auto-columns: auto;
+    align-content: start;
+    gap: var(--space-20);
+    min-block-size: 0;
+    padding-block: max(var(--space-20), env(safe-area-inset-top))
+      max(var(--space-20), env(safe-area-inset-bottom));
+    padding-inline: var(--space-20);
+    border-block-start: 0;
+    border-inline-end: var(--border-width) solid var(--ui-border, var(--border));
+  }
+
+  .app-layout > .app-nav > a {
+    grid-template-rows: auto;
+    grid-template-columns: 1.5rem minmax(0, 1fr);
+    place-content: center start;
+    align-items: center;
+    justify-items: start;
+    gap: var(--space-30);
+    padding-inline: var(--space-30);
+    text-align: start;
+  }
+}
+
+@media print {
+  .app-layout {
+    display: block;
+    block-size: auto;
+    overflow: visible;
+  }
+
+  .app-layout > .app-main {
+    overflow: visible;
+  }
+}

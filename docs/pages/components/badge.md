@@ -77,6 +77,8 @@ The dot conveys no text, so an `aria-label` is required for it to mean anything.
 ## Removable tag pattern
 
 Use `.badge soft` for tag visuals. Add a direct dismiss button only when the tag can actually be removed. There is no separate chip component.
+For a compact action or filter, use `.btn.sm` instead; badges describe content
+and must not be turned into toggle controls merely to obtain a compact shape.
 
 ```html demo
 <span class="badge primary soft">

@@ -107,12 +107,14 @@
         <li><a class="nav-link" href="../layout/scroll-target.html">Scroll Target</a></li>
         <li><a class="nav-link" href="../layout/frame.html">Frame</a></li>
         <li><a class="nav-link" href="../layout/app-shell.html">App Shell</a></li>
+        <li><a class="nav-link" href="../layout/app-layout.html">App Layout</a></li>
         <li><a class="nav-link" href="../layout/list.html">List</a></li>
       </ul>
       <p class="docs-nav-group">Components</p>
       <ul class="nav-list">
         <li><a class="nav-link" href="accordion.html">Accordion</a></li>
         <li><a class="nav-link" href="alert.html">Alert</a></li>
+        <li><a class="nav-link" href="app-navigation.html">App Navigation</a></li>
         <li><a class="nav-link" href="aura.html">Aura</a></li>
         <li><a class="nav-link" href="avatar.html">Avatar</a></li>
         <li><a class="nav-link" href="badge.html">Badge</a></li>
@@ -125,6 +127,7 @@
         <li><a class="nav-link" href="fab.html">Floating action button</a></li>
         <li><a class="nav-link" href="indicator.html">Indicator</a></li>
         <li><a class="nav-link" href="key.html">Key</a></li>
+        <li><a class="nav-link" href="list.html">List</a></li>
         <li><a class="nav-link" href="meter.html">Meter</a></li>
         <li><a class="nav-link" href="navbar.html">Navbar</a></li>
         <li><a class="nav-link" href="pagination.html">Pagination</a></li>
@@ -381,6 +384,31 @@ change typography.</p>
 </div>
 <div class="prose docs-prose">
 <h2 id="states">States</h2>
+<h3 id="compact-filters-and-actions">Compact filters and actions</h3>
+<p>A compact filter is still a button, not a separate chip semantic. Compose the
+small size with <code>aria-pressed</code>; application code owns the state change.</p>
+</div>
+<div class="docs-example">
+  <div class="docs-preview">
+<div class="cluster" aria-label="Task filters">
+  <button class="btn sm" type="button" aria-pressed="true">All</button>
+  <button class="btn sm outline" type="button" aria-pressed="false">Open</button>
+  <button class="btn sm outline" type="button" aria-pressed="false">Done</button>
+</div>
+  </div>
+  <div class="docs-code">
+    <pre><code class="language-html">&lt;div class=&quot;cluster&quot; aria-label=&quot;Task filters&quot;&gt;
+  &lt;button class=&quot;btn sm&quot; type=&quot;button&quot; aria-pressed=&quot;true&quot;&gt;All&lt;/button&gt;
+  &lt;button class=&quot;btn sm outline&quot; type=&quot;button&quot; aria-pressed=&quot;false&quot;&gt;Open&lt;/button&gt;
+  &lt;button class=&quot;btn sm outline&quot; type=&quot;button&quot; aria-pressed=&quot;false&quot;&gt;Done&lt;/button&gt;
+&lt;/div&gt;</code></pre>
+  </div>
+</div>
+<div class="prose docs-prose">
+<p>Use <code>.badge</code> for a passive category or count and the removable-tag composition
+when a displayed value needs its own remove action. Actual intentionally has no
+generic <code>.chip</code> component: action, selection, and information retain their HTML
+semantics.</p>
 <h3 id="disabled">Disabled</h3>
 <p>Disable a <code>&lt;button&gt;</code> or <code>&lt;input&gt;</code> with the native <code>disabled</code> attribute. Anchors
 have no native disabled state, so <code>&lt;a class=&quot;btn&quot; aria-disabled=&quot;true&quot;&gt;</code> is the
@@ -557,6 +585,7 @@ activation guard.</li>
         <li><a class="nav-link" href="#button-groups" data-docs-toc-item data-level="3">Button groups</a></li>
         <li><a class="nav-link" href="#sizes" data-docs-toc-item data-level="2">Sizes</a></li>
         <li><a class="nav-link" href="#states" data-docs-toc-item data-level="2">States</a></li>
+        <li><a class="nav-link" href="#compact-filters-and-actions" data-docs-toc-item data-level="3">Compact filters and actions</a></li>
         <li><a class="nav-link" href="#disabled" data-docs-toc-item data-level="3">Disabled</a></li>
         <li><a class="nav-link" href="#loading" data-docs-toc-item data-level="3">Loading</a></li>
         <li><a class="nav-link" href="#toggle" data-docs-toc-item data-level="3">Toggle</a></li>
@@ -613,12 +642,14 @@ activation guard.</li>
         <li><a class="nav-link" href="../layout/scroll-target.html">Scroll Target</a></li>
         <li><a class="nav-link" href="../layout/frame.html">Frame</a></li>
         <li><a class="nav-link" href="../layout/app-shell.html">App Shell</a></li>
+        <li><a class="nav-link" href="../layout/app-layout.html">App Layout</a></li>
         <li><a class="nav-link" href="../layout/list.html">List</a></li>
       </ul>
       <p class="docs-nav-group">Components</p>
       <ul class="nav-list">
         <li><a class="nav-link" href="accordion.html">Accordion</a></li>
         <li><a class="nav-link" href="alert.html">Alert</a></li>
+        <li><a class="nav-link" href="app-navigation.html">App Navigation</a></li>
         <li><a class="nav-link" href="aura.html">Aura</a></li>
         <li><a class="nav-link" href="avatar.html">Avatar</a></li>
         <li><a class="nav-link" href="badge.html">Badge</a></li>
@@ -631,6 +662,7 @@ activation guard.</li>
         <li><a class="nav-link" href="fab.html">Floating action button</a></li>
         <li><a class="nav-link" href="indicator.html">Indicator</a></li>
         <li><a class="nav-link" href="key.html">Key</a></li>
+        <li><a class="nav-link" href="list.html">List</a></li>
         <li><a class="nav-link" href="meter.html">Meter</a></li>
         <li><a class="nav-link" href="navbar.html">Navbar</a></li>
         <li><a class="nav-link" href="pagination.html">Pagination</a></li>

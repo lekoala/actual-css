@@ -323,6 +323,14 @@ test("btn.link is intrinsically content-sized", () => {
   expect(css).toMatch(/\.btn\.link \{[\s\S]*max-inline-size: 100%;/);
 });
 
+test("icon-only buttons stay square with icons larger than the text line", () => {
+  const css = readCss("src/css/components/button.css");
+
+  expect(css).toMatch(
+    /\.btn\.icon-only\s*\{[\s\S]*?inline-size:\s*var\(--btn-min-size\);[\s\S]*?block-size:\s*var\(--btn-min-size\);[\s\S]*?padding:\s*0;/,
+  );
+});
+
 test("busy overlay can inherit local surface background", () => {
   const busyCss = readCss("src/css/components/busy.css");
   const variantsCss = readCss("src/css/core/variants.css");
@@ -606,6 +614,46 @@ test("optional FAB preserves DOM order and stays out of print", () => {
   expect(css).toMatch(/\.fab-action\s*\{[\s\S]*inline-size:\s*max-content;/);
   expect(css).toMatch(/\.fab-label\s*\{[\s\S]*box-shadow:\s*var\(--shadow\);/);
   expect(css).toContain("@media print");
+});
+
+test("app navigation stays semantic and app-layout owns its adaptive geometry", () => {
+  const navCss = readCss("src/css/components/app-nav.css");
+  const layoutCss = readCss("src/css/layout/app-layout.css");
+
+  expect(navCss).toContain('.app-nav > a:where([aria-current]:not([aria-current="false"]))');
+  expect(navCss).toContain("env(safe-area-inset-bottom)");
+  expect(navCss).toContain("min-block-size: var(--control-size-lg);");
+  expect(navCss).toContain("@media (forced-colors: active)");
+  expect(navCss).not.toContain(".active");
+  expect(navCss).not.toContain("@media (min-width:");
+
+  expect(layoutCss).toContain('"topbar" auto');
+  expect(layoutCss).toContain('"nav topbar" auto');
+  expect(layoutCss).toContain(".app-layout > .app-nav");
+  expect(layoutCss).toContain(".app-layout > .app-nav > a");
+  expect(layoutCss).toContain(".app-layout > .app-main");
+  expect(layoutCss).toContain("block-size: var(--viewport-block);");
+  expect(layoutCss).toContain("--app-nav-side-size: 12rem;");
+  expect(layoutCss).toContain("grid-template-columns: 1.5rem minmax(0, 1fr);");
+  expect(layoutCss).toContain("align-items: center;");
+  expect(layoutCss).toMatch(
+    /@media \(min-width: 48rem\)[\s\S]*?\.app-layout > \.app-nav\s*\{[\s\S]*?gap: var\(--space-20\);[\s\S]*?padding-inline: var\(--space-20\);/,
+  );
+});
+
+test("application lists provide three semantic slots without owning their controls", () => {
+  const css = readCss("src/css/components/list.css");
+
+  expect(css).toContain("grid-template-columns: auto minmax(0, 1fr) auto;");
+  expect(css).toContain("min-block-size: var(--list-item-min-size);");
+  expect(css).toContain("border-block-start: var(--list-divider);");
+  expect(css).not.toContain("border-block: var(--list-divider);");
+  expect(css).toContain(".list-item-content");
+  expect(css).toContain("min-inline-size: 0;");
+  expect(css).toContain("a.list-item");
+  expect(css).toContain("@media (forced-colors: active)");
+  expect(css).not.toContain("two-line");
+  expect(css).not.toContain("three-line");
 });
 
 test("indicator exposes only logical four-corner positioning", () => {
