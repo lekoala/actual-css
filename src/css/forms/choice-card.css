@@ -131,27 +131,18 @@
   transform: scale(1);
 }
 
+/* The native input is hidden and the checked marker is custom-drawn: without
+   this repair, forced colors pushes disc and check to the same system color
+   and the state disappears. Highlight/Canvas/HighlightText are preserved as-is,
+   so no forced-color-adjust is needed. The pseudo is not focusable — the
+   outline is a separator against the card, not a focus channel. */
 @media (forced-colors: active) {
-  .choice-card {
-    --choice-card-border: ButtonText;
-    --choice-card-bg: Canvas;
-  }
-
-  .choice-card:has(:checked) {
-    --choice-card-border: Highlight;
-    /* Pin the selected surface to the system canvas: only the essential
-       marker pseudos opt out of remapping, never the interactive card host. */
-    --choice-card-bg: Canvas;
-  }
-
   .choice-card:has(:checked)::before {
     background: Highlight;
-    box-shadow: 0 0 0 2px Canvas;
-    forced-color-adjust: none;
+    outline: 2px solid Canvas;
   }
 
   .choice-card:has(:checked)::after {
     background: HighlightText;
-    forced-color-adjust: none;
   }
 }

@@ -75,19 +75,6 @@ a.list-item:hover {
   min-inline-size: 0;
 }
 
-@media (forced-colors: active) {
-  .list {
-    --list-divider: var(--border-width) solid CanvasText;
-  }
-
-  a.list-item:hover {
-    outline: var(--border-width) solid ButtonText;
-    outline-offset: calc(var(--border-width) * -1);
-    background: Canvas;
-    color: CanvasText;
-  }
-}
-
 @media print {
   .list > :where(.list-item),
   .list > li > .list-item {

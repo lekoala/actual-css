@@ -138,12 +138,6 @@ dialog.drawer nav {
   }
 }
 
-@media (forced-colors: active) {
-  dialog.drawer::backdrop {
-    background: Canvas;
-  }
-}
-
 @media (prefers-reduced-motion: no-preference) {
   dialog.drawer.is-static {
     animation: actual-dialog-static var(--duration-slow) var(--ease);

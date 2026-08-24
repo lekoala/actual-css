@@ -126,10 +126,3 @@
   border: 0;
   border-block-start: var(--border-width) solid var(--border);
 }
-
-@media (forced-colors: active) {
-  .menu-item:focus-visible {
-    outline: var(--border-width) solid ButtonText;
-    outline-offset: -1px;
-  }
-}

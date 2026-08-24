@@ -239,23 +239,6 @@ html.has-modal-open.had-scrollbar {
   }
 }
 
-@media (forced-colors: active) {
-  dialog.modal {
-    border-color: ButtonText;
-    background: Canvas;
-    color: CanvasText;
-    box-shadow: none;
-  }
-
-  dialog.modal::backdrop {
-    background: Canvas;
-  }
-
-  .dialog-icon {
-    border: var(--border-width) solid CanvasText;
-  }
-}
-
 /* Close controls. A close button is an action attached to a surface, so it
    never participates in the content flow. The modal and the drawer share the
    same simple placement — absolute at the panel's top inline-end, inside the

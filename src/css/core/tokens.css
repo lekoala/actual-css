@@ -156,9 +156,8 @@
 @media (forced-colors: active) {
   :root,
   [data-theme] {
-    --state-selected: Highlight;
-    --state-selected-fg: HighlightText;
     --state-disabled: GrayText;
+    --disabled-opacity: 1;
   }
 }
 

@@ -24,6 +24,7 @@
   max-inline-size: min(24rem, calc(var(--viewport-inline) - 2rem));
   padding: 0.25em 0.6em;
   border-radius: var(--radius-sm);
+  border: var(--border-width) solid transparent;
   background: var(--tooltip-bg);
   color: var(--tooltip-fg);
   font-size: var(--font-size-xs);
@@ -102,16 +103,6 @@
   clip-path: polygon(0 50%, 100% 0, 100% 100%);
 }
 
-@media (forced-colors: active) {
-  .tooltip {
-    --tooltip-bg: Canvas;
-    --tooltip-fg: CanvasText;
-  }
-
-  .tooltip::before {
-    display: none;
-  }
-}
 @media print {
   .tooltip {
     display: none !important;

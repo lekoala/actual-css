@@ -699,6 +699,87 @@
     </div>
   </section>
 
+  <!-- 24. Disabled & special states -->
+  <section>
+    <h2>Disabled &amp; special states</h2>
+    <div class="sink-grid">
+      <div class="sink-col">
+        <span class="badge" aria-disabled="true">Disabled badge</span>
+        <button class="badge primary" disabled>Disabled button badge</button>
+      </div>
+      <div class="sink-col">
+        <button class="avatar" disabled><span>AB</span></button>
+        <a class="avatar" aria-disabled="true" href="#"><span>CD</span></a>
+      </div>
+      <div class="sink-col">
+        <label class="choice"><input class="switch" type="checkbox" role="switch" disabled> Switch off</label>
+        <a class="btn primary" href="#" aria-disabled="true">Disabled link button</a>
+      </div>
+      <form class="sink-col">
+        <label class="choice-card">
+          <input class="radio" type="radio" name="plan-disabled" disabled>
+          <span class="choice-card-label">Disabled plan</span>
+          <span class="choice-card-body"><span class="choice-card-value">—</span><span class="choice-card-text">Unavailable</span></span>
+        </label>
+      </form>
+      <menu class="menu">
+        <li><button class="menu-item" type="button" role="menuitem" aria-disabled="true">Unavailable action</button></li>
+      </menu>
+      <div class="tabs" role="tablist" aria-label="Unavailable tab">
+        <button class="tab" type="button" role="tab" aria-selected="false" aria-disabled="true">Unavailable</button>
+      </div>
+    </div>
+    <div style="max-inline-size:30rem;display:grid;gap:var(--space-40)">
+      <div class="field"><label class="field-label" for="d-input">Disabled input</label><input class="input" id="d-input" type="text" value="Disabled" disabled></div>
+      <div class="field"><label class="field-label" for="d-select">Disabled select</label><select class="select" id="d-select" disabled><option>One</option></select></div>
+      <div class="field"><label class="field-label" for="d-textarea">Disabled textarea</label><textarea class="textarea" id="d-textarea" disabled>Disabled</textarea></div>
+    </div>
+    <div style="margin-block-start:var(--space-40);display:grid;gap:var(--space-40)">
+      <div class="cluster">
+        <span class="field-label">Rating</span>
+        <span class="rating" role="radiogroup" aria-label="Rating">
+          <input type="radio" name="rating-demo" value="1">
+          <input type="radio" name="rating-demo" value="2" checked>
+          <input type="radio" name="rating-demo" value="3">
+          <input type="radio" name="rating-demo" value="4">
+          <input type="radio" name="rating-demo" value="5">
+        </span>
+      </div>
+      <div class="cluster">
+        <span class="field-label">Rating (disabled)</span>
+        <span class="rating" role="radiogroup" aria-label="Rating disabled">
+          <input type="radio" name="rating-demo-d" value="1" disabled>
+          <input type="radio" name="rating-demo-d" value="2" disabled>
+          <input type="radio" name="rating-demo-d" value="3" disabled>
+          <input type="radio" name="rating-demo-d" value="4" disabled>
+          <input type="radio" name="rating-demo-d" value="5" disabled>
+        </span>
+      </div>
+      <div class="cluster">
+        <span class="field-label">OTP code</span>
+        <div class="otp" aria-label="Code">
+          <span></span><span></span><span></span><span></span>
+          <input type="text" inputmode="numeric" maxlength="4" aria-label="One-time code">
+        </div>
+      </div>
+      <div class="cluster">
+        <span class="field-label">OTP code (disabled)</span>
+        <div class="otp" aria-label="Code disabled">
+          <span></span><span></span><span></span><span></span>
+          <input type="text" inputmode="numeric" maxlength="4" disabled aria-label="One-time code disabled">
+        </div>
+      </div>
+      <div class="cluster">
+        <span class="field-label">Color picker</span>
+        <input class="color" type="color" value="#7048e8" aria-label="Color picker">
+      </div>
+      <div class="cluster">
+        <span class="field-label">Color picker (disabled)</span>
+        <input class="color" type="color" value="#7048e8" disabled aria-label="Color picker disabled">
+      </div>
+    </div>
+  </section>
+
   <div class="status-bar" data-status role="status" aria-live="polite" aria-atomic="true"></div>
   <script src="../../dist/actual.full.js"></script>
   <script>
