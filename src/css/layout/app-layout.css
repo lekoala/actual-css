@@ -1,8 +1,9 @@
 /*
- * Application shell recipe: one DOM structure uses a bottom navigation bar
- * when narrow and a labelled side navigation when space permits. The main
- * region owns scrolling, keeping both pieces of application chrome available
- * without fixed offsets.
+ * Specialized application shell recipe: one exact DOM structure uses a
+ * bottom navigation bar when narrow and a labelled side navigation when space
+ * permits. The main region owns scrolling, keeping both pieces of application
+ * chrome available without fixed offsets. This is not a generic page wrapper
+ * or a public-site layout; all three direct regions are part of the contract.
  *
  * Public hook:
  * --app-nav-side-size

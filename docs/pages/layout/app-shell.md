@@ -1,16 +1,30 @@
 # App Shell
 
-Document landmarks for top and bottom regions, composed with layout primitives.
+Full-height, single-column document flow. Despite its historical name, this is
+the general shell for ordinary pages as well as simple applications.
 
 Header and footer are document landmarks, not required layout classes.
-
-Use semantic elements by default.
+Use semantic elements by default. `.app-shell` already supplies the outer
+column, so do not add a `.stack` solely to arrange the page landmarks.
 
 ```html demo
 <body class="app-shell">
-  <header>Actual CSS</header>
-  <main class="grow">Main content</main>
-  <footer>Footer links</footer>
+  <header>
+    <div class="center">
+      <nav class="navbar" aria-label="Main">
+        <a class="navbar-brand" href="/">Actual CSS</a>
+      </nav>
+    </div>
+  </header>
+  <main class="grow">
+    <div class="center stack">
+      <h1>Page title</h1>
+      <p>Main content</p>
+    </div>
+  </main>
+  <footer>
+    <div class="center">Footer links</div>
+  </footer>
 </body>
 ```
 
@@ -22,8 +36,11 @@ Use semantic elements by default.
 }
 ```
 
-Sticky header/footer behavior should be opt-in and documented only if it becomes part of the shipped layout API.
+Keep `.center` inside each full-width landmark when their backgrounds or
+borders should span the viewport. Sticky header/footer behavior remains an
+application choice.
 
-For a persistent topbar, independently scrolling main region, and one primary
-navigation landmark that changes from a bottom bar to a labelled side menu, use
-App Layout.
+Do not upgrade this shell to `.app-layout` merely because the product is an
+application. Use App Layout only for its complete specialized contract: a
+direct-child `.topbar`, independently scrolling `.app-main`, and direct-child
+`.app-nav` that changes from a bottom bar to a labelled side menu.

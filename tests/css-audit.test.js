@@ -190,6 +190,14 @@ test("stack resets block margins, cluster resets all margins", () => {
   expect(clusterCss).toMatch(/\.cluster > \* \{\s*margin: 0;\s*\}/);
 });
 
+test("center keeps its content-box measure when it participates in flex or grid", () => {
+  const css = readCss("src/css/layout/center.css");
+
+  expect(css).toContain("box-sizing: content-box;");
+  expect(css).toContain("inline-size: calc(100% - var(--center-pad, 1rem) * 2);");
+  expect(css).toContain("max-inline-size: var(--center-size, 72rem);");
+});
+
 test("typography is imported before layout so stack/cluster own vertical rhythm inside prose", () => {
   const css = readCss("src/css/actual.full.css");
   const typographyIndex = css.indexOf("./typography/index.css");

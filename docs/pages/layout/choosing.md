@@ -3,6 +3,21 @@
 Choose a primitive from the relationship between its children, not from the
 number of children visible in one mockup.
 
+## Page and application shells
+
+| Situation | Recipe |
+|---|---|
+| Public, marketing, editorial, or normally scrolling page | Semantic landmarks; optionally `.app-shell`, with `.navbar` for site navigation |
+| Persistent topbar + independently scrolling main + bottom-to-side primary navigation | `.app-layout` with its exact direct-child contract |
+
+Do not choose `.app-layout` from the word "app" or from the presence of a
+header. Its viewport-sized grid, hidden shell overflow, internal main scroll,
+and adaptive `.app-nav` are one indivisible behavior. If any of those is not
+wanted, compose the ordinary page from semantic landmarks and the primitives
+below.
+
+## Content relationships
+
 | Situation                                                    | Primitive         |
 |--------------------------------------------------------------|-------------------|
 | Vertical flow                                                | `.stack`          |
