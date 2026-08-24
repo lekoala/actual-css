@@ -1,47 +1,45 @@
 # Structured Lists
 
-Use native lists plus layout primitives for rich content rows. Reset list chrome only when markers are not part of the content.
+Choose list markup from the content semantics, then add only the layout or
+component contract the collection needs.
+
+| Need | Use |
+| --- | --- |
+| Bullets or order carry meaning | Native `<ul>` or `<ol>` |
+| One leading element and one flexible content region | [`.media`](../layout/media.md) |
+| Repeated application rows with leading, content, and trailing regions | [`.list`](../components/list.md) |
+| A list of navigation links | [`.nav-list`](./navigation-list.md) |
+| A richer collection with its own item structure | Native list plus layout primitives and components |
+
+`.media` and `.list` are not interchangeable. `.media` is geometry for one
+two-part composition and requires exactly two direct children. `.list` owns the
+repeated-row treatment: three regions, row padding, minimum touch height,
+dividers, navigable-row hover, and supporting text.
+
+Keep native markers when they communicate sequence, rank, or grouping. Remove
+them with `.list-reset` only when they are not part of the content. A reset
+changes list chrome; it does not create a row component.
+
+For a collection whose items are complete compositions rather than application
+rows, keep the native list and compose each item independently:
 
 ```html demo
-<figure class="stack">
-  <figcaption><strong>Most played songs this week</strong></figcaption>
-
-  <ul class="list-reset stack gap-none">
-    <li class="media items-center py" style="border-block-end: var(--border-width) solid var(--border)">
-      <div class="avatar">
-        <img src="https://i.pravatar.cc/48?img=5" alt="Dio Lupa" />
-      </div>
-      <div class="cluster">
-        <div class="stack grow" style="--gap: var(--space-10)">
-          <strong>Dio Lupa</strong>
-          <span class="muted">Remaining Reason</span>
-        </div>
-        <span class="muted">3:45</span>
-        <button class="btn ghost" type="button" aria-label="Play">
-          <i class="ti ti-player-play" aria-hidden="true"></i>
-        </button>
-      </div>
-    </li>
-
-    <li class="media items-center py" style="border-block-end: var(--border-width) solid var(--border)">
-      <div class="avatar">
-        <img src="https://i.pravatar.cc/48?img=10" alt="Astral Planes" />
-      </div>
-      <div class="cluster">
-        <div class="stack grow" style="--gap: var(--space-10)">
-          <strong>Astral Planes</strong>
-          <span class="muted">Neon Drift</span>
-        </div>
-        <span class="muted">4:12</span>
-        <button class="btn ghost" type="button" aria-label="Play">
-          <i class="ti ti-player-play" aria-hidden="true"></i>
-        </button>
-      </div>
-    </li>
-  </ul>
-</figure>
+<ul class="list-reset grid" style="--grid-min: 16rem">
+  <li>
+    <article class="card stack">
+      <span class="badge">Guide</span>
+      <h2>Choose a layout</h2>
+      <p>Match intrinsic behavior to the structure of the content.</p>
+      <a href="#layout-guide">Read the guide</a>
+    </article>
+  </li>
+  <li>
+    <article class="card stack">
+      <span class="badge">Reference</span>
+      <h2>Compose spacing</h2>
+      <p>Use shared rhythm without coupling content to a component.</p>
+      <a href="#spacing-reference">View the reference</a>
+    </article>
+  </li>
+</ul>
 ```
-
-Use `.actions` for action controls and `.nav-list` for navigation links. For structured content items, compose `.list-reset`, `.stack`, `.cluster`, `.media`, and components directly.
-
-`.media` is a two-slot object: it lays out exactly two children — the leading element and one content column. Trailing metadata and actions belong inside the content column (nest a `.cluster` and put `.grow` on the flexible part), never as extra row children: additional children silently wrap onto a second grid row.

@@ -6,7 +6,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Structured Lists — Actual CSS</title>
-  <meta name="description" content="Use native lists plus layout primitives for rich content rows. Reset list chrome only when markers are not part of the content.">
+  <meta name="description" content="Choose list markup from the content semantics, then add only the layout or
+component contract the collection needs.">
   <link rel="stylesheet" href="../../src/css/actual.full.css">
   <link rel="stylesheet" href="../assets/actual-themes.min.css">
   <link rel="stylesheet" href="../../scripts/docs/assets/docs.css">
@@ -108,7 +109,6 @@
         <li><a class="nav-link" href="../layout/frame.html">Frame</a></li>
         <li><a class="nav-link" href="../layout/app-shell.html">App Shell</a></li>
         <li><a class="nav-link" href="../layout/app-layout.html">App Layout</a></li>
-        <li><a class="nav-link" href="../layout/list.html">List</a></li>
       </ul>
       <p class="docs-nav-group">Components</p>
       <ul class="nav-list">
@@ -208,93 +208,73 @@
 
           <div class="prose docs-prose">
 <h1 id="structured-lists">Structured Lists</h1>
-<p>Use native lists plus layout primitives for rich content rows. Reset list chrome only when markers are not part of the content.</p>
+<p>Choose list markup from the content semantics, then add only the layout or
+component contract the collection needs.</p>
+<div class="table-wrap"><table class="table">
+<thead>
+<tr><th>Need</th><th>Use</th></tr>
+</thead>
+<tbody>
+<tr><td>Bullets or order carry meaning</td><td>Native <code>&lt;ul&gt;</code> or <code>&lt;ol&gt;</code></td></tr>
+<tr><td>One leading element and one flexible content region</td><td><a href="../layout/media.html"><code>.media</code></a></td></tr>
+<tr><td>Repeated application rows with leading, content, and trailing regions</td><td><a href="../components/list.html"><code>.list</code></a></td></tr>
+<tr><td>A list of navigation links</td><td><a href="navigation-list.html"><code>.nav-list</code></a></td></tr>
+<tr><td>A richer collection with its own item structure</td><td>Native list plus layout primitives and components</td></tr>
+</tbody>
+</table></div>
+<p><code>.media</code> and <code>.list</code> are not interchangeable. <code>.media</code> is geometry for one
+two-part composition and requires exactly two direct children. <code>.list</code> owns the
+repeated-row treatment: three regions, row padding, minimum touch height,
+dividers, navigable-row hover, and supporting text.</p>
+<p>Keep native markers when they communicate sequence, rank, or grouping. Remove
+them with <code>.list-reset</code> only when they are not part of the content. A reset
+changes list chrome; it does not create a row component.</p>
+<p>For a collection whose items are complete compositions rather than application
+rows, keep the native list and compose each item independently:</p>
 </div>
 <div class="docs-example">
   <div class="docs-preview">
-<figure class="stack">
-  <figcaption><strong>Most played songs this week</strong></figcaption>
-
-  <ul class="list-reset stack gap-none">
-    <li class="media items-center py" style="border-block-end: var(--border-width) solid var(--border)">
-      <div class="avatar">
-        <img src="https://i.pravatar.cc/48?img=5" alt="Dio Lupa" />
-      </div>
-      <div class="cluster">
-        <div class="stack grow" style="--gap: var(--space-10)">
-          <strong>Dio Lupa</strong>
-          <span class="muted">Remaining Reason</span>
-        </div>
-        <span class="muted">3:45</span>
-        <button class="btn ghost" type="button" aria-label="Play">
-          <i class="ti ti-player-play" aria-hidden="true"></i>
-        </button>
-      </div>
-    </li>
-
-    <li class="media items-center py" style="border-block-end: var(--border-width) solid var(--border)">
-      <div class="avatar">
-        <img src="https://i.pravatar.cc/48?img=10" alt="Astral Planes" />
-      </div>
-      <div class="cluster">
-        <div class="stack grow" style="--gap: var(--space-10)">
-          <strong>Astral Planes</strong>
-          <span class="muted">Neon Drift</span>
-        </div>
-        <span class="muted">4:12</span>
-        <button class="btn ghost" type="button" aria-label="Play">
-          <i class="ti ti-player-play" aria-hidden="true"></i>
-        </button>
-      </div>
-    </li>
-  </ul>
-</figure>
+<ul class="list-reset grid" style="--grid-min: 16rem">
+  <li>
+    <article class="card stack">
+      <span class="badge">Guide</span>
+      <h2>Choose a layout</h2>
+      <p>Match intrinsic behavior to the structure of the content.</p>
+      <a href="#layout-guide">Read the guide</a>
+    </article>
+  </li>
+  <li>
+    <article class="card stack">
+      <span class="badge">Reference</span>
+      <h2>Compose spacing</h2>
+      <p>Use shared rhythm without coupling content to a component.</p>
+      <a href="#spacing-reference">View the reference</a>
+    </article>
+  </li>
+</ul>
   </div>
   <div class="docs-code">
-    <pre><code class="language-html">&lt;figure class=&quot;stack&quot;&gt;
-  &lt;figcaption&gt;&lt;strong&gt;Most played songs this week&lt;/strong&gt;&lt;/figcaption&gt;
-
-  &lt;ul class=&quot;list-reset stack gap-none&quot;&gt;
-    &lt;li class=&quot;media items-center py&quot; style=&quot;border-block-end: var(--border-width) solid var(--border)&quot;&gt;
-      &lt;div class=&quot;avatar&quot;&gt;
-        &lt;img src=&quot;https://i.pravatar.cc/48?img=5&quot; alt=&quot;Dio Lupa&quot; /&gt;
-      &lt;/div&gt;
-      &lt;div class=&quot;cluster&quot;&gt;
-        &lt;div class=&quot;stack grow&quot; style=&quot;--gap: var(--space-10)&quot;&gt;
-          &lt;strong&gt;Dio Lupa&lt;/strong&gt;
-          &lt;span class=&quot;muted&quot;&gt;Remaining Reason&lt;/span&gt;
-        &lt;/div&gt;
-        &lt;span class=&quot;muted&quot;&gt;3:45&lt;/span&gt;
-        &lt;button class=&quot;btn ghost&quot; type=&quot;button&quot; aria-label=&quot;Play&quot;&gt;
-          &lt;i class=&quot;ti ti-player-play&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;
-        &lt;/button&gt;
-      &lt;/div&gt;
-    &lt;/li&gt;
-
-    &lt;li class=&quot;media items-center py&quot; style=&quot;border-block-end: var(--border-width) solid var(--border)&quot;&gt;
-      &lt;div class=&quot;avatar&quot;&gt;
-        &lt;img src=&quot;https://i.pravatar.cc/48?img=10&quot; alt=&quot;Astral Planes&quot; /&gt;
-      &lt;/div&gt;
-      &lt;div class=&quot;cluster&quot;&gt;
-        &lt;div class=&quot;stack grow&quot; style=&quot;--gap: var(--space-10)&quot;&gt;
-          &lt;strong&gt;Astral Planes&lt;/strong&gt;
-          &lt;span class=&quot;muted&quot;&gt;Neon Drift&lt;/span&gt;
-        &lt;/div&gt;
-        &lt;span class=&quot;muted&quot;&gt;4:12&lt;/span&gt;
-        &lt;button class=&quot;btn ghost&quot; type=&quot;button&quot; aria-label=&quot;Play&quot;&gt;
-          &lt;i class=&quot;ti ti-player-play&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;
-        &lt;/button&gt;
-      &lt;/div&gt;
-    &lt;/li&gt;
-  &lt;/ul&gt;
-&lt;/figure&gt;</code></pre>
+    <pre><code class="language-html">&lt;ul class=&quot;list-reset grid&quot; style=&quot;--grid-min: 16rem&quot;&gt;
+  &lt;li&gt;
+    &lt;article class=&quot;card stack&quot;&gt;
+      &lt;span class=&quot;badge&quot;&gt;Guide&lt;/span&gt;
+      &lt;h2&gt;Choose a layout&lt;/h2&gt;
+      &lt;p&gt;Match intrinsic behavior to the structure of the content.&lt;/p&gt;
+      &lt;a href=&quot;#layout-guide&quot;&gt;Read the guide&lt;/a&gt;
+    &lt;/article&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;article class=&quot;card stack&quot;&gt;
+      &lt;span class=&quot;badge&quot;&gt;Reference&lt;/span&gt;
+      &lt;h2&gt;Compose spacing&lt;/h2&gt;
+      &lt;p&gt;Use shared rhythm without coupling content to a component.&lt;/p&gt;
+      &lt;a href=&quot;#spacing-reference&quot;&gt;View the reference&lt;/a&gt;
+    &lt;/article&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;</code></pre>
   </div>
 </div>
-<div class="prose docs-prose">
-<p>Use <code>.actions</code> for action controls and <code>.nav-list</code> for navigation links. For structured content items, compose <code>.list-reset</code>, <code>.stack</code>, <code>.cluster</code>, <code>.media</code>, and components directly.</p>
-<p><code>.media</code> is a two-slot object: it lays out exactly two children — the leading element and one content column. Trailing metadata and actions belong inside the content column (nest a <code>.cluster</code> and put <code>.grow</code> on the flexible part), never as extra row children: additional children silently wrap onto a second grid row.</p>
 
-</div>
 
           <div class="cluster docs-source-links">
             <a class="btn sm ghost" href="https://github.com/lekoala/actual-css/edit/master/docs/pages/patterns/structured-lists.md" rel="noopener noreferrer">Edit on GitHub</a>
@@ -365,7 +345,6 @@
         <li><a class="nav-link" href="../layout/frame.html">Frame</a></li>
         <li><a class="nav-link" href="../layout/app-shell.html">App Shell</a></li>
         <li><a class="nav-link" href="../layout/app-layout.html">App Layout</a></li>
-        <li><a class="nav-link" href="../layout/list.html">List</a></li>
       </ul>
       <p class="docs-nav-group">Components</p>
       <ul class="nav-list">

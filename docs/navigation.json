@@ -36,8 +36,7 @@
         "scroll-target",
         "frame",
         "app-shell",
-        "app-layout",
-        "list"
+        "app-layout"
       ]
     },
     {
