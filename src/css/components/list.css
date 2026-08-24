@@ -1,0 +1,96 @@
+/*
+ * Application list — repeated rows with optional leading and trailing regions.
+ * Content determines the number of lines; the component only owns the row
+ * geometry, dividers, and supporting-text treatment.
+ *
+ * Public hooks:
+ * --list-item-min-size
+ * --list-item-pad-block
+ * --list-item-pad-inline
+ * --list-item-gap
+ * --list-divider
+ */
+.list {
+  --list-item-min-size: var(--control-size-lg);
+  --list-item-pad-block: var(--space-30);
+  --list-item-pad-inline: 0;
+  --list-item-gap: var(--gap);
+  --list-divider: var(--border-width) solid var(--border);
+
+  display: grid;
+  gap: 0;
+  margin: 0;
+  padding: 0;
+  border-block-start: var(--list-divider);
+  list-style: none;
+}
+
+.list > li {
+  margin: 0;
+}
+
+.list > :where(.list-item),
+.list > li > .list-item {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--list-item-gap);
+  min-block-size: var(--list-item-min-size);
+  padding-block: var(--list-item-pad-block);
+  padding-inline: var(--list-item-pad-inline);
+}
+
+.list > .list-item + .list-item,
+.list > li + li {
+  border-block-start: var(--list-divider);
+}
+
+a.list-item {
+  color: inherit;
+  text-decoration: none;
+}
+
+a.list-item:hover {
+  background: var(--surface-subtle);
+}
+
+.list-item-content {
+  min-inline-size: 0;
+}
+
+.list-item-title,
+.list-item-text {
+  display: block;
+  margin: 0;
+}
+
+.list-item-text {
+  color: var(--text-muted);
+  font-size: var(--font-size-sm);
+  overflow-wrap: anywhere;
+}
+
+.list-item-trailing {
+  justify-self: end;
+  min-inline-size: 0;
+}
+
+@media (forced-colors: active) {
+  .list {
+    --list-divider: var(--border-width) solid CanvasText;
+  }
+
+  a.list-item:hover {
+    outline: var(--border-width) solid ButtonText;
+    outline-offset: calc(var(--border-width) * -1);
+    background: Canvas;
+    color: CanvasText;
+  }
+}
+
+@media print {
+  .list > :where(.list-item),
+  .list > li > .list-item {
+    break-inside: avoid;
+  }
+}

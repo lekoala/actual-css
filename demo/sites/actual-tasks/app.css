@@ -1,0 +1,128 @@
+/*
+ * Prototype audit
+ *
+ * Product-specific: brand, page measure, task metadata, empty state.
+ * Framework candidates still under evaluation: safe topbar inset and
+ * FAB/app-nav avoidance. Repeated three-zone rows were promoted to .list.
+ */
+
+.mobile-icon,
+.app-nav i {
+  inline-size: 1.5rem;
+  block-size: 1.5rem;
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+/* Gap candidate: top application chrome touches the physical viewport edge. */
+.mobile-topbar {
+  padding-block-start: max(var(--space-30), env(safe-area-inset-top));
+}
+
+.mobile-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-20);
+  color: var(--text);
+  font-weight: var(--font-weight-bold);
+  text-decoration: none;
+}
+
+.mobile-page {
+  inline-size: min(100%, 46rem);
+  margin-inline: auto;
+  padding: var(--space-40);
+  padding-block-end: calc(var(--space-60) * 2);
+}
+
+.mobile-page > * + * {
+  margin-block-start: var(--space-40);
+}
+
+.mobile-page-heading {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--gap);
+  min-inline-size: 0;
+}
+
+.mobile-page-heading h1,
+.mobile-page-heading h2 {
+  margin: 0;
+}
+
+.mobile-filters {
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  padding: var(--focus-ring-width);
+  margin-inline: calc(var(--focus-ring-width) * -1);
+}
+
+/* The button contract already covers filter semantics; only product shape is local. */
+.mobile-filters > .btn {
+  --btn-radius: var(--radius-full);
+  flex: 0 0 auto;
+}
+
+.list-item time {
+  color: var(--text-muted);
+  font-size: var(--font-size-sm);
+}
+
+.list-item[data-state="done"] .list-item-title {
+  color: var(--text-muted);
+  text-decoration: line-through;
+}
+
+.task-rating {
+  min-inline-size: 0;
+  margin: var(--space-10) 0 0;
+  padding: 0;
+  border: 0;
+}
+
+.mobile-empty {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-20);
+  padding-block: var(--space-60);
+  text-align: center;
+}
+
+.mobile-empty[hidden] {
+  display: none;
+}
+
+.mobile-tab-panel {
+  padding-block: var(--space-40);
+}
+
+/* Gap candidate: a fixed FAB must clear app-nav without knowing its size. */
+.mobile-fab {
+  inset-block-end: calc(var(--app-nav-size, 4rem) + env(safe-area-inset-bottom) + var(--space-40));
+}
+
+.mobile-fab > .btn {
+  box-shadow: var(--shadow-popout);
+}
+
+@media (min-width: 48rem) {
+  .mobile-fab {
+    inset-block-end: max(var(--space-40), env(safe-area-inset-bottom));
+  }
+}
+
+@media print {
+  .mobile-topbar,
+  .mobile-fab,
+  .mobile-filters {
+    display: none;
+  }
+
+  .mobile-page {
+    display: block !important;
+    max-inline-size: none;
+    padding: 0;
+  }
+}

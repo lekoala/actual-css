@@ -1,0 +1,344 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="description" content="A small task application used to evaluate Actual CSS on mobile.">
+  <title>Today — Actual Tasks</title>
+  <link rel="stylesheet" href="../../../dist/actual.full.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.46.0/dist/tabler-icons.min.css">
+  <link rel="stylesheet" href="app.css">
+</head>
+
+<body class="app-shell app-layout">
+  <header class="topbar mobile-topbar">
+    <a class="mobile-brand" href="?view=today" data-view="today" aria-label="Actual Tasks, Today">
+      <span class="avatar primary sm"><abbr>AT</abbr></span>
+      <span>Actual Tasks</span>
+    </a>
+    <span class="grow"></span>
+  </header>
+
+  <main class="app-main" id="app-main" tabindex="-1">
+    <section class="mobile-page" data-page="today" aria-labelledby="today-title">
+      <header class="mobile-page-heading">
+        <div>
+          <span class="overline">Monday, August 24</span>
+          <h1 id="today-title">Today</h1>
+        </div>
+        <span class="badge primary soft">3 tasks</span>
+      </header>
+
+      <div class="cluster mobile-filters" role="group" aria-label="Filter today's tasks">
+        <button class="btn sm" type="button" aria-pressed="true" data-filter="all">All</button>
+        <button class="btn sm outline" type="button" aria-pressed="false" data-filter="open">Open</button>
+        <button class="btn sm outline" type="button" aria-pressed="false" data-filter="done">Done</button>
+      </div>
+
+      <ul class="list" id="today-list">
+        <li class="list-item" data-state="open">
+          <input class="check" type="checkbox" aria-label="Mark Send proposal complete">
+          <span class="list-item-content"><strong class="list-item-title">Send proposal</strong><span class="list-item-text">Northwind renewal</span></span>
+          <time class="list-item-trailing" datetime="2026-08-24T09:30">09:30</time>
+        </li>
+        <li class="list-item" data-state="open">
+          <input class="check" type="checkbox" aria-label="Mark Call supplier complete">
+          <span class="list-item-content"><strong class="list-item-title">Call supplier</strong><span class="list-item-text">Confirm delivery window</span></span>
+          <span class="badge warning">High</span>
+        </li>
+        <li class="list-item" data-state="done">
+          <input class="check" type="checkbox" aria-label="Mark Deploy website incomplete" checked>
+          <span class="list-item-content"><strong class="list-item-title">Deploy website</strong><span class="list-item-text">Production release</span></span>
+          <span class="badge success">Done</span>
+        </li>
+      </ul>
+
+      <div class="mobile-empty" id="today-empty" hidden>
+        <span class="avatar lg" aria-hidden="true"><abbr>✓</abbr></span>
+        <h2>No matching tasks</h2>
+        <p class="muted">Choose another filter or add a task.</p>
+      </div>
+    </section>
+
+    <section class="mobile-page" data-page="tasks" aria-labelledby="tasks-title" hidden inert>
+      <header class="mobile-page-heading">
+        <div>
+          <span class="overline">Workspace</span>
+          <h1 id="tasks-title">Tasks</h1>
+        </div>
+        <button class="btn primary icon-only" type="button" commandfor="task-dialog" command="show-modal" aria-haspopup="dialog" aria-controls="task-dialog" aria-label="Add task">
+          <i class="ti ti-plus mobile-icon" aria-hidden="true"></i>
+        </button>
+      </header>
+
+      <label class="field input-icon">
+        <i class="ti ti-search" aria-hidden="true"></i>
+        <input class="input" id="task-search" type="search" placeholder="Search tasks" aria-label="Search tasks" autocomplete="off">
+      </label>
+
+      <div class="tabset">
+        <div class="tabs" data-enhance="tabs" role="tablist" aria-label="Task groups">
+          <button class="tab primary" type="button" role="tab" aria-selected="true" aria-controls="task-panel-open" id="task-tab-open">Open</button>
+          <button class="tab" type="button" role="tab" aria-selected="false" aria-controls="task-panel-done" id="task-tab-done" tabindex="-1">Done</button>
+        </div>
+
+        <section class="mobile-tab-panel" role="tabpanel" id="task-panel-open" aria-labelledby="task-tab-open" tabindex="-1">
+          <div class="stack" id="tasks-loading" aria-label="Loading tasks">
+            <span class="skeleton" style="block-size: 4.5rem"></span>
+            <span class="skeleton" style="block-size: 4.5rem"></span>
+            <span class="skeleton" style="block-size: 4.5rem"></span>
+          </div>
+          <ul class="list" id="task-list" hidden>
+            <li class="list-item" data-search="prepare quarterly review">
+              <span class="avatar primary sm"><abbr>QR</abbr></span>
+              <span class="list-item-content">
+                <strong class="list-item-title">Prepare quarterly review</strong>
+                <span class="list-item-text">Due tomorrow · Planning</span>
+                <fieldset class="field task-rating">
+                  <legend class="sr-only">Rate Prepare quarterly review</legend>
+                  <span class="rating primary sm">
+                    <input type="radio" name="rating-quarterly-review" value="1" aria-label="1 star">
+                    <input type="radio" name="rating-quarterly-review" value="2" aria-label="2 stars">
+                    <input type="radio" name="rating-quarterly-review" value="3" aria-label="3 stars">
+                    <input type="radio" name="rating-quarterly-review" value="4" aria-label="4 stars" checked>
+                    <input type="radio" name="rating-quarterly-review" value="5" aria-label="5 stars">
+                  </span>
+                </fieldset>
+              </span>
+              <button class="btn ghost icon-only sm" type="button" data-delete-task aria-label="Delete Prepare quarterly review">
+                <i class="ti ti-trash mobile-icon" aria-hidden="true"></i>
+              </button>
+            </li>
+            <li class="list-item" data-search="book research interviews">
+              <span class="avatar secondary sm"><abbr>RI</abbr></span>
+              <span class="list-item-content">
+                <strong class="list-item-title">Book research interviews</strong>
+                <span class="list-item-text">Friday · Research</span>
+                <fieldset class="field task-rating">
+                  <legend class="sr-only">Rate Book research interviews</legend>
+                  <span class="rating primary sm">
+                    <input type="radio" name="rating-research-interviews" value="1" aria-label="1 star">
+                    <input type="radio" name="rating-research-interviews" value="2" aria-label="2 stars">
+                    <input type="radio" name="rating-research-interviews" value="3" aria-label="3 stars" checked>
+                    <input type="radio" name="rating-research-interviews" value="4" aria-label="4 stars">
+                    <input type="radio" name="rating-research-interviews" value="5" aria-label="5 stars">
+                  </span>
+                </fieldset>
+              </span>
+              <button class="btn ghost icon-only sm" type="button" data-delete-task aria-label="Delete Book research interviews">
+                <i class="ti ti-trash mobile-icon" aria-hidden="true"></i>
+              </button>
+            </li>
+          </ul>
+          <div class="mobile-empty" id="tasks-empty" hidden>
+            <h2>No tasks found</h2>
+            <p class="muted">Try a different search.</p>
+          </div>
+        </section>
+
+        <section class="mobile-tab-panel" role="tabpanel" id="task-panel-done" aria-labelledby="task-tab-done" tabindex="-1" hidden>
+          <div class="alert success soft"><strong>All caught up.</strong> Two tasks were completed today.</div>
+        </section>
+      </div>
+    </section>
+
+    <section class="mobile-page" data-page="projects" aria-labelledby="projects-title" hidden inert>
+      <header class="mobile-page-heading">
+        <div>
+          <span class="overline">Workspace</span>
+          <h1 id="projects-title">Projects</h1>
+        </div>
+        <span class="badge primary soft">4 active</span>
+      </header>
+
+      <div class="grid" style="--grid-min: 17rem">
+        <article class="card stack">
+          <header class="cluster" style="--cluster-justify: space-between">
+            <h2>Website refresh</h2>
+            <span class="badge warning">At risk</span>
+          </header>
+          <p class="muted">New product pages and migration of the documentation shell.</p>
+          <progress class="progress" value="68" max="100">68%</progress>
+          <footer class="cluster" style="--cluster-justify: space-between">
+            <div class="avatar-stack sm" aria-label="Ada, Morgan, and Lee">
+              <span class="avatar sm primary"><abbr>AM</abbr></span>
+              <span class="avatar sm secondary"><abbr>ML</abbr></span>
+              <span class="avatar sm"><abbr>JL</abbr></span>
+            </div>
+            <span class="muted">Due Friday</span>
+          </footer>
+        </article>
+
+        <article class="card stack">
+          <header class="cluster" style="--cluster-justify: space-between">
+            <h2>Mobile research</h2>
+            <span class="badge success">On track</span>
+          </header>
+          <p class="muted">Prototype field testing across narrow screens and standalone mode.</p>
+          <progress class="progress success" value="42" max="100">42%</progress>
+          <footer class="cluster" style="--cluster-justify: space-between">
+            <div class="avatar-stack sm" aria-label="Rin and Theo">
+              <span class="avatar sm warning"><abbr>RM</abbr></span>
+              <span class="avatar sm"><abbr>TS</abbr></span>
+            </div>
+            <span class="muted">Due Sep 4</span>
+          </footer>
+        </article>
+
+        <article class="card stack">
+          <header class="cluster" style="--cluster-justify: space-between">
+            <h2>Billing cleanup</h2>
+            <span class="badge neutral">Planned</span>
+          </header>
+          <p class="muted">Consolidate invoice exports and clarify account permissions.</p>
+          <progress class="progress" value="12" max="100">12%</progress>
+          <footer class="cluster" style="--cluster-justify: space-between">
+            <span class="avatar sm"><abbr>MH</abbr></span>
+            <span class="muted">Due Sep 18</span>
+          </footer>
+        </article>
+      </div>
+    </section>
+
+    <section class="mobile-page" data-page="activity" aria-labelledby="activity-title" hidden inert>
+      <header class="mobile-page-heading">
+        <div>
+          <span class="overline">Latest changes</span>
+          <h1 id="activity-title">Activity</h1>
+        </div>
+      </header>
+
+      <section class="stack" aria-labelledby="activity-today">
+        <h2 id="activity-today">Today</h2>
+        <ol class="list">
+          <li class="list-item">
+            <span class="avatar sm success"><abbr>AM</abbr></span>
+            <span class="list-item-content"><strong class="list-item-title">Ada completed “Deploy website”</strong><span class="list-item-text">Website refresh</span></span>
+            <time class="list-item-trailing" datetime="2026-08-24T10:42">10:42</time>
+          </li>
+          <li class="list-item">
+            <span class="avatar sm warning"><abbr>RM</abbr></span>
+            <span class="list-item-content"><strong class="list-item-title">Rin changed the project risk</strong><span class="list-item-text">On track → At risk</span></span>
+            <time class="list-item-trailing" datetime="2026-08-24T09:18">09:18</time>
+          </li>
+          <li class="list-item">
+            <span class="avatar sm secondary"><abbr>JL</abbr></span>
+            <span class="list-item-content"><strong class="list-item-title">Jana added a research note</strong><span class="list-item-text">Mobile research</span></span>
+            <time class="list-item-trailing" datetime="2026-08-24T08:05">08:05</time>
+          </li>
+        </ol>
+      </section>
+
+      <section class="stack" aria-labelledby="activity-yesterday">
+        <h2 id="activity-yesterday">Yesterday</h2>
+        <ol class="list">
+          <li class="list-item">
+            <span class="avatar sm"><abbr>TS</abbr></span>
+            <span class="list-item-content"><strong class="list-item-title">Theo created “Book interviews”</strong><span class="list-item-text">Research · Normal priority</span></span>
+            <time class="list-item-trailing" datetime="2026-08-23T16:24">16:24</time>
+          </li>
+        </ol>
+      </section>
+    </section>
+
+    <section class="mobile-page" data-page="settings" aria-labelledby="settings-title" hidden inert>
+      <header class="mobile-page-heading">
+        <div>
+          <span class="overline">Preferences</span>
+          <h1 id="settings-title">Settings</h1>
+        </div>
+      </header>
+
+      <section class="card stack">
+        <h2>Appearance</h2>
+        <ul class="list">
+          <li class="list-item">
+            <span class="avatar sm" aria-hidden="true"><abbr>◐</abbr></span>
+            <label class="list-item-content" for="theme-select">
+              <strong class="list-item-title">Theme</strong><span class="list-item-text">Follow the system or choose a mode</span>
+            </label>
+            <select class="select sm fit" id="theme-select">
+              <option value="">System</option>
+              <option value="light">Light</option>
+              <option value="dark">Dark</option>
+            </select>
+          </li>
+          <li class="list-item">
+            <span class="avatar sm" aria-hidden="true"><abbr>✓</abbr></span>
+            <label class="list-item-content" for="task-reminders">
+              <strong class="list-item-title">Task reminders</strong><span class="list-item-text">Notify me when a task is due soon</span>
+            </label>
+            <input class="switch" id="task-reminders" type="checkbox" checked>
+          </li>
+        </ul>
+      </section>
+
+      <button class="btn outline" id="clear-local-data" type="button">Clear local preferences</button>
+    </section>
+  </main>
+
+  <nav class="app-nav" aria-label="Primary">
+    <a href="?view=today" data-view="today" aria-current="page">
+      <i class="ti ti-sun" aria-hidden="true"></i>
+      <span>Today</span>
+    </a>
+    <a href="?view=tasks" data-view="tasks">
+      <i class="ti ti-list-check" aria-hidden="true"></i>
+      <span>Tasks</span>
+    </a>
+    <a href="?view=projects" data-view="projects">
+      <i class="ti ti-folder" aria-hidden="true"></i>
+      <span>Projects</span>
+    </a>
+    <a href="?view=activity" data-view="activity">
+      <i class="ti ti-activity" aria-hidden="true"></i>
+      <span>Activity</span>
+    </a>
+    <a href="?view=settings" data-view="settings">
+      <i class="ti ti-settings" aria-hidden="true"></i>
+      <span>Settings</span>
+    </a>
+  </nav>
+
+  <div class="fab mobile-fab">
+    <button class="btn primary lg circle icon-only" type="button" commandfor="task-dialog" command="show-modal" aria-haspopup="dialog" aria-controls="task-dialog" aria-label="Add task">
+      <i class="ti ti-plus mobile-icon" aria-hidden="true"></i>
+    </button>
+  </div>
+
+  <dialog class="modal" id="task-dialog" closedby="any" data-dialog-dismissible>
+    <form class="stack needs-validation" id="task-form" data-enhance="validation" data-validation-message="Name the task before saving.">
+      <header>
+        <h2>Add task</h2>
+        <p class="muted">Create a task locally.</p>
+      </header>
+      <div class="stack">
+        <label class="field">
+          <span class="field-label">Task name</span>
+          <input class="input" id="new-task-name" name="name" required autocomplete="off" aria-describedby="task-name-error">
+          <span class="field-error" id="task-name-error" role="alert">Enter a task name.</span>
+        </label>
+        <label class="field">
+          <span class="field-label">Priority</span>
+          <select class="select" name="priority">
+            <option>Normal</option>
+            <option>High</option>
+            <option>Low</option>
+          </select>
+        </label>
+      </div>
+      <footer>
+        <button class="btn outline" type="button" commandfor="task-dialog" command="request-close">Cancel</button>
+        <button class="btn primary" type="submit">Create task</button>
+      </footer>
+    </form>
+  </dialog>
+
+  <div class="status-bar" data-status id="app-status" role="status" aria-live="polite" aria-atomic="true"></div>
+
+  <script src="../../../dist/actual.full.js"></script>
+  <script src="app.js"></script>
+</body>
+
+</html>

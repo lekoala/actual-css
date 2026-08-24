@@ -1,0 +1,88 @@
+/*
+ * Primary application navigation. The component owns the navigation surface
+ * and item states; app-layout owns whether that surface is a bottom bar or
+ * labelled side navigation.
+ *
+ * Public hooks:
+ * --app-nav-size
+ * --app-nav-gap
+ */
+:where(.app-nav) {
+  --ui-bg: initial;
+  --ui-fg: initial;
+  --ui-border: initial;
+}
+
+.app-nav {
+  --app-nav-size: 4rem;
+  --app-nav-gap: var(--space-10);
+
+  position: sticky;
+  inset-block-end: 0;
+  z-index: var(--z-sticky);
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
+  gap: var(--app-nav-gap);
+  min-block-size: calc(var(--app-nav-size) + env(safe-area-inset-bottom));
+  padding-block: var(--space-10) max(var(--space-10), env(safe-area-inset-bottom));
+  padding-inline: var(--space-10);
+  border-block-start: var(--border-width) solid var(--ui-border, var(--border));
+  background: var(--ui-bg, var(--surface));
+  color: var(--ui-fg, var(--text-muted));
+}
+
+.app-nav > a {
+  display: grid;
+  grid-template-rows: auto auto;
+  place-content: center;
+  justify-items: center;
+  gap: var(--space-10);
+  min-inline-size: 0;
+  min-block-size: var(--control-size-lg);
+  padding-inline: var(--space-10);
+  border-radius: var(--radius);
+  color: inherit;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-tight);
+  text-align: center;
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+
+.app-nav > a > :where(svg, img, [aria-hidden="true"]) {
+  inline-size: 1.5rem;
+  block-size: 1.5rem;
+}
+
+.app-nav > a:hover {
+  background: var(--surface-subtle);
+  color: var(--text);
+}
+
+.app-nav > a:where([aria-current]:not([aria-current="false"])) {
+  background: var(--state-selected);
+  color: var(--state-selected-fg);
+}
+
+@media (forced-colors: active) {
+  .app-nav {
+    border-color: CanvasText;
+    background: Canvas;
+    color: CanvasText;
+  }
+
+  .app-nav > a:where([aria-current]:not([aria-current="false"])) {
+    outline: var(--border-width) solid Highlight;
+    background: Highlight;
+    color: HighlightText;
+    forced-color-adjust: none;
+  }
+}
+
+@media print {
+  .app-nav {
+    display: none;
+  }
+}

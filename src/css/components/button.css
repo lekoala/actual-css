@@ -92,7 +92,8 @@
 
 .btn.icon-only {
   inline-size: var(--btn-min-size);
-  padding-inline: 0;
+  block-size: var(--btn-min-size);
+  padding: 0;
 }
 
 @supports (color: color-mix(in oklch, red, white)) {

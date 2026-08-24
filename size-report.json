@@ -1,12 +1,12 @@
 {
-  "totalRaw": 240329,
+  "totalRaw": 246472,
   "core": {
     "minified": 10635,
     "brotli": 2520
   },
   "full": {
-    "minified": 112019,
-    "brotli": 16511
+    "minified": 116676,
+    "brotli": 17043
   },
   "js": {
     "core": {
@@ -14,11 +14,11 @@
       "brotli": 2203
     },
     "full": {
-      "bytes": 55250,
-      "brotli": 15986
+      "bytes": 55226,
+      "brotli": 16010
     }
   },
-  "fileCount": 105,
+  "fileCount": 108,
   "files": [
     {
       "file": "components/modal.css",
@@ -26,7 +26,7 @@
     },
     {
       "file": "components/button.css",
-      "raw": 8128
+      "raw": 8156
     },
     {
       "file": "components/alert.css",
@@ -217,6 +217,10 @@
       "raw": 2144
     },
     {
+      "file": "components/app-nav.css",
+      "raw": 2139
+    },
+    {
       "file": "themes/mono.css",
       "raw": 2094
     },
@@ -233,12 +237,24 @@
       "raw": 1936
     },
     {
+      "file": "components/list.css",
+      "raw": 1931
+    },
+    {
+      "file": "layout/app-layout.css",
+      "raw": 1898
+    },
+    {
       "file": "themes/brutalist.css",
       "raw": 1758
     },
     {
       "file": "effects/aura.css",
       "raw": 1709
+    },
+    {
+      "file": "layout/index.css",
+      "raw": 1704
     },
     {
       "file": "forms/input-icon.css",
@@ -251,10 +267,6 @@
     {
       "file": "typography/fluid.css",
       "raw": 1613
-    },
-    {
-      "file": "layout/index.css",
-      "raw": 1604
     },
     {
       "file": "components/table.css",
@@ -318,7 +330,7 @@
     },
     {
       "file": "components/index.css",
-      "raw": 1021
+      "raw": 1068
     },
     {
       "file": "components/breadcrumb.css",

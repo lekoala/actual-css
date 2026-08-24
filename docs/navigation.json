@@ -36,6 +36,7 @@
         "scroll-target",
         "frame",
         "app-shell",
+        "app-layout",
         "list"
       ]
     },
@@ -45,6 +46,7 @@
       "pages": [
         "accordion",
         "alert",
+        "app-navigation",
         "aura",
         "avatar",
         "badge",
@@ -57,6 +59,7 @@
         "fab",
         "indicator",
         "key",
+        "list",
         "meter",
         "navbar",
         "pagination",

@@ -26,6 +26,14 @@ and `actual.full.js` from `dist/`, plus the theme palettes bundle from
 
 Full sites demo living in `demo/sites`.
 
+### Mobile PWA
+
+[Actual Tasks](../../demo/sites/actual-tasks/index.html) is a mobile task demo
+with one bottom/side navigation landmark, application lists, tabs,
+dialog validation, project cards, an activity feed, loading and empty states,
+theme preferences, switches, and passive status feedback. Its local
+stylesheet includes a rule-by-rule framework friction audit.
+
 ### Admin application
 
 `demo/sites/admini/` is a complete admin interface: application shell, navigation,
