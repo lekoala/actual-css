@@ -221,7 +221,7 @@ Prior Actual CSS libraries:
 - https://smolcss.dev/#smol-container
 - https://every-layout.dev/layouts/center/
 
-### Layout: List
+### Component: List
 
 - https://daisyui.com/components/list/
 - https://html.spec.whatwg.org/multipage/grouping-content.html#the-li-element
