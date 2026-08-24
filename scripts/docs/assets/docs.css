@@ -129,6 +129,19 @@
 .docs-preview {
   padding: var(--space-40);
   overflow-x: auto;
+  /* Every live demo preview is a query container named actual-grid, so any
+     .grid-N it presents gets balanced subdivision (3 -> 1, never 2 + 1) with
+     no wrapper per snippet. The wrapper is a normal block box, so inline-size
+     containment cannot collapse it. Opt out per demo with the "bare" fence
+     flag. */
+  container: actual-grid / inline-size;
+}
+
+.docs-preview--bare {
+  /* Opt-out for a demo that must show the unwrapped preset collapsing one
+     column at a time. Resets both name and type so the .grid-N keeps its
+     auto-fill fallback instead of the balanced chain. */
+  container: normal;
 }
 
 /* Preview-only viewport for the fixed FAB. Production keeps .fab fixed to the

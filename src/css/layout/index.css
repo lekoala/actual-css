@@ -13,8 +13,8 @@
  * .switcher       peer regions: all horizontal or all stacked
  * .sidebar-layout main content + secondary aside
  * .grid           responsive collection; item width is the contract
- * .grid-N         structural density of N; wrap in .container-query for
- *                 balanced subdivision (in grid.css)
+ *  .grid-N         structural density of N; balanced inside a container named
+ *                  actual-grid (in grid.css)
  * .column-layout  explicit 12-column region composition; the author owns
  *                 narrow-container recomposition
  * .scroller       theme-aware scrollbar density and colour

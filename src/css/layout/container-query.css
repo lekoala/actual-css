@@ -1,7 +1,9 @@
-/* Local container-query opt-in: establishes an inline-size query context for
+/* Convenience helper: establishes a query container named actual-grid for
    descendants. Use it for a component that changes representation according
-   to its allocated inline size, and to opt .grid-N into balanced subdivision
-   (see grid.css). Layout primitives are responsive without it — this adds
+   to its allocated inline size, and to give .grid-N the named context it needs
+   for balanced subdivision (see grid.css). The name matters: grids only respond
+   to an explicitly actual-grid-named container, never to an incidental
+   query container. Layout primitives are responsive without it; this adds
    precision, it is never a prerequisite.
 
    The element takes inline-size containment, so put it on a normal
@@ -9,5 +11,5 @@
    float, an inline-block): its contents would stop contributing to its own
    inline size and it would collapse. */
 .container-query {
-  container-type: inline-size;
+  container: actual-grid / inline-size;
 }

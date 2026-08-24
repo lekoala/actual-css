@@ -248,7 +248,7 @@ own: it never exceeds N columns, never overflows, and every item keeps the same
 width.</p>
 </div>
 <div class="docs-example">
-  <div class="docs-preview">
+  <div class="docs-preview docs-preview--bare">
 <div class="grid-4">
   <div class="card">Exercitation</div>
   <div class="card">Amet mollit</div>
@@ -280,8 +280,10 @@ density is <code>.grid-N</code>'s. Choose the preset that suits your item size:<
 </table></div>
 <h2 id="balanced-subdivision">Balanced subdivision</h2>
 <p>Left alone, a preset collapses one column at a time, so a six-item <code>.grid-6</code>
-can pass through five columns — five items and a lone sixth. Wrap it in
-<code>.container-query</code> and it only ever enters a <strong>divisor of N</strong>:</p>
+can pass through five columns — five items and a lone sixth. The example above
+is that bare version. Placed inside a container named <strong><code>actual-grid</code></strong> — the
+<code>.container-query</code> helper, or a region of your own that declares
+<code>container: actual-grid / inline-size</code> — it only ever enters a <strong>divisor of N</strong>:</p>
 <pre><code class="language-text">.grid-2   2 → 1
 .grid-3   3 → 1
 .grid-4   4 → 2 → 1
@@ -316,12 +318,14 @@ can pass through five columns — five items and a lone sixth. Wrap it in
   </div>
 </div>
 <div class="prose docs-prose">
-<p>The wrapper is an opt-in for precision, never a prerequisite for responsive
-behavior — forgetting it costs you the exact chain, nothing else. It has to be
-an ancestor: an element cannot query its own size without taking inline-size
+<p>Balanced subdivision is precision, never a prerequisite for responsive
+behavior — forgetting the container costs you the exact chain, nothing else.
+The grid responds only to a container named <code>actual-grid</code>, never to an
+incidental query container, so a region that sets <code>container-type: inline-size</code>
+for its own reasons leaves the grid untouched. The container has to be an
+ancestor: an element cannot query its own size without taking inline-size
 containment, which would collapse the grid inside a <code>.cluster</code>, a float, or any
-shrink-to-fit box. Put <code>.container-query</code> on a normal block-level wrapper for
-the same reason.</p>
+shrink-to-fit box. Put it on a normal block-level wrapper for the same reason.</p>
 <p>The chain balances the <strong>declared density</strong>, not your actual item count. Eight
 items in <code>.grid-6</code> still give <code>6 + 2</code>. For a paginated collection, choose a page
 size that suits the density — 12, 20, and 24 divide well. A partial final page
