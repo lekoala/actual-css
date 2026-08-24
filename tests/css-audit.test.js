@@ -40,6 +40,7 @@ test("nav-list is self-laid out with grid gap", () => {
 
   expect(css).toMatch(/\.nav-list\s*\{[\s\S]*display:\s*grid;/);
   expect(css).toMatch(/\.nav-list\s*\{[\s\S]*gap:\s*var\(--gap\);/);
+  expect(css).toMatch(/\.nav-list\s+\.nav-link\s*\{[^}]*inline-size:\s*100%/);
 });
 
 test("card picture bleed clips children", () => {
@@ -158,12 +159,21 @@ test("intrinsic composition primitives do not depend on an ancestor opt-in", () 
   expect(sidebarCss).toMatch(
     /\.sidebar-layout\s*\{[\s\S]*display:\s*flex;[\s\S]*flex-wrap:\s*wrap;/,
   );
+  // Roles are positional: first is main, last is aside; .reverse (aside-first
+  // in the DOM) swaps them so the aside keeps its width and main reclaims.
   expect(sidebarCss).toMatch(
-    /\.sidebar-layout > :first-child\s*\{[\s\S]*flex-grow:\s*999;[\s\S]*var\(--sidebar-content-min, 30rem\)/,
+    /\.sidebar-layout > :first-child\s*\{[\s\S]*flex-grow:\s*999;[\s\S]*min-inline-size: min\(100%, var\(--sidebar-content-min, 30rem\)\);/,
   );
   expect(sidebarCss).toMatch(
-    /\.sidebar-layout > :last-child\s*\{[\s\S]*var\(--sidebar-layout-size, 18rem\)/,
+    /\.sidebar-layout > :last-child\s*\{[\s\S]*flex-basis: var\(--sidebar-layout-size, 18rem\);[\s\S]*min-inline-size: 0;/,
   );
+  expect(sidebarCss).toMatch(
+    /\.sidebar-layout\.reverse > :last-child\s*\{[\s\S]*flex-grow:\s*999;[\s\S]*min-inline-size: min\(100%, var\(--sidebar-content-min, 30rem\)\);/,
+  );
+  expect(sidebarCss).toMatch(
+    /\.sidebar-layout\.reverse > :first-child\s*\{[\s\S]*flex-basis: var\(--sidebar-layout-size, 18rem\);[\s\S]*min-inline-size: 0;/,
+  );
+  expect(sidebarCss).not.toContain("order: 2");
   expect(sidebarCss).not.toContain(".container-query .sidebar-layout");
 
   const topbarCss = readCss("src/css/layout/topbar.css");
@@ -720,6 +730,11 @@ test("steps derive markers from list order and keep state semantic", () => {
   expect(css).toContain("overscroll-behavior-inline: contain;");
   expect(css).not.toContain(".steps.vertical");
   expect(css).toContain("content: var(--step-complete-mark, counter(actual-step));");
+  // The connector falls back to the step's own --step-line (resolved after
+  // inheritance), so a .complete connector follows its selected line. No
+  // default --step-connector on .steps, which would freeze it at the parent.
+  expect(css).toContain("background: var(--step-connector, var(--step-line));");
+  expect(css).not.toMatch(/\.steps\s*\{[^}]*--step-connector:/);
 });
 
 test("rating keeps radio order and cumulative fill progressive", () => {

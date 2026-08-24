@@ -288,6 +288,25 @@ shared with other components.</p>
 foreground by default, including on a contrasting <code>.inverted</code> surface. A local
 intent class still wins: <code>.danger.outline</code> uses the danger color in either
 context. Filled buttons own their surface and keep their normal intent recipe.</p>
+<p><code>.btn.link</code> is the link-looking variant of the button component: it keeps the
+button's control height and touch target while reading as a link. For a plain
+text link, use a bare <code>&lt;a&gt;</code> with no class.</p>
+</div>
+<div class="docs-example">
+  <div class="docs-preview">
+<div class="cluster">
+  <a href="#">Normal link</a>
+  <a class="btn link" href="#">Button-like link</a>
+  <button class="btn link" type="button">Button with link appearance</button>
+</div>
+  </div>
+  <div class="docs-code">
+    <pre><code class="language-html">&lt;div class=&quot;cluster&quot;&gt;
+  &lt;a href=&quot;#&quot;&gt;Normal link&lt;/a&gt;
+  &lt;a class=&quot;btn link&quot; href=&quot;#&quot;&gt;Button-like link&lt;/a&gt;
+  &lt;button class=&quot;btn link&quot; type=&quot;button&quot;&gt;Button with link appearance&lt;/button&gt;
+&lt;/div&gt;</code></pre>
+  </div>
 </div>
 <div class="docs-example">
   <div class="docs-preview">

@@ -10,10 +10,10 @@
  * --sidebar-content-min
  * --sidebar-layout-size
  *
- * Child contract: the first and last direct children carry the sizing roles.
- * By default the main region is first and the aside second (aside on the
- * inline end). .reverse swaps only the visual order via `order`; the DOM keeps
- * main-content-first, so reading and keyboard order are unchanged.
+ * Child contract: the main region is first and the aside second by default
+ * (aside on the inline end). .reverse expects the aside first in the DOM, so
+ * visual, reading and keyboard order all agree — the role rules swap so the
+ * aside still takes its preferred width and the main still reclaims the row.
  */
 .sidebar-layout {
   display: flex;
@@ -22,21 +22,31 @@
   align-items: flex-start;
 }
 
+/* Main region — flexible, reclaims the full row when the aside wraps. */
 .sidebar-layout > :first-child {
   flex-basis: 0;
   flex-grow: 999;
   min-inline-size: min(100%, var(--sidebar-content-min, 30rem));
 }
 
+/* Aside region — preferred width, never forces content min-width. */
 .sidebar-layout > :last-child {
   flex-basis: var(--sidebar-layout-size, 18rem);
   flex-grow: 1;
+  min-inline-size: 0;
+}
+
+/* .reverse: the aside is first in the DOM and the main last, so each role
+   rule above would hit the wrong element. Swap the sizing per child; the
+   higher-specificity reverse rules outrank the positional defaults. */
+.sidebar-layout.reverse > :last-child {
+  flex-basis: 0;
+  flex-grow: 999;
+  min-inline-size: min(100%, var(--sidebar-content-min, 30rem));
 }
 
 .sidebar-layout.reverse > :first-child {
-  order: 2;
-}
-
-.sidebar-layout.reverse > :last-child {
-  order: 1;
+  flex-basis: var(--sidebar-layout-size, 18rem);
+  flex-grow: 1;
+  min-inline-size: 0;
 }

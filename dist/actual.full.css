@@ -1296,10 +1296,10 @@ small {
  * --sidebar-content-min
  * --sidebar-layout-size
  *
- * Child contract: the first and last direct children carry the sizing roles.
- * By default the main region is first and the aside second (aside on the
- * inline end). .reverse swaps only the visual order via `order`; the DOM keeps
- * main-content-first, so reading and keyboard order are unchanged.
+ * Child contract: the main region is first and the aside second by default
+ * (aside on the inline end). .reverse expects the aside first in the DOM, so
+ * visual, reading and keyboard order all agree — the role rules swap so the
+ * aside still takes its preferred width and the main still reclaims the row.
  */
 .sidebar-layout {
   display: flex;
@@ -1308,23 +1308,33 @@ small {
   align-items: flex-start;
 }
 
+/* Main region — flexible, reclaims the full row when the aside wraps. */
 .sidebar-layout > :first-child {
   flex-basis: 0;
   flex-grow: 999;
   min-inline-size: min(100%, var(--sidebar-content-min, 30rem));
 }
 
+/* Aside region — preferred width, never forces content min-width. */
 .sidebar-layout > :last-child {
   flex-basis: var(--sidebar-layout-size, 18rem);
   flex-grow: 1;
+  min-inline-size: 0;
+}
+
+/* .reverse: the aside is first in the DOM and the main last, so each role
+   rule above would hit the wrong element. Swap the sizing per child; the
+   higher-specificity reverse rules outrank the positional defaults. */
+.sidebar-layout.reverse > :last-child {
+  flex-basis: 0;
+  flex-grow: 999;
+  min-inline-size: min(100%, var(--sidebar-content-min, 30rem));
 }
 
 .sidebar-layout.reverse > :first-child {
-  order: 2;
-}
-
-.sidebar-layout.reverse > :last-child {
-  order: 1;
+  flex-basis: var(--sidebar-layout-size, 18rem);
+  flex-grow: 1;
+  min-inline-size: 0;
 }
 
 /*
@@ -3373,7 +3383,6 @@ small {
   --ui-border: transparent;
   --btn-radius: var(--radius-sm);
 
-  min-block-size: auto;
   padding-inline: 0;
   inline-size: fit-content;
   max-inline-size: 100%;
@@ -6134,7 +6143,6 @@ a.avatar[aria-disabled="true"] {
   --step-marker-fg: var(--text-muted);
   --step-marker-radius: var(--radius-full);
   --step-line: var(--border);
-  --step-connector: var(--step-line);
 
   counter-reset: actual-step;
   display: flex;
@@ -6187,7 +6195,12 @@ a.avatar[aria-disabled="true"] {
   inset-inline-start: calc(50% + var(--step-size) / 2);
   inline-size: calc(100% - var(--step-size));
   block-size: var(--step-line-size);
-  background: var(--step-connector);
+  /* A custom property resolves its var() before inheritance, so a default
+     --step-connector: var(--step-line) on .steps would freeze the parent line
+     color and a .complete child's connector would never follow its own line.
+     Falling back to the local --step-line here keeps each connector in sync;
+     an explicit --step-connector still wins when the author sets one. */
+  background: var(--step-connector, var(--step-line));
 }
 
 .steps > li:last-child::after {
@@ -6375,7 +6388,9 @@ a.avatar[aria-disabled="true"] {
   color: var(--text);
 }
 
-/* Nav list — a vertical navigation list. Used by .drawer for stacked links. */
+/* Nav list — a vertical navigation list. Used by .drawer for stacked links.
+   Links fill each row so the whole line is an interactive target; the
+   horizontal .navbar-nav links keep their intrinsic size. */
 .nav-list {
   display: grid;
   --gap: var(--space-20);
@@ -6387,6 +6402,10 @@ a.avatar[aria-disabled="true"] {
 
 .nav-list > li {
   margin: 0;
+}
+
+.nav-list .nav-link {
+  inline-size: 100%;
 }
 
 /*

@@ -75,7 +75,9 @@
   color: var(--text);
 }
 
-/* Nav list — a vertical navigation list. Used by .drawer for stacked links. */
+/* Nav list — a vertical navigation list. Used by .drawer for stacked links.
+   Links fill each row so the whole line is an interactive target; the
+   horizontal .navbar-nav links keep their intrinsic size. */
 .nav-list {
   display: grid;
   --gap: var(--space-20);
@@ -87,4 +89,8 @@
 
 .nav-list > li {
   margin: 0;
+}
+
+.nav-list .nav-link {
+  inline-size: 100%;
 }

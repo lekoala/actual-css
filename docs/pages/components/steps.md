@@ -26,9 +26,15 @@ future steps. The component needs no JavaScript.
 
 `.steps` fills its row when the steps fit and holds each item at `--step-min`
 otherwise, so the sequence scrolls horizontally only when it genuinely cannot
-fit — no breakpoint, and the threshold tracks the real content: three short
-steps hold longer than six long ones. Labels wrap inside their item when
-needed.
+fit — no breakpoint. The threshold is space-driven: how many steps fit depends
+on their number and the configurable minimum item width `--step-min`. Labels
+wrap inside their item when needed.
+
+Because `.steps` is an `<ol>` that can scroll horizontally, its overflow is not
+focusable by default in every browser. Prefer a `--step-min` that fits the
+common case, and only give a step flow `tabindex="0"` when your content
+genuinely needs keyboard access to the overflow — the framework adds neither
+JavaScript nor a tabindex automatically.
 
 Keep state classes aligned with the real process state; they are visual, while
 `aria-current="step"` also exposes the current position to assistive technology.
@@ -43,7 +49,9 @@ the user to navigate to it.
 - `--step-gap` — space between each marker and label.
 - `--step-line-size` — connector thickness.
 - `--step-marker-radius` — marker corner radius (round by default).
-- `--step-connector` — connector background; a plain color by default, but any
-  background (e.g. a dashed `repeating-linear-gradient`) works.
+- `--step-connector` — connector background; when set it overrides the color
+  (defaults to each step's own line, so a `.complete` step's connector follows
+  its selected color). A plain color by default, but any background (e.g. a
+  dashed `repeating-linear-gradient`) works.
 - `--step-complete-mark` — replaces the number on a `.complete` step with any
   `content` value (e.g. `"✓"`); defaults to the step number.

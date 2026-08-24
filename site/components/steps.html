@@ -246,9 +246,14 @@ future steps. The component needs no JavaScript.</p>
 <h2 id="intrinsic-responsiveness">Intrinsic responsiveness</h2>
 <p><code>.steps</code> fills its row when the steps fit and holds each item at <code>--step-min</code>
 otherwise, so the sequence scrolls horizontally only when it genuinely cannot
-fit — no breakpoint, and the threshold tracks the real content: three short
-steps hold longer than six long ones. Labels wrap inside their item when
-needed.</p>
+fit — no breakpoint. The threshold is space-driven: how many steps fit depends
+on their number and the configurable minimum item width <code>--step-min</code>. Labels
+wrap inside their item when needed.</p>
+<p>Because <code>.steps</code> is an <code>&lt;ol&gt;</code> that can scroll horizontally, its overflow is not
+focusable by default in every browser. Prefer a <code>--step-min</code> that fits the
+common case, and only give a step flow <code>tabindex=&quot;0&quot;</code> when your content
+genuinely needs keyboard access to the overflow — the framework adds neither
+JavaScript nor a tabindex automatically.</p>
 <p>Keep state classes aligned with the real process state; they are visual, while
 <code>aria-current=&quot;step&quot;</code> also exposes the current position to assistive technology.
 Do not put links or buttons around a step unless the workflow genuinely allows
@@ -261,8 +266,10 @@ squishing labels.</li>
 <li><code>--step-gap</code> — space between each marker and label.</li>
 <li><code>--step-line-size</code> — connector thickness.</li>
 <li><code>--step-marker-radius</code> — marker corner radius (round by default).</li>
-<li><code>--step-connector</code> — connector background; a plain color by default, but any
-background (e.g. a dashed <code>repeating-linear-gradient</code>) works.</li>
+<li><code>--step-connector</code> — connector background; when set it overrides the color
+(defaults to each step's own line, so a <code>.complete</code> step's connector follows
+its selected color). A plain color by default, but any background (e.g. a
+dashed <code>repeating-linear-gradient</code>) works.</li>
 <li><code>--step-complete-mark</code> — replaces the number on a <code>.complete</code> step with any
 <code>content</code> value (e.g. <code>&quot;✓&quot;</code>); defaults to the step number.</li>
 </ul>

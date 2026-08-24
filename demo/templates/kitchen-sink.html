@@ -57,6 +57,8 @@
   <!-- 1. Buttons -->
   <section>
     <h2>Buttons</h2>
+
+    <h3>Variants</h3>
     <div class="sink-grid">
       <div class="sink-col">
         <button class="btn">Default</button>
@@ -82,14 +84,27 @@
         <button class="btn ghost primary">Ghost primary</button>
         <button class="btn link primary">Link primary</button>
       </div>
+    </div>
+
+    <h3>Sizes</h3>
+    <div class="sink-grid">
       <div class="sink-col">
         <button class="btn sm primary">Small</button>
+        <button class="btn primary">Regular</button>
         <button class="btn lg primary">Large</button>
       </div>
+    </div>
+
+    <h3>States</h3>
+    <div class="sink-grid">
       <div class="sink-col">
         <button class="btn" disabled>Disabled</button>
         <button class="btn primary" aria-busy="true">Loading</button>
       </div>
+    </div>
+
+    <h3>Links &amp; groups</h3>
+    <div class="sink-grid">
       <div class="sink-col">
         <a class="btn primary" href="#">Link button</a>
       </div>
@@ -678,7 +693,8 @@
       focus ring, and text selection should all follow the island's green
       palette.</p>
     <div class="sink-grid" data-theme="forest">
-      <button class="btn" type="button" aria-pressed="true">Pressed</button>
+      <button class="btn" type="button" aria-pressed="false">Toggle</button>
+      <button class="btn" type="button" aria-pressed="true">Toggle</button>
       <label class="choice">
         <input class="check" type="checkbox" checked />
         <span>Selected choice</span>

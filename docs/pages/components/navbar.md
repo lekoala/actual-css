@@ -40,6 +40,8 @@ flex list, `.nav-list` a vertical grid. Putting both on one element resolves to
 ```
 
 For a vertical sidebar nav, use `.nav-list` inside the drawer or sidebar.
+Links inside `.nav-list` stretch to the available inline size, providing a
+full-row hit target for vertical navigation.
 
 ## Responsive: navbar + drawer
 
