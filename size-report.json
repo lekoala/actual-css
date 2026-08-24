@@ -1,12 +1,12 @@
 {
-  "totalRaw": 246472,
+  "totalRaw": 245031,
   "core": {
-    "minified": 10635,
-    "brotli": 2520
+    "minified": 10351,
+    "brotli": 2485
   },
   "full": {
-    "minified": 116676,
-    "brotli": 17043
+    "minified": 113826,
+    "brotli": 16859
   },
   "js": {
     "core": {
@@ -22,11 +22,7 @@
   "files": [
     {
       "file": "components/modal.css",
-      "raw": 8173
-    },
-    {
-      "file": "components/button.css",
-      "raw": 8156
+      "raw": 7889
     },
     {
       "file": "components/alert.css",
@@ -34,11 +30,15 @@
     },
     {
       "file": "core/tokens.css",
-      "raw": 7821
+      "raw": 7775
+    },
+    {
+      "file": "components/button.css",
+      "raw": 7482
     },
     {
       "file": "core/theme.css",
-      "raw": 7286
+      "raw": 7121
     },
     {
       "file": "forms/choice.css",
@@ -46,19 +46,19 @@
     },
     {
       "file": "components/badge.css",
-      "raw": 5493
+      "raw": 5152
     },
     {
       "file": "typography/prose.css",
       "raw": 5139
     },
     {
-      "file": "layout/grid.css",
-      "raw": 4897
+      "file": "components/avatar.css",
+      "raw": 5067
     },
     {
-      "file": "components/avatar.css",
-      "raw": 4841
+      "file": "layout/grid.css",
+      "raw": 4897
     },
     {
       "file": "components/flyout.css",
@@ -69,12 +69,12 @@
       "raw": 4590
     },
     {
-      "file": "forms/choice-card.css",
-      "raw": 4518
-    },
-    {
       "file": "themes/edge.css",
       "raw": 4497
+    },
+    {
+      "file": "forms/choice-card.css",
+      "raw": 4487
     },
     {
       "file": "utilities/extra.css",
@@ -82,7 +82,7 @@
     },
     {
       "file": "components/drawer.css",
-      "raw": 4370
+      "raw": 4278
     },
     {
       "file": "forms/switch.css",
@@ -101,16 +101,16 @@
       "raw": 3892
     },
     {
+      "file": "forms/otp.css",
+      "raw": 3783
+    },
+    {
       "file": "components/join.css",
       "raw": 3553
     },
     {
       "file": "forms/floating-field.css",
       "raw": 3517
-    },
-    {
-      "file": "forms/otp.css",
-      "raw": 3494
     },
     {
       "file": "utilities/base.css",
@@ -121,24 +121,24 @@
       "raw": 3174
     },
     {
-      "file": "components/menu.css",
-      "raw": 3032
+      "file": "components/steps.css",
+      "raw": 3121
     },
     {
-      "file": "components/tooltip.css",
-      "raw": 2959
+      "file": "forms/range.css",
+      "raw": 3115
     },
     {
       "file": "forms/control.css",
       "raw": 2909
     },
     {
-      "file": "components/steps.css",
-      "raw": 2870
+      "file": "components/menu.css",
+      "raw": 2886
     },
     {
-      "file": "forms/range.css",
-      "raw": 2807
+      "file": "components/tooltip.css",
+      "raw": 2855
     },
     {
       "file": "forms/validation.css",
@@ -153,16 +153,16 @@
       "raw": 2671
     },
     {
+      "file": "components/tab.css",
+      "raw": 2586
+    },
+    {
+      "file": "layout/app-layout.css",
+      "raw": 2538
+    },
+    {
       "file": "themes/spruce.css",
       "raw": 2520
-    },
-    {
-      "file": "components/navbar.css",
-      "raw": 2516
-    },
-    {
-      "file": "components/tab.css",
-      "raw": 2486
     },
     {
       "file": "forms/native.css",
@@ -177,12 +177,12 @@
       "raw": 2460
     },
     {
-      "file": "components/fab.css",
-      "raw": 2452
-    },
-    {
       "file": "themes/sunset.css",
       "raw": 2385
+    },
+    {
+      "file": "components/fab.css",
+      "raw": 2374
     },
     {
       "file": "themes/lavender.css",
@@ -205,10 +205,6 @@
       "raw": 2228
     },
     {
-      "file": "components/chat.css",
-      "raw": 2205
-    },
-    {
       "file": "themes/corporate.css",
       "raw": 2150
     },
@@ -217,8 +213,12 @@
       "raw": 2144
     },
     {
-      "file": "components/app-nav.css",
-      "raw": 2139
+      "file": "components/chat.css",
+      "raw": 2118
+    },
+    {
+      "file": "components/navbar.css",
+      "raw": 2114
     },
     {
       "file": "themes/mono.css",
@@ -237,20 +237,12 @@
       "raw": 1936
     },
     {
-      "file": "components/list.css",
-      "raw": 1931
-    },
-    {
-      "file": "layout/app-layout.css",
-      "raw": 1898
+      "file": "components/app-nav.css",
+      "raw": 1882
     },
     {
       "file": "themes/brutalist.css",
       "raw": 1758
-    },
-    {
-      "file": "effects/aura.css",
-      "raw": 1709
     },
     {
       "file": "layout/index.css",
@@ -259,6 +251,14 @@
     {
       "file": "forms/input-icon.css",
       "raw": 1678
+    },
+    {
+      "file": "components/list.css",
+      "raw": 1646
+    },
+    {
+      "file": "effects/aura.css",
+      "raw": 1638
     },
     {
       "file": "components/skeleton.css",
@@ -337,10 +337,6 @@
       "raw": 1008
     },
     {
-      "file": "core/focus.css",
-      "raw": 968
-    },
-    {
       "file": "components/indicator.css",
       "raw": 963
     },
@@ -367,6 +363,10 @@
     {
       "file": "core/reset.css",
       "raw": 714
+    },
+    {
+      "file": "core/focus.css",
+      "raw": 708
     },
     {
       "file": "layout/container-query.css",
@@ -405,16 +405,16 @@
       "raw": 376
     },
     {
+      "file": "layout/center.css",
+      "raw": 319
+    },
+    {
       "file": "typography/lead.css",
       "raw": 275
     },
     {
       "file": "core/index.css",
       "raw": 269
-    },
-    {
-      "file": "layout/center.css",
-      "raw": 262
     },
     {
       "file": "forms/base.css",
@@ -434,7 +434,7 @@
     },
     {
       "file": "layout/app-shell.css",
-      "raw": 136
+      "raw": 147
     },
     {
       "file": "utilities/index.css",

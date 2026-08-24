@@ -22,6 +22,23 @@ block margins are reset, so vertical rhythm always comes from `--gap`. Inline
 margins stay free — for example `margin-inline: auto` on a child centers it
 without fighting the primitive.
 
+## Don't wrap full-width regions with `.stack`
+
+`.stack` is a column flex container, so a `.center` child — which sets its own
+`inline-size` and `margin-inline: auto` — becomes a flex item that will not
+stretch across the full row; it sizes to its content measure and centers inside
+the flex line. For page-level full-width regions that each constrain their own
+content, keep them in normal block flow instead:
+
+```html
+<header class="center">…</header>
+<main class="center">…</main>
+<footer class="center">…</footer>
+```
+
+Use `.stack` for the vertical rhythm *between* related items inside one region,
+not as the wrapper that lays out independent full-width regions of a page.
+
 ## Choosing a density
 
 `--gap` is the primitive's channel, and the density variants set it at the point

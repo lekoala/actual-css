@@ -33,3 +33,8 @@ flex or grid item instead of collapsing to its min-content width.
 Do not override it with `inline-size: 100%`: because the padding sits outside
 the content box, that would make its outer size exceed the available width by
 both padding edges.
+
+As a child of `.stack`, `.center` sizes to its content measure and centers via
+`margin-inline: auto` instead of stretching to the full row. For full-width page
+regions, keep `.center` regions in normal block flow rather than inside a
+`.stack` wrapper (see [stack](stack.md)).

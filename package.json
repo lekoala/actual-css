@@ -115,6 +115,7 @@
     "build:docs": "bun run build:themes && bun scripts/build-docs.js",
     "watch:docs": "bun run build:themes && bun scripts/build-docs.js --watch",
     "check:docs": "bun scripts/check-docs.js",
+    "check:doc-classes": "bun scripts/check-doc-classes.js",
     "check:compat": "bun scripts/check-compat.js",
     "check:css-api": "bun scripts/check-css-api.js",
     "check:color-space": "bun scripts/check-color-space.js",
@@ -135,7 +136,7 @@
     "check:sync": "bun scripts/check-sync.js",
     "test": "bun test",
     "test:changed": "bun test --changed=master",
-    "build:all": "bun run lint && bun run build:dist && bun run build:js && bun run build:docs && bun run check:docs && bun run check:compat && bun run check:css-api && bun run check:color-space && bun run check:architecture && bun run check:enhance && bun run generate:reserved && bun run check:reserved && bun run check:sync && bun run check:links && bun run check:templates && bun run test && bun run build:size",
+    "build:all": "bun run lint && bun run build:dist && bun run build:js && bun run build:docs && bun run check:docs && bun run check:doc-classes && bun run check:compat && bun run check:css-api && bun run check:color-space && bun run check:architecture && bun run check:enhance && bun run generate:reserved && bun run check:reserved && bun run check:sync && bun run check:links && bun run check:templates && bun run test && bun run build:size",
     "prepublishOnly": "bun run build:all"
   },
   "devDependencies": {

@@ -14,6 +14,11 @@
 - Use `.sm` or `.lg` for density changes. The inline padding stays stable.
 - Use `.alert-dismiss` for a compact dismiss button. It is a direct trailing child in standard alerts and lives inside `.alert-title` in admonitions. It uses the shared `--icon-close` mask and the `--dismiss` runtime command — no icon font or custom JS.
 
+Because alerts are soft by default, adding `.soft` to an intent (`.alert.soft.primary`,
+`.alert.soft.danger`, …) is a no-op: it already resolves to a soft version of that
+intent. Reach for `.solid` (stronger) or `.outline` (quieter) when the emphasis
+itself needs to change, not `.soft`.
+
 ## Class reference
 
 | Class            | Kind        | Description                                                                       |

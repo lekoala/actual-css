@@ -118,6 +118,8 @@ it("soft variant contract over a chromatic surface", async () => {
             danger: read("#badge-danger"),
           },
           alert: { danger: read("#alert-danger"), secondary: read("#alert-secondary") },
+          alertSoft: { primary: read("#alert-soft-primary"), danger: read("#alert-soft-danger") },
+          badgeSoft: { primary: read("#badge-soft-primary"), danger: read("#badge-soft-danger") },
           btn: { primary: read("#btn-primary"), secondary: read("#btn-secondary") },
           bare: read("#badge-bare"),
           raw: { primary: read("#raw-badge-primary"), danger: read("#raw-badge-danger") },
@@ -162,6 +164,22 @@ it("soft variant contract over a chromatic surface", async () => {
       expect(snapshot.btn.primary.bg).toBe(snapshot.badge.primary.bg);
       expect(snapshot.btn.primary.fg).toBe(snapshot.badge.primary.fg);
       expect(snapshot.btn.secondary.fg).toBe(snapshot.badge.secondary.fg);
+
+      // 3b. Explicit .soft + intent on an alert/badge is a no-op against the
+      // soft-by-default treatment: it must resolve to the same soft intent
+      // tint, never collapse to a neutral subtle surface (item: alert.soft
+      // must keep the intent).
+      expect(snapshot.alertSoft.primary.bg).toBe(snapshot.badge.primary.bg);
+      expect(snapshot.alertSoft.primary.fg).toBe(snapshot.badge.primary.fg);
+      expect(snapshot.alertSoft.danger.bg).toBe(snapshot.alert.danger.bg);
+      expect(snapshot.alertSoft.danger.fg).toBe(snapshot.alert.danger.fg);
+      expect(snapshot.badgeSoft.primary.bg).toBe(snapshot.badge.primary.bg);
+      expect(snapshot.badgeSoft.primary.fg).toBe(snapshot.badge.primary.fg);
+      expect(snapshot.badgeSoft.danger.bg).toBe(snapshot.badge.danger.bg);
+      expect(snapshot.badgeSoft.danger.fg).toBe(snapshot.badge.danger.fg);
+      // ...and each stays on the intent hue, not a neutral/surface grey.
+      expect(hueDrift(snapshot.intent.primary, snapshot.alertSoft.primary.bg)).toBeLessThan(20);
+      expect(hueDrift(snapshot.intent.danger, snapshot.alertSoft.danger.bg)).toBeLessThan(20);
 
       // Without an intent the recipe collapses to plain text ink, never a mix.
       expect(snapshot.bare.fg).toBe(snapshot.text);

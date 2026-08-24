@@ -41,6 +41,16 @@
 The avatar keeps the same visual box across semantics — as a link or button it
 gains hover and pressed feedback.
 
+For an accessible initials label, prefer `<abbr title="Full name">` so the
+expansion is available to assistive tech; the UA dotted underline it would draw
+is suppressed inside the avatar.
+
+```html demo
+<div class="avatar" role="img">
+  <abbr title="Ada Meridian">AM</abbr>
+</div>
+```
+
 ```html demo
 <a href="#" class="avatar">
   <img src="https://mockmind-api.uifaces.co/content/human/219.jpg" alt="Jane Doe" />
