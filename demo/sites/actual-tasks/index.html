@@ -21,7 +21,7 @@
   </header>
 
   <main class="app-main" id="app-main" tabindex="-1">
-    <section class="mobile-page" data-page="today" aria-labelledby="today-title">
+    <section class="mobile-page stack" data-page="today" aria-labelledby="today-title">
       <header class="mobile-page-heading">
         <div>
           <span class="overline">Monday, August 24</span>
@@ -40,7 +40,7 @@
         <li class="list-item" data-state="open">
           <input class="check" type="checkbox" aria-label="Mark Send proposal complete">
           <span class="list-item-content"><strong class="list-item-title">Send proposal</strong><span class="list-item-text">Northwind renewal</span></span>
-          <time class="list-item-trailing" datetime="2026-08-24T09:30">09:30</time>
+          <time class="list-item-text list-item-trailing" datetime="2026-08-24T09:30">09:30</time>
         </li>
         <li class="list-item" data-state="open">
           <input class="check" type="checkbox" aria-label="Mark Call supplier complete">
@@ -61,15 +61,12 @@
       </div>
     </section>
 
-    <section class="mobile-page" data-page="tasks" aria-labelledby="tasks-title" hidden inert>
+    <section class="mobile-page stack" data-page="tasks" aria-labelledby="tasks-title" hidden inert>
       <header class="mobile-page-heading">
         <div>
           <span class="overline">Workspace</span>
           <h1 id="tasks-title">Tasks</h1>
         </div>
-        <button class="btn primary icon-only" type="button" commandfor="task-dialog" command="show-modal" aria-haspopup="dialog" aria-controls="task-dialog" aria-label="Add task">
-          <i class="ti ti-plus mobile-icon" aria-hidden="true"></i>
-        </button>
       </header>
 
       <label class="field input-icon">
@@ -143,7 +140,7 @@
       </div>
     </section>
 
-    <section class="mobile-page" data-page="projects" aria-labelledby="projects-title" hidden inert>
+    <section class="mobile-page stack" data-page="projects" aria-labelledby="projects-title" hidden inert>
       <header class="mobile-page-heading">
         <div>
           <span class="overline">Workspace</span>
@@ -201,7 +198,7 @@
       </div>
     </section>
 
-    <section class="mobile-page" data-page="activity" aria-labelledby="activity-title" hidden inert>
+    <section class="mobile-page stack" data-page="activity" aria-labelledby="activity-title" hidden inert>
       <header class="mobile-page-heading">
         <div>
           <span class="overline">Latest changes</span>
@@ -215,17 +212,17 @@
           <li class="list-item">
             <span class="avatar sm success"><abbr>AM</abbr></span>
             <span class="list-item-content"><strong class="list-item-title">Ada completed “Deploy website”</strong><span class="list-item-text">Website refresh</span></span>
-            <time class="list-item-trailing" datetime="2026-08-24T10:42">10:42</time>
+            <time class="list-item-text list-item-trailing" datetime="2026-08-24T10:42">10:42</time>
           </li>
           <li class="list-item">
             <span class="avatar sm warning"><abbr>RM</abbr></span>
             <span class="list-item-content"><strong class="list-item-title">Rin changed the project risk</strong><span class="list-item-text">On track → At risk</span></span>
-            <time class="list-item-trailing" datetime="2026-08-24T09:18">09:18</time>
+            <time class="list-item-text list-item-trailing" datetime="2026-08-24T09:18">09:18</time>
           </li>
           <li class="list-item">
             <span class="avatar sm secondary"><abbr>JL</abbr></span>
             <span class="list-item-content"><strong class="list-item-title">Jana added a research note</strong><span class="list-item-text">Mobile research</span></span>
-            <time class="list-item-trailing" datetime="2026-08-24T08:05">08:05</time>
+            <time class="list-item-text list-item-trailing" datetime="2026-08-24T08:05">08:05</time>
           </li>
         </ol>
       </section>
@@ -236,13 +233,13 @@
           <li class="list-item">
             <span class="avatar sm"><abbr>TS</abbr></span>
             <span class="list-item-content"><strong class="list-item-title">Theo created “Book interviews”</strong><span class="list-item-text">Research · Normal priority</span></span>
-            <time class="list-item-trailing" datetime="2026-08-23T16:24">16:24</time>
+            <time class="list-item-text list-item-trailing" datetime="2026-08-23T16:24">16:24</time>
           </li>
         </ol>
       </section>
     </section>
 
-    <section class="mobile-page" data-page="settings" aria-labelledby="settings-title" hidden inert>
+    <section class="mobile-page stack" data-page="settings" aria-labelledby="settings-title" hidden inert>
       <header class="mobile-page-heading">
         <div>
           <span class="overline">Preferences</span>

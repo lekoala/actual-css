@@ -623,6 +623,9 @@ test("app navigation stays semantic and app-layout owns its adaptive geometry", 
   expect(navCss).toContain('.app-nav > a:where([aria-current]:not([aria-current="false"]))');
   expect(navCss).toContain("env(safe-area-inset-bottom)");
   expect(navCss).toContain("min-block-size: var(--control-size-lg);");
+  expect(navCss).toMatch(
+    /> a > :where\(svg, img, \[aria-hidden="true"\]\)\s*\{[\s\S]*font-size: 1\.5rem;[\s\S]*line-height: 1;/,
+  );
   expect(navCss).toContain("@media (forced-colors: active)");
   expect(navCss).not.toContain(".active");
   expect(navCss).not.toContain("@media (min-width:");
@@ -633,7 +636,16 @@ test("app navigation stays semantic and app-layout owns its adaptive geometry", 
   expect(layoutCss).toContain(".app-layout > .app-nav > a");
   expect(layoutCss).toContain(".app-layout > .app-main");
   expect(layoutCss).toContain("block-size: var(--viewport-block);");
+  expect(layoutCss).toContain(
+    "padding-block-start: calc(var(--space-30) + env(safe-area-inset-top));",
+  );
   expect(layoutCss).toContain("--app-nav-side-size: 12rem;");
+  expect(layoutCss).toMatch(
+    /\.app-layout > \.fab\s*\{[\s\S]*position: relative;[\s\S]*grid-area: main;[\s\S]*place-self: end;[\s\S]*inset: auto;[\s\S]*margin: var\(--fab-offset\);/,
+  );
+  expect(layoutCss).toMatch(
+    /@media \(min-width: 48rem\)[\s\S]*\.app-layout > \.fab\s*\{[\s\S]*margin-block-end: max\(var\(--fab-offset\), env\(safe-area-inset-bottom\)\);/,
+  );
   expect(layoutCss).toContain("grid-template-columns: 1.5rem minmax(0, 1fr);");
   expect(layoutCss).toContain("align-items: center;");
   expect(layoutCss).toMatch(
