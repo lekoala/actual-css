@@ -20,8 +20,7 @@
 - A `.tab` with an icon uses `--tab-gap` (default `0.375em`) for the space between icon and label.
 
 ```html demo
-<div class="tabset">
-  <div class="tabs" data-enhance="tabs" role="tablist" aria-label="Settings">
+<div class="tabs" data-enhance="tabs" role="tablist" aria-label="Settings">
     <button class="tab primary"
             type="button"
             role="tab"

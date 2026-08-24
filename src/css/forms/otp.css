@@ -79,7 +79,12 @@
    but it sits in the clipped input extension once every cell is filled, so
    the focused edge must be unambiguous on its own — hence the doubled width,
    not only the color swap. Width is safe to change: box-sizing is border-box
-   and the cells have a fixed inline/block size, so nothing reflows. */
+   and the cells have a fixed inline/block size, so nothing reflows.
+
+   The <input> must be the first direct child, with one cell <span> per
+   character after it: the state rules select the cells as following siblings
+   (input:focus ~ span, input:disabled ~ span, …), so that order is part of the
+   contract. */
 .otp > input:focus ~ span {
   --otp-cell-border: var(--focus);
   --otp-cell-border-width: calc(var(--border-width) * 2);
@@ -103,7 +108,7 @@
 
 .otp > input:disabled ~ span {
   --otp-cell-bg: var(--surface-subtle);
-
+  --otp-cell-border: var(--state-disabled);
   opacity: var(--disabled-opacity);
 }
 

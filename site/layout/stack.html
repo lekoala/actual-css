@@ -241,6 +241,18 @@
 block margins are reset, so vertical rhythm always comes from <code>--gap</code>. Inline
 margins stay free — for example <code>margin-inline: auto</code> on a child centers it
 without fighting the primitive.</p>
+<h2 id="dont-wrap-full-width-regions-with-stack">Don't wrap full-width regions with <code>.stack</code></h2>
+<p><code>.stack</code> is a column flex container, so a <code>.center</code> child — which sets its own
+<code>inline-size</code> and <code>margin-inline: auto</code> — becomes a flex item that will not
+stretch across the full row; it sizes to its content measure and centers inside
+the flex line. For page-level full-width regions that each constrain their own
+content, keep them in normal block flow instead:</p>
+<pre><code class="language-html">&lt;header class=&quot;center&quot;&gt;…&lt;/header&gt;
+&lt;main class=&quot;center&quot;&gt;…&lt;/main&gt;
+&lt;footer class=&quot;center&quot;&gt;…&lt;/footer&gt;
+</code></pre>
+<p>Use <code>.stack</code> for the vertical rhythm <em>between</em> related items inside one region,
+not as the wrapper that lays out independent full-width regions of a page.</p>
 <h2 id="choosing-a-density">Choosing a density</h2>
 <p><code>--gap</code> is the primitive's channel, and the density variants set it at the point
 of use. Pick the one that matches how tightly the children belong together:</p>
@@ -342,6 +354,7 @@ one child only; the rest of the stack keeps its rhythm.</p>
         <nav class="scrollspy" data-enhance="scrollspy" data-scrollspy-offset="80" aria-label="On this page">
           <p class="docs-nav-group">On this page</p>
           <ul class="nav-list docs-toc-list" data-docs-toc>
+        <li><a class="nav-link" href="#dont-wrap-full-width-regions-with-stack" data-docs-toc-item data-level="2">Don't wrap full-width regions with .stack</a></li>
         <li><a class="nav-link" href="#choosing-a-density" data-docs-toc-item data-level="2">Choosing a density</a></li>
         <li><a class="nav-link" href="#region-rhythm-goes-on-gap-not-on-gap" data-docs-toc-item data-level="2">Region rhythm goes on gap, not on --gap</a></li>
         <li><a class="nav-link" href="#grouping-items-tightly" data-docs-toc-item data-level="2">Grouping items tightly</a></li>

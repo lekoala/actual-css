@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>OTP state fixture</title>
+  <link rel="stylesheet" href="../../src/css/actual.full.css">
+  <style>
+    * { transition-duration: 0s !important; }
+  </style>
+</head>
+<body>
+  <!-- Palette references so assertions never hard-code sRGB values. -->
+  <span id="ref-border" style="color: var(--border)"></span>
+  <span id="ref-state-disabled" style="color: var(--state-disabled)"></span>
+  <span id="ref-surface" style="background: var(--surface)"></span>
+  <span id="ref-surface-subtle" style="background: var(--surface-subtle)"></span>
+
+  <!-- Canonical order: the input is the first direct child, then one span per
+       character. The state rules select the cells as following siblings. -->
+  <div class="otp" id="otp-enabled" aria-label="Enabled code">
+    <input type="text" inputmode="numeric" maxlength="4" aria-label="Enabled code" />
+    <span aria-hidden="true"></span>
+    <span aria-hidden="true"></span>
+    <span aria-hidden="true"></span>
+    <span aria-hidden="true"></span>
+  </div>
+
+  <div class="otp" id="otp-disabled" aria-label="Disabled code">
+    <input type="text" inputmode="numeric" maxlength="4" disabled aria-label="Disabled code" />
+    <span aria-hidden="true"></span>
+    <span aria-hidden="true"></span>
+    <span aria-hidden="true"></span>
+    <span aria-hidden="true"></span>
+  </div>
+</body>
+</html>

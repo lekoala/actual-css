@@ -40,6 +40,38 @@ The component follows shared `.sm` and `.lg` density through `--control-size`.
 Use `aria-invalid="true"` for explicit invalid state, or place it in the
 standard `.needs-validation.was-validated` form flow.
 
+The `<input>` must be the **first** direct child, with one `<span>` per
+character after it — the state rules (focus, invalid, disabled) select the
+cells as following siblings, so that order is part of the contract.
+
+## Disabled
+
+Set `disabled` on the input. The cells rest on `--surface-subtle` with a muted
+`--state-disabled` border at `--disabled-opacity`, the code glyph turns
+`--state-disabled`, and the cursor is `not-allowed` — a clearly distinct,
+non-interactive look that follows the shared disabled contract. A disabled
+`<fieldset>` disables it the same way.
+
+```html demo
+<div class="otp" aria-label="Disabled verification code">
+  <input
+    class="input"
+    type="text"
+    autocomplete="one-time-code"
+    inputmode="numeric"
+    maxlength="6"
+    disabled
+    aria-label="Disabled verification code"
+  />
+  <span aria-hidden="true"></span>
+  <span aria-hidden="true"></span>
+  <span aria-hidden="true"></span>
+  <span aria-hidden="true"></span>
+  <span aria-hidden="true"></span>
+  <span aria-hidden="true"></span>
+</div>
+```
+
 ## CSS hooks
 
 - `--otp-cell-size` — width and height of every cell; follows `--control-size`.

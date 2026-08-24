@@ -250,6 +250,10 @@ flex or grid item instead of collapsing to its min-content width.</p>
 <p>Do not override it with <code>inline-size: 100%</code>: because the padding sits outside
 the content box, that would make its outer size exceed the available width by
 both padding edges.</p>
+<p>As a child of <code>.stack</code>, <code>.center</code> sizes to its content measure and centers via
+<code>margin-inline: auto</code> instead of stretching to the full row. For full-width page
+regions, keep <code>.center</code> regions in normal block flow rather than inside a
+<code>.stack</code> wrapper (see <a href="stack.html">stack</a>).</p>
 
 </div>
 

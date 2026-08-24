@@ -270,6 +270,21 @@
 <div class="prose docs-prose">
 <p>The avatar keeps the same visual box across semantics — as a link or button it
 gains hover and pressed feedback.</p>
+<p>For an accessible initials label, prefer <code>&lt;abbr title=&quot;Full name&quot;&gt;</code> so the
+expansion is available to assistive tech; the UA dotted underline it would draw
+is suppressed inside the avatar.</p>
+</div>
+<div class="docs-example">
+  <div class="docs-preview">
+<div class="avatar" role="img">
+  <abbr title="Ada Meridian">AM</abbr>
+</div>
+  </div>
+  <div class="docs-code">
+    <pre><code class="language-html">&lt;div class=&quot;avatar&quot; role=&quot;img&quot;&gt;
+  &lt;abbr title=&quot;Ada Meridian&quot;&gt;AM&lt;/abbr&gt;
+&lt;/div&gt;</code></pre>
+  </div>
 </div>
 <div class="docs-example">
   <div class="docs-preview">

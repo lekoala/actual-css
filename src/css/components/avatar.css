@@ -69,6 +69,9 @@
   }
 }
 
+/* The initials element (a span or an accessible <abbr title="…">) fills the box.
+   text-decoration: none neutralizes the UA dotted underline on <abbr title="…">
+   inside the circular avatar. */
 .avatar > :first-child:not(:where(img, picture, .badge)) {
   display: inline-grid;
   place-items: center;
@@ -76,6 +79,7 @@
   block-size: 100%;
   overflow: hidden;
   border-radius: inherit;
+  text-decoration: none;
 }
 
 .avatar > img,

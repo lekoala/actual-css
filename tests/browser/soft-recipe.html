@@ -68,6 +68,13 @@
     <div class="alert danger" id="alert-danger">Danger alert</div>
     <div class="alert secondary" id="alert-secondary">Secondary alert</div>
 
+    <!-- Explicit .soft + intent: must resolve to the same soft intent tint as
+         the soft-by-default alert/badge, never fall back to a neutral subtle. -->
+    <div class="alert soft primary" id="alert-soft-primary">Soft primary alert</div>
+    <div class="alert soft danger" id="alert-soft-danger">Soft danger alert</div>
+    <span class="badge soft primary" id="badge-soft-primary">Soft primary</span>
+    <span class="badge soft danger" id="badge-soft-danger">Soft danger</span>
+
     <!-- Explicit shared variant on a button. -->
     <button class="btn soft primary" id="btn-primary" type="button">Soft primary</button>
     <button class="btn soft secondary" id="btn-secondary" type="button">Soft secondary</button>

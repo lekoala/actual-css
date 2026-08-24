@@ -495,12 +495,16 @@ test("theme-derived aliases are declared on :root, [data-theme] so islands recom
     /@supports \(color: color-mix\(in oklch, red, white\)\)\s*\{\s*:root,\s*\n\s*\[data-theme\]\s*\{[\s\S]*--shadow:/,
   );
 
-  // Accessibility overrides must cross every named theme boundary too.
+  // Forced-colors state remap (see CONTRIBUTING.md "Forced colors invariant"):
+  // the only state tokens overridden in forced colors are the disabled pair.
   expect(tokensCss).toMatch(
-    /@media \(forced-colors: active\)\s*\{\s*:root,\s*\n\s*\[data-theme\]\s*\{[\s\S]*--state-selected:/,
+    /@media \(forced-colors: active\)\s*\{\s*:root,\s*\n\s*\[data-theme\]\s*\{[\s\S]*--state-disabled: GrayText;[\s\S]*--disabled-opacity: 1;/,
   );
-  expect(themeCss).toMatch(
-    /@media \(forced-colors: active\)\s*\{\s*:root,\s*\n\s*\[data-theme\]\s*\{[\s\S]*--focus-ring-shadow:/,
+  // Selected/current colors are NOT remapped to Highlight/HighlightText — they
+  // resolve to their theme value and are forced by the UA. Guard against the
+  // old repaint-theme regression.
+  expect(tokensCss).not.toMatch(
+    /@media \(forced-colors: active\)[\s\S]*--state-selected:\s*Highlight/,
   );
   expect(themeCss).toMatch(
     /@media \(prefers-contrast: more\)\s*\{\s*:root,[\s\S]*\[data-theme\]\[data-theme\]\s*\{[\s\S]*--text-muted:/,
@@ -580,9 +584,11 @@ test("optional OTP keeps one native input and covers validation states", () => {
   expect(css).not.toContain(".otp:focus-within");
   expect(css).not.toContain(".otp:has(");
   expect(css).not.toContain("--focus-ring-shadow");
+  // The input must be the first direct child: state rules select the cells as
+  // following siblings, so this contract is asserted on the source text.
   expect(css).toContain(".otp > input:focus ~ span");
   expect(css).toMatch(
-    /\.otp > input:focus ~ span\s*\{[\s\S]*?--otp-cell-border-width:\s*calc\(var\(--border-width\) \* 2\);/,
+    /\.otp > input:focus ~ span[\s\S]*?--otp-cell-border-width:\s*calc\(var\(--border-width\) \* 2\);/,
   );
   expect(css).toMatch(
     /\.otp > span\s*\{[\s\S]*?border:\s*var\(--otp-cell-border-width, var\(--border-width\)\) solid/,
@@ -593,6 +599,9 @@ test("optional OTP keeps one native input and covers validation states", () => {
   expect(css).toContain(".needs-validation.was-validated .otp > input:invalid ~ span");
   expect(css).toContain("input:user-invalid ~ span");
   expect(css).toContain("input:disabled ~ span");
+  // Disabled cells must be visibly distinct — muted gray border over a subtle
+  // background at --disabled-opacity, not just the cursor.
+  expect(css).toMatch(/input:disabled ~ span[\s\S]*?--otp-cell-border: var\(--state-disabled\);/);
 });
 
 test("optional chat bubbles consume shared intents and variants", () => {
@@ -608,7 +617,10 @@ test("optional aura only animates when motion is allowed", () => {
 
   expect(css).toContain("@media (prefers-reduced-motion: no-preference)");
   expect(css).toContain(".aura:not(.aura-glow)");
-  expect(css).toContain("@media (forced-colors: active)");
+  // Forced-colors: the transparent border baseline becomes a visible boundary
+  // without a repaint block (CONTRIBUTING.md "Forced colors invariant").
+  expect(css).toContain("border: var(--border-width) solid transparent;");
+  expect(css).not.toContain("@media (forced-colors: active)");
 });
 
 test("optional FAB preserves DOM order and stays out of print", () => {
@@ -634,7 +646,10 @@ test("app navigation stays semantic and app-layout owns its adaptive geometry", 
   expect(navCss).toMatch(
     /> a > :where\(svg, img, \[aria-hidden="true"\]\)\s*\{[\s\S]*font-size: 1\.5rem;[\s\S]*line-height: 1;/,
   );
-  expect(navCss).toContain("@media (forced-colors: active)");
+  // Selected state is carried by font-weight — a structural distinction that
+  // survives forced colors without a repaint block (CONTRIBUTING.md).
+  expect(navCss).toMatch(/\[aria-current\][^{]*\{[\s\S]*font-weight: var\(--font-weight-bold\);/);
+  expect(navCss).not.toContain("@media (forced-colors: active)");
   expect(navCss).not.toContain(".active");
   expect(navCss).not.toContain("@media (min-width:");
 
@@ -671,7 +686,9 @@ test("application lists provide three semantic slots without owning their contro
   expect(css).toContain(".list-item-content");
   expect(css).toContain("min-inline-size: 0;");
   expect(css).toContain("a.list-item");
-  expect(css).toContain("@media (forced-colors: active)");
+  // The divider is a real border, so it stays visible in forced colors without
+  // a repaint block (CONTRIBUTING.md "Forced colors invariant").
+  expect(css).not.toContain("@media (forced-colors: active)");
   expect(css).not.toContain("two-line");
   expect(css).not.toContain("three-line");
 });

@@ -272,6 +272,57 @@ value as usual.</p>
 <p>The component follows shared <code>.sm</code> and <code>.lg</code> density through <code>--control-size</code>.
 Use <code>aria-invalid=&quot;true&quot;</code> for explicit invalid state, or place it in the
 standard <code>.needs-validation.was-validated</code> form flow.</p>
+<p>The <code>&lt;input&gt;</code> must be the <strong>first</strong> direct child, with one <code>&lt;span&gt;</code> per
+character after it — the state rules (focus, invalid, disabled) select the
+cells as following siblings, so that order is part of the contract.</p>
+<h2 id="disabled">Disabled</h2>
+<p>Set <code>disabled</code> on the input. The cells rest on <code>--surface-subtle</code> with a muted
+<code>--state-disabled</code> border at <code>--disabled-opacity</code>, the code glyph turns
+<code>--state-disabled</code>, and the cursor is <code>not-allowed</code> — a clearly distinct,
+non-interactive look that follows the shared disabled contract. A disabled
+<code>&lt;fieldset&gt;</code> disables it the same way.</p>
+</div>
+<div class="docs-example">
+  <div class="docs-preview">
+<div class="otp" aria-label="Disabled verification code">
+  <input
+    class="input"
+    type="text"
+    autocomplete="one-time-code"
+    inputmode="numeric"
+    maxlength="6"
+    disabled
+    aria-label="Disabled verification code"
+  />
+  <span aria-hidden="true"></span>
+  <span aria-hidden="true"></span>
+  <span aria-hidden="true"></span>
+  <span aria-hidden="true"></span>
+  <span aria-hidden="true"></span>
+  <span aria-hidden="true"></span>
+</div>
+  </div>
+  <div class="docs-code">
+    <pre><code class="language-html">&lt;div class=&quot;otp&quot; aria-label=&quot;Disabled verification code&quot;&gt;
+  &lt;input
+    class=&quot;input&quot;
+    type=&quot;text&quot;
+    autocomplete=&quot;one-time-code&quot;
+    inputmode=&quot;numeric&quot;
+    maxlength=&quot;6&quot;
+    disabled
+    aria-label=&quot;Disabled verification code&quot;
+  /&gt;
+  &lt;span aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;
+  &lt;span aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;
+  &lt;span aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;
+  &lt;span aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;
+  &lt;span aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;
+  &lt;span aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;
+&lt;/div&gt;</code></pre>
+  </div>
+</div>
+<div class="prose docs-prose">
 <h2 id="css-hooks">CSS hooks</h2>
 <ul>
 <li><code>--otp-cell-size</code> — width and height of every cell; follows <code>--control-size</code>.</li>
@@ -299,6 +350,7 @@ and theme tokens.</p>
         <nav class="scrollspy" data-enhance="scrollspy" data-scrollspy-offset="80" aria-label="On this page">
           <p class="docs-nav-group">On this page</p>
           <ul class="nav-list docs-toc-list" data-docs-toc>
+        <li><a class="nav-link" href="#disabled" data-docs-toc-item data-level="2">Disabled</a></li>
         <li><a class="nav-link" href="#css-hooks" data-docs-toc-item data-level="2">CSS hooks</a></li>
           </ul>
         </nav>

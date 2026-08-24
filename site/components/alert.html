@@ -223,6 +223,10 @@
 <li>Use <code>.sm</code> or <code>.lg</code> for density changes. The inline padding stays stable.</li>
 <li>Use <code>.alert-dismiss</code> for a compact dismiss button. It is a direct trailing child in standard alerts and lives inside <code>.alert-title</code> in admonitions. It uses the shared <code>--icon-close</code> mask and the <code>--dismiss</code> runtime command — no icon font or custom JS.</li>
 </ul>
+<p>Because alerts are soft by default, adding <code>.soft</code> to an intent (<code>.alert.soft.primary</code>,
+<code>.alert.soft.danger</code>, …) is a no-op: it already resolves to a soft version of that
+intent. Reach for <code>.solid</code> (stronger) or <code>.outline</code> (quieter) when the emphasis
+itself needs to change, not <code>.soft</code>.</p>
 <h2 id="class-reference">Class reference</h2>
 <div class="table-wrap"><table class="table">
 <thead>

@@ -96,7 +96,7 @@ type instead.
         </label>
       </div>
 
-      <div class="grid-5 items-start">
+      <div class="grid items-start">
         <label class="choice">
           <input class="check" type="checkbox" />
           <span>
@@ -133,7 +133,7 @@ type instead.
           <input class="check" type="checkbox" id="indet-demo" />
           <span>
             <span class="field-label">Indeterminate checkbox</span>
-            <span class="field-help">Partially selected — set via <code>element.indeterminate = true</code>. Try it: <button class="btn text sm" type="button" onclick="document.getElementById('indet-demo').indeterminate = !document.getElementById('indet-demo').indeterminate">toggle</button></span>
+            <span class="field-help">Partially selected — set via <code>element.indeterminate = true</code>. Try it: <button class="btn link sm" type="button" onclick="document.getElementById('indet-demo').indeterminate = !document.getElementById('indet-demo').indeterminate">toggle</button></span>
           </span>
         </label>
       </div>
@@ -291,7 +291,7 @@ type instead.
         </label>
         <label class="choice">
           <input class="check" type="checkbox" id="indet-size" />
-          <span>Indeterminate <button class="btn text sm" type="button" onclick="document.getElementById('indet-size').indeterminate = !document.getElementById('indet-size').indeterminate">toggle</button></span>
+          <span>Indeterminate <button class="btn link sm" type="button" onclick="document.getElementById('indet-size').indeterminate = !document.getElementById('indet-size').indeterminate">toggle</button></span>
         </label>
       </div>
 

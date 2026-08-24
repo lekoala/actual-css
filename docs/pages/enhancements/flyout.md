@@ -350,12 +350,12 @@ delay; a number sets the delay in milliseconds.
       More
     </button>
   </div>
-  <p class="text-sm text-muted">Right click a detail below, press the context-menu key, or use More.</p>
+  <p class="muted">Right click a detail below, press the context-menu key, or use More.</p>
   <div class="cluster">
     <span class="badge" data-context-item="File name">File.pdf</span>
     <span class="badge" data-context-item="Owner">Design team</span>
   </div>
-  <output id="context-result" class="text-sm text-muted" aria-live="polite">No context selected.</output>
+  <output id="context-result" class="muted" aria-live="polite">No context selected.</output>
 
   <menu class="flyout menu"
         id="file-actions"
