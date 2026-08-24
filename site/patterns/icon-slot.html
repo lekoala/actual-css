@@ -5,8 +5,11 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Actions — Actual CSS</title>
-  <meta name="description" content="Use .actions for a semantic list of actions.">
+  <title>Icon slot — Actual CSS</title>
+  <meta name="description" content="Contained icon zones — a leading icon, an icon disc, a status marker — appear
+across product UI: notifications, activity feeds, list actions, cards. There
+is no dedicated primitive; the same small contract is composed from existing
+pieces.">
   <link rel="stylesheet" href="../../src/css/actual.full.css">
   <link rel="stylesheet" href="../assets/actual-themes.min.css">
   <link rel="stylesheet" href="../../scripts/docs/assets/docs.css">
@@ -159,10 +162,10 @@
       <p class="docs-nav-group">Patterns</p>
       <ul class="nav-list">
         <li><a class="nav-link" href="overview.html">Patterns</a></li>
-        <li><a class="nav-link" href="actions.html" aria-current="page">Actions</a></li>
+        <li><a class="nav-link" href="actions.html">Actions</a></li>
         <li><a class="nav-link" href="navigation-list.html">Navigation List</a></li>
         <li><a class="nav-link" href="icon-input.html">Icon Input</a></li>
-        <li><a class="nav-link" href="icon-slot.html">Icon slot</a></li>
+        <li><a class="nav-link" href="icon-slot.html" aria-current="page">Icon slot</a></li>
         <li><a class="nav-link" href="structured-lists.html">Structured Lists</a></li>
         <li><a class="nav-link" href="hierarchical-nav.html">Hierarchical Scrollable Nav</a></li>
         <li><a class="nav-link" href="code-block.html">Code Block With Copy Button</a></li>
@@ -202,98 +205,89 @@
           <nav aria-label="Breadcrumb">
             <ol class="breadcrumb">
               <li><a href="../index.html">Docs</a></li>
-              <li><span aria-current="page">Actions</span></li>
+              <li><span aria-current="page">Icon slot</span></li>
             </ol>
           </nav>
 
           <div class="prose docs-prose">
-<h1 id="actions">Actions</h1>
-<p>Use <code>.actions</code> for a semantic list of actions.</p>
-<p>It removes native list chrome and provides a baseline row layout (<code>display: flex</code>, wrap, shared gap). Compose with layout primitives only when you need a different direction or distribution.</p>
-</div>
-<div class="docs-example">
-  <div class="docs-preview">
-<div class="stack">
-  <menu class="actions cluster">
-    <li><button class="btn primary" type="button">Save</button></li>
-    <li><button class="btn outline" type="button">Cancel</button></li>
-  </menu>
-
-  <menu class="actions stack">
-    <li><a class="btn primary" href="/billing">Update billing</a></li>
-    <li><a href="/support">Contact support</a></li>
-  </menu>
-</div>
-  </div>
-  <div class="docs-code">
-    <pre><code class="language-html">&lt;div class=&quot;stack&quot;&gt;
-  &lt;menu class=&quot;actions cluster&quot;&gt;
-    &lt;li&gt;&lt;button class=&quot;btn primary&quot; type=&quot;button&quot;&gt;Save&lt;/button&gt;&lt;/li&gt;
-    &lt;li&gt;&lt;button class=&quot;btn outline&quot; type=&quot;button&quot;&gt;Cancel&lt;/button&gt;&lt;/li&gt;
-  &lt;/menu&gt;
-
-  &lt;menu class=&quot;actions stack&quot;&gt;
-    &lt;li&gt;&lt;a class=&quot;btn primary&quot; href=&quot;/billing&quot;&gt;Update billing&lt;/a&gt;&lt;/li&gt;
-    &lt;li&gt;&lt;a href=&quot;/support&quot;&gt;Contact support&lt;/a&gt;&lt;/li&gt;
-  &lt;/menu&gt;
-&lt;/div&gt;</code></pre>
-  </div>
-</div>
-<div class="prose docs-prose">
-<p>Use <code>.actions</code> for:</p>
+<h1 id="icon-slot">Icon slot</h1>
+<blockquote>
+<p>Contained icon zones — a leading icon, an icon disc, a status marker — appear
+across product UI: notifications, activity feeds, list actions, cards. There
+is no dedicated primitive; the same small contract is composed from existing
+pieces.</p>
+</blockquote>
+<p>A contained icon zone must be a <strong>stable box</strong> that never shrinks, always
+centers its glyph, and clips overflow:</p>
 <ul>
-<li>dialog actions</li>
-<li>alert actions</li>
-<li>card actions</li>
-<li>toolbar actions</li>
-<li>form submit/cancel groups</li>
+<li>fixed <code>inline-size</code> / <code>block-size</code> (or <code>aspect-ratio: 1</code> for a disc);</li>
+<li><code>display: grid; place-items: center;</code> for reliable centering;</li>
+<li><code>flex: 0 0 auto</code> so a flex row never compresses it;</li>
+<li><code>overflow: hidden</code>;</li>
+<li>a child <code>svg</code> constrained to the box.</li>
 </ul>
-<p>Use layout primitives for contextual spacing.</p>
-</div>
-<div class="docs-example">
-  <div class="docs-preview">
-<div class="alert warning stack">
-  <p>Your billing method has expired.</p>
+<h2 id="the-contract">The contract</h2>
+<pre><code class="language-css">.product-icon {
+  flex: 0 0 auto;
+  inline-size: 1.5rem;
+  block-size: 1.5rem;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
 
-  <menu class="actions cluster">
-    <li><a class="btn danger sm" href="/billing">Update billing</a></li>
-    <li><a href="/support">Contact support</a></li>
-  </menu>
-</div>
-  </div>
-  <div class="docs-code">
-    <pre><code class="language-html">&lt;div class=&quot;alert warning stack&quot;&gt;
-  &lt;p&gt;Your billing method has expired.&lt;/p&gt;
-
-  &lt;menu class=&quot;actions cluster&quot;&gt;
-    &lt;li&gt;&lt;a class=&quot;btn danger sm&quot; href=&quot;/billing&quot;&gt;Update billing&lt;/a&gt;&lt;/li&gt;
-    &lt;li&gt;&lt;a href=&quot;/support&quot;&gt;Contact support&lt;/a&gt;&lt;/li&gt;
-  &lt;/menu&gt;
-&lt;/div&gt;</code></pre>
-  </div>
-</div>
-<div class="prose docs-prose">
-<p>Prefer composition over making each component reimplement action-list layout.</p>
-<pre><code class="language-css">/* Avoid */
-.alert &gt; menu {
-  display: flex;
-  gap: var(--space-20);
-  padding: 0;
-  list-style: none;
+.product-icon svg {
+  inline-size: 100%;
+  block-size: 100%;
 }
 </code></pre>
-
+<p>For a round disc, add the <code>.circle</code> utility:</p>
+<pre><code class="language-css">.product-icon {
+  border-radius: var(--radius-full);
+  background: var(--surface-subtle);
+}
+</code></pre>
+<h2 id="reuse-the-existing-icon-slots">Reuse the existing icon slots</h2>
+<p>Several components already embody this slot — reach for them before composing
+your own:</p>
+<ul>
+<li><code>.alert-icon</code> — the leading icon in an alert.</li>
+<li><code>.avatar</code> — initials or image in a fixed circular box.</li>
+<li><code>.btn.icon-only</code> — a square icon button sized to the control height.</li>
+<li><code>.input-icon</code> — a leading icon in a search/filter input.</li>
+</ul>
+</div>
+<div class="docs-example">
+  <div class="docs-preview">
+<div class="media">
+  <span class="avatar primary"><abbr>AM</abbr></span>
+  <div class="stack">
+    <strong>Ada Meridian</strong>
+    <span class="muted">Senior designer.</span>
+  </div>
+</div>
+  </div>
+  <div class="docs-code">
+    <pre><code class="language-html">&lt;div class=&quot;media&quot;&gt;
+  &lt;span class=&quot;avatar primary&quot;&gt;&lt;abbr&gt;AM&lt;/abbr&gt;&lt;/span&gt;
+  &lt;div class=&quot;stack&quot;&gt;
+    &lt;strong&gt;Ada Meridian&lt;/strong&gt;
+    &lt;span class=&quot;muted&quot;&gt;Senior designer.&lt;/span&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+  </div>
 </div>
 
+
           <div class="cluster docs-source-links">
-            <a class="btn sm ghost" href="https://github.com/lekoala/actual-css/edit/master/docs/pages/patterns/actions.md" rel="noopener noreferrer">Edit on GitHub</a>
-            <a class="btn sm ghost" href="https://github.com/lekoala/actual-css/blob/master/docs/pages/patterns/actions.md" rel="noopener noreferrer">View Markdown</a>
+            <a class="btn sm ghost" href="https://github.com/lekoala/actual-css/edit/master/docs/pages/patterns/icon-slot.md" rel="noopener noreferrer">Edit on GitHub</a>
+            <a class="btn sm ghost" href="https://github.com/lekoala/actual-css/blob/master/docs/pages/patterns/icon-slot.md" rel="noopener noreferrer">View Markdown</a>
           </div>
         </article>
 
         <nav class="cluster docs-prevnext" aria-label="Page navigation">
-                    <a class="btn outline" href="overview.html">&larr; Patterns</a>
-                    <a class="btn outline" href="navigation-list.html">Navigation List &rarr;</a>
+                    <a class="btn outline" href="icon-input.html">&larr; Icon Input</a>
+                    <a class="btn outline" href="structured-lists.html">Structured Lists &rarr;</a>
         </nav>
       </main>
 
@@ -301,7 +295,8 @@
         <nav class="scrollspy" data-enhance="scrollspy" data-scrollspy-offset="80" aria-label="On this page">
           <p class="docs-nav-group">On this page</p>
           <ul class="nav-list docs-toc-list" data-docs-toc>
-
+        <li><a class="nav-link" href="#the-contract" data-docs-toc-item data-level="2">The contract</a></li>
+        <li><a class="nav-link" href="#reuse-the-existing-icon-slots" data-docs-toc-item data-level="2">Reuse the existing icon slots</a></li>
           </ul>
         </nav>
       </aside>
@@ -405,10 +400,10 @@
       <p class="docs-nav-group">Patterns</p>
       <ul class="nav-list">
         <li><a class="nav-link" href="overview.html">Patterns</a></li>
-        <li><a class="nav-link" href="actions.html" aria-current="page">Actions</a></li>
+        <li><a class="nav-link" href="actions.html">Actions</a></li>
         <li><a class="nav-link" href="navigation-list.html">Navigation List</a></li>
         <li><a class="nav-link" href="icon-input.html">Icon Input</a></li>
-        <li><a class="nav-link" href="icon-slot.html">Icon slot</a></li>
+        <li><a class="nav-link" href="icon-slot.html" aria-current="page">Icon slot</a></li>
         <li><a class="nav-link" href="structured-lists.html">Structured Lists</a></li>
         <li><a class="nav-link" href="hierarchical-nav.html">Hierarchical Scrollable Nav</a></li>
         <li><a class="nav-link" href="code-block.html">Code Block With Copy Button</a></li>

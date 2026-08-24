@@ -710,7 +710,16 @@ test("steps derive markers from list order and keep state semantic", () => {
   expect(css).toContain("counter-increment: actual-step;");
   expect(css).toContain("content: counter(actual-step);");
   expect(css).toContain('[aria-current="step"]');
-  expect(css).toContain(".steps.vertical");
+  // Intrinsic responsiveness: items fill then scroll, never squish below
+  // --step-min, and there is no separate .vertical geometry to maintain.
+  expect(css).toMatch(/\.steps > li\s*\{[\s\S]*?flex:\s*1 0 var\(--step-min\);/);
+  expect(css).toMatch(
+    /\.steps > li\s*\{[\s\S]*?min-inline-size:\s*max\(var\(--step-size\), var\(--step-min\)\);/,
+  );
+  expect(css).toMatch(/\.steps\s*\{[\s\S]*?overflow-x:\s*auto;/);
+  expect(css).toContain("overscroll-behavior-inline: contain;");
+  expect(css).not.toContain(".steps.vertical");
+  expect(css).toContain("content: var(--step-complete-mark, counter(actual-step));");
 });
 
 test("rating keeps radio order and cumulative fill progressive", () => {

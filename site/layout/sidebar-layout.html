@@ -165,6 +165,7 @@ otherwise stack. No .container-query ancestor is required.">
         <li><a class="nav-link" href="../patterns/actions.html">Actions</a></li>
         <li><a class="nav-link" href="../patterns/navigation-list.html">Navigation List</a></li>
         <li><a class="nav-link" href="../patterns/icon-input.html">Icon Input</a></li>
+        <li><a class="nav-link" href="../patterns/icon-slot.html">Icon slot</a></li>
         <li><a class="nav-link" href="../patterns/structured-lists.html">Structured Lists</a></li>
         <li><a class="nav-link" href="../patterns/hierarchical-nav.html">Hierarchical Scrollable Nav</a></li>
         <li><a class="nav-link" href="../patterns/code-block.html">Code Block With Copy Button</a></li>
@@ -246,6 +247,40 @@ otherwise stack. No <code>.container-query</code> ancestor is required.</p>
 <div class="prose docs-prose">
 <p>The first child is the flexible main region and the last child is the aside.
 Use a custom <code>.grid</code> template only when an exact editorial ratio is structural.</p>
+<p>To place the aside on the inline start instead, add <code>.reverse</code> — it swaps only
+the visual order, so the DOM keeps the main content first for reading and
+keyboard order:</p>
+</div>
+<div class="docs-example">
+  <div class="docs-preview">
+<div class="sidebar-layout reverse">
+  <article class="stack">
+    <h1>Long-form article</h1>
+    <p>Article body that benefits from a related table of contents.</p>
+  </article>
+
+  <aside class="stack">
+    <h3>On this page</h3>
+    <ol class="list-reset"><li><a class="link-muted" href="#">Section</a></li></ol>
+  </aside>
+</div>
+  </div>
+  <div class="docs-code">
+    <pre><code class="language-html">&lt;div class=&quot;sidebar-layout reverse&quot;&gt;
+  &lt;article class=&quot;stack&quot;&gt;
+    &lt;h1&gt;Long-form article&lt;/h1&gt;
+    &lt;p&gt;Article body that benefits from a related table of contents.&lt;/p&gt;
+  &lt;/article&gt;
+
+  &lt;aside class=&quot;stack&quot;&gt;
+    &lt;h3&gt;On this page&lt;/h3&gt;
+    &lt;ol class=&quot;list-reset&quot;&gt;&lt;li&gt;&lt;a class=&quot;link-muted&quot; href=&quot;#&quot;&gt;Section&lt;/a&gt;&lt;/li&gt;&lt;/ol&gt;
+  &lt;/aside&gt;
+&lt;/div&gt;</code></pre>
+  </div>
+</div>
+<div class="prose docs-prose">
+<p>When the layout stacks (narrow space), <code>.reverse</code> keeps the aside on top.</p>
 <h3 id="hooks">Hooks</h3>
 <ul>
 <li><code>--sidebar-layout-size</code> sets the aside's preferred width.</li>
@@ -377,6 +412,7 @@ Use a custom <code>.grid</code> template only when an exact editorial ratio is s
         <li><a class="nav-link" href="../patterns/actions.html">Actions</a></li>
         <li><a class="nav-link" href="../patterns/navigation-list.html">Navigation List</a></li>
         <li><a class="nav-link" href="../patterns/icon-input.html">Icon Input</a></li>
+        <li><a class="nav-link" href="../patterns/icon-slot.html">Icon slot</a></li>
         <li><a class="nav-link" href="../patterns/structured-lists.html">Structured Lists</a></li>
         <li><a class="nav-link" href="../patterns/hierarchical-nav.html">Hierarchical Scrollable Nav</a></li>
         <li><a class="nav-link" href="../patterns/code-block.html">Code Block With Copy Button</a></li>

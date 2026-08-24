@@ -162,6 +162,7 @@
         <li><a class="nav-link" href="../patterns/actions.html">Actions</a></li>
         <li><a class="nav-link" href="../patterns/navigation-list.html">Navigation List</a></li>
         <li><a class="nav-link" href="../patterns/icon-input.html">Icon Input</a></li>
+        <li><a class="nav-link" href="../patterns/icon-slot.html">Icon slot</a></li>
         <li><a class="nav-link" href="../patterns/structured-lists.html">Structured Lists</a></li>
         <li><a class="nav-link" href="../patterns/hierarchical-nav.html">Hierarchical Scrollable Nav</a></li>
         <li><a class="nav-link" href="../patterns/code-block.html">Code Block With Copy Button</a></li>
@@ -209,6 +210,11 @@
 <h1 id="building-with-actual-css">Building with Actual CSS</h1>
 <p>Use Actual CSS as a vocabulary before writing application CSS.</p>
 <p>The goal is not to eliminate custom CSS. The goal is to keep framework concerns in the framework and application identity in the application.</p>
+<p>In short: <strong>use Actual for generic structure and behavior; add product-specific
+classes for brand and compositions rather than forcing a generic primitive.</strong> A
+local rule is not a failure of Actual — overfitting the framework to a
+product-specific look is. Reach for an Actual primitive first, and write
+application CSS when the need is genuinely product-specific (see §6–7).</p>
 <h2 id="1-start-with-the-theme">1. Start with the theme</h2>
 <p>Define palette values once, then derive decorative colors from them.</p>
 <pre><code class="language-css">[data-theme=&quot;brand&quot;] {
@@ -473,6 +479,7 @@ Add application identity
         <li><a class="nav-link" href="../patterns/actions.html">Actions</a></li>
         <li><a class="nav-link" href="../patterns/navigation-list.html">Navigation List</a></li>
         <li><a class="nav-link" href="../patterns/icon-input.html">Icon Input</a></li>
+        <li><a class="nav-link" href="../patterns/icon-slot.html">Icon slot</a></li>
         <li><a class="nav-link" href="../patterns/structured-lists.html">Structured Lists</a></li>
         <li><a class="nav-link" href="../patterns/hierarchical-nav.html">Hierarchical Scrollable Nav</a></li>
         <li><a class="nav-link" href="../patterns/code-block.html">Code Block With Copy Button</a></li>

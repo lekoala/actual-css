@@ -1297,6 +1297,9 @@ small {
  * --sidebar-layout-size
  *
  * Child contract: the first and last direct children carry the sizing roles.
+ * By default the main region is first and the aside second (aside on the
+ * inline end). .reverse swaps only the visual order via `order`; the DOM keeps
+ * main-content-first, so reading and keyboard order are unchanged.
  */
 .sidebar-layout {
   display: flex;
@@ -1314,6 +1317,14 @@ small {
 .sidebar-layout > :last-child {
   flex-basis: var(--sidebar-layout-size, 18rem);
   flex-grow: 1;
+}
+
+.sidebar-layout.reverse > :first-child {
+  order: 2;
+}
+
+.sidebar-layout.reverse > :last-child {
+  order: 1;
 }
 
 /*
@@ -6090,14 +6101,22 @@ a.avatar[aria-disabled="true"] {
 }
 
 /*
- * Steps — semantic ordered-list progression with horizontal and vertical
- * layouts. Markers come from the list counter; state stays in .complete and
+ * Steps — semantic ordered-list progression. One intrinsic layout: items fill
+ * the row when they fit and hold a minimum width otherwise, so the sequence
+ * scrolls horizontally only when it genuinely cannot fit. No breakpoint decides
+ * this — the item minimum tracks the real content, not an arbitrary width.
+ *
+ * Markers come from the list counter; state stays in .complete and
  * aria-current="step", so the component needs no runtime.
  *
  * Public hooks:
  * --step-size
+ * --step-min
  * --step-gap
  * --step-line-size
+ * --step-marker-radius
+ * --step-complete-mark
+ * --step-connector
  *
  * Internal:
  * --step-marker-bg
@@ -6107,12 +6126,15 @@ a.avatar[aria-disabled="true"] {
  */
 .steps {
   --step-size: 1.75rem;
+  --step-min: 7rem;
   --step-gap: var(--space-20);
   --step-line-size: var(--border-width);
   --step-marker-bg: var(--surface);
   --step-marker-border: var(--border);
   --step-marker-fg: var(--text-muted);
+  --step-marker-radius: var(--radius-full);
   --step-line: var(--border);
+  --step-connector: var(--step-line);
 
   counter-reset: actual-step;
   display: flex;
@@ -6120,16 +6142,22 @@ a.avatar[aria-disabled="true"] {
   margin: 0;
   padding: 0;
   list-style: none;
+  /* Fill when it fits, scroll when it cannot: items never shrink below
+     --step-min, so labels keep a readable width and the sequence scrolls
+     horizontally instead of squishing. overscroll-behavior keeps the scroll
+     from chaining to the page. */
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
 }
 
 .steps > li {
   position: relative;
   display: grid;
-  flex: 1 1 0;
+  flex: 1 0 var(--step-min);
   grid-template-rows: var(--step-size) auto;
   gap: var(--step-gap);
   justify-items: center;
-  min-inline-size: max(var(--step-size), 4rem);
+  min-inline-size: max(var(--step-size), var(--step-min));
   color: var(--text-muted);
   text-align: center;
   counter-increment: actual-step;
@@ -6144,7 +6172,7 @@ a.avatar[aria-disabled="true"] {
   inline-size: var(--step-size);
   block-size: var(--step-size);
   border: var(--border-width) solid var(--step-marker-border);
-  border-radius: var(--radius-full);
+  border-radius: var(--step-marker-radius);
   background: var(--step-marker-bg);
   color: var(--step-marker-fg);
   font-size: var(--font-size-sm);
@@ -6159,7 +6187,7 @@ a.avatar[aria-disabled="true"] {
   inset-inline-start: calc(50% + var(--step-size) / 2);
   inline-size: calc(100% - var(--step-size));
   block-size: var(--step-line-size);
-  background: var(--step-line);
+  background: var(--step-connector);
 }
 
 .steps > li:last-child::after {
@@ -6184,35 +6212,11 @@ a.avatar[aria-disabled="true"] {
   --step-line: var(--state-selected);
 }
 
-.steps:not(.vertical) {
-  overflow-x: auto;
-}
-
-.steps.vertical {
-  flex-direction: column;
-}
-
-.steps.vertical > li {
-  grid-template-rows: auto;
-  grid-template-columns: var(--step-size) minmax(0, 1fr);
-  align-items: center;
-  justify-items: start;
-  min-inline-size: 0;
-  min-block-size: calc(var(--step-size) + var(--step-gap));
-  padding-block-end: var(--step-gap);
-  text-align: start;
-}
-
-.steps.vertical > li:last-child {
-  min-block-size: var(--step-size);
-  padding-block-end: 0;
-}
-
-.steps.vertical > li::after {
-  inset-block-start: var(--step-size);
-  inset-inline-start: calc((var(--step-size) - var(--step-line-size)) / 2);
-  inline-size: var(--step-line-size);
-  block-size: calc(100% - var(--step-size));
+/* A finished step may replace its number with a mark (e.g. a check glyph):
+   --step-complete-mark accepts any content value and falls back to the
+   counter, so existing numbered steppers are unchanged. */
+.steps > .complete::before {
+  content: var(--step-complete-mark, counter(actual-step));
 }
 
 

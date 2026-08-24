@@ -162,6 +162,7 @@
         <li><a class="nav-link" href="../patterns/actions.html">Actions</a></li>
         <li><a class="nav-link" href="../patterns/navigation-list.html">Navigation List</a></li>
         <li><a class="nav-link" href="../patterns/icon-input.html">Icon Input</a></li>
+        <li><a class="nav-link" href="../patterns/icon-slot.html">Icon slot</a></li>
         <li><a class="nav-link" href="../patterns/structured-lists.html">Structured Lists</a></li>
         <li><a class="nav-link" href="../patterns/hierarchical-nav.html">Hierarchical Scrollable Nav</a></li>
         <li><a class="nav-link" href="../patterns/code-block.html">Code Block With Copy Button</a></li>
@@ -212,8 +213,7 @@
 </blockquote>
 <p>Use an <code>&lt;ol&gt;</code> because order is part of the meaning. Add <code>.complete</code> to finished
 steps and <code>aria-current=&quot;step&quot;</code> to exactly one current step. Unmarked items are
-future steps. The component is horizontal by default; <code>.vertical</code> changes only
-the layout and requires no JavaScript.</p>
+future steps. The component needs no JavaScript.</p>
 <h2 id="class-reference">Class reference</h2>
 <div class="table-wrap"><table class="table">
 <thead>
@@ -223,7 +223,6 @@ the layout and requires no JavaScript.</p>
 <tr><td><code>.steps</code></td><td>Component</td><td>Ordered progression with numbered markers.</td></tr>
 <tr><td><code>.complete</code></td><td>State</td><td>A finished step.</td></tr>
 <tr><td><code>[aria-current=&quot;step&quot;]</code></td><td>State</td><td>The current step.</td></tr>
-<tr><td><code>.vertical</code></td><td>Layout</td><td>Stacks steps on the block axis.</td></tr>
 </tbody>
 </table></div>
 </div>
@@ -244,27 +243,12 @@ the layout and requires no JavaScript.</p>
   </div>
 </div>
 <div class="prose docs-prose">
-<h2 id="vertical-steps">Vertical steps</h2>
-</div>
-<div class="docs-example">
-  <div class="docs-preview">
-<ol class="steps vertical" style="max-inline-size: 18rem;">
-  <li class="complete">Create an account</li>
-  <li class="complete">Choose a plan</li>
-  <li aria-current="step">Add payment details</li>
-  <li>Confirm the subscription</li>
-</ol>
-  </div>
-  <div class="docs-code">
-    <pre><code class="language-html">&lt;ol class=&quot;steps vertical&quot; style=&quot;max-inline-size: 18rem;&quot;&gt;
-  &lt;li class=&quot;complete&quot;&gt;Create an account&lt;/li&gt;
-  &lt;li class=&quot;complete&quot;&gt;Choose a plan&lt;/li&gt;
-  &lt;li aria-current=&quot;step&quot;&gt;Add payment details&lt;/li&gt;
-  &lt;li&gt;Confirm the subscription&lt;/li&gt;
-&lt;/ol&gt;</code></pre>
-  </div>
-</div>
-<div class="prose docs-prose">
+<h2 id="intrinsic-responsiveness">Intrinsic responsiveness</h2>
+<p><code>.steps</code> fills its row when the steps fit and holds each item at <code>--step-min</code>
+otherwise, so the sequence scrolls horizontally only when it genuinely cannot
+fit — no breakpoint, and the threshold tracks the real content: three short
+steps hold longer than six long ones. Labels wrap inside their item when
+needed.</p>
 <p>Keep state classes aligned with the real process state; they are visual, while
 <code>aria-current=&quot;step&quot;</code> also exposes the current position to assistive technology.
 Do not put links or buttons around a step unless the workflow genuinely allows
@@ -272,8 +256,15 @@ the user to navigate to it.</p>
 <h3 id="hooks">Hooks</h3>
 <ul>
 <li><code>--step-size</code> — marker diameter.</li>
-<li><code>--step-gap</code> — space between each marker and label, or between vertical steps.</li>
+<li><code>--step-min</code> — minimum item width; below this the sequence scrolls instead of
+squishing labels.</li>
+<li><code>--step-gap</code> — space between each marker and label.</li>
 <li><code>--step-line-size</code> — connector thickness.</li>
+<li><code>--step-marker-radius</code> — marker corner radius (round by default).</li>
+<li><code>--step-connector</code> — connector background; a plain color by default, but any
+background (e.g. a dashed <code>repeating-linear-gradient</code>) works.</li>
+<li><code>--step-complete-mark</code> — replaces the number on a <code>.complete</code> step with any
+<code>content</code> value (e.g. <code>&quot;✓&quot;</code>); defaults to the step number.</li>
 </ul>
 
 </div>
@@ -295,7 +286,7 @@ the user to navigate to it.</p>
           <p class="docs-nav-group">On this page</p>
           <ul class="nav-list docs-toc-list" data-docs-toc>
         <li><a class="nav-link" href="#class-reference" data-docs-toc-item data-level="2">Class reference</a></li>
-        <li><a class="nav-link" href="#vertical-steps" data-docs-toc-item data-level="2">Vertical steps</a></li>
+        <li><a class="nav-link" href="#intrinsic-responsiveness" data-docs-toc-item data-level="2">Intrinsic responsiveness</a></li>
         <li><a class="nav-link" href="#hooks" data-docs-toc-item data-level="3">Hooks</a></li>
           </ul>
         </nav>
@@ -403,6 +394,7 @@ the user to navigate to it.</p>
         <li><a class="nav-link" href="../patterns/actions.html">Actions</a></li>
         <li><a class="nav-link" href="../patterns/navigation-list.html">Navigation List</a></li>
         <li><a class="nav-link" href="../patterns/icon-input.html">Icon Input</a></li>
+        <li><a class="nav-link" href="../patterns/icon-slot.html">Icon slot</a></li>
         <li><a class="nav-link" href="../patterns/structured-lists.html">Structured Lists</a></li>
         <li><a class="nav-link" href="../patterns/hierarchical-nav.html">Hierarchical Scrollable Nav</a></li>
         <li><a class="nav-link" href="../patterns/code-block.html">Code Block With Copy Button</a></li>

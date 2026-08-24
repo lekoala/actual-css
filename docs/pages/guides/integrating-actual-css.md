@@ -4,6 +4,12 @@ Use Actual CSS as a vocabulary before writing application CSS.
 
 The goal is not to eliminate custom CSS. The goal is to keep framework concerns in the framework and application identity in the application.
 
+In short: **use Actual for generic structure and behavior; add product-specific
+classes for brand and compositions rather than forcing a generic primitive.** A
+local rule is not a failure of Actual — overfitting the framework to a
+product-specific look is. Reach for an Actual primitive first, and write
+application CSS when the need is genuinely product-specific (see §6–7).
+
 ## 1. Start with the theme
 
 Define palette values once, then derive decorative colors from them.

@@ -1,12 +1,12 @@
 {
-  "totalRaw": 245031,
+  "totalRaw": 245715,
   "core": {
     "minified": 10351,
     "brotli": 2485
   },
   "full": {
-    "minified": 113826,
-    "brotli": 16859
+    "minified": 113523,
+    "brotli": 16821
   },
   "js": {
     "core": {
@@ -113,16 +113,16 @@
       "raw": 3517
     },
     {
+      "file": "components/steps.css",
+      "raw": 3472
+    },
+    {
       "file": "utilities/base.css",
       "raw": 3316
     },
     {
       "file": "components/rating.css",
       "raw": 3174
-    },
-    {
-      "file": "components/steps.css",
-      "raw": 3121
     },
     {
       "file": "forms/range.css",
@@ -325,6 +325,10 @@
       "raw": 1174
     },
     {
+      "file": "layout/sidebar-layout.css",
+      "raw": 1133
+    },
+    {
       "file": "themes/indigo.css",
       "raw": 1125
     },
@@ -351,10 +355,6 @@
     {
       "file": "components/key.css",
       "raw": 859
-    },
-    {
-      "file": "layout/sidebar-layout.css",
-      "raw": 800
     },
     {
       "file": "layout/stack.css",
