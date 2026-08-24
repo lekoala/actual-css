@@ -262,6 +262,44 @@ test("removing a shorthand trigger removes its generated tooltip", async () => {
   expect(document.querySelector('[role="tooltip"]')).toBeNull();
 });
 
+test("moving a trigger within the document preserves its tooltip instance", async () => {
+  await loadTooltip(`
+    <main id="from"><button data-tooltip="Help" data-tooltip-click>Trigger</button></main>
+    <aside id="to"></aside>
+  `);
+  const trigger = document.querySelector("button");
+
+  click(trigger);
+  const tip = document.querySelector('[role="tooltip"]');
+  const describedBy = trigger.getAttribute("aria-describedby");
+
+  document.getElementById("to").append(trigger);
+  await nextMicrotask();
+
+  expect(document.querySelector('[role="tooltip"]')).toBe(tip);
+  expect(trigger.getAttribute("aria-describedby")).toBe(describedBy);
+  expect(tip.hidden).toBe(false);
+});
+
+test("moving a trigger outside the observed root cleans it while it stays connected", async () => {
+  await loadTooltip(`
+    <main><button data-tooltip="Help" data-tooltip-click>Trigger</button></main>
+    <div id="host"></div>
+  `);
+  const trigger = document.querySelector("button");
+  const shadow = document.getElementById("host").attachShadow({ mode: "open" });
+
+  click(trigger);
+  expect(document.querySelector('[role="tooltip"]')).not.toBeNull();
+
+  shadow.append(trigger);
+  await nextMicrotask();
+
+  expect(trigger.isConnected).toBe(true);
+  expect(trigger.hasAttribute("aria-describedby")).toBe(false);
+  expect(document.querySelector('[role="tooltip"]')).toBeNull();
+});
+
 test("explicit tooltip resolution retries after the target is inserted", async () => {
   await loadTooltip('<main><button data-tooltip aria-describedby="tip1">Trigger</button></main>');
   const trigger = document.querySelector("button");

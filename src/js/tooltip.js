@@ -358,7 +358,8 @@ function ensureTip(trigger) {
 }
 
 function cleanupTrigger(trigger) {
-  if (trigger.isConnected) return;
+  // The enhancement runtime owns the root-membership decision; a trigger may
+  // still be connected after moving beyond that lifecycle boundary.
   triggerStates.get(trigger)?.cleanup?.();
 }
 
