@@ -42,10 +42,9 @@ const THEMES_BUNDLE = join(ASSETS, "actual-themes.min.css");
 // place, so site/ never stores a copy.
 //
 // build-themes.js writes the palettes bundle to demo/assets/, which is
-// gitignored as demo build output. A page in site/ must never depend on an
-// ignored artifact: served from a fresh clone the link 404s, the theme
-// selector still sets data-theme, and no palette answers it. So the bundle is
-// copied into site/assets/ and linked from there.
+// committed because the demo pages (templates + admini) link it from a fresh
+// checkout. site/ still takes its own copy into site/assets/ so a page here
+// never depends on demo/, keeping the published site self-contained.
 const REQUIRED_ASSETS = [
   { path: join(DIST, "actual.full.js"), command: "bun run build:js" },
   { path: THEMES_SOURCE, command: "bun run build:themes" },
