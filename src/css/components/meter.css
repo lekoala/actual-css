@@ -1,8 +1,11 @@
 /*
- * Meter — native gauge for known-range values.
+ * Meter — native and segmented gauges for known-range values.
  *
  * Maps the three standard meter zones (optimum / suboptimum / even-less-good)
  * to the shared success / warning / danger intent colors.
+ *
+ * Public hooks:
+ * --meter-value
  */
 
 .meter {
@@ -15,6 +18,25 @@
   border: 0;
   border-radius: var(--radius-full);
   background: var(--surface-subtle);
+}
+
+/* A non-native meter is a weighted flex container. The element type keeps the
+   native <meter> API and the composed segmented API distinct without another
+   public variant class. */
+.meter:not(meter) {
+  --intent: initial;
+
+  display: flex;
+}
+
+.meter:not(meter) > * {
+  flex: var(--meter-value, 1) 1 0;
+  min-inline-size: 0;
+  background: var(--intent);
+}
+
+.meter:not(meter) > * + * {
+  border-inline-start: var(--border-width) solid var(--surface);
 }
 
 .meter::-webkit-meter-bar {

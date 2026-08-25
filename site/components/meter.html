@@ -213,6 +213,8 @@
 </blockquote>
 <ul>
 <li>Use native <code>&lt;meter class=&quot;meter&quot;&gt;</code>.</li>
+<li>Use a segmented <code>&lt;div class=&quot;meter&quot; role=&quot;meter&quot;&gt;</code> when the measurement
+needs a category breakdown.</li>
 <li>Shares progress styling DNA.</li>
 <li>Represents a scalar measurement within a known range, not task completion.</li>
 <li>Use explicit bar height to avoid padding issues.</li>
@@ -237,9 +239,88 @@
 <div class="prose docs-prose">
 <p>The three standard meter zones (optimum, suboptimum, even-less-good) map to the
 shared <code>--success</code>, <code>--warning</code>, and <code>--danger</code> colors.</p>
-<h2 id="css-hooks">CSS hooks</h2>
+<p>Segmented meters keep the overall measurement on the meter itself and expose
+the category breakdown as composition. A segmented <code>.meter</code> is a flex container
+whose direct children are weighted by <code>--meter-value</code>; child intent classes
+define segment colors. The values are relative weights, so they do not need to
+be converted to percentages. Keep the segments decorative with
+<code>aria-hidden=&quot;true&quot;</code> and provide category names and values in a nearby legend.
+An unintentional child remains transparent, so the meter background can
+represent an available or otherwise unclassified portion.</p>
+</div>
+<div class="docs-example">
+  <div class="docs-preview">
+<div class="stack">
+  <div
+    class="meter"
+    role="meter"
+    aria-label="Storage usage"
+    aria-valuemin="0"
+    aria-valuemax="8192"
+    aria-valuenow="6854.45"
+    aria-valuetext="6854.45 MB used of 8 GB"
+  >
+    <span class="primary" style="--meter-value: 4600" aria-hidden="true"></span>
+    <span class="secondary" style="--meter-value: 1350" aria-hidden="true"></span>
+    <span class="success" style="--meter-value: 904.45" aria-hidden="true"></span>
+    <span style="--meter-value: 1337.55" aria-hidden="true"></span>
+  </div>
+
+  <div class="cluster">
+    <span class="cluster">
+      <span><span class="primary" style="color: var(--intent)" aria-hidden="true">●</span> Regular <span class="muted">4600 MB</span></span>
+    </span>
+    <span class="cluster">
+      <span><span class="secondary" style="color: var(--intent)" aria-hidden="true">●</span> System <span class="muted">1350 MB</span></span>
+    </span>
+    <span class="cluster">
+      <span><span class="success" style="color: var(--intent)" aria-hidden="true">●</span> Shared <span class="muted">904.45 MB</span></span>
+    </span>
+    <span class="cluster">
+      <span><span class="muted" aria-hidden="true">●</span> Free <span class="muted">1337.55 MB</span></span>
+    </span>
+  </div>
+</div>
+  </div>
+  <div class="docs-code">
+    <pre><code class="language-html">&lt;div class=&quot;stack&quot;&gt;
+  &lt;div
+    class=&quot;meter&quot;
+    role=&quot;meter&quot;
+    aria-label=&quot;Storage usage&quot;
+    aria-valuemin=&quot;0&quot;
+    aria-valuemax=&quot;8192&quot;
+    aria-valuenow=&quot;6854.45&quot;
+    aria-valuetext=&quot;6854.45 MB used of 8 GB&quot;
+  &gt;
+    &lt;span class=&quot;primary&quot; style=&quot;--meter-value: 4600&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;
+    &lt;span class=&quot;secondary&quot; style=&quot;--meter-value: 1350&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;
+    &lt;span class=&quot;success&quot; style=&quot;--meter-value: 904.45&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;
+    &lt;span style=&quot;--meter-value: 1337.55&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;
+  &lt;/div&gt;
+
+  &lt;div class=&quot;cluster&quot;&gt;
+    &lt;span class=&quot;cluster&quot;&gt;
+      &lt;span&gt;&lt;span class=&quot;primary&quot; style=&quot;color: var(--intent)&quot; aria-hidden=&quot;true&quot;&gt;●&lt;/span&gt; Regular &lt;span class=&quot;muted&quot;&gt;4600 MB&lt;/span&gt;&lt;/span&gt;
+    &lt;/span&gt;
+    &lt;span class=&quot;cluster&quot;&gt;
+      &lt;span&gt;&lt;span class=&quot;secondary&quot; style=&quot;color: var(--intent)&quot; aria-hidden=&quot;true&quot;&gt;●&lt;/span&gt; System &lt;span class=&quot;muted&quot;&gt;1350 MB&lt;/span&gt;&lt;/span&gt;
+    &lt;/span&gt;
+    &lt;span class=&quot;cluster&quot;&gt;
+      &lt;span&gt;&lt;span class=&quot;success&quot; style=&quot;color: var(--intent)&quot; aria-hidden=&quot;true&quot;&gt;●&lt;/span&gt; Shared &lt;span class=&quot;muted&quot;&gt;904.45 MB&lt;/span&gt;&lt;/span&gt;
+    &lt;/span&gt;
+    &lt;span class=&quot;cluster&quot;&gt;
+      &lt;span&gt;&lt;span class=&quot;muted&quot; aria-hidden=&quot;true&quot;&gt;●&lt;/span&gt; Free &lt;span class=&quot;muted&quot;&gt;1337.55 MB&lt;/span&gt;&lt;/span&gt;
+    &lt;/span&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+  </div>
+</div>
+<div class="prose docs-prose">
+<h3 id="hooks">Hooks</h3>
 <ul>
 <li><code>--bar-height</code> — bar thickness, shared with <code>.progress</code>.</li>
+<li><code>--meter-value</code> — relative weight of a direct child in a segmented meter.</li>
 </ul>
 
 </div>
@@ -260,7 +341,7 @@ shared <code>--success</code>, <code>--warning</code>, and <code>--danger</code>
         <nav class="scrollspy" data-enhance="scrollspy" data-scrollspy-offset="80" aria-label="On this page">
           <p class="docs-nav-group">On this page</p>
           <ul class="nav-list docs-toc-list" data-docs-toc>
-        <li><a class="nav-link" href="#css-hooks" data-docs-toc-item data-level="2">CSS hooks</a></li>
+        <li><a class="nav-link" href="#hooks" data-docs-toc-item data-level="3">Hooks</a></li>
           </ul>
         </nav>
       </aside>

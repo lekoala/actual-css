@@ -421,9 +421,44 @@
 
           <aside class="stack" aria-label="Dashboard sidebar">
             <section class="card stack">
-              <h2>Storage</h2>
-              <meter class="meter" min="0" max="100" value="68" low="60" high="85">68%</meter>
-              <p class="muted">6.8 GB of 10 GB used. Usage is billed on the Growth plan.</p>
+              <header class="cluster" style="--cluster-justify: space-between;">
+                <h2>Storage</h2>
+                <strong>6,854.45 MB <span class="muted">/ 8 GB</span></strong>
+              </header>
+
+              <div
+                class="meter"
+                role="meter"
+                aria-label="Storage usage"
+                aria-valuemin="0"
+                aria-valuemax="8192"
+                aria-valuenow="6854.45"
+                aria-valuetext="6854.45 MB used of 8 GB"
+              >
+                <span class="primary" style="--meter-value: 4600" aria-hidden="true"></span>
+                <span class="secondary" style="--meter-value: 1350" aria-hidden="true"></span>
+                <span class="success" style="--meter-value: 904.45" aria-hidden="true"></span>
+                <span style="--meter-value: 1337.55" aria-hidden="true"></span>
+              </div>
+
+              <div class="cluster">
+                <span class="cluster">
+                  <span class="admini-storage-legend-key primary" aria-hidden="true">●</span>
+                  <span>Regular <span class="muted">4600 MB</span></span>
+                </span>
+                <span class="cluster">
+                  <span class="admini-storage-legend-key secondary" aria-hidden="true">●</span>
+                  <span>System <span class="muted">1350 MB</span></span>
+                </span>
+                <span class="cluster">
+                  <span class="admini-storage-legend-key success" aria-hidden="true">●</span>
+                  <span>Shared <span class="muted">904.45 MB</span></span>
+                </span>
+                <span class="cluster">
+                  <span class="admini-storage-legend-key muted" aria-hidden="true">●</span>
+                  <span>Free <span class="muted">1337.55 MB</span></span>
+                </span>
+              </div>
             </section>
 
             <section class="card stack">
