@@ -10,9 +10,19 @@ Components are semantic boxes: `.btn`, `.badge`, `.alert`, `.card`, `.avatar`, e
 
 `.primary`, `.secondary`, `.success`, `.warning`, `.danger` do not style elements directly. They only expose `--intent` and `--intent-fg`. Components and variants decide how to consume them.
 
+Intent classes define the current `--intent` value; they do not form a
+general-purpose color utility system. Use `.intent-color` when a simple element
+should consume the current intent as its foreground color. It works with an
+intent on the same element or inherited from an ancestor.
+
 ```html demo
 <button class="btn primary">Primary</button>
 <span class="badge success">Success</span>
+<span class="success intent-color">Success text</span>
+<span class="danger">
+  <i class="ti ti-alert-triangle intent-color" aria-hidden="true"></i>
+  Something needs attention
+</span>
 ```
 
 There is no `.btn-primary` or `.badge-success`. Intents are generic and reusable across any component that supports them.

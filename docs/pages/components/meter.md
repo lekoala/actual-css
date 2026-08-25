@@ -48,13 +48,13 @@ represent an available or otherwise unclassified portion.
 
   <div class="cluster">
     <span class="cluster">
-      <span><span class="primary" style="color: var(--intent)" aria-hidden="true">●</span> Regular <span class="muted">4600 MB</span></span>
+      <span><span class="primary intent-color" aria-hidden="true">●</span> Regular <span class="muted">4600 MB</span></span>
     </span>
     <span class="cluster">
-      <span><span class="secondary" style="color: var(--intent)" aria-hidden="true">●</span> System <span class="muted">1350 MB</span></span>
+      <span><span class="secondary intent-color" aria-hidden="true">●</span> System <span class="muted">1350 MB</span></span>
     </span>
     <span class="cluster">
-      <span><span class="success" style="color: var(--intent)" aria-hidden="true">●</span> Shared <span class="muted">904.45 MB</span></span>
+      <span><span class="success intent-color" aria-hidden="true">●</span> Shared <span class="muted">904.45 MB</span></span>
     </span>
     <span class="cluster">
       <span><span class="muted" aria-hidden="true">●</span> Free <span class="muted">1337.55 MB</span></span>

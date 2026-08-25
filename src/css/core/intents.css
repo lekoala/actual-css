@@ -31,3 +31,9 @@
   --intent: var(--neutral);
   --intent-fg: var(--neutral-fg);
 }
+
+/* Paint an inherited or local intent on a simple foreground element without
+   turning the intent classes into general-purpose color utilities. */
+.intent-color {
+  color: var(--intent);
+}
