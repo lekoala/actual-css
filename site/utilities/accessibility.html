@@ -249,6 +249,28 @@
   border: 0;
 }
 </code></pre>
+<h2 id="touch-targets">Touch targets</h2>
+<p><code>.touch-target</code> adds 8px of invisible hit area around a small control on coarse
+primary pointers, without growing the visual. Apply it opt-in to targets that
+are genuinely small — icon buttons, close buttons, compact actions.</p>
+</div>
+<div class="docs-example">
+  <div class="docs-preview">
+<button class="btn icon-only touch-target" type="button" aria-label="Close">
+  <i class="ti ti-x" aria-hidden="true"></i>
+</button>
+  </div>
+  <div class="docs-code">
+    <pre><code class="language-html">&lt;button class=&quot;btn icon-only touch-target&quot; type=&quot;button&quot; aria-label=&quot;Close&quot;&gt;
+  &lt;i class=&quot;ti ti-x&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;
+&lt;/button&gt;</code></pre>
+  </div>
+</div>
+<div class="prose docs-prose">
+<p><strong>Related terms:</strong> touch target, hit area, tap target, target size.</p>
+<p>On fine pointers the class is fully neutral. On coarse pointers it establishes
+a relative positioning context — do not apply it to controls whose positioning
+is structural (<code>fixed</code>, <code>absolute</code>, <code>sticky</code>).</p>
 
 </div>
 
@@ -270,6 +292,7 @@
           <ul class="nav-list docs-toc-list" data-docs-toc>
         <li><a class="nav-link" href="#class-reference" data-docs-toc-item data-level="2">Class reference</a></li>
         <li><a class="nav-link" href="#screen-reader-only" data-docs-toc-item data-level="2">Screen reader only</a></li>
+        <li><a class="nav-link" href="#touch-targets" data-docs-toc-item data-level="2">Touch targets</a></li>
           </ul>
         </nav>
       </aside>

@@ -7168,6 +7168,22 @@ a.list-item:hover {
   border: 0;
 }
 
+/* Enlarge a small control's touch target on touch-primary devices without
+   growing the visual. Opt-in — apply to genuinely small targets only. The
+   ::after exists only under (pointer: coarse), so on fine pointers the class
+   is fully neutral. */
+@media (pointer: coarse) {
+  .touch-target {
+    position: relative;
+  }
+
+  .touch-target::after {
+    content: "";
+    position: absolute;
+    inset: calc(var(--space-20) * -1);
+  }
+}
+
 .overflow-auto {
   overflow: auto;
 }
