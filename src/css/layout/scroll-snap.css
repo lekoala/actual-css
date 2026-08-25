@@ -18,6 +18,7 @@
   --scroll-snap-item-size: auto;
 
   display: flex;
+  flex-direction: row;
   gap: var(--scroll-snap-gap);
   overflow-x: auto;
 }

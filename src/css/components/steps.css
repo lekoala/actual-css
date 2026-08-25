@@ -35,6 +35,7 @@
 
   counter-reset: actual-step;
   display: flex;
+  flex-direction: row;
   inline-size: 100%;
   margin: 0;
   padding: 0;

@@ -10,6 +10,7 @@
  */
 .cluster {
   display: flex;
+  flex-direction: row;
   flex-wrap: var(--cluster-wrap, wrap);
   align-items: var(--cluster-align, center);
   justify-content: var(--cluster-justify, flex-start);

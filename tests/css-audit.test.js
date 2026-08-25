@@ -154,15 +154,19 @@ test("density presets declare a count and collapse through divisors of it", () =
 });
 
 test("intrinsic composition primitives do not depend on an ancestor opt-in", () => {
+  const clusterCss = readCss("src/css/layout/cluster.css");
   const switcherCss = readCss("src/css/layout/switcher.css");
   const sidebarCss = readCss("src/css/layout/sidebar-layout.css");
 
-  expect(switcherCss).toMatch(/\.switcher\s*\{[\s\S]*display:\s*flex;[\s\S]*flex-wrap:\s*wrap;/);
+  expect(clusterCss).toMatch(/\.cluster\s*\{[\s\S]*display:\s*flex;[\s\S]*flex-direction:\s*row;/);
+  expect(switcherCss).toMatch(
+    /\.switcher\s*\{[\s\S]*display:\s*flex;[\s\S]*flex-direction:\s*row;[\s\S]*flex-wrap:\s*wrap;/,
+  );
   expect(switcherCss).toMatch(
     /\.switcher > \*\s*\{[\s\S]*var\(--switcher-threshold, 40rem\)[\s\S]*flex-grow:\s*1;/,
   );
   expect(sidebarCss).toMatch(
-    /\.sidebar-layout\s*\{[\s\S]*display:\s*flex;[\s\S]*flex-wrap:\s*wrap;/,
+    /\.sidebar-layout\s*\{[\s\S]*display:\s*flex;[\s\S]*flex-direction:\s*row;[\s\S]*flex-wrap:\s*wrap;/,
   );
   // Roles are positional: first is main, last is aside; .reverse (aside-first
   // in the DOM) swaps them so the aside keeps its width and main reclaims.
