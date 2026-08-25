@@ -5,6 +5,8 @@
 ### Added
 
 * Segmented `meter`.
+* `intent-color` to apply color based on intent.
+
 
 ## [0.4.2] - 2026-08-25
 

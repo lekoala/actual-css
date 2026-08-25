@@ -1,12 +1,12 @@
 {
-  "totalRaw": 248636,
+  "totalRaw": 248827,
   "core": {
-    "minified": 10351,
-    "brotli": 2485
+    "minified": 10391,
+    "brotli": 2496
   },
   "full": {
-    "minified": 114255,
-    "brotli": 16897
+    "minified": 114295,
+    "brotli": 16919
   },
   "js": {
     "core": {
@@ -329,6 +329,10 @@
       "raw": 1174
     },
     {
+      "file": "core/intents.css",
+      "raw": 1129
+    },
+    {
       "file": "themes/indigo.css",
       "raw": 1125
     },
@@ -343,10 +347,6 @@
     {
       "file": "components/indicator.css",
       "raw": 963
-    },
-    {
-      "file": "core/intents.css",
-      "raw": 938
     },
     {
       "file": "components/scrollspy.css",
