@@ -79,7 +79,7 @@ it("card.stack and footer.bleed keep the anchored footer", async () => {
   );
 });
 
-it("bare cards own their flow while stack and media own composed layout", async () => {
+it("bare cards own their flow while layout primitives own composed layout", async () => {
   await withBrowserPage(
     fixtureUrl(FIXTURE),
     async (view) => {
@@ -88,6 +88,9 @@ it("bare cards own their flow while stack and media own composed layout", async 
         const bare = style("#bare-card");
         const stack = style("#stack-card");
         const media = style("#media-card");
+        const cluster = style("#cluster-card");
+        const switcher = style("#switcher-card");
+        const sidebar = style("#sidebar-card");
         return {
           bareDisplay: bare.display,
           bareGap: bare.gap,
@@ -99,6 +102,12 @@ it("bare cards own their flow while stack and media own composed layout", async 
           stackGap: stack.gap,
           mediaDisplay: media.display,
           mediaGap: media.gap,
+          clusterDisplay: cluster.display,
+          clusterDirection: cluster.flexDirection,
+          switcherDisplay: switcher.display,
+          switcherDirection: switcher.flexDirection,
+          sidebarDisplay: sidebar.display,
+          sidebarDirection: sidebar.flexDirection,
         };
       })()`);
 
@@ -112,6 +121,12 @@ it("bare cards own their flow while stack and media own composed layout", async 
       expect(result.stackGap).toBe("7px");
       expect(result.mediaDisplay).toBe("grid");
       expect(result.mediaGap).toBe("9px");
+      expect(result.clusterDisplay).toBe("flex");
+      expect(result.clusterDirection).toBe("row");
+      expect(result.switcherDisplay).toBe("flex");
+      expect(result.switcherDirection).toBe("row");
+      expect(result.sidebarDisplay).toBe("flex");
+      expect(result.sidebarDirection).toBe("row");
     },
     { artifactName: "card-composition" },
   );

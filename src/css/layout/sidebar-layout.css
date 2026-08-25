@@ -17,6 +17,7 @@
  */
 .sidebar-layout {
   display: flex;
+  flex-direction: row;
   flex-wrap: wrap;
   gap: var(--gap);
   align-items: flex-start;

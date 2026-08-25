@@ -17,6 +17,7 @@
  */
 .form-actions {
   display: flex;
+  flex-direction: row;
   flex-wrap: wrap;
   gap: var(--gap);
   align-items: var(--form-actions-align, center);

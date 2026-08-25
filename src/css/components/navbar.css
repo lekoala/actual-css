@@ -18,6 +18,7 @@
 
 .navbar {
   display: flex;
+  flex-direction: row;
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
@@ -45,6 +46,7 @@
 
 .navbar-nav {
   display: flex;
+  flex-direction: row;
   flex-wrap: wrap;
   align-items: center;
   gap: var(--space-10);
