@@ -1,0 +1,27 @@
+/*
+ * Data list — term/value pairs for the properties of a single object.
+ *
+ * Expects alternating <dt>/<dd> children: one term, one value per property.
+ * A plain <dl> handles richer relationships (several terms or descriptions)
+ * and stays untouched by this component.
+ *
+ * Why margin resets: neutralizes .prose list margins if .data-list appears
+ * inside an authored rich-text scope; the grid owns row/column rhythm.
+ */
+.data-list {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  align-items: baseline;
+  gap: var(--space-20) var(--space-40);
+}
+
+.data-list > dt {
+  min-inline-size: 0;
+  margin-block-start: 0;
+  font-weight: var(--font-weight-strong);
+}
+
+.data-list > dd {
+  min-inline-size: 0;
+  margin: 0;
+}

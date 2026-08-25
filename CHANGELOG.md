@@ -4,6 +4,7 @@
 
 ### Added
 
+* `data-list` for compact term–value pairs describing the properties of a single object.
 * Segmented `meter`.
 * `intent-color` to apply color based on intent.
 
