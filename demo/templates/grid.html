@@ -30,6 +30,12 @@
       --center-size: 76rem;
     }
 
+    /* Own the page-level rhythm between the introduction and its first
+       section without changing either block's internal stack gap. */
+    .grid-intro-flow {
+      gap: var(--space-50);
+    }
+
     .grid-section {
       padding-block: var(--space-60);
       border-block-start: var(--border-width) solid var(--border);
@@ -138,63 +144,66 @@
 
 <body>
   <main class="grid-page">
-    <header class="center stack grid-intro">
-      <p class="overline">Actual CSS</p>
-      <h1>Grid density</h1>
-      <p class="lead">
-        One question decides which class you want. Does the <em>item width</em>
-        determine the column count, or does the <em>column density</em>?
-      </p>
-      <p class="grid-note">
-        Every stage below is resizable — drag its bottom-right corner. The
-        readout follows the stage, never the window. That is the contract:
-        these grids react to the space they are given, not to the viewport.
-      </p>
-    </header>
-
-    <section class="center stack grid-section">
-      <h2>1. Item width is the contract — <code>.grid</code></h2>
-      <p class="grid-note">
-        <code>.grid</code> fits as many columns as <code>--grid-min</code>
-        allows. An incomplete final row is expected: the items are independent,
-        so nothing is wrong with a row of two under a row of four.
-      </p>
-      <div class="stage" data-stage>
-        <p class="stage-meter">
-          <span>container <b data-width>&mdash;</b></span>
-          <span class="badge" data-count>&mdash;</span>
+    <div class="stack grid-intro-flow">
+      <header class="center stack grid-intro">
+        <p class="overline">Actual CSS</p>
+        <h1>Grid density</h1>
+        <p class="lead">
+          One question decides which class you want. Does the <em>item width</em>
+          determine the column count, or does the <em>column density</em>?
         </p>
-        <div class="grid" data-grid style="--grid-min: 12rem">
-          <div class="tile">1</div>
-          <div class="tile">2</div>
-          <div class="tile">3</div>
-          <div class="tile">4</div>
-          <div class="tile">5</div>
-          <div class="tile">6</div>
-        </div>
-      </div>
-      <p class="grid-note">
-        <code>--grid-min: 12rem</code> here. Raise it for wider items, lower it
-        for denser ones. It is the only knob, and it belongs to
-        <code>.grid</code> alone.
-      </p>
-      <div class="alert admonition grid-pitfall" role="note">
-        <div class="alert-title">
-          <i class="ti ti-info-circle" aria-hidden="true"></i>
-          Pitfall &mdash; <code>--grid-min</code> is not a <code>.grid-N</code> hook
-        </div>
-        <div class="alert-body">
-          <p>
-            It tunes <code>.grid</code> only. The presets deliberately ignore
-            it: their subdivision runs on <code>@container</code> thresholds,
-            which cannot resolve a custom property, so a hook honored in the
-            unwrapped baseline would fall silent the moment you added a query
-            container. Item width is <code>.grid</code>'s contract; column
-            density is <code>.grid-N</code>'s.
+        <p class="grid-note">
+          Every stage below is resizable — drag its bottom-right corner. The
+          readout follows the stage, never the window. That is the contract:
+          these grids react to the space they are given, not to the viewport.
+        </p>
+      </header>
+
+      <section class="center stack grid-section">
+        <h2>1. Item width is the contract — <code>.grid</code></h2>
+        <p class="grid-note">
+          <code>.grid</code> fits as many columns as <code>--grid-min</code>
+          allows. An incomplete final row is expected: the items are independent,
+          so nothing is wrong with a row of two under a row of four.
+        </p>
+        <div class="stage" data-stage>
+          <p class="stage-meter">
+            <span>container <b data-width>&mdash;</b></span>
+            <span class="badge" data-count>&mdash;</span>
           </p>
+          <div class="grid" data-grid style="--grid-min: 12rem">
+            <div class="tile">1</div>
+            <div class="tile">2</div>
+            <div class="tile">3</div>
+            <div class="tile">4</div>
+            <div class="tile">5</div>
+            <div class="tile">6</div>
+          </div>
+        </div>
+        <p class="grid-note">
+          <code>--grid-min: 12rem</code> here. Raise it for wider items, lower it
+          for denser ones. It is the only knob, and it belongs to
+          <code>.grid</code> alone.
+        </p>
+        <div class="alert admonition grid-pitfall" role="note">
+          <div class="alert-title">
+            <i class="ti ti-info-circle" aria-hidden="true"></i>
+            Pitfall &mdash; <code>--grid-min</code> is not a <code>.grid-N</code> hook
+          </div>
+          <div class="alert-body">
+            <p>
+              It tunes <code>.grid</code> only. The presets deliberately ignore
+              it: their subdivision runs on <code>@container</code> thresholds,
+              which cannot resolve a custom property, so a hook honored in the
+              unwrapped baseline would fall silent the moment you added a query
+              container. Item width is <code>.grid</code>'s contract; column
+              density is <code>.grid-N</code>'s.
+            </p>
+          </div>
         </div>
       </div>
-    </section>
+      </section>
+    </div>
 
     <section class="center stack grid-section">
       <h2>2. Density is the contract — <code>.grid-N</code></h2>
