@@ -58,13 +58,25 @@ full-width badge is intentional.
 </button>
 ```
 
-## Empty badge dot
+## Status dot
 
 ```html demo
 <span class="badge success" aria-label="Online"></span>
 ```
 
-The dot conveys no text, so an `aria-label` is required for it to mean anything.
+An autonomous dot conveys state without visible text, so give it an accessible
+name.
+
+## Color marker
+
+Use an empty badge as a compact intent-colored marker in legends and status
+labels. When adjacent text carries the same information, keep the marker
+decorative.
+
+```html demo
+<span class="badge primary" aria-hidden="true"></span>
+Regular
+```
 
 ## Size variants
 

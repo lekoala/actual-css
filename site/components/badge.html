@@ -299,7 +299,7 @@ full-width badge is intentional.</p>
   </div>
 </div>
 <div class="prose docs-prose">
-<h2 id="empty-badge-dot">Empty badge dot</h2>
+<h2 id="status-dot">Status dot</h2>
 </div>
 <div class="docs-example">
   <div class="docs-preview">
@@ -310,7 +310,24 @@ full-width badge is intentional.</p>
   </div>
 </div>
 <div class="prose docs-prose">
-<p>The dot conveys no text, so an <code>aria-label</code> is required for it to mean anything.</p>
+<p>An autonomous dot conveys state without visible text, so give it an accessible
+name.</p>
+<h2 id="color-marker">Color marker</h2>
+<p>Use an empty badge as a compact intent-colored marker in legends and status
+labels. When adjacent text carries the same information, keep the marker
+decorative.</p>
+</div>
+<div class="docs-example">
+  <div class="docs-preview">
+<span class="badge primary" aria-hidden="true"></span>
+Regular
+  </div>
+  <div class="docs-code">
+    <pre><code class="language-html">&lt;span class=&quot;badge primary&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;
+Regular</code></pre>
+  </div>
+</div>
+<div class="prose docs-prose">
 <h2 id="size-variants">Size variants</h2>
 </div>
 <div class="docs-example">
@@ -393,7 +410,8 @@ and must not be turned into toggle controls merely to obtain a compact shape.</p
         <li><a class="nav-link" href="#basic-usage" data-docs-toc-item data-level="2">Basic usage</a></li>
         <li><a class="nav-link" href="#in-a-title" data-docs-toc-item data-level="2">In a title</a></li>
         <li><a class="nav-link" href="#composed" data-docs-toc-item data-level="2">Composed</a></li>
-        <li><a class="nav-link" href="#empty-badge-dot" data-docs-toc-item data-level="2">Empty badge dot</a></li>
+        <li><a class="nav-link" href="#status-dot" data-docs-toc-item data-level="2">Status dot</a></li>
+        <li><a class="nav-link" href="#color-marker" data-docs-toc-item data-level="2">Color marker</a></li>
         <li><a class="nav-link" href="#size-variants" data-docs-toc-item data-level="2">Size variants</a></li>
         <li><a class="nav-link" href="#removable-tag-pattern" data-docs-toc-item data-level="2">Removable tag pattern</a></li>
         <li><a class="nav-link" href="#css-hooks" data-docs-toc-item data-level="2">CSS hooks</a></li>

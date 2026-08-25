@@ -246,7 +246,8 @@ define segment colors. The values are relative weights, so they do not need to
 be converted to percentages. Keep the segments decorative with
 <code>aria-hidden=&quot;true&quot;</code> and provide category names and values in a nearby legend.
 An unintentional child remains transparent, so the meter background can
-represent an available or otherwise unclassified portion.</p>
+represent an available or otherwise unclassified portion. Match its legend
+marker to that background rather than to the neutral intent.</p>
 </div>
 <div class="docs-example">
   <div class="docs-preview">
@@ -268,19 +269,19 @@ represent an available or otherwise unclassified portion.</p>
 
   <div class="cluster">
     <span>
-      <span class="primary intent-color" aria-hidden="true">●</span>
+      <span class="badge primary" aria-hidden="true"></span>
       Regular <span class="muted">4600 MB</span>
     </span>
     <span>
-      <span class="secondary intent-color" aria-hidden="true">●</span>
+      <span class="badge secondary" aria-hidden="true"></span>
       System <span class="muted">1350 MB</span>
     </span>
     <span>
-      <span class="success intent-color" aria-hidden="true">●</span>
+      <span class="badge success" aria-hidden="true"></span>
       Shared <span class="muted">904.45 MB</span>
     </span>
     <span>
-      <span class="muted" aria-hidden="true">●</span>
+      <span class="badge" style="--intent: var(--surface-subtle)" aria-hidden="true"></span>
       Free <span class="muted">1337.55 MB</span>
     </span>
   </div>
@@ -305,19 +306,19 @@ represent an available or otherwise unclassified portion.</p>
 
   &lt;div class=&quot;cluster&quot;&gt;
     &lt;span&gt;
-      &lt;span class=&quot;primary intent-color&quot; aria-hidden=&quot;true&quot;&gt;●&lt;/span&gt;
+      &lt;span class=&quot;badge primary&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;
       Regular &lt;span class=&quot;muted&quot;&gt;4600 MB&lt;/span&gt;
     &lt;/span&gt;
     &lt;span&gt;
-      &lt;span class=&quot;secondary intent-color&quot; aria-hidden=&quot;true&quot;&gt;●&lt;/span&gt;
+      &lt;span class=&quot;badge secondary&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;
       System &lt;span class=&quot;muted&quot;&gt;1350 MB&lt;/span&gt;
     &lt;/span&gt;
     &lt;span&gt;
-      &lt;span class=&quot;success intent-color&quot; aria-hidden=&quot;true&quot;&gt;●&lt;/span&gt;
+      &lt;span class=&quot;badge success&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;
       Shared &lt;span class=&quot;muted&quot;&gt;904.45 MB&lt;/span&gt;
     &lt;/span&gt;
     &lt;span&gt;
-      &lt;span class=&quot;muted&quot; aria-hidden=&quot;true&quot;&gt;●&lt;/span&gt;
+      &lt;span class=&quot;badge&quot; style=&quot;--intent: var(--surface-subtle)&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;
       Free &lt;span class=&quot;muted&quot;&gt;1337.55 MB&lt;/span&gt;
     &lt;/span&gt;
   &lt;/div&gt;

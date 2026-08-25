@@ -27,7 +27,8 @@ define segment colors. The values are relative weights, so they do not need to
 be converted to percentages. Keep the segments decorative with
 `aria-hidden="true"` and provide category names and values in a nearby legend.
 An unintentional child remains transparent, so the meter background can
-represent an available or otherwise unclassified portion.
+represent an available or otherwise unclassified portion. Match its legend
+marker to that background rather than to the neutral intent.
 
 ```html demo
 <div class="stack">
@@ -48,19 +49,19 @@ represent an available or otherwise unclassified portion.
 
   <div class="cluster">
     <span>
-      <span class="primary intent-color" aria-hidden="true">●</span>
+      <span class="badge primary" aria-hidden="true"></span>
       Regular <span class="muted">4600 MB</span>
     </span>
     <span>
-      <span class="secondary intent-color" aria-hidden="true">●</span>
+      <span class="badge secondary" aria-hidden="true"></span>
       System <span class="muted">1350 MB</span>
     </span>
     <span>
-      <span class="success intent-color" aria-hidden="true">●</span>
+      <span class="badge success" aria-hidden="true"></span>
       Shared <span class="muted">904.45 MB</span>
     </span>
     <span>
-      <span class="muted" aria-hidden="true">●</span>
+      <span class="badge" style="--intent: var(--surface-subtle)" aria-hidden="true"></span>
       Free <span class="muted">1337.55 MB</span>
     </span>
   </div>

@@ -247,12 +247,6 @@
   gap: var(--space-10);
 }
 
-.admini-storage-legend-key {
-  font-size: 1.1em;
-  line-height: 1;
-}
-
-
 /* --------------------------------------------------------------- users */
 
 .admini-user-card {
