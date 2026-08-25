@@ -5,7 +5,10 @@ package-lock.json
 # Build output
 out/
 *.tgz
-demo/assets/
+# Everything in demo/assets/ except the theme bundle, which committed demo
+# pages (templates + admini) reference and must resolve from a fresh checkout.
+demo/assets/*
+!demo/assets/actual-themes.min.css
 
 # OS files
 .DS_Store
