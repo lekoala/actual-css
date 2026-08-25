@@ -32,3 +32,21 @@ Use `.sr-only` for text that should be available to assistive technology but vis
   border: 0;
 }
 ```
+
+## Touch targets
+
+`.touch-target` adds 8px of invisible hit area around a small control on coarse
+primary pointers, without growing the visual. Apply it opt-in to targets that
+are genuinely small — icon buttons, close buttons, compact actions.
+
+```html demo
+<button class="btn icon-only touch-target" type="button" aria-label="Close">
+  <i class="ti ti-x" aria-hidden="true"></i>
+</button>
+```
+
+**Related terms:** touch target, hit area, tap target, target size.
+
+On fine pointers the class is fully neutral. On coarse pointers it establishes
+a relative positioning context — do not apply it to controls whose positioning
+is structural (`fixed`, `absolute`, `sticky`).
