@@ -1,12 +1,12 @@
 {
-  "totalRaw": 248128,
+  "totalRaw": 248636,
   "core": {
     "minified": 10351,
     "brotli": 2485
   },
   "full": {
-    "minified": 114000,
-    "brotli": 16832
+    "minified": 114255,
+    "brotli": 16897
   },
   "js": {
     "core": {
@@ -237,6 +237,10 @@
       "raw": 1936
     },
     {
+      "file": "components/meter.css",
+      "raw": 1908
+    },
+    {
       "file": "components/app-nav.css",
       "raw": 1882
     },
@@ -295,10 +299,6 @@
     {
       "file": "components/spinner.css",
       "raw": 1452
-    },
-    {
-      "file": "components/meter.css",
-      "raw": 1400
     },
     {
       "file": "components/busy.css",

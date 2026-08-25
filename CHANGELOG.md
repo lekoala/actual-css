@@ -2,12 +2,16 @@
 
 ## [Unreleased]
 
+### Added
+
+* Segmented `meter`.
+
 ## [0.4.2] - 2026-08-25
 
 ### Fixed
 
-* `card` + `cluster` regression
-* Some markup in demos
+* `card` + `cluster` regression.
+* Some markup in demos.
 
 
 ## [0.4.1] - 2026-08-25
