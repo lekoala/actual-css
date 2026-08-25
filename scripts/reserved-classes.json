@@ -134,6 +134,7 @@
   "inline-size-full",
   "input",
   "input-icon",
+  "intent-color",
   "inverted",
   "is-open",
   "is-sheet",

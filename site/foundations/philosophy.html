@@ -213,15 +213,29 @@
 <p>Components are semantic boxes: <code>.btn</code>, <code>.badge</code>, <code>.alert</code>, <code>.card</code>, <code>.avatar</code>, etc. Each component owns its intrinsic layout and visual defaults.</p>
 <h2 id="intents">Intents</h2>
 <p><code>.primary</code>, <code>.secondary</code>, <code>.success</code>, <code>.warning</code>, <code>.danger</code> do not style elements directly. They only expose <code>--intent</code> and <code>--intent-fg</code>. Components and variants decide how to consume them.</p>
+<p>Intent classes define the current <code>--intent</code> value; they do not form a
+general-purpose color utility system. Use <code>.intent-color</code> when a simple element
+should consume the current intent as its foreground color. It works with an
+intent on the same element or inherited from an ancestor.</p>
 </div>
 <div class="docs-example">
   <div class="docs-preview">
 <button class="btn primary">Primary</button>
 <span class="badge success">Success</span>
+<span class="success intent-color">Success text</span>
+<span class="danger">
+  <i class="ti ti-alert-triangle intent-color" aria-hidden="true"></i>
+  Something needs attention
+</span>
   </div>
   <div class="docs-code">
     <pre><code class="language-html">&lt;button class=&quot;btn primary&quot;&gt;Primary&lt;/button&gt;
-&lt;span class=&quot;badge success&quot;&gt;Success&lt;/span&gt;</code></pre>
+&lt;span class=&quot;badge success&quot;&gt;Success&lt;/span&gt;
+&lt;span class=&quot;success intent-color&quot;&gt;Success text&lt;/span&gt;
+&lt;span class=&quot;danger&quot;&gt;
+  &lt;i class=&quot;ti ti-alert-triangle intent-color&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;
+  Something needs attention
+&lt;/span&gt;</code></pre>
   </div>
 </div>
 <div class="prose docs-prose">
