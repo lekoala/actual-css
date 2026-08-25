@@ -1,6 +1,48 @@
-# Actual CSS 0.4.0 — Changelog
+# Actual CSS Changelog
 
-# 0.4.0 — unreleased
+## [Unreleased]
+
+
+## [0.4.1] - 2026-08-25
+
+### Added
+
+* `indicator`, `rating`, and intrinsically responsive `steps` components.
+* `list` / `list-item` for repeated application rows with leading, content, and trailing regions.
+* `app-nav` and `app-layout` primitives for adaptive application shells.
+* `.sidebar-layout.reverse` to place the sidebar visually first while keeping main-content-first DOM order.
+* `icon-slot` documented pattern for predictable contained icon regions.
+* `check:doc-classes` guardrail for validating framework classes used in documentation.
+* New **Actual Tasks** mobile/application demo.
+* `docs-geometry` guardrail asserting the documentation shell can reach the structural-grid thresholds, read from `grid.css` rather than hard-coded.
+* `--width` on `shot:page` for captures at an exact layout viewport; the flag was previously accepted and silently ignored.
+
+### Changed
+
+* Improved card and prose vertical rhythm:
+  * bare cards now own direct-child spacing through `--card-gap`;
+  * direct child block margins are normalized;
+  * `.stack` and `.media` keep ownership when composed with `.card`;
+  * prose sibling rhythm is more deterministic.
+* `steps` now use one intrinsic responsive layout, filling available space and scrolling only when `--step-min` cannot be maintained.
+* Added `--step-marker-radius`, `--step-connector`, and `--step-complete-mark` customization hooks.
+* Improved `app-layout` / `app-nav` composition with framework-owned safe-area handling and automatic FAB/navigation avoidance.
+* Clarified that `app-layout` targets persistent application shells rather than regular document pages.
+* Simplified forced-colors support: native/system colors are preferred, with framework overrides limited to structural states that would otherwise disappear.
+* Expanded documentation around lists, application layouts, icon containment, and framework-vs-application CSS ownership.
+* Documented reference container sizes for `.grid-N`, including that the thresholds describe the query container's content box rather than the viewport.
+* Recorded why the framework exposes no global breakpoint scale: container width is not a monotonic function of viewport width, measured across a composition that reveals a sidebar as the viewport grows.
+
+### Fixed
+
+* Tooltip cleanup now follows enhancement-root membership correctly, including triggers moved outside the observed root while still connected.
+* Documentation home-page overflow and minimum-size issues.
+* Documentation demo previews could not reach the structural-grid thresholds. The article column capped every live preview at 45.9rem at any viewport width, so `.grid-3` demos rendered one column and `.grid-4` / `.grid-6` two — including on the page documenting `6 -> 3 -> 2 -> 1`. No framework CSS was involved or changed.
+* Invalid or misleading documentation class examples.
+* Steps sizing and narrow-container behavior.
+
+
+## [0.4.0] - 2026-08-22
 
 ### Added
 
@@ -15,63 +57,57 @@
 * “Building with Actual CSS” integration guide covering theme tokens, layout selection, hooks, utilities, and application CSS.
 * Expanded build, architecture, compatibility, browser-layout, package, and generated-output guardrails, including real `npm pack` verification.
 * `brutalist` theme.
-* `--soft-fg-mix` tunes soft foreground ink; at its `100%` default soft text stays the raw intent, and lowering it rebates the ink toward `--text` for palettes whose intents are too light or too saturated to carry text on their own soft surface.
-* Optional `--link` overrides `.prose` link ink when a theme's `--primary` works as an accent but not as inline body text.
-* `check:color-space` guardrail: an intent tinted against a theme-controlled surface or border must interpolate in `oklab`, with an `intentional-oklch` escape hatch.
+* `--soft-fg-mix` for tuning soft foreground ink.
+* Optional `--link` override for prose link ink.
+* `check:color-space` guardrail for intent/context color interpolation.
 * Bundle tool.
-* `.sidebar-layout.reverse` places the aside on the inline start by swapping only the visual order (DOM stays main-content-first).
-* `.steps` visual hooks: `--step-marker-radius`, `--step-connector` (any background), and `--step-complete-mark` (replace the number on a finished step).
-* `check:doc-classes` guardrail: classes in documentation snippets must be Actual classes or an explicit demo whitelist.
-* `icon-slot` pattern documenting the contained-icon-zone contract, composed from existing pieces (no new primitive).
 
 ### Changed
-
-* **Breaking:** `.steps` is now a single intrinsically responsive component — items fill the row when they fit and hold `--step-min` otherwise, scrolling horizontally only when they cannot fit. The `.vertical` variant and its second geometry/API are removed.
 
 * The bare `actual-css` entrypoint is now the minimal core; use `actual-css/full` for all CSS families.
 * `actual-css/js` is now the enhancement loader only; use `actual-css/js/full` or `actual.full.js` for the complete pre-registered runtime.
 * `.grid` remains space-driven through `--grid-min`; `.grid-2/3/4/6` now express bounded structural density and degrade responsively.
-* `.container-query` optionally gives `.grid-N` balanced divisor-based subdivisions (`2→1`, `3→1`, `4→2→1`, `6→3→2→1`) instead of being required for responsiveness.
-* `--grid-columns` is the explicit escape hatch for exact custom tracks, including arbitrary structural counts, asymmetric ratios, and mixed intrinsic/flexible tracks; applications own their narrow behavior.
-* `.sidebar-layout` now uses intrinsic flex wrapping instead of a hidden container-query/viewport breakpoint contract.
-* Grid primitives remove the automatic `min-inline-size` floor from their direct children to preserve overflow-safe track sizing.
-* `.card` is now a column flex container; a direct `<footer>` anchors to the bottom when extra space is available, aligning actions across equal-height cards.
-* Focus is a core invariant and no longer depends on loading focus styles after components.
-* Focus rings are derived from each `[data-theme]` island's own `--focus`; preset palettes only keep intentional overrides such as neon.
-* `.prose` now includes sane native description-list (`dt` / `dd`) styling.
+* `.container-query` optionally gives `.grid-N` balanced divisor-based subdivisions.
+* `--grid-columns` is the explicit escape hatch for exact custom tracks.
+* `.sidebar-layout` now uses intrinsic flex wrapping instead of a hidden breakpoint contract.
+* Grid primitives preserve overflow-safe track sizing.
+* `.card` is now a column flex container and direct footers can anchor to the bottom.
+* Focus is now a core invariant.
+* Focus rings follow each theme island's `--focus`.
+* `.prose` adds native description-list styling.
 * `.lead` and `.measure` are independent from `.prose`.
-* Utilities distinguish compact framework shortcuts from verbose optional property/value helpers; optional helpers include semantic gap sizes and common sizing, alignment, overflow, spacing, text, border, and surface escape hatches.
-* Preset theme palettes are reference/demo material rather than package API; their bundle is generated for demos/docs instead of `dist/`.
-* `llms.txt` now documents the core/full package split, layout-selection model, class manifest, and application-CSS integration workflow.
-* Biome now covers `src/`, `scripts/`, and `tests/`, and lint runs as part of `build:all`.
-* Use OKLab for intent/context color mixes to keep custom themes stable when surfaces or borders are chromatic.
-* Docs syntax highlighting uses a purpose-built local palette instead of the theme intents, which do not hold contrast as small text under most presets and are too close together on the monochromatic ones to stay distinguishable.
-* CI and browser diagnostics are updated for Bun 1.4 and verify committed `dist/`, `site/`, and `size-report.json` against fresh builds.
+* Utilities are split between compact framework shortcuts and optional property/value helpers.
+* Preset theme palettes are reference/demo material rather than package API.
+* `llms.txt` documents package splits, layout selection, the class manifest, and application-CSS integration.
+* Biome covers `src/`, `scripts/`, and `tests/`.
+* Intent/context color mixes use OKLab.
+* Documentation syntax highlighting uses its own local palette.
+* CI and browser diagnostics were updated for Bun 1.4 and verify committed generated output.
 
 ### Fixed
 
 * Forced-colors and theme-island focus/state handling.
-* Grid child min-content overflow in narrow tracks.
-* Drawer RTL behavior now follows resolved direction through `:dir(rtl)`.
-* Badge typography uses shared font-size/density tokens instead of private literals.
-* `.sr-only` now combines modern `clip-path` hiding with the legacy `clip` fallback.
-* `dim` and `indigo` shadows use palette-appropriate shadow colors.
+* Grid child min-content overflow.
+* Drawer RTL behavior.
+* Badge typography token usage.
+* `.sr-only` legacy fallback.
+* `dim` and `indigo` shadows.
 * Vendor pseudo-element handling for color inputs and meters.
-* Tooltip Escape handling and LIFO surface dismissal, including pinned tooltips.
-* OTP, switch, joined-control, floating-field, validation, and native color-control focus/state edge cases.
-* Flyout panel lifecycle cleanup.
+* Tooltip Escape handling and LIFO dismissal.
+* OTP, switch, joined-control, floating-field, validation, and native color-control edge cases.
+* Flyout lifecycle cleanup.
 * Prose spacing and component focus regressions.
-* Compatibility checks ignore feature names appearing only in CSS comments.
-* Navbar and status-bar guidance now makes responsive trigger placement and transient-feedback semantics explicit.
+* Compatibility checks matching feature names in CSS comments.
+* Navbar and status-bar guidance.
 
 ### Breaking
 
-* `actual-css` now contains only the core. Replace it with `actual-css/full` when the previous full-framework behavior is required.
+* `actual-css` now contains only the core. Use `actual-css/full` for the previous full-framework behavior.
 * `actual-css/js` / `actual.js` now contain only the enhancement loader. Use `actual-css/js/full` / `actual.full.js` for the previous complete runtime.
-* `.grid-N` no longer means a fixed N-column grid at every width; it is a responsive structural-density preset, with balanced divisor layouts available through `.container-query`.
-* `.sidebar-layout` no longer depends on `.container-query` or the old fixed breakpoint; direct children now participate in its intrinsic flex sizing contract.
-* `.card` now establishes a column flex formatting context so direct structural footers can anchor to the bottom; code relying on block margin collapsing inside cards should be reviewed.
-* Direct imports of `typography/prose` no longer include `.lead` or `.measure`; import `typography/lead` and `layout/measure` explicitly when needed.
+* `.grid-N` no longer means a fixed N-column grid at every width.
+* `.sidebar-layout` no longer depends on `.container-query` or the old fixed breakpoint.
+* `.card` now establishes a column flex formatting context.
+* Direct imports of `typography/prose` no longer include `.lead` or `.measure`.
 
 
 ## [0.3.1] - 2026-08-20

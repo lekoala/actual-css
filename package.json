@@ -1,6 +1,6 @@
 {
   "name": "actual-css",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "Plain CSS component framework with semantic classes, universal variants, small tokens, theme hooks, and progressive enhancements.",
   "type": "module",
   "packageManager": "bun@1.4.0",
