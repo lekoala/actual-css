@@ -16,6 +16,8 @@ direct child of `.stack` (where flex children otherwise stretch). Use
 `inline-size: 100%` — or the optional `.inline-size-full` utility — when a
 full-width badge is intentional.
 
+**Related terms:** chip, tag, pill, removable tag.
+
 ## Class reference
 
 | Class           | Kind        | Description                                                  |

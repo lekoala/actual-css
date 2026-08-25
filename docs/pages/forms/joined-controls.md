@@ -2,6 +2,8 @@
 
 > Use `.join` when controls need to be visually joined into a single unit.
 
+**Related terms:** segmented control, button group, input group.
+
 ## Class reference
 
 | Class         | Kind        | Description                                                                     |

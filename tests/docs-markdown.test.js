@@ -1,7 +1,13 @@
 import { describe, expect, it } from "bun:test";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import { parseCodeInfo, render, scanCodeFences, wrapTables } from "../scripts/docs/markdown.js";
+import {
+  extractAliases,
+  parseCodeInfo,
+  render,
+  scanCodeFences,
+  wrapTables,
+} from "../scripts/docs/markdown.js";
 import { wrapDocsContent } from "../scripts/docs/templates.js";
 
 const fixture = readFileSync(join(import.meta.dir, "fixtures", "docs", "sample.md"), "utf8");
@@ -162,6 +168,33 @@ describe("render", () => {
     });
     expect(result.toc.map((t) => t.label)).toEqual(["Basic usage", "Variants", "Variants"]);
     expect(result.toc.map((t) => t.id)).toEqual(["basic-usage", "variants", "variants-1"]);
+  });
+});
+
+describe("extractAliases", () => {
+  it("parses a Related terms line into lowercased aliases", () => {
+    const markdown =
+      "# Flyout\n\n> Description.\n\n**Related terms:** Popover, dropdown menu, bottom sheet.\n";
+    expect(extractAliases(markdown)).toEqual(["popover", "dropdown menu", "bottom sheet"]);
+  });
+
+  it("strips the trailing period", () => {
+    const markdown = "**Related terms:** off-canvas, side sheet.\n";
+    expect(extractAliases(markdown)).toEqual(["off-canvas", "side sheet"]);
+  });
+
+  it("dedupes repeated terms", () => {
+    const markdown = "**Related terms:** bottom nav, bottom navigation, bottom nav.\n";
+    expect(extractAliases(markdown)).toEqual(["bottom nav", "bottom navigation"]);
+  });
+
+  it("returns an empty list when no Related terms line exists", () => {
+    expect(extractAliases("# Page\n\nPlain paragraph.\n")).toEqual([]);
+  });
+
+  it("exposes aliases through render", () => {
+    const result = render("# Range\n\n> Description.\n\n**Related terms:** slider, scrubber.\n");
+    expect(result.aliases).toEqual(["slider", "scrubber"]);
   });
 });
 

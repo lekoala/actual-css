@@ -8,7 +8,7 @@
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { dirname, join, normalize, relative, resolve, sep } from "node:path";
 import { fileURLToPath } from "node:url";
-import { render, scanCodeFences } from "./docs/markdown.js";
+import { extractAliases, render, scanCodeFences } from "./docs/markdown.js";
 import { loadNavigation } from "./docs/navigation.js";
 import { relHref } from "./docs/templates.js";
 
@@ -118,6 +118,19 @@ function main() {
     const h1Count = (markdown.match(/^#\s+.+$/m) ?? []).length;
     if (h1Count !== 1) {
       issues.push(`${rel(file)}: expected exactly one H1, found ${h1Count}`);
+    }
+
+    if (/^\*\*Related terms:\*\*$/m.test(markdown)) {
+      issues.push(
+        `${rel(file)}: the Related terms line must list at least one term after the colon`,
+      );
+    } else if (
+      /^\*\*Related terms:\*\*.+$/m.test(markdown) &&
+      extractAliases(markdown).length === 0
+    ) {
+      issues.push(
+        `${rel(file)}: Related terms parse to no aliases — check the comma-separated list`,
+      );
     }
 
     const sourceRefs = new Set(

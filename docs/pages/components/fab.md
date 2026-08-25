@@ -7,6 +7,8 @@ The existing button component owns its size, shape, intent, and interaction.
 As a direct child of `.app-layout`, it instead overlays the main grid area so
 the layout keeps it clear of adaptive application navigation and safe areas.
 
+**Related terms:** fab.
+
 ```html
 <div class="fab">
   <button class="btn circle primary lg icon-only" type="button" aria-label="Create">

@@ -5,6 +5,8 @@ switches intrinsically according to its own available width: the regions sit
 side by side when the main minimum, preferred aside width, and gap fit; they
 otherwise stack. No `.container-query` ancestor is required.
 
+**Related terms:** master-detail, split view.
+
 ```html demo
 <div class="sidebar-layout">
   <article class="stack">

@@ -4,6 +4,8 @@
 
 Core: native range, enhanced by `accent-color`. Optional richer skin may come later.
 
+**Related terms:** slider, range input, scrubber.
+
 ```html demo
 <label class="field">
   <span class="field-label">Volume</span>

@@ -21,3 +21,5 @@ Use `.topbar` for the structural shell of an app-shell header: sticky positionin
 ```
 
 This is for the app-shell topbar specifically — a structural need that recurs unchanged across app UIs regardless of brand. It is not for marketing or editorial site headers, which are one-off visual identity per page.
+
+**Related terms:** sticky header, app bar, application header.

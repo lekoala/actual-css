@@ -2,6 +2,8 @@
 
 > Centered modal overlay for focused tasks, confirmations, or forms, built on the native `<dialog>` element.
 
+**Related terms:** modal, alert dialog, confirmation dialog.
+
 ## Class reference
 
 | Class                  | Kind      | Description                                                                      |

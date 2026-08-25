@@ -2,6 +2,8 @@
 
 > Modal side-sheet that overlays the page for navigation or filters.
 
+**Related terms:** off-canvas, side panel, side sheet, navigation drawer.
+
 ## Class reference
 
 | Class           | Kind      | Description                                                |

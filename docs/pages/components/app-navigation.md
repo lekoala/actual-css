@@ -5,6 +5,8 @@
 Use one `.app-nav` landmark for the application's primary destinations. Links
 remain links, and `aria-current="page"` is the only current-page state.
 
+**Related terms:** tab bar, bottom navigation, bottom nav, navigation rail, side navigation.
+
 ```html demo
 <nav class="app-nav" aria-label="Primary">
   <a href="#today" aria-current="page">

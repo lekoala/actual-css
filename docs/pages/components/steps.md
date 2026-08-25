@@ -6,6 +6,8 @@ Use an `<ol>` because order is part of the meaning. Add `.complete` to finished
 steps and `aria-current="step"` to exactly one current step. Unmarked items are
 future steps. The component needs no JavaScript.
 
+**Related terms:** stepper, progress steps, step indicator, wizard steps, multi-step progress.
+
 ## Class reference
 
 | Class                   | Kind      | Description                                |
