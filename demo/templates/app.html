@@ -726,35 +726,20 @@
         <section class="stack">
           <h2>Recent notifications</h2>
           <div id="notifications-list" class="stack">
-            <div class="alert success items-center" role="status">
-              <i class="ti ti-circle-check" aria-hidden="true"></i>
-              <div class="cluster" style="--cluster-justify: space-between; flex-wrap: wrap; gap: 0.5rem; flex: 1 1 auto;">
-                <span>Payout of &euro;12,450 has been processed successfully.</span>
-                <button class="btn ghost sm" type="button" data-dismiss>
-                  <span class="sr-only">Dismiss</span>
-                  <i class="ti ti-x" aria-hidden="true"></i>
-                </button>
-              </div>
+            <div class="alert success" role="status">
+              <i class="ti ti-circle-check alert-icon" aria-hidden="true"></i>
+              <span>Payout of &euro;12,450 has been processed successfully.</span>
+              <button class="alert-dismiss" type="button" data-dismiss aria-label="Dismiss alert"></button>
             </div>
-            <div class="alert warning items-center" role="status">
+            <div class="alert warning" role="status">
               <i class="ti ti-alert-triangle alert-icon" aria-hidden="true"></i>
-              <div class="cluster" style="--cluster-justify: space-between; flex-wrap: wrap; gap: 0.5rem; flex: 1 1 auto;">
-                <span>3 transactions require manual review. <a href="#">Review now</a></span>
-                <button class="btn ghost sm" type="button" data-dismiss>
-                  <span class="sr-only">Dismiss</span>
-                  <i class="ti ti-x" aria-hidden="true"></i>
-                </button>
-              </div>
+              <span>3 transactions require manual review. <a href="#">Review now</a></span>
+              <button class="alert-dismiss" type="button" data-dismiss aria-label="Dismiss alert"></button>
             </div>
-            <div class="alert primary items-center" role="status">
-              <i class="ti ti-info-circle" aria-hidden="true"></i>
-              <div class="cluster" style="--cluster-justify: space-between; flex-wrap: wrap; gap: 0.5rem; flex: 1 1 auto;">
-                <span>New clinic "Ocean Beach" has been added to your account.</span>
-                <button class="btn ghost sm" type="button" data-dismiss>
-                  <span class="sr-only">Dismiss</span>
-                  <i class="ti ti-x" aria-hidden="true"></i>
-                </button>
-              </div>
+            <div class="alert primary" role="status">
+              <i class="ti ti-info-circle alert-icon" aria-hidden="true"></i>
+              <span>New clinic "Ocean Beach" has been added to your account.</span>
+              <button class="alert-dismiss" type="button" data-dismiss aria-label="Dismiss alert"></button>
             </div>
           </div>
 

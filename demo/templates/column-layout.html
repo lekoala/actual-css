@@ -30,6 +30,12 @@
       --center-size: 76rem;
     }
 
+    /* Own the page-level rhythm between the introduction and its first
+       section without changing either block's internal stack gap. */
+    .cl-intro-flow {
+      gap: var(--space-50);
+    }
+
     .cl-section {
       padding-block: var(--space-60);
       border-block-start: var(--border-width) solid var(--border);
@@ -139,75 +145,77 @@
 
 <body>
   <main class="cl-page">
-    <header class="center stack cl-intro">
-      <p class="overline">Actual CSS</p>
-      <h1>Column layout</h1>
-      <p class="lead">
-        Twelve units, and nothing else. <code>.column-layout</code> is the one
-        layout primitive that makes <em>no</em> responsive decision &mdash; you
-        place regions on the canvas, and you own what happens when it gets
-        narrow.
-      </p>
-      <p class="cl-note">
-        Every stage below is resizable &mdash; drag its bottom-right corner.
-        Sections 1 through 3 never change shape, however far you drag: that is
-        the contract, not a missing feature. Sections 4 and 5 do change, because
-        this page's own stylesheet says so.
-      </p>
-    </header>
-
-    <section class="center stack cl-section">
-      <h2>1. The canvas</h2>
-      <p class="cl-note">
-        Twelve <code>minmax(0, 1fr)</code> tracks. The ruler and the regions
-        below share the same canvas, so a span can be counted by eye.
-      </p>
-      <div class="stage" data-stage>
-        <p class="stage-meter">
-          <span>container <b data-width>&mdash;</b></span>
-          <span>unit <b data-unit>&mdash;</b></span>
+    <div class="stack cl-intro-flow">
+      <header class="center stack cl-intro">
+        <p class="overline">Actual CSS</p>
+        <h1>Column layout</h1>
+        <p class="lead">
+          Twelve units, and nothing else. <code>.column-layout</code> is the one
+          layout primitive that makes <em>no</em> responsive decision &mdash; you
+          place regions on the canvas, and you own what happens when it gets
+          narrow.
         </p>
-        <div class="column-layout ruler" aria-hidden="true">
-          <div class="unit column-span-1">1</div>
-          <div class="unit column-span-1">2</div>
-          <div class="unit column-span-1">3</div>
-          <div class="unit column-span-1">4</div>
-          <div class="unit column-span-1">5</div>
-          <div class="unit column-span-1">6</div>
-          <div class="unit column-span-1">7</div>
-          <div class="unit column-span-1">8</div>
-          <div class="unit column-span-1">9</div>
-          <div class="unit column-span-1">10</div>
-          <div class="unit column-span-1">11</div>
-          <div class="unit column-span-1">12</div>
-        </div>
-        <div class="column-layout">
-          <section class="region column-span-8"><strong>column-span-8</strong>main</section>
-          <aside class="region accent column-span-4"><strong>column-span-4</strong>aside</aside>
-        </div>
-      </div>
-      <p class="cl-note">
-        Neither region names a start line. Grid auto-placement flows the aside
-        into columns 9 through 12 on its own &mdash; the same way
-        <code>col-8</code> and <code>col-4</code> compose in any twelve-column
-        system you have used before.
-      </p>
-      <div class="alert admonition cl-note" role="note">
-        <div class="alert-title">
-          <i class="ti ti-info-circle" aria-hidden="true"></i>
-          Unit width shrinks fast
-        </div>
-        <div class="alert-body">
-          <p>
-            Watch the unit readout as you drag. Eleven gaps are a fixed cost, so
-            they take a growing share of a shrinking canvas. Around 280px a unit
-            is roughly 12px and a <code>column-span-4</code> region is 84px.
-            Twelve columns is a wide-context tool; the readout is here to make
-            that concrete rather than theoretical.
+        <p class="cl-note">
+          Every stage below is resizable &mdash; drag its bottom-right corner.
+          Sections 1 through 3 never change shape, however far you drag: that is
+          the contract, not a missing feature. Sections 4 and 5 do change, because
+          this page's own stylesheet says so.
+        </p>
+      </header>
+
+      <section class="center stack cl-section">
+        <h2>1. The canvas</h2>
+        <p class="cl-note">
+          Twelve <code>minmax(0, 1fr)</code> tracks. The ruler and the regions
+          below share the same canvas, so a span can be counted by eye.
+        </p>
+        <div class="stage" data-stage>
+          <p class="stage-meter">
+            <span>container <b data-width>&mdash;</b></span>
+            <span>unit <b data-unit>&mdash;</b></span>
           </p>
+          <div class="column-layout ruler" aria-hidden="true">
+            <div class="unit column-span-1">1</div>
+            <div class="unit column-span-1">2</div>
+            <div class="unit column-span-1">3</div>
+            <div class="unit column-span-1">4</div>
+            <div class="unit column-span-1">5</div>
+            <div class="unit column-span-1">6</div>
+            <div class="unit column-span-1">7</div>
+            <div class="unit column-span-1">8</div>
+            <div class="unit column-span-1">9</div>
+            <div class="unit column-span-1">10</div>
+            <div class="unit column-span-1">11</div>
+            <div class="unit column-span-1">12</div>
+          </div>
+          <div class="column-layout">
+            <section class="region column-span-8"><strong>column-span-8</strong>main</section>
+            <aside class="region accent column-span-4"><strong>column-span-4</strong>aside</aside>
+          </div>
         </div>
-      </div>
-    </section>
+        <p class="cl-note">
+          Neither region names a start line. Grid auto-placement flows the aside
+          into columns 9 through 12 on its own &mdash; the same way
+          <code>col-8</code> and <code>col-4</code> compose in any twelve-column
+          system you have used before.
+        </p>
+        <div class="alert admonition cl-note" role="note">
+          <div class="alert-title">
+            <i class="ti ti-info-circle" aria-hidden="true"></i>
+            Unit width shrinks fast
+          </div>
+          <div class="alert-body">
+            <p>
+              Watch the unit readout as you drag. Eleven gaps are a fixed cost, so
+              they take a growing share of a shrinking canvas. Around 280px a unit
+              is roughly 12px and a <code>column-span-4</code> region is 84px.
+              Twelve columns is a wide-context tool; the readout is here to make
+              that concrete rather than theoretical.
+            </p>
+          </div>
+        </div>
+      </section>
+    </div>
 
     <section class="center stack cl-section">
       <h2>2. Unplaced children span the canvas</h2>
