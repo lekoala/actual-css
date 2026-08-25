@@ -20,6 +20,12 @@
       gap: var(--space-30);
     }
 
+    /* Keep the monitor visually attached to the introduction while the
+       wrapper owns the space before the remaining test sections. */
+    .keyboard-intro-flow {
+      gap: var(--space-50);
+    }
+
     .keyboard-section {
       padding-block: var(--space-60);
       border-block-start: var(--border-width) solid var(--border);
@@ -111,21 +117,23 @@
 </head>
 <body>
   <main class="center keyboard-page">
-    <header class="keyboard-intro">
-      <p class="overline">Interaction test bench</p>
-      <h1>Keyboard controls</h1>
-      <p>
-        Use only the keyboard to exercise Actual's supported composite-control
-        behavior. The focus monitor makes delayed focus changes visible.
-      </p>
-    </header>
+    <div class="stack keyboard-intro-flow">
+      <header class="keyboard-intro">
+        <p class="overline">Interaction test bench</p>
+        <h1>Keyboard controls</h1>
+        <p>
+          Use only the keyboard to exercise Actual's supported composite-control
+          behavior. The focus monitor makes delayed focus changes visible.
+        </p>
+      </header>
 
-    <section class="keyboard-section" aria-labelledby="focus-monitor-title">
-      <div class="keyboard-monitor" aria-live="polite">
-        <p id="focus-monitor-title"><strong>Current focus:</strong> <output id="focus-current">document body</output></p>
-        <ol class="keyboard-log" id="focus-log" aria-label="Recent focus changes"></ol>
-      </div>
-    </section>
+      <section class="keyboard-section" aria-labelledby="focus-monitor-title">
+        <div class="keyboard-monitor" aria-live="polite">
+          <p id="focus-monitor-title"><strong>Current focus:</strong> <output id="focus-current">document body</output></p>
+          <ol class="keyboard-log" id="focus-log" aria-label="Recent focus changes"></ol>
+        </div>
+      </section>
+    </div>
 
     <section class="keyboard-section" aria-labelledby="support-title">
       <h2 id="support-title">Support matrix</h2>
