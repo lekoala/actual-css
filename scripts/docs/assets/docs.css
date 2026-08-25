@@ -7,6 +7,38 @@
  * that is a product signal — fix the framework instead.
  */
 
+/* --- Shell geometry --- */
+
+/* The demo previews are query containers named actual-grid, so a preview's
+   content box is the width that .grid-N thresholds resolve against. The
+   documentation therefore has a hard geometric obligation: a preview must be
+   able to reach the widest documented threshold, 64rem (.grid-4 -> 4,
+   .grid-6 -> 6). Work backwards from it.
+
+     64rem      preview content box (widest grid threshold)
+   +  2rem      .docs-preview padding-inline (2 x --space-40)
+   +  0.125rem  .docs-example border
+   ------------------------------------------------------------
+     ~66.2rem   minimum .docs-example outer width
+
+   --docs-demo-track sits above that minimum on purpose, so a later padding or
+   border tweak cannot silently push every grid demo below a threshold. The
+   demo measure is not the prose measure: .docs-prose is a framework .prose and
+   keeps its own 70ch reading measure inside this wider track.
+
+   The shell then needs the nav track + demo track + TOC track plus two
+   column gaps, and .center subtracts 2 x --center-pad from --center-size:
+
+     12 + 1 + 68 + 1 + 11 = 93rem of track -> --center-size 95rem
+
+   Regression-tested in tests/docs-geometry.test.js. */
+:root {
+  --docs-demo-track: 68rem;
+  --docs-nav-track: 12rem;
+  --docs-toc-track: 11rem;
+  --docs-shell-size: 95rem;
+}
+
 /* --- Site chrome --- */
 
 .docs-header {
@@ -16,7 +48,7 @@
 
 .docs-header-inner {
   --cluster-justify: space-between;
-  --center-size: 82rem;
+  --center-size: var(--docs-shell-size);
   padding-block: var(--space-30);
 }
 
@@ -34,10 +66,10 @@
 }
 
 .docs-shell {
-  --center-size: 82rem;
+  --center-size: var(--docs-shell-size);
   /* .center's auto margins otherwise let fixed grid tracks shrink-wrap this
-     flex item. Fill the shared 82rem shell so the sidebar starts with the
-     header brand. */
+     flex item. Fill the shared shell so the sidebar starts with the header
+     brand. */
   inline-size: calc(100% - var(--center-pad, 1rem) * 2);
   display: grid;
   grid-template-columns: minmax(0, 1fr);
@@ -391,7 +423,16 @@
 
 @media (min-width: 56rem) {
   .docs-shell {
-    grid-template-columns: 13rem minmax(0, 48rem) 12rem;
+    /* The sidebar and TOC tracks are deliberately tighter than the demo
+       track. At 1280px -- the most common desktop docs width -- the shell is
+       space-limited rather than track-limited, so every rem spent on chrome is
+       a rem the preview cannot use: with 13rem + 12rem of chrome the preview
+       landed at 47.94rem and missed the 48rem .grid-3 threshold by a rounding
+       error. 12rem + 11rem clears it with real margin. */
+    grid-template-columns:
+      var(--docs-nav-track)
+      minmax(0, var(--docs-demo-track))
+      var(--docs-toc-track);
     column-gap: var(--space-40);
     /* Keep the documentation navigation on the same starting edge as the
        brand; centering fixed tracks made the two shells look unrelated. */

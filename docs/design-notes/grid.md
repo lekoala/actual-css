@@ -496,6 +496,79 @@ Before changing structural-grid thresholds, probes should verify:
 
 The viewport itself should not determine the result; the relevant local container should.
 
+## Why there is no breakpoint scale
+
+Actual exposes no `sm` / `md` / `lg` / `xl` scale, and the structural grid is the
+clearest illustration of why. The whole framework declares two width media
+queries:
+
+```text
+@media (max-width: 30rem)   x2   modal padding on small screens
+@media (min-width: 48rem)   x1   .app-layout, bottom nav -> side nav
+```
+
+Everything else responsive is intrinsic or container-driven. The responsibility
+splits cleanly:
+
+```text
+viewport
+   |
+   +-- the few genuinely viewport-level decisions
+   |     .app-layout
+   |
+   +-- composition and chrome
+          |
+        named query container
+          |
+        actual-grid
+          |
+        2 / 3 / 4 / 6 stages
+```
+
+**Thresholds are local and content-driven.** `28rem`, `48rem` and `64rem`
+describe how much room *this collection* needs for a given density, probed
+against the content each preset targets. They are not device classes, and the
+fact that two of them coincide with widely used framework breakpoints is a
+coincidence, not the justification. A grid does not know what device it is on
+and does not need to.
+
+**The unit is `rem` so the thresholds follow typographic scale.** Container
+query lengths in `rem` resolve against the root font size, so a reader who
+scales their type up moves every threshold with it:
+
+```text
+root 16px   48rem = 768px    768px container -> .grid-3 = 3 columns
+root 20px   48rem = 960px    768px container -> .grid-3 = 1 column
+root 24px   48rem = 1152px   768px container -> .grid-3 = 1 column
+```
+
+That is the correct response, not a rounding artifact: larger type genuinely
+needs more room per item, so the same container honestly supports fewer columns.
+A `px` breakpoint cannot express this.
+
+### Container width is not a monotonic function of viewport width
+
+This is the empirical case against a global scale, and it is measurable inside
+this repository. `demo/templates/dashboard.html` reveals its workspace sidebar
+at `72rem`. Measuring the main region's content box across that boundary:
+
+| Viewport | Container content box | `.grid-4` | `.grid-6` |
+| -------- | --------------------- | --------- | --------- |
+| 1100px   | 65.8rem               | 4         | 6         |
+| 1160px   | 52.6rem               | 2         | 3         |
+
+The viewport grew by 60px and the grid lost half its columns, because the
+composition spent that growth on chrome rather than on content. A viewport-keyed
+system reasons about this backwards by construction: it sees a wider screen and
+infers more room, at the exact moment there is less. No amount of breakpoint
+tuning fixes that, because there is no stable function from viewport width to
+container width — the composition sits in between and is free to change.
+
+A named query container asks the only question with a reliable answer: *how much
+inline space does this collection actually have?* Everything the ladder does
+follows from that measurement, which is why the thresholds can stay content-
+derived instead of device-derived.
+
 ## API guidance
 
 Use `.grid` when the number of columns should emerge naturally from available space.
@@ -603,6 +676,42 @@ The framework does not guess appropriate item size. The author states it by
 choosing a density; the framework then guarantees a clean structural collapse
 of that density.
 
+### Reference container sizes
+
+The thresholds describe the **query container's content box**, not the viewport
+and not the grid's own border box. Padding and borders on the container come off
+the top before the query resolves. Verified states:
+
+| Container content box | `.grid-2` | `.grid-3` | `.grid-4` | `.grid-6` |
+| --------------------- | --------- | --------- | --------- | --------- |
+| `< 28rem`             | 1         | 1         | 1         | 1         |
+| `28rem` – `< 48rem`   | 2         | 1         | 2         | 2         |
+| `48rem` – `< 64rem`   | 2         | 3         | 2         | 3         |
+| `>= 64rem`            | 2         | 3         | 4         | 6         |
+
+Two consequences for anyone sizing a region that hosts a structural grid.
+
+**Size the region to land on a threshold, not just under one.** A region whose
+content box settles at 47rem gives `.grid-3` one column — the same result as
+20rem. The step is a cliff, not a ramp, and `.grid-3` has no intermediate state
+to soften it; that is the invariant, not a defect. If a region is meant to show
+three columns, give it 48rem of content box with room to spare.
+
+**Budget backwards from the content box.** A region that must reach a threshold
+`T` needs `T + its own padding-inline + its own border-inline` of outer width.
+The convenient reference sizes are therefore the thresholds plus the padding the
+region actually carries:
+
+```text
+target 28rem content box   + 2 x 1rem padding + 2 x 1px border   ~= 30.2rem outer
+target 48rem content box   + 2 x 1rem padding + 2 x 1px border   ~= 50.2rem outer
+target 64rem content box   + 2 x 1rem padding + 2 x 1px border   ~= 66.2rem outer
+```
+
+Rounding **up** past that figure is deliberate. Landing on the threshold to the
+pixel means a later padding change, measured in fractions of a rem, silently
+drops the region a state.
+
 ### Why there is no `.grid-5`
 
 The divisors of five are five and one, so the chain would be `5 -> 1` with no
@@ -610,3 +719,67 @@ intermediate state. The system exposes densities that subdivide well, not every
 integer. Proposals to give `.grid-5` a hand-picked `5 -> 2 -> 1` chain are
 covered by the rejected `smart-grid` section above: those steps encode an
 assumption about item count that the class cannot verify.
+
+## Demonstrability is part of the contract
+
+A threshold nobody can reach is indistinguishable from a threshold that does not
+work. This was not hypothetical: the documentation site shipped for some time
+with an article column capped at 48rem, and the live demo previews inside it are
+the query containers. Their content box therefore topped out at **45.9rem at
+every viewport width** — 1280px, 1920px, identical. Every `.grid-3` demo on the
+site rendered one column, `.grid-4` and `.grid-6` rendered two, and the page
+teaching `6 -> 3 -> 2 -> 1` showed the reader its 2-column state as though that
+were the top of the chain.
+
+The bug was reported as a `.grid-3` calibration complaint. It was not one. No
+text-based check could see it, because every class name, every threshold, and
+every rule in the framework was correct.
+
+Two durable rules came out of it.
+
+**The query container must be the element whose content box is the grid's actual
+available space.** Putting `container` on a padded box is correct; putting it on
+an outer wrapper and letting an inner box add the padding makes the query
+resolve against a width the grid does not have, firing every threshold early.
+The demo would then claim a state it cannot honor — a lie in the geometry rather
+than in the CSS.
+
+**A surface that documents the thresholds has to be wide enough to reach them.**
+The docs shell is sized backwards from 64rem plus the preview's own padding, and
+that arithmetic is asserted in `tests/docs-geometry.test.js` against the
+thresholds parsed out of `grid.css`, so raising a threshold without giving the
+documentation room to reach it fails a test instead of quietly degrading every
+demo. The prose keeps its own reading measure inside the wider track: demo
+measure and prose measure are different contracts and should not be forced to
+share a number.
+
+### A probe that correctly changed nothing
+
+The same investigation measured `.choice-card` in a forced 3-up, to ask whether
+`.grid-3`'s 48rem step was simply too conservative:
+
+| Container | px / card | Result             |
+| --------- | --------- | ------------------ |
+| 44rem     | 224       | one line, at ease  |
+| 40rem     | 203       | one line, at limit |
+| 38rem     | 192       | **wraps**          |
+| 32rem     | 160       | wraps badly        |
+
+So those particular cards do fit three-up at roughly 40rem, well below the
+preset's step. That was not a reason to move the step or to add a density
+modifier, and the temptation is worth recording.
+
+`.grid-3` is a generic preset built around ~15.5rem per item, in agreement with
+`.grid-4`'s ~15.4rem. Choice cards are simply smaller than the preset's target
+content. Lowering the step to fit them would have put `.grid-3` at ~14.2rem and
+broken the only clean agreement in the ladder — to fix a symptom whose actual
+cause was 2rem of documentation padding.
+
+A modifier introducing a second density ladder becomes defensible only when
+*several unrelated* content families independently show the standard steps to be
+too conservative while wanting identical balanced-collapse behavior. One
+component in one miscalibrated container is not that evidence. A per-component
+threshold would also collide with the established meaning of `.compact` in
+Actual, which is padding density on a component (`.card.compact`,
+`.table.compact`) and never a layout threshold.
+

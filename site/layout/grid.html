@@ -318,6 +318,32 @@ is that bare version. Placed inside a container named <strong><code>actual-grid<
   </div>
 </div>
 <div class="prose docs-prose">
+<h3 id="container-sizes">Container sizes</h3>
+<p>The steps are read from the <strong>container's content box</strong> — not the viewport, and
+not the grid's own width. Padding and borders on the container come off before
+the query resolves.</p>
+<div class="table-wrap"><table class="table">
+<thead>
+<tr><th>Container content box</th><th><code>.grid-2</code></th><th><code>.grid-3</code></th><th><code>.grid-4</code></th><th><code>.grid-6</code></th></tr>
+</thead>
+<tbody>
+<tr><td>under <code>28rem</code></td><td>1</td><td>1</td><td>1</td><td>1</td></tr>
+<tr><td><code>28rem</code> to <code>48rem</code></td><td>2</td><td>1</td><td>2</td><td>2</td></tr>
+<tr><td><code>48rem</code> to <code>64rem</code></td><td>2</td><td>3</td><td>2</td><td>3</td></tr>
+<tr><td><code>64rem</code> and up</td><td>2</td><td>3</td><td>4</td><td>6</td></tr>
+</tbody>
+</table></div>
+<p>Size a region that hosts a <code>.grid-N</code> so it lands on the step you want, with room
+to spare. The step is a cliff, not a ramp: a container at <code>47rem</code> gives
+<code>.grid-3</code> a single column, the same as one at <code>20rem</code>. <code>.grid-3</code> has no
+intermediate state by design — it never shows <code>2 + 1</code>.</p>
+<p>Budget backwards from the content box. A region that must reach a step needs
+that width <strong>plus its own padding and borders</strong>:</p>
+<pre><code class="language-text">3 columns   48rem + 2 x 1rem padding  ~= 50rem outer
+4 or 6      64rem + 2 x 1rem padding  ~= 66rem outer
+</code></pre>
+<p>Round up past the figure rather than matching it exactly, so a later padding
+change cannot drop the region a state.</p>
 <p>Balanced subdivision is precision, never a prerequisite for responsive
 behavior — forgetting the container costs you the exact chain, nothing else.
 The grid responds only to a container named <code>actual-grid</code>, never to an
@@ -390,6 +416,7 @@ It does not apply to <code>.grid-N</code>.</li>
         <li><a class="nav-link" href="#space-driven-collection" data-docs-toc-item data-level="2">Space-driven collection</a></li>
         <li><a class="nav-link" href="#count-driven-density" data-docs-toc-item data-level="2">Count-driven density</a></li>
         <li><a class="nav-link" href="#balanced-subdivision" data-docs-toc-item data-level="2">Balanced subdivision</a></li>
+        <li><a class="nav-link" href="#container-sizes" data-docs-toc-item data-level="3">Container sizes</a></li>
         <li><a class="nav-link" href="#exact-templates" data-docs-toc-item data-level="2">Exact templates</a></li>
         <li><a class="nav-link" href="#hooks" data-docs-toc-item data-level="3">Hooks</a></li>
           </ul>

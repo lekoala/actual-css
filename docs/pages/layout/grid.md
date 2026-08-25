@@ -82,6 +82,35 @@ Every state splits the collection evenly, and all items keep the same width.
 </div>
 ```
 
+### Container sizes
+
+The steps are read from the **container's content box** — not the viewport, and
+not the grid's own width. Padding and borders on the container come off before
+the query resolves.
+
+| Container content box | `.grid-2` | `.grid-3` | `.grid-4` | `.grid-6` |
+|-----------------------|-----------|-----------|-----------|-----------|
+| under `28rem`         | 1         | 1         | 1         | 1         |
+| `28rem` to `48rem`    | 2         | 1         | 2         | 2         |
+| `48rem` to `64rem`    | 2         | 3         | 2         | 3         |
+| `64rem` and up        | 2         | 3         | 4         | 6         |
+
+Size a region that hosts a `.grid-N` so it lands on the step you want, with room
+to spare. The step is a cliff, not a ramp: a container at `47rem` gives
+`.grid-3` a single column, the same as one at `20rem`. `.grid-3` has no
+intermediate state by design — it never shows `2 + 1`.
+
+Budget backwards from the content box. A region that must reach a step needs
+that width **plus its own padding and borders**:
+
+```text
+3 columns   48rem + 2 x 1rem padding  ~= 50rem outer
+4 or 6      64rem + 2 x 1rem padding  ~= 66rem outer
+```
+
+Round up past the figure rather than matching it exactly, so a later padding
+change cannot drop the region a state.
+
 Balanced subdivision is precision, never a prerequisite for responsive
 behavior — forgetting the container costs you the exact chain, nothing else.
 The grid responds only to a container named `actual-grid`, never to an

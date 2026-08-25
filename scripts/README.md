@@ -43,7 +43,15 @@ bun run shot:page site/components/button.html
 
 # dark scheme, custom output
 bun run shot:page site/index.html --scheme dark --out tmp/home-dark.png
+
+# exact layout viewport — required whenever the check depends on width
+bun run shot:page site/layout/grid.html --width 1512
 ```
+
+`--width` forces the layout viewport with device metrics, the same mechanism
+`shot:multi` and `probe` use. Without it the capture uses the default window
+size, so a width-sensitive check (container queries, `.grid-N` subdivision,
+any breakpoint) silently renders at the wrong width.
 
 `shot:forced` captures the same kind of screenshot with forced-colors
 emulated through the DevTools protocol (a plain `--forced-colors` CLI flag
