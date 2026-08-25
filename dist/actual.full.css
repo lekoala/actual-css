@@ -1096,6 +1096,7 @@ small {
  */
 .cluster {
   display: flex;
+  flex-direction: row;
   flex-wrap: var(--cluster-wrap, wrap);
   align-items: var(--cluster-align, center);
   justify-content: var(--cluster-justify, flex-start);
@@ -1276,6 +1277,7 @@ small {
  */
 .switcher {
   display: flex;
+  flex-direction: row;
   flex-wrap: wrap;
   gap: var(--gap);
 }
@@ -1305,6 +1307,7 @@ small {
  */
 .sidebar-layout {
   display: flex;
+  flex-direction: row;
   flex-wrap: wrap;
   gap: var(--gap);
   align-items: flex-start;
@@ -1702,6 +1705,7 @@ small {
   --scroll-snap-item-size: auto;
 
   display: flex;
+  flex-direction: row;
   gap: var(--scroll-snap-gap);
   overflow-x: auto;
 }
@@ -1773,6 +1777,7 @@ small {
   z-index: var(--z-sticky);
   isolation: isolate;
   display: flex;
+  flex-direction: row;
   align-items: center;
   gap: var(--gap);
   padding-block: var(--space-30);
@@ -2420,6 +2425,7 @@ small {
  */
 .form-actions {
   display: flex;
+  flex-direction: row;
   flex-wrap: wrap;
   gap: var(--gap);
   align-items: var(--form-actions-align, center);
@@ -3965,6 +3971,7 @@ a.badge[aria-disabled="true"] {
   --gap: var(--space-20);
 
   display: flex;
+  flex-direction: row;
   flex-wrap: wrap;
   align-items: center;
   gap: var(--gap);
@@ -6163,6 +6170,7 @@ a.avatar[aria-disabled="true"] {
 
   counter-reset: actual-step;
   display: flex;
+  flex-direction: row;
   inline-size: 100%;
   margin: 0;
   padding: 0;
@@ -6348,6 +6356,7 @@ a.avatar[aria-disabled="true"] {
 
 .navbar {
   display: flex;
+  flex-direction: row;
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
@@ -6375,6 +6384,7 @@ a.avatar[aria-disabled="true"] {
 
 .navbar-nav {
   display: flex;
+  flex-direction: row;
   flex-wrap: wrap;
   align-items: center;
   gap: var(--space-10);
@@ -6433,6 +6443,7 @@ a.avatar[aria-disabled="true"] {
  */
 .breadcrumb {
   display: flex;
+  flex-direction: row;
   flex-wrap: wrap;
   align-items: center;
   gap: var(--space-10);
@@ -6486,6 +6497,7 @@ a.avatar[aria-disabled="true"] {
  */
 .pagination {
   display: flex;
+  flex-direction: row;
   flex-wrap: wrap;
   align-items: center;
   gap: var(--space-10);
@@ -6534,6 +6546,7 @@ a.avatar[aria-disabled="true"] {
 
 .tabs {
   display: flex;
+  flex-direction: row;
   flex-wrap: wrap;
   gap: var(--space-10);
   margin: 0;
