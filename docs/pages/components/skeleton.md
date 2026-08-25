@@ -8,6 +8,8 @@
 - Use layout utilities for placeholder arrangement.
 - Only relevant for simple placeholders - use more structural solutions like phantom-ui for complex cases.
 
+**Related terms:** skeleton screen, shimmer, loading placeholder.
+
 ## Class reference
 
 | Class        | Kind      | Description                                         |

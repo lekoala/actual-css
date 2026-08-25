@@ -2,6 +2,8 @@
 
 > Positioned surface attached to a trigger, commonly used for action lists and small panels.
 
+**Related terms:** popover, dropdown, dropdown menu, action menu, context menu, bottom sheet, action sheet, anchored panel.
+
 ## Class reference
 
 | Class             | Kind        | Description                                                          |

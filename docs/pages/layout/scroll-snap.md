@@ -6,6 +6,8 @@ Horizontal rails that stay useful without JavaScript and snap in modern browsers
 
 Use `.scroll-snap` for a niche row of items that should scroll horizontally, such as card rails, media strips, overflow tabs, or a simple touch-friendly carousel baseline. Scrolling only appears when the items are wider than the container; set `--scroll-snap-item-size` for card rails.
 
+**Related terms:** carousel, card carousel, horizontal scroller, media rail, scrolling rail.
+
 ```html demo
 <section class="stack" aria-labelledby="featured-title">
   <h2 id="featured-title">Featured articles</h2>

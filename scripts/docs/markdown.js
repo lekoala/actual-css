@@ -202,12 +202,32 @@ export function render(markdown, { resolveLink } = {}) {
     title: extractTitle(markdown),
     description: extractDescription(html),
     toc: extractToc(html),
+    aliases: extractAliases(markdown),
   };
 }
 
 export function extractTitle(markdown) {
   const match = markdown.match(/^#\s+(.+)$/m);
   return match ? match[1].trim() : "";
+}
+
+/**
+ * Parse the "**Related terms:**" discovery line into search aliases. The line
+ * is authored as the human-visible vocabulary for the page; this is its only
+ * representation in the index. Dedupe keeps a repeated term out of the index.
+ */
+export function extractAliases(markdown) {
+  const match = markdown.match(/^\*\*Related terms:\*\*\s*(.+?)\s*$/m);
+  if (!match) return [];
+  return [
+    ...new Set(
+      match[1]
+        .replace(/\.$/, "")
+        .split(",")
+        .map((term) => term.trim().toLowerCase())
+        .filter(Boolean),
+    ),
+  ];
 }
 
 export function extractDescription(html) {

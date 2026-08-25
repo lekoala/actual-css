@@ -2,6 +2,8 @@
 
 > Inline error feedback that respects assistive technology and form state.
 
+**Related terms:** inline validation, field error.
+
 ## Class reference
 
 | Class               | Kind        | Description                                                                     |

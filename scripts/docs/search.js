@@ -24,6 +24,7 @@ export function buildSearchIndex(navigation, rendered) {
       group: page.groupTitle,
       url: page.url,
       headings: result.toc.map((heading) => heading.label),
+      aliases: result.aliases ?? [],
       text: stripHtml(result.html),
     };
   });

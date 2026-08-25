@@ -116,6 +116,13 @@
     for (const heading of entry.headings ?? []) {
       if (heading.toLowerCase().includes(q)) score += 20;
     }
+    // Aliases stay below an exact title: a known synonym is the second-best
+    // signal after the canonical name. Only "query contains alias" counts —
+    // a short query must not inherit a boost from a longer alias.
+    for (const alias of entry.aliases ?? []) {
+      if (alias === q) score += 80;
+      else if (q.includes(alias)) score += 40;
+    }
     if (description.includes(q)) score += 10;
     if (text.includes(q)) score += 5;
     return score;
@@ -188,9 +195,12 @@
       } else if (event.key === "ArrowUp") {
         event.preventDefault();
         setActive(activeIndex - 1);
-      } else if (event.key === "Enter" && activeIndex >= 0) {
-        event.preventDefault();
-        results[activeIndex].url && location.assign(siteRoot() + results[activeIndex].url);
+      } else if (event.key === "Enter") {
+        const target = results[activeIndex >= 0 ? activeIndex : 0];
+        if (target) {
+          event.preventDefault();
+          target.url && location.assign(siteRoot() + target.url);
+        }
       }
     });
 
