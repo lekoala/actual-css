@@ -7,6 +7,7 @@
 - Use `.text-end` for numeric columns and `.text-nowrap` for non-wrapping cells.
 - For wide tables, make the wrapper an accessible scroll region with `role="region"`, `aria-labelledby`, and `tabindex="0"`.
 - Tables stay content-first and neutral by default.
+- `.table` is a static, content-first table. It provides no sorting, filtering, search, selection, pagination, or row actions. For an interactive data grid ("datatable"), use a dedicated component — see the [data grid template](../../demo/templates/data-grid.html), which themes `data-grid-component` with Actual CSS tokens.
 - `.table` does not consume shared variants or intent colors (`--ui-bg` / `--intent`): a `.soft` + intent combo on a `<tr>` has no effect. To tint rows or headers, style them with a class of your own.
 
 ## Class reference
