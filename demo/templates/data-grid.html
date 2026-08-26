@@ -1,0 +1,531 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Data grid - Actual CSS</title>
+  <meta name="description" content="data-grid-component loaded from CDN, themed with Actual CSS tokens. Declarative table and JavaScript API examples.">
+  <link rel="stylesheet" href="../../dist/actual.full.css">
+  <link rel="stylesheet" href="../assets/actual-themes.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/data-grid-component@3.0.1/dist/data-grid.min.css">
+  <style>
+    .page {
+      --center-size: 72rem;
+      padding-block: var(--space-50) var(--space-60);
+    }
+
+    .page-header {
+      align-items: flex-start;
+    }
+
+    /* Theme bridge: map the grid's --dg-* tokens onto Actual CSS design
+       tokens so the grid follows light/dark mode, data-theme islands and the
+       theme presets for free. */
+    data-grid {
+      --dg-bg: var(--surface-raised);
+      --dg-color: var(--text);
+      --dg-muted-color: var(--text-muted);
+      --dg-border-color: var(--border);
+
+      --dg-accent: var(--primary);
+      --dg-accent-soft: color-mix(in oklab, var(--surface) var(--soft-bg-mix), var(--primary));
+      --dg-focus-ring: var(--focus-ring);
+
+      --dg-header-bg: var(--surface-subtle);
+      --dg-header-color: var(--text);
+      --dg-filter-bg: var(--surface);
+
+      --dg-row-hover-bg: var(--hover-overlay);
+      --dg-row-selected-bg: color-mix(in oklab, var(--surface) calc(var(--soft-bg-mix) - 6%), var(--primary));
+      --dg-row-selected-hover-bg: color-mix(in oklab, var(--surface) calc(var(--soft-bg-mix) - 12%), var(--primary));
+      --dg-row-border-color: var(--border);
+
+      --dg-control-bg: var(--surface-raised);
+      --dg-control-color: var(--text);
+      --dg-control-border-color: var(--border);
+
+      --dg-danger-bg: color-mix(in oklab, var(--surface) var(--soft-bg-mix), var(--danger));
+      --dg-danger-color: var(--danger);
+      --dg-danger-border-color: color-mix(in oklab, var(--surface) var(--soft-border-mix), var(--danger));
+
+      --dg-radius: var(--radius);
+    }
+
+    /* The card heading is the visible label; keep the native caption as the
+       table's accessible name only. */
+    data-grid caption {
+      position: absolute;
+      inline-size: 1px;
+      block-size: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    .dg-status {
+      padding-block-start: var(--space-30);
+      border-block-start: var(--border-width) solid var(--border);
+      color: var(--text-muted);
+      font-size: var(--font-size-sm);
+    }
+
+    .page-note {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-20) var(--space-30);
+      align-items: baseline;
+      justify-content: space-between;
+      padding-block-start: var(--space-30);
+      border-block-start: var(--border-width) solid var(--border);
+      color: var(--text-muted);
+      font-size: var(--font-size-sm);
+    }
+
+    .page-note code {
+      color: var(--text);
+    }
+  </style>
+</head>
+
+<body>
+  <main class="center stack page">
+    <header class="cluster page-header">
+      <hgroup>
+        <p class="overline">Web component</p>
+        <h1>Data grid</h1>
+        <p class="muted">data-grid-component loaded from CDN and themed with Actual CSS tokens: sort, filter, search,
+          selection, row actions and bulk actions.</p>
+      </hgroup>
+
+      <div class="cluster" style="gap: var(--space-20);">
+        <select class="select sm fit" id="theme-switcher" aria-label="Switch theme">
+          <option value="">System</option>
+          <option value="light">Light</option>
+          <option value="dark">Dark</option>
+          <optgroup label="Themes">
+          <option value="indigo">Indigo</option>
+          <option value="dim">Dim</option>
+          <option value="corporate">Corporate</option>
+          <option value="forest">Forest</option>
+          <option value="ocean">Ocean</option>
+          <option value="spruce">Spruce</option>
+          <option value="petrol">Petrol</option>
+          <option value="sunset">Sunset</option>
+          <option value="lavender">Lavender</option>
+          <option value="mono">Mono</option>
+          <option value="square">Square</option>
+          <option value="brutalist">Brutalist</option>
+          <option value="edge">Edge</option>
+          <option value="cyberpunk">Cyberpunk</option>
+          <option value="neon">Neon</option>
+          <option value="gradient">Gradient</option>
+          </optgroup>
+        </select>
+        <a class="btn neutral outline sm" href="https://github.com/lekoala/data-grid" target="_blank" rel="noopener">
+          data-grid docs
+        </a>
+      </div>
+    </header>
+
+    <section class="card stack" aria-label="Invoices">
+      <header>
+        <hgroup>
+          <h2 style="margin: 0;">Invoices</h2>
+          <p class="muted">Declarative: a native <code>&lt;table&gt;</code> adopted in place. Attributes and markup drive
+            sorting, select filters, global search, selection, pagination and row actions; <code>data-value</code>
+            carries the typed machine value while the cell content stays the authored display.</p>
+        </hgroup>
+      </header>
+
+      <data-grid id="invoices-grid" sortable filterable searchable selectable row-actions page-size="10"
+          page-sizes="10,25,50" no-data="No invoices match your query.">
+        <table>
+          <caption>Invoices</caption>
+          <thead>
+            <tr>
+              <th scope="col" data-field="invoice" data-sort="asc">Invoice</th>
+              <th scope="col" data-field="customer">Customer</th>
+              <th scope="col" data-field="status" data-filter="select">Status</th>
+              <th scope="col" data-field="amount" class="text-end">Amount</th>
+              <th scope="col" data-field="date" data-min-width="120">Issued</th>
+              <th scope="col" data-actions><span class="sr-only">Actions</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr data-row-key="1">
+              <td>INV-2026-001</td>
+              <td>Acme Corp</td>
+              <td data-value="paid"><span class="badge success soft">Paid</span></td>
+              <td data-value="1240" class="text-end text-nowrap">$1,240.00</td>
+              <td>2026-08-21</td>
+              <td data-actions class="text-nowrap"><a data-action="view">View</a><a data-action="delete" data-confirm="Delete this invoice?">Delete</a></td>
+            </tr>
+            <tr data-row-key="2">
+              <td>INV-2026-002</td>
+              <td>Globex</td>
+              <td data-value="pending"><span class="badge warning soft">Pending</span></td>
+              <td data-value="860.5" class="text-end text-nowrap">$860.50</td>
+              <td>2026-08-18</td>
+              <td data-actions class="text-nowrap"><a data-action="view">View</a><a data-action="delete" data-confirm="Delete this invoice?">Delete</a></td>
+            </tr>
+            <tr data-row-key="3">
+              <td>INV-2026-003</td>
+              <td>Initech</td>
+              <td data-value="paid"><span class="badge success soft">Paid</span></td>
+              <td data-value="3250" class="text-end text-nowrap">$3,250.00</td>
+              <td>2026-08-15</td>
+              <td data-actions class="text-nowrap"><a data-action="view">View</a><a data-action="delete" data-confirm="Delete this invoice?">Delete</a></td>
+            </tr>
+            <tr data-row-key="4">
+              <td>INV-2026-004</td>
+              <td>Umbrella Corp</td>
+              <td data-value="overdue"><span class="badge danger soft">Overdue</span></td>
+              <td data-value="575" class="text-end text-nowrap">$575.00</td>
+              <td>2026-07-29</td>
+              <td data-actions class="text-nowrap"><a data-action="view">View</a><a data-action="delete" data-confirm="Delete this invoice?">Delete</a></td>
+            </tr>
+            <tr data-row-key="5">
+              <td>INV-2026-005</td>
+              <td>Stark Industries</td>
+              <td data-value="paid"><span class="badge success soft">Paid</span></td>
+              <td data-value="4210.75" class="text-end text-nowrap">$4,210.75</td>
+              <td>2026-08-11</td>
+              <td data-actions class="text-nowrap"><a data-action="view">View</a><a data-action="delete" data-confirm="Delete this invoice?">Delete</a></td>
+            </tr>
+            <tr data-row-key="6">
+              <td>INV-2026-006</td>
+              <td>Wayne Enterprises</td>
+              <td data-value="pending"><span class="badge warning soft">Pending</span></td>
+              <td data-value="990" class="text-end text-nowrap">$990.00</td>
+              <td>2026-08-14</td>
+              <td data-actions class="text-nowrap"><a data-action="view">View</a><a data-action="delete" data-confirm="Delete this invoice?">Delete</a></td>
+            </tr>
+            <tr data-row-key="7">
+              <td>INV-2026-007</td>
+              <td>Hooli</td>
+              <td data-value="paid"><span class="badge success soft">Paid</span></td>
+              <td data-value="1875" class="text-end text-nowrap">$1,875.00</td>
+              <td>2026-08-09</td>
+              <td data-actions class="text-nowrap"><a data-action="view">View</a><a data-action="delete" data-confirm="Delete this invoice?">Delete</a></td>
+            </tr>
+            <tr data-row-key="8">
+              <td>INV-2026-008</td>
+              <td>Pied Piper</td>
+              <td data-value="refunded"><span class="badge neutral soft">Refunded</span></td>
+              <td data-value="640.25" class="text-end text-nowrap">$640.25</td>
+              <td>2026-07-22</td>
+              <td data-actions class="text-nowrap"><a data-action="view">View</a><a data-action="delete" data-confirm="Delete this invoice?">Delete</a></td>
+            </tr>
+            <tr data-row-key="9">
+              <td>INV-2026-009</td>
+              <td>Vandelay Industries</td>
+              <td data-value="paid"><span class="badge success soft">Paid</span></td>
+              <td data-value="5120" class="text-end text-nowrap">$5,120.00</td>
+              <td>2026-08-06</td>
+              <td data-actions class="text-nowrap"><a data-action="view">View</a><a data-action="delete" data-confirm="Delete this invoice?">Delete</a></td>
+            </tr>
+            <tr data-row-key="10">
+              <td>INV-2026-010</td>
+              <td>Massive Dynamic</td>
+              <td data-value="pending"><span class="badge warning soft">Pending</span></td>
+              <td data-value="730" class="text-end text-nowrap">$730.00</td>
+              <td>2026-08-19</td>
+              <td data-actions class="text-nowrap"><a data-action="view">View</a><a data-action="delete" data-confirm="Delete this invoice?">Delete</a></td>
+            </tr>
+            <tr data-row-key="11">
+              <td>INV-2026-011</td>
+              <td>Cyberdyne Systems</td>
+              <td data-value="paid"><span class="badge success soft">Paid</span></td>
+              <td data-value="2980.5" class="text-end text-nowrap">$2,980.50</td>
+              <td>2026-08-04</td>
+              <td data-actions class="text-nowrap"><a data-action="view">View</a><a data-action="delete" data-confirm="Delete this invoice?">Delete</a></td>
+            </tr>
+            <tr data-row-key="12">
+              <td>INV-2026-012</td>
+              <td>Tyrell Corp</td>
+              <td data-value="draft"><span class="badge neutral soft">Draft</span></td>
+              <td data-value="1105" class="text-end text-nowrap">$1,105.00</td>
+              <td>2026-08-20</td>
+              <td data-actions class="text-nowrap"><a data-action="view">View</a><a data-action="delete" data-confirm="Delete this invoice?">Delete</a></td>
+            </tr>
+            <tr data-row-key="13">
+              <td>INV-2026-013</td>
+              <td>Wonka Industries</td>
+              <td data-value="paid"><span class="badge success soft">Paid</span></td>
+              <td data-value="4490" class="text-end text-nowrap">$4,490.00</td>
+              <td>2026-07-31</td>
+              <td data-actions class="text-nowrap"><a data-action="view">View</a><a data-action="delete" data-confirm="Delete this invoice?">Delete</a></td>
+            </tr>
+            <tr data-row-key="14">
+              <td>INV-2026-014</td>
+              <td>Gringotts &amp; Co</td>
+              <td data-value="overdue"><span class="badge danger soft">Overdue</span></td>
+              <td data-value="820" class="text-end text-nowrap">$820.00</td>
+              <td>2026-07-25</td>
+              <td data-actions class="text-nowrap"><a data-action="view">View</a><a data-action="delete" data-confirm="Delete this invoice?">Delete</a></td>
+            </tr>
+            <tr data-row-key="15">
+              <td>INV-2026-015</td>
+              <td>Nakatomi Plaza</td>
+              <td data-value="paid"><span class="badge success soft">Paid</span></td>
+              <td data-value="3560" class="text-end text-nowrap">$3,560.00</td>
+              <td>2026-08-02</td>
+              <td data-actions class="text-nowrap"><a data-action="view">View</a><a data-action="delete" data-confirm="Delete this invoice?">Delete</a></td>
+            </tr>
+            <tr data-row-key="16">
+              <td>INV-2026-016</td>
+              <td>Sterling Cooper</td>
+              <td data-value="pending"><span class="badge warning soft">Pending</span></td>
+              <td data-value="1475.5" class="text-end text-nowrap">$1,475.50</td>
+              <td>2026-08-16</td>
+              <td data-actions class="text-nowrap"><a data-action="view">View</a><a data-action="delete" data-confirm="Delete this invoice?">Delete</a></td>
+            </tr>
+            <tr data-row-key="17">
+              <td>INV-2026-017</td>
+              <td>Prestige Worldwide</td>
+              <td data-value="paid"><span class="badge success soft">Paid</span></td>
+              <td data-value="2080" class="text-end text-nowrap">$2,080.00</td>
+              <td>2026-07-30</td>
+              <td data-actions class="text-nowrap"><a data-action="view">View</a><a data-action="delete" data-confirm="Delete this invoice?">Delete</a></td>
+            </tr>
+            <tr data-row-key="18">
+              <td>INV-2026-018</td>
+              <td>Duff Beer</td>
+              <td data-value="paid"><span class="badge success soft">Paid</span></td>
+              <td data-value="645" class="text-end text-nowrap">$645.00</td>
+              <td>2026-08-12</td>
+              <td data-actions class="text-nowrap"><a data-action="view">View</a><a data-action="delete" data-confirm="Delete this invoice?">Delete</a></td>
+            </tr>
+            <tr data-row-key="19">
+              <td>INV-2026-019</td>
+              <td>Oscorp</td>
+              <td data-value="paid"><span class="badge success soft">Paid</span></td>
+              <td data-value="8730" class="text-end text-nowrap">$8,730.00</td>
+              <td>2026-08-08</td>
+              <td data-actions class="text-nowrap"><a data-action="view">View</a><a data-action="delete" data-confirm="Delete this invoice?">Delete</a></td>
+            </tr>
+            <tr data-row-key="20">
+              <td>INV-2026-020</td>
+              <td>Soylent Corp</td>
+              <td data-value="pending"><span class="badge warning soft">Pending</span></td>
+              <td data-value="1520" class="text-end text-nowrap">$1,520.00</td>
+              <td>2026-08-17</td>
+              <td data-actions class="text-nowrap"><a data-action="view">View</a><a data-action="delete" data-confirm="Delete this invoice?">Delete</a></td>
+            </tr>
+            <tr data-row-key="21">
+              <td>INV-2026-021</td>
+              <td>Dunder Mifflin</td>
+              <td data-value="overdue"><span class="badge danger soft">Overdue</span></td>
+              <td data-value="3990.25" class="text-end text-nowrap">$3,990.25</td>
+              <td>2026-07-19</td>
+              <td data-actions class="text-nowrap"><a data-action="view">View</a><a data-action="delete" data-confirm="Delete this invoice?">Delete</a></td>
+            </tr>
+            <tr data-row-key="22">
+              <td>INV-2026-022</td>
+              <td>Wexler-McGill</td>
+              <td data-value="paid"><span class="badge success soft">Paid</span></td>
+              <td data-value="710" class="text-end text-nowrap">$710.00</td>
+              <td>2026-08-13</td>
+              <td data-actions class="text-nowrap"><a data-action="view">View</a><a data-action="delete" data-confirm="Delete this invoice?">Delete</a></td>
+            </tr>
+            <tr data-row-key="23">
+              <td>INV-2026-023</td>
+              <td>Victory Yards</td>
+              <td data-value="paid"><span class="badge success soft">Paid</span></td>
+              <td data-value="2650" class="text-end text-nowrap">$2,650.00</td>
+              <td>2026-08-05</td>
+              <td data-actions class="text-nowrap"><a data-action="view">View</a><a data-action="delete" data-confirm="Delete this invoice?">Delete</a></td>
+            </tr>
+            <tr data-row-key="24">
+              <td>INV-2026-024</td>
+              <td>Paper Street Soap</td>
+              <td data-value="refunded"><span class="badge neutral soft">Refunded</span></td>
+              <td data-value="980" class="text-end text-nowrap">$980.00</td>
+              <td>2026-07-24</td>
+              <td data-actions class="text-nowrap"><a data-action="view">View</a><a data-action="delete" data-confirm="Delete this invoice?">Delete</a></td>
+            </tr>
+            <tr data-row-key="25">
+              <td>INV-2026-025</td>
+              <td>Acme Corp</td>
+              <td data-value="paid"><span class="badge success soft">Paid</span></td>
+              <td data-value="5400" class="text-end text-nowrap">$5,400.00</td>
+              <td>2026-08-22</td>
+              <td data-actions class="text-nowrap"><a data-action="view">View</a><a data-action="delete" data-confirm="Delete this invoice?">Delete</a></td>
+            </tr>
+            <tr data-row-key="26">
+              <td>INV-2026-026</td>
+              <td>Globex</td>
+              <td data-value="pending"><span class="badge warning soft">Pending</span></td>
+              <td data-value="1235.5" class="text-end text-nowrap">$1,235.50</td>
+              <td>2026-08-23</td>
+              <td data-actions class="text-nowrap"><a data-action="view">View</a><a data-action="delete" data-confirm="Delete this invoice?">Delete</a></td>
+            </tr>
+            <tr data-row-key="27">
+              <td>INV-2026-027</td>
+              <td>Initech</td>
+              <td data-value="paid"><span class="badge success soft">Paid</span></td>
+              <td data-value="3120" class="text-end text-nowrap">$3,120.00</td>
+              <td>2026-08-10</td>
+              <td data-actions class="text-nowrap"><a data-action="view">View</a><a data-action="delete" data-confirm="Delete this invoice?">Delete</a></td>
+            </tr>
+            <tr data-row-key="28">
+              <td>INV-2026-028</td>
+              <td>Umbrella Corp</td>
+              <td data-value="draft"><span class="badge neutral soft">Draft</span></td>
+              <td data-value="890" class="text-end text-nowrap">$890.00</td>
+              <td>2026-08-24</td>
+              <td data-actions class="text-nowrap"><a data-action="view">View</a><a data-action="delete" data-confirm="Delete this invoice?">Delete</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </data-grid>
+
+      <p class="dg-status" id="invoices-status" role="status">Try sorting a column, filtering by status, or deleting a row.</p>
+    </section>
+
+    <section class="card stack" aria-label="Team">
+      <header>
+        <hgroup>
+          <h2 style="margin: 0;">Team</h2>
+          <p class="muted">JavaScript API: <code>new DataGrid(...)</code> with an <code>ArrayDataSource</code>, custom
+            cell renderers, resizable and reorderable columns, bulk actions.</p>
+        </hgroup>
+      </header>
+
+      <div id="team-grid"></div>
+
+      <p class="dg-status" id="team-status" role="status">Select rows to reveal the bulk action bar.</p>
+    </section>
+
+    <footer class="page-note">
+      <span>Loaded from jsDelivr: <code>data-grid-component@3.0.1/dist/data-grid.min.css</code> and
+        <code>data-grid-component@3.0.1/data-grid.min.js</code>.</span>
+    </footer>
+  </main>
+
+  <script type="module" src="https://cdn.jsdelivr.net/npm/data-grid-component@3.0.1/data-grid.min.js"></script>
+  <script src="../../dist/actual.full.js"></script>
+  <script type="module">
+    const switcher = document.getElementById("theme-switcher");
+    if (switcher) {
+      switcher.addEventListener("change", () => {
+        if (switcher.value) {
+          document.documentElement.dataset.theme = switcher.value;
+        } else {
+          document.documentElement.removeAttribute("data-theme");
+        }
+      });
+    }
+
+    const invoicesGrid = document.getElementById("invoices-grid");
+    const invoicesStatus = document.getElementById("invoices-status");
+
+    invoicesGrid.addEventListener("action", (ev) => {
+      const { name, row, rowKey } = ev.detail;
+      if (name === "delete") {
+        invoicesGrid.removeRow(rowKey);
+        invoicesStatus.textContent = `Invoice ${row.invoice} removed from the local dataset.`;
+      } else if (name === "view") {
+        invoicesStatus.textContent = `Viewing ${row.invoice} — demo only, no navigation.`;
+      }
+    });
+
+    const teamStatus = document.getElementById("team-status");
+    const money = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 });
+
+    const teamRows = [
+      { id: 1, name: "Ada Lovelace", role: "Principal Engineer", status: "Active", salary: 185000, hired: "2019-04-02" },
+      { id: 2, name: "Grace Hopper", role: "Staff Engineer", status: "Active", salary: 168000, hired: "2019-11-18" },
+      { id: 3, name: "Alan Turing", role: "Staff Engineer", status: "Away", salary: 162000, hired: "2020-02-10" },
+      { id: 4, name: "Katherine Johnson", role: "Senior Engineer", status: "Active", salary: 142000, hired: "2020-06-22" },
+      { id: 5, name: "Margaret Hamilton", role: "Tech Lead", status: "Active", salary: 178000, hired: "2020-09-01" },
+      { id: 6, name: "Radia Perlman", role: "Staff Engineer", status: "Active", salary: 164000, hired: "2021-01-14" },
+      { id: 7, name: "Dennis Ritchie", role: "Senior Engineer", status: "Active", salary: 139000, hired: "2021-03-08" },
+      { id: 8, name: "Ken Thompson", role: "Senior Engineer", status: "Away", salary: 137000, hired: "2021-03-08" },
+      { id: 9, name: "Barbara Liskov", role: "Engineering Manager", status: "Active", salary: 190000, hired: "2021-07-19" },
+      { id: 10, name: "Edsger Dijkstra", role: "Senior Engineer", status: "Active", salary: 141000, hired: "2021-10-04" },
+      { id: 11, name: "Linus Torvalds", role: "Principal Engineer", status: "Active", salary: 192000, hired: "2022-01-17" },
+      { id: 12, name: "Guido van Rossum", role: "Senior Engineer", status: "Active", salary: 146000, hired: "2022-04-11" },
+      { id: 13, name: "Brendan Eich", role: "Senior Engineer", status: "Active", salary: 144000, hired: "2022-08-29" },
+      { id: 14, name: "Tim Berners-Lee", role: "Engineering Manager", status: "Active", salary: 188000, hired: "2022-11-07" },
+      { id: 15, name: "James Gosling", role: "Senior Engineer", status: "Away", salary: 143000, hired: "2023-02-13" },
+      { id: 16, name: "Bjarne Stroustrup", role: "Staff Engineer", status: "Active", salary: 166000, hired: "2023-05-22" },
+      { id: 17, name: "Yukihiro Matsumoto", role: "Engineer", status: "Active", salary: 118000, hired: "2023-09-18" },
+      { id: 18, name: "Anders Hejlsberg", role: "Staff Engineer", status: "Active", salary: 170000, hired: "2024-01-08" },
+      { id: 19, name: "Rasmus Lerdorf", role: "Engineer", status: "Active", salary: 112000, hired: "2024-03-25" },
+      { id: 20, name: "John Resig", role: "Engineer", status: "Leave", salary: 121000, hired: "2024-07-15" },
+      { id: 21, name: "Dan Abramov", role: "Senior Engineer", status: "Active", salary: 149000, hired: "2024-11-11" },
+      { id: 22, name: "Rich Harris", role: "Engineer", status: "Active", salary: 115000, hired: "2025-02-03" },
+      { id: 23, name: "Evan You", role: "Senior Engineer", status: "Active", salary: 151000, hired: "2025-05-19" },
+      { id: 24, name: "Julia Evans", role: "Engineer", status: "Active", salary: 108000, hired: "2025-08-04" },
+    ];
+
+    const statusBadge = (value) => {
+      const intent = { Active: "success", Away: "warning", Leave: "neutral" }[value] ?? "neutral";
+      return { html: `<span class="badge ${intent} soft">${value}</span>` };
+    };
+
+    const teamGrid = new DataGrid({
+      rowKey: "id",
+      rowLabel: "name",
+      dataSource: new ArrayDataSource(teamRows),
+      columns: [
+        { field: "name", title: "Name" },
+        { field: "role", title: "Role" },
+        {
+          field: "status",
+          title: "Status",
+          filterType: "select",
+          filterList: [
+            { value: "Active", text: "Active" },
+            { value: "Away", text: "Away" },
+            { value: "Leave", text: "Leave" },
+          ],
+          renderCell: ({ value }) => statusBadge(value),
+        },
+        {
+          field: "salary",
+          title: "Salary",
+          class: "text-end",
+          renderCell: ({ value }) => ({ html: money.format(value) }),
+        },
+        { field: "hired", title: "Hired" },
+      ],
+      sortable: true,
+      filterable: true,
+      searchable: true,
+      selectable: true,
+      resizable: true,
+      reorder: true,
+      density: "compact",
+      pageSize: 10,
+      pageSizes: [10, 25, 50],
+      noData: "No team members match your query.",
+      bulkActions: [
+        { name: "mark-active", label: "Set active" },
+        { name: "archive", label: "Archive", intent: "danger" },
+      ],
+      actions: [
+        { name: "view", label: "View" },
+        { name: "profile", label: "Profile" },
+      ],
+    });
+    document.getElementById("team-grid").appendChild(teamGrid);
+
+    teamGrid.addEventListener("bulkAction", (ev) => {
+      const { name, selection } = ev.detail;
+      teamStatus.textContent = `${name}: ${selection.ids.size} selected — demo only, no server call.`;
+    });
+
+    teamGrid.addEventListener("action", (ev) => {
+      const { name, row } = ev.detail;
+      teamStatus.textContent = `${name}: ${row.name} — demo only, no navigation.`;
+    });
+  </script>
+</body>
+
+</html>
