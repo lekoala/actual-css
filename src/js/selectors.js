@@ -25,6 +25,7 @@ export const CLASSES = {
   // for aria-invalid/danger state. Optional — degrades to no-op.
   field: "field",
   // surface.js — state class on the open flyout/menu/dialog surface.
+  // status.js writes the same class on the status bar while a message shows.
   open: "is-open",
   // surface.js — state class while the surface renders as a mobile sheet.
   sheet: "is-sheet",

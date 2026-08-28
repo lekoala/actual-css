@@ -4,6 +4,7 @@ import { EVENTS } from "./events.js";
 import { autoUpdate, reposition, repositionAt } from "./floating.js";
 
 import { CLASSES } from "./selectors.js";
+import { waitForTransitions } from "./transition.js";
 
 const openSurfaces = new Set();
 const surfaceMap = new WeakMap();
@@ -44,16 +45,6 @@ function reaperFor(menu) {
     reapers.set(root, reaper);
   }
   return reaper;
-}
-
-function waitForAnimations(...elements) {
-  const animations = elements
-    .filter(Boolean)
-    .flatMap((el) =>
-      typeof el.getAnimations === "function" ? el.getAnimations({ subtree: true }) : [],
-    );
-
-  return Promise.allSettled(animations.map((animation) => animation.finished));
 }
 
 function getSurfaceRoot(menu, anchor) {
@@ -360,7 +351,7 @@ export function closeSurface(menu, opts = {}) {
     state.restoreFocusTo.focus({ preventScroll: true });
   }
 
-  waitForAnimations(menu, backdrop).then(() => {
+  waitForTransitions(menu, backdrop).then(() => {
     if (!state || state.closeId !== closeId) return;
     state.isSheet = false;
     menu.classList.remove(CLASSES.sheet);

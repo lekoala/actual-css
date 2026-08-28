@@ -11,9 +11,18 @@ replace the previous one. Keep one element in the HTML, styled with
 `.status-bar` and carrying the `[data-status][role="status"]` contract that the
 runtime targets, empty by default.
 
-- JavaScript only updates its text content; it shows when non-empty and hides when empty, while staying available as a live region.
+- JavaScript writes the text content and toggles `.is-open`, the state class the CSS animates. The element is never hidden, so it stays available as a live region.
 - Use it for transient status (`Saved.`, `Reconnected.`, `Copied.`). Critical, persistent, or actionable information belongs in `.alert`, inline messages, or dialogs.
 - Intents: `danger`, `success`, `warning`, `neutral`. The default (no intent) is a neutral dark pill.
+- On mobile, the runtime keeps the bar above the software keyboard by tracking `visualViewport` while a message is showing.
+
+Clearing is deferred, not immediate: the bar closes first and only empties its
+text and intent once the exit transition has finished, so it leaves at the size
+and color it was shown at. A new message during that exit wins — it cancels the
+pending cleanup instead of being wiped by it. Read the bar's content right after
+`clear()` and you still see the outgoing message; that is the contract, not a
+race. An empty message clears too, so `status(response.error)` on a successful
+response closes the bar rather than opening a blank pill.
 
 The runtime auto-wires the status bar to Actual's form validation: a form that
 fails to submit shows its `data-validation-message` in the status bar with the

@@ -1,9 +1,12 @@
 /*
  * Status bar — singleton floating status area.
  *
- * One element in the HTML, empty by default, hidden when :empty but kept in the
- * accessibility tree so it stays a reliable live region. JavaScript only sets
- * text content; the visual shows and hides with the content.
+ * One element in the HTML, empty by default. .is-open is the visual state, set
+ * by status.js like any other surface: it lands after the message is written
+ * and lifts before the bar is cleared, so the bar leaves in the exact state it
+ * was shown in — same text, same width, same intent color — instead of snapping
+ * to a neutral empty pill mid-exit. Emptying the text is the *end* of the exit,
+ * not its trigger.
  *
  * Consumes intent like badge or alert. No need for status-bar-specific modifier
  * classes — .danger / .success / .warning / .neutral from intents.css drive
@@ -17,6 +20,7 @@
  * Internal:
  * --status-bg
  * --status-fg
+ * --status-viewport-offset (written by status.js while the bar is open)
  */
 
 /* Intent boundary — inherited intents do not tint this component.
@@ -31,7 +35,9 @@
   --status-fg: var(--intent-fg, var(--surface));
 
   position: fixed;
-  inset-block-end: var(--space-40);
+  /* Fixed positioning tracks the layout viewport, which the mobile software
+     keyboard covers. status.js writes the occluded band into the offset. */
+  inset-block-end: calc(var(--space-40) + var(--status-viewport-offset, 0px));
   inset-inline: var(--space-40);
   z-index: var(--z-status);
 
@@ -53,22 +59,30 @@
   color: var(--status-fg);
   box-shadow: var(--shadow-popout);
 
-  opacity: 1;
-  scale: 1;
-  translate: 0 0;
+  /* Closed by default. Opacity, not visibility or display: the bar has to stay
+     in the accessibility tree to work as a live region. */
+  opacity: 0;
+  translate: 0 var(--space-30);
   pointer-events: none;
 
+  /* Exit is shorter than entry so dismissed feedback gets out of the way.
+     background stays a shorthand so --status-bg still accepts gradients;
+     solid colors expose an interpolable computed background-color. */
   transition:
-    opacity var(--duration-slow) var(--ease),
-    scale var(--duration-slow) var(--ease),
-    translate var(--duration-slow) var(--ease);
+    opacity var(--duration-fast) var(--ease),
+    translate var(--duration) var(--ease),
+    background-color var(--duration) var(--ease);
 }
 
-.status-bar:empty {
-  opacity: 0;
-  scale: 0.96;
-  translate: 0 var(--space-20);
-  pointer-events: none;
+.status-bar.is-open {
+  opacity: 1;
+  translate: 0 0;
+  /* Entry takes a little longer, making the message legible before its motion
+     settles without adding component-local easing vocabulary. */
+  transition:
+    opacity var(--duration) var(--ease),
+    translate var(--duration-slow) var(--ease),
+    background-color var(--duration) var(--ease);
 }
 @media print {
   .status-bar {
