@@ -2,8 +2,15 @@
  * Status — singleton floating status bar.
  *
  * A status bar is a transient, non-critical feedback area. Keep one element in
- * the HTML, empty by default; JavaScript only updates its text content. It is
- * hidden visually when empty but stays available as a live region.
+ * the HTML, empty by default; JavaScript writes its text content and toggles
+ * the shared `.is-open` state class, which is the visual state the CSS
+ * animates. The element itself is never hidden, so it stays a live region.
+ *
+ * Showing and clearing are asymmetric on purpose. A show writes content first
+ * and opens after; a clear only closes, and empties content and intent once the
+ * exit transition has finished, so the bar leaves in the state it was shown in
+ * rather than collapsing to a neutral empty pill mid-animation. An empty
+ * message is a clear, not a blank pill.
  *
  * Importing the module auto-wires it to Actual's validation: a form that fails
  * to submit shows its data-validation-message in the status bar. The bar is a
@@ -39,15 +46,60 @@
 
 import { registerCommands, targetFor } from "./command.js";
 import { EVENTS } from "./events.js";
+import { CLASSES } from "./selectors.js";
+import { waitForTransitions } from "./transition.js";
 
 const STATUS_SELECTOR = '[data-status][role="status"]';
 const STATUS_CLASSES_ATTR = "statusClasses";
+const VIEWPORT_OFFSET_PROPERTY = "--status-viewport-offset";
 
 let statusTimer;
+// Bumped by every show and every clear. A deferred exit cleanup only runs when
+// its own generation is still current, so a message that arrives mid-exit is
+// never emptied by the previous message's cleanup.
+let statusGeneration = 0;
+let viewportTracker = null;
 
 function statusTarget() {
   if (typeof document === "undefined") return null;
   return document.querySelector(STATUS_SELECTOR);
+}
+
+// The bar is fixed to the layout viewport, so the mobile software keyboard
+// covers it. visualViewport reports the occluded band; the CSS adds it to the
+// bottom inset. Tracking runs only while a message is on screen.
+function trackViewport(target) {
+  if (viewportTracker?.target === target) return;
+  releaseViewport();
+
+  const view = target.ownerDocument?.defaultView;
+  const viewport = view?.visualViewport;
+  if (!viewport) return;
+
+  const controller = new AbortController();
+  const update = () => {
+    // Self-heal: an app that drops the bar while a message is up never reaches
+    // the clear() path, so the tracker would outlive its element.
+    if (!target.isConnected) {
+      releaseViewport();
+      return;
+    }
+    const occluded = Math.max(0, view.innerHeight - viewport.height - viewport.offsetTop);
+    target.style.setProperty(VIEWPORT_OFFSET_PROPERTY, `${occluded}px`);
+  };
+
+  viewport.addEventListener("resize", update, { signal: controller.signal });
+  viewport.addEventListener("scroll", update, { signal: controller.signal });
+  update();
+
+  viewportTracker = { target, stop: () => controller.abort() };
+}
+
+function releaseViewport() {
+  if (!viewportTracker) return;
+  viewportTracker.stop();
+  viewportTracker.target.style.removeProperty(VIEWPORT_OFFSET_PROPERTY);
+  viewportTracker = null;
 }
 
 function intentClasses(value) {
@@ -66,7 +118,17 @@ export function status(message, options = {}) {
   const target = statusTarget();
   if (!target || message == null) return;
 
+  // A live region with nothing to announce is not a message. `:empty` used to
+  // absorb this case for free; now that the open state is explicit, an empty
+  // message has to mean "close" or it would open a blank pill. This also keeps
+  // status(await response.text()) from leaving a stale message on screen.
+  if (message === "") {
+    status.clear();
+    return;
+  }
+
   clearTimeout(statusTimer);
+  statusGeneration++;
 
   clearIntentClasses(target);
   const intent = intentClasses(options.intent);
@@ -75,7 +137,11 @@ export function status(message, options = {}) {
     target.dataset[STATUS_CLASSES_ATTR] = intent.join(" ");
   }
 
+  // Content and intent are in place before the bar opens, so it enters at its
+  // final size and color.
   target.textContent = message;
+  target.classList.add(CLASSES.open);
+  trackViewport(target);
 
   if (options.duration !== false) {
     statusTimer = setTimeout(() => status.clear(), options.duration ?? 3000);
@@ -83,12 +149,26 @@ export function status(message, options = {}) {
 }
 
 status.clear = function clear() {
+  clearTimeout(statusTimer);
+
   const target = statusTarget();
-  if (target) {
+  if (!target) {
+    // No bar to animate out — but one may have been removed while open, and its
+    // viewport listeners and element reference still have to go.
+    releaseViewport();
+    return;
+  }
+
+  const generation = ++statusGeneration;
+  target.classList.remove(CLASSES.open);
+
+  waitForTransitions(target).then(() => {
+    // A show during the exit owns the bar now; leave its message alone.
+    if (generation !== statusGeneration) return;
     target.textContent = "";
     clearIntentClasses(target);
-  }
-  clearTimeout(statusTimer);
+    releaseViewport();
+  });
 };
 
 const STATUS_SHOW_COMMANDS = ["--status"];
@@ -125,8 +205,9 @@ if (typeof document !== "undefined") {
   // importing this module. A message shows it; omitting one clears it.
   document.addEventListener(EVENTS.status, (event) => {
     const { message, intent, duration } = event.detail ?? {};
-    // `message != null` keeps "" (an intentional empty message) on the show
-    // path, consistent with status() itself; an absent message clears.
+    // An absent message clears here; "" reaches status() and closes there. Both
+    // paths end in the same exit, so a detail that lost its message never
+    // strands a stale one on screen.
     if (message != null) {
       status(message, { intent, duration });
     } else {

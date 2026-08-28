@@ -9,6 +9,16 @@
 * Segmented `meter`.
 * `intent-color` to apply color based on intent.
 
+### Changed
+
+* `status-bar` visibility is driven by the `.is-open` state class instead of `:empty`,
+  and `status.clear()` now empties the text and intent only after the exit transition,
+  so the bar animates out at the size and color it was shown at. A message dispatched
+  during that exit cancels the pending cleanup. An empty message now clears instead of
+  opening a blank pill. The runtime also lifts the bar above the mobile software keyboard
+  via `visualViewport`. Deferred component cleanup now shares one CSS-transition helper,
+  so unrelated or infinite author animations cannot strand a status bar or surface.
+
 
 ## [0.4.2] - 2026-08-25
 

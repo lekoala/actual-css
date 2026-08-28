@@ -221,7 +221,7 @@ test("openSurface mounts to the surface root and disconnectSurface restores it",
   expect(menu.previousElementSibling).toBe(next);
 });
 
-test("closeSurface restores the surface to its original position once animations finish", async () => {
+test("closeSurface restores the surface to its original position once transitions finish", async () => {
   setBody(
     '<section id="host"><button id="trigger" aria-controls="menu"></button><div id="menu" class="flyout"></div></section>',
   );
@@ -271,7 +271,7 @@ test("sheet mode preserves author-provided semantic attributes", () => {
   expect(menu.getAttribute("aria-modal")).toBe("false");
 });
 
-test("sheet close hides the backdrop immediately and removes it after animations", async () => {
+test("sheet close hides the backdrop immediately and removes it after transitions", async () => {
   setBody('<button aria-controls="menu"></button><div id="menu" class="flyout"></div>');
   const trigger = document.querySelector("button");
   const menu = document.getElementById("menu");
@@ -283,7 +283,7 @@ test("sheet close hides the backdrop immediately and removes it after animations
   const finished = new Promise((resolve) => {
     finish = resolve;
   });
-  menu.getAnimations = () => [{ finished }];
+  menu.getAnimations = () => [{ transitionProperty: "opacity", finished }];
   backdrop.getAnimations = () => [];
 
   closeSurface(menu);
@@ -293,6 +293,25 @@ test("sheet close hides the backdrop immediately and removes it after animations
   expect(backdrop.isConnected).toBe(true);
 
   finish();
+  await nextMicrotask();
+
+  expect(backdrop.isConnected).toBe(false);
+});
+
+test("sheet cleanup does not wait for an endless descendant animation", async () => {
+  setBody(
+    '<button aria-controls="menu"></button><div id="menu" class="flyout"><span></span></div>',
+  );
+  const trigger = document.querySelector("button");
+  const menu = document.getElementById("menu");
+  mockPlacement(trigger, menu);
+  openSurface(menu, { trigger, mobile: "sheet" });
+
+  const backdrop = document.querySelector(".surface-backdrop");
+  menu.getAnimations = () => [{ finished: new Promise(() => {}) }];
+  backdrop.getAnimations = () => [];
+
+  closeSurface(menu);
   await nextMicrotask();
 
   expect(backdrop.isConnected).toBe(false);
@@ -310,7 +329,7 @@ test("reopening a sheet cancels stale close cleanup", async () => {
   const finished = new Promise((resolve) => {
     finish = resolve;
   });
-  menu.getAnimations = () => [{ finished }];
+  menu.getAnimations = () => [{ transitionProperty: "opacity", finished }];
   backdrop.getAnimations = () => [];
 
   closeSurface(menu);
