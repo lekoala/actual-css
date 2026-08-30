@@ -815,28 +815,41 @@ test("column-layout keeps auto-placement available to its children", () => {
   expect(css).not.toContain("--column-count");
 });
 
-test("motion keeps no generic global easing token", () => {
+test("motion tokens: presence pair exists, no generic easing leaks, exceptions hold", () => {
   const tokensCss = readCss("src/css/core/tokens.css");
   const cssRoot = join(import.meta.dir, "..", "src", "css");
 
-  const cssFiles = [];
+  const cssFiles = new Map();
   const walk = (dir) => {
     for (const entry of readdirSync(dir)) {
       const full = join(dir, entry);
       if (statSync(full).isDirectory()) walk(full);
-      else if (/\.css$/.test(entry)) cssFiles.push(readFileSync(full, "utf8"));
+      else if (/\.css$/.test(entry)) cssFiles.set(entry, readFileSync(full, "utf8"));
     }
   };
   walk(cssRoot);
 
-  const source = cssFiles.join("\n").replace(/\/\*[\s\S]*?\*\//g, "");
+  const source = [...cssFiles.values()].join("\n").replace(/\/\*[\s\S]*?\*\//g, "");
 
-  /* Generic `--ease` was removed: state/interaction motion uses the CSS
-     default `ease`, and presence enter/exit curves are added only as a
-     dedicated pair (`var(--ease-enter)` / `var(--ease-exit)`) when the
-     overlay audit proves shared semantics. The exact-token patterns below
-     never match those prefixed names. */
+  /* Generic `--ease` stays gone: state/interaction motion uses the CSS
+     default `ease`, shake and View Transitions included. The presence pair
+     `--ease-enter` / `--ease-exit` is the dedicated vocabulary; the exact
+     patterns below never match those prefixed names. */
   expect(tokensCss).not.toMatch(/--ease\s*:/);
   expect(source).not.toMatch(/var\(--ease\)/);
-  expect(tokensCss).toContain("--duration-slow: 200ms;");
+  expect(tokensCss).toContain("--ease-enter: cubic-bezier(0.2, 0, 0, 1);");
+  expect(tokensCss).toContain("--ease-exit: cubic-bezier(0.4, 0, 1, 1);");
+
+  /* Presence semantics spread only where open and closed states own separate
+     transition declarations (status-bar, modal, drawer). */
+  for (const file of ["status-bar.css", "modal.css", "drawer.css"]) {
+    expect(cssFiles.get(file)).toContain("var(--ease-enter)");
+    expect(cssFiles.get(file)).toContain("var(--ease-exit)");
+  }
+
+  /* Shared-single-transition toggles and backdrops stay on neutral `ease`;
+     their exclusion is documented in tokens.md, not an oversight. */
+  for (const file of ["tooltip.css", "flyout.css", "surface.css"]) {
+    expect(cssFiles.get(file)).not.toMatch(/var\(--ease-(enter|exit)\)/);
+  }
 });

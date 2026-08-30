@@ -105,14 +105,25 @@ select {
   --shadow-popout: 0 0.25rem 0.75rem rgb(0 0 0 / 0.15);
 
   /* Motion — see reset.css for the prefers-reduced-motion hard reset.
-     --duration drives component transitions (hover/focus); the dedicated
-     animation rates below tune one-shot open/close and decorative loops. */
+     --duration scales component transitions (hover/focus); the dedicated
+     animation rates below tune one-shot open/close and decorative loops.
+     Generic state/interaction motion uses the CSS default `ease` directly
+     (registered nowhere). --ease-enter/--ease-exit express the character of
+     one-shot presence changes, owned by the open/closed state rules that
+     separate them (status-bar, drawer, modal). The pair follows the standard
+     M3 rhythm; the more aggressive emphasized-decelerate entrance is
+     deliberately not offered because it only pays off on 250–400ms motions,
+     beyond this vocabulary. Toggles that share one transition list at
+     --duration-fast (flyout, tooltip) and pure-opacity backdrops stay on
+     `ease`: at 100ms the curve has almost no resolving time, and a scrim is
+     not traveling anywhere. */
   --duration: 150ms;
   --duration-fast: 100ms;
   --duration-slow: 200ms;
   --duration-spin: 0.75s;
   --duration-shimmer: 1.2s;
-  --ease: ease;
+  --ease-enter: cubic-bezier(0.2, 0, 0, 1);
+  --ease-exit: cubic-bezier(0.4, 0, 1, 1);
 
   /* Focus ring — shared by every interactive component's :focus-visible */
   --focus-outline-color: currentColor;
@@ -4167,7 +4178,9 @@ a.badge[aria-disabled="true"] {
   z-index: calc(var(--z-menu) - 1);
   background: var(--backdrop-fill);
   opacity: 1;
-  transition: opacity var(--duration) var(--ease);
+  /* A scrim never travels; it fades on the neutral `ease`. Duration matches
+     the flyout sheet it accompanies so it never lags the panel. */
+  transition: opacity var(--duration-fast) ease;
 }
 
 .surface-backdrop[hidden] {
@@ -4184,8 +4197,8 @@ a.badge[aria-disabled="true"] {
 @supports (transition-behavior: allow-discrete) {
   .surface-backdrop {
     transition:
-      opacity var(--duration) var(--ease),
-      display var(--duration) allow-discrete;
+      opacity var(--duration-fast) ease,
+      display var(--duration-fast) allow-discrete;
   }
 }
 @media print {
@@ -4235,12 +4248,14 @@ dialog.modal {
    * Keep the open dialog root untransformed. Fixed overlays mounted inside a
    * modal dialog use viewport coordinates; transform/translate/scale on this
    * element would make them position against the dialog instead. The closed
-   * state can still carry a small transform for enter/exit motion.
+   * state can still carry a small transform for enter/exit motion. The lift
+   * is a pure vertical offset: scaling a wide panel around its center drags
+   * both edges, which reads as horizontal movement.
    */
-  transform: translateY(0.35rem) scale(0.98);
+  transform: translateY(0.35rem);
   transition:
-    opacity var(--duration),
-    transform var(--duration);
+    opacity var(--duration) var(--ease-exit),
+    transform var(--duration) var(--ease-exit);
 }
 
 dialog.modal > form,
@@ -4359,33 +4374,46 @@ dialog.modal.dialog-confirmation > form > footer {
 dialog.modal[open] {
   opacity: 1;
   transform: none;
+  transition:
+    opacity var(--duration) var(--ease-enter),
+    transform var(--duration) var(--ease-enter);
 }
 
 @starting-style {
   dialog.modal[open] {
     opacity: 0;
-    transform: translateY(0.35rem) scale(0.98);
+    transform: translateY(0.35rem);
   }
 }
 
 dialog.modal::backdrop {
   background: var(--backdrop-fill);
   opacity: 0;
-  transition: opacity var(--duration);
+  /* Scrim curve stays neutral `ease`; only the panel carries the character
+     curves. */
+  transition: opacity var(--duration) ease;
 }
 
 @supports (transition-behavior: allow-discrete) {
   dialog.modal {
     transition:
-      opacity var(--duration),
-      transform var(--duration),
+      opacity var(--duration) var(--ease-exit),
+      transform var(--duration) var(--ease-exit),
+      overlay var(--duration) allow-discrete,
+      display var(--duration) allow-discrete;
+  }
+
+  dialog.modal[open] {
+    transition:
+      opacity var(--duration) var(--ease-enter),
+      transform var(--duration) var(--ease-enter),
       overlay var(--duration) allow-discrete,
       display var(--duration) allow-discrete;
   }
 
   dialog.modal::backdrop {
     transition:
-      opacity var(--duration),
+      opacity var(--duration) ease,
       overlay var(--duration) allow-discrete,
       display var(--duration) allow-discrete;
   }
@@ -4410,13 +4438,15 @@ html.has-modal-open.had-scrollbar {
 }
 
 @media (prefers-reduced-motion: no-preference) {
+  /* Wrong-close feedback and view-transition transport are motion quirks, not
+     presence enter/exit, so they stay on the plain CSS default easing. */
   dialog.modal.is-static {
-    animation: actual-dialog-static var(--duration-slow) var(--ease);
+    animation: actual-dialog-static var(--duration-slow) ease;
   }
 
   ::view-transition-group(actual-dialog) {
     animation-duration: var(--duration);
-    animation-timing-function: var(--ease);
+    animation-timing-function: ease;
   }
 }
 
@@ -4515,11 +4545,16 @@ html.has-modal-open.had-scrollbar {
  *
  * Internal:
  * --drawer-closed-translate (side/RTL positioning state)
+ * --drawer-motion-duration (shared by panel and ::backdrop so exit duration
+ *   changes in one place; entry state redefines it longer)
  */
 dialog.drawer {
   --drawer-size: 20rem;
   --drawer-pad: var(--space-40);
   --drawer-closed-translate: -100%;
+  /* Exit is shorter than entry so the panel clears quickly; the scrim reads
+     the same variable through inheritance and never lags the panel. */
+  --drawer-motion-duration: var(--duration);
 
   /* Keep the surface anchored to the viewport in the top layer. This also
      provides the containing block for the absolutely positioned close button.
@@ -4543,16 +4578,20 @@ dialog.drawer {
   opacity: 0;
   transform: translateX(var(--drawer-closed-translate));
   transition:
-    opacity var(--duration-slow),
-    transform var(--duration-slow);
+    opacity var(--drawer-motion-duration) var(--ease-exit),
+    transform var(--drawer-motion-duration) var(--ease-exit);
 }
 
 dialog.drawer[open] {
+  --drawer-motion-duration: var(--duration-slow);
   display: grid;
   grid-template-rows: auto minmax(0, 1fr) auto;
   gap: var(--space-40);
   opacity: 1;
   transform: translateX(0);
+  transition:
+    opacity var(--drawer-motion-duration) var(--ease-enter),
+    transform var(--drawer-motion-duration) var(--ease-enter);
 }
 
 /* Backdrop color sourced from components/surface.css so it matches .modal
@@ -4560,7 +4599,9 @@ dialog.drawer[open] {
 dialog.drawer::backdrop {
   background: var(--backdrop-fill);
   opacity: 0;
-  transition: opacity var(--duration-slow);
+  /* Scrim curve stays neutral `ease`; only the panel's character curves
+     apply. Duration follows --drawer-motion-duration through inheritance. */
+  transition: opacity var(--drawer-motion-duration) ease;
 }
 
 dialog.drawer[data-side="end"] {
@@ -4596,17 +4637,25 @@ dialog.drawer nav {
 @supports (transition-behavior: allow-discrete) {
   dialog.drawer {
     transition:
-      opacity var(--duration-slow),
-      transform var(--duration-slow),
-      overlay var(--duration-slow) allow-discrete,
-      display var(--duration-slow) allow-discrete;
+      opacity var(--drawer-motion-duration) var(--ease-exit),
+      transform var(--drawer-motion-duration) var(--ease-exit),
+      overlay var(--drawer-motion-duration) allow-discrete,
+      display var(--drawer-motion-duration) allow-discrete;
+  }
+
+  dialog.drawer[open] {
+    transition:
+      opacity var(--drawer-motion-duration) var(--ease-enter),
+      transform var(--drawer-motion-duration) var(--ease-enter),
+      overlay var(--drawer-motion-duration) allow-discrete,
+      display var(--drawer-motion-duration) allow-discrete;
   }
 
   dialog.drawer::backdrop {
     transition:
-      opacity var(--duration-slow),
-      overlay var(--duration-slow) allow-discrete,
-      display var(--duration-slow) allow-discrete;
+      opacity var(--drawer-motion-duration) ease,
+      overlay var(--drawer-motion-duration) allow-discrete,
+      display var(--drawer-motion-duration) allow-discrete;
   }
 }
 
@@ -4642,7 +4691,7 @@ dialog.drawer nav {
 
 @media (prefers-reduced-motion: no-preference) {
   dialog.drawer.is-static {
-    animation: actual-dialog-static var(--duration-slow) var(--ease);
+    animation: actual-dialog-static var(--duration-slow) ease;
   }
 }
 
@@ -4736,11 +4785,10 @@ dialog.drawer > form > header {
   box-shadow: var(--shadow-popout);
   list-style: none;
   opacity: 1;
-  scale: 1;
-  transition:
-    opacity var(--duration-fast) var(--ease),
-    scale var(--duration-fast) var(--ease),
-    translate var(--duration-fast) var(--ease);
+  /* Anchored flyouts fade in and out; scaling around the center would detach
+     the anchored edge from its trigger on wide panels. The sheet presentation
+     below adds its own translate motion. */
+  transition: opacity var(--duration-fast) ease;
 }
 
 .flyout.is-open:not(.is-sheet) {
@@ -4750,7 +4798,6 @@ dialog.drawer > form > header {
 @starting-style {
   .flyout.is-open {
     opacity: 0;
-    scale: 0.98;
   }
 }
 
@@ -4772,22 +4819,24 @@ dialog.drawer > form > header {
     max(var(--space-30), env(safe-area-inset-bottom));
   border-end-start-radius: 0;
   border-end-end-radius: 0;
+  /* Sheet motion is a directional slide from the viewport edge; it replaces
+     the base fade-only recipe. */
+  transition:
+    opacity var(--duration-fast) ease,
+    translate var(--duration-fast) ease;
 }
 
 .flyout[hidden] {
   display: none;
   opacity: 0;
-  scale: 0.98;
 }
 
 .flyout.is-sheet[hidden] {
-  scale: 1;
   translate: 0 var(--space-30);
 }
 
 @starting-style {
   .flyout.is-sheet.is-open {
-    scale: 1;
     translate: 0 var(--space-30);
   }
 }
@@ -4795,9 +4844,14 @@ dialog.drawer > form > header {
 @supports (transition-behavior: allow-discrete) {
   .flyout {
     transition:
-      opacity var(--duration-fast) var(--ease),
-      scale var(--duration-fast) var(--ease),
-      translate var(--duration-fast) var(--ease),
+      opacity var(--duration-fast) ease,
+      display var(--duration-fast) allow-discrete;
+  }
+
+  .flyout.is-sheet {
+    transition:
+      opacity var(--duration-fast) ease,
+      translate var(--duration-fast) ease,
       display var(--duration-fast) allow-discrete;
   }
 }
@@ -5002,31 +5056,28 @@ dialog.drawer > form > header {
   overflow-wrap: anywhere;
   pointer-events: auto;
   user-select: none;
+  /* Tooltips fade only: the anchor edge, marked by the arrow, must stay put
+     during motion, and a 4% scale was perceptible on small text. Scaling moves
+     the arrow tip away from its trigger on every placement. */
   opacity: 1;
-  scale: 1;
-  transition:
-    opacity var(--duration-fast) var(--ease),
-    scale var(--duration-fast) var(--ease);
+  transition: opacity var(--duration-fast) ease;
 }
 
 .tooltip[hidden] {
   display: none;
   opacity: 0;
-  scale: 0.96;
 }
 
 @starting-style {
   .tooltip:not([hidden]) {
     opacity: 0;
-    scale: 0.96;
   }
 }
 
 @supports (transition-behavior: allow-discrete) {
   .tooltip {
     transition:
-      opacity var(--duration-fast) var(--ease),
-      scale var(--duration-fast) var(--ease),
+      opacity var(--duration-fast) ease,
       display var(--duration-fast) allow-discrete;
   }
 }
@@ -5473,9 +5524,12 @@ dialog.drawer > form > header {
 /*
  * Status bar — singleton floating status area.
  *
- * One element in the HTML, empty by default, hidden when :empty but kept in the
- * accessibility tree so it stays a reliable live region. JavaScript only sets
- * text content; the visual shows and hides with the content.
+ * One element in the HTML, empty by default. .is-open is the visual state, set
+ * by status.js like any other surface: it lands after the message is written
+ * and lifts before the bar is cleared, so the bar leaves in the exact state it
+ * was shown in — same text, same width, same intent color — instead of snapping
+ * to a neutral empty pill mid-exit. Emptying the text is the *end* of the exit,
+ * not its trigger.
  *
  * Consumes intent like badge or alert. No need for status-bar-specific modifier
  * classes — .danger / .success / .warning / .neutral from intents.css drive
@@ -5489,6 +5543,7 @@ dialog.drawer > form > header {
  * Internal:
  * --status-bg
  * --status-fg
+ * --status-viewport-offset (written by status.js while the bar is open)
  */
 
 /* Intent boundary — inherited intents do not tint this component.
@@ -5503,7 +5558,9 @@ dialog.drawer > form > header {
   --status-fg: var(--intent-fg, var(--surface));
 
   position: fixed;
-  inset-block-end: var(--space-40);
+  /* Fixed positioning tracks the layout viewport, which the mobile software
+     keyboard covers. status.js writes the occluded band into the offset. */
+  inset-block-end: calc(var(--space-40) + var(--status-viewport-offset, 0px));
   inset-inline: var(--space-40);
   z-index: var(--z-status);
 
@@ -5525,22 +5582,32 @@ dialog.drawer > form > header {
   color: var(--status-fg);
   box-shadow: var(--shadow-popout);
 
-  opacity: 1;
-  scale: 1;
-  translate: 0 0;
+  /* Closed by default. Opacity, not visibility or display: the bar has to stay
+     in the accessibility tree to work as a live region. */
+  opacity: 0;
+  translate: 0 var(--space-30);
   pointer-events: none;
 
+  /* Exit is shorter than entry so dismissed feedback gets out of the way.
+     background stays a shorthand so --status-bg still accepts gradients;
+     solid colors expose an interpolable computed background-color. The
+     intent color follows the state/interaction `ease`, not the presence
+     curves. */
   transition:
-    opacity var(--duration-slow) var(--ease),
-    scale var(--duration-slow) var(--ease),
-    translate var(--duration-slow) var(--ease);
+    opacity var(--duration-fast) var(--ease-exit),
+    translate var(--duration) var(--ease-exit),
+    background-color var(--duration) ease;
 }
 
-.status-bar:empty {
-  opacity: 0;
-  scale: 0.96;
-  translate: 0 var(--space-20);
-  pointer-events: none;
+.status-bar.is-open {
+  opacity: 1;
+  translate: 0 0;
+  /* Entry takes a little longer and decelerates, making the message legible
+     before its motion settles. */
+  transition:
+    opacity var(--duration) var(--ease-enter),
+    translate var(--duration-slow) var(--ease-enter),
+    background-color var(--duration) ease;
 }
 @media print {
   .status-bar {

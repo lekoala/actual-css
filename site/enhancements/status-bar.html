@@ -220,10 +220,18 @@ replace the previous one. Keep one element in the HTML, styled with
 <code>.status-bar</code> and carrying the <code>[data-status][role=&quot;status&quot;]</code> contract that the
 runtime targets, empty by default.</p>
 <ul>
-<li>JavaScript only updates its text content; it shows when non-empty and hides when empty, while staying available as a live region.</li>
+<li>JavaScript writes the text content and toggles <code>.is-open</code>, the state class the CSS animates. The element is never hidden, so it stays available as a live region.</li>
 <li>Use it for transient status (<code>Saved.</code>, <code>Reconnected.</code>, <code>Copied.</code>). Critical, persistent, or actionable information belongs in <code>.alert</code>, inline messages, or dialogs.</li>
 <li>Intents: <code>danger</code>, <code>success</code>, <code>warning</code>, <code>neutral</code>. The default (no intent) is a neutral dark pill.</li>
+<li>On mobile, the runtime keeps the bar above the software keyboard by tracking <code>visualViewport</code> while a message is showing.</li>
 </ul>
+<p>Clearing is deferred, not immediate: the bar closes first and only empties its
+text and intent once the exit transition has finished, so it leaves at the size
+and color it was shown at. A new message during that exit wins — it cancels the
+pending cleanup instead of being wiped by it. Read the bar's content right after
+<code>clear()</code> and you still see the outgoing message; that is the contract, not a
+race. An empty message clears too, so <code>status(response.error)</code> on a successful
+response closes the bar rather than opening a blank pill.</p>
 <p>The runtime auto-wires the status bar to Actual's form validation: a form that
 fails to submit shows its <code>data-validation-message</code> in the status bar with the
 <code>danger</code> intent. No target in the DOM means the call is a no-op, so the markup

@@ -67,21 +67,23 @@
 
   /* Exit is shorter than entry so dismissed feedback gets out of the way.
      background stays a shorthand so --status-bg still accepts gradients;
-     solid colors expose an interpolable computed background-color. */
+     solid colors expose an interpolable computed background-color. The
+     intent color follows the state/interaction `ease`, not the presence
+     curves. */
   transition:
-    opacity var(--duration-fast) ease,
-    translate var(--duration) ease,
+    opacity var(--duration-fast) var(--ease-exit),
+    translate var(--duration) var(--ease-exit),
     background-color var(--duration) ease;
 }
 
 .status-bar.is-open {
   opacity: 1;
   translate: 0 0;
-  /* Entry takes a little longer, making the message legible before its motion
-     settles while staying on the CSS default easing. */
+  /* Entry takes a little longer and decelerates, making the message legible
+     before its motion settles. */
   transition:
-    opacity var(--duration) ease,
-    translate var(--duration-slow) ease,
+    opacity var(--duration) var(--ease-enter),
+    translate var(--duration-slow) var(--ease-enter),
     background-color var(--duration) ease;
 }
 @media print {

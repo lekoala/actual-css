@@ -1,0 +1,497 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Motion catalogue — Actual CSS</title>
+  <meta name="description" content="Replay the presence motion of status-bar, tooltip, flyout, sheet, modal, and drawer side by side, switch easing curves, and simulate reduced motion.">
+  <link rel="stylesheet" href="../../dist/actual.full.css">
+  <link rel="stylesheet" href="../assets/actual-themes.min.css">
+  <style>
+    .motion-page {
+      --center-size: 76rem;
+
+      padding-block: var(--space-60);
+    }
+
+    .motion-intro,
+    .motion-section {
+      display: grid;
+      gap: var(--space-30);
+    }
+
+    .motion-intro {
+      padding-block-end: var(--space-40);
+    }
+
+    .motion-section {
+      padding-block: var(--space-50);
+      border-block-start: var(--border-width) solid var(--border);
+    }
+
+    .motion-section > :is(h2, p) {
+      margin: 0;
+    }
+
+    .motion-section .recipe {
+      color: var(--text-muted);
+    }
+
+    .motion-stage {
+      display: grid;
+      gap: var(--space-40);
+      align-items: center;
+      padding: var(--space-40);
+      border-radius: var(--radius);
+      background: var(--surface-subtle);
+    }
+
+    .motion-controls {
+      flex-wrap: wrap;
+    }
+
+    /* What reset.css does under prefers-reduced-motion, applied on demand so
+       the catalogue can exercise the fallback without DevTools emulation. */
+    .simulate-reduced *,
+    .simulate-reduced *::before,
+    .simulate-reduced *::after {
+      animation-duration: 0.01ms !important;
+      animation-delay: 0s !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      transition-delay: 0s !important;
+    }
+  </style>
+</head>
+<body>
+  <main class="center motion-page">
+    <header class="motion-intro">
+      <p class="overline">Motion catalogue</p>
+      <h1>Presence motion, one surface at a time</h1>
+      <p class="lead">
+        Each section replays one overlay's entry and exit. The slow-motion
+        toggle stretches the duration tokens so the presence curves read, and
+        the reduced-motion toggle confirms the fallback snaps instead of
+        ghosting. The recipes below describe the cascade in
+        <code>src/css/components/</code>.
+      </p>
+      <div class="cluster motion-controls">
+        <select class="select sm fit" id="theme-switcher" aria-label="Switch theme">
+          <option value="">System</option>
+          <option value="light">Light</option>
+          <option value="dark">Dark</option>
+          <option value="indigo">Indigo</option>
+          <option value="dim">Dim</option>
+          <option value="corporate">Corporate</option>
+        </select>
+        <label class="cluster" for="reduced-toggle">
+          <input type="checkbox" id="reduced-toggle">
+          Simulate reduced motion
+        </label>
+        <label class="cluster" for="slow-toggle">
+          <input type="checkbox" id="slow-toggle">
+          Slow motion ×4
+        </label>
+      </div>
+    </header>
+
+    <section class="motion-section card" aria-labelledby="motion-matrix">
+      <h2 id="motion-matrix">Recipe matrix</h2>
+      <div class="table-wrap">
+        <table class="table">
+          <caption class="sr-only">What interpolates during each surface's enter and exit motion.</caption>
+          <thead>
+            <tr>
+              <th scope="col">Surface</th>
+              <th scope="col">Interpolates</th>
+              <th scope="col">Entry</th>
+              <th scope="col">Exit</th>
+              <th scope="col">Snaps</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">status-bar</th>
+              <td><code>opacity</code>, <code>translate</code></td>
+              <td>150 / 200ms, <code>--ease-enter</code></td>
+              <td>100 / 150ms, <code>--ease-exit</code></td>
+              <td>—</td>
+            </tr>
+            <tr>
+              <th scope="row">tooltip</th>
+              <td><code>opacity</code></td>
+              <td>100ms, <code>ease</code></td>
+              <td>100ms, <code>ease</code></td>
+              <td>—</td>
+            </tr>
+            <tr>
+              <th scope="row">flyout (anchored)</th>
+              <td><code>opacity</code></td>
+              <td>100ms, <code>ease</code></td>
+              <td>100ms, <code>ease</code></td>
+              <td>—</td>
+            </tr>
+            <tr>
+              <th scope="row">flyout (sheet) + backdrop</th>
+              <td><code>opacity</code>, <code>translate</code>, backdrop <code>opacity</code></td>
+              <td>100ms, <code>ease</code></td>
+              <td>100ms, <code>ease</code></td>
+              <td>—</td>
+            </tr>
+            <tr>
+              <th scope="row">modal + backdrop</th>
+              <td><code>opacity</code>, <code>transform</code>, backdrop <code>opacity</code></td>
+              <td>150ms, <code>--ease-enter</code></td>
+              <td>150ms, <code>--ease-exit</code></td>
+              <td>—</td>
+            </tr>
+            <tr>
+              <th scope="row">drawer + backdrop</th>
+              <td><code>opacity</code>, <code>transform</code>, backdrop <code>opacity</code></td>
+              <td>200ms, <code>--ease-enter</code></td>
+              <td>150ms, <code>--ease-exit</code></td>
+              <td><code>--drawer-motion-duration</code> couples the scrim to the panel</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="recipe">
+        Curves under <code>--ease-enter</code>/<code>--ease-exit</code> belong
+        to the open/closed <em>state</em> that owns them (destination state owns
+        the transition). The 100ms toggles deliberately share one list and stay
+        on the CSS default <code>ease</code>; backdrops keep <code>ease</code>
+        but track the panel duration. Exits relying on
+        <code>display</code>/<code>overlay</code> discrete transitions snap on
+        browsers without <code>transition-behavior: allow-discrete</code>.
+      </p>
+    </section>
+
+    <section class="motion-section stack" aria-labelledby="status-title">
+      <div class="stack">
+        <h2 id="status-title">Status bar</h2>
+        <p class="recipe">
+          Singleton live region, pinned to the layout viewport. Entry is slower
+          (legible before it settles), exit faster (feedback gets out of the
+          way). <code>background-color</code> intentionally follows state
+          <code>ease</code>, not the presence curves.
+        </p>
+      </div>
+      <div class="motion-stage">
+        <div class="cluster">
+          <button class="btn primary sm" type="button" id="status-replay">Replay</button>
+          <button class="btn outline sm" type="button" data-status-show>Show</button>
+          <button class="btn ghost sm" type="button" data-status-clear>Clear</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="motion-section stack" aria-labelledby="tooltip-title">
+      <div class="stack">
+        <h2 id="tooltip-title">Tooltip</h2>
+        <p class="recipe">
+          Opacity only. A scale around the center moves the arrow tip away from
+          its trigger and reads as a jump on small text, so the anchored
+          surface fades without geometry.
+        </p>
+      </div>
+      <div class="motion-stage">
+        <button class="btn outline fit" type="button" id="tooltip-trigger" data-tooltip="Prompt via hover or focus"
+          data-tooltip-placement="top">Focus or hover for tooltip</button>
+        <button class="btn ghost sm" type="button" id="tooltip-replay">Replay</button>
+      </div>
+    </section>
+
+    <section class="motion-section stack" aria-labelledby="flyout-anchored-title">
+      <div class="stack">
+        <h2 id="flyout-anchored-title">Anchored flyout</h2>
+        <p class="recipe">
+          Opacity only. Scale around the center would detach the edge attached
+          to the trigger on wide panels, so the anchored menu fades in place and
+          the anchor always stays put.
+        </p>
+      </div>
+      <div class="motion-stage">
+        <div class="cluster">
+          <div class="flyout-trigger">
+            <button class="btn outline" type="button" id="flyout-anchored-trigger" data-enhance="flyout"
+              aria-haspopup="menu" aria-expanded="false" aria-controls="motion-flyout-anchored">
+              Toggle anchored flyout
+            </button>
+            <menu class="flyout menu" id="motion-flyout-anchored" role="menu"
+              aria-labelledby="flyout-anchored-trigger" hidden>
+              <li><button class="menu-item" type="button" role="menuitem">First action</button></li>
+              <li><button class="menu-item" type="button" role="menuitem">Second action</button></li>
+              <li><button class="menu-item" type="button" role="menuitem" aria-disabled="true">Unavailable</button></li>
+            </menu>
+          </div>
+          <button class="btn ghost sm" type="button" data-replay-flyout="motion-flyout-anchored">Replay</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="motion-section stack" aria-labelledby="flyout-sheet-title">
+      <div class="stack">
+        <h2 id="flyout-sheet-title">Bottom-sheet flyout + backdrop</h2>
+        <p class="recipe">
+          <code>data-flyout-mobile="sheet"</code> forces the coarse-pointer
+          presentation on any viewport. The sheet slides a quarter-gap up from
+          the bottom edge without zooming; the backdrop fades on neutral
+          <code>ease</code> at the same duration so it never lags the panel.
+        </p>
+      </div>
+      <div class="motion-stage">
+        <div class="cluster">
+          <div class="flyout-trigger">
+            <button class="btn outline" type="button" id="flyout-sheet-trigger" data-enhance="flyout"
+              aria-haspopup="dialog" aria-expanded="false" aria-controls="motion-flyout-sheet">
+              Toggle bottom sheet
+            </button>
+            <nav class="flyout" id="motion-flyout-sheet" data-flyout-mobile="sheet"
+              aria-labelledby="flyout-sheet-trigger" hidden>
+              <section aria-labelledby="motion-sheet-heading">
+                <h3 id="motion-sheet-heading">Sheet action</h3>
+                <ul>
+                  <li><a href="#">Continue to settings</a></li>
+                  <li><a href="#">View account</a></li>
+                  <li><a href="#">Sign out</a></li>
+                </ul>
+              </section>
+            </nav>
+          </div>
+          <button class="btn ghost sm" type="button" data-replay-flyout="motion-flyout-sheet">Replay</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="motion-section stack" aria-labelledby="modal-title">
+      <div class="stack">
+        <h2 id="modal-title">Modal + backdrop</h2>
+        <p class="recipe">
+          A centered surface lifts slightly from the page instead of zooming;
+          the translate-only geometry avoids horizontal edge drift on wide
+          panels. Entry decelerates, exit accelerates at the same duration; the
+          native <code>dialog</code> keeps its top-layer semantics.
+        </p>
+      </div>
+      <div class="motion-stage">
+        <div class="cluster">
+          <button class="btn primary" type="button" commandfor="motion-modal" command="show-modal"
+            aria-haspopup="dialog" aria-controls="motion-modal" id="modal-open">Open modal</button>
+          <button class="btn ghost sm" type="button" id="modal-replay">Replay</button>
+        </div>
+      </div>
+      <div class="motion-stage">
+        <div class="cluster">
+          <button class="btn outline" type="button" commandfor="motion-shake-modal" command="show-modal"
+            aria-haspopup="dialog" aria-controls="motion-shake-modal" id="shake-open">Open modal (dismiss shake)</button>
+          <button class="btn ghost sm" type="button" id="shake-replay">Replay shake</button>
+        </div>
+        <p class="recipe">
+          An opt-out modal (<code>closedby="none"</code>, no
+          <code>data-dialog-dismissible</code>) rejects light dismiss: pressing
+          outside (or <code>Replay shake</code>) flashes the
+          <code>actual-dialog-static</code> shake and keeps the dialog open — the
+          feedback quirk that stays on <code>ease</code>, independent of the
+          enter/exit pair. Close it with the button inside.
+        </p>
+      </div>
+    </section>
+
+    <section class="motion-section stack" aria-labelledby="drawer-title">
+      <div class="stack">
+        <h2 id="drawer-title">Drawer + backdrop</h2>
+        <p class="recipe">
+          The side sheet travels the full drawer width, so the asymmetric recipe
+          is most legible here: entry 200ms decelerating, exit 150ms
+          accelerating. The backdrop shares the panel duration through
+          <code>--drawer-motion-duration</code> and keeps the neutral scrim
+          curve.
+        </p>
+      </div>
+      <div class="motion-stage">
+        <div class="cluster">
+          <button class="btn outline" type="button" commandfor="motion-drawer" command="show-modal"
+            aria-haspopup="dialog" aria-controls="motion-drawer" id="drawer-open">Open drawer</button>
+          <button class="btn ghost sm" type="button" id="drawer-replay">Replay</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="status-bar" data-status role="status" aria-live="polite" aria-atomic="true"></div>
+
+  <dialog class="modal" id="motion-modal" data-dialog-dismissible>
+    <form method="dialog" class="stack">
+      <header><h3>Modal replay</h3></header>
+      <p>Entry decelerates into place; exit accelerates back out, both with a
+        small vertical lift and no scale.</p>
+      <footer>
+        <button class="btn" type="submit" value="cancel">Dismiss</button>
+        <button class="btn primary" commandfor="motion-modal" command="request-close">Close</button>
+      </footer>
+    </form>
+  </dialog>
+
+  <dialog class="drawer" id="motion-drawer" data-dialog-dismissible>
+    <form method="dialog" class="stack">
+      <header><h3>Drawer replay</h3></header>
+      <p>The panel slides the full width in <code>--duration-slow</code> and
+        exits at <code>--duration</code>; the scrim follows via
+        <code>--drawer-motion-duration</code>.</p>
+      <footer>
+        <button class="btn primary" commandfor="motion-drawer" command="request-close">Close</button>
+      </footer>
+    </form>
+  </dialog>
+
+  <dialog class="modal" id="motion-shake-modal" closedby="none">
+    <form method="dialog" class="stack">
+      <header><h3>Invalid light dismiss</h3></header>
+      <p>Press outside this dialog to see the shake. It stays open; use Close
+        below to exit.</p>
+      <footer>
+        <button class="btn primary" commandfor="motion-shake-modal" command="request-close">Close</button>
+      </footer>
+    </form>
+  </dialog>
+
+  <script src="../../dist/actual.full.js"></script>
+  <script>
+    const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+    let busy = false;
+    let slowFactor = 1;
+
+    async function replay(open, close, entry = 520, exit = 380) {
+      if (busy) return;
+      busy = true;
+      try {
+        if (close && close !== open) {
+          open.click();
+          await sleep(entry * slowFactor);
+          close.click();
+        } else {
+          open.click();
+          await sleep(entry * slowFactor);
+          open.click();
+        }
+        await sleep(exit * slowFactor);
+      } finally {
+        busy = false;
+      }
+    }
+
+    const root = document.documentElement;
+
+    const themeSwitcher = document.getElementById("theme-switcher");
+    themeSwitcher?.addEventListener("change", () => {
+      if (themeSwitcher.value) root.dataset.theme = themeSwitcher.value;
+      else root.removeAttribute("data-theme");
+    });
+
+    const reducedToggle = document.getElementById("reduced-toggle");
+    reducedToggle?.addEventListener("change", () => {
+      root.classList.toggle("simulate-reduced", reducedToggle.checked);
+    });
+
+    const slowToggle = document.getElementById("slow-toggle");
+    slowToggle?.addEventListener("change", () => {
+      slowFactor = slowToggle.checked ? 4 : 1;
+      if (slowToggle.checked) {
+        /* Stretch the real duration tokens so the shapes of the presence
+           curves become readable. Replay waits scale through slowFactor. */
+        root.style.setProperty("--duration", "600ms");
+        root.style.setProperty("--duration-fast", "400ms");
+        root.style.setProperty("--duration-slow", "800ms");
+      } else {
+        root.style.removeProperty("--duration");
+        root.style.removeProperty("--duration-fast");
+        root.style.removeProperty("--duration-slow");
+      }
+    });
+
+    /* status-bar */
+    document.getElementById("status-replay")?.addEventListener("click", async () => {
+      if (busy) return;
+      busy = true;
+      try {
+        document.dispatchEvent(new CustomEvent("actual:status", {
+          detail: { message: "Saved. Entry decelerates, exit accelerates.", intent: "success", duration: false },
+        }));
+        await sleep(850 * slowFactor);
+        document.dispatchEvent(new CustomEvent("actual:status", { detail: {} }));
+        await sleep(350 * slowFactor);
+      } finally {
+        busy = false;
+      }
+    });
+    document.querySelectorAll("[data-status-show]").forEach((button) => {
+      button.addEventListener("click", () => {
+        document.dispatchEvent(new CustomEvent("actual:status", {
+          detail: { message: "Status bar replay.", intent: "success", duration: 3000 },
+        }));
+      });
+    });
+    document.querySelectorAll("[data-status-clear]").forEach((button) => {
+      button.addEventListener("click", () => {
+        document.dispatchEvent(new CustomEvent("actual:status", { detail: {} }));
+      });
+    });
+
+    /* tooltip */
+    const tooltipTrigger = document.getElementById("tooltip-trigger");
+    document.getElementById("tooltip-replay")?.addEventListener("click", async () => {
+      if (busy || !tooltipTrigger) return;
+      busy = true;
+      try {
+        tooltipTrigger.focus();
+        await sleep(500 * slowFactor);
+        tooltipTrigger.blur();
+        await sleep(400 * slowFactor);
+      } finally {
+        busy = false;
+      }
+    });
+
+    /* flyouts */
+    document.querySelectorAll("[data-replay-flyout]").forEach((button) => {
+      const panelId = button.dataset.replayFlyout;
+      button.addEventListener("click", () => {
+        const open = document.querySelector(`[aria-controls="${panelId}"]`);
+        if (open) replay(open, null, 420, 320);
+      });
+    });
+
+    /* modal and drawer */
+    document.getElementById("modal-replay")?.addEventListener("click", () =>
+      replay(
+        document.getElementById("modal-open"),
+        document.querySelector('#motion-modal button[command="request-close"]'),
+      ),
+    );
+    document.getElementById("drawer-replay")?.addEventListener("click", () =>
+      replay(
+        document.getElementById("drawer-open"),
+        document.querySelector('#motion-drawer button[command="request-close"]'),
+      ),
+    );
+
+    /* modal dismiss shake: simulate a backdrop press by clicking the dialog
+       element itself — clientX/clientY land at 0,0, outside the centered
+       rect, so dialog.js routes it to flashStatic() instead of closing. */
+    document.getElementById("shake-replay")?.addEventListener("click", async () => {
+      if (busy) return;
+      const modal = document.getElementById("motion-shake-modal");
+      const open = document.getElementById("shake-open");
+      busy = true;
+      try {
+        if (!modal?.open) open?.click();
+        await sleep(500 * slowFactor);
+        modal?.click();
+        await sleep(750 * slowFactor);
+      } finally {
+        busy = false;
+      }
+    });
+  </script>
+</body>
+</html>

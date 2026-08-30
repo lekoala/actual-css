@@ -370,16 +370,18 @@
 </code></pre>
 <p>With <code>color-mix()</code> support the shadows derive from <code>--shadow-color</code> (a theme token) and re-declare on every theme boundary so islands follow their own shadow color.</p>
 <h3 id="motion">Motion</h3>
-<p>Motion tokens keep transitions consistent and easy to disable.</p>
+<p>Motion durations keep transitions consistent and easy to disable.</p>
 <pre><code class="language-css">:root {
   --duration: 150ms;          /* component transitions (hover/focus) */
   --duration-fast: 100ms;     /* quick feedback */
   --duration-slow: 200ms;     /* one-shot open/close */
   --duration-spin: 0.75s;     /* continuous spin (.spinner) */
   --duration-shimmer: 1.2s;   /* continuous shimmer (.skeleton, indeterminate .progress) */
-  --ease: ease;
+  --ease-enter: cubic-bezier(0.2, 0, 0, 1);
+  --ease-exit: cubic-bezier(0.4, 0, 1, 1);
 }
 </code></pre>
+<p>Ordinary interaction/state transitions have <strong>no easing token</strong>: they use the CSS default <code>ease</code> directly, and the dialog shake feedback plus the <code>actual-dialog</code> View Transition keep that default deliberately. The presence pair exists only for one-shot open/close where open and closed states own separate transition declarations (<code>.status-bar</code>/<code>.is-open</code>, <code>dialog.modal[open]</code>, <code>dialog.drawer[open]</code>): <code>--ease-enter</code> decelerates the appearance, <code>--ease-exit</code> accelerates the departure. The pair follows Material's standard rhythm; the emphasized-decelerate entrance is deliberately not offered because it only pays off at 250–400ms durations, beyond this vocabulary. Backdrops keep <code>ease</code> — a scrim only fades, it does not travel — but track their surface's duration. Toggles that share one transition list at <code>--duration-fast</code> (flyout, tooltip) also stay on <code>ease</code>: at 100ms the curve barely resolves and entry/exit cannot split on a single rule. These absences are deliberate, not gaps; a theme with a different motion character overrides <code>--ease-enter</code> / <code>--ease-exit</code>.</p>
 <p><code>reset.css</code> clamps raw animation and transition durations to <code>0.01ms</code>, resets their delays, and restores <code>html</code> scroll behavior under <code>prefers-reduced-motion: reduce</code>. Decorative loops effectively complete immediately without blanket-disabling animation support.</p>
 <h3 id="icons">Icons</h3>
 <p>Icons used by CSS-only controls are public tokens because users may need to replace them. They are inline SVG data URIs — override these URLs when a strict CSP disallows <code>data:</code>.</p>

@@ -101,14 +101,25 @@ select {
   --shadow-popout: 0 0.25rem 0.75rem rgb(0 0 0 / 0.15);
 
   /* Motion — see reset.css for the prefers-reduced-motion hard reset.
-     --duration drives component transitions (hover/focus); the dedicated
-     animation rates below tune one-shot open/close and decorative loops. */
+     --duration scales component transitions (hover/focus); the dedicated
+     animation rates below tune one-shot open/close and decorative loops.
+     Generic state/interaction motion uses the CSS default `ease` directly
+     (registered nowhere). --ease-enter/--ease-exit express the character of
+     one-shot presence changes, owned by the open/closed state rules that
+     separate them (status-bar, drawer, modal). The pair follows the standard
+     M3 rhythm; the more aggressive emphasized-decelerate entrance is
+     deliberately not offered because it only pays off on 250–400ms motions,
+     beyond this vocabulary. Toggles that share one transition list at
+     --duration-fast (flyout, tooltip) and pure-opacity backdrops stay on
+     `ease`: at 100ms the curve has almost no resolving time, and a scrim is
+     not traveling anywhere. */
   --duration: 150ms;
   --duration-fast: 100ms;
   --duration-slow: 200ms;
   --duration-spin: 0.75s;
   --duration-shimmer: 1.2s;
-  --ease: ease;
+  --ease-enter: cubic-bezier(0.2, 0, 0, 1);
+  --ease-exit: cubic-bezier(0.4, 0, 1, 1);
 
   /* Focus ring — shared by every interactive component's :focus-visible */
   --focus-outline-color: currentColor;

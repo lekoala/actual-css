@@ -8,6 +8,9 @@
 * `data-list` for compact term–value pairs describing the properties of a single object.
 * Segmented `meter`.
 * `intent-color` to apply color based on intent.
+* `demo/templates/motion.html` — a motion catalogue that replays each overlay's
+  entry/exit side by side, stretches durations to read the presence curves, and
+  simulates reduced motion.
 
 ### Changed
 
@@ -21,6 +24,11 @@
 * Removed the generic `--ease` motion token (breaking, pre-1.0). Generic interaction and
   state transitions now use the CSS default `ease` directly; the dialog shake and the
   `actual-dialog` View Transition keep that default deliberately, so no behavior changes.
+* Introduced `--ease-enter` / `--ease-exit` presence curves for one-shot open/close, applied
+  to `status-bar`, `modal`, and `drawer`. The drawer exit shortens to `--duration` (entry
+  stays `--duration-slow`) and its `::backdrop` follows the panel duration. Flyout, tooltip,
+  and all backdrops keep the neutral `ease`; they share a single fast transition list or are
+  pure-opacity scrims where the presence pair does not resolve.
 
 
 ## [0.4.2] - 2026-08-25

@@ -229,10 +229,12 @@ Motion durations keep transitions consistent and easy to disable.
   --duration-slow: 200ms;     /* one-shot open/close */
   --duration-spin: 0.75s;     /* continuous spin (.spinner) */
   --duration-shimmer: 1.2s;   /* continuous shimmer (.skeleton, indeterminate .progress) */
+  --ease-enter: cubic-bezier(0.2, 0, 0, 1);
+  --ease-exit: cubic-bezier(0.4, 0, 1, 1);
 }
 ```
 
-Easing has **no generic global token**: ordinary interaction/state transitions use the CSS default `ease` directly. A curve expresses the character of a movement (something arrives, something leaves), so a single `ease` token either duplicates the default or — as soon as one component does not consume it — advertises a cross-component control it cannot hold. The shake feedback on an invalid dialog close and the `actual-dialog` View Transition also stay on `ease`, deliberately outside any future presence-motion vocabulary. If an overlay audit proves that component families share enter/exit semantics, dedicated presence tokens are introduced for that exact contract; absence of such tokens is not a gap.
+Ordinary interaction/state transitions have **no easing token**: they use the CSS default `ease` directly, and the dialog shake feedback plus the `actual-dialog` View Transition keep that default deliberately. The presence pair exists only for one-shot open/close where open and closed states own separate transition declarations (`.status-bar`/`.is-open`, `dialog.modal[open]`, `dialog.drawer[open]`): `--ease-enter` decelerates the appearance, `--ease-exit` accelerates the departure. The pair follows Material's standard rhythm; the emphasized-decelerate entrance is deliberately not offered because it only pays off at 250–400ms durations, beyond this vocabulary. Backdrops keep `ease` — a scrim only fades, it does not travel — but track their surface's duration. Toggles that share one transition list at `--duration-fast` (flyout, tooltip) also stay on `ease`: at 100ms the curve barely resolves and entry/exit cannot split on a single rule. These absences are deliberate, not gaps; a theme with a different motion character overrides `--ease-enter` / `--ease-exit`.
 
 `reset.css` clamps raw animation and transition durations to `0.01ms`, resets their delays, and restores `html` scroll behavior under `prefers-reduced-motion: reduce`. Decorative loops effectively complete immediately without blanket-disabling animation support.
 
