@@ -18,6 +18,9 @@
   opening a blank pill. The runtime also lifts the bar above the mobile software keyboard
   via `visualViewport`. Deferred component cleanup now shares one CSS-transition helper,
   so unrelated or infinite author animations cannot strand a status bar or surface.
+* Removed the generic `--ease` motion token (breaking, pre-1.0). Generic interaction and
+  state transitions now use the CSS default `ease` directly; the dialog shake and the
+  `actual-dialog` View Transition keep that default deliberately, so no behavior changes.
 
 
 ## [0.4.2] - 2026-08-25

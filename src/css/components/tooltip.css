@@ -35,8 +35,8 @@
   opacity: 1;
   scale: 1;
   transition:
-    opacity var(--duration-fast) var(--ease),
-    scale var(--duration-fast) var(--ease);
+    opacity var(--duration-fast) ease,
+    scale var(--duration-fast) ease;
 }
 
 .tooltip[hidden] {
@@ -55,8 +55,8 @@
 @supports (transition-behavior: allow-discrete) {
   .tooltip {
     transition:
-      opacity var(--duration-fast) var(--ease),
-      scale var(--duration-fast) var(--ease),
+      opacity var(--duration-fast) ease,
+      scale var(--duration-fast) ease,
       display var(--duration-fast) allow-discrete;
   }
 }

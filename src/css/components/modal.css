@@ -214,13 +214,15 @@ html.has-modal-open.had-scrollbar {
 }
 
 @media (prefers-reduced-motion: no-preference) {
+  /* Wrong-close feedback and view-transition transport are motion quirks, not
+     presence enter/exit, so they stay on the plain CSS default easing. */
   dialog.modal.is-static {
-    animation: actual-dialog-static var(--duration-slow) var(--ease);
+    animation: actual-dialog-static var(--duration-slow) ease;
   }
 
   ::view-transition-group(actual-dialog) {
     animation-duration: var(--duration);
-    animation-timing-function: var(--ease);
+    animation-timing-function: ease;
   }
 }
 

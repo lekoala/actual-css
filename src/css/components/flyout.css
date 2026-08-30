@@ -75,9 +75,9 @@
   opacity: 1;
   scale: 1;
   transition:
-    opacity var(--duration-fast) var(--ease),
-    scale var(--duration-fast) var(--ease),
-    translate var(--duration-fast) var(--ease);
+    opacity var(--duration-fast) ease,
+    scale var(--duration-fast) ease,
+    translate var(--duration-fast) ease;
 }
 
 .flyout.is-open:not(.is-sheet) {
@@ -132,9 +132,9 @@
 @supports (transition-behavior: allow-discrete) {
   .flyout {
     transition:
-      opacity var(--duration-fast) var(--ease),
-      scale var(--duration-fast) var(--ease),
-      translate var(--duration-fast) var(--ease),
+      opacity var(--duration-fast) ease,
+      scale var(--duration-fast) ease,
+      translate var(--duration-fast) ease,
       display var(--duration-fast) allow-discrete;
   }
 }

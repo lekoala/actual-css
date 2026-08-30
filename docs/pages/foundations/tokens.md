@@ -220,7 +220,7 @@ With `color-mix()` support the shadows derive from `--shadow-color` (a theme tok
 
 ### Motion
 
-Motion tokens keep transitions consistent and easy to disable.
+Motion durations keep transitions consistent and easy to disable.
 
 ```css
 :root {
@@ -229,9 +229,10 @@ Motion tokens keep transitions consistent and easy to disable.
   --duration-slow: 200ms;     /* one-shot open/close */
   --duration-spin: 0.75s;     /* continuous spin (.spinner) */
   --duration-shimmer: 1.2s;   /* continuous shimmer (.skeleton, indeterminate .progress) */
-  --ease: ease;
 }
 ```
+
+Easing has **no generic global token**: ordinary interaction/state transitions use the CSS default `ease` directly. A curve expresses the character of a movement (something arrives, something leaves), so a single `ease` token either duplicates the default or — as soon as one component does not consume it — advertises a cross-component control it cannot hold. The shake feedback on an invalid dialog close and the `actual-dialog` View Transition also stay on `ease`, deliberately outside any future presence-motion vocabulary. If an overlay audit proves that component families share enter/exit semantics, dedicated presence tokens are introduced for that exact contract; absence of such tokens is not a gap.
 
 `reset.css` clamps raw animation and transition durations to `0.01ms`, resets their delays, and restores `html` scroll behavior under `prefers-reduced-motion: reduce`. Decorative loops effectively complete immediately without blanket-disabling animation support.
 
