@@ -32,23 +32,21 @@
   overflow-wrap: anywhere;
   pointer-events: auto;
   user-select: none;
+  /* Tooltips fade only: the anchor edge, marked by the arrow, must stay put
+     during motion, and a 4% scale was perceptible on small text. Scaling moves
+     the arrow tip away from its trigger on every placement. */
   opacity: 1;
-  scale: 1;
-  transition:
-    opacity var(--duration-fast) ease,
-    scale var(--duration-fast) ease;
+  transition: opacity var(--duration-fast) ease;
 }
 
 .tooltip[hidden] {
   display: none;
   opacity: 0;
-  scale: 0.96;
 }
 
 @starting-style {
   .tooltip:not([hidden]) {
     opacity: 0;
-    scale: 0.96;
   }
 }
 
@@ -56,7 +54,6 @@
   .tooltip {
     transition:
       opacity var(--duration-fast) ease,
-      scale var(--duration-fast) ease,
       display var(--duration-fast) allow-discrete;
   }
 }
