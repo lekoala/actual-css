@@ -73,11 +73,10 @@
   box-shadow: var(--shadow-popout);
   list-style: none;
   opacity: 1;
-  scale: 1;
-  transition:
-    opacity var(--duration-fast) ease,
-    scale var(--duration-fast) ease,
-    translate var(--duration-fast) ease;
+  /* Anchored flyouts fade in and out; scaling around the center would detach
+     the anchored edge from its trigger on wide panels. The sheet presentation
+     below adds its own translate motion. */
+  transition: opacity var(--duration-fast) ease;
 }
 
 .flyout.is-open:not(.is-sheet) {
@@ -87,7 +86,6 @@
 @starting-style {
   .flyout.is-open {
     opacity: 0;
-    scale: 0.98;
   }
 }
 
@@ -109,22 +107,24 @@
     max(var(--space-30), env(safe-area-inset-bottom));
   border-end-start-radius: 0;
   border-end-end-radius: 0;
+  /* Sheet motion is a directional slide from the viewport edge; it replaces
+     the base fade-only recipe. */
+  transition:
+    opacity var(--duration-fast) ease,
+    translate var(--duration-fast) ease;
 }
 
 .flyout[hidden] {
   display: none;
   opacity: 0;
-  scale: 0.98;
 }
 
 .flyout.is-sheet[hidden] {
-  scale: 1;
   translate: 0 var(--space-30);
 }
 
 @starting-style {
   .flyout.is-sheet.is-open {
-    scale: 1;
     translate: 0 var(--space-30);
   }
 }
@@ -133,7 +133,12 @@
   .flyout {
     transition:
       opacity var(--duration-fast) ease,
-      scale var(--duration-fast) ease,
+      display var(--duration-fast) allow-discrete;
+  }
+
+  .flyout.is-sheet {
+    transition:
+      opacity var(--duration-fast) ease,
       translate var(--duration-fast) ease,
       display var(--duration-fast) allow-discrete;
   }
