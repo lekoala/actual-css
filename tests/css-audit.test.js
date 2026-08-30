@@ -1,5 +1,5 @@
 import { expect, test } from "bun:test";
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
 
 function readCss(path) {
@@ -813,4 +813,30 @@ test("column-layout keeps auto-placement available to its children", () => {
   /* Twelve tracks, fixed, with no min-content floor. */
   expect(css).toContain("grid-template-columns: repeat(12, minmax(0, 1fr));");
   expect(css).not.toContain("--column-count");
+});
+
+test("motion keeps no generic global easing token", () => {
+  const tokensCss = readCss("src/css/core/tokens.css");
+  const cssRoot = join(import.meta.dir, "..", "src", "css");
+
+  const cssFiles = [];
+  const walk = (dir) => {
+    for (const entry of readdirSync(dir)) {
+      const full = join(dir, entry);
+      if (statSync(full).isDirectory()) walk(full);
+      else if (/\.css$/.test(entry)) cssFiles.push(readFileSync(full, "utf8"));
+    }
+  };
+  walk(cssRoot);
+
+  const source = cssFiles.join("\n").replace(/\/\*[\s\S]*?\*\//g, "");
+
+  /* Generic `--ease` was removed: state/interaction motion uses the CSS
+     default `ease`, and presence enter/exit curves are added only as a
+     dedicated pair (`var(--ease-enter)` / `var(--ease-exit)`) when the
+     overlay audit proves shared semantics. The exact-token patterns below
+     never match those prefixed names. */
+  expect(tokensCss).not.toMatch(/--ease\s*:/);
+  expect(source).not.toMatch(/var\(--ease\)/);
+  expect(tokensCss).toContain("--duration-slow: 200ms;");
 });

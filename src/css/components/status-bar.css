@@ -69,20 +69,20 @@
      background stays a shorthand so --status-bg still accepts gradients;
      solid colors expose an interpolable computed background-color. */
   transition:
-    opacity var(--duration-fast) var(--ease),
-    translate var(--duration) var(--ease),
-    background-color var(--duration) var(--ease);
+    opacity var(--duration-fast) ease,
+    translate var(--duration) ease,
+    background-color var(--duration) ease;
 }
 
 .status-bar.is-open {
   opacity: 1;
   translate: 0 0;
   /* Entry takes a little longer, making the message legible before its motion
-     settles without adding component-local easing vocabulary. */
+     settles while staying on the CSS default easing. */
   transition:
-    opacity var(--duration) var(--ease),
-    translate var(--duration-slow) var(--ease),
-    background-color var(--duration) var(--ease);
+    opacity var(--duration) ease,
+    translate var(--duration-slow) ease,
+    background-color var(--duration) ease;
 }
 @media print {
   .status-bar {

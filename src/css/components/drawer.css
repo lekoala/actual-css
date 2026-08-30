@@ -140,7 +140,7 @@ dialog.drawer nav {
 
 @media (prefers-reduced-motion: no-preference) {
   dialog.drawer.is-static {
-    animation: actual-dialog-static var(--duration-slow) var(--ease);
+    animation: actual-dialog-static var(--duration-slow) ease;
   }
 }
 

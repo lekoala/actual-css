@@ -19,7 +19,7 @@
   z-index: calc(var(--z-menu) - 1);
   background: var(--backdrop-fill);
   opacity: 1;
-  transition: opacity var(--duration) var(--ease);
+  transition: opacity var(--duration) ease;
 }
 
 .surface-backdrop[hidden] {
@@ -36,7 +36,7 @@
 @supports (transition-behavior: allow-discrete) {
   .surface-backdrop {
     transition:
-      opacity var(--duration) var(--ease),
+      opacity var(--duration) ease,
       display var(--duration) allow-discrete;
   }
 }

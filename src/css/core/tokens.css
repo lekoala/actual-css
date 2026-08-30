@@ -53,14 +53,17 @@
   --shadow-popout: 0 0.25rem 0.75rem rgb(0 0 0 / 0.15);
 
   /* Motion — see reset.css for the prefers-reduced-motion hard reset.
-     --duration drives component transitions (hover/focus); the dedicated
-     animation rates below tune one-shot open/close and decorative loops. */
+     --duration scales component transitions (hover/focus); the dedicated
+     animation rates below tune one-shot open/close and decorative loops.
+     Easing is deliberately not tokenized: generic state/interaction motion
+     uses the CSS default `ease`, and presence enter/exit curves are
+     introduced only if an audit proves shared semantics across component
+     families. */
   --duration: 150ms;
   --duration-fast: 100ms;
   --duration-slow: 200ms;
   --duration-spin: 0.75s;
   --duration-shimmer: 1.2s;
-  --ease: ease;
 
   /* Focus ring — shared by every interactive component's :focus-visible */
   --focus-outline-color: currentColor;
