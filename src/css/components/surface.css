@@ -19,7 +19,9 @@
   z-index: calc(var(--z-menu) - 1);
   background: var(--backdrop-fill);
   opacity: 1;
-  transition: opacity var(--duration) ease;
+  /* A scrim never travels; it fades on the neutral `ease`. Duration matches
+     the flyout sheet it accompanies so it never lags the panel. */
+  transition: opacity var(--duration-fast) ease;
 }
 
 .surface-backdrop[hidden] {
@@ -36,8 +38,8 @@
 @supports (transition-behavior: allow-discrete) {
   .surface-backdrop {
     transition:
-      opacity var(--duration) ease,
-      display var(--duration) allow-discrete;
+      opacity var(--duration-fast) ease,
+      display var(--duration-fast) allow-discrete;
   }
 }
 @media print {

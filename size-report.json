@@ -1,12 +1,12 @@
 {
-  "totalRaw": 250040,
+  "totalRaw": 254381,
   "core": {
-    "minified": 10391,
-    "brotli": 2496
+    "minified": 10460,
+    "brotli": 2519
   },
   "full": {
-    "minified": 114751,
-    "brotli": 16992
+    "minified": 115818,
+    "brotli": 17043
   },
   "js": {
     "core": {
@@ -14,23 +14,23 @@
       "brotli": 2203
     },
     "full": {
-      "bytes": 55226,
-      "brotli": 16010
+      "bytes": 55955,
+      "brotli": 16222
     }
   },
   "fileCount": 109,
   "files": [
     {
       "file": "components/modal.css",
-      "raw": 7889
+      "raw": 8660
+    },
+    {
+      "file": "core/tokens.css",
+      "raw": 8550
     },
     {
       "file": "components/alert.css",
       "raw": 7856
-    },
-    {
-      "file": "core/tokens.css",
-      "raw": 7775
     },
     {
       "file": "components/button.css",
@@ -49,6 +49,10 @@
       "raw": 5749
     },
     {
+      "file": "components/drawer.css",
+      "raw": 5402
+    },
+    {
       "file": "components/badge.css",
       "raw": 5152
     },
@@ -62,7 +66,7 @@
     },
     {
       "file": "components/flyout.css",
-      "raw": 4704
+      "raw": 5013
     },
     {
       "file": "layout/column-layout.css",
@@ -79,10 +83,6 @@
     {
       "file": "utilities/extra.css",
       "raw": 4403
-    },
-    {
-      "file": "components/drawer.css",
-      "raw": 4278
     },
     {
       "file": "forms/switch.css",
@@ -121,6 +121,10 @@
       "raw": 3517
     },
     {
+      "file": "components/status-bar.css",
+      "raw": 3238
+    },
+    {
       "file": "components/rating.css",
       "raw": 3174
     },
@@ -129,16 +133,16 @@
       "raw": 3115
     },
     {
+      "file": "components/tooltip.css",
+      "raw": 2924
+    },
+    {
       "file": "forms/control.css",
       "raw": 2909
     },
     {
       "file": "components/menu.css",
       "raw": 2886
-    },
-    {
-      "file": "components/tooltip.css",
-      "raw": 2855
     },
     {
       "file": "forms/validation.css",
@@ -225,10 +229,6 @@
       "raw": 2094
     },
     {
-      "file": "components/status-bar.css",
-      "raw": 2091
-    },
-    {
       "file": "forms/form-actions.css",
       "raw": 2088
     },
@@ -285,6 +285,10 @@
       "raw": 1500
     },
     {
+      "file": "components/surface.css",
+      "raw": 1471
+    },
+    {
       "file": "layout/scroller.css",
       "raw": 1470
     },
@@ -315,10 +319,6 @@
     {
       "file": "layout/scroll-snap.css",
       "raw": 1327
-    },
-    {
-      "file": "components/surface.css",
-      "raw": 1325
     },
     {
       "file": "themes/dim.css",

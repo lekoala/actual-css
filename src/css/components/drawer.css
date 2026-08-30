@@ -13,11 +13,16 @@
  *
  * Internal:
  * --drawer-closed-translate (side/RTL positioning state)
+ * --drawer-motion-duration (shared by panel and ::backdrop so exit duration
+ *   changes in one place; entry state redefines it longer)
  */
 dialog.drawer {
   --drawer-size: 20rem;
   --drawer-pad: var(--space-40);
   --drawer-closed-translate: -100%;
+  /* Exit is shorter than entry so the panel clears quickly; the scrim reads
+     the same variable through inheritance and never lags the panel. */
+  --drawer-motion-duration: var(--duration);
 
   /* Keep the surface anchored to the viewport in the top layer. This also
      provides the containing block for the absolutely positioned close button.
@@ -41,16 +46,20 @@ dialog.drawer {
   opacity: 0;
   transform: translateX(var(--drawer-closed-translate));
   transition:
-    opacity var(--duration-slow),
-    transform var(--duration-slow);
+    opacity var(--drawer-motion-duration) var(--ease-exit),
+    transform var(--drawer-motion-duration) var(--ease-exit);
 }
 
 dialog.drawer[open] {
+  --drawer-motion-duration: var(--duration-slow);
   display: grid;
   grid-template-rows: auto minmax(0, 1fr) auto;
   gap: var(--space-40);
   opacity: 1;
   transform: translateX(0);
+  transition:
+    opacity var(--drawer-motion-duration) var(--ease-enter),
+    transform var(--drawer-motion-duration) var(--ease-enter);
 }
 
 /* Backdrop color sourced from components/surface.css so it matches .modal
@@ -58,7 +67,9 @@ dialog.drawer[open] {
 dialog.drawer::backdrop {
   background: var(--backdrop-fill);
   opacity: 0;
-  transition: opacity var(--duration-slow);
+  /* Scrim curve stays neutral `ease`; only the panel's character curves
+     apply. Duration follows --drawer-motion-duration through inheritance. */
+  transition: opacity var(--drawer-motion-duration) ease;
 }
 
 dialog.drawer[data-side="end"] {
@@ -94,17 +105,25 @@ dialog.drawer nav {
 @supports (transition-behavior: allow-discrete) {
   dialog.drawer {
     transition:
-      opacity var(--duration-slow),
-      transform var(--duration-slow),
-      overlay var(--duration-slow) allow-discrete,
-      display var(--duration-slow) allow-discrete;
+      opacity var(--drawer-motion-duration) var(--ease-exit),
+      transform var(--drawer-motion-duration) var(--ease-exit),
+      overlay var(--drawer-motion-duration) allow-discrete,
+      display var(--drawer-motion-duration) allow-discrete;
+  }
+
+  dialog.drawer[open] {
+    transition:
+      opacity var(--drawer-motion-duration) var(--ease-enter),
+      transform var(--drawer-motion-duration) var(--ease-enter),
+      overlay var(--drawer-motion-duration) allow-discrete,
+      display var(--drawer-motion-duration) allow-discrete;
   }
 
   dialog.drawer::backdrop {
     transition:
-      opacity var(--duration-slow),
-      overlay var(--duration-slow) allow-discrete,
-      display var(--duration-slow) allow-discrete;
+      opacity var(--drawer-motion-duration) ease,
+      overlay var(--drawer-motion-duration) allow-discrete,
+      display var(--drawer-motion-duration) allow-discrete;
   }
 }
 
