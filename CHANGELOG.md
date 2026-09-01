@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+
+## [0.5.0] - 2026-09-01
+
 ### Added
 
 * `surface` shared variant: the page surface with the theme border, intent in the text only.
