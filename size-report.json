@@ -1,12 +1,12 @@
 {
-  "totalRaw": 254381,
+  "totalRaw": 257344,
   "core": {
-    "minified": 10460,
-    "brotli": 2519
+    "minified": 10576,
+    "brotli": 2530
   },
   "full": {
-    "minified": 115818,
-    "brotli": 17043
+    "minified": 116166,
+    "brotli": 17069
   },
   "js": {
     "core": {
@@ -21,12 +21,12 @@
   "fileCount": 109,
   "files": [
     {
-      "file": "components/modal.css",
-      "raw": 8660
+      "file": "core/tokens.css",
+      "raw": 8787
     },
     {
-      "file": "core/tokens.css",
-      "raw": 8550
+      "file": "components/modal.css",
+      "raw": 8660
     },
     {
       "file": "components/alert.css",
@@ -57,8 +57,12 @@
       "raw": 5152
     },
     {
+      "file": "components/steps.css",
+      "raw": 5118
+    },
+    {
       "file": "typography/prose.css",
-      "raw": 5139
+      "raw": 5104
     },
     {
       "file": "components/avatar.css",
@@ -67,6 +71,10 @@
     {
       "file": "components/flyout.css",
       "raw": 5013
+    },
+    {
+      "file": "core/variants.css",
+      "raw": 4671
     },
     {
       "file": "layout/column-layout.css",
@@ -93,16 +101,8 @@
       "raw": 4103
     },
     {
-      "file": "core/variants.css",
-      "raw": 4005
-    },
-    {
       "file": "themes/gradient.css",
       "raw": 3892
-    },
-    {
-      "file": "components/steps.css",
-      "raw": 3859
     },
     {
       "file": "forms/otp.css",
@@ -149,6 +149,10 @@
       "raw": 2690
     },
     {
+      "file": "components/progress.css",
+      "raw": 2682
+    },
+    {
       "file": "themes/neon.css",
       "raw": 2674
     },
@@ -171,10 +175,6 @@
     {
       "file": "forms/native.css",
       "raw": 2473
-    },
-    {
-      "file": "components/progress.css",
-      "raw": 2468
     },
     {
       "file": "themes/petrol.css",
@@ -221,6 +221,10 @@
       "raw": 2144
     },
     {
+      "file": "components/meter.css",
+      "raw": 2122
+    },
+    {
       "file": "components/chat.css",
       "raw": 2118
     },
@@ -235,10 +239,6 @@
     {
       "file": "components/accordion.css",
       "raw": 1936
-    },
-    {
-      "file": "components/meter.css",
-      "raw": 1908
     },
     {
       "file": "components/app-nav.css",
@@ -277,6 +277,10 @@
       "raw": 1613
     },
     {
+      "file": "core/base.css",
+      "raw": 1601
+    },
+    {
       "file": "components/table.css",
       "raw": 1565
     },
@@ -313,8 +317,8 @@
       "raw": 1356
     },
     {
-      "file": "core/base.css",
-      "raw": 1348
+      "file": "forms/form.css",
+      "raw": 1329
     },
     {
       "file": "layout/scroll-snap.css",
@@ -323,10 +327,6 @@
     {
       "file": "themes/dim.css",
       "raw": 1184
-    },
-    {
-      "file": "forms/form.css",
-      "raw": 1174
     },
     {
       "file": "core/intents.css",

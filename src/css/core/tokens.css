@@ -8,8 +8,8 @@
    *
    * Derived: "Theme-derived aliases" and "State tokens" reference intent and
    * surface tokens and follow the theme; do not hard-code values into them.
-   * Internal: indicator offsets, --bar-height, --disabled-opacity and the
-   * like are consumed by components, not authored.
+   * Internal: indicator offsets, --disabled-opacity and the like are
+   * consumed by components, not authored.
    *
    * Component-local hooks and internal state relays live with their
    * components. See docs/pages/foundations/tokens.md for the public/internal
@@ -33,9 +33,10 @@
   --font-size-md: 1rem;
   --font-size-lg: 1.125rem;
 
-  /* Spacing — official steps are named in tens so the scale stays open for
-     application themes to intercalate intermediate values (--space-15,
-     --space-45…) without colliding with future framework steps. */
+  /* Spacing — official steps are named in tens so the scale stays open.
+     Actual CSS will never define a --space-* that is not a multiple of 10:
+     the intermediate names (--space-15, --space-45…) are reserved for
+     applications, and no future framework step can collide with them. */
   --gap: 0.75rem;
   --density-space: var(--space-40);
   --density-compact-size: 1.5rem;
@@ -89,7 +90,9 @@
   --backdrop-opacity: 0.45;
   --backdrop-fill: rgb(0 0 0 / var(--backdrop-opacity));
 
-  /* Progress / meter track height */
+  /* Bar thickness shared by .progress and .meter — two conceptual variants of
+     the same geometry. Public: set it on the element or on an application
+     class rather than reaching for a size variant. */
   --bar-height: 0.65rem;
 
   /* Controls — inputs and buttons share --control-size so heights always match.

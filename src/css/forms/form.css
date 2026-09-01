@@ -4,6 +4,10 @@
  * Individual controls keep their own files; .choice label layout lives in
  * choice.css; .form-actions lives in form-actions.css.
  *
+ * .field-group owns its own box only. Distance between sibling groups is a
+ * composition concern (.stack on the form), never a sibling margin here: the
+ * component cannot know whether its siblings are stacked or gridded.
+ *
  * Public API: .field, .field-label, .field-help, .field-error, .field-group,
  * .required-mark.
  *
@@ -22,10 +26,6 @@
   padding: var(--space-30);
   border: var(--border-width) solid var(--border);
   border-radius: var(--radius);
-}
-
-.field-group + .field-group {
-  margin-block-start: var(--space-40);
 }
 
 .field-label,

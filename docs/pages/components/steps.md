@@ -6,6 +6,12 @@ Use an `<ol>` because order is part of the meaning. Add `.complete` to finished
 steps and `aria-current="step"` to exactly one current step. Unmarked items are
 future steps. The component needs no JavaScript.
 
+The three states are distinct without any glyph: future is neutral, complete is
+a filled marker with an accented connector, current is an outlined marker with a
+thicker ring. The accented connector reads as "already walked", so the segment
+leaving the current step stays neutral. A step carrying both states renders
+entirely as current — marker, glyph, and connector.
+
 **Related terms:** stepper, progress steps, step indicator, wizard steps, multi-step progress.
 
 ## Class reference
@@ -13,8 +19,8 @@ future steps. The component needs no JavaScript.
 | Class                   | Kind      | Description                                |
 |-------------------------|-----------|--------------------------------------------|
 | `.steps`                | Component | Ordered progression with numbered markers. |
-| `.complete`             | State     | A finished step.                           |
-| `[aria-current="step"]` | State     | The current step.                          |
+| `.complete`             | State     | A finished step: filled marker.            |
+| `[aria-current="step"]` | State     | The current step: outlined marker.         |
 
 ```html demo
 <ol class="steps">

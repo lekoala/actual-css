@@ -9,6 +9,7 @@ Flexible content container with optional header, body, and footer regions, plus 
 | `.card`     | Component        | Neutral raised surface for grouped content.                                                                                                                                                                     |
 | `.raised`   | Variant          | Elevated surface with a soft shadow.                                                                                                                                                                            |
 | `.subtle`   | Variant          | Lower contrast against the page surface.                                                                                                                                                                        |
+| `.surface`  | Variant          | Shared variant: the page surface instead of `--surface-raised`, with the intent in the text only.                                                                                                               |
 | `.inverted` | Surface modifier | Inverse surface treatment: paints `--surface-solid` and swaps the foreground to `--surface`, so it inverts in dark themes instead of always reading as dark. Apply as `class="card inverted"`, or on any block. |
 | `.compact`  | Variant          | Tighter padding for dense contexts.                                                                                                                                                                             |
 
@@ -162,6 +163,11 @@ the surface tokens, so `.card.subtle.inverted` renders a subtle background with
 inverted foreground. Treat them as mutually exclusive, like two competing
 variants.
 
+`.surface` is the shared variant on a card: it drops the card to the page
+surface instead of `--surface-raised`, keeps the theme border, and lets an
+intent class color the text only. `.raised` and `.subtle` are the card-local
+treatments on either side of it.
+
 ```html demo
 <section class="grid">
   <article class="card raised">
@@ -175,6 +181,13 @@ variants.
     <hgroup>
       <h3>Subtle</h3>
       <p class="muted">Lower contrast against the page surface.</p>
+    </hgroup>
+  </article>
+
+  <article class="card surface">
+    <hgroup>
+      <h3>Surface</h3>
+      <p class="muted">The page surface with the theme border.</p>
     </hgroup>
   </article>
 

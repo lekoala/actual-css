@@ -4,9 +4,14 @@
  * Consumes the shared --intent/--primary for the value bar and --bar-height
  * for thickness. Indeterminate state animates a shimmer using --duration-shimmer.
  *
+ * Thickness is a dimension, not a density step: the bar always spans its
+ * container and only gets thinner or thicker, so --bar-height is the API and
+ * .sm/.lg are deliberately not supported.
+ *
  * Public hooks:
  * --progress-track
  * --progress-value
+ * --bar-height
  */
 /* Intent boundary — inherited intents do not tint this component.
    Local intent classes still win because :where() has zero specificity. */

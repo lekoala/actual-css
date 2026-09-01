@@ -3,6 +3,9 @@
  *
  * Sits between reset (browser defaults) and prose (rich content scope).
  * These styles apply everywhere — cards, dialogs, heroes — not only in prose.
+ *
+ * Public hooks:
+ * --link
  */
 
 body {
@@ -12,8 +15,11 @@ body {
   line-height: var(--line-height);
 }
 
+/* Bare links inherit their ink by default, so nothing changes unless a theme
+   opts in by setting --link. Because this is an element selector, any component
+   rule that colors its own anchors still wins. */
 a {
-  color: inherit;
+  color: var(--link, inherit);
   text-underline-offset: 0.18em;
 }
 

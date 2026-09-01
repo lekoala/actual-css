@@ -72,3 +72,7 @@ marker to that background rather than to the neutral intent.
 
 - `--bar-height` — bar thickness, shared with `.progress`.
 - `--meter-value` — relative weight of a direct child in a segmented meter.
+
+`.sm` / `.lg` are intentionally not supported: a bar keeps its inline size and only changes
+thickness, and a design asks for a 4px or a 12px bar, not for a "small" one. Set the hook
+on the element, or better, on an application class.

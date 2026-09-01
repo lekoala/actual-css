@@ -25,7 +25,7 @@ full-width badge is intentional.
 | `.badge`        | Component   | Compact label; soft by default.                              |
 | `.badge:empty`  | Composition | Truly-empty badge renders as a solid dot.                    |
 | Shared intents  | Intent      | `.primary`, `.secondary`, `.success`, `.warning`, `.danger`. |
-| Shared variants | Variant     | `.solid` (filled) and `.outline` (bordered) emphasis.        |
+| Shared variants | Variant     | `.solid` (filled), `.outline` (bordered), `.surface` (untinted) emphasis. |
 | `.sm` / `.lg`   | Size        | Compact density.                                             |
 
 ## Basic usage

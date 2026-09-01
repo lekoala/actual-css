@@ -97,27 +97,53 @@
   content: none;
 }
 
-.steps > :is(.complete, [aria-current="step"]) {
+/* Three states must be readable without a check glyph: future stays neutral,
+   complete is a filled marker, current is an outlined one. Filled reads as
+   "done", outlined as "you are here" — the distinction survives a numbered
+   stepper that never sets --step-complete-mark. */
+.steps > .complete {
   --step-marker-bg: var(--state-selected);
   --step-marker-border: var(--state-selected);
   --step-marker-fg: var(--state-selected-fg);
+  --step-line: var(--state-selected);
 
   color: var(--text);
 }
 
-/* Thicker border is the selected affordance in every mode — structural, and it
-   never competes with the outline channel owned by focus. */
-.steps > :is(.complete, [aria-current="step"])::before {
-  border-width: calc(var(--border-width) * 2);
+/* Declared after .complete at equal specificity, and it wins on every channel
+   including the connector: the accented line means "already walked", so the
+   segment leaving the current step must stay neutral. The line reaching the
+   current step is owned by the previous step, which is complete. */
+.steps > [aria-current="step"] {
+  --step-marker-bg: var(--surface);
+  --step-marker-border: var(--state-selected);
+  --step-marker-fg: var(--state-selected);
+  --step-line: var(--border);
+
+  color: var(--text);
 }
 
-.steps > .complete {
-  --step-line: var(--state-selected);
+/* Thicker border is the current affordance in every mode — structural, so it
+   survives forced colors, and it never competes with the outline channel owned
+   by focus. */
+.steps > [aria-current="step"]::before {
+  border-width: calc(var(--border-width) * 2);
 }
 
 /* A finished step may replace its number with a mark (e.g. a check glyph):
    --step-complete-mark accepts any content value and falls back to the
-   counter, so existing numbered steppers are unchanged. */
-.steps > .complete::before {
+   counter, so existing numbered steppers are unchanged. Excluded on the
+   current step so "current wins" holds on the glyph too, not only on color. */
+.steps > .complete:not([aria-current="step"])::before {
   content: var(--step-complete-mark, counter(actual-step));
+}
+
+/* Forced colors drop the accent fill, which would leave complete and future
+   markers identical — current keeps its thicker ring, complete needs a system
+   color to stay filled. Same exclusion, for the same reason. */
+@media (forced-colors: active) {
+  .steps > .complete:not([aria-current="step"])::before {
+    background: Highlight;
+    color: HighlightText;
+  }
 }

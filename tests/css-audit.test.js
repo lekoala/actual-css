@@ -189,6 +189,15 @@ test("intrinsic composition primitives do not depend on an ancestor opt-in", () 
   expect(topbarCss).not.toContain(".switcher");
 });
 
+test("field-group owns its box, never the distance to its siblings", () => {
+  const css = readCss("src/css/forms/form.css");
+
+  expect(css).toContain(".field-group {");
+  // A component cannot know whether its siblings are stacked or gridded, so
+  // the gap between groups belongs to the composition (.stack on the form).
+  expect(css).not.toContain(".field-group + .field-group");
+});
+
 test("form-actions exposes alignment hooks while sticky behavior remains intact", () => {
   const css = readCss("src/css/forms/form-actions.css");
 
@@ -311,6 +320,18 @@ test("transparent treatments follow currentColor, including hover", () => {
   expect(badge).toContain("color-mix(in oklch, currentColor 10%, transparent)");
 });
 
+test("surface variant maps theme chrome and stays literal", () => {
+  const variants = readCss("src/css/core/variants.css");
+  const rule = variants.match(/\n\.surface \{([^}]*)\}/)?.[1] ?? "";
+
+  expect(rule).toContain("--ui-bg: var(--surface);");
+  expect(rule).toContain("--ui-fg: var(--intent, var(--text));");
+  expect(rule).toContain("--ui-border: var(--border);");
+  // The one variant that must read exactly as the theme's own surface: no
+  // color-mix enhancement may be added for it, or it becomes a second .soft.
+  expect(variants.match(/\.surface \{/g)).toHaveLength(1);
+});
+
 test("alert and badge defaults stay behind explicit shared treatments", () => {
   const alert = readCss("src/css/components/alert.css");
   const badge = readCss("src/css/components/badge.css");
@@ -382,6 +403,32 @@ test("rich menu slots and checkable states share the leading column", () => {
   expect(css).toContain('[role="menuitemcheckbox"][aria-checked="true"]');
   expect(css).toContain('[role="menuitemradio"][aria-checked="true"]');
   expect(css).toContain("var(--menu-item-icon-size)");
+});
+
+test("steps keep complete and current distinct, and current wins when both apply", () => {
+  const css = readCss("src/css/components/steps.css");
+
+  // Equal specificity, so source order decides: current must come last.
+  const complete = css.indexOf(".steps > .complete {");
+  const current = css.indexOf('.steps > [aria-current="step"] {');
+  expect(complete).toBeGreaterThan(-1);
+  expect(current).toBeGreaterThan(complete);
+
+  // Filled reads as "done", outlined as "you are here" — no glyph required.
+  expect(css).toMatch(/\.steps > \.complete \{[^}]*--step-marker-bg: var\(--state-selected\);/);
+  expect(css).toMatch(
+    /\.steps > \[aria-current="step"\] \{[^}]*--step-marker-bg: var\(--surface\);/,
+  );
+
+  // An accented connector means "already walked", so the segment leaving the
+  // current step goes back to neutral.
+  expect(css).toMatch(/\.steps > \[aria-current="step"\] \{[^}]*--step-line: var\(--border\);/);
+
+  // Current wins on every channel, not only on color: the completion glyph and
+  // the forced-colors fill are excluded on it too.
+  expect(css).not.toContain(".steps > .complete::before");
+  expect(css).toContain('.steps > .complete:not([aria-current="step"])::before');
+  expect(css).toContain('.steps > [aria-current="step"]::before');
 });
 
 test("tabs include vertical orientation styling", () => {

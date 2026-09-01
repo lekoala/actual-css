@@ -21,7 +21,7 @@ without its label would only break the alignment. Scale them by scaling their
 type instead.
 
 ```html demo
-<form novalidate>
+<form class="stack" novalidate>
   <fieldset class="field-group">
     <legend class="field-label">Text control states</legend>
     <div class="stack" style="--grid-min: 14rem;">
