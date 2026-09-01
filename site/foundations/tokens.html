@@ -306,7 +306,7 @@
   --space-60: 2rem;
 }
 </code></pre>
-<p>Official steps are named in tens so the scale stays extensible: Actual CSS only publishes multiples of 10, and applications can intercalate intermediate values (<code>--space-15</code>, <code>--space-45</code>, …) without colliding with a future framework step.</p>
+<p>Official steps are named in tens so the scale stays extensible. <strong>Actual CSS will never define a <code>--space-*</code> token that is not a multiple of 10.</strong> The intermediate names (<code>--space-15</code>, <code>--space-45</code>, …) are reserved for application-level interpolation: defining them is not writing into the framework namespace, it is using the half of the scale the framework has permanently given up.</p>
 <p>Use <code>em</code> for spacing that should scale with the component text size, such as button gaps and inline padding. Use <code>rem</code> for global rhythm, layouts, and fixed density.</p>
 <h3 id="typography">Typography</h3>
 <p>Typography tokens cover the document baseline and common component needs.</p>
@@ -430,6 +430,7 @@
 <li><code>.solid</code>: full background, paired foreground. This is the default for buttons.</li>
 <li><code>.soft</code>: lightly tinted background, colored text. Good for alerts, badges, and secondary actions.</li>
 <li><code>.outline</code>: transparent background, colored border and text.</li>
+<li><code>.surface</code>: the page surface with the theme border, and the intent only in the text. The neutral chrome neither <code>.soft</code> (the intent-tinted treatment) nor <code>.outline</code> (no fill) can give.</li>
 </ul>
 <p>Buttons also support two button-only variants:</p>
 <ul>

@@ -75,7 +75,7 @@ Actual CSS uses a small unprefixed class grammar:
 ```
 
 Intents are `.primary`, `.secondary`, `.success`, `.warning`, and `.danger`, and
-work across components. Variants such as `.solid`, `.soft`, and `.outline` are
+work across components. Variants such as `.solid`, `.soft`, `.outline`, and `.surface` are
 shared by buttons, badges, alerts, and cards; `.inverted` is a shared surface
 modifier that paints any block with the inverse surface. `.ghost` and `.link`
 are button-only. Size variants `.sm` and `.lg` scale controls consistently.

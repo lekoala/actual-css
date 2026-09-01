@@ -27,3 +27,13 @@
 - `--progress-track` — unfilled track color.
 - `--progress-value` — filled bar color. Prefer an intent class over setting this directly.
 - `--bar-height` — bar thickness, shared with `.meter`.
+
+`.sm` / `.lg` are intentionally not supported: a bar keeps its inline size and only changes
+thickness, and a design asks for a 4px or a 12px bar, not for a "small" one. Set the hook
+on the element, or better, on an application class.
+
+```css
+.storage-meter {
+  --bar-height: 0.375rem;
+}
+```

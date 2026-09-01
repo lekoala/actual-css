@@ -60,8 +60,8 @@ select {
    *
    * Derived: "Theme-derived aliases" and "State tokens" reference intent and
    * surface tokens and follow the theme; do not hard-code values into them.
-   * Internal: indicator offsets, --bar-height, --disabled-opacity and the
-   * like are consumed by components, not authored.
+   * Internal: indicator offsets, --disabled-opacity and the like are
+   * consumed by components, not authored.
    *
    * Component-local hooks and internal state relays live with their
    * components. See docs/pages/foundations/tokens.md for the public/internal
@@ -85,9 +85,10 @@ select {
   --font-size-md: 1rem;
   --font-size-lg: 1.125rem;
 
-  /* Spacing — official steps are named in tens so the scale stays open for
-     application themes to intercalate intermediate values (--space-15,
-     --space-45…) without colliding with future framework steps. */
+  /* Spacing — official steps are named in tens so the scale stays open.
+     Actual CSS will never define a --space-* that is not a multiple of 10:
+     the intermediate names (--space-15, --space-45…) are reserved for
+     applications, and no future framework step can collide with them. */
   --gap: 0.75rem;
   --density-space: var(--space-40);
   --density-compact-size: 1.5rem;
@@ -141,7 +142,9 @@ select {
   --backdrop-opacity: 0.45;
   --backdrop-fill: rgb(0 0 0 / var(--backdrop-opacity));
 
-  /* Progress / meter track height */
+  /* Bar thickness shared by .progress and .meter — two conceptual variants of
+     the same geometry. Public: set it on the element or on an application
+     class rather than reaching for a size variant. */
   --bar-height: 0.65rem;
 
   /* Controls — inputs and buttons share --control-size so heights always match.
@@ -464,6 +467,9 @@ select {
  *
  * Sits between reset (browser defaults) and prose (rich content scope).
  * These styles apply everywhere — cards, dialogs, heroes — not only in prose.
+ *
+ * Public hooks:
+ * --link
  */
 
 body {
@@ -473,8 +479,11 @@ body {
   line-height: var(--line-height);
 }
 
+/* Bare links inherit their ink by default, so nothing changes unless a theme
+   opts in by setting --link. Because this is an element selector, any component
+   rule that colors its own anchors still wins. */
 a {
-  color: inherit;
+  color: var(--link, inherit);
   text-underline-offset: 0.18em;
 }
 
@@ -567,8 +576,8 @@ small {
 /*
  * Cross-cutting variant token mapping.
  *
- * Variant scope: .solid/.soft/.outline set --ui-* for components that opt into
- * shared variants. .inverted is a surface modifier, not a variant: it paints
+ * Variant scope: .solid/.soft/.outline/.surface set --ui-* for components that
+ * opt into shared variants. .inverted is a surface modifier, not a variant: it paints
  * the element directly (background/color/border-color) so it works on any bare
  * block, and remaps the shared --ui-* tokens so participating components
  * (.card, .navbar, .alert, .badge) invert through their own rules. Loaded
@@ -587,8 +596,10 @@ small {
  * components may consume --density-* when the density context should affect
  * their local rhythm. Compact components may consume --density-compact-size.
  * Components with bespoke sizing (spinner, avatar) define local .sm/.lg;
- * applying .sm/.lg to card, dialog, accordion, navbar, table is
- * a no-op.
+ * applying .sm/.lg to card, dialog, accordion, navbar, table, progress, meter
+ * is a no-op. Progress and meter are deliberate: a bar keeps its inline size
+ * and only changes thickness, which --bar-height expresses better than a
+ * three-step scale.
  *
  * Intent list source of truth: intents.css. Components consume --intent* tokens
  * instead of re-listing intent classes.
@@ -609,6 +620,17 @@ small {
   --ui-bg: transparent;
   --ui-fg: var(--intent, currentColor);
   --ui-border: var(--intent, currentColor);
+}
+
+/* Neutral chrome, intent only in the ink: the page surface with the theme
+   border. .soft is the intent-tinted treatment (its baseline fallback uses
+   --surface-subtle) and .outline has no fill at all, so neither can express
+   it. Deliberately literal — no color-mix enhancement — so this stays the one
+   variant that reads exactly as the theme's own surface. */
+.surface {
+  --ui-bg: var(--surface);
+  --ui-fg: var(--intent, var(--text));
+  --ui-border: var(--border);
 }
 
 /* Inverse surface treatment. Paints the element directly (so it works on any
@@ -793,9 +815,8 @@ small {
   font-size: var(--prose-h4);
 }
 
-/* Link ink defaults to --primary. --link is an optional escape hatch: a
-   theme whose primary is too light or too vivid to read as inline text sets
-   it without having to restate the rule. */
+/* --link is a theme-level token (core/base.css also reads it for bare links);
+   prose falls back to --primary so a theme that never sets it is unaffected. */
 .prose :where(a) {
   color: var(--link, var(--primary));
   text-decoration-line: underline;
@@ -1839,6 +1860,10 @@ small {
  * Individual controls keep their own files; .choice label layout lives in
  * choice.css; .form-actions lives in form-actions.css.
  *
+ * .field-group owns its own box only. Distance between sibling groups is a
+ * composition concern (.stack on the form), never a sibling margin here: the
+ * component cannot know whether its siblings are stacked or gridded.
+ *
  * Public API: .field, .field-label, .field-help, .field-error, .field-group,
  * .required-mark.
  *
@@ -1857,10 +1882,6 @@ small {
   padding: var(--space-30);
   border: var(--border-width) solid var(--border);
   border-radius: var(--radius);
-}
-
-.field-group + .field-group {
-  margin-block-start: var(--space-40);
 }
 
 .field-label,
@@ -5418,9 +5439,14 @@ dialog.drawer > form > header {
  * Consumes the shared --intent/--primary for the value bar and --bar-height
  * for thickness. Indeterminate state animates a shimmer using --duration-shimmer.
  *
+ * Thickness is a dimension, not a density step: the bar always spans its
+ * container and only gets thinner or thicker, so --bar-height is the API and
+ * .sm/.lg are deliberately not supported.
+ *
  * Public hooks:
  * --progress-track
  * --progress-value
+ * --bar-height
  */
 /* Intent boundary — inherited intents do not tint this component.
    Local intent classes still win because :where() has zero specificity. */
@@ -6305,29 +6331,55 @@ a.avatar[aria-disabled="true"] {
   content: none;
 }
 
-.steps > :is(.complete, [aria-current="step"]) {
+/* Three states must be readable without a check glyph: future stays neutral,
+   complete is a filled marker, current is an outlined one. Filled reads as
+   "done", outlined as "you are here" — the distinction survives a numbered
+   stepper that never sets --step-complete-mark. */
+.steps > .complete {
   --step-marker-bg: var(--state-selected);
   --step-marker-border: var(--state-selected);
   --step-marker-fg: var(--state-selected-fg);
+  --step-line: var(--state-selected);
 
   color: var(--text);
 }
 
-/* Thicker border is the selected affordance in every mode — structural, and it
-   never competes with the outline channel owned by focus. */
-.steps > :is(.complete, [aria-current="step"])::before {
-  border-width: calc(var(--border-width) * 2);
+/* Declared after .complete at equal specificity, and it wins on every channel
+   including the connector: the accented line means "already walked", so the
+   segment leaving the current step must stay neutral. The line reaching the
+   current step is owned by the previous step, which is complete. */
+.steps > [aria-current="step"] {
+  --step-marker-bg: var(--surface);
+  --step-marker-border: var(--state-selected);
+  --step-marker-fg: var(--state-selected);
+  --step-line: var(--border);
+
+  color: var(--text);
 }
 
-.steps > .complete {
-  --step-line: var(--state-selected);
+/* Thicker border is the current affordance in every mode — structural, so it
+   survives forced colors, and it never competes with the outline channel owned
+   by focus. */
+.steps > [aria-current="step"]::before {
+  border-width: calc(var(--border-width) * 2);
 }
 
 /* A finished step may replace its number with a mark (e.g. a check glyph):
    --step-complete-mark accepts any content value and falls back to the
-   counter, so existing numbered steppers are unchanged. */
-.steps > .complete::before {
+   counter, so existing numbered steppers are unchanged. Excluded on the
+   current step so "current wins" holds on the glyph too, not only on color. */
+.steps > .complete:not([aria-current="step"])::before {
   content: var(--step-complete-mark, counter(actual-step));
+}
+
+/* Forced colors drop the accent fill, which would leave complete and future
+   markers identical — current keeps its thicker ring, complete needs a system
+   color to stay filled. Same exclusion, for the same reason. */
+@media (forced-colors: active) {
+  .steps > .complete:not([aria-current="step"])::before {
+    background: Highlight;
+    color: HighlightText;
+  }
 }
 
 
@@ -6922,8 +6974,13 @@ a.list-item:hover {
  * Maps the three standard meter zones (optimum / suboptimum / even-less-good)
  * to the shared success / warning / danger intent colors.
  *
+ * Thickness is a dimension, not a density step: the bar always spans its
+ * container and only gets thinner or thicker, so --bar-height is the API and
+ * .sm/.lg are deliberately not supported.
+ *
  * Public hooks:
  * --meter-value
+ * --bar-height
  */
 
 .meter {

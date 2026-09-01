@@ -332,6 +332,9 @@ marker to that background rather than to the neutral intent.</p>
 <li><code>--bar-height</code> — bar thickness, shared with <code>.progress</code>.</li>
 <li><code>--meter-value</code> — relative weight of a direct child in a segmented meter.</li>
 </ul>
+<p><code>.sm</code> / <code>.lg</code> are intentionally not supported: a bar keeps its inline size and only changes
+thickness, and a design asks for a 4px or a 12px bar, not for a &quot;small&quot; one. Set the hook
+on the element, or better, on an application class.</p>
 
 </div>
 

@@ -4,8 +4,13 @@
  * Maps the three standard meter zones (optimum / suboptimum / even-less-good)
  * to the shared success / warning / danger intent colors.
  *
+ * Thickness is a dimension, not a density step: the bar always spans its
+ * container and only gets thinner or thicker, so --bar-height is the API and
+ * .sm/.lg are deliberately not supported.
+ *
  * Public hooks:
  * --meter-value
+ * --bar-height
  */
 
 .meter {

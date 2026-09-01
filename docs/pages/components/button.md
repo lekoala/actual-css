@@ -16,6 +16,7 @@ Actions and navigation with shared intents, variants, sizes, and loading, presse
 | `.soft`       | Variant   | Muted intent-tinted surface.                                                               |
 | `.outline`    | Variant   | Transparent with an intent-colored border.                                                 |
 | `.solid`      | Variant   | Filled intent background — the `.btn` default.                                             |
+| `.surface`    | Variant   | Page surface with a neutral border; the intent colors the label only.                      |
 | `.ghost`      | Variant   | Borderless text button (button-only).                                                      |
 | `.link`       | Variant   | Underlined text button (button-only).                                                      |
 | `.sm` / `.lg` | Size      | Compact or large control height.                                                           |
@@ -53,8 +54,12 @@ Shared intent classes set color meaning. They compose with every variant.
 
 ## Variants
 
-`.ghost` and `.link` are button-only; `.soft`, `.outline`, and `.solid` are
-shared with other components.
+`.ghost` and `.link` are button-only; `.soft`, `.outline`, `.solid`, and
+`.surface` are shared with other components.
+
+Reach for `.surface` when a secondary action must sit on an opaque, neutral
+chip: `.outline` lets whatever is behind it show through, and `.soft` is the
+intent-tinted treatment (its baseline fallback uses `--surface-subtle`).
 
 Transparent treatments (`.outline`, `.ghost`, `.link`) follow the surrounding
 foreground by default, including on a contrasting `.inverted` surface. A local
@@ -79,6 +84,8 @@ container. For a plain text link, use a bare `<a>` with no class.
   <button class="btn danger outline" type="button">Danger outline</button>
   <button class="btn soft" type="button">Soft</button>
   <button class="btn danger soft" type="button">Danger soft</button>
+  <button class="btn surface" type="button">Surface</button>
+  <button class="btn danger surface" type="button">Danger surface</button>
   <button class="btn ghost" type="button">Ghost</button>
   <button class="btn link" type="button">Button as link</button>
 </div>

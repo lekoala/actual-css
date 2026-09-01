@@ -4,6 +4,10 @@
 
 ### Added
 
+* `surface` shared variant: the page surface with the theme border, intent in the text only.
+  Fills the gap between `soft` (always intent-tinted) and `outline` (no fill at all).
+* `--link` is now read by the base `a` rule, so a theme that sets it colors bare links and
+  prose links at once. Unset, nothing changes.
 * `touch-target` for small buttons.
 * `data-list` for compact term–value pairs describing the properties of a single object.
 * Segmented `meter`.
@@ -14,6 +18,17 @@
 
 ### Changed
 
+* `--bar-height` is a public hook. It was classified Internal by mistake while both
+  `progress` and `meter` used it as their only thickness mechanism. Size variants stay
+  unsupported on those two: a bar keeps its inline size and only changes thickness, which
+  the hook expresses better than a three-step scale.
+* Removed the `.field-group + .field-group` sibling margin (breaking, pre-1.0). A component
+  cannot know whether its siblings are stacked or gridded; space consecutive groups with
+  `.stack` on the form.
+* `steps` now separates the two accented states: `.complete` is a filled marker with an
+  accented connector, `[aria-current="step"]` an outlined one with a thicker ring. They were
+  visually identical, so a numbered stepper could not show position without a check glyph.
+  A step carrying both renders entirely as current, connector and completion glyph included.
 * `status-bar` visibility is driven by the `.is-open` state class instead of `:empty`,
   and `status.clear()` now empties the text and intent only after the exit transition,
   so the bar animates out at the size and color it was shown at. A message dispatched

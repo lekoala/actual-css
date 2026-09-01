@@ -215,6 +215,11 @@
 <p>Use an <code>&lt;ol&gt;</code> because order is part of the meaning. Add <code>.complete</code> to finished
 steps and <code>aria-current=&quot;step&quot;</code> to exactly one current step. Unmarked items are
 future steps. The component needs no JavaScript.</p>
+<p>The three states are distinct without any glyph: future is neutral, complete is
+a filled marker with an accented connector, current is an outlined marker with a
+thicker ring. The accented connector reads as &quot;already walked&quot;, so the segment
+leaving the current step stays neutral. A step carrying both states renders
+entirely as current — marker, glyph, and connector.</p>
 <p><strong>Related terms:</strong> stepper, progress steps, step indicator, wizard steps, multi-step progress.</p>
 <h2 id="class-reference">Class reference</h2>
 <div class="table-wrap"><table class="table">
@@ -223,8 +228,8 @@ future steps. The component needs no JavaScript.</p>
 </thead>
 <tbody>
 <tr><td><code>.steps</code></td><td>Component</td><td>Ordered progression with numbered markers.</td></tr>
-<tr><td><code>.complete</code></td><td>State</td><td>A finished step.</td></tr>
-<tr><td><code>[aria-current=&quot;step&quot;]</code></td><td>State</td><td>The current step.</td></tr>
+<tr><td><code>.complete</code></td><td>State</td><td>A finished step: filled marker.</td></tr>
+<tr><td><code>[aria-current=&quot;step&quot;]</code></td><td>State</td><td>The current step: outlined marker.</td></tr>
 </tbody>
 </table></div>
 </div>

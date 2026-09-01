@@ -31,7 +31,7 @@ itself needs to change, not `.soft`.
 | `.alert-title`   | Composition | Admonition title bar; hosts the dismiss button.                                   |
 | `.alert-body`    | Composition | Admonition body resting on the page surface.                                      |
 | Shared intents   | Intent      | `.primary`, `.secondary`, `.success`, `.warning`, `.danger`.                      |
-| Shared variants  | Variant     | `.solid` and `.outline` emphasis.                                                 |
+| Shared variants  | Variant     | `.solid`, `.outline`, and `.surface` emphasis.                                    |
 | `.sm` / `.lg`    | Size        | Density; inline padding stays stable.                                             |
 
 ## Basic usage

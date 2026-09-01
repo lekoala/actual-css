@@ -45,7 +45,7 @@ Custom intents need no framework support — define `--intent` and `--intent-fg`
 
 ## Variants
 
-`.solid`, `.soft`, `.outline` define the visual treatment by setting `--ui-bg`, `--ui-fg`, `--ui-border`. Components consume these tokens with sensible fallbacks. Interactive components also set a `--ui-hover-bg` recipe that their hover rule reads.
+`.solid`, `.soft`, `.outline`, `.surface` define the visual treatment by setting `--ui-bg`, `--ui-fg`, `--ui-border`. Components consume these tokens with sensible fallbacks. Interactive components also set a `--ui-hover-bg` recipe that their hover rule reads.
 
 `.btn` defaults to `.solid`; `.badge` and `.alert` default to `.soft`.
 

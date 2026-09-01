@@ -164,7 +164,7 @@ A full form using the control classes, field wrappers, and form actions:
 - `required` is the semantic source of truth. Add `<span class="required-mark" aria-hidden="true">*</span>` inside a label only when a visual required marker is wanted; the framework does not add one automatically.
 - `.field` is the canonical field wrapper. It works on `<label>` and `<div>`.
 - `.field-label` is element-agnostic. Use it on `<span>` inside a wrapped label, on `<label for="…">` in a detached layout, or on `<legend>` inside a fieldset.
-- `.field-group` styles a `<fieldset class="field-group">` as a grouped field container. Its legend gutter is tunable with `--fieldset-legend-padding-inline` (`var(--space-10)`).
+- `.field-group` styles a `<fieldset class="field-group">` as a grouped field container. Its legend gutter is tunable with `--fieldset-legend-padding-inline` (`var(--space-10)`). It carries no sibling margin: space consecutive groups with `.stack` on the form, so the rhythm follows the layout instead of the component.
 - Use native `<optgroup>` and `disabled` options in `.select` controls when applicable; the customizable picker preserves both as a progressive enhancement.
 - `.choice` is the choice-label API. Use `.check` or `.radio` on the nested control. The control goes first, the label group second, so multi-line labels align the control with the first line.
 - For a switch, use `class="switch"` and `role="switch"`.

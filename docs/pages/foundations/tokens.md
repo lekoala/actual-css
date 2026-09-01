@@ -133,7 +133,7 @@ Spacing should be useful without becoming a design-token encyclopedia.
 }
 ```
 
-Official steps are named in tens so the scale stays extensible: Actual CSS only publishes multiples of 10, and applications can intercalate intermediate values (`--space-15`, `--space-45`, …) without colliding with a future framework step.
+Official steps are named in tens so the scale stays extensible. **Actual CSS will never define a `--space-*` token that is not a multiple of 10.** The intermediate names (`--space-15`, `--space-45`, …) are reserved for application-level interpolation: defining them is not writing into the framework namespace, it is using the half of the scale the framework has permanently given up.
 
 Use `em` for spacing that should scale with the component text size, such as button gaps and inline padding. Use `rem` for global rhythm, layouts, and fixed density.
 
@@ -297,6 +297,7 @@ The shared visual variants are:
 - `.solid`: full background, paired foreground. This is the default for buttons.
 - `.soft`: lightly tinted background, colored text. Good for alerts, badges, and secondary actions.
 - `.outline`: transparent background, colored border and text.
+- `.surface`: the page surface with the theme border, and the intent only in the text. The neutral chrome neither `.soft` (the intent-tinted treatment) nor `.outline` (no fill) can give.
 
 Buttons also support two button-only variants:
 

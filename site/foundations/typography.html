@@ -262,7 +262,12 @@ documentation homepages) import it manually:</p>
 <p>There is also a non-fluid <code>.lead</code> utility in the core, for a simple readable intro paragraph. The fluid module does not redefine <code>.lead</code>; it adds a separate <code>.text-lead</code> for display contexts. This avoids a fluid import silently changing how existing markup renders.</p>
 <h2 id="link-treatment">Link treatment</h2>
 <p>Global links are intentionally neutral. Only <code>.prose</code> styles them as prose links, and only components style their own link-like elements (nav links, button-as-link, tabs, breadcrumbs, etc.). The reason is that underlining every <code>a</code> globally fights against button-like links, nav links, clickable cards, menu items, and tab triggers. Components that need link semantics should opt in with their own rule.</p>
-<p>Prose links take <code>--primary</code>. That breaks down for a theme whose primary is a light or fully saturated accent: it can carry a filled button, where it is the background under its own <code>--primary-fg</code>, but not inline body text, where it has to hold contrast against <code>--surface</code> on its own. <code>--link</code> is the optional override for exactly that case — a theme sets it and <code>.prose</code> link ink follows, hover included, with no rule to restate. Unset, it falls back to <code>--primary</code>, so existing themes are unaffected.</p>
+<p><code>--link</code> is the theme-level link ink. It is unset by default, so a bare <code>a</code> inherits its color and <code>.prose</code> links fall back to <code>--primary</code> — nothing changes until a theme opts in. Setting it is that opt-in, and it reaches both places at once:</p>
+<pre><code class="language-css">:root {
+  --link: var(--primary); /* bare links become link-colored, prose included */
+}
+</code></pre>
+<p>The <code>.prose</code> fallback to <code>--primary</code> breaks down for a theme whose primary is a light or fully saturated accent: it can carry a filled button, where it is the background under its own <code>--primary-fg</code>, but not inline body text, where it has to hold contrast against <code>--surface</code> on its own. <code>--link</code> is the override for exactly that case — hover included, with no rule to restate.</p>
 <pre><code class="language-css">[data-theme=&quot;vivid&quot;] {
   --primary: hsl(48 100% 50%); /* fine as a button fill */
   --link: hsl(215 100% 30%);   /* 1.4:1 as body ink, so lend a darker hue */
@@ -303,7 +308,7 @@ baseline stays sans so app UI inherits predictably.</p>
 <li><code>--prose-line-height</code> — body line height inside <code>.prose</code>.</li>
 <li><code>--prose-heading-line-height</code> — heading line height inside <code>.prose</code>.</li>
 <li><code>--prose-flow</code> — vertical rhythm between sibling blocks inside <code>.prose</code>.</li>
-<li><code>--link</code> — prose link ink; falls back to <code>--primary</code> when a theme leaves it unset.</li>
+<li><code>--link</code> — theme-level link ink, listed here because <code>.prose</code> is its main consumer. Unset, bare links inherit and prose links fall back to <code>--primary</code>.</li>
 </ul>
 <h2 id="text-wrap">text-wrap</h2>
 <p><code>text-wrap: balance</code> and <code>text-wrap: pretty</code> are used at three levels:</p>

@@ -1,8 +1,8 @@
 /*
  * Cross-cutting variant token mapping.
  *
- * Variant scope: .solid/.soft/.outline set --ui-* for components that opt into
- * shared variants. .inverted is a surface modifier, not a variant: it paints
+ * Variant scope: .solid/.soft/.outline/.surface set --ui-* for components that
+ * opt into shared variants. .inverted is a surface modifier, not a variant: it paints
  * the element directly (background/color/border-color) so it works on any bare
  * block, and remaps the shared --ui-* tokens so participating components
  * (.card, .navbar, .alert, .badge) invert through their own rules. Loaded
@@ -21,8 +21,10 @@
  * components may consume --density-* when the density context should affect
  * their local rhythm. Compact components may consume --density-compact-size.
  * Components with bespoke sizing (spinner, avatar) define local .sm/.lg;
- * applying .sm/.lg to card, dialog, accordion, navbar, table is
- * a no-op.
+ * applying .sm/.lg to card, dialog, accordion, navbar, table, progress, meter
+ * is a no-op. Progress and meter are deliberate: a bar keeps its inline size
+ * and only changes thickness, which --bar-height expresses better than a
+ * three-step scale.
  *
  * Intent list source of truth: intents.css. Components consume --intent* tokens
  * instead of re-listing intent classes.
@@ -43,6 +45,17 @@
   --ui-bg: transparent;
   --ui-fg: var(--intent, currentColor);
   --ui-border: var(--intent, currentColor);
+}
+
+/* Neutral chrome, intent only in the ink: the page surface with the theme
+   border. .soft is the intent-tinted treatment (its baseline fallback uses
+   --surface-subtle) and .outline has no fill at all, so neither can express
+   it. Deliberately literal — no color-mix enhancement — so this stays the one
+   variant that reads exactly as the theme's own surface. */
+.surface {
+  --ui-bg: var(--surface);
+  --ui-fg: var(--intent, var(--text));
+  --ui-border: var(--border);
 }
 
 /* Inverse surface treatment. Paints the element directly (so it works on any

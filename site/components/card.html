@@ -219,6 +219,7 @@
 <tr><td><code>.card</code></td><td>Component</td><td>Neutral raised surface for grouped content.</td></tr>
 <tr><td><code>.raised</code></td><td>Variant</td><td>Elevated surface with a soft shadow.</td></tr>
 <tr><td><code>.subtle</code></td><td>Variant</td><td>Lower contrast against the page surface.</td></tr>
+<tr><td><code>.surface</code></td><td>Variant</td><td>Shared variant: the page surface instead of <code>--surface-raised</code>, with the intent in the text only.</td></tr>
 <tr><td><code>.inverted</code></td><td>Surface modifier</td><td>Inverse surface treatment: paints <code>--surface-solid</code> and swaps the foreground to <code>--surface</code>, so it inverts in dark themes instead of always reading as dark. Apply as <code>class=&quot;card inverted&quot;</code>, or on any block.</td></tr>
 <tr><td><code>.compact</code></td><td>Variant</td><td>Tighter padding for dense contexts.</td></tr>
 </tbody>
@@ -472,6 +473,10 @@ them. <code>.subtle</code> paints the card's background directly while <code>.in
 the surface tokens, so <code>.card.subtle.inverted</code> renders a subtle background with
 inverted foreground. Treat them as mutually exclusive, like two competing
 variants.</p>
+<p><code>.surface</code> is the shared variant on a card: it drops the card to the page
+surface instead of <code>--surface-raised</code>, keeps the theme border, and lets an
+intent class color the text only. <code>.raised</code> and <code>.subtle</code> are the card-local
+treatments on either side of it.</p>
 </div>
 <div class="docs-example">
   <div class="docs-preview">
@@ -487,6 +492,13 @@ variants.</p>
     <hgroup>
       <h3>Subtle</h3>
       <p class="muted">Lower contrast against the page surface.</p>
+    </hgroup>
+  </article>
+
+  <article class="card surface">
+    <hgroup>
+      <h3>Surface</h3>
+      <p class="muted">The page surface with the theme border.</p>
     </hgroup>
   </article>
 
@@ -519,6 +531,13 @@ variants.</p>
     &lt;hgroup&gt;
       &lt;h3&gt;Subtle&lt;/h3&gt;
       &lt;p class=&quot;muted&quot;&gt;Lower contrast against the page surface.&lt;/p&gt;
+    &lt;/hgroup&gt;
+  &lt;/article&gt;
+
+  &lt;article class=&quot;card surface&quot;&gt;
+    &lt;hgroup&gt;
+      &lt;h3&gt;Surface&lt;/h3&gt;
+      &lt;p class=&quot;muted&quot;&gt;The page surface with the theme border.&lt;/p&gt;
     &lt;/hgroup&gt;
   &lt;/article&gt;
 

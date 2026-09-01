@@ -77,7 +77,15 @@ There is also a non-fluid `.lead` utility in the core, for a simple readable int
 
 Global links are intentionally neutral. Only `.prose` styles them as prose links, and only components style their own link-like elements (nav links, button-as-link, tabs, breadcrumbs, etc.). The reason is that underlining every `a` globally fights against button-like links, nav links, clickable cards, menu items, and tab triggers. Components that need link semantics should opt in with their own rule.
 
-Prose links take `--primary`. That breaks down for a theme whose primary is a light or fully saturated accent: it can carry a filled button, where it is the background under its own `--primary-fg`, but not inline body text, where it has to hold contrast against `--surface` on its own. `--link` is the optional override for exactly that case — a theme sets it and `.prose` link ink follows, hover included, with no rule to restate. Unset, it falls back to `--primary`, so existing themes are unaffected.
+`--link` is the theme-level link ink. It is unset by default, so a bare `a` inherits its color and `.prose` links fall back to `--primary` — nothing changes until a theme opts in. Setting it is that opt-in, and it reaches both places at once:
+
+```css
+:root {
+  --link: var(--primary); /* bare links become link-colored, prose included */
+}
+```
+
+The `.prose` fallback to `--primary` breaks down for a theme whose primary is a light or fully saturated accent: it can carry a filled button, where it is the background under its own `--primary-fg`, but not inline body text, where it has to hold contrast against `--surface` on its own. `--link` is the override for exactly that case — hover included, with no rule to restate.
 
 ```css
 [data-theme="vivid"] {
@@ -133,7 +141,7 @@ There is no `--line-height-normal`. It would be redundant with `--line-height`. 
 - `--prose-line-height` — body line height inside `.prose`.
 - `--prose-heading-line-height` — heading line height inside `.prose`.
 - `--prose-flow` — vertical rhythm between sibling blocks inside `.prose`.
-- `--link` — prose link ink; falls back to `--primary` when a theme leaves it unset.
+- `--link` — theme-level link ink, listed here because `.prose` is its main consumer. Unset, bare links inherit and prose links fall back to `--primary`.
 
 ## text-wrap
 

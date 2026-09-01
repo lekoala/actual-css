@@ -83,9 +83,8 @@
   font-size: var(--prose-h4);
 }
 
-/* Link ink defaults to --primary. --link is an optional escape hatch: a
-   theme whose primary is too light or too vivid to read as inline text sets
-   it without having to restate the rule. */
+/* --link is a theme-level token (core/base.css also reads it for bare links);
+   prose falls back to --primary so a theme that never sets it is unaffected. */
 .prose :where(a) {
   color: var(--link, var(--primary));
   text-decoration-line: underline;

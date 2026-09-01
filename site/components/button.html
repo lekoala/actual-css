@@ -226,6 +226,7 @@
 <tr><td><code>.soft</code></td><td>Variant</td><td>Muted intent-tinted surface.</td></tr>
 <tr><td><code>.outline</code></td><td>Variant</td><td>Transparent with an intent-colored border.</td></tr>
 <tr><td><code>.solid</code></td><td>Variant</td><td>Filled intent background — the <code>.btn</code> default.</td></tr>
+<tr><td><code>.surface</code></td><td>Variant</td><td>Page surface with a neutral border; the intent colors the label only.</td></tr>
 <tr><td><code>.ghost</code></td><td>Variant</td><td>Borderless text button (button-only).</td></tr>
 <tr><td><code>.link</code></td><td>Variant</td><td>Underlined text button (button-only).</td></tr>
 <tr><td><code>.sm</code> / <code>.lg</code></td><td>Size</td><td>Compact or large control height.</td></tr>
@@ -283,8 +284,11 @@
 </div>
 <div class="prose docs-prose">
 <h2 id="variants">Variants</h2>
-<p><code>.ghost</code> and <code>.link</code> are button-only; <code>.soft</code>, <code>.outline</code>, and <code>.solid</code> are
-shared with other components.</p>
+<p><code>.ghost</code> and <code>.link</code> are button-only; <code>.soft</code>, <code>.outline</code>, <code>.solid</code>, and
+<code>.surface</code> are shared with other components.</p>
+<p>Reach for <code>.surface</code> when a secondary action must sit on an opaque, neutral
+chip: <code>.outline</code> lets whatever is behind it show through, and <code>.soft</code> is the
+intent-tinted treatment (its baseline fallback uses <code>--surface-subtle</code>).</p>
 <p>Transparent treatments (<code>.outline</code>, <code>.ghost</code>, <code>.link</code>) follow the surrounding
 foreground by default, including on a contrasting <code>.inverted</code> surface. A local
 intent class still wins: <code>.danger.outline</code> uses the danger color in either
@@ -316,6 +320,8 @@ container. For a plain text link, use a bare <code>&lt;a&gt;</code> with no clas
   <button class="btn danger outline" type="button">Danger outline</button>
   <button class="btn soft" type="button">Soft</button>
   <button class="btn danger soft" type="button">Danger soft</button>
+  <button class="btn surface" type="button">Surface</button>
+  <button class="btn danger surface" type="button">Danger surface</button>
   <button class="btn ghost" type="button">Ghost</button>
   <button class="btn link" type="button">Button as link</button>
 </div>
@@ -326,6 +332,8 @@ container. For a plain text link, use a bare <code>&lt;a&gt;</code> with no clas
   &lt;button class=&quot;btn danger outline&quot; type=&quot;button&quot;&gt;Danger outline&lt;/button&gt;
   &lt;button class=&quot;btn soft&quot; type=&quot;button&quot;&gt;Soft&lt;/button&gt;
   &lt;button class=&quot;btn danger soft&quot; type=&quot;button&quot;&gt;Danger soft&lt;/button&gt;
+  &lt;button class=&quot;btn surface&quot; type=&quot;button&quot;&gt;Surface&lt;/button&gt;
+  &lt;button class=&quot;btn danger surface&quot; type=&quot;button&quot;&gt;Danger surface&lt;/button&gt;
   &lt;button class=&quot;btn ghost&quot; type=&quot;button&quot;&gt;Ghost&lt;/button&gt;
   &lt;button class=&quot;btn link&quot; type=&quot;button&quot;&gt;Button as link&lt;/button&gt;
 &lt;/div&gt;</code></pre>
