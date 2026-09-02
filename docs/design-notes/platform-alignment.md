@@ -287,6 +287,15 @@ Avoid building a large custom range abstraction around browser-specific pseudo-e
 
 Prefer native controls and progressive styling.
 
+The concrete signal to watch is `appearance: base-slider` with `::slider-track`, `::slider-fill`, and `::slider-thumb`. Checked on Chrome 152: `CSS.supports('appearance', 'base-slider')` and `CSS.supports('selector(::slider-fill)')` are both false, so there is nothing to enhance against yet.
+
+Until then, `.range` intentionally omits filled tracks and tick marks. Both are reachable today only through techniques Actual should not take on:
+
+- The Chromium filled-track trick needs `overflow: hidden` on the runnable track plus a large `box-shadow` on the thumb. It collides twice with `range.css`: the thumb is wider than the track and would be clipped, and the focus ring already owns the thumb's `box-shadow`.
+- CSS-only tick marks need a step count duplicated out of `min`/`max`/`step` into a custom property, so markup carries the same contract twice and the two can diverge. `datalist` cannot carry it either: its native ticks are part of the appearance that `appearance: none` removes, and no engine renders `<option label>` for a range.
+
+When the base-slider parts become interoperable, this becomes a `@supports` enhancement in the shape of `custom-select.css` — less engine-specific CSS, not more.
+
 ### Navigation
 
 Native navigation proposals may eventually provide richer semantics and interaction behavior for complex navigation structures.
