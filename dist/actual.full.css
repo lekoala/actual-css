@@ -1073,7 +1073,7 @@ small {
  * .sidebar-layout main content + secondary aside
  * .grid           responsive collection; item width is the contract
  *  .grid-N         structural density of N; balanced inside a container named
- *                  actual-grid (in grid.css)
+ *                  actual-container (in grid.css)
  * .column-layout  explicit 12-column region composition; the author owns
  *                 narrow-container recomposition
  * .scroller       theme-aware scrollbar density and colour
@@ -1084,20 +1084,44 @@ small {
  *
  * Prefer these compositions over viewport breakpoint utilities.
  */
-/* Convenience helper: establishes a query container named actual-grid for
-   descendants. Use it for a component that changes representation according
-   to its allocated inline size, and to give .grid-N the named context it needs
-   for balanced subdivision (see grid.css). The name matters: grids only respond
-   to an explicitly actual-grid-named container, never to an incidental
-   query container. Layout primitives are responsive without it; this adds
-   precision, it is never a prerequisite.
+/* Convenience helper for size-aware components: establishes an inline-size
+   query container named actual-container. The name is the contract, not this
+   class — an author can declare `container: actual-container / inline-size` on
+   their own region and get the same result.
 
-   The element takes inline-size containment, so put it on a normal
-   block-level wrapper, never on a shrink-to-fit item (a .cluster child, a
-   float, an inline-block): its contents would stop contributing to its own
-   inline size and it would collapse. */
+   actual-container is shared. Granting it to a region may enable size-aware
+   enhancements for any Actual component inside that region, not only the one
+   that motivated the container: .grid-N reads it for balanced subdivision,
+   .steps for its label collapse, and future components will read the same
+   context. That is the scope of the API, not a caveat.
+
+   An anonymous query container is not part of it. A region that declares
+   `container-type: inline-size` for the application's own purposes carries no
+   actual-container name, so no framework component changes behaviour there.
+   Opting into the protocol is always explicit. Nothing here is a prerequisite
+   either — every primitive is responsive without it; this adds precision.
+
+   Place it where the width you want measured lives: usually a wrapper for a
+   grid, whose queried children sit inside it, and the component itself for
+   .steps, whose own row is the width in question.
+
+   The rule for where it is safe is the containment rule, not a list of
+   primitives. Query containment removes the element's intrinsic inline-size
+   contribution, so:
+
+     safe    the element's width is imposed by its context
+             (.steps sets inline-size: 100%, so it survives even as a
+             .cluster child — it wraps and fills)
+
+     unsafe  the element's width depends on its contents' intrinsic
+             contribution (a bare .grid child of .cluster measures 0 once
+             contained, as does a float, inline-block, table, grid auto track,
+             max-content parent, or an abspos box sized by its contents)
+
+   So .cluster is neither safe nor unsafe; what matters is where the child's
+   width comes from. */
 .container-query {
-  container: actual-grid / inline-size;
+  container: actual-container / inline-size;
 }
 
 /* Vertical flow. .stack owns the block axis only: block margins reset, inline
@@ -1468,13 +1492,13 @@ small {
   min-inline-size: 0;
 }
 
-/* Balanced subdivision, activated by an ancestor container named actual-grid.
+/* Balanced subdivision, activated by an ancestor container named actual-container.
  * A .grid-N inside such a container enters only divisor states of N. The name
  * is deliberate: a grid must not key off the nearest anonymous query container,
  * or a region that sets container-type: inline-size for an unrelated reason
  * would silently change the grid. The author opts the grid in by naming the
  * context — .container-query is the official helper, or declare
- * container: actual-grid / inline-size on your own region.
+ * container: actual-container / inline-size on your own region.
  *
  *   .grid-2   2 -> 1
  *   .grid-3   3 -> 1
@@ -1491,7 +1515,7 @@ small {
  * inline contribution and collapses it inside .cluster, .topbar, floats, and
  * any shrink-to-fit box. See docs/design-notes/grid.md.
  *
- * Without an actual-grid ancestor none of these @container rules resolve, so
+ * Without an actual-container ancestor none of these @container rules resolve, so
  * the auto-fill baseline above stays. The min-width: 0 rule is the lowest
  * step: it pins the grid to one column inside a container before any larger
  * threshold fires (a bare grid would otherwise show a 2 + 1 orphan at 28-48rem).
@@ -1507,25 +1531,25 @@ small {
  * Ascending min-width only: the last matching step wins by cascade order.
  */
 @supports (container-type: inline-size) {
-  @container actual-grid (min-width: 0px) {
+  @container actual-container (min-width: 0px) {
     :where(.grid-2, .grid-3, .grid-4, .grid-6) {
       grid-template-columns: 1fr;
     }
   }
 
-  @container actual-grid (min-width: 28rem) {
+  @container actual-container (min-width: 28rem) {
     :where(.grid-2, .grid-4, .grid-6) {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
   }
 
-  @container actual-grid (min-width: 48rem) {
+  @container actual-container (min-width: 48rem) {
     :where(.grid-3, .grid-6) {
       grid-template-columns: repeat(3, minmax(0, 1fr));
     }
   }
 
-  @container actual-grid (min-width: 64rem) {
+  @container actual-container (min-width: 64rem) {
     :where(.grid-4) {
       grid-template-columns: repeat(4, minmax(0, 1fr));
     }
@@ -6233,22 +6257,31 @@ a.avatar[aria-disabled="true"] {
 }
 
 /*
- * Steps — semantic ordered-list progression. One intrinsic layout: items fill
- * the row when they fit and hold a minimum width otherwise, so the sequence
- * scrolls horizontally only when it genuinely cannot fit. No breakpoint decides
- * this — the item minimum tracks the real content, not an arbitrary width.
+ * Steps — semantic ordered-list progression for a multi-step process.
  *
- * Markers come from the list counter; state stays in .complete and
- * aria-current="step", so the component needs no runtime.
+ * Every step wraps its label in `.step-label`; that wrapper is the contract the
+ * space-aware representations address. They need an `actual-container` size
+ * context the author grants — without one, stacked is the fallback and the
+ * modes below never fire.
+ *
+ * Vertical is explicit with `.steps-vertical`: a composition choice for sidebars
+ * and narrow regions, never a responsive fallback, and not bound by the
+ * horizontal 2–5 step range.
+ *
+ * See docs/design-notes/steps.md for the reasoning behind the thresholds, the
+ * selector shapes, and the alternatives that were rejected.
  *
  * Public hooks:
  * --step-size
  * --step-min
  * --step-gap
+ * --step-inline-gap
+ * --step-vertical-gap
  * --step-line-size
  * --step-marker-radius
  * --step-complete-mark
  * --step-connector
+ * --step-inline-connector
  *
  * Internal:
  * --step-marker-bg
@@ -6260,6 +6293,8 @@ a.avatar[aria-disabled="true"] {
   --step-size: 1.75rem;
   --step-min: 7rem;
   --step-gap: var(--space-20);
+  --step-inline-gap: var(--space-20);
+  --step-vertical-gap: var(--space-40);
   --step-line-size: var(--border-width);
   --step-marker-bg: var(--surface);
   --step-marker-border: var(--border);
@@ -6273,13 +6308,23 @@ a.avatar[aria-disabled="true"] {
   inline-size: 100%;
   margin: 0;
   padding: 0;
-  list-style: none;
-  /* Fill when it fits, scroll when it cannot: items never shrink below
-     --step-min, so labels keep a readable width and the sequence scrolls
-     horizontally instead of squishing. overscroll-behavior keeps the scroll
-     from chaining to the page. */
   overflow-x: auto;
+  /* Never `auto`. A row hugs fractional content — 28px marker + gap + a 17.5px
+     label line is 53.5px — and `overflow-x: auto` alone would compute this axis
+     to `auto` too, so any rounding that tips scrollHeight past clientHeight
+     (another font, a fractional device pixel ratio, a zoom step) raises a
+     phantom vertical scrollbar. There is never anything to scroll here. */
+  overflow-y: hidden;
   overscroll-behavior-inline: contain;
+  list-style: none;
+}
+
+/* Clipping happens at the padding edge, so a navigable row reserves the focus
+   ring's own width and offset. Only that case pays for it: an informational
+   stepper has nothing to draw a ring around, and the vertical orientation gives
+   the scroll container back entirely, so nothing there clips either. */
+.steps:not(.steps-vertical):has(> li > :is(a[href], button, [tabindex])) {
+  padding-block: calc(var(--focus-outline-offset) + var(--border-width) * 2);
 }
 
 .steps > li {
@@ -6312,29 +6357,40 @@ a.avatar[aria-disabled="true"] {
   line-height: 1;
 }
 
+/* The marker carries the state, so the label stays a notch below it. Set on the
+   component, never per representation: a size that changed with the layout
+   would resize the text under a reader dragging a window. */
+.steps .step-label {
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-tight);
+}
+
+/* A navigable label keeps its underline, hover and focus ring — but not a link
+   color, which would read ahead of the marker states. */
+.steps .step-label:is(a) {
+  color: inherit;
+}
+
+/* The pseudo-element is marker-height so --step-connector may be any complete
+   background value. */
 .steps > li::after {
   content: "";
   position: absolute;
-  inset-block-start: calc((var(--step-size) - var(--step-line-size)) / 2);
+  inset-block-start: 0;
   inset-inline-start: calc(50% + var(--step-size) / 2);
   inline-size: calc(100% - var(--step-size));
-  block-size: var(--step-line-size);
-  /* A custom property resolves its var() before inheritance, so a default
-     --step-connector: var(--step-line) on .steps would freeze the parent line
-     color and a .complete child's connector would never follow its own line.
-     Falling back to the local --step-line here keeps each connector in sync;
-     an explicit --step-connector still wins when the author sets one. */
-  background: var(--step-connector, var(--step-line));
+  block-size: var(--step-size);
+  background: var(
+    --step-connector,
+    linear-gradient(var(--step-line), var(--step-line)) center /
+    100% var(--step-line-size) no-repeat
+  );
 }
 
 .steps > li:last-child::after {
   content: none;
 }
 
-/* Three states must be readable without a check glyph: future stays neutral,
-   complete is a filled marker, current is an outlined one. Filled reads as
-   "done", outlined as "you are here" — the distinction survives a numbered
-   stepper that never sets --step-complete-mark. */
 .steps > .complete {
   --step-marker-bg: var(--state-selected);
   --step-marker-border: var(--state-selected);
@@ -6344,10 +6400,9 @@ a.avatar[aria-disabled="true"] {
   color: var(--text);
 }
 
-/* Declared after .complete at equal specificity, and it wins on every channel
-   including the connector: the accented line means "already walked", so the
-   segment leaving the current step must stay neutral. The line reaching the
-   current step is owned by the previous step, which is complete. */
+/* Complete owns the accented connector that reaches the current step, so the
+   connector leaving current goes back to neutral. Declared after .complete at
+   equal specificity: current wins on every channel. */
 .steps > [aria-current="step"] {
   --step-marker-bg: var(--surface);
   --step-marker-border: var(--state-selected);
@@ -6357,29 +6412,158 @@ a.avatar[aria-disabled="true"] {
   color: var(--text);
 }
 
-/* Thicker border is the current affordance in every mode — structural, so it
-   survives forced colors, and it never competes with the outline channel owned
-   by focus. */
 .steps > [aria-current="step"]::before {
   border-width: calc(var(--border-width) * 2);
 }
 
-/* A finished step may replace its number with a mark (e.g. a check glyph):
-   --step-complete-mark accepts any content value and falls back to the
-   counter, so existing numbered steppers are unchanged. Excluded on the
-   current step so "current wins" holds on the glyph too, not only on color. */
+/* Weight marks "where I am now". Complete needs none: its filled disc already
+   reads as strongly. */
+.steps > [aria-current="step"] > .step-label {
+  font-weight: var(--font-weight-strong);
+}
+
 .steps > .complete:not([aria-current="step"])::before {
   content: var(--step-complete-mark, counter(actual-step));
 }
 
-/* Forced colors drop the accent fill, which would leave complete and future
-   markers identical — current keeps its thicker ring, complete needs a system
-   color to stay filled. Same exclusion, for the same reason. */
+/* Forced colors drops the accent fill, which would leave complete and future
+   markers identical. */
 @media (forced-colors: active) {
   .steps > .complete:not([aria-current="step"])::before {
     background: Highlight;
     color: HighlightText;
   }
+}
+
+/*
+ * Horizontal CQ modes, both thresholds calibrated on five steps. Each lists the
+ * counts it serves outright: horizontal is 2-5, and 6+ keeps the base layout.
+ *   < 35rem  + 4-5 steps  markers only, unless a label is interactive
+ *   >= 60rem + 2-5 steps  marker beside label
+ *   otherwise             stacked
+ */
+@supports (container-type: inline-size) {
+  @container actual-container (inline-size < 35rem) {
+    .steps:not(.steps-vertical):not(:has(> li > :is(a[href], button, [tabindex]))):has(
+        > :nth-child(4):last-child,
+        > :nth-child(5):last-child
+      )
+      > li {
+      flex: 1 1 0;
+      grid-template-rows: var(--step-size);
+      min-inline-size: var(--step-size);
+      gap: 0;
+    }
+
+    .steps:not(.steps-vertical):not(:has(> li > :is(a[href], button, [tabindex]))):has(
+        > :nth-child(4):last-child,
+        > :nth-child(5):last-child
+      )
+      > li
+      > .step-label {
+      position: absolute;
+      inline-size: 1px;
+      block-size: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      clip-path: inset(50%);
+      white-space: nowrap;
+      border: 0;
+    }
+  }
+
+  @container actual-container (min-width: 60rem) {
+    .steps:not(.steps-vertical):has(
+        > :nth-child(2):last-child,
+        > :nth-child(3):last-child,
+        > :nth-child(4):last-child,
+        > :nth-child(5):last-child
+      )
+      > li {
+      display: flex;
+      flex: 1 1 auto;
+      align-items: center;
+      gap: var(--step-inline-gap);
+      min-inline-size: 0;
+      text-align: start;
+      white-space: nowrap;
+    }
+
+    .steps:not(.steps-vertical):has(
+        > :nth-child(2):last-child,
+        > :nth-child(3):last-child,
+        > :nth-child(4):last-child,
+        > :nth-child(5):last-child
+      )
+      > li::after {
+      position: static;
+      flex: 1 1 2rem;
+      inline-size: auto;
+      block-size: var(--step-size);
+      margin-inline-end: var(--step-inline-gap);
+      background: var(
+        --step-inline-connector,
+        var(
+          --step-connector,
+          linear-gradient(var(--step-line), var(--step-line)) center /
+          100% var(--step-line-size) no-repeat
+        )
+      );
+    }
+
+    .steps:not(.steps-vertical):has(
+        > :nth-child(2):last-child,
+        > :nth-child(3):last-child,
+        > :nth-child(4):last-child,
+        > :nth-child(5):last-child
+      )
+      > li:last-child {
+      flex: 0 0 auto;
+    }
+  }
+}
+
+/* Vertical is an explicit orientation, never a responsive fallback: container
+   queries do not reach it, and it has no step-count limit. */
+.steps.steps-vertical {
+  flex-direction: column;
+  gap: var(--step-vertical-gap);
+  overflow: visible;
+  overscroll-behavior: auto;
+}
+
+.steps.steps-vertical > li {
+  display: grid;
+  flex: none;
+  grid-template-columns: var(--step-size) minmax(0, 1fr);
+  grid-template-rows: auto;
+  align-items: start;
+  justify-items: start;
+  gap: var(--step-inline-gap);
+  min-inline-size: 0;
+  min-block-size: var(--step-size);
+  color: var(--text-muted);
+  text-align: start;
+}
+
+/* The row starts at the top so a wrapped label begins level with its marker.
+   align-self only bites on a single line, which would otherwise float above
+   the marker's centre. */
+.steps.steps-vertical > li > .step-label {
+  align-self: center;
+}
+
+.steps.steps-vertical > li::after {
+  position: absolute;
+  inset-block-start: var(--step-size);
+  inset-inline-start: calc((var(--step-size) - var(--step-line-size)) / 2);
+  inline-size: var(--step-line-size);
+  block-size: calc(100% - var(--step-size) + var(--step-vertical-gap));
+  background:
+    linear-gradient(var(--step-line), var(--step-line)) center / var(--step-line-size) 100%
+    no-repeat;
 }
 
 

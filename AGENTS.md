@@ -71,9 +71,12 @@ Add relevant guards for future-us when needed based on traps and discoveries.
   genuinely product-specific. Do not preserve incidental mockup pixel values by
   default.
 
-## CSS
+## Invalid CSS selectors
 
-- Never merge vendor rules (rule becomes invalid and is discarded)
+Invalid selectors are invalid and the whole rule is dicarded.
+
+- Never merge vendor rules.
+- Never nest `:has()` inside `:has()`, including through `:not()`/`:is()`.
 
 ### Documentation and implementation
 

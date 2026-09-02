@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Steps connector fixture</title>
+  <title>Steps representation fixture</title>
   <link rel="stylesheet" href="../../src/css/actual.full.css">
   <style>
     * { transition-duration: 0s !important; }
@@ -12,20 +12,25 @@
   </style>
 </head>
 <body>
-  <ol class="steps">
-    <li class="complete">Account</li>
-    <li aria-current="step">Payment</li>
-    <li>Confirm</li>
+  <!-- No size context: the stacked layout is the universal fallback. -->
+  <ol class="steps" id="plain">
+    <li class="complete"><span class="step-label">Account</span></li>
+    <li aria-current="step"><span class="step-label">Payment</span></li>
+    <li><span class="step-label">Confirm</span></li>
   </ol>
-  <ol class="steps" id="marked" style="--step-connector: none; --step-connector-mark: '›'">
-    <li class="complete">Account</li>
-    <li aria-current="step">Payment</li>
-    <li>Confirm</li>
+  <!-- --step-connector is a complete background value, so `none` erases the
+       default line without touching the marker geometry. -->
+  <ol class="steps" id="no-connector" style="--step-connector: none">
+    <li class="complete"><span class="step-label">Account</span></li>
+    <li aria-current="step"><span class="step-label">Payment</span></li>
+    <li><span class="step-label">Confirm</span></li>
   </ol>
-  <!-- Collapse fixture. 35rem = 560px is the 5-step budget, so 559px is one
-       pixel past where the plain row starts to scroll. -->
+
+  <!-- Markers-only, five steps. 35rem = 560px is the five-step --step-min
+       budget, so 559px is one pixel past where a stacked row starts to
+       scroll — the threshold is calibrated on the count that needs it most. -->
   <div style="inline-size: 559px">
-    <ol class="steps container-query" id="collapsed">
+    <ol class="steps container-query" id="compact-5">
       <li class="complete"><span class="step-label">Identification</span></li>
       <li class="complete"><span class="step-label">Coordonnees</span></li>
       <li aria-current="step"><span class="step-label">Motif</span></li>
@@ -34,7 +39,7 @@
     </ol>
   </div>
   <div style="inline-size: 561px">
-    <ol class="steps container-query" id="expanded">
+    <ol class="steps container-query" id="stacked-5">
       <li class="complete"><span class="step-label">Identification</span></li>
       <li class="complete"><span class="step-label">Coordonnees</span></li>
       <li aria-current="step"><span class="step-label">Motif</span></li>
@@ -42,9 +47,108 @@
       <li><span class="step-label">Paiement</span></li>
     </ol>
   </div>
-  <!-- Bare text under the opt-in: must fall back to scroll, not half-collapse. -->
+  <!-- Four steps share that threshold rather than getting their own at
+       28rem. Between 448px and 560px they are compacted although stacked would
+       still have fitted: the deliberate cost of one threshold instead of two. -->
   <div style="inline-size: 559px">
-    <ol class="steps container-query" id="bare-collapse">
+    <ol class="steps container-query" id="compact-4">
+      <li class="complete"><span class="step-label">Identification</span></li>
+      <li aria-current="step"><span class="step-label">Motif</span></li>
+      <li><span class="step-label">Confirmation</span></li>
+      <li><span class="step-label">Paiement</span></li>
+    </ol>
+  </div>
+  <div style="inline-size: 561px">
+    <ol class="steps container-query" id="stacked-4">
+      <li class="complete"><span class="step-label">Identification</span></li>
+      <li aria-current="step"><span class="step-label">Motif</span></li>
+      <li><span class="step-label">Confirmation</span></li>
+      <li><span class="step-label">Paiement</span></li>
+    </ol>
+  </div>
+  <!-- Two and three steps never go markers-only: they stay readable stacked
+       far below any width worth designing for, and scroll past that. -->
+  <div style="inline-size: 300px">
+    <ol class="steps container-query" id="narrow-3">
+      <li class="complete"><span class="step-label">Identification</span></li>
+      <li aria-current="step"><span class="step-label">Motif</span></li>
+      <li><span class="step-label">Paiement</span></li>
+    </ol>
+  </div>
+  <div style="inline-size: 200px">
+    <ol class="steps container-query" id="narrow-2">
+      <li class="complete"><span class="step-label">Identification</span></li>
+      <li aria-current="step"><span class="step-label">Motif</span></li>
+    </ol>
+  </div>
+
+  <!-- Inline, every supported count, from 60rem = 960px. 959px is the last
+       stacked pixel. The threshold is where a five-step row's connector still
+       reaches its 2rem basis with realistic labels; anything earlier leaves the
+       widest count with a stub. -->
+  <div style="inline-size: 959px">
+    <ol class="steps container-query" id="stacked-3">
+      <li class="complete"><span class="step-label">Identification</span></li>
+      <li aria-current="step"><span class="step-label">Motif</span></li>
+      <li><span class="step-label">Paiement</span></li>
+    </ol>
+  </div>
+  <div style="inline-size: 961px">
+    <ol class="steps container-query" id="inline-3">
+      <li class="complete"><span class="step-label">Identification</span></li>
+      <li aria-current="step"><span class="step-label">Motif</span></li>
+      <li><span class="step-label">Paiement</span></li>
+    </ol>
+  </div>
+  <!-- 769px, five steps, realistic labels: this is what 48rem would have
+       bought. The row fits inline, but the connector collapses to ~15px — the
+       region a themed chevron lives in, gone. It must still be stacked here. -->
+  <div style="inline-size: 769px">
+    <ol class="steps container-query" id="stacked-5-cramped">
+      <li class="complete"><span class="step-label">Personal details</span></li>
+      <li class="complete"><span class="step-label">Delivery address</span></li>
+      <li aria-current="step"><span class="step-label">Shipping method</span></li>
+      <li><span class="step-label">Payment details</span></li>
+      <li><span class="step-label">Order confirmation</span></li>
+    </ol>
+  </div>
+  <!-- The same threshold for five steps, which is the count it was measured
+       on: the connector must still be a region, not a stub. -->
+  <div style="inline-size: 961px">
+    <ol class="steps container-query" id="inline-5">
+      <li class="complete"><span class="step-label">Identification</span></li>
+      <li class="complete"><span class="step-label">Coordonnees</span></li>
+      <li aria-current="step"><span class="step-label">Motif</span></li>
+      <li><span class="step-label">Confirmation</span></li>
+      <li><span class="step-label">Paiement</span></li>
+    </ol>
+  </div>
+
+  <!-- --step-inline-connector belongs to the inline representation only; the
+       same declaration must not repaint the stacked one. -->
+  <div style="inline-size: 961px">
+    <ol class="steps container-query" id="inline-hook"
+        style="--step-inline-connector: linear-gradient(rgb(1, 2, 3), rgb(1, 2, 3))">
+      <li class="complete"><span class="step-label">Identification</span></li>
+      <li aria-current="step"><span class="step-label">Motif</span></li>
+      <li><span class="step-label">Paiement</span></li>
+    </ol>
+  </div>
+  <div style="inline-size: 959px">
+    <ol class="steps container-query" id="stacked-hook"
+        style="--step-inline-connector: linear-gradient(rgb(1, 2, 3), rgb(1, 2, 3))">
+      <li class="complete"><span class="step-label">Identification</span></li>
+      <li aria-current="step"><span class="step-label">Motif</span></li>
+      <li><span class="step-label">Paiement</span></li>
+    </ol>
+  </div>
+
+  <!-- Unwrapped labels are outside the contract now that .step-label is
+       mandatory, so nothing guards against them: the row compacts with nothing
+       to hide. It stays laid out and readable, which is all an out-of-contract
+       markup is owed. -->
+  <div style="inline-size: 559px">
+    <ol class="steps container-query" id="bare">
       <li class="complete">Identification</li>
       <li class="complete">Coordonnees</li>
       <li aria-current="step">Motif</li>
@@ -52,7 +156,7 @@
       <li>Paiement</li>
     </ol>
   </div>
-  <!-- Six steps: outside the 2..5 contract, no rule fires. -->
+  <!-- Six steps: outside the 2..5 horizontal contract, no rule fires. -->
   <div style="inline-size: 559px">
     <ol class="steps container-query" id="six">
       <li class="complete"><span class="step-label">Identification</span></li>
@@ -63,8 +167,8 @@
       <li><span class="step-label">Recu</span></li>
     </ol>
   </div>
-  <!-- Interactive labels at a collapsing width: the flow must refuse to
-       collapse, or tab would land on a label clipped to 1x1. -->
+  <!-- Interactive labels at a compacting width: the flow must refuse the
+       markers-only form, or tab would land on a label clipped to 1x1. -->
   <div style="inline-size: 559px">
     <ol class="steps container-query" id="interactive">
       <li class="complete"><a class="step-label" href="#one">Identification</a></li>
@@ -94,6 +198,25 @@
       <li><span class="step-label">Paiement</span></li>
     </ol>
   </div>
+  <!-- Interactive labels stay visible in the inline representation, which
+       hides nothing: the guard is about the markers-only form only. -->
+  <div style="inline-size: 961px">
+    <ol class="steps container-query" id="interactive-inline">
+      <li class="complete"><a class="step-label" href="#a">Identification</a></li>
+      <li aria-current="step"><span class="step-label">Motif</span></li>
+      <li><span class="step-label">Paiement</span></li>
+    </ol>
+  </div>
+  <!-- --link is a theme hook (brutalist sets it); a step label must keep its
+       state color anyway, and keep the underline that signals the link. -->
+  <div style="inline-size: 961px">
+    <ol class="steps container-query" id="themed-link" style="--link: rgb(0, 0, 255)">
+      <li class="complete"><a class="step-label" href="#a">Identification</a></li>
+      <li aria-current="step"><span class="step-label">Motif</span></li>
+      <li><a class="step-label" href="#b">Paiement</a></li>
+    </ol>
+  </div>
+
   <!-- The anchor named from a stylesheet, no class in the markup. -->
   <div style="inline-size: 559px">
     <ol class="steps" id="stylesheet-route">
@@ -105,7 +228,7 @@
     </ol>
   </div>
   <!-- A wrapper grant measures the zone it is on, so a row filling a 300px
-       wrapper collapses from the wrapper's width. -->
+       wrapper compacts from the wrapper's width. -->
   <div class="container-query" style="inline-size: 300px">
     <div>
       <ol class="steps" id="ancestor-grant">
@@ -116,6 +239,46 @@
         <li><span class="step-label">Paiement</span></li>
       </ol>
     </div>
+  </div>
+
+  <!-- Vertical is a composition choice, not a fallback: the same grant that
+       compacts a horizontal row must leave this one alone, at any width and
+       at any step count. -->
+  <div class="container-query" style="inline-size: 300px">
+    <ol class="steps steps-vertical" id="vertical">
+      <li class="complete"><span class="step-label">Basic details</span></li>
+      <li class="complete"><span class="step-label">Company details</span></li>
+      <li aria-current="step"><span class="step-label">Subscription plan</span></li>
+      <li><span class="step-label">Payment details</span></li>
+      <li><span class="step-label">Confirmation</span></li>
+    </ol>
+  </div>
+  <!-- Wide enough for the horizontal inline representation, still vertical. -->
+  <div class="container-query" style="inline-size: 700px">
+    <ol class="steps steps-vertical" id="vertical-wide">
+      <li class="complete"><span class="step-label">Basic details</span></li>
+      <li aria-current="step"><span class="step-label">Subscription plan</span></li>
+      <li><span class="step-label">Payment details</span></li>
+    </ol>
+  </div>
+  <!-- Navigable and vertical: the focus-ring padding is compensation for the
+       horizontal row's clip, and a column gives its scroll container back, so
+       this must reserve nothing. -->
+  <div class="container-query" style="inline-size: 300px">
+    <ol class="steps steps-vertical" id="vertical-link">
+      <li class="complete"><a class="step-label" href="#basic">Basic details</a></li>
+      <li aria-current="step"><span class="step-label">Subscription plan</span></li>
+      <li><span class="step-label">Payment details</span></li>
+    </ol>
+  </div>
+  <!-- A label that wraps must begin level with the top of its marker; a single
+       line must sit on the marker's centre. Same rule, both cases. -->
+  <div class="container-query" style="inline-size: 240px">
+    <ol class="steps steps-vertical" id="vertical-wrap">
+      <li class="complete"><span class="step-label">Basic details about your company and its representatives</span></li>
+      <li aria-current="step"><span class="step-label">Plan</span></li>
+      <li><span class="step-label">Payment</span></li>
+    </ol>
   </div>
 </body>
 </html>

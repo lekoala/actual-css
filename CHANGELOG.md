@@ -4,25 +4,59 @@
 
 ### Added
 
-* `--step-connector-mark` draws a glyph between steps (e.g. a chevron), centred on the
-  connector's midline and coloured from the step's line state, so it carries `.complete` the
-  same way the default connector does (an explicit `--step-connector` repaints only the
-  track). It shares the connector's box rather than adding a variant: keep both for a mark on
-  the track, or `--step-connector: none` for a mark alone.
-* `.step-label` is the canonical wrapper for a step's label. Plain text still works for a
-  simple stepper, but only an element can be addressed by label-aware layouts.
-* `.steps` collapses its secondary labels when the row no longer fits: every marker stays,
-  the current label stays, the others go visually hidden. Not a variant — it is what the
-  component does once it has an `actual-container` size context, which the author grants
-  (the `.container-query` class, or the name declared in their own CSS) on the step flow or
-  on a region around it.
-  The threshold is the scroll threshold: items hold at `--step-min`, so the row is
-  `count × --step-min` wide and the compact form takes over on that exact pixel. Covers the
-  supported 2–5 counts; scroll remains the last resort. A flow whose labels are interactive
-  keeps them rather than leaving a link in the tab order with its focus ring clipped away.
+* `.step-label` wraps every step's label. It is part of the component contract, not an
+  option: the wrapper is the only handle the space-aware representations have — something to
+  move beside a marker, place under one, or visually hide.
+* Horizontal `.steps` has three space-aware representations of the same markup, once it has
+  an `actual-container` size context: the label beside its marker when there is generous
+  room, stacked under it by default, and markers only when even that would scroll. Not a
+  variant — it is what the component does once the author grants the context (the
+  `.container-query` class, or the name declared in their own CSS) on the step flow or on a
+  region around it. Two thresholds in all:
+
+  | Container width | 2–3 stages | 4–5 stages |
+  | --- | --- | --- |
+  | below 35rem | stacked, scrolls if it must | markers only |
+  | 35rem to 60rem | stacked | stacked |
+  | from 60rem | inline | inline |
+
+  Both are calibrated on five stages, the widest supported row. `35rem` is that count's
+  `--step-min` budget, so no supported row scrolls where markers-only could have helped;
+  four stages share it and are reduced slightly earlier than they strictly need to be.
+  `60rem` is where a five-stage row still leaves its connector a real region rather than a
+  stub. Markers-only covers 4–5 only: a 2- or 3-stage row stays readable stacked far below
+  any width worth designing for, and scrolls instead.
+  Every label is hidden in the markers-only form, current included, so the markers keep an
+  even pitch — the surrounding screen names the current step. A flow whose labels are
+  interactive keeps them rather than leaving a link in the tab order with its focus ring
+  clipped away.
+* `.steps-vertical` is an explicit vertical orientation for a wizard sidebar or a narrow
+  process panel: markers form a column track and labels sit beside them. It is a composition
+  choice, not a responsive fallback — container queries never switch a row into it — and it
+  is not bound by the horizontal 2–5 range.
+* `.step-label` is typed a notch below its marker — one size down, neutral weight, tight
+  leading — because the marker's fill and ring already carry the state. Only
+  `aria-current="step"` earns extra text weight; a completed step leans on its filled disc.
+  The size is set on the component rather than per representation, so a resize moves the
+  layout without also resizing the text. A navigable label keeps its own state colour
+  instead of the theme's `--link`, and keeps its underline, hover and focus ring.
+* `--step-inline-connector` repaints the connector of the inline representation, where it
+  absorbs the free space between marker + label groups — the natural region for a themed
+  chevron. It falls back to `--step-connector`, then to the default line. Vertical steps have
+  no equivalent hook: their geometry differs, but no design has asked to repaint it and
+  `.steps-vertical > li::after` is a reachable override.
 
 ### Changed
 
+* `.steps` states `overflow-y: hidden` alongside its horizontal scroll instead of leaving the
+  block axis to compute to `auto`. A row hugs fractional content with no slack, so whether a
+  phantom vertical scrollbar appeared depended on the font, the device pixel ratio and the
+  zoom level. A row with an interactive label now reserves `padding-block` for its focus
+  ring, which the clip would otherwise cut; an informational stepper keeps its height.
+* `--step-connector` now takes a complete CSS background value, not a colour, so a theme can
+  replace the line with a gradient, an image or nothing at all. The default paints the
+  hairline as a gradient of the step's own `--step-line`, so a `.complete` connector still
+  follows its state.
 * The framework's query container name is now `actual-container`, not `actual-grid`.
   It was named after its first consumer; the contract is generic — "here is the width you
   were allocated" — and `.steps` reads the same context as `.grid-N`. Rename

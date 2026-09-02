@@ -6,7 +6,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Steps — Actual CSS</title>
-  <meta name="description" content="Semantic ordered-list progression for a multi-step process.">
+  <meta name="description" content="Progress through a short multi-step flow.">
   <link rel="stylesheet" href="../../src/css/actual.full.css">
   <link rel="stylesheet" href="../assets/actual-themes.min.css">
   <link rel="stylesheet" href="../../scripts/docs/assets/docs.css">
@@ -210,32 +210,19 @@
           <div class="prose docs-prose">
 <h1 id="steps">Steps</h1>
 <blockquote>
-<p>Semantic ordered-list progression for a multi-step process.</p>
+<p>Progress through a short multi-step flow.</p>
 </blockquote>
-<p>Use an <code>&lt;ol&gt;</code> because order is part of the meaning. Wrap each label in
-<code>.step-label</code>, add <code>.complete</code> to finished steps and <code>aria-current=&quot;step&quot;</code> to
-exactly one current step. Unmarked items are future steps. The component needs
-no JavaScript.</p>
-<p>Steps is a compact pattern for workflows of <strong>2 to 5 stages</strong> with short labels.
-Beyond five the UX changes category and the framework promises nothing.</p>
-<p>The three states are distinct without any glyph: future is neutral, complete is
-a filled marker with an accented connector, current is an outlined marker with a
-thicker ring. The accented connector reads as &quot;already walked&quot;, so the segment
-leaving the current step stays neutral. A step carrying both states renders
-entirely as current — marker, glyph, and connector.</p>
+<p>Use an <code>&lt;ol&gt;</code> because the order is part of the meaning. Add <code>.complete</code> to
+finished steps and <code>aria-current=&quot;step&quot;</code> to the current one. Unmarked steps are
+upcoming.</p>
+<p>Wrap each label in <code>.step-label</code>. The wrapper lets the horizontal stepper move
+between its three space-aware representations without changing the markup.</p>
+<p>Horizontal steps are designed and tested for <strong>short flows of 2 to 5 stages</strong>.
+Vertical steps are not bound by that range; use as many stages as remain useful
+in the surrounding layout.</p>
+<p>The component needs no JavaScript.</p>
 <p><strong>Related terms:</strong> stepper, progress steps, step indicator, wizard steps, multi-step progress.</p>
-<h2 id="class-reference">Class reference</h2>
-<div class="table-wrap"><table class="table">
-<thead>
-<tr><th>Class</th><th>Kind</th><th>Description</th></tr>
-</thead>
-<tbody>
-<tr><td><code>.steps</code></td><td>Component</td><td>Ordered progression with numbered markers.</td></tr>
-<tr><td><code>.step-label</code></td><td>Component</td><td>A step's label. Required by label-aware layouts.</td></tr>
-<tr><td><code>.complete</code></td><td>State</td><td>A finished step: filled marker.</td></tr>
-<tr><td><code>[aria-current=&quot;step&quot;]</code></td><td>State</td><td>The current step: outlined marker.</td></tr>
-</tbody>
-</table></div>
+<h2 id="basic-usage">Basic usage</h2>
 </div>
 <div class="docs-example">
   <div class="docs-preview">
@@ -254,164 +241,214 @@ entirely as current — marker, glyph, and connector.</p>
   </div>
 </div>
 <div class="prose docs-prose">
-<p>Plain text labels stay supported for a simple stepper and render identically:</p>
-</div>
-<div class="docs-example">
-  <div class="docs-preview">
-<ol class="steps">
-  <li class="complete">Account</li>
-  <li aria-current="step">Payment</li>
-  <li>Confirm</li>
-</ol>
-  </div>
-  <div class="docs-code">
-    <pre><code class="language-html">&lt;ol class=&quot;steps&quot;&gt;
-  &lt;li class=&quot;complete&quot;&gt;Account&lt;/li&gt;
-  &lt;li aria-current=&quot;step&quot;&gt;Payment&lt;/li&gt;
-  &lt;li&gt;Confirm&lt;/li&gt;
-&lt;/ol&gt;</code></pre>
-  </div>
-</div>
-<div class="prose docs-prose">
-<p>Label-aware behaviour needs <code>.step-label</code>, because a bare text node is an
-anonymous grid item that CSS cannot address. Use the element unless the stepper
-is a one-off. When a workflow genuinely allows navigating back to a step, make
-<code>.step-label</code> itself the <code>&lt;a&gt;</code> rather than nesting a control inside it — that is
-the shape the component reads.</p>
-<h2 id="intrinsic-responsiveness">Intrinsic responsiveness</h2>
-<p><code>.steps</code> fills its row when the steps fit and holds each item at <code>--step-min</code>
-otherwise, so the sequence scrolls horizontally only when it genuinely cannot
-fit — no breakpoint. The threshold is space-driven: how many steps fit depends
-on their number and the configurable minimum item width <code>--step-min</code>. Labels
-wrap inside their item when needed.</p>
-<p>Because <code>.steps</code> is an <code>&lt;ol&gt;</code> that can scroll horizontally, its overflow is not
-focusable by default in every browser. Prefer a <code>--step-min</code> that fits the
-common case, and only give a step flow <code>tabindex=&quot;0&quot;</code> when your content
-genuinely needs keyboard access to the overflow — the framework adds neither
-JavaScript nor a tabindex automatically.</p>
-<p>Keep state classes aligned with the real process state; they are visual, while
-<code>aria-current=&quot;step&quot;</code> also exposes the current position to assistive technology.
-Do not put links or buttons around a step unless the workflow genuinely allows
-the user to navigate to it.</p>
-<h2 id="narrow-widths">Narrow widths</h2>
-<p>When the row can no longer fit, <code>.steps</code> keeps every marker and the current
-label and visually hides the other labels — the sequence keeps its shape
-instead of sliding out of view, and every accessible name survives. Scroll is
-the last resort, for when even the compact form cannot fit.</p>
-<p>This is not a variant you switch on. It is what the component does once it can
-has an <code>actual-container</code> size context — the framework's shared name for &quot;here
-is the width you were allocated&quot;. That part is yours to grant, because
-containment would collapse a step flow whose width came from its own contents.
-Add the ready-made class to the row:</p>
+<p>The three states stay distinct even without a checkmark:</p>
+<ul>
+<li><strong>Upcoming</strong> — neutral marker</li>
+<li><strong>Complete</strong> — filled marker and completed connector</li>
+<li><strong>Current</strong> — outlined marker with a stronger ring</li>
+</ul>
+<p>Only one step should use <code>aria-current=&quot;step&quot;</code>.</p>
+<p>The marker carries the state, so the label sits a notch below it: one size
+smaller than body text, and neutral in weight. Only the current step's label is
+emphasised — it is where you are now. A completed step needs no bold text; its
+filled marker already says as much.</p>
+<p>Wrapping every label in <code>.step-label</code> is part of the component contract. The
+wrapper is what the space-aware representations move, place or visually hide.</p>
+<h2 id="horizontal-steps-adapt-to-their-space">Horizontal steps adapt to their space</h2>
+<p>Horizontal is the default orientation and is designed for <strong>2 to 5 stages</strong>.
+With an <code>actual-container</code> size context, the same markup has three
+representations.</p>
+<h3 id="wide-marker-and-label-inline">Wide — marker and label inline</h3>
+<p>With generous room, marker and label form one group and the connector absorbs
+the free space between groups:</p>
+<pre><code class="language-text">✓ Account ───────── 2 Payment ───────── 3 Confirm
+</code></pre>
+<h3 id="medium-label-below-the-marker">Medium — label below the marker</h3>
+<p>As space tightens, labels move below their markers and each step gets a readable
+share of the row:</p>
+<pre><code class="language-text">      ✓──────────2──────────3
+   Account     Payment     Confirm
+</code></pre>
+<h3 id="narrow-markers-only-for-4-and-5-stages">Narrow — markers only, for 4 and 5 stages</h3>
+<p>A four- or five-stage row in a phone-width region would have to scroll. Rather
+than that, it reduces to its markers:</p>
+<pre><code class="language-text">✓────────✓────────3────────4────────5
+</code></pre>
+<p>Two- and three-stage rows have no markers-only form. They stay readable stacked
+far below any width worth designing for, and scroll below that, so removing
+their labels would buy nothing.</p>
+<p>The labels are only visually hidden; they stay in the ordered list for assistive
+technology. The surrounding screen can present the current step name however it
+needs — for example in its page title, form heading or a “Step 3 of 5” summary.</p>
+<p>Actual CSS does not add tooltips or another interaction just to repeat those
+labels.</p>
+<p>Resize the demo below. The 3-step flow needs less room than the supported
+5-step maximum.</p>
 </div>
 <div class="docs-example">
   <div class="docs-preview docs-preview-resizable">
-<ol class="steps container-query">
-  <li class="complete"><span class="step-label">Identification</span></li>
-  <li aria-current="step"><span class="step-label">Confirmation</span></li>
-  <li><span class="step-label">Payment</span></li>
-</ol>
+<div class="stack">
+  <ol class="steps container-query" style="--step-complete-mark: '✓'">
+    <li class="complete"><span class="step-label">Identification</span></li>
+    <li aria-current="step"><span class="step-label">Confirmation</span></li>
+    <li><span class="step-label">Finalisation</span></li>
+  </ol>
+
+  <ol class="steps container-query" style="--step-complete-mark: '✓'">
+    <li class="complete"><span class="step-label">Account</span></li>
+    <li class="complete"><span class="step-label">Details</span></li>
+    <li aria-current="step"><span class="step-label">Payment</span></li>
+    <li><span class="step-label">Review</span></li>
+    <li><span class="step-label">Confirm</span></li>
+  </ol>
+</div>
   </div>
   <div class="docs-code">
-    <pre><code class="language-html">&lt;ol class=&quot;steps container-query&quot;&gt;
-  &lt;li class=&quot;complete&quot;&gt;&lt;span class=&quot;step-label&quot;&gt;Identification&lt;/span&gt;&lt;/li&gt;
-  &lt;li aria-current=&quot;step&quot;&gt;&lt;span class=&quot;step-label&quot;&gt;Confirmation&lt;/span&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;span class=&quot;step-label&quot;&gt;Payment&lt;/span&gt;&lt;/li&gt;
-&lt;/ol&gt;</code></pre>
+    <pre><code class="language-html">&lt;div class=&quot;stack&quot;&gt;
+  &lt;ol class=&quot;steps container-query&quot; style=&quot;--step-complete-mark: '✓'&quot;&gt;
+    &lt;li class=&quot;complete&quot;&gt;&lt;span class=&quot;step-label&quot;&gt;Identification&lt;/span&gt;&lt;/li&gt;
+    &lt;li aria-current=&quot;step&quot;&gt;&lt;span class=&quot;step-label&quot;&gt;Confirmation&lt;/span&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;span class=&quot;step-label&quot;&gt;Finalisation&lt;/span&gt;&lt;/li&gt;
+  &lt;/ol&gt;
+
+  &lt;ol class=&quot;steps container-query&quot; style=&quot;--step-complete-mark: '✓'&quot;&gt;
+    &lt;li class=&quot;complete&quot;&gt;&lt;span class=&quot;step-label&quot;&gt;Account&lt;/span&gt;&lt;/li&gt;
+    &lt;li class=&quot;complete&quot;&gt;&lt;span class=&quot;step-label&quot;&gt;Details&lt;/span&gt;&lt;/li&gt;
+    &lt;li aria-current=&quot;step&quot;&gt;&lt;span class=&quot;step-label&quot;&gt;Payment&lt;/span&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;span class=&quot;step-label&quot;&gt;Review&lt;/span&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;span class=&quot;step-label&quot;&gt;Confirm&lt;/span&gt;&lt;/li&gt;
+  &lt;/ol&gt;
+&lt;/div&gt;</code></pre>
   </div>
 </div>
 <div class="prose docs-prose">
-<p>Narrow this page and the row above swaps its labels for markers — the other
-demos have no grant, so they stay plain <code>.steps</code> at any width.</p>
-<p>or declare the same name yourself and keep the markup clean:</p>
+<p><code>.container-query</code> is only a convenience helper. You can grant the same shared
+context in your own CSS:</p>
 <pre><code class="language-css">.checkout-steps {
   container: actual-container / inline-size;
 }
 </code></pre>
-<p>Either way the row's own width is the one measured. A region around it works
-too, and then the width measured is that region's — the component responds to
-its nearest <code>actual-container</code>, it does not necessarily measure itself. That is
-the point of the shared name, and it also means a grant made for a <code>.grid-N</code> in
-the same region reaches a step flow inside it.</p>
-<p>The threshold is not a breakpoint. Items hold at <code>--step-min</code>, so the row's
-intrinsic width is <code>count × --step-min</code> and the compact form takes over on the
-exact width where the row would otherwise begin to scroll.</p>
-<p>It stays out of the way unless it can keep that promise:</p>
-<ul>
-<li><strong>Width from the context.</strong> Grant it in normal block flow (a <code>.cluster</code>
-child is fine). On a float, <code>inline-block</code>, table, grid <code>auto</code> track, abspos
-box, or <code>max-content</code> parent, containment would collapse the step flow to
-nothing. Same caveat as <code>.container-query</code> anywhere else.</li>
-<li><strong><code>.step-label</code> elements.</strong> Bare text has nothing to hide, so it scrolls.</li>
-<li><strong>No interactive label.</strong> A hidden link would stay in the tab order with its
-focus ring clipped away, so a navigable flow keeps its labels and scrolls.</li>
-<li><strong>2 to 5 steps.</strong> Six or more scrolls.</li>
-</ul>
-<p>Thresholds are calibrated on the default <code>--step-min</code>, and a container query
-cannot read a custom property, so raising <code>--step-min</code> moves the scroll budget
-but not them. Restate the <code>@container</code> rules if you need the two aligned.</p>
-<p>Without <code>:has()</code> or container query support the component behaves as it always
-has: intrinsic widths, then scroll.</p>
-<h3 id="hooks">Hooks</h3>
-<ul>
-<li><code>--step-size</code> — marker diameter.</li>
-<li><code>--step-min</code> — minimum item width; below this the sequence scrolls instead of
-squishing labels.</li>
-<li><code>--step-gap</code> — space between each marker and label.</li>
-<li><code>--step-line-size</code> — connector thickness.</li>
-<li><code>--step-marker-radius</code> — marker corner radius (round by default).</li>
-<li><code>--step-connector</code> — connector background; when set it overrides the color
-(defaults to each step's own line, so a <code>.complete</code> step's connector follows
-its selected color). A plain color by default, but any background (e.g. a
-dashed <code>repeating-linear-gradient</code>) works. <code>none</code> removes the line.</li>
-<li><code>--step-connector-mark</code> — a <code>content</code> value drawn between steps, centred on
-the connector's midline. Coloured from <code>--step-line</code>, so it carries the same
-state as the default connector; a <code>--step-connector</code> gradient or colour
-repaints the track only. Independent of <code>--step-connector</code> — keep both for a
-glyph on the track, or <code>none</code> for a glyph alone. Stay within <code>--step-size</code>, or
-the scroll container clips it.</li>
-<li><code>--step-complete-mark</code> — replaces the number on a <code>.complete</code> step with any
-<code>content</code> value (e.g. <code>&quot;✓&quot;</code>); defaults to the step number.</li>
-</ul>
-<h2 id="line-or-mark-between-steps">Line or mark between steps</h2>
-<p>A track and a separator glyph are both connectors. The line is the default; a
-mark replaces or joins it.</p>
+<p>A named wrapper works too; the stepper responds to the nearest
+<code>actual-container</code> region.</p>
+<p>Two thresholds decide it:</p>
+<div class="table-wrap"><table class="table">
+<thead>
+<tr><th>Container width</th><th>2–3 stages</th><th>4–5 stages</th></tr>
+</thead>
+<tbody>
+<tr><td>below 35rem</td><td>stacked, scrolls if it must</td><td>markers only</td></tr>
+<tr><td>35rem to 60rem</td><td>stacked</td><td>stacked</td></tr>
+<tr><td>from 60rem</td><td>inline</td><td>inline</td></tr>
+</tbody>
+</table></div>
+<p>Both are calibrated on five stages, the widest supported row. <strong>35rem</strong> is the
+five-stage <code>--step-min</code> budget, so no supported row ever scrolls where
+markers-only could have helped; four stages share it and are therefore reduced
+slightly earlier than they strictly need to be. <strong>60rem</strong> is where a five-stage
+row still leaves its connector a real region rather than a stub — inline is a
+bonus for generous room, so switching late costs nothing.</p>
+<p>If labels are interactive, the markers-only representation is skipped. Hiding a
+focusable label would create an invisible focus target, so a navigable flow keeps
+its labels and uses the normal overflow fallback instead.</p>
+<p>Without an <code>actual-container</code>, or without container-query / <code>:has()</code> support,
+the stacked layout remains fully functional.</p>
+<blockquote>
+<p><code>.container-query</code> uses inline-size containment. Put it where width comes from
+the layout context, not on a shrink-to-fit box. See the container-query helper
+for the full containment guidance.</p>
+</blockquote>
+<h2 id="vertical-steps">Vertical steps</h2>
+<p>Vertical steps are an explicit orientation, not a mobile fallback, and they do
+not inherit the horizontal 2–5 stage limit.</p>
+<p>Use <code>.steps-vertical</code> when the surrounding layout is naturally vertical — for
+example a wizard sidebar or a narrow process panel:</p>
 </div>
 <div class="docs-example">
   <div class="docs-preview">
-<ol class="steps" style="--step-connector: none; --step-connector-mark: '›'">
-  <li class="complete">Account</li>
-  <li aria-current="step">Payment</li>
-  <li>Confirm</li>
-</ol>
-<ol class="steps" style="--step-connector-mark: '•'">
-  <li class="complete">Account</li>
-  <li aria-current="step">Payment</li>
-  <li>Confirm</li>
+<ol class="steps steps-vertical" style="--step-complete-mark: '✓'">
+  <li class="complete"><span class="step-label">Basic details</span></li>
+  <li class="complete"><span class="step-label">Company details</span></li>
+  <li aria-current="step"><span class="step-label">Subscription plan</span></li>
+  <li><span class="step-label">Payment details</span></li>
 </ol>
   </div>
   <div class="docs-code">
-    <pre><code class="language-html">&lt;ol class=&quot;steps&quot; style=&quot;--step-connector: none; --step-connector-mark: '›'&quot;&gt;
-  &lt;li class=&quot;complete&quot;&gt;Account&lt;/li&gt;
-  &lt;li aria-current=&quot;step&quot;&gt;Payment&lt;/li&gt;
-  &lt;li&gt;Confirm&lt;/li&gt;
-&lt;/ol&gt;
-&lt;ol class=&quot;steps&quot; style=&quot;--step-connector-mark: '•'&quot;&gt;
-  &lt;li class=&quot;complete&quot;&gt;Account&lt;/li&gt;
-  &lt;li aria-current=&quot;step&quot;&gt;Payment&lt;/li&gt;
-  &lt;li&gt;Confirm&lt;/li&gt;
+    <pre><code class="language-html">&lt;ol class=&quot;steps steps-vertical&quot; style=&quot;--step-complete-mark: '✓'&quot;&gt;
+  &lt;li class=&quot;complete&quot;&gt;&lt;span class=&quot;step-label&quot;&gt;Basic details&lt;/span&gt;&lt;/li&gt;
+  &lt;li class=&quot;complete&quot;&gt;&lt;span class=&quot;step-label&quot;&gt;Company details&lt;/span&gt;&lt;/li&gt;
+  &lt;li aria-current=&quot;step&quot;&gt;&lt;span class=&quot;step-label&quot;&gt;Subscription plan&lt;/span&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;span class=&quot;step-label&quot;&gt;Payment details&lt;/span&gt;&lt;/li&gt;
 &lt;/ol&gt;</code></pre>
   </div>
 </div>
 <div class="prose docs-prose">
-<p>A directional glyph is not mirrored for you — pair it with the writing mode:</p>
-<pre><code class="language-css">[dir=&quot;rtl&quot;] .steps {
-  --step-connector-mark: &quot;‹&quot;;
+<p>The state model is identical to horizontal steps. The composition is simply
+different: markers form a vertical track and labels sit beside them.</p>
+<p>Vertical steps stay vertical at every width. Container queries only refine the
+horizontal orientation.</p>
+<p>There is no fixed stage count for the vertical orientation. A longer sequence is
+fine as long as it remains useful and readable in its surrounding layout.</p>
+<h2 id="connectors">Connectors</h2>
+<p>Steps uses a line between markers by default.</p>
+<p><code>--step-connector</code> controls the default horizontal connector background. It
+accepts a complete CSS background value, so a theme can replace the line with a
+gradient, image or nothing at all.</p>
+<p>In the wide horizontal representation, the connector expands into the free
+space between marker + label groups. A theme can replace only that representation
+with <code>--step-inline-connector</code>, for example a custom chevron SVG:</p>
+<pre><code class="language-css">.checkout-steps {
+  --step-inline-connector:
+    url(&quot;../icons/chevron.svg&quot;) center / 1rem 1rem no-repeat;
 }
 </code></pre>
-<p>Marks ship with empty <code>content</code> alt text where the browser supports it. The
-sequence lives in the <code>&lt;ol&gt;</code> and the labels either way, so pick a glyph that
-adds nothing to the reading and never one carrying the only copy of a state.</p>
+<p>Vertical steps have no connector hook of their own. The vertical geometry is
+different, so a horizontal value cannot transpose onto it — override
+<code>.steps-vertical &gt; li::after</code> directly if a design ever needs to.</p>
+<p>Connectors are decorative. The ordered list and its labels carry the meaning of
+the sequence.</p>
+<h2 id="navigation">Navigation</h2>
+<p>Steps are informational by default. Only make a label interactive when the
+workflow genuinely allows navigation to that step:</p>
+<pre><code class="language-html">&lt;li class=&quot;complete&quot;&gt;
+  &lt;a class=&quot;step-label&quot; href=&quot;/checkout/account&quot;&gt;Account&lt;/a&gt;
+&lt;/li&gt;
+</code></pre>
+<p>Keep <code>aria-current=&quot;step&quot;</code> on the current <code>&lt;li&gt;</code>.</p>
+<p>Interactive labels stay visible at narrow widths; the stepper prefers scrolling
+over hiding a focusable control.</p>
+<p>A step link keeps the colour of its own state rather than the theme's <code>--link</code>,
+so the marker states stay the strongest signal in the row. Its underline, hover
+and focus ring are untouched — that is what marks it as navigable. If a touch
+target needs to be more generous, put <code>.touch-target</code> on the anchor rather than
+growing the stepper.</p>
+<h2 id="hooks">Hooks</h2>
+<ul>
+<li><code>--step-size</code> — marker diameter</li>
+<li><code>--step-min</code> — minimum item width in the stacked horizontal layout</li>
+<li><code>--step-gap</code> — marker-to-label space in the stacked horizontal layout</li>
+<li><code>--step-inline-gap</code> — spacing between marker, label and connector inline</li>
+<li><code>--step-vertical-gap</code> — space between vertical steps</li>
+<li><code>--step-line-size</code> — connector thickness</li>
+<li><code>--step-marker-radius</code> — marker corner radius</li>
+<li><code>--step-connector</code> — default horizontal connector background</li>
+<li><code>--step-inline-connector</code> — optional connector background for wide horizontal steps</li>
+<li><code>--step-complete-mark</code> — content used instead of the number on completed steps</li>
+</ul>
+<h2 id="notes">Notes</h2>
+<p>The <strong>2 to 5</strong> range applies to the horizontal, space-aware stepper. Longer
+horizontal sequences are not prevented, but they fall back to the base layout
+instead of receiving the inline and markers-only adaptations.</p>
+<p>The vertical orientation has no equivalent hard limit; its practical limit is
+the surrounding layout and whether the sequence remains useful to scan.</p>
+<p>The markers-only representation intentionally leaves presentation of the
+current step name to the surrounding interface. If a narrow layout needs every
+step name visible at once, <code>.steps-vertical</code> is usually the better composition.</p>
+<p>The container-query thresholds are calibrated to the default <code>--step-min</code>.
+Container queries cannot read custom properties, so changing <code>--step-min</code> does
+not move those thresholds automatically.</p>
+<p>See <a href="https://github.com/lekoala/actual-css/blob/master/docs/design-notes/steps.md">Steps representations and thresholds</a>
+for why the ranges are grouped this way, and which alternatives were measured
+and rejected.</p>
 
 </div>
 
@@ -431,11 +468,16 @@ adds nothing to the reading and never one carrying the only copy of a state.</p>
         <nav class="scrollspy" data-enhance="scrollspy" data-scrollspy-offset="80" aria-label="On this page">
           <p class="docs-nav-group">On this page</p>
           <ul class="nav-list docs-toc-list" data-docs-toc>
-        <li><a class="nav-link" href="#class-reference" data-docs-toc-item data-level="2">Class reference</a></li>
-        <li><a class="nav-link" href="#intrinsic-responsiveness" data-docs-toc-item data-level="2">Intrinsic responsiveness</a></li>
-        <li><a class="nav-link" href="#narrow-widths" data-docs-toc-item data-level="2">Narrow widths</a></li>
-        <li><a class="nav-link" href="#hooks" data-docs-toc-item data-level="3">Hooks</a></li>
-        <li><a class="nav-link" href="#line-or-mark-between-steps" data-docs-toc-item data-level="2">Line or mark between steps</a></li>
+        <li><a class="nav-link" href="#basic-usage" data-docs-toc-item data-level="2">Basic usage</a></li>
+        <li><a class="nav-link" href="#horizontal-steps-adapt-to-their-space" data-docs-toc-item data-level="2">Horizontal steps adapt to their space</a></li>
+        <li><a class="nav-link" href="#wide-marker-and-label-inline" data-docs-toc-item data-level="3">Wide — marker and label inline</a></li>
+        <li><a class="nav-link" href="#medium-label-below-the-marker" data-docs-toc-item data-level="3">Medium — label below the marker</a></li>
+        <li><a class="nav-link" href="#narrow-markers-only-for-4-and-5-stages" data-docs-toc-item data-level="3">Narrow — markers only, for 4 and 5 stages</a></li>
+        <li><a class="nav-link" href="#vertical-steps" data-docs-toc-item data-level="2">Vertical steps</a></li>
+        <li><a class="nav-link" href="#connectors" data-docs-toc-item data-level="2">Connectors</a></li>
+        <li><a class="nav-link" href="#navigation" data-docs-toc-item data-level="2">Navigation</a></li>
+        <li><a class="nav-link" href="#hooks" data-docs-toc-item data-level="2">Hooks</a></li>
+        <li><a class="nav-link" href="#notes" data-docs-toc-item data-level="2">Notes</a></li>
           </ul>
         </nav>
       </aside>
