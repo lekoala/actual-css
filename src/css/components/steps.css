@@ -15,6 +15,7 @@
  * --step-marker-radius
  * --step-complete-mark
  * --step-connector
+ * --step-connector-mark
  *
  * Internal:
  * --step-marker-bg
@@ -78,11 +79,19 @@
   line-height: 1;
 }
 
+/* One box, two shapes: the hairline is its background, a mark is its content.
+   place-content on a hairline-tall grid overflows the glyph symmetrically
+   about the line's own midline, so the mark needs no second geometry and the
+   two stay independent (--step-connector: none gives a bare chevron; keeping
+   both puts a glyph on the track). Keep a mark within --step-size: overflow-x
+   computes overflow-y to auto, so a taller one is clipped. */
 .steps > li::after {
-  content: "";
+  content: var(--step-connector-mark, "");
   position: absolute;
   inset-block-start: calc((var(--step-size) - var(--step-line-size)) / 2);
   inset-inline-start: calc(50% + var(--step-size) / 2);
+  display: grid;
+  place-content: center;
   inline-size: calc(100% - var(--step-size));
   block-size: var(--step-line-size);
   /* A custom property resolves its var() before inheritance, so a default
@@ -91,10 +100,27 @@
      Falling back to the local --step-line here keeps each connector in sync;
      an explicit --step-connector still wins when the author sets one. */
   background: var(--step-connector, var(--step-line));
+  /* Same source as the line, so a mark carries state like the segment it
+     replaces. */
+  color: var(--step-line);
+  line-height: 1;
 }
 
 .steps > li:last-child::after {
   content: none;
+}
+
+/* The mark is decoration — the sequence is the <ol> and the labels — so give it
+   empty alt text where that is understood, rather than trusting every AT to
+   stay quiet about generated content. @supports is load-bearing and cannot be
+   replaced by declaring both forms: a declaration holding var() parses lazily,
+   so an unsupported alt-text grammar fails at computed-value time and falls to
+   content's initial value (none), taking the whole connector box with it
+   instead of the previous declaration. Specificity keeps :last-child bare. */
+@supports (content: "a" / "b") {
+  .steps > li::after {
+    content: var(--step-connector-mark, "") / "";
+  }
 }
 
 /* Three states must be readable without a check glyph: future stays neutral,
@@ -145,5 +171,141 @@
   .steps > .complete:not([aria-current="step"])::before {
     background: Highlight;
     color: HighlightText;
+  }
+}
+
+/* Label collapse: too narrow to fit, so keep every marker and the current
+   label and visually hide the rest. Scroll stays the last resort. Not a design
+   choice — it is what .steps does once it has an actual-container size context,
+   which is why there is no .steps-collapse to turn it on.
+
+   The context is the nearest ancestor named actual-container, which may be the
+   <ol> itself or a region around it — .steps does not necessarily measure
+   itself, it responds to the width that context exposes. The name is shared,
+   not steps-specific, so one grant serves every size-aware component in a
+   region. The author grants it, because containment collapses
+   .steps to ~0 in any shrink-to-fit box (float, inline-block, table, grid auto
+   track, abspos, max-content parent); block flow and .cluster are safe. The
+   .container-query class or a stylesheet declaring the name both work, on the
+   row or on a wrapper around it.
+
+   The :not(:has(...)) on every rule below is the interactive guard: a hidden
+   label that is still focusable is a focus ring clipped to nothing, so a
+   navigable flow keeps its labels and scrolls. It rides in the selector
+   because the grant may sit on a wrapper this component cannot restyle.
+   Refused rather than revealed on focus, which would need the label to float
+   over the row it no longer fits. Direct children and state-blind on purpose:
+   the label is itself the control, and aria-current moves as the workflow
+   advances, so a state-keyed guard would toggle the collapse under the user.
+
+   Containment is also what keeps it stable: content cannot perturb the
+   container's width, so the condition cannot be flipped by its own effect.
+
+   Thresholds are not tuned breakpoints. Items are flex: 1 0 var(--step-min),
+   so the row's intrinsic width is count x --step-min and each query lands on
+   the exact pixel where scroll used to begin. Literal rem is forced:
+   @container cannot read a custom property, so overriding --step-min moves the
+   scroll budget but not these — same trade as --grid-min in grid.css.
+
+   Four bounded cases, 2..5, counted with :has() rather than a redundant
+   data-count. Mutually exclusive, so order carries no meaning. The current
+   step keeps its full budget, which is what lets its label stay under its own
+   marker with no absolute positioning and nothing to clip.
+
+   Shrinking is gated on :has(> .step-label): without it a bare-text stepper
+   shrinks with nothing to hide and wraps into a column of letters. Measured,
+   which is why plain text is a supported form and not a half-working one.
+
+   The .sr-only hide repeats per threshold on purpose — it is declarations, not
+   a value, so unlike --step-min it cannot ride on a custom property. The
+   clever alternatives (zero block-size, font-size: 0, style queries) either
+   lose the accessible name or sit above the support floor. */
+@supports (container-type: inline-size) {
+  @container actual-container (inline-size < 14rem) {
+    .steps:not(:has(> li > :is(a[href], button, [tabindex]))):has(> :nth-child(2):last-child)
+      > li:not([aria-current="step"]):has(> .step-label) {
+      --step-min: var(--step-size);
+    }
+
+    .steps:not(:has(> li > :is(a[href], button, [tabindex]))):has(> :nth-child(2):last-child)
+      > li:not([aria-current="step"])
+      > .step-label {
+      position: absolute;
+      inline-size: 1px;
+      block-size: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      clip-path: inset(50%);
+      white-space: nowrap;
+      border: 0;
+    }
+  }
+
+  @container actual-container (inline-size < 21rem) {
+    .steps:not(:has(> li > :is(a[href], button, [tabindex]))):has(> :nth-child(3):last-child)
+      > li:not([aria-current="step"]):has(> .step-label) {
+      --step-min: var(--step-size);
+    }
+
+    .steps:not(:has(> li > :is(a[href], button, [tabindex]))):has(> :nth-child(3):last-child)
+      > li:not([aria-current="step"])
+      > .step-label {
+      position: absolute;
+      inline-size: 1px;
+      block-size: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      clip-path: inset(50%);
+      white-space: nowrap;
+      border: 0;
+    }
+  }
+
+  @container actual-container (inline-size < 28rem) {
+    .steps:not(:has(> li > :is(a[href], button, [tabindex]))):has(> :nth-child(4):last-child)
+      > li:not([aria-current="step"]):has(> .step-label) {
+      --step-min: var(--step-size);
+    }
+
+    .steps:not(:has(> li > :is(a[href], button, [tabindex]))):has(> :nth-child(4):last-child)
+      > li:not([aria-current="step"])
+      > .step-label {
+      position: absolute;
+      inline-size: 1px;
+      block-size: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      clip-path: inset(50%);
+      white-space: nowrap;
+      border: 0;
+    }
+  }
+
+  @container actual-container (inline-size < 35rem) {
+    .steps:not(:has(> li > :is(a[href], button, [tabindex]))):has(> :nth-child(5):last-child)
+      > li:not([aria-current="step"]):has(> .step-label) {
+      --step-min: var(--step-size);
+    }
+
+    .steps:not(:has(> li > :is(a[href], button, [tabindex]))):has(> :nth-child(5):last-child)
+      > li:not([aria-current="step"])
+      > .step-label {
+      position: absolute;
+      inline-size: 1px;
+      block-size: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      clip-path: inset(50%);
+      white-space: nowrap;
+      border: 0;
+    }
   }
 }

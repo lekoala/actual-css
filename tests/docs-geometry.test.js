@@ -5,10 +5,11 @@ import { join } from "node:path";
 /*
  * The documentation must be able to demonstrate the framework's own contracts.
  *
- * .grid-N subdivision is driven by @container thresholds, and the query
- * container for every live demo is .docs-preview. So the width a reader
- * actually sees is the preview's content box — not the viewport, not the
- * article. Before this test existed the docs article was capped at 48rem,
+ * .grid-N subdivision is driven by @container thresholds, and a demo that wants
+ * them puts .container-query in its own markup, inside .docs-preview. That
+ * wrapper adds no padding, so the width a reader actually sees is still the
+ * preview's content box — not the viewport, not the article. Before this test
+ * existed the docs article was capped at 48rem,
  * which left the preview at 45.9rem at every viewport: .grid-3 was stuck at
  * one column and .grid-4 / .grid-6 at two, forever, on a page that documents
  * "6 -> 3 -> 2 -> 1". The failure was invisible to every text-based check.
@@ -48,22 +49,22 @@ function docsRulePaddingRem(selector) {
   return token(padding[1]);
 }
 
-/** Every @container actual-grid threshold declared by the grid primitive. */
+/** Every @container actual-container threshold declared by the grid primitive. */
 function gridThresholdsRem() {
-  const values = [...gridCss.matchAll(/@container actual-grid \(min-width:\s*([\d.]+)(rem|px)\)/g)];
+  const values = [
+    ...gridCss.matchAll(/@container actual-container \(min-width:\s*([\d.]+)(rem|px)\)/g),
+  ];
   expect(values.length).toBeGreaterThan(0);
   return values.map(([, value, unit]) => (unit === "px" ? Number(value) / 16 : Number(value)));
 }
 
 describe("documentation demo geometry", () => {
-  it("puts the query container on the padded preview box", () => {
-    /* The container must be the element whose content box IS the space the grid
-       gets. Moving it outward (onto .docs-example) would make the query resolve
-       against a width 2rem wider than the room the grid actually has, firing
-       every threshold early — the demo would claim a state it cannot honor. */
-    expect(docsCss).toMatch(
-      /\.docs-preview\s*\{[\s\S]*?container:\s*actual-grid\s*\/\s*inline-size/,
-    );
+  it("grants no query container to a demo preview", () => {
+    /* actual-container is a contract the author declares. A preview that
+       granted it would render unlike the snippet printed beside it, and one
+       shared name reaches every size-aware component, not just .grid-N. An
+       example needing the context establishes it in its own markup. */
+    expect(docsCss).not.toMatch(/container(-name)?:\s*actual-container/);
   });
 
   it("lets a preview reach the widest .grid-N threshold", () => {

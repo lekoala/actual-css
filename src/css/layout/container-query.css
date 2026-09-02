@@ -1,15 +1,39 @@
-/* Convenience helper: establishes a query container named actual-grid for
-   descendants. Use it for a component that changes representation according
-   to its allocated inline size, and to give .grid-N the named context it needs
-   for balanced subdivision (see grid.css). The name matters: grids only respond
-   to an explicitly actual-grid-named container, never to an incidental
-   query container. Layout primitives are responsive without it; this adds
-   precision, it is never a prerequisite.
+/* Convenience helper for size-aware components: establishes an inline-size
+   query container named actual-container. The name is the contract, not this
+   class — an author can declare `container: actual-container / inline-size` on
+   their own region and get the same result.
 
-   The element takes inline-size containment, so put it on a normal
-   block-level wrapper, never on a shrink-to-fit item (a .cluster child, a
-   float, an inline-block): its contents would stop contributing to its own
-   inline size and it would collapse. */
+   actual-container is shared. Granting it to a region may enable size-aware
+   enhancements for any Actual component inside that region, not only the one
+   that motivated the container: .grid-N reads it for balanced subdivision,
+   .steps for its label collapse, and future components will read the same
+   context. That is the scope of the API, not a caveat.
+
+   An anonymous query container is not part of it. A region that declares
+   `container-type: inline-size` for the application's own purposes carries no
+   actual-container name, so no framework component changes behaviour there.
+   Opting into the protocol is always explicit. Nothing here is a prerequisite
+   either — every primitive is responsive without it; this adds precision.
+
+   Place it where the width you want measured lives: usually a wrapper for a
+   grid, whose queried children sit inside it, and the component itself for
+   .steps, whose own row is the width in question.
+
+   The rule for where it is safe is the containment rule, not a list of
+   primitives. Query containment removes the element's intrinsic inline-size
+   contribution, so:
+
+     safe    the element's width is imposed by its context
+             (.steps sets inline-size: 100%, so it survives even as a
+             .cluster child — it wraps and fills)
+
+     unsafe  the element's width depends on its contents' intrinsic
+             contribution (a bare .grid child of .cluster measures 0 once
+             contained, as does a float, inline-block, table, grid auto track,
+             max-content parent, or an abspos box sized by its contents)
+
+   So .cluster is neither safe nor unsafe; what matters is where the child's
+   width comes from. */
 .container-query {
-  container: actual-grid / inline-size;
+  container: actual-container / inline-size;
 }

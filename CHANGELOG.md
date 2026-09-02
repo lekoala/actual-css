@@ -2,6 +2,38 @@
 
 ## [Unreleased]
 
+### Added
+
+* `--step-connector-mark` draws a glyph between steps (e.g. a chevron), centred on the
+  connector's midline and coloured from the step's line state, so it carries `.complete` the
+  same way the default connector does (an explicit `--step-connector` repaints only the
+  track). It shares the connector's box rather than adding a variant: keep both for a mark on
+  the track, or `--step-connector: none` for a mark alone.
+* `.step-label` is the canonical wrapper for a step's label. Plain text still works for a
+  simple stepper, but only an element can be addressed by label-aware layouts.
+* `.steps` collapses its secondary labels when the row no longer fits: every marker stays,
+  the current label stays, the others go visually hidden. Not a variant — it is what the
+  component does once it has an `actual-container` size context, which the author grants
+  (the `.container-query` class, or the name declared in their own CSS) on the step flow or
+  on a region around it.
+  The threshold is the scroll threshold: items hold at `--step-min`, so the row is
+  `count × --step-min` wide and the compact form takes over on that exact pixel. Covers the
+  supported 2–5 counts; scroll remains the last resort. A flow whose labels are interactive
+  keeps them rather than leaving a link in the tab order with its focus ring clipped away.
+
+### Changed
+
+* The framework's query container name is now `actual-container`, not `actual-grid`.
+  It was named after its first consumer; the contract is generic — "here is the width you
+  were allocated" — and `.steps` reads the same context as `.grid-N`. Rename
+  `container: actual-grid / inline-size` and any `@container actual-grid` rule of your own.
+  `.container-query` is unchanged.
+* Documentation demo previews no longer grant a query container, so a rendered demo behaves
+  like the snippet printed beside it. `actual-container` is a contract an author declares,
+  and one shared name reaches every size-aware component, not just `.grid-N`. The `bare`
+  fence flag is gone with the ambient grant it existed to escape; an example needing the
+  context now establishes it in its own markup, where the reader can see it.
+
 
 ## [0.5.0] - 2026-09-01
 

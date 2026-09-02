@@ -34,7 +34,7 @@ Tune the item minimum with `--grid-min`.
 own: it never exceeds N columns, never overflows, and every item keeps the same
 width.
 
-```html demo bare
+```html demo
 <div class="grid-4">
   <div class="card">Exercitation</div>
   <div class="card">Amet mollit</div>
@@ -56,9 +56,9 @@ density is `.grid-N`'s. Choose the preset that suits your item size:
 
 Left alone, a preset collapses one column at a time, so a six-item `.grid-6`
 can pass through five columns — five items and a lone sixth. The example above
-is that bare version. Placed inside a container named **`actual-grid`** — the
+is that bare version. Placed inside a container named **`actual-container`** — the
 `.container-query` helper, or a region of your own that declares
-`container: actual-grid / inline-size` — it only ever enters a **divisor of N**:
+`container: actual-container / inline-size` — it only ever enters a **divisor of N**:
 
 ```text
 .grid-2   2 → 1
@@ -113,9 +113,10 @@ change cannot drop the region a state.
 
 Balanced subdivision is precision, never a prerequisite for responsive
 behavior — forgetting the container costs you the exact chain, nothing else.
-The grid responds only to a container named `actual-grid`, never to an
-incidental query container, so a region that sets `container-type: inline-size`
-for its own reasons leaves the grid untouched. The container has to be an
+`actual-container` is the framework's shared name for size-aware components,
+so one region can serve a grid and a step flow at once. The grid responds only
+to that name, never to an incidental query container, so a region that sets
+`container-type: inline-size` for its own reasons leaves the grid untouched. The container has to be an
 ancestor: an element cannot query its own size without taking inline-size
 containment, which would collapse the grid inside a `.cluster`, a float, or any
 shrink-to-fit box. Put it on a normal block-level wrapper for the same reason.

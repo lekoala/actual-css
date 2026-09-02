@@ -254,7 +254,7 @@ asks.
 It is nevertheless the right **baseline**. Bounded at N, using `auto-fill`, it
 is responsive, overflow-safe, and equal-width at every state, and it needs
 nothing above Actual's Minimal floor. Adopting it as the unenhanced behavior of
-`.grid-N` is what makes the actual-grid container a precision enhancement rather than
+`.grid-N` is what makes the actual-container container a precision enhancement rather than
 a prerequisite for responsiveness. This is the single most important difference
 from 0.3.1, where a preset used without a wrapper stayed frozen at N columns
 and was a genuine trap.
@@ -391,7 +391,7 @@ The extra ancestor is therefore not accidental ceremony.
 
 It represents a real boundary imposed by the CSS containment model.
 
-Actual should not hide that boundary if hiding it requires changing the sizing semantics of the grid. Balanced subdivision keys off a container **named** `actual-grid` rather than any anonymous query container, so an incidental `container-type: inline-size` region never changes the grid by accident; `.container-query` is the convenience helper that establishes that named context.
+Actual should not hide that boundary if hiding it requires changing the sizing semantics of the grid. Balanced subdivision keys off a container **named** `actual-container` rather than any anonymous query container, so an incidental `container-type: inline-size` region never changes the grid by accident; `.container-query` is the convenience helper that establishes that named context. The name is generic rather than grid-specific: it means "here is the width you were allocated", and other size-aware components (`.steps` and its label collapse) read the same context. The grid does not own it — it is one consumer.
 
 ## Out of scope: explicit per-region placement
 
@@ -520,7 +520,7 @@ viewport
           |
         named query container
           |
-        actual-grid
+        actual-container
           |
         2 / 3 / 4 / 6 stages
 ```
@@ -620,7 +620,7 @@ inside a query container.
 .grid                      space-driven, auto-fit, --grid-min
 .grid-N                    count-driven baseline, auto-fill bounded at N,
                            may pass through non-divisor column counts
-actual-grid .grid-N        balanced subdivision, N -> divisors of N -> 1
+actual-container .grid-N        balanced subdivision, N -> divisors of N -> 1
 ```
 
 The whole enhancement lives inside `@supports (container-type: inline-size)`.
