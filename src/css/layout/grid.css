@@ -86,13 +86,13 @@
   min-inline-size: 0;
 }
 
-/* Balanced subdivision, activated by an ancestor container named actual-grid.
+/* Balanced subdivision, activated by an ancestor container named actual-container.
  * A .grid-N inside such a container enters only divisor states of N. The name
  * is deliberate: a grid must not key off the nearest anonymous query container,
  * or a region that sets container-type: inline-size for an unrelated reason
  * would silently change the grid. The author opts the grid in by naming the
  * context — .container-query is the official helper, or declare
- * container: actual-grid / inline-size on your own region.
+ * container: actual-container / inline-size on your own region.
  *
  *   .grid-2   2 -> 1
  *   .grid-3   3 -> 1
@@ -109,7 +109,7 @@
  * inline contribution and collapses it inside .cluster, .topbar, floats, and
  * any shrink-to-fit box. See docs/design-notes/grid.md.
  *
- * Without an actual-grid ancestor none of these @container rules resolve, so
+ * Without an actual-container ancestor none of these @container rules resolve, so
  * the auto-fill baseline above stays. The min-width: 0 rule is the lowest
  * step: it pins the grid to one column inside a container before any larger
  * threshold fires (a bare grid would otherwise show a 2 + 1 orphan at 28-48rem).
@@ -125,25 +125,25 @@
  * Ascending min-width only: the last matching step wins by cascade order.
  */
 @supports (container-type: inline-size) {
-  @container actual-grid (min-width: 0px) {
+  @container actual-container (min-width: 0px) {
     :where(.grid-2, .grid-3, .grid-4, .grid-6) {
       grid-template-columns: 1fr;
     }
   }
 
-  @container actual-grid (min-width: 28rem) {
+  @container actual-container (min-width: 28rem) {
     :where(.grid-2, .grid-4, .grid-6) {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
   }
 
-  @container actual-grid (min-width: 48rem) {
+  @container actual-container (min-width: 48rem) {
     :where(.grid-3, .grid-6) {
       grid-template-columns: repeat(3, minmax(0, 1fr));
     }
   }
 
-  @container actual-grid (min-width: 64rem) {
+  @container actual-container (min-width: 64rem) {
     :where(.grid-4) {
       grid-template-columns: repeat(4, minmax(0, 1fr));
     }

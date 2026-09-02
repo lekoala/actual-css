@@ -249,7 +249,7 @@ own: it never exceeds N columns, never overflows, and every item keeps the same
 width.</p>
 </div>
 <div class="docs-example">
-  <div class="docs-preview docs-preview--bare">
+  <div class="docs-preview">
 <div class="grid-4">
   <div class="card">Exercitation</div>
   <div class="card">Amet mollit</div>
@@ -282,9 +282,9 @@ density is <code>.grid-N</code>'s. Choose the preset that suits your item size:<
 <h2 id="balanced-subdivision">Balanced subdivision</h2>
 <p>Left alone, a preset collapses one column at a time, so a six-item <code>.grid-6</code>
 can pass through five columns — five items and a lone sixth. The example above
-is that bare version. Placed inside a container named <strong><code>actual-grid</code></strong> — the
+is that bare version. Placed inside a container named <strong><code>actual-container</code></strong> — the
 <code>.container-query</code> helper, or a region of your own that declares
-<code>container: actual-grid / inline-size</code> — it only ever enters a <strong>divisor of N</strong>:</p>
+<code>container: actual-container / inline-size</code> — it only ever enters a <strong>divisor of N</strong>:</p>
 <pre><code class="language-text">.grid-2   2 → 1
 .grid-3   3 → 1
 .grid-4   4 → 2 → 1
@@ -347,9 +347,10 @@ that width <strong>plus its own padding and borders</strong>:</p>
 change cannot drop the region a state.</p>
 <p>Balanced subdivision is precision, never a prerequisite for responsive
 behavior — forgetting the container costs you the exact chain, nothing else.
-The grid responds only to a container named <code>actual-grid</code>, never to an
-incidental query container, so a region that sets <code>container-type: inline-size</code>
-for its own reasons leaves the grid untouched. The container has to be an
+<code>actual-container</code> is the framework's shared name for size-aware components,
+so one region can serve a grid and a step flow at once. The grid responds only
+to that name, never to an incidental query container, so a region that sets
+<code>container-type: inline-size</code> for its own reasons leaves the grid untouched. The container has to be an
 ancestor: an element cannot query its own size without taking inline-size
 containment, which would collapse the grid inside a <code>.cluster</code>, a float, or any
 shrink-to-fit box. Put it on a normal block-level wrapper for the same reason.</p>

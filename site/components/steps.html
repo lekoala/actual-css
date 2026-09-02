@@ -212,9 +212,12 @@
 <blockquote>
 <p>Semantic ordered-list progression for a multi-step process.</p>
 </blockquote>
-<p>Use an <code>&lt;ol&gt;</code> because order is part of the meaning. Add <code>.complete</code> to finished
-steps and <code>aria-current=&quot;step&quot;</code> to exactly one current step. Unmarked items are
-future steps. The component needs no JavaScript.</p>
+<p>Use an <code>&lt;ol&gt;</code> because order is part of the meaning. Wrap each label in
+<code>.step-label</code>, add <code>.complete</code> to finished steps and <code>aria-current=&quot;step&quot;</code> to
+exactly one current step. Unmarked items are future steps. The component needs
+no JavaScript.</p>
+<p>Steps is a compact pattern for workflows of <strong>2 to 5 stages</strong> with short labels.
+Beyond five the UX changes category and the framework promises nothing.</p>
 <p>The three states are distinct without any glyph: future is neutral, complete is
 a filled marker with an accented connector, current is an outlined marker with a
 thicker ring. The accented connector reads as &quot;already walked&quot;, so the segment
@@ -228,10 +231,30 @@ entirely as current — marker, glyph, and connector.</p>
 </thead>
 <tbody>
 <tr><td><code>.steps</code></td><td>Component</td><td>Ordered progression with numbered markers.</td></tr>
+<tr><td><code>.step-label</code></td><td>Component</td><td>A step's label. Required by label-aware layouts.</td></tr>
 <tr><td><code>.complete</code></td><td>State</td><td>A finished step: filled marker.</td></tr>
 <tr><td><code>[aria-current=&quot;step&quot;]</code></td><td>State</td><td>The current step: outlined marker.</td></tr>
 </tbody>
 </table></div>
+</div>
+<div class="docs-example">
+  <div class="docs-preview">
+<ol class="steps">
+  <li class="complete"><span class="step-label">Account</span></li>
+  <li aria-current="step"><span class="step-label">Payment</span></li>
+  <li><span class="step-label">Confirm</span></li>
+</ol>
+  </div>
+  <div class="docs-code">
+    <pre><code class="language-html">&lt;ol class=&quot;steps&quot;&gt;
+  &lt;li class=&quot;complete&quot;&gt;&lt;span class=&quot;step-label&quot;&gt;Account&lt;/span&gt;&lt;/li&gt;
+  &lt;li aria-current=&quot;step&quot;&gt;&lt;span class=&quot;step-label&quot;&gt;Payment&lt;/span&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;span class=&quot;step-label&quot;&gt;Confirm&lt;/span&gt;&lt;/li&gt;
+&lt;/ol&gt;</code></pre>
+  </div>
+</div>
+<div class="prose docs-prose">
+<p>Plain text labels stay supported for a simple stepper and render identically:</p>
 </div>
 <div class="docs-example">
   <div class="docs-preview">
@@ -250,6 +273,11 @@ entirely as current — marker, glyph, and connector.</p>
   </div>
 </div>
 <div class="prose docs-prose">
+<p>Label-aware behaviour needs <code>.step-label</code>, because a bare text node is an
+anonymous grid item that CSS cannot address. Use the element unless the stepper
+is a one-off. When a workflow genuinely allows navigating back to a step, make
+<code>.step-label</code> itself the <code>&lt;a&gt;</code> rather than nesting a control inside it — that is
+the shape the component reads.</p>
 <h2 id="intrinsic-responsiveness">Intrinsic responsiveness</h2>
 <p><code>.steps</code> fills its row when the steps fit and holds each item at <code>--step-min</code>
 otherwise, so the sequence scrolls horizontally only when it genuinely cannot
@@ -265,6 +293,65 @@ JavaScript nor a tabindex automatically.</p>
 <code>aria-current=&quot;step&quot;</code> also exposes the current position to assistive technology.
 Do not put links or buttons around a step unless the workflow genuinely allows
 the user to navigate to it.</p>
+<h2 id="narrow-widths">Narrow widths</h2>
+<p>When the row can no longer fit, <code>.steps</code> keeps every marker and the current
+label and visually hides the other labels — the sequence keeps its shape
+instead of sliding out of view, and every accessible name survives. Scroll is
+the last resort, for when even the compact form cannot fit.</p>
+<p>This is not a variant you switch on. It is what the component does once it can
+has an <code>actual-container</code> size context — the framework's shared name for &quot;here
+is the width you were allocated&quot;. That part is yours to grant, because
+containment would collapse a step flow whose width came from its own contents.
+Add the ready-made class to the row:</p>
+</div>
+<div class="docs-example">
+  <div class="docs-preview">
+<ol class="steps container-query">
+  <li class="complete"><span class="step-label">Identification</span></li>
+  <li aria-current="step"><span class="step-label">Confirmation</span></li>
+  <li><span class="step-label">Payment</span></li>
+</ol>
+  </div>
+  <div class="docs-code">
+    <pre><code class="language-html">&lt;ol class=&quot;steps container-query&quot;&gt;
+  &lt;li class=&quot;complete&quot;&gt;&lt;span class=&quot;step-label&quot;&gt;Identification&lt;/span&gt;&lt;/li&gt;
+  &lt;li aria-current=&quot;step&quot;&gt;&lt;span class=&quot;step-label&quot;&gt;Confirmation&lt;/span&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;span class=&quot;step-label&quot;&gt;Payment&lt;/span&gt;&lt;/li&gt;
+&lt;/ol&gt;</code></pre>
+  </div>
+</div>
+<div class="prose docs-prose">
+<p>Narrow this page and the row above swaps its labels for markers — the other
+demos have no grant, so they stay plain <code>.steps</code> at any width.</p>
+<p>or declare the same name yourself and keep the markup clean:</p>
+<pre><code class="language-css">.checkout-steps {
+  container: actual-container / inline-size;
+}
+</code></pre>
+<p>Either way the row's own width is the one measured. A region around it works
+too, and then the width measured is that region's — the component responds to
+its nearest <code>actual-container</code>, it does not necessarily measure itself. That is
+the point of the shared name, and it also means a grant made for a <code>.grid-N</code> in
+the same region reaches a step flow inside it.</p>
+<p>The threshold is not a breakpoint. Items hold at <code>--step-min</code>, so the row's
+intrinsic width is <code>count × --step-min</code> and the compact form takes over on the
+exact width where the row would otherwise begin to scroll.</p>
+<p>It stays out of the way unless it can keep that promise:</p>
+<ul>
+<li><strong>Width from the context.</strong> Grant it in normal block flow (a <code>.cluster</code>
+child is fine). On a float, <code>inline-block</code>, table, grid <code>auto</code> track, abspos
+box, or <code>max-content</code> parent, containment would collapse the step flow to
+nothing. Same caveat as <code>.container-query</code> anywhere else.</li>
+<li><strong><code>.step-label</code> elements.</strong> Bare text has nothing to hide, so it scrolls.</li>
+<li><strong>No interactive label.</strong> A hidden link would stay in the tab order with its
+focus ring clipped away, so a navigable flow keeps its labels and scrolls.</li>
+<li><strong>2 to 5 steps.</strong> Six or more scrolls.</li>
+</ul>
+<p>Thresholds are calibrated on the default <code>--step-min</code>, and a container query
+cannot read a custom property, so raising <code>--step-min</code> moves the scroll budget
+but not them. Restate the <code>@container</code> rules if you need the two aligned.</p>
+<p>Without <code>:has()</code> or container query support the component behaves as it always
+has: intrinsic widths, then scroll.</p>
 <h3 id="hooks">Hooks</h3>
 <ul>
 <li><code>--step-size</code> — marker diameter.</li>
@@ -276,10 +363,55 @@ squishing labels.</li>
 <li><code>--step-connector</code> — connector background; when set it overrides the color
 (defaults to each step's own line, so a <code>.complete</code> step's connector follows
 its selected color). A plain color by default, but any background (e.g. a
-dashed <code>repeating-linear-gradient</code>) works.</li>
+dashed <code>repeating-linear-gradient</code>) works. <code>none</code> removes the line.</li>
+<li><code>--step-connector-mark</code> — a <code>content</code> value drawn between steps, centred on
+the connector's midline. Coloured from <code>--step-line</code>, so it carries the same
+state as the default connector; a <code>--step-connector</code> gradient or colour
+repaints the track only. Independent of <code>--step-connector</code> — keep both for a
+glyph on the track, or <code>none</code> for a glyph alone. Stay within <code>--step-size</code>, or
+the scroll container clips it.</li>
 <li><code>--step-complete-mark</code> — replaces the number on a <code>.complete</code> step with any
 <code>content</code> value (e.g. <code>&quot;✓&quot;</code>); defaults to the step number.</li>
 </ul>
+<h2 id="line-or-mark-between-steps">Line or mark between steps</h2>
+<p>A track and a separator glyph are both connectors. The line is the default; a
+mark replaces or joins it.</p>
+</div>
+<div class="docs-example">
+  <div class="docs-preview">
+<ol class="steps" style="--step-connector: none; --step-connector-mark: '›'">
+  <li class="complete">Account</li>
+  <li aria-current="step">Payment</li>
+  <li>Confirm</li>
+</ol>
+<ol class="steps" style="--step-connector-mark: '•'">
+  <li class="complete">Account</li>
+  <li aria-current="step">Payment</li>
+  <li>Confirm</li>
+</ol>
+  </div>
+  <div class="docs-code">
+    <pre><code class="language-html">&lt;ol class=&quot;steps&quot; style=&quot;--step-connector: none; --step-connector-mark: '›'&quot;&gt;
+  &lt;li class=&quot;complete&quot;&gt;Account&lt;/li&gt;
+  &lt;li aria-current=&quot;step&quot;&gt;Payment&lt;/li&gt;
+  &lt;li&gt;Confirm&lt;/li&gt;
+&lt;/ol&gt;
+&lt;ol class=&quot;steps&quot; style=&quot;--step-connector-mark: '•'&quot;&gt;
+  &lt;li class=&quot;complete&quot;&gt;Account&lt;/li&gt;
+  &lt;li aria-current=&quot;step&quot;&gt;Payment&lt;/li&gt;
+  &lt;li&gt;Confirm&lt;/li&gt;
+&lt;/ol&gt;</code></pre>
+  </div>
+</div>
+<div class="prose docs-prose">
+<p>A directional glyph is not mirrored for you — pair it with the writing mode:</p>
+<pre><code class="language-css">[dir=&quot;rtl&quot;] .steps {
+  --step-connector-mark: &quot;‹&quot;;
+}
+</code></pre>
+<p>Marks ship with empty <code>content</code> alt text where the browser supports it. The
+sequence lives in the <code>&lt;ol&gt;</code> and the labels either way, so pick a glyph that
+adds nothing to the reading and never one carrying the only copy of a state.</p>
 
 </div>
 
@@ -301,7 +433,9 @@ dashed <code>repeating-linear-gradient</code>) works.</li>
           <ul class="nav-list docs-toc-list" data-docs-toc>
         <li><a class="nav-link" href="#class-reference" data-docs-toc-item data-level="2">Class reference</a></li>
         <li><a class="nav-link" href="#intrinsic-responsiveness" data-docs-toc-item data-level="2">Intrinsic responsiveness</a></li>
+        <li><a class="nav-link" href="#narrow-widths" data-docs-toc-item data-level="2">Narrow widths</a></li>
         <li><a class="nav-link" href="#hooks" data-docs-toc-item data-level="3">Hooks</a></li>
+        <li><a class="nav-link" href="#line-or-mark-between-steps" data-docs-toc-item data-level="2">Line or mark between steps</a></li>
           </ul>
         </nav>
       </aside>

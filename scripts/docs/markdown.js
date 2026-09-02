@@ -29,7 +29,15 @@ export function parseCodeInfo(info = "") {
 
 /**
  * Scan fenced code blocks in document order. Each entry carries the language
- * and flags from its info string plus the raw content. Fences may be ``` or
+ * and flags from its info string plus the raw content.
+ *
+ * Flags: `demo` renders a live preview beside the source. That is the only one
+ * — a preview is a neutral environment, so an example needing an
+ * actual-container context establishes it in its own markup, where the reader
+ * can see it. Do not reintroduce a flag that grants one ambiently: the rendered
+ * demo would then behave unlike the snippet beside it.
+ *
+ * Fences may be ``` or
  * ~~~; content ends at the first closing fence of the same kind with >= the
  * opening length. An unclosed fence runs to the end of the document.
  */
@@ -120,12 +128,9 @@ export function prepareMarkdown(markdown) {
 function renderDemoBlock(entry) {
   const language = escapeHtml(entry.language || "html");
   const source = escapeHtml(entry.content);
-  const previewClass = entry.flags.includes("bare")
-    ? "docs-preview docs-preview--bare"
-    : "docs-preview";
   return `${DOCS_PROSE_END}
 <div class="docs-example">
-  <div class="${previewClass}">
+  <div class="docs-preview">
 ${entry.content}
   </div>
   <div class="docs-code">

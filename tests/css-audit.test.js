@@ -126,13 +126,15 @@ test("density presets declare a count and collapse through divisors of it", () =
 
   /* Subdivision is an enhancement gated on container queries, and every step
      must land on a divisor of its preset — never 5 + 1, never 4 + 2. It keys
-     off the named actual-grid context so an incidental query container never
+     off the named actual-container context so an incidental query container never
      changes a grid. */
   expect(css).toContain(ENHANCEMENT);
-  expect(css).toContain("@container actual-grid (min-width:");
+  expect(css).toContain("@container actual-container (min-width:");
   const enhancement = css.slice(css.indexOf(ENHANCEMENT));
   const steps = [
-    ...enhancement.matchAll(/@container actual-grid \(min-width: (\d+)rem\)([\s\S]*?)\n {2}\}/g),
+    ...enhancement.matchAll(
+      /@container actual-container \(min-width: (\d+)rem\)([\s\S]*?)\n {2}\}/g,
+    ),
   ];
   expect(steps.length).toBeGreaterThan(0);
   const seen = [];

@@ -5,7 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Steps connector fixture</title>
   <link rel="stylesheet" href="../../src/css/actual.full.css">
-  <style>* { transition-duration: 0s !important; }</style>
+  <style>
+    * { transition-duration: 0s !important; }
+    /* The stylesheet route: no helper class in the markup. */
+    #stylesheet-route { container: actual-container / inline-size; }
+  </style>
 </head>
 <body>
   <ol class="steps">
@@ -13,5 +17,105 @@
     <li aria-current="step">Payment</li>
     <li>Confirm</li>
   </ol>
+  <ol class="steps" id="marked" style="--step-connector: none; --step-connector-mark: '›'">
+    <li class="complete">Account</li>
+    <li aria-current="step">Payment</li>
+    <li>Confirm</li>
+  </ol>
+  <!-- Collapse fixture. 35rem = 560px is the 5-step budget, so 559px is one
+       pixel past where the plain row starts to scroll. -->
+  <div style="inline-size: 559px">
+    <ol class="steps container-query" id="collapsed">
+      <li class="complete"><span class="step-label">Identification</span></li>
+      <li class="complete"><span class="step-label">Coordonnees</span></li>
+      <li aria-current="step"><span class="step-label">Motif</span></li>
+      <li><span class="step-label">Confirmation</span></li>
+      <li><span class="step-label">Paiement</span></li>
+    </ol>
+  </div>
+  <div style="inline-size: 561px">
+    <ol class="steps container-query" id="expanded">
+      <li class="complete"><span class="step-label">Identification</span></li>
+      <li class="complete"><span class="step-label">Coordonnees</span></li>
+      <li aria-current="step"><span class="step-label">Motif</span></li>
+      <li><span class="step-label">Confirmation</span></li>
+      <li><span class="step-label">Paiement</span></li>
+    </ol>
+  </div>
+  <!-- Bare text under the opt-in: must fall back to scroll, not half-collapse. -->
+  <div style="inline-size: 559px">
+    <ol class="steps container-query" id="bare-collapse">
+      <li class="complete">Identification</li>
+      <li class="complete">Coordonnees</li>
+      <li aria-current="step">Motif</li>
+      <li>Confirmation</li>
+      <li>Paiement</li>
+    </ol>
+  </div>
+  <!-- Six steps: outside the 2..5 contract, no rule fires. -->
+  <div style="inline-size: 559px">
+    <ol class="steps container-query" id="six">
+      <li class="complete"><span class="step-label">Identification</span></li>
+      <li class="complete"><span class="step-label">Coordonnees</span></li>
+      <li aria-current="step"><span class="step-label">Motif</span></li>
+      <li><span class="step-label">Confirmation</span></li>
+      <li><span class="step-label">Paiement</span></li>
+      <li><span class="step-label">Recu</span></li>
+    </ol>
+  </div>
+  <!-- Interactive labels at a collapsing width: the flow must refuse to
+       collapse, or tab would land on a label clipped to 1x1. -->
+  <div style="inline-size: 559px">
+    <ol class="steps container-query" id="interactive">
+      <li class="complete"><a class="step-label" href="#one">Identification</a></li>
+      <li class="complete"><a class="step-label" href="#two">Coordonnees</a></li>
+      <li aria-current="step"><span class="step-label">Motif</span></li>
+      <li><span class="step-label">Confirmation</span></li>
+      <li><span class="step-label">Paiement</span></li>
+    </ol>
+  </div>
+  <!-- The guard reads structure, not state. One link per flow, on a future
+       step and on the current step, to prove neither state changes it. -->
+  <div style="inline-size: 559px">
+    <ol class="steps container-query" id="future-link">
+      <li class="complete"><span class="step-label">Identification</span></li>
+      <li class="complete"><span class="step-label">Coordonnees</span></li>
+      <li aria-current="step"><span class="step-label">Motif</span></li>
+      <li><span class="step-label">Confirmation</span></li>
+      <li><a class="step-label" href="#pay">Paiement</a></li>
+    </ol>
+  </div>
+  <div style="inline-size: 559px">
+    <ol class="steps container-query" id="current-link">
+      <li class="complete"><span class="step-label">Identification</span></li>
+      <li class="complete"><span class="step-label">Coordonnees</span></li>
+      <li aria-current="step"><a class="step-label" href="#motif">Motif</a></li>
+      <li><span class="step-label">Confirmation</span></li>
+      <li><span class="step-label">Paiement</span></li>
+    </ol>
+  </div>
+  <!-- The anchor named from a stylesheet, no class in the markup. -->
+  <div style="inline-size: 559px">
+    <ol class="steps" id="stylesheet-route">
+      <li class="complete"><span class="step-label">Identification</span></li>
+      <li class="complete"><span class="step-label">Coordonnees</span></li>
+      <li aria-current="step"><span class="step-label">Motif</span></li>
+      <li><span class="step-label">Confirmation</span></li>
+      <li><span class="step-label">Paiement</span></li>
+    </ol>
+  </div>
+  <!-- A wrapper grant measures the zone it is on, so a row filling a 300px
+       wrapper collapses from the wrapper's width. -->
+  <div class="container-query" style="inline-size: 300px">
+    <div>
+      <ol class="steps" id="ancestor-grant">
+        <li class="complete"><span class="step-label">Identification</span></li>
+        <li class="complete"><span class="step-label">Coordonnees</span></li>
+        <li aria-current="step"><span class="step-label">Motif</span></li>
+        <li><span class="step-label">Confirmation</span></li>
+        <li><span class="step-label">Paiement</span></li>
+      </ol>
+    </div>
+  </div>
 </body>
 </html>

@@ -9,8 +9,9 @@
 
 /* --- Shell geometry --- */
 
-/* The demo previews are query containers named actual-grid, so a preview's
-   content box is the width that .grid-N thresholds resolve against. The
+/* A grid demo that wants subdivision puts .container-query in its own markup
+   inside the preview, and that wrapper adds no padding — so the preview's
+   content box is still the width .grid-N thresholds resolve against. The
    documentation therefore has a hard geometric obligation: a preview must be
    able to reach the widest documented threshold, 64rem (.grid-4 -> 4,
    .grid-6 -> 6). Work backwards from it.
@@ -159,22 +160,15 @@
 }
 
 .docs-preview {
+  /* A neutral environment: no query container. actual-container is a public
+     contract an author declares, so a demo that inherited it here would render
+     unlike the snippet printed beside it — and one shared name reaches every
+     size-aware component, not just .grid-N. An example that needs the context
+     establishes it in its own markup. */
   padding: var(--space-40);
   overflow-x: auto;
-  /* Every live demo preview is a query container named actual-grid, so any
-     .grid-N it presents gets balanced subdivision (3 -> 1, never 2 + 1) with
-     no wrapper per snippet. The wrapper is a normal block box, so inline-size
-     containment cannot collapse it. Opt out per demo with the "bare" fence
-     flag. */
-  container: actual-grid / inline-size;
 }
 
-.docs-preview--bare {
-  /* Opt-out for a demo that must show the unwrapped preset collapsing one
-     column at a time. Resets both name and type so the .grid-N keeps its
-     auto-fill fallback instead of the balanced chain. */
-  container: normal;
-}
 
 /* Preview-only viewport for the fixed FAB. Production keeps .fab fixed to the
    real viewport; the docs replace only its positioning context. */
