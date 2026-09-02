@@ -33,7 +33,9 @@
 .list > li > .list-item {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr) auto;
-  align-items: center;
+  /* Regions align to the first line, so leading, title, and trailing controls
+     share one horizontal line while supporting text wraps beneath. */
+  align-items: start;
   gap: var(--list-item-gap);
   min-block-size: var(--list-item-min-size);
   padding-block: var(--list-item-pad-block);

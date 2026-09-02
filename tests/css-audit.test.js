@@ -774,6 +774,7 @@ test("application lists provide three semantic slots without owning their contro
   const css = readCss("src/css/components/list.css");
 
   expect(css).toContain("grid-template-columns: auto minmax(0, 1fr) auto;");
+  expect(css).toContain("align-items: start;");
   expect(css).toContain("min-block-size: var(--list-item-min-size);");
   expect(css).toContain("border-block-start: var(--list-divider);");
   expect(css).not.toContain("border-block: var(--list-divider);");

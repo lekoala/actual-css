@@ -33,18 +33,27 @@ badges, text, switches, and buttons retain their own component sizing. The
 middle region has no minimum content floor, so supporting text and long tokens
 wrap instead of widening the page.
 
+Regions align to the row's first line: the leading check or avatar, the title,
+and the trailing metadata or control sit on one horizontal line while
+supporting text wraps beneath — a structured row, not a centered button. For a
+shared two-line arrangement where leading and trailing truly need to center,
+the app composes the alignment itself rather than switching this default.
+A pure traversal affordance such as a trailing caret can opt out of the
+first-line rule on its own item with `align-self: center`, keeping metadata
+rows unaffected.
+
 For a navigable row, keep the list semantics and put `.list-item` on the link:
 
 ```html demo
 <ul class="list">
   <li>
     <a class="list-item" href="#profile">
-      <span aria-hidden="true">👤</span>
+      <span class="avatar sm" aria-hidden="true"><i class="ti ti-user" aria-hidden="true"></i></span>
       <span class="list-item-content">
         <strong class="list-item-title">Profile</strong>
         <span class="list-item-text">Name, photo, and contact details</span>
       </span>
-      <span class="list-item-trailing" aria-hidden="true">›</span>
+      <i class="ti ti-chevron-right list-item-trailing" style="align-self: center" aria-hidden="true"></i>
     </a>
   </li>
 </ul>
