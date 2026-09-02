@@ -217,23 +217,37 @@ finished steps and <code>aria-current=&quot;step&quot;</code> to the current one
 upcoming.</p>
 <p>Wrap each label in <code>.step-label</code>. The wrapper lets the horizontal stepper move
 between its three space-aware representations without changing the markup.</p>
-<p>Horizontal steps are designed and tested for <strong>short flows of 2 to 5 stages</strong>.
-Vertical steps are not bound by that range; use as many stages as remain useful
-in the surrounding layout.</p>
+<p><code>.steps</code> is the component; the orientation is a second class, and it is always
+required:</p>
+<div class="table-wrap"><table class="table">
+<thead>
+<tr><th>Markup</th><th>Orientation</th><th>Stages</th></tr>
+</thead>
+<tbody>
+<tr><td><code>&lt;ol class=&quot;steps steps-horizontal&quot;&gt;</code></td><td>horizontal</td><td>2 to 5</td></tr>
+<tr><td><code>&lt;ol class=&quot;steps steps-vertical&quot;&gt;</code></td><td>vertical</td><td>no limit</td></tr>
+</tbody>
+</table></div>
+<p>Neither orientation is the default, so <code>.steps</code> on its own is incomplete markup.
+Everything a step <em>is</em> — <code>.step-label</code>, <code>.complete</code>, <code>aria-current=&quot;step&quot;</code>, the
+marker and its states — comes from <code>.steps</code> and is identical in both. The second
+class only decides how the sequence is laid out.</p>
+<p>For a horizontal sequence longer than five stages, use <code>.steps-vertical</code> or
+another progression pattern.</p>
 <p>The component needs no JavaScript.</p>
 <p><strong>Related terms:</strong> stepper, progress steps, step indicator, wizard steps, multi-step progress.</p>
 <h2 id="basic-usage">Basic usage</h2>
 </div>
 <div class="docs-example">
   <div class="docs-preview">
-<ol class="steps">
+<ol class="steps steps-horizontal">
   <li class="complete"><span class="step-label">Account</span></li>
   <li aria-current="step"><span class="step-label">Payment</span></li>
   <li><span class="step-label">Confirm</span></li>
 </ol>
   </div>
   <div class="docs-code">
-    <pre><code class="language-html">&lt;ol class=&quot;steps&quot;&gt;
+    <pre><code class="language-html">&lt;ol class=&quot;steps steps-horizontal&quot;&gt;
   &lt;li class=&quot;complete&quot;&gt;&lt;span class=&quot;step-label&quot;&gt;Account&lt;/span&gt;&lt;/li&gt;
   &lt;li aria-current=&quot;step&quot;&gt;&lt;span class=&quot;step-label&quot;&gt;Payment&lt;/span&gt;&lt;/li&gt;
   &lt;li&gt;&lt;span class=&quot;step-label&quot;&gt;Confirm&lt;/span&gt;&lt;/li&gt;
@@ -255,9 +269,8 @@ filled marker already says as much.</p>
 <p>Wrapping every label in <code>.step-label</code> is part of the component contract. The
 wrapper is what the space-aware representations move, place or visually hide.</p>
 <h2 id="horizontal-steps-adapt-to-their-space">Horizontal steps adapt to their space</h2>
-<p>Horizontal is the default orientation and is designed for <strong>2 to 5 stages</strong>.
-With an <code>actual-container</code> size context, the same markup has three
-representations.</p>
+<p><code>.steps-horizontal</code> is designed for <strong>2 to 5 stages</strong>. With an
+<code>actual-container</code> size context, the same markup has three representations.</p>
 <h3 id="wide-marker-and-label-inline">Wide — marker and label inline</h3>
 <p>With generous room, marker and label form one group and the connector absorbs
 the free space between groups:</p>
@@ -288,13 +301,13 @@ labels.</p>
 <div class="docs-example">
   <div class="docs-preview docs-preview-resizable">
 <div class="stack">
-  <ol class="steps container-query" style="--step-complete-mark: '✓'">
+  <ol class="steps steps-horizontal container-query" style="--step-complete-mark: '✓'">
     <li class="complete"><span class="step-label">Identification</span></li>
     <li aria-current="step"><span class="step-label">Confirmation</span></li>
     <li><span class="step-label">Finalisation</span></li>
   </ol>
 
-  <ol class="steps container-query" style="--step-complete-mark: '✓'">
+  <ol class="steps steps-horizontal container-query" style="--step-complete-mark: '✓'">
     <li class="complete"><span class="step-label">Account</span></li>
     <li class="complete"><span class="step-label">Details</span></li>
     <li aria-current="step"><span class="step-label">Payment</span></li>
@@ -305,13 +318,13 @@ labels.</p>
   </div>
   <div class="docs-code">
     <pre><code class="language-html">&lt;div class=&quot;stack&quot;&gt;
-  &lt;ol class=&quot;steps container-query&quot; style=&quot;--step-complete-mark: '✓'&quot;&gt;
+  &lt;ol class=&quot;steps steps-horizontal container-query&quot; style=&quot;--step-complete-mark: '✓'&quot;&gt;
     &lt;li class=&quot;complete&quot;&gt;&lt;span class=&quot;step-label&quot;&gt;Identification&lt;/span&gt;&lt;/li&gt;
     &lt;li aria-current=&quot;step&quot;&gt;&lt;span class=&quot;step-label&quot;&gt;Confirmation&lt;/span&gt;&lt;/li&gt;
     &lt;li&gt;&lt;span class=&quot;step-label&quot;&gt;Finalisation&lt;/span&gt;&lt;/li&gt;
   &lt;/ol&gt;
 
-  &lt;ol class=&quot;steps container-query&quot; style=&quot;--step-complete-mark: '✓'&quot;&gt;
+  &lt;ol class=&quot;steps steps-horizontal container-query&quot; style=&quot;--step-complete-mark: '✓'&quot;&gt;
     &lt;li class=&quot;complete&quot;&gt;&lt;span class=&quot;step-label&quot;&gt;Account&lt;/span&gt;&lt;/li&gt;
     &lt;li class=&quot;complete&quot;&gt;&lt;span class=&quot;step-label&quot;&gt;Details&lt;/span&gt;&lt;/li&gt;
     &lt;li aria-current=&quot;step&quot;&gt;&lt;span class=&quot;step-label&quot;&gt;Payment&lt;/span&gt;&lt;/li&gt;
@@ -358,10 +371,11 @@ the layout context, not on a shrink-to-fit box. See the container-query helper
 for the full containment guidance.</p>
 </blockquote>
 <h2 id="vertical-steps">Vertical steps</h2>
-<p>Vertical steps are an explicit orientation, not a mobile fallback, and they do
-not inherit the horizontal 2–5 stage limit.</p>
-<p>Use <code>.steps-vertical</code> when the surrounding layout is naturally vertical — for
-example a wizard sidebar or a narrow process panel:</p>
+<p>Vertical steps are an explicit orientation, not a mobile fallback, and they are
+not bound by the horizontal 2–5 stage limit.</p>
+<p>Use <code>.steps steps-vertical</code> when the surrounding layout is naturally vertical —
+for example a wizard sidebar or a narrow process panel. It is a peer of
+<code>.steps-horizontal</code>, not a modifier on it: never write the two together.</p>
 </div>
 <div class="docs-example">
   <div class="docs-preview">
@@ -407,12 +421,46 @@ different, so a horizontal value cannot transpose onto it — override
 <p>Connectors are decorative. The ordered list and its labels carry the meaning of
 the sequence.</p>
 <h2 id="navigation">Navigation</h2>
-<p>Steps are informational by default. Only make a label interactive when the
-workflow genuinely allows navigation to that step:</p>
-<pre><code class="language-html">&lt;li class=&quot;complete&quot;&gt;
-  &lt;a class=&quot;step-label&quot; href=&quot;/checkout/account&quot;&gt;Account&lt;/a&gt;
-&lt;/li&gt;
-</code></pre>
+<p>Steps are informational by default. The one supported interactive label is an
+<code>&lt;a href&gt;</code>; a <code>&lt;button&gt;</code> or any other focusable element inside a step is outside
+the component contract. Only make a label a link when the workflow genuinely
+allows navigation to that step:</p>
+</div>
+<div class="docs-example">
+  <div class="docs-preview docs-preview-resizable">
+<ol class="steps steps-horizontal container-query">
+  <li class="complete">
+    <a class="step-label" href="#">Account</a>
+  </li>
+  <li class="complete">
+    <a class="step-label" href="#">Details</a>
+  </li>
+  <li aria-current="step">
+    <span class="step-label">Payment</span>
+  </li>
+  <li>
+    <span class="step-label">Confirm</span>
+  </li>
+</ol>
+  </div>
+  <div class="docs-code">
+    <pre><code class="language-html">&lt;ol class=&quot;steps steps-horizontal container-query&quot;&gt;
+  &lt;li class=&quot;complete&quot;&gt;
+    &lt;a class=&quot;step-label&quot; href=&quot;#&quot;&gt;Account&lt;/a&gt;
+  &lt;/li&gt;
+  &lt;li class=&quot;complete&quot;&gt;
+    &lt;a class=&quot;step-label&quot; href=&quot;#&quot;&gt;Details&lt;/a&gt;
+  &lt;/li&gt;
+  &lt;li aria-current=&quot;step&quot;&gt;
+    &lt;span class=&quot;step-label&quot;&gt;Payment&lt;/span&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;span class=&quot;step-label&quot;&gt;Confirm&lt;/span&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;</code></pre>
+  </div>
+</div>
+<div class="prose docs-prose">
 <p>Keep <code>aria-current=&quot;step&quot;</code> on the current <code>&lt;li&gt;</code>.</p>
 <p>Interactive labels stay visible at narrow widths; the stepper prefers scrolling
 over hiding a focusable control.</p>
@@ -422,27 +470,41 @@ and focus ring are untouched — that is what marks it as navigable. If a touch
 target needs to be more generous, put <code>.touch-target</code> on the anchor rather than
 growing the stepper.</p>
 <h2 id="hooks">Hooks</h2>
+<p>On <code>.steps</code>, so both orientations read them:</p>
 <ul>
 <li><code>--step-size</code> — marker diameter</li>
-<li><code>--step-min</code> — minimum item width in the stacked horizontal layout</li>
-<li><code>--step-gap</code> — marker-to-label space in the stacked horizontal layout</li>
 <li><code>--step-inline-gap</code> — spacing between marker, label and connector inline</li>
-<li><code>--step-vertical-gap</code> — space between vertical steps</li>
 <li><code>--step-line-size</code> — connector thickness</li>
 <li><code>--step-marker-radius</code> — marker corner radius</li>
-<li><code>--step-connector</code> — default horizontal connector background</li>
-<li><code>--step-inline-connector</code> — optional connector background for wide horizontal steps</li>
 <li><code>--step-complete-mark</code> — content used instead of the number on completed steps</li>
 </ul>
+<p><code>.steps-horizontal</code> only:</p>
+<ul>
+<li><code>--step-min</code> — minimum item width in the stacked horizontal layout</li>
+<li><code>--step-gap</code> — marker-to-label space in the stacked horizontal layout</li>
+<li><code>--step-connector</code> — default horizontal connector background</li>
+<li><code>--step-inline-connector</code> — optional connector background for wide horizontal steps</li>
+</ul>
+<p><code>.steps-vertical</code> only:</p>
+<ul>
+<li><code>--step-vertical-gap</code> — space between vertical steps</li>
+</ul>
 <h2 id="notes">Notes</h2>
-<p>The <strong>2 to 5</strong> range applies to the horizontal, space-aware stepper. Longer
-horizontal sequences are not prevented, but they fall back to the base layout
-instead of receiving the inline and markers-only adaptations.</p>
+<p>The <strong>2 to 5</strong> range applies to the horizontal, space-aware stepper, and the
+container-query thresholds are calibrated for it. A longer horizontal sequence
+is out of contract: it still renders, but which representation it lands in was
+never designed for that count, so it may well be the wrong one.</p>
 <p>The vertical orientation has no equivalent hard limit; its practical limit is
 the surrounding layout and whether the sequence remains useful to scan.</p>
 <p>The markers-only representation intentionally leaves presentation of the
 current step name to the surrounding interface. If a narrow layout needs every
 step name visible at once, <code>.steps-vertical</code> is usually the better composition.</p>
+<p>In Windows forced-colors mode the accent fill is dropped, so a completed marker
+and an upcoming one both render as a ringed disc with a number. Set
+<code>--step-complete-mark</code> — a checkmark, for instance — if your flow needs the two
+to stay distinguishable there. Steps deliberately ships no forced-colors
+override of its own: painting the marker <code>Highlight</code> makes the number or glyph
+inside it unreadable, which is worse than the ambiguity it removes.</p>
 <p>The container-query thresholds are calibrated to the default <code>--step-min</code>.
 Container queries cannot read custom properties, so changing <code>--step-min</code> does
 not move those thresholds automatically.</p>

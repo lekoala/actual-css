@@ -1,12 +1,12 @@
 {
-  "totalRaw": 262833,
+  "totalRaw": 264040,
   "core": {
     "minified": 10576,
     "brotli": 2530
   },
   "full": {
-    "minified": 119250,
-    "brotli": 17464
+    "minified": 118344,
+    "brotli": 17326
   },
   "js": {
     "core": {
@@ -22,7 +22,7 @@
   "files": [
     {
       "file": "components/steps.css",
-      "raw": 9339
+      "raw": 10546
     },
     {
       "file": "core/tokens.css",

@@ -71,14 +71,25 @@ Add relevant guards for future-us when needed based on traps and discoveries.
   genuinely product-specific. Do not preserve incidental mockup pixel values by
   default.
 
-## Invalid CSS selectors
+## CSS selectors
 
-Invalid selectors are invalid and the whole rule is dicarded.
+- Invalid selectors discard the whole rule. Never merge vendor rules, and never
+  nest `:has()` inside `:has()` — including through `:not()`/`:is()`.
+- Child combinator only where layout or state depends on the immediate DOM: the
+  component's own items, or a property that needs a direct child (grid/flex-item
+  properties). Plain descendant for anything named by its own class — the
+  framework owns the structure, so restating it is weight without protection.
 
-- Never merge vendor rules.
-- Never nest `:has()` inside `:has()`, including through `:not()`/`:is()`.
+  ```css
+  .steps > li { … }                                   /* the row's items */
+  .steps-vertical > li > .step-label { align-self: center; }  /* grid item */
+  .steps .step-label { … }                            /* named sub-element */
+  ```
 
-### Documentation and implementation
+- The same prefix on a dozen rules is a shared primitive missing a class. Give
+  it one and make the variants peers, so no rule excludes or undoes another.
+
+## Documentation and implementation
 
 - The CSS source is canonical for exact values and fallback chains. Do not
   duplicate current defaults into docs merely to restate them; explain which
