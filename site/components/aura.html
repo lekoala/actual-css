@@ -218,6 +218,50 @@ It is visual emphasis only and does not change the child's semantics.</p>
 </div>
 <div class="docs-example">
   <div class="docs-preview">
+<div class="cluster" style="gap: 2.5rem">
+  <span class="aura primary">
+    <article class="card" style="inline-size: 13rem">
+      <p><strong>Rotating arc</strong></p>
+      <p class="muted">One lit segment travels around the frame.</p>
+    </article>
+  </span>
+
+  <span class="aura aura-glow primary">
+    <article class="card" style="inline-size: 13rem">
+      <p><strong>Breathing glow</strong></p>
+      <p class="muted">The whole perimeter lights and breathes.</p>
+    </article>
+  </span>
+</div>
+  </div>
+  <div class="docs-code">
+    <pre><code class="language-html">&lt;div class=&quot;cluster&quot; style=&quot;gap: 2.5rem&quot;&gt;
+  &lt;span class=&quot;aura primary&quot;&gt;
+    &lt;article class=&quot;card&quot; style=&quot;inline-size: 13rem&quot;&gt;
+      &lt;p&gt;&lt;strong&gt;Rotating arc&lt;/strong&gt;&lt;/p&gt;
+      &lt;p class=&quot;muted&quot;&gt;One lit segment travels around the frame.&lt;/p&gt;
+    &lt;/article&gt;
+  &lt;/span&gt;
+
+  &lt;span class=&quot;aura aura-glow primary&quot;&gt;
+    &lt;article class=&quot;card&quot; style=&quot;inline-size: 13rem&quot;&gt;
+      &lt;p&gt;&lt;strong&gt;Breathing glow&lt;/strong&gt;&lt;/p&gt;
+      &lt;p class=&quot;muted&quot;&gt;The whole perimeter lights and breathes.&lt;/p&gt;
+    &lt;/article&gt;
+  &lt;/span&gt;
+&lt;/div&gt;</code></pre>
+  </div>
+</div>
+<div class="prose docs-prose">
+<p><code>.aura</code> sends a short accent of light travelling around the frame, over a
+permanent halo that keeps the object present between two passes. Add
+<code>.aura-glow</code> to light the whole perimeter evenly instead, as a halo that
+breathes slowly.</p>
+<p>Aura reads best when it has enough perimeter to travel around, and is naturally
+more pronounced on dark surfaces. It still composes on small shapes:</p>
+</div>
+<div class="docs-example">
+  <div class="docs-preview">
 <div class="cluster">
   <span class="aura primary">
     <button class="btn" type="button">Publish</button>
@@ -225,6 +269,14 @@ It is visual emphasis only and does not change the child's semantics.</p>
 
   <span class="aura aura-glow secondary">
     <span class="badge">New</span>
+  </span>
+
+  <span class="aura aura-glow success">
+    <span class="badge success soft">Live</span>
+  </span>
+
+  <span class="aura danger">
+    <span class="badge danger solid" aria-label="12 unread notifications">12</span>
   </span>
 </div>
   </div>
@@ -237,24 +289,132 @@ It is visual emphasis only and does not change the child's semantics.</p>
   &lt;span class=&quot;aura aura-glow secondary&quot;&gt;
     &lt;span class=&quot;badge&quot;&gt;New&lt;/span&gt;
   &lt;/span&gt;
+
+  &lt;span class=&quot;aura aura-glow success&quot;&gt;
+    &lt;span class=&quot;badge success soft&quot;&gt;Live&lt;/span&gt;
+  &lt;/span&gt;
+
+  &lt;span class=&quot;aura danger&quot;&gt;
+    &lt;span class=&quot;badge danger solid&quot; aria-label=&quot;12 unread notifications&quot;&gt;12&lt;/span&gt;
+  &lt;/span&gt;
 &lt;/div&gt;</code></pre>
   </div>
 </div>
 <div class="prose docs-prose">
-<p>The animated conic frame runs only when the user has not requested reduced
-motion. Add <code>.aura-glow</code> for a static, solid frame. The component uses an
-intent such as <code>.primary</code>, <code>.success</code>, or <code>.danger</code>; it does not introduce
-separate aura color variants.</p>
+<p>Note the intent on the wrapper, not on the child: <code>.aura</code> is an intent
+boundary, so the badge or alert inside keeps its own color and the frame keeps
+the one you gave the wrapper. Matching them reads as one object; deliberately
+mismatching them reads as two.</p>
+</div>
+<div class="docs-example">
+  <div class="docs-preview">
+<div class="stack" style="max-inline-size: 28rem">
+  <span class="aura warning">
+    <div class="alert warning" role="alert">
+      <i class="ti ti-alert-triangle alert-icon" aria-hidden="true"></i>
+      <div>Your trial ends in three days.</div>
+    </div>
+  </span>
+
+  <span class="aura aura-glow danger">
+    <div class="alert danger" role="alert">
+      <i class="ti ti-credit-card-off alert-icon" aria-hidden="true"></i>
+      <div>Two payment methods failed. <a href="#">Review them</a>.</div>
+    </div>
+  </span>
+</div>
+  </div>
+  <div class="docs-code">
+    <pre><code class="language-html">&lt;div class=&quot;stack&quot; style=&quot;max-inline-size: 28rem&quot;&gt;
+  &lt;span class=&quot;aura warning&quot;&gt;
+    &lt;div class=&quot;alert warning&quot; role=&quot;alert&quot;&gt;
+      &lt;i class=&quot;ti ti-alert-triangle alert-icon&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;
+      &lt;div&gt;Your trial ends in three days.&lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/span&gt;
+
+  &lt;span class=&quot;aura aura-glow danger&quot;&gt;
+    &lt;div class=&quot;alert danger&quot; role=&quot;alert&quot;&gt;
+      &lt;i class=&quot;ti ti-credit-card-off alert-icon&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;
+      &lt;div&gt;Two payment methods failed. &lt;a href=&quot;#&quot;&gt;Review them&lt;/a&gt;.&lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/span&gt;
+&lt;/div&gt;</code></pre>
+  </div>
+</div>
+<div class="prose docs-prose">
+<p>Motion changes how the light lives, never whether the effect is there: when the
+user has requested reduced motion, the travelling accent becomes two opposite
+lit corners — a deliberate composition rather than a rotation frozen at an
+arbitrary angle — and the glow stays a full, still halo.</p>
+<p>The frame color comes from an intent such as <code>.primary</code>, <code>.success</code>, or
+<code>.danger</code>; there are no separate aura color variants. The intent is sovereign:
+a neutral intent produces a neutral aura. Use a chromatic intent when you want
+a visibly luminous effect.</p>
+<p>Two hooks tune how loud the effect is. <code>--aura-intensity</code> scales both halos at
+once, resting and breathing alike, so the breath stays proportional at every
+setting; <code>--aura-duration</code> sets one full rotation of the accent, or one breath
+of the glow.</p>
+</div>
+<div class="docs-example">
+  <div class="docs-preview">
+<div class="cluster" style="gap: 2rem">
+  <span class="aura aura-glow primary" style="--aura-intensity: 0.4">
+    <span class="card" style="inline-size: 8rem">Muted</span>
+  </span>
+
+  <span class="aura aura-glow primary">
+    <span class="card" style="inline-size: 8rem">Default</span>
+  </span>
+
+  <span class="aura aura-glow primary" style="--aura-intensity: 2">
+    <span class="card" style="inline-size: 8rem">Loud</span>
+  </span>
+
+  <span class="aura primary" style="--aura-duration: 2s">
+    <span class="card" style="inline-size: 8rem">Fast accent</span>
+  </span>
+</div>
+  </div>
+  <div class="docs-code">
+    <pre><code class="language-html">&lt;div class=&quot;cluster&quot; style=&quot;gap: 2rem&quot;&gt;
+  &lt;span class=&quot;aura aura-glow primary&quot; style=&quot;--aura-intensity: 0.4&quot;&gt;
+    &lt;span class=&quot;card&quot; style=&quot;inline-size: 8rem&quot;&gt;Muted&lt;/span&gt;
+  &lt;/span&gt;
+
+  &lt;span class=&quot;aura aura-glow primary&quot;&gt;
+    &lt;span class=&quot;card&quot; style=&quot;inline-size: 8rem&quot;&gt;Default&lt;/span&gt;
+  &lt;/span&gt;
+
+  &lt;span class=&quot;aura aura-glow primary&quot; style=&quot;--aura-intensity: 2&quot;&gt;
+    &lt;span class=&quot;card&quot; style=&quot;inline-size: 8rem&quot;&gt;Loud&lt;/span&gt;
+  &lt;/span&gt;
+
+  &lt;span class=&quot;aura primary&quot; style=&quot;--aura-duration: 2s&quot;&gt;
+    &lt;span class=&quot;card&quot; style=&quot;inline-size: 8rem&quot;&gt;Fast accent&lt;/span&gt;
+  &lt;/span&gt;
+&lt;/div&gt;</code></pre>
+  </div>
+</div>
+<div class="prose docs-prose">
 <p>Keep exactly one direct child and set <code>--aura-radius</code> when its shape differs
 from the common button, card, alert, and badge shapes detected as a visual
 enhancement.</p>
+<p>The child must be opaque. The frame paints across the whole box and relies on
+the child to cover all but its edge, so a transparent child — an <code>.outline</code>
+alert, a <code>.ghost</code> button — is filled edge to edge with the frame color instead
+of framed by it. Give such a child a surface, or move the aura to an opaque
+wrapper around it.</p>
 <h2 id="css-hooks">CSS hooks</h2>
 <ul>
 <li><code>--aura-color</code> — frame and halo color; follows the local intent.</li>
 <li><code>--aura-width</code> — frame thickness.</li>
-<li><code>--aura-blur</code> — halo blur radius.</li>
+<li><code>--aura-blur</code> — near halo blur; the far halo derives its own blur and its
+spread beyond the frame from this value, so one hook scales both.</li>
+<li><code>--aura-intensity</code> — multiplies both halo opacities, resting and breathing.
+It does not touch the frame itself, which stays a crisp line at any setting.</li>
 <li><code>--aura-radius</code> — child corner radius used to derive the outer radius.</li>
-<li><code>--aura-duration</code> — rotation duration when motion is allowed.</li>
+<li><code>--aura-duration</code> — one rotation of the accent, or one breath of the glow.</li>
 </ul>
 
 </div>

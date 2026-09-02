@@ -1,12 +1,12 @@
 {
-  "totalRaw": 265615,
+  "totalRaw": 269377,
   "core": {
     "minified": 10889,
     "brotli": 2553
   },
   "full": {
-    "minified": 119235,
-    "brotli": 17407
+    "minified": 120231,
+    "brotli": 17556
   },
   "js": {
     "core": {
@@ -55,6 +55,10 @@
     {
       "file": "components/drawer.css",
       "raw": 5402
+    },
+    {
+      "file": "effects/aura.css",
+      "raw": 5400
     },
     {
       "file": "components/badge.css",
@@ -267,10 +271,6 @@
     {
       "file": "forms/input-icon.css",
       "raw": 1678
-    },
-    {
-      "file": "effects/aura.css",
-      "raw": 1638
     },
     {
       "file": "components/skeleton.css",

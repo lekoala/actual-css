@@ -7415,12 +7415,23 @@ a.list-item:hover {
 /*
  * Decorative intent-colored frame for one direct child.
  *
+ * The effect is built from three layers with distinct roles: a frame carrying
+ * a short accent of light, a small halo that belongs to the frame and keeps
+ * that light attached to the edge, and a wide static halo that belongs to the
+ * object and gives it a permanent, diffuse presence. Only the small halo
+ * follows the animated gradient, so a rotating aura repaints one blurred layer
+ * per frame, not two.
+ *
  * Public hooks:
  * --aura-color
  * --aura-width
  * --aura-blur
+ * --aura-intensity
  * --aura-radius
  * --aura-duration
+ *
+ * Internal:
+ * --aura-angle
  */
 @property --aura-angle {
   syntax: "<angle>";
@@ -7437,7 +7448,8 @@ a.list-item:hover {
 .aura {
   --aura-color: var(--intent, var(--primary));
   --aura-width: 2px;
-  --aura-blur: 0.75rem;
+  --aura-blur: 0.25rem;
+  --aura-intensity: 1;
   --aura-radius: var(--radius-lg);
   --aura-duration: 6s;
 
@@ -7448,9 +7460,19 @@ a.list-item:hover {
   border-radius: calc(var(--aura-radius) + var(--aura-width));
   border: var(--border-width) solid transparent;
   background: var(--aura-color);
-  background: conic-gradient(from var(--aura-angle), transparent 0 65%, var(--aura-color));
+
+  /* A short feathered accent rather than a long wedge with a hard edge, which
+     reads as one lit side. Nothing tints the frame outside it: a constant tint
+     across 2px draws an outline, the opposite of the effect. */
+  background: conic-gradient(
+    from var(--aura-angle),
+    transparent 0 78%,
+    var(--aura-color) 93%,
+    transparent
+  );
 }
 
+/* Near halo — inherits the frame gradient, so it tracks the lit accent. */
 .aura::before {
   position: absolute;
   z-index: -1;
@@ -7458,15 +7480,40 @@ a.list-item:hover {
   border-radius: inherit;
   background: inherit;
   filter: blur(var(--aura-blur));
-  opacity: 0.45;
+  opacity: calc(0.55 * var(--aura-intensity));
   pointer-events: none;
   content: "";
 }
 
+/* Far halo — flat and static. At this blur the rotating detail is no longer
+   legible, so there is nothing to gain from animating a second wide blurred
+   layer. It outgrows the frame, otherwise the child covers it and the whole
+   effect reads as a drop shadow. This is the layer that stays lit at all
+   times, so it — not the frame — is what keeps the object present between two
+   passes of the accent. */
+.aura::after {
+  position: absolute;
+  z-index: -1;
+  inset: calc(-1 * var(--aura-blur));
+  border-radius: calc(var(--aura-radius) + var(--aura-width) + var(--aura-blur));
+  background: var(--aura-color);
+  filter: blur(calc(var(--aura-blur) * 4));
+  opacity: calc(0.15 * var(--aura-intensity));
+  pointer-events: none;
+  content: "";
+}
+
+/* Lifts the child above both halos. It also has to be opaque: the frame paints
+   across the whole box and only its edge is meant to show, so a transparent
+   child (an .outline alert, a .ghost button) is filled with the frame color
+   rather than framed by it. Documented as a constraint, not worked around —
+   masking a ring would cost more than the case is worth. */
 .aura > * {
   position: relative;
 }
 
+/* Glow lights the whole perimeter instead of a short accent, so both halos
+   become a single soft field around the child. */
 .aura-glow {
   background: var(--aura-color);
 }
@@ -7474,6 +7521,29 @@ a.list-item:hover {
 @media (prefers-reduced-motion: no-preference) {
   .aura:not(.aura-glow) {
     animation: aura-rotate var(--aura-duration) linear infinite;
+  }
+
+  /* Both halos breathe: moving the near one alone changes a line's brightness,
+     which barely registers. Opening the wide field with it is what reads as a
+     breath. */
+  .aura-glow::before {
+    animation: aura-breathe-near var(--aura-duration) ease-in-out infinite;
+  }
+
+  .aura-glow::after {
+    animation: aura-breathe-far var(--aura-duration) ease-in-out infinite;
+  }
+}
+
+/* Without motion the accent would freeze at an arbitrary angle and read as a
+   broken animation, so it becomes a deliberate composition: two opposite
+   corners. Fixed radii keep those corners stable across aspect ratios;
+   proportional radii turn wide or tall elements into lit edges instead. */
+@media (prefers-reduced-motion: reduce) {
+  .aura:not(.aura-glow) {
+    background:
+      radial-gradient(4rem 4rem at 0% 0%, var(--aura-color), transparent 70%),
+      radial-gradient(4rem 4rem at 100% 100%, var(--aura-color), transparent 70%);
   }
 }
 
@@ -7483,18 +7553,38 @@ a.list-item:hover {
   }
 }
 
-@supports selector(:has(*)) {
-  .aura:has(> .btn) {
-    --aura-radius: var(--radius);
+/* Only the peak is declared, so each halo breathes up from its own resting
+   opacity and never dips below the static glow. The peaks scale with the same
+   intensity as the resting values, which keeps the breath proportional at
+   every setting. */
+@keyframes aura-breathe-near {
+  50% {
+    opacity: calc(0.95 * var(--aura-intensity));
+    transform: scale(1.03);
   }
+}
 
-  .aura:has(> :is(.card, .alert)) {
-    --aura-radius: var(--radius-lg);
+@keyframes aura-breathe-far {
+  50% {
+    opacity: calc(0.28 * var(--aura-intensity));
+    transform: scale(1.07);
   }
+}
 
-  .aura:has(> .badge) {
-    --aura-radius: var(--radius-full);
-  }
+/* Each rule is a lone :has() setting a decorative radius, so a browser without
+   :has() simply drops it and keeps the default. No @supports needed — that
+   guard only earns its place around a selector list that mixes :has() with
+   selectors worth keeping. */
+.aura:has(> .btn) {
+  --aura-radius: var(--radius);
+}
+
+.aura:has(> :is(.card, .alert)) {
+  --aura-radius: var(--radius-lg);
+}
+
+.aura:has(> .badge) {
+  --aura-radius: var(--radius-full);
 }
 
 /* Utilities — small, single-purpose escape hatches. */
