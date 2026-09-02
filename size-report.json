@@ -1,12 +1,12 @@
 {
-  "totalRaw": 257344,
+  "totalRaw": 262833,
   "core": {
     "minified": 10576,
     "brotli": 2530
   },
   "full": {
-    "minified": 116166,
-    "brotli": 17069
+    "minified": 119250,
+    "brotli": 17464
   },
   "js": {
     "core": {
@@ -20,6 +20,10 @@
   },
   "fileCount": 109,
   "files": [
+    {
+      "file": "components/steps.css",
+      "raw": 9339
+    },
     {
       "file": "core/tokens.css",
       "raw": 8787
@@ -46,7 +50,7 @@
     },
     {
       "file": "layout/grid.css",
-      "raw": 5749
+      "raw": 5784
     },
     {
       "file": "components/drawer.css",
@@ -55,10 +59,6 @@
     {
       "file": "components/badge.css",
       "raw": 5152
-    },
-    {
-      "file": "components/steps.css",
-      "raw": 5118
     },
     {
       "file": "typography/prose.css",
@@ -237,6 +237,10 @@
       "raw": 2088
     },
     {
+      "file": "layout/container-query.css",
+      "raw": 2052
+    },
+    {
       "file": "components/accordion.css",
       "raw": 1936
     },
@@ -254,7 +258,7 @@
     },
     {
       "file": "layout/index.css",
-      "raw": 1702
+      "raw": 1707
     },
     {
       "file": "forms/input-icon.css",
@@ -355,10 +359,6 @@
     {
       "file": "components/key.css",
       "raw": 859
-    },
-    {
-      "file": "layout/container-query.css",
-      "raw": 824
     },
     {
       "file": "layout/stack.css",

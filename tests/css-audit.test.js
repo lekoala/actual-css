@@ -785,14 +785,232 @@ test("steps derive markers from list order and keep state semantic", () => {
     /\.steps > li\s*\{[\s\S]*?min-inline-size:\s*max\(var\(--step-size\), var\(--step-min\)\);/,
   );
   expect(css).toMatch(/\.steps\s*\{[\s\S]*?overflow-x:\s*auto;/);
+  /* Both axes are stated. `overflow-x: auto` alone computes the block axis to
+     `auto` as well, and a row hugs fractional content with no slack, so a
+     rounding difference raises a phantom vertical scrollbar. Clipping then
+     happens at the padding edge, which is why a navigable row — and only a
+     navigable row — reserves the focus ring's own width and offset. */
+  expect(css).toMatch(/\.steps\s*\{[\s\S]*?overflow-y:\s*hidden;/);
+  expect(css).toMatch(
+    /\.steps:not\(\.steps-vertical\):has\(> li > :is\(a\[href\], button, \[tabindex\]\)\) \{[^}]*padding-block: calc\(var\(--focus-outline-offset\) \+ var\(--border-width\) \* 2\);/,
+  );
   expect(css).toContain("overscroll-behavior-inline: contain;");
-  expect(css).not.toContain(".steps.vertical");
   expect(css).toContain("content: var(--step-complete-mark, counter(actual-step));");
-  // The connector falls back to the step's own --step-line (resolved after
-  // inheritance), so a .complete connector follows its selected line. No
-  // default --step-connector on .steps, which would freeze it at the parent.
-  expect(css).toContain("background: var(--step-connector, var(--step-line));");
+  // The connector is a whole background so a theme can drop in a gradient, an
+  // image or nothing, and the line colour rides inside it as a gradient of the
+  // step's own --step-line. A custom property resolves its var() before
+  // inheritance, so a default --step-connector on .steps would freeze the
+  // parent's colour and a .complete connector would never follow its state.
+  expect(css).toMatch(
+    /background: var\(\s*--step-connector,\s*linear-gradient\(var\(--step-line\), var\(--step-line\)\)/,
+  );
   expect(css).not.toMatch(/\.steps\s*\{[^}]*--step-connector:/);
+});
+
+/*
+ * Two container queries, not eight. Both are calibrated on five steps, the
+ * widest supported row and therefore the binding case:
+ *
+ *   < 35rem  markers only, 4–5 steps — five steps' own --step-min budget, so
+ *            no supported row ever scrolls where the form could have helped
+ *   >= 60rem inline, 2–5 steps — where a five-step row still leaves its
+ *            connector at roughly its 2rem basis with realistic labels
+ *
+ * Both literal rem: @container cannot read a custom property, so overriding
+ * --step-min moves the scroll budget but not these.
+ *
+ * The invariants worth guarding are the count coverage and the ordering. A
+ * markers-only threshold pulled down to split the difference with four steps
+ * would hand five-step rows a scrolling band; an inline threshold pulled down
+ * would hand them a stub connector. Both were measured before being rejected.
+ */
+test("steps horizontal representations stay two container queries wide", () => {
+  const css = readCss("src/css/components/steps.css");
+  /* The formatter wraps long selectors inside :has() and :is(), so match
+     against a whitespace-normalised copy rather than the source lines. */
+  const flatten = (s) =>
+    s.replace(/\s+/g, " ").replace(/\( /g, "(").replace(/ \)/g, ")").replace(/, /g, ",");
+
+  /* Selector text with every parenthesised group removed, so what is left is
+     the chain of compounds and the combinators between them. These selectors
+     wrap over several lines and the formatter owns where the breaks land — a
+     break outside the parens would be a descendant combinator, silently
+     retargeting the rule at a `.steps` nested inside another one. */
+  const selectorsOf = (body) => {
+    const stripGroups = (sel) => {
+      let out = sel;
+      let previous;
+      do {
+        previous = out;
+        out = out.replace(/\([^()]*\)/g, "");
+      } while (out !== previous);
+      return out;
+    };
+    // Selectors and declarations both stop at a brace, and no declaration
+    // mentions .steps, so this reaches every rule in the block.
+    return [...body.matchAll(/(\.steps[^{}]*)\{/g)].map(([, sel]) =>
+      stripGroups(sel).replace(/\s+/g, " ").trim(),
+    );
+  };
+
+  const blocks = (condition) =>
+    [
+      ...css.matchAll(
+        new RegExp(
+          `@container actual-container \\(${condition} (\\d+)rem\\)([\\s\\S]*?)\\n {2}\\}`,
+          "g",
+        ),
+      ),
+    ].map(([, threshold, body]) => ({
+      threshold: Number(threshold),
+      body: flatten(body),
+      selectors: selectorsOf(body),
+      counts: [...body.matchAll(/:nth-child\((\d)\):last-child/g)]
+        .map((m) => Number(m[1]))
+        .filter((n, i, all) => all.indexOf(n) === i)
+        .sort(),
+    }));
+
+  const compact = blocks("inline-size <");
+  const inline = blocks("min-width:");
+
+  // Exactly one query each, listing outright the counts it serves.
+  expect(compact.map((b) => [b.counts, b.threshold])).toEqual([[[4, 5], 35]]);
+  expect(inline.map((b) => [b.counts, b.threshold])).toEqual([[[2, 3, 4, 5], 60]]);
+
+  /* Every count check is a `:nth-child(N):last-child` — "exactly N steps" —
+     so the 2-5 contract is bounded by the selector's own shape. The shorter
+     interval spelling, `:has(> :nth-child(4)):not(:has(> :nth-child(6)))`, was
+     tried and reverted: it is specificity-equivalent and selects identically,
+     but it states the bound as an extra clause someone can drop, and a bare
+     `:has(> :nth-child(4))` reads fine while silently handing 6+ an adaptation
+     calibrated for five. */
+  for (const block of [...compact, ...inline]) {
+    expect(block.body).not.toMatch(/:nth-child\(\d\)(?!:last-child)/);
+    expect(block.body).not.toContain(":nth-child(6)");
+
+    /* Child combinators only. Every one of these selectors starts at `.steps`
+       and reaches its target through `>`; a whitespace combinator anywhere
+       would mean "a .steps somewhere inside a .steps", which matches nothing
+       real and fails silently. The formatter wraps these selectors over
+       several lines, so this is the assertion that a break landed inside a
+       `:has()` and not between two compounds. */
+    for (const selector of block.selectors) {
+      expect(`${selector} :: ${/^\.steps\S*( > \S+)+$/.test(selector)}`).toBe(
+        `${selector} :: true`,
+      );
+    }
+  }
+
+  // No row can be in two representations at once, whatever its count.
+  expect(compact[0].threshold).toBeLessThan(inline[0].threshold);
+
+  // Vertical is an orientation, not a width: no container query reaches it.
+  expect(compact[0].body).toContain(".steps:not(.steps-vertical)");
+  expect(inline[0].body).toContain(".steps:not(.steps-vertical)");
+
+  // A visually hidden label that is still focusable is an invisible focus
+  // target, so markers-only refuses an interactive flow. Inline hides nothing
+  // and must not carry the guard.
+  expect(compact[0].body).toContain(":not(:has(> li > :is(a[href],button,[tabindex])))");
+  expect(inline[0].body).not.toContain("a[href]");
+
+  // Every label goes, current included: an exempt step would keep its full
+  // --step-min budget and skew the marker pitch of every step after it.
+  expect(compact[0].body).not.toContain("aria-current");
+
+  /* .step-label is the contract now, so nothing in here re-checks it: no
+     per-position enumeration, and no per-item gate trying to rescue a
+     half-wrapped flow. An unwrapped row is out of contract, not a case to
+     support. */
+  expect(compact[0].body).not.toContain(".step-label)");
+  expect(compact[0].body).not.toContain("> li:has(");
+
+  // The inline connector is the only one a theme can repaint separately, and
+  // it still falls back to --step-connector before the default line.
+  expect(inline[0].body).toContain("background: var(--step-inline-connector,var(--step-connector,");
+});
+
+/*
+ * .steps-vertical is a composition choice for a sidebar or a narrow panel, not
+ * a responsive fallback: it is explicit, it is not bound by the horizontal
+ * 2..5 range, and no container query may switch a row into it or out of it.
+ */
+test("steps keep vertical explicit and separate from the horizontal axis", () => {
+  const css = readCss("src/css/components/steps.css");
+
+  // Not `.vertical`: the orientation is part of the component's own namespace.
+  expect(css).not.toContain(".steps.vertical");
+  expect(css).toContain(".steps.steps-vertical {");
+  expect(css).toMatch(/\.steps\.steps-vertical \{[^}]*flex-direction: column;/);
+  // The horizontal row scrolls as its last resort; a column has nothing to
+  // scroll, so it gives the scroll container back.
+  expect(css).toMatch(/\.steps\.steps-vertical \{[^}]*overflow: visible;/);
+
+  // Marker column then label, with the connector running down the track.
+  expect(css).toMatch(
+    /\.steps\.steps-vertical > li \{[^}]*grid-template-columns: var\(--step-size\) minmax\(0, 1fr\);/,
+  );
+  expect(css).toMatch(
+    /\.steps\.steps-vertical > li::after \{[\s\S]*?inline-size: var\(--step-line-size\);/,
+  );
+  /* No --step-vertical-connector hook. The horizontal --step-connector cannot
+     transpose onto this geometry, but nothing has asked for a vertical one and
+     .steps-vertical > li::after is a perfectly reachable override — API a real
+     design has not requested is API not worth publishing. The track still
+     follows each step's own --step-line. */
+  expect(css).not.toContain("--step-vertical-connector");
+  expect(css).toMatch(
+    /\.steps\.steps-vertical > li::after \{[\s\S]*?linear-gradient\(var\(--step-line\), var\(--step-line\)\)/,
+  );
+
+  // No container query may reach the vertical orientation, in either direction.
+  const enhancement = css.slice(css.indexOf("@supports (container-type: inline-size)"));
+  for (const [selector] of enhancement.matchAll(/^ {4}\.steps[^{]*/gm)) {
+    expect(`${selector.trim().slice(0, 24)} guards vertical`).toBe(
+      ".steps:not(.steps-vertic guards vertical",
+    );
+  }
+});
+
+/*
+ * The label is the quiet half of the anatomy: the marker carries the state, so
+ * the text sits a notch below it and only the current step earns extra weight.
+ *
+ * The size in particular belongs to the component and not to a representation.
+ * Scoped inside a container block it would resize the text as the reader
+ * dragged a window, on top of the layout move the threshold already makes —
+ * and it would have to be repeated once per supported step count.
+ */
+test("steps keep the label a notch below the marker, at one size throughout", () => {
+  const css = readCss("src/css/components/steps.css");
+  const enhancement = css.indexOf("@supports (container-type: inline-size)");
+
+  const label = css.match(/\n\.steps \.step-label \{([^}]*)\}/);
+  expect(label).not.toBeNull();
+  expect(label[1]).toContain("font-size: var(--font-size-sm);");
+  expect(label[1]).toContain("line-height: var(--line-height-tight);");
+  // Declared on the component, above the container blocks, so no threshold can
+  // change it — and no representation may set a font-size of its own.
+  expect(css.indexOf(label[0])).toBeLessThan(enhancement);
+  expect(css.slice(enhancement)).not.toContain("font-size:");
+
+  // Weight marks "where I am now" only. A completed step leans on its filled
+  // disc; giving it bold text too would flatten the two states back together.
+  expect(css).toMatch(
+    /\.steps > \[aria-current="step"\] > \.step-label \{[^}]*font-weight: var\(--font-weight-strong\);/,
+  );
+  expect(css).not.toMatch(/\.steps > \.complete[^{]*\.step-label \{[^}]*font-weight/);
+
+  // --link is a theme hook, so a navigable label must not inherit a link colour
+  // that would read ahead of the marker states. The underline is untouched:
+  // that is what still signals the link.
+  expect(css).toMatch(/\.steps \.step-label:is\(a\) \{[^}]*color: inherit;/);
+  expect(css).not.toMatch(/\.steps \.step-label:is\(a\) \{[^}]*text-decoration/);
+
+  // Vertical puts the label beside a taller marker: centre a single line on it,
+  // and let a wrapped one fall back to the row's start alignment.
+  expect(css).toMatch(/\.steps\.steps-vertical > li > \.step-label \{[^}]*align-self: center;/);
 });
 
 test("rating keeps radio order and cumulative fill progressive", () => {
