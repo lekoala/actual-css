@@ -6,7 +6,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Range — Actual CSS</title>
-  <meta name="description" content="Native range inputs with theme-aware accent color.">
+  <meta name="description" content="Native range input with a lightweight theme-aware custom skin.">
   <link rel="stylesheet" href="../../src/css/actual.full.css">
   <link rel="stylesheet" href="../assets/actual-themes.min.css">
   <link rel="stylesheet" href="../../scripts/docs/assets/docs.css">
@@ -211,9 +211,12 @@
           <div class="prose docs-prose">
 <h1 id="range">Range</h1>
 <blockquote>
-<p>Native range inputs with theme-aware accent color.</p>
+<p>Native range input with a lightweight theme-aware custom skin.</p>
 </blockquote>
-<p>Core: native range, enhanced by <code>accent-color</code>. Optional richer skin may come later.</p>
+<p><code>.range</code> keeps the native range control and its interaction semantics, while
+customizing the track, thumb, focus state, intents, and disabled state. The
+focus ring targets the thumb — the surface the user actually manipulates —
+rather than the CSS box.</p>
 <p><strong>Related terms:</strong> slider, range input, scrubber.</p>
 </div>
 <div class="docs-example">
@@ -231,10 +234,17 @@
   </div>
 </div>
 <div class="prose docs-prose">
+<p>Actual deliberately does not emulate filled tracks, tick marks, value labels,
+or multi-thumb ranges. Those still require engine-specific pseudo-elements or a
+value duplicated out of the HTML into CSS. Prefer the platform as richer range
+styling becomes interoperable — see
+<a href="https://github.com/lekoala/actual-css/blob/master/docs/design-notes/platform-alignment.md">Enhanced range controls</a>.</p>
 <h2 id="css-hooks">CSS hooks</h2>
 <ul>
 <li><code>--range-thumb-size</code> — thumb diameter.</li>
 <li><code>--range-track-height</code> — track thickness.</li>
+<li><code>--range-thumb-bg</code> — thumb color. Defaults to the local intent, then <code>--primary</code>.</li>
+<li><code>--range-track-bg</code> — track color.</li>
 </ul>
 
 </div>
