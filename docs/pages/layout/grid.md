@@ -12,7 +12,7 @@ column count.
 `.grid` fits as many columns as the available inline space permits. Incomplete
 final rows are part of the contract.
 
-```html demo
+```html demo resize
 <section class="grid">
   <article class="card"><h3>Starter</h3><p>For small projects.</p></article>
   <article class="card"><h3>Team</h3><p>For shared products.</p></article>
@@ -34,7 +34,7 @@ Tune the item minimum with `--grid-min`.
 own: it never exceeds N columns, never overflows, and every item keeps the same
 width.
 
-```html demo
+```html demo resize
 <div class="grid-4">
   <div class="card">Exercitation</div>
   <div class="card">Amet mollit</div>
@@ -69,7 +69,7 @@ is that bare version. Placed inside a container named **`actual-container`** —
 
 Every state splits the collection evenly, and all items keep the same width.
 
-```html demo
+```html demo resize
 <div class="container-query">
   <div class="grid-6">
     <div class="card">1</div>

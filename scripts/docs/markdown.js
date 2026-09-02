@@ -128,9 +128,12 @@ export function prepareMarkdown(markdown) {
 function renderDemoBlock(entry) {
   const language = escapeHtml(entry.language || "html");
   const source = escapeHtml(entry.content);
+  const previewClass = entry.flags.includes("resize")
+    ? "docs-preview docs-preview-resizable"
+    : "docs-preview";
   return `${DOCS_PROSE_END}
 <div class="docs-example">
-  <div class="docs-preview">
+  <div class="${previewClass}">
 ${entry.content}
   </div>
   <div class="docs-code">

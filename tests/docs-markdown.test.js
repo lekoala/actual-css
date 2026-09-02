@@ -124,6 +124,16 @@ describe("render", () => {
     expect(source).not.toContain("<script>");
   });
 
+  it("marks a demo preview resizable only on the resize flag", () => {
+    const plain = render("```html demo\n<button>One</button>\n```");
+    const resizable = render("```html demo resize\n<button>One</button>\n```");
+
+    expect(plain.html).toContain('<div class="docs-preview">');
+    expect(plain.html).not.toContain("docs-preview-resizable");
+    expect(resizable.html).toContain('<div class="docs-preview docs-preview-resizable">');
+    expect(resizable.html).not.toContain('<div class="docs-preview">');
+  });
+
   it("keeps live demos outside prose sections", () => {
     const content = wrapDocsContent(result.html);
     expect(content).toContain('</div>\n<div class="docs-example">');

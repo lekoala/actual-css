@@ -169,6 +169,18 @@
   overflow-x: auto;
 }
 
+/* The opt-in `resize` demo flag turns the preview into a width test bench:
+   the reader drags this box to scrub an example through its actual-container
+   thresholds (.grid-N subdivisions, .steps label collapse). 12rem keeps every
+   documented step reachable — 14rem is the narrowest .steps threshold — while
+   still leaving enough room for the sequence; below it the row scrolls, which
+   is the behaviour the widest transport is for. */
+.docs-preview-resizable {
+  resize: horizontal;
+  min-inline-size: 12rem;
+  max-inline-size: 100%;
+}
+
 
 /* Preview-only viewport for the fixed FAB. Production keeps .fab fixed to the
    real viewport; the docs replace only its positioning context. */
