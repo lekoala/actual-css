@@ -9,6 +9,7 @@
 - Proper focus style that preserves keyboard navigation.
 - `.field-group` and `.choice` provide layout without depending on parent scope.
 - Customizable select is progressive enhancement only — the native select remains the baseline.
+- Searchable selects, tags and autocomplete are a JavaScript widget concern; theme an external combobox with Actual tokens — see the [combobox template](../../demo/templates/combobox.html).
 
 ## Class reference
 

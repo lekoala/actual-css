@@ -27,6 +27,7 @@ const RESERVED = JSON.parse(readFileSync(join(__dirname, "reserved-classes.json"
 const DOC_DEMO_CLASSES = new Set([
   "accordion-demo",
   "accordion-demo-icon",
+  "actual-combobox",
   "brand",
   "code-block",
   "docs-fab-preview",

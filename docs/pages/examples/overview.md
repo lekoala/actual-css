@@ -22,6 +22,8 @@ and `actual.full.js` from `dist/`, plus the theme palettes bundle from
 - [Layout reference](../../demo/templates/layouts.html) - canonical compositions built only with the layout primitives
 - [Grid density](../../demo/templates/grid.html) - the grid contracts on resizable stages, with the pitfalls called out
 - [Density](../../demo/templates/density.html) - compact control density
+- [Data grid](../../demo/templates/data-grid.html) - an external data grid component themed with Actual tokens (sort, filter, search, selection)
+- [Combobox](../../demo/templates/combobox.html) - an external combobox themed with Actual tokens (search, tags, autocomplete)
 
 ## Sites
 
