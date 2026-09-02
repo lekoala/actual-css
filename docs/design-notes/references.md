@@ -330,3 +330,7 @@ Prior Actual CSS libraries:
 - https://getbootstrap.com/docs/5.3/components/scrollspy/
 - https://una.im/scroll-target-group/
 - https://www.sarasoueidan.com/blog/css-scrollspy/
+
+### @container
+
+- https://ishadeed.com/article/css-container-query-guide/
