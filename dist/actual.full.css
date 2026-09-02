@@ -201,6 +201,7 @@ select {
   --icon-chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%238a8594' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
   --icon-check: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E");
   --icon-close: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='6' y1='6' x2='18' y2='18'/%3E%3Cline x1='18' y1='6' x2='6' y2='18'/%3E%3C/svg%3E");
+  --icon-plus: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='12' y1='5' x2='12' y2='19'/%3E%3Cline x1='5' y1='12' x2='19' y2='12'/%3E%3C/svg%3E");
 
   /* Viewport size tokens — fallback vh/vw with dvh/vi enhancement.
      Consumed by full-viewport components (app-shell, drawer, modal, flyout).
@@ -3076,8 +3077,10 @@ small {
  * messages stay in the surrounding .field, not inside the cell, so the
  * resting label can center on the control alone.
  *
- * The control must precede the label: the float is driven by the sibling
- * combinator and :placeholder-shown. Every .input/.textarea needs
+ * The control must precede the label: the float is driven by the general
+ * sibling combinator and :placeholder-shown. Injected nodes may appear between
+ * the control and the label (password managers, extension wrappers); the cell
+ * contract stays a single control plus one label. Every .input/.textarea needs
  * placeholder=" " to expose a reliable empty state — without it the label
  * only reacts to focus.
  *
@@ -3125,14 +3128,14 @@ small {
 }
 
 /* Single-line controls rest in the middle until they receive a value. */
-.floating-field > :is(.input, .select) + .field-label {
+.floating-field > :is(.input, .select) ~ .field-label {
   inset-block-start: 50%;
   transform: translateY(-50%);
 }
 
 /* An empty textarea label follows the control's normal first-line position;
    the control itself keeps the extra headroom reserved for its floated state. */
-.floating-field > .textarea + .field-label {
+.floating-field > .textarea ~ .field-label {
   inset-block-start: calc(1em + var(--border-width));
   transform: none;
 }
@@ -3141,7 +3144,7 @@ small {
    not have propagated the value to the placeholder state yet. */
 .floating-field
   > :is(.input, .textarea):is(:focus, :autofill, :not(:placeholder-shown))
-  + .field-label {
+  ~ .field-label {
   inset-block-start: var(--floating-label-top);
   transform: none;
   font-size: var(--font-size-xs);
@@ -3160,7 +3163,7 @@ small {
     .input[type="month"],
     .input[type="week"]
   )
-  + .field-label {
+  ~ .field-label {
   inset-block-start: var(--floating-label-top);
   transform: none;
   font-size: var(--font-size-xs);
@@ -6057,15 +6060,18 @@ a.avatar[aria-disabled="true"] {
 
 /*
  * Fixed floating action placement and a native-details speed dial.
- * Button owns the action's size, shape, and intent; FAB only owns placement.
+ * Button owns the trigger's size, shape, and intent; FAB owns placement and
+ * the speed dial's structural open/close markers (--icon-plus / --icon-close).
  *
  * Public hooks:
  * --fab-offset
  * --fab-gap
+ * --fab-icon-size
  */
 .fab {
   --fab-offset: var(--space-40);
   --fab-gap: var(--space-20);
+  --fab-icon-size: 1.5rem;
 
   position: fixed;
   z-index: var(--z-menu);
@@ -6074,6 +6080,9 @@ a.avatar[aria-disabled="true"] {
 }
 
 .fab > summary {
+  /* Centers the toggle markers: the summary is the markers' positioned
+     context, not just the app-button class. */
+  position: relative;
   list-style: none;
   cursor: pointer;
 }
@@ -6082,11 +6091,35 @@ a.avatar[aria-disabled="true"] {
   display: none;
 }
 
-/* A lone decorative plus can communicate the open/close state without
-   requiring a second icon or JavaScript-managed content. */
-.fab > summary > [aria-hidden="true"]:only-child {
-  display: inline-block;
-  transition: transform var(--duration);
+/* The speed dial trigger is an icon-only toggle. FAB owns both structural
+   markers: masked pseudo-elements swap the shared plus (closed) and close
+   (open) glyphs at the same size, so the two states never drift apart. */
+.fab > summary::before,
+.fab > summary::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  inline-size: var(--fab-icon-size);
+  block-size: var(--fab-icon-size);
+  background: currentColor;
+  opacity: 0;
+  transform: scale(0.8);
+  transition:
+    opacity var(--duration),
+    transform var(--duration);
+}
+
+.fab > summary::before {
+  -webkit-mask: var(--icon-plus) center / contain no-repeat;
+  mask: var(--icon-plus) center / contain no-repeat;
+  opacity: 1;
+  transform: none;
+}
+
+.fab > summary::after {
+  -webkit-mask: var(--icon-close) center / contain no-repeat;
+  mask: var(--icon-close) center / contain no-repeat;
 }
 
 .fab-actions {
@@ -6144,8 +6177,14 @@ a.avatar[aria-disabled="true"] {
   transition-delay: 0s;
 }
 
-.fab[open] > summary > [aria-hidden="true"]:only-child {
-  transform: rotate(45deg);
+.fab[open] > summary::before {
+  opacity: 0;
+  transform: scale(0.8);
+}
+
+.fab[open] > summary::after {
+  opacity: 1;
+  transform: none;
 }
 
 @media print {
@@ -7031,7 +7070,9 @@ a.avatar[aria-disabled="true"] {
 .list > li > .list-item {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr) auto;
-  align-items: center;
+  /* Regions align to the first line, so leading, title, and trailing controls
+     share one horizontal line while supporting text wraps beneath. */
+  align-items: start;
   gap: var(--list-item-gap);
   min-block-size: var(--list-item-min-size);
   padding-block: var(--list-item-pad-block);

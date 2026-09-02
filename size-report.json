@@ -1,12 +1,12 @@
 {
-  "totalRaw": 264040,
+  "totalRaw": 265615,
   "core": {
-    "minified": 10576,
-    "brotli": 2530
+    "minified": 10889,
+    "brotli": 2553
   },
   "full": {
-    "minified": 118344,
-    "brotli": 17326
+    "minified": 119235,
+    "brotli": 17407
   },
   "js": {
     "core": {
@@ -26,7 +26,7 @@
     },
     {
       "file": "core/tokens.css",
-      "raw": 8787
+      "raw": 9102
     },
     {
       "file": "components/modal.css",
@@ -113,12 +113,16 @@
       "raw": 3756
     },
     {
+      "file": "forms/floating-field.css",
+      "raw": 3689
+    },
+    {
       "file": "components/join.css",
       "raw": 3553
     },
     {
-      "file": "forms/floating-field.css",
-      "raw": 3517
+      "file": "components/fab.css",
+      "raw": 3313
     },
     {
       "file": "components/status-bar.css",
@@ -185,10 +189,6 @@
       "raw": 2385
     },
     {
-      "file": "components/fab.css",
-      "raw": 2374
-    },
-    {
       "file": "themes/lavender.css",
       "raw": 2362
     },
@@ -249,6 +249,10 @@
       "raw": 1882
     },
     {
+      "file": "components/list.css",
+      "raw": 1795
+    },
+    {
       "file": "themes/brutalist.css",
       "raw": 1758
     },
@@ -263,10 +267,6 @@
     {
       "file": "forms/input-icon.css",
       "raw": 1678
-    },
-    {
-      "file": "components/list.css",
-      "raw": 1646
     },
     {
       "file": "effects/aura.css",
