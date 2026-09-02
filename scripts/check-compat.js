@@ -100,6 +100,7 @@ const JUSTIFIED =
  */
 const PROGRESSIVE = {
   "src/css/components/join.css": [":has()"],
+  "src/css/effects/aura.css": [":has()"],
   "src/css/components/modal.css": [":has()"],
   "src/css/forms/choice-card.css": [":has()"],
   "src/css/forms/choice.css": [":has()"],

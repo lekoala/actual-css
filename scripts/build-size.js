@@ -12,11 +12,16 @@ const DIST = join(ROOT, "dist");
  * Absolute brotli budgets. Edited by hand when the project deliberately grows;
  * build:size never rewrites its own limits, so a committed report cannot
  * silently raise the bar.
+ *
+ * The core budget is the one that has to hurt: it is what an adopter actually
+ * ships. The full bundle is every family concatenated — a documentation and
+ * demo artifact rather than something to serve as-is — so its budget guards
+ * against runaway growth, not against a component gaining a layer.
  */
 const BUDGETS = {
-  coreCssBrotli: 2800, // actual.min.css (current ~2482)
-  fullCssBrotli: 17500, // actual.full.min.css (current ~15239)
-  fullJsBrotli: 18500, // actual.full.js (current ~16025)
+  coreCssBrotli: 2800, // actual.min.css (current ~2553)
+  fullCssBrotli: 18500, // actual.full.min.css (current ~17556)
+  fullJsBrotli: 18500, // actual.full.js (current ~16222)
 };
 
 async function collectCSS(root, base = "") {

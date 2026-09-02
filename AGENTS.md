@@ -23,7 +23,15 @@ Add relevant guards for future-us when needed based on traps and discoveries.
 - Do not run build:dist, unless you want to test if build script works (the user build it)
 - Do not run build:docs unless you worked on the build scripts or docs sources (it needs dist/ first; the user runs it)
 - After editing demo/templates/*.html, run `bun run check:templates` (balanced `<style>` braces) — it's cheap and doesn't touch dist or generated demo output, unlike build:all
-- Playwright is not installed, build based on specifications or implement a test with `Bun.WebView`
+- Rendering is `Bun.WebView` driving headless Chrome through
+  `scripts/utils/browser.js`, never Playwright (not a dependency;
+  `node_modules/.bin/playwright` is a stale shim). Use `bun run shot:page`,
+  `bun run shot:multi` or `bun run probe`; for a state no flag exposes, such as
+  `prefers-reduced-motion`, import `capture` from that module in a `tmp/`
+  script and pass `mediaFeatures`.
+- Visual changes must be inspected once in the states they affect. Cover the
+  meaningful extremes when the geometry is responsive, and exaggerate a tiny
+  detail in the fixture rather than squinting at its production size.
 - On every shell, pass rg a directory plus rg's own `-g` glob — never a shell
   glob (`rg "x" dir/*.ext` passes the literal path and fails with os error 123).
   Wrap the pattern in single quotes and never escape a quote with `\"`
@@ -47,8 +55,10 @@ Add relevant guards for future-us when needed based on traps and discoveries.
 - For the rare quick number-only check (a rect, a computed style, a class
   list) use `bun run probe <page> --script tmp/x.js` instead of improvising a
   headless-Chrome script — it runs the file as an async program in the page and
-  prints its `return` value as JSON. Do not chain probes to verify a change;
-  rely on `bun run lint` and the test suite instead
+  prints its `return` value as JSON. Do not chain probes to verify behaviour;
+  that belongs in a test, with `bun run lint` and the suite as the gate. This
+  bans the probe loop, not the screenshot pass above — a value you cannot
+  assert is a value you have to look at
 - Never rewrite a source file through a shell pipeline. PowerShell
   `(Get-Content x) -replace ... | Set-Content x` truncated `blocks.html`,
   `forms.md` and `javascript.md` to 0 bytes (the read is lazy, so the write
@@ -75,6 +85,16 @@ Add relevant guards for future-us when needed based on traps and discoveries.
 
 - Invalid selectors discard the whole rule. Never merge vendor rules, and never
   nest `:has()` inside `:has()` — including through `:not()`/`:is()`.
+- No `@supports` that guards nothing: an unsupported selector or declaration is
+  already dropped on its own. Wrap a rule only when that drop would take
+  something worth keeping with it — a selector list mixing new and supported
+  selectors, or a fallback declaration that must survive. Otherwise document
+  the degradation with a why comment or the `check:compat` ledger.
+- Not every position accepts a math function. A radial-gradient radius rejects
+  percentage-mixed math at parse time (`min(38%, 4.5rem)` and
+  `calc(38% - 1rem)` both fail `CSS.supports`), so the declaration is dropped
+  and the effect silently disappears. Probe `CSS.supports` before relying on
+  math in an unusual value position.
 - Child combinator only where layout or state depends on the immediate DOM: the
   component's own items, or a property that needs a direct child (grid/flex-item
   properties). Plain descendant for anything named by its own class — the
