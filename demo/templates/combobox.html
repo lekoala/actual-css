@@ -1,0 +1,542 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Combobox - Actual CSS</title>
+  <meta name="description" content="@lekoala/combobox loaded from CDN and themed with Actual CSS tokens: searchable selects, removable chips, autocomplete, states and the theme presets follow the framework.">
+  <link rel="stylesheet" href="../../dist/actual.full.css">
+  <link rel="stylesheet" href="../assets/actual-themes.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@lekoala/combobox@0.1.0/dist/combobox.css">
+  <script src="https://cdn.jsdelivr.net/npm/@lekoala/combobox@0.1.0/dist/combobox.js"></script>
+  <style>
+    .page {
+      --center-size: 60rem;
+      padding-block: var(--space-50) var(--space-60);
+    }
+
+    .page-header {
+      align-items: flex-start;
+    }
+
+    .page-cards {
+      display: grid;
+      gap: var(--space-50);
+    }
+
+    .page-note {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-20) var(--space-30);
+      align-items: baseline;
+      justify-content: space-between;
+      padding-block-start: var(--space-30);
+      border-block-start: var(--border-width) solid var(--border);
+      color: var(--text-muted);
+      font-size: var(--font-size-sm);
+    }
+
+    .page-note code {
+      color: var(--text);
+    }
+
+    /* ================================================================== */
+    /* THEME BRIDGE — the whole skin in one block                          */
+    /*                                                                     */
+    /* Actual CSS provides the visual language, combobox the behaviour.    */
+    /* No adapter package, no compatibility layer, no JS integration:      */
+    /* just shared CSS contracts on top of the public --cb-* tokens.       */
+    /* ================================================================== */
+
+    /* 1. Control — one recipe, same as .input/.textarea/.select */
+    .actual-combobox {
+      --cb-bg: var(--surface);
+      --cb-color: var(--text);
+      --cb-border-color: var(--border);
+      --cb-border-radius: var(--radius);
+      --cb-focus-color: var(--focus);
+      --cb-muted-color: var(--text-muted);
+      --cb-error-color: var(--danger);
+      --cb-chip-bg: transparent;
+      --cb-control-height: var(--control-size);
+      --cb-option-min-height: var(--control-size);
+    }
+
+    /* 2. Focus — the composite ring only when the search input itself is
+          focused. Chip and remove-button focus keep their own local
+          :focus-visible indicator; the combobox core keys the composite ring
+          on .cb-control:focus-within, so that ring is neutralized here. */
+    .actual-combobox .cb-control:focus-within {
+      outline: none;
+    }
+
+    .actual-combobox .cb-text-control:focus-visible,
+    .actual-combobox .cb-control:has(.cb-input:focus-visible) {
+      --cb-border-color: var(--focus);
+
+      outline: 2px solid transparent;
+      box-shadow: var(--focus-ring-shadow);
+    }
+
+    /* Chip remove buttons need no extra ring: the chip background tint on
+       :focus-visible is the local indicator, and the transparent outline
+       keeps Actual's forced-colors focus pattern. */
+    .actual-combobox .cb-chip-remove:focus-visible {
+      outline: 2px solid transparent;
+      outline-offset: 0;
+    }
+
+    /* 3. Invalid — the native source is required; follow --danger */
+    .actual-combobox :is(
+      .cb-text-control[aria-invalid="true"],
+      .cb-control:has([aria-invalid="true"])
+    ) {
+      border-color: var(--danger);
+    }
+
+    /* 4. Chips — re-derive the removable .badge soft recipe */
+    .actual-combobox .cb-chip {
+      min-block-size: var(--density-compact-size);
+      padding-inline: 0.55em;
+
+      border: var(--border-width) solid
+        color-mix(in oklab, var(--surface) var(--soft-border-mix), var(--primary));
+      border-radius: var(--radius-full);
+
+      background: color-mix(in oklab, var(--surface) var(--soft-bg-mix), var(--primary));
+      color: color-mix(in oklab, var(--primary) var(--soft-fg-mix), var(--text));
+
+      font-size: var(--font-size-xs);
+      font-weight: var(--font-weight-strong);
+      line-height: var(--line-height);
+    }
+
+    /* The core supplies a font-independent SVG; only its ink needs mapping. */
+    .actual-combobox .cb-chip-remove {
+      color: color-mix(in oklab, var(--primary) var(--soft-fg-mix), var(--text));
+    }
+
+    /* 5. Picker — the popover renders in the top layer, appended to
+          <body>, so its tokens are declared on .cb-popover directly. */
+    .cb-popover {
+      --cb-picker-bg: var(--surface-raised);
+      --cb-muted-color: var(--text-muted);
+      --cb-error-color: var(--danger);
+
+      border-color: var(--border);
+      border-radius: var(--radius);
+      background: var(--cb-picker-bg);
+      box-shadow: var(--shadow-popout);
+    }
+
+    .cb-option {
+      border-radius: var(--radius-sm);
+    }
+
+    /* Active row uses the subtle overlay, not a full primary fill */
+    .cb-option:is(:hover, [data-active]) {
+      background: var(--hover-overlay);
+      color: var(--text);
+    }
+
+    .cb-option[aria-selected="true"] {
+      background: color-mix(in oklab, var(--surface) var(--soft-bg-mix), var(--primary));
+      color: color-mix(in oklab, var(--primary) var(--soft-fg-mix), var(--text));
+    }
+
+    .cb-option[aria-selected="true"]::after {
+      color: var(--primary);
+    }
+
+    .cb-option[aria-selected="true"]:is(:hover, [data-active]) {
+      background: color-mix(in oklab, var(--surface) calc(var(--soft-bg-mix) - 12%), var(--primary));
+      color: color-mix(in oklab, var(--primary) var(--soft-fg-mix), var(--text));
+    }
+
+    .cb-create .cb-option-label {
+      color: var(--primary);
+    }
+
+    .cb-input:disabled,
+    .cb-control:has(.cb-input:disabled) {
+      opacity: var(--disabled-opacity);
+    }
+  </style>
+</head>
+
+<body>
+  <main class="center stack page">
+    <header class="cluster page-header">
+      <hgroup>
+        <p class="overline">Web component</p>
+        <h1>Combobox × Actual CSS</h1>
+        <p class="muted">
+          <code>@lekoala/combobox</code> loaded from CDN; the skin is pure Actual CSS.
+          Switch themes and watch the chips, picker, focus and states follow the
+          tokens — the combobox engine never changes.
+        </p>
+      </hgroup>
+
+      <div class="cluster" style="gap: var(--space-20);">
+        <select class="select sm fit" id="theme-switcher" aria-label="Switch theme">
+          <option value="">System</option>
+          <option value="light">Light</option>
+          <option value="dark">Dark</option>
+          <optgroup label="Themes">
+            <option value="indigo">Indigo</option>
+            <option value="dim">Dim</option>
+            <option value="corporate">Corporate</option>
+            <option value="forest">Forest</option>
+            <option value="ocean">Ocean</option>
+            <option value="spruce">Spruce</option>
+            <option value="petrol">Petrol</option>
+            <option value="sunset">Sunset</option>
+            <option value="lavender">Lavender</option>
+            <option value="mono">Mono</option>
+            <option value="square">Square</option>
+            <option value="brutalist">Brutalist</option>
+            <option value="edge">Edge</option>
+            <option value="cyberpunk">Cyberpunk</option>
+            <option value="neon">Neon</option>
+            <option value="gradient">Gradient</option>
+          </optgroup>
+        </select>
+        <a class="btn neutral outline sm" href="https://github.com/lekoala/combobox" target="_blank" rel="noopener">
+          combobox docs
+        </a>
+      </div>
+    </header>
+
+    <p class="demo-status" id="support-status" role="status"></p>
+
+    <div class="page-cards">
+      <section class="card stack">
+        <header>
+          <hgroup>
+            <h2 style="margin: 0;">Skills — multiple with removable badges</h2>
+            <p class="muted">
+              The chips re-derive the <code>.badge</code> soft recipe from the shared
+              <code>--soft-*</code> tokens. Focus a chip and press Delete/Backspace to remove it.
+            </p>
+          </hgroup>
+        </header>
+        <label class="field actual-combobox">
+          <span class="field-label">Skills</span>
+          <combo-box placeholder="Search or add a skill…">
+            <select id="skills" name="skills[]" multiple>
+              <option value="design" selected>Design</option>
+              <option value="css" selected>CSS</option>
+              <option value="javascript" selected>JavaScript</option>
+              <option value="accessibility">Accessibility</option>
+              <option value="content">Content strategy</option>
+              <option value="testing">Testing</option>
+            </select>
+          </combo-box>
+        </label>
+      </section>
+
+      <section class="card stack">
+        <header>
+          <hgroup>
+            <h2 style="margin: 0;">Autocomplete — a native input that looks like one</h2>
+            <p class="muted">
+              An <code>input + datalist</code> sits next to a plain Actual
+              <code>.input</code> — same height, radius, border, focus and typography
+              (<code>search="includes"</code> gives an accent-insensitive substring match).
+            </p>
+          </hgroup>
+        </header>
+        <div class="grid-2 items-start">
+          <div class="field">
+            <span class="field-label">Plain Actual input</span>
+            <input class="input" type="text" placeholder="Regular .input">
+          </div>
+          <div class="field actual-combobox">
+            <span class="field-label">Enhanced combobox</span>
+            <combo-box search="includes" placeholder="Type a city…">
+              <input id="city" name="city" list="cities" autocomplete="address-level2">
+              <datalist id="cities">
+                <option value="Brussels"></option>
+                <option value="Namur"></option>
+                <option value="Liège"></option>
+                <option value="Antwerp"></option>
+                <option value="Ghent"></option>
+              </datalist>
+            </combo-box>
+          </div>
+        </div>
+      </section>
+
+      <section class="card stack">
+        <header>
+          <hgroup>
+            <h2 style="margin: 0;">Single select — progressive enhancement</h2>
+            <p class="muted">
+              The native <code>&lt;select&gt;</code> stays the value owner. A separate unnamed
+              filter input drives the picker; the placeholder option is never an offer.
+            </p>
+          </hgroup>
+        </header>
+        <label class="field actual-combobox">
+          <span class="field-label">Role <span class="required-mark" aria-hidden="true">*</span></span>
+          <combo-box placeholder="Choose a role…">
+            <select id="role" name="role" required>
+              <option value="">Choose a role…</option>
+              <optgroup label="Engineering">
+                <option value="fe">Front-end engineer</option>
+                <option value="be">Back-end engineer</option>
+                <option value="qa">QA engineer</option>
+              </optgroup>
+              <optgroup label="Design">
+                <option value="ui" selected>UI designer</option>
+                <option value="ux">UX researcher</option>
+              </optgroup>
+            </select>
+          </combo-box>
+        </label>
+      </section>
+
+      <section class="card stack">
+        <header>
+          <hgroup>
+            <h2 style="margin: 0;">Optgroups + fuzzy search</h2>
+            <p class="muted">
+              Order-preserving subsequence matching: type <code>bnn</code> and Banana surfaces.
+              Group headers and catalogue order come straight from the native
+              <code>&lt;optgroup&gt;</code>s.
+            </p>
+          </hgroup>
+        </header>
+        <label class="field actual-combobox">
+          <span class="field-label">Produce</span>
+          <combo-box search="fuzzy" placeholder="Type a fuzzy search…">
+            <select id="produce" name="produce">
+              <option value="">Pick produce…</option>
+              <optgroup label="Fruits">
+                <option value="banana">Banana</option>
+                <option value="blueberry">Blueberry</option>
+                <option value="cherry">Cherry</option>
+                <option value="pomegranate">Pomegranate</option>
+              </optgroup>
+              <optgroup label="Vegetables">
+                <option value="broccoli">Broccoli</option>
+                <option value="carrot">Carrot</option>
+                <option value="spinach">Spinach</option>
+              </optgroup>
+              <optgroup label="Berries">
+                <option value="raspberry">Raspberry</option>
+                <option value="strawberry">Strawberry</option>
+              </optgroup>
+            </select>
+          </combo-box>
+        </label>
+      </section>
+
+      <section class="card stack">
+        <header>
+          <hgroup>
+            <h2 style="margin: 0;">Duplicate values are distinct choices</h2>
+            <p class="muted">
+              Three options share <code>value="2"</code>. Each is its own chip; the native
+              <code>&lt;select&gt;</code> remains the source of truth and submits the serialized
+              values below.
+            </p>
+          </hgroup>
+        </header>
+        <label class="field actual-combobox">
+          <span class="field-label">Fruit</span>
+          <combo-box placeholder="Pick some…">
+            <select id="fruit" name="fruit[]" multiple>
+              <option value="2">Banana</option>
+              <option value="2">Banana</option>
+              <option value="2">Banana (same value)</option>
+              <option value="1">Apple</option>
+            </select>
+          </combo-box>
+        </label>
+        <p class="muted">Submitted values:</p>
+        <pre aria-live="polite"><code id="fruit-output">[]</code></pre>
+      </section>
+
+      <section class="card stack">
+        <header>
+          <hgroup>
+            <h2 style="margin: 0;">States</h2>
+            <p class="muted">
+              Disabled, required and invalid are reflected from the native source — submit the
+              form to see the required field turn <code>--danger</code>.
+            </p>
+          </hgroup>
+        </header>
+        <form id="states-form" class="grid grid-2 items-start">
+          <div class="field actual-combobox">
+            <span class="field-label">Normal</span>
+            <combo-box placeholder="Pick…">
+              <select id="normal" name="normal[]" multiple>
+                <option value="a">Alpha</option>
+                <option value="b" selected>Beta</option>
+                <option value="c">Gamma</option>
+              </select>
+            </combo-box>
+          </div>
+
+          <div class="field actual-combobox">
+            <span class="field-label">Disabled</span>
+            <combo-box placeholder="Unavailable…">
+              <select id="disabled" name="disabled[]" multiple disabled>
+                <option value="d" selected>Delta</option>
+                <option value="e">Epsilon</option>
+              </select>
+            </combo-box>
+          </div>
+
+          <div class="field actual-combobox">
+            <span class="field-label">Required <span class="required-mark" aria-hidden="true">*</span></span>
+            <combo-box placeholder="Pick a location…">
+              <select id="required" name="required" required>
+                <option value="">Choose a location</option>
+                <option value="north">North</option>
+                <option value="south">South</option>
+              </select>
+            </combo-box>
+          </div>
+
+          <div class="field actual-combobox">
+            <span class="field-label">Invalid</span>
+            <combo-box placeholder="Choose a location…">
+              <input data-filter-for="invalid" aria-invalid="true" hidden>
+              <select id="invalid" name="invalid">
+                <option value="">Choose a location</option>
+                <option value="north">North</option>
+                <option value="south">South</option>
+              </select>
+            </combo-box>
+          </div>
+
+          <button type="submit" class="btn">Submit states form</button>
+        </form>
+      </section>
+
+      <section class="card stack">
+        <header>
+          <hgroup>
+            <h2 id="bridge-title" style="margin: 0;">Theme bridge</h2>
+            <p class="muted">
+              This page adds no Actual CSS package, no compatibility layer and no JS.
+              Fewer than sixty lines of CSS map the combobox <code>--cb-*</code> tokens onto the
+              Actual visible vocabulary.
+            </p>
+          </hgroup>
+        </header>
+        <pre><code>.actual-combobox {
+  --cb-bg: var(--surface);
+  --cb-color: var(--text);
+  --cb-border-color: var(--border);
+  --cb-border-radius: var(--radius);
+  --cb-focus-color: var(--focus);
+  --cb-muted-color: var(--text-muted);
+  --cb-error-color: var(--danger);
+  --cb-chip-bg: transparent;
+  --cb-control-height: var(--control-size);
+  --cb-option-min-height: var(--control-size);
+}
+
+.actual-combobox .cb-control:focus-within {
+  outline: none;
+}
+
+.actual-combobox .cb-text-control:focus-visible,
+.actual-combobox .cb-control:has(.cb-input:focus-visible) {
+  --cb-border-color: var(--focus);
+  outline: 2px solid transparent;
+  box-shadow: var(--focus-ring-shadow);
+}
+
+.actual-combobox .cb-chip-remove:focus-visible {
+  outline: 2px solid transparent;
+  outline-offset: 0;
+}
+
+.actual-combobox .cb-chip {
+  min-block-size: var(--density-compact-size);
+  padding-inline: 0.55em;
+  border: var(--border-width) solid
+    color-mix(in oklab, var(--surface) var(--soft-border-mix), var(--primary));
+  border-radius: var(--radius-full);
+  background: color-mix(in oklab, var(--surface) var(--soft-bg-mix), var(--primary));
+  color: color-mix(in oklab, var(--primary) var(--soft-fg-mix), var(--text));
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-strong);
+}
+
+.actual-combobox .cb-chip-remove {
+  color: color-mix(in oklab, var(--primary) var(--soft-fg-mix), var(--text));
+}
+
+.cb-popover {
+  --cb-picker-bg: var(--surface-raised);
+  border-color: var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-popout);
+}
+
+.cb-option:is(:hover, [data-active]) {
+  background: var(--hover-overlay);
+  color: var(--text);
+}
+
+.cb-option[aria-selected="true"] {
+  background: color-mix(in oklab, var(--surface) var(--soft-bg-mix), var(--primary));
+}</code></pre>
+      </section>
+    </div>
+
+    <footer class="page-note">
+      <span>
+        Loaded from jsDelivr, pinned: <code>@lekoala/combobox@0.1.0/dist/combobox.css</code> and
+        <code>@lekoala/combobox@0.1.0/dist/combobox.js</code>.
+      </span>
+      <span>Combobox enhances native <code>&lt;input&gt;</code>/<code>&lt;select&gt;</code> — the source owns the form value.</span>
+    </footer>
+  </main>
+
+  <script>
+    (() => {
+      const switcher = document.getElementById("theme-switcher");
+      if (switcher) {
+        switcher.addEventListener("change", () => {
+          if (switcher.value) {
+            document.documentElement.dataset.theme = switcher.value;
+          } else {
+            document.documentElement.removeAttribute("data-theme");
+          }
+        });
+      }
+
+      const stage = document.getElementById("support-status");
+      customElements.whenDefined("combo-box").then(async () => {
+        const first = await document.querySelector("combo-box").whenReady();
+        stage.textContent =
+          first.mode === "enhanced"
+            ? "Enhanced mode: manual Popover + CSS Anchor Positioning, skinned through Actual CSS tokens."
+            : "Basic fallback active: native controls remain usable.";
+      });
+
+      const fruit = document.getElementById("fruit");
+      const fruitOutput = document.getElementById("fruit-output");
+      const renderFruit = () => {
+        const values = Array.from(fruit.selectedOptions, (option) => JSON.stringify(option.value));
+        fruitOutput.textContent = `[${values.join(", ")}]`;
+      };
+      fruit.addEventListener("change", renderFruit);
+      renderFruit();
+
+      document.getElementById("states-form").addEventListener("submit", (event) => {
+        event.preventDefault();
+      });
+    })();
+  </script>
+</body>
+
+</html>
