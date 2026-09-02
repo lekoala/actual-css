@@ -83,7 +83,7 @@ is the width you were allocated". That part is yours to grant, because
 containment would collapse a step flow whose width came from its own contents.
 Add the ready-made class to the row:
 
-```html demo
+```html demo resize
 <ol class="steps container-query">
   <li class="complete"><span class="step-label">Identification</span></li>
   <li aria-current="step"><span class="step-label">Confirmation</span></li>

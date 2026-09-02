@@ -18,7 +18,7 @@ const PAGES = join(ROOT, "docs", "pages");
 const SITE = join(ROOT, "site");
 
 const FENCE_LANGUAGES = new Set(["html", "css", "js", "javascript", "sh", "text"]);
-const KNOWN_FENCE_FLAGS = new Set(["demo", "bare"]);
+const KNOWN_FENCE_FLAGS = new Set(["demo", "bare", "resize"]);
 
 function isExternal(href) {
   return /^(?:[a-z]+:)?\/\//iu.test(href) || /^(?:mailto|tel):/iu.test(href);
