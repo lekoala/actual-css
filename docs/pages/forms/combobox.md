@@ -57,19 +57,15 @@ contrast contracts apply to the combobox for free:
   --cb-option-min-height: var(--control-size);
 }
 
-.actual-combobox .cb-control:focus-within {
-  outline: none;
-}
-
-.actual-combobox .cb-text-control:focus-visible,
-.actual-combobox .cb-control:has(.cb-input:focus-visible) {
-  --cb-border-color: var(--focus);
+.actual-combobox .cb-control:focus-within,
+.actual-combobox .cb-text-control:focus {
+  outline: 2px solid transparent;
   box-shadow: var(--focus-ring-shadow);
 }
 
 .actual-combobox .cb-chip-remove:focus-visible {
   outline: 2px solid transparent;
-  outline-offset: 0;
+  box-shadow: 0 0 0 2px var(--focus-ring);
 }
 
 .actual-combobox .cb-chip {
@@ -82,6 +78,10 @@ contrast contracts apply to the combobox for free:
   font-weight: var(--font-weight-strong);
 }
 ```
+
+The composite focus ring follows any internal focus, not just the search
+input: focus a chip or its remove × and the control shows the same field ring,
+with the local `:focus-visible` indicator on the chip or its × on top.
 
 The same approach works for any widget that exposes a custom-property skin —
 keep the widget's behavior, restyle its tokens through the shared vocabulary.

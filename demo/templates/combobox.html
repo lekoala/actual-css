@@ -63,28 +63,19 @@
       --cb-option-min-height: var(--control-size);
     }
 
-    /* 2. Focus — the composite ring only when the search input itself is
-          focused. Chip and remove-button focus keep their own local
-          :focus-visible indicator; the combobox core keys the composite ring
-          on .cb-control:focus-within, so that ring is neutralized here. */
-    .actual-combobox .cb-control:focus-within {
-      outline: none;
-    }
-
-    .actual-combobox .cb-text-control:focus-visible,
-    .actual-combobox .cb-control:has(.cb-input:focus-visible) {
-      --cb-border-color: var(--focus);
-
+    /* 2. Focus — one composite field ring for any internal focus: the input,
+          a chip or a chip remove button. Local :focus-visible indicators for
+          the chip and its × stay on top of that ring. */
+    .actual-combobox .cb-control:focus-within,
+    .actual-combobox .cb-text-control:focus {
       outline: 2px solid transparent;
       box-shadow: var(--focus-ring-shadow);
     }
 
-    /* Chip remove buttons need no extra ring: the chip background tint on
-       :focus-visible is the local indicator, and the transparent outline
-       keeps Actual's forced-colors focus pattern. */
+    /* The remove × carries a compact ring of its own over the field ring. */
     .actual-combobox .cb-chip-remove:focus-visible {
       outline: 2px solid transparent;
-      outline-offset: 0;
+      box-shadow: 0 0 0 2px var(--focus-ring);
     }
 
     /* 3. Invalid — the native source is required; follow --danger */
@@ -442,20 +433,15 @@
   --cb-option-min-height: var(--control-size);
 }
 
-.actual-combobox .cb-control:focus-within {
-  outline: none;
-}
-
-.actual-combobox .cb-text-control:focus-visible,
-.actual-combobox .cb-control:has(.cb-input:focus-visible) {
-  --cb-border-color: var(--focus);
+.actual-combobox .cb-control:focus-within,
+.actual-combobox .cb-text-control:focus {
   outline: 2px solid transparent;
   box-shadow: var(--focus-ring-shadow);
 }
 
 .actual-combobox .cb-chip-remove:focus-visible {
   outline: 2px solid transparent;
-  outline-offset: 0;
+  box-shadow: 0 0 0 2px var(--focus-ring);
 }
 
 .actual-combobox .cb-chip {
