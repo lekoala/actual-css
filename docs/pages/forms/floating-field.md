@@ -7,9 +7,11 @@ the label rests inside the control and floats to the top when the control is
 focused or filled. It composes the existing `.field` layout and the text
 controls (`.input`, `.textarea`, `.select`) with zero JavaScript.
 
-The cell holds the control and its label only. Help and error messages stay in
-the surrounding `.field`, otherwise the resting label centers on the whole
-field instead of the control.
+The cell holds exactly one control and its label, with the control before the
+label. Label placement is linked through the general sibling combinator, so an
+injected node between the two (a password manager, an extension wrapper) is
+tolerated. Help and error messages stay in the surrounding `.field`, otherwise
+the resting label centers on the whole field instead of the control.
 
 ```html demo
 <div class="field">

@@ -7,8 +7,10 @@
  * messages stay in the surrounding .field, not inside the cell, so the
  * resting label can center on the control alone.
  *
- * The control must precede the label: the float is driven by the sibling
- * combinator and :placeholder-shown. Every .input/.textarea needs
+ * The control must precede the label: the float is driven by the general
+ * sibling combinator and :placeholder-shown. Injected nodes may appear between
+ * the control and the label (password managers, extension wrappers); the cell
+ * contract stays a single control plus one label. Every .input/.textarea needs
  * placeholder=" " to expose a reliable empty state — without it the label
  * only reacts to focus.
  *
@@ -56,14 +58,14 @@
 }
 
 /* Single-line controls rest in the middle until they receive a value. */
-.floating-field > :is(.input, .select) + .field-label {
+.floating-field > :is(.input, .select) ~ .field-label {
   inset-block-start: 50%;
   transform: translateY(-50%);
 }
 
 /* An empty textarea label follows the control's normal first-line position;
    the control itself keeps the extra headroom reserved for its floated state. */
-.floating-field > .textarea + .field-label {
+.floating-field > .textarea ~ .field-label {
   inset-block-start: calc(1em + var(--border-width));
   transform: none;
 }
@@ -72,7 +74,7 @@
    not have propagated the value to the placeholder state yet. */
 .floating-field
   > :is(.input, .textarea):is(:focus, :autofill, :not(:placeholder-shown))
-  + .field-label {
+  ~ .field-label {
   inset-block-start: var(--floating-label-top);
   transform: none;
   font-size: var(--font-size-xs);
@@ -91,7 +93,7 @@
     .input[type="month"],
     .input[type="week"]
   )
-  + .field-label {
+  ~ .field-label {
   inset-block-start: var(--floating-label-top);
   transform: none;
   font-size: var(--font-size-xs);

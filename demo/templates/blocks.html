@@ -223,15 +223,15 @@
       }
     }
 
-    .block-float-form .floating-field > :is([aria-invalid="true"], :user-invalid) + .field-label,
-    .was-validated .block-float-form .floating-field > :invalid + .field-label {
+    .block-float-form .floating-field > :is([aria-invalid="true"], :user-invalid) ~ .field-label,
+    .was-validated .block-float-form .floating-field > :invalid ~ .field-label {
       color: var(--danger);
     }
 
     /* Declared after the danger rule so an invalid field reads as "being
        edited" while focused (equal specificity with the .was-validated line,
        source order wins). */
-    .block-float-form .floating-field > :is(.input, .textarea, .select):focus + .field-label {
+    .block-float-form .floating-field > :is(.input, .textarea, .select):focus ~ .field-label {
       color: var(--focus);
     }
 

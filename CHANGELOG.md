@@ -38,10 +38,12 @@
   inside it unreadable in that mode. Complete and upcoming markers now read alike
   in forced colors unless you set `--step-complete-mark`, which is the documented
   way to keep them distinct.
+- List are now top aligned.
 
 ## Fixed
 
 - Fab icons.
+- Floating labels with password managers.
 
 
 ## [0.5.0] - 2026-09-01

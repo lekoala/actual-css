@@ -23,7 +23,7 @@ test("floating-field is CSS-only with placeholder-shown and always-floated contr
   expect(css).toContain("pointer-events: none;");
   expect(css).toContain("transform: translateY(-50%)");
   expect(css).toContain(
-    ".floating-field > .textarea + .field-label {\n  inset-block-start: calc(1em + var(--border-width));",
+    ".floating-field > .textarea ~ .field-label {\n  inset-block-start: calc(1em + var(--border-width));",
   );
   expect(css).toContain("--floating-label-top: var(--space-10);");
   expect(css).toContain("--floating-label-opacity: 0.8;");
@@ -31,7 +31,8 @@ test("floating-field is CSS-only with placeholder-shown and always-floated contr
   expect(css).toContain(".select,");
   expect(css).toContain('.input[type="date"]');
   expect(css).toContain('.input[type="week"]');
-  expect(css).toContain("+ .field-label {");
+  expect(css).toContain("~ .field-label {");
+  expect(css).not.toContain("+ .field-label");
   expect(css).not.toContain(".floating-form");
 });
 
