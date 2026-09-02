@@ -39,6 +39,10 @@
   in forced colors unless you set `--step-complete-mark`, which is the documented
   way to keep them distinct.
 
+## Fixed
+
+- Fab icons.
+
 
 ## [0.5.0] - 2026-09-01
 

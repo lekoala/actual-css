@@ -1,14 +1,17 @@
 /*
  * Fixed floating action placement and a native-details speed dial.
- * Button owns the action's size, shape, and intent; FAB only owns placement.
+ * Button owns the trigger's size, shape, and intent; FAB owns placement and
+ * the speed dial's structural open/close markers (--icon-plus / --icon-close).
  *
  * Public hooks:
  * --fab-offset
  * --fab-gap
+ * --fab-icon-size
  */
 .fab {
   --fab-offset: var(--space-40);
   --fab-gap: var(--space-20);
+  --fab-icon-size: 1.5rem;
 
   position: fixed;
   z-index: var(--z-menu);
@@ -17,6 +20,9 @@
 }
 
 .fab > summary {
+  /* Centers the toggle markers: the summary is the markers' positioned
+     context, not just the app-button class. */
+  position: relative;
   list-style: none;
   cursor: pointer;
 }
@@ -25,11 +31,35 @@
   display: none;
 }
 
-/* A lone decorative plus can communicate the open/close state without
-   requiring a second icon or JavaScript-managed content. */
-.fab > summary > [aria-hidden="true"]:only-child {
-  display: inline-block;
-  transition: transform var(--duration);
+/* The speed dial trigger is an icon-only toggle. FAB owns both structural
+   markers: masked pseudo-elements swap the shared plus (closed) and close
+   (open) glyphs at the same size, so the two states never drift apart. */
+.fab > summary::before,
+.fab > summary::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  inline-size: var(--fab-icon-size);
+  block-size: var(--fab-icon-size);
+  background: currentColor;
+  opacity: 0;
+  transform: scale(0.8);
+  transition:
+    opacity var(--duration),
+    transform var(--duration);
+}
+
+.fab > summary::before {
+  -webkit-mask: var(--icon-plus) center / contain no-repeat;
+  mask: var(--icon-plus) center / contain no-repeat;
+  opacity: 1;
+  transform: none;
+}
+
+.fab > summary::after {
+  -webkit-mask: var(--icon-close) center / contain no-repeat;
+  mask: var(--icon-close) center / contain no-repeat;
 }
 
 .fab-actions {
@@ -87,8 +117,14 @@
   transition-delay: 0s;
 }
 
-.fab[open] > summary > [aria-hidden="true"]:only-child {
-  transform: rotate(45deg);
+.fab[open] > summary::before {
+  opacity: 0;
+  transform: scale(0.8);
+}
+
+.fab[open] > summary::after {
+  opacity: 1;
+  transform: none;
 }
 
 @media print {
