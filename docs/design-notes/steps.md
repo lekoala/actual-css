@@ -2,8 +2,6 @@
 
 ## Status
 
-Design note for Actual CSS 0.6.
-
 This document holds the reasoning that `steps.css` used to carry in its
 comments: why the horizontal stepper has the representations it has, why the
 thresholds sit where they sit, and which approaches were tried and rejected.
@@ -13,11 +11,22 @@ reintroduce a shape that was already measured and discarded.
 
 ## The markup contract
 
-Every step wraps its label:
+One primitive, two explicit compositions. Both classes are required:
+
+```html
+<ol class="steps steps-horizontal">…</ol>  <!-- 2 to 5 stages -->
+<ol class="steps steps-vertical">…</ol>    <!-- no count limit -->
+```
+
+`.steps` is what a step *is*; the second class is what the sequence *looks
+like*. A step is therefore the same thing in both. Every step wraps its label:
 
 ```html
 <li class="complete"><span class="step-label">Account</span></li>
 ```
+
+and its label may be an `a[href]` where the workflow allows navigation. That is
+the whole interactive surface: see "The interactive guard".
 
 The wrapper is not decoration. It is the only handle the space-aware
 representations have: something to move beside a marker, something to place
@@ -40,8 +49,8 @@ weight on every supported row to improve one that is already wrong.
 ## Why there are two thresholds
 
 ```text
-< 35rem   markers only, 4–5 steps
->= 60rem  marker beside label, 2–5 steps
+< 35rem   markers only, 4 steps or more
+>= 60rem  marker beside label, any count
 otherwise stacked
 ```
 
@@ -49,11 +58,14 @@ Both are calibrated on five steps, the widest supported row and therefore the
 binding case. Earlier versions had one threshold per count — eight ranges, then
 four — and the per-count precision turned out to buy less than it cost.
 
-**Markers-only covers 4 and 5 only.** It exists for one real problem: a four- or
+**Markers-only starts at 4.** It exists for one real problem: a four- or
 five-stage checkout in a phone-width region. Two or three steps stay readable
 stacked far below any width worth designing for, and scroll past that, which is
 an acceptable outcome there. The 2- and 3-step blocks that used to exist were
 near-copies solving a problem nobody had. Symmetry is not a reason.
+
+Inside the supported 2–5 domain, "4 or more" is exactly "4 or 5". Neither
+query carries an upper bound; see "Counting the steps".
 
 **35rem is five steps' own scroll threshold.** Items hold at
 `flex: 1 0 var(--step-min)`, so a row's intrinsic width is `count × --step-min`
@@ -126,38 +138,58 @@ removing the need for it was worth more than optimising it.
 
 ### Counting the steps
 
-Each container query lists outright the counts it serves, one
-`:nth-child(N):last-child` per count inside a single `:has()`:
+Only markers-only counts, and only as a lower bound:
 
 ```css
-/* exactly 4 or 5 */
-:has(> :nth-child(4):last-child, > :nth-child(5):last-child)
+/* four steps or more */
+:has(> :nth-child(4))
 ```
 
-`:has()` takes a relative selector list, so this needs no `:is()` wrapper.
+`:has()` takes a relative selector list, so this needs no `:is()` wrapper. The
+inline query counts nothing at all: it serves the whole domain.
 
-The shorter interval spelling was tried and reverted:
+Two richer spellings were carried before this one, and both existed for the same
+reason — to keep a 6+ row out of the enhanced representations and on the base
+layout:
 
 ```css
-/* at least 4, fewer than 6 — rejected */
+/* exactly 4 or 5 — removed */
+:has(> :nth-child(4):last-child, > :nth-child(5):last-child)
+
+/* at least 4, fewer than 6 — removed earlier */
 :has(> :nth-child(4)):not(:has(> :nth-child(6)))
 ```
 
-It is exactly equivalent — measured over the browser fixture it selects the
-same elements, and it is specificity-neutral, since `:has()` and `:not()` each
-take the specificity of their most specific argument, so both forms contribute
-two pseudo-classes. That neutrality matters here, because these rules sit at
+The two are equivalent — measured over the browser fixture they select the same
+elements, and they are specificity-neutral to each other, since `:has()` and
+`:not()` each take the specificity of their most specific argument. That
+neutrality mattered while a choice between them was open: these rules sit at
 equal specificity with the base ones and rely on source order.
 
-It was still the wrong trade. The enumeration *is* the contract — horizontal is
-2–5, and the selector says those numbers. The interval states the same thing as
-a lower bound plus a separate upper-bound clause, and that clause reads like
-defensive noise: `:has(> :nth-child(4))` on its own is perfectly idiomatic, so a
-later cleanup drops it and every 6+ row silently inherits a representation whose
-thresholds were calibrated for five steps. Out of contract is a reason not to
-adapt a row, not a reason to adapt it badly.
+What settled it was dropping the promise underneath both. The enumeration was
+defended as "the enumeration *is* the contract" — the selector states the
+supported counts, and an upper bound written as a separate `:not()` clause reads
+like defensive noise a later cleanup would delete. That argument holds only if
+6+ horizontal is a case worth serving carefully. It is not. It is out of
+contract, and the enumeration was buying it a curated fallback at the cost of
+four `:nth-child` clauses on every rule of the inline block, repeated three
+times, on every row that *is* supported.
 
-A few characters are worth that.
+So the upper bound is gone, in both spellings. A 6+ row now compacts at narrow
+widths and goes inline at wide ones, calibrated for a count it does not have.
+That is what out of contract means: the rules apply as written. The docs say
+2 to 5 and point longer sequences at `.steps-vertical` rather than promising a
+graceful degradation nobody asked for.
+
+The tests followed the same rule. A browser test that pinned what a six-step row
+does — it used to assert "no rule fires", then briefly "it compacts" — was
+deleted rather than updated. Either assertion turns an accident of the selectors
+into an API nobody promised, and the second one would have to be revisited every
+time a threshold moved. What is out of contract is not tested for behaviour.
+
+Vertical was the other reason a rule might have needed a guard, and it is not one
+any more either: every container query addresses `.steps-horizontal` by name, so
+there is nothing to exclude. See "Two compositions, one primitive".
 
 ### The containment grant
 
@@ -179,14 +211,36 @@ size-aware component in a region.
 
 `.sr-only` leaves an element in the tab order at 1×1 with `clip-path:
 inset(50%)`, so a focus ring lands on nothing. Markers-only therefore refuses
-any row whose labels are focusable:
+any row whose labels are navigable:
 
 ```css
-:not(:has(> li > :is(a[href], button, [tabindex])))
+:not(:has(a[href]))
 ```
 
 The guard rides in the selector rather than in a separate rule because the
 container grant may sit on a wrapper this component cannot restyle.
+
+**Links only.** The guard used to read
+`:not(:has(> li > :is(a[href], button, [tabindex])))`, which covered any
+focusable content a step might hold. Nothing ever held any: no fixture, demo or
+documented example used a `<button>` or a `tabindex` inside a step, and the
+docs describe exactly one navigable form — `<a class="step-label" href>`. The
+extra branches were surface area spent on markup the component does not
+describe, and they made the one selector a reader has to parse three times
+longer.
+
+So the contract is now explicit: a step label may be a link, and anything else
+focusable in a step is out of contract. The guard is deliberately loose —
+`:has(a[href])` reads the whole subtree, so a link anywhere in the row refuses
+the compact form. Refusing on more than you promise is the safe direction.
+
+A link needs no styling rule of its own to go with it. `color: inherit` sits in
+the `.steps .step-label` rule: a span inherits its ink anyway, so only a link
+ever had a `--link` colour to take back, and taking it back for every label costs
+nothing and one rule less. That rule stays scoped to `.steps` — unlike
+`.menu-item-text` and the framework's other sub-part classes — because a bare
+`.step-label` weighs (0,1,0), exactly `.prose :where(a)`, and a stepper inside
+prose would then be decided by the order the bundle concatenates two files in.
 
 It reads structure, never state. A guard keyed on `aria-current` or `.complete`
 would toggle the representation under the user as the workflow advanced and the
@@ -195,6 +249,10 @@ revealing the label on focus, which would need it to float over a row it no
 longer fits.
 
 The inline representation hides nothing and carries no such guard.
+
+The same `:has()` appears once more, for a different reason: a navigable row
+reserves `padding-block` for its focus ring, because the scroll container clips
+at the padding edge. See "Scrolling on one axis".
 
 ### Rejected alternatives for hiding a label
 
@@ -221,9 +279,31 @@ the segment *leaving* the current step is neutral; the segment *reaching* it is
 owned by the previous step, which is complete.
 
 The thicker ring is structural, so it survives forced colors, and it never
-competes with the outline channel that belongs to focus. Forced colors drops the
-accent fill, which would otherwise leave complete and future markers identical,
-so complete takes a system `Highlight` fill there.
+competes with the outline channel that belongs to focus.
+
+### Forced colors, and the override that was removed
+
+Forced colors drops the accent fill, so in a numbered flow a complete marker and
+an upcoming one both render as a ringed disc with a number in it. Current still
+reads, on its thicker ring and its bolder label; complete and upcoming do not
+separate.
+
+The component used to answer that with a `@media (forced-colors: active)` block
+giving complete a system `Highlight` fill and `HighlightText` text. Captured
+with forced colors emulated through the DevTools protocol, that fill renders the
+marker's own content — the counter, or a `--step-complete-mark` checkmark —
+unreadable: a sliver of `HighlightText` inside a solid disc. It trades an
+ambiguity for an illegible glyph, in the exact mode it was written to help.
+
+So the block is gone, and the honest answer is documented instead:
+`--step-complete-mark` distinguishes the two states in forced colors as well as
+anywhere else, because a different glyph survives a colour system that flattens
+fills. An author whose flow needs that distinction sets it; the component does
+not fake it with a fill that cannot carry its own content.
+
+The general principle is the one this file keeps arriving at. A remedy that is
+worse than the problem in its own target mode is not a remedy, and shipping it
+"for accessibility" only makes the failure harder to notice.
 
 ## Connectors
 
@@ -266,26 +346,111 @@ fixture cannot catch.
 `overflow-y: hidden` settles it: there is genuinely nothing to scroll on that
 axis, in any representation.
 
+On the axis that does scroll, `overscroll-behavior-inline: contain` keeps a
+swipe that reaches the end of the row from chaining to the page behind it.
+
+What makes the row scroll rather than squash is the item floor:
+`min-inline-size: max(var(--step-size), var(--step-min))`. The `max()` is there
+so an author who lowers `--step-min` below `--step-size` narrows the scroll
+budget without collapsing items behind their own markers.
+
 The cost is that clipping now happens at the padding edge, and a focus ring is
 drawn outside its element's border box — `--focus-outline` is two border-widths
 wide at `--focus-outline-offset`, so 4px past a label that sits flush with the
 bottom of a stacked row. A navigable row therefore reserves exactly that much
-`padding-block`, gated on `:not(.steps-vertical):has(> li > :is(a[href], button, [tabindex]))`.
-An informational stepper — the common case, with no ring to protect — keeps its
-height, and so does a navigable column: the padding is compensation for the
-horizontal row's clip, and `.steps-vertical` gives its scroll container back.
+`padding-block`, gated on `.steps-horizontal:has(a[href])`. An informational
+stepper — the common case, with no ring to protect — keeps its height, and so
+does a navigable column: the padding is compensation for the row's clip, and the
+column is not a scroll container at all.
 
 Reserving the space unconditionally would have been one rule shorter and 8px
 taller on every stepper in the framework. Clipping and letting focus scroll the
 ring into view would have kept the height and moved the row under the reader
 instead.
 
-## Vertical
+## Two compositions, one primitive
 
-`.steps-vertical` is an explicit orientation, never a responsive fallback.
-Container queries do not reach it: every horizontal rule carries
-`:not(.steps-vertical)`. It has no step-count limit, because its practical limit
-is the surrounding layout rather than a row's width budget.
+`.steps` is the component. `.steps-horizontal` and `.steps-vertical` are peers,
+both required, neither the default. Vertical is an explicit orientation, never a
+responsive fallback, and it has no step-count limit: its practical limit is the
+surrounding layout rather than a row's width budget.
+
+This arrangement is the third the component has had, and each move was made to
+delete something the previous one forced.
+
+### First: vertical as a modifier
+
+`<ol class="steps steps-vertical">`, where `.steps` was both the component and
+the horizontal layout. The column inherited a row and then undid it — six
+declarations that existed for no other reason:
+
+| Undone | Because the row set |
+| --- | --- |
+| `overflow: visible` | `overflow-x: auto` |
+| `overscroll-behavior: auto` | `overscroll-behavior-inline: contain` |
+| `flex: none` | `flex: 1 0 var(--step-min)` |
+| `grid-template-rows: auto` | `grid-template-rows: var(--step-size) auto` |
+| `min-inline-size: 0` | `min-inline-size: max(--step-size, --step-min)` |
+| `text-align: start` | `text-align: center` |
+
+And it forced the inverse on the horizontal side: every rule that must not reach
+a column carried `:not(.steps-vertical)` — the focus-ring rule plus every rule in
+both container queries.
+
+### Then: two independent roots
+
+`<ol class="steps">` and `<ol class="steps-vertical">`, sharing no class. Both
+lists above went to zero. But the shared half of the component — the counter, the
+marker, `.step-label`, `.complete`, `aria-current="step"` — then had no name, and
+had to be spelled `:is(.steps, .steps-vertical)` on twelve rules.
+
+That repetition was the diagnosis, not the disease. Twelve rules needing the same
+two-class prefix is what a shared primitive looks like when it has not been given
+a class of its own.
+
+### Now: a primitive and two compositions
+
+`.steps` holds the twelve, under its own name. `.steps-horizontal` and
+`.steps-vertical` hold what is genuinely per-orientation. Nothing excludes
+anything, nothing undoes anything, and the shared rules read as what they are:
+
+```text
+.steps             what a step is
+.steps-horizontal  a row, plus its container queries
+.steps-vertical    a column
+```
+
+The cost is one class on the horizontal markup, which was previously implicit.
+That is the right direction: if vertical is an explicit orientation rather than a
+fallback, horizontal being explicit too is the same claim stated once more.
+
+`.steps` on its own is incomplete markup. That is a real footgun — it renders a
+flex row of unpositioned markers rather than nothing — and it is the price of
+having neither orientation be the default. Documented, not defended.
+
+### The one declaration that survived the audit
+
+Each undone declaration in the first table was re-checked in a browser rather
+than assumed gone, and one was not: **`justify-items: start` stays.** Grid items
+blockify, so a label left at the default `normal` stretches across the whole
+`1fr` track — measured, an `a.step-label` goes from 75px to 264px. That is a
+full-width hover target and a full-width focus ring in a column, where the same
+link in a row gets a box that hugs its text. The declaration is not undoing the
+row; it is the column's own alignment, and it was only ever mistakable for a
+reset.
+
+### The connector's terminator
+
+The connector's geometry belongs to each composition, so only the question of
+*which* steps get one is shared. That used to be two rules pulling against each
+other — `> li::after { content: "" }` and `> li:last-child::after { content:
+none }` — which made "does a line trail the last step" a specificity question,
+and made a stray `content` in a geometry rule enough to break it.
+
+It is now one rule stating the condition: `.steps > li:not(:last-child)::after`.
+A pseudo-element with no content generates no box, so both compositions can
+address `> li::after` freely and neither can grow a line past the final step.
+Nothing to order, nothing to weigh.
 
 Its row is aligned to `start` so a label that wraps begins level with the top of
 its marker. A single line is shorter than the marker and would float above its

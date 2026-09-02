@@ -13,14 +13,23 @@
 </head>
 <body>
   <!-- No size context: the stacked layout is the universal fallback. -->
-  <ol class="steps" id="plain">
+  <ol class="steps steps-horizontal" id="plain">
+    <li class="complete"><span class="step-label">Account</span></li>
+    <li aria-current="step"><span class="step-label">Payment</span></li>
+    <li><span class="step-label">Confirm</span></li>
+  </ol>
+  <!-- The same three states on the other root. State is the half of Steps the
+       two roots share, so every channel a marker carries must read identically
+       here and in #plain: a step that meant something different in a sidebar
+       than in a row would be two components, not one. -->
+  <ol class="steps steps-vertical" id="plain-vertical">
     <li class="complete"><span class="step-label">Account</span></li>
     <li aria-current="step"><span class="step-label">Payment</span></li>
     <li><span class="step-label">Confirm</span></li>
   </ol>
   <!-- --step-connector is a complete background value, so `none` erases the
        default line without touching the marker geometry. -->
-  <ol class="steps" id="no-connector" style="--step-connector: none">
+  <ol class="steps steps-horizontal" id="no-connector" style="--step-connector: none">
     <li class="complete"><span class="step-label">Account</span></li>
     <li aria-current="step"><span class="step-label">Payment</span></li>
     <li><span class="step-label">Confirm</span></li>
@@ -30,7 +39,7 @@
        budget, so 559px is one pixel past where a stacked row starts to
        scroll — the threshold is calibrated on the count that needs it most. -->
   <div style="inline-size: 559px">
-    <ol class="steps container-query" id="compact-5">
+    <ol class="steps steps-horizontal container-query" id="compact-5">
       <li class="complete"><span class="step-label">Identification</span></li>
       <li class="complete"><span class="step-label">Coordonnees</span></li>
       <li aria-current="step"><span class="step-label">Motif</span></li>
@@ -39,7 +48,7 @@
     </ol>
   </div>
   <div style="inline-size: 561px">
-    <ol class="steps container-query" id="stacked-5">
+    <ol class="steps steps-horizontal container-query" id="stacked-5">
       <li class="complete"><span class="step-label">Identification</span></li>
       <li class="complete"><span class="step-label">Coordonnees</span></li>
       <li aria-current="step"><span class="step-label">Motif</span></li>
@@ -51,7 +60,7 @@
        28rem. Between 448px and 560px they are compacted although stacked would
        still have fitted: the deliberate cost of one threshold instead of two. -->
   <div style="inline-size: 559px">
-    <ol class="steps container-query" id="compact-4">
+    <ol class="steps steps-horizontal container-query" id="compact-4">
       <li class="complete"><span class="step-label">Identification</span></li>
       <li aria-current="step"><span class="step-label">Motif</span></li>
       <li><span class="step-label">Confirmation</span></li>
@@ -59,7 +68,7 @@
     </ol>
   </div>
   <div style="inline-size: 561px">
-    <ol class="steps container-query" id="stacked-4">
+    <ol class="steps steps-horizontal container-query" id="stacked-4">
       <li class="complete"><span class="step-label">Identification</span></li>
       <li aria-current="step"><span class="step-label">Motif</span></li>
       <li><span class="step-label">Confirmation</span></li>
@@ -69,14 +78,14 @@
   <!-- Two and three steps never go markers-only: they stay readable stacked
        far below any width worth designing for, and scroll past that. -->
   <div style="inline-size: 300px">
-    <ol class="steps container-query" id="narrow-3">
+    <ol class="steps steps-horizontal container-query" id="narrow-3">
       <li class="complete"><span class="step-label">Identification</span></li>
       <li aria-current="step"><span class="step-label">Motif</span></li>
       <li><span class="step-label">Paiement</span></li>
     </ol>
   </div>
   <div style="inline-size: 200px">
-    <ol class="steps container-query" id="narrow-2">
+    <ol class="steps steps-horizontal container-query" id="narrow-2">
       <li class="complete"><span class="step-label">Identification</span></li>
       <li aria-current="step"><span class="step-label">Motif</span></li>
     </ol>
@@ -87,14 +96,14 @@
        reaches its 2rem basis with realistic labels; anything earlier leaves the
        widest count with a stub. -->
   <div style="inline-size: 959px">
-    <ol class="steps container-query" id="stacked-3">
+    <ol class="steps steps-horizontal container-query" id="stacked-3">
       <li class="complete"><span class="step-label">Identification</span></li>
       <li aria-current="step"><span class="step-label">Motif</span></li>
       <li><span class="step-label">Paiement</span></li>
     </ol>
   </div>
   <div style="inline-size: 961px">
-    <ol class="steps container-query" id="inline-3">
+    <ol class="steps steps-horizontal container-query" id="inline-3">
       <li class="complete"><span class="step-label">Identification</span></li>
       <li aria-current="step"><span class="step-label">Motif</span></li>
       <li><span class="step-label">Paiement</span></li>
@@ -104,7 +113,7 @@
        bought. The row fits inline, but the connector collapses to ~15px — the
        region a themed chevron lives in, gone. It must still be stacked here. -->
   <div style="inline-size: 769px">
-    <ol class="steps container-query" id="stacked-5-cramped">
+    <ol class="steps steps-horizontal container-query" id="stacked-5-cramped">
       <li class="complete"><span class="step-label">Personal details</span></li>
       <li class="complete"><span class="step-label">Delivery address</span></li>
       <li aria-current="step"><span class="step-label">Shipping method</span></li>
@@ -115,7 +124,7 @@
   <!-- The same threshold for five steps, which is the count it was measured
        on: the connector must still be a region, not a stub. -->
   <div style="inline-size: 961px">
-    <ol class="steps container-query" id="inline-5">
+    <ol class="steps steps-horizontal container-query" id="inline-5">
       <li class="complete"><span class="step-label">Identification</span></li>
       <li class="complete"><span class="step-label">Coordonnees</span></li>
       <li aria-current="step"><span class="step-label">Motif</span></li>
@@ -127,7 +136,7 @@
   <!-- --step-inline-connector belongs to the inline representation only; the
        same declaration must not repaint the stacked one. -->
   <div style="inline-size: 961px">
-    <ol class="steps container-query" id="inline-hook"
+    <ol class="steps steps-horizontal container-query" id="inline-hook"
         style="--step-inline-connector: linear-gradient(rgb(1, 2, 3), rgb(1, 2, 3))">
       <li class="complete"><span class="step-label">Identification</span></li>
       <li aria-current="step"><span class="step-label">Motif</span></li>
@@ -135,7 +144,7 @@
     </ol>
   </div>
   <div style="inline-size: 959px">
-    <ol class="steps container-query" id="stacked-hook"
+    <ol class="steps steps-horizontal container-query" id="stacked-hook"
         style="--step-inline-connector: linear-gradient(rgb(1, 2, 3), rgb(1, 2, 3))">
       <li class="complete"><span class="step-label">Identification</span></li>
       <li aria-current="step"><span class="step-label">Motif</span></li>
@@ -148,7 +157,7 @@
        to hide. It stays laid out and readable, which is all an out-of-contract
        markup is owed. -->
   <div style="inline-size: 559px">
-    <ol class="steps container-query" id="bare">
+    <ol class="steps steps-horizontal container-query" id="bare">
       <li class="complete">Identification</li>
       <li class="complete">Coordonnees</li>
       <li aria-current="step">Motif</li>
@@ -156,21 +165,14 @@
       <li>Paiement</li>
     </ol>
   </div>
-  <!-- Six steps: outside the 2..5 horizontal contract, no rule fires. -->
-  <div style="inline-size: 559px">
-    <ol class="steps container-query" id="six">
-      <li class="complete"><span class="step-label">Identification</span></li>
-      <li class="complete"><span class="step-label">Coordonnees</span></li>
-      <li aria-current="step"><span class="step-label">Motif</span></li>
-      <li><span class="step-label">Confirmation</span></li>
-      <li><span class="step-label">Paiement</span></li>
-      <li><span class="step-label">Recu</span></li>
-    </ol>
-  </div>
+  <!-- Six steps used to be here, asserting that no rule fired on it. Horizontal
+       supports 2 to 5 stages; pinning what a 6-step row does would turn an
+       accident of the selectors into an API nobody promised. Longer sequences
+       go to .steps-vertical, which has its own fixtures below. -->
   <!-- Interactive labels at a compacting width: the flow must refuse the
        markers-only form, or tab would land on a label clipped to 1x1. -->
   <div style="inline-size: 559px">
-    <ol class="steps container-query" id="interactive">
+    <ol class="steps steps-horizontal container-query" id="interactive">
       <li class="complete"><a class="step-label" href="#one">Identification</a></li>
       <li class="complete"><a class="step-label" href="#two">Coordonnees</a></li>
       <li aria-current="step"><span class="step-label">Motif</span></li>
@@ -181,7 +183,7 @@
   <!-- The guard reads structure, not state. One link per flow, on a future
        step and on the current step, to prove neither state changes it. -->
   <div style="inline-size: 559px">
-    <ol class="steps container-query" id="future-link">
+    <ol class="steps steps-horizontal container-query" id="future-link">
       <li class="complete"><span class="step-label">Identification</span></li>
       <li class="complete"><span class="step-label">Coordonnees</span></li>
       <li aria-current="step"><span class="step-label">Motif</span></li>
@@ -190,7 +192,7 @@
     </ol>
   </div>
   <div style="inline-size: 559px">
-    <ol class="steps container-query" id="current-link">
+    <ol class="steps steps-horizontal container-query" id="current-link">
       <li class="complete"><span class="step-label">Identification</span></li>
       <li class="complete"><span class="step-label">Coordonnees</span></li>
       <li aria-current="step"><a class="step-label" href="#motif">Motif</a></li>
@@ -201,7 +203,7 @@
   <!-- Interactive labels stay visible in the inline representation, which
        hides nothing: the guard is about the markers-only form only. -->
   <div style="inline-size: 961px">
-    <ol class="steps container-query" id="interactive-inline">
+    <ol class="steps steps-horizontal container-query" id="interactive-inline">
       <li class="complete"><a class="step-label" href="#a">Identification</a></li>
       <li aria-current="step"><span class="step-label">Motif</span></li>
       <li><span class="step-label">Paiement</span></li>
@@ -210,7 +212,7 @@
   <!-- --link is a theme hook (brutalist sets it); a step label must keep its
        state color anyway, and keep the underline that signals the link. -->
   <div style="inline-size: 961px">
-    <ol class="steps container-query" id="themed-link" style="--link: rgb(0, 0, 255)">
+    <ol class="steps steps-horizontal container-query" id="themed-link" style="--link: rgb(0, 0, 255)">
       <li class="complete"><a class="step-label" href="#a">Identification</a></li>
       <li aria-current="step"><span class="step-label">Motif</span></li>
       <li><a class="step-label" href="#b">Paiement</a></li>
@@ -219,7 +221,7 @@
 
   <!-- The anchor named from a stylesheet, no class in the markup. -->
   <div style="inline-size: 559px">
-    <ol class="steps" id="stylesheet-route">
+    <ol class="steps steps-horizontal" id="stylesheet-route">
       <li class="complete"><span class="step-label">Identification</span></li>
       <li class="complete"><span class="step-label">Coordonnees</span></li>
       <li aria-current="step"><span class="step-label">Motif</span></li>
@@ -231,7 +233,7 @@
        wrapper compacts from the wrapper's width. -->
   <div class="container-query" style="inline-size: 300px">
     <div>
-      <ol class="steps" id="ancestor-grant">
+      <ol class="steps steps-horizontal" id="ancestor-grant">
         <li class="complete"><span class="step-label">Identification</span></li>
         <li class="complete"><span class="step-label">Coordonnees</span></li>
         <li aria-current="step"><span class="step-label">Motif</span></li>
@@ -253,8 +255,9 @@
       <li><span class="step-label">Confirmation</span></li>
     </ol>
   </div>
-  <!-- Wide enough for the horizontal inline representation, still vertical. -->
-  <div class="container-query" style="inline-size: 700px">
+  <!-- Past 60rem, so a horizontal row here would be in the inline
+       representation. This one is not a horizontal row. -->
+  <div class="container-query" style="inline-size: 980px">
     <ol class="steps steps-vertical" id="vertical-wide">
       <li class="complete"><span class="step-label">Basic details</span></li>
       <li aria-current="step"><span class="step-label">Subscription plan</span></li>

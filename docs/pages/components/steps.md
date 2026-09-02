@@ -9,9 +9,21 @@ upcoming.
 Wrap each label in `.step-label`. The wrapper lets the horizontal stepper move
 between its three space-aware representations without changing the markup.
 
-Horizontal steps are designed and tested for **short flows of 2 to 5 stages**.
-Vertical steps are not bound by that range; use as many stages as remain useful
-in the surrounding layout.
+`.steps` is the component; the orientation is a second class, and it is always
+required:
+
+| Markup | Orientation | Stages |
+| --- | --- | --- |
+| `<ol class="steps steps-horizontal">` | horizontal | 2 to 5 |
+| `<ol class="steps steps-vertical">` | vertical | no limit |
+
+Neither orientation is the default, so `.steps` on its own is incomplete markup.
+Everything a step *is* — `.step-label`, `.complete`, `aria-current="step"`, the
+marker and its states — comes from `.steps` and is identical in both. The second
+class only decides how the sequence is laid out.
+
+For a horizontal sequence longer than five stages, use `.steps-vertical` or
+another progression pattern.
 
 The component needs no JavaScript.
 
@@ -20,7 +32,7 @@ The component needs no JavaScript.
 ## Basic usage
 
 ```html demo
-<ol class="steps">
+<ol class="steps steps-horizontal">
   <li class="complete"><span class="step-label">Account</span></li>
   <li aria-current="step"><span class="step-label">Payment</span></li>
   <li><span class="step-label">Confirm</span></li>
@@ -45,9 +57,8 @@ wrapper is what the space-aware representations move, place or visually hide.
 
 ## Horizontal steps adapt to their space
 
-Horizontal is the default orientation and is designed for **2 to 5 stages**.
-With an `actual-container` size context, the same markup has three
-representations.
+`.steps-horizontal` is designed for **2 to 5 stages**. With an
+`actual-container` size context, the same markup has three representations.
 
 ### Wide — marker and label inline
 
@@ -93,13 +104,13 @@ Resize the demo below. The 3-step flow needs less room than the supported
 
 ```html demo resize
 <div class="stack">
-  <ol class="steps container-query" style="--step-complete-mark: '✓'">
+  <ol class="steps steps-horizontal container-query" style="--step-complete-mark: '✓'">
     <li class="complete"><span class="step-label">Identification</span></li>
     <li aria-current="step"><span class="step-label">Confirmation</span></li>
     <li><span class="step-label">Finalisation</span></li>
   </ol>
 
-  <ol class="steps container-query" style="--step-complete-mark: '✓'">
+  <ol class="steps steps-horizontal container-query" style="--step-complete-mark: '✓'">
     <li class="complete"><span class="step-label">Account</span></li>
     <li class="complete"><span class="step-label">Details</span></li>
     <li aria-current="step"><span class="step-label">Payment</span></li>
@@ -149,11 +160,12 @@ the stacked layout remains fully functional.
 
 ## Vertical steps
 
-Vertical steps are an explicit orientation, not a mobile fallback, and they do
-not inherit the horizontal 2–5 stage limit.
+Vertical steps are an explicit orientation, not a mobile fallback, and they are
+not bound by the horizontal 2–5 stage limit.
 
-Use `.steps-vertical` when the surrounding layout is naturally vertical — for
-example a wizard sidebar or a narrow process panel:
+Use `.steps steps-vertical` when the surrounding layout is naturally vertical —
+for example a wizard sidebar or a narrow process panel. It is a peer of
+`.steps-horizontal`, not a modifier on it: never write the two together.
 
 ```html demo
 <ol class="steps steps-vertical" style="--step-complete-mark: '✓'">
@@ -201,13 +213,26 @@ the sequence.
 
 ## Navigation
 
-Steps are informational by default. Only make a label interactive when the
-workflow genuinely allows navigation to that step:
+Steps are informational by default. The one supported interactive label is an
+`<a href>`; a `<button>` or any other focusable element inside a step is outside
+the component contract. Only make a label a link when the workflow genuinely
+allows navigation to that step:
 
-```html
-<li class="complete">
-  <a class="step-label" href="/checkout/account">Account</a>
-</li>
+```html demo resize
+<ol class="steps steps-horizontal container-query">
+  <li class="complete">
+    <a class="step-label" href="#">Account</a>
+  </li>
+  <li class="complete">
+    <a class="step-label" href="#">Details</a>
+  </li>
+  <li aria-current="step">
+    <span class="step-label">Payment</span>
+  </li>
+  <li>
+    <span class="step-label">Confirm</span>
+  </li>
+</ol>
 ```
 
 Keep `aria-current="step"` on the current `<li>`.
@@ -223,22 +248,31 @@ growing the stepper.
 
 ## Hooks
 
+On `.steps`, so both orientations read them:
+
 - `--step-size` — marker diameter
-- `--step-min` — minimum item width in the stacked horizontal layout
-- `--step-gap` — marker-to-label space in the stacked horizontal layout
 - `--step-inline-gap` — spacing between marker, label and connector inline
-- `--step-vertical-gap` — space between vertical steps
 - `--step-line-size` — connector thickness
 - `--step-marker-radius` — marker corner radius
+- `--step-complete-mark` — content used instead of the number on completed steps
+
+`.steps-horizontal` only:
+
+- `--step-min` — minimum item width in the stacked horizontal layout
+- `--step-gap` — marker-to-label space in the stacked horizontal layout
 - `--step-connector` — default horizontal connector background
 - `--step-inline-connector` — optional connector background for wide horizontal steps
-- `--step-complete-mark` — content used instead of the number on completed steps
+
+`.steps-vertical` only:
+
+- `--step-vertical-gap` — space between vertical steps
 
 ## Notes
 
-The **2 to 5** range applies to the horizontal, space-aware stepper. Longer
-horizontal sequences are not prevented, but they fall back to the base layout
-instead of receiving the inline and markers-only adaptations.
+The **2 to 5** range applies to the horizontal, space-aware stepper, and the
+container-query thresholds are calibrated for it. A longer horizontal sequence
+is out of contract: it still renders, but which representation it lands in was
+never designed for that count, so it may well be the wrong one.
 
 The vertical orientation has no equivalent hard limit; its practical limit is
 the surrounding layout and whether the sequence remains useful to scan.
@@ -246,6 +280,13 @@ the surrounding layout and whether the sequence remains useful to scan.
 The markers-only representation intentionally leaves presentation of the
 current step name to the surrounding interface. If a narrow layout needs every
 step name visible at once, `.steps-vertical` is usually the better composition.
+
+In Windows forced-colors mode the accent fill is dropped, so a completed marker
+and an upcoming one both render as a ringed disc with a number. Set
+`--step-complete-mark` — a checkmark, for instance — if your flow needs the two
+to stay distinguishable there. Steps deliberately ships no forced-colors
+override of its own: painting the marker `Highlight` makes the number or glyph
+inside it unreadable, which is worse than the ambiguity it removes.
 
 The container-query thresholds are calibrated to the default `--step-min`.
 Container queries cannot read custom properties, so changing `--step-min` does

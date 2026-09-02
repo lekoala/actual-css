@@ -1,29 +1,40 @@
 /*
  * Steps — semantic ordered-list progression for a multi-step process.
  *
- * Every step wraps its label in `.step-label`; that wrapper is the contract the
- * space-aware representations address. They need an `actual-container` size
- * context the author grants — without one, stacked is the fallback and the
- * modes below never fire.
+ * One primitive, two explicit compositions. Both classes are required:
  *
- * Vertical is explicit with `.steps-vertical`: a composition choice for sidebars
- * and narrow regions, never a responsive fallback, and not bound by the
- * horizontal 2–5 step range.
+ *   <ol class="steps steps-horizontal">  horizontal, 2 to 5 stages
+ *   <ol class="steps steps-vertical">    vertical, any number of stages
  *
- * See docs/design-notes/steps.md for the reasoning behind the thresholds, the
- * selector shapes, and the alternatives that were rejected.
+ * `.steps` is what a step *is* — the counter, the marker, `.step-label`,
+ * `.complete`, `aria-current="step"`. It carries no orientation, so it is never
+ * written alone. `.steps-horizontal` and `.steps-vertical` are what a sequence
+ * *looks like*, and they are peers: neither is the default the other has to
+ * exclude, so no rule says `:not(...)` and no rule undoes another's layout.
+ *
+ * `.step-label` is mandatory: it is the handle the space-aware representations
+ * move, place or hide. It may be an `a[href]`; anything else focusable in a
+ * step is out of contract.
+ *
+ * The horizontal representations need an `actual-container` size context the
+ * author grants. Without one, stacked is the fallback.
+ *
+ * See docs/design-notes/steps.md for the thresholds, the selector shapes, the
+ * rejected alternatives, and why there is no forced-colors branch.
+ *
+ * Each public hook is followed by the class that owns it.
  *
  * Public hooks:
- * --step-size
- * --step-min
- * --step-gap
- * --step-inline-gap
- * --step-vertical-gap
- * --step-line-size
- * --step-marker-radius
- * --step-complete-mark
- * --step-connector
- * --step-inline-connector
+ * --step-size              .steps
+ * --step-inline-gap        .steps
+ * --step-line-size         .steps
+ * --step-marker-radius     .steps
+ * --step-complete-mark     .steps
+ * --step-min               .steps-horizontal
+ * --step-gap               .steps-horizontal
+ * --step-connector         .steps-horizontal
+ * --step-inline-connector  .steps-horizontal
+ * --step-vertical-gap      .steps-vertical
  *
  * Internal:
  * --step-marker-bg
@@ -31,12 +42,12 @@
  * --step-marker-fg
  * --step-line
  */
+
+/* Step primitive --------------------------------------------------------- */
+
 .steps {
   --step-size: 1.75rem;
-  --step-min: 7rem;
-  --step-gap: var(--space-20);
   --step-inline-gap: var(--space-20);
-  --step-vertical-gap: var(--space-40);
   --step-line-size: var(--border-width);
   --step-marker-bg: var(--surface);
   --step-marker-border: var(--border);
@@ -46,39 +57,14 @@
 
   counter-reset: actual-step;
   display: flex;
-  flex-direction: row;
-  inline-size: 100%;
   margin: 0;
   padding: 0;
-  overflow-x: auto;
-  /* Never `auto`. A row hugs fractional content — 28px marker + gap + a 17.5px
-     label line is 53.5px — and `overflow-x: auto` alone would compute this axis
-     to `auto` too, so any rounding that tips scrollHeight past clientHeight
-     (another font, a fractional device pixel ratio, a zoom step) raises a
-     phantom vertical scrollbar. There is never anything to scroll here. */
-  overflow-y: hidden;
-  overscroll-behavior-inline: contain;
   list-style: none;
-}
-
-/* Clipping happens at the padding edge, so a navigable row reserves the focus
-   ring's own width and offset. Only that case pays for it: an informational
-   stepper has nothing to draw a ring around, and the vertical orientation gives
-   the scroll container back entirely, so nothing there clips either. */
-.steps:not(.steps-vertical):has(> li > :is(a[href], button, [tabindex])) {
-  padding-block: calc(var(--focus-outline-offset) + var(--border-width) * 2);
 }
 
 .steps > li {
   position: relative;
-  display: grid;
-  flex: 1 0 var(--step-min);
-  grid-template-rows: var(--step-size) auto;
-  gap: var(--step-gap);
-  justify-items: center;
-  min-inline-size: max(var(--step-size), var(--step-min));
   color: var(--text-muted);
-  text-align: center;
   counter-increment: actual-step;
 }
 
@@ -99,38 +85,31 @@
   line-height: 1;
 }
 
-/* The marker carries the state, so the label stays a notch below it. Set on the
-   component, never per representation: a size that changed with the layout
-   would resize the text under a reader dragging a window. */
+/* The marker carries the state, so the label reads a notch below it — set on
+   the component, never per representation: a size that changed with the layout
+   would resize the text under a reader dragging a window. `color: inherit` is
+   here rather than in a rule of its own for `a.step-label`, because a span
+   inherits its ink anyway; only a link had anything to take back, and taking it
+   back for every label costs nothing and one rule less. A navigable label keeps
+   its underline, hover and focus ring — just not a link color, which would read
+   ahead of the marker states.
+
+   Still scoped, though `.menu-item-text` and friends are not: a bare
+   `.step-label` would weigh (0,1,0), exactly tying `.prose :where(a)`, and a
+   stepper in prose would then be decided by bundle order. */
 .steps .step-label {
   font-size: var(--font-size-sm);
   line-height: var(--line-height-tight);
-}
-
-/* A navigable label keeps its underline, hover and focus ring — but not a link
-   color, which would read ahead of the marker states. */
-.steps .step-label:is(a) {
   color: inherit;
 }
 
-/* The pseudo-element is marker-height so --step-connector may be any complete
-   background value. */
-.steps > li::after {
+/* Each composition gives the connector its own geometry and background, so the
+   only shared fact is which steps get one — every step but the last. Stated as
+   the condition rather than as a `content: none` rule undoing a `content: ""`
+   rule: a pseudo-element with no content generates no box, so a composition can
+   address `> li::after` freely and still not trail a line past the last step. */
+.steps > li:not(:last-child)::after {
   content: "";
-  position: absolute;
-  inset-block-start: 0;
-  inset-inline-start: calc(50% + var(--step-size) / 2);
-  inline-size: calc(100% - var(--step-size));
-  block-size: var(--step-size);
-  background: var(
-    --step-connector,
-    linear-gradient(var(--step-line), var(--step-line)) center /
-    100% var(--step-line-size) no-repeat
-  );
-}
-
-.steps > li:last-child::after {
-  content: none;
 }
 
 .steps > .complete {
@@ -160,7 +139,7 @@
 
 /* Weight marks "where I am now". Complete needs none: its filled disc already
    reads as strongly. */
-.steps > [aria-current="step"] > .step-label {
+.steps > [aria-current="step"] .step-label {
   font-weight: var(--font-weight-strong);
 }
 
@@ -168,41 +147,74 @@
   content: var(--step-complete-mark, counter(actual-step));
 }
 
-/* Forced colors drops the accent fill, which would leave complete and future
-   markers identical. */
-@media (forced-colors: active) {
-  .steps > .complete:not([aria-current="step"])::before {
-    background: Highlight;
-    color: HighlightText;
-  }
+/* Horizontal ------------------------------------------------------------- */
+
+.steps-horizontal {
+  --step-min: 7rem;
+  --step-gap: var(--space-20);
+
+  inline-size: 100%;
+  overflow-x: auto;
+  /* Stated, never left to `overflow-x` alone: one scrolling axis computes the
+     other to `auto`, and a row hugs fractional content closely enough that a
+     rounding difference then raises a phantom vertical scrollbar. */
+  overflow-y: hidden;
+  overscroll-behavior-inline: contain;
+}
+
+/* A scroll container clips at the padding edge, so a navigable row reserves the
+   focus ring's own width and offset. Only this composition scrolls, and only a
+   link has a ring to protect. */
+.steps-horizontal:has(a[href]) {
+  padding-block: calc(var(--focus-outline-offset) + var(--border-width) * 2);
+}
+
+.steps-horizontal > li {
+  display: grid;
+  flex: 1 0 var(--step-min);
+  grid-template-rows: var(--step-size) auto;
+  gap: var(--step-gap);
+  justify-items: center;
+  min-inline-size: max(var(--step-size), var(--step-min));
+  text-align: center;
+}
+
+/* The pseudo-element is marker-height so --step-connector may be any complete
+   background value. */
+.steps-horizontal > li::after {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-start: calc(50% + var(--step-size) / 2);
+  inline-size: calc(100% - var(--step-size));
+  block-size: var(--step-size);
+  background: var(
+    --step-connector,
+    linear-gradient(var(--step-line), var(--step-line)) center /
+    100% var(--step-line-size) no-repeat
+  );
 }
 
 /*
- * Horizontal CQ modes, both thresholds calibrated on five steps. Each lists the
- * counts it serves outright: horizontal is 2-5, and 6+ keeps the base layout.
- *   < 35rem  + 4-5 steps  markers only, unless a label is interactive
- *   >= 60rem + 2-5 steps  marker beside label
- *   otherwise             stacked
+ * Horizontal CQ modes, both thresholds calibrated on five steps — the widest
+ * supported row, and therefore the binding case.
+ *   < 35rem  + 4 steps or more  markers only, unless a label is a link
+ *   >= 60rem                    marker beside label
+ *   otherwise                   stacked
+ *
+ * Horizontal is a 2-5 step component. Inside that domain the count check reads
+ * "4 or 5"; outside it the rules simply apply, because a row that is out of
+ * contract is not owed a curated fallback.
  */
 @supports (container-type: inline-size) {
   @container actual-container (inline-size < 35rem) {
-    .steps:not(.steps-vertical):not(:has(> li > :is(a[href], button, [tabindex]))):has(
-        > :nth-child(4):last-child,
-        > :nth-child(5):last-child
-      )
-      > li {
+    .steps-horizontal:not(:has(a[href])):has(> :nth-child(4)) > li {
       flex: 1 1 0;
       grid-template-rows: var(--step-size);
       min-inline-size: var(--step-size);
       gap: 0;
     }
 
-    .steps:not(.steps-vertical):not(:has(> li > :is(a[href], button, [tabindex]))):has(
-        > :nth-child(4):last-child,
-        > :nth-child(5):last-child
-      )
-      > li
-      > .step-label {
+    .steps-horizontal:not(:has(a[href])):has(> :nth-child(4)) > li .step-label {
       position: absolute;
       inline-size: 1px;
       block-size: 1px;
@@ -217,13 +229,7 @@
   }
 
   @container actual-container (min-width: 60rem) {
-    .steps:not(.steps-vertical):has(
-        > :nth-child(2):last-child,
-        > :nth-child(3):last-child,
-        > :nth-child(4):last-child,
-        > :nth-child(5):last-child
-      )
-      > li {
+    .steps-horizontal > li {
       display: flex;
       flex: 1 1 auto;
       align-items: center;
@@ -233,13 +239,7 @@
       white-space: nowrap;
     }
 
-    .steps:not(.steps-vertical):has(
-        > :nth-child(2):last-child,
-        > :nth-child(3):last-child,
-        > :nth-child(4):last-child,
-        > :nth-child(5):last-child
-      )
-      > li::after {
+    .steps-horizontal > li::after {
       position: static;
       flex: 1 1 2rem;
       inline-size: auto;
@@ -255,49 +255,50 @@
       );
     }
 
-    .steps:not(.steps-vertical):has(
-        > :nth-child(2):last-child,
-        > :nth-child(3):last-child,
-        > :nth-child(4):last-child,
-        > :nth-child(5):last-child
-      )
-      > li:last-child {
+    .steps-horizontal > li:last-child {
       flex: 0 0 auto;
     }
   }
 }
 
-/* Vertical is an explicit orientation, never a responsive fallback: container
-   queries do not reach it, and it has no step-count limit. */
-.steps.steps-vertical {
+/* Vertical --------------------------------------------------------------- */
+
+.steps-vertical {
+  --step-vertical-gap: var(--space-40);
+
   flex-direction: column;
   gap: var(--step-vertical-gap);
-  overflow: visible;
-  overscroll-behavior: auto;
 }
 
-.steps.steps-vertical > li {
+/* `justify-items` looks like a reset and is not one — nothing here resets
+   anything, since the horizontal rules never applied. Grid items blockify, so
+   without it a label stretches the whole 1fr track: 264px against 75px for an
+   `a.step-label`, a full-width focus ring the row does not give the same link. */
+.steps-vertical > li {
   display: grid;
-  flex: none;
   grid-template-columns: var(--step-size) minmax(0, 1fr);
-  grid-template-rows: auto;
   align-items: start;
   justify-items: start;
   gap: var(--step-inline-gap);
-  min-inline-size: 0;
   min-block-size: var(--step-size);
-  color: var(--text-muted);
-  text-align: start;
 }
 
 /* The row starts at the top so a wrapped label begins level with its marker.
    align-self only bites on a single line, which would otherwise float above
-   the marker's centre. */
-.steps.steps-vertical > li > .step-label {
+   the marker's centre.
+
+   The one `.step-label` rule that keeps a child combinator: `align-self` is a
+   grid-item property, so this declaration is meaningless on anything but a
+   direct child of the row. Elsewhere the label is addressed as a descendant —
+   the framework owns the structure, and repeating it buys nothing. */
+.steps-vertical > li > .step-label {
   align-self: center;
 }
 
-.steps.steps-vertical > li::after {
+/* The vertical track publishes no hook of its own: a horizontal connector value
+   cannot transpose onto this geometry, and this selector is already a reachable
+   override for the design that finally asks. */
+.steps-vertical > li::after {
   position: absolute;
   inset-block-start: var(--step-size);
   inset-inline-start: calc((var(--step-size) - var(--step-line-size)) / 2);

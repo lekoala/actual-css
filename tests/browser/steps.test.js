@@ -10,7 +10,9 @@
  * - the three horizontal representations must switch on the documented pixel
  *   and never overlap;
  * - the compact form must not leave a focusable label clipped to 1x1;
- * - .steps-vertical must stay vertical whatever the container reports;
+ * - .steps-vertical must stay vertical whatever the container reports, and
+ *   must do it without carrying .steps at all;
+ * - state must read identically on both roots;
  * - the label must read as one notch below its marker, and sit on the marker's
  *   optical centre, in every representation;
  * - the row must scroll on the inline axis only, and clip nothing a reader
@@ -227,7 +229,6 @@ it("--step-connector replaces the whole connector background", async () => {
  *   cross-axis scrollbar.
  * - Every label goes, including the current one, so the markers keep an even
  *   pitch and no step reads as wider than its peers. The text stays in the DOM.
- * - Six steps is outside the 2..5 horizontal contract, so no rule fires.
  * - All three grant routes behave the same: the class on the row, the name
  *   declared in a stylesheet, and a wrapper carrying the shared name — that
  *   last one reaches the row and measures its region.
@@ -258,7 +259,6 @@ it("a granted size context trades scroll for markers only, at four and five step
           narrow3: read("narrow-3"),
           narrow2: read("narrow-2"),
           bare: read("bare"),
-          six: read("six"),
           stylesheet: read("stylesheet-route"),
           ancestor: read("ancestor-grant"),
         };
@@ -300,10 +300,6 @@ it("a granted size context trades scroll for markers only, at four and five step
       expect(result.bare.labelHidden).toBe(null);
       expect(result.bare.overflowPx).toBe(0);
       expect(result.bare.scrollbarPx).toBe(0);
-
-      // Six steps is outside the contract: no rule fires.
-      expect(result.six.otherLabelHidden).toBe(false);
-      expect(result.six.overflowPx).toBeGreaterThan(0);
 
       // The class is a convenience, not the API: naming the anchor in CSS is
       // equivalent.
@@ -516,6 +512,10 @@ it("vertical steps stay vertical under any container width", async () => {
           const line = connector(li);
           const after = getComputedStyle(li, "::after");
           return {
+            // Peers on a shared primitive: a column carries the primitive for
+            // everything a step is, and never the horizontal composition.
+            carriesPrimitive: ol.classList.contains("steps"),
+            carriesHorizontal: ol.classList.contains("steps-horizontal"),
             direction: getComputedStyle(ol).flexDirection,
             // Stacked top to bottom, each step at the same inline start.
             stacked: list.every((x, i, all) =>
@@ -543,6 +543,9 @@ it("vertical steps stay vertical under any container width", async () => {
 
       for (const key of ["narrow", "wide"]) {
         const v = result[key];
+        // `<ol class="steps steps-vertical">`, never `.steps-horizontal`.
+        expect(v.carriesPrimitive).toBe(true);
+        expect(v.carriesHorizontal).toBe(false);
         expect(v.direction).toBe("column");
         expect(v.stacked).toBe(true);
         expect(v.sameStart).toBe(1);
@@ -565,6 +568,59 @@ it("vertical steps stay vertical under any container width", async () => {
       expect(result.narrow.lineImage).toContain("rgb");
     },
     { artifactName: "steps-vertical" },
+  );
+});
+
+/*
+ * `.steps` and `.steps-vertical` are two roots but one component, and state is
+ * the half they share. Every channel a step's state paints — the marker fill,
+ * its ring, its ring width, the glyph or number inside it, the label's weight
+ * and the item's own text colour — must read identically on both.
+ *
+ * This is the test that would catch the shared block being split back into two
+ * copies. `:is(.steps, .steps-vertical)` makes the parity structural rather
+ * than a convention someone maintains by hand, and a copy that drifted by one
+ * token would still pass every other test in this file.
+ */
+it("state reads the same on both roots", async () => {
+  await withBrowserPage(
+    fixtureUrl(FIXTURE),
+    async (view) => {
+      const result = await probe(
+        view,
+        `
+        const state = (li) => {
+          const marker = getComputedStyle(li, "::before");
+          const label = getComputedStyle(labelOf(li));
+          return {
+            fill: marker.backgroundColor,
+            ring: marker.borderTopColor,
+            ringWidth: marker.borderTopWidth,
+            glyph: marker.content,
+            markerColor: marker.color,
+            itemColor: getComputedStyle(li).color,
+            labelWeight: label.fontWeight,
+            labelSize: label.fontSize,
+          };
+        };
+        const read = (id) => items(id).map(state);
+        return { horizontal: read("plain"), vertical: read("plain-vertical") };
+      `,
+      );
+
+      // complete, current, upcoming — same markup, same three states.
+      expect(result.horizontal).toHaveLength(3);
+      expect(result.vertical).toEqual(result.horizontal);
+
+      /* And the three states are actually distinct on that shared channel set,
+         so the equality above is not two identical nothings. */
+      const [complete, current, upcoming] = result.horizontal;
+      expect(complete.fill).not.toBe(upcoming.fill);
+      expect(current.ringWidth).not.toBe(upcoming.ringWidth);
+      expect(current.labelWeight).not.toBe(upcoming.labelWeight);
+      expect(complete.labelWeight).toBe(upcoming.labelWeight);
+    },
+    { artifactName: "steps-state-parity" },
   );
 });
 
@@ -701,7 +757,7 @@ it("scrolls only on the inline axis, without clipping a focus ring", async () =>
           box.style.inlineSize = width + "px";
           document.body.append(box);
           const ol = document.createElement("ol");
-          ol.className = "steps";
+          ol.className = "steps steps-horizontal";
           for (const [i, text] of ["Account", "Payment", "Confirm"].entries()) {
             const li = document.createElement("li");
             if (i === 0) li.className = "complete";
