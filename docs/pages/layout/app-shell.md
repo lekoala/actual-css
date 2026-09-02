@@ -1,11 +1,11 @@
 # App Shell
 
-Full-height, single-column document flow. Despite its historical name, this is
-the general shell for ordinary pages as well as simple applications.
+Full-height, single-column document flow. Use it as the outer shell for ordinary pages,
+simple applications, and other layouts that need a header / main / footer structure spanning the viewport.
 
 Header and footer are document landmarks, not required layout classes.
-Use semantic elements by default. `.app-shell` already supplies the outer
-column, so do not add a `.stack` solely to arrange the page landmarks.
+Use semantic elements by default. .app-shell already supplies the outer column,
+so do not add a .stack solely to arrange the page landmarks.
 
 ```html demo
 <body class="app-shell">

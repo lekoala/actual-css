@@ -219,10 +219,12 @@ the layout keeps it clear of adaptive application navigation and safe areas.</p>
 <p><strong>Related terms:</strong> fab.</p>
 <pre><code class="language-html">&lt;div class=&quot;fab&quot;&gt;
   &lt;button class=&quot;btn circle primary lg icon-only&quot; type=&quot;button&quot; aria-label=&quot;Create&quot;&gt;
-    &lt;span aria-hidden=&quot;true&quot;&gt;+&lt;/span&gt;
+    &lt;i class=&quot;ti ti-plus&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;
   &lt;/button&gt;
 &lt;/div&gt;
 </code></pre>
+<p>The plain FAB button carries the application's own icon — it is a product
+action, not a toggle.</p>
 <p>Use native <code>details</code> for a no-JavaScript speed dial. List actions in their
 visual top-to-bottom order so keyboard focus follows the same sequence.</p>
 <pre><code class="language-html">&lt;details class=&quot;fab&quot;&gt;
@@ -230,9 +232,7 @@ visual top-to-bottom order so keyboard focus follows the same sequence.</p>
     class=&quot;btn circle primary icon-only&quot;
     style=&quot;--btn-min-size: 3.5rem&quot;
     aria-label=&quot;Create&quot;
-  &gt;
-    &lt;span aria-hidden=&quot;true&quot;&gt;+&lt;/span&gt;
-  &lt;/summary&gt;
+  &gt;&lt;/summary&gt;
 
   &lt;div class=&quot;fab-actions&quot;&gt;
     &lt;div class=&quot;fab-action&quot;&gt;
@@ -268,9 +268,7 @@ not the FAB's containing component. Production <code>.fab</code> remains viewpor
       class="btn circle primary icon-only"
       style="--btn-min-size: 3.5rem"
       aria-label="Create"
-    >
-      <span aria-hidden="true">+</span>
-    </summary>
+    ></summary>
 
     <div class="fab-actions">
       <div class="fab-action">
@@ -307,9 +305,7 @@ not the FAB's containing component. Production <code>.fab</code> remains viewpor
       class=&quot;btn circle primary icon-only&quot;
       style=&quot;--btn-min-size: 3.5rem&quot;
       aria-label=&quot;Create&quot;
-    &gt;
-      &lt;span aria-hidden=&quot;true&quot;&gt;+&lt;/span&gt;
-    &lt;/summary&gt;
+    &gt;&lt;/summary&gt;
 
     &lt;div class=&quot;fab-actions&quot;&gt;
       &lt;div class=&quot;fab-action&quot;&gt;
@@ -343,8 +339,11 @@ add application behavior only when the product requires those policies.</p>
 line. The example uses the button's existing <code>.lg</code> density for 44px secondary
 actions and its <code>--btn-min-size</code> hook for a dominant 56px trigger. Size still
 belongs to Button rather than introducing FAB-specific size modifiers.
-When the summary contains one decorative icon, FAB rotates it by 45 degrees in
-the open state so a plus naturally becomes a close symbol.</p>
+Unlike the plain FAB, the speed dial trigger takes no icon: FAB owns it as a
+toggle and masks the shared <code>--icon-plus</code> glyph while closed and <code>--icon-close</code> —
+the same close symbol used by alerts and dialogs — while open, both sized by
+<code>--fab-icon-size</code>. No application icon and no rotated glyph is involved, so the
+two states stay visually identical in size and stroke.</p>
 <h2 id="class-reference">Class reference</h2>
 <div class="table-wrap"><table class="table">
 <thead>
@@ -361,6 +360,7 @@ the open state so a plus naturally becomes a close symbol.</p>
 <ul>
 <li><code>--fab-offset</code> — minimum viewport-edge offset.</li>
 <li><code>--fab-gap</code> — gap between actions and between the trigger and action list.</li>
+<li><code>--fab-icon-size</code> — size of the speed dial toggle's open and close markers.</li>
 </ul>
 <p>FAB is hidden in print and uses <code>--z-menu</code>, leaving tooltips and status UI above
 it. Dialogs remain in the browser's top layer.</p>

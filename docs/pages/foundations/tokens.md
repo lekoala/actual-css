@@ -247,6 +247,7 @@ Icons used by CSS-only controls are public tokens because users may need to repl
   --icon-chevron: url("data:image/svg+xml,...");
   --icon-check: url("data:image/svg+xml,...");
   --icon-close: url("data:image/svg+xml,...");
+  --icon-plus: url("data:image/svg+xml,...");
 }
 ```
 
