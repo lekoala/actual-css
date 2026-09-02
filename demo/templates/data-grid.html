@@ -8,7 +8,7 @@
   <meta name="description" content="data-grid-component loaded from CDN, themed with Actual CSS tokens. Declarative table and JavaScript API examples.">
   <link rel="stylesheet" href="../../dist/actual.full.css">
   <link rel="stylesheet" href="../assets/actual-themes.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/data-grid-component@3.2.1/dist/data-grid.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/data-grid-component@3.3.0/dist/data-grid.min.css">
   <style>
     .page {
       --center-size: 72rem;
@@ -402,14 +402,16 @@
     </section>
 
     <footer class="page-note">
-      <span>Loaded from jsDelivr: <code>data-grid-component@3.0.1/dist/data-grid.min.css</code> and
-        <code>data-grid-component@3.0.1/data-grid.min.js</code>.</span>
+      <span>Loaded from jsDelivr: <code>data-grid-component@3.3.0/dist/data-grid.min.css</code> and
+        <code>data-grid-component@3.3.0/dist/data-grid.min.js</code>.</span>
     </footer>
   </main>
 
-  <script type="module" src="https://cdn.jsdelivr.net/npm/data-grid-component@3.0.1/data-grid.min.js"></script>
+  <script type="module" src="https://cdn.jsdelivr.net/npm/data-grid-component@3.3.0/dist/data-grid.min.js"></script>
   <script src="../../dist/actual.full.js"></script>
   <script type="module">
+    import { DataGrid, ArrayDataSource } from "https://cdn.jsdelivr.net/npm/data-grid-component@3.3.0/dist/data-grid.min.js";
+
     const switcher = document.getElementById("theme-switcher");
     if (switcher) {
       switcher.addEventListener("change", () => {
