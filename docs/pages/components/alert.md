@@ -117,10 +117,12 @@ Use `.alert-dismiss` to let a user remove an inline alert. The button is transpa
 ```html demo
 <div class="alert warning" id="warning-alert">
   <i class="ti ti-alert-triangle alert-icon" aria-hidden="true"></i>
-  <div>
+
+  <div class="stack" style="--gap: var(--space-10)">
     <strong>Warning</strong>
     <p>Something needs your attention.</p>
   </div>
+
   <button
     class="alert-dismiss"
     type="button"
