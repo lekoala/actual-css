@@ -133,6 +133,10 @@ test("tooltip tracking only runs while the tooltip is visible", async () => {
     unobserve(element) {
       observed.delete(element);
     }
+
+    disconnect() {
+      observed.clear();
+    }
   };
   const trigger = document.querySelector("button");
 
@@ -141,7 +145,7 @@ test("tooltip tracking only runs while the tooltip is visible", async () => {
   expect(observed.size).toBe(0);
 
   await waitForShow();
-  expect(observed.has(tip)).toBe(true);
+  expect(observed).toEqual(new Set([trigger, tip]));
 
   leave(trigger);
   await waitForHide();
@@ -159,6 +163,10 @@ test("activated tooltip replacements release their tracking", async () => {
     unobserve(element) {
       observed.delete(element);
     }
+
+    disconnect() {
+      observed.clear();
+    }
   };
   const main = document.querySelector("main");
 
@@ -170,7 +178,7 @@ test("activated tooltip replacements release their tracking", async () => {
     const trigger = main.lastElementChild;
     click(trigger);
 
-    expect(observed.size).toBe(1);
+    expect(observed.size).toBe(2);
 
     trigger.remove();
     await nextMicrotask();

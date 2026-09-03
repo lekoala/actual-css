@@ -124,19 +124,18 @@ The JS is designed to run on its own, without Actual's stylesheet.
 ## The runtime as a primitive kit
 
 For building custom widgets (select, tags, date picker) on Actual's primitives,
-see the widget-primitives design note. Every primitive subpath is published in
-`package.json#exports`:
+see the widget-primitives design note. Every Actual runtime primitive subpath is
+published in `package.json#exports`:
 
-| Subpath                  | Purpose                                                          |
-| ------------------------ | ---------------------------------------------------------------- |
-| `actual-css/js/enhance`  | DOM lifecycle engine: `enhance()`, `registerEnhancement`, tokens |
-| `actual-css/js/escape`   | Per-document LIFO Escape dismissal stack                         |
-| `actual-css/js/events`   | The `actual:*` event name constants                              |
-| `actual-css/js/floating` | Positioning engine (`reposition`, `repositionAt`, `autoUpdate`)  |
-| `actual-css/js/focus`    | Focusable-item lookup and helpers                                |
-| `actual-css/js/keys`     | Roving-focus item navigation helpers                             |
-| `actual-css/js/menu`     | Menu keyboard/click wiring, item vocabulary                      |
-| `actual-css/js/surface`  | Surface lifecycle (`openSurface`, `closeSurface`, …)             |
+| Subpath                 | Purpose                                                          |
+| ----------------------- | ---------------------------------------------------------------- |
+| `actual-css/js/enhance` | DOM lifecycle engine: `enhance()`, `registerEnhancement`, tokens |
+| `actual-css/js/escape`  | Per-document LIFO Escape dismissal stack                         |
+| `actual-css/js/events`  | The `actual:*` event name constants                              |
+| `actual-css/js/focus`   | Focusable-item lookup and helpers                                |
+| `actual-css/js/keys`    | Roving-focus item navigation helpers                             |
+| `actual-css/js/menu`    | Menu keyboard/click wiring, item vocabulary                      |
+| `actual-css/js/surface` | Surface lifecycle (`openSurface`, `closeSurface`, …)             |
 
 The exports map is explicit — it *is* the statement of what is public.
 
@@ -149,33 +148,36 @@ computes and writes inline `left`/`top`, `data-placement`,
 caller owns the floating element's presentation entirely.
 
 ```js
-import { autoUpdate, reposition, repositionAt } from "actual-css/js/floating";
+import { autoUpdate, reposition, repositionAt } from "@lekoala/floating";
 
-const stop = autoUpdate(float, () => {
+const stop = autoUpdate(trigger, float, () => {
   reposition(trigger, float, { placement: "bottom-start", distance: 4 });
 });
 ```
 
 Options passed to `reposition()`:
 
-| Option         | Default          | Contract                                    |
-| -------------- | ---------------- | ------------------------------------------- |
-| `placement`    | `"bottom-start"` | Preferred side and alignment                |
-| `distance`     | `0`              | Gap from the reference element              |
-| `flip`         | `true`           | Flip when the preferred side is out of view |
-| `shift`        | `true`           | Shift along the main axis to stay in bounds |
-| `shiftPadding` | `4`              | Minimum space kept from the boundary        |
-| `scope`        | viewport         | Boundary element for overflow decisions     |
+| Option         | Default          | Contract                                     |
+| -------------- | ---------------- | -------------------------------------------- |
+| `placement`    | `"bottom-start"` | Preferred side and alignment                 |
+| `distance`     | `0`              | Gap from the reference element               |
+| `flip`         | `true`           | Flip when the preferred side is out of view  |
+| `shift`        | `true`           | Shift along the cross axis to stay in bounds |
+| `shiftPadding` | `4`              | Minimum space kept from the boundary         |
+| `scope`        | viewport         | Boundary element for overflow decisions      |
 
 `placement` takes a `-start` or `-end` alignment suffix.
 
-`autoUpdate(element, callback)` batches scroll, resize, and element-resize
-callbacks per document and returns a stop handle; it does not keep a closed or
+`@lekoala/floating` is the standalone positioning dependency used by the
+runtime. `autoUpdate(reference, float, callback)` batches scroll, resize, and
+element-resize callbacks per document and returns a stop handle; it observes
+both the reference and floating element while the surface is open. Pass `null`
+as the reference for point-positioned surfaces. It does not keep a closed or
 hidden element positioned. `repositionAt(x, y, float, opts)` positions relative
 to a fixed point — used by context menus.
 
-A third-party widget importing only `floating` with no Actual stylesheet must be
-able to position a listbox under an input — that is the test.
+A third-party widget importing only `@lekoala/floating` with no Actual stylesheet
+must be able to position a listbox under an input — that is the test.
 
 ## Surface contract
 

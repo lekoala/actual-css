@@ -27,9 +27,9 @@
  * Hide:       blur, pointer leave, Escape
  */
 
+import { autoUpdate, reposition } from "@lekoala/floating";
 import enhance from "./enhance.js";
 import { registerEscapeDismissal } from "./escape.js";
-import { autoUpdate, reposition } from "./floating.js";
 import { CLASSES } from "./selectors.js";
 
 const SHOW_DELAY_MS = 150;
@@ -163,7 +163,7 @@ function updateTrackedTip(tip, state) {
 function startTracking(tip, state) {
   if (state.stopTracking) return;
 
-  state.stopTracking = autoUpdate(tip, () => updateTrackedTip(tip, state));
+  state.stopTracking = autoUpdate(state.activeRef, tip, () => updateTrackedTip(tip, state));
 }
 
 function stopTracking(state) {

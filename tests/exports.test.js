@@ -5,7 +5,6 @@ const PUBLIC_EXPORTS = {
   enhance: ["default", "enhancementSelector", "hasEnhancement", "registerEnhancement"],
   escape: ["registerEscapeDismissal"],
   events: ["EVENTS"],
-  floating: ["autoUpdate", "reposition", "repositionAt"],
   focus: ["isElementVisible", "getFocusable", "focusFirstDescendant"],
   "focus-group": ["connectFocusGroup"],
   keys: ["firstItem", "lastItem", "nextItem", "itemForKey"],

@@ -8,7 +8,7 @@ The JS runtime doubles as a primitive kit for building custom widgets.
 | ---------------------------------- | ------------- | --------------------------- |
 | Discovery, lifecycle, cleanup      | `enhance`     | `actual-css/js/enhance`     |
 | Per-document LIFO Escape dismissal | `escape`      | `actual-css/js/escape`      |
-| Positioning, flip and shift        | `floating`    | `actual-css/js/floating`    |
+| Positioning, flip and shift        | `floating`    | `@lekoala/floating`         |
 | Open/close, sheet, backdrop, focus | `surface`     | `actual-css/js/surface`     |
 | Directional item lookup            | `keys`        | `actual-css/js/keys`        |
 | Menu-item vocabulary               | `menu`        | `actual-css/js/menu`        |
@@ -24,7 +24,7 @@ The named exports each module carries:
 
 - `enhance` — `enhance`, `registerEnhancement`
 - `escape` — `registerEscapeDismissal`
-- `floating` — `track`, `reposition`, `repositionAt`, plus
+- `floating` — `autoUpdate`, `reposition`, `repositionAt`, plus
   `--available-height` and `data-placement`
 - `keys` — `itemForKey`, `firstItem`, `lastItem`, `nextItem`, with edge,
   wrapping and RTL handling
