@@ -279,7 +279,7 @@ example:</p>
 <tr><th>Module</th><th>Behavior</th></tr>
 </thead>
 <tbody>
-<tr><td><code>actual-css/js/flyout</code></td><td>Trigger → panel surface: positioning, open/close, sheet mode (token <code>flyout</code>)</td></tr>
+<tr><td><code>actual-css/js/flyout</code></td><td>Trigger → panel positioning and open/close (token <code>flyout</code>)</td></tr>
 <tr><td><code>actual-css/js/context-menu</code></td><td>Context menus on <code>data-context-menu</code></td></tr>
 <tr><td><code>actual-css/js/focus-group</code></td><td>Reusable roving-focus controller; no automatic discovery</td></tr>
 <tr><td><code>actual-css/js/dialog</code></td><td>Native <code>&lt;dialog&gt;</code> behavior, focus management, dismissal</td></tr>
@@ -292,9 +292,11 @@ example:</p>
 <tr><td><code>actual-css/js/password</code></td><td>Password reveal toggle</td></tr>
 <tr><td><code>actual-css/js/validation</code></td><td>Form validation (token <code>validation</code>)</td></tr>
 <tr><td><code>actual-css/js/status</code></td><td>Singleton status bar on <code>[data-status][role=&quot;status&quot;]</code></td></tr>
-<tr><td><code>actual-css/js/enhancement-loader</code></td><td>Declared enhancement manifests (<code>data-enhance-modules</code>, <code>Enhance-Modules</code>)</td></tr>
+<tr><td><code>actual-css/js/enhancement-loader</code></td><td>Declared enhancement manifests</td></tr>
 </tbody>
 </table></div>
+<p>The enhancement loader reads its manifests from <code>data-enhance-modules</code> or the
+<code>Enhance-Modules</code> header.</p>
 <p>Use <code>actual-css/js/full</code> for demos, playgrounds, and smoke tests where one import
 enables every built-in behavior. Production apps can import individual modules
 such as <code>actual-css/js/validation</code> or <code>actual-css/js/status</code> when only those are
@@ -358,14 +360,15 @@ const stop = autoUpdate(float, () =&gt; {
 <tr><th>Option</th><th>Default</th><th>Contract</th></tr>
 </thead>
 <tbody>
-<tr><td><code>placement</code></td><td><code>&quot;bottom-start&quot;</code></td><td>Preferred side and alignment (<code>-start</code> / <code>-end</code>)</td></tr>
-<tr><td><code>distance</code></td><td><code>0</code></td><td>Gap between the reference and the floating element</td></tr>
-<tr><td><code>flip</code></td><td><code>true</code></td><td>Flip to the opposite side when the preferred side is out of view</td></tr>
-<tr><td><code>shift</code></td><td><code>true</code></td><td>Shift along the main axis to stay within the boundary</td></tr>
+<tr><td><code>placement</code></td><td><code>&quot;bottom-start&quot;</code></td><td>Preferred side and alignment</td></tr>
+<tr><td><code>distance</code></td><td><code>0</code></td><td>Gap from the reference element</td></tr>
+<tr><td><code>flip</code></td><td><code>true</code></td><td>Flip when the preferred side is out of view</td></tr>
+<tr><td><code>shift</code></td><td><code>true</code></td><td>Shift along the main axis to stay in bounds</td></tr>
 <tr><td><code>shiftPadding</code></td><td><code>4</code></td><td>Minimum space kept from the boundary</td></tr>
 <tr><td><code>scope</code></td><td>viewport</td><td>Boundary element for overflow decisions</td></tr>
 </tbody>
 </table></div>
+<p><code>placement</code> takes a <code>-start</code> or <code>-end</code> alignment suffix.</p>
 <p><code>autoUpdate(element, callback)</code> batches scroll, resize, and element-resize
 callbacks per document and returns a stop handle; it does not keep a closed or
 hidden element positioned. <code>repositionAt(x, y, float, opts)</code> positions relative
@@ -405,22 +408,30 @@ widgets can veto or decorate opens, and context menus inject their own
 <tr><th>Option</th><th>Default</th><th>Contract</th></tr>
 </thead>
 <tbody>
-<tr><td><code>trigger</code></td><td>—</td><td>Anchoring element; also the focus-restore target by default</td></tr>
+<tr><td><code>trigger</code></td><td>—</td><td>Anchoring element, and focus-restore target</td></tr>
 <tr><td><code>source</code></td><td>—</td><td>Alternate anchor when there is no trigger</td></tr>
-<tr><td><code>x</code>, <code>y</code></td><td>—</td><td>Position at a fixed viewport point instead of an anchor (context menus)</td></tr>
+<tr><td><code>x</code>, <code>y</code></td><td>—</td><td>Position at a fixed viewport point</td></tr>
 <tr><td><code>placement</code></td><td><code>&quot;bottom-start&quot;</code></td><td>Preferred placement</td></tr>
 <tr><td><code>distance</code></td><td><code>4</code></td><td>Gap between anchor and surface</td></tr>
-<tr><td><code>flip</code></td><td><code>true</code></td><td>Flip when the preferred side is out of view</td></tr>
+<tr><td><code>flip</code></td><td><code>true</code></td><td>Flip when the preferred side is hidden</td></tr>
 <tr><td><code>shift</code></td><td><code>true</code></td><td>Shift to stay within the boundary</td></tr>
 <tr><td><code>shiftPadding</code></td><td><code>4</code></td><td>Minimum space kept from the boundary</td></tr>
 <tr><td><code>scope</code></td><td>viewport</td><td>Boundary element</td></tr>
-<tr><td><code>mobile</code></td><td><code>&quot;auto&quot;</code></td><td><code>&quot;auto&quot;</code>, <code>&quot;sheet&quot;</code>, <code>&quot;none&quot;</code>, or <code>&quot;anchored&quot;</code> sheet behavior</td></tr>
+<tr><td><code>mobile</code></td><td><code>&quot;auto&quot;</code></td><td>Sheet behavior</td></tr>
 <tr><td><code>breakpoint</code></td><td><code>768</code></td><td>Max viewport width for an automatic sheet</td></tr>
-<tr><td><code>autoClose</code></td><td><code>&quot;outside&quot;</code></td><td><code>&quot;true&quot;</code> closes for inside and outside clicks; <code>&quot;inside&quot;</code> and <code>&quot;outside&quot;</code> limit the side; <code>&quot;false&quot;</code> disables automatic click closing. Invalid values use <code>&quot;true&quot;</code></td></tr>
-<tr><td><code>dismissOnScroll</code></td><td><code>false</code></td><td>Close when scrolling outside the surface follows a new user input; opening/focus scroll is ignored</td></tr>
-<tr><td><code>restoreFocusTo</code></td><td><code>trigger</code> or <code>source</code></td><td>Element focused on close</td></tr>
+<tr><td><code>autoClose</code></td><td><code>&quot;outside&quot;</code></td><td>Which clicks close the surface</td></tr>
+<tr><td><code>dismissOnScroll</code></td><td><code>false</code></td><td>Close on a scroll the user just started</td></tr>
+<tr><td><code>restoreFocusTo</code></td><td><code>trigger</code></td><td>Element focused on close</td></tr>
 </tbody>
 </table></div>
+<p><code>x</code>, <code>y</code> replace the anchor entirely, which is what a context menu needs.
+<code>mobile</code> takes <code>&quot;auto&quot;</code>, <code>&quot;sheet&quot;</code>, <code>&quot;none&quot;</code> or <code>&quot;anchored&quot;</code>.</p>
+<p><code>autoClose</code> takes <code>&quot;true&quot;</code> to close on inside and outside clicks, <code>&quot;inside&quot;</code> or
+<code>&quot;outside&quot;</code> to limit it to one side, and <code>&quot;false&quot;</code> to disable automatic click
+closing; an invalid value reads as <code>&quot;true&quot;</code>.</p>
+<p><code>dismissOnScroll</code> only fires when the scroll follows a new user input — the
+scroll that opening or focusing causes is ignored. <code>restoreFocusTo</code> falls back
+to <code>source</code> when there is no <code>trigger</code>.</p>
 <p>The click policy belongs to the surface rather than to a particular menu
 anatomy. The generic primitive defaults to outside-click dismissal; flyout and
 context-menu choose <code>&quot;true&quot;</code> as their component default. A descendant carrying
@@ -438,17 +449,20 @@ listenable on the document; cancelable events veto the associated action when
 <code>preventDefault()</code> is called.</p>
 <div class="table-wrap"><table class="table">
 <thead>
-<tr><th>Event</th><th>Dispatch</th><th>Contract</th></tr>
+<tr><th>Event</th><th>Dispatch</th><th><code>detail</code></th></tr>
 </thead>
 <tbody>
-<tr><td><code>actual:surface-open</code></td><td><code>openSurface()</code>, before a surface opens</td><td>Cancelable. <code>detail: { surface, options }</code></td></tr>
-<tr><td><code>actual:context-menu</code></td><td>context-menu, before its menu opens</td><td>Cancelable. <code>detail: { menu, context, origin, trigger }</code></td></tr>
-<tr><td><code>actual:status</code></td><td>status module, or any code</td><td>Show or clear the status bar. <code>detail: { message, intent, duration }</code>; omit <code>message</code> to clear</td></tr>
-<tr><td><code>actual:invalid</code></td><td>validation, after a submit was blocked</td><td><code>detail: { form, firstInvalid, message }</code></td></tr>
-<tr><td><code>actual:dialog-cancel</code></td><td>dialog, before native cancel close</td><td>Cancelable. <code>detail: { dialog, sourceEvent }</code></td></tr>
-<tr><td><code>actual:dismiss</code></td><td><code>--dismiss</code> command, after hiding a target</td><td><code>detail: { trigger }</code></td></tr>
+<tr><td><code>actual:surface-open</code></td><td>before a surface opens</td><td><code>{ surface, options }</code></td></tr>
+<tr><td><code>actual:context-menu</code></td><td>before a context menu opens</td><td><code>{ menu, context, origin, trigger }</code></td></tr>
+<tr><td><code>actual:status</code></td><td>status module, or any code</td><td><code>{ message, intent, duration }</code></td></tr>
+<tr><td><code>actual:invalid</code></td><td>after a submit was blocked</td><td><code>{ form, firstInvalid, message }</code></td></tr>
+<tr><td><code>actual:dialog-cancel</code></td><td>before a native cancel close</td><td><code>{ dialog, sourceEvent }</code></td></tr>
+<tr><td><code>actual:dismiss</code></td><td>after <code>--dismiss</code> hid a target</td><td><code>{ trigger }</code></td></tr>
 </tbody>
 </table></div>
+<p><code>actual:surface-open</code>, <code>actual:context-menu</code> and <code>actual:dialog-cancel</code> are
+cancelable. <code>actual:status</code> both shows and clears the status bar — omit
+<code>message</code> to clear it.</p>
 <h2 id="extending-the-runtime">Extending the runtime</h2>
 <h3 id="stateless-commands">Stateless commands</h3>
 <p>Use <code>registerCommands()</code> for a target-oriented action that can be fully resolved

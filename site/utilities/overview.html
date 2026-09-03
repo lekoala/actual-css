@@ -217,6 +217,27 @@
 <li>Keep utility names stable, boring, and few.</li>
 <li>Utilities should use logical properties where relevant.</li>
 </ul>
+<h2 id="two-layers">Two layers</h2>
+<p>Utilities ship in two modules, and the split is about <strong>naming and curation</strong>,
+not about opting in. Importing <code>actual-css/css/utilities</code> — or
+<code>actual.full.css</code> — gives you both.</p>
+<div class="table-wrap"><table class="table">
+<thead>
+<tr><th>Module</th><th>Import</th><th>Naming</th></tr>
+</thead>
+<tbody>
+<tr><td><strong>Base</strong></td><td><code>actual-css/css/utilities/base</code></td><td>Compact names, frequent operations</td></tr>
+<tr><td><strong>Extra</strong></td><td><code>actual-css/css/utilities/extra</code></td><td>Explicit property/value names</td></tr>
+</tbody>
+</table></div>
+<p>Base is the curated set, and it is where a short name is allowed: <code>.px</code>, <code>.py</code>,
+<code>.mbs</code>, <code>.gap-none</code>. Extra spells out the property and the value — <code>.gap-sm</code>,
+<code>.overflow-x-auto</code>, <code>.justify-content-center</code> — and never gives a base utility
+a second spelling.</p>
+<p>Reach for base first. Extra exists so an explicit one-off does not have to
+become a new short name, which is the pressure that grows a utility surface.</p>
+<p>Extra utilities are concentrated in flex, overflow and spacing; those pages
+list the two layers as separate tables. Every other utility page is base only.</p>
 <h2 id="non-goals">Non-Goals</h2>
 <blockquote>
 <p>Utilities deliberately excluded to keep the surface small and intentional.</p>
@@ -247,6 +268,7 @@
         <nav class="scrollspy" data-enhance="scrollspy" data-scrollspy-offset="80" aria-label="On this page">
           <p class="docs-nav-group">On this page</p>
           <ul class="nav-list docs-toc-list" data-docs-toc>
+        <li><a class="nav-link" href="#two-layers" data-docs-toc-item data-level="2">Two layers</a></li>
         <li><a class="nav-link" href="#non-goals" data-docs-toc-item data-level="2">Non-Goals</a></li>
           </ul>
         </nav>

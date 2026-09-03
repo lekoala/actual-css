@@ -219,10 +219,13 @@ number of children visible in one mockup.</p>
 <tr><th>Situation</th><th>Recipe</th></tr>
 </thead>
 <tbody>
-<tr><td>Public, marketing, editorial, or normally scrolling page</td><td>Semantic landmarks; optionally <code>.app-shell</code>, with <code>.navbar</code> for site navigation</td></tr>
-<tr><td>Persistent topbar + independently scrolling main + bottom-to-side primary navigation</td><td><code>.app-layout</code> with its exact direct-child contract</td></tr>
+<tr><td>A normally scrolling page</td><td>Semantic landmarks, optionally <code>.app-shell</code></td></tr>
+<tr><td>Topbar + scrolling main + adaptive nav</td><td><code>.app-layout</code></td></tr>
 </tbody>
 </table></div>
+<p>The first covers public, marketing and editorial pages; add <code>.navbar</code> for site
+navigation. The second is <code>.app-layout</code> with its exact direct-child contract,
+where the primary navigation moves from bottom to side.</p>
 <p>Do not choose <code>.app-layout</code> from the word &quot;app&quot; or from the presence of a
 header. Its viewport-sized grid, hidden shell overflow, internal main scroll,
 and adaptive <code>.app-nav</code> are one indivisible behavior. If any of those is not

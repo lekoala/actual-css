@@ -264,12 +264,15 @@ of use. Pick the one that matches how tightly the children belong together:</p>
 <tr><th>Markup</th><th>Gap</th><th>Use for</th></tr>
 </thead>
 <tbody>
-<tr><td><code>.stack gap-none</code></td><td>0</td><td>Lines that form one typographic unit — a name and a job title, a figure and its caption.</td></tr>
-<tr><td><code>.stack sm</code></td><td>8px</td><td>A homogeneous series of distinct controls — a radio list, a checkbox list, a compact vertical menu.</td></tr>
-<tr><td><code>.stack</code></td><td>12px</td><td>Normal flow between distinct elements.</td></tr>
-<tr><td><code>.stack lg</code></td><td>24px</td><td>Sections, or blocks that should read as separated.</td></tr>
+<tr><td><code>.stack gap-none</code></td><td>0</td><td>Lines forming one typographic unit</td></tr>
+<tr><td><code>.stack sm</code></td><td>8px</td><td>A homogeneous series of controls</td></tr>
+<tr><td><code>.stack</code></td><td>12px</td><td>Normal flow between distinct elements</td></tr>
+<tr><td><code>.stack lg</code></td><td>24px</td><td>Sections, or blocks that read as separated</td></tr>
 </tbody>
 </table></div>
+<p>One typographic unit means a name and a job title, or a figure and its caption.
+A homogeneous series means a radio list, a checkbox list, or a compact vertical
+menu.</p>
 <p>The distinction between the first two matters. <code>42</code> above <code>Open issues</code> is
 almost a single block of text, so it takes <code>gap-none</code>. Three <code>.choice</code> labels
 stay three separate controls that happen to form one group, so they take <code>sm</code> —

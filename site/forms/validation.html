@@ -220,14 +220,17 @@
 <tr><th>Class</th><th>Kind</th><th>Description</th></tr>
 </thead>
 <tbody>
-<tr><td><code>.field-error</code></td><td>Composition</td><td>Canonical inline error message; shown while the field is invalid.</td></tr>
-<tr><td><code>.field-help</code></td><td>Composition</td><td>Canonical helper text; carries supporting copy before and after validation.</td></tr>
-<tr><td><code>.field.danger</code></td><td>Modifier</td><td>Manual invalid marking on the field wrapper.</td></tr>
-<tr><td><code>.needs-validation</code></td><td>Modifier</td><td>Opt-in class for the validation enhancer and <code>:user-invalid</code> styling.</td></tr>
-<tr><td><code>.was-validated</code></td><td>Modifier</td><td>Added to the form by the enhancer after the first submit attempt.</td></tr>
-<tr><td><code>.status-bar</code></td><td>Component</td><td>Optional status element that shows <code>data-validation-message</code> on invalid submit.</td></tr>
+<tr><td><code>.field-error</code></td><td>Composition</td><td>Canonical inline error message.</td></tr>
+<tr><td><code>.field-help</code></td><td>Composition</td><td>Canonical helper text.</td></tr>
+<tr><td><code>.field.danger</code></td><td>Modifier</td><td>Manual invalid marking on the wrapper.</td></tr>
+<tr><td><code>.needs-validation</code></td><td>Modifier</td><td>Opt-in for the enhancer and <code>:user-invalid</code>.</td></tr>
+<tr><td><code>.was-validated</code></td><td>Modifier</td><td>Set by the enhancer after a submit attempt.</td></tr>
+<tr><td><code>.status-bar</code></td><td>Component</td><td>Optional form-level status element.</td></tr>
 </tbody>
 </table></div>
+<p><code>.field-error</code> shows while the field is invalid; <code>.field-help</code> carries
+supporting copy before and after validation. <code>.status-bar</code> shows
+<code>data-validation-message</code> on an invalid submit.</p>
 <ul>
 <li><code>.field-error</code> is the canonical error message. It is wired to <code>aria-invalid=&quot;true&quot;</code> via the input, so the visual border and the assistive-tech announcement move together.</li>
 <li><code>.field-help</code> is the canonical helper text. It carries supporting copy before and after validation.</li>

@@ -237,17 +237,19 @@ itself needs to change, not <code>.soft</code>.</p>
 </thead>
 <tbody>
 <tr><td><code>.alert</code></td><td>Component</td><td>Inline status surface; soft by default.</td></tr>
-<tr><td><code>.alert-icon</code></td><td>Composition</td><td>Decorative leading icon; pins to the first grid column.</td></tr>
-<tr><td><code>.alert-dismiss</code></td><td>Modifier</td><td>Compact dismiss button using the <code>--icon-close</code> mask and the <code>--dismiss</code> command.</td></tr>
-<tr><td><code>.callout</code></td><td>Variant</td><td>Neutral panel with a thick accent border on the leading edge.</td></tr>
-<tr><td><code>.admonition</code></td><td>Variant</td><td>Structured box with a tinted title bar and body on the page surface.</td></tr>
-<tr><td><code>.alert-title</code></td><td>Composition</td><td>Admonition title bar; hosts the dismiss button.</td></tr>
-<tr><td><code>.alert-body</code></td><td>Composition</td><td>Admonition body resting on the page surface.</td></tr>
-<tr><td>Shared intents</td><td>Intent</td><td><code>.primary</code>, <code>.secondary</code>, <code>.success</code>, <code>.warning</code>, <code>.danger</code>.</td></tr>
-<tr><td>Shared variants</td><td>Variant</td><td><code>.solid</code>, <code>.outline</code>, and <code>.surface</code> emphasis.</td></tr>
-<tr><td><code>.sm</code> / <code>.lg</code></td><td>Size</td><td>Density; inline padding stays stable.</td></tr>
+<tr><td><code>.alert-icon</code></td><td>Composition</td><td>Decorative leading icon, in the first column.</td></tr>
+<tr><td><code>.alert-dismiss</code></td><td>Modifier</td><td>Compact dismiss button.</td></tr>
+<tr><td><code>.callout</code></td><td>Variant</td><td>Neutral panel, thick accent leading edge.</td></tr>
+<tr><td><code>.admonition</code></td><td>Variant</td><td>Tinted title bar, body on the page surface.</td></tr>
 </tbody>
 </table></div>
+<p><code>.alert-dismiss</code> draws itself with the <code>--icon-close</code> mask and acts through the
+<code>--dismiss</code> command.
+| <code>.alert-title</code>   | Composition | Admonition title bar; hosts the dismiss button.                                   |
+| <code>.alert-body</code>    | Composition | Admonition body resting on the page surface.                                      |
+| Shared intents   | Intent      | <code>.primary</code>, <code>.secondary</code>, <code>.success</code>, <code>.warning</code>, <code>.danger</code>.                      |
+| Shared variants  | Variant     | <code>.solid</code>, <code>.outline</code>, and <code>.surface</code> emphasis.                                    |
+| <code>.sm</code> / <code>.lg</code>    | Size        | Density; inline padding stays stable.                                             |</p>
 <h2 id="basic-usage">Basic usage</h2>
 </div>
 <div class="docs-example">

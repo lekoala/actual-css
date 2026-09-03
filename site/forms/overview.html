@@ -229,24 +229,29 @@
 <tr><th>Class</th><th>Kind</th><th>Description</th></tr>
 </thead>
 <tbody>
-<tr><td><code>.input</code></td><td>Component</td><td>Text input; shares the text-control recipe with <code>.textarea</code> and <code>.select</code>.</td></tr>
+<tr><td><code>.input</code></td><td>Component</td><td>Text input.</td></tr>
 <tr><td><code>.textarea</code></td><td>Component</td><td>Multi-line text control.</td></tr>
-<tr><td><code>.select</code></td><td>Component</td><td>Dropdown — native baseline with a CSS chevron and an opt-in enhanced picker.</td></tr>
+<tr><td><code>.select</code></td><td>Component</td><td>Dropdown, native baseline with a CSS chevron.</td></tr>
 <tr><td><code>.check</code></td><td>Component</td><td>Styled checkbox.</td></tr>
 <tr><td><code>.radio</code></td><td>Component</td><td>Styled radio button.</td></tr>
-<tr><td><code>.switch</code></td><td>Component</td><td>Toggle switch on a checkbox input with <code>role=&quot;switch&quot;</code>.</td></tr>
-<tr><td><code>.range</code></td><td>Component</td><td>Native range slider with a theme-aware accent color.</td></tr>
-<tr><td><code>.file</code></td><td>Component</td><td>Native file input with a themed picker button.</td></tr>
+<tr><td><code>.switch</code></td><td>Component</td><td>Toggle switch on a <code>role=&quot;switch&quot;</code> checkbox.</td></tr>
+<tr><td><code>.range</code></td><td>Component</td><td>Native range slider, theme-aware accent.</td></tr>
+<tr><td><code>.file</code></td><td>Component</td><td>Native file input, themed picker button.</td></tr>
 <tr><td><code>.color</code></td><td>Component</td><td>Native color picker in a control-sized box.</td></tr>
-<tr><td><code>.field</code></td><td>Composition</td><td>Field wrapper that works on <code>&lt;label&gt;</code> and <code>&lt;div&gt;</code>.</td></tr>
-<tr><td><code>.field-label</code></td><td>Composition</td><td>Label text; element-agnostic — <code>&lt;span&gt;</code>, detached <code>&lt;label&gt;</code>, or <code>&lt;legend&gt;</code>.</td></tr>
+<tr><td><code>.field</code></td><td>Composition</td><td>Field wrapper, on <code>&lt;label&gt;</code> or <code>&lt;div&gt;</code>.</td></tr>
+<tr><td><code>.field-label</code></td><td>Composition</td><td>Label text, element-agnostic.</td></tr>
 <tr><td><code>.field-help</code></td><td>Composition</td><td>Supporting helper text under a control.</td></tr>
-<tr><td><code>.field-error</code></td><td>Composition</td><td>Inline error message shown while the field is invalid.</td></tr>
-<tr><td><code>.field-group</code></td><td>Composition</td><td>Grouped <code>&lt;fieldset&gt;</code> container with a tunable legend gutter.</td></tr>
-<tr><td><code>.choice</code></td><td>Composition</td><td>Choice-label layout wrapping a <code>.check</code>, <code>.radio</code>, or <code>.switch</code>.</td></tr>
-<tr><td><code>.form-actions</code></td><td>Composition</td><td>Class-only flex row that closes a form; works inside or outside the <code>&lt;form&gt;</code>.</td></tr>
+<tr><td><code>.field-error</code></td><td>Composition</td><td>Inline error message, shown while invalid.</td></tr>
+<tr><td><code>.field-group</code></td><td>Composition</td><td><code>&lt;fieldset&gt;</code> with a tunable legend gutter.</td></tr>
+<tr><td><code>.choice</code></td><td>Composition</td><td>Choice-label layout around an inline control.</td></tr>
+<tr><td><code>.form-actions</code></td><td>Composition</td><td>Class-only flex row that closes a form.</td></tr>
 </tbody>
 </table></div>
+<p><code>.input</code> shares the text-control recipe with <code>.textarea</code> and <code>.select</code>, and
+<code>.select</code> also has an opt-in enhanced picker. <code>.field-label</code> works on a
+<code>&lt;span&gt;</code>, a detached <code>&lt;label&gt;</code> or a <code>&lt;legend&gt;</code>. <code>.choice</code> wraps a <code>.check</code>,
+<code>.radio</code> or <code>.switch</code>, and <code>.form-actions</code> works inside or outside the
+<code>&lt;form&gt;</code>.</p>
 <h2 id="example-form">Example form</h2>
 <p>A full form using the control classes, field wrappers, and form actions:</p>
 </div>

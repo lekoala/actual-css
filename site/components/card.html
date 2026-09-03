@@ -220,11 +220,16 @@
 <tr><td><code>.card</code></td><td>Component</td><td>Neutral raised surface for grouped content.</td></tr>
 <tr><td><code>.raised</code></td><td>Variant</td><td>Elevated surface with a soft shadow.</td></tr>
 <tr><td><code>.subtle</code></td><td>Variant</td><td>Lower contrast against the page surface.</td></tr>
-<tr><td><code>.surface</code></td><td>Variant</td><td>Shared variant: the page surface instead of <code>--surface-raised</code>, with the intent in the text only.</td></tr>
-<tr><td><code>.inverted</code></td><td>Surface modifier</td><td>Inverse surface treatment: paints <code>--surface-solid</code> and swaps the foreground to <code>--surface</code>, so it inverts in dark themes instead of always reading as dark. Apply as <code>class=&quot;card inverted&quot;</code>, or on any block.</td></tr>
+<tr><td><code>.surface</code></td><td>Variant</td><td>The page surface; intent in the text only.</td></tr>
+<tr><td><code>.inverted</code></td><td>Surface modifier</td><td>Inverse surface treatment.</td></tr>
 <tr><td><code>.compact</code></td><td>Variant</td><td>Tighter padding for dense contexts.</td></tr>
 </tbody>
 </table></div>
+<p><code>.surface</code> is a shared variant: it paints the page surface instead of
+<code>--surface-raised</code> and leaves the intent to the text.</p>
+<p><code>.inverted</code> paints <code>--surface-solid</code> and swaps the foreground to <code>--surface</code>,
+so it inverts in dark themes instead of always reading as dark. Write it as
+<code>class=&quot;card inverted&quot;</code>, or on any block.</p>
 <h2 id="basic-usage">Basic usage</h2>
 <p>Use semantic elements inside the card. A direct <code>&lt;header&gt;</code> or <code>&lt;footer&gt;</code> is the
 card's structural slot. A direct <code>&lt;footer&gt;</code> is anchored to the bottom of the

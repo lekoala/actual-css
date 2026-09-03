@@ -372,9 +372,12 @@ answers to that are more room, fewer stages, or <code>.steps-vertical</code>.</p
 instead of the OS default:</p>
 <pre><code class="language-html">&lt;ol class=&quot;steps steps-horizontal scroller&quot;&gt;
 </code></pre>
-<p>Steps does not apply it for you: scrollbar treatment is a project-wide
-decision, and <code>scroller</code> ships as an optional layer rather than in
-<code>actual.css</code>. See the sizing and wrapping page for its hooks.</p>
+<p>Steps does not apply it for you, because scrollbar treatment is an app-wide
+decision rather than a per-component one. Every other scroll container —
+<code>.table</code>, a <code>.flyout</code>, a scrolling <code>dialog</code> — leaves the scrollbar alone too,
+so a page that thinned only its stepper would show two kinds of scrollbar. Put
+<code>.scroller</code> on whatever scrolls, once. See the sizing and wrapping page for its
+hooks.</p>
 <p>Do not add <code>.stable-gutter</code> here. It reserves gutter on the inline axis, for a
 vertical scrollbar this row never draws, so it narrows the row instead of
 steadying its height.</p>

@@ -416,12 +416,13 @@
 <tr><th>Token</th><th>Value</th><th>Used by</th></tr>
 </thead>
 <tbody>
-<tr><td><code>--z-sticky</code></td><td>10</td><td>Sticky page chrome (<code>form-actions.sticky</code>, <code>topbar</code>).</td></tr>
-<tr><td><code>--z-menu</code></td><td>20</td><td>Floating menus (<code>flyout</code>); <code>.surface-backdrop</code> sits at <code>calc(var(--z-menu) - 1)</code>.</td></tr>
-<tr><td><code>--z-tooltip</code></td><td>50</td><td>Tooltips.</td></tr>
-<tr><td><code>--z-status</code></td><td>60</td><td><code>status-bar</code>.</td></tr>
+<tr><td><code>--z-sticky</code></td><td>10</td><td><code>form-actions.sticky</code>, <code>topbar</code></td></tr>
+<tr><td><code>--z-menu</code></td><td>20</td><td>Floating menus (<code>flyout</code>)</td></tr>
+<tr><td><code>--z-tooltip</code></td><td>50</td><td>Tooltips</td></tr>
+<tr><td><code>--z-status</code></td><td>60</td><td><code>status-bar</code></td></tr>
 </tbody>
 </table></div>
+<p><code>.surface-backdrop</code> sits just under the menus, at <code>calc(var(--z-menu) - 1)</code>.</p>
 <p>Stacking-context traps: a flyout or tooltip that is a DOM descendant of a dialog, or of a container with <code>transform</code>, <code>filter</code>, <code>contain</code>, <code>isolation</code>, or <code>will-change</code>, is confined to that ancestor's stacking context. Its z-index token only orders it against siblings within that context. When a dialog's top-layer clips a descendant flyout, move the flyout markup outside the dialog or use a portal/popover to escape the stacking context.</p>
 <p>Scrollbar gutter: modal open/close can shift page layout when the classic scrollbar disappears. When a measured scrollbar is present, <code>modal.css</code> applies <code>scrollbar-gutter: stable</code> to the viewport so the page doesn't jump.</p>
 <h2 id="internal-tokens">Internal tokens</h2>

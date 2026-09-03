@@ -220,13 +220,15 @@
 <tr><th>Class</th><th>Kind</th><th>Description</th></tr>
 </thead>
 <tbody>
-<tr><td><code>.modal</code></td><td>Component</td><td>Centered modal surface built on the native <code>&lt;dialog&gt;</code> element.</td></tr>
-<tr><td><code>.scrollable</code></td><td>Variant</td><td>Keeps the header and footer visible while the dialog body scrolls.</td></tr>
-<tr><td><code>.dialog-confirmation</code></td><td>Variant</td><td>Separates a confirmation message from its full-width action band.</td></tr>
-<tr><td><code>.dialog-icon</code></td><td>Component</td><td>Circular intent-aware icon well for confirmation messages.</td></tr>
-<tr><td><code>.dialog-close</code></td><td>Component</td><td>Icon-only close button anchored to the modal's top end, out of the content flow.</td></tr>
+<tr><td><code>.modal</code></td><td>Component</td><td>Centered surface on the native <code>&lt;dialog&gt;</code>.</td></tr>
+<tr><td><code>.scrollable</code></td><td>Variant</td><td>Header and footer stay while the body scrolls.</td></tr>
+<tr><td><code>.dialog-confirmation</code></td><td>Variant</td><td>Message above a full-width action band.</td></tr>
+<tr><td><code>.dialog-icon</code></td><td>Component</td><td>Circular intent-aware icon well.</td></tr>
+<tr><td><code>.dialog-close</code></td><td>Component</td><td>Icon-only close button, at the top end.</td></tr>
 </tbody>
 </table></div>
+<p><code>.dialog-close</code> sits outside the content flow, so it does not take part in the
+dialog's own layout.</p>
 <h2 id="usage">Usage</h2>
 <p>Modals use the platform-native <code>&lt;dialog class=&quot;modal&quot;&gt;</code> element with <code>commandfor</code> and <code>command</code> buttons.</p>
 <p>Use <code>command=&quot;show-modal&quot;</code> to open a modal dialog.</p>

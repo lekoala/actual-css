@@ -225,21 +225,28 @@
 <p>Components may enhance or replace that treatment in interactive states, but their base styles must not cancel the shared fallback.</p>
 <p>When an interactive state replaces the outline, it must preserve a visible focus indicator in forced-colors, either with an outline-based fallback or by keeping the replacement out of forced-colors.</p>
 <h2 id="family-manifests">Family manifests</h2>
-<div class="table-wrap"><table class="table">
-<thead>
-<tr><th>Family</th><th>Import</th><th>Contents</th></tr>
-</thead>
-<tbody>
-<tr><td>Core</td><td><code>actual-css/css</code></td><td>reset, tokens, theme, base, intents, variants, focus, print</td></tr>
-<tr><td>Typography</td><td><code>actual-css/css/typography</code></td><td>prose, overline, fluid</td></tr>
-<tr><td>Layout</td><td><code>actual-css/css/layout</code></td><td>stack, cluster, center, frame, media, switcher, sidebar-layout, grid, scroller, scroll-snap, topbar, container-query, app-shell</td></tr>
-<tr><td>Forms</td><td><code>actual-css/css/forms</code></td><td>native control baseline</td></tr>
-<tr><td>Forms (complete)</td><td><code>actual-css/css/forms/all</code></td><td>base plus input-icon, switch, range, choice-card, custom-select, floating-field, otp</td></tr>
-<tr><td>Components</td><td><code>actual-css/css/components</code></td><td>buttons, surfaces, overlays, feedback, navigation, data and composed controls</td></tr>
-<tr><td>Effects</td><td><code>actual-css/css/effects</code></td><td>aura</td></tr>
-<tr><td>Utilities</td><td><code>actual-css/css/utilities</code></td><td>base and extra utilities</td></tr>
-</tbody>
-</table></div>
+<p>Each family is one import. The contents are enumerations rather than table
+cells, so they read as a list:</p>
+<ul>
+<li><strong>Core</strong> — <code>actual-css/css</code>
+reset, tokens, theme, base, intents, variants, focus, print</li>
+<li><strong>Typography</strong> — <code>actual-css/css/typography</code>
+prose, overline, fluid</li>
+<li><strong>Layout</strong> — <code>actual-css/css/layout</code>
+stack, cluster, center, frame, media, switcher, sidebar-layout, grid,
+scroller, scroll-snap, topbar, container-query, app-shell</li>
+<li><strong>Forms</strong> — <code>actual-css/css/forms</code>
+native control baseline</li>
+<li><strong>Forms (complete)</strong> — <code>actual-css/css/forms/all</code>
+base plus input-icon, switch, range, choice-card, custom-select,
+floating-field, otp</li>
+<li><strong>Components</strong> — <code>actual-css/css/components</code>
+buttons, surfaces, overlays, feedback, navigation, data and composed controls</li>
+<li><strong>Effects</strong> — <code>actual-css/css/effects</code>
+aura</li>
+<li><strong>Utilities</strong> — <code>actual-css/css/utilities</code>
+base and extra utilities</li>
+</ul>
 <p>Individual modules can be imported through their domain path:</p>
 <pre><code class="language-css">@import &quot;actual-css/css/forms/otp&quot;;
 @import &quot;actual-css/css/components/chat&quot;;

@@ -217,11 +217,11 @@
 <tr><th>Class</th><th>Kind</th><th>Description</th></tr>
 </thead>
 <tbody>
-<tr><td><code>.fit</code></td><td>Utility</td><td>Shrinks a control or element to its content width.</td></tr>
+<tr><td><code>.fit</code></td><td>Utility</td><td>Shrinks an element to its content width.</td></tr>
 <tr><td><code>.text-nowrap</code></td><td>Utility</td><td>Keeps text on one line.</td></tr>
 <tr><td><code>.truncate</code></td><td>Utility</td><td>Ellipsizes overflowing single-line text.</td></tr>
-<tr><td><code>.scroller</code></td><td>Utility</td><td>Theme-aware scrollbar density and colour for scroll containers. Optional layer.</td></tr>
-<tr><td><code>.scroller.stable-gutter</code></td><td>Variant</td><td>Reserves scrollbar gutter space so layout does not shift. Optional layer.</td></tr>
+<tr><td><code>.scroller</code></td><td>Layout</td><td>Theme-aware scrollbar density and colour.</td></tr>
+<tr><td><code>.scroller.stable-gutter</code></td><td>Variant</td><td>Reserves inline-axis scrollbar gutter.</td></tr>
 </tbody>
 </table></div>
 <p>Use <code>.fit</code> when a control or element should shrink to its content instead of filling the available inline space.</p>
@@ -311,7 +311,9 @@ never quite matches the native one anyway.</p>
 above the capability floor. An engine that knows neither ignores both
 declarations and draws its native scrollbar — the intended fallback, not a
 broken state.</p>
-<p><code>scroller</code> is not imported by <code>actual.css</code>. Import it explicitly when a project wants Actual CSS scrollbar chrome instead of the native OS default:</p>
+<p><code>.scroller</code> is a layout primitive, so it comes with <code>actual.full.css</code> and with
+<code>actual-css/css/layout</code> like <code>.stack</code> or <code>.cluster</code>. A project importing module
+by module reaches it directly:</p>
 <pre><code class="language-css">@import &quot;actual-css/css/layout/scroller&quot;;
 </code></pre>
 </div>

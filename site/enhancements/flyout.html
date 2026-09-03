@@ -220,19 +220,20 @@
 <tr><th>Class</th><th>Kind</th><th>Description</th></tr>
 </thead>
 <tbody>
-<tr><td><code>.flyout-trigger</code></td><td>Composition</td><td>Positioning wrapper for a trigger and its panel.</td></tr>
-<tr><td><code>.stretch</code></td><td>Modifier</td><td>Stretches a <code>.flyout-trigger</code> to span its container.</td></tr>
-<tr><td><code>.flyout</code></td><td>Component</td><td>Floating action or nav surface, positioned by JavaScript.</td></tr>
-<tr><td><code>.menu</code></td><td>Component</td><td>Action-list primitive with strict <code>.menu &gt; li &gt; .menu-item</code> anatomy.</td></tr>
-<tr><td><code>.menu-item</code></td><td>Component</td><td>One action row; participates in roving focus.</td></tr>
-<tr><td><code>.menu-item-icon</code></td><td>Slot</td><td>Fixed leading column for a decorative icon.</td></tr>
-<tr><td><code>.menu-item-text</code></td><td>Slot</td><td>Flexible label column; truncates when the row is constrained.</td></tr>
-<tr><td><code>.menu-item-end</code></td><td>Slot</td><td>Trailing metadata such as a shortcut, badge, or status.</td></tr>
-<tr><td><code>.menu-label</code></td><td>Variant</td><td>Muted section heading inside a menu; not interactive.</td></tr>
-<tr><td><code>.menu-separator</code></td><td>Variant</td><td>Divider between menu groups (<code>&lt;hr role=&quot;separator&quot;&gt;</code>).</td></tr>
-<tr><td><code>.sm</code> / <code>.lg</code></td><td>Variant</td><td>Compact or large density.</td></tr>
+<tr><td><code>.flyout-trigger</code></td><td>Composition</td><td>Positioning wrapper for trigger and panel.</td></tr>
+<tr><td><code>.stretch</code></td><td>Modifier</td><td>Spans a <code>.flyout-trigger</code> to its container.</td></tr>
+<tr><td><code>.flyout</code></td><td>Component</td><td>Floating surface, positioned by JavaScript.</td></tr>
+<tr><td><code>.menu</code></td><td>Component</td><td>Action-list primitive.</td></tr>
+<tr><td><code>.menu-item</code></td><td>Component</td><td>One action row; joins roving focus.</td></tr>
+<tr><td><code>.menu-item-icon</code></td><td>Slot</td><td>Fixed leading column for an icon.</td></tr>
+<tr><td><code>.menu-item-text</code></td><td>Slot</td><td>Flexible label column; truncates.</td></tr>
+<tr><td><code>.menu-item-end</code></td><td>Slot</td><td>Trailing shortcut, badge or status.</td></tr>
 </tbody>
 </table></div>
+<p><code>.menu</code> has a strict <code>.menu &gt; li &gt; .menu-item</code> anatomy.
+| <code>.menu-label</code>     | Variant     | Muted section heading inside a menu; not interactive.                |
+| <code>.menu-separator</code> | Variant     | Divider between menu groups (<code>&lt;hr role=&quot;separator&quot;&gt;</code>).               |
+| <code>.sm</code> / <code>.lg</code>     | Variant     | Compact or large density.                                            |</p>
 <h2 id="usage">Usage</h2>
 <p>Flyout and context menu share one action-surface runtime:</p>
 <ul>
