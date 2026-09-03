@@ -389,6 +389,12 @@ test("icon-only buttons stay square with icons larger than the text line", () =>
   );
 });
 
+test("joined icon-only buttons release their fixed block size", () => {
+  const css = readCss("src/css/components/join.css");
+
+  expect(css).toMatch(/\.join > \.btn\.icon-only\s*\{[^}]*block-size:\s*auto;/);
+});
+
 test("busy overlay can inherit local surface background", () => {
   const busyCss = readCss("src/css/components/busy.css");
   const variantsCss = readCss("src/css/core/variants.css");
@@ -413,6 +419,22 @@ test("rich menu slots and checkable states share the leading column", () => {
   expect(css).toContain('[role="menuitemcheckbox"][aria-checked="true"]');
   expect(css).toContain('[role="menuitemradio"][aria-checked="true"]');
   expect(css).toContain("var(--menu-item-icon-size)");
+  expect(css).toContain("mask: var(--icon-check)");
+  expect(css).not.toMatch(/content:\s*["'][✓−○●]["']/);
+});
+
+test("native flyout and tooltip popovers neutralize conflicting UA geometry", () => {
+  const flyout = readCss("src/css/components/flyout.css");
+  const tooltip = readCss("src/css/components/tooltip.css");
+
+  expect(flyout).toMatch(
+    /\.flyout\[popover\]\s*\{[^}]*position:\s*fixed;[^}]*inset:\s*auto;[^}]*margin:\s*0;/,
+  );
+  expect(flyout).toContain(":popover-open");
+  expect(tooltip).toMatch(
+    /\.tooltip\[popover\]\s*\{[^}]*inset:\s*auto;[^}]*margin:\s*0;[^}]*overflow:\s*visible;/,
+  );
+  expect(tooltip).toContain(":popover-open");
 });
 
 /*

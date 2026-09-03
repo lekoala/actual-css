@@ -17,6 +17,12 @@ with the `hidden` attribute.
 - The arrow inherits the tooltip background — custom gradients carry through automatically.
 - Avoid relying on the native `title` attribute as the primary implementation.
 
+A `.tooltip[popover]` may use a native or third-party-owned popover lifecycle.
+Actual removes the native inset, margin, and overflow that conflict with
+positioning and with the projecting arrow, while leaving bare `[popover]`
+elements untouched. The lifecycle owner must still write the fixed viewport
+coordinates and arrow position; Actual only supplies the presentation.
+
 ```html demo
 <button class="btn ghost"
         type="button"

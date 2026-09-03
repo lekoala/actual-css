@@ -70,6 +70,14 @@ Native controls that no component class restyles — a bare checkbox, radio, ran
 
 → Forms · Overview · Foundations · Tokens (theme contract)
 
+### Store a theme name without applying it
+
+`data-theme` is an active theme boundary on every element that carries it, not
+a generic storage attribute. Use a different name such as `data-theme-value`,
+or a form control's `value`, when the element should only hold a theme name.
+Apply `data-theme` deliberately when that element and its subtree should paint
+with the selected palette — a theme swatch is a useful example.
+
 ### Loading / busy overlay on a container
 
 Use `aria-busy="true"` with a direct last-child `.spinner`; tint the overlay with `--busy-overlay-bg`.

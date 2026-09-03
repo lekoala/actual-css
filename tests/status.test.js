@@ -391,6 +391,76 @@ test("actual:status event shows a message", async () => {
   expect(target.classList.contains("success")).toBe(true);
 });
 
+test("mounts event-driven status inside its originating open dialog", async () => {
+  await loadStatus(`
+    <main><div class="status-bar" data-status role="status"></div></main>
+    <dialog open><button type="button">Save</button></dialog>
+  `);
+
+  const target = document.querySelector('[data-status][role="status"]');
+  const dialog = document.querySelector("dialog");
+  const trigger = document.querySelector("button");
+  trigger.dispatchEvent(
+    new CustomEvent("actual:status", {
+      bubbles: true,
+      detail: { message: "Saved.", duration: false },
+    }),
+  );
+
+  expect(target.parentElement).toBe(dialog);
+  expect(target.textContent).toBe("Saved.");
+});
+
+test("mounts validation feedback inside the invalid form's open dialog", async () => {
+  await loadStatus(`
+    <main><div class="status-bar" data-status role="status"></div></main>
+    <dialog open><form></form></dialog>
+  `);
+
+  const target = document.querySelector('[data-status][role="status"]');
+  const dialog = document.querySelector("dialog");
+  document.querySelector("form").dispatchEvent(
+    new CustomEvent("actual:invalid", {
+      bubbles: true,
+      detail: { message: "Please check the form." },
+    }),
+  );
+
+  expect(target.parentElement).toBe(dialog);
+  expect(target.classList.contains("danger")).toBe(true);
+});
+
+test("restores a dialog-mounted status to its original position after exit", async () => {
+  const { status } = await loadStatus(`
+    <main><span id="before"></span><div class="status-bar" data-status role="status"></div><span id="after"></span></main>
+    <dialog open><button type="button">Save</button></dialog>
+  `);
+
+  const target = document.querySelector('[data-status][role="status"]');
+  const source = document.querySelector("button");
+  status("Saved.", { duration: false, source });
+  status.clear();
+  await afterExit();
+
+  expect(target.parentElement).toBe(document.querySelector("main"));
+  expect(target.previousElementSibling?.id).toBe("before");
+  expect(target.nextElementSibling?.id).toBe("after");
+});
+
+test("a global status call leaves a previous dialog context immediately", async () => {
+  const { status } = await loadStatus(`
+    <main><div class="status-bar" data-status role="status"></div></main>
+    <dialog open><button type="button">Save</button></dialog>
+  `);
+
+  const target = document.querySelector('[data-status][role="status"]');
+  status("Dialog message", { duration: false, source: document.querySelector("button") });
+  status("Global message", { duration: false });
+
+  expect(target.parentElement).toBe(document.querySelector("main"));
+  expect(target.textContent).toBe("Global message");
+});
+
 test("actual:status event without a message clears the bar", async () => {
   const { status } = await loadStatus(`<div class="status-bar" data-status role="status"></div>`);
 

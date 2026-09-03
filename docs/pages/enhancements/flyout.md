@@ -74,6 +74,20 @@ placement strings supported by the floating runtime, such as `bottom-start`,
 
 Use `data-flyout-distance` for the trigger gap in pixels. The default is `4`.
 
+### Native popover lifecycle
+
+The `.flyout` presentation also composes with an element carrying `popover`.
+Actual neutralizes the native popover geometry that conflicts with anchored
+positioning and recognizes `:popover-open` as the visible state. The browser or
+another library may therefore own opening, dismissal, and focus without
+requiring `.is-open` or `[hidden]`.
+
+Actual CSS does not position that independently managed popover. Its positioner
+must write fixed viewport coordinates (and may write `--available-height` and
+`--surface-anchor-width`); the built-in `surface.js` runtime remains the full
+fallback when Actual owns the lifecycle too. A bare `[popover]` without
+`.flyout` or `.tooltip` keeps its platform appearance.
+
 Use `data-flyout-auto-close` when the default click dismissal behavior is not
 right. Escape still follows the shared surface lifecycle.
 

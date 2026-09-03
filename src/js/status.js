@@ -31,6 +31,12 @@
  *   - Any other code, without importing this module: dispatch `actual:status`
  *     directly — `detail: { message, intent, duration }`, or `{}` to clear.
  *
+ * A message originating inside an open dialog temporarily mounts the singleton
+ * bar in that dialog. Content outside a modal dialog is inert and cannot sit
+ * above its top layer, so this keeps both the visual feedback and live region
+ * in the active subtree. Programmatic callers pass the originating element as
+ * `options.source`; event and command entry points propagate it automatically.
+ *
  * The element contract is `[data-status][role="status"]`. Both are required:
  * "status" is a generic domain word, so `role="status"` keeps the
  * document-wide lookup from matching an unrelated app element that happens to
@@ -59,10 +65,37 @@ let statusTimer;
 // never emptied by the previous message's cleanup.
 let statusGeneration = 0;
 let viewportTracker = null;
+const statusHomes = new WeakMap();
 
 function statusTarget() {
   if (typeof document === "undefined") return null;
   return document.querySelector(STATUS_SELECTOR);
+}
+
+function restoreStatusTarget(target) {
+  const home = statusHomes.get(target);
+  if (!home) return;
+
+  const parent = home.parent?.isConnected ? home.parent : target.ownerDocument?.body;
+  if (parent) {
+    const reference = home.nextSibling?.parentNode === parent ? home.nextSibling : null;
+    parent.insertBefore(target, reference);
+  }
+  statusHomes.delete(target);
+}
+
+function mountStatusTarget(target, source) {
+  const dialog = source?.closest?.("dialog[open]");
+  if (!dialog || dialog.ownerDocument !== target.ownerDocument) {
+    restoreStatusTarget(target);
+    return;
+  }
+  if (dialog.contains(target)) return;
+
+  if (!statusHomes.has(target)) {
+    statusHomes.set(target, { parent: target.parentNode, nextSibling: target.nextSibling });
+  }
+  dialog.append(target);
 }
 
 // The bar is fixed to the layout viewport, so the mobile software keyboard
@@ -130,6 +163,8 @@ export function status(message, options = {}) {
   clearTimeout(statusTimer);
   statusGeneration++;
 
+  mountStatusTarget(target, options.source);
+
   clearIntentClasses(target);
   const intent = intentClasses(options.intent);
   if (intent.length) {
@@ -168,6 +203,7 @@ status.clear = function clear() {
     target.textContent = "";
     clearIntentClasses(target);
     releaseViewport();
+    restoreStatusTarget(target);
   });
 };
 
@@ -198,7 +234,7 @@ function connectStatusTrigger(trigger, target) {
 if (typeof document !== "undefined") {
   document.addEventListener(EVENTS.invalid, (event) => {
     const message = event.detail?.message;
-    if (message) status(message, { intent: "danger" });
+    if (message) status(message, { intent: "danger", source: event.target });
   });
 
   // Public contract: any code can trigger the status bar this way, without
@@ -209,7 +245,7 @@ if (typeof document !== "undefined") {
     // paths end in the same exit, so a detail that lost its message never
     // strands a stale one on screen.
     if (message != null) {
-      status(message, { intent, duration });
+      status(message, { intent, duration, source: event.target });
     } else {
       status.clear();
     }

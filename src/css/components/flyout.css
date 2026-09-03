@@ -79,12 +79,21 @@
   transition: opacity var(--duration-fast) ease;
 }
 
-.flyout.is-open:not(.is-sheet) {
+/* Native popovers enter the top layer with UA geometry that conflicts with
+   anchored positioning. Keep the reset scoped to Actual surfaces so bare
+   [popover] elements retain their platform presentation. */
+.flyout[popover] {
+  position: fixed;
+  inset: auto;
+  margin: 0;
+}
+
+.flyout:is(.is-open, :popover-open):not(.is-sheet) {
   inset: auto;
 }
 
 @starting-style {
-  .flyout.is-open {
+  .flyout:is(.is-open, :popover-open) {
     opacity: 0;
   }
 }
@@ -124,7 +133,7 @@
 }
 
 @starting-style {
-  .flyout.is-sheet.is-open {
+  .flyout.is-sheet:is(.is-open, :popover-open) {
     translate: 0 var(--space-30);
   }
 }

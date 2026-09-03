@@ -1,12 +1,12 @@
 {
-  "totalRaw": 272496,
+  "totalRaw": 273832,
   "core": {
     "minified": 10889,
     "brotli": 2553
   },
   "full": {
-    "minified": 120136,
-    "brotli": 17553
+    "minified": 120767,
+    "brotli": 17689
   },
   "js": {
     "core": {
@@ -14,8 +14,8 @@
       "brotli": 2203
     },
     "full": {
-      "bytes": 56275,
-      "brotli": 16267
+      "bytes": 56755,
+      "brotli": 16393
     }
   },
   "fileCount": 109,
@@ -61,6 +61,10 @@
       "raw": 5400
     },
     {
+      "file": "components/flyout.css",
+      "raw": 5353
+    },
+    {
       "file": "components/badge.css",
       "raw": 5152
     },
@@ -71,10 +75,6 @@
     {
       "file": "components/avatar.css",
       "raw": 5067
-    },
-    {
-      "file": "components/flyout.css",
-      "raw": 5013
     },
     {
       "file": "core/variants.css",
@@ -109,6 +109,10 @@
       "raw": 3892
     },
     {
+      "file": "components/join.css",
+      "raw": 3837
+    },
+    {
       "file": "forms/otp.css",
       "raw": 3783
     },
@@ -121,12 +125,16 @@
       "raw": 3689
     },
     {
-      "file": "components/join.css",
-      "raw": 3553
-    },
-    {
       "file": "components/fab.css",
       "raw": 3313
+    },
+    {
+      "file": "components/menu.css",
+      "raw": 3279
+    },
+    {
+      "file": "components/tooltip.css",
+      "raw": 3243
     },
     {
       "file": "components/status-bar.css",
@@ -141,16 +149,8 @@
       "raw": 3115
     },
     {
-      "file": "components/tooltip.css",
-      "raw": 2924
-    },
-    {
       "file": "forms/control.css",
       "raw": 2909
-    },
-    {
-      "file": "components/menu.css",
-      "raw": 2886
     },
     {
       "file": "forms/validation.css",
