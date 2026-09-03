@@ -2,23 +2,64 @@
  * Structural checks for the docs site. Run with bun run check:docs.
  *
  * Verifies navigation.json against docs/pages, that every page is well-formed
- * (one H1, explicit fence languages), that slugs are unique, and that internal
- * links (including anchors) resolve.
+ * (one H1, explicit fence languages, tables that stay readable in the source),
+ * that slugs are unique, and that internal links (including anchors) resolve.
+ *
+ * The table check also covers docs/design-notes, which is hand-edited markdown
+ * outside the site navigation.
  */
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { dirname, join, normalize, relative, resolve, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 import { extractAliases, render, scanCodeFences } from "./docs/markdown.js";
 import { loadNavigation } from "./docs/navigation.js";
+import { findTables, formatTable, measureTable, TABLE_MAX_WIDTH } from "./docs/tables.js";
 import { relHref } from "./docs/templates.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, "..");
 const PAGES = join(ROOT, "docs", "pages");
+const NOTES = join(ROOT, "docs", "design-notes");
 const SITE = join(ROOT, "site");
 
 const FENCE_LANGUAGES = new Set(["html", "css", "js", "javascript", "sh", "text"]);
 const KNOWN_FENCE_FLAGS = new Set(["demo", "bare", "resize"]);
+
+/*
+ * Two things about every table, both measured on its *formatted* form rather
+ * than on the bytes: `format:docs` owns the alignment, so a check that read
+ * the raw lines would report a ragged table that is one command away from
+ * being fine, and would miss a ragged table whose 200-char cell explodes the
+ * moment it is aligned.
+ *
+ * The width is one issue per table rather than per row, because alignment
+ * means one long cell makes every row too wide and the fix is always that one
+ * cell. The report names the cell to shorten.
+ */
+function tableIssues(markdown, label) {
+  const issues = [];
+
+  for (const table of findTables(markdown)) {
+    const line = table.start + 1;
+    const { formattedWidth, widestCell } = measureTable(table);
+
+    if (formattedWidth > TABLE_MAX_WIDTH) {
+      const size = [...widestCell].length;
+      const excerpt = size > 50 ? `${[...widestCell].slice(0, 50).join("")}…` : widestCell;
+      issues.push(
+        `${label}:${line}: table is ${formattedWidth} chars wide once aligned (max ${TABLE_MAX_WIDTH}) — shorten its widest cell (${size} chars: "${excerpt}") and move the detail into prose below the table`,
+      );
+      // Alignment is not worth reporting on a table that has to be rewritten.
+      continue;
+    }
+
+    if (formatTable(table).join("\n") !== table.rows.join("\n")) {
+      issues.push(`${label}:${line}: table is not aligned — run \`bun run format:docs\``);
+    }
+  }
+
+  return issues;
+}
 
 function isExternal(href) {
   return /^(?:[a-z]+:)?\/\//iu.test(href) || /^(?:mailto|tel):/iu.test(href);
@@ -53,6 +94,13 @@ function main() {
     }
   }
 
+  /* Design notes carry the same tables and the same formatter, so they get the
+     table check even though they are outside the site navigation and therefore
+     skip every other check in this file. */
+  for (const file of walkMarkdown(NOTES)) {
+    issues.push(...tableIssues(readFileSync(file, "utf8"), rel(file)));
+  }
+
   const seenUrls = new Map();
   for (const page of navigation.pages) {
     const key = `${page.groupSlug}/${page.slug}`;
@@ -71,6 +119,8 @@ function main() {
         Array.from({ length: fence.end - fence.start + 1 }, (_, offset) => fence.start + offset),
       ),
     );
+
+    issues.push(...tableIssues(markdown, rel(file)));
 
     for (const [index, line] of markdown.split(/\r?\n/u).entries()) {
       if (

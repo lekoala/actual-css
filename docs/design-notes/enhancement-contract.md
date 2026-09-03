@@ -105,22 +105,39 @@ defeating the split.
 
 ## Design decisions recorded
 
-| # | Decision | Rationale |
-|---|----------|-----------|
-| D2 | `selectors.js` drops its 5 discovery entries, keeps 11 write-side state entries | The file's job changes from *CSS↔init bridge* to *state vocabulary the runtime writes*. It stays the single file to alias for another CSS framework. |
-| D4 | `status.js` uses `[data-status][role="status"]` — no class, no token | The markup already carries `role="status"` everywhere. Semantics alone scope the document-wide lookup. |
-| D5 | `<dialog>` gets no token | `<dialog>` is its own opt-in: semantic, native, CSS-agnostic. |
-| D6 | `validation.js` accepts `[data-field-error]` as an alias for `.field-error` and keeps `.field` / `.danger` as an optional, degrading presentation adapter | Validation is the one module with intentional, optional CSS coupling. The adapter degrades to a no-op under foreign CSS while `aria-invalid`, focus management, custom rules, and server errors all keep working. |
-| D7 | Context-menu reuses `surface`, not `flyout` | The panel gets no token; `menuFor()` validates semantically (`menu, [role="menu"]`). A context menu may legitimately want the flyout *look* without the flyout *behavior*. |
-| D9 | Orphaned mounted surfaces closed from the origin's disconnect handler | A `fix:`, not part of the contract itself. Landed independently. |
+**D2 — `selectors.js` drops its 5 discovery entries and keeps 11 write-side
+state entries.** The file's job changes from *CSS↔init bridge* to *state
+vocabulary the runtime writes*. It stays the single file to alias for another
+CSS framework.
+
+**D4 — `status.js` uses `[data-status][role="status"]`, with no class and no
+token.** The markup already carries `role="status"` everywhere, so semantics
+alone scope the document-wide lookup.
+
+**D5 — `<dialog>` gets no token.** It is its own opt-in: semantic, native,
+CSS-agnostic.
+
+**D6 — `validation.js` accepts `[data-field-error]` as an alias for
+`.field-error`, and keeps `.field` / `.danger` as an optional, degrading
+presentation adapter.** Validation is the one module with intentional, optional
+CSS coupling. The adapter degrades to a no-op under foreign CSS, while
+`aria-invalid`, focus management, custom rules and server errors all keep
+working.
+
+**D7 — Context-menu reuses `surface`, not `flyout`.** The panel gets no token;
+`menuFor()` validates semantically (`menu, [role="menu"]`). A context menu may
+legitimately want the flyout *look* without the flyout *behavior*.
+
+**D9 — Orphaned mounted surfaces are closed from the origin's disconnect
+handler.** A `fix:`, not part of the contract itself. Landed independently.
 
 ## Token vocabulary
 
-| Token | Behavior | Existing class |
-|-------|----------|---------------|
-| `tabs` | Tab panel switching, arrow-key navigation | `.tabs` |
-| `flyout` | Trigger → panel positioning, open/close | `.flyout` |
-| `scrollspy` | Scroll-driven nav highlighting | `.scrollspy` |
+| Token        | Behavior                                         | Existing class      |
+| ------------ | ------------------------------------------------ | ------------------- |
+| `tabs`       | Tab panel switching, arrow-key navigation        | `.tabs`             |
+| `flyout`     | Trigger → panel positioning, open/close          | `.flyout`           |
+| `scrollspy`  | Scroll-driven nav highlighting                   | `.scrollspy`        |
 | `validation` | Form validation, focus management, server errors | `.needs-validation` |
 
 Four tokens. Everything else stays self-describing.

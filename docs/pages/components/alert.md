@@ -21,13 +21,16 @@ itself needs to change, not `.soft`.
 
 ## Class reference
 
-| Class            | Kind        | Description                                                                       |
-|------------------|-------------|-----------------------------------------------------------------------------------|
-| `.alert`         | Component   | Inline status surface; soft by default.                                           |
-| `.alert-icon`    | Composition | Decorative leading icon; pins to the first grid column.                           |
-| `.alert-dismiss` | Modifier    | Compact dismiss button using the `--icon-close` mask and the `--dismiss` command. |
-| `.callout`       | Variant     | Neutral panel with a thick accent border on the leading edge.                     |
-| `.admonition`    | Variant     | Structured box with a tinted title bar and body on the page surface.              |
+| Class            | Kind        | Description                                   |
+| ---------------- | ----------- | --------------------------------------------- |
+| `.alert`         | Component   | Inline status surface; soft by default.       |
+| `.alert-icon`    | Composition | Decorative leading icon, in the first column. |
+| `.alert-dismiss` | Modifier    | Compact dismiss button.                       |
+| `.callout`       | Variant     | Neutral panel, thick accent leading edge.     |
+| `.admonition`    | Variant     | Tinted title bar, body on the page surface.   |
+
+`.alert-dismiss` draws itself with the `--icon-close` mask and acts through the
+`--dismiss` command.
 | `.alert-title`   | Composition | Admonition title bar; hosts the dismiss button.                                   |
 | `.alert-body`    | Composition | Admonition body resting on the page surface.                                      |
 | Shared intents   | Intent      | `.primary`, `.secondary`, `.success`, `.warning`, `.danger`.                      |

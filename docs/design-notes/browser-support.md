@@ -83,20 +83,20 @@ The tiers above are Actual's own contract. The table below tracks the Web
 Platform Baseline of the individual CSS features the framework uses; it is a
 different notion from an Actual tier.
 
-| Feature area     | Baseline    | Progressive enhancement       |
-|------------------|-------------|-------------------------------|
-| Layout (flex, grid, position) | Baseline 2023 | —                  |
-| CSS custom properties         | Baseline 2023 | —                  |
-| `:has()`                      | Baseline 2023 | —                  |
-| `<dialog>` element            | Baseline 2023 | —                  |
-| `color-mix()`                 | Baseline 2023 | Fallback flat color |
-| `light-dark()`                | 2024+        | Manual theme override |
-| `:user-invalid`               | 2024+        | `[aria-invalid]` attribute |
-| `transition-behavior: allow-discrete` | 2024+ | Native dialog open/close |
-| `appearance: base-select`     | 2024+        | Native `<select>` |
-| `@starting-style`             | 2024+        | Instant appearance |
-| View Transition API           | 2024+        | Dialog open/close transition |
-| CSS Anchor Positioning        | Future       | JS positioning (`floating.js`) |
+| Feature area                          | Baseline      | Progressive enhancement        |
+| ------------------------------------- | ------------- | ------------------------------ |
+| Layout (flex, grid, position)         | Baseline 2023 | —                              |
+| CSS custom properties                 | Baseline 2023 | —                              |
+| `:has()`                              | Baseline 2023 | —                              |
+| `<dialog>` element                    | Baseline 2023 | —                              |
+| `color-mix()`                         | Baseline 2023 | Fallback flat color            |
+| `light-dark()`                        | 2024+         | Manual theme override          |
+| `:user-invalid`                       | 2024+         | `[aria-invalid]` attribute     |
+| `transition-behavior: allow-discrete` | 2024+         | Native dialog open/close       |
+| `appearance: base-select`             | 2024+         | Native `<select>`              |
+| `@starting-style`                     | 2024+         | Instant appearance             |
+| View Transition API                   | 2024+         | Dialog open/close transition   |
+| CSS Anchor Positioning                | Future        | JS positioning (`floating.js`) |
 
 Core layout and visual tokens work on all Baseline 2023 browsers. Features marked
 2024+ are gated with `@supports` or degrade gracefully through fallback values.

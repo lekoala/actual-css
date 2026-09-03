@@ -108,7 +108,7 @@ two states stay visually identical in size and stroke.
 ## Class reference
 
 | Class          | Description                                               |
-|----------------|-----------------------------------------------------------|
+| -------------- | --------------------------------------------------------- |
 | `.fab`         | Fixed viewport placement; use `details` for a speed dial. |
 | `.fab-actions` | Collapsible vertical action list.                         |
 | `.fab-action`  | One horizontal label-and-button unit.                     |

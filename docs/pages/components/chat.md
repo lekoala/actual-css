@@ -37,7 +37,7 @@ put `role="log"` on individual messages.
 ## Class reference
 
 | Class                           | Description                                  |
-|---------------------------------|----------------------------------------------|
+| ------------------------------- | -------------------------------------------- |
 | `.chat`                         | Message row grid.                            |
 | `.chat-start` / `.chat-end`     | Logical inline placement.                    |
 | `.chat-avatar`                  | Avatar grid slot; compose it with `.avatar`. |

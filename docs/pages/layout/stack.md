@@ -44,12 +44,16 @@ not as the wrapper that lays out independent full-width regions of a page.
 `--gap` is the primitive's channel, and the density variants set it at the point
 of use. Pick the one that matches how tightly the children belong together:
 
-| Markup | Gap | Use for |
-|--------------------|------|--------------------------------------------------------|
-| `.stack gap-none` | 0 | Lines that form one typographic unit — a name and a job title, a figure and its caption. |
-| `.stack sm` | 8px | A homogeneous series of distinct controls — a radio list, a checkbox list, a compact vertical menu. |
-| `.stack` | 12px | Normal flow between distinct elements. |
-| `.stack lg` | 24px | Sections, or blocks that should read as separated. |
+| Markup            | Gap  | Use for                                    |
+| ----------------- | ---- | ------------------------------------------ |
+| `.stack gap-none` | 0    | Lines forming one typographic unit         |
+| `.stack sm`       | 8px  | A homogeneous series of controls           |
+| `.stack`          | 12px | Normal flow between distinct elements      |
+| `.stack lg`       | 24px | Sections, or blocks that read as separated |
+
+One typographic unit means a name and a job title, or a figure and its caption.
+A homogeneous series means a radio list, a checkbox list, or a compact vertical
+menu.
 
 The distinction between the first two matters. `42` above `Open issues` is
 almost a single block of text, so it takes `gap-none`. Three `.choice` labels

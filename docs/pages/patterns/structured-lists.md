@@ -3,13 +3,13 @@
 Choose list markup from the content semantics, then add only the layout or
 component contract the collection needs.
 
-| Need | Use |
-| --- | --- |
-| Bullets or order carry meaning | Native `<ul>` or `<ol>` |
-| One leading element and one flexible content region | [`.media`](../layout/media.md) |
-| Repeated application rows with leading, content, and trailing regions | [`.list`](../components/list.md) |
-| A list of navigation links | [`.nav-list`](./navigation-list.md) |
-| A richer collection with its own item structure | Native list plus layout primitives and components |
+| Need                                            | Use                                 |
+| ----------------------------------------------- | ----------------------------------- |
+| Bullets or order carry meaning                  | Native `<ul>` or `<ol>`             |
+| Leading element plus flexible content           | [`.media`](../layout/media.md)      |
+| Repeated rows: leading, content, trailing       | [`.list`](../components/list.md)    |
+| A list of navigation links                      | [`.nav-list`](./navigation-list.md) |
+| A richer collection with its own item structure | Native list plus primitives         |
 
 `.media` and `.list` are not interchangeable. `.media` is geometry for one
 two-part composition and requires exactly two direct children. `.list` owns the

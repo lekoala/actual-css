@@ -40,15 +40,21 @@ Actual CSS is intended for new projects. Existing projects with class collisions
 
 ## Utilities
 
-Utilities ship in two layers that follow the same class grammar.
+Utilities ship in two modules that follow the same class grammar. Both are
+imported by `utilities/index.css`, so the split is about naming and curation,
+never about opting in.
 
-- **Base utilities** are a curated set of common ergonomic shortcuts
-  (`.overflow-auto`, `.gap-none`, `.text-nowrap`, `.px`, `.py`).
-- **Optional utilities** use explicit property/value names
+- **Base** (`utilities/base.css`) is a curated set of common ergonomic
+  shortcuts (`.overflow-auto`, `.gap-none`, `.text-nowrap`, `.px`, `.py`).
+- **Extra** (`utilities/extra.css`) uses explicit property/value names
   (`.overflow-hidden`, `.gap-sm`, `.white-space-normal`).
 
-Base utilities may use compact names for a small set of frequent operations
-(`.px`, `.py`, `.mbs`, `.mbe`). Extra utilities use explicit property/value
-names and must not duplicate an operation already provided by base. The two
-sets may cover the same CSS property, but must not expose competing names for
-the same declaration.
+Call them base and extra, after the files. "Optional" is the wrong word for
+either: it reads as a layer an author has to opt into, which is true of every
+module outside `core/` and therefore says nothing about these two.
+
+Base may use compact names for a small set of frequent operations (`.px`,
+`.py`, `.mbs`, `.mbe`). Extra uses explicit property/value names and must not
+duplicate an operation already provided by base. The two sets may cover the
+same CSS property, but must not expose competing names for the same
+declaration.

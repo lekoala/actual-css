@@ -10,10 +10,10 @@ filled while the control remains fully functional.
 
 ## Class reference
 
-| Class         | Kind      | Description                         |
-|---------------|-----------|-------------------------------------|
-| `.rating`     | Component | Radio group presented as stars.     |
-| `.sm` / `.lg` | Size      | Smaller or larger star geometry.    |
+| Class         | Kind      | Description                      |
+| ------------- | --------- | -------------------------------- |
+| `.rating`     | Component | Radio group presented as stars.  |
+| `.sm` / `.lg` | Size      | Smaller or larger star geometry. |
 
 ```html demo
 <fieldset class="field">

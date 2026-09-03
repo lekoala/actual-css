@@ -12,11 +12,11 @@
 
 ## Class reference
 
-| Class           | Kind      | Description                                                  |
-|-----------------|-----------|--------------------------------------------------------------|
-| `.table-wrap`   | Component | Scroll container and outer chrome (surface, border, radius). |
-| `.table`        | Component | The table itself; row and cell rules.                        |
-| `.table.compact`| Density   | Tighter cell padding; typography is unchanged.               |
+| Class            | Kind      | Description                                                  |
+| ---------------- | --------- | ------------------------------------------------------------ |
+| `.table-wrap`    | Component | Scroll container and outer chrome (surface, border, radius). |
+| `.table`         | Component | The table itself; row and cell rules.                        |
+| `.table.compact` | Density   | Tighter cell padding; typography is unchanged.               |
 
 ## Basic usage
 

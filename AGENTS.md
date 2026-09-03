@@ -128,6 +128,19 @@ Add relevant guards for future-us when needed based on traps and discoveries.
 - Use `### Hooks` to list useful author-facing hooks and their non-obvious
   relationships. Do not repeat defaults already visible in the CSS, and skip a
   one-item section when the surrounding prose already names the hook.
+- Table cells hold labels, not paragraphs. Alignment pads every cell to its
+  column's widest, so one long cell widens every row and the source stops
+  fitting a pane — `check:docs` fails a table whose aligned width would pass
+  100 chars, and names the cell to shorten. Keep the cell to the scannable
+  claim and put the qualification in prose under the table. When a cell is an
+  enumeration or a paragraph, the content is not table-shaped: use a list.
+- Never align a markdown table by hand. Write the cells with single spaces and
+  run `bun run format:docs`, which aligns every table under `docs/` (biome
+  does not format markdown). It pads on the side each column's marker asks
+  for, so `:---:` and `---:` keep previewing their rendering, and it leaves
+  code fences alone. `check:docs` fails an unaligned table, so the pair works
+  like `generate:reserved` / `check:reserved`. Both read the width formula from
+  `scripts/docs/tables.js` — change it there, not in one of them.
 - Document primitives so they are searchable from the problem, not only from the
   solution: near the canonical answer, include a few natural terms an author
   might search for (e.g. cluster / split / spread / one left one right). State

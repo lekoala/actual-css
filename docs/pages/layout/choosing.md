@@ -5,10 +5,14 @@ number of children visible in one mockup.
 
 ## Page and application shells
 
-| Situation | Recipe |
-|---|---|
-| Public, marketing, editorial, or normally scrolling page | Semantic landmarks; optionally `.app-shell`, with `.navbar` for site navigation |
-| Persistent topbar + independently scrolling main + bottom-to-side primary navigation | `.app-layout` with its exact direct-child contract |
+| Situation                              | Recipe                                      |
+| -------------------------------------- | ------------------------------------------- |
+| A normally scrolling page              | Semantic landmarks, optionally `.app-shell` |
+| Topbar + scrolling main + adaptive nav | `.app-layout`                               |
+
+The first covers public, marketing and editorial pages; add `.navbar` for site
+navigation. The second is `.app-layout` with its exact direct-child contract,
+where the primary navigation moves from bottom to side.
 
 Do not choose `.app-layout` from the word "app" or from the presence of a
 header. Its viewport-sized grid, hidden shell overflow, internal main scroll,
@@ -19,11 +23,11 @@ below.
 ## Content relationships
 
 | Situation                                                    | Primitive         |
-|--------------------------------------------------------------|-------------------|
+| ------------------------------------------------------------ | ----------------- |
 | Vertical flow                                                | `.stack`          |
 | Inline actions, tags, or navigation that may wrap            | `.cluster`        |
 | Responsive collection; an incomplete final row is acceptable | `.grid`           |
-| Known structural density, at most N columns                 | `.grid-N`         |
+| Known structural density, at most N columns                  | `.grid-N`         |
 | Peer regions that must switch together                       | `.switcher`       |
 | Main content followed by a secondary region                  | `.sidebar-layout` |
 | Fixed media followed by flexible content                     | `.media`          |

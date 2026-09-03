@@ -276,12 +276,14 @@ Under `forced-colors: active`, `--backdrop-fill` maps to `Canvas`.
 
 A small z-index scale orders non-dialog overlays. Native `<dialog>` elements (modal, drawer) render on the platform top-layer, which has no numeric z-index and always paints above the page — they never compete with this scale.
 
-| Token         | Value | Used by                                                                           |
-|---------------|-------|-----------------------------------------------------------------------------------|
-| `--z-sticky`  | 10    | Sticky page chrome (`form-actions.sticky`, `topbar`).                             |
-| `--z-menu`    | 20    | Floating menus (`flyout`); `.surface-backdrop` sits at `calc(var(--z-menu) - 1)`. |
-| `--z-tooltip` | 50    | Tooltips.                                                                         |
-| `--z-status`  | 60    | `status-bar`.                                                                     |
+| Token         | Value | Used by                         |
+| ------------- | ----- | ------------------------------- |
+| `--z-sticky`  | 10    | `form-actions.sticky`, `topbar` |
+| `--z-menu`    | 20    | Floating menus (`flyout`)       |
+| `--z-tooltip` | 50    | Tooltips                        |
+| `--z-status`  | 60    | `status-bar`                    |
+
+`.surface-backdrop` sits just under the menus, at `calc(var(--z-menu) - 1)`.
 
 Stacking-context traps: a flyout or tooltip that is a DOM descendant of a dialog, or of a container with `transform`, `filter`, `contain`, `isolation`, or `will-change`, is confined to that ancestor's stacking context. Its z-index token only orders it against siblings within that context. When a dialog's top-layer clips a descendant flyout, move the flyout markup outside the dialog or use a portal/popover to escape the stacking context.
 

@@ -47,7 +47,7 @@ width.
 density is `.grid-N`'s. Choose the preset that suits your item size:
 
 | Item                              | Preset               |
-|-----------------------------------|----------------------|
+| --------------------------------- | -------------------- |
 | large card                        | `.grid-2`            |
 | card with a heading and a summary | `.grid-3`, `.grid-4` |
 | compact tile, stat, avatar        | `.grid-6`            |
@@ -89,7 +89,7 @@ not the grid's own width. Padding and borders on the container come off before
 the query resolves.
 
 | Container content box | `.grid-2` | `.grid-3` | `.grid-4` | `.grid-6` |
-|-----------------------|-----------|-----------|-----------|-----------|
+| --------------------- | --------- | --------- | --------- | --------- |
 | under `28rem`         | 1         | 1         | 1         | 1         |
 | `28rem` to `48rem`    | 2         | 1         | 2         | 2         |
 | `48rem` to `64rem`    | 2         | 3         | 2         | 3         |

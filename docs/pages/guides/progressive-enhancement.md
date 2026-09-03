@@ -18,7 +18,7 @@ runtime evolves. The runtime assumes the modern platform primitives available
 across Minimal and ships no compatibility layer or polyfill.
 
 | Tier         | Firefox | Safari    | Chromium |
-|--------------|---------|-----------|----------|
+| ------------ | ------- | --------- | -------- |
 | Degraded     | 78+     | 14+       | 88+      |
 | **Minimal**  | **98+** | **15.4+** | **99+**  |
 | Intermediate | 121+    | 16+       | 106+     |
@@ -74,22 +74,25 @@ example:
 </script>
 ```
 
-| Module                             | Behavior                                                                      |
-|------------------------------------|-------------------------------------------------------------------------------|
-| `actual-css/js/flyout`             | Trigger → panel surface: positioning, open/close, sheet mode (token `flyout`) |
-| `actual-css/js/context-menu`       | Context menus on `data-context-menu`                                          |
-| `actual-css/js/focus-group`        | Reusable roving-focus controller; no automatic discovery                      |
-| `actual-css/js/dialog`             | Native `<dialog>` behavior, focus management, dismissal                       |
-| `actual-css/js/dismiss`            | The generic `--dismiss` command                                               |
-| `actual-css/js/tab`                | Tab panels and arrow-key navigation (token `tabs`)                            |
-| `actual-css/js/tooltip`            | Tooltips on `data-tooltip`                                                    |
-| `actual-css/js/scrollspy`          | Scroll-driven nav highlighting (token `scrollspy`)                            |
-| `actual-css/js/filter`             | Input value filtering on `data-filter`                                        |
-| `actual-css/js/mask`               | Input masks on `data-mask`                                                    |
-| `actual-css/js/password`           | Password reveal toggle                                                        |
-| `actual-css/js/validation`         | Form validation (token `validation`)                                          |
-| `actual-css/js/status`             | Singleton status bar on `[data-status][role="status"]`                        |
-| `actual-css/js/enhancement-loader` | Declared enhancement manifests (`data-enhance-modules`, `Enhance-Modules`)    |
+| Module                             | Behavior                                                    |
+| ---------------------------------- | ----------------------------------------------------------- |
+| `actual-css/js/flyout`             | Trigger → panel positioning and open/close (token `flyout`) |
+| `actual-css/js/context-menu`       | Context menus on `data-context-menu`                        |
+| `actual-css/js/focus-group`        | Reusable roving-focus controller; no automatic discovery    |
+| `actual-css/js/dialog`             | Native `<dialog>` behavior, focus management, dismissal     |
+| `actual-css/js/dismiss`            | The generic `--dismiss` command                             |
+| `actual-css/js/tab`                | Tab panels and arrow-key navigation (token `tabs`)          |
+| `actual-css/js/tooltip`            | Tooltips on `data-tooltip`                                  |
+| `actual-css/js/scrollspy`          | Scroll-driven nav highlighting (token `scrollspy`)          |
+| `actual-css/js/filter`             | Input value filtering on `data-filter`                      |
+| `actual-css/js/mask`               | Input masks on `data-mask`                                  |
+| `actual-css/js/password`           | Password reveal toggle                                      |
+| `actual-css/js/validation`         | Form validation (token `validation`)                        |
+| `actual-css/js/status`             | Singleton status bar on `[data-status][role="status"]`      |
+| `actual-css/js/enhancement-loader` | Declared enhancement manifests                              |
+
+The enhancement loader reads its manifests from `data-enhance-modules` or the
+`Enhance-Modules` header.
 
 Use `actual-css/js/full` for demos, playgrounds, and smoke tests where one import
 enables every built-in behavior. Production apps can import individual modules
@@ -125,7 +128,7 @@ see the widget-primitives design note. Every primitive subpath is published in
 `package.json#exports`:
 
 | Subpath                  | Purpose                                                          |
-|--------------------------|------------------------------------------------------------------|
+| ------------------------ | ---------------------------------------------------------------- |
 | `actual-css/js/enhance`  | DOM lifecycle engine: `enhance()`, `registerEnhancement`, tokens |
 | `actual-css/js/escape`   | Per-document LIFO Escape dismissal stack                         |
 | `actual-css/js/events`   | The `actual:*` event name constants                              |
@@ -155,14 +158,16 @@ const stop = autoUpdate(float, () => {
 
 Options passed to `reposition()`:
 
-| Option         | Default          | Contract                                                         |
-|----------------|------------------|------------------------------------------------------------------|
-| `placement`    | `"bottom-start"` | Preferred side and alignment (`-start` / `-end`)                 |
-| `distance`     | `0`              | Gap between the reference and the floating element               |
-| `flip`         | `true`           | Flip to the opposite side when the preferred side is out of view |
-| `shift`        | `true`           | Shift along the main axis to stay within the boundary            |
-| `shiftPadding` | `4`              | Minimum space kept from the boundary                             |
-| `scope`        | viewport         | Boundary element for overflow decisions                          |
+| Option         | Default          | Contract                                    |
+| -------------- | ---------------- | ------------------------------------------- |
+| `placement`    | `"bottom-start"` | Preferred side and alignment                |
+| `distance`     | `0`              | Gap from the reference element              |
+| `flip`         | `true`           | Flip when the preferred side is out of view |
+| `shift`        | `true`           | Shift along the main axis to stay in bounds |
+| `shiftPadding` | `4`              | Minimum space kept from the boundary        |
+| `scope`        | viewport         | Boundary element for overflow decisions     |
+
+`placement` takes a `-start` or `-end` alignment suffix.
 
 `autoUpdate(element, callback)` batches scroll, resize, and element-resize
 callbacks per document and returns a stop handle; it does not keep a closed or
@@ -206,22 +211,33 @@ visible dismissable UI to the shared per-document Escape stack.
 widgets can veto or decorate opens, and context menus inject their own
 `source`/`restoreFocusTo` through it.
 
-| Option            | Default               | Contract                                                                                                                                                          |
-|-------------------|-----------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `trigger`         | —                     | Anchoring element; also the focus-restore target by default                                                                                                       |
-| `source`          | —                     | Alternate anchor when there is no trigger                                                                                                                         |
-| `x`, `y`          | —                     | Position at a fixed viewport point instead of an anchor (context menus)                                                                                           |
-| `placement`       | `"bottom-start"`      | Preferred placement                                                                                                                                               |
-| `distance`        | `4`                   | Gap between anchor and surface                                                                                                                                    |
-| `flip`            | `true`                | Flip when the preferred side is out of view                                                                                                                       |
-| `shift`           | `true`                | Shift to stay within the boundary                                                                                                                                 |
-| `shiftPadding`    | `4`                   | Minimum space kept from the boundary                                                                                                                              |
-| `scope`           | viewport              | Boundary element                                                                                                                                                  |
-| `mobile`          | `"auto"`              | `"auto"`, `"sheet"`, `"none"`, or `"anchored"` sheet behavior                                                                                                     |
-| `breakpoint`      | `768`                 | Max viewport width for an automatic sheet                                                                                                                         |
-| `autoClose`       | `"outside"`           | `"true"` closes for inside and outside clicks; `"inside"` and `"outside"` limit the side; `"false"` disables automatic click closing. Invalid values use `"true"` |
-| `dismissOnScroll` | `false`               | Close when scrolling outside the surface follows a new user input; opening/focus scroll is ignored                                                                |
-| `restoreFocusTo`  | `trigger` or `source` | Element focused on close                                                                                                                                          |
+| Option            | Default          | Contract                                    |
+| ----------------- | ---------------- | ------------------------------------------- |
+| `trigger`         | —                | Anchoring element, and focus-restore target |
+| `source`          | —                | Alternate anchor when there is no trigger   |
+| `x`, `y`          | —                | Position at a fixed viewport point          |
+| `placement`       | `"bottom-start"` | Preferred placement                         |
+| `distance`        | `4`              | Gap between anchor and surface              |
+| `flip`            | `true`           | Flip when the preferred side is hidden      |
+| `shift`           | `true`           | Shift to stay within the boundary           |
+| `shiftPadding`    | `4`              | Minimum space kept from the boundary        |
+| `scope`           | viewport         | Boundary element                            |
+| `mobile`          | `"auto"`         | Sheet behavior                              |
+| `breakpoint`      | `768`            | Max viewport width for an automatic sheet   |
+| `autoClose`       | `"outside"`      | Which clicks close the surface              |
+| `dismissOnScroll` | `false`          | Close on a scroll the user just started     |
+| `restoreFocusTo`  | `trigger`        | Element focused on close                    |
+
+`x`, `y` replace the anchor entirely, which is what a context menu needs.
+`mobile` takes `"auto"`, `"sheet"`, `"none"` or `"anchored"`.
+
+`autoClose` takes `"true"` to close on inside and outside clicks, `"inside"` or
+`"outside"` to limit it to one side, and `"false"` to disable automatic click
+closing; an invalid value reads as `"true"`.
+
+`dismissOnScroll` only fires when the scroll follows a new user input — the
+scroll that opening or focusing causes is ignored. `restoreFocusTo` falls back
+to `source` when there is no `trigger`.
 
 The click policy belongs to the surface rather than to a particular menu
 anatomy. The generic primitive defaults to outside-click dismissal; flyout and
@@ -242,14 +258,18 @@ The runtime dispatches a small set of public `actual:*` events. All are
 listenable on the document; cancelable events veto the associated action when
 `preventDefault()` is called.
 
-| Event                  | Dispatch                                   | Contract                                                                                       |
-|------------------------|--------------------------------------------|------------------------------------------------------------------------------------------------|
-| `actual:surface-open`  | `openSurface()`, before a surface opens    | Cancelable. `detail: { surface, options }`                                                     |
-| `actual:context-menu`  | context-menu, before its menu opens        | Cancelable. `detail: { menu, context, origin, trigger }`                                       |
-| `actual:status`        | status module, or any code                 | Show or clear the status bar. `detail: { message, intent, duration }`; omit `message` to clear |
-| `actual:invalid`       | validation, after a submit was blocked     | `detail: { form, firstInvalid, message }`                                                      |
-| `actual:dialog-cancel` | dialog, before native cancel close         | Cancelable. `detail: { dialog, sourceEvent }`                                                  |
-| `actual:dismiss`       | `--dismiss` command, after hiding a target | `detail: { trigger }`                                                                          |
+| Event                  | Dispatch                       | `detail`                             |
+| ---------------------- | ------------------------------ | ------------------------------------ |
+| `actual:surface-open`  | before a surface opens         | `{ surface, options }`               |
+| `actual:context-menu`  | before a context menu opens    | `{ menu, context, origin, trigger }` |
+| `actual:status`        | status module, or any code     | `{ message, intent, duration }`      |
+| `actual:invalid`       | after a submit was blocked     | `{ form, firstInvalid, message }`    |
+| `actual:dialog-cancel` | before a native cancel close   | `{ dialog, sourceEvent }`            |
+| `actual:dismiss`       | after `--dismiss` hid a target | `{ trigger }`                        |
+
+`actual:surface-open`, `actual:context-menu` and `actual:dialog-cancel` are
+cancelable. `actual:status` both shows and clears the status bar — omit
+`message` to clear it.
 
 ## Extending the runtime
 

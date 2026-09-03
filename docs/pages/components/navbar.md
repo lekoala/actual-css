@@ -19,7 +19,7 @@ flex list, `.nav-list` a vertical grid. Putting both on one element resolves to
 ## Class reference
 
 | Class           | Kind        | Description                                           |
-|-----------------|-------------|-------------------------------------------------------|
+| --------------- | ----------- | ----------------------------------------------------- |
 | `.navbar`       | Component   | Horizontal bar shell.                                 |
 | `.navbar-brand` | Composition | Brand link at the inline start.                       |
 | `.navbar-nav`   | Composition | Horizontal link list.                                 |
