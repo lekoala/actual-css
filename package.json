@@ -58,7 +58,6 @@
     "./js/parse-config": "./src/js/parse-config.js",
     "./js/events": "./src/js/events.js",
     "./js/filter": "./src/js/filter.js",
-    "./js/floating": "./src/js/floating.js",
     "./js/flyout": "./src/js/flyout.js",
     "./js/focus": "./src/js/focus.js",
     "./js/focus-group": "./src/js/focus-group.js",
@@ -143,5 +142,8 @@
   "devDependencies": {
     "@biomejs/biome": "^2.5",
     "happy-dom": "^20.11"
+  },
+  "dependencies": {
+    "@lekoala/floating": "^0.1.0"
   }
 }

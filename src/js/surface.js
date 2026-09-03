@@ -1,7 +1,7 @@
+import { autoUpdate, reposition, repositionAt } from "@lekoala/floating";
 import enhance from "./enhance.js";
 import { registerEscapeDismissal } from "./escape.js";
 import { EVENTS } from "./events.js";
-import { autoUpdate, reposition, repositionAt } from "./floating.js";
 
 import { CLASSES } from "./selectors.js";
 import { waitForTransitions } from "./transition.js";
@@ -210,6 +210,10 @@ function startSurfaceResources(menu, state) {
     const armKey = (event) => {
       if (!event.defaultPrevented && SCROLL_KEYS.has(event.key)) arm(event);
     };
+    const dismissOnScroll = (event) => {
+      if (state.scrollIntentAt == null || menu.contains(event.target)) return;
+      closeSurface(menu);
+    };
     const captureOptions = { signal: controller.signal, capture: true };
     const passiveCaptureOptions = { ...captureOptions, passive: true };
     const doc = menu.ownerDocument;
@@ -217,20 +221,13 @@ function startSurfaceResources(menu, state) {
     doc.addEventListener("touchmove", arm, passiveCaptureOptions);
     doc.addEventListener("wheel", arm, passiveCaptureOptions);
     doc.addEventListener("keydown", armKey, { signal: controller.signal });
+    doc.addEventListener("scroll", dismissOnScroll, passiveCaptureOptions);
     state.stopScrollIntent = () => controller.abort();
   }
-  state.stopTracking = autoUpdate(menu, ({ type, targets, timeStamp }) => {
+  const anchor = state.point ? null : state.trigger || state.source;
+  state.stopTracking = autoUpdate(anchor, menu, ({ type }) => {
     if (menu.hidden) return;
-    if (
-      type === "scroll" &&
-      state.dismissOnScroll &&
-      state.scrollIntentAt != null &&
-      timeStamp >= state.scrollIntentAt &&
-      [...targets].some((target) => target !== menu && !menu.contains(target))
-    ) {
-      closeSurface(menu);
-      return;
-    }
+    if (type === "scroll" && state.dismissOnScroll) return;
     applyPresentation(menu, state);
     if (!positionSurface(menu)) closeSurface(menu);
   });

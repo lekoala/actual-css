@@ -2,7 +2,7 @@
 
 ## Context
 
-Currently, the positioning logic for tooltips, flyouts, and context menus is handled by a custom JavaScript engine (in `floating.js`). This engine computes absolute coordinates, handles viewport boundaries, and applies "flip" and "shift" heuristics to prevent overflow.
+Currently, the positioning logic for tooltips, flyouts, and context menus is handled by the `@lekoala/floating` JavaScript dependency. This engine computes fixed coordinates, handles viewport boundaries, and applies "flip" and "shift" heuristics to prevent overflow.
 
 As of mid-2024, modern browsers started supporting the **CSS Anchor Positioning API**, which delegates this heavy mathematical lifting directly to the browser's layout engine.
 

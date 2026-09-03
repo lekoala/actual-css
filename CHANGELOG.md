@@ -1,5 +1,12 @@
 # Actual CSS Changelog
 
+## [Unreleased]
+
+### Breaking
+
+- Replaced `floating.js` by `@lekoala/floating`.
+
+
 ## [0.6.0] - 2026-09-03
 
 ### Changed
@@ -13,7 +20,7 @@
 - The framework query-container name is now `actual-container` instead of
   `actual-grid`. `.container-query` is unchanged.
 
-## Fixed
+### Fixed
 
 - `.fab` icons.
 - `.floating-field` with password managers.

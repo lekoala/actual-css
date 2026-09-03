@@ -324,8 +324,8 @@ Its <code>intent</code> option applies whatever class names the caller passes, s
 </ul>
 <h2 id="the-runtime-as-a-primitive-kit">The runtime as a primitive kit</h2>
 <p>For building custom widgets (select, tags, date picker) on Actual's primitives,
-see the widget-primitives design note. Every primitive subpath is published in
-<code>package.json#exports</code>:</p>
+see the widget-primitives design note. Every Actual runtime primitive subpath is
+published in <code>package.json#exports</code>:</p>
 <div class="table-wrap"><table class="table">
 <thead>
 <tr><th>Subpath</th><th>Purpose</th></tr>
@@ -334,7 +334,6 @@ see the widget-primitives design note. Every primitive subpath is published in
 <tr><td><code>actual-css/js/enhance</code></td><td>DOM lifecycle engine: <code>enhance()</code>, <code>registerEnhancement</code>, tokens</td></tr>
 <tr><td><code>actual-css/js/escape</code></td><td>Per-document LIFO Escape dismissal stack</td></tr>
 <tr><td><code>actual-css/js/events</code></td><td>The <code>actual:*</code> event name constants</td></tr>
-<tr><td><code>actual-css/js/floating</code></td><td>Positioning engine (<code>reposition</code>, <code>repositionAt</code>, <code>autoUpdate</code>)</td></tr>
 <tr><td><code>actual-css/js/focus</code></td><td>Focusable-item lookup and helpers</td></tr>
 <tr><td><code>actual-css/js/keys</code></td><td>Roving-focus item navigation helpers</td></tr>
 <tr><td><code>actual-css/js/menu</code></td><td>Menu keyboard/click wiring, item vocabulary</td></tr>
@@ -348,9 +347,9 @@ see the widget-primitives design note. Every primitive subpath is published in
 computes and writes inline <code>left</code>/<code>top</code>, <code>data-placement</code>,
 <code>--available-height</code>, and <code>--arrow-x</code>/<code>--arrow-y</code> on the floating element. The
 caller owns the floating element's presentation entirely.</p>
-<pre><code class="language-js">import { autoUpdate, reposition, repositionAt } from &quot;actual-css/js/floating&quot;;
+<pre><code class="language-js">import { autoUpdate, reposition, repositionAt } from &quot;@lekoala/floating&quot;;
 
-const stop = autoUpdate(float, () =&gt; {
+const stop = autoUpdate(trigger, float, () =&gt; {
   reposition(trigger, float, { placement: &quot;bottom-start&quot;, distance: 4 });
 });
 </code></pre>
@@ -363,18 +362,21 @@ const stop = autoUpdate(float, () =&gt; {
 <tr><td><code>placement</code></td><td><code>&quot;bottom-start&quot;</code></td><td>Preferred side and alignment</td></tr>
 <tr><td><code>distance</code></td><td><code>0</code></td><td>Gap from the reference element</td></tr>
 <tr><td><code>flip</code></td><td><code>true</code></td><td>Flip when the preferred side is out of view</td></tr>
-<tr><td><code>shift</code></td><td><code>true</code></td><td>Shift along the main axis to stay in bounds</td></tr>
+<tr><td><code>shift</code></td><td><code>true</code></td><td>Shift along the cross axis to stay in bounds</td></tr>
 <tr><td><code>shiftPadding</code></td><td><code>4</code></td><td>Minimum space kept from the boundary</td></tr>
 <tr><td><code>scope</code></td><td>viewport</td><td>Boundary element for overflow decisions</td></tr>
 </tbody>
 </table></div>
 <p><code>placement</code> takes a <code>-start</code> or <code>-end</code> alignment suffix.</p>
-<p><code>autoUpdate(element, callback)</code> batches scroll, resize, and element-resize
-callbacks per document and returns a stop handle; it does not keep a closed or
+<p><code>@lekoala/floating</code> is the standalone positioning dependency used by the
+runtime. <code>autoUpdate(reference, float, callback)</code> batches scroll, resize, and
+element-resize callbacks per document and returns a stop handle; it observes
+both the reference and floating element while the surface is open. Pass <code>null</code>
+as the reference for point-positioned surfaces. It does not keep a closed or
 hidden element positioned. <code>repositionAt(x, y, float, opts)</code> positions relative
 to a fixed point — used by context menus.</p>
-<p>A third-party widget importing only <code>floating</code> with no Actual stylesheet must be
-able to position a listbox under an input — that is the test.</p>
+<p>A third-party widget importing only <code>@lekoala/floating</code> with no Actual stylesheet
+must be able to position a listbox under an input — that is the test.</p>
 <h2 id="surface-contract">Surface contract</h2>
 <p><code>surface</code> has documented presentation coupling. A foreign consumer must supply
 or account for:</p>
