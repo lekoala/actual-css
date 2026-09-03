@@ -1,5 +1,6 @@
 import { afterEach, expect, test } from "bun:test";
 import { cleanupDOM } from "./helpers/dom.js";
+import { publicJsExports, sourceModuleForJsExport } from "./helpers/package-exports.js";
 
 let importId = 0;
 
@@ -10,27 +11,8 @@ afterEach(() => {
 test("javascript modules import without a DOM", async () => {
   cleanupDOM();
 
-  const modules = [
-    "index",
-    "full",
-    "context-menu",
-    "dialog",
-    "dismiss",
-    "enhance",
-    "filter",
-    "floating",
-    "flyout",
-    "input",
-    "mask",
-    "scrollspy",
-    "status",
-    "surface",
-    "validation",
-    "tab",
-    "tooltip",
-  ];
-
-  for (const module of modules) {
+  for (const exportPath of publicJsExports()) {
+    const module = sourceModuleForJsExport(exportPath);
     await import(`../src/js/${module}.js?ssr=${++importId}`);
   }
 
