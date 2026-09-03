@@ -3,7 +3,7 @@
 > The optional JavaScript runtime that progressively enhances Actual's semantic markup — self-registering side-effect modules, the `enhance()` DOM lifecycle, stateless command routing, and the floating and surface contracts for custom widgets.
 
 Actual's JavaScript modules are optional. Importing `actual-css/js/full`
-registers the complete default runtime — every built-in enhancer, including
+registers the full runtime — every built-in enhancer, including
 validation and status. Importing `actual-css/js` registers only the enhancement
 manifest loader; importing a specific module registers only that behavior. The
 runtime does not require `DOMContentLoaded` or manual init calls, and it never
@@ -56,7 +56,7 @@ Modules are safe to import during SSR — registration is a no-op when there is 
 DOM. The runtime remains active until the page unloads; there is no teardown
 handle, and cleanup happens per element when an element leaves the DOM.
 
-## The default runtime
+## The full runtime
 
 Loading `dist/actual.full.js` as a plain `<script>` (no `type="module"`, no
 bundler, no `import`) gets the full runtime. Static HTML that needs to trigger
@@ -388,7 +388,8 @@ import { loadEnhancement, loadEnhancements, loadResponse } from "actual-css/js/e
 
 await loadEnhancements(); // every manifest block in the document
 await loadEnhancement("autosubmit", "/js/autosubmit.js");
-await loadResponse(fetch("/...").then((r) => r)); // Enhance-Modules header
+const response = await fetch("/...");
+await loadResponse(response); // Enhance-Modules header
 ```
 
 The `Enhance-Modules` HTTP header carries the same JSON object. Loaded modules
@@ -638,7 +639,7 @@ enhance({
 
 ## Form validation
 
-`actual-css/js/validation` is part of the default runtime and also importable on
+`actual-css/js/validation` is part of the full runtime and also importable on
 its own — it is an enhancer, not a validation framework. Forms opt in with the
 `data-enhance="validation"` token (`.needs-validation` is a presentation class
 for CSS-only `:user-invalid` feedback and does not by itself register the
