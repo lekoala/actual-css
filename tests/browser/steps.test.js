@@ -4,12 +4,13 @@
  * Five things only a layout engine can settle, and each of them is a bug the
  * source alone would not show:
  *
- * - the connector must resolve --step-line at its own use site, so a .complete
- *   segment is accented and a future one is not (a parent-level default would
- *   freeze both);
- * - the three horizontal representations must switch on the documented pixel
- *   and never overlap;
- * - the compact form must not leave a focusable label clipped to 1x1;
+ * - the connector must resolve --step-line at its own use site, so a
+ *   .step-complete segment is accented and a future one is not (a parent-level
+ *   default would freeze both);
+ * - a row with no labels must be compact by structure, at every width and with
+ *   no size context, while a labelled one must switch to inline on the
+ *   documented pixel and never drop a label to fit;
+ * - a navigable label must keep a real box in every representation;
  * - .steps-vertical must stay vertical whatever the container reports, and
  *   must do it without carrying .steps at all;
  * - state must read identically on both roots;
@@ -38,7 +39,9 @@ const READERS = `
   const stepSize = ${STEP_SIZE};
   const items = (id) => [...document.getElementById(id).children];
   const labelOf = (li) => li.querySelector(".step-label");
-  // The compact form is .sr-only: taken out of flow and clipped away.
+  /* Nothing must ever answer true. .sr-only takes an element out of flow and
+     clips it away, so this is how "the framework never hides an authored
+     label" is asserted rather than assumed. */
   const hidden = (li) => {
     const el = labelOf(li);
     return el ? getComputedStyle(el).position === "absolute" : null;
@@ -67,6 +70,10 @@ const READERS = `
     return {
       liDisplay: getComputedStyle(li).display,
       labelHidden: hidden(li),
+      /* The step's own height, which is what the grid template decides: one
+         marker row and nothing else, or a marker row plus a gap and a label
+         row. A step with no label must measure the first. */
+      blockSize: Math.round(box.height),
       // Under the marker row = stacked; inside it = inline.
       labelBelowMarker: label
         ? label.getBoundingClientRect().top - box.top >= stepSize
@@ -135,7 +142,7 @@ const probe = (view, body) => view.evaluate(`(() => {${READERS}${body}})()`);
 /*
  * A custom property resolves its var() before inheritance, so a default
  * --step-connector on .steps would freeze the parent's line colour and a
- * .complete child's connector would never follow its own state. The default
+ * .step-complete child's connector would never follow its own state. The default
  * therefore falls back to the local --step-line inside the gradient.
  */
 it("each connector resolves the line color of the step it leaves", async () => {
@@ -214,104 +221,117 @@ it("--step-connector replaces the whole connector background", async () => {
 });
 
 /*
- * Markers-only, in order of what would break silently:
+ * Labels are a dimension of their own, independent of orientation, and each
+ * side of it makes one promise.
  *
- * - It exists for the case that actually hurts: 4 or 5 steps in a phone-width
- *   region. A 2- or 3-step row is readable stacked far below that and simply
- *   scrolls, so no rule reaches it however narrow the container gets.
- * - One threshold, calibrated on five steps: 35rem is that count's own
- *   --step-min budget, so a five-step row never scrolls inside the supported
- *   range. Four steps share it and are therefore compacted between 448px and
- *   560px although stacked would still have fitted — the deliberate cost of a
- *   single threshold. Moving it down to split the difference is what must not
- *   happen: it would hand five-step rows a scrolling band instead.
- * - Compacting must actually remove the overflow, without trading it for a
- *   cross-axis scrollbar.
- * - Every label goes, including the current one, so the markers keep an even
- *   pitch and no step reads as wider than its peers. The text stays in the DOM.
- * - All three grant routes behave the same: the class on the row, the name
- *   declared in a stylesheet, and a wrapper carrying the shared name — that
- *   last one reaches the row and measures its region.
+ * An empty step is a marker and nothing else, so it is compact by structure
+ * rather than by grant: five of them fit a 320px region with no size context,
+ * because `> li:empty` reads the markup and not the width. Nothing authored,
+ * nothing hidden, no variant class. It must be that one shape at every width,
+ * so the inline query has to stay out of it — and the column must answer the
+ * same way, which in a shrink-to-fit box means being exactly as wide as its
+ * markers.
+ *
+ * A labelled sequence makes the opposite promise: every label stays visible at
+ * every width, and a row that outgrows its space scrolls. The count is no part
+ * of either promise, so two steps at 200px must answer exactly as five at
+ * 559px: nothing in the component counts its items.
  */
-it("a granted size context trades scroll for markers only, at four and five steps", async () => {
+it("an empty step is compact by structure, and a labelled one is never dropped", async () => {
   await withBrowserPage(
     fixtureUrl(FIXTURE),
     async (view) => {
       const result = await probe(
         view,
         `
-        const read = (id) => {
+        const read = (id) => ({ ...shape(id), ...flow(id) });
+        const widthOf = (id) => Math.round(
+          document.getElementById(id).getBoundingClientRect().width);
+        /* The marker is a ::before, so its box is read through its item: an
+           empty step aligns it to the start of its share, and the final step
+           is only as wide as its own marker. Both ends therefore sit flush
+           with the row. */
+        const trackEdges = (id) => {
+          const ol = document.getElementById(id);
           const list = items(id);
-          const current = list.find((li) => li.getAttribute("aria-current") === "step");
-          const other = list.find((li) => li.getAttribute("aria-current") !== "step");
-          return {
-            ...shape(id),
-            ...flow(id),
-            currentLabelHidden: hidden(current),
-            otherLabelHidden: hidden(other),
-          };
+          const box = ol.getBoundingClientRect();
+          return [
+            Math.round(list[0].getBoundingClientRect().left - box.left),
+            Math.round(box.right - list.at(-1).getBoundingClientRect().right),
+          ];
         };
         return {
-          compact5: read("compact-5"),
-          stacked5: read("stacked-5"),
-          compact4: read("compact-4"),
-          stacked4: read("stacked-4"),
-          narrow3: read("narrow-3"),
-          narrow2: read("narrow-2"),
+          markerEdges: trackEdges("markers"),
+          markerWideEdges: trackEdges("markers-wide"),
+          markers: read("markers"),
+          markersWide: read("markers-wide"),
+          narrow5: read("labelled-narrow"),
+          tiny2: read("labelled-tiny"),
           bare: read("bare"),
-          stylesheet: read("stylesheet-route"),
-          ancestor: read("ancestor-grant"),
+          mixed: items("mixed").map((li) => Math.round(li.getBoundingClientRect().width)),
+          verticalRail: widthOf("vertical-markers"),
+          verticalRailItem: read("vertical-markers").blockSize,
         };
       `,
       );
 
-      // 559px, one pixel under the five-step budget both counts now share.
-      for (const key of ["compact5", "compact4"]) {
-        expect(result[key].otherLabelHidden).toBe(true);
-        expect(result[key].overflowPx).toBe(0);
-        expect(result[key].scrollbarPx).toBe(0);
-        expect(result[key].textPresent).toBe(true);
-        // The current step compacts with the rest: an exempt step would keep
-        // its --step-min budget and skew every marker after it.
-        expect(result[key].currentLabelHidden).toBe(true);
-        expect(result[key].pitchSpread).toBeLessThanOrEqual(2);
-      }
+      /* 320px, five steps, no grant at all. An even marker pitch is the point:
+         a step keeping a wider budget than its peers would stop reading as a
+         position in a sequence. */
+      expect(result.markers.overflowPx).toBe(0);
+      expect(result.markers.scrollbarPx).toBe(0);
+      expect(result.markers.pitchSpread).toBeLessThanOrEqual(2);
+      /* One grid row, the marker's. This is the row's half of the trick: the
+         template declares that row only, so no label means no implicit second
+         row and therefore no gap either — measured as the step's own height. */
+      expect(result.markers.liDisplay).toBe("grid");
+      expect(result.markers.blockSize).toBe(STEP_SIZE);
 
-      // 561px, one pixel over: the stacked layout is intact with nothing to
-      // scroll. Both counts stay stacked until 60rem, well past this width.
-      for (const key of ["stacked5", "stacked4"]) {
-        expect(result[key].otherLabelHidden).toBe(false);
-        expect(result[key].labelBelowMarker).toBe(true);
-        expect(result[key].overflowPx).toBe(0);
-      }
+      /* Edge to edge, at both widths. A marker with no label under it has
+         nothing to share a centre with, so it takes the start of its share and
+         the track lines up with the text around it. Half-cell margins at the
+         ends would leave it floating against a left-aligned heading. */
+      expect(result.markerEdges).toEqual([0, 0]);
+      expect(result.markerWideEdges).toEqual([0, 0]);
 
-      /* Two and three steps have no markers-only form at all: at 300px and
-         200px they keep every label and scroll, which is the readable
-         outcome at those widths and the reason those blocks were dropped. */
-      for (const key of ["narrow3", "narrow2"]) {
-        expect(result[key].otherLabelHidden).toBe(false);
+      /* 980px, and granted the context that fires the inline query. Same
+         representation: a marker row whose first marker jumped flush at 60rem
+         would break the "one shape at every width" promise. */
+      expect(result.markersWide.liDisplay).toBe("grid");
+      expect(result.markersWide.blockSize).toBe(STEP_SIZE);
+      expect(result.markersWide.connectorPosition).toBe("absolute");
+      expect(result.markersWide.overflowPx).toBe(0);
+
+      /* The column's half. A stretched column hides the difference, so this is
+         measured shrink-to-fit — a sticky rail — where the label track and the
+         gap to it would otherwise make the rail --step-inline-gap wider than
+         the markers it draws. */
+      expect(result.verticalRail).toBe(STEP_SIZE);
+      expect(result.verticalRailItem).toBe(STEP_SIZE);
+
+      /* The other promise, at both ends of the count range: labels stay
+         visible, stacked under their markers, and the row scrolls instead. */
+      for (const key of ["narrow5", "tiny2"]) {
+        expect(result[key].labelHidden).toBe(false);
         expect(result[key].labelBelowMarker).toBe(true);
         expect(result[key].overflowPx).toBeGreaterThan(0);
       }
 
-      /* .step-label is the contract, so nothing guards against an unwrapped
-         row: it compacts with nothing to hide. Not a supported form — just one
-         that must still lay out rather than fall apart. */
+      /* `:empty` reads an item's own content, which is what makes both
+         out-of-contract rows lay out as what they say rather than fall apart.
+         Bare text is content, so it keeps the reading widths its wrapped peers
+         would get — the second row of a stacked step, hence a taller item than
+         a marker. And in a row mixing an empty step with labelled ones, the
+         labelled ones still measure alike: `--step-min` is a floor on the
+         items that asked for it, never a budget one item can take from
+         another, which is the 201px-against-89px skew that made the wrapper
+         mandatory. */
       expect(result.bare.labelHidden).toBe(null);
-      expect(result.bare.overflowPx).toBe(0);
-      expect(result.bare.scrollbarPx).toBe(0);
-
-      // The class is a convenience, not the API: naming the anchor in CSS is
-      // equivalent.
-      expect(result.stylesheet.otherLabelHidden).toBe(true);
-      expect(result.stylesheet.overflowPx).toBe(0);
-
-      // actual-container is shared, so a wrapper grant reaches the row inside
-      // it — the width measured is the zone the row was allocated.
-      expect(result.ancestor.otherLabelHidden).toBe(true);
-      expect(result.ancestor.overflowPx).toBe(0);
+      expect(result.bare.blockSize).toBeGreaterThan(STEP_SIZE);
+      expect(result.mixed[0]).toBe(result.mixed[2]);
+      expect(result.mixed[1]).toBeLessThan(result.mixed[0]);
     },
-    { artifactName: "steps-compact" },
+    { artifactName: "steps-markers" },
   );
 });
 
@@ -327,8 +347,10 @@ it("a granted size context trades scroll for markers only, at four and five step
  * collapsed to a stub. So the assertion below is on the connector's width, not
  * merely on the row being inline.
  *
- * The threshold sits far above the markers-only one, so no row can be in two
- * representations at once and stacked owns the whole band between them.
+ * It is also the only thing an `actual-container` grant buys, so all three
+ * grant routes are checked here: the class on the row, the name declared in a
+ * stylesheet, and a wrapper carrying the shared name — that last one reaching
+ * the row through an intervening element and measuring its own region.
  *
  * --step-inline-connector is scoped to this representation on purpose: a
  * chevron that reads correctly between two inline groups would be nonsense
@@ -353,6 +375,8 @@ it("generous room puts the label beside its marker and stretches the connector",
           stackedConnector: connectorOf("stacked-3"),
           hookedInline: connectorOf("inline-hook"),
           hookedStacked: connectorOf("stacked-hook"),
+          stylesheet: read("stylesheet-route"),
+          ancestor: read("ancestor-grant"),
         };
       `,
       );
@@ -367,9 +391,9 @@ it("generous room puts the label beside its marker and stretches the connector",
         expect(result[key].lastConnector).toBe("none");
       }
       // The connector joins the flex row and takes the free space, so it stays
-      // at least its 2rem basis. That width is what a themed chevron gets — and
-      // on five steps, the widest supported row, it is what an earlier
-      // threshold would have squeezed away.
+      // at least its 2rem basis. That width is what a themed chevron gets, and
+      // on five steps — the widest supported row — it is what any lower
+      // threshold squeezes away.
       expect(result.inlineConnector.position).toBe("static");
       expect(result.inlineConnector.width).toBeGreaterThan(32);
       expect(result.inlineConnector5.position).toBe("static");
@@ -381,32 +405,42 @@ it("generous room puts the label beside its marker and stretches the connector",
       expect(result.stacked3.labelBelowMarker).toBe(true);
       expect(result.stackedConnector.position).toBe("absolute");
 
-      /* 769px, five steps, realistic labels — what an earlier threshold would
-         have bought. The row does fit inline there, so "no overflow" is not the
-         test: the connector measures ~15px, a stub where the representation
-         promises a region. It must still be stacked. */
+      /* 769px, five steps, realistic labels: what a 48rem threshold buys. The
+         row does fit inline there, so "no overflow" is not the test — the
+         connector measures ~15px, a stub where the representation promises a
+         region. It must still be stacked. */
       expect(result.cramped5.liDisplay).toBe("grid");
       expect(result.cramped5.labelBelowMarker).toBe(true);
 
       // The hook repaints the inline representation only.
       expect(result.hookedInline.image).toBe("linear-gradient(rgb(1, 2, 3), rgb(1, 2, 3))");
       expect(result.hookedStacked.image).toBe(result.stackedConnector.image);
+
+      /* The class is a convenience, not the API: naming the anchor in a
+         stylesheet is equivalent, and actual-container is shared, so a wrapper
+         grant reaches the row inside it and measures the zone it was given. */
+      for (const key of ["stylesheet", "ancestor"]) {
+        expect(result[key].liDisplay).toBe("flex");
+        expect(result[key].labelBelowMarker).toBe(false);
+      }
     },
     { artifactName: "steps-inline" },
   );
 });
 
 /*
- * The compact form must never hide a focusable label. .sr-only leaves the
- * element in the tab order at 1x1 with clip-path: inset(50%), so the focus ring
- * is clipped to nothing and a keyboard user lands somewhere invisible. The flow
- * refuses to compact instead, keeping its labels and its scroll. Guards the
- * whole feature, since the docs invite an <a> as a label.
+ * Navigation is a labelled affair — only a `.step-label` can be a link — and
+ * the framework never hides an authored label, so a focusable box exists in
+ * every representation, at every width. It falls out of the contract rather
+ * than out of a guard, which is exactly why it needs a real browser to hold:
+ * the cheap way to compact a row is `.sr-only`, and that leaves an element in
+ * the tab order at 1x1 under `clip-path: inset(50%)`, so the focus ring is
+ * clipped to nothing and a keyboard user lands somewhere invisible.
  *
- * The guard is scoped to the compact form: the inline representation hides
- * nothing, so an interactive flow must still get it.
+ * The narrow row therefore scrolls with its labels intact, and the inline
+ * representation moves the label rather than touching its box.
  */
-it("an interactive flow refuses the compact form but keeps the inline one", async () => {
+it("a navigable label keeps a real box at every width", async () => {
   await withBrowserPage(
     fixtureUrl(FIXTURE),
     async (view) => {
@@ -424,7 +458,7 @@ it("an interactive flow refuses the compact form but keeps the inline one", asyn
           h: Math.round(r.height),
           clipPath: s.clipPath,
           position: s.position,
-          // Labels kept means the row scrolls, exactly as without the grant.
+          // Labels kept means the row scrolls, grant or no grant.
           overflowPx: Math.round(ol.scrollWidth - ol.clientWidth),
           inline: shape("interactive-inline"),
         };
@@ -439,60 +473,18 @@ it("an interactive flow refuses the compact form but keeps the inline one", asyn
       expect(result.position).not.toBe("absolute");
       expect(result.overflowPx).toBeGreaterThan(0);
 
-      // Nothing to refuse above the inline threshold: the label is visible.
+      // And above the inline threshold, where the label only moves.
       expect(result.inline.liDisplay).toBe("flex");
       expect(result.inline.labelHidden).toBe(false);
     },
-    { artifactName: "steps-compact-interactive" },
-  );
-});
-
-/*
- * The guard reads structure, never state — one link anywhere refuses the whole
- * flow. That matters beyond symmetry: aria-current moves as the workflow
- * advances, so a guard keyed on state would switch the compact form on and off
- * under the user as the same link went future -> current -> complete.
- */
-it("the compact guard ignores step state", async () => {
-  await withBrowserPage(
-    fixtureUrl(FIXTURE),
-    async (view) => {
-      const result = await probe(
-        view,
-        `
-        const read = (id) => {
-          const list = items(id);
-          // Read a non-current label: one the compact form would have hidden.
-          const other = list.find((li) => li.getAttribute("aria-current") !== "step");
-          return { labelHidden: hidden(other), ...flow(id) };
-        };
-        return {
-          completeLink: read("interactive"),
-          futureLink: read("future-link"),
-          currentLink: read("current-link"),
-          // The control: same width, same count, no link at all.
-          noLink: read("compact-5"),
-        };
-      `,
-      );
-
-      for (const key of ["completeLink", "futureLink", "currentLink"]) {
-        expect(result[key].labelHidden).toBe(false);
-        expect(result[key].overflowPx).toBeGreaterThan(0);
-      }
-
-      // And the guard is the reason, not the width: without a link it compacts.
-      expect(result.noLink.labelHidden).toBe(true);
-      expect(result.noLink.overflowPx).toBe(0);
-    },
-    { artifactName: "steps-compact-states" },
+    { artifactName: "steps-interactive" },
   );
 });
 
 /*
  * .steps-vertical is a composition choice, not a responsive fallback. The same
- * grant that compacts a horizontal row must leave it alone at every width, its
- * connector must run down the marker track instead of across it, and the 2..5
+ * grant that moves a horizontal row inline must leave it alone at every width,
+ * its connector must run down the marker track instead of across it, and the 2..5
  * horizontal range must not follow it: a vertical flow is bounded by its
  * layout, not by a rule.
  */
@@ -549,7 +541,7 @@ it("vertical steps stay vertical under any container width", async () => {
         expect(v.direction).toBe("column");
         expect(v.stacked).toBe(true);
         expect(v.sameStart).toBe(1);
-        // Never compacted, however narrow the granted context is.
+        // A label is never hidden, here no more than in a row.
         expect(v.labelHidden).toBe(false);
         expect(v.labelOffsetX).toBeGreaterThanOrEqual(STEP_SIZE);
         // The connector is taller than it is wide, and stops at the last step.
@@ -647,7 +639,7 @@ it("the label reads one notch below its marker and centres on it", async () => {
         const marked = (id) => {
           const list = items(id);
           const current = list.find((li) => li.getAttribute("aria-current") === "step");
-          const complete = list.find((li) => li.classList.contains("complete"));
+          const complete = list.find((li) => li.classList.contains("step-complete"));
           const future = list.at(-1);
           return {
             current: type(current),
@@ -663,7 +655,6 @@ it("the label reads one notch below its marker and centres on it", async () => {
         return {
           inline: marked("inline-3"),
           stacked: marked("stacked-3"),
-          compact: marked("compact-5"),
           vertical: marked("vertical"),
           inlineOffsets: centred("inline-3"),
           verticalOffsets: centred("vertical"),
@@ -683,10 +674,10 @@ it("the label reads one notch below its marker and centres on it", async () => {
       `,
       );
 
-      // One size for the whole component: identical in all four forms, so no
+      // One size for the whole component: identical in all three forms, so no
       // threshold can resize the text under the reader.
       const sizes = new Set(
-        ["inline", "stacked", "compact", "vertical"].flatMap((form) =>
+        ["inline", "stacked", "vertical"].flatMap((form) =>
           [result[form].current, result[form].complete, result[form].future].map(
             (t) => `${t.fontSize}/${t.lineHeight}`,
           ),
@@ -695,7 +686,7 @@ it("the label reads one notch below its marker and centres on it", async () => {
       expect([...sizes]).toEqual(["14px/17.5px"]);
 
       // Only the current step gains weight; complete leans on its filled disc.
-      for (const form of ["inline", "stacked", "compact", "vertical"]) {
+      for (const form of ["inline", "stacked", "vertical"]) {
         const { current, complete, future } = result[form];
         expect(Number(current.fontWeight)).toBeGreaterThan(Number(future.fontWeight));
         expect(complete.fontWeight).toBe(future.fontWeight);
@@ -760,7 +751,7 @@ it("scrolls only on the inline axis, without clipping a focus ring", async () =>
           ol.className = "steps steps-horizontal";
           for (const [i, text] of ["Account", "Payment", "Confirm"].entries()) {
             const li = document.createElement("li");
-            if (i === 0) li.className = "complete";
+            if (i === 0) li.className = "step-complete";
             const el = document.createElement(interactive ? "a" : "span");
             el.className = "step-label";
             if (interactive) el.href = "#x";

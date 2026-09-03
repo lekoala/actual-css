@@ -7,19 +7,33 @@
  *   <ol class="steps steps-vertical">    vertical, any number of stages
  *
  * `.steps` is what a step *is* — the counter, the marker, `.step-label`,
- * `.complete`, `aria-current="step"`. It carries no orientation, so it is never
- * written alone. `.steps-horizontal` and `.steps-vertical` are what a sequence
- * *looks like*, and they are peers: neither is the default the other has to
- * exclude, so no rule says `:not(...)` and no rule undoes another's layout.
+ * `.step-complete`, `aria-current="step"`. It carries no orientation, so it is
+ * never written alone. `.steps-horizontal` and `.steps-vertical` are what a
+ * sequence *looks like*, and they are peers: neither is the default the other
+ * has to exclude, so no rule says `:not(...)` and no rule undoes another's
+ * layout.
  *
- * `.step-label` is mandatory: it is the handle the space-aware representations
- * move, place or hide. It may be an `a[href]`; anything else focusable in a
- * step is out of contract.
+ * Orientation and labels are independent dimensions. `.step-label` is optional
+ * in either orientation; when a sequence carries names, every step carries
+ * one:
  *
- * The horizontal representations need an `actual-container` size context the
- * author grants. Without one, stacked is the fallback.
+ *                 empty steps           .step-label on every step
+ *   horizontal    compact progression   named sequence, stacked or inline
+ *   vertical      compact rail          named sequence, labels beside markers
  *
- * See docs/design-notes/steps.md for the thresholds, the selector shapes, the
+ * An empty step is a marker and nothing else, so it is compact by structure —
+ * `> li:empty` in both orientations, no variant class, and nothing authored
+ * only to be hidden again. The page around it owns the step name.
+ *
+ * A label may be an `a[href]`, which is the whole interactive surface: the
+ * marker is never navigable, so navigating a flow means naming its
+ * destinations. Anything else focusable in a step is out of contract.
+ *
+ * The framework never hides an authored label to solve a layout problem. A
+ * labelled row that outgrows its space scrolls. An `actual-container` size
+ * context buys it one thing: the wide representation, marker beside label.
+ *
+ * See docs/design-notes/steps.md for the threshold, the selector shapes, the
  * rejected alternatives, and why there is no forced-colors branch.
  *
  * Each public hook is followed by the class that owns it.
@@ -89,14 +103,14 @@
    the component, never per representation: a size that changed with the layout
    would resize the text under a reader dragging a window. `color: inherit` is
    here rather than in a rule of its own for `a.step-label`, because a span
-   inherits its ink anyway; only a link had anything to take back, and taking it
+   inherits its ink anyway; only a link has anything to take back, and taking it
    back for every label costs nothing and one rule less. A navigable label keeps
    its underline, hover and focus ring — just not a link color, which would read
    ahead of the marker states.
 
-   Still scoped, though `.menu-item-text` and friends are not: a bare
-   `.step-label` would weigh (0,1,0), exactly tying `.prose :where(a)`, and a
-   stepper in prose would then be decided by bundle order. */
+   Scoped to `.steps`, unlike `.menu-item-text` and the framework's other
+   sub-part classes: a bare `.step-label` weighs (0,1,0), exactly tying
+   `.prose :where(a)`, so a stepper in prose would be decided by bundle order. */
 .steps .step-label {
   font-size: var(--font-size-sm);
   line-height: var(--line-height-tight);
@@ -112,7 +126,11 @@
   content: "";
 }
 
-.steps > .complete {
+/* Prefixed like `.step-label`, unlike the framework's bare `.primary` /
+   `.outline` modifiers: those qualify a component on its own element, this
+   marks one item inside one. A bare `.complete` would also claim a very
+   ordinary English word globally, for a single component's single state. */
+.steps > .step-complete {
   --step-marker-bg: var(--state-selected);
   --step-marker-border: var(--state-selected);
   --step-marker-fg: var(--state-selected-fg);
@@ -122,8 +140,8 @@
 }
 
 /* Complete owns the accented connector that reaches the current step, so the
-   connector leaving current goes back to neutral. Declared after .complete at
-   equal specificity: current wins on every channel. */
+   connector leaving current goes back to neutral. Declared after
+   .step-complete at equal specificity: current wins on every channel. */
 .steps > [aria-current="step"] {
   --step-marker-bg: var(--surface);
   --step-marker-border: var(--state-selected);
@@ -143,7 +161,7 @@
   font-weight: var(--font-weight-strong);
 }
 
-.steps > .complete:not([aria-current="step"])::before {
+.steps > .step-complete:not([aria-current="step"])::before {
   content: var(--step-complete-mark, counter(actual-step));
 }
 
@@ -169,14 +187,50 @@
   padding-block: calc(var(--focus-outline-offset) + var(--border-width) * 2);
 }
 
+/* One explicit row, the marker's: a `.step-label` is auto-placed into an
+   implicit second row, and two tracks are also the only thing `gap` has to sit
+   between. So an empty step measures exactly `--step-size`, and the rule below
+   takes back nothing. `var(--step-size) auto` would build that second row
+   whether or not a label ever arrives, and the compact form would then have to
+   remove both the track and the gap. */
 .steps-horizontal > li {
   display: grid;
   flex: 1 0 var(--step-min);
-  grid-template-rows: var(--step-size) auto;
+  grid-template-rows: var(--step-size);
   gap: var(--step-gap);
   justify-items: center;
   min-inline-size: max(var(--step-size), var(--step-min));
   text-align: center;
+}
+
+/* An empty step is a marker and nothing else, so it needs a marker's width
+   rather than a reading width. That is what lets five of them fit a phone with
+   no size context and no variant class.
+
+   `justify-items` is not an override of the row's centring: the marker is
+   centred because a label sits under it and the two share a centre, and with no
+   label there is nothing to centre against. The marker takes the start of its
+   own share instead, the connector below fills the rest of it, and the last
+   step has no share to fill — so the track runs edge to edge and lines up with
+   the text around it, the way the inline representation does.
+
+   `:empty` says exactly what the markup says, the way `.badge:empty` does, and
+   it reads the item's own content: bare text in an `<li>` keeps a reading width
+   like its wrapped peers, where `> li:has(.step-label)` would give it a marker
+   floor and skew the row. It also predates `:has()` by a decade, so the compact
+   form reaches the Degraded tier and only the inline bonus needs `:has()`. */
+.steps-horizontal > li:empty {
+  flex: 1 1 0;
+  justify-items: start;
+  min-inline-size: var(--step-size);
+}
+
+.steps-horizontal > li:empty::after {
+  inset-inline-start: var(--step-size);
+}
+
+.steps-horizontal > li:empty:last-child {
+  flex: 0 0 auto;
 }
 
 /* The pseudo-element is marker-height so --step-connector may be any complete
@@ -195,41 +249,20 @@
 }
 
 /*
- * Horizontal CQ modes, both thresholds calibrated on five steps — the widest
- * supported row, and therefore the binding case.
- *   < 35rem  + 4 steps or more  markers only, unless a label is a link
- *   >= 60rem                    marker beside label
- *   otherwise                   stacked
+ * The one horizontal container query. Past 60rem a labelled row has the room
+ * to put marker and label inline and still leave the connector a real region
+ * between groups, rather than a stub. Calibrated on five steps — the widest
+ * supported row, and therefore the binding case — and it counts nothing, so it
+ * serves every count. Below it, stacked; a marker row is already the shape
+ * this query produces and stays out of it.
  *
- * Horizontal is a 2-5 step component. Inside that domain the count check reads
- * "4 or 5"; outside it the rules simply apply, because a row that is out of
- * contract is not owed a curated fallback.
+ * Horizontal is a 2-5 step component. Outside that domain the rule simply
+ * applies as written, because a row that is out of contract is not owed a
+ * curated fallback.
  */
 @supports (container-type: inline-size) {
-  @container actual-container (inline-size < 35rem) {
-    .steps-horizontal:not(:has(a[href])):has(> :nth-child(4)) > li {
-      flex: 1 1 0;
-      grid-template-rows: var(--step-size);
-      min-inline-size: var(--step-size);
-      gap: 0;
-    }
-
-    .steps-horizontal:not(:has(a[href])):has(> :nth-child(4)) > li .step-label {
-      position: absolute;
-      inline-size: 1px;
-      block-size: 1px;
-      padding: 0;
-      margin: -1px;
-      overflow: hidden;
-      clip: rect(0, 0, 0, 0);
-      clip-path: inset(50%);
-      white-space: nowrap;
-      border: 0;
-    }
-  }
-
   @container actual-container (inline-size >= 60rem) {
-    .steps-horizontal > li {
+    .steps-horizontal:has(.step-label) > li {
       display: flex;
       flex: 1 1 auto;
       align-items: center;
@@ -239,7 +272,7 @@
       white-space: nowrap;
     }
 
-    .steps-horizontal > li::after {
+    .steps-horizontal:has(.step-label) > li::after {
       position: static;
       flex: 1 1 2rem;
       inline-size: auto;
@@ -255,7 +288,7 @@
       );
     }
 
-    .steps-horizontal > li:last-child {
+    .steps-horizontal:has(.step-label) > li:last-child {
       flex: 0 0 auto;
     }
   }
@@ -281,6 +314,20 @@
   justify-items: start;
   gap: var(--step-inline-gap);
   min-block-size: var(--step-size);
+}
+
+/* An empty step is a marker rail. The column cannot use the row's implicit
+   second track, because `grid-auto-flow` is `row`: an auto-placed label would
+   land *under* its marker. Its second track is therefore explicit, and this
+   takes it back.
+
+   Silent in a stretched column, where the item fills its line whatever its
+   tracks say. It bites in a shrink-to-fit box — which is what a sticky
+   progress rail usually is — where the label track and the gap to it make the
+   rail `--step-inline-gap` wider than the markers it draws: measured 36px
+   against 28px. No `gap: 0` needed; one track has nothing to sit beside. */
+.steps-vertical > li:empty {
+  grid-template-columns: var(--step-size);
 }
 
 /* The row starts at the top so a wrapped label begins level with its marker.
