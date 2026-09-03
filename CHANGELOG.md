@@ -2,46 +2,21 @@
 
 ## [0.6.0] - 2026-09-03
 
-### Added
-
-- Horizontal `.steps` can now adapt to the width of an `actual-container`.
-- `--step-inline-connector` lets themes customize the connector used by the wide
-  horizontal representation.
-
 ### Changed
 
-- Step labels are slightly smaller than body text, with the current step given
-  stronger weight. Navigable labels keep their underline, hover and focus
-  treatment while inheriting the step's state colour instead of `--link`.
-- `--step-connector` now accepts a complete CSS background value instead of only
-  a colour. Themes can use a solid line, gradient, image or `none` without
-  changing the component structure.
-- A step label may be an `<a href>`. A `<button>` or any other focusable element
-  inside a step is outside the component contract; the compact representation
-  still refuses any row containing a link, so no focusable label is ever hidden.
-- `.steps` ships no `forced-colors` override. The previous one filled a completed
-  marker with `Highlight`, which makes the number or `--step-complete-mark` glyph
-  inside it unreadable in that mode. Complete and upcoming markers now read alike
-  in forced colors unless you set `--step-complete-mark`, which is the documented
-  way to keep them distinct.
-- List items are now top-aligned.
-- Aura improvements.
+- `.list` are now top-aligned.
+- `.aura` improvements.
 
 ### Breaking
 
-- `.step-label` is now required as the label wrapper for `.steps`.
-- `.steps` requires either `.steps-horizontal` or `.steps-vertical`; neither
-  orientation is the default, so `.steps` alone is incomplete markup.
-- `.steps-vertical` is a peer of `.steps-horizontal`, not a modifier on it.
-- Horizontal `.steps` supports 2 to 5 stages. Use `.steps-vertical` or another
-  progression pattern for a longer sequence.
+- Reworked completely the `.steps`. Read the updated documentation for changes.
 - The framework query-container name is now `actual-container` instead of
   `actual-grid`. `.container-query` is unchanged.
 
 ## Fixed
 
-- Fab icons.
-- Floating labels with password managers.
+- `.fab` icons.
+- `.floating-field` with password managers.
 
 
 ## [0.5.0] - 2026-09-01

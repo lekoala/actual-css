@@ -416,7 +416,7 @@ test("rich menu slots and checkable states share the leading column", () => {
 });
 
 /*
- * State belongs to the primitive, not to a composition. `.complete` and
+ * State belongs to the primitive, not to a composition. `.step-complete` and
  * `aria-current="step"` mean the same thing in a row and in a column, so they
  * are written once against `.steps` and neither `.steps-horizontal` nor
  * `.steps-vertical` may restate them.
@@ -425,13 +425,15 @@ test("steps keep complete and current distinct, and current wins when both apply
   const css = readCss("src/css/components/steps.css");
 
   // Equal specificity, so source order decides: current must come last.
-  const complete = css.indexOf(".steps > .complete {");
+  const complete = css.indexOf(".steps > .step-complete {");
   const current = css.indexOf('.steps > [aria-current="step"] {');
   expect(complete).toBeGreaterThan(-1);
   expect(current).toBeGreaterThan(complete);
 
   // Filled reads as "done", outlined as "you are here" — no glyph required.
-  expect(css).toMatch(/\n\.steps > \.complete \{[^}]*--step-marker-bg: var\(--state-selected\);/);
+  expect(css).toMatch(
+    /\n\.steps > \.step-complete \{[^}]*--step-marker-bg: var\(--state-selected\);/,
+  );
   expect(css).toMatch(
     /\n\.steps > \[aria-current="step"\] \{[^}]*--step-marker-bg: var\(--surface\);/,
   );
@@ -442,14 +444,14 @@ test("steps keep complete and current distinct, and current wins when both apply
 
   // Current wins on every channel, not only on color: the completion glyph is
   // excluded on it too.
-  expect(css).not.toContain(".steps > .complete::before");
-  expect(css).toContain('.steps > .complete:not([aria-current="step"])::before');
+  expect(css).not.toContain(".steps > .step-complete::before");
+  expect(css).toContain('.steps > .step-complete:not([aria-current="step"])::before');
   expect(css).toContain('.steps > [aria-current="step"]::before');
 
   /* No state rule may be written against a composition: a marker that read
      differently in a sidebar than in a row would be two components. */
   const rules = readRules("src/css/components/steps.css");
-  expect(rules).not.toMatch(/\.steps-(horizontal|vertical)[^{,]* > \.complete/);
+  expect(rules).not.toMatch(/\.steps-(horizontal|vertical)[^{,]* > \.step-complete/);
   expect(rules).not.toMatch(/\.steps-(horizontal|vertical)[^{,]* > \[aria-current/);
 });
 
@@ -842,18 +844,18 @@ test("steps derive markers from list order and keep state semantic", () => {
   }
 
   /* A step label may be an `a[href]`, and that is the whole interactive
-     surface. The generic `:is(a[href], button, [tabindex])` this replaced was
-     never exercised by a fixture, a demo or a documented example — it was
-     selector weight spent on markup the component does not describe. */
+     surface. A generic `:is(a[href], button, [tabindex])` would be selector
+     weight spent on markup the component does not describe: no fixture, demo
+     or documented example puts a `<button>` or a `tabindex` in a step. */
   const rules = readRules("src/css/components/steps.css");
   expect(rules).not.toContain("button");
   expect(rules).not.toContain("[tabindex]");
 
-  /* No forced-colors branch. The one that existed painted a complete marker
-     `Highlight`/`HighlightText`, which renders its own number or check
-     unreadable in the mode it was meant to help. Complete and upcoming then
-     read alike in a numbered flow, and `--step-complete-mark` is the honest
-     answer — documented as such rather than patched around here. */
+  /* No forced-colors branch. Painting a complete marker
+     `Highlight`/`HighlightText` renders its own number or check unreadable, in
+     the exact mode the branch would exist to help. Complete and upcoming do
+     read alike in a numbered flow there, and `--step-complete-mark` is the
+     honest answer — documented as such rather than patched around here. */
   expect(rules).not.toContain("forced-colors");
   expect(css).toContain("overscroll-behavior-inline: contain;");
   expect(css).toContain("content: var(--step-complete-mark, counter(actual-step));");
@@ -861,7 +863,7 @@ test("steps derive markers from list order and keep state semantic", () => {
   // image or nothing, and the line colour rides inside it as a gradient of the
   // step's own --step-line. A custom property resolves its var() before
   // inheritance, so a default --step-connector on .steps would freeze the
-  // parent's colour and a .complete connector would never follow its state.
+  // parent's colour and a .step-complete connector would never follow its state.
   expect(css).toMatch(
     /background: var\(\s*--step-connector,\s*linear-gradient\(var\(--step-line\), var\(--step-line\)\)/,
   );
@@ -869,154 +871,114 @@ test("steps derive markers from list order and keep state semantic", () => {
 });
 
 /*
- * Two container queries, not eight. Both are calibrated on five steps, the
- * widest supported row and therefore the binding case:
+ * Orientation and labels are independent dimensions, so the whole responsive
+ * contract is one container query plus one `:empty` rule per orientation.
  *
- *   < 35rem  markers only, 4 steps or more — five steps' own --step-min
- *            budget, so no supported row ever scrolls where the form could
- *            have helped
- *   >= 60rem inline, any count — where a five-step row still leaves its
- *            connector at roughly its 2rem basis with realistic labels
+ * `>= 60rem` moves a labelled row's marker beside its label. Calibrated on
+ * five steps, the widest supported row and therefore the binding case, and
+ * pulling it down was measured and rejected — at 48rem that row does render
+ * inline, with the connector collapsed to a 15px stub where the representation
+ * promises the region a themed chevron lives in. Literal rem, because
+ * `@container` cannot read a custom property: overriding `--step-min` moves the
+ * scroll budget but not this threshold.
  *
- * Horizontal is a 2–5 step component, so those two conditions cover the whole
- * supported domain: inside it the count check reads "4 or 5". Nothing here
- * counts an upper bound, because a 6+ row is out of contract and is not owed a
- * curated fallback — selector weight spent on every supported row to be polite
- * to one that is already wrong is the trade this component declines.
+ * `> li:empty` is not responsive at all, and that is the point: an empty step
+ * is compact wherever it is put, with no size context, no variant class and
+ * nothing hidden. `:empty` rather than `:has()` for two reasons — it says what
+ * the markup says, the way `.badge:empty` already does, and it predates
+ * `:has()` by a decade, so the compact shape survives the Degraded tier while
+ * only the inline bonus depends on a modern selector.
  *
- * Both literal rem: @container cannot read a custom property, so overriding
- * --step-min moves the scroll budget but not these.
- *
- * The invariants worth guarding are the count coverage and the ordering. A
- * markers-only threshold pulled down to split the difference with four steps
- * would hand five-step rows a scrolling band; an inline threshold pulled down
- * would hand them a stub connector. Both were measured before being rejected.
+ * The assertions below are mostly negative, and they guard one rule: the
+ * component never removes authored content to make a layout fit. The cheap
+ * version of that — a narrow query hiding a four- or five-step row's labels,
+ * `:has(> :nth-child(4))` to find the count, `:not(:has(a[href]))` so the
+ * hiding does not clip a focus target to 1x1 — is a shape to keep out, not a
+ * shape to tune.
  */
-test("steps horizontal representations stay two container queries wide", () => {
+test("steps sizing follows content, and never hides a label", () => {
   const css = readCss("src/css/components/steps.css");
   /* The formatter wraps long selectors inside :has() and :is(), so match
      against a whitespace-normalised copy rather than the source lines. */
   const flatten = (s) =>
     s.replace(/\s+/g, " ").replace(/\( /g, "(").replace(/ \)/g, ")").replace(/, /g, ",");
 
-  /* Selector text with every parenthesised group removed, so what is left is
-     the chain of compounds and the combinators between them. These selectors
-     wrap over several lines and the formatter owns where the breaks land — a
-     break outside the parens would be a descendant combinator, silently
-     retargeting the rule at a `.steps` nested inside another one. */
-  const selectorsOf = (body) => {
-    const stripGroups = (sel) => {
-      let out = sel;
-      let previous;
-      do {
-        previous = out;
-        out = out.replace(/\([^()]*\)/g, "");
-      } while (out !== previous);
-      return out;
-    };
-    // Selectors and declarations both stop at a brace, and no declaration
-    // mentions .steps, so this reaches every rule in the block.
-    return [...body.matchAll(/(\.steps[^{}]*)\{/g)].map(([, sel]) =>
-      stripGroups(sel).replace(/\s+/g, " ").trim(),
-    );
-  };
+  const queries = [...css.matchAll(/@container actual-container \(([^)]*)\)/g)].map((m) => m[1]);
+  expect(queries).toEqual(["inline-size >= 60rem"]);
 
-  const blocks = (condition) =>
-    [
-      ...css.matchAll(
-        new RegExp(
-          `@container actual-container \\(${condition} (\\d+)rem\\)([\\s\\S]*?)\\n {2}\\}`,
-          "g",
-        ),
-      ),
-    ].map(([, threshold, body]) => ({
-      threshold: Number(threshold),
-      body: flatten(body),
-      selectors: selectorsOf(body),
-      counts: [...body.matchAll(/:nth-child\((\d)\)/g)]
-        .map((m) => Number(m[1]))
-        .filter((n, i, all) => all.indexOf(n) === i)
-        .sort(),
-    }));
+  const block = flatten(
+    css.slice(css.indexOf("@container actual-container")).match(/\{([\s\S]*?)\n {2}\}/)[1],
+  );
 
-  const compact = blocks("inline-size <");
-  const inline = blocks("inline-size >=");
-
-  /* One query each. Markers-only needs a lower bound — a 2- or 3-step row is
-     readable stacked far below any width worth designing for — and inside the
-     2–5 domain `:has(> :nth-child(4))` is exactly "4 or 5". Inline serves the
-     whole domain, so it counts nothing at all. */
-  expect(compact.map((b) => [b.counts, b.threshold])).toEqual([[[4], 35]]);
-  expect(inline.map((b) => [b.counts, b.threshold])).toEqual([[[], 60]]);
-
-  /* No upper bound anywhere: neither an `:nth-child(N):last-child` enumeration
-     nor a `:not(:has(> :nth-child(6)))` clause. Both spellings were carried and
-     removed — they existed only so a 6+ row would keep the base layout, which
-     is a behaviour the component no longer promises. Out of contract means the
-     rules apply as written, not that they bend. */
-  for (const block of [...compact, ...inline]) {
-    expect(block.body).not.toMatch(/:nth-child\(\d\):last-child/);
-    expect(block.body).not.toContain(":nth-child(6)");
-  }
-
-  // No row can be in two representations at once, whatever its count.
-  expect(compact[0].threshold).toBeLessThan(inline[0].threshold);
-
-  /* Both blocks, selector by selector, with the parenthesised groups stripped
-     so what is compared is the chain of compounds and the combinators between
-     them. Pinned as a list rather than as a shape, for two reasons.
-
-     The formatter owns where these long selectors wrap, and a break landing
-     outside the parens would turn a compound boundary into a descendant
-     combinator — "a .steps-horizontal somewhere inside a .steps-horizontal",
-     which matches nothing real and fails silently. A shape test cannot see that
-     any more, now that one of these selectors legitimately ends in a descendant
-     combinator: `> li .step-label` addresses a sub-element the framework names,
-     where repeating `> li >` would only restate structure the component already
-     owns. `> li` itself keeps its child combinator, because those are the
-     sequence's items and a nested list must not be swept in.
-
-     And every selector must start at `.steps-horizontal`. A rule keyed on the
-     shared `.steps` inside a width query would reach a column that never asked
-     to be measured. */
-  expect(compact[0].selectors).toEqual([
-    ".steps-horizontal:not:has > li",
-    ".steps-horizontal:not:has > li .step-label",
+  /* Every rule keyed on the row and gated on a label, spelled the same way
+     three times. Pinned as text because the formatter owns where these wrap,
+     and a break landing outside the parens would turn a compound boundary into
+     a descendant combinator — a `.steps-horizontal` inside a
+     `.steps-horizontal`, which matches nothing and fails silently. Keying one
+     on the shared `.steps` instead would reach a column that never asked to be
+     measured. */
+  expect([...block.matchAll(/(\.steps[^{}]*)\{/g)].map(([, sel]) => sel.trim())).toEqual([
+    ".steps-horizontal:has(.step-label) > li",
+    ".steps-horizontal:has(.step-label) > li::after",
+    ".steps-horizontal:has(.step-label) > li:last-child",
   ]);
-  expect(inline[0].selectors).toEqual([
-    ".steps-horizontal > li",
-    ".steps-horizontal > li::after",
-    ".steps-horizontal > li:last-child",
-  ]);
-  for (const block of [...compact, ...inline]) {
-    expect(block.body).not.toContain("steps-vertical");
-  }
 
-  /* A visually hidden label that is still focusable is an invisible focus
-     target, so markers-only refuses a navigable flow. Inline hides nothing and
-     must not carry the guard. */
-  expect(compact[0].body).toContain(":not(:has(a[href]))");
-  expect(inline[0].body).not.toContain("a[href]");
-
-  /* Inline is three ordinary rules. Nothing in it counts, excludes or probes:
-     if a `:has()` ever reappears here, it is buying something the contract
-     does not promise. */
-  expect(inline[0].body).not.toContain(":has(");
-
-  // Every label goes, current included: an exempt step would keep its full
-  // --step-min budget and skew the marker pitch of every step after it.
-  expect(compact[0].body).not.toContain("aria-current");
-
-  /* .step-label is the contract now, so nothing in here re-checks it: no
-     per-position enumeration, and no per-item gate trying to rescue a
-     half-wrapped flow. An unwrapped row is out of contract, not a case to
-     support. */
-  expect(compact[0].body).not.toContain(".step-label)");
-  expect(compact[0].body).not.toContain("> li:has(");
+  /* It counts nothing and reads no state. One threshold serves 2 to 5, and a
+     6+ row is out of contract rather than owed a curated fallback — selector
+     weight on every supported row to be polite to one that is already wrong is
+     the trade this component declines. */
+  expect(block).not.toContain(":nth-child");
+  expect(block).not.toContain("aria-current");
 
   // The inline connector is the only one a theme can repaint separately, and
   // it still falls back to --step-connector before the default line.
-  expect(inline[0].body).toContain("background: var(--step-inline-connector,var(--step-connector,");
+  expect(block).toContain("background: var(--step-inline-connector,var(--step-connector,");
+
+  /* The compact form, asked of the item's own content, and small in both
+     orientations: a marker's width instead of a reading width, aligned to the
+     start of its share so the track runs edge to edge, and a final step with
+     no share to fill. Pinned declaration by declaration — an `:empty` rule
+     that grows means a base rule has started describing a labelled step
+     rather than a step. */
+  expect(css).toMatch(
+    /\n\.steps-horizontal > li:empty \{\n {2}flex: 1 1 0;\n {2}justify-items: start;\n {2}min-inline-size: var\(--step-size\);\n\}/,
+  );
+  expect(css).toMatch(
+    /\n\.steps-horizontal > li:empty::after \{\n {2}inset-inline-start: var\(--step-size\);\n\}/,
+  );
+  expect(css).toMatch(/\n\.steps-horizontal > li:empty:last-child \{\n {2}flex: 0 0 auto;\n\}/);
+  expect(css).toMatch(
+    /\n\.steps-vertical > li:empty \{\n {2}grid-template-columns: var\(--step-size\);\n\}/,
+  );
+  /* Never `:has()`: that puts the compact form above the Degraded tier, and
+     per item it hands bare text a marker floor while its wrapped peers keep
+     `--step-min`. Read from the comment-free copy — the prose right above
+     those rules names both spellings in order to reject them. */
+  expect(readRules("src/css/components/steps.css")).not.toMatch(/> li:not\(:has|> li:has/);
+
+  /* Why the row's rule is that small: its template declares the marker's row
+     only, so a label creates the second one implicitly and an empty step gets
+     neither an empty track nor the gap that comes with it. The column cannot
+     do the same — `grid-auto-flow` is `row`, so an auto-placed label lands
+     under its marker — so its second track is explicit and its `:empty` rule
+     takes that one back. */
+  expect(css).toMatch(/\n\.steps-horizontal > li \{[^}]*grid-template-rows: var\(--step-size\);\n/);
+  expect(css).toMatch(
+    /\n\.steps-vertical > li \{[^}]*grid-template-columns: var\(--step-size\) minmax\(0, 1fr\);/,
+  );
+
+  /* Nothing in the file hides a label, in any representation: no `.sr-only`
+     clone, and no variant class asking an author to write content only to have
+     it removed again. */
+  expect(css).not.toContain("clip-path");
+  expect(css).not.toContain("steps-markers");
+
+  /* The one `a[href]` left is the focus-ring reservation, which exists because
+     the row clips at its padding edge — not a guard deciding whether hiding a
+     label is allowed. */
+  expect([...css.matchAll(/^\.steps[^{}\n]*a\[href\][^{}\n]*\{/gm)].map(([sel]) => sel)).toEqual([
+    ".steps-horizontal:has(a[href]) {",
+  ]);
 });
 
 /*
@@ -1130,7 +1092,7 @@ test("steps keep the label a notch below the marker, at one size throughout", ()
   expect(css).toMatch(
     /> \[aria-current="step"\] \.step-label \{[^}]*font-weight: var\(--font-weight-strong\);/,
   );
-  expect(css).not.toMatch(/> \.complete[^{]*\.step-label \{[^}]*font-weight/);
+  expect(css).not.toMatch(/> \.step-complete[^{]*\.step-label \{[^}]*font-weight/);
 
   /* Combinators say what they mean. `> li` and `> [aria-current="step"]` are
      the sequence's own items, so a nested list is not swept in; the label
