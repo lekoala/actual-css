@@ -6,16 +6,18 @@
 
 ## Class reference
 
-| Class             | Kind        | Description                                                          |
-|-------------------|-------------|----------------------------------------------------------------------|
-| `.flyout-trigger` | Composition | Positioning wrapper for a trigger and its panel.                     |
-| `.stretch`        | Modifier    | Stretches a `.flyout-trigger` to span its container.                 |
-| `.flyout`         | Component   | Floating action or nav surface, positioned by JavaScript.            |
-| `.menu`           | Component   | Action-list primitive with strict `.menu > li > .menu-item` anatomy. |
-| `.menu-item`      | Component   | One action row; participates in roving focus.                        |
-| `.menu-item-icon` | Slot        | Fixed leading column for a decorative icon.                          |
-| `.menu-item-text` | Slot        | Flexible label column; truncates when the row is constrained.        |
-| `.menu-item-end`  | Slot        | Trailing metadata such as a shortcut, badge, or status.              |
+| Class             | Kind        | Description                                 |
+| ----------------- | ----------- | ------------------------------------------- |
+| `.flyout-trigger` | Composition | Positioning wrapper for trigger and panel.  |
+| `.stretch`        | Modifier    | Spans a `.flyout-trigger` to its container. |
+| `.flyout`         | Component   | Floating surface, positioned by JavaScript. |
+| `.menu`           | Component   | Action-list primitive.                      |
+| `.menu-item`      | Component   | One action row; joins roving focus.         |
+| `.menu-item-icon` | Slot        | Fixed leading column for an icon.           |
+| `.menu-item-text` | Slot        | Flexible label column; truncates.           |
+| `.menu-item-end`  | Slot        | Trailing shortcut, badge or status.         |
+
+`.menu` has a strict `.menu > li > .menu-item` anatomy.
 | `.menu-label`     | Variant     | Muted section heading inside a menu; not interactive.                |
 | `.menu-separator` | Variant     | Divider between menu groups (`<hr role="separator">`).               |
 | `.sm` / `.lg`     | Variant     | Compact or large density.                                            |

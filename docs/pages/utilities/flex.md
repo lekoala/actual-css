@@ -4,19 +4,26 @@ Small flex helpers for grow behavior and other one-line needs.
 
 ## Class reference
 
-| Class                            | Kind    | Description                                                               |
-|----------------------------------|---------|---------------------------------------------------------------------------|
-| `.grow`                          | Utility | Makes an item take available flex space without overflowing.              |
-| `.items-start`                   | Utility | Aligns children to the block-start edge; sets `--items-align`.            |
-| `.items-center`                  | Utility | Centers children on the cross axis; sets `--items-align`.                 |
-| `.items-end`                     | Utility | Aligns children to the block-end edge; sets `--items-align`.              |
-| `.dot`                           | Utility | Inline separator dot for metadata rows.                                   |
-| `.justify-content-start`         | Utility | `justify-content: flex-start` and `--cluster-justify`. Optional layer.    |
-| `.justify-content-center`        | Utility | `justify-content: center` and `--cluster-justify`. Optional layer.        |
-| `.justify-content-end`           | Utility | `justify-content: flex-end` and `--cluster-justify`. Optional layer.      |
-| `.justify-content-space-between` | Utility | `justify-content: space-between` and `--cluster-justify`. Optional layer. |
-| `.flex-wrap`                     | Utility | `flex-wrap: wrap` on any flex container. Optional layer.                  |
-| `.flex-nowrap`                   | Utility | `flex-wrap: nowrap` on any flex container. Optional layer.                |
+Base utilities:
+
+| Class           | Description                                                    |
+| --------------- | -------------------------------------------------------------- |
+| `.grow`         | Makes an item take available flex space without overflowing.   |
+| `.items-start`  | Aligns children to the block-start edge; sets `--items-align`. |
+| `.items-center` | Centers children on the cross axis; sets `--items-align`.      |
+| `.items-end`    | Aligns children to the block-end edge; sets `--items-align`.   |
+| `.dot`          | Inline separator dot for metadata rows.                        |
+
+Extra utilities:
+
+| Class                            | Description                                               |
+| -------------------------------- | --------------------------------------------------------- |
+| `.justify-content-start`         | `justify-content: flex-start` and `--cluster-justify`.    |
+| `.justify-content-center`        | `justify-content: center` and `--cluster-justify`.        |
+| `.justify-content-end`           | `justify-content: flex-end` and `--cluster-justify`.      |
+| `.justify-content-space-between` | `justify-content: space-between` and `--cluster-justify`. |
+| `.flex-wrap`                     | `flex-wrap: wrap` on any flex container.                  |
+| `.flex-nowrap`                   | `flex-wrap: nowrap` on any flex container.                |
 
 ## Grow
 

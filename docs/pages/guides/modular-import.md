@@ -29,16 +29,27 @@ When an interactive state replaces the outline, it must preserve a visible focus
 
 ## Family manifests
 
-| Family           | Import                      | Contents                                                                                                                        |
-| ---------------- | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
-| Core             | `actual-css/css`            | reset, tokens, theme, base, intents, variants, focus, print                                                                     |
-| Typography       | `actual-css/css/typography` | prose, overline, fluid                                                                                                          |
-| Layout           | `actual-css/css/layout`     | stack, cluster, center, frame, media, switcher, sidebar-layout, grid, scroller, scroll-snap, topbar, container-query, app-shell |
-| Forms            | `actual-css/css/forms`      | native control baseline                                                                                                         |
-| Forms (complete) | `actual-css/css/forms/all`  | base plus input-icon, switch, range, choice-card, custom-select, floating-field, otp                                            |
-| Components       | `actual-css/css/components` | buttons, surfaces, overlays, feedback, navigation, data and composed controls                                                   |
-| Effects          | `actual-css/css/effects`    | aura                                                                                                                            |
-| Utilities        | `actual-css/css/utilities`  | base and extra utilities                                                                                                        |
+Each family is one import. The contents are enumerations rather than table
+cells, so they read as a list:
+
+- **Core** — `actual-css/css`
+  reset, tokens, theme, base, intents, variants, focus, print
+- **Typography** — `actual-css/css/typography`
+  prose, overline, fluid
+- **Layout** — `actual-css/css/layout`
+  stack, cluster, center, frame, media, switcher, sidebar-layout, grid,
+  scroller, scroll-snap, topbar, container-query, app-shell
+- **Forms** — `actual-css/css/forms`
+  native control baseline
+- **Forms (complete)** — `actual-css/css/forms/all`
+  base plus input-icon, switch, range, choice-card, custom-select,
+  floating-field, otp
+- **Components** — `actual-css/css/components`
+  buttons, surfaces, overlays, feedback, navigation, data and composed controls
+- **Effects** — `actual-css/css/effects`
+  aura
+- **Utilities** — `actual-css/css/utilities`
+  base and extra utilities
 
 Individual modules can be imported through their domain path:
 

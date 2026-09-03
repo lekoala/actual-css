@@ -205,7 +205,7 @@ Actual does not prohibit media queries. It simply does not encode every media qu
 ## Utility translation guide
 
 | Tailwind usage                       | Actual approach                                   |
-|--------------------------------------|---------------------------------------------------|
+| ------------------------------------ | ------------------------------------------------- |
 | `flex flex-col gap-*`                | `.stack`                                          |
 | `flex flex-wrap items-center gap-*`  | `.cluster`                                        |
 | `grid grid-cols-*`                   | `.grid`, `.grid-2`, `.grid-3`, etc.               |
@@ -407,7 +407,7 @@ Do not remove Tailwind from the build until migrated screens no longer depend on
 ## Where migration is genuinely harder
 
 | Existing Tailwind usage                            | Migration cost |
-|----------------------------------------------------|----------------|
+| -------------------------------------------------- | -------------- |
 | buttons, badges, alerts, forms                     | low            |
 | repeated card/panel patterns                       | low            |
 | basic flex/grid composition                        | low to medium  |

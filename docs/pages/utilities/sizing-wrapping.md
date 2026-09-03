@@ -4,13 +4,13 @@ Small layout corrections for controls, labels, and compact rails.
 
 ## Class reference
 
-| Class                     | Kind    | Description                                                               |
-|---------------------------|---------|---------------------------------------------------------------------------|
-| `.fit`                    | Utility | Shrinks a control or element to its content width.                        |
-| `.text-nowrap`            | Utility | Keeps text on one line.                                                   |
-| `.truncate`               | Utility | Ellipsizes overflowing single-line text.                                  |
-| `.scroller`               | Utility | Theme-aware scrollbar density and colour for scroll containers. Optional layer. |
-| `.scroller.stable-gutter` | Variant | Reserves scrollbar gutter space so layout does not shift. Optional layer. |
+| Class                     | Kind    | Description                               |
+| ------------------------- | ------- | ----------------------------------------- |
+| `.fit`                    | Utility | Shrinks an element to its content width.  |
+| `.text-nowrap`            | Utility | Keeps text on one line.                   |
+| `.truncate`               | Utility | Ellipsizes overflowing single-line text.  |
+| `.scroller`               | Layout  | Theme-aware scrollbar density and colour. |
+| `.scroller.stable-gutter` | Variant | Reserves inline-axis scrollbar gutter.    |
 
 Use `.fit` when a control or element should shrink to its content instead of filling the available inline space.
 
@@ -78,7 +78,9 @@ above the capability floor. An engine that knows neither ignores both
 declarations and draws its native scrollbar — the intended fallback, not a
 broken state.
 
-`scroller` is not imported by `actual.css`. Import it explicitly when a project wants Actual CSS scrollbar chrome instead of the native OS default:
+`.scroller` is a layout primitive, so it comes with `actual.full.css` and with
+`actual-css/css/layout` like `.stack` or `.cluster`. A project importing module
+by module reaches it directly:
 
 ```css
 @import "actual-css/css/layout/scroller";

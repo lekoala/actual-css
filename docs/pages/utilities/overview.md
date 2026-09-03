@@ -7,6 +7,28 @@ Utilities are a small escape hatch for common single-purpose needs. They should 
 - Keep utility names stable, boring, and few.
 - Utilities should use logical properties where relevant.
 
+## Two layers
+
+Utilities ship in two modules, and the split is about **naming and curation**,
+not about opting in. Importing `actual-css/css/utilities` — or
+`actual.full.css` — gives you both.
+
+| Module    | Import                           | Naming                             |
+| --------- | -------------------------------- | ---------------------------------- |
+| **Base**  | `actual-css/css/utilities/base`  | Compact names, frequent operations |
+| **Extra** | `actual-css/css/utilities/extra` | Explicit property/value names      |
+
+Base is the curated set, and it is where a short name is allowed: `.px`, `.py`,
+`.mbs`, `.gap-none`. Extra spells out the property and the value — `.gap-sm`,
+`.overflow-x-auto`, `.justify-content-center` — and never gives a base utility
+a second spelling.
+
+Reach for base first. Extra exists so an explicit one-off does not have to
+become a new short name, which is the pressure that grows a utility surface.
+
+Extra utilities are concentrated in flex, overflow and spacing; those pages
+list the two layers as separate tables. Every other utility page is base only.
+
 ## Non-Goals
 
 > Utilities deliberately excluded to keep the surface small and intentional.

@@ -5,7 +5,7 @@ Lightweight helpers for muted or secondary text without a full color scale.
 ## Class reference
 
 | Class           | Kind    | Description                                              |
-|-----------------|---------|----------------------------------------------------------|
+| --------------- | ------- | -------------------------------------------------------- |
 | `.muted`        | Utility | Secondary text color.                                    |
 | `.text-start`   | Utility | Logical start-aligned text; sets `--text-align`.         |
 | `.text-center`  | Utility | Centered text; sets `--text-align`.                      |

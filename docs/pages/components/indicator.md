@@ -9,12 +9,12 @@ that owns its appearance.
 
 ## Class reference
 
-| Class             | Kind      | Description                                      |
-|-------------------|-----------|--------------------------------------------------|
-| `.indicator`      | Component | Positioning context for an overlaid child.       |
-| `.indicator-item` | Part      | Item attached to the top-end corner by default.  |
-| `.start`          | Placement | Moves the item to the inline-start corner.       |
-| `.bottom`         | Placement | Moves the item to the bottom corner.             |
+| Class             | Kind      | Description                                     |
+| ----------------- | --------- | ----------------------------------------------- |
+| `.indicator`      | Component | Positioning context for an overlaid child.      |
+| `.indicator-item` | Part      | Item attached to the top-end corner by default. |
+| `.start`          | Placement | Moves the item to the inline-start corner.      |
+| `.bottom`         | Placement | Moves the item to the bottom corner.            |
 
 Combine `.bottom.start` for bottom-start. Logical inline placement follows the
 document direction automatically.

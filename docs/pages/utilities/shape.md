@@ -5,7 +5,7 @@ Rare shape utilities for cases that must be perfectly round or square.
 ## Class reference
 
 | Class     | Kind    | Description                                         |
-|-----------|---------|-----------------------------------------------------|
+| --------- | ------- | --------------------------------------------------- |
 | `.circle` | Utility | Forces a perfectly round shape via `--radius-full`. |
 
 Shape utilities should be rare because shape is mostly theme-level.

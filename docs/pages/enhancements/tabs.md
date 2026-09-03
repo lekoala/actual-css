@@ -5,7 +5,7 @@
 ## Class reference
 
 | Class      | Kind      | Description                                  |
-|------------|-----------|----------------------------------------------|
+| ---------- | --------- | -------------------------------------------- |
 | `.tabs`    | Component | Tab strip; pairs with `role="tablist"`.      |
 | `.tab`     | Component | One tab trigger; pairs with `role="tab"`.    |
 | `.primary` | Intent    | Tints the selected tab's indicator and text. |

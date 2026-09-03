@@ -4,21 +4,38 @@ The JS runtime doubles as a primitive kit for building custom widgets.
 
 ## Primitives
 
-| Need | Primitive | Import |
-|------|-----------|--------|
-| Opt-in discovery + lifecycle + cleanup | `enhance`, `registerEnhancement` | `actual-css/js/enhance` |
-| Per-document LIFO Escape dismissal | `escape` (`registerEscapeDismissal`) | `actual-css/js/escape` |
-| Positioning, flip/shift, `--available-height`, `data-placement` | `floating` (`track`, `reposition`, `repositionAt`) | `actual-css/js/floating` |
-| Open/close, sheet on mobile, backdrop, outside-click, Escape, focus restore | `surface` | `actual-css/js/surface` |
-| Directional item lookup, edges, wrapping, RTL | `keys` (`itemForKey`, `firstItem`, `lastItem`, `nextItem`) | `actual-css/js/keys` |
-| Menu-item vocabulary, usable-item filtering | `menu` | `actual-css/js/menu` |
-| Focusable lookup, visibility | `focus` | `actual-css/js/focus` |
-| One remembered tab stop with directional navigation | `focus-group` (`connectFocusGroup`) | `actual-css/js/focus-group` |
-| Caret-safe value rewriting | `input` (`onTextInput`, `setCaret`, `dispatchInput`) | `actual-css/js/input` |
-| Character policies | `filter` | `actual-css/js/filter` |
-| Event namespace | `events` (`EVENTS`, `ACTUAL_EVENT_PREFIX`) | `actual-css/js/events` |
-| Declarative triggers | `command` (`registerCommands`) | `actual-css/js/command` |
-| State classes the runtime writes | `selectors` (`CLASSES`) | `actual-css/js/selectors` |
+| Need                               | Primitive     | Import                      |
+| ---------------------------------- | ------------- | --------------------------- |
+| Discovery, lifecycle, cleanup      | `enhance`     | `actual-css/js/enhance`     |
+| Per-document LIFO Escape dismissal | `escape`      | `actual-css/js/escape`      |
+| Positioning, flip and shift        | `floating`    | `actual-css/js/floating`    |
+| Open/close, sheet, backdrop, focus | `surface`     | `actual-css/js/surface`     |
+| Directional item lookup            | `keys`        | `actual-css/js/keys`        |
+| Menu-item vocabulary               | `menu`        | `actual-css/js/menu`        |
+| Focusable lookup, visibility       | `focus`       | `actual-css/js/focus`       |
+| One remembered tab stop            | `focus-group` | `actual-css/js/focus-group` |
+| Caret-safe value rewriting         | `input`       | `actual-css/js/input`       |
+| Character policies                 | `filter`      | `actual-css/js/filter`      |
+| Event namespace                    | `events`      | `actual-css/js/events`      |
+| Declarative triggers               | `command`     | `actual-css/js/command`     |
+| State classes the runtime writes   | `selectors`   | `actual-css/js/selectors`   |
+
+The named exports each module carries:
+
+- `enhance` — `enhance`, `registerEnhancement`
+- `escape` — `registerEscapeDismissal`
+- `floating` — `track`, `reposition`, `repositionAt`, plus
+  `--available-height` and `data-placement`
+- `keys` — `itemForKey`, `firstItem`, `lastItem`, `nextItem`, with edge,
+  wrapping and RTL handling
+- `focus-group` — `connectFocusGroup`
+- `input` — `onTextInput`, `setCaret`, `dispatchInput`
+- `events` — `EVENTS`, `ACTUAL_EVENT_PREFIX`
+- `command` — `registerCommands`
+- `selectors` — `CLASSES`
+
+`surface` also owns outside-click and Escape dismissal, and focus restore.
+`menu` filters to usable items.
 
 ## Focus group
 

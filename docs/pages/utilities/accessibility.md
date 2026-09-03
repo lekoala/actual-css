@@ -5,7 +5,7 @@ Text hidden visually but still available to assistive technology.
 ## Class reference
 
 | Class      | Kind    | Description                                                     |
-|------------|---------|-----------------------------------------------------------------|
+| ---------- | ------- | --------------------------------------------------------------- |
 | `.sr-only` | Utility | Visually hides text while keeping it in the accessibility tree. |
 
 ## Screen reader only

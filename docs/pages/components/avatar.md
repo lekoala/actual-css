@@ -12,12 +12,15 @@
 
 ## Class reference
 
-| Class                             | Kind        | Description                                                             |
-|-----------------------------------|-------------|-------------------------------------------------------------------------|
-| `.avatar`                         | Component   | Initials or image in a circular box; works on `div`, `a`, and `button`. |
-| `.avatar-stack`                   | Composition | Overlapping avatar group.                                               |
-| `.badge:empty` (inside `.avatar`) | Composition | Status dot at the bottom-end corner; give it an `aria-label`.           |
-| `.sm` / `.lg`                     | Size        | Density; also rescales the whole `.avatar-stack`.                       |
+| Class           | Kind        | Description                             |
+| --------------- | ----------- | --------------------------------------- |
+| `.avatar`       | Component   | Initials or image in a circular box.    |
+| `.avatar-stack` | Composition | Overlapping avatar group.               |
+| `.badge:empty`  | Composition | Status dot, at the bottom-end corner.   |
+| `.sm` / `.lg`   | Size        | Density; also rescales `.avatar-stack`. |
+
+`.avatar` works on `div`, `a` and `button`. The status dot is an empty
+`.badge` inside an `.avatar`, and needs an `aria-label` of its own.
 
 ## Basic usage
 

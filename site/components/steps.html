@@ -367,6 +367,17 @@ names, or when a step should be navigable:</p>
 <p><strong>Actual CSS never hides an authored step label.</strong> Labels stay visible at every
 width. If a labelled row does not fit its space, it scrolls — and the honest
 answers to that are more room, fewer stages, or <code>.steps-vertical</code>.</p>
+<p>Since scrolling is the fallback, a labelled row is worth pairing with
+<code>.scroller</code>, which gives the native scrollbar the theme's density and colour
+instead of the OS default:</p>
+<pre><code class="language-html">&lt;ol class=&quot;steps steps-horizontal scroller&quot;&gt;
+</code></pre>
+<p>Steps does not apply it for you: scrollbar treatment is a project-wide
+decision, and <code>scroller</code> ships as an optional layer rather than in
+<code>actual.css</code>. See the sizing and wrapping page for its hooks.</p>
+<p>Do not add <code>.stable-gutter</code> here. It reserves gutter on the inline axis, for a
+vertical scrollbar this row never draws, so it narrows the row instead of
+steadying its height.</p>
 <h3 id="one-presentation-enhancement">One presentation enhancement</h3>
 <p>With generous room, a labelled row moves marker and label inline and lets the
 connector absorb the free space between groups:</p>
@@ -386,13 +397,13 @@ grants.</p>
 <div class="docs-example">
   <div class="docs-preview docs-preview-resizable">
 <div class="stack">
-  <ol class="steps steps-horizontal container-query" style="--step-complete-mark: '✓'">
+  <ol class="steps steps-horizontal container-query scroller" style="--step-complete-mark: '✓'">
     <li class="step-complete"><span class="step-label">Identification</span></li>
     <li aria-current="step"><span class="step-label">Confirmation</span></li>
     <li><span class="step-label">Finalisation</span></li>
   </ol>
 
-  <ol class="steps steps-horizontal container-query" style="--step-complete-mark: '✓'">
+  <ol class="steps steps-horizontal container-query scroller" style="--step-complete-mark: '✓'">
     <li class="step-complete"><span class="step-label">Account</span></li>
     <li class="step-complete"><span class="step-label">Details</span></li>
     <li aria-current="step"><span class="step-label">Payment</span></li>
@@ -403,13 +414,13 @@ grants.</p>
   </div>
   <div class="docs-code">
     <pre><code class="language-html">&lt;div class=&quot;stack&quot;&gt;
-  &lt;ol class=&quot;steps steps-horizontal container-query&quot; style=&quot;--step-complete-mark: '✓'&quot;&gt;
+  &lt;ol class=&quot;steps steps-horizontal container-query scroller&quot; style=&quot;--step-complete-mark: '✓'&quot;&gt;
     &lt;li class=&quot;step-complete&quot;&gt;&lt;span class=&quot;step-label&quot;&gt;Identification&lt;/span&gt;&lt;/li&gt;
     &lt;li aria-current=&quot;step&quot;&gt;&lt;span class=&quot;step-label&quot;&gt;Confirmation&lt;/span&gt;&lt;/li&gt;
     &lt;li&gt;&lt;span class=&quot;step-label&quot;&gt;Finalisation&lt;/span&gt;&lt;/li&gt;
   &lt;/ol&gt;
 
-  &lt;ol class=&quot;steps steps-horizontal container-query&quot; style=&quot;--step-complete-mark: '✓'&quot;&gt;
+  &lt;ol class=&quot;steps steps-horizontal container-query scroller&quot; style=&quot;--step-complete-mark: '✓'&quot;&gt;
     &lt;li class=&quot;step-complete&quot;&gt;&lt;span class=&quot;step-label&quot;&gt;Account&lt;/span&gt;&lt;/li&gt;
     &lt;li class=&quot;step-complete&quot;&gt;&lt;span class=&quot;step-label&quot;&gt;Details&lt;/span&gt;&lt;/li&gt;
     &lt;li aria-current=&quot;step&quot;&gt;&lt;span class=&quot;step-label&quot;&gt;Payment&lt;/span&gt;&lt;/li&gt;
@@ -545,7 +556,7 @@ label a link when the workflow genuinely allows navigation to that step:</p>
 </div>
 <div class="docs-example">
   <div class="docs-preview docs-preview-resizable">
-<ol class="steps steps-horizontal container-query">
+<ol class="steps steps-horizontal container-query scroller">
   <li class="step-complete">
     <a class="step-label" href="#">Account</a>
   </li>
@@ -561,7 +572,7 @@ label a link when the workflow genuinely allows navigation to that step:</p>
 </ol>
   </div>
   <div class="docs-code">
-    <pre><code class="language-html">&lt;ol class=&quot;steps steps-horizontal container-query&quot;&gt;
+    <pre><code class="language-html">&lt;ol class=&quot;steps steps-horizontal container-query scroller&quot;&gt;
   &lt;li class=&quot;step-complete&quot;&gt;
     &lt;a class=&quot;step-label&quot; href=&quot;#&quot;&gt;Account&lt;/a&gt;
   &lt;/li&gt;

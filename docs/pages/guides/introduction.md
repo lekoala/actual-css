@@ -140,7 +140,7 @@ internal design documents for contributors.
 Actual CSS is built around progressive enhancement.
 
 | Tier         | Firefox | Safari    | Chromium |
-|--------------|---------|-----------|----------|
+| ------------ | ------- | --------- | -------- |
 | Degraded     | 78+     | 14+       | 88+      |
 | **Minimal**  | **98+** | **15.4+** | **99+**  |
 | Intermediate | 121+    | 16+       | 106+     |

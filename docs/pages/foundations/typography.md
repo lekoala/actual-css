@@ -66,7 +66,7 @@ documentation homepages) import it manually:
 The module exposes three size tokens and three composed classes. It is deliberately not the foundation: body text, app UI, and the default prose scale stay static.
 
 | Token             | Class           | Purpose                               |
-|-------------------|-----------------|---------------------------------------|
+| ----------------- | --------------- | ------------------------------------- |
 | `--fluid-display` | `.text-display` | Hero / display sizes.                 |
 | `--fluid-title`   | `.text-title`   | Section titles.                       |
 | `--fluid-lead`    | `.text-lead`    | Intro paragraphs on display surfaces. |

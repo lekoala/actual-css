@@ -5,7 +5,7 @@ Utilities for list chrome reset, readable measure, and editorial kicker labels.
 ## Class reference
 
 | Class         | Kind      | Description                                                   |
-|---------------|-----------|---------------------------------------------------------------|
+| ------------- | --------- | ------------------------------------------------------------- |
 | `.list-reset` | Utility   | Removes native list margin, padding, and markers.             |
 | `.measure`    | Utility   | Caps a block at a readable width via `--measure`.             |
 | `.overline`   | Component | Small editorial kicker label: muted, uppercase, letterspaced. |

@@ -13,7 +13,7 @@
 ## Class reference
 
 | Class          | Kind      | Description                                                        |
-|----------------|-----------|--------------------------------------------------------------------|
+| -------------- | --------- | ------------------------------------------------------------------ |
 | `.spinner`     | Component | Circular loading indicator using `currentColor`.                   |
 | `.sm` / `.lg`  | Size      | Smaller (`0.75em`) or larger (`2rem`) spinner.                     |
 | Shared intents | Intent    | `.primary`, `.secondary`, `.success`, `.warning`, `.danger` color. |

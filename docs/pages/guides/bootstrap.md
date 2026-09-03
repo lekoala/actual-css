@@ -43,7 +43,7 @@ Remove the compatibility mechanism when Bootstrap is gone. The public Actual API
 Many common Bootstrap components translate directly.
 
 | Bootstrap                  | Actual CSS              |
-|----------------------------|-------------------------|
+| -------------------------- | ----------------------- |
 | `.btn .btn-primary`        | `.btn .primary`         |
 | `.btn .btn-outline-danger` | `.btn .danger .outline` |
 | `.btn .btn-sm`             | `.btn .sm`              |
@@ -101,7 +101,7 @@ Actual:
 Common translations include:
 
 | Bootstrap                     | Actual CSS                     |
-|-------------------------------|--------------------------------|
+| ----------------------------- | ------------------------------ |
 | `.form-control` on an input   | `.input`                       |
 | `.form-control` on a textarea | `.textarea`                    |
 | `.form-select`                | `.select`                      |
@@ -213,7 +213,7 @@ Think in terms of the relationship between children rather than translating each
 Typical choices are:
 
 | Bootstrap pattern                          | Actual approach                            |
-|--------------------------------------------|--------------------------------------------|
+| ------------------------------------------ | ------------------------------------------ |
 | flex row that may wrap                     | `.cluster`                                 |
 | vertical flex stack                        | `.stack`                                   |
 | exact structural columns                   | `.grid-2`, `.grid-3`, `.grid-4`, `.grid-6` |

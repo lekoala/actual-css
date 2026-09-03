@@ -45,10 +45,10 @@ either orientation; when a sequence carries names, every step carries one.
 
 Two dimensions, four compositions:
 
-|                | empty steps          | `.step-label` on every step            |
-| -------------- | -------------------- | -------------------------------------- |
-| **horizontal** | compact progression  | named sequence, stacked or inline      |
-| **vertical**   | compact rail         | named sequence, labels beside markers  |
+|                | empty steps         | `.step-label` on every step           |
+| -------------- | ------------------- | ------------------------------------- |
+| **horizontal** | compact progression | named sequence, stacked or inline     |
+| **vertical**   | compact rail        | named sequence, labels beside markers |
 
 The two forms are not two densities of the same thing. They show different
 information, which is why the contract splits on content rather than on a
@@ -142,8 +142,8 @@ Measured with five steps and realistic labels ("Personal details", "Delivery
 address", "Shipping method", …), the connector width is:
 
 | Container | 768px | 832px | 896px | 960px | 1024px |
-| --- | --- | --- | --- | --- | --- |
-| connector | 15px | 24px | 33px | 49px | 65px |
+| --------- | ----- | ----- | ----- | ----- | ------ |
+| connector | 15px  | 24px  | 33px  | 49px  | 65px   |
 
 At 48rem (768px) the row renders inline with a 15px connector — the
 representation applies, but its point has collapsed to a stub. 60rem is the
@@ -591,6 +591,39 @@ axis, in any representation.
 On the axis that does scroll, `overscroll-behavior-inline: contain` keeps a
 swipe that reaches the end of the row from chaining to the page behind it.
 
+The scrollbar itself is left to `.scroller`, composed on the row rather than
+baked into it. A stepper is short — a stacked step is 53.5px — so an OS-default
+scrollbar reads heavy under one, and the temptation is to give the component a
+`scrollbar-width: thin` of its own.
+
+The reason not to is consistency, not modularity. Every scroll container the
+framework owns — `.table`, `.flyout`, a scrolling `dialog`, `.app-layout`'s
+main — leaves the scrollbar to the engine. A stepper that thinned its own would
+be the only one, so a page with a scrolling table above a scrolling stepper
+would show two kinds of scrollbar. Scrollbar treatment is a decision an author
+makes once, for everything that scrolls, which is exactly the shape `.scroller`
+has: the scroller docs name this case — "pair it with `.overflow-auto` or a
+component that already creates overflow" — and `.nav-list scroller` is the same
+composition elsewhere.
+
+Baking the declarations without the hooks would also strand the author: the
+retuning surface is `--scroller-thumb` and `--scroller-track`, which belong to
+`.scroller`. Copying those into Steps duplicates the primitive; omitting them
+leaves a scrollbar no documented hook reaches.
+
+Measured on a five-step row in a 380px region, the pairing takes the scrollbar
+from 15px to 10px and the row from 69px to 64px, with the thumb on
+`--text-muted` instead of the OS grey.
+
+Its `.stable-gutter` variant, on the other hand, is a trap worth naming.
+`scrollbar-gutter` reserves space on the *inline* axis, for a vertical
+scrollbar — and this row sets `overflow-y: hidden`, so there is never one to
+reserve for. It does not steady the row's height across the appearance of the
+horizontal scrollbar, which is what an author would reach for it to do:
+measured, the row is 54px when it fits and 64px when it scrolls either way,
+while the reserved inline gutter takes 10px off the row's width and pushes
+overflow from 36px to 46px. Strictly worse in both directions.
+
 What makes the row scroll rather than squash is the item floor:
 `min-inline-size: max(var(--step-size), var(--step-min))`. The `max()` is there
 so an author who lowers `--step-min` below `--step-size` narrows the scroll
@@ -650,14 +683,14 @@ economy.
 horizontal layout — makes the column inherit a row and then undo it. Six
 declarations exist for no other reason:
 
-| Undone | Because the row sets |
-| --- | --- |
-| `overflow: visible` | `overflow-x: auto` |
-| `overscroll-behavior: auto` | `overscroll-behavior-inline: contain` |
-| `flex: none` | `flex: 1 0 var(--step-min)` |
-| `grid-template-rows: auto` | `grid-template-rows: var(--step-size)` |
-| `min-inline-size: 0` | `min-inline-size: max(--step-size, --step-min)` |
-| `text-align: start` | `text-align: center` |
+| Undone                      | Because the row sets                            |
+| --------------------------- | ----------------------------------------------- |
+| `overflow: visible`         | `overflow-x: auto`                              |
+| `overscroll-behavior: auto` | `overscroll-behavior-inline: contain`           |
+| `flex: none`                | `flex: 1 0 var(--step-min)`                     |
+| `grid-template-rows: auto`  | `grid-template-rows: var(--step-size)`          |
+| `min-inline-size: 0`        | `min-inline-size: max(--step-size, --step-min)` |
+| `text-align: start`         | `text-align: center`                            |
 
 And it forces the inverse on the horizontal side: every rule that must not
 reach a column carries `:not(.steps-vertical)` — the focus-ring rule plus every

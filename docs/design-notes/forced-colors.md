@@ -53,13 +53,17 @@ an essential shape, state, or affordance.
 
 ## Color system keywords by role
 
-| Context | Color | Why |
-|---|---|---|
-| Disclosure / accordion marker | `CanvasText` | Summary is on Canvas, not a button |
-| Button, switch, checkbox | `ButtonText` / `ButtonFace` / `Highlight` / `HighlightText` | Interactive controls |
-| Selected / current state | `Highlight` / `HighlightText` | Matches OS selection |
-| Disabled state | `GrayText` | Standard disabled system color |
-| Hover indicator | `ButtonText` outline or `CanvasText` underline | Avoids blocked backgrounds |
+| Context                  | Color                 | Why                                |
+| ------------------------ | --------------------- | ---------------------------------- |
+| Disclosure marker        | `CanvasText`          | Summary is on Canvas, not a button |
+| Button, switch, checkbox | the `Button*` pair    | Interactive controls               |
+| Selected / current state | the `Highlight*` pair | Matches OS selection               |
+| Disabled state           | `GrayText`            | Standard disabled system color     |
+| Hover indicator          | outline or underline  | Avoids blocked backgrounds         |
+
+Controls use `ButtonText` / `ButtonFace`, and `Highlight` / `HighlightText` for
+their selected state. A hover indicator is a `ButtonText` outline or a
+`CanvasText` underline.
 
 Prefer `CanvasText` for non-interactive mark-up content. `CanvasText` and
 `ButtonText` are **not guaranteed identical** — custom HCM palettes can set

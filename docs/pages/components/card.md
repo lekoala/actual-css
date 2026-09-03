@@ -4,14 +4,21 @@ Flexible content container with optional header, body, and footer regions, plus 
 
 ## Class reference
 
-| Class       | Kind             | Description                                                                                                                                                                                                     |
-|-------------|------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `.card`     | Component        | Neutral raised surface for grouped content.                                                                                                                                                                     |
-| `.raised`   | Variant          | Elevated surface with a soft shadow.                                                                                                                                                                            |
-| `.subtle`   | Variant          | Lower contrast against the page surface.                                                                                                                                                                        |
-| `.surface`  | Variant          | Shared variant: the page surface instead of `--surface-raised`, with the intent in the text only.                                                                                                               |
-| `.inverted` | Surface modifier | Inverse surface treatment: paints `--surface-solid` and swaps the foreground to `--surface`, so it inverts in dark themes instead of always reading as dark. Apply as `class="card inverted"`, or on any block. |
-| `.compact`  | Variant          | Tighter padding for dense contexts.                                                                                                                                                                             |
+| Class       | Kind             | Description                                 |
+| ----------- | ---------------- | ------------------------------------------- |
+| `.card`     | Component        | Neutral raised surface for grouped content. |
+| `.raised`   | Variant          | Elevated surface with a soft shadow.        |
+| `.subtle`   | Variant          | Lower contrast against the page surface.    |
+| `.surface`  | Variant          | The page surface; intent in the text only.  |
+| `.inverted` | Surface modifier | Inverse surface treatment.                  |
+| `.compact`  | Variant          | Tighter padding for dense contexts.         |
+
+`.surface` is a shared variant: it paints the page surface instead of
+`--surface-raised` and leaves the intent to the text.
+
+`.inverted` paints `--surface-solid` and swaps the foreground to `--surface`,
+so it inverts in dark themes instead of always reading as dark. Write it as
+`class="card inverted"`, or on any block.
 
 ## Basic usage
 

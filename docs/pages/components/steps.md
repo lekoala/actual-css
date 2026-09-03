@@ -12,7 +12,7 @@ Orientation and labels are two independent choices.
 required:
 
 | Markup                                | Orientation | Stages   |
-|---------------------------------------|-------------|----------|
+| ------------------------------------- | ----------- | -------- |
 | `<ol class="steps steps-horizontal">` | horizontal  | 2 to 5   |
 | `<ol class="steps steps-vertical">`   | vertical    | no limit |
 
@@ -28,7 +28,7 @@ Step labels are then the other choice, and it is **optional in either
 orientation**. A sequence is either entirely labelled or entirely unlabelled:
 
 |                | Empty steps         | `.step-label` on every step           |
-|----------------|---------------------|---------------------------------------|
+| -------------- | ------------------- | ------------------------------------- |
 | **horizontal** | compact progression | named sequence, stacked or inline     |
 | **vertical**   | compact rail        | named sequence, labels beside markers |
 
@@ -129,6 +129,25 @@ names, or when a step should be navigable:
 width. If a labelled row does not fit its space, it scrolls — and the honest
 answers to that are more room, fewer stages, or `.steps-vertical`.
 
+Since scrolling is the fallback, a labelled row is worth pairing with
+`.scroller`, which gives the native scrollbar the theme's density and colour
+instead of the OS default:
+
+```html
+<ol class="steps steps-horizontal scroller">
+```
+
+Steps does not apply it for you, because scrollbar treatment is an app-wide
+decision rather than a per-component one. Every other scroll container —
+`.table`, a `.flyout`, a scrolling `dialog` — leaves the scrollbar alone too,
+so a page that thinned only its stepper would show two kinds of scrollbar. Put
+`.scroller` on whatever scrolls, once. See the sizing and wrapping page for its
+hooks.
+
+Do not add `.stable-gutter` here. It reserves gutter on the inline axis, for a
+vertical scrollbar this row never draws, so it narrows the row instead of
+steadying its height.
+
 ### One presentation enhancement
 
 With generous room, a labelled row moves marker and label inline and lets the
@@ -152,13 +171,13 @@ Resize the demo below. The 3-step flow needs less room than the supported
 
 ```html demo resize
 <div class="stack">
-  <ol class="steps steps-horizontal container-query" style="--step-complete-mark: '✓'">
+  <ol class="steps steps-horizontal container-query scroller" style="--step-complete-mark: '✓'">
     <li class="step-complete"><span class="step-label">Identification</span></li>
     <li aria-current="step"><span class="step-label">Confirmation</span></li>
     <li><span class="step-label">Finalisation</span></li>
   </ol>
 
-  <ol class="steps steps-horizontal container-query" style="--step-complete-mark: '✓'">
+  <ol class="steps steps-horizontal container-query scroller" style="--step-complete-mark: '✓'">
     <li class="step-complete"><span class="step-label">Account</span></li>
     <li class="step-complete"><span class="step-label">Details</span></li>
     <li aria-current="step"><span class="step-label">Payment</span></li>
@@ -287,7 +306,7 @@ focusable element inside a step is outside the component contract. Only make a
 label a link when the workflow genuinely allows navigation to that step:
 
 ```html demo resize
-<ol class="steps steps-horizontal container-query">
+<ol class="steps steps-horizontal container-query scroller">
   <li class="step-complete">
     <a class="step-label" href="#">Account</a>
   </li>
