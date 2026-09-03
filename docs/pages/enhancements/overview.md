@@ -15,7 +15,7 @@ class API, shared tokens, and progressive enhancement.
 
 ## Modules
 
-The full runtime is `actual-css/js`. Each enhancer is also importable on its own
+The full runtime is `actual-css/js/full`. Each enhancer is also importable on its own
 for projects that use custom components or want a smaller behavior surface:
 
 ```js
@@ -32,5 +32,5 @@ is a no-op until the module is loaded again with a DOM.
 
 Each interactive component has its own page documenting the exact markup its
 enhancement expects: Dialog, Drawer, Flyout, Tooltip, Tabs, Scrollspy, and
-Status Bar. The default runtime is loaded on the docs pages, so the examples
+Status Bar. The full runtime is loaded on the docs pages, so the examples
 work with the documented markup alone.

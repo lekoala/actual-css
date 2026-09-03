@@ -214,7 +214,7 @@
 <p>The optional JavaScript runtime that progressively enhances Actual's semantic markup — self-registering side-effect modules, the <code>enhance()</code> DOM lifecycle, stateless command routing, and the floating and surface contracts for custom widgets.</p>
 </blockquote>
 <p>Actual's JavaScript modules are optional. Importing <code>actual-css/js/full</code>
-registers the complete default runtime — every built-in enhancer, including
+registers the full runtime — every built-in enhancer, including
 validation and status. Importing <code>actual-css/js</code> registers only the enhancement
 manifest loader; importing a specific module registers only that behavior. The
 runtime does not require <code>DOMContentLoaded</code> or manual init calls, and it never
@@ -260,7 +260,7 @@ the element leaves the DOM.</p>
 <p>Modules are safe to import during SSR — registration is a no-op when there is no
 DOM. The runtime remains active until the page unloads; there is no teardown
 handle, and cleanup happens per element when an element leaves the DOM.</p>
-<h2 id="the-default-runtime">The default runtime</h2>
+<h2 id="the-full-runtime">The full runtime</h2>
 <p>Loading <code>dist/actual.full.js</code> as a plain <code>&lt;script&gt;</code> (no <code>type=&quot;module&quot;</code>, no
 bundler, no <code>import</code>) gets the full runtime. Static HTML that needs to trigger
 something from its own inline <code>&lt;script&gt;</code> dispatches the module's public event
@@ -567,7 +567,8 @@ runtime.</p>
 
 await loadEnhancements(); // every manifest block in the document
 await loadEnhancement(&quot;autosubmit&quot;, &quot;/js/autosubmit.js&quot;);
-await loadResponse(fetch(&quot;/...&quot;).then((r) =&gt; r)); // Enhance-Modules header
+const response = await fetch(&quot;/...&quot;);
+await loadResponse(response); // Enhance-Modules header
 </code></pre>
 <p>The <code>Enhance-Modules</code> HTTP header carries the same JSON object. Loaded modules
 register on the default document root and must export a default function. An
@@ -784,7 +785,7 @@ enhance({
 });
 </code></pre>
 <h2 id="form-validation">Form validation</h2>
-<p><code>actual-css/js/validation</code> is part of the default runtime and also importable on
+<p><code>actual-css/js/validation</code> is part of the full runtime and also importable on
 its own — it is an enhancer, not a validation framework. Forms opt in with the
 <code>data-enhance=&quot;validation&quot;</code> token (<code>.needs-validation</code> is a presentation class
 for CSS-only <code>:user-invalid</code> feedback and does not by itself register the
@@ -862,7 +863,7 @@ FormValidator.setErrors(form, { email: &quot;Already taken&quot; });
           <ul class="nav-list docs-toc-list" data-docs-toc>
         <li><a class="nav-link" href="#browser-support" data-docs-toc-item data-level="2">Browser support</a></li>
         <li><a class="nav-link" href="#overview" data-docs-toc-item data-level="2">Overview</a></li>
-        <li><a class="nav-link" href="#the-default-runtime" data-docs-toc-item data-level="2">The default runtime</a></li>
+        <li><a class="nav-link" href="#the-full-runtime" data-docs-toc-item data-level="2">The full runtime</a></li>
         <li><a class="nav-link" href="#using-the-runtime-with-another-css-framework" data-docs-toc-item data-level="2">Using the runtime with another CSS framework</a></li>
         <li><a class="nav-link" href="#the-runtime-as-a-primitive-kit" data-docs-toc-item data-level="2">The runtime as a primitive kit</a></li>
         <li><a class="nav-link" href="#floating-contract" data-docs-toc-item data-level="2">Floating contract</a></li>

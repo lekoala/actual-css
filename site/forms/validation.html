@@ -288,7 +288,7 @@
 <div class="prose docs-prose">
 <h2 id="optional-javascript-enhancer">Optional JavaScript enhancer</h2>
 <p>Native validation first; the enhancer only adds state and focus behavior.</p>
-<p>Actual CSS ships validation <em>styles</em>. Invalid fields are marked with <code>aria-invalid=&quot;true&quot;</code> (or the manual <code>.field.danger</code> wrapper class). The default forms bundle imports <code>forms/validation.css</code>; custom builds may omit that file when validation styling is app-owned. A small enhancer (<code>actual-css/js/validation</code>), included in the default runtime (<code>actual-css/js</code>) and also importable on its own, prevents premature error display, marks invalid fields on blur and submit, focuses the first invalid field on submit, and supports a few custom rules. It is not a validation framework — server and AJAX validation stay in app code.</p>
+<p>Actual CSS ships validation <em>styles</em>. Invalid fields are marked with <code>aria-invalid=&quot;true&quot;</code> (or the manual <code>.field.danger</code> wrapper class). The default forms bundle imports <code>forms/validation.css</code>; custom builds may omit that file when validation styling is app-owned. A small enhancer (<code>actual-css/js/validation</code>), included in the full runtime (<code>actual-css/js/full</code>) and also importable on its own, prevents premature error display, marks invalid fields on blur and submit, focuses the first invalid field on submit, and supports a few custom rules. It is not a validation framework — server and AJAX validation stay in app code.</p>
 <p>Opt in with the <code>.needs-validation</code> class. Importing the module registers the behavior; there is no init call.</p>
 </div>
 <div class="docs-example">

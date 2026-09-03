@@ -92,7 +92,7 @@ if (typeof document !== "undefined") {
   submitRoots.add(document);
   document.addEventListener("submit", handleSubmit);
 
-  window.addEventListener("pagehide", () => {
+  document.defaultView?.addEventListener("pagehide", () => {
     for (const input of revealed) {
       // Opportunistic housekeeping: an input removed from the DOM before
       // navigation no longer needs reverting and can leave the set.

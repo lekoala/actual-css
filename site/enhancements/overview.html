@@ -225,7 +225,7 @@ class API, shared tokens, and progressive enhancement.</p>
 <li>Do not add toasts. Use alerts, status regions, dialogs, or inline validation instead.</li>
 </ul>
 <h2 id="modules">Modules</h2>
-<p>The full runtime is <code>actual-css/js</code>. Each enhancer is also importable on its own
+<p>The full runtime is <code>actual-css/js/full</code>. Each enhancer is also importable on its own
 for projects that use custom components or want a smaller behavior surface:</p>
 <pre><code class="language-js">import &quot;actual-css/js/dialog&quot;;
 import &quot;actual-css/js/flyout&quot;;
@@ -237,7 +237,7 @@ is a no-op until the module is loaded again with a DOM.</p>
 <h2 id="component-pages">Component pages</h2>
 <p>Each interactive component has its own page documenting the exact markup its
 enhancement expects: Dialog, Drawer, Flyout, Tooltip, Tabs, Scrollspy, and
-Status Bar. The default runtime is loaded on the docs pages, so the examples
+Status Bar. The full runtime is loaded on the docs pages, so the examples
 work with the documented markup alone.</p>
 
 </div>

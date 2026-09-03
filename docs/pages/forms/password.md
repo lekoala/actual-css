@@ -1,8 +1,9 @@
 # Password Toggle
 
 > A password field reveals its value through a linked button. The markup is a
-> plain command invoker; the behavior ships with the JS runtime
-> (`actual-css/js` or `actual-css/js/password`).
+> plain command invoker; the behavior ships with the full JS runtime
+> (`actual-css/js/full`) and can also be imported independently
+> (`actual-css/js/password`).
 
 Point a `button` at the input with `commandfor` and
 `command="--password-toggle"`. Use `.join` when the button should sit attached

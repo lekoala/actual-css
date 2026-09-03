@@ -1,18 +1,10 @@
 # Actual CSS Changelog
 
-## [Unreleased]
+## [0.6.0] - 2026-09-03
 
 ### Added
 
-- `.step-label` is now the label wrapper for `.steps`.
 - Horizontal `.steps` can now adapt to the width of an `actual-container`.
-- `.steps` is the component and the orientation is a second, required class:
-  `<ol class="steps steps-horizontal">` or `<ol class="steps steps-vertical">`.
-  Neither orientation is the default, so `.steps` alone is incomplete markup.
-- `.steps-vertical` adds an explicit vertical orientation for sidebars and
-  process panels. It is a peer of `.steps-horizontal`, not a modifier on it.
-  Steps themselves are identical under both — `.step-label`, `.complete` and
-  `aria-current="step"` come from `.steps` and behave the same either way.
 - `--step-inline-connector` lets themes customize the connector used by the wide
   horizontal representation.
 
@@ -24,12 +16,6 @@
 - `--step-connector` now accepts a complete CSS background value instead of only
   a colour. Themes can use a solid line, gradient, image or `none` without
   changing the component structure.
-- The framework query-container name is now `actual-container` instead of
-  `actual-grid`. `.container-query` is unchanged.
-- Horizontal `.steps` supports 2 to 5 stages, and the container queries are
-  calibrated for exactly that range. A longer sequence is out of contract: it
-  renders, but the representation it lands in was not designed for its count.
-  Use `.steps-vertical` or another progression pattern instead.
 - A step label may be an `<a href>`. A `<button>` or any other focusable element
   inside a step is outside the component contract; the compact representation
   still refuses any row containing a link, so no focusable label is ever hidden.
@@ -38,8 +24,19 @@
   inside it unreadable in that mode. Complete and upcoming markers now read alike
   in forced colors unless you set `--step-complete-mark`, which is the documented
   way to keep them distinct.
-- List are now top aligned.
+- List items are now top-aligned.
 - Aura improvements.
+
+### Breaking
+
+- `.step-label` is now required as the label wrapper for `.steps`.
+- `.steps` requires either `.steps-horizontal` or `.steps-vertical`; neither
+  orientation is the default, so `.steps` alone is incomplete markup.
+- `.steps-vertical` is a peer of `.steps-horizontal`, not a modifier on it.
+- Horizontal `.steps` supports 2 to 5 stages. Use `.steps-vertical` or another
+  progression pattern for a longer sequence.
+- The framework query-container name is now `actual-container` instead of
+  `actual-grid`. `.container-query` is unchanged.
 
 ## Fixed
 

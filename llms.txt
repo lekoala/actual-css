@@ -16,18 +16,36 @@ Actual CSS uses a small public grammar: `.component [intent] [variant] [size] [m
 - `actual-css/full` — the complete framework: core plus every component, form, layout, typography, effect, and utility family.
 - `actual-css/js` — the enhancement loader only; it discovers `data-enhance` markers and loads enhancers on demand.
 - `actual-css/js/full` — the complete runtime with all built-in enhancers pre-registered.
-- `actual-css/reserved-classes.json` — machine-readable list of every class name the framework can generate. Use it to validate class usage in HTML (an "unknown class" checker) instead of guessing names from other frameworks.
+- `actual-css/reserved-classes.json` — machine-readable list of the framework-owned class namespace. Use it to check whether a class belongs to Actual CSS and to validate claimed framework classes; application-specific classes are expected to exist outside this manifest.
 - Individual families and modules are importable separately (`actual-css/css/components`, `actual-css/css/layout/grid`, `actual-css/js/dialog`, …); see [README](README.md) and [Modular imports](docs/pages/guides/modular-import.md).
+
+Forms are the one family with two aggregate entrypoints:
+`actual-css/css/forms` is the native-control baseline; use
+`actual-css/css/forms/all` for the complete forms family.
 
 The composition guides in [README](README.md) and [Progressive Enhancements](docs/pages/enhancements/overview.md)
 show supported CSS modules and individual enhancer imports without duplicating
 the full export list here.
 
 Presentation (`class`) and behavior (`data-enhance`) are separate layers.
-Behaviour primitives (`enhance`, `floating`, `surface`, `keys`, `menu`, `focus`,
-`events`) are independently importable for building custom widgets.
-See [enhancement contract](docs/design-notes/enhancement-contract.md) and
+Behaviour primitives are independently importable for building custom widgets,
+including `enhance`, `surface`, `floating`, `focus-group`, `keys`, `input`,
+`command`, `menu`, `focus`, `escape`, and `events`. See
+[enhancement contract](docs/design-notes/enhancement-contract.md) and
 [widget primitives](docs/design-notes/widget-primitives.md).
+
+## Choosing a page shell
+
+Before choosing a content layout, choose the page shell:
+
+- Normal scrolling page, marketing/editorial site, or ordinary application page
+  → semantic landmarks; optionally `.app-shell` and `.navbar`.
+- Persistent topbar + independently scrolling main + adaptive bottom/side
+  primary navigation → `.app-layout`.
+
+Do not choose `.app-layout` merely because the product is an application. Its
+viewport-sized shell, internal scrolling, and adaptive navigation are one
+combined contract. See [layout choices](docs/pages/layout/choosing.md).
 
 ## Choosing a layout primitive
 
@@ -40,6 +58,11 @@ Pick from the relationship between children, not the number of children in one m
 - Fixed media followed by flexible content → `.media`
 - Explicit region placement on a shared 12-column canvas → `.column-layout`
 - Vertical flow → `.stack`; wrapping inline items → `.cluster`
+
+`.container-query` establishes the framework's shared
+`actual-container / inline-size` container for components that explicitly
+respond to allocated space; it is not a general prerequisite for responsive
+layouts.
 
 Use `--grid-columns` on `.grid` for exact track templates that do not match a
 built-in layout contract: arbitrary structural counts (seven calendar days),
