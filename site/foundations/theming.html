@@ -245,6 +245,12 @@
 <h3 id="keep-bare-native-controls-on-theme-accent-color">Keep bare native controls on-theme / accent-color</h3>
 <p>Native controls that no component class restyles — a bare checkbox, radio, range, or <code>&lt;progress&gt;</code> — follow the theme through <code>accent-color: var(--primary)</code>, declared on <code>:root</code> and every <code>[data-theme]</code> island so each island recomputes it from its own palette. Component classes (<code>.check</code>, <code>.radio</code>, <code>.range</code>) paint their own rendering and do not read it.</p>
 <p>→ Forms · Overview · Foundations · Tokens (theme contract)</p>
+<h3 id="store-a-theme-name-without-applying-it">Store a theme name without applying it</h3>
+<p><code>data-theme</code> is an active theme boundary on every element that carries it, not
+a generic storage attribute. Use a different name such as <code>data-theme-value</code>,
+or a form control's <code>value</code>, when the element should only hold a theme name.
+Apply <code>data-theme</code> deliberately when that element and its subtree should paint
+with the selected palette — a theme swatch is a useful example.</p>
 <h3 id="loading-busy-overlay-on-a-container">Loading / busy overlay on a container</h3>
 <p>Use <code>aria-busy=&quot;true&quot;</code> with a direct last-child <code>.spinner</code>; tint the overlay with <code>--busy-overlay-bg</code>.</p>
 <p>→ Components · Card</p>
@@ -304,6 +310,7 @@ for a deliberate visual override or a matching legacy fallback.</p>
         <li><a class="nav-link" href="#customize-a-switchs-size" data-docs-toc-item data-level="3">Customize a switch's size</a></li>
         <li><a class="nav-link" href="#dim-disabled-controls" data-docs-toc-item data-level="3">Dim disabled controls</a></li>
         <li><a class="nav-link" href="#keep-bare-native-controls-on-theme-accent-color" data-docs-toc-item data-level="3">Keep bare native controls on-theme / accent-color</a></li>
+        <li><a class="nav-link" href="#store-a-theme-name-without-applying-it" data-docs-toc-item data-level="3">Store a theme name without applying it</a></li>
         <li><a class="nav-link" href="#loading-busy-overlay-on-a-container" data-docs-toc-item data-level="3">Loading / busy overlay on a container</a></li>
         <li><a class="nav-link" href="#set-card-rail-item-width-in-a-scroll-snap-row" data-docs-toc-item data-level="3">Set card-rail item width in a scroll-snap row</a></li>
         <li><a class="nav-link" href="#resize-an-avatar-or-its-stack" data-docs-toc-item data-level="3">Resize an avatar or its stack</a></li>

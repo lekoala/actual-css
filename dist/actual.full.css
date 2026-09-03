@@ -4839,12 +4839,21 @@ dialog.drawer > form > header {
   transition: opacity var(--duration-fast) ease;
 }
 
-.flyout.is-open:not(.is-sheet) {
+/* Native popovers enter the top layer with UA geometry that conflicts with
+   anchored positioning. Keep the reset scoped to Actual surfaces so bare
+   [popover] elements retain their platform presentation. */
+.flyout[popover] {
+  position: fixed;
+  inset: auto;
+  margin: 0;
+}
+
+.flyout:is(.is-open, :popover-open):not(.is-sheet) {
   inset: auto;
 }
 
 @starting-style {
-  .flyout.is-open {
+  .flyout:is(.is-open, :popover-open) {
     opacity: 0;
   }
 }
@@ -4884,7 +4893,7 @@ dialog.drawer > form > header {
 }
 
 @starting-style {
-  .flyout.is-sheet.is-open {
+  .flyout.is-sheet:is(.is-open, :popover-open) {
     translate: 0 var(--space-30);
   }
 }
@@ -5018,30 +5027,36 @@ dialog.drawer > form > header {
 /* Checkable menu items are one command with one accessible state. Their
    indicator is generated so authors do not add a second interactive input. */
 .menu-item:is([role="menuitemcheckbox"], [role="menuitemradio"])::before {
-  display: grid;
+  content: "";
+  display: block;
   flex: 0 0 var(--menu-item-icon-size);
   inline-size: var(--menu-item-icon-size);
-  place-items: center;
-}
-
-.menu-item[role="menuitemcheckbox"]::before {
-  content: "";
+  block-size: var(--menu-item-icon-size);
 }
 
 .menu-item[role="menuitemcheckbox"][aria-checked="true"]::before {
-  content: "✓";
+  background: currentColor;
+  -webkit-mask: var(--icon-check) center / contain no-repeat;
+  mask: var(--icon-check) center / contain no-repeat;
 }
 
 .menu-item[role="menuitemcheckbox"][aria-checked="mixed"]::before {
-  content: "−";
+  background:
+    linear-gradient(currentColor 0 0) center / 60% max(var(--border-width), 0.125em) no-repeat;
 }
 
 .menu-item[role="menuitemradio"]::before {
-  content: "○";
+  background: radial-gradient(circle, transparent 0 46%, currentColor 48% 58%, transparent 60%);
 }
 
 .menu-item[role="menuitemradio"][aria-checked="true"]::before {
-  content: "●";
+  background: radial-gradient(
+    circle,
+    currentColor 0 25%,
+    transparent 27% 46%,
+    currentColor 48% 58%,
+    transparent 60%
+  );
 }
 
 .menu-item:focus-visible {
@@ -5111,13 +5126,22 @@ dialog.drawer > form > header {
   transition: opacity var(--duration-fast) ease;
 }
 
+/* Neutralize only the native geometry that conflicts with a positioned
+   tooltip. In particular, the UA overflow would turn the arrow into scroll
+   overflow instead of letting it project beyond the bubble. */
+.tooltip[popover] {
+  inset: auto;
+  margin: 0;
+  overflow: visible;
+}
+
 .tooltip[hidden] {
   display: none;
   opacity: 0;
 }
 
 @starting-style {
-  .tooltip:not([hidden]) {
+  .tooltip:is(:not([popover]):not([hidden]), :popover-open) {
     opacity: 0;
   }
 }
@@ -7396,6 +7420,13 @@ a.list-item:hover {
   border-start-end-radius: var(--join-se);
   border-end-end-radius: var(--join-ee);
   border-end-start-radius: var(--join-es);
+}
+
+/* A square icon button has an explicit block size, which otherwise prevents
+   align-items: stretch from matching a taller labelled sibling. The button's
+   existing min-block-size keeps the standalone square-size invariant intact. */
+.join > .btn.icon-only {
+  block-size: auto;
 }
 
 .join > :first-child {

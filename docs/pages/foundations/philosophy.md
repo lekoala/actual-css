@@ -75,6 +75,19 @@ As inherited contexts, one class tightens or loosens the whole subtree:
 </div>
 ```
 
+Application chrome can use the same scope; no separate `.compact` mode is
+needed:
+
+```html demo
+<header class="navbar sm">
+  <a class="navbar-brand" href="/">Workspace</a>
+  <nav class="cluster" aria-label="Workspace actions">
+    <button class="btn ghost">Search</button>
+    <button class="btn primary">Create</button>
+  </nav>
+</header>
+```
+
 The same class on a component is local density, not a second meaning:
 
 ```html demo
@@ -86,7 +99,8 @@ This is not "`.sm` sometimes means density and sometimes size": `.sm` always
 establishes the same density tokens — only the scope changes. The density
 tokens are `--gap`, `--density-space`, `--control-size`, and
 `--density-compact-size`. Components consume the dimensions that make sense
-for them and opt out of the rest.
+for them and opt out of the rest. The absolute `--space-*` scale is not rebound
+by density scopes.
 
 Components with bespoke sizing (`.avatar`, `.spinner`) define local `.sm`/`.lg`
 instead of consuming the shared tokens.

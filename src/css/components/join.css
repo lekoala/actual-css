@@ -63,6 +63,13 @@
   border-end-start-radius: var(--join-es);
 }
 
+/* A square icon button has an explicit block size, which otherwise prevents
+   align-items: stretch from matching a taller labelled sibling. The button's
+   existing min-block-size keeps the standalone square-size invariant intact. */
+.join > .btn.icon-only {
+  block-size: auto;
+}
+
 .join > :first-child {
   --join-ss: var(--join-radius);
   --join-es: var(--join-radius);

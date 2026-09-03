@@ -225,6 +225,7 @@ runtime targets, empty by default.</p>
 <li>Use it for transient status (<code>Saved.</code>, <code>Reconnected.</code>, <code>Copied.</code>). Critical, persistent, or actionable information belongs in <code>.alert</code>, inline messages, or dialogs.</li>
 <li>Intents: <code>danger</code>, <code>success</code>, <code>warning</code>, <code>neutral</code>. The default (no intent) is a neutral dark pill.</li>
 <li>On mobile, the runtime keeps the bar above the software keyboard by tracking <code>visualViewport</code> while a message is showing.</li>
+<li>A message originating inside an open modal dialog temporarily moves the singleton bar into that dialog. This keeps it in the active top-layer and accessibility subtree; the bar returns to its original DOM position after its exit.</li>
 </ul>
 <p>Clearing is deferred, not immediate: the bar closes first and only empties its
 text and intent once the exit transition has finished, so it leaves at the size
@@ -314,6 +315,18 @@ event the commands use under the hood:</p>
   detail: { message: &quot;Saved.&quot;, intent: &quot;success&quot; },
 }));
 </code></pre>
+<p>Dispatch from the control or region that produced the feedback when it lives
+inside a dialog; bubbling lets the runtime infer the active surface:</p>
+<pre><code class="language-js">saveButton.dispatchEvent(new CustomEvent(&quot;actual:status&quot;, {
+  bubbles: true,
+  detail: { message: &quot;Saved.&quot;, intent: &quot;success&quot; },
+}));
+</code></pre>
+<p>Code importing <code>status()</code> directly passes the same origin as <code>source</code>:</p>
+<pre><code class="language-js">status(&quot;Saved.&quot;, { intent: &quot;success&quot;, source: saveButton });
+</code></pre>
+<p>Validation and declarative status commands propagate their source
+automatically.</p>
 <h2 id="css-hooks">CSS hooks</h2>
 <ul>
 <li><code>--status-bg</code> — bar background.</li>

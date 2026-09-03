@@ -36,3 +36,18 @@ it("default outline in a field join matches the field border; intents keep their
     { artifactName: "join" },
   );
 });
+
+it("icon-only buttons stretch to the height of labelled siblings", async () => {
+  await withBrowserPage(
+    fixtureUrl(FIXTURE),
+    async (view) => {
+      const result = await view.evaluate(`(() => ({
+        labelled: document.querySelector("#join-labelled").getBoundingClientRect().height,
+        icon: document.querySelector("#join-icon").getBoundingClientRect().height,
+      }))()`);
+
+      expect(result.icon).toBe(result.labelled);
+    },
+    { artifactName: "join-icon-only" },
+  );
+});

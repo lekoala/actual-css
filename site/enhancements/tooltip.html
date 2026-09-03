@@ -228,6 +228,11 @@ with the <code>hidden</code> attribute.</p>
 <li>The arrow inherits the tooltip background — custom gradients carry through automatically.</li>
 <li>Avoid relying on the native <code>title</code> attribute as the primary implementation.</li>
 </ul>
+<p>A <code>.tooltip[popover]</code> may use a native or third-party-owned popover lifecycle.
+Actual removes the native inset, margin, and overflow that conflict with
+positioning and with the projecting arrow, while leaving bare <code>[popover]</code>
+elements untouched. The lifecycle owner must still write the fixed viewport
+coordinates and arrow position; Actual only supplies the presentation.</p>
 </div>
 <div class="docs-example">
   <div class="docs-preview">

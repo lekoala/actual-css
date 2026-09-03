@@ -304,6 +304,30 @@ directly to a component for local density.</p>
   </div>
 </div>
 <div class="prose docs-prose">
+<p>Application chrome can use the same scope; no separate <code>.compact</code> mode is
+needed:</p>
+</div>
+<div class="docs-example">
+  <div class="docs-preview">
+<header class="navbar sm">
+  <a class="navbar-brand" href="/">Workspace</a>
+  <nav class="cluster" aria-label="Workspace actions">
+    <button class="btn ghost">Search</button>
+    <button class="btn primary">Create</button>
+  </nav>
+</header>
+  </div>
+  <div class="docs-code">
+    <pre><code class="language-html">&lt;header class=&quot;navbar sm&quot;&gt;
+  &lt;a class=&quot;navbar-brand&quot; href=&quot;/&quot;&gt;Workspace&lt;/a&gt;
+  &lt;nav class=&quot;cluster&quot; aria-label=&quot;Workspace actions&quot;&gt;
+    &lt;button class=&quot;btn ghost&quot;&gt;Search&lt;/button&gt;
+    &lt;button class=&quot;btn primary&quot;&gt;Create&lt;/button&gt;
+  &lt;/nav&gt;
+&lt;/header&gt;</code></pre>
+  </div>
+</div>
+<div class="prose docs-prose">
 <p>The same class on a component is local density, not a second meaning:</p>
 </div>
 <div class="docs-example">
@@ -321,7 +345,8 @@ directly to a component for local density.</p>
 establishes the same density tokens — only the scope changes. The density
 tokens are <code>--gap</code>, <code>--density-space</code>, <code>--control-size</code>, and
 <code>--density-compact-size</code>. Components consume the dimensions that make sense
-for them and opt out of the rest.</p>
+for them and opt out of the rest. The absolute <code>--space-*</code> scale is not rebound
+by density scopes.</p>
 <p>Components with bespoke sizing (<code>.avatar</code>, <code>.spinner</code>) define local <code>.sm</code>/<code>.lg</code>
 instead of consuming the shared tokens.</p>
 <h2 id="child-semantics">Child semantics</h2>

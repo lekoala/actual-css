@@ -39,13 +39,22 @@
   transition: opacity var(--duration-fast) ease;
 }
 
+/* Neutralize only the native geometry that conflicts with a positioned
+   tooltip. In particular, the UA overflow would turn the arrow into scroll
+   overflow instead of letting it project beyond the bubble. */
+.tooltip[popover] {
+  inset: auto;
+  margin: 0;
+  overflow: visible;
+}
+
 .tooltip[hidden] {
   display: none;
   opacity: 0;
 }
 
 @starting-style {
-  .tooltip:not([hidden]) {
+  .tooltip:is(:not([popover]):not([hidden]), :popover-open) {
     opacity: 0;
   }
 }

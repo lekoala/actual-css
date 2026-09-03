@@ -75,30 +75,36 @@
 /* Checkable menu items are one command with one accessible state. Their
    indicator is generated so authors do not add a second interactive input. */
 .menu-item:is([role="menuitemcheckbox"], [role="menuitemradio"])::before {
-  display: grid;
+  content: "";
+  display: block;
   flex: 0 0 var(--menu-item-icon-size);
   inline-size: var(--menu-item-icon-size);
-  place-items: center;
-}
-
-.menu-item[role="menuitemcheckbox"]::before {
-  content: "";
+  block-size: var(--menu-item-icon-size);
 }
 
 .menu-item[role="menuitemcheckbox"][aria-checked="true"]::before {
-  content: "✓";
+  background: currentColor;
+  -webkit-mask: var(--icon-check) center / contain no-repeat;
+  mask: var(--icon-check) center / contain no-repeat;
 }
 
 .menu-item[role="menuitemcheckbox"][aria-checked="mixed"]::before {
-  content: "−";
+  background:
+    linear-gradient(currentColor 0 0) center / 60% max(var(--border-width), 0.125em) no-repeat;
 }
 
 .menu-item[role="menuitemradio"]::before {
-  content: "○";
+  background: radial-gradient(circle, transparent 0 46%, currentColor 48% 58%, transparent 60%);
 }
 
 .menu-item[role="menuitemradio"][aria-checked="true"]::before {
-  content: "●";
+  background: radial-gradient(
+    circle,
+    currentColor 0 25%,
+    transparent 27% 46%,
+    currentColor 48% 58%,
+    transparent 60%
+  );
 }
 
 .menu-item:focus-visible {

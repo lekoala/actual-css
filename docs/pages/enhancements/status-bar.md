@@ -15,6 +15,7 @@ runtime targets, empty by default.
 - Use it for transient status (`Saved.`, `Reconnected.`, `Copied.`). Critical, persistent, or actionable information belongs in `.alert`, inline messages, or dialogs.
 - Intents: `danger`, `success`, `warning`, `neutral`. The default (no intent) is a neutral dark pill.
 - On mobile, the runtime keeps the bar above the software keyboard by tracking `visualViewport` while a message is showing.
+- A message originating inside an open modal dialog temporarily moves the singleton bar into that dialog. This keeps it in the active top-layer and accessibility subtree; the bar returns to its original DOM position after its exit.
 
 Clearing is deferred, not immediate: the bar closes first and only empties its
 text and intent once the exit transition has finished, so it leaves at the size
@@ -76,6 +77,25 @@ document.dispatchEvent(new CustomEvent("actual:status", {
   detail: { message: "Saved.", intent: "success" },
 }));
 ```
+
+Dispatch from the control or region that produced the feedback when it lives
+inside a dialog; bubbling lets the runtime infer the active surface:
+
+```js
+saveButton.dispatchEvent(new CustomEvent("actual:status", {
+  bubbles: true,
+  detail: { message: "Saved.", intent: "success" },
+}));
+```
+
+Code importing `status()` directly passes the same origin as `source`:
+
+```js
+status("Saved.", { intent: "success", source: saveButton });
+```
+
+Validation and declarative status commands propagate their source
+automatically.
 
 ## CSS hooks
 

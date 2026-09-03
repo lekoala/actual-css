@@ -279,6 +279,17 @@ hides and positions it.</li>
 placement strings supported by the floating runtime, such as <code>bottom-start</code>,
 <code>bottom-end</code>, <code>top-start</code>, <code>right</code>, or <code>left</code>.</p>
 <p>Use <code>data-flyout-distance</code> for the trigger gap in pixels. The default is <code>4</code>.</p>
+<h3 id="native-popover-lifecycle">Native popover lifecycle</h3>
+<p>The <code>.flyout</code> presentation also composes with an element carrying <code>popover</code>.
+Actual neutralizes the native popover geometry that conflicts with anchored
+positioning and recognizes <code>:popover-open</code> as the visible state. The browser or
+another library may therefore own opening, dismissal, and focus without
+requiring <code>.is-open</code> or <code>[hidden]</code>.</p>
+<p>Actual CSS does not position that independently managed popover. Its positioner
+must write fixed viewport coordinates (and may write <code>--available-height</code> and
+<code>--surface-anchor-width</code>); the built-in <code>surface.js</code> runtime remains the full
+fallback when Actual owns the lifecycle too. A bare <code>[popover]</code> without
+<code>.flyout</code> or <code>.tooltip</code> keeps its platform appearance.</p>
 <p>Use <code>data-flyout-auto-close</code> when the default click dismissal behavior is not
 right. Escape still follows the shared surface lifecycle.</p>
 <ul>
@@ -776,6 +787,7 @@ at runtime, not set by the author. See the JavaScript runtime documentation.</p>
         <li><a class="nav-link" href="#class-reference" data-docs-toc-item data-level="2">Class reference</a></li>
         <li><a class="nav-link" href="#usage" data-docs-toc-item data-level="2">Usage</a></li>
         <li><a class="nav-link" href="#trigger-wiring" data-docs-toc-item data-level="3">Trigger wiring</a></li>
+        <li><a class="nav-link" href="#native-popover-lifecycle" data-docs-toc-item data-level="3">Native popover lifecycle</a></li>
         <li><a class="nav-link" href="#action-list" data-docs-toc-item data-level="2">Action list</a></li>
         <li><a class="nav-link" href="#aria-menu-pattern" data-docs-toc-item data-level="3">ARIA menu pattern</a></li>
         <li><a class="nav-link" href="#rich-items-and-selection-state" data-docs-toc-item data-level="3">Rich items and selection state</a></li>

@@ -2,6 +2,25 @@
 
 ## [Unreleased]
 
+### Added
+
+- Native Popover API presentation support for `.flyout[popover]` and
+  `.tooltip[popover]`, including component-scoped UA geometry normalization and
+  `:popover-open` entry states.
+
+### Changed
+
+- Menu checkbox and radio indicators now use the shared icon token and CSS
+  shapes instead of font-dependent text glyphs.
+
+### Fixed
+
+- Icon-only buttons stretch to match labelled siblings when composed in a
+  `.join`, while remaining square everywhere else.
+- Status messages originating in an open dialog temporarily mount the singleton
+  live region inside that dialog, keeping it visible and accessible in the
+  active top-layer subtree.
+
 ### Breaking
 
 - Replaced `floating.js` by `@lekoala/floating`.
