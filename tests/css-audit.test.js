@@ -940,7 +940,7 @@ test("steps horizontal representations stay two container queries wide", () => {
     }));
 
   const compact = blocks("inline-size <");
-  const inline = blocks("min-width:");
+  const inline = blocks("inline-size >=");
 
   /* One query each. Markers-only needs a lower bound — a 2- or 3-step row is
      readable stacked far below any width worth designing for — and inside the
