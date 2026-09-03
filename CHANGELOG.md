@@ -39,6 +39,7 @@
   in forced colors unless you set `--step-complete-mark`, which is the documented
   way to keep them distinct.
 - List are now top aligned.
+- Aura improvements.
 
 ## Fixed
 

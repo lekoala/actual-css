@@ -3000,7 +3000,7 @@ small {
 
       &::picker(select) {
         appearance: base-select;
-        max-height: min(24rem, calc(var(--viewport-block) * 0.7));
+        max-block-size: min(24rem, calc(var(--viewport-block) * 0.7));
         margin-block: var(--space-20);
         padding: 0;
         border: var(--border-width) solid var(--border);
@@ -6525,7 +6525,7 @@ a.avatar[aria-disabled="true"] {
     }
   }
 
-  @container actual-container (min-width: 60rem) {
+  @container actual-container (inline-size >= 60rem) {
     .steps-horizontal > li {
       display: flex;
       flex: 1 1 auto;

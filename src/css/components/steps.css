@@ -228,7 +228,7 @@
     }
   }
 
-  @container actual-container (min-width: 60rem) {
+  @container actual-container (inline-size >= 60rem) {
     .steps-horizontal > li {
       display: flex;
       flex: 1 1 auto;

@@ -84,7 +84,10 @@ Add relevant guards for future-us when needed based on traps and discoveries.
 ## CSS selectors
 
 - Invalid selectors discard the whole rule. Never merge vendor rules, and never
-  nest `:has()` inside `:has()` — including through `:not()`/`:is()`.
+  nest `:has()` inside `:has()` — including through `:not()`/`:is()`. Flat
+  combinations such as `.x:has(...):has(...)` and
+  `.x:not(:has(...)):has(...)` are valid; only a `:has()` inside another
+  `:has()` argument is forbidden.
 - No `@supports` that guards nothing: an unsupported selector or declaration is
   already dropped on its own. Wrap a rule only when that drop would take
   something worth keeping with it — a selector list mixing new and supported

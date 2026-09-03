@@ -1,12 +1,12 @@
 {
-  "totalRaw": 269377,
+  "totalRaw": 269385,
   "core": {
     "minified": 10889,
     "brotli": 2553
   },
   "full": {
-    "minified": 120231,
-    "brotli": 17556
+    "minified": 120239,
+    "brotli": 17567
   },
   "js": {
     "core": {
@@ -22,7 +22,7 @@
   "files": [
     {
       "file": "components/steps.css",
-      "raw": 10546
+      "raw": 10550
     },
     {
       "file": "core/tokens.css",
@@ -161,12 +161,12 @@
       "raw": 2682
     },
     {
-      "file": "themes/neon.css",
-      "raw": 2674
+      "file": "forms/custom-select.css",
+      "raw": 2675
     },
     {
-      "file": "forms/custom-select.css",
-      "raw": 2671
+      "file": "themes/neon.css",
+      "raw": 2674
     },
     {
       "file": "components/tab.css",
