@@ -1,4 +1,5 @@
 import { expect, test } from "bun:test";
+import { publicJsExports } from "./helpers/package-exports.js";
 
 const PUBLIC_EXPORTS = {
   enhance: ["default", "enhancementSelector", "hasEnhancement", "registerEnhancement"],
@@ -20,13 +21,16 @@ const PUBLIC_EXPORTS = {
   surface: ["isSurfaceOpen", "prepareSurface", "openSurface", "closeSurface", "disconnectSurface"],
 };
 
-for (const [subpath, symbols] of Object.entries(PUBLIC_EXPORTS)) {
-  test(`actual-css/js/${subpath} resolves and exports a module`, async () => {
-    const mod = await import(`actual-css/js/${subpath}`);
+for (const exportPath of publicJsExports()) {
+  const specifier = `actual-css${exportPath.slice(1)}`;
+  test(`${specifier} resolves and exports a module`, async () => {
+    const mod = await import(specifier);
     expect(mod).toBeDefined();
     expect(typeof mod).toBe("object");
   });
+}
 
+for (const [subpath, symbols] of Object.entries(PUBLIC_EXPORTS)) {
   for (const name of symbols) {
     test(`actual-css/js/${subpath} exports ${name}`, async () => {
       const mod = await import(`actual-css/js/${subpath}`);
@@ -35,30 +39,4 @@ for (const [subpath, symbols] of Object.entries(PUBLIC_EXPORTS)) {
       expect(value).toBeDefined();
     });
   }
-}
-
-const REMAINING_MODULES = [
-  "command",
-  "context-menu",
-  "dialog",
-  "dismiss",
-  "filter",
-  "flyout",
-  "input",
-  "mask",
-  "password",
-  "scrollspy",
-  "selectors",
-  "tab",
-  "tooltip",
-  "validation",
-  "status",
-];
-
-for (const subpath of REMAINING_MODULES) {
-  test(`actual-css/js/${subpath} resolves`, async () => {
-    const mod = await import(`actual-css/js/${subpath}`);
-    expect(mod).toBeDefined();
-    expect(typeof mod).toBe("object");
-  });
 }
