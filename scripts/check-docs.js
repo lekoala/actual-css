@@ -2,8 +2,9 @@
  * Structural checks for the docs site. Run with bun run check:docs.
  *
  * Verifies navigation.json against docs/pages, that every page is well-formed
- * (one H1, explicit fence languages, tables that stay readable in the source),
- * that slugs are unique, and that internal links (including anchors) resolve.
+ * (one H1, explicit fence languages, balanced demo markup, tables that stay
+ * readable in the source), that slugs are unique, and that internal links
+ * (including anchors) resolve.
  *
  * The table check also covers docs/design-notes, which is hand-edited markdown
  * outside the site navigation.
@@ -56,6 +57,74 @@ function tableIssues(markdown, label) {
     if (formatTable(table).join("\n") !== table.rows.join("\n")) {
       issues.push(`${label}:${line}: table is not aligned — run \`bun run format:docs\``);
     }
+  }
+
+  return issues;
+}
+
+/*
+ * A demo fence is injected raw into `.docs-preview`, so an unbalanced tag does
+ * not stay inside the example: one extra `</div>` closes the preview early and
+ * the code block, the prose after it, and the rest of the page escape their
+ * container. The browser recovers silently, which is why this has to be a
+ * check rather than something the page would visibly complain about.
+ *
+ * Void elements never take a closing tag, and the optional-close set is legal
+ * HTML without one, so both are skipped rather than tracked — a stack that
+ * expected `</li>` would report correct markup. That trades away detection of
+ * a stray `</li>`, which the HTML parser drops without moving the tree, for no
+ * false positives on the failure that actually reshapes the page.
+ */
+const VOID_ELEMENTS = new Set(
+  "area base br col embed hr img input link meta param source track wbr".split(" "),
+);
+const OPTIONAL_CLOSE = new Set("li p dt dd td th tr thead tbody tfoot option optgroup".split(" "));
+
+/* Comments can hold anything, tag-shaped text included. Blanking them in place
+   keeps every later line number honest. */
+function blankComments(html) {
+  return html.replace(/<!--[\s\S]*?-->/gu, (match) => match.replace(/[^\n]/gu, " "));
+}
+
+function countLines(text) {
+  return text.split("\n").length - 1;
+}
+
+function demoMarkupIssues(fence, label) {
+  const issues = [];
+  const stack = [];
+  const source = blankComments(fence.content);
+
+  for (const match of source.matchAll(/<(\/?)([a-zA-Z][\w:-]*)([^>]*?)(\/?)>/gu)) {
+    const [, closing, rawName, , selfClosing] = match;
+    const name = rawName.toLowerCase();
+    if (VOID_ELEMENTS.has(name) || OPTIONAL_CLOSE.has(name) || selfClosing) continue;
+
+    // fence.content starts one line after the fence marker.
+    const line = fence.start + 2 + countLines(source.slice(0, match.index));
+
+    if (!closing) {
+      stack.push({ name, line });
+      continue;
+    }
+
+    const open = stack.pop();
+    if (!open) {
+      issues.push(
+        `${label}:${line}: demo fence has an extra </${name}> — it closes .docs-preview and pushes the rest of the page out of the example`,
+      );
+      return issues;
+    }
+    if (open.name !== name) {
+      issues.push(
+        `${label}:${line}: demo fence closes </${name}> while <${open.name}> (line ${open.line}) is still open`,
+      );
+      return issues;
+    }
+  }
+
+  for (const open of stack.reverse()) {
+    issues.push(`${label}:${open.line}: demo fence leaves <${open.name}> unclosed`);
   }
 
   return issues;
@@ -146,6 +215,8 @@ function main() {
       }
       if (fence.demo && fence.language !== "html") {
         issues.push(`${rel(file)}: the demo flag is only supported on html fences`);
+      } else if (fence.demo) {
+        issues.push(...demoMarkupIssues(fence, rel(file)));
       }
       if (fence.flags.some((flag) => !KNOWN_FENCE_FLAGS.has(flag))) {
         issues.push(

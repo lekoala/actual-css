@@ -21,44 +21,43 @@
 
 ```html demo
 <div class="tabs" data-enhance="tabs" role="tablist" aria-label="Settings">
-    <button class="tab primary"
-            type="button"
-            role="tab"
-            aria-selected="true"
-            aria-controls="panel-general"
-            id="tab-general">
-      General
-    </button>
-    <button class="tab"
-            type="button"
-            role="tab"
-            aria-selected="false"
-            aria-controls="panel-security"
-            id="tab-security"
-            tabindex="-1">
-      Security
-    </button>
-    <button class="tab"
-            type="button"
-            role="tab"
-            aria-selected="false"
-            aria-controls="panel-billing"
-            id="tab-billing"
-            tabindex="-1">
-      Billing
-    </button>
-  </div>
-
-  <section role="tabpanel" id="panel-general" aria-labelledby="tab-general" tabindex="-1" class="py">
-    General content
-  </section>
-  <section role="tabpanel" id="panel-security" aria-labelledby="tab-security" tabindex="-1" hidden class="py">
-    Security content
-  </section>
-  <section role="tabpanel" id="panel-billing" aria-labelledby="tab-billing" tabindex="-1" hidden class="py">
-    Billing content
-  </section>
+  <button class="tab primary"
+          type="button"
+          role="tab"
+          aria-selected="true"
+          aria-controls="panel-general"
+          id="tab-general">
+    General
+  </button>
+  <button class="tab"
+          type="button"
+          role="tab"
+          aria-selected="false"
+          aria-controls="panel-security"
+          id="tab-security"
+          tabindex="-1">
+    Security
+  </button>
+  <button class="tab"
+          type="button"
+          role="tab"
+          aria-selected="false"
+          aria-controls="panel-billing"
+          id="tab-billing"
+          tabindex="-1">
+    Billing
+  </button>
 </div>
+
+<section role="tabpanel" id="panel-general" aria-labelledby="tab-general" tabindex="-1" class="py">
+  General content
+</section>
+<section role="tabpanel" id="panel-security" aria-labelledby="tab-security" tabindex="-1" hidden class="py">
+  Security content
+</section>
+<section role="tabpanel" id="panel-billing" aria-labelledby="tab-billing" tabindex="-1" hidden class="py">
+  Billing content
+</section>
 ```
 
 For navigation that only looks like tabs, keep it a plain link list — no
