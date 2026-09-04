@@ -33,6 +33,26 @@ the focus ring surrounds the complete joined field. Attached buttons keep their
 own focus indicator when reached directly, so the actionable segment remains
 identifiable.
 
+## Linting `role="group"`
+
+Biome's `a11y/useSemanticElements` reports the wrapper and offers `<fieldset>`
+as the replacement. That is the only element it suggests, and it does not fit:
+`<fieldset>` groups form controls under a `<legend>`, while ARIA's `group` is
+any labelled set of related objects. Suppress it on the element:
+
+```html
+<!-- biome-ignore lint/a11y/useSemanticElements: ARIA group has no HTML
+     equivalent here; fieldset expects form controls under a legend. -->
+<div class="join" role="group" aria-label="Date navigation">
+```
+
+Unlike the menu rule in
+[flyout](../enhancements/flyout.html#linting-rolemenu), do not switch this one
+off globally: it correctly catches `<div role="navigation">`,
+`<div role="button">` and `<div role="separator">`. And drop `role="group"`
+rather than suppressing it when the wrapper has no label to give — an unnamed
+group adds a boundary and nothing else.
+
 ## CSS hooks
 
 - `--join-radius` — outer corner radius of the joined group. The per-corner
