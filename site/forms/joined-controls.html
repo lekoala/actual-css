@@ -257,6 +257,21 @@ When an <code>.input</code>, <code>.textarea</code>, or <code>.select</code> rec
 the focus ring surrounds the complete joined field. Attached buttons keep their
 own focus indicator when reached directly, so the actionable segment remains
 identifiable.</p>
+<h2 id="linting-rolegroup">Linting <code>role=&quot;group&quot;</code></h2>
+<p>Biome's <code>a11y/useSemanticElements</code> reports the wrapper and offers <code>&lt;fieldset&gt;</code>
+as the replacement. That is the only element it suggests, and it does not fit:
+<code>&lt;fieldset&gt;</code> groups form controls under a <code>&lt;legend&gt;</code>, while ARIA's <code>group</code> is
+any labelled set of related objects. Suppress it on the element:</p>
+<pre><code class="language-html">&lt;!-- biome-ignore lint/a11y/useSemanticElements: ARIA group has no HTML
+     equivalent here; fieldset expects form controls under a legend. --&gt;
+&lt;div class=&quot;join&quot; role=&quot;group&quot; aria-label=&quot;Date navigation&quot;&gt;
+</code></pre>
+<p>Unlike the menu rule in
+<a href="../enhancements/flyout.html#linting-rolemenu">flyout</a>, do not switch this one
+off globally: it correctly catches <code>&lt;div role=&quot;navigation&quot;&gt;</code>,
+<code>&lt;div role=&quot;button&quot;&gt;</code> and <code>&lt;div role=&quot;separator&quot;&gt;</code>. And drop <code>role=&quot;group&quot;</code>
+rather than suppressing it when the wrapper has no label to give — an unnamed
+group adds a boundary and nothing else.</p>
 <h2 id="css-hooks">CSS hooks</h2>
 <ul>
 <li><code>--join-radius</code> — outer corner radius of the joined group. The per-corner
@@ -282,6 +297,7 @@ values of each child are derived from it.</li>
           <p class="docs-nav-group">On this page</p>
           <ul class="nav-list docs-toc-list" data-docs-toc>
         <li><a class="nav-link" href="#class-reference" data-docs-toc-item data-level="2">Class reference</a></li>
+        <li><a class="nav-link" href="#linting-rolegroup" data-docs-toc-item data-level="2">Linting role=&amp;quot;group&amp;quot;</a></li>
         <li><a class="nav-link" href="#css-hooks" data-docs-toc-item data-level="2">CSS hooks</a></li>
           </ul>
         </nav>

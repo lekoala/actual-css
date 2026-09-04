@@ -19,7 +19,7 @@
 
 `.menu` has a strict `.menu > li > .menu-item` anatomy.
 | `.menu-label`     | Variant     | Muted section heading inside a menu; not interactive.                |
-| `.menu-separator` | Variant     | Divider between menu groups (`<hr role="separator">`).               |
+| `.menu-separator` | Variant     | Divider between menu groups (`<hr>`).                               |
 | `.sm` / `.lg`     | Variant     | Compact or large density.                                            |
 
 ## Usage
@@ -201,7 +201,7 @@ A list of *actions* the user can take: sign out, copy, delete.
 - Flyout triggers are opt-in: add `data-enhance="flyout"` to the trigger.
 - Wrap the trigger and flyout in `.flyout-trigger` when the flyout should have a local absolute-position fallback before JavaScript positions it. Add `.stretch` when the trigger must span its container, such as the last row of a full-width sidebar nav list.
 - Use `<menu class="flyout menu">` with strict anatomy: `.menu > li > .menu-item`. Items must carry the `.menu-item` class to participate in directional keyboard navigation. ArrowUp/Down and Home/End move focus without rewriting their normal tab stops.
-- Use `.menu-label` on a `li` for a muted section heading inside a menu (e.g. a group title before its items). It is non-interactive and does not participate in roving focus. Use `.menu-separator` (`<hr role="separator">`) between groups.
+- Use `.menu-label` on a `li` for a muted section heading inside a menu (e.g. a group title before its items). It is non-interactive and does not participate in roving focus. Use `.menu-separator` (a plain `<hr>`) between groups.
 - Items are regular `<button>` or `<a>` elements.
 - Use `.sm` or `.lg` for density changes.
 - Add `role="menu"` / `role="menuitem"` only when you intentionally need the ARIA menu pattern described below.
@@ -224,7 +224,7 @@ A list of *actions* the user can take: sign out, copy, delete.
         hidden>
     <li><button class="menu-item" type="button">Profile</button></li>
     <li><button class="menu-item" type="button">Settings</button></li>
-    <hr class="menu-separator" role="separator">
+    <hr class="menu-separator">
     <li><button class="menu-item danger" type="button">Sign out</button></li>
   </menu>
 </div>
@@ -241,6 +241,36 @@ tab stop instead.
 
 The runtime owns only focus movement and `tabindex`. The application still owns
 command state and updates attributes such as `aria-checked`.
+
+### Linting `role="menu"`
+
+Biome's `a11y/noNoninteractiveElementToInteractiveRole` reports
+`<menu role="menu">`, and the fix it offers — remove the role — dismantles the
+pattern. It is a port of
+`jsx-a11y/no-noninteractive-element-to-interactive-role` that lost the source
+rule's default allowlist, and that allowlist exists to permit exactly this
+markup: the source documents `<ul role="menu">` as *valid*, matching the
+WAI-ARIA APG menu button pattern. Every ARIA composite built on a list is
+affected, not only menus — `listbox`, `tablist`, `menubar`, `tree`, `grid`.
+
+Until it is fixed upstream, turn the rule off:
+
+```json
+{
+  "linter": {
+    "rules": {
+      "a11y": { "noNoninteractiveElementToInteractiveRole": "off" }
+    }
+  }
+}
+```
+
+One line, and no `biome-ignore` comment above every menu in your markup. The
+rest of the `a11y` group stays on and is worth keeping — with just this rule
+off, the menu anatomy above lints clean.
+
+[Accessibility decisions](https://github.com/lekoala/actual-css/blob/master/docs/design-notes/accessibility-decisions.md)
+records which patterns Biome rejects, and which of its findings were right.
 
 ### Rich items and selection state
 
@@ -460,7 +490,7 @@ delay; a number sets the delay in milliseconds.
         hidden>
     <li><button class="menu-item" type="button">Open</button></li>
     <li><button class="menu-item" type="button">Rename</button></li>
-    <hr class="menu-separator" role="separator">
+    <hr class="menu-separator">
     <li><button class="menu-item danger" type="button">Delete</button></li>
   </menu>
 </div>

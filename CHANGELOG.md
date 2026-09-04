@@ -8,6 +8,11 @@
 - Settings modal composition demo: `demo/templates/settings-modal.html`.
 - `.list` rows accept any combination of leading, content and trailing regions.
 - `bun run serve`, a static server for opening demo pages from another device.
+- Flyout documents the Biome `noNoninteractiveElementToInteractiveRole` false
+  positive on `<menu role="menu">`, and recommends switching the rule off until
+  it is fixed upstream.
+- Joined controls documents the Biome `useSemanticElements` false positive on
+  `role="group"`, and the targeted suppression for it.
 
 ### Breaking
 
@@ -22,6 +27,8 @@
 
 ### Fixed
 
+- `.menu-separator` is a plain `<hr>`: the `role="separator"` the docs used to
+  show is implied by the element.
 - `--modal-size` is fallback-only, so a class on the dialog can set it.
 - `.list-item` is flex: a row with no leading region no longer puts its content
   in the leading track and its control in the flexible one.

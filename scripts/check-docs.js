@@ -23,7 +23,7 @@ const PAGES = join(ROOT, "docs", "pages");
 const NOTES = join(ROOT, "docs", "design-notes");
 const SITE = join(ROOT, "site");
 
-const FENCE_LANGUAGES = new Set(["html", "css", "js", "javascript", "sh", "text"]);
+const FENCE_LANGUAGES = new Set(["html", "css", "js", "javascript", "json", "sh", "text"]);
 const KNOWN_FENCE_FLAGS = new Set(["demo", "bare", "resize"]);
 
 /*

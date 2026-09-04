@@ -232,7 +232,7 @@
 </table></div>
 <p><code>.menu</code> has a strict <code>.menu &gt; li &gt; .menu-item</code> anatomy.
 | <code>.menu-label</code>     | Variant     | Muted section heading inside a menu; not interactive.                |
-| <code>.menu-separator</code> | Variant     | Divider between menu groups (<code>&lt;hr role=&quot;separator&quot;&gt;</code>).               |
+| <code>.menu-separator</code> | Variant     | Divider between menu groups (<code>&lt;hr&gt;</code>).                               |
 | <code>.sm</code> / <code>.lg</code>     | Variant     | Compact or large density.                                            |</p>
 <h2 id="usage">Usage</h2>
 <p>Flyout and context menu share one action-surface runtime:</p>
@@ -384,7 +384,7 @@ panel. The trigger and Escape continue to close the flyout in every mode.</p>
 <li>Flyout triggers are opt-in: add <code>data-enhance=&quot;flyout&quot;</code> to the trigger.</li>
 <li>Wrap the trigger and flyout in <code>.flyout-trigger</code> when the flyout should have a local absolute-position fallback before JavaScript positions it. Add <code>.stretch</code> when the trigger must span its container, such as the last row of a full-width sidebar nav list.</li>
 <li>Use <code>&lt;menu class=&quot;flyout menu&quot;&gt;</code> with strict anatomy: <code>.menu &gt; li &gt; .menu-item</code>. Items must carry the <code>.menu-item</code> class to participate in directional keyboard navigation. ArrowUp/Down and Home/End move focus without rewriting their normal tab stops.</li>
-<li>Use <code>.menu-label</code> on a <code>li</code> for a muted section heading inside a menu (e.g. a group title before its items). It is non-interactive and does not participate in roving focus. Use <code>.menu-separator</code> (<code>&lt;hr role=&quot;separator&quot;&gt;</code>) between groups.</li>
+<li>Use <code>.menu-label</code> on a <code>li</code> for a muted section heading inside a menu (e.g. a group title before its items). It is non-interactive and does not participate in roving focus. Use <code>.menu-separator</code> (a plain <code>&lt;hr&gt;</code>) between groups.</li>
 <li>Items are regular <code>&lt;button&gt;</code> or <code>&lt;a&gt;</code> elements.</li>
 <li>Use <code>.sm</code> or <code>.lg</code> for density changes.</li>
 <li>Add <code>role=&quot;menu&quot;</code> / <code>role=&quot;menuitem&quot;</code> only when you intentionally need the ARIA menu pattern described below.</li>
@@ -409,7 +409,7 @@ panel. The trigger and Escape continue to close the flyout in every mode.</p>
         hidden>
     <li><button class="menu-item" type="button">Profile</button></li>
     <li><button class="menu-item" type="button">Settings</button></li>
-    <hr class="menu-separator" role="separator">
+    <hr class="menu-separator">
     <li><button class="menu-item danger" type="button">Sign out</button></li>
   </menu>
 </div>
@@ -432,7 +432,7 @@ panel. The trigger and Escape continue to close the flyout in every mode.</p>
         hidden&gt;
     &lt;li&gt;&lt;button class=&quot;menu-item&quot; type=&quot;button&quot;&gt;Profile&lt;/button&gt;&lt;/li&gt;
     &lt;li&gt;&lt;button class=&quot;menu-item&quot; type=&quot;button&quot;&gt;Settings&lt;/button&gt;&lt;/li&gt;
-    &lt;hr class=&quot;menu-separator&quot; role=&quot;separator&quot;&gt;
+    &lt;hr class=&quot;menu-separator&quot;&gt;
     &lt;li&gt;&lt;button class=&quot;menu-item danger&quot; type=&quot;button&quot;&gt;Sign out&lt;/button&gt;&lt;/li&gt;
   &lt;/menu&gt;
 &lt;/div&gt;</code></pre>
@@ -448,6 +448,29 @@ part of the focus group. Plain <code>.menu</code> action lists keep every item's
 tab stop instead.</p>
 <p>The runtime owns only focus movement and <code>tabindex</code>. The application still owns
 command state and updates attributes such as <code>aria-checked</code>.</p>
+<h3 id="linting-rolemenu">Linting <code>role=&quot;menu&quot;</code></h3>
+<p>Biome's <code>a11y/noNoninteractiveElementToInteractiveRole</code> reports
+<code>&lt;menu role=&quot;menu&quot;&gt;</code>, and the fix it offers — remove the role — dismantles the
+pattern. It is a port of
+<code>jsx-a11y/no-noninteractive-element-to-interactive-role</code> that lost the source
+rule's default allowlist, and that allowlist exists to permit exactly this
+markup: the source documents <code>&lt;ul role=&quot;menu&quot;&gt;</code> as <em>valid</em>, matching the
+WAI-ARIA APG menu button pattern. Every ARIA composite built on a list is
+affected, not only menus — <code>listbox</code>, <code>tablist</code>, <code>menubar</code>, <code>tree</code>, <code>grid</code>.</p>
+<p>Until it is fixed upstream, turn the rule off:</p>
+<pre><code class="language-json">{
+  &quot;linter&quot;: {
+    &quot;rules&quot;: {
+      &quot;a11y&quot;: { &quot;noNoninteractiveElementToInteractiveRole&quot;: &quot;off&quot; }
+    }
+  }
+}
+</code></pre>
+<p>One line, and no <code>biome-ignore</code> comment above every menu in your markup. The
+rest of the <code>a11y</code> group stays on and is worth keeping — with just this rule
+off, the menu anatomy above lints clean.</p>
+<p><a href="https://github.com/lekoala/actual-css/blob/master/docs/design-notes/accessibility-decisions.md">Accessibility decisions</a>
+records which patterns Biome rejects, and which of its findings were right.</p>
 <h3 id="rich-items-and-selection-state">Rich items and selection state</h3>
 <p>Wrap rich item content in the three optional slots when a menu needs aligned
 icons or trailing metadata. Keep decorative icons hidden from assistive
@@ -757,7 +780,7 @@ delay; a number sets the delay in milliseconds.</p>
         hidden>
     <li><button class="menu-item" type="button">Open</button></li>
     <li><button class="menu-item" type="button">Rename</button></li>
-    <hr class="menu-separator" role="separator">
+    <hr class="menu-separator">
     <li><button class="menu-item danger" type="button">Delete</button></li>
   </menu>
 </div>
@@ -803,7 +826,7 @@ delay; a number sets the delay in milliseconds.</p>
         hidden&gt;
     &lt;li&gt;&lt;button class=&quot;menu-item&quot; type=&quot;button&quot;&gt;Open&lt;/button&gt;&lt;/li&gt;
     &lt;li&gt;&lt;button class=&quot;menu-item&quot; type=&quot;button&quot;&gt;Rename&lt;/button&gt;&lt;/li&gt;
-    &lt;hr class=&quot;menu-separator&quot; role=&quot;separator&quot;&gt;
+    &lt;hr class=&quot;menu-separator&quot;&gt;
     &lt;li&gt;&lt;button class=&quot;menu-item danger&quot; type=&quot;button&quot;&gt;Delete&lt;/button&gt;&lt;/li&gt;
   &lt;/menu&gt;
 &lt;/div&gt;
@@ -855,6 +878,7 @@ at runtime, not set by the author. See the JavaScript runtime documentation.</p>
         <li><a class="nav-link" href="#native-popover-lifecycle" data-docs-toc-item data-level="3">Native popover lifecycle</a></li>
         <li><a class="nav-link" href="#action-list" data-docs-toc-item data-level="2">Action list</a></li>
         <li><a class="nav-link" href="#aria-menu-pattern" data-docs-toc-item data-level="3">ARIA menu pattern</a></li>
+        <li><a class="nav-link" href="#linting-rolemenu" data-docs-toc-item data-level="3">Linting role=&amp;quot;menu&amp;quot;</a></li>
         <li><a class="nav-link" href="#rich-items-and-selection-state" data-docs-toc-item data-level="3">Rich items and selection state</a></li>
         <li><a class="nav-link" href="#nav-panel" data-docs-toc-item data-level="2">Nav panel</a></li>
         <li><a class="nav-link" href="#products-design" data-docs-toc-item data-level="3">Design</a></li>
