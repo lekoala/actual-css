@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+
+## [0.7.0] - 2026-09-04
+
 ### Added
 
 - Native Popover API presentation support for `.flyout[popover]` and
@@ -12,6 +15,8 @@
 
 - Menu checkbox and radio indicators now use the shared icon token and CSS
   shapes instead of font-dependent text glyphs.
+- Build toolchain pinned to bun 1.4.1. The bundled JavaScript differs in bytes
+  from 0.6.0 because of the newer minifier; no source or behavior changed.
 
 ### Fixed
 
