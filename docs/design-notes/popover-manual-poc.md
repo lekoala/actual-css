@@ -136,29 +136,91 @@ observing the lifecycle that owns it. If a future attempt has to modify an
 assertion about focus, dismissal, positioning or events to make the transport
 pass, it is no longer a transport swap and the claim does not hold.
 
+## Go / no-go: WebKit verification
+
+Every measurement in this note was taken on Chromium — the browser test harness
+hardcodes `backend: "chrome"`. The floor's most notable step is Safari 17, so
+the transport has no measured evidence on the engine the raise actually buys.
+This is the one open technical gate on the migration, and the only item on the
+checklist below that is not already demonstrated.
+
+A permanent WebKit matrix is disproportionate for a decision taken once. One
+manual pass on a real Safari at the chosen floor, recorded here, is enough:
+
+```text
+1. showPopover() / hidePopover() in manual mode
+2. a closed panel is genuinely invisible and unfocusable
+3. the DOM parent is unchanged before, during and after opening
+4. inherited theme, density and custom properties survive opening
+5. a surface inside <dialog open> and inside a modal dialog
+6. reopening during the exit transition
+7. a context menu at pointer coordinates
+8. the sheet scrim covers and intercepts the click
+```
+
+Record the result in this section:
+
+```text
+Verified manually on:
+  Safari __._ / macOS __
+  iOS Safari __._ / iOS __      (if reachable)
+Date: ____-__-__
+Scenarios: _/8 passed
+```
+
+Scenario 5 deserves the most attention. On Chromium the native top layer solved
+cleanly the problem that motivated `getSurfaceRoot()` in the first place — a
+modal dialog inerts the rest of the document — and that result is what makes
+the transport worth making mandatory. Scenario 2 is the second: the old
+transport used `[hidden]`, which `isElementVisible()` reads in its first
+branch, and the migration shifts the guard onto `checkVisibility()` with
+`getClientRects()` behind it. Which branch actually runs depends on what the
+bottom of the new floor implements, and the third has never been exercised.
+
+## Changelog framing for the raise
+
+State what stops working before what it buys, with versions named. Something
+along these lines:
+
+> **JavaScript browser floor raised** to Safari 17+, Firefox 125+ and
+> Chromium 116+. Interactive surfaces now use the native manual Popover
+> transport (`popover`, `showPopover()`, `hidePopover()`) instead of
+> physically reparenting author DOM. This preserves inherited themes, density
+> and application custom properties while leaving Actual's dismissal, focus
+> and positioning contracts unchanged.
+>
+> Browsers below this JavaScript floor no longer receive the supported full
+> Actual runtime. Core HTML/CSS degradation remains governed separately by the
+> Degraded tier.
+
+Not "Popover is now required": that reads as a dependency on the whole API
+family, when the requirement is the four primitives listed above.
+
 ## Migration checklist
 
 For the release that raises Minimal. Items 4–7 are scaffolding built for a floor
 that will no longer exist; a gate outliving its reason is silent dead weight, so
 they belong here rather than being found later.
 
-1. Raise Minimal to the required subset above, justified by observed adopter
-   usage rather than by platform tables.
-2. Delete the `Intermediate` tier. It is not merely less useful — with a new
+1. Pass the WebKit verification above and record it. This is the go/no-go.
+2. Raise Minimal to the required subset above. The justification is the defect
+   and the transparent migration, not a download count: npm figures conflate
+   CI, bots, caches and the author, and say nothing about the end browser.
+3. Delete the `Intermediate` tier. It is not merely less useful — with a new
    Minimal above it on all three engines it is arithmetically absorbed, so its
    features become floor-guaranteed and no information is lost.
-3. Reclassify those features (`color-mix()`, `oklch()/oklab()`, `dvh/svh/lvh`,
+4. Reclassify those features (`color-mix()`, `oklch()/oklab()`, `dvh/svh/lvh`,
    `scrollbar-gutter`, `scrollbar-width`, `scrollbar-color`) as Minimal
    baseline and drop their `check-compat` entries.
-4. Remove the `@supports selector(:popover-open)` gates in `flyout.css` and
+5. Remove the `@supports selector(:popover-open)` gates in `flyout.css` and
    `tooltip.css`.
-5. Remove the two `popover` entries from `check-compat`'s feature table.
-6. Remove the associated `compat-ok:` pragmas, and `hasPragma()` itself if
+6. Remove the two `popover` entries from `check-compat`'s feature table.
+7. Remove the associated `compat-ok:` pragmas, and `hasPragma()` itself if
    nothing else consumes it.
-7. Move `surface.js` to the manual transport, with no fallback branch.
-8. Drop `test.failing` from the reparenting tests in
+8. Move `surface.js` to the manual transport, with no fallback branch.
+9. Drop `test.failing` from the reparenting tests in
    `tests/browser/surface-inherited-context.test.js`, keeping the assertions.
-9. Update [surface-reparenting](surface-reparenting.md) from a known limitation
+10. Update [surface-reparenting](surface-reparenting.md) from a known limitation
    to resolved.
 
 Steps 8 and 9 are linked but not enforced. The `test.failing` markers guarantee
