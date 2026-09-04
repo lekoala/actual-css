@@ -15,7 +15,6 @@
  * --dialog-viewport-gap-2x
  */
 dialog.modal {
-  --modal-size: 32rem;
   --dialog-viewport-gap: var(--space-40);
   /* calc() multiplication is not in the supported browser range, so the
      doubled gap is spelled out with an additive calc. */
@@ -25,7 +24,11 @@ dialog.modal {
      provides the containing block for the absolutely positioned close button. */
   position: fixed;
 
-  max-inline-size: min(calc(100% - var(--dialog-viewport-gap-2x)), var(--modal-size));
+  /* --modal-size stays fallback-only: declaring it on dialog.modal gives it
+     type+class specificity, which a single author class cannot outrank, so the
+     public hook would silently keep this default. Same reason choice.css never
+     declares --choice-control-offset. */
+  max-inline-size: min(calc(100% - var(--dialog-viewport-gap-2x)), var(--modal-size, 32rem));
   max-block-size: calc(var(--viewport-block) - var(--dialog-viewport-gap-2x));
   border: var(--border-width) solid var(--border);
   border-radius: var(--radius-lg);

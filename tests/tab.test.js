@@ -269,3 +269,55 @@ test("initialization skips a selected tab with a missing panel", async () => {
   expect(document.getElementById("tab-b").getAttribute("aria-selected")).toBe("true");
   expect(document.getElementById("panel-b").hidden).toBe(false);
 });
+
+/* A filtered tab strip is the common case: an application hides the tabs that
+   do not match a search. A hidden tab is off screen, so it must not stay a
+   keyboard stop — the enhancement rebuilds its map from the live tablist, and
+   live is not the same as visible. */
+test("keyboard navigation skips hidden tabs", async () => {
+  await loadTabs(`
+    <div class="tabs" data-enhance="tabs" role="tablist">
+      <button id="tab-a" role="tab" aria-controls="panel-a" aria-selected="true">A</button>
+      <button id="tab-b" role="tab" aria-controls="panel-b" hidden>B</button>
+      <button id="tab-c" role="tab" aria-controls="panel-c" hidden>C</button>
+      <button id="tab-d" role="tab" aria-controls="panel-d">D</button>
+    </div>
+    <section id="panel-a" role="tabpanel">A panel</section>
+    <section id="panel-b" role="tabpanel">B panel</section>
+    <section id="panel-c" role="tabpanel">C panel</section>
+    <section id="panel-d" role="tabpanel">D panel</section>
+  `);
+  const tabA = document.getElementById("tab-a");
+  const tabD = document.getElementById("tab-d");
+
+  tabA.focus();
+  press(tabA, "ArrowRight");
+
+  // Over the two hidden tabs, not into them.
+  expect(tabD.getAttribute("aria-selected")).toBe("true");
+  expect(document.activeElement).toBe(tabD);
+  expect(document.getElementById("tab-b").getAttribute("aria-selected")).toBe("false");
+  expect(document.getElementById("tab-c").getAttribute("aria-selected")).toBe("false");
+
+  // Wrapping and End respect the same set.
+  press(tabD, "ArrowRight");
+  expect(tabA.getAttribute("aria-selected")).toBe("true");
+
+  press(tabA, "End");
+  expect(tabD.getAttribute("aria-selected")).toBe("true");
+});
+
+test("a hidden selected tab is not the one initialization picks", async () => {
+  await loadTabs(`
+    <div class="tabs" data-enhance="tabs" role="tablist">
+      <button id="tab-a" role="tab" aria-controls="panel-a" aria-selected="true" hidden>A</button>
+      <button id="tab-b" role="tab" aria-controls="panel-b">B</button>
+    </div>
+    <section id="panel-a" role="tabpanel">A panel</section>
+    <section id="panel-b" role="tabpanel">B panel</section>
+  `);
+
+  expect(document.getElementById("tab-a").getAttribute("aria-selected")).toBe("false");
+  expect(document.getElementById("tab-b").getAttribute("aria-selected")).toBe("true");
+  expect(document.getElementById("panel-b").hidden).toBe(false);
+});

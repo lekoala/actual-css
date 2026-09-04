@@ -232,6 +232,10 @@
 <li>Left/Right select tabs and wrap at the ends. Home/End jump to first/last. Down moves focus into the selected panel.</li>
 <li>A tab list needs both <code>.tabs</code> and <code>role=&quot;tablist&quot;</code>; <code>.tab</code> styles each trigger.</li>
 <li>A <code>.tab</code> with an icon uses <code>--tab-gap</code> (default <code>0.375em</code>) for the space between icon and label.</li>
+<li>A tab that is <code>hidden</code>, <code>disabled</code>, <code>aria-disabled</code>, or has no panel is skipped
+by the arrow keys. An application filtering a tab strip only has to set
+<code>hidden</code>; deciding what to show when the selected tab is filtered out is the
+application's call.</li>
 </ul>
 </div>
 <div class="docs-example">

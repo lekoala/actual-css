@@ -10,6 +10,7 @@
  *   - No file or directory named optional may exist under src/css.
  *   - Every distributed leaf appears exactly once in the actual.full.css graph.
  *   - core/print.css stays generic: no class or id selectors.
+ *   - aria-orientation is matched inside :where() everywhere.
  *
  * The analyzer is exported so tests can run it against fixture trees.
  */
@@ -175,6 +176,32 @@ export function analyzeCss(root) {
         issues.push(`${relPath(leaf)}: missing from the actual.full.css bundle`);
       } else if (count > 1) {
         issues.push(`${relPath(leaf)}: appears ${count} times in the actual.full.css bundle`);
+      }
+    }
+  }
+
+  /*
+   * aria-orientation says which axis a widget runs along, and the runtime reads
+   * it to decide which arrow keys move between items. Matched bare it also
+   * hands every rule an attribute's worth of specificity, which no author
+   * class can outrank: restyling a vertical strip then means restating the
+   * attribute just to reach the cascade, and the ARIA contract has quietly
+   * become a priority mechanism. Orientation never needs to win over a base
+   * rule — unlike a state such as [aria-selected] — so it belongs in
+   * :where(). This is the same invariant as a fallback-only hook: cheap to
+   * keep, easy for an innocent refactor to drop.
+   */
+  for (const file of files) {
+    for (const prelude of selectorPreludes(readFileSync(file, "utf8"))) {
+      for (const match of prelude.matchAll(/\[aria-orientation/g)) {
+        const before = prelude.slice(0, match.index);
+        const opened = (before.match(/:where\(/g) ?? []).length;
+        const closed = (before.match(/\)/g) ?? []).length;
+        if (opened <= closed) {
+          issues.push(
+            `${relPath(file)}: [aria-orientation] outside :where() in "${prelude}" — it would spend specificity an author class cannot outrank`,
+          );
+        }
       }
     }
   }

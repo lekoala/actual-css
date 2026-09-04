@@ -477,11 +477,40 @@ test("steps keep complete and current distinct, and current wins when both apply
   expect(rules).not.toMatch(/\.steps-(horizontal|vertical)[^{,]* > \[aria-current/);
 });
 
-test("tabs include vertical orientation styling", () => {
+test("tabs include vertical orientation styling without spending specificity on it", () => {
   const css = readCss("src/css/components/tab.css");
+  const rules = readRules("src/css/components/tab.css");
 
-  expect(css).toContain('.tabs[aria-orientation="vertical"]');
+  expect(css).toContain('.tabs:where([aria-orientation="vertical"])');
   expect(css).toContain("border-inline-end");
+
+  /* Keeping aria-orientation out of the cascade is a repo-wide invariant, so
+     check:architecture owns the negative assertion for every stylesheet.
+     What is specific to this file is that the selected indicator still carries
+     its own [aria-selected] weight, because it has to outrank the horizontal
+     indicator rule. */
+  expect(rules).toMatch(
+    /\.tabs:where\(\[aria-orientation="vertical"\]\) \.tab\[aria-selected="true"\]::after/,
+  );
+
+  /* A vertical tab is attached along its inline end, so the horizontal
+     focus-ring radius would round the wrong corners. */
+  expect(css).toMatch(
+    /\.tabs:where\(\[aria-orientation="vertical"\]\) \.tab:focus-visible \{[^}]*border-start-start-radius/,
+  );
+  expect(css).not.toContain("border-top-left-radius");
+});
+
+test("--modal-size is a fallback-only hook", () => {
+  const css = readCss("src/css/components/modal.css");
+
+  /* Declared on dialog.modal, the hook carries type+class specificity and a
+     single author class cannot set it: the public width hook would silently
+     keep its default. Fallback-only, as choice.css does for
+     --choice-control-offset, so `.my-modal { --modal-size: 58rem }` and an
+     inherited override both reach it. */
+  expect(css).not.toMatch(/^\s*--modal-size:/m);
+  expect(css).toMatch(/var\(\s*--modal-size,\s*32rem\s*\)/);
 });
 
 test("breadcrumb supports aria-current on the link or span", () => {
@@ -794,10 +823,20 @@ test("app navigation stays semantic and app-layout owns its adaptive geometry", 
   );
 });
 
-test("application lists provide three semantic slots without owning their controls", () => {
+test("application lists provide optional regions without owning their controls", () => {
   const css = readCss("src/css/components/list.css");
+  const rules = readRules("src/css/components/list.css");
 
-  expect(css).toContain("grid-template-columns: auto minmax(0, 1fr) auto;");
+  /* The row is flex, not a three-track grid. A fixed template hands an absent
+     region a track and a gap anyway: a row with no leading region put its
+     content in the leading track and gave the flexible one to the trailing
+     control, which inverts the documented "optional leading and trailing"
+     contract. tests/browser/list-item.test.js measures the four shapes. */
+  expect(rules).not.toContain("grid-template-columns");
+  expect(css).toMatch(/\.list > li > \.list-item \{[^}]*display: flex;/);
+  expect(css).toMatch(/\.list-item-content \{[^}]*flex: 1 1 0;/);
+  expect(css).toMatch(/\.list-item-trailing \{[^}]*margin-inline-start: auto;/);
+  expect(rules).not.toContain("justify-self");
   expect(css).toContain("align-items: start;");
   expect(css).toContain("min-block-size: var(--list-item-min-size);");
   expect(css).toContain("border-block-start: var(--list-divider);");

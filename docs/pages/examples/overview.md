@@ -15,6 +15,7 @@ and `actual.full.js` from `dist/`, plus the theme palettes bundle from
 - [Keyboard controls](../../demo/templates/keyboard-controls.html) - hands-on keyboard support matrix and focus test bench
 - [Surface contracts](../../demo/templates/surfaces.html) - .inverted, cascade precedence, and the intent boundary
 - [Popover transport probe](../../demo/templates/popover-transport.html) - self-scoring bench for the native popover transport go/no-go
+- [Settings modal](../../demo/templates/settings-modal.html) - two-pane preferences dialog, with the local CSS it needs audited rule by rule
 - [Dashboard](../../demo/templates/dashboard.html) - data-heavy overview page
 - [App](../../demo/templates/app.html) - application shell with sidebar
 - [Marketing](../../demo/templates/marketing.html) - landing page with typography and fluid type

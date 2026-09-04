@@ -18,6 +18,10 @@
 - Left/Right select tabs and wrap at the ends. Home/End jump to first/last. Down moves focus into the selected panel.
 - A tab list needs both `.tabs` and `role="tablist"`; `.tab` styles each trigger.
 - A `.tab` with an icon uses `--tab-gap` (default `0.375em`) for the space between icon and label.
+- A tab that is `hidden`, `disabled`, `aria-disabled`, or has no panel is skipped
+  by the arrow keys. An application filtering a tab strip only has to set
+  `hidden`; deciding what to show when the selected tab is filtered out is the
+  application's call.
 
 ```html demo
 <div class="tabs" data-enhance="tabs" role="tablist" aria-label="Settings">

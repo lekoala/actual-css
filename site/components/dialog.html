@@ -785,7 +785,9 @@ Keep the button a direct child of <code>dialog.modal</code> so the scrolling con
 (<code>&gt; form</code> or <code>&gt; .stack</code>) never competes with it.</p>
 <h2 id="css-hooks">CSS hooks</h2>
 <ul>
-<li><code>--modal-size</code> — maximum dialog width.</li>
+<li><code>--modal-size</code> — maximum dialog width. Fallback-only, so a class on the
+dialog or an inherited value both reach it. A dialog is shrink-to-fit: a
+composition that must fill this width sets <code>inline-size</code> as well.</li>
 <li><code>--dialog-viewport-gap</code> — distance kept between the dialog and the viewport edges.</li>
 <li><code>--dialog-icon-size</code> — diameter of the <code>.dialog-icon</code> circle.</li>
 <li><code>--dialog-icon-glyph-size</code> — size of the glyph centered inside <code>.dialog-icon</code>.</li>

@@ -118,6 +118,52 @@ test("a generic core/print.css passes", async () => {
   expect(issues).toEqual([]);
 });
 
+/*
+ * aria-orientation is a semantic contract the runtime reads, not a cascade
+ * weight. Matched bare it gives every orientation rule an attribute's worth of
+ * specificity that no author class can outrank, so restyling a vertical strip
+ * would mean restating the attribute just to reach it. Orientation never has to
+ * win over a base rule — unlike a state such as [aria-selected] — so this is
+ * the kind of quiet architectural property an innocent refactor drops.
+ */
+test("a bare [aria-orientation] selector is reported", async () => {
+  const files = {
+    ...base,
+    "components/button.css": '.strip[aria-orientation="vertical"] { display: grid }',
+  };
+  const issues = await fixture(files)
+    .then(analyzeCss)
+    .then((r) => r.issues);
+  expect(issues.join("\n")).toContain("[aria-orientation] outside :where()");
+});
+
+test("an [aria-orientation] selector after a closed :where() is reported", async () => {
+  const files = {
+    ...base,
+    // The :where() is already closed, so the attribute still spends its weight.
+    "components/button.css": '.strip:where(.a)[aria-orientation="vertical"] .item { color: red }',
+  };
+  const issues = await fixture(files)
+    .then(analyzeCss)
+    .then((r) => r.issues);
+  expect(issues.join("\n")).toContain("[aria-orientation] outside :where()");
+});
+
+test("[aria-orientation] inside :where() passes, and a state attribute stays free", async () => {
+  const files = {
+    ...base,
+    "components/button.css": [
+      '.strip:where([aria-orientation="vertical"]) { display: grid }',
+      // A state has to outrank the base rule it modifies, so it keeps its weight.
+      '.strip:where([aria-orientation="vertical"]) .item[aria-selected="true"] { color: red }',
+    ].join("\n"),
+  };
+  const issues = await fixture(files)
+    .then(analyzeCss)
+    .then((r) => r.issues);
+  expect(issues).toEqual([]);
+});
+
 test("an import in a leaf module is reported", async () => {
   const files = { ...base, "core/reset.css": '@import "./tokens.css";' };
   const issues = await fixture(files)

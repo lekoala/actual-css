@@ -8,6 +8,7 @@
  * Keyboard:  ArrowLeft/Right, Home/End (select tab, wrapping)
  *            ArrowUp/Down for aria-orientation="vertical"
  *            ArrowDown (focus selected panel)
+ *            [hidden], disabled and panel-less tabs are skipped
  *
  * Self-registers via registerEnhancement: injected tablists wire automatically.
  * The tab→panel map is rebuilt from the live tablist on each interaction,
@@ -47,8 +48,12 @@ function isTabDisabled(tab) {
   return tab.disabled || tab.getAttribute("aria-disabled") === "true";
 }
 
+/* A [hidden] tab is not on screen, so it must not be a keyboard stop either:
+   an application that filters a tab strip would otherwise leave the hidden
+   tabs in the arrow-key sequence, selecting a panel whose tab is invisible.
+   Rebuilding from the live tablist is not enough — live is not visible. */
 function activatableTabs(list) {
-  return tabsOf(list).filter((tab) => !isTabDisabled(tab) && panelFor(tab));
+  return tabsOf(list).filter((tab) => !tab.hidden && !isTabDisabled(tab) && panelFor(tab));
 }
 
 function makePanelFocusable(panel) {

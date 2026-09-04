@@ -4271,7 +4271,6 @@ a.badge[aria-disabled="true"] {
  * --dialog-viewport-gap-2x
  */
 dialog.modal {
-  --modal-size: 32rem;
   --dialog-viewport-gap: var(--space-40);
   /* calc() multiplication is not in the supported browser range, so the
      doubled gap is spelled out with an additive calc. */
@@ -4281,7 +4280,11 @@ dialog.modal {
      provides the containing block for the absolutely positioned close button. */
   position: fixed;
 
-  max-inline-size: min(calc(100% - var(--dialog-viewport-gap-2x)), var(--modal-size));
+  /* --modal-size stays fallback-only: declaring it on dialog.modal gives it
+     type+class specificity, which a single author class cannot outrank, so the
+     public hook would silently keep this default. Same reason choice.css never
+     declares --choice-control-offset. */
+  max-inline-size: min(calc(100% - var(--dialog-viewport-gap-2x)), var(--modal-size, 32rem));
   max-block-size: calc(var(--viewport-block) - var(--dialog-viewport-gap-2x));
   border: var(--border-width) solid var(--border);
   border-radius: var(--radius-lg);
@@ -7000,6 +7003,11 @@ a.avatar[aria-disabled="true"] {
  * and arrow-key navigation. CSS owns the tab strip appearance and
  * active indicator.
  *
+ * aria-orientation is matched inside :where() so it keeps describing which
+ * arrow keys move between tabs without also carrying cascade weight: an
+ * author class can then adjust a vertical strip without restating the
+ * attribute to reach its specificity.
+ *
  * Public hooks:
  * --tab-gap
  */
@@ -7020,7 +7028,7 @@ a.avatar[aria-disabled="true"] {
   list-style: none;
 }
 
-.tabs[aria-orientation="vertical"] {
+.tabs:where([aria-orientation="vertical"]) {
   display: grid;
   align-content: start;
   justify-items: stretch;
@@ -7046,7 +7054,7 @@ a.avatar[aria-disabled="true"] {
   cursor: pointer;
 }
 
-.tabs[aria-orientation="vertical"] .tab {
+.tabs:where([aria-orientation="vertical"]) .tab {
   justify-content: flex-start;
   padding-inline-end: var(--space-40);
 }
@@ -7060,11 +7068,23 @@ a.avatar[aria-disabled="true"] {
   color: var(--text);
 }
 
+/* The ring is square on the edge the tab is attached to, so it reads as part
+   of the strip rather than a floating chip. */
 .tab:focus-visible {
   outline: var(--focus-outline);
   outline-color: var(--focus);
   outline-offset: -2px;
   border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+}
+
+/* A vertical tab is attached along its inline end, not its block end, so the
+   horizontal geometry above would round the wrong pair of corners. Logical
+   corners keep it correct in RTL. */
+.tabs:where([aria-orientation="vertical"]) .tab:focus-visible {
+  border-start-start-radius: var(--radius-sm);
+  border-start-end-radius: 0;
+  border-end-start-radius: var(--radius-sm);
+  border-end-end-radius: 0;
 }
 
 .tab[aria-selected="true"] {
@@ -7086,7 +7106,7 @@ a.avatar[aria-disabled="true"] {
   border-block-end: 2px solid currentColor;
 }
 
-.tabs[aria-orientation="vertical"] .tab[aria-selected="true"]::after {
+.tabs:where([aria-orientation="vertical"]) .tab[aria-selected="true"]::after {
   inset-block: 0;
   inset-inline: auto 0;
   border-block-end: 0;
@@ -7182,10 +7202,17 @@ a.avatar[aria-disabled="true"] {
   margin: 0;
 }
 
+/*
+ * Flex, not a three-track grid: the leading and trailing regions are optional,
+ * and a fixed `auto minmax(0, 1fr) auto` template gives an absent region a
+ * track anyway — the content of a row with no leading region lands in the
+ * leading track and the trailing control inherits the flexible one, which is
+ * the opposite of the intent. Flex drops both the track and its gap when a
+ * region is not there, so all four shapes work off one rule.
+ */
 .list > :where(.list-item),
 .list > li > .list-item {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto;
+  display: flex;
   /* Regions align to the first line, so leading, title, and trailing controls
      share one horizontal line while supporting text wraps beneath. */
   align-items: start;
@@ -7209,7 +7236,9 @@ a.list-item:hover {
   background: var(--surface-subtle);
 }
 
+/* The content region is the one that flexes, whichever position it holds. */
 .list-item-content {
+  flex: 1 1 0;
   min-inline-size: 0;
 }
 
@@ -7225,8 +7254,11 @@ a.list-item:hover {
   overflow-wrap: anywhere;
 }
 
+/* The auto margin keeps the trailing region at the row's end even in a row
+   with no content region to absorb the free space. */
 .list-item-trailing {
-  justify-self: end;
+  flex: none;
+  margin-inline-start: auto;
   min-inline-size: 0;
 }
 

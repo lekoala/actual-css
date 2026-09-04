@@ -5,6 +5,11 @@
  * and arrow-key navigation. CSS owns the tab strip appearance and
  * active indicator.
  *
+ * aria-orientation is matched inside :where() so it keeps describing which
+ * arrow keys move between tabs without also carrying cascade weight: an
+ * author class can then adjust a vertical strip without restating the
+ * attribute to reach its specificity.
+ *
  * Public hooks:
  * --tab-gap
  */
@@ -25,7 +30,7 @@
   list-style: none;
 }
 
-.tabs[aria-orientation="vertical"] {
+.tabs:where([aria-orientation="vertical"]) {
   display: grid;
   align-content: start;
   justify-items: stretch;
@@ -51,7 +56,7 @@
   cursor: pointer;
 }
 
-.tabs[aria-orientation="vertical"] .tab {
+.tabs:where([aria-orientation="vertical"]) .tab {
   justify-content: flex-start;
   padding-inline-end: var(--space-40);
 }
@@ -65,11 +70,23 @@
   color: var(--text);
 }
 
+/* The ring is square on the edge the tab is attached to, so it reads as part
+   of the strip rather than a floating chip. */
 .tab:focus-visible {
   outline: var(--focus-outline);
   outline-color: var(--focus);
   outline-offset: -2px;
   border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+}
+
+/* A vertical tab is attached along its inline end, not its block end, so the
+   horizontal geometry above would round the wrong pair of corners. Logical
+   corners keep it correct in RTL. */
+.tabs:where([aria-orientation="vertical"]) .tab:focus-visible {
+  border-start-start-radius: var(--radius-sm);
+  border-start-end-radius: 0;
+  border-end-start-radius: var(--radius-sm);
+  border-end-end-radius: 0;
 }
 
 .tab[aria-selected="true"] {
@@ -91,7 +108,7 @@
   border-block-end: 2px solid currentColor;
 }
 
-.tabs[aria-orientation="vertical"] .tab[aria-selected="true"]::after {
+.tabs:where([aria-orientation="vertical"]) .tab[aria-selected="true"]::after {
   inset-block: 0;
   inset-inline: auto 0;
   border-block-end: 0;

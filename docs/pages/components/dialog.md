@@ -362,7 +362,9 @@ Keep the button a direct child of `dialog.modal` so the scrolling content
 
 ## CSS hooks
 
-- `--modal-size` — maximum dialog width.
+- `--modal-size` — maximum dialog width. Fallback-only, so a class on the
+  dialog or an inherited value both reach it. A dialog is shrink-to-fit: a
+  composition that must fill this width sets `inline-size` as well.
 - `--dialog-viewport-gap` — distance kept between the dialog and the viewport edges.
 - `--dialog-icon-size` — diameter of the `.dialog-icon` circle.
 - `--dialog-icon-glyph-size` — size of the glyph centered inside `.dialog-icon`.

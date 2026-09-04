@@ -262,9 +262,14 @@ list markers when order or bullets carry meaning.</p>
 </div>
 <div class="prose docs-prose">
 <p>Leading and trailing content are unconstrained: avatars, native choices,
-badges, text, switches, and buttons retain their own component sizing. The
-middle region has no minimum content floor, so supporting text and long tokens
-wrap instead of widening the page.</p>
+badges, text, switches, and buttons retain their own component sizing.
+<code>.list-item-content</code> has no minimum content floor, so supporting text and long
+tokens wrap instead of widening the page.</p>
+<p>Both outer regions are optional, and an absent one costs neither space nor a
+gap: <code>.list-item-content</code> always takes the row's free space and
+<code>.list-item-trailing</code> always sits on the end edge, whether the row has a
+leading region or not. A settings row — a label, a description, and one
+control on the end edge — is the two-region form.</p>
 <p>Regions align to the row's first line: the leading check or avatar, the title,
 and the trailing metadata or control sit on one horizontal line while
 supporting text wraps beneath — a structured row, not a centered button. For a
@@ -273,6 +278,56 @@ the app composes the alignment itself rather than switching this default.
 A pure traversal affordance such as a trailing caret can opt out of the
 first-line rule on its own item with <code>align-self: center</code>, keeping metadata
 rows unaffected.</p>
+</div>
+<div class="docs-example">
+  <div class="docs-preview">
+<ul class="list">
+  <li class="list-item">
+    <label class="list-item-content" for="row-memory">
+      <span class="list-item-title">Memory</span>
+      <span class="list-item-text">Remember details across conversations.</span>
+    </label>
+    <span class="list-item-trailing">
+      <input class="switch" type="checkbox" role="switch" id="row-memory" checked>
+    </span>
+  </li>
+  <li class="list-item">
+    <label class="list-item-content list-item-title" for="row-theme">Theme</label>
+    <span class="list-item-trailing">
+      <select class="select sm fit" id="row-theme">
+        <option>System</option>
+        <option>Light</option>
+        <option>Dark</option>
+      </select>
+    </span>
+  </li>
+</ul>
+  </div>
+  <div class="docs-code">
+    <pre><code class="language-html">&lt;ul class=&quot;list&quot;&gt;
+  &lt;li class=&quot;list-item&quot;&gt;
+    &lt;label class=&quot;list-item-content&quot; for=&quot;row-memory&quot;&gt;
+      &lt;span class=&quot;list-item-title&quot;&gt;Memory&lt;/span&gt;
+      &lt;span class=&quot;list-item-text&quot;&gt;Remember details across conversations.&lt;/span&gt;
+    &lt;/label&gt;
+    &lt;span class=&quot;list-item-trailing&quot;&gt;
+      &lt;input class=&quot;switch&quot; type=&quot;checkbox&quot; role=&quot;switch&quot; id=&quot;row-memory&quot; checked&gt;
+    &lt;/span&gt;
+  &lt;/li&gt;
+  &lt;li class=&quot;list-item&quot;&gt;
+    &lt;label class=&quot;list-item-content list-item-title&quot; for=&quot;row-theme&quot;&gt;Theme&lt;/label&gt;
+    &lt;span class=&quot;list-item-trailing&quot;&gt;
+      &lt;select class=&quot;select sm fit&quot; id=&quot;row-theme&quot;&gt;
+        &lt;option&gt;System&lt;/option&gt;
+        &lt;option&gt;Light&lt;/option&gt;
+        &lt;option&gt;Dark&lt;/option&gt;
+      &lt;/select&gt;
+    &lt;/span&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;</code></pre>
+  </div>
+</div>
+<div class="prose docs-prose">
 <p>For a navigable row, keep the list semantics and put <code>.list-item</code> on the link:</p>
 </div>
 <div class="docs-example">
@@ -312,7 +367,7 @@ a button or native control for actions.</p>
 <ul>
 <li><code>--list-item-min-size</code> controls the row's minimum touch height.</li>
 <li><code>--list-item-pad-block</code> and <code>--list-item-pad-inline</code> control row padding.</li>
-<li><code>--list-item-gap</code> controls spacing between the three regions.</li>
+<li><code>--list-item-gap</code> controls spacing between the regions a row actually has.</li>
 <li><code>--list-divider</code> controls the leading and inter-row dividers. The final row
 deliberately has no trailing divider.</li>
 </ul>

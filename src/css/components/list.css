@@ -29,10 +29,17 @@
   margin: 0;
 }
 
+/*
+ * Flex, not a three-track grid: the leading and trailing regions are optional,
+ * and a fixed `auto minmax(0, 1fr) auto` template gives an absent region a
+ * track anyway — the content of a row with no leading region lands in the
+ * leading track and the trailing control inherits the flexible one, which is
+ * the opposite of the intent. Flex drops both the track and its gap when a
+ * region is not there, so all four shapes work off one rule.
+ */
 .list > :where(.list-item),
 .list > li > .list-item {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto;
+  display: flex;
   /* Regions align to the first line, so leading, title, and trailing controls
      share one horizontal line while supporting text wraps beneath. */
   align-items: start;
@@ -56,7 +63,9 @@ a.list-item:hover {
   background: var(--surface-subtle);
 }
 
+/* The content region is the one that flexes, whichever position it holds. */
 .list-item-content {
+  flex: 1 1 0;
   min-inline-size: 0;
 }
 
@@ -72,8 +81,11 @@ a.list-item:hover {
   overflow-wrap: anywhere;
 }
 
+/* The auto margin keeps the trailing region at the row's end even in a row
+   with no content region to absorb the free space. */
 .list-item-trailing {
-  justify-self: end;
+  flex: none;
+  margin-inline-start: auto;
   min-inline-size: 0;
 }
 
