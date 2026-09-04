@@ -1,0 +1,1400 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Popover transport probe — Actual CSS</title>
+  <meta name="description" content="Manual verification bench for the native popover transport: the required platform subset and the eight go/no-go scenarios, self-scoring.">
+  <link rel="stylesheet" href="../../dist/actual.full.css">
+  <style>
+    .probe-page {
+      --center-size: 72rem;
+
+      padding-block: var(--space-60);
+    }
+
+    /* minmax(0, 1fr), not the default auto track: an auto track is floored by
+       its widest item's min-content, which for the `white-space: pre` report
+       textarea is its longest line. Defensive — this page is read on devices
+       its author cannot open. */
+    .probe-intro,
+    .probe-section {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--space-30);
+    }
+
+    .probe-section {
+      padding-block: var(--space-60);
+      border-block-start: var(--border-width) solid var(--border);
+    }
+
+    .probe-section > :is(h2, p) {
+      margin: 0;
+    }
+
+    .probe-bar {
+      position: sticky;
+      inset-block-start: 0;
+      z-index: 2;
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-30);
+      align-items: center;
+      justify-content: space-between;
+      padding: var(--space-30);
+      border: var(--border-width) solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface-raised);
+      box-shadow: var(--shadow);
+    }
+
+    .probe-score {
+      margin: 0;
+      font-size: var(--font-size-lg);
+      font-weight: 600;
+    }
+
+    .probe-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 24rem), 1fr));
+      gap: var(--gap);
+      align-items: start;
+    }
+
+    .probe-case {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--space-30);
+      padding: var(--space-40);
+      border: var(--border-width) solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+    }
+
+    .probe-case > :is(h3, p) {
+      margin: 0;
+    }
+
+    .probe-case[data-verdict="pass"] {
+      border-color: var(--success);
+    }
+
+    .probe-case[data-verdict="fail"] {
+      border-color: var(--danger);
+    }
+
+    .probe-head {
+      display: flex;
+      gap: var(--space-30);
+      align-items: baseline;
+      justify-content: space-between;
+    }
+
+    .probe-head h3 {
+      margin: 0;
+    }
+
+    .probe-why {
+      color: var(--text-muted);
+    }
+
+    .probe-checks {
+      display: grid;
+      gap: var(--space-10);
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      font-family: var(--font-mono);
+      font-size: var(--font-size-sm);
+    }
+
+    .probe-checks li {
+      display: flex;
+      gap: var(--space-20);
+      align-items: baseline;
+    }
+
+    .probe-checks li::before {
+      flex: none;
+      inline-size: 1.25em;
+      content: "·";
+      color: var(--text-muted);
+    }
+
+    .probe-checks li[data-ok="true"]::before {
+      content: "✓";
+      color: var(--success);
+    }
+
+    .probe-checks li[data-ok="false"]::before {
+      content: "✕";
+      color: var(--danger);
+    }
+
+    .probe-detail {
+      color: var(--text-muted);
+    }
+
+    .probe-report {
+      inline-size: 100%;
+      min-block-size: 20rem;
+      min-inline-size: 0;
+      max-inline-size: 100%;
+      font-family: var(--font-mono);
+      font-size: var(--font-size-sm);
+      white-space: pre;
+    }
+
+    /* Flex items floor at their min-content width, and a form control with an
+       intrinsic `size` carries that floor into its row. The field flexes
+       instead of imposing a character count. */
+    .probe-page .field {
+      flex: 1 1 12rem;
+      min-inline-size: 0;
+    }
+
+    /* iOS zooms the page when a field under 16px takes focus, and page zoom
+       clips content exactly like an overflow while leaving every layout metric
+       intact. Not worth risking on a page read for its measurements. */
+    .probe-page :is(.input, .probe-report) {
+      font-size: 16px;
+    }
+
+    /* The context-menu target needs a surface a pointer can reach with both a
+       mouse (right click) and a touch screen (long press). */
+    .probe-target {
+      display: grid;
+      place-items: center;
+      min-block-size: 6rem;
+      padding: var(--space-40);
+      border: 2px dashed var(--text-muted);
+      border-radius: var(--radius);
+      background: var(--surface-raised);
+      font-weight: 600;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+
+    /*
+     * Probe panels deliberately avoid .flyout and .tooltip: Actual scopes its
+     * [popover] rules to those classes so bare popovers keep platform
+     * behavior, and this page measures the platform. Fixed placement with an
+     * explicit margin gives every hit test a deterministic point, overriding
+     * the UA's centering margin for a top-layer element.
+     *
+     * Do not give this rule a `display`. The UA closes a popover with
+     * display: none from its own sheet, where any author display wins by
+     * specificity and leaves a closed panel painted — the trap flyout.css
+     * answers with an explicit :not(:popover-open) reset. Repairing it the
+     * same way here would make scenario 2 measure this stylesheet instead of
+     * the platform, so the panel declares no display at all and its children
+     * carry the layout.
+     */
+    .probe-panel {
+      position: fixed;
+      inset: 4rem auto auto 4rem;
+      inline-size: 14rem;
+      margin: 0;
+      padding: var(--space-30);
+      border: var(--border-width) solid var(--border);
+      border-radius: var(--radius);
+      background: var(--probe-surface, var(--surface-raised));
+      color: var(--text);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .probe-panel > :is(strong, span) {
+      display: block;
+    }
+
+    .probe-panel > * + * {
+      margin-block-start: var(--space-20);
+    }
+
+    /* The three inherited scopes mirror
+       tests/browser/surface-inherited-context.html one for one, so a verdict
+       here maps onto a named test there. */
+    #s4-theme {
+      --probe-surface: rgb(1, 2, 3);
+    }
+
+    #s4-theme-panel {
+      color: rgb(255, 255, 255);
+    }
+
+    #s4-density {
+      --control-size: 2rem;
+    }
+
+    #s4-app {
+      --app-accent: rgb(1, 2, 3);
+    }
+
+    /*
+     * Exit transition for scenario 6, entirely inside the enhancement tier and
+     * gated as such. Ungated, the opacity: 0 base would survive on an engine
+     * that drops the :popover-open rule and leave the panel permanently
+     * transparent — a missing enhancement would read as a failed scenario.
+     */
+    @supports selector(:popover-open) {
+      #s6-panel {
+        opacity: 0;
+        transition: opacity 300ms linear, overlay 300ms allow-discrete, display 300ms allow-discrete;
+      }
+
+      #s6-panel:popover-open {
+        opacity: 1;
+      }
+
+      @starting-style {
+        #s6-panel:popover-open {
+          opacity: 0;
+        }
+      }
+    }
+
+    /* Scenario 8 asks the platform for an author override the UA refuses.
+       Written as !important on purpose: a UA !important outranks it, and the
+       computed value is the measurement. */
+    #s8-panel {
+      --probe-backdrop-fill: rgb(9, 8, 7);
+    }
+
+    #s8-panel::backdrop {
+      pointer-events: auto !important;
+      background: rgb(0 0 0 / 35%);
+    }
+
+    /* Reproduces where surface.js puts its runtime scrim: a plain element at
+       the document root, under the top layer and over the page. */
+    .probe-scrim {
+      position: fixed;
+      z-index: 40;
+      display: grid;
+      place-items: center;
+      padding: var(--space-40);
+      background: rgb(0 0 0 / 45%);
+      color: rgb(255, 255, 255);
+      font-weight: 600;
+      text-align: center;
+      inset: 0;
+    }
+
+    .probe-victim {
+      position: fixed;
+      inset-block-end: 2rem;
+      inset-inline-end: 2rem;
+    }
+
+    .probe-dialog[open] {
+      display: grid;
+      gap: var(--space-30);
+      padding: var(--space-40);
+    }
+
+    /* The non-modal dialog stays in its own card. A UA dialog is absolutely
+       positioned and otherwise floats over the neighbouring scenario. Scoped to
+       this one: the modal needs its UA placement once it is in the top layer,
+       and what scenario 5 measures is the panel's promotion out of the dialog,
+       not where the dialog itself sits. */
+    #s5-open[open] {
+      position: static;
+    }
+
+    /* The tier reads as its own column on a wide screen and as a second line
+       under the capability on a phone. Three columns give the subset table a
+       370px min-content width, which .table-wrap then makes scroll sideways —
+       correct behavior, but the wrong reading experience for the table that
+       carries the go/no-go. */
+    .probe-tier-inline {
+      display: none;
+    }
+
+    @media (max-width: 40rem) {
+      .probe-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .probe-panel {
+        inline-size: 11rem;
+      }
+
+      .probe-tier-inline {
+        display: block;
+        color: var(--text-muted);
+        font-size: var(--font-size-sm);
+        font-weight: 400;
+      }
+
+      .probe-page .table :is(th, td):nth-child(2) {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="center probe-page">
+    <header class="probe-intro">
+      <p class="overline">Go / no-go bench</p>
+      <h1>Popover transport probe</h1>
+      <p class="lead">
+        The eight scenarios that gate replacing surface reparenting with the
+        native manual Popover transport, scored by the page itself. Open it on
+        the browser at the bottom of the proposed floor, press
+        <strong>Run all</strong>, complete the two scenarios that need a real
+        gesture, then copy the report into the design note.
+      </p>
+      <div class="alert primary callout">
+        <strong>This page loads no Actual JavaScript.</strong>
+        <p>
+          It measures the platform subset the transport needs, so it answers the
+          same on <code>master</code> and on
+          <code>poc/popover-manual-surfaces</code>. Probe panels avoid
+          <code>.flyout</code> and <code>.tooltip</code>, whose
+          <code>[popover]</code> rules would replace the platform behavior being
+          measured. Scenario 4 mirrors
+          <code>tests/browser/surface-inherited-context.test.js</code>.
+          Background: <code>docs/design-notes/popover-manual-poc.md</code>.
+        </p>
+      </div>
+    </header>
+
+    <div class="probe-bar">
+      <div class="cluster">
+        <button class="btn primary" type="button" id="run-all">Run all</button>
+        <button class="btn outline" type="button" id="reset-all">Reset</button>
+      </div>
+      <p class="probe-score"><output id="score">0/8</output> scenarios passed</p>
+    </div>
+
+    <section class="probe-section" aria-labelledby="engine-title">
+      <h2 id="engine-title">Engine</h2>
+      <p class="probe-why">
+        Record this verbatim. A scenario score without the engine it was taken
+        on proves nothing about a floor.
+      </p>
+      <ul class="probe-checks" id="engine-facts"></ul>
+    </section>
+
+    <section class="probe-section" aria-labelledby="subset-title">
+      <h2 id="subset-title">Required subset</h2>
+      <p>
+        Two contracts that fail differently. The JavaScript primitives gate the
+        runtime — without them the transport cannot work at all. The CSS
+        features are <code>@supports</code>-gated enhancements: without them the
+        exit is instant and correct.
+      </p>
+      <div class="table-wrap">
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">Capability</th>
+              <th scope="col">Tier</th>
+              <th scope="col">Present</th>
+            </tr>
+          </thead>
+          <tbody id="subset-rows"></tbody>
+        </table>
+      </div>
+      <p class="probe-why">
+        <code>checkVisibility()</code> is listed because the migration shifts
+        the closed-state guard onto it, with <code>getClientRects()</code>
+        behind it. Which branch runs at the bottom of the floor is exactly what
+        has never been exercised — an absent row here is information, not a
+        failure.
+      </p>
+    </section>
+
+    <section class="probe-section" aria-labelledby="scenarios-title">
+      <h2 id="scenarios-title">Scenarios</h2>
+
+      <div class="probe-grid">
+        <article class="probe-case" data-scenario="1">
+          <div class="probe-head">
+            <h3>1 · Manual mode round trip</h3>
+            <span class="badge sm" data-badge>idle</span>
+          </div>
+          <p class="probe-why">
+            <code>showPopover()</code> and <code>hidePopover()</code> on
+            <code>popover="manual"</code>, twice, with the closed state settling
+            back each time.
+          </p>
+          <div class="cluster">
+            <button class="btn sm outline" type="button" data-run="1">Run</button>
+          </div>
+          <ul class="probe-checks" data-checks></ul>
+          <div class="probe-panel" id="s1-panel" popover="manual">
+            <strong>Panel 1</strong>
+            <span>Round trip</span>
+          </div>
+        </article>
+
+        <article class="probe-case" data-scenario="2">
+          <div class="probe-head">
+            <h3>2 · Closed means invisible</h3>
+            <span class="badge sm" data-badge>idle</span>
+          </div>
+          <p class="probe-why">
+            A closed panel must render nothing and take no focus. The old
+            transport used <code>[hidden]</code>; the new one relies on the UA's
+            closed-state <code>display: none</code>, and nothing has ever
+            checked that on this engine.
+          </p>
+          <div class="cluster">
+            <button class="btn sm outline" type="button" data-run="2">Run</button>
+          </div>
+          <ul class="probe-checks" data-checks></ul>
+          <div class="probe-panel" id="s2-panel" popover="manual">
+            <strong>Panel 2</strong>
+            <button class="btn sm" type="button" id="s2-bait">Should be unreachable</button>
+          </div>
+        </article>
+
+        <article class="probe-case" data-scenario="3">
+          <div class="probe-head">
+            <h3>3 · The DOM parent never changes</h3>
+            <span class="badge sm" data-badge>idle</span>
+          </div>
+          <p class="probe-why">
+            The defect in one line: the old transport moved the panel in order
+            to open it. Identity of <code>parentElement</code> is compared
+            before, during and after — the node itself, not its id.
+          </p>
+          <div class="cluster">
+            <button class="btn sm outline" type="button" data-run="3">Run</button>
+          </div>
+          <ul class="probe-checks" data-checks></ul>
+          <div id="s3-host">
+            <div class="probe-panel" id="s3-panel" popover="manual">
+              <strong>Panel 3</strong>
+              <span>Stays home</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="probe-case" data-scenario="4">
+          <div class="probe-head">
+            <h3>4 · Inherited context survives opening</h3>
+            <span class="badge sm" data-badge>idle</span>
+          </div>
+          <p class="probe-why">
+            Theme island, density scope, application custom property. Each panel
+            is read closed, then open; a difference is the defect. These are the
+            three <code>test.failing</code> assertions.
+          </p>
+          <div class="cluster">
+            <button class="btn sm outline" type="button" data-run="4">Run</button>
+          </div>
+          <ul class="probe-checks" data-checks></ul>
+          <div id="s4-theme">
+            <div class="probe-panel" id="s4-theme-panel" popover="manual">
+              <strong>Theme island</strong>
+            </div>
+          </div>
+          <div id="s4-density">
+            <div class="probe-panel" id="s4-density-panel" popover="manual">
+              <strong>Density scope</strong>
+            </div>
+          </div>
+          <div id="s4-app">
+            <div class="probe-panel" id="s4-app-panel" popover="manual">
+              <strong>App scope</strong>
+            </div>
+          </div>
+        </article>
+
+        <article class="probe-case" data-scenario="5">
+          <div class="probe-head">
+            <h3>5 · Inside a dialog, modal included</h3>
+            <span class="badge sm" data-badge>idle</span>
+          </div>
+          <p class="probe-why">
+            The scenario that decides the migration. A modal dialog inerts the
+            rest of the document — the reason the old transport moved panels
+            into the dialog. The panel must win the hit test, stay in the dialog
+            subtree, and take focus.
+          </p>
+          <div class="cluster">
+            <button class="btn sm outline" type="button" data-run="5">Run</button>
+          </div>
+          <ul class="probe-checks" data-checks></ul>
+          <dialog class="probe-dialog" id="s5-open" open>
+            <strong>Non-modal dialog</strong>
+            <div class="probe-panel" id="s5-open-panel" popover="manual">
+              <strong>Panel 5a</strong>
+              <button class="btn sm" type="button">Focusable</button>
+            </div>
+          </dialog>
+          <dialog class="modal probe-dialog" id="s5-modal">
+            <strong>Modal dialog</strong>
+            <p>Opened and closed by the scenario.</p>
+            <div class="probe-panel" id="s5-modal-panel" popover="manual">
+              <strong>Panel 5b</strong>
+              <button class="btn sm" type="button" id="s5-modal-bait">Focusable</button>
+            </div>
+          </dialog>
+        </article>
+
+        <article class="probe-case" data-scenario="6">
+          <div class="probe-head">
+            <h3>6 · Reopening during the exit</h3>
+            <span class="badge sm" data-badge>idle</span>
+          </div>
+          <p class="probe-why">
+            Hide, wait a third of the exit, show again. The panel must end open
+            and painted — a stuck discrete <code>display</code> transition would
+            leave it invisible while reporting open.
+          </p>
+          <div class="cluster">
+            <button class="btn sm outline" type="button" data-run="6">Run</button>
+          </div>
+          <ul class="probe-checks" data-checks></ul>
+          <div class="probe-panel" id="s6-panel" popover="manual">
+            <strong>Panel 6</strong>
+            <span>Interrupted exit</span>
+          </div>
+        </article>
+
+        <article class="probe-case" data-scenario="7">
+          <div class="probe-head">
+            <h3>7 · Placed at pointer coordinates</h3>
+            <span class="badge sm" data-badge>idle</span>
+          </div>
+          <p class="probe-why">
+            Needs a real gesture: right-click the target, or long-press it on a
+            touch screen. The panel must land at the reported point. The
+            fallback places it at a synthetic point, which exercises top-layer
+            placement but not the <code>contextmenu</code> event.
+          </p>
+          <div class="probe-target" id="s7-target" tabindex="0">Right-click or long-press here</div>
+          <div class="cluster">
+            <button class="btn sm outline" type="button" data-run="7">Fallback: synthetic point</button>
+          </div>
+          <ul class="probe-checks" data-checks></ul>
+          <div class="probe-panel" id="s7-panel" popover="manual">
+            <strong>Panel 7</strong>
+            <span>At the pointer</span>
+          </div>
+        </article>
+
+        <article class="probe-case" data-scenario="8">
+          <div class="probe-head">
+            <h3>8 · The scrim absorbs the pointer</h3>
+            <span class="badge sm" data-badge>idle</span>
+          </div>
+          <p class="probe-why">
+            Reproduces the <code>::backdrop</code> refutation. The native
+            backdrop is painted, but the UA forces
+            <code>pointer-events: none</code> on it, so it cannot absorb a
+            click; an Actual scrim element can. The run ends with a five-second
+            window — click the dimmed area with a real pointer to confirm.
+          </p>
+          <div class="cluster">
+            <button class="btn sm outline" type="button" data-run="8">Run</button>
+          </div>
+          <ul class="probe-checks" data-checks></ul>
+          <div class="probe-panel" id="s8-panel" popover="manual">
+            <strong>Panel 8</strong>
+            <span>Sheet-style</span>
+          </div>
+          <button class="btn sm danger probe-victim" type="button" id="s8-victim" hidden>Must not be clickable</button>
+        </article>
+      </div>
+    </section>
+
+    <section class="probe-section" aria-labelledby="report-title">
+      <h2 id="report-title">Report</h2>
+      <p>
+        Paste this under <em>Go / no-go: WebKit verification</em> in
+        <code>docs/design-notes/popover-manual-poc.md</code>. Correct the engine
+        line by hand if the user-agent string lied about it — a browser stack
+        profile often does.
+      </p>
+      <div class="cluster">
+        <label class="field">
+          <span class="label">Engine and OS</span>
+          <input class="input" id="engine-line">
+        </label>
+        <button class="btn" type="button" id="copy-report">Copy report</button>
+        <output class="probe-detail" id="copy-status"></output>
+      </div>
+      <textarea class="input probe-report" id="report" readonly></textarea>
+    </section>
+  </main>
+
+  <script>
+    const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+    const frame = () =>
+      new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+
+    const byId = (id) => document.getElementById(id);
+    const caseFor = (id) => document.querySelector(`[data-scenario="${id}"]`);
+
+    /*
+     * :popover-open is measured but never decides a verdict. A partially
+     * implemented selector engine answers false rather than throwing, which is
+     * a silent wrong answer — the same finding that took the pseudo-class out
+     * of isSurfaceOpen(). Geometry is the oracle here.
+     */
+    function pseudoOpen(panel) {
+      try {
+        return panel.matches(":popover-open");
+      } catch {
+        return null;
+      }
+    }
+
+    function painted(panel) {
+      return panel.getClientRects().length > 0 && getComputedStyle(panel).display !== "none";
+    }
+
+    function centerOf(element) {
+      const rect = element.getBoundingClientRect();
+      return {
+        x: Math.round(rect.left + rect.width / 2),
+        y: Math.round(rect.top + rect.height / 2),
+      };
+    }
+
+    function within(element, node) {
+      return node === element || element.contains(node);
+    }
+
+    async function show(panel) {
+      panel.showPopover();
+      await frame();
+    }
+
+    async function hide(panel) {
+      if (typeof panel.hidePopover === "function") panel.hidePopover();
+      await frame();
+    }
+
+    const TITLES = {
+      1: "manual showPopover/hidePopover round trip",
+      2: "closed panel is invisible and unfocusable",
+      3: "DOM parent unchanged across opening",
+      4: "inherited theme, density and custom property survive",
+      5: "surface inside a dialog, modal included",
+      6: "reopening during the exit transition",
+      7: "placed at pointer coordinates",
+      8: "the scrim covers and intercepts the pointer",
+    };
+
+    const state = new Map();
+
+    function setBadge(id, text, intent) {
+      const badge = caseFor(id).querySelector("[data-badge]");
+      badge.textContent = text;
+      badge.className = intent ? `badge sm ${intent}` : "badge sm";
+    }
+
+    function render(id, checks) {
+      const decisive = checks.filter((check) => !check.info);
+      const verdict = decisive.length > 0 && decisive.every((check) => check.ok === true)
+        ? "pass"
+        : "fail";
+      state.set(id, { verdict, checks });
+
+      const card = caseFor(id);
+      card.dataset.verdict = verdict;
+      setBadge(id, verdict, verdict === "pass" ? "success" : "danger");
+
+      const list = card.querySelector("[data-checks]");
+      list.replaceChildren();
+      for (const check of checks) {
+        const item = document.createElement("li");
+        if (!check.info) item.dataset.ok = String(check.ok === true);
+        const label = document.createElement("span");
+        label.textContent = check.detail ? `${check.label} — ${check.detail}` : check.label;
+        if (check.info) label.className = "probe-detail";
+        item.append(label);
+        list.append(item);
+      }
+
+      updateScore();
+    }
+
+    function updateScore() {
+      const passed = [...state.values()].filter((entry) => entry.verdict === "pass").length;
+      byId("score").value = `${passed}/8`;
+      writeReport();
+    }
+
+    /* ---- the required subset -------------------------------------------- */
+
+    function supportsStartingStyle() {
+      const style = document.createElement("style");
+      style.textContent = "@starting-style { .probe-starting-style { opacity: 0 } }";
+      document.head.append(style);
+      const ok = style.sheet.cssRules.length > 0;
+      style.remove();
+      return ok;
+    }
+
+    function closedStateIsDisplayNone() {
+      const probe = document.createElement("div");
+      probe.setAttribute("popover", "manual");
+      document.body.append(probe);
+      const none = getComputedStyle(probe).display === "none";
+      probe.remove();
+      return none;
+    }
+
+    function reflectsManual() {
+      const probe = document.createElement("div");
+      probe.setAttribute("popover", "manual");
+      return probe.popover === "manual";
+    }
+
+    function readSubset() {
+      /* The Popover methods live on HTMLElement, checkVisibility() on Element.
+         Probing the wrong prototype reports a missing primitive on an engine
+         that implements it — a false no-go. */
+      const html = HTMLElement.prototype;
+      const gates = "JS — gates the runtime";
+      const enhancement = "CSS — enhancement";
+      return [
+        { name: 'popover="manual" reflected', tier: gates, ok: reflectsManual() },
+        { name: "showPopover()", tier: gates, ok: typeof html.showPopover === "function" },
+        { name: "hidePopover()", tier: gates, ok: typeof html.hidePopover === "function" },
+        { name: "closed state is display: none", tier: gates, ok: closedStateIsDisplayNone() },
+        {
+          name: "checkVisibility()",
+          tier: "JS — chooses a branch",
+          ok: typeof Element.prototype.checkVisibility === "function",
+        },
+        {
+          name: "selector(:popover-open)",
+          tier: enhancement,
+          ok: CSS.supports("selector(:popover-open)"),
+        },
+        { name: "overlay", tier: enhancement, ok: CSS.supports("overlay", "auto") },
+        {
+          name: "transition-behavior: allow-discrete",
+          tier: enhancement,
+          ok: CSS.supports("transition-behavior", "allow-discrete"),
+        },
+        { name: "@starting-style", tier: enhancement, ok: supportsStartingStyle() },
+      ];
+    }
+
+    let subset = [];
+
+    function renderSubset() {
+      subset = readSubset();
+      const rows = byId("subset-rows");
+      rows.replaceChildren();
+      for (const entry of subset) {
+        const row = document.createElement("tr");
+        const name = document.createElement("th");
+        name.scope = "row";
+        name.append(entry.name);
+        /* The tier follows the capability on a phone, where its own column is
+           hidden. Without this the narrow layout would drop the distinction
+           between what gates the runtime and what merely degrades. */
+        const inlineTier = document.createElement("span");
+        inlineTier.className = "probe-tier-inline";
+        inlineTier.textContent = entry.tier;
+        name.append(inlineTier);
+        const tier = document.createElement("td");
+        tier.textContent = entry.tier;
+        const present = document.createElement("td");
+        const badge = document.createElement("span");
+        badge.className = `badge sm ${entry.ok ? "success" : "warning"}`;
+        badge.textContent = entry.ok ? "yes" : "no";
+        present.append(badge);
+        row.append(name, tier, present);
+        rows.append(row);
+      }
+    }
+
+    /* ---- engine ---------------------------------------------------------- */
+
+    function describeEngine() {
+      const ua = navigator.userAgent;
+      const clean = (value) => value.replaceAll("_", ".");
+      const safari = ua.match(/Version\/(\d+(?:\.\d+)?)/);
+      const macos = ua.match(/Mac OS X (\d+[\d_]*)/);
+      const ios = ua.match(/OS (\d+[\d_]*) like Mac OS X/);
+
+      if (safari && ios) return `iOS Safari ${safari[1]} / iOS ${clean(ios[1])}`;
+      /* Safari has reported a frozen 10_15_7 for macOS since 2020, so the UA
+         cannot name the host version. Ask for it rather than assert it: this
+         line gets pasted into a design note as a fact. */
+      if (safari && macos) {
+        const host = macos[1] === "10_15_7" ? "?" : clean(macos[1]);
+        return `Safari ${safari[1]} / macOS ${host}`;
+      }
+      const chromium = ua.match(/Chrome\/(\d+)/);
+      if (chromium) return `Chromium ${chromium[1]}`;
+      const firefox = ua.match(/Firefox\/(\d+)/);
+      if (firefox) return `Firefox ${firefox[1]}`;
+      return "unidentified engine";
+    }
+
+    /*
+     * The page runs on devices its author cannot open. Engines disagree about
+     * whether an item's min-content may widen its container, so a layout that
+     * fits here can scroll sideways there — and "it still looks the same" is
+     * not a measurement. This names the in-flow elements wider than the
+     * viewport so a remote report says which one.
+     */
+    function describeLayout() {
+      /*
+       * Both readings must come from the layout viewport. `window.innerWidth`
+       * follows the visual viewport on iOS, so comparing it against
+       * scrollWidth reports a zoomed page as an overflowing one — a false
+       * positive on the exact page whose job is to be believed.
+       */
+      const limit = document.documentElement.clientWidth;
+      const document_ = document.documentElement.scrollWidth;
+      if (document_ <= limit) return `no horizontal overflow (${document_}px)`;
+
+      /*
+       * Fixed and top-layer boxes are named too. They cannot widen the
+       * document on every engine, but iOS has let one extend the scrollable
+       * area, and skipping them was a blind spot precisely where this page
+       * puts its panels: an overflow would have been reported with nothing
+       * named for it.
+       */
+      const guilty = [];
+      for (const element of document.querySelectorAll("main *")) {
+        const styles = getComputedStyle(element);
+        if (styles.display === "none") continue;
+        const rect = element.getBoundingClientRect();
+        if (rect.width === 0) continue;
+        if (Math.round(rect.right) <= limit + 1 && Math.round(rect.width) <= limit + 1) continue;
+        const id = element.id ? `#${element.id}` : "";
+        const fixed = styles.position === "fixed" ? " fixed" : "";
+        guilty.push(`${element.localName}${id}${fixed} ${Math.round(rect.width)}px→${Math.round(rect.right)}`);
+      }
+
+      const named = guilty.length > 0 ? guilty.slice(0, 4).join(", ") : "no in-flow element named";
+      return `document ${document_}px vs viewport ${viewport}px — ${named}${describeZoom()}`;
+    }
+
+    /*
+     * Page zoom cuts content off exactly like an overflow does, while leaving
+     * every layout metric intact — so a reader looking at a clipped page and a
+     * report claiming no overflow needs this line to tell the two apart.
+     */
+    function describeZoom() {
+      const visual = window.visualViewport;
+      if (!visual || Math.abs(visual.scale - 1) < 0.01) return "";
+      return ` · zoomed ${visual.scale.toFixed(2)}×, visible ${Math.round(visual.width)}px`;
+    }
+
+    /* Reports the layout viewport, which is what CSS lengths resolve against.
+       window.innerWidth is the visual one on iOS and shrinks under zoom, so
+       naming it "viewport" is how a zoomed page reads as a broken one. */
+    function describeViewport() {
+      const root = document.documentElement;
+      return `layout ${root.clientWidth}×${root.clientHeight} @ ${window.devicePixelRatio}x${describeZoom()}`;
+    }
+
+    function renderEngine() {
+      const facts = [
+        ["Engine", describeEngine()],
+        ["User agent", navigator.userAgent],
+        ["Viewport", describeViewport()],
+        ["Layout", describeLayout()],
+        ["Date", new Date().toISOString().slice(0, 10)],
+      ];
+      const list = byId("engine-facts");
+      list.replaceChildren();
+      for (const [label, value] of facts) {
+        const item = document.createElement("li");
+        const text = document.createElement("span");
+        text.textContent = `${label}: ${value}`;
+        item.append(text);
+        list.append(item);
+      }
+      byId("engine-line").value = describeEngine();
+    }
+
+    /* ---- scenarios ------------------------------------------------------- */
+
+    const runners = {};
+
+    runners[1] = async () => {
+      const panel = byId("s1-panel");
+      const checks = [];
+
+      await hide(panel);
+      checks.push({ label: "starts closed", ok: !painted(panel) });
+
+      await show(panel);
+      checks.push({ label: "open after showPopover()", ok: painted(panel) });
+      checks.push({
+        label: "matches :popover-open",
+        info: true,
+        detail: String(pseudoOpen(panel)),
+      });
+
+      await hide(panel);
+      checks.push({ label: "closed after hidePopover()", ok: !painted(panel) });
+
+      await show(panel);
+      checks.push({ label: "reopens", ok: painted(panel) });
+
+      await hide(panel);
+      checks.push({ label: "closes again", ok: !painted(panel) });
+
+      return checks;
+    };
+
+    runners[2] = async () => {
+      const panel = byId("s2-panel");
+      const bait = byId("s2-bait");
+      await hide(panel);
+
+      /* Focus something reachable first, so "focus() did nothing" is a real
+         observation rather than an artefact of nothing being focused. */
+      const anchor = byId("run-all");
+      anchor.focus();
+      bait.focus();
+
+      const checks = [
+        { label: "no client rects", ok: panel.getClientRects().length === 0 },
+        { label: "display: none", ok: getComputedStyle(panel).display === "none" },
+        { label: "no offsetParent", ok: panel.offsetParent === null },
+        { label: "focus() does not move the active element", ok: document.activeElement !== bait },
+      ];
+
+      if (typeof panel.checkVisibility === "function") {
+        checks.push({ label: "checkVisibility() is false", ok: panel.checkVisibility() === false });
+      } else {
+        checks.push({
+          label: "checkVisibility() absent — the getClientRects() branch runs on this engine",
+          info: true,
+        });
+      }
+
+      checks.push({
+        label: "this panel declares no author display, so the closed state is the UA's own",
+        info: true,
+      });
+
+      anchor.blur();
+      return checks;
+    };
+
+    runners[3] = async () => {
+      const panel = byId("s3-panel");
+      const before = panel.parentElement;
+
+      await show(panel);
+      const during = panel.parentElement;
+      const promoted = painted(panel);
+      await hide(panel);
+      const after = panel.parentElement;
+
+      return [
+        { label: "opened at all", ok: promoted },
+        { label: "same parent node while open", ok: during === before },
+        { label: "same parent node after closing", ok: after === before },
+        { label: "still connected", ok: panel.isConnected },
+        { label: `parent is ${before.id || before.localName}`, info: true },
+      ];
+    };
+
+    runners[4] = async () => {
+      const cases = [
+        {
+          label: "theme island",
+          panel: byId("s4-theme-panel"),
+          read: (styles) => styles.backgroundColor,
+          sane: (value) => value !== "rgb(255, 255, 255)" && value !== "",
+        },
+        {
+          label: "density scope",
+          panel: byId("s4-density-panel"),
+          read: (styles) => styles.getPropertyValue("--control-size").trim(),
+          sane: (value) => value === "2rem",
+        },
+        {
+          label: "application property",
+          panel: byId("s4-app-panel"),
+          read: (styles) => styles.getPropertyValue("--app-accent").trim(),
+          sane: (value) => value !== "",
+        },
+      ];
+
+      const checks = [];
+      for (const entry of cases) {
+        const closed = entry.read(getComputedStyle(entry.panel));
+        await show(entry.panel);
+        const open = entry.read(getComputedStyle(entry.panel));
+        await hide(entry.panel);
+
+        checks.push({
+          label: `${entry.label}: scope applied while closed`,
+          ok: entry.sane(closed),
+          detail: closed || "empty",
+        });
+        checks.push({
+          label: `${entry.label}: unchanged when open`,
+          ok: open === closed,
+          detail: open === closed ? undefined : `${closed} → ${open}`,
+        });
+      }
+      return checks;
+    };
+
+    runners[5] = async () => {
+      const checks = [];
+
+      const openDialog = byId("s5-open");
+      const openPanel = byId("s5-open-panel");
+      await show(openPanel);
+      const openPoint = centerOf(openPanel);
+      checks.push({
+        label: "non-modal dialog: the panel wins its own hit test",
+        ok: within(openPanel, document.elementFromPoint(openPoint.x, openPoint.y)),
+      });
+      checks.push({
+        label: "non-modal dialog: the panel stays in the dialog subtree",
+        ok: openDialog.contains(openPanel),
+      });
+      await hide(openPanel);
+
+      const modal = byId("s5-modal");
+      const modalPanel = byId("s5-modal-panel");
+      const bait = byId("s5-modal-bait");
+      const host = modalPanel.parentElement;
+
+      try {
+        if (!modal.open) modal.showModal();
+        await frame();
+        await show(modalPanel);
+
+        const point = centerOf(modalPanel);
+        const hit = document.elementFromPoint(point.x, point.y);
+        bait.focus();
+
+        checks.push({ label: "modal: the panel is painted", ok: painted(modalPanel) });
+        checks.push({
+          label: "modal: the panel is above the dialog in the hit test",
+          ok: within(modalPanel, hit),
+        });
+        checks.push({
+          label: "modal: the panel stays in the dialog subtree",
+          ok: modal.contains(modalPanel),
+        });
+        checks.push({ label: "modal: host element unchanged", ok: modalPanel.parentElement === host });
+        checks.push({
+          label: "modal: content inside the panel takes focus",
+          ok: document.activeElement === bait,
+        });
+      } finally {
+        await hide(modalPanel);
+        if (modal.open) modal.close();
+      }
+
+      return checks;
+    };
+
+    runners[6] = async () => {
+      const panel = byId("s6-panel");
+      await hide(panel);
+
+      await show(panel);
+      await sleep(350);
+      const settled = getComputedStyle(panel).opacity;
+
+      panel.hidePopover();
+      await sleep(100);
+      const midExit = painted(panel);
+
+      panel.showPopover();
+      await sleep(400);
+
+      const checks = [
+        { label: "open and painted after the interrupted exit", ok: painted(panel) },
+        {
+          label: "not stuck transparent",
+          ok: Number.parseFloat(getComputedStyle(panel).opacity) > 0.9,
+        },
+        { label: `opacity when fully open: ${settled}`, info: true },
+        {
+          label: midExit
+            ? "an exit animation played, so the interruption was real"
+            : "the exit was instant — the enhancement tier is absent here",
+          info: true,
+        },
+      ];
+
+      await hide(panel);
+      return checks;
+    };
+
+    /*
+     * Scenario 7 is driven by a real contextmenu where one is available and by
+     * a synthetic point otherwise. Both paths assert the same thing: a
+     * top-layer element placed at an explicit coordinate lands there.
+     */
+    async function placeAtPoint(x, y, source) {
+      const panel = byId("s7-panel");
+      await hide(panel);
+      panel.style.insetBlockStart = `${y}px`;
+      panel.style.insetInlineStart = `${x}px`;
+      await show(panel);
+
+      const rect = panel.getBoundingClientRect();
+      const dx = Math.round(rect.left - x);
+      const dy = Math.round(rect.top - y);
+      const offset = `offset ${dx},${dy}px`;
+      const overflows = x + rect.width > window.innerWidth || y + rect.height > window.innerHeight;
+      const hit = document.elementFromPoint(Math.round(rect.left + 4), Math.round(rect.top + 4));
+
+      const checks = [];
+
+      /*
+       * A point that would push the panel past the viewport is the UA's to
+       * adjust, and engines differ: WebKit nudges it back inside, Chromium
+       * leaves it overflowing. Asserting an exact landing there measures the
+       * clamp, not the placement — and Actual never asks for such a point,
+       * since surface.js positions through floating's shift middleware.
+       */
+      if (overflows) {
+        checks.push({
+          label: "the point would push the panel past the viewport; adjustment is the UA's",
+          info: true,
+          detail: offset,
+        });
+      } else {
+        checks.push({
+          label: "placed within 2px of the point",
+          ok: Math.max(Math.abs(dx), Math.abs(dy)) <= 2,
+          detail: offset,
+        });
+      }
+
+      checks.push({
+        label: "the panel receives the pointer where it reports itself",
+        ok: within(panel, hit),
+      });
+      checks.push({ label: `source: ${source}, point ${x},${y}`, info: true });
+
+      if (source === "synthetic") {
+        checks.push({ label: "the contextmenu event itself was not exercised", info: true });
+      }
+
+      await sleep(700);
+      await hide(panel);
+      panel.style.insetBlockStart = "";
+      panel.style.insetInlineStart = "";
+      return checks;
+    }
+
+    /* The quarter mark, not the centre: the panel is anchored by its top-left
+       corner, so a centred point overflows a phone viewport and the scenario
+       ends up measuring the UA's clamp instead of the placement. */
+    runners[7] = async () =>
+      placeAtPoint(
+        Math.round(window.innerWidth / 4),
+        Math.round(window.innerHeight / 4),
+        "synthetic",
+      );
+
+    runners[8] = async () => {
+      const panel = byId("s8-panel");
+      const victim = byId("s8-victim");
+      victim.hidden = false;
+      await show(panel);
+
+      const point = centerOf(victim);
+
+      /* A narrow viewport can put the panel over the target, which would read
+         as a scrim intercepting a pointer when in fact nothing does. */
+      if (within(panel, document.elementFromPoint(point.x, point.y))) {
+        await hide(panel);
+        victim.hidden = true;
+        return [{ label: "the panel overlaps the target — widen the window and rerun", ok: false }];
+      }
+
+      const backdrop = getComputedStyle(panel, "::backdrop");
+      const pointerEvents = backdrop.pointerEvents;
+      const inherited = backdrop.getPropertyValue("--probe-backdrop-fill").trim();
+
+      const checks = [
+        {
+          label: "author pointer-events on ::backdrop is refused by the UA",
+          ok: pointerEvents === "none",
+          detail: pointerEvents || "::backdrop not exposed to getComputedStyle",
+        },
+        {
+          label: "the native backdrop does not intercept the pointer",
+          ok: !within(panel, document.elementFromPoint(point.x, point.y)),
+        },
+        {
+          label: inherited
+            ? `::backdrop inherits a scoped custom property (${inherited})`
+            : "::backdrop exposes no inherited custom property here",
+          info: true,
+        },
+      ];
+
+      const scrim = document.createElement("div");
+      scrim.className = "probe-scrim";
+      scrim.textContent = "Click here — this scrim must absorb the pointer";
+      document.documentElement.append(scrim);
+      await frame();
+
+      checks.push({
+        label: "an Actual scrim element does intercept it",
+        ok: document.elementFromPoint(point.x, point.y) === scrim,
+      });
+
+      let reached = false;
+      let confirmed = false;
+      const onVictim = () => {
+        reached = true;
+      };
+      const onScrim = () => {
+        confirmed = true;
+      };
+      victim.addEventListener("click", onVictim);
+      scrim.addEventListener("click", onScrim);
+
+      setBadge(8, "click the scrim", "warning");
+      await sleep(5000);
+      victim.removeEventListener("click", onVictim);
+      scrim.removeEventListener("click", onScrim);
+
+      if (reached) {
+        checks.push({ label: "a real pointer reached the target through the scrim", ok: false });
+      } else if (confirmed) {
+        checks.push({ label: "a real click landed on the scrim and went no further", ok: true });
+      } else {
+        checks.push({
+          label: "no pointer confirmation — nothing was clicked during the window",
+          info: true,
+        });
+      }
+
+      scrim.remove();
+      await hide(panel);
+      victim.hidden = true;
+      return checks;
+    };
+
+    /* ---- driving --------------------------------------------------------- */
+
+    async function run(id) {
+      setBadge(id, "running");
+      try {
+        render(id, await runners[id]());
+      } catch (error) {
+        render(id, [{ label: `threw: ${error.name}: ${error.message}`, ok: false }]);
+      }
+    }
+
+    for (const button of document.querySelectorAll("[data-run]")) {
+      button.addEventListener("click", () => run(Number(button.dataset.run)));
+    }
+
+    byId("run-all").addEventListener("click", async () => {
+      /* 7 needs a gesture and 8 waits for one, so neither belongs in a sweep
+         that is supposed to finish on its own. */
+      for (const id of [1, 2, 3, 4, 5, 6]) await run(id);
+    });
+
+    byId("reset-all").addEventListener("click", () => {
+      state.clear();
+      for (const card of document.querySelectorAll("[data-scenario]")) {
+        delete card.dataset.verdict;
+        card.querySelector("[data-checks]").replaceChildren();
+      }
+      for (let id = 1; id <= 8; id += 1) setBadge(id, "idle");
+      updateScore();
+    });
+
+    byId("s7-target").addEventListener("contextmenu", async (event) => {
+      event.preventDefault();
+      setBadge(7, "running");
+      try {
+        render(7, await placeAtPoint(event.clientX, event.clientY, "contextmenu"));
+      } catch (error) {
+        render(7, [{ label: `threw: ${error.name}: ${error.message}`, ok: false }]);
+      }
+    });
+
+    /* ---- report ---------------------------------------------------------- */
+
+    function writeReport() {
+      const passed = [...state.values()].filter((entry) => entry.verdict === "pass").length;
+      const lines = [];
+
+      lines.push("Verified manually on:");
+      lines.push(`  ${byId("engine-line").value}`);
+      lines.push(`Date: ${new Date().toISOString().slice(0, 10)}`);
+      lines.push(`Scenarios: ${passed}/8 passed`);
+      lines.push("");
+      lines.push("Scenarios");
+      for (let id = 1; id <= 8; id += 1) {
+        const entry = state.get(id);
+        const verdict = entry ? entry.verdict.toUpperCase() : "NOT RUN";
+        lines.push(`  ${id}. ${`${TITLES[id]} `.padEnd(52, ".")} ${verdict}`);
+        if (!entry) continue;
+        /* Informational checks carry the measurements worth pasting into a
+           note — which branch ran, whether an exit animated, what ::backdrop
+           computed. Dropping them left a passing scenario unable to say how it
+           passed. */
+        for (const check of entry.checks) {
+          const detail = check.detail ? ` (${check.detail})` : "";
+          if (check.info) lines.push(`       note: ${check.label}${detail}`);
+          else if (check.ok !== true) lines.push(`       failed: ${check.label}${detail}`);
+        }
+      }
+      lines.push("");
+      lines.push("Required subset");
+      for (const entry of subset) {
+        lines.push(`  ${`${entry.name} `.padEnd(42, ".")} ${entry.ok ? "yes" : "NO"}   ${entry.tier}`);
+      }
+      lines.push("");
+      lines.push(`UA: ${navigator.userAgent}`);
+      lines.push(`Viewport: ${describeViewport()}`);
+      lines.push(`Layout: ${describeLayout()}`);
+
+      byId("report").value = lines.join("\n");
+    }
+
+    byId("engine-line").addEventListener("input", writeReport);
+
+    byId("copy-report").addEventListener("click", async () => {
+      const report = byId("report");
+      const status = byId("copy-status");
+      try {
+        await navigator.clipboard.writeText(report.value);
+        status.value = "Copied.";
+      } catch {
+        report.focus();
+        report.select();
+        status.value = "Clipboard refused — the report is selected, copy it by hand.";
+      }
+    });
+
+    renderEngine();
+    renderSubset();
+    updateScore();
+
+    /* The layout reading is only trustworthy once stylesheets and fonts have
+       settled, and it goes stale the moment a phone is rotated — which is one
+       of the conditions worth catching. */
+    let layoutTimer;
+    const refreshLayout = () => {
+      clearTimeout(layoutTimer);
+      layoutTimer = setTimeout(() => {
+        renderEngine();
+        writeReport();
+      }, 200);
+    };
+
+    window.addEventListener("load", refreshLayout);
+    window.addEventListener("resize", refreshLayout);
+  </script>
+</body>
+</html>

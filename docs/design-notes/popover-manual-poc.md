@@ -138,14 +138,13 @@ pass, it is no longer a transport swap and the claim does not hold.
 
 ## Go / no-go: WebKit verification
 
-Every measurement in this note was taken on Chromium — the browser test harness
+The measurements above were taken on Chromium — the browser test harness
 hardcodes `backend: "chrome"`. The floor's most notable step is Safari 17, so
-the transport has no measured evidence on the engine the raise actually buys.
-This is the one open technical gate on the migration, and the only item on the
-checklist below that is not already demonstrated.
+the transport needed evidence on the engine the raise actually buys. That was
+the one open technical gate on the migration. It is now closed.
 
-A permanent WebKit matrix is disproportionate for a decision taken once. One
-manual pass on a real Safari at the chosen floor, recorded here, is enough:
+A permanent WebKit matrix was disproportionate for a decision taken once. One
+manual pass on a real Safari at the chosen floor:
 
 ```text
 1. showPopover() / hidePopover() in manual mode
@@ -158,24 +157,66 @@ manual pass on a real Safari at the chosen floor, recorded here, is enough:
 8. the sheet scrim covers and intercepts the click
 ```
 
-Record the result in this section:
+`demo/templates/popover-transport.html` is that pass, scored by the page. It
+loads no Actual JavaScript and measures the platform subset above, so it
+answers on `master` without checking the branch out. Scenarios 1–6 run
+unattended; 7 and 8 need a real gesture. It scores 8/8 on Chromium and
+reproduces the findings above, `::backdrop` included — so a deviation on WebKit
+is the engine, not the bench.
+
+### Result — gate passed
 
 ```text
 Verified manually on:
-  Safari __._ / macOS __
-  iOS Safari __._ / iOS __      (if reachable)
-Date: ____-__-__
-Scenarios: _/8 passed
+  iOS Safari 17.0 / iOS 17.0        8/8 passed
+  Safari 17.3 / macOS unrecorded    8/8 passed
+Date: 2026-09-04
 ```
 
-Scenario 5 deserves the most attention. On Chromium the native top layer solved
-cleanly the problem that motivated `getSurfaceRoot()` in the first place — a
-modal dialog inerts the rest of the document — and that result is what makes
-the transport worth making mandatory. Scenario 2 is the second: the old
-transport used `[hidden]`, which `isElementVisible()` reads in its first
-branch, and the migration shifts the guard onto `checkVisibility()` with
-`getClientRects()` behind it. Which branch actually runs depends on what the
-bottom of the new floor implements, and the third has never been exercised.
+iOS 17.0 is the bottom of the proposed floor, measured rather than inferred.
+The desktop score is the union of two page loads on one engine, the iOS score a
+single session at 390×745; a second iOS pass at 341×651 reproduced everything
+but scenario 7, whose assertion the bench has since corrected — see below.
+Safari freezes its macOS UA token at `10_15_7`, so the desktop host version is
+not recoverable from a report. macOS Safari 17.0–17.2 stay inferred, on the
+same WebKit that iOS 17.0 exercised.
+
+Scenario 7 ran through the synthetic fallback on both iOS passes: iOS fires no
+`contextmenu` from a long press, so that event path is unexercised on the port
+where it matters most, and the scenario attests placement only.
+
+Both ports report the same subset: the four runtime primitives and
+`selector(:popover-open)` present; `checkVisibility()`, `overlay`,
+`transition-behavior: allow-discrete` and `@starting-style` absent. That
+matches WebKit's published timeline — Popover in 17.0, the rest in 17.4 and
+17.5 — which is corroboration that the bench measures rather than guesses.
+
+Four results carry consequences:
+
+**Scenario 5 passes on both ports**, which is what makes the transport worth
+making mandatory: the native top layer solves on WebKit the problem that
+motivated `getSurfaceRoot()` in the first place, on a 390px phone included.
+
+**Scenario 2 passes on the fallback branch.** `checkVisibility()` does not
+exist below Safari 17.4, so `isElementVisible()` runs its `getClientRects()`
+branch at the floor — the branch that had never been exercised. It works, and
+it is load-bearing rather than dead.
+
+**`::backdrop` is weaker on WebKit, not stronger.** Author `pointer-events` on
+an open popover's backdrop still computes to `none`, the native backdrop still
+lets the pointer through, and an Actual scrim element still absorbs it,
+confirmed with a real tap. The one thing `::backdrop` did well on Chromium —
+resolving a custom property scoped to an ancestor of the panel — resolves to
+nothing on WebKit. The scrim stays an Actual element on both engines, and not
+by Chromium's accident.
+
+**An overflowing top-layer box is adjusted differently.** Asked to place a
+panel at a point that would push it past the right edge of a 341px viewport,
+iOS Safari 17.0 offset it by 11px; Chromium at the identical viewport and
+overflow offset it by 0. Not a gate: `surface.js` positions through floating's
+`shift` middleware with `shiftPadding: 4`, so it never asks for such a point
+and measures the rendered rect afterwards. The bench now picks a point that
+fits, so scenario 7 measures placement rather than the UA's correction.
 
 ## Changelog framing for the raise
 
@@ -202,7 +243,7 @@ For the release that raises Minimal. Items 4–7 are scaffolding built for a flo
 that will no longer exist; a gate outliving its reason is silent dead weight, so
 they belong here rather than being found later.
 
-1. Pass the WebKit verification above and record it. This is the go/no-go.
+1. WebKit verification — done, 8/8 on Safari 17.3, recorded above. Cleared.
 2. Raise Minimal to the required subset above. The justification is the defect
    and the transparent migration, not a download count: npm figures conflate
    CI, bots, caches and the author, and say nothing about the end browser.
@@ -213,11 +254,16 @@ they belong here rather than being found later.
    `scrollbar-gutter`, `scrollbar-width`, `scrollbar-color`) as Minimal
    baseline and drop their `check-compat` entries.
 5. Remove the `@supports selector(:popover-open)` gates in `flyout.css` and
-   `tooltip.css`.
+   `tooltip.css`. Those only: the `@supports (transition-behavior:
+   allow-discrete)` gate and the `@starting-style` blocks stay, since neither
+   is in the floor — Safari 17.4 and 17.5.
 6. Remove the two `popover` entries from `check-compat`'s feature table.
 7. Remove the associated `compat-ok:` pragmas, and `hasPragma()` itself if
    nothing else consumes it.
-8. Move `surface.js` to the manual transport, with no fallback branch.
+8. Move `surface.js` to the manual transport, with no fallback branch. This
+   does not reach `isElementVisible()` in `focus.js`: `checkVisibility()` is
+   Safari 17.4, so its `getClientRects()` fallback is the branch that runs at
+   the floor and must stay.
 9. Drop `test.failing` from the reparenting tests in
    `tests/browser/surface-inherited-context.test.js`, keeping the assertions.
 10. Update [surface-reparenting](surface-reparenting.md) from a known limitation
