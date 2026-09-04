@@ -2,6 +2,9 @@ import { afterAll, afterEach, expect, test } from "bun:test";
 import { cleanupDOM, click, mockRect, nextMicrotask, setupDOM } from "./helpers/dom.js";
 import { nextFrame } from "./helpers/layout.js";
 
+// The transport no longer uses [hidden]; .is-open is the lifecycle state.
+const isOpen = (el) => el.classList.contains("is-open");
+
 setupDOM();
 
 const {
@@ -63,7 +66,7 @@ test("openSurface reveals a menu and syncs linked triggers", () => {
 
   openSurface(menu, { trigger });
 
-  expect(menu.hidden).toBe(false);
+  expect(isOpen(menu)).toBe(true);
   expect(menu.style.display).toBe("");
   expect(menu.classList.contains("is-open")).toBe(true);
   expect(trigger.getAttribute("aria-expanded")).toBe("true");
@@ -81,7 +84,7 @@ test("closeSurface hides a menu and resets presentation state", async () => {
 
   closeSurface(menu);
 
-  expect(menu.hidden).toBe(true);
+  expect(isOpen(menu)).toBe(false);
   expect(menu.style.display).toBe("");
   expect(menu.classList.contains("is-open")).toBe(false);
   expect(menu.classList.contains("is-sheet")).toBe(true);
@@ -215,49 +218,9 @@ test("prepareSurface leaves the surface at its original position", () => {
 
   expect(menu.parentNode).toBe(host);
   expect(menu.previousElementSibling).toBe(next);
-  expect(menu.hidden).toBe(true);
+  expect(isOpen(menu)).toBe(false);
   expect(menu.style.position).toBe("fixed");
   expect(menu.style.display).toBe("");
-});
-
-test("openSurface mounts to the surface root and disconnectSurface restores it", () => {
-  setBody(
-    '<section id="host"><button id="next" aria-controls="menu"></button><div id="menu" class="flyout"></div></section>',
-  );
-  const host = document.getElementById("host");
-  const next = document.getElementById("next");
-  const menu = document.getElementById("menu");
-  mockPlacement(next, menu);
-
-  openSurface(menu, { trigger: next });
-
-  expect(menu.parentNode).toBe(document.body);
-
-  disconnectSurface(menu);
-
-  expect(menu.parentNode).toBe(host);
-  expect(menu.previousElementSibling).toBe(next);
-});
-
-test("closeSurface restores the surface to its original position once transitions finish", async () => {
-  setBody(
-    '<section id="host"><button id="trigger" aria-controls="menu"></button><div id="menu" class="flyout"></div></section>',
-  );
-  const host = document.getElementById("host");
-  const trigger = document.getElementById("trigger");
-  const menu = document.getElementById("menu");
-  mockPlacement(trigger, menu);
-
-  openSurface(menu, { trigger });
-  expect(menu.parentNode).toBe(document.body);
-
-  closeSurface(menu);
-  expect(menu.parentNode).toBe(document.body);
-
-  await nextMicrotask();
-
-  expect(menu.parentNode).toBe(host);
-  expect(menu.previousElementSibling).toBe(trigger);
 });
 
 test("sheet mode adds sheet class and backdrop", () => {
@@ -306,7 +269,7 @@ test("sheet close hides the backdrop immediately and removes it after transition
 
   closeSurface(menu);
 
-  expect(menu.hidden).toBe(true);
+  expect(isOpen(menu)).toBe(false);
   expect(backdrop.hidden).toBe(true);
   expect(backdrop.isConnected).toBe(true);
 
@@ -361,24 +324,6 @@ test("reopening a sheet cancels stale close cleanup", async () => {
 
   expect(backdrop.isConnected).toBe(true);
   expect(isSurfaceOpen(menu)).toBe(true);
-});
-
-test("openSurface mounts surfaces inside an open dialog root", () => {
-  setBody(`
-    <dialog id="modal" open>
-      <section id="host"><button id="trigger" aria-controls="menu"></button><div id="menu" class="flyout"></div></section>
-    </dialog>
-  `);
-  const dialog = document.getElementById("modal");
-  const trigger = document.getElementById("trigger");
-  const menu = document.getElementById("menu");
-  mockPlacement(trigger, menu);
-
-  openSurface(menu, { trigger });
-
-  expect(menu.parentNode).toBe(dialog);
-
-  disconnectSurface(menu);
 });
 
 test("default auto-close closes from outside clicks", () => {
@@ -540,18 +485,15 @@ test("unknown auto-close values fall back to the default policy", () => {
   expect(isSurfaceOpen(menu)).toBe(false);
 });
 
-test("D8 — disconnectSurface({ restore: false }) does not resurrect the element", async () => {
+test("removing an open surface leaves it disconnected and clears its backdrop", async () => {
   setBody(
-    '<section id="parent"><div id="menu" class="flyout" hidden></div></section><button id="outside">x</button>',
+    '<section id="parent"><div id="menu" class="flyout"></div></section><button id="outside">x</button>',
   );
   const menu = document.getElementById("menu");
-  const _parent = document.getElementById("parent");
   const outside = document.getElementById("outside");
   mockPlacement(outside, menu);
 
   openSurface(menu, { trigger: outside });
-
-  expect(menu.parentNode).toBe(document.body);
   expect(isSurfaceOpen(menu)).toBe(true);
 
   menu.remove();
@@ -561,9 +503,9 @@ test("D8 — disconnectSurface({ restore: false }) does not resurrect the elemen
   expect(document.querySelector(".surface-backdrop")).toBe(null);
 });
 
-test("D8 — deliberate disconnectSurface on a still-present component restores it", () => {
+test("disconnectSurface closes a still-connected surface", () => {
   setBody(
-    '<section id="parent"><div id="menu" class="flyout" hidden></div></section><button id="outside">x</button>',
+    '<section id="parent"><div id="menu" class="flyout"></div></section><button id="outside">x</button>',
   );
   const menu = document.getElementById("menu");
   const parent = document.getElementById("parent");
@@ -571,49 +513,110 @@ test("D8 — deliberate disconnectSurface on a still-present component restores 
   mockPlacement(outside, menu);
 
   openSurface(menu, { trigger: outside });
-  expect(menu.parentNode).toBe(document.body);
-
   disconnectSurface(menu);
 
-  expect(menu.parentNode).toBe(parent);
   expect(isSurfaceOpen(menu)).toBe(false);
+  expect(menu.parentNode).toBe(parent);
 });
 
-test("D8 — mountSurface moving to body does not run teardown", () => {
+/*
+ * Opening used to relocate the node, which tripped the enhancement reaper's
+ * disconnect callback and had to be worked around. Promotion cannot trip it at
+ * all, so only the marker contract is left to assert.
+ */
+test("opening marks the surface for the reaper without tearing it down", () => {
   setBody(
-    '<section id="parent"><div id="menu" class="flyout" hidden></div></section><button id="outside">x</button>',
+    '<section id="parent"><div id="menu" class="flyout"></div></section><button id="outside">x</button>',
   );
   const menu = document.getElementById("menu");
-  const _parent = document.getElementById("parent");
   const outside = document.getElementById("outside");
   mockPlacement(outside, menu);
 
   openSurface(menu, { trigger: outside });
 
-  expect(menu.parentNode).toBe(document.body);
   expect(isSurfaceOpen(menu)).toBe(true);
   expect(menu.hasAttribute("data-actual-surface")).toBe(true);
 });
 
 /*
- * One lifecycle owner per surface. surface.js never calls showPopover(), so a
- * [popover] panel handed to it would stay closed whatever the runtime writes —
- * including popover="manual", which is a candidate future transport for this
- * module rather than a legitimate mix today.
+ * The transport is set by the runtime, never asked of the author: a surface is
+ * marked up exactly as before. [hidden] belonged to the old transport and must
+ * not survive as a second closed-state signal, since it would outrank the
+ * platform's own.
  */
-test("retaining a [popover] surface warns about the double lifecycle owner", () => {
-  setBody('<div id="menu" class="flyout" popover="manual"></div>');
-  const panel = document.getElementById("menu");
-
-  const warnings = captureWarnings(() => retainSurface(panel)());
-
-  expect(warnings).toHaveLength(1);
-  expect(warnings[0]).toContain("one lifecycle owner");
-});
-
-test("retaining a runtime-owned surface warns about nothing", () => {
+test("preparing a surface installs the transport and drops the old one", () => {
   setBody('<div id="menu" class="flyout" hidden></div>');
   const panel = document.getElementById("menu");
 
+  prepareSurface(panel);
+
+  expect(panel.getAttribute("popover")).toBe("manual");
+  expect(panel.hasAttribute("hidden")).toBe(false);
+});
+
+/*
+ * An author's own mode is overwritten rather than respected: "auto" would give
+ * the UA a dismissal policy, and native light dismiss closes on outside clicks
+ * only — which cannot express data-flyout-auto-close and would defeat
+ * data-flyout-auto-close="false" outright.
+ */
+test("preparing a surface overrides an author's own popover mode", () => {
+  setBody('<div id="menu" class="flyout" popover="auto"></div>');
+  const panel = document.getElementById("menu");
+
+  prepareSurface(panel);
+
+  expect(panel.getAttribute("popover")).toBe("manual");
+});
+
+test("retaining a surface warns about nothing", () => {
+  setBody('<div id="menu" class="flyout"></div>');
+  const panel = document.getElementById("menu");
+
   expect(captureWarnings(() => retainSurface(panel)())).toEqual([]);
+});
+
+/*
+ * The new transport invariant: promotion to the top layer replaces relocation,
+ * so the surface never leaves the place the author put it. This locks the
+ * cause; the browser tests in surface-inherited-context lock its consequences.
+ */
+test("the surface DOM parent is unchanged before, during and after opening", async () => {
+  setBody(
+    '<section id="scope"><div class="flyout-trigger">' +
+      '<button aria-controls="menu">Open</button>' +
+      '<div id="menu" class="flyout"></div>' +
+      "</div></section>",
+  );
+  const trigger = document.querySelector("button");
+  const menu = document.getElementById("menu");
+  mockPlacement(trigger, menu);
+  const parent = menu.parentNode;
+
+  prepareSurface(menu);
+  expect(menu.parentNode).toBe(parent);
+
+  openSurface(menu, { trigger });
+  expect(isSurfaceOpen(menu)).toBe(true);
+  expect(menu.parentNode).toBe(parent);
+
+  closeSurface(menu);
+  expect(menu.parentNode).toBe(parent);
+  await nextFrame();
+  await nextMicrotask();
+  expect(menu.parentNode).toBe(parent);
+});
+
+test("a surface inside a dialog also stays where it was authored", () => {
+  setBody(
+    '<dialog open><div id="scope"><button aria-controls="menu">Open</button>' +
+      '<div id="menu" class="flyout"></div></div></dialog>',
+  );
+  const trigger = document.querySelector("button");
+  const menu = document.getElementById("menu");
+  mockPlacement(trigger, menu);
+
+  openSurface(menu, { trigger });
+
+  expect(menu.parentNode.id).toBe("scope");
 });

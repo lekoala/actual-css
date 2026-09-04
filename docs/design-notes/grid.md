@@ -407,7 +407,8 @@ meaning, rather than a stand-in for a coordinate system.
 
 ## Progressive enhancement
 
-Container queries are newer than Actual's Minimal browser baseline.
+Container queries are guaranteed across Minimal, but not across Degraded — and
+Degraded browsers still receive every stylesheet.
 
 Structural grids must therefore have a usable fallback without them.
 

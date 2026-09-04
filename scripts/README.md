@@ -13,7 +13,7 @@ script in `package.json`; `bun run build:all` chains the full pipeline
 | `build:themes` | `build-themes.js` | Bundle the preset palettes into `demo/assets/actual-themes.min.css` for the demo pages and docs site. Demo asset only — never in `dist/`. |
 | `build:size` | `build-size.js` | Write `size-report.json` (per-file, minified, brotli). |
 | `check:docs` | `check-docs.js` | Structural checks for the docs site: page/IA consistency, fence contract, internal links + anchors, and that referenced `src/css` / `src/js` files exist. |
-| `check:compat` | `check-compat.js` | Capability floor audit: flags unguarded above-Minimal structural CSS. |
+| `check:compat` | `check-compat.js` | Capability floor audit: flags unguarded above-Degraded structural CSS. |
 | `check:css-api` | `check-css-api.js` | Enforce the public/internal custom-property contract against fixtures. |
 | `check:architecture` | `check-css-architecture.js` | Structural CSS architecture rules (layer order, selector discipline). |
 | `check:enhance` | `check-enhance.js` | Verify `data-enhance` tokens used in docs/demos exist in the enhancer contract. |

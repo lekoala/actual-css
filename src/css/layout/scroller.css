@@ -8,10 +8,9 @@
  * the light/dark adaptation that color-scheme already gives for free, and the
  * two never match anyway.
  *
- * Above the capability floor: scrollbar-color lands in Chromium 121 and
- * Safari 18.2, the floor is Chromium 99 / Safari 15.4. Older engines ignore
- * both declarations and draw their native scrollbar — the intended fallback,
- * not a broken state.
+ * Above every tier: scrollbar-color lands in Chromium 121 and Safari 18.2, so
+ * even a Recommended engine may lack it. Engines that ignore both declarations
+ * draw their native scrollbar — the intended fallback, not a broken state.
  *
  * Styles the scrollbar only; it does not create the overflow. Pair it with
  * .overflow-auto or a component that already scrolls.

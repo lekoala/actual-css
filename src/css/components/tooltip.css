@@ -41,28 +41,23 @@
 
 /* Neutralize only the native geometry that conflicts with a positioned
    tooltip. In particular, the UA overflow would turn the arrow into scroll
-   overflow instead of letting it project beyond the bubble. Gated on real
-   Popover support: the attribute selector matches whether or not the engine
-   implements Popover, and without it nothing hides the element, so an ungated
-   reset would leave a stray bubble parked at inset: auto. Popover sits outside
-   Actual's Minimal contract, so the gate tracks the capability rather than the
-   floor. */
-@supports selector(:popover-open) {
-  .tooltip[popover] {
-    inset: auto;
-    margin: 0;
-    overflow: visible;
-  }
+   overflow instead of letting it project beyond the bubble. tooltip.js drives
+   [hidden], so [popover] here is always the author's own choice of a native
+   lifecycle. */
+.tooltip[popover] {
+  inset: auto;
+  margin: 0;
+  overflow: visible;
+}
 
-  /* .tooltip declares no display of its own, so the UA already hides a closed
-     popover here. The rule is written anyway: both components advertised as
-     Popover-compatible should cede the hidden state the same way, and the
-     opacity target is what actually makes the native exit fade — see the
-     overlay note below. */
-  .tooltip[popover]:not(:popover-open) {
-    display: none;
-    opacity: 0;
-  }
+/* .tooltip declares no display of its own, so the UA already hides a closed
+   popover here. The rule is written anyway: both components advertised as
+   Popover-compatible should cede the hidden state the same way, and the
+   opacity target is what actually makes the native exit fade — see the overlay
+   note below. */
+.tooltip[popover]:not(:popover-open) {
+  display: none;
+  opacity: 0;
 }
 
 .tooltip[hidden] {
@@ -72,10 +67,8 @@
 
 /* Entry opacity for both lifecycles: a runtime-driven tip is visible when it
    is neither a popover nor [hidden], a native one when it is :popover-open.
-   compat-ok: [popover] appears here only under negation, which every engine
-   evaluates correctly whether or not it implements Popover, :popover-open
-   rides in a forgiving :is(), and @starting-style is itself unsupported across
-   part of the Minimal range — so the rule does not exist there at all. */
+   @starting-style is above the floor (Safari 17.5); where it is missing the tip
+   simply appears at full opacity. */
 @starting-style {
   .tooltip:is(:not([popover]):not([hidden]), :popover-open) {
     opacity: 0;

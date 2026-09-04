@@ -1,18 +1,15 @@
 /*
- * Known defect: surface reparenting severs inherited presentation context.
+ * A surface is presented in its trigger's context, not the document's.
  *
- * surface.js moves an open surface to the nearest dialog or to body so it
- * escapes overflow clipping and z-index stacking. That move also takes the
- * panel out of every scope that reached it by inheritance — theme islands,
- * density, .inverted, and any custom property an application scoped to a
- * container. The panel is styled by its ancestors right up to the moment it
- * becomes visible, and by different ancestors from then on.
+ * The transport promotes the panel to the top layer without moving it, so
+ * every scope that reaches it by inheritance — theme islands, density,
+ * .inverted, and any custom property an application scoped to a container —
+ * still reaches it once it opens. These assertions are the contract, written
+ * against the defect that reparenting used to cause; they are the reason the
+ * transport exists, so keep them phrased as before/after comparisons rather
+ * than as absolute values a fixture edit could satisfy by accident.
  *
- * See docs/design-notes/surface-reparenting.md. These tests describe the
- * behavior Actual owes its own documented contracts, so they are marked
- * `test.failing` while the defect stands: the suite stays green, and the day
- * the transport stops reparenting they turn red as unexpected passes, which is
- * the signal to drop the marker rather than the assertions.
+ * See docs/design-notes/surface-reparenting.md.
  */
 import { expect, test } from "bun:test";
 import { browserAvailable, fixtureUrl, withBrowserPage } from "../../scripts/utils/browser.js";
@@ -21,19 +18,14 @@ const FIXTURE = "tests/browser/surface-inherited-context.html";
 const TIMEOUT = 60_000;
 
 const available = await browserAvailable();
-/*
- * Not abandoned tests: the assertions are the contract, and test.failing is
- * what keeps them honest while the defect stands. Do not delete them, and do
- * not relax them to match today's behavior — see
- * docs/design-notes/surface-reparenting.md.
- */
-const owed = (name, run) => (available ? test.failing : test.skip)(name, run, TIMEOUT);
+const owed = (name, run) => (available ? test : test.skip)(name, run, TIMEOUT);
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 /*
- * Reads one computed value off a panel before and after it opens. Opening is
- * what triggers the reparenting, so a difference between the two is the defect.
+ * Reads one computed value off a panel before and after it opens, plus the
+ * parent it is attached to. Opening is the moment the old transport relocated
+ * the panel, so any difference between the two reads is a context loss.
  */
 async function acrossOpen(panelId, read) {
   let closed;
@@ -59,6 +51,10 @@ async function acrossOpen(panelId, read) {
     },
     { artifactName: `surface-context-${panelId}` },
   );
+
+  // The invariant every case below depends on: inheritance can only survive if
+  // the panel is still attached where it was authored.
+  expect(open.parent).toBe(closed.parent);
 
   return { closed, open };
 }

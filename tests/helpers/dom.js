@@ -1,4 +1,5 @@
 import { Window } from "happy-dom";
+import { installPopoverTestStub } from "./popover-stub.js";
 
 const assignedGlobals = [
   "WeakRef",
@@ -89,6 +90,8 @@ export function setupDOM(html = "") {
       return false;
     },
   });
+
+  installPopoverTestStub(window);
 
   const globals = {
     window,

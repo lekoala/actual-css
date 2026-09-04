@@ -2,6 +2,9 @@ import { afterEach, expect, test } from "bun:test";
 import { cleanupDOM, click, mockRect, nextMicrotask, press, setupDOM } from "./helpers/dom.js";
 import { nextFrame } from "./helpers/layout.js";
 
+// The transport no longer uses [hidden]; .is-open is the lifecycle state.
+const isOpen = (el) => el.classList.contains("is-open");
+
 let importId = 0;
 
 function setupGeometry(trigger, menu) {
@@ -64,7 +67,7 @@ test("flyout trigger arrow key opens and focuses direct menu items", async () =>
 
   press(trigger, "ArrowDown");
 
-  expect(menu.hidden).toBe(false);
+  expect(isOpen(menu)).toBe(true);
   expect(menu.classList.contains("is-open")).toBe(true);
   expect(document.activeElement).toBe(first);
 });
@@ -88,7 +91,7 @@ test("flyout keeps the first menu item focused after opening settles", async () 
   await nextMicrotask();
   await nextFrame();
 
-  expect(menu.hidden).toBe(false);
+  expect(isOpen(menu)).toBe(true);
   expect(menu.classList.contains("is-open")).toBe(true);
   expect(document.activeElement).toBe(first);
 });
@@ -114,7 +117,7 @@ test("a hidden action menu is classified by semantics before its items are visib
 
   press(trigger, "ArrowUp");
 
-  expect(menu.hidden).toBe(false);
+  expect(isOpen(menu)).toBe(true);
   expect(document.activeElement).toBe(last);
 });
 
@@ -140,7 +143,7 @@ test("a shared menu is wired once across two triggers", async () => {
 
   // Both triggers now reference the same shared menu.
   press(b, "ArrowDown");
-  expect(menu.hidden).toBe(false);
+  expect(isOpen(menu)).toBe(true);
 
   // A single ArrowDown moves by exactly one item. With duplicated wiring it
   // would skip an item (two handlers each moving focus).
@@ -167,7 +170,7 @@ test("nav panel flyout focuses first descendant, not menu items", async () => {
 
   press(trigger, "ArrowDown");
 
-  expect(menu.hidden).toBe(false);
+  expect(isOpen(menu)).toBe(true);
   expect(document.activeElement).toBe(first);
 });
 
@@ -229,7 +232,7 @@ test("aria-haspopup alone does not opt into flyout behavior", async () => {
 
   click(trigger);
 
-  expect(menu.hidden).toBe(true);
+  expect(isOpen(menu)).toBe(false);
 });
 
 test("only native menu flyouts get menu popup semantics", async () => {
@@ -242,7 +245,7 @@ test("only native menu flyouts get menu popup semantics", async () => {
   expect(trigger.hasAttribute("aria-haspopup")).toBe(false);
 });
 
-test("flyout stays at its markup position until it is opened", async () => {
+test("flyout stays at its markup position through open and close", async () => {
   await loadFlyout(`
     <main><button id="trigger" type="button" data-enhance="flyout" aria-controls="menu" aria-expanded="false">Open</button>
     <menu id="menu" class="flyout" hidden>
@@ -257,10 +260,12 @@ test("flyout stays at its markup position until it is opened", async () => {
   expect(menu.parentNode).toBe(main);
 
   click(trigger);
-  expect(menu.parentNode).toBe(document.body);
+  expect(isOpen(menu)).toBe(true);
+  expect(menu.parentNode).toBe(main);
 
   click(trigger);
   await nextMicrotask();
+  expect(isOpen(menu)).toBe(false);
   expect(menu.parentNode).toBe(main);
 });
 
@@ -281,7 +286,7 @@ test("removing one trigger does not disconnect a shared flyout", async () => {
   await nextMicrotask();
   click(second);
 
-  expect(menu.hidden).toBe(false);
+  expect(isOpen(menu)).toBe(true);
   expect(menu.classList.contains("is-open")).toBe(true);
 });
 
@@ -302,7 +307,7 @@ test("flyout connects when the menu is inserted after its trigger", async () => 
   setupGeometry(trigger, menu);
   click(trigger);
 
-  expect(menu.hidden).toBe(false);
+  expect(isOpen(menu)).toBe(true);
   expect(menu.classList.contains("is-open")).toBe(true);
 });
 
@@ -329,8 +334,8 @@ test("flyout trigger re-resolves a same-id replacement", async () => {
 
   click(trigger);
 
-  expect(first.hidden).toBe(true);
-  expect(replacement.hidden).toBe(false);
+  expect(isOpen(first)).toBe(false);
+  expect(isOpen(replacement)).toBe(true);
   expect(replacement.classList.contains("is-open")).toBe(true);
 
   // Reconnecting the replacement must release the detached menu's listeners.
@@ -361,7 +366,7 @@ test("flyout trigger opens nav panels and focuses the first link", async () => {
 
   press(trigger, "Enter");
 
-  expect(panel.hidden).toBe(false);
+  expect(isOpen(panel)).toBe(true);
   expect(panel.classList.contains("is-open")).toBe(true);
   expect(document.activeElement).toBe(first);
 });
@@ -388,7 +393,7 @@ test("nav panel fallback skips invisible items when checkVisibility is unavailab
 
   press(trigger, "Enter");
 
-  expect(panel.hidden).toBe(false);
+  expect(isOpen(panel)).toBe(true);
   expect(document.activeElement).toBe(visible);
 });
 
@@ -409,7 +414,7 @@ test("tab from an open nav panel trigger enters the panel", async () => {
   click(trigger);
   press(trigger, "Tab");
 
-  expect(panel.hidden).toBe(false);
+  expect(isOpen(panel)).toBe(true);
   expect(document.activeElement).toBe(first);
 });
 
@@ -428,7 +433,7 @@ test("keyboard context menu focuses the first direct menu item", async () => {
 
   press(target, "ContextMenu");
 
-  expect(menu.hidden).toBe(false);
+  expect(isOpen(menu)).toBe(true);
   expect(menu.classList.contains("is-open")).toBe(true);
   expect(document.activeElement).toBe(first);
 });
@@ -489,7 +494,7 @@ test("a context menu opening can be cancelled", async () => {
     new MouseEvent("contextmenu", { bubbles: true, cancelable: true, clientX: 20, clientY: 30 }),
   );
 
-  expect(menu.hidden).toBe(true);
+  expect(isOpen(menu)).toBe(false);
 });
 
 test("a flyout trigger opens the menu with its enclosing context", async () => {
@@ -512,7 +517,7 @@ test("a flyout trigger opens the menu with its enclosing context", async () => {
 
   click(trigger);
 
-  expect(menu.hidden).toBe(false);
+  expect(isOpen(menu)).toBe(true);
   expect(document.activeElement).toBe(menu);
   expect(detail.context).toBe(target);
   expect(detail.origin).toBe(trigger);
@@ -536,7 +541,7 @@ test("pointer context menu focuses the menu container, not the first item", asyn
     new MouseEvent("contextmenu", { bubbles: true, cancelable: true, clientX: 20, clientY: 30 }),
   );
 
-  expect(menu.hidden).toBe(false);
+  expect(isOpen(menu)).toBe(true);
   expect(document.activeElement).toBe(menu);
 
   press(menu, "ArrowDown");
@@ -570,8 +575,9 @@ test("focus-induced scroll does not dismiss a pointer context menu", async () =>
   await nextFrame();
 
   expect(focusOptions).toEqual({ preventScroll: true });
-  expect(menu.parentNode).toBe(document.body);
-  expect(menu.hidden).toBe(false);
+  // The transport promotes instead of relocating, so the panel stays authored.
+  expect(menu.parentNode).toBe(document.querySelector("article"));
+  expect(isOpen(menu)).toBe(true);
   expect(menu.classList.contains("is-open")).toBe(true);
 });
 
@@ -599,7 +605,7 @@ test("handled menu navigation does not arm scroll dismissal", async () => {
   await nextFrame();
 
   expect(document.activeElement).toBe(first);
-  expect(menu.hidden).toBe(false);
+  expect(isOpen(menu)).toBe(true);
   expect(menu.classList.contains("is-open")).toBe(true);
 });
 
@@ -629,7 +635,7 @@ test("surface tracking starts after a context menu becomes visible", async () =>
     new MouseEvent("contextmenu", { bubbles: true, cancelable: true, clientX: 20, clientY: 30 }),
   );
 
-  expect(menu.hidden).toBe(false);
+  expect(isOpen(menu)).toBe(true);
   expect(hiddenWhenObserved).toBe(false);
 });
 
@@ -662,7 +668,7 @@ test("a scroll queued before context-menu opening does not close the new menu", 
   );
   await nextFrame();
 
-  expect(menu.hidden).toBe(false);
+  expect(isOpen(menu)).toBe(true);
   expect(menu.classList.contains("is-open")).toBe(true);
 });
 
@@ -684,7 +690,7 @@ test("user scrolling after context-menu opening closes the menu", async () => {
   document.dispatchEvent(new Event("scroll"));
   await nextFrame();
 
-  expect(menu.hidden).toBe(true);
+  expect(isOpen(menu)).toBe(false);
   expect(menu.classList.contains("is-open")).toBe(false);
 });
 
@@ -706,7 +712,7 @@ test("scrolling inside a context menu does not dismiss it", async () => {
   menu.dispatchEvent(new Event("scroll"));
   await nextFrame();
 
-  expect(menu.hidden).toBe(false);
+  expect(isOpen(menu)).toBe(true);
   expect(menu.classList.contains("is-open")).toBe(true);
 });
 
@@ -724,12 +730,12 @@ test("removing an open context menu cleans up its surface state", async () => {
   target.dispatchEvent(
     new MouseEvent("contextmenu", { bubbles: true, cancelable: true, clientX: 20, clientY: 30 }),
   );
-  expect(menu.hidden).toBe(false);
+  expect(isOpen(menu)).toBe(true);
 
   menu.remove();
   await nextMicrotask();
 
-  expect(menu.hidden).toBe(true);
+  expect(isOpen(menu)).toBe(false);
   expect(menu.classList.contains("is-open")).toBe(false);
 });
 
@@ -753,11 +759,11 @@ test("an outside click closes a context menu opened through the shared surface",
   target.dispatchEvent(
     new MouseEvent("contextmenu", { bubbles: true, cancelable: true, clientX: 20, clientY: 30 }),
   );
-  expect(menu.hidden).toBe(false);
+  expect(isOpen(menu)).toBe(true);
 
   click(document.getElementById("elsewhere"));
 
-  expect(menu.hidden).toBe(true);
+  expect(isOpen(menu)).toBe(false);
   expect(menu.classList.contains("is-open")).toBe(false);
 });
 
@@ -780,7 +786,7 @@ test("D9 — removing a context target closes its open context menu", async () =
   target.dispatchEvent(
     new MouseEvent("contextmenu", { bubbles: true, cancelable: true, clientX: 20, clientY: 30 }),
   );
-  expect(menu.hidden).toBe(false);
+  expect(isOpen(menu)).toBe(true);
   expect(menu.classList.contains("is-open")).toBe(true);
 
   wrapper.remove();
@@ -806,7 +812,7 @@ test("D9 — removing a flyout trigger closes its open panel", async () => {
   setupGeometry(trigger, menu);
 
   press(trigger, "Enter");
-  expect(menu.hidden).toBe(false);
+  expect(isOpen(menu)).toBe(true);
   expect(menu.classList.contains("is-open")).toBe(true);
 
   container.remove();
@@ -815,7 +821,7 @@ test("D9 — removing a flyout trigger closes its open panel", async () => {
   expect(menu.classList.contains("is-open")).toBe(false);
 });
 
-test("removing an open flyout with its original parent removes the mounted panel", async () => {
+test("removing an open flyout with its container removes the panel too", async () => {
   await loadFlyout(`
     <div id="container">
       <button id="trigger" type="button" data-enhance="flyout" aria-controls="menu">Open</button>
@@ -830,7 +836,7 @@ test("removing an open flyout with its original parent removes the mounted panel
   setupGeometry(trigger, menu);
 
   click(trigger);
-  expect(menu.parentElement).toBe(document.body);
+  expect(isOpen(menu)).toBe(true);
 
   container.remove();
   await nextMicrotask();
@@ -838,7 +844,7 @@ test("removing an open flyout with its original parent removes the mounted panel
   expect(menu.isConnected).toBe(false);
 });
 
-test("removing the last flyout trigger restores its panel when the original parent survives", async () => {
+test("removing the last flyout trigger closes its panel and leaves it in place", async () => {
   await loadFlyout(`
     <div id="container">
       <button id="trigger" type="button" data-enhance="flyout" aria-controls="menu">Open</button>
@@ -853,13 +859,13 @@ test("removing the last flyout trigger restores its panel when the original pare
   setupGeometry(trigger, menu);
 
   click(trigger);
-  expect(menu.parentElement).toBe(document.body);
+  expect(isOpen(menu)).toBe(true);
 
   trigger.remove();
   await nextMicrotask();
 
   expect(menu.parentElement).toBe(container);
-  expect(menu.hidden).toBe(true);
+  expect(isOpen(menu)).toBe(false);
 });
 
 test("multi-trigger — two triggers control the same panel independently", async () => {
@@ -876,24 +882,24 @@ test("multi-trigger — two triggers control the same panel independently", asyn
   setupGeometry(first, menu);
 
   click(first);
-  expect(menu.hidden).toBe(false);
+  expect(isOpen(menu)).toBe(true);
   expect(menu.classList.contains("is-open")).toBe(true);
   expect(first.getAttribute("aria-expanded")).toBe("true");
   expect(second.getAttribute("aria-expanded")).toBe("true");
 
   click(first);
   await nextMicrotask();
-  expect(menu.hidden).toBe(true);
+  expect(isOpen(menu)).toBe(false);
   expect(first.getAttribute("aria-expanded")).toBe("false");
   expect(second.getAttribute("aria-expanded")).toBe("false");
 
   click(second);
-  expect(menu.hidden).toBe(false);
+  expect(isOpen(menu)).toBe(true);
   expect(menu.classList.contains("is-open")).toBe(true);
 
   click(second);
   await nextMicrotask();
-  expect(menu.hidden).toBe(true);
+  expect(isOpen(menu)).toBe(false);
 });
 
 test("multi-trigger — removing the active trigger closes the panel cleanly", async () => {
@@ -913,7 +919,7 @@ test("multi-trigger — removing the active trigger closes the panel cleanly", a
   setupGeometry(first, menu);
 
   click(first);
-  expect(menu.hidden).toBe(false);
+  expect(isOpen(menu)).toBe(true);
 
   container.remove();
   await nextMicrotask();
@@ -923,7 +929,7 @@ test("multi-trigger — removing the active trigger closes the panel cleanly", a
 
   setupGeometry(second, menu);
   click(second);
-  expect(menu.hidden).toBe(false);
+  expect(isOpen(menu)).toBe(true);
   expect(menu.classList.contains("is-open")).toBe(true);
 });
 
@@ -948,7 +954,7 @@ test("multi-trigger — restore focus to the trigger that opened the panel", asy
   expect(document.activeElement).toBe(first);
 
   click(second);
-  expect(menu.hidden).toBe(false);
+  expect(isOpen(menu)).toBe(true);
   item.focus();
   press(menu, "Escape");
 
@@ -968,10 +974,10 @@ test("autoClose — menu-item click keeps surface open with data-flyout-auto-clo
   setupGeometry(trigger, menu);
 
   click(trigger);
-  expect(menu.hidden).toBe(false);
+  expect(isOpen(menu)).toBe(true);
 
   click(item);
-  expect(menu.hidden).toBe(false);
+  expect(isOpen(menu)).toBe(true);
   expect(menu.classList.contains("is-open")).toBe(true);
 });
 
@@ -988,10 +994,10 @@ test("autoClose — menu-item click closes surface with data-flyout-auto-close='
   setupGeometry(trigger, menu);
 
   click(trigger);
-  expect(menu.hidden).toBe(false);
+  expect(isOpen(menu)).toBe(true);
 
   click(item);
-  expect(menu.hidden).toBe(true);
+  expect(isOpen(menu)).toBe(false);
 });
 
 test("autoClose — rich panel inside clicks follow data-flyout-auto-close='inside'", async () => {
@@ -1008,10 +1014,10 @@ test("autoClose — rich panel inside clicks follow data-flyout-auto-close='insi
 
   click(trigger);
   click(document.getElementById("outside"));
-  expect(panel.hidden).toBe(false);
+  expect(isOpen(panel)).toBe(true);
 
   click(document.getElementById("item"));
-  expect(panel.hidden).toBe(true);
+  expect(isOpen(panel)).toBe(false);
 });
 
 test("autoClose — keyboard activation follows the outside-only policy", async () => {
@@ -1029,7 +1035,7 @@ test("autoClose — keyboard activation follows the outside-only policy", async 
   press(trigger, "ArrowDown");
   press(menu, "Enter");
 
-  expect(menu.hidden).toBe(false);
+  expect(isOpen(menu)).toBe(true);
   expect(document.activeElement).toBe(item);
 });
 
@@ -1048,7 +1054,7 @@ test("autoClose — disabled menu items do not dismiss the surface", async () =>
   click(trigger);
   click(item);
 
-  expect(menu.hidden).toBe(false);
+  expect(isOpen(menu)).toBe(true);
 });
 
 test("data-flyout-close dismisses a manual rich panel", async () => {
@@ -1065,10 +1071,10 @@ test("data-flyout-close dismisses a manual rich panel", async () => {
 
   click(trigger);
   click(document.getElementById("keep"));
-  expect(panel.hidden).toBe(false);
+  expect(isOpen(panel)).toBe(true);
 
   click(document.getElementById("close"));
-  expect(panel.hidden).toBe(true);
+  expect(isOpen(panel)).toBe(false);
 });
 
 for (const [role, key] of [
@@ -1094,6 +1100,6 @@ for (const [role, key] of [
 
     expect(activations).toBe(1);
     expect(item.getAttribute("aria-checked")).toBe("false");
-    expect(menu.hidden).toBe(false);
+    expect(isOpen(menu)).toBe(true);
   });
 }

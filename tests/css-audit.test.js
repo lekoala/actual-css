@@ -539,7 +539,7 @@ test("dialog surfaces stay fixed to the viewport", () => {
   expect(drawerCss).toMatch(/dialog\.drawer\s*\{[^}]*max-block-size:\s*100%;/);
 });
 
-test("drawer RTL keeps the Minimal fallback and enhances inherited direction", () => {
+test("drawer RTL keeps the Degraded fallback and enhances inherited direction", () => {
   const css = readCss("src/css/components/drawer.css");
 
   expect(css).toContain('[dir="rtl"] dialog.drawer {');

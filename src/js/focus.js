@@ -9,6 +9,12 @@ const FOCUSABLE_SELECTOR = [
   "[tabindex]",
 ].join(",");
 
+/*
+ * The branch below checkVisibility() is not dead code: checkVisibility() is
+ * Safari 17.4 and the floor is Safari 17, so it is the branch that runs at the
+ * bottom of the supported range — where it also decides whether a closed
+ * popover's contents are reachable. Measured there; do not drop it.
+ */
 export function isElementVisible(el) {
   if (!el || el.hidden) return false;
   if (typeof el.checkVisibility === "function") return el.checkVisibility();

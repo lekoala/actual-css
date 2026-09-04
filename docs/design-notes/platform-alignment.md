@@ -159,6 +159,41 @@ not yet, because the current positioner also reports *placement validity*, which
 the lifecycle uses to close a surface whose anchor has left the viewport, and
 declarative CSS positioning offers no equivalent signal.
 
+### Top-layer transport must not imply lifecycle ownership
+
+A capability that solves one problem is not an invitation to hand it the
+neighbouring ones. Popover bundles a transport — promotion to the top layer —
+with a lifecycle, and the two are separable: `popover="manual"` supplies the
+transport and nothing else.
+
+That separation is what lets Actual use the native top layer while remaining
+the owner of:
+
+```text
+.is-open
+Escape ordering
+inside / outside dismissal
+focus restoration
+sheet policy
+```
+
+The slide to guard against is "we are using Popover, so we should use its
+lifecycle too". Those are two decisions, taken on different evidence. The
+transport is judged on what it removes; the lifecycle is judged on whether the
+component contract survives it — and for Flyout it does not, because
+`data-flyout-auto-close` defaults to closing on an inside click, which native
+light-dismiss cannot express.
+
+The rule cuts the other way too, and that is where the boundary actually falls:
+a capability is not obliged to take on a responsibility just because it looks
+adjacent. A native `::backdrop` is painted for a manual popover and even
+inherits custom properties from its originating element, but its UA
+`pointer-events: none` is not overridable from author CSS — not with
+`!important` either, since a UA `!important` outranks an author one. So it
+cannot do the scrim's second job, absorbing the pointer, and the scrim stays an
+Actual element. Adopting the transport did not make the platform responsible
+for everything the old transport happened to carry.
+
 ### Ceding the properties a capability is expressed through
 
 Keeping presentation and behavior separate is not enough on its own, because
@@ -184,10 +219,13 @@ This is checkable rather than aspirational: any Actual class that carries a
 
 The corresponding trap is adopting a capability in a way that adds an axis
 instead of replacing one. A second surface transport living alongside the
-existing one would leave the DOM-reparenting code in place while doubling the
-behavior matrix, which is the opposite of the deletion this note asks for. The
-acceptance criterion for moving Actual’s own surfaces onto the top layer is
-therefore concrete: the change should remove more surface code than it adds.
+existing one would have left the DOM-reparenting code in place while doubling
+the behavior matrix, which is the opposite of the deletion this note asks for.
+That is why the top-layer transport was adopted by raising the floor rather
+than behind a capability branch: the axis was replaced, not added. Counting
+lines was the weaker half of the criterion — the transport removed one concept
+and a defect while the file grew by five lines. See
+[popover-manual-poc](popover-manual-poc.md).
 
 ## Prefer capabilities over browser generations
 
