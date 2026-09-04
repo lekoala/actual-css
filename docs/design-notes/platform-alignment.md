@@ -138,6 +138,34 @@ Actual class + native HTML
 
 rather than replacing one framework API with another.
 
+## Surface responsibility split
+
+Anchored surfaces are the clearest case where the platform is absorbing one
+responsibility at a time rather than a whole widget. Keeping the axes named
+separately is what lets each be replaced on its own schedule:
+
+```text
+Popover            = where the surface lives
+floating           = where it is placed
+surface.js         = when and how it opens
+flyout / tooltip   = what it looks like
+menu               = how its content behaves
+```
+
+The value of the split is that each line can change owner independently.
+Popover can take over the top layer without touching placement. Anchor
+positioning could later take over placement without touching lifecycle — though
+not yet, because the current positioner also reports *placement validity*, which
+the lifecycle uses to close a surface whose anchor has left the viewport, and
+declarative CSS positioning offers no equivalent signal.
+
+The corresponding trap is adopting a capability in a way that adds an axis
+instead of replacing one. A second surface transport living alongside the
+existing one would leave the DOM-reparenting code in place while doubling the
+behavior matrix, which is the opposite of the deletion this note asks for. The
+acceptance criterion for moving Actual’s own surfaces onto the top layer is
+therefore concrete: the change should remove more surface code than it adds.
+
 ## Prefer capabilities over browser generations
 
 New platform features should not automatically raise Actual's Minimal browser floor.

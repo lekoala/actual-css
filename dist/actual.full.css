@@ -4840,18 +4840,33 @@ dialog.drawer > form > header {
 }
 
 /* Native popovers enter the top layer with UA geometry that conflicts with
-   anchored positioning. Keep the reset scoped to Actual surfaces so bare
-   [popover] elements retain their platform presentation. */
-.flyout[popover] {
-  position: fixed;
-  inset: auto;
-  margin: 0;
+   anchored positioning. The reset is gated on real Popover support because an
+   attribute selector matches whether or not the engine implements Popover:
+   without it the UA neither hides nor promotes the element, so an ungated
+   reset would strand a permanently visible panel at inset: auto. Popover is
+   not part of Actual's Minimal contract — engines inside the Minimal range
+   may lack it — so the gate is about the capability, not the floor. Kept
+   scoped to Actual surfaces so bare [popover] elements retain their platform
+   presentation. */
+@supports selector(:popover-open) {
+  .flyout[popover] {
+    position: fixed;
+    inset: auto;
+    margin: 0;
+  }
 }
 
+/* compat-ok: :popover-open rides in a forgiving :is(), where an engine without
+   Popover discards just that member and .is-open alone keeps driving the open
+   state. This is a property of the forgiving list, not of the pseudo-class: in
+   a plain selector list an unsupported member would invalidate the whole rule.
+   Keep it inside :is()/:where() or gate it. */
 .flyout:is(.is-open, :popover-open):not(.is-sheet) {
   inset: auto;
 }
 
+/* compat-ok: forgiving :is() again, and @starting-style is itself unsupported
+   across part of the Minimal range, so the rule simply does not exist there. */
 @starting-style {
   .flyout:is(.is-open, :popover-open) {
     opacity: 0;
@@ -4892,16 +4907,23 @@ dialog.drawer > form > header {
   translate: 0 var(--space-30);
 }
 
+/* compat-ok: forgiving :is() inside @starting-style, as above. */
 @starting-style {
   .flyout.is-sheet:is(.is-open, :popover-open) {
     translate: 0 var(--space-30);
   }
 }
 
+/* display keeps the exit transition alive for the [hidden] path; overlay does
+   the same for the native popover path, where hidePopover() would otherwise
+   drop the panel out of the top layer on the first frame and let a parent
+   overflow or a dialog clip the fade. An engine that cannot transition either
+   property ignores it and the exit is instant. */
 @supports (transition-behavior: allow-discrete) {
   .flyout {
     transition:
       opacity var(--duration-fast) ease,
+      overlay var(--duration-fast) allow-discrete,
       display var(--duration-fast) allow-discrete;
   }
 
@@ -4909,6 +4931,7 @@ dialog.drawer > form > header {
     transition:
       opacity var(--duration-fast) ease,
       translate var(--duration-fast) ease,
+      overlay var(--duration-fast) allow-discrete,
       display var(--duration-fast) allow-discrete;
   }
 }
@@ -5128,11 +5151,18 @@ dialog.drawer > form > header {
 
 /* Neutralize only the native geometry that conflicts with a positioned
    tooltip. In particular, the UA overflow would turn the arrow into scroll
-   overflow instead of letting it project beyond the bubble. */
-.tooltip[popover] {
-  inset: auto;
-  margin: 0;
-  overflow: visible;
+   overflow instead of letting it project beyond the bubble. Gated on real
+   Popover support: the attribute selector matches whether or not the engine
+   implements Popover, and without it nothing hides the element, so an ungated
+   reset would leave a stray bubble parked at inset: auto. Popover sits outside
+   Actual's Minimal contract, so the gate tracks the capability rather than the
+   floor. */
+@supports selector(:popover-open) {
+  .tooltip[popover] {
+    inset: auto;
+    margin: 0;
+    overflow: visible;
+  }
 }
 
 .tooltip[hidden] {
@@ -5140,16 +5170,26 @@ dialog.drawer > form > header {
   opacity: 0;
 }
 
+/* Entry opacity for both lifecycles: a runtime-driven tip is visible when it
+   is neither a popover nor [hidden], a native one when it is :popover-open.
+   compat-ok: [popover] appears here only under negation, which every engine
+   evaluates correctly whether or not it implements Popover, :popover-open
+   rides in a forgiving :is(), and @starting-style is itself unsupported across
+   part of the Minimal range — so the rule does not exist there at all. */
 @starting-style {
   .tooltip:is(:not([popover]):not([hidden]), :popover-open) {
     opacity: 0;
   }
 }
 
+/* overlay is the native popover counterpart of display: it holds the tip in
+   the top layer until the fade finishes, instead of letting hidePopover()
+   demote it on the first frame. Ignored where unsupported. */
 @supports (transition-behavior: allow-discrete) {
   .tooltip {
     transition:
       opacity var(--duration-fast) ease,
+      overlay var(--duration-fast) allow-discrete,
       display var(--duration-fast) allow-discrete;
   }
 }

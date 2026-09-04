@@ -41,11 +41,18 @@
 
 /* Neutralize only the native geometry that conflicts with a positioned
    tooltip. In particular, the UA overflow would turn the arrow into scroll
-   overflow instead of letting it project beyond the bubble. */
-.tooltip[popover] {
-  inset: auto;
-  margin: 0;
-  overflow: visible;
+   overflow instead of letting it project beyond the bubble. Gated on real
+   Popover support: the attribute selector matches whether or not the engine
+   implements Popover, and without it nothing hides the element, so an ungated
+   reset would leave a stray bubble parked at inset: auto. Popover sits outside
+   Actual's Minimal contract, so the gate tracks the capability rather than the
+   floor. */
+@supports selector(:popover-open) {
+  .tooltip[popover] {
+    inset: auto;
+    margin: 0;
+    overflow: visible;
+  }
 }
 
 .tooltip[hidden] {
@@ -53,16 +60,26 @@
   opacity: 0;
 }
 
+/* Entry opacity for both lifecycles: a runtime-driven tip is visible when it
+   is neither a popover nor [hidden], a native one when it is :popover-open.
+   compat-ok: [popover] appears here only under negation, which every engine
+   evaluates correctly whether or not it implements Popover, :popover-open
+   rides in a forgiving :is(), and @starting-style is itself unsupported across
+   part of the Minimal range — so the rule does not exist there at all. */
 @starting-style {
   .tooltip:is(:not([popover]):not([hidden]), :popover-open) {
     opacity: 0;
   }
 }
 
+/* overlay is the native popover counterpart of display: it holds the tip in
+   the top layer until the fade finishes, instead of letting hidePopover()
+   demote it on the first frame. Ignored where unsupported. */
 @supports (transition-behavior: allow-discrete) {
   .tooltip {
     transition:
       opacity var(--duration-fast) ease,
+      overlay var(--duration-fast) allow-discrete,
       display var(--duration-fast) allow-discrete;
   }
 }

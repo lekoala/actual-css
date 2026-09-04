@@ -23,6 +23,12 @@ positioning and with the projecting arrow, while leaving bare `[popover]`
 elements untouched. The lifecycle owner must still write the fixed viewport
 coordinates and arrow position; Actual only supplies the presentation.
 
+That reset is gated on `@supports selector(:popover-open)`. Native Popover is
+optional and is not part of Actual's Minimal contract: browsers within the
+Minimal range may not support it, and there the attribute carries no behavior,
+so nothing shows or hides the tip. Use `data-tooltip` and the built-in runtime
+when the lifecycle must work across the full Minimal range.
+
 ```html demo
 <button class="btn ghost"
         type="button"

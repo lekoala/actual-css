@@ -290,8 +290,18 @@ must write fixed viewport coordinates (and may write <code>--available-height</c
 <code>--surface-anchor-width</code>); the built-in <code>surface.js</code> runtime remains the full
 fallback when Actual owns the lifecycle too. A bare <code>[popover]</code> without
 <code>.flyout</code> or <code>.tooltip</code> keeps its platform appearance.</p>
-<p>Use <code>data-flyout-auto-close</code> when the default click dismissal behavior is not
-right. Escape still follows the shared surface lifecycle.</p>
+<p>Native Popover is optional and is not part of Actual's Minimal contract:
+browsers within the Minimal range may not support it. Actual gates its own
+geometry reset behind <code>@supports selector(:popover-open)</code>, so an engine without
+Popover no longer gets a mispositioned panel — but that engine also never hides
+or promotes a <code>popover</code> element, so nothing dismisses the panel either.</p>
+<p>When the lifecycle must work across the full Minimal range, use <code>surface.js</code>.
+Otherwise using the native lifecycle is an application support decision. The
+two are alternatives, not layers.</p>
+<p><strong>When <code>surface.js</code> owns the lifecycle</strong>, use <code>data-flyout-auto-close</code> if the
+default click dismissal behavior is not right. Escape still follows the shared
+surface lifecycle. These options do not reach a natively managed
+<code>popover=&quot;auto&quot;</code>, whose dismissal belongs to the browser.</p>
 <ul>
 <li><code>true</code> is the default. Clicks inside or outside close the flyout.</li>
 <li><code>inside</code> closes on inside clicks only.</li>

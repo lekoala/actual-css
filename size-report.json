@@ -1,12 +1,12 @@
 {
-  "totalRaw": 273832,
+  "totalRaw": 276479,
   "core": {
     "minified": 10889,
     "brotli": 2553
   },
   "full": {
-    "minified": 120767,
-    "brotli": 17689
+    "minified": 120978,
+    "brotli": 17665
   },
   "js": {
     "core": {
@@ -45,6 +45,10 @@
       "raw": 7121
     },
     {
+      "file": "components/flyout.css",
+      "raw": 6882
+    },
+    {
       "file": "forms/choice.css",
       "raw": 6028
     },
@@ -59,10 +63,6 @@
     {
       "file": "effects/aura.css",
       "raw": 5400
-    },
-    {
-      "file": "components/flyout.css",
-      "raw": 5353
     },
     {
       "file": "components/badge.css",
@@ -95,6 +95,10 @@
     {
       "file": "utilities/extra.css",
       "raw": 4403
+    },
+    {
+      "file": "components/tooltip.css",
+      "raw": 4361
     },
     {
       "file": "forms/switch.css",
@@ -131,10 +135,6 @@
     {
       "file": "components/menu.css",
       "raw": 3279
-    },
-    {
-      "file": "components/tooltip.css",
-      "raw": 3243
     },
     {
       "file": "components/status-bar.css",

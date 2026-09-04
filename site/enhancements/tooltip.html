@@ -233,6 +233,11 @@ Actual removes the native inset, margin, and overflow that conflict with
 positioning and with the projecting arrow, while leaving bare <code>[popover]</code>
 elements untouched. The lifecycle owner must still write the fixed viewport
 coordinates and arrow position; Actual only supplies the presentation.</p>
+<p>That reset is gated on <code>@supports selector(:popover-open)</code>. Native Popover is
+optional and is not part of Actual's Minimal contract: browsers within the
+Minimal range may not support it, and there the attribute carries no behavior,
+so nothing shows or hides the tip. Use <code>data-tooltip</code> and the built-in runtime
+when the lifecycle must work across the full Minimal range.</p>
 </div>
 <div class="docs-example">
   <div class="docs-preview">
