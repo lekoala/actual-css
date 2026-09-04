@@ -81,6 +81,11 @@ Add relevant guards for future-us when needed based on traps and discoveries.
 - Don't create file outside the project
 - Temp files can be created in `./tmp`
 - If code and docs disagree, treat code as the API source and update the smallest doc that explains the decision
+- Release tags carry no `v` prefix: `0.7.0`, never `v0.7.0`. The maintainer
+  creates the tag — a release stops at the version commit (dated changelog
+  section, bumped `package.json`, rebuilt artifacts). Do not tag and do not
+  publish to npm. Read the format from `git ls-remote --tags github`, not from
+  the local tag list, which can hold a stray a push never carried.
 - Resolve designs toward the system before transcribing them. Prefer an existing
   token or primitive when it is a close match. Use a public component hook for
   intentional local deviations. Add application CSS only when the difference is
