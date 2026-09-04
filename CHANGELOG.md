@@ -5,6 +5,8 @@
 ### Added
 
 - Popover transport probe: `demo/templates/popover-transport.html`.
+- Settings modal composition demo: `demo/templates/settings-modal.html`.
+- `.list` rows accept any combination of leading, content and trailing regions.
 - `bun run serve`, a static server for opening demo pages from another device.
 
 ### Breaking
@@ -17,6 +19,17 @@
   engines.
 - `disconnectSurface(menu, { restore })` no longer takes options; the
   reparenting it controlled is gone.
+
+### Fixed
+
+- `--modal-size` is fallback-only, so a class on the dialog can set it.
+- `.list-item` is flex: a row with no leading region no longer puts its content
+  in the leading track and its control in the flexible one.
+- Tabs that are `hidden` are skipped by keyboard navigation.
+- Vertical tabs round the focus ring on the inline edge, not the block edge.
+- `.tabs` matches `aria-orientation` inside `:where()`, so an author class can
+  restyle a vertical strip without restating the attribute.
+- `check:architecture` enforces that `aria-orientation` stays inside `:where()`.
 
 ### Changed
 

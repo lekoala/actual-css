@@ -1,0 +1,684 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Settings modal - Actual CSS</title>
+  <meta name="description" content="A two-pane settings modal composed from the modal, vertical tabs, list rows, and form controls.">
+  <link rel="stylesheet" href="../../dist/actual.full.css">
+  <link rel="stylesheet" href="../assets/actual-themes.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+  <style>
+    .settings-page {
+      --center-size: 48rem;
+
+      padding-block: var(--space-60);
+    }
+
+    .settings-intro {
+      display: grid;
+      gap: var(--space-30);
+    }
+
+    .settings-intro > * {
+      margin: 0;
+    }
+
+    /*
+     * Everything below is the composition of this particular dialog: the two
+     * hooks it sets, the panel geometry, and the placement decisions a
+     * settings dialog makes that a generic modal cannot make for it. No rule
+     * here restates a framework declaration to reach its specificity.
+     */
+
+    /* --modal-size is the documented maximum width, and a fixed positioned
+       dialog is shrink-to-fit, so a two-column composition that has to fill
+       that width asks for it. A modal sized by its own text — most of them —
+       wants the intrinsic default instead, which is why the component caps
+       rather than sets. Its max-inline-size still clamps this on a narrow
+       viewport.
+       The block-size is what gives the two panes a definite height to divide:
+       the dialog is position:fixed, so the percentage resolves against the
+       viewport, and max-block-size keeps the edge gap. */
+    .settings-modal {
+      --modal-size: 58rem;
+      /* One inset for the whole rail: the close button, the search field and
+         the empty-state line all measure from it, so their start edges agree. */
+      --settings-rail-inset: var(--space-30);
+
+      inline-size: var(--modal-size);
+      block-size: min(36rem, 100%);
+    }
+
+    /* .dialog-close and .drawer-close deliberately share one top/end model, so
+       putting the close control over a left rail is this dialog's call. Both
+       axes move, not just the side: the component's --space-20 inset assumes
+       a corner with nothing aligned under it, where 8px reads fine against
+       the panel's 12px radius. Put a filled 38px button above a search field
+       inset by 12px and the two start edges disagree by 4px, which is what
+       the eye picks up. On the rail's inset the button lines up with its
+       column and clears the corner curve. */
+    .settings-modal > .dialog-close {
+      inset-block-start: var(--settings-rail-inset);
+      inset-inline: var(--settings-rail-inset) auto;
+    }
+
+    /* A div child deliberately skips the padding that dialog.modal gives its
+       form/.stack children, which is what makes the body full-bleed; the
+       bounded row is what lets each pane scroll on its own instead of growing
+       the dialog. */
+    .settings-body {
+      display: grid;
+      grid-template: minmax(0, 1fr) / minmax(0, 15rem) minmax(0, 1fr);
+      block-size: 100%;
+    }
+
+    .settings-nav,
+    .settings-panels {
+      min-block-size: 0;
+      overflow: auto;
+    }
+
+    /* The tab strip's own divider stops at the last tab, and this rail's has
+       to run the full column height: past the search field, and below a short
+       list. So the column owns the divider and the strip gives its own up —
+       one plain class each, now that the vertical rules carry no attribute
+       weight. */
+    .settings-nav {
+      border-inline-end: var(--border-width) solid var(--border);
+    }
+
+    /* The tab strip spans the column so its selected indicator lands on the
+       rail's divider, which is the whole point of the vertical variant. Only
+       the rail's other content is inset. */
+    .settings-nav-inner {
+      display: grid;
+      gap: var(--space-30);
+      /* The re-anchored close button sits in this column: reserve its row,
+         then the same inset again as the gap below it. Spelled additively
+         because calc() multiplication is below the supported floor, the same
+         way modal.css doubles its viewport gap. */
+      padding-block:
+        calc(var(--settings-rail-inset) + var(--control-size) + var(--settings-rail-inset))
+        var(--space-30);
+    }
+
+    .settings-nav-inner > :not(.settings-tabs) {
+      margin-inline: var(--settings-rail-inset);
+    }
+
+    .settings-tabs {
+      border-inline-end: 0;
+    }
+
+    .settings-panels {
+      padding: var(--space-40) var(--space-50) var(--space-50);
+    }
+
+    .settings-panel > h2 {
+      margin: 0;
+    }
+
+    /* Documented escape hatch, per the .list contract: regions align to the
+       row's first line, and a two-line row centers its trailing control only
+       when the app says so. */
+    .settings-row-center > .list-item-trailing {
+      align-self: center;
+    }
+
+    /* A 12px round preview next to a picker is not a framework primitive. If
+       it turns up in a palette, a theme selector and a status dot as well, it
+       earns one. */
+    .settings-swatch {
+      inline-size: 0.75rem;
+      block-size: 0.75rem;
+      border: var(--border-width) solid var(--border);
+      border-radius: var(--radius-full);
+      background: var(--primary);
+    }
+
+    .settings-empty {
+      margin: 0;
+      color: var(--text-muted);
+      font-size: var(--font-size-sm);
+    }
+
+    /* The rail stacks above the panel when the dialog is too narrow for two
+       columns, and stays a vertical list. .tabs keys its vertical layout on
+       aria-orientation, which also tells the runtime which arrow keys move
+       between tabs, so layout and semantics have to change together: that is
+       a JS decision, not something a media query should fake. A bounded,
+       scrolling height is the honest answer here. The strip is inset with the
+       rest of the rail because its selected indicator would otherwise sit on
+       the panel's edge with no divider under it. */
+    @media (max-width: 44rem) {
+      .settings-body {
+        grid-template: minmax(0, 13rem) minmax(0, 1fr) / minmax(0, 1fr);
+      }
+
+      .settings-nav {
+        border-inline-end: 0;
+        border-block-end: var(--border-width) solid var(--border);
+      }
+
+      .settings-nav-inner > .settings-tabs {
+        margin-inline: var(--settings-rail-inset);
+      }
+
+      .settings-panels {
+        padding-inline: var(--space-40);
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="center settings-page">
+    <header class="settings-intro">
+      <p class="overline">Actual CSS</p>
+      <h1>Settings modal</h1>
+      <p class="lead">
+        A two-pane preferences dialog: a searchable vertical tab rail, panels of
+        label/control rows, and the full spread of form controls. Everything is
+        framework markup — <code>.modal</code>, <code>.tabs</code>,
+        <code>.list</code>, <code>.input-icon</code>, <code>.select</code>,
+        <code>.switch</code>, <code>.meter</code> — and the page's
+        <code>&lt;style&gt;</code> block says what each local rule is for.
+      </p>
+      <div class="cluster">
+        <button class="btn primary" type="button" commandfor="settings-modal" command="show-modal"
+                aria-haspopup="dialog" aria-controls="settings-modal">
+          <i class="ti ti-settings" aria-hidden="true"></i>
+          Open settings
+        </button>
+        <select class="select sm fit" id="theme-switcher" aria-label="Switch theme">
+          <option value="">System</option>
+          <option value="light">Light</option>
+          <option value="dark">Dark</option>
+          <optgroup label="Themes">
+            <option value="indigo">Indigo</option>
+            <option value="dim">Dim</option>
+            <option value="corporate">Corporate</option>
+            <option value="forest">Forest</option>
+            <option value="ocean">Ocean</option>
+            <option value="spruce">Spruce</option>
+            <option value="petrol">Petrol</option>
+            <option value="sunset">Sunset</option>
+            <option value="lavender">Lavender</option>
+            <option value="mono">Mono</option>
+            <option value="square">Square</option>
+            <option value="brutalist">Brutalist</option>
+            <option value="edge">Edge</option>
+            <option value="cyberpunk">Cyberpunk</option>
+            <option value="neon">Neon</option>
+            <option value="gradient">Gradient</option>
+          </optgroup>
+        </select>
+      </div>
+    </header>
+  </main>
+
+  <dialog class="modal settings-modal" id="settings-modal" closedby="any" aria-label="Settings">
+    <button class="dialog-close" type="button" commandfor="settings-modal" command="request-close"
+            aria-controls="settings-modal" aria-label="Close settings"></button>
+
+    <div class="settings-body">
+      <div class="settings-nav scroller">
+        <div class="settings-nav-inner">
+          <label class="input-icon sm">
+            <i class="ti ti-search" aria-hidden="true"></i>
+            <!-- Without autofocus the dialog's focusing steps land on the first
+                 focusable element, which is the close button: a focus ring in
+                 the corner instead of a caret where the work starts. -->
+            <input class="input sm" type="search" placeholder="Search settings" aria-label="Search settings"
+                   autocomplete="off" autofocus data-settings-search>
+          </label>
+
+          <div class="tabs settings-tabs" role="tablist" aria-orientation="vertical" aria-label="Settings sections"
+               data-enhance="tabs">
+            <button class="tab primary" type="button" role="tab" id="tab-general" aria-controls="panel-general"
+                    aria-selected="true">
+              <i class="ti ti-settings" aria-hidden="true"></i> General
+            </button>
+            <button class="tab" type="button" role="tab" id="tab-notifications" aria-controls="panel-notifications"
+                    aria-selected="false" tabindex="-1">
+              <i class="ti ti-bell" aria-hidden="true"></i> Notifications
+            </button>
+            <button class="tab" type="button" role="tab" id="tab-personalization" aria-controls="panel-personalization"
+                    aria-selected="false" tabindex="-1">
+              <i class="ti ti-user-cog" aria-hidden="true"></i> Personalization
+            </button>
+            <button class="tab" type="button" role="tab" id="tab-connectors" aria-controls="panel-connectors"
+                    aria-selected="false" tabindex="-1">
+              <i class="ti ti-plug" aria-hidden="true"></i> Connectors
+            </button>
+            <button class="tab" type="button" role="tab" id="tab-voice" aria-controls="panel-voice"
+                    aria-selected="false" tabindex="-1">
+              <i class="ti ti-microphone" aria-hidden="true"></i> Voice
+            </button>
+            <button class="tab" type="button" role="tab" id="tab-billing" aria-controls="panel-billing"
+                    aria-selected="false" tabindex="-1">
+              <i class="ti ti-credit-card" aria-hidden="true"></i> Billing
+            </button>
+            <button class="tab" type="button" role="tab" id="tab-usage" aria-controls="panel-usage"
+                    aria-selected="false" tabindex="-1">
+              <i class="ti ti-chart-bar" aria-hidden="true"></i> Usage
+            </button>
+            <button class="tab" type="button" role="tab" id="tab-data" aria-controls="panel-data"
+                    aria-selected="false" tabindex="-1">
+              <i class="ti ti-database" aria-hidden="true"></i> Data controls
+            </button>
+            <button class="tab" type="button" role="tab" id="tab-security" aria-controls="panel-security"
+                    aria-selected="false" tabindex="-1">
+              <i class="ti ti-shield-check" aria-hidden="true"></i> Security
+            </button>
+            <button class="tab" type="button" role="tab" id="tab-parental" aria-controls="panel-parental"
+                    aria-selected="false" tabindex="-1">
+              <i class="ti ti-users" aria-hidden="true"></i> Parental controls
+            </button>
+          </div>
+
+          <p class="settings-empty" hidden data-settings-empty>No section matches your search.</p>
+        </div>
+      </div>
+
+      <div class="settings-panels scroller">
+        <section class="stack settings-panel" role="tabpanel" id="panel-general" aria-labelledby="tab-general"
+                 tabindex="-1">
+          <h2>General</h2>
+          <ul class="list">
+            <li class="list-item">
+              <label class="list-item-content list-item-title" for="pref-theme">Theme</label>
+              <span class="list-item-trailing">
+                <select class="select sm fit" id="pref-theme">
+                  <option>System</option>
+                  <option>Light</option>
+                  <option>Dark</option>
+                </select>
+              </span>
+            </li>
+            <li class="list-item">
+              <label class="list-item-content list-item-title" for="pref-contrast">Contrast</label>
+              <span class="list-item-trailing">
+                <select class="select sm fit" id="pref-contrast">
+                  <option>System</option>
+                  <option>Standard</option>
+                  <option>More</option>
+                </select>
+              </span>
+            </li>
+            <li class="list-item">
+              <label class="list-item-content list-item-title" for="pref-accent">Accent color</label>
+              <span class="list-item-trailing cluster">
+                <span class="settings-swatch" aria-hidden="true"></span>
+                <select class="select sm fit" id="pref-accent">
+                  <option>Default</option>
+                  <option>Indigo</option>
+                  <option>Forest</option>
+                  <option>Sunset</option>
+                </select>
+              </span>
+            </li>
+            <li class="list-item">
+              <label class="list-item-content list-item-title" for="pref-language">Language</label>
+              <span class="list-item-trailing">
+                <select class="select sm fit" id="pref-language">
+                  <option>Auto-detect</option>
+                  <option>English</option>
+                  <option>Français</option>
+                  <option>Nederlands</option>
+                </select>
+              </span>
+            </li>
+            <li class="list-item settings-row-center">
+              <label class="list-item-content" for="pref-routing">
+                <span class="list-item-title">Smarter model routing</span>
+                <span class="list-item-text">
+                  Switch to a stronger model on its own when a question looks
+                  complex.
+                </span>
+              </label>
+              <span class="list-item-trailing">
+                <input class="switch" type="checkbox" role="switch" id="pref-routing" aria-checked="true" checked>
+              </span>
+            </li>
+            <li class="list-item settings-row-center">
+              <label class="list-item-content" for="pref-dictation">
+                <span class="list-item-title">Voice dictation</span>
+                <span class="list-item-text">Dictate straight into the composer.</span>
+              </label>
+              <span class="list-item-trailing">
+                <input class="switch" type="checkbox" role="switch" id="pref-dictation" aria-checked="true" checked>
+              </span>
+            </li>
+          </ul>
+        </section>
+
+        <section class="stack settings-panel" role="tabpanel" id="panel-notifications"
+                 aria-labelledby="tab-notifications" tabindex="-1" hidden>
+          <h2>Notifications</h2>
+          <ul class="list">
+            <li class="list-item">
+              <label class="list-item-content list-item-title" for="pref-responses">Responses</label>
+              <span class="list-item-trailing">
+                <select class="select sm fit" id="pref-responses">
+                  <option>Push and email</option>
+                  <option>Push only</option>
+                  <option>Email only</option>
+                  <option>Off</option>
+                </select>
+              </span>
+            </li>
+            <li class="list-item settings-row-center">
+              <label class="list-item-content" for="pref-reminders">
+                <span class="list-item-title">Task reminders</span>
+                <span class="list-item-text">Ping me when a scheduled task finishes.</span>
+              </label>
+              <span class="list-item-trailing">
+                <input class="switch" type="checkbox" role="switch" id="pref-reminders" aria-checked="true" checked>
+              </span>
+            </li>
+            <li class="list-item">
+              <label class="list-item-content list-item-title" for="pref-sounds">Sounds</label>
+              <span class="list-item-trailing">
+                <input class="switch" type="checkbox" role="switch" id="pref-sounds" aria-checked="false">
+              </span>
+            </li>
+          </ul>
+        </section>
+
+        <section class="stack settings-panel" role="tabpanel" id="panel-personalization"
+                 aria-labelledby="tab-personalization" tabindex="-1" hidden>
+          <h2>Personalization</h2>
+          <div class="field">
+            <label class="field-label" for="pref-name">Display name</label>
+            <input class="input" type="text" id="pref-name" value="Ada Morgan" autocomplete="name">
+            <span class="field-help">Used when a reply addresses you directly.</span>
+          </div>
+          <div class="field">
+            <label class="field-label" for="pref-instructions">Custom instructions</label>
+            <textarea class="textarea" id="pref-instructions" rows="3">Answer in French. Keep code samples short.</textarea>
+            <span class="field-help">Applied at the start of every new conversation.</span>
+          </div>
+          <ul class="list">
+            <li class="list-item settings-row-center">
+              <label class="list-item-content" for="pref-memory">
+                <span class="list-item-title">Memory</span>
+                <span class="list-item-text">Remember details across conversations.</span>
+              </label>
+              <span class="list-item-trailing">
+                <input class="switch" type="checkbox" role="switch" id="pref-memory" aria-checked="true" checked>
+              </span>
+            </li>
+          </ul>
+        </section>
+
+        <section class="stack settings-panel" role="tabpanel" id="panel-connectors" aria-labelledby="tab-connectors"
+                 tabindex="-1" hidden>
+          <h2>Connectors</h2>
+          <ul class="list">
+            <li class="list-item settings-row-center">
+              <label class="list-item-content" for="pref-connectors">
+                <span class="list-item-title">Allow connectors</span>
+                <span class="list-item-text">Let conversations read from connected apps.</span>
+              </label>
+              <span class="list-item-trailing">
+                <input class="switch" type="checkbox" role="switch" id="pref-connectors" aria-checked="true" checked>
+              </span>
+            </li>
+            <li class="list-item settings-row-center">
+              <label class="list-item-content" for="pref-beta">
+                <span class="list-item-title">Beta connectors</span>
+                <span class="list-item-text">Unreleased integrations. Expect breakage.</span>
+              </label>
+              <span class="list-item-trailing">
+                <input class="switch" type="checkbox" role="switch" id="pref-beta" aria-checked="false">
+              </span>
+            </li>
+            <li class="list-item">
+              <span class="list-item-content list-item-title">Connected apps</span>
+              <span class="list-item-trailing cluster">
+                <span class="badge">3 active</span>
+                <button class="btn sm outline" type="button">Manage</button>
+              </span>
+            </li>
+          </ul>
+        </section>
+
+        <section class="stack settings-panel" role="tabpanel" id="panel-voice" aria-labelledby="tab-voice"
+                 tabindex="-1" hidden>
+          <h2>Voice</h2>
+          <ul class="list">
+            <li class="list-item">
+              <label class="list-item-content list-item-title" for="pref-voice">Voice</label>
+              <span class="list-item-trailing">
+                <select class="select sm fit" id="pref-voice">
+                  <option>Ember</option>
+                  <option>Cove</option>
+                  <option>Juniper</option>
+                </select>
+              </span>
+            </li>
+            <li class="list-item settings-row-center">
+              <label class="list-item-content" for="pref-autoplay">
+                <span class="list-item-title">Autoplay replies</span>
+                <span class="list-item-text">Read answers aloud as they arrive.</span>
+              </label>
+              <span class="list-item-trailing">
+                <input class="switch" type="checkbox" role="switch" id="pref-autoplay" aria-checked="false">
+              </span>
+            </li>
+          </ul>
+        </section>
+
+        <section class="stack settings-panel" role="tabpanel" id="panel-billing" aria-labelledby="tab-billing"
+                 tabindex="-1" hidden>
+          <h2>Billing</h2>
+          <ul class="list">
+            <li class="list-item">
+              <span class="list-item-content list-item-title">Plan</span>
+              <span class="list-item-trailing cluster">
+                <span class="badge success">Pro</span>
+                <button class="btn sm outline" type="button">Change plan</button>
+              </span>
+            </li>
+            <li class="list-item settings-row-center">
+              <span class="list-item-content">
+                <span class="list-item-title">Payment method</span>
+                <span class="list-item-text">Visa ending 4242 · expires 09/28</span>
+              </span>
+              <span class="list-item-trailing">
+                <button class="btn sm outline" type="button">Update</button>
+              </span>
+            </li>
+            <li class="list-item">
+              <span class="list-item-content list-item-title">Invoices</span>
+              <span class="list-item-trailing">
+                <button class="btn sm ghost" type="button">
+                  Download
+                  <i class="ti ti-download" aria-hidden="true"></i>
+                </button>
+              </span>
+            </li>
+          </ul>
+        </section>
+
+        <section class="stack settings-panel" role="tabpanel" id="panel-usage" aria-labelledby="tab-usage"
+                 tabindex="-1" hidden>
+          <h2>Usage</h2>
+          <div class="field">
+            <label class="field-label" for="pref-quota">Monthly requests</label>
+            <meter class="meter" id="pref-quota" value="0.68" min="0" max="1" low="0.5" high="0.85"
+                   optimum="0"></meter>
+            <span class="field-help">6,800 of 10,000 requests used. Resets on 1 October.</span>
+          </div>
+          <dl class="data-list">
+            <dt>Current period</dt>
+            <dd><time datetime="2026-09">September 2026</time></dd>
+
+            <dt>Requests</dt>
+            <dd>6,800</dd>
+
+            <dt>Attachments</dt>
+            <dd>1.2 GB</dd>
+          </dl>
+        </section>
+
+        <section class="stack settings-panel" role="tabpanel" id="panel-data" aria-labelledby="tab-data"
+                 tabindex="-1" hidden>
+          <h2>Data controls</h2>
+          <ul class="list">
+            <li class="list-item settings-row-center">
+              <label class="list-item-content" for="pref-training">
+                <span class="list-item-title">Improve the model for everyone</span>
+                <span class="list-item-text">Allow new conversations to be used for training.</span>
+              </label>
+              <span class="list-item-trailing">
+                <input class="switch" type="checkbox" role="switch" id="pref-training" aria-checked="false">
+              </span>
+            </li>
+            <li class="list-item settings-row-center">
+              <span class="list-item-content">
+                <span class="list-item-title">Export data</span>
+                <span class="list-item-text">A download link is emailed to you.</span>
+              </span>
+              <span class="list-item-trailing">
+                <button class="btn sm outline" type="button">Request export</button>
+              </span>
+            </li>
+            <li class="list-item settings-row-center">
+              <span class="list-item-content">
+                <span class="list-item-title">Delete account</span>
+                <span class="list-item-text">Permanent. Conversations cannot be restored.</span>
+              </span>
+              <span class="list-item-trailing">
+                <button class="btn sm outline danger" type="button">Delete</button>
+              </span>
+            </li>
+          </ul>
+        </section>
+
+        <section class="stack settings-panel" role="tabpanel" id="panel-security" aria-labelledby="tab-security"
+                 tabindex="-1" hidden>
+          <h2>Security</h2>
+          <ul class="list">
+            <li class="list-item settings-row-center">
+              <label class="list-item-content" for="pref-2fa">
+                <span class="list-item-title">Two-factor authentication</span>
+                <span class="list-item-text">Ask for a code from an authenticator app.</span>
+              </label>
+              <span class="list-item-trailing">
+                <input class="switch" type="checkbox" role="switch" id="pref-2fa" aria-checked="true" checked>
+              </span>
+            </li>
+            <li class="list-item settings-row-center">
+              <span class="list-item-content">
+                <span class="list-item-title">Active sessions</span>
+                <span class="list-item-text">4 devices signed in.</span>
+              </span>
+              <span class="list-item-trailing">
+                <button class="btn sm outline" type="button">Review</button>
+              </span>
+            </li>
+            <li class="list-item">
+              <span class="list-item-content list-item-title">Sign out everywhere</span>
+              <span class="list-item-trailing">
+                <button class="btn sm ghost danger" type="button">Sign out</button>
+              </span>
+            </li>
+          </ul>
+        </section>
+
+        <section class="stack settings-panel" role="tabpanel" id="panel-parental" aria-labelledby="tab-parental"
+                 tabindex="-1" hidden>
+          <h2>Parental controls</h2>
+          <ul class="list">
+            <li class="list-item settings-row-center">
+              <label class="list-item-content" for="pref-restricted">
+                <span class="list-item-title">Restricted mode</span>
+                <span class="list-item-text">Hide mature topics from this account.</span>
+              </label>
+              <span class="list-item-trailing">
+                <input class="switch" type="checkbox" role="switch" id="pref-restricted" aria-checked="false">
+              </span>
+            </li>
+            <li class="list-item">
+              <label class="list-item-content list-item-title" for="pref-filter">Content filter</label>
+              <span class="list-item-trailing">
+                <select class="select sm fit" id="pref-filter">
+                  <option>Standard</option>
+                  <option>Strict</option>
+                </select>
+              </span>
+            </li>
+          </ul>
+        </section>
+      </div>
+    </div>
+  </dialog>
+
+  <script src="../../dist/actual.full.js"></script>
+  <script>
+    const switcher = document.getElementById("theme-switcher");
+
+    if (switcher) {
+      switcher.addEventListener("change", () => {
+        if (switcher.value) {
+          document.documentElement.dataset.theme = switcher.value;
+        } else {
+          document.documentElement.removeAttribute("data-theme");
+        }
+      });
+    }
+
+    /* Keeping aria-checked in sync is the switch enhancement from the docs, not
+       something the component does on its own. */
+    for (const control of document.querySelectorAll('.switch[role="switch"]')) {
+      control.addEventListener("change", () => {
+        control.setAttribute("aria-checked", String(control.checked));
+      });
+    }
+
+    /*
+     * Filtering a list by a search field is application code — the framework
+     * ships input policies (data-filter), not list search. Hiding a tab is all
+     * this has to do: [hidden] wins over .tab's own display thanks to the
+     * reset, and tab.js excludes hidden tabs from the keyboard sequence, so
+     * the arrow keys move between the visible ones.
+     *
+     * Which panel to show when the search hides the selected tab is a policy
+     * the application owns. This one treats the field as a navigation filter
+     * and leaves the current panel alone, so typing "gen" does not throw the
+     * reader into General before they have finished the word. The cost is an
+     * unusual moment for the tabs pattern: the selected tab is hidden, its
+     * panel is still on screen, and no visible tab carries
+     * aria-selected="true". Selecting the first match instead would keep the
+     * pattern strict and make the panel jump on every keystroke; for a
+     * settings dialog the quiet filter is the better trade.
+     */
+    const search = document.querySelector("[data-settings-search]");
+    const empty = document.querySelector("[data-settings-empty]");
+    const tabs = [...document.querySelectorAll(".settings-tabs .tab")];
+
+    if (search) {
+      search.addEventListener("input", () => {
+        const query = search.value.trim().toLowerCase();
+        let matches = 0;
+
+        for (const tab of tabs) {
+          const hit = !query || tab.textContent.toLowerCase().includes(query);
+          tab.hidden = !hit;
+          if (hit) matches++;
+        }
+
+        empty.hidden = matches > 0;
+      });
+    }
+
+    /* The modal is the demo, so it opens on load. */
+    document.getElementById("settings-modal")?.showModal();
+  </script>
+</body>
+
+</html>

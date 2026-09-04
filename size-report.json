@@ -1,12 +1,12 @@
 {
-  "totalRaw": 276411,
+  "totalRaw": 278146,
   "core": {
     "minified": 10889,
     "brotli": 2553
   },
   "full": {
-    "minified": 121037,
-    "brotli": 17707
+    "minified": 121239,
+    "brotli": 17742
   },
   "js": {
     "core": {
@@ -14,8 +14,8 @@
       "brotli": 2203
     },
     "full": {
-      "bytes": 56491,
-      "brotli": 16358
+      "bytes": 56502,
+      "brotli": 16372
     }
   },
   "fileCount": 109,
@@ -30,7 +30,7 @@
     },
     {
       "file": "components/modal.css",
-      "raw": 8660
+      "raw": 8923
     },
     {
       "file": "components/alert.css",
@@ -129,6 +129,10 @@
       "raw": 3689
     },
     {
+      "file": "components/tab.css",
+      "raw": 3430
+    },
+    {
       "file": "components/fab.css",
       "raw": 3313
     },
@@ -169,10 +173,6 @@
       "raw": 2674
     },
     {
-      "file": "components/tab.css",
-      "raw": 2609
-    },
-    {
       "file": "layout/app-layout.css",
       "raw": 2538
     },
@@ -187,6 +187,10 @@
     {
       "file": "themes/petrol.css",
       "raw": 2460
+    },
+    {
+      "file": "components/list.css",
+      "raw": 2446
     },
     {
       "file": "themes/sunset.css",
@@ -251,10 +255,6 @@
     {
       "file": "components/app-nav.css",
       "raw": 1882
-    },
-    {
-      "file": "components/list.css",
-      "raw": 1795
     },
     {
       "file": "themes/brutalist.css",

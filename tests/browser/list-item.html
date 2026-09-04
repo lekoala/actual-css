@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>List row region fixture</title>
+  <link rel="stylesheet" href="../../src/css/actual.full.css">
+  <style>
+    * { transition-duration: 0s !important; }
+
+    /* A known gap and a known row width make the region math exact. */
+    .list {
+      --list-item-gap: 16px;
+
+      inline-size: 600px;
+    }
+  </style>
+</head>
+<body>
+  <!-- The four shapes a row can take. The content region must be the flexible
+       one in all four, and an absent region must cost neither a track nor a
+       gap: the row with no leading region is the one that used to drop its
+       content into the leading track and hand the flexible column to the
+       trailing control. -->
+  <ul class="list" id="shapes">
+    <li class="list-item" id="all-three">
+      <span class="avatar sm" id="all-three-leading"><abbr>AM</abbr></span>
+      <span class="list-item-content" id="all-three-content">
+        <strong class="list-item-title">Leading, content and trailing</strong>
+        <span class="list-item-text">All three regions present.</span>
+      </span>
+      <span class="list-item-trailing" id="all-three-trailing">
+        <span class="badge">Badge</span>
+      </span>
+    </li>
+
+    <li class="list-item" id="no-leading">
+      <span class="list-item-content" id="no-leading-content">
+        <strong class="list-item-title">Content and trailing</strong>
+        <span class="list-item-text">A settings row: a label and a description on the
+          start edge, one control on the end edge, and no leading region at all.</span>
+      </span>
+      <span class="list-item-trailing" id="no-leading-trailing">
+        <input class="switch" type="checkbox" role="switch" checked>
+      </span>
+    </li>
+
+    <li class="list-item" id="no-trailing">
+      <span class="avatar sm" id="no-trailing-leading"><abbr>AM</abbr></span>
+      <span class="list-item-content" id="no-trailing-content">
+        <strong class="list-item-title">Leading and content</strong>
+        <span class="list-item-text">No trailing region.</span>
+      </span>
+    </li>
+
+    <li class="list-item" id="content-only">
+      <span class="list-item-content" id="content-only-content">
+        <strong class="list-item-title">Content only</strong>
+      </span>
+    </li>
+  </ul>
+</body>
+</html>
