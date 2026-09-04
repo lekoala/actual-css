@@ -53,6 +53,16 @@
     margin: 0;
     overflow: visible;
   }
+
+  /* .tooltip declares no display of its own, so the UA already hides a closed
+     popover here. The rule is written anyway: both components advertised as
+     Popover-compatible should cede the hidden state the same way, and the
+     opacity target is what actually makes the native exit fade — see the
+     overlay note below. */
+  .tooltip[popover]:not(:popover-open) {
+    display: none;
+    opacity: 0;
+  }
 }
 
 .tooltip[hidden] {

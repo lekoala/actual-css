@@ -159,6 +159,29 @@ not yet, because the current positioner also reports *placement validity*, which
 the lifecycle uses to close a surface whose anchor has left the viewport, and
 declarative CSS positioning offers no equivalent signal.
 
+### Ceding the properties a capability is expressed through
+
+Keeping presentation and behavior separate is not enough on its own, because
+CSS expresses some behavior *as* presentation.
+
+> A presentation class that composes with `popover` may own its visible display
+> type, but must not override the platform's hidden-state display.
+
+`.flyout { display: grid }` is entirely legitimate. The problem is that the UA
+closes a popover with `display: none`, and an author declaration beats the UA
+origin whatever the specificity — so that legitimate choice silently leaves a
+closed popover painted on screen. The class was not implementing the lifecycle;
+it was overriding the property the lifecycle is written in.
+
+The general rule, then:
+
+> A class that is advertised as composing with a platform capability must cede
+> the properties that capability uses to express itself, for the states the
+> platform owns.
+
+This is checkable rather than aspirational: any Actual class that carries a
+`[popover]` reset must also restore `display` for `:not(:popover-open)`.
+
 The corresponding trap is adopting a capability in a way that adds an axis
 instead of replacing one. A second surface transport living alongside the
 existing one would leave the DOM-reparenting code in place while doubling the

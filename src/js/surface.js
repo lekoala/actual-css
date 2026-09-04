@@ -246,11 +246,30 @@ export function prepareSurface(menu) {
   reaperFor(menu)?.refresh(menu);
 }
 
+/*
+ * One lifecycle owner per surface. surface.js opens by clearing [hidden] and
+ * adding .is-open; it never calls showPopover(). So a [popover] panel handed to
+ * the runtime has two owners and stays shut: the platform keeps a popover it
+ * was never asked to show closed, whatever the runtime writes.
+ *
+ * This covers every popover value. "manual" is a candidate future transport for
+ * this module, which does not make it a legitimate mix today. Delete this guard
+ * in the commit that makes surface.js call showPopover().
+ */
+function warnPopoverConflict(panel) {
+  if (!panel.hasAttribute("popover")) return;
+  console.warn(
+    "Actual: the surface lifecycle cannot own a [popover] element — choose one lifecycle owner (remove the popover attribute, or drop the Actual enhancement).",
+    panel,
+  );
+}
+
 export function retainSurface(panel) {
   if (!panel) return () => {};
 
   let entry = surfaceRetainers.get(panel);
   if (!entry) {
+    warnPopoverConflict(panel);
     prepareSurface(panel);
     entry = { count: 0 };
     surfaceRetainers.set(panel, entry);

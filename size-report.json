@@ -1,12 +1,12 @@
 {
-  "totalRaw": 276479,
+  "totalRaw": 277620,
   "core": {
     "minified": 10889,
     "brotli": 2553
   },
   "full": {
-    "minified": 120978,
-    "brotli": 17665
+    "minified": 121113,
+    "brotli": 17671
   },
   "js": {
     "core": {
@@ -14,8 +14,8 @@
       "brotli": 2203
     },
     "full": {
-      "bytes": 56755,
-      "brotli": 16393
+      "bytes": 56987,
+      "brotli": 16482
     }
   },
   "fileCount": 109,
@@ -37,16 +37,16 @@
       "raw": 7856
     },
     {
+      "file": "components/flyout.css",
+      "raw": 7607
+    },
+    {
       "file": "components/button.css",
       "raw": 7482
     },
     {
       "file": "core/theme.css",
       "raw": 7121
-    },
-    {
-      "file": "components/flyout.css",
-      "raw": 6882
     },
     {
       "file": "forms/choice.css",
@@ -77,6 +77,10 @@
       "raw": 5067
     },
     {
+      "file": "components/tooltip.css",
+      "raw": 4777
+    },
+    {
       "file": "core/variants.css",
       "raw": 4671
     },
@@ -95,10 +99,6 @@
     {
       "file": "utilities/extra.css",
       "raw": 4403
-    },
-    {
-      "file": "components/tooltip.css",
-      "raw": 4361
     },
     {
       "file": "forms/switch.css",

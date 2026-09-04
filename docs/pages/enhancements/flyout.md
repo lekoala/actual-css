@@ -98,6 +98,70 @@ When the lifecycle must work across the full Minimal range, use `surface.js`.
 Otherwise using the native lifecycle is an application support decision. The
 two are alternatives, not layers.
 
+#### Choose one lifecycle owner
+
+The Actual runtime path, where `surface.js` owns opening, dismissal, focus and
+placement:
+
+```html
+<div class="flyout-trigger">
+  <button data-enhance="flyout" aria-controls="actions" aria-expanded="false">
+    Actions
+  </button>
+
+  <ul id="actions" class="flyout menu" hidden>
+    <li><button class="menu-item" type="button">Rename</button></li>
+  </ul>
+</div>
+```
+
+The native path, where the browser owns the lifecycle and the top layer:
+
+```html
+<button popovertarget="actions">Actions</button>
+
+<ul id="actions" class="flyout menu" popover>
+  <li><button class="menu-item" type="button">Rename</button></li>
+</ul>
+```
+
+Do not combine them. `surface.js` opens a panel by clearing `[hidden]` and
+adding `.is-open`; it never calls `showPopover()`, so a `popover` element handed
+to the runtime has two owners and stays closed. The runtime logs a warning if it
+is asked to retain one.
+
+**The native path still needs a positioner.** `popovertarget` gives the panel an
+implicit anchor reference to its invoker, but it does not place it: Actual's
+geometry reset clears the UA's centering, so an unpositioned native flyout is
+laid out at its static position rather than under its trigger. Supply
+coordinates the same way `surface.js` does:
+
+```js
+import { autoUpdate, reposition } from "@lekoala/floating";
+
+const trigger = document.querySelector("[popovertarget='actions']");
+const panel = document.getElementById("actions");
+
+// One tracker at a time. autoUpdate returns its own cleanup; releasing it
+// before every state change keeps repeated opens from stacking trackers, and
+// stops the scroll/resize work as soon as the panel closes.
+let stop;
+
+panel.addEventListener("toggle", (event) => {
+  stop?.();
+  stop = undefined;
+  if (event.newState !== "open") return;
+
+  stop = autoUpdate(trigger, panel, () => {
+    reposition(trigger, panel, { placement: "bottom-start", distance: 4 });
+  });
+});
+```
+
+CSS Anchor Positioning will eventually cover the simple anchored case from the
+stylesheet alone, using that implicit anchor reference. It is still only
+partially supported and is not the documented recipe yet.
+
 **When `surface.js` owns the lifecycle**, use `data-flyout-auto-close` if the
 default click dismissal behavior is not right. Escape still follows the shared
 surface lifecycle. These options do not reach a natively managed

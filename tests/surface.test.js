@@ -4,8 +4,26 @@ import { nextFrame } from "./helpers/layout.js";
 
 setupDOM();
 
-const { closeSurface, disconnectSurface, isSurfaceOpen, openSurface, prepareSurface } =
-  await import(`../src/js/surface.js?test=${Date.now()}`);
+const {
+  closeSurface,
+  disconnectSurface,
+  isSurfaceOpen,
+  openSurface,
+  prepareSurface,
+  retainSurface,
+} = await import(`../src/js/surface.js?test=${Date.now()}`);
+
+function captureWarnings(run) {
+  const warnings = [];
+  const original = console.warn;
+  console.warn = (...args) => warnings.push(args.map(String).join(" "));
+  try {
+    run();
+  } finally {
+    console.warn = original;
+  }
+  return warnings;
+}
 
 function setBody(html) {
   document.body.innerHTML = html;
@@ -575,4 +593,27 @@ test("D8 — mountSurface moving to body does not run teardown", () => {
   expect(menu.parentNode).toBe(document.body);
   expect(isSurfaceOpen(menu)).toBe(true);
   expect(menu.hasAttribute("data-actual-surface")).toBe(true);
+});
+
+/*
+ * One lifecycle owner per surface. surface.js never calls showPopover(), so a
+ * [popover] panel handed to it would stay closed whatever the runtime writes —
+ * including popover="manual", which is a candidate future transport for this
+ * module rather than a legitimate mix today.
+ */
+test("retaining a [popover] surface warns about the double lifecycle owner", () => {
+  setBody('<div id="menu" class="flyout" popover="manual"></div>');
+  const panel = document.getElementById("menu");
+
+  const warnings = captureWarnings(() => retainSurface(panel)());
+
+  expect(warnings).toHaveLength(1);
+  expect(warnings[0]).toContain("one lifecycle owner");
+});
+
+test("retaining a runtime-owned surface warns about nothing", () => {
+  setBody('<div id="menu" class="flyout" hidden></div>');
+  const panel = document.getElementById("menu");
+
+  expect(captureWarnings(() => retainSurface(panel)())).toEqual([]);
 });
