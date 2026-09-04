@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Added
+
+- Popover transport probe: `demo/templates/popover-transport.html`.
+- `bun run serve`, a static server for opening demo pages from another device.
 
 ## [0.7.0] - 2026-09-04
 

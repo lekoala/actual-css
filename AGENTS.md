@@ -112,6 +112,18 @@ Add relevant guards for future-us when needed based on traps and discoveries.
 - The same prefix on a dozen rules is a shared primitive missing a class. Give
   it one and make the variants peers, so no rule excludes or undoes another.
 
+## Writing
+
+- Clear and concise. Every sentence must carry something the reader cannot get
+  from the code.
+- Say what a thing is and how to use it. Reasoning belongs in a design note, a
+  commit message, or a code comment — not in reference documentation.
+- Cut restatements: a default already visible in the CSS, a rationale already
+  written elsewhere, a sentence summarising the paragraph above it.
+- Changelog: one line per entry, always. An entry needing a second sentence is
+  two entries or a pointer to a note. Name the class, hook, export, or file an
+  adopter would search for.
+
 ## Documentation and implementation
 
 - The CSS source is canonical for exact values and fallback chains. Do not
