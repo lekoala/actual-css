@@ -11,7 +11,23 @@
  *     behaves. Must be inside @supports (or have a comment on the preceding
  *     lines explaining why the fallback keeps the base functional).
  *
- * Violations fail the pipeline. Optional-tier features are informational only.
+ * Violations fail the pipeline. Tier controls how a use is *reported*, not
+ * whether it needs a gate: an optional-tier feature that is safe-drop stays
+ * informational, but an optional-tier feature that is structural must still be
+ * guarded or justified. Tier says how far above the floor a capability sits;
+ * kind says what happens on an engine that lacks it, and only kind can excuse
+ * a use.
+ *
+ * "Above the floor" is not the same as "outside the Minimal range". An
+ * optional-tier capability such as Popover is simply not part of Actual's
+ * Minimal contract: engines well inside the Minimal range may still lack it,
+ * so a gate tracks the capability, never a browser generation.
+ *
+ * Prose does not excuse an optional-tier structural use. A comment explaining
+ * why a capability needs a gate reads, to a keyword matcher, exactly like a
+ * comment excusing its absence — so removing the @supports would keep passing.
+ * Optional-tier structural uses therefore need either a real guard or an
+ * explicit "compat-ok:" pragma naming the reason.
  *
  * Minimal floor: Firefox 98 / Safari 15.4 / Chromium 99.
  */
@@ -80,10 +96,31 @@ const FEATURES = [
     kind: "safe-drop",
     tier: "optional",
   },
+  /* Two capabilities that fail differently, so they are tracked separately —
+     but both are structural.
+
+     The attribute selector matches whether or not the engine implements
+     Popover, and without it the UA neither hides nor promotes the element, so
+     an ungated reset restyles a panel nothing will ever hide. The pattern
+     covers a value too ([popover="manual"], [popovertargetaction="hide"]),
+     which is the form real code reaches for, without matching an unrelated
+     [popover-foo].
+
+     :popover-open is safe *in a forgiving list* — :is()/:where() discard an
+     unknown member and leave the rest — but that is a property of the list,
+     not of the pseudo-class: in a plain selector list an unsupported member
+     invalidates the whole rule. So it needs a guard or a compat-ok naming the
+     forgiving context. */
   {
-    name: "popover",
-    pattern: /(?:popovertarget|popover-open|\[popover\])/gi,
-    kind: "safe-drop",
+    name: "popover attribute",
+    pattern: /\[\s*popover(?:target(?:action)?)?(?=\s*(?:\]|[~|^$*]?=))[^\]]*\]/gi,
+    kind: "structural",
+    tier: "optional",
+  },
+  {
+    name: ":popover-open",
+    pattern: /:popover-open\b/gi,
+    kind: "structural",
     tier: "optional",
   },
 ];
@@ -146,6 +183,14 @@ function supportsRanges(css) {
 
 function isGuarded(index, ranges) {
   return ranges.some(([start, end]) => index > start && index < end);
+}
+
+/* An explicit pragma on the rule's own comment. Unlike prose, it cannot be
+   tripped by a comment that merely discusses the capability. */
+function hasPragma(css, index) {
+  const lineStart = css.lastIndexOf("\n", index - 1) + 1;
+  const ruleStart = css.lastIndexOf("}", lineStart - 1) + 1;
+  return /compat-ok:/i.test(css.slice(ruleStart, lineStart));
 }
 
 /* The comment attached to the rule (back to the previous rule boundary) or the
@@ -229,6 +274,42 @@ export function mixedVendorSelectorLists(css) {
   return violations;
 }
 
+/*
+ * Classify every above-floor capability in one stylesheet. Exported so the
+ * guard's own rules can be tested on a CSS string instead of on the tree.
+ * `name` only feeds the entry labels and the PROGRESSIVE ledger lookup.
+ */
+export function auditCss(css, name = "test.css") {
+  const violations = [];
+  const progressive = [];
+  const optional = [];
+
+  // Comments must not trigger feature detection, but indices must stay in
+  // sync with the real source so line numbers and justification checks line up.
+  const masked = css.replace(/\/\*[\s\S]*?\*\//g, (comment) => " ".repeat(comment.length));
+  const guarded = supportsRanges(masked);
+
+  for (const feature of FEATURES) {
+    const grandfathered = (PROGRESSIVE[name] ?? []).includes(feature.name);
+    for (const m of masked.matchAll(feature.pattern)) {
+      const entry = `${name}:${lineNo(css, m.index)}  ${feature.name}`;
+      // Excuse on kind and guarding only. Tier then decides which bucket an
+      // excused use is reported in, so "optional" can no longer wave through
+      // an unguarded structural rule.
+      const excused =
+        feature.kind === "safe-drop" ||
+        isGuarded(m.index, guarded) ||
+        grandfathered ||
+        (feature.tier === "optional" ? hasPragma(css, m.index) : isJustified(css, m.index));
+      if (!excused) violations.push(entry);
+      else if (feature.tier === "optional") optional.push(entry);
+      else progressive.push(entry);
+    }
+  }
+
+  return { violations, progressive, optional };
+}
+
 function main() {
   const files = walkCss(SRC);
   const violations = [];
@@ -238,34 +319,16 @@ function main() {
 
   for (const file of files) {
     const css = readFileSync(file, "utf8");
-    // Comments must not trigger feature detection, but indices must stay in
-    // sync with the real source so line numbers and justification checks line up.
-    const masked = css.replace(/\/\*[\s\S]*?\*\//g, (comment) => " ".repeat(comment.length));
-    const guarded = supportsRanges(masked);
     vendorViolations.push(
       ...mixedVendorSelectorLists(css).map(
         ({ line, selector }) => `${rel(file)}:${line}  mixed vendor pseudo-elements: ${selector}`,
       ),
     );
 
-    for (const feature of FEATURES) {
-      const grandfathered = (PROGRESSIVE[rel(file)] ?? []).includes(feature.name);
-      for (const m of masked.matchAll(feature.pattern)) {
-        const entry = `${rel(file)}:${lineNo(css, m.index)}  ${feature.name}`;
-        if (feature.tier === "optional") {
-          optional.push(entry);
-        } else if (
-          feature.kind === "safe-drop" ||
-          isGuarded(m.index, guarded) ||
-          grandfathered ||
-          isJustified(css, m.index)
-        ) {
-          progressive.push(entry);
-        } else {
-          violations.push(entry);
-        }
-      }
-    }
+    const audit = auditCss(css, rel(file));
+    violations.push(...audit.violations);
+    progressive.push(...audit.progressive);
+    optional.push(...audit.optional);
   }
 
   console.log("CSS compatibility audit");

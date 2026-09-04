@@ -80,18 +80,33 @@
 }
 
 /* Native popovers enter the top layer with UA geometry that conflicts with
-   anchored positioning. Keep the reset scoped to Actual surfaces so bare
-   [popover] elements retain their platform presentation. */
-.flyout[popover] {
-  position: fixed;
-  inset: auto;
-  margin: 0;
+   anchored positioning. The reset is gated on real Popover support because an
+   attribute selector matches whether or not the engine implements Popover:
+   without it the UA neither hides nor promotes the element, so an ungated
+   reset would strand a permanently visible panel at inset: auto. Popover is
+   not part of Actual's Minimal contract — engines inside the Minimal range
+   may lack it — so the gate is about the capability, not the floor. Kept
+   scoped to Actual surfaces so bare [popover] elements retain their platform
+   presentation. */
+@supports selector(:popover-open) {
+  .flyout[popover] {
+    position: fixed;
+    inset: auto;
+    margin: 0;
+  }
 }
 
+/* compat-ok: :popover-open rides in a forgiving :is(), where an engine without
+   Popover discards just that member and .is-open alone keeps driving the open
+   state. This is a property of the forgiving list, not of the pseudo-class: in
+   a plain selector list an unsupported member would invalidate the whole rule.
+   Keep it inside :is()/:where() or gate it. */
 .flyout:is(.is-open, :popover-open):not(.is-sheet) {
   inset: auto;
 }
 
+/* compat-ok: forgiving :is() again, and @starting-style is itself unsupported
+   across part of the Minimal range, so the rule simply does not exist there. */
 @starting-style {
   .flyout:is(.is-open, :popover-open) {
     opacity: 0;
@@ -132,16 +147,23 @@
   translate: 0 var(--space-30);
 }
 
+/* compat-ok: forgiving :is() inside @starting-style, as above. */
 @starting-style {
   .flyout.is-sheet:is(.is-open, :popover-open) {
     translate: 0 var(--space-30);
   }
 }
 
+/* display keeps the exit transition alive for the [hidden] path; overlay does
+   the same for the native popover path, where hidePopover() would otherwise
+   drop the panel out of the top layer on the first frame and let a parent
+   overflow or a dialog clip the fade. An engine that cannot transition either
+   property ignores it and the exit is instant. */
 @supports (transition-behavior: allow-discrete) {
   .flyout {
     transition:
       opacity var(--duration-fast) ease,
+      overlay var(--duration-fast) allow-discrete,
       display var(--duration-fast) allow-discrete;
   }
 
@@ -149,6 +171,7 @@
     transition:
       opacity var(--duration-fast) ease,
       translate var(--duration-fast) ease,
+      overlay var(--duration-fast) allow-discrete,
       display var(--duration-fast) allow-discrete;
   }
 }
