@@ -15,11 +15,27 @@
 
 ### Fixed
 
+- A closed `.flyout[popover]` is no longer rendered. The component's own
+  `display: grid` outranked the UA rule that hides a closed popover, leaving
+  the panel painted at its static position with no way to dismiss it. Both
+  `.flyout` and `.tooltip` now cede the platform's hidden state, which also
+  gives the native path the exit fade it lacked.
 - Icon-only buttons stretch to match labelled siblings when composed in a
   `.join`, while remaining square everywhere else.
 - Status messages originating in an open dialog temporarily mount the singleton
   live region inside that dialog, keeping it visible and accessible in the
   active top-layer subtree.
+
+### Known limitations
+
+- A surface managed by `surface.js` is presented in the document's own context,
+  not its trigger's. Opening it moves the panel to the nearest dialog or to
+  `body`, which severs every scope that reached it by inheritance — a theme
+  island, a density scope, `.inverted`, or an application's own scoped custom
+  properties. Do not rely on inheritance reaching an anchored surface. See
+  `docs/design-notes/surface-reparenting.md`; the repair needs a transport that
+  promotes without relocating, which is not available across the current
+  Minimal floor.
 
 ### Breaking
 
