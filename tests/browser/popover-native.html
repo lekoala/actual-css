@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Native popover presentation fixture</title>
+  <link rel="stylesheet" href="../../src/css/actual.full.css">
+</head>
+<body style="margin: 0">
+  <!-- No Actual runtime on this page: the browser owns the lifecycle. Actual
+       supplies presentation only, so a closed popover must be invisible and an
+       open one must fade in and out under the platform's own show/hide. -->
+  <div style="height: 200px"></div>
+  <div style="text-align: center">
+    <button id="flyout-trigger" class="btn" type="button" popovertarget="native-flyout">
+      Actions
+    </button>
+  </div>
+
+  <ul id="native-flyout" class="flyout menu" popover>
+    <li><button class="menu-item" type="button">One</button></li>
+    <li><button class="menu-item" type="button">Two</button></li>
+  </ul>
+
+  <div id="native-tooltip" class="tooltip" role="tooltip" popover>Some hint</div>
+</body>
+</html>

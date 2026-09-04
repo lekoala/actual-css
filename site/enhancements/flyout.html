@@ -298,6 +298,58 @@ or promotes a <code>popover</code> element, so nothing dismisses the panel eithe
 <p>When the lifecycle must work across the full Minimal range, use <code>surface.js</code>.
 Otherwise using the native lifecycle is an application support decision. The
 two are alternatives, not layers.</p>
+<h4 id="choose-one-lifecycle-owner">Choose one lifecycle owner</h4>
+<p>The Actual runtime path, where <code>surface.js</code> owns opening, dismissal, focus and
+placement:</p>
+<pre><code class="language-html">&lt;div class=&quot;flyout-trigger&quot;&gt;
+  &lt;button data-enhance=&quot;flyout&quot; aria-controls=&quot;actions&quot; aria-expanded=&quot;false&quot;&gt;
+    Actions
+  &lt;/button&gt;
+
+  &lt;ul id=&quot;actions&quot; class=&quot;flyout menu&quot; hidden&gt;
+    &lt;li&gt;&lt;button class=&quot;menu-item&quot; type=&quot;button&quot;&gt;Rename&lt;/button&gt;&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/div&gt;
+</code></pre>
+<p>The native path, where the browser owns the lifecycle and the top layer:</p>
+<pre><code class="language-html">&lt;button popovertarget=&quot;actions&quot;&gt;Actions&lt;/button&gt;
+
+&lt;ul id=&quot;actions&quot; class=&quot;flyout menu&quot; popover&gt;
+  &lt;li&gt;&lt;button class=&quot;menu-item&quot; type=&quot;button&quot;&gt;Rename&lt;/button&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</code></pre>
+<p>Do not combine them. <code>surface.js</code> opens a panel by clearing <code>[hidden]</code> and
+adding <code>.is-open</code>; it never calls <code>showPopover()</code>, so a <code>popover</code> element handed
+to the runtime has two owners and stays closed. The runtime logs a warning if it
+is asked to retain one.</p>
+<p><strong>The native path still needs a positioner.</strong> <code>popovertarget</code> gives the panel an
+implicit anchor reference to its invoker, but it does not place it: Actual's
+geometry reset clears the UA's centering, so an unpositioned native flyout is
+laid out at its static position rather than under its trigger. Supply
+coordinates the same way <code>surface.js</code> does:</p>
+<pre><code class="language-js">import { autoUpdate, reposition } from &quot;@lekoala/floating&quot;;
+
+const trigger = document.querySelector(&quot;[popovertarget='actions']&quot;);
+const panel = document.getElementById(&quot;actions&quot;);
+
+// One tracker at a time. autoUpdate returns its own cleanup; releasing it
+// before every state change keeps repeated opens from stacking trackers, and
+// stops the scroll/resize work as soon as the panel closes.
+let stop;
+
+panel.addEventListener(&quot;toggle&quot;, (event) =&gt; {
+  stop?.();
+  stop = undefined;
+  if (event.newState !== &quot;open&quot;) return;
+
+  stop = autoUpdate(trigger, panel, () =&gt; {
+    reposition(trigger, panel, { placement: &quot;bottom-start&quot;, distance: 4 });
+  });
+});
+</code></pre>
+<p>CSS Anchor Positioning will eventually cover the simple anchored case from the
+stylesheet alone, using that implicit anchor reference. It is still only
+partially supported and is not the documented recipe yet.</p>
 <p><strong>When <code>surface.js</code> owns the lifecycle</strong>, use <code>data-flyout-auto-close</code> if the
 default click dismissal behavior is not right. Escape still follows the shared
 surface lifecycle. These options do not reach a natively managed

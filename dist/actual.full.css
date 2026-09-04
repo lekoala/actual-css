@@ -4854,6 +4854,20 @@ dialog.drawer > form > header {
     inset: auto;
     margin: 0;
   }
+
+  /* A presentation class may own its *visible* display type, but must not
+     override the platform's hidden state. The UA closes a popover with
+     display: none, and an author declaration beats the UA origin whatever the
+     specificity — so .flyout's own display: grid would leave a closed popover
+     painted at its static position. Restoring both properties here also gives
+     the native path the exit target the runtime path already has in
+     .flyout[hidden]: without an opacity to animate, the overlay/display
+     allow-discrete transition below would hold a fully opaque panel in the top
+     layer and then snap it away. */
+  .flyout[popover]:not(:popover-open) {
+    display: none;
+    opacity: 0;
+  }
 }
 
 /* compat-ok: :popover-open rides in a forgiving :is(), where an engine without
@@ -5162,6 +5176,16 @@ dialog.drawer > form > header {
     inset: auto;
     margin: 0;
     overflow: visible;
+  }
+
+  /* .tooltip declares no display of its own, so the UA already hides a closed
+     popover here. The rule is written anyway: both components advertised as
+     Popover-compatible should cede the hidden state the same way, and the
+     opacity target is what actually makes the native exit fade — see the
+     overlay note below. */
+  .tooltip[popover]:not(:popover-open) {
+    display: none;
+    opacity: 0;
   }
 }
 

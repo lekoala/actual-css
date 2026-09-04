@@ -23,6 +23,30 @@ Degraded browsers may still run some JavaScript successfully, but that
 behavior is not tested, documented as supported, or preserved when the
 runtime evolves.
 
+### Native Popover and the tiers
+
+Popover is not part of any Actual tier's guarantee below Recommended. It is a
+capability, not a browser generation: the core lifecycle landed around
+Chromium 116, Firefox 125 and Safari 17, which clears Recommended but sits
+above both Minimal and Intermediate on every engine.
+
+| Actual tier  | Core native Popover guaranteed | Recommended lifecycle owner     |
+| ------------ | ------------------------------ | ------------------------------- |
+| Degraded     | no                             | HTML/CSS fallback only          |
+| Minimal      | no                             | `surface.js`                    |
+| Intermediate | no                             | `surface.js`                    |
+| Recommended  | yes, core lifecycle            | native Popover, or `surface.js` |
+
+"Core lifecycle" means `popover="auto"`/`"manual"`, `popovertarget`,
+`showPopover`/`hidePopover` and `:popover-open` — not the entire Popover API.
+`popover="hint"` and interest invokers are much newer and are not covered at
+any tier. Safari coverage here is read as the desktop engine; some iOS versions
+through 18.2 still report partial support for parts of the API, so an
+application targeting iOS should verify the specific pieces it relies on.
+
+Actual's presentation classes compose with either lifecycle from Recommended
+up. The runtime itself depends on Popover at no tier.
+
 ## JavaScript philosophy
 
 > The Degraded tier exists primarily to preserve useful HTML and CSS on older
@@ -96,6 +120,7 @@ different notion from an Actual tier.
 | `appearance: base-select`             | 2024+         | Native `<select>`                    |
 | `@starting-style`                     | 2024+         | Instant appearance                   |
 | View Transition API                   | 2024+         | Dialog open/close transition         |
+| Popover API (core)                    | Baseline 2025 | `surface.js` lifecycle               |
 | CSS Anchor Positioning                | Future        | JS positioning (`@lekoala/floating`) |
 
 Core layout and visual tokens work on all Baseline 2023 browsers. Features marked
