@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Surface transport fixture</title>
+  <link rel="stylesheet" href="../../src/css/actual.full.css">
+  <script src="../../dist/actual.full.js" defer></script>
+</head>
+<body style="margin:0; padding:1rem">
+
+  <!-- 1. A plain anchored flyout, for the closed-state focus and reopen cases. -->
+  <div class="flyout-trigger">
+    <button id="plain-trigger" class="btn" type="button"
+            data-enhance="flyout" aria-controls="plain-panel">Plain</button>
+    <menu id="plain-panel" class="flyout menu" hidden>
+      <li><button id="plain-item" class="menu-item" type="button">Item</button></li>
+    </menu>
+  </div>
+
+  <!-- 2. A surface authored inside a modal dialog. The panel must be promoted
+       above the dialog without leaving it, and must stay interactive: a modal
+       dialog makes the rest of the document inert. -->
+  <button id="open-dialog" class="btn" type="button">Open dialog</button>
+  <dialog id="dlg" class="modal">
+    <div id="dlg-host">
+      <div class="flyout-trigger">
+        <button id="dlg-trigger" class="btn" type="button"
+                data-enhance="flyout" aria-controls="dlg-panel">In dialog</button>
+        <menu id="dlg-panel" class="flyout menu" hidden>
+          <li><button id="dlg-item" class="menu-item" type="button">Item</button></li>
+        </menu>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- 3. A context menu opened at pointer coordinates. -->
+  <div id="row" data-context-menu="ctx"
+       style="height:80px; background:#eee; margin-top:1rem">Right-click me</div>
+  <menu id="ctx" class="flyout menu" hidden>
+    <li><button class="menu-item" type="button">Rename</button></li>
+  </menu>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      document.getElementById("open-dialog").addEventListener("click", () => {
+        document.getElementById("dlg").showModal();
+      });
+    });
+  </script>
+</body>
+</html>

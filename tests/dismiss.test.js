@@ -1,6 +1,9 @@
 import { afterEach, expect, test } from "bun:test";
 import { cleanupDOM, click, setupDOM } from "./helpers/dom.js";
 
+// The transport no longer uses [hidden]; .is-open is the lifecycle state.
+const isOpen = (el) => el.classList.contains("is-open");
+
 let importId = 0;
 
 async function loadDismiss(html) {
@@ -25,7 +28,7 @@ test("resolves the current target dynamically and hides it", async () => {
 
   click(trigger);
 
-  expect(target.hidden).toBe(true);
+  expect(isOpen(target)).toBe(false);
 });
 
 test("emits a bubbling actual:dismiss event with its trigger", async () => {

@@ -7,6 +7,34 @@
 - Popover transport probe: `demo/templates/popover-transport.html`.
 - `bun run serve`, a static server for opening demo pages from another device.
 
+### Breaking
+
+- JavaScript browser floor raised to Safari 17+, Firefox 125+ and Chromium
+  116+; browsers below it no longer receive the supported Actual runtime.
+- Core HTML/CSS degradation is unchanged, and stays governed by the Degraded
+  tier.
+- The `Intermediate` tier is deleted — the new Minimal absorbs it on all three
+  engines.
+- `disconnectSurface(menu, { restore })` no longer takes options; the
+  reparenting it controlled is gone.
+
+### Changed
+
+- Interactive surfaces enter the top layer through `popover="manual"` instead
+  of being moved to `body` or the nearest `<dialog>`.
+- `.is-open` is the only state `surface.js` writes; `prepareSurface()` removes
+  `[hidden]` and sets `popover="manual"` over any author value.
+- `flyout.css` and `tooltip.css` drop their `@supports selector(:popover-open)`
+  gates.
+- `check:compat` audits stylesheets against the Degraded floor, and no longer
+  tracks popover selectors or `compat-ok:` pragmas.
+
+### Fixed
+
+- A scoped theme, density, `.inverted` or application custom property now
+  reaches an anchored surface through inheritance — see
+  `docs/design-notes/surface-reparenting.md`.
+
 ## [0.7.0] - 2026-09-04
 
 ### Added

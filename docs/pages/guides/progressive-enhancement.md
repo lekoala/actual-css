@@ -17,14 +17,16 @@ unsupported — it is not tested, documented as supported, or preserved when the
 runtime evolves. The runtime assumes the modern platform primitives available
 across Minimal and ships no compatibility layer or polyfill.
 
-| Tier         | Firefox | Safari    | Chromium |
-| ------------ | ------- | --------- | -------- |
-| Degraded     | 78+     | 14+       | 88+      |
-| **Minimal**  | **98+** | **15.4+** | **99+**  |
-| Intermediate | 121+    | 16+       | 106+     |
-| Recommended  | 129+    | 17.5+     | 123+     |
+| Tier        | Firefox  | Safari  | Chromium |
+| ----------- | -------- | ------- | -------- |
+| Degraded    | 78+      | 14+     | 88+      |
+| **Minimal** | **125+** | **17+** | **116+** |
+| Recommended | 129+     | 17.5+   | 123+     |
 
-The tier definitions live in the browser-support design note.
+The floor is set by the native manual Popover transport (`popover="manual"`,
+`showPopover()`, `hidePopover()`), which interactive surfaces use to promote a
+panel to the top layer without moving it in the DOM. The tier definitions live
+in the browser-support design note.
 
 ## Overview
 
@@ -185,8 +187,9 @@ must be able to position a listbox under an input — that is the test.
 or account for:
 
 ```css
-.my-panel              { position: absolute; z-index: 100; }
-.my-panel[hidden]      { display: none; }
+.my-panel          { position: absolute; z-index: 100; }
+.my-panel[popover] { inset: auto; margin: 0; }
+.my-panel[popover]:not(:popover-open) { display: none; }
 /* surface.js sets position: fixed + inline left/top on open —
    do not override with !important */
 /* .is-open / .is-sheet / .surface-backdrop are written by surface.js
@@ -196,12 +199,18 @@ or account for:
    — never select on it */
 ```
 
-Two non-obvious requirements:
+Three non-obvious requirements:
 
-1. `[hidden] { display: none }` must not be defeated by a higher-specificity
-   `display` rule — `surface.js` toggles `hidden`, not `display`.
-2. The open state switches to `position: fixed` with measured inline
-   coordinates.
+1. `surface.js` writes `popover="manual"` and removes `hidden`: the panel is
+   promoted to the top layer where it stands, never reparented, and the closed
+   state belongs to the platform. `.is-open` is the state the runtime writes
+   and the only one to key styles on.
+2. A panel that declares its own `display` must restore `display: none` for the
+   closed popover. An author declaration outranks the UA origin whatever the
+   specificity, so a bare `display: grid` leaves a closed panel painted at its
+   static position.
+3. The open state switches to `position: fixed` with measured inline
+   coordinates, and the UA's own `inset` / `margin` must be cleared.
 
 Lifecycle: `prepareSurface` → `openSurface` → `closeSurface` →
 `disconnectSurface`. `retainSurface(panel)` reference-counts a surface shared by

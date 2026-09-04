@@ -9,7 +9,6 @@ import { waitForTransitions } from "./transition.js";
 const openSurfaces = new Set();
 const surfaceMap = new WeakMap();
 const surfaceRetainers = new WeakMap();
-const mountedSurfaces = new WeakMap();
 const clickBoundDocuments = new WeakSet();
 
 const SURFACE_MARKER = "data-actual-surface";
@@ -38,42 +37,40 @@ function reaperFor(menu) {
 
   let reaper = reapers.get(root);
   if (!reaper) {
-    reaper = enhance(
-      { [`[${SURFACE_MARKER}]`]: (el) => () => disconnectSurface(el, { restore: false }) },
-      root,
-    );
+    reaper = enhance({ [`[${SURFACE_MARKER}]`]: (el) => () => disconnectSurface(el) }, root);
     reapers.set(root, reaper);
   }
   return reaper;
 }
 
-function getSurfaceRoot(menu, anchor) {
-  return anchor?.closest("dialog") || menu.closest("dialog") || menu.ownerDocument.body;
-}
-
-function mountSurface(menu, anchor) {
-  if (mountedSurfaces.has(menu)) return;
-
-  const root = getSurfaceRoot(menu, anchor);
-  const parent = menu.parentNode;
-  if (!root || !parent || parent === root) return;
-
-  mountedSurfaces.set(menu, { parent, next: menu.nextSibling });
-  root.append(menu);
-}
-
-function restoreSurface(menu) {
-  const mount = mountedSurfaces.get(menu);
-  if (!mount) return;
-
-  if (mount.parent.isConnected) {
-    const next = mount.next?.parentNode === mount.parent ? mount.next : null;
-    mount.parent.insertBefore(menu, next);
-  } else {
-    menu.remove();
+/*
+ * Transport: the top layer, via popover="manual".
+ *
+ * The runtime owns the whole lifecycle, so "manual" is the only usable mode —
+ * it supplies promotion to the top layer and nothing else, leaving the
+ * dismissal policy, Escape ordering and focus restoration below untouched.
+ *
+ * The attribute is set by the runtime, not asked of the author: a surface is
+ * still marked up exactly as before. showPopover/hidePopover throw on an
+ * out-of-order call (already open, not connected), which is a state Actual's
+ * own guards should already have excluded — the try/catch is there so a
+ * surprising DOM does not take the lifecycle down with it.
+ */
+function showTransport(menu) {
+  try {
+    menu.showPopover();
+    return true;
+  } catch {
+    return false;
   }
+}
 
-  mountedSurfaces.delete(menu);
+function hideTransport(menu) {
+  try {
+    menu.hidePopover();
+  } catch {
+    /* Already closed or detached; nothing left to hide. */
+  }
 }
 
 function shouldUseSheet(menu, state) {
@@ -93,6 +90,21 @@ function shouldUseSheet(menu, state) {
   );
 }
 
+/*
+ * Trigger state sync stays Actual's job, deliberately.
+ *
+ * A button carrying popovertarget gets an implicit invoker relation and the
+ * platform computes aria-expanded on it by itself — measured on the AX tree:
+ * expanded false when closed, true when open. Tempting, and out of scope: the
+ * public contract here is aria-controls, and popovertarget would replace it.
+ * That is a markup change for adopters, not an internal transport detail, so it
+ * cannot ride along with a transport swap that changes no HTML.
+ *
+ * It is also not obviously a win. linkedTriggers() is small, explicit, and
+ * already supports several triggers pointing at one panel; popovertarget covers
+ * the single-invoker case. Any future move needs to weigh what is lost, not
+ * just count the lines saved.
+ */
 function linkedTriggers(menu) {
   if (!menu.id) return [];
   return [...menu.ownerDocument.querySelectorAll(`[aria-controls="${CSS.escape(menu.id)}"]`)];
@@ -102,6 +114,15 @@ function syncExpanded(menu, expanded) {
   for (const trigger of linkedTriggers(menu)) {
     trigger.setAttribute("aria-expanded", expanded ? "true" : "false");
   }
+}
+
+/*
+ * Where a runtime-created scrim goes. The panel itself is promoted, not moved,
+ * so this is the one remaining need for a document-level root: a plain fixed
+ * div cannot escape an ancestor's overflow or stacking context on its own.
+ */
+function backdropRoot(menu, anchor) {
+  return anchor?.closest("dialog") || menu.closest("dialog") || menu.ownerDocument.body;
 }
 
 function ensureBackdrop(menu, state) {
@@ -120,7 +141,11 @@ function ensureBackdrop(menu, state) {
   backdrop.className = CLASSES.backdrop;
   backdrop.hidden = false;
 
-  menu.before(backdrop);
+  // Not menu.before(): the panel stays where it was authored now, and a scrim
+  // next to it there could not cover the viewport. The native ::backdrop is
+  // not an option — its UA pointer-events: none is not overridable, even with
+  // !important, so it would let clicks through to the page behind the sheet.
+  backdropRoot(menu, state.trigger || state.source).append(backdrop);
   state.backdrop = backdrop;
 }
 
@@ -226,7 +251,7 @@ function startSurfaceResources(menu, state) {
   }
   const anchor = state.point ? null : state.trigger || state.source;
   state.stopTracking = autoUpdate(anchor, menu, ({ type }) => {
-    if (menu.hidden) return;
+    if (!isSurfaceOpen(menu)) return;
     if (type === "scroll" && state.dismissOnScroll) return;
     applyPresentation(menu, state);
     if (!positionSurface(menu)) closeSurface(menu);
@@ -234,34 +259,23 @@ function startSurfaceResources(menu, state) {
 }
 
 export function isSurfaceOpen(menu) {
-  return menu.classList.contains(CLASSES.open) && !menu.hidden;
+  return menu.classList.contains(CLASSES.open);
 }
 
 export function prepareSurface(menu) {
   if (!menu) return;
   menu.style.position = "fixed";
-  menu.hidden = true;
+  // A closed popover is hidden by the platform, so [hidden] is no longer the
+  // closed state. Any left over from author markup would outrank it.
+  menu.removeAttribute("hidden");
+  // "manual" is written even over an author's own value, because it is the
+  // whole of what the transport asks for. Any other mode hands the UA a
+  // dismissal policy of its own: light dismiss closes on outside clicks only,
+  // which silently defeats data-flyout-auto-close.
+  menu.setAttribute("popover", "manual");
   syncExpanded(menu, false);
   menu.setAttribute(SURFACE_MARKER, "");
   reaperFor(menu)?.refresh(menu);
-}
-
-/*
- * One lifecycle owner per surface. surface.js opens by clearing [hidden] and
- * adding .is-open; it never calls showPopover(). So a [popover] panel handed to
- * the runtime has two owners and stays shut: the platform keeps a popover it
- * was never asked to show closed, whatever the runtime writes.
- *
- * This covers every popover value. "manual" is a candidate future transport for
- * this module, which does not make it a legitimate mix today. Delete this guard
- * in the commit that makes surface.js call showPopover().
- */
-function warnPopoverConflict(panel) {
-  if (!panel.hasAttribute("popover")) return;
-  console.warn(
-    "Actual: the surface lifecycle cannot own a [popover] element — choose one lifecycle owner (remove the popover attribute, or drop the Actual enhancement).",
-    panel,
-  );
 }
 
 export function retainSurface(panel) {
@@ -269,7 +283,6 @@ export function retainSurface(panel) {
 
   let entry = surfaceRetainers.get(panel);
   if (!entry) {
-    warnPopoverConflict(panel);
     prepareSurface(panel);
     entry = { count: 0 };
     surfaceRetainers.set(panel, entry);
@@ -305,8 +318,6 @@ export function openSurface(menu, opts = {}) {
     if (other !== menu && other.ownerDocument === menu.ownerDocument) closeSurface(other);
   }
 
-  const anchor = opts.trigger || opts.source || null;
-  mountSurface(menu, anchor);
   prepareSurface(menu);
   const state = ensureSurfaceWired(menu);
   state.trigger = opts.trigger || null;
@@ -327,8 +338,9 @@ export function openSurface(menu, opts = {}) {
   state.restoreFocusTo = opts.restoreFocusTo || opts.trigger || opts.source || null;
   state.closeId++;
 
+  // Promote before measuring: a closed popover has no box to position.
+  if (!showTransport(menu)) return false;
   menu.classList.add(CLASSES.open);
-  menu.hidden = false;
   applyPresentation(menu, state);
   syncExpanded(menu, true);
 
@@ -354,7 +366,7 @@ export function closeSurface(menu, opts = {}) {
   if (!wasSheet) {
     menu.classList.remove(CLASSES.sheet);
   }
-  menu.hidden = true;
+  hideTransport(menu);
   const backdrop = state?.backdrop || null;
   if (backdrop) backdrop.hidden = true;
   openSurfaces.delete(menu);
@@ -373,13 +385,11 @@ export function closeSurface(menu, opts = {}) {
     menu.classList.remove(CLASSES.sheet);
     backdrop?.remove();
     if (state.backdrop === backdrop) state.backdrop = null;
-    restoreSurface(menu);
   });
 }
 
-export function disconnectSurface(menu, { restore = true } = {}) {
+export function disconnectSurface(menu) {
   if (!menu) return;
-  if (!restore) mountedSurfaces.delete(menu);
   closeSurface(menu);
   const state = surfaceMap.get(menu);
   if (state) {
@@ -389,7 +399,6 @@ export function disconnectSurface(menu, { restore = true } = {}) {
     state.stopTracking?.();
     surfaceMap.delete(menu);
   }
-  restoreSurface(menu);
 }
 
 function onDocumentClick(e) {

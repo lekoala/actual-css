@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sheet scrim fixture</title>
+  <link rel="stylesheet" href="../../src/css/actual.full.css">
+  <script src="../../dist/actual.full.js" defer></script>
+</head>
+<body style="margin:0">
+  <button id="behind" type="button"
+          style="position:fixed; top:20px; left:20px; z-index:1">Behind</button>
+
+  <!-- The panel lives inside an overflow-clipping, scoped container: exactly
+       the case where a scrim inserted next to it could not cover the viewport. -->
+  <div id="scope" style="overflow:hidden; height:120px; margin-top:200px">
+    <div class="flyout-trigger">
+      <button id="trigger" class="btn" type="button"
+              data-enhance="flyout" aria-controls="sheet">Open sheet</button>
+      <ul id="sheet" class="flyout menu" data-flyout-mobile="sheet" hidden>
+        <li><button class="menu-item" type="button">One</button></li>
+      </ul>
+    </div>
+  </div>
+
+  <script>
+    window.behindClicks = 0;
+    document.addEventListener("DOMContentLoaded", () => {
+      document.getElementById("behind").addEventListener("click", () => {
+        window.behindClicks++;
+      });
+    });
+  </script>
+</body>
+</html>

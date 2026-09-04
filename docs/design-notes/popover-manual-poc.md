@@ -7,9 +7,10 @@ negative, which are the ones a future attempt would otherwise repeat.
 Question asked: can `popover="manual"` replace the DOM reparenting in
 `surface.js` without changing anything else?
 
-Answer: yes, and the branch demonstrates it. What blocks shipping is not the
-architecture; it is the browser contract. See
-[browser-support](browser-support.md).
+Answer: yes. The branch demonstrated it, the WebKit gate below closed it, and
+the migration checklist at the end has been executed — so this note is now also
+the record of what the checklist got wrong. The cost was a browser floor, not
+an architecture change; see [browser-support](browser-support.md).
 
 ## Branch
 
@@ -274,6 +275,39 @@ that step 8 becomes unavoidable — they turn red as unexpected passes the momen
 the transport changes — but nothing forces step 9. The test file points at the
 note, and the note points back here; that is as far as documentation can close
 the loop.
+
+### Executed — where the checklist was wrong
+
+All ten items are done. Three needed correcting on contact, and the corrections
+are worth more than the items were.
+
+**Item 4 rested on a false premise.** Raising Minimal does not make a CSS
+capability baseline, because Minimal is the *JavaScript* floor: a Degraded
+browser runs no supported runtime and still receives every stylesheet, so CSS
+owes its fallbacks that far down. `check:compat` now states the Degraded floor
+and keeps the entries, relabelled — dropping them would have removed the only
+machine check that keeps those fallbacks honest. Two of the six features were
+also mistagged before the migration: `scrollbar-gutter`, `scrollbar-width` and
+`scrollbar-color` land in Safari 18.2, above every tier including Recommended,
+so they are `optional` rather than absorbed. The same relabelling moved `:has()`
+and `@container` to `minimal` — the new floor genuinely does absorb them, which
+the checklist missed because it enumerated the Intermediate tier's features
+instead of reading the new floor.
+
+**Item 7 cost more than it removed.** `hasPragma()` had no consumer left once
+the popover entries went, so it is gone — and with it five tests, including the
+one recording that prose must not excuse an optional structural use. The
+discovery is now a comment in `check-compat.js` naming the pragma to reinstate.
+Deleting a guard whose only proof of value was its own test is the trade this
+item asked for; it should be re-read before the next optional structural
+capability arrives.
+
+**Item 8 left one author-facing decision open.** The POC preserved an author's
+own `popover` value and only defaulted a missing one. `prepareSurface()` now
+writes `manual` unconditionally: any other mode hands the UA a dismissal policy,
+and native light dismiss closes on outside clicks only — which silently defeats
+`data-flyout-auto-close="false"`. The old `[popover]` conflict warning had
+caught that case; overwriting the attribute is what replaces it.
 
 ## What was deliberately left out
 

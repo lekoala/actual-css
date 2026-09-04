@@ -1,8 +1,8 @@
 /*
  * Capability floor audit. Run with bun run check:compat.
  *
- * Answers: which capabilities above the Minimal floor are used on a path that
- * does not degrade? Two kinds of above-floor use are acceptable:
+ * Answers: which capabilities above the CSS floor are used on a path that does
+ * not degrade? Two kinds of above-floor use are acceptable:
  *
  *   - safe-drop: an unknown declaration/value is ignored and the previous
  *     declaration or default wins — the component keeps working, only an
@@ -12,24 +12,29 @@
  *     lines explaining why the fallback keeps the base functional).
  *
  * Violations fail the pipeline. Tier controls how a use is *reported*, not
- * whether it needs a gate: an optional-tier feature that is safe-drop stays
- * informational, but an optional-tier feature that is structural must still be
- * guarded or justified. Tier says how far above the floor a capability sits;
- * kind says what happens on an engine that lacks it, and only kind can excuse
- * a use.
+ * whether it needs a gate: kind says what happens on an engine that lacks the
+ * capability, and only kind can excuse a use.
  *
- * "Above the floor" is not the same as "outside the Minimal range". An
- * optional-tier capability such as Popover is simply not part of Actual's
- * Minimal contract: engines well inside the Minimal range may still lack it,
- * so a gate tracks the capability, never a browser generation.
+ * The floor here is the Degraded tier, not Minimal. Minimal is the JavaScript
+ * baseline; a Degraded browser runs no supported runtime but still receives
+ * every stylesheet, so CSS owes its fallbacks that far down. Raising Minimal
+ * therefore does not turn a CSS capability into baseline — it only moves the
+ * tier label a capability is reported under.
  *
- * Prose does not excuse an optional-tier structural use. A comment explaining
+ * Tier says which Actual tier first guarantees the capability: "minimal" is
+ * lost only on Degraded, "recommended" is lost across part of Minimal too, and
+ * "optional" is guaranteed by no tier — either because it lands above
+ * Recommended on some engine, or because it is capability-shaped rather than
+ * version-shaped.
+ *
+ * If an optional structural capability ever returns to this table, it needs a
+ * machine-checkable escape hatch rather than a prose one: a comment explaining
  * why a capability needs a gate reads, to a keyword matcher, exactly like a
- * comment excusing its absence — so removing the @supports would keep passing.
- * Optional-tier structural uses therefore need either a real guard or an
- * explicit "compat-ok:" pragma naming the reason.
+ * comment excusing its absence, so isJustified() would wave through a rule
+ * whose @supports had been deleted. The removed form was a "compat-ok:" pragma
+ * on the rule's own comment; reinstate that, not a wider keyword list.
  *
- * Minimal floor: Firefox 98 / Safari 15.4 / Chromium 99.
+ * CSS floor (Degraded): Firefox 78 / Safari 14 / Chromium 88.
  */
 import { readdirSync, readFileSync } from "node:fs";
 import { dirname, join, relative, sep } from "node:path";
@@ -40,39 +45,39 @@ const ROOT = join(__dirname, "..");
 const SRC = join(ROOT, "src");
 
 const FEATURES = [
-  { name: "color-mix()", pattern: /color-mix\(/gi, kind: "safe-drop", tier: "intermediate" },
+  { name: "color-mix()", pattern: /color-mix\(/gi, kind: "safe-drop", tier: "minimal" },
   {
     name: "oklch()/oklab()",
     pattern: /\bokl(?:ch|ab)\(/gi,
     kind: "safe-drop",
-    tier: "intermediate",
+    tier: "minimal",
   },
   {
     name: "dvh/svh/lvh units",
     pattern: /\b(?:d|l|s)vh\b/gi,
     kind: "safe-drop",
-    tier: "intermediate",
+    tier: "minimal",
   },
+  /* Scrollbar styling lands in Chromium 121 and Safari 18.2, so it is above
+     Recommended on WebKit and belongs to no tier. An engine that knows none of
+     the three draws its native scrollbar, which is the intended fallback. */
   {
     name: "scrollbar-gutter",
     pattern: /scrollbar-gutter\b/gi,
     kind: "safe-drop",
-    tier: "intermediate",
+    tier: "optional",
   },
-  /* scrollbar-width and scrollbar-color land in Chromium 121 / Safari 18.2,
-     both above the floor. An engine that knows neither draws its native
-     scrollbar, which is the intended fallback. */
   {
     name: "scrollbar-width",
     pattern: /scrollbar-width\b/gi,
     kind: "safe-drop",
-    tier: "intermediate",
+    tier: "optional",
   },
   {
     name: "scrollbar-color",
     pattern: /scrollbar-color\b/gi,
     kind: "safe-drop",
-    tier: "intermediate",
+    tier: "optional",
   },
   { name: "light-dark()", pattern: /light-dark\(/gi, kind: "safe-drop", tier: "recommended" },
   {
@@ -82,45 +87,23 @@ const FEATURES = [
     tier: "recommended",
   },
   { name: "field-sizing", pattern: /field-sizing\b/gi, kind: "safe-drop", tier: "recommended" },
-  { name: ":has()", pattern: /:has\(/gi, kind: "structural", tier: "recommended" },
+  /* :has() and @container are guaranteed from Minimal up, so a Minimal browser
+     never needs their fallbacks — Degraded does, which is why they stay
+     tracked as structural rather than being dropped when Minimal rose. */
+  { name: ":has()", pattern: /:has\(/gi, kind: "structural", tier: "minimal" },
   {
     name: "@container queries",
     pattern: /@container\b/gi,
     kind: "structural",
-    tier: "recommended",
+    tier: "minimal",
   },
+  /* Subgrid is Chromium 117 — one version above Minimal's Chromium 116, which
+     is why it is not "minimal" alongside the two above. */
   { name: "subgrid", pattern: /subgrid/gi, kind: "structural", tier: "recommended" },
   {
     name: "anchor positioning",
     pattern: /(?:position-anchor|position-area|anchor-name|anchor-size)\b/gi,
     kind: "safe-drop",
-    tier: "optional",
-  },
-  /* Two capabilities that fail differently, so they are tracked separately —
-     but both are structural.
-
-     The attribute selector matches whether or not the engine implements
-     Popover, and without it the UA neither hides nor promotes the element, so
-     an ungated reset restyles a panel nothing will ever hide. The pattern
-     covers a value too ([popover="manual"], [popovertargetaction="hide"]),
-     which is the form real code reaches for, without matching an unrelated
-     [popover-foo].
-
-     :popover-open is safe *in a forgiving list* — :is()/:where() discard an
-     unknown member and leave the rest — but that is a property of the list,
-     not of the pseudo-class: in a plain selector list an unsupported member
-     invalidates the whole rule. So it needs a guard or a compat-ok naming the
-     forgiving context. */
-  {
-    name: "popover attribute",
-    pattern: /\[\s*popover(?:target(?:action)?)?(?=\s*(?:\]|[~|^$*]?=))[^\]]*\]/gi,
-    kind: "structural",
-    tier: "optional",
-  },
-  {
-    name: ":popover-open",
-    pattern: /:popover-open\b/gi,
-    kind: "structural",
     tier: "optional",
   },
 ];
@@ -129,11 +112,11 @@ const JUSTIFIED =
   /(?:progressive|minimal|enhancement|fallback|unsupported|without|retain|degrade|optional|justif|why|browsers)/i;
 
 /*
- * Grandfathered progressive decisions: features used above the Minimal floor
- * with an explicitly documented fallback (see the cited source comments).
- * Any use outside these files still needs a local why comment. This ledger is
- * the "raising Minimal is an explicit decision" record — extend it in the same
- * commit as the source comment that documents the fallback.
+ * Grandfathered progressive decisions: features used above the CSS floor with
+ * an explicitly documented fallback (see the cited source comments). Any use
+ * outside these files still needs a local why comment. This ledger is the
+ * "degrading below the floor is an explicit decision" record — extend it in
+ * the same commit as the source comment that documents the fallback.
  */
 const PROGRESSIVE = {
   "src/css/components/join.css": [":has()"],
@@ -183,14 +166,6 @@ function supportsRanges(css) {
 
 function isGuarded(index, ranges) {
   return ranges.some(([start, end]) => index > start && index < end);
-}
-
-/* An explicit pragma on the rule's own comment. Unlike prose, it cannot be
-   tripped by a comment that merely discusses the capability. */
-function hasPragma(css, index) {
-  const lineStart = css.lastIndexOf("\n", index - 1) + 1;
-  const ruleStart = css.lastIndexOf("}", lineStart - 1) + 1;
-  return /compat-ok:/i.test(css.slice(ruleStart, lineStart));
 }
 
 /* The comment attached to the rule (back to the previous rule boundary) or the
@@ -293,14 +268,13 @@ export function auditCss(css, name = "test.css") {
     const grandfathered = (PROGRESSIVE[name] ?? []).includes(feature.name);
     for (const m of masked.matchAll(feature.pattern)) {
       const entry = `${name}:${lineNo(css, m.index)}  ${feature.name}`;
-      // Excuse on kind and guarding only. Tier then decides which bucket an
-      // excused use is reported in, so "optional" can no longer wave through
-      // an unguarded structural rule.
+      // Excuse on kind and guarding only; tier then decides which bucket an
+      // excused use is reported in.
       const excused =
         feature.kind === "safe-drop" ||
         isGuarded(m.index, guarded) ||
         grandfathered ||
-        (feature.tier === "optional" ? hasPragma(css, m.index) : isJustified(css, m.index));
+        isJustified(css, m.index);
       if (!excused) violations.push(entry);
       else if (feature.tier === "optional") optional.push(entry);
       else progressive.push(entry);
@@ -333,7 +307,7 @@ function main() {
 
   console.log("CSS compatibility audit");
   console.log("────────────────────────────────────────────");
-  console.log("Minimal floor: Firefox 98 / Safari 15.4 / Chromium 99");
+  console.log("CSS floor (Degraded): Firefox 78 / Safari 14 / Chromium 88");
   console.log(`Progressive/safe-drop: ${progressive.length}`);
   console.log(`Optional enhancements: ${optional.length}`);
   console.log(`Unguarded structural above floor: ${violations.length}`);

@@ -231,12 +231,14 @@ across Minimal and ships no compatibility layer or polyfill.</p>
 </thead>
 <tbody>
 <tr><td>Degraded</td><td>78+</td><td>14+</td><td>88+</td></tr>
-<tr><td><strong>Minimal</strong></td><td><strong>98+</strong></td><td><strong>15.4+</strong></td><td><strong>99+</strong></td></tr>
-<tr><td>Intermediate</td><td>121+</td><td>16+</td><td>106+</td></tr>
+<tr><td><strong>Minimal</strong></td><td><strong>125+</strong></td><td><strong>17+</strong></td><td><strong>116+</strong></td></tr>
 <tr><td>Recommended</td><td>129+</td><td>17.5+</td><td>123+</td></tr>
 </tbody>
 </table></div>
-<p>The tier definitions live in the browser-support design note.</p>
+<p>The floor is set by the native manual Popover transport (<code>popover=&quot;manual&quot;</code>,
+<code>showPopover()</code>, <code>hidePopover()</code>), which interactive surfaces use to promote a
+panel to the top layer without moving it in the DOM. The tier definitions live
+in the browser-support design note.</p>
 <h2 id="overview">Overview</h2>
 <p>All JS modules are side-effect modules: importing them registers behavior
 automatically. There is no init call, public global object, or configuration.
@@ -380,8 +382,9 @@ must be able to position a listbox under an input — that is the test.</p>
 <h2 id="surface-contract">Surface contract</h2>
 <p><code>surface</code> has documented presentation coupling. A foreign consumer must supply
 or account for:</p>
-<pre><code class="language-css">.my-panel              { position: absolute; z-index: 100; }
-.my-panel[hidden]      { display: none; }
+<pre><code class="language-css">.my-panel          { position: absolute; z-index: 100; }
+.my-panel[popover] { inset: auto; margin: 0; }
+.my-panel[popover]:not(:popover-open) { display: none; }
 /* surface.js sets position: fixed + inline left/top on open —
    do not override with !important */
 /* .is-open / .is-sheet / .surface-backdrop are written by surface.js
@@ -390,12 +393,18 @@ or account for:</p>
 /* data-actual-surface is written by surface.js for teardown
    — never select on it */
 </code></pre>
-<p>Two non-obvious requirements:</p>
+<p>Three non-obvious requirements:</p>
 <ol>
-<li><code>[hidden] { display: none }</code> must not be defeated by a higher-specificity
-<code>display</code> rule — <code>surface.js</code> toggles <code>hidden</code>, not <code>display</code>.</li>
+<li><code>surface.js</code> writes <code>popover=&quot;manual&quot;</code> and removes <code>hidden</code>: the panel is
+promoted to the top layer where it stands, never reparented, and the closed
+state belongs to the platform. <code>.is-open</code> is the state the runtime writes
+and the only one to key styles on.</li>
+<li>A panel that declares its own <code>display</code> must restore <code>display: none</code> for the
+closed popover. An author declaration outranks the UA origin whatever the
+specificity, so a bare <code>display: grid</code> leaves a closed panel painted at its
+static position.</li>
 <li>The open state switches to <code>position: fixed</code> with measured inline
-coordinates.</li>
+coordinates, and the UA's own <code>inset</code> / <code>margin</code> must be cleared.</li>
 </ol>
 <p>Lifecycle: <code>prepareSurface</code> → <code>openSurface</code> → <code>closeSurface</code> →
 <code>disconnectSurface</code>. <code>retainSurface(panel)</code> reference-counts a surface shared by

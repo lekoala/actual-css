@@ -128,7 +128,7 @@ dialog.drawer nav {
 }
 
 /* Safari before 16.4 does not support :dir(); keep the ancestor-attribute
-   path as the Minimal-tier fallback. */
+   path as the Degraded-tier fallback. */
 [dir="rtl"] dialog.drawer {
   --drawer-closed-translate: 100%;
 }

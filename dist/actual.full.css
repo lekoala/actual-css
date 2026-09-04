@@ -1716,10 +1716,9 @@ small {
  * the light/dark adaptation that color-scheme already gives for free, and the
  * two never match anyway.
  *
- * Above the capability floor: scrollbar-color lands in Chromium 121 and
- * Safari 18.2, the floor is Chromium 99 / Safari 15.4. Older engines ignore
- * both declarations and draw their native scrollbar — the intended fallback,
- * not a broken state.
+ * Above every tier: scrollbar-color lands in Chromium 121 and Safari 18.2, so
+ * even a Recommended engine may lack it. Engines that ignore both declarations
+ * draw their native scrollbar — the intended fallback, not a broken state.
  *
  * Styles the scrollbar only; it does not create the overflow. Pair it with
  * .overflow-auto or a component that already scrolls.
@@ -4708,7 +4707,7 @@ dialog.drawer nav {
 }
 
 /* Safari before 16.4 does not support :dir(); keep the ancestor-attribute
-   path as the Minimal-tier fallback. */
+   path as the Degraded-tier fallback. */
 [dir="rtl"] dialog.drawer {
   --drawer-closed-translate: 100%;
 }
@@ -4761,9 +4760,10 @@ dialog.drawer > form > header {
 /*
  * Flyout — floating panel for actions and links.
  *
- * JavaScript owns positioning (position: fixed + left/top), state
- * (hidden + .is-open), focus, and keyboard behavior. CSS owns the surfaced
- * panel appearance, item styles, and animation.
+ * JavaScript owns positioning (position: fixed + left/top), state (.is-open,
+ * plus the popover="manual" transport that promotes the panel to the top
+ * layer), focus, and keyboard behavior. CSS owns the surfaced panel
+ * appearance, item styles, and animation.
  *
  * Runtime markers (managed by surface.js): .is-open marks an open flyout,
  * .is-sheet marks "auto" resolved to bottom-sheet presentation on coarse
@@ -4839,48 +4839,37 @@ dialog.drawer > form > header {
   transition: opacity var(--duration-fast) ease;
 }
 
-/* Native popovers enter the top layer with UA geometry that conflicts with
-   anchored positioning. The reset is gated on real Popover support because an
-   attribute selector matches whether or not the engine implements Popover:
-   without it the UA neither hides nor promotes the element, so an ungated
-   reset would strand a permanently visible panel at inset: auto. Popover is
-   not part of Actual's Minimal contract — engines inside the Minimal range
-   may lack it — so the gate is about the capability, not the floor. Kept
-   scoped to Actual surfaces so bare [popover] elements retain their platform
+/* A popover enters the top layer with UA geometry that conflicts with anchored
+   positioning. surface.js sets popover="manual" on every surface it manages,
+   so this is the transport's own geometry rather than an opt-in. Kept scoped to
+   Actual surfaces so bare [popover] elements retain their platform
    presentation. */
-@supports selector(:popover-open) {
-  .flyout[popover] {
-    position: fixed;
-    inset: auto;
-    margin: 0;
-  }
-
-  /* A presentation class may own its *visible* display type, but must not
-     override the platform's hidden state. The UA closes a popover with
-     display: none, and an author declaration beats the UA origin whatever the
-     specificity — so .flyout's own display: grid would leave a closed popover
-     painted at its static position. Restoring both properties here also gives
-     the native path the exit target the runtime path already has in
-     .flyout[hidden]: without an opacity to animate, the overlay/display
-     allow-discrete transition below would hold a fully opaque panel in the top
-     layer and then snap it away. */
-  .flyout[popover]:not(:popover-open) {
-    display: none;
-    opacity: 0;
-  }
+.flyout[popover] {
+  position: fixed;
+  inset: auto;
+  margin: 0;
 }
 
-/* compat-ok: :popover-open rides in a forgiving :is(), where an engine without
-   Popover discards just that member and .is-open alone keeps driving the open
-   state. This is a property of the forgiving list, not of the pseudo-class: in
-   a plain selector list an unsupported member would invalidate the whole rule.
-   Keep it inside :is()/:where() or gate it. */
+/* A presentation class may own its *visible* display type, but must not
+   override the platform's hidden state. The UA closes a popover with
+   display: none, and an author declaration beats the UA origin whatever the
+   specificity — so .flyout's own display: grid would leave a closed popover
+   painted at its static position. The opacity is the exit target: with nothing
+   to animate, the overlay/display allow-discrete transition below would hold a
+   fully opaque panel in the top layer and then snap it away. */
+.flyout[popover]:not(:popover-open) {
+  display: none;
+  opacity: 0;
+}
+
+/* Both lifecycles in one rule: .is-open for a surface.js panel, :popover-open
+   for one an author drives natively with popovertarget. */
 .flyout:is(.is-open, :popover-open):not(.is-sheet) {
   inset: auto;
 }
 
-/* compat-ok: forgiving :is() again, and @starting-style is itself unsupported
-   across part of the Minimal range, so the rule simply does not exist there. */
+/* @starting-style is above the floor (Safari 17.5), so where it is missing the
+   entry simply has no animated origin and the panel appears at full opacity. */
 @starting-style {
   .flyout:is(.is-open, :popover-open) {
     opacity: 0;
@@ -4921,7 +4910,6 @@ dialog.drawer > form > header {
   translate: 0 var(--space-30);
 }
 
-/* compat-ok: forgiving :is() inside @starting-style, as above. */
 @starting-style {
   .flyout.is-sheet:is(.is-open, :popover-open) {
     translate: 0 var(--space-30);
@@ -5165,28 +5153,23 @@ dialog.drawer > form > header {
 
 /* Neutralize only the native geometry that conflicts with a positioned
    tooltip. In particular, the UA overflow would turn the arrow into scroll
-   overflow instead of letting it project beyond the bubble. Gated on real
-   Popover support: the attribute selector matches whether or not the engine
-   implements Popover, and without it nothing hides the element, so an ungated
-   reset would leave a stray bubble parked at inset: auto. Popover sits outside
-   Actual's Minimal contract, so the gate tracks the capability rather than the
-   floor. */
-@supports selector(:popover-open) {
-  .tooltip[popover] {
-    inset: auto;
-    margin: 0;
-    overflow: visible;
-  }
+   overflow instead of letting it project beyond the bubble. tooltip.js drives
+   [hidden], so [popover] here is always the author's own choice of a native
+   lifecycle. */
+.tooltip[popover] {
+  inset: auto;
+  margin: 0;
+  overflow: visible;
+}
 
-  /* .tooltip declares no display of its own, so the UA already hides a closed
-     popover here. The rule is written anyway: both components advertised as
-     Popover-compatible should cede the hidden state the same way, and the
-     opacity target is what actually makes the native exit fade — see the
-     overlay note below. */
-  .tooltip[popover]:not(:popover-open) {
-    display: none;
-    opacity: 0;
-  }
+/* .tooltip declares no display of its own, so the UA already hides a closed
+   popover here. The rule is written anyway: both components advertised as
+   Popover-compatible should cede the hidden state the same way, and the
+   opacity target is what actually makes the native exit fade — see the overlay
+   note below. */
+.tooltip[popover]:not(:popover-open) {
+  display: none;
+  opacity: 0;
 }
 
 .tooltip[hidden] {
@@ -5196,10 +5179,8 @@ dialog.drawer > form > header {
 
 /* Entry opacity for both lifecycles: a runtime-driven tip is visible when it
    is neither a popover nor [hidden], a native one when it is :popover-open.
-   compat-ok: [popover] appears here only under negation, which every engine
-   evaluates correctly whether or not it implements Popover, :popover-open
-   rides in a forgiving :is(), and @starting-style is itself unsupported across
-   part of the Minimal range — so the rule does not exist there at all. */
+   @starting-style is above the floor (Safari 17.5); where it is missing the tip
+   simply appears at full opacity. */
 @starting-style {
   .tooltip:is(:not([popover]):not([hidden]), :popover-open) {
     opacity: 0;

@@ -151,19 +151,19 @@ For more conservative fallbacks, import and compose the source entrypoints direc
 
 Actual CSS is built around progressive enhancement.
 
-| Tier         | Firefox |    Safari | Chromium |
-| ------------ | ------: | --------: | -------: |
-| Degraded     |     78+ |       14+ |      88+ |
-| **Minimal**  | **98+** | **15.4+** |  **99+** |
-| Intermediate |    121+ |       16+ |     106+ |
-| Recommended  |    129+ |     17.5+ |     123+ |
+| Tier        |  Firefox |  Safari | Chromium |
+| ----------- | -------: | ------: | -------: |
+| Degraded    |      78+ |     14+ |      88+ |
+| **Minimal** | **125+** | **17+** | **116+** |
+| Recommended |     129+ |   17.5+ |     123+ |
 
 **Degraded** — semantic HTML and core CSS remain usable. JavaScript
 enhancements are outside the supported contract.
 
 **Minimal** — full Actual support, including the JavaScript runtime. The
-runtime assumes modern browser APIs and does not ship legacy compatibility
-layers or polyfills.
+runtime assumes modern browser APIs — including the native manual Popover
+transport used by interactive surfaces — and does not ship legacy
+compatibility layers or polyfills.
 
 Degraded browsers may execute some enhancements successfully, but this
 behavior is not tested or preserved.

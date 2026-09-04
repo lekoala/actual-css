@@ -32,6 +32,12 @@ Add relevant guards for future-us when needed based on traps and discoveries.
 - Visual changes must be inspected once in the states they affect. Cover the
   meaningful extremes when the geometry is responsive, and exaggerate a tiny
   detail in the fixture rather than squinting at its production size.
+- Do not screenshot top-layer content with `shot:page` or `capture`: they pass
+  `captureBeyondViewport: true`, which mis-composites an open popover or modal
+  dialog — the panel came out translucent and painted *under* a sibling button
+  that a probe proved it covered. For a top-layer state, drive
+  `Page.captureScreenshot` yourself from a `tmp/` script with the flag off, and
+  size the viewport with `Emulation.setDeviceMetricsOverride`.
 - On every shell, pass rg a directory plus rg's own `-g` glob — never a shell
   glob (`rg "x" dir/*.ext` passes the literal path and fails with os error 123).
   Wrap the pattern in single quotes and never escape a quote with `\"`

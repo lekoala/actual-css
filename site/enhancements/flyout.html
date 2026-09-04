@@ -254,7 +254,8 @@ trigger without the pairing never opens anything.</li>
 context for the no-JS fallback: without it the panel lays out against the
 nearest positioned ancestor (or the page edge) instead of under the trigger.</li>
 <li>Start the panel with <code>hidden</code> so it does not flash open before the runtime
-hides and positions it.</li>
+takes it over. The runtime then removes the attribute: a closed panel is
+hidden by the popover transport, and <code>[hidden]</code> would outrank it.</li>
 </ul>
 <pre><code class="language-html">&lt;div class=&quot;flyout-trigger&quot;&gt;
   &lt;button data-enhance=&quot;flyout&quot;
@@ -290,14 +291,14 @@ must write fixed viewport coordinates (and may write <code>--available-height</c
 <code>--surface-anchor-width</code>); the built-in <code>surface.js</code> runtime remains the full
 fallback when Actual owns the lifecycle too. A bare <code>[popover]</code> without
 <code>.flyout</code> or <code>.tooltip</code> keeps its platform appearance.</p>
-<p>Native Popover is optional and is not part of Actual's Minimal contract:
-browsers within the Minimal range may not support it. Actual gates its own
-geometry reset behind <code>@supports selector(:popover-open)</code>, so an engine without
-Popover no longer gets a mispositioned panel — but that engine also never hides
-or promotes a <code>popover</code> element, so nothing dismisses the panel either.</p>
-<p>When the lifecycle must work across the full Minimal range, use <code>surface.js</code>.
-Otherwise using the native lifecycle is an application support decision. The
-two are alternatives, not layers.</p>
+<p>The Popover lifecycle is guaranteed across Minimal, so choosing it is a
+behavior decision rather than a support one: native light dismiss closes on
+outside clicks only, which cannot express <code>data-flyout-auto-close</code>. The two
+lifecycles are alternatives, not layers.</p>
+<p><code>surface.js</code> itself uses <code>popover=&quot;manual&quot;</code> as its transport — the panel is
+promoted to the top layer where it stands, so a scoped theme, density, or
+custom property still reaches it. That transport supplies no behavior, so the
+runtime keeps owning dismissal, Escape ordering, focus and placement.</p>
 <h4 id="choose-one-lifecycle-owner">Choose one lifecycle owner</h4>
 <p>The Actual runtime path, where <code>surface.js</code> owns opening, dismissal, focus and
 placement:</p>
@@ -318,10 +319,12 @@ placement:</p>
   &lt;li&gt;&lt;button class=&quot;menu-item&quot; type=&quot;button&quot;&gt;Rename&lt;/button&gt;&lt;/li&gt;
 &lt;/ul&gt;
 </code></pre>
-<p>Do not combine them. <code>surface.js</code> opens a panel by clearing <code>[hidden]</code> and
-adding <code>.is-open</code>; it never calls <code>showPopover()</code>, so a <code>popover</code> element handed
-to the runtime has two owners and stays closed. The runtime logs a warning if it
-is asked to retain one.</p>
+<p>Do not combine them. <code>surface.js</code> writes <code>popover=&quot;manual&quot;</code> on every panel it
+manages and drives <code>showPopover()</code> / <code>hidePopover()</code> itself, so a
+<code>popover=&quot;auto&quot;</code> panel handed to the runtime has its mode overwritten — the
+runtime keeps one lifecycle owner rather than letting native light dismiss
+compete with <code>data-flyout-auto-close</code>. Keep <code>popovertarget</code> for panels the
+runtime does not enhance.</p>
 <p><strong>The native path still needs a positioner.</strong> <code>popovertarget</code> gives the panel an
 implicit anchor reference to its invoker, but it does not place it: Actual's
 geometry reset clears the UA's centering, so an unpositioned native flyout is

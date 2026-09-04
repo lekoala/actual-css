@@ -1,6 +1,9 @@
 import { afterEach, expect, test } from "bun:test";
 import { cleanupDOM, nextMicrotask, press, setupDOM } from "./helpers/dom.js";
 
+// The transport no longer uses [hidden]; .is-open is the lifecycle state.
+const isOpen = (el) => el.classList.contains("is-open");
+
 let importId = 0;
 
 async function loadSurface(html) {
@@ -26,13 +29,13 @@ test("a listbox surface opens and closes without interference", async () => {
   prepareSurface(surface);
   openSurface(surface);
 
-  expect(surface.hidden).toBe(false);
+  expect(isOpen(surface)).toBe(true);
   expect(isSurfaceOpen(surface)).toBe(true);
   expect(surface.classList.contains("is-open")).toBe(true);
 
   closeSurface(surface);
 
-  expect(surface.hidden).toBe(true);
+  expect(isOpen(surface)).toBe(false);
   expect(isSurfaceOpen(surface)).toBe(false);
 });
 

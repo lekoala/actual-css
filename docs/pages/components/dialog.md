@@ -295,7 +295,7 @@ Available options:
 ## Browser support
 
 Actual relies on the native `<dialog>` API in its supported JavaScript range
-(Safari 15.4+, Firefox 98+, Chromium 99+). No dialog polyfill or fallback shim
+(Safari 17+, Firefox 125+, Chromium 116+). No dialog polyfill or fallback shim
 is shipped.
 
 ## Animation

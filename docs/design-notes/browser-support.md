@@ -5,12 +5,11 @@
 The compatibility contract is expressed in browser versions, not ECMAScript
 edition labels. Each tier is defined by what it guarantees.
 
-| Actual tier  | Firefox |    Safari | Chromium | Contract                                       |
-| ------------ | ------: | --------: | -------: | ---------------------------------------------- |
-| Degraded     |     78+ |       14+ |      88+ | Semantic HTML + core CSS; JS unsupported       |
-| **Minimal**  | **98+** | **15.4+** |  **99+** | Full supported Actual experience, including JS |
-| Intermediate |    121+ |       16+ |     106+ | More modern platform enhancements              |
-| Recommended  |    129+ |     17.5+ |     123+ | Target experience                              |
+| Actual tier |  Firefox |  Safari | Chromium | Contract                                       |
+| ----------- | -------: | ------: | -------: | ---------------------------------------------- |
+| Degraded    |      78+ |     14+ |      88+ | Semantic HTML + core CSS; JS unsupported       |
+| **Minimal** | **125+** | **17+** | **116+** | Full supported Actual experience, including JS |
+| Recommended |     129+ |   17.5+ |     123+ | Target experience                              |
 
 - **Degraded** keeps useful HTML and CSS on older browsers. JavaScript is
   explicitly outside the supported contract there.
@@ -19,33 +18,42 @@ edition labels. Each tier is defined by what it guarantees.
   modern platform primitives available across the whole tier and ships no
   legacy compatibility layer or polyfill.
 
+Only the JavaScript floor is expressed by Minimal. CSS degradation is owed to
+Degraded, so a capability being available across Minimal does not make it CSS
+baseline — `check:compat` audits stylesheets against the Degraded floor.
+
 Degraded browsers may still run some JavaScript successfully, but that
 behavior is not tested, documented as supported, or preserved when the
 runtime evolves.
 
 ### Native Popover and the tiers
 
-Popover is not part of any Actual tier's guarantee below Recommended. It is a
-capability, not a browser generation: the core lifecycle landed around
-Chromium 116, Firefox 125 and Safari 17, which clears Recommended but sits
-above both Minimal and Intermediate on every engine.
+Minimal sits exactly where the manual Popover transport lands: Chromium 116,
+Firefox 125, Safari 17. That is what the floor buys, and the whole of what the
+runtime requires:
 
-| Actual tier  | Core native Popover guaranteed | Recommended lifecycle owner     |
-| ------------ | ------------------------------ | ------------------------------- |
-| Degraded     | no                             | HTML/CSS fallback only          |
-| Minimal      | no                             | `surface.js`                    |
-| Intermediate | no                             | `surface.js`                    |
-| Recommended  | yes, core lifecycle            | native Popover, or `surface.js` |
+```text
+popover="manual"
+showPopover()
+hidePopover()
+top-layer promotion + closed-state display: none
+```
 
-"Core lifecycle" means `popover="auto"`/`"manual"`, `popovertarget`,
-`showPopover`/`hidePopover` and `:popover-open` — not the entire Popover API.
-`popover="hint"` and interest invokers are much newer and are not covered at
-any tier. Safari coverage here is read as the desktop engine; some iOS versions
-through 18.2 still report partial support for parts of the API, so an
-application targeting iOS should verify the specific pieces it relies on.
+`popovertarget`, `popover="auto"` and `:popover-open` arrive on the same
+engines and are guaranteed too, but the runtime uses none of them — it keeps
+`aria-controls` and drives the lifecycle itself. Newer parts of the API
+(`popover="hint"`, interest invokers) are covered by no tier.
 
-Actual's presentation classes compose with either lifecycle from Recommended
-up. The runtime itself depends on Popover at no tier.
+| Actual tier | Manual Popover transport | Lifecycle owner                 |
+| ----------- | ------------------------ | ------------------------------- |
+| Degraded    | no                       | HTML/CSS fallback only          |
+| Minimal     | yes                      | `surface.js`                    |
+| Recommended | yes                      | native Popover, or `surface.js` |
+
+Actual's presentation classes compose with either lifecycle. `surface.js` uses
+the transport and never the native lifecycle, because `popover="auto"` cannot
+express `data-flyout-auto-close`; see
+[platform-alignment](platform-alignment.md).
 
 ## JavaScript philosophy
 
@@ -60,9 +68,9 @@ JavaScript support below Minimal.
 
 ### Abortable listeners
 
-Abortable event listeners predate the Minimal floor: Firefox 86, Chrome 88,
-and WebKit (early 2021) all shipped the capability before the Safari 15.4
-threshold. ([Bugzilla][1], [Chrome][2], [WebKit][3])
+Abortable event listeners predate the Minimal floor by a wide margin: Firefox
+86, Chrome 88, and WebKit (early 2021). ([Bugzilla][1], [Chrome][2],
+[WebKit][3])
 
 > `addEventListener({ signal })` is a baseline runtime primitive.
 
@@ -72,10 +80,24 @@ that is already native throughout Minimal.
 
 ### Native `<dialog>`
 
-The Minimal floor sits at the point where Safari 15.4 and Firefox 98 ship
-native `<dialog>`, and Chromium already had it. ([WebKit][4])
+Native `<dialog>` predates the floor on every engine: Safari 15.4, Firefox 98,
+and Chromium earlier still. ([WebKit][4])
 
 > Native dialog is assumed by the runtime; no dialog polyfill is shipped.
+
+### The manual Popover transport
+
+The floor is set by this capability. `surface.js` promotes a panel with
+`popover="manual"` instead of moving it in the DOM, which is what keeps a
+surface inside every scope that reaches it by inheritance — see
+[surface-reparenting](surface-reparenting.md).
+
+> The manual Popover transport is assumed by the runtime; there is no
+> reparenting fallback.
+
+A capability branch was rejected rather than overlooked: the fallback path is
+the defect, so keeping it would leave the bug in place for exactly the browsers
+the branch would have served.
 
 ### Future-direction invariants
 
@@ -120,7 +142,7 @@ different notion from an Actual tier.
 | `appearance: base-select`             | 2024+         | Native `<select>`                    |
 | `@starting-style`                     | 2024+         | Instant appearance                   |
 | View Transition API                   | 2024+         | Dialog open/close transition         |
-| Popover API (core)                    | Baseline 2025 | `surface.js` lifecycle               |
+| Popover transport (`manual`)          | Baseline 2025 | none — runtime requirement           |
 | CSS Anchor Positioning                | Future        | JS positioning (`@lekoala/floating`) |
 
 Core layout and visual tokens work on all Baseline 2023 browsers. Features marked
