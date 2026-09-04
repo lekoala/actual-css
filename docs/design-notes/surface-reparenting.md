@@ -108,6 +108,13 @@ which put the scope where the panel lands rather than where it starts: declare
 the scope on an ancestor that survives the move (`body`, or the dialog), or
 carry the scope on the panel element itself.
 
+## Experiment
+
+A branch has demonstrated the repair without changing any other contract:
+[popover-manual-poc](popover-manual-poc.md) records what it measured, what it
+refuted, and the checklist for the release that adopts it. Read that before
+attempting this again — it also holds the negative results.
+
 ## Review trigger
 
 Revisit when Popover is guaranteed across Minimal, when a further inherited
