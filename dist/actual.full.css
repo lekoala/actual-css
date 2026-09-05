@@ -252,7 +252,12 @@ select {
     --shadow-popout: 0 0.25rem 0.75rem color-mix(in oklch, var(--shadow-color) 15%, transparent);
   }
 
-  :root {
+  /* Theme-derived like the shadows above, so it is declared on the same
+     boundaries: an alias resolved only on :root is inherited already composed,
+     and a [data-theme] island overriding --backdrop-color or
+     --backdrop-opacity would not change the scrim of a dialog inside it. */
+  :root,
+  [data-theme] {
     --backdrop-fill: color-mix(
       in oklch,
       var(--backdrop-color) calc(var(--backdrop-opacity) * 100%),
@@ -4269,13 +4274,23 @@ a.badge[aria-disabled="true"] {
  *
  * Internal:
  * --dialog-close-icon-size
+ * --dialog-viewport-gap-default
  * --dialog-viewport-gap-2x
  */
 dialog.modal {
-  --dialog-viewport-gap: var(--space-40);
-  /* calc() multiplication is not in the supported browser range, so the
+  /* --dialog-viewport-gap stays fallback-only for the same reason as
+     --modal-size below: declaring the public hook here would give it
+     type+class specificity that a single author class cannot outrank. The
+     responsive default lives in an internal token instead, so a media query
+     can still move it without closing the hook.
+
+     calc() multiplication is not in the supported browser range, so the
      doubled gap is spelled out with an additive calc. */
-  --dialog-viewport-gap-2x: calc(var(--dialog-viewport-gap) + var(--dialog-viewport-gap));
+  --dialog-viewport-gap-default: var(--space-40);
+  --dialog-viewport-gap-2x: calc(
+    var(--dialog-viewport-gap, var(--dialog-viewport-gap-default)) +
+    var(--dialog-viewport-gap, var(--dialog-viewport-gap-default))
+  );
 
   /* Keep the surface anchored to the viewport in the top layer. This also
      provides the containing block for the absolutely positioned close button. */
@@ -4319,10 +4334,11 @@ dialog.modal > .stack {
   padding: var(--space-40);
 }
 
-/* Keep the dialog off the viewport edges on small screens. */
+/* Keep the dialog off the viewport edges on small screens. Moves the internal
+   default, not the public hook, so an author override still wins here too. */
 @media (max-width: 30rem) {
   dialog.modal {
-    --dialog-viewport-gap: var(--space-30);
+    --dialog-viewport-gap-default: var(--space-30);
   }
 }
 
