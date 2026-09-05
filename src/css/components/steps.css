@@ -8,22 +8,15 @@
  *
  * `.steps` is what a step *is* — the counter, the marker, `.step-label`,
  * `.step-complete`, `aria-current="step"`. It carries no orientation, so it is
- * never written alone. `.steps-horizontal` and `.steps-vertical` are what a
- * sequence *looks like*, and they are peers: neither is the default the other
- * has to exclude, so no rule says `:not(...)` and no rule undoes another's
- * layout.
+ * never written alone. The two orientations are peers: no rule says
+ * `:not(...)` and no rule undoes another's layout.
  *
- * Orientation and labels are independent dimensions. `.step-label` is optional
- * in either orientation; when a sequence carries names, every step carries
- * one:
+ * Orientation and labels are independent. `.step-label` is optional in either;
+ * when a sequence carries names, every step carries one:
  *
  *                 empty steps           .step-label on every step
  *   horizontal    compact progression   named sequence, stacked or inline
  *   vertical      compact rail          named sequence, labels beside markers
- *
- * An empty step is a marker and nothing else, so it is compact by structure —
- * `> li:empty` in both orientations, no variant class, and nothing authored
- * only to be hidden again. The page around it owns the step name.
  *
  * A label may be an `a[href]`, which is the whole interactive surface: the
  * marker is never navigable, so navigating a flow means naming its
@@ -249,16 +242,13 @@
 }
 
 /*
- * The one horizontal container query. Past 60rem a labelled row has the room
- * to put marker and label inline and still leave the connector a real region
- * between groups, rather than a stub. Calibrated on five steps — the widest
- * supported row, and therefore the binding case — and it counts nothing, so it
- * serves every count. Below it, stacked; a marker row is already the shape
- * this query produces and stays out of it.
+ * The one horizontal container query: past 60rem a labelled row can put marker
+ * and label inline and still leave the connector a real region between groups.
+ * It counts nothing, so it serves every count; below it, stacked. A marker row
+ * is already the shape this query produces and stays out of it.
  *
- * Horizontal is a 2-5 step component. Outside that domain the rule simply
- * applies as written, because a row that is out of contract is not owed a
- * curated fallback.
+ * Horizontal is a 2-5 step component. Outside that domain the rule applies as
+ * written — a row out of contract is not owed a curated fallback.
  */
 @container actual-container (inline-size >= 60rem) {
   .steps-horizontal:has(.step-label) > li {

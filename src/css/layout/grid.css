@@ -3,7 +3,7 @@
  *
  * .grid is space-driven: it fits as many tracks as --grid-min allows.
  * .grid-N is count-driven: it declares a structural density of N and collapses
- * through natural divisors of N (see the subdivision block below).
+ * through natural divisors of N.
  *
  * Public hooks:
  * --grid-min
@@ -14,22 +14,15 @@
  *
  * Child contract: each direct child is a grid item placed in the tracks the
  * recipe generates.
+ *
+ * Choosing between these and the other layout primitives:
+ * docs/pages/layout/grid.md. Why divisors, why a *named* container, and how
+ * the thresholds were arrived at: docs/design-notes/grid.md.
  */
 
-/* --grid-columns replaces the intrinsic auto-fit template: once set, the
-   grid no longer collapses on its own — the author owns narrow-container
-   collapse. Prefer .sidebar-layout for content + aside layouts; reserve
-   --grid-columns for exact custom track templates. */
-
-/* Recipe:
-   - collection whose item width is the contract -> .grid, tune --grid-min
-   - collection whose column density is the contract -> .grid-2/3/4/6
-   - balanced subdivision of that density -> place it inside any size query
-     container (.container-query is the convenience helper for that context)
-   - peer regions that switch as a group -> .switcher
-   - content + aside -> .sidebar-layout
-   - exact custom track templates -> --grid-columns with an explicit collapse
-     rule of your own */
+/* --grid-columns replaces the intrinsic auto-fit template: once set, the grid
+   no longer collapses on its own and the author owns narrow-container
+   collapse. */
 .grid {
   display: grid;
   gap: var(--gap);
@@ -39,16 +32,14 @@
     );
 }
 
-/* Structural density presets. The baseline is an auto-fill grid bounded at N
-   tracks: responsive and overflow-safe on its own, so a preset used without a
-   query container is never a trap — it simply reaches its balanced states less
-   precisely. auto-fill rather than auto-fit keeps item width stable when a
-   partial final page holds fewer items than the grid's capacity.
+/* Baseline: auto-fill bounded at N, so a preset is responsive and
+   overflow-safe with no wrapper at all. auto-fill rather than auto-fit keeps
+   item width stable when a partial final page holds fewer items than the
+   grid's capacity.
 
-   --grid-min is deliberately NOT read here. The subdivision below runs on
-   @container thresholds, which cannot resolve a custom property, so a hook
-   honored in the baseline would fall silent the moment a query container is
-   added. Item width is .grid's contract; column density is .grid-N's. */
+   --grid-min is deliberately NOT read here: @container thresholds cannot
+   resolve a custom property, so a hook honored in the baseline would fall
+   silent the moment a query container is added. */
 :where(.grid-2, .grid-3, .grid-4, .grid-6) {
   display: grid;
   gap: var(--gap);
@@ -77,50 +68,35 @@
   --grid-count: 6;
 }
 
-/* Grid items keep an automatic minimum inline size (min-content), which can
-   overflow a track sized minmax(0, 1fr). Layout primitives remove that
-   intrinsic floor so their overflow-safe track sizing holds; authors only
-   need .min-inline-size-0 outside primitives that do not already remove this
-   floor. */
+/* Grid items keep an automatic min-content floor that can overflow a
+   minmax(0, 1fr) track. Layout primitives remove it so their overflow-safe
+   track sizing holds; .min-inline-size-0 is for the ones that do not. */
 :where(.grid, .grid-2, .grid-3, .grid-4, .grid-6) > * {
   min-inline-size: 0;
 }
 
-/* Balanced subdivision, activated by an ancestor container named actual-container.
- * A .grid-N inside such a container enters only divisor states of N. The name
- * is deliberate: a grid must not key off the nearest anonymous query container,
- * or a region that sets container-type: inline-size for an unrelated reason
- * would silently change the grid. The author opts the grid in by naming the
- * context — .container-query is the official helper, or declare
- * container: actual-container / inline-size on your own region.
+/* Balanced subdivision, keyed on an ancestor container *named*
+ * actual-container — never an anonymous one, so a region that sets
+ * container-type: inline-size for an unrelated reason cannot change a grid.
  *
  *   .grid-2   2 -> 1
  *   .grid-3   3 -> 1
  *   .grid-4   4 -> 2 -> 1
  *   .grid-6   6 -> 3 -> 2 -> 1
  *
- * Every state is a divisor of N, so all items keep the same width and no
- * state produces a visibly uneven split such as 5 + 1 or 4 + 2. Intermediate
- * counts are skipped on purpose: do not "complete" these chains with the
- * missing integers, and do not replace them with an unbounded auto-fit.
+ * Every state is a divisor of N. Do not complete these chains with the
+ * missing integers and do not replace them with an unbounded auto-fit: both
+ * bring back uneven splits such as 5 + 1.
  *
- * The query container must be an ancestor. An element cannot query its own
- * size without taking inline-size containment, which destroys its intrinsic
- * inline contribution and collapses it inside .cluster, .topbar, floats, and
- * any shrink-to-fit box. See docs/design-notes/grid.md.
+ * The container must be an ANCESTOR. An element cannot query its own size
+ * without inline-size containment, which destroys its intrinsic inline
+ * contribution and collapses it inside .cluster, .topbar, floats and any
+ * shrink-to-fit box.
  *
- * Without an actual-container ancestor none of these @container rules resolve, so
- * the auto-fill baseline above stays. The min-width: 0 rule is the lowest
- * step: it pins the grid to one column inside a container before any larger
- * threshold fires (a bare grid would otherwise show a 2 + 1 orphan at 28-48rem).
- *
- * Three shared thresholds, not one calibrated per preset: 28rem opens the
- * first horizontal density, 48rem opens three columns, 64rem opens the dense
- * 4 and 6. N already carries the author's statement about item size, so
- * tuning every step to land the same item width would erase that signal —
- * .grid-6 at 64rem gives ~161px per tile, which is the point of choosing it.
- * Probed with the content each preset targets: large cards for .grid-2 down
- * to stats, avatars, and thumbnails for .grid-6.
+ * With no such ancestor none of these resolve and the baseline above stays.
+ * min-width: 0 is the lowest step: it pins the grid to one column before any
+ * larger threshold fires, which a bare grid would otherwise show as a 2 + 1
+ * orphan between 28 and 48rem.
  *
  * Ascending min-width only: the last matching step wins by cascade order.
  */
