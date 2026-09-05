@@ -1537,33 +1537,31 @@ small {
  *
  * Ascending min-width only: the last matching step wins by cascade order.
  */
-@supports (container-type: inline-size) {
-  @container actual-container (min-width: 0px) {
-    :where(.grid-2, .grid-3, .grid-4, .grid-6) {
-      grid-template-columns: 1fr;
-    }
+@container actual-container (min-width: 0px) {
+  :where(.grid-2, .grid-3, .grid-4, .grid-6) {
+    grid-template-columns: 1fr;
+  }
+}
+
+@container actual-container (min-width: 28rem) {
+  :where(.grid-2, .grid-4, .grid-6) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@container actual-container (min-width: 48rem) {
+  :where(.grid-3, .grid-6) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@container actual-container (min-width: 64rem) {
+  :where(.grid-4) {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 
-  @container actual-container (min-width: 28rem) {
-    :where(.grid-2, .grid-4, .grid-6) {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-  }
-
-  @container actual-container (min-width: 48rem) {
-    :where(.grid-3, .grid-6) {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-    }
-  }
-
-  @container actual-container (min-width: 64rem) {
-    :where(.grid-4) {
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-    }
-
-    :where(.grid-6) {
-      grid-template-columns: repeat(6, minmax(0, 1fr));
-    }
+  :where(.grid-6) {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
   }
 }
 
@@ -6657,37 +6655,35 @@ a.avatar[aria-disabled="true"] {
  * applies as written, because a row that is out of contract is not owed a
  * curated fallback.
  */
-@supports (container-type: inline-size) {
-  @container actual-container (inline-size >= 60rem) {
-    .steps-horizontal:has(.step-label) > li {
-      display: flex;
-      flex: 1 1 auto;
-      align-items: center;
-      gap: var(--step-inline-gap);
-      min-inline-size: 0;
-      text-align: start;
-      white-space: nowrap;
-    }
+@container actual-container (inline-size >= 60rem) {
+  .steps-horizontal:has(.step-label) > li {
+    display: flex;
+    flex: 1 1 auto;
+    align-items: center;
+    gap: var(--step-inline-gap);
+    min-inline-size: 0;
+    text-align: start;
+    white-space: nowrap;
+  }
 
-    .steps-horizontal:has(.step-label) > li::after {
-      position: static;
-      flex: 1 1 2rem;
-      inline-size: auto;
-      block-size: var(--step-size);
-      margin-inline-end: var(--step-inline-gap);
-      background: var(
-        --step-inline-connector,
-        var(
-          --step-connector,
-          linear-gradient(var(--step-line), var(--step-line)) center /
-          100% var(--step-line-size) no-repeat
-        )
-      );
-    }
+  .steps-horizontal:has(.step-label) > li::after {
+    position: static;
+    flex: 1 1 2rem;
+    inline-size: auto;
+    block-size: var(--step-size);
+    margin-inline-end: var(--step-inline-gap);
+    background: var(
+      --step-inline-connector,
+      var(
+        --step-connector,
+        linear-gradient(var(--step-line), var(--step-line)) center /
+        100% var(--step-line-size) no-repeat
+      )
+    );
+  }
 
-    .steps-horizontal:has(.step-label) > li:last-child {
-      flex: 0 0 auto;
-    }
+  .steps-horizontal:has(.step-label) > li:last-child {
+    flex: 0 0 auto;
   }
 }
 

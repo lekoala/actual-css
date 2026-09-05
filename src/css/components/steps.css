@@ -260,37 +260,35 @@
  * applies as written, because a row that is out of contract is not owed a
  * curated fallback.
  */
-@supports (container-type: inline-size) {
-  @container actual-container (inline-size >= 60rem) {
-    .steps-horizontal:has(.step-label) > li {
-      display: flex;
-      flex: 1 1 auto;
-      align-items: center;
-      gap: var(--step-inline-gap);
-      min-inline-size: 0;
-      text-align: start;
-      white-space: nowrap;
-    }
+@container actual-container (inline-size >= 60rem) {
+  .steps-horizontal:has(.step-label) > li {
+    display: flex;
+    flex: 1 1 auto;
+    align-items: center;
+    gap: var(--step-inline-gap);
+    min-inline-size: 0;
+    text-align: start;
+    white-space: nowrap;
+  }
 
-    .steps-horizontal:has(.step-label) > li::after {
-      position: static;
-      flex: 1 1 2rem;
-      inline-size: auto;
-      block-size: var(--step-size);
-      margin-inline-end: var(--step-inline-gap);
-      background: var(
-        --step-inline-connector,
-        var(
-          --step-connector,
-          linear-gradient(var(--step-line), var(--step-line)) center /
-          100% var(--step-line-size) no-repeat
-        )
-      );
-    }
+  .steps-horizontal:has(.step-label) > li::after {
+    position: static;
+    flex: 1 1 2rem;
+    inline-size: auto;
+    block-size: var(--step-size);
+    margin-inline-end: var(--step-inline-gap);
+    background: var(
+      --step-inline-connector,
+      var(
+        --step-connector,
+        linear-gradient(var(--step-line), var(--step-line)) center /
+        100% var(--step-line-size) no-repeat
+      )
+    );
+  }
 
-    .steps-horizontal:has(.step-label) > li:last-child {
-      flex: 0 0 auto;
-    }
+  .steps-horizontal:has(.step-label) > li:last-child {
+    flex: 0 0 auto;
   }
 }
 
