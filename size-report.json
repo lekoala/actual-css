@@ -1,5 +1,5 @@
 {
-  "totalRaw": 279865,
+  "totalRaw": 277081,
   "core": {
     "minified": 10886,
     "brotli": 2547
@@ -22,7 +22,7 @@
   "files": [
     {
       "file": "components/steps.css",
-      "raw": 13559
+      "raw": 13028
     },
     {
       "file": "core/tokens.css",
@@ -53,10 +53,6 @@
       "raw": 6028
     },
     {
-      "file": "layout/grid.css",
-      "raw": 5694
-    },
-    {
       "file": "components/drawer.css",
       "raw": 5403
     },
@@ -69,16 +65,16 @@
       "raw": 5152
     },
     {
-      "file": "components/tooltip.css",
-      "raw": 5138
-    },
-    {
       "file": "typography/prose.css",
       "raw": 5104
     },
     {
       "file": "components/avatar.css",
       "raw": 5067
+    },
+    {
+      "file": "components/tooltip.css",
+      "raw": 4710
     },
     {
       "file": "core/variants.css",
@@ -111,6 +107,10 @@
     {
       "file": "themes/gradient.css",
       "raw": 3892
+    },
+    {
+      "file": "layout/grid.css",
+      "raw": 3869
     },
     {
       "file": "components/join.css",

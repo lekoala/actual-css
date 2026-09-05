@@ -43,22 +43,19 @@
    tooltip. In particular, the UA overflow would turn the arrow into scroll
    overflow instead of letting it project beyond the bubble.
 
-   One rule for both lifecycles. tooltip.js writes popover="manual" on every
-   tip it manages, and an application driving a .tooltip[popover] itself lands
-   on the same declarations — the runtime only ever reaches a tip that a
-   [data-tooltip] trigger points at, so a bare [popover] element stays the
-   application's own. */
+   One rule for both lifecycles: the runtime writes popover="manual" on the
+   tips it manages, and an application driving a .tooltip[popover] itself lands
+   on the same declarations. Who owns which is in
+   docs/pages/enhancements/overview.md. */
 .tooltip[popover] {
   inset: auto;
   margin: 0;
   overflow: visible;
 }
 
-/* The closed state, for the runtime and for an application-driven popover
-   alike. .tooltip declares no display of its own, so the UA would already hide
-   it; the rule is written anyway because the opacity target is what makes the
-   exit fade at all — see the overlay note below — and because both components
-   advertised as Popover-compatible cede the hidden state the same way. */
+/* The closed state, for either lifecycle. .tooltip declares no display of its
+   own so the UA would already hide it, but the opacity target is what makes
+   the exit fade at all — see the overlay note below. */
 .tooltip[popover]:not(:popover-open) {
   display: none;
   opacity: 0;
@@ -75,11 +72,9 @@
   opacity: 0;
 }
 
-/* Entry opacity. Both lifecycles converge on :popover-open, so the branch this
-   rule used to carry for the runtime — visible means neither [popover] nor
-   [hidden] — described the old hidden-driven path and matches nothing now.
-   @starting-style is above the floor (Safari 17.5); where it is missing the tip
-   simply appears at full opacity. */
+/* Entry opacity, for either lifecycle — both are :popover-open.
+   @starting-style is above the floor (Safari 17.5); where it is missing the
+   tip simply appears at full opacity. */
 @starting-style {
   .tooltip:popover-open {
     opacity: 0;
