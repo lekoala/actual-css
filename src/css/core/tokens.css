@@ -158,13 +158,14 @@
   --viewport-block: 100vh;
   --viewport-inline: 100vw;
 
-  /* Z-index scale — used ONLY by non-dialog overlays (see the layering
-     note below for the full model). Actual CSS reserves multiples of 10 for
-     framework layers; applications may use intermediate values for local
-     layering. */
+  /* Z-index scale — orders document-layer components only. Native top-layer
+     elements, dialogs and popovers alike, do not participate in it: they have
+     no numeric z-index, they always paint above the document, and their order
+     among themselves is the order they were promoted in. No value here can
+     reach them. Actual CSS reserves multiples of 10 for framework layers;
+     applications may use intermediate values for local layering. */
   --z-sticky: 10;
   --z-menu: 20;
-  --z-tooltip: 50;
   --z-status: 60;
 }
 

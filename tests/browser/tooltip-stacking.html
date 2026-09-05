@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tooltip stacking fixture</title>
+  <link rel="stylesheet" href="../../src/css/actual.full.css">
+  <script src="../../dist/actual.full.js" defer></script>
+</head>
+<body style="margin:0; padding:1rem">
+
+  <!-- A tooltip trigger sitting near the top of a tall flyout panel, with the
+       tip placed below it so it necessarily overlaps the items underneath.
+       The flyout is promoted to the top layer; the tooltip is not, so no
+       z-index can lift it above the panel. -->
+  <div class="flyout-trigger">
+    <button id="plain-trigger" class="btn" type="button"
+            data-enhance="flyout" aria-controls="plain-panel">Open menu</button>
+    <menu id="plain-panel" class="flyout menu" hidden style="inline-size:14rem">
+      <li><button class="menu-item" type="button" style="block-size:2.5rem">First</button></li>
+      <li><button id="plain-tip-trigger" class="menu-item" type="button" style="block-size:2.5rem"
+                  data-tooltip="Overlapping tip" data-tooltip-placement="bottom">Hover me</button></li>
+      <li><button class="menu-item" type="button" style="block-size:2.5rem">Third</button></li>
+      <li><button class="menu-item" type="button" style="block-size:2.5rem">Fourth</button></li>
+      <li><button class="menu-item" type="button" style="block-size:2.5rem">Fifth</button></li>
+    </menu>
+  </div>
+
+  <!-- Same arrangement inside a modal dialog. Two contracts at once: the
+       shorthand tip must be created inside the dialog subtree (outside it the
+       modal's inertness would apply, top layer or not), and it must still end
+       up above the flyout panel. -->
+  <button id="open-dialog" class="btn" type="button">Open dialog</button>
+  <dialog id="dlg" class="modal">
+    <div class="flyout-trigger">
+      <button id="dlg-trigger" class="btn" type="button"
+              data-enhance="flyout" aria-controls="dlg-panel">Open menu</button>
+      <menu id="dlg-panel" class="flyout menu" hidden style="inline-size:14rem">
+        <li><button class="menu-item" type="button" style="block-size:2.5rem">First</button></li>
+        <li><button id="dlg-tip-trigger" class="menu-item" type="button" style="block-size:2.5rem"
+                    data-tooltip="Overlapping tip" data-tooltip-placement="bottom">Hover me</button></li>
+        <li><button class="menu-item" type="button" style="block-size:2.5rem">Third</button></li>
+        <li><button class="menu-item" type="button" style="block-size:2.5rem">Fourth</button></li>
+        <li><button class="menu-item" type="button" style="block-size:2.5rem">Fifth</button></li>
+      </menu>
+    </div>
+  </dialog>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      document.getElementById("open-dialog").addEventListener("click", () => {
+        document.getElementById("dlg").showModal();
+      });
+    });
+  </script>
+</body>
+</html>

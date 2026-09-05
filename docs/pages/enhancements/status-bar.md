@@ -15,7 +15,7 @@ runtime targets, empty by default.
 - Use it for transient status (`Saved.`, `Reconnected.`, `Copied.`). Critical, persistent, or actionable information belongs in `.alert`, inline messages, or dialogs.
 - Intents: `danger`, `success`, `warning`, `neutral`. The default (no intent) is a neutral dark pill.
 - On mobile, the runtime keeps the bar above the software keyboard by tracking `visualViewport` while a message is showing.
-- A message originating inside an open modal dialog temporarily moves the singleton bar into that dialog. This keeps it in the active top-layer and accessibility subtree; the bar returns to its original DOM position after its exit.
+- A message originating inside an open modal dialog temporarily moves the singleton bar into that dialog. A modal inerts the rest of the document, and being painted above it would not undo that — inertness is computed on the DOM — so the bar has to be in the dialog's subtree to be announced and seen. The bar returns to its original DOM position after its exit.
 
 Clearing is deferred, not immediate: the bar closes first and only empties its
 text and intent once the exit transition has finished, so it leaves at the size

@@ -111,6 +111,19 @@ The two workarounds this note used to recommend — declaring the scope on `body
 or on the panel itself — are no longer needed and can be removed from
 application code.
 
+`tooltip.js` reached the same contract later, and for the same reason: it moved
+an explicit tooltip to the dialog or the body on first hover, which is this
+defect in a second component. An explicit tooltip now stays where it was
+written and inherits accordingly.
+
+A generated tooltip (`data-tooltip="text"`) is deliberately outside the
+contract. Actual creates that element, so Actual places it, and it goes to
+document level rather than beside the trigger — a generated sibling would take
+`.join > :last-child` from a trigger that ends a group, since structural
+pseudo-classes are DOM-based and `position: fixed` does not exempt an element
+from them. The shorthand therefore promises no inheritance; the explicit form
+is the one to use when local context matters.
+
 ## Experiment
 
 [popover-manual-poc](popover-manual-poc.md) records what the branch measured,

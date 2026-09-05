@@ -3,7 +3,8 @@
  *
  * Position, placement, and arrow position are managed by JavaScript
  * via position: fixed, left, top, data-placement, and --arrow-x.
- * Visibility is managed with hidden; CSS owns entry and exit animation.
+ * Visibility is the Popover lifecycle: tooltip.js promotes the tip to the top
+ * layer with popover="manual". CSS owns entry and exit animation.
  *
  * Public hooks:
  * --tooltip-bg
@@ -20,7 +21,6 @@
   --tooltip-arrow-size: 5px;
 
   position: fixed;
-  z-index: var(--z-tooltip);
   max-inline-size: min(24rem, calc(var(--viewport-inline) - 2rem));
   padding: 0.25em 0.6em;
   border-radius: var(--radius-sm);
@@ -41,36 +41,47 @@
 
 /* Neutralize only the native geometry that conflicts with a positioned
    tooltip. In particular, the UA overflow would turn the arrow into scroll
-   overflow instead of letting it project beyond the bubble. tooltip.js drives
-   [hidden], so [popover] here is always the author's own choice of a native
-   lifecycle. */
+   overflow instead of letting it project beyond the bubble.
+
+   One rule for both lifecycles. tooltip.js writes popover="manual" on every
+   tip it manages, and an application driving a .tooltip[popover] itself lands
+   on the same declarations — the runtime only ever reaches a tip that a
+   [data-tooltip] trigger points at, so a bare [popover] element stays the
+   application's own. */
 .tooltip[popover] {
   inset: auto;
   margin: 0;
   overflow: visible;
 }
 
-/* .tooltip declares no display of its own, so the UA already hides a closed
-   popover here. The rule is written anyway: both components advertised as
-   Popover-compatible should cede the hidden state the same way, and the
-   opacity target is what actually makes the native exit fade — see the overlay
-   note below. */
+/* The closed state, for the runtime and for an application-driven popover
+   alike. .tooltip declares no display of its own, so the UA would already hide
+   it; the rule is written anyway because the opacity target is what makes the
+   exit fade at all — see the overlay note below — and because both components
+   advertised as Popover-compatible cede the hidden state the same way. */
 .tooltip[popover]:not(:popover-open) {
   display: none;
   opacity: 0;
 }
 
+/* The state before enhancement, and the author's to write — not the runtime's.
+   Wiring is lazy: tooltip.js adopts an explicit tip on its trigger's first
+   hover, so a tooltip nobody hovers keeps [hidden] for the whole life of the
+   page. Without this rule it would sit on screen at full opacity until then.
+   The runtime removes the attribute at the moment it takes the lifecycle over,
+   because an author declaration outranks the platform's own hidden state. */
 .tooltip[hidden] {
   display: none;
   opacity: 0;
 }
 
-/* Entry opacity for both lifecycles: a runtime-driven tip is visible when it
-   is neither a popover nor [hidden], a native one when it is :popover-open.
+/* Entry opacity. Both lifecycles converge on :popover-open, so the branch this
+   rule used to carry for the runtime — visible means neither [popover] nor
+   [hidden] — described the old hidden-driven path and matches nothing now.
    @starting-style is above the floor (Safari 17.5); where it is missing the tip
    simply appears at full opacity. */
 @starting-style {
-  .tooltip:is(:not([popover]):not([hidden]), :popover-open) {
+  .tooltip:popover-open {
     opacity: 0;
   }
 }

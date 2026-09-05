@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tooltip placement fixture</title>
+  <link rel="stylesheet" href="../../src/css/actual.full.css">
+  <script src="../../dist/actual.full.js" defer></script>
+  <style>
+    /* An application-defined inherited hook — the pattern Actual invites
+       adopters to use for their own scoped tokens. */
+    #app-scope {
+      --app-accent: rgb(1, 2, 3);
+    }
+  </style>
+</head>
+<body style="margin: 0; padding: 1rem">
+
+  <!-- ── Explicit tooltips: author-owned placement, so they inherit ──────
+       Each tip is authored inside a scope that reaches it only by
+       inheritance. Wiring happens on first hover, which is where the old
+       transport relocated it. -->
+
+  <div id="theme-scope" data-theme="dark" style="padding: 1rem">
+    <button class="btn" type="button" data-tooltip aria-describedby="theme-tip">Theme</button>
+    <div class="tooltip" role="tooltip" id="theme-tip" hidden>Scoped</div>
+  </div>
+
+  <div id="density-scope" class="sm" style="padding: 1rem">
+    <button class="btn" type="button" data-tooltip aria-describedby="density-tip">Density</button>
+    <div class="tooltip" role="tooltip" id="density-tip" hidden>Scoped</div>
+  </div>
+
+  <div id="app-scope" style="padding: 1rem">
+    <button class="btn" type="button" data-tooltip aria-describedby="app-tip">App hook</button>
+    <div class="tooltip" role="tooltip" id="app-tip" hidden>Scoped</div>
+  </div>
+
+  <div id="inverted-scope" class="inverted" style="padding: 1rem">
+    <button class="btn" type="button" data-tooltip aria-describedby="inverted-tip">Inverted</button>
+    <div class="tooltip" role="tooltip" id="inverted-tip" hidden>Scoped</div>
+  </div>
+
+  <!-- Reference tip at body level, in no scope at all. It is what the scoped
+       reads are compared against, so a fixture edit cannot make the theme case
+       pass by accident. -->
+  <button class="btn" type="button" data-tooltip aria-describedby="ref-tip">Reference</button>
+  <div class="tooltip" role="tooltip" id="ref-tip" hidden>Reference</div>
+
+  <!-- ── Shorthand: generated, so placement is Actual's and must stay neutral ──
+       The trigger is the last child of a .join, which writes its group radius
+       through .join > :last-child. Structural pseudo-classes are DOM-based, so
+       a generated sibling would silently take that selector over. -->
+  <div id="join-group" class="join">
+    <button class="btn" type="button">One</button>
+    <button id="join-last" class="btn" type="button" data-tooltip="Generated tip">Two</button>
+  </div>
+
+</body>
+</html>

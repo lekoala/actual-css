@@ -25,6 +25,11 @@
  *
  * Show:       hover + focus (150ms delay), click toggle, or always visible
  * Hide:       blur, pointer leave, Escape
+ *
+ * Transport:  the top layer, via popover="manual", written by the runtime on
+ *             every tip it manages. A .tooltip[popover] with no data-tooltip
+ *             trigger pointing at it is never reached from here and stays the
+ *             application's own to drive.
  */
 
 import { autoUpdate, reposition } from "@lekoala/floating";
@@ -44,7 +49,7 @@ const HIDE_DELAY_MS = 100;
  * @property {(() => void) | null} unregisterEscape Escape-stack cleanup while visible and dismissable.
  * @property {Element | null} escapeRef Trigger represented by the current Escape-stack entry.
  * @property {boolean} generated True when the tip was created from data-tooltip text.
- * @property {{ parent: Node, next: ChildNode | null } | null} mount Original DOM position for explicit tips moved into a dialog/body root.
+ * @property {boolean} visible True while the tip is promoted to the top layer.
  * @property {ReturnType<typeof setTimeout> | null} timer Pending delayed show.
  * @property {ReturnType<typeof setTimeout> | null} hideTimer Pending delayed hide.
  * @property {boolean} hovered Pointer is over the active trigger.
@@ -55,28 +60,50 @@ const HIDE_DELAY_MS = 100;
 let uid = 0;
 const triggerStates = new WeakMap(); // trigger -> { tip, cleanup }
 /** @type {WeakMap<Element, TooltipState>} */
-const tipStates = new WeakMap(); // tip -> { refs, activeRef, controller, stopTracking, generated, mount, timer }
+const tipStates = new WeakMap(); // tip -> { refs, activeRef, controller, stopTracking, generated, visible, timer }
 
-function mountTip(tip, trigger) {
-  const root = trigger.closest("dialog") || trigger.ownerDocument.body;
-  const parent = tip.parentNode;
-  if (!root || !parent || parent === root) return null;
-
-  const mount = { parent, next: tip.nextSibling };
-  root.append(tip);
-  return mount;
+/*
+ * Transport, the same shape surface.js uses and for the same reason: the
+ * platform promotes the tip to the top layer and does nothing else, leaving
+ * the hover/focus/click policy, the show delays and the Escape ordering here
+ * untouched. showPopover/hidePopover throw on an out-of-order call, which the
+ * state below should already have excluded — the try/catch is there so a
+ * surprising DOM does not take the lifecycle down with it.
+ */
+function showTransport(tip) {
+  try {
+    tip.showPopover();
+    return true;
+  } catch {
+    return false;
+  }
 }
 
-function restoreTip(tip, state) {
-  const mount = state.mount;
-  if (!mount) return;
-
-  if (mount.parent.isConnected) {
-    const next = mount.next?.parentNode === mount.parent ? mount.next : null;
-    mount.parent.insertBefore(tip, next);
-  } else {
-    tip.remove();
+function hideTransport(tip) {
+  try {
+    tip.hidePopover();
+  } catch {
+    /* Already closed or detached; nothing left to hide. */
   }
+}
+
+/*
+ * [hidden] stops being the runtime's state here and goes back to what the
+ * author wrote: the state before enhancement. Wiring is lazy, so an explicit
+ * tip that is never hovered keeps it for the whole life of the page — which
+ * is why .tooltip[hidden] has to stay in the CSS. The runtime strips it only
+ * at the moment it takes the lifecycle over, because an author declaration
+ * outranks the platform's own hidden state for a closed popover.
+ */
+function prepareTip(tip) {
+  tip.style.position = "fixed";
+  tip.removeAttribute("hidden");
+  tip.setAttribute("popover", "manual");
+}
+
+/** True while the tip is promoted. The runtime's state, not :popover-open. */
+export function isTooltipVisible(tip) {
+  return tipStates.get(tip)?.visible === true;
 }
 
 function placementFor(ref) {
@@ -147,17 +174,24 @@ function updateTrackedTip(tip, state) {
   const ref = state.activeRef;
   if (!ref) return;
 
-  const alwaysVisible = isAlwaysVisible(ref);
-  // Reveal before measuring: an always-visible tooltip may currently be
-  // hidden because its trigger was outside the positioning boundary.
-  if (alwaysVisible) tip.hidden = false;
-  if (tip.hidden || repositionTip(ref, tip)) {
+  // Two separate notions, deliberately: `pinned` is the author's policy, and
+  // state.visible is what is actually rendered. A pinned tip is not always
+  // shown — it goes down whenever its trigger leaves the positioning
+  // boundary, and has to come back up before it can be measured again, since
+  // a closed popover has no box to position.
+  const pinned = isAlwaysVisible(ref);
+  if (pinned && !state.visible && showTransport(tip)) state.visible = true;
+  if (!state.visible || repositionTip(ref, tip)) {
     syncEscapeDismissal(tip, state);
     return;
   }
 
-  if (alwaysVisible) tip.hidden = true;
-  else hideTip(tip, true);
+  if (pinned) {
+    state.visible = false;
+    hideTransport(tip);
+  } else {
+    hideTip(tip, true);
+  }
 }
 
 function startTracking(tip, state) {
@@ -173,7 +207,7 @@ function stopTracking(state) {
 
 function syncEscapeDismissal(tip, state) {
   const ref = state.activeRef;
-  const dismissable = !tip.hidden && !isAlwaysVisible(ref);
+  const dismissable = state.visible && !isAlwaysVisible(ref);
   // Position tracking calls this after every successful update. Preserve the
   // current entry so a scroll/resize tick cannot reorder the LIFO stack.
   if (dismissable && state.unregisterEscape && state.escapeRef === ref) return;
@@ -198,7 +232,8 @@ function hideTip(tip, force = false) {
     clearTimeout(state.hideTimer);
     state.hideTimer = null;
   }
-  tip.hidden = true;
+  if (state) state.visible = false;
+  hideTransport(tip);
   state?.unregisterEscape?.();
   if (state) {
     state.unregisterEscape = null;
@@ -242,7 +277,7 @@ function wireTip(tip, options = {}) {
     unregisterEscape: null,
     escapeRef: null,
     generated: options.generated === true,
-    mount: options.mount || null,
+    visible: false,
     timer: null,
     hideTimer: null,
     hovered: false,
@@ -277,7 +312,6 @@ function ensureTip(trigger) {
 
   let tip;
   let generated = false;
-  let mount = null;
   let descriptionAdded = false;
   const text = trigger.getAttribute("data-tooltip");
   const doc = trigger.ownerDocument;
@@ -289,12 +323,25 @@ function ensureTip(trigger) {
     tip.role = "tooltip";
     tip.id = nextTooltipId(doc);
     tip.textContent = text;
-    tip.hidden = true;
-    tip.style.position = "fixed";
     generated = true;
 
+    /*
+     * A generated tip is Actual's to place, so the placement has to be
+     * structurally neutral — not trigger.after(). Structural pseudo-classes
+     * are DOM-based and position: fixed does not exempt a generated sibling
+     * from :last-child, so it would take `.join > :last-child` from the
+     * trigger and drop the group's trailing corner. The shorthand therefore
+     * promises no inheritance; authors who need a local theme, density or
+     * custom property use the explicit form, which stays where they wrote it.
+     *
+     * The dialog hop is not geometry any more — the top layer handles that.
+     * It is inertness: a modal dialog inerts the rest of the document, and
+     * promotion does not lift an element out of that, because inertness is
+     * computed on the DOM and not on paint order.
+     */
     const parent = trigger.closest("dialog") || doc.body;
     parent.appendChild(tip);
+    prepareTip(tip);
     descriptionAdded = addDescription(trigger, tip.id);
   }
 
@@ -302,16 +349,14 @@ function ensureTip(trigger) {
   if (!tip) {
     tip = explicitTipFor(trigger);
     if (!tip) return null;
-    // Wire and mount the shared tip only on first retain. A later trigger
-    // must not re-hide a tooltip that is currently visible for another.
-    if (!tipStates.has(tip)) {
-      tip.hidden = true;
-      tip.style.position = "fixed";
-      mount = mountTip(tip, trigger);
-    }
+    // Wire the shared tip only on first retain. A later trigger must not
+    // re-hide a tooltip that is currently visible for another.
+    // It is not moved: an explicit tip is author-placed, so it keeps every
+    // scope that reaches it by inheritance.
+    if (!tipStates.has(tip)) prepareTip(tip);
   }
 
-  const state = wireTip(tip, { generated, mount });
+  const state = wireTip(tip, { generated });
   state.refs.add(trigger);
 
   const triggerController = new AbortController();
@@ -349,8 +394,8 @@ function ensureTip(trigger) {
     state.controller.abort();
     stopTracking(state);
     tipStates.delete(tip);
+    // An explicit tip is left exactly where the author wrote it, closed.
     if (state.generated) tip.remove();
-    else restoreTip(tip, state);
   };
 
   triggerStates.set(trigger, { tip, cleanup });
@@ -373,7 +418,10 @@ function show(tip, ref, immediate = false) {
   if (state.timer) clearTimeout(state.timer);
   const reveal = () => {
     state.timer = null;
-    tip.hidden = false;
+    if (!state.visible) {
+      if (!showTransport(tip)) return;
+      state.visible = true;
+    }
     startTracking(tip, state);
     updateTrackedTip(tip, state);
   };
@@ -414,8 +462,8 @@ function handleTriggerClick(e) {
   if (!tip) return;
 
   e.preventDefault();
-  if (tip.hidden) show(tip, trigger, true);
-  else hideTip(tip, true);
+  if (isTooltipVisible(tip)) hideTip(tip, true);
+  else show(tip, trigger, true);
 }
 
 // Delegated discovery listeners run at import time; keep SSR imports inert.

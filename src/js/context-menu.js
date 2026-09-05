@@ -62,8 +62,10 @@ function focusMenuContainer(menu) {
   if (!menu.hasAttribute("tabindex")) {
     menu.tabIndex = -1;
   }
-  // Moving the mounted menu into the surface root must not scroll the page.
-  // Genuine user scrolling is handled separately by the surface policy.
+  // The menu is promoted where it stands rather than moved, so there is no
+  // relocation left to compensate for. preventScroll stays for its own sake:
+  // focusing a panel must not move the page under the user. Genuine user
+  // scrolling is handled separately by the surface policy.
   menu.focus({ preventScroll: true });
 }
 

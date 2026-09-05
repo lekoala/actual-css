@@ -187,11 +187,13 @@ must be able to position a listbox under an input — that is the test.
 or account for:
 
 ```css
-.my-panel          { position: absolute; z-index: 100; }
+.my-panel          { position: absolute; }
 .my-panel[popover] { inset: auto; margin: 0; }
 .my-panel[popover]:not(:popover-open) { display: none; }
 /* surface.js sets position: fixed + inline left/top on open —
    do not override with !important */
+/* no z-index: an open panel is promoted to the top layer, where
+   numbers do not apply — see Layering in foundations/tokens */
 /* .is-open / .is-sheet / .surface-backdrop are written by surface.js
    — style or ignore them */
 /* --surface-anchor-width is set while an open surface is positioned */

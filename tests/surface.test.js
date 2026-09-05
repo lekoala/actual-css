@@ -191,6 +191,58 @@ test("Escape closes the surface that is open, not a stale closed one", () => {
   expect(isSurfaceOpen(menuA)).toBe(false);
 });
 
+test("a failed open leaves the surface it would have replaced untouched", () => {
+  setBody(`
+    <button id="a-trigger" aria-controls="a"></button>
+    <div id="a" class="flyout"></div>
+    <button id="b-trigger" aria-controls="b"></button>
+    <div id="b" class="flyout"></div>
+  `);
+  const triggerA = document.getElementById("a-trigger");
+  const triggerB = document.getElementById("b-trigger");
+  const menuA = document.getElementById("a");
+  const menuB = document.getElementById("b");
+  mockPlacement(triggerA, menuA);
+  // B's anchor is outside the positioning boundary, so its open cannot finish.
+  mockRect(triggerB, { x: -220, y: 100, width: 60, height: 24 });
+  mockRect(menuB, { x: 0, y: 0, width: 120, height: 80 });
+
+  openSurface(menuA, { trigger: triggerA });
+  const result = openSurface(menuB, { trigger: triggerB });
+
+  expect(result).toBe(false);
+  expect(isSurfaceOpen(menuB)).toBe(false);
+  // The point of the ordering: a failed open costs the user nothing.
+  expect(isSurfaceOpen(menuA)).toBe(true);
+  expect(triggerA.getAttribute("aria-expanded")).toBe("true");
+});
+
+test("replacing a surface does not bounce focus through the outgoing trigger", () => {
+  setBody(`
+    <button id="a-trigger" aria-controls="a"></button>
+    <div id="a" class="flyout"><button id="a-item"></button></div>
+    <button id="b-trigger" aria-controls="b"></button>
+    <div id="b" class="flyout"></div>
+  `);
+  const triggerA = document.getElementById("a-trigger");
+  const triggerB = document.getElementById("b-trigger");
+  const menuA = document.getElementById("a");
+  const menuB = document.getElementById("b");
+  mockPlacement(triggerA, menuA);
+  mockPlacement(triggerB, menuB);
+
+  openSurface(menuA, { trigger: triggerA });
+  document.getElementById("a-item").focus();
+
+  openSurface(menuB, { trigger: triggerB });
+
+  // A was superseded, not dismissed. Focus belongs to whoever opened B —
+  // both callers in tree place it in the new surface as soon as openSurface
+  // returns — and must not land on the control the user just left.
+  expect(isSurfaceOpen(menuB)).toBe(true);
+  expect(document.activeElement).not.toBe(triggerA);
+});
+
 test("positionSurface failure leaves the surface closed", () => {
   setBody(
     '<button id="trigger" aria-controls="menu">Open</button><div id="menu" class="flyout"></div>',
