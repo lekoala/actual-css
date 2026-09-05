@@ -200,7 +200,12 @@
     --shadow-popout: 0 0.25rem 0.75rem color-mix(in oklch, var(--shadow-color) 15%, transparent);
   }
 
-  :root {
+  /* Theme-derived like the shadows above, so it is declared on the same
+     boundaries: an alias resolved only on :root is inherited already composed,
+     and a [data-theme] island overriding --backdrop-color or
+     --backdrop-opacity would not change the scrim of a dialog inside it. */
+  :root,
+  [data-theme] {
     --backdrop-fill: color-mix(
       in oklch,
       var(--backdrop-color) calc(var(--backdrop-opacity) * 100%),
