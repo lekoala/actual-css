@@ -207,11 +207,11 @@ select {
   --viewport-inline: 100vw;
 
   /* Z-index scale — orders document-layer components only. Native top-layer
-     elements, dialogs and popovers alike, do not participate in it: they have
-     no numeric z-index, they always paint above the document, and their order
-     among themselves is the order they were promoted in. No value here can
-     reach them. Actual CSS reserves multiples of 10 for framework layers;
-     applications may use intermediate values for local layering. */
+     elements, dialogs and popovers alike, do not participate in this ordering:
+     they always paint above the document, and their order among themselves is
+     their top-layer promotion order. No z-index value here can reach them.
+     Actual CSS reserves multiples of 10 for framework layers; applications may
+     use intermediate values for local layering. */
   --z-sticky: 10;
   --z-menu: 20;
   --z-status: 60;

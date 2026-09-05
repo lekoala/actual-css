@@ -411,7 +411,7 @@
 <p>Under <code>forced-colors: active</code>, <code>--backdrop-fill</code> maps to <code>Canvas</code>.</p>
 <h3 id="layering">Layering</h3>
 <p>Two systems order overlays, and only one of them uses numbers.</p>
-<p><strong>The platform top layer</strong> holds native <code>&lt;dialog&gt;</code> (modal, drawer) and every element currently showing as a popover — which, since the runtime drives flyouts, context menus and tooltips with <code>popover=&quot;manual&quot;</code>, is all of Actual's anchored overlays. Top-layer elements have no numeric z-index. They always paint above the document, and their order among themselves is the order each was promoted in.</p>
+<p><strong>The platform top layer</strong> holds native <code>&lt;dialog&gt;</code> (modal, drawer) and every element currently showing as a popover — which, since the runtime drives flyouts, context menus and tooltips with <code>popover=&quot;manual&quot;</code>, is all of Actual's anchored overlays. Top-layer ordering does not use <code>z-index</code>. Such an element always paints above the document, and its order among the others is its top-layer promotion order — the most recently promoted on top. A <code>z-index</code> declaration on it still computes; it just does not decide where it lands.</p>
 <p><strong>The document layer</strong> is everything else, and the scale below is what orders it. Nothing in it can reach the other system: <code>z-index: 999999</code> on a document-layer element still paints under any open dialog or popover.</p>
 <div class="table-wrap"><table class="table">
 <thead>
@@ -419,7 +419,7 @@
 </thead>
 <tbody>
 <tr><td><code>--z-sticky</code></td><td>10</td><td><code>form-actions.sticky</code>, <code>topbar</code></td></tr>
-<tr><td><code>--z-menu</code></td><td>20</td><td><code>fab</code>, <code>.surface-backdrop</code></td></tr>
+<tr><td><code>--z-menu</code></td><td>20</td><td><code>fab</code>, <code>.surface-backdrop</code>, static <code>.flyout</code></td></tr>
 <tr><td><code>--z-status</code></td><td>60</td><td><code>status-bar</code></td></tr>
 </tbody>
 </table></div>
