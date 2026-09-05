@@ -1,12 +1,12 @@
 {
-  "totalRaw": 280057,
+  "totalRaw": 279865,
   "core": {
     "minified": 10886,
     "brotli": 2547
   },
   "full": {
-    "minified": 121263,
-    "brotli": 17664
+    "minified": 121175,
+    "brotli": 17673
   },
   "js": {
     "core": {
@@ -22,7 +22,7 @@
   "files": [
     {
       "file": "components/steps.css",
-      "raw": 13661
+      "raw": 13559
     },
     {
       "file": "core/tokens.css",
@@ -54,7 +54,7 @@
     },
     {
       "file": "layout/grid.css",
-      "raw": 5784
+      "raw": 5694
     },
     {
       "file": "components/drawer.css",

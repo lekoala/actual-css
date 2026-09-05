@@ -111,7 +111,9 @@ test("grid primitives remove the intrinsic child floor", () => {
 
 test("density presets declare a count and collapse through divisors of it", () => {
   const css = readCss("src/css/layout/grid.css");
-  const ENHANCEMENT = "@supports (container-type: inline-size)";
+  // Anchored on the mechanism, not on a guard: @container is self-guarding,
+  // so no @supports wraps these blocks.
+  const ENHANCEMENT = "@container actual-container";
 
   /* Baseline: bounded auto-fill, so a preset is responsive and overflow-safe
      with no wrapper at all. auto-fit would stretch the items of a partial
@@ -140,9 +142,7 @@ test("density presets declare a count and collapse through divisors of it", () =
   expect(css).toContain("@container actual-container (min-width:");
   const enhancement = css.slice(css.indexOf(ENHANCEMENT));
   const steps = [
-    ...enhancement.matchAll(
-      /@container actual-container \(min-width: (\d+)rem\)([\s\S]*?)\n {2}\}/g,
-    ),
+    ...enhancement.matchAll(/@container actual-container \(min-width: (\d+)rem\)([\s\S]*?)\n\}/g),
   ];
   expect(steps.length).toBeGreaterThan(0);
   const seen = [];
@@ -968,7 +968,7 @@ test("steps sizing follows content, and never hides a label", () => {
   expect(queries).toEqual(["inline-size >= 60rem"]);
 
   const block = flatten(
-    css.slice(css.indexOf("@container actual-container")).match(/\{([\s\S]*?)\n {2}\}/)[1],
+    css.slice(css.indexOf("@container actual-container")).match(/\{([\s\S]*?)\n\}/)[1],
   );
 
   /* Every rule keyed on the row and gated on a label, spelled the same way
@@ -1137,7 +1137,7 @@ test("steps keep the two orientations as peers on a shared primitive", () => {
  */
 test("steps keep the label a notch below the marker, at one size throughout", () => {
   const css = readCss("src/css/components/steps.css");
-  const enhancement = css.indexOf("@supports (container-type: inline-size)");
+  const enhancement = css.indexOf("@container actual-container");
 
   const label = css.match(/\n\.steps \.step-label \{([^}]*)\}/);
   expect(label).not.toBeNull();
