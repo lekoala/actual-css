@@ -274,18 +274,23 @@ Under `forced-colors: active`, `--backdrop-fill` maps to `Canvas`.
 
 ### Layering
 
-A small z-index scale orders non-dialog overlays. Native `<dialog>` elements (modal, drawer) render on the platform top-layer, which has no numeric z-index and always paints above the page — they never compete with this scale.
+Two systems order overlays, and only one of them uses numbers.
 
-| Token         | Value | Used by                         |
-| ------------- | ----- | ------------------------------- |
-| `--z-sticky`  | 10    | `form-actions.sticky`, `topbar` |
-| `--z-menu`    | 20    | Floating menus (`flyout`)       |
-| `--z-tooltip` | 50    | Tooltips                        |
-| `--z-status`  | 60    | `status-bar`                    |
+**The platform top layer** holds native `<dialog>` (modal, drawer) and every element currently showing as a popover — which, since the runtime drives flyouts, context menus and tooltips with `popover="manual"`, is all of Actual's anchored overlays. Top-layer elements have no numeric z-index. They always paint above the document, and their order among themselves is the order each was promoted in.
 
-`.surface-backdrop` sits just under the menus, at `calc(var(--z-menu) - 1)`.
+**The document layer** is everything else, and the scale below is what orders it. Nothing in it can reach the other system: `z-index: 999999` on a document-layer element still paints under any open dialog or popover.
 
-Stacking-context traps: a flyout or tooltip that is a DOM descendant of a dialog, or of a container with `transform`, `filter`, `contain`, `isolation`, or `will-change`, is confined to that ancestor's stacking context. Its z-index token only orders it against siblings within that context. When a dialog's top-layer clips a descendant flyout, move the flyout markup outside the dialog or use a portal/popover to escape the stacking context.
+| Token        | Value | Used by                         |
+| ------------ | ----- | ------------------------------- |
+| `--z-sticky` | 10    | `form-actions.sticky`, `topbar` |
+| `--z-menu`   | 20    | `fab`, `.surface-backdrop`      |
+| `--z-status` | 60    | `status-bar`                    |
+
+`.surface-backdrop` sits just under the menus, at `calc(var(--z-menu) - 1)`. It is runtime-created and never promoted, and it is why `--z-menu` outlived the move to the top layer: the sheet it dims needs no number any more, but the scrim beneath it does. `.flyout` keeps the same declaration for a panel the runtime does not manage — one the platform has not promoted still stacks by number.
+
+`status-bar` is at the top of the document layer: above sticky bars, the FAB and the scrim, and below any open dialog, menu or tooltip. That is the boundary between the two systems rather than a gap in the scale. Status messages are transient, non-critical feedback and their real contract is the live-region announcement — which is why `status.js` moves the singleton into an open modal dialog's subtree, since a modal inerts the rest of the document and promotion would not undo that.
+
+Stacking-context traps: these apply to overlays painted in the page, not to promoted ones. An element that is a DOM descendant of a container with `transform`, `filter`, `contain`, `isolation`, or `will-change` is confined to that ancestor's stacking context, and its z-index token only orders it against siblings within that context. Promotion escapes all of it — but do not move the markup to chase the effect: a panel or tooltip used from inside a modal dialog must be authored *inside* that dialog, because the top layer does not lift an element out of a modal's inertness.
 
 Scrollbar gutter: modal open/close can shift page layout when the classic scrollbar disappears. When a measured scrollbar is present, `modal.css` applies `scrollbar-gutter: stable` to the viewport so the page doesn't jump.
 

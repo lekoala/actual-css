@@ -295,8 +295,10 @@ export function retainSurface(panel) {
     released = true;
     entry.count--;
     if (entry.count <= 0) {
-      // A released retainer may leave a mounted panel whose original parent
-      // either still needs it back or has disappeared along with the trigger.
+      // Nothing was moved, so nothing has to be put back. What the last
+      // release still owes is the teardown: the panel may be open, and an
+      // open surface holds an Escape entry, a position tracker and possibly a
+      // scrim, none of which have an owner once the last retainer is gone.
       disconnectSurface(panel);
       surfaceRetainers.delete(panel);
     }
@@ -313,10 +315,6 @@ export function openSurface(menu, opts = {}) {
     detail: { surface: menu, options: opts },
   });
   if (!menu.dispatchEvent(beforeOpen)) return false;
-
-  for (const other of openSurfaces) {
-    if (other !== menu && other.ownerDocument === menu.ownerDocument) closeSurface(other);
-  }
 
   prepareSurface(menu);
   const state = ensureSurfaceWired(menu);
@@ -347,6 +345,25 @@ export function openSurface(menu, opts = {}) {
   if (!positionSurface(menu)) {
     closeSurface(menu, { restoreFocus: false });
     return false;
+  }
+
+  /*
+   * The others come down only once this one is up and placed. With
+   * popover="manual" nothing requires the old surface to leave the top layer
+   * before the new one enters it, so there is no reason to spend it before
+   * knowing the open will succeed — a detached anchor or a positioner failure
+   * used to dismiss the current menu and then open nothing.
+   *
+   * restoreFocus: false because these are superseded, not dismissed. Restoring
+   * would bounce focus through the outgoing trigger on the way to the new
+   * surface, firing focusin on a control the user has just navigated away
+   * from; placing focus in the new surface is the caller's job, and both
+   * callers in tree do it as soon as this returns.
+   */
+  for (const other of openSurfaces) {
+    if (other !== menu && other.ownerDocument === menu.ownerDocument) {
+      closeSurface(other, { restoreFocus: false });
+    }
   }
 
   openSurfaces.add(menu);

@@ -1291,3 +1291,36 @@ test("motion tokens: presence pair exists, no generic easing leaks, exceptions h
     expect(cssFiles.get(file)).not.toMatch(/var\(--ease-(enter|exit)\)/);
   }
 });
+
+/*
+ * The z-index scale is a public token table, and the docs are the only place
+ * that says what each layer orders. Nothing else fails when a token is added
+ * or removed: --z-tooltip could be deleted from tokens.css and the table would
+ * keep advertising it, which is exactly how it would have outlived the
+ * tooltip's move to the top layer.
+ *
+ * Scoped to --z-* on purpose. Synchronising every custom property with its
+ * documentation would turn the token docs into generated output; this is one
+ * small closed set whose whole point is to be read as an ordering, so a stale
+ * row is a wrong ordering rather than a stale description.
+ */
+test("the documented z-index scale matches the tokens", () => {
+  const declared = new Map(
+    [...readCss("src/css/core/tokens.css").matchAll(/^\s*(--z-[\w-]+):\s*([^;]+);/gm)].map(
+      ([, name, value]) => [name, value.trim()],
+    ),
+  );
+  const documented = new Map(
+    [
+      ...readCss("docs/pages/foundations/tokens.md").matchAll(
+        /^\|\s*`(--z-[\w-]+)`\s*\|\s*([^|]+?)\s*\|/gm,
+      ),
+    ].map(([, name, value]) => [name, value]),
+  );
+
+  expect(declared.size).toBeGreaterThan(0);
+  expect([...documented.keys()].sort()).toEqual([...declared.keys()].sort());
+  for (const [name, value] of declared) {
+    expect(documented.get(name)).toBe(value);
+  }
+});

@@ -410,20 +410,22 @@
 </code></pre>
 <p>Under <code>forced-colors: active</code>, <code>--backdrop-fill</code> maps to <code>Canvas</code>.</p>
 <h3 id="layering">Layering</h3>
-<p>A small z-index scale orders non-dialog overlays. Native <code>&lt;dialog&gt;</code> elements (modal, drawer) render on the platform top-layer, which has no numeric z-index and always paints above the page — they never compete with this scale.</p>
+<p>Two systems order overlays, and only one of them uses numbers.</p>
+<p><strong>The platform top layer</strong> holds native <code>&lt;dialog&gt;</code> (modal, drawer) and every element currently showing as a popover — which, since the runtime drives flyouts, context menus and tooltips with <code>popover=&quot;manual&quot;</code>, is all of Actual's anchored overlays. Top-layer elements have no numeric z-index. They always paint above the document, and their order among themselves is the order each was promoted in.</p>
+<p><strong>The document layer</strong> is everything else, and the scale below is what orders it. Nothing in it can reach the other system: <code>z-index: 999999</code> on a document-layer element still paints under any open dialog or popover.</p>
 <div class="table-wrap"><table class="table">
 <thead>
 <tr><th>Token</th><th>Value</th><th>Used by</th></tr>
 </thead>
 <tbody>
 <tr><td><code>--z-sticky</code></td><td>10</td><td><code>form-actions.sticky</code>, <code>topbar</code></td></tr>
-<tr><td><code>--z-menu</code></td><td>20</td><td>Floating menus (<code>flyout</code>)</td></tr>
-<tr><td><code>--z-tooltip</code></td><td>50</td><td>Tooltips</td></tr>
+<tr><td><code>--z-menu</code></td><td>20</td><td><code>fab</code>, <code>.surface-backdrop</code></td></tr>
 <tr><td><code>--z-status</code></td><td>60</td><td><code>status-bar</code></td></tr>
 </tbody>
 </table></div>
-<p><code>.surface-backdrop</code> sits just under the menus, at <code>calc(var(--z-menu) - 1)</code>.</p>
-<p>Stacking-context traps: a flyout or tooltip that is a DOM descendant of a dialog, or of a container with <code>transform</code>, <code>filter</code>, <code>contain</code>, <code>isolation</code>, or <code>will-change</code>, is confined to that ancestor's stacking context. Its z-index token only orders it against siblings within that context. When a dialog's top-layer clips a descendant flyout, move the flyout markup outside the dialog or use a portal/popover to escape the stacking context.</p>
+<p><code>.surface-backdrop</code> sits just under the menus, at <code>calc(var(--z-menu) - 1)</code>. It is runtime-created and never promoted, and it is why <code>--z-menu</code> outlived the move to the top layer: the sheet it dims needs no number any more, but the scrim beneath it does. <code>.flyout</code> keeps the same declaration for a panel the runtime does not manage — one the platform has not promoted still stacks by number.</p>
+<p><code>status-bar</code> is at the top of the document layer: above sticky bars, the FAB and the scrim, and below any open dialog, menu or tooltip. That is the boundary between the two systems rather than a gap in the scale. Status messages are transient, non-critical feedback and their real contract is the live-region announcement — which is why <code>status.js</code> moves the singleton into an open modal dialog's subtree, since a modal inerts the rest of the document and promotion would not undo that.</p>
+<p>Stacking-context traps: these apply to overlays painted in the page, not to promoted ones. An element that is a DOM descendant of a container with <code>transform</code>, <code>filter</code>, <code>contain</code>, <code>isolation</code>, or <code>will-change</code> is confined to that ancestor's stacking context, and its z-index token only orders it against siblings within that context. Promotion escapes all of it — but do not move the markup to chase the effect: a panel or tooltip used from inside a modal dialog must be authored <em>inside</em> that dialog, because the top layer does not lift an element out of a modal's inertness.</p>
 <p>Scrollbar gutter: modal open/close can shift page layout when the classic scrollbar disappears. When a measured scrollbar is present, <code>modal.css</code> applies <code>scrollbar-gutter: stable</code> to the viewport so the page doesn't jump.</p>
 <h2 id="internal-tokens">Internal tokens</h2>
 <p>Internal tokens are allowed when they reduce duplication or make component code clearer.</p>

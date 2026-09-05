@@ -1,12 +1,12 @@
 {
-  "totalRaw": 278146,
+  "totalRaw": 279168,
   "core": {
-    "minified": 10889,
-    "brotli": 2553
+    "minified": 10872,
+    "brotli": 2549
   },
   "full": {
-    "minified": 121239,
-    "brotli": 17742
+    "minified": 121159,
+    "brotli": 17658
   },
   "js": {
     "core": {
@@ -14,8 +14,8 @@
       "brotli": 2203
     },
     "full": {
-      "bytes": 56502,
-      "brotli": 16372
+      "bytes": 56408,
+      "brotli": 16325
     }
   },
   "fileCount": 109,
@@ -26,11 +26,11 @@
     },
     {
       "file": "core/tokens.css",
-      "raw": 9102
+      "raw": 9275
     },
     {
       "file": "components/modal.css",
-      "raw": 8923
+      "raw": 8924
     },
     {
       "file": "components/alert.css",
@@ -69,6 +69,10 @@
       "raw": 5152
     },
     {
+      "file": "components/tooltip.css",
+      "raw": 5138
+    },
+    {
       "file": "typography/prose.css",
       "raw": 5104
     },
@@ -95,10 +99,6 @@
     {
       "file": "utilities/extra.css",
       "raw": 4403
-    },
-    {
-      "file": "components/tooltip.css",
-      "raw": 4290
     },
     {
       "file": "forms/switch.css",

@@ -128,7 +128,7 @@ working.
 `menuFor()` validates semantically (`menu, [role="menu"]`). A context menu may
 legitimately want the flyout *look* without the flyout *behavior*.
 
-**D9 — Orphaned mounted surfaces are closed from the origin's disconnect
+**D9 — Orphaned surfaces are closed from the origin's disconnect
 handler.** A `fix:`, not part of the contract itself. Landed independently.
 
 ## Token vocabulary

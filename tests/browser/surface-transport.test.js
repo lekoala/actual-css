@@ -15,6 +15,10 @@
  *     the panel into the dialog.
  *   - reopening during the exit transition must land open.
  *   - a coordinate-positioned context menu must still be placed at the pointer.
+ *   - .is-open and :popover-open must say the same thing. The unit layer is
+ *     right never to read :popover-open — happy-dom answers it with a silent
+ *     false — but that leaves nothing anywhere asserting the two agree, which
+ *     is the one invariant this transport introduced.
  */
 import { expect, test } from "bun:test";
 import { browserAvailable, fixtureUrl, withBrowserPage } from "../../scripts/utils/browser.js";
@@ -164,5 +168,41 @@ it("a context menu is still positioned at the pointer", async () => {
     // Placed at the pointer, within the positioner's shift padding.
     expect(Math.abs(state.left - rect.x)).toBeLessThan(24);
     expect(Math.abs(state.top - rect.y)).toBeLessThan(24);
+  });
+});
+
+it("the runtime state and the transport state agree", async () => {
+  await withPage("state-sync", async (view) => {
+    // Read both together, so a mismatch cannot hide behind a timing gap.
+    const sync = () =>
+      view
+        .evaluate(`(() => {
+          const panel = document.getElementById("plain-panel");
+          return JSON.stringify({
+            isOpen: panel.classList.contains("is-open"),
+            popoverOpen: panel.matches(":popover-open"),
+          });
+        })()`)
+        .then(JSON.parse);
+
+    const closed = await sync();
+    expect(closed.isOpen).toBe(false);
+    expect(closed.popoverOpen).toBe(closed.isOpen);
+
+    await view.evaluate(`document.getElementById("plain-trigger").click()`);
+    await sleep(300);
+
+    const open = await sync();
+    expect(open.isOpen).toBe(true);
+    expect(open.popoverOpen).toBe(open.isOpen);
+
+    // Past the exit transition: `overlay` holds the panel in the top layer
+    // while it fades, so settle before reading rather than racing the fade.
+    await view.evaluate(`document.getElementById("plain-trigger").click()`);
+    await sleep(400);
+
+    const reclosed = await sync();
+    expect(reclosed.isOpen).toBe(false);
+    expect(reclosed.popoverOpen).toBe(reclosed.isOpen);
   });
 });

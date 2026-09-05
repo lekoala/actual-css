@@ -3,11 +3,21 @@ import { cleanupDOM, mockRect, nextMicrotask, setupDOM } from "./helpers/dom.js"
 import { nextFrame } from "./helpers/layout.js";
 
 let importId = 0;
+/** The tooltip module instance for the current test — each load is cache-busted. */
+let api;
 
 async function loadTooltip(html) {
   setupDOM(html);
-  await import(`../src/js/tooltip.js?test=${++importId}`);
+  api = await import(`../src/js/tooltip.js?test=${++importId}`);
 }
+
+/*
+ * The runtime's own visibility state, read through the module rather than off
+ * the element. [hidden] is no longer the state machine, and happy-dom answers
+ * matches(":popover-open") with a silent `false` — see helpers/popover-stub.js.
+ * Whether the transport really promotes lives in tests/browser.
+ */
+const visible = (tip) => api.isTooltipVisible(tip);
 
 function hover(el) {
   el.dispatchEvent(new MouseEvent("mouseover", { bubbles: true }));
@@ -46,11 +56,11 @@ test("data-tooltip generates a tooltip lazily on first hover", async () => {
   expect(tip).not.toBeNull();
   expect(tip.textContent).toBe("Help text");
   expect(trigger.getAttribute("aria-describedby")).toBe(tip.id);
-  expect(tip.hidden).toBe(true);
+  expect(visible(tip)).toBe(false);
 
   await waitForShow();
 
-  expect(tip.hidden).toBe(false);
+  expect(visible(tip)).toBe(true);
 });
 
 test("shorthand content stays text while explicit tooltips support HTML", async () => {
@@ -80,14 +90,14 @@ test("data-tooltip-click toggles on click and ignores hover", async () => {
 
   click(trigger);
   const tip = document.querySelector('[role="tooltip"]');
-  expect(tip.hidden).toBe(false);
+  expect(visible(tip)).toBe(true);
 
   leave(trigger);
   await waitForHide();
-  expect(tip.hidden).toBe(false);
+  expect(visible(tip)).toBe(true);
 
   click(trigger);
-  expect(tip.hidden).toBe(true);
+  expect(visible(tip)).toBe(false);
 });
 
 test("data-tooltip-visible eagerly creates and keeps a tooltip visible", async () => {
@@ -96,11 +106,11 @@ test("data-tooltip-visible eagerly creates and keeps a tooltip visible", async (
   const tip = document.querySelector('[role="tooltip"]');
 
   expect(tip).not.toBeNull();
-  expect(tip.hidden).toBe(false);
+  expect(visible(tip)).toBe(true);
 
   leave(trigger);
   await waitForHide();
-  expect(tip.hidden).toBe(false);
+  expect(visible(tip)).toBe(true);
 
   const escapeEvent = new KeyboardEvent("keydown", {
     key: "Escape",
@@ -108,7 +118,7 @@ test("data-tooltip-visible eagerly creates and keeps a tooltip visible", async (
     cancelable: true,
   });
   document.dispatchEvent(escapeEvent);
-  expect(tip.hidden).toBe(false);
+  expect(visible(tip)).toBe(true);
   expect(escapeEvent.defaultPrevented).toBe(false);
 });
 
@@ -117,9 +127,9 @@ test("data-tooltip-visible starts hidden when its trigger is outside the viewpor
   const trigger = document.querySelector("button");
   mockRect(trigger, { x: 0, y: window.innerHeight + 100, width: 100, height: 40 });
 
-  await import(`../src/js/tooltip.js?test=${++importId}`);
+  api = await import(`../src/js/tooltip.js?test=${++importId}`);
 
-  expect(document.querySelector('[role="tooltip"]').hidden).toBe(true);
+  expect(visible(document.querySelector('[role="tooltip"]'))).toBe(false);
 });
 
 test("tooltip tracking only runs while the tooltip is visible", async () => {
@@ -200,12 +210,12 @@ test("an explicit tooltip via aria-describedby is wired, not recreated", async (
 
   await waitForShow();
 
-  expect(tip.hidden).toBe(false);
+  expect(visible(tip)).toBe(true);
 
   leave(trigger);
   await waitForHide();
 
-  expect(tip.hidden).toBe(true);
+  expect(visible(tip)).toBe(false);
 });
 
 test("plain aria-describedby without data-tooltip is ignored", async () => {
@@ -218,7 +228,11 @@ test("plain aria-describedby without data-tooltip is ignored", async () => {
   hover(trigger);
   await waitForShow();
 
-  expect(document.getElementById("help1").hidden).toBe(false);
+  const help = document.getElementById("help1");
+  // Untouched: not a tooltip, so never hidden, never wired, and never given a
+  // transport.
+  expect(help.hidden).toBe(false);
+  expect(help.hasAttribute("popover")).toBe(false);
   expect(document.querySelector('[role="tooltip"]')).toBeNull();
 });
 
@@ -234,11 +248,11 @@ test("a shared explicit tooltip survives the removal of one of its triggers", as
 
   hover(a);
   await waitForShow();
-  expect(tip.hidden).toBe(false);
+  expect(visible(tip)).toBe(true);
 
   leave(a);
   await waitForHide();
-  expect(tip.hidden).toBe(true);
+  expect(visible(tip)).toBe(false);
 
   // Removing one trigger must not tear down the tooltip for the other.
   a.remove();
@@ -247,12 +261,12 @@ test("a shared explicit tooltip survives the removal of one of its triggers", as
 
   hover(b);
   await waitForShow();
-  expect(tip.hidden).toBe(false);
+  expect(visible(tip)).toBe(true);
 
   // Last trigger removed: the tooltip hides but stays in the user's DOM.
   b.remove();
   await nextMicrotask();
-  expect(tip.hidden).toBe(true);
+  expect(visible(tip)).toBe(false);
   expect(tip.isConnected).toBe(true);
 });
 
@@ -286,7 +300,7 @@ test("moving a trigger within the document preserves its tooltip instance", asyn
 
   expect(document.querySelector('[role="tooltip"]')).toBe(tip);
   expect(trigger.getAttribute("aria-describedby")).toBe(describedBy);
-  expect(tip.hidden).toBe(false);
+  expect(visible(tip)).toBe(true);
 });
 
 test("moving a trigger outside the observed root cleans it while it stays connected", async () => {
@@ -324,7 +338,7 @@ test("explicit tooltip resolution retries after the target is inserted", async (
   hover(trigger);
   await waitForShow();
 
-  expect(tip.hidden).toBe(false);
+  expect(visible(tip)).toBe(true);
 });
 
 test("shorthand tooltip preserves and extends an existing describedby value", async () => {
@@ -339,7 +353,7 @@ test("shorthand tooltip preserves and extends an existing describedby value", as
 
   const tip = document.querySelector('[role="tooltip"]');
   expect(trigger.getAttribute("aria-describedby")).toBe(`help ${tip.id}`);
-  expect(tip.hidden).toBe(false);
+  expect(visible(tip)).toBe(true);
 
   trigger.remove();
   await nextMicrotask();
@@ -358,7 +372,7 @@ test("explicit tooltip resolves from multiple describedby ids", async () => {
   hover(trigger);
   await waitForShow();
 
-  expect(tip.hidden).toBe(false);
+  expect(visible(tip)).toBe(true);
   expect(trigger.getAttribute("aria-describedby")).toBe("help tip1");
 });
 
@@ -368,13 +382,13 @@ test("tooltip stays visible when focus is kept after the pointer leaves", async 
 
   trigger.dispatchEvent(new FocusEvent("focusin", { bubbles: true }));
   await waitForShow();
-  expect(document.querySelector('[role="tooltip"]').hidden).toBe(false);
+  expect(visible(document.querySelector('[role="tooltip"]'))).toBe(true);
 
   leave(trigger);
   await waitForHide();
 
   // Still focused: the tooltip must not hide on pointer leave alone.
-  expect(document.querySelector('[role="tooltip"]').hidden).toBe(false);
+  expect(visible(document.querySelector('[role="tooltip"]'))).toBe(true);
 });
 
 test("tooltip hides only when both focus and hover are gone", async () => {
@@ -389,7 +403,7 @@ test("tooltip hides only when both focus and hover are gone", async () => {
   trigger.dispatchEvent(new FocusEvent("blur"));
   await waitForHide();
 
-  expect(document.querySelector('[role="tooltip"]').hidden).toBe(true);
+  expect(visible(document.querySelector('[role="tooltip"]'))).toBe(false);
 });
 
 test("tooltip stays open while the pointer moves from trigger to tip", async () => {
@@ -403,11 +417,11 @@ test("tooltip stays open while the pointer moves from trigger to tip", async () 
   leave(trigger);
   tip.dispatchEvent(new MouseEvent("mouseenter"));
   await waitForHide();
-  expect(tip.hidden).toBe(false);
+  expect(visible(tip)).toBe(true);
 
   tip.dispatchEvent(new MouseEvent("mouseleave"));
   await waitForHide();
-  expect(tip.hidden).toBe(true);
+  expect(visible(tip)).toBe(false);
 });
 
 test("Escape key hides the tooltip", async () => {
@@ -417,17 +431,17 @@ test("Escape key hides the tooltip", async () => {
   hover(trigger);
   await waitForShow();
   const tip = document.querySelector('[role="tooltip"]');
-  expect(tip.hidden).toBe(false);
+  expect(visible(tip)).toBe(true);
 
   document.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
-  expect(tip.hidden).toBe(true);
+  expect(visible(tip)).toBe(false);
 
   hover(trigger);
   await waitForShow();
-  expect(tip.hidden).toBe(false);
+  expect(visible(tip)).toBe(true);
 
   document.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
-  expect(tip.hidden).toBe(true);
+  expect(visible(tip)).toBe(false);
 });
 
 test("Escape closes a tooltip above a flyout without closing the flyout", async () => {
@@ -449,11 +463,11 @@ test("Escape closes a tooltip above a flyout without closing the flyout", async 
   hover(help);
   await waitForShow();
   const tip = document.querySelector('[role="tooltip"]');
-  expect(tip.hidden).toBe(false);
+  expect(visible(tip)).toBe(true);
 
   document.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
 
-  expect(tip.hidden).toBe(true);
+  expect(visible(tip)).toBe(false);
   expect(isSurfaceOpen(menu)).toBe(true);
   disconnectSurface(menu);
 });
@@ -475,7 +489,7 @@ test("tooltip tracking does not jump above a flyout opened later", async () => {
   hover(help);
   await waitForShow();
   const tip = document.querySelector('[role="tooltip"]');
-  expect(tip.hidden).toBe(false);
+  expect(visible(tip)).toBe(true);
   expect(openSurface(menu, { trigger })).toBe(true);
 
   window.dispatchEvent(new Event("scroll"));
@@ -483,7 +497,7 @@ test("tooltip tracking does not jump above a flyout opened later", async () => {
   document.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
 
   expect(isSurfaceOpen(menu)).toBe(false);
-  expect(tip.hidden).toBe(false);
+  expect(visible(tip)).toBe(true);
   disconnectSurface(menu);
 });
 
@@ -498,7 +512,7 @@ test("tooltip positions relative to its trigger", async () => {
   tip.checkVisibility = () => true;
 
   await waitForShow();
-  expect(tip.hidden).toBe(false);
+  expect(visible(tip)).toBe(true);
   expect(tip.dataset.placement).toBe("right");
   expect(tip.style.left).not.toBe("");
 });

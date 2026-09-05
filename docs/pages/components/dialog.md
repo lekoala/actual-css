@@ -213,8 +213,15 @@ one was present).
 
 ## Overlays inside modals
 
-Flyouts and tooltips opened from inside a modal dialog are mounted inside the
-dialog so they stay in the same top-layer context.
+Flyouts and tooltips opened from inside a modal dialog stay exactly where they
+are authored. The runtime promotes them to the top layer instead of moving
+them, which is what keeps them inside every scope that reaches them by
+inheritance.
+
+Author them inside the dialog. Promotion paints an element above a modal, but
+it does not lift it out of the modal's inertness — that is computed on the DOM,
+not on paint order — so an overlay authored outside the dialog would be
+promoted above it and still unclickable.
 
 ```html demo
 <button class="btn"
@@ -306,7 +313,7 @@ remain in the top layer while `display` and `overlay` transition out. Browsers
 without that support keep native close behavior.
 
 The open dialog root intentionally ends at `transform: none`; fixed flyouts and
-tooltips mounted inside a modal dialog rely on viewport coordinates.
+tooltips authored inside a modal dialog rely on viewport coordinates.
 
 ### View transition
 

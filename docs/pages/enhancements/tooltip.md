@@ -5,11 +5,12 @@
 Tooltips are supplemental: `data-tooltip` on the trigger wires a `.tooltip`
 element (`role="tooltip"`) that appears near the trigger. Position, placement,
 and arrow position are written by JavaScript; the element is shown and hidden
-with the `hidden` attribute.
+by promoting it to the top layer with `popover="manual"`.
 
 - Use `data-tooltip` on the trigger. With text (`data-tooltip="Help"`), the tooltip element is generated. Empty (`data-tooltip`) marks an explicit tooltip connected via `aria-describedby`.
 - Tooltips are supplemental. Do not put required information or interactive controls inside them.
 - Show on hover and focus. Hide on Escape, blur, pointer leave, or scroll when appropriate.
+- Author an explicit tooltip with `hidden`. The runtime removes it when it takes the lifecycle over; until then it is what keeps the tooltip off screen.
 - JavaScript can generate tooltip elements from `data-tooltip`.
 - Add `data-tooltip-click` to toggle it on click instead of hover/focus.
 - Add `data-tooltip-visible` to show it immediately and keep it visible while its trigger is in view.
@@ -23,9 +24,25 @@ positioning and with the projecting arrow, while leaving bare `[popover]`
 elements untouched. The lifecycle owner must still write the fixed viewport
 coordinates and arrow position; Actual only supplies the presentation.
 
-`tooltip.js` drives `[hidden]` and never sets `popover`, so the attribute is
-always the application's own choice of lifecycle. Use `data-tooltip` and the
-built-in runtime when Actual should own showing and hiding.
+Do not combine them. `tooltip.js` writes `popover="manual"` on every tooltip it
+manages and calls `showPopover()` / `hidePopover()` itself, so a tooltip handed
+to the runtime has its mode overwritten. The runtime only ever reaches a
+tooltip that a `data-tooltip` trigger points at, so a `.tooltip[popover]` with
+no such trigger stays yours to drive. Use `data-tooltip` and the built-in
+runtime when Actual should own showing and hiding.
+
+**Where the element lives is part of the contract.** An explicit tooltip stays
+exactly where you wrote it, so it keeps every scope that reaches it by
+inheritance — a theme island, a density scope, `.inverted`, your own scoped
+custom properties. It also means placement is yours to get right: a tooltip
+used from inside a modal dialog must be authored inside that dialog, because
+the top layer does not lift an element out of a modal's inertness.
+
+A generated tooltip (`data-tooltip="Help"`) is Actual's to place, and it goes
+at document level rather than beside the trigger, so it cannot disturb the
+trigger's structural position — a generated sibling would take
+`.join > :last-child` from a trigger that ends a group. It therefore makes no
+inheritance promise. Use the explicit form when the local CSS context matters.
 
 ```html demo
 <button class="btn ghost"

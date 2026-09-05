@@ -120,5 +120,6 @@ two states stay visually identical in size and stroke.
 - `--fab-gap` — gap between actions and between the trigger and action list.
 - `--fab-icon-size` — size of the speed dial toggle's open and close markers.
 
-FAB is hidden in print and uses `--z-menu`, leaving tooltips and status UI above
-it. Dialogs remain in the browser's top layer.
+FAB is hidden in print and uses `--z-menu`, leaving `status-bar` above it on the
+scale. Open flyouts and tooltips are promoted to the top layer and paint above
+it whatever their number. Dialogs remain in the browser's top layer.
