@@ -224,6 +224,27 @@ class API, shared tokens, and progressive enhancement.</p>
 <li>Use shared button classes and variants for triggers.</li>
 <li>Do not add toasts. Use alerts, status regions, dialogs, or inline validation instead.</li>
 </ul>
+<h2 id="popover-ownership">Popover ownership</h2>
+<p>Actual drives the top layer itself. On every surface and tooltip its runtime
+manages, <code>surface.js</code> and <code>tooltip.js</code> own the <code>popover</code> attribute and both
+<code>showPopover()</code> and <code>hidePopover()</code>.</p>
+<p>On a managed element, an application must not:</p>
+<ul>
+<li>set or change <code>popover</code>. The runtime writes <code>manual</code> over any other value, because <code>popover=&quot;auto&quot;</code> hands the browser a dismissal policy of its own that competes with <code>data-flyout-auto-close</code>.</li>
+<li>call <code>showPopover()</code>, <code>hidePopover()</code>, or <code>togglePopover()</code>.</li>
+<li>cancel its <code>beforetoggle</code>. Preventing an open leaves Actual's state saying open while the element is not in the top layer, and nothing repairs that — Actual owns the lifecycle rather than mediating it.</li>
+</ul>
+<p>To stop a surface from opening, cancel Actual's own <code>actual:surface-open</code>
+instead. It is dispatched before anything is promoted, so cancelling it leaves
+no state behind.</p>
+<p><strong>What counts as managed is the runtime's decision, not the attribute's.</strong> A
+panel is managed when a <code>data-enhance=&quot;flyout&quot;</code> trigger points at it through
+<code>aria-controls</code>, or when a <code>data-context-menu</code> target names it; a tooltip is
+managed when a <code>data-tooltip</code> trigger points at it. A <code>.flyout[popover]</code> or
+<code>.tooltip[popover]</code> that no such trigger reaches is never touched — Actual
+supplies its presentation and the application owns its lifecycle. That is the
+supported way to drive either class with <code>popovertarget</code> or a third-party
+lifecycle. Do not do both to the same element.</p>
 <h2 id="modules">Modules</h2>
 <p>The full runtime is <code>actual-css/js/full</code>. Each enhancer is also importable on its own
 for projects that use custom components or want a smaller behavior surface:</p>
@@ -258,6 +279,7 @@ work with the documented markup alone.</p>
         <nav class="scrollspy" data-enhance="scrollspy" data-scrollspy-offset="80" aria-label="On this page">
           <p class="docs-nav-group">On this page</p>
           <ul class="nav-list docs-toc-list" data-docs-toc>
+        <li><a class="nav-link" href="#popover-ownership" data-docs-toc-item data-level="2">Popover ownership</a></li>
         <li><a class="nav-link" href="#modules" data-docs-toc-item data-level="2">Modules</a></li>
         <li><a class="nav-link" href="#component-pages" data-docs-toc-item data-level="2">Component pages</a></li>
           </ul>

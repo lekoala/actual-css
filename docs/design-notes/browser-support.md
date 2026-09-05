@@ -44,15 +44,16 @@ engines and are guaranteed too, but the runtime uses none of them — it keeps
 `aria-controls` and drives the lifecycle itself. Newer parts of the API
 (`popover="hint"`, interest invokers) are covered by no tier.
 
-| Actual tier | Manual Popover transport | Lifecycle owner                 |
-| ----------- | ------------------------ | ------------------------------- |
-| Degraded    | no                       | HTML/CSS fallback only          |
-| Minimal     | yes                      | `surface.js`                    |
-| Recommended | yes                      | native Popover, or `surface.js` |
+| Actual tier | Manual Popover transport | Lifecycle owner                              |
+| ----------- | ------------------------ | -------------------------------------------- |
+| Degraded    | no                       | HTML/CSS fallback only                       |
+| Minimal     | yes                      | `surface.js`, `tooltip.js`                   |
+| Recommended | yes                      | native Popover, or `surface.js`/`tooltip.js` |
 
-Actual's presentation classes compose with either lifecycle. `surface.js` uses
-the transport and never the native lifecycle, because `popover="auto"` cannot
-express `data-flyout-auto-close`; see
+Actual's presentation classes compose with either lifecycle. Both runtimes use
+the transport and never the native lifecycle: `popover="auto"` cannot express
+`data-flyout-auto-close`, and it would put the browser's light dismiss in
+competition with the tooltip's own hover and focus policy. See
 [platform-alignment](platform-alignment.md).
 
 ## JavaScript philosophy
@@ -87,10 +88,10 @@ and Chromium earlier still. ([WebKit][4])
 
 ### The manual Popover transport
 
-The floor is set by this capability. `surface.js` promotes a panel with
-`popover="manual"` instead of moving it in the DOM, which is what keeps a
-surface inside every scope that reaches it by inheritance — see
-[surface-reparenting](surface-reparenting.md).
+The floor is set by this capability. `surface.js` and `tooltip.js` both promote
+their element with `popover="manual"` instead of moving it in the DOM, which is
+what keeps a surface — and an explicit tooltip — inside every scope that reaches
+it by inheritance. See [surface-reparenting](surface-reparenting.md).
 
 > The manual Popover transport is assumed by the runtime; there is no
 > reparenting fallback.

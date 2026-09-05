@@ -13,6 +13,31 @@ class API, shared tokens, and progressive enhancement.
 - Use shared button classes and variants for triggers.
 - Do not add toasts. Use alerts, status regions, dialogs, or inline validation instead.
 
+## Popover ownership
+
+Actual drives the top layer itself. On every surface and tooltip its runtime
+manages, `surface.js` and `tooltip.js` own the `popover` attribute and both
+`showPopover()` and `hidePopover()`.
+
+On a managed element, an application must not:
+
+- set or change `popover`. The runtime writes `manual` over any other value, because `popover="auto"` hands the browser a dismissal policy of its own that competes with `data-flyout-auto-close`.
+- call `showPopover()`, `hidePopover()`, or `togglePopover()`.
+- cancel its `beforetoggle`. Preventing an open leaves Actual's state saying open while the element is not in the top layer, and nothing repairs that — Actual owns the lifecycle rather than mediating it.
+
+To stop a surface from opening, cancel Actual's own `actual:surface-open`
+instead. It is dispatched before anything is promoted, so cancelling it leaves
+no state behind.
+
+**What counts as managed is the runtime's decision, not the attribute's.** A
+panel is managed when a `data-enhance="flyout"` trigger points at it through
+`aria-controls`, or when a `data-context-menu` target names it; a tooltip is
+managed when a `data-tooltip` trigger points at it. A `.flyout[popover]` or
+`.tooltip[popover]` that no such trigger reaches is never touched — Actual
+supplies its presentation and the application owns its lifecycle. That is the
+supported way to drive either class with `popovertarget` or a third-party
+lifecycle. Do not do both to the same element.
+
 ## Modules
 
 The full runtime is `actual-css/js/full`. Each enhancer is also importable on its own
