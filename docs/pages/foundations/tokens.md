@@ -276,15 +276,15 @@ Under `forced-colors: active`, `--backdrop-fill` maps to `Canvas`.
 
 Two systems order overlays, and only one of them uses numbers.
 
-**The platform top layer** holds native `<dialog>` (modal, drawer) and every element currently showing as a popover — which, since the runtime drives flyouts, context menus and tooltips with `popover="manual"`, is all of Actual's anchored overlays. Top-layer elements have no numeric z-index. They always paint above the document, and their order among themselves is the order each was promoted in.
+**The platform top layer** holds native `<dialog>` (modal, drawer) and every element currently showing as a popover — which, since the runtime drives flyouts, context menus and tooltips with `popover="manual"`, is all of Actual's anchored overlays. Top-layer ordering does not use `z-index`. Such an element always paints above the document, and its order among the others is its top-layer promotion order — the most recently promoted on top. A `z-index` declaration on it still computes; it just does not decide where it lands.
 
 **The document layer** is everything else, and the scale below is what orders it. Nothing in it can reach the other system: `z-index: 999999` on a document-layer element still paints under any open dialog or popover.
 
-| Token        | Value | Used by                         |
-| ------------ | ----- | ------------------------------- |
-| `--z-sticky` | 10    | `form-actions.sticky`, `topbar` |
-| `--z-menu`   | 20    | `fab`, `.surface-backdrop`      |
-| `--z-status` | 60    | `status-bar`                    |
+| Token        | Value | Used by                                      |
+| ------------ | ----- | -------------------------------------------- |
+| `--z-sticky` | 10    | `form-actions.sticky`, `topbar`              |
+| `--z-menu`   | 20    | `fab`, `.surface-backdrop`, static `.flyout` |
+| `--z-status` | 60    | `status-bar`                                 |
 
 `.surface-backdrop` sits just under the menus, at `calc(var(--z-menu) - 1)`. It is runtime-created and never promoted, and it is why `--z-menu` outlived the move to the top layer: the sheet it dims needs no number any more, but the scrim beneath it does. `.flyout` keeps the same declaration for a panel the runtime does not manage — one the platform has not promoted still stacks by number.
 
