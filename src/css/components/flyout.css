@@ -18,7 +18,7 @@
  *
  * Internal:
  * --menu-item-size (derived from --control-size for menu rows)
- * --available-height (measured by floating.js)
+ * --available-height (measured by the positioner)
  * --surface-anchor-width (measured by surface.js)
  */
 

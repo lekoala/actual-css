@@ -157,7 +157,9 @@ Popover can take over the top layer without touching placement. Anchor
 positioning could later take over placement without touching lifecycle — though
 not yet, because the current positioner also reports *placement validity*, which
 the lifecycle uses to close a surface whose anchor has left the viewport, and
-declarative CSS positioning offers no equivalent signal.
+declarative CSS positioning offers no equivalent signal. See
+[css-anchor](css-anchor.md) for what else the positioner writes and what would
+unblock the move.
 
 ### Top-layer transport must not imply lifecycle ownership
 
