@@ -13,6 +13,10 @@
   it is fixed upstream.
 - Joined controls documents the Biome `useSemanticElements` false positive on
   `role="group"`, and the targeted suppression for it.
+- `openSurface` documents that Actual surfaces are mutually exclusive per
+  document and that nested surfaces are unsupported.
+- Kitchen sink covers `steps`, `aura`, and an `inverted` / density /
+  nested-intent scopes section.
 
 ### Changed
 
@@ -40,6 +44,8 @@
 - `.tabs` matches `aria-orientation` inside `:where()`, so an author class can
   restyle a vertical strip without restating the attribute.
 - `check:architecture` enforces that `aria-orientation` stays inside `:where()`.
+- Kitchen sink drops `card-body`, `card-header`, `card-footer`, `choice-card-*`
+  and `tabset`, class names no stylesheet defines.
 
 ### Breaking
 

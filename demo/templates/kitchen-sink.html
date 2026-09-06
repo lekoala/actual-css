@@ -201,24 +201,20 @@
   <section>
     <h2>Cards</h2>
     <div class="sink-grid">
-      <div class="card" style="max-inline-size:20rem">
-        <div class="card-body">
-          <h3>Card title</h3>
-          <p>Some quick example text to build on the card.</p>
-          <button class="btn primary">Go somewhere</button>
-        </div>
-      </div>
-      <div class="card primary" style="max-inline-size:20rem">
-        <div class="card-body">
-          <h3>Primary card</h3>
-          <p>Card with intent class.</p>
-        </div>
-      </div>
-      <div class="card" style="max-inline-size:20rem">
-        <div class="card-header">Header</div>
-        <div class="card-body">Body with <a href="#">link</a></div>
-        <div class="card-footer">Footer</div>
-      </div>
+      <article class="card stack" style="max-inline-size:20rem">
+        <header><h3>Card title</h3></header>
+        <p>Some quick example text to build on the card.</p>
+        <button class="btn primary" type="button">Go somewhere</button>
+      </article>
+      <article class="card stack primary" style="max-inline-size:20rem">
+        <header><h3>Primary card</h3></header>
+        <p>Card with intent class.</p>
+      </article>
+      <article class="card stack" style="max-inline-size:20rem">
+        <header>Header</header>
+        <p>Body with <a href="#">link</a></p>
+        <footer>Footer</footer>
+      </article>
     </div>
   </section>
 
@@ -310,28 +306,19 @@
         <label class="field-label">Choice cards</label>
         <form class="grid grid-3">
           <label class="choice-card">
-            <input class="radio" type="radio" name="plan" checked>
-            <span class="choice-card-label">Starter</span>
-            <span class="choice-card-body">
-              <span class="choice-card-value">$0</span>
-              <span class="choice-card-text">Up to 3 projects</span>
-            </span>
+            <input type="radio" name="plan" checked>
+            <strong>Starter</strong>
+            <span class="muted">Up to 3 projects</span>
           </label>
           <label class="choice-card">
-            <input class="radio" type="radio" name="plan">
-            <span class="choice-card-label">Pro</span>
-            <span class="choice-card-body">
-              <span class="choice-card-value">$12</span>
-              <span class="choice-card-text">Unlimited projects</span>
-            </span>
+            <input type="radio" name="plan">
+            <strong>Pro</strong>
+            <span class="muted">Unlimited projects</span>
           </label>
           <label class="choice-card">
-            <input class="radio" type="radio" name="plan">
-            <span class="choice-card-label">Enterprise</span>
-            <span class="choice-card-body">
-              <span class="choice-card-value">$49</span>
-              <span class="choice-card-text">SSO + dedicated support</span>
-            </span>
+            <input type="radio" name="plan">
+            <strong>Enterprise</strong>
+            <span class="muted">SSO + dedicated support</span>
           </label>
         </form>
       </div>
@@ -465,7 +452,7 @@
         <span class="badge" data-context-item="Owner">Design team</span>
         <span class="badge" data-context-item="Updated">Updated today</span>
       </div>
-      <output class="text-sm text-muted" id="demo-context-result" aria-live="polite">
+      <output class="muted" id="demo-context-result" aria-live="polite">
         No context selected.
       </output>
 
@@ -507,7 +494,7 @@
   <!-- 12. Tabs -->
   <section>
     <h2>Tabs</h2>
-    <div class="tabset" style="max-inline-size:36rem">
+    <div class="stack" style="max-inline-size:36rem">
       <div class="tabs" data-enhance="tabs" role="tablist" aria-label="Settings">
         <button class="tab primary" type="button" role="tab"
                 aria-selected="true" aria-controls="sink-panel-general" id="sink-tab-general">General</button>
@@ -582,7 +569,31 @@
     </div>
   </section>
 
-  <!-- 16. Navbar -->
+  <!-- 16. Steps -->
+  <section>
+    <h2>Steps</h2>
+    <!-- Forced colors flattens complete and upcoming to the same ringed disc;
+         --step-complete-mark is the documented way to keep them apart. -->
+    <div class="sink-grid">
+      <ol class="steps steps-horizontal" style="min-inline-size:22rem">
+        <li class="step-complete"><span class="step-label">Account</span></li>
+        <li aria-current="step"><span class="step-label">Payment</span></li>
+        <li><span class="step-label">Confirm</span></li>
+      </ol>
+      <ol class="steps steps-horizontal" style="min-inline-size:22rem;--step-complete-mark:'✓'">
+        <li class="step-complete"><span class="step-label">Account</span></li>
+        <li aria-current="step"><span class="step-label">Payment</span></li>
+        <li><span class="step-label">Confirm</span></li>
+      </ol>
+      <ol class="steps steps-vertical">
+        <li class="step-complete"><span class="step-label">Uploaded</span></li>
+        <li aria-current="step"><span class="step-label">Processing</span></li>
+        <li><span class="step-label">Published</span></li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- 17. Navbar -->
   <section>
     <h2>Navbar</h2>
     <nav class="navbar">
@@ -595,7 +606,7 @@
     </nav>
   </section>
 
-  <!-- 17. Breadcrumb -->
+  <!-- 18. Breadcrumb -->
   <section>
     <h2>Breadcrumb</h2>
     <nav class="breadcrumb" aria-label="Breadcrumb">
@@ -607,7 +618,7 @@
     </nav>
   </section>
 
-  <!-- 18. Pagination -->
+  <!-- 19. Pagination -->
   <section>
     <h2>Pagination</h2>
     <nav aria-label="Page navigation">
@@ -623,7 +634,7 @@
     </nav>
   </section>
 
-  <!-- 19. Key / Overline -->
+  <!-- 20. Key / Overline -->
   <section>
     <h2>Key / Overline</h2>
     <div class="stack">
@@ -635,7 +646,7 @@
     </div>
   </section>
 
-  <!-- 20. Status bar -->
+  <!-- 21. Status bar -->
   <section>
     <h2>Status bar</h2>
     <p>
@@ -644,7 +655,7 @@
     </p>
   </section>
 
-  <!-- 21. Floating action button -->
+  <!-- 22. Floating action button -->
   <section>
     <h2>Floating action button</h2>
     <p>The speed dial is fixed to the viewport's bottom-end corner. Activate the
@@ -678,13 +689,33 @@
     </details>
   </section>
 
-  <!-- 22. Dark mode -->
+  <!-- 23. Aura -->
+  <section>
+    <h2>Aura</h2>
+    <!-- The wrapper carries the intent; the child keeps its own. -->
+    <div class="sink-grid" style="gap:2.5rem">
+      <span class="aura primary">
+        <button class="btn" type="button">Publish</button>
+      </span>
+      <span class="aura aura-glow secondary">
+        <span class="badge">New</span>
+      </span>
+      <span class="aura danger">
+        <span class="badge danger solid" aria-label="12 unread">12</span>
+      </span>
+      <span class="aura warning">
+        <div class="alert warning" role="alert">Your trial ends in three days.</div>
+      </span>
+    </div>
+  </section>
+
+  <!-- 24. Dark mode -->
   <section>
     <h2>Dark mode</h2>
     <p>Use the theme selector at the top to switch <code>data-theme</code>.</p>
   </section>
 
-  <!-- 23. Theme island -->
+  <!-- 25. Theme island -->
   <section>
     <h2>Theme island</h2>
     <p>A nested <code>[data-theme="forest"]</code> island must recompute the
@@ -715,7 +746,64 @@
     </div>
   </section>
 
-  <!-- 24. Disabled & special states -->
+  <!-- 26. Scopes -->
+  <section>
+    <h2>Scopes</h2>
+    <p>Three contexts that reach components by inheritance. Each block sets one
+      scope on its container; nothing inside restates it.</p>
+
+    <h3>Inverted surface</h3>
+    <!-- A surface-owning descendant keeps its own surface and foreground. -->
+    <div class="inverted stack" style="padding:var(--space-40)">
+      <p>Contextual text follows the inverted foreground.</p>
+      <div class="cluster">
+        <button class="btn" type="button">Button</button>
+        <button class="btn primary" type="button">Primary</button>
+        <span class="badge">Badge</span>
+        <a href="#">Link</a>
+      </div>
+      <article class="card stack" style="max-inline-size:20rem">
+        <p>A card keeps its own surface inside the block.</p>
+      </article>
+    </div>
+
+    <h3>Density</h3>
+    <!-- .sm / .lg on the container, never on the controls. -->
+    <div class="sink-grid">
+      <div class="sm sink-col">
+        <p class="overline">sm</p>
+        <button class="btn primary" type="button">Button</button>
+        <input class="input" aria-label="Compact input">
+        <span class="badge">Badge</span>
+      </div>
+      <div class="sink-col">
+        <p class="overline">default</p>
+        <button class="btn primary" type="button">Button</button>
+        <input class="input" aria-label="Default input">
+        <span class="badge">Badge</span>
+      </div>
+      <div class="lg sink-col">
+        <p class="overline">lg</p>
+        <button class="btn primary" type="button">Button</button>
+        <input class="input" aria-label="Spacious input">
+        <span class="badge">Badge</span>
+      </div>
+    </div>
+
+    <h3>Nested intent</h3>
+    <!-- An ancestor intent must not tint nested components; a local one wins. -->
+    <article class="card stack primary" style="max-inline-size:24rem">
+      <header><h4>Card carries the intent</h4></header>
+      <div class="cluster">
+        <button class="btn" type="button">Untinted</button>
+        <button class="btn danger" type="button">Local danger</button>
+        <span class="badge">Untinted</span>
+        <span class="badge success">Local success</span>
+      </div>
+    </article>
+  </section>
+
+  <!-- 27. Disabled & special states -->
   <section>
     <h2>Disabled &amp; special states</h2>
     <div class="sink-grid">
@@ -733,9 +821,9 @@
       </div>
       <form class="sink-col">
         <label class="choice-card">
-          <input class="radio" type="radio" name="plan-disabled" disabled>
-          <span class="choice-card-label">Disabled plan</span>
-          <span class="choice-card-body"><span class="choice-card-value">—</span><span class="choice-card-text">Unavailable</span></span>
+          <input type="radio" name="plan-disabled" disabled>
+          <strong>Disabled plan</strong>
+          <span class="muted">Unavailable</span>
         </label>
       </form>
       <menu class="menu">

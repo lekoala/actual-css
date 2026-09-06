@@ -277,7 +277,13 @@ Actual already has most of the visual building blocks through buttons, actions, 
 
 A toolbar may be a useful small pattern, but its keyboard contract should preferably be built on a shared focus primitive rather than implemented independently.
 
-Do not add `.toolbar` merely as another horizontal flex utility.
+Do not add `.toolbar` merely as another horizontal flex utility. If Toolbar is ever added, it is a semantic and keyboard enhancement over existing layout, with no CSS class of its own:
+
+```html
+<div class="cluster" role="toolbar" aria-label="Formatting" data-enhance="toolbar">
+```
+
+`.cluster` owns the layout, the controls keep their own presentation, `role="toolbar"` carries the semantics, and the enhancement supplies only the roving tab stop — which is `connectFocusGroup` almost exactly as it already exists. APG reserves the pattern for groups of at least three controls; below that the grouping earns nothing.
 
 ### Menu elements
 
@@ -523,7 +529,7 @@ If several widgets need the same roving-focus behavior, extract one reusable pri
 
 Consider a small Toolbar pattern only after the shared focus behavior is clear.
 
-Its value should come from semantics and interaction, not from duplicating `.cluster`.
+Its value should come from semantics and interaction, not from duplicating `.cluster`. It is also not a reason to consolidate the focus primitive: `focus-group` is a documented public export with a real internal consumer in `menu`, so it does not need a second one to justify itself. Tabs in particular are not the missing consumer — they navigate *and* activate, sync `aria-selected`, toggle panels, and treat a valid panel as a candidacy requirement, so folding them in would trade little code for a subtle coupling between the focused item and the selected one. Wait for a third consumer to reveal the shared abstraction instead of designing it from two.
 
 ### Switch
 

@@ -30,6 +30,11 @@ Flyout and context menu share one action-surface runtime:
 - Context menu = right click or a keyboard context action opens that same surface.
 - Sheet = mobile presentation mode of that same surface.
 
+One surface is open at a time. Opening any of them closes the others, so a
+trigger placed inside an open panel replaces that panel instead of opening a
+second level. Submenus and other nested panels are outside the current
+contract.
+
 ### Trigger wiring
 
 The runtime resolves the panel from the trigger, so the wiring is part of the

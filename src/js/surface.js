@@ -348,6 +348,14 @@ export function openSurface(menu, opts = {}) {
   }
 
   /*
+   * Surfaces are mutually exclusive per document, including when one contains
+   * the other's trigger. That is a deliberate contract, not a missing feature:
+   * making this loop ancestor-aware is most of a nesting implementation but
+   * not all of it. The platform closes a popover with display: none, and what
+   * that does to a descendant surface already in the top layer is unmeasured —
+   * nothing here cascades a close, so a live Escape entry and position tracker
+   * outliving their panel is the expected failure. Measure before relaxing it.
+   *
    * The others come down only once this one is up and placed. With
    * popover="manual" nothing requires the old surface to leave the top layer
    * before the new one enters it, so there is no reason to spend it before
