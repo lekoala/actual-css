@@ -220,6 +220,11 @@ several triggers and returns a release function; `isSurfaceOpen` and
 `getSurfaceAutoClose` read current state. The separate `escape` primitive adds
 visible dismissable UI to the shared per-document Escape stack.
 
+Actual-managed surfaces are mutually exclusive within a document. Opening a
+surface closes any other open Actual surface, including one containing its
+trigger. Nested surfaces are not currently supported: a panel opened from
+inside another panel replaces it rather than stacking on it.
+
 `openSurface(menu, opts)` dispatches a cancelable `actual:surface-open` event —
 widgets can veto or decorate opens, and context menus inject their own
 `source`/`restoreFocusTo` through it.

@@ -130,6 +130,9 @@ state to style or ignore.
 
 ## Honest gaps
 
+- No nested surfaces — one Actual surface is open per document, and opening one
+  closes the rest. A widget that needs a second level owns its own popup
+  (composition A above).
 - No typeahead helper — filter, debounce, render are author concerns.
 - No `aria-activedescendant` helper — the author manages the composite-widget pattern.
 - No virtual-list support.
