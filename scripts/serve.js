@@ -16,7 +16,6 @@ import { join, normalize, resolve, sep } from "node:path";
 import { readFlags } from "./utils/browser.js";
 
 const ROOT = join(import.meta.dirname, "..");
-const PROBE = "/demo/templates/popover-transport.html";
 
 const args = process.argv.slice(2);
 const { "--port": portArg } = readFlags(args, { "--port": { fallback: "3000" } });
@@ -92,4 +91,4 @@ try {
 console.log(`Serving ${ROOT}`);
 console.log(`  http://localhost:${server.port}/`);
 for (const address of lanAddresses()) console.log(`  http://${address}:${server.port}/`);
-console.log(`Popover transport probe: http://localhost:${server.port}${PROBE}`);
+console.log(`Demo pages: http://localhost:${server.port}/demo/templates/<name>.html`);
