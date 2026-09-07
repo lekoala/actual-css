@@ -58,6 +58,8 @@
 
 ### Fixed
 
+- `select.css` and `modal.css` preserve select appearance and modal body scrolling in Degraded Firefox 78–83 using `:not(:is(...))` without changing specificity.
+- `check:compat` detects direct selector lists in `:not()` while accepting lists nested in `:is()` or `:where()`.
 - The Alert class reference is one table again: a stray paragraph split it and
   left six rows rendering as literal text.
 - The badge dismiss button keeps a 24px pointer-target floor (WCAG 2.2 2.5.8)

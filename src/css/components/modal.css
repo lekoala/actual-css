@@ -86,8 +86,8 @@ dialog.modal.scrollable > .stack {
   overflow: hidden;
 }
 
-dialog.modal.scrollable > form > :not(header, footer),
-dialog.modal.scrollable > .stack > :not(header, footer) {
+dialog.modal.scrollable > form > :not(:is(header, footer)),
+dialog.modal.scrollable > .stack > :not(:is(header, footer)) {
   min-block-size: 0;
   overflow: auto;
   overscroll-behavior: contain;
