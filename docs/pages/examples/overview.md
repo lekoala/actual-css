@@ -16,6 +16,8 @@ and `actual.full.js` from `dist/`, plus the theme palettes bundle from
 - [Surface contracts](../../demo/templates/surfaces.html) - .inverted, cascade precedence, and the intent boundary
 - [Popover transport probe](../../demo/templates/popover-transport.html) - self-scoring bench for the native popover transport go/no-go
 - [Settings modal](../../demo/templates/settings-modal.html) - two-pane preferences dialog, with the local CSS it needs audited rule by rule
+- [Workspace settings](../../demo/templates/settings-pricing.html) - plans with visible native choices, preferences and a local segmented tab treatment
+- [Card compositions](../../demo/templates/card-compositions.html) - editorial, team, sign-in and horizontal cards composed from existing primitives
 - [Dashboard](../../demo/templates/dashboard.html) - data-heavy overview page
 - [App](../../demo/templates/app.html) - application shell with sidebar
 - [Marketing](../../demo/templates/marketing.html) - landing page with typography and fluid type

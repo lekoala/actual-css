@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Workspace settings - Actual CSS</title>
+  <meta name="description" content="Plans and preferences composed from native choices, cards, lists and tabs.">
+  <link rel="stylesheet" href="../../dist/actual.full.css">
+  <link rel="stylesheet" href="../assets/actual-themes.min.css">
+  <style>
+    /* Page proportions and experimental treatments belong to this demo. */
+    .workspace-page {
+      --center-size: 64rem;
+      --gap: var(--space-50);
+
+      padding-block: var(--space-60);
+    }
+
+    .workspace-options { --gap: var(--space-30); }
+    .workspace-heading { --cluster-justify: space-between; }
+    .workspace-price { font-size: var(--font-size-lg); }
+
+    /* A visible native control carries state even without :has(). The border
+       is only a second cue, shared by plan and notification surfaces. */
+    .workspace-option { cursor: pointer; }
+    .workspace-option:has(:checked) { border-color: var(--primary); }
+
+    /* A local second expression of tabs; discovery and keyboard behavior stay
+       with data-enhance and ARIA. Nothing is added to the component API. */
+    .workspace-tabs {
+      align-self: start;
+      padding: var(--space-10);
+      border: var(--border-width) solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface-subtle);
+    }
+
+    .workspace-tabs .tab { border-radius: var(--radius-sm); }
+    .workspace-tabs .tab[aria-selected="true"] {
+      background: var(--surface-raised);
+      box-shadow: var(--shadow);
+    }
+
+    .workspace-tabs .tab[aria-selected="true"]::after { content: none; }
+
+    /* System colors can suppress the selected fill and shadow. */
+    @media (forced-colors: active) {
+      .workspace-tabs .tab[aria-selected="true"] { outline: 2px solid Highlight; }
+    }
+  </style>
+</head>
+<body>
+  <main class="center stack workspace-page">
+    <header class="cluster workspace-heading">
+      <hgroup>
+        <p class="overline">North Studio / Workspace</p>
+        <h1>Make room for your next idea.</h1>
+        <p class="muted">A workspace that grows with your team.</p>
+      </hgroup>
+      <label class="choice">
+        <input class="switch" type="checkbox" role="switch" id="dark-mode">
+        <span>Dark appearance</span>
+      </label>
+    </header>
+
+    <div class="tabs workspace-tabs" role="tablist" aria-label="Workspace settings" data-enhance="tabs">
+      <button class="tab" type="button" role="tab" id="billing-tab" aria-controls="billing-panel" aria-selected="true">Plan &amp; billing</button>
+      <button class="tab" type="button" role="tab" id="preferences-tab" aria-controls="preferences-panel" aria-selected="false" tabindex="-1">Preferences</button>
+    </div>
+
+    <section class="stack" role="tabpanel" id="billing-panel" aria-labelledby="billing-tab" tabindex="-1">
+      <form class="stack" id="plan-form">
+        <fieldset class="field-group stack">
+          <legend class="field-label">Choose your plan</legend>
+          <div class="grid-3 workspace-options">
+            <label class="card workspace-option">
+              <span class="choice">
+                <input class="radio" type="radio" name="plan" value="Studio" checked aria-describedby="studio-help">
+                <span><strong>Studio</strong><span class="field-help" id="studio-help">A focused space for independent work.</span></span>
+              </span>
+              <span><strong class="workspace-price">€12</strong><span class="muted"> / month</span></span>
+              <span>3 projects · 1 member</span>
+            </label>
+            <label class="card workspace-option">
+              <span class="choice">
+                <input class="radio" type="radio" name="plan" value="Team" aria-describedby="team-help">
+                <span><strong>Team</strong><span class="field-help" id="team-help">Shared projects, feedback and a little more room.</span></span>
+              </span>
+              <span><strong class="workspace-price">€29</strong><span class="muted"> / month</span></span>
+              <span class="cluster"><span>Unlimited projects · 5 members</span><span class="badge success">Popular</span></span>
+            </label>
+            <label class="card workspace-option">
+              <span class="choice">
+                <input class="radio" type="radio" name="plan" value="Collective" aria-describedby="collective-help">
+                <span><strong>Collective</strong><span class="field-help" id="collective-help">Space for every team and every client.</span></span>
+              </span>
+              <span><strong class="workspace-price">€59</strong><span class="muted"> / month</span></span>
+              <span>Unlimited projects · 20 members</span>
+            </label>
+          </div>
+        </fieldset>
+
+        <section class="card" aria-labelledby="billing-details">
+          <header><h2 id="billing-details">Billing details</h2><span class="badge">Monthly</span></header>
+          <ul class="list">
+            <li class="list-item"><span class="list-item-content"><strong class="list-item-title">Next invoice</strong><span class="list-item-text">Your selected plan takes effect at the next renewal.</span></span><time datetime="2026-10-01">1 October</time></li>
+            <li class="list-item"><label class="list-item-content" for="invoice-email"><strong class="list-item-title">Invoice copies</strong><span class="list-item-text">Email a receipt to the workspace owner after each payment.</span></label><input class="switch" type="checkbox" role="switch" name="invoice-email" id="invoice-email" checked></li>
+          </ul>
+        </section>
+        <div class="cluster workspace-heading"><p class="muted">Preview only. No payment will be taken.</p><button class="btn primary" type="submit">Preview plan change</button></div>
+        <p role="status" id="plan-result"></p>
+      </form>
+    </section>
+
+    <section class="stack" role="tabpanel" id="preferences-panel" aria-labelledby="preferences-tab" tabindex="-1" hidden>
+      <form class="stack" id="preferences-form">
+        <fieldset class="field-group stack">
+          <legend class="field-label">Keep up with your team</legend>
+          <div class="grid-2 workspace-options">
+            <label class="card workspace-option"><span class="choice"><input class="check" type="checkbox" name="digest" checked><span><strong>Weekly digest</strong><span class="field-help">A quiet summary of project updates every Monday.</span></span></span></label>
+            <label class="card workspace-option"><span class="choice"><input class="check" type="checkbox" name="mentions"><span><strong>Mentions &amp; replies</strong><span class="field-help">Know when someone needs your input.</span></span></span></label>
+          </div>
+        </fieldset>
+        <section class="card" aria-labelledby="workspace-preferences">
+          <h2 id="workspace-preferences">Working together</h2>
+          <ul class="list">
+            <li class="list-item"><label class="list-item-content" for="presence"><strong class="list-item-title">Show my availability</strong><span class="list-item-text">Let teammates see when you are around.</span></label><input class="switch" type="checkbox" role="switch" id="presence" name="presence" checked></li>
+            <li class="list-item"><label class="list-item-content" for="timezone"><strong class="list-item-title">Time zone</strong><span class="list-item-text">Used for scheduled updates.</span></label><select class="select fit" name="timezone" id="timezone"><option>Brussels</option><option>London</option><option>New York</option></select></li>
+          </ul>
+        </section>
+        <div class="cluster workspace-heading"><p class="muted">Preferences apply to this preview only.</p><button class="btn primary" type="submit">Save preferences</button></div>
+        <p role="status" id="preferences-result"></p>
+      </form>
+    </section>
+    <footer class="cluster workspace-heading"><a href="card-compositions.html">Explore the card collection</a><a href="settings-modal.html">Open the settings modal demo</a></footer>
+  </main>
+  <script src="../../dist/actual.full.js"></script>
+  <script>
+    const appearance = document.getElementById("dark-mode");
+    appearance.checked = matchMedia("(prefers-color-scheme: dark)").matches;
+    appearance.addEventListener("change", () => {
+      document.documentElement.dataset.theme = appearance.checked ? "dark" : "light";
+    });
+    document.getElementById("plan-form").addEventListener("submit", (event) => {
+      event.preventDefault();
+      const plan = new FormData(event.currentTarget).get("plan");
+      document.getElementById("plan-result").textContent = `${plan} selected. This preview has not changed your subscription.`;
+    });
+    document.getElementById("preferences-form").addEventListener("submit", (event) => {
+      event.preventDefault();
+      document.getElementById("preferences-result").textContent = "Preferences saved for this preview. Reloading restores the defaults.";
+    });
+  </script>
+</body>
+</html>
