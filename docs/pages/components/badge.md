@@ -73,6 +73,10 @@ The shared intents are `.primary`, `.secondary`, `.success`, `.warning` and
 An autonomous dot conveys state without visible text, so give it an accessible
 name.
 
+Custom status or category dots define a custom intent (`--intent` /
+`--intent-fg`); `--ui-*` controls treatment, while empty dots intentionally
+remain solid.
+
 ## Color marker
 
 Use an empty badge as a compact intent-colored marker in legends and status
@@ -98,17 +102,17 @@ Use `.badge soft` for tag visuals. Add a direct dismiss button only when the tag
 For a compact action or filter, use `.btn.sm` instead; badges describe content
 and must not be turned into toggle controls merely to obtain a compact shape.
 
+Leave the dismiss button empty: it paints its own X, so the pattern needs no
+icon font and no text glyph. Put your own icon inside it and that content is
+used instead.
+
 ```html demo
 <span class="badge primary soft">
   Design
-  <button type="button" aria-label="Remove Design">
-    <i class="ti ti-x" aria-hidden="true"></i>
-  </button>
+  <button type="button" aria-label="Remove Design"></button>
 </span>
 <span class="badge primary soft">
-  <button type="button" aria-label="Remove Design">
-    <i class="ti ti-x" aria-hidden="true"></i>
-  </button>
+  <button type="button" aria-label="Remove Design"></button>
   Design
 </span>
 ```
@@ -120,3 +124,4 @@ and must not be turned into toggle controls merely to obtain a compact shape.
 - `--badge-dot-size` — size of an `:empty` dot badge.
 - `--badge-font-size` — label font size.
 - `--badge-pad-x` — inline padding.
+- `--badge-dismiss-icon-size` — size of the X painted by an empty dismiss button.

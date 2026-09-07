@@ -32,6 +32,7 @@
 :where(.alert) {
   --intent: initial;
   --intent-fg: initial;
+  --intent-soft-fg: initial;
   --ui-bg: initial;
   --ui-fg: initial;
   --ui-border: initial;
@@ -87,10 +88,9 @@
       var(--surface) var(--soft-border-mix),
       var(--intent, var(--neutral))
     );
-    --alert-default-fg: color-mix(
-      in oklab,
-      var(--text),
-      var(--intent, var(--text)) var(--soft-fg-mix)
+    --alert-default-fg: var(
+      --intent-soft-fg,
+      color-mix(in oklab, var(--text), var(--intent, var(--text)) var(--soft-fg-mix))
     );
     /* @sync soft-recipe */
   }

@@ -104,7 +104,10 @@
       var(--surface) var(--soft-border-mix),
       var(--intent, var(--neutral))
     );
-    --ui-fg: color-mix(in oklab, var(--text), var(--intent, var(--text)) var(--soft-fg-mix));
+    --ui-fg: var(
+      --intent-soft-fg,
+      color-mix(in oklab, var(--text), var(--intent, var(--text)) var(--soft-fg-mix))
+    );
     /* @sync soft-recipe */
   }
 

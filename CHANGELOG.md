@@ -20,6 +20,9 @@
 
 ### Changed
 
+- Soft foreground resolves per intent: the intent classes expose the
+  `--intent-soft-fg` relay backed by per-role `--*-soft-fg` theme hooks, with
+  the global `--soft-fg-mix` derivation kept as the fallback.
 - Interactive surfaces enter the top layer through `popover="manual"` instead
   of being moved to `body` or the nearest `<dialog>`.
 - `.is-open` is the only state `surface.js` writes; `prepareSurface()` removes
@@ -31,6 +34,15 @@
 
 ### Fixed
 
+- The badge dismiss button keeps a 24px pointer-target floor (WCAG 2.2 2.5.8)
+  even under `.sm` or a density override below the target size, without
+  inflating the badge itself.
+- An empty badge dismiss button paints its own X from `--icon-close`, sized by
+  `--badge-dismiss-icon-size`. The documented pattern no longer asks for an icon
+  font, and the mark is centered on its ink rather than on a text line box.
+- `.card`, `.navbar` and `.app-nav` now reset the intent tokens at their
+  boundary, so an inherited intent no longer tints a shared variant
+  (`.soft`/`.solid`/`.outline`/`.surface`) that has no local intent class.
 - A scoped theme, density, `.inverted` or application custom property now
   reaches an anchored surface through inheritance — see
   `docs/design-notes/surface-reparenting.md`.

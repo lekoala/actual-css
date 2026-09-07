@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Soft foreground intent boundary fixture</title>
+  <link rel="stylesheet" href="../../src/css/actual.full.css">
+  <style>
+    * { transition-duration: 0s !important; }
+
+    /*
+     * A non-default --soft-fg-mix means the fallback recipe is a real mix and
+     * not byte-identical to the raw intent — so the "no --*-soft-fg defined"
+     * case can assert against an element that recomputes the old recipe, not
+     * against a trivially equal color.
+     */
+    body {
+      --soft-fg-mix: 45%;
+    }
+  </style>
+</head>
+<body>
+  <!-- The old recipe, recomputed: the byte-exact fallback every component must
+       reach when no per-intent --*-soft-fg exists anywhere up the tree. -->
+  <div id="ref-fallback-fg"
+       style="color: color-mix(in oklab, var(--text), var(--primary) var(--soft-fg-mix))"></div>
+
+  <!-- Per-role channel present on the wrapper. A local intent class picks it
+       up (\#*-primary); a neutral .soft component must NOT (the boundary
+       resets --intent-soft-fg to its guaranteed-invalid initial value). -->
+  <div id="wrap" style="--primary-soft-fg: rgb(15 20 45)">
+    <button id="wrap-btn-primary" class="btn soft primary" type="button">Primary</button>
+    <span id="wrap-badge-primary" class="badge soft primary">Primary</span>
+    <div id="wrap-alert-primary" class="alert soft primary">Primary alert</div>
+    <div id="wrap-bubble-primary" class="chat-bubble soft primary">Hello</div>
+    <div id="wrap-icon-primary" class="dialog-icon soft primary"><i aria-hidden="true">*</i></div>
+    <div id="wrap-card-primary" class="card soft primary">Card</div>
+    <nav id="wrap-navbar-primary" class="navbar soft primary" aria-label="Main">
+      <ul class="navbar-nav">
+        <li><a class="nav-link" href="#">Home</a></li>
+      </ul>
+    </nav>
+    <nav id="wrap-appnav-primary" class="app-nav soft primary" aria-label="Primary">
+      <a href="#">Home</a>
+    </nav>
+
+    <button id="wrap-btn" class="btn soft" type="button">Neutral</button>
+    <span id="wrap-badge" class="badge soft">Neutral</span>
+    <div id="wrap-alert" class="alert soft">Neutral alert</div>
+    <div id="wrap-bubble" class="chat-bubble soft">Hello</div>
+    <div id="wrap-icon" class="dialog-icon soft"><i aria-hidden="true">*</i></div>
+    <div id="wrap-card" class="card soft">Card</div>
+    <nav id="wrap-navbar" class="navbar soft" aria-label="Main">
+      <ul class="navbar-nav">
+        <li><a class="nav-link" href="#">Home</a></li>
+      </ul>
+    </nav>
+    <nav id="wrap-appnav" class="app-nav soft" aria-label="Primary">
+      <a href="#">Home</a>
+    </nav>
+  </div>
+
+  <!-- No channel anywhere: the local intent must fall back to the old
+       --soft-fg-mix recipe, byte for byte. -->
+  <div id="plain">
+    <button id="plain-btn-primary" class="btn soft primary" type="button">Primary</button>
+    <span id="plain-badge-primary" class="badge soft primary">Primary</span>
+    <div id="plain-alert-primary" class="alert soft primary">Primary alert</div>
+    <div id="plain-bubble-primary" class="chat-bubble soft primary">Hello</div>
+    <div id="plain-icon-primary" class="dialog-icon soft primary"><i aria-hidden="true">*</i></div>
+    <div id="plain-card-primary" class="card soft primary">Card</div>
+    <nav id="plain-navbar-primary" class="navbar soft primary" aria-label="Main">
+      <ul class="navbar-nav">
+        <li><a class="nav-link" href="#">Home</a></li>
+      </ul>
+    </nav>
+    <nav id="plain-appnav-primary" class="app-nav soft primary" aria-label="Primary">
+      <a href="#">Home</a>
+    </nav>
+
+    <button id="plain-btn" class="btn soft" type="button">Neutral</button>
+    <span id="plain-badge" class="badge soft">Neutral</span>
+    <div id="plain-alert" class="alert soft">Neutral alert</div>
+    <div id="plain-bubble" class="chat-bubble soft">Hello</div>
+    <div id="plain-icon" class="dialog-icon soft"><i aria-hidden="true">*</i></div>
+    <div id="plain-card" class="card soft">Card</div>
+    <nav id="plain-navbar" class="navbar soft" aria-label="Main">
+      <ul class="navbar-nav">
+        <li><a class="nav-link" href="#">Home</a></li>
+      </ul>
+    </nav>
+    <nav id="plain-appnav" class="app-nav soft" aria-label="Primary">
+      <a href="#">Home</a>
+    </nav>
+  </div>
+</body>
+</html>

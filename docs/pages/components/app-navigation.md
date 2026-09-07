@@ -5,6 +5,12 @@
 Use one `.app-nav` landmark for the application's primary destinations. Links
 remain links, and `aria-current="page"` is the only current-page state.
 
+Reach for `.app-nav` only as part of a persistent application shell: it exists
+as a direct child of `.app-layout`, which turns the landmark from a bottom bar
+into side navigation. A site or webapp header with normal scrolling stays
+`.navbar` — `.app-nav` is not a stacked-icon variant of the horizontal bar. See
+[Navbar](navbar.md).
+
 **Related terms:** tab bar, bottom navigation, bottom nav, navigation rail, side navigation.
 
 ```html demo

@@ -142,6 +142,7 @@ dialog.modal.dialog-confirmation > form > footer {
 :where(.dialog-icon) {
   --intent: initial;
   --intent-fg: initial;
+  --intent-soft-fg: initial;
   --ui-bg: initial;
   --ui-fg: initial;
 }

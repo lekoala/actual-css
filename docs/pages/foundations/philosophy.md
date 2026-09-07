@@ -29,12 +29,15 @@ There is no `.btn-primary` or `.badge-success`. Intents are generic and reusable
 
 Components fall back to their own default intent when no intent class is set. Buttons, badges, and alerts use the neutral palette (`--neutral` / `--neutral-fg`) by default.
 
-Custom intents need no framework support — define `--intent` and `--intent-fg` on a class:
+Custom intents need no framework support — define `--intent` and `--intent-fg`
+(and `--intent-soft-fg` when the custom role needs its own soft foreground) on a
+class:
 
 ```css
 .tertiary {
   --intent: var(--tertiary);
   --intent-fg: var(--tertiary-fg);
+  --intent-soft-fg: var(--tertiary-soft-fg);
 }
 ```
 

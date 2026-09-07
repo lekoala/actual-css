@@ -93,6 +93,29 @@ Soft surfaces (`.btn.soft`, `.badge.soft`, and the default `.alert`) are generat
 
 `--soft-fg-mix` is the share of raw intent in soft *text*. At its `100%` default soft ink is the intent color itself, which is what a palette of dark, muted intents wants. A vivid or light palette cannot afford that: a soft badge then paints intent-tinted ink on an intent-tinted surface, and the two converge. Lowering the mix rebates the ink toward `--text`, which is the right direction in both schemes because `--text` is dark on a light theme and light on a dark one. Around `45%` a fully saturated palette recovers AA while the ink still reads as its intent.
 
+Soft ink can also be corrected per role. The intent classes relay a per-role
+hook, and the soft recipe reads it before falling back to the global mix:
+
+- `--primary-soft-fg`, `--secondary-soft-fg`, `--success-soft-fg`,
+  `--warning-soft-fg`, `--danger-soft-fg`, `--neutral-soft-fg` — **theme hooks
+  per role**; the ones whose palette needs a softer ink than the others.
+- `--intent-soft-fg` — the **current relay** (framework plumbing), set by each
+  intent class to its own `--*-soft-fg`.
+- `--soft-fg-mix` — the **global fallback derivation**, unchanged.
+
+A theme whose primary should read more muted than its statuses sets only
+`--primary-soft-fg`, and every soft `.primary` foreground follows it. Without a
+`--*-soft-fg` the recipe resolves byte-identically to the old `--soft-fg-mix`
+derivation. A custom intent class provides the relay directly:
+
+```css
+.tertiary {
+  --intent: var(--tertiary);
+  --intent-fg: var(--tertiary-fg);
+  --intent-soft-fg: var(--tertiary-soft-fg);
+}
+```
+
 **When an intent is tinted against a theme-controlled surface or border, the mix interpolates in `oklab`.** That covers the soft recipe, the checked `.choice-card` tint, and the `.overline.pill` border.
 
 Not because rectangular interpolation is more faithful to the intent hue — across the shipped presets it is a few degrees *less* faithful. A browser treats hue as powerless below a small chroma epsilon, so for the low-chroma surfaces and borders the presets actually use, a polar mix snaps cleanly onto the intent and wins.

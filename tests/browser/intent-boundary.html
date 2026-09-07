@@ -11,6 +11,7 @@
   <!-- Token references keep assertions independent from the active palette. -->
   <div id="ref-neutral" style="background: var(--neutral)"></div>
   <div id="ref-primary" style="background: var(--primary)"></div>
+  <div id="ref-danger" style="background: var(--danger)"></div>
 
   <!-- The :where(.btn) intent boundary sets --intent to its guaranteed-invalid
        initial value, so a neutral button falls back to --neutral rather than
@@ -21,6 +22,42 @@
   <!-- The boundary also blocks an intent inherited from an ancestor context. -->
   <div class="danger">
     <button id="btn-inherit" class="btn" type="button">Inside danger wrapper</button>
+
+    <!-- Shared variants read --intent / --intent-fg to paint their surface, so
+         the components whose boundary only reset --ui-* (card, navbar, app-nav)
+         let an ancestor intent through a variant — e.g. .card.soft inside .danger
+         tinted with the danger hue. Each variant must render byte-identically
+         to its plain twin outside the wrapper. -->
+    <div id="card-inherit-soft" class="card soft">Card</div>
+    <div id="card-inherit-solid" class="card solid">Card</div>
+    <nav id="navbar-inherit-soft" class="navbar soft" aria-label="Main">
+      <ul class="navbar-nav"><li><a class="nav-link" href="#">Home</a></li></ul>
+    </nav>
+    <nav id="navbar-inherit-solid" class="navbar solid" aria-label="Main">
+      <ul class="navbar-nav"><li><a class="nav-link" href="#">Home</a></li></ul>
+    </nav>
+    <nav id="appnav-inherit-soft" class="app-nav soft" aria-label="Primary">
+      <a href="#">Home</a>
+    </nav>
+    <nav id="appnav-inherit-solid" class="app-nav solid" aria-label="Primary">
+      <a href="#">Home</a>
+    </nav>
   </div>
+
+  <!-- Plain twins: same components and variants, no inherited intent. -->
+  <div id="card-plain-soft" class="card soft">Card</div>
+  <div id="card-plain-solid" class="card solid">Card</div>
+  <nav id="navbar-plain-soft" class="navbar soft" aria-label="Main">
+    <ul class="navbar-nav"><li><a class="nav-link" href="#">Home</a></li></ul>
+  </nav>
+  <nav id="navbar-plain-solid" class="navbar solid" aria-label="Main">
+    <ul class="navbar-nav"><li><a class="nav-link" href="#">Home</a></li></ul>
+  </nav>
+  <nav id="appnav-plain-soft" class="app-nav soft" aria-label="Primary">
+    <a href="#">Home</a>
+  </nav>
+  <nav id="appnav-plain-solid" class="app-nav solid" aria-label="Primary">
+    <a href="#">Home</a>
+  </nav>
 </body>
 </html>

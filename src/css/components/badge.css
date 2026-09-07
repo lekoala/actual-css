@@ -11,6 +11,7 @@
  * --badge-font-size
  * --badge-dot-size
  * --badge-radius
+ * --badge-dismiss-icon-size
  *
  * Internal:
  * --badge-default-bg
@@ -26,6 +27,7 @@
 :where(.badge) {
   --intent: initial;
   --intent-fg: initial;
+  --intent-soft-fg: initial;
   --ui-bg: initial;
   --ui-fg: initial;
   --ui-border: initial;
@@ -37,6 +39,7 @@
   --badge-pad-x: 0.55em;
   --badge-font-size: var(--font-size-xs);
   --badge-dot-size: 0.5rem;
+  --badge-dismiss-icon-size: 0.75rem;
   --badge-default-bg: var(--surface-subtle);
   --badge-default-fg: var(--intent, var(--text));
   --badge-default-border: var(--border);
@@ -85,10 +88,9 @@
       var(--surface) var(--soft-border-mix),
       var(--intent, var(--neutral))
     );
-    --badge-default-fg: color-mix(
-      in oklab,
-      var(--text),
-      var(--intent, var(--text)) var(--soft-fg-mix)
+    --badge-default-fg: var(
+      --intent-soft-fg,
+      color-mix(in oklab, var(--text), var(--intent, var(--text)) var(--soft-fg-mix))
     );
     /* @sync soft-recipe */
   }
@@ -109,8 +111,13 @@
   display: inline-grid;
   place-items: center;
   flex: 0 0 auto;
-  min-inline-size: var(--density-compact-size);
-  min-block-size: var(--density-compact-size);
+  /* WCAG 2.5.8 floors pointer targets at 24 CSS px. --density-compact-size
+     drops below that under .sm (1.25rem = 20px), and the floor is a literal
+     px value so the guarantee does not depend on the root font size. Density
+     may still keep the badge visually compact through the negative margins —
+     it just never shrinks this target under its floor. */
+  min-inline-size: max(var(--density-compact-size), 24px);
+  min-block-size: max(var(--density-compact-size), 24px);
   margin-block: -0.25rem;
   margin-inline-start: -0.15em;
   margin-inline-end: -0.45em;
@@ -122,6 +129,21 @@
   font: inherit;
   line-height: 1;
   cursor: pointer;
+}
+
+/* Dismiss mark — an empty dismiss button paints its own X from the shared
+   --icon-close mask, so no icon font or text glyph is required in the markup
+   (same contract as .alert-dismiss and .dialog-close). A mask box is a block
+   box, so place-items centers the ink itself; a text glyph would only center
+   its line box and land the ink low, because a lowercase x has no descender
+   and only x-height of ascent. A button with its own content keeps it. */
+.badge > button:empty::before {
+  content: "";
+  inline-size: var(--badge-dismiss-icon-size);
+  block-size: var(--badge-dismiss-icon-size);
+  background: currentColor;
+  -webkit-mask: var(--icon-close) center / contain no-repeat;
+  mask: var(--icon-close) center / contain no-repeat;
 }
 
 .badge > button:not(:disabled):hover {
