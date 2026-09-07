@@ -5,7 +5,8 @@
 - Use native `<details>` and `<summary>` for collapsible content.
 - Use the `name` attribute for exclusive accordions.
 - Supports any valid body element (`div`, `p`, `ul`, ...).
-- The toggle marker color is customizable with `--accordion-marker-color`; the marker icon comes from the shared `--icon-chevron` token.
+- Three container treatments: the default common shell, `.flush` (bare separators, for embedding inside an existing surface), and `.separated` (independent items).
+- The toggle marker color is customizable with `--accordion-marker-color`; it reinforces to the summary text color on hover, and the marker icon comes from the shared `--icon-chevron` token.
 
 ```html demo
 <div class="accordion">
@@ -33,6 +34,44 @@
   </details>
 </div>
 ```
+
+## Variants
+
+The default builds one raised shell around the whole group. `.flush` and `.separated` only change that chrome — they are integration modes between the component and its container, not decorative skins.
+
+- **`flush`** — the ambient box disappears and only the item separators remain, so the group sits edge to edge inside a surface that already exists: a card, a drawer, a page section. A FAQ list without a box inside a box.
+
+```html demo
+<div class="accordion flush">
+  <details open>
+    <summary>Flush keeps just the separators</summary>
+    <p>No shell: embed the group in a card, drawer, or page section.</p>
+  </details>
+
+  <details>
+    <summary>Edge to edge</summary>
+    <p>The summary and panel follow the surrounding surface's own gutter.</p>
+  </details>
+</div>
+```
+
+- **`separated`** — each `<details>` becomes its own card, for groups of standalone items.
+
+```html demo
+<div class="accordion separated">
+  <details open>
+    <summary>Each item is its own card</summary>
+    <p>Standalone items share the same gap, border, radius, and raised surface.</p>
+  </details>
+
+  <details>
+    <summary>Still native details</summary>
+    <p>Exclusive <code>name</code> groups and per-item icons work exactly as in the base component.</p>
+  </details>
+</div>
+```
+
+The accordion owns its disclosure marker; the trigger content belongs to the markup. Item accents, per-item shadows, an underlined trigger label, and alternative markers stay application recipes, not framework variants.
 
 ## Exclusive groups
 
@@ -77,4 +116,4 @@ The end marker is a shared token-based chevron; swapping it for a local icon is 
 ## CSS hooks
 
 - `--accordion-radius` — outer corner radius.
-- `--accordion-marker-color` — color of the end marker; forced-colors mode overrides it to `CanvasText`.
+- `--accordion-marker-color` — color of the end marker; it reinforces to the summary text color on hover, and forced-colors mode overrides it to `CanvasText`.

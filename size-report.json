@@ -1,12 +1,12 @@
 {
-  "totalRaw": 279916,
+  "totalRaw": 281300,
   "core": {
     "minified": 11164,
     "brotli": 2574
   },
   "full": {
-    "minified": 122170,
-    "brotli": 17718
+    "minified": 122616,
+    "brotli": 17757
   },
   "js": {
     "core": {
@@ -133,6 +133,10 @@
       "raw": 3430
     },
     {
+      "file": "components/accordion.css",
+      "raw": 3320
+    },
+    {
       "file": "components/fab.css",
       "raw": 3313
     },
@@ -251,10 +255,6 @@
     {
       "file": "components/app-nav.css",
       "raw": 1956
-    },
-    {
-      "file": "components/accordion.css",
-      "raw": 1936
     },
     {
       "file": "themes/brutalist.css",

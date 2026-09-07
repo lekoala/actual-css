@@ -488,6 +488,7 @@ derivation. A custom intent class provides the relay directly:</p>
 <li>Prefix shared variant plumbing with <code>--ui-*</code>.</li>
 <li>The shared relays <code>--ui-*</code>, <code>--intent*</code>, and <code>--density-*</code> are framework plumbing: they are classified once at framework level, not restated in every component file.</li>
 <li>Keep component-specific variants in component code when they do not generalize.</li>
+<li><code>flush</code> is a shared modifier: it removes the component's outer chrome so the component sits directly inside an existing surface (<code>.accordion.flush</code>). Reuse the term one component at a time when the same integration need appears elsewhere; <code>separated</code> stays component-local until a second real consumer exists.</li>
 <li>Do not require users to override internal tokens for ordinary theming.</li>
 <li>Promote an internal token to public only when there is a repeated, reasonable customization need.</li>
 <li>A custom property used only in a fallback position (<code>var(--x, default)</code>) and never declared is an unset extension point and must carry a classification — public, framework plumbing, or internal. <code>check:css-api</code> fails on any unclassified fallback-only property; it does not force an artificial declaration to satisfy the audit.</li>

@@ -5,6 +5,12 @@
  * or demo styles. Decorative palettes and custom markers belong outside the
  * base component.
  *
+ * Container treatments (structural chrome, not skins):
+ * - default — the common raised shell;
+ * - .flush — the shell removed, only the item separators remain, so the group
+ *   can sit directly inside an existing surface (card, drawer, page section);
+ * - .separated — each item becomes its own card.
+ *
  * Public hooks:
  * --accordion-radius
  * --accordion-marker-color
@@ -30,11 +36,14 @@
   list-style: none;
   padding: var(--space-40);
   color: var(--text);
-  font-weight: var(--font-weight-bold);
+  font-weight: var(--font-weight-medium);
 }
 
-.accordion summary:hover {
-  color: var(--primary);
+.accordion summary:hover::after {
+  /* The whole row is one focus target; reinforcing only the end marker keeps
+     the affordance on the disclosure control instead of making the whole
+     label read as a link. */
+  --accordion-marker-color: currentColor;
 }
 
 .accordion summary::-webkit-details-marker {
@@ -76,6 +85,36 @@
 .accordion details > summary + ol {
   margin: 0;
   padding-inline-start: 2rem;
+}
+
+/* Flush — the shell is dropped and only the shared item separators remain.
+   Zero inline padding puts the group edge to edge inside the surface that
+   already frames it, so no override is repeated per embedding. */
+.accordion.flush {
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+.accordion.flush summary,
+.accordion.flush details > summary + * {
+  padding-inline: 0;
+}
+
+/* Separated — each item owns a full card. The item's own border beats the
+   shared details + details separator on specificity alone, so nothing needs
+   undoing for the second item onwards. */
+.accordion.separated {
+  display: grid;
+  gap: var(--space-20);
+  border: 0;
+  background: transparent;
+}
+
+.accordion.separated > details {
+  border: var(--border-width) solid var(--border);
+  border-radius: var(--accordion-radius);
+  background: var(--surface-raised);
 }
 
 @media (forced-colors: active) {

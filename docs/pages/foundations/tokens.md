@@ -370,6 +370,7 @@ Rules:
 - Prefix shared variant plumbing with `--ui-*`.
 - The shared relays `--ui-*`, `--intent*`, and `--density-*` are framework plumbing: they are classified once at framework level, not restated in every component file.
 - Keep component-specific variants in component code when they do not generalize.
+- `flush` is a shared modifier: it removes the component's outer chrome so the component sits directly inside an existing surface (`.accordion.flush`). Reuse the term one component at a time when the same integration need appears elsewhere; `separated` stays component-local until a second real consumer exists.
 - Do not require users to override internal tokens for ordinary theming.
 - Promote an internal token to public only when there is a repeated, reasonable customization need.
 - A custom property used only in a fallback position (`var(--x, default)`) and never declared is an unset extension point and must carry a classification — public, framework plumbing, or internal. `check:css-api` fails on any unclassified fallback-only property; it does not force an artificial declaration to satisfy the audit.

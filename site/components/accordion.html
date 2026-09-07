@@ -217,7 +217,8 @@
 <li>Use native <code>&lt;details&gt;</code> and <code>&lt;summary&gt;</code> for collapsible content.</li>
 <li>Use the <code>name</code> attribute for exclusive accordions.</li>
 <li>Supports any valid body element (<code>div</code>, <code>p</code>, <code>ul</code>, ...).</li>
-<li>The toggle marker color is customizable with <code>--accordion-marker-color</code>; the marker icon comes from the shared <code>--icon-chevron</code> token.</li>
+<li>Three container treatments: the default common shell, <code>.flush</code> (bare separators, for embedding inside an existing surface), and <code>.separated</code> (independent items).</li>
+<li>The toggle marker color is customizable with <code>--accordion-marker-color</code>; it reinforces to the summary text color on hover, and the marker icon comes from the shared <code>--icon-chevron</code> token.</li>
 </ul>
 </div>
 <div class="docs-example">
@@ -275,6 +276,75 @@
   </div>
 </div>
 <div class="prose docs-prose">
+<h2 id="variants">Variants</h2>
+<p>The default builds one raised shell around the whole group. <code>.flush</code> and <code>.separated</code> only change that chrome — they are integration modes between the component and its container, not decorative skins.</p>
+<ul>
+<li><strong><code>flush</code></strong> — the ambient box disappears and only the item separators remain, so the group sits edge to edge inside a surface that already exists: a card, a drawer, a page section. A FAQ list without a box inside a box.</li>
+</ul>
+</div>
+<div class="docs-example">
+  <div class="docs-preview">
+<div class="accordion flush">
+  <details open>
+    <summary>Flush keeps just the separators</summary>
+    <p>No shell: embed the group in a card, drawer, or page section.</p>
+  </details>
+
+  <details>
+    <summary>Edge to edge</summary>
+    <p>The summary and panel follow the surrounding surface's own gutter.</p>
+  </details>
+</div>
+  </div>
+  <div class="docs-code">
+    <pre><code class="language-html">&lt;div class=&quot;accordion flush&quot;&gt;
+  &lt;details open&gt;
+    &lt;summary&gt;Flush keeps just the separators&lt;/summary&gt;
+    &lt;p&gt;No shell: embed the group in a card, drawer, or page section.&lt;/p&gt;
+  &lt;/details&gt;
+
+  &lt;details&gt;
+    &lt;summary&gt;Edge to edge&lt;/summary&gt;
+    &lt;p&gt;The summary and panel follow the surrounding surface's own gutter.&lt;/p&gt;
+  &lt;/details&gt;
+&lt;/div&gt;</code></pre>
+  </div>
+</div>
+<div class="prose docs-prose">
+<ul>
+<li><strong><code>separated</code></strong> — each <code>&lt;details&gt;</code> becomes its own card, for groups of standalone items.</li>
+</ul>
+</div>
+<div class="docs-example">
+  <div class="docs-preview">
+<div class="accordion separated">
+  <details open>
+    <summary>Each item is its own card</summary>
+    <p>Standalone items share the same gap, border, radius, and raised surface.</p>
+  </details>
+
+  <details>
+    <summary>Still native details</summary>
+    <p>Exclusive <code>name</code> groups and per-item icons work exactly as in the base component.</p>
+  </details>
+</div>
+  </div>
+  <div class="docs-code">
+    <pre><code class="language-html">&lt;div class=&quot;accordion separated&quot;&gt;
+  &lt;details open&gt;
+    &lt;summary&gt;Each item is its own card&lt;/summary&gt;
+    &lt;p&gt;Standalone items share the same gap, border, radius, and raised surface.&lt;/p&gt;
+  &lt;/details&gt;
+
+  &lt;details&gt;
+    &lt;summary&gt;Still native details&lt;/summary&gt;
+    &lt;p&gt;Exclusive &lt;code&gt;name&lt;/code&gt; groups and per-item icons work exactly as in the base component.&lt;/p&gt;
+  &lt;/details&gt;
+&lt;/div&gt;</code></pre>
+  </div>
+</div>
+<div class="prose docs-prose">
+<p>The accordion owns its disclosure marker; the trigger content belongs to the markup. Item accents, per-item shadows, an underlined trigger label, and alternative markers stay application recipes, not framework variants.</p>
 <h2 id="exclusive-groups">Exclusive groups</h2>
 </div>
 <div class="docs-example">
@@ -329,7 +399,7 @@
 <h2 id="css-hooks">CSS hooks</h2>
 <ul>
 <li><code>--accordion-radius</code> — outer corner radius.</li>
-<li><code>--accordion-marker-color</code> — color of the end marker; forced-colors mode overrides it to <code>CanvasText</code>.</li>
+<li><code>--accordion-marker-color</code> — color of the end marker; it reinforces to the summary text color on hover, and forced-colors mode overrides it to <code>CanvasText</code>.</li>
 </ul>
 
 </div>
@@ -350,6 +420,7 @@
         <nav class="scrollspy" data-enhance="scrollspy" data-scrollspy-offset="80" aria-label="On this page">
           <p class="docs-nav-group">On this page</p>
           <ul class="nav-list docs-toc-list" data-docs-toc>
+        <li><a class="nav-link" href="#variants" data-docs-toc-item data-level="2">Variants</a></li>
         <li><a class="nav-link" href="#exclusive-groups" data-docs-toc-item data-level="2">Exclusive groups</a></li>
         <li><a class="nav-link" href="#custom-markers" data-docs-toc-item data-level="2">Custom markers</a></li>
         <li><a class="nav-link" href="#css-hooks" data-docs-toc-item data-level="2">CSS hooks</a></li>
