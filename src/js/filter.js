@@ -62,7 +62,6 @@ function filterSlug(value, event) {
   const slug = normalizeText(value)
     .toLowerCase()
     .replace(/[^\p{L}\p{N}]+/gu, "-")
-    .replace(/-{2,}/g, "-")
     .replace(/^-+/, "");
 
   return keepTrailingSeparator ? slug : slug.replace(/-+$/, "");

@@ -134,7 +134,6 @@ export function connectMenu(menu, { close }) {
     released = true;
     entry.count--;
     if (entry.count <= 0) {
-      entry.focusGroup?.disconnect();
       entry.controller.abort();
       menuConnections.delete(menu);
     }

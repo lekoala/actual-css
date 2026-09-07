@@ -92,20 +92,12 @@ function onTriggerKeydown(e) {
 
   switch (e.key) {
     case "ArrowDown":
-      e.preventDefault();
-      if (!isSurfaceOpen(panel) && !openFlyout(panel, trigger)) break;
-      focusFirstMenuItem(panel);
-      break;
-    case "ArrowUp":
-      e.preventDefault();
-      if (!isSurfaceOpen(panel) && !openFlyout(panel, trigger)) break;
-      focusLastMenuItem(panel);
-      break;
     case "Home":
       e.preventDefault();
       if (!isSurfaceOpen(panel) && !openFlyout(panel, trigger)) break;
       focusFirstMenuItem(panel);
       break;
+    case "ArrowUp":
     case "End":
       e.preventDefault();
       if (!isSurfaceOpen(panel) && !openFlyout(panel, trigger)) break;
