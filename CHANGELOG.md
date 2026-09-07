@@ -4,6 +4,7 @@
 
 ### Added
 
+- `.accordion.flush` and `.accordion.separated` container treatments: bare separators for embedding inside an existing surface, and independent item cards.
 - Popover transport probe: `demo/templates/popover-transport.html`.
 - Settings modal composition demo: `demo/templates/settings-modal.html`.
 - `.list` rows accept any combination of leading, content and trailing regions.
@@ -20,6 +21,7 @@
 
 ### Changed
 
+- The accordion summary moves to `--font-weight-medium`; its hover no longer tints `--primary` and instead reinforces the end marker to the summary text color.
 - Soft foreground resolves per intent: the intent classes expose the
   `--intent-soft-fg` relay backed by per-role `--*-soft-fg` theme hooks, with
   the global `--soft-fg-mix` derivation kept as the fallback.
