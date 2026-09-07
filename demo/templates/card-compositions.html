@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Card compositions - Actual CSS</title>
+  <meta name="description" content="A small collection of editorial, team and product cards composed with Actual CSS.">
+  <link rel="stylesheet" href="../../dist/actual.full.css">
+  <link rel="stylesheet" href="../assets/actual-themes.min.css">
+  <style>
+    .collection-page {
+      --center-size: 72rem;
+      --gap: var(--space-50);
+
+      padding-block: var(--space-60);
+    }
+
+    .collection-grid { --grid-min: 26rem; }
+    .collection-heading { --cluster-justify: space-between; }
+    .collection-members { --grid-min: 12rem; }
+
+    /* This artwork is product content, kept local and independent of the
+       theme palette. .bleed owns edge geometry and corner clipping. */
+    .collection-art {
+      min-block-size: 14rem;
+      background:
+        radial-gradient(ellipse at 15% 20%, #ffcf9e, transparent 60%),
+        radial-gradient(ellipse at 80% 85%, #af6be9, transparent 65%),
+        linear-gradient(135deg, #e86894, #473587 60%, #263e68);
+    }
+
+    /* One editorial card switches its image/content pair together. The
+       outer card still owns the surface; its public padding hook removes
+       the inset and an inner stack restores it around the copy only. */
+    .collection-feature {
+      --card-pad: 0;
+      --gap: 0;
+      --switcher-threshold: 32rem;
+
+      overflow: hidden;
+    }
+
+    .collection-feature-copy {
+      --gap: var(--space-30);
+
+      padding: var(--space-40);
+    }
+  </style>
+</head>
+<body>
+  <main class="center stack collection-page">
+    <header class="cluster collection-heading">
+      <hgroup><p class="overline">North Studio / Collection</p><h1>Small spaces. Good stories.</h1><p class="muted">Work, people and ideas, brought together.</p></hgroup>
+      <label class="choice"><input class="switch" type="checkbox" role="switch" id="dark-mode"><span>Dark appearance</span></label>
+    </header>
+    <div class="grid collection-grid">
+      <article class="card">
+        <header><hgroup><p class="overline">Workspace</p><h2>Your next chapter starts here.</h2><p class="muted">A place for your projects and the people behind them.</p></hgroup></header>
+        <form class="stack" id="login-preview">
+          <div class="field"><label class="field-label" for="email">Email</label><input class="input" id="email" type="email" autocomplete="email" placeholder="you@example.com" required></div>
+          <div class="field"><label class="field-label" for="password">Password</label><input class="input" id="password" type="password" autocomplete="current-password" required></div>
+          <button class="btn primary" type="submit">Preview sign in</button>
+          <p role="status" id="login-result"></p>
+        </form>
+        <footer><small class="muted">Demo only. Nothing is sent or stored.</small><a href="settings-pricing.html">Explore plans</a></footer>
+      </article>
+
+      <article class="card">
+        <header><hgroup><p class="overline">Project journal</p><h2>A calmer Monday.</h2><p class="muted">Notes from our weekly design review.</p></hgroup><span class="badge success">On track</span></header>
+        <div class="prose"><p>We are making the workspace easier to navigate, with more room for the work that matters.</p><ol><li>Bring recent projects to the home screen.</li><li>Group notifications into one quiet digest.</li><li>Keep keyboard navigation predictable.</li><li>Review the first prototype together next week.</li></ol></div>
+        <footer><div class="avatar-stack" role="group" aria-label="Contributors"><span class="avatar"><abbr title="Ada Morgan">AM</abbr></span><span class="avatar"><abbr title="Jon Bell">JB</abbr></span><span class="avatar"><abbr title="Maya Chen">MC</abbr></span></div><time class="muted" datetime="2026-09-07">7 September</time></footer>
+      </article>
+
+      <article class="card">
+        <header><hgroup><p class="overline">People</p><h2>Made together.</h2></hgroup><span class="badge">4 members</span></header>
+        <div class="grid collection-members">
+          <div class="media"><span class="avatar" aria-hidden="true">AM</span><div><strong>Ada Morgan</strong><p class="muted">Product design</p></div></div>
+          <div class="media"><span class="avatar" aria-hidden="true">JB</span><div><strong>Jon Bell</strong><p class="muted">Engineering</p></div></div>
+          <div class="media"><span class="avatar" aria-hidden="true">MC</span><div><strong>Maya Chen</strong><p class="muted">Research</p></div></div>
+          <div class="media"><span class="avatar" aria-hidden="true">LK</span><div><strong>Leo Kim</strong><p class="muted">Creative direction</p></div></div>
+        </div>
+        <footer><span class="muted">Different skills. Shared direction.</span><a href="settings-pricing.html">Workspace settings</a></footer>
+      </article>
+
+      <article class="card">
+        <header><hgroup><p class="overline">Color study 01</p><h2>The hours between.</h2><p class="muted">Warm light, deep violet and a little room to wander.</p></hgroup></header>
+        <div class="bleed collection-art" role="img" aria-label="Abstract peach and violet gradients fading into deep blue"></div>
+      </article>
+
+      <article class="card">
+        <div class="bleed collection-art" role="img" aria-label="Abstract peach and violet color study"></div>
+        <hgroup><p class="overline">Studio edition</p><h2>Something worth keeping.</h2></hgroup>
+        <p>A monthly collection of notes, references and unfinished ideas from our studio.</p>
+        <footer><span class="badge">Issue 04</span><a class="btn outline" href="#reading-room">Read the introduction</a></footer>
+      </article>
+
+      <article class="card inverted" id="reading-room">
+        <header><hgroup><p>Reading room</p><h2>Leave space for the unexpected.</h2></hgroup></header>
+        <div class="prose"><p>The best ideas rarely arrive on schedule. They happen in the margins: a conversation, a sketch, a question nobody thought to ask.</p><p>This collection is a record of those small beginnings. Take what is useful, follow what is interesting, and make it your own.</p></div>
+        <footer><span>From the North Studio team</span><span class="badge surface">5 min read</span></footer>
+      </article>
+    </div>
+
+    <article class="card switcher collection-feature">
+      <div class="collection-art" role="img" aria-label="Soft peach and violet color study"></div>
+      <div class="stack collection-feature-copy"><p class="overline">A little more room</p><h2>Your work, at its own pace.</h2><p class="muted">Choose the space that fits your team. Start small, and grow when you are ready.</p><div class="cluster"><a class="btn primary" href="settings-pricing.html">Find your plan</a><span class="badge success">From €12 / month</span></div></div>
+    </article>
+    <footer><a href="settings-pricing.html">Explore workspace settings</a></footer>
+  </main>
+  <script>
+    const appearance = document.getElementById("dark-mode");
+    appearance.checked = matchMedia("(prefers-color-scheme: dark)").matches;
+    appearance.addEventListener("change", () => {
+      document.documentElement.dataset.theme = appearance.checked ? "dark" : "light";
+    });
+    document.getElementById("login-preview").addEventListener("submit", (event) => {
+      event.preventDefault();
+      document.getElementById("login-result").textContent = "Preview complete. No sign-in request was sent.";
+    });
+  </script>
+</body>
+</html>
