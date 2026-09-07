@@ -243,10 +243,13 @@ intent on the same element or inherited from an ancestor.</p>
 <div class="prose docs-prose">
 <p>There is no <code>.btn-primary</code> or <code>.badge-success</code>. Intents are generic and reusable across any component that supports them.</p>
 <p>Components fall back to their own default intent when no intent class is set. Buttons, badges, and alerts use the neutral palette (<code>--neutral</code> / <code>--neutral-fg</code>) by default.</p>
-<p>Custom intents need no framework support — define <code>--intent</code> and <code>--intent-fg</code> on a class:</p>
+<p>Custom intents need no framework support — define <code>--intent</code> and <code>--intent-fg</code>
+(and <code>--intent-soft-fg</code> when the custom role needs its own soft foreground) on a
+class:</p>
 <pre><code class="language-css">.tertiary {
   --intent: var(--tertiary);
   --intent-fg: var(--tertiary-fg);
+  --intent-soft-fg: var(--tertiary-soft-fg);
 }
 </code></pre>
 </div>

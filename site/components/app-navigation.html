@@ -215,6 +215,11 @@
 </blockquote>
 <p>Use one <code>.app-nav</code> landmark for the application's primary destinations. Links
 remain links, and <code>aria-current=&quot;page&quot;</code> is the only current-page state.</p>
+<p>Reach for <code>.app-nav</code> only as part of a persistent application shell: it exists
+as a direct child of <code>.app-layout</code>, which turns the landmark from a bottom bar
+into side navigation. A site or webapp header with normal scrolling stays
+<code>.navbar</code> — <code>.app-nav</code> is not a stacked-icon variant of the horizontal bar. See
+<a href="navbar.html">Navbar</a>.</p>
 <p><strong>Related terms:</strong> tab bar, bottom navigation, bottom nav, navigation rail, side navigation.</p>
 </div>
 <div class="docs-example">

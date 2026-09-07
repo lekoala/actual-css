@@ -538,36 +538,47 @@ small {
 
 /*
  * Intent classes do not style elements directly.
- * They only expose --intent and --intent-fg.
- * Components and variants decide how to consume them. Each component that
- * consumes --intent or --ui-* opens a local intent boundary in a :where()
- * block that resets exactly the tokens it consumes to initial. Parent intents
- * do not leak into nested components. Local intent classes (.primary, .danger,
- * etc.) still apply because they have higher specificity than :where().
+ * They only expose --intent, --intent-fg, and the optional per-intent soft
+ * foreground --intent-soft-fg, relayed from the per-role --*-soft-fg hooks.
+ * Those hooks ship undeclared: an unset one makes the relay itself invalid,
+ * so the soft recipe falls back to its --soft-fg-mix derivation and a theme
+ * opts in one role at a time (docs/pages/foundations/tokens.md). Components
+ * and variants decide how to consume them. Each component that consumes
+ * --intent, --intent-soft-fg or --ui-* opens a local intent boundary in a
+ * :where() block that resets exactly the tokens it consumes to initial.
+ * Parent intents do not leak into nested components. Local intent classes
+ * (.primary, .danger, etc.) still apply because they have higher specificity
+ * than :where().
  */
 .primary {
   --intent: var(--primary);
   --intent-fg: var(--primary-fg);
+  --intent-soft-fg: var(--primary-soft-fg);
 }
 .secondary {
   --intent: var(--secondary);
   --intent-fg: var(--secondary-fg);
+  --intent-soft-fg: var(--secondary-soft-fg);
 }
 .success {
   --intent: var(--success);
   --intent-fg: var(--success-fg);
+  --intent-soft-fg: var(--success-soft-fg);
 }
 .warning {
   --intent: var(--warning);
   --intent-fg: var(--warning-fg);
+  --intent-soft-fg: var(--warning-soft-fg);
 }
 .danger {
   --intent: var(--danger);
   --intent-fg: var(--danger-fg);
+  --intent-soft-fg: var(--danger-soft-fg);
 }
 .neutral {
   --intent: var(--neutral);
   --intent-fg: var(--neutral-fg);
+  --intent-soft-fg: var(--neutral-soft-fg);
 }
 
 /* Paint an inherited or local intent on a simple foreground element without
@@ -682,7 +693,10 @@ small {
       var(--surface) var(--soft-border-mix),
       var(--intent, var(--neutral))
     );
-    --ui-fg: color-mix(in oklab, var(--text), var(--intent, var(--text)) var(--soft-fg-mix));
+    --ui-fg: var(
+      --intent-soft-fg,
+      color-mix(in oklab, var(--text), var(--intent, var(--text)) var(--soft-fg-mix))
+    );
     /* @sync soft-recipe */
   }
 

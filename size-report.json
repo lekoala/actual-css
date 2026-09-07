@@ -1,12 +1,12 @@
 {
-  "totalRaw": 277081,
+  "totalRaw": 279916,
   "core": {
-    "minified": 10886,
-    "brotli": 2547
+    "minified": 11164,
+    "brotli": 2574
   },
   "full": {
-    "minified": 121175,
-    "brotli": 17673
+    "minified": 122170,
+    "brotli": 17718
   },
   "js": {
     "core": {
@@ -30,15 +30,15 @@
     },
     {
       "file": "components/modal.css",
-      "raw": 9494
+      "raw": 9523
     },
     {
       "file": "components/alert.css",
-      "raw": 7856
+      "raw": 7902
     },
     {
       "file": "components/button.css",
-      "raw": 7482
+      "raw": 7511
     },
     {
       "file": "core/theme.css",
@@ -46,7 +46,11 @@
     },
     {
       "file": "components/flyout.css",
-      "raw": 6900
+      "raw": 6903
+    },
+    {
+      "file": "components/badge.css",
+      "raw": 6407
     },
     {
       "file": "forms/choice.css",
@@ -61,10 +65,6 @@
       "raw": 5400
     },
     {
-      "file": "components/badge.css",
-      "raw": 5152
-    },
-    {
       "file": "typography/prose.css",
       "raw": 5104
     },
@@ -74,11 +74,11 @@
     },
     {
       "file": "components/tooltip.css",
-      "raw": 4710
+      "raw": 4716
     },
     {
       "file": "core/variants.css",
-      "raw": 4671
+      "raw": 4712
     },
     {
       "file": "layout/column-layout.css",
@@ -93,16 +93,16 @@
       "raw": 4487
     },
     {
+      "file": "components/card.css",
+      "raw": 4458
+    },
+    {
       "file": "utilities/extra.css",
       "raw": 4403
     },
     {
       "file": "forms/switch.css",
       "raw": 4121
-    },
-    {
-      "file": "components/card.css",
-      "raw": 4103
     },
     {
       "file": "themes/gradient.css",
@@ -157,6 +157,10 @@
       "raw": 2909
     },
     {
+      "file": "components/navbar.css",
+      "raw": 2691
+    },
+    {
       "file": "forms/validation.css",
       "raw": 2690
     },
@@ -201,10 +205,6 @@
       "raw": 2362
     },
     {
-      "file": "components/navbar.css",
-      "raw": 2336
-    },
-    {
       "file": "themes/index.css",
       "raw": 2325
     },
@@ -225,16 +225,16 @@
       "raw": 2150
     },
     {
+      "file": "components/chat.css",
+      "raw": 2147
+    },
+    {
       "file": "themes/ocean.css",
       "raw": 2144
     },
     {
       "file": "components/meter.css",
       "raw": 2122
-    },
-    {
-      "file": "components/chat.css",
-      "raw": 2118
     },
     {
       "file": "themes/mono.css",
@@ -249,16 +249,20 @@
       "raw": 2052
     },
     {
+      "file": "components/app-nav.css",
+      "raw": 1956
+    },
+    {
       "file": "components/accordion.css",
       "raw": 1936
     },
     {
-      "file": "components/app-nav.css",
-      "raw": 1882
-    },
-    {
       "file": "themes/brutalist.css",
       "raw": 1758
+    },
+    {
+      "file": "core/intents.css",
+      "raw": 1742
     },
     {
       "file": "layout/sidebar-layout.css",
@@ -331,10 +335,6 @@
     {
       "file": "themes/dim.css",
       "raw": 1184
-    },
-    {
-      "file": "core/intents.css",
-      "raw": 1129
     },
     {
       "file": "themes/indigo.css",

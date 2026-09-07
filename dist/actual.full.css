@@ -542,36 +542,47 @@ small {
 
 /*
  * Intent classes do not style elements directly.
- * They only expose --intent and --intent-fg.
- * Components and variants decide how to consume them. Each component that
- * consumes --intent or --ui-* opens a local intent boundary in a :where()
- * block that resets exactly the tokens it consumes to initial. Parent intents
- * do not leak into nested components. Local intent classes (.primary, .danger,
- * etc.) still apply because they have higher specificity than :where().
+ * They only expose --intent, --intent-fg, and the optional per-intent soft
+ * foreground --intent-soft-fg, relayed from the per-role --*-soft-fg hooks.
+ * Those hooks ship undeclared: an unset one makes the relay itself invalid,
+ * so the soft recipe falls back to its --soft-fg-mix derivation and a theme
+ * opts in one role at a time (docs/pages/foundations/tokens.md). Components
+ * and variants decide how to consume them. Each component that consumes
+ * --intent, --intent-soft-fg or --ui-* opens a local intent boundary in a
+ * :where() block that resets exactly the tokens it consumes to initial.
+ * Parent intents do not leak into nested components. Local intent classes
+ * (.primary, .danger, etc.) still apply because they have higher specificity
+ * than :where().
  */
 .primary {
   --intent: var(--primary);
   --intent-fg: var(--primary-fg);
+  --intent-soft-fg: var(--primary-soft-fg);
 }
 .secondary {
   --intent: var(--secondary);
   --intent-fg: var(--secondary-fg);
+  --intent-soft-fg: var(--secondary-soft-fg);
 }
 .success {
   --intent: var(--success);
   --intent-fg: var(--success-fg);
+  --intent-soft-fg: var(--success-soft-fg);
 }
 .warning {
   --intent: var(--warning);
   --intent-fg: var(--warning-fg);
+  --intent-soft-fg: var(--warning-soft-fg);
 }
 .danger {
   --intent: var(--danger);
   --intent-fg: var(--danger-fg);
+  --intent-soft-fg: var(--danger-soft-fg);
 }
 .neutral {
   --intent: var(--neutral);
   --intent-fg: var(--neutral-fg);
+  --intent-soft-fg: var(--neutral-soft-fg);
 }
 
 /* Paint an inherited or local intent on a simple foreground element without
@@ -686,7 +697,10 @@ small {
       var(--surface) var(--soft-border-mix),
       var(--intent, var(--neutral))
     );
-    --ui-fg: color-mix(in oklab, var(--text), var(--intent, var(--text)) var(--soft-fg-mix));
+    --ui-fg: var(
+      --intent-soft-fg,
+      color-mix(in oklab, var(--text), var(--intent, var(--text)) var(--soft-fg-mix))
+    );
     /* @sync soft-recipe */
   }
 
@@ -3322,6 +3336,7 @@ small {
 :where(.btn) {
   --intent: initial;
   --intent-fg: initial;
+  --intent-soft-fg: initial;
   --ui-bg: initial;
   --ui-fg: initial;
   --ui-border: initial;
@@ -3547,6 +3562,7 @@ a.btn[aria-disabled="true"] {
  * --badge-font-size
  * --badge-dot-size
  * --badge-radius
+ * --badge-dismiss-icon-size
  *
  * Internal:
  * --badge-default-bg
@@ -3562,6 +3578,7 @@ a.btn[aria-disabled="true"] {
 :where(.badge) {
   --intent: initial;
   --intent-fg: initial;
+  --intent-soft-fg: initial;
   --ui-bg: initial;
   --ui-fg: initial;
   --ui-border: initial;
@@ -3573,6 +3590,7 @@ a.btn[aria-disabled="true"] {
   --badge-pad-x: 0.55em;
   --badge-font-size: var(--font-size-xs);
   --badge-dot-size: 0.5rem;
+  --badge-dismiss-icon-size: 0.75rem;
   --badge-default-bg: var(--surface-subtle);
   --badge-default-fg: var(--intent, var(--text));
   --badge-default-border: var(--border);
@@ -3621,10 +3639,9 @@ a.btn[aria-disabled="true"] {
       var(--surface) var(--soft-border-mix),
       var(--intent, var(--neutral))
     );
-    --badge-default-fg: color-mix(
-      in oklab,
-      var(--text),
-      var(--intent, var(--text)) var(--soft-fg-mix)
+    --badge-default-fg: var(
+      --intent-soft-fg,
+      color-mix(in oklab, var(--text), var(--intent, var(--text)) var(--soft-fg-mix))
     );
     /* @sync soft-recipe */
   }
@@ -3645,8 +3662,13 @@ a.btn[aria-disabled="true"] {
   display: inline-grid;
   place-items: center;
   flex: 0 0 auto;
-  min-inline-size: var(--density-compact-size);
-  min-block-size: var(--density-compact-size);
+  /* WCAG 2.5.8 floors pointer targets at 24 CSS px. --density-compact-size
+     drops below that under .sm (1.25rem = 20px), and the floor is a literal
+     px value so the guarantee does not depend on the root font size. Density
+     may still keep the badge visually compact through the negative margins —
+     it just never shrinks this target under its floor. */
+  min-inline-size: max(var(--density-compact-size), 24px);
+  min-block-size: max(var(--density-compact-size), 24px);
   margin-block: -0.25rem;
   margin-inline-start: -0.15em;
   margin-inline-end: -0.45em;
@@ -3658,6 +3680,21 @@ a.btn[aria-disabled="true"] {
   font: inherit;
   line-height: 1;
   cursor: pointer;
+}
+
+/* Dismiss mark — an empty dismiss button paints its own X from the shared
+   --icon-close mask, so no icon font or text glyph is required in the markup
+   (same contract as .alert-dismiss and .dialog-close). A mask box is a block
+   box, so place-items centers the ink itself; a text glyph would only center
+   its line box and land the ink low, because a lowercase x has no descender
+   and only x-height of ascent. A button with its own content keeps it. */
+.badge > button:empty::before {
+  content: "";
+  inline-size: var(--badge-dismiss-icon-size);
+  block-size: var(--badge-dismiss-icon-size);
+  background: currentColor;
+  -webkit-mask: var(--icon-close) center / contain no-repeat;
+  mask: var(--icon-close) center / contain no-repeat;
 }
 
 .badge > button:not(:disabled):hover {
@@ -3762,6 +3799,7 @@ a.badge[aria-disabled="true"] {
 :where(.alert) {
   --intent: initial;
   --intent-fg: initial;
+  --intent-soft-fg: initial;
   --ui-bg: initial;
   --ui-fg: initial;
   --ui-border: initial;
@@ -3817,10 +3855,9 @@ a.badge[aria-disabled="true"] {
       var(--surface) var(--soft-border-mix),
       var(--intent, var(--neutral))
     );
-    --alert-default-fg: color-mix(
-      in oklab,
-      var(--text),
-      var(--intent, var(--text)) var(--soft-fg-mix)
+    --alert-default-fg: var(
+      --intent-soft-fg,
+      color-mix(in oklab, var(--text), var(--intent, var(--text)) var(--soft-fg-mix))
     );
     /* @sync soft-recipe */
   }
@@ -4058,8 +4095,15 @@ a.badge[aria-disabled="true"] {
  * --busy-overlay-bg
  */
 /* Intent boundary — inherited intents do not tint this component.
-   Local intent classes still win because :where() has zero specificity. */
+   Local intent classes still win because :where() has zero specificity.
+   The intent tokens are reset alongside --ui-*: the shared variants
+   (.soft/.solid/.outline/.surface) read --intent / --intent-fg / --intent-soft-fg
+   when they paint this surface, so an ancestor intent would otherwise leak
+   through a variant that has no local intent class. */
 :where(.card) {
+  --intent: initial;
+  --intent-fg: initial;
+  --intent-soft-fg: initial;
   --ui-bg: initial;
   --ui-fg: initial;
   --ui-border: initial;
@@ -4378,6 +4422,7 @@ dialog.modal.dialog-confirmation > form > footer {
 :where(.dialog-icon) {
   --intent: initial;
   --intent-fg: initial;
+  --intent-soft-fg: initial;
   --ui-bg: initial;
   --ui-fg: initial;
 }
@@ -4771,7 +4816,7 @@ dialog.drawer > form > header {
  *
  * Internal:
  * --menu-item-size (derived from --control-size for menu rows)
- * --available-height (measured by floating.js)
+ * --available-height (measured by the positioner)
  * --surface-anchor-width (measured by surface.js)
  */
 
@@ -5118,8 +5163,8 @@ dialog.drawer > form > header {
  * --tooltip-arrow-size
  *
  * Internal:
- * --arrow-x (arrow position, written by floating.js)
- * --arrow-y (arrow position, written by floating.js)
+ * --arrow-x (arrow position, written by the positioner)
+ * --arrow-y (arrow position, written by the positioner)
  */
 .tooltip {
   --tooltip-bg: var(--surface-solid);
@@ -6091,6 +6136,7 @@ a.avatar[aria-disabled="true"] {
 :where(.chat-bubble) {
   --intent: initial;
   --intent-fg: initial;
+  --intent-soft-fg: initial;
   --ui-bg: initial;
   --ui-fg: initial;
   --ui-border: initial;
@@ -6722,6 +6768,9 @@ a.avatar[aria-disabled="true"] {
  * --app-nav-gap
  */
 :where(.app-nav) {
+  --intent: initial;
+  --intent-fg: initial;
+  --intent-soft-fg: initial;
   --ui-bg: initial;
   --ui-fg: initial;
   --ui-border: initial;
@@ -6800,8 +6849,15 @@ a.avatar[aria-disabled="true"] {
  * --gap (local value for the shared gap token)
  */
 /* Intent boundary — inherited intents do not tint this component.
-   Local intent classes still win because :where() has zero specificity. */
+   Local intent classes still win because :where() has zero specificity.
+   The intent tokens are reset alongside --ui-*: the shared variants
+   (.soft/.solid/.outline/.surface) read --intent / --intent-fg / --intent-soft-fg
+   when they paint this surface, so an ancestor intent would otherwise leak
+   through a variant that has no local intent class. */
 :where(.navbar) {
+  --intent: initial;
+  --intent-fg: initial;
+  --intent-soft-fg: initial;
   --ui-bg: initial;
   --ui-fg: initial;
   --ui-border: initial;

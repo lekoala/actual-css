@@ -16,6 +16,13 @@ the specialized persistent application-shell behavior those APIs describe.
 flex list, `.nav-list` a vertical grid. Putting both on one element resolves to
 `.nav-list` (vertical) — pick one per container.
 
+`.navbar` stays the horizontal bar for a site or webapp header with a brand and
+normal document scrolling. `.app-nav` is not merely a stacked-icon flavour of it:
+reach for that component only when the destinations are part of a persistent
+application shell — bottom navigation or labelled side navigation via
+`.app-layout`. The choice follows the shell contract, not a preference for
+icons. See [App Navigation](app-navigation.md).
+
 ## Class reference
 
 | Class           | Kind        | Description                                           |
@@ -50,6 +57,10 @@ horizontal `.navbar` for the desktop bar and compose the mobile experience from
 a `.drawer` with a vertical `.nav-list`, opened by a `command="show-modal"` /
 `commandfor` trigger. Keep that trigger outside the `<nav>` subtree you hide at
 narrow widths, or hiding the nav hides the control that opens it.
+
+When the compact layout drops labels, keep that text in the DOM and hide it
+visually instead of replacing it with `aria-label` strings: one source for the
+accessible name.
 
 ```html demo
 <nav class="navbar" aria-label="Main">

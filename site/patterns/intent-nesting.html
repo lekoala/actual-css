@@ -6,7 +6,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Intent Nesting — Actual CSS</title>
-  <meta name="description" content="Intent on an ancestor must not tint nested components, and a local intent inside an intent-carrying ancestor must win. Both directions are verified in tests/css-audit.test.js and the kitchen-sink demo template. Intent classes only expose --intent and --intent-fg; each consuming component opens a local intent boundary in a :where() block that resets exactly the tokens it consumes to initial. Parent intents do not leak into nested components, and a local intent class still wins because it has higher specificity than :where().">
+  <meta name="description" content="Intent on an ancestor must not tint nested components, and a local intent inside an intent-carrying ancestor must win. Both directions are verified in tests/css-audit.test.js, tests/browser/intent-boundary.test.js, tests/browser/soft-boundary.test.js and the kitchen-sink demo template. Intent classes expose --intent, --intent-fg, and the soft-foreground relay --intent-soft-fg; each consuming component opens a local intent boundary in a :where() block that resets exactly the tokens it consumes to initial. Parent intents do not leak into nested components, and a local intent class still wins because it has higher specificity than :where().">
   <link rel="stylesheet" href="../../src/css/actual.full.css">
   <link rel="stylesheet" href="../assets/actual-themes.min.css">
   <link rel="stylesheet" href="../../scripts/docs/assets/docs.css">
@@ -210,7 +210,7 @@
 
           <div class="prose docs-prose">
 <h1 id="intent-nesting">Intent Nesting</h1>
-<p>Intent on an ancestor must not tint nested components, and a local intent inside an intent-carrying ancestor must win. Both directions are verified in <code>tests/css-audit.test.js</code> and the kitchen-sink demo template. Intent classes only expose <code>--intent</code> and <code>--intent-fg</code>; each consuming component opens a local intent boundary in a <code>:where()</code> block that resets exactly the tokens it consumes to initial. Parent intents do not leak into nested components, and a local intent class still wins because it has higher specificity than <code>:where()</code>.</p>
+<p>Intent on an ancestor must not tint nested components, and a local intent inside an intent-carrying ancestor must win. Both directions are verified in <code>tests/css-audit.test.js</code>, <code>tests/browser/intent-boundary.test.js</code>, <code>tests/browser/soft-boundary.test.js</code> and the kitchen-sink demo template. Intent classes expose <code>--intent</code>, <code>--intent-fg</code>, and the soft-foreground relay <code>--intent-soft-fg</code>; each consuming component opens a local intent boundary in a <code>:where()</code> block that resets exactly the tokens it consumes to initial. Parent intents do not leak into nested components, and a local intent class still wins because it has higher specificity than <code>:where()</code>.</p>
 
 </div>
 

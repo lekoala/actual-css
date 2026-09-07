@@ -280,6 +280,26 @@
 }
 </code></pre>
 <p><code>--soft-fg-mix</code> is the share of raw intent in soft <em>text</em>. At its <code>100%</code> default soft ink is the intent color itself, which is what a palette of dark, muted intents wants. A vivid or light palette cannot afford that: a soft badge then paints intent-tinted ink on an intent-tinted surface, and the two converge. Lowering the mix rebates the ink toward <code>--text</code>, which is the right direction in both schemes because <code>--text</code> is dark on a light theme and light on a dark one. Around <code>45%</code> a fully saturated palette recovers AA while the ink still reads as its intent.</p>
+<p>Soft ink can also be corrected per role. The intent classes relay a per-role
+hook, and the soft recipe reads it before falling back to the global mix:</p>
+<ul>
+<li><code>--primary-soft-fg</code>, <code>--secondary-soft-fg</code>, <code>--success-soft-fg</code>,
+<code>--warning-soft-fg</code>, <code>--danger-soft-fg</code>, <code>--neutral-soft-fg</code> — <strong>theme hooks
+per role</strong>; the ones whose palette needs a softer ink than the others.</li>
+<li><code>--intent-soft-fg</code> — the <strong>current relay</strong> (framework plumbing), set by each
+intent class to its own <code>--*-soft-fg</code>.</li>
+<li><code>--soft-fg-mix</code> — the <strong>global fallback derivation</strong>, unchanged.</li>
+</ul>
+<p>A theme whose primary should read more muted than its statuses sets only
+<code>--primary-soft-fg</code>, and every soft <code>.primary</code> foreground follows it. Without a
+<code>--*-soft-fg</code> the recipe resolves byte-identically to the old <code>--soft-fg-mix</code>
+derivation. A custom intent class provides the relay directly:</p>
+<pre><code class="language-css">.tertiary {
+  --intent: var(--tertiary);
+  --intent-fg: var(--tertiary-fg);
+  --intent-soft-fg: var(--tertiary-soft-fg);
+}
+</code></pre>
 <p><strong>When an intent is tinted against a theme-controlled surface or border, the mix interpolates in <code>oklab</code>.</strong> That covers the soft recipe, the checked <code>.choice-card</code> tint, and the <code>.overline.pill</code> border.</p>
 <p>Not because rectangular interpolation is more faithful to the intent hue — across the shipped presets it is a few degrees <em>less</em> faithful. A browser treats hue as powerless below a small chroma epsilon, so for the low-chroma surfaces and borders the presets actually use, a polar mix snaps cleanly onto the intent and wins.</p>
 <p>The reason is continuity. A theme owns <code>--surface</code> and <code>--border</code>, and may put them anywhere from achromatic to vivid. Under polar interpolation that range contains a cliff: below the epsilon the mix tracks the intent, above it the surface hue starts winning, and crossing it moves the result into a different color family — 116 degrees, a soft <code>.secondary</code> landing in the greens. Cartesian interpolation responds smoothly across the whole range a public token allows. A recipe that is only correct while an adopter's surface stays under an unstated, implementation-defined threshold is not a contract, so the framework trades a small continuous error for a predictable one. The present cost is imperceptible: the largest difference the rule introduces in any preset is 3/255 on one channel.</p>

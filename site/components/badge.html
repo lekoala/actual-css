@@ -318,6 +318,9 @@ full-width badge is intentional.</p>
 <div class="prose docs-prose">
 <p>An autonomous dot conveys state without visible text, so give it an accessible
 name.</p>
+<p>Custom status or category dots define a custom intent (<code>--intent</code> /
+<code>--intent-fg</code>); <code>--ui-*</code> controls treatment, while empty dots intentionally
+remain solid.</p>
 <h2 id="color-marker">Color marker</h2>
 <p>Use an empty badge as a compact intent-colored marker in legends and status
 labels. When adjacent text carries the same information, keep the marker
@@ -353,33 +356,28 @@ Regular</code></pre>
 <p>Use <code>.badge soft</code> for tag visuals. Add a direct dismiss button only when the tag can actually be removed. There is no separate chip component.
 For a compact action or filter, use <code>.btn.sm</code> instead; badges describe content
 and must not be turned into toggle controls merely to obtain a compact shape.</p>
+<p>Leave the dismiss button empty: it paints its own X, so the pattern needs no
+icon font and no text glyph. Put your own icon inside it and that content is
+used instead.</p>
 </div>
 <div class="docs-example">
   <div class="docs-preview">
 <span class="badge primary soft">
   Design
-  <button type="button" aria-label="Remove Design">
-    <i class="ti ti-x" aria-hidden="true"></i>
-  </button>
+  <button type="button" aria-label="Remove Design"></button>
 </span>
 <span class="badge primary soft">
-  <button type="button" aria-label="Remove Design">
-    <i class="ti ti-x" aria-hidden="true"></i>
-  </button>
+  <button type="button" aria-label="Remove Design"></button>
   Design
 </span>
   </div>
   <div class="docs-code">
     <pre><code class="language-html">&lt;span class=&quot;badge primary soft&quot;&gt;
   Design
-  &lt;button type=&quot;button&quot; aria-label=&quot;Remove Design&quot;&gt;
-    &lt;i class=&quot;ti ti-x&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;
-  &lt;/button&gt;
+  &lt;button type=&quot;button&quot; aria-label=&quot;Remove Design&quot;&gt;&lt;/button&gt;
 &lt;/span&gt;
 &lt;span class=&quot;badge primary soft&quot;&gt;
-  &lt;button type=&quot;button&quot; aria-label=&quot;Remove Design&quot;&gt;
-    &lt;i class=&quot;ti ti-x&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;
-  &lt;/button&gt;
+  &lt;button type=&quot;button&quot; aria-label=&quot;Remove Design&quot;&gt;&lt;/button&gt;
   Design
 &lt;/span&gt;</code></pre>
   </div>
@@ -392,6 +390,7 @@ and must not be turned into toggle controls merely to obtain a compact shape.</p
 <li><code>--badge-dot-size</code> — size of an <code>:empty</code> dot badge.</li>
 <li><code>--badge-font-size</code> — label font size.</li>
 <li><code>--badge-pad-x</code> — inline padding.</li>
+<li><code>--badge-dismiss-icon-size</code> — size of the X painted by an empty dismiss button.</li>
 </ul>
 
 </div>

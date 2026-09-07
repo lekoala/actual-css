@@ -226,6 +226,12 @@ the specialized persistent application-shell behavior those APIs describe.</p>
 <p><code>.navbar-nav</code> and <code>.nav-list</code> are mutually exclusive: <code>.navbar-nav</code> is a horizontal
 flex list, <code>.nav-list</code> a vertical grid. Putting both on one element resolves to
 <code>.nav-list</code> (vertical) — pick one per container.</p>
+<p><code>.navbar</code> stays the horizontal bar for a site or webapp header with a brand and
+normal document scrolling. <code>.app-nav</code> is not merely a stacked-icon flavour of it:
+reach for that component only when the destinations are part of a persistent
+application shell — bottom navigation or labelled side navigation via
+<code>.app-layout</code>. The choice follows the shell contract, not a preference for
+icons. See <a href="app-navigation.html">App Navigation</a>.</p>
 <h2 id="class-reference">Class reference</h2>
 <div class="table-wrap"><table class="table">
 <thead>
@@ -273,6 +279,9 @@ horizontal <code>.navbar</code> for the desktop bar and compose the mobile exper
 a <code>.drawer</code> with a vertical <code>.nav-list</code>, opened by a <code>command=&quot;show-modal&quot;</code> /
 <code>commandfor</code> trigger. Keep that trigger outside the <code>&lt;nav&gt;</code> subtree you hide at
 narrow widths, or hiding the nav hides the control that opens it.</p>
+<p>When the compact layout drops labels, keep that text in the DOM and hide it
+visually instead of replacing it with <code>aria-label</code> strings: one source for the
+accessible name.</p>
 </div>
 <div class="docs-example">
   <div class="docs-preview">

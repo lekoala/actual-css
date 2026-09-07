@@ -26,8 +26,15 @@
  * --busy-overlay-bg
  */
 /* Intent boundary — inherited intents do not tint this component.
-   Local intent classes still win because :where() has zero specificity. */
+   Local intent classes still win because :where() has zero specificity.
+   The intent tokens are reset alongside --ui-*: the shared variants
+   (.soft/.solid/.outline/.surface) read --intent / --intent-fg / --intent-soft-fg
+   when they paint this surface, so an ancestor intent would otherwise leak
+   through a variant that has no local intent class. */
 :where(.card) {
+  --intent: initial;
+  --intent-fg: initial;
+  --intent-soft-fg: initial;
   --ui-bg: initial;
   --ui-fg: initial;
   --ui-border: initial;

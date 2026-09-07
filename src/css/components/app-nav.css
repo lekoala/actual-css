@@ -8,6 +8,9 @@
  * --app-nav-gap
  */
 :where(.app-nav) {
+  --intent: initial;
+  --intent-fg: initial;
+  --intent-soft-fg: initial;
   --ui-bg: initial;
   --ui-fg: initial;
   --ui-border: initial;
