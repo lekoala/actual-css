@@ -350,6 +350,57 @@ describe("enhancement-loader", () => {
   });
 
   describe("loadScript / loadStyle helpers", () => {
+    test("loadScript evicts a failed load and starts fresh on retry", async () => {
+      setupTestDOM("");
+      const { loadScript } = await import("../src/js/enhancement-loader.js");
+      const url = "https://example.test/vendor.js";
+
+      const first = loadScript(url);
+      await expect(first).rejects.toThrow(`Unable to load script: ${url}`);
+      expect(
+        document.head.querySelector('script[src="https://example.test/vendor.js"]'),
+      ).toBeNull();
+
+      const retry = loadScript(url);
+      expect(retry).not.toBe(first);
+      await expect(retry).rejects.toThrow(`Unable to load script: ${url}`);
+    });
+
+    test("loadStyle evicts a failed load and starts fresh on retry", async () => {
+      setupTestDOM("");
+      const { loadStyle } = await import("../src/js/enhancement-loader.js");
+      const url = "https://example.test/theme.css";
+
+      const first = loadStyle(url);
+      const link = document.head.querySelector('link[rel="stylesheet"]');
+      expect(link.href).toBe(url);
+
+      link.dispatchEvent(new Event("error"));
+      await expect(first).rejects.toThrow(`Unable to load style: ${url}`);
+      expect(link.isConnected).toBe(false);
+
+      const retry = loadStyle(url);
+      expect(retry).not.toBe(first);
+      const replacement = document.head.querySelector('link[rel="stylesheet"]');
+      expect(replacement).not.toBe(link);
+      expect(replacement.href).toBe(url);
+    });
+
+    test("loadStyle keeps a successful load cached", async () => {
+      setupTestDOM("");
+      const { loadStyle } = await import("../src/js/enhancement-loader.js");
+      const url = "https://example.test/theme.css";
+
+      const first = loadStyle(url);
+      const link = document.head.querySelector('link[rel="stylesheet"]');
+      const loaded = new Event("load");
+      link.dispatchEvent(loaded);
+
+      await expect(first).resolves.toBe(loaded);
+      expect(loadStyle(url)).toBe(first);
+      expect(document.head.querySelector('link[rel="stylesheet"]')).toBe(link);
+    });
+
     test("loadScript deduplicates by URL", async () => {
       setupTestDOM("");
 

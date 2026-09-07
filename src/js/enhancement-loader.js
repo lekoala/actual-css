@@ -29,51 +29,45 @@ const styleLoads = new Map();
 
 let moduleImporter = (url) => import(url);
 
-export function loadScript(url) {
+function loadAsset(url, loads, kind) {
   const absoluteUrl = new URL(url, document.baseURI).href;
 
-  if (!scriptLoads.has(absoluteUrl)) {
-    scriptLoads.set(
-      absoluteUrl,
-      new Promise((resolve, reject) => {
-        const script = document.createElement("script");
-        script.src = absoluteUrl;
-        script.onload = resolve;
-        script.onerror = () => {
-          scriptLoads.delete(absoluteUrl);
-          script.remove();
-          reject(new Error(`Unable to load script: ${absoluteUrl}`));
-        };
-        document.head.append(script);
-      }),
-    );
+  if (!loads.has(absoluteUrl)) {
+    const pending = new Promise((resolve, reject) => {
+      const element = document.createElement(kind === "script" ? "script" : "link");
+      if (kind === "script") {
+        element.src = absoluteUrl;
+      } else {
+        element.rel = "stylesheet";
+        element.href = absoluteUrl;
+      }
+      element.onload = resolve;
+      element.onerror = () => {
+        element.remove();
+        reject(new Error(`Unable to load ${kind}: ${absoluteUrl}`));
+      };
+      document.head.append(element);
+    });
+
+    // The DOM clears the failed element; the cache evicts the rejected
+    // promise. The guard keeps a finished load from wiping out a newer one.
+    // A catch never runs synchronously, so the eviction always lands after
+    // the `set` above, even when the transport rejects during append.
+    loads.set(absoluteUrl, pending);
+    pending.catch(() => {
+      if (loads.get(absoluteUrl) === pending) loads.delete(absoluteUrl);
+    });
   }
 
-  return scriptLoads.get(absoluteUrl);
+  return loads.get(absoluteUrl);
+}
+
+export function loadScript(url) {
+  return loadAsset(url, scriptLoads, "script");
 }
 
 export function loadStyle(url) {
-  const absoluteUrl = new URL(url, document.baseURI).href;
-
-  if (!styleLoads.has(absoluteUrl)) {
-    styleLoads.set(
-      absoluteUrl,
-      new Promise((resolve, reject) => {
-        const link = document.createElement("link");
-        link.rel = "stylesheet";
-        link.href = absoluteUrl;
-        link.onload = resolve;
-        link.onerror = () => {
-          styleLoads.delete(absoluteUrl);
-          link.remove();
-          reject(new Error(`Unable to load style: ${absoluteUrl}`));
-        };
-        document.head.append(link);
-      }),
-    );
-  }
-
-  return styleLoads.get(absoluteUrl);
+  return loadAsset(url, styleLoads, "style");
 }
 
 function makeInit(name, connect) {
@@ -177,8 +171,7 @@ export function loadEnhancement(name, url) {
   return promise;
 }
 
-async function loadManifest(manifest) {
-  const entries = Object.entries(manifest);
+async function loadManifest(entries) {
   const results = await Promise.allSettled(
     entries.map(([name, url]) => loadEnhancement(name, url)),
   );
@@ -239,7 +232,7 @@ export async function loadEnhancements(scope = document) {
     }
   }
 
-  const result = await loadManifest(Object.fromEntries(manifest));
+  const result = await loadManifest([...manifest]);
 
   if (result.failed.length === 0) {
     for (const block of blocks) block.remove();
@@ -250,7 +243,7 @@ export async function loadEnhancements(scope = document) {
 
 async function loadManifestBlock(block) {
   const entries = parseManifestEntries(block.textContent);
-  const result = await loadManifest(Object.fromEntries(entries));
+  const result = await loadManifest(entries);
 
   for (const failure of result.failed) {
     console.error(`Enhancement "${failure.name}" failed to load:`, failure.error);
@@ -286,7 +279,7 @@ export async function loadResponse(response) {
     throw new TypeError("Enhance-Modules header must be a JSON object.");
   }
 
-  return loadManifest(manifest);
+  return loadManifest(Object.entries(manifest));
 }
 
 export function __setModuleImporter(fn) {
