@@ -174,6 +174,8 @@
   transform: scale(1);
 }
 
+/* Progressive: without :not() selector lists, the normal unchecked border
+   remains visible and the control stays usable. */
 .check:hover:not(:checked, :indeterminate, :disabled),
 .radio:hover:not(:checked, :indeterminate, :disabled) {
   --choice-border: var(--text-subtle);

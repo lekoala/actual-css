@@ -91,6 +91,16 @@ const FEATURES = [
      never needs their fallbacks — Degraded does, which is why they stay
      tracked as structural rather than being dropped when Minimal rose. */
   { name: ":has()", pattern: /:has\(/gi, kind: "structural", tier: "minimal" },
+  /* Firefox 78 supports :is()/ :where(), but direct :not() lists need 84.
+     Inspect argument depth so compatible :not(:is(...)) stays baseline. */
+  {
+    name: ":not() selector lists",
+    pattern: /:not\(/gi,
+    matches: (css, match) =>
+      splitSelectorList(css.slice(match.index + match[0].length), true).length > 1,
+    kind: "structural",
+    tier: "minimal",
+  },
   {
     name: "@container queries",
     pattern: /@container\b/gi,
@@ -183,7 +193,7 @@ function rel(file) {
   return relative(ROOT, file).replaceAll(sep, "/");
 }
 
-function splitSelectorList(prelude) {
+function splitSelectorList(prelude, stopAtClosingParen = false) {
   const selectors = [];
   let start = 0;
   let depth = 0;
@@ -207,6 +217,10 @@ function splitSelectorList(prelude) {
     if (char === '"' || char === "'") {
       quote = char;
       continue;
+    }
+    if (stopAtClosingParen && char === ")" && depth === 0) {
+      selectors.push(prelude.slice(start, index).trim());
+      return selectors.filter(Boolean);
     }
     if (char === "(" || char === "[") depth++;
     else if (char === ")" || char === "]") depth--;
@@ -267,6 +281,7 @@ export function auditCss(css, name = "test.css") {
   for (const feature of FEATURES) {
     const grandfathered = (PROGRESSIVE[name] ?? []).includes(feature.name);
     for (const m of masked.matchAll(feature.pattern)) {
+      if (feature.matches && !feature.matches(masked, m)) continue;
       const entry = `${name}:${lineNo(css, m.index)}  ${feature.name}`;
       // Excuse on kind and guarding only; tier then decides which bucket an
       // excused use is reported in.

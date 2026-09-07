@@ -26,7 +26,7 @@ test("size=1 selects follow the single-select paths", () => {
   const selectCss = readCss("src/css/forms/select.css");
   const customSelectCss = readCss("src/css/forms/custom-select.css");
 
-  expect(selectCss).toContain(':not([multiple], [size]:not([size="1"]))');
+  expect(selectCss).toContain(':not(:is([multiple], [size]:not([size="1"])))');
   expect(customSelectCss).toContain('[size]:not([size="1"])');
 });
 

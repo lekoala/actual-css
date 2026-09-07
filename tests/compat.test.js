@@ -1,6 +1,59 @@
 import { expect, test } from "bun:test";
 import { auditCss, mixedVendorSelectorLists } from "../scripts/check-compat.js";
 
+test.each([
+  ".x:not(.a, .b)",
+  '.select:not([multiple], [size]:not([size="1"]))',
+  ".x:not(:is(.a, .b), .c)",
+  ".x:is(.a, :not(.b, .c))",
+  ".x:NOT(\n.a,\n.b)",
+  '.x:not([data-label="),"], .b)',
+])("direct :not() lists need a guard: %s", (selector) => {
+  expect(auditCss(`${selector} { color: red; }`).violations).toEqual([
+    "test.css:1  :not() selector lists",
+  ]);
+});
+
+test.each([
+  ".x:not(:is(.a, .b))",
+  ".x:not(:where(.a, .b))",
+  ".x:not(.a)",
+  '.select:not(:is([multiple], [size]:not([size="1"])))',
+  '.x:not([data-label="a,b)"])',
+  String.raw`.x:not(.a\,b)`,
+  ".x:not(.a), .y:not(.b)",
+  ".x:not(/* , */ .a)",
+])("single :not() arguments stay baseline: %s", (selector) => {
+  expect(auditCss(`${selector} { color: red; }`)).toEqual({
+    violations: [],
+    progressive: [],
+    optional: [],
+  });
+});
+
+test("a documented decorative fallback excuses :not() lists", () => {
+  const css = `/* Progressive: the normal border keeps the control usable. */
+.check:hover:not(:checked, :indeterminate, :disabled) { color: red; }`;
+  expect(auditCss(css)).toEqual({
+    violations: [],
+    progressive: ["test.css:2  :not() selector lists"],
+    optional: [],
+  });
+  expect(auditCss(css.slice(css.indexOf("\n") + 1)).violations).toHaveLength(1);
+});
+
+test("guarded :not() lists are progressive and comments are ignored", () => {
+  const css = `/* :not(.a, .b) */
+@supports (color: color-mix(in srgb, red, blue)) {
+  .x:not(.a, .b) { color: red; }
+}`;
+  const result = auditCss(css);
+  expect(result.violations).toEqual([]);
+  expect(result.progressive.filter((entry) => entry.includes(":not()"))).toEqual([
+    "test.css:3  :not() selector lists",
+  ]);
+});
+
 test("vendor selector guard rejects a vendor pseudo mixed with a standard selector", () => {
   const violations = mixedVendorSelectorLists(".a, .b::-moz-range-thumb { color: red; }");
 
