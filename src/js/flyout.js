@@ -3,7 +3,6 @@ import { focusFirstDescendant } from "./focus.js";
 import { connectMenu, focusFirstMenuItem, focusLastMenuItem } from "./menu.js";
 import { closeSurface, isSurfaceOpen, openSurface, retainSurface } from "./surface.js";
 
-const panelRefs = new WeakMap();
 const triggerMap = new WeakMap();
 
 function normalizeBreakpoint(raw) {
@@ -131,7 +130,7 @@ function connectTrigger(trigger) {
   if (triggerMap.has(trigger)) return;
 
   const controller = new AbortController();
-  const state = { panel: null, controller, releaseMenu: null };
+  const state = { panel: null, controller, releaseMenu: null, releaseSurface: null };
   triggerMap.set(trigger, state);
 
   resolvePanel(trigger, state);
@@ -144,38 +143,23 @@ function connectTrigger(trigger) {
   trigger.addEventListener("keydown", onTriggerKeydown, { signal: controller.signal });
 }
 
-function releasePanelReference(trigger, state) {
+function releasePanelReference(state) {
   state.releaseMenu?.();
   state.releaseMenu = null;
-
-  const panel = state.panel;
+  state.releaseSurface?.();
+  state.releaseSurface = null;
   state.panel = null;
-  if (!panel) return;
-
-  const panelEntry = panelRefs.get(panel);
-  if (!panelEntry) return;
-
-  panelEntry.triggers.delete(trigger);
-  if (panelEntry.triggers.size === 0) {
-    panelEntry.release();
-    panelRefs.delete(panel);
-  }
 }
 
 function resolvePanel(trigger, state) {
   const panel = panelFor(trigger);
   if (state.panel === panel && panel?.isConnected) return panel;
 
-  releasePanelReference(trigger, state);
+  releasePanelReference(state);
   if (!panel) return null;
 
-  let panelEntry = panelRefs.get(panel);
-  if (!panelEntry) {
-    const release = retainSurface(panel);
-    panelEntry = { triggers: new Set(), release };
-    panelRefs.set(panel, panelEntry);
-  }
-  panelEntry.triggers.add(trigger);
+  // Surface retention owns the shared lifetime across all triggers and consumers.
+  state.releaseSurface = retainSurface(panel);
   state.panel = panel;
 
   if (isMenuFlyout(panel)) {
@@ -197,7 +181,7 @@ function disconnectTrigger(trigger) {
   if (state.panel?.isConnected && isSurfaceOpen(state.panel)) {
     closeSurface(state.panel, { restoreFocus: false });
   }
-  releasePanelReference(trigger, state);
+  releasePanelReference(state);
   triggerMap.delete(trigger);
 }
 
