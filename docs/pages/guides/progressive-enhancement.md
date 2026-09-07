@@ -407,6 +407,63 @@ on the same root throws, and `disconnect()` releases the name so it can be
 registered again. A custom root passed as the third argument must be disposed
 by its owner; the default `document.documentElement` root is not affected.
 
+### Applying behaviors from application selectors
+
+Prefer declarative `data-enhance` in HTML. When server-rendered markup or
+application conventions make JavaScript more convenient, use
+`applyEnhancement(name, selector, root?)`:
+
+```js
+import "actual-css/js/tab";
+import "actual-css/js/flyout";
+import "actual-css/js/validation";
+import { applyEnhancement } from "actual-css/js/enhance";
+
+const bindings = {
+  tabs: ".tabs",
+  flyout: ".menu-trigger",
+  validation: "form.needs-validation",
+};
+
+for (const [name, selector] of Object.entries(bindings)) {
+  applyEnhancement(name, selector);
+}
+```
+
+Run this after the target markup exists, for example in a module script.
+Select the element that owns the behavior, not necessarily the element carrying
+the component class. For example, `flyout` applies to **triggers**, not `.flyout`
+panels. Those triggers need `aria-controls` pointing to their panels. Tooltips use
+`data-tooltip` directly and do not need a named enhancement.
+
+`selector` is a CSS selector. `root` defaults to `document.documentElement` and
+uses `querySelectorAll()` semantics: only descendants match, never the scope
+itself. Pass a container to limit the application:
+
+```js
+applyEnhancement("tabs", ".tabs", container);
+```
+
+Each registration on the scope or its ancestors refreshes the scope once.
+Shadow roots need their own registrations; document registrations do not cross
+into them.
+
+The function returns an array of matched elements, preserves existing
+tokens, and can be called repeatedly without initializing an active behavior
+twice. Invalid names or selectors throw. Without a DOM it returns an
+empty array. It does not import modules: applying a token before its module is
+registered lets that registration's initial scan discover it later.
+
+`applyEnhancement()` is a one-time convenience for adding an enhancement token
+to elements selected by the application. It does not create a persistent
+selector-to-enhancement binding. For injected markup, author `data-enhance`
+directly or call the function with a scope containing the new elements.
+Detached elements receive the token and initialize when inserted into a
+registered root. Removing the token does not disconnect an active behavior.
+
+`data-enhance` remains the portable behavior contract. Class mappings belong to
+the application; Actual does not infer behavior from presentation classes.
+
 ### Enhancement manifests
 
 The enhancement-loader lets a server (or static HTML) declare document-wide
