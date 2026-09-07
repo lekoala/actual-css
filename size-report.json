@@ -1,21 +1,21 @@
 {
-  "totalRaw": 282939,
+  "totalRaw": 283091,
   "core": {
     "minified": 11173,
     "brotli": 2582
   },
   "full": {
-    "minified": 122884,
-    "brotli": 17811
+    "minified": 122909,
+    "brotli": 17816
   },
   "js": {
     "core": {
-      "bytes": 6079,
-      "brotli": 2203
+      "bytes": 5932,
+      "brotli": 2229
     },
     "full": {
-      "bytes": 56932,
-      "brotli": 16547
+      "bytes": 56470,
+      "brotli": 16523
     }
   },
   "fileCount": 109,
@@ -30,7 +30,7 @@
     },
     {
       "file": "components/modal.css",
-      "raw": 9523
+      "raw": 9533
     },
     {
       "file": "components/alert.css",
@@ -54,7 +54,7 @@
     },
     {
       "file": "forms/choice.css",
-      "raw": 6028
+      "raw": 6155
     },
     {
       "file": "components/drawer.css",
@@ -297,16 +297,16 @@
       "raw": 1500
     },
     {
+      "file": "forms/select.css",
+      "raw": 1479
+    },
+    {
       "file": "components/surface.css",
       "raw": 1471
     },
     {
       "file": "typography/overline.css",
       "raw": 1465
-    },
-    {
-      "file": "forms/select.css",
-      "raw": 1464
     },
     {
       "file": "layout/scroller.css",
