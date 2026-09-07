@@ -99,3 +99,26 @@ test("the last menu release restores authored tabindex values", () => {
   secondRelease();
   expect(items.map((item) => item.getAttribute("tabindex"))).toEqual(["3", null]);
 });
+
+test("the last menu release removes keydown wiring and allows reconnecting", () => {
+  const { items, menu } = connect(`
+    <menu class="menu" role="menu">
+      <li><button class="menu-item" role="menuitem">First</button></li>
+      <li><button class="menu-item" role="menuitem">Second</button></li>
+    </menu>
+  `);
+
+  releases.pop()();
+  expect(items.map((item) => item.getAttribute("tabindex"))).toEqual([null, null]);
+
+  items[0].focus();
+  press(items[0], "ArrowDown");
+  expect(document.activeElement).toBe(items[0]);
+
+  const reRelease = connectMenu(menu, { close() {} });
+  releases.push(reRelease);
+  expect(items.map((item) => item.getAttribute("tabindex"))).toEqual(["0", "-1"]);
+  items[0].focus();
+  press(items[0], "ArrowDown");
+  expect(document.activeElement).toBe(items[1]);
+});
