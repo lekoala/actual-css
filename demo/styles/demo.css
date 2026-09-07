@@ -311,7 +311,7 @@
   margin: 0 0 1rem;
   color: var(--text-muted);
   font-size: 0.8125rem;
-  font-weight: 650;
+  font-weight: var(--font-weight-semibold);
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
@@ -320,7 +320,7 @@
   margin: 0 0 1rem;
   font-size: clamp(2rem, 4vw, 2.75rem);
   line-height: 1.15;
-  font-weight: 650;
+  font-weight: var(--font-weight-semibold);
   letter-spacing: -0.01em;
 }
 
@@ -349,7 +349,7 @@
 
 .demo-section-title {
   font-size: var(--font-size-base);
-  font-weight: var(--font-weight-strong);
+  font-weight: var(--font-weight-semibold);
   text-transform: uppercase;
   letter-spacing: 0.05em;
   color: var(--text-muted);

@@ -132,7 +132,7 @@
 .admini-section-title {
   margin: 0;
   color: var(--text-subtle);
-  font-weight: var(--font-weight-strong);
+  font-weight: var(--font-weight-semibold);
   letter-spacing: 0;
 }
 
@@ -636,7 +636,7 @@
   background: var(--surface-subtle);
   color: var(--text-muted);
   font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-strong);
+  font-weight: var(--font-weight-semibold);
 }
 
 .admini-calendar-day {
@@ -662,7 +662,7 @@
   border-radius: var(--radius);
   background: var(--primary);
   color: var(--primary-fg);
-  font-weight: var(--font-weight-strong);
+  font-weight: var(--font-weight-semibold);
 }
 
 .admini-calendar-events {

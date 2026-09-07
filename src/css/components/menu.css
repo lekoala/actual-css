@@ -124,7 +124,7 @@
   padding: var(--space-20);
   color: var(--text-muted);
   font-size: var(--font-size-xs);
-  font-weight: var(--font-weight-strong);
+  font-weight: var(--font-weight-semibold);
 }
 
 .menu-separator {

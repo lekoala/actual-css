@@ -18,9 +18,17 @@
   document and that nested surfaces are unsupported.
 - Kitchen sink covers `steps`, `aura`, and an `inverted` / density /
   nested-intent scopes section.
+- `.dot` inside a badge paints with `currentColor`, so a status dot beside a
+  label needs no new class.
+- Alert documents the trailing-action composition (`.cluster` plus
+  `.justify-content-space-between`), the tinted leading flag through
+  `--alert-border-inline-start-*`, and the `.surface` / `.inverted` treatments.
+- Tokens document `--soft-border-mix` as the borderless-soft dial: what it
+  reaches, and that it is a rendering choice the baseline path does not uphold.
 
 ### Changed
 
+- The font-weight scale drops the awkward names: `--font-weight` becomes `--font-weight-normal`, `--font-weight-strong` becomes `--font-weight-semibold` (650 → 600), and the `.font-weight-strong` utility becomes `.font-weight-semibold`.
 - The accordion summary moves to `--font-weight-medium`; its hover no longer tints `--primary` and instead reinforces the end marker to the summary text color.
 - Soft foreground resolves per intent: the intent classes expose the
   `--intent-soft-fg` relay backed by per-role `--*-soft-fg` theme hooks, with
@@ -33,9 +41,25 @@
   gates.
 - `check:compat` audits stylesheets against the Degraded floor, and no longer
   tracks popover selectors or `compat-ok:` pragmas.
+- Badge inline padding is a third of `--badge-size`, so `.sm`/`.lg` keep the
+  pill proportional instead of only changing its height.
+- Badge is `flex: none`: a flex parent no longer squeezes the pill and pushes
+  its label outside the background.
+- Badge moves to `--font-weight-medium`, the weight `.btn` already uses, so a
+  badge no longer reads heavier than the button beside it.
+- The alert owns the block spacing between its direct content blocks, the way
+  `.stack` and `.prose` do: a title and a description are plain siblings, with
+  no wrapper and no inline `--gap`. It replaces the first/last-child margin
+  trim, so the UA paragraph margin between two content blocks becomes
+  `--space-10` — wrap several paragraphs in `.prose`, or a differently spaced
+  group in `.stack`, when the message wants its own rhythm. The `.alert-icon`,
+  `.alert-dismiss`, `.alert-title` and `.alert-body` slots are excluded, so an
+  admonition's title bar stays flush against its body.
 
 ### Fixed
 
+- The Alert class reference is one table again: a stray paragraph split it and
+  left six rows rendering as literal text.
 - The badge dismiss button keeps a 24px pointer-target floor (WCAG 2.2 2.5.8)
   even under `.sm` or a density override below the target size, without
   inflating the badge itself.
@@ -63,6 +87,10 @@
 
 ### Breaking
 
+- `.alert.callout` is a leading-flag treatment: it owns the border geometry
+  only and no longer forces a neutral surface, so an intent tints the panel as
+  well as the flag, and `.surface` / `.solid` / `.outline` / `.inverted`
+  compose with it instead of being ignored.
 - JavaScript browser floor raised to Safari 17+, Firefox 125+ and Chromium
   116+; browsers below it no longer receive the supported Actual runtime.
 - Core HTML/CSS degradation is unchanged, and stays governed by the Degraded

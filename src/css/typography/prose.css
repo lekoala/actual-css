@@ -51,7 +51,7 @@
 .prose :where(h1, h2, h3, h4, h5, h6) {
   margin-block: 1.5em 0;
   color: var(--heading, var(--text));
-  font-weight: var(--font-weight-strong);
+  font-weight: var(--font-weight-semibold);
   line-height: var(--prose-heading-line-height);
 }
 
@@ -115,7 +115,7 @@
 /* Description lists keep document flow: a valid <dl> may pair several <dt>
    with one <dd> or the reverse, so no grid layout is imposed here. */
 .prose :where(dt) {
-  font-weight: var(--font-weight-strong);
+  font-weight: var(--font-weight-semibold);
 }
 
 .prose :where(dd) {

@@ -12,9 +12,9 @@
 - Empty badges render as dots. The element must be truly empty: no text and no whitespace.
 
 A badge is **content-sized**: it never stretches to fill its container, even as a
-direct child of `.stack` (where flex children otherwise stretch). Use
-`inline-size: 100%` — or the optional `.inline-size-full` utility — when a
-full-width badge is intentional.
+direct child of `.stack` (where flex children otherwise stretch), and a flex
+parent never compresses it (`flex: none`). Use `inline-size: 100%` — or the
+optional `.inline-size-full` utility — when a full-width badge is intentional.
 
 **Related terms:** chip, tag, pill, removable tag.
 
@@ -24,6 +24,7 @@ full-width badge is intentional.
 | --------------- | ----------- | ----------------------------------------- |
 | `.badge`        | Component   | Compact label; soft by default.           |
 | `.badge:empty`  | Composition | Truly-empty badge renders as a solid dot. |
+| `.dot`          | Composition | Status dot inside a badge.                |
 | Shared intents  | Intent      | `.primary`, `.secondary`, `.success`, …   |
 | Shared variants | Variant     | `.solid`, `.outline`, `.surface`.         |
 | `.sm` / `.lg`   | Size        | Compact density.                          |
@@ -72,6 +73,25 @@ The shared intents are `.primary`, `.secondary`, `.success`, `.warning` and
 
 An autonomous dot conveys state without visible text, so give it an accessible
 name.
+
+For a dot beside a label, put the shared `.dot` utility inside the badge. It
+paints with `currentColor`, so it follows the badge ink instead of needing the
+intent class repeated on it.
+
+```html demo
+<span class="badge warning">
+  <span class="dot" aria-hidden="true"></span>
+  In progress
+</span>
+<span class="badge danger">
+  <span class="dot" aria-hidden="true"></span>
+  Blocked
+</span>
+<span class="badge success">
+  <span class="dot" aria-hidden="true"></span>
+  Completed
+</span>
+```
 
 Custom status or category dots define a custom intent (`--intent` /
 `--intent-fg`); `--ui-*` controls treatment, while empty dots intentionally
@@ -123,5 +143,5 @@ used instead.
 - `--badge-size` — minimum block size; also the square size of an `:empty` dot badge.
 - `--badge-dot-size` — size of an `:empty` dot badge.
 - `--badge-font-size` — label font size.
-- `--badge-pad-x` — inline padding.
+- `--badge-pad-x` — inline padding. Derived from `--badge-size`, so it follows density and keeps the pill proportional; set it to opt out.
 - `--badge-dismiss-icon-size` — size of the X painted by an empty dismiss button.

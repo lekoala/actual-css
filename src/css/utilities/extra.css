@@ -206,15 +206,15 @@
 }
 
 .font-weight-normal {
-  font-weight: var(--font-weight);
+  font-weight: var(--font-weight-normal);
 }
 
 .font-weight-medium {
   font-weight: var(--font-weight-medium);
 }
 
-.font-weight-strong {
-  font-weight: var(--font-weight-strong);
+.font-weight-semibold {
+  font-weight: var(--font-weight-semibold);
 }
 
 .font-weight-bold {

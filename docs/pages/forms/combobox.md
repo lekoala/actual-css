@@ -75,7 +75,7 @@ contrast contracts apply to the combobox for free:
   background: color-mix(in oklab, var(--surface) var(--soft-bg-mix), var(--primary));
   color: color-mix(in oklab, var(--primary) var(--soft-fg-mix), var(--text));
   font-size: var(--font-size-xs);
-  font-weight: var(--font-weight-strong);
+  font-weight: var(--font-weight-semibold);
 }
 ```
 

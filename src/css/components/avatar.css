@@ -46,7 +46,7 @@
   color: var(--avatar-fg);
   font: inherit;
   font-size: var(--avatar-font-size);
-  font-weight: var(--font-weight-strong);
+  font-weight: var(--font-weight-semibold);
   line-height: 1;
   text-decoration: none;
   vertical-align: middle;

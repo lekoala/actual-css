@@ -31,7 +31,7 @@
 .field-label,
 .field-group > legend {
   color: var(--text);
-  font-weight: var(--font-weight-strong);
+  font-weight: var(--font-weight-semibold);
 }
 
 .field-group > legend {

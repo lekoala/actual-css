@@ -1,12 +1,12 @@
 {
-  "totalRaw": 281300,
+  "totalRaw": 282939,
   "core": {
-    "minified": 11164,
-    "brotli": 2574
+    "minified": 11173,
+    "brotli": 2582
   },
   "full": {
-    "minified": 122616,
-    "brotli": 17757
+    "minified": 122884,
+    "brotli": 17811
   },
   "js": {
     "core": {
@@ -22,11 +22,11 @@
   "files": [
     {
       "file": "components/steps.css",
-      "raw": 13028
+      "raw": 13032
     },
     {
       "file": "core/tokens.css",
-      "raw": 9594
+      "raw": 9603
     },
     {
       "file": "components/modal.css",
@@ -34,7 +34,7 @@
     },
     {
       "file": "components/alert.css",
-      "raw": 7902
+      "raw": 8889
     },
     {
       "file": "components/button.css",
@@ -45,12 +45,12 @@
       "raw": 7121
     },
     {
-      "file": "components/flyout.css",
-      "raw": 6903
+      "file": "components/badge.css",
+      "raw": 7008
     },
     {
-      "file": "components/badge.css",
-      "raw": 6407
+      "file": "components/flyout.css",
+      "raw": 6905
     },
     {
       "file": "forms/choice.css",
@@ -66,11 +66,11 @@
     },
     {
       "file": "typography/prose.css",
-      "raw": 5104
+      "raw": 5108
     },
     {
       "file": "components/avatar.css",
-      "raw": 5067
+      "raw": 5069
     },
     {
       "file": "components/tooltip.css",
@@ -98,7 +98,7 @@
     },
     {
       "file": "utilities/extra.css",
-      "raw": 4403
+      "raw": 4414
     },
     {
       "file": "forms/switch.css",
@@ -126,11 +126,11 @@
     },
     {
       "file": "forms/floating-field.css",
-      "raw": 3689
+      "raw": 3696
     },
     {
       "file": "components/tab.css",
-      "raw": 3430
+      "raw": 3432
     },
     {
       "file": "components/accordion.css",
@@ -142,7 +142,7 @@
     },
     {
       "file": "components/menu.css",
-      "raw": 3279
+      "raw": 3281
     },
     {
       "file": "components/status-bar.css",
@@ -258,7 +258,7 @@
     },
     {
       "file": "themes/brutalist.css",
-      "raw": 1758
+      "raw": 1760
     },
     {
       "file": "core/intents.css",
@@ -290,7 +290,7 @@
     },
     {
       "file": "components/table.css",
-      "raw": 1565
+      "raw": 1567
     },
     {
       "file": "layout/topbar.css",
@@ -326,7 +326,7 @@
     },
     {
       "file": "forms/form.css",
-      "raw": 1329
+      "raw": 1331
     },
     {
       "file": "layout/scroll-snap.css",
@@ -366,7 +366,7 @@
     },
     {
       "file": "components/data-list.css",
-      "raw": 746
+      "raw": 748
     },
     {
       "file": "core/reset.css",

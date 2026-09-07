@@ -92,7 +92,7 @@
   margin: var(--space-40) 0 var(--space-20);
   color: var(--text-muted);
   font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-strong);
+  font-weight: var(--font-weight-semibold);
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
