@@ -91,6 +91,24 @@ Soft surfaces (`.btn.soft`, `.badge.soft`, and the default `.alert`) are generat
 }
 ```
 
+`--soft-border-mix` is the same lever for the rim. The `65%` default keeps a
+visibly tinted border around every soft surface; pointing it at `--soft-bg-mix`
+resolves the rim to the fill, and soft treatments become a tint carrying text
+with no contour — the flatter language of a modern component set, from one
+declaration:
+
+```css
+[data-theme="flat"] {
+  --soft-border-mix: var(--soft-bg-mix);
+}
+```
+
+It reaches the default `.badge` and `.alert` plus every explicit `.soft`
+(`.btn`, `.card`, `.chat`, `.navbar`, `.app-nav`), and nothing else: a component
+on its own surface keeps its `--border` rim. The dial is also
+rendering-only — the baseline path below `color-mix()` keeps `var(--border)`, so
+borderless soft is a look, not a contract the Degraded tier upholds.
+
 `--soft-fg-mix` is the share of raw intent in soft *text*. At its `100%` default soft ink is the intent color itself, which is what a palette of dark, muted intents wants. A vivid or light palette cannot afford that: a soft badge then paints intent-tinted ink on an intent-tinted surface, and the two converge. Lowering the mix rebates the ink toward `--text`, which is the right direction in both schemes because `--text` is dark on a light theme and light on a dark one. Around `45%` a fully saturated palette recovers AA while the ink still reads as its intent.
 
 Soft ink can also be corrected per role. The intent classes relay a per-role
@@ -170,8 +188,10 @@ Typography tokens cover the document baseline and common component needs.
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 
   --line-height: 1.5;
-  --font-weight: 400;
-  --font-weight-strong: 650;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
 
   --font-size-xs: 0.8125rem;
   --font-size-sm: 0.875rem;

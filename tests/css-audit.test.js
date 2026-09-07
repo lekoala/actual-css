@@ -588,11 +588,15 @@ test("confirmation dialog composes media alignment with an intent-aware icon wel
   expect(css).toContain("color: var(--ui-fg, var(--intent, var(--text-muted)));");
 });
 
-test("alert.callout overrides local defaults with its final surface recipe", () => {
+test("alert.callout owns the border geometry and leaves the surface composable", () => {
   const css = readCss("src/css/components/alert.css");
+  const callout = css.slice(css.indexOf(".alert.callout {"));
 
   expect(css).toContain("--alert-bg: var(--ui-bg, var(--alert-default-bg));");
-  expect(css).toMatch(/\.alert\.callout \{[\s\S]*--alert-bg: var\(--surface-subtle\);/);
+  // A flag treatment, not a surface: writing --alert-bg / --alert-fg here would
+  // short-circuit the chain and make .surface/.solid/.outline/.inverted no-ops.
+  expect(callout.slice(0, callout.indexOf("}"))).not.toContain("--alert-bg");
+  expect(callout.slice(0, callout.indexOf("}"))).not.toContain("--alert-fg");
   expect(css).toContain("border-inline-start: var(--alert-border-inline-start-width, 4px) solid");
   expect(css).toContain("border: 0");
 });
@@ -1151,7 +1155,7 @@ test("steps keep the label a notch below the marker, at one size throughout", ()
   // Weight marks "where I am now" only. A completed step leans on its filled
   // disc; giving it bold text too would flatten the two states back together.
   expect(css).toMatch(
-    /> \[aria-current="step"\] \.step-label \{[^}]*font-weight: var\(--font-weight-strong\);/,
+    /> \[aria-current="step"\] \.step-label \{[^}]*font-weight: var\(--font-weight-semibold\);/,
   );
   expect(css).not.toMatch(/> \.step-complete[^{]*\.step-label \{[^}]*font-weight/);
 

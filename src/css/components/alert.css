@@ -65,12 +65,23 @@
   min-inline-size: 0;
 }
 
-.alert > :first-child {
-  margin-block-start: 0;
+/* The alert owns the block spacing between its direct content blocks, the way
+   .stack and .prose own theirs, so a title and a description are plain
+   siblings instead of a wrapper carrying an inline --gap. What made that pair
+   read as detached is the UA paragraph margin: trimming only the outer edges
+   left it in place between them. Content keeps its own internal rhythm — a
+   nested list keeps its bullets and padding, a .prose child keeps its flow.
+   The slots are excluded because they are anatomy, not content: an
+   admonition's title bar has to stay flush against its body. The list follows
+   the anatomy, so it grows with it. */
+.alert > :not(:where(.alert-icon, .alert-dismiss, .alert-title, .alert-body)) {
+  margin-block: 0;
 }
 
-.alert > :last-child {
-  margin-block-end: 0;
+.alert
+  > :not(:where(.alert-icon, .alert-dismiss, .alert-title, .alert-body))
+  + :not(:where(.alert-icon, .alert-dismiss, .alert-title, .alert-body)) {
+  margin-block-start: var(--space-10);
 }
 
 /* Alerts are soft by default. The recipe writes local defaults rather than
@@ -191,7 +202,7 @@
 /* Links */
 .alert :where(a:not(.btn)) {
   color: inherit;
-  font-weight: var(--font-weight-strong);
+  font-weight: var(--font-weight-semibold);
 }
 
 /* Forced colors: no override needed. The always-on border gets a forced
@@ -199,11 +210,12 @@
    Canvas backplate (unreadable) — so .solid intentionally falls back to the
    default look. */
 
-/* Callout — neutral surface with a thick accent border on the leading edge.
-   The thickness follows the shared --alert-border-inline-start-width hook. */
+/* Callout — leading-edge flag treatment. It owns the border geometry only, so
+   the surface and the ink stay with the alert's own intent and shared
+   treatment: bare is the soft panel, .surface the page surface, .solid a
+   filled one, and .outline has no fill and no other side. Thickness and color
+   follow the --alert-border-inline-start-* hooks. */
 .alert.callout {
-  --alert-bg: var(--surface-subtle);
-  --alert-fg: var(--text);
   border: 0;
   border-inline-start: var(--alert-border-inline-start-width, 4px) solid
     var(--alert-border-inline-start-color, var(--intent, var(--neutral)));

@@ -5,11 +5,12 @@
 - Supports intent colors.
 - Supports longer text and lists.
 - Links inherit alert color by default.
-- Alerts are soft by default. Use `.solid` or `.outline` when the message needs stronger or quieter emphasis.
+- Alerts are soft by default. Use `.surface` for neutral chrome with the intent only in the ink, `.solid` or `.outline` when the message needs stronger or quieter emphasis, and `.inverted` for an inverse surface.
 - Use `<menu class="actions cluster">` for alert action lists.
 - Use `role="alert"` only when the alert is injected dynamically and should be announced.
 - Not a toast.
 - Could have simple or complex html content.
+- A title and a description are plain siblings: the alert owns the small space between its direct content blocks, so neither needs a wrapper. Nested content keeps its own rhythm — wrap several paragraphs in `.prose`, or a differently spaced group in `.stack`, when the message needs a rhythm of its own.
 - Alerts may include a decorative leading icon. Use `.alert-icon` on the icon element; the rest of the content flows into the remaining text column.
 - Use `.sm` or `.lg` for density changes. The inline padding stays stable.
 - Use `.alert-dismiss` for a compact dismiss button. It is a direct trailing child in standard alerts and lives inside `.alert-title` in admonitions. It uses the shared `--icon-close` mask and the `--dismiss` runtime command — no icon font or custom JS.
@@ -21,26 +22,33 @@ itself needs to change, not `.soft`.
 
 ## Class reference
 
-| Class            | Kind        | Description                                   |
-| ---------------- | ----------- | --------------------------------------------- |
-| `.alert`         | Component   | Inline status surface; soft by default.       |
-| `.alert-icon`    | Composition | Decorative leading icon, in the first column. |
-| `.alert-dismiss` | Modifier    | Compact dismiss button.                       |
-| `.callout`       | Variant     | Neutral panel, thick accent leading edge.     |
-| `.admonition`    | Variant     | Tinted title bar, body on the page surface.   |
-
-`.alert-dismiss` draws itself with the `--icon-close` mask and acts through the
-`--dismiss` command.
-| `.alert-title`   | Composition | Admonition title bar; hosts the dismiss button.                                   |
-| `.alert-body`    | Composition | Admonition body resting on the page surface.                                      |
-| Shared intents   | Intent      | `.primary`, `.secondary`, `.success`, `.warning`, `.danger`.                      |
-| Shared variants  | Variant     | `.solid`, `.outline`, and `.surface` emphasis.                                    |
-| `.sm` / `.lg`    | Size        | Density; inline padding stays stable.                                             |
+| Class            | Kind        | Description                                     |
+| ---------------- | ----------- | ----------------------------------------------- |
+| `.alert`         | Component   | Inline status surface; soft by default.         |
+| `.alert-icon`    | Composition | Decorative leading icon, in the first column.   |
+| `.alert-dismiss` | Modifier    | Compact dismiss button.                         |
+| `.alert-title`   | Composition | Admonition title bar; hosts the dismiss button. |
+| `.alert-body`    | Composition | Admonition body on the page surface.            |
+| `.callout`       | Variant     | Leading-edge flag; owns the border geometry.    |
+| `.admonition`    | Variant     | Tinted title bar, body on the page surface.     |
+| Shared intents   | Intent      | `.primary`, `.secondary`, `.success`, …         |
+| Shared variants  | Variant     | `.solid`, `.outline`, `.surface`.               |
+| `.inverted`      | Surface     | Inverse surface, any intent.                    |
+| `.sm` / `.lg`    | Size        | Density; inline padding stays stable.           |
 
 ## Basic usage
 
+`.surface` comes first on purpose: it keeps the theme's own chrome and puts the
+intent in the ink alone, which is what most informational messages want. Add an
+intent treatment when the color itself carries the meaning.
+
 ```html demo
 <div class="stack">
+  <div class="alert surface">
+    <i class="ti ti-info-circle alert-icon" aria-hidden="true"></i>
+    <div><strong>New message.</strong> 12 unread. <a href="#">Open inbox</a>.</div>
+  </div>
+
   <div class="alert success">
     <i class="ti ti-circle-check alert-icon" aria-hidden="true"></i>
     <div>Your changes have been saved. <a href="#">View activity</a>.</div>
@@ -91,10 +99,35 @@ itself needs to change, not `.soft`.
 </div>
 ```
 
+## Trailing action
+
+The grid pins `.alert-icon` and `.alert-dismiss` to the outer columns. A
+trailing link or button is content, not anatomy, so it lives in the text column:
+wrap the row in a `.cluster` and push the two ends apart. Same recipe as any
+split / spread row — there is no `.alert-action` class.
+
+```html demo
+<div class="alert surface">
+  <i class="ti ti-info-circle alert-icon" aria-hidden="true"></i>
+  <div class="cluster justify-content-space-between">
+    <strong>New message!</strong>
+    <a class="btn sm outline" href="#">Open</a>
+  </div>
+</div>
+```
+
 ## Variants
 
 ```html demo
 <div class="stack">
+  <div class="alert surface" role="alert">
+    I'm a surface alert — theme chrome, intent in the ink
+  </div>
+
+  <div class="alert inverted" role="alert">
+    I'm an inverted alert <a href="#">with a link</a>
+  </div>
+
   <div class="alert danger sm" role="alert">
     I'm a small error
   </div>
@@ -120,11 +153,8 @@ Use `.alert-dismiss` to let a user remove an inline alert. The button is transpa
 ```html demo
 <div class="alert warning" id="warning-alert">
   <i class="ti ti-alert-triangle alert-icon" aria-hidden="true"></i>
-
-  <div class="stack" style="--gap: var(--space-10)">
-    <strong>Warning</strong>
-    <p>Something needs your attention.</p>
-  </div>
+  <strong>Warning</strong>
+  <p>Something needs your attention.</p>
 
   <button
     class="alert-dismiss"
@@ -156,19 +186,39 @@ In an admonition, place `.alert-dismiss` inside `.alert-title`; it rides the inl
 
 ## Callout
 
-Use `.callout` for a neutral panel with a thick accent border on the leading edge. Intent classes tint the border color.
+`.callout` is a **leading-edge flag treatment**: it owns the border geometry and
+nothing else, so the surface and the ink keep coming from the alert's own intent
+and treatment. Bare is the soft panel, `.surface` the page surface, `.solid` a
+filled one — and `.outline` has no fill and no other side, since the flag *is*
+the border.
 
 ```html demo
 <div class="stack">
   <div class="alert callout">
     <strong>Note</strong>
-    <p>This is a callout — a neutral panel with a thick accent border on the leading edge.</p>
+    <p>A neutral panel with a thick accent flag on the leading edge.</p>
   </div>
 
   <div class="alert warning callout" role="alert">
     <strong>Heads up</strong>
-    <p>The border color follows the intent. No other borders are drawn.</p>
+    <p>The intent tints the panel and the flag together.</p>
   </div>
+
+  <div class="alert success callout surface">
+    <strong>On the page surface</strong>
+    <p>The flag keeps the intent, the panel drops the tint.</p>
+  </div>
+</div>
+```
+
+Tune the flag with `--alert-border-inline-start-width` and
+`--alert-border-inline-start-color`; `--alert-radius: 0` turns it into a
+full-bleed notice.
+
+```html demo
+<div class="alert danger callout" style="--alert-radius: 0">
+  <i class="ti ti-user-x alert-icon" aria-hidden="true"></i>
+  <div>Your request to join the team is denied.</div>
 </div>
 ```
 

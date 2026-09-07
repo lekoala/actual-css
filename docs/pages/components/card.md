@@ -88,7 +88,7 @@ colored headers, or footers.
       <p class="muted">For growing products</p>
     </hgroup>
     <p>
-      <span style="font-size: 2rem; font-weight: var(--font-weight-strong); line-height: 1">$24</span>
+      <span style="font-size: 2rem; font-weight: var(--font-weight-semibold); line-height: 1">$24</span>
       <span class="muted">/ user / month</span>
     </p>
   </header>

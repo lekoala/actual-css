@@ -116,14 +116,14 @@ baseline stays sans so app UI inherits predictably.
 
 The framework exposes a small set of weights:
 
-- `--font-weight` (400) — body default
+- `--font-weight-normal` (400) — body default
 - `--font-weight-medium` (500) — slightly heavier than body, for nav links and accordion summaries
-- `--font-weight-strong` (650) — emphasis, prose headings, badges, tabs, table headers
+- `--font-weight-semibold` (600) — emphasis, prose headings, badges, tabs, table headers
 - `--font-weight-bold` (700) — the strongest weight exposed, used by the navbar brand
 
 No `--font-weight-light`. Light weights depend on the typeface, are rarely a good default, and add surface area without a recurring need.
 
-These weights are also the values used by components. Components do not use literal `font-weight: 600` or `font-weight: 750`; they reference the tokens. Theme authors can re-map them in one place.
+These weights are also the values used by components. Components reference the tokens instead of literal weights, so theme authors can re-map the scale in one place.
 
 ## Line heights
 
@@ -159,7 +159,7 @@ Headings are split between the global baseline and `.prose`.
 
 Globally, headings get a tight line-height, a color from `--heading` (or inherited), and progressive `text-wrap: balance`. They do not get a `font-size`, a `font-weight`, or margins. The reason is that a card heading, a dialog title, or a sidebar section should not be auto-magically enlarged by selector.
 
-Inside `.prose`, headings get a `font-weight` from `--font-weight-strong`, a tighter line-height from `--prose-heading-line-height`, margin rhythm, and keep the global `text-wrap: balance`. Their color follows the contextual `--heading` alias, so prose also composes correctly with a contextual surface. The `h1` to `h4` font sizes are scoped to `.prose`, remain low-specificity, and are not exposed as a public scale.
+Inside `.prose`, headings get a `font-weight` from `--font-weight-semibold`, a tighter line-height from `--prose-heading-line-height`, margin rhythm, and keep the global `text-wrap: balance`. Their color follows the contextual `--heading` alias, so prose also composes correctly with a contextual surface. The `h1` to `h4` font sizes are scoped to `.prose`, remain low-specificity, and are not exposed as a public scale.
 
 The `hgroup` element gets only structural styling: a grid layout, a gap, and a reset of internal margins. No font-size, no color, no weight. Its visual identity is the responsibility of the headings and paragraphs it contains.
 
@@ -205,7 +205,7 @@ Projects that do not need fluid display type do nothing — the module is not pa
 These are decisions that the framework has already made. Re-introducing them silently would regress the system.
 
 - Do not add `font-size` on global `h1` to `h6`. Headings inherit size from context (component or `.prose`).
-- Do not add `font-weight` on global `h1` to `h6`. Strong weight is scoped to `.prose` and to components that need it.
+- Do not add `font-weight` on global `h1` to `h6`. Heavier weights are scoped to `.prose` and to components that need them.
 - Do not add global `text-decoration: underline` on `a`. Links get their visual affordance from `.prose` or from their component.
 - Do not add `transition: all`. Transitions target specific properties.
 - Do not add a `--font-weight-light`. It is rarely a good default and depends on the typeface.

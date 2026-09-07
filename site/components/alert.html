@@ -217,11 +217,12 @@
 <li>Supports intent colors.</li>
 <li>Supports longer text and lists.</li>
 <li>Links inherit alert color by default.</li>
-<li>Alerts are soft by default. Use <code>.solid</code> or <code>.outline</code> when the message needs stronger or quieter emphasis.</li>
+<li>Alerts are soft by default. Use <code>.surface</code> for neutral chrome with the intent only in the ink, <code>.solid</code> or <code>.outline</code> when the message needs stronger or quieter emphasis, and <code>.inverted</code> for an inverse surface.</li>
 <li>Use <code>&lt;menu class=&quot;actions cluster&quot;&gt;</code> for alert action lists.</li>
 <li>Use <code>role=&quot;alert&quot;</code> only when the alert is injected dynamically and should be announced.</li>
 <li>Not a toast.</li>
 <li>Could have simple or complex html content.</li>
+<li>A title and a description are plain siblings: the alert owns the small space between its direct content blocks, so neither needs a wrapper. Nested content keeps its own rhythm — wrap several paragraphs in <code>.prose</code>, or a differently spaced group in <code>.stack</code>, when the message needs a rhythm of its own.</li>
 <li>Alerts may include a decorative leading icon. Use <code>.alert-icon</code> on the icon element; the rest of the content flows into the remaining text column.</li>
 <li>Use <code>.sm</code> or <code>.lg</code> for density changes. The inline padding stays stable.</li>
 <li>Use <code>.alert-dismiss</code> for a compact dismiss button. It is a direct trailing child in standard alerts and lives inside <code>.alert-title</code> in admonitions. It uses the shared <code>--icon-close</code> mask and the <code>--dismiss</code> runtime command — no icon font or custom JS.</li>
@@ -239,22 +240,29 @@ itself needs to change, not <code>.soft</code>.</p>
 <tr><td><code>.alert</code></td><td>Component</td><td>Inline status surface; soft by default.</td></tr>
 <tr><td><code>.alert-icon</code></td><td>Composition</td><td>Decorative leading icon, in the first column.</td></tr>
 <tr><td><code>.alert-dismiss</code></td><td>Modifier</td><td>Compact dismiss button.</td></tr>
-<tr><td><code>.callout</code></td><td>Variant</td><td>Neutral panel, thick accent leading edge.</td></tr>
+<tr><td><code>.alert-title</code></td><td>Composition</td><td>Admonition title bar; hosts the dismiss button.</td></tr>
+<tr><td><code>.alert-body</code></td><td>Composition</td><td>Admonition body on the page surface.</td></tr>
+<tr><td><code>.callout</code></td><td>Variant</td><td>Leading-edge flag; owns the border geometry.</td></tr>
 <tr><td><code>.admonition</code></td><td>Variant</td><td>Tinted title bar, body on the page surface.</td></tr>
+<tr><td>Shared intents</td><td>Intent</td><td><code>.primary</code>, <code>.secondary</code>, <code>.success</code>, …</td></tr>
+<tr><td>Shared variants</td><td>Variant</td><td><code>.solid</code>, <code>.outline</code>, <code>.surface</code>.</td></tr>
+<tr><td><code>.inverted</code></td><td>Surface</td><td>Inverse surface, any intent.</td></tr>
+<tr><td><code>.sm</code> / <code>.lg</code></td><td>Size</td><td>Density; inline padding stays stable.</td></tr>
 </tbody>
 </table></div>
-<p><code>.alert-dismiss</code> draws itself with the <code>--icon-close</code> mask and acts through the
-<code>--dismiss</code> command.
-| <code>.alert-title</code>   | Composition | Admonition title bar; hosts the dismiss button.                                   |
-| <code>.alert-body</code>    | Composition | Admonition body resting on the page surface.                                      |
-| Shared intents   | Intent      | <code>.primary</code>, <code>.secondary</code>, <code>.success</code>, <code>.warning</code>, <code>.danger</code>.                      |
-| Shared variants  | Variant     | <code>.solid</code>, <code>.outline</code>, and <code>.surface</code> emphasis.                                    |
-| <code>.sm</code> / <code>.lg</code>    | Size        | Density; inline padding stays stable.                                             |</p>
 <h2 id="basic-usage">Basic usage</h2>
+<p><code>.surface</code> comes first on purpose: it keeps the theme's own chrome and puts the
+intent in the ink alone, which is what most informational messages want. Add an
+intent treatment when the color itself carries the meaning.</p>
 </div>
 <div class="docs-example">
   <div class="docs-preview">
 <div class="stack">
+  <div class="alert surface">
+    <i class="ti ti-info-circle alert-icon" aria-hidden="true"></i>
+    <div><strong>New message.</strong> 12 unread. <a href="#">Open inbox</a>.</div>
+  </div>
+
   <div class="alert success">
     <i class="ti ti-circle-check alert-icon" aria-hidden="true"></i>
     <div>Your changes have been saved. <a href="#">View activity</a>.</div>
@@ -286,6 +294,11 @@ itself needs to change, not <code>.soft</code>.</p>
   </div>
   <div class="docs-code">
     <pre><code class="language-html">&lt;div class=&quot;stack&quot;&gt;
+  &lt;div class=&quot;alert surface&quot;&gt;
+    &lt;i class=&quot;ti ti-info-circle alert-icon&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;
+    &lt;div&gt;&lt;strong&gt;New message.&lt;/strong&gt; 12 unread. &lt;a href=&quot;#&quot;&gt;Open inbox&lt;/a&gt;.&lt;/div&gt;
+  &lt;/div&gt;
+
   &lt;div class=&quot;alert success&quot;&gt;
     &lt;i class=&quot;ti ti-circle-check alert-icon&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;
     &lt;div&gt;Your changes have been saved. &lt;a href=&quot;#&quot;&gt;View activity&lt;/a&gt;.&lt;/div&gt;
@@ -356,11 +369,46 @@ itself needs to change, not <code>.soft</code>.</p>
   </div>
 </div>
 <div class="prose docs-prose">
+<h2 id="trailing-action">Trailing action</h2>
+<p>The grid pins <code>.alert-icon</code> and <code>.alert-dismiss</code> to the outer columns. A
+trailing link or button is content, not anatomy, so it lives in the text column:
+wrap the row in a <code>.cluster</code> and push the two ends apart. Same recipe as any
+split / spread row — there is no <code>.alert-action</code> class.</p>
+</div>
+<div class="docs-example">
+  <div class="docs-preview">
+<div class="alert surface">
+  <i class="ti ti-info-circle alert-icon" aria-hidden="true"></i>
+  <div class="cluster justify-content-space-between">
+    <strong>New message!</strong>
+    <a class="btn sm outline" href="#">Open</a>
+  </div>
+</div>
+  </div>
+  <div class="docs-code">
+    <pre><code class="language-html">&lt;div class=&quot;alert surface&quot;&gt;
+  &lt;i class=&quot;ti ti-info-circle alert-icon&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;
+  &lt;div class=&quot;cluster justify-content-space-between&quot;&gt;
+    &lt;strong&gt;New message!&lt;/strong&gt;
+    &lt;a class=&quot;btn sm outline&quot; href=&quot;#&quot;&gt;Open&lt;/a&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+  </div>
+</div>
+<div class="prose docs-prose">
 <h2 id="variants">Variants</h2>
 </div>
 <div class="docs-example">
   <div class="docs-preview">
 <div class="stack">
+  <div class="alert surface" role="alert">
+    I'm a surface alert — theme chrome, intent in the ink
+  </div>
+
+  <div class="alert inverted" role="alert">
+    I'm an inverted alert <a href="#">with a link</a>
+  </div>
+
   <div class="alert danger sm" role="alert">
     I'm a small error
   </div>
@@ -380,6 +428,14 @@ itself needs to change, not <code>.soft</code>.</p>
   </div>
   <div class="docs-code">
     <pre><code class="language-html">&lt;div class=&quot;stack&quot;&gt;
+  &lt;div class=&quot;alert surface&quot; role=&quot;alert&quot;&gt;
+    I'm a surface alert — theme chrome, intent in the ink
+  &lt;/div&gt;
+
+  &lt;div class=&quot;alert inverted&quot; role=&quot;alert&quot;&gt;
+    I'm an inverted alert &lt;a href=&quot;#&quot;&gt;with a link&lt;/a&gt;
+  &lt;/div&gt;
+
   &lt;div class=&quot;alert danger sm&quot; role=&quot;alert&quot;&gt;
     I'm a small error
   &lt;/div&gt;
@@ -406,11 +462,8 @@ itself needs to change, not <code>.soft</code>.</p>
   <div class="docs-preview">
 <div class="alert warning" id="warning-alert">
   <i class="ti ti-alert-triangle alert-icon" aria-hidden="true"></i>
-
-  <div class="stack" style="--gap: var(--space-10)">
-    <strong>Warning</strong>
-    <p>Something needs your attention.</p>
-  </div>
+  <strong>Warning</strong>
+  <p>Something needs your attention.</p>
 
   <button
     class="alert-dismiss"
@@ -424,11 +477,8 @@ itself needs to change, not <code>.soft</code>.</p>
   <div class="docs-code">
     <pre><code class="language-html">&lt;div class=&quot;alert warning&quot; id=&quot;warning-alert&quot;&gt;
   &lt;i class=&quot;ti ti-alert-triangle alert-icon&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;
-
-  &lt;div class=&quot;stack&quot; style=&quot;--gap: var(--space-10)&quot;&gt;
-    &lt;strong&gt;Warning&lt;/strong&gt;
-    &lt;p&gt;Something needs your attention.&lt;/p&gt;
-  &lt;/div&gt;
+  &lt;strong&gt;Warning&lt;/strong&gt;
+  &lt;p&gt;Something needs your attention.&lt;/p&gt;
 
   &lt;button
     class=&quot;alert-dismiss&quot;
@@ -457,19 +507,28 @@ itself needs to change, not <code>.soft</code>.</p>
 &lt;/div&gt;
 </code></pre>
 <h2 id="callout">Callout</h2>
-<p>Use <code>.callout</code> for a neutral panel with a thick accent border on the leading edge. Intent classes tint the border color.</p>
+<p><code>.callout</code> is a <strong>leading-edge flag treatment</strong>: it owns the border geometry and
+nothing else, so the surface and the ink keep coming from the alert's own intent
+and treatment. Bare is the soft panel, <code>.surface</code> the page surface, <code>.solid</code> a
+filled one — and <code>.outline</code> has no fill and no other side, since the flag <em>is</em>
+the border.</p>
 </div>
 <div class="docs-example">
   <div class="docs-preview">
 <div class="stack">
   <div class="alert callout">
     <strong>Note</strong>
-    <p>This is a callout — a neutral panel with a thick accent border on the leading edge.</p>
+    <p>A neutral panel with a thick accent flag on the leading edge.</p>
   </div>
 
   <div class="alert warning callout" role="alert">
     <strong>Heads up</strong>
-    <p>The border color follows the intent. No other borders are drawn.</p>
+    <p>The intent tints the panel and the flag together.</p>
+  </div>
+
+  <div class="alert success callout surface">
+    <strong>On the page surface</strong>
+    <p>The flag keeps the intent, the panel drops the tint.</p>
   </div>
 </div>
   </div>
@@ -477,13 +536,37 @@ itself needs to change, not <code>.soft</code>.</p>
     <pre><code class="language-html">&lt;div class=&quot;stack&quot;&gt;
   &lt;div class=&quot;alert callout&quot;&gt;
     &lt;strong&gt;Note&lt;/strong&gt;
-    &lt;p&gt;This is a callout — a neutral panel with a thick accent border on the leading edge.&lt;/p&gt;
+    &lt;p&gt;A neutral panel with a thick accent flag on the leading edge.&lt;/p&gt;
   &lt;/div&gt;
 
   &lt;div class=&quot;alert warning callout&quot; role=&quot;alert&quot;&gt;
     &lt;strong&gt;Heads up&lt;/strong&gt;
-    &lt;p&gt;The border color follows the intent. No other borders are drawn.&lt;/p&gt;
+    &lt;p&gt;The intent tints the panel and the flag together.&lt;/p&gt;
   &lt;/div&gt;
+
+  &lt;div class=&quot;alert success callout surface&quot;&gt;
+    &lt;strong&gt;On the page surface&lt;/strong&gt;
+    &lt;p&gt;The flag keeps the intent, the panel drops the tint.&lt;/p&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+  </div>
+</div>
+<div class="prose docs-prose">
+<p>Tune the flag with <code>--alert-border-inline-start-width</code> and
+<code>--alert-border-inline-start-color</code>; <code>--alert-radius: 0</code> turns it into a
+full-bleed notice.</p>
+</div>
+<div class="docs-example">
+  <div class="docs-preview">
+<div class="alert danger callout" style="--alert-radius: 0">
+  <i class="ti ti-user-x alert-icon" aria-hidden="true"></i>
+  <div>Your request to join the team is denied.</div>
+</div>
+  </div>
+  <div class="docs-code">
+    <pre><code class="language-html">&lt;div class=&quot;alert danger callout&quot; style=&quot;--alert-radius: 0&quot;&gt;
+  &lt;i class=&quot;ti ti-user-x alert-icon&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;
+  &lt;div&gt;Your request to join the team is denied.&lt;/div&gt;
 &lt;/div&gt;</code></pre>
   </div>
 </div>
@@ -575,6 +658,7 @@ internal color plumbing directly.</p>
         <li><a class="nav-link" href="#class-reference" data-docs-toc-item data-level="2">Class reference</a></li>
         <li><a class="nav-link" href="#basic-usage" data-docs-toc-item data-level="2">Basic usage</a></li>
         <li><a class="nav-link" href="#content-and-actions" data-docs-toc-item data-level="2">Content and actions</a></li>
+        <li><a class="nav-link" href="#trailing-action" data-docs-toc-item data-level="2">Trailing action</a></li>
         <li><a class="nav-link" href="#variants" data-docs-toc-item data-level="2">Variants</a></li>
         <li><a class="nav-link" href="#dismiss" data-docs-toc-item data-level="2">Dismiss</a></li>
         <li><a class="nav-link" href="#callout" data-docs-toc-item data-level="2">Callout</a></li>

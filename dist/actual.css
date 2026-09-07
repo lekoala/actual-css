@@ -70,9 +70,9 @@ select {
   --line-height: 1.5;
   --line-height-tight: 1.25;
   --line-height-relaxed: 1.75;
-  --font-weight: 400;
+  --font-weight-normal: 400;
   --font-weight-medium: 500;
-  --font-weight-strong: 650;
+  --font-weight-semibold: 600;
   --font-weight-bold: 700;
 
   /* Typography scale */

@@ -46,7 +46,7 @@
   inset-inline-start: calc(var(--space-30) + var(--border-width));
   color: var(--text-muted);
   font-size: var(--control-font-size);
-  font-weight: var(--font-weight);
+  font-weight: var(--font-weight-normal);
   opacity: var(--floating-label-opacity);
   pointer-events: none;
   transition:

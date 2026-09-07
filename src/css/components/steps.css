@@ -88,7 +88,7 @@
   background: var(--step-marker-bg);
   color: var(--step-marker-fg);
   font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-strong);
+  font-weight: var(--font-weight-semibold);
   line-height: 1;
 }
 
@@ -151,7 +151,7 @@
 /* Weight marks "where I am now". Complete needs none: its filled disc already
    reads as strongly. */
 .steps > [aria-current="step"] .step-label {
-  font-weight: var(--font-weight-strong);
+  font-weight: var(--font-weight-semibold);
 }
 
 .steps > .step-complete:not([aria-current="step"])::before {

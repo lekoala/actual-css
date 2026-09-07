@@ -224,9 +224,9 @@
 <li>Empty badges render as dots. The element must be truly empty: no text and no whitespace.</li>
 </ul>
 <p>A badge is <strong>content-sized</strong>: it never stretches to fill its container, even as a
-direct child of <code>.stack</code> (where flex children otherwise stretch). Use
-<code>inline-size: 100%</code> — or the optional <code>.inline-size-full</code> utility — when a
-full-width badge is intentional.</p>
+direct child of <code>.stack</code> (where flex children otherwise stretch), and a flex
+parent never compresses it (<code>flex: none</code>). Use <code>inline-size: 100%</code> — or the
+optional <code>.inline-size-full</code> utility — when a full-width badge is intentional.</p>
 <p><strong>Related terms:</strong> chip, tag, pill, removable tag.</p>
 <h2 id="class-reference">Class reference</h2>
 <div class="table-wrap"><table class="table">
@@ -236,6 +236,7 @@ full-width badge is intentional.</p>
 <tbody>
 <tr><td><code>.badge</code></td><td>Component</td><td>Compact label; soft by default.</td></tr>
 <tr><td><code>.badge:empty</code></td><td>Composition</td><td>Truly-empty badge renders as a solid dot.</td></tr>
+<tr><td><code>.dot</code></td><td>Composition</td><td>Status dot inside a badge.</td></tr>
 <tr><td>Shared intents</td><td>Intent</td><td><code>.primary</code>, <code>.secondary</code>, <code>.success</code>, …</td></tr>
 <tr><td>Shared variants</td><td>Variant</td><td><code>.solid</code>, <code>.outline</code>, <code>.surface</code>.</td></tr>
 <tr><td><code>.sm</code> / <code>.lg</code></td><td>Size</td><td>Compact density.</td></tr>
@@ -318,6 +319,41 @@ full-width badge is intentional.</p>
 <div class="prose docs-prose">
 <p>An autonomous dot conveys state without visible text, so give it an accessible
 name.</p>
+<p>For a dot beside a label, put the shared <code>.dot</code> utility inside the badge. It
+paints with <code>currentColor</code>, so it follows the badge ink instead of needing the
+intent class repeated on it.</p>
+</div>
+<div class="docs-example">
+  <div class="docs-preview">
+<span class="badge warning">
+  <span class="dot" aria-hidden="true"></span>
+  In progress
+</span>
+<span class="badge danger">
+  <span class="dot" aria-hidden="true"></span>
+  Blocked
+</span>
+<span class="badge success">
+  <span class="dot" aria-hidden="true"></span>
+  Completed
+</span>
+  </div>
+  <div class="docs-code">
+    <pre><code class="language-html">&lt;span class=&quot;badge warning&quot;&gt;
+  &lt;span class=&quot;dot&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;
+  In progress
+&lt;/span&gt;
+&lt;span class=&quot;badge danger&quot;&gt;
+  &lt;span class=&quot;dot&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;
+  Blocked
+&lt;/span&gt;
+&lt;span class=&quot;badge success&quot;&gt;
+  &lt;span class=&quot;dot&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;
+  Completed
+&lt;/span&gt;</code></pre>
+  </div>
+</div>
+<div class="prose docs-prose">
 <p>Custom status or category dots define a custom intent (<code>--intent</code> /
 <code>--intent-fg</code>); <code>--ui-*</code> controls treatment, while empty dots intentionally
 remain solid.</p>
@@ -389,7 +425,7 @@ used instead.</p>
 <li><code>--badge-size</code> — minimum block size; also the square size of an <code>:empty</code> dot badge.</li>
 <li><code>--badge-dot-size</code> — size of an <code>:empty</code> dot badge.</li>
 <li><code>--badge-font-size</code> — label font size.</li>
-<li><code>--badge-pad-x</code> — inline padding.</li>
+<li><code>--badge-pad-x</code> — inline padding. Derived from <code>--badge-size</code>, so it follows density and keeps the pill proportional; set it to opt out.</li>
 <li><code>--badge-dismiss-icon-size</code> — size of the X painted by an empty dismiss button.</li>
 </ul>
 

@@ -51,7 +51,7 @@
   background: transparent;
   color: var(--text-muted);
   font: inherit;
-  font-weight: var(--font-weight-strong);
+  font-weight: var(--font-weight-semibold);
   text-decoration: none;
   cursor: pointer;
 }

@@ -279,6 +279,20 @@
   --soft-fg-mix: 100%;
 }
 </code></pre>
+<p><code>--soft-border-mix</code> is the same lever for the rim. The <code>65%</code> default keeps a
+visibly tinted border around every soft surface; pointing it at <code>--soft-bg-mix</code>
+resolves the rim to the fill, and soft treatments become a tint carrying text
+with no contour — the flatter language of a modern component set, from one
+declaration:</p>
+<pre><code class="language-css">[data-theme=&quot;flat&quot;] {
+  --soft-border-mix: var(--soft-bg-mix);
+}
+</code></pre>
+<p>It reaches the default <code>.badge</code> and <code>.alert</code> plus every explicit <code>.soft</code>
+(<code>.btn</code>, <code>.card</code>, <code>.chat</code>, <code>.navbar</code>, <code>.app-nav</code>), and nothing else: a component
+on its own surface keeps its <code>--border</code> rim. The dial is also
+rendering-only — the baseline path below <code>color-mix()</code> keeps <code>var(--border)</code>, so
+borderless soft is a look, not a contract the Degraded tier upholds.</p>
 <p><code>--soft-fg-mix</code> is the share of raw intent in soft <em>text</em>. At its <code>100%</code> default soft ink is the intent color itself, which is what a palette of dark, muted intents wants. A vivid or light palette cannot afford that: a soft badge then paints intent-tinted ink on an intent-tinted surface, and the two converge. Lowering the mix rebates the ink toward <code>--text</code>, which is the right direction in both schemes because <code>--text</code> is dark on a light theme and light on a dark one. Around <code>45%</code> a fully saturated palette recovers AA while the ink still reads as its intent.</p>
 <p>Soft ink can also be corrected per role. The intent classes relay a per-role
 hook, and the soft recipe reads it before falling back to the global mix:</p>
@@ -336,8 +350,10 @@ derivation. A custom intent class provides the relay directly:</p>
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 
   --line-height: 1.5;
-  --font-weight: 400;
-  --font-weight-strong: 650;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
 
   --font-size-xs: 0.8125rem;
   --font-size-sm: 0.875rem;
