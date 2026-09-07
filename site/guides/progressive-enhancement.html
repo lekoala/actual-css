@@ -584,6 +584,51 @@ tests it. No core module list is modified — the regression test in
 on the same root throws, and <code>disconnect()</code> releases the name so it can be
 registered again. A custom root passed as the third argument must be disposed
 by its owner; the default <code>document.documentElement</code> root is not affected.</p>
+<h3 id="applying-behaviors-from-application-selectors">Applying behaviors from application selectors</h3>
+<p>Prefer declarative <code>data-enhance</code> in HTML. When server-rendered markup or
+application conventions make JavaScript more convenient, use
+<code>applyEnhancement(name, selector, root?)</code>:</p>
+<pre><code class="language-js">import &quot;actual-css/js/tab&quot;;
+import &quot;actual-css/js/flyout&quot;;
+import &quot;actual-css/js/validation&quot;;
+import { applyEnhancement } from &quot;actual-css/js/enhance&quot;;
+
+const bindings = {
+  tabs: &quot;.tabs&quot;,
+  flyout: &quot;.menu-trigger&quot;,
+  validation: &quot;form.needs-validation&quot;,
+};
+
+for (const [name, selector] of Object.entries(bindings)) {
+  applyEnhancement(name, selector);
+}
+</code></pre>
+<p>Run this after the target markup exists, for example in a module script.
+Select the element that owns the behavior, not necessarily the element carrying
+the component class. For example, <code>flyout</code> applies to <strong>triggers</strong>, not <code>.flyout</code>
+panels. Those triggers need <code>aria-controls</code> pointing to their panels. Tooltips use
+<code>data-tooltip</code> directly and do not need a named enhancement.</p>
+<p><code>selector</code> is a CSS selector. <code>root</code> defaults to <code>document.documentElement</code> and
+uses <code>querySelectorAll()</code> semantics: only descendants match, never the scope
+itself. Pass a container to limit the application:</p>
+<pre><code class="language-js">applyEnhancement(&quot;tabs&quot;, &quot;.tabs&quot;, container);
+</code></pre>
+<p>Each registration on the scope or its ancestors refreshes the scope once.
+Shadow roots need their own registrations; document registrations do not cross
+into them.</p>
+<p>The function returns an array of matched elements, preserves existing
+tokens, and can be called repeatedly without initializing an active behavior
+twice. Invalid names or selectors throw. Without a DOM it returns an
+empty array. It does not import modules: applying a token before its module is
+registered lets that registration's initial scan discover it later.</p>
+<p><code>applyEnhancement()</code> is a one-time convenience for adding an enhancement token
+to elements selected by the application. It does not create a persistent
+selector-to-enhancement binding. For injected markup, author <code>data-enhance</code>
+directly or call the function with a scope containing the new elements.
+Detached elements receive the token and initialize when inserted into a
+registered root. Removing the token does not disconnect an active behavior.</p>
+<p><code>data-enhance</code> remains the portable behavior contract. Class mappings belong to
+the application; Actual does not infer behavior from presentation classes.</p>
 <h3 id="enhancement-manifests">Enhancement manifests</h3>
 <p>The enhancement-loader lets a server (or static HTML) declare document-wide
 enhancement modules that are imported lazily. A manifest is a JSON object
@@ -905,6 +950,7 @@ FormValidator.setErrors(form, { email: &quot;Already taken&quot; });
         <li><a class="nav-link" href="#dismiss-command" data-docs-toc-item data-level="3">Dismiss command</a></li>
         <li><a class="nav-link" href="#stateful-enhancers" data-docs-toc-item data-level="3">Stateful enhancers</a></li>
         <li><a class="nav-link" href="#named-behavior-registration" data-docs-toc-item data-level="3">Named behavior registration</a></li>
+        <li><a class="nav-link" href="#applying-behaviors-from-application-selectors" data-docs-toc-item data-level="3">Applying behaviors from application selectors</a></li>
         <li><a class="nav-link" href="#enhancement-manifests" data-docs-toc-item data-level="3">Enhancement manifests</a></li>
         <li><a class="nav-link" href="#lifecycle-rules" data-docs-toc-item data-level="2">Lifecycle rules</a></li>
         <li><a class="nav-link" href="#toggle-button-groups" data-docs-toc-item data-level="2">Toggle button groups</a></li>

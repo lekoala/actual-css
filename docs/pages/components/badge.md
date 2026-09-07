@@ -43,6 +43,9 @@ The shared intents are `.primary`, `.secondary`, `.success`, `.warning` and
 <span class="badge danger">Danger</span>
 <span class="badge success outline">Outline success</span>
 <span class="badge warning soft">Soft warning</span>
+<span class="badge primary solid">Solid primary</span>
+<span class="badge success solid">Solid success</span>
+<span class="badge danger solid">Solid danger</span>
 ```
 
 ## In a title
