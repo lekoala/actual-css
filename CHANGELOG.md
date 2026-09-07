@@ -4,6 +4,7 @@
 
 ### Added
 
+- `applyEnhancement()` applies named behavior tokens through an application selector and optional scope, preserves existing tokens and refreshes registered behaviors.
 - `.accordion.flush` and `.accordion.separated` container treatments: bare separators for embedding inside an existing surface, and independent item cards.
 - Popover transport probe: `demo/templates/popover-transport.html`.
 - Settings modal composition demo: `demo/templates/settings-modal.html`.

@@ -1,5 +1,6 @@
 import { afterEach, expect, test } from "bun:test";
 import enhance, {
+  applyEnhancement,
   enhancementSelector,
   hasEnhancement,
   registerEnhancement,
@@ -8,6 +9,129 @@ import { cleanupDOM, nextMicrotask, setupDOM } from "./helpers/dom.js";
 
 afterEach(() => {
   cleanupDOM();
+});
+
+test("applyEnhancement preserves tokens and initializes existing elements once", () => {
+  setupDOM('<div class="target" data-enhance="other"></div>');
+  const el = document.querySelector("div");
+  const calls = [];
+  const runtime = registerEnhancement("demo", (target) => calls.push(target));
+
+  expect(applyEnhancement("demo", ".target")).toEqual([el]);
+  applyEnhancement("demo", ".target");
+
+  expect(el.getAttribute("data-enhance")).toBe("other demo");
+  expect(calls).toEqual([el]);
+  runtime.disconnect();
+});
+
+test("applyEnhancement can precede registration and preserves normal cleanup", async () => {
+  setupDOM('<div class="target"></div>');
+  const [el] = applyEnhancement("demo", ".target");
+  const calls = [];
+  const runtime = registerEnhancement("demo", (target) => {
+    calls.push(target);
+    return () => calls.push("cleanup");
+  });
+  expect(calls).toEqual([el]);
+  el.remove();
+  await nextMicrotask();
+  expect(calls).toEqual([el, "cleanup"]);
+  runtime.disconnect();
+});
+
+test("selector scopes exclude themselves and refresh the containing registration", () => {
+  setupDOM('<main class="target"><div class="target"></div></main><aside class="target"></aside>');
+  const root = document.querySelector("main");
+  const calls = [];
+  const runtime = registerEnhancement("demo", (el) => calls.push(el));
+  const matches = applyEnhancement("demo", ".target", root);
+  expect(matches).toEqual([root.firstElementChild]);
+  expect(root.hasAttribute("data-enhance")).toBe(false);
+  expect(calls).toEqual(matches);
+  expect(document.querySelector("aside").hasAttribute("data-enhance")).toBe(false);
+  runtime.disconnect();
+});
+
+test("query scopes refresh their owners without crossing shadow boundaries", () => {
+  setupDOM("<main><div></div></main><aside></aside>");
+  const root = document.querySelector("main");
+  const shadow = document.querySelector("aside").attachShadow({ mode: "open" });
+  shadow.innerHTML = "<div></div>";
+  const calls = [];
+  const local = registerEnhancement("demo", () => calls.push("local"), root);
+  const scoped = registerEnhancement("demo", () => calls.push("shadow"), shadow);
+  const global = registerEnhancement("demo", () => calls.push("document"));
+
+  applyEnhancement("demo", "div", root);
+  applyEnhancement("demo", "div", shadow);
+
+  expect(calls).toEqual(["local", "document", "shadow"]);
+  local.disconnect();
+  scoped.disconnect();
+  global.disconnect();
+});
+
+test("detached scopes wait for insertion and a selector binding is not observed", async () => {
+  setupDOM("<main></main>");
+  const el = document.createElement("div");
+  const fragment = document.createDocumentFragment();
+  fragment.append(el);
+  const calls = [];
+  const runtime = registerEnhancement("demo", (target) => calls.push(target));
+  applyEnhancement("demo", "div", fragment);
+  expect(calls).toEqual([]);
+  document.querySelector("main").append(el);
+  await nextMicrotask();
+  expect(calls).toEqual([el]);
+
+  applyEnhancement("demo", ".target");
+  document.querySelector("main").insertAdjacentHTML("beforeend", '<div class="target"></div>');
+  await nextMicrotask();
+  expect(calls).toEqual([el]);
+  applyEnhancement("demo", ".target");
+  expect(calls).toHaveLength(2);
+  runtime.disconnect();
+});
+
+test("applyEnhancement rejects invalid names and selectors", () => {
+  setupDOM("<div></div>");
+  const el = document.querySelector("div");
+  expect(() => applyEnhancement("bad name", "div")).toThrow(TypeError);
+  expect(() => applyEnhancement("demo", "[", document)).toThrow();
+  expect(el.hasAttribute("data-enhance")).toBe(false);
+});
+
+test("applyEnhancement is safe without a DOM", () => {
+  cleanupDOM();
+  expect(applyEnhancement("demo", ".target")).toEqual([]);
+});
+
+test("applyEnhancement refreshes a manually added token without starting other names", () => {
+  setupDOM("<div></div>");
+  const el = document.querySelector("div");
+  const calls = [];
+  const demo = registerEnhancement("demo", () => calls.push("demo"));
+  const other = registerEnhancement("other", () => calls.push("other"));
+  el.setAttribute("data-enhance", "demo other");
+
+  applyEnhancement("demo", "div");
+  expect(calls).toEqual(["demo"]);
+  demo.disconnect();
+  applyEnhancement("demo", "div");
+  expect(calls).toEqual(["demo"]);
+  other.disconnect();
+});
+
+test("applyEnhancement supports document and fragment query scopes", () => {
+  setupDOM('<div class="target"></div>');
+  expect(applyEnhancement("demo", ".target", document)).toEqual([document.querySelector("div")]);
+  const fragment = document.createDocumentFragment();
+  const el = document.createElement("div");
+  el.className = "target";
+  fragment.append(el);
+  expect(applyEnhancement("demo", ".target", fragment)).toEqual([el]);
+  expect(el.getAttribute("data-enhance")).toBe("demo");
 });
 
 test("enhances initial matching elements once", () => {

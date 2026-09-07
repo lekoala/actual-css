@@ -201,6 +201,32 @@ export function hasEnhancement(el, name) {
   return el.matches(enhancementSelector(name));
 }
 
+/**
+ * Apply a named opt-in once; presentation selectors remain application-owned.
+ * @param {string} name
+ * @param {string} selector
+ * @param {Document | Element | DocumentFragment} [root] Query scope, excluding itself.
+ * @returns {Element[]} Matched descendants.
+ */
+export function applyEnhancement(name, selector, root) {
+  if (typeof document === "undefined") return [];
+
+  enhancementSelector(name);
+  root ??= document.documentElement;
+  const elements = [...root.querySelectorAll(selector)];
+
+  for (const el of elements) {
+    if (hasEnhancement(el, name)) continue;
+    const tokens = el.getAttribute("data-enhance");
+    el.setAttribute("data-enhance", tokens ? `${tokens} ${name}` : name);
+  }
+  // Refresh the scope once per owner; parentNode stops at shadow boundaries.
+  for (let owner = root; owner; owner = owner.parentNode) {
+    ownedNames.get(owner)?.get(name)?.refresh(root);
+  }
+  return elements;
+}
+
 export function registerEnhancement(name, init, root) {
   if (typeof document === "undefined") return noopRuntime();
 

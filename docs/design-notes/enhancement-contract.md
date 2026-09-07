@@ -47,6 +47,12 @@ and must match `[a-z][a-z0-9-]*`. Order is irrelevant; duplicates are harmless.
 <form data-enhance="validation autosubmit">  <!-- two behaviors -->
 ```
 
+`applyEnhancement()` is an application-owned authoring convenience: it writes
+the same tokens and refreshes their containing registrations. It does not watch
+presentation classes or establish a second discovery contract. Walking the
+scope's ancestors finds lifecycle owners even when the query scope is narrower
+than the registration root, without crossing shadow boundaries.
+
 ## When a token, when a `data-*`
 
 > `data-enhance` is a generic opt-in for when HTML does not already provide an unambiguous one.
