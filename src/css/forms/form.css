@@ -18,6 +18,7 @@
   display: grid;
   gap: var(--space-10);
   color: var(--text);
+  font-size: var(--control-font-size);
 }
 
 .field-group {
@@ -42,13 +43,13 @@
 
 .field-help {
   color: var(--text-muted);
-  font-size: var(--font-size-sm);
+  font-size: 0.875em;
 }
 
 .field-error {
   display: none;
   color: var(--danger);
-  font-size: var(--font-size-sm);
+  font-size: 0.875em;
 }
 
 .required-mark {

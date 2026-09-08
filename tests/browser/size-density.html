@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Size and density fixture</title>
+  <link rel="stylesheet" href="../../src/css/actual.full.css">
+  <style>
+    body { padding: 1rem; }
+    .sample { margin-block-end: 1rem; }
+  </style>
+</head>
+<body>
+  <div class="sm sample" id="plain-size">A size role is inert without a participating component.</div>
+
+  <div class="cluster sample">
+    <button class="btn sm" id="control-sm" type="button">Small</button>
+    <button class="btn" id="control-default" type="button">Default</button>
+    <button class="btn lg" id="control-lg" type="button">Large</button>
+  </div>
+
+  <div class="cluster sample">
+    <span class="compact"><button class="btn" id="density-compact" type="button">Compact</button></span>
+    <span><button class="btn" id="density-default" type="button">Default</button></span>
+    <span class="spacious"><button class="btn" id="density-spacious" type="button">Spacious</button></span>
+    <span class="compact"><button class="btn lg" id="local-large" type="button">Local large</button></span>
+  </div>
+
+  <div class="grid grid-3 sample">
+    <label class="input-icon sm" id="icon-sm">
+      <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8" fill="currentColor"></circle></svg>
+      <input class="input" type="text" value="Small">
+    </label>
+    <label class="input-icon" id="icon-default">
+      <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8" fill="currentColor"></circle></svg>
+      <input class="input" type="text" value="Default">
+    </label>
+    <label class="input-icon lg" id="icon-lg">
+      <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8" fill="currentColor"></circle></svg>
+      <input class="input" type="text" value="Large">
+    </label>
+  </div>
+</body>
+</html>

@@ -39,7 +39,6 @@
      applications, and no future framework step can collide with them. */
   --gap: 0.75rem;
   --density-space: var(--space-40);
-  --density-compact-size: 1.5rem;
   --space-10: 0.25rem;
   --space-20: 0.5rem;
   --space-30: 0.75rem;
@@ -96,8 +95,8 @@
   --bar-height: 0.65rem;
 
   /* Controls — inputs and buttons share --control-size so heights always match.
-     .sm/.lg (variants.css) switch --control-size; --control-font-size stays
-     at its baseline because density does not change typography.
+     .compact/.spacious (variants.css) switch geometry without changing
+     --control-font-size. Local .sm/.lg component sizes switch both.
 
      Inline choices (checkbox, radio, switch) are typographic, not field-sized:
      they sit on a line of text, so they follow --control-font-size through

@@ -32,8 +32,8 @@ Extra utilities:
 | `.margin-block-end-auto`    | Pushes content toward the block start.        |
 
 Spacing helpers follow the density context. The default step is
-`--space-40` (1rem); the `.sm` context tightens it to `--space-20` (0.5rem)
-and the `.lg` context loosens it to `--space-50` (1.5rem). All helpers read
+`--space-40` (1rem); the `.compact` context tightens it to `--space-20` (0.5rem)
+and the `.spacious` context loosens it to `--space-50` (1.5rem). All helpers read
 `--density-space` and map to logical properties (`padding-block`,
 `margin-block-end`, etc.) for writing-direction safety.
 
@@ -51,7 +51,7 @@ Override the default gap from layout primitives (`.stack`, `.cluster`, `.grid`):
 - `.gap-none` → `gap: 0`
 
 `.gap-none` sets the element's own gap directly and does not change `--gap`
-for nested layouts. For a denser or roomier rhythm, use the `.sm` / `.lg`
+for nested layouts. For a denser or roomier rhythm, use the `.compact` / `.spacious`
 density contexts or override `--gap` on the layout instance.
 
 ## Padding
@@ -82,5 +82,5 @@ No `mbs-none` / `mbe-none` — use `margin: 0` via `.list-reset` for lists, or a
 
 ## CSS hooks
 
-- `--density-space` — the step every padding and margin helper reads; `.sm` sets it to `--space-20`, default to `--space-40`, `.lg` to `--space-50`.
+- `--density-space` — the step every padding and margin helper reads; `.compact` sets it to `--space-20`, default to `--space-40`, `.spacious` to `--space-50`.
 - `--gap` — base gap of layout primitives; read by the optional `.gap-context`, `.row-gap-context`, and `.column-gap-context` helpers.

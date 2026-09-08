@@ -91,6 +91,17 @@ test("file selector button reflects disabled cursor", () => {
   expect(css).toContain("cursor: not-allowed;");
 });
 
+test("file selector button follows the shared control scale", () => {
+  const css = readCss("src/css/forms/native.css");
+
+  expect(css).toMatch(
+    /\.file::file-selector-button\s*\{[^}]*min-block-size:\s*var\(--control-size\)/s,
+  );
+  expect(css).toMatch(
+    /\.file::file-selector-button\s*\{[^}]*font-size:\s*var\(--control-font-size\)/s,
+  );
+});
+
 test("generic grid exposes an override and stays space-driven", () => {
   const css = readCss("src/css/layout/grid.css");
 
@@ -258,13 +269,31 @@ test("native color control has normal, disabled, focus, and forced-colors states
   expect(css).toContain(".color::-moz-color-swatch");
 });
 
-test("status bar supports long tokens and owns its print behavior", () => {
+test("status bar supports long tokens without filtering printed content", () => {
   const statusCss = readCss("src/css/components/status-bar.css");
   const printCss = readCss("src/css/core/print.css");
 
   expect(statusCss).toContain("overflow-wrap: anywhere;");
-  expect(statusCss).toMatch(/@media print\s*\{[\s\S]*\.status-bar/);
+  expect(statusCss).not.toContain("@media print");
   expect(printCss).not.toContain(".status-bar");
+});
+
+test("print rules preserve semantic component content", () => {
+  for (const file of [
+    "app-nav.css",
+    "button.css",
+    "drawer.css",
+    "fab.css",
+    "flyout.css",
+    "modal.css",
+    "spinner.css",
+    "status-bar.css",
+    "tooltip.css",
+  ]) {
+    expect(readRules(`src/css/components/${file}`)).not.toMatch(
+      /@media print\s*\{[\s\S]*?display:\s*none/,
+    );
+  }
 });
 
 test("global print defaults do not know component selectors", () => {
@@ -292,6 +321,18 @@ test("badge is content-sized and never stretches in a stack", () => {
 
   expect(css).toMatch(/\.badge \{[\s\S]*inline-size: fit-content;/);
   expect(css).toMatch(/\.badge \{[\s\S]*max-inline-size: 100%;/);
+});
+
+test("badge decorative children consume the icon scale once", () => {
+  const css = readCss("src/css/components/badge.css");
+
+  expect(css).toMatch(/\.badge\s*\{[^}]*--badge-icon-size:\s*1em;/s);
+  expect(css).toMatch(
+    /\.badge\s*>\s*:where\(svg, img, \[aria-hidden="true"\]:not\(\.dot\)\)\s*\{[^}]*font-size:\s*var\(--badge-icon-size\)/s,
+  );
+  expect(css).toMatch(
+    /\.badge\s*>\s*:where\(svg, img, \[aria-hidden="true"\]:not\(\.dot\)\)\s*\{[^}]*inline-size:\s*1em;\s*block-size:\s*1em;/s,
+  );
 });
 
 test("inverted maps tokens and paints early in variants.css (no late paint)", () => {
@@ -691,6 +732,63 @@ test("inline choices are sized by typography, not by field density", () => {
   expect(choiceCss).not.toContain("var(--control-size)");
 });
 
+test("size and density use separate shared contracts", () => {
+  const variantsCss = readCss("src/css/core/variants.css");
+  const variantRules = readRules("src/css/core/variants.css");
+  const badgeCss = readCss("src/css/components/badge.css");
+
+  expect(variantsCss).toMatch(/\.compact\s*\{[^}]*--control-size:\s*var\(--control-size-sm\)/s);
+  expect(variantsCss).toMatch(/\.spacious\s*\{[^}]*--control-size:\s*var\(--control-size-lg\)/s);
+
+  // Size roles are opt-in and local. A bare rule would turn them back into
+  // inherited typography contexts and cannot respect each family's baseline.
+  expect(variantRules).not.toMatch(/(^|\n)\.sm\s*\{/);
+  expect(variantRules).not.toMatch(/(^|\n)\.lg\s*\{/);
+  expect(variantsCss).toMatch(
+    /:where\([\s\S]*\.btn,[\s\S]*\)\.sm\s*\{[^}]*--control-font-size:\s*var\(--font-size-sm\)/,
+  );
+  expect(variantsCss).toMatch(
+    /:where\([\s\S]*\.btn,[\s\S]*\)\.lg\s*\{[^}]*--control-font-size:\s*var\(--font-size-lg\)/,
+  );
+  expect(badgeCss).toMatch(/\.badge\.sm\s*\{[^}]*--badge-font-size:\s*var\(--font-size-xs\)/s);
+  expect(badgeCss).toMatch(/\.badge\.lg\s*\{[^}]*--badge-font-size:\s*var\(--font-size-md\)/s);
+
+  // Density never becomes a second size ladder: the badge's optical height is
+  // intrinsic and must not depend on a density token.
+  expect(variantsCss).not.toContain("--density-compact-size");
+  expect(badgeCss).not.toContain("--density-compact-size");
+  expect(badgeCss).not.toContain("--density-");
+  expect(badgeCss).toMatch(/\.badge\s*\{[^}]*--badge-size:\s*1\.5rem;/s);
+});
+
+test("input icon applies its em scale once to SVG geometry", () => {
+  const css = readCss("src/css/forms/input-icon.css");
+
+  expect(css).toContain("--input-icon-size: 1.25em;");
+  expect(css).toMatch(/\.input-icon\s*\{[^}]*font-size:\s*var\(--control-font-size\)/s);
+  expect(css).toMatch(
+    /> :where\(:not\(\.input\)\)\s*\{[^}]*font-size:\s*var\(--input-icon-size\)/s,
+  );
+  expect(css).toMatch(
+    /> svg:where\(:not\(\.input\)\)\s*\{[^}]*inline-size:\s*1em;[^}]*block-size:\s*1em;/s,
+  );
+});
+
+test("sized control wrappers consume their local typography", () => {
+  const participants = [
+    ["src/css/forms/form.css", ".field"],
+    ["src/css/forms/input-icon.css", ".input-icon"],
+    ["src/css/forms/otp.css", ".otp"],
+    ["src/css/components/pagination.css", ".pagination"],
+  ];
+
+  for (const [path, selector] of participants) {
+    expect(readCss(path)).toMatch(
+      new RegExp(`\\${selector}\\s*\\{[^}]*font-size:\\s*var\\(--control-font-size\\)`, "s"),
+    );
+  }
+});
+
 test("every inline choice derives its first-line offset from its own height", () => {
   const css = readCss("src/css/forms/choice.css");
 
@@ -768,7 +866,7 @@ test("optional aura only animates when motion is allowed", () => {
   expect(css).not.toContain("@media (forced-colors: active)");
 });
 
-test("optional FAB preserves DOM order and stays out of print", () => {
+test("optional FAB preserves DOM order", () => {
   const css = readCss("src/css/components/fab.css");
 
   expect(css).toContain("flex-direction: column;");
@@ -784,7 +882,7 @@ test("optional FAB preserves DOM order and stays out of print", () => {
   expect(css).not.toContain('[aria-hidden="true"]:only-child');
   expect(css).toMatch(/\.fab-action\s*\{[\s\S]*inline-size:\s*max-content;/);
   expect(css).toMatch(/\.fab-label\s*\{[\s\S]*box-shadow:\s*var\(--shadow\);/);
-  expect(css).toContain("@media print");
+  expect(css).not.toContain("@media print");
 });
 
 test("app navigation stays semantic and app-layout owns its adaptive geometry", () => {

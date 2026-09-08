@@ -1,12 +1,12 @@
 {
-  "totalRaw": 283091,
+  "totalRaw": 284352,
   "core": {
-    "minified": 11173,
-    "brotli": 2582
+    "minified": 11535,
+    "brotli": 2654
   },
   "full": {
-    "minified": 122909,
-    "brotli": 17816
+    "minified": 123364,
+    "brotli": 17870
   },
   "js": {
     "core": {
@@ -26,43 +26,47 @@
     },
     {
       "file": "core/tokens.css",
-      "raw": 9603
+      "raw": 9568
     },
     {
       "file": "components/modal.css",
-      "raw": 9533
+      "raw": 9459
     },
     {
       "file": "components/alert.css",
       "raw": 8889
     },
     {
+      "file": "components/badge.css",
+      "raw": 7503
+    },
+    {
       "file": "components/button.css",
-      "raw": 7511
+      "raw": 7280
     },
     {
       "file": "core/theme.css",
       "raw": 7121
     },
     {
-      "file": "components/badge.css",
-      "raw": 7008
-    },
-    {
       "file": "components/flyout.css",
-      "raw": 6905
+      "raw": 6842
     },
     {
       "file": "forms/choice.css",
       "raw": 6155
     },
     {
-      "file": "components/drawer.css",
-      "raw": 5403
-    },
-    {
       "file": "effects/aura.css",
       "raw": 5400
+    },
+    {
+      "file": "components/drawer.css",
+      "raw": 5328
+    },
+    {
+      "file": "core/variants.css",
+      "raw": 5297
     },
     {
       "file": "typography/prose.css",
@@ -74,11 +78,7 @@
     },
     {
       "file": "components/tooltip.css",
-      "raw": 4716
-    },
-    {
-      "file": "core/variants.css",
-      "raw": 4712
+      "raw": 4651
     },
     {
       "file": "layout/column-layout.css",
@@ -98,7 +98,7 @@
     },
     {
       "file": "utilities/extra.css",
-      "raw": 4414
+      "raw": 4434
     },
     {
       "file": "forms/switch.css",
@@ -118,7 +118,7 @@
     },
     {
       "file": "forms/otp.css",
-      "raw": 3783
+      "raw": 3821
     },
     {
       "file": "utilities/base.css",
@@ -126,31 +126,31 @@
     },
     {
       "file": "forms/floating-field.css",
-      "raw": 3696
+      "raw": 3707
     },
     {
       "file": "components/tab.css",
-      "raw": 3432
+      "raw": 3471
     },
     {
       "file": "components/accordion.css",
       "raw": 3320
     },
     {
-      "file": "components/fab.css",
-      "raw": 3313
-    },
-    {
       "file": "components/menu.css",
-      "raw": 3281
+      "raw": 3320
     },
     {
-      "file": "components/status-bar.css",
-      "raw": 3238
+      "file": "components/fab.css",
+      "raw": 3263
     },
     {
       "file": "components/rating.css",
       "raw": 3174
+    },
+    {
+      "file": "components/status-bar.css",
+      "raw": 3171
     },
     {
       "file": "forms/range.css",
@@ -159,6 +159,10 @@
     {
       "file": "forms/control.css",
       "raw": 2909
+    },
+    {
+      "file": "forms/native.css",
+      "raw": 2768
     },
     {
       "file": "components/navbar.css",
@@ -187,10 +191,6 @@
     {
       "file": "themes/spruce.css",
       "raw": 2520
-    },
-    {
-      "file": "forms/native.css",
-      "raw": 2473
     },
     {
       "file": "themes/petrol.css",
@@ -254,7 +254,11 @@
     },
     {
       "file": "components/app-nav.css",
-      "raw": 1956
+      "raw": 1902
+    },
+    {
+      "file": "forms/input-icon.css",
+      "raw": 1895
     },
     {
       "file": "themes/brutalist.css",
@@ -271,10 +275,6 @@
     {
       "file": "layout/index.css",
       "raw": 1707
-    },
-    {
-      "file": "forms/input-icon.css",
-      "raw": 1678
     },
     {
       "file": "components/skeleton.css",
@@ -301,32 +301,32 @@
       "raw": 1479
     },
     {
-      "file": "components/surface.css",
-      "raw": 1471
-    },
-    {
       "file": "typography/overline.css",
       "raw": 1465
+    },
+    {
+      "file": "components/surface.css",
+      "raw": 1460
     },
     {
       "file": "layout/scroller.css",
       "raw": 1454
     },
     {
+      "file": "components/pagination.css",
+      "raw": 1395
+    },
+    {
       "file": "components/spinner.css",
-      "raw": 1452
+      "raw": 1388
     },
     {
       "file": "components/busy.css",
       "raw": 1386
     },
     {
-      "file": "components/pagination.css",
-      "raw": 1356
-    },
-    {
       "file": "forms/form.css",
-      "raw": 1331
+      "raw": 1346
     },
     {
       "file": "layout/scroll-snap.css",
@@ -339,6 +339,10 @@
     {
       "file": "themes/indigo.css",
       "raw": 1125
+    },
+    {
+      "file": "components/key.css",
+      "raw": 1105
     },
     {
       "file": "components/index.css",
@@ -357,12 +361,8 @@
       "raw": 883
     },
     {
-      "file": "components/key.css",
-      "raw": 859
-    },
-    {
       "file": "layout/stack.css",
-      "raw": 783
+      "raw": 794
     },
     {
       "file": "components/data-list.css",

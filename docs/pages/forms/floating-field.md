@@ -68,11 +68,12 @@ every state, so their label always sits at the top.
 </div>
 ```
 
-## Density
+## Size and density
 
 The reserved headroom responds to control density through `--control-size`:
-`.sm` and `.lg` on the cell or an ancestor resize the control geometry and the
-label spacing with it. Typography is untouched, as everywhere in the framework.
+`.sm` and `.lg` on the cell resize the control geometry and typography. A
+`.compact` or `.spacious` ancestor changes geometry only, including the label
+spacing with it; typography stays unchanged under density.
 The floating label does add height — the headroom reserves a second vertical
 line on top of the control's minimum size.
 

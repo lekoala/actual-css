@@ -36,7 +36,8 @@ Add exactly one visual `span` per expected character. Their count must match
 a numeric keyboard but does not enforce numeric input; validate the submitted
 value as usual.
 
-The component follows shared `.sm` and `.lg` density through `--control-size`.
+The component follows shared `.sm` and `.lg` size through `--control-size` and
+`--control-font-size`.
 Use `aria-invalid="true"` for explicit invalid state, or place it in the
 standard `.needs-validation.was-validated` form flow.
 

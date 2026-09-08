@@ -41,15 +41,17 @@ not as the wrapper that lays out independent full-width regions of a page.
 
 ## Choosing a density
 
-`--gap` is the primitive's channel, and the density variants set it at the point
-of use. Pick the one that matches how tightly the children belong together:
+`--gap` is the primitive's channel, and the density context variants set it at
+the point of use. Apply the density class on the stack itself to size one
+instance, or on an ancestor to reach nested layouts. Pick the one that matches
+how tightly the children belong together:
 
 | Markup            | Gap  | Use for                                    |
 | ----------------- | ---- | ------------------------------------------ |
 | `.stack gap-none` | 0    | Lines forming one typographic unit         |
-| `.stack sm`       | 8px  | A homogeneous series of controls           |
+| `.stack compact`  | 8px  | A homogeneous series of controls           |
 | `.stack`          | 12px | Normal flow between distinct elements      |
-| `.stack lg`       | 24px | Sections, or blocks that read as separated |
+| `.stack spacious` | 24px | Sections, or blocks that read as separated |
 
 One typographic unit means a name and a job title, or a figure and its caption.
 A homogeneous series means a radio list, a checkbox list, or a compact vertical
@@ -57,8 +59,14 @@ menu.
 
 The distinction between the first two matters. `42` above `Open issues` is
 almost a single block of text, so it takes `gap-none`. Three `.choice` labels
-stay three separate controls that happen to form one group, so they take `sm` —
-tighter than the default, but still spaced.
+stay three separate controls that happen to form one group, so they take
+`compact` — tighter than the default, but still spaced.
+
+`.compact` and `.spacious` rebind `--gap` to `--space-20` and `--space-50`.
+Because the token is inherited, the same two classes also tighten the inner gap
+of any nested stack, cluster, and grid. For a one-off gap that must *not* follow
+density, using `src/css/utilities/extra.css` `.gap-sm` / `.gap-md` / `.gap-lg`
+sets the `gap` property directly on the instance instead.
 
 A stack that mixes kinds keeps the default: five `.field` wrappers and one lone
 `.choice` is a form that contains a checkbox, not a list of options, and
@@ -84,7 +92,7 @@ depth:
 ```
 
 Both give the region the same spacing; only the second stops there. This is what
-makes a nested `.stack sm` a real density choice — 12px down to 8px — rather
+makes a nested `.stack compact` a real density choice — 12px down to 8px — rather
 than a patch cancelling a rhythm inherited from three levels up.
 
 Setting `--gap` is still the right move on the element that *consumes* it: a
@@ -92,8 +100,8 @@ one-off `--gap` on a card body or an actions row tunes that primitive and
 nothing below it, because the setter is the consumer. The leak only appears when
 a container sets the token and its children read it.
 
-`.sm` and `.lg` are the deliberate exception: they set `--gap` precisely so a
-density context reaches nested layouts.
+`.compact` and `.spacious` are the deliberate exception: they set `--gap`
+precisely so a density context reaches nested layouts.
 
 ## Grouping items tightly
 

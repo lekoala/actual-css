@@ -12,7 +12,7 @@
 - Could have simple or complex html content.
 - A title and a description are plain siblings: the alert owns the small space between its direct content blocks, so neither needs a wrapper. Nested content keeps its own rhythm — wrap several paragraphs in `.prose`, or a differently spaced group in `.stack`, when the message needs a rhythm of its own.
 - Alerts may include a decorative leading icon. Use `.alert-icon` on the icon element; the rest of the content flows into the remaining text column.
-- Use `.sm` or `.lg` for density changes. The inline padding stays stable.
+- Use `.compact` or `.spacious` for density changes. The inline padding stays stable.
 - Use `.alert-dismiss` for a compact dismiss button. It is a direct trailing child in standard alerts and lives inside `.alert-title` in admonitions. It uses the shared `--icon-close` mask and the `--dismiss` runtime command — no icon font or custom JS.
 
 Because alerts are soft by default, adding `.soft` to an intent (`.alert.soft.primary`,
@@ -34,7 +34,7 @@ itself needs to change, not `.soft`.
 | Shared intents   | Intent      | `.primary`, `.secondary`, `.success`, …         |
 | Shared variants  | Variant     | `.solid`, `.outline`, `.surface`.               |
 | `.inverted`      | Surface     | Inverse surface, any intent.                    |
-| `.sm` / `.lg`    | Size        | Density; inline padding stays stable.           |
+| Density contexts | Density     | Descendant rhythm; inline padding stays stable. |
 
 ## Basic usage
 
@@ -128,12 +128,12 @@ split / spread row — there is no `.alert-action` class.
     I'm an inverted alert <a href="#">with a link</a>
   </div>
 
-  <div class="alert danger sm" role="alert">
-    I'm a small error
+  <div class="alert danger compact" role="alert">
+    I'm an error in a compact context
   </div>
 
-  <div class="alert danger lg" role="alert">
-    I'm a large error
+  <div class="alert danger spacious" role="alert">
+    I'm an error in a spacious context
   </div>
 
   <div class="alert danger outline" role="alert">
@@ -252,7 +252,7 @@ An admonition is a structured box with a tinted title bar, an optional icon, and
 
 ## CSS hooks
 
-- `--alert-pad-inline` — inline padding. Stays stable across `.sm`/`.lg`.
+- `--alert-pad-inline` — inline padding. Stays stable across density contexts.
 - `--alert-pad-block` — block padding.
 - `--alert-font-size` — base font size.
 - `--alert-icon-size` — size of a leading `.alert-icon`.

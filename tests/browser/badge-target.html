@@ -8,19 +8,23 @@
   <style>* { transition-duration: 0s !important; }</style>
 </head>
 <body>
-  <!-- .sm drops --density-compact-size to 1.25rem (20px); the 24px target floor
+  <!-- .sm sets --badge-size to 1.25rem (20px); the 24px target floor
        must keep the button at 24x24 while the badge stays visually compact. -->
-  <span class="badge primary soft sm" id="sm">Design <button type="button" aria-label="Remove Design"></button></span>
+  <span class="badge primary soft sm" id="sm"><i aria-hidden="true"></i>Design <button type="button" aria-label="Remove Design"></button></span>
 
-  <!-- Default density: 1.5rem == 24px at the default root size, so badge and
+  <!-- Default size: 1.5rem == 24px at the default root size, so badge and
        button measure the same and the floor must not change the geometry. -->
-  <span class="badge primary soft" id="default">Design <button type="button" aria-label="Remove Design"></button></span>
+  <span class="badge primary soft" id="default"><i aria-hidden="true"></i>Design <button type="button" aria-label="Remove Design"></button></span>
 
   <!-- .lg: 1.875rem, above the floor on both badge and target. -->
-  <span class="badge primary soft lg" id="lg">Design <button type="button" aria-label="Remove Design"></button></span>
+  <span class="badge primary soft lg" id="lg"><i aria-hidden="true"></i>Design <button type="button" aria-label="Remove Design"></button></span>
 
   <!-- A thematic override under the floor (17px): the floor holds the target at
        24px and still does not inflate the badge itself. -->
-  <span class="badge primary soft" id="custom" style="--density-compact-size: 17px">Design <button type="button" aria-label="Remove Design"></button></span>
+  <span class="badge primary soft" id="custom" style="--badge-size: 17px"><i aria-hidden="true"></i>Design <button type="button" aria-label="Remove Design"></button></span>
+
+  <span class="compact"><span class="badge" id="compact"><i aria-hidden="true"></i>Compact</span></span>
+  <span><span class="badge" id="density-default"><i aria-hidden="true"></i>Default</span></span>
+  <span class="spacious"><span class="badge" id="spacious"><i aria-hidden="true"></i>Spacious</span></span>
 </body>
 </html>

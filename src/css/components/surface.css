@@ -44,6 +44,6 @@
 }
 @media print {
   .surface-backdrop {
-    display: none !important;
+    display: none;
   }
 }

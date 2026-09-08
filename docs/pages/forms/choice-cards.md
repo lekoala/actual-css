@@ -88,7 +88,10 @@ Validation follows the shared pattern: `aria-invalid="true"` on the input (set m
 </fieldset>
 ```
 
-Sizes follow the shared `.sm` and `.lg` modifiers. Intent classes (`.primary`, `.secondary`) are supported on the `.choice-card` element.
+Sizes follow the shared `.sm` and `.lg` typography scale; the check indicator
+follows through its `em` sizing. Padding is density, so use a `.compact` or
+`.spacious` context to change it. Intent classes (`.primary`, `.secondary`) are
+supported on the `.choice-card` element.
 
 ## CSS hooks
 
@@ -100,7 +103,8 @@ Plain `.check` / `.radio` controls expose two hooks:
 
 - `--choice-control-size` — the control's own size, in `em` off the surrounding
   type. The switch track derives from it too, so a checkbox and a switch on the
-  same line stay proportionate. `.sm` / `.lg` do not touch it.
+  same line stay proportionate. A `.choice.sm` or `.choice.lg` scales it through
+  the surrounding typography.
 - `--choice-control-offset` — top offset that aligns the control with the first
   line of a multi-line label. Left unset, each control derives its own offset
   from its height and the line box, which keeps a checkbox and a taller switch

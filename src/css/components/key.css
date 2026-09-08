@@ -27,3 +27,13 @@
   vertical-align: 0.08em;
 }
 /* @sync key-recipe */
+
+/* .key has a compact typographic default of its own, so its local size roles
+   step around that default instead of inheriting the generic mapping. */
+.key.sm {
+  font-size: var(--font-size-xs);
+}
+
+.key.lg {
+  font-size: var(--font-size-md);
+}

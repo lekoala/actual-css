@@ -4,14 +4,14 @@ Flexible content container with optional header, body, and footer regions, plus 
 
 ## Class reference
 
-| Class       | Kind             | Description                                 |
-| ----------- | ---------------- | ------------------------------------------- |
-| `.card`     | Component        | Neutral raised surface for grouped content. |
-| `.raised`   | Variant          | Elevated surface with a soft shadow.        |
-| `.subtle`   | Variant          | Lower contrast against the page surface.    |
-| `.surface`  | Variant          | The page surface; intent in the text only.  |
-| `.inverted` | Surface modifier | Inverse surface treatment.                  |
-| `.compact`  | Variant          | Tighter padding for dense contexts.         |
+| Class       | Kind             | Description                                     |
+| ----------- | ---------------- | ----------------------------------------------- |
+| `.card`     | Component        | Neutral raised surface for grouped content.     |
+| `.raised`   | Variant          | Elevated surface with a soft shadow.            |
+| `.subtle`   | Variant          | Lower contrast against the page surface.        |
+| `.surface`  | Variant          | The page surface; intent in the text only.      |
+| `.inverted` | Surface modifier | Inverse surface treatment.                      |
+| `.compact`  | Density          | Tighter padding and compact descendant context. |
 
 `.surface` is a shared variant: it paints the page surface instead of
 `--surface-raised` and leaves the intent to the text.
@@ -220,4 +220,4 @@ treatments on either side of it.
 - `--card-radius` — corner radius.
 - `--card-max-inline-size` — maximum width.
 - `--card-pad` — inner padding; also drives the negative offsets that let a `.bleed` child reach the card edge. `.compact` lowers it.
-- `--card-gap` — space between direct children of a bare card. A composed layout primitive owns its own gap instead. `.compact` does not change this hook.
+- `--card-gap` — space between direct children of a bare card. A composed layout primitive owns its own gap instead.

@@ -62,7 +62,7 @@ naturally or via an explicit line break — still sit cleanly.
 
 A switch is sized off the control typography, not field density. Its track
 comes from `--choice-control-size` — the same token a checkbox and a radio use
-— so the three sit on a line of text at matching weight. `.sm` and `.lg` change
+— so the three sit on a line of text at matching weight. Density contexts change
 `--control-size`, which is field height, and deliberately leave inline choices
 alone.
 

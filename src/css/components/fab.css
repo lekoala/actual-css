@@ -126,9 +126,3 @@
   opacity: 1;
   transform: none;
 }
-
-@media print {
-  .fab {
-    display: none;
-  }
-}
