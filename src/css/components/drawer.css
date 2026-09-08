@@ -62,6 +62,17 @@ dialog.drawer[open] {
     transform var(--drawer-motion-duration) var(--ease-enter);
 }
 
+/* A form is the drawer's content wrapper when actions need method="dialog".
+   Span the drawer tracks so the form can keep the header at the top, let the
+   body absorb the available height, and keep the footer at the bottom. */
+dialog.drawer > form {
+  display: grid;
+  grid-row: 1 / -1;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  gap: var(--space-40);
+  min-block-size: 100%;
+}
+
 /* Backdrop color sourced from components/surface.css so it matches .modal
    and .surface-backdrop across the dialog family. */
 dialog.drawer::backdrop {

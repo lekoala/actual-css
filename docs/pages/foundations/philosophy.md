@@ -55,9 +55,13 @@ class:
 `.ghost` and `.link` are button-only variants.
 
 ```html demo
-<button class="btn soft primary">Soft primary</button>
-<span class="badge outline success">Outline success</span>
-<div class="alert solid warning">Solid warning</div>
+<div class="stack">
+  <div class="cluster">
+    <button class="btn soft primary">Soft primary</button>
+    <span class="badge outline success">Outline success</span>
+  </div>
+  <div class="alert solid warning">Solid warning</div>
+</div>
 ```
 
 ## Size and density
@@ -94,7 +98,7 @@ Density participation takes three levels:
 As inherited contexts, one class tightens or loosens the whole subtree:
 
 ```html demo
-<div class="compact">
+<div class="compact stack">
   <button class="btn">Compact button</button>
   <input class="input">
   <span class="badge">Compact badge</span>

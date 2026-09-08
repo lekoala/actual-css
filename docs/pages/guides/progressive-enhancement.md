@@ -749,7 +749,9 @@ field, and dispatches a bubbling `actual:invalid` event with
   <input class="input" name="email" type="email" required
          aria-describedby="email-error" />
   <span class="field-error" id="email-error">Enter a valid email.</span>
-  <button class="btn primary" type="submit">Submit</button>
+  <div class="form-actions">
+    <button class="btn primary" type="submit">Submit</button>
+  </div>
 </form>
 
 <div class="status-bar" data-status role="status" aria-live="polite" aria-atomic="true"></div>
