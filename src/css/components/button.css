@@ -111,13 +111,16 @@
   --ui-border: transparent;
 }
 
-/* Solid/soft get the overlay darkening on hover; outline/ghost/link stay flat.
-   Routed through a variable instead of a :not(.outline, .ghost, .link)
-   exclusion so the hover rule below only has to state the interactive
-   element list once. */
+/* Solid keeps the overlay darkening on hover; soft/outline/ghost/link stay
+   flat. The soft hover is its own fill change (--soft-hover-alpha) — a second
+   overlay on top would double the fill step and drag its ink below the resting
+   contrast on every intent. Routed through a variable instead of a
+   :not(.outline, .ghost, .link) exclusion so the hover rule below only has to
+   state the interactive element list once. */
 .btn.outline,
 .btn.ghost,
-.btn.link {
+.btn.link,
+.btn.soft {
   --btn-hover-overlay: transparent;
 }
 

@@ -74,7 +74,7 @@ const contrast = (a, b) => {
   return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05);
 };
 
-const INTENTS = ["primary", "secondary", "success", "danger"];
+const INTENTS = ["primary", "secondary", "success", "warning", "danger", "neutral"];
 
 it("soft variant contract over a chromatic surface", async () => {
   await withBrowserPage(
@@ -109,13 +109,17 @@ it("soft variant contract over a chromatic surface", async () => {
             primary: ink("#ref-primary"),
             secondary: ink("#ref-secondary"),
             success: ink("#ref-success"),
+            warning: ink("#ref-warning"),
             danger: ink("#ref-danger"),
+            neutral: ink("#ref-neutral"),
           },
           badge: {
             primary: read("#badge-primary"),
             secondary: read("#badge-secondary"),
             success: read("#badge-success"),
+            warning: read("#badge-warning"),
             danger: read("#badge-danger"),
+            neutral: read("#badge-neutral"),
           },
           alert: { danger: read("#alert-danger"), secondary: read("#alert-secondary") },
           alertSoft: { primary: read("#alert-soft-primary"), danger: read("#alert-soft-danger") },
@@ -153,7 +157,9 @@ it("soft variant contract over a chromatic surface", async () => {
         expect(contrast(soft.fg, soft.bg)).toBeGreaterThanOrEqual(4.5);
 
         // A --soft-fg-mix below 100% must actually move the ink off raw intent.
-        expect(soft.fg).not.toBe(raw);
+        // Neutral is the fixture's near-black text, so rebating toward --text
+        // cannot change it — the move is only meaningful for chromatic intents.
+        if (intent !== "neutral") expect(soft.fg).not.toBe(raw);
       }
 
       // 3. The three synced blocks agree at runtime, not merely as text.
@@ -189,10 +195,12 @@ it("soft variant contract over a chromatic surface", async () => {
       expect(snapshot.raw.primary.fg).toBe(snapshot.intent.primary);
       expect(snapshot.raw.danger.fg).toBe(snapshot.intent.danger);
 
-      // Same guarantee on the untouched default theme, whose surface has no
-      // chroma of its own.
+      // On the untouched default theme: intents without a soft-fg hook keep the
+      // raw intent (primary), while hooked intents rebate toward --text (danger
+      // no longer equals its raw intent). The hook is the default palette's
+      // deliberate contrast calibration, not recipe drift.
       expect(snapshot.plain.primary.fg).toBe(snapshot.plain.intentPrimary);
-      expect(snapshot.plain.danger.fg).toBe(snapshot.plain.intentDanger);
+      expect(snapshot.plain.danger.fg).not.toBe(snapshot.plain.intentDanger);
       expect(snapshot.plain.bare.fg).toBe(snapshot.plain.text);
 
       // And the default theme's own soft pairs stay legible.
@@ -204,5 +212,79 @@ it("soft variant contract over a chromatic surface", async () => {
       );
     },
     { artifactName: "soft-recipe" },
+  );
+});
+
+it("default theme soft contract clears 4.5 on rest and hover, light and dark", async () => {
+  await withBrowserPage(
+    fixtureUrl(FIXTURE),
+    async (view) => {
+      const readContract = (root) =>
+        view.evaluate(`(() => {
+          const canvas = document.createElement("canvas");
+          canvas.width = canvas.height = 1;
+          const ctx = canvas.getContext("2d", { willReadFrequently: true });
+          const norm = (value) => {
+            ctx.clearRect(0, 0, 1, 1);
+            ctx.fillStyle = value;
+            ctx.fillRect(0, 0, 1, 1);
+            const [r, g, b] = ctx.getImageData(0, 0, 1, 1).data;
+            return r + "," + g + "," + b;
+          };
+          const ink = {};
+          for (const el of document.querySelectorAll("#${root} [data-ink]"))
+            ink[el.dataset.ink] = norm(getComputedStyle(el).color);
+          const pair = (sel) => {
+            const s = getComputedStyle(document.querySelector("#${root} " + sel));
+            return { bg: norm(s.backgroundColor), fg: norm(s.color) };
+          };
+          const rest = {};
+          for (const el of document.querySelectorAll("#${root} [data-badge]"))
+            rest[el.dataset.badge] = pair("[data-badge='" + el.dataset.badge + "']");
+          return { rest };
+        })()`);
+
+      for (const root of ["contract", "contract-dark"]) {
+        const resting = await readContract(root);
+
+        // Force a real :hover on the soft buttons (see inverted.test.js).
+        await view.cdp("DOM.enable");
+        await view.cdp("CSS.enable");
+        const { root: docRoot } = await view.cdp("DOM.getDocument");
+        for (const intent of INTENTS) {
+          const { nodeId } = await view.cdp("DOM.querySelector", {
+            nodeId: docRoot.nodeId,
+            selector: `#${root} [data-hover="${intent}"]`,
+          });
+          await view.cdp("CSS.forcePseudoState", { nodeId, forcedPseudoClasses: ["hover"] });
+        }
+
+        const hoveredBg = await view.evaluate(`(() => {
+          const canvas = document.createElement("canvas");
+          canvas.width = canvas.height = 1;
+          const ctx = canvas.getContext("2d", { willReadFrequently: true });
+          const norm = (value) => {
+            ctx.clearRect(0, 0, 1, 1);
+            ctx.fillStyle = value;
+            ctx.fillRect(0, 0, 1, 1);
+            const [r, g, b] = ctx.getImageData(0, 0, 1, 1).data;
+            return r + "," + g + "," + b;
+          };
+          const out = {};
+          for (const el of document.querySelectorAll("#${root} [data-hover]"))
+            out[el.dataset.hover] = norm(getComputedStyle(el).backgroundColor);
+          return out;
+        })()`);
+
+        // The soft ink must clear the required ratio on BOTH surfaces the fill
+        // reaches: the resting fill just carries more margin.
+        for (const intent of INTENTS) {
+          const fg = resting.rest[intent].fg;
+          expect(contrast(fg, resting.rest[intent].bg)).toBeGreaterThanOrEqual(4.5);
+          expect(contrast(fg, hoveredBg[intent])).toBeGreaterThanOrEqual(4.5);
+        }
+      }
+    },
+    { artifactName: "soft-recipe-contract" },
   );
 });

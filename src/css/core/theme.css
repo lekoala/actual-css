@@ -101,6 +101,33 @@
   --focus-ring-shadow: 0 0 0 var(--focus-ring-width) var(--focus-ring);
 }
 
+/* Soft foreground hooks — the soft ink is the intent rebated toward the local
+   text so it keeps 4.5:1 against the soft hover fill (the resting fill carries
+   the extra margin; variants.css soft recipe). Deliberately scoped to the
+   default theme: a custom property bakes its var() references where it is
+   declared, so these resolve against root/light/dark tokens on every boundary.
+   Presets and custom islands keep their --soft-fg-mix / raw-intent ink unless
+   they declare hooks themselves — :where() keeps this reset from outranking a
+   theme's own declaration (e.g. brutalist's 45% soft-fg-mix). */
+:where([data-theme]:not([data-theme="light"]):not([data-theme="dark"])) {
+  --primary-soft-fg: initial;
+  --secondary-soft-fg: initial;
+  --success-soft-fg: initial;
+  --warning-soft-fg: initial;
+  --danger-soft-fg: initial;
+  --neutral-soft-fg: initial;
+}
+
+:root,
+[data-theme="light"],
+[data-theme="dark"] {
+  --secondary-soft-fg: color-mix(in oklab, var(--text) 10%, var(--secondary) 90%);
+  --success-soft-fg: color-mix(in oklab, var(--text) 15%, var(--success) 85%);
+  --warning-soft-fg: color-mix(in oklab, var(--text) 25%, var(--warning) 75%);
+  --danger-soft-fg: color-mix(in oklab, var(--text) 15%, var(--danger) 85%);
+  --neutral-soft-fg: color-mix(in oklab, var(--text) 20%, var(--neutral) 80%);
+}
+
 /* Native platform controls (checkbox, radio, range, progress) that are not
    restyled by a component class still follow the theme accent. Declared on
    every island: accent-color inherits as a computed value, so islands must

@@ -193,7 +193,10 @@ select {
   --soft-hover-alpha: 12%;
   /* Soft foreground: the share of raw intent in soft text. 100% keeps the
      pure intent color; lower values rebate it toward --text, which vivid or
-     light intent palettes need to stay legible on their own soft surface. */
+     light intent palettes need to stay legible on their own soft surface.
+     The default palette ships per-role --*-soft-fg hooks calibrated against
+     the hovered soft fill instead (theme.css); this mix is the fallback a
+     theme without hooks falls back to. */
   --soft-fg-mix: 100%;
 
   /* Shared icon assets. Override these URLs when a strict CSP disallows data:. */
@@ -366,6 +369,33 @@ select {
   --selection-bg: var(--primary);
   --selection-fg: var(--primary-fg);
   --focus-ring-shadow: 0 0 0 var(--focus-ring-width) var(--focus-ring);
+}
+
+/* Soft foreground hooks — the soft ink is the intent rebated toward the local
+   text so it keeps 4.5:1 against the soft hover fill (the resting fill carries
+   the extra margin; variants.css soft recipe). Deliberately scoped to the
+   default theme: a custom property bakes its var() references where it is
+   declared, so these resolve against root/light/dark tokens on every boundary.
+   Presets and custom islands keep their --soft-fg-mix / raw-intent ink unless
+   they declare hooks themselves — :where() keeps this reset from outranking a
+   theme's own declaration (e.g. brutalist's 45% soft-fg-mix). */
+:where([data-theme]:not([data-theme="light"]):not([data-theme="dark"])) {
+  --primary-soft-fg: initial;
+  --secondary-soft-fg: initial;
+  --success-soft-fg: initial;
+  --warning-soft-fg: initial;
+  --danger-soft-fg: initial;
+  --neutral-soft-fg: initial;
+}
+
+:root,
+[data-theme="light"],
+[data-theme="dark"] {
+  --secondary-soft-fg: color-mix(in oklab, var(--text) 10%, var(--secondary) 90%);
+  --success-soft-fg: color-mix(in oklab, var(--text) 15%, var(--success) 85%);
+  --warning-soft-fg: color-mix(in oklab, var(--text) 25%, var(--warning) 75%);
+  --danger-soft-fg: color-mix(in oklab, var(--text) 15%, var(--danger) 85%);
+  --neutral-soft-fg: color-mix(in oklab, var(--text) 20%, var(--neutral) 80%);
 }
 
 /* Native platform controls (checkbox, radio, range, progress) that are not
@@ -543,15 +573,15 @@ small {
  * Intent classes do not style elements directly.
  * They only expose --intent, --intent-fg, and the optional per-intent soft
  * foreground --intent-soft-fg, relayed from the per-role --*-soft-fg hooks.
- * Those hooks ship undeclared: an unset one makes the relay itself invalid,
- * so the soft recipe falls back to its --soft-fg-mix derivation and a theme
- * opts in one role at a time (docs/pages/foundations/tokens.md). Components
- * and variants decide how to consume them. Each component that consumes
- * --intent, --intent-soft-fg or --ui-* opens a local intent boundary in a
- * :where() block that resets exactly the tokens it consumes to initial.
- * Parent intents do not leak into nested components. Local intent classes
- * (.primary, .danger, etc.) still apply because they have higher specificity
- * than :where().
+ * The default theme declares those hooks for its soft ink (see theme.css);
+ * a theme without them lets the relay resolve to an invalid value, so the soft
+ * recipe falls back to its --soft-fg-mix derivation and a theme opts in one
+ * role at a time (docs/pages/foundations/tokens.md). Components and variants
+ * decide how to consume them. Each component that consumes --intent,
+ * --intent-soft-fg or --ui-* opens a local intent boundary in a :where() block
+ * that resets exactly the tokens it consumes to initial. Parent intents do not
+ * leak into nested components. Local intent classes (.primary, .danger, etc.)
+ * still apply because they have higher specificity than :where().
  */
 .primary {
   --intent: var(--primary);
@@ -3464,13 +3494,16 @@ small {
   --ui-border: transparent;
 }
 
-/* Solid/soft get the overlay darkening on hover; outline/ghost/link stay flat.
-   Routed through a variable instead of a :not(.outline, .ghost, .link)
-   exclusion so the hover rule below only has to state the interactive
-   element list once. */
+/* Solid keeps the overlay darkening on hover; soft/outline/ghost/link stay
+   flat. The soft hover is its own fill change (--soft-hover-alpha) — a second
+   overlay on top would double the fill step and drag its ink below the resting
+   contrast on every intent. Routed through a variable instead of a
+   :not(.outline, .ghost, .link) exclusion so the hover rule below only has to
+   state the interactive element list once. */
 .btn.outline,
 .btn.ghost,
-.btn.link {
+.btn.link,
+.btn.soft {
   --btn-hover-overlay: transparent;
 }
 
@@ -3812,7 +3845,14 @@ a.btn[aria-disabled="true"] {
   background: var(--ui-hover-bg, var(--badge-default-hover-bg));
 }
 
-:where(a.badge, button.badge):not(:where(:disabled, [aria-disabled="true"], .outline)):hover {
+/* Solid and empty badges keep the overlay darkening on hover; soft badges do
+   not — their hover fill (--soft-hover-alpha) is already the state change, and
+   stacking a second darkening drags the soft ink below its resting contrast.
+   Soft here means :not(.solid, .outline, :empty), mirroring the soft hover-bg
+   recipe above. */
+:where(a.badge, button.badge):is(.solid, :empty):not(
+  :where(:disabled, [aria-disabled="true"])
+):hover {
   /* Huge inset spread paints the overlay over the pill radius (see button.css). */
   box-shadow: inset 0 0 0 999px var(--hover-overlay);
 }

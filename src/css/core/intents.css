@@ -2,15 +2,15 @@
  * Intent classes do not style elements directly.
  * They only expose --intent, --intent-fg, and the optional per-intent soft
  * foreground --intent-soft-fg, relayed from the per-role --*-soft-fg hooks.
- * Those hooks ship undeclared: an unset one makes the relay itself invalid,
- * so the soft recipe falls back to its --soft-fg-mix derivation and a theme
- * opts in one role at a time (docs/pages/foundations/tokens.md). Components
- * and variants decide how to consume them. Each component that consumes
- * --intent, --intent-soft-fg or --ui-* opens a local intent boundary in a
- * :where() block that resets exactly the tokens it consumes to initial.
- * Parent intents do not leak into nested components. Local intent classes
- * (.primary, .danger, etc.) still apply because they have higher specificity
- * than :where().
+ * The default theme declares those hooks for its soft ink (see theme.css);
+ * a theme without them lets the relay resolve to an invalid value, so the soft
+ * recipe falls back to its --soft-fg-mix derivation and a theme opts in one
+ * role at a time (docs/pages/foundations/tokens.md). Components and variants
+ * decide how to consume them. Each component that consumes --intent,
+ * --intent-soft-fg or --ui-* opens a local intent boundary in a :where() block
+ * that resets exactly the tokens it consumes to initial. Parent intents do not
+ * leak into nested components. Local intent classes (.primary, .danger, etc.)
+ * still apply because they have higher specificity than :where().
  */
 .primary {
   --intent: var(--primary);

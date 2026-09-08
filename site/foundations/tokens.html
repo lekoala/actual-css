@@ -304,6 +304,18 @@ per role</strong>; the ones whose palette needs a softer ink than the others.</l
 intent class to its own <code>--*-soft-fg</code>.</li>
 <li><code>--soft-fg-mix</code> — the <strong>global fallback derivation</strong>, unchanged.</li>
 </ul>
+<p><strong>Soft foregrounds are calibrated against the darkest or closest interactive
+surface they are expected to appear on.</strong> For interactive soft treatments the
+fill moves toward the intent on hover (<code>--soft-hover-alpha</code>), so the binding
+surface is the <em>hovered</em> one and the resting fill simply carries more margin;
+the default palette ships its own <code>--primary</code>/<code>--secondary</code>/… <code>-soft-fg</code> hooks
+to keep that pair ≥ 4.5:1 in both color schemes, enforced by
+<code>tests/browser/soft-recipe.test.js</code>. The hard line stops at the default theme:
+presets and custom <code>[data-theme]</code> islands keep the <code>--soft-fg-mix</code> derivation
+unless they declare the hooks themselves (the framework resets them outside
+the default boundary). A theme that overrides the soft palette is responsible
+for preserving sufficient text contrast; <code>bun run report:theme-contrast</code>
+reports every preset's resting and hovered pairs without failing the build.</p>
 <p>A theme whose primary should read more muted than its statuses sets only
 <code>--primary-soft-fg</code>, and every soft <code>.primary</code> foreground follows it. Without a
 <code>--*-soft-fg</code> the recipe resolves byte-identically to the old <code>--soft-fg-mix</code>

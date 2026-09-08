@@ -1,13 +1,13 @@
-import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { collectReservedClasses } from "./utils/collect-reserved-classes.js";
+import { loadReservedClasses } from "./utils/load-reserved-classes.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, "..");
-const JSON_FILE = join(__dirname, "reserved-classes.json");
+const JSON_FILE = join(ROOT, "reserved-classes.json");
 
-const committed = JSON.parse(readFileSync(JSON_FILE, "utf8"));
+const committed = loadReservedClasses(JSON_FILE);
 const generated = await collectReservedClasses(ROOT);
 
 if (JSON.stringify(committed) !== JSON.stringify(generated)) {

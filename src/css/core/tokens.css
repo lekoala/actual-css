@@ -141,7 +141,10 @@
   --soft-hover-alpha: 12%;
   /* Soft foreground: the share of raw intent in soft text. 100% keeps the
      pure intent color; lower values rebate it toward --text, which vivid or
-     light intent palettes need to stay legible on their own soft surface. */
+     light intent palettes need to stay legible on their own soft surface.
+     The default palette ships per-role --*-soft-fg hooks calibrated against
+     the hovered soft fill instead (theme.css); this mix is the fallback a
+     theme without hooks falls back to. */
   --soft-fg-mix: 100%;
 
   /* Shared icon assets. Override these URLs when a strict CSP disallows data:. */
