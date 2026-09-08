@@ -73,6 +73,10 @@
   text-decoration: none;
 }
 
+/* nav-link serves two contracts: plain page navigation (aria-current="page")
+   and scrollspy, which toggles aria-current="location" on the active link. It
+   deliberately accepts every non-false value instead of pinning a single one.
+   Unlike app-nav and breadcrumb, this component has no single ARIA contract. */
 .nav-link:where([aria-current]:not([aria-current="false"])) {
   background: var(--surface-subtle);
   color: var(--text);

@@ -66,7 +66,7 @@
   color: var(--text);
 }
 
-.app-nav > a:where([aria-current]:not([aria-current="false"])) {
+.app-nav > a[aria-current="page"] {
   background: var(--state-selected);
   color: var(--state-selected-fg);
   font-weight: var(--font-weight-bold);

@@ -1,12 +1,12 @@
 {
-  "totalRaw": 284352,
+  "totalRaw": 284731,
   "core": {
     "minified": 11535,
     "brotli": 2654
   },
   "full": {
-    "minified": 123364,
-    "brotli": 17870
+    "minified": 123370,
+    "brotli": 17844
   },
   "js": {
     "core": {
@@ -130,7 +130,7 @@
     },
     {
       "file": "components/tab.css",
-      "raw": 3471
+      "raw": 3627
     },
     {
       "file": "components/accordion.css",
@@ -157,16 +157,16 @@
       "raw": 3115
     },
     {
+      "file": "components/navbar.css",
+      "raw": 3008
+    },
+    {
       "file": "forms/control.css",
       "raw": 2909
     },
     {
       "file": "forms/native.css",
       "raw": 2768
-    },
-    {
-      "file": "components/navbar.css",
-      "raw": 2691
     },
     {
       "file": "forms/validation.css",
@@ -253,12 +253,12 @@
       "raw": 2052
     },
     {
-      "file": "components/app-nav.css",
-      "raw": 1902
-    },
-    {
       "file": "forms/input-icon.css",
       "raw": 1895
+    },
+    {
+      "file": "components/app-nav.css",
+      "raw": 1873
     },
     {
       "file": "themes/brutalist.css",
@@ -350,7 +350,7 @@
     },
     {
       "file": "components/breadcrumb.css",
-      "raw": 1031
+      "raw": 966
     },
     {
       "file": "components/indicator.css",
