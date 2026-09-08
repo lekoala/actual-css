@@ -48,10 +48,10 @@ test("package ships built assets, not theme demo sources", () => {
   expect(files).toContain("src/cli");
   expect(files).toContain("src/tooling");
   expect(files).not.toContain("src/css/themes");
-  expect(files).toContain("scripts/reserved-classes.json");
+  expect(files).toContain("reserved-classes.json");
   expect(files).not.toContain("src/css");
   expect(files).not.toContain("src/css/optional");
-  expect(pkg.exports["./reserved-classes.json"]).toBe("./scripts/reserved-classes.json");
+  expect(pkg.exports["./reserved-classes.json"]).toBe("./reserved-classes.json");
   expect(existsSync(join(ROOT, pkg.exports["./reserved-classes.json"]))).toBe(true);
   expect(pkg.bin["actual-css"]).toBe("./src/cli/actual-css.js");
   expect(existsSync(join(ROOT, pkg.bin["actual-css"]))).toBe(true);
@@ -203,7 +203,6 @@ async function packAvailable() {
   }
   return packTools;
 }
-
 const packTest = (await packAvailable()) ? test : test.skip;
 
 packTest("packed tarball ships every critical public export", async () => {
@@ -230,7 +229,7 @@ packTest("packed tarball ships every critical public export", async () => {
       "package/src/css/layout/index.css", // actual-css/css/layout
       "package/src/css/layout/column-layout.css", // actual-css/css/layout/column-layout
       "package/src/tooling/css-bundle.js", // shared bundler for CLI and build scripts
-      "package/scripts/reserved-classes.json", // actual-css/reserved-classes.json
+      "package/reserved-classes.json", // actual-css/reserved-classes.json
     ];
     for (const entry of critical) {
       expect(entries, `tarball must contain ${entry}`).toContain(entry);
@@ -294,4 +293,41 @@ packTest("the packed CLI bundles a consumer stylesheet from node_modules", async
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }
+});
+
+/*
+ * The reserved-classes export is public API, but .gitattributes marks scripts/
+ * (the tooling that generated it) as export-ignore — fine for a build script,
+ * fatal for the file those exports point at. git archive resolves attributes
+ * on the concrete path, so assert the contract by asking git about the file,
+ * not by reading pattern order. Missing the file or flipping the flag must
+ * fail here rather than break a git-archive-based distribution silently.
+ */
+let gitTools;
+async function gitAvailable() {
+  if (gitTools !== undefined) return gitTools;
+  try {
+    const git = await spawn("git", ["--version"]);
+    gitTools = git.code === 0;
+  } catch {
+    gitTools = false;
+  }
+  return gitTools;
+}
+
+const gitTest = (await gitAvailable()) ? test : test.skip;
+
+gitTest("the public reserved-classes export is never export-ignored", async () => {
+  const pkg = readJson("package.json");
+  const target = pkg.exports["./reserved-classes.json"];
+  expect(target, "reserved-classes export must stay a repo-root file").toBe(
+    "./reserved-classes.json",
+  );
+  expect(existsSync(join(ROOT, target)), "reserved-classes export target must exist").toBe(true);
+
+  const attr = await spawn("git", ["check-attr", "export-ignore", "--", "reserved-classes.json"], {
+    cwd: ROOT,
+  });
+  expect(attr.code, `git check-attr failed:\n${attr.stderr}`).toBe(0);
+  expect(attr.stdout).not.toContain("set");
 });

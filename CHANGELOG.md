@@ -26,10 +26,16 @@
   `--alert-border-inline-start-*`, and the `.surface` / `.inverted` treatments.
 - Tokens document `--soft-border-mix` as the borderless-soft dial: what it
   reaches, and that it is a rendering choice the baseline path does not uphold.
+- `bun run report:theme-contrast` prints every preset theme's resting and
+  hovered soft-pair contrast (light and dark) without failing the build.
 
 ### Changed
 
 - `.sm` / `.lg` now scale participating component families locally; inherited density moves to `.compact` / `.spacious`.
+- The `.soft` hover is a single fill change: the inset `--btn-hover-overlay` stays reserved for solid buttons and solid/empty badges, and `--soft-hover-alpha` owns the interactive soft fill.
+- The default palette declares per-role `--*-soft-fg` hooks (the intent rebated toward `--text`) so soft ink keeps ≥ 4.5:1 against the hovered soft fill in light and dark; presets and custom `[data-theme]` islands keep the `--soft-fg-mix` derivation unless they declare the hooks themselves.
+- `reserved-classes.json` moves from `scripts/` to the repo root with the same `actual-css/reserved-classes.json` export, so git-archive-based distributions no longer drop a public API.
+- `check:doc-classes` and `check:reserved` load the reserved list through a strict loader that fails on a missing, empty, or malformed list instead of running with a weaker one.
 - Badge sizes scale label, decorative icons, dots, and geometry through `--badge-icon-size` and the existing badge hooks.
 - Badge geometry is intrinsic: badge leaves density participation and `--density-compact-size` is removed; `.badge` keeps its own `--badge-size` scale.
 - Print styles preserve semantic component content and limit framework intervention to structural repairs.

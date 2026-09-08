@@ -121,6 +121,19 @@ hook, and the soft recipe reads it before falling back to the global mix:
   intent class to its own `--*-soft-fg`.
 - `--soft-fg-mix` — the **global fallback derivation**, unchanged.
 
+**Soft foregrounds are calibrated against the darkest or closest interactive
+surface they are expected to appear on.** For interactive soft treatments the
+fill moves toward the intent on hover (`--soft-hover-alpha`), so the binding
+surface is the *hovered* one and the resting fill simply carries more margin;
+the default palette ships its own `--primary`/`--secondary`/… `-soft-fg` hooks
+to keep that pair ≥ 4.5:1 in both color schemes, enforced by
+`tests/browser/soft-recipe.test.js`. The hard line stops at the default theme:
+presets and custom `[data-theme]` islands keep the `--soft-fg-mix` derivation
+unless they declare the hooks themselves (the framework resets them outside
+the default boundary). A theme that overrides the soft palette is responsible
+for preserving sufficient text contrast; `bun run report:theme-contrast`
+reports every preset's resting and hovered pairs without failing the build.
+
 A theme whose primary should read more muted than its statuses sets only
 `--primary-soft-fg`, and every soft `.primary` foreground follows it. Without a
 `--*-soft-fg` the recipe resolves byte-identically to the old `--soft-fg-mix`

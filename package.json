@@ -73,7 +73,7 @@
     "./js/validation": "./src/js/validation.js",
     "./js/status": "./src/js/status.js",
     "./js/surface": "./src/js/surface.js",
-    "./reserved-classes.json": "./scripts/reserved-classes.json",
+    "./reserved-classes.json": "./reserved-classes.json",
     "./package.json": "./package.json"
   },
   "bin": {
@@ -97,7 +97,7 @@
     "src/cli",
     "src/js",
     "src/tooling",
-    "scripts/reserved-classes.json",
+    "reserved-classes.json",
     "docs",
     "CHANGELOG.md",
     "llms.txt",
@@ -119,6 +119,7 @@
     "check:compat": "bun scripts/check-compat.js",
     "check:css-api": "bun scripts/check-css-api.js",
     "check:color-space": "bun scripts/check-color-space.js",
+    "report:theme-contrast": "bun scripts/report-theme-contrast.js",
     "check:architecture": "bun scripts/check-css-architecture.js",
     "build:dist": "bun scripts/build-dist.js",
     "build:js": "bun scripts/build-js.js",

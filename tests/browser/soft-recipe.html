@@ -34,13 +34,27 @@
       --secondary-fg: white;
       --success: hsl(135 70% 42%);
       --success-fg: hsl(0 0% 4%);
+      --warning: hsl(35 100% 52%);
+      --warning-fg: hsl(0 0% 4%);
       --danger: hsl(0 85% 52%);
       --danger-fg: white;
+      --neutral: hsl(0 0% 5%);
+      --neutral-fg: white;
 
       --border: hsl(0 0% 5%);
       --soft-bg-mix: 72%;
       --soft-border-mix: 25%;
       --soft-fg-mix: 45%;
+
+      /* This theme exercises the --soft-fg-mix derivation, so it resets the
+         default theme's per-intent soft-fg hooks: the fixture measures the
+         recipe in isolation, not the calibrated default palette. */
+      --primary-soft-fg: initial;
+      --secondary-soft-fg: initial;
+      --success-soft-fg: initial;
+      --warning-soft-fg: initial;
+      --danger-soft-fg: initial;
+      --neutral-soft-fg: initial;
     }
 
     /* Same palette, default foreground mix — isolates what --soft-fg-mix does. */
@@ -58,12 +72,16 @@
     <div id="ref-secondary" style="color: var(--secondary)"></div>
     <div id="ref-success" style="color: var(--success)"></div>
     <div id="ref-danger" style="color: var(--danger)"></div>
+    <div id="ref-warning" style="color: var(--warning)"></div>
+    <div id="ref-neutral" style="color: var(--neutral)"></div>
 
     <!-- Soft-by-default components on the chromatic surface. -->
     <span class="badge primary" id="badge-primary">Primary</span>
     <span class="badge secondary" id="badge-secondary">Secondary</span>
     <span class="badge success" id="badge-success">Success</span>
     <span class="badge danger" id="badge-danger">Danger</span>
+    <span class="badge warning" id="badge-warning">Warning</span>
+    <span class="badge neutral" id="badge-neutral">Neutral</span>
 
     <div class="alert danger" id="alert-danger">Danger alert</div>
     <div class="alert secondary" id="alert-secondary">Secondary alert</div>
@@ -78,6 +96,21 @@
     <!-- Explicit shared variant on a button. -->
     <button class="btn soft primary" id="btn-primary" type="button">Soft primary</button>
     <button class="btn soft secondary" id="btn-secondary" type="button">Soft secondary</button>
+
+    <!-- Interactive soft buttons, one per intent — the hover surface that fixes
+         the binding contrast state. (.btn.soft is the interactive shared variant;
+         a.badge/button.badge share the same recipe.) -->
+    <button class="btn soft primary" data-hover="primary" type="button">Primary</button>
+    <button class="btn soft secondary" data-hover="secondary" type="button">Secondary</button>
+    <button class="btn soft success" data-hover="success" type="button">Success</button>
+    <button class="btn soft warning" data-hover="warning" type="button">Warning</button>
+    <button class="btn soft danger" data-hover="danger" type="button">Danger</button>
+    <button class="btn soft neutral" data-hover="neutral" type="button">Neutral</button>
+
+    <!-- Interactive badge hover uses the badge recipe, not the button one.
+         Both must land on the same intent fill under --soft-hover-alpha. -->
+    <button class="badge primary" data-badge-hover="primary" type="button">Primary</button>
+    <button class="badge warning" data-badge-hover="warning" type="button">Warning</button>
 
     <!-- No intent: soft ink must collapse to plain --text, never a mix. -->
     <span class="badge" id="badge-bare">Bare</span>
@@ -98,6 +131,53 @@
     <span class="badge primary" id="plain-badge-primary">Primary</span>
     <span class="badge danger" id="plain-badge-danger">Danger</span>
     <span class="badge" id="plain-badge-bare">Bare</span>
+  </div>
+
+  <!-- Blocking contract: the default theme, light and dark, all six intents,
+       resting and hovered soft pairs. The hover soft fill is the binding
+       surface soft ink must clear (the resting fill simply carries more
+       margin). Dedicated ids keep the selector list explicit. -->
+  <div id="contract">
+    <span data-ink="text" style="color: var(--text)"></span>
+    <span data-ink="primary" style="color: var(--primary)"></span>
+    <span data-ink="secondary" style="color: var(--secondary)"></span>
+    <span data-ink="success" style="color: var(--success)"></span>
+    <span data-ink="warning" style="color: var(--warning)"></span>
+    <span data-ink="danger" style="color: var(--danger)"></span>
+    <span data-ink="neutral" style="color: var(--neutral)"></span>
+    <span class="badge primary" data-badge="primary">1</span>
+    <span class="badge secondary" data-badge="secondary">2</span>
+    <span class="badge success" data-badge="success">3</span>
+    <span class="badge warning" data-badge="warning">4</span>
+    <span class="badge danger" data-badge="danger">5</span>
+    <span class="badge neutral" data-badge="neutral">6</span>
+    <button class="btn soft primary" data-hover="primary" type="button"></button>
+    <button class="btn soft secondary" data-hover="secondary" type="button"></button>
+    <button class="btn soft success" data-hover="success" type="button"></button>
+    <button class="btn soft warning" data-hover="warning" type="button"></button>
+    <button class="btn soft danger" data-hover="danger" type="button"></button>
+    <button class="btn soft neutral" data-hover="neutral" type="button"></button>
+  </div>
+  <div id="contract-dark" data-theme="dark">
+    <span data-ink="text" style="color: var(--text)"></span>
+    <span data-ink="primary" style="color: var(--primary)"></span>
+    <span data-ink="secondary" style="color: var(--secondary)"></span>
+    <span data-ink="success" style="color: var(--success)"></span>
+    <span data-ink="warning" style="color: var(--warning)"></span>
+    <span data-ink="danger" style="color: var(--danger)"></span>
+    <span data-ink="neutral" style="color: var(--neutral)"></span>
+    <span class="badge primary" data-badge="primary">1</span>
+    <span class="badge secondary" data-badge="secondary">2</span>
+    <span class="badge success" data-badge="success">3</span>
+    <span class="badge warning" data-badge="warning">4</span>
+    <span class="badge danger" data-badge="danger">5</span>
+    <span class="badge neutral" data-badge="neutral">6</span>
+    <button class="btn soft primary" data-hover="primary" type="button"></button>
+    <button class="btn soft secondary" data-hover="secondary" type="button"></button>
+    <button class="btn soft success" data-hover="success" type="button"></button>
+    <button class="btn soft warning" data-hover="warning" type="button"></button>
+    <button class="btn soft danger" data-hover="danger" type="button"></button>
+    <button class="btn soft neutral" data-hover="neutral" type="button"></button>
   </div>
 </body>
 </html>

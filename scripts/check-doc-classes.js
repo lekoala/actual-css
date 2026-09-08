@@ -15,11 +15,12 @@ import { readdirSync, readFileSync } from "node:fs";
 import { dirname, join, relative, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 import { scanCodeFences } from "./docs/markdown.js";
+import { loadReservedClasses } from "./utils/load-reserved-classes.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, "..");
 const PAGES = join(ROOT, "docs", "pages");
-const RESERVED = JSON.parse(readFileSync(join(__dirname, "reserved-classes.json"), "utf8"));
+const RESERVED = loadReservedClasses(join(ROOT, "reserved-classes.json"));
 
 /* Demo-only and example classes deliberately absent from the framework. Only
    add a class here when it is genuinely demo/product CSS, never to mask a typo

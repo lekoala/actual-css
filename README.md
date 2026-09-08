@@ -3,7 +3,7 @@
 Plain CSS component framework for new projects. Semantic classes, shared variants, small tokens, theme hooks, and progressive enhancement.
 
 Actual CSS claims a documented set of global class names; the package publishes
-it as [`actual-css/reserved-classes.json`](scripts/reserved-classes.json).
+it as [`actual-css/reserved-classes.json`](reserved-classes.json).
 
 For existing projects: use cascade layers, import order, or your own build-time
 prefix transform.

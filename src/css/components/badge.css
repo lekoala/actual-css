@@ -216,7 +216,14 @@
   background: var(--ui-hover-bg, var(--badge-default-hover-bg));
 }
 
-:where(a.badge, button.badge):not(:where(:disabled, [aria-disabled="true"], .outline)):hover {
+/* Solid and empty badges keep the overlay darkening on hover; soft badges do
+   not — their hover fill (--soft-hover-alpha) is already the state change, and
+   stacking a second darkening drags the soft ink below its resting contrast.
+   Soft here means :not(.solid, .outline, :empty), mirroring the soft hover-bg
+   recipe above. */
+:where(a.badge, button.badge):is(.solid, :empty):not(
+  :where(:disabled, [aria-disabled="true"])
+):hover {
   /* Huge inset spread paints the overlay over the pill radius (see button.css). */
   box-shadow: inset 0 0 0 999px var(--hover-overlay);
 }

@@ -22,6 +22,7 @@ script in `package.json`; `bun run build:all` chains the full pipeline
 | `check:links` | `check-doc-links.js` | Validate doc links and `actual-css` entrypoints against `package.json#exports`. |
 | `check:templates` | `check-templates.js` | Sanity-check the demo template pages. |
 | `check:sync` | `check-sync.js` | Verify files that must stay in sync with each other. |
+| `report:theme-contrast` | `report-theme-contrast.js` | Print every preset's resting and hovered soft-pair contrast (light + dark), never failing — the preset contrast ledger. |
 | `test` | — | Full bun test suite (`tests/`, browser tests skip gracefully without Chrome). |
 | `shot:page` | `page-shot.js` | Full-page screenshot of any page in headless Chrome. |
 | `shot:forced` | `forced-colors-shot.js` | Same, with forced-colors emulation (DevTools pipeline). |
