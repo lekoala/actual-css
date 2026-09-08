@@ -14,6 +14,11 @@
 
 - Use real tab semantics when panels switch in place.
 - Use normal links and `aria-current="page"` for page navigation that only looks like tabs.
+- On that link variant, `aria-current="page"` on the current link gets the same
+  color and underline treatment as `aria-selected="true"` on a widget tab;
+  `primary` tints it.
+- Tab selection never changes text metrics: the active tab keeps the shared
+  weight and is marked by color and the indicator line.
 - JavaScript owns roving `tabindex`, `aria-selected`, `hidden`, and keyboard behavior.
 - Left/Right select tabs and wrap at the ends. Home/End jump to first/last. Down moves focus into the selected panel.
 - A tab list needs both `.tabs` and `role="tablist"`; `.tab` styles each trigger.

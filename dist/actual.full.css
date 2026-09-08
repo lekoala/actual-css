@@ -6933,7 +6933,7 @@ a.avatar[aria-disabled="true"] {
   color: var(--text);
 }
 
-.app-nav > a:where([aria-current]:not([aria-current="false"])) {
+.app-nav > a[aria-current="page"] {
   background: var(--state-selected);
   color: var(--state-selected-fg);
   font-weight: var(--font-weight-bold);
@@ -7014,6 +7014,10 @@ a.avatar[aria-disabled="true"] {
   text-decoration: none;
 }
 
+/* nav-link serves two contracts: plain page navigation (aria-current="page")
+   and scrollspy, which toggles aria-current="location" on the active link. It
+   deliberately accepts every non-false value instead of pinning a single one.
+   Unlike app-nav and breadcrumb, this component has no single ARIA contract. */
 .nav-link:where([aria-current]:not([aria-current="false"])) {
   background: var(--surface-subtle);
   color: var(--text);
@@ -7080,8 +7084,7 @@ a.avatar[aria-disabled="true"] {
   text-decoration: none;
 }
 
-.breadcrumb a:not([aria-current]):hover,
-.breadcrumb a[aria-current="false"]:hover {
+.breadcrumb a:not([aria-current="page"]):hover {
   color: var(--text);
   text-decoration: underline;
 }
@@ -7090,7 +7093,7 @@ a.avatar[aria-disabled="true"] {
   border-radius: var(--radius-sm);
 }
 
-.breadcrumb :where(li, a, span):where([aria-current]:not([aria-current="false"])) {
+.breadcrumb :where(li, a, span)[aria-current="page"] {
   color: var(--text);
   font-weight: var(--font-weight-medium);
 }
@@ -7193,6 +7196,8 @@ a.avatar[aria-disabled="true"] {
   color: var(--text-muted);
   font: inherit;
   font-size: var(--control-font-size);
+  /* Selection must not change text metrics: a heavier active label would shift
+     the strip. The active state is carried by color and the indicator line. */
   font-weight: var(--font-weight-semibold);
   text-decoration: none;
   cursor: pointer;
@@ -7231,18 +7236,17 @@ a.avatar[aria-disabled="true"] {
   border-end-end-radius: 0;
 }
 
-.tab[aria-selected="true"] {
+.tab[aria-selected="true"],
+.tab[aria-current="page"] {
   color: var(--intent, var(--state-selected));
-  /* Second, layout-free selected cue — the underline alone is color-only in
-     forced colors. */
-  font-weight: var(--font-weight-bold);
 }
 
 /* The selected indicator lives on a positioned pseudo so that only the active
    tab owns an underline: a transparent border on every tab would surface in
    forced colors and erase the distinction. currentColor follows the palette the
    UA forces, so no forced-colors block is needed. */
-.tab[aria-selected="true"]::after {
+.tab[aria-selected="true"]::after,
+.tab[aria-current="page"]::after {
   content: "";
   position: absolute;
   inset-inline: 0;
@@ -7250,7 +7254,8 @@ a.avatar[aria-disabled="true"] {
   border-block-end: 2px solid currentColor;
 }
 
-.tabs:where([aria-orientation="vertical"]) .tab[aria-selected="true"]::after {
+.tabs:where([aria-orientation="vertical"]) .tab[aria-selected="true"]::after,
+.tabs:where([aria-orientation="vertical"]) .tab[aria-current="page"]::after {
   inset-block: 0;
   inset-inline: auto 0;
   border-block-end: 0;

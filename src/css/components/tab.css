@@ -52,6 +52,8 @@
   color: var(--text-muted);
   font: inherit;
   font-size: var(--control-font-size);
+  /* Selection must not change text metrics: a heavier active label would shift
+     the strip. The active state is carried by color and the indicator line. */
   font-weight: var(--font-weight-semibold);
   text-decoration: none;
   cursor: pointer;
@@ -90,18 +92,17 @@
   border-end-end-radius: 0;
 }
 
-.tab[aria-selected="true"] {
+.tab[aria-selected="true"],
+.tab[aria-current="page"] {
   color: var(--intent, var(--state-selected));
-  /* Second, layout-free selected cue — the underline alone is color-only in
-     forced colors. */
-  font-weight: var(--font-weight-bold);
 }
 
 /* The selected indicator lives on a positioned pseudo so that only the active
    tab owns an underline: a transparent border on every tab would surface in
    forced colors and erase the distinction. currentColor follows the palette the
    UA forces, so no forced-colors block is needed. */
-.tab[aria-selected="true"]::after {
+.tab[aria-selected="true"]::after,
+.tab[aria-current="page"]::after {
   content: "";
   position: absolute;
   inset-inline: 0;
@@ -109,7 +110,8 @@
   border-block-end: 2px solid currentColor;
 }
 
-.tabs:where([aria-orientation="vertical"]) .tab[aria-selected="true"]::after {
+.tabs:where([aria-orientation="vertical"]) .tab[aria-selected="true"]::after,
+.tabs:where([aria-orientation="vertical"]) .tab[aria-current="page"]::after {
   inset-block: 0;
   inset-inline: auto 0;
   border-block-end: 0;

@@ -403,6 +403,9 @@ test("navbar consumes the shared surface contract with an intent boundary", () =
   expect(css).toMatch(/\.navbar \{[\s\S]*color: var\(--ui-fg, var\(--text\)\);/);
   expect(css).toMatch(/\.navbar-brand \{[\s\S]*color: var\(--ui-fg, var\(--text\)\);/);
   expect(css).toMatch(/\.nav-link \{[\s\S]*color: var\(--ui-fg, var\(--text-muted\)\);/);
+  // nav-link keeps the multi-value aria-current contract: page navigation and
+  // scrollspy ("location") share the trigger.
+  expect(css).toContain('.nav-link:where([aria-current]:not([aria-current="false"]))');
 });
 
 test("overline is content-sized only on the pill and exposes a radius hook", () => {
@@ -525,6 +528,18 @@ test("tabs include vertical orientation styling without spending specificity on 
   expect(css).toContain('.tabs:where([aria-orientation="vertical"])');
   expect(css).toContain("border-inline-end");
 
+  /* Selection must not change text metrics: every tab shares one weight, so
+     activating a tab never shifts the strip. */
+  expect(css).toMatch(/\.tab\s*\{[^}]*font-weight:\s*var\(--font-weight-semibold\)/s);
+  expect(css).not.toMatch(/\.tab\[aria-selected="true"\]\s*\{[^}]*font-weight:/s);
+
+  /* The link variant marks aria-current="page" exactly like the widget state:
+     same tint, same underline, no extra aria-current semantics. */
+  expect(css).toMatch(/\.tab\[aria-selected="true"\],\s*\.tab\[aria-current="page"\]\s*\{/s);
+  expect(css).toMatch(
+    /\.tab\[aria-selected="true"\]::after,\s*\.tab\[aria-current="page"\]::after\s*\{/s,
+  );
+
   /* Keeping aria-orientation out of the cascade is a repo-wide invariant, so
      check:architecture owns the negative assertion for every stylesheet.
      What is specific to this file is that the selected indicator still carries
@@ -554,12 +569,12 @@ test("--modal-size is a fallback-only hook", () => {
   expect(css).toMatch(/var\(\s*--modal-size,\s*32rem\s*\)/);
 });
 
-test("breadcrumb supports aria-current on the link or span", () => {
+test('breadcrumb marks a single aria-current="page" state', () => {
   const css = readCss("src/css/components/breadcrumb.css");
 
-  expect(css).toContain(
-    '.breadcrumb :where(li, a, span):where([aria-current]:not([aria-current="false"]))',
-  );
+  expect(css).toContain('.breadcrumb a:not([aria-current="page"]):hover');
+  expect(css).toContain('.breadcrumb :where(li, a, span)[aria-current="page"]');
+  expect(css).not.toContain('aria-current="false"');
   expect(css.includes("pointer-events: none")).toBe(false);
 });
 
@@ -889,7 +904,7 @@ test("app navigation stays semantic and app-layout owns its adaptive geometry", 
   const navCss = readCss("src/css/components/app-nav.css");
   const layoutCss = readCss("src/css/layout/app-layout.css");
 
-  expect(navCss).toContain('.app-nav > a:where([aria-current]:not([aria-current="false"]))');
+  expect(navCss).toContain('.app-nav > a[aria-current="page"]');
   expect(navCss).toContain("env(safe-area-inset-bottom)");
   expect(navCss).toContain("min-block-size: var(--control-size-lg);");
   expect(navCss).toMatch(
@@ -897,7 +912,9 @@ test("app navigation stays semantic and app-layout owns its adaptive geometry", 
   );
   // Selected state is carried by font-weight — a structural distinction that
   // survives forced colors without a repaint block (CONTRIBUTING.md).
-  expect(navCss).toMatch(/\[aria-current\][^{]*\{[\s\S]*font-weight: var\(--font-weight-bold\);/);
+  expect(navCss).toMatch(
+    /> a\[aria-current="page"\]\s*\{[\s\S]*font-weight: var\(--font-weight-bold\);/,
+  );
   expect(navCss).not.toContain("@media (forced-colors: active)");
   expect(navCss).not.toContain(".active");
   expect(navCss).not.toContain("@media (min-width:");
