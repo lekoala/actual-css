@@ -1,0 +1,384 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Select intents - Actual CSS</title>
+  <meta name="description" content="Extend Actual with your own data-enhance behavior: options declare data-intent, the enhancement relays the selected intent onto the control, and the registry handles injected markup — no framework change.">
+  <link rel="stylesheet" href="../../dist/actual.full.css">
+  <link rel="stylesheet" href="../assets/actual-themes.min.css">
+  <style>
+    .page {
+      --center-size: 64rem;
+      padding-block: var(--space-50) var(--space-60);
+    }
+
+    .page-header {
+      align-items: flex-start;
+    }
+
+    .page-grid {
+      display: grid;
+      gap: var(--space-40);
+    }
+
+    /* Presentation half of the split: the select consumes the shared intent
+       token like any component. :where() pins the mapping at .select
+       specificity, so the control's hover/focus/disabled states still win. */
+    :where(.intent-selects) .select {
+      --control-border: color-mix(in oklab, var(--intent, var(--border)) 45%, var(--border));
+      --control-bg: color-mix(
+        in oklab,
+        var(--surface) var(--soft-bg-mix),
+        var(--intent, var(--surface))
+      );
+    }
+
+    .codeblock pre,
+    .readout {
+      margin: 0;
+      padding: var(--space-30);
+      background: var(--surface-subtle);
+      border-radius: var(--radius-sm);
+      overflow-x: auto;
+      font-size: var(--font-size-sm);
+    }
+
+    .page-note {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-20) var(--space-30);
+      align-items: baseline;
+      justify-content: space-between;
+      padding-block-start: var(--space-30);
+      border-block-start: var(--border-width) solid var(--border);
+      color: var(--text-muted);
+      font-size: var(--font-size-sm);
+    }
+
+    .page-note code {
+      color: var(--text);
+    }
+  </style>
+</head>
+
+<body>
+  <main class="center stack page">
+    <header class="cluster page-header">
+      <hgroup>
+        <p class="overline">Extending Actual</p>
+        <h1>Select intents</h1>
+        <p class="muted">
+          <code>data-enhance</code> is a behavior contract, not a closed list. This page registers
+          its own <code>select-intent</code> behavior with the public
+          <code>registerEnhancement()</code> API — options declare <code>data-intent</code>, the
+          enhancement relays the selected option's intent onto the control.
+        </p>
+      </hgroup>
+
+      <div class="cluster" style="gap: var(--space-20);">
+        <select class="select sm fit" id="theme-switcher" aria-label="Switch theme">
+          <option value="">System</option>
+          <option value="light">Light</option>
+          <option value="dark">Dark</option>
+          <optgroup label="Themes">
+            <option value="indigo">Indigo</option>
+            <option value="dim">Dim</option>
+            <option value="corporate">Corporate</option>
+            <option value="forest">Forest</option>
+            <option value="ocean">Ocean</option>
+            <option value="spruce">Spruce</option>
+            <option value="petrol">Petrol</option>
+            <option value="sunset">Sunset</option>
+            <option value="lavender">Lavender</option>
+            <option value="mono">Mono</option>
+            <option value="square">Square</option>
+            <option value="brutalist">Brutalist</option>
+            <option value="edge">Edge</option>
+            <option value="cyberpunk">Cyberpunk</option>
+            <option value="neon">Neon</option>
+            <option value="gradient">Gradient</option>
+          </optgroup>
+        </select>
+      </div>
+    </header>
+
+    <div class="page-grid">
+      <section class="card stack">
+        <header>
+          <h2 style="margin: 0;">The enhancement is yours</h2>
+          <p class="muted">
+            Actual provides the lifecycle; applications register their own behaviors. This is the
+            same API <a href="../../site/guides/progressive-enhancement.html">
+            tabs and scrollspy use</a> — the registry finds existing elements, wires injected
+            ones, and calls the cleanup when an element leaves the document.
+          </p>
+        </header>
+
+        <div class="codeblock">
+          <pre><code>import { registerEnhancement } from
+  "https://cdn.jsdelivr.net/npm/actual-css@0.7.0/src/js/enhance.js";
+// with the npm package:
+// import { registerEnhancement } from "actual-css/js/enhance";
+
+registerEnhancement("select-intent", (select) => {
+  if (!(select instanceof HTMLSelectElement) || select.multiple) return;
+
+  const sync = () => {
+    const previous = select.dataset.currentIntent;
+    if (previous) select.classList.remove(previous);
+
+    const intent = select.selectedOptions[0]?.dataset.intent;
+
+    if (intent) {
+      select.classList.add(intent);
+      select.dataset.currentIntent = intent;
+    } else {
+      delete select.dataset.currentIntent;
+    }
+  };
+
+  const controller = new AbortController();
+
+  sync();
+  select.addEventListener("change", sync, { signal: controller.signal });
+
+  return () => controller.abort();
+});</code></pre>
+        </div>
+
+        <p class="muted">
+          The module knows nothing about <code>primary/success/warning/danger</code>. It mirrors
+          the selected option's <code>data-intent</code> onto the control and remembers the class
+          it added (<code>data-current-intent</code>), removing it on the next change. An option
+          without <code>data-intent</code> clears back to a plain control.
+        </p>
+
+        <div class="cluster" style="gap: var(--space-20);">
+          <span class="badge primary soft">primary</span>
+          <span class="badge warning soft">warning</span>
+          <span class="badge success soft">success</span>
+          <span class="badge danger soft">danger</span>
+        </div>
+      </section>
+    </div>
+
+    <div class="intent-selects page-grid">
+      <section class="card stack">
+        <header>
+          <h2 style="margin: 0;">Semantics on the option</h2>
+          <p class="muted">
+            <code>data-intent</code> describes the option; the enhancement relays it onto the
+            control. Preselects ship their intent class in the markup, so they paint before the
+            module even loads — the enhancement adopts them at init.
+          </p>
+        </header>
+        <div class="grid-2 items-start">
+          <div class="field">
+            <span class="field-label">Issue status</span>
+            <select id="status" class="select success" data-enhance="select-intent" name="status">
+              <option value="backlog">Backlog</option>
+              <option value="in-progress" data-intent="warning">In progress</option>
+              <option value="done" data-intent="success" selected>Done</option>
+              <option value="blocked" data-intent="danger">Blocked</option>
+            </select>
+            <span class="field-help">Preselected <code>Done</code>; its <code>success</code> class ships in the markup.</span>
+          </div>
+          <div class="field">
+            <span class="field-label">Priority — optgroups work too</span>
+            <select id="priority" class="select primary" data-enhance="select-intent" name="priority">
+              <optgroup label="Release">
+                <option value="p0" data-intent="danger">P0 — Blocker</option>
+                <option value="p1" data-intent="warning">P1 — High</option>
+                <option value="p2" data-intent="primary" selected>P2 — Normal</option>
+                <option value="p3">P3 — Low</option>
+              </optgroup>
+              <optgroup label="Triage">
+                <option value="deferred">Deferred</option>
+                <option value="resolved" data-intent="success">Resolved</option>
+              </optgroup>
+            </select>
+          </div>
+        </div>
+      </section>
+
+      <section class="card stack">
+        <header>
+          <h2 style="margin: 0;">Any select size</h2>
+          <p class="muted">
+            The recipe rides the existing <code>.sm</code>/<code>.lg</code> size roles and the
+            control tokens — nothing to restyle per size.
+          </p>
+        </header>
+        <div class="grid grid-3 items-start">
+          <div class="field">
+            <span class="field-label">Compact</span>
+            <select class="select sm warning" data-enhance="select-intent" aria-label="Compact select intent">
+              <option value="backlog">Backlog</option>
+              <option value="in-progress" data-intent="warning" selected>In progress</option>
+              <option value="done" data-intent="success">Done</option>
+              <option value="blocked" data-intent="danger">Blocked</option>
+            </select>
+          </div>
+          <div class="field">
+            <span class="field-label">Base</span>
+            <select class="select success" data-enhance="select-intent" aria-label="Base select intent">
+              <option value="backlog">Backlog</option>
+              <option value="in-progress" data-intent="warning">In progress</option>
+              <option value="done" data-intent="success" selected>Done</option>
+              <option value="blocked" data-intent="danger">Blocked</option>
+            </select>
+          </div>
+          <div class="field">
+            <span class="field-label">Large</span>
+            <select class="select lg danger" data-enhance="select-intent" aria-label="Large select intent">
+              <option value="backlog">Backlog</option>
+              <option value="in-progress" data-intent="warning">In progress</option>
+              <option value="done" data-intent="success">Done</option>
+              <option value="blocked" data-intent="danger" selected>Blocked</option>
+            </select>
+          </div>
+        </div>
+      </section>
+
+      <section class="card stack">
+        <header>
+          <h2 style="margin: 0;">Injected markup, no extra code</h2>
+          <p class="muted">
+            <code>registerEnhancement</code> observes the document. A fresh
+            <code>&lt;select data-enhance="select-intent"&gt;</code> appended below is wired
+            automatically — the attribute alone is the whole contract.
+          </p>
+        </header>
+        <div class="cluster" style="gap: var(--space-20);">
+          <button class="btn outline sm" type="button" id="add-injected">Add a select</button>
+        </div>
+        <div class="stack" id="injected" style="margin-block-start: var(--space-30); gap: var(--space-30);"></div>
+      </section>
+
+      <section class="card stack">
+        <header>
+          <h2 style="margin: 0;">Watch the propagation</h2>
+          <p class="muted">
+            The enhancement only ever touches the <code>currentIntent</code> class it owns. Change
+            the status select above and the readout follows.
+          </p>
+        </header>
+        <div class="cluster" style="gap: var(--space-30);">
+          <button class="btn outline sm" type="button" id="programmatic">Set Blocked programmatically</button>
+          <span class="field-help">A JS <code>value</code>/<code>selectedIndex</code> change must dispatch <code>change</code>.</span>
+        </div>
+        <pre class="readout" aria-live="polite"><code id="readout"></code></pre>
+      </section>
+    </div>
+
+    <div class="page-grid">
+      <section class="card stack">
+        <header>
+          <h2 style="margin: 0;">Opt-in only</h2>
+          <p class="muted">
+            Without the <code>data-enhance="select-intent"</code> token, this identical select
+            keeps its baseline look no matter which option is chosen — <code>data-intent</code>
+            on options is meaning, not paint.
+          </p>
+        </header>
+        <div class="field">
+          <span class="field-label">Same options, no token</span>
+          <select class="select" name="plain">
+            <option value="backlog">Backlog</option>
+            <option value="in-progress" data-intent="warning">In progress</option>
+            <option value="done" data-intent="success" selected>Done</option>
+            <option value="blocked" data-intent="danger">Blocked</option>
+          </select>
+        </div>
+      </section>
+    </div>
+
+    <footer class="page-note">
+      <span>
+        Enhancement loaded from jsDelivr, pinned: <code>actual-css@0.7.0/src/js/enhance.js</code>.
+        Only the behavior is loaded; the skin is the local <code>dist/actual.full.css</code>.
+      </span>
+      <span>
+        See the <a href="../../site/guides/progressive-enhancement.html">progressive enhancement guide</a>
+        for the lifecycle contract.
+      </span>
+    </footer>
+  </main>
+
+  <script type="module">
+    import { registerEnhancement } from
+      "https://cdn.jsdelivr.net/npm/actual-css@0.7.0/src/js/enhance.js";
+
+    /* The application's own behavior — see "The enhancement is yours" above. */
+    registerEnhancement("select-intent", (select) => {
+      if (!(select instanceof HTMLSelectElement) || select.multiple) return;
+
+      const sync = () => {
+        const previous = select.dataset.currentIntent;
+        if (previous) select.classList.remove(previous);
+
+        const intent = select.selectedOptions[0]?.dataset.intent;
+
+        if (intent) {
+          select.classList.add(intent);
+          select.dataset.currentIntent = intent;
+        } else {
+          delete select.dataset.currentIntent;
+        }
+      };
+
+      const controller = new AbortController();
+
+      sync();
+      select.addEventListener("change", sync, { signal: controller.signal });
+
+      return () => controller.abort();
+    });
+
+    /* Page niceties — not part of the enhancement. */
+    const switcher = document.getElementById("theme-switcher");
+    switcher?.addEventListener("change", () => {
+      if (switcher.value) {
+        document.documentElement.dataset.theme = switcher.value;
+      } else {
+        document.documentElement.removeAttribute("data-theme");
+      }
+    });
+
+    const status = document.getElementById("status");
+    const readout = document.getElementById("readout");
+    if (status && readout) {
+      const reflect = () => {
+        const intent = status.dataset.currentIntent;
+        readout.textContent = `class="${status.className}"${
+          intent ? `  data-current-intent="${intent}"` : "  data-current-intent removed"
+        }`;
+      };
+      // Registered after the enhancement's own listener, so it reads the synced class.
+      status.addEventListener("change", reflect);
+      reflect();
+
+      document.getElementById("programmatic")?.addEventListener("click", () => {
+        status.value = "blocked";
+        status.dispatchEvent(new Event("change", { bubbles: true }));
+      });
+    }
+
+    document.getElementById("add-injected")?.addEventListener("click", () => {
+      const holder = document.getElementById("injected");
+      const select = document.createElement("select");
+      select.className = "select";
+      select.dataset.enhance = "select-intent";
+      select.innerHTML =
+        '<option value="backlog">Backlog</option>' +
+        '<option value="in-progress" data-intent="warning" selected>In progress</option>' +
+        '<option value="done" data-intent="success">Done</option>' +
+        '<option value="blocked" data-intent="danger">Blocked</option>';
+      holder.append(select);
+    });
+  </script>
+</body>
+
+</html>
