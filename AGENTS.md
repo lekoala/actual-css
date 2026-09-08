@@ -23,6 +23,7 @@ Add relevant guards for future-us when needed based on traps and discoveries.
 - Do not run build:dist, unless you want to test if build script works (the user build it)
 - Do not run build:docs unless you worked on the build scripts or docs sources (it needs dist/ first; the user runs it)
 - After editing demo/templates/*.html, run `bun run check:templates` (balanced `<style>` braces) — it's cheap and doesn't touch dist or generated demo output, unlike build:all
+- `components.json` is a derived artifact, not a second source of truth. After touching CSS header comments, selectors, `src/js` enhancements, or `package.json#exports`, run `bun run generate:catalog` and let the diff speak; `check:catalog` (in build:all) verifies the committed file matches the derivation.
 - Rendering is `Bun.WebView` driving headless Chrome through
   `scripts/utils/browser.js`, never Playwright (not a dependency;
   `node_modules/.bin/playwright` is a stale shim). Use `bun run shot:page`,

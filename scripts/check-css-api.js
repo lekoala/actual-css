@@ -30,6 +30,7 @@
 import { readdirSync, readFileSync } from "node:fs";
 import { dirname, join, relative, sep } from "node:path";
 import { fileURLToPath } from "node:url";
+import { parseHookSections } from "./utils/parse-hook-sections.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, "..");
@@ -52,44 +53,6 @@ function walkCss(dir) {
     else if (entry.name.endsWith(".css")) files.push(full);
   }
   return files;
-}
-
-/* { public, internal, plumbing } from every "Public hooks:" / "Framework
-   plumbing:" / "Internal:" block in the file. A section ends at the next
-   label-like line ("Child contract:", "Intent boundary —" is not label-like
-   because it has no trailing colon, but "JS target contract:" is). */
-function parseHookSections(css) {
-  const sections = { public: [], internal: [], plumbing: [] };
-  for (const block of css.matchAll(/\/\*[\s\S]*?\*\//g)) {
-    let active = null;
-    for (const rawLine of block[0].split("\n")) {
-      const line = rawLine
-        .trim()
-        .replace(/^\*\s?/, "")
-        .trim();
-      if (/^Public hooks:$/.test(line)) {
-        active = "public";
-        continue;
-      }
-      if (/^Framework plumbing:$/.test(line)) {
-        active = "plumbing";
-        continue;
-      }
-      if (/^Internal:$/.test(line)) {
-        active = "internal";
-        continue;
-      }
-      if (active && /^[A-Za-z][A-Za-z -]*:$/.test(line)) {
-        active = null; // next section (e.g. "Child contract:")
-        continue;
-      }
-      if (active) {
-        const hook = line.match(/--[a-z0-9-]+/);
-        if (hook) sections[active].push(hook[0]);
-      }
-    }
-  }
-  return sections;
 }
 
 function declaredProps(css) {

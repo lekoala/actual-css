@@ -1,0 +1,676 @@
+[
+  {
+    "name": "accordion",
+    "source": "src/css/components/accordion.css",
+    "cssImport": "actual-css/css/components/accordion",
+    "classes": [
+      "accordion",
+      "flush",
+      "separated"
+    ],
+    "publicHooks": [
+      "--accordion-radius",
+      "--accordion-marker-color"
+    ],
+    "states": [
+      "open"
+    ]
+  },
+  {
+    "name": "actions",
+    "source": "src/css/components/actions.css",
+    "cssImport": "actual-css/css/components/actions",
+    "classes": [
+      "actions"
+    ],
+    "internalHooks": [
+      "--gap"
+    ]
+  },
+  {
+    "name": "alert",
+    "source": "src/css/components/alert.css",
+    "cssImport": "actual-css/css/components/alert",
+    "classes": [
+      "admonition",
+      "alert",
+      "alert-dismiss",
+      "callout"
+    ],
+    "publicHooks": [
+      "--alert-pad-block",
+      "--alert-pad-inline",
+      "--alert-font-size",
+      "--alert-radius",
+      "--alert-icon-size",
+      "--alert-dismiss-size",
+      "--alert-border-inline-start-color",
+      "--alert-border-inline-start-width"
+    ],
+    "internalHooks": [
+      "--alert-default-bg",
+      "--alert-default-fg",
+      "--alert-default-border",
+      "--alert-bg",
+      "--alert-fg",
+      "--alert-border",
+      "--alert-dismiss-icon-size"
+    ]
+  },
+  {
+    "name": "app-nav",
+    "source": "src/css/components/app-nav.css",
+    "cssImport": "actual-css/css/components/app-nav",
+    "classes": [
+      "app-nav"
+    ],
+    "publicHooks": [
+      "--app-nav-size",
+      "--app-nav-gap"
+    ],
+    "states": [
+      "aria-current",
+      "aria-hidden"
+    ]
+  },
+  {
+    "name": "avatar",
+    "source": "src/css/components/avatar.css",
+    "cssImport": "actual-css/css/components/avatar",
+    "classes": [
+      "avatar",
+      "avatar-stack"
+    ],
+    "publicHooks": [
+      "--avatar-size",
+      "--avatar-radius",
+      "--avatar-font-size",
+      "--avatar-stack-size",
+      "--avatar-stack-font-size",
+      "--avatar-stack-overlap",
+      "--avatar-stack-ring"
+    ],
+    "internalHooks": [
+      "--avatar-bg",
+      "--avatar-fg",
+      "--avatar-status-translate-x"
+    ],
+    "states": [
+      "aria-disabled",
+      "disabled"
+    ]
+  },
+  {
+    "name": "badge",
+    "source": "src/css/components/badge.css",
+    "cssImport": "actual-css/css/components/badge",
+    "classes": [
+      "badge"
+    ],
+    "publicHooks": [
+      "--badge-size",
+      "--badge-pad-x",
+      "--badge-font-size",
+      "--badge-icon-size",
+      "--badge-dot-size",
+      "--badge-radius",
+      "--badge-dismiss-icon-size"
+    ],
+    "internalHooks": [
+      "--badge-default-bg",
+      "--badge-default-fg",
+      "--badge-default-border",
+      "--badge-default-hover-bg",
+      "--badge-bg",
+      "--badge-fg",
+      "--badge-border"
+    ],
+    "states": [
+      "aria-disabled",
+      "aria-hidden",
+      "disabled"
+    ]
+  },
+  {
+    "name": "breadcrumb",
+    "source": "src/css/components/breadcrumb.css",
+    "cssImport": "actual-css/css/components/breadcrumb",
+    "classes": [
+      "breadcrumb"
+    ],
+    "states": [
+      "aria-current"
+    ]
+  },
+  {
+    "name": "busy",
+    "source": "src/css/components/busy.css",
+    "cssImport": "actual-css/css/components/busy",
+    "publicHooks": [
+      "--busy-overlay-bg"
+    ],
+    "internalHooks": [
+      "--spinner-size"
+    ],
+    "states": [
+      "aria-busy"
+    ]
+  },
+  {
+    "name": "button",
+    "source": "src/css/components/button.css",
+    "cssImport": "actual-css/css/components/button",
+    "classes": [
+      "btn",
+      "ghost",
+      "icon-only",
+      "link"
+    ],
+    "publicHooks": [
+      "--btn-font-size",
+      "--btn-min-size",
+      "--btn-pad-x",
+      "--btn-radius",
+      "--btn-focus-color",
+      "--btn-gap",
+      "--btn-hover-overlay",
+      "--btn-default-bg",
+      "--btn-default-fg",
+      "--btn-default-border",
+      "--btn-border-color"
+    ],
+    "internalHooks": [
+      "--btn-bg",
+      "--btn-fg",
+      "--btn-border",
+      "--btn-default-hover-bg",
+      "--btn-focus-ring-color",
+      "--btn-border-block-end-color",
+      "--btn-border-block-end-width",
+      "--spinner-width"
+    ],
+    "states": [
+      "aria-busy",
+      "aria-current",
+      "aria-disabled",
+      "aria-pressed",
+      "disabled"
+    ]
+  },
+  {
+    "name": "card",
+    "source": "src/css/components/card.css",
+    "cssImport": "actual-css/css/components/card",
+    "classes": [
+      "card",
+      "raised",
+      "subtle"
+    ],
+    "publicHooks": [
+      "--card-pad",
+      "--card-gap",
+      "--card-radius",
+      "--card-max-inline-size"
+    ],
+    "internalHooks": [
+      "--card-bg",
+      "--card-fg",
+      "--heading",
+      "--busy-overlay-bg"
+    ]
+  },
+  {
+    "name": "chat",
+    "source": "src/css/components/chat.css",
+    "cssImport": "actual-css/css/components/chat",
+    "classes": [
+      "chat",
+      "chat-avatar",
+      "chat-bubble",
+      "chat-end",
+      "chat-footer",
+      "chat-header",
+      "chat-start"
+    ],
+    "publicHooks": [
+      "--chat-gap",
+      "--chat-max-size"
+    ],
+    "internalHooks": [
+      "--chat-bubble-bg",
+      "--chat-bubble-fg",
+      "--chat-bubble-border"
+    ]
+  },
+  {
+    "name": "data-list",
+    "source": "src/css/components/data-list.css",
+    "cssImport": "actual-css/css/components/data-list",
+    "classes": [
+      "data-list"
+    ]
+  },
+  {
+    "name": "drawer",
+    "source": "src/css/components/drawer.css",
+    "cssImport": "actual-css/css/components/drawer",
+    "classes": [
+      "drawer",
+      "is-static"
+    ],
+    "publicHooks": [
+      "--drawer-size",
+      "--drawer-pad"
+    ],
+    "internalHooks": [
+      "--drawer-closed-translate",
+      "--drawer-motion-duration"
+    ],
+    "states": [
+      "open"
+    ]
+  },
+  {
+    "name": "fab",
+    "source": "src/css/components/fab.css",
+    "cssImport": "actual-css/css/components/fab",
+    "classes": [
+      "fab",
+      "fab-action",
+      "fab-actions",
+      "fab-label"
+    ],
+    "publicHooks": [
+      "--fab-offset",
+      "--fab-gap",
+      "--fab-icon-size"
+    ],
+    "states": [
+      "open"
+    ]
+  },
+  {
+    "name": "flyout",
+    "source": "src/css/components/flyout.css",
+    "cssImport": "actual-css/css/components/flyout",
+    "classes": [
+      "flyout",
+      "flyout-trigger",
+      "is-open",
+      "is-sheet",
+      "stretch"
+    ],
+    "publicHooks": [
+      "--flyout-inline-size",
+      "--flyout-max-inline-size"
+    ],
+    "internalHooks": [
+      "--menu-item-size",
+      "--available-height",
+      "--surface-anchor-width"
+    ],
+    "states": [
+      "aria-haspopup",
+      "hidden",
+      "popover-open"
+    ],
+    "jsImport": "actual-css/js/flyout",
+    "enhancements": [
+      "flyout"
+    ]
+  },
+  {
+    "name": "indicator",
+    "source": "src/css/components/indicator.css",
+    "cssImport": "actual-css/css/components/indicator",
+    "classes": [
+      "bottom",
+      "indicator",
+      "indicator-item",
+      "start"
+    ],
+    "internalHooks": [
+      "--indicator-translate-x",
+      "--indicator-translate-y"
+    ]
+  },
+  {
+    "name": "join",
+    "source": "src/css/components/join.css",
+    "cssImport": "actual-css/css/components/join",
+    "classes": [
+      "circle",
+      "join",
+      "join-addon"
+    ],
+    "publicHooks": [
+      "--join-radius"
+    ],
+    "internalHooks": [
+      "--join-ss",
+      "--join-se",
+      "--join-es",
+      "--join-ee",
+      "--control-border",
+      "--control-bg",
+      "--control-fg"
+    ]
+  },
+  {
+    "name": "key",
+    "source": "src/css/components/key.css",
+    "cssImport": "actual-css/css/components/key",
+    "classes": [
+      "key"
+    ]
+  },
+  {
+    "name": "list",
+    "source": "src/css/components/list.css",
+    "cssImport": "actual-css/css/components/list",
+    "classes": [
+      "list",
+      "list-item",
+      "list-item-content",
+      "list-item-text",
+      "list-item-title",
+      "list-item-trailing"
+    ],
+    "publicHooks": [
+      "--list-item-min-size",
+      "--list-item-pad-block",
+      "--list-item-pad-inline",
+      "--list-item-gap",
+      "--list-divider"
+    ]
+  },
+  {
+    "name": "menu",
+    "source": "src/css/components/menu.css",
+    "cssImport": "actual-css/css/components/menu",
+    "classes": [
+      "menu",
+      "menu-item",
+      "menu-item-end",
+      "menu-item-icon",
+      "menu-item-text",
+      "menu-label",
+      "menu-separator"
+    ],
+    "publicHooks": [
+      "--menu-item-icon-size",
+      "--intent"
+    ],
+    "states": [
+      "aria-checked",
+      "aria-disabled",
+      "disabled"
+    ],
+    "jsImport": "actual-css/js/menu"
+  },
+  {
+    "name": "meter",
+    "source": "src/css/components/meter.css",
+    "cssImport": "actual-css/css/components/meter",
+    "classes": [
+      "meter"
+    ],
+    "publicHooks": [
+      "--meter-value",
+      "--bar-height"
+    ]
+  },
+  {
+    "name": "modal",
+    "source": "src/css/components/modal.css",
+    "cssImport": "actual-css/css/components/modal",
+    "classes": [
+      "dialog-close",
+      "dialog-confirmation",
+      "dialog-icon",
+      "drawer-close",
+      "had-scrollbar",
+      "has-modal-open",
+      "is-static",
+      "modal",
+      "scrollable"
+    ],
+    "publicHooks": [
+      "--modal-size",
+      "--dialog-viewport-gap",
+      "--dialog-icon-size",
+      "--dialog-icon-glyph-size"
+    ],
+    "internalHooks": [
+      "--dialog-close-icon-size",
+      "--dialog-viewport-gap-default",
+      "--dialog-viewport-gap-2x"
+    ],
+    "states": [
+      "open"
+    ]
+  },
+  {
+    "name": "navbar",
+    "source": "src/css/components/navbar.css",
+    "cssImport": "actual-css/css/components/navbar",
+    "classes": [
+      "nav-link",
+      "nav-list",
+      "navbar",
+      "navbar-brand",
+      "navbar-nav"
+    ],
+    "internalHooks": [
+      "--gap"
+    ],
+    "states": [
+      "aria-current"
+    ]
+  },
+  {
+    "name": "pagination",
+    "source": "src/css/components/pagination.css",
+    "cssImport": "actual-css/css/components/pagination",
+    "classes": [
+      "pagination"
+    ],
+    "states": [
+      "aria-hidden"
+    ]
+  },
+  {
+    "name": "progress",
+    "source": "src/css/components/progress.css",
+    "cssImport": "actual-css/css/components/progress",
+    "classes": [
+      "progress"
+    ],
+    "publicHooks": [
+      "--progress-track",
+      "--progress-value",
+      "--bar-height"
+    ],
+    "states": [
+      "indeterminate"
+    ]
+  },
+  {
+    "name": "rating",
+    "source": "src/css/components/rating.css",
+    "cssImport": "actual-css/css/components/rating",
+    "classes": [
+      "rating"
+    ],
+    "publicHooks": [
+      "--rating-size",
+      "--rating-gap",
+      "--rating-color",
+      "--rating-empty",
+      "--rating-star"
+    ],
+    "states": [
+      "checked",
+      "disabled"
+    ]
+  },
+  {
+    "name": "scrollspy",
+    "source": "src/css/components/scrollspy.css",
+    "cssImport": "actual-css/css/components/scrollspy",
+    "classes": [
+      "scrollspy"
+    ],
+    "states": [
+      "target"
+    ],
+    "jsImport": "actual-css/js/scrollspy",
+    "enhancements": [
+      "scrollspy"
+    ]
+  },
+  {
+    "name": "skeleton",
+    "source": "src/css/components/skeleton.css",
+    "cssImport": "actual-css/css/components/skeleton",
+    "classes": [
+      "skeleton"
+    ],
+    "publicHooks": [
+      "--skeleton-size",
+      "--skeleton-width",
+      "--skeleton-radius",
+      "--skeleton-track",
+      "--skeleton-highlight"
+    ]
+  },
+  {
+    "name": "spinner",
+    "source": "src/css/components/spinner.css",
+    "cssImport": "actual-css/css/components/spinner",
+    "classes": [
+      "spinner"
+    ],
+    "publicHooks": [
+      "--spinner-size",
+      "--spinner-width",
+      "--spinner-track",
+      "--spinner-value"
+    ]
+  },
+  {
+    "name": "status-bar",
+    "source": "src/css/components/status-bar.css",
+    "cssImport": "actual-css/css/components/status-bar",
+    "classes": [
+      "is-open",
+      "status-bar"
+    ],
+    "internalHooks": [
+      "--status-bg",
+      "--status-fg",
+      "--status-viewport-offset"
+    ]
+  },
+  {
+    "name": "steps",
+    "source": "src/css/components/steps.css",
+    "cssImport": "actual-css/css/components/steps",
+    "classes": [
+      "steps",
+      "steps-horizontal",
+      "steps-vertical"
+    ],
+    "publicHooks": [
+      "--step-size",
+      "--step-inline-gap",
+      "--step-line-size",
+      "--step-marker-radius",
+      "--step-complete-mark",
+      "--step-min",
+      "--step-gap",
+      "--step-connector",
+      "--step-inline-connector",
+      "--step-vertical-gap"
+    ],
+    "internalHooks": [
+      "--step-marker-bg",
+      "--step-marker-border",
+      "--step-marker-fg",
+      "--step-line"
+    ],
+    "states": [
+      "aria-current"
+    ]
+  },
+  {
+    "name": "surface",
+    "source": "src/css/components/surface.css",
+    "cssImport": "actual-css/css/components/surface",
+    "classes": [
+      "surface-backdrop"
+    ],
+    "states": [
+      "hidden"
+    ],
+    "jsImport": "actual-css/js/surface"
+  },
+  {
+    "name": "tab",
+    "source": "src/css/components/tab.css",
+    "cssImport": "actual-css/css/components/tab",
+    "classes": [
+      "tab",
+      "tabs"
+    ],
+    "publicHooks": [
+      "--tab-gap"
+    ],
+    "states": [
+      "aria-current",
+      "aria-disabled",
+      "aria-orientation",
+      "aria-selected",
+      "disabled"
+    ],
+    "jsImport": "actual-css/js/tab",
+    "enhancements": [
+      "tabs"
+    ]
+  },
+  {
+    "name": "table",
+    "source": "src/css/components/table.css",
+    "cssImport": "actual-css/css/components/table",
+    "classes": [
+      "table",
+      "table-wrap"
+    ],
+    "publicHooks": [
+      "--table-min",
+      "--table-cell-pad"
+    ]
+  },
+  {
+    "name": "tooltip",
+    "source": "src/css/components/tooltip.css",
+    "cssImport": "actual-css/css/components/tooltip",
+    "classes": [
+      "tooltip"
+    ],
+    "publicHooks": [
+      "--tooltip-bg",
+      "--tooltip-fg",
+      "--tooltip-arrow-size"
+    ],
+    "internalHooks": [
+      "--arrow-x",
+      "--arrow-y"
+    ],
+    "states": [
+      "hidden",
+      "popover-open"
+    ],
+    "jsImport": "actual-css/js/tooltip"
+  }
+]
