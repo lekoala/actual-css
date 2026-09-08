@@ -530,6 +530,7 @@ inherited density for the dimensions they share.</p>
 <h2 id="theme-contract">Theme contract</h2>
 <p>Themes override tokens, not selectors. The themes in <code>src/css/themes/</code> are repository-only demo examples, not included in the default stylesheet or the npm package; they exist to show valid ways to use this contract, such as <code>ocean</code>, <code>square</code>, <code>cyberpunk</code>, and <code>brutalist</code>.</p>
 <p>A minimal recolor theme overrides the intent pairs, surfaces, text colors, border, focus, and hover overlay. In browsers with <code>color-mix()</code> support, the core derives <code>--focus-ring</code> from the island's <code>--focus</code>; override the ring only for a deliberate visual treatment or when a matching pre-<code>color-mix()</code> fallback is required.</p>
+<p>When overriding an intent color, review its paired <code>--*-fg</code> and <code>--*-soft-fg</code>. The generic soft fallback (<code>--soft-fg-mix</code> derivation, above) may already be sufficient.</p>
 <p>Shape, shadow, motion, typography, and soft-variant mix tokens are optional knobs. Override them only when the theme actually changes that part of the system.</p>
 <p>A full theme can override:</p>
 <ul>

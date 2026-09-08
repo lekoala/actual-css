@@ -420,6 +420,8 @@ Themes override tokens, not selectors. The themes in `src/css/themes/` are repos
 
 A minimal recolor theme overrides the intent pairs, surfaces, text colors, border, focus, and hover overlay. In browsers with `color-mix()` support, the core derives `--focus-ring` from the island's `--focus`; override the ring only for a deliberate visual treatment or when a matching pre-`color-mix()` fallback is required.
 
+When overriding an intent color, review its paired `--*-fg` and `--*-soft-fg`. The generic soft fallback (`--soft-fg-mix` derivation, above) may already be sufficient.
+
 Shape, shadow, motion, typography, and soft-variant mix tokens are optional knobs. Override them only when the theme actually changes that part of the system.
 
 A full theme can override:

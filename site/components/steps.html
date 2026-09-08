@@ -284,6 +284,20 @@ solve a layout constraint.</li>
 smaller than body text, and neutral in weight. Only the current step's label is
 emphasised — it is where you are now. A completed step needs no bold text; its
 filled marker already says as much.</p>
+<h2 id="theming-the-states">Theming the states</h2>
+<p>The complete and current states consume the shared
+<code>--state-selected</code> / <code>--state-selected-fg</code> tokens, which default to
+<code>--primary</code> / <code>--primary-fg</code>. A <code>--primary</code> recolor therefore flows through
+without any stepper-specific rule. To theme only this sequence with a local
+accent, override the tokens on the component:</p>
+<pre><code class="language-css">.checkout-steps {
+  --state-selected: var(--success);
+  --state-selected-fg: var(--success-fg);
+}
+</code></pre>
+<p><code>--state-selected</code> drives the completed fill, connector and the current ring;
+<code>--state-selected-fg</code> corrects the number inside a completed marker when the
+accent needs a lighter ink.</p>
 <h2 id="horizontal-steps">Horizontal steps</h2>
 <p><code>.steps-horizontal</code> is designed for <strong>2 to 5 stages</strong>.</p>
 <h3 id="without-labels-visual-progress-only">Without labels — visual progress only</h3>
@@ -666,6 +680,7 @@ and rejected.</p>
           <p class="docs-nav-group">On this page</p>
           <ul class="nav-list docs-toc-list" data-docs-toc>
         <li><a class="nav-link" href="#basic-usage" data-docs-toc-item data-level="2">Basic usage</a></li>
+        <li><a class="nav-link" href="#theming-the-states" data-docs-toc-item data-level="2">Theming the states</a></li>
         <li><a class="nav-link" href="#horizontal-steps" data-docs-toc-item data-level="2">Horizontal steps</a></li>
         <li><a class="nav-link" href="#without-labels-visual-progress-only" data-docs-toc-item data-level="3">Without labels — visual progress only</a></li>
         <li><a class="nav-link" href="#with-labels-the-sequence-carries-the-names" data-docs-toc-item data-level="3">With labels — the sequence carries the names</a></li>

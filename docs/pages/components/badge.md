@@ -4,7 +4,7 @@
 
 - Supports intent colors.
 - Soft by default. Use `.solid` for counters and notification badges, or `.outline` for quieter emphasis.
-- Dots stay solid regardless of variant.
+- Empty badges are solid status dots: visual variants such as `.soft` and `.outline` do not change their fill.
 - Use `.sm` or `.lg` to scale the badge locally.
 - Use `.compact` or `.spacious` on a context to change geometry without changing the label or icon size.
 - Can be used inline in headings.
