@@ -150,6 +150,21 @@ Decorative SVG, image, or `[aria-hidden="true"]` children follow
 </span>
 ```
 
+## Loading status
+
+A decorative spinner follows the badge color and optical size.
+
+```html demo
+<span class="badge danger sm">
+  <span class="spinner" aria-hidden="true"></span>
+  Deleting
+</span>
+<span class="badge sm">
+  Generating
+  <span class="spinner" aria-hidden="true"></span>
+</span>
+```
+
 ## Custom sizing
 
 Override the existing hooks when the three-step scale does not fit the content.
