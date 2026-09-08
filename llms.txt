@@ -17,6 +17,7 @@ Actual CSS uses a small public grammar: `.component [intent] [variant] [size] [m
 - `actual-css/js` — the enhancement loader only; it discovers `data-enhance` markers and loads enhancers on demand.
 - `actual-css/js/full` — the complete runtime with all built-in enhancers pre-registered.
 - `actual-css/reserved-classes.json` — machine-readable list of the framework-owned class namespace. Use it to check whether a class belongs to Actual CSS and to validate claimed framework classes; application-specific classes are expected to exist outside this manifest.
+- `actual-css/components.json` — machine-readable component index, derived from the sources (CSS headers, selectors, package exports, `src/js`) by `scripts/build-catalog.js` and verified by `check:catalog`. Gives each component its import paths, owned classes, hooks, states, and registered enhancement tokens — enough to know what exists and where to read more, not a replacement for `docs/pages/components/*.md`.
 - Individual families and modules are importable separately (`actual-css/css/components`, `actual-css/css/layout/grid`, `actual-css/js/dialog`, …); see [README](README.md) and [Modular imports](docs/pages/guides/modular-import.md).
 
 Forms are the one family with two aggregate entrypoints:

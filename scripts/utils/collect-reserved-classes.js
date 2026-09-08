@@ -1,77 +1,8 @@
 import { readdir, readFile } from "node:fs/promises";
 import { join } from "node:path";
+import { classesFromSelectors } from "./css-classes.js";
 
 export const CSS_SOURCE_DIR = "src/css";
-
-function stripComments(css) {
-  let out = "";
-  let quote = "";
-
-  for (let i = 0; i < css.length; i += 1) {
-    const char = css[i];
-    const next = css[i + 1];
-
-    if (quote) {
-      out += char;
-      if (char === "\\") {
-        out += next ?? "";
-        i += 1;
-      } else if (char === quote) {
-        quote = "";
-      }
-      continue;
-    }
-
-    if (char === '"' || char === "'") {
-      quote = char;
-      out += char;
-      continue;
-    }
-
-    if (char === "/" && next === "*") {
-      i += 2;
-      while (i < css.length && !(css[i] === "*" && css[i + 1] === "/")) i += 1;
-      i += 1;
-      continue;
-    }
-
-    out += char;
-  }
-
-  return out;
-}
-
-function selectorPreludes(css) {
-  const preludes = [];
-  let start = 0;
-
-  for (let i = 0; i < css.length; i += 1) {
-    const char = css[i];
-    if (char === "{") {
-      const prelude = css.slice(start, i).trim();
-      if (prelude && !prelude.startsWith("@")) {
-        preludes.push(prelude);
-      }
-      start = i + 1;
-    } else if (char === "}") {
-      start = i + 1;
-    }
-  }
-
-  return preludes;
-}
-
-function classesFromSelectors(css) {
-  const classes = new Set();
-
-  for (const prelude of selectorPreludes(stripComments(css))) {
-    for (const match of prelude.matchAll(/\.([A-Za-z_-][A-Za-z0-9_-]*)/g)) {
-      classes.add(match[1]);
-    }
-  }
-
-  return classes;
-}
 
 async function collectCssFiles(dir) {
   const files = [];
