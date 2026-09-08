@@ -108,6 +108,34 @@ async function checkCssSelectors() {
   return offenders;
 }
 
+/*
+ * Every token used in a scanned file must be defined somewhere: either a
+ * built-in, or a registerEnhancement("token", …) literal in the same file.
+ * registerEnhancement is public API, so a demo may own its behavior token
+ * without widening the built-in list; a stray token still trips the check.
+ */
+function registeredTokens(source) {
+  const tokens = new Set();
+  const pattern = /registerEnhancement\(\s*["']([a-z][a-z0-9-]*)["']/g;
+  for (let match = pattern.exec(source); match !== null; match = pattern.exec(source)) {
+    tokens.add(match[1]);
+  }
+  return tokens;
+}
+
+function checkTokensIn(path, source, patterns, offenders) {
+  const allowed = new Set([...TOKENS, ...registeredTokens(source)]);
+  for (const pattern of patterns) {
+    for (let match = pattern.exec(source); match !== null; match = pattern.exec(source)) {
+      for (const token of match[1].split(/\s+/)) {
+        if (token && !allowed.has(token)) {
+          offenders.push(`${path}: unknown token "${token}"`);
+        }
+      }
+    }
+  }
+}
+
 async function checkTokens() {
   const offenders = [];
   const patterns = [/data-enhance="([^"]*)"/g];
@@ -124,18 +152,7 @@ async function checkTokens() {
         await scanDir(path);
       } else if (/\.(html|md)$/.test(entry.name)) {
         const content = await readFile(path, "utf8");
-        for (const pattern of patterns) {
-          let match = pattern.exec(content);
-          while (match !== null) {
-            const tokens = match[1].split(/\s+/);
-            for (const token of tokens) {
-              if (!TOKENS.has(token) && token) {
-                offenders.push(`${path}: unknown token "${token}"`);
-              }
-            }
-            match = pattern.exec(content);
-          }
-        }
+        checkTokensIn(path, content, patterns, offenders);
       }
     }
   }
@@ -147,18 +164,7 @@ async function checkTokens() {
   for (const file of tokenFiles) {
     try {
       const content = await readFile(file, "utf8");
-      for (const pattern of patterns) {
-        let match = pattern.exec(content);
-        while (match !== null) {
-          const tokens = match[1].split(/\s+/);
-          for (const token of tokens) {
-            if (!TOKENS.has(token) && token) {
-              offenders.push(`${file}: unknown token "${token}"`);
-            }
-          }
-          match = pattern.exec(content);
-        }
-      }
+      checkTokensIn(file, content, patterns, offenders);
     } catch {
       // File may not exist — skip.
     }
