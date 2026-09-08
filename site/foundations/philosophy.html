@@ -271,14 +271,22 @@ class:</p>
 </div>
 <div class="docs-example">
   <div class="docs-preview">
-<button class="btn soft primary">Soft primary</button>
-<span class="badge outline success">Outline success</span>
-<div class="alert solid warning">Solid warning</div>
+<div class="stack">
+  <div class="cluster">
+    <button class="btn soft primary">Soft primary</button>
+    <span class="badge outline success">Outline success</span>
+  </div>
+  <div class="alert solid warning">Solid warning</div>
+</div>
   </div>
   <div class="docs-code">
-    <pre><code class="language-html">&lt;button class=&quot;btn soft primary&quot;&gt;Soft primary&lt;/button&gt;
-&lt;span class=&quot;badge outline success&quot;&gt;Outline success&lt;/span&gt;
-&lt;div class=&quot;alert solid warning&quot;&gt;Solid warning&lt;/div&gt;</code></pre>
+    <pre><code class="language-html">&lt;div class=&quot;stack&quot;&gt;
+  &lt;div class=&quot;cluster&quot;&gt;
+    &lt;button class=&quot;btn soft primary&quot;&gt;Soft primary&lt;/button&gt;
+    &lt;span class=&quot;badge outline success&quot;&gt;Outline success&lt;/span&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;alert solid warning&quot;&gt;Solid warning&lt;/div&gt;
+&lt;/div&gt;</code></pre>
   </div>
 </div>
 <div class="prose docs-prose">
@@ -313,14 +321,14 @@ content (<code>.badge</code>, <code>.avatar</code>, <code>.spinner</code>, <code
 </div>
 <div class="docs-example">
   <div class="docs-preview">
-<div class="compact">
+<div class="compact stack">
   <button class="btn">Compact button</button>
   <input class="input">
   <span class="badge">Compact badge</span>
 </div>
   </div>
   <div class="docs-code">
-    <pre><code class="language-html">&lt;div class=&quot;compact&quot;&gt;
+    <pre><code class="language-html">&lt;div class=&quot;compact stack&quot;&gt;
   &lt;button class=&quot;btn&quot;&gt;Compact button&lt;/button&gt;
   &lt;input class=&quot;input&quot;&gt;
   &lt;span class=&quot;badge&quot;&gt;Compact badge&lt;/span&gt;
