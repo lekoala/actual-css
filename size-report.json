@@ -1,12 +1,12 @@
 {
-  "totalRaw": 284731,
+  "totalRaw": 286857,
   "core": {
-    "minified": 11535,
-    "brotli": 2654
+    "minified": 12220,
+    "brotli": 2759
   },
   "full": {
-    "minified": 123370,
-    "brotli": 17844
+    "minified": 124077,
+    "brotli": 17993
   },
   "js": {
     "core": {
@@ -26,7 +26,7 @@
     },
     {
       "file": "core/tokens.css",
-      "raw": 9568
+      "raw": 9760
     },
     {
       "file": "components/modal.css",
@@ -37,16 +37,16 @@
       "raw": 8889
     },
     {
+      "file": "core/theme.css",
+      "raw": 8447
+    },
+    {
       "file": "components/badge.css",
-      "raw": 7503
+      "raw": 7853
     },
     {
       "file": "components/button.css",
-      "raw": 7280
-    },
-    {
-      "file": "core/theme.css",
-      "raw": 7121
+      "raw": 7474
     },
     {
       "file": "components/flyout.css",
@@ -261,12 +261,12 @@
       "raw": 1873
     },
     {
-      "file": "themes/brutalist.css",
-      "raw": 1760
+      "file": "core/intents.css",
+      "raw": 1806
     },
     {
-      "file": "core/intents.css",
-      "raw": 1742
+      "file": "themes/brutalist.css",
+      "raw": 1760
     },
     {
       "file": "layout/sidebar-layout.css",

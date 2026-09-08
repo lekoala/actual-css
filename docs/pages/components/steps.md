@@ -65,6 +65,25 @@ smaller than body text, and neutral in weight. Only the current step's label is
 emphasised — it is where you are now. A completed step needs no bold text; its
 filled marker already says as much.
 
+## Theming the states
+
+The complete and current states consume the shared
+`--state-selected` / `--state-selected-fg` tokens, which default to
+`--primary` / `--primary-fg`. A `--primary` recolor therefore flows through
+without any stepper-specific rule. To theme only this sequence with a local
+accent, override the tokens on the component:
+
+```css
+.checkout-steps {
+  --state-selected: var(--success);
+  --state-selected-fg: var(--success-fg);
+}
+```
+
+`--state-selected` drives the completed fill, connector and the current ring;
+`--state-selected-fg` corrects the number inside a completed marker when the
+accent needs a lighter ink.
+
 ## Horizontal steps
 
 `.steps-horizontal` is designed for **2 to 5 stages**.
