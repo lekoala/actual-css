@@ -60,29 +60,51 @@ class:
 <div class="alert solid warning">Solid warning</div>
 ```
 
-## Density
+## Size and density
 
-`.sm` and `.lg` establish inherited density tokens. Density adjusts how much
-space UI consumes — spacing and component geometry — not how large its content
-is: typography and icon size never change. Components opt into the density
-dimensions that make sense for them. The same modifiers can also be applied
-directly to a component for local density.
+`.sm` and `.lg` mean one size role below or above a component's natural size.
+Size names are shared roles, not shared measurements. Each participating
+component family maps them to its own optical scale: badges use `xs / sm / md`,
+while controls use `sm / md / lg`. Components without an explicit mapping do
+not change.
+
+A size role is applied to the component that participates in the scale and
+never styles arbitrary descendants. It propagates through token inheritance,
+though: components in the shared control scale set local `--control-size` and
+`--control-font-size`, and descendants consume them by their own rules. That is
+how `.field sm`, `.input-icon sm`, `.join sm`, and `.flyout sm` size the
+controls inside them, while a bare `.sm` on a plain element does nothing.
+
+`.compact` and `.spacious` establish inherited density tokens. Density arranges
+how tightly UI sits — spacing and component geometry — while typography and
+icon size stay unchanged. Participation is opt-in, and a component only joins
+where density has an effect independent from its optical size: if the result is
+merely that the component looks smaller or larger, that is size, not density.
+
+Density participation takes three levels:
+
+- **Geometry + rhythm** — controls and their wrappers (`.field`, `.join`,
+  `.flyout`, …). Height, padding, and gap respond; typography is untouched.
+- **Rhythm only** — content rows and shells such as `.list`. Spacing tightens
+  (`--list-item-gap: var(--gap)`), but the structural size stays stable.
+- **No density effect** — components whose geometry is intrinsic to their
+  content (`.badge`, `.avatar`, `.spinner`, `.rating`, `.key`, prose, inline
+  `.choice`/`.switch`). Their optical size belongs to `sm`/`lg` or local hooks.
 
 As inherited contexts, one class tightens or loosens the whole subtree:
 
 ```html demo
-<div class="sm">
+<div class="compact">
   <button class="btn">Compact button</button>
   <input class="input">
   <span class="badge">Compact badge</span>
 </div>
 ```
 
-Application chrome can use the same scope; no separate `.compact` mode is
-needed:
+Application chrome can use the same scope:
 
 ```html demo
-<header class="navbar sm">
+<header class="navbar compact">
   <a class="navbar-brand" href="/">Workspace</a>
   <nav class="cluster" aria-label="Workspace actions">
     <button class="btn ghost">Search</button>
@@ -91,22 +113,24 @@ needed:
 </header>
 ```
 
-The same class on a component is local density, not a second meaning:
+Component geometry remains local and wins over inherited density when both
+affect the same dimension:
 
 ```html demo
-<button class="btn sm">Compact button</button>
-<span class="badge lg">Spacious badge</span>
+<div class="compact">
+  <button class="btn lg">Large button in a compact context</button>
+</div>
 ```
 
-This is not "`.sm` sometimes means density and sometimes size": `.sm` always
-establishes the same density tokens — only the scope changes. The density
-tokens are `--gap`, `--density-space`, `--control-size`, and
-`--density-compact-size`. Components consume the dimensions that make sense
-for them and opt out of the rest. The absolute `--space-*` scale is not rebound
-by density scopes.
+The density tokens are `--gap`, `--density-space`, and `--control-size`.
+Components consume the dimensions that make sense for them and opt out of the
+rest. The absolute `--space-*` scale is not rebound by density scopes.
+Components with bespoke geometry (`.badge`, `.avatar`,
+`.spinner`, `.rating`) own their local `.sm`/`.lg` mappings.
 
-Components with bespoke sizing (`.avatar`, `.spinner`) define local `.sm`/`.lg`
-instead of consuming the shared tokens.
+`.compact` also remains a meaningful local modifier for `.card` and `.table`.
+On those components it tightens their own padding and establishes the compact
+density context for descendants.
 
 ## Child semantics
 

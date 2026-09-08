@@ -11,13 +11,15 @@ Use `.input-icon` for a search or filter input with a leading icon.
 
 It positions the wrapper's first child absolutely inside a relative container and grows the input's start padding to clear it. `pointer-events: none` on the icon keeps clicks passing through to the input underneath. It is icon-library agnostic — an `<i>` webfont icon, an inline `<svg>`, or a `<span>` all work as the wrapper's first child.
 
-The icon keeps a fixed `--input-icon-size` (1.25rem); density contexts shrink the control geometry around it, not the pictogram. Apply the density class to the wrapper and to the input so the control height follows:
+The icon follows local typography through `--input-icon-size`. Apply a size to
+the wrapper so icon, input type, and control geometry scale together. A density
+context changes only the geometry.
 
 ```html demo
 <div class="stack">
   <label class="input-icon sm">
     <i class="ti ti-search" aria-hidden="true"></i>
-    <input class="input sm" type="search" aria-label="Search">
+    <input class="input" type="search" aria-label="Search">
   </label>
 </div>
 ```

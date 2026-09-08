@@ -363,7 +363,8 @@ derivation. A custom intent class provides the relay directly:</p>
 </code></pre>
 <p>Components can use local font variables for their own mapping, but should inherit by default. <code>--font-size-md</code> is the baseline — going smaller (<code>--font-size-sm</code> / <code>--font-size-xs</code>) is the easy direction; going larger adjusts line-heights and surrounding paddings, so prefer keeping base body text at <code>--font-size-md</code>.</p>
 <h3 id="controls">Controls</h3>
-<p>Controls share sizing so buttons, inputs, selects, and compact app UI always align. <code>.sm</code>/<code>.lg</code> set shared density tokens for controls, compact labels, and spacing helpers.</p>
+<p>Controls share geometry so buttons, inputs, selects, and compact app UI align.
+Local <code>.sm</code>/<code>.lg</code> sizes map both <code>--control-size</code> and <code>--control-font-size</code>.</p>
 <pre><code class="language-css">:root {
   --control-size-sm: 2rem;      /* 32px → .sm */
   --control-size-md: 2.375rem;  /* 38px → default */
@@ -379,25 +380,30 @@ derivation. A custom intent class provides the relay directly:</p>
 <li>default — 38px control height</li>
 <li><code>.sm</code> — 32px control height</li>
 </ul>
-<p>The font size stays at the baseline (<code>--control-font-size</code> = <code>--font-size-md</code>) in every density — density changes how much space controls consume, not how large their text is.</p>
+<p>The default font size is <code>--font-size-md</code>; <code>.sm</code> maps it to <code>--font-size-sm</code> and
+<code>.lg</code> to <code>--font-size-lg</code>. Density contexts change <code>--control-size</code> without
+changing the font size.</p>
 <p>Disabled controls and disabled-prone components read <code>--disabled-opacity</code> for their dimmed state — buttons, tabs, menu items, badges, avatars, choice cards, native inputs, and range sliders.</p>
 <h3 id="density">Density</h3>
-<p>Density modifiers swap the shared control geometry:</p>
-<pre><code class="language-css">.sm {
+<p>Density contexts swap shared spacing and geometry:</p>
+<pre><code class="language-css">.compact {
   --gap: var(--space-20);
   --density-space: var(--space-20);
   --control-size: var(--control-size-sm);
-  --density-compact-size: 1.25rem;
 }
 
-.lg {
+.spacious {
   --gap: var(--space-50);
   --density-space: var(--space-50);
   --control-size: var(--control-size-lg);
-  --density-compact-size: 1.875rem;
 }
 </code></pre>
-<p>Density covers spacing and geometry only — it never touches typography or icon size. Compact labels such as <code>.badge</code> consume <code>--density-compact-size</code>; display elements with special geometry, such as avatar and spinner, keep their own size scales. Content blocks like alert, card, dialog, table, and accordion do not participate.</p>
+<p>Density covers spacing and geometry only — it never touches typography or icon
+size. Participation is opt-in and selective: controls consume <code>--control-size</code>
+for geometry; spacing helpers and rhythms consume <code>--density-space</code> and <code>--gap</code>;
+components whose size is intrinsic (badge, avatar, spinner, rating, key, prose,
+inline choice/switch) keep their own scales. A local component size overrides
+inherited density for the dimensions they share.</p>
 <h3 id="elevation">Elevation</h3>
 <p>Use a tiny elevation surface. Components should not invent their own shadow scales.</p>
 <pre><code class="language-css">:root {

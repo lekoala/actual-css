@@ -4,23 +4,23 @@
 
 ## Class reference
 
-| Class | Kind     | Description                                |
-| ----- | -------- | ------------------------------------------ |
-| `.sm` | Modifier | Compact control height and spacing rhythm. |
-| `.lg` | Modifier | Large control height and spacing rhythm.   |
+| Class | Kind     | Description                              |
+| ----- | -------- | ---------------------------------------- |
+| `.sm` | Modifier | Smaller control geometry and typography. |
+| `.lg` | Modifier | Larger control geometry and typography.  |
 
-Each sets `--control-size` to `--control-size-sm` or `--control-size-lg`.
+Each maps `--control-size` and `--control-font-size` to the matching step.
 
 Use `readonly` for text-like values that can still be focused, selected, and submitted. Use `disabled` for unavailable controls that should not receive focus or submit a value.
 
-The `.sm` and `.lg` modifiers set the shared control tokens used by inputs, selects, textareas, and buttons. Put the modifier on the control itself, or on a `.field` wrapper when the whole field should share that size.
+The `.sm` and `.lg` modifiers set the shared control tokens used by inputs,
+selects, textareas, buttons, and inline choices. Put the modifier on the control
+itself, or on a `.field` wrapper when the whole field should share that size.
 
-Inline choices — `.check`, `.radio`, `.switch` — are the exception. They sit on
-a line of text rather than standing as a field, so they are sized off the
-control typography (`--choice-control-size`, an em value) and `.sm` / `.lg`
-leave them alone: density changes field heights, not type. Resizing the control
-without its label would only break the alignment. Scale them by scaling their
-type instead.
+Inline choices — `.check`, `.radio`, `.switch` — sit on a line of text, so their
+geometry follows the local control typography through `--choice-control-size`.
+Apply `.sm` or `.lg` to the `.choice` wrapper so its label and control scale
+together. Density contexts leave both unchanged.
 
 ```html demo
 <form class="stack" novalidate>
@@ -276,12 +276,11 @@ type instead.
         <button class="btn outline lg" type="button">Large</button>
       </div>
 
-      <!-- Density is a deliberate no-op on inline choices: these three are
-           identical even though the modifiers differ. -->
+      <!-- Size belongs on the choice wrapper so label and control move together. -->
       <div class="grid items-start">
         <label class="choice sm">
           <input class="check" type="checkbox" checked />
-          <span>.sm checkbox</span>
+          <span>Small checkbox</span>
         </label>
         <label class="choice">
           <input class="radio" type="radio" name="demo-radio-size" checked />
@@ -289,7 +288,7 @@ type instead.
         </label>
         <label class="choice lg">
           <input class="switch" type="checkbox" role="switch" checked />
-          <span>.lg switch</span>
+          <span>Large switch</span>
         </label>
         <label class="choice">
           <input class="check" type="checkbox" id="indet-size" />
@@ -297,8 +296,7 @@ type instead.
         </label>
       </div>
 
-      <!-- Typography is the knob that does resize them — control and label
-           together, so the alignment survives. -->
+      <!-- The underlying typography hook remains available for custom scales. -->
       <div class="grid items-start" style="--control-font-size: var(--font-size-sm);">
         <label class="choice">
           <input class="check" type="checkbox" checked />

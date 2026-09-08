@@ -29,6 +29,10 @@
 
 ### Changed
 
+- `.sm` / `.lg` now scale participating component families locally; inherited density moves to `.compact` / `.spacious`.
+- Badge sizes scale label, decorative icons, dots, and geometry through `--badge-icon-size` and the existing badge hooks.
+- Badge geometry is intrinsic: badge leaves density participation and `--density-compact-size` is removed; `.badge` keeps its own `--badge-size` scale.
+- Print styles preserve semantic component content and limit framework intervention to structural repairs.
 - The font-weight scale drops the awkward names: `--font-weight` becomes `--font-weight-normal`, `--font-weight-strong` becomes `--font-weight-semibold` (650 → 600), and the `.font-weight-strong` utility becomes `.font-weight-semibold`.
 - The accordion summary moves to `--font-weight-medium`; its hover no longer tints `--primary` and instead reinforces the end marker to the summary text color.
 - Soft foreground resolves per intent: the intent classes expose the

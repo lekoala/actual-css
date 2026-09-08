@@ -222,7 +222,7 @@
 <tr><td><code>.subtle</code></td><td>Variant</td><td>Lower contrast against the page surface.</td></tr>
 <tr><td><code>.surface</code></td><td>Variant</td><td>The page surface; intent in the text only.</td></tr>
 <tr><td><code>.inverted</code></td><td>Surface modifier</td><td>Inverse surface treatment.</td></tr>
-<tr><td><code>.compact</code></td><td>Variant</td><td>Tighter padding for dense contexts.</td></tr>
+<tr><td><code>.compact</code></td><td>Density</td><td>Tighter padding and compact descendant context.</td></tr>
 </tbody>
 </table></div>
 <p><code>.surface</code> is a shared variant: it paints the page surface instead of
@@ -570,7 +570,7 @@ treatments on either side of it.</p>
 <li><code>--card-radius</code> — corner radius.</li>
 <li><code>--card-max-inline-size</code> — maximum width.</li>
 <li><code>--card-pad</code> — inner padding; also drives the negative offsets that let a <code>.bleed</code> child reach the card edge. <code>.compact</code> lowers it.</li>
-<li><code>--card-gap</code> — space between direct children of a bare card. A composed layout primitive owns its own gap instead. <code>.compact</code> does not change this hook.</li>
+<li><code>--card-gap</code> — space between direct children of a bare card. A composed layout primitive owns its own gap instead.</li>
 </ul>
 
 </div>

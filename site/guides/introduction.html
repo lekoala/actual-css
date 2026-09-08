@@ -268,7 +268,9 @@ to source files, so each project composes the framework shape it needs.</p>
 work across components. Variants such as <code>.solid</code>, <code>.soft</code>, <code>.outline</code>, and <code>.surface</code> are
 shared by buttons, badges, alerts, and cards; <code>.inverted</code> is a shared surface
 modifier that paints any block with the inverse surface. <code>.ghost</code> and <code>.link</code>
-are button-only. Size variants <code>.sm</code> and <code>.lg</code> scale controls consistently.
+are button-only. Size variants <code>.sm</code> and <code>.lg</code> scale typography and
+participating component geometry consistently. Density contexts <code>.compact</code> and
+<code>.spacious</code> change geometry and spacing without changing typography or icons.
 Undocumented <code>is-*</code> classes are runtime internals.</p>
 <pre><code class="language-html">&lt;button class=&quot;btn&quot;&gt;Click me&lt;/button&gt;
 &lt;button class=&quot;btn primary&quot;&gt;Save&lt;/button&gt;

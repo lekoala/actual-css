@@ -316,10 +316,11 @@ every state, so their label always sits at the top.</p>
   </div>
 </div>
 <div class="prose docs-prose">
-<h2 id="density">Density</h2>
+<h2 id="size-and-density">Size and density</h2>
 <p>The reserved headroom responds to control density through <code>--control-size</code>:
-<code>.sm</code> and <code>.lg</code> on the cell or an ancestor resize the control geometry and the
-label spacing with it. Typography is untouched, as everywhere in the framework.
+<code>.sm</code> and <code>.lg</code> on the cell resize the control geometry and typography. A
+<code>.compact</code> or <code>.spacious</code> ancestor changes geometry only, including the label
+spacing with it; typography stays unchanged under density.
 The floating label does add height — the headroom reserves a second vertical
 line on top of the control's minimum size.</p>
 <h2 id="css-hooks">CSS hooks</h2>
@@ -361,7 +362,7 @@ embedded leading icon is required.</p>
           <ul class="nav-list docs-toc-list" data-docs-toc>
         <li><a class="nav-link" href="#textarea" data-docs-toc-item data-level="2">Textarea</a></li>
         <li><a class="nav-link" href="#select-and-datetime-inputs" data-docs-toc-item data-level="2">Select and date/time inputs</a></li>
-        <li><a class="nav-link" href="#density" data-docs-toc-item data-level="2">Density</a></li>
+        <li><a class="nav-link" href="#size-and-density" data-docs-toc-item data-level="2">Size and density</a></li>
         <li><a class="nav-link" href="#css-hooks" data-docs-toc-item data-level="2">CSS hooks</a></li>
           </ul>
         </nav>

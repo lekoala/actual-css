@@ -15,16 +15,15 @@
  *   components/badge.css   — .badge default soft behind explicit --ui-*
  *   components/alert.css   — .alert default soft behind explicit --ui-*
  *
- * .sm/.lg set shared density tokens: spacing rhythm and geometry only.
- * Density never changes typography — controls keep their font-size and
- * content components keep theirs. Controls consume --control-size; non-control
- * components may consume --density-* when the density context should affect
- * their local rhythm. Compact components may consume --density-compact-size.
- * Components with bespoke sizing (spinner, avatar) define local .sm/.lg;
- * applying .sm/.lg to card, dialog, accordion, navbar, table, progress, meter
- * is a no-op. Progress and meter are deliberate: a bar keeps its inline size
- * and only changes thickness, which --bar-height expresses better than a
- * three-step scale.
+ * .compact/.spacious set inherited density tokens: spacing rhythm and geometry
+ * only. Density never changes typography or icon size. Controls consume
+ * --control-size; non-control components may consume --density-* when the
+ * context should affect their local rhythm.
+ *
+ * .sm/.lg are local size roles, not shared measurements. Shared control
+ * participants below map both typography and geometry; components with
+ * bespoke geometry (badge, spinner, avatar, rating, key, prose) own those
+ * mappings locally. Components without an explicit mapping do not participate.
  *
  * Intent list source of truth: intents.css. Components consume --intent* tokens
  * instead of re-listing intent classes.
@@ -80,17 +79,62 @@
   border-color: var(--ui-border);
 }
 
-.sm {
+.compact {
   --gap: var(--space-20);
   --density-space: var(--space-20);
   --control-size: var(--control-size-sm);
-  --density-compact-size: 1.25rem;
 }
-.lg {
+
+.spacious {
   --gap: var(--space-50);
   --density-space: var(--space-50);
   --control-size: var(--control-size-lg);
-  --density-compact-size: 1.875rem;
+}
+
+/* Shared control scale. Wrappers are listed when their descendants form one
+   component (field, input-icon, join, pagination, tabs, flyout). A local size
+   declaration beats inherited density because it is declared on the sized
+   component itself. */
+:where(
+  .btn,
+  .input,
+  .textarea,
+  .select,
+  .color,
+  .file,
+  .field,
+  .choice,
+  .input-icon,
+  .otp,
+  .join,
+  .pagination,
+  .tabs,
+  .tab,
+  .flyout
+).sm {
+  --control-size: var(--control-size-sm);
+  --control-font-size: var(--font-size-sm);
+}
+
+:where(
+  .btn,
+  .input,
+  .textarea,
+  .select,
+  .color,
+  .file,
+  .field,
+  .choice,
+  .input-icon,
+  .otp,
+  .join,
+  .pagination,
+  .tabs,
+  .tab,
+  .flyout
+).lg {
+  --control-size: var(--control-size-lg);
+  --control-font-size: var(--font-size-lg);
 }
 
 /* Modern color enhancement. Baseline variant values above remain usable

@@ -257,17 +257,19 @@ content, keep them in normal block flow instead:</p>
 <p>Use <code>.stack</code> for the vertical rhythm <em>between</em> related items inside one region,
 not as the wrapper that lays out independent full-width regions of a page.</p>
 <h2 id="choosing-a-density">Choosing a density</h2>
-<p><code>--gap</code> is the primitive's channel, and the density variants set it at the point
-of use. Pick the one that matches how tightly the children belong together:</p>
+<p><code>--gap</code> is the primitive's channel, and the density context variants set it at
+the point of use. Apply the density class on the stack itself to size one
+instance, or on an ancestor to reach nested layouts. Pick the one that matches
+how tightly the children belong together:</p>
 <div class="table-wrap"><table class="table">
 <thead>
 <tr><th>Markup</th><th>Gap</th><th>Use for</th></tr>
 </thead>
 <tbody>
 <tr><td><code>.stack gap-none</code></td><td>0</td><td>Lines forming one typographic unit</td></tr>
-<tr><td><code>.stack sm</code></td><td>8px</td><td>A homogeneous series of controls</td></tr>
+<tr><td><code>.stack compact</code></td><td>8px</td><td>A homogeneous series of controls</td></tr>
 <tr><td><code>.stack</code></td><td>12px</td><td>Normal flow between distinct elements</td></tr>
-<tr><td><code>.stack lg</code></td><td>24px</td><td>Sections, or blocks that read as separated</td></tr>
+<tr><td><code>.stack spacious</code></td><td>24px</td><td>Sections, or blocks that read as separated</td></tr>
 </tbody>
 </table></div>
 <p>One typographic unit means a name and a job title, or a figure and its caption.
@@ -275,8 +277,13 @@ A homogeneous series means a radio list, a checkbox list, or a compact vertical
 menu.</p>
 <p>The distinction between the first two matters. <code>42</code> above <code>Open issues</code> is
 almost a single block of text, so it takes <code>gap-none</code>. Three <code>.choice</code> labels
-stay three separate controls that happen to form one group, so they take <code>sm</code> —
-tighter than the default, but still spaced.</p>
+stay three separate controls that happen to form one group, so they take
+<code>compact</code> — tighter than the default, but still spaced.</p>
+<p><code>.compact</code> and <code>.spacious</code> rebind <code>--gap</code> to <code>--space-20</code> and <code>--space-50</code>.
+Because the token is inherited, the same two classes also tighten the inner gap
+of any nested stack, cluster, and grid. For a one-off gap that must <em>not</em> follow
+density, using <code>src/css/utilities/extra.css</code> <code>.gap-sm</code> / <code>.gap-md</code> / <code>.gap-lg</code>
+sets the <code>gap</code> property directly on the instance instead.</p>
 <p>A stack that mixes kinds keeps the default: five <code>.field</code> wrappers and one lone
 <code>.choice</code> is a form that contains a checkbox, not a list of options, and
 tightening it would squeeze the fields.</p>
@@ -296,14 +303,14 @@ depth:</p>
 }
 </code></pre>
 <p>Both give the region the same spacing; only the second stops there. This is what
-makes a nested <code>.stack sm</code> a real density choice — 12px down to 8px — rather
+makes a nested <code>.stack compact</code> a real density choice — 12px down to 8px — rather
 than a patch cancelling a rhythm inherited from three levels up.</p>
 <p>Setting <code>--gap</code> is still the right move on the element that <em>consumes</em> it: a
 one-off <code>--gap</code> on a card body or an actions row tunes that primitive and
 nothing below it, because the setter is the consumer. The leak only appears when
 a container sets the token and its children read it.</p>
-<p><code>.sm</code> and <code>.lg</code> are the deliberate exception: they set <code>--gap</code> precisely so a
-density context reaches nested layouts.</p>
+<p><code>.compact</code> and <code>.spacious</code> are the deliberate exception: they set <code>--gap</code>
+precisely so a density context reaches nested layouts.</p>
 <h2 id="grouping-items-tightly">Grouping items tightly</h2>
 <p>Stack spacing is a <code>--gap</code> between every direct child; the primitive cannot
 tighten two specific children by itself. To group a few items into one unit

@@ -123,8 +123,8 @@ the buttons keep their own variants.
 
 ## Sizes
 
-Prefer `.sm` and `.lg` over setting sizes directly. Density variants never
-change typography.
+Prefer `.sm` and `.lg` over setting sizes directly. They scale control geometry
+and typography together; `.compact` and `.spacious` only change density.
 
 ```html demo
 <div class="cluster">

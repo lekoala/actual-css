@@ -100,8 +100,9 @@ table width before the wrapper scrolls horizontally.
 
 ## Compact tables
 
-`.compact` lowers the cell padding only — density never changes typography.
-It is the same vocabulary as `.card.compact`.
+`.compact` lowers cell padding and establishes compact density for controls or
+spacing helpers inside cells. Typography and icons stay unchanged. It is the
+same vocabulary as `.card.compact`.
 
 ```html demo
 <div class="table-wrap">

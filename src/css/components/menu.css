@@ -44,6 +44,7 @@
   background: transparent;
   color: var(--intent, var(--text));
   font: inherit;
+  font-size: var(--control-font-size);
   text-align: start;
   text-decoration: none;
   white-space: nowrap;

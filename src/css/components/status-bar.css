@@ -86,8 +86,3 @@
     translate var(--duration-slow) var(--ease-enter),
     background-color var(--duration) ease;
 }
-@media print {
-  .status-bar {
-    display: none !important;
-  }
-}

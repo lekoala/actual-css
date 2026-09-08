@@ -51,6 +51,7 @@
   background: transparent;
   color: var(--text-muted);
   font: inherit;
+  font-size: var(--control-font-size);
   font-weight: var(--font-weight-semibold);
   text-decoration: none;
   cursor: pointer;

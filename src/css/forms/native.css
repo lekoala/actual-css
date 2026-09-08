@@ -8,18 +8,23 @@
  */
 .file {
   color: var(--text-muted);
+  font-size: var(--control-font-size);
 }
 
 .file::file-selector-button {
   margin-inline-end: var(--space-30);
+  /* Consume the shared control scale like .btn, so .sm/.lg and density resize
+     the whole control, not just the filename text. */
+  min-block-size: var(--control-size);
   padding-block: var(--space-10);
+  padding-block: max(var(--space-10), calc((var(--control-size) - 1lh) / 2));
   padding-inline: var(--space-20);
   border: var(--border-width) solid var(--border);
   border-radius: var(--radius-sm);
   background: var(--surface-subtle);
   color: var(--text);
   font: inherit;
-  font-size: var(--font-size-sm);
+  font-size: var(--control-font-size);
   font-weight: var(--font-weight-medium);
   cursor: pointer;
   transition:

@@ -144,46 +144,94 @@
 
       <section class="docs-section center stack">
         <h2>Density, not scaling</h2>
-        <p class="muted">Compact or comfortable without shrinking your type.</p>
+        <p class="muted">Same typography in every column — only the wrapper class changes.</p>
         <div class="grid docs-density-grid">
           <article class="card stack">
             <h3>Compact</h3>
-            <div class="stack sm">
+            <form class="stack compact" onsubmit="return false">
+              <label class="field">
+                <span class="field-label">Name</span>
+                <input class="input" type="text" value="Ada Morgan" readonly>
+              </label>
               <label class="field">
                 <span class="field-label">Email</span>
-                <input class="input" type="email" value="hello@example.com" readonly>
+                <input class="input" type="email" value="ada@example.com" readonly>
+              </label>
+              <label class="field">
+                <span class="field-label">Role</span>
+                <input class="input" type="text" value="Platform engineer" readonly>
+              </label>
+              <label class="field">
+                <span class="field-label">Team</span>
+                <input class="input" type="text" value="Reliability" readonly>
+              </label>
+              <label class="field">
+                <span class="field-label">Status</span>
+                <span class="badge success">Active</span>
               </label>
               <div class="cluster">
-                <button class="btn primary" type="button">Save</button>
-                <span class="badge success">Ready</span>
+                <button class="btn primary" type="submit">Save</button>
+                <button class="btn" type="button">Cancel</button>
               </div>
-            </div>
+            </form>
           </article>
           <article class="card stack">
             <h3>Default</h3>
-            <div class="stack">
+            <form class="stack" onsubmit="return false">
+              <label class="field">
+                <span class="field-label">Name</span>
+                <input class="input" type="text" value="Ada Morgan" readonly>
+              </label>
               <label class="field">
                 <span class="field-label">Email</span>
-                <input class="input" type="email" value="hello@example.com" readonly>
+                <input class="input" type="email" value="ada@example.com" readonly>
+              </label>
+              <label class="field">
+                <span class="field-label">Role</span>
+                <input class="input" type="text" value="Platform engineer" readonly>
+              </label>
+              <label class="field">
+                <span class="field-label">Team</span>
+                <input class="input" type="text" value="Reliability" readonly>
+              </label>
+              <label class="field">
+                <span class="field-label">Status</span>
+                <span class="badge success">Active</span>
               </label>
               <div class="cluster">
-                <button class="btn primary" type="button">Save</button>
-                <span class="badge success">Ready</span>
+                <button class="btn primary" type="submit">Save</button>
+                <button class="btn" type="button">Cancel</button>
               </div>
-            </div>
+            </form>
           </article>
           <article class="card stack">
-            <h3>Comfortable</h3>
-            <div class="stack lg">
+            <h3>Spacious</h3>
+            <form class="stack spacious" onsubmit="return false">
+              <label class="field">
+                <span class="field-label">Name</span>
+                <input class="input" type="text" value="Ada Morgan" readonly>
+              </label>
               <label class="field">
                 <span class="field-label">Email</span>
-                <input class="input" type="email" value="hello@example.com" readonly>
+                <input class="input" type="email" value="ada@example.com" readonly>
+              </label>
+              <label class="field">
+                <span class="field-label">Role</span>
+                <input class="input" type="text" value="Platform engineer" readonly>
+              </label>
+              <label class="field">
+                <span class="field-label">Team</span>
+                <input class="input" type="text" value="Reliability" readonly>
+              </label>
+              <label class="field">
+                <span class="field-label">Status</span>
+                <span class="badge success">Active</span>
               </label>
               <div class="cluster">
-                <button class="btn primary" type="button">Save</button>
-                <span class="badge success">Ready</span>
+                <button class="btn primary" type="submit">Save</button>
+                <button class="btn" type="button">Cancel</button>
               </div>
-            </div>
+            </form>
           </article>
         </div>
       </section>

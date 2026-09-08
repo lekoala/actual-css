@@ -20,7 +20,7 @@
 `.menu` has a strict `.menu > li > .menu-item` anatomy.
 | `.menu-label`     | Variant     | Muted section heading inside a menu; not interactive.                |
 | `.menu-separator` | Variant     | Divider between menu groups (`<hr>`).                               |
-| `.sm` / `.lg`     | Variant     | Compact or large density.                                            |
+| `.sm` / `.lg`     | Size        | Smaller or larger menu rows and type.                                |
 
 ## Usage
 
@@ -208,7 +208,7 @@ A list of *actions* the user can take: sign out, copy, delete.
 - Use `<menu class="flyout menu">` with strict anatomy: `.menu > li > .menu-item`. Items must carry the `.menu-item` class to participate in directional keyboard navigation. ArrowUp/Down and Home/End move focus without rewriting their normal tab stops.
 - Use `.menu-label` on a `li` for a muted section heading inside a menu (e.g. a group title before its items). It is non-interactive and does not participate in roving focus. Use `.menu-separator` (a plain `<hr>`) between groups.
 - Items are regular `<button>` or `<a>` elements.
-- Use `.sm` or `.lg` for density changes.
+- Use `.sm` or `.lg` to scale one flyout; use a density context for surrounding UI.
 - Add `role="menu"` / `role="menuitem"` only when you intentionally need the ARIA menu pattern described below.
 
 ```html demo

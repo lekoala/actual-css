@@ -224,7 +224,7 @@
 <li>Could have simple or complex html content.</li>
 <li>A title and a description are plain siblings: the alert owns the small space between its direct content blocks, so neither needs a wrapper. Nested content keeps its own rhythm — wrap several paragraphs in <code>.prose</code>, or a differently spaced group in <code>.stack</code>, when the message needs a rhythm of its own.</li>
 <li>Alerts may include a decorative leading icon. Use <code>.alert-icon</code> on the icon element; the rest of the content flows into the remaining text column.</li>
-<li>Use <code>.sm</code> or <code>.lg</code> for density changes. The inline padding stays stable.</li>
+<li>Use <code>.compact</code> or <code>.spacious</code> for density changes. The inline padding stays stable.</li>
 <li>Use <code>.alert-dismiss</code> for a compact dismiss button. It is a direct trailing child in standard alerts and lives inside <code>.alert-title</code> in admonitions. It uses the shared <code>--icon-close</code> mask and the <code>--dismiss</code> runtime command — no icon font or custom JS.</li>
 </ul>
 <p>Because alerts are soft by default, adding <code>.soft</code> to an intent (<code>.alert.soft.primary</code>,
@@ -247,7 +247,7 @@ itself needs to change, not <code>.soft</code>.</p>
 <tr><td>Shared intents</td><td>Intent</td><td><code>.primary</code>, <code>.secondary</code>, <code>.success</code>, …</td></tr>
 <tr><td>Shared variants</td><td>Variant</td><td><code>.solid</code>, <code>.outline</code>, <code>.surface</code>.</td></tr>
 <tr><td><code>.inverted</code></td><td>Surface</td><td>Inverse surface, any intent.</td></tr>
-<tr><td><code>.sm</code> / <code>.lg</code></td><td>Size</td><td>Density; inline padding stays stable.</td></tr>
+<tr><td>Density contexts</td><td>Density</td><td>Descendant rhythm; inline padding stays stable.</td></tr>
 </tbody>
 </table></div>
 <h2 id="basic-usage">Basic usage</h2>
@@ -409,12 +409,12 @@ split / spread row — there is no <code>.alert-action</code> class.</p>
     I'm an inverted alert <a href="#">with a link</a>
   </div>
 
-  <div class="alert danger sm" role="alert">
-    I'm a small error
+  <div class="alert danger compact" role="alert">
+    I'm an error in a compact context
   </div>
 
-  <div class="alert danger lg" role="alert">
-    I'm a large error
+  <div class="alert danger spacious" role="alert">
+    I'm an error in a spacious context
   </div>
 
   <div class="alert danger outline" role="alert">
@@ -436,12 +436,12 @@ split / spread row — there is no <code>.alert-action</code> class.</p>
     I'm an inverted alert &lt;a href=&quot;#&quot;&gt;with a link&lt;/a&gt;
   &lt;/div&gt;
 
-  &lt;div class=&quot;alert danger sm&quot; role=&quot;alert&quot;&gt;
-    I'm a small error
+  &lt;div class=&quot;alert danger compact&quot; role=&quot;alert&quot;&gt;
+    I'm an error in a compact context
   &lt;/div&gt;
 
-  &lt;div class=&quot;alert danger lg&quot; role=&quot;alert&quot;&gt;
-    I'm a large error
+  &lt;div class=&quot;alert danger spacious&quot; role=&quot;alert&quot;&gt;
+    I'm an error in a spacious context
   &lt;/div&gt;
 
   &lt;div class=&quot;alert danger outline&quot; role=&quot;alert&quot;&gt;
@@ -625,7 +625,7 @@ full-bleed notice.</p>
 <div class="prose docs-prose">
 <h2 id="css-hooks">CSS hooks</h2>
 <ul>
-<li><code>--alert-pad-inline</code> — inline padding. Stays stable across <code>.sm</code>/<code>.lg</code>.</li>
+<li><code>--alert-pad-inline</code> — inline padding. Stays stable across density contexts.</li>
 <li><code>--alert-pad-block</code> — block padding.</li>
 <li><code>--alert-font-size</code> — base font size.</li>
 <li><code>--alert-icon-size</code> — size of a leading <code>.alert-icon</code>.</li>

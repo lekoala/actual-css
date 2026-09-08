@@ -2,11 +2,11 @@
  * Real-browser badge dismiss target contract, driven over Bun.WebView.
  *
  * WCAG 2.2 2.5.8 floors pointer targets at 24 CSS px. The badge's dismiss
- * button uses a 24px literal floor on top of --density-compact-size, so a
- * density that dips below 24px (.sm = 20px, or a thematic 17px override) can
- * no longer shrink the target — while the negative margins keep the badge
- * itself visually compact. At and above the floor (default 24px, .lg 30px)
- * the floor is a no-op and badge/button keep their normal relationship.
+ * button uses a 24px literal floor on top of --badge-size, so a local size or
+ * a thematic override below 24px (.sm = 20px, or a 17px override) can no
+ * longer shrink the target — while the negative margins keep the badge itself
+ * visually compact. At and above the floor (default 24px, .lg 30px) the floor
+ * is a no-op and badge/button keep their normal relationship.
  */
 import { expect, test } from "bun:test";
 import { browserAvailable, fixtureUrl, withBrowserPage } from "../../scripts/utils/browser.js";
@@ -34,7 +34,12 @@ it("badge dismiss targets never fall below 24x24 while the badge stays compact",
             return { w: r.width, h: r.height };
           })(),
         });
-        return { sm: measure("sm"), def: measure("default"), lg: measure("lg"), custom: measure("custom") };
+        return {
+          sm: measure("sm"),
+          def: measure("default"),
+          lg: measure("lg"),
+          custom: measure("custom"),
+        };
       })()`);
 
       // The floor holds the target at 24x24 whatever the density…
@@ -57,5 +62,50 @@ it("badge dismiss targets never fall below 24x24 while the badge stays compact",
       expect(result.lg.button.h).toBeGreaterThanOrEqual(30);
     },
     { artifactName: "badge-target" },
+  );
+});
+
+it("badge size scales type and icons while density geometry stays inert", async () => {
+  await withBrowserPage(
+    fixtureUrl(FIXTURE),
+    async (view) => {
+      const result = await view.evaluate(`(() => {
+        const measure = (id) => {
+          const el = document.getElementById(id);
+          const rect = el.getBoundingClientRect();
+          const icon = el.querySelector('[aria-hidden="true"]');
+          return {
+            font: parseFloat(getComputedStyle(el).fontSize),
+            height: rect.height,
+            icon: icon ? icon.getBoundingClientRect().width : null,
+          };
+        };
+        return {
+          sm: measure("sm"),
+          def: measure("default"),
+          lg: measure("lg"),
+          compact: measure("compact"),
+          densityDefault: measure("density-default"),
+          spacious: measure("spacious"),
+        };
+      })()`);
+
+      expect(result.sm.font).toBe(13);
+      expect(result.def.font).toBe(14);
+      expect(result.lg.font).toBe(16);
+      expect(result.sm.icon).toBe(result.sm.font);
+      expect(result.def.icon).toBe(result.def.font);
+      expect(result.lg.icon).toBe(result.lg.font);
+
+      expect(result.compact.font).toBe(result.densityDefault.font);
+      expect(result.densityDefault.font).toBe(result.spacious.font);
+      expect(result.compact.icon).toBe(result.compact.font);
+      expect(result.densityDefault.icon).toBe(result.densityDefault.font);
+      expect(result.spacious.icon).toBe(result.spacious.font);
+      // Badge geometry is intrinsic: density contexts leave it identical.
+      expect(result.compact.height).toBe(result.densityDefault.height);
+      expect(result.densityDefault.height).toBe(result.spacious.height);
+    },
+    { artifactName: "badge-size-density" },
   );
 });

@@ -91,7 +91,6 @@ select {
      applications, and no future framework step can collide with them. */
   --gap: 0.75rem;
   --density-space: var(--space-40);
-  --density-compact-size: 1.5rem;
   --space-10: 0.25rem;
   --space-20: 0.5rem;
   --space-30: 0.75rem;
@@ -148,8 +147,8 @@ select {
   --bar-height: 0.65rem;
 
   /* Controls — inputs and buttons share --control-size so heights always match.
-     .sm/.lg (variants.css) switch --control-size; --control-font-size stays
-     at its baseline because density does not change typography.
+     .compact/.spacious (variants.css) switch geometry without changing
+     --control-font-size. Local .sm/.lg component sizes switch both.
 
      Inline choices (checkbox, radio, switch) are typographic, not field-sized:
      they sit on a line of text, so they follow --control-font-size through
@@ -608,16 +607,15 @@ small {
  *   components/badge.css   — .badge default soft behind explicit --ui-*
  *   components/alert.css   — .alert default soft behind explicit --ui-*
  *
- * .sm/.lg set shared density tokens: spacing rhythm and geometry only.
- * Density never changes typography — controls keep their font-size and
- * content components keep theirs. Controls consume --control-size; non-control
- * components may consume --density-* when the density context should affect
- * their local rhythm. Compact components may consume --density-compact-size.
- * Components with bespoke sizing (spinner, avatar) define local .sm/.lg;
- * applying .sm/.lg to card, dialog, accordion, navbar, table, progress, meter
- * is a no-op. Progress and meter are deliberate: a bar keeps its inline size
- * and only changes thickness, which --bar-height expresses better than a
- * three-step scale.
+ * .compact/.spacious set inherited density tokens: spacing rhythm and geometry
+ * only. Density never changes typography or icon size. Controls consume
+ * --control-size; non-control components may consume --density-* when the
+ * context should affect their local rhythm.
+ *
+ * .sm/.lg are local size roles, not shared measurements. Shared control
+ * participants below map both typography and geometry; components with
+ * bespoke geometry (badge, spinner, avatar, rating, key, prose) own those
+ * mappings locally. Components without an explicit mapping do not participate.
  *
  * Intent list source of truth: intents.css. Components consume --intent* tokens
  * instead of re-listing intent classes.
@@ -673,17 +671,62 @@ small {
   border-color: var(--ui-border);
 }
 
-.sm {
+.compact {
   --gap: var(--space-20);
   --density-space: var(--space-20);
   --control-size: var(--control-size-sm);
-  --density-compact-size: 1.25rem;
 }
-.lg {
+
+.spacious {
   --gap: var(--space-50);
   --density-space: var(--space-50);
   --control-size: var(--control-size-lg);
-  --density-compact-size: 1.875rem;
+}
+
+/* Shared control scale. Wrappers are listed when their descendants form one
+   component (field, input-icon, join, pagination, tabs, flyout). A local size
+   declaration beats inherited density because it is declared on the sized
+   component itself. */
+:where(
+  .btn,
+  .input,
+  .textarea,
+  .select,
+  .color,
+  .file,
+  .field,
+  .choice,
+  .input-icon,
+  .otp,
+  .join,
+  .pagination,
+  .tabs,
+  .tab,
+  .flyout
+).sm {
+  --control-size: var(--control-size-sm);
+  --control-font-size: var(--font-size-sm);
+}
+
+:where(
+  .btn,
+  .input,
+  .textarea,
+  .select,
+  .color,
+  .file,
+  .field,
+  .choice,
+  .input-icon,
+  .otp,
+  .join,
+  .pagination,
+  .tabs,
+  .tab,
+  .flyout
+).lg {
+  --control-size: var(--control-size-lg);
+  --control-font-size: var(--font-size-lg);
 }
 
 /* Modern color enhancement. Baseline variant values above remain usable
@@ -1154,8 +1197,8 @@ small {
    --gap is inherited, so a container that composes other primitives sets its
    own rhythm on the `gap` property, not on the token: setting --gap on a
    region re-spaces every nested stack, cluster and grid at any depth. Setting
-   the token stays correct on the element that consumes it, and .sm/.lg set it
-   deliberately so a density context reaches nested layouts. See
+   the token stays correct on the element that consumes it, and
+   .compact/.spacious set it deliberately so a density context reaches nested layouts. See
    docs/pages/layout/stack.md. */
 .stack {
   display: flex;
@@ -1892,6 +1935,7 @@ small {
   display: grid;
   gap: var(--space-10);
   color: var(--text);
+  font-size: var(--control-font-size);
 }
 
 .field-group {
@@ -1916,13 +1960,13 @@ small {
 
 .field-help {
   color: var(--text-muted);
-  font-size: var(--font-size-sm);
+  font-size: 0.875em;
 }
 
 .field-error {
   display: none;
   color: var(--danger);
-  font-size: var(--font-size-sm);
+  font-size: 0.875em;
 }
 
 .required-mark {
@@ -2286,18 +2330,23 @@ small {
  */
 .file {
   color: var(--text-muted);
+  font-size: var(--control-font-size);
 }
 
 .file::file-selector-button {
   margin-inline-end: var(--space-30);
+  /* Consume the shared control scale like .btn, so .sm/.lg and density resize
+     the whole control, not just the filename text. */
+  min-block-size: var(--control-size);
   padding-block: var(--space-10);
+  padding-block: max(var(--space-10), calc((var(--control-size) - 1lh) / 2));
   padding-inline: var(--space-20);
   border: var(--border-width) solid var(--border);
   border-radius: var(--radius-sm);
   background: var(--surface-subtle);
   color: var(--text);
   font: inherit;
-  font-size: var(--font-size-sm);
+  font-size: var(--control-font-size);
   font-weight: var(--font-weight-medium);
   cursor: pointer;
   transition:
@@ -2524,18 +2573,19 @@ small {
  * Input Icon — decorative icon inside a relative wrapper, leading or trailing.
  *
  * Icon-library agnostic: detects position by DOM order. First child that is
- * not .input = leading icon; icon after .input = trailing. The icon keeps a
- * fixed size; density contexts shrink the control geometry around it, not
- * the pictogram.
+ * not .input = leading icon; icon after .input = trailing. The icon follows
+ * local typography; density contexts shrink the control geometry around it
+ * without changing the pictogram.
  *
  * Public hooks:
  * --input-icon-size
  */
 .input-icon {
-  --input-icon-size: 1.25rem;
+  --input-icon-size: 1.25em;
 
   display: block;
   position: relative;
+  font-size: var(--control-font-size);
 }
 
 /* Icon — shared by leading and trailing */
@@ -2561,8 +2611,11 @@ small {
 /* font-size only sizes text-metric icons (webfont <i>, <span>). An inline
    <svg> with just a viewBox ignores it, so give it explicit dimensions. */
 .input-icon > svg:where(:not(.input)) {
-  inline-size: var(--input-icon-size);
-  block-size: var(--input-icon-size);
+  /* The shared rule already maps --input-icon-size onto font-size. One em is
+     therefore the requested optical size; reusing the em-valued hook here
+     would apply its factor a second time. */
+  inline-size: 1em;
+  block-size: 1em;
 }
 
 /* Leading: input gets start padding to clear the icon */
@@ -3079,8 +3132,8 @@ small {
  * placeholder=" " to expose a reliable empty state — without it the label
  * only reacts to focus.
  *
- * Density flows through --control-size: .sm/.lg shrink the control geometry
- * and the reserved headroom with it, leaving typography untouched.
+ * Density flows through --control-size: .compact/.spacious change the control
+ * geometry and the reserved headroom with it, leaving typography untouched.
  *
  * Public hooks:
  * --floating-label-top
@@ -3191,7 +3244,7 @@ small {
 .otp {
   --otp-cell-size: var(--control-size);
   --otp-gap: var(--space-10);
-  --otp-font-size: 1.5rem;
+  --otp-font-size: 1.5em;
   --otp-cell-border: var(--border);
   --otp-cell-bg: var(--surface);
   --otp-caret-space: calc((var(--otp-cell-size) - 1ch) / 2 + var(--otp-gap) + 1px);
@@ -3204,6 +3257,7 @@ small {
   max-inline-size: 100%;
   gap: var(--otp-gap);
   border-radius: var(--radius);
+  font-size: var(--control-font-size);
   /* Unlike hidden, clip cannot become a scroll container when the caret moves
      into the input extension. */
   overflow: clip;
@@ -3540,17 +3594,6 @@ a.btn[aria-disabled="true"] {
   }
 }
 
-@media print {
-  :is(button, input[type="button"], input[type="submit"], input[type="reset"]).btn {
-    display: none !important;
-  }
-
-  a.btn[href^="http"]::after {
-    content: " (" attr(href) ")";
-    font-size: 0.875em;
-  }
-}
-
 /*
  * Badges for compact labels, counts, and state hints.
  *
@@ -3562,6 +3605,7 @@ a.btn[aria-disabled="true"] {
  * --badge-size
  * --badge-pad-x
  * --badge-font-size
+ * --badge-icon-size
  * --badge-dot-size
  * --badge-radius
  * --badge-dismiss-icon-size
@@ -3588,14 +3632,14 @@ a.btn[aria-disabled="true"] {
 }
 
 .badge {
-  --badge-size: var(--density-compact-size);
-  /* A third of the height keeps the pill proportional across densities:
-     --badge-font-size is stable, so an em-based padding would not follow
-     .sm/.lg and .lg would only grow taller. */
+  --badge-size: 1.5rem;
+  /* A third of the height keeps the pill proportional across local sizes
+     without coupling it to the label typography. */
   --badge-pad-x: calc(var(--badge-size) / 3);
-  --badge-font-size: var(--font-size-xs);
+  --badge-font-size: var(--font-size-sm);
+  --badge-icon-size: 1em;
   --badge-dot-size: 0.5rem;
-  --badge-dismiss-icon-size: 0.75rem;
+  --badge-dismiss-icon-size: 0.875em;
   --badge-default-bg: var(--surface-subtle);
   --badge-default-fg: var(--intent, var(--text));
   --badge-default-border: var(--border);
@@ -3608,6 +3652,7 @@ a.btn[aria-disabled="true"] {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  vertical-align: middle;
   gap: 0.35em;
   /* Content-sized: a flex parent must not squeeze the pill and push its
      nowrap label outside the background. */
@@ -3630,6 +3675,31 @@ a.btn[aria-disabled="true"] {
     border-color var(--duration),
     color var(--duration),
     box-shadow var(--duration);
+}
+
+.badge.sm {
+  --badge-size: 1.25rem;
+  --badge-font-size: var(--font-size-xs);
+  --badge-dot-size: 0.375rem;
+}
+
+.badge.lg {
+  --badge-size: 1.875rem;
+  --badge-font-size: var(--font-size-md);
+  --badge-dot-size: 0.625rem;
+}
+
+/* Decorative children follow the badge's optical size. Text and interactive
+   dismiss buttons retain their own boxes. */
+.badge > :where(svg, img, [aria-hidden="true"]:not(.dot)) {
+  flex: none;
+  /* The shared rule maps --badge-icon-size onto font-size. One em is therefore
+     the requested optical size; reusing the em-valued hook here would apply its
+     factor a second time. */
+  inline-size: 1em;
+  block-size: 1em;
+  font-size: var(--badge-icon-size);
+  line-height: 1;
 }
 
 /* Soft by default. Local defaults remain behind --ui-* in the resolution
@@ -3677,13 +3747,11 @@ a.btn[aria-disabled="true"] {
   display: inline-grid;
   place-items: center;
   flex: 0 0 auto;
-  /* WCAG 2.5.8 floors pointer targets at 24 CSS px. --density-compact-size
-     drops below that under .sm (1.25rem = 20px), and the floor is a literal
-     px value so the guarantee does not depend on the root font size. Density
-     may still keep the badge visually compact through the negative margins —
-     it just never shrinks this target under its floor. */
-  min-inline-size: max(var(--density-compact-size), 24px);
-  min-block-size: max(var(--density-compact-size), 24px);
+  /* WCAG 2.5.8 floors pointer targets at 24 CSS px. Density and local size may
+     keep the badge visually compact through the negative margins, but never
+     shrink its action target below that literal floor. */
+  min-inline-size: max(var(--badge-size), 24px);
+  min-block-size: max(var(--badge-size), 24px);
   margin-block: -0.25rem;
   margin-inline-start: -0.15em;
   margin-inline-end: -0.45em;
@@ -3776,7 +3844,6 @@ a.badge[aria-disabled="true"] {
 @media print {
   .badge {
     border: var(--border-width) solid CanvasText;
-    break-inside: avoid;
   }
 }
 
@@ -4301,7 +4368,7 @@ a.badge[aria-disabled="true"] {
 }
 @media print {
   .surface-backdrop {
-    display: none !important;
+    display: none;
   }
 }
 
@@ -4637,11 +4704,6 @@ html.has-modal-open.had-scrollbar {
   outline: 2px solid transparent;
   box-shadow: var(--focus-ring-shadow);
 }
-@media print {
-  dialog.modal[open] {
-    display: none !important;
-  }
-}
 
 /*
  * Drawer — modal side-sheet built on the native dialog element.
@@ -4814,11 +4876,6 @@ dialog.drawer nav {
 dialog.drawer > header,
 dialog.drawer > form > header {
   padding-inline-end: calc(var(--control-size) + var(--space-30));
-}
-@media print {
-  dialog.drawer[open] {
-    display: none !important;
-  }
 }
 
 
@@ -5035,11 +5092,6 @@ dialog.drawer > form > header {
 /* Vertical dividers — .menu-separator (menu.css) is the canonical way to
    separate menu items. Flyout panels that are not menus use auto grid gap
    declared on .flyout itself. */
-@media print {
-  .flyout {
-    display: none !important;
-  }
-}
 
 /*
  * Menu — action list primitive consumed by flyout and context-menu.
@@ -5087,6 +5139,7 @@ dialog.drawer > form > header {
   background: transparent;
   color: var(--intent, var(--text));
   font: inherit;
+  font-size: var(--control-font-size);
   text-align: start;
   text-decoration: none;
   white-space: nowrap;
@@ -5313,12 +5366,6 @@ dialog.drawer > form > header {
   clip-path: polygon(0 50%, 100% 0, 100% 100%);
 }
 
-@media print {
-  .tooltip {
-    display: none !important;
-  }
-}
-
 
 /* Disclosure */
 /*
@@ -5505,11 +5552,6 @@ dialog.drawer > form > header {
 @keyframes actual-spin {
   to {
     transform: rotate(360deg);
-  }
-}
-@media print {
-  .spinner {
-    display: none !important;
   }
 }
 
@@ -5842,11 +5884,6 @@ dialog.drawer > form > header {
     translate var(--duration-slow) var(--ease-enter),
     background-color var(--duration) ease;
 }
-@media print {
-  .status-bar {
-    display: none !important;
-  }
-}
 
 
 /* Display */
@@ -6138,6 +6175,16 @@ a.avatar[aria-disabled="true"] {
 }
 /* @sync key-recipe */
 
+/* .key has a compact typographic default of its own, so its local size roles
+   step around that default instead of inheriting the generic mapping. */
+.key.sm {
+  font-size: var(--font-size-xs);
+}
+
+.key.lg {
+  font-size: var(--font-size-md);
+}
+
 /*
  * Message rows composed from an optional avatar, metadata, and bubble.
  *
@@ -6366,12 +6413,6 @@ a.avatar[aria-disabled="true"] {
 .fab[open] > summary::after {
   opacity: 1;
   transform: none;
-}
-
-@media print {
-  .fab {
-    display: none;
-  }
 }
 
 /*
@@ -6898,12 +6939,6 @@ a.avatar[aria-disabled="true"] {
   font-weight: var(--font-weight-bold);
 }
 
-@media print {
-  .app-nav {
-    display: none;
-  }
-}
-
 /*
  * Navbar — top-level navigation bar.
  *
@@ -7079,6 +7114,7 @@ a.avatar[aria-disabled="true"] {
   margin: 0;
   padding: 0;
   list-style: none;
+  font-size: var(--control-font-size);
 
   /* Arrows, page numbers, and truncation ellipses share one geometric
      system: equal digit widths keep the row from re-flowing as numbers grow
@@ -7156,6 +7192,7 @@ a.avatar[aria-disabled="true"] {
   background: transparent;
   color: var(--text-muted);
   font: inherit;
+  font-size: var(--control-font-size);
   font-weight: var(--font-weight-semibold);
   text-decoration: none;
   cursor: pointer;
@@ -8036,7 +8073,8 @@ a.list-item:hover {
  * They are escape hatches for layout nudges, not a full atomic scale.
  *
  * Core principle:
- * - .sm / .lg provide local rhythm through --gap and --density-space.
+ * - .compact / .spacious provide inherited rhythm through --gap and
+ *   --density-space.
  * - utilities consume the current context instead of defining their own -sm/-lg scale.
  * - optional utilities extend core utilities, they do not re-express them.
  * - follow verbose .{property}-{value} naming.

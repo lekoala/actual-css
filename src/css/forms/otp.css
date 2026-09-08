@@ -18,7 +18,7 @@
 .otp {
   --otp-cell-size: var(--control-size);
   --otp-gap: var(--space-10);
-  --otp-font-size: 1.5rem;
+  --otp-font-size: 1.5em;
   --otp-cell-border: var(--border);
   --otp-cell-bg: var(--surface);
   --otp-caret-space: calc((var(--otp-cell-size) - 1ch) / 2 + var(--otp-gap) + 1px);
@@ -31,6 +31,7 @@
   max-inline-size: 100%;
   gap: var(--otp-gap);
   border-radius: var(--radius);
+  font-size: var(--control-font-size);
   /* Unlike hidden, clip cannot become a scroll container when the caret moves
      into the input extension. */
   overflow: clip;

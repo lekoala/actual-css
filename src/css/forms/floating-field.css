@@ -14,8 +14,8 @@
  * placeholder=" " to expose a reliable empty state — without it the label
  * only reacts to focus.
  *
- * Density flows through --control-size: .sm/.lg shrink the control geometry
- * and the reserved headroom with it, leaving typography untouched.
+ * Density flows through --control-size: .compact/.spacious change the control
+ * geometry and the reserved headroom with it, leaving typography untouched.
  *
  * Public hooks:
  * --floating-label-top

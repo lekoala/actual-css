@@ -71,9 +71,3 @@
   color: var(--state-selected-fg);
   font-weight: var(--font-weight-bold);
 }
-
-@media print {
-  .app-nav {
-    display: none;
-  }
-}

@@ -246,8 +246,8 @@
 </tbody>
 </table></div>
 <p>Spacing helpers follow the density context. The default step is
-<code>--space-40</code> (1rem); the <code>.sm</code> context tightens it to <code>--space-20</code> (0.5rem)
-and the <code>.lg</code> context loosens it to <code>--space-50</code> (1.5rem). All helpers read
+<code>--space-40</code> (1rem); the <code>.compact</code> context tightens it to <code>--space-20</code> (0.5rem)
+and the <code>.spacious</code> context loosens it to <code>--space-50</code> (1.5rem). All helpers read
 <code>--density-space</code> and map to logical properties (<code>padding-block</code>,
 <code>margin-block-end</code>, etc.) for writing-direction safety.</p>
 <h2 id="gap">Gap</h2>
@@ -272,7 +272,7 @@ and the <code>.lg</code> context loosens it to <code>--space-50</code> (1.5rem).
 <li><code>.gap-none</code> → <code>gap: 0</code></li>
 </ul>
 <p><code>.gap-none</code> sets the element's own gap directly and does not change <code>--gap</code>
-for nested layouts. For a denser or roomier rhythm, use the <code>.sm</code> / <code>.lg</code>
+for nested layouts. For a denser or roomier rhythm, use the <code>.compact</code> / <code>.spacious</code>
 density contexts or override <code>--gap</code> on the layout instance.</p>
 <h2 id="padding">Padding</h2>
 <p>Block (vertical) and inline (horizontal) padding. Values respond to the density context.</p>
@@ -313,7 +313,7 @@ density contexts or override <code>--gap</code> on the layout instance.</p>
 <p>No <code>mbs-none</code> / <code>mbe-none</code> — use <code>margin: 0</code> via <code>.list-reset</code> for lists, or a layout primitive that already resets margins (<code>.stack &gt; *</code>).</p>
 <h2 id="css-hooks">CSS hooks</h2>
 <ul>
-<li><code>--density-space</code> — the step every padding and margin helper reads; <code>.sm</code> sets it to <code>--space-20</code>, default to <code>--space-40</code>, <code>.lg</code> to <code>--space-50</code>.</li>
+<li><code>--density-space</code> — the step every padding and margin helper reads; <code>.compact</code> sets it to <code>--space-20</code>, default to <code>--space-40</code>, <code>.spacious</code> to <code>--space-50</code>.</li>
 <li><code>--gap</code> — base gap of layout primitives; read by the optional <code>.gap-context</code>, <code>.row-gap-context</code>, and <code>.column-gap-context</code> helpers.</li>
 </ul>
 

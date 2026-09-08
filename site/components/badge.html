@@ -217,7 +217,8 @@
 <li>Supports intent colors.</li>
 <li>Soft by default. Use <code>.solid</code> for counters and notification badges, or <code>.outline</code> for quieter emphasis.</li>
 <li>Dots stay solid regardless of variant.</li>
-<li>Use <code>.sm</code> or <code>.lg</code> for compact density changes.</li>
+<li>Use <code>.sm</code> or <code>.lg</code> to scale the badge locally.</li>
+<li>Use <code>.compact</code> or <code>.spacious</code> on a context to change geometry without changing the label or icon size.</li>
 <li>Can be used inline in headings.</li>
 <li>Can be used as a count badge.</li>
 <li>Can be used as a stable dot badge when empty and given an accessible name.</li>
@@ -239,7 +240,7 @@ optional <code>.inline-size-full</code> utility — when a full-width badge is i
 <tr><td><code>.dot</code></td><td>Composition</td><td>Status dot inside a badge.</td></tr>
 <tr><td>Shared intents</td><td>Intent</td><td><code>.primary</code>, <code>.secondary</code>, <code>.success</code>, …</td></tr>
 <tr><td>Shared variants</td><td>Variant</td><td><code>.solid</code>, <code>.outline</code>, <code>.surface</code>.</td></tr>
-<tr><td><code>.sm</code> / <code>.lg</code></td><td>Size</td><td>Compact density.</td></tr>
+<tr><td><code>.sm</code> / <code>.lg</code></td><td>Size</td><td>Smaller or larger optical scale.</td></tr>
 </tbody>
 </table></div>
 <p>The shared intents are <code>.primary</code>, <code>.secondary</code>, <code>.success</code>, <code>.warning</code> and
@@ -383,14 +384,81 @@ Regular</code></pre>
 </div>
 <div class="docs-example">
   <div class="docs-preview">
-<span class="badge success sm">Small Success</span>
-<span class="badge success">Regular Success</span>
-<span class="badge success lg">Large Success</span>
+<span class="badge success sm">Small</span>
+<span class="badge success">Default</span>
+<span class="badge success lg">Large</span>
   </div>
   <div class="docs-code">
-    <pre><code class="language-html">&lt;span class=&quot;badge success sm&quot;&gt;Small Success&lt;/span&gt;
-&lt;span class=&quot;badge success&quot;&gt;Regular Success&lt;/span&gt;
-&lt;span class=&quot;badge success lg&quot;&gt;Large Success&lt;/span&gt;</code></pre>
+    <pre><code class="language-html">&lt;span class=&quot;badge success sm&quot;&gt;Small&lt;/span&gt;
+&lt;span class=&quot;badge success&quot;&gt;Default&lt;/span&gt;
+&lt;span class=&quot;badge success lg&quot;&gt;Large&lt;/span&gt;</code></pre>
+  </div>
+</div>
+<div class="prose docs-prose">
+<h2 id="density">Density</h2>
+<p>Density changes the pill geometry without scaling its label or icon.</p>
+</div>
+<div class="docs-example">
+  <div class="docs-preview">
+<span class="compact"><span class="badge success">Compact</span></span>
+<span><span class="badge success">Default</span></span>
+<span class="spacious"><span class="badge success">Spacious</span></span>
+  </div>
+  <div class="docs-code">
+    <pre><code class="language-html">&lt;span class=&quot;compact&quot;&gt;&lt;span class=&quot;badge success&quot;&gt;Compact&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&quot;badge success&quot;&gt;Default&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&quot;spacious&quot;&gt;&lt;span class=&quot;badge success&quot;&gt;Spacious&lt;/span&gt;&lt;/span&gt;</code></pre>
+  </div>
+</div>
+<div class="prose docs-prose">
+<h2 id="with-an-icon">With an icon</h2>
+<p>Decorative SVG, image, or <code>[aria-hidden=&quot;true&quot;]</code> children follow
+<code>--badge-icon-size</code>.</p>
+</div>
+<div class="docs-example">
+  <div class="docs-preview">
+<span class="badge success">
+  <i class="ti ti-rosette-discount-check" aria-hidden="true"></i>
+  Verified
+</span>
+<span class="badge warning">
+  <i class="ti ti-clock" aria-hidden="true"></i>
+  Pending
+</span>
+<span class="badge danger solid">
+  <i class="ti ti-alert-circle" aria-hidden="true"></i>
+  Failed
+</span>
+  </div>
+  <div class="docs-code">
+    <pre><code class="language-html">&lt;span class=&quot;badge success&quot;&gt;
+  &lt;i class=&quot;ti ti-rosette-discount-check&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;
+  Verified
+&lt;/span&gt;
+&lt;span class=&quot;badge warning&quot;&gt;
+  &lt;i class=&quot;ti ti-clock&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;
+  Pending
+&lt;/span&gt;
+&lt;span class=&quot;badge danger solid&quot;&gt;
+  &lt;i class=&quot;ti ti-alert-circle&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;
+  Failed
+&lt;/span&gt;</code></pre>
+  </div>
+</div>
+<div class="prose docs-prose">
+<h2 id="custom-sizing">Custom sizing</h2>
+<p>Override the existing hooks when the three-step scale does not fit the content.</p>
+</div>
+<div class="docs-example">
+  <div class="docs-preview">
+<span class="badge primary" style="--badge-size: 2rem; --badge-font-size: var(--font-size-md);">
+  Prominent
+</span>
+  </div>
+  <div class="docs-code">
+    <pre><code class="language-html">&lt;span class=&quot;badge primary&quot; style=&quot;--badge-size: 2rem; --badge-font-size: var(--font-size-md);&quot;&gt;
+  Prominent
+&lt;/span&gt;</code></pre>
   </div>
 </div>
 <div class="prose docs-prose">
@@ -431,7 +499,8 @@ used instead.</p>
 <li><code>--badge-size</code> — minimum block size; also the square size of an <code>:empty</code> dot badge.</li>
 <li><code>--badge-dot-size</code> — size of an <code>:empty</code> dot badge.</li>
 <li><code>--badge-font-size</code> — label font size.</li>
-<li><code>--badge-pad-x</code> — inline padding. Derived from <code>--badge-size</code>, so it follows density and keeps the pill proportional; set it to opt out.</li>
+<li><code>--badge-icon-size</code> — decorative child size; <code>1em</code> follows the label by default.</li>
+<li><code>--badge-pad-x</code> — inline padding. Derived from <code>--badge-size</code>, so it stays proportional to the pill; set it to opt out.</li>
 <li><code>--badge-dismiss-icon-size</code> — size of the X painted by an empty dismiss button.</li>
 </ul>
 
@@ -460,6 +529,9 @@ used instead.</p>
         <li><a class="nav-link" href="#status-dot" data-docs-toc-item data-level="2">Status dot</a></li>
         <li><a class="nav-link" href="#color-marker" data-docs-toc-item data-level="2">Color marker</a></li>
         <li><a class="nav-link" href="#size-variants" data-docs-toc-item data-level="2">Size variants</a></li>
+        <li><a class="nav-link" href="#density" data-docs-toc-item data-level="2">Density</a></li>
+        <li><a class="nav-link" href="#with-an-icon" data-docs-toc-item data-level="2">With an icon</a></li>
+        <li><a class="nav-link" href="#custom-sizing" data-docs-toc-item data-level="2">Custom sizing</a></li>
         <li><a class="nav-link" href="#removable-tag-pattern" data-docs-toc-item data-level="2">Removable tag pattern</a></li>
         <li><a class="nav-link" href="#css-hooks" data-docs-toc-item data-level="2">CSS hooks</a></li>
           </ul>

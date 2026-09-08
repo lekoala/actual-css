@@ -378,7 +378,10 @@
   </div>
 </div>
 <div class="prose docs-prose">
-<p>Sizes follow the shared <code>.sm</code> and <code>.lg</code> modifiers. Intent classes (<code>.primary</code>, <code>.secondary</code>) are supported on the <code>.choice-card</code> element.</p>
+<p>Sizes follow the shared <code>.sm</code> and <code>.lg</code> typography scale; the check indicator
+follows through its <code>em</code> sizing. Padding is density, so use a <code>.compact</code> or
+<code>.spacious</code> context to change it. Intent classes (<code>.primary</code>, <code>.secondary</code>) are
+supported on the <code>.choice-card</code> element.</p>
 <h2 id="css-hooks">CSS hooks</h2>
 <ul>
 <li><code>--choice-card-pad</code> — inner padding.</li>
@@ -389,7 +392,8 @@
 <ul>
 <li><code>--choice-control-size</code> — the control's own size, in <code>em</code> off the surrounding
 type. The switch track derives from it too, so a checkbox and a switch on the
-same line stay proportionate. <code>.sm</code> / <code>.lg</code> do not touch it.</li>
+same line stay proportionate. A <code>.choice.sm</code> or <code>.choice.lg</code> scales it through
+the surrounding typography.</li>
 <li><code>--choice-control-offset</code> — top offset that aligns the control with the first
 line of a multi-line label. Left unset, each control derives its own offset
 from its height and the line box, which keeps a checkbox and a taller switch

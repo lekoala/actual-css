@@ -17,6 +17,7 @@
   margin: 0;
   padding: 0;
   list-style: none;
+  font-size: var(--control-font-size);
 
   /* Arrows, page numbers, and truncation ellipses share one geometric
      system: equal digit widths keep the row from re-flowing as numbers grow

@@ -228,14 +228,16 @@
 </div>
 <div class="prose docs-prose">
 <p>It positions the wrapper's first child absolutely inside a relative container and grows the input's start padding to clear it. <code>pointer-events: none</code> on the icon keeps clicks passing through to the input underneath. It is icon-library agnostic — an <code>&lt;i&gt;</code> webfont icon, an inline <code>&lt;svg&gt;</code>, or a <code>&lt;span&gt;</code> all work as the wrapper's first child.</p>
-<p>The icon keeps a fixed <code>--input-icon-size</code> (1.25rem); density contexts shrink the control geometry around it, not the pictogram. Apply the density class to the wrapper and to the input so the control height follows:</p>
+<p>The icon follows local typography through <code>--input-icon-size</code>. Apply a size to
+the wrapper so icon, input type, and control geometry scale together. A density
+context changes only the geometry.</p>
 </div>
 <div class="docs-example">
   <div class="docs-preview">
 <div class="stack">
   <label class="input-icon sm">
     <i class="ti ti-search" aria-hidden="true"></i>
-    <input class="input sm" type="search" aria-label="Search">
+    <input class="input" type="search" aria-label="Search">
   </label>
 </div>
   </div>
@@ -243,7 +245,7 @@
     <pre><code class="language-html">&lt;div class=&quot;stack&quot;&gt;
   &lt;label class=&quot;input-icon sm&quot;&gt;
     &lt;i class=&quot;ti ti-search&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;
-    &lt;input class=&quot;input sm&quot; type=&quot;search&quot; aria-label=&quot;Search&quot;&gt;
+    &lt;input class=&quot;input&quot; type=&quot;search&quot; aria-label=&quot;Search&quot;&gt;
   &lt;/label&gt;
 &lt;/div&gt;</code></pre>
   </div>

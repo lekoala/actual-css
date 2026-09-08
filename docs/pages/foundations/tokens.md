@@ -204,7 +204,8 @@ Components can use local font variables for their own mapping, but should inheri
 
 ### Controls
 
-Controls share sizing so buttons, inputs, selects, and compact app UI always align. `.sm`/`.lg` set shared density tokens for controls, compact labels, and spacing helpers.
+Controls share geometry so buttons, inputs, selects, and compact app UI align.
+Local `.sm`/`.lg` sizes map both `--control-size` and `--control-font-size`.
 
 ```css
 :root {
@@ -222,31 +223,36 @@ Controls share sizing so buttons, inputs, selects, and compact app UI always ali
 - default — 38px control height
 - `.sm` — 32px control height
 
-The font size stays at the baseline (`--control-font-size` = `--font-size-md`) in every density — density changes how much space controls consume, not how large their text is.
+The default font size is `--font-size-md`; `.sm` maps it to `--font-size-sm` and
+`.lg` to `--font-size-lg`. Density contexts change `--control-size` without
+changing the font size.
 
 Disabled controls and disabled-prone components read `--disabled-opacity` for their dimmed state — buttons, tabs, menu items, badges, avatars, choice cards, native inputs, and range sliders.
 
 ### Density
 
-Density modifiers swap the shared control geometry:
+Density contexts swap shared spacing and geometry:
 
 ```css
-.sm {
+.compact {
   --gap: var(--space-20);
   --density-space: var(--space-20);
   --control-size: var(--control-size-sm);
-  --density-compact-size: 1.25rem;
 }
 
-.lg {
+.spacious {
   --gap: var(--space-50);
   --density-space: var(--space-50);
   --control-size: var(--control-size-lg);
-  --density-compact-size: 1.875rem;
 }
 ```
 
-Density covers spacing and geometry only — it never touches typography or icon size. Compact labels such as `.badge` consume `--density-compact-size`; display elements with special geometry, such as avatar and spinner, keep their own size scales. Content blocks like alert, card, dialog, table, and accordion do not participate.
+Density covers spacing and geometry only — it never touches typography or icon
+size. Participation is opt-in and selective: controls consume `--control-size`
+for geometry; spacing helpers and rhythms consume `--density-space` and `--gap`;
+components whose size is intrinsic (badge, avatar, spinner, rating, key, prose,
+inline choice/switch) keep their own scales. A local component size overrides
+inherited density for the dimensions they share.
 
 ### Elevation
 

@@ -96,7 +96,7 @@ does not close automatically after an action, on outside click, or on Escape;
 add application behavior only when the product requires those policies.
 
 Each `.fab-action` keeps its `.fab-label` and secondary button on one compact
-line. The example uses the button's existing `.lg` density for 44px secondary
+line. The example uses the button's existing `.lg` size for 44px secondary
 actions and its `--btn-min-size` hook for a dominant 56px trigger. Size still
 belongs to Button rather than introducing FAB-specific size modifiers.
 Unlike the plain FAB, the speed dial trigger takes no icon: FAB owns it as a
@@ -120,6 +120,6 @@ two states stay visually identical in size and stroke.
 - `--fab-gap` — gap between actions and between the trigger and action list.
 - `--fab-icon-size` — size of the speed dial toggle's open and close markers.
 
-FAB is hidden in print and uses `--z-menu`, leaving `status-bar` above it on the
-scale. Open flyouts and tooltips are promoted to the top layer and paint above
-it whatever their number. Dialogs remain in the browser's top layer.
+FAB uses `--z-menu`, leaving `status-bar` above it on the scale. Open flyouts
+and tooltips are promoted to the top layer and paint above it whatever their
+number. Dialogs remain in the browser's top layer.

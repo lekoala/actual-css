@@ -233,7 +233,7 @@
 <p><code>.menu</code> has a strict <code>.menu &gt; li &gt; .menu-item</code> anatomy.
 | <code>.menu-label</code>     | Variant     | Muted section heading inside a menu; not interactive.                |
 | <code>.menu-separator</code> | Variant     | Divider between menu groups (<code>&lt;hr&gt;</code>).                               |
-| <code>.sm</code> / <code>.lg</code>     | Variant     | Compact or large density.                                            |</p>
+| <code>.sm</code> / <code>.lg</code>     | Size        | Smaller or larger menu rows and type.                                |</p>
 <h2 id="usage">Usage</h2>
 <p>Flyout and context menu share one action-surface runtime:</p>
 <ul>
@@ -390,7 +390,7 @@ panel. The trigger and Escape continue to close the flyout in every mode.</p>
 <li>Use <code>&lt;menu class=&quot;flyout menu&quot;&gt;</code> with strict anatomy: <code>.menu &gt; li &gt; .menu-item</code>. Items must carry the <code>.menu-item</code> class to participate in directional keyboard navigation. ArrowUp/Down and Home/End move focus without rewriting their normal tab stops.</li>
 <li>Use <code>.menu-label</code> on a <code>li</code> for a muted section heading inside a menu (e.g. a group title before its items). It is non-interactive and does not participate in roving focus. Use <code>.menu-separator</code> (a plain <code>&lt;hr&gt;</code>) between groups.</li>
 <li>Items are regular <code>&lt;button&gt;</code> or <code>&lt;a&gt;</code> elements.</li>
-<li>Use <code>.sm</code> or <code>.lg</code> for density changes.</li>
+<li>Use <code>.sm</code> or <code>.lg</code> to scale one flyout; use a density context for surrounding UI.</li>
 <li>Add <code>role=&quot;menu&quot;</code> / <code>role=&quot;menuitem&quot;</code> only when you intentionally need the ARIA menu pattern described below.</li>
 </ul>
 </div>

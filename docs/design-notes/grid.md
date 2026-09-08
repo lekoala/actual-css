@@ -781,6 +781,5 @@ A modifier introducing a second density ladder becomes defensible only when
 too conservative while wanting identical balanced-collapse behavior. One
 component in one miscalibrated container is not that evidence. A per-component
 threshold would also collide with the established meaning of `.compact` in
-Actual, which is padding density on a component (`.card.compact`,
-`.table.compact`) and never a layout threshold.
-
+Actual: UI density, including tighter local padding on `.card.compact` and
+`.table.compact`, never a layout threshold.

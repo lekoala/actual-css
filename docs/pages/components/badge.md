@@ -5,7 +5,8 @@
 - Supports intent colors.
 - Soft by default. Use `.solid` for counters and notification badges, or `.outline` for quieter emphasis.
 - Dots stay solid regardless of variant.
-- Use `.sm` or `.lg` for compact density changes.
+- Use `.sm` or `.lg` to scale the badge locally.
+- Use `.compact` or `.spacious` on a context to change geometry without changing the label or icon size.
 - Can be used inline in headings.
 - Can be used as a count badge.
 - Can be used as a stable dot badge when empty and given an accessible name.
@@ -27,7 +28,7 @@ optional `.inline-size-full` utility — when a full-width badge is intentional.
 | `.dot`          | Composition | Status dot inside a badge.                |
 | Shared intents  | Intent      | `.primary`, `.secondary`, `.success`, …   |
 | Shared variants | Variant     | `.solid`, `.outline`, `.surface`.         |
-| `.sm` / `.lg`   | Size        | Compact density.                          |
+| `.sm` / `.lg`   | Size        | Smaller or larger optical scale.          |
 
 The shared intents are `.primary`, `.secondary`, `.success`, `.warning` and
 `.danger`. The variants set emphasis: `.solid` is filled, `.outline` bordered,
@@ -114,9 +115,49 @@ Regular
 ## Size variants
 
 ```html demo
-<span class="badge success sm">Small Success</span>
-<span class="badge success">Regular Success</span>
-<span class="badge success lg">Large Success</span>
+<span class="badge success sm">Small</span>
+<span class="badge success">Default</span>
+<span class="badge success lg">Large</span>
+```
+
+## Density
+
+Density changes the pill geometry without scaling its label or icon.
+
+```html demo
+<span class="compact"><span class="badge success">Compact</span></span>
+<span><span class="badge success">Default</span></span>
+<span class="spacious"><span class="badge success">Spacious</span></span>
+```
+
+## With an icon
+
+Decorative SVG, image, or `[aria-hidden="true"]` children follow
+`--badge-icon-size`.
+
+```html demo
+<span class="badge success">
+  <i class="ti ti-rosette-discount-check" aria-hidden="true"></i>
+  Verified
+</span>
+<span class="badge warning">
+  <i class="ti ti-clock" aria-hidden="true"></i>
+  Pending
+</span>
+<span class="badge danger solid">
+  <i class="ti ti-alert-circle" aria-hidden="true"></i>
+  Failed
+</span>
+```
+
+## Custom sizing
+
+Override the existing hooks when the three-step scale does not fit the content.
+
+```html demo
+<span class="badge primary" style="--badge-size: 2rem; --badge-font-size: var(--font-size-md);">
+  Prominent
+</span>
 ```
 
 ## Removable tag pattern
@@ -146,5 +187,6 @@ used instead.
 - `--badge-size` — minimum block size; also the square size of an `:empty` dot badge.
 - `--badge-dot-size` — size of an `:empty` dot badge.
 - `--badge-font-size` — label font size.
-- `--badge-pad-x` — inline padding. Derived from `--badge-size`, so it follows density and keeps the pill proportional; set it to opt out.
+- `--badge-icon-size` — decorative child size; `1em` follows the label by default.
+- `--badge-pad-x` — inline padding. Derived from `--badge-size`, so it stays proportional to the pill; set it to opt out.
 - `--badge-dismiss-icon-size` — size of the X painted by an empty dismiss button.

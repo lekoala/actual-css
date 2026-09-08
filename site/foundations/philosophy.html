@@ -282,24 +282,45 @@ class:</p>
   </div>
 </div>
 <div class="prose docs-prose">
-<h2 id="density">Density</h2>
-<p><code>.sm</code> and <code>.lg</code> establish inherited density tokens. Density adjusts how much
-space UI consumes — spacing and component geometry — not how large its content
-is: typography and icon size never change. Components opt into the density
-dimensions that make sense for them. The same modifiers can also be applied
-directly to a component for local density.</p>
+<h2 id="size-and-density">Size and density</h2>
+<p><code>.sm</code> and <code>.lg</code> mean one size role below or above a component's natural size.
+Size names are shared roles, not shared measurements. Each participating
+component family maps them to its own optical scale: badges use <code>xs / sm / md</code>,
+while controls use <code>sm / md / lg</code>. Components without an explicit mapping do
+not change.</p>
+<p>A size role is applied to the component that participates in the scale and
+never styles arbitrary descendants. It propagates through token inheritance,
+though: components in the shared control scale set local <code>--control-size</code> and
+<code>--control-font-size</code>, and descendants consume them by their own rules. That is
+how <code>.field sm</code>, <code>.input-icon sm</code>, <code>.join sm</code>, and <code>.flyout sm</code> size the
+controls inside them, while a bare <code>.sm</code> on a plain element does nothing.</p>
+<p><code>.compact</code> and <code>.spacious</code> establish inherited density tokens. Density arranges
+how tightly UI sits — spacing and component geometry — while typography and
+icon size stay unchanged. Participation is opt-in, and a component only joins
+where density has an effect independent from its optical size: if the result is
+merely that the component looks smaller or larger, that is size, not density.</p>
+<p>Density participation takes three levels:</p>
+<ul>
+<li><strong>Geometry + rhythm</strong> — controls and their wrappers (<code>.field</code>, <code>.join</code>,
+<code>.flyout</code>, …). Height, padding, and gap respond; typography is untouched.</li>
+<li><strong>Rhythm only</strong> — content rows and shells such as <code>.list</code>. Spacing tightens
+(<code>--list-item-gap: var(--gap)</code>), but the structural size stays stable.</li>
+<li><strong>No density effect</strong> — components whose geometry is intrinsic to their
+content (<code>.badge</code>, <code>.avatar</code>, <code>.spinner</code>, <code>.rating</code>, <code>.key</code>, prose, inline
+<code>.choice</code>/<code>.switch</code>). Their optical size belongs to <code>sm</code>/<code>lg</code> or local hooks.</li>
+</ul>
 <p>As inherited contexts, one class tightens or loosens the whole subtree:</p>
 </div>
 <div class="docs-example">
   <div class="docs-preview">
-<div class="sm">
+<div class="compact">
   <button class="btn">Compact button</button>
   <input class="input">
   <span class="badge">Compact badge</span>
 </div>
   </div>
   <div class="docs-code">
-    <pre><code class="language-html">&lt;div class=&quot;sm&quot;&gt;
+    <pre><code class="language-html">&lt;div class=&quot;compact&quot;&gt;
   &lt;button class=&quot;btn&quot;&gt;Compact button&lt;/button&gt;
   &lt;input class=&quot;input&quot;&gt;
   &lt;span class=&quot;badge&quot;&gt;Compact badge&lt;/span&gt;
@@ -307,12 +328,11 @@ directly to a component for local density.</p>
   </div>
 </div>
 <div class="prose docs-prose">
-<p>Application chrome can use the same scope; no separate <code>.compact</code> mode is
-needed:</p>
+<p>Application chrome can use the same scope:</p>
 </div>
 <div class="docs-example">
   <div class="docs-preview">
-<header class="navbar sm">
+<header class="navbar compact">
   <a class="navbar-brand" href="/">Workspace</a>
   <nav class="cluster" aria-label="Workspace actions">
     <button class="btn ghost">Search</button>
@@ -321,7 +341,7 @@ needed:</p>
 </header>
   </div>
   <div class="docs-code">
-    <pre><code class="language-html">&lt;header class=&quot;navbar sm&quot;&gt;
+    <pre><code class="language-html">&lt;header class=&quot;navbar compact&quot;&gt;
   &lt;a class=&quot;navbar-brand&quot; href=&quot;/&quot;&gt;Workspace&lt;/a&gt;
   &lt;nav class=&quot;cluster&quot; aria-label=&quot;Workspace actions&quot;&gt;
     &lt;button class=&quot;btn ghost&quot;&gt;Search&lt;/button&gt;
@@ -331,27 +351,30 @@ needed:</p>
   </div>
 </div>
 <div class="prose docs-prose">
-<p>The same class on a component is local density, not a second meaning:</p>
+<p>Component geometry remains local and wins over inherited density when both
+affect the same dimension:</p>
 </div>
 <div class="docs-example">
   <div class="docs-preview">
-<button class="btn sm">Compact button</button>
-<span class="badge lg">Spacious badge</span>
+<div class="compact">
+  <button class="btn lg">Large button in a compact context</button>
+</div>
   </div>
   <div class="docs-code">
-    <pre><code class="language-html">&lt;button class=&quot;btn sm&quot;&gt;Compact button&lt;/button&gt;
-&lt;span class=&quot;badge lg&quot;&gt;Spacious badge&lt;/span&gt;</code></pre>
+    <pre><code class="language-html">&lt;div class=&quot;compact&quot;&gt;
+  &lt;button class=&quot;btn lg&quot;&gt;Large button in a compact context&lt;/button&gt;
+&lt;/div&gt;</code></pre>
   </div>
 </div>
 <div class="prose docs-prose">
-<p>This is not &quot;<code>.sm</code> sometimes means density and sometimes size&quot;: <code>.sm</code> always
-establishes the same density tokens — only the scope changes. The density
-tokens are <code>--gap</code>, <code>--density-space</code>, <code>--control-size</code>, and
-<code>--density-compact-size</code>. Components consume the dimensions that make sense
-for them and opt out of the rest. The absolute <code>--space-*</code> scale is not rebound
-by density scopes.</p>
-<p>Components with bespoke sizing (<code>.avatar</code>, <code>.spinner</code>) define local <code>.sm</code>/<code>.lg</code>
-instead of consuming the shared tokens.</p>
+<p>The density tokens are <code>--gap</code>, <code>--density-space</code>, and <code>--control-size</code>.
+Components consume the dimensions that make sense for them and opt out of the
+rest. The absolute <code>--space-*</code> scale is not rebound by density scopes.
+Components with bespoke geometry (<code>.badge</code>, <code>.avatar</code>,
+<code>.spinner</code>, <code>.rating</code>) own their local <code>.sm</code>/<code>.lg</code> mappings.</p>
+<p><code>.compact</code> also remains a meaningful local modifier for <code>.card</code> and <code>.table</code>.
+On those components it tightens their own padding and establishes the compact
+density context for descendants.</p>
 <h2 id="child-semantics">Child semantics</h2>
 <p>When using a component, child elements follow the semantic pattern of that component. For example, <code>.avatar</code> accepts <code>&lt;img&gt;</code>, <code>&lt;picture&gt;</code>, text content, an empty <code>.badge</code> for status dots, and can be a <code>&lt;button&gt;</code> or <code>&lt;a&gt;</code>.</p>
 <p>No child classes like <code>.avatar-img</code> are needed.</p>
@@ -377,7 +400,7 @@ instead of consuming the shared tokens.</p>
         <li><a class="nav-link" href="#components" data-docs-toc-item data-level="2">Components</a></li>
         <li><a class="nav-link" href="#intents" data-docs-toc-item data-level="2">Intents</a></li>
         <li><a class="nav-link" href="#variants" data-docs-toc-item data-level="2">Variants</a></li>
-        <li><a class="nav-link" href="#density" data-docs-toc-item data-level="2">Density</a></li>
+        <li><a class="nav-link" href="#size-and-density" data-docs-toc-item data-level="2">Size and density</a></li>
         <li><a class="nav-link" href="#child-semantics" data-docs-toc-item data-level="2">Child semantics</a></li>
           </ul>
         </nav>

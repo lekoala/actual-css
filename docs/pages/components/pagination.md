@@ -5,7 +5,7 @@
 - Use a semantic `<nav>` landmark.
 - Put `.pagination` on the ordered list.
 - Use `aria-current="page"` for the current page.
-- Put `.sm` or `.lg` on `.pagination` to change the density of its controls.
+- Put `.sm` or `.lg` on `.pagination` to scale its controls.
 - Numeric links may use `aria-label="Page N"` for clearer screen reader output.
 - Prefer text labels for Previous and Next. Icon-only controls need an accessible name.
 - Page links can compose with `.btn` for button-like hit targets.
@@ -17,7 +17,7 @@
 | Class         | Kind      | Description                    |
 | ------------- | --------- | ------------------------------ |
 | `.pagination` | Component | Ordered list of page controls. |
-| `.sm` / `.lg` | Size      | Control density.               |
+| `.sm` / `.lg` | Size      | Control geometry and type.     |
 
 ## Basic usage
 

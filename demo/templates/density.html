@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Density - Actual CSS</title>
-  <meta name="description" content="How .sm and .lg density contexts inherit through a subtree, which components opt in, and how to tune a single dimension locally.">
+  <meta name="description" content="How .compact and .spacious density contexts compose with local .sm and .lg component sizes.">
   <link rel="stylesheet" href="../../dist/actual.full.css">
   <link rel="stylesheet" href="../assets/actual-themes.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
@@ -112,7 +112,7 @@
       <p class="overline">Actual CSS</p>
       <h1>Density</h1>
       <p class="lead">
-        `.sm` and `.lg` establish inherited density tokens. A single class on a
+        `.compact` and `.spacious` establish inherited density tokens. A single class on a
         wrapper tightens or loosens the rhythm and control sizes of everything
         inside it that opts in — typography and icons never change.
       </p>
@@ -151,16 +151,16 @@
 
       <div class="density-switcher" role="radiogroup" aria-label="Density context">
         <label class="choice">
-          <input class="radio" type="radio" name="density" value="sm">
-          <span>.sm</span>
+          <input class="radio" type="radio" name="density" value="compact">
+          <span>.compact</span>
         </label>
         <label class="choice">
           <input class="radio" type="radio" name="density" value="" checked>
           <span>default</span>
         </label>
         <label class="choice">
-          <input class="radio" type="radio" name="density" value="lg">
-          <span>.lg</span>
+          <input class="radio" type="radio" name="density" value="spacious">
+          <span>.spacious</span>
         </label>
       </div>
 
@@ -196,13 +196,15 @@
       <h2>Same markup, different density</h2>
       <p class="density-note">
         The exact same fragment rendered in three contexts. The only difference
-        is the class on the wrapper: `<code>.sm</code>`, nothing, `<code>.lg</code>`.
+        is the class on the wrapper: `<code>.compact</code>`, nothing,
+        `<code>.spacious</code>`. The badge stays identical — its size is
+        intrinsic, so density leaves it alone.
       </p>
 
       <div class="density-cols">
         <div class="density-col">
-          <h3>.sm</h3>
-          <div class="sm density-sample">
+          <h3>.compact</h3>
+          <div class="compact density-sample">
             <div class="cluster">
               <button class="btn">Save</button>
               <span class="badge">Active</span>
@@ -225,8 +227,8 @@
         </div>
 
         <div class="density-col">
-          <h3>.lg</h3>
-          <div class="lg density-sample">
+          <h3>.spacious</h3>
+          <div class="spacious density-sample">
             <div class="cluster">
               <button class="btn">Save</button>
               <span class="badge">Active</span>
@@ -238,7 +240,7 @@
       </div>
 
       <div class="density-code">
-        <pre><code>&lt;div class="sm"&gt;
+        <pre><code>&lt;div class="compact"&gt;
   &lt;button class="btn"&gt;Save&lt;/button&gt;
   &lt;input class="input"&gt;
   &lt;span class="badge"&gt;Active&lt;/span&gt;
@@ -247,40 +249,38 @@
       </div>
     </section>
 
-    <section class="center density-section" id="local-density">
-      <h2>Local density</h2>
+    <section class="center density-section" id="local-size">
+      <h2>Local size</h2>
       <p class="density-note">
-        The same class on a component is local density, not a second meaning.
-        `.sm` always establishes the same density tokens — only the scope
-        changes. Typography and icons stay the same; only the envelope
-        tightens or loosens.
+        `.sm` and `.lg` scale one component: geometry, typography, and icons
+        move together. They do not establish a context for unrelated children.
       </p>
 
       <div class="density-cols">
         <div class="density-col">
           <h3>.btn</h3>
           <div class="cluster">
-            <button class="btn sm">Compact</button>
+            <button class="btn sm">Small</button>
             <button class="btn">Default</button>
-            <button class="btn lg">Spacious</button>
+            <button class="btn lg">Large</button>
           </div>
         </div>
 
         <div class="density-col">
           <h3>.badge</h3>
           <div class="cluster">
-            <span class="badge sm">Compact</span>
-            <span class="badge">Default</span>
-            <span class="badge lg">Spacious</span>
+            <span class="badge sm"><i class="ti ti-check" aria-hidden="true"></i> Small</span>
+            <span class="badge"><i class="ti ti-check" aria-hidden="true"></i> Default</span>
+            <span class="badge lg"><i class="ti ti-check" aria-hidden="true"></i> Large</span>
           </div>
         </div>
 
         <div class="density-col">
           <h3>.input</h3>
           <div class="cluster">
-            <input class="input sm" placeholder="Compact">
+            <input class="input sm" placeholder="Small">
             <input class="input" placeholder="Default">
-            <input class="input lg" placeholder="Spacious">
+            <input class="input lg" placeholder="Large">
           </div>
         </div>
       </div>
@@ -290,9 +290,11 @@
       <h2>What participates</h2>
       <p class="density-note">
         Density is opt-in, not a global scale multiplier. Components consume
-        the dimensions that make sense for them; page chrome like alerts,
-        cards, tables, and accordions stays put. Compare the same set of
-        components at default and inside a `.sm` context.
+        the dimensions that make sense for them — controls tighten their
+        geometry, rhythms tighten their gaps, and chrome or intrinsic
+        components like alerts, cards, tables, accordions, and badges stay put.
+        Compare the same set of components at default and inside a `.compact`
+        context.
       </p>
 
       <div class="density-cols">
@@ -324,8 +326,8 @@
         </div>
 
         <div class="density-col">
-          <h3>.sm</h3>
-          <div class="sm density-sample">
+          <h3>.compact</h3>
+          <div class="compact density-sample">
             <div class="cluster">
               <button class="btn">Button</button>
               <span class="badge">Badge</span>
@@ -352,13 +354,9 @@
       </div>
 
       <div class="density-legend">
-        <p><strong>Opt in</strong> — button, badge, input, select, pagination, tabs, choice cards, flyout menus, spacing helpers (<code>.py</code> / <code>.px</code> / <code>.mbs</code> / <code>.mbe</code>), and layout primitives via <code>--gap</code>.</p>
-        <ul>
-          <li>Controls (<code>.btn</code>, <code>.input</code>, <code>.select</code>, …) consume <code>--control-size</code>.</li>
-          <li>Compact labels (<code>.badge</code>) consume <code>--density-compact-size</code>.</li>
-          <li>Spacing helpers and <code>.choice-card</code> consume <code>--density-space</code>; layouts consume <code>--gap</code>.</li>
-        </ul>
-        <p><strong>No-op</strong> — alert, card, dialog, table, accordion, navbar, and page sections keep their size. The alert and card above are identical in both columns even though their inner button and badge shrank.</p>
+        <p><strong>Geometry + rhythm</strong> — controls (<code>.btn</code>, <code>.input</code>, <code>.select</code>, <code>.pagination</code>, <code>.tabs</code>, <code>.flyout</code> menus, …) consume <code>--control-size</code>; spacing helpers (<code>.py</code> / <code>.px</code> / <code>.mbs</code> / <code>.mbe</code>) and <code>.choice-card</code> consume <code>--density-space</code>; layout primitives consume <code>--gap</code>.</p>
+        <p><strong>Rhythm only</strong> — content rows such as <code>.list</code>. Dimensional size stays stable; the inner gap follows <code>--gap</code>.</p>
+        <p><strong>No effect</strong> — badge, alert, card, dialog, table, accordion, and navbar keep their size. The alert and card above are identical in both columns even though the inner button shrank and the badge held its size.</p>
         <p>Inline choices (<code>.check</code>, <code>.radio</code>, <code>.switch</code>) are a no-op too, and deliberately so: they sit on a line of text, so they follow <code>--choice-control-size</code> off the control typography, which density does not touch. Shrinking the checkbox but not its label would break the alignment density is not asking to change. Size them with <code>--control-font-size</code> or <code>--choice-control-size</code> instead.</p>
       </div>
     </section>
