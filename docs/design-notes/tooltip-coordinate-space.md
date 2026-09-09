@@ -65,7 +65,7 @@ The modal case is the one worth naming, because a modal dialog does **not**
 stop the page from scrolling behind it — measured, wheel included. A trigger
 inside one is as viewport-anchored as a fixed bar, and keeps `position: fixed`.
 
-## What document coordinates cost
+## The scrollable overflow case
 
 An absolutely positioned box in the top layer joins the document's scrollable
 overflow; a fixed one never does. The scrollable height becomes the greater of
@@ -73,16 +73,22 @@ the content's own bottom and the tip's, and the threshold is exact: walking a
 20px tip down a 2000px document in Chrome, `scrollHeight` reads 2000 for every
 tip bottom through 2000, and the tip's own bottom from 2001 on.
 
-So a tip that overflows the content raises the scroll maximum while it is up,
-and hiding it clamps back any position only that tip made reachable: the page
-appears to jump upwards on every show and hide. Worth remembering if something
-like it ever shows up, because nothing here defends against it — placement
-does. Flip and shift put the tip inside the viewport, which at any scroll
-position is inside the document, and only overflow the engine explicitly
-accepts, for a tip it could not fit, can pass the end of the content. The
-demote/promote path needs nothing either: the document does not change size
-while a tip is down, so the coordinates it comes back up with are still inside
-it.
+A tip past the end of the content therefore raises the scroll maximum while it
+is up, and hiding it clamps back any position only that tip made reachable —
+the page appears to jump upwards.
+
+Placement is what prevents this, not anything in `tooltip.js`. Flip and shift
+put the tip inside the viewport, which at any scroll position is inside the
+document, so only overflow the engine explicitly accepts — a tip it could not
+fit anywhere — reaches past the end of the content. Nor does the demote and
+promote path add a case: the coordinates are a document point, so a tip that
+was inside the document when it went down is still inside it when it comes
+back up, exit fade included.
+
+It is a failure mode to test for, then, not a standing cost of document
+coordinates. If the page ever does jump, `documentElement.scrollHeight` across
+a show and a hide separates this from everything else that moves a page: it
+moves with the tip here, and holds steady for anything else.
 
 ## `false` is a geometry answer
 
