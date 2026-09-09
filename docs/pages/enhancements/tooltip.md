@@ -11,6 +11,7 @@ by promoting it to the top layer with `popover="manual"`.
 - Tooltips are supplemental. Do not put required information or interactive controls inside them.
 - Show on hover and focus. Hide on Escape, blur, or pointer leave.
 - A trigger scrolled out of view takes its tooltip down and brings it back when it returns; only a dismissal ends the tooltip.
+- Escape outlasts the hover and focus that justified the tooltip (WCAG 2.1 SC 1.4.13); showing it again takes a fresh hover or focus, not a second click on a trigger that already has focus.
 - Author an explicit tooltip with `hidden`. The runtime removes it when it takes the lifecycle over; until then it is what keeps the tooltip off screen.
 - JavaScript can generate tooltip elements from `data-tooltip`.
 - Add `data-tooltip-click` to toggle it on click instead of hover/focus.

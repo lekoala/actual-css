@@ -536,6 +536,46 @@ test("Escape key hides the tooltip", async () => {
   expect(visible(tip)).toBe(false);
 });
 
+/*
+ * WCAG 2.1 SC 1.4.13 asks for content on hover or focus to be dismissable
+ * without moving either. So the dismissal has to outlast the hover and focus
+ * that justified the tooltip — otherwise Escape would be answered by the tip
+ * reappearing on the spot, and there would be no way to dismiss it at all.
+ *
+ * It reads like a bug from the outside: click a trigger, press Escape, click
+ * the same trigger again and nothing happens. The second click reaches nothing
+ * — the trigger already has focus, so no focusin fires, and the pointer never
+ * left, so no mouseover does either. Re-triggering is what shows it again.
+ *
+ * This also pins the boundary with the restore-on-scroll behavior above: a
+ * tracking tick may bring back a tip that could not be positioned, never one
+ * the user dismissed.
+ */
+test("Escape outlasts the focus that justified the tooltip", async () => {
+  await loadTooltip('<button data-tooltip="Help">Trigger</button>');
+  const layout = createLayout({ height: 600, scrollHeight: 3000 });
+  const trigger = document.querySelector("button");
+  layout.place(trigger, 300, 40);
+
+  trigger.dispatchEvent(new FocusEvent("focusin", { bubbles: true }));
+  const tip = measurable(document.querySelector('[role="tooltip"]'));
+  await waitForShow();
+  expect(visible(tip)).toBe(true);
+
+  document.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
+  expect(visible(tip)).toBe(false);
+
+  // The trigger still has focus and the pointer never moved, so nothing
+  // reaches the runtime — and scrolling must not speak for the user either.
+  await scrollPage(layout, 100);
+  expect(visible(tip)).toBe(false);
+
+  // Only a fresh trigger event shows it again.
+  trigger.dispatchEvent(new FocusEvent("focusin", { bubbles: true }));
+  await waitForShow();
+  expect(visible(tip)).toBe(true);
+});
+
 test("Escape closes a tooltip above a flyout without closing the flyout", async () => {
   await loadTooltip(`
     <button id="open" aria-controls="menu">Open</button>
