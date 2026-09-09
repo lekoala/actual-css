@@ -28,7 +28,7 @@ Flyout and context menu share one action-surface runtime:
 
 - Flyout = a visible trigger opens a surface.
 - Context menu = right click or a keyboard context action opens that same surface.
-- Sheet = mobile presentation mode of that same surface.
+- Flyouts and context menus remain anchored, non-modal popovers at every viewport size.
 
 One surface is open at a time. Opening any of them closes the others, so a
 trigger placed inside an open panel replaces that panel instead of opening a
@@ -63,16 +63,9 @@ contract:
 </div>
 ```
 
-Use `data-flyout-mobile` on the flyout to control mobile behavior:
-
-- `auto` is the default. It keeps the surface anchored on desktop and switches to a bottom sheet on coarse pointers below the breakpoint.
-- `sheet` always uses the sheet presentation.
-- `anchored` always uses floating positioning.
-- `none` disables the mobile transformation.
-
-`data-flyout-breakpoint` only matters for `auto`. Prefer the built-in tokens
-(`sm`, `md`, `lg`) and use raw pixel values only as an escape hatch, for example
-`data-flyout-breakpoint="640"`.
+For a modal bottom sheet or action sheet, use `dialog.drawer`; use
+`dialog.modal` for a centered modal. Those components own modal focus,
+dismissal, scroll locking, and backdrop behavior explicitly.
 
 Use `data-flyout-placement` for the preferred anchored placement. It accepts the
 placement strings supported by the floating runtime, such as `bottom-start`,
@@ -342,7 +335,6 @@ can be multi-column with `<section>` / `<ul>` groups.
       <div class="flyout"
            id="products-panel"
            aria-label="Products"
-           data-flyout-mobile="auto"
            hidden>
         <section aria-labelledby="products-design">
           <h3 id="products-design">Design</h3>
@@ -375,8 +367,8 @@ can be multi-column with `<section>` / `<ul>` groups.
 ## Mega menu
 
 Use `class="flyout grid-3"` when a nav panel needs multiple link groups. Keep
-links regular anchors and let the panel collapse to a one-column sheet on mobile
-with `data-flyout-mobile="auto"`.
+links as regular anchors. The panel remains an anchored popover on mobile; use
+a separate `dialog.drawer` when the content needs a modal mobile presentation.
 
 ```html demo
 <nav aria-label="Product navigation">
@@ -394,7 +386,6 @@ with `data-flyout-mobile="auto"`.
       <div class="flyout grid-3"
            id="product-mega-menu"
            aria-label="Platform"
-           data-flyout-mobile="auto"
            style="--flyout-inline-size: 42rem; --flyout-max-inline-size: 42rem"
            hidden>
         <section aria-labelledby="mega-design">

@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Motion catalogue — Actual CSS</title>
-  <meta name="description" content="Replay the presence motion of status-bar, tooltip, flyout, sheet, modal, and drawer side by side, switch easing curves, and simulate reduced motion.">
+  <meta name="description" content="Replay the presence motion of status-bar, tooltip, flyout, modal, and drawer side by side, switch easing curves, and simulate reduced motion.">
   <link rel="stylesheet" href="../../dist/actual.full.css">
   <link rel="stylesheet" href="../assets/actual-themes.min.css">
   <style>
@@ -132,13 +132,6 @@
               <td>—</td>
             </tr>
             <tr>
-              <th scope="row">flyout (sheet) + backdrop</th>
-              <td><code>opacity</code>, <code>translate</code>, backdrop <code>opacity</code></td>
-              <td>100ms, <code>ease</code></td>
-              <td>100ms, <code>ease</code></td>
-              <td>—</td>
-            </tr>
-            <tr>
               <th scope="row">modal + backdrop</th>
               <td><code>opacity</code>, <code>transform</code>, backdrop <code>opacity</code></td>
               <td>150ms, <code>--ease-enter</code></td>
@@ -225,40 +218,6 @@
             </menu>
           </div>
           <button class="btn ghost sm" type="button" data-replay-flyout="motion-flyout-anchored">Replay</button>
-        </div>
-      </div>
-    </section>
-
-    <section class="motion-section stack" aria-labelledby="flyout-sheet-title">
-      <div class="stack">
-        <h2 id="flyout-sheet-title">Bottom-sheet flyout + backdrop</h2>
-        <p class="recipe">
-          <code>data-flyout-mobile="sheet"</code> forces the coarse-pointer
-          presentation on any viewport. The sheet slides a quarter-gap up from
-          the bottom edge without zooming; the backdrop fades on neutral
-          <code>ease</code> at the same duration so it never lags the panel.
-        </p>
-      </div>
-      <div class="motion-stage">
-        <div class="cluster">
-          <div class="flyout-trigger">
-            <button class="btn outline" type="button" id="flyout-sheet-trigger" data-enhance="flyout"
-              aria-haspopup="dialog" aria-expanded="false" aria-controls="motion-flyout-sheet">
-              Toggle bottom sheet
-            </button>
-            <nav class="flyout" id="motion-flyout-sheet" data-flyout-mobile="sheet"
-              aria-labelledby="flyout-sheet-trigger" hidden>
-              <section aria-labelledby="motion-sheet-heading">
-                <h3 id="motion-sheet-heading">Sheet action</h3>
-                <ul>
-                  <li><a href="#">Continue to settings</a></li>
-                  <li><a href="#">View account</a></li>
-                  <li><a href="#">Sign out</a></li>
-                </ul>
-              </section>
-            </nav>
-          </div>
-          <button class="btn ghost sm" type="button" data-replay-flyout="motion-flyout-sheet">Replay</button>
         </div>
       </div>
     </section>

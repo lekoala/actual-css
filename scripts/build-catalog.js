@@ -51,7 +51,7 @@
  *     `.step-complete`, `.list-item`, …) never lead a compound, so they are
  *     absent even when they are part of the component API. The docs name them;
  *     the catalog lists what a rule styles directly.
- *   - JS-written runtime markers styled in a compound (`.is-open`, `.is-sheet`,
+ *   - JS-written runtime markers styled in a compound (`.is-open`,
  *     `.has-modal-open`, …) do appear in `classes` of the component that
  *     styles them.
  *   - `busy` styles no class of its own (pure `[aria-busy]` state selectors),

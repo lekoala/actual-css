@@ -320,7 +320,7 @@ A single icon token can serve both `background-image` (native select) and `mask-
 A few cross-component helpers:
 
 - `--indicator-offset` / `--indicator-ring` — positioning and contrast ring for a status dot attached to `.avatar > .badge:empty`.
-- `--backdrop-color` / `--backdrop-opacity` / `--backdrop-fill` — scrim color and opacity shared by `dialog.modal::backdrop`, `dialog.drawer::backdrop`, and `.surface-backdrop`. Override `--backdrop-opacity` per theme for a denser or lighter scrim.
+- `--backdrop-color` / `--backdrop-opacity` / `--backdrop-fill` — scrim color and opacity shared by `dialog.modal::backdrop` and `dialog.drawer::backdrop`. Override `--backdrop-opacity` per theme for a denser or lighter scrim.
 
 ```css
 :root {
@@ -342,15 +342,22 @@ Two systems order overlays, and only one of them uses numbers.
 
 **The document layer** is everything else, and the scale below is what orders it. Nothing in it can reach the other system: `z-index: 999999` on a document-layer element still paints under any open dialog or popover.
 
-| Token        | Value | Used by                                      |
-| ------------ | ----- | -------------------------------------------- |
-| `--z-sticky` | 10    | `form-actions.sticky`, `topbar`              |
-| `--z-menu`   | 20    | `fab`, `.surface-backdrop`, static `.flyout` |
-| `--z-status` | 60    | `status-bar`                                 |
+| Token        | Value | Used by                         |
+| ------------ | ----- | ------------------------------- |
+| `--z-sticky` | 10    | `form-actions.sticky`, `topbar` |
+| `--z-menu`   | 20    | `fab`, static `.flyout`         |
+| `--z-status` | 60    | `status-bar`                    |
 
-`.surface-backdrop` sits just under the menus, at `calc(var(--z-menu) - 1)`. It is runtime-created and never promoted, and it is why `--z-menu` outlived the move to the top layer: the sheet it dims needs no number any more, but the scrim beneath it does. `.flyout` keeps the same declaration for a panel the runtime does not manage — one the platform has not promoted still stacks by number.
+`.flyout` keeps the `--z-menu` declaration for a panel the runtime does not
+manage — one the platform has not promoted still stacks by number.
 
-`status-bar` is at the top of the document layer: above sticky bars, the FAB and the scrim, and below any open dialog, menu or tooltip. That is the boundary between the two systems rather than a gap in the scale. Status messages are transient, non-critical feedback and their real contract is the live-region announcement — which is why `status.js` moves the singleton into an open modal dialog's subtree, since a modal inerts the rest of the document and promotion would not undo that.
+`status-bar` is at the top of the document layer: above sticky bars and the FAB,
+and below any open dialog, menu or tooltip. That is the boundary between the
+two systems rather than a gap in the scale. Status messages are transient,
+non-critical feedback and their real contract is the live-region announcement
+— which is why `status.js` moves the singleton into an open modal dialog's
+subtree, since a modal inerts the rest of the document and promotion would not
+undo that.
 
 Stacking-context traps: these apply to overlays painted in the page, not to promoted ones. An element that is a DOM descendant of a container with `transform`, `filter`, `contain`, `isolation`, or `will-change` is confined to that ancestor's stacking context, and its z-index token only orders it against siblings within that context. Promotion escapes all of it — but do not move the markup to chase the effect: a panel or tooltip used from inside a modal dialog must be authored *inside* that dialog, because the top layer does not lift an element out of a modal's inertness.
 

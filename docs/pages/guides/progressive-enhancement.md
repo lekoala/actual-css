@@ -111,7 +111,7 @@ The JS is designed to run on its own, without Actual's stylesheet.
   presentation class needed. Self-describing attributes (`data-mask`,
   `data-tooltip`, `data-context-menu`) stay framework-neutral by construction.
 - **`selectors.js`** lists the state classes the runtime *writes* (`is-open`,
-  `was-validated`, `is-sheet`, …). Edit this file (or alias it in a bundler) to
+  `was-validated`, …). Edit this file (or alias it in a bundler) to
   match a different CSS framework's state vocabulary. It is a read-side-only
   adapter — it does not bridge CSS class names to JS initialization.
 - **One documented exception:** validation reads `.field-error` (or its alias
@@ -194,8 +194,7 @@ or account for:
    do not override with !important */
 /* no z-index: an open panel is promoted to the top layer, where
    numbers do not apply — see Layering in foundations/tokens */
-/* .is-open / .is-sheet / .surface-backdrop are written by surface.js
-   — style or ignore them */
+/* .is-open is written by surface.js — style or ignore it */
 /* --surface-anchor-width is set while an open surface is positioned */
 /* data-actual-surface is written by surface.js for teardown
    — never select on it */
@@ -240,8 +239,6 @@ widgets can veto or decorate opens, and context menus inject their own
 | `shift`           | `true`           | Shift to stay within the boundary           |
 | `shiftPadding`    | `4`              | Minimum space kept from the boundary        |
 | `scope`           | viewport         | Boundary element                            |
-| `mobile`          | `"auto"`         | Sheet behavior                              |
-| `breakpoint`      | `768`            | Max viewport width for an automatic sheet   |
 | `autoClose`       | `"outside"`      | Which clicks close the surface              |
 | `dismissOnScroll` | `false`          | Close on a scroll the user just started     |
 | `restoreFocusTo`  | `trigger`        | Element focused on close                    |

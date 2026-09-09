@@ -73,25 +73,21 @@ test("openSurface reveals a menu and syncs linked triggers", () => {
   expect(isSurfaceOpen(menu)).toBe(true);
 });
 
-test("closeSurface hides a menu and resets presentation state", async () => {
+test("closeSurface hides a menu and resets trigger state", () => {
   setBody(
     '<button aria-controls="menu" aria-expanded="false">Open</button><div id="menu" class="flyout"></div>',
   );
   const trigger = document.querySelector("button");
   const menu = document.getElementById("menu");
   mockPlacement(trigger, menu);
-  openSurface(menu, { trigger, mobile: "sheet" });
+  openSurface(menu, { trigger });
 
   closeSurface(menu);
 
   expect(isOpen(menu)).toBe(false);
   expect(menu.style.display).toBe("");
   expect(menu.classList.contains("is-open")).toBe(false);
-  expect(menu.classList.contains("is-sheet")).toBe(true);
   expect(trigger.getAttribute("aria-expanded")).toBe("false");
-
-  await nextMicrotask();
-  expect(menu.classList.contains("is-sheet")).toBe(false);
 });
 
 test("opening one surface closes another open surface", () => {
@@ -275,107 +271,21 @@ test("prepareSurface leaves the surface at its original position", () => {
   expect(menu.style.display).toBe("");
 });
 
-test("sheet mode adds sheet class and backdrop", () => {
+test("resize keeps an open surface anchored and non-modal", async () => {
   setBody('<button aria-controls="menu"></button><div id="menu" class="flyout"></div>');
   const trigger = document.querySelector("button");
   const menu = document.getElementById("menu");
   mockPlacement(trigger, menu);
+  openSurface(menu, { trigger });
 
-  openSurface(menu, { trigger, mobile: "sheet" });
+  window.dispatchEvent(new Event("resize"));
+  await nextFrame();
 
-  expect(menu.classList.contains("is-sheet")).toBe(true);
-  expect(menu.getAttribute("role")).toBeNull();
-  expect(menu.getAttribute("aria-modal")).toBeNull();
-  expect(document.querySelector(".surface-backdrop")).not.toBeNull();
-});
-
-test("sheet mode preserves author-provided semantic attributes", () => {
-  setBody(
-    '<button aria-controls="menu"></button><div id="menu" class="flyout" role="menu" aria-modal="false"></div>',
-  );
-  const trigger = document.querySelector("button");
-  const menu = document.getElementById("menu");
-  mockPlacement(trigger, menu);
-
-  openSurface(menu, { trigger, mobile: "sheet" });
-  closeSurface(menu);
-
-  expect(menu.getAttribute("role")).toBe("menu");
-  expect(menu.getAttribute("aria-modal")).toBe("false");
-});
-
-test("sheet close hides the backdrop immediately and removes it after transitions", async () => {
-  setBody('<button aria-controls="menu"></button><div id="menu" class="flyout"></div>');
-  const trigger = document.querySelector("button");
-  const menu = document.getElementById("menu");
-  mockPlacement(trigger, menu);
-  openSurface(menu, { trigger, mobile: "sheet" });
-
-  const backdrop = document.querySelector(".surface-backdrop");
-  let finish;
-  const finished = new Promise((resolve) => {
-    finish = resolve;
-  });
-  menu.getAnimations = () => [{ transitionProperty: "opacity", finished }];
-  backdrop.getAnimations = () => [];
-
-  closeSurface(menu);
-
-  expect(isOpen(menu)).toBe(false);
-  expect(backdrop.hidden).toBe(true);
-  expect(backdrop.isConnected).toBe(true);
-
-  finish();
-  await nextMicrotask();
-
-  expect(backdrop.isConnected).toBe(false);
-});
-
-test("sheet cleanup does not wait for an endless descendant animation", async () => {
-  setBody(
-    '<button aria-controls="menu"></button><div id="menu" class="flyout"><span></span></div>',
-  );
-  const trigger = document.querySelector("button");
-  const menu = document.getElementById("menu");
-  mockPlacement(trigger, menu);
-  openSurface(menu, { trigger, mobile: "sheet" });
-
-  const backdrop = document.querySelector(".surface-backdrop");
-  menu.getAnimations = () => [{ finished: new Promise(() => {}) }];
-  backdrop.getAnimations = () => [];
-
-  closeSurface(menu);
-  await nextMicrotask();
-
-  expect(backdrop.isConnected).toBe(false);
-});
-
-test("reopening a sheet cancels stale close cleanup", async () => {
-  setBody('<button aria-controls="menu"></button><div id="menu" class="flyout"></div>');
-  const trigger = document.querySelector("button");
-  const menu = document.getElementById("menu");
-  mockPlacement(trigger, menu);
-  openSurface(menu, { trigger, mobile: "sheet" });
-
-  const backdrop = document.querySelector(".surface-backdrop");
-  let finish;
-  const finished = new Promise((resolve) => {
-    finish = resolve;
-  });
-  menu.getAnimations = () => [{ transitionProperty: "opacity", finished }];
-  backdrop.getAnimations = () => [];
-
-  closeSurface(menu);
-  openSurface(menu, { trigger, mobile: "sheet" });
-
-  expect(backdrop.hidden).toBe(false);
-  expect(backdrop.isConnected).toBe(true);
-
-  finish();
-  await nextMicrotask();
-
-  expect(backdrop.isConnected).toBe(true);
   expect(isSurfaceOpen(menu)).toBe(true);
+  expect(menu.style.left).not.toBe("");
+  expect(menu.style.top).not.toBe("");
+  expect(menu.getAttribute("aria-modal")).toBeNull();
+  expect(document.body.children).toHaveLength(2);
 });
 
 test("default auto-close closes from outside clicks", () => {
@@ -479,18 +389,6 @@ test("data-flyout-close explicitly closes a manual surface", () => {
   expect(isSurfaceOpen(menu)).toBe(false);
 });
 
-test("manual auto-close also applies to the sheet backdrop", () => {
-  setBody('<button aria-controls="menu"></button><div id="menu" class="flyout"></div>');
-  const trigger = document.querySelector("button");
-  const menu = document.getElementById("menu");
-  mockPlacement(trigger, menu);
-
-  openSurface(menu, { trigger, mobile: "sheet", autoClose: false });
-  click(document.querySelector(".surface-backdrop"));
-
-  expect(isSurfaceOpen(menu)).toBe(true);
-});
-
 test("scroll dismissal ignores opening scroll and closes after new user input", async () => {
   setBody('<button id="source"></button><div id="menu" class="flyout"></div>');
   const source = document.getElementById("source");
@@ -537,7 +435,7 @@ test("unknown auto-close values fall back to the default policy", () => {
   expect(isSurfaceOpen(menu)).toBe(false);
 });
 
-test("removing an open surface leaves it disconnected and clears its backdrop", async () => {
+test("removing an open surface leaves it disconnected", async () => {
   setBody(
     '<section id="parent"><div id="menu" class="flyout"></div></section><button id="outside">x</button>',
   );
@@ -552,7 +450,6 @@ test("removing an open surface leaves it disconnected and clears its backdrop", 
   await nextMicrotask();
 
   expect(menu.isConnected).toBe(false);
-  expect(document.querySelector(".surface-backdrop")).toBe(null);
 });
 
 test("disconnectSurface closes a still-connected surface", () => {

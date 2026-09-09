@@ -312,7 +312,7 @@ discovers components through <code>data-enhance=&quot;tabs&quot;</code>, <code>d
 presentation class needed. Self-describing attributes (<code>data-mask</code>,
 <code>data-tooltip</code>, <code>data-context-menu</code>) stay framework-neutral by construction.</li>
 <li><strong><code>selectors.js</code></strong> lists the state classes the runtime <em>writes</em> (<code>is-open</code>,
-<code>was-validated</code>, <code>is-sheet</code>, …). Edit this file (or alias it in a bundler) to
+<code>was-validated</code>, …). Edit this file (or alias it in a bundler) to
 match a different CSS framework's state vocabulary. It is a read-side-only
 adapter — it does not bridge CSS class names to JS initialization.</li>
 <li><strong>One documented exception:</strong> validation reads <code>.field-error</code> (or its alias
@@ -389,8 +389,7 @@ or account for:</p>
    do not override with !important */
 /* no z-index: an open panel is promoted to the top layer, where
    numbers do not apply — see Layering in foundations/tokens */
-/* .is-open / .is-sheet / .surface-backdrop are written by surface.js
-   — style or ignore them */
+/* .is-open is written by surface.js — style or ignore it */
 /* --surface-anchor-width is set while an open surface is positioned */
 /* data-actual-surface is written by surface.js for teardown
    — never select on it */
@@ -434,8 +433,6 @@ widgets can veto or decorate opens, and context menus inject their own
 <tr><td><code>shift</code></td><td><code>true</code></td><td>Shift to stay within the boundary</td></tr>
 <tr><td><code>shiftPadding</code></td><td><code>4</code></td><td>Minimum space kept from the boundary</td></tr>
 <tr><td><code>scope</code></td><td>viewport</td><td>Boundary element</td></tr>
-<tr><td><code>mobile</code></td><td><code>&quot;auto&quot;</code></td><td>Sheet behavior</td></tr>
-<tr><td><code>breakpoint</code></td><td><code>768</code></td><td>Max viewport width for an automatic sheet</td></tr>
 <tr><td><code>autoClose</code></td><td><code>&quot;outside&quot;</code></td><td>Which clicks close the surface</td></tr>
 <tr><td><code>dismissOnScroll</code></td><td><code>false</code></td><td>Close on a scroll the user just started</td></tr>
 <tr><td><code>restoreFocusTo</code></td><td><code>trigger</code></td><td>Element focused on close</td></tr>

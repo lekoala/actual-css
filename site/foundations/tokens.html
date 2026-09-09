@@ -452,7 +452,7 @@ inherited density for the dimensions they share.</p>
 <p>A few cross-component helpers:</p>
 <ul>
 <li><code>--indicator-offset</code> / <code>--indicator-ring</code> — positioning and contrast ring for a status dot attached to <code>.avatar &gt; .badge:empty</code>.</li>
-<li><code>--backdrop-color</code> / <code>--backdrop-opacity</code> / <code>--backdrop-fill</code> — scrim color and opacity shared by <code>dialog.modal::backdrop</code>, <code>dialog.drawer::backdrop</code>, and <code>.surface-backdrop</code>. Override <code>--backdrop-opacity</code> per theme for a denser or lighter scrim.</li>
+<li><code>--backdrop-color</code> / <code>--backdrop-opacity</code> / <code>--backdrop-fill</code> — scrim color and opacity shared by <code>dialog.modal::backdrop</code> and <code>dialog.drawer::backdrop</code>. Override <code>--backdrop-opacity</code> per theme for a denser or lighter scrim.</li>
 </ul>
 <pre><code class="language-css">:root {
   --indicator-offset: 14.65%;      /* circle-aware inset */
@@ -473,12 +473,19 @@ inherited density for the dimensions they share.</p>
 </thead>
 <tbody>
 <tr><td><code>--z-sticky</code></td><td>10</td><td><code>form-actions.sticky</code>, <code>topbar</code></td></tr>
-<tr><td><code>--z-menu</code></td><td>20</td><td><code>fab</code>, <code>.surface-backdrop</code>, static <code>.flyout</code></td></tr>
+<tr><td><code>--z-menu</code></td><td>20</td><td><code>fab</code>, static <code>.flyout</code></td></tr>
 <tr><td><code>--z-status</code></td><td>60</td><td><code>status-bar</code></td></tr>
 </tbody>
 </table></div>
-<p><code>.surface-backdrop</code> sits just under the menus, at <code>calc(var(--z-menu) - 1)</code>. It is runtime-created and never promoted, and it is why <code>--z-menu</code> outlived the move to the top layer: the sheet it dims needs no number any more, but the scrim beneath it does. <code>.flyout</code> keeps the same declaration for a panel the runtime does not manage — one the platform has not promoted still stacks by number.</p>
-<p><code>status-bar</code> is at the top of the document layer: above sticky bars, the FAB and the scrim, and below any open dialog, menu or tooltip. That is the boundary between the two systems rather than a gap in the scale. Status messages are transient, non-critical feedback and their real contract is the live-region announcement — which is why <code>status.js</code> moves the singleton into an open modal dialog's subtree, since a modal inerts the rest of the document and promotion would not undo that.</p>
+<p><code>.flyout</code> keeps the <code>--z-menu</code> declaration for a panel the runtime does not
+manage — one the platform has not promoted still stacks by number.</p>
+<p><code>status-bar</code> is at the top of the document layer: above sticky bars and the FAB,
+and below any open dialog, menu or tooltip. That is the boundary between the
+two systems rather than a gap in the scale. Status messages are transient,
+non-critical feedback and their real contract is the live-region announcement
+— which is why <code>status.js</code> moves the singleton into an open modal dialog's
+subtree, since a modal inerts the rest of the document and promotion would not
+undo that.</p>
 <p>Stacking-context traps: these apply to overlays painted in the page, not to promoted ones. An element that is a DOM descendant of a container with <code>transform</code>, <code>filter</code>, <code>contain</code>, <code>isolation</code>, or <code>will-change</code> is confined to that ancestor's stacking context, and its z-index token only orders it against siblings within that context. Promotion escapes all of it — but do not move the markup to chase the effect: a panel or tooltip used from inside a modal dialog must be authored <em>inside</em> that dialog, because the top layer does not lift an element out of a modal's inertness.</p>
 <p>Scrollbar gutter: modal open/close can shift page layout when the classic scrollbar disappears. When a measured scrollbar is present, <code>modal.css</code> applies <code>scrollbar-gutter: stable</code> to the viewport so the page doesn't jump.</p>
 <h2 id="internal-tokens">Internal tokens</h2>
