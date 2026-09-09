@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tooltip coordinate space fixture</title>
+  <link rel="stylesheet" href="../../src/css/actual.full.css">
+  <script src="../../dist/actual.full.js" defer></script>
+  <style>
+    /* Tall enough that every trigger can be scrolled well past the boundary
+       and back, which is what the recovery case needs. */
+    #filler { block-size: 250vh; }
+    #bar { position: fixed; inset-block-start: 0; inset-inline-end: 0; padding: 0.5rem; }
+  </style>
+</head>
+<body style="margin:0; padding:1rem">
+
+  <!-- Viewport-anchored by an ancestor: the pattern .fab and .status-bar use.
+       The page scroll must not move its tip. -->
+  <div id="bar">
+    <button id="fixed-trigger" class="btn" type="button" data-tooltip="Fixed bar">Bar</button>
+  </div>
+
+  <p><button id="page-trigger" class="btn" type="button" data-tooltip="Scrolls with the page">Page</button></p>
+
+  <div id="filler"></div>
+
+  <p><button id="low-trigger" class="btn" type="button" data-tooltip="Far down the page">Low</button></p>
+
+  <!-- A modal dialog is laid out against the viewport and the page still
+       scrolls behind it, so its triggers are viewport-anchored even though the
+       dialog computes position: absolute. Both authoring forms are here: the
+       explicit tip has to be inside the dialog subtree to escape its
+       inertness, and the shorthand tip is generated into it. -->
+  <button id="open-dialog" class="btn" type="button">Open dialog</button>
+  <dialog id="dlg" class="modal">
+    <p><button id="modal-trigger" class="btn" type="button"
+               data-tooltip aria-describedby="modal-tip">Explicit</button></p>
+    <div class="tooltip" role="tooltip" id="modal-tip" hidden>In a modal</div>
+    <p><button id="modal-shorthand" class="btn" type="button" data-tooltip="Generated">Shorthand</button></p>
+  </dialog>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      document.getElementById("open-dialog").addEventListener("click", () => {
+        document.getElementById("dlg").showModal();
+      });
+    });
+  </script>
+</body>
+</html>

@@ -326,6 +326,11 @@
    grid-item property, so this declaration is meaningless on anything but a
    direct child of the row. Elsewhere the label is addressed as a descendant —
    the framework owns the structure, and repeating it buys nothing. */
+/* biome-ignore lint/style/noDescendingSpecificity: the rule compares the
+   trailing .step-label alone. The selector it pairs this with,
+   `.steps > [aria-current="step"] .step-label`, sets font-weight on a
+   different root; align-self is a grid-item property and is never in
+   contention. Reordering would only move this out of the vertical section. */
 .steps-vertical > li > .step-label {
   align-self: center;
 }

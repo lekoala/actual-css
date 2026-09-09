@@ -159,16 +159,26 @@ const stop = autoUpdate(trigger, float, () => {
 
 Options passed to `reposition()`:
 
-| Option         | Default          | Contract                                     |
-| -------------- | ---------------- | -------------------------------------------- |
-| `placement`    | `"bottom-start"` | Preferred side and alignment                 |
-| `distance`     | `0`              | Gap from the reference element               |
-| `flip`         | `true`           | Flip when the preferred side is out of view  |
-| `shift`        | `true`           | Shift along the cross axis to stay in bounds |
-| `shiftPadding` | `4`              | Minimum space kept from the boundary         |
-| `scope`        | viewport         | Boundary element for overflow decisions      |
+| Option            | Default          | Contract                                     |
+| ----------------- | ---------------- | -------------------------------------------- |
+| `placement`       | `"bottom-start"` | Preferred side and alignment                 |
+| `distance`        | `0`              | Gap from the reference element               |
+| `flip`            | `true`           | Flip when the preferred side is out of view  |
+| `shift`           | `true`           | Shift along the cross axis to stay in bounds |
+| `shiftPadding`    | `4`              | Minimum space kept from the boundary         |
+| `scope`           | viewport         | Boundary element for overflow decisions      |
+| `coordinateSpace` | `"viewport"`     | Space the written `left`/`top` use           |
 
 `placement` takes a `-start` or `-end` alignment suffix.
+
+Measurement is always in viewport coordinates; `coordinateSpace` only changes
+what is written. `"viewport"` expects `position: fixed`; `"document"` adds the
+page scroll and expects `position: absolute` against the initial containing
+block, which the top layer supplies to an open popover. The browser then
+scrolls the element with the page rather than `autoUpdate()` correcting it a
+frame later — right for a reference that scrolls with the page, wrong for a
+fixed or sticky one. `tooltip.js` chooses per tooltip; `surface.js` always uses
+viewport coordinates.
 
 `@lekoala/floating` is the standalone positioning dependency used by the
 runtime. `autoUpdate(reference, float, callback)` batches scroll, resize, and

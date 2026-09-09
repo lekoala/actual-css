@@ -9,7 +9,8 @@ by promoting it to the top layer with `popover="manual"`.
 
 - Use `data-tooltip` on the trigger. With text (`data-tooltip="Help"`), the tooltip element is generated. Empty (`data-tooltip`) marks an explicit tooltip connected via `aria-describedby`.
 - Tooltips are supplemental. Do not put required information or interactive controls inside them.
-- Show on hover and focus. Hide on Escape, blur, pointer leave, or scroll when appropriate.
+- Show on hover and focus. Hide on Escape, blur, or pointer leave.
+- A trigger scrolled out of view takes its tooltip down and brings it back when it returns; only a dismissal ends the tooltip.
 - Author an explicit tooltip with `hidden`. The runtime removes it when it takes the lifecycle over; until then it is what keeps the tooltip off screen.
 - JavaScript can generate tooltip elements from `data-tooltip`.
 - Add `data-tooltip-click` to toggle it on click instead of hover/focus.
@@ -21,8 +22,8 @@ by promoting it to the top layer with `popover="manual"`.
 A `.tooltip[popover]` may use a native or third-party-owned popover lifecycle.
 Actual removes the native inset, margin, and overflow that conflict with
 positioning and with the projecting arrow, while leaving bare `[popover]`
-elements untouched. The lifecycle owner must still write the fixed viewport
-coordinates and arrow position; Actual only supplies the presentation.
+elements untouched. The lifecycle owner still writes `position`, the
+coordinates, and the arrow position; Actual only supplies the presentation.
 
 Do not combine them. `tooltip.js` writes `popover="manual"` on every tooltip it
 manages and calls `showPopover()` / `hidePopover()` itself, so a tooltip handed
@@ -112,6 +113,15 @@ viewport-aware maximum width.
 
 Set `data-tooltip-placement` to control where the tooltip appears relative to
 its trigger. The arrow follows the placement automatically.
+
+The runtime also picks the coordinate space, and writes `position` to match. A
+tooltip whose trigger scrolls with the page is placed in document coordinates
+and `position: absolute`, so the browser scrolls it with the page instead of
+the positioner correcting it a frame later — the lag visible while scrolling on
+a touch device. A trigger that is viewport-anchored — inside a fixed or sticky
+ancestor, an open popover, or a modal dialog — keeps `position: fixed`. Do not
+override `position` on a tooltip the runtime manages. See
+[Tooltip coordinate space](https://github.com/lekoala/actual-css/blob/master/docs/design-notes/tooltip-coordinate-space.md).
 
 ```html demo
 <p>

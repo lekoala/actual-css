@@ -1,6 +1,6 @@
 import { afterEach, expect, test } from "bun:test";
 import { cleanupDOM, mockRect, nextMicrotask, setupDOM } from "./helpers/dom.js";
-import { nextFrame } from "./helpers/layout.js";
+import { createLayout, nextFrame } from "./helpers/layout.js";
 
 let importId = 0;
 /** The tooltip module instance for the current test — each load is cache-busted. */
@@ -38,6 +38,23 @@ function waitForShow() {
 
 function waitForHide() {
   return new Promise((resolve) => setTimeout(resolve, 140));
+}
+
+// autoUpdate() listens for scroll on the document, in capture. An event
+// dispatched on window has window as its whole propagation path and never
+// reaches it, so createLayout's own scrollTo() moves the model without waking
+// the positioner.
+async function scrollPage(layout, value) {
+  await layout.scrollTo(value);
+  document.dispatchEvent(new Event("scroll"));
+  await nextFrame();
+}
+
+/** A generated tip, made measurable — happy-dom lays nothing out. */
+function measurable(tip) {
+  mockRect(tip, { width: 60, height: 20 });
+  tip.checkVisibility = () => true;
+  return tip;
 }
 
 afterEach(() => {
@@ -130,6 +147,81 @@ test("data-tooltip-visible starts hidden when its trigger is outside the viewpor
   api = await import(`../src/js/tooltip.js?test=${++importId}`);
 
   expect(visible(document.querySelector('[role="tooltip"]'))).toBe(false);
+});
+
+/*
+ * The bug this covers, as reported on a touch device: focus a trigger, scroll
+ * it out of view, scroll back — and nothing brings the tooltip back. A second
+ * tap on an already-focused trigger fires no focusin, so the recovery cannot
+ * come from an interaction event; it has to come from the tracker, which means
+ * reposition() returning false must not end the tip.
+ */
+test("a trigger scrolled out of view takes its tooltip down and brings it back", async () => {
+  await loadTooltip('<button data-tooltip="Help">Trigger</button>');
+  const observed = new Set();
+  window.ResizeObserver = class ResizeObserver {
+    observe(element) {
+      observed.add(element);
+    }
+
+    unobserve(element) {
+      observed.delete(element);
+    }
+
+    disconnect() {
+      observed.clear();
+    }
+  };
+  const layout = createLayout({ height: 600, scrollHeight: 3000 });
+  const trigger = document.querySelector("button");
+  layout.place(trigger, 300, 40);
+
+  trigger.dispatchEvent(new FocusEvent("focusin", { bubbles: true }));
+  const tip = measurable(document.querySelector('[role="tooltip"]'));
+  await waitForShow();
+  expect(visible(tip)).toBe(true);
+
+  await scrollPage(layout, 2000);
+  expect(visible(tip)).toBe(false);
+  // Tracking is what brings it back, so it must outlive the tip going down.
+  expect(observed).toEqual(new Set([trigger, tip]));
+
+  await scrollPage(layout, 100);
+  expect(visible(tip)).toBe(true);
+
+  // The interaction still owns the end of it.
+  trigger.dispatchEvent(new FocusEvent("blur"));
+  await waitForHide();
+  expect(visible(tip)).toBe(false);
+  expect(observed.size).toBe(0);
+});
+
+/*
+ * Which space the coordinates are written in is a property of the trigger, not
+ * of the tip: document coordinates are only correct while the trigger scrolls
+ * with the page. The modal-dialog half of the rule needs :modal and a real top
+ * layer — see tests/browser/tooltip-coordinate-space.test.js.
+ */
+test("tooltip coordinates follow the page unless the trigger is viewport-anchored", async () => {
+  await loadTooltip(`
+    <button id="in-page" data-tooltip="Page">Page</button>
+    <div style="position: fixed">
+      <button id="in-fixed" data-tooltip="Fixed">Fixed</button>
+    </div>
+  `);
+  const tipFor = (id) =>
+    document.getElementById(document.getElementById(id).getAttribute("aria-describedby"));
+
+  for (const id of ["in-page", "in-fixed"]) {
+    const trigger = document.getElementById(id);
+    mockRect(trigger, { x: 100, y: 100, width: 80, height: 30 });
+    hover(trigger);
+    measurable(tipFor(id));
+  }
+  await waitForShow();
+
+  expect(tipFor("in-page").style.position).toBe("absolute");
+  expect(tipFor("in-fixed").style.position).toBe("fixed");
 });
 
 test("tooltip tracking only runs while the tooltip is visible", async () => {

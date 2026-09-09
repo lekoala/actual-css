@@ -71,7 +71,7 @@
     "./js/tab": "./src/js/tab.js",
     "./js/tooltip": "./src/js/tooltip.js",
     "./js/validation": "./src/js/validation.js",
-"./js/status": "./src/js/status.js",
+    "./js/status": "./src/js/status.js",
     "./js/surface": "./src/js/surface.js",
     "./reserved-classes.json": "./reserved-classes.json",
     "./components.json": "./components.json",
@@ -146,10 +146,10 @@
     "prepublishOnly": "bun run build:all"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.5",
-    "happy-dom": "^20.11"
+    "@biomejs/biome": "^2.5.12",
+    "happy-dom": "^20.14.0"
   },
   "dependencies": {
-    "@lekoala/floating": "^0.1.1"
+    "@lekoala/floating": "^0.2.0"
   }
 }
