@@ -220,7 +220,8 @@ by promoting it to the top layer with <code>popover=&quot;manual&quot;</code>.</
 <ul>
 <li>Use <code>data-tooltip</code> on the trigger. With text (<code>data-tooltip=&quot;Help&quot;</code>), the tooltip element is generated. Empty (<code>data-tooltip</code>) marks an explicit tooltip connected via <code>aria-describedby</code>.</li>
 <li>Tooltips are supplemental. Do not put required information or interactive controls inside them.</li>
-<li>Show on hover and focus. Hide on Escape, blur, pointer leave, or scroll when appropriate.</li>
+<li>Show on hover and focus. Hide on Escape, blur, or pointer leave.</li>
+<li>A trigger scrolled out of view takes its tooltip down and brings it back when it returns; only a dismissal ends the tooltip.</li>
 <li>Author an explicit tooltip with <code>hidden</code>. The runtime removes it when it takes the lifecycle over; until then it is what keeps the tooltip off screen.</li>
 <li>JavaScript can generate tooltip elements from <code>data-tooltip</code>.</li>
 <li>Add <code>data-tooltip-click</code> to toggle it on click instead of hover/focus.</li>
@@ -232,8 +233,8 @@ by promoting it to the top layer with <code>popover=&quot;manual&quot;</code>.</
 <p>A <code>.tooltip[popover]</code> may use a native or third-party-owned popover lifecycle.
 Actual removes the native inset, margin, and overflow that conflict with
 positioning and with the projecting arrow, while leaving bare <code>[popover]</code>
-elements untouched. The lifecycle owner must still write the fixed viewport
-coordinates and arrow position; Actual only supplies the presentation.</p>
+elements untouched. The lifecycle owner still writes <code>position</code>, the
+coordinates, and the arrow position; Actual only supplies the presentation.</p>
 <p>Do not combine them. <code>tooltip.js</code> writes <code>popover=&quot;manual&quot;</code> on every tooltip it
 manages and calls <code>showPopover()</code> / <code>hidePopover()</code> itself, so a tooltip handed
 to the runtime has its mode overwritten. The runtime only ever reaches a
@@ -371,6 +372,14 @@ viewport-aware maximum width.</p>
 <h2 id="positioning">Positioning</h2>
 <p>Set <code>data-tooltip-placement</code> to control where the tooltip appears relative to
 its trigger. The arrow follows the placement automatically.</p>
+<p>The runtime also picks the coordinate space, and writes <code>position</code> to match. A
+tooltip whose trigger scrolls with the page is placed in document coordinates
+and <code>position: absolute</code>, so the browser scrolls it with the page instead of
+the positioner correcting it a frame later — the lag visible while scrolling on
+a touch device. A trigger that is viewport-anchored — inside a fixed or sticky
+ancestor, an open popover, or a modal dialog — keeps <code>position: fixed</code>. Do not
+override <code>position</code> on a tooltip the runtime manages. See
+<a href="https://github.com/lekoala/actual-css/blob/master/docs/design-notes/tooltip-coordinate-space.md">Tooltip coordinate space</a>.</p>
 </div>
 <div class="docs-example">
   <div class="docs-preview">

@@ -43,13 +43,13 @@
   vertical-align: baseline;
 }
 
-.table thead th {
-  vertical-align: bottom;
-}
-
 .table th {
   color: var(--text-muted);
   font-weight: var(--font-weight-semibold);
+}
+
+.table thead th {
+  vertical-align: bottom;
 }
 
 .table thead {

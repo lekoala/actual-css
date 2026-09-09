@@ -32,6 +32,9 @@
 
 ### Changed
 
+- `@lekoala/floating` 0.2.0.
+- Tooltips write document coordinates and `position: absolute` when their trigger scrolls with the page, so the browser carries the tip instead of the positioner correcting it a frame later; a viewport-anchored trigger (fixed, sticky, open popover, modal dialog) keeps `position: fixed`.
+- A tooltip whose trigger leaves the positioning boundary is hidden and restored when it returns, instead of being torn down. See `docs/design-notes/tooltip-coordinate-space.md`.
 - `.sm` / `.lg` now scale participating component families locally; inherited density moves to `.compact` / `.spacious`.
 - The `.soft` hover is a single fill change: the inset `--btn-hover-overlay` stays reserved for solid buttons and solid/empty badges, and `--soft-hover-alpha` owns the interactive soft fill.
 - The default palette declares per-role `--*-soft-fg` hooks (the intent rebated toward `--text`) so soft ink keeps ≥ 4.5:1 against the hovered soft fill in light and dark; presets and custom `[data-theme]` islands keep the `--soft-fg-mix` derivation unless they declare the hooks themselves.
@@ -71,6 +74,8 @@
 
 ### Fixed
 
+- A tooltip shown by focus on a touch device is no longer lost for good after its trigger scrolls out of view and back: a second tap fires neither `focusin` nor `mouseover`, so nothing could bring it back.
+- A shared explicit tooltip re-shown from another trigger resubscribes its position tracking, instead of keeping the previous trigger observed.
 - `select.css` and `modal.css` preserve select appearance and modal body scrolling in Degraded Firefox 78–83 using `:not(:is(...))` without changing specificity.
 - `check:compat` detects direct selector lists in `:not()` while accepting lists nested in `:is()` or `:where()`.
 - The Alert class reference is one table again: a stray paragraph split it and

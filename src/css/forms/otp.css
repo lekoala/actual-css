@@ -107,6 +107,12 @@
   cursor: not-allowed;
 }
 
+/* biome-ignore lint/style/noDescendingSpecificity: disabled must come last of
+   the cell states, and the reorder the rule asks for would invert that. A
+   disabled input is barred from constraint validation, so `:invalid` and
+   `:focus` cannot reach it at all; the only overlap left is an authored
+   aria-invalid, where equal specificity and source order are what make
+   disabled — not danger — the colour a dead field reads as. */
 .otp > input:disabled ~ span {
   --otp-cell-bg: var(--surface-subtle);
   --otp-cell-border: var(--state-disabled);

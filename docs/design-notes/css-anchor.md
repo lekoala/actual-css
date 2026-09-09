@@ -75,7 +75,9 @@ One of:
 - a deliberate contract change — an out-of-view surface hides instead of
   closing. That is a component decision, not a transport swap, and it has the
   same shape as the `popover="auto"` rejection in
-  [popover-manual-poc](popover-manual-poc.md).
+  [popover-manual-poc](popover-manual-poc.md). It has been taken for tooltips,
+  which have no focus restoration, event or Escape entry to lose — see
+  [tooltip-coordinate-space](tooltip-coordinate-space.md).
 
 Browser support is a precondition for either, never the trigger on its own.
 

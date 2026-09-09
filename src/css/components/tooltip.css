@@ -1,8 +1,11 @@
 /*
  * Tooltip — supplemental label overlaid near a trigger.
  *
- * Position, placement, and arrow position are managed by JavaScript
- * via position: fixed, left, top, data-placement, and --arrow-x.
+ * Position, placement, and arrow position are managed by JavaScript via left,
+ * top, data-placement, and --arrow-x. The runtime also owns `position`: it
+ * writes `absolute` for a tip whose trigger scrolls with the page, so the
+ * browser carries the tip along instead of the positioner correcting it a
+ * frame later, and `fixed` — the declaration below — for every other trigger.
  * Visibility is the Popover lifecycle: tooltip.js promotes the tip to the top
  * layer with popover="manual". CSS owns entry and exit animation.
  *

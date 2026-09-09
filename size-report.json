@@ -1,12 +1,12 @@
 {
-  "totalRaw": 284184,
+  "totalRaw": 285236,
   "core": {
     "minified": 12220,
     "brotli": 2759
   },
   "full": {
     "minified": 122763,
-    "brotli": 17818
+    "brotli": 17781
   },
   "js": {
     "core": {
@@ -14,15 +14,15 @@
       "brotli": 2229
     },
     "full": {
-      "bytes": 54899,
-      "brotli": 16084
+      "bytes": 55514,
+      "brotli": 16267
     }
   },
   "fileCount": 108,
   "files": [
     {
       "file": "components/steps.css",
-      "raw": 13032
+      "raw": 13390
     },
     {
       "file": "core/tokens.css",
@@ -78,7 +78,7 @@
     },
     {
       "file": "components/tooltip.css",
-      "raw": 4651
+      "raw": 4904
     },
     {
       "file": "layout/column-layout.css",
@@ -101,6 +101,10 @@
       "raw": 4434
     },
     {
+      "file": "forms/otp.css",
+      "raw": 4262
+    },
+    {
       "file": "forms/switch.css",
       "raw": 4121
     },
@@ -115,10 +119,6 @@
     {
       "file": "components/join.css",
       "raw": 3837
-    },
-    {
-      "file": "forms/otp.css",
-      "raw": 3821
     },
     {
       "file": "utilities/base.css",

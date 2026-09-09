@@ -367,9 +367,18 @@ const stop = autoUpdate(trigger, float, () =&gt; {
 <tr><td><code>shift</code></td><td><code>true</code></td><td>Shift along the cross axis to stay in bounds</td></tr>
 <tr><td><code>shiftPadding</code></td><td><code>4</code></td><td>Minimum space kept from the boundary</td></tr>
 <tr><td><code>scope</code></td><td>viewport</td><td>Boundary element for overflow decisions</td></tr>
+<tr><td><code>coordinateSpace</code></td><td><code>&quot;viewport&quot;</code></td><td>Space the written <code>left</code>/<code>top</code> use</td></tr>
 </tbody>
 </table></div>
 <p><code>placement</code> takes a <code>-start</code> or <code>-end</code> alignment suffix.</p>
+<p>Measurement is always in viewport coordinates; <code>coordinateSpace</code> only changes
+what is written. <code>&quot;viewport&quot;</code> expects <code>position: fixed</code>; <code>&quot;document&quot;</code> adds the
+page scroll and expects <code>position: absolute</code> against the initial containing
+block, which the top layer supplies to an open popover. The browser then
+scrolls the element with the page rather than <code>autoUpdate()</code> correcting it a
+frame later — right for a reference that scrolls with the page, wrong for a
+fixed or sticky one. <code>tooltip.js</code> chooses per tooltip; <code>surface.js</code> always uses
+viewport coordinates.</p>
 <p><code>@lekoala/floating</code> is the standalone positioning dependency used by the
 runtime. <code>autoUpdate(reference, float, callback)</code> batches scroll, resize, and
 element-resize callbacks per document and returns a stop handle; it observes

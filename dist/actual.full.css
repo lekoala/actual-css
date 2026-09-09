@@ -3363,6 +3363,12 @@ small {
   cursor: not-allowed;
 }
 
+/* biome-ignore lint/style/noDescendingSpecificity: disabled must come last of
+   the cell states, and the reorder the rule asks for would invert that. A
+   disabled input is barred from constraint validation, so `:invalid` and
+   `:focus` cannot reach it at all; the only overlap left is an authored
+   aria-invalid, where equal specificity and source order are what make
+   disabled — not danger — the colour a dead field reads as. */
 .otp > input:disabled ~ span {
   --otp-cell-bg: var(--surface-subtle);
   --otp-cell-border: var(--state-disabled);
@@ -5185,8 +5191,11 @@ dialog.drawer > form > header {
 /*
  * Tooltip — supplemental label overlaid near a trigger.
  *
- * Position, placement, and arrow position are managed by JavaScript
- * via position: fixed, left, top, data-placement, and --arrow-x.
+ * Position, placement, and arrow position are managed by JavaScript via left,
+ * top, data-placement, and --arrow-x. The runtime also owns `position`: it
+ * writes `absolute` for a tip whose trigger scrolls with the page, so the
+ * browser carries the tip along instead of the positioner correcting it a
+ * frame later, and `fixed` — the declaration below — for every other trigger.
  * Visibility is the Popover lifecycle: tooltip.js promotes the tip to the top
  * layer with popover="manual". CSS owns entry and exit animation.
  *
@@ -6798,6 +6807,11 @@ a.avatar[aria-disabled="true"] {
    grid-item property, so this declaration is meaningless on anything but a
    direct child of the row. Elsewhere the label is addressed as a descendant —
    the framework owns the structure, and repeating it buys nothing. */
+/* biome-ignore lint/style/noDescendingSpecificity: the rule compares the
+   trailing .step-label alone. The selector it pairs this with,
+   `.steps > [aria-current="step"] .step-label`, sets font-weight on a
+   different root; align-self is a grid-item property and is never in
+   contention. Reordering would only move this out of the vertical section. */
 .steps-vertical > li > .step-label {
   align-self: center;
 }
@@ -7416,13 +7430,13 @@ a.list-item:hover {
   vertical-align: baseline;
 }
 
-.table thead th {
-  vertical-align: bottom;
-}
-
 .table th {
   color: var(--text-muted);
   font-weight: var(--font-weight-semibold);
+}
+
+.table thead th {
+  vertical-align: bottom;
 }
 
 .table thead {

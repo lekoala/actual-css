@@ -26,6 +26,13 @@
  * Show:       hover + focus (150ms delay), click toggle, or always visible
  * Hide:       blur, pointer leave, Escape
  *
+ * Geometry:   a trigger scrolled out of the positioning boundary takes its tip
+ *             down and keeps it tracked, so scrolling back brings the same tip
+ *             up again with no second hover or tap.
+ *
+ * Coordinates: viewport by default, document coordinates whenever the trigger
+ *             scrolls with the page. See coordinateSpaceFor().
+ *
  * Transport:  the top layer, via popover="manual", written by the runtime on
  *             every tip it manages. A .tooltip[popover] with no data-tooltip
  *             trigger pointing at it is never reached from here and stays the
@@ -45,11 +52,14 @@ const HIDE_DELAY_MS = 100;
  * @property {Set<Element>} refs Triggers that currently reference this tip.
  * @property {Element | null} activeRef Trigger that last showed this tip.
  * @property {AbortController} controller Tip-level event listener cleanup.
- * @property {(() => void) | null} stopTracking Floating-position cleanup while visible.
+ * @property {(() => void) | null} stopTracking Floating-position cleanup while wanted.
+ * @property {Element | null} trackedRef Reference the current subscription observes.
  * @property {(() => void) | null} unregisterEscape Escape-stack cleanup while visible and dismissable.
  * @property {Element | null} escapeRef Trigger represented by the current Escape-stack entry.
  * @property {boolean} generated True when the tip was created from data-tooltip text.
+ * @property {boolean} wanted True while the interaction asks for this tip, positionable or not.
  * @property {boolean} visible True while the tip is promoted to the top layer.
+ * @property {"viewport" | "document"} space Coordinate space the tip is written in.
  * @property {ReturnType<typeof setTimeout> | null} timer Pending delayed show.
  * @property {ReturnType<typeof setTimeout> | null} hideTimer Pending delayed hide.
  * @property {boolean} hovered Pointer is over the active trigger.
@@ -104,6 +114,61 @@ function prepareTip(tip) {
 /** True while the tip is promoted. The runtime's state, not :popover-open. */
 export function isTooltipVisible(tip) {
   return tipStates.get(tip)?.visible === true;
+}
+
+/*
+ * Coordinate space, resolved once per shown tip.
+ *
+ * The engine always measures in viewport coordinates; the space only decides
+ * what gets written. Document coordinates let the browser scroll the tip along
+ * with the page, so it stays attached during touch scrolling instead of
+ * trailing its trigger until the next autoUpdate() frame. That holds only
+ * while the trigger scrolls with the page too: against a viewport-anchored
+ * trigger the browser would carry the tip away on every scroll and each update
+ * would snap it back, which is worse than the lag it removes.
+ *
+ * Which is why this asks about the trigger, not about the tip. An open popover
+ * is in the top layer, where an absolutely positioned box resolves against the
+ * initial containing block whatever its ancestors do — measured for
+ * position: relative, transform, filter, contain and both dialog modes — so
+ * the tip's own placement never enters into it.
+ */
+const VIEWPORT_ANCHORED = "dialog:modal, :popover-open";
+
+function isViewportAnchored(ref) {
+  const win = ref.ownerDocument?.defaultView;
+  if (!win) return true;
+
+  // A modal dialog and an open popover are laid out against the viewport
+  // without computing `fixed` themselves, so the walk below cannot see them.
+  try {
+    if (ref.closest(VIEWPORT_ANCHORED)) return true;
+  } catch {
+    /* An engine without :modal / :popover-open: the walk is all there is. */
+  }
+
+  for (let el = ref; el; el = el.parentElement) {
+    const { position } = win.getComputedStyle(el);
+    // Sticky counts even while unstuck: it stops scrolling with the page
+    // without any DOM change to re-resolve this on.
+    if (position === "fixed" || position === "sticky") return true;
+  }
+  return false;
+}
+
+/** @returns {"viewport" | "document"} */
+function coordinateSpaceFor(ref) {
+  return isViewportAnchored(ref) ? "viewport" : "document";
+}
+
+/*
+ * Document coordinates need the initial containing block, which the top layer
+ * supplies to an absolutely positioned box. Viewport coordinates need `fixed`,
+ * which is also what .tooltip declares, so the CSS default and the pre-show
+ * state agree.
+ */
+function applyCoordinateSpace(tip, space) {
+  tip.style.position = space === "document" ? "absolute" : "fixed";
 }
 
 function placementFor(ref) {
@@ -161,48 +226,65 @@ function nextTooltipId(doc) {
   return id;
 }
 
-function repositionTip(ref, tip) {
+function repositionTip(ref, tip, space) {
   return reposition(ref, tip, {
     placement: placementFor(ref),
     distance: 6,
     flip: true,
     shift: true,
+    coordinateSpace: space,
   });
 }
 
+/*
+ * One update, from show() or from a tracking tick.
+ *
+ * Two separate notions, deliberately: `wanted` is what the interaction asks
+ * for — hover, focus, a click toggle, data-tooltip-visible — and `visible` is
+ * what is actually promoted. They come apart whenever the trigger leaves the
+ * positioning boundary, because reposition() returning false means "not
+ * positionable right now", not "the interaction is over": the tip goes down
+ * and its tracking stays, so scrolling the trigger back into view brings the
+ * same tip up again with no second hover or tap. Only hideTip() ends a tip.
+ *
+ * A closed popover has no box to measure, so the tip has to be promoted
+ * before it can be positioned, and demoted again when that fails.
+ */
 function updateTrackedTip(tip, state) {
   const ref = state.activeRef;
-  if (!ref) return;
+  if (!ref || !state.wanted) return;
 
-  // Two separate notions, deliberately: `pinned` is the author's policy, and
-  // state.visible is what is actually rendered. A pinned tip is not always
-  // shown — it goes down whenever its trigger leaves the positioning
-  // boundary, and has to come back up before it can be measured again, since
-  // a closed popover has no box to position.
-  const pinned = isAlwaysVisible(ref);
-  if (pinned && !state.visible && showTransport(tip)) state.visible = true;
-  if (!state.visible || repositionTip(ref, tip)) {
-    syncEscapeDismissal(tip, state);
-    return;
+  if (!state.visible) {
+    if (!showTransport(tip)) return;
+    state.visible = true;
   }
 
-  if (pinned) {
+  if (!repositionTip(ref, tip, state.space)) {
     state.visible = false;
     hideTransport(tip);
-  } else {
-    hideTip(tip, true);
   }
+  syncEscapeDismissal(tip, state);
 }
 
+// A subscription observes one reference, so a shared tip re-shown from another
+// trigger has to resubscribe — tracking now outlives a demoted tip, and would
+// otherwise keep watching the trigger that is no longer active.
 function startTracking(tip, state) {
-  if (state.stopTracking) return;
+  if (state.stopTracking) {
+    if (state.trackedRef === state.activeRef) return;
+    stopTracking(state);
+  }
 
+  state.trackedRef = state.activeRef;
   state.stopTracking = autoUpdate(state.activeRef, tip, () => updateTrackedTip(tip, state));
 }
 
 function stopTracking(state) {
   state?.stopTracking?.();
-  if (state) state.stopTracking = null;
+  if (state) {
+    state.stopTracking = null;
+    state.trackedRef = null;
+  }
 }
 
 function syncEscapeDismissal(tip, state) {
@@ -232,7 +314,10 @@ function hideTip(tip, force = false) {
     clearTimeout(state.hideTimer);
     state.hideTimer = null;
   }
-  if (state) state.visible = false;
+  if (state) {
+    state.wanted = false;
+    state.visible = false;
+  }
   hideTransport(tip);
   state?.unregisterEscape?.();
   if (state) {
@@ -274,10 +359,13 @@ function wireTip(tip, options = {}) {
     activeRef: null,
     controller,
     stopTracking: null,
+    trackedRef: null,
     unregisterEscape: null,
     escapeRef: null,
     generated: options.generated === true,
+    wanted: false,
     visible: false,
+    space: "viewport",
     timer: null,
     hideTimer: null,
     hovered: false,
@@ -413,15 +501,14 @@ function show(tip, ref, immediate = false) {
   if (!state) return;
 
   state.activeRef = ref;
+  state.space = coordinateSpaceFor(ref);
+  applyCoordinateSpace(tip, state.space);
   syncEscapeDismissal(tip, state);
   clearHide(tip);
   if (state.timer) clearTimeout(state.timer);
   const reveal = () => {
     state.timer = null;
-    if (!state.visible) {
-      if (!showTransport(tip)) return;
-      state.visible = true;
-    }
+    state.wanted = true;
     startTracking(tip, state);
     updateTrackedTip(tip, state);
   };
