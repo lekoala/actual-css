@@ -7,6 +7,7 @@
 - `applyEnhancement()` applies named behavior tokens through an application selector and optional scope, preserves existing tokens and refreshes registered behaviors.
 - `.accordion.flush` and `.accordion.separated` container treatments: bare separators for embedding inside an existing surface, and independent item cards.
 - Popover transport probe: `demo/templates/popover-transport.html`.
+- Adaptive filter surface demo: `demo/templates/adaptive-surface.html` composes a synchronized anchored flyout and modal bottom drawer without extending the core API.
 - Settings modal composition demo: `demo/templates/settings-modal.html`.
 - `.list` rows accept any combination of leading, content and trailing regions.
 - `bun run serve`, a static server for opening demo pages from another device.
@@ -46,6 +47,7 @@
   the global `--soft-fg-mix` derivation kept as the fallback.
 - Interactive surfaces enter the top layer through `popover="manual"` instead
   of being moved to `body` or the nearest `<dialog>`.
+- Flyouts and context menus stay anchored non-modal popovers at every viewport size; `data-flyout-mobile`, `data-flyout-breakpoint`, the responsive sheet presentation, and its generated backdrop are removed.
 - `.is-open` is the only state `surface.js` writes; `prepareSurface()` removes
   `[hidden]` and sets `popover="manual"` over any author value.
 - `flyout.css` and `tooltip.css` drop their `@supports selector(:popover-open)`
