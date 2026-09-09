@@ -65,6 +65,25 @@ The modal case is the one worth naming, because a modal dialog does **not**
 stop the page from scrolling behind it — measured, wheel included. A trigger
 inside one is as viewport-anchored as a fixed bar, and keeps `position: fixed`.
 
+## What document coordinates cost
+
+An absolutely positioned box in the top layer joins the document's scrollable
+overflow; a fixed one never does. The scrollable height becomes the greater of
+the content's own bottom and the tip's, and the threshold is exact: walking a
+20px tip down a 2000px document in Chrome, `scrollHeight` reads 2000 for every
+tip bottom through 2000, and the tip's own bottom from 2001 on.
+
+So a tip that overflows the content raises the scroll maximum while it is up,
+and hiding it clamps back any position only that tip made reachable: the page
+appears to jump upwards on every show and hide. Worth remembering if something
+like it ever shows up, because nothing here defends against it — placement
+does. Flip and shift put the tip inside the viewport, which at any scroll
+position is inside the document, and only overflow the engine explicitly
+accepts, for a tip it could not fit, can pass the end of the content. The
+demote/promote path needs nothing either: the document does not change size
+while a tip is down, so the coordinates it comes back up with are still inside
+it.
+
 ## `false` is a geometry answer
 
 `reposition()` returns `false` when it cannot place the element, an anchor

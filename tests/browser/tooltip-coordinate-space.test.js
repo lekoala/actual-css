@@ -168,6 +168,73 @@ it("a tip inside a modal dialog stays attached while the page scrolls behind it"
 });
 
 /*
+ * A tooltip must not change what the page can scroll to.
+ *
+ * This is the cost document coordinates carry and viewport ones do not: an
+ * absolutely positioned box in the top layer joins the document's scrollable
+ * overflow, so the scrollable height becomes the greater of the content's own
+ * bottom and the tip's. A tip that overflows the content raises the scroll
+ * maximum while it is up, and hiding it clamps back any position only that tip
+ * made reachable — the page jumping upwards on every show and hide.
+ *
+ * What keeps it out of reach is placement: flip and shift put the tip inside
+ * the viewport, which at any scroll position is inside the document. Measured
+ * at the bottom of the page and across the demote/promote path, where the
+ * margin for error is zero.
+ */
+it("a tooltip does not change what the page can scroll to", async () => {
+  const reads = await withPage("overflow", async (view) => {
+    const geometry = (at) =>
+      view.evaluate(`(() => {
+        const de = document.documentElement;
+        return JSON.stringify({
+          at: ${JSON.stringify(at)},
+          scrollWidth: de.scrollWidth,
+          scrollHeight: de.scrollHeight,
+          maxScroll: de.scrollHeight - de.clientHeight,
+          scrollY: Math.round(window.scrollY),
+        });
+      })()`);
+
+    const out = [];
+    await view.evaluate(`window.scrollTo(0, 1e6)`);
+    await sleep(250);
+    out.push(JSON.parse(await geometry("resting")));
+
+    for (let cycle = 1; cycle <= 2; cycle++) {
+      await view.evaluate(`(() => {
+        ${READERS}
+        show("low-trigger");
+      })()`);
+      await sleep(350);
+      out.push(JSON.parse(await geometry(`shown ${cycle}`)));
+
+      // Out of the boundary and back: the demote/promote path, which is where
+      // a stale document coordinate would re-enter the top layer.
+      await view.evaluate(`window.scrollTo(0, 0)`);
+      await sleep(250);
+      await view.evaluate(`window.scrollTo(0, 1e6)`);
+      await sleep(250);
+      out.push(JSON.parse(await geometry(`returned ${cycle}`)));
+
+      await view.evaluate(`(() => {
+        document.getElementById("low-trigger").dispatchEvent(new MouseEvent("mouseleave"));
+      })()`);
+      await sleep(350);
+      out.push(JSON.parse(await geometry(`hidden ${cycle}`)));
+    }
+    return out;
+  });
+
+  const [resting] = reads;
+  // Nothing the tooltip does may move any of these, at any point in the cycle.
+  expect(resting.maxScroll).toBeGreaterThan(0);
+  for (const read of reads) {
+    expect(read).toEqual({ ...resting, at: read.at });
+  }
+});
+
+/*
  * The touch-device report: focus a trigger, scroll it out of view, scroll back
  * — and the tooltip is gone for good. A second tap on an already-focused
  * trigger fires no focusin, so nothing reaches the runtime; the tip has to
