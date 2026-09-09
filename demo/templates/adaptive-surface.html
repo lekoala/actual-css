@@ -1,0 +1,354 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Adaptive filter surface — Actual CSS</title>
+  <meta name="description" content="App-level composition that presents the same filters in an anchored flyout or a modal bottom drawer.">
+  <link rel="stylesheet" href="../../dist/actual.full.css">
+  <link rel="stylesheet" href="../assets/actual-themes.min.css">
+  <style>
+    .adaptive-page {
+      --center-size: 64rem;
+
+      padding-block: var(--space-60);
+    }
+
+    .adaptive-intro,
+    .adaptive-demo,
+    .adaptive-copy {
+      display: grid;
+      gap: var(--space-30);
+    }
+
+    .adaptive-intro > *,
+    .adaptive-copy > * {
+      margin: 0;
+    }
+
+    .adaptive-demo {
+      padding-block: var(--space-60);
+      border-block-start: var(--border-width) solid var(--border);
+    }
+
+    .adaptive-toolbar {
+      --cluster-justify: space-between;
+    }
+
+    .adaptive-toolbar > output {
+      color: var(--text-muted);
+      font-size: var(--font-size-sm);
+    }
+
+    .adaptive-filter-panel {
+      --flyout-inline-size: 20rem;
+
+      gap: var(--space-30);
+      padding: var(--space-30);
+    }
+
+    .adaptive-filter-panel > :is(header, fieldset, footer) {
+      margin: 0;
+    }
+
+    .adaptive-filter-panel > header > * {
+      margin: 0;
+    }
+
+    .adaptive-filter-panel > footer {
+      --cluster-justify: end;
+
+      padding: 0;
+    }
+
+    .adaptive-mobile-trigger {
+      display: none;
+    }
+
+    .adaptive-results {
+      --grid-min: 15rem;
+    }
+
+    .adaptive-results .card > * {
+      margin: 0;
+    }
+
+    /* A bottom sheet is a product-specific presentation of the existing
+       drawer. The framework keeps drawer side-oriented; this experiment owns
+       the alternate edge, size and corner treatment locally. */
+    @media (pointer: coarse) and (max-width: 48rem) {
+      .adaptive-desktop-trigger {
+        display: none;
+      }
+
+      .adaptive-mobile-trigger {
+        display: inline-flex;
+      }
+
+      dialog.drawer.adaptive-drawer {
+        inset-block: auto 0;
+        inset-inline: 0;
+        inline-size: 100%;
+        block-size: auto;
+        max-block-size: min(calc(var(--viewport-block) * 0.75), 32rem);
+        margin: auto 0 0;
+        border-inline: 0;
+        border-block-start: var(--border-width) solid var(--border);
+        border-start-start-radius: var(--radius-lg);
+        border-start-end-radius: var(--radius-lg);
+        transform: translateY(100%);
+      }
+
+      dialog.drawer.adaptive-drawer[open] {
+        transform: translateY(0);
+      }
+
+      dialog.drawer.adaptive-drawer > form {
+        min-block-size: 0;
+      }
+
+      @starting-style {
+        dialog.drawer.adaptive-drawer[open] {
+          transform: translateY(100%);
+        }
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="center adaptive-page">
+    <header class="adaptive-intro">
+      <p class="overline">Application composition</p>
+      <h1>One task, two explicit surfaces</h1>
+      <p class="lead">
+        The filter task uses an anchored flyout with a precise pointer and a
+        modal bottom drawer on a narrow coarse-pointer viewport. Actual keeps
+        both primitives independent; this page owns the responsive choice and
+        synchronizes their application state.
+      </p>
+      <div class="alert callout">
+        <strong>No adaptive core component</strong>
+        <p>
+          Resize while a surface is open and it closes. The next interaction
+          chooses the new presentation instead of converting one top-layer
+          transport into another.
+        </p>
+      </div>
+    </header>
+
+    <section class="adaptive-demo" aria-labelledby="catalog-title">
+      <div class="adaptive-copy">
+        <h2 id="catalog-title">Workshop catalog</h2>
+        <p>Open Filters, change the criteria, then apply them. Both presentations share the same local state.</p>
+      </div>
+
+      <div class="cluster adaptive-toolbar">
+        <div class="cluster">
+          <div class="flyout-trigger adaptive-desktop-trigger">
+            <button class="btn outline"
+                    type="button"
+                    id="adaptive-flyout-trigger"
+                    data-enhance="flyout"
+                    aria-expanded="false"
+                    aria-controls="adaptive-flyout">
+              Filters
+            </button>
+
+            <form class="flyout adaptive-filter-panel"
+                  id="adaptive-flyout"
+                  data-filter-form
+                  data-flyout-auto-close="false"
+                  hidden>
+              <header>
+                <h3>Filter workshops</h3>
+                <p class="muted">Anchored, non-modal popover.</p>
+              </header>
+
+              <fieldset class="field-group">
+                <legend>Format</legend>
+                <label class="choice">
+                  <input class="check" type="checkbox" name="remote" checked>
+                  <span>Remote</span>
+                </label>
+                <label class="choice">
+                  <input class="check" type="checkbox" name="in-person">
+                  <span>In person</span>
+                </label>
+              </fieldset>
+
+              <label class="field">
+                <span class="field-label">Sort by</span>
+                <select class="select" name="sort">
+                  <option value="relevance">Relevance</option>
+                  <option value="date">Soonest date</option>
+                  <option value="price">Lowest price</option>
+                </select>
+              </label>
+
+              <footer class="cluster">
+                <button class="btn ghost" type="reset">Reset</button>
+                <button class="btn primary" type="button" data-apply-filters>Apply</button>
+              </footer>
+            </form>
+          </div>
+
+          <button class="btn outline adaptive-mobile-trigger"
+                  type="button"
+                  id="adaptive-drawer-trigger"
+                  command="show-modal"
+                  commandfor="adaptive-drawer"
+                  aria-haspopup="dialog"
+                  aria-controls="adaptive-drawer">
+            Filters
+          </button>
+
+          <span class="badge neutral" data-mode-label>Anchored flyout</span>
+        </div>
+
+        <output id="filter-result" aria-live="polite">Remote · Relevance</output>
+      </div>
+
+      <div class="grid adaptive-results">
+        <article class="card stack">
+          <span class="badge primary soft fit">Remote</span>
+          <h3>Design systems clinic</h3>
+          <p class="muted">Audit a component API and turn inconsistencies into a maintainable vocabulary.</p>
+        </article>
+        <article class="card stack">
+          <span class="badge success soft fit">In person</span>
+          <h3>Accessible interactions</h3>
+          <p class="muted">Build keyboard and focus behavior from native controls and explicit semantics.</p>
+        </article>
+        <article class="card stack">
+          <span class="badge primary soft fit">Remote</span>
+          <h3>Intrinsic layouts</h3>
+          <p class="muted">Compose resilient grids and sidebars without viewport-specific component variants.</p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <dialog class="drawer adaptive-drawer"
+          id="adaptive-drawer"
+          aria-labelledby="adaptive-drawer-title"
+          closedby="any"
+          data-dialog-dismissible>
+    <form method="dialog" data-filter-form>
+      <header>
+        <div>
+          <h3 id="adaptive-drawer-title">Filter workshops</h3>
+          <p class="muted">Modal bottom drawer.</p>
+        </div>
+        <button class="drawer-close" type="submit" value="cancel" aria-label="Close filters"></button>
+      </header>
+
+      <div class="stack">
+        <fieldset class="field-group">
+          <legend>Format</legend>
+          <label class="choice">
+            <input class="check" type="checkbox" name="remote" checked>
+            <span>Remote</span>
+          </label>
+          <label class="choice">
+            <input class="check" type="checkbox" name="in-person">
+            <span>In person</span>
+          </label>
+        </fieldset>
+
+        <label class="field">
+          <span class="field-label">Sort by</span>
+          <select class="select" name="sort">
+            <option value="relevance">Relevance</option>
+            <option value="date">Soonest date</option>
+            <option value="price">Lowest price</option>
+          </select>
+        </label>
+      </div>
+
+      <footer class="cluster" style="--cluster-justify: end">
+        <button class="btn ghost" type="reset">Reset</button>
+        <button class="btn primary" type="button" data-apply-filters>Apply</button>
+      </footer>
+    </form>
+  </dialog>
+
+  <script src="../../dist/actual.full.js"></script>
+  <script>
+    const adaptiveMode = matchMedia("(pointer: coarse) and (max-width: 48rem)");
+    const desktopTrigger = document.getElementById("adaptive-flyout-trigger");
+    const mobileTrigger = document.getElementById("adaptive-drawer-trigger");
+    const flyout = document.getElementById("adaptive-flyout");
+    const drawer = document.getElementById("adaptive-drawer");
+    const result = document.getElementById("filter-result");
+    const forms = [...document.querySelectorAll("[data-filter-form]")];
+    const modeLabel = document.querySelector("[data-mode-label]");
+
+    function syncControl(control) {
+      for (const form of forms) {
+        const peer = form.elements.namedItem(control.name);
+        if (!peer || peer === control) continue;
+        if (control instanceof HTMLInputElement && control.type === "checkbox") {
+          peer.checked = control.checked;
+        } else {
+          peer.value = control.value;
+        }
+      }
+    }
+
+    function syncForm(source) {
+      for (const control of source.elements) {
+        if (control.name) syncControl(control);
+      }
+    }
+
+    function renderResult(form) {
+      const labels = [];
+      if (form.elements.namedItem("remote").checked) labels.push("Remote");
+      if (form.elements.namedItem("in-person").checked) labels.push("In person");
+      if (labels.length === 0) labels.push("Any format");
+
+      const sort = form.elements.namedItem("sort");
+      labels.push(sort.options[sort.selectedIndex].text);
+      result.textContent = labels.join(" · ");
+    }
+
+    function closeOpenSurface() {
+      if (flyout.matches(":popover-open")) desktopTrigger.click();
+      if (drawer.open) drawer.close();
+    }
+
+    function reflectMode() {
+      modeLabel.textContent = adaptiveMode.matches ? "Modal bottom drawer" : "Anchored flyout";
+    }
+
+    for (const form of forms) {
+      form.addEventListener("change", (event) => {
+        if (event.target instanceof HTMLInputElement || event.target instanceof HTMLSelectElement) {
+          syncControl(event.target);
+        }
+      });
+      form.addEventListener("reset", () => {
+        requestAnimationFrame(() => syncForm(form));
+      });
+    }
+
+    for (const button of document.querySelectorAll("[data-apply-filters]")) {
+      button.addEventListener("click", () => {
+        const form = button.closest("form");
+        syncForm(form);
+        renderResult(form);
+        if (drawer.contains(button)) drawer.close("apply");
+        else if (flyout.matches(":popover-open")) desktopTrigger.click();
+      });
+    }
+
+    desktopTrigger.addEventListener("click", () => syncForm(forms[0]));
+    mobileTrigger.addEventListener("click", () => syncForm(forms[0]));
+    adaptiveMode.addEventListener("change", () => {
+      closeOpenSurface();
+      reflectMode();
+    });
+    reflectMode();
+  </script>
+</body>
+</html>
