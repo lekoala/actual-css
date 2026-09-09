@@ -4,7 +4,6 @@ import { registerEscapeDismissal } from "./escape.js";
 import { EVENTS } from "./events.js";
 
 import { CLASSES } from "./selectors.js";
-import { waitForTransitions } from "./transition.js";
 
 const openSurfaces = new Set();
 const surfaceMap = new WeakMap();
@@ -73,23 +72,6 @@ function hideTransport(menu) {
   }
 }
 
-function shouldUseSheet(menu, state) {
-  const mobile = state.mobile || "auto";
-  if (mobile === "none" || mobile === "anchored") return false;
-  if (mobile === "sheet") return true;
-
-  const view = menu.ownerDocument?.defaultView;
-  if (!view || typeof view.matchMedia !== "function") {
-    return false;
-  }
-
-  const breakpoint = state.breakpoint ?? 768;
-  return (
-    view.matchMedia("(pointer: coarse)").matches &&
-    view.matchMedia(`(max-width: ${breakpoint}px)`).matches
-  );
-}
-
 /*
  * Trigger state sync stays Actual's job, deliberately.
  *
@@ -116,52 +98,9 @@ function syncExpanded(menu, expanded) {
   }
 }
 
-/*
- * Where a runtime-created scrim goes. The panel itself is promoted, not moved,
- * so this is the one remaining need for a document-level root: a plain fixed
- * div cannot escape an ancestor's overflow or stacking context on its own.
- */
-function backdropRoot(menu, anchor) {
-  return anchor?.closest("dialog") || menu.closest("dialog") || menu.ownerDocument.body;
-}
-
-function ensureBackdrop(menu, state) {
-  if (!state.isSheet) {
-    state.backdrop?.remove();
-    state.backdrop = null;
-    return;
-  }
-
-  if (state.backdrop?.isConnected) {
-    state.backdrop.hidden = false;
-    return;
-  }
-
-  const backdrop = menu.ownerDocument.createElement("div");
-  backdrop.className = CLASSES.backdrop;
-  backdrop.hidden = false;
-
-  // Not menu.before(): the panel stays where it was authored now, and a scrim
-  // next to it there could not cover the viewport. The native ::backdrop is
-  // not an option — its UA pointer-events: none is not overridable, even with
-  // !important, so it would let clicks through to the page behind the sheet.
-  backdropRoot(menu, state.trigger || state.source).append(backdrop);
-  state.backdrop = backdrop;
-}
-
-function applyPresentation(menu, state) {
-  state.isSheet = shouldUseSheet(menu, state);
-  if (state.isSheet) {
-    menu.style.removeProperty("left");
-    menu.style.removeProperty("top");
-  }
-  menu.classList.toggle(CLASSES.sheet, state.isSheet);
-  ensureBackdrop(menu, state);
-}
-
 function positionSurface(menu) {
   const state = surfaceMap.get(menu);
-  if (!state || state.isSheet) return true;
+  if (!state) return true;
 
   if (state.trigger) {
     const triggerWidth = state.trigger.getBoundingClientRect().width;
@@ -196,12 +135,9 @@ function ensureSurfaceWired(menu) {
     stopTracking: null,
     stopScrollIntent: null,
     unregisterEscape: null,
-    backdrop: null,
     trigger: null,
     source: null,
     point: null,
-    mobile: "auto",
-    breakpoint: 768,
     placement: "bottom-start",
     distance: 4,
     flip: true,
@@ -210,8 +146,6 @@ function ensureSurfaceWired(menu) {
     autoClose: "outside",
     dismissOnScroll: false,
     scrollIntentAt: null,
-    isSheet: false,
-    closeId: 0,
   };
 
   surfaceMap.set(menu, state);
@@ -253,7 +187,6 @@ function startSurfaceResources(menu, state) {
   state.stopTracking = autoUpdate(anchor, menu, ({ type }) => {
     if (!isSurfaceOpen(menu)) return;
     if (type === "scroll" && state.dismissOnScroll) return;
-    applyPresentation(menu, state);
     if (!positionSurface(menu)) closeSurface(menu);
   });
 }
@@ -297,8 +230,8 @@ export function retainSurface(panel) {
     if (entry.count <= 0) {
       // Nothing was moved, so nothing has to be put back. What the last
       // release still owes is the teardown: the panel may be open, and an
-      // open surface holds an Escape entry, a position tracker and possibly a
-      // scrim, none of which have an owner once the last retainer is gone.
+      // open surface holds an Escape entry and a position tracker, neither of
+      // which has an owner once the last retainer is gone.
       disconnectSurface(panel);
       surfaceRetainers.delete(panel);
     }
@@ -322,8 +255,6 @@ export function openSurface(menu, opts = {}) {
   state.source = opts.source || null;
   state.point =
     Number.isFinite(opts.x) && Number.isFinite(opts.y) ? { x: opts.x, y: opts.y } : null;
-  state.mobile = opts.mobile || "auto";
-  state.breakpoint = opts.breakpoint ?? 768;
   state.autoClose = normalizeAutoClose(opts.autoClose);
   state.dismissOnScroll = opts.dismissOnScroll === true;
   state.scrollIntentAt = null;
@@ -334,12 +265,10 @@ export function openSurface(menu, opts = {}) {
   state.shiftPadding = opts.shiftPadding ?? 4;
   state.scope = opts.scope;
   state.restoreFocusTo = opts.restoreFocusTo || opts.trigger || opts.source || null;
-  state.closeId++;
 
   // Promote before measuring: a closed popover has no box to position.
   if (!showTransport(menu)) return false;
   menu.classList.add(CLASSES.open);
-  applyPresentation(menu, state);
   syncExpanded(menu, true);
 
   if (!positionSurface(menu)) {
@@ -383,17 +312,10 @@ export function closeSurface(menu, opts = {}) {
   if (!menu || !isSurfaceOpen(menu)) return;
 
   const state = surfaceMap.get(menu);
-  const closeId = state ? ++state.closeId : 0;
-  const wasSheet = state?.isSheet === true;
   const activeElement = menu.ownerDocument.activeElement;
   const shouldRestoreFocus = opts.restoreFocus ?? menu.contains(activeElement);
   menu.classList.remove(CLASSES.open);
-  if (!wasSheet) {
-    menu.classList.remove(CLASSES.sheet);
-  }
   hideTransport(menu);
-  const backdrop = state?.backdrop || null;
-  if (backdrop) backdrop.hidden = true;
   openSurfaces.delete(menu);
   syncExpanded(menu, false);
   state?.unregisterEscape?.();
@@ -403,14 +325,6 @@ export function closeSurface(menu, opts = {}) {
   if (shouldRestoreFocus && state?.restoreFocusTo?.isConnected) {
     state.restoreFocusTo.focus({ preventScroll: true });
   }
-
-  waitForTransitions(menu, backdrop).then(() => {
-    if (!state || state.closeId !== closeId) return;
-    state.isSheet = false;
-    menu.classList.remove(CLASSES.sheet);
-    backdrop?.remove();
-    if (state.backdrop === backdrop) state.backdrop = null;
-  });
 }
 
 export function disconnectSurface(menu) {
@@ -418,7 +332,6 @@ export function disconnectSurface(menu) {
   closeSurface(menu);
   const state = surfaceMap.get(menu);
   if (state) {
-    state.backdrop?.remove();
     state.unregisterEscape?.();
     state.stopScrollIntent?.();
     state.stopTracking?.();

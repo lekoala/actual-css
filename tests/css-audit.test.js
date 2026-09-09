@@ -309,7 +309,6 @@ test("global print defaults do not know component selectors", () => {
     ".modal",
     ".spinner",
     ".status-bar",
-    ".surface-backdrop",
     ".tooltip",
   ]) {
     expect(printCss).not.toContain(selector);
@@ -1404,9 +1403,9 @@ test("motion tokens: presence pair exists, no generic easing leaks, exceptions h
     expect(cssFiles.get(file)).toContain("var(--ease-exit)");
   }
 
-  /* Shared-single-transition toggles and backdrops stay on neutral `ease`;
-     their exclusion is documented in tokens.md, not an oversight. */
-  for (const file of ["tooltip.css", "flyout.css", "surface.css"]) {
+  /* Shared-single-transition toggles stay on neutral `ease`; their exclusion
+     is documented in tokens.md, not an oversight. */
+  for (const file of ["tooltip.css", "flyout.css"]) {
     expect(cssFiles.get(file)).not.toMatch(/var\(--ease-(enter|exit)\)/);
   }
 });

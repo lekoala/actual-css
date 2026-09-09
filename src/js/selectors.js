@@ -27,10 +27,6 @@ export const CLASSES = {
   // surface.js — state class on the open flyout/menu/dialog surface.
   // status.js writes the same class on the status bar while a message shows.
   open: "is-open",
-  // surface.js — state class while the surface renders as a mobile sheet.
-  sheet: "is-sheet",
-  // surface.js — class name written on the generated sheet backdrop.
-  backdrop: "surface-backdrop",
   // dialog.js — transient class for the "can't dismiss" shake animation.
   static: "is-static",
   // dialog.js — written on <html> while any modal dialog is open.

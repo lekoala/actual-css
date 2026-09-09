@@ -73,8 +73,7 @@ dialog.drawer > form {
   min-block-size: 100%;
 }
 
-/* Backdrop color sourced from components/surface.css so it matches .modal
-   and .surface-backdrop across the dialog family. */
+/* The shared backdrop token keeps drawer and modal scrims consistent. */
 dialog.drawer::backdrop {
   background: var(--backdrop-fill);
   opacity: 0;

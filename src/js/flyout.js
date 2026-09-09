@@ -5,12 +5,6 @@ import { closeSurface, isSurfaceOpen, openSurface, retainSurface } from "./surfa
 
 const triggerMap = new WeakMap();
 
-function normalizeBreakpoint(raw) {
-  const BREAKPOINTS = { sm: 640, md: 768, lg: 1024 };
-  const value = Number.parseInt(BREAKPOINTS[raw] || raw, 10);
-  return Number.isFinite(value) ? value : undefined;
-}
-
 function readFlyoutOptions(panel) {
   const opts = { autoClose: "true" };
   const ds = panel.dataset;
@@ -18,11 +12,6 @@ function readFlyoutOptions(panel) {
   if (ds.flyoutDistance != null) {
     const d = Number.parseFloat(ds.flyoutDistance);
     if (Number.isFinite(d)) opts.distance = d;
-  }
-  if (ds.flyoutMobile) opts.mobile = ds.flyoutMobile;
-  if (ds.flyoutBreakpoint) {
-    const bp = normalizeBreakpoint(ds.flyoutBreakpoint);
-    if (bp != null) opts.breakpoint = bp;
   }
   if (ds.flyoutAutoClose) opts.autoClose = ds.flyoutAutoClose;
   return opts;

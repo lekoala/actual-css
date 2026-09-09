@@ -53,7 +53,6 @@ function getLongPressDelay(target, menu) {
 function readPanelOptions(menu) {
   const opts = { autoClose: "true" };
   const ds = menu.dataset;
-  if (ds.flyoutMobile) opts.mobile = ds.flyoutMobile;
   if (ds.flyoutAutoClose) opts.autoClose = ds.flyoutAutoClose;
   return opts;
 }
@@ -105,7 +104,6 @@ function openContextMenu(context, menu, opts = {}) {
       placement: opts.placement || "bottom-start",
       distance: opts.distance ?? 2,
       dismissOnScroll: true,
-      mobile: opts.mobile || "auto",
       scope: opts.scope || getContextScope(context),
       restoreFocusTo: opts.restoreFocusTo,
       ...readPanelOptions(menu),

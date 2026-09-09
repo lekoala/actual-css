@@ -1,12 +1,12 @@
 {
-  "totalRaw": 286857,
+  "totalRaw": 284184,
   "core": {
     "minified": 12220,
     "brotli": 2759
   },
   "full": {
-    "minified": 124077,
-    "brotli": 17993
+    "minified": 122763,
+    "brotli": 17818
   },
   "js": {
     "core": {
@@ -14,11 +14,11 @@
       "brotli": 2229
     },
     "full": {
-      "bytes": 56470,
-      "brotli": 16523
+      "bytes": 54899,
+      "brotli": 16084
     }
   },
-  "fileCount": 109,
+  "fileCount": 108,
   "files": [
     {
       "file": "components/steps.css",
@@ -49,20 +49,20 @@
       "raw": 7474
     },
     {
-      "file": "components/flyout.css",
-      "raw": 6842
-    },
-    {
       "file": "forms/choice.css",
       "raw": 6155
+    },
+    {
+      "file": "components/drawer.css",
+      "raw": 5662
     },
     {
       "file": "effects/aura.css",
       "raw": 5400
     },
     {
-      "file": "components/drawer.css",
-      "raw": 5328
+      "file": "components/flyout.css",
+      "raw": 5320
     },
     {
       "file": "core/variants.css",
@@ -305,10 +305,6 @@
       "raw": 1465
     },
     {
-      "file": "components/surface.css",
-      "raw": 1460
-    },
-    {
       "file": "layout/scroller.css",
       "raw": 1454
     },
@@ -346,7 +342,7 @@
     },
     {
       "file": "components/index.css",
-      "raw": 1095
+      "raw": 1070
     },
     {
       "file": "components/breadcrumb.css",
