@@ -21,6 +21,7 @@ and `actual.full.js` from `dist/`, plus the theme palettes bundle from
 - [Card compositions](../../demo/templates/card-compositions.html) - editorial, team, sign-in and horizontal cards composed from existing primitives
 - [Dashboard](../../demo/templates/dashboard.html) - data-heavy overview page
 - [App](../../demo/templates/app.html) - application shell with sidebar
+- [Workspaces](../../demo/templates/workspaces.html) - sectioned sidebar, master/detail list with native current state, and workspace cards
 - [Marketing](../../demo/templates/marketing.html) - landing page with typography and fluid type
 - [Blog](../../demo/templates/blog.html) - article page with prose
 - [Blocks](../../demo/templates/blocks.html) - layout building blocks

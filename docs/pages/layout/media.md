@@ -25,4 +25,4 @@ Add `.items-center` to align the leading element with short trailing content. Fo
 </div>
 ```
 
-The media object is the underlying pattern of `.blog-author`, `.blog-comment`, and similar compositions in templates. Components can adopt it instead of repeating the grid rule.
+The media object is the underlying pattern of `.blog-author`, `.blog-comment`, and similar compositions in templates. Components can adopt it instead of repeating the grid rule. The [Workspaces example](../examples/overview.md) shows the card pattern: `card > header` with `.media` plus `hgroup`, and row actions in the header — never a third `.media` child.

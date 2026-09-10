@@ -173,13 +173,12 @@
       margin-inline-start: auto;
     }
 
-    .app-sidebar .nav-link[aria-current="page"] {
-      color: var(--intent, var(--primary));
-      background: color-mix(in oklch, var(--intent, var(--primary)) 8%, transparent);
-    }
-
-    .app-sidebar .nav-link[aria-current="page"] i {
-      color: var(--intent, var(--primary));
+    /* Current state is framework-owned (.nav-link[aria-current]: selected
+       accent + subtle surface + inset trait in .nav-list, constant metrics).
+       Only the row layout and idle icon tone stay local; the icon follows
+       the accent via currentColor instead of redefining the state. */
+    .app-sidebar .nav-link[aria-current] i {
+      color: currentColor;
     }
 
     .app-sidebar .nav-list-sub {

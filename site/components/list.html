@@ -366,7 +366,10 @@ a button or native control for actions.</p>
 <p>In a master/detail navigation, mark the current row with <code>aria-current</code> on its
 link, using the value that matches the semantics (<code>page</code>, <code>location</code>, …).
 Presence is the contract: set the attribute on the current row and remove it
-elsewhere, never <code>aria-current=&quot;false&quot;</code>.</p>
+elsewhere, never <code>aria-current=&quot;false&quot;</code>. The <a href="../examples/overview.html">Workspaces example</a>
+shows a current row with trailing actions and a flyout. Navigable rows usually
+want a non-zero <code>--list-item-pad-inline</code>: without that gutter, the current
+indicator touches the leading region and the trailing touches the row edge.</p>
 <h3 id="hooks">Hooks</h3>
 <ul>
 <li><code>--list-item-min-size</code> controls the row's minimum touch height.</li>
