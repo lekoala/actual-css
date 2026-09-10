@@ -269,6 +269,12 @@
   --focus-ring-shadow: 0 0 0 var(--focus-ring-width) var(--focus-ring);
 }
 </code></pre>
+<h3 id="palette-coherence">Palette coherence</h3>
+<p>A coherent palette treats surfaces, text, borders, intents, and shadows as related roles rather than isolated colors.</p>
+<p>Coherence does not mean that every token must be chromatic. Pure or near-pure whites and blacks remain legitimate where their role calls for them; what matters is that the surrounding neutral ramp and derived treatments belong to the same visual family.</p>
+<p>Neutral roles may lean toward the palette's ambient hue — by default the primary's — while lightness and chroma stay curated per role. Chroma runs strongest through the ramp's mid-lightness rungs, often around <code>--border</code> and <code>--text-muted</code> depending on the color scheme, and tapers toward both ends. A palette whose accent is deliberately warmer or cooler than its paper picks an ambient hue of its own.</p>
+<p>Semantic intents are curated colors, not mechanical derivatives of <code>--primary</code>. Danger, warning, and success stay recognizable for their function, but they are chosen as members of the theme palette rather than copied independently from a generic scale. Neither intents nor neutrals are derived from <code>--primary</code> at runtime: the relationship is a design decision recorded in the theme's own values.</p>
+<p>Color should reinforce structure and meaning, not carry them alone. Information hierarchy and semantic states should remain understandable when hue is removed or unavailable. Desaturating a composition is a useful review heuristic, not a conformance test.</p>
 <h3 id="default-theme-philosophy">Default theme philosophy</h3>
 <p>The default palette is <strong>Ink &amp; Terra</strong>: a near-neutral aubergine <code>primary</code>, terracotta <code>secondary</code>, and pigment-toned statuses (sage, ochre, brick) tuned to equal perceived weight. The neutral ramp (text, borders, subtle surfaces) is tinted toward the primary hue so the whole page quietly carries the identity. Optional themes can re-introduce vivid intent palettes on top of this foundation.</p>
 <p>Soft surfaces (<code>.btn.soft</code>, <code>.badge.soft</code>, and the default <code>.alert</code>) are generated from intent colors through <code>color-mix()</code>. Themes can tune the mix globally instead of rewriting component selectors.</p>
@@ -634,6 +640,7 @@ undo that.</p>
           <ul class="nav-list docs-toc-list" data-docs-toc>
         <li><a class="nav-link" href="#public-surface" data-docs-toc-item data-level="2">Public surface</a></li>
         <li><a class="nav-link" href="#color" data-docs-toc-item data-level="3">Color</a></li>
+        <li><a class="nav-link" href="#palette-coherence" data-docs-toc-item data-level="3">Palette coherence</a></li>
         <li><a class="nav-link" href="#default-theme-philosophy" data-docs-toc-item data-level="3">Default theme philosophy</a></li>
         <li><a class="nav-link" href="#shape" data-docs-toc-item data-level="3">Shape</a></li>
         <li><a class="nav-link" href="#spacing" data-docs-toc-item data-level="3">Spacing</a></li>

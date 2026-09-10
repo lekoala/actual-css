@@ -82,7 +82,9 @@ A coherent palette treats surfaces, text, borders, intents, and shadows as relat
 
 Coherence does not mean that every token must be chromatic. Pure or near-pure whites and blacks remain legitimate where their role calls for them; what matters is that the surrounding neutral ramp and derived treatments belong to the same visual family.
 
-Semantic intents are curated colors, not mechanical derivatives of `--primary`. Danger, warning, and success stay recognizable for their function, but they are chosen as members of the theme palette rather than copied independently from a generic scale.
+Neutral roles may lean toward the palette's ambient hue — by default the primary's — while lightness and chroma stay curated per role. Chroma runs strongest through the ramp's mid-lightness rungs, often around `--border` and `--text-muted` depending on the color scheme, and tapers toward both ends. A palette whose accent is deliberately warmer or cooler than its paper picks an ambient hue of its own.
+
+Semantic intents are curated colors, not mechanical derivatives of `--primary`. Danger, warning, and success stay recognizable for their function, but they are chosen as members of the theme palette rather than copied independently from a generic scale. Neither intents nor neutrals are derived from `--primary` at runtime: the relationship is a design decision recorded in the theme's own values.
 
 Color should reinforce structure and meaning, not carry them alone. Information hierarchy and semantic states should remain understandable when hue is removed or unavailable. Desaturating a composition is a useful review heuristic, not a conformance test.
 

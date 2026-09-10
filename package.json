@@ -122,6 +122,7 @@
     "check:css-api": "bun scripts/check-css-api.js",
     "check:color-space": "bun scripts/check-color-space.js",
     "report:theme-contrast": "bun scripts/report-theme-contrast.js",
+    "report:neutral-ramp": "bun scripts/report-neutral-ramp.js",
     "check:architecture": "bun scripts/check-css-architecture.js",
     "build:dist": "bun scripts/build-dist.js",
     "build:js": "bun scripts/build-js.js",

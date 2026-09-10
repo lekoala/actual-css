@@ -476,7 +476,8 @@ has no action button; the header close button dismisses the dialog.</p>
 <p>Use <code>modal scrollable</code> when the header and footer should stay visible while the
 dialog body scrolls. Modal dialogs lock page scroll while a modal is open: the
 runtime writes <code>html.has-modal-open</code>, and the stylesheet applies <code>overflow: hidden</code> (and reserves the scrollbar gutter with <code>scrollbar-gutter: stable</code> when
-one was present).</p>
+one was present). The height cap follows the small viewport, so the panel keeps
+a stable size while mobile browser chrome expands or collapses.</p>
 </div>
 <div class="docs-example">
   <div class="docs-preview">

@@ -247,6 +247,11 @@ that bypass.</p>
 </code></pre>
 <p>Prefer a local custom property over adding many one-off utility classes. Use inline styles only for demos, prototypes, or truly dynamic values.</p>
 <p>There are no <code>.gap-sm</code> / <code>.gap-md</code> / <code>.gap-lg</code> density variants on the core layout primitives; set <code>--gap</code> locally when only spacing should change. The extra utilities (<code>src/css/utilities/extra.css</code>) ship those gap utilities for row/column containers.</p>
+<h2 id="spacing-expresses-relationships">Spacing expresses relationships</h2>
+<p><strong>Components own their internal rhythm; layout owns the relationships between components.</strong></p>
+<p>Prefer a parent <code>gap</code> for relationships between peers instead of encoding sibling margins into a component. Smaller gaps imply a stronger relationship; progressively larger gaps distinguish groups and sections.</p>
+<p>Before adding a divider or other separating chrome, consider whether additional spacing already expresses the boundary clearly.</p>
+<p>Density changes the amount of space available, not the relationships that space communicates. When a composition contains local, group, and section rhythms, preserve their relative hierarchy with nested or local <code>--gap</code> values rather than relying on one inherited gap at every level. See <a href="stack.html">Stack</a> for the nesting and density mechanics.</p>
 
 </div>
 
@@ -268,6 +273,7 @@ that bypass.</p>
           <ul class="nav-list docs-toc-list" data-docs-toc>
         <li><a class="nav-link" href="#child-contract" data-docs-toc-item data-level="2">Child contract</a></li>
         <li><a class="nav-link" href="#spacing-tokens" data-docs-toc-item data-level="2">Spacing tokens</a></li>
+        <li><a class="nav-link" href="#spacing-expresses-relationships" data-docs-toc-item data-level="2">Spacing expresses relationships</a></li>
           </ul>
         </nav>
       </aside>

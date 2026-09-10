@@ -25,8 +25,10 @@
 - Alert documents the trailing-action composition (`.cluster` plus
   `.justify-content-space-between`), the tinted leading flag through
   `--alert-border-inline-start-*`, and the `.surface` / `.inverted` treatments.
+- Tokens document the neutral ramp as curated per role under an ambient hue that leans on `--primary` by default, and that no intent or neutral is derived from `--primary` at runtime.
 - Tokens document `--soft-border-mix` as the borderless-soft dial: what it
   reaches, and that it is a rendering choice the baseline path does not uphold.
+- `bun run report:neutral-ramp` surveys every preset's neutral ramp in OKLCH: chroma per role, hue distance to `--primary`, and the lightness a tint costs at equal contrast.
 - `bun run report:theme-contrast` prints every preset theme's resting and
   hovered soft-pair contrast (light and dark) without failing the build.
 
