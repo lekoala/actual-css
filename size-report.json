@@ -1,12 +1,12 @@
 {
-  "totalRaw": 287418,
+  "totalRaw": 287806,
   "core": {
     "minified": 12220,
     "brotli": 2759
   },
   "full": {
-    "minified": 123255,
-    "brotli": 17834
+    "minified": 123402,
+    "brotli": 17906
   },
   "js": {
     "core": {
@@ -14,8 +14,8 @@
       "brotli": 2229
     },
     "full": {
-      "bytes": 55514,
-      "brotli": 16267
+      "bytes": 55685,
+      "brotli": 16301
     }
   },
   "fileCount": 108,
@@ -25,12 +25,12 @@
       "raw": 13069
     },
     {
-      "file": "core/tokens.css",
-      "raw": 9760
+      "file": "components/modal.css",
+      "raw": 9865
     },
     {
-      "file": "components/modal.css",
-      "raw": 9459
+      "file": "core/tokens.css",
+      "raw": 9760
     },
     {
       "file": "components/alert.css",
@@ -62,7 +62,7 @@
     },
     {
       "file": "components/flyout.css",
-      "raw": 5320
+      "raw": 5302
     },
     {
       "file": "core/variants.css",

@@ -284,8 +284,9 @@ positioning and recognizes <code>:popover-open</code> as the visible state. The 
 another library may therefore own opening, dismissal, and focus without
 requiring <code>.is-open</code> or <code>[hidden]</code>.</p>
 <p>Actual CSS does not position that independently managed popover. Its positioner
-must write fixed viewport coordinates (and may write <code>--available-height</code> and
-<code>--surface-anchor-width</code>); the built-in <code>surface.js</code> runtime remains the full
+must couple fixed positioning with viewport coordinates or absolute positioning
+with document coordinates (and may write <code>--available-height</code> and
+<code>--surface-anchor-width</code>). The built-in <code>surface.js</code> runtime remains the full
 fallback when Actual owns the lifecycle too. A bare <code>[popover]</code> without
 <code>.flyout</code> or <code>.tooltip</code> keeps its platform appearance.</p>
 <p>The Popover lifecycle is guaranteed across Minimal, so choosing it is a

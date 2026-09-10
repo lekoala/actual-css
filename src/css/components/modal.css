@@ -12,6 +12,7 @@
  *
  * Internal:
  * --dialog-close-icon-size
+ * --dialog-viewport-block
  * --dialog-viewport-gap-default
  * --dialog-viewport-gap-2x
  */
@@ -39,7 +40,12 @@ dialog.modal {
      public hook would silently keep this default. Same reason choice.css never
      declares --choice-control-offset. */
   max-inline-size: min(calc(100% - var(--dialog-viewport-gap-2x)), var(--modal-size, 32rem));
-  max-block-size: calc(var(--viewport-block) - var(--dialog-viewport-gap-2x));
+
+  /* Stable viewport cap for the panel: dvh tracks the dynamic browser toolbar
+     and makes the dialog reflow on mobile, svh does not. App shells keep the
+     dynamic token; only the modal pins the small viewport. */
+  --dialog-viewport-block: var(--viewport-block);
+  max-block-size: calc(var(--dialog-viewport-block) - var(--dialog-viewport-gap-2x));
   border: var(--border-width) solid var(--border);
   border-radius: var(--radius-lg);
   background: var(--surface-raised);
@@ -66,10 +72,16 @@ dialog.modal > form,
 dialog.modal > .stack {
   display: grid;
   gap: var(--space-40);
-  max-block-size: calc(var(--viewport-block) - var(--dialog-viewport-gap-2x));
+  max-block-size: calc(var(--dialog-viewport-block) - var(--dialog-viewport-gap-2x));
   overflow: auto;
   overscroll-behavior: contain;
   padding: var(--space-40);
+}
+
+@supports (block-size: 100svh) {
+  dialog.modal {
+    --dialog-viewport-block: 100svh;
+  }
 }
 
 /* Keep the dialog off the viewport edges on small screens. Moves the internal

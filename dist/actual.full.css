@@ -4385,6 +4385,7 @@ a.badge[aria-disabled="true"] {
  *
  * Internal:
  * --dialog-close-icon-size
+ * --dialog-viewport-block
  * --dialog-viewport-gap-default
  * --dialog-viewport-gap-2x
  */
@@ -4412,7 +4413,12 @@ dialog.modal {
      public hook would silently keep this default. Same reason choice.css never
      declares --choice-control-offset. */
   max-inline-size: min(calc(100% - var(--dialog-viewport-gap-2x)), var(--modal-size, 32rem));
-  max-block-size: calc(var(--viewport-block) - var(--dialog-viewport-gap-2x));
+
+  /* Stable viewport cap for the panel: dvh tracks the dynamic browser toolbar
+     and makes the dialog reflow on mobile, svh does not. App shells keep the
+     dynamic token; only the modal pins the small viewport. */
+  --dialog-viewport-block: var(--viewport-block);
+  max-block-size: calc(var(--dialog-viewport-block) - var(--dialog-viewport-gap-2x));
   border: var(--border-width) solid var(--border);
   border-radius: var(--radius-lg);
   background: var(--surface-raised);
@@ -4439,10 +4445,16 @@ dialog.modal > form,
 dialog.modal > .stack {
   display: grid;
   gap: var(--space-40);
-  max-block-size: calc(var(--viewport-block) - var(--dialog-viewport-gap-2x));
+  max-block-size: calc(var(--dialog-viewport-block) - var(--dialog-viewport-gap-2x));
   overflow: auto;
   overscroll-behavior: contain;
   padding: var(--space-40);
+}
+
+@supports (block-size: 100svh) {
+  dialog.modal {
+    --dialog-viewport-block: 100svh;
+  }
 }
 
 /* Keep the dialog off the viewport edges on small screens. Moves the internal
@@ -4892,10 +4904,10 @@ dialog.drawer > form > header {
 /*
  * Flyout — floating panel for actions and links.
  *
- * JavaScript owns positioning (position: fixed + left/top), state (.is-open,
- * plus the popover="manual" transport that promotes the panel to the top
- * layer), focus, and keyboard behavior. CSS owns the surfaced panel
- * appearance, item styles, and animation.
+ * JavaScript promotes the panel to the top layer and chooses viewport or
+ * document coordinates from its anchor. It also owns state (.is-open), focus,
+ * and keyboard behavior. CSS owns the surfaced panel appearance, item styles,
+ * and animation.
  *
  * Runtime marker (managed by surface.js): .is-open marks an open flyout.
  * --surface-anchor-width is set by surface.js while an open flyout is positioned.
@@ -4933,8 +4945,8 @@ dialog.drawer > form > header {
   --menu-item-size: var(--control-size);
   z-index: var(--z-menu);
   /* No-JS fallback: below the trigger inside the relative .flyout-trigger.
-     surface.js switches an open flyout to position: fixed with measured
-     coordinates; this only covers a flyout revealed without the runtime. */
+     surface.js replaces this with the anchor's coupled position/coordinate
+     mode; this only covers a flyout revealed without the runtime. */
   position: absolute;
   inset-block-start: calc(100% + var(--space-10));
   inset-inline-start: 0;

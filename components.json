@@ -445,6 +445,7 @@
     ],
     "internalHooks": [
       "--dialog-close-icon-size",
+      "--dialog-viewport-block",
       "--dialog-viewport-gap-default",
       "--dialog-viewport-gap-2x"
     ],

@@ -377,8 +377,11 @@ page scroll and expects <code>position: absolute</code> against the initial cont
 block, which the top layer supplies to an open popover. The browser then
 scrolls the element with the page rather than <code>autoUpdate()</code> correcting it a
 frame later — right for a reference that scrolls with the page, wrong for a
-fixed or sticky one. <code>tooltip.js</code> chooses per tooltip; <code>surface.js</code> always uses
-viewport coordinates.</p>
+fixed or sticky one. <code>tooltip.js</code> and element-anchored surfaces choose this
+coupled coordinate/position mode once per opening. A point-positioned surface
+always uses fixed viewport coordinates because <code>x</code> and <code>y</code> are client
+coordinates. Scrolling a nested container still needs the next <code>autoUpdate()</code>
+frame; document coordinates remove correction only for page scrolling.</p>
 <p><code>@lekoala/floating</code> is the standalone positioning dependency used by the
 runtime. <code>autoUpdate(reference, float, callback)</code> batches scroll, resize, and
 element-resize callbacks per document and returns a stop handle; it observes
@@ -394,7 +397,7 @@ or account for:</p>
 <pre><code class="language-css">.my-panel          { position: absolute; }
 .my-panel[popover] { inset: auto; margin: 0; }
 .my-panel[popover]:not(:popover-open) { display: none; }
-/* surface.js sets position: fixed + inline left/top on open —
+/* surface.js sets a coupled fixed/viewport or absolute/document mode —
    do not override with !important */
 /* no z-index: an open panel is promoted to the top layer, where
    numbers do not apply — see Layering in foundations/tokens */
@@ -413,8 +416,9 @@ and the only one to key styles on.</li>
 closed popover. An author declaration outranks the UA origin whatever the
 specificity, so a bare <code>display: grid</code> leaves a closed panel painted at its
 static position.</li>
-<li>The open state switches to <code>position: fixed</code> with measured inline
-coordinates, and the UA's own <code>inset</code> / <code>margin</code> must be cleared.</li>
+<li>The open state switches to the coupled position and coordinate mode chosen
+from its anchor, with measured inline coordinates. The UA's own <code>inset</code> /
+<code>margin</code> must be cleared.</li>
 </ol>
 <p>Lifecycle: <code>prepareSurface</code> → <code>openSurface</code> → <code>closeSurface</code> →
 <code>disconnectSurface</code>. <code>retainSurface(panel)</code> reference-counts a surface shared by
