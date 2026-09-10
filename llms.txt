@@ -14,7 +14,7 @@ Actual CSS uses a small public grammar: `.component [intent] [variant] [size] [m
 
 - `actual-css` — the minimal core: tokens, theme contract, reset, base elements, and universal variants. Components and layout primitives are NOT included.
 - `actual-css/full` — the complete framework: core plus every component, form, layout, typography, effect, and utility family.
-- `actual-css/js` — the enhancement loader only; it discovers `data-enhance` markers and loads enhancers on demand.
+- `actual-css/js` — the enhancement-loader entry only: it watches `data-enhance-modules` manifest blocks and imports the declared enhancers on demand.
 - `actual-css/js/full` — the complete runtime with all built-in enhancers pre-registered.
 - `actual-css/reserved-classes.json` — machine-readable list of the framework-owned class namespace. Use it to check whether a class belongs to Actual CSS and to validate claimed framework classes; application-specific classes are expected to exist outside this manifest.
 - `actual-css/components.json` — machine-readable component index, derived from the sources (CSS headers, selectors, package exports, `src/js`) by `scripts/build-catalog.js` and verified by `check:catalog`. Gives each component its import paths, owned classes, hooks, states, and registered enhancement tokens — enough to know what exists and where to read more, not a replacement for `docs/pages/components/*.md`.

@@ -9,7 +9,7 @@ The JS runtime doubles as a primitive kit for building custom widgets.
 | Discovery, lifecycle, cleanup      | `enhance`     | `actual-css/js/enhance`     |
 | Per-document LIFO Escape dismissal | `escape`      | `actual-css/js/escape`      |
 | Positioning, flip and shift        | `floating`    | `@lekoala/floating`         |
-| Open/close, sheet, backdrop, focus | `surface`     | `actual-css/js/surface`     |
+| Open/close, dismissal, focus       | `surface`     | `actual-css/js/surface`     |
 | Directional item lookup            | `keys`        | `actual-css/js/keys`        |
 | Menu-item vocabulary               | `menu`        | `actual-css/js/menu`        |
 | Focusable lookup, visibility       | `focus`       | `actual-css/js/focus`       |
@@ -22,7 +22,7 @@ The JS runtime doubles as a primitive kit for building custom widgets.
 
 The named exports each module carries:
 
-- `enhance` — `enhance`, `registerEnhancement`
+- `enhance` — `enhance`, `registerEnhancement`, `applyEnhancement`
 - `escape` — `registerEscapeDismissal`
 - `floating` — `autoUpdate`, `reposition`, `repositionAt`, plus
   `--available-height` and `data-placement`
@@ -89,12 +89,12 @@ an inline autocomplete that should survive an outside click).
 
 ```
 enhance
-surface   (Escape, outside click, focus restore, sheet mode)
+surface   (Escape, outside click, focus restore)
 floating
 keys
 ```
 
-Less code. Inherits the runtime's dismissal semantics and mobile sheet. Use for
+Less code. Inherits the runtime's dismissal semantics. Use for
 anything that behaves like a popup.
 
 > A `[role="listbox"]` surface with `[role="option"]` children gets no key handling and

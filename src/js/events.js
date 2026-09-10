@@ -1,9 +1,6 @@
 export const ACTUAL_EVENT_PREFIX = "actual";
 
 export const EVENTS = {
-  reposition: `${ACTUAL_EVENT_PREFIX}:reposition`,
-  hide: `${ACTUAL_EVENT_PREFIX}:hide`,
-  outOfView: `${ACTUAL_EVENT_PREFIX}:out-of-view`,
   // Cancelable: dispatched by a surface before it opens.
   // detail: { surface, options }
   surfaceOpen: `${ACTUAL_EVENT_PREFIX}:surface-open`,

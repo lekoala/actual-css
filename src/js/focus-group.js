@@ -1,3 +1,10 @@
+/*
+ * Focus group — one remembered tab stop and Arrow/Home/End navigation for a
+ * composite widget. The consumer supplies getItems(); the controller only
+ * updates tabindex and focus, never activation or ARIA. sync() re-reads the
+ * candidate list; the primitive does not observe the subtree.
+ */
+
 import { itemForKey } from "./keys.js";
 
 const ORIENTATIONS = new Set(["horizontal", "vertical"]);

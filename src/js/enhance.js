@@ -146,8 +146,6 @@ function createRegistry(root) {
     if (hasRemoval) sweepDisconnected();
   });
 
-  observer.observe(root, { childList: true, subtree: true });
-
   return {
     add(enhancers) {
       const selectors = Object.keys(enhancers).filter(isValidSelector);
@@ -164,6 +162,9 @@ function createRegistry(root) {
         selectorString: selectors.join(","),
       };
       records.add(record);
+      // Observe only once there is a record to act on; an enhance() call with
+      // no valid selector must not leave an idle observer behind.
+      if (records.size === 1) observer.observe(root, { childList: true, subtree: true });
       updateSelectorString();
       scanFor(record, root);
       return record;
@@ -221,8 +222,13 @@ export function applyEnhancement(name, selector, root) {
     el.setAttribute("data-enhance", tokens ? `${tokens} ${name}` : name);
   }
   // Refresh the scope once per owner; parentNode stops at shadow boundaries.
+  // A Document scope can own registrations, but its default root —
+  // documentElement — is a descendant the ancestor walk never reaches.
   for (let owner = root; owner; owner = owner.parentNode) {
     ownedNames.get(owner)?.get(name)?.refresh(root);
+    if (owner === root && owner.nodeType === DOCUMENT_NODE) {
+      ownedNames.get(owner.documentElement)?.get(name)?.refresh(root);
+    }
   }
   return elements;
 }

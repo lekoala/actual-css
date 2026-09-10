@@ -258,7 +258,6 @@ widgets can veto or decorate opens, and context menus inject their own
 | `restoreFocusTo`  | `trigger`        | Element focused on close                    |
 
 `x`, `y` replace the anchor entirely, which is what a context menu needs.
-`mobile` takes `"auto"`, `"sheet"`, `"none"` or `"anchored"`.
 
 `autoClose` takes `"true"` to close on inside and outside clicks, `"inside"` or
 `"outside"` to limit it to one side, and `"false"` to disable automatic click

@@ -2,9 +2,15 @@ import { expect, test } from "bun:test";
 import { publicJsExports } from "./helpers/package-exports.js";
 
 const PUBLIC_EXPORTS = {
-  enhance: ["default", "enhancementSelector", "hasEnhancement", "registerEnhancement"],
+  enhance: [
+    "default",
+    "enhancementSelector",
+    "hasEnhancement",
+    "applyEnhancement",
+    "registerEnhancement",
+  ],
   escape: ["registerEscapeDismissal"],
-  events: ["EVENTS"],
+  events: ["EVENTS", "ACTUAL_EVENT_PREFIX"],
   focus: ["isElementVisible", "getFocusable", "focusFirstDescendant"],
   "focus-group": ["connectFocusGroup"],
   keys: ["firstItem", "lastItem", "nextItem", "itemForKey"],

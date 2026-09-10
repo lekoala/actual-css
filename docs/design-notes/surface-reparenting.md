@@ -90,12 +90,6 @@ restoration and placement orchestration unchanged. See
 [platform-alignment](platform-alignment.md) for the responsibility split, and
 [browser-support](browser-support.md) for the floor it requires.
 
-One fragment of the old mechanism survives, and it is not reparenting: the
-sheet scrim is still appended to the document root, because a runtime-created
-`fixed` div cannot escape an ancestor's overflow or stacking context on its own
-and the native `::backdrop` cannot absorb a pointer. The scrim has no author
-identity and nothing inherited to preserve.
-
 Adopting it behind a capability branch was rejected rather than overlooked: the
 fallback path *is* the defect, so a branch would have kept the bug alive for
 exactly the browsers it was written to serve. Raising the floor was the cheaper

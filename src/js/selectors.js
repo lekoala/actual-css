@@ -1,11 +1,11 @@
 /*
  * Selectors — the state-class vocabulary the runtime writes.
  *
- * This file no longer lists discovery selectors: behavior discovery moved
- * to data-enhance tokens in 0.2. What remains are the class names modules
- * write as state (is-open, was-validated, …) and validation's two read-side
- * presentation adapters (field, fieldError). To run this runtime against a
- * different CSS framework, edit this file (or alias it in a bundler).
+ * The file lists the class names modules write as state (is-open,
+ * was-validated, …) and validation's two read-side presentation adapters
+ * (field, fieldError). Behavior discovery is not listed here: it uses
+ * data-enhance tokens. To run this runtime against a different CSS
+ * framework, edit this file (or alias it in a bundler).
  *
  * data-* attributes and ARIA are not listed: they are each module's own
  * behavior API, not CSS vocabulary, so they stay framework-neutral by

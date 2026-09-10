@@ -1,3 +1,9 @@
+/*
+ * Context menu — `data-context-menu` targets opening a shared menu surface at
+ * a pointer, keyboard, or button origin. Reuses surface for the lifecycle and
+ * menu for item navigation; the panel gets no token.
+ */
+
 import enhance from "./enhance.js";
 import { EVENTS } from "./events.js";
 import { connectMenu, focusFirstMenuItem, hasMenuItems } from "./menu.js";
@@ -96,11 +102,20 @@ function requestContextMenu(context, menu, opts = {}) {
 function openContextMenu(context, menu, opts = {}) {
   if (!requestContextMenu(context, menu, opts)) return;
   if (isSurfaceOpen(menu)) closeSurface(menu);
+
+  // Measured after the cancelable event: a handler may have moved the anchor.
+  let { x, y } = opts;
+  if (x == null || y == null) {
+    const rect = (opts.origin || context).getBoundingClientRect();
+    x ??= rect.left;
+    y ??= rect.bottom;
+  }
+
   if (
     openSurface(menu, {
       source: context,
-      x: opts.x,
-      y: opts.y,
+      x,
+      y,
       placement: opts.placement || "bottom-start",
       distance: opts.distance ?? 2,
       dismissOnScroll: true,
@@ -114,10 +129,7 @@ function openContextMenu(context, menu, opts = {}) {
 }
 
 function openFromKeyboard(context, menu, origin = context, restoreFocusTo) {
-  const rect = origin.getBoundingClientRect();
   openContextMenu(context, menu, {
-    x: rect.left,
-    y: rect.bottom,
     placement: "bottom-start",
     distance: 4,
     focus: "first-item",
@@ -264,23 +276,12 @@ function connectContextTarget(target) {
         return;
       }
 
-      if (!requestContextMenu(target, menu, { origin: trigger, trigger: "button" })) return;
-
-      const rect = trigger.getBoundingClientRect();
-      if (
-        openSurface(menu, {
-          source: target,
-          x: rect.left,
-          y: rect.bottom,
-          placement: "bottom-start",
-          distance: 4,
-          dismissOnScroll: true,
-          restoreFocusTo: trigger,
-          ...readPanelOptions(menu),
-        })
-      ) {
-        focusMenuContainer(menu);
-      }
+      openContextMenu(target, menu, {
+        distance: 4,
+        origin: trigger,
+        trigger: "button",
+        restoreFocusTo: trigger,
+      });
     },
     { signal: controller.signal },
   );

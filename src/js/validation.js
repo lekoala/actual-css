@@ -367,7 +367,7 @@ export class FormValidator {
     rules[name] = callback;
   }
 
-  static init(selector = VALIDATION_SELECTOR) {
+  static init(selector = `form${VALIDATION_SELECTOR}`) {
     if (typeof document === "undefined") return;
     for (const form of document.querySelectorAll(selector)) {
       if (isFormElement(form)) connectForm(form);
