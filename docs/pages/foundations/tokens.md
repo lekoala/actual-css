@@ -76,6 +76,16 @@ Focus styling is outline-first. `--focus` names the theme's focus color, and a r
 }
 ```
 
+### Palette coherence
+
+A coherent palette treats surfaces, text, borders, intents, and shadows as related roles rather than isolated colors.
+
+Coherence does not mean that every token must be chromatic. Pure or near-pure whites and blacks remain legitimate where their role calls for them; what matters is that the surrounding neutral ramp and derived treatments belong to the same visual family.
+
+Semantic intents are curated colors, not mechanical derivatives of `--primary`. Danger, warning, and success stay recognizable for their function, but they are chosen as members of the theme palette rather than copied independently from a generic scale.
+
+Color should reinforce structure and meaning, not carry them alone. Information hierarchy and semantic states should remain understandable when hue is removed or unavailable. Desaturating a composition is a useful review heuristic, not a conformance test.
+
 ### Default theme philosophy
 
 The default palette is **Ink & Terra**: a near-neutral aubergine `primary`, terracotta `secondary`, and pigment-toned statuses (sage, ochre, brick) tuned to equal perceived weight. The neutral ramp (text, borders, subtle surfaces) is tinted toward the primary hue so the whole page quietly carries the identity. Optional themes can re-introduce vivid intent palettes on top of this foundation.

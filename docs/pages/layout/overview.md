@@ -48,3 +48,13 @@ Most layout primitives read `--gap` and allow local overrides.
 Prefer a local custom property over adding many one-off utility classes. Use inline styles only for demos, prototypes, or truly dynamic values.
 
 There are no `.gap-sm` / `.gap-md` / `.gap-lg` density variants on the core layout primitives; set `--gap` locally when only spacing should change. The extra utilities (`src/css/utilities/extra.css`) ship those gap utilities for row/column containers.
+
+## Spacing expresses relationships
+
+**Components own their internal rhythm; layout owns the relationships between components.**
+
+Prefer a parent `gap` for relationships between peers instead of encoding sibling margins into a component. Smaller gaps imply a stronger relationship; progressively larger gaps distinguish groups and sections.
+
+Before adding a divider or other separating chrome, consider whether additional spacing already expresses the boundary clearly.
+
+Density changes the amount of space available, not the relationships that space communicates. When a composition contains local, group, and section rhythms, preserve their relative hierarchy with nested or local `--gap` values rather than relying on one inherited gap at every level. See [Stack](./stack.md) for the nesting and density mechanics.
