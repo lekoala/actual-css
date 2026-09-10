@@ -26,6 +26,7 @@
   --border: hsl(220 15% 88%);
   --focus: var(--primary);
   --hover-overlay: hsl(220 30% 10% / 0.04);
+  --shadow-color: hsl(220 30% 10%);
 
   --radius: 0;
   --radius-sm: 0;

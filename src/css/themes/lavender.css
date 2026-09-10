@@ -31,6 +31,8 @@
   --soft-bg-mix: 92%;
   --soft-hover-alpha: 8%;
   --shadow-color: hsl(260 45% 20%);
+  /* Pre-light-dark() tier, mirroring the light half below. */
+  --hover-overlay: hsl(220 30% 10% / 0.04);
 }
 
 @supports (color: light-dark(red, blue)) {

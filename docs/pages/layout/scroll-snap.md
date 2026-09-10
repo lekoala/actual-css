@@ -24,10 +24,10 @@ Use `.scroll-snap` for a niche row of items that should scroll horizontally, suc
 
 The baseline is flex layout plus `overflow-x: auto`, so older browsers still get a usable horizontal scroll area. Browsers with scroll snap support add `scroll-snap-type` and item alignment.
 
-Items snap to the inline start edge by default. Use `data-snap="center"` for visual rails where centered cards are the better fit.
+Items snap to the inline start edge by default, with `proximity` snapping so a short rail never fights the pointer. Use `data-snap-align="center"` for visual rails where centered cards are the better fit, and `data-snap="mandatory"` only when every stop must land.
 
 ```html demo
-<div class="scroll-snap" data-snap="center" style="--scroll-snap-item-size: min(85%, 18rem)">
+<div class="scroll-snap" data-snap-align="center" style="--scroll-snap-item-size: min(85%, 18rem)">
   <article class="card">One</article>
   <article class="card">Two</article>
   <article class="card">Three</article>
@@ -42,7 +42,7 @@ Items snap to the inline start edge by default. Use `data-snap="center"` for vis
 - `--scroll-snap-gap` — space between items.
 - `--scroll-snap-padding` — inline scroll padding, so a snapped item does not sit
   flush against the container edge. Not declared; falls back to `--scroll-snap-gap`.
-- `--scroll-snap-align` — item snap alignment. Prefer `data-snap="center"`
+- `--scroll-snap-align` — item snap alignment. Prefer `data-snap-align="center"`
   over setting this directly.
 
 Keep scrollbars visible by default. If a product deliberately hides them, make that choice explicit with `data-scrollbar="hidden"`.

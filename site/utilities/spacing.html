@@ -231,9 +231,6 @@
 <tr><th>Class</th><th>Description</th></tr>
 </thead>
 <tbody>
-<tr><td><code>.gap-sm</code></td><td><code>gap: var(--space-20)</code> — denser row rhythm.</td></tr>
-<tr><td><code>.gap-md</code></td><td><code>gap: var(--space-40)</code> — default row rhythm.</td></tr>
-<tr><td><code>.gap-lg</code></td><td><code>gap: var(--space-50)</code> — roomier row rhythm.</td></tr>
 <tr><td><code>.padding-context</code></td><td>All-side padding at the current density step.</td></tr>
 <tr><td><code>.gap-context</code></td><td><code>gap: var(--gap)</code>.</td></tr>
 <tr><td><code>.row-gap-context</code></td><td><code>row-gap: var(--gap)</code>.</td></tr>
@@ -272,8 +269,12 @@ and the <code>.spacious</code> context loosens it to <code>--space-50</code> (1.
 <li><code>.gap-none</code> → <code>gap: 0</code></li>
 </ul>
 <p><code>.gap-none</code> sets the element's own gap directly and does not change <code>--gap</code>
-for nested layouts. For a denser or roomier rhythm, use the <code>.compact</code> / <code>.spacious</code>
-density contexts or override <code>--gap</code> on the layout instance.</p>
+for nested layouts. For a denser or roomier rhythm, use the <code>.compact</code> /
+<code>.spacious</code> density contexts, or set the <code>gap</code> property on the instance when the
+change must stop there.</p>
+<p><code>--gap</code> defines the contextual rhythm; <code>.gap-context</code> applies that rhythm to a
+container that does not already consume <code>--gap</code>. The layout primitives
+(<code>.stack</code>, <code>.cluster</code>, <code>.grid</code>, …) read it on their own.</p>
 <h2 id="padding">Padding</h2>
 <p>Block (vertical) and inline (horizontal) padding. Values respond to the density context.</p>
 </div>

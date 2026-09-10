@@ -153,11 +153,11 @@ It does **not** guarantee that arbitrary content will remain usable inside a ver
 
 A two-column span in a narrow container may still be too small for its content. That is an application composition problem, not something the primitive should guess how to solve.
 
-## Gap utilities are exact here
+## Gap is not coupled to the track count
 
-`grid.css` documents a pitfall: `.gap-sm` and `.gap-lg` set the `gap` property without updating `--gap`, and the unwrapped `.grid-N` baseline sizes its tracks from `--gap`, so the two disagree and a bare `.grid-4.gap-lg` stops one column short.
+A grid that sizes its tracks from `--gap` couples spacing and density: setting the `gap` property on its own can make the two disagree. Actual removed its `.gap-sm` / `.gap-md` / `.gap-lg` utilities before 0.8 for exactly that reason — a local gap is now a direct `gap` declaration, and `--gap` is reserved for rebinding an inherited rhythm.
 
-`.column-layout` has no such coupling. Its track template is `repeat(12, minmax(0, 1fr))` and never reads `--gap` for sizing, so `gap` and the track count are independent. Every gap utility is exact at every width.
+`.column-layout` never had that coupling. Its track template is `repeat(12, minmax(0, 1fr))` and never reads `--gap` for sizing, so `gap` and the track count are independent at every width.
 
 This is worth stating explicitly because an author who has read the grid page will reasonably assume the opposite.
 

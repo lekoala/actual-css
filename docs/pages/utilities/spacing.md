@@ -18,9 +18,6 @@ Extra utilities:
 
 | Class                       | Description                                   |
 | --------------------------- | --------------------------------------------- |
-| `.gap-sm`                   | `gap: var(--space-20)` — denser row rhythm.   |
-| `.gap-md`                   | `gap: var(--space-40)` — default row rhythm.  |
-| `.gap-lg`                   | `gap: var(--space-50)` — roomier row rhythm.  |
 | `.padding-context`          | All-side padding at the current density step. |
 | `.gap-context`              | `gap: var(--gap)`.                            |
 | `.row-gap-context`          | `row-gap: var(--gap)`.                        |
@@ -51,8 +48,13 @@ Override the default gap from layout primitives (`.stack`, `.cluster`, `.grid`):
 - `.gap-none` → `gap: 0`
 
 `.gap-none` sets the element's own gap directly and does not change `--gap`
-for nested layouts. For a denser or roomier rhythm, use the `.compact` / `.spacious`
-density contexts or override `--gap` on the layout instance.
+for nested layouts. For a denser or roomier rhythm, use the `.compact` /
+`.spacious` density contexts, or set the `gap` property on the instance when the
+change must stop there.
+
+`--gap` defines the contextual rhythm; `.gap-context` applies that rhythm to a
+container that does not already consume `--gap`. The layout primitives
+(`.stack`, `.cluster`, `.grid`, …) read it on their own.
 
 ## Padding
 

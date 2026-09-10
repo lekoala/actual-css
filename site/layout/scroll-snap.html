@@ -247,11 +247,11 @@
 </div>
 <div class="prose docs-prose">
 <p>The baseline is flex layout plus <code>overflow-x: auto</code>, so older browsers still get a usable horizontal scroll area. Browsers with scroll snap support add <code>scroll-snap-type</code> and item alignment.</p>
-<p>Items snap to the inline start edge by default. Use <code>data-snap=&quot;center&quot;</code> for visual rails where centered cards are the better fit.</p>
+<p>Items snap to the inline start edge by default, with <code>proximity</code> snapping so a short rail never fights the pointer. Use <code>data-snap-align=&quot;center&quot;</code> for visual rails where centered cards are the better fit, and <code>data-snap=&quot;mandatory&quot;</code> only when every stop must land.</p>
 </div>
 <div class="docs-example">
   <div class="docs-preview">
-<div class="scroll-snap" data-snap="center" style="--scroll-snap-item-size: min(85%, 18rem)">
+<div class="scroll-snap" data-snap-align="center" style="--scroll-snap-item-size: min(85%, 18rem)">
   <article class="card">One</article>
   <article class="card">Two</article>
   <article class="card">Three</article>
@@ -260,7 +260,7 @@
 </div>
   </div>
   <div class="docs-code">
-    <pre><code class="language-html">&lt;div class=&quot;scroll-snap&quot; data-snap=&quot;center&quot; style=&quot;--scroll-snap-item-size: min(85%, 18rem)&quot;&gt;
+    <pre><code class="language-html">&lt;div class=&quot;scroll-snap&quot; data-snap-align=&quot;center&quot; style=&quot;--scroll-snap-item-size: min(85%, 18rem)&quot;&gt;
   &lt;article class=&quot;card&quot;&gt;One&lt;/article&gt;
   &lt;article class=&quot;card&quot;&gt;Two&lt;/article&gt;
   &lt;article class=&quot;card&quot;&gt;Three&lt;/article&gt;
@@ -276,7 +276,7 @@
 <li><code>--scroll-snap-gap</code> — space between items.</li>
 <li><code>--scroll-snap-padding</code> — inline scroll padding, so a snapped item does not sit
 flush against the container edge. Not declared; falls back to <code>--scroll-snap-gap</code>.</li>
-<li><code>--scroll-snap-align</code> — item snap alignment. Prefer <code>data-snap=&quot;center&quot;</code>
+<li><code>--scroll-snap-align</code> — item snap alignment. Prefer <code>data-snap-align=&quot;center&quot;</code>
 over setting this directly.</li>
 </ul>
 <p>Keep scrollbars visible by default. If a product deliberately hides them, make that choice explicit with <code>data-scrollbar=&quot;hidden&quot;</code>.</p>

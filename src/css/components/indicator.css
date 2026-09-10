@@ -38,7 +38,28 @@
   inset-block-end: 0;
 }
 
+/* Safari before 16.4 has no :dir(); the ancestor-attribute path is the
+   Degraded-tier fallback and the :dir() rules are dropped on their own there.
+   :dir() follows inherited directionality, so the explicit ltr rules
+   neutralize an outer RTL fallback for a nested direction change. The rules
+   stay grouped by specificity so the fallback never follows the :dir() rules. */
+[dir="rtl"] .indicator-item {
+  --indicator-translate-x: -50%;
+}
+
+.indicator-item:dir(ltr) {
+  --indicator-translate-x: 50%;
+}
+
 .indicator-item:dir(rtl) {
+  --indicator-translate-x: -50%;
+}
+
+[dir="rtl"] .indicator-item.start {
+  --indicator-translate-x: 50%;
+}
+
+.indicator-item.start:dir(ltr) {
   --indicator-translate-x: -50%;
 }
 

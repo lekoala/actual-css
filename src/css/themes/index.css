@@ -30,8 +30,9 @@
  *   gradient   — paired recolor + Bootstrap 4 style gradient on solid buttons
  *                via component-local button tokens
  *
- * Single-block themes (indigo, dim, cyberpunk, neon) pin one color-scheme and
- * cannot adapt to prefers-color-scheme; the paired ones follow the OS. */
+ * Single-block themes (indigo, dim, brutalist, cyberpunk, neon) pin one
+ * color-scheme and cannot adapt to prefers-color-scheme; the paired ones follow
+ * the OS. */
 @import "./indigo.css";
 @import "./dim.css";
 @import "./corporate.css";

@@ -7,20 +7,40 @@
  * the CSS chevron, so the picker (appearance: base-select) enhancement in
  * custom-select.css can be opted out independently. Add .native to a specific
  * select to opt out of the enhancement.
+ *
+ * Public hooks:
+ * --select-icon-size
  */
+/* --select-icon-size is typographic (em), so the reserved slot and the
+   pictogram scale with the control's font size, not a fixed rem sliver. */
 .select:not(:is([multiple], [size]:not([size="1"]))) {
+  --select-icon-size: 1em;
+
   appearance: none;
-  padding-inline-end: calc(var(--space-30) + var(--space-60));
+  -webkit-appearance: none;
+  padding-inline-end: calc(var(--control-pad-x) * 2 + var(--select-icon-size));
   background-image: var(--icon-chevron);
-  background-position: center right var(--space-30);
-  background-size: 1rem auto;
+  background-position: center right var(--control-pad-x);
+  background-size: var(--select-icon-size) auto;
   background-repeat: no-repeat;
 }
 
 /* The chevron sits on the inline-end side; flip it in RTL so it follows
-   the padding-inline-end space reserved for it. */
+   the padding-inline-end space reserved for it. Safari before 16.4 has no
+   :dir(); the ancestor-attribute path is the Degraded-tier fallback and the
+   :dir() rules are dropped on their own there. :dir() follows inherited
+   directionality, so the explicit ltr rule neutralizes an outer RTL fallback
+   for a nested direction change. */
+[dir="rtl"] .select:not(:is([multiple], [size]:not([size="1"]))) {
+  background-position: center left var(--control-pad-x);
+}
+
+.select:not(:is([multiple], [size]:not([size="1"]))):dir(ltr) {
+  background-position: center right var(--control-pad-x);
+}
+
 .select:not(:is([multiple], [size]:not([size="1"]))):dir(rtl) {
-  background-position: center left var(--space-30);
+  background-position: center left var(--control-pad-x);
 }
 
 /* Both forced-colors and prefers-contrast hand the arrow back to the
@@ -31,6 +51,6 @@
   .select:not(:is([multiple], [size]:not([size="1"]))) {
     appearance: auto;
     background-image: none;
-    padding-inline-end: var(--space-30);
+    padding-inline-end: var(--control-pad-x);
   }
 }

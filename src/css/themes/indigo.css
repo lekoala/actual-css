@@ -1,7 +1,7 @@
 /* Indigo — deep blue/violet palette, dark-only. Single-block shape
  * (color-scheme: dark only) — it does not adapt to prefers-color-scheme;
- * opt in via [data-theme="indigo"]. dim.css is a darker variant with
- * lifted surface tones. */
+ * opt in via [data-theme="indigo"]. dim.css lifts the surface tones for a
+ * lighter, less dense dark theme. */
 [data-theme="indigo"] {
   color-scheme: dark;
 

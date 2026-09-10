@@ -29,6 +29,9 @@
 
   --border: hsl(170 12% 86%);
   --focus: var(--primary);
+  /* Pre-light-dark() tier, mirroring the light half below. */
+  --hover-overlay: hsl(185 30% 10% / 0.04);
+  --shadow-color: hsl(185 30% 10%);
 }
 
 @supports (color: light-dark(red, blue)) {

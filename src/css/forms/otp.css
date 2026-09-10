@@ -73,6 +73,7 @@
   letter-spacing: calc(var(--otp-cell-size) + var(--otp-gap) - 1ch);
   text-align: start;
   appearance: none;
+  -webkit-appearance: none;
 }
 
 /* Deliberately no group ring: a box around all the cells reads as a second

@@ -47,11 +47,16 @@ never about opting in.
 - **Base** (`utilities/base.css`) is a curated set of common ergonomic
   shortcuts (`.overflow-auto`, `.gap-none`, `.text-nowrap`, `.px`, `.py`).
 - **Extra** (`utilities/extra.css`) uses explicit property/value names
-  (`.overflow-hidden`, `.gap-sm`, `.white-space-normal`).
+  (`.overflow-hidden`, `.padding-context`, `.white-space-normal`).
 
 Call them base and extra, after the files. "Optional" is the wrong word for
 either: it reads as a layer an author has to opt into, which is true of every
 module outside `core/` and therefore says nothing about these two.
+
+The `.gap-sm` / `.gap-md` / `.gap-lg` scale was removed before 0.8: it set `gap`
+without `--gap`, which can diverge from `.grid-N` track sizing. A local gap is
+now a direct `gap` declaration; `--gap` is reserved for rebinding an inherited
+rhythm.
 
 Base may use compact names for a small set of frequent operations (`.px`,
 `.py`, `.mbs`, `.mbe`). Extra uses explicit property/value names and must not

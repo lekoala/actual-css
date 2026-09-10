@@ -32,9 +32,10 @@
   --control-cursor: auto;
 
   appearance: none;
+  -webkit-appearance: none;
   inline-size: 100%;
   min-block-size: var(--control-size);
-  padding-inline: var(--space-30);
+  padding-inline: var(--control-pad-x);
   border: var(--border-width) solid var(--form-invalid-border, var(--control-border));
   border-block-end-color: var(
     --form-invalid-border,

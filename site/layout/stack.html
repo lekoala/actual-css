@@ -282,8 +282,8 @@ stay three separate controls that happen to form one group, so they take
 <p><code>.compact</code> and <code>.spacious</code> rebind <code>--gap</code> to <code>--space-20</code> and <code>--space-50</code>.
 Because the token is inherited, the same two classes also tighten the inner gap
 of any nested stack, cluster, and grid. For a one-off gap that must <em>not</em> follow
-density, using <code>src/css/utilities/extra.css</code> <code>.gap-sm</code> / <code>.gap-md</code> / <code>.gap-lg</code>
-sets the <code>gap</code> property directly on the instance instead.</p>
+density, set the <code>gap</code> property directly on the instance (the next section
+explains why).</p>
 <p>A stack that mixes kinds keeps the default: five <code>.field</code> wrappers and one lone
 <code>.choice</code> is a form that contains a checkbox, not a list of options, and
 tightening it would squeeze the fields.</p>

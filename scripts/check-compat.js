@@ -11,6 +11,15 @@
  *     behaves. Must be inside @supports (or have a comment on the preceding
  *     lines explaining why the fallback keeps the base functional).
  *
+ * @supports is the simplest machine-readable boundary, not an architectural
+ * requirement in itself. When an unsupported selector already drops the
+ * enhancement cleanly and the base stays fully functional, a documented
+ * justification (isJustified below) or a ledger entry is equally valid. A
+ * behaviorally redundant @supports wrapper kept only to satisfy this checker is
+ * a simplification candidate (docs/design-notes/browser-support.md): improve
+ * the checker/ledger rather than let the wrapper harden into a convention.
+ * Encoded hierarchy: architecture > readability > tooling.
+ *
  * Violations fail the pipeline. Tier controls how a use is *reported*, not
  * whether it needs a gate: kind says what happens on an engine that lacks the
  * capability, and only kind can excuse a use.

@@ -20,7 +20,7 @@ Set `--cluster-align`.
 
 ### Change spacing without changing control size
 
-Set `--gap` locally on the layout primitive. The extra utilities (`src/css/utilities/extra.css`) ship `.gap-sm` / `.gap-md` / `.gap-lg` for row/column containers.
+Set `--gap` on the layout primitive to retune it and everything nested. To change only that element's rhythm without reaching nested primitives, set the `gap` property instead.
 
 → Layout
 

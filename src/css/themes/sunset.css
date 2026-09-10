@@ -31,6 +31,8 @@
   --selection-bg: var(--secondary);
   --selection-fg: var(--secondary-fg);
   --shadow-color: hsl(20 60% 12%);
+  /* Pre-light-dark() tier, mirroring the light half below. */
+  --hover-overlay: hsl(220 30% 10% / 0.04);
 }
 
 @supports (color: light-dark(red, blue)) {

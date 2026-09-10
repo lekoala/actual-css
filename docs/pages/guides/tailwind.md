@@ -163,7 +163,7 @@ Tailwind allows almost every utility to be changed independently at a breakpoint
 There is intentionally no equivalent Actual syntax such as:
 
 ```text
-md:cluster xl:gap-lg
+md:cluster xl:spacious
 ```
 
 First ask what the layout is supposed to do.
@@ -213,7 +213,8 @@ Actual does not prohibit media queries. It simply does not encode every media qu
 | `max-w-*` for readable text          | `.measure` where appropriate                      |
 | common visual component bundle       | Actual component                                  |
 | component colors                     | intents such as `.primary`, `.danger`, `.success` |
-| repeated layout spacing              | `--gap` / layout hooks                            |
+| `gap-*` on one container             | `gap: var(--space-*)`                             |
+| rebind rhythm for nested primitives  | `--gap` on the layout context                     |
 | small common corrections             | Actual utilities                                  |
 | breakpoint-prefixed utilities        | intrinsic layout, container query, or project CSS |
 | arbitrary values                     | custom property or project CSS                    |

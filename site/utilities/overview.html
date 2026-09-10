@@ -231,7 +231,7 @@ not about opting in. Importing <code>actual-css/css/utilities</code> — or
 </tbody>
 </table></div>
 <p>Base is the curated set, and it is where a short name is allowed: <code>.px</code>, <code>.py</code>,
-<code>.mbs</code>, <code>.gap-none</code>. Extra spells out the property and the value — <code>.gap-sm</code>,
+<code>.mbs</code>, <code>.gap-none</code>. Extra spells out the property and the value — <code>.row-gap-context</code>,
 <code>.overflow-x-auto</code>, <code>.justify-content-center</code> — and never gives a base utility
 a second spelling.</p>
 <p>Reach for base first. Extra exists so an explicit one-off does not have to
@@ -243,12 +243,34 @@ list the two layers as separate tables. Every other utility page is base only.</
 <p>Utilities deliberately excluded to keep the surface small and intentional.</p>
 </blockquote>
 <ul>
-<li>No display scale such as <code>.block</code>, <code>.flex</code>, <code>.grid</code> — use layout primitives.</li>
+<li>No display scale such as <code>.block</code>, <code>.flex</code>, <code>.grid</code> — use layout primitives. The extra layer does ship explicit <code>.display-flex</code> / <code>.display-grid</code> escape hatches; see Display escape hatches below.</li>
 <li>No color scales such as <code>.text-primary</code> or <code>.bg-success</code> — intent colors belong to components and state.</li>
 <li>No breakpoint utility variants — use container queries or layout primitives.</li>
 <li>No utility variants for hover, focus, dark mode, or arbitrary selectors — use component states.</li>
 <li>No full spacing scale with every step and direction — the 17 spacing helpers across the core and extra utilities cover the most common escape hatches.</li>
 </ul>
+<h2 id="display-escape-hatches">Display escape hatches</h2>
+<p>A one-off display correction is the exception to the display Non-Goal. The extra
+layer spells the property and the value, so these are opt-in corrections, not the
+short atomic scale the Non-Goal bans.</p>
+<div class="table-wrap"><table class="table">
+<thead>
+<tr><th>Class</th><th>Description</th></tr>
+</thead>
+<tbody>
+<tr><td><code>.display-block</code></td><td><code>display: block</code>.</td></tr>
+<tr><td><code>.display-inline</code></td><td><code>display: inline</code>.</td></tr>
+<tr><td><code>.display-inline-block</code></td><td><code>display: inline-block</code>.</td></tr>
+<tr><td><code>.display-flex</code></td><td><code>display: flex</code>.</td></tr>
+<tr><td><code>.display-inline-flex</code></td><td><code>display: inline-flex</code>.</td></tr>
+<tr><td><code>.display-grid</code></td><td><code>display: grid</code>.</td></tr>
+<tr><td><code>.display-none</code></td><td><code>display: none</code>.</td></tr>
+<tr><td><code>.visibility-hidden</code></td><td><code>visibility: hidden</code>.</td></tr>
+</tbody>
+</table></div>
+<p>Prefer <code>.stack</code>, <code>.cluster</code>, <code>.grid</code>, and the other layout primitives first.
+Reach for a display helper when existing component or third-party markup needs a
+one-line correction and no primitive expresses it.</p>
 
 </div>
 
@@ -270,6 +292,7 @@ list the two layers as separate tables. Every other utility page is base only.</
           <ul class="nav-list docs-toc-list" data-docs-toc>
         <li><a class="nav-link" href="#two-layers" data-docs-toc-item data-level="2">Two layers</a></li>
         <li><a class="nav-link" href="#non-goals" data-docs-toc-item data-level="2">Non-Goals</a></li>
+        <li><a class="nav-link" href="#display-escape-hatches" data-docs-toc-item data-level="2">Display escape hatches</a></li>
           </ul>
         </nav>
       </aside>

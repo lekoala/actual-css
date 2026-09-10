@@ -92,12 +92,12 @@
   text-underline-offset: 0.18em;
 }
 
-.prose :where(a:hover) {
+.prose :where(a:hover, a:focus-visible) {
   text-decoration-thickness: 0.12em;
 }
 
 @supports (color: color-mix(in oklch, red, white)) {
-  .prose :where(a:hover) {
+  .prose :where(a:hover, a:focus-visible) {
     color: color-mix(in oklab, var(--link, var(--primary)), var(--text) 15%);
   }
 }
@@ -171,6 +171,7 @@
 }
 
 .prose :where(blockquote) {
+  margin-inline: 0;
   padding-inline-start: 1em;
   border-inline-start: var(--border-width) solid var(--border);
   color: var(--text-muted);

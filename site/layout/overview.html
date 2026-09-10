@@ -246,7 +246,7 @@ that bypass.</p>
 }
 </code></pre>
 <p>Prefer a local custom property over adding many one-off utility classes. Use inline styles only for demos, prototypes, or truly dynamic values.</p>
-<p>There are no <code>.gap-sm</code> / <code>.gap-md</code> / <code>.gap-lg</code> density variants on the core layout primitives; set <code>--gap</code> locally when only spacing should change. The extra utilities (<code>src/css/utilities/extra.css</code>) ship those gap utilities for row/column containers.</p>
+<p>Set <code>--gap</code> locally to retune the primitive and its nested layouts. To change only one element's rhythm without reaching nested primitives, set the <code>gap</code> property instead.</p>
 <h2 id="spacing-expresses-relationships">Spacing expresses relationships</h2>
 <p><strong>Components own their internal rhythm; layout owns the relationships between components.</strong></p>
 <p>Prefer a parent <code>gap</code> for relationships between peers instead of encoding sibling margins into a component. Smaller gaps imply a stronger relationship; progressively larger gaps distinguish groups and sections.</p>

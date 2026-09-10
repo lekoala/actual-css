@@ -114,6 +114,7 @@
 ).sm {
   --control-size: var(--control-size-sm);
   --control-font-size: var(--font-size-sm);
+  --control-pad-x: var(--font-size-sm);
 }
 
 :where(
@@ -135,6 +136,7 @@
 ).lg {
   --control-size: var(--control-size-lg);
   --control-font-size: var(--font-size-lg);
+  --control-pad-x: var(--font-size-lg);
 }
 
 /* Modern color enhancement. Baseline variant values above remain usable

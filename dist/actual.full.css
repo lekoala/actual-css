@@ -116,7 +116,10 @@ select {
      beyond this vocabulary. Toggles that share one transition list at
      --duration-fast (flyout, tooltip) and pure-opacity backdrops stay on
      `ease`: at 100ms the curve has almost no resolving time, and a scrim is
-     not traveling anywhere. */
+     not traveling anywhere. Animation policy: reset.css is the global safety
+     net; every meaningful @keyframes is explicitly gated behind
+     prefers-reduced-motion: no-preference; ordinary transitions rely on the
+     reset alone. */
   --duration: 150ms;
   --duration-fast: 100ms;
   --duration-slow: 200ms;
@@ -148,19 +151,28 @@ select {
 
   /* Controls — inputs and buttons share --control-size so heights always match.
      .compact/.spacious (variants.css) switch geometry without changing
-     --control-font-size. Local .sm/.lg component sizes switch both.
+     --control-font-size. Local .sm/.lg component sizes switch all three.
 
      Inline choices (checkbox, radio, switch) are typographic, not field-sized:
      they sit on a line of text, so they follow --control-font-size through
      --choice-control-size instead of --control-size. Being an em value in
      :root is deliberate — an unregistered custom property resolves its units
      at the element that consumes it, so one declaration tracks whatever font
-     size the choice actually renders at. */
+     size the choice actually renders at.
+
+     --control-pad-x is the opposite kind of token: a resolved geometry length,
+     not an em ratio. Every part of one control must see the same horizontal
+     distance, so it is stated in the typographic tokens rather than an em
+     whose value would change on a descendant with its own font size (the
+     input-icon glyph, made larger by --input-icon-size). It mirrors
+     --control-font-size and is rebound beside it at the .sm/.lg boundaries
+     (variants.css); declaring it only in :root would freeze the md value,
+     because a var() inside a custom property resolves where it is declared. */
   --control-size-sm: 2rem;
   --control-size-md: 2.375rem;
   --control-size-lg: 2.75rem;
   --control-size: var(--control-size-md);
-  --control-pad-x: 1em;
+  --control-pad-x: var(--font-size-md);
   --control-font-size: var(--font-size-md);
   --choice-control-size: 1.125em;
   --disabled-opacity: 0.65;
@@ -758,6 +770,7 @@ small {
 ).sm {
   --control-size: var(--control-size-sm);
   --control-font-size: var(--font-size-sm);
+  --control-pad-x: var(--font-size-sm);
 }
 
 :where(
@@ -779,6 +792,7 @@ small {
 ).lg {
   --control-size: var(--control-size-lg);
   --control-font-size: var(--font-size-lg);
+  --control-pad-x: var(--font-size-lg);
 }
 
 /* Modern color enhancement. Baseline variant values above remain usable
@@ -940,12 +954,12 @@ small {
   text-underline-offset: 0.18em;
 }
 
-.prose :where(a:hover) {
+.prose :where(a:hover, a:focus-visible) {
   text-decoration-thickness: 0.12em;
 }
 
 @supports (color: color-mix(in oklch, red, white)) {
-  .prose :where(a:hover) {
+  .prose :where(a:hover, a:focus-visible) {
     color: color-mix(in oklab, var(--link, var(--primary)), var(--text) 15%);
   }
 }
@@ -1019,6 +1033,7 @@ small {
 }
 
 .prose :where(blockquote) {
+  margin-inline: 0;
   padding-inline-start: 1em;
   border-inline-start: var(--border-width) solid var(--border);
   color: var(--text-muted);
@@ -1122,9 +1137,10 @@ small {
 /*
  * Optional fluid typography module.
  *
- * Not imported by actual.css. Import this file manually after actual.css when
- * you need display, title, and lead sizes that scale with the viewport. Typical
- * use cases: marketing pages, landing pages, hero sections, documentation
+ * Part of the typography family (typography/index.css) and the full bundle; it
+ * is not in the minimal core, so a core-only import adds it explicitly when
+ * display, title, and lead sizes must scale with the viewport. Typical use
+ * cases: marketing pages, landing pages, hero sections, documentation
  * homepages.
  *
  * Do not use this for body text, app UI, or the default prose scale. Fluid
@@ -1412,7 +1428,7 @@ small {
     text-align: start;
   }
 
-  /* Side navigation no longer occupies the viewport's bottom safe area. */
+  /* In the side layout the FAB owns the viewport's bottom safe-area inset. */
   .app-layout > .fab {
     margin-block-end: max(var(--fab-offset), env(safe-area-inset-bottom));
   }
@@ -1869,21 +1885,25 @@ small {
   .scroll-snap {
     overscroll-behavior-inline: contain;
     scroll-padding-inline: var(--scroll-snap-padding, var(--scroll-snap-gap));
+    /* x then inline: an engine that lacks the logical keyword keeps x.
+       proximity is the default, so a short rail cannot trap the pointer. */
+    scroll-snap-type: x proximity;
+    scroll-snap-type: inline proximity;
+  }
+
+  /* Strict snapping is opt-in; proximity keeps a rail from fighting the
+     pointer on a short strip. */
+  .scroll-snap[data-snap="mandatory"] {
     scroll-snap-type: x mandatory;
+    scroll-snap-type: inline mandatory;
   }
 
   .scroll-snap > * {
     scroll-snap-align: var(--scroll-snap-align);
   }
 
-  .scroll-snap[data-snap="center"] {
+  .scroll-snap[data-snap-align="center"] {
     --scroll-snap-align: center;
-  }
-}
-
-@supports (scroll-snap-type: inline mandatory) {
-  .scroll-snap {
-    scroll-snap-type: inline mandatory;
   }
 }
 
@@ -2063,9 +2083,10 @@ small {
   --control-cursor: auto;
 
   appearance: none;
+  -webkit-appearance: none;
   inline-size: 100%;
   min-block-size: var(--control-size);
-  padding-inline: var(--space-30);
+  padding-inline: var(--control-pad-x);
   border: var(--border-width) solid var(--form-invalid-border, var(--control-border));
   border-block-end-color: var(
     --form-invalid-border,
@@ -2248,6 +2269,7 @@ small {
   background: var(--choice-bg);
   color: var(--choice-mark);
   appearance: none;
+  -webkit-appearance: none;
   cursor: pointer;
 }
 
@@ -2344,20 +2366,40 @@ small {
  * the CSS chevron, so the picker (appearance: base-select) enhancement in
  * custom-select.css can be opted out independently. Add .native to a specific
  * select to opt out of the enhancement.
+ *
+ * Public hooks:
+ * --select-icon-size
  */
+/* --select-icon-size is typographic (em), so the reserved slot and the
+   pictogram scale with the control's font size, not a fixed rem sliver. */
 .select:not(:is([multiple], [size]:not([size="1"]))) {
+  --select-icon-size: 1em;
+
   appearance: none;
-  padding-inline-end: calc(var(--space-30) + var(--space-60));
+  -webkit-appearance: none;
+  padding-inline-end: calc(var(--control-pad-x) * 2 + var(--select-icon-size));
   background-image: var(--icon-chevron);
-  background-position: center right var(--space-30);
-  background-size: 1rem auto;
+  background-position: center right var(--control-pad-x);
+  background-size: var(--select-icon-size) auto;
   background-repeat: no-repeat;
 }
 
 /* The chevron sits on the inline-end side; flip it in RTL so it follows
-   the padding-inline-end space reserved for it. */
+   the padding-inline-end space reserved for it. Safari before 16.4 has no
+   :dir(); the ancestor-attribute path is the Degraded-tier fallback and the
+   :dir() rules are dropped on their own there. :dir() follows inherited
+   directionality, so the explicit ltr rule neutralizes an outer RTL fallback
+   for a nested direction change. */
+[dir="rtl"] .select:not(:is([multiple], [size]:not([size="1"]))) {
+  background-position: center left var(--control-pad-x);
+}
+
+.select:not(:is([multiple], [size]:not([size="1"]))):dir(ltr) {
+  background-position: center right var(--control-pad-x);
+}
+
 .select:not(:is([multiple], [size]:not([size="1"]))):dir(rtl) {
-  background-position: center left var(--space-30);
+  background-position: center left var(--control-pad-x);
 }
 
 /* Both forced-colors and prefers-contrast hand the arrow back to the
@@ -2368,7 +2410,7 @@ small {
   .select:not(:is([multiple], [size]:not([size="1"]))) {
     appearance: auto;
     background-image: none;
-    padding-inline-end: var(--space-30);
+    padding-inline-end: var(--control-pad-x);
   }
 }
 
@@ -2652,12 +2694,12 @@ small {
 
 /* Leading: icon is the first child */
 .input-icon > :first-child:where(:not(.input)) {
-  inset-inline-start: var(--space-30);
+  inset-inline-start: var(--control-pad-x);
 }
 
-/* Trailing: input is the first child, icon follows */
-.input-icon > .input:first-child ~ :where(:not(.input)) {
-  inset-inline-end: var(--space-30);
+/* Trailing: an icon follows the input, with or without a leading icon. */
+.input-icon > .input ~ :where(:not(.input)) {
+  inset-inline-end: var(--control-pad-x);
 }
 
 /* font-size only sizes text-metric icons (webfont <i>, <span>). An inline
@@ -2672,12 +2714,14 @@ small {
 
 /* Leading: input gets start padding to clear the icon */
 .input-icon > :first-child:where(:not(.input)) ~ .input {
-  padding-inline-start: calc(var(--space-30) * 2 + var(--input-icon-size));
+  padding-inline-start: calc(var(--control-pad-x) * 2 + var(--input-icon-size));
 }
 
-/* Trailing: input is first child and has a sibling → end padding */
-.input-icon > .input:first-child:where(:not(:last-child)) {
-  padding-inline-end: calc(var(--space-30) * 2 + var(--input-icon-size));
+/* Trailing: the input has a following sibling → end padding. Not tied to the
+   input being first child, so a leading icon does not disable the trailing
+   icon's reserved space. */
+.input-icon > .input:where(:not(:last-child)) {
+  padding-inline-end: calc(var(--control-pad-x) * 2 + var(--input-icon-size));
 }
 
 /*
@@ -2747,6 +2791,7 @@ small {
   border-radius: var(--radius-full);
   background: var(--switch-bg);
   appearance: none;
+  -webkit-appearance: none;
   cursor: pointer;
 }
 
@@ -2770,7 +2815,7 @@ small {
 /* Hover is not selected: an unchecked switch keeps the brand fallback on hover,
    so a theme that separates --primary from --state-selected never tints an
    OFF control with the selection accent before it is checked. */
-.switch:hover:not(:disabled) {
+.switch:not(:checked):hover:not(:disabled) {
   --switch-border: var(--intent, var(--primary));
 }
 
@@ -2785,7 +2830,17 @@ small {
 }
 
 /* The knob travels toward inline-end; in RTL that is leftward, so the
-    translateX sign flips. translateX is physical, not logical. */
+    translateX sign flips. translateX is physical, not logical. Safari before
+    16.4 has no :dir(); the ancestor-attribute path is the Degraded-tier
+    fallback and the :dir() rules are dropped on their own there. */
+[dir="rtl"] .switch:checked::before {
+  transform: translateX(calc(var(--switch-travel) * -1));
+}
+
+.switch:checked:dir(ltr)::before {
+  transform: translateX(var(--switch-travel));
+}
+
 .switch:checked:dir(rtl)::before {
   transform: translateX(calc(var(--switch-travel) * -1));
 }
@@ -2842,6 +2897,7 @@ small {
   --range-track-bg: var(--border);
 
   appearance: none;
+  -webkit-appearance: none;
   inline-size: 100%;
   block-size: var(--range-thumb-size);
   background: transparent;
@@ -2862,6 +2918,7 @@ small {
 
 .range::-webkit-slider-thumb {
   appearance: none;
+  -webkit-appearance: none;
   inline-size: var(--range-thumb-size);
   block-size: var(--range-thumb-size);
   border-radius: var(--radius-full);
@@ -3354,6 +3411,7 @@ small {
   letter-spacing: calc(var(--otp-cell-size) + var(--otp-gap) - 1ch);
   text-align: start;
   appearance: none;
+  -webkit-appearance: none;
 }
 
 /* Deliberately no group ring: a box around all the cells reads as a second
@@ -4341,7 +4399,7 @@ a.badge[aria-disabled="true"] {
   box-shadow: var(--shadow);
 }
 .card.subtle {
-  background: var(--surface-subtle);
+  --card-bg: var(--surface-subtle);
 }
 .card.compact {
   --card-pad: var(--space-20);
@@ -4678,14 +4736,11 @@ html.has-modal-open.had-scrollbar {
   }
 }
 
-/* Close controls. A close button is an action attached to a surface, so it
-   never participates in the content flow. The modal and the drawer share the
-   same simple placement — absolute at the panel's top inline-end, inside the
-   surface — so both close buttons look and behave identically. The glyph comes
-   from --icon-close, masked to currentColor, so no icon font or text glyph is
-   required in the markup. */
-.dialog-close,
-.drawer-close {
+/* Close control. A close button is an action attached to a surface, so it
+   never participates in the content flow — absolute at the panel's top
+   inline-end, inside the surface. The glyph comes from --icon-close, masked to
+   currentColor, so no icon font or text glyph is required in the markup. */
+.dialog-close {
   --dialog-close-icon-size: 1rem;
 
   display: inline-grid;
@@ -4709,8 +4764,7 @@ html.has-modal-open.had-scrollbar {
   background: var(--surface-subtle);
 }
 
-.dialog-close::before,
-.drawer-close::before {
+.dialog-close::before {
   content: "";
   inline-size: var(--dialog-close-icon-size);
   block-size: var(--dialog-close-icon-size);
@@ -4720,20 +4774,17 @@ html.has-modal-open.had-scrollbar {
 }
 
 @media (hover: hover) {
-  .dialog-close:hover,
-  .drawer-close:hover {
+  .dialog-close:hover {
     box-shadow: inset 0 0 0 999px var(--hover-overlay);
     color: var(--text);
   }
 }
 
-.dialog-close:active,
-.drawer-close:active {
+.dialog-close:active {
   box-shadow: inset 0 0 0 999px var(--hover-overlay);
 }
 
-.dialog-close:focus-visible,
-.drawer-close:focus-visible {
+.dialog-close:focus-visible {
   outline: 2px solid transparent;
   box-shadow: var(--focus-ring-shadow);
 }
@@ -4878,8 +4929,20 @@ dialog.drawer nav {
 }
 
 /* Safari before 16.4 does not support :dir(); keep the ancestor-attribute
-   path as the Degraded-tier fallback. */
+   path as the Degraded-tier fallback. The :dir() rules are dropped on their
+   own there, so they need no wrapper. :dir() follows inherited HTML
+   directionality and handles nested direction changes; the explicit ltr rules
+   neutralize an outer RTL fallback selector. Each specificity group keeps the
+   fallback before the :dir() rules. */
 [dir="rtl"] dialog.drawer {
+  --drawer-closed-translate: 100%;
+}
+
+dialog.drawer:dir(ltr) {
+  --drawer-closed-translate: -100%;
+}
+
+dialog.drawer:dir(rtl) {
   --drawer-closed-translate: 100%;
 }
 
@@ -4887,24 +4950,12 @@ dialog.drawer nav {
   --drawer-closed-translate: -100%;
 }
 
-/* :dir() follows inherited HTML directionality and handles nested direction
-   changes. Explicit ltr rules neutralize an outer RTL fallback selector. */
-@supports selector(:dir(rtl)) {
-  dialog.drawer:dir(ltr) {
-    --drawer-closed-translate: -100%;
-  }
+dialog.drawer[data-side="end"]:dir(ltr) {
+  --drawer-closed-translate: 100%;
+}
 
-  dialog.drawer[data-side="end"]:dir(ltr) {
-    --drawer-closed-translate: 100%;
-  }
-
-  dialog.drawer:dir(rtl) {
-    --drawer-closed-translate: 100%;
-  }
-
-  dialog.drawer[data-side="end"]:dir(rtl) {
-    --drawer-closed-translate: -100%;
-  }
+dialog.drawer[data-side="end"]:dir(rtl) {
+  --drawer-closed-translate: -100%;
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -4913,12 +4964,61 @@ dialog.drawer nav {
   }
 }
 
-/* The close button shares the modal's interior placement (modal.css): absolute
-   at the panel's top inline-end, out of the content flow. The header reserves
-   inline room so the title never runs under it. */
+/* The header reserves inline room so the title never runs under the close
+   control. */
 dialog.drawer > header,
 dialog.drawer > form > header {
   padding-inline-end: calc(var(--control-size) + var(--space-30));
+}
+
+/* Close control, owned here so a drawer-only build does not depend on
+   modal.css. Mirrors the modal's .dialog-close placement: absolute at the
+   panel's top inline-end, out of the content flow. */
+.drawer-close {
+  --drawer-close-icon-size: 1rem;
+
+  display: inline-grid;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius);
+  color: var(--text-muted);
+  cursor: pointer;
+
+  position: absolute;
+  z-index: 1;
+  inset-block-start: var(--space-20);
+  inset-inline-end: var(--space-20);
+
+  inline-size: var(--control-size);
+  block-size: var(--control-size);
+
+  background: var(--surface-subtle);
+}
+
+.drawer-close::before {
+  content: "";
+  inline-size: var(--drawer-close-icon-size);
+  block-size: var(--drawer-close-icon-size);
+  background: currentColor;
+  -webkit-mask: var(--icon-close) center / contain no-repeat;
+  mask: var(--icon-close) center / contain no-repeat;
+}
+
+@media (hover: hover) {
+  .drawer-close:hover {
+    box-shadow: inset 0 0 0 999px var(--hover-overlay);
+    color: var(--text);
+  }
+}
+
+.drawer-close:active {
+  box-shadow: inset 0 0 0 999px var(--hover-overlay);
+}
+
+.drawer-close:focus-visible {
+  outline: 2px solid transparent;
+  box-shadow: var(--focus-ring-shadow);
 }
 
 
@@ -5527,7 +5627,6 @@ dialog.drawer > form > header {
   border-inline-end-color: var(--spinner-value);
   border-radius: var(--radius-full);
   opacity: 0.85;
-  animation: actual-spin var(--duration-spin) linear infinite;
   vertical-align: text-bottom;
 }
 
@@ -5546,6 +5645,12 @@ dialog.drawer > form > header {
 .spinner.lg {
   --spinner-size: 2rem;
   --spinner-width: 3px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .spinner {
+    animation: actual-spin var(--duration-spin) linear infinite;
+  }
 }
 
 @keyframes actual-spin {
@@ -6048,6 +6153,18 @@ a.avatar[aria-disabled="true"] {
   transform: translate(var(--avatar-status-translate-x), 50%);
 }
 
+/* Safari before 16.4 has no :dir(); the ancestor-attribute path is the
+   Degraded-tier fallback and the :dir() rules are dropped on their own there.
+   :dir() follows inherited directionality, so the explicit ltr rule
+   neutralizes an outer RTL fallback for a nested direction change. */
+[dir="rtl"] .avatar > .badge:empty {
+  --avatar-status-translate-x: -50%;
+}
+
+.avatar:dir(ltr) > .badge:empty {
+  --avatar-status-translate-x: 50%;
+}
+
 .avatar:dir(rtl) > .badge:empty {
   --avatar-status-translate-x: -50%;
 }
@@ -6136,7 +6253,28 @@ a.avatar[aria-disabled="true"] {
   inset-block-end: 0;
 }
 
+/* Safari before 16.4 has no :dir(); the ancestor-attribute path is the
+   Degraded-tier fallback and the :dir() rules are dropped on their own there.
+   :dir() follows inherited directionality, so the explicit ltr rules
+   neutralize an outer RTL fallback for a nested direction change. The rules
+   stay grouped by specificity so the fallback never follows the :dir() rules. */
+[dir="rtl"] .indicator-item {
+  --indicator-translate-x: -50%;
+}
+
+.indicator-item:dir(ltr) {
+  --indicator-translate-x: 50%;
+}
+
 .indicator-item:dir(rtl) {
+  --indicator-translate-x: -50%;
+}
+
+[dir="rtl"] .indicator-item.start {
+  --indicator-translate-x: 50%;
+}
+
+.indicator-item.start:dir(ltr) {
   --indicator-translate-x: -50%;
 }
 
@@ -6726,8 +6864,8 @@ a.avatar[aria-disabled="true"] {
    `:empty` says exactly what the markup says, the way `.badge:empty` does, and
    it reads the item's own content: bare text in an `<li>` keeps a reading width
    like its wrapped peers, where `> li:has(.step-label)` would give it a marker
-   floor and skew the row. It also predates `:has()` by a decade, so the compact
-   form reaches the Degraded tier and only the inline bonus needs `:has()`. */
+   floor and skew the row. `:empty` also keeps the compact form reachable on the
+   Degraded tier, where only the inline bonus needs `:has()`. */
 .steps-horizontal > li:empty {
   flex: 1 1 0;
   justify-items: start;
@@ -6870,6 +7008,7 @@ a.avatar[aria-disabled="true"] {
  * Public hooks:
  * --app-nav-size
  * --app-nav-gap
+ * --app-nav-icon-size
  */
 :where(.app-nav) {
   --intent: initial;
@@ -6883,6 +7022,7 @@ a.avatar[aria-disabled="true"] {
 .app-nav {
   --app-nav-size: 4rem;
   --app-nav-gap: var(--space-10);
+  --app-nav-icon-size: 1.5rem;
 
   position: sticky;
   inset-block-end: 0;
@@ -6919,9 +7059,9 @@ a.avatar[aria-disabled="true"] {
 }
 
 .app-nav > a > :where(svg, img, [aria-hidden="true"]) {
-  inline-size: 1.5rem;
-  block-size: 1.5rem;
-  font-size: 1.5rem;
+  inline-size: var(--app-nav-icon-size);
+  block-size: var(--app-nav-icon-size);
+  font-size: var(--app-nav-icon-size);
   line-height: 1;
 }
 
@@ -6932,11 +7072,19 @@ a.avatar[aria-disabled="true"] {
 
 /* Current tile is already a full selected surface. Selection never changes
    text metrics: the shared medium weight is kept, no permanent indicator is
-   added here. Forced colors remaps the tile; a local repair is added only if
-   testing shows the state becomes ambiguous. */
+   added here. */
 .app-nav > a[aria-current="page"] {
   background: var(--state-selected);
   color: var(--state-selected-fg);
+}
+
+@media (forced-colors: active) {
+  /* --state-selected flattens to a UA color that no longer distinguishes the
+     current tile from the rest of the bar, so paint the system Highlight pair. */
+  .app-nav > a[aria-current="page"] {
+    background: Highlight;
+    color: HighlightText;
+  }
 }
 
 /*
@@ -8083,7 +8231,8 @@ a.list-item[aria-current]::before {
   text-decoration: none;
 }
 
-.link-muted:hover {
+.link-muted:hover,
+.link-muted:focus-visible {
   color: var(--text);
 }
 
@@ -8206,18 +8355,6 @@ a.list-item[aria-current]::before {
   flex-wrap: nowrap;
 }
 
-.gap-sm {
-  gap: var(--space-20);
-}
-
-.gap-md {
-  gap: var(--space-40);
-}
-
-.gap-lg {
-  gap: var(--space-50);
-}
-
 .justify-content-start {
   --cluster-justify: flex-start;
   justify-content: flex-start;
@@ -8275,6 +8412,10 @@ a.list-item[aria-current]::before {
   margin-block-end: auto;
 }
 
+/* Consume the inherited --gap rhythm on an arbitrary layout container.
+   Setting --gap alone only defines the custom property; it has no visual
+   effect unless the element already uses gap: var(--gap) (as .stack,
+   .cluster, .grid, etc. do). */
 .gap-context {
   gap: var(--gap);
 }
@@ -8375,18 +8516,28 @@ a.list-item[aria-current]::before {
   border-inline-end: var(--border-width) solid var(--border);
 }
 
-/* Surface */
+/* Surface. These are semantic surfaces, not arbitrary paint: each owns its
+   matching ink and rebinds --heading to that ink, so it stays readable when it
+   recreates a light surface inside a context that installed a dark one
+   (.inverted). Intent ink is not inherited through a surface utility; use
+   .intent-color for that. */
 .background-surface {
+  --heading: currentColor;
+
   background: var(--surface);
   color: var(--text);
 }
 
 .background-raised {
+  --heading: currentColor;
+
   background: var(--surface-raised);
   color: var(--text);
 }
 
 .background-subtle {
+  --heading: currentColor;
+
   background: var(--surface-subtle);
   color: var(--text);
 }

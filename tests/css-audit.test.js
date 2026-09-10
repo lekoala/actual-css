@@ -649,7 +649,8 @@ test("drawer RTL keeps the Degraded fallback and enhances inherited direction", 
 
   expect(css).toContain('[dir="rtl"] dialog.drawer {');
   expect(css).toContain('[dir="rtl"] dialog.drawer[data-side="end"] {');
-  expect(css).toContain("@supports selector(:dir(rtl))");
+  // Each :dir() rule is dropped on its own where unsupported, so no wrapper.
+  expect(css).not.toContain("@supports selector(:dir");
   expect(css).toContain("dialog.drawer:dir(ltr) {");
   expect(css).toContain('dialog.drawer[data-side="end"]:dir(rtl) {');
 });
@@ -868,7 +869,7 @@ test("checked choices fall back to the selected token, not primary", () => {
   );
   expect(switchCss).toContain("--switch-knob: var(--intent-fg, var(--state-selected-fg));");
   expect(switchCss).toMatch(
-    /\.switch:hover:not\(:disabled\) \{[^}]*--switch-border: var\(--intent, var\(--primary\)\);/,
+    /\.switch:not\(:checked\):hover:not\(:disabled\) \{[^}]*--switch-border: var\(--intent, var\(--primary\)\);/,
   );
   expect(choiceCardCss).toContain("--choice-card-border: var(--intent, var(--state-selected));");
   expect(choiceCardCss).toContain("var(--intent, var(--state-selected))");
@@ -953,14 +954,15 @@ test("app navigation stays semantic and app-layout owns its adaptive geometry", 
   expect(navCss).toContain("env(safe-area-inset-bottom)");
   expect(navCss).toContain("min-block-size: var(--control-size-lg);");
   expect(navCss).toMatch(
-    /> a > :where\(svg, img, \[aria-hidden="true"\]\)\s*\{[\s\S]*font-size: 1\.5rem;[\s\S]*line-height: 1;/,
+    /> a > :where\(svg, img, \[aria-hidden="true"\]\)\s*\{[\s\S]*font-size: var\(--app-nav-icon-size\);[\s\S]*line-height: 1;/,
   );
   // The current tile is a full selected surface at the shared weight —
-  // selection never changes text metrics. No permanent indicator is added;
-  // forced colors remaps the tile, and a local repair is added only if testing
-  // shows the state becomes ambiguous (CONTRIBUTING.md).
+  // selection never changes text metrics. Forced colors paints the system
+  // Highlight pair because --state-selected flattens there.
   expect(navCss).not.toMatch(/> a\[aria-current="page"\]\s*\{[^}]*font-weight:/);
-  expect(navCss).not.toContain("@media (forced-colors: active)");
+  expect(navCss).toMatch(
+    /@media \(forced-colors: active\)[\s\S]*\.app-nav > a\[aria-current="page"\][\s\S]*background: Highlight;[\s\S]*color: HighlightText;/,
+  );
   expect(navCss).not.toContain(".active");
   expect(navCss).not.toContain("@media (min-width:");
 

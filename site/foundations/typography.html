@@ -243,10 +243,11 @@
 <p>It does not own: page layout, app cards, alerts, forms, app tables, navigation, component variants, or any automatic styling outside the <code>.prose</code> subtree.</p>
 <p>The reason for that boundary: a dialog title, a card heading, or a sidebar section heading should not become a &quot;prose h1&quot;. Components own those. Put the component next to the prose section in a layout container; do not ask <code>.prose</code> to infer where an embedded component begins.</p>
 <h3 id="fluid-module">Fluid module</h3>
-<p><code>src/css/typography/fluid.css</code> is a small module that is not imported by
-<code>actual.css</code>. Projects that need display, title, and lead sizes that scale
-with the viewport (landing pages, marketing pages, hero sections,
-documentation homepages) import it manually:</p>
+<p><code>src/css/typography/fluid.css</code> ships with the typography family
+(<code>actual-css/css/typography</code>) and <code>actual-css/full</code>, but not with the minimal
+core. A core-only entry point that needs display, title, and lead sizes that
+scale with the viewport (landing pages, marketing pages, hero sections,
+documentation homepages) imports it explicitly:</p>
 <pre><code class="language-css">@import &quot;actual-css/css/typography/fluid&quot;;
 </code></pre>
 <p>The module exposes three size tokens and three composed classes. It is deliberately not the foundation: body text, app UI, and the default prose scale stay static.</p>
@@ -354,7 +355,7 @@ baseline stays sans so app UI inherits predictably.</p>
 @import &quot;actual-css/css/typography/fluid&quot;;
 </code></pre>
 <p>The module does not change anything in the core: it adds three size tokens and three classes. Body text, app UI, and the default prose scale are not affected.</p>
-<p>Projects that do not need fluid display type do nothing — the module is not part of the default bundle.</p>
+<p>Projects on <code>actual-css/css/typography</code> or <code>actual-css/full</code> already have the module. A minimal-core project that does not need fluid display type does nothing — the module is not in the core.</p>
 <h2 id="what-not-to-reintroduce">What not to reintroduce</h2>
 <p>These are decisions that the framework has already made. Re-introducing them silently would regress the system.</p>
 <ul>

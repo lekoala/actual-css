@@ -230,7 +230,8 @@ Components can use local font variables for their own mapping, but should inheri
 ### Controls
 
 Controls share geometry so buttons, inputs, selects, and compact app UI align.
-Local `.sm`/`.lg` sizes map both `--control-size` and `--control-font-size`.
+Local `.sm`/`.lg` sizes map `--control-size`, `--control-font-size`, and
+`--control-pad-x`.
 
 ```css
 :root {
@@ -238,11 +239,18 @@ Local `.sm`/`.lg` sizes map both `--control-size` and `--control-font-size`.
   --control-size-md: 2.375rem;  /* 38px → default */
   --control-size-lg: 2.75rem;   /* 44px → .lg */
   --control-size: var(--control-size-md);
-  --control-pad-x: 1em;
+  --control-pad-x: var(--font-size-md);
   --control-font-size: var(--font-size-md);
   --disabled-opacity: 0.65;
 }
 ```
+
+`--control-pad-x` is a resolved geometry length, stated in the typographic
+tokens rather than an `em`. Every part of one control must see the same
+horizontal distance; an `em` would change value on a descendant with its own
+font size, which is exactly what `--input-icon-size` does to the icon glyph. It
+mirrors `--control-font-size` and is rebound beside it at the `.sm`/`.lg`
+boundaries.
 
 - `.lg` — 44px control height
 - default — 38px control height

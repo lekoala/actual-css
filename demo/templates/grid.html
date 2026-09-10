@@ -545,26 +545,25 @@
         Both stages keep the same <code>4 &rarr; 2 &rarr; 1</code> chain at the
         same thresholds: spacing is independent of density.
       </p>
-      <div class="alert warning admonition grid-pitfall" role="note">
+      <div class="alert admonition grid-pitfall" role="note">
         <div class="alert-title">
-          <i class="ti ti-alert-triangle" aria-hidden="true"></i>
-          Pitfall &mdash; prefer <code>--gap</code> to the gap utilities on a bare preset
+          <i class="ti ti-info-circle" aria-hidden="true"></i>
+          Note &mdash; <code>--gap</code> is the only gap knob
         </div>
         <div class="alert-body">
           <p>
-            <code>.gap-sm</code> and <code>.gap-lg</code> set the
-            <code>gap</code> property without updating <code>--gap</code>, and
-            the unwrapped baseline sizes its tracks from <code>--gap</code>. The
-            two then disagree, and a bare <code>.grid-4.gap-lg</code> stops one
-            column short of four.
-          </p>
-          <p>
-            <code>.gap-none</code> is safe at every width, and inside
-            <code>.container-query</code> the column count is fixed per step, so
-            any form is exact. Setting <code>--gap</code> directly is exact
-            everywhere &mdash; and it retunes the whole composition, since
+            There is no <code>.gap-sm</code> / <code>.gap-lg</code> scale. A
+            grid sizes its tracks from <code>--gap</code>, so setting the
+            <code>gap</code> property on its own would let spacing and density
+            disagree. Override <code>--gap</code> instead: it is exact at every
+            width, and it retunes the whole composition, since
             <code>.stack</code>, <code>.cluster</code>, and
             <code>.switcher</code> read the same relay.
+          </p>
+          <p>
+            <code>.gap-none</code> stays safe at every width, and inside
+            <code>.container-query</code> the column count is fixed per step, so
+            any form is exact.
           </p>
         </div>
       </div>

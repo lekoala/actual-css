@@ -25,6 +25,9 @@
 
   --border: hsl(105 18% 78%);
   --focus: var(--primary);
+  /* Pre-light-dark() tier, mirroring the light half below. */
+  --hover-overlay: hsl(220 30% 10% / 0.04);
+  --shadow-color: hsl(220 30% 10%);
 
   /* Organic rounding — demonstrates scaling the radius tokens up. */
   --radius: 0.75rem;

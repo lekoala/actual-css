@@ -65,6 +65,7 @@
   border-radius: var(--radius-full);
   background: var(--switch-bg);
   appearance: none;
+  -webkit-appearance: none;
   cursor: pointer;
 }
 
@@ -88,7 +89,7 @@
 /* Hover is not selected: an unchecked switch keeps the brand fallback on hover,
    so a theme that separates --primary from --state-selected never tints an
    OFF control with the selection accent before it is checked. */
-.switch:hover:not(:disabled) {
+.switch:not(:checked):hover:not(:disabled) {
   --switch-border: var(--intent, var(--primary));
 }
 
@@ -103,7 +104,17 @@
 }
 
 /* The knob travels toward inline-end; in RTL that is leftward, so the
-    translateX sign flips. translateX is physical, not logical. */
+    translateX sign flips. translateX is physical, not logical. Safari before
+    16.4 has no :dir(); the ancestor-attribute path is the Degraded-tier
+    fallback and the :dir() rules are dropped on their own there. */
+[dir="rtl"] .switch:checked::before {
+  transform: translateX(calc(var(--switch-travel) * -1));
+}
+
+.switch:checked:dir(ltr)::before {
+  transform: translateX(var(--switch-travel));
+}
+
 .switch:checked:dir(rtl)::before {
   transform: translateX(calc(var(--switch-travel) * -1));
 }

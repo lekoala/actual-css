@@ -29,12 +29,12 @@
 
 /* Leading: icon is the first child */
 .input-icon > :first-child:where(:not(.input)) {
-  inset-inline-start: var(--space-30);
+  inset-inline-start: var(--control-pad-x);
 }
 
-/* Trailing: input is the first child, icon follows */
-.input-icon > .input:first-child ~ :where(:not(.input)) {
-  inset-inline-end: var(--space-30);
+/* Trailing: an icon follows the input, with or without a leading icon. */
+.input-icon > .input ~ :where(:not(.input)) {
+  inset-inline-end: var(--control-pad-x);
 }
 
 /* font-size only sizes text-metric icons (webfont <i>, <span>). An inline
@@ -49,10 +49,12 @@
 
 /* Leading: input gets start padding to clear the icon */
 .input-icon > :first-child:where(:not(.input)) ~ .input {
-  padding-inline-start: calc(var(--space-30) * 2 + var(--input-icon-size));
+  padding-inline-start: calc(var(--control-pad-x) * 2 + var(--input-icon-size));
 }
 
-/* Trailing: input is first child and has a sibling → end padding */
-.input-icon > .input:first-child:where(:not(:last-child)) {
-  padding-inline-end: calc(var(--space-30) * 2 + var(--input-icon-size));
+/* Trailing: the input has a following sibling → end padding. Not tied to the
+   input being first child, so a leading icon does not disable the trailing
+   icon's reserved space. */
+.input-icon > .input:where(:not(:last-child)) {
+  padding-inline-end: calc(var(--control-pad-x) * 2 + var(--input-icon-size));
 }
