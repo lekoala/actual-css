@@ -71,6 +71,9 @@
   group in `.stack`, when the message wants its own rhythm. The `.alert-icon`,
   `.alert-dismiss`, `.alert-title` and `.alert-body` slots are excluded, so an
   admonition's title bar stays flush against its body.
+- Modal dialogs cap their block size against the small viewport (`100svh`)
+  instead of the dynamic viewport, so collapsing mobile browser chrome no
+  longer reflows the panel.
 
 ### Fixed
 
