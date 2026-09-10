@@ -167,7 +167,8 @@ Use `modal scrollable` when the header and footer should stay visible while the
 dialog body scrolls. Modal dialogs lock page scroll while a modal is open: the
 runtime writes `html.has-modal-open`, and the stylesheet applies `overflow:
 hidden` (and reserves the scrollbar gutter with `scrollbar-gutter: stable` when
-one was present).
+one was present). The height cap follows the small viewport, so the panel keeps
+a stable size while mobile browser chrome expands or collapses.
 
 ```html demo
 <button class="btn"
