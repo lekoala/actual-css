@@ -25,8 +25,13 @@ themselves into a second forced-colors theme.
 
 ### Principles
 
-- Add a **structural distinction that is meaningful in every mode first**
-  (`font-weight`, a real border or geometry change, a positioned indicator).
+- When a selected/current/pressed state uses an accent, its default accent is
+  `--state-selected`. Persistent state must not change text metrics; when
+  emphasis is wanted, peers share a constant weight. Prefer a layout-free
+  structural cue when one fits the component naturally (a real border or
+  geometry change, a positioned indicator). Let forced colors remap the normal
+  presentation; add a local repair only when testing shows that the state
+  becomes ambiguous.
   A local forced-colors repair block is the fallback, not the default.
 - On non-interactive surfaces, a transparent `border` baseline becomes a visible
   boundary in forced colors (the UA renders `transparent` as a system color) at
@@ -64,9 +69,10 @@ themselves into a second forced-colors theme.
 - **C — replaced control**: `appearance:none`, hidden native input, custom
   meter/progress/range/switch → a component-level exception is likely legitimate.
 - **D — state expressed by an author color pair** (selected, current, pressed) →
-  first add a structural distinction that works in every mode. Use a local
-  forced-colors repair only when no natural structural affordance fits the
-  component (e.g. a custom-drawn marker whose state would otherwise vanish).
+  use `--state-selected` as the default accent and prefer a layout-free
+  structural cue when one fits the component naturally. Use a local
+  forced-colors repair only when testing shows the state becomes ambiguous
+  (e.g. a custom-drawn marker whose state would otherwise vanish).
   Never reuse the focus `outline` channel for state on a focusable control.
 
 ### State tokens

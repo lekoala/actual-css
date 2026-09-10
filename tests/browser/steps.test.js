@@ -605,11 +605,14 @@ it("state reads the same on both roots", async () => {
       expect(result.vertical).toEqual(result.horizontal);
 
       /* And the three states are actually distinct on that shared channel set,
-         so the equality above is not two identical nothings. */
+         so the equality above is not two identical nothings. Weight is shared
+         by all three — selection never changes text metrics — so distinctness
+         rides on the marker channels. */
       const [complete, current, upcoming] = result.horizontal;
       expect(complete.fill).not.toBe(upcoming.fill);
       expect(current.ringWidth).not.toBe(upcoming.ringWidth);
-      expect(current.labelWeight).not.toBe(upcoming.labelWeight);
+      expect(current.ring).not.toBe(upcoming.ring);
+      expect(current.labelWeight).toBe(upcoming.labelWeight);
       expect(complete.labelWeight).toBe(upcoming.labelWeight);
     },
     { artifactName: "steps-state-parity" },
@@ -620,8 +623,9 @@ it("state reads the same on both roots", async () => {
  * Label typography, which is a hierarchy claim and an alignment claim at once.
  *
  * Hierarchy: the marker carries the state — filled, ringed, or neutral — so the
- * label sits a notch below it and only the current step earns extra weight.
- * A completed step gets none: its filled disc already reads as strongly.
+ * label sits a notch below it at one shared weight throughout. Neither current
+ * nor complete earns extra weight: the doubled ring and the filled disc
+ * already read as strongly, and selection never changes text metrics.
  *
  * Alignment: the size is set on the component, not inside the container
  * blocks, so it cannot change with the representation — a label that resized
@@ -685,10 +689,11 @@ it("the label reads one notch below its marker and centres on it", async () => {
       );
       expect([...sizes]).toEqual(["14px/17.5px"]);
 
-      // Only the current step gains weight; complete leans on its filled disc.
+      // One shared weight for all three states; the marker channels above
+      // carry current vs complete vs upcoming.
       for (const form of ["inline", "stacked", "vertical"]) {
         const { current, complete, future } = result[form];
-        expect(Number(current.fontWeight)).toBeGreaterThan(Number(future.fontWeight));
+        expect(current.fontWeight).toBe(future.fontWeight);
         expect(complete.fontWeight).toBe(future.fontWeight);
       }
 

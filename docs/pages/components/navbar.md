@@ -7,6 +7,9 @@
 - `.navbar-nav` is the horizontal link list; its items are `.nav-link`.
 - `.nav-list` is the shared vertical navigation list, reused by `.drawer` for stacked links.
 - Mark the current page with `aria-current="page"` on the active `.nav-link`.
+- Presence is the contract: set `aria-current` on the current link and remove
+  it elsewhere, never `aria-current="false"`. Scrollspy follows the same rule
+  with `aria-current="location"`.
 
 For a public or normally scrolling page, `.navbar` belongs inside the semantic
 site header. Do not use `.topbar` or `.app-layout` unless the page actually has

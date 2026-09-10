@@ -381,6 +381,9 @@
       "--list-item-pad-inline",
       "--list-item-gap",
       "--list-divider"
+    ],
+    "states": [
+      "aria-current"
     ]
   },
   {

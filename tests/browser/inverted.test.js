@@ -41,6 +41,7 @@ it("inverted contrasting-surface contract over one browser pass", async () => {
           refTextMuted: color("#ref-text-muted"),
           refNeutralFg: color("#ref-neutral-fg"),
           refPrimaryFg: color("#ref-primary-fg"),
+          refSelected: color("#ref-selected"),
           refContextHover: bg("#ref-context-hover"),
           refRaisedOverlay: bg("#ref-raised-overlay"),
           refSolidOverlay: bg("#ref-solid-overlay"),
@@ -139,11 +140,13 @@ it("inverted contrasting-surface contract over one browser pass", async () => {
       expect(initial.brandColor).toBe(initial.refSurface);
       expect(initial.linkColor).toBe(initial.refSurface);
 
-      // Explicit component state/surface treatment remains more specific.
+      // Explicit component state/surface treatment remains more specific: the
+      // current nav link keeps its subtle surface and selected accent even
+      // inside the inverted navbar.
       expect(initial.cardSubtleBg).toBe(initial.refSubtle);
       expect(initial.cardSubtleColor).toBe(initial.refSurface);
       expect(initial.activeBg).toBe(initial.refSubtle);
-      expect(initial.activeColor).toBe(initial.refText);
+      expect(initial.activeColor).toBe(initial.refSelected);
 
       // Force a real :hover through CDP and verify that it derives from the
       // contextual foreground instead of injecting an absolute light surface.

@@ -79,13 +79,13 @@
 
 /* Checked border — shared by radio and checkbox */
 .choice-card:has(:checked) {
-  --choice-card-border: var(--intent, var(--primary));
+  --choice-card-border: var(--intent, var(--state-selected));
 }
 
 /* Subtle background tint on checked — modern browsers only */
 @supports (color: color-mix(in oklch, red, white)) {
   .choice-card:has(:checked) {
-    --choice-card-bg: color-mix(in oklab, var(--surface) 96%, var(--intent, var(--primary)));
+    --choice-card-bg: color-mix(in oklab, var(--surface) 96%, var(--intent, var(--state-selected)));
   }
 }
 
@@ -105,7 +105,7 @@
 
 /* Badge disc — circle for radio, rounded square for checkbox */
 .choice-card::before {
-  background: var(--intent, var(--primary));
+  background: var(--intent, var(--state-selected));
   box-shadow: 0 0 0 2px var(--surface);
   z-index: 1;
 }
@@ -120,7 +120,7 @@
 
 /* Check mark */
 .choice-card::after {
-  background: var(--intent-fg, var(--primary-fg));
+  background: var(--intent-fg, var(--state-selected-fg));
   -webkit-mask: var(--icon-check) center / 60% no-repeat;
   mask: var(--icon-check) center / 60% no-repeat;
   z-index: 2;

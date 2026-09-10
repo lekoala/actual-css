@@ -1,12 +1,12 @@
 {
-  "totalRaw": 285236,
+  "totalRaw": 287418,
   "core": {
     "minified": 12220,
     "brotli": 2759
   },
   "full": {
-    "minified": 122763,
-    "brotli": 17781
+    "minified": 123255,
+    "brotli": 17834
   },
   "js": {
     "core": {
@@ -22,7 +22,7 @@
   "files": [
     {
       "file": "components/steps.css",
-      "raw": 13390
+      "raw": 13069
     },
     {
       "file": "core/tokens.css",
@@ -50,7 +50,7 @@
     },
     {
       "file": "forms/choice.css",
-      "raw": 6155
+      "raw": 6176
     },
     {
       "file": "components/drawer.css",
@@ -85,12 +85,12 @@
       "raw": 4590
     },
     {
-      "file": "themes/edge.css",
-      "raw": 4497
+      "file": "forms/choice-card.css",
+      "raw": 4515
     },
     {
-      "file": "forms/choice-card.css",
-      "raw": 4487
+      "file": "themes/edge.css",
+      "raw": 4497
     },
     {
       "file": "components/card.css",
@@ -101,12 +101,16 @@
       "raw": 4434
     },
     {
+      "file": "forms/switch.css",
+      "raw": 4365
+    },
+    {
       "file": "forms/otp.css",
       "raw": 4262
     },
     {
-      "file": "forms/switch.css",
-      "raw": 4121
+      "file": "components/navbar.css",
+      "raw": 3903
     },
     {
       "file": "themes/gradient.css",
@@ -133,6 +137,10 @@
       "raw": 3627
     },
     {
+      "file": "components/list.css",
+      "raw": 3521
+    },
+    {
       "file": "components/accordion.css",
       "raw": 3320
     },
@@ -155,10 +163,6 @@
     {
       "file": "forms/range.css",
       "raw": 3115
-    },
-    {
-      "file": "components/navbar.css",
-      "raw": 3008
     },
     {
       "file": "forms/control.css",
@@ -195,10 +199,6 @@
     {
       "file": "themes/petrol.css",
       "raw": 2460
-    },
-    {
-      "file": "components/list.css",
-      "raw": 2446
     },
     {
       "file": "themes/sunset.css",
@@ -241,6 +241,10 @@
       "raw": 2122
     },
     {
+      "file": "components/app-nav.css",
+      "raw": 2113
+    },
+    {
       "file": "themes/mono.css",
       "raw": 2094
     },
@@ -255,10 +259,6 @@
     {
       "file": "forms/input-icon.css",
       "raw": 1895
-    },
-    {
-      "file": "components/app-nav.css",
-      "raw": 1873
     },
     {
       "file": "core/intents.css",

@@ -396,15 +396,36 @@ test("alert and badge defaults stay behind explicit shared treatments", () => {
 
 test("navbar consumes the shared surface contract with an intent boundary", () => {
   const css = readCss("src/css/components/navbar.css");
+  const rules = readRules("src/css/components/navbar.css");
 
   expect(css).toMatch(/:where\(\.navbar\) \{[\s\S]*--ui-bg: initial;/);
   expect(css).toMatch(/\.navbar \{[\s\S]*background: var\(--ui-bg, var\(--surface-raised\)\);/);
   expect(css).toMatch(/\.navbar \{[\s\S]*color: var\(--ui-fg, var\(--text\)\);/);
   expect(css).toMatch(/\.navbar-brand \{[\s\S]*color: var\(--ui-fg, var\(--text\)\);/);
   expect(css).toMatch(/\.nav-link \{[\s\S]*color: var\(--ui-fg, var\(--text-muted\)\);/);
-  // nav-link keeps the multi-value aria-current contract: page navigation and
-  // scrollspy ("location") share the trigger.
-  expect(css).toContain('.nav-link:where([aria-current]:not([aria-current="false"]))');
+  // nav-link is deliberately multi-value: page navigation and scrollspy
+  // ("location") share the presence trigger. Presence is the contract — the
+  // attribute is removed when inactive, never serialized as "false".
+  expect(css).toContain(".nav-link[aria-current]");
+  expect(rules).not.toContain('aria-current="false"');
+  // Selection never changes text metrics: the current link shares the base
+  // weight and is carried by the selected accent plus, in .nav-list, an inset
+  // inline-start trait (CONTRIBUTING.md "Forced colors invariant").
+  expect(css).toMatch(/\.nav-link\[aria-current\] \{[^}]*color: var\(--state-selected\);/);
+  expect(css).not.toMatch(/\.nav-link\[aria-current\][^{]*\{[^}]*font-weight:/);
+  // A current link keeps its accent on hover: the plain hover rule drops to
+  // --text, so the current:hover rule must hold --state-selected.
+  expect(css).toMatch(/\.nav-link\[aria-current\]:hover \{[^}]*color: var\(--state-selected\);/);
+  expect(css).toContain(".nav-list .nav-link[aria-current]");
+  expect(css).toMatch(
+    /\.nav-list \.nav-link\[aria-current\]::before \{[^}]*border-inline-start: 2px solid currentColor;/,
+  );
+  // The positioning context lives on every row link, so becoming current never
+  // moves an app-positioned decoration to a new containing block.
+  expect(css).toMatch(/\.nav-list \.nav-link \{[^}]*position: relative;/);
+  // A long label must wrap inside a narrow pane instead of pushing the grid
+  // track wider than its container (stress-test sidebar diagnosis).
+  expect(css).toMatch(/\.nav-list \{[^}]*grid-template-columns: minmax\(0, 1fr\);/);
 });
 
 test("overline is content-sized only on the pill and exposes a radius hook", () => {
@@ -829,6 +850,31 @@ test("the switch knob is concentric inside its track", () => {
   );
 });
 
+test("checked choices fall back to the selected token, not primary", () => {
+  const choiceCss = readCss("src/css/forms/choice.css");
+  const switchCss = readCss("src/css/forms/switch.css");
+  const choiceCardCss = readCss("src/css/forms/choice-card.css");
+
+  // --state-selected defaults to --primary, so nothing renders differently
+  // today; the fallback keeps a future --state-selected override working.
+  // Hover is not selected: an unchecked switch keeps the brand fallback.
+  expect(choiceCss).toContain("--choice-border: var(--intent, var(--state-selected));");
+  expect(choiceCss).toContain("--choice-bg: var(--intent, var(--state-selected));");
+  expect(choiceCss).toContain("--choice-mark: var(--intent-fg, var(--state-selected-fg));");
+  expect(switchCss).toContain("--switch-bg: var(--intent, var(--state-selected));");
+  expect(switchCss).toContain(".switch:checked {");
+  expect(switchCss).toMatch(
+    /\.switch:checked \{[^}]*--switch-border: var\(--intent, var\(--state-selected\)\);/,
+  );
+  expect(switchCss).toContain("--switch-knob: var(--intent-fg, var(--state-selected-fg));");
+  expect(switchCss).toMatch(
+    /\.switch:hover:not\(:disabled\) \{[^}]*--switch-border: var\(--intent, var\(--primary\)\);/,
+  );
+  expect(choiceCardCss).toContain("--choice-card-border: var(--intent, var(--state-selected));");
+  expect(choiceCardCss).toContain("var(--intent, var(--state-selected))");
+  expect(choiceCardCss).toContain("var(--intent-fg, var(--state-selected-fg))");
+});
+
 test("optional OTP keeps one native input and covers validation states", () => {
   const css = readCss("src/css/forms/otp.css");
 
@@ -909,11 +955,11 @@ test("app navigation stays semantic and app-layout owns its adaptive geometry", 
   expect(navCss).toMatch(
     /> a > :where\(svg, img, \[aria-hidden="true"\]\)\s*\{[\s\S]*font-size: 1\.5rem;[\s\S]*line-height: 1;/,
   );
-  // Selected state is carried by font-weight — a structural distinction that
-  // survives forced colors without a repaint block (CONTRIBUTING.md).
-  expect(navCss).toMatch(
-    /> a\[aria-current="page"\]\s*\{[\s\S]*font-weight: var\(--font-weight-bold\);/,
-  );
+  // The current tile is a full selected surface at the shared weight —
+  // selection never changes text metrics. No permanent indicator is added;
+  // forced colors remaps the tile, and a local repair is added only if testing
+  // shows the state becomes ambiguous (CONTRIBUTING.md).
+  expect(navCss).not.toMatch(/> a\[aria-current="page"\]\s*\{[^}]*font-weight:/);
   expect(navCss).not.toContain("@media (forced-colors: active)");
   expect(navCss).not.toContain(".active");
   expect(navCss).not.toContain("@media (min-width:");
@@ -950,7 +996,8 @@ test("application lists provide optional regions without owning their controls",
      content in the leading track and gave the flexible one to the trailing
      control, which inverts the documented "optional leading and trailing"
      contract. tests/browser/list-item.test.js measures the four shapes. */
-  expect(rules).not.toContain("grid-template-columns");
+  expect(css).toMatch(/\.list \{[^}]*grid-template-columns: minmax\(0, 1fr\);/);
+  expect(css).not.toMatch(/\.list > [^{]*\.list-item \{[^}]*grid-template-columns/);
   expect(css).toMatch(/\.list > li > \.list-item \{[^}]*display: flex;/);
   expect(css).toMatch(/\.list-item-content \{[^}]*flex: 1 1 0;/);
   expect(css).toMatch(/\.list-item-trailing \{[^}]*margin-inline-start: auto;/);
@@ -967,6 +1014,21 @@ test("application lists provide optional regions without owning their controls",
   expect(css).not.toContain("@media (forced-colors: active)");
   expect(css).not.toContain("two-line");
   expect(css).not.toContain("three-line");
+  // Long content wraps instead of pushing the grid track: title and text share
+  // the anywhere wrap, and an explicit .truncate stays the opt-in single line.
+  expect(css).toMatch(/\.list-item-title,\s*\.list-item-text \{[^}]*overflow-wrap: anywhere;/);
+  // Navigational current row: generic presence contract, calm surface,
+  // normal text, inset selected trait. Presence is the contract, never "false".
+  // The value (page, location, …) stays free for assistive technology.
+  expect(css).toContain("a.list-item[aria-current]");
+  expect(rules).not.toContain('aria-current="false"');
+  expect(css).toMatch(/a\.list-item\[aria-current\] \{[^}]*background: var\(--surface-subtle\);/);
+  expect(css).toMatch(
+    /a\.list-item\[aria-current\]::before \{[^}]*border-inline-start: 2px solid var\(--state-selected\);/,
+  );
+  expect(css).not.toMatch(/a\.list-item\[aria-current[^}]*\{[^}]*font-weight:/);
+  // Same containing-block rule as nav-list: every row link owns the context.
+  expect(css).toMatch(/a\.list-item \{[^}]*position: relative;/);
 });
 
 test("indicator exposes only logical four-corner positioning", () => {
@@ -1266,11 +1328,10 @@ test("steps keep the label a notch below the marker, at one size throughout", ()
   expect(css.indexOf(label[0])).toBeLessThan(enhancement);
   expect(css.slice(enhancement)).not.toContain("font-size:");
 
-  // Weight marks "where I am now" only. A completed step leans on its filled
-  // disc; giving it bold text too would flatten the two states back together.
-  expect(css).toMatch(
-    /> \[aria-current="step"\] \.step-label \{[^}]*font-weight: var\(--font-weight-semibold\);/,
-  );
+  // Selection never changes text metrics: current already owns an accented
+  // marker with a doubled border, complete its filled disc. Neither sets a
+  // label weight.
+  expect(css).not.toMatch(/> \[aria-current="step"\] \.step-label \{[^}]*font-weight/);
   expect(css).not.toMatch(/> \.step-complete[^{]*\.step-label \{[^}]*font-weight/);
 
   /* Combinators say what they mean. `> li` and `> [aria-current="step"]` are

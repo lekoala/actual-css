@@ -92,6 +92,11 @@ For a navigable row, keep the list semantics and put `.list-item` on the link:
 Do not attach click JavaScript to the entire row. Use a link for navigation and
 a button or native control for actions.
 
+In a master/detail navigation, mark the current row with `aria-current` on its
+link, using the value that matches the semantics (`page`, `location`, …).
+Presence is the contract: set the attribute on the current row and remove it
+elsewhere, never `aria-current="false"`.
+
 ### Hooks
 
 - `--list-item-min-size` controls the row's minimum touch height.

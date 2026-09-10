@@ -18,6 +18,7 @@
   --list-divider: var(--border-width) solid var(--border);
 
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 0;
   margin: 0;
   padding: 0;
@@ -55,12 +56,35 @@
 }
 
 a.list-item {
+  position: relative;
   color: inherit;
   text-decoration: none;
 }
 
 a.list-item:hover {
   background: var(--surface-subtle);
+}
+
+/* Current row in a navigational list (master/detail). Generic by design: the
+   visual treatment only cares that the row is current, so presence is the
+   contract — the attribute is set on the current row and removed everywhere
+   else, never serialized as aria-current="false". The value (page, location,
+   …) stays free for assistive technology.
+   Calm by design: the row keeps its normal text metrics and color on a subtle
+   surface, and the selected accent lives on an inset inline-start trait only.
+   The trait is a real border, so it survives forced colors without a repaint
+   block. The positioning context lives on every row link, so becoming current
+   never moves an app-positioned decoration to a new containing block. */
+a.list-item[aria-current] {
+  background: var(--surface-subtle);
+}
+
+a.list-item[aria-current]::before {
+  content: "";
+  position: absolute;
+  inset-block: var(--list-item-pad-block);
+  inset-inline-start: 0;
+  border-inline-start: 2px solid var(--state-selected);
 }
 
 /* The content region is the one that flexes, whichever position it holds. */
@@ -73,12 +97,12 @@ a.list-item:hover {
 .list-item-text {
   display: block;
   margin: 0;
+  overflow-wrap: anywhere;
 }
 
 .list-item-text {
   color: var(--text-muted);
   font-size: var(--font-size-sm);
-  overflow-wrap: anywhere;
 }
 
 /* The auto margin keeps the trailing region at the row's end even in a row

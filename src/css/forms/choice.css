@@ -153,9 +153,9 @@
 
 .check:is(:checked, :indeterminate),
 .radio:checked {
-  --choice-border: var(--intent, var(--primary));
-  --choice-bg: var(--intent, var(--primary));
-  --choice-mark: var(--intent-fg, var(--primary-fg));
+  --choice-border: var(--intent, var(--state-selected));
+  --choice-bg: var(--intent, var(--state-selected));
+  --choice-mark: var(--intent-fg, var(--state-selected-fg));
 }
 
 .check:checked::before {
