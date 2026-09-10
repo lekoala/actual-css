@@ -38,7 +38,7 @@ It applies everywhere — cards, dialogs, heroes, app shells — not only in pro
 
 It does not own visual hierarchy. No global `font-size` on headings, no global `font-weight` on headings, no global margins on headings, no global `text-decoration` on links. These choices would shape app UI in ways the framework cannot predict.
 
-The mildly opinionated defaults at the baseline are few: line-height on headings (tight, so multi-line headings stay readable), `text-wrap: balance` on headings where supported, the `hr` rule, the `::selection` rule, the `code` / `kbd` / `samp` / `pre` font family, `small` font size, and a global link underline offset that prose and components reuse. Everything else stays neutral so components and `.prose` can take over without fighting the baseline.
+The mildly opinionated defaults at the baseline are few: line-height on headings (tight, so multi-line headings stay readable), `text-wrap: balance` on headings where supported, the `hr` rule, the `::selection` rule, the `code` / `kbd` / `samp` / `pre` font family, `pre` overflow containment, `small` font size, and a global link underline offset that prose and components reuse. Everything else stays neutral so components and `.prose` can take over without fighting the baseline.
 
 Global links inherit color. The visual affordance of a link is the responsibility of `.prose` (for authored content) or of a component (for nav links, button-like links, tabs, breadcrumbs, etc.). Underlining every `a` globally would collide with all of those.
 
@@ -175,7 +175,27 @@ Three logical alignment utilities exist (`.text-start`, `.text-center`, `.text-e
 
 `small` gets a smaller font size globally (`0.875em`) because it is a semantic element, not a utility. There is no `.small` class competing with the element.
 
-`code`, `kbd`, `samp`, and `pre` get the mono font family globally. Visual treatment (background, padding, radius) is left to `.prose` or to code-block components.
+`code`, `kbd`, `samp`, and `pre` get the mono font family globally. `pre` also gets `overflow-x: auto`, because one unbreakable line widens the whole page and nothing in the markup warns you. That is containment, not decoration: background, padding, and radius are still left to `.prose` or to a code-block component.
+
+For a standalone snippet outside authored content, `.prose` is the ready-made box — opt out of the reading measure so the code can use the full width:
+
+```html
+<div class="prose" style="--prose-measure: none">
+  <pre><code>bun add actual-css</code></pre>
+</div>
+```
+
+`hr` resets the UA's `margin-inline: auto`. In document flow that changes nothing — auto inline margins on an auto-width block resolve to zero — but as a flex or grid item they replace the cross-axis stretch, which made an `<hr>` inside a `.stack` compute to zero width and disappear. `.stack` deliberately leaves the inline axis free (self-centering children keep working), so the reset belongs to the element.
+
+Its block margin is tunable with `--hr-space`. The `--space-60` default suits a rule closing a page section; a rule separating two rows inside a panel wants far less.
+
+```css
+.settings-panel hr {
+  --hr-space: var(--space-10);
+}
+```
+
+The hook applies to an `hr` in document flow. Inside `.stack` or `.prose` the parent owns the distance between siblings and overrides the element's own margin — express the rhythm there instead, with `--gap` or `--prose-flow`.
 
 ## Tables
 

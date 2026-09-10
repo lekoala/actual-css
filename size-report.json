@@ -1,12 +1,12 @@
 {
-  "totalRaw": 287806,
+  "totalRaw": 288923,
   "core": {
-    "minified": 12220,
-    "brotli": 2759
+    "minified": 12281,
+    "brotli": 2784
   },
   "full": {
-    "minified": 123402,
-    "brotli": 17906
+    "minified": 123445,
+    "brotli": 17903
   },
   "js": {
     "core": {
@@ -70,7 +70,7 @@
     },
     {
       "file": "typography/prose.css",
-      "raw": 5108
+      "raw": 5171
     },
     {
       "file": "components/avatar.css",
@@ -189,6 +189,10 @@
       "raw": 2674
     },
     {
+      "file": "core/base.css",
+      "raw": 2655
+    },
+    {
       "file": "layout/app-layout.css",
       "raw": 2538
     },
@@ -283,10 +287,6 @@
     {
       "file": "typography/fluid.css",
       "raw": 1613
-    },
-    {
-      "file": "core/base.css",
-      "raw": 1601
     },
     {
       "file": "components/table.css",
