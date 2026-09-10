@@ -32,6 +32,7 @@
 - Tokens document the neutral ramp as curated per role under an ambient hue that leans on `--primary` by default, and that no intent or neutral is derived from `--primary` at runtime.
 - Tokens document `--soft-border-mix` as the borderless-soft dial: what it
   reaches, and that it is a rendering choice the baseline path does not uphold.
+- `bun run report:dead-css` surveys the demo stylesheets against the pages that link them: class rules nothing uses, and local classes that shadow a framework one.
 - `bun run report:neutral-ramp` surveys every preset's neutral ramp in OKLCH: chroma per role, hue distance to `--primary`, and the lightness a tint costs at equal contrast.
 - `bun run report:theme-contrast` prints every preset theme's resting and
   hovered soft-pair contrast (light and dark) without failing the build.
@@ -85,6 +86,9 @@
 
 - `hr` resets the UA's `margin-inline: auto`, which replaced the cross-axis stretch and collapsed an `<hr>` inside a `.stack` to zero width.
 - Density demo dropped `.card-body`, a class the framework does not define; a card already owns its padding and its direct-child rhythm.
+- `demo/styles/demo.css` no longer redefines `.center`, which overrode the layout primitive and silenced its `--center-size` hook on every page linking the sheet. Thirty unused rules from the retired demo gallery went with it, and four dead rules left `demo/sites/neon-ramen/neon-site.css`.
+- The examples index groups the templates (start here, page shapes, layout references, system benches, third-party) and lists `column-layout`, `motion` and `select-intents`, which were missing entirely.
+- The documentation home leads with the layout primitives, carries a stat strip built from `size-report.json`, and links the examples it never linked before — a "See it running" section for the visual guide, the color guide, the kitchen sink and the admin site. Its theme count comes from the theme list instead of prose that said fifteen for sixteen themes.
 - A tooltip shown by focus on a touch device is no longer lost for good after its trigger scrolls out of view and back: a second tap fires neither `focusin` nor `mouseover`, so nothing could bring it back.
 - A shared explicit tooltip re-shown from another trigger resubscribes its position tracking, instead of keeping the previous trigger observed.
 - `select.css` and `modal.css` preserve select appearance and modal body scrolling in Degraded Firefox 78–83 using `:not(:is(...))` without changing specificity.

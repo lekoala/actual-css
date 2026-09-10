@@ -82,8 +82,69 @@
         </p>
         <div class="cluster docs-hero-cta">
           <a class="btn primary lg" href="guides/introduction.html">Get started</a>
-          <a class="btn outline lg" href="components/button.html">Browse components</a>
+          <a class="btn outline lg" href="#see-it-running">See it running</a>
         </div>
+      </section>
+
+      <section class="docs-section center" aria-label="At a glance">
+        <div class="grid docs-stats">
+          <div class="docs-stat">
+            <strong>0</strong>
+            <span class="muted">Runtime dependencies</span>
+          </div>
+          <div class="docs-stat">
+            <strong>17.5kb</strong>
+            <span class="muted">Full build, brotli</span>
+          </div>
+          <div class="docs-stat">
+            <strong>2.7kb</strong>
+            <span class="muted">Core build, brotli</span>
+          </div>
+          <div class="docs-stat">
+            <strong>18</strong>
+            <span class="muted">Themes, light and dark included</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="docs-section center stack">
+        <h2>Layout that reads like the markup</h2>
+        <p class="muted">A handful of primitives that compose — the docs are built with the same ones.</p>
+        <div class="grid docs-layout-grid">
+          <article class="card stack">
+            <h3>Stack</h3>
+            <p class="muted">Spacing follows the markup, top to bottom.</p>
+            <div class="stack docs-layout-preview">
+              <div class="docs-layout-line"></div>
+              <div class="docs-layout-line"></div>
+              <div class="docs-layout-line"></div>
+            </div>
+          </article>
+          <article class="card stack">
+            <h3>Cluster</h3>
+            <p class="muted">A row that wraps and centers itself.</p>
+            <div class="cluster docs-layout-preview">
+              <span class="badge soft">one</span>
+              <span class="badge soft">two</span>
+              <span class="badge soft">three</span>
+              <span class="badge soft">four</span>
+              <span class="badge soft">five</span>
+            </div>
+          </article>
+          <article class="card stack">
+            <h3>Grid</h3>
+            <p class="muted">Responsive columns without media queries.</p>
+            <div class="grid docs-demo-grid docs-layout-preview">
+              <div class="docs-layout-cell"></div>
+              <div class="docs-layout-cell"></div>
+              <div class="docs-layout-cell"></div>
+              <div class="docs-layout-cell"></div>
+              <div class="docs-layout-cell"></div>
+              <div class="docs-layout-cell"></div>
+            </div>
+          </article>
+        </div>
+        <p class="muted"><a href="../demo/templates/visual-guide.html">The visual guide</a> walks the spacing scale, every primitive, and the difference between density and size — seventeen figures.</p>
       </section>
 
       <section class="docs-section center stack">
@@ -108,7 +169,7 @@
           <article class="card stack">
             <span class="docs-icon" aria-hidden="true"><i class="ti ti-palette"></i></span>
             <h3>Themable</h3>
-            <p class="muted">Light, dark and fifteen named themes, all driven by tokens. Bring your own theme with a few custom properties.</p>
+            <p class="muted">Light, dark and 16 named themes, all driven by tokens. Bring your own theme with a few custom properties.</p>
           </article>
         </div>
       </section>
@@ -237,45 +298,6 @@
       </section>
 
       <section class="docs-section center stack">
-        <h2>Layout that reads like the markup</h2>
-        <p class="muted">A handful of primitives that compose — the docs are built with the same ones.</p>
-        <div class="grid docs-layout-grid">
-          <article class="card stack">
-            <h3>Stack</h3>
-            <p class="muted">Spacing follows the markup, top to bottom.</p>
-            <div class="stack docs-layout-preview">
-              <div class="docs-layout-line"></div>
-              <div class="docs-layout-line"></div>
-              <div class="docs-layout-line"></div>
-            </div>
-          </article>
-          <article class="card stack">
-            <h3>Cluster</h3>
-            <p class="muted">A row that wraps and centers itself.</p>
-            <div class="cluster docs-layout-preview">
-              <span class="badge soft">one</span>
-              <span class="badge soft">two</span>
-              <span class="badge soft">three</span>
-              <span class="badge soft">four</span>
-              <span class="badge soft">five</span>
-            </div>
-          </article>
-          <article class="card stack">
-            <h3>Grid</h3>
-            <p class="muted">Responsive columns without media queries.</p>
-            <div class="grid docs-demo-grid docs-layout-preview">
-              <div class="docs-layout-cell"></div>
-              <div class="docs-layout-cell"></div>
-              <div class="docs-layout-cell"></div>
-              <div class="docs-layout-cell"></div>
-              <div class="docs-layout-cell"></div>
-              <div class="docs-layout-cell"></div>
-            </div>
-          </article>
-        </div>
-      </section>
-
-      <section class="docs-section center stack">
         <h2>Progressive by design</h2>
         <p class="muted">Native <code>dialog</code>, <code>command</code> and tooltips first — enhanced only where supported.</p>
         <div class="docs-panel card cluster">
@@ -293,9 +315,37 @@
         </div>
       </section>
 
+      <section class="docs-section center stack" id="see-it-running">
+        <h2>See it running</h2>
+        <p class="muted">Pages built with the framework, not screenshots of it. Every one opens from this checkout.</p>
+        <div class="grid docs-feature-grid">
+          <a class="card stack docs-component-card" href="../demo/templates/visual-guide.html">
+            <span class="docs-icon" aria-hidden="true"><i class="ti ti-ruler-measure"></i></span>
+            <h3>Visual guide</h3>
+            <p class="muted">Seventeen figures on the spacing scale, the layout primitives, and density versus local size. Every bar is drawn from a live token.</p>
+          </a>
+          <a class="card stack docs-component-card" href="../demo/templates/color-guide.html">
+            <span class="docs-icon" aria-hidden="true"><i class="ti ti-palette"></i></span>
+            <h3>Color guide</h3>
+            <p class="muted">Theming measured on two palettes, light and dark at once, as <code>data-theme</code> islands. The numbers are read off the rendered page.</p>
+          </a>
+          <a class="card stack docs-component-card" href="../demo/templates/kitchen-sink.html">
+            <span class="docs-icon" aria-hidden="true"><i class="ti ti-layout-grid"></i></span>
+            <h3>Kitchen sink</h3>
+            <p class="muted">Every component, variant, scope and interaction on one screen. The page to open when you want to break something.</p>
+          </a>
+          <a class="card stack docs-component-card" href="../demo/sites/admini/index.html">
+            <span class="docs-icon" aria-hidden="true"><i class="ti ti-app-window"></i></span>
+            <h3>Admini</h3>
+            <p class="muted">A complete admin application: shell, tables, forms, dialogs, kanban, chat and feedback states.</p>
+          </a>
+        </div>
+        <p class="muted"><a href="examples/overview.html">All examples</a> — page shapes, layout references, system benches, and two full sites.</p>
+      </section>
+
       <section class="docs-section docs-theme-showcase center stack">
         <h2>Pick a theme</h2>
-        <p class="muted">Light, dark and fifteen named themes. Each card below previews one — that is a <code>data-theme</code> island doing its job.</p>
+        <p class="muted">Light, dark and 16 named themes. Each card below previews one — that is a <code>data-theme</code> island doing its job.</p>
         <div class="grid docs-theme-grid">
                     <article class="card compact stack docs-theme-card" data-theme="indigo">
             <div class="docs-theme-preview" aria-hidden="true">
