@@ -1,0 +1,336 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Workspaces - Actual CSS</title>
+  <meta name="description" content="Sectioned application sidebar, master/detail list with native current state, and workspace cards.">
+  <link rel="stylesheet" href="../../dist/actual.full.css">
+  <link rel="stylesheet" href="../assets/actual-themes.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+  <style>
+    /* Canonical sectioned-sidebar specimen: the sidebar owns only its own
+       geometry (sticky full-height rail, scrollable body, pinned footer).
+       Row states stay framework-owned — .nav-link[aria-current] and
+       a.list-item[aria-current] carry surface, accent, and indicator with
+       constant metrics, so nothing here repaints them. */
+    .ws-shell {
+      display: grid;
+      grid-template-columns: 15rem minmax(0, 1fr);
+      min-block-size: 100dvh;
+      background: var(--surface);
+    }
+
+    .ws-sidebar {
+      position: sticky;
+      inset-block-start: 0;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-30);
+      block-size: 100dvh;
+      padding: var(--space-40) var(--space-30);
+      border-inline-end: var(--border-width) solid var(--border);
+      background: var(--surface-raised);
+    }
+
+    .ws-sidebar-body {
+      flex: 1 1 auto;
+      min-block-size: 0;
+      overflow-y: auto;
+      /* Pinned footer must not cover scrolled links: the body keeps its own
+         block-end padding while the foot carries the separator. */
+      padding-block-end: var(--space-30);
+    }
+
+    .ws-sidebar-foot {
+      margin-block-start: auto;
+      padding-block-start: var(--space-30);
+      border-block-start: var(--border-width) solid var(--border);
+    }
+
+    .ws-nav .nav-link {
+      justify-content: flex-start;
+      gap: var(--space-20);
+      min-block-size: 2.35rem;
+      padding-inline: var(--space-30);
+    }
+
+    .ws-nav .nav-link i {
+      color: var(--text-muted);
+      font-size: 1.125rem;
+    }
+
+    /* Same release as the dashboard specimen: the idle icon tone outranks
+       the link color on specificity, so the current icon follows the accent
+       via currentColor instead of redefining the state. */
+    .ws-nav .nav-link[aria-current] i {
+      color: currentColor;
+    }
+
+    .ws-account {
+      display: flex;
+      align-items: center;
+      gap: var(--space-20);
+      inline-size: 100%;
+      padding: var(--space-20) var(--space-30);
+      border-radius: var(--radius);
+      color: var(--text);
+      font-weight: var(--font-weight-medium);
+      text-decoration: none;
+    }
+
+    .ws-account:hover {
+      background: var(--surface-subtle);
+    }
+
+    .ws-account small {
+      display: block;
+      color: var(--text-muted);
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-normal);
+    }
+
+    .ws-main {
+      min-inline-size: 0;
+      padding: var(--space-50) var(--space-40);
+    }
+
+    .ws-content {
+      --center-size: 62rem;
+      --gap: var(--space-40);
+    }
+
+    .ws-cards {
+      --grid-min: 17rem;
+    }
+
+    /* The list default has no inline padding, which glues the current-row
+       indicator to the leading avatar and the trailing badge to the row
+       edge. Navigable rows want a gutter: the indicator and trailing then
+       sit inside it instead of touching content. */
+    .ws-master {
+      --list-item-pad-inline: var(--space-30);
+    }
+
+    .ws-card p {
+      margin-block-end: 0;
+      color: var(--text-muted);
+      font-size: var(--font-size-sm);
+    }
+
+    /* Narrow viewports stack instead of duplicating the nav into a drawer:
+       one nav source, no second markup tree to keep in sync. */
+    @media (max-width: 60rem) {
+      .ws-shell {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .ws-sidebar {
+        position: static;
+        block-size: auto;
+      }
+
+      .ws-sidebar-body {
+        overflow: visible;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="ws-shell">
+    <aside class="ws-sidebar" aria-label="Workspace navigation">
+      <a class="navbar-brand" href="#workspaces">
+        <span class="avatar primary"><abbr>WS</abbr></span>
+        <span>Workspaces</span>
+      </a>
+
+      <div class="ws-sidebar-body">
+        <nav class="ws-nav stack" aria-label="Primary">
+          <p class="overline">Workspace</p>
+          <ul class="nav-list stack">
+            <li>
+              <a class="nav-link" href="#overview" aria-current="page">
+                <i class="ti ti-layout-dashboard" aria-hidden="true"></i>
+                Overview
+              </a>
+            </li>
+            <li>
+              <a class="nav-link" href="#starred">
+                <i class="ti ti-star" aria-hidden="true"></i>
+                Starred
+              </a>
+            </li>
+            <li>
+              <a class="nav-link" href="#shared-planning-documents-and-notes">
+                <i class="ti ti-folder" aria-hidden="true"></i>
+                Shared planning documents and notes
+              </a>
+            </li>
+          </ul>
+        </nav>
+
+        <nav class="ws-nav stack" aria-label="Library" style="margin-block-start: var(--space-40);">
+          <p class="overline">Library</p>
+          <ul class="nav-list stack">
+            <li>
+              <a class="nav-link" href="#templates">
+                <i class="ti ti-layout-grid" aria-hidden="true"></i>
+                Templates
+              </a>
+            </li>
+            <li>
+              <a class="nav-link" href="#archive">
+                <i class="ti ti-archive" aria-hidden="true"></i>
+                Archive
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+
+      <footer class="ws-sidebar-foot">
+        <a class="ws-account" href="#account">
+          <span class="avatar sm"><abbr>AK</abbr></span>
+          <span>Ana Keller<small>ana@example.com</small></span>
+        </a>
+      </footer>
+    </aside>
+
+    <main class="ws-main" aria-labelledby="ws-title">
+      <div class="center stack ws-content">
+        <header class="cluster" style="--cluster-justify: space-between; align-items: flex-start;">
+          <hgroup>
+            <p class="overline">Workspaces</p>
+            <h1 id="ws-title">Team overview</h1>
+            <p class="muted">Every workspace in one place, with the current one marked by the framework's native current states.</p>
+          </hgroup>
+
+          <div class="cluster" style="gap: var(--space-20);">
+            <select class="select sm fit" id="theme-switcher" aria-label="Switch theme">
+              <option value="">System</option>
+              <option value="light">Light</option>
+              <option value="dark">Dark</option>
+            </select>
+            <button class="btn primary" type="button">
+              <i class="ti ti-plus" aria-hidden="true"></i>
+              New workspace
+            </button>
+          </div>
+        </header>
+
+        <section aria-label="Workspaces">
+          <ul class="list ws-master">
+            <li>
+              <a class="list-item" href="#product-design" aria-current="page">
+                <span class="avatar sm primary" aria-hidden="true"><abbr>PD</abbr></span>
+                <span class="list-item-content">
+                  <strong class="list-item-title">Product design</strong>
+                  <span class="list-item-text">12 projects · Updated today</span>
+                </span>
+                <span class="list-item-trailing">
+                  <span class="flyout-trigger">
+                    <button class="btn ghost sm" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="ws-row-menu"
+                      id="ws-row-trigger" data-enhance="flyout" data-flyout-placement="bottom-end" aria-label="Workspace actions">
+                      <i class="ti ti-dots" aria-hidden="true"></i>
+                    </button>
+                    <menu class="flyout sm menu" role="menu" id="ws-row-menu" aria-labelledby="ws-row-trigger" hidden>
+                      <li><button class="menu-item" type="button" role="menuitem">Rename</button></li>
+                      <li><button class="menu-item" type="button" role="menuitem">Share</button></li>
+                      <hr class="menu-separator">
+                      <li><button class="menu-item danger" type="button" role="menuitem">Archive</button></li>
+                    </menu>
+                  </span>
+                </span>
+              </a>
+            </li>
+            <li>
+              <a class="list-item" href="#marketing">
+                <span class="avatar sm success" aria-hidden="true"><abbr>MK</abbr></span>
+                <span class="list-item-content">
+                  <strong class="list-item-title">Marketing site and campaign planning calendar</strong>
+                  <span class="list-item-text">4 projects · Updated yesterday</span>
+                </span>
+                <span class="badge neutral soft list-item-trailing">Shared</span>
+              </a>
+            </li>
+            <li>
+              <a class="list-item" href="#research">
+                <span class="avatar sm warning" aria-hidden="true"><abbr>RS</abbr></span>
+                <span class="list-item-content">
+                  <strong class="list-item-title">Research</strong>
+                  <span class="list-item-text">8 projects · Updated last week</span>
+                </span>
+              </a>
+            </li>
+          </ul>
+        </section>
+
+        <section aria-label="Pinned workspaces">
+          <div class="grid ws-cards">
+            <article class="card">
+              <header>
+                <div class="media">
+                  <span class="avatar" aria-hidden="true"><abbr>PD</abbr></span>
+                  <hgroup>
+                    <strong>Product design</strong>
+                    <small class="muted">Opened today</small>
+                  </hgroup>
+                </div>
+                <button class="btn ghost sm" type="button" aria-label="Unstar workspace" aria-pressed="true">
+                  <i class="ti ti-star" aria-hidden="true"></i>
+                </button>
+              </header>
+              <p>Component library, tokens, and review queue for the current cycle.</p>
+            </article>
+
+            <article class="card">
+              <header>
+                <div class="media">
+                  <span class="avatar success" aria-hidden="true"><abbr>MK</abbr></span>
+                  <hgroup>
+                    <strong>Marketing</strong>
+                    <small class="muted">Opened yesterday</small>
+                  </hgroup>
+                </div>
+              </header>
+            </article>
+
+            <article class="card">
+              <header>
+                <div class="media">
+                  <span class="avatar warning" aria-hidden="true"><abbr>RS</abbr></span>
+                  <hgroup>
+                    <strong>Research</strong>
+                    <small class="muted">Opened last week</small>
+                  </hgroup>
+                </div>
+                <button class="btn ghost sm" type="button" aria-label="Star workspace" aria-pressed="false">
+                  <i class="ti ti-star" aria-hidden="true"></i>
+                </button>
+              </header>
+            </article>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <script src="../../dist/actual.full.js"></script>
+  <script>
+    const switcher = document.getElementById("theme-switcher");
+
+    if (switcher) {
+      switcher.addEventListener("change", () => {
+        if (switcher.value) {
+          document.documentElement.dataset.theme = switcher.value;
+        } else {
+          document.documentElement.removeAttribute("data-theme");
+        }
+      });
+    }
+  </script>
+</body>
+
+</html>

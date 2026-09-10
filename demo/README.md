@@ -4,7 +4,11 @@ Hand-authored example sources:
 
 - `styles/` for demo-only CSS.
 - `templates/` for standalone static HTML examples (kitchen sink, keyboard
-  controls, surface contracts, dashboard, app, marketing, blog, blocks, density).
+  controls, surface contracts, dashboard, app, workspaces, marketing, blog, blocks, density).
+  Each template is a named variant: one page shape or product flavor per file,
+  including complete single pages. Several admin/backoffice flavors coexist on
+  purpose (dashboard, app, workspaces) to show the range of possibilities;
+  states the framework owns are exercised natively, never redefined locally.
 - `sites/` for multi-page sites built on Actual CSS:
   - `admini/` — a recreation of the [admini](https://github.com/lekoala/admini) Bootstrap 5 admin template - dashboard, tables, forms, settings, login, and 404. Each page is self-contained (no shared-layout mechanism yet); the sidebar/topbar block is identical across pages and delimited with `<!-- admini-shell:. -->` comments so it can be extracted behind htmx/Turbo/etc. later.
   - `neon-ramen/` - a cyberpunk themed ramen shop to showcase typical layouts and theme customization.

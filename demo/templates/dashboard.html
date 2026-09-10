@@ -94,13 +94,13 @@
       font-size: 1.125rem;
     }
 
-    .dashboard-nav .nav-link[aria-current="page"] {
-      color: var(--text);
-      background: var(--surface-subtle);
-    }
-
-    .dashboard-nav .nav-link[aria-current="page"] i {
-      color: var(--intent, var(--primary));
+    /* Current state is framework-owned (.nav-link[aria-current]: selected
+       accent + subtle surface + inset trait in .nav-list, constant metrics),
+       so only the row layout and idle icon tone stay local. The idle tone
+       outranks the link color on specificity, hence this release: the icon
+       follows the accent via currentColor instead of redefining the state. */
+    .dashboard-nav .nav-link[aria-current] i {
+      color: currentColor;
     }
 
     /* Denser variant of the framework's .overline for a tight sidebar: no
