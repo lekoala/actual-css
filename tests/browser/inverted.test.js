@@ -71,6 +71,9 @@ it("inverted contrasting-surface contract over one browser pass", async () => {
           nestedAccordionBg: bg("#nested-accordion"),
           nestedAccordionSummary: color("#nested-accordion summary"),
           nestedAccordionPanel: color("#nested-accordion p"),
+          invertedBackgroundBg: bg("#inverted-background"),
+          invertedBackgroundColor: color("#inverted-background"),
+          invertedBackgroundHeading: color("#inverted-background h3"),
           invertedCardBg: bg("#inverted-card"),
           invertedCardColor: color("#inverted-card"),
           invertedCardHeading: color("#inverted-card h3"),
@@ -125,6 +128,13 @@ it("inverted contrasting-surface contract over one browser pass", async () => {
       expect(initial.nestedAccordionBg).toBe(initial.refRaised);
       expect(initial.nestedAccordionSummary).toBe(initial.refText);
       expect(initial.nestedAccordionPanel).toBe(initial.refTextMuted);
+
+      // A background utility is a semantic surface: it recreates a light
+      // surface inside the inverted context, so it must also recreate the
+      // matching ink and heading color, not inherit the inverted foreground.
+      expect(initial.invertedBackgroundBg).toBe(initial.refSurface);
+      expect(initial.invertedBackgroundColor).toBe(initial.refText);
+      expect(initial.invertedBackgroundHeading).toBe(initial.refText);
 
       // Shared-surface components opt in when .inverted is applied directly.
       expect(initial.invertedCardBg).toBe(initial.refSolid);

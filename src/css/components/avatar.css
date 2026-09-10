@@ -160,6 +160,18 @@ a.avatar[aria-disabled="true"] {
   transform: translate(var(--avatar-status-translate-x), 50%);
 }
 
+/* Safari before 16.4 has no :dir(); the ancestor-attribute path is the
+   Degraded-tier fallback and the :dir() rules are dropped on their own there.
+   :dir() follows inherited directionality, so the explicit ltr rule
+   neutralizes an outer RTL fallback for a nested direction change. */
+[dir="rtl"] .avatar > .badge:empty {
+  --avatar-status-translate-x: -50%;
+}
+
+.avatar:dir(ltr) > .badge:empty {
+  --avatar-status-translate-x: 50%;
+}
+
 .avatar:dir(rtl) > .badge:empty {
   --avatar-status-translate-x: -50%;
 }

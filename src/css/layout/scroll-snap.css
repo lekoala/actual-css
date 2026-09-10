@@ -31,21 +31,25 @@
   .scroll-snap {
     overscroll-behavior-inline: contain;
     scroll-padding-inline: var(--scroll-snap-padding, var(--scroll-snap-gap));
+    /* x then inline: an engine that lacks the logical keyword keeps x.
+       proximity is the default, so a short rail cannot trap the pointer. */
+    scroll-snap-type: x proximity;
+    scroll-snap-type: inline proximity;
+  }
+
+  /* Strict snapping is opt-in; proximity keeps a rail from fighting the
+     pointer on a short strip. */
+  .scroll-snap[data-snap="mandatory"] {
     scroll-snap-type: x mandatory;
+    scroll-snap-type: inline mandatory;
   }
 
   .scroll-snap > * {
     scroll-snap-align: var(--scroll-snap-align);
   }
 
-  .scroll-snap[data-snap="center"] {
+  .scroll-snap[data-snap-align="center"] {
     --scroll-snap-align: center;
-  }
-}
-
-@supports (scroll-snap-type: inline mandatory) {
-  .scroll-snap {
-    scroll-snap-type: inline mandatory;
   }
 }
 

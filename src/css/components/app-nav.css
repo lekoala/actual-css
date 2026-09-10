@@ -6,6 +6,7 @@
  * Public hooks:
  * --app-nav-size
  * --app-nav-gap
+ * --app-nav-icon-size
  */
 :where(.app-nav) {
   --intent: initial;
@@ -19,6 +20,7 @@
 .app-nav {
   --app-nav-size: 4rem;
   --app-nav-gap: var(--space-10);
+  --app-nav-icon-size: 1.5rem;
 
   position: sticky;
   inset-block-end: 0;
@@ -55,9 +57,9 @@
 }
 
 .app-nav > a > :where(svg, img, [aria-hidden="true"]) {
-  inline-size: 1.5rem;
-  block-size: 1.5rem;
-  font-size: 1.5rem;
+  inline-size: var(--app-nav-icon-size);
+  block-size: var(--app-nav-icon-size);
+  font-size: var(--app-nav-icon-size);
   line-height: 1;
 }
 
@@ -68,9 +70,17 @@
 
 /* Current tile is already a full selected surface. Selection never changes
    text metrics: the shared medium weight is kept, no permanent indicator is
-   added here. Forced colors remaps the tile; a local repair is added only if
-   testing shows the state becomes ambiguous. */
+   added here. */
 .app-nav > a[aria-current="page"] {
   background: var(--state-selected);
   color: var(--state-selected-fg);
+}
+
+@media (forced-colors: active) {
+  /* --state-selected flattens to a UA color that no longer distinguishes the
+     current tile from the rest of the bar, so paint the system Highlight pair. */
+  .app-nav > a[aria-current="page"] {
+    background: Highlight;
+    color: HighlightText;
+  }
 }

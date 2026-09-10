@@ -26,6 +26,7 @@
   --range-track-bg: var(--border);
 
   appearance: none;
+  -webkit-appearance: none;
   inline-size: 100%;
   block-size: var(--range-thumb-size);
   background: transparent;
@@ -46,6 +47,7 @@
 
 .range::-webkit-slider-thumb {
   appearance: none;
+  -webkit-appearance: none;
   inline-size: var(--range-thumb-size);
   block-size: var(--range-thumb-size);
   border-radius: var(--radius-full);

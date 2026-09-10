@@ -138,8 +138,20 @@ dialog.drawer nav {
 }
 
 /* Safari before 16.4 does not support :dir(); keep the ancestor-attribute
-   path as the Degraded-tier fallback. */
+   path as the Degraded-tier fallback. The :dir() rules are dropped on their
+   own there, so they need no wrapper. :dir() follows inherited HTML
+   directionality and handles nested direction changes; the explicit ltr rules
+   neutralize an outer RTL fallback selector. Each specificity group keeps the
+   fallback before the :dir() rules. */
 [dir="rtl"] dialog.drawer {
+  --drawer-closed-translate: 100%;
+}
+
+dialog.drawer:dir(ltr) {
+  --drawer-closed-translate: -100%;
+}
+
+dialog.drawer:dir(rtl) {
   --drawer-closed-translate: 100%;
 }
 
@@ -147,24 +159,12 @@ dialog.drawer nav {
   --drawer-closed-translate: -100%;
 }
 
-/* :dir() follows inherited HTML directionality and handles nested direction
-   changes. Explicit ltr rules neutralize an outer RTL fallback selector. */
-@supports selector(:dir(rtl)) {
-  dialog.drawer:dir(ltr) {
-    --drawer-closed-translate: -100%;
-  }
+dialog.drawer[data-side="end"]:dir(ltr) {
+  --drawer-closed-translate: 100%;
+}
 
-  dialog.drawer[data-side="end"]:dir(ltr) {
-    --drawer-closed-translate: 100%;
-  }
-
-  dialog.drawer:dir(rtl) {
-    --drawer-closed-translate: 100%;
-  }
-
-  dialog.drawer[data-side="end"]:dir(rtl) {
-    --drawer-closed-translate: -100%;
-  }
+dialog.drawer[data-side="end"]:dir(rtl) {
+  --drawer-closed-translate: -100%;
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -173,10 +173,59 @@ dialog.drawer nav {
   }
 }
 
-/* The close button shares the modal's interior placement (modal.css): absolute
-   at the panel's top inline-end, out of the content flow. The header reserves
-   inline room so the title never runs under it. */
+/* The header reserves inline room so the title never runs under the close
+   control. */
 dialog.drawer > header,
 dialog.drawer > form > header {
   padding-inline-end: calc(var(--control-size) + var(--space-30));
+}
+
+/* Close control, owned here so a drawer-only build does not depend on
+   modal.css. Mirrors the modal's .dialog-close placement: absolute at the
+   panel's top inline-end, out of the content flow. */
+.drawer-close {
+  --drawer-close-icon-size: 1rem;
+
+  display: inline-grid;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius);
+  color: var(--text-muted);
+  cursor: pointer;
+
+  position: absolute;
+  z-index: 1;
+  inset-block-start: var(--space-20);
+  inset-inline-end: var(--space-20);
+
+  inline-size: var(--control-size);
+  block-size: var(--control-size);
+
+  background: var(--surface-subtle);
+}
+
+.drawer-close::before {
+  content: "";
+  inline-size: var(--drawer-close-icon-size);
+  block-size: var(--drawer-close-icon-size);
+  background: currentColor;
+  -webkit-mask: var(--icon-close) center / contain no-repeat;
+  mask: var(--icon-close) center / contain no-repeat;
+}
+
+@media (hover: hover) {
+  .drawer-close:hover {
+    box-shadow: inset 0 0 0 999px var(--hover-overlay);
+    color: var(--text);
+  }
+}
+
+.drawer-close:active {
+  box-shadow: inset 0 0 0 999px var(--hover-overlay);
+}
+
+.drawer-close:focus-visible {
+  outline: 2px solid transparent;
+  box-shadow: var(--focus-ring-shadow);
 }

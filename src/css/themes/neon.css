@@ -47,7 +47,7 @@
   --soft-border-mix: 45%;
   --soft-hover-alpha: 20%;
 
-  /* Popovers and tooltips glow instead of dropping a shadow. */
+  /* Anchored popovers glow instead of dropping a shadow. */
   --shadow-popout: 0 0 1rem hsl(315 95% 62% / 0.25);
 }
 

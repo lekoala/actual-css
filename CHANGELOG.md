@@ -79,6 +79,9 @@
   group in `.stack`, when the message wants its own rhythm. The `.alert-icon`,
   `.alert-dismiss`, `.alert-title` and `.alert-body` slots are excluded, so an
   admonition's title bar stays flush against its body.
+- Text controls now use `--control-pad-x` for horizontal padding. The default padding increases from `0.75rem` to `1em` and now scales with the control font size; select and input-icon geometry scale with it.
+- `--control-pad-x` is stated in the typographic tokens and rebound beside `--control-font-size` at the `.sm`/`.lg` boundaries, so a descendant with its own font size — the `input-icon` glyph — reads the control's inset, not its own.
+- The `@supports selector(:dir(rtl))` wrappers are dropped. An unsupported `:dir()` selector already drops its own rule, so `[dir="rtl"]` stays the Degraded fallback and `:dir()` enhances nested direction changes without a gate.
 - Modal dialogs cap their block size against the small viewport (`100svh`)
   instead of the dynamic viewport, so collapsing mobile browser chrome no
   longer reflows the panel.
@@ -120,9 +123,21 @@
 - `check:architecture` enforces that `aria-orientation` stays inside `:where()`.
 - Kitchen sink drops `card-body`, `card-header`, `card-footer`, `choice-card-*`
   and `tabset`, class names no stylesheet defines.
+- An unchecked `.switch` keeps the brand fallback on hover; the hover rule no longer outranks the checked state.
+- `.input-icon` reserves trailing space and positions a trailing icon even when a leading icon precedes the input.
+- A `.card.subtle` repoints `--card-bg`, so its busy overlay and contextual aliases follow the subtle surface.
+- `.app-nav` paints its current tile with the system Highlight pair under forced colors.
+- `select`, `switch`, `avatar` and `indicator` keep a `[dir="rtl"]` fallback and enhance `:dir()` inside `@supports`, matching the drawer pattern.
+- Form controls declare `-webkit-appearance: none` beside `appearance: none`, matching progress and meter.
+- `.spinner` gates its rotation behind `prefers-reduced-motion: no-preference`.
+- `.scroll-snap` snaps with `proximity` by default; `data-snap="mandatory"` opts into strict snapping and `data-snap-align="center"` sets alignment.
+- `.background-surface` / `-raised` / `-subtle` rebind `--heading` to their ink, so a heading follows the surface they recreate instead of an inherited heading color.
+- Every paired theme declares `--hover-overlay` and `--shadow-color` in its base block, so the pre-`light-dark()` tier no longer inherits the core aubergine tint.
+- `.prose` resets the UA `blockquote` inline margin, so a quote keeps only its intended indent, border, and padding.
 
 ### Breaking
 
+- The `.gap-sm` / `.gap-md` / `.gap-lg` utilities are removed: they set `gap` without `--gap`, which can diverge from `.grid-N` track sizing. For a one-off gap on a container, set `gap` directly with a spacing token; set `--gap` only to deliberately rebind the inherited rhythm of that context and its nested primitives.
 - `.alert.callout` is a leading-flag treatment: it owns the border geometry
   only and no longer forces a neutral surface, so an intent tints the panel as
   well as the flag, and `.surface` / `.solid` / `.outline` / `.inverted`

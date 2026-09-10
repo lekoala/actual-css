@@ -83,7 +83,7 @@
     text-align: start;
   }
 
-  /* Side navigation no longer occupies the viewport's bottom safe area. */
+  /* In the side layout the FAB owns the viewport's bottom safe-area inset. */
   .app-layout > .fab {
     margin-block-end: max(var(--fab-offset), env(safe-area-inset-bottom));
   }

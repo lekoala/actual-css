@@ -208,8 +208,8 @@
    `:empty` says exactly what the markup says, the way `.badge:empty` does, and
    it reads the item's own content: bare text in an `<li>` keeps a reading width
    like its wrapped peers, where `> li:has(.step-label)` would give it a marker
-   floor and skew the row. It also predates `:has()` by a decade, so the compact
-   form reaches the Degraded tier and only the inline bonus needs `:has()`. */
+   floor and skew the row. `:empty` also keeps the compact form reachable on the
+   Degraded tier, where only the inline bonus needs `:has()`. */
 .steps-horizontal > li:empty {
   flex: 1 1 0;
   justify-items: start;

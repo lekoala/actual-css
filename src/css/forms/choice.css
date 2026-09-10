@@ -115,6 +115,7 @@
   background: var(--choice-bg);
   color: var(--choice-mark);
   appearance: none;
+  -webkit-appearance: none;
   cursor: pointer;
 }
 

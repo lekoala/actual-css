@@ -54,10 +54,11 @@ The reason for that boundary: a dialog title, a card heading, or a sidebar secti
 
 ### Fluid module
 
-`src/css/typography/fluid.css` is a small module that is not imported by
-`actual.css`. Projects that need display, title, and lead sizes that scale
-with the viewport (landing pages, marketing pages, hero sections,
-documentation homepages) import it manually:
+`src/css/typography/fluid.css` ships with the typography family
+(`actual-css/css/typography`) and `actual-css/full`, but not with the minimal
+core. A core-only entry point that needs display, title, and lead sizes that
+scale with the viewport (landing pages, marketing pages, hero sections,
+documentation homepages) imports it explicitly:
 
 ```css
 @import "actual-css/css/typography/fluid";
@@ -218,7 +219,7 @@ To enable fluid display type on a marketing or documentation surface, import the
 
 The module does not change anything in the core: it adds three size tokens and three classes. Body text, app UI, and the default prose scale are not affected.
 
-Projects that do not need fluid display type do nothing — the module is not part of the default bundle.
+Projects on `actual-css/css/typography` or `actual-css/full` already have the module. A minimal-core project that does not need fluid display type does nothing — the module is not in the core.
 
 ## What not to reintroduce
 

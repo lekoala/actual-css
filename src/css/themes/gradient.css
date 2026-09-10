@@ -3,8 +3,8 @@
  * Bootstrap 4 gradient treatment (a 15%-white-lightened top fading to the
  * flat intent color) purely through token overrides, without touching
  * button.css. Only bare/.solid buttons are targeted — .soft/.outline/.ghost/
- * .link stay flat, matching Bootstrap 4's own gradient mixin, which only
- * wraps its filled button variant. */
+ * .link/.surface stay flat, matching Bootstrap 4's own gradient mixin, which
+ * only wraps its filled button variant. */
 [data-theme="gradient"] {
   color-scheme: light dark;
 
@@ -33,6 +33,7 @@
   --border: hsl(210 14% 89%);
   --focus: var(--primary);
   --hover-overlay: hsl(210 30% 10% / 0.04);
+  --shadow-color: hsl(210 30% 10%);
 
   --radius: 0.25rem;
   --radius-sm: 0.2rem;
@@ -48,7 +49,6 @@
     --success: light-dark(hsl(134 61% 41%), hsl(134 55% 65%));
     --success-fg: light-dark(white, hsl(134 40% 8%));
     --warning: light-dark(hsl(45 100% 51%), hsl(45 90% 70%));
-    --warning-fg: light-dark(hsl(45 100% 10%), hsl(45 100% 10%));
     --danger: light-dark(hsl(354 70% 54%), hsl(354 75% 74%));
     --danger-fg: light-dark(white, hsl(354 40% 10%));
     --neutral: light-dark(hsl(210 10% 23%), hsl(210 12% 75%));
@@ -78,7 +78,7 @@
      of reusing --ui-bg verbatim — the resting gradient shape survives, just
      shifted darker, same as the flat color-mix darken variants.css uses for
      hover on ungradiented themes. */
-  [data-theme="gradient"] .btn:not(:where(.soft, .outline, .ghost, .link)) {
+  [data-theme="gradient"] .btn:not(:where(.soft, .outline, .ghost, .link, .surface)) {
     --gradient-hover-color: color-mix(in oklch, var(--intent, var(--neutral)) 88%, black);
     --ui-bg: linear-gradient(
       180deg,

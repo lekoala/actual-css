@@ -178,6 +178,15 @@ background: color-mix(in oklch, var(--surface) 88%, transparent);
 backdrop-filter: blur(1rem);
 ```
 
+`@supports` is the simplest machine-readable boundary for a structural
+enhancement, not a preferred shape in itself. Where an unsupported selector
+already drops the enhancement cleanly and the baseline stays functional, a
+documented why-comment (the one the guard audit recognises) or a `PROGRESSIVE`
+ledger entry is just as valid. A wrapper that is behaviorally redundant is a
+simplification candidate: improve `check:compat` — for example, let one
+justification cover a contiguous group of rules — rather than let the wrapper
+become a framework convention.
+
 ### CSS nesting inside @supports
 
 The no-nesting rule protects browsers that predate CSS nesting (Chrome 112, Firefox 117, Safari 16.5). A block already gated behind a later feature can't be reached by any browser that lacks nesting, so the inspector-friendliness argument no longer applies — nest freely inside it. `appearance: base-select` (Chrome 133+) is the current example: everything inside that `@supports` block in `custom-select.css` uses `&`-nesting instead of repeating the `.select:not(...)` selector.

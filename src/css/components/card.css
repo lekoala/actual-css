@@ -107,7 +107,7 @@
   box-shadow: var(--shadow);
 }
 .card.subtle {
-  background: var(--surface-subtle);
+  --card-bg: var(--surface-subtle);
 }
 .card.compact {
   --card-pad: var(--space-20);

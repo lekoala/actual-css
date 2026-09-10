@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Input icon fixture</title>
+  <link rel="stylesheet" href="../../src/css/actual.full.css">
+  <style>
+    body { padding: 1rem; }
+    .input-icon { inline-size: 20rem; }
+  </style>
+</head>
+<body>
+  <!-- A bare control, so the reserved-space assertions compare against the
+       control's own default padding rather than a hard-coded value. -->
+  <input class="input" id="plain" type="text" aria-label="Plain input" />
+
+  <div class="input-icon" id="leading">
+    <span aria-hidden="true">L</span>
+    <input class="input" type="text" aria-label="Leading icon" />
+  </div>
+
+  <div class="input-icon" id="trailing">
+    <input class="input" type="text" aria-label="Trailing icon" />
+    <span aria-hidden="true">T</span>
+  </div>
+
+  <div class="input-icon" id="both">
+    <span aria-hidden="true">L</span>
+    <input class="input" type="text" aria-label="Leading and trailing icons" />
+    <span aria-hidden="true">T</span>
+  </div>
+
+  <!-- An oversized glyph must not creep under the text: the reserved space and
+       the icon inset share the control frame, not the icon's font size. -->
+  <div class="input-icon" id="large" style="--input-icon-size: 3em">
+    <span aria-hidden="true">L</span>
+    <input class="input" type="text" aria-label="Oversized leading icon" />
+  </div>
+</body>
+</html>

@@ -87,18 +87,6 @@
   flex-wrap: nowrap;
 }
 
-.gap-sm {
-  gap: var(--space-20);
-}
-
-.gap-md {
-  gap: var(--space-40);
-}
-
-.gap-lg {
-  gap: var(--space-50);
-}
-
 .justify-content-start {
   --cluster-justify: flex-start;
   justify-content: flex-start;
@@ -156,6 +144,10 @@
   margin-block-end: auto;
 }
 
+/* Consume the inherited --gap rhythm on an arbitrary layout container.
+   Setting --gap alone only defines the custom property; it has no visual
+   effect unless the element already uses gap: var(--gap) (as .stack,
+   .cluster, .grid, etc. do). */
 .gap-context {
   gap: var(--gap);
 }
@@ -256,18 +248,28 @@
   border-inline-end: var(--border-width) solid var(--border);
 }
 
-/* Surface */
+/* Surface. These are semantic surfaces, not arbitrary paint: each owns its
+   matching ink and rebinds --heading to that ink, so it stays readable when it
+   recreates a light surface inside a context that installed a dark one
+   (.inverted). Intent ink is not inherited through a surface utility; use
+   .intent-color for that. */
 .background-surface {
+  --heading: currentColor;
+
   background: var(--surface);
   color: var(--text);
 }
 
 .background-raised {
+  --heading: currentColor;
+
   background: var(--surface-raised);
   color: var(--text);
 }
 
 .background-subtle {
+  --heading: currentColor;
+
   background: var(--surface-subtle);
   color: var(--text);
 }

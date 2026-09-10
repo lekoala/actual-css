@@ -283,14 +283,11 @@ html.has-modal-open.had-scrollbar {
   }
 }
 
-/* Close controls. A close button is an action attached to a surface, so it
-   never participates in the content flow. The modal and the drawer share the
-   same simple placement — absolute at the panel's top inline-end, inside the
-   surface — so both close buttons look and behave identically. The glyph comes
-   from --icon-close, masked to currentColor, so no icon font or text glyph is
-   required in the markup. */
-.dialog-close,
-.drawer-close {
+/* Close control. A close button is an action attached to a surface, so it
+   never participates in the content flow — absolute at the panel's top
+   inline-end, inside the surface. The glyph comes from --icon-close, masked to
+   currentColor, so no icon font or text glyph is required in the markup. */
+.dialog-close {
   --dialog-close-icon-size: 1rem;
 
   display: inline-grid;
@@ -314,8 +311,7 @@ html.has-modal-open.had-scrollbar {
   background: var(--surface-subtle);
 }
 
-.dialog-close::before,
-.drawer-close::before {
+.dialog-close::before {
   content: "";
   inline-size: var(--dialog-close-icon-size);
   block-size: var(--dialog-close-icon-size);
@@ -325,20 +321,17 @@ html.has-modal-open.had-scrollbar {
 }
 
 @media (hover: hover) {
-  .dialog-close:hover,
-  .drawer-close:hover {
+  .dialog-close:hover {
     box-shadow: inset 0 0 0 999px var(--hover-overlay);
     color: var(--text);
   }
 }
 
-.dialog-close:active,
-.drawer-close:active {
+.dialog-close:active {
   box-shadow: inset 0 0 0 999px var(--hover-overlay);
 }
 
-.dialog-close:focus-visible,
-.drawer-close:focus-visible {
+.dialog-close:focus-visible {
   outline: 2px solid transparent;
   box-shadow: var(--focus-ring-shadow);
 }

@@ -64,7 +64,10 @@
      beyond this vocabulary. Toggles that share one transition list at
      --duration-fast (flyout, tooltip) and pure-opacity backdrops stay on
      `ease`: at 100ms the curve has almost no resolving time, and a scrim is
-     not traveling anywhere. */
+     not traveling anywhere. Animation policy: reset.css is the global safety
+     net; every meaningful @keyframes is explicitly gated behind
+     prefers-reduced-motion: no-preference; ordinary transitions rely on the
+     reset alone. */
   --duration: 150ms;
   --duration-fast: 100ms;
   --duration-slow: 200ms;
@@ -96,19 +99,28 @@
 
   /* Controls — inputs and buttons share --control-size so heights always match.
      .compact/.spacious (variants.css) switch geometry without changing
-     --control-font-size. Local .sm/.lg component sizes switch both.
+     --control-font-size. Local .sm/.lg component sizes switch all three.
 
      Inline choices (checkbox, radio, switch) are typographic, not field-sized:
      they sit on a line of text, so they follow --control-font-size through
      --choice-control-size instead of --control-size. Being an em value in
      :root is deliberate — an unregistered custom property resolves its units
      at the element that consumes it, so one declaration tracks whatever font
-     size the choice actually renders at. */
+     size the choice actually renders at.
+
+     --control-pad-x is the opposite kind of token: a resolved geometry length,
+     not an em ratio. Every part of one control must see the same horizontal
+     distance, so it is stated in the typographic tokens rather than an em
+     whose value would change on a descendant with its own font size (the
+     input-icon glyph, made larger by --input-icon-size). It mirrors
+     --control-font-size and is rebound beside it at the .sm/.lg boundaries
+     (variants.css); declaring it only in :root would freeze the md value,
+     because a var() inside a custom property resolves where it is declared. */
   --control-size-sm: 2rem;
   --control-size-md: 2.375rem;
   --control-size-lg: 2.75rem;
   --control-size: var(--control-size-md);
-  --control-pad-x: 1em;
+  --control-pad-x: var(--font-size-md);
   --control-font-size: var(--font-size-md);
   --choice-control-size: 1.125em;
   --disabled-opacity: 0.65;

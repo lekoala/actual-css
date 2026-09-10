@@ -180,13 +180,13 @@ it("the canvas shrinks with its container instead of overflowing it", async () =
   );
 });
 
-it("gap utilities are exact because the track count never reads --gap", async () => {
+it("column-layout tracks are independent of --gap", async () => {
   await withBrowserPage(
     fixtureUrl(FIXTURE),
     async (view) => {
       await setViewport(view, WIDE_VIEWPORT);
       const probe = await readCase(view, "gap-none");
-      /* .gap-lg on a bare .grid-4 costs a column; here 6 + 6 stays 6 + 6. */
+      /* The track count never reads --gap; here 6 + 6 stays 6 + 6. */
       expect(probe.rows).toBe(1);
       expect(probe.items).toEqual([
         { startLine: 1, span: 6 },

@@ -1,9 +1,10 @@
 /*
  * Optional fluid typography module.
  *
- * Not imported by actual.css. Import this file manually after actual.css when
- * you need display, title, and lead sizes that scale with the viewport. Typical
- * use cases: marketing pages, landing pages, hero sections, documentation
+ * Part of the typography family (typography/index.css) and the full bundle; it
+ * is not in the minimal core, so a core-only import adds it explicitly when
+ * display, title, and lead sizes must scale with the viewport. Typical use
+ * cases: marketing pages, landing pages, hero sections, documentation
  * homepages.
  *
  * Do not use this for body text, app UI, or the default prose scale. Fluid

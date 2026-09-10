@@ -31,7 +31,6 @@
   border-inline-end-color: var(--spinner-value);
   border-radius: var(--radius-full);
   opacity: 0.85;
-  animation: actual-spin var(--duration-spin) linear infinite;
   vertical-align: text-bottom;
 }
 
@@ -50,6 +49,12 @@
 .spinner.lg {
   --spinner-size: 2rem;
   --spinner-width: 3px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .spinner {
+    animation: actual-spin var(--duration-spin) linear infinite;
+  }
 }
 
 @keyframes actual-spin {

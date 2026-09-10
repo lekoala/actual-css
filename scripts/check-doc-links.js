@@ -112,7 +112,6 @@ const REMOVED_ENTRYPOINTS = new Set([
   "actual-css/css/optional/scroller",
   "actual-css/css/optional/scroll-snap",
   "actual-css/css/optional/layout-extra",
-  "actual-css/css/optional/typography-fluid",
   "actual-css/css/optional/utilities-extra",
   "actual-css/css/actual.full",
   "actual-css/css/grid",

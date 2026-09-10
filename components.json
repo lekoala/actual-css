@@ -66,7 +66,8 @@
     ],
     "publicHooks": [
       "--app-nav-size",
-      "--app-nav-gap"
+      "--app-nav-gap",
+      "--app-nav-icon-size"
     ],
     "states": [
       "aria-current",
@@ -256,6 +257,7 @@
     "cssImport": "actual-css/css/components/drawer",
     "classes": [
       "drawer",
+      "drawer-close",
       "is-static"
     ],
     "publicHooks": [
@@ -430,7 +432,6 @@
       "dialog-close",
       "dialog-confirmation",
       "dialog-icon",
-      "drawer-close",
       "had-scrollbar",
       "has-modal-open",
       "is-static",
