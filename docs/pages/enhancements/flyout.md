@@ -82,8 +82,9 @@ another library may therefore own opening, dismissal, and focus without
 requiring `.is-open` or `[hidden]`.
 
 Actual CSS does not position that independently managed popover. Its positioner
-must write fixed viewport coordinates (and may write `--available-height` and
-`--surface-anchor-width`); the built-in `surface.js` runtime remains the full
+must couple fixed positioning with viewport coordinates or absolute positioning
+with document coordinates (and may write `--available-height` and
+`--surface-anchor-width`). The built-in `surface.js` runtime remains the full
 fallback when Actual owns the lifecycle too. A bare `[popover]` without
 `.flyout` or `.tooltip` keeps its platform appearance.
 

@@ -31,7 +31,7 @@
  *             up again with no second hover or tap.
  *
  * Coordinates: viewport by default, document coordinates whenever the trigger
- *             scrolls with the page. See coordinateSpaceFor().
+ *             scrolls with the page. See positionModeFor().
  *
  * Transport:  the top layer, via popover="manual", written by the runtime on
  *             every tip it manages. A .tooltip[popover] with no data-tooltip
@@ -42,6 +42,7 @@
 import { autoUpdate, reposition } from "@lekoala/floating";
 import enhance from "./enhance.js";
 import { registerEscapeDismissal } from "./escape.js";
+import { positionModeFor } from "./floating-space.js";
 import { CLASSES } from "./selectors.js";
 
 const SHOW_DELAY_MS = 150;
@@ -133,44 +134,6 @@ export function isTooltipVisible(tip) {
  * position: relative, transform, filter, contain and both dialog modes — so
  * the tip's own placement never enters into it.
  */
-const VIEWPORT_ANCHORED = "dialog:modal, :popover-open";
-
-function isViewportAnchored(ref) {
-  const win = ref.ownerDocument?.defaultView;
-  if (!win) return true;
-
-  // A modal dialog and an open popover are laid out against the viewport
-  // without computing `fixed` themselves, so the walk below cannot see them.
-  try {
-    if (ref.closest(VIEWPORT_ANCHORED)) return true;
-  } catch {
-    /* An engine without :modal / :popover-open: the walk is all there is. */
-  }
-
-  for (let el = ref; el; el = el.parentElement) {
-    const { position } = win.getComputedStyle(el);
-    // Sticky counts even while unstuck: it stops scrolling with the page
-    // without any DOM change to re-resolve this on.
-    if (position === "fixed" || position === "sticky") return true;
-  }
-  return false;
-}
-
-/** @returns {"viewport" | "document"} */
-function coordinateSpaceFor(ref) {
-  return isViewportAnchored(ref) ? "viewport" : "document";
-}
-
-/*
- * Document coordinates need the initial containing block, which the top layer
- * supplies to an absolutely positioned box. Viewport coordinates need `fixed`,
- * which is also what .tooltip declares, so the CSS default and the pre-show
- * state agree.
- */
-function applyCoordinateSpace(tip, space) {
-  tip.style.position = space === "document" ? "absolute" : "fixed";
-}
-
 function placementFor(ref) {
   return ref?.getAttribute("data-tooltip-placement") || "top";
 }
@@ -501,8 +464,9 @@ function show(tip, ref, immediate = false) {
   if (!state) return;
 
   state.activeRef = ref;
-  state.space = coordinateSpaceFor(ref);
-  applyCoordinateSpace(tip, state.space);
+  const mode = positionModeFor(ref);
+  state.space = mode.space;
+  tip.style.position = mode.position;
   syncEscapeDismissal(tip, state);
   clearHide(tip);
   if (state.timer) clearTimeout(state.timer);

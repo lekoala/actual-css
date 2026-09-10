@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Surface coordinate space fixture</title>
+  <link rel="stylesheet" href="../../src/css/actual.full.css">
+  <script src="../../dist/actual.full.js" defer></script>
+  <style>
+    body { margin: 0; padding: 1rem; }
+    #fixed-host { position: fixed; inset-block-start: 1rem; inset-inline-end: 1rem; }
+    #sticky-host { position: sticky; inset-block-start: 1rem; inline-size: max-content; }
+    #scroller { block-size: 10rem; overflow: auto; border: 1px solid; }
+    #nested-before { block-size: 5rem; }
+    #nested-after { block-size: 14rem; }
+    #page-filler { block-size: 140vh; }
+    #fit-panel { inline-size: 16rem; }
+  </style>
+</head>
+<body>
+  <div id="fixed-host" class="flyout-trigger">
+    <button id="fixed-trigger" class="btn" type="button"
+            data-enhance="flyout" aria-controls="fixed-panel">Fixed</button>
+    <menu id="fixed-panel" class="flyout menu" hidden>
+      <li><button class="menu-item" type="button">Item</button></li>
+    </menu>
+  </div>
+
+  <div id="sticky-host" class="flyout-trigger">
+    <button id="sticky-trigger" class="btn" type="button"
+            data-enhance="flyout" aria-controls="sticky-panel">Sticky</button>
+    <menu id="sticky-panel" class="flyout menu" hidden>
+      <li><button class="menu-item" type="button">Item</button></li>
+    </menu>
+  </div>
+
+  <p class="flyout-trigger">
+    <button id="page-trigger" class="btn" type="button"
+            data-enhance="flyout" aria-controls="page-panel">Page</button>
+    <menu id="page-panel" class="flyout menu" hidden>
+      <li><button class="menu-item" type="button">Item</button></li>
+    </menu>
+  </p>
+
+  <div id="scroller">
+    <div id="nested-before"></div>
+    <div class="flyout-trigger">
+      <button id="nested-trigger" class="btn" type="button"
+              data-enhance="flyout" aria-controls="nested-panel">Nested</button>
+      <menu id="nested-panel" class="flyout menu" hidden>
+        <li><button class="menu-item" type="button">Item</button></li>
+      </menu>
+    </div>
+    <div id="nested-after"></div>
+  </div>
+
+  <div id="page-filler"></div>
+
+  <div class="flyout-trigger">
+    <button id="fit-trigger" class="btn" type="button"
+            data-enhance="flyout" aria-controls="fit-panel">Fits above</button>
+    <menu id="fit-panel" class="flyout menu" hidden>
+      <li><button class="menu-item" type="button">Alpha</button></li>
+      <li><button class="menu-item" type="button">Bravo</button></li>
+      <li><button class="menu-item" type="button">Charlie</button></li>
+      <li><button class="menu-item" type="button">Delta</button></li>
+      <li><button class="menu-item" type="button">Echo</button></li>
+      <li><button class="menu-item" type="button">Foxtrot</button></li>
+    </menu>
+  </div>
+</body>
+</html>

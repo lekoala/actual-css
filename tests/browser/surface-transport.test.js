@@ -156,6 +156,7 @@ it("a context menu is still positioned at the pointer", async () => {
         return JSON.stringify({
           open: menu.classList.contains("is-open"),
           parent: menu.parentElement.tagName,
+          position: getComputedStyle(menu).position,
           left: Math.round(r.left),
           top: Math.round(r.top),
         });
@@ -163,6 +164,7 @@ it("a context menu is still positioned at the pointer", async () => {
     );
 
     expect(state.open).toBe(true);
+    expect(state.position).toBe("fixed");
     // Authored at body level here, and it must not have been moved.
     expect(state.parent).toBe("BODY");
     // Placed at the pointer, within the positioner's shift padding.
