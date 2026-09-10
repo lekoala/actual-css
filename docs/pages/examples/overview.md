@@ -11,6 +11,7 @@ and `actual.full.js` from `dist/`, plus the theme palettes bundle from
 
 `demo/templates/` are standalone pages covering common page shapes.
 
+- [Visual guide](../../demo/templates/visual-guide.html) - seventeen illustrated figures on the spacing scale, the layout primitives, and density versus local size
 - [Kitchen sink](../../demo/templates/kitchen-sink.html) - one-screen test bed for themes, scopes, variants and interactions
 - [Keyboard controls](../../demo/templates/keyboard-controls.html) - hands-on keyboard support matrix and focus test bench
 - [Surface contracts](../../demo/templates/surfaces.html) - .inverted, cascade precedence, and the intent boundary
