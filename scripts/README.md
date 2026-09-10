@@ -23,6 +23,7 @@ script in `package.json`; `bun run build:all` chains the full pipeline
 | `check:templates` | `check-templates.js` | Sanity-check the demo template pages. |
 | `check:sync` | `check-sync.js` | Verify files that must stay in sync with each other. |
 | `report:theme-contrast` | `report-theme-contrast.js` | Print every preset's resting and hovered soft-pair contrast (light + dark), never failing — the preset contrast ledger. |
+| `report:neutral-ramp` | `report-neutral-ramp.js` | Survey every preset's neutral ramp in OKLCH (light + dark), never failing — chroma per role, hue distance to `--primary`, and the lightness a tint costs at equal contrast. Observation only: a palette may depart from the trend on purpose, and hue deltas near the achromatic axis are descriptive, not measurements to gate on. |
 | `test` | — | Full bun test suite (`tests/`, browser tests skip gracefully without Chrome). |
 | `shot:page` | `page-shot.js` | Full-page screenshot of any page in headless Chrome. |
 | `shot:forced` | `forced-colors-shot.js` | Same, with forced-colors emulation (DevTools pipeline). |
