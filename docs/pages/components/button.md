@@ -110,16 +110,24 @@ Always name it with an `aria-label` since there is no visible text.
 
 ### Button groups
 
-Join adjacent buttons with `.join`. The joined group is not a new component —
-the buttons keep their own variants.
+Join adjacent buttons with `.join`. The joined group is not a new component:
+each button keeps its own classes, and `.join` only reshapes the outer corners
+and collapses the shared edges.
 
 ```html demo
-<div class="join" role="group" aria-label="Text alignment">
-  <button class="btn" type="button">Left</button>
-  <button class="btn outline" type="button">Center</button>
-  <button class="btn soft" type="button">Right</button>
+<div class="join" role="group" aria-label="Row actions">
+  <button class="btn outline" type="button">Edit</button>
+  <button class="btn outline" type="button">Duplicate</button>
+  <button class="btn outline" type="button">Archive</button>
 </div>
 ```
+
+Keep one variant family inside a group. Because each button keeps its own
+classes, nothing stops `.btn`, `.btn outline` and `.btn soft` from sitting side
+by side — but three fills and three border treatments in one shape read as
+unrelated controls that happen to touch, not as one unit. Change the variant
+only to carry meaning: [Toggle](#toggle) marks the active segment with a solid
+button among outlines, which is the pattern a segmented control wants.
 
 ## Sizes
 

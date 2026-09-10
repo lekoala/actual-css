@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Section break fixture</title>
+  <link rel="stylesheet" href="../../src/css/actual.full.css">
+  <style>* { transition-duration: 0s !important; }</style>
+</head>
+<body>
+  <!-- A separator inside a column layout. The UA sets `margin: 0.5em auto` on
+       hr; as a flex item an inline auto margin replaces the cross-axis stretch,
+       so without the reset in base.css this computes to zero width and
+       disappears. .stack leaves the inline axis free on purpose, so the fix
+       has to live on the element. -->
+  <div id="in-stack" class="stack" style="inline-size: 400px;">
+    <p>Above</p>
+    <hr>
+    <p>Below</p>
+  </div>
+
+  <!-- Same case one level down: the grid primitive stretches its items too. -->
+  <div id="in-grid" class="grid" style="inline-size: 400px; --grid-columns: 1fr;">
+    <p>Above</p>
+    <hr>
+    <p>Below</p>
+  </div>
+
+  <!-- Document flow: the element owns its block rhythm, --space-60 by default. -->
+  <div id="in-flow" style="inline-size: 400px;">
+    <p>Above</p>
+    <hr>
+    <p>Below</p>
+  </div>
+
+  <!-- ...and --hr-space tunes it on the instance. -->
+  <div id="in-flow-tuned" style="inline-size: 400px;">
+    <p>Above</p>
+    <hr style="--hr-space: 4px;">
+    <p>Below</p>
+  </div>
+</body>
+</html>

@@ -12,7 +12,8 @@
 - `.list` rows accept any combination of leading, content and trailing regions.
 - `bun run serve`, a static server for opening demo pages from another device.
 - Visual guide: `demo/templates/visual-guide.html`, seventeen illustrated figures on the spacing scale, the layout primitives, and density versus local size.
-- Color guide: `demo/templates/color-guide.html`, theming principles measured live on `ocean` and `sunset` in light and dark, as `data-theme` islands on one page.
+- Color guide: `demo/templates/color-guide.html`, theming principles measured live on `ocean` and `sunset` in light and dark, as `data-theme` islands on one page. Covers gradients derived from the intent tokens and the interaction colours — `--hover-overlay`, `--focus-ring`, `accent-color`.
+- Joined controls and Button document that `.join` reshapes edges without unifying treatments: keep one variant family in a group, and change a segment's variant only to mark state.
 - `--hr-space` tunes an `hr`'s block margin on the instance. It applies in document flow; `.stack` and `.prose` own the distance between their own children.
 - `pre` gets `overflow-x: auto` globally, so an unbreakable line scrolls in its own box instead of widening the page. Background, padding and radius stay with `.prose` or an application code-block.
 - Flyout documents the Biome `noNoninteractiveElementToInteractiveRole` false
@@ -84,7 +85,7 @@
 
 ### Fixed
 
-- `hr` resets the UA's `margin-inline: auto`, which replaced the cross-axis stretch and collapsed an `<hr>` inside a `.stack` to zero width.
+- `hr` resets the UA's `margin-inline: auto`, which replaced the cross-axis stretch and collapsed an `<hr>` inside a `.stack` to zero width — the admin settings demo shipped an invisible separator that way. Guarded by `tests/browser/hr.test.js`, which also pins the `--hr-space` rhythm and the `.stack` precedence.
 - Density demo dropped `.card-body`, a class the framework does not define; a card already owns its padding and its direct-child rhythm.
 - `demo/styles/demo.css` no longer redefines `.center`, which overrode the layout primitive and silenced its `--center-size` hook on every page linking the sheet. Thirty unused rules from the retired demo gallery went with it, and four dead rules left `demo/sites/neon-ramen/neon-site.css`.
 - The examples index groups the templates (start here, page shapes, layout references, system benches, third-party) and lists `column-layout`, `motion` and `select-intents`, which were missing entirely.
