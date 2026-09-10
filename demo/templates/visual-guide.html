@@ -15,8 +15,8 @@
      * column, .card for every figure and every stage, .grid for the comparison
      * columns, .stack / .cluster for the rhythms, .overline for the labels,
      * .prose for the snippets. What is left here is the diagram vocabulary —
-     * bars, hatched bands, rulers — which is page-specific by nature, plus the
-     * handful of tweaks the framework has no hook for (marked NO HOOK).
+     * bars, hatched bands, rulers — which is page-specific by nature, and a
+     * few local hook values on top of it.
      */
     body {
       background: var(--surface-subtle);
@@ -229,11 +229,6 @@
       padding: var(--space-20) var(--space-30);
       font-size: var(--font-size-sm);
       color: var(--text-muted);
-    }
-
-    /* NO HOOK — base.css hard-codes hr's margin-block to --space-60. */
-    .vg-hr {
-      margin-block: var(--space-10);
     }
 
     /* Ownership diagram — the padding ring of a component made visible. */
@@ -469,15 +464,21 @@
         <div class="grid vg-columns">
           <div class="card subtle vg-stage">
             <span class="overline">Ruled</span>
-            <div class="stack gap-none">
-              <div class="vg-row">Overview</div>
-              <div class="vg-row">Activity</div>
-              <hr class="vg-hr">
-              <div class="vg-row">Members</div>
-              <div class="vg-row">Invitations</div>
-              <hr class="vg-hr">
-              <div class="vg-row">Billing</div>
-              <div class="vg-row">Invoices</div>
+            <div class="stack" style="--gap: var(--space-10);">
+              <div class="stack gap-none">
+                <div class="vg-row">Overview</div>
+                <div class="vg-row">Activity</div>
+              </div>
+              <hr>
+              <div class="stack gap-none">
+                <div class="vg-row">Members</div>
+                <div class="vg-row">Invitations</div>
+              </div>
+              <hr>
+              <div class="stack gap-none">
+                <div class="vg-row">Billing</div>
+                <div class="vg-row">Invoices</div>
+              </div>
             </div>
           </div>
 

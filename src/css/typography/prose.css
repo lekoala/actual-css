@@ -157,8 +157,8 @@
 }
 /* @sync key-recipe */
 
+/* Overflow containment is global on `pre` (base.css); only the box is prose's. */
 .prose :where(pre) {
-  overflow-x: auto;
   padding: 1em;
   border: var(--border-width) solid var(--border);
   border-radius: var(--radius);

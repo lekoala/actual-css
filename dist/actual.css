@@ -502,6 +502,7 @@ select {
  *
  * Public hooks:
  * --link
+ * --hr-space
  */
 
 body {
@@ -543,10 +544,23 @@ hgroup > * {
   margin-block: 0;
 }
 
+/* Section break.
+
+   margin-inline: 0 overrides the UA's `margin: 0.5em auto`. In block flow the
+   auto margins resolve to zero and nothing changes, but as a flex or grid item
+   an inline auto margin replaces the stretch — an <hr> in a .stack computed to
+   width 0 and vanished. .stack deliberately leaves the inline axis free, so
+   the reset belongs here.
+
+   --hr-space tunes the block rhythm on the instance: a rule closing a page
+   section and a rule separating two rows in a panel are the same element at
+   very different scales. It applies to an hr in document flow; inside .stack
+   or .prose the parent owns the spacing between siblings and wins. */
 hr {
   border: 0;
   border-block-start: var(--border-width) solid var(--border);
-  margin-block: var(--space-60);
+  margin-block: var(--hr-space, var(--space-60));
+  margin-inline: 0;
 }
 
 code,
@@ -554,6 +568,14 @@ kbd,
 samp,
 pre {
   font-family: var(--font-mono);
+}
+
+/* Overflow containment only. One unbreakable line — a URL, a minified token, a
+   wide ASCII table — otherwise widens the whole page, and an author cannot see
+   it coming from the markup. Background, padding and radius stay out: those
+   belong to .prose or to an application code-block component. */
+pre {
+  overflow-x: auto;
 }
 
 small {

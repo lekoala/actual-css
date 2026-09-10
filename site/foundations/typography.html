@@ -235,7 +235,7 @@
 <p>The baseline owns the minimum needed to make plain HTML readable.</p>
 <p>It applies everywhere — cards, dialogs, heroes, app shells — not only in prose.</p>
 <p>It does not own visual hierarchy. No global <code>font-size</code> on headings, no global <code>font-weight</code> on headings, no global margins on headings, no global <code>text-decoration</code> on links. These choices would shape app UI in ways the framework cannot predict.</p>
-<p>The mildly opinionated defaults at the baseline are few: line-height on headings (tight, so multi-line headings stay readable), <code>text-wrap: balance</code> on headings where supported, the <code>hr</code> rule, the <code>::selection</code> rule, the <code>code</code> / <code>kbd</code> / <code>samp</code> / <code>pre</code> font family, <code>small</code> font size, and a global link underline offset that prose and components reuse. Everything else stays neutral so components and <code>.prose</code> can take over without fighting the baseline.</p>
+<p>The mildly opinionated defaults at the baseline are few: line-height on headings (tight, so multi-line headings stay readable), <code>text-wrap: balance</code> on headings where supported, the <code>hr</code> rule, the <code>::selection</code> rule, the <code>code</code> / <code>kbd</code> / <code>samp</code> / <code>pre</code> font family, <code>pre</code> overflow containment, <code>small</code> font size, and a global link underline offset that prose and components reuse. Everything else stays neutral so components and <code>.prose</code> can take over without fighting the baseline.</p>
 <p>Global links inherit color. The visual affordance of a link is the responsibility of <code>.prose</code> (for authored content) or of a component (for nav links, button-like links, tabs, breadcrumbs, etc.). Underlining every <code>a</code> globally would collide with all of those.</p>
 <h3 id="prose-scope"><code>.prose</code> scope</h3>
 <p><code>.prose</code> is the opt-in rich-text scope. It owns the visual hierarchy of authored content.</p>
@@ -330,7 +330,19 @@ baseline stays sans so app UI inherits predictably.</p>
 <p><code>transition: all</code> is not used. Transitions target specific properties. This is a general rule, not just a typography rule.</p>
 <h2 id="small-elements">Small elements</h2>
 <p><code>small</code> gets a smaller font size globally (<code>0.875em</code>) because it is a semantic element, not a utility. There is no <code>.small</code> class competing with the element.</p>
-<p><code>code</code>, <code>kbd</code>, <code>samp</code>, and <code>pre</code> get the mono font family globally. Visual treatment (background, padding, radius) is left to <code>.prose</code> or to code-block components.</p>
+<p><code>code</code>, <code>kbd</code>, <code>samp</code>, and <code>pre</code> get the mono font family globally. <code>pre</code> also gets <code>overflow-x: auto</code>, because one unbreakable line widens the whole page and nothing in the markup warns you. That is containment, not decoration: background, padding, and radius are still left to <code>.prose</code> or to a code-block component.</p>
+<p>For a standalone snippet outside authored content, <code>.prose</code> is the ready-made box — opt out of the reading measure so the code can use the full width:</p>
+<pre><code class="language-html">&lt;div class=&quot;prose&quot; style=&quot;--prose-measure: none&quot;&gt;
+  &lt;pre&gt;&lt;code&gt;bun add actual-css&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+</code></pre>
+<p><code>hr</code> resets the UA's <code>margin-inline: auto</code>. In document flow that changes nothing — auto inline margins on an auto-width block resolve to zero — but as a flex or grid item they replace the cross-axis stretch, which made an <code>&lt;hr&gt;</code> inside a <code>.stack</code> compute to zero width and disappear. <code>.stack</code> deliberately leaves the inline axis free (self-centering children keep working), so the reset belongs to the element.</p>
+<p>Its block margin is tunable with <code>--hr-space</code>. The <code>--space-60</code> default suits a rule closing a page section; a rule separating two rows inside a panel wants far less.</p>
+<pre><code class="language-css">.settings-panel hr {
+  --hr-space: var(--space-10);
+}
+</code></pre>
+<p>The hook applies to an <code>hr</code> in document flow. Inside <code>.stack</code> or <code>.prose</code> the parent owns the distance between siblings and overrides the element's own margin — express the rhythm there instead, with <code>--gap</code> or <code>--prose-flow</code>.</p>
 <h2 id="tables">Tables</h2>
 <p>Prose tables are a different concern from app data tables. Long-form content can contain a small table, but a sortable, dense, row-actionable app table belongs to the table component outside the prose boundary. The prose table recipe is intentionally minimal: it does not define sticky headers, selection states, row actions, or density variants.</p>
 <h2 id="description-lists">Description lists</h2>
