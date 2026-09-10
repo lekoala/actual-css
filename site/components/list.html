@@ -363,6 +363,10 @@ rows unaffected.</p>
 <div class="prose docs-prose">
 <p>Do not attach click JavaScript to the entire row. Use a link for navigation and
 a button or native control for actions.</p>
+<p>In a master/detail navigation, mark the current row with <code>aria-current</code> on its
+link, using the value that matches the semantics (<code>page</code>, <code>location</code>, …).
+Presence is the contract: set the attribute on the current row and remove it
+elsewhere, never <code>aria-current=&quot;false&quot;</code>.</p>
 <h3 id="hooks">Hooks</h3>
 <ul>
 <li><code>--list-item-min-size</code> controls the row's minimum touch height.</li>

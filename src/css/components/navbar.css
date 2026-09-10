@@ -74,13 +74,14 @@
 }
 
 /* nav-link serves two contracts: plain page navigation (aria-current="page")
-   and scrollspy, which toggles aria-current="location" on the active link. It
-   deliberately accepts every non-false value instead of pinning a single one.
-   Unlike app-nav and breadcrumb, this component has no single ARIA contract. */
-.nav-link:where([aria-current]:not([aria-current="false"])) {
+   and scrollspy, which toggles aria-current="location" on the active link.
+   Presence is the contract: the attribute is set on the current link and
+   removed everywhere else, never serialized as aria-current="false".
+   Selection never changes text metrics: the shared medium weight is kept and
+   the current link is carried by the selected accent. */
+.nav-link[aria-current] {
   background: var(--surface-subtle);
-  color: var(--text);
-  font-weight: var(--font-weight-bold);
+  color: var(--state-selected);
 }
 
 .nav-link:hover {
@@ -88,11 +89,18 @@
   color: var(--text);
 }
 
+/* A current link keeps its accent on hover: without this, the hover rule above
+   would drop it back to --text. The surface hover still applies. */
+.nav-link[aria-current]:hover {
+  color: var(--state-selected);
+}
+
 /* Nav list — a vertical navigation list. Used by .drawer for stacked links.
    Links fill each row so the whole line is an interactive target; the
    horizontal .navbar-nav links keep their intrinsic size. */
 .nav-list {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   --gap: var(--space-20);
   gap: var(--gap);
   margin: 0;
@@ -105,5 +113,19 @@
 }
 
 .nav-list .nav-link {
+  position: relative;
   inline-size: 100%;
+}
+
+/* Vertical current indicator: inset inline-start trait in currentColor, so it
+   follows the forced palette without a forced-colors block and never touches
+   the row separators. Navbar horizontal links keep color + surface only. The
+   positioning context lives on every row link, so becoming current never moves
+   an app-positioned decoration to a new containing block. */
+.nav-list .nav-link[aria-current]::before {
+  content: "";
+  position: absolute;
+  inset-block: var(--space-20);
+  inset-inline-start: 0;
+  border-inline-start: 2px solid currentColor;
 }

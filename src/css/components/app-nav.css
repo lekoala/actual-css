@@ -66,8 +66,11 @@
   color: var(--text);
 }
 
+/* Current tile is already a full selected surface. Selection never changes
+   text metrics: the shared medium weight is kept, no permanent indicator is
+   added here. Forced colors remaps the tile; a local repair is added only if
+   testing shows the state becomes ambiguous. */
 .app-nav > a[aria-current="page"] {
   background: var(--state-selected);
   color: var(--state-selected-fg);
-  font-weight: var(--font-weight-bold);
 }

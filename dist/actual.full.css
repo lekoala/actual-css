@@ -2264,9 +2264,9 @@ small {
 
 .check:is(:checked, :indeterminate),
 .radio:checked {
-  --choice-border: var(--intent, var(--primary));
-  --choice-bg: var(--intent, var(--primary));
-  --choice-mark: var(--intent-fg, var(--primary-fg));
+  --choice-border: var(--intent, var(--state-selected));
+  --choice-bg: var(--intent, var(--state-selected));
+  --choice-mark: var(--intent-fg, var(--state-selected-fg));
 }
 
 .check:checked::before {
@@ -2745,14 +2745,17 @@ small {
     background-color var(--duration);
 }
 
+/* Hover is not selected: an unchecked switch keeps the brand fallback on hover,
+   so a theme that separates --primary from --state-selected never tints an
+   OFF control with the selection accent before it is checked. */
 .switch:hover:not(:disabled) {
   --switch-border: var(--intent, var(--primary));
 }
 
 .switch:checked {
-  --switch-bg: var(--intent, var(--primary));
-  --switch-border: var(--intent, var(--primary));
-  --switch-knob: var(--intent-fg, var(--primary-fg));
+  --switch-bg: var(--intent, var(--state-selected));
+  --switch-border: var(--intent, var(--state-selected));
+  --switch-knob: var(--intent-fg, var(--state-selected-fg));
 }
 
 .switch:checked::before {
@@ -2984,13 +2987,13 @@ small {
 
 /* Checked border — shared by radio and checkbox */
 .choice-card:has(:checked) {
-  --choice-card-border: var(--intent, var(--primary));
+  --choice-card-border: var(--intent, var(--state-selected));
 }
 
 /* Subtle background tint on checked — modern browsers only */
 @supports (color: color-mix(in oklch, red, white)) {
   .choice-card:has(:checked) {
-    --choice-card-bg: color-mix(in oklab, var(--surface) 96%, var(--intent, var(--primary)));
+    --choice-card-bg: color-mix(in oklab, var(--surface) 96%, var(--intent, var(--state-selected)));
   }
 }
 
@@ -3010,7 +3013,7 @@ small {
 
 /* Badge disc — circle for radio, rounded square for checkbox */
 .choice-card::before {
-  background: var(--intent, var(--primary));
+  background: var(--intent, var(--state-selected));
   box-shadow: 0 0 0 2px var(--surface);
   z-index: 1;
 }
@@ -3025,7 +3028,7 @@ small {
 
 /* Check mark */
 .choice-card::after {
-  background: var(--intent-fg, var(--primary-fg));
+  background: var(--intent-fg, var(--state-selected-fg));
   -webkit-mask: var(--icon-check) center / 60% no-repeat;
   mask: var(--icon-check) center / 60% no-repeat;
   z-index: 2;
@@ -6629,11 +6632,9 @@ a.avatar[aria-disabled="true"] {
   border-width: calc(var(--border-width) * 2);
 }
 
-/* Weight marks "where I am now". Complete needs none: its filled disc already
-   reads as strongly. */
-.steps > [aria-current="step"] .step-label {
-  font-weight: var(--font-weight-semibold);
-}
+/* No label weight change for current: the accented marker with its doubled
+   border already carries the state, and selection never changes text metrics.
+   Complete needs none either: its filled disc already reads as strongly. */
 
 .steps > .step-complete:not([aria-current="step"])::before {
   content: var(--step-complete-mark, counter(actual-step));
@@ -6807,11 +6808,6 @@ a.avatar[aria-disabled="true"] {
    grid-item property, so this declaration is meaningless on anything but a
    direct child of the row. Elsewhere the label is addressed as a descendant —
    the framework owns the structure, and repeating it buys nothing. */
-/* biome-ignore lint/style/noDescendingSpecificity: the rule compares the
-   trailing .step-label alone. The selector it pairs this with,
-   `.steps > [aria-current="step"] .step-label`, sets font-weight on a
-   different root; align-self is a grid-item property and is never in
-   contention. Reordering would only move this out of the vertical section. */
 .steps-vertical > li > .step-label {
   align-self: center;
 }
@@ -6900,10 +6896,13 @@ a.avatar[aria-disabled="true"] {
   color: var(--text);
 }
 
+/* Current tile is already a full selected surface. Selection never changes
+   text metrics: the shared medium weight is kept, no permanent indicator is
+   added here. Forced colors remaps the tile; a local repair is added only if
+   testing shows the state becomes ambiguous. */
 .app-nav > a[aria-current="page"] {
   background: var(--state-selected);
   color: var(--state-selected-fg);
-  font-weight: var(--font-weight-bold);
 }
 
 /*
@@ -6982,13 +6981,14 @@ a.avatar[aria-disabled="true"] {
 }
 
 /* nav-link serves two contracts: plain page navigation (aria-current="page")
-   and scrollspy, which toggles aria-current="location" on the active link. It
-   deliberately accepts every non-false value instead of pinning a single one.
-   Unlike app-nav and breadcrumb, this component has no single ARIA contract. */
-.nav-link:where([aria-current]:not([aria-current="false"])) {
+   and scrollspy, which toggles aria-current="location" on the active link.
+   Presence is the contract: the attribute is set on the current link and
+   removed everywhere else, never serialized as aria-current="false".
+   Selection never changes text metrics: the shared medium weight is kept and
+   the current link is carried by the selected accent. */
+.nav-link[aria-current] {
   background: var(--surface-subtle);
-  color: var(--text);
-  font-weight: var(--font-weight-bold);
+  color: var(--state-selected);
 }
 
 .nav-link:hover {
@@ -6996,11 +6996,18 @@ a.avatar[aria-disabled="true"] {
   color: var(--text);
 }
 
+/* A current link keeps its accent on hover: without this, the hover rule above
+   would drop it back to --text. The surface hover still applies. */
+.nav-link[aria-current]:hover {
+  color: var(--state-selected);
+}
+
 /* Nav list — a vertical navigation list. Used by .drawer for stacked links.
    Links fill each row so the whole line is an interactive target; the
    horizontal .navbar-nav links keep their intrinsic size. */
 .nav-list {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   --gap: var(--space-20);
   gap: var(--gap);
   margin: 0;
@@ -7013,7 +7020,21 @@ a.avatar[aria-disabled="true"] {
 }
 
 .nav-list .nav-link {
+  position: relative;
   inline-size: 100%;
+}
+
+/* Vertical current indicator: inset inline-start trait in currentColor, so it
+   follows the forced palette without a forced-colors block and never touches
+   the row separators. Navbar horizontal links keep color + surface only. The
+   positioning context lives on every row link, so becoming current never moves
+   an app-positioned decoration to a new containing block. */
+.nav-list .nav-link[aria-current]::before {
+  content: "";
+  position: absolute;
+  inset-block: var(--space-20);
+  inset-inline-start: 0;
+  border-inline-start: 2px solid currentColor;
 }
 
 /*
@@ -7307,6 +7328,7 @@ a.avatar[aria-disabled="true"] {
   --list-divider: var(--border-width) solid var(--border);
 
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 0;
   margin: 0;
   padding: 0;
@@ -7344,12 +7366,35 @@ a.avatar[aria-disabled="true"] {
 }
 
 a.list-item {
+  position: relative;
   color: inherit;
   text-decoration: none;
 }
 
 a.list-item:hover {
   background: var(--surface-subtle);
+}
+
+/* Current row in a navigational list (master/detail). Generic by design: the
+   visual treatment only cares that the row is current, so presence is the
+   contract — the attribute is set on the current row and removed everywhere
+   else, never serialized as aria-current="false". The value (page, location,
+   …) stays free for assistive technology.
+   Calm by design: the row keeps its normal text metrics and color on a subtle
+   surface, and the selected accent lives on an inset inline-start trait only.
+   The trait is a real border, so it survives forced colors without a repaint
+   block. The positioning context lives on every row link, so becoming current
+   never moves an app-positioned decoration to a new containing block. */
+a.list-item[aria-current] {
+  background: var(--surface-subtle);
+}
+
+a.list-item[aria-current]::before {
+  content: "";
+  position: absolute;
+  inset-block: var(--list-item-pad-block);
+  inset-inline-start: 0;
+  border-inline-start: 2px solid var(--state-selected);
 }
 
 /* The content region is the one that flexes, whichever position it holds. */
@@ -7362,12 +7407,12 @@ a.list-item:hover {
 .list-item-text {
   display: block;
   margin: 0;
+  overflow-wrap: anywhere;
 }
 
 .list-item-text {
   color: var(--text-muted);
   font-size: var(--font-size-sm);
-  overflow-wrap: anywhere;
 }
 
 /* The auto margin keeps the trailing region at the row's end even in a row

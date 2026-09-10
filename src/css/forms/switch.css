@@ -85,14 +85,17 @@
     background-color var(--duration);
 }
 
+/* Hover is not selected: an unchecked switch keeps the brand fallback on hover,
+   so a theme that separates --primary from --state-selected never tints an
+   OFF control with the selection accent before it is checked. */
 .switch:hover:not(:disabled) {
   --switch-border: var(--intent, var(--primary));
 }
 
 .switch:checked {
-  --switch-bg: var(--intent, var(--primary));
-  --switch-border: var(--intent, var(--primary));
-  --switch-knob: var(--intent-fg, var(--primary-fg));
+  --switch-bg: var(--intent, var(--state-selected));
+  --switch-border: var(--intent, var(--state-selected));
+  --switch-knob: var(--intent-fg, var(--state-selected-fg));
 }
 
 .switch:checked::before {
