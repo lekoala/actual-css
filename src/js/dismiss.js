@@ -1,3 +1,8 @@
+/*
+ * Dismiss command — the generic `--dismiss` action. Hides the resolved target
+ * and emits the bubbling `actual:dismiss` event.
+ */
+
 import { registerCommands } from "./command.js";
 import { EVENTS } from "./events.js";
 

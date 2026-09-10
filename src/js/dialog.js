@@ -37,6 +37,7 @@ const wiredDialogs = new Set();
 const DIALOG_COMMANDS = ["show-modal", "show", "request-close", "close"];
 const DIALOG_SELECTOR = "dialog";
 const DIALOG_TITLE_SELECTOR = "[data-title], h1, h2, h3, h4, h5, h6";
+const STATIC_SHAKE_MS = 250;
 let uid = 0;
 
 function isDialogElement(el) {
@@ -213,7 +214,7 @@ function flashStatic(dialog) {
   state.staticTimer = win?.setTimeout(() => {
     dialog.classList.remove(CLASSES.static);
     state.staticTimer = null;
-  }, 250);
+  }, STATIC_SHAKE_MS);
 }
 
 function finishClose(dialog, returnValue = "") {

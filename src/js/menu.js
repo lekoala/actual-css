@@ -1,3 +1,13 @@
+/*
+ * Menu — the shared `.menu > li > .menu-item` vocabulary and wiring.
+ *
+ * getMenuItems() filters to usable items; onMenuKeydown() adds directional
+ * navigation and activation; connectMenu() owns the ref-counted listeners a
+ * menu shares across its triggers. Wiring is per menu, not per trigger, so a
+ * menu retained by several triggers (or by flyout and context-menu at once)
+ * tears down only when the last one releases it.
+ */
+
 import { isElementVisible } from "./focus.js";
 import { connectFocusGroup } from "./focus-group.js";
 import { firstItem, itemForKey, lastItem } from "./keys.js";

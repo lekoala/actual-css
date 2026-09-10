@@ -524,6 +524,65 @@ test("a flyout trigger opens the menu with its enclosing context", async () => {
   expect(detail.trigger).toBe("button");
 });
 
+test("a button-triggered context menu honors data-context-menu-scope", async () => {
+  await loadContextMenuAndFlyout(`
+    <div id="box">
+      <div id="target" data-context-menu="menu" data-context-menu-scope="#box" tabindex="0">
+        <button id="trigger" type="button" data-context-menu-trigger aria-controls="menu">More</button>
+      </div>
+    </div>
+    <menu id="menu" class="flyout menu" hidden>
+      <li><button class="menu-item" type="button">Open</button></li>
+    </menu>
+  `);
+  const box = document.getElementById("box");
+  const trigger = document.getElementById("trigger");
+  const menu = document.getElementById("menu");
+  Object.defineProperty(document.documentElement, "clientWidth", {
+    configurable: true,
+    value: 1024,
+  });
+  Object.defineProperty(document.documentElement, "clientHeight", {
+    configurable: true,
+    value: 768,
+  });
+  mockRect(box, { x: 0, y: 0, width: 300, height: 130 });
+  mockRect(trigger, { x: 20, y: 60, width: 120, height: 32 });
+  mockRect(menu, { x: 0, y: 0, width: 160, height: 80 });
+
+  click(trigger);
+
+  expect(isOpen(menu)).toBe(true);
+  expect(menu.dataset.placement).toBe("top-start");
+
+  click(trigger);
+  expect(isOpen(menu)).toBe(false);
+});
+
+test("a button-triggered context menu measures the trigger after actual:context-menu", async () => {
+  await loadContextMenuAndFlyout(`
+    <div id="target" data-context-menu="menu" tabindex="0">
+      <button id="trigger" type="button" data-context-menu-trigger aria-controls="menu">More</button>
+    </div>
+    <menu id="menu" class="flyout menu" hidden>
+      <li><button class="menu-item" type="button">Open</button></li>
+    </menu>
+  `);
+  const target = document.getElementById("target");
+  const trigger = document.getElementById("trigger");
+  const menu = document.getElementById("menu");
+  setupGeometry(trigger, menu);
+  target.addEventListener("actual:context-menu", () => {
+    mockRect(trigger, { x: 20, y: 160, width: 120, height: 32 });
+  });
+
+  click(trigger);
+
+  expect(isOpen(menu)).toBe(true);
+  // Post-event bottom is 192; the pre-event bottom (62) would place it at 66.
+  expect(menu.style.top).toBe("196px");
+});
+
 test("pointer context menu focuses the menu container, not the first item", async () => {
   await loadContextMenu(`
     <div id="target" data-context-menu="menu" tabindex="0">File.pdf</div>

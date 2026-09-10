@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Breaking
+
+- `EVENTS.reposition`, `EVENTS.hide` and `EVENTS.outOfView` are removed from `actual-css/js/events`; no runtime path dispatched them.
+
 ### Added
 
 - `applyEnhancement()` applies named behavior tokens through an application selector and optional scope, preserves existing tokens and refreshes registered behaviors.
@@ -88,6 +92,8 @@
 
 ### Fixed
 
+- `applyEnhancement(name, selector, document)` initializes the default `documentElement`-owned registration; the ancestor walk did reach `document` owners but never that root.
+- `enhance()` calls `observer.observe()` only once a valid record exists, so an empty or all-invalid selector set no longer leaves a watching observer. The `MutationObserver` itself is still constructed immediately.
 - `hr` resets the UA's `margin-inline: auto`, which replaced the cross-axis stretch and collapsed an `<hr>` inside a `.stack` to zero width — the admin settings demo shipped an invisible separator that way. Guarded by `tests/browser/hr.test.js`, which also pins the `--hr-space` rhythm and the `.stack` precedence.
 - Density demo dropped `.card-body`, a class the framework does not define; a card already owns its padding and its direct-child rhythm.
 - `demo/styles/demo.css` no longer redefines `.center`, which overrode the layout primitive and silenced its `--center-size` hook on every page linking the sheet. Thirty unused rules from the retired demo gallery went with it, and four dead rules left `demo/sites/neon-ramen/neon-site.css`.

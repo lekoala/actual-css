@@ -134,6 +134,49 @@ test("applyEnhancement supports document and fragment query scopes", () => {
   expect(el.getAttribute("data-enhance")).toBe("demo");
 });
 
+test("applyEnhancement with a document scope refreshes both possible owners", () => {
+  setupDOM('<div class="target"></div>');
+  const calls = [];
+  const onDocumentElement = registerEnhancement("demo", () => calls.push("documentElement"));
+  const onDocument = registerEnhancement("demo", () => calls.push("document"), document);
+
+  applyEnhancement("demo", ".target", document);
+
+  expect(calls).toHaveLength(2);
+  expect(calls).toContain("documentElement");
+  expect(calls).toContain("document");
+  onDocumentElement.disconnect();
+  onDocument.disconnect();
+});
+
+test("enhance() observes its MutationObserver only for a valid record", () => {
+  setupDOM("<div></div>");
+  const observed = [];
+  const Original = globalThis.MutationObserver;
+  const originalError = console.error;
+  class SpyObserver extends Original {
+    observe(...args) {
+      observed.push(args);
+      return super.observe(...args);
+    }
+  }
+  globalThis.MutationObserver = SpyObserver;
+  console.error = () => {};
+
+  try {
+    enhance({});
+    enhance({ "[": () => {} });
+    expect(observed).toHaveLength(0);
+
+    const runtime = enhance({ "[data-test]": () => {} });
+    expect(observed).toHaveLength(1);
+    runtime.disconnect();
+  } finally {
+    globalThis.MutationObserver = Original;
+    console.error = originalError;
+  }
+});
+
 test("enhances initial matching elements once", () => {
   setupDOM("<button data-test></button>");
   const calls = [];

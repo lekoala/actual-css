@@ -58,6 +58,7 @@ import { waitForTransitions } from "./transition.js";
 const STATUS_SELECTOR = '[data-status][role="status"]';
 const STATUS_CLASSES_ATTR = "statusClasses";
 const VIEWPORT_OFFSET_PROPERTY = "--status-viewport-offset";
+const DEFAULT_DURATION_MS = 3000;
 
 let statusTimer;
 // Bumped by every show and every clear. A deferred exit cleanup only runs when
@@ -151,10 +152,10 @@ export function status(message, options = {}) {
   const target = statusTarget();
   if (!target || message == null) return;
 
-  // A live region with nothing to announce is not a message. `:empty` used to
-  // absorb this case for free; now that the open state is explicit, an empty
-  // message has to mean "close" or it would open a blank pill. This also keeps
-  // status(await response.text()) from leaving a stale message on screen.
+  // A live region with nothing to announce is not a message. The open state
+  // is explicit, so an empty message has to mean "close" or it would open a
+  // blank pill. This also keeps status(await response.text()) from leaving a
+  // stale message on screen.
   if (message === "") {
     status.clear();
     return;
@@ -179,7 +180,7 @@ export function status(message, options = {}) {
   trackViewport(target);
 
   if (options.duration !== false) {
-    statusTimer = setTimeout(() => status.clear(), options.duration ?? 3000);
+    statusTimer = setTimeout(() => status.clear(), options.duration ?? DEFAULT_DURATION_MS);
   }
 }
 

@@ -10,12 +10,12 @@
   },
   "js": {
     "core": {
-      "bytes": 5932,
-      "brotli": 2229
+      "bytes": 5945,
+      "brotli": 2243
     },
     "full": {
-      "bytes": 55685,
-      "brotli": 16301
+      "bytes": 55533,
+      "brotli": 16272
     }
   },
   "fileCount": 108,

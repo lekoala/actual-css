@@ -111,10 +111,10 @@ defeating the split.
 
 ## Design decisions recorded
 
-**D2 — `selectors.js` drops its 5 discovery entries and keeps 11 write-side
-state entries.** The file's job changes from *CSS↔init bridge* to *state
-vocabulary the runtime writes*. It stays the single file to alias for another
-CSS framework.
+**D2 — `selectors.js` drops its 5 discovery entries and keeps 9 state
+entries.** The file's job changes from *CSS↔init bridge* to *state vocabulary
+the runtime writes*. It stays the single file to alias for another CSS
+framework.
 
 **D4 — `status.js` uses `[data-status][role="status"]`, with no class and no
 token.** The markup already carries `role="status"` everywhere, so semantics
@@ -134,8 +134,10 @@ working.
 `menuFor()` validates semantically (`menu, [role="menu"]`). A context menu may
 legitimately want the flyout *look* without the flyout *behavior*.
 
-**D9 — Orphaned surfaces are closed from the origin's disconnect
-handler.** A `fix:`, not part of the contract itself. Landed independently.
+**D9 — An orphaned surface is torn down by a reaper observing
+`data-actual-surface`.** `prepareSurface()` writes the marker; the reaper
+closes and forgets a surface once it leaves the document. A `fix:`, not part
+of the contract itself.
 
 ## Token vocabulary
 
