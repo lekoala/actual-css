@@ -1,10 +1,10 @@
 /*
  * Flyout — floating panel for actions and links.
  *
- * JavaScript owns positioning (position: fixed + left/top), state (.is-open,
- * plus the popover="manual" transport that promotes the panel to the top
- * layer), focus, and keyboard behavior. CSS owns the surfaced panel
- * appearance, item styles, and animation.
+ * JavaScript promotes the panel to the top layer and chooses viewport or
+ * document coordinates from its anchor. It also owns state (.is-open), focus,
+ * and keyboard behavior. CSS owns the surfaced panel appearance, item styles,
+ * and animation.
  *
  * Runtime marker (managed by surface.js): .is-open marks an open flyout.
  * --surface-anchor-width is set by surface.js while an open flyout is positioned.
@@ -42,8 +42,8 @@
   --menu-item-size: var(--control-size);
   z-index: var(--z-menu);
   /* No-JS fallback: below the trigger inside the relative .flyout-trigger.
-     surface.js switches an open flyout to position: fixed with measured
-     coordinates; this only covers a flyout revealed without the runtime. */
+     surface.js replaces this with the anchor's coupled position/coordinate
+     mode; this only covers a flyout revealed without the runtime. */
   position: absolute;
   inset-block-start: calc(100% + var(--space-10));
   inset-inline-start: 0;

@@ -2,6 +2,7 @@ import { autoUpdate, reposition, repositionAt } from "@lekoala/floating";
 import enhance from "./enhance.js";
 import { registerEscapeDismissal } from "./escape.js";
 import { EVENTS } from "./events.js";
+import { positionModeFor } from "./floating-space.js";
 
 import { CLASSES } from "./selectors.js";
 
@@ -116,6 +117,7 @@ function positionSurface(menu) {
     shift: state.shift !== false,
     shiftPadding: state.shiftPadding ?? 4,
     scope: state.scope,
+    coordinateSpace: state.coordinateSpace,
   };
 
   if (state.point) {
@@ -146,6 +148,7 @@ function ensureSurfaceWired(menu) {
     autoClose: "outside",
     dismissOnScroll: false,
     scrollIntentAt: null,
+    coordinateSpace: "viewport",
   };
 
   surfaceMap.set(menu, state);
@@ -265,6 +268,14 @@ export function openSurface(menu, opts = {}) {
   state.shiftPadding = opts.shiftPadding ?? 4;
   state.scope = opts.scope;
   state.restoreFocusTo = opts.restoreFocusTo || opts.trigger || opts.source || null;
+
+  // Points are client coordinates and therefore always viewport-relative.
+  // Element anchors choose their coupled coordinate/CSS mode once per open;
+  // in particular, a sticky anchor must not switch modes while scrolling.
+  const positionAnchor = state.point ? null : state.trigger || state.source;
+  const mode = positionModeFor(positionAnchor);
+  state.coordinateSpace = mode.space;
+  menu.style.position = mode.position;
 
   // Promote before measuring: a closed popover has no box to position.
   if (!showTransport(menu)) return false;

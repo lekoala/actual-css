@@ -177,8 +177,11 @@ page scroll and expects `position: absolute` against the initial containing
 block, which the top layer supplies to an open popover. The browser then
 scrolls the element with the page rather than `autoUpdate()` correcting it a
 frame later — right for a reference that scrolls with the page, wrong for a
-fixed or sticky one. `tooltip.js` chooses per tooltip; `surface.js` always uses
-viewport coordinates.
+fixed or sticky one. `tooltip.js` and element-anchored surfaces choose this
+coupled coordinate/position mode once per opening. A point-positioned surface
+always uses fixed viewport coordinates because `x` and `y` are client
+coordinates. Scrolling a nested container still needs the next `autoUpdate()`
+frame; document coordinates remove correction only for page scrolling.
 
 `@lekoala/floating` is the standalone positioning dependency used by the
 runtime. `autoUpdate(reference, float, callback)` batches scroll, resize, and
@@ -200,7 +203,7 @@ or account for:
 .my-panel          { position: absolute; }
 .my-panel[popover] { inset: auto; margin: 0; }
 .my-panel[popover]:not(:popover-open) { display: none; }
-/* surface.js sets position: fixed + inline left/top on open —
+/* surface.js sets a coupled fixed/viewport or absolute/document mode —
    do not override with !important */
 /* no z-index: an open panel is promoted to the top layer, where
    numbers do not apply — see Layering in foundations/tokens */
@@ -220,8 +223,9 @@ Three non-obvious requirements:
    closed popover. An author declaration outranks the UA origin whatever the
    specificity, so a bare `display: grid` leaves a closed panel painted at its
    static position.
-3. The open state switches to `position: fixed` with measured inline
-   coordinates, and the UA's own `inset` / `margin` must be cleared.
+3. The open state switches to the coupled position and coordinate mode chosen
+   from its anchor, with measured inline coordinates. The UA's own `inset` /
+   `margin` must be cleared.
 
 Lifecycle: `prepareSurface` → `openSurface` → `closeSurface` →
 `disconnectSurface`. `retainSurface(panel)` reference-counts a surface shared by

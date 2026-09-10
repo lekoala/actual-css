@@ -111,7 +111,18 @@ place it brings it back up.
 return, no option. Its README already documents the pattern — a failed
 positioning may be temporary without `autoUpdate()` being stopped.
 
-## Surfaces are not tooltips
+## Surfaces share geometry, not lifecycle
+
+Element-anchored surfaces use the same coupled coordinate and CSS position mode
+as tooltips. Point-positioned surfaces stay fixed because their `x` and `y` are
+client coordinates. A nested scroll container remains a separate boundary:
+document coordinates move natively with page scroll, while container scroll
+still waits for `autoUpdate()` to correct the placement.
+
+A surface that fits inside its boundary must not create scrollable overflow
+merely because it uses document coordinates. This is not a guarantee for an
+arbitrarily large custom surface: the positioner deliberately accepts overflow
+when no placement can physically contain it.
 
 `surface.js` still closes on `false`, and that stays a separate decision. A
 flyout close restores focus, fires an event and releases an Escape entry;

@@ -271,6 +271,39 @@ test("prepareSurface leaves the surface at its original position", () => {
   expect(menu.style.display).toBe("");
 });
 
+test("an element-anchored surface uses one coupled position and coordinate mode", () => {
+  setBody(`
+    <button id="page-trigger"></button>
+    <div id="page-menu" class="flyout"></div>
+    <div style="position: fixed">
+      <button id="fixed-trigger"></button>
+      <div id="fixed-menu" class="flyout"></div>
+    </div>
+  `);
+  const pageTrigger = document.getElementById("page-trigger");
+  const pageMenu = document.getElementById("page-menu");
+  const fixedTrigger = document.getElementById("fixed-trigger");
+  const fixedMenu = document.getElementById("fixed-menu");
+  mockPlacement(pageTrigger, pageMenu);
+  mockPlacement(fixedTrigger, fixedMenu);
+
+  openSurface(pageMenu, { trigger: pageTrigger });
+  expect(pageMenu.style.position).toBe("absolute");
+
+  openSurface(fixedMenu, { trigger: fixedTrigger });
+  expect(fixedMenu.style.position).toBe("fixed");
+});
+
+test("a point-positioned surface stays in viewport coordinates", () => {
+  setBody('<div id="menu" class="flyout"></div>');
+  const menu = document.getElementById("menu");
+  mockRect(menu, { x: 0, y: 0, width: 160, height: 80 });
+
+  openSurface(menu, { x: 20, y: 30 });
+
+  expect(menu.style.position).toBe("fixed");
+});
+
 test("resize keeps an open surface anchored and non-modal", async () => {
   setBody('<button aria-controls="menu"></button><div id="menu" class="flyout"></div>');
   const trigger = document.querySelector("button");
