@@ -12,6 +12,7 @@
 - `.list` rows accept any combination of leading, content and trailing regions.
 - `bun run serve`, a static server for opening demo pages from another device.
 - Visual guide: `demo/templates/visual-guide.html`, seventeen illustrated figures on the spacing scale, the layout primitives, and density versus local size.
+- Color guide: `demo/templates/color-guide.html`, theming principles measured live on `ocean` and `sunset` in light and dark, as `data-theme` islands on one page.
 - `--hr-space` tunes an `hr`'s block margin on the instance. It applies in document flow; `.stack` and `.prose` own the distance between their own children.
 - `pre` gets `overflow-x: auto` globally, so an unbreakable line scrolls in its own box instead of widening the page. Background, padding and radius stay with `.prose` or an application code-block.
 - Flyout documents the Biome `noNoninteractiveElementToInteractiveRole` false
@@ -83,6 +84,7 @@
 ### Fixed
 
 - `hr` resets the UA's `margin-inline: auto`, which replaced the cross-axis stretch and collapsed an `<hr>` inside a `.stack` to zero width.
+- Density demo dropped `.card-body`, a class the framework does not define; a card already owns its padding and its direct-child rhythm.
 - A tooltip shown by focus on a touch device is no longer lost for good after its trigger scrolls out of view and back: a second tap fires neither `focusin` nor `mouseover`, so nothing could bring it back.
 - A shared explicit tooltip re-shown from another trigger resubscribes its position tracking, instead of keeping the previous trigger observed.
 - `select.css` and `modal.css` preserve select appearance and modal body scrolling in Degraded Firefox 78–83 using `:not(:is(...))` without changing specificity.

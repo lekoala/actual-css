@@ -1,0 +1,1287 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Color guide - Actual CSS</title>
+  <meta name="description" content="Theming principles measured on two preset palettes: neutral ramps, ambient hue, soft relations, shadow ink, and data-theme islands.">
+  <link rel="stylesheet" href="../../dist/actual.full.css">
+  <link rel="stylesheet" href="../assets/actual-themes.min.css">
+  <link rel="stylesheet" href="../styles/demo.css">
+  <style>
+    /*
+     * Built from the primitives, like demo/templates/visual-guide.html:
+     * .center for the column, .card for figures and stages, .grid for the
+     * comparisons, .stack / .cluster for the rhythms, .overline for labels.
+     * What is local here is the colour vocabulary — swatches, chroma bars, a
+     * hue axis — and the island preview, which is a page canvas rather than a
+     * component surface.
+     *
+     * Every number on this page is read from the rendered page at load
+     * (see the script at the end), not transcribed from the theme sources.
+     */
+    body {
+      background: var(--surface-subtle);
+    }
+
+    .cg-page {
+      padding-block: var(--space-60);
+    }
+
+    .cg-intro {
+      --center-size: 60rem;
+
+      padding-block: var(--space-60);
+    }
+
+    .cg-deck {
+      counter-reset: cg-figure;
+    }
+
+    .cg-chapter {
+      gap: var(--space-20);
+      margin-block: var(--space-60) var(--space-50);
+      padding-block-start: var(--space-50);
+      border-block-start: var(--border-width) solid var(--border);
+    }
+
+    .cg-figure {
+      --card-pad: var(--space-60);
+      --card-gap: var(--space-40);
+
+      counter-increment: cg-figure;
+      margin: 0 0 var(--space-50);
+    }
+
+    .cg-figure > figcaption {
+      display: grid;
+      gap: var(--space-20);
+    }
+
+    .cg-figure > figcaption > * {
+      margin: 0;
+    }
+
+    .cg-figure h3 {
+      font-size: var(--font-size-lg);
+      font-weight: var(--font-weight-semibold);
+    }
+
+    .cg-tag::after {
+      content: counter(cg-figure, decimal-leading-zero);
+    }
+
+    .cg-stage {
+      --card-pad: var(--space-50);
+      --card-gap: var(--space-20);
+    }
+
+    .cg-columns {
+      --grid-min: 16rem;
+
+      align-items: start;
+    }
+
+    .cg-legend {
+      --measure: 78ch;
+
+      font-size: var(--font-size-sm);
+    }
+
+    .cg-code {
+      --prose-measure: none;
+    }
+
+    /* Island preview -----------------------------------------------------
+       A [data-theme] island painted as a page canvas. The framework puts that
+       surface on `body`, so a preview of another palette has to restate it. */
+    .cg-island {
+      display: grid;
+      gap: var(--space-30);
+      padding: var(--space-40);
+      border: var(--border-width) solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+      color: var(--text);
+    }
+
+    .cg-island > * {
+      margin: 0;
+    }
+
+    /* The island's own label, so it reads inside the palette it names. */
+    .cg-island-name {
+      font-size: var(--font-size-xs);
+      font-weight: var(--font-weight-medium);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--text-subtle);
+    }
+
+    /* Colour vocabulary --------------------------------------------------- */
+
+    .cg-ramp {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: var(--space-20) var(--space-30);
+      align-items: center;
+      font-size: var(--font-size-sm);
+    }
+
+    .cg-chip {
+      inline-size: 2rem;
+      block-size: 1.5rem;
+      border: var(--border-width) solid color-mix(in oklab, var(--text) 20%, transparent);
+      border-radius: var(--radius-sm);
+    }
+
+    .cg-ramp code {
+      font-size: var(--font-size-xs);
+    }
+
+    .cg-value {
+      color: var(--text-subtle);
+      font-family: var(--font-mono);
+      font-size: var(--font-size-xs);
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Chroma readout. The track is a fixed 0.04 OKLCH scale so the bars are
+       comparable between islands, not normalized per column. */
+    .cg-chroma {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: var(--space-10) var(--space-30);
+      align-items: center;
+      font-size: var(--font-size-xs);
+    }
+
+    .cg-track {
+      block-size: 0.75rem;
+      border-radius: 2px;
+      background: color-mix(in oklab, var(--text) 8%, transparent);
+    }
+
+    .cg-track > span {
+      display: block;
+      block-size: 100%;
+      border-radius: inherit;
+      background: var(--primary);
+    }
+
+    /* Hue axis: the full circle at constant L and C. Angles are read in OKLCH
+       — the space scripts/report-neutral-ramp.js reports in — so the strip has
+       to be built in OKLCH too, or a marker would land on the wrong colour. */
+    .cg-hue-axis {
+      position: relative;
+      block-size: 2rem;
+      border-radius: var(--radius-sm);
+      background: linear-gradient(
+          to right,
+          hsl(29 100% 45%),
+          hsl(64 62% 42%),
+          hsl(136 44% 40%),
+          hsl(191 61% 40%),
+          hsl(244 63% 60%),
+          hsl(315 63% 50%),
+          hsl(29 100% 45%)
+        );
+    }
+
+    @supports (color: oklch(70% 0.15 0)) {
+      .cg-hue-axis {
+        background: linear-gradient(
+            to right,
+            oklch(70% 0.15 0),
+            oklch(70% 0.15 60),
+            oklch(70% 0.15 120),
+            oklch(70% 0.15 180),
+            oklch(70% 0.15 240),
+            oklch(70% 0.15 300),
+            oklch(70% 0.15 360)
+          );
+      }
+    }
+
+    .cg-hue-mark {
+      position: absolute;
+      inset-block: -0.3rem;
+      inline-size: 2px;
+      background: var(--text);
+      outline: 1px solid var(--surface);
+    }
+
+    /* Labels live under the axis rather than on it: these palettes park four
+       or five tokens inside a 40° band, which is the point of the figure and
+       also what makes in-place labels collide. */
+    .cg-hue-key {
+      font-family: var(--font-mono);
+      font-size: var(--font-size-xs);
+      color: var(--text-muted);
+    }
+
+    .cg-hue-key > span {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-10);
+    }
+
+    .cg-hue-key .dot {
+      inline-size: 0.7rem;
+      block-size: 0.7rem;
+      border-radius: var(--radius-full);
+      border: var(--border-width) solid color-mix(in oklab, var(--text) 25%, transparent);
+    }
+
+    /* Greyscale review heuristic. */
+    .cg-grey {
+      filter: grayscale(1);
+    }
+
+    /* Demo compositions --------------------------------------------------- */
+    .cg-demo-price {
+      font-size: 2rem;
+      font-weight: var(--font-weight-semibold);
+      line-height: 1;
+    }
+
+    .cg-demo-price > small {
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-normal);
+      color: var(--text-muted);
+    }
+
+    .cg-demo-fine {
+      font-size: var(--font-size-xs);
+      color: var(--text-subtle);
+    }
+
+    .cg-demo-stats {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: var(--space-20);
+    }
+
+    .cg-demo-stat {
+      display: grid;
+      gap: 0.125rem;
+      padding: var(--space-20);
+      border: var(--border-width) solid var(--border);
+      border-radius: var(--radius-sm);
+      background: var(--surface-raised);
+    }
+
+    .cg-demo-stat > strong {
+      font-size: var(--font-size-lg);
+    }
+
+    .cg-demo-stat > small {
+      color: var(--text-muted);
+    }
+
+    @media (max-width: 48rem) {
+      .cg-figure {
+        --card-pad: var(--space-40);
+      }
+
+      .cg-stage {
+        --card-pad: var(--space-40);
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="cg-page">
+    <header class="center stack cg-intro">
+      <p class="overline">Actual CSS</p>
+      <h1>Color guide</h1>
+      <p class="lead muted measure">
+        Theming principles read off two preset palettes — <code>ocean</code> as
+        the cool one, <code>sunset</code> as the warm one — in light and dark at
+        the same time, as four <code>data-theme</code> islands on one page. Every
+        hex, chroma and hue below is measured from the rendered page at load, so
+        the figures cannot drift away from the themes they describe.
+      </p>
+      <select class="select sm fit" id="theme-switcher" aria-label="Switch the page theme">
+        <option value="">System</option>
+        <option value="light">Light</option>
+        <option value="dark">Dark</option>
+        <optgroup label="Themes">
+          <option value="indigo">Indigo</option>
+          <option value="dim">Dim</option>
+          <option value="corporate">Corporate</option>
+          <option value="forest">Forest</option>
+          <option value="ocean">Ocean</option>
+          <option value="spruce">Spruce</option>
+          <option value="petrol">Petrol</option>
+          <option value="sunset">Sunset</option>
+          <option value="lavender">Lavender</option>
+          <option value="mono">Mono</option>
+        </optgroup>
+      </select>
+      <p class="muted measure">
+        The switcher changes the page chrome only. The islands inside each figure
+        carry their own palette and ignore it — which is the first thing this
+        guide is about.
+      </p>
+    </header>
+
+    <div class="center cg-deck">
+
+      <!-- ================= Chapter 1 ================= -->
+      <section class="stack cg-chapter" id="ramp">
+        <p class="overline">Chapter one</p>
+        <h2>The neutral ramp</h2>
+        <p class="muted measure">
+          Most of a page is neutral. What those neutrals are made of decides
+          whether the palette reads as one thing or as a brand colour dropped
+          onto grey furniture.
+        </p>
+      </section>
+
+      <figure class="card raised cg-figure">
+        <figcaption>
+          <span class="overline pill primary cg-tag">Figure&nbsp;</span>
+          <h3>Neutrals lean</h3>
+          <p class="muted measure">
+            The same eight roles in both palettes, lightest first. Nothing here
+            is grey: each rung carries a trace of its palette's temperature,
+            and the two ramps are the same structure at two different
+            temperatures.
+          </p>
+        </figcaption>
+
+        <div class="grid cg-columns" style="--grid-min: 18rem;">
+          <div class="cg-island" data-theme="ocean" style="color-scheme: light;">
+            <p class="cg-island-name">ocean · light</p>
+            <div class="cg-ramp" data-ramp></div>
+          </div>
+
+          <div class="cg-island" data-theme="sunset" style="color-scheme: light;">
+            <p class="cg-island-name">sunset · light</p>
+            <div class="cg-ramp" data-ramp></div>
+          </div>
+        </div>
+
+        <div class="stack muted measure cg-legend">
+          <p>
+            <code>--surface</code> is the canvas, <code>--surface-raised</code>
+            the elevated one, <code>--surface-subtle</code> the working level for
+            fields and hovers. <code>--text</code>, <code>--text-muted</code> and
+            <code>--text-subtle</code> are the three ink tiers, and
+            <code>--neutral</code> is the intent, not a ramp rung — it sits on the
+            ramp here because it has to belong to the same family.
+          </p>
+        </div>
+      </figure>
+
+      <figure class="card raised cg-figure">
+        <figcaption>
+          <span class="overline pill primary cg-tag">Figure&nbsp;</span>
+          <h3>Chroma is a curve, and light is not dark reversed</h3>
+          <p class="muted measure">
+            OKLCH chroma per role, on one shared 0–0.04 scale so the four
+            columns are comparable. Two things show up that a token list cannot
+            say: the temperature is a dose that varies per rung, and the two
+            schemes spend it in opposite places.
+          </p>
+        </figcaption>
+
+        <div class="grid cg-columns" style="--grid-min: 14rem;">
+          <div class="cg-island" data-theme="ocean" style="color-scheme: light;">
+            <p class="cg-island-name">ocean · light</p>
+            <div class="cg-chroma" data-chroma></div>
+          </div>
+          <div class="cg-island" data-theme="ocean" style="color-scheme: dark;">
+            <p class="cg-island-name">ocean · dark</p>
+            <div class="cg-chroma" data-chroma></div>
+          </div>
+          <div class="cg-island" data-theme="sunset" style="color-scheme: light;">
+            <p class="cg-island-name">sunset · light</p>
+            <div class="cg-chroma" data-chroma></div>
+          </div>
+          <div class="cg-island" data-theme="sunset" style="color-scheme: dark;">
+            <p class="cg-island-name">sunset · dark</p>
+            <div class="cg-chroma" data-chroma></div>
+          </div>
+        </div>
+
+        <div class="stack muted measure cg-legend">
+          <p>
+            In <strong>light</strong>, the paper is nearly achromatic and the
+            chroma climbs all the way to the ink: the darkest text is the most
+            tinted thing in the palette. In <strong>dark</strong> it inverts —
+            the ink goes to a flat near-white and the temperature moves into the
+            paper and the borders, peaking at <code>--border</code> — the last
+            rung before the ink.
+          </p>
+          <p>
+            That is why a dark theme is not a light theme with the lightness
+            reversed. Both schemes are authored separately, as
+            <code>light-dark()</code> pairs in the same declaration.
+          </p>
+          <p>
+            <code>bun run report:neutral-ramp</code> prints these figures for
+            every preset, plus the lightness a tint costs at equal contrast. It
+            is a survey, not a gate: leaving the trend is a legitimate palette
+            decision.
+          </p>
+        </div>
+      </figure>
+
+      <figure class="card raised cg-figure">
+        <figcaption>
+          <span class="overline pill primary cg-tag">Figure&nbsp;</span>
+          <h3>Ambient hue is not the brand hue</h3>
+          <p class="muted measure">
+            Where each palette parks its tokens on the hue circle, measured. The
+            neutrals are not the primary's hue copied down the ramp: they hold a
+            narrow band of their own, and the shadow ink is placed on purpose
+            rather than inherited.
+          </p>
+        </figcaption>
+
+        <div class="cg-island" data-theme="ocean" style="color-scheme: light;">
+          <p class="cg-island-name">ocean · light</p>
+          <div class="cg-hue-axis" data-hue-axis></div>
+          <div class="cluster cg-hue-key" data-hue-key style="--gap: var(--space-30);"></div>
+        </div>
+
+        <div class="cg-island" data-theme="sunset" style="color-scheme: light;">
+          <p class="cg-island-name">sunset · light</p>
+          <div class="cg-hue-axis" data-hue-axis></div>
+          <div class="cluster cg-hue-key" data-hue-key style="--gap: var(--space-30);"></div>
+        </div>
+
+        <div class="stack muted measure cg-legend">
+          <p>
+            Angles are OKLCH, the space <code>report:neutral-ramp</code> reports
+            in — they do not match the HSL numbers written in the theme sources,
+            and the strip above is built in OKLCH so a marker lands on the colour
+            it names.
+          </p>
+          <p>
+            As measured here, <code>ocean</code> straddles: its neutrals sit a
+            few degrees either side of the primary, and the shadow ink is pushed
+            about 30° beyond all of them. <code>sunset</code> fans out in one
+            direction: the primary is the reddest thing in the palette and every
+            neutral lies further toward amber, with the shadow ink tucked in
+            between. Two different answers to the same question.
+          </p>
+          <p>
+            Either way the relationship is a <em>coordination</em>, decided once
+            by the theme author and recorded in the theme's own values. Nothing
+            in the core derives a neutral or an intent from
+            <code>--primary</code> at runtime.
+          </p>
+        </div>
+      </figure>
+
+      <figure class="card raised cg-figure">
+        <figcaption>
+          <span class="overline pill primary cg-tag">Figure&nbsp;</span>
+          <h3>Pure white is allowed</h3>
+          <p class="muted measure">
+            <code>ocean</code> tints its canvas and keeps
+            <code>--surface-raised</code> at pure white. <code>sunset</code>
+            tints both. Two defensible answers, and the contract does not pick
+            one for you.
+          </p>
+        </figcaption>
+
+        <div class="grid cg-columns" style="--grid-min: 18rem;">
+          <div class="cg-island" data-theme="ocean" style="color-scheme: light;">
+            <p class="cg-island-name">ocean · white card on a cool canvas</p>
+            <div class="card">
+              <strong>Raised surface</strong>
+              <p class="muted">The card is <code>#FFFFFF</code>. Against the tinted canvas it reads cooler than it is.</p>
+            </div>
+          </div>
+
+          <div class="cg-island" data-theme="sunset" style="color-scheme: light;">
+            <p class="cg-island-name">sunset · warm card on a warm canvas</p>
+            <div class="card">
+              <strong>Raised surface</strong>
+              <p class="muted">The card carries its own amber. The palette wants matter in every pixel.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="stack muted measure cg-legend">
+          <p>
+            Simultaneous contrast does the work in the first case: a neutral card
+            on a cool ground makes the ground read cooler, without a single blue
+            pixel in the card. "Never use pure white" is a rule of thumb, not a
+            law — what matters is that the ramp around it belongs to one family.
+          </p>
+        </div>
+      </figure>
+
+      <!-- ================= Chapter 2 ================= -->
+      <section class="stack cg-chapter" id="relations">
+        <p class="overline">Chapter two</p>
+        <h2>Relations, not stored colours</h2>
+        <p class="muted measure">
+          The tempting move is to materialise every result as its own token:
+          a subtle variant per intent, a border per weight, a shadow per size.
+          Actual stores fewer colours and more relationships between them.
+        </p>
+      </section>
+
+      <figure class="card raised cg-figure">
+        <figcaption>
+          <span class="overline pill primary cg-tag">Figure&nbsp;</span>
+          <h3><code>.soft</code> is a recipe, not six more tokens</h3>
+          <p class="muted measure">
+            Six intents, two palettes, twelve tinted surfaces — and no
+            <code>--primary-subtle</code>, <code>--danger-subtle</code> or
+            <code>--success-subtle</code> anywhere. The soft treatment mixes the
+            intent into the <em>local</em> surface, so it lands correctly on
+            whatever it is dropped onto.
+          </p>
+        </figcaption>
+
+        <div class="grid cg-columns" style="--grid-min: 18rem;">
+          <div class="cg-island" data-theme="ocean" style="color-scheme: light;">
+            <p class="cg-island-name">ocean · light</p>
+            <div class="cluster">
+              <span class="badge primary soft">Primary</span>
+              <span class="badge secondary soft">Secondary</span>
+              <span class="badge success soft">Success</span>
+              <span class="badge warning soft">Warning</span>
+              <span class="badge danger soft">Danger</span>
+              <span class="badge neutral soft">Neutral</span>
+            </div>
+          </div>
+
+          <div class="cg-island" data-theme="sunset" style="color-scheme: dark;">
+            <p class="cg-island-name">sunset · dark</p>
+            <div class="cluster">
+              <span class="badge primary soft">Primary</span>
+              <span class="badge secondary soft">Secondary</span>
+              <span class="badge success soft">Success</span>
+              <span class="badge warning soft">Warning</span>
+              <span class="badge danger soft">Danger</span>
+              <span class="badge neutral soft">Neutral</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="prose cg-code">
+          <pre><code>/* the whole recipe, from core/variants.css */
+--ui-bg:     color-mix(in oklab, var(--surface) var(--soft-bg-mix), var(--intent));
+--ui-border: color-mix(in oklab, var(--surface) var(--soft-border-mix), var(--intent));
+--ui-fg:     var(--intent-soft-fg, color-mix(in oklab, var(--text), var(--intent) var(--soft-fg-mix)));</code></pre>
+        </div>
+
+        <div class="stack muted measure cg-legend">
+          <p>
+            A stored <code>--primary-subtle</code> would be one colour against
+            one assumed background. This one resolves against the surface it is
+            actually sitting on, in whichever island, in whichever scheme —
+            twelve results above from three declarations.
+          </p>
+        </div>
+      </figure>
+
+      <figure class="card raised cg-figure">
+        <figcaption>
+          <span class="overline pill primary cg-tag">Figure&nbsp;</span>
+          <h3>One dial changes the whole language</h3>
+          <p class="muted measure">
+            <code>--soft-border-mix</code> decides how much of the rim survives.
+            Pointing it at <code>--soft-bg-mix</code> resolves the border to the
+            fill, and every soft treatment in the island becomes a flat tint —
+            from one declaration, with no component rule rewritten.
+          </p>
+        </figcaption>
+
+        <div class="grid cg-columns" style="--grid-min: 18rem;">
+          <div class="cg-island" data-theme="ocean" style="color-scheme: light;">
+            <p class="cg-island-name">default · 65%</p>
+            <div class="cluster">
+              <span class="badge primary soft">Primary</span>
+              <span class="badge success soft">Success</span>
+              <span class="badge danger soft">Danger</span>
+            </div>
+            <div class="alert warning">Contoured soft surfaces.</div>
+          </div>
+
+          <div class="cg-island" data-theme="ocean" style="color-scheme: light; --soft-border-mix: var(--soft-bg-mix);">
+            <p class="cg-island-name">rim resolved to the fill</p>
+            <div class="cluster">
+              <span class="badge primary soft">Primary</span>
+              <span class="badge success soft">Success</span>
+              <span class="badge danger soft">Danger</span>
+            </div>
+            <div class="alert warning">Flat soft surfaces.</div>
+          </div>
+        </div>
+
+        <div class="stack muted measure cg-legend">
+          <p>
+            It reaches the default <code>.badge</code> and <code>.alert</code>
+            plus every explicit <code>.soft</code>, and nothing else — a
+            component sitting on its own surface keeps its <code>--border</code>
+            rim.
+          </p>
+        </div>
+      </figure>
+
+      <figure class="card raised cg-figure">
+        <figcaption>
+          <span class="overline pill primary cg-tag">Figure&nbsp;</span>
+          <h3>Shadow is the colour of absent light</h3>
+          <p class="muted measure">
+            The theme decides what colour the darkness is; the elevation tokens
+            decide how much of it there is. One <code>--shadow-color</code>
+            per palette, and every shadow in the island follows.
+          </p>
+        </figcaption>
+
+        <div class="grid cg-columns" style="--grid-min: 18rem;">
+          <div class="cg-island" data-theme="ocean" style="color-scheme: light;">
+            <p class="cg-island-name">ocean · shadow ink</p>
+            <div class="cluster">
+              <span class="cg-chip" data-swatch="--shadow-color"></span>
+              <span class="cg-value" data-swatch-value>&nbsp;</span>
+            </div>
+            <div class="card raised">
+              <strong>--shadow</strong>
+              <p class="muted">Resting elevation.</p>
+            </div>
+          </div>
+
+          <div class="cg-island" data-theme="sunset" style="color-scheme: light;">
+            <p class="cg-island-name">sunset · shadow ink</p>
+            <div class="cluster">
+              <span class="cg-chip" data-swatch="--shadow-color"></span>
+              <span class="cg-value" data-swatch-value>&nbsp;</span>
+            </div>
+            <div class="card raised">
+              <strong>--shadow</strong>
+              <p class="muted">Resting elevation.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="stack muted measure cg-legend">
+          <p>
+            <code>--shadow</code> and <code>--shadow-popout</code> are derived
+            from <code>--shadow-color</code> with <code>color-mix()</code>, on
+            every theme boundary. A palette changes the ink once instead of
+            restating a shadow list — and it is free to place that ink outside
+            its own primary's hue, as figure 03 shows.
+          </p>
+          <p>
+            Two levels, not three. A hero card that wants more is an application
+            decision, not a missing global token.
+          </p>
+        </div>
+      </figure>
+
+      <figure class="card raised cg-figure">
+        <figcaption>
+          <span class="overline pill primary cg-tag">Figure&nbsp;</span>
+          <h3>Semantics stay recognisable, and still belong</h3>
+          <p class="muted measure">
+            An error imported from a component library that assumed a neutral
+            field reads as a foreign object on a tinted one. Both palettes below
+            keep danger unmistakably red — and both nudge it into the family
+            they live in.
+          </p>
+        </figcaption>
+
+        <div class="grid cg-columns" style="--grid-min: 18rem;">
+          <div class="cg-island" data-theme="ocean" style="color-scheme: light;">
+            <p class="cg-island-name">ocean · light</p>
+            <div class="cluster">
+              <span class="cg-chip" data-swatch="--danger"></span>
+              <span class="cg-chip" data-swatch="--warning"></span>
+              <span class="cg-chip" data-swatch="--success"></span>
+              <span class="cg-value" data-swatch-hues>&nbsp;</span>
+            </div>
+            <div class="field">
+              <label class="field-label" for="cg-email-o">Email address</label>
+              <input class="input" id="cg-email-o" value="not-an-email" aria-invalid="true" aria-describedby="cg-email-o-error">
+              <span class="field-error" id="cg-email-o-error">Enter a valid email address.</span>
+            </div>
+          </div>
+
+          <div class="cg-island" data-theme="sunset" style="color-scheme: light;">
+            <p class="cg-island-name">sunset · light</p>
+            <div class="cluster">
+              <span class="cg-chip" data-swatch="--danger"></span>
+              <span class="cg-chip" data-swatch="--warning"></span>
+              <span class="cg-chip" data-swatch="--success"></span>
+              <span class="cg-value" data-swatch-hues>&nbsp;</span>
+            </div>
+            <div class="field">
+              <label class="field-label" for="cg-email-s">Email address</label>
+              <input class="input" id="cg-email-s" value="not-an-email" aria-invalid="true" aria-describedby="cg-email-s-error">
+              <span class="field-error" id="cg-email-s-error">Enter a valid email address.</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="stack muted measure cg-legend">
+          <p>
+            Intents are curated pairs in each theme's own values, not mechanical
+            derivatives of <code>--primary</code>. That is what lets
+            <code>ocean</code> place success in a cool green and
+            <code>sunset</code> place it in a warmer one while both keep meaning
+            the same thing.
+          </p>
+        </div>
+      </figure>
+
+      <!-- ================= Chapter 3 ================= -->
+      <section class="stack cg-chapter" id="islands">
+        <p class="overline">Chapter three</p>
+        <h2>Islands</h2>
+        <p class="muted measure">
+          Everything above is rendered on one page, at the same time, with no
+          media query and no JavaScript deciding colours. That is the island
+          contract doing the work.
+        </p>
+      </section>
+
+      <figure class="card raised cg-figure">
+        <figcaption>
+          <span class="overline pill primary cg-tag">Figure&nbsp;</span>
+          <h3>Four palettes, one document</h3>
+          <p class="muted measure">
+            <code>data-theme</code> selects the palette.
+            <code>color-scheme</code> selects which half of every
+            <code>light-dark()</code> pair resolves. The two are independent, so
+            a preset gives you four surfaces from one attribute pair.
+          </p>
+        </figcaption>
+
+        <div class="grid cg-columns" style="--grid-min: 13rem;">
+          <div class="cg-island" data-theme="ocean" style="color-scheme: light;">
+            <p class="cg-island-name">ocean · light</p>
+            <button class="btn primary" type="button">Deploy</button>
+            <span class="badge success soft fit">Healthy</span>
+          </div>
+          <div class="cg-island" data-theme="ocean" style="color-scheme: dark;">
+            <p class="cg-island-name">ocean · dark</p>
+            <button class="btn primary" type="button">Deploy</button>
+            <span class="badge success soft fit">Healthy</span>
+          </div>
+          <div class="cg-island" data-theme="sunset" style="color-scheme: light;">
+            <p class="cg-island-name">sunset · light</p>
+            <button class="btn primary" type="button">Deploy</button>
+            <span class="badge success soft fit">Healthy</span>
+          </div>
+          <div class="cg-island" data-theme="sunset" style="color-scheme: dark;">
+            <p class="cg-island-name">sunset · dark</p>
+            <button class="btn primary" type="button">Deploy</button>
+            <span class="badge success soft fit">Healthy</span>
+          </div>
+        </div>
+
+        <div class="prose cg-code">
+          <pre><code>&lt;div data-theme="ocean" style="color-scheme: light"&gt;…&lt;/div&gt;
+&lt;div data-theme="ocean" style="color-scheme: dark"&gt;…&lt;/div&gt;</code></pre>
+        </div>
+
+        <div class="stack muted measure cg-legend">
+          <p>
+            Without <code>data-theme</code>, the default palette advertises
+            <code>color-scheme: light dark</code> and follows the OS. A dark-only
+            theme declares <code>color-scheme: dark</code>, a light-only one
+            <code>light</code>. Browsers without <code>light-dark()</code> get
+            the light fallback, which is why every preset states it first.
+          </p>
+        </div>
+      </figure>
+
+      <figure class="card raised cg-figure">
+        <figcaption>
+          <span class="overline pill primary cg-tag">Figure&nbsp;</span>
+          <h3>An island recomputes what it derives</h3>
+          <p class="muted measure">
+            A boundary is not just a set of colours: everything the core derives
+            from them is re-declared there too. A nested island overrides its
+            parent's, and every derivation follows the nearest one.
+          </p>
+        </figcaption>
+
+        <div class="cg-island" data-theme="ocean" style="color-scheme: light;">
+          <p class="cg-island-name">ocean</p>
+          <p class="muted">Selection ink, shadow, focus ring and the native <code>accent-color</code> all belong to this palette.</p>
+          <div class="cluster">
+            <input class="check" type="checkbox" checked aria-label="Native checkbox on ocean">
+            <button class="btn primary" type="button">Focus me</button>
+          </div>
+
+          <div class="cg-island" data-theme="sunset" style="color-scheme: dark;">
+            <p class="cg-island-name">sunset · dark, nested inside ocean</p>
+            <p class="muted">Same markup. Every derived alias recomputed at this boundary.</p>
+            <div class="cluster">
+              <input class="check" type="checkbox" checked aria-label="Native checkbox on nested sunset">
+              <button class="btn primary" type="button">Focus me</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="stack muted measure cg-legend">
+          <p>
+            Theme-derived aliases — <code>--shadow</code>,
+            <code>--shadow-popout</code>, <code>--backdrop-fill</code>,
+            <code>--selection-bg</code>, <code>--heading</code>,
+            <code>--state-selected</code>, <code>--indicator-ring</code> — are
+            declared on <code>:root, [data-theme]</code> rather than on
+            <code>:root</code> alone. A custom property resolves its
+            <code>var()</code> references where it is declared, so an alias
+            declared only at the root would be inherited already resolved and
+            would ignore the island entirely.
+          </p>
+          <p>
+            <code>data-theme</code> is an active boundary on every element that
+            carries it, never a place to park a value. A
+            <code>&lt;option value="ocean"&gt;</code> or a hidden input holding a
+            theme name wants <code>data-theme-value</code> or the control's own
+            <code>value</code> — unless you actually want that element painted,
+            which is exactly how a theme swatch is built.
+          </p>
+        </div>
+      </figure>
+
+      <!-- ================= Chapter 4 ================= -->
+      <section class="stack cg-chapter" id="demos">
+        <p class="overline">Chapter four</p>
+        <h2>Two compositions</h2>
+        <p class="muted measure">
+          Principles are easy to agree with one swatch at a time. These are the
+          same two fragments, byte for byte, rendered in all four islands.
+        </p>
+      </section>
+
+      <figure class="card raised cg-figure">
+        <figcaption>
+          <span class="overline pill primary cg-tag">Figure&nbsp;</span>
+          <h3>Demo one — a plan card</h3>
+          <p class="muted measure">
+            Canvas, raised surface, border, three ink tiers, a soft badge, a
+            solid action and a resting shadow. No colour is written in the
+            fragment; all of it comes from the island.
+          </p>
+        </figcaption>
+
+        <div class="grid cg-columns" style="--grid-min: 15rem;">
+          <div class="cg-island" data-theme="ocean" style="color-scheme: light;">
+            <p class="cg-island-name">ocean · light</p>
+            <div class="card raised">
+              <div class="cluster" style="--cluster-justify: space-between;">
+                <strong>Team</strong>
+                <span class="badge primary soft">Popular</span>
+              </div>
+              <p class="cg-demo-price">€24<small>/mo</small></p>
+              <p class="muted">Everything in Starter, plus shared workspaces and audit history.</p>
+              <button class="btn primary" type="button">Choose Team</button>
+              <p class="cg-demo-fine">Billed annually. Cancel anytime.</p>
+            </div>
+          </div>
+
+          <div class="cg-island" data-theme="ocean" style="color-scheme: dark;">
+            <p class="cg-island-name">ocean · dark</p>
+            <div class="card raised">
+              <div class="cluster" style="--cluster-justify: space-between;">
+                <strong>Team</strong>
+                <span class="badge primary soft">Popular</span>
+              </div>
+              <p class="cg-demo-price">€24<small>/mo</small></p>
+              <p class="muted">Everything in Starter, plus shared workspaces and audit history.</p>
+              <button class="btn primary" type="button">Choose Team</button>
+              <p class="cg-demo-fine">Billed annually. Cancel anytime.</p>
+            </div>
+          </div>
+
+          <div class="cg-island" data-theme="sunset" style="color-scheme: light;">
+            <p class="cg-island-name">sunset · light</p>
+            <div class="card raised">
+              <div class="cluster" style="--cluster-justify: space-between;">
+                <strong>Team</strong>
+                <span class="badge primary soft">Popular</span>
+              </div>
+              <p class="cg-demo-price">€24<small>/mo</small></p>
+              <p class="muted">Everything in Starter, plus shared workspaces and audit history.</p>
+              <button class="btn primary" type="button">Choose Team</button>
+              <p class="cg-demo-fine">Billed annually. Cancel anytime.</p>
+            </div>
+          </div>
+
+          <div class="cg-island" data-theme="sunset" style="color-scheme: dark;">
+            <p class="cg-island-name">sunset · dark</p>
+            <div class="card raised">
+              <div class="cluster" style="--cluster-justify: space-between;">
+                <strong>Team</strong>
+                <span class="badge primary soft">Popular</span>
+              </div>
+              <p class="cg-demo-price">€24<small>/mo</small></p>
+              <p class="muted">Everything in Starter, plus shared workspaces and audit history.</p>
+              <button class="btn primary" type="button">Choose Team</button>
+              <p class="cg-demo-fine">Billed annually. Cancel anytime.</p>
+            </div>
+          </div>
+        </div>
+      </figure>
+
+      <figure class="card raised cg-figure">
+        <figcaption>
+          <span class="overline pill primary cg-tag">Figure&nbsp;</span>
+          <h3>Demo two — a status panel</h3>
+          <p class="muted measure">
+            The harder case: three semantic states next to each other, on a
+            tinted field, with a subtle surface underneath. This is where an
+            imported palette usually starts to float.
+          </p>
+        </figcaption>
+
+        <div class="grid cg-columns" style="--grid-min: 15rem;">
+          <div class="cg-island" data-theme="ocean" style="color-scheme: light;">
+            <p class="cg-island-name">ocean · light</p>
+            <div class="cg-demo-stats">
+              <div class="cg-demo-stat"><strong>99.9%</strong><small>Uptime</small></div>
+              <div class="cg-demo-stat"><strong>142ms</strong><small>p95</small></div>
+              <div class="cg-demo-stat"><strong>3</strong><small>Alerts</small></div>
+            </div>
+            <div class="alert success">Deployment completed.</div>
+            <div class="alert warning">Certificate expires in 6 days.</div>
+            <div class="alert danger">Two workers failed their health check.</div>
+          </div>
+
+          <div class="cg-island" data-theme="ocean" style="color-scheme: dark;">
+            <p class="cg-island-name">ocean · dark</p>
+            <div class="cg-demo-stats">
+              <div class="cg-demo-stat"><strong>99.9%</strong><small>Uptime</small></div>
+              <div class="cg-demo-stat"><strong>142ms</strong><small>p95</small></div>
+              <div class="cg-demo-stat"><strong>3</strong><small>Alerts</small></div>
+            </div>
+            <div class="alert success">Deployment completed.</div>
+            <div class="alert warning">Certificate expires in 6 days.</div>
+            <div class="alert danger">Two workers failed their health check.</div>
+          </div>
+
+          <div class="cg-island" data-theme="sunset" style="color-scheme: light;">
+            <p class="cg-island-name">sunset · light</p>
+            <div class="cg-demo-stats">
+              <div class="cg-demo-stat"><strong>99.9%</strong><small>Uptime</small></div>
+              <div class="cg-demo-stat"><strong>142ms</strong><small>p95</small></div>
+              <div class="cg-demo-stat"><strong>3</strong><small>Alerts</small></div>
+            </div>
+            <div class="alert success">Deployment completed.</div>
+            <div class="alert warning">Certificate expires in 6 days.</div>
+            <div class="alert danger">Two workers failed their health check.</div>
+          </div>
+
+          <div class="cg-island" data-theme="sunset" style="color-scheme: dark;">
+            <p class="cg-island-name">sunset · dark</p>
+            <div class="cg-demo-stats">
+              <div class="cg-demo-stat"><strong>99.9%</strong><small>Uptime</small></div>
+              <div class="cg-demo-stat"><strong>142ms</strong><small>p95</small></div>
+              <div class="cg-demo-stat"><strong>3</strong><small>Alerts</small></div>
+            </div>
+            <div class="alert success">Deployment completed.</div>
+            <div class="alert warning">Certificate expires in 6 days.</div>
+            <div class="alert danger">Two workers failed their health check.</div>
+          </div>
+        </div>
+      </figure>
+
+      <!-- ================= Chapter 5 ================= -->
+      <section class="stack cg-chapter" id="notes">
+        <p class="overline">Chapter five</p>
+        <h2>Notes</h2>
+        <p class="muted measure">
+          Two review habits, and two rungs the token set deliberately does not
+          have.
+        </p>
+      </section>
+
+      <figure class="card raised cg-figure">
+        <figcaption>
+          <span class="overline pill primary cg-tag">Figure&nbsp;</span>
+          <h3>The greyscale check</h3>
+          <p class="muted measure">
+            Hue removed from the same panel. If the hierarchy and the states
+            survive, colour was reinforcing them; if the panel goes flat, colour
+            was carrying them alone.
+          </p>
+        </figcaption>
+
+        <div class="grid cg-columns" style="--grid-min: 18rem;">
+          <div class="cg-island" data-theme="sunset" style="color-scheme: light;">
+            <p class="cg-island-name">as authored</p>
+            <div class="cluster">
+              <button class="btn primary" type="button">Save</button>
+              <button class="btn neutral outline" type="button">Cancel</button>
+            </div>
+            <div class="alert danger">Two workers failed their health check.</div>
+            <p class="muted">Secondary description.</p>
+            <p style="font-size: var(--font-size-sm); color: var(--text-subtle);">Tertiary metadata.</p>
+          </div>
+
+          <div class="cg-island cg-grey" data-theme="sunset" style="color-scheme: light;">
+            <p class="cg-island-name">hue removed</p>
+            <div class="cluster">
+              <button class="btn primary" type="button">Save</button>
+              <button class="btn neutral outline" type="button">Cancel</button>
+            </div>
+            <div class="alert danger">Two workers failed their health check.</div>
+            <p class="muted">Secondary description.</p>
+            <p style="font-size: var(--font-size-sm); color: var(--text-subtle);">Tertiary metadata.</p>
+          </div>
+        </div>
+
+        <div class="stack muted measure cg-legend">
+          <p>
+            A review heuristic, not a conformance test — and not the same thing
+            as the contrast requirement. The alert keeps its border, its weight
+            and its position; the three ink tiers keep their separation. Nothing
+            here needed hue to be understood.
+          </p>
+        </div>
+      </figure>
+
+      <figure class="card raised cg-figure">
+        <figcaption>
+          <span class="overline pill primary cg-tag">Figure&nbsp;</span>
+          <h3>What the palette does not get to decide</h3>
+          <p class="muted measure">
+            Under <code>prefers-contrast: more</code> the core collapses
+            <code>--text-muted</code> and <code>--text-subtle</code> to
+            <code>--text</code> and thickens borders and focus. No theme can
+            defeat that, by contract rather than by accident.
+          </p>
+        </figcaption>
+
+        <div class="prose cg-code">
+          <pre><code>/* core/theme.css — the repeated attribute intentionally outranks
+   single-attribute preset palettes, including a preset stylesheet
+   loaded after the core. */
+@media (prefers-contrast: more) {
+  :root,
+  [data-theme][data-theme] {
+    --border-width: 2px;
+    --focus-outline-offset: 3px;
+    --focus-ring-width: 4px;
+    --text-muted: var(--text);
+    --text-subtle: var(--text);
+  }
+}</code></pre>
+        </div>
+
+        <div class="stack muted measure cg-legend">
+          <p>
+            <code>forced-colors: active</code> is the other floor: the browser
+            remaps colour, background and border to system colours, and the core
+            supplies the handful of overrides the browser cannot infer —
+            focus outline, selected and disabled states, the backdrop, and
+            removing decorative shadows.
+          </p>
+        </div>
+      </figure>
+
+      <figure class="card raised cg-figure">
+        <figcaption>
+          <span class="overline pill primary cg-tag">Figure&nbsp;</span>
+          <h3>Two rungs that are missing on purpose</h3>
+          <p class="muted measure">
+            Both are common in published token sets. Neither is here yet,
+            and the reason is the same in both cases.
+          </p>
+        </figcaption>
+
+        <div class="table-wrap" role="region" aria-label="Absent tokens" tabindex="0">
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">Absent</th>
+                <th scope="col">What is there instead</th>
+                <th scope="col">What would justify adding it</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row"><code>--border-strong</code></th>
+                <td>One <code>--border</code>, plus the component's own rim where it needs a heavier one.</td>
+                <td>Applications repeatedly reaching for a <code>color-mix()</code> on <code>--border</code>, or misusing <code>--text-subtle</code> to get a firmer line.</td>
+              </tr>
+              <tr>
+                <th scope="row">A third elevation</th>
+                <td><code>--shadow</code> for resting, <code>--shadow-popout</code> for detached surfaces.</td>
+                <td>A recurring hero or floating treatment that every application ends up re-deriving the same way.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="stack muted measure cg-legend">
+          <p>
+            A small token set is a feature — every rung is one more thing a theme
+            author has to get right, in light and in dark, for every island. The
+            bar for adding one is evidence from real compositions, not symmetry
+            with someone else's list.
+          </p>
+        </div>
+      </figure>
+
+    </div>
+  </main>
+
+  <script src="../../dist/actual.full.js"></script>
+  <script>
+    const switcher = document.getElementById("theme-switcher");
+
+    if (switcher) {
+      switcher.addEventListener("change", () => {
+        if (switcher.value) {
+          document.documentElement.dataset.theme = switcher.value;
+        } else {
+          document.documentElement.removeAttribute("data-theme");
+        }
+      });
+    }
+
+    /*
+     * Every colour figure is measured from the rendered page rather than
+     * transcribed, so a theme edit cannot leave the guide describing colours it
+     * no longer shows. A probe element is painted with the token, its used
+     * background is read back, and converted to OKLCH.
+     */
+    const RAMP = [
+      "--surface",
+      "--surface-raised",
+      "--surface-subtle",
+      "--border",
+      "--text-subtle",
+      "--text-muted",
+      "--neutral",
+      "--text",
+    ];
+
+    /* Below this chroma a hue angle is noise, not a design decision — the same
+       epsilon scripts/report-neutral-ramp.js uses. */
+    const CHROMA_EPSILON = 0.01;
+    const CHROMA_SCALE = 0.04;
+
+    function readRgb(host, token) {
+      const probe = document.createElement("span");
+      probe.style.display = "none";
+      probe.style.backgroundColor = `var(${token})`;
+      host.append(probe);
+      const value = getComputedStyle(probe).backgroundColor;
+      probe.remove();
+      const parts = value.match(/[\d.]+/g);
+      if (!parts || parts.length < 3) return null;
+      return parts.slice(0, 3).map(Number);
+    }
+
+    const hex = ([r, g, b]) =>
+      `#${[r, g, b].map((c) => Math.round(c).toString(16).padStart(2, "0")).join("")}`.toUpperCase();
+
+    /* sRGB -> OKLab (Björn Ottosson's matrices), then to polar OKLCH. */
+    function oklch([r, g, b]) {
+      const lin = (c) => {
+        const v = c / 255;
+        return v <= 0.04045 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4;
+      };
+      const [R, G, B] = [lin(r), lin(g), lin(b)];
+      const l = Math.cbrt(0.4122214708 * R + 0.5363325363 * G + 0.0514459929 * B);
+      const m = Math.cbrt(0.2119034982 * R + 0.6806995451 * G + 0.1073969566 * B);
+      const s = Math.cbrt(0.0883024619 * R + 0.2817188376 * G + 0.6299787005 * B);
+      const L = 0.2104542553 * l + 0.793617785 * m - 0.0040720468 * s;
+      const A = 1.9779984951 * l - 2.428592205 * m + 0.4505937099 * s;
+      const Bb = 0.0259040371 * l + 0.7827717662 * m - 0.808675766 * s;
+      const h = (Math.atan2(Bb, A) * 180) / Math.PI;
+      return { L, C: Math.hypot(A, Bb), h: h < 0 ? h + 360 : h };
+    }
+
+    function cell(tag, className, text) {
+      const node = document.createElement(tag);
+      if (className) node.className = className;
+      if (text !== undefined) node.textContent = text;
+      return node;
+    }
+
+    for (const host of document.querySelectorAll("[data-ramp]")) {
+      for (const token of RAMP) {
+        const rgb = readRgb(host, token);
+        if (!rgb) continue;
+        const chip = cell("span", "cg-chip");
+        chip.style.background = `var(${token})`;
+        host.append(chip, cell("code", "", token), cell("span", "cg-value", hex(rgb)));
+      }
+    }
+
+    for (const host of document.querySelectorAll("[data-chroma]")) {
+      for (const token of RAMP) {
+        const rgb = readRgb(host, token);
+        if (!rgb) continue;
+        const { C } = oklch(rgb);
+        const track = cell("span", "cg-track");
+        const fill = cell("span");
+        fill.style.inlineSize = `${Math.min(100, (C / CHROMA_SCALE) * 100)}%`;
+        track.append(fill);
+        host.append(
+          cell("code", "", token.replace("--", "")),
+          track,
+          cell("span", "cg-value", C.toFixed(4)),
+        );
+      }
+    }
+
+    /* Hue markers on the axis, labels in a key below. Achromatic tokens are
+       dropped rather than drawn at a meaningless angle. */
+    const HUE_TOKENS = ["--primary", "--surface-subtle", "--border", "--text", "--shadow-color"];
+
+    for (const axis of document.querySelectorAll("[data-hue-axis]")) {
+      const host = axis.parentElement;
+      const key = host.querySelector("[data-hue-key]");
+      const measured = HUE_TOKENS.map((token) => ({ token, rgb: readRgb(host, token) }))
+        .filter(({ rgb }) => rgb)
+        .map(({ token, rgb }) => ({ token, ...oklch(rgb) }))
+        .filter(({ C }) => C >= CHROMA_EPSILON)
+        .sort((a, b) => a.h - b.h);
+
+      for (const { token, h } of measured) {
+        const mark = cell("span", "cg-hue-mark");
+        mark.style.insetInlineStart = `${(h / 360) * 100}%`;
+        axis.append(mark);
+
+        if (!key) continue;
+        const item = cell("span");
+        const dot = cell("span", "dot");
+        dot.style.background = `var(${token})`;
+        item.append(dot, cell("span", "", `${token.replace("--", "")} ${Math.round(h)}°`));
+        key.append(item);
+      }
+    }
+
+    for (const chip of document.querySelectorAll("[data-swatch]")) {
+      const token = chip.dataset.swatch;
+      chip.style.background = `var(${token})`;
+      const rgb = readRgb(chip.parentElement, token);
+      const target = chip.parentElement.querySelector("[data-swatch-value]");
+      if (rgb && target) target.textContent = `${token} ${hex(rgb)}`;
+    }
+
+    for (const row of document.querySelectorAll("[data-swatch-hues]")) {
+      const tokens = [...row.parentElement.querySelectorAll("[data-swatch]")].map(
+        (chip) => chip.dataset.swatch,
+      );
+      const angles = tokens
+        .map((token) => ({ token, rgb: readRgb(row.parentElement, token) }))
+        .filter(({ rgb }) => rgb)
+        .map(({ token, rgb }) => `${token.replace("--", "")} ${Math.round(oklch(rgb).h)}°`);
+      row.textContent = angles.join(" · ");
+    }
+  </script>
+</body>
+
+</html>
