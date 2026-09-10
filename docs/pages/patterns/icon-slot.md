@@ -14,6 +14,8 @@ centers its glyph, and clips overflow:
 - `overflow: hidden`;
 - a child `svg` constrained to the box.
 
+Icons inherit first: an icon that supports nearby content uses `currentColor`; it takes its own color only when it conveys an independent state or intent.
+
 ## The contract
 
 ```css
