@@ -2,160 +2,172 @@
 
 ## [Unreleased]
 
-### Breaking
+## [0.8.0] - 2026-09-10
 
-- `EVENTS.reposition`, `EVENTS.hide` and `EVENTS.outOfView` are removed from `actual-css/js/events`; no runtime path dispatched them.
+Actual CSS 0.8 focuses on a cleaner component contract, more predictable sizing
+and density, simpler surface behavior, stronger progressive enhancement, and a
+more polished JavaScript runtime.
+
+### Breaking changes
+
+- The JavaScript browser floor is now Safari 17+, Firefox 125+, and Chromium
+  116+. Older browsers still receive the CSS degradation covered by the
+  Degraded tier, but no longer receive the supported JavaScript runtime.
+- The Intermediate browser tier is removed; Minimal now covers the supported
+  JavaScript baseline.
+- `.gap-sm`, `.gap-md`, and `.gap-lg` are removed. They changed the `gap`
+  property without updating Actual's inherited `--gap` rhythm, which could also
+  diverge from `.grid-N` track sizing. Use `gap: var(--space-*)` for a local
+  one-off gap, and `--gap` only when intentionally rebinding the rhythm inherited
+  by nested layout primitives.
+- `.alert.callout` is now purely a leading-flag treatment. It no longer forces a
+  neutral surface, so intents and surface variants compose with it normally.
+- `--font-weight` is renamed to `--font-weight-normal`,
+  `--font-weight-strong` to `--font-weight-semibold`, and
+  `.font-weight-strong` to `.font-weight-semibold`. Semibold is now 600.
+- Badge sizing is independent from density. `--density-compact-size` is removed;
+  use the badge size hooks and `.sm` / `.lg` instead.
+- Flyouts and context menus no longer turn into mobile sheets. They remain
+  anchored non-modal popovers at every viewport size.
+  `data-flyout-mobile`, `data-flyout-breakpoint`, the responsive sheet
+  presentation, and its generated backdrop are removed.
+- `disconnectSurface(menu, { restore })` no longer accepts options; surface
+  reparenting is gone.
+- `EVENTS.reposition`, `EVENTS.hide`, and `EVENTS.outOfView` are removed from
+  `actual-css/js/events`. No runtime path dispatched them.
 
 ### Added
 
-- `applyEnhancement()` applies named behavior tokens through an application selector and optional scope, preserves existing tokens and refreshes registered behaviors.
-- `.accordion.flush` and `.accordion.separated` container treatments: bare separators for embedding inside an existing surface, and independent item cards.
-- Popover transport probe: `demo/templates/popover-transport.html`.
-- Adaptive filter surface demo: `demo/templates/adaptive-surface.html` composes a synchronized anchored flyout and modal bottom drawer without extending the core API.
-- Settings modal composition demo: `demo/templates/settings-modal.html`.
-- `.list` rows accept any combination of leading, content and trailing regions.
-- `bun run serve`, a static server for opening demo pages from another device.
-- Visual guide: `demo/templates/visual-guide.html`, seventeen illustrated figures on the spacing scale, the layout primitives, and density versus local size.
-- Color guide: `demo/templates/color-guide.html`, theming principles measured live on `ocean` and `sunset` in light and dark, as `data-theme` islands on one page. Covers gradients derived from the intent tokens and the interaction colours — `--hover-overlay`, `--focus-ring`, `accent-color`.
-- Joined controls and Button document that `.join` reshapes edges without unifying treatments: keep one variant family in a group, and change a segment's variant only to mark state.
-- `--hr-space` tunes an `hr`'s block margin on the instance. It applies in document flow; `.stack` and `.prose` own the distance between their own children.
-- `pre` gets `overflow-x: auto` globally, so an unbreakable line scrolls in its own box instead of widening the page. Background, padding and radius stay with `.prose` or an application code-block.
-- Flyout documents the Biome `noNoninteractiveElementToInteractiveRole` false
-  positive on `<menu role="menu">`, and recommends switching the rule off until
-  it is fixed upstream.
-- Joined controls documents the Biome `useSemanticElements` false positive on
-  `role="group"`, and the targeted suppression for it.
-- `openSurface` documents that Actual surfaces are mutually exclusive per
-  document and that nested surfaces are unsupported.
-- Kitchen sink covers `steps`, `aura`, and an `inverted` / density /
-  nested-intent scopes section.
-- `.dot` inside a badge paints with `currentColor`, so a status dot beside a
-  label needs no new class.
-- Alert documents the trailing-action composition (`.cluster` plus
-  `.justify-content-space-between`), the tinted leading flag through
-  `--alert-border-inline-start-*`, and the `.surface` / `.inverted` treatments.
-- Tokens document the neutral ramp as curated per role under an ambient hue that leans on `--primary` by default, and that no intent or neutral is derived from `--primary` at runtime.
-- Tokens document `--soft-border-mix` as the borderless-soft dial: what it
-  reaches, and that it is a rendering choice the baseline path does not uphold.
-- `bun run report:dead-css` surveys the demo stylesheets against the pages that link them: class rules nothing uses, and local classes that shadow a framework one.
-- `bun run report:neutral-ramp` surveys every preset's neutral ramp in OKLCH: chroma per role, hue distance to `--primary`, and the lightness a tint costs at equal contrast.
-- `bun run report:theme-contrast` prints every preset theme's resting and
-  hovered soft-pair contrast (light and dark) without failing the build.
+- `applyEnhancement(name, selector, root?)` lets applications apply
+  `data-enhance` behavior tokens programmatically while preserving existing
+  tokens and refreshing registered behaviors.
+- Accordion now supports `.flush` and `.separated` container treatments.
+- `.list` rows can freely combine leading, content, and trailing regions.
+- `--hr-space` customizes an `hr`'s block spacing when used in normal document
+  flow.
+- Global `pre` elements now use `overflow-x: auto`, preventing long
+  unbreakable lines from widening the page.
+- Badge status dots use `currentColor`, so they compose naturally with badge
+  intent and text color.
+- New demos and references:
+  - visual guide for spacing, layout primitives, density, and size;
+  - color guide for theme islands, intent colors, gradients, and interaction
+    colors;
+  - popover transport, adaptive filter surface, and settings modal examples;
+  - expanded kitchen sink coverage for steps, aura, inverted contexts, density,
+    and nested intents.
+- New tooling:
+  - `bun run serve` for opening demos from another device;
+  - `report:dead-css` for unused demo CSS;
+  - `report:neutral-ramp` for preset neutral-ramp analysis;
+  - `report:theme-contrast` for soft-state contrast reporting.
 
 ### Changed
 
-- `@lekoala/floating` 0.2.0.
-- Tooltips write document coordinates and `position: absolute` when their trigger scrolls with the page, so the browser carries the tip instead of the positioner correcting it a frame later; a viewport-anchored trigger (fixed, sticky, open popover, modal dialog) keeps `position: fixed`.
-- A tooltip whose trigger leaves the positioning boundary is hidden and restored when it returns, instead of being torn down. See `docs/design-notes/tooltip-coordinate-space.md`.
-- `.sm` / `.lg` now scale participating component families locally; inherited density moves to `.compact` / `.spacious`.
-- The `.soft` hover is a single fill change: the inset `--btn-hover-overlay` stays reserved for solid buttons and solid/empty badges, and `--soft-hover-alpha` owns the interactive soft fill.
-- The default palette declares per-role `--*-soft-fg` hooks (the intent rebated toward `--text`) so soft ink keeps ≥ 4.5:1 against the hovered soft fill in light and dark; presets and custom `[data-theme]` islands keep the `--soft-fg-mix` derivation unless they declare the hooks themselves.
-- `reserved-classes.json` moves from `scripts/` to the repo root with the same `actual-css/reserved-classes.json` export, so git-archive-based distributions no longer drop a public API.
-- `check:doc-classes` and `check:reserved` load the reserved list through a strict loader that fails on a missing, empty, or malformed list instead of running with a weaker one.
-- Badge sizes scale label, decorative icons, dots, and geometry through `--badge-icon-size` and the existing badge hooks.
-- Badge geometry is intrinsic: badge leaves density participation and `--density-compact-size` is removed; `.badge` keeps its own `--badge-size` scale.
-- Print styles preserve semantic component content and limit framework intervention to structural repairs.
-- The font-weight scale drops the awkward names: `--font-weight` becomes `--font-weight-normal`, `--font-weight-strong` becomes `--font-weight-semibold` (650 → 600), and the `.font-weight-strong` utility becomes `.font-weight-semibold`.
-- The accordion summary moves to `--font-weight-medium`; its hover no longer tints `--primary` and instead reinforces the end marker to the summary text color.
-- Soft foreground resolves per intent: the intent classes expose the
-  `--intent-soft-fg` relay backed by per-role `--*-soft-fg` theme hooks, with
-  the global `--soft-fg-mix` derivation kept as the fallback.
-- Interactive surfaces enter the top layer through `popover="manual"` instead
-  of being moved to `body` or the nearest `<dialog>`.
-- Flyouts and context menus stay anchored non-modal popovers at every viewport size; `data-flyout-mobile`, `data-flyout-breakpoint`, the responsive sheet presentation, and its generated backdrop are removed.
-- `.is-open` is the only state `surface.js` writes; `prepareSurface()` removes
-  `[hidden]` and sets `popover="manual"` over any author value.
-- `flyout.css` and `tooltip.css` drop their `@supports selector(:popover-open)`
-  gates.
-- `check:compat` audits stylesheets against the Degraded floor, and no longer
-  tracks popover selectors or `compat-ok:` pragmas.
-- Badge inline padding is a third of `--badge-size`, so `.sm`/`.lg` keep the
-  pill proportional instead of only changing its height.
-- Badge is `flex: none`: a flex parent no longer squeezes the pill and pushes
-  its label outside the background.
-- Badge moves to `--font-weight-medium`, the weight `.btn` already uses, so a
-  badge no longer reads heavier than the button beside it.
-- The alert owns the block spacing between its direct content blocks, the way
-  `.stack` and `.prose` do: a title and a description are plain siblings, with
-  no wrapper and no inline `--gap`. It replaces the first/last-child margin
-  trim, so the UA paragraph margin between two content blocks becomes
-  `--space-10` — wrap several paragraphs in `.prose`, or a differently spaced
-  group in `.stack`, when the message wants its own rhythm. The `.alert-icon`,
-  `.alert-dismiss`, `.alert-title` and `.alert-body` slots are excluded, so an
-  admonition's title bar stays flush against its body.
-- Text controls now use `--control-pad-x` for horizontal padding. The default padding increases from `0.75rem` to `1em` and now scales with the control font size; select and input-icon geometry scale with it.
-- `--control-pad-x` is stated in the typographic tokens and rebound beside `--control-font-size` at the `.sm`/`.lg` boundaries, so a descendant with its own font size — the `input-icon` glyph — reads the control's inset, not its own.
-- The `@supports selector(:dir(rtl))` wrappers are dropped. An unsupported `:dir()` selector already drops its own rule, so `[dir="rtl"]` stays the Degraded fallback and `:dir()` enhances nested direction changes without a gate.
-- Modal dialogs cap their block size against the small viewport (`100svh`)
-  instead of the dynamic viewport, so collapsing mobile browser chrome no
-  longer reflows the panel.
+- Updated `@lekoala/floating` to 0.2.0.
+- `.sm` and `.lg` now scale participating component families locally.
+  `.compact` and `.spacious` remain inherited density contexts.
+- Text controls now use the shared `--control-pad-x` geometry. Horizontal
+  padding scales with the control size, and select/input-icon geometry follows
+  the same control frame.
+- Badge size now scales its label, icons, dots, and geometry proportionally.
+  Badge inline padding is derived from `--badge-size`, and badges no longer
+  shrink inside flex layouts.
+- Badge and button typography now both use the medium font weight.
+- Accordion summaries use the medium font weight and keep hover feedback in the
+  current text color instead of switching to the primary color.
+- `.soft` interactions now use one consistent fill change. Soft foreground
+  colors resolve per intent through `--intent-soft-fg`, with theme hooks tuned
+  for readable hovered states.
+- Surface behavior is simpler:
+  - interactive surfaces use `popover="manual"` instead of DOM reparenting;
+  - `.is-open` is the only state written by `surface.js`;
+  - `prepareSurface()` removes `[hidden]` and normalizes the popover transport;
+  - Actual surfaces remain mutually exclusive per document; nested surfaces are
+    unsupported.
+- Tooltips now choose their coordinate space based on their trigger:
+  scrolling page content uses absolute/document coordinates, while fixed,
+  sticky, popover, and modal contexts stay viewport-relative.
+- Tooltips that temporarily leave their positioning boundary are hidden and
+  restored rather than torn down.
+- Modal dialogs use the small viewport height (`svh`) for their block-size cap,
+  avoiding panel reflow while mobile browser chrome expands or collapses.
+- RTL fallbacks now use `[dir="rtl"]` for the Degraded tier and `:dir()` for
+  nested direction changes. Redundant `@supports selector(:dir(...))` wrappers
+  were removed.
+- Form controls include `-webkit-appearance` alongside `appearance` where
+  needed for older WebKit.
+- `.scroll-snap` now uses `proximity` by default.
+  `data-snap="mandatory"` opts into strict snapping and
+  `data-snap-align="center"` controls item alignment.
+- Print styles focus on structural repair and preserve semantic component
+  content.
+- `reserved-classes.json` now lives at the package root while keeping the same
+  public package export.
+- Compatibility checks now explicitly audit against the Degraded CSS floor,
+  including structural selectors such as `:has()` and selector lists in
+  `:not()`.
 
 ### Fixed
 
-- `applyEnhancement(name, selector, document)` initializes the default `documentElement`-owned registration; the ancestor walk did reach `document` owners but never that root.
-- `enhance()` calls `observer.observe()` only once a valid record exists, so an empty or all-invalid selector set no longer leaves a watching observer. The `MutationObserver` itself is still constructed immediately.
-- `hr` resets the UA's `margin-inline: auto`, which replaced the cross-axis stretch and collapsed an `<hr>` inside a `.stack` to zero width — the admin settings demo shipped an invisible separator that way. Guarded by `tests/browser/hr.test.js`, which also pins the `--hr-space` rhythm and the `.stack` precedence.
-- Density demo dropped `.card-body`, a class the framework does not define; a card already owns its padding and its direct-child rhythm.
-- `demo/styles/demo.css` no longer redefines `.center`, which overrode the layout primitive and silenced its `--center-size` hook on every page linking the sheet. Thirty unused rules from the retired demo gallery went with it, and four dead rules left `demo/sites/neon-ramen/neon-site.css`.
-- The examples index groups the templates (start here, page shapes, layout references, system benches, third-party) and lists `column-layout`, `motion` and `select-intents`, which were missing entirely.
-- The documentation home leads with the layout primitives, carries a stat strip built from `size-report.json`, and links the examples it never linked before — a "See it running" section for the visual guide, the color guide, the kitchen sink and the admin site. Its theme count comes from the theme list instead of prose that said fifteen for sixteen themes.
-- A tooltip shown by focus on a touch device is no longer lost for good after its trigger scrolls out of view and back: a second tap fires neither `focusin` nor `mouseover`, so nothing could bring it back.
-- A shared explicit tooltip re-shown from another trigger resubscribes its position tracking, instead of keeping the previous trigger observed.
-- `select.css` and `modal.css` preserve select appearance and modal body scrolling in Degraded Firefox 78–83 using `:not(:is(...))` without changing specificity.
-- `check:compat` detects direct selector lists in `:not()` while accepting lists nested in `:is()` or `:where()`.
-- The Alert class reference is one table again: a stray paragraph split it and
-  left six rows rendering as literal text.
-- The badge dismiss button keeps a 24px pointer-target floor (WCAG 2.2 2.5.8)
-  even under `.sm` or a density override below the target size, without
-  inflating the badge itself.
-- An empty badge dismiss button paints its own X from `--icon-close`, sized by
-  `--badge-dismiss-icon-size`. The documented pattern no longer asks for an icon
-  font, and the mark is centered on its ink rather than on a text line box.
-- `.card`, `.navbar` and `.app-nav` now reset the intent tokens at their
-  boundary, so an inherited intent no longer tints a shared variant
-  (`.soft`/`.solid`/`.outline`/`.surface`) that has no local intent class.
-- A scoped theme, density, `.inverted` or application custom property now
-  reaches an anchored surface through inheritance — see
-  `docs/design-notes/surface-reparenting.md`.
-- `.menu-separator` is a plain `<hr>`: the `role="separator"` the docs used to
-  show is implied by the element.
-- `--modal-size` is fallback-only, so a class on the dialog can set it.
-- `.list-item` is flex: a row with no leading region no longer puts its content
-  in the leading track and its control in the flexible one.
-- Tabs that are `hidden` are skipped by keyboard navigation.
-- Vertical tabs round the focus ring on the inline edge, not the block edge.
-- `.tabs` matches `aria-orientation` inside `:where()`, so an author class can
-  restyle a vertical strip without restating the attribute.
-- `check:architecture` enforces that `aria-orientation` stays inside `:where()`.
-- Kitchen sink drops `card-body`, `card-header`, `card-footer`, `choice-card-*`
-  and `tabset`, class names no stylesheet defines.
-- An unchecked `.switch` keeps the brand fallback on hover; the hover rule no longer outranks the checked state.
-- `.input-icon` reserves trailing space and positions a trailing icon even when a leading icon precedes the input.
-- A `.card.subtle` repoints `--card-bg`, so its busy overlay and contextual aliases follow the subtle surface.
-- `.app-nav` paints its current tile with the system Highlight pair under forced colors.
-- `select`, `switch`, `avatar` and `indicator` keep a `[dir="rtl"]` fallback and enhance `:dir()` inside `@supports`, matching the drawer pattern.
-- Form controls declare `-webkit-appearance: none` beside `appearance: none`, matching progress and meter.
-- `.spinner` gates its rotation behind `prefers-reduced-motion: no-preference`.
-- `.scroll-snap` snaps with `proximity` by default; `data-snap="mandatory"` opts into strict snapping and `data-snap-align="center"` sets alignment.
-- `.background-surface` / `-raised` / `-subtle` rebind `--heading` to their ink, so a heading follows the surface they recreate instead of an inherited heading color.
-- Every paired theme declares `--hover-overlay` and `--shadow-color` in its base block, so the pre-`light-dark()` tier no longer inherits the core aubergine tint.
-- `.prose` resets the UA `blockquote` inline margin, so a quote keeps only its intended indent, border, and padding.
+- `applyEnhancement(name, selector, document)` now refreshes registrations owned
+  by either `document` or `document.documentElement`.
+- `enhance()` no longer starts an idle `MutationObserver` when no valid enhancer
+  record exists.
+- Context-menu button triggers now use the same opening path as pointer and
+  keyboard triggers, including `data-context-menu-scope`.
+- Tooltips shown from touch/focus recover correctly after leaving and re-entering
+  their positioning boundary.
+- Reusing one explicit tooltip from another trigger correctly restarts position
+  tracking.
+- Tabs skip hidden items during keyboard navigation.
+- Vertical tab focus rings use the correct inline edge.
+- `.tabs` keeps `aria-orientation` inside `:where()`, allowing application
+  classes to override layout without fighting framework specificity.
+- An unchecked `.switch` keeps the correct hover treatment without the hover
+  selector overriding the checked state.
+- `.input-icon` supports leading and trailing icons at the same time and keeps
+  their inset tied to the control frame even when the icon has its own font
+  size.
+- `.list-item` correctly lays out rows with no leading region.
+- `.card.subtle` now propagates its subtle surface to contextual aliases and
+  busy overlays.
+- `.card`, `.navbar`, and `.app-nav` reset inherited intent state at their
+  component boundary, preventing unrelated ancestor intents from tinting their
+  variants.
+- `.app-nav` uses the system Highlight colors for its current item in forced
+  colors mode.
+- `.background-surface`, `.background-raised`, and `.background-subtle` restore
+  their matching text color and heading context, including inside `.inverted`
+  sections.
+- All paired themes provide their own `--hover-overlay` and `--shadow-color`
+  baseline values instead of inheriting the core tint.
+- `.prose` resets the browser's default inline blockquote margin.
+- `hr` no longer collapses to zero width inside `.stack`.
+- Select styling and modal body scrolling remain functional in Degraded
+  Firefox 78–83.
+- Badge dismiss buttons keep a 24px pointer-target floor and empty dismiss
+  buttons render their built-in close icon correctly.
+- `.menu-separator` documentation now uses plain `<hr>` without a redundant
+  separator role.
+- `--modal-size` can once again be overridden directly on a dialog.
+- Theme, density, inverted, and application custom properties now inherit
+  correctly into anchored surfaces.
 
-### Breaking
+### Documentation and tooling
 
-- The `.gap-sm` / `.gap-md` / `.gap-lg` utilities are removed: they set `gap` without `--gap`, which can diverge from `.grid-N` track sizing. For a one-off gap on a container, set `gap` directly with a spacing token; set `--gap` only to deliberately rebind the inherited rhythm of that context and its nested primitives.
-- `.alert.callout` is a leading-flag treatment: it owns the border geometry
-  only and no longer forces a neutral surface, so an intent tints the panel as
-  well as the flag, and `.surface` / `.solid` / `.outline` / `.inverted`
-  compose with it instead of being ignored.
-- JavaScript browser floor raised to Safari 17+, Firefox 125+ and Chromium
-  116+; browsers below it no longer receive the supported Actual runtime.
-- Core HTML/CSS degradation is unchanged, and stays governed by the Degraded
-  tier.
-- The `Intermediate` tier is deleted — the new Minimal absorbs it on all three
-  engines.
-- `disconnectSurface(menu, { restore })` no longer takes options; the
-  reparenting it controlled is gone.
+- Updated the progressive-enhancement, surface, sizing, theme, layout, alert,
+  badge, joined-control, and browser-support documentation to match the 0.8
+  behavior.
+- Added clearer guidance around `--gap`: setting the custom property changes an
+  inherited rhythm, while `.gap-context` applies that rhythm to containers that
+  do not already consume it.
+- Updated Biome guidance for known false positives around `<menu role="menu">`
+  and `role="group"`.
+- Documentation examples and the examples index were cleaned up to remove stale
+  framework classes and retired surface/sheet behavior.
+- Package export tests now cover the documented `applyEnhancement()` and
+  `ACTUAL_EVENT_PREFIX` exports.
 
 ## [0.7.0] - 2026-09-04
 
