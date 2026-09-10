@@ -326,6 +326,34 @@
   --grid-min: 12rem;
 }
 
+/* Home stat strip. Figures come from size-report.json at build time
+   (scripts/docs/templates.js), so the landing page cannot quote a size the
+   build no longer produces. */
+.docs-stats {
+  --grid-min: 9rem;
+
+  padding-block: var(--space-40);
+  border-block: var(--border-width) solid var(--border);
+}
+
+.docs-stat {
+  display: grid;
+  gap: var(--space-10);
+  text-align: center;
+}
+
+.docs-stat > strong {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: var(--font-weight-semibold);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.docs-stat > .muted {
+  font-size: var(--font-size-sm);
+  text-wrap: balance;
+}
+
 .docs-layout-grid {
   --grid-min: 14rem;
   align-items: start;

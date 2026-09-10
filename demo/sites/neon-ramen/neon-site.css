@@ -470,18 +470,6 @@ img { filter: saturate(1.06) contrast(1.03); }
 
 .spice b { color: var(--danger); font-weight: 400; }
 
-/* Placeholder frame for dishes without photography. */
-.frame-ph {
-  display: grid;
-  place-items: center;
-  background:
-    radial-gradient(circle at 30% 20%, var(--brand-glow-faint), transparent 60%),
-    linear-gradient(180deg, var(--surface-raised), var(--surface));
-  color: var(--text-subtle);
-  font-size: clamp(3rem, 8vw, 4.5rem);
-  user-select: none;
-}
-
 /* -------------------------------------------------------------- locations */
 .location-copy { --gap: 1rem; }
 
@@ -512,35 +500,6 @@ img { filter: saturate(1.06) contrast(1.03); }
   color: var(--warning);
 }
 
-.loc-card { --gap: 0.6rem; }
-
-.loc-meta {
-  display: grid;
-  gap: 0.3rem;
-  margin: 0;
-}
-
-.meta-row {
-  --cluster-justify: space-between;
-  --gap: 1rem;
-  border-block-end: 1px dashed var(--border);
-  padding-block: 0.3rem;
-}
-
-.loc-meta dt {
-  color: var(--text-subtle);
-  font-family: var(--font-mono);
-  font-size: 0.7rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.loc-meta dd {
-  margin: 0;
-  color: var(--text);
-  font-size: 0.88rem;
-  text-align: end;
-}
 
 
 .location-board {

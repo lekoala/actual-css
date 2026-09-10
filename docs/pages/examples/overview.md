@@ -9,27 +9,52 @@ and `actual.full.js` from `dist/`, plus the theme palettes bundle from
 
 ## Templates
 
-`demo/templates/` are standalone pages covering common page shapes.
+`demo/templates/` are standalone pages. The first three explain the system; the
+rest show it composed, isolated, or under stress.
+
+### Start here
 
 - [Visual guide](../../demo/templates/visual-guide.html) - seventeen illustrated figures on the spacing scale, the layout primitives, and density versus local size
 - [Color guide](../../demo/templates/color-guide.html) - theming principles measured live on `ocean` and `sunset`, in light and dark, as `data-theme` islands
 - [Kitchen sink](../../demo/templates/kitchen-sink.html) - one-screen test bed for themes, scopes, variants and interactions
-- [Keyboard controls](../../demo/templates/keyboard-controls.html) - hands-on keyboard support matrix and focus test bench
-- [Surface contracts](../../demo/templates/surfaces.html) - .inverted, cascade precedence, and the intent boundary
-- [Popover transport probe](../../demo/templates/popover-transport.html) - self-scoring bench for the native popover transport go/no-go
-- [Adaptive filter surface](../../demo/templates/adaptive-surface.html) - app-level flyout/drawer composition with one synchronized filter state
-- [Settings modal](../../demo/templates/settings-modal.html) - two-pane preferences dialog, with the local CSS it needs audited rule by rule
-- [Workspace settings](../../demo/templates/settings-pricing.html) - plans with visible native choices, preferences and a local segmented tab treatment
-- [Card compositions](../../demo/templates/card-compositions.html) - editorial, team, sign-in and horizontal cards composed from existing primitives
+
+### Page shapes
+
+Whole pages, composed the way a real product would.
+
 - [Dashboard](../../demo/templates/dashboard.html) - data-heavy overview page
 - [App](../../demo/templates/app.html) - application shell with sidebar
 - [Workspaces](../../demo/templates/workspaces.html) - sectioned sidebar, master/detail list with native current state, and workspace cards
 - [Marketing](../../demo/templates/marketing.html) - landing page with typography and fluid type
 - [Blog](../../demo/templates/blog.html) - article page with prose
-- [Blocks](../../demo/templates/blocks.html) - layout building blocks
+- [Settings modal](../../demo/templates/settings-modal.html) - two-pane preferences dialog, with the local CSS it needs audited rule by rule
+- [Workspace settings](../../demo/templates/settings-pricing.html) - plans with visible native choices, preferences and a local segmented tab treatment
+- [Card compositions](../../demo/templates/card-compositions.html) - editorial, team, sign-in and horizontal cards composed from existing primitives
+
+### Layout references
+
+One mechanism at a time, with its contract and its pitfalls.
+
 - [Layout reference](../../demo/templates/layouts.html) - canonical compositions built only with the layout primitives
+- [Blocks](../../demo/templates/blocks.html) - layout building blocks
 - [Grid density](../../demo/templates/grid.html) - the grid contracts on resizable stages, with the pitfalls called out
+- [Column layout](../../demo/templates/column-layout.html) - the twelve-column canvas: spans, starts, and the narrow-container recomposition the framework leaves to the application
 - [Density](../../demo/templates/density.html) - compact control density
+
+### System benches
+
+Contracts you cannot read off a static screenshot: state, motion, focus, and
+extension points.
+
+- [Surface contracts](../../demo/templates/surfaces.html) - `.inverted`, cascade precedence, and the intent boundary
+- [Presence motion](../../demo/templates/motion.html) - status bar, tooltip, flyout, modal and drawer replayed side by side, with easing swaps and a reduced-motion simulation
+- [Keyboard controls](../../demo/templates/keyboard-controls.html) - hands-on keyboard support matrix and focus test bench
+- [Adaptive filter surface](../../demo/templates/adaptive-surface.html) - app-level flyout/drawer composition with one synchronized filter state
+- [Select intents](../../demo/templates/select-intents.html) - extending the enhancer with a project's own `data-enhance` behavior, injected markup included, with no framework change
+- [Popover transport probe](../../demo/templates/popover-transport.html) - self-scoring bench for the native popover transport go/no-go
+
+### Third-party components on Actual tokens
+
 - [Data grid](../../demo/templates/data-grid.html) - an external data grid component themed with Actual tokens (sort, filter, search, selection)
 - [Combobox](../../demo/templates/combobox.html) - an external combobox themed with Actual tokens (search, tags, autocomplete)
 

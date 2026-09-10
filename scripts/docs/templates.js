@@ -102,6 +102,37 @@ export function renderThemeInit(themes) {
 </script>`;
 }
 
+/*
+ * Home stat strip, read from size-report.json so the figures on the landing
+ * page are the ones build:size measured, not prose that drifts. A missing or
+ * unbuilt report yields an empty strip rather than a stale or invented number.
+ */
+export function renderHomeStats(themes) {
+  let report;
+  try {
+    report = JSON.parse(readFileSync(join(__dirname, "..", "..", "size-report.json"), "utf8"));
+  } catch {
+    return "";
+  }
+
+  const kb = (bytes) => `${(bytes / 1024).toFixed(1)}kb`;
+  const stats = [
+    ["0", "Runtime dependencies"],
+    [kb(report.full.brotli), "Full build, brotli"],
+    [kb(report.core.brotli), "Core build, brotli"],
+    [String(themes.length + 2), "Themes, light and dark included"],
+  ];
+
+  return stats
+    .map(
+      ([value, label]) => `          <div class="docs-stat">
+            <strong>${escapeHtml(value)}</strong>
+            <span class="muted">${escapeHtml(label)}</span>
+          </div>`,
+    )
+    .join("\n");
+}
+
 export function renderThemeCards(themes) {
   return themes
     .map(
@@ -166,6 +197,8 @@ export function renderHome({
     .replace(/\{\{siteRoot\}\}/g, siteRoot)
     .replace(/\{\{themeOptions\}\}/g, renderThemeOptions(themes))
     .replace(/\{\{themeInit\}\}/g, renderThemeInit(themes))
+    .replace(/\{\{themeCount\}\}/g, String(themes.length))
+    .replace(/\{\{homeStats\}\}/g, renderHomeStats(themes))
     .replace(/\{\{themeCards\}\}/g, renderThemeCards(themes))
     .replace(/\{\{componentsGrid\}\}/g, renderComponentsGrid(navigation))
     .replace(/\{\{navGroups\}\}/g, renderNavGroups(navigation, null));
