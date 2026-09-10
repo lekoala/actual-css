@@ -371,26 +371,33 @@ container. For a plain text link, use a bare <code>&lt;a&gt;</code> with no clas
 <p>Use <code>.btn.icon-only</code> for a square icon button sized to the control height.
 Always name it with an <code>aria-label</code> since there is no visible text.</p>
 <h3 id="button-groups">Button groups</h3>
-<p>Join adjacent buttons with <code>.join</code>. The joined group is not a new component —
-the buttons keep their own variants.</p>
+<p>Join adjacent buttons with <code>.join</code>. The joined group is not a new component:
+each button keeps its own classes, and <code>.join</code> only reshapes the outer corners
+and collapses the shared edges.</p>
 </div>
 <div class="docs-example">
   <div class="docs-preview">
-<div class="join" role="group" aria-label="Text alignment">
-  <button class="btn" type="button">Left</button>
-  <button class="btn outline" type="button">Center</button>
-  <button class="btn soft" type="button">Right</button>
+<div class="join" role="group" aria-label="Row actions">
+  <button class="btn outline" type="button">Edit</button>
+  <button class="btn outline" type="button">Duplicate</button>
+  <button class="btn outline" type="button">Archive</button>
 </div>
   </div>
   <div class="docs-code">
-    <pre><code class="language-html">&lt;div class=&quot;join&quot; role=&quot;group&quot; aria-label=&quot;Text alignment&quot;&gt;
-  &lt;button class=&quot;btn&quot; type=&quot;button&quot;&gt;Left&lt;/button&gt;
-  &lt;button class=&quot;btn outline&quot; type=&quot;button&quot;&gt;Center&lt;/button&gt;
-  &lt;button class=&quot;btn soft&quot; type=&quot;button&quot;&gt;Right&lt;/button&gt;
+    <pre><code class="language-html">&lt;div class=&quot;join&quot; role=&quot;group&quot; aria-label=&quot;Row actions&quot;&gt;
+  &lt;button class=&quot;btn outline&quot; type=&quot;button&quot;&gt;Edit&lt;/button&gt;
+  &lt;button class=&quot;btn outline&quot; type=&quot;button&quot;&gt;Duplicate&lt;/button&gt;
+  &lt;button class=&quot;btn outline&quot; type=&quot;button&quot;&gt;Archive&lt;/button&gt;
 &lt;/div&gt;</code></pre>
   </div>
 </div>
 <div class="prose docs-prose">
+<p>Keep one variant family inside a group. Because each button keeps its own
+classes, nothing stops <code>.btn</code>, <code>.btn outline</code> and <code>.btn soft</code> from sitting side
+by side — but three fills and three border treatments in one shape read as
+unrelated controls that happen to touch, not as one unit. Change the variant
+only to carry meaning: <a href="#toggle">Toggle</a> marks the active segment with a solid
+button among outlines, which is the pattern a segmented control wants.</p>
 <h2 id="sizes">Sizes</h2>
 <p>Prefer <code>.sm</code> and <code>.lg</code> over setting sizes directly. They scale control geometry
 and typography together; <code>.compact</code> and <code>.spacious</code> only change density.</p>

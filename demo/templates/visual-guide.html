@@ -507,6 +507,14 @@
             boundary. Chrome is what you add when spacing genuinely cannot carry
             the meaning — not the first move.
           </p>
+          <p>
+            The rules on the left are plain <code>&lt;hr&gt;</code> elements
+            inside a <code>.stack</code>, and their spacing comes from the
+            stack's <code>--gap</code>, not from their own margin: a layout
+            primitive owns the distance between its children. Outside a layout,
+            an <code>hr</code> keeps its own block rhythm and
+            <code>--hr-space</code> tunes it.
+          </p>
         </div>
       </figure>
 

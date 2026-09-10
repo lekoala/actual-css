@@ -239,6 +239,34 @@
       filter: grayscale(1);
     }
 
+    /* The hover overlay is 4% ink — invisible as a flat swatch, so the chip
+       composites it the way .btn does: an inset shadow over the surface. */
+    .cg-chip.cg-overlay {
+      background: var(--surface);
+      box-shadow: inset 0 0 0 999px var(--hover-overlay);
+    }
+
+    /* Gradient bars, sized to read as a surface rather than a swatch. */
+    .cg-bar-wide {
+      block-size: 2.5rem;
+      border: var(--border-width) solid color-mix(in oklab, var(--text) 15%, transparent);
+      border-radius: var(--radius-sm);
+    }
+
+    .cg-bar-derived {
+      background: linear-gradient(
+          180deg,
+          color-mix(in oklch, white 15%, var(--primary)),
+          var(--primary)
+        );
+    }
+
+    /* Deliberately off-palette: two stops picked from a generic grey scale,
+       with no relationship to the island they sit on. */
+    .cg-bar-handwritten {
+      background: linear-gradient(180deg, #f8fafc, #cbd5e1);
+    }
+
     /* Demo compositions --------------------------------------------------- */
     .cg-demo-price {
       font-size: 2rem;
@@ -738,8 +766,171 @@
       </figure>
 
       <!-- ================= Chapter 3 ================= -->
-      <section class="stack cg-chapter" id="islands">
+      <section class="stack cg-chapter" id="treatments">
         <p class="overline">Chapter three</p>
+        <h2>Treatments and states</h2>
+        <p class="muted measure">
+          Colour stops being a flat fill as soon as something is a gradient, is
+          hovered, is focused, or is a control the browser paints itself. None
+          of those is a stored colour either — each is derived from the same
+          tokens at the point of use.
+        </p>
+      </section>
+
+      <figure class="card raised cg-figure">
+        <figcaption>
+          <span class="overline pill primary cg-tag">Figure&nbsp;</span>
+          <h3>A gradient is two stops from the same palette</h3>
+          <p class="muted measure">
+            The <code>gradient</code> preset turns every solid button into a
+            gradient without touching a single component rule: it re-derives
+            <code>--ui-bg</code> from the intent the button already carries.
+            Same markup as the two flat palettes beside it.
+          </p>
+        </figcaption>
+
+        <div class="grid cg-columns" style="--grid-min: 15rem;">
+          <div class="cg-island" data-theme="ocean" style="color-scheme: light;">
+            <p class="cg-island-name">ocean · flat</p>
+            <div class="cluster">
+              <button class="btn primary" type="button">Deploy</button>
+              <button class="btn danger" type="button">Delete</button>
+            </div>
+          </div>
+
+          <div class="cg-island" data-theme="sunset" style="color-scheme: light;">
+            <p class="cg-island-name">sunset · flat</p>
+            <div class="cluster">
+              <button class="btn primary" type="button">Deploy</button>
+              <button class="btn danger" type="button">Delete</button>
+            </div>
+          </div>
+
+          <div class="cg-island" data-theme="gradient" style="color-scheme: light;">
+            <p class="cg-island-name">gradient · same markup</p>
+            <div class="cluster">
+              <button class="btn primary" type="button">Deploy</button>
+              <button class="btn danger" type="button">Delete</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="prose cg-code">
+          <pre><code>/* themes/gradient.css — both stops come from the intent,
+   so danger gradients red and primary gradients blue with
+   no per-intent rule. */
+--ui-bg: linear-gradient(
+  180deg,
+  color-mix(in oklch, white 15%, var(--intent)),
+  var(--intent)
+);</code></pre>
+        </div>
+
+        <div class="cg-island" data-theme="sunset" style="color-scheme: light;">
+          <p class="cg-island-name">sunset · derived stops, then hand-picked ones</p>
+          <div class="cg-bar-wide cg-bar-derived"></div>
+          <div class="cg-bar-wide cg-bar-handwritten"></div>
+        </div>
+
+        <div class="stack muted measure cg-legend">
+          <p>
+            The second bar is a perfectly reasonable
+            <code>#f8fafc → #cbd5e1</code> lifted from a generic grey scale. On
+            a warm canvas it belongs to nothing — the surface it sits on is the
+            only thing that decides whether a gradient reads as part of the
+            page or pasted onto it.
+          </p>
+          <p>
+            The preset also re-runs the recipe over a darkened base for hover
+            rather than reusing the resting fill, so the gradient shape survives
+            the state change instead of flattening.
+          </p>
+        </div>
+      </figure>
+
+      <figure class="card raised cg-figure">
+        <figcaption>
+          <span class="overline pill primary cg-tag">Figure&nbsp;</span>
+          <h3>Interaction belongs to the palette too</h3>
+          <p class="muted measure">
+            Three colours that only exist while something is being used. All
+            three are declared on <code>:root, [data-theme]</code>, so they are
+            recomputed at every island rather than inherited already resolved.
+            Hover and tab through the rows below.
+          </p>
+        </figcaption>
+
+        <div class="grid cg-columns" style="--grid-min: 18rem;">
+          <div class="cg-island" data-theme="ocean" style="color-scheme: light;">
+            <p class="cg-island-name">ocean · light</p>
+            <div class="cluster">
+              <span class="cg-chip"></span>
+              <span class="cg-chip cg-overlay"></span>
+              <span class="cg-value">surface, then + --hover-overlay</span>
+            </div>
+            <div class="cluster">
+              <span class="cg-chip" data-swatch="--focus"></span>
+              <span class="cg-chip" data-swatch="--focus-ring"></span>
+              <span class="cg-value">--focus, --focus-ring</span>
+            </div>
+            <div class="cluster">
+              <button class="btn primary" type="button">Hover me</button>
+              <input type="checkbox" checked aria-label="Native checkbox on ocean">
+              <input type="range" value="60" aria-label="Native range on ocean">
+            </div>
+          </div>
+
+          <div class="cg-island" data-theme="sunset" style="color-scheme: light;">
+            <p class="cg-island-name">sunset · light</p>
+            <div class="cluster">
+              <span class="cg-chip"></span>
+              <span class="cg-chip cg-overlay"></span>
+              <span class="cg-value">surface, then + --hover-overlay</span>
+            </div>
+            <div class="cluster">
+              <span class="cg-chip" data-swatch="--focus"></span>
+              <span class="cg-chip" data-swatch="--focus-ring"></span>
+              <span class="cg-value">--focus, --focus-ring</span>
+            </div>
+            <div class="cluster">
+              <button class="btn primary" type="button">Hover me</button>
+              <input type="checkbox" checked aria-label="Native checkbox on sunset">
+              <input type="range" value="60" aria-label="Native range on sunset">
+            </div>
+          </div>
+        </div>
+
+        <div class="stack muted measure cg-legend">
+          <p>
+            <strong><code>--hover-overlay</code></strong> is about four percent
+            of ink. A button paints it as
+            <code>box-shadow: inset 0 0 0 999px</code> over whatever fill it
+            already has, so one token covers a solid, an outline and a table row
+            without a hover colour per variant. The second chip above is that
+            same recipe applied to <code>--surface</code>, which is the only way
+            to see four percent at all.
+          </p>
+          <p>
+            <strong><code>--focus-ring</code></strong> is not authored: it is
+            <code>color-mix(in oklch, var(--focus) 30%, transparent)</code>,
+            re-derived on every boundary. Override <code>--focus</code> and the
+            ring follows; there is no stale second value to keep in sync.
+          </p>
+          <p>
+            <strong><code>accent-color</code></strong> is the one that catches
+            people out. The checkbox and range above carry no Actual class at
+            all — the browser paints them, and follows the island only because
+            <code>accent-color: var(--primary)</code> is re-declared on every
+            <code>[data-theme]</code>. It inherits as a computed value, so a
+            single declaration at the root would paint every island with the
+            root's primary.
+          </p>
+        </div>
+      </figure>
+
+      <!-- ================= Chapter 4 ================= -->
+      <section class="stack cg-chapter" id="islands">
+        <p class="overline">Chapter four</p>
         <h2>Islands</h2>
         <p class="muted measure">
           Everything above is rendered on one page, at the same time, with no
@@ -853,7 +1044,7 @@
 
       <!-- ================= Chapter 4 ================= -->
       <section class="stack cg-chapter" id="demos">
-        <p class="overline">Chapter four</p>
+        <p class="overline">Chapter five</p>
         <h2>Two compositions</h2>
         <p class="muted measure">
           Principles are easy to agree with one swatch at a time. These are the
@@ -995,7 +1186,7 @@
 
       <!-- ================= Chapter 5 ================= -->
       <section class="stack cg-chapter" id="notes">
-        <p class="overline">Chapter five</p>
+        <p class="overline">Chapter six</p>
         <h2>Notes</h2>
         <p class="muted measure">
           Two review habits, and two rungs the token set deliberately does not
