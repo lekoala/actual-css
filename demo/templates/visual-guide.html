@@ -10,8 +10,14 @@
   <link rel="stylesheet" href="../assets/actual-themes.min.css">
   <link rel="stylesheet" href="../styles/demo.css">
   <style>
-    /* Local page chrome. Every measurement drawn below reads a live token, so
-       the diagrams follow the theme instead of restating hard-coded pixels. */
+    /*
+     * The guide is built from the primitives it documents: .center for the
+     * column, .card for every figure and every stage, .grid for the comparison
+     * columns, .stack / .cluster for the rhythms, .overline for the labels,
+     * .prose for the snippets. What is left here is the diagram vocabulary —
+     * bars, hatched bands, rulers — which is page-specific by nature, plus the
+     * handful of tweaks the framework has no hook for (marked NO HOOK).
+     */
     body {
       background: var(--surface-subtle);
     }
@@ -20,146 +26,80 @@
       padding-block: var(--space-60);
     }
 
+    .vg-intro {
+      --center-size: 60rem;
+
+      padding-block: var(--space-60);
+    }
+
     .vg-deck {
       counter-reset: vg-figure;
-      max-inline-size: 72rem;
-      margin-inline: auto;
-      padding-inline: var(--space-40);
     }
 
-    .vg-intro {
-      max-inline-size: 60rem;
-      margin-inline: auto;
-      padding: var(--space-60) var(--space-40);
-      display: grid;
-      gap: var(--space-30);
-    }
-
-    .vg-intro > :is(h1, p) {
-      margin: 0;
-    }
-
-    .vg-intro .lead {
-      max-inline-size: 60ch;
-      color: var(--text-muted);
-    }
-
-    /* Chapter opener — a plain band between decks of figures. */
+    /* Chapter opener — a rule and a title between decks of figures. */
     .vg-chapter {
-      display: grid;
       gap: var(--space-20);
       margin-block: var(--space-60) var(--space-50);
       padding-block-start: var(--space-50);
       border-block-start: var(--border-width) solid var(--border);
     }
 
-    .vg-chapter > :is(h2, p) {
-      margin: 0;
-    }
-
-    .vg-chapter p {
-      max-inline-size: 62ch;
-      color: var(--text-muted);
-    }
-
     /* One figure = one standalone, screenshot-ready card. */
     .vg-figure {
+      --card-pad: var(--space-60);
+      --card-gap: var(--space-40);
+
+      counter-increment: vg-figure;
       margin: 0 0 var(--space-50);
-      padding: var(--space-60);
-      border: var(--border-width) solid var(--border);
-      border-radius: var(--radius-lg);
-      background: var(--surface);
-      box-shadow: var(--shadow);
     }
 
     .vg-figure > figcaption {
       display: grid;
       gap: var(--space-20);
-      margin-block-end: var(--space-50);
+    }
+
+    .vg-figure > figcaption > * {
+      margin: 0;
     }
 
     .vg-figure h3 {
-      margin: 0;
       font-size: var(--font-size-lg);
       font-weight: var(--font-weight-semibold);
-    }
-
-    .vg-note {
-      margin: 0;
-      max-inline-size: 68ch;
-      color: var(--text-muted);
     }
 
     .vg-tag::after {
       content: counter(vg-figure, decimal-leading-zero);
     }
 
-    .vg-figure {
-      counter-increment: vg-figure;
-    }
-
-    /* Stage — the neutral surface every diagram is drawn on. */
+    /* Stage — the inset surface every diagram is drawn on. */
     .vg-stage {
-      padding: var(--space-50);
-      border: var(--border-width) solid var(--border);
-      border-radius: var(--radius);
-      background: var(--surface-subtle);
+      --card-pad: var(--space-50);
+      --card-gap: var(--space-20);
     }
 
-    .vg-stage + .vg-stage {
-      margin-block-start: var(--space-40);
+    /* A diagram whose own bands are the only spacing it may show. */
+    .vg-flush {
+      --card-gap: 0;
     }
 
-    .vg-stage.tight {
-      padding: var(--space-40);
-    }
-
-    .vg-label {
-      display: block;
-      margin-block-end: var(--space-20);
-      font-size: var(--font-size-xs);
-      font-weight: var(--font-weight-medium);
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-      color: var(--text-subtle);
-    }
-
+    /* Side-by-side comparisons. Natural heights: two stages differing in
+       height is often the point being made. */
     .vg-columns {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
-      gap: var(--space-40);
+      --grid-min: 16rem;
+
       align-items: start;
     }
 
-    .vg-scroll {
-      overflow-x: auto;
-      padding-block-end: var(--space-20);
-    }
-
-    .vg-code {
-      margin-block-start: var(--space-40);
-    }
-
-    .vg-code pre {
-      margin: 0;
-      padding: var(--space-40);
-      border-radius: var(--radius-sm);
-      background: var(--surface-subtle);
-      overflow-x: auto;
-      font-size: var(--font-size-sm);
-    }
-
     .vg-legend {
-      display: grid;
-      gap: var(--space-20);
-      margin-block-start: var(--space-40);
-      max-inline-size: 78ch;
-      color: var(--text-muted);
+      --measure: 78ch;
+
       font-size: var(--font-size-sm);
     }
 
-    .vg-legend p {
-      margin: 0;
+    /* The framework's code-block recipe lives inside .prose; a lone snippet
+       opts out of the reading measure to use it. */
+    .vg-code {
+      --prose-measure: none;
     }
 
     /* Diagram vocabulary ------------------------------------------------- */
@@ -264,17 +204,11 @@
     }
 
     /* Vertical bars whose height IS the control size. */
-    .vg-heights {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: flex-end;
-      gap: var(--space-50);
-    }
-
     .vg-height {
       display: grid;
       justify-items: center;
       gap: var(--space-20);
+      text-align: center;
     }
 
     .vg-height > .bar {
@@ -286,10 +220,8 @@
 
     .vg-height > .caption {
       display: grid;
-      justify-items: center;
       font-size: var(--font-size-xs);
       color: var(--text-muted);
-      text-align: center;
     }
 
     /* Plain content row, for the chrome-versus-space comparison. */
@@ -299,10 +231,9 @@
       color: var(--text-muted);
     }
 
+    /* NO HOOK — base.css hard-codes hr's margin-block to --space-60. */
     .vg-hr {
-      block-size: var(--border-width);
       margin-block: var(--space-10);
-      background: var(--border);
     }
 
     /* Ownership diagram — the padding ring of a component made visible. */
@@ -341,15 +272,11 @@
       border-inline-end: 2px dashed color-mix(in oklab, var(--primary) 55%, var(--border));
     }
 
-    .vg-measure-box p {
-      margin: 0;
-    }
-
-    /* Centered column diagram. */
+    /* Centered column diagram — an exact track template, which is what
+       --grid-columns is for. */
     .vg-center-track {
-      display: grid;
-      grid-template-columns: 1fr minmax(0, 24rem) 1fr;
-      align-items: stretch;
+      --grid-columns: 1fr minmax(0, 24rem) 1fr;
+
       gap: 0;
     }
 
@@ -361,17 +288,13 @@
       justify-content: center;
     }
 
-    .vg-fixed {
-      flex: 0 0 auto;
-    }
-
     @media (max-width: 48rem) {
       .vg-figure {
-        padding: var(--space-40);
+        --card-pad: var(--space-40);
       }
 
       .vg-stage {
-        padding: var(--space-40);
+        --card-pad: var(--space-40);
       }
     }
   </style>
@@ -379,10 +302,10 @@
 
 <body>
   <main class="vg-page">
-    <header class="vg-intro">
+    <header class="center stack vg-intro">
       <p class="overline">Actual CSS</p>
       <h1>Visual guide</h1>
-      <p class="lead">
+      <p class="lead muted measure">
         Seventeen figures on the three things everything else is built from: the
         spacing scale, the layout primitives, and the difference between a
         density context and a local size. Every bar, gap and control height
@@ -414,30 +337,30 @@
       </select>
     </header>
 
-    <div class="vg-deck">
+    <div class="center vg-deck">
 
       <!-- ================= Chapter 1 ================= -->
-      <section class="vg-chapter" id="space">
+      <section class="stack vg-chapter" id="space">
         <p class="overline">Chapter one</p>
         <h2>Space</h2>
-        <p>
+        <p class="muted measure">
           One scale, six steps, and a naming rule that keeps the rest of the
           scale available to you. What the numbers are matters much less than
           the fact that there are only six of them.
         </p>
       </section>
 
-      <figure class="vg-figure">
+      <figure class="card raised vg-figure">
         <figcaption>
           <span class="overline pill primary vg-tag">Figure&nbsp;</span>
           <h3>The spacing scale</h3>
-          <p class="vg-note">
+          <p class="muted measure">
             Six official steps. Each bar below is exactly as long as the token it
             names — no redrawing, no approximation.
           </p>
         </figcaption>
 
-        <div class="vg-stage">
+        <div class="card subtle vg-stage">
           <div class="vg-ruler">
             <code>--space-10</code>
             <span class="vg-bar" style="inline-size: var(--space-10);"></span>
@@ -465,8 +388,8 @@
           </div>
         </div>
 
-        <div class="vg-stage">
-          <span class="vg-label">The gaps in the numbering are deliberate</span>
+        <div class="card subtle vg-stage">
+          <span class="overline">The gaps in the numbering are deliberate</span>
           <div class="vg-ruler">
             <code class="reserved-row">--space-15</code>
             <span class="vg-bar reserved" style="inline-size: 0.375rem;"></span>
@@ -476,7 +399,7 @@
             <span class="vg-bar reserved" style="inline-size: 1.25rem;"></span>
             <span class="value reserved-row">yours</span>
           </div>
-          <p class="vg-note" style="margin-block-start: var(--space-30);">
+          <p class="muted measure">
             Actual CSS will never define a <code>--space-*</code> that is not a
             multiple of ten. Every intermediate name is reserved for your
             application, and no future framework step can ever collide with it.
@@ -484,53 +407,47 @@
         </div>
       </figure>
 
-      <figure class="vg-figure">
+      <figure class="card raised vg-figure">
         <figcaption>
           <span class="overline pill primary vg-tag">Figure&nbsp;</span>
           <h3>Gap is the relationship</h3>
-          <p class="vg-note">
+          <p class="muted measure">
             The same three rows, three times. Nothing changed but the gap, and
             the gap alone says whether these are one thing, a group, or three
             unrelated sections.
           </p>
         </figcaption>
 
-        <div class="vg-columns">
-          <div>
-            <span class="vg-label">--space-20 · one thing</span>
-            <div class="vg-stage tight">
-              <div class="stack" style="--gap: var(--space-20);">
-                <div class="vg-slab">Name</div>
-                <div class="vg-slab">Role</div>
-                <div class="vg-slab">Team</div>
-              </div>
+        <div class="grid vg-columns">
+          <div class="card subtle vg-stage">
+            <span class="overline">--space-20 · one thing</span>
+            <div class="stack" style="--gap: var(--space-20);">
+              <div class="vg-slab">Name</div>
+              <div class="vg-slab">Role</div>
+              <div class="vg-slab">Team</div>
             </div>
           </div>
 
-          <div>
-            <span class="vg-label">--space-40 · a group</span>
-            <div class="vg-stage tight">
-              <div class="stack" style="--gap: var(--space-40);">
-                <div class="vg-slab">Name</div>
-                <div class="vg-slab">Role</div>
-                <div class="vg-slab">Team</div>
-              </div>
+          <div class="card subtle vg-stage">
+            <span class="overline">--space-40 · a group</span>
+            <div class="stack" style="--gap: var(--space-40);">
+              <div class="vg-slab">Name</div>
+              <div class="vg-slab">Role</div>
+              <div class="vg-slab">Team</div>
             </div>
           </div>
 
-          <div>
-            <span class="vg-label">--space-60 · three sections</span>
-            <div class="vg-stage tight">
-              <div class="stack" style="--gap: var(--space-60);">
-                <div class="vg-slab">Name</div>
-                <div class="vg-slab">Role</div>
-                <div class="vg-slab">Team</div>
-              </div>
+          <div class="card subtle vg-stage">
+            <span class="overline">--space-60 · three sections</span>
+            <div class="stack" style="--gap: var(--space-60);">
+              <div class="vg-slab">Name</div>
+              <div class="vg-slab">Role</div>
+              <div class="vg-slab">Team</div>
             </div>
           </div>
         </div>
 
-        <div class="vg-legend">
+        <div class="stack muted measure vg-legend">
           <p>
             Smaller gaps imply a stronger relationship. Keep the relative
             hierarchy when you nest: set a local <code>--gap</code> on the inner
@@ -539,55 +456,51 @@
         </div>
       </figure>
 
-      <figure class="vg-figure">
+      <figure class="card raised vg-figure">
         <figcaption>
           <span class="overline pill primary vg-tag">Figure&nbsp;</span>
           <h3>Space before chrome</h3>
-          <p class="vg-note">
+          <p class="muted measure">
             Both columns group the same six rows into three pairs. The left one
             draws a rule to say so; the right one lets the space say it.
           </p>
         </figcaption>
 
-        <div class="vg-columns">
-          <div>
-            <span class="vg-label">Ruled</span>
-            <div class="vg-stage tight">
+        <div class="grid vg-columns">
+          <div class="card subtle vg-stage">
+            <span class="overline">Ruled</span>
+            <div class="stack gap-none">
+              <div class="vg-row">Overview</div>
+              <div class="vg-row">Activity</div>
+              <hr class="vg-hr">
+              <div class="vg-row">Members</div>
+              <div class="vg-row">Invitations</div>
+              <hr class="vg-hr">
+              <div class="vg-row">Billing</div>
+              <div class="vg-row">Invoices</div>
+            </div>
+          </div>
+
+          <div class="card subtle vg-stage">
+            <span class="overline">Spaced</span>
+            <div class="stack" style="--gap: var(--space-60);">
               <div class="stack gap-none">
                 <div class="vg-row">Overview</div>
                 <div class="vg-row">Activity</div>
-                <div class="vg-hr"></div>
+              </div>
+              <div class="stack gap-none">
                 <div class="vg-row">Members</div>
                 <div class="vg-row">Invitations</div>
-                <div class="vg-hr"></div>
+              </div>
+              <div class="stack gap-none">
                 <div class="vg-row">Billing</div>
                 <div class="vg-row">Invoices</div>
               </div>
             </div>
           </div>
-
-          <div>
-            <span class="vg-label">Spaced</span>
-            <div class="vg-stage tight">
-              <div class="stack" style="--gap: var(--space-60);">
-                <div class="stack gap-none">
-                  <div class="vg-row">Overview</div>
-                  <div class="vg-row">Activity</div>
-                </div>
-                <div class="stack gap-none">
-                  <div class="vg-row">Members</div>
-                  <div class="vg-row">Invitations</div>
-                </div>
-                <div class="stack gap-none">
-                  <div class="vg-row">Billing</div>
-                  <div class="vg-row">Invoices</div>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
 
-        <div class="vg-legend">
+        <div class="stack muted measure vg-legend">
           <p>
             Before adding a divider, check whether more space already draws the
             boundary. Chrome is what you add when spacing genuinely cannot carry
@@ -596,11 +509,11 @@
         </div>
       </figure>
 
-      <figure class="vg-figure">
+      <figure class="card raised vg-figure">
         <figcaption>
           <span class="overline pill primary vg-tag">Figure&nbsp;</span>
           <h3>Two owners, one page</h3>
-          <p class="vg-note">
+          <p class="muted measure">
             The hatched ring <em>inside</em> each card is the card's own
             padding: the component owns it and no layout may reach in. The
             hatched band <em>between</em> the cards is the gap: the layout owns
@@ -608,7 +521,7 @@
           </p>
         </figcaption>
 
-        <div class="vg-stage">
+        <div class="card subtle vg-stage vg-flush">
           <div class="vg-own-card">
             <div class="vg-slab">Card content</div>
           </div>
@@ -618,7 +531,7 @@
           </div>
         </div>
 
-        <div class="vg-legend">
+        <div class="stack muted measure vg-legend">
           <p>
             <strong>Components own their internal rhythm; layout owns the
             relationships between components.</strong> This is why the layout
@@ -629,36 +542,36 @@
       </figure>
 
       <!-- ================= Chapter 2 ================= -->
-      <section class="vg-chapter" id="primitives">
+      <section class="stack vg-chapter" id="primitives">
         <p class="overline">Chapter two</p>
         <h2>Primitives</h2>
-        <p>
+        <p class="muted measure">
           A handful of classes covering the relationships that actually recur.
           Pick one from the relationship between the children, not from how many
           children happen to be in the mockup.
         </p>
       </section>
 
-      <figure class="vg-figure">
+      <figure class="card raised vg-figure">
         <figcaption>
           <span class="overline pill primary vg-tag">Figure&nbsp;</span>
           <h3><code>.stack</code> — one axis, one gap</h3>
-          <p class="vg-note">
+          <p class="muted measure">
             Vertical flow. Direct children become flex items, their block margins
             are reset, and the whole rhythm comes from a single
             <code>--gap</code>.
           </p>
         </figcaption>
 
-        <div class="vg-stage">
+        <div class="card subtle vg-stage">
           <div class="stack" style="max-inline-size: 26rem;">
-            <h4 style="margin: 0;">Deployment</h4>
-            <p class="muted" style="margin: 0;">Version 0.3.0 is live in production.</p>
+            <h4>Deployment</h4>
+            <p class="muted">Version 0.3.0 is live in production.</p>
             <span class="badge success soft fit">Healthy</span>
           </div>
         </div>
 
-        <div class="vg-code">
+        <div class="prose vg-code">
           <pre><code>&lt;div class="stack"&gt;
   &lt;h4&gt;Deployment&lt;/h4&gt;
   &lt;p&gt;Version 0.3.0 is live in production.&lt;/p&gt;
@@ -666,7 +579,7 @@
 &lt;/div&gt;</code></pre>
         </div>
 
-        <div class="vg-legend">
+        <div class="stack muted measure vg-legend">
           <p>
             <code>--gap</code> is inherited. A region that composes several
             primitives sets its own rhythm on the <code>gap</code>
@@ -676,19 +589,19 @@
         </div>
       </figure>
 
-      <figure class="vg-figure">
+      <figure class="card raised vg-figure">
         <figcaption>
           <span class="overline pill primary vg-tag">Figure&nbsp;</span>
           <h3><code>.cluster</code> — a row that wraps</h3>
-          <p class="vg-note">
+          <p class="muted measure">
             The same four actions in a wide stage and a narrow one. A cluster
             wraps instead of overflowing, and its alignment is a hook rather than
             a set of variants.
           </p>
         </figcaption>
 
-        <div class="vg-stage">
-          <span class="vg-label">Room to spare</span>
+        <div class="card subtle vg-stage">
+          <span class="overline">Room to spare</span>
           <div class="cluster">
             <button class="btn primary" type="button">Deploy</button>
             <button class="btn neutral outline" type="button">Rollback</button>
@@ -697,8 +610,8 @@
           </div>
         </div>
 
-        <div class="vg-stage" style="max-inline-size: 20rem;">
-          <span class="vg-label">Out of room</span>
+        <div class="card subtle vg-stage" style="max-inline-size: 20rem;">
+          <span class="overline">Out of room</span>
           <div class="cluster">
             <button class="btn primary" type="button">Deploy</button>
             <button class="btn neutral outline" type="button">Rollback</button>
@@ -707,7 +620,7 @@
           </div>
         </div>
 
-        <div class="vg-legend">
+        <div class="stack muted measure vg-legend">
           <p>
             Hooks: <code>--cluster-align</code>, <code>--cluster-justify</code>,
             <code>--cluster-wrap</code>. A header with a title on one side and
@@ -717,11 +630,11 @@
         </div>
       </figure>
 
-      <figure class="vg-figure">
+      <figure class="card raised vg-figure">
         <figcaption>
           <span class="overline pill primary vg-tag">Figure&nbsp;</span>
           <h3><code>.grid</code> fills space, <code>.switcher</code> switches together</h3>
-          <p class="vg-note">
+          <p class="muted measure">
             Three peers, first with room to spare and then in a stage too narrow
             for all of them. The grid fits as many tracks as the space allows
             and leaves an orphan on the last row; the switcher refuses to split
@@ -729,8 +642,8 @@
           </p>
         </figcaption>
 
-        <div class="vg-stage">
-          <span class="vg-label">Room for three — both recipes agree</span>
+        <div class="card subtle vg-stage">
+          <span class="overline">Room for three — both recipes agree</span>
           <div class="switcher" style="--switcher-threshold: 34rem;">
             <div class="vg-slab">Region A</div>
             <div class="vg-slab">Region B</div>
@@ -738,31 +651,27 @@
           </div>
         </div>
 
-        <div class="vg-columns" style="margin-block-start: var(--space-40);">
-          <div>
-            <span class="vg-label">.grid · --grid-min: 9rem</span>
-            <div class="vg-stage tight" style="max-inline-size: 22rem;">
-              <div class="grid" style="--grid-min: 9rem;">
-                <div class="vg-slab">Region A</div>
-                <div class="vg-slab">Region B</div>
-                <div class="vg-slab">Region C</div>
-              </div>
+        <div class="grid vg-columns">
+          <div class="card subtle vg-stage" style="max-inline-size: 22rem;">
+            <span class="overline">.grid · --grid-min: 9rem</span>
+            <div class="grid" style="--grid-min: 9rem;">
+              <div class="vg-slab">Region A</div>
+              <div class="vg-slab">Region B</div>
+              <div class="vg-slab">Region C</div>
             </div>
           </div>
 
-          <div>
-            <span class="vg-label">.switcher · --switcher-threshold: 34rem</span>
-            <div class="vg-stage tight" style="max-inline-size: 22rem;">
-              <div class="switcher" style="--switcher-threshold: 34rem;">
-                <div class="vg-slab">Region A</div>
-                <div class="vg-slab">Region B</div>
-                <div class="vg-slab">Region C</div>
-              </div>
+          <div class="card subtle vg-stage" style="max-inline-size: 22rem;">
+            <span class="overline">.switcher · --switcher-threshold: 34rem</span>
+            <div class="switcher" style="--switcher-threshold: 34rem;">
+              <div class="vg-slab">Region A</div>
+              <div class="vg-slab">Region B</div>
+              <div class="vg-slab">Region C</div>
             </div>
           </div>
         </div>
 
-        <div class="vg-legend">
+        <div class="stack muted measure vg-legend">
           <p>
             Use <code>.grid</code> for collections where an incomplete final row
             is fine: cards, products, results, galleries. Use
@@ -772,20 +681,20 @@
         </div>
       </figure>
 
-      <figure class="vg-figure">
+      <figure class="card raised vg-figure">
         <figcaption>
           <span class="overline pill primary vg-tag">Figure&nbsp;</span>
           <h3><code>.grid-N</code> collapses through divisors</h3>
-          <p class="vg-note">
+          <p class="muted measure">
             The same <code>.grid-6</code> in two query containers. Every state it
             passes through is a divisor of six, so it is never caught halfway
             with a lone item on the last row.
           </p>
         </figcaption>
 
-        <div class="vg-scroll">
-          <div class="vg-stage">
-            <span class="vg-label">Container 48rem → 3 columns</span>
+        <div class="stack overflow-auto">
+          <div class="card subtle vg-stage">
+            <span class="overline">Container 48rem → 3 columns</span>
             <div class="container-query" style="inline-size: 48rem;">
               <div class="grid-6">
                 <div class="vg-slab">1</div>
@@ -798,8 +707,8 @@
             </div>
           </div>
 
-          <div class="vg-stage">
-            <span class="vg-label">Container 28rem → 2 columns</span>
+          <div class="card subtle vg-stage">
+            <span class="overline">Container 28rem → 2 columns</span>
             <div class="container-query" style="inline-size: 28rem;">
               <div class="grid-6">
                 <div class="vg-slab">1</div>
@@ -813,7 +722,7 @@
           </div>
         </div>
 
-        <div class="vg-legend">
+        <div class="stack muted measure vg-legend">
           <p>
             The chain is 6 → 3 → 2 → 1: six columns again at 64rem, and one
             column below 28rem. <code>.grid-4</code> goes 4 → 2 → 1,
@@ -830,28 +739,28 @@
         </div>
       </figure>
 
-      <figure class="vg-figure">
+      <figure class="card raised vg-figure">
         <figcaption>
           <span class="overline pill primary vg-tag">Figure&nbsp;</span>
           <h3><code>.center</code> bounds the page, <code>.measure</code> bounds the line</h3>
-          <p class="vg-note">
+          <p class="muted measure">
             Two limits that are constantly confused. One decides how wide the
             column of content is; the other decides how many characters fit on a
             line of prose. They are different jobs, and they compose.
           </p>
         </figcaption>
 
-        <div class="vg-stage">
-          <span class="vg-label">.center · max-inline-size + auto margins</span>
-          <div class="vg-center-track">
+        <div class="card subtle vg-stage">
+          <span class="overline">.center · max-inline-size + auto margins</span>
+          <div class="grid vg-center-track">
             <div class="vg-band"><span>auto</span></div>
             <div class="vg-slab">--center-size</div>
             <div class="vg-band"><span>auto</span></div>
           </div>
         </div>
 
-        <div class="vg-stage">
-          <span class="vg-label">.measure · the reading limit</span>
+        <div class="card subtle vg-stage">
+          <span class="overline">.measure · the reading limit</span>
           <div class="vg-measure-box">
             <p class="muted">
               A line this long is comfortable to read: the eye finds the start of
@@ -863,7 +772,7 @@
           </div>
         </div>
 
-        <div class="vg-legend">
+        <div class="stack muted measure vg-legend">
           <p>
             <code>.center</code> is content-box sized, so
             <code>--center-pad</code> adds gutters outside the measure instead of
@@ -874,11 +783,11 @@
         </div>
       </figure>
 
-      <figure class="vg-figure">
+      <figure class="card raised vg-figure">
         <figcaption>
           <span class="overline pill primary vg-tag">Figure&nbsp;</span>
           <h3><code>.media</code> — fixed leading, flexible trailing</h3>
-          <p class="vg-note">
+          <p class="muted measure">
             Exactly two children: something with an intrinsic width, then
             everything else. It replaces the <code>auto minmax(0, 1fr)</code>
             grid that otherwise gets rewritten in every author card, comment and
@@ -886,7 +795,7 @@
           </p>
         </figcaption>
 
-        <div class="vg-stage">
+        <div class="card subtle vg-stage">
           <div class="media" style="max-inline-size: 32rem;">
             <span class="avatar"><span>AR</span></span>
             <div class="stack" style="--gap: var(--space-10);">
@@ -897,11 +806,11 @@
         </div>
       </figure>
 
-      <figure class="vg-figure">
+      <figure class="card raised vg-figure">
         <figcaption>
           <span class="overline pill primary vg-tag">Figure&nbsp;</span>
           <h3>Choosing one</h3>
-          <p class="vg-note">
+          <p class="muted measure">
             Read the left column as a question about the children's relationship.
             If none of them fits, that is a signal to compose two primitives, not
             to invent a third.
@@ -955,10 +864,10 @@
       </figure>
 
       <!-- ================= Chapter 3 ================= -->
-      <section class="vg-chapter" id="density-and-size">
+      <section class="stack vg-chapter" id="density-and-size">
         <p class="overline">Chapter three</p>
         <h2>Density and size</h2>
-        <p>
+        <p class="muted measure">
           Two mechanisms that look alike from the outside and behave nothing
           alike. Density is an inherited context that changes how much room
           things get. Size is a local role that changes what a single component
@@ -966,82 +875,74 @@
         </p>
       </section>
 
-      <figure class="vg-figure">
+      <figure class="card raised vg-figure">
         <figcaption>
           <span class="overline pill primary vg-tag">Figure&nbsp;</span>
           <h3>Density is a context</h3>
-          <p class="vg-note">
+          <p class="muted measure">
             Byte-for-byte the same fragment in all three columns. The only
             difference is one class on the wrapper — nothing is repeated on the
             children.
           </p>
         </figcaption>
 
-        <div class="vg-columns">
-          <div>
-            <span class="vg-label">.compact</span>
-            <div class="compact vg-stage tight">
-              <div class="stack">
-                <div class="cluster">
-                  <button class="btn primary" type="button">Save</button>
-                  <button class="btn neutral outline" type="button">Cancel</button>
-                </div>
-                <input class="input" value="Project name">
+        <div class="grid vg-columns">
+          <div class="card subtle vg-stage">
+            <span class="overline">.compact</span>
+            <div class="compact stack">
+              <div class="cluster">
+                <button class="btn primary" type="button">Save</button>
+                <button class="btn neutral outline" type="button">Cancel</button>
               </div>
+              <input class="input" value="Project name">
             </div>
           </div>
 
-          <div>
-            <span class="vg-label">default</span>
-            <div class="vg-stage tight">
-              <div class="stack">
-                <div class="cluster">
-                  <button class="btn primary" type="button">Save</button>
-                  <button class="btn neutral outline" type="button">Cancel</button>
-                </div>
-                <input class="input" value="Project name">
+          <div class="card subtle vg-stage">
+            <span class="overline">default</span>
+            <div class="stack">
+              <div class="cluster">
+                <button class="btn primary" type="button">Save</button>
+                <button class="btn neutral outline" type="button">Cancel</button>
               </div>
+              <input class="input" value="Project name">
             </div>
           </div>
 
-          <div>
-            <span class="vg-label">.spacious</span>
-            <div class="spacious vg-stage tight">
-              <div class="stack">
-                <div class="cluster">
-                  <button class="btn primary" type="button">Save</button>
-                  <button class="btn neutral outline" type="button">Cancel</button>
-                </div>
-                <input class="input" value="Project name">
+          <div class="card subtle vg-stage">
+            <span class="overline">.spacious</span>
+            <div class="spacious stack">
+              <div class="cluster">
+                <button class="btn primary" type="button">Save</button>
+                <button class="btn neutral outline" type="button">Cancel</button>
               </div>
+              <input class="input" value="Project name">
             </div>
           </div>
         </div>
 
-        <div class="vg-code">
-          <pre><code>&lt;div class="compact"&gt;
-  &lt;div class="stack"&gt;
-    &lt;div class="cluster"&gt;
-      &lt;button class="btn primary"&gt;Save&lt;/button&gt;
-      &lt;button class="btn neutral outline"&gt;Cancel&lt;/button&gt;
-    &lt;/div&gt;
-    &lt;input class="input" value="Project name"&gt;
+        <div class="prose vg-code">
+          <pre><code>&lt;div class="compact stack"&gt;
+  &lt;div class="cluster"&gt;
+    &lt;button class="btn primary"&gt;Save&lt;/button&gt;
+    &lt;button class="btn neutral outline"&gt;Cancel&lt;/button&gt;
   &lt;/div&gt;
+  &lt;input class="input" value="Project name"&gt;
 &lt;/div&gt;</code></pre>
         </div>
       </figure>
 
-      <figure class="vg-figure">
+      <figure class="card raised vg-figure">
         <figcaption>
           <span class="overline pill primary vg-tag">Figure&nbsp;</span>
           <h3>What the context actually sets</h3>
-          <p class="vg-note">
+          <p class="muted measure">
             Three tokens, and that is the whole mechanism. Components read
             whichever of them makes sense for what they are.
           </p>
         </figcaption>
 
-        <div class="vg-stage">
+        <div class="card subtle vg-stage">
           <div class="table-wrap" role="region" aria-label="Density token table" tabindex="0">
             <table class="table">
               <thead>
@@ -1076,9 +977,9 @@
           </div>
         </div>
 
-        <div class="vg-stage">
-          <span class="vg-label">--control-size, drawn at its real height</span>
-          <div class="vg-heights">
+        <div class="card subtle vg-stage">
+          <span class="overline">--control-size, drawn at its real height</span>
+          <div class="cluster" style="--cluster-align: flex-end; --gap: var(--space-50);">
             <div class="vg-height">
               <span class="bar" style="block-size: var(--control-size-sm);"></span>
               <span class="caption"><code>sm</code>2rem</span>
@@ -1094,7 +995,7 @@
           </div>
         </div>
 
-        <div class="vg-legend">
+        <div class="stack muted measure vg-legend">
           <p>
             Controls consume <code>--control-size</code>; the spacing helpers and
             <code>.choice-card</code> consume <code>--density-space</code>; layout
@@ -1104,28 +1005,28 @@
         </div>
       </figure>
 
-      <figure class="vg-figure">
+      <figure class="card raised vg-figure">
         <figcaption>
           <span class="overline pill primary vg-tag">Figure&nbsp;</span>
           <h3>Density moves geometry. Size moves geometry <em>and</em> type.</h3>
-          <p class="vg-note">
+          <p class="muted measure">
             This is the whole distinction. In the top row the buttons change
             height and the label stays put. In the bottom row the label changes
             with them.
           </p>
         </figcaption>
 
-        <div class="vg-stage">
-          <span class="vg-label">Density context — geometry only</span>
+        <div class="card subtle vg-stage">
+          <span class="overline">Density context — geometry only</span>
           <div class="cluster" style="--cluster-align: flex-end;">
-            <span class="compact vg-fixed"><button class="btn primary" type="button">Deploy</button></span>
-            <span class="vg-fixed"><button class="btn primary" type="button">Deploy</button></span>
-            <span class="spacious vg-fixed"><button class="btn primary" type="button">Deploy</button></span>
+            <span class="compact"><button class="btn primary" type="button">Deploy</button></span>
+            <span><button class="btn primary" type="button">Deploy</button></span>
+            <span class="spacious"><button class="btn primary" type="button">Deploy</button></span>
           </div>
         </div>
 
-        <div class="vg-stage">
-          <span class="vg-label">Local size — geometry and typography</span>
+        <div class="card subtle vg-stage">
+          <span class="overline">Local size — geometry and typography</span>
           <div class="cluster" style="--cluster-align: flex-end;">
             <button class="btn primary sm" type="button">Deploy</button>
             <button class="btn primary" type="button">Deploy</button>
@@ -1133,7 +1034,7 @@
           </div>
         </div>
 
-        <div class="vg-legend">
+        <div class="stack muted measure vg-legend">
           <p>
             A density context is about how much room a region has. A
             <code>.sm</code> or <code>.lg</code> is about what one component is
@@ -1142,54 +1043,50 @@
         </div>
       </figure>
 
-      <figure class="vg-figure">
+      <figure class="card raised vg-figure">
         <figcaption>
           <span class="overline pill primary vg-tag">Figure&nbsp;</span>
           <h3>Density is opt-in, not a global multiplier</h3>
-          <p class="vg-note">
+          <p class="muted measure">
             The same set of components at default and inside a
             <code>.compact</code> context. The button and the input tighten; the
             badge, the alert and the card are identical in both columns.
           </p>
         </figcaption>
 
-        <div class="vg-columns">
-          <div>
-            <span class="vg-label">default</span>
-            <div class="vg-stage tight">
-              <div class="stack">
-                <div class="cluster">
-                  <button class="btn neutral outline" type="button">Button</button>
-                  <span class="badge">Badge</span>
-                </div>
-                <input class="input" value="Input">
-                <div class="alert">Alert</div>
-                <div class="card">
-                  <div class="card-body">Card padding is its own contract.</div>
-                </div>
+        <div class="grid vg-columns">
+          <div class="card subtle vg-stage">
+            <span class="overline">default</span>
+            <div class="stack">
+              <div class="cluster">
+                <button class="btn neutral outline" type="button">Button</button>
+                <span class="badge">Badge</span>
+              </div>
+              <input class="input" value="Input">
+              <div class="alert">Alert</div>
+              <div class="card">
+                <div class="card-body">Card padding is its own contract.</div>
               </div>
             </div>
           </div>
 
-          <div>
-            <span class="vg-label">.compact</span>
-            <div class="compact vg-stage tight">
-              <div class="stack">
-                <div class="cluster">
-                  <button class="btn neutral outline" type="button">Button</button>
-                  <span class="badge">Badge</span>
-                </div>
-                <input class="input" value="Input">
-                <div class="alert">Alert</div>
-                <div class="card">
-                  <div class="card-body">Card padding is its own contract.</div>
-                </div>
+          <div class="card subtle vg-stage">
+            <span class="overline">.compact</span>
+            <div class="compact stack">
+              <div class="cluster">
+                <button class="btn neutral outline" type="button">Button</button>
+                <span class="badge">Badge</span>
+              </div>
+              <input class="input" value="Input">
+              <div class="alert">Alert</div>
+              <div class="card">
+                <div class="card-body">Card padding is its own contract.</div>
               </div>
             </div>
           </div>
         </div>
 
-        <div class="vg-legend">
+        <div class="stack muted measure vg-legend">
           <p>
             <strong>Geometry and rhythm</strong> — controls, spacing helpers,
             layout primitives.
@@ -1209,25 +1106,25 @@
         </div>
       </figure>
 
-      <figure class="vg-figure">
+      <figure class="card raised vg-figure">
         <figcaption>
           <span class="overline pill primary vg-tag">Figure&nbsp;</span>
           <h3>A local size beats an inherited context</h3>
-          <p class="vg-note">
+          <p class="muted measure">
             Both buttons sit in the same <code>.spacious</code> panel. The second
             one carries <code>.sm</code>, declared on the component itself, so it
             wins over the density it inherits.
           </p>
         </figcaption>
 
-        <div class="spacious vg-stage">
-          <div class="cluster" style="--cluster-align: flex-end;">
+        <div class="card subtle vg-stage">
+          <div class="spacious cluster" style="--cluster-align: flex-end;">
             <button class="btn primary" type="button">Inherits .spacious</button>
             <button class="btn primary sm" type="button">.sm wins</button>
           </div>
         </div>
 
-        <div class="vg-legend">
+        <div class="stack muted measure vg-legend">
           <p>
             No <code>!important</code>, no specificity trick: the size class is
             declared on the sized element, the density on an ancestor, and the
@@ -1236,50 +1133,46 @@
         </div>
       </figure>
 
-      <figure class="vg-figure">
+      <figure class="card raised vg-figure">
         <figcaption>
           <span class="overline pill primary vg-tag">Figure&nbsp;</span>
           <h3>Tune the dimension, not the number</h3>
-          <p class="vg-note">
+          <p class="muted measure">
             When one dimension needs adjusting, set that dimension's token on the
             instance. Reaching for a raw value instead is how a system quietly
             stops being one.
           </p>
         </figcaption>
 
-        <div class="vg-columns">
-          <div>
-            <span class="vg-label">Three numbers, no scale</span>
-            <div class="vg-stage tight">
-              <div class="stack gap-none vg-gapstack">
-                <div class="vg-slab">Filters</div>
-                <div class="vg-band warn vg-gaprow" style="block-size: 7px;"><span>7px</span></div>
-                <div class="vg-slab">Results</div>
-                <div class="vg-band warn vg-gaprow" style="block-size: 13px;"><span>13px</span></div>
-                <div class="vg-slab">Pagination</div>
-                <div class="vg-band warn vg-gaprow" style="block-size: 19px;"><span>19px</span></div>
-                <div class="vg-slab">Footnote</div>
-              </div>
+        <div class="grid vg-columns">
+          <div class="card subtle vg-stage">
+            <span class="overline">Three numbers, no scale</span>
+            <div class="stack gap-none vg-gapstack">
+              <div class="vg-slab">Filters</div>
+              <div class="vg-band warn vg-gaprow" style="block-size: 7px;"><span>7px</span></div>
+              <div class="vg-slab">Results</div>
+              <div class="vg-band warn vg-gaprow" style="block-size: 13px;"><span>13px</span></div>
+              <div class="vg-slab">Pagination</div>
+              <div class="vg-band warn vg-gaprow" style="block-size: 19px;"><span>19px</span></div>
+              <div class="vg-slab">Footnote</div>
             </div>
           </div>
 
-          <div>
-            <span class="vg-label">Two steps, one hierarchy</span>
-            <div class="vg-stage tight">
-              <div class="stack gap-none vg-gapstack">
-                <div class="vg-slab">Filters</div>
-                <div class="vg-band vg-gaprow" style="block-size: var(--space-20);"><span>--space-20</span></div>
-                <div class="vg-slab">Results</div>
-                <div class="vg-band vg-gaprow" style="block-size: var(--space-20);"><span>--space-20</span></div>
-                <div class="vg-slab">Pagination</div>
-                <div class="vg-band vg-gaprow" style="block-size: var(--space-50);"><span>--space-50</span></div>
-                <div class="vg-slab">Footnote</div>
-              </div>
+          <div class="card subtle vg-stage">
+            <span class="overline">Two steps, one hierarchy</span>
+            <div class="stack gap-none vg-gapstack">
+              <div class="vg-slab">Filters</div>
+              <div class="vg-band vg-gaprow" style="block-size: var(--space-20);"><span>--space-20</span></div>
+              <div class="vg-slab">Results</div>
+              <div class="vg-band vg-gaprow" style="block-size: var(--space-20);"><span>--space-20</span></div>
+              <div class="vg-slab">Pagination</div>
+              <div class="vg-band vg-gaprow" style="block-size: var(--space-50);"><span>--space-50</span></div>
+              <div class="vg-slab">Footnote</div>
             </div>
           </div>
         </div>
 
-        <div class="vg-legend">
+        <div class="stack muted measure vg-legend">
           <p>
             The left column has three measurements and no relationships: 7, 13
             and 19 all mean "a bit of space", and none of them will ever line up
