@@ -2,6 +2,12 @@
 
 ## [Unreleased]
 
+### Documentation and tooling
+
+- The alert trailing-action recipe and the dashboard template add `.items-center`:
+  a trailing control makes the row taller than a line of text, which left the
+  start-aligned `.alert-icon` above the message.
+
 ## [0.8.0] - 2026-09-10
 
 Actual CSS 0.8 focuses on a cleaner component contract, more predictable sizing

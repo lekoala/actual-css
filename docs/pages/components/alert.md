@@ -106,8 +106,13 @@ trailing link or button is content, not anatomy, so it lives in the text column:
 wrap the row in a `.cluster` and push the two ends apart. Same recipe as any
 split / spread row — there is no `.alert-action` class.
 
+The alert aligns its columns to the block start, so a multi-line message keeps
+its icon on the first line. A trailing control makes that row taller than a line
+of text: add `.items-center` to put the icon, the text and the button on one
+center.
+
 ```html demo
-<div class="alert surface">
+<div class="alert surface items-center">
   <i class="ti ti-info-circle alert-icon" aria-hidden="true"></i>
   <div class="cluster justify-content-space-between">
     <strong>New message!</strong>

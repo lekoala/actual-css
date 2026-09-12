@@ -374,10 +374,14 @@ intent treatment when the color itself carries the meaning.</p>
 trailing link or button is content, not anatomy, so it lives in the text column:
 wrap the row in a <code>.cluster</code> and push the two ends apart. Same recipe as any
 split / spread row — there is no <code>.alert-action</code> class.</p>
+<p>The alert aligns its columns to the block start, so a multi-line message keeps
+its icon on the first line. A trailing control makes that row taller than a line
+of text: add <code>.items-center</code> to put the icon, the text and the button on one
+center.</p>
 </div>
 <div class="docs-example">
   <div class="docs-preview">
-<div class="alert surface">
+<div class="alert surface items-center">
   <i class="ti ti-info-circle alert-icon" aria-hidden="true"></i>
   <div class="cluster justify-content-space-between">
     <strong>New message!</strong>
@@ -386,7 +390,7 @@ split / spread row — there is no <code>.alert-action</code> class.</p>
 </div>
   </div>
   <div class="docs-code">
-    <pre><code class="language-html">&lt;div class=&quot;alert surface&quot;&gt;
+    <pre><code class="language-html">&lt;div class=&quot;alert surface items-center&quot;&gt;
   &lt;i class=&quot;ti ti-info-circle alert-icon&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;
   &lt;div class=&quot;cluster justify-content-space-between&quot;&gt;
     &lt;strong&gt;New message!&lt;/strong&gt;
