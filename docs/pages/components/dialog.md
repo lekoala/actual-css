@@ -170,6 +170,11 @@ hidden` (and reserves the scrollbar gutter with `scrollbar-gutter: stable` when
 one was present). The height cap follows the small viewport, so the panel keeps
 a stable size while mobile browser chrome expands or collapses.
 
+The scrolling body is a scroll container, and browsers make one
+keyboard-focusable so it can be scrolled without a pointer — it takes a focus
+ring like any other focusable element, and it can claim initial focus when
+nothing focusable precedes it. Mark the control you want focused `autofocus`.
+
 ```html demo
 <button class="btn"
         type="button"

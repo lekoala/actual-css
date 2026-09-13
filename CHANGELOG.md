@@ -7,6 +7,10 @@
 - `--choice-control-offset` is renamed `--choice-control-nudge` and adds to the
   derived first-line offset instead of replacing it — an old value is a whole
   offset and will sit that far too low.
+- `--skeleton-width` is a maximum inline size, not a width: a placeholder fills
+  its container and stops there, so it no longer gives every shrink-to-fit
+  ancestor a min-content floor. A placeholder in a container sized by its own
+  content now collapses instead of forcing that container open.
 
 ### Fixed
 
@@ -26,6 +30,16 @@
 
 ### Documentation and tooling
 
+- `tests/browser/mobile-overflow.test.js` asserts that no component scrolls the
+  page sideways at 320px and 360px, and that wide content scrolls inside its
+  own container.
+- `bun run report:overflow` surveys demo and site pages at phone width and
+  bisects each failure down to the element that owns it.
+- The drawer and scrollable-modal pages state that a scrolling body region is
+  keyboard-focusable, takes a focus ring, and can claim a dialog's initial
+  focus — put the close control in the `header`, or use `autofocus`.
+- The kitchen-sink, blocks, blog, combobox and select-intents templates no
+  longer scroll sideways at phone widths.
 - The alert trailing-action recipe and the dashboard template add `.items-center`:
   a trailing control makes the row taller than a line of text, which left the
   start-aligned `.alert-icon` above the message.

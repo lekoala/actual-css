@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mobile overflow fixture</title>
+  <link rel="stylesheet" href="../../src/css/actual.full.css">
+  <style>
+    body { padding: var(--space-40); }
+    section { margin-block: var(--space-50); }
+    /* A shrink-to-fit row: flex items keep their automatic minimum size, so
+       anything with a content-based width floor shows up here first. */
+    .probe-row { display: flex; flex-wrap: wrap; gap: var(--gap); align-items: start; }
+  </style>
+</head>
+<body>
+
+  <!-- A wide table scrolls inside its wrapper. The .sr-only header is the
+       trap: absolutely positioned, it resolves against the initial containing
+       block unless .table-wrap is positioned, keeps the static position of a
+       cell far along the scrolled row, and extends the document's own
+       scrollable width. -->
+  <section>
+    <div class="table-wrap" id="wrap" role="region" aria-labelledby="tbl" tabindex="0">
+      <table class="table" id="table" style="--table-min: 58rem">
+        <caption id="tbl" class="sr-only">Accounts</caption>
+        <thead>
+          <tr>
+            <th scope="col">Account</th>
+            <th scope="col">Owner</th>
+            <th scope="col">Region</th>
+            <th scope="col">Renewal</th>
+            <th scope="col" class="text-end">Value</th>
+            <th scope="col"><span class="sr-only">Actions</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Northwind Traders</td><td>A. Okafor</td><td>EMEA</td>
+            <td>2026-11-02</td><td class="text-end">€48,200</td>
+            <td><button class="btn sm ghost" type="button">Open</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Placeholder shapes carry preset widths; they must cap, never floor. -->
+  <section class="probe-row">
+    <article class="card" id="skeleton-card" role="status" aria-label="Loading profile">
+      <div class="cluster">
+        <div class="skeleton" data-shape="avatar" aria-hidden="true"></div>
+        <div class="stack grow">
+          <div class="skeleton" data-shape="title" aria-hidden="true"></div>
+          <div class="skeleton" data-shape="text" aria-hidden="true"></div>
+        </div>
+      </div>
+    </article>
+  </section>
+
+  <!-- A labelled stepper outgrows a phone and scrolls inside itself. -->
+  <section class="probe-row">
+    <ol class="steps steps-horizontal" id="steps">
+      <li class="step-complete"><span class="step-label">Account</span></li>
+      <li aria-current="step"><span class="step-label">Payment</span></li>
+      <li><span class="step-label">Confirm</span></li>
+    </ol>
+  </section>
+
+  <!-- Unbreakable content in prose: the scroll container is the pre itself. -->
+  <section class="prose">
+    <pre id="code"><code>import { registerEnhancement } from "https://esm.sh/actual-css/js/enhance.js";</code></pre>
+  </section>
+
+  <section>
+    <nav class="navbar">
+      <a class="navbar-brand" href="#">Kitchen Sink Application</a>
+      <ul class="navbar-nav">
+        <li><a class="nav-link" aria-current="page" href="#">Home</a></li>
+        <li><a class="nav-link" href="#">Documentation</a></li>
+        <li><a class="nav-link" href="#">About</a></li>
+      </ul>
+    </nav>
+  </section>
+
+  <section class="probe-row">
+    <label class="choice"><input class="check" type="checkbox" checked> Remember me</label>
+    <label class="choice"><input class="switch" type="checkbox" role="switch" checked> Notifications</label>
+  </section>
+
+</body>
+</html>

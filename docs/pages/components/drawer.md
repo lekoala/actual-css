@@ -30,6 +30,12 @@ The panel is `--viewport-block` tall, so it follows the space a mobile browser
 actually leaves on screen as its URL bar collapses. A shell that fakes a
 viewport (an embedded preview) overrides that token rather than the drawer.
 
+The body region is a scroll container, and browsers make one keyboard-focusable
+so it can be scrolled without a pointer — it takes a focus ring like any other
+focusable element. `showModal()` focuses the first focusable thing in the
+drawer, so put the close button in the `header` (as both examples do) or mark
+your intended target `autofocus`; otherwise the body claims initial focus.
+
 ```html demo
 <button class="btn ghost"
         type="button"
