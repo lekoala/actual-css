@@ -234,8 +234,14 @@ only gates backdrop click: Escape and the close button always close.</li>
 <li>Use <code>closedby=&quot;none&quot;</code> when the drawer must not be dismissed by the user at all
 (e.g. a form with unsaved changes): no backdrop close and no Escape close.</li>
 <li>Use <code>[data-side=&quot;end&quot;]</code> for a right-side drawer.</li>
+<li>Put the body between a <code>header</code> and a <code>footer</code>: the panel is a three-row grid
+whose middle region scrolls, so the footer stays reachable however long the
+content gets.</li>
 <li>Permanent desktop sidebars belong in layout, not here.</li>
 </ul>
+<p>The panel is <code>--viewport-block</code> tall, so it follows the space a mobile browser
+actually leaves on screen as its URL bar collapses. A shell that fakes a
+viewport (an embedded preview) overrides that token rather than the drawer.</p>
 </div>
 <div class="docs-example">
   <div class="docs-preview">

@@ -56,8 +56,6 @@
 
   position: relative;
   display: inline-grid;
-  align-items: center;
-  justify-content: start;
   inline-size: var(--switch-width);
   block-size: var(--switch-block-size);
   margin: 0;
@@ -76,9 +74,17 @@
    against the track is what makes the knob legible. */
 .switch::before {
   content: "";
+  /* Out of flow like the checkbox mark, so the track carries no in-flow item
+     and the switch synthesizes its baseline from its own border box. A knob
+     laid out as a grid item makes the baseline the knob's bottom edge instead,
+     which is what .choice measures its cap-height offset from. The inset is
+     the same --switch-knob-margin on both axes: it resolves against the
+     padding box, so the border is already out of the way. */
+  position: absolute;
+  inset-block-start: var(--switch-knob-margin);
+  inset-inline-start: var(--switch-knob-margin);
   inline-size: var(--switch-knob-size);
   block-size: var(--switch-knob-size);
-  margin-inline: var(--switch-knob-margin);
   border-radius: var(--radius-full);
   background: var(--switch-knob);
   transition:

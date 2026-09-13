@@ -38,7 +38,7 @@ dialog.modal {
   /* --modal-size stays fallback-only: declaring it on dialog.modal gives it
      type+class specificity, which a single author class cannot outrank, so the
      public hook would silently keep this default. Same reason choice.css never
-     declares --choice-control-offset. */
+     declares --choice-control-nudge. */
   max-inline-size: min(calc(100% - var(--dialog-viewport-gap-2x)), var(--modal-size, 32rem));
 
   /* Stable viewport cap for the panel: dvh tracks the dynamic browser toolbar

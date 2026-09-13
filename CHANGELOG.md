@@ -2,6 +2,25 @@
 
 ## [Unreleased]
 
+### Fixed
+
+- `.choice` aligns its control on the first line's cap height with the `cap`
+  unit, so a checkbox, radio or switch is level with the label text in any
+  font — the previous constant was tuned for Segoe UI and sat ~2px low on
+  Roboto.
+- `.switch` lays its knob out of flow, so the track's baseline is its own
+  border box.
+- `dialog.drawer` is `--viewport-block` tall again, so a mobile browser's
+  collapsing URL bar no longer pushes its footer below the fold.
+- `dialog.drawer` scrolls its body region, so the footer stays reachable
+  whatever the content length; the rule replaces the `nav`-only one.
+
+### Breaking changes
+
+- `--choice-control-offset` is renamed `--choice-control-nudge` and adds to the
+  derived first-line offset instead of replacing it — an old value is a whole
+  offset and will sit that far too low.
+
 ### Documentation and tooling
 
 - The alert trailing-action recipe and the dashboard template add `.items-center`:

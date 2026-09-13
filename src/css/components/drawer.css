@@ -26,15 +26,24 @@ dialog.drawer {
 
   /* Keep the surface anchored to the viewport in the top layer. This also
      provides the containing block for the absolutely positioned close button.
-     A percentage height resolves against the fixed containing viewport, while
-     dynamic viewport units can be stale in embedded previews. */
+
+     The panel reaches both viewport edges, so it has to follow the space that
+     is actually on screen: --viewport-block resolves to 100dvh and tracks a
+     mobile browser's collapsing URL bar. A percentage resolves against the
+     layout viewport instead, which those browsers size as if the bar were
+     hidden — that put the footer below the fold for as long as it showed. The
+     modal pins the small viewport for the opposite reason: it floats, so a
+     stable height beats a panel that breathes while the bar moves.
+
+     An embedded preview that fakes a viewport overrides --viewport-block on
+     its own shell; the component does not degrade to a percentage for it. */
   position: fixed;
   inset-block-start: 0;
 
   inline-size: min(calc(var(--viewport-inline) * 0.9), var(--drawer-size));
-  block-size: 100%;
+  block-size: var(--viewport-block);
   max-inline-size: none;
-  max-block-size: 100%;
+  max-block-size: var(--viewport-block);
   margin: 0;
   padding: var(--drawer-pad);
   border: 0;
@@ -106,10 +115,16 @@ dialog.drawer[open]::backdrop {
   }
 }
 
-/* Scrollable navigation region inside the drawer. */
-dialog.drawer nav {
+/* The body region absorbs the panel's height and scrolls. A drawer is a
+   full-height shell by definition, so it always scrolls its body — unlike the
+   modal, which sizes to its content and opts in with .scrollable. Header and
+   footer keep their own tracks; .drawer-close is named because a generic
+   exclusion list is easier to trust than its `position: absolute`. */
+dialog.drawer > :not(:is(header, footer, form, .drawer-close)),
+dialog.drawer > form > :not(:is(header, footer, .drawer-close)) {
   min-block-size: 0;
-  overflow-y: auto;
+  overflow: auto;
+  overscroll-behavior: contain;
 }
 
 @supports (transition-behavior: allow-discrete) {

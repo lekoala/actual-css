@@ -583,7 +583,7 @@ test("--modal-size is a fallback-only hook", () => {
   /* Declared on dialog.modal, the hook carries type+class specificity and a
      single author class cannot set it: the public width hook would silently
      keep its default. Fallback-only, as choice.css does for
-     --choice-control-offset, so `.my-modal { --modal-size: 58rem }` and an
+     --choice-control-nudge, so `.my-modal { --modal-size: 58rem }` and an
      inherited override both reach it. */
   expect(css).not.toMatch(/^\s*--modal-size:/m);
   expect(css).toMatch(/var\(\s*--modal-size,\s*32rem\s*\)/);
@@ -640,8 +640,22 @@ test("dialog surfaces stay fixed to the viewport", () => {
   expect(modalCss).toMatch(/dialog\.modal\s*\{[^}]*position:\s*fixed;/);
   expect(drawerCss).toMatch(/dialog\.drawer\s*\{[^}]*position:\s*fixed;/);
   expect(drawerCss).toMatch(/dialog\.drawer\s*\{[^}]*inset-block-start:\s*0;/);
-  expect(drawerCss).toMatch(/dialog\.drawer\s*\{[^}]*block-size:\s*100%;/);
-  expect(drawerCss).toMatch(/dialog\.drawer\s*\{[^}]*max-block-size:\s*100%;/);
+  // The drawer reaches both viewport edges, so it follows the dynamic token
+  // rather than a percentage of the layout viewport, which mobile browsers
+  // size as if the URL bar were hidden. The modal pins the small viewport
+  // instead: it floats, and a stable height beats one that breathes.
+  expect(drawerCss).toMatch(/dialog\.drawer\s*\{[^}]*block-size:\s*var\(--viewport-block\);/);
+  expect(drawerCss).toMatch(/dialog\.drawer\s*\{[^}]*max-block-size:\s*var\(--viewport-block\);/);
+});
+
+test("the drawer body scrolls so its footer is always reachable", () => {
+  const css = readCss("src/css/components/drawer.css");
+
+  // A drawer is a full-height shell, so the body region always scrolls —
+  // the modal is the one that sizes to content and opts in with .scrollable.
+  expect(css).toContain("dialog.drawer > :not(:is(header, footer, form, .drawer-close))");
+  expect(css).toContain("dialog.drawer > form > :not(:is(header, footer, .drawer-close))");
+  expect(css).toMatch(/overscroll-behavior:\s*contain;/);
 });
 
 test("drawer RTL keeps the Degraded fallback and enhances inherited direction", () => {
@@ -830,14 +844,34 @@ test("every inline choice derives its first-line offset from its own height", ()
 
   // A per-control constant cannot keep an 18px checkbox and a 20px switch on
   // the same optical line once the line-height or the control size changes,
-  // so both run the same 1lh formula over their own block size.
-  expect(css).toContain("calc((1lh - var(--choice-control-size)) / 2 + 0.0625em)");
-  expect(css).toContain("calc((1lh - var(--switch-block-size)) / 2 + 0.0625em)");
+  // so both run the same formula over their own block size.
+  expect(css).toMatch(/\(1lh - var\(--choice-control-size\)\)\s*\/\s*2/);
+  expect(css).toMatch(/\(1lh - var\(--switch-block-size\)\)\s*\/\s*2/);
+
+  // Where the cap centre falls inside a line box is a property of the font,
+  // so the exact tier measures from the text baseline and the cap height —
+  // no constant serves both Segoe UI and Roboto.
+  expect(css).toContain("@supports (margin-block-start: 1cap)");
+  expect(css).toMatch(/\.choice\s*\{\s*align-items:\s*baseline;/);
+  expect(css).toMatch(/\(var\(--choice-control-size\) - 1cap\)\s*\/\s*2/);
+  expect(css).toMatch(/\(var\(--switch-block-size\) - 1cap\)\s*\/\s*2/);
 
   // Fallback-only, so an override anywhere up the tree still reaches the
-  // control instead of losing to a declaration on .choice itself.
-  expect(css).not.toMatch(/^\s*--choice-control-offset:/m);
-  expect(css).toMatch(/margin-block-start:\s*var\(\s*--choice-control-offset,/);
+  // control instead of losing to a declaration on .choice itself. It is an
+  // additive nudge now that the derived value is exact rather than tuned.
+  expect(css).not.toMatch(/^\s*--choice-control-nudge:/m);
+  expect(css).toMatch(/\+\s*var\(--choice-control-nudge, 0px\)/);
+});
+
+test("the switch keeps its knob out of flow so its baseline is its own box", () => {
+  const css = readCss("src/css/forms/switch.css");
+
+  // A knob laid out as a grid item becomes the track's baseline, which throws
+  // off the cap-height alignment .choice measures from the border box.
+  expect(css).toMatch(/\.switch::before\s*\{[^}]*position:\s*absolute;/);
+  expect(css).toMatch(
+    /\.switch::before\s*\{[^}]*inset-block-start:\s*var\(--switch-knob-margin\);/,
+  );
 });
 
 test("the switch knob is concentric inside its track", () => {
