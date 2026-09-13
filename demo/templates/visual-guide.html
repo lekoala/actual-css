@@ -77,6 +77,13 @@
       --card-gap: var(--space-20);
     }
 
+    /* Fixed-width query demos scroll as whole cards under a shared scroller,
+       so the stage background follows its overflowing content. */
+    .vg-scroll-stages > .vg-stage {
+      inline-size: max-content;
+      min-inline-size: 100%;
+    }
+
     /* A diagram whose own bands are the only spacing it may show. */
     .vg-flush {
       --card-gap: 0;
@@ -701,7 +708,7 @@
           </p>
         </figcaption>
 
-        <div class="stack overflow-auto">
+        <div class="stack overflow-auto vg-scroll-stages">
           <div class="card subtle vg-stage">
             <span class="overline">Container 48rem → 3 columns</span>
             <div class="container-query" style="inline-size: 48rem;">
