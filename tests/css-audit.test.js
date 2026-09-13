@@ -863,6 +863,22 @@ test("every inline choice derives its first-line offset from its own height", ()
   expect(css).toMatch(/\+\s*var\(--choice-control-nudge, 0px\)/);
 });
 
+test("a skeleton placeholder gives its ancestors no width floor", () => {
+  const css = readCss("src/css/components/skeleton.css");
+
+  // A rem inline-size capped by a percentage max is the wrong way round: the
+  // cap is ignored during intrinsic sizing, so every shrink-to-fit ancestor
+  // inherits the preset width as a min-content floor.
+  expect(css).toMatch(/\.skeleton\s*\{[^}]*inline-size:\s*100%;/);
+  expect(css).toMatch(/\.skeleton\s*\{[^}]*max-inline-size:\s*var\(--skeleton-width\);/);
+  expect(css).toMatch(/\.skeleton\s*\{[^}]*--skeleton-width:\s*none;/);
+
+  // The disc is square, so it is the one preset that sizes rather than caps.
+  expect(css).toMatch(
+    /\.skeleton\[data-shape="avatar"\]\s*\{[^}]*inline-size:\s*var\(--skeleton-size\);/,
+  );
+});
+
 test("the table scroller contains its own absolutely positioned content", () => {
   const css = readCss("src/css/components/table.css");
 

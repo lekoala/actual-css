@@ -37,4 +37,6 @@
 - `--skeleton-highlight` — sweeping highlight color.
 - `--skeleton-radius` — corner radius; `data-shape` presets override it.
 - `--skeleton-size` — block size; `data-shape` presets override it.
-- `--skeleton-width` — inline size; `data-shape` presets override it.
+- `--skeleton-width` — maximum inline size. A placeholder fills its container
+  and stops here, so it never gives an ancestor a width floor. `data-shape`
+  presets set it; `avatar` ignores it and stays square.

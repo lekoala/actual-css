@@ -20,6 +20,9 @@
 
     .page-grid {
       display: grid;
+      /* Same reason as the code cards elsewhere: an auto track inherits its
+         items' min-content, and a <pre> brings an unbreakable line. */
+      grid-template-columns: minmax(0, 1fr);
       gap: var(--space-40);
     }
 
