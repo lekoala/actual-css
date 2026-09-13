@@ -2,6 +2,12 @@
 
 ## [Unreleased]
 
+### Breaking changes
+
+- `--choice-control-offset` is renamed `--choice-control-nudge` and adds to the
+  derived first-line offset instead of replacing it — an old value is a whole
+  offset and will sit that far too low.
+
 ### Fixed
 
 - `.choice` aligns its control on the first line's cap height with the `cap`
@@ -14,12 +20,9 @@
   collapsing URL bar no longer pushes its footer below the fold.
 - `dialog.drawer` scrolls its body region, so the footer stays reachable
   whatever the content length; the rule replaces the `nav`-only one.
-
-### Breaking changes
-
-- `--choice-control-offset` is renamed `--choice-control-nudge` and adds to the
-  derived first-line offset instead of replacing it — an old value is a whole
-  offset and will sit that far too low.
+- `.table-wrap` is `position: relative`, so an `.sr-only` header inside a wide
+  table no longer escapes the scroller and gives the page a phantom horizontal
+  scrollbar on small viewports.
 
 ### Documentation and tooling
 
