@@ -506,8 +506,22 @@ delay; a number sets the delay in milliseconds.
 
 ## CSS hooks
 
-- `--flyout-inline-size` — panel width.
-- `--flyout-max-inline-size` — panel width cap.
+- `--flyout-inline-size` — preferred width. Takes intrinsic values such as
+  `max-content`, its default.
+- `--flyout-max-inline-size` — width cap, a `<length-percentage>` the runtime
+  also clamps to the viewport. Defaults to `20rem`, independently of the
+  preferred width — the same way `width: 42rem; max-width: 20rem` renders at
+  20rem. A panel wider than the cap therefore sets both:
+
+  ```css
+  .mega-panel {
+    --flyout-inline-size: 42rem;
+    --flyout-max-inline-size: 42rem;
+  }
+  ```
+
+  The repetition is the point: the two hooks are different contracts, and only
+  the cap may enter the runtime's `min()`.
 - `--menu-item-size` — minimum row height of `.menu-item`.
 - `--menu-item-icon-size` — shared leading-column width for icons and checked-state indicators.
 

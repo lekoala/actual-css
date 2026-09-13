@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+
+## [0.9.0] - 2026-09-13
+
 ### Breaking changes
 
 - `--choice-control-offset` is renamed `--choice-control-nudge` and adds to the
@@ -35,6 +38,12 @@
   own container.
 - `bun run report:overflow` surveys demo and site pages at phone width and
   bisects each failure down to the element that owns it.
+- `tests/browser/mega-menu.test.js` exercises three wide sibling nav panels —
+  takeover, toggle, focus handover, keyboard open, Escape, clamping at both
+  viewport edges, and no drawer mutation on a phone.
+- The flyout hooks are documented as a preferred width and a width cap, with
+  the cap's `20rem` default stated: a wide panel sets both, like `width` and
+  `max-width`.
 - The drawer and scrollable-modal pages state that a scrolling body region is
   keyboard-focusable, takes a focus ring, and can claim a dialog's initial
   focus — put the close control in the `header`, or use `autofocus`.

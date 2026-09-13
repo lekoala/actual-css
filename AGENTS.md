@@ -33,6 +33,14 @@ Add relevant guards for future-us when needed based on traps and discoveries.
 - Visual changes must be inspected once in the states they affect. Cover the
   meaningful extremes when the geometry is responsive, and exaggerate a tiny
   detail in the fixture rather than squinting at its production size.
+- Programmatic activation tests behaviour; dispatched input tests interaction.
+  `el.click()` runs the handler without focusing the element, so any assertion
+  about focus, active element, focus restoration or pointer modality written
+  against it describes a path no user takes — a mega-menu takeover looked like
+  it stranded focus on `<body>`, and the test passed on the wrong evidence.
+  Once an assertion mentions focus, dispatch real events with
+  `Input.dispatchMouseEvent` / `Input.dispatchKeyEvent` through `view.cdp`.
+  `.click()` stays fine for a handler or a state transition.
 - Do not screenshot top-layer content with `shot:page` or `capture`: they pass
   `captureBeyondViewport: true`, which mis-composites an open popover or modal
   dialog — the panel came out translucent and painted *under* a sibling button
