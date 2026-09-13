@@ -9,6 +9,14 @@
  * --table-cell-pad
  */
 .table-wrap {
+  /* Containing block for anything absolutely positioned inside the table —
+     `.sr-only` on a column header above all. Without it that box resolves
+     against the initial containing block, so it keeps the static position of a
+     cell that may be a thousand pixels along the scrolled row, escapes this
+     scroller, and extends the *document's* scrollable width. The page then
+     scrolls sideways on a phone with nothing painted out there. */
+  position: relative;
+
   inline-size: 100%;
   max-inline-size: 100%;
   min-inline-size: 0;

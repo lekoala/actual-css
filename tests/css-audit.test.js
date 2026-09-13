@@ -863,6 +863,16 @@ test("every inline choice derives its first-line offset from its own height", ()
   expect(css).toMatch(/\+\s*var\(--choice-control-nudge, 0px\)/);
 });
 
+test("the table scroller contains its own absolutely positioned content", () => {
+  const css = readCss("src/css/components/table.css");
+
+  // An .sr-only column header resolves against the initial containing block
+  // without this, keeps the static position of a cell far along the scrolled
+  // row, and extends the document's scrollable width — a phantom horizontal
+  // scrollbar on a phone, with nothing painted in the overflow.
+  expect(css).toMatch(/\.table-wrap\s*\{[^}]*position:\s*relative;/);
+});
+
 test("the switch keeps its knob out of flow so its baseline is its own box", () => {
   const css = readCss("src/css/forms/switch.css");
 
