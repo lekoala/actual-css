@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mega menu stress fixture</title>
+  <link rel="stylesheet" href="../../src/css/actual.full.css">
+  <script src="../../dist/actual.full.js" defer></script>
+  <style>
+    body { margin: 0; padding: 0; }
+    /* Triggers at the start, the middle and the end of the bar, so a wide
+       panel has to be clamped against both viewport edges. */
+    .bar { display: flex; justify-content: space-between; padding: var(--space-20); }
+  </style>
+</head>
+<body>
+
+  <nav class="bar" aria-label="Main">
+    <ul class="list-reset cluster">
+      <li class="flyout-trigger">
+        <button id="t-products" class="btn ghost" type="button"
+                data-enhance="flyout" aria-expanded="false" aria-controls="p-products">Products</button>
+        <div id="p-products" class="flyout grid-3" aria-label="Products" hidden
+             style="--flyout-inline-size: 42rem; --flyout-max-inline-size: 42rem">
+          <section><h3>Design</h3><ul class="list-reset">
+            <li><a id="products-first" href="#figma">Figma</a></li>
+            <li><a href="#tokens">Tokens</a></li>
+          </ul></section>
+          <section><h3>Build</h3><ul class="list-reset">
+            <li><a href="#components">Components</a></li>
+            <li><a href="#api">API</a></li>
+          </ul></section>
+          <section><h3>Ship</h3><ul class="list-reset">
+            <li><a href="#analytics">Analytics</a></li>
+            <li><a id="products-last" href="#support">Support</a></li>
+          </ul></section>
+        </div>
+      </li>
+    </ul>
+
+    <ul class="list-reset cluster">
+      <li class="flyout-trigger">
+        <button id="t-solutions" class="btn ghost" type="button"
+                data-enhance="flyout" aria-expanded="false" aria-controls="p-solutions">Solutions</button>
+        <div id="p-solutions" class="flyout grid-3" aria-label="Solutions" hidden
+             style="--flyout-inline-size: 42rem; --flyout-max-inline-size: 42rem">
+          <section><h3>Teams</h3><ul class="list-reset">
+            <li><a id="solutions-first" href="#startups">Startups</a></li>
+            <li><a href="#enterprise">Enterprise</a></li>
+          </ul></section>
+          <section><h3>Roles</h3><ul class="list-reset">
+            <li><a href="#designers">Designers</a></li>
+            <li><a href="#engineers">Engineers</a></li>
+          </ul></section>
+          <section><h3>Industry</h3><ul class="list-reset">
+            <li><a href="#retail">Retail</a></li>
+            <li><a href="#finance">Finance</a></li>
+          </ul></section>
+        </div>
+      </li>
+    </ul>
+
+    <ul class="list-reset cluster">
+      <li class="flyout-trigger">
+        <button id="t-company" class="btn ghost" type="button"
+                data-enhance="flyout" aria-expanded="false" aria-controls="p-company">Company</button>
+        <div id="p-company" class="flyout grid-3" aria-label="Company" hidden
+             style="--flyout-inline-size: 42rem; --flyout-max-inline-size: 42rem">
+          <section><h3>About</h3><ul class="list-reset">
+            <li><a id="company-first" href="#story">Story</a></li>
+            <li><a href="#team">Team</a></li>
+          </ul></section>
+          <section><h3>Work</h3><ul class="list-reset">
+            <li><a href="#careers">Careers</a></li>
+            <li><a href="#culture">Culture</a></li>
+          </ul></section>
+          <section><h3>Press</h3><ul class="list-reset">
+            <li><a href="#news">News</a></li>
+            <li><a href="#kit">Brand kit</a></li>
+          </ul></section>
+        </div>
+      </li>
+    </ul>
+  </nav>
+
+  <main style="padding: var(--space-40)">
+    <p>Page content under the navigation.</p>
+  </main>
+
+</body>
+</html>

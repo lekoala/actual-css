@@ -1,12 +1,12 @@
 {
-  "totalRaw": 298939,
+  "totalRaw": 300201,
   "core": {
     "minified": 12373,
     "brotli": 2783
   },
   "full": {
-    "minified": 126441,
-    "brotli": 18085
+    "minified": 126456,
+    "brotli": 18044
   },
   "js": {
     "core": {
@@ -221,6 +221,10 @@
       "raw": 2404
     },
     {
+      "file": "components/skeleton.css",
+      "raw": 2404
+    },
+    {
       "file": "themes/index.css",
       "raw": 2339
     },
@@ -265,6 +269,10 @@
       "raw": 2052
     },
     {
+      "file": "components/table.css",
+      "raw": 2044
+    },
+    {
       "file": "forms/input-icon.css",
       "raw": 2025
     },
@@ -293,16 +301,8 @@
       "raw": 1636
     },
     {
-      "file": "components/skeleton.css",
-      "raw": 1619
-    },
-    {
       "file": "components/indicator.css",
       "raw": 1611
-    },
-    {
-      "file": "components/table.css",
-      "raw": 1567
     },
     {
       "file": "layout/topbar.css",

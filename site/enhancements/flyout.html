@@ -840,10 +840,29 @@ delay; a number sets the delay in milliseconds.</p>
 <div class="prose docs-prose">
 <h2 id="css-hooks">CSS hooks</h2>
 <ul>
-<li><code>--flyout-inline-size</code> — panel width.</li>
-<li><code>--flyout-max-inline-size</code> — panel width cap.</li>
-<li><code>--menu-item-size</code> — minimum row height of <code>.menu-item</code>.</li>
-<li><code>--menu-item-icon-size</code> — shared leading-column width for icons and checked-state indicators.</li>
+<li>
+<p><code>--flyout-inline-size</code> — preferred width. Takes intrinsic values such as
+<code>max-content</code>, its default.</p>
+</li>
+<li>
+<p><code>--flyout-max-inline-size</code> — width cap, a <code>&lt;length-percentage&gt;</code> the runtime
+also clamps to the viewport. Defaults to <code>20rem</code>, independently of the
+preferred width — the same way <code>width: 42rem; max-width: 20rem</code> renders at
+20rem. A panel wider than the cap therefore sets both:</p>
+<pre><code class="language-css">.mega-panel {
+  --flyout-inline-size: 42rem;
+  --flyout-max-inline-size: 42rem;
+}
+</code></pre>
+<p>The repetition is the point: the two hooks are different contracts, and only
+the cap may enter the runtime's <code>min()</code>.</p>
+</li>
+<li>
+<p><code>--menu-item-size</code> — minimum row height of <code>.menu-item</code>.</p>
+</li>
+<li>
+<p><code>--menu-item-icon-size</code> — shared leading-column width for icons and checked-state indicators.</p>
+</li>
 </ul>
 <p><code>--available-height</code> and <code>--surface-anchor-width</code> are written by the positioner
 at runtime, not set by the author. See the JavaScript runtime documentation.</p>

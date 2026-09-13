@@ -264,7 +264,9 @@
 <li><code>--skeleton-highlight</code> — sweeping highlight color.</li>
 <li><code>--skeleton-radius</code> — corner radius; <code>data-shape</code> presets override it.</li>
 <li><code>--skeleton-size</code> — block size; <code>data-shape</code> presets override it.</li>
-<li><code>--skeleton-width</code> — inline size; <code>data-shape</code> presets override it.</li>
+<li><code>--skeleton-width</code> — maximum inline size. A placeholder fills its container
+and stops here, so it never gives an ancestor a width floor. <code>data-shape</code>
+presets set it; <code>avatar</code> ignores it and stays square.</li>
 </ul>
 
 </div>

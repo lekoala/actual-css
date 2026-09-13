@@ -478,6 +478,10 @@ dialog body scrolls. Modal dialogs lock page scroll while a modal is open: the
 runtime writes <code>html.has-modal-open</code>, and the stylesheet applies <code>overflow: hidden</code> (and reserves the scrollbar gutter with <code>scrollbar-gutter: stable</code> when
 one was present). The height cap follows the small viewport, so the panel keeps
 a stable size while mobile browser chrome expands or collapses.</p>
+<p>The scrolling body is a scroll container, and browsers make one
+keyboard-focusable so it can be scrolled without a pointer — it takes a focus
+ring like any other focusable element, and it can claim initial focus when
+nothing focusable precedes it. Mark the control you want focused <code>autofocus</code>.</p>
 </div>
 <div class="docs-example">
   <div class="docs-preview">
