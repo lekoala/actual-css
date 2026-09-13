@@ -3,6 +3,8 @@
  * and item states; app-layout owns whether that surface is a bottom bar or
  * labelled side navigation.
  *
+ * Docs: docs/pages/components/app-navigation.md
+ *
  * Public hooks:
  * --app-nav-size
  * --app-nav-gap

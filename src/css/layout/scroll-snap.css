@@ -2,6 +2,8 @@
  * Scroll snap — optional horizontal rails for niche card strips and simple
  * touch-friendly overflow areas.
  *
+ * Docs: docs/pages/layout/scroll-snap.md
+ *
  * This is not a full carousel. For previous/next controls, pagination,
  * active state, drag behavior, looping, or robust desktop mouse interaction,
  * use a dedicated carousel library.

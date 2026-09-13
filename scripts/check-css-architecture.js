@@ -11,6 +11,9 @@
  *   - Every distributed leaf appears exactly once in the actual.full.css graph.
  *   - core/print.css stays generic: no class or id selectors.
  *   - aria-orientation is matched inside :where() everywhere.
+ *   - dialog element qualifications on component roots stay inside :where().
+ *   - every `Docs:` pointer in a CSS header resolves to an existing file.
+ *     A pointer is optional — but when present, it must not dangle.
  *
  * The analyzer is exported so tests can run it against fixture trees.
  */
@@ -202,6 +205,48 @@ export function analyzeCss(root) {
             `${relPath(file)}: [aria-orientation] outside :where() in "${prelude}" — it would spend specificity an author class cannot outrank`,
           );
         }
+      }
+    }
+  }
+
+  /*
+   * A semantic element qualification on a component root (dialog.modal,
+   * dialog.drawer) spends type specificity every author override must then
+   * outrank — modal.css once had to keep --modal-size fallback-only for
+   * exactly this reason. Roots stay :where(dialog).modal so overrides keep
+   * working at 0-1-0 like every other component.
+   */
+  for (const file of files) {
+    // Comments carry prose such as "native dialog." — strip them so only
+    // real selectors are judged.
+    const uncommented = readFileSync(file, "utf8").replace(/\/\*[\s\S]*?\*\//g, "");
+    for (const prelude of selectorPreludes(uncommented)) {
+      for (const match of prelude.matchAll(/(^|[\s,>+~:(])dialog\./g)) {
+        const before = prelude.slice(0, match.index + match[1].length);
+        const opened = (before.match(/:where\(/g) ?? []).length;
+        const closed = (before.match(/\)/g) ?? []).length;
+        if (opened <= closed) {
+          issues.push(
+            `${relPath(file)}: dialog element qualification outside :where() in "${prelude}" — author overrides would need type specificity to outrank it`,
+          );
+        }
+      }
+    }
+  }
+
+  /*
+   * A public source may carry one `Docs:` pointer to its canonical usage
+   * page ("don't stop here to learn how to use it"). The pointer is never
+   * required and never maps 1:1 by construction — several sources may share
+   * one page — but a declared pointer must resolve, whatever the header's
+   * comment style.
+   */
+  for (const file of files) {
+    const css = readFileSync(file, "utf8");
+    for (const match of css.matchAll(/^\s*\*?\s*Docs:\s*(\S+?)(?:\s*\*\/)?\s*$/gm)) {
+      const target = resolve(root, "..", "..", match[1]);
+      if (!existsSync(target)) {
+        issues.push(`${relPath(file)}: Docs: pointer does not resolve (${match[1]})`);
       }
     }
   }

@@ -1,6 +1,8 @@
 /*
  * Tabs — in-place panel switcher with real tab semantics.
  *
+ * Docs: docs/pages/enhancements/tabs.md
+ *
  * JavaScript owns roving tabindex, aria-selected, panel visibility,
  * and arrow-key navigation. CSS owns the tab strip appearance and
  * active indicator.

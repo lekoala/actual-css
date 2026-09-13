@@ -1,6 +1,8 @@
 /*
  * Table — structured tabular data.
  *
+ * Docs: docs/pages/components/table.md
+ *
  * .table-wrap provides the scroll container and outer chrome; .table owns row
  * and cell rules. Tokens are sourced from the shared scale.
  *

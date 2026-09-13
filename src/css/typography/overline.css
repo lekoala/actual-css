@@ -1,6 +1,8 @@
 /*
  * Overline — editorial small-cap label for section openers.
  *
+ * Docs: docs/pages/foundations/typography.md
+ *
  * Base form is unstyled chrome that takes its surrounding color. Add .pill for
  * the bordered rounded shape, and combine with an intent class (.primary,
  * .success, etc.) to tint the text, border, and background.

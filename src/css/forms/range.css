@@ -2,6 +2,8 @@
  * Range slider — custom-styled so the focus ring always targets the
  * user-manipulated surface (the thumb) rather than the CSS box.
  *
+ * Docs: docs/pages/forms/range.md
+ *
  * appearance: none gives us full control over track and thumb; without it,
  * pseudo-element rules for ::-webkit-slider-thumb and ::-moz-range-thumb
  * are not reliably applied across browsers.

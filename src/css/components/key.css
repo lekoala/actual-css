@@ -1,6 +1,8 @@
 /*
  * Key — keyboard keys and shortcut tokens for UI chrome.
  *
+ * Docs: docs/pages/components/key.md
+ *
  * Use .key outside prose. Plain kbd inside .prose gets the same visual
  * treatment from prose.css so authored content stays convenient.
  *

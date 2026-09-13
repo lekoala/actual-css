@@ -2,6 +2,8 @@
  * Scrollspy — behavior hook for navigation that marks the active section
  * while the page scrolls.
  *
+ * Docs: docs/pages/enhancements/scrollspy.md
+ *
  * Does not add visual styles by itself. scrollspy.js watches
  * <nav class="scrollspy">
  * containing <a href="#section"> links and toggles aria-current="location" on

@@ -1,12 +1,12 @@
 {
-  "totalRaw": 300201,
+  "totalRaw": 303292,
   "core": {
     "minified": 12373,
     "brotli": 2783
   },
   "full": {
-    "minified": 126456,
-    "brotli": 18044
+    "minified": 126872,
+    "brotli": 18066
   },
   "js": {
     "core": {
@@ -22,7 +22,7 @@
   "files": [
     {
       "file": "components/steps.css",
-      "raw": 13055
+      "raw": 13098
     },
     {
       "file": "core/tokens.css",
@@ -30,11 +30,11 @@
     },
     {
       "file": "components/modal.css",
-      "raw": 9633
+      "raw": 9621
     },
     {
       "file": "components/alert.css",
-      "raw": 8889
+      "raw": 8932
     },
     {
       "file": "core/theme.css",
@@ -42,11 +42,11 @@
     },
     {
       "file": "components/drawer.css",
-      "raw": 7901
+      "raw": 8279
     },
     {
       "file": "components/badge.css",
-      "raw": 7853
+      "raw": 7896
     },
     {
       "file": "forms/choice.css",
@@ -54,15 +54,15 @@
     },
     {
       "file": "components/button.css",
-      "raw": 7474
+      "raw": 7518
     },
     {
       "file": "components/avatar.css",
-      "raw": 5510
+      "raw": 5554
     },
     {
       "file": "effects/aura.css",
-      "raw": 5400
+      "raw": 5442
     },
     {
       "file": "core/variants.css",
@@ -70,15 +70,15 @@
     },
     {
       "file": "components/flyout.css",
-      "raw": 5302
+      "raw": 5348
     },
     {
       "file": "typography/prose.css",
-      "raw": 5225
+      "raw": 5274
     },
     {
       "file": "forms/switch.css",
-      "raw": 5217
+      "raw": 5256
     },
     {
       "file": "utilities/extra.css",
@@ -86,43 +86,43 @@
     },
     {
       "file": "components/tooltip.css",
-      "raw": 4904
+      "raw": 4951
     },
     {
       "file": "layout/column-layout.css",
-      "raw": 4590
+      "raw": 4637
+    },
+    {
+      "file": "forms/choice-card.css",
+      "raw": 4560
     },
     {
       "file": "themes/edge.css",
       "raw": 4533
     },
     {
-      "file": "forms/choice-card.css",
-      "raw": 4515
-    },
-    {
       "file": "components/card.css",
-      "raw": 4457
+      "raw": 4499
     },
     {
       "file": "forms/otp.css",
-      "raw": 4290
+      "raw": 4326
     },
     {
       "file": "components/navbar.css",
-      "raw": 3903
+      "raw": 3947
+    },
+    {
+      "file": "layout/grid.css",
+      "raw": 3907
+    },
+    {
+      "file": "components/join.css",
+      "raw": 3885
     },
     {
       "file": "themes/gradient.css",
       "raw": 3881
-    },
-    {
-      "file": "layout/grid.css",
-      "raw": 3869
-    },
-    {
-      "file": "components/join.css",
-      "raw": 3837
     },
     {
       "file": "utilities/base.css",
@@ -130,19 +130,19 @@
     },
     {
       "file": "forms/floating-field.css",
-      "raw": 3707
+      "raw": 3754
     },
     {
       "file": "components/tab.css",
-      "raw": 3627
+      "raw": 3671
     },
     {
       "file": "components/list.css",
-      "raw": 3521
+      "raw": 3563
     },
     {
       "file": "components/accordion.css",
-      "raw": 3320
+      "raw": 3367
     },
     {
       "file": "components/menu.css",
@@ -150,35 +150,35 @@
     },
     {
       "file": "components/fab.css",
-      "raw": 3263
-    },
-    {
-      "file": "components/rating.css",
-      "raw": 3174
+      "raw": 3304
     },
     {
       "file": "components/status-bar.css",
-      "raw": 3171
+      "raw": 3221
+    },
+    {
+      "file": "components/rating.css",
+      "raw": 3218
     },
     {
       "file": "forms/range.css",
-      "raw": 3171
+      "raw": 3209
     },
     {
       "file": "forms/control.css",
-      "raw": 2942
+      "raw": 2983
     },
     {
       "file": "forms/native.css",
-      "raw": 2768
+      "raw": 2809
     },
     {
       "file": "forms/validation.css",
-      "raw": 2690
+      "raw": 2733
     },
     {
       "file": "components/progress.css",
-      "raw": 2682
+      "raw": 2728
     },
     {
       "file": "forms/custom-select.css",
@@ -202,7 +202,7 @@
     },
     {
       "file": "layout/app-layout.css",
-      "raw": 2541
+      "raw": 2585
     },
     {
       "file": "themes/sunset.css",
@@ -213,24 +213,24 @@
       "raw": 2469
     },
     {
+      "file": "components/app-nav.css",
+      "raw": 2456
+    },
+    {
+      "file": "components/skeleton.css",
+      "raw": 2450
+    },
+    {
       "file": "themes/forest.css",
       "raw": 2416
     },
     {
-      "file": "components/app-nav.css",
-      "raw": 2404
-    },
-    {
-      "file": "components/skeleton.css",
-      "raw": 2404
+      "file": "forms/select.css",
+      "raw": 2357
     },
     {
       "file": "themes/index.css",
       "raw": 2339
-    },
-    {
-      "file": "forms/select.css",
-      "raw": 2316
     },
     {
       "file": "themes/corporate.css",
@@ -254,67 +254,67 @@
     },
     {
       "file": "components/chat.css",
-      "raw": 2147
+      "raw": 2189
     },
     {
       "file": "components/meter.css",
-      "raw": 2122
+      "raw": 2165
     },
     {
       "file": "forms/form-actions.css",
-      "raw": 2088
+      "raw": 2133
+    },
+    {
+      "file": "components/table.css",
+      "raw": 2087
+    },
+    {
+      "file": "forms/input-icon.css",
+      "raw": 2071
     },
     {
       "file": "layout/container-query.css",
       "raw": 2052
     },
     {
-      "file": "components/table.css",
-      "raw": 2044
-    },
-    {
-      "file": "forms/input-icon.css",
-      "raw": 2025
-    },
-    {
       "file": "core/intents.css",
       "raw": 1806
+    },
+    {
+      "file": "layout/sidebar-layout.css",
+      "raw": 1769
     },
     {
       "file": "themes/brutalist.css",
       "raw": 1760
     },
     {
-      "file": "layout/sidebar-layout.css",
-      "raw": 1721
+      "file": "typography/fluid.css",
+      "raw": 1731
     },
     {
       "file": "layout/index.css",
       "raw": 1707
     },
     {
-      "file": "typography/fluid.css",
-      "raw": 1682
-    },
-    {
       "file": "layout/scroll-snap.css",
-      "raw": 1636
+      "raw": 1681
     },
     {
       "file": "components/indicator.css",
-      "raw": 1611
+      "raw": 1658
     },
     {
       "file": "layout/topbar.css",
-      "raw": 1500
+      "raw": 1540
     },
     {
       "file": "typography/overline.css",
-      "raw": 1465
+      "raw": 1514
     },
     {
       "file": "components/spinner.css",
-      "raw": 1459
+      "raw": 1504
     },
     {
       "file": "layout/scroller.css",
@@ -322,27 +322,27 @@
     },
     {
       "file": "components/pagination.css",
-      "raw": 1395
+      "raw": 1443
     },
     {
       "file": "components/busy.css",
-      "raw": 1386
+      "raw": 1431
     },
     {
       "file": "forms/form.css",
-      "raw": 1346
+      "raw": 1387
     },
     {
       "file": "themes/dim.css",
       "raw": 1184
     },
     {
-      "file": "themes/indigo.css",
-      "raw": 1140
+      "file": "components/key.css",
+      "raw": 1146
     },
     {
-      "file": "components/key.css",
-      "raw": 1105
+      "file": "themes/indigo.css",
+      "raw": 1140
     },
     {
       "file": "components/index.css",
@@ -350,19 +350,19 @@
     },
     {
       "file": "components/breadcrumb.css",
-      "raw": 966
+      "raw": 1014
     },
     {
       "file": "components/scrollspy.css",
-      "raw": 883
+      "raw": 932
     },
     {
       "file": "layout/stack.css",
-      "raw": 794
+      "raw": 830
     },
     {
       "file": "components/data-list.css",
-      "raw": 748
+      "raw": 795
     },
     {
       "file": "core/reset.css",
@@ -374,11 +374,11 @@
     },
     {
       "file": "layout/scroll-target.css",
-      "raw": 637
+      "raw": 684
     },
     {
       "file": "layout/switcher.css",
-      "raw": 572
+      "raw": 614
     },
     {
       "file": "forms/index.css",
@@ -390,27 +390,27 @@
     },
     {
       "file": "layout/cluster.css",
-      "raw": 456
+      "raw": 497
     },
     {
       "file": "components/actions.css",
-      "raw": 439
+      "raw": 482
     },
     {
       "file": "layout/media.css",
-      "raw": 410
+      "raw": 446
     },
     {
       "file": "layout/frame.css",
-      "raw": 376
+      "raw": 415
     },
     {
       "file": "layout/center.css",
-      "raw": 319
+      "raw": 359
     },
     {
       "file": "typography/lead.css",
-      "raw": 275
+      "raw": 321
     },
     {
       "file": "core/index.css",
@@ -429,12 +429,12 @@
       "raw": 206
     },
     {
-      "file": "typography/index.css",
-      "raw": 155
+      "file": "layout/app-shell.css",
+      "raw": 194
     },
     {
-      "file": "layout/app-shell.css",
-      "raw": 147
+      "file": "typography/index.css",
+      "raw": 155
     },
     {
       "file": "utilities/index.css",

@@ -5,6 +5,8 @@
  * chrome available without fixed offsets. This is not a generic page wrapper
  * or a public-site layout; all three direct regions are part of the contract.
  *
+ * Docs: docs/pages/layout/app-layout.md
+ *
  * Public hook:
  * --app-nav-side-size
  */

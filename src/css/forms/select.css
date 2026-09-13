@@ -2,6 +2,8 @@
  * Select — chevron and appearance layer on top of the shared text-control
  * recipe.
  *
+ * Docs: docs/pages/forms/overview.md
+ *
  * Base geometry and interaction states come from control.css (select shares
  * the --control-* tokens). This file only removes the native arrow and draws
  * the CSS chevron, so the picker (appearance: base-select) enhancement in

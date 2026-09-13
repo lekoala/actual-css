@@ -1,6 +1,8 @@
 /*
  * One-time code input with visual cells and one native input.
  *
+ * Docs: docs/pages/forms/otp.md
+ *
  * Add one direct span per accepted character. The cells determine the
  * component width; the overlaid input remains the only interactive control.
  *

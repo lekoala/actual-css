@@ -1,6 +1,8 @@
 /*
  * Meter — native and segmented gauges for known-range values.
  *
+ * Docs: docs/pages/components/meter.md
+ *
  * Maps the three standard meter zones (optimum / suboptimum / even-less-good)
  * to the shared success / warning / danger intent colors.
  *

@@ -1,7 +1,8 @@
 /* Media object: fixed-width leading element (avatar, icon, image) + flexible
    trailing content. Replaces the repeated "auto minmax(0, 1fr)" pattern in
    author cards, comments, meta rows, and similar compositions.
-   Child contract: exactly two direct children (leading media + content). */
+   Child contract: exactly two direct children (leading media + content).
+   Docs: docs/pages/layout/media.md */
 .media {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);

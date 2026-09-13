@@ -1,6 +1,8 @@
 /*
  * Decorative intent-colored frame for one direct child.
  *
+ * Docs: docs/pages/components/aura.md
+ *
  * The effect is built from three layers with distinct roles: a frame carrying
  * a short accent of light, a small halo that belongs to the frame and keeps
  * that light attached to the edge, and a wide static halo that belongs to the

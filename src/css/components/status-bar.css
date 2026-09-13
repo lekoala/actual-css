@@ -1,6 +1,8 @@
 /*
  * Status bar — singleton floating status area.
  *
+ * Docs: docs/pages/enhancements/status-bar.md
+ *
  * One element in the HTML, empty by default. .is-open is the visual state, set
  * by status.js like any other surface: it lands after the message is written
  * and lifts before the bar is cleared, so the bar leaves in the exact state it

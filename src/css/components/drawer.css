@@ -1,6 +1,12 @@
 /*
  * Drawer — modal side-sheet built on the native dialog element.
  *
+ * Docs: docs/pages/components/drawer.md
+ *
+ * Open with a native command button:
+ * command="show-modal" commandfor="<drawer-id>".
+ * For stacked navigation, compose with .nav-list from navbar.css.
+ *
  * Top-layer rendering, ::backdrop, Escape, and modal focus come from the
  * native dialog. CSS owns progressive enter/exit motion where browsers support
  * discrete display/overlay transitions. The drawer is a layout shell only —
@@ -16,7 +22,7 @@
  * --drawer-motion-duration (shared by panel and ::backdrop so exit duration
  *   changes in one place; entry state redefines it longer)
  */
-dialog.drawer {
+:where(dialog).drawer {
   --drawer-size: 20rem;
   --drawer-pad: var(--space-40);
   --drawer-closed-translate: -100%;
@@ -59,7 +65,7 @@ dialog.drawer {
     transform var(--drawer-motion-duration) var(--ease-exit);
 }
 
-dialog.drawer[open] {
+:where(dialog).drawer[open] {
   --drawer-motion-duration: var(--duration-slow);
   display: grid;
   grid-template-rows: auto minmax(0, 1fr) auto;
@@ -74,7 +80,7 @@ dialog.drawer[open] {
 /* A form is the drawer's content wrapper when actions need method="dialog".
    Span the drawer tracks so the form can keep the header at the top, let the
    body absorb the available height, and keep the footer at the bottom. */
-dialog.drawer > form {
+:where(dialog).drawer > form {
   display: grid;
   grid-row: 1 / -1;
   grid-template-rows: auto minmax(0, 1fr) auto;
@@ -83,7 +89,7 @@ dialog.drawer > form {
 }
 
 /* The shared backdrop token keeps drawer and modal scrims consistent. */
-dialog.drawer::backdrop {
+:where(dialog).drawer::backdrop {
   background: var(--backdrop-fill);
   opacity: 0;
   /* Scrim curve stays neutral `ease`; only the panel's character curves
@@ -91,7 +97,7 @@ dialog.drawer::backdrop {
   transition: opacity var(--drawer-motion-duration) ease;
 }
 
-dialog.drawer[data-side="end"] {
+:where(dialog).drawer[data-side="end"] {
   --drawer-closed-translate: 100%;
 
   margin-inline-start: auto;
@@ -100,17 +106,17 @@ dialog.drawer[data-side="end"] {
   border-inline-start: var(--border-width) solid var(--border);
 }
 
-dialog.drawer[open]::backdrop {
+:where(dialog).drawer[open]::backdrop {
   opacity: 1;
 }
 
 @starting-style {
-  dialog.drawer[open] {
+  :where(dialog).drawer[open] {
     opacity: 0;
     transform: translateX(var(--drawer-closed-translate));
   }
 
-  dialog.drawer[open]::backdrop {
+  :where(dialog).drawer[open]::backdrop {
     opacity: 0;
   }
 }
@@ -120,15 +126,15 @@ dialog.drawer[open]::backdrop {
    modal, which sizes to its content and opts in with .scrollable. Header and
    footer keep their own tracks; .drawer-close is named because a generic
    exclusion list is easier to trust than its `position: absolute`. */
-dialog.drawer > :not(:is(header, footer, form, .drawer-close)),
-dialog.drawer > form > :not(:is(header, footer, .drawer-close)) {
+:where(dialog).drawer > :not(:is(header, footer, form, .drawer-close)),
+:where(dialog).drawer > form > :not(:is(header, footer, .drawer-close)) {
   min-block-size: 0;
   overflow: auto;
   overscroll-behavior: contain;
 }
 
 @supports (transition-behavior: allow-discrete) {
-  dialog.drawer {
+  :where(dialog).drawer {
     transition:
       opacity var(--drawer-motion-duration) var(--ease-exit),
       transform var(--drawer-motion-duration) var(--ease-exit),
@@ -136,7 +142,7 @@ dialog.drawer > form > :not(:is(header, footer, .drawer-close)) {
       display var(--drawer-motion-duration) allow-discrete;
   }
 
-  dialog.drawer[open] {
+  :where(dialog).drawer[open] {
     transition:
       opacity var(--drawer-motion-duration) var(--ease-enter),
       transform var(--drawer-motion-duration) var(--ease-enter),
@@ -144,7 +150,7 @@ dialog.drawer > form > :not(:is(header, footer, .drawer-close)) {
       display var(--drawer-motion-duration) allow-discrete;
   }
 
-  dialog.drawer::backdrop {
+  :where(dialog).drawer::backdrop {
     transition:
       opacity var(--drawer-motion-duration) ease,
       overlay var(--drawer-motion-duration) allow-discrete,
@@ -158,40 +164,40 @@ dialog.drawer > form > :not(:is(header, footer, .drawer-close)) {
    directionality and handles nested direction changes; the explicit ltr rules
    neutralize an outer RTL fallback selector. Each specificity group keeps the
    fallback before the :dir() rules. */
-[dir="rtl"] dialog.drawer {
+[dir="rtl"] :where(dialog).drawer {
   --drawer-closed-translate: 100%;
 }
 
-dialog.drawer:dir(ltr) {
+:where(dialog).drawer:dir(ltr) {
   --drawer-closed-translate: -100%;
 }
 
-dialog.drawer:dir(rtl) {
+:where(dialog).drawer:dir(rtl) {
   --drawer-closed-translate: 100%;
 }
 
-[dir="rtl"] dialog.drawer[data-side="end"] {
+[dir="rtl"] :where(dialog).drawer[data-side="end"] {
   --drawer-closed-translate: -100%;
 }
 
-dialog.drawer[data-side="end"]:dir(ltr) {
+:where(dialog).drawer[data-side="end"]:dir(ltr) {
   --drawer-closed-translate: 100%;
 }
 
-dialog.drawer[data-side="end"]:dir(rtl) {
+:where(dialog).drawer[data-side="end"]:dir(rtl) {
   --drawer-closed-translate: -100%;
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  dialog.drawer.is-static {
+  :where(dialog).drawer.is-static {
     animation: actual-dialog-static var(--duration-slow) ease;
   }
 }
 
 /* The header reserves inline room so the title never runs under the close
    control. */
-dialog.drawer > header,
-dialog.drawer > form > header {
+:where(dialog).drawer > header,
+:where(dialog).drawer > form > header {
   padding-inline-end: calc(var(--control-size) + var(--space-30));
 }
 

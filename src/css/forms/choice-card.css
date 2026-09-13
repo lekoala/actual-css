@@ -1,6 +1,8 @@
 /*
  * Choice cards — card-style radio and checkbox labels.
  *
+ * Docs: docs/pages/forms/choice-cards.md
+ *
  * Each .choice-card is a <label> wrapping a native radio or checkbox. When
  * :has() is supported the input is visually hidden and the card mirrors its
  * state: checked border and tint, checkmark badge (round for radio, rounded

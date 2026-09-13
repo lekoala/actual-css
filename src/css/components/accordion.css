@@ -1,6 +1,8 @@
 /*
  * Accordion disclosures built on native details and summary.
  *
+ * Docs: docs/pages/components/accordion.md
+ *
  * Keeps the clickable summary affordance aligned and usable without JavaScript
  * or demo styles. Decorative palettes and custom markers belong outside the
  * base component.

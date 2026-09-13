@@ -4,6 +4,8 @@
  * background only — row content (search, breadcrumb, actions) stays local
  * to the page.
  *
+ * Docs: docs/pages/layout/topbar.md
+ *
  * Not for marketing/editorial site headers — those are one-off visual
  * identity per page; see docs/pages/patterns/overview.md's Header Navigation
  * section. This is for the structural app-shell topbar, which recurs unchanged

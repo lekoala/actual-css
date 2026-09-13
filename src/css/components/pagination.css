@@ -1,6 +1,8 @@
 /*
  * Pagination — page navigation for paginated lists.
  *
+ * Docs: docs/pages/components/pagination.md
+ *
  * Render .btn elements inside a .pagination list. The active page is marked
  * with aria-current="page"; .btn owns the active state styling.
  *

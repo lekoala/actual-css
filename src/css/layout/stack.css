@@ -9,7 +9,8 @@
    region re-spaces every nested stack, cluster and grid at any depth. Setting
    the token stays correct on the element that consumes it, and
    .compact/.spacious set it deliberately so a density context reaches nested layouts. See
-   docs/pages/layout/stack.md. */
+   docs/pages/layout/stack.md.
+   Docs: docs/pages/layout/stack.md */
 .stack {
   display: flex;
   flex-direction: column;

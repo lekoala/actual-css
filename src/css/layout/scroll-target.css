@@ -3,6 +3,8 @@
  * header (.topbar) or underlaps it; scroll-margin reserves space on the
  * target itself so the browser stops early.
  *
+ * Docs: docs/pages/layout/scroll-target.md
+ *
  * Apply to the elements that are link targets: <section id="...">, headings,
  * etc. The scrollspy enhancer only reads ids — this offset is what actually
  * shapes where the page lands, and the two are independent.

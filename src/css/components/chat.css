@@ -1,6 +1,8 @@
 /*
  * Message rows composed from an optional avatar, metadata, and bubble.
  *
+ * Docs: docs/pages/components/chat.md
+ *
  * Public hooks:
  * --chat-gap
  * --chat-max-size

@@ -1,6 +1,8 @@
 /*
  * Prose is the opt-in rich text scope for authored content.
  *
+ * Docs: docs/pages/foundations/typography.md
+ *
  * Global element styles stay mild so app UI is not shaped accidentally. Page
  * layout, forms, cards, navigation, and app tables remain outside this scope.
  *

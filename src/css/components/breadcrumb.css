@@ -1,6 +1,8 @@
 /*
  * Breadcrumb — current-location trail from the site root.
  *
+ * Docs: docs/pages/components/breadcrumb.md
+ *
  * Inline list separated by "/". Mark the current page with `aria-current="page"`
  * either on the item or on the current link.
  */

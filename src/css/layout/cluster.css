@@ -1,6 +1,8 @@
 /*
  * Inline group that wraps when space runs out.
  *
+ * Docs: docs/pages/layout/cluster.md
+ *
  * Public hooks:
  * --cluster-align
  * --cluster-justify
