@@ -55,6 +55,10 @@
       gap: var(--gap);
       align-items: start;
     }
+    /* No demo may widen the page: a flex item's automatic minimum size is its
+       content, and a few samples (skeleton shapes, fixed-width cards) carry a
+       content floor wider than a phone. */
+    .sink-grid > * { min-inline-size: 0; }
     .sink-col { display: grid; gap: var(--space-20); }
   </style>
 </head>
@@ -629,12 +633,12 @@
     <!-- Forced colors flattens complete and upcoming to the same ringed disc;
          --step-complete-mark is the documented way to keep them apart. -->
     <div class="sink-grid">
-      <ol class="steps steps-horizontal" style="min-inline-size:22rem">
+      <ol class="steps steps-horizontal" style="flex:1 1 22rem">
         <li class="step-complete"><span class="step-label">Account</span></li>
         <li aria-current="step"><span class="step-label">Payment</span></li>
         <li><span class="step-label">Confirm</span></li>
       </ol>
-      <ol class="steps steps-horizontal" style="min-inline-size:22rem;--step-complete-mark:'✓'">
+      <ol class="steps steps-horizontal" style="flex:1 1 22rem;--step-complete-mark:'✓'">
         <li class="step-complete"><span class="step-label">Account</span></li>
         <li aria-current="step"><span class="step-label">Payment</span></li>
         <li><span class="step-label">Confirm</span></li>

@@ -21,7 +21,14 @@
 - Use `closedby="none"` when the drawer must not be dismissed by the user at all
   (e.g. a form with unsaved changes): no backdrop close and no Escape close.
 - Use `[data-side="end"]` for a right-side drawer.
+- Put the body between a `header` and a `footer`: the panel is a three-row grid
+  whose middle region scrolls, so the footer stays reachable however long the
+  content gets.
 - Permanent desktop sidebars belong in layout, not here.
+
+The panel is `--viewport-block` tall, so it follows the space a mobile browser
+actually leaves on screen as its URL bar collapses. A shell that fakes a
+viewport (an embedded preview) overrides that token rather than the drawer.
 
 ```html demo
 <button class="btn ghost"
