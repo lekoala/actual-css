@@ -1,6 +1,8 @@
 /*
  * Join — visually groups adjacent controls into a single unit.
  *
+ * Docs: docs/pages/forms/joined-controls.md
+ *
  * This is a cross-cutting control primitive, not a forms-only component:
  * it applies equally to inputs, selects, buttons, and button-like links.
  *

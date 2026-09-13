@@ -1,6 +1,8 @@
 /*
  * Data list — term/value pairs for the properties of a single object.
  *
+ * Docs: docs/pages/components/data-list.md
+ *
  * Expects alternating <dt>/<dd> children: one term, one value per property.
  * A plain <dl> handles richer relationships (several terms or descriptions)
  * and stays untouched by this component.

@@ -1,6 +1,7 @@
 /* Lead paragraph: a slightly larger, more relaxed reading-introduction text.
    Non-fluid and always available — use .text-lead from the optional fluid
-   module for marketing/display surfaces. */
+   module for marketing/display surfaces.
+   Docs: docs/pages/foundations/typography.md */
 .lead {
   font-size: 1.125em;
   line-height: var(--line-height-relaxed);

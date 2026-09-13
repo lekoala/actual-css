@@ -2,6 +2,8 @@
  * Floating labels — optional composition over the text controls
  * (.input, .textarea, .select) and .field-label.
  *
+ * Docs: docs/pages/forms/floating-field.md
+ *
  * The cell owns a control plus its label; the label overlays the control and
  * floats to the top when the control is focused or non-empty. Help and error
  * messages stay in the surrounding .field, not inside the cell, so the

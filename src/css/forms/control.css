@@ -1,6 +1,8 @@
 /*
  * Text controls — input, textarea, select.
  *
+ * Docs: docs/pages/forms/overview.md
+ *
  * Neutral geometry and interaction states shared across all text-like
  * controls. select shares this base recipe; its chevron/appearance layer
  * lives in select.css. checkbox, radio, range, switch, and file have their

@@ -1,6 +1,8 @@
 /*
  * Progress — native progress bar with theme-aware track and value.
  *
+ * Docs: docs/pages/components/progress.md
+ *
  * Consumes the shared --intent/--primary for the value bar and --bar-height
  * for thickness. Indeterminate state animates a shimmer using --duration-shimmer.
  *

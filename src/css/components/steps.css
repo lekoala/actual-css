@@ -1,6 +1,8 @@
 /*
  * Steps — semantic ordered-list progression for a multi-step process.
  *
+ * Docs: docs/pages/components/steps.md
+ *
  * One primitive, two explicit compositions. Both classes are required:
  *
  *   <ol class="steps steps-horizontal">  horizontal, 2 to 5 stages

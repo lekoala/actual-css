@@ -3,6 +3,8 @@
  * Button owns the trigger's size, shape, and intent; FAB owns placement and
  * the speed dial's structural open/close markers (--icon-plus / --icon-close).
  *
+ * Docs: docs/pages/components/fab.md
+ *
  * Public hooks:
  * --fab-offset
  * --fab-gap

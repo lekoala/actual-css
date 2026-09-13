@@ -1,6 +1,8 @@
 /*
  * Responsive equal-width grids.
  *
+ * Docs: docs/pages/layout/grid.md
+ *
  * .grid is space-driven: it fits as many tracks as --grid-min allows.
  * .grid-N is count-driven: it declares a structural density of N and collapses
  * through natural divisors of N.

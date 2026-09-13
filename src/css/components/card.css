@@ -1,6 +1,8 @@
 /*
  * Cards provide a neutral raised surface for grouped content.
  *
+ * Docs: docs/pages/components/card.md
+ *
  * Surface, border, radius, padding, density, and elevation stay local here.
  * Direct header/footer children are structural slots; a direct footer is
  * anchored to the card's bottom edge when extra block space is available (so

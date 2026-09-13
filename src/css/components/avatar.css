@@ -1,6 +1,8 @@
 /*
  * Avatars for initials, images, links, and buttons.
  *
+ * Docs: docs/pages/components/avatar.md
+ *
  * The visual box stays the same across semantic elements. Grouping and status
  * dots (an empty .badge child) compose around the avatar without changing its
  * meaning.

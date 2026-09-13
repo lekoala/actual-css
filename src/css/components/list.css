@@ -3,6 +3,8 @@
  * Content determines the number of lines; the component only owns the row
  * geometry, dividers, and supporting-text treatment.
  *
+ * Docs: docs/pages/components/list.md
+ *
  * Public hooks:
  * --list-item-min-size
  * --list-item-pad-block

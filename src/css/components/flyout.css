@@ -1,6 +1,8 @@
 /*
  * Flyout — floating panel for actions and links.
  *
+ * Docs: docs/pages/enhancements/flyout.md
+ *
  * JavaScript promotes the panel to the top layer and chooses viewport or
  * document coordinates from its anchor. It also owns state (.is-open), focus,
  * and keyboard behavior. CSS owns the surfaced panel appearance, item styles,

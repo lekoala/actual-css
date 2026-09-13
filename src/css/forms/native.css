@@ -3,6 +3,8 @@
  * custom styling, so the framework stays out of the way and just keeps them
  * readable and theme-aware.
  *
+ * Docs: docs/pages/forms/controls.md
+ *
  * Range has its own custom-styled file (range.css) so the focus ring can
  * target the thumb pseudo-element rather than the rectangular CSS box.
  */

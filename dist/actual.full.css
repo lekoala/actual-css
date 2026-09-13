@@ -863,6 +863,8 @@ small {
 /*
  * Prose is the opt-in rich text scope for authored content.
  *
+ * Docs: docs/pages/foundations/typography.md
+ *
  * Global element styles stay mild so app UI is not shaped accidentally. Page
  * layout, forms, cards, navigation, and app tables remain outside this scope.
  *
@@ -1079,7 +1081,8 @@ small {
 
 /* Lead paragraph: a slightly larger, more relaxed reading-introduction text.
    Non-fluid and always available — use .text-lead from the optional fluid
-   module for marketing/display surfaces. */
+   module for marketing/display surfaces.
+   Docs: docs/pages/foundations/typography.md */
 .lead {
   font-size: 1.125em;
   line-height: var(--line-height-relaxed);
@@ -1087,6 +1090,8 @@ small {
 
 /*
  * Overline — editorial small-cap label for section openers.
+ *
+ * Docs: docs/pages/foundations/typography.md
  *
  * Base form is unstyled chrome that takes its surrounding color. Add .pill for
  * the bordered rounded shape, and combine with an intent class (.primary,
@@ -1136,6 +1141,8 @@ small {
 
 /*
  * Optional fluid typography module.
+ *
+ * Docs: docs/pages/foundations/typography.md
  *
  * Part of the typography family (typography/index.css) and the full bundle; it
  * is not in the minimal core, so a core-only import adds it explicitly when
@@ -1267,7 +1274,8 @@ small {
    region re-spaces every nested stack, cluster and grid at any depth. Setting
    the token stays correct on the element that consumes it, and
    .compact/.spacious set it deliberately so a density context reaches nested layouts. See
-   docs/pages/layout/stack.md. */
+   docs/pages/layout/stack.md.
+   Docs: docs/pages/layout/stack.md */
 .stack {
   display: flex;
   flex-direction: column;
@@ -1280,6 +1288,8 @@ small {
 
 /*
  * Inline group that wraps when space runs out.
+ *
+ * Docs: docs/pages/layout/cluster.md
  *
  * Public hooks:
  * --cluster-align
@@ -1304,6 +1314,8 @@ small {
 /*
  * Centered content column with a maximum measure.
  *
+ * Docs: docs/pages/layout/center.md
+ *
  * Public hooks:
  * --center-size
  * --center-pad
@@ -1318,6 +1330,8 @@ small {
 
 /*
  * Media frame with a fixed ratio.
+ *
+ * Docs: docs/pages/layout/frame.md
  *
  * Public hooks:
  * --frame-ratio
@@ -1336,7 +1350,11 @@ small {
   object-fit: cover;
 }
 
-/* Full-height single-column document shell. */
+/*
+ * Full-height single-column document shell.
+ *
+ * Docs: docs/pages/layout/app-shell.md
+ */
 .app-shell {
   min-block-size: var(--viewport-block);
   display: flex;
@@ -1349,6 +1367,8 @@ small {
  * permits. The main region owns scrolling, keeping both pieces of application
  * chrome available without fixed offsets. This is not a generic page wrapper
  * or a public-site layout; all three direct regions are part of the contract.
+ *
+ * Docs: docs/pages/layout/app-layout.md
  *
  * Public hook:
  * --app-nav-side-size
@@ -1449,7 +1469,8 @@ small {
 /* Media object: fixed-width leading element (avatar, icon, image) + flexible
    trailing content. Replaces the repeated "auto minmax(0, 1fr)" pattern in
    author cards, comments, meta rows, and similar compositions.
-   Child contract: exactly two direct children (leading media + content). */
+   Child contract: exactly two direct children (leading media + content).
+   Docs: docs/pages/layout/media.md */
 .media {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
@@ -1459,6 +1480,8 @@ small {
 
 /*
  * Peer regions that switch as a group.
+ *
+ * Docs: docs/pages/layout/switcher.md
  *
  * All children sit side by side when they all fit; otherwise every child
  * stacks. Unlike .grid, this recipe cannot create a partial row such as two
@@ -1484,6 +1507,8 @@ small {
 
 /*
  * Main content + secondary region.
+ *
+ * Docs: docs/pages/layout/sidebar-layout.md
  *
  * The children wrap according to the space allocated to this layout, without
  * an ancestor opt-in or viewport threshold. The large growth ratio lets the
@@ -1538,6 +1563,8 @@ small {
 
 /*
  * Responsive equal-width grids.
+ *
+ * Docs: docs/pages/layout/grid.md
  *
  * .grid is space-driven: it fits as many tracks as --grid-min allows.
  * .grid-N is count-driven: it declares a structural density of N and collapses
@@ -1668,6 +1695,8 @@ small {
 
 /*
  * Explicit 12-column composition canvas.
+ *
+ * Docs: docs/pages/layout/column-layout.md
  *
  * Neither space-driven like .grid nor count-driven like .grid-N: this is a
  * coordinate system. The author places regions with .column-span-N /
@@ -1856,6 +1885,8 @@ small {
  * Scroll snap — optional horizontal rails for niche card strips and simple
  * touch-friendly overflow areas.
  *
+ * Docs: docs/pages/layout/scroll-snap.md
+ *
  * This is not a full carousel. For previous/next controls, pagination,
  * active state, drag behavior, looping, or robust desktop mouse interaction,
  * use a dedicated carousel library.
@@ -1920,6 +1951,8 @@ small {
  * header (.topbar) or underlaps it; scroll-margin reserves space on the
  * target itself so the browser stops early.
  *
+ * Docs: docs/pages/layout/scroll-target.md
+ *
  * Apply to the elements that are link targets: <section id="...">, headings,
  * etc. The scrollspy enhancer only reads ids — this offset is what actually
  * shapes where the page lands, and the two are independent.
@@ -1936,6 +1969,8 @@ small {
  * sidebar + topbar layouts). Owns positioning, stacking, and the frosted
  * background only — row content (search, breadcrumb, actions) stays local
  * to the page.
+ *
+ * Docs: docs/pages/layout/topbar.md
  *
  * Not for marketing/editorial site headers — those are one-off visual
  * identity per page; see docs/pages/patterns/overview.md's Header Navigation
@@ -1989,6 +2024,8 @@ small {
 /* Forms base — the ordinary native controls bundle. */
 /*
  * Form layout and supporting text.
+ *
+ * Docs: docs/pages/forms/overview.md
  *
  * Individual controls keep their own files; .choice label layout lives in
  * choice.css; .form-actions lives in form-actions.css.
@@ -2051,6 +2088,8 @@ small {
 
 /*
  * Text controls — input, textarea, select.
+ *
+ * Docs: docs/pages/forms/overview.md
  *
  * Neutral geometry and interaction states shared across all text-like
  * controls. select shares this base recipe; its chevron/appearance layer
@@ -2405,6 +2444,8 @@ small {
  * Select — chevron and appearance layer on top of the shared text-control
  * recipe.
  *
+ * Docs: docs/pages/forms/overview.md
+ *
  * Base geometry and interaction states come from control.css (select shares
  * the --control-* tokens). This file only removes the native arrow and draws
  * the CSS chevron, so the picker (appearance: base-select) enhancement in
@@ -2462,6 +2503,8 @@ small {
  * Native-only control polish: the file input and color picker mostly defeat
  * custom styling, so the framework stays out of the way and just keeps them
  * readable and theme-aware.
+ *
+ * Docs: docs/pages/forms/controls.md
  *
  * Range has its own custom-styled file (range.css) so the focus ring can
  * target the thumb pseudo-element rather than the rectangular CSS box.
@@ -2563,6 +2606,8 @@ small {
 /*
  * Form validation states.
  *
+ * Docs: docs/pages/forms/validation.md
+ *
  * Imported by default through forms/index.css. Custom builds may omit this
  * file when an app wants to own validation styling completely.
  *
@@ -2654,6 +2699,8 @@ small {
 /*
  * Form actions — bottom form bar with sticky variant.
  *
+ * Docs: docs/pages/forms/form-actions.md
+ *
  * A flex cluster of buttons/actions that closes a form. The sticky variant
  * docks to the viewport bottom with a translucent blur where supported; at
  * rest it stays visually neutral so it does not double as a separator.
@@ -2709,6 +2756,8 @@ small {
 
 /*
  * Input Icon — decorative icon inside a relative wrapper, leading or trailing.
+ *
+ * Docs: docs/pages/patterns/icon-input.md
  *
  * Icon-library agnostic: detects position by DOM order. First child that is
  * not .input = leading icon; icon after .input = trailing. The icon follows
@@ -2770,6 +2819,8 @@ small {
 
 /*
  * Switch controls for checkbox inputs with switch semantics.
+ *
+ * Docs: docs/pages/forms/switch.md
  *
  * The switch remains an input control, not a decorative toggle. Checked, hover,
  * focus-visible, and disabled states stay clear.
@@ -2923,6 +2974,8 @@ small {
  * Range slider — custom-styled so the focus ring always targets the
  * user-manipulated surface (the thumb) rather than the CSS box.
  *
+ * Docs: docs/pages/forms/range.md
+ *
  * appearance: none gives us full control over track and thumb; without it,
  * pseudo-element rules for ::-webkit-slider-thumb and ::-moz-range-thumb
  * are not reliably applied across browsers.
@@ -3037,6 +3090,8 @@ small {
 
 /*
  * Choice cards — card-style radio and checkbox labels.
+ *
+ * Docs: docs/pages/forms/choice-cards.md
  *
  * Each .choice-card is a <label> wrapping a native radio or checkbox. When
  * :has() is supported the input is visually hidden and the card mirrors its
@@ -3282,6 +3337,8 @@ small {
  * Floating labels — optional composition over the text controls
  * (.input, .textarea, .select) and .field-label.
  *
+ * Docs: docs/pages/forms/floating-field.md
+ *
  * The cell owns a control plus its label; the label overlays the control and
  * floats to the top when the control is focused or non-empty. Help and error
  * messages stay in the surrounding .field, not inside the cell, so the
@@ -3388,6 +3445,8 @@ small {
 
 /*
  * One-time code input with visual cells and one native input.
+ *
+ * Docs: docs/pages/forms/otp.md
  *
  * Add one direct span per accepted character. The cells determine the
  * component width; the overlaid input remains the only interactive control.
@@ -3522,6 +3581,8 @@ small {
 /* Controls */
 /*
  * Buttons for actions and button-like links.
+ *
+ * Docs: docs/pages/components/button.md
  *
  * .btn is primarily for actionable elements: <button>, <a href>,
  * input[type="button"|"submit"|"reset"].
@@ -3768,6 +3829,8 @@ a.btn[aria-disabled="true"] {
 
 /*
  * Badges for compact labels, counts, and state hints.
+ *
+ * Docs: docs/pages/components/badge.md
  *
  * Soft by default. .solid for counters and notification badges. The dot
  * (.badge:empty) stays solid regardless — a soft dot is pointless.
@@ -4028,6 +4091,8 @@ a.badge[aria-disabled="true"] {
 
 /*
  * Alerts for inline feedback and status messages.
+ *
+ * Docs: docs/pages/components/alert.md
  *
  * Keeps alert defaults local while consuming the shared --ui-* variant
  * plumbing for emphasis.
@@ -4315,6 +4380,8 @@ a.badge[aria-disabled="true"] {
 /*
  * Actions — a horizontal action-button cluster.
  *
+ * Docs: docs/pages/patterns/actions.md
+ *
  * Composes with .btn (or any inline element) and feeds layout via the shared
  * --gap token.
  *
@@ -4342,6 +4409,8 @@ a.badge[aria-disabled="true"] {
 /* Surfaces */
 /*
  * Cards provide a neutral raised surface for grouped content.
+ *
+ * Docs: docs/pages/components/card.md
  *
  * Surface, border, radius, padding, density, and elevation stay local here.
  * Direct header/footer children are structural slots; a direct footer is
@@ -4504,6 +4573,8 @@ a.badge[aria-disabled="true"] {
 /*
  * Modal shell styling for native dialog elements.
  *
+ * Docs: docs/pages/components/dialog.md
+ *
  * Spacing, radius, transitions, and focus treatment come from shared tokens.
  * Opening behavior and intent-specific decisions stay outside this component.
  *
@@ -4519,12 +4590,10 @@ a.badge[aria-disabled="true"] {
  * --dialog-viewport-gap-default
  * --dialog-viewport-gap-2x
  */
-dialog.modal {
-  /* --dialog-viewport-gap stays fallback-only for the same reason as
-     --modal-size below: declaring the public hook here would give it
-     type+class specificity that a single author class cannot outrank. The
-     responsive default lives in an internal token instead, so a media query
-     can still move it without closing the hook.
+:where(dialog).modal {
+  /* --dialog-viewport-gap stays fallback-only so the responsive default can
+     live in an internal token: a media query moves it without closing the
+     public hook.
 
      calc() multiplication is not in the supported browser range, so the
      doubled gap is spelled out with an additive calc. */
@@ -4538,10 +4607,8 @@ dialog.modal {
      provides the containing block for the absolutely positioned close button. */
   position: fixed;
 
-  /* --modal-size stays fallback-only: declaring it on dialog.modal gives it
-     type+class specificity, which a single author class cannot outrank, so the
-     public hook would silently keep this default. Same reason choice.css never
-     declares --choice-control-nudge. */
+  /* The root is :where(dialog).modal (0-1-0), so a single author class can
+     outrank these defaults — no fallback-only indirection needed here. */
   max-inline-size: min(calc(100% - var(--dialog-viewport-gap-2x)), var(--modal-size, 32rem));
 
   /* Stable viewport cap for the panel: dvh tracks the dynamic browser toolbar
@@ -4571,8 +4638,8 @@ dialog.modal {
     transform var(--duration) var(--ease-exit);
 }
 
-dialog.modal > form,
-dialog.modal > .stack {
+:where(dialog).modal > form,
+:where(dialog).modal > .stack {
   display: grid;
   gap: var(--space-40);
   max-block-size: calc(var(--dialog-viewport-block) - var(--dialog-viewport-gap-2x));
@@ -4582,7 +4649,7 @@ dialog.modal > .stack {
 }
 
 @supports (block-size: 100svh) {
-  dialog.modal {
+  :where(dialog).modal {
     --dialog-viewport-block: 100svh;
   }
 }
@@ -4590,42 +4657,42 @@ dialog.modal > .stack {
 /* Keep the dialog off the viewport edges on small screens. Moves the internal
    default, not the public hook, so an author override still wins here too. */
 @media (max-width: 30rem) {
-  dialog.modal {
+  :where(dialog).modal {
     --dialog-viewport-gap-default: var(--space-30);
   }
 }
 
-dialog.modal.scrollable > form,
-dialog.modal.scrollable > .stack {
+:where(dialog).modal.scrollable > form,
+:where(dialog).modal.scrollable > .stack {
   grid-template-rows: auto minmax(0, 1fr) auto;
   overflow: hidden;
 }
 
-dialog.modal.scrollable > form > :not(:is(header, footer)),
-dialog.modal.scrollable > .stack > :not(:is(header, footer)) {
+:where(dialog).modal.scrollable > form > :not(:is(header, footer)),
+:where(dialog).modal.scrollable > .stack > :not(:is(header, footer)) {
   min-block-size: 0;
   overflow: auto;
   overscroll-behavior: contain;
 }
 
-dialog.modal header > :first-child,
-dialog.modal footer > :first-child {
+:where(dialog).modal header > :first-child,
+:where(dialog).modal footer > :first-child {
   margin-block-start: 0;
 }
 
-dialog.modal header > :last-child,
-dialog.modal footer > :last-child {
+:where(dialog).modal header > :last-child,
+:where(dialog).modal footer > :last-child {
   margin-block-end: 0;
 }
 
 /* The close button is anchored to the dialog at top inline-end, out of the
    content flow; headers reserve inline room so titles never run under it. */
-dialog.modal > form > header,
-dialog.modal > .stack > header {
+:where(dialog).modal > form > header,
+:where(dialog).modal > .stack > header {
   padding-inline-end: calc(var(--control-size) + var(--space-30));
 }
 
-dialog.modal footer {
+:where(dialog).modal footer {
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-end;
@@ -4635,17 +4702,17 @@ dialog.modal footer {
 /* Confirmation layout — a focused message followed by a visually distinct
    action band. The media primitive owns icon/content alignment; this variant
    only removes the standard form inset so both regions can own their padding. */
-dialog.modal.dialog-confirmation > form {
+:where(dialog).modal.dialog-confirmation > form {
   gap: 0;
   padding: 0;
 }
 
-dialog.modal.dialog-confirmation > form > .media {
+:where(dialog).modal.dialog-confirmation > form > .media {
   gap: var(--space-40);
   padding: var(--space-50);
 }
 
-dialog.modal.dialog-confirmation > form > footer {
+:where(dialog).modal.dialog-confirmation > form > footer {
   padding: var(--space-40) var(--space-50);
   border-end-start-radius: calc(var(--radius-lg) - var(--border-width));
   border-end-end-radius: calc(var(--radius-lg) - var(--border-width));
@@ -4686,13 +4753,13 @@ dialog.modal.dialog-confirmation > form > footer {
 }
 
 @media (max-width: 30rem) {
-  dialog.modal.dialog-confirmation > form > .media,
-  dialog.modal.dialog-confirmation > form > footer {
+  :where(dialog).modal.dialog-confirmation > form > .media,
+  :where(dialog).modal.dialog-confirmation > form > footer {
     padding: var(--space-40);
   }
 }
 
-dialog.modal[open] {
+:where(dialog).modal[open] {
   opacity: 1;
   transform: none;
   transition:
@@ -4701,13 +4768,13 @@ dialog.modal[open] {
 }
 
 @starting-style {
-  dialog.modal[open] {
+  :where(dialog).modal[open] {
     opacity: 0;
     transform: translateY(0.35rem);
   }
 }
 
-dialog.modal::backdrop {
+:where(dialog).modal::backdrop {
   background: var(--backdrop-fill);
   opacity: 0;
   /* Scrim curve stays neutral `ease`; only the panel carries the character
@@ -4716,7 +4783,7 @@ dialog.modal::backdrop {
 }
 
 @supports (transition-behavior: allow-discrete) {
-  dialog.modal {
+  :where(dialog).modal {
     transition:
       opacity var(--duration) var(--ease-exit),
       transform var(--duration) var(--ease-exit),
@@ -4724,7 +4791,7 @@ dialog.modal::backdrop {
       display var(--duration) allow-discrete;
   }
 
-  dialog.modal[open] {
+  :where(dialog).modal[open] {
     transition:
       opacity var(--duration) var(--ease-enter),
       transform var(--duration) var(--ease-enter),
@@ -4732,7 +4799,7 @@ dialog.modal::backdrop {
       display var(--duration) allow-discrete;
   }
 
-  dialog.modal::backdrop {
+  :where(dialog).modal::backdrop {
     transition:
       opacity var(--duration) ease,
       overlay var(--duration) allow-discrete,
@@ -4740,7 +4807,7 @@ dialog.modal::backdrop {
   }
 }
 
-dialog.modal[open]::backdrop {
+:where(dialog).modal[open]::backdrop {
   opacity: 1;
 }
 
@@ -4753,7 +4820,7 @@ html.has-modal-open.had-scrollbar {
 }
 
 @starting-style {
-  dialog.modal[open]::backdrop {
+  :where(dialog).modal[open]::backdrop {
     opacity: 0;
   }
 }
@@ -4761,7 +4828,7 @@ html.has-modal-open.had-scrollbar {
 @media (prefers-reduced-motion: no-preference) {
   /* Wrong-close feedback and view-transition transport are motion quirks, not
      presence enter/exit, so they stay on the plain CSS default easing. */
-  dialog.modal.is-static {
+  :where(dialog).modal.is-static {
     animation: actual-dialog-static var(--duration-slow) ease;
   }
 
@@ -4842,6 +4909,12 @@ html.has-modal-open.had-scrollbar {
 /*
  * Drawer — modal side-sheet built on the native dialog element.
  *
+ * Docs: docs/pages/components/drawer.md
+ *
+ * Open with a native command button:
+ * command="show-modal" commandfor="<drawer-id>".
+ * For stacked navigation, compose with .nav-list from navbar.css.
+ *
  * Top-layer rendering, ::backdrop, Escape, and modal focus come from the
  * native dialog. CSS owns progressive enter/exit motion where browsers support
  * discrete display/overlay transitions. The drawer is a layout shell only —
@@ -4857,7 +4930,7 @@ html.has-modal-open.had-scrollbar {
  * --drawer-motion-duration (shared by panel and ::backdrop so exit duration
  *   changes in one place; entry state redefines it longer)
  */
-dialog.drawer {
+:where(dialog).drawer {
   --drawer-size: 20rem;
   --drawer-pad: var(--space-40);
   --drawer-closed-translate: -100%;
@@ -4900,7 +4973,7 @@ dialog.drawer {
     transform var(--drawer-motion-duration) var(--ease-exit);
 }
 
-dialog.drawer[open] {
+:where(dialog).drawer[open] {
   --drawer-motion-duration: var(--duration-slow);
   display: grid;
   grid-template-rows: auto minmax(0, 1fr) auto;
@@ -4915,7 +4988,7 @@ dialog.drawer[open] {
 /* A form is the drawer's content wrapper when actions need method="dialog".
    Span the drawer tracks so the form can keep the header at the top, let the
    body absorb the available height, and keep the footer at the bottom. */
-dialog.drawer > form {
+:where(dialog).drawer > form {
   display: grid;
   grid-row: 1 / -1;
   grid-template-rows: auto minmax(0, 1fr) auto;
@@ -4924,7 +4997,7 @@ dialog.drawer > form {
 }
 
 /* The shared backdrop token keeps drawer and modal scrims consistent. */
-dialog.drawer::backdrop {
+:where(dialog).drawer::backdrop {
   background: var(--backdrop-fill);
   opacity: 0;
   /* Scrim curve stays neutral `ease`; only the panel's character curves
@@ -4932,7 +5005,7 @@ dialog.drawer::backdrop {
   transition: opacity var(--drawer-motion-duration) ease;
 }
 
-dialog.drawer[data-side="end"] {
+:where(dialog).drawer[data-side="end"] {
   --drawer-closed-translate: 100%;
 
   margin-inline-start: auto;
@@ -4941,17 +5014,17 @@ dialog.drawer[data-side="end"] {
   border-inline-start: var(--border-width) solid var(--border);
 }
 
-dialog.drawer[open]::backdrop {
+:where(dialog).drawer[open]::backdrop {
   opacity: 1;
 }
 
 @starting-style {
-  dialog.drawer[open] {
+  :where(dialog).drawer[open] {
     opacity: 0;
     transform: translateX(var(--drawer-closed-translate));
   }
 
-  dialog.drawer[open]::backdrop {
+  :where(dialog).drawer[open]::backdrop {
     opacity: 0;
   }
 }
@@ -4961,15 +5034,15 @@ dialog.drawer[open]::backdrop {
    modal, which sizes to its content and opts in with .scrollable. Header and
    footer keep their own tracks; .drawer-close is named because a generic
    exclusion list is easier to trust than its `position: absolute`. */
-dialog.drawer > :not(:is(header, footer, form, .drawer-close)),
-dialog.drawer > form > :not(:is(header, footer, .drawer-close)) {
+:where(dialog).drawer > :not(:is(header, footer, form, .drawer-close)),
+:where(dialog).drawer > form > :not(:is(header, footer, .drawer-close)) {
   min-block-size: 0;
   overflow: auto;
   overscroll-behavior: contain;
 }
 
 @supports (transition-behavior: allow-discrete) {
-  dialog.drawer {
+  :where(dialog).drawer {
     transition:
       opacity var(--drawer-motion-duration) var(--ease-exit),
       transform var(--drawer-motion-duration) var(--ease-exit),
@@ -4977,7 +5050,7 @@ dialog.drawer > form > :not(:is(header, footer, .drawer-close)) {
       display var(--drawer-motion-duration) allow-discrete;
   }
 
-  dialog.drawer[open] {
+  :where(dialog).drawer[open] {
     transition:
       opacity var(--drawer-motion-duration) var(--ease-enter),
       transform var(--drawer-motion-duration) var(--ease-enter),
@@ -4985,7 +5058,7 @@ dialog.drawer > form > :not(:is(header, footer, .drawer-close)) {
       display var(--drawer-motion-duration) allow-discrete;
   }
 
-  dialog.drawer::backdrop {
+  :where(dialog).drawer::backdrop {
     transition:
       opacity var(--drawer-motion-duration) ease,
       overlay var(--drawer-motion-duration) allow-discrete,
@@ -4999,40 +5072,40 @@ dialog.drawer > form > :not(:is(header, footer, .drawer-close)) {
    directionality and handles nested direction changes; the explicit ltr rules
    neutralize an outer RTL fallback selector. Each specificity group keeps the
    fallback before the :dir() rules. */
-[dir="rtl"] dialog.drawer {
+[dir="rtl"] :where(dialog).drawer {
   --drawer-closed-translate: 100%;
 }
 
-dialog.drawer:dir(ltr) {
+:where(dialog).drawer:dir(ltr) {
   --drawer-closed-translate: -100%;
 }
 
-dialog.drawer:dir(rtl) {
+:where(dialog).drawer:dir(rtl) {
   --drawer-closed-translate: 100%;
 }
 
-[dir="rtl"] dialog.drawer[data-side="end"] {
+[dir="rtl"] :where(dialog).drawer[data-side="end"] {
   --drawer-closed-translate: -100%;
 }
 
-dialog.drawer[data-side="end"]:dir(ltr) {
+:where(dialog).drawer[data-side="end"]:dir(ltr) {
   --drawer-closed-translate: 100%;
 }
 
-dialog.drawer[data-side="end"]:dir(rtl) {
+:where(dialog).drawer[data-side="end"]:dir(rtl) {
   --drawer-closed-translate: -100%;
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  dialog.drawer.is-static {
+  :where(dialog).drawer.is-static {
     animation: actual-dialog-static var(--duration-slow) ease;
   }
 }
 
 /* The header reserves inline room so the title never runs under the close
    control. */
-dialog.drawer > header,
-dialog.drawer > form > header {
+:where(dialog).drawer > header,
+:where(dialog).drawer > form > header {
   padding-inline-end: calc(var(--control-size) + var(--space-30));
 }
 
@@ -5090,6 +5163,8 @@ dialog.drawer > form > header {
 /* Overlays */
 /*
  * Flyout — floating panel for actions and links.
+ *
+ * Docs: docs/pages/enhancements/flyout.md
  *
  * JavaScript promotes the panel to the top layer and chooses viewport or
  * document coordinates from its anchor. It also owns state (.is-open), focus,
@@ -5393,6 +5468,8 @@ dialog.drawer > form > header {
 /*
  * Tooltip — supplemental label overlaid near a trigger.
  *
+ * Docs: docs/pages/enhancements/tooltip.md
+ *
  * Position, placement, and arrow position are managed by JavaScript via left,
  * top, data-placement, and --arrow-x. The runtime also owns `position`: it
  * writes `absolute` for a tip whose trigger scrolls with the page, so the
@@ -5535,6 +5612,8 @@ dialog.drawer > form > header {
 /*
  * Accordion disclosures built on native details and summary.
  *
+ * Docs: docs/pages/components/accordion.md
+ *
  * Keeps the clickable summary affordance aligned and usable without JavaScript
  * or demo styles. Decorative palettes and custom markers belong outside the
  * base component.
@@ -5662,6 +5741,8 @@ dialog.drawer > form > header {
 /*
  * Spinner — compact loading feedback.
  *
+ * Docs: docs/pages/components/spinner.md
+ *
  * Uses currentColor so it adapts to buttons, alerts, badges, and text. The
  * [aria-busy] overlay composition lives in components/busy.css.
  *
@@ -5726,6 +5807,8 @@ dialog.drawer > form > header {
 
 /*
  * Skeleton placeholders for loading states.
+ *
+ * Docs: docs/pages/components/skeleton.md
  *
  * Shows approximate loading structure without implying real content hierarchy.
  * Geometry, animation, and color stay theme-aware.
@@ -5813,6 +5896,8 @@ dialog.drawer > form > header {
 /*
  * Busy overlay — non-button loading state.
  *
+ * Docs: docs/pages/components/spinner.md
+ *
  * A non-button element with aria-busy="true" and a direct last-child .spinner
  * shows that spinner as a centered overlay over a faded surface. Buttons keep
  * their spinners inline (e.g. .btn[aria-busy] > .spinner stays inline-flex).
@@ -5864,6 +5949,8 @@ dialog.drawer > form > header {
 
 /*
  * Progress — native progress bar with theme-aware track and value.
+ *
+ * Docs: docs/pages/components/progress.md
  *
  * Consumes the shared --intent/--primary for the value bar and --bar-height
  * for thickness. Indeterminate state animates a shimmer using --duration-shimmer.
@@ -5979,6 +6066,8 @@ dialog.drawer > form > header {
 /*
  * Status bar — singleton floating status area.
  *
+ * Docs: docs/pages/enhancements/status-bar.md
+ *
  * One element in the HTML, empty by default. .is-open is the visual state, set
  * by status.js like any other surface: it lands after the message is written
  * and lifts before the bar is cleared, so the bar leaves in the exact state it
@@ -6069,6 +6158,8 @@ dialog.drawer > form > header {
 /* Display */
 /*
  * Avatars for initials, images, links, and buttons.
+ *
+ * Docs: docs/pages/components/avatar.md
  *
  * The visual box stays the same across semantic elements. Grouping and status
  * dots (an empty .badge child) compose around the avatar without changing its
@@ -6292,6 +6383,8 @@ a.avatar[aria-disabled="true"] {
 /*
  * Indicator — generic corner positioning for overlaid component content.
  *
+ * Docs: docs/pages/components/indicator.md
+ *
  * The container only establishes the containing block. The item owns no
  * paint, size, or ring so badges and other components keep their own visual
  * contract.
@@ -6361,6 +6454,8 @@ a.avatar[aria-disabled="true"] {
 /*
  * Key — keyboard keys and shortcut tokens for UI chrome.
  *
+ * Docs: docs/pages/components/key.md
+ *
  * Use .key outside prose. Plain kbd inside .prose gets the same visual
  * treatment from prose.css so authored content stays convenient.
  *
@@ -6400,6 +6495,8 @@ a.avatar[aria-disabled="true"] {
 
 /*
  * Message rows composed from an optional avatar, metadata, and bubble.
+ *
+ * Docs: docs/pages/components/chat.md
  *
  * Public hooks:
  * --chat-gap
@@ -6503,6 +6600,8 @@ a.avatar[aria-disabled="true"] {
  * Fixed floating action placement and a native-details speed dial.
  * Button owns the trigger's size, shape, and intent; FAB owns placement and
  * the speed dial's structural open/close markers (--icon-plus / --icon-close).
+ *
+ * Docs: docs/pages/components/fab.md
  *
  * Public hooks:
  * --fab-offset
@@ -6631,6 +6730,8 @@ a.avatar[aria-disabled="true"] {
 /*
  * Rating — integer star rating drawn on native radio inputs.
  *
+ * Docs: docs/pages/components/rating.md
+ *
  * The checked radio remains the functional baseline. :has() progressively
  * fills preceding stars without reversing DOM or keyboard order. Forced
  * colors restores the platform radio presentation.
@@ -6732,6 +6833,8 @@ a.avatar[aria-disabled="true"] {
 
 /*
  * Steps — semantic ordered-list progression for a multi-step process.
+ *
+ * Docs: docs/pages/components/steps.md
  *
  * One primitive, two explicit compositions. Both classes are required:
  *
@@ -7081,6 +7184,8 @@ a.avatar[aria-disabled="true"] {
  * and item states; app-layout owns whether that surface is a bottom bar or
  * labelled side navigation.
  *
+ * Docs: docs/pages/components/app-navigation.md
+ *
  * Public hooks:
  * --app-nav-size
  * --app-nav-gap
@@ -7165,6 +7270,8 @@ a.avatar[aria-disabled="true"] {
 
 /*
  * Navbar — top-level navigation bar.
+ *
+ * Docs: docs/pages/components/navbar.md
  *
  * .navbar is a horizontal bar; .navbar-brand is the brand link; .navbar-nav is
  * the inline link list using .nav-link items. .nav-list is the vertical nav
@@ -7298,6 +7405,8 @@ a.avatar[aria-disabled="true"] {
 /*
  * Breadcrumb — current-location trail from the site root.
  *
+ * Docs: docs/pages/components/breadcrumb.md
+ *
  * Inline list separated by "/". Mark the current page with `aria-current="page"`
  * either on the item or on the current link.
  */
@@ -7347,6 +7456,8 @@ a.avatar[aria-disabled="true"] {
 /*
  * Pagination — page navigation for paginated lists.
  *
+ * Docs: docs/pages/components/pagination.md
+ *
  * Render .btn elements inside a .pagination list. The active page is marked
  * with aria-current="page"; .btn owns the active state styling.
  *
@@ -7390,6 +7501,8 @@ a.avatar[aria-disabled="true"] {
 
 /*
  * Tabs — in-place panel switcher with real tab semantics.
+ *
+ * Docs: docs/pages/enhancements/tabs.md
  *
  * JavaScript owns roving tabindex, aria-selected, panel visibility,
  * and arrow-key navigation. CSS owns the tab strip appearance and
@@ -7512,6 +7625,8 @@ a.avatar[aria-disabled="true"] {
  * Scrollspy — behavior hook for navigation that marks the active section
  * while the page scrolls.
  *
+ * Docs: docs/pages/enhancements/scrollspy.md
+ *
  * Does not add visual styles by itself. scrollspy.js watches
  * <nav class="scrollspy">
  * containing <a href="#section"> links and toggles aria-current="location" on
@@ -7540,6 +7655,8 @@ a.avatar[aria-disabled="true"] {
 /* Data */
 /*
  * Data list — term/value pairs for the properties of a single object.
+ *
+ * Docs: docs/pages/components/data-list.md
  *
  * Expects alternating <dt>/<dd> children: one term, one value per property.
  * A plain <dl> handles richer relationships (several terms or descriptions)
@@ -7570,6 +7687,8 @@ a.avatar[aria-disabled="true"] {
  * Application list — repeated rows with optional leading and trailing regions.
  * Content determines the number of lines; the component only owns the row
  * geometry, dividers, and supporting-text treatment.
+ *
+ * Docs: docs/pages/components/list.md
  *
  * Public hooks:
  * --list-item-min-size
@@ -7691,6 +7810,8 @@ a.list-item[aria-current]::before {
 /*
  * Table — structured tabular data.
  *
+ * Docs: docs/pages/components/table.md
+ *
  * .table-wrap provides the scroll container and outer chrome; .table owns row
  * and cell rules. Tokens are sourced from the shared scale.
  *
@@ -7771,6 +7892,8 @@ a.list-item[aria-current]::before {
 
 /*
  * Meter — native and segmented gauges for known-range values.
+ *
+ * Docs: docs/pages/components/meter.md
  *
  * Maps the three standard meter zones (optimum / suboptimum / even-less-good)
  * to the shared success / warning / danger intent colors.
@@ -7863,6 +7986,8 @@ a.list-item[aria-current]::before {
    later than the controls they group. */
 /*
  * Join — visually groups adjacent controls into a single unit.
+ *
+ * Docs: docs/pages/forms/joined-controls.md
  *
  * This is a cross-cutting control primitive, not a forms-only component:
  * it applies equally to inputs, selects, buttons, and button-like links.
@@ -7996,6 +8121,8 @@ a.list-item[aria-current]::before {
 /* Effects — purely visual enrichments. */
 /*
  * Decorative intent-colored frame for one direct child.
+ *
+ * Docs: docs/pages/components/aura.md
  *
  * The effect is built from three layers with distinct roles: a frame carrying
  * a short accent of light, a small halo that belongs to the frame and keeps

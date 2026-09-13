@@ -1,6 +1,8 @@
 /*
  * Main content + secondary region.
  *
+ * Docs: docs/pages/layout/sidebar-layout.md
+ *
  * The children wrap according to the space allocated to this layout, without
  * an ancestor opt-in or viewport threshold. The large growth ratio lets the
  * main region reclaim the full row when the aside wraps instead of remaining

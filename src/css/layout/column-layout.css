@@ -1,6 +1,8 @@
 /*
  * Explicit 12-column composition canvas.
  *
+ * Docs: docs/pages/layout/column-layout.md
+ *
  * Neither space-driven like .grid nor count-driven like .grid-N: this is a
  * coordinate system. The author places regions with .column-span-N /
  * .column-start-N and owns narrow-container recomposition. There is

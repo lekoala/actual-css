@@ -1,6 +1,8 @@
 /*
  * Switch controls for checkbox inputs with switch semantics.
  *
+ * Docs: docs/pages/forms/switch.md
+ *
  * The switch remains an input control, not a decorative toggle. Checked, hover,
  * focus-visible, and disabled states stay clear.
  *

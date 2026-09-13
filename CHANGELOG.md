@@ -2,6 +2,14 @@
 
 ## [Unreleased]
 
+### Fixed
+
+- `:where(dialog).modal` and `:where(dialog).drawer` roots now have 0-1-0 specificity like other components, allowing a later application class to override their defaults and documented hooks normally.
+
+### Documentation and tooling
+
+- Public CSS sources carry a `Docs:` pointer to their canonical usage page, verified by `check:architecture`.
+
 
 ## [0.9.0] - 2026-09-13
 

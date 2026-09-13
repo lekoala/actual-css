@@ -1,6 +1,8 @@
 /*
  * Indicator — generic corner positioning for overlaid component content.
  *
+ * Docs: docs/pages/components/indicator.md
+ *
  * The container only establishes the containing block. The item owns no
  * paint, size, or ring so badges and other components keep their own visual
  * contract.

@@ -1,6 +1,8 @@
 /*
  * Tooltip — supplemental label overlaid near a trigger.
  *
+ * Docs: docs/pages/enhancements/tooltip.md
+ *
  * Position, placement, and arrow position are managed by JavaScript via left,
  * top, data-placement, and --arrow-x. The runtime also owns `position`: it
  * writes `absolute` for a tip whose trigger scrolls with the page, so the

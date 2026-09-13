@@ -1,4 +1,8 @@
-/* Full-height single-column document shell. */
+/*
+ * Full-height single-column document shell.
+ *
+ * Docs: docs/pages/layout/app-shell.md
+ */
 .app-shell {
   min-block-size: var(--viewport-block);
   display: flex;

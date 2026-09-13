@@ -1,6 +1,8 @@
 /*
  * Badges for compact labels, counts, and state hints.
  *
+ * Docs: docs/pages/components/badge.md
+ *
  * Soft by default. .solid for counters and notification badges. The dot
  * (.badge:empty) stays solid regardless — a soft dot is pointless.
  * Shared .outline variant stays available.

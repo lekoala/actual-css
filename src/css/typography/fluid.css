@@ -1,6 +1,8 @@
 /*
  * Optional fluid typography module.
  *
+ * Docs: docs/pages/foundations/typography.md
+ *
  * Part of the typography family (typography/index.css) and the full bundle; it
  * is not in the minimal core, so a core-only import adds it explicitly when
  * display, title, and lead sizes must scale with the viewport. Typical use

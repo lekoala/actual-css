@@ -1,6 +1,8 @@
 /*
  * Spinner — compact loading feedback.
  *
+ * Docs: docs/pages/components/spinner.md
+ *
  * Uses currentColor so it adapts to buttons, alerts, badges, and text. The
  * [aria-busy] overlay composition lives in components/busy.css.
  *

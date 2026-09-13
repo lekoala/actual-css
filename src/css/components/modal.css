@@ -1,6 +1,8 @@
 /*
  * Modal shell styling for native dialog elements.
  *
+ * Docs: docs/pages/components/dialog.md
+ *
  * Spacing, radius, transitions, and focus treatment come from shared tokens.
  * Opening behavior and intent-specific decisions stay outside this component.
  *
@@ -16,12 +18,10 @@
  * --dialog-viewport-gap-default
  * --dialog-viewport-gap-2x
  */
-dialog.modal {
-  /* --dialog-viewport-gap stays fallback-only for the same reason as
-     --modal-size below: declaring the public hook here would give it
-     type+class specificity that a single author class cannot outrank. The
-     responsive default lives in an internal token instead, so a media query
-     can still move it without closing the hook.
+:where(dialog).modal {
+  /* --dialog-viewport-gap stays fallback-only so the responsive default can
+     live in an internal token: a media query moves it without closing the
+     public hook.
 
      calc() multiplication is not in the supported browser range, so the
      doubled gap is spelled out with an additive calc. */
@@ -35,10 +35,8 @@ dialog.modal {
      provides the containing block for the absolutely positioned close button. */
   position: fixed;
 
-  /* --modal-size stays fallback-only: declaring it on dialog.modal gives it
-     type+class specificity, which a single author class cannot outrank, so the
-     public hook would silently keep this default. Same reason choice.css never
-     declares --choice-control-nudge. */
+  /* The root is :where(dialog).modal (0-1-0), so a single author class can
+     outrank these defaults — no fallback-only indirection needed here. */
   max-inline-size: min(calc(100% - var(--dialog-viewport-gap-2x)), var(--modal-size, 32rem));
 
   /* Stable viewport cap for the panel: dvh tracks the dynamic browser toolbar
@@ -68,8 +66,8 @@ dialog.modal {
     transform var(--duration) var(--ease-exit);
 }
 
-dialog.modal > form,
-dialog.modal > .stack {
+:where(dialog).modal > form,
+:where(dialog).modal > .stack {
   display: grid;
   gap: var(--space-40);
   max-block-size: calc(var(--dialog-viewport-block) - var(--dialog-viewport-gap-2x));
@@ -79,7 +77,7 @@ dialog.modal > .stack {
 }
 
 @supports (block-size: 100svh) {
-  dialog.modal {
+  :where(dialog).modal {
     --dialog-viewport-block: 100svh;
   }
 }
@@ -87,42 +85,42 @@ dialog.modal > .stack {
 /* Keep the dialog off the viewport edges on small screens. Moves the internal
    default, not the public hook, so an author override still wins here too. */
 @media (max-width: 30rem) {
-  dialog.modal {
+  :where(dialog).modal {
     --dialog-viewport-gap-default: var(--space-30);
   }
 }
 
-dialog.modal.scrollable > form,
-dialog.modal.scrollable > .stack {
+:where(dialog).modal.scrollable > form,
+:where(dialog).modal.scrollable > .stack {
   grid-template-rows: auto minmax(0, 1fr) auto;
   overflow: hidden;
 }
 
-dialog.modal.scrollable > form > :not(:is(header, footer)),
-dialog.modal.scrollable > .stack > :not(:is(header, footer)) {
+:where(dialog).modal.scrollable > form > :not(:is(header, footer)),
+:where(dialog).modal.scrollable > .stack > :not(:is(header, footer)) {
   min-block-size: 0;
   overflow: auto;
   overscroll-behavior: contain;
 }
 
-dialog.modal header > :first-child,
-dialog.modal footer > :first-child {
+:where(dialog).modal header > :first-child,
+:where(dialog).modal footer > :first-child {
   margin-block-start: 0;
 }
 
-dialog.modal header > :last-child,
-dialog.modal footer > :last-child {
+:where(dialog).modal header > :last-child,
+:where(dialog).modal footer > :last-child {
   margin-block-end: 0;
 }
 
 /* The close button is anchored to the dialog at top inline-end, out of the
    content flow; headers reserve inline room so titles never run under it. */
-dialog.modal > form > header,
-dialog.modal > .stack > header {
+:where(dialog).modal > form > header,
+:where(dialog).modal > .stack > header {
   padding-inline-end: calc(var(--control-size) + var(--space-30));
 }
 
-dialog.modal footer {
+:where(dialog).modal footer {
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-end;
@@ -132,17 +130,17 @@ dialog.modal footer {
 /* Confirmation layout — a focused message followed by a visually distinct
    action band. The media primitive owns icon/content alignment; this variant
    only removes the standard form inset so both regions can own their padding. */
-dialog.modal.dialog-confirmation > form {
+:where(dialog).modal.dialog-confirmation > form {
   gap: 0;
   padding: 0;
 }
 
-dialog.modal.dialog-confirmation > form > .media {
+:where(dialog).modal.dialog-confirmation > form > .media {
   gap: var(--space-40);
   padding: var(--space-50);
 }
 
-dialog.modal.dialog-confirmation > form > footer {
+:where(dialog).modal.dialog-confirmation > form > footer {
   padding: var(--space-40) var(--space-50);
   border-end-start-radius: calc(var(--radius-lg) - var(--border-width));
   border-end-end-radius: calc(var(--radius-lg) - var(--border-width));
@@ -183,13 +181,13 @@ dialog.modal.dialog-confirmation > form > footer {
 }
 
 @media (max-width: 30rem) {
-  dialog.modal.dialog-confirmation > form > .media,
-  dialog.modal.dialog-confirmation > form > footer {
+  :where(dialog).modal.dialog-confirmation > form > .media,
+  :where(dialog).modal.dialog-confirmation > form > footer {
     padding: var(--space-40);
   }
 }
 
-dialog.modal[open] {
+:where(dialog).modal[open] {
   opacity: 1;
   transform: none;
   transition:
@@ -198,13 +196,13 @@ dialog.modal[open] {
 }
 
 @starting-style {
-  dialog.modal[open] {
+  :where(dialog).modal[open] {
     opacity: 0;
     transform: translateY(0.35rem);
   }
 }
 
-dialog.modal::backdrop {
+:where(dialog).modal::backdrop {
   background: var(--backdrop-fill);
   opacity: 0;
   /* Scrim curve stays neutral `ease`; only the panel carries the character
@@ -213,7 +211,7 @@ dialog.modal::backdrop {
 }
 
 @supports (transition-behavior: allow-discrete) {
-  dialog.modal {
+  :where(dialog).modal {
     transition:
       opacity var(--duration) var(--ease-exit),
       transform var(--duration) var(--ease-exit),
@@ -221,7 +219,7 @@ dialog.modal::backdrop {
       display var(--duration) allow-discrete;
   }
 
-  dialog.modal[open] {
+  :where(dialog).modal[open] {
     transition:
       opacity var(--duration) var(--ease-enter),
       transform var(--duration) var(--ease-enter),
@@ -229,7 +227,7 @@ dialog.modal::backdrop {
       display var(--duration) allow-discrete;
   }
 
-  dialog.modal::backdrop {
+  :where(dialog).modal::backdrop {
     transition:
       opacity var(--duration) ease,
       overlay var(--duration) allow-discrete,
@@ -237,7 +235,7 @@ dialog.modal::backdrop {
   }
 }
 
-dialog.modal[open]::backdrop {
+:where(dialog).modal[open]::backdrop {
   opacity: 1;
 }
 
@@ -250,7 +248,7 @@ html.has-modal-open.had-scrollbar {
 }
 
 @starting-style {
-  dialog.modal[open]::backdrop {
+  :where(dialog).modal[open]::backdrop {
     opacity: 0;
   }
 }
@@ -258,7 +256,7 @@ html.has-modal-open.had-scrollbar {
 @media (prefers-reduced-motion: no-preference) {
   /* Wrong-close feedback and view-transition transport are motion quirks, not
      presence enter/exit, so they stay on the plain CSS default easing. */
-  dialog.modal.is-static {
+  :where(dialog).modal.is-static {
     animation: actual-dialog-static var(--duration-slow) ease;
   }
 

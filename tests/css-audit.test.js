@@ -580,9 +580,8 @@ test("tabs include vertical orientation styling without spending specificity on 
 test("--modal-size is a fallback-only hook", () => {
   const css = readCss("src/css/components/modal.css");
 
-  /* Declared on dialog.modal, the hook carries type+class specificity and a
-     single author class cannot set it: the public width hook would silently
-     keep its default. Fallback-only, as choice.css does for
+  /* The root is :where(dialog).modal (0-1-0), so a single author class can
+     set the hook: fallback-only, as choice.css does for
      --choice-control-nudge, so `.my-modal { --modal-size: 58rem }` and an
      inherited override both reach it. */
   expect(css).not.toMatch(/^\s*--modal-size:/m);
@@ -637,15 +636,19 @@ test("dialog surfaces stay fixed to the viewport", () => {
   const modalCss = readCss("src/css/components/modal.css");
   const drawerCss = readCss("src/css/components/drawer.css");
 
-  expect(modalCss).toMatch(/dialog\.modal\s*\{[^}]*position:\s*fixed;/);
-  expect(drawerCss).toMatch(/dialog\.drawer\s*\{[^}]*position:\s*fixed;/);
-  expect(drawerCss).toMatch(/dialog\.drawer\s*\{[^}]*inset-block-start:\s*0;/);
+  expect(modalCss).toMatch(/:where\(dialog\)\.modal\s*\{[^}]*position:\s*fixed;/);
+  expect(drawerCss).toMatch(/:where\(dialog\)\.drawer\s*\{[^}]*position:\s*fixed;/);
+  expect(drawerCss).toMatch(/:where\(dialog\)\.drawer\s*\{[^}]*inset-block-start:\s*0;/);
   // The drawer reaches both viewport edges, so it follows the dynamic token
   // rather than a percentage of the layout viewport, which mobile browsers
   // size as if the URL bar were hidden. The modal pins the small viewport
   // instead: it floats, and a stable height beats one that breathes.
-  expect(drawerCss).toMatch(/dialog\.drawer\s*\{[^}]*block-size:\s*var\(--viewport-block\);/);
-  expect(drawerCss).toMatch(/dialog\.drawer\s*\{[^}]*max-block-size:\s*var\(--viewport-block\);/);
+  expect(drawerCss).toMatch(
+    /:where\(dialog\)\.drawer\s*\{[^}]*block-size:\s*var\(--viewport-block\);/,
+  );
+  expect(drawerCss).toMatch(
+    /:where\(dialog\)\.drawer\s*\{[^}]*max-block-size:\s*var\(--viewport-block\);/,
+  );
 });
 
 test("the drawer body scrolls so its footer is always reachable", () => {
@@ -653,26 +656,26 @@ test("the drawer body scrolls so its footer is always reachable", () => {
 
   // A drawer is a full-height shell, so the body region always scrolls —
   // the modal is the one that sizes to content and opts in with .scrollable.
-  expect(css).toContain("dialog.drawer > :not(:is(header, footer, form, .drawer-close))");
-  expect(css).toContain("dialog.drawer > form > :not(:is(header, footer, .drawer-close))");
+  expect(css).toContain(":where(dialog).drawer > :not(:is(header, footer, form, .drawer-close))");
+  expect(css).toContain(":where(dialog).drawer > form > :not(:is(header, footer, .drawer-close))");
   expect(css).toMatch(/overscroll-behavior:\s*contain;/);
 });
 
 test("drawer RTL keeps the Degraded fallback and enhances inherited direction", () => {
   const css = readCss("src/css/components/drawer.css");
 
-  expect(css).toContain('[dir="rtl"] dialog.drawer {');
-  expect(css).toContain('[dir="rtl"] dialog.drawer[data-side="end"] {');
+  expect(css).toContain('[dir="rtl"] :where(dialog).drawer {');
+  expect(css).toContain('[dir="rtl"] :where(dialog).drawer[data-side="end"] {');
   // Each :dir() rule is dropped on its own where unsupported, so no wrapper.
   expect(css).not.toContain("@supports selector(:dir");
-  expect(css).toContain("dialog.drawer:dir(ltr) {");
-  expect(css).toContain('dialog.drawer[data-side="end"]:dir(rtl) {');
+  expect(css).toContain(":where(dialog).drawer:dir(ltr) {");
+  expect(css).toContain(':where(dialog).drawer[data-side="end"]:dir(rtl) {');
 });
 
 test("confirmation dialog composes media alignment with an intent-aware icon well", () => {
   const css = readCss("src/css/components/modal.css");
 
-  expect(css).toContain("dialog.modal.dialog-confirmation > form > .media");
+  expect(css).toContain(":where(dialog).modal.dialog-confirmation > form > .media");
   expect(css).toMatch(/\.dialog-icon\s*\{[^}]*place-items:\s*center;/);
   expect(css).toMatch(/\.dialog-icon\s*\{[^}]*border-radius:\s*var\(--radius-full\);/);
   expect(css).toContain("background: var(--ui-bg, var(--surface-subtle));");

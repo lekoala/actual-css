@@ -1,6 +1,8 @@
 /*
  * Form actions — bottom form bar with sticky variant.
  *
+ * Docs: docs/pages/forms/form-actions.md
+ *
  * A flex cluster of buttons/actions that closes a form. The sticky variant
  * docks to the viewport bottom with a translucent blur where supported; at
  * rest it stays visually neutral so it does not double as a separator.

@@ -1,6 +1,8 @@
 /*
  * Rating — integer star rating drawn on native radio inputs.
  *
+ * Docs: docs/pages/components/rating.md
+ *
  * The checked radio remains the functional baseline. :has() progressively
  * fills preceding stars without reversing DOM or keyboard order. Forced
  * colors restores the platform radio presentation.

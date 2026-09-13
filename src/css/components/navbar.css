@@ -1,6 +1,8 @@
 /*
  * Navbar — top-level navigation bar.
  *
+ * Docs: docs/pages/components/navbar.md
+ *
  * .navbar is a horizontal bar; .navbar-brand is the brand link; .navbar-nav is
  * the inline link list using .nav-link items. .nav-list is the vertical nav
  * list shared with .drawer, fed by the shared --gap token.

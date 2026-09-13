@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dialog root specificity fixture</title>
+  <link rel="stylesheet" href="../../src/css/actual.full.css">
+  <style>
+    * { transition-duration: 0s !important; }
+    /* Single application classes: they outrank the :where(dialog) roots
+       (0-1-0) by source order. Against the old dialog.modal roots (0-1-1)
+       these declarations would lose. */
+    .site-modal { background: rgb(1, 2, 3); }
+    .site-drawer { background: rgb(4, 5, 6); }
+  </style>
+</head>
+<body>
+  <dialog class="modal site-modal" id="override-modal" open>
+    <div class="stack"><p>Modal override</p></div>
+  </dialog>
+  <dialog class="drawer site-drawer" id="override-drawer" open>
+    <header><strong>Drawer override</strong></header>
+    <nav><p>Drawer override</p></nav>
+  </dialog>
+</body>
+</html>

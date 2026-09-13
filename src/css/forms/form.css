@@ -1,6 +1,8 @@
 /*
  * Form layout and supporting text.
  *
+ * Docs: docs/pages/forms/overview.md
+ *
  * Individual controls keep their own files; .choice label layout lives in
  * choice.css; .form-actions lives in form-actions.css.
  *

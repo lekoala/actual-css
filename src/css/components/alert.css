@@ -1,6 +1,8 @@
 /*
  * Alerts for inline feedback and status messages.
  *
+ * Docs: docs/pages/components/alert.md
+ *
  * Keeps alert defaults local while consuming the shared --ui-* variant
  * plumbing for emphasis.
  *
