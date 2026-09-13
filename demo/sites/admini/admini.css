@@ -100,8 +100,13 @@
   gap: var(--space-20);
   min-block-size: 2.35rem;
   padding-inline: var(--space-30);
-  /* The framework recipe derives link ink from --text-muted/--text, whose
-     light-branch values are dark and unreadable on the dark rail. */
+}
+
+/* Dark-rail ink: scoped to the sidebar so the mobile drawer keeps the
+   framework's theme-aware text colors. The framework recipe derives link
+   ink from --text-muted/--text, whose light-branch values are dark and
+   unreadable on the dark rail. */
+.admini-sidebar .admini-nav .nav-link {
   color: var(--surface);
 }
 
@@ -117,11 +122,26 @@
   color: var(--surface);
 }
 
-/* Active item is a primary pill: same accent the active icon already used,
-   now carried by the whole row. */
-.admini-nav .nav-link[aria-current="page"] {
-  background: var(--primary);
-  color: var(--primary-fg);
+/* Active item is a selected pill on the dark rail: scoped to the sidebar
+   so the drawer keeps the framework's current style. State tokens keep
+   forced-colors support instead of pinning --primary directly. */
+.admini-sidebar .admini-nav .nav-link[aria-current="page"] {
+  background: var(--state-selected);
+  color: var(--state-selected-fg);
+}
+
+.admini-sidebar .admini-nav .nav-link[aria-current="page"] i {
+  color: inherit;
+}
+
+/* The pill already carries selection; the framework's inset current trait
+   would double it. */
+.admini-sidebar .nav-list .nav-link[aria-current]::before {
+  content: none;
+}
+
+.admini-sidebar .admini-nav .nav-link[aria-current="page"]:hover {
+  color: var(--state-selected-fg);
 }
 
 .admini-sidebar .flyout-trigger > .btn {
