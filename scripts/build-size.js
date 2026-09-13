@@ -1,3 +1,14 @@
+/*
+ * Measures dist/ and writes size-report.json.
+ *
+ * Runs before build:docs in build:all, never after: the docs home renders its
+ * stat strip from this report, so a build that measures last publishes the
+ * previous run's figures and leaves site/index.html disagreeing with the
+ * report beside it. CI verifies the committed build output, so that lag fails
+ * the pipeline on exactly the changes that move the bundle — and converges
+ * only if someone builds twice. It reads dist/ alone, so it fits anywhere
+ * after build:dist and build:js.
+ */
 import { readdir, readFile, stat, writeFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";

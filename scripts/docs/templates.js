@@ -106,6 +106,10 @@ export function renderThemeInit(themes) {
  * Home stat strip, read from size-report.json so the figures on the landing
  * page are the ones build:size measured, not prose that drifts. A missing or
  * unbuilt report yields an empty strip rather than a stale or invented number.
+ *
+ * This is the only consumer of that report, and it is why build:all measures
+ * before it builds docs. Reading a report written later in the same pipeline
+ * publishes the previous run's numbers.
  */
 export function renderHomeStats(themes) {
   let report;
