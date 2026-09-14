@@ -19,6 +19,7 @@
  *
  * Internal:
  * --drawer-closed-translate (side/RTL positioning state)
+ * --drawer-focus-bleed
  * --drawer-motion-duration (shared by panel and ::backdrop so exit duration
  *   changes in one place; entry state redefines it longer)
  */
@@ -128,7 +129,13 @@
    exclusion list is easier to trust than its `position: absolute`. */
 :where(dialog).drawer > :not(:is(header, footer, form, .drawer-close)),
 :where(dialog).drawer > form > :not(:is(header, footer, .drawer-close)) {
+  --drawer-focus-bleed: calc(var(--focus-outline-offset) + var(--border-width) * 2);
+
   min-block-size: 0;
+  /* Keep focus paint inside the clip without moving the body off the fixed
+     header and footer edges. */
+  margin-inline: calc(var(--drawer-focus-bleed) * -1);
+  padding-inline: var(--drawer-focus-bleed);
   overflow: auto;
   overscroll-behavior: contain;
 }

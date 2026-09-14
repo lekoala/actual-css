@@ -1,12 +1,12 @@
 {
-  "totalRaw": 303292,
+  "totalRaw": 303930,
   "core": {
     "minified": 12373,
     "brotli": 2783
   },
   "full": {
-    "minified": 126872,
-    "brotli": 18066
+    "minified": 127230,
+    "brotli": 18116
   },
   "js": {
     "core": {
@@ -30,19 +30,19 @@
     },
     {
       "file": "components/modal.css",
-      "raw": 9621
+      "raw": 9940
     },
     {
       "file": "components/alert.css",
       "raw": 8932
     },
     {
-      "file": "core/theme.css",
-      "raw": 8447
+      "file": "components/drawer.css",
+      "raw": 8598
     },
     {
-      "file": "components/drawer.css",
-      "raw": 8279
+      "file": "core/theme.css",
+      "raw": 8447
     },
     {
       "file": "components/badge.css",

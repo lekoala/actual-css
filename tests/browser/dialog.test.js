@@ -59,6 +59,31 @@ async function withPage(run) {
   );
 }
 
+async function click(view, id) {
+  await view.evaluate(
+    `document.getElementById(${JSON.stringify(id)}).scrollIntoView({ block: "center" })`,
+  );
+  const at = await view
+    .evaluate(`(() => {
+      const rect = document.getElementById(${JSON.stringify(id)}).getBoundingClientRect();
+      return JSON.stringify({
+        x: Math.round(rect.left + rect.width / 2),
+        y: Math.round(rect.top + rect.height / 2),
+      });
+    })()`)
+    .then(JSON.parse);
+
+  for (const type of ["mousePressed", "mouseReleased"]) {
+    await view.cdp("Input.dispatchMouseEvent", {
+      ...at,
+      type,
+      button: "left",
+      clickCount: 1,
+    });
+  }
+  await view.evaluate("new Promise((resolve) => setTimeout(resolve, 250))");
+}
+
 const scrollTo1200 = (evalIn) =>
   evalIn("(() => { window.scrollTo(0, 1200); return window.scrollY; })()");
 
@@ -191,6 +216,124 @@ it("repeated open/close cycles do not drift the scroll position", async () => {
     }
     expect(await evalIn("window.scrollY")).toBe(y0);
   });
+});
+
+it("scrollable dialog bodies preserve full-width focus rings and alignment", async () => {
+  await withBrowserPage(
+    fixtureUrl(FIXTURE),
+    async (view) => {
+      await click(view, "open-scrollable");
+      await click(view, "modal-edge-control");
+
+      const modal = await view
+        .evaluate(`(() => {
+          const body = document.getElementById("modal-scroll-body");
+          const control = document.getElementById("modal-edge-control");
+          const header = body.previousElementSibling;
+          const bodyRect = body.getBoundingClientRect();
+          const controlRect = control.getBoundingClientRect();
+          const headerRect = header.getBoundingClientRect();
+          const style = getComputedStyle(body);
+          const controlStyle = getComputedStyle(control);
+          const reserve = parseFloat(style.paddingInlineStart);
+          const paintedRing =
+            parseFloat(controlStyle.outlineWidth) + parseFloat(controlStyle.outlineOffset);
+          const expectedReserve =
+            parseFloat(style.getPropertyValue("--focus-outline-offset")) +
+            parseFloat(style.getPropertyValue("--border-width")) * 2;
+          return JSON.stringify({
+            active: document.activeElement === control,
+            focusVisible: control.matches(":focus-visible"),
+            reserve,
+            expectedReserve,
+            paintedRing,
+            paddingStart: parseFloat(style.paddingInlineStart),
+            marginStart: parseFloat(style.marginInlineStart),
+            ringPastStart: bodyRect.left - (controlRect.left - paintedRing),
+            ringPastEnd: controlRect.right + paintedRing - bodyRect.right,
+            startDrift: controlRect.left - headerRect.left,
+            endDrift: controlRect.right - headerRect.right,
+          });
+        })()`)
+        .then(JSON.parse);
+
+      expect(modal.active).toBe(true);
+      expect(modal.focusVisible).toBe(true);
+      expect(modal.reserve).toBeGreaterThan(0);
+      expect(modal.reserve).toBe(modal.expectedReserve);
+      expect(modal.reserve).toBeGreaterThanOrEqual(modal.paintedRing);
+      expect(modal.paddingStart).toBe(modal.reserve);
+      expect(modal.marginStart).toBe(-modal.reserve);
+      expect(modal.ringPastStart).toBeLessThanOrEqual(0);
+      expect(modal.ringPastEnd).toBeLessThanOrEqual(0);
+      expect(Math.abs(modal.startDrift)).toBeLessThanOrEqual(0.5);
+      expect(Math.abs(modal.endDrift)).toBeLessThanOrEqual(0.5);
+
+      await view.evaluate('document.getElementById("dlg-scrollable").close()');
+      await click(view, "open-drawer");
+      await view.press("Tab");
+      await view.evaluate("new Promise((resolve) => setTimeout(resolve, 250))");
+
+      const drawer = await view
+        .evaluate(`(() => {
+          const drawer = document.getElementById("drawer");
+          const body = drawer.querySelector("nav");
+          const control = document.getElementById("drawer-edge-control");
+          const bodyRect = body.getBoundingClientRect();
+          const controlRect = control.getBoundingClientRect();
+          const drawerRect = drawer.getBoundingClientRect();
+          const bodyStyle = getComputedStyle(body);
+          const controlStyle = getComputedStyle(control);
+          const drawerStyle = getComputedStyle(drawer);
+          const reserve = parseFloat(bodyStyle.paddingInlineStart);
+          const paintedRing =
+            parseFloat(controlStyle.outlineWidth) + parseFloat(controlStyle.outlineOffset);
+          const expectedReserve =
+            parseFloat(bodyStyle.getPropertyValue("--focus-outline-offset")) +
+            parseFloat(bodyStyle.getPropertyValue("--border-width")) * 2;
+          const contentStart =
+            drawerRect.left +
+            parseFloat(drawerStyle.borderLeftWidth) +
+            parseFloat(drawerStyle.paddingLeft);
+          const contentEnd =
+            drawerRect.right -
+            parseFloat(drawerStyle.borderRightWidth) -
+            parseFloat(drawerStyle.paddingRight);
+          return JSON.stringify({
+            activeId: document.activeElement?.id,
+            focusVisible: control.matches(":focus-visible"),
+            open: drawer.open,
+            reserve,
+            expectedReserve,
+            paintedRing,
+            paddingStart: parseFloat(bodyStyle.paddingInlineStart),
+            marginStart: parseFloat(bodyStyle.marginInlineStart),
+            ringPastStart: bodyRect.left - (controlRect.left - paintedRing),
+            ringPastEnd: controlRect.right + paintedRing - bodyRect.right,
+            startDrift: controlRect.left - contentStart,
+            endDrift: controlRect.right - contentEnd,
+          });
+        })()`)
+        .then(JSON.parse);
+
+      expect(drawer.open).toBe(true);
+      expect(drawer.activeId).toBe("drawer-edge-control");
+      expect(drawer.focusVisible).toBe(true);
+      expect(drawer.reserve).toBeGreaterThan(0);
+      expect(drawer.reserve).toBe(drawer.expectedReserve);
+      expect(drawer.reserve).toBeGreaterThanOrEqual(drawer.paintedRing);
+      expect(drawer.paddingStart).toBe(drawer.reserve);
+      expect(drawer.marginStart).toBe(-drawer.reserve);
+      expect(drawer.ringPastStart).toBeLessThanOrEqual(0);
+      expect(drawer.ringPastEnd).toBeLessThanOrEqual(0);
+      expect(Math.abs(drawer.startDrift)).toBeLessThanOrEqual(0.5);
+      expect(Math.abs(drawer.endDrift)).toBeLessThanOrEqual(0.5);
+    },
+    {
+      mediaFeatures: [{ name: "prefers-reduced-motion", value: "reduce" }],
+      artifactName: "dialog-focus-bleed",
+    },
+  );
 });
 
 it("drawer: scroll preserved, close button and Escape close, backdrop gated by dismissible", async () => {

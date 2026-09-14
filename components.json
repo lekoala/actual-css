@@ -266,6 +266,7 @@
     ],
     "internalHooks": [
       "--drawer-closed-translate",
+      "--drawer-focus-bleed",
       "--drawer-motion-duration"
     ],
     "states": [
@@ -446,6 +447,7 @@
     ],
     "internalHooks": [
       "--dialog-close-icon-size",
+      "--dialog-focus-bleed",
       "--dialog-viewport-block",
       "--dialog-viewport-gap-default",
       "--dialog-viewport-gap-2x"
