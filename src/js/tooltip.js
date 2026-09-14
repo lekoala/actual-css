@@ -24,7 +24,7 @@
  *             work automatically via bubbling delegated listeners.
  *
  * Show:       hover + focus (150ms delay), click toggle, or always visible
- * Hide:       blur, pointer leave, Escape
+ * Hide:       focus leaving the trigger (focusout), pointer leave, Escape
  *
  * Geometry:   a trigger scrolled out of the positioning boundary takes its tip
  *             down and keeps it tracked, so scrolling back brings the same tip
@@ -420,8 +420,12 @@ function ensureTip(trigger) {
     { signal: triggerController.signal },
   );
   trigger.addEventListener(
-    "blur",
-    () => {
+    // blur does not bubble: on a composite trigger (focusable children) the
+    // loss of focus is only observable through focusout. relatedTarget keeps
+    // a focus move between the trigger's own children from ending the tip.
+    "focusout",
+    (event) => {
+      if (event.relatedTarget && trigger.contains(event.relatedTarget)) return;
       state.focused = false;
       scheduleHide(tip);
     },
@@ -489,8 +493,10 @@ function handleTriggerIntent(e) {
   const trigger = e.target.closest?.(SEL);
   if (!trigger) return;
   if (isClickTrigger(trigger) || isAlwaysVisible(trigger)) return;
+  // A pointer or focus move between the trigger's own children is not a new
+  // intent: it must not restart the show delay or rewrite the intent flags.
   if (
-    e.type === "mouseover" &&
+    (e.type === "mouseover" || e.type === "focusin") &&
     e.relatedTarget instanceof Node &&
     trigger.contains(e.relatedTarget)
   )

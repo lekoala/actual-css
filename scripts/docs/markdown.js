@@ -14,6 +14,28 @@
 const escapeHtml = (str) =>
   str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 
+/*
+ * Renderer output is entity-escaped; plain-text consumers (TOC labels, page
+ * descriptions) re-escape once at render time, so undecoded entities would
+ * double-escape and show literally. `&amp;` decodes last, after every other
+ * entity, so "&amp;quot;" cannot round-trip into a live "&quot;".
+ */
+export const decodeEntities = (str) =>
+  str
+    .replace(/&(#x?[0-9a-fA-F]+|lt|gt|quot|apos);/g, (entity, body) => {
+      if (body === "lt") return "<";
+      if (body === "gt") return ">";
+      if (body === "quot") return '"';
+      if (body === "apos") return "'";
+      const code = body.startsWith("#x")
+        ? Number.parseInt(body.slice(2), 16)
+        : Number.parseInt(body.slice(1), 10);
+      // fromCodePoint throws RangeError above the Unicode range — leave an
+      // out-of-range entity untouched, same as an unparseable one.
+      return Number.isNaN(code) || code > 0x10ffff ? entity : String.fromCodePoint(code);
+    })
+    .replace(/&amp;/g, "&");
+
 /* Page assembly consumes these boundaries to keep live component demos out of
    prose while leaving authored Markdown in rich-text sections. */
 export const DOCS_PROSE_END = "<!--docs-prose-end-->";
@@ -243,7 +265,7 @@ export function extractDescription(html) {
   const body = headingEnd === -1 ? html : html.slice(headingEnd);
   const match = body.match(/<p>([\s\S]*?)<\/p>/);
   if (!match) return "";
-  return match[1].replace(/<[^>]+>/g, "").trim();
+  return decodeEntities(match[1].replace(/<[^>]+>/g, "").trim());
 }
 
 export function extractToc(html) {
@@ -254,7 +276,7 @@ export function extractToc(html) {
     toc.push({
       level: Number(match[1]),
       id: match[2],
-      label: match[3].replace(/<[^>]+>/g, "").trim(),
+      label: decodeEntities(match[3].replace(/<[^>]+>/g, "").trim()),
     });
     match = re.exec(html);
   }

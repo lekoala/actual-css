@@ -286,14 +286,14 @@ The runtime dispatches a small set of public `actual:*` events. All are
 listenable on the document; cancelable events veto the associated action when
 `preventDefault()` is called.
 
-| Event                  | Dispatch                       | `detail`                             |
-| ---------------------- | ------------------------------ | ------------------------------------ |
-| `actual:surface-open`  | before a surface opens         | `{ surface, options }`               |
-| `actual:context-menu`  | before a context menu opens    | `{ menu, context, origin, trigger }` |
-| `actual:status`        | status module, or any code     | `{ message, intent, duration }`      |
-| `actual:invalid`       | after a submit was blocked     | `{ form, firstInvalid, message }`    |
-| `actual:dialog-cancel` | before a native cancel close   | `{ dialog, sourceEvent }`            |
-| `actual:dismiss`       | after `--dismiss` hid a target | `{ trigger }`                        |
+| Event                  | Dispatch                      | `detail`                             |
+| ---------------------- | ----------------------------- | ------------------------------------ |
+| `actual:surface-open`  | before a surface opens        | `{ surface, options }`               |
+| `actual:context-menu`  | before a context menu opens   | `{ menu, context, origin, trigger }` |
+| `actual:status`        | status module, or any code    | `{ message, intent, duration }`      |
+| `actual:invalid`       | after a submit was blocked    | `{ form, firstInvalid, message }`    |
+| `actual:dialog-cancel` | before a native cancel close  | `{ dialog, sourceEvent }`            |
+| `actual:dismiss`       | after a `--dismiss` dismissal | `{ trigger }`                        |
 
 `actual:surface-open`, `actual:context-menu` and `actual:dialog-cancel` are
 cancelable. `actual:status` both shows and clears the status bar — omit
@@ -343,6 +343,10 @@ applications that unload the module owning the command.
 The runtime includes a generic `--dismiss` command for hiding any resolved
 target. It prevents the trigger's default action, sets `hidden`, and emits a
 bubbling `actual:dismiss` event with the trigger in `event.detail.trigger`.
+On an open surface (flyout, context menu), the surface consumes the event to
+close through its own lifecycle instead of staying hidden — by the time the
+event reaches document listeners, `hidden` has already been lifted again and
+the surface reads as closed, not merely attribute-hidden.
 
 ```html demo
 <section id="notice" class="alert">

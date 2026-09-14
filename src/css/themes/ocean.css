@@ -1,5 +1,7 @@
 [data-theme="ocean"] {
-  color-scheme: light dark;
+  /* Base palette is the light half; the dark pairing is only announced where
+     light-dark() exists, in the @supports block below. */
+  color-scheme: light;
 
   --primary: hsl(198 82% 35%);
   --primary-fg: white;
@@ -32,6 +34,7 @@
 
 @supports (color: light-dark(red, blue)) {
   [data-theme="ocean"] {
+    color-scheme: light dark;
     --primary: light-dark(hsl(198 82% 35%), hsl(198 75% 80%));
     --primary-fg: light-dark(white, hsl(198 30% 12%));
     --secondary: light-dark(hsl(174 58% 30%), hsl(174 66% 80%));

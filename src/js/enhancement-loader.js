@@ -1,9 +1,13 @@
 /*
  * enhancement-loader.js — Server-declared enhancement manifest loader.
  *
- * Reads <script type="application/json" data-enhance-modules"> blocks or
+ * Reads <script type="application/json" data-enhance-modules> blocks or
  * the Enhance-Modules HTTP header, dynamically imports the declared ES
  * module entrypoints, and registers them with the Actual lifecycle engine.
+ *
+ * A manifest is trusted application configuration: every declared URL is
+ * imported and executed (or loaded as script/style), so manifests must be
+ * produced by the server — never built from untrusted input.
  *
  * Manifests declare document-wide modules: dynamically loaded enhancements
  * always register on the default document root. A scope passed to

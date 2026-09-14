@@ -45,7 +45,9 @@
 
 .floating-field > .field-label {
   position: absolute;
-  inset-inline-start: calc(var(--space-30) + var(--border-width));
+  /* Same start edge as the control's text: --control-pad-x owns that shared
+     geometry, so .sm/.lg keep label and value aligned. */
+  inset-inline-start: calc(var(--control-pad-x) + var(--border-width));
   color: var(--text-muted);
   font-size: var(--control-font-size);
   font-weight: var(--font-weight-normal);

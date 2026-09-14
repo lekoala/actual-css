@@ -17,10 +17,15 @@ const FOCUSABLE_SELECTOR = [
  */
 export function isElementVisible(el) {
   if (!el || el.hidden) return false;
-  if (typeof el.checkVisibility === "function") return el.checkVisibility();
+  if (typeof el.checkVisibility === "function") {
+    // Bare checkVisibility() only tests for a layout box — visibility:hidden
+    // requires the option. Both names are passed because the engines that
+    // shipped first knew it as checkVisibilityCSS.
+    return el.checkVisibility({ visibilityProperty: true, checkVisibilityCSS: true });
+  }
   if (el.getClientRects().length === 0) return false;
-  // checkVisibility() covers visibility:hidden; without it, read the
-  // computed direction of the cascade so a hidden element is not focusable.
+  // The fallback reproduces the option's coverage through the computed style
+  // so a hidden element is not focusable.
   const style = el.ownerDocument?.defaultView?.getComputedStyle?.(el);
   if (!style) return true;
   return style.visibility !== "hidden" && style.visibility !== "collapse";

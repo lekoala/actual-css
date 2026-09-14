@@ -41,6 +41,18 @@
     <li><button class="menu-item" type="button">Rename</button></li>
   </menu>
 
+  <!-- 4. A flyout dismissed from inside by the generic --dismiss command.
+       dismiss.js writes [hidden] before emitting actual:dismiss, which can
+       drop focus out of the surface before the event reaches it. -->
+  <div class="flyout-trigger">
+    <button id="dismiss-trigger" class="btn" type="button"
+            data-enhance="flyout" aria-controls="dismiss-panel">Dismiss host</button>
+    <div id="dismiss-panel" class="flyout" hidden>
+      <button id="dismiss-close" class="btn" type="button"
+              commandfor="dismiss-panel" command="--dismiss">Close</button>
+    </div>
+  </div>
+
   <script>
     document.addEventListener("DOMContentLoaded", () => {
       document.getElementById("open-dialog").addEventListener("click", () => {

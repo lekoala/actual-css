@@ -43,9 +43,14 @@ function onTriggerClick(e) {
   const trigger = e.currentTarget;
   const state = triggerMap.get(trigger);
   if (!state) return;
-  e.stopPropagation();
   const panel = resolvePanel(trigger, state);
   if (!panel) return;
+  // A link trigger is legal markup; the interaction is claimed only once a
+  // panel has actually resolved — an unresolved trigger still navigates and
+  // still bubbles. The stop is what keeps the document-level surface handler
+  // from closing the panel this same click just opened.
+  e.preventDefault();
+  e.stopPropagation();
   if (isSurfaceOpen(panel)) closeSurface(panel);
   else openFlyout(panel, trigger);
 }

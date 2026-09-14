@@ -7,7 +7,9 @@
  * ring keeps the shared width — edge only drops the border-color flip so the
  * intent-colored lower edge stays dominant. */
 [data-theme="edge"] {
-  color-scheme: light dark;
+  /* Base palette is the light half; the dark pairing is only announced where
+     light-dark() exists, in the @supports block below. */
+  color-scheme: light;
 
   --primary: hsl(224 72% 42%);
   --primary-fg: white;
@@ -87,6 +89,7 @@
 
 @supports (color: light-dark(red, blue)) {
   [data-theme="edge"] {
+    color-scheme: light dark;
     --primary: light-dark(hsl(224 72% 42%), hsl(220 80% 76%));
     --primary-fg: light-dark(white, hsl(224 35% 10%));
     --secondary: light-dark(hsl(166 54% 30%), hsl(166 58% 70%));

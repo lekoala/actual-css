@@ -173,6 +173,75 @@ it("a context menu is still positioned at the pointer", async () => {
   });
 });
 
+async function realClick(view, id) {
+  await view.evaluate(
+    `document.getElementById(${JSON.stringify(id)}).scrollIntoView({ block: "center" })`,
+  );
+  const at = await view
+    .evaluate(`(() => {
+      const rect = document.getElementById(${JSON.stringify(id)}).getBoundingClientRect();
+      return JSON.stringify({
+        x: Math.round(rect.left + rect.width / 2),
+        y: Math.round(rect.top + rect.height / 2),
+      });
+    })()`)
+    .then(JSON.parse);
+
+  for (const type of ["mousePressed", "mouseReleased"]) {
+    await view.cdp("Input.dispatchMouseEvent", {
+      ...at,
+      type,
+      button: "left",
+      clickCount: 1,
+    });
+  }
+}
+
+/*
+ * --dismiss writes [hidden] on its target before emitting actual:dismiss, so
+ * when the command's trigger sits inside the surface, hiding it can already
+ * have dropped focus out of the panel by the time the event lands. The
+ * surface reads the trigger from the event detail — not activeElement — to
+ * decide whether focus has to be restored to the opener. Programmatic clicks
+ * would not prove this: only a real click gives the in-panel button focus.
+ */
+it("--dismiss from inside a surface closes it and returns focus to the opener", async () => {
+  await withPage("dismiss", async (view) => {
+    await realClick(view, "dismiss-trigger");
+    await sleep(300);
+
+    const opened = JSON.parse(
+      await view.evaluate(`(() => {
+        const panel = document.getElementById("dismiss-panel");
+        return JSON.stringify({
+          open: panel.classList.contains("is-open"),
+          focused: document.activeElement.id,
+        });
+      })()`),
+    );
+    expect(opened.open).toBe(true);
+
+    await realClick(view, "dismiss-close");
+    await sleep(300);
+
+    const state = JSON.parse(
+      await view.evaluate(`(() => {
+        const panel = document.getElementById("dismiss-panel");
+        return JSON.stringify({
+          open: panel.classList.contains("is-open"),
+          popoverOpen: panel.matches(":popover-open"),
+          hidden: panel.hasAttribute("hidden"),
+          focused: document.activeElement.id,
+        });
+      })()`),
+    );
+    expect(state.open).toBe(false);
+    expect(state.popoverOpen).toBe(false);
+    expect(state.hidden).toBe(false);
+    expect(state.focused).toBe("dismiss-trigger");
+  });
+});
+
 it("the runtime state and the transport state agree", async () => {
   await withPage("state-sync", async (view) => {
     // Read both together, so a mismatch cannot hide behind a timing gap.

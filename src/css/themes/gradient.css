@@ -6,7 +6,9 @@
  * .link/.surface stay flat, matching Bootstrap 4's own gradient mixin, which
  * only wraps its filled button variant. */
 [data-theme="gradient"] {
-  color-scheme: light dark;
+  /* Base palette is the light half; the dark pairing is only announced where
+     light-dark() exists, in the @supports block below. */
+  color-scheme: light;
 
   --primary: hsl(211 100% 50%);
   --primary-fg: white;
@@ -42,6 +44,7 @@
 
 @supports (color: light-dark(red, blue)) {
   [data-theme="gradient"] {
+    color-scheme: light dark;
     --primary: light-dark(hsl(211 100% 50%), hsl(211 90% 72%));
     --primary-fg: light-dark(white, hsl(211 40% 10%));
     --secondary: light-dark(hsl(208 7% 46%), hsl(208 10% 72%));

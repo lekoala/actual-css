@@ -110,24 +110,26 @@
   overscroll-behavior: contain;
 }
 
-:where(dialog).modal header > :first-child,
-:where(dialog).modal footer > :first-child {
+/* Anatomy is bounded to the structural slots (direct children of the
+   form/.stack body): a header or footer deeper in the content keeps its own
+   rhythm and is not restyled as the modal's chrome. */
+:where(dialog).modal > :where(form, .stack) > :is(header, footer) > :first-child {
   margin-block-start: 0;
 }
 
-:where(dialog).modal header > :last-child,
-:where(dialog).modal footer > :last-child {
+:where(dialog).modal > :where(form, .stack) > :is(header, footer) > :last-child {
   margin-block-end: 0;
 }
 
 /* The close button is anchored to the dialog at top inline-end, out of the
-   content flow; headers reserve inline room so titles never run under it. */
-:where(dialog).modal > form > header,
-:where(dialog).modal > .stack > header {
+   content flow; headers reserve inline room so titles never run under it.
+   The form/.stack anatomy is structural, so it stays in :where() and never
+   lends .stack's specificity to a bare <form>. */
+:where(dialog).modal > :where(form, .stack) > header {
   padding-inline-end: calc(var(--control-size) + var(--space-30));
 }
 
-:where(dialog).modal footer {
+:where(dialog).modal > :where(form, .stack) > footer {
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-end;

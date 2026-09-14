@@ -190,7 +190,7 @@ test("a trigger scrolled out of view takes its tooltip down and brings it back",
   expect(visible(tip)).toBe(true);
 
   // The interaction still owns the end of it.
-  trigger.dispatchEvent(new FocusEvent("blur"));
+  trigger.dispatchEvent(new FocusEvent("focusout", { bubbles: true }));
   await waitForHide();
   expect(visible(tip)).toBe(false);
   expect(observed.size).toBe(0);
@@ -492,10 +492,36 @@ test("tooltip hides only when both focus and hover are gone", async () => {
   trigger.dispatchEvent(new FocusEvent("focusin", { bubbles: true }));
 
   leave(trigger);
-  trigger.dispatchEvent(new FocusEvent("blur"));
+  trigger.dispatchEvent(new FocusEvent("focusout", { bubbles: true }));
   await waitForHide();
 
   expect(visible(document.querySelector('[role="tooltip"]'))).toBe(false);
+});
+
+test("a composite trigger keeps its tip while focus moves inside it", async () => {
+  await loadTooltip(`
+    <div id="trigger" data-tooltip="Help">
+      <button id="one">One</button>
+      <button id="two">Two</button>
+    </div>
+  `);
+  const one = document.getElementById("one");
+  const two = document.getElementById("two");
+
+  one.dispatchEvent(new FocusEvent("focusin", { bubbles: true }));
+  await waitForShow();
+  const tip = document.querySelector('[role="tooltip"]');
+  expect(visible(tip)).toBe(true);
+
+  // blur never reaches the container: on a composite trigger only focusout
+  // reports the loss, and only when focus actually left the trigger.
+  one.dispatchEvent(new FocusEvent("focusout", { bubbles: true, relatedTarget: two }));
+  await waitForHide();
+  expect(visible(tip)).toBe(true);
+
+  two.dispatchEvent(new FocusEvent("focusout", { bubbles: true, relatedTarget: null }));
+  await waitForHide();
+  expect(visible(tip)).toBe(false);
 });
 
 test("tooltip stays open while the pointer moves from trigger to tip", async () => {

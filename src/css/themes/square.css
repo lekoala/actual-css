@@ -1,5 +1,7 @@
 [data-theme="square"] {
-  color-scheme: light dark;
+  /* Base palette is the light half; the dark pairing is only announced where
+     light-dark() exists, in the @supports block below. */
+  color-scheme: light;
 
   --primary: hsl(220 90% 56%);
   --primary-fg: white;
@@ -35,6 +37,7 @@
 
 @supports (color: light-dark(red, blue)) {
   [data-theme="square"] {
+    color-scheme: light dark;
     --primary: light-dark(hsl(220 90% 56%), hsl(220 75% 80%));
     --primary-fg: light-dark(white, hsl(220 30% 12%));
     --secondary: light-dark(hsl(270 60% 56%), hsl(270 68% 80%));

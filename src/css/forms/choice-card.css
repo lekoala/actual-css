@@ -39,6 +39,8 @@
   border-radius: var(--choice-card-radius);
   background: var(--choice-card-bg);
   color: var(--text);
+  /* Consumed so .sm/.lg reach the card; the badge's em sizing follows. */
+  font-size: var(--control-font-size);
   cursor: pointer;
   transition:
     border-color var(--duration),

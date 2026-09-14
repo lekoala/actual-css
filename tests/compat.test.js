@@ -1,5 +1,9 @@
 import { expect, test } from "bun:test";
-import { auditCss, mixedVendorSelectorLists } from "../scripts/check-compat.js";
+import {
+  auditCss,
+  mixedBreakingSelectorLists,
+  mixedVendorSelectorLists,
+} from "../scripts/check-compat.js";
 
 test.each([
   ".x:not(.a, .b)",
@@ -78,6 +82,35 @@ test("vendor selector guard accepts lists from one engine and separate vendor ru
   `;
 
   expect(mixedVendorSelectorLists(css)).toEqual([]);
+});
+
+test("an above-floor pseudo sharing a rule with a baseline selector is rejected", () => {
+  const violations = mixedBreakingSelectorLists(
+    ".link-muted:hover, .link-muted:focus-visible { color: red; }",
+  );
+
+  expect(violations).toHaveLength(1);
+  expect(violations[0].selector).toBe(".link-muted:hover, .link-muted:focus-visible");
+});
+
+test("above-floor pseudos in their own rules and forgiving lists are accepted", () => {
+  const css = `
+    .a:hover { color: red; }
+    .a:focus-visible { color: red; }
+    .b:is(:hover, :focus-visible) { color: blue; }
+    .a:where(:focus-visible, .x), .b:hover { color: green; }
+    .a:user-invalid, .b:user-valid { color: orange; }
+  `;
+
+  expect(mixedBreakingSelectorLists(css)).toEqual([]);
+});
+
+test("a forgiving list nested before an above-floor pseudo stays forgiving", () => {
+  // The inner :is() ends before the outer's arguments do; scanning it must not
+  // re-expose the enclosing tail, or the pseudo would falsely read as mixed.
+  const css = ".a:is(.b:is(.c), :focus-visible), .d { color: red; }";
+
+  expect(mixedBreakingSelectorLists(css)).toEqual([]);
 });
 
 /*

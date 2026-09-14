@@ -152,7 +152,34 @@ function ensureSurfaceWired(menu) {
   };
 
   surfaceMap.set(menu, state);
+  menu.addEventListener(EVENTS.dismiss, onSurfaceDismiss);
   return state;
+}
+
+/*
+ * The generic `--dismiss` command hides its target by writing `hidden` — but
+ * on a surface the attribute is not the closed state, the popover transport
+ * is. Left alone it would strand the open lifecycle: the Escape entry, the
+ * position tracker and the is-open class would survive, and openSurface()
+ * would refuse to act on a panel that reads open. The surface therefore
+ * consumes the event to finalize its own lifecycle, rather than dismiss.js
+ * learning about surfaces. `hidden` comes back off once the transport state
+ * is clean; prepareSurface() also strips it on the next open.
+ * A dismissal bubbled from a nested target is not the surface's own.
+ */
+function onSurfaceDismiss(event) {
+  if (event.target !== event.currentTarget) return;
+  const menu = event.currentTarget;
+  // dismiss.js writes `hidden` before dispatching, and hiding an ancestor can
+  // already have dropped focus out of the surface — so the command's trigger,
+  // not activeElement, is the reliable witness of where the activation came
+  // from. A trigger inside the surface means focus was inside it and must be
+  // restored to the opener; a trigger outside keeps focus where it landed.
+  const trigger = event.detail?.trigger;
+  closeSurface(menu, {
+    restoreFocus: trigger ? menu.contains(trigger) : undefined,
+  });
+  menu.removeAttribute("hidden");
 }
 
 // Escape and positional tracking belong to the *open* surface, not to the
@@ -341,6 +368,7 @@ export function closeSurface(menu, opts = {}) {
 export function disconnectSurface(menu) {
   if (!menu) return;
   closeSurface(menu);
+  menu.removeEventListener(EVENTS.dismiss, onSurfaceDismiss);
   const state = surfaceMap.get(menu);
   if (state) {
     state.unregisterEscape?.();

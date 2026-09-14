@@ -1,5 +1,7 @@
 [data-theme="corporate"] {
-  color-scheme: light dark;
+  /* Base palette is the light half; the dark pairing is only announced where
+     light-dark() exists, in the @supports block below. */
+  color-scheme: light;
 
   --primary: hsl(214 82% 44%);
   --primary-fg: white;
@@ -32,6 +34,7 @@
 
 @supports (color: light-dark(red, blue)) {
   [data-theme="corporate"] {
+    color-scheme: light dark;
     --primary: light-dark(hsl(214 82% 44%), hsl(214 75% 80%));
     --primary-fg: light-dark(white, hsl(214 30% 12%));
     --secondary: light-dark(hsl(250 45% 48%), hsl(250 53% 80%));

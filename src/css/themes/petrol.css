@@ -3,7 +3,9 @@
  * conventional of the bundled palettes: warm, highly legible, no semantic
  * hue collisions. */
 [data-theme="petrol"] {
-  color-scheme: light dark;
+  /* Base palette is the light half; the dark pairing is only announced where
+     light-dark() exists, in the @supports block below. */
+  color-scheme: light;
 
   --primary: hsl(203 55% 30%);
   --primary-fg: hsl(0 0% 98%);
@@ -36,6 +38,7 @@
 
 @supports (color: light-dark(red, blue)) {
   [data-theme="petrol"] {
+    color-scheme: light dark;
     --primary: light-dark(hsl(203 55% 30%), hsl(202 55% 72%));
     --primary-fg: light-dark(hsl(0 0% 98%), hsl(204 40% 10%));
     --secondary: light-dark(hsl(22 55% 47%), hsl(24 55% 70%));
