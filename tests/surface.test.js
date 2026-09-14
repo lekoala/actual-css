@@ -239,6 +239,96 @@ test("replacing a surface does not bounce focus through the outgoing trigger", (
   expect(document.activeElement).not.toBe(triggerA);
 });
 
+/*
+ * The generic --dismiss command writes `hidden` and emits actual:dismiss. On a
+ * surface that attribute is not the closed state — the popover transport is —
+ * so the surface consumes the event to finalize its own lifecycle. Without
+ * this the Escape entry and tracker would survive, and openSurface() would
+ * refuse to act on a panel that still reads open.
+ */
+test("actual:dismiss on an open surface finalizes the lifecycle", () => {
+  setBody('<button aria-controls="menu">Open</button><div id="menu" class="flyout"></div>');
+  const trigger = document.querySelector("button");
+  const menu = document.getElementById("menu");
+  mockPlacement(trigger, menu);
+  openSurface(menu, { trigger });
+
+  // What dismiss.js does to its resolved target.
+  menu.hidden = true;
+  menu.dispatchEvent(new CustomEvent("actual:dismiss", { bubbles: true }));
+
+  expect(isSurfaceOpen(menu)).toBe(false);
+  expect(trigger.getAttribute("aria-expanded")).toBe("false");
+  // hidden is not the surface's closed state; the transport is.
+  expect(menu.hasAttribute("hidden")).toBe(false);
+
+  // The surface can be reopened — the stale is-open lock is gone.
+  openSurface(menu, { trigger });
+  expect(isSurfaceOpen(menu)).toBe(true);
+});
+
+test("a dismiss triggered from inside the surface restores focus to the opener", () => {
+  setBody(
+    '<button aria-controls="menu">Open</button><div id="menu" class="flyout"><button id="close">Close</button></div>',
+  );
+  const trigger = document.querySelector("button[aria-controls]");
+  const menu = document.getElementById("menu");
+  const close = document.getElementById("close");
+  mockPlacement(trigger, menu);
+  openSurface(menu, { trigger });
+  close.focus();
+
+  // What dismiss.js does: hidden first — which in a real browser drops focus
+  // to <body> before the event arrives — then the event carrying trigger.
+  // The drop is emulated with blur() because happy-dom does not do it.
+  menu.hidden = true;
+  close.blur();
+  menu.dispatchEvent(
+    new CustomEvent("actual:dismiss", { bubbles: true, detail: { trigger: close } }),
+  );
+
+  expect(isSurfaceOpen(menu)).toBe(false);
+  expect(document.activeElement).toBe(trigger);
+});
+
+test("a dismiss triggered from outside the surface keeps focus where it is", () => {
+  setBody(
+    '<button aria-controls="menu">Open</button><button id="outside-close">Close</button><div id="menu" class="flyout"></div>',
+  );
+  const trigger = document.querySelector("button[aria-controls]");
+  const outsideClose = document.getElementById("outside-close");
+  const menu = document.getElementById("menu");
+  mockPlacement(trigger, menu);
+  openSurface(menu, { trigger });
+  outsideClose.focus();
+
+  menu.hidden = true;
+  menu.dispatchEvent(
+    new CustomEvent("actual:dismiss", {
+      bubbles: true,
+      detail: { trigger: outsideClose },
+    }),
+  );
+
+  expect(isSurfaceOpen(menu)).toBe(false);
+  expect(document.activeElement).toBe(outsideClose);
+});
+
+test("a dismissal bubbled from inside a surface is not the surface's own", () => {
+  setBody(
+    '<button aria-controls="menu">Open</button><div id="menu" class="flyout"><div id="inner"></div></div>',
+  );
+  const trigger = document.querySelector("button");
+  const menu = document.getElementById("menu");
+  const inner = document.getElementById("inner");
+  mockPlacement(trigger, menu);
+  openSurface(menu, { trigger });
+
+  inner.dispatchEvent(new CustomEvent("actual:dismiss", { bubbles: true }));
+
+  expect(isSurfaceOpen(menu)).toBe(true);
+});
+
 test("positionSurface failure leaves the surface closed", () => {
   setBody(
     '<button id="trigger" aria-controls="menu">Open</button><div id="menu" class="flyout"></div>',

@@ -1,5 +1,8 @@
 @media print {
   :root,
+  /* The doubled attribute intentionally outranks single-attribute preset
+     islands (data-theme="dark", paired themes) loaded after the core. */
+  [data-theme][data-theme],
   body {
     /* Save some ink in dark mode */
     color-scheme: light;

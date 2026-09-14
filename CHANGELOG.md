@@ -6,10 +6,26 @@
 
 - `.modal.scrollable` and `.drawer` body scrollports reserve inline focus-ring space without changing header, body, or footer alignment, so full-width controls no longer clip their focus indicator.
 - `:where(dialog).modal` and `:where(dialog).drawer` roots now have 0-1-0 specificity like other components, allowing a later application class to override their defaults and documented hooks normally.
+- `[data-context-menu]` resolves its menu per interaction: a target declared before its `<menu>` exists and a same-id menu replacement now open correctly instead of staying dead.
+- `escape.js` ignores `Escape` presses already consumed (`defaultPrevented`) or chorded with `metaKey`.
+- `isElementVisible()` in `focus.js` passes `visibilityProperty` to `checkVisibility()`, so `visibility:hidden` content is no longer reported focusable on modern engines.
+- A flyout `<a>` trigger calls `preventDefault()` once its panel resolved — clicking it no longer navigates, while an unresolved trigger still navigates and bubbles.
+- `data-tooltip` triggers containing focusable children now hide correctly: the non-bubbling `blur` listener was replaced by `focusout` with a `relatedTarget` containment check.
+- `--dismiss` on an open surface finalizes the surface lifecycle — `.is-open`, the Escape entry, position tracking — and restores focus to the opener; the surface consumes `actual:dismiss` itself, keeping `dismiss.js` generic.
+- `.link-muted:hover` and `.link-muted:focus-visible` are separate rules, so the hover color survives browsers without `:focus-visible`.
+- `.choice-card` and `.floating-field` participate in `.sm` / `.lg` (and `.choice-card` consumes `--control-font-size`), so their documented size modifiers actually work.
+- The `.floating-field` label rests on `--control-pad-x`, the same geometry as the control's text — both now share an inline start edge at every size.
+- `.modal` header/footer resets are bounded to the dialog's structural `form` / `.stack` slots, so a header or footer inside the content keeps its own rhythm.
+- `.otp` forced-colors styling covers the `:user-invalid` route.
+- `print.css` forces `[data-theme]` islands to `color-scheme: light` with a white background and black text, so a dark-themed section no longer prints dark.
+- The 11 paired themes declare `color-scheme: light` in their fallback block and `light dark` under `@supports (color: light-dark(...))` — dark UA controls no longer appear on the light fallback palette.
 
 ### Documentation and tooling
 
 - Public CSS sources carry a `Docs:` pointer to their canonical usage page, verified by `check:architecture`.
+- `check:compat` rejects selector lists mixing an above-floor pseudo with baseline selectors.
+- Docs TOC and search headings decode HTML entities, so a heading like `Linting role="menu"` no longer shows `&quot;` in the sidebar.
+- `tokens.md` describes the actual forced-colors contract; `enhancement-loader` documents that manifests are trusted application configuration.
 
 
 ## [0.9.0] - 2026-09-13

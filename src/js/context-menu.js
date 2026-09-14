@@ -48,7 +48,7 @@ function getContextScope(target) {
 }
 
 function getLongPressDelay(target, menu) {
-  const value = target.dataset.contextMenuLongPress ?? menu.dataset.contextMenuLongPress;
+  const value = target.dataset.contextMenuLongPress ?? menu?.dataset.contextMenuLongPress;
   if (value == null || value === "false" || value === "none") return null;
   if (value === "") return LONG_PRESS_MS;
 
@@ -147,21 +147,52 @@ function clearLongPress(state) {
   state.pointerId = null;
 }
 
-function connectContextTarget(target) {
-  if (contextMap.has(target)) return;
-  const menu = menuFor(target);
-  if (!menu) return;
+function releaseMenuReference(target, state) {
+  const menu = state.menu;
+  // contextByMenu backs the exported contextFor(): a released menu must not
+  // keep reporting a target it no longer belongs to. The context check keeps
+  // a menu another target has since claimed.
+  if (menu && contextFor(menu)?.context === target) {
+    contextByMenu.delete(menu);
+  }
+  state.releaseMenu?.();
+  state.releaseMenu = null;
+  state.release?.();
+  state.release = null;
+  state.menu = null;
+}
 
-  const release = retainSurface(menu);
-  const controller = new AbortController();
-  const releaseMenu = connectMenu(menu, {
+/*
+ * The menu is resolved per interaction, not once at connect: a target can be
+ * declared before its <menu> exists (streamed markup, late AJAX), and a
+ * same-id replacement must rewire to the live element. An unchanged menu
+ * costs a WeakMap read and a connection check; a changed one pays for
+ * releasing the old retain/menu wiring and acquiring the new.
+ */
+function resolveContextMenu(target, state) {
+  const menu = menuFor(target);
+  if (state.menu === menu && menu?.isConnected) return menu;
+
+  releaseMenuReference(target, state);
+  if (!menu) return null;
+
+  state.release = retainSurface(menu);
+  state.menu = menu;
+  state.releaseMenu = connectMenu(menu, {
     close: (menu) => closeSurface(menu),
   });
+  return menu;
+}
+
+function connectContextTarget(target) {
+  if (contextMap.has(target)) return;
+
+  const controller = new AbortController();
   const state = {
     controller,
-    releaseMenu,
-    menu,
-    release,
+    releaseMenu: null,
+    menu: null,
+    release: null,
     timer: null,
     pointerId: null,
     startX: 0,
@@ -169,10 +200,15 @@ function connectContextTarget(target) {
     suppressClickUntil: 0,
   };
 
+  resolveContextMenu(target, state);
+
   target.addEventListener(
     "contextmenu",
     (e) => {
       if (shouldIgnoreNativeTarget(e.target)) return;
+      const menu = resolveContextMenu(target, state);
+      // Without a resolvable menu the native context menu stays the fallback.
+      if (!menu) return;
       e.preventDefault();
       e.stopPropagation();
       openContextMenu(target, menu, {
@@ -190,6 +226,8 @@ function connectContextTarget(target) {
     (e) => {
       if (e.key !== "ContextMenu" && !(e.shiftKey && e.key === "F10")) return;
       if (shouldIgnoreNativeTarget(e.target)) return;
+      const menu = resolveContextMenu(target, state);
+      if (!menu) return;
       e.preventDefault();
       openFromKeyboard(target, menu, e.target, target);
     },
@@ -199,7 +237,7 @@ function connectContextTarget(target) {
   target.addEventListener(
     "pointerdown",
     (e) => {
-      const delay = getLongPressDelay(target, menu);
+      const delay = getLongPressDelay(target, menuFor(target));
       if (e.pointerType !== "touch" || delay == null || shouldIgnoreNativeTarget(e.target)) {
         return;
       }
@@ -210,6 +248,8 @@ function connectContextTarget(target) {
       state.startY = e.clientY;
       state.timer = setTimeout(() => {
         state.timer = null;
+        const menu = resolveContextMenu(target, state);
+        if (!menu) return;
         state.suppressClickUntil = Date.now() + LONG_PRESS_CLICK_SUPPRESSION_MS;
         openContextMenu(target, menu, {
           x: state.startX,
@@ -268,6 +308,9 @@ function connectContextTarget(target) {
       )
         return;
 
+      const menu = resolveContextMenu(target, state);
+      if (!menu) return;
+
       e.preventDefault();
       e.stopPropagation();
 
@@ -294,12 +337,10 @@ function disconnectContextTarget(target) {
   if (!state) return;
   clearLongPress(state);
   state.controller.abort();
-  state.releaseMenu?.();
-  if (contextFor(state.menu)?.context === target) {
-    contextByMenu.delete(state.menu);
+  if (state.menu && contextFor(state.menu)?.context === target) {
     closeSurface(state.menu, { restoreFocus: false });
   }
-  state.release();
+  releaseMenuReference(target, state);
   contextMap.delete(target);
 }
 

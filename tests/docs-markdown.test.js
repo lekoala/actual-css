@@ -2,6 +2,7 @@ import { describe, expect, it } from "bun:test";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import {
+  decodeEntities,
   extractAliases,
   parseCodeInfo,
   render,
@@ -178,6 +179,23 @@ describe("render", () => {
     });
     expect(result.toc.map((t) => t.label)).toEqual(["Basic usage", "Variants", "Variants"]);
     expect(result.toc.map((t) => t.id)).toEqual(["basic-usage", "variants", "variants-1"]);
+  });
+
+  it("decodes entities in TOC labels and descriptions", () => {
+    // Heading text arrives entity-escaped from the renderer; templates escape
+    // once more, so undecoded entities would render literally.
+    const page = render(
+      '# Title\n\n"Quoted" description & more.\n\n## Linting role="menu"\n\n## A & B <em>x</em>\n',
+    );
+    expect(page.toc.map((t) => t.label)).toEqual(['Linting role="menu"', "A & B x"]);
+    expect(page.description).toBe('"Quoted" description & more.');
+  });
+
+  it("leaves an out-of-range numeric entity untouched instead of throwing", () => {
+    // String.fromCodePoint throws RangeError past U+10FFFF; an entity the
+    // renderer happens to pass through must not crash the build.
+    expect(decodeEntities("&#x110000;")).toBe("&#x110000;");
+    expect(decodeEntities("&#65; &#x42;")).toBe("A B");
   });
 });
 

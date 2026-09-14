@@ -25,7 +25,17 @@ export function registerEscapeDismissal(element, dismiss) {
 }
 
 function onDocumentEscape(event) {
-  if (event.key !== "Escape" || event.ctrlKey || event.altKey || event.shiftKey) return;
+  // A closer handler that consumed the key (defaultPrevented) keeps its
+  // claim; Escape with any modifier is not a dismissal.
+  if (
+    event.defaultPrevented ||
+    event.key !== "Escape" ||
+    event.ctrlKey ||
+    event.altKey ||
+    event.shiftKey ||
+    event.metaKey
+  )
+    return;
 
   const stack = dismissableStacks.get(event.currentTarget);
   const entry = stack.at(-1);

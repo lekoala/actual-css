@@ -744,9 +744,9 @@ small {
 }
 
 /* Shared control scale. Wrappers are listed when their descendants form one
-   component (field, input-icon, join, pagination, tabs, flyout). A local size
-   declaration beats inherited density because it is declared on the sized
-   component itself. */
+   component (field, choice-card, floating-field, input-icon, join, pagination,
+   tabs, flyout). A local size declaration beats inherited density because it
+   is declared on the sized component itself. */
 :where(
   .btn,
   .input,
@@ -756,7 +756,9 @@ small {
   .file,
   .field,
   .choice,
+  .choice-card,
   .input-icon,
+  .floating-field,
   .otp,
   .join,
   .pagination,
@@ -778,7 +780,9 @@ small {
   .file,
   .field,
   .choice,
+  .choice-card,
   .input-icon,
+  .floating-field,
   .otp,
   .join,
   .pagination,
@@ -838,6 +842,9 @@ small {
 
 @media print {
   :root,
+  /* The doubled attribute intentionally outranks single-attribute preset
+     islands (data-theme="dark", paired themes) loaded after the core. */
+  [data-theme][data-theme],
   body {
     /* Save some ink in dark mode */
     color-scheme: light;

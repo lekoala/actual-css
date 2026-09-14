@@ -37,3 +37,44 @@ test("Escape dismissal ignores modified shortcuts", () => {
   expect(dismissed).toBe(false);
   expect(event.defaultPrevented).toBe(false);
 });
+
+test("Escape dismissal ignores Meta-modified shortcuts", () => {
+  setupDOM('<div id="target"></div>');
+  let dismissed = false;
+  registerEscapeDismissal(document.getElementById("target"), () => {
+    dismissed = true;
+  });
+  const event = new KeyboardEvent("keydown", {
+    key: "Escape",
+    metaKey: true,
+    cancelable: true,
+  });
+
+  document.dispatchEvent(event);
+
+  expect(dismissed).toBe(false);
+  expect(event.defaultPrevented).toBe(false);
+});
+
+test("a keydown already consumed by a closer handler keeps its claim", () => {
+  setupDOM('<div id="target"></div>');
+  let dismissed = false;
+  registerEscapeDismissal(document.getElementById("target"), () => {
+    dismissed = true;
+  });
+  // A listener attached before registration consumes the key for its own
+  // purpose; the stack must not dismiss over it.
+  document.getElementById("target").addEventListener("keydown", (event) => {
+    if (event.key === "Escape") event.preventDefault();
+  });
+  const event = new KeyboardEvent("keydown", {
+    key: "Escape",
+    bubbles: true,
+    cancelable: true,
+  });
+
+  document.getElementById("target").dispatchEvent(event);
+
+  expect(dismissed).toBe(false);
+  expect(event.defaultPrevented).toBe(true);
+});

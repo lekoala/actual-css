@@ -131,4 +131,12 @@
   .needs-validation.was-validated .otp > input:invalid ~ span {
     --otp-cell-border: Mark;
   }
+
+  /* biome-ignore lint/style/noDescendingSpecificity: the :user-invalid route
+     mirrors the non-forced-colors block above and must come last — the three
+     invalid markers write the same value, so source order is inert. An engine
+     without the pseudo drops this rule alone. */
+  .needs-validation .otp > input:user-invalid ~ span {
+    --otp-cell-border: Mark;
+  }
 }

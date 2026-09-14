@@ -3,7 +3,9 @@
  * deliberately far from success in hue (174 vs 135) and saturation so the two
  * never read as the same signal; keep that split when adjusting either. */
 [data-theme="spruce"] {
-  color-scheme: light dark;
+  /* Base palette is the light half; the dark pairing is only announced where
+     light-dark() exists, in the @supports block below. */
+  color-scheme: light;
 
   --primary: hsl(174 45% 24%);
   --primary-fg: hsl(160 30% 97%);
@@ -36,6 +38,7 @@
 
 @supports (color: light-dark(red, blue)) {
   [data-theme="spruce"] {
+    color-scheme: light dark;
     --primary: light-dark(hsl(174 45% 24%), hsl(170 35% 66%));
     --primary-fg: light-dark(hsl(160 30% 97%), hsl(174 40% 9%));
     --secondary: light-dark(hsl(24 48% 42%), hsl(26 50% 70%));

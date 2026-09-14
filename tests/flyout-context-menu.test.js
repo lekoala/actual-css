@@ -371,6 +371,37 @@ test("flyout trigger opens nav panels and focuses the first link", async () => {
   expect(document.activeElement).toBe(first);
 });
 
+test("a link trigger toggles its panel without navigating", async () => {
+  await loadFlyout(`
+    <a id="trigger" data-enhance="flyout" aria-controls="panel" href="/products">Products</a>
+    <div id="panel" class="flyout" hidden>
+      <section><a href="/figma">Figma integration</a></section>
+    </div>
+  `);
+  const trigger = document.getElementById("trigger");
+  const panel = document.getElementById("panel");
+  setupGeometry(trigger, panel);
+
+  const event = new MouseEvent("click", { bubbles: true, cancelable: true });
+  trigger.dispatchEvent(event);
+
+  // Once a panel resolved, the click is a toggle: navigation is claimed.
+  expect(event.defaultPrevented).toBe(true);
+  expect(isOpen(panel)).toBe(true);
+});
+
+test("a link trigger with no resolvable panel stays navigable", async () => {
+  await loadFlyout(
+    '<a id="trigger" data-enhance="flyout" aria-controls="missing" href="/products">Products</a>',
+  );
+  const trigger = document.getElementById("trigger");
+
+  const event = new MouseEvent("click", { bubbles: true, cancelable: true });
+  trigger.dispatchEvent(event);
+
+  expect(event.defaultPrevented).toBe(false);
+});
+
 test("nav panel fallback skips invisible items when checkVisibility is unavailable", async () => {
   await loadFlyout(`
     <button id="trigger" type="button" data-enhance="flyout" aria-controls="panel" aria-expanded="false">Products</button>
@@ -436,6 +467,92 @@ test("keyboard context menu focuses the first direct menu item", async () => {
   expect(isOpen(menu)).toBe(true);
   expect(menu.classList.contains("is-open")).toBe(true);
   expect(document.activeElement).toBe(first);
+});
+
+test("context menu resolves a menu inserted after its target", async () => {
+  await loadContextMenu(
+    '<main><div id="target" data-context-menu="menu" tabindex="0">File.pdf</div></main>',
+  );
+
+  document
+    .querySelector("main")
+    .insertAdjacentHTML(
+      "beforeend",
+      '<menu id="menu" class="flyout" hidden><li><button type="button">Open</button></li></menu>',
+    );
+  await nextMicrotask();
+  const target = document.getElementById("target");
+  const menu = document.getElementById("menu");
+  setupGeometry(target, menu);
+
+  target.dispatchEvent(
+    new MouseEvent("contextmenu", { bubbles: true, cancelable: true, clientX: 20, clientY: 30 }),
+  );
+
+  expect(isOpen(menu)).toBe(true);
+  expect(menu.classList.contains("is-open")).toBe(true);
+});
+
+test("context target without a resolvable menu leaves the native menu alone", async () => {
+  await loadContextMenu('<div id="target" data-context-menu="menu" tabindex="0">File.pdf</div>');
+  const target = document.getElementById("target");
+
+  const event = new MouseEvent("contextmenu", {
+    bubbles: true,
+    cancelable: true,
+    clientX: 20,
+    clientY: 30,
+  });
+  target.dispatchEvent(event);
+
+  expect(event.defaultPrevented).toBe(false);
+});
+
+test("context menu re-resolves a same-id menu replacement", async () => {
+  const { contextFor } = await loadContextMenu(`
+    <div id="target" data-context-menu="menu" tabindex="0">File.pdf</div>
+    <menu id="menu" class="flyout" hidden><li><button type="button">Old</button></li></menu>
+  `);
+  const target = document.getElementById("target");
+  const first = document.getElementById("menu");
+  setupGeometry(target, first);
+
+  // Open once so the first menu holds a contextByMenu entry; the assertion
+  // below then proves the release path clears it.
+  target.dispatchEvent(
+    new MouseEvent("contextmenu", { bubbles: true, cancelable: true, clientX: 10, clientY: 20 }),
+  );
+  expect(isOpen(first)).toBe(true);
+  expect(contextFor(first)?.context).toBe(target);
+
+  first.replaceWith(
+    document
+      .createRange()
+      .createContextualFragment(
+        '<menu id="menu" class="flyout" hidden><li><button type="button">New</button></li></menu>',
+      ),
+  );
+  await nextMicrotask();
+  const replacement = document.getElementById("menu");
+  setupGeometry(target, replacement);
+
+  target.dispatchEvent(
+    new MouseEvent("contextmenu", { bubbles: true, cancelable: true, clientX: 20, clientY: 30 }),
+  );
+
+  expect(isOpen(first)).toBe(false);
+  expect(isOpen(replacement)).toBe(true);
+  expect(replacement.classList.contains("is-open")).toBe(true);
+  // contextFor() backs the public API: a released menu must not keep
+  // reporting the target it no longer belongs to.
+  expect(contextFor(first)).toBeNull();
+
+  // The detached menu's retainers were released: its key wiring must be dead.
+  document.body.append(first);
+  first.hidden = false;
+  const staleItem = first.querySelector("button");
+  press(first, "ArrowDown");
+  expect(document.activeElement).not.toBe(staleItem);
 });
 
 test("context menu targets do not claim button disclosure semantics", async () => {

@@ -748,9 +748,9 @@ small {
 }
 
 /* Shared control scale. Wrappers are listed when their descendants form one
-   component (field, input-icon, join, pagination, tabs, flyout). A local size
-   declaration beats inherited density because it is declared on the sized
-   component itself. */
+   component (field, choice-card, floating-field, input-icon, join, pagination,
+   tabs, flyout). A local size declaration beats inherited density because it
+   is declared on the sized component itself. */
 :where(
   .btn,
   .input,
@@ -760,7 +760,9 @@ small {
   .file,
   .field,
   .choice,
+  .choice-card,
   .input-icon,
+  .floating-field,
   .otp,
   .join,
   .pagination,
@@ -782,7 +784,9 @@ small {
   .file,
   .field,
   .choice,
+  .choice-card,
   .input-icon,
+  .floating-field,
   .otp,
   .join,
   .pagination,
@@ -842,6 +846,9 @@ small {
 
 @media print {
   :root,
+  /* The doubled attribute intentionally outranks single-attribute preset
+     islands (data-theme="dark", paired themes) loaded after the core. */
+  [data-theme][data-theme],
   body {
     /* Save some ink in dark mode */
     color-scheme: light;
@@ -3129,6 +3136,8 @@ small {
   border-radius: var(--choice-card-radius);
   background: var(--choice-card-bg);
   color: var(--text);
+  /* Consumed so .sm/.lg reach the card; the badge's em sizing follows. */
+  font-size: var(--control-font-size);
   cursor: pointer;
   transition:
     border-color var(--duration),
@@ -3380,7 +3389,9 @@ small {
 
 .floating-field > .field-label {
   position: absolute;
-  inset-inline-start: calc(var(--space-30) + var(--border-width));
+  /* Same start edge as the control's text: --control-pad-x owns that shared
+     geometry, so .sm/.lg keep label and value aligned. */
+  inset-inline-start: calc(var(--control-pad-x) + var(--border-width));
   color: var(--text-muted);
   font-size: var(--control-font-size);
   font-weight: var(--font-weight-normal);
@@ -3574,6 +3585,14 @@ small {
 
   .otp > input[aria-invalid="true"] ~ span,
   .needs-validation.was-validated .otp > input:invalid ~ span {
+    --otp-cell-border: Mark;
+  }
+
+  /* biome-ignore lint/style/noDescendingSpecificity: the :user-invalid route
+     mirrors the non-forced-colors block above and must come last — the three
+     invalid markers write the same value, so source order is inert. An engine
+     without the pseudo drops this rule alone. */
+  .needs-validation .otp > input:user-invalid ~ span {
     --otp-cell-border: Mark;
   }
 }
@@ -4682,24 +4701,26 @@ a.badge[aria-disabled="true"] {
   overscroll-behavior: contain;
 }
 
-:where(dialog).modal header > :first-child,
-:where(dialog).modal footer > :first-child {
+/* Anatomy is bounded to the structural slots (direct children of the
+   form/.stack body): a header or footer deeper in the content keeps its own
+   rhythm and is not restyled as the modal's chrome. */
+:where(dialog).modal > :where(form, .stack) > :is(header, footer) > :first-child {
   margin-block-start: 0;
 }
 
-:where(dialog).modal header > :last-child,
-:where(dialog).modal footer > :last-child {
+:where(dialog).modal > :where(form, .stack) > :is(header, footer) > :last-child {
   margin-block-end: 0;
 }
 
 /* The close button is anchored to the dialog at top inline-end, out of the
-   content flow; headers reserve inline room so titles never run under it. */
-:where(dialog).modal > form > header,
-:where(dialog).modal > .stack > header {
+   content flow; headers reserve inline room so titles never run under it.
+   The form/.stack anatomy is structural, so it stays in :where() and never
+   lends .stack's specificity to a bare <form>. */
+:where(dialog).modal > :where(form, .stack) > header {
   padding-inline-end: calc(var(--control-size) + var(--space-30));
 }
 
-:where(dialog).modal footer {
+:where(dialog).modal > :where(form, .stack) > footer {
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-end;
@@ -8456,7 +8477,12 @@ a.list-item[aria-current]::before {
   text-decoration: none;
 }
 
-.link-muted:hover,
+/* :focus-visible stays in its own rule: in a mixed selector list an engine
+   without it would drop the whole rule, taking the :hover styling with it. */
+.link-muted:hover {
+  color: var(--text);
+}
+
 .link-muted:focus-visible {
   color: var(--text);
 }

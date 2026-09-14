@@ -483,7 +483,7 @@ listenable on the document; cancelable events veto the associated action when
 <tr><td><code>actual:status</code></td><td>status module, or any code</td><td><code>{ message, intent, duration }</code></td></tr>
 <tr><td><code>actual:invalid</code></td><td>after a submit was blocked</td><td><code>{ form, firstInvalid, message }</code></td></tr>
 <tr><td><code>actual:dialog-cancel</code></td><td>before a native cancel close</td><td><code>{ dialog, sourceEvent }</code></td></tr>
-<tr><td><code>actual:dismiss</code></td><td>after <code>--dismiss</code> hid a target</td><td><code>{ trigger }</code></td></tr>
+<tr><td><code>actual:dismiss</code></td><td>after a <code>--dismiss</code> dismissal</td><td><code>{ trigger }</code></td></tr>
 </tbody>
 </table></div>
 <p><code>actual:surface-open</code>, <code>actual:context-menu</code> and <code>actual:dialog-cancel</code> are
@@ -522,7 +522,11 @@ applications that unload the module owning the command.</p>
 <h3 id="dismiss-command">Dismiss command</h3>
 <p>The runtime includes a generic <code>--dismiss</code> command for hiding any resolved
 target. It prevents the trigger's default action, sets <code>hidden</code>, and emits a
-bubbling <code>actual:dismiss</code> event with the trigger in <code>event.detail.trigger</code>.</p>
+bubbling <code>actual:dismiss</code> event with the trigger in <code>event.detail.trigger</code>.
+On an open surface (flyout, context menu), the surface consumes the event to
+close through its own lifecycle instead of staying hidden — by the time the
+event reaches document listeners, <code>hidden</code> has already been lifted again and
+the surface reads as closed, not merely attribute-hidden.</p>
 </div>
 <div class="docs-example">
   <div class="docs-preview">

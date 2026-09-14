@@ -143,7 +143,12 @@
   text-decoration: none;
 }
 
-.link-muted:hover,
+/* :focus-visible stays in its own rule: in a mixed selector list an engine
+   without it would drop the whole rule, taking the :hover styling with it. */
+.link-muted:hover {
+  color: var(--text);
+}
+
 .link-muted:focus-visible {
   color: var(--text);
 }

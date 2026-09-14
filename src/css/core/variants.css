@@ -92,9 +92,9 @@
 }
 
 /* Shared control scale. Wrappers are listed when their descendants form one
-   component (field, input-icon, join, pagination, tabs, flyout). A local size
-   declaration beats inherited density because it is declared on the sized
-   component itself. */
+   component (field, choice-card, floating-field, input-icon, join, pagination,
+   tabs, flyout). A local size declaration beats inherited density because it
+   is declared on the sized component itself. */
 :where(
   .btn,
   .input,
@@ -104,7 +104,9 @@
   .file,
   .field,
   .choice,
+  .choice-card,
   .input-icon,
+  .floating-field,
   .otp,
   .join,
   .pagination,
@@ -126,7 +128,9 @@
   .file,
   .field,
   .choice,
+  .choice-card,
   .input-icon,
+  .floating-field,
   .otp,
   .join,
   .pagination,

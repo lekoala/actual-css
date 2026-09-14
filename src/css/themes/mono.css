@@ -1,5 +1,7 @@
 [data-theme="mono"] {
-  color-scheme: light dark;
+  /* Base palette is the light half; the dark pairing is only announced where
+     light-dark() exists, in the @supports block below. */
+  color-scheme: light;
 
   --primary: hsl(220 8% 18%);
   --primary-fg: white;
@@ -32,6 +34,7 @@
 
 @supports (color: light-dark(red, blue)) {
   [data-theme="mono"] {
+    color-scheme: light dark;
     --primary: light-dark(hsl(220 8% 18%), hsl(220 16% 80%));
     --primary-fg: light-dark(white, hsl(220 30% 12%));
     --secondary: light-dark(hsl(220 7% 34%), hsl(220 15% 80%));

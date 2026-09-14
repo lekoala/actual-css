@@ -1,12 +1,12 @@
 {
-  "totalRaw": 303930,
+  "totalRaw": 307116,
   "core": {
-    "minified": 12373,
-    "brotli": 2783
+    "minified": 12461,
+    "brotli": 2798
   },
   "full": {
-    "minified": 127230,
-    "brotli": 18116
+    "minified": 127453,
+    "brotli": 18111
   },
   "js": {
     "core": {
@@ -14,8 +14,8 @@
       "brotli": 2243
     },
     "full": {
-      "bytes": 55533,
-      "brotli": 16272
+      "bytes": 56295,
+      "brotli": 16426
     }
   },
   "fileCount": 108,
@@ -30,7 +30,7 @@
     },
     {
       "file": "components/modal.css",
-      "raw": 9940
+      "raw": 10257
     },
     {
       "file": "components/alert.css",
@@ -61,12 +61,12 @@
       "raw": 5554
     },
     {
-      "file": "effects/aura.css",
-      "raw": 5442
+      "file": "core/variants.css",
+      "raw": 5476
     },
     {
-      "file": "core/variants.css",
-      "raw": 5377
+      "file": "effects/aura.css",
+      "raw": 5442
     },
     {
       "file": "components/flyout.css",
@@ -89,24 +89,32 @@
       "raw": 4951
     },
     {
-      "file": "layout/column-layout.css",
-      "raw": 4637
-    },
-    {
-      "file": "forms/choice-card.css",
-      "raw": 4560
+      "file": "forms/otp.css",
+      "raw": 4702
     },
     {
       "file": "themes/edge.css",
-      "raw": 4533
+      "raw": 4695
+    },
+    {
+      "file": "forms/choice-card.css",
+      "raw": 4674
+    },
+    {
+      "file": "layout/column-layout.css",
+      "raw": 4637
     },
     {
       "file": "components/card.css",
       "raw": 4499
     },
     {
-      "file": "forms/otp.css",
-      "raw": 4326
+      "file": "themes/gradient.css",
+      "raw": 4043
+    },
+    {
+      "file": "utilities/base.css",
+      "raw": 3964
     },
     {
       "file": "components/navbar.css",
@@ -117,20 +125,12 @@
       "raw": 3907
     },
     {
+      "file": "forms/floating-field.css",
+      "raw": 3895
+    },
+    {
       "file": "components/join.css",
       "raw": 3885
-    },
-    {
-      "file": "themes/gradient.css",
-      "raw": 3881
-    },
-    {
-      "file": "utilities/base.css",
-      "raw": 3783
-    },
-    {
-      "file": "forms/floating-field.css",
-      "raw": 3754
     },
     {
       "file": "components/tab.css",
@@ -169,8 +169,16 @@
       "raw": 2983
     },
     {
+      "file": "themes/spruce.css",
+      "raw": 2825
+    },
+    {
       "file": "forms/native.css",
       "raw": 2809
+    },
+    {
+      "file": "themes/petrol.css",
+      "raw": 2765
     },
     {
       "file": "forms/validation.css",
@@ -189,40 +197,48 @@
       "raw": 2670
     },
     {
-      "file": "themes/spruce.css",
-      "raw": 2663
-    },
-    {
       "file": "core/base.css",
       "raw": 2655
     },
     {
-      "file": "themes/petrol.css",
-      "raw": 2603
+      "file": "themes/sunset.css",
+      "raw": 2654
+    },
+    {
+      "file": "themes/lavender.css",
+      "raw": 2631
     },
     {
       "file": "layout/app-layout.css",
       "raw": 2585
     },
     {
-      "file": "themes/sunset.css",
-      "raw": 2492
-    },
-    {
-      "file": "themes/lavender.css",
-      "raw": 2469
+      "file": "themes/forest.css",
+      "raw": 2578
     },
     {
       "file": "components/app-nav.css",
       "raw": 2456
     },
     {
+      "file": "themes/corporate.css",
+      "raw": 2455
+    },
+    {
       "file": "components/skeleton.css",
       "raw": 2450
     },
     {
-      "file": "themes/forest.css",
-      "raw": 2416
+      "file": "themes/ocean.css",
+      "raw": 2449
+    },
+    {
+      "file": "themes/square.css",
+      "raw": 2426
+    },
+    {
+      "file": "themes/mono.css",
+      "raw": 2399
     },
     {
       "file": "forms/select.css",
@@ -231,22 +247,6 @@
     {
       "file": "themes/index.css",
       "raw": 2339
-    },
-    {
-      "file": "themes/corporate.css",
-      "raw": 2293
-    },
-    {
-      "file": "themes/ocean.css",
-      "raw": 2287
-    },
-    {
-      "file": "themes/square.css",
-      "raw": 2264
-    },
-    {
-      "file": "themes/mono.css",
-      "raw": 2237
     },
     {
       "file": "themes/cyberpunk.css",
@@ -405,6 +405,10 @@
       "raw": 415
     },
     {
+      "file": "core/print.css",
+      "raw": 382
+    },
+    {
       "file": "layout/center.css",
       "raw": 359
     },
@@ -423,10 +427,6 @@
     {
       "file": "layout/measure.css",
       "raw": 217
-    },
-    {
-      "file": "core/print.css",
-      "raw": 206
     },
     {
       "file": "layout/app-shell.css",

@@ -24,6 +24,11 @@
  * whether it needs a gate: kind says what happens on an engine that lacks the
  * capability, and only kind can excuse a use.
  *
+ * Selector lists get a separate audit: an above-floor pseudo-class sharing a
+ * comma-separated rule with baseline selectors discards the whole rule on an
+ * engine that lacks it, taking the baseline styling down with it. Split such
+ * rules so each selector's degradation stays its own.
+ *
  * The floor here is the Degraded tier, not Minimal. Minimal is the JavaScript
  * baseline; a Degraded browser runs no supported runtime but still receives
  * every stylesheet, so CSS owes its fallbacks that far down. Raising Minimal
@@ -250,6 +255,65 @@ function vendorSignature(selector) {
   return prefixes.size === 0 ? "standard" : [...prefixes].sort().join("+");
 }
 
+/* Pseudo-classes above the floor that discard their whole rule when the
+   engine does not know them. Only a mixed list is a violation: alone in a
+   rule the drop is the intended degradation, but sharing a rule with a
+   baseline selector takes that styling down with it. :has() is not listed —
+   FEATURES already flags every unguarded use as structural, mixed or not. */
+const LIST_BREAKING_PSEUDOS =
+  /:(?:focus-visible|user-valid|user-invalid|target-current|popover-open|modal|autofill|fullscreen)\b/i;
+
+/* :is()/:where() arguments are a forgiving selector list: an unsupported
+   selector inside them is dropped alone and cannot take the rule down. */
+function stripForgivingSelectorArgs(selector) {
+  let result = "";
+  let cursor = 0;
+  for (const match of selector.matchAll(/:(?:is|where)\(/gi)) {
+    // A nested :is()/:where() already consumed by its enclosing call sits
+    // before the cursor; honoring it would rewind the cursor and re-expose
+    // the enclosing list's tail to the audit.
+    if (match.index < cursor) continue;
+    let depth = 0;
+    let end = match.index + match[0].length - 1;
+    for (; end < selector.length; end++) {
+      if (selector[end] === "(") depth++;
+      else if (selector[end] === ")") {
+        depth--;
+        if (depth === 0) {
+          end++;
+          break;
+        }
+      }
+    }
+    result += selector.slice(cursor, match.index);
+    cursor = end;
+  }
+  return result + selector.slice(cursor);
+}
+
+export function mixedBreakingSelectorLists(css) {
+  const violations = [];
+  const withoutComments = css.replace(/\/\*[\s\S]*?\*\//g, (comment) => " ".repeat(comment.length));
+
+  for (const match of withoutComments.matchAll(/([^{}]+)\{/g)) {
+    const prelude = match[1].trim();
+    if (prelude.startsWith("@") || !prelude.includes(",")) continue;
+
+    const breaking = splitSelectorList(prelude).map((selector) =>
+      LIST_BREAKING_PSEUDOS.test(stripForgivingSelectorArgs(selector)),
+    );
+    if (!breaking.some(Boolean) || breaking.every(Boolean)) continue;
+
+    const selectorOffset = match[1].search(/\S/);
+    violations.push({
+      line: lineNo(css, match.index + Math.max(selectorOffset, 0)),
+      selector: prelude,
+    });
+  }
+
+  return violations;
+}
+
 export function mixedVendorSelectorLists(css) {
   const violations = [];
   const withoutComments = css.replace(/\/\*[\s\S]*?\*\//g, (comment) => " ".repeat(comment.length));
@@ -314,12 +378,19 @@ function main() {
   const progressive = [];
   const optional = [];
   const vendorViolations = [];
+  const breakingViolations = [];
 
   for (const file of files) {
     const css = readFileSync(file, "utf8");
     vendorViolations.push(
       ...mixedVendorSelectorLists(css).map(
         ({ line, selector }) => `${rel(file)}:${line}  mixed vendor pseudo-elements: ${selector}`,
+      ),
+    );
+    breakingViolations.push(
+      ...mixedBreakingSelectorLists(css).map(
+        ({ line, selector }) =>
+          `${rel(file)}:${line}  above-floor pseudo shares a rule with baseline selectors: ${selector}`,
       ),
     );
 
@@ -338,10 +409,15 @@ function main() {
   for (const line of violations) console.log(`  ✗ ${line}`);
   console.log(`Mixed vendor selector lists: ${vendorViolations.length}`);
   for (const line of vendorViolations) console.log(`  ✗ ${line}`);
+  console.log(
+    `Selector lists mixing above-floor and baseline pseudos: ${breakingViolations.length}`,
+  );
+  for (const line of breakingViolations) console.log(`  ✗ ${line}`);
 
-  if (violations.length > 0 || vendorViolations.length > 0) {
+  if (violations.length > 0 || vendorViolations.length > 0 || breakingViolations.length > 0) {
     console.error("\ncheck:compat failed — structural capabilities need a guarded fallback, and");
-    console.error("selector lists must not mix browser-specific pseudo-elements.");
+    console.error("selector lists must not mix browser-specific pseudo-elements or let an");
+    console.error("above-floor pseudo-class share a rule with baseline selectors.");
     process.exit(1);
   }
   console.log("\ncheck:compat passed.");
