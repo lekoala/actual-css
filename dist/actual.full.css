@@ -4586,6 +4586,7 @@ a.badge[aria-disabled="true"] {
  *
  * Internal:
  * --dialog-close-icon-size
+ * --dialog-focus-bleed
  * --dialog-viewport-block
  * --dialog-viewport-gap-default
  * --dialog-viewport-gap-2x
@@ -4670,7 +4671,13 @@ a.badge[aria-disabled="true"] {
 
 :where(dialog).modal.scrollable > form > :not(:is(header, footer)),
 :where(dialog).modal.scrollable > .stack > :not(:is(header, footer)) {
+  --dialog-focus-bleed: calc(var(--focus-outline-offset) + var(--border-width) * 2);
+
   min-block-size: 0;
+  /* Keep focus paint inside the clip without moving the body off the fixed
+     header and footer edges. */
+  margin-inline: calc(var(--dialog-focus-bleed) * -1);
+  padding-inline: var(--dialog-focus-bleed);
   overflow: auto;
   overscroll-behavior: contain;
 }
@@ -4927,6 +4934,7 @@ html.has-modal-open.had-scrollbar {
  *
  * Internal:
  * --drawer-closed-translate (side/RTL positioning state)
+ * --drawer-focus-bleed
  * --drawer-motion-duration (shared by panel and ::backdrop so exit duration
  *   changes in one place; entry state redefines it longer)
  */
@@ -5036,7 +5044,13 @@ html.has-modal-open.had-scrollbar {
    exclusion list is easier to trust than its `position: absolute`. */
 :where(dialog).drawer > :not(:is(header, footer, form, .drawer-close)),
 :where(dialog).drawer > form > :not(:is(header, footer, .drawer-close)) {
+  --drawer-focus-bleed: calc(var(--focus-outline-offset) + var(--border-width) * 2);
+
   min-block-size: 0;
+  /* Keep focus paint inside the clip without moving the body off the fixed
+     header and footer edges. */
+  margin-inline: calc(var(--drawer-focus-bleed) * -1);
+  padding-inline: var(--drawer-focus-bleed);
   overflow: auto;
   overscroll-behavior: contain;
 }

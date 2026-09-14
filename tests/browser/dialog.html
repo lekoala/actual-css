@@ -11,6 +11,7 @@
 
   <button id="open-dismissible" type="button" commandfor="dlg-dismissible" command="show-modal">Open dismissible</button>
   <button id="open-nondismiss" type="button" commandfor="dlg-nondismiss" command="show-modal">Open non-dismissible</button>
+  <button id="open-scrollable" type="button" commandfor="dlg-scrollable" command="show-modal">Open scrollable</button>
   <button id="open-drawer" type="button" commandfor="drawer" command="show-modal">Open drawer</button>
 
   <dialog class="modal" id="dlg-dismissible" closedby="any" data-dialog-dismissible aria-label="Dismissible dialog">
@@ -37,6 +38,16 @@
     </div>
   </dialog>
 
+  <dialog class="modal scrollable" id="dlg-scrollable" aria-label="Scrollable dialog">
+    <div class="stack">
+      <header><h3>Scrollable dialog</h3></header>
+      <div id="modal-scroll-body">
+        <input id="modal-edge-control" style="inline-size: 100%" value="Full-width control">
+      </div>
+      <footer><button type="button">Action</button></footer>
+    </div>
+  </dialog>
+
   <dialog class="drawer" id="drawer" aria-label="Drawer">
     <header>
       <strong>Drawer</strong>
@@ -45,7 +56,7 @@
       </form>
     </header>
     <nav>
-      <ul class="nav-list"><li><a href="#">Item</a></li></ul>
+      <ul class="nav-list"><li><a class="nav-link" id="drawer-edge-control" href="#">Item</a></li></ul>
     </nav>
   </dialog>
 

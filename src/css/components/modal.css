@@ -14,6 +14,7 @@
  *
  * Internal:
  * --dialog-close-icon-size
+ * --dialog-focus-bleed
  * --dialog-viewport-block
  * --dialog-viewport-gap-default
  * --dialog-viewport-gap-2x
@@ -98,7 +99,13 @@
 
 :where(dialog).modal.scrollable > form > :not(:is(header, footer)),
 :where(dialog).modal.scrollable > .stack > :not(:is(header, footer)) {
+  --dialog-focus-bleed: calc(var(--focus-outline-offset) + var(--border-width) * 2);
+
   min-block-size: 0;
+  /* Keep focus paint inside the clip without moving the body off the fixed
+     header and footer edges. */
+  margin-inline: calc(var(--dialog-focus-bleed) * -1);
+  padding-inline: var(--dialog-focus-bleed);
   overflow: auto;
   overscroll-behavior: contain;
 }
