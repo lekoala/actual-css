@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+
+## [0.9.1] - 2026-09-16
+
 ### Fixed
 
 - `.modal.scrollable` and `.drawer` body scrollports reserve inline focus-ring space without changing header, body, or footer alignment, so full-width controls no longer clip their focus indicator.
