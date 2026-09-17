@@ -34,13 +34,14 @@ export function readFlags(args, spec) {
 }
 
 let available;
-export async function browserAvailable() {
+export async function browserAvailable(createView = () => new Bun.WebView({ backend: "chrome" })) {
   if (available !== undefined) return available;
   try {
-    const view = new Bun.WebView({ backend: "chrome" });
+    const view = createView();
     view.close();
     available = true;
-  } catch {
+  } catch (error) {
+    if (process.env.CI) throw error;
     available = false;
   }
   return available;

@@ -12,5 +12,5 @@ jobs:
       # anything different from what is tracked must fail the pipeline.
       - name: Verify committed build output
         run: |
-          git diff --exit-code -- dist site size-report.json
-          test -z "$(git ls-files --others --exclude-standard -- dist site size-report.json)"
+          git diff --exit-code -- dist site size-report.json components.json reserved-classes.json
+          test -z "$(git ls-files --others --exclude-standard -- dist site size-report.json components.json reserved-classes.json)"
