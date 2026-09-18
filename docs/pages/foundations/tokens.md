@@ -211,6 +211,8 @@ Typography tokens cover the document baseline and common component needs.
 :root {
   --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --font-width: 100%;
+  --font-width-dense: 95%;
 
   --line-height: 1.5;
   --font-weight-normal: 400;
@@ -264,24 +266,41 @@ Disabled controls and disabled-prone components read `--disabled-opacity` for th
 
 ### Density
 
-Density contexts swap shared spacing and geometry:
+Density contexts swap shared spacing and geometry, plus a slight typographic
+width bonus:
 
 ```css
+:root {
+  --font-width: 100%;
+  --font-width-dense: 95%;
+}
+
 .compact {
   --gap: var(--space-20);
   --density-space: var(--space-20);
   --control-size: var(--control-size-sm);
+  font-stretch: var(--font-width-dense);
 }
 
 .spacious {
   --gap: var(--space-50);
   --density-space: var(--space-50);
   --control-size: var(--control-size-lg);
+  font-stretch: var(--font-width);
 }
 ```
 
-Density covers spacing and geometry only — it never touches typography or icon
-size. Participation is opt-in and selective: controls consume `--control-size`
+Density never changes font size or icon size — it may only use the denser font
+width. `font-stretch` uses a variable `wdth` axis when available, or
+participates in normal width-face matching for families that expose multiple
+widths. Layout must never depend on the narrowing being available. Compact
+density may slightly narrow variable typefaces when they support a width axis.
+This is a density enhancement, not an overflow strategy: never condense a
+component just because its label overflows at some viewport — that hides a
+composition problem. A theme whose typeface has no useful width axis opts out
+with `--font-width-dense: 100%`.
+
+Participation is opt-in and selective: controls consume `--control-size`
 for geometry; spacing helpers and rhythms consume `--density-space` and `--gap`;
 components whose size is intrinsic (badge, avatar, spinner, rating, key, prose,
 inline choice/switch) keep their own scales. A local component size overrides

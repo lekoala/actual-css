@@ -4,6 +4,7 @@
 
 ### Added
 
+- `--font-width` and `--font-width-dense` typography hooks: `.compact` applies the denser width through `font-stretch` (variable `wdth` axis when available, width-face matching otherwise), `.spacious` restores the normal width. Themes without a useful width axis opt out with `--font-width-dense: 100%`.
 - `starts-with` and `ends-with` built-in `data-validation-rules` rules: the trimmed value must begin or end with one of the literal tokens, case-sensitive.
 - `tel-prefix` built-in `data-validation-rules` rule: dialing digits are required, local numbers pass, explicit international numbers (`+`, `00`) must match an allowed prefix, and no prefix means local-only. It is an origin policy, not phone validation, and never rewrites the value.
 

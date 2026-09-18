@@ -71,6 +71,8 @@ select {
   /* Typography */
   --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --font-width: 100%;
+  --font-width-dense: 95%;
   --line-height: 1.5;
   --line-height-tight: 1.25;
   --line-height-relaxed: 1.75;
@@ -519,12 +521,14 @@ select {
  * Public hooks:
  * --link
  * --hr-space
+ * --font-width / --font-width-dense (see variants.css for the dense application)
  */
 
 body {
   background: var(--surface);
   color: var(--text);
   font-family: var(--font-sans);
+  font-stretch: var(--font-width);
   line-height: var(--line-height);
 }
 
@@ -672,9 +676,16 @@ small {
  *   components/alert.css   — .alert default soft behind explicit --ui-*
  *
  * .compact/.spacious set inherited density tokens: spacing rhythm and geometry
- * only. Density never changes typography or icon size. Controls consume
- * --control-size; non-control components may consume --density-* when the
- * context should affect their local rhythm.
+ * only, plus a slight typographic width bonus. Density never changes font size
+ * or icon size. Controls consume --control-size; non-control components may
+ * consume --density-* when the context should affect their local rhythm.
+ * .compact applies --font-width-dense through font-stretch (a variable wdth
+ * axis when available, otherwise normal width-face matching); layout must
+ * never depend on the narrowing being available. .spacious restores
+ * --font-width, so a spacious island inside a compact context returns to the
+ * normal width exactly as it restores its own gap, spacing, and control size.
+ * Themes whose typeface has no useful width axis opt out with
+ * --font-width-dense: 100%.
  *
  * .sm/.lg are local size roles, not shared measurements. Shared control
  * participants below map both typography and geometry; components with
@@ -739,12 +750,14 @@ small {
   --gap: var(--space-20);
   --density-space: var(--space-20);
   --control-size: var(--control-size-sm);
+  font-stretch: var(--font-width-dense);
 }
 
 .spacious {
   --gap: var(--space-50);
   --density-space: var(--space-50);
   --control-size: var(--control-size-lg);
+  font-stretch: var(--font-width);
 }
 
 /* Shared control scale. Wrappers are listed when their descendants form one

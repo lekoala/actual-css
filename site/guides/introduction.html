@@ -270,7 +270,8 @@ shared by buttons, badges, alerts, and cards; <code>.inverted</code> is a shared
 modifier that paints any block with the inverse surface. <code>.ghost</code> and <code>.link</code>
 are button-only. Size variants <code>.sm</code> and <code>.lg</code> scale typography and
 participating component geometry consistently. Density contexts <code>.compact</code> and
-<code>.spacious</code> change geometry and spacing without changing typography or icons.
+<code>.spacious</code> change geometry and spacing without changing font size or icons;
+<code>.compact</code> may slightly narrow typefaces that support a width axis.
 Undocumented <code>is-*</code> classes are runtime internals.</p>
 <pre><code class="language-html">&lt;button class=&quot;btn&quot;&gt;Click me&lt;/button&gt;
 &lt;button class=&quot;btn primary&quot;&gt;Save&lt;/button&gt;

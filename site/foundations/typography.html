@@ -286,6 +286,14 @@ the document) and <code>--font-mono</code> (for <code>code</code> / <code>kbd</c
 <code>--font-serif</code> or separate display slot. Add a serif or display family as a
 theme-level token in your own theme when a project actually needs one; the
 baseline stays sans so app UI inherits predictably.</p>
+<h3 id="font-width">Font width</h3>
+<p>Two public hooks carry the typographic side of density: <code>--font-width</code> (normal
+width) and <code>--font-width-dense</code> (compact width). The document reads
+<code>--font-width</code> through <code>font-stretch</code>; <code>.compact</code> applies
+<code>--font-width-dense</code> and <code>.spacious</code> restores <code>--font-width</code>. A theme whose
+typeface has no useful width axis sets <code>--font-width-dense: 100%</code>. Width is a
+density token, not a responsive escape hatch — never condense text to fix an
+overflowing label.</p>
 <h2 id="font-weights">Font weights</h2>
 <p>The framework exposes a small set of weights:</p>
 <ul>
@@ -396,6 +404,7 @@ baseline stays sans so app UI inherits predictably.</p>
         <li><a class="nav-link" href="#link-treatment" data-docs-toc-item data-level="2">Link treatment</a></li>
         <li><a class="nav-link" href="#type-scale" data-docs-toc-item data-level="2">Type scale</a></li>
         <li><a class="nav-link" href="#font-families" data-docs-toc-item data-level="2">Font families</a></li>
+        <li><a class="nav-link" href="#font-width" data-docs-toc-item data-level="3">Font width</a></li>
         <li><a class="nav-link" href="#font-weights" data-docs-toc-item data-level="2">Font weights</a></li>
         <li><a class="nav-link" href="#line-heights" data-docs-toc-item data-level="2">Line heights</a></li>
         <li><a class="nav-link" href="#prose-hooks" data-docs-toc-item data-level="3">Prose hooks</a></li>
