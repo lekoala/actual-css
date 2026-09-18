@@ -33,6 +33,12 @@
       margin: 0;
     }
 
+    /* This flow names three short steps, so it fits below the generic
+       --step-min budget: 3 x 5rem = 240px, scroll stays for tinier widths. */
+    #register-steps {
+      --step-min: 5rem;
+    }
+
     /* A quiet info affordance: focusable so the tooltip opens from the
        keyboard, and a span rather than a button so it never activates the
        linked field. */
