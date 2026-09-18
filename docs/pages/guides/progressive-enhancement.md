@@ -785,8 +785,9 @@ document.addEventListener("actual:invalid", (event) => {
 
 Custom rules go in `data-validation-rules` and resolve through
 `FormValidator.registerRule`. Built-in rules are `same`, `number`, `digits`,
-`alnum`, and `date`. The library never performs network validation; server
-errors flow back through `FormValidator.setErrors(form, { name: message })` and
+`alnum`, `starts-with`, `ends-with`, `date`, and `tel-prefix`. The library never
+performs network validation; server errors flow back through
+`FormValidator.setErrors(form, { name: message })` and
 `FormValidator.clearFieldError(field)`.
 
 ```js

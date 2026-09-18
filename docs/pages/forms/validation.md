@@ -2,7 +2,7 @@
 
 > Inline error feedback that respects assistive technology and form state.
 
-**Related terms:** inline validation, field error.
+**Related terms:** inline validation, field error, telephone input.
 
 ## Class reference
 
@@ -162,9 +162,45 @@ Custom rules live in `data-validation-rules` as a comma-separated list; each rul
 - `number` — Value is empty or a valid `Number`.
 - `digits` — Value is empty or ASCII digits only.
 - `alnum` — Value is empty or letters and digits only.
+- `starts-with <token>…` — Value must begin with one of the literal tokens (`starts-with INV- CR-`). The value is trimmed before comparison; the match is case-sensitive.
+- `ends-with <token>…` — Value must end with one of the literal tokens (`ends-with .pdf .csv`). Trimmed, case-sensitive.
 - `date` — Value is a valid date in `yyyy-mm-dd`, `dd/mm/yyyy`, `mm/dd/yyyy`, `dd.mm.yyyy`, `mm.dd.yyyy`, `dd-mm-yyyy`, or `mm-dd-yyyy` shape; rejects non-existent dates like `2026-02-29`. ISO remains the recommended wire format because servers can parse it without guessing.
+- `tel-prefix <prefix>…` — A local number (its digits, with the usual separators `space ( ) . / -` ignored) passes; an explicit international number is normalized (`00` to `+`) and must match one of the literal prefixes (`tel-prefix +32`, `tel-prefix +32 +33 +352`). A value that is not dialing digits fails. With no prefix, only local input passes. The entered value is never modified.
+
+`starts-with` and `ends-with` options are literal tokens: no quoting, no escaping, and a token cannot contain whitespace. Without a token they fail rather than passing silently. `tel-prefix` without a prefix is instead a deliberate local-only policy.
 
 Add your own with `FormValidator.registerRule(name, (value, el, ...opts) => boolean)`. The built-in rules treat empty values as valid so optional fields stay optional; custom rules should do the same when that behavior is wanted.
+
+```html demo
+<form class="needs-validation stack" data-enhance="validation" novalidate>
+  <label class="field">
+    <span class="field-label">Invoice reference</span>
+    <input class="input" name="reference"
+           data-validation-rules="starts-with INV- CR-"
+           aria-describedby="reference-help reference-error"
+           required />
+    <span class="field-help" id="reference-help">Start with INV- or CR-.</span>
+    <span class="field-error" id="reference-error">Use an INV- or CR- reference.</span>
+  </label>
+
+  <label class="field">
+    <span class="field-label">Attachment filename</span>
+    <input class="input" name="attachment"
+           data-validation-rules="ends-with .pdf .csv"
+           aria-describedby="attachment-help attachment-error"
+           required />
+    <span class="field-help" id="attachment-help">A .pdf or .csv filename.</span>
+    <span class="field-error" id="attachment-error">Choose a .pdf or .csv file.</span>
+  </label>
+
+  <div class="form-actions">
+    <button class="btn primary" type="submit">Submit</button>
+    <button class="btn neutral outline" type="reset">Reset</button>
+  </div>
+</form>
+```
+
+More specific telephone policies — determining the actual region, validating number semantics, or producing E.164 — belong in application or server code, registered through `FormValidator.registerRule()`.
 
 The `date` rule pairs naturally with `data-mask` — the mask structures input, the rule validates meaning. Same rule, different formats:
 

@@ -86,8 +86,39 @@ const rules = {
   alnum(v) {
     return /^[a-z0-9]+$/i.test(v);
   },
+  // Options are literal tokens: no quoting, no escaping, no whitespace. A
+  // missing option is a configuration error and fails rather than passing
+  // silently. Comparison is case-sensitive; the value is trimmed to compare.
+  "starts-with"(v, _el, ...prefixes) {
+    const value = v.trim();
+    return prefixes.length > 0 && prefixes.some((prefix) => value.startsWith(prefix));
+  },
+  "ends-with"(v, _el, ...suffixes) {
+    const value = v.trim();
+    return suffixes.length > 0 && suffixes.some((suffix) => value.endsWith(suffix));
+  },
   date(v) {
     return isValidDate(v);
+  },
+  // Telephone origin policy, not telephone validation. A local number carries
+  // nothing but its digits after the usual separators are ignored, so a value
+  // with letters or stray symbols is not a number and fails instead of reading
+  // as local. Local numbering still belongs to the application and the server;
+  // an explicit international number must match an allowed prefix. No prefixes
+  // means local-only: local input passes, any explicit international notation
+  // fails. The entered value is analyzed, never rewritten.
+  "tel-prefix"(value, _el, ...prefixes) {
+    let v = value.trim().replace(/[\s()./-]+/g, "");
+    if (v.startsWith("00")) {
+      v = `+${v.slice(2)}`;
+    }
+    if (!/^\+?\d+$/.test(v)) {
+      return false;
+    }
+    if (!v.startsWith("+")) {
+      return true;
+    }
+    return prefixes.some((prefix) => v.startsWith(prefix));
   },
 };
 
