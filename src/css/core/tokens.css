@@ -19,6 +19,8 @@
   /* Typography */
   --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --font-width: 100%;
+  --font-width-dense: 95%;
   --line-height: 1.5;
   --line-height-tight: 1.25;
   --line-height-relaxed: 1.75;

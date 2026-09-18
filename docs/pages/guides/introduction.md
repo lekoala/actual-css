@@ -80,7 +80,8 @@ shared by buttons, badges, alerts, and cards; `.inverted` is a shared surface
 modifier that paints any block with the inverse surface. `.ghost` and `.link`
 are button-only. Size variants `.sm` and `.lg` scale typography and
 participating component geometry consistently. Density contexts `.compact` and
-`.spacious` change geometry and spacing without changing typography or icons.
+`.spacious` change geometry and spacing without changing font size or icons;
+`.compact` may slightly narrow typefaces that support a width axis.
 Undocumented `is-*` classes are runtime internals.
 
 ```html

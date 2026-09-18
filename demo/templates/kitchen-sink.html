@@ -39,6 +39,24 @@
       font-weight: 100 900;
       src: url("https://cdn.jsdelivr.net/npm/@fontsource-variable/roboto@5.3.0/files/roboto-latin-wght-normal.woff2") format("woff2-variations");
     }
+    /* Width-axis lab face: both wdth (75–100%) and wght (100–800) are
+       declared so font-stretch drives the variable width axis. */
+    @font-face {
+      font-family: "Ubuntu Sans Variable";
+      font-style: normal;
+      font-display: swap;
+      font-weight: 100 800;
+      font-stretch: 75% 100%;
+      src: url("https://cdn.jsdelivr.net/npm/@fontsource-variable/ubuntu-sans@5.3.0/files/ubuntu-sans-latin-standard-normal.woff2") format("woff2-variations");
+    }
+    @font-face {
+      font-family: "Ubuntu Sans Variable";
+      font-style: normal;
+      font-display: swap;
+      font-weight: 100 800;
+      font-stretch: 75% 100%;
+      src: url("https://cdn.jsdelivr.net/npm/@fontsource-variable/ubuntu-sans@5.3.0/files/ubuntu-sans-latin-ext-standard-normal.woff2") format("woff2-variations");
+    }
 
     body { padding: 2rem; }
     section { margin-block: 2rem; }
@@ -92,9 +110,20 @@
     <option value="inter">Inter</option>
     <option value="onest">Onest</option>
     <option value="roboto">Roboto</option>
+    <option value="ubuntu">Ubuntu Sans (width axis)</option>
     <option value="georgia">Georgia (serif)</option>
     <option value="mono">Monospace</option>
   </select>
+
+  <select class="select fit" id="density-switcher" aria-label="Switch density">
+    <option value="">Default density</option>
+    <option value="compact">Compact density</option>
+  </select>
+
+  <label class="cluster" style="--gap: var(--space-20);" title="Demo-only lab control: explores the typeface width axis, not a framework utility.">
+    <input class="range" type="range" id="width-lab" min="75" max="100" step="1" value="100" aria-label="Width lab (demo only)">
+    <span>Width <span id="width-lab-value">100%</span> (demo only)</span>
+  </label>
   </div>
 
   <!-- 1. Buttons -->
@@ -958,6 +987,7 @@
       inter: '"Inter Variable", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
       onest: '"Onest Variable", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
       roboto: '"Roboto Variable", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+      ubuntu: '"Ubuntu Sans Variable", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
       /* Local stress types — no load, prove the framework stays typography-neutral. */
       georgia: 'Georgia, "Times New Roman", serif',
       mono: "ui-monospace, SFMono-Regular, Menlo, Consolas, monospace",
@@ -979,6 +1009,36 @@
       fontSwitcher.value = requestedFont;
       applyFont(requestedFont);
     }
+
+    /* Density demonstrates the framework API (.compact applies
+       --font-width-dense); the width slider below is a demo-only lab that
+       writes --font-width directly and takes over from compact. */
+    const densitySwitcher = document.getElementById("density-switcher");
+
+    function applyDensity(value) {
+      document.body.classList.toggle("compact", value === "compact");
+    }
+
+    densitySwitcher?.addEventListener("change", () => applyDensity(densitySwitcher.value));
+
+    const requestedDensity = new URLSearchParams(location.search).get("density");
+    if (requestedDensity === "compact" && densitySwitcher) {
+      densitySwitcher.value = "compact";
+      applyDensity("compact");
+    }
+
+    const widthLab = document.getElementById("width-lab");
+    const widthLabValue = document.getElementById("width-lab-value");
+
+    widthLab?.addEventListener("input", () => {
+      const value = `${widthLab.value}%`;
+      widthLabValue.textContent = value;
+      document.documentElement.style.setProperty("--font-width", value);
+      if (densitySwitcher) {
+        densitySwitcher.value = "";
+      }
+      applyDensity("");
+    });
 
     const contextCard = document.getElementById("demo-context-card");
     const contextResult = document.getElementById("demo-context-result");

@@ -16,7 +16,7 @@
 | ---------------- | --------- | ------------------------------------------------------------ |
 | `.table-wrap`    | Component | Scroll container and outer chrome (surface, border, radius). |
 | `.table`         | Component | The table itself; row and cell rules.                        |
-| `.table.compact` | Density   | Tighter cell padding; typography is unchanged.               |
+| `.table.compact` | Density   | Tighter cell padding; font size and icons unchanged.         |
 
 ## Basic usage
 
@@ -101,7 +101,8 @@ table width before the wrapper scrolls horizontally.
 ## Compact tables
 
 `.compact` lowers cell padding and establishes compact density for controls or
-spacing helpers inside cells. Typography and icons stay unchanged. It is the
+spacing helpers inside cells. Font size and icons stay unchanged; the framework's
+denser font width may apply when the typeface supports it. It is the
 same vocabulary as `.card.compact`.
 
 ```html demo

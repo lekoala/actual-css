@@ -7,12 +7,14 @@
  * Public hooks:
  * --link
  * --hr-space
+ * --font-width / --font-width-dense (see variants.css for the dense application)
  */
 
 body {
   background: var(--surface);
   color: var(--text);
   font-family: var(--font-sans);
+  font-stretch: var(--font-width);
   line-height: var(--line-height);
 }
 

@@ -69,7 +69,8 @@ Variants such as `.solid`, `.soft`, `.outline`, and `.surface` are shared by com
 
 Size variants `.sm` and `.lg` scale typography and participating component
 geometry consistently. Density contexts `.compact` and `.spacious` change
-spacing and geometry without changing typography or icons.
+spacing and geometry without changing font size or icons; `.compact` may
+slightly narrow typefaces that support a width axis.
 
 ## Public Class Grammar
 

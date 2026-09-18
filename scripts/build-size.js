@@ -30,7 +30,7 @@ const DIST = join(ROOT, "dist");
  * against runaway growth, not against a component gaining a layer.
  */
 const BUDGETS = {
-  coreCssBrotli: 2800, // actual.min.css (current ~2553)
+  coreCssBrotli: 2900, // actual.min.css (current ~2823; typographic density: --font-width hooks + compact/spacious font-stretch)
   fullCssBrotli: 18500, // actual.full.min.css (current ~17556)
   fullJsBrotli: 18500, // actual.full.js (current ~16222)
 };

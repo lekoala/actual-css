@@ -113,6 +113,16 @@ the document) and `--font-mono` (for `code` / `kbd` / `samp` / `pre`). There is 
 theme-level token in your own theme when a project actually needs one; the
 baseline stays sans so app UI inherits predictably.
 
+### Font width
+
+Two public hooks carry the typographic side of density: `--font-width` (normal
+width) and `--font-width-dense` (compact width). The document reads
+`--font-width` through `font-stretch`; `.compact` applies
+`--font-width-dense` and `.spacious` restores `--font-width`. A theme whose
+typeface has no useful width axis sets `--font-width-dense: 100%`. Width is a
+density token, not a responsive escape hatch — never condense text to fix an
+overflowing label.
+
 ## Font weights
 
 The framework exposes a small set of weights:
