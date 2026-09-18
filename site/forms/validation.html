@@ -213,7 +213,7 @@
 <blockquote>
 <p>Inline error feedback that respects assistive technology and form state.</p>
 </blockquote>
-<p><strong>Related terms:</strong> inline validation, field error.</p>
+<p><strong>Related terms:</strong> inline validation, field error, telephone input.</p>
 <h2 id="class-reference">Class reference</h2>
 <div class="table-wrap"><table class="table">
 <thead>
@@ -480,9 +480,74 @@ supporting copy before and after validation. <code>.status-bar</code> shows
 <li><code>number</code> — Value is empty or a valid <code>Number</code>.</li>
 <li><code>digits</code> — Value is empty or ASCII digits only.</li>
 <li><code>alnum</code> — Value is empty or letters and digits only.</li>
+<li><code>starts-with &lt;token&gt;…</code> — Value must begin with one of the literal tokens (<code>starts-with INV- CR-</code>). The value is trimmed before comparison; the match is case-sensitive.</li>
+<li><code>ends-with &lt;token&gt;…</code> — Value must end with one of the literal tokens (<code>ends-with .pdf .csv</code>). Trimmed, case-sensitive.</li>
 <li><code>date</code> — Value is a valid date in <code>yyyy-mm-dd</code>, <code>dd/mm/yyyy</code>, <code>mm/dd/yyyy</code>, <code>dd.mm.yyyy</code>, <code>mm.dd.yyyy</code>, <code>dd-mm-yyyy</code>, or <code>mm-dd-yyyy</code> shape; rejects non-existent dates like <code>2026-02-29</code>. ISO remains the recommended wire format because servers can parse it without guessing.</li>
+<li><code>tel-prefix &lt;prefix&gt;…</code> — A local number (its digits, with the usual separators <code>space ( ) . / -</code> ignored) passes; an explicit international number is normalized (<code>00</code> to <code>+</code>) and must match one of the literal prefixes (<code>tel-prefix +32</code>, <code>tel-prefix +32 +33 +352</code>). A value that is not dialing digits fails. With no prefix, only local input passes. The entered value is never modified.</li>
 </ul>
+<p><code>starts-with</code> and <code>ends-with</code> options are literal tokens: no quoting, no escaping, and a token cannot contain whitespace. Without a token they fail rather than passing silently. <code>tel-prefix</code> without a prefix is instead a deliberate local-only policy.</p>
 <p>Add your own with <code>FormValidator.registerRule(name, (value, el, ...opts) =&gt; boolean)</code>. The built-in rules treat empty values as valid so optional fields stay optional; custom rules should do the same when that behavior is wanted.</p>
+</div>
+<div class="docs-example">
+  <div class="docs-preview">
+<form class="needs-validation stack" data-enhance="validation" novalidate>
+  <label class="field">
+    <span class="field-label">Invoice reference</span>
+    <input class="input" name="reference"
+           data-validation-rules="starts-with INV- CR-"
+           aria-describedby="reference-help reference-error"
+           required />
+    <span class="field-help" id="reference-help">Start with INV- or CR-.</span>
+    <span class="field-error" id="reference-error">Use an INV- or CR- reference.</span>
+  </label>
+
+  <label class="field">
+    <span class="field-label">Attachment filename</span>
+    <input class="input" name="attachment"
+           data-validation-rules="ends-with .pdf .csv"
+           aria-describedby="attachment-help attachment-error"
+           required />
+    <span class="field-help" id="attachment-help">A .pdf or .csv filename.</span>
+    <span class="field-error" id="attachment-error">Choose a .pdf or .csv file.</span>
+  </label>
+
+  <div class="form-actions">
+    <button class="btn primary" type="submit">Submit</button>
+    <button class="btn neutral outline" type="reset">Reset</button>
+  </div>
+</form>
+  </div>
+  <div class="docs-code">
+    <pre><code class="language-html">&lt;form class=&quot;needs-validation stack&quot; data-enhance=&quot;validation&quot; novalidate&gt;
+  &lt;label class=&quot;field&quot;&gt;
+    &lt;span class=&quot;field-label&quot;&gt;Invoice reference&lt;/span&gt;
+    &lt;input class=&quot;input&quot; name=&quot;reference&quot;
+           data-validation-rules=&quot;starts-with INV- CR-&quot;
+           aria-describedby=&quot;reference-help reference-error&quot;
+           required /&gt;
+    &lt;span class=&quot;field-help&quot; id=&quot;reference-help&quot;&gt;Start with INV- or CR-.&lt;/span&gt;
+    &lt;span class=&quot;field-error&quot; id=&quot;reference-error&quot;&gt;Use an INV- or CR- reference.&lt;/span&gt;
+  &lt;/label&gt;
+
+  &lt;label class=&quot;field&quot;&gt;
+    &lt;span class=&quot;field-label&quot;&gt;Attachment filename&lt;/span&gt;
+    &lt;input class=&quot;input&quot; name=&quot;attachment&quot;
+           data-validation-rules=&quot;ends-with .pdf .csv&quot;
+           aria-describedby=&quot;attachment-help attachment-error&quot;
+           required /&gt;
+    &lt;span class=&quot;field-help&quot; id=&quot;attachment-help&quot;&gt;A .pdf or .csv filename.&lt;/span&gt;
+    &lt;span class=&quot;field-error&quot; id=&quot;attachment-error&quot;&gt;Choose a .pdf or .csv file.&lt;/span&gt;
+  &lt;/label&gt;
+
+  &lt;div class=&quot;form-actions&quot;&gt;
+    &lt;button class=&quot;btn primary&quot; type=&quot;submit&quot;&gt;Submit&lt;/button&gt;
+    &lt;button class=&quot;btn neutral outline&quot; type=&quot;reset&quot;&gt;Reset&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/form&gt;</code></pre>
+  </div>
+</div>
+<div class="prose docs-prose">
+<p>More specific telephone policies — determining the actual region, validating number semantics, or producing E.164 — belong in application or server code, registered through <code>FormValidator.registerRule()</code>.</p>
 <p>The <code>date</code> rule pairs naturally with <code>data-mask</code> — the mask structures input, the rule validates meaning. Same rule, different formats:</p>
 </div>
 <div class="docs-example">

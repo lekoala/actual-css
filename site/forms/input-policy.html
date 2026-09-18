@@ -213,6 +213,7 @@
 <blockquote>
 <p>Native input intent first. Actual's runtime filters values only when explicitly asked, and fixed-shape masks stay opt-in through <code>data-mask</code>.</p>
 </blockquote>
+<p><strong>Related terms:</strong> telephone, phone, tel-prefix.</p>
 <p><code>inputmode</code> changes the virtual keyboard but does not constrain the value. Actual
 does not filter plain <code>inputmode</code> fields by default because numeric entry often
 needs temporary, signed, grouped, or locale-specific values while the user types.</p>
@@ -339,6 +340,93 @@ patterns built on <code>enhance()</code>.</p>
 <div class="prose docs-prose">
 <p>Masks enforce shape, not domain validity. Use application validation when a date
 must reject impossible values such as <code>2026-13-40</code>.</p>
+<h3 id="telephone-input">Telephone input</h3>
+<p>Do not mask telephone numbers by default. Phone formatting varies by country,
+device, copied source, and user convention. Preserve the entered value, apply
+only coarse client-side policy, and normalize or validate the actual number on
+the server.</p>
+<p><code>tel-prefix</code> is that coarse policy: a local number passes, and an explicit
+international number must match one of the allowed prefixes. It analyzes a copy
+of the value and never rewrites it.</p>
+</div>
+<div class="docs-example">
+  <div class="docs-preview">
+<form class="needs-validation stack" data-enhance="validation" novalidate>
+  <label class="field">
+    <span class="field-label">Phone</span>
+    <input
+      class="input"
+      type="tel"
+      name="phone"
+      inputmode="tel"
+      autocomplete="tel"
+      data-validation-rules="tel-prefix +32"
+      aria-describedby="phone-help phone-error"
+    />
+    <span class="field-help" id="phone-help">
+      Local number or +32 international number.
+    </span>
+    <span class="field-error" id="phone-error">
+      Use a local number or an allowed international prefix.
+    </span>
+  </label>
+
+  <div class="form-actions">
+    <button class="btn primary" type="submit">Submit</button>
+    <button class="btn neutral outline" type="reset">Reset</button>
+  </div>
+</form>
+  </div>
+  <div class="docs-code">
+    <pre><code class="language-html">&lt;form class=&quot;needs-validation stack&quot; data-enhance=&quot;validation&quot; novalidate&gt;
+  &lt;label class=&quot;field&quot;&gt;
+    &lt;span class=&quot;field-label&quot;&gt;Phone&lt;/span&gt;
+    &lt;input
+      class=&quot;input&quot;
+      type=&quot;tel&quot;
+      name=&quot;phone&quot;
+      inputmode=&quot;tel&quot;
+      autocomplete=&quot;tel&quot;
+      data-validation-rules=&quot;tel-prefix +32&quot;
+      aria-describedby=&quot;phone-help phone-error&quot;
+    /&gt;
+    &lt;span class=&quot;field-help&quot; id=&quot;phone-help&quot;&gt;
+      Local number or +32 international number.
+    &lt;/span&gt;
+    &lt;span class=&quot;field-error&quot; id=&quot;phone-error&quot;&gt;
+      Use a local number or an allowed international prefix.
+    &lt;/span&gt;
+  &lt;/label&gt;
+
+  &lt;div class=&quot;form-actions&quot;&gt;
+    &lt;button class=&quot;btn primary&quot; type=&quot;submit&quot;&gt;Submit&lt;/button&gt;
+    &lt;button class=&quot;btn neutral outline&quot; type=&quot;reset&quot;&gt;Reset&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/form&gt;</code></pre>
+  </div>
+</div>
+<div class="prose docs-prose">
+<div class="table-wrap"><table class="table">
+<thead>
+<tr><th>Input</th><th><code>tel-prefix +32</code></th></tr>
+</thead>
+<tbody>
+<tr><td><code>0470 12 34 56</code></td><td>passes</td></tr>
+<tr><td><code>02/123.45.67</code></td><td>passes</td></tr>
+<tr><td><code>+32 470 12 34 56</code></td><td>passes</td></tr>
+<tr><td><code>0032 470 12 34 56</code></td><td>passes</td></tr>
+<tr><td><code>(+32) 470 12 34 56</code></td><td>passes</td></tr>
+<tr><td><code>0033 6 12 34 56 78</code></td><td>fails</td></tr>
+<tr><td><code>+33 6 12 34 56 78</code></td><td>fails</td></tr>
+</tbody>
+</table></div>
+<p>A local number passes in any usual notation, but its digits are required: once
+the separators are ignored, letters and stray symbols fail, so a pasted word is
+never read as a local number. An explicit international number is normalized
+for comparison — <code>0032…</code>, <code>(+32)…</code>, and <code>+32 (0)…</code> all read as <code>+32</code> — and a
+foreign prefix fails. With no prefix, only local input passes. This is an origin
+policy, not phone validation: region detection, number semantics, and E.164
+normalization stay on the server. See <a href="validation.html">validation</a>.</p>
 
 </div>
 
@@ -360,6 +448,7 @@ must reject impossible values such as <code>2026-13-40</code>.</p>
           <ul class="nav-list docs-toc-list" data-docs-toc>
         <li><a class="nav-link" href="#built-in-filters" data-docs-toc-item data-level="3">Built-in filters</a></li>
         <li><a class="nav-link" href="#pattern-mask" data-docs-toc-item data-level="3">Pattern mask</a></li>
+        <li><a class="nav-link" href="#telephone-input" data-docs-toc-item data-level="3">Telephone input</a></li>
           </ul>
         </nav>
       </aside>

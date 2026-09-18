@@ -30,6 +30,7 @@ Whole pages, composed the way a real product would.
 - [Settings modal](../../demo/templates/settings-modal.html) - two-pane preferences dialog, with the local CSS it needs audited rule by rule
 - [Workspace settings](../../demo/templates/settings-pricing.html) - plans with visible native choices, preferences and a local segmented tab treatment
 - [Card compositions](../../demo/templates/card-compositions.html) - editorial, team, sign-in and horizontal cards composed from existing primitives
+- [Register form](../../demo/templates/register-form.html) - registration page with choice cards, masks, the password toggle, `tel-prefix` validation, an OTP verification dialog, and status feedback
 
 ### Layout references
 

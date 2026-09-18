@@ -923,8 +923,9 @@ the event:</p>
 </code></pre>
 <p>Custom rules go in <code>data-validation-rules</code> and resolve through
 <code>FormValidator.registerRule</code>. Built-in rules are <code>same</code>, <code>number</code>, <code>digits</code>,
-<code>alnum</code>, and <code>date</code>. The library never performs network validation; server
-errors flow back through <code>FormValidator.setErrors(form, { name: message })</code> and
+<code>alnum</code>, <code>starts-with</code>, <code>ends-with</code>, <code>date</code>, and <code>tel-prefix</code>. The library never
+performs network validation; server errors flow back through
+<code>FormValidator.setErrors(form, { name: message })</code> and
 <code>FormValidator.clearFieldError(field)</code>.</p>
 <pre><code class="language-js">import { FormValidator } from &quot;actual-css/js/validation&quot;;
 

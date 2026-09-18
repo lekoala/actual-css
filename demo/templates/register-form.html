@@ -1,0 +1,436 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Register form - Actual CSS</title>
+  <meta name="description"
+        content="A registration form composing choice cards, masks, input filters, the password toggle, tel-prefix validation, an OTP verification dialog, and status feedback.">
+  <link rel="stylesheet" href="../../dist/actual.full.css">
+  <link rel="stylesheet" href="../assets/actual-themes.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3/dist/tabler-icons.min.css">
+  <style>
+    body {
+      min-block-size: 100dvh;
+      background:
+        radial-gradient(50rem 28rem at 12% -12%,
+          color-mix(in oklch, var(--primary) 14%, transparent), transparent),
+        var(--surface-subtle);
+    }
+
+    .register-page {
+      --center-size: 40rem;
+
+      padding-block: var(--space-60);
+    }
+
+    .register-card {
+      gap: var(--space-20);
+    }
+
+    .register-card > * {
+      margin: 0;
+    }
+
+    /* A quiet info affordance: focusable so the tooltip opens from the
+       keyboard, and a span rather than a button so it never activates the
+       linked field. */
+    .register-info {
+      color: var(--text-muted);
+      cursor: help;
+    }
+
+    .register-info:focus-visible {
+      outline: var(--focus-ring-width) solid var(--focus-ring);
+      outline-offset: 2px;
+      border-radius: var(--radius-full);
+    }
+
+    /* Icon swap for the reveal button, per the password toggle contract. */
+    [command="--password-toggle"][aria-pressed="true"] .icon-show {
+      display: none;
+    }
+
+    [command="--password-toggle"]:not([aria-pressed="true"]) .icon-hide {
+      display: none;
+    }
+
+    /* The strength gauge is a micro-overlay in the field's trailing zone: it
+       rides above the input (the .join lifts the input to z-index 3), never
+       takes the pointer, and the input reserves its lane. Its own API is
+       height (--bar-height); 2.75rem holds weak / medium / strong, not finer. */
+    .register-password {
+      --register-strength-width: 2.75rem;
+
+      position: relative;
+    }
+
+    .register-password > .input {
+      padding-inline-end: calc(var(--register-strength-width) + var(--space-30));
+    }
+
+    .register-strength {
+      position: absolute;
+      inset-inline-end: calc(var(--control-size) + var(--space-20));
+      inset-block-start: 50%;
+      transform: translateY(-50%);
+      z-index: 5;
+      margin: 0;
+      pointer-events: none;
+    }
+
+    .register-strength.meter {
+      --bar-height: 0.25rem;
+
+      inline-size: var(--register-strength-width);
+    }
+  </style>
+</head>
+
+<body>
+  <main class="center register-page">
+    <section class="card stack register-card">
+      <div class="cluster" style="--cluster-justify: space-between;">
+        <p class="overline">Actual CSS</p>
+        <select class="select sm fit" id="theme-switcher" aria-label="Switch theme">
+          <option value="">System</option>
+          <option value="light">Light</option>
+          <option value="dark">Dark</option>
+          <optgroup label="Themes">
+            <option value="indigo">Indigo</option>
+            <option value="dim">Dim</option>
+            <option value="corporate">Corporate</option>
+            <option value="forest">Forest</option>
+            <option value="ocean">Ocean</option>
+            <option value="spruce">Spruce</option>
+            <option value="petrol">Petrol</option>
+            <option value="sunset">Sunset</option>
+            <option value="lavender">Lavender</option>
+            <option value="mono">Mono</option>
+            <option value="square">Square</option>
+            <option value="edge">Edge</option>
+            <option value="cyberpunk">Cyberpunk</option>
+            <option value="neon">Neon</option>
+            <option value="gradient">Gradient</option>
+          </optgroup>
+        </select>
+      </div>
+
+      <h1>Create your account</h1>
+      <p class="lead">
+        A signup page built from framework primitives: the validation enhancer
+        (including <code>tel-prefix</code>), the password toggle with a live
+        strength meter, an OTP dialog, and the status bar.
+      </p>
+
+      <ol class="steps steps-horizontal" id="register-steps">
+        <li aria-current="step" data-step="account"><span class="step-label">Account</span></li>
+        <li data-step="verify"><span class="step-label">Verify</span></li>
+        <li data-step="done"><span class="step-label">Done</span></li>
+      </ol>
+
+      <form class="stack needs-validation" id="register-form" data-enhance="validation"
+            data-validation-message="Please check the highlighted fields.">
+        <fieldset class="field field-group">
+          <legend class="field-label">Account type</legend>
+          <div class="grid-2">
+            <label class="choice-card">
+              <input type="radio" name="account-type" value="personal" checked>
+              <span class="stack" style="--gap: var(--space-10);">
+                <strong>Personal</strong>
+                <span class="muted">For your own use.</span>
+              </span>
+            </label>
+            <label class="choice-card">
+              <input type="radio" name="account-type" value="company">
+              <span class="stack" style="--gap: var(--space-10);">
+                <strong>Company</strong>
+                <span class="muted">Invoices and team seats.</span>
+              </span>
+            </label>
+          </div>
+          <span class="field-error" role="alert">Choose an account type.</span>
+        </fieldset>
+
+        <div class="grid-2">
+          <label class="field">
+            <span class="field-label">First name</span>
+            <input class="input" type="text" name="given-name" id="given-name"
+                   autocomplete="given-name" required aria-describedby="given-name-error">
+            <span class="field-error" id="given-name-error" role="alert">Enter your first name.</span>
+          </label>
+          <label class="field">
+            <span class="field-label">Last name</span>
+            <input class="input" type="text" name="family-name" id="family-name"
+                   autocomplete="family-name" required aria-describedby="family-name-error">
+            <span class="field-error" id="family-name-error" role="alert">Enter your last name.</span>
+          </label>
+        </div>
+
+        <label class="field">
+          <span class="field-label">Date of birth</span>
+          <input class="input" type="text" name="birthdate" id="birthdate"
+                 data-mask="99/99/9999" data-validation-rules="date"
+                 inputmode="numeric" autocomplete="bday" placeholder="dd/mm/yyyy"
+                 required aria-describedby="birthdate-help birthdate-error">
+          <span class="field-help" id="birthdate-help">dd/mm/yyyy format.</span>
+          <span class="field-error" id="birthdate-error" role="alert">Enter a valid date.</span>
+        </label>
+
+        <label class="field">
+          <span class="field-label">Username</span>
+          <input class="input" type="text" name="username" id="username"
+                 data-filter="lower" minlength="3" spellcheck="false"
+                 autocomplete="username" required aria-describedby="username-help username-error">
+          <span class="field-help" id="username-help">Lowercase; at least 3 characters.</span>
+          <span class="field-error" id="username-error" role="alert">Choose a username of 3 characters or more.</span>
+        </label>
+
+        <div class="grid-2">
+          <label class="field">
+            <span class="field-label">Email</span>
+            <input class="input" type="email" name="email" id="email"
+                   autocomplete="email" required aria-describedby="email-error">
+            <span class="field-error" id="email-error" role="alert">Enter a valid email.</span>
+          </label>
+          <label class="field">
+            <span class="field-label">Confirm email</span>
+            <input class="input" type="email" name="email-confirm"
+                   data-validation-rules="same #email"
+                   autocomplete="email" required aria-describedby="email-confirm-error">
+            <span class="field-error" id="email-confirm-error" role="alert">Emails must match.</span>
+          </label>
+        </div>
+
+        <div class="field">
+          <span class="cluster" style="--cluster-gap: var(--space-10);">
+            <label class="field-label" for="phone">Mobile</label>
+            <span class="register-info" tabindex="0" role="img" aria-label="Why we ask for your mobile"
+                  data-tooltip="Used to verify your account. The number is normalized and validated on the server."
+                  data-tooltip-placement="right">
+              <i class="ti ti-info-circle" aria-hidden="true"></i>
+            </span>
+          </span>
+          <div class="input-icon">
+            <i class="ti ti-device-mobile" aria-hidden="true"></i>
+            <input class="input" type="tel" name="phone" id="phone"
+                   data-validation-rules="tel-prefix +32 +33 +352 +31 +34 +39"
+                   inputmode="tel" autocomplete="tel" required
+                   aria-describedby="phone-help phone-error">
+          </div>
+          <span class="field-help" id="phone-help">
+            Local number, or an international number with an allowed prefix
+            (+32, +33, +352, +31, +34 or +39).
+          </span>
+          <span class="field-error" id="phone-error" role="alert">
+            Use a local number or an allowed international prefix.
+          </span>
+        </div>
+
+        <div class="field">
+          <label class="field-label" for="password">Password</label>
+          <div class="join register-password" style="inline-size: 100%;">
+            <input class="input" type="password" name="password" id="password"
+                   minlength="8" autocomplete="new-password" required
+                   aria-describedby="password-help password-error"
+                   style="flex: 1;">
+            <meter class="meter register-strength" id="password-strength-meter" value="0"
+                   min="0" max="1" low="0.34" high="0.66" optimum="1"
+                   aria-label="Password strength"></meter>
+            <button class="btn outline icon-only" type="button" commandfor="password"
+                    command="--password-toggle" aria-controls="password"
+                    aria-label="Show password" aria-pressed="false">
+              <i class="ti ti-eye icon-show" aria-hidden="true"></i>
+              <i class="ti ti-eye-off icon-hide" aria-hidden="true"></i>
+            </button>
+          </div>
+          <span class="field-help" id="password-help">
+            At least 8 characters, with a lowercase letter, an uppercase letter and a digit.
+          </span>
+          <span class="field-error" id="password-error" role="alert">Choose a stronger password.</span>
+        </div>
+
+        <div class="field">
+          <label class="field-label" for="password-confirm">Confirm password</label>
+          <div class="join" style="inline-size: 100%;">
+            <input class="input" type="password" name="password-confirm" id="password-confirm"
+                   data-validation-rules="same #password"
+                   autocomplete="new-password" required
+                   aria-describedby="password-confirm-error" style="flex: 1;">
+            <button class="btn outline icon-only" type="button" commandfor="password-confirm"
+                    command="--password-toggle" aria-controls="password-confirm"
+                    aria-label="Show password confirmation" aria-pressed="false">
+              <i class="ti ti-eye icon-show" aria-hidden="true"></i>
+              <i class="ti ti-eye-off icon-hide" aria-hidden="true"></i>
+            </button>
+          </div>
+          <span class="field-error" id="password-confirm-error" role="alert">Passwords must match.</span>
+        </div>
+
+        <div class="field">
+          <label class="choice">
+            <input class="check" type="checkbox" name="terms" required
+                   aria-describedby="terms-error">
+            <span>
+              I have read and accept the <a href="#">terms of use</a> and the
+              <a href="#">privacy policy</a>.
+            </span>
+          </label>
+          <span class="field-error" id="terms-error" role="alert">Accept the terms to continue.</span>
+        </div>
+
+        <label class="choice">
+          <input class="switch" type="checkbox" role="switch" name="newsletter" aria-checked="false">
+          <span>Send me occasional product news.</span>
+        </label>
+
+        <div class="form-actions">
+          <button class="btn primary" type="submit">Create account</button>
+          <button class="btn neutral outline" type="reset">Reset</button>
+        </div>
+
+        <p class="muted text-center">
+          Already have an account? <a href="#">Sign in</a>
+        </p>
+      </form>
+    </section>
+  </main>
+
+  <dialog class="modal" id="verify-dialog" closedby="any" aria-labelledby="verify-title">
+    <button class="dialog-close" type="button" commandfor="verify-dialog" command="request-close"
+            aria-controls="verify-dialog" aria-label="Close verification"></button>
+
+    <form method="dialog" class="stack" id="verify-form" data-enhance="validation">
+      <header>
+        <h2 id="verify-title">Verify your mobile</h2>
+        <p class="muted">
+          We sent a six-digit code to <strong data-verify-phone></strong>.
+        </p>
+      </header>
+
+      <label class="field">
+        <span class="field-label">Verification code</span>
+        <span class="otp">
+          <input class="input" type="text" name="code" autocomplete="one-time-code"
+                 inputmode="numeric" maxlength="6" pattern="[0-9]{6}" required
+                 aria-describedby="otp-help otp-error">
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </span>
+        <span class="field-help" id="otp-help">Enter the code from the text message.</span>
+        <span class="field-error" id="otp-error" role="alert">Enter the six-digit code.</span>
+      </label>
+
+      <footer class="form-actions">
+        <button class="btn neutral outline" type="submit" value="cancel" formnovalidate>Cancel</button>
+        <button class="btn primary" type="submit" value="verify">Verify</button>
+      </footer>
+    </form>
+  </dialog>
+
+  <div class="status-bar" data-status role="status" aria-live="polite" aria-atomic="true"></div>
+
+  <script src="../../dist/actual.full.js"></script>
+  <script>
+    const switcher = document.getElementById("theme-switcher");
+
+    if (switcher) {
+      switcher.addEventListener("change", () => {
+        if (switcher.value) {
+          document.documentElement.dataset.theme = switcher.value;
+        } else {
+          document.documentElement.removeAttribute("data-theme");
+        }
+      });
+    }
+
+    /* The switch enhancement is application code in every template: the
+       component styles [aria-checked], it does not maintain it. */
+    for (const control of document.querySelectorAll('.switch[role="switch"]')) {
+      control.addEventListener("change", () => {
+        control.setAttribute("aria-checked", String(control.checked));
+      });
+    }
+
+    const steps = [...document.querySelectorAll("#register-steps [data-step]")];
+    const stepOrder = steps.map((step) => step.dataset.step);
+
+    function setStep(name) {
+      const index = stepOrder.indexOf(name);
+      for (const step of steps) {
+        const position = stepOrder.indexOf(step.dataset.step);
+        if (position === index) {
+          step.setAttribute("aria-current", "step");
+        } else {
+          step.removeAttribute("aria-current");
+        }
+        step.classList.toggle("step-complete", position < index);
+      }
+    }
+
+    /*
+     * Strength is a coarse hint, never a gate: the field's real constraints are
+     * minlength and the server. The gauge carries three bands through its
+     * native low/high/optimum colors, and its length carries the same progress
+     * without relying on color.
+     */
+    const password = document.getElementById("password");
+    const strengthMeter = document.getElementById("password-strength-meter");
+
+    function scorePassword(value) {
+      let score = 0;
+      if (value.length >= 8) score += 0.35;
+      if (value.length >= 12) score += 0.15;
+      if (/[a-z]/.test(value) && /[A-Z]/.test(value)) score += 0.25;
+      if (/\d/.test(value)) score += 0.15;
+      if (/[^\w\s]/.test(value)) score += 0.1;
+      return Math.min(1, score);
+    }
+
+    if (password && strengthMeter) {
+      password.addEventListener("input", () => {
+        strengthMeter.value = scorePassword(password.value);
+      });
+    }
+
+    /*
+     * On a valid submit the dialog opens; on an invalid one the enhancer has
+     * already marked the fields and dispatched actual:invalid. Reading the
+     * mark in a microtask keeps this independent of listener registration
+     * order — the enhancer's submit handler runs before the task ends.
+     */
+    const form = document.getElementById("register-form");
+    const verifyDialog = document.getElementById("verify-dialog");
+    const verifyForm = document.getElementById("verify-form");
+    const verifyPhone = document.querySelector("[data-verify-phone]");
+
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      queueMicrotask(() => {
+        if (form.querySelector('[aria-invalid="true"]')) return;
+
+        verifyPhone.textContent = form.elements.phone.value.trim();
+        verifyForm.reset();
+        setStep("verify");
+        verifyDialog.showModal();
+      });
+    });
+
+    verifyDialog.addEventListener("close", () => {
+      if (verifyDialog.returnValue !== "verify") return;
+
+      setStep("done");
+      document.dispatchEvent(new CustomEvent("actual:status", {
+        bubbles: true,
+        detail: { message: "Mobile verified. Your account is ready.", intent: "success" },
+      }));
+    });
+  </script>
+</body>
+
+</html>
