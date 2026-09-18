@@ -39,6 +39,32 @@
       --step-min: 5rem;
     }
 
+    /* Flush ends for this 3-step row only: the first marker opens on the
+       text edge, the last marker closes on it, the middle step stays
+       centred. An end-adjacent connector spans 1.5 cells
+       (centred-to-flush) instead of 1, hence the wider ::after on the two
+       segments touching an end marker. Coupled to exactly 3 steps (a
+       2-step row would need x2); stacked form only, this row has no
+       actual-container grant so the inline query never fires. */
+    #register-steps > li:first-child {
+      justify-items: start;
+      text-align: start;
+    }
+
+    #register-steps > li:first-child::after {
+      inset-inline-start: var(--step-size);
+      inline-size: calc((100% - var(--step-size)) * 1.5);
+    }
+
+    #register-steps > li:nth-child(2)::after {
+      inline-size: calc((100% - var(--step-size)) * 1.5);
+    }
+
+    #register-steps > li:last-child {
+      justify-items: end;
+      text-align: end;
+    }
+
     /* A quiet info affordance: focusable so the tooltip opens from the
        keyboard, and a span rather than a button so it never activates the
        linked field. */
