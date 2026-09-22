@@ -1,12 +1,12 @@
 {
-  "totalRaw": 313407,
+  "totalRaw": 310049,
   "core": {
     "minified": 12619,
     "brotli": 2827
   },
   "full": {
-    "minified": 128478,
-    "brotli": 18308
+    "minified": 125771,
+    "brotli": 18156
   },
   "js": {
     "core": {
@@ -18,7 +18,7 @@
       "brotli": 16580
     }
   },
-  "fileCount": 109,
+  "fileCount": 110,
   "files": [
     {
       "file": "components/steps.css",
@@ -29,32 +29,32 @@
       "raw": 10643
     },
     {
-      "file": "components/modal.css",
-      "raw": 10257
-    },
-    {
       "file": "core/theme.css",
       "raw": 8957
     },
     {
+      "file": "components/modal.css",
+      "raw": 8860
+    },
+    {
       "file": "components/alert.css",
-      "raw": 8932
-    },
-    {
-      "file": "components/drawer.css",
-      "raw": 8734
-    },
-    {
-      "file": "components/badge.css",
-      "raw": 7896
+      "raw": 8200
     },
     {
       "file": "forms/choice.css",
       "raw": 7738
     },
     {
+      "file": "components/drawer.css",
+      "raw": 7540
+    },
+    {
       "file": "components/button.css",
       "raw": 7518
+    },
+    {
+      "file": "components/badge.css",
+      "raw": 6981
     },
     {
       "file": "core/variants.css",
@@ -82,7 +82,7 @@
     },
     {
       "file": "utilities/extra.css",
-      "raw": 5097
+      "raw": 5213
     },
     {
       "file": "components/accordion.css",
@@ -103,10 +103,6 @@
     {
       "file": "forms/choice-card.css",
       "raw": 4674
-    },
-    {
-      "file": "layout/column-layout.css",
-      "raw": 4637
     },
     {
       "file": "themes/gradient.css",
@@ -185,6 +181,10 @@
       "raw": 2765
     },
     {
+      "file": "components/close.css",
+      "raw": 2734
+    },
+    {
       "file": "forms/validation.css",
       "raw": 2733
     },
@@ -207,6 +207,10 @@
     {
       "file": "themes/sunset.css",
       "raw": 2654
+    },
+    {
+      "file": "layout/column-layout.css",
+      "raw": 2644
     },
     {
       "file": "themes/lavender.css",
@@ -354,7 +358,7 @@
     },
     {
       "file": "components/index.css",
-      "raw": 1093
+      "raw": 1116
     },
     {
       "file": "components/breadcrumb.css",

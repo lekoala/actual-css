@@ -1727,12 +1727,12 @@ small {
  * Docs: docs/pages/layout/column-layout.md
  *
  * Neither space-driven like .grid nor count-driven like .grid-N: this is a
- * coordinate system. The author places regions with .column-span-N /
- * .column-start-N and owns narrow-container recomposition. There is
- * deliberately no automatic collapse — no threshold, no hidden
- * .container-query behavior, no breakpoint variants. A single framework
- * threshold cannot be right for arbitrary per-region compositions, and a
- * hidden default would have to be undone rather than extended.
+ * coordinate system. Each direct child places itself with two numbers,
+ * --column-start and --column-span, and the author owns narrow-container
+ * recomposition. There is deliberately no automatic collapse — no threshold,
+ * no hidden .container-query behavior, no breakpoint variants. A single
+ * framework threshold cannot be right for arbitrary per-region compositions,
+ * and a hidden default would have to be undone rather than extended.
  *
  * See docs/design-notes/column-layout.md.
  *
@@ -1744,11 +1744,12 @@ small {
  *   media + flexible content        -> .media
  *   exact custom track templates    -> --grid-columns on .grid
  *
- * Child contract: each direct child is placed on the canvas via its own
- * .column-span-N / .column-start-N.
- *
  * Unlike .grid-N, the track template does not read --gap, so the gap
  * utilities are exact here at every width.
+ *
+ * Public hooks:
+ * --column-start (the start line, 1-12; unset = auto-placed)
+ * --column-span (the width in canvas units, 1-12; unset = to the canvas end)
  */
 .column-layout {
   display: grid;
@@ -1756,116 +1757,30 @@ small {
   grid-template-columns: repeat(12, minmax(0, 1fr));
 }
 
-/* Three zero-specificity tiers, applied in this order and only ever separated
- * by source order. ORDER IS LOAD-BEARING:
+/* One rule covers the four placements:
+ *   neither          auto-placed, spanning the whole canvas
+ *   span only        auto-placed over N units, so 8 + 4 flows onto one row
+ *   start only       from line S to the canvas end (span 13 - S)
+ *   start and span   explicit; keep S + N - 1 <= 12
  *
- *   1. the child reset       auto-placed, spanning the whole canvas
- *   2. .column-start-*       a definite start line, running to the canvas end
- *   3. .column-span-*        the end only, so it refines either of the above
+ * The start stays `auto` unless set: a definite start on every child would
+ * take all of them out of auto-placement, and an 8 + 4 pair would stack.
  *
- * Moving tier 3 above tier 2 makes every start+span pair run to column 12;
- * moving either above tier 1 makes every placement full-span. Both failures
- * are silent. tests/css-audit.test.js locks the order and
- * tests/browser/column-layout.test.js locks the resulting geometry.
- *
- * Zero specificity is the point: an application's own container-query rules
- * override placement additively, with a single-class selector and without
- * having to undo framework specificity first.
- */
-
-/* Tier 1. A child with no placement class stays a readable full-width region
- * instead of collapsing to one twelfth. Expressed as a span, not as
- * `1 / -1`: a definite start line would give every child a definite column
- * position and disable auto-placement, so `.column-span-8` next to
- * `.column-span-4` would stack instead of composing 8 + 4.
+ * The reset makes the two hooks inputs of this grid item rather than an
+ * inherited context: a nested .column-layout keeps the coordinates it was
+ * given for its own placement, and its children start from nothing. Zero
+ * specificity, so any author rule on the child wins.
  *
  * min-inline-size: 0 keeps the item box inside its track so the canvas never
  * grows past its container. It does not stop content from painting outside a
  * narrow track — that distinction is the primitive's contract, not a bug. */
 :where(.column-layout) > * {
-  grid-column-end: span 12;
+  --column-start: initial;
+  --column-span: initial;
+
+  grid-column-start: var(--column-start, auto);
+  grid-column-end: span var(--column-span, calc(13 - var(--column-start, 1)));
   min-inline-size: 0;
-}
-
-/* Tier 2. A definite start line, running to the end of the canvas unless a
- * .column-span-* refines the end. `column-start-9` alone is therefore the
- * last four columns rather than an implicit 21-line overflow. */
-:where(.column-start-1) {
-  grid-column: 1 / -1;
-}
-:where(.column-start-2) {
-  grid-column: 2 / -1;
-}
-:where(.column-start-3) {
-  grid-column: 3 / -1;
-}
-:where(.column-start-4) {
-  grid-column: 4 / -1;
-}
-:where(.column-start-5) {
-  grid-column: 5 / -1;
-}
-:where(.column-start-6) {
-  grid-column: 6 / -1;
-}
-:where(.column-start-7) {
-  grid-column: 7 / -1;
-}
-:where(.column-start-8) {
-  grid-column: 8 / -1;
-}
-:where(.column-start-9) {
-  grid-column: 9 / -1;
-}
-:where(.column-start-10) {
-  grid-column: 10 / -1;
-}
-:where(.column-start-11) {
-  grid-column: 11 / -1;
-}
-:where(.column-start-12) {
-  grid-column: 12 / -1;
-}
-
-/* Tier 3. The end only. Combined with a start, keep the placement inside the
- * canvas: S + N - 1 <= 12. Exceeding it adds an auto-sized implicit column,
- * which reshapes every 1fr track — the whole canvas loses its alignment, not
- * just the offending region. */
-:where(.column-span-1) {
-  grid-column-end: span 1;
-}
-:where(.column-span-2) {
-  grid-column-end: span 2;
-}
-:where(.column-span-3) {
-  grid-column-end: span 3;
-}
-:where(.column-span-4) {
-  grid-column-end: span 4;
-}
-:where(.column-span-5) {
-  grid-column-end: span 5;
-}
-:where(.column-span-6) {
-  grid-column-end: span 6;
-}
-:where(.column-span-7) {
-  grid-column-end: span 7;
-}
-:where(.column-span-8) {
-  grid-column-end: span 8;
-}
-:where(.column-span-9) {
-  grid-column-end: span 9;
-}
-:where(.column-span-10) {
-  grid-column-end: span 10;
-}
-:where(.column-span-11) {
-  grid-column-end: span 11;
-}
-:where(.column-span-12) {
-  grid-column-end: span 12;
 }
 
 /*
@@ -3874,6 +3789,89 @@ a.btn[aria-disabled="true"] {
 }
 
 /*
+ * Close button — the shared X that removes or closes the thing it sits in.
+ *
+ * Docs: docs/pages/components/close.md
+ *
+ * .close is always the X, painted from the --icon-close mask: an empty
+ * <button class="close" aria-label="…"> needs no icon font and no text glyph.
+ * The mechanism stays with the container (command="request-close",
+ * method="dialog", command="--dismiss", application logic); the class only
+ * names the visual action.
+ *
+ * The containers that host one (alert, badge) tune it from their own files by
+ * declaring the size hooks and their geometry; this file owns the control
+ * and the dialog-surface corner, shared by .modal and .drawer.
+ *
+ * Public hooks:
+ * --close-size
+ * --close-icon-size
+ */
+.close {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  inline-size: var(--close-size, var(--control-size));
+  block-size: var(--close-size, var(--control-size));
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius);
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+
+.close::before {
+  content: "";
+  inline-size: var(--close-icon-size, 1rem);
+  block-size: var(--close-icon-size, 1rem);
+  background: currentColor;
+  -webkit-mask: var(--icon-close) center / contain no-repeat;
+  mask: var(--icon-close) center / contain no-repeat;
+}
+
+/* An inset overlay, not a background: it tints whatever fill the context gave
+   the control (the dialog corner's --surface-subtle) instead of replacing it. */
+@media (hover: hover) {
+  .close:hover {
+    box-shadow: inset 0 0 0 999px var(--hover-overlay);
+  }
+}
+
+.close:active {
+  box-shadow: inset 0 0 0 999px var(--hover-overlay);
+}
+
+.close:focus-visible {
+  outline: 2px solid transparent;
+  box-shadow: var(--focus-ring-shadow);
+}
+
+/* Dialog corner — out of the content flow, anchored to the positioned dialog
+   surface rather than to the header or a scroll container inside it. Matched
+   on the documented positions (the dialog, its form, its header, or a form
+   inside that header) so a .close inside content — an alert in the body —
+   keeps its own place. */
+:where(dialog):is(.modal, .drawer) > .close,
+:where(dialog):is(.modal, .drawer) > :is(form, header) > .close,
+:where(dialog):is(.modal, .drawer) > :is(form, header) > :is(form, header) > .close {
+  position: absolute;
+  z-index: 1;
+  inset-block-start: var(--space-20);
+  inset-inline-end: var(--space-20);
+  background: var(--surface-subtle);
+  color: var(--text-muted);
+}
+
+@media (hover: hover) {
+  :where(dialog):is(.modal, .drawer) > .close:hover,
+  :where(dialog):is(.modal, .drawer) > :is(form, header) > .close:hover,
+  :where(dialog):is(.modal, .drawer) > :is(form, header) > :is(form, header) > .close:hover {
+    color: var(--text);
+  }
+}
+
+/*
  * Badges for compact labels, counts, and state hints.
  *
  * Docs: docs/pages/components/badge.md
@@ -3889,7 +3887,6 @@ a.btn[aria-disabled="true"] {
  * --badge-icon-size
  * --badge-dot-size
  * --badge-radius
- * --badge-dismiss-icon-size
  *
  * Internal:
  * --badge-default-bg
@@ -3920,7 +3917,10 @@ a.btn[aria-disabled="true"] {
   --badge-font-size: var(--font-size-sm);
   --badge-icon-size: 1em;
   --badge-dot-size: 0.5rem;
-  --badge-dismiss-icon-size: 0.875em;
+  /* Declared on the badge, not the button, so an author can still set them
+     on either. Same element as --badge-size, so .sm/.lg carry through. */
+  --close-size: max(var(--badge-size), 24px);
+  --close-icon-size: 0.875em;
   --badge-default-bg: var(--surface-subtle);
   --badge-default-fg: var(--intent, var(--text));
   --badge-default-border: var(--border);
@@ -3970,8 +3970,8 @@ a.btn[aria-disabled="true"] {
   --badge-dot-size: 0.625rem;
 }
 
-/* Decorative children follow the badge's optical size. Text and interactive
-   dismiss buttons retain their own boxes. */
+/* Decorative children follow the badge's optical size. Text and the .close
+   button retain their own boxes. */
 .badge > :where(svg, img, [aria-hidden="true"]:not(.dot)) {
   flex: none;
   /* The shared rule maps --badge-icon-size onto font-size. One em is therefore
@@ -4024,45 +4024,15 @@ a.btn[aria-disabled="true"] {
   background-color: currentColor;
 }
 
-.badge > button {
-  display: inline-grid;
-  place-items: center;
-  flex: 0 0 auto;
-  /* WCAG 2.5.8 floors pointer targets at 24 CSS px. Density and local size may
-     keep the badge visually compact through the negative margins, but never
-     shrink its action target below that literal floor. */
-  min-inline-size: max(var(--badge-size), 24px);
-  min-block-size: max(var(--badge-size), 24px);
+/* Removable tag — a .close (components/close.css) inside the pill. WCAG 2.5.8
+   floors pointer targets at 24 CSS px: density and local size may keep the
+   badge visually compact through the negative margins, but never shrink the
+   target below that literal floor. */
+.badge > .close {
   margin-block: -0.25rem;
   margin-inline-start: -0.15em;
   margin-inline-end: -0.45em;
-  padding: 0.25rem;
-  border: 0;
   border-radius: var(--radius-full);
-  background: transparent;
-  color: inherit;
-  font: inherit;
-  line-height: 1;
-  cursor: pointer;
-}
-
-/* Dismiss mark — an empty dismiss button paints its own X from the shared
-   --icon-close mask, so no icon font or text glyph is required in the markup
-   (same contract as .alert-dismiss and .dialog-close). A mask box is a block
-   box, so place-items centers the ink itself; a text glyph would only center
-   its line box and land the ink low, because a lowercase x has no descender
-   and only x-height of ascent. A button with its own content keeps it. */
-.badge > button:empty::before {
-  content: "";
-  inline-size: var(--badge-dismiss-icon-size);
-  block-size: var(--badge-dismiss-icon-size);
-  background: currentColor;
-  -webkit-mask: var(--icon-close) center / contain no-repeat;
-  mask: var(--icon-close) center / contain no-repeat;
-}
-
-.badge > button:not(:disabled):hover {
-  background: var(--hover-overlay);
 }
 
 /* Hover recipes — sets --ui-hover-bg consumed by the hover rule below.
@@ -4153,7 +4123,6 @@ a.badge[aria-disabled="true"] {
  * --alert-font-size
  * --alert-radius
  * --alert-icon-size
- * --alert-dismiss-size
  * --alert-border-inline-start-color
  * --alert-border-inline-start-width
  *
@@ -4164,7 +4133,6 @@ a.badge[aria-disabled="true"] {
  * --alert-bg
  * --alert-fg
  * --alert-border
- * --alert-dismiss-icon-size
  */
 /* Intent boundary — inherited intents do not tint this component.
    Local intent classes still win because :where() has zero specificity. */
@@ -4213,13 +4181,13 @@ a.badge[aria-disabled="true"] {
    The slots are excluded because they are anatomy, not content: an
    admonition's title bar has to stay flush against its body. The list follows
    the anatomy, so it grows with it. */
-.alert > :not(:where(.alert-icon, .alert-dismiss, .alert-title, .alert-body)) {
+.alert > :not(:where(.alert-icon, .close, .alert-title, .alert-body)) {
   margin-block: 0;
 }
 
 .alert
-  > :not(:where(.alert-icon, .alert-dismiss, .alert-title, .alert-body))
-  + :not(:where(.alert-icon, .alert-dismiss, .alert-title, .alert-body)) {
+  > :not(:where(.alert-icon, .close, .alert-title, .alert-body))
+  + :not(:where(.alert-icon, .close, .alert-title, .alert-body)) {
   margin-block-start: var(--space-10);
 }
 
@@ -4257,42 +4225,24 @@ a.badge[aria-disabled="true"] {
   vertical-align: -0.125em;
 }
 
-/* Dismiss — compact close button for inline alerts. Transparent at rest with
-   a reduced opacity glyph so it stays secondary inside an already-colored
-   alert; hover reinforces it via the shared overlay. Uses the shared
-   --icon-close mask, so no icon font or text glyph is required in the markup.
-   Standard alerts place it as a direct trailing child; admonitions place it
-   inside .alert-title (see below). */
-.alert-dismiss {
-  --alert-dismiss-size: 1.75rem;
-  --alert-dismiss-icon-size: 0.875rem;
-
-  display: inline-grid;
-  place-items: center;
-  inline-size: var(--alert-dismiss-size);
-  block-size: var(--alert-dismiss-size);
-  flex: none;
-  padding: 0;
-  border: 0;
-  border-radius: var(--radius);
-  background: transparent;
-  color: currentColor;
-  opacity: 0.65;
-  cursor: pointer;
+/* Close (components/close.css) — compact, and at reduced opacity so it stays
+   secondary inside an already-colored alert. Standard alerts place it as a
+   direct trailing child; admonitions place it inside .alert-title (see
+   below). The sizes are declared on the alert so an author can still set
+   them on the alert or on the button. */
+.alert {
+  --close-size: 1.75rem;
+  --close-icon-size: 0.875rem;
 }
 
-.alert-dismiss::before {
-  content: "";
-  inline-size: var(--alert-dismiss-icon-size);
-  block-size: var(--alert-dismiss-icon-size);
-  background: currentColor;
-  -webkit-mask: var(--icon-close) center / contain no-repeat;
-  mask: var(--icon-close) center / contain no-repeat;
+.alert > .close,
+.alert > .alert-title > .close {
+  opacity: 0.65;
 }
 
 @media (hover: hover) {
-  .alert-dismiss:hover {
-    background: var(--hover-overlay);
+  .alert > .close:hover,
+  .alert > .alert-title > .close:hover {
     opacity: 1;
   }
 }
@@ -4301,7 +4251,7 @@ a.badge[aria-disabled="true"] {
    both. Icon and dismiss are pinned to the outer columns; anything else (the
    message content) flows into the remaining text column. */
 @supports selector(.alert:has(> *)) {
-  .alert:has(> .alert-icon, > .alert-dismiss) {
+  .alert:has(> .alert-icon, > .close) {
     display: grid;
     grid-template-columns: minmax(0, 1fr);
     align-items: var(--items-align, start);
@@ -4320,19 +4270,19 @@ a.badge[aria-disabled="true"] {
     margin-block-start: 0.125em;
   }
 
-  .alert:has(> .alert-icon) > :not(.alert-icon, .alert-dismiss) {
+  .alert:has(> .alert-icon) > :not(.alert-icon, .close) {
     grid-column: 2;
   }
 
-  .alert:has(> .alert-dismiss) {
+  .alert:has(> .close) {
     grid-template-columns: minmax(0, 1fr) auto;
   }
 
-  .alert:has(> .alert-icon):has(> .alert-dismiss) {
+  .alert:has(> .alert-icon):has(> .close) {
     grid-template-columns: auto minmax(0, 1fr) auto;
   }
 
-  .alert:has(> .alert-dismiss) > .alert-dismiss {
+  .alert:has(> .close) > .close {
     grid-column: -2 / -1;
     grid-row: 1;
   }
@@ -4380,8 +4330,8 @@ a.badge[aria-disabled="true"] {
   border-start-end-radius: calc(var(--alert-radius, var(--radius-lg)) - var(--border-width));
 }
 
-/* Dismiss inside an admonition title bar rides the inline end. */
-.alert.admonition > .alert-title > .alert-dismiss {
+/* Close inside an admonition title bar rides the inline end. */
+.alert.admonition > .alert-title > .close {
   margin-inline-start: auto;
 }
 
@@ -4597,8 +4547,9 @@ a.badge[aria-disabled="true"] {
  * --dialog-icon-size
  * --dialog-icon-glyph-size
  *
+ * The corner close control is .close (components/close.css).
+ *
  * Internal:
- * --dialog-close-icon-size
  * --dialog-focus-bleed
  * --dialog-viewport-block
  * --dialog-viewport-gap-default
@@ -4711,7 +4662,7 @@ a.badge[aria-disabled="true"] {
    The form/.stack anatomy is structural, so it stays in :where() and never
    lends .stack's specificity to a bare <form>. */
 :where(dialog).modal > :where(form, .stack) > header {
-  padding-inline-end: calc(var(--control-size) + var(--space-30));
+  padding-inline-end: calc(var(--close-size, var(--control-size)) + var(--space-30));
 }
 
 :where(dialog).modal > :where(form, .stack) > footer {
@@ -4875,59 +4826,6 @@ html.has-modal-open.had-scrollbar {
   }
 }
 
-/* Close control. A close button is an action attached to a surface, so it
-   never participates in the content flow — absolute at the panel's top
-   inline-end, inside the surface. The glyph comes from --icon-close, masked to
-   currentColor, so no icon font or text glyph is required in the markup. */
-.dialog-close {
-  --dialog-close-icon-size: 1rem;
-
-  display: inline-grid;
-  place-items: center;
-  padding: 0;
-  border: 0;
-  border-radius: var(--radius);
-  color: var(--text-muted);
-  cursor: pointer;
-
-  /* Out of flow, anchored to the positioned dialog surface, not the header or
-     any scroll container inside it. */
-  position: absolute;
-  z-index: 1;
-  inset-block-start: var(--space-20);
-  inset-inline-end: var(--space-20);
-
-  inline-size: var(--control-size);
-  block-size: var(--control-size);
-
-  background: var(--surface-subtle);
-}
-
-.dialog-close::before {
-  content: "";
-  inline-size: var(--dialog-close-icon-size);
-  block-size: var(--dialog-close-icon-size);
-  background: currentColor;
-  -webkit-mask: var(--icon-close) center / contain no-repeat;
-  mask: var(--icon-close) center / contain no-repeat;
-}
-
-@media (hover: hover) {
-  .dialog-close:hover {
-    box-shadow: inset 0 0 0 999px var(--hover-overlay);
-    color: var(--text);
-  }
-}
-
-.dialog-close:active {
-  box-shadow: inset 0 0 0 999px var(--hover-overlay);
-}
-
-.dialog-close:focus-visible {
-  outline: 2px solid transparent;
-  box-shadow: var(--focus-ring-shadow);
-}
-
 /*
  * Drawer — modal side-sheet built on the native dialog element.
  *
@@ -4947,8 +4845,9 @@ html.has-modal-open.had-scrollbar {
  * --drawer-size
  * --drawer-pad
  *
+ * The corner close control is .close (components/close.css).
+ *
  * Internal:
- * --drawer-close-icon-size
  * --drawer-closed-translate (side/RTL positioning state)
  * --drawer-focus-bleed
  * --drawer-motion-duration (shared by panel and ::backdrop so exit duration
@@ -5058,10 +4957,10 @@ html.has-modal-open.had-scrollbar {
 /* The body region absorbs the panel's height and scrolls. A drawer is a
    full-height shell by definition, so it always scrolls its body — unlike the
    modal, which sizes to its content and opts in with .scrollable. Header and
-   footer keep their own tracks; .drawer-close is named because a generic
+   footer keep their own tracks; .close is named because a generic
    exclusion list is easier to trust than its `position: absolute`. */
-:where(dialog).drawer > :not(:is(header, footer, form, .drawer-close)),
-:where(dialog).drawer > form > :not(:is(header, footer, .drawer-close)) {
+:where(dialog).drawer > :not(:is(header, footer, form, .close)),
+:where(dialog).drawer > form > :not(:is(header, footer, .close)) {
   --drawer-focus-bleed: calc(var(--focus-outline-offset) + var(--border-width) * 2);
 
   min-block-size: 0;
@@ -5138,57 +5037,7 @@ html.has-modal-open.had-scrollbar {
    control. */
 :where(dialog).drawer > header,
 :where(dialog).drawer > form > header {
-  padding-inline-end: calc(var(--control-size) + var(--space-30));
-}
-
-/* Close control, owned here so a drawer-only build does not depend on
-   modal.css. Mirrors the modal's .dialog-close placement: absolute at the
-   panel's top inline-end, out of the content flow. */
-.drawer-close {
-  --drawer-close-icon-size: 1rem;
-
-  display: inline-grid;
-  place-items: center;
-  padding: 0;
-  border: 0;
-  border-radius: var(--radius);
-  color: var(--text-muted);
-  cursor: pointer;
-
-  position: absolute;
-  z-index: 1;
-  inset-block-start: var(--space-20);
-  inset-inline-end: var(--space-20);
-
-  inline-size: var(--control-size);
-  block-size: var(--control-size);
-
-  background: var(--surface-subtle);
-}
-
-.drawer-close::before {
-  content: "";
-  inline-size: var(--drawer-close-icon-size);
-  block-size: var(--drawer-close-icon-size);
-  background: currentColor;
-  -webkit-mask: var(--icon-close) center / contain no-repeat;
-  mask: var(--icon-close) center / contain no-repeat;
-}
-
-@media (hover: hover) {
-  .drawer-close:hover {
-    box-shadow: inset 0 0 0 999px var(--hover-overlay);
-    color: var(--text);
-  }
-}
-
-.drawer-close:active {
-  box-shadow: inset 0 0 0 999px var(--hover-overlay);
-}
-
-.drawer-close:focus-visible {
-  outline: 2px solid transparent;
-  box-shadow: var(--focus-ring-shadow);
+  padding-inline-end: calc(var(--close-size, var(--control-size)) + var(--space-30));
 }
 
 /*
@@ -8825,8 +8674,9 @@ a.list-item[aria-current]::before {
   overflow-y: auto;
 }
 
-/* Text */
-.white-space-normal {
+/* Text. .text-wrap is the counterpart of base's .text-nowrap: it restores
+   wrapping inside a component that sets nowrap (.badge). */
+.text-wrap {
   white-space: normal;
 }
 

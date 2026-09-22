@@ -6,8 +6,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Column Layout — Actual CSS</title>
-  <meta name="description" content=".column-layout is an explicit twelve-column composition canvas. Place regions
-with .column-span-N and .column-start-N.">
+  <meta name="description" content=".column-layout is an explicit twelve-column composition canvas. Each direct
+child places itself with two numbers: --column-span (how many units) and
+--column-start (which line it begins on).">
   <link rel="stylesheet" href="../../src/css/actual.full.css">
   <link rel="stylesheet" href="../assets/actual-themes.min.css">
   <link rel="stylesheet" href="../../scripts/docs/assets/docs.css">
@@ -122,6 +123,7 @@ with .column-span-N and .column-start-N.">
         <li><a class="nav-link" href="../components/button.html">Button</a></li>
         <li><a class="nav-link" href="../components/card.html">Card</a></li>
         <li><a class="nav-link" href="../components/chat.html">Chat</a></li>
+        <li><a class="nav-link" href="../components/close.html">Close</a></li>
         <li><a class="nav-link" href="../components/dialog.html">Dialog</a></li>
         <li><a class="nav-link" href="../components/drawer.html">Drawer</a></li>
         <li><a class="nav-link" href="../components/data-list.html">Data list</a></li>
@@ -211,74 +213,84 @@ with .column-span-N and .column-start-N.">
 
           <div class="prose docs-prose">
 <h1 id="column-layout">Column Layout</h1>
-<p><code>.column-layout</code> is an explicit twelve-column composition canvas. Place regions
-with <code>.column-span-N</code> and <code>.column-start-N</code>.</p>
+<p><code>.column-layout</code> is an explicit twelve-column composition canvas. Each direct
+child places itself with two numbers: <code>--column-span</code> (how many units) and
+<code>--column-start</code> (which line it begins on).</p>
 <p>Reach for it when the placement of each region <strong>is</strong> the design. If the regions
 are a collection, a known density, peers that switch together, or a main region
 with an aside, one of the other primitives already says so — and says it with
 intrinsic responsive behavior this one does not have.</p>
+<pre><code class="language-css">.article-main {
+  --column-span: 8;
+}
+
+.article-aside {
+  --column-span: 4;
+}
+</code></pre>
 </div>
 <div class="docs-example">
   <div class="docs-preview">
 <div class="column-layout">
-  <main class="column-span-8 card">Main — 8 columns</main>
-  <aside class="column-span-4 card">Aside — 4 columns</aside>
+  <main class="card" style="--column-span: 8">Main — 8 columns</main>
+  <aside class="card" style="--column-span: 4">Aside — 4 columns</aside>
 </div>
   </div>
   <div class="docs-code">
     <pre><code class="language-html">&lt;div class=&quot;column-layout&quot;&gt;
-  &lt;main class=&quot;column-span-8 card&quot;&gt;Main — 8 columns&lt;/main&gt;
-  &lt;aside class=&quot;column-span-4 card&quot;&gt;Aside — 4 columns&lt;/aside&gt;
+  &lt;main class=&quot;card&quot; style=&quot;--column-span: 8&quot;&gt;Main — 8 columns&lt;/main&gt;
+  &lt;aside class=&quot;card&quot; style=&quot;--column-span: 4&quot;&gt;Aside — 4 columns&lt;/aside&gt;
 &lt;/div&gt;</code></pre>
   </div>
 </div>
 <div class="prose docs-prose">
-<p>Neither child names a start line, so grid auto-placement flows the aside into
-columns 9 through 12.</p>
+<p>The hooks are plain CSS: set them from an application class, or inline as a
+shortcut for a composition that never changes. Neither child names a start
+line, so grid auto-placement flows the aside into columns 9 through 12.</p>
 <h2 id="spans">Spans</h2>
 <p>A span declares how many of the twelve units a region occupies.</p>
 </div>
 <div class="docs-example">
   <div class="docs-preview">
 <div class="column-layout">
-  <div class="column-span-3 card">3</div>
-  <div class="column-span-6 card">6</div>
-  <div class="column-span-3 card">3</div>
+  <div class="card" style="--column-span: 3">3</div>
+  <div class="card" style="--column-span: 6">6</div>
+  <div class="card" style="--column-span: 3">3</div>
 </div>
   </div>
   <div class="docs-code">
     <pre><code class="language-html">&lt;div class=&quot;column-layout&quot;&gt;
-  &lt;div class=&quot;column-span-3 card&quot;&gt;3&lt;/div&gt;
-  &lt;div class=&quot;column-span-6 card&quot;&gt;6&lt;/div&gt;
-  &lt;div class=&quot;column-span-3 card&quot;&gt;3&lt;/div&gt;
+  &lt;div class=&quot;card&quot; style=&quot;--column-span: 3&quot;&gt;3&lt;/div&gt;
+  &lt;div class=&quot;card&quot; style=&quot;--column-span: 6&quot;&gt;6&lt;/div&gt;
+  &lt;div class=&quot;card&quot; style=&quot;--column-span: 3&quot;&gt;3&lt;/div&gt;
 &lt;/div&gt;</code></pre>
   </div>
 </div>
 <div class="prose docs-prose">
-<p>A child with no placement class spans the whole canvas, so a heading can share
-the canvas with placed regions without carrying a class.</p>
+<p>A child with no coordinates spans the whole canvas, so a heading can share the
+canvas with placed regions without setting anything.</p>
 </div>
 <div class="docs-example">
   <div class="docs-preview">
 <div class="column-layout">
-  <h3>Full canvas — no class needed</h3>
-  <div class="column-span-4 card">4</div>
-  <div class="column-span-4 card">4</div>
-  <div class="column-span-4 card">4</div>
+  <h3>Full canvas — nothing set</h3>
+  <div class="card" style="--column-span: 4">4</div>
+  <div class="card" style="--column-span: 4">4</div>
+  <div class="card" style="--column-span: 4">4</div>
 </div>
   </div>
   <div class="docs-code">
     <pre><code class="language-html">&lt;div class=&quot;column-layout&quot;&gt;
-  &lt;h3&gt;Full canvas — no class needed&lt;/h3&gt;
-  &lt;div class=&quot;column-span-4 card&quot;&gt;4&lt;/div&gt;
-  &lt;div class=&quot;column-span-4 card&quot;&gt;4&lt;/div&gt;
-  &lt;div class=&quot;column-span-4 card&quot;&gt;4&lt;/div&gt;
+  &lt;h3&gt;Full canvas — nothing set&lt;/h3&gt;
+  &lt;div class=&quot;card&quot; style=&quot;--column-span: 4&quot;&gt;4&lt;/div&gt;
+  &lt;div class=&quot;card&quot; style=&quot;--column-span: 4&quot;&gt;4&lt;/div&gt;
+  &lt;div class=&quot;card&quot; style=&quot;--column-span: 4&quot;&gt;4&lt;/div&gt;
 &lt;/div&gt;</code></pre>
   </div>
 </div>
 <div class="prose docs-prose">
-<p>Regions that do not fit wrap to the next row, as any grid does. Two
-<code>.column-span-8</code> regions need sixteen units, so the second moves down.</p>
+<p>Regions that do not fit wrap to the next row, as any grid does. Two eight-unit
+regions need sixteen units, so the second moves down.</p>
 <h2 id="starts">Starts</h2>
 <p>A start declares the line a region begins on. This replaces margin-based
 offsets and is direction-independent: line 1 is the inline start, so the
@@ -287,14 +299,14 @@ placement flips with <code>dir=&quot;rtl&quot;</code> on its own.</p>
 <div class="docs-example">
   <div class="docs-preview">
 <div class="column-layout">
-  <article class="column-span-10 column-start-2 card">
+  <article class="card" style="--column-start: 2; --column-span: 10">
     Columns 2 through 11
   </article>
 </div>
   </div>
   <div class="docs-code">
     <pre><code class="language-html">&lt;div class=&quot;column-layout&quot;&gt;
-  &lt;article class=&quot;column-span-10 column-start-2 card&quot;&gt;
+  &lt;article class=&quot;card&quot; style=&quot;--column-start: 2; --column-span: 10&quot;&gt;
     Columns 2 through 11
   &lt;/article&gt;
 &lt;/div&gt;</code></pre>
@@ -306,21 +318,20 @@ placement flips with <code>dir=&quot;rtl&quot;</code> on its own.</p>
 <div class="docs-example">
   <div class="docs-preview">
 <div class="column-layout">
-  <aside class="column-start-9 card">Columns 9 through 12</aside>
+  <aside class="card" style="--column-start: 9">Columns 9 through 12</aside>
 </div>
   </div>
   <div class="docs-code">
     <pre><code class="language-html">&lt;div class=&quot;column-layout&quot;&gt;
-  &lt;aside class=&quot;column-start-9 card&quot;&gt;Columns 9 through 12&lt;/aside&gt;
+  &lt;aside class=&quot;card&quot; style=&quot;--column-start: 9&quot;&gt;Columns 9 through 12&lt;/aside&gt;
 &lt;/div&gt;</code></pre>
   </div>
 </div>
 <div class="prose docs-prose">
-<p>Keep a combined placement inside the canvas: <code>S + N - 1 &lt;= 12</code>. So
-<code>.column-start-9 .column-span-4</code> is valid and <code>.column-start-10 .column-span-4</code>
-is not. Exceeding the canvas adds a thirteenth, content-sized column, and every
-other region shrinks with it — the failure is canvas-wide, not local to the
-region you got wrong.</p>
+<p>Keep a combined placement inside the canvas: <code>start + span - 1 &lt;= 12</code>. Start 9
+with span 4 is valid; start 10 with span 4 is not. Exceeding the canvas adds a
+thirteenth, content-sized column, and every other region shrinks with it — the
+failure is canvas-wide, not local to the region you got wrong.</p>
 <h2 id="cross-section-alignment">Cross-section alignment</h2>
 <p>The canvas is shared across sibling sections, so regions in different sections
 can line up on the same columns — something a collection or a sidebar cannot
@@ -330,39 +341,40 @@ guarantee. This is the case no other primitive can replace.</p>
   <div class="docs-preview">
 <div class="stack">
   <div class="column-layout">
-    <h3 class="column-span-8 column-start-3">Feature title</h3>
-    <p class="muted column-span-8 column-start-3">Kicker aligned to the same line.</p>
+    <h3 style="--column-start: 3; --column-span: 8">Feature title</h3>
+    <p class="muted" style="--column-start: 3; --column-span: 8">Kicker aligned to the same line.</p>
   </div>
 
   <div class="column-layout">
-    <p class="column-span-8 column-start-3">
+    <p style="--column-start: 3; --column-span: 8">
       Body copy starts on the same column as the title above and spans the same
       eight columns.
     </p>
-    <aside class="column-span-2 column-start-11 card">Inline note</aside>
+    <aside class="card" style="--column-start: 11; --column-span: 2">Inline note</aside>
   </div>
 </div>
   </div>
   <div class="docs-code">
     <pre><code class="language-html">&lt;div class=&quot;stack&quot;&gt;
   &lt;div class=&quot;column-layout&quot;&gt;
-    &lt;h3 class=&quot;column-span-8 column-start-3&quot;&gt;Feature title&lt;/h3&gt;
-    &lt;p class=&quot;muted column-span-8 column-start-3&quot;&gt;Kicker aligned to the same line.&lt;/p&gt;
+    &lt;h3 style=&quot;--column-start: 3; --column-span: 8&quot;&gt;Feature title&lt;/h3&gt;
+    &lt;p class=&quot;muted&quot; style=&quot;--column-start: 3; --column-span: 8&quot;&gt;Kicker aligned to the same line.&lt;/p&gt;
   &lt;/div&gt;
 
   &lt;div class=&quot;column-layout&quot;&gt;
-    &lt;p class=&quot;column-span-8 column-start-3&quot;&gt;
+    &lt;p style=&quot;--column-start: 3; --column-span: 8&quot;&gt;
       Body copy starts on the same column as the title above and spans the same
       eight columns.
     &lt;/p&gt;
-    &lt;aside class=&quot;column-span-2 column-start-11 card&quot;&gt;Inline note&lt;/aside&gt;
+    &lt;aside class=&quot;card&quot; style=&quot;--column-start: 11; --column-span: 2&quot;&gt;Inline note&lt;/aside&gt;
   &lt;/div&gt;
 &lt;/div&gt;</code></pre>
   </div>
 </div>
 <div class="prose docs-prose">
-<p>Both sections name the same <code>column-start-3</code> / <code>column-span-8</code>, so their content
-shares a left edge and an alignment gutter without a wrapping grid.</p>
+<p>Both sections use start 3 and span 8, so their content shares a left edge and
+an alignment gutter without a wrapping grid. In an application, give that pair
+one class and reuse it.</p>
 <h2 id="the-responsive-contract">The responsive contract</h2>
 <p><code>.column-layout</code> has <strong>no automatic collapse</strong>. The canvas stays twelve columns
 at every width, and the application owns narrow-container behavior.</p>
@@ -371,80 +383,102 @@ width, a centered article may only need wider gutters, and a dashboard may want
 three regions to become two before stacking. A single framework threshold would
 be wrong more often than right, and a hidden one would have to be undone rather
 than extended.</p>
-<p>The simplest recomposition stacks everything:</p>
+<p>Recomposition sets the same two hooks. The simplest one stacks everything:</p>
 <pre><code class="language-css">@container (width &lt; 40rem) {
   .profile-layout &gt; * {
-    grid-column: 1 / -1;
+    --column-start: 1;
+    --column-span: 12;
   }
 }
 </code></pre>
 <p>A coordinate system is more useful when you keep it through an intermediate
 state:</p>
-<pre><code class="language-css">@container (width &lt; 48rem) {
+<pre><code class="language-css">.profile-main {
+  --column-span: 8;
+}
+
+.profile-aside {
+  --column-start: 9;
+  --column-span: 4;
+}
+
+@container (width &lt; 48rem) {
   .profile-main {
-    grid-column: 1 / span 6;
+    --column-start: 1;
+    --column-span: 6;
   }
 
   .profile-aside {
-    grid-column: 7 / span 6;
+    --column-start: 7;
+    --column-span: 6;
   }
 }
 
 @container (width &lt; 32rem) {
   .profile-main,
   .profile-aside {
-    grid-column: 1 / -1;
+    --column-start: 1;
+    --column-span: 12;
   }
 }
 </code></pre>
 <pre><code class="language-html">&lt;div class=&quot;container-query&quot;&gt;
   &lt;div class=&quot;column-layout profile-layout&quot;&gt;
-    &lt;main class=&quot;column-span-8 profile-main&quot;&gt;...&lt;/main&gt;
-    &lt;aside class=&quot;column-span-4 column-start-9 profile-aside&quot;&gt;...&lt;/aside&gt;
+    &lt;main class=&quot;profile-main&quot;&gt;...&lt;/main&gt;
+    &lt;aside class=&quot;profile-aside&quot;&gt;...&lt;/aside&gt;
   &lt;/div&gt;
 &lt;/div&gt;
 </code></pre>
+<p>Put coordinates you recompose on a class: an inline <code>style</code> outranks every
+rule, including your container query.</p>
 <p>The <code>.container-query</code> wrapper here enables <strong>your</strong> <code>@container</code> rules, not a
 hidden framework behavior. Remove your rules and the wrapper stops mattering.
 This is the opposite of a primitive whose responsive contract depends on a
 wrapper someone else has to remember.</p>
-<p>Placement classes carry zero specificity, so a single-class rule of your own
-wins without <code>!important</code> and without having to undo a framework declaration
-first.</p>
+<h2 id="nesting">Nesting</h2>
+<p>A child's coordinates place that child only. A nested <code>.column-layout</code> uses the
+ones it carries for its own position in the parent, and its children start from
+nothing.</p>
+<pre><code class="language-html">&lt;div class=&quot;column-layout&quot;&gt;
+  &lt;section class=&quot;column-layout&quot; style=&quot;--column-start: 3; --column-span: 8&quot;&gt;
+    &lt;h3&gt;Full width of the nested canvas&lt;/h3&gt;
+    &lt;div style=&quot;--column-span: 6&quot;&gt;Half of it&lt;/div&gt;
+  &lt;/section&gt;
+&lt;/div&gt;
+</code></pre>
 <h2 id="narrow-containers">Narrow containers</h2>
 <p>Twelve columns is a wide-context tool. With the default <code>--gap</code>, a 279px
 container spends 132px on its eleven gaps and leaves about 12px per unit — a
-<code>.column-span-4</code> region is 84px wide.</p>
+four-unit region is 84px wide.</p>
 <p>The framework guarantees the canvas itself never overflows its container: the
 tracks are <code>minmax(0, 1fr)</code> and every child gets <code>min-inline-size: 0</code>, so item
 boxes stay inside their tracks. It does not guarantee that content inside a
 narrow span stays readable, or that an unbreakable word will not paint outside
 its track. Define a narrow representation where the composition needs one.</p>
 <h2 id="scope">Scope</h2>
-<p>The primitive is horizontal only. There are no <code>.row-span-*</code>, <code>.area-*</code>, or
-<code>.order-*</code> classes, and no breakpoint variants such as <code>md-column-span-6</code> —
-those would move responsive strategy back into markup. For genuinely
-two-dimensional placement, use CSS Grid directly on your own class:</p>
+<p>The primitive is horizontal only. There are no row, area, or order hooks, and no
+breakpoint variants — those would move responsive strategy back into markup.
+For genuinely two-dimensional placement, use CSS Grid directly on your own
+class:</p>
 <pre><code class="language-css">.dashboard-summary {
   grid-row: 1 / span 2;
 }
 </code></pre>
 <p>The column count is fixed at twelve and is not configurable. Twelve is what
-makes the vocabulary shared and lets <code>6 + 6</code>, <code>4 + 4 + 4</code>, <code>3 + 3 + 3 + 3</code>,
+makes the coordinates shared and lets <code>6 + 6</code>, <code>4 + 4 + 4</code>, <code>3 + 3 + 3 + 3</code>,
 <code>8 + 4</code>, and <code>2 + 8 + 2</code> all land on the same canvas. For a track system whose
 sizes carry meaning rather than twelve interchangeable units, use
 <code>--grid-columns</code> on <code>.grid</code>.</p>
 <p>Unlike <code>.grid-N</code>, the track template does not read <code>--gap</code>, so the gap
 utilities are exact here at every width.</p>
-<p>A region carrying a placement class must generate a box. <code>display: contents</code>
-removes that box and promotes its descendants to grid items, which leaves the
-placement with nothing to apply to.</p>
-<h3 id="classes">Classes</h3>
+<p>A placed region must generate a box. <code>display: contents</code> removes that box and
+promotes its descendants to grid items, which leaves the placement with nothing
+to apply to.</p>
+<h3 id="hooks">Hooks</h3>
 <ul>
-<li><code>.column-layout</code> establishes the twelve-column canvas.</li>
-<li><code>.column-span-1</code> … <code>.column-span-12</code> set the width in canvas units.</li>
-<li><code>.column-start-1</code> … <code>.column-start-12</code> set the starting line, running to the
-canvas end unless a span refines it.</li>
+<li><code>--column-span</code> — width in canvas units, 1 to 12. Unset, a region runs to the
+canvas end.</li>
+<li><code>--column-start</code> — starting line, 1 to 12. Unset, the region is auto-placed.</li>
 </ul>
 
 </div>
@@ -469,9 +503,10 @@ canvas end unless a span refines it.</li>
         <li><a class="nav-link" href="#starts" data-docs-toc-item data-level="2">Starts</a></li>
         <li><a class="nav-link" href="#cross-section-alignment" data-docs-toc-item data-level="2">Cross-section alignment</a></li>
         <li><a class="nav-link" href="#the-responsive-contract" data-docs-toc-item data-level="2">The responsive contract</a></li>
+        <li><a class="nav-link" href="#nesting" data-docs-toc-item data-level="2">Nesting</a></li>
         <li><a class="nav-link" href="#narrow-containers" data-docs-toc-item data-level="2">Narrow containers</a></li>
         <li><a class="nav-link" href="#scope" data-docs-toc-item data-level="2">Scope</a></li>
-        <li><a class="nav-link" href="#classes" data-docs-toc-item data-level="3">Classes</a></li>
+        <li><a class="nav-link" href="#hooks" data-docs-toc-item data-level="3">Hooks</a></li>
           </ul>
         </nav>
       </aside>
@@ -483,12 +518,12 @@ canvas end unless a span refines it.</li>
   </div>
 
   <dialog class="drawer" id="docs-nav-drawer" closedby="any" aria-label="Documentation navigation">
-    <div class="docs-drawer-header">
+    <header class="docs-drawer-header">
       <strong>Actual CSS</strong>
       <form method="dialog">
-        <button class="drawer-close" type="submit" aria-label="Close navigation"></button>
+        <button class="close" type="submit" aria-label="Close navigation"></button>
       </form>
-    </div>
+    </header>
     <nav aria-label="Documentation">
             <p class="docs-nav-group">Guides</p>
       <ul class="nav-list">
@@ -537,6 +572,7 @@ canvas end unless a span refines it.</li>
         <li><a class="nav-link" href="../components/button.html">Button</a></li>
         <li><a class="nav-link" href="../components/card.html">Card</a></li>
         <li><a class="nav-link" href="../components/chat.html">Chat</a></li>
+        <li><a class="nav-link" href="../components/close.html">Close</a></li>
         <li><a class="nav-link" href="../components/dialog.html">Dialog</a></li>
         <li><a class="nav-link" href="../components/drawer.html">Drawer</a></li>
         <li><a class="nav-link" href="../components/data-list.html">Data list</a></li>
@@ -617,7 +653,7 @@ canvas end unless a span refines it.</li>
   </dialog>
 
   <dialog class="modal docs-search-dialog" id="docs-search-dialog" closedby="any" aria-label="Search documentation">
-    <button class="dialog-close"
+    <button class="close"
             type="button"
             commandfor="docs-search-dialog"
             command="request-close"

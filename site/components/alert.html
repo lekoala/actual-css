@@ -121,6 +121,7 @@
         <li><a class="nav-link" href="button.html">Button</a></li>
         <li><a class="nav-link" href="card.html">Card</a></li>
         <li><a class="nav-link" href="chat.html">Chat</a></li>
+        <li><a class="nav-link" href="close.html">Close</a></li>
         <li><a class="nav-link" href="dialog.html">Dialog</a></li>
         <li><a class="nav-link" href="drawer.html">Drawer</a></li>
         <li><a class="nav-link" href="data-list.html">Data list</a></li>
@@ -225,7 +226,7 @@
 <li>A title and a description are plain siblings: the alert owns the small space between its direct content blocks, so neither needs a wrapper. Nested content keeps its own rhythm — wrap several paragraphs in <code>.prose</code>, or a differently spaced group in <code>.stack</code>, when the message needs a rhythm of its own.</li>
 <li>Alerts may include a decorative leading icon. Use <code>.alert-icon</code> on the icon element; the rest of the content flows into the remaining text column.</li>
 <li>Use <code>.compact</code> or <code>.spacious</code> for density changes. The inline padding stays stable.</li>
-<li>Use <code>.alert-dismiss</code> for a compact dismiss button. It is a direct trailing child in standard alerts and lives inside <code>.alert-title</code> in admonitions. It uses the shared <code>--icon-close</code> mask and the <code>--dismiss</code> runtime command — no icon font or custom JS.</li>
+<li>Use a <a href="close.html"><code>.close</code></a> button to make the alert dismissible. It is a direct trailing child in standard alerts and lives inside <code>.alert-title</code> in admonitions; the alert makes it compact.</li>
 </ul>
 <p>Because alerts are soft by default, adding <code>.soft</code> to an intent (<code>.alert.soft.primary</code>,
 <code>.alert.soft.danger</code>, …) is a no-op: it already resolves to a soft version of that
@@ -239,7 +240,7 @@ itself needs to change, not <code>.soft</code>.</p>
 <tbody>
 <tr><td><code>.alert</code></td><td>Component</td><td>Inline status surface; soft by default.</td></tr>
 <tr><td><code>.alert-icon</code></td><td>Composition</td><td>Decorative leading icon, in the first column.</td></tr>
-<tr><td><code>.alert-dismiss</code></td><td>Modifier</td><td>Compact dismiss button.</td></tr>
+<tr><td><code>.close</code></td><td>Composition</td><td>Dismiss button, in the last column.</td></tr>
 <tr><td><code>.alert-title</code></td><td>Composition</td><td>Admonition title bar; hosts the dismiss button.</td></tr>
 <tr><td><code>.alert-body</code></td><td>Composition</td><td>Admonition body on the page surface.</td></tr>
 <tr><td><code>.callout</code></td><td>Variant</td><td>Leading-edge flag; owns the border geometry.</td></tr>
@@ -370,7 +371,7 @@ intent treatment when the color itself carries the meaning.</p>
 </div>
 <div class="prose docs-prose">
 <h2 id="trailing-action">Trailing action</h2>
-<p>The grid pins <code>.alert-icon</code> and <code>.alert-dismiss</code> to the outer columns. A
+<p>The grid pins <code>.alert-icon</code> and <code>.close</code> to the outer columns. A
 trailing link or button is content, not anatomy, so it lives in the text column:
 wrap the row in a <code>.cluster</code> and push the two ends apart. Same recipe as any
 split / spread row — there is no <code>.alert-action</code> class.</p>
@@ -460,7 +461,7 @@ center.</p>
 </div>
 <div class="prose docs-prose">
 <h2 id="dismiss">Dismiss</h2>
-<p>Use <code>.alert-dismiss</code> to let a user remove an inline alert. The button is transparent at rest with a muted glyph; it works with any intent because it uses <code>currentColor</code> and reduced opacity. It relies on the runtime <code>--dismiss</code> command — no custom script.</p>
+<p>Add a <code>.close</code> button to let a user remove an inline alert. Inside an alert it is compact and at reduced opacity, and it follows the alert's ink with any intent. The runtime <code>--dismiss</code> command removes the alert — no custom script.</p>
 </div>
 <div class="docs-example">
   <div class="docs-preview">
@@ -470,7 +471,7 @@ center.</p>
   <p>Something needs your attention.</p>
 
   <button
-    class="alert-dismiss"
+    class="close"
     type="button"
     commandfor="warning-alert"
     command="--dismiss"
@@ -485,7 +486,7 @@ center.</p>
   &lt;p&gt;Something needs your attention.&lt;/p&gt;
 
   &lt;button
-    class=&quot;alert-dismiss&quot;
+    class=&quot;close&quot;
     type=&quot;button&quot;
     commandfor=&quot;warning-alert&quot;
     command=&quot;--dismiss&quot;
@@ -495,12 +496,12 @@ center.</p>
   </div>
 </div>
 <div class="prose docs-prose">
-<p>In an admonition, place <code>.alert-dismiss</code> inside <code>.alert-title</code>; it rides the inline end of the title bar:</p>
+<p>In an admonition, place <code>.close</code> inside <code>.alert-title</code>; it rides the inline end of the title bar:</p>
 <pre><code class="language-html">&lt;div class=&quot;alert admonition warning&quot; id=&quot;notice&quot;&gt;
   &lt;div class=&quot;alert-title&quot;&gt;
     &lt;span&gt;Warning&lt;/span&gt;
     &lt;button
-      class=&quot;alert-dismiss&quot;
+      class=&quot;close&quot;
       type=&quot;button&quot;
       commandfor=&quot;notice&quot;
       command=&quot;--dismiss&quot;
@@ -633,8 +634,7 @@ full-bleed notice.</p>
 <li><code>--alert-pad-block</code> — block padding.</li>
 <li><code>--alert-font-size</code> — base font size.</li>
 <li><code>--alert-icon-size</code> — size of a leading <code>.alert-icon</code>.</li>
-<li><code>--alert-dismiss-size</code> — inline and block size of the <code>.alert-dismiss</code> button.</li>
-<li><code>--alert-dismiss-icon-size</code> — size of the dismiss glyph.</li>
+<li><code>--close-size</code> / <code>--close-icon-size</code> — the alert declares compact values for its <code>.close</code>; set them on the alert to change them.</li>
 <li><code>--alert-radius</code> — corner radius, when the default <code>--radius-lg</code> does not fit.</li>
 <li><code>--alert-border-inline-start-color</code> / <code>--alert-border-inline-start-width</code> — extension points for a callout-style colored flag on the leading edge instead of a uniform border.</li>
 </ul>
@@ -679,12 +679,12 @@ internal color plumbing directly.</p>
   </div>
 
   <dialog class="drawer" id="docs-nav-drawer" closedby="any" aria-label="Documentation navigation">
-    <div class="docs-drawer-header">
+    <header class="docs-drawer-header">
       <strong>Actual CSS</strong>
       <form method="dialog">
-        <button class="drawer-close" type="submit" aria-label="Close navigation"></button>
+        <button class="close" type="submit" aria-label="Close navigation"></button>
       </form>
-    </div>
+    </header>
     <nav aria-label="Documentation">
             <p class="docs-nav-group">Guides</p>
       <ul class="nav-list">
@@ -733,6 +733,7 @@ internal color plumbing directly.</p>
         <li><a class="nav-link" href="button.html">Button</a></li>
         <li><a class="nav-link" href="card.html">Card</a></li>
         <li><a class="nav-link" href="chat.html">Chat</a></li>
+        <li><a class="nav-link" href="close.html">Close</a></li>
         <li><a class="nav-link" href="dialog.html">Dialog</a></li>
         <li><a class="nav-link" href="drawer.html">Drawer</a></li>
         <li><a class="nav-link" href="data-list.html">Data list</a></li>
@@ -813,7 +814,7 @@ internal color plumbing directly.</p>
   </dialog>
 
   <dialog class="modal docs-search-dialog" id="docs-search-dialog" closedby="any" aria-label="Search documentation">
-    <button class="dialog-close"
+    <button class="close"
             type="button"
             commandfor="docs-search-dialog"
             command="request-close"

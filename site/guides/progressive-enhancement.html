@@ -121,6 +121,7 @@
         <li><a class="nav-link" href="../components/button.html">Button</a></li>
         <li><a class="nav-link" href="../components/card.html">Card</a></li>
         <li><a class="nav-link" href="../components/chat.html">Chat</a></li>
+        <li><a class="nav-link" href="../components/close.html">Close</a></li>
         <li><a class="nav-link" href="../components/dialog.html">Dialog</a></li>
         <li><a class="nav-link" href="../components/drawer.html">Drawer</a></li>
         <li><a class="nav-link" href="../components/data-list.html">Data list</a></li>
@@ -425,8 +426,8 @@ from its anchor, with measured inline coordinates. The UA's own <code>inset</cod
 </ol>
 <p>Lifecycle: <code>prepareSurface</code> → <code>openSurface</code> → <code>closeSurface</code> →
 <code>disconnectSurface</code>. <code>retainSurface(panel)</code> reference-counts a surface shared by
-several triggers and returns a release function; <code>isSurfaceOpen</code> and
-<code>getSurfaceAutoClose</code> read current state. The separate <code>escape</code> primitive adds
+several triggers and returns a release function; <code>isSurfaceOpen</code> reads the
+current state. The separate <code>escape</code> primitive adds
 visible dismissable UI to the shared per-document Escape stack.</p>
 <p>Actual-managed surfaces are mutually exclusive within a document. Opening a
 surface closes any other open Actual surface, including one containing its
@@ -990,12 +991,12 @@ FormValidator.setErrors(form, { email: &quot;Already taken&quot; });
   </div>
 
   <dialog class="drawer" id="docs-nav-drawer" closedby="any" aria-label="Documentation navigation">
-    <div class="docs-drawer-header">
+    <header class="docs-drawer-header">
       <strong>Actual CSS</strong>
       <form method="dialog">
-        <button class="drawer-close" type="submit" aria-label="Close navigation"></button>
+        <button class="close" type="submit" aria-label="Close navigation"></button>
       </form>
-    </div>
+    </header>
     <nav aria-label="Documentation">
             <p class="docs-nav-group">Guides</p>
       <ul class="nav-list">
@@ -1044,6 +1045,7 @@ FormValidator.setErrors(form, { email: &quot;Already taken&quot; });
         <li><a class="nav-link" href="../components/button.html">Button</a></li>
         <li><a class="nav-link" href="../components/card.html">Card</a></li>
         <li><a class="nav-link" href="../components/chat.html">Chat</a></li>
+        <li><a class="nav-link" href="../components/close.html">Close</a></li>
         <li><a class="nav-link" href="../components/dialog.html">Dialog</a></li>
         <li><a class="nav-link" href="../components/drawer.html">Drawer</a></li>
         <li><a class="nav-link" href="../components/data-list.html">Data list</a></li>
@@ -1124,7 +1126,7 @@ FormValidator.setErrors(form, { email: &quot;Already taken&quot; });
   </dialog>
 
   <dialog class="modal docs-search-dialog" id="docs-search-dialog" closedby="any" aria-label="Search documentation">
-    <button class="dialog-close"
+    <button class="close"
             type="button"
             commandfor="docs-search-dialog"
             command="request-close"

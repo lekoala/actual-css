@@ -121,6 +121,7 @@
         <li><a class="nav-link" href="button.html">Button</a></li>
         <li><a class="nav-link" href="card.html">Card</a></li>
         <li><a class="nav-link" href="chat.html">Chat</a></li>
+        <li><a class="nav-link" href="close.html">Close</a></li>
         <li><a class="nav-link" href="dialog.html">Dialog</a></li>
         <li><a class="nav-link" href="drawer.html">Drawer</a></li>
         <li><a class="nav-link" href="data-list.html">Data list</a></li>
@@ -489,31 +490,30 @@ Regular</code></pre>
 </div>
 <div class="prose docs-prose">
 <h2 id="removable-tag-pattern">Removable tag pattern</h2>
-<p>Use <code>.badge soft</code> for tag visuals. Add a direct dismiss button only when the tag can actually be removed. There is no separate chip component.
+<p>Use <code>.badge soft</code> for tag visuals. Add a direct <a href="close.html"><code>.close</code></a> button only when the tag can actually be removed. There is no separate chip component.
 For a compact action or filter, use <code>.btn.sm</code> instead; badges describe content
 and must not be turned into toggle controls merely to obtain a compact shape.</p>
-<p>Leave the dismiss button empty: it paints its own X, so the pattern needs no
-icon font and no text glyph. Put your own icon inside it and that content is
-used instead.</p>
+<p>Inside a badge the close follows the pill's size, keeps a 24px pointer target,
+and tucks into the padding.</p>
 </div>
 <div class="docs-example">
   <div class="docs-preview">
 <span class="badge primary soft">
   Design
-  <button type="button" aria-label="Remove Design"></button>
+  <button class="close" type="button" aria-label="Remove Design"></button>
 </span>
 <span class="badge primary soft">
-  <button type="button" aria-label="Remove Design"></button>
+  <button class="close" type="button" aria-label="Remove Design"></button>
   Design
 </span>
   </div>
   <div class="docs-code">
     <pre><code class="language-html">&lt;span class=&quot;badge primary soft&quot;&gt;
   Design
-  &lt;button type=&quot;button&quot; aria-label=&quot;Remove Design&quot;&gt;&lt;/button&gt;
+  &lt;button class=&quot;close&quot; type=&quot;button&quot; aria-label=&quot;Remove Design&quot;&gt;&lt;/button&gt;
 &lt;/span&gt;
 &lt;span class=&quot;badge primary soft&quot;&gt;
-  &lt;button type=&quot;button&quot; aria-label=&quot;Remove Design&quot;&gt;&lt;/button&gt;
+  &lt;button class=&quot;close&quot; type=&quot;button&quot; aria-label=&quot;Remove Design&quot;&gt;&lt;/button&gt;
   Design
 &lt;/span&gt;</code></pre>
   </div>
@@ -527,7 +527,7 @@ used instead.</p>
 <li><code>--badge-font-size</code> — label font size.</li>
 <li><code>--badge-icon-size</code> — decorative child size; <code>1em</code> follows the label by default.</li>
 <li><code>--badge-pad-x</code> — inline padding. Derived from <code>--badge-size</code>, so it stays proportional to the pill; set it to opt out.</li>
-<li><code>--badge-dismiss-icon-size</code> — size of the X painted by an empty dismiss button.</li>
+<li><code>--close-size</code> / <code>--close-icon-size</code> — the badge declares them for its <code>.close</code>; set them on the badge to change them.</li>
 </ul>
 
 </div>
@@ -572,12 +572,12 @@ used instead.</p>
   </div>
 
   <dialog class="drawer" id="docs-nav-drawer" closedby="any" aria-label="Documentation navigation">
-    <div class="docs-drawer-header">
+    <header class="docs-drawer-header">
       <strong>Actual CSS</strong>
       <form method="dialog">
-        <button class="drawer-close" type="submit" aria-label="Close navigation"></button>
+        <button class="close" type="submit" aria-label="Close navigation"></button>
       </form>
-    </div>
+    </header>
     <nav aria-label="Documentation">
             <p class="docs-nav-group">Guides</p>
       <ul class="nav-list">
@@ -626,6 +626,7 @@ used instead.</p>
         <li><a class="nav-link" href="button.html">Button</a></li>
         <li><a class="nav-link" href="card.html">Card</a></li>
         <li><a class="nav-link" href="chat.html">Chat</a></li>
+        <li><a class="nav-link" href="close.html">Close</a></li>
         <li><a class="nav-link" href="dialog.html">Dialog</a></li>
         <li><a class="nav-link" href="drawer.html">Drawer</a></li>
         <li><a class="nav-link" href="data-list.html">Data list</a></li>
@@ -706,7 +707,7 @@ used instead.</p>
   </dialog>
 
   <dialog class="modal docs-search-dialog" id="docs-search-dialog" closedby="any" aria-label="Search documentation">
-    <button class="dialog-close"
+    <button class="close"
             type="button"
             commandfor="docs-search-dialog"
             command="request-close"
