@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bleed surface fixture</title>
+  <link rel="stylesheet" href="../../src/css/actual.full.css">
+  <style>
+    * { transition-duration: 0s !important; }
+    .accordion { --accordion-radius: 12px; --accordion-pad: 20px; }
+    .status-row { padding: var(--bleed-pad); }
+  </style>
+</head>
+<body>
+  <!-- Separated: every panel closes a rounded item, and a first .bleed child
+       must stay below the summary rather than lift into it. -->
+  <div id="separated" class="accordion separated">
+    <details open>
+      <summary>First</summary>
+      <div>
+        <div class="bleed first">Top band</div>
+        <p>Body.</p>
+        <div class="bleed last">Bottom band</div>
+      </div>
+    </details>
+    <details open>
+      <summary>Second</summary>
+      <div><div class="bleed last">Bottom band</div></div>
+    </details>
+  </div>
+
+  <!-- Default shell: only the last item's panel meets the group corners. -->
+  <div id="default" class="accordion">
+    <details open>
+      <summary>First</summary>
+      <div><div class="bleed last">Bottom band</div></div>
+    </details>
+    <details open>
+      <summary>Last</summary>
+      <div><div class="bleed last">Bottom band</div></div>
+    </details>
+  </div>
+
+  <!-- Flush sits against the embedding surface: no corners to meet. -->
+  <div id="flush" class="accordion flush">
+    <details open>
+      <summary>Only</summary>
+      <div><div class="bleed last">Bottom band</div></div>
+    </details>
+  </div>
+
+  <!-- A band that is not header/footer/figure pads itself from --bleed-pad. -->
+  <article id="card" class="card" style="--card-pad: 24px">
+    <p>Body.</p>
+    <div class="bleed status-row">Status</div>
+  </article>
+</body>
+</html>

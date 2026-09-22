@@ -93,6 +93,9 @@
   padding-block-start: var(--space-10);
 }
 
+/* Also cancels the lift of a first .bleed child (bleed.css, lower
+   specificity): the panel's top edge is the summary, not the item edge, so a
+   bleed reaches only the sides and the bottom. */
 .accordion details > summary + * > :first-child {
   margin-block-start: 0;
 }
@@ -137,6 +140,17 @@
   border: var(--border-width) solid var(--border);
   border-radius: var(--accordion-radius);
   background: var(--surface-raised);
+}
+
+/* A last .bleed child inherits its bottom corners from the panel, but the
+   rounded box is the item (.separated) or the group (last item) — relay the
+   radius to the panel. Explicit rather than inherit: in browsers with
+   ::details-content the panel's flat-tree parent is that slot, not
+   <details>. */
+.accordion.separated > details > summary + *,
+.accordion:not(.flush) > details:last-child > summary + * {
+  border-end-start-radius: var(--accordion-radius);
+  border-end-end-radius: var(--accordion-radius);
 }
 
 @media (forced-colors: active) {

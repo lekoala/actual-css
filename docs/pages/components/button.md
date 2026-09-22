@@ -72,6 +72,9 @@ component with shared variants reads, so the same declaration works on a badge:
 }
 ```
 
+The rule ties with the variant's own `--ui-bg` on specificity, so load it after
+Actual CSS or import `actual.layer.css`.
+
 Transparent treatments (`.outline`, `.ghost`, `.link`) follow the surrounding
 foreground by default, including on a contrasting `.inverted` surface. A local
 intent class still wins: `.danger.outline` uses the danger color in either
