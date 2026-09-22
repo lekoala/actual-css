@@ -232,8 +232,8 @@ Three non-obvious requirements:
 
 Lifecycle: `prepareSurface` → `openSurface` → `closeSurface` →
 `disconnectSurface`. `retainSurface(panel)` reference-counts a surface shared by
-several triggers and returns a release function; `isSurfaceOpen` and
-`getSurfaceAutoClose` read current state. The separate `escape` primitive adds
+several triggers and returns a release function; `isSurfaceOpen` reads the
+current state. The separate `escape` primitive adds
 visible dismissable UI to the shared per-document Escape stack.
 
 Actual-managed surfaces are mutually exclusive within a document. Opening a

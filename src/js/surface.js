@@ -411,7 +411,3 @@ function ensureDocumentClick(menu) {
   clickBoundDocuments.add(doc);
   doc.addEventListener("click", onDocumentClick);
 }
-
-export function getSurfaceAutoClose(menu) {
-  return surfaceMap.get(menu)?.autoClose ?? "outside";
-}
