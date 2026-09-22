@@ -11,15 +11,26 @@
        canvas, never about the viewport. */
     .probe { width: var(--w); }
     .column-layout > * { outline: 1px solid; }
+
+    /* The documented form: coordinates on an application class. */
+    .main { --column-span: 8; }
+    .aside { --column-start: 9; --column-span: 4; }
+
+    /* Recomposition overrides the class with one rule of the same shape. */
+    .recomposed .main,
+    .recomposed .aside {
+      --column-start: 1;
+      --column-span: 12;
+    }
   </style>
 </head>
 <body>
   <!-- Auto-placement: no start line anywhere, so peers must flow across the
-       canvas rather than stack. This is what a `1 / -1` default breaks. -->
+       canvas rather than stack. This is what a definite default start breaks. -->
   <div class="probe" style="--w: 1200px">
     <div class="column-layout" data-case="auto-8-4">
-      <section class="column-span-8">a</section>
-      <aside class="column-span-4">b</aside>
+      <section style="--column-span: 8">a</section>
+      <aside style="--column-span: 4">b</aside>
     </div>
   </div>
 
@@ -27,46 +38,65 @@
   <div class="probe" style="--w: 1200px">
     <div class="column-layout" data-case="mixed">
       <h2>head</h2>
-      <div class="column-span-4">1</div>
-      <div class="column-span-4">2</div>
-      <div class="column-span-4">3</div>
+      <div style="--column-span: 4">1</div>
+      <div style="--column-span: 4">2</div>
+      <div style="--column-span: 4">3</div>
     </div>
   </div>
 
-  <!-- start + span: tier 3 must refine tier 2's end line. -->
+  <!-- start + span, from application classes. -->
   <div class="probe" style="--w: 1200px">
     <div class="column-layout" data-case="start-span">
-      <main class="column-span-8">m</main>
-      <aside class="column-span-4 column-start-9">s</aside>
+      <main class="main">m</main>
+      <aside class="aside">s</aside>
     </div>
   </div>
 
   <!-- A start with no span runs to the canvas end, not to line 21. -->
   <div class="probe" style="--w: 1200px">
     <div class="column-layout" data-case="start-only">
-      <aside class="column-start-9">s</aside>
+      <aside style="--column-start: 9">s</aside>
     </div>
   </div>
 
   <!-- Centered article: 2 through 11. -->
   <div class="probe" style="--w: 1200px">
     <div class="column-layout" data-case="centered">
-      <article class="column-span-10 column-start-2">a</article>
+      <article style="--column-start: 2; --column-span: 10">a</article>
     </div>
   </div>
 
   <!-- Sixteen units do not fit twelve: the second region wraps. -->
   <div class="probe" style="--w: 1200px">
     <div class="column-layout" data-case="wrap">
-      <div class="column-span-8">x</div>
-      <div class="column-span-8">y</div>
+      <div style="--column-span: 8">x</div>
+      <div style="--column-span: 8">y</div>
     </div>
   </div>
 
   <!-- Mid-canvas placement. -->
   <div class="probe" style="--w: 1200px">
     <div class="column-layout" data-case="mid">
-      <div class="column-span-4 column-start-3">g</div>
+      <div style="--column-start: 3; --column-span: 4">g</div>
+    </div>
+  </div>
+
+  <!-- Recomposition: the same classes, restacked by one rule. -->
+  <div class="probe" style="--w: 1200px">
+    <div class="column-layout recomposed" data-case="recomposed">
+      <main class="main">m</main>
+      <aside class="aside">s</aside>
+    </div>
+  </div>
+
+  <!-- A nested canvas keeps its own placement in the parent; its children do
+       not inherit those coordinates. -->
+  <div class="probe" style="--w: 1200px">
+    <div class="column-layout" data-case="nested-outer">
+      <section class="column-layout" data-case="nested" style="--column-start: 3; --column-span: 8">
+        <div>full</div>
+        <div style="--column-span: 6">half</div>
+      </section>
     </div>
   </div>
 
@@ -80,8 +110,8 @@
   <!-- Gap utilities are exact here: the track count never reads --gap. -->
   <div class="probe" style="--w: 1200px">
     <div class="column-layout gap-none" data-case="gap-none">
-      <div class="column-span-6">1</div>
-      <div class="column-span-6">2</div>
+      <div style="--column-span: 6">1</div>
+      <div style="--column-span: 6">2</div>
     </div>
   </div>
 
@@ -91,7 +121,7 @@
       const probe = document.createElement("div");
       probe.className = "probe";
       probe.style.setProperty("--w", "1200px");
-      probe.innerHTML = `<div class="column-layout"><div class="column-span-${n}" data-span="${n}">s</div></div>`;
+      probe.innerHTML = `<div class="column-layout"><div style="--column-span: ${n}" data-span="${n}">s</div></div>`;
       spans.append(probe);
     }
 
@@ -101,7 +131,7 @@
       probe.className = "probe";
       probe.style.setProperty("--w", w + "px");
       probe.innerHTML = `<div class="column-layout" data-narrow="${w}">
-        <div class="column-span-8">m</div><div class="column-span-4">s</div>
+        <div style="--column-span: 8">m</div><div style="--column-span: 4">s</div>
       </div>`;
       narrow.append(probe);
     }

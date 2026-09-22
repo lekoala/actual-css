@@ -80,6 +80,8 @@
     }
 
     .unit {
+      --column-span: 1;
+
       padding-block: var(--space-10);
       border-radius: var(--radius);
       background: var(--surface-subtle);
@@ -113,10 +115,20 @@
 
     /* ---- Application-owned recomposition, section 4 ---------------------
        Stack everything below 40rem of container. The simplest contract an
-       author can write, and the one most compositions want. */
+       author can write, and the one most compositions want. The placement
+       lives on classes, not inline, so a rule can recompose it. */
+    .rail {
+      --column-span: 3;
+    }
+
+    .content {
+      --column-span: 6;
+    }
+
     @container (width < 40rem) {
       .stack-all > * {
-        grid-column: 1 / -1;
+        --column-start: 1;
+        --column-span: 12;
       }
     }
 
@@ -124,20 +136,32 @@
        Keep the coordinate system through an intermediate state: 8 + 4 becomes
        6 + 6 before it stacks. A framework threshold could not have guessed
        this, which is the argument for owning it here. */
+    .recompose-main {
+      --column-span: 8;
+    }
+
+    .recompose-aside {
+      --column-start: 9;
+      --column-span: 4;
+    }
+
     @container (width < 48rem) {
       .recompose-main {
-        grid-column: 1 / span 6;
+        --column-start: 1;
+        --column-span: 6;
       }
 
       .recompose-aside {
-        grid-column: 7 / span 6;
+        --column-start: 7;
+        --column-span: 6;
       }
     }
 
     @container (width < 32rem) {
       .recompose-main,
       .recompose-aside {
-        grid-column: 1 / -1;
+        --column-start: 1;
+        --column-span: 12;
       }
     }
   </style>
@@ -175,22 +199,22 @@
             <span>unit <b data-unit>&mdash;</b></span>
           </p>
           <div class="column-layout ruler" aria-hidden="true">
-            <div class="unit column-span-1">1</div>
-            <div class="unit column-span-1">2</div>
-            <div class="unit column-span-1">3</div>
-            <div class="unit column-span-1">4</div>
-            <div class="unit column-span-1">5</div>
-            <div class="unit column-span-1">6</div>
-            <div class="unit column-span-1">7</div>
-            <div class="unit column-span-1">8</div>
-            <div class="unit column-span-1">9</div>
-            <div class="unit column-span-1">10</div>
-            <div class="unit column-span-1">11</div>
-            <div class="unit column-span-1">12</div>
+            <div class="unit">1</div>
+            <div class="unit">2</div>
+            <div class="unit">3</div>
+            <div class="unit">4</div>
+            <div class="unit">5</div>
+            <div class="unit">6</div>
+            <div class="unit">7</div>
+            <div class="unit">8</div>
+            <div class="unit">9</div>
+            <div class="unit">10</div>
+            <div class="unit">11</div>
+            <div class="unit">12</div>
           </div>
           <div class="column-layout">
-            <section class="region column-span-8"><strong>column-span-8</strong>main</section>
-            <aside class="region accent column-span-4"><strong>column-span-4</strong>aside</aside>
+            <section class="region" style="--column-span: 8"><strong>--column-span: 8</strong>main</section>
+            <aside class="region accent" style="--column-span: 4"><strong>--column-span: 4</strong>aside</aside>
           </div>
         </div>
         <p class="cl-note">
@@ -208,7 +232,7 @@
             <p>
               Watch the unit readout as you drag. Eleven gaps are a fixed cost, so
               they take a growing share of a shrinking canvas. Around 280px a unit
-              is roughly 12px and a <code>column-span-4</code> region is 84px.
+              is roughly 12px and a four-unit region is 84px.
               Twelve columns is a wide-context tool; the readout is here to make
               that concrete rather than theoretical.
             </p>
@@ -220,10 +244,10 @@
     <section class="center stack cl-section">
       <h2>2. Unplaced children span the canvas</h2>
       <p class="cl-note">
-        A child with no placement class is a full-width region. A heading, an
+        A child with no coordinates is a full-width region. A heading, an
         intro, or a footer shares the canvas with placed regions without
-        carrying a class of its own &mdash; and a forgotten class stays readable
-        instead of collapsing to one twelfth.
+        setting anything &mdash; and a forgotten span stays readable instead of
+        collapsing to one twelfth.
       </p>
       <div class="stage" data-stage>
         <p class="stage-meter">
@@ -231,25 +255,25 @@
           <span>unit <b data-unit>&mdash;</b></span>
         </p>
         <div class="column-layout">
-          <h3>No class &mdash; full canvas</h3>
-          <div class="region column-span-4"><strong>4</strong></div>
-          <div class="region accent column-span-4"><strong>4</strong></div>
-          <div class="region column-span-4"><strong>4</strong></div>
+          <h3>Nothing set &mdash; full canvas</h3>
+          <div class="region" style="--column-span: 4"><strong>4</strong></div>
+          <div class="region accent" style="--column-span: 4"><strong>4</strong></div>
+          <div class="region" style="--column-span: 4"><strong>4</strong></div>
         </div>
       </div>
       <div class="alert admonition cl-note" role="note">
         <div class="alert-title">
           <i class="ti ti-info-circle" aria-hidden="true"></i>
-          Why the default is a span, not <code>1 / -1</code>
+          Why the default start is <code>auto</code>, not line 1
         </div>
         <div class="alert-body">
           <p>
-            The default is <code>grid-column-end: span 12</code>. Writing it as
-            <code>grid-column: 1 / -1</code> would look equivalent but sets a
-            <em>definite</em> start line on every child, removing them all from
-            column auto-placement. Section 1 would then stack &mdash; both
+            An unset <code>--column-start</code> leaves the start line
+            <code>auto</code>. Defaulting it to line 1 would look equivalent but
+            sets a <em>definite</em> start line on every child, removing them all
+            from column auto-placement. Section 1 would then stack &mdash; both
             regions would resolve to column 1 &mdash; and every composition
-            would need an explicit <code>column-start-*</code>.
+            would need an explicit start.
           </p>
         </div>
       </div>
@@ -268,19 +292,19 @@
           <span>unit <b data-unit>&mdash;</b></span>
         </p>
         <div class="column-layout" style="--gap: var(--space-40)">
-          <article class="region column-span-10 column-start-2">
-            <strong>column-span-10 column-start-2</strong>columns 2&ndash;11
+          <article class="region" style="--column-start: 2; --column-span: 10">
+            <strong>start 2, span 10</strong>columns 2&ndash;11
           </article>
-          <aside class="region accent column-start-9">
-            <strong>column-start-9</strong>no span &mdash; runs to the edge
+          <aside class="region accent" style="--column-start: 9">
+            <strong>start 9</strong>no span &mdash; runs to the edge
           </aside>
-          <div class="region column-span-4 column-start-3">
-            <strong>column-start-3 column-span-4</strong>columns 3&ndash;6
+          <div class="region" style="--column-start: 3; --column-span: 4">
+            <strong>start 3, span 4</strong>columns 3&ndash;6
           </div>
         </div>
       </div>
       <p class="cl-note">
-        A start with no span runs to the end of the canvas, so a single class is
+        A start with no span runs to the end of the canvas, so a start alone is
         always a valid placement. Combining the two is where you have to keep
         the arithmetic inside the canvas.
       </p>
@@ -292,8 +316,7 @@
         <div class="alert-body">
           <p>
             Keep <code>S + N - 1 &le; 12</code>.
-            <code>column-start-9 column-span-4</code> is valid;
-            <code>column-start-10 column-span-4</code> is not.
+            Start 9 with span 4 is valid; start 10 with span 4 is not.
           </p>
           <p>
             Exceeding it adds a thirteenth, content-sized implicit column, and
@@ -314,7 +337,8 @@
       </p>
       <pre><code>@container (width &lt; 40rem) {
   .stack-all &gt; * {
-    grid-column: 1 / -1;
+    --column-start: 1;
+    --column-span: 12;
   }
 }</code></pre>
       <div class="stage container-query" data-stage>
@@ -323,9 +347,9 @@
           <span>stacks below 40rem &mdash; because this page says so</span>
         </p>
         <div class="column-layout stack-all">
-          <div class="region column-span-3"><strong>3</strong></div>
-          <div class="region accent column-span-6"><strong>6</strong></div>
-          <div class="region column-span-3"><strong>3</strong></div>
+          <div class="region rail"><strong>3</strong></div>
+          <div class="region accent content"><strong>6</strong></div>
+          <div class="region rail"><strong>3</strong></div>
         </div>
       </div>
       <p class="cl-note">
@@ -337,9 +361,10 @@
         the rule that needs it.
       </p>
       <p class="cl-note">
-        Placement classes carry zero specificity, so
-        <code>.stack-all &gt; *</code> wins on its own. No
-        <code>!important</code>, and nothing to undo first.
+        The recomposition stays inside the primitive's API: it sets the same two
+        hooks the regions were placed with. The regions carry their placement
+        on classes (<code>.rail</code>, <code>.content</code>) rather than
+        inline, because an inline value would outrank the query.
       </p>
     </section>
 
@@ -356,10 +381,10 @@
           <span>8+4, then 6+6 below 48rem, then stacked below 32rem</span>
         </p>
         <div class="column-layout">
-          <main class="region column-span-8 recompose-main">
+          <main class="region recompose-main">
             <strong>main</strong>8 &rarr; 6 &rarr; 12
           </main>
-          <aside class="region accent column-span-4 column-start-9 recompose-aside">
+          <aside class="region accent recompose-aside">
             <strong>aside</strong>4 &rarr; 6 &rarr; 12
           </aside>
         </div>
@@ -389,7 +414,7 @@
         </li>
         <li>
           <strong>A known peer density</strong> &mdash; <code>.grid-N</code>,
-          not three <code>column-span-4</code> regions.
+          not three four-unit regions.
         </li>
         <li>
           <strong>Peers that must switch together</strong> &mdash;

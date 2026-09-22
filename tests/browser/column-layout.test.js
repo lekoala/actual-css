@@ -1,16 +1,13 @@
 /*
  * Real-browser .column-layout placement contracts, driven over Bun.WebView.
  *
- * The primitive is three zero-specificity tiers separated only by source
- * order, so the geometry here is the guard against a silent reorder:
+ * One child rule reads --column-start and --column-span. The four placements
+ * it must produce — neither, span only, start only, both — are asserted here,
+ * with the two hooks set inline and from application classes.
  *
- *   tier 1  the child reset      auto-placed, spanning the whole canvas
- *   tier 2  .column-start-N      a definite start line, running to the end
- *   tier 3  .column-span-N       the end only, refining either of the above
- *
- * The auto-placement case is the one that fails if tier 1 ever regresses to
- * `grid-column: 1 / -1`: a definite start line on every child removes them
- * all from column auto-placement, and an 8 + 4 pair stacks instead.
+ * The auto-placement case is the one that fails if the start ever stops
+ * defaulting to `auto`: a definite start line on every child removes them all
+ * from column auto-placement, and an 8 + 4 pair stacks instead.
  *
  * Every canvas sits in a fixed-width wrapper, so a passing test proves the
  * placement follows the twelve tracks of the canvas rather than the viewport.
@@ -103,20 +100,51 @@ it("a span refines the end line a start leaves at the canvas edge", async () => 
     async (view) => {
       await setViewport(view, WIDE_VIEWPORT);
 
-      /* Tier 3 after tier 2: start 9 + span 4 is columns 9-12, not 9-12 by
-         accident of the canvas ending there — `mid` proves the refinement. */
+      /* start 9 + span 4 is columns 9-12, not 9-12 by accident of the canvas
+         ending there — `mid` proves the span is honored. */
       expect((await readCase(view, "start-span")).items).toEqual([
         { startLine: 1, span: 8 },
         { startLine: 9, span: 4 },
       ]);
       expect((await readCase(view, "mid")).items).toEqual([{ startLine: 3, span: 4 }]);
 
-      /* A start with no span runs to the canvas end. Setting grid-column-start
-         alone would leave tier 1's `span 12` and place this at lines 9-21. */
+      /* A start with no span runs to the canvas end. A fixed `span 12` default
+         would place this at lines 9-21. */
       expect((await readCase(view, "start-only")).items).toEqual([{ startLine: 9, span: 4 }]);
       expect((await readCase(view, "centered")).items).toEqual([{ startLine: 2, span: 10 }]);
     },
     { artifactName: "column-layout-start" },
+  );
+});
+
+it("one class rule recomposes a placement without leaving the hooks", async () => {
+  await withBrowserPage(
+    fixtureUrl(FIXTURE),
+    async (view) => {
+      await setViewport(view, WIDE_VIEWPORT);
+      expect((await readCase(view, "recomposed")).items).toEqual([
+        { startLine: 1, span: 12 },
+        { startLine: 1, span: 12 },
+      ]);
+    },
+    { artifactName: "column-layout-recomposed" },
+  );
+});
+
+it("a nested canvas keeps its own placement and does not pass it down", async () => {
+  await withBrowserPage(
+    fixtureUrl(FIXTURE),
+    async (view) => {
+      await setViewport(view, WIDE_VIEWPORT);
+      expect((await readCase(view, "nested-outer")).items).toEqual([{ startLine: 3, span: 8 }]);
+      /* Without the per-child reset, both children would inherit start 3 /
+         span 8 from the nested canvas they sit in. */
+      expect((await readCase(view, "nested")).items).toEqual([
+        { startLine: 1, span: 12 },
+        { startLine: 1, span: 6 },
+      ]);
+    },
+    { artifactName: "column-layout-nested" },
   );
 });
 
