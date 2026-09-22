@@ -53,6 +53,7 @@
         "button",
         "card",
         "chat",
+        "close",
         "dialog",
         "drawer",
         "data-list",

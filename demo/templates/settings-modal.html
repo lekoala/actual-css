@@ -51,7 +51,7 @@
       block-size: min(36rem, 100%);
     }
 
-    /* .dialog-close and .drawer-close deliberately share one top/end model, so
+    /* The dialog corner .close keeps one top/end model for every dialog, so
        putting the close control over a left rail is this dialog's call. Both
        axes move, not just the side: the component's --space-20 inset assumes
        a corner with nothing aligned under it, where 8px reads fine against
@@ -59,7 +59,7 @@
        inset by 12px and the two start edges disagree by 4px, which is what
        the eye picks up. On the rail's inset the button lines up with its
        column and clears the corner curve. */
-    .settings-modal > .dialog-close {
+    .settings-modal > .close {
       inset-block-start: var(--settings-rail-inset);
       inset-inline: var(--settings-rail-inset) auto;
     }
@@ -220,7 +220,7 @@
   </main>
 
   <dialog class="modal settings-modal" id="settings-modal" closedby="any" aria-label="Settings">
-    <button class="dialog-close" type="button" commandfor="settings-modal" command="request-close"
+    <button class="close" type="button" commandfor="settings-modal" command="request-close"
             aria-controls="settings-modal" aria-label="Close settings"></button>
 
     <div class="settings-body">

@@ -8,6 +8,7 @@ Small layout corrections for controls, labels, and compact rails.
 | ------------------------- | ------- | ----------------------------------------- |
 | `.fit`                    | Utility | Shrinks an element to its content width.  |
 | `.text-nowrap`            | Utility | Keeps text on one line.                   |
+| `.text-wrap`              | Utility | Restores wrapping under a nowrap parent.  |
 | `.truncate`               | Utility | Ellipsizes overflowing single-line text.  |
 | `.scroller`               | Layout  | Theme-aware scrollbar density and colour. |
 | `.scroller.stable-gutter` | Variant | Reserves inline-axis scrollbar gutter.    |
@@ -22,9 +23,10 @@ Use `.fit` when a control or element should shrink to its content instead of fil
 </select>
 ```
 
-Use `.text-nowrap` to keep text on one line inside a cell or label. To stop a
-layout primitive from wrapping — for example to force a `.cluster` onto a single
-row — set `--cluster-wrap: nowrap`.
+Use `.text-nowrap` to keep text on one line inside a cell or label, and
+`.text-wrap` to let a long label wrap inside a component that keeps its text on
+one line (`.badge`). To stop a layout primitive from wrapping — for example to
+force a `.cluster` onto a single row — set `--cluster-wrap: nowrap`.
 
 ```html demo
 <div class="cluster compact" style="--cluster-wrap: nowrap;">

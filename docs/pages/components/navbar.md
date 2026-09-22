@@ -94,7 +94,7 @@ accessible name.
   <header>
     <strong>Menu</strong>
     <form method="dialog">
-      <button class="drawer-close" type="submit" aria-label="Close navigation"></button>
+      <button class="close" type="submit" aria-label="Close navigation"></button>
     </form>
   </header>
 

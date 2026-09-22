@@ -6,10 +6,10 @@
 
 ## Class reference
 
-| Class           | Kind      | Description                                                |
-| --------------- | --------- | ---------------------------------------------------------- |
-| `.drawer`       | Component | Modal side-sheet built on the native `<dialog>` element.   |
-| `.drawer-close` | Component | Icon-only close button that sits inside the drawer header. |
+| Class     | Kind        | Description                                              |
+| --------- | ----------- | -------------------------------------------------------- |
+| `.drawer` | Component   | Modal side-sheet built on the native `<dialog>` element. |
+| `.close`  | Composition | Icon-only close button, at the top end.                  |
 
 ## Usage
 
@@ -56,7 +56,7 @@ your intended target `autofocus`; otherwise the body claims initial focus.
     <strong>Menu</strong>
 
     <form method="dialog">
-      <button class="drawer-close" type="submit" aria-label="Close navigation"></button>
+      <button class="close" type="submit" aria-label="Close navigation"></button>
     </form>
   </header>
 
@@ -96,7 +96,7 @@ actions and the close button can close the drawer.
   <form method="dialog">
     <header>
       <strong>Settings</strong>
-      <button class="drawer-close" type="submit" aria-label="Close settings"></button>
+      <button class="close" type="submit" aria-label="Close settings"></button>
     </header>
 
     <div class="stack">
@@ -123,6 +123,6 @@ useful for drawers that should not be dismissed accidentally.
 
 - `--drawer-size` — panel width.
 - `--drawer-pad` — panel padding.
-- `--control-size` — size of the `.drawer-close` button. The drawer header
-  reserves `calc(var(--control-size) + var(--space-30))` on its inline end so
-  the title never runs under the close.
+- `--close-size` / `--close-icon-size` — size of the corner [`.close`](close.md)
+  and of its X. The header reserves the close size plus `--space-30` on its
+  inline end so the title never runs under it.

@@ -17,8 +17,9 @@
  * --drawer-size
  * --drawer-pad
  *
+ * The corner close control is .close (components/close.css).
+ *
  * Internal:
- * --drawer-close-icon-size
  * --drawer-closed-translate (side/RTL positioning state)
  * --drawer-focus-bleed
  * --drawer-motion-duration (shared by panel and ::backdrop so exit duration
@@ -128,10 +129,10 @@
 /* The body region absorbs the panel's height and scrolls. A drawer is a
    full-height shell by definition, so it always scrolls its body — unlike the
    modal, which sizes to its content and opts in with .scrollable. Header and
-   footer keep their own tracks; .drawer-close is named because a generic
+   footer keep their own tracks; .close is named because a generic
    exclusion list is easier to trust than its `position: absolute`. */
-:where(dialog).drawer > :not(:is(header, footer, form, .drawer-close)),
-:where(dialog).drawer > form > :not(:is(header, footer, .drawer-close)) {
+:where(dialog).drawer > :not(:is(header, footer, form, .close)),
+:where(dialog).drawer > form > :not(:is(header, footer, .close)) {
   --drawer-focus-bleed: calc(var(--focus-outline-offset) + var(--border-width) * 2);
 
   min-block-size: 0;
@@ -208,55 +209,5 @@
    control. */
 :where(dialog).drawer > header,
 :where(dialog).drawer > form > header {
-  padding-inline-end: calc(var(--control-size) + var(--space-30));
-}
-
-/* Close control, owned here so a drawer-only build does not depend on
-   modal.css. Mirrors the modal's .dialog-close placement: absolute at the
-   panel's top inline-end, out of the content flow. */
-.drawer-close {
-  --drawer-close-icon-size: 1rem;
-
-  display: inline-grid;
-  place-items: center;
-  padding: 0;
-  border: 0;
-  border-radius: var(--radius);
-  color: var(--text-muted);
-  cursor: pointer;
-
-  position: absolute;
-  z-index: 1;
-  inset-block-start: var(--space-20);
-  inset-inline-end: var(--space-20);
-
-  inline-size: var(--control-size);
-  block-size: var(--control-size);
-
-  background: var(--surface-subtle);
-}
-
-.drawer-close::before {
-  content: "";
-  inline-size: var(--drawer-close-icon-size);
-  block-size: var(--drawer-close-icon-size);
-  background: currentColor;
-  -webkit-mask: var(--icon-close) center / contain no-repeat;
-  mask: var(--icon-close) center / contain no-repeat;
-}
-
-@media (hover: hover) {
-  .drawer-close:hover {
-    box-shadow: inset 0 0 0 999px var(--hover-overlay);
-    color: var(--text);
-  }
-}
-
-.drawer-close:active {
-  box-shadow: inset 0 0 0 999px var(--hover-overlay);
-}
-
-.drawer-close:focus-visible {
-  outline: 2px solid transparent;
-  box-shadow: var(--focus-ring-shadow);
+  padding-inline-end: calc(var(--close-size, var(--control-size)) + var(--space-30));
 }

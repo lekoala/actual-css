@@ -134,7 +134,7 @@ it("close button closes, restores focus, and keeps the scroll position", async (
     const y0 = await scrollTo1200(evalIn);
     await evalIn("document.getElementById('open-dismissible').click()");
     await settle();
-    await evalIn("document.querySelector('#dlg-dismissible .dialog-close').click()");
+    await evalIn("document.querySelector('#dlg-dismissible .close').click()");
     await settle();
 
     const state = await snapshot("dlg-dismissible");
@@ -193,7 +193,7 @@ it("a prevented actual:dialog-cancel keeps the dialog open", async () => {
     // A close button goes through requestClose(), whose cancel event is
     // cancelable — unlike Chrome's closedby-driven Escape close. The contract
     // (preventable actual:dialog-cancel) is exercised on this path.
-    await evalIn("document.querySelector('#dlg-nondismiss .dialog-close').click()");
+    await evalIn("document.querySelector('#dlg-nondismiss .close').click()");
     await settle();
     const report = await evalIn(
       "({ seen: window.__seen, open: document.getElementById('dlg-nondismiss').open })",
@@ -392,7 +392,7 @@ it("drawer: scroll preserved, close button and Escape close, backdrop gated by d
     expect(state.open).toBe(true);
     expect(state.staticClass).toBe(true);
 
-    await evalIn("document.querySelector('#drawer .drawer-close').click()");
+    await evalIn("document.querySelector('#drawer .close').click()");
     await settle();
     state = await snapshot("drawer");
     expect(state.open).toBe(false);

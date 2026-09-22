@@ -36,7 +36,6 @@
     "classes": [
       "admonition",
       "alert",
-      "alert-dismiss",
       "callout"
     ],
     "publicHooks": [
@@ -45,7 +44,6 @@
       "--alert-font-size",
       "--alert-radius",
       "--alert-icon-size",
-      "--alert-dismiss-size",
       "--alert-border-inline-start-color",
       "--alert-border-inline-start-width"
     ],
@@ -55,8 +53,7 @@
       "--alert-default-border",
       "--alert-bg",
       "--alert-fg",
-      "--alert-border",
-      "--alert-dismiss-icon-size"
+      "--alert-border"
     ]
   },
   {
@@ -116,8 +113,7 @@
       "--badge-font-size",
       "--badge-icon-size",
       "--badge-dot-size",
-      "--badge-radius",
-      "--badge-dismiss-icon-size"
+      "--badge-radius"
     ],
     "internalHooks": [
       "--badge-default-bg",
@@ -260,6 +256,18 @@
     ]
   },
   {
+    "name": "close",
+    "source": "src/css/components/close.css",
+    "cssImport": "actual-css/css/components/close",
+    "classes": [
+      "close"
+    ],
+    "publicHooks": [
+      "--close-size",
+      "--close-icon-size"
+    ]
+  },
+  {
     "name": "data-list",
     "source": "src/css/components/data-list.css",
     "cssImport": "actual-css/css/components/data-list",
@@ -274,7 +282,6 @@
     "cssImport": "actual-css/css/components/drawer",
     "classes": [
       "drawer",
-      "drawer-close",
       "is-static"
     ],
     "publicHooks": [
@@ -282,7 +289,6 @@
       "--drawer-pad"
     ],
     "internalHooks": [
-      "--drawer-close-icon-size",
       "--drawer-closed-translate",
       "--drawer-focus-bleed",
       "--drawer-motion-duration"
@@ -448,7 +454,6 @@
     "source": "src/css/components/modal.css",
     "cssImport": "actual-css/css/components/modal",
     "classes": [
-      "dialog-close",
       "dialog-confirmation",
       "dialog-icon",
       "had-scrollbar",
@@ -464,7 +469,6 @@
       "--dialog-icon-glyph-size"
     ],
     "internalHooks": [
-      "--dialog-close-icon-size",
       "--dialog-focus-bleed",
       "--dialog-viewport-block",
       "--dialog-viewport-gap-default",

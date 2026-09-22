@@ -108,9 +108,6 @@
 
 .docs-drawer-header {
   margin-block-end: var(--space-30);
-  /* The close button is absolutely positioned against the drawer; reserve
-     inline room so the title never runs under it. */
-  padding-inline-end: calc(var(--control-size) + var(--space-30));
 }
 
 /* --- Content --- */

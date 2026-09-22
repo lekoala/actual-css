@@ -177,21 +177,20 @@ Override the existing hooks when the three-step scale does not fit the content.
 
 ## Removable tag pattern
 
-Use `.badge soft` for tag visuals. Add a direct dismiss button only when the tag can actually be removed. There is no separate chip component.
+Use `.badge soft` for tag visuals. Add a direct [`.close`](close.md) button only when the tag can actually be removed. There is no separate chip component.
 For a compact action or filter, use `.btn.sm` instead; badges describe content
 and must not be turned into toggle controls merely to obtain a compact shape.
 
-Leave the dismiss button empty: it paints its own X, so the pattern needs no
-icon font and no text glyph. Put your own icon inside it and that content is
-used instead.
+Inside a badge the close follows the pill's size, keeps a 24px pointer target,
+and tucks into the padding.
 
 ```html demo
 <span class="badge primary soft">
   Design
-  <button type="button" aria-label="Remove Design"></button>
+  <button class="close" type="button" aria-label="Remove Design"></button>
 </span>
 <span class="badge primary soft">
-  <button type="button" aria-label="Remove Design"></button>
+  <button class="close" type="button" aria-label="Remove Design"></button>
   Design
 </span>
 ```
@@ -204,4 +203,4 @@ used instead.
 - `--badge-font-size` — label font size.
 - `--badge-icon-size` — decorative child size; `1em` follows the label by default.
 - `--badge-pad-x` — inline padding. Derived from `--badge-size`, so it stays proportional to the pill; set it to opt out.
-- `--badge-dismiss-icon-size` — size of the X painted by an empty dismiss button.
+- `--close-size` / `--close-icon-size` — the badge declares them for its `.close`; set them on the badge to change them.

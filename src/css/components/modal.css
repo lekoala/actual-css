@@ -12,8 +12,9 @@
  * --dialog-icon-size
  * --dialog-icon-glyph-size
  *
+ * The corner close control is .close (components/close.css).
+ *
  * Internal:
- * --dialog-close-icon-size
  * --dialog-focus-bleed
  * --dialog-viewport-block
  * --dialog-viewport-gap-default
@@ -126,7 +127,7 @@
    The form/.stack anatomy is structural, so it stays in :where() and never
    lends .stack's specificity to a bare <form>. */
 :where(dialog).modal > :where(form, .stack) > header {
-  padding-inline-end: calc(var(--control-size) + var(--space-30));
+  padding-inline-end: calc(var(--close-size, var(--control-size)) + var(--space-30));
 }
 
 :where(dialog).modal > :where(form, .stack) > footer {
@@ -288,57 +289,4 @@ html.has-modal-open.had-scrollbar {
   70% {
     transform: translateX(0.35rem);
   }
-}
-
-/* Close control. A close button is an action attached to a surface, so it
-   never participates in the content flow — absolute at the panel's top
-   inline-end, inside the surface. The glyph comes from --icon-close, masked to
-   currentColor, so no icon font or text glyph is required in the markup. */
-.dialog-close {
-  --dialog-close-icon-size: 1rem;
-
-  display: inline-grid;
-  place-items: center;
-  padding: 0;
-  border: 0;
-  border-radius: var(--radius);
-  color: var(--text-muted);
-  cursor: pointer;
-
-  /* Out of flow, anchored to the positioned dialog surface, not the header or
-     any scroll container inside it. */
-  position: absolute;
-  z-index: 1;
-  inset-block-start: var(--space-20);
-  inset-inline-end: var(--space-20);
-
-  inline-size: var(--control-size);
-  block-size: var(--control-size);
-
-  background: var(--surface-subtle);
-}
-
-.dialog-close::before {
-  content: "";
-  inline-size: var(--dialog-close-icon-size);
-  block-size: var(--dialog-close-icon-size);
-  background: currentColor;
-  -webkit-mask: var(--icon-close) center / contain no-repeat;
-  mask: var(--icon-close) center / contain no-repeat;
-}
-
-@media (hover: hover) {
-  .dialog-close:hover {
-    box-shadow: inset 0 0 0 999px var(--hover-overlay);
-    color: var(--text);
-  }
-}
-
-.dialog-close:active {
-  box-shadow: inset 0 0 0 999px var(--hover-overlay);
-}
-
-.dialog-close:focus-visible {
-  outline: 2px solid transparent;
-  box-shadow: var(--focus-ring-shadow);
 }
