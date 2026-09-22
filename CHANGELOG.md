@@ -9,6 +9,7 @@
 - A removable badge needs `<button class="close">`: a bare `.badge > button` is no longer styled, and an empty one no longer paints an X.
 - `--alert-dismiss-size` and `--badge-dismiss-icon-size` are replaced by `--close-size` / `--close-icon-size`.
 - The dialog corner applies to a `.close` that is a direct child of the dialog, of its `form` or `header`, or of a `form` inside that header.
+- `getSurfaceAutoClose` is removed from `surface.js`: it had no caller, and the code that opens a surface passes its own `autoClose`.
 - `.column-span-1…12` and `.column-start-1…12` are replaced by the `--column-span` / `--column-start` hooks on each `.column-layout` child.
 ### Added
 
