@@ -116,7 +116,7 @@ The end marker is a shared token-based chevron; swapping it for a local icon is 
 ## CSS hooks
 
 - `--accordion-radius` — outer corner radius.
-- `--accordion-pad` — inset of the summary row and the panel. The panel relays it as `--surface-pad`, so a direct `.bleed` child of the panel reaches the item edge; `.flush` drops the inline half and the relay with it.
+- `--accordion-pad` — inset of the summary row and the panel. The panel relays it as `--surface-pad`, so a direct `.bleed` child of the panel reaches the item's sides and bottom corners (never the summary); `.flush` drops the inline half and the relay with it.
 - `--accordion-marker-color` — color of the end marker; it reinforces to the summary text color on hover, and forced-colors mode overrides it to `CanvasText`.
 - `--accordion-marker-size` — edge length of the end marker.
 
@@ -125,8 +125,10 @@ The end marker is a shared token-based chevron; swapping it for a local icon is 
 The marker is a masked box: `--accordion-marker-color` fills it and the chevron
 mask clips it to the glyph. A background, ring, or shadow set on it is clipped
 to the same silhouette, so a decorated marker — a chevron inside a pill — has
-to be a real element. Hide the built-in one and place your own; the open state
-is `details[open]`, and `--icon-chevron` is the shared asset:
+to be a real element: hide the built-in one and put a
+`<span class="marker" aria-hidden="true"></span>` at the end of the summary. The
+pill is the span; the chevron is its pseudo-element, which reads the same color
+hook, so the hover reinforcement and the forced-colors `CanvasText` carry over:
 
 ```css
 .accordion.custom-marker summary::after {
@@ -134,11 +136,26 @@ is `details[open]`, and `--icon-chevron` is the shared asset:
 }
 
 .accordion.custom-marker .marker {
+  display: grid;
+  place-items: center;
   margin-inline-start: auto;
+  padding: var(--space-10);
   border-radius: 50%;
   background: var(--surface-subtle);
-  padding: var(--space-10);
   transition: transform var(--duration);
+}
+
+.accordion.custom-marker .marker::before {
+  content: "";
+  inline-size: var(--accordion-marker-size);
+  block-size: var(--accordion-marker-size);
+  background-color: var(--accordion-marker-color);
+  -webkit-mask: var(--icon-chevron) center / contain no-repeat;
+  mask: var(--icon-chevron) center / contain no-repeat;
+}
+
+.accordion.custom-marker summary:hover .marker {
+  --accordion-marker-color: currentColor;
 }
 
 .accordion.custom-marker details[open] .marker {

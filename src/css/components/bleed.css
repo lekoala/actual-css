@@ -21,9 +21,12 @@
  * element — a direct child of a surface nested inside another surface. That
  * child must keep the inner surface's inset, so the relay has to win.
  *
+ * Public hooks:
+ * --bleed-pad (read-only: the inset relayed to a surface's direct children;
+ *   pad a band that is not a header/footer/figure with it)
+ *
  * Framework plumbing:
  * --surface-pad (declared by the surface)
- * --bleed-pad (relayed to its direct children)
  */
 :where(.card, .drawer, .accordion details > summary + *) > * * {
   --bleed-pad: initial;

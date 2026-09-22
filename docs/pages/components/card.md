@@ -68,6 +68,16 @@ accordion pads. A surface joins that contract by declaring `--surface-pad`.
 The child combinator is load-bearing — a `.bleed` deeper than one level stays
 inert rather than escaping a box it does not sit against.
 
+A `header`, `footer`, or `figure` band keeps the surface's padding; any other
+band (a status row, a notice strip) reads the same inset from `--bleed-pad`,
+which every direct child of a surface receives:
+
+```css
+.status-row {
+  padding: var(--bleed-pad);
+}
+```
+
 ```html demo
 <div style="max-inline-size: 32rem">
   <article class="card stack">

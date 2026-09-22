@@ -27,7 +27,7 @@ A hook is only defined inside the scope that declares it. Reading one outside th
 | Component | the component's base rule   | `--card-pad`, `--drawer-size`          |
 | Relay     | a variant, state, or script | `--ui-bg`, `--intent`, `--surface-pad` |
 
-Global tokens are the ones to reach for in application CSS. When you do want a component token outside its component — matching a bare block to the card rhythm, say — give `var()` the default explicitly, so the declaration survives where the hook is absent:
+Global tokens are the ones to reach for in application CSS. Write a relay only to override what a variant sets on one element (Button · Variants); read one only where its owner documents it (`--bleed-pad`). When you do want a component token outside its component — matching a bare block to the card rhythm, say — give `var()` the default explicitly, so the declaration survives where the hook is absent:
 
 ```css
 .panel {
@@ -482,7 +482,7 @@ Rules:
 
 Themes override tokens, not selectors. The themes in `src/css/themes/` are repository-only demo examples, not included in the default stylesheet or the npm package; they exist to show valid ways to use this contract, such as `ocean`, `square`, `cyberpunk`, and `brutalist`.
 
-A minimal recolor theme overrides the intent pairs, surfaces, text colors, border, focus, and hover overlay. In browsers with `color-mix()` support, the core derives `--focus-ring` from the island's `--focus`; override the ring only for a deliberate visual treatment or when a matching pre-`color-mix()` fallback is required.
+A minimal recolor theme overrides the intent pairs, surfaces, text colors, border, focus, hover overlay, and shadow color. In browsers with `color-mix()` support, the core derives `--focus-ring` from the island's `--focus`; override the ring only for a deliberate visual treatment or when a matching pre-`color-mix()` fallback is required.
 
 When overriding an intent color, review its paired `--*-fg` and `--*-soft-fg`. A theme that declares no hook falls back to the `--soft-fg-mix` derivation: one global percentage applied to every role, so it carries no contrast guarantee for a palette it was not tuned against. `bun run report:theme-contrast` prints the resting and hovered soft pair for every intent of every island, which is how a theme finds the roles that need a hook or a lower `--soft-fg-mix`.
 
@@ -527,6 +527,7 @@ A minimal recolor theme (illustrative, not a shipped theme):
   --border: hsl(260 24% 84%);
   --focus: var(--primary);
   --hover-overlay: hsl(260 30% 10% / 0.04);
+  --shadow-color: hsl(260 30% 10%);
   --soft-bg-mix: 84%;
   --soft-border-mix: 58%;
 

@@ -114,10 +114,12 @@ surface variants (`.card.subtle`) still take precedence.
 
 ### Replace the palette with my own brand
 
-Override the whole theme contract, not just `--primary`. The neutral ramp
-(`--surface-subtle`, `--border`, `--text-muted`, `--text-subtle`) is curated per
-role and tinted toward the default primary; it is never derived from `--primary`
-at runtime, so a partial override leaves the default identity in the greys.
+Override the whole minimal recolor set (Tokens · Theme contract), not just
+`--primary`. Every neutral of the default theme — surfaces, text, border,
+`--neutral`, `--hover-overlay`, `--shadow-color` — is tinted toward the default
+primary and never derived from `--primary` at runtime, so a partial override
+leaves the default identity in the greys. `report:theme-contrast` checks
+contrast, not a leftover tint.
 
 Soft ink is the other half. The default palette ships calibrated
 `--*-soft-fg` hooks; any other theme falls back to the `--soft-fg-mix`
