@@ -94,7 +94,11 @@ Add relevant guards for future-us when needed based on traps and discoveries.
   creates the tag — a release stops at the version commit (dated changelog
   section, bumped `package.json`, rebuilt artifacts). Do not tag and do not
   publish to npm. Read the format from `git ls-remote --tags github`, not from
-  the local tag list, which can hold a stray a push never carried.
+  the local tag list, which can hold a stray a push never carried. `.npmrc`
+  keeps `npm version <patch|minor|major>` on that format, and pushing the tag
+  is what publishes the GitHub release (CI job `release`), so the changelog
+  section must be dated and complete before the tag moves — preview it with
+  `bun run release:notes`.
 - Resolve designs toward the system before transcribing them. Prefer an existing
   token or primitive when it is a close match. Use a public component hook for
   intentional local deviations. Add application CSS only when the difference is
