@@ -18,6 +18,12 @@
  */
 .field {
   display: grid;
+
+  /* why: a field stretched by a taller row sibling — the classic case is a
+     neighbour revealing its .field-error — would otherwise hand the extra
+     block size to its auto rows and inflate the control. Rows keep their
+     natural height; the slack stays at the end. */
+  align-content: start;
   gap: var(--space-10);
   color: var(--text);
   font-size: var(--control-font-size);
