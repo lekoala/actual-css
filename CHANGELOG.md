@@ -13,6 +13,8 @@
 ### Fixed
 
 - A last `.bleed` child of an accordion panel had square corners over the rounded `.separated` item or the group's last item.
+- `applyEnhancement("validation", …)` did not wire an already-connected form: `validation.js` now registers through `registerEnhancement`.
+- `--app-nav-side-size` was invisible to `check:css-api` (header read `Public hook:`).
 - A custom `data-theme` on `<html>` kept the default palette's `--*-soft-fg` calibration instead of resetting it, so the same theme resolved a different soft ink on `<html data-theme>` than on a nested island.
 
 ### Documentation and tooling
@@ -23,6 +25,11 @@
 - Tokens: a "Where a token is declared" section separates global, component-scoped, and relay properties, and shows the `var(--card-pad, <default>)` form for reading a component hook from outside.
 - Button: `--ui-bg` is the lever for an opaque fill under an intent-colored border, which no shared variant expresses; the rule must load after Actual CSS.
 - Accordion: the marker is a masked box, so a decorated marker needs a real element — the opt-out recipe paints the chevron and keeps the hover and forced-colors behavior.
+- `llms.txt` lists the four `data-enhance` tokens and what the vocabulary does not have (compound intents, breakpoint prefixes, spacing scale, `is-*`, standalone modifiers).
+- `parseHookSections` throws on a near-miss section label (`Public hook:`) instead of silently dropping the hooks under it.
+- `components.json`: an entry no longer lists another component's class it only styles (`bleed` → `card`), and `plumbingHooks` carries the "Framework plumbing:" section.
+- Progressive enhancement guide: built-in `data-*` behaviors expose no `refresh()`; insert the element with its attribute set.
+- `utilities/extra.css` header no longer calls extra utilities non-API.
 
 
 ## [0.9.2] - 2026-09-22

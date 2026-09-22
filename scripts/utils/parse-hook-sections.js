@@ -6,7 +6,13 @@
  * A section ends at the next label-like line ("Child contract:",
  * "JS target contract:" — a label with a trailing colon). Lines without one
  * ("Intent boundary —" has no colon) stay in the active section.
+ *
+ * A near miss of the three labels ("Public hook:", "internal:") throws: it
+ * would otherwise end the previous section and hide its hooks from every
+ * consumer, silently — app-layout.css shipped one.
  */
+
+const NEAR_MISS = /^(public hooks?|framework plumbing|internal)\s*:?$/i;
 
 export function parseHookSections(css) {
   const sections = { public: [], internal: [], plumbing: [] };
@@ -28,6 +34,11 @@ export function parseHookSections(css) {
       if (/^Internal:$/.test(line)) {
         active = "internal";
         continue;
+      }
+      if (NEAR_MISS.test(line)) {
+        throw new Error(
+          `Hook section label "${line}" must be exactly "Public hooks:", "Framework plumbing:", or "Internal:".`,
+        );
       }
       if (active && /^[A-Za-z][A-Za-z -]*:$/.test(line)) {
         active = null; // next section (e.g. "Child contract:")

@@ -139,13 +139,13 @@
     "source": "src/css/components/bleed.css",
     "cssImport": "actual-css/css/components/bleed",
     "classes": [
-      "accordion",
-      "bleed",
-      "card",
-      "drawer"
+      "bleed"
     ],
     "publicHooks": [
       "--bleed-pad"
+    ],
+    "plumbingHooks": [
+      "--surface-pad"
     ]
   },
   {
@@ -282,6 +282,7 @@
       "--drawer-pad"
     ],
     "internalHooks": [
+      "--drawer-close-icon-size",
       "--drawer-closed-translate",
       "--drawer-focus-bleed",
       "--drawer-motion-duration"

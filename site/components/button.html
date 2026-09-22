@@ -298,6 +298,8 @@ component with shared variants reads, so the same declaration works on a badge:<
   --ui-bg: var(--surface);
 }
 </code></pre>
+<p>The rule ties with the variant's own <code>--ui-bg</code> on specificity, so load it after
+Actual CSS or import <code>actual.layer.css</code>.</p>
 <p>Transparent treatments (<code>.outline</code>, <code>.ghost</code>, <code>.link</code>) follow the surrounding
 foreground by default, including on a contrasting <code>.inverted</code> surface. A local
 intent class still wins: <code>.danger.outline</code> uses the danger color in either

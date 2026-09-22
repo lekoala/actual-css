@@ -255,7 +255,10 @@ actions use a single delegated click listener instead; triggers and targets are
 never tracked.</p>
 <p><code>enhance()</code> observes DOM insertions and removals, not attribute changes. If an
 already-connected element receives a behavior attribute later, call the returned
-<code>refresh(node)</code> handle. Behavior attributes are setup-time contracts: removing
+<code>refresh(node)</code> handle of your own <code>enhance()</code>, or <code>applyEnhancement()</code> for a
+<code>data-enhance</code> token. The built-in <code>data-*</code> behaviors (<code>data-mask</code>,
+<code>data-filter</code>, …) expose no handle: insert the element with the attribute
+already set. Behavior attributes are setup-time contracts: removing
 one does not disconnect an active behavior. If an application needs a live
 enable/disable switch, keep that state inside its enhancer and clean it up when
 the element leaves the DOM.</p>

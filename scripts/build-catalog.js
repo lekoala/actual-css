@@ -15,12 +15,14 @@
  *                   `./css/components/*` export — the modular import path.
  *   classes         classes a rule in the file *styles*: the leftmost compound
  *                   of each selector (`subjectClasses`), minus the shared
- *                   intent/variant vocabulary (see below). Sub-element classes
- *                   that never lead a compound are not listed.
- *   publicHooks / internalHooks — the "Public hooks:" / "Internal:" header
- *                   sections, parsed with the same contract check:css-api
- *                   enforces. No new annotation; the section list is the
- *                   contract.
+ *                   intent/variant vocabulary (see below) and minus another
+ *                   component's name — `bleed` styles `.card > *` but does not
+ *                   provide `.card`. Sub-element classes that never lead a
+ *                   compound are not listed.
+ *   publicHooks / plumbingHooks / internalHooks — the "Public hooks:" /
+ *                   "Framework plumbing:" / "Internal:" header sections,
+ *                   parsed with the same contract check:css-api enforces. No
+ *                   new annotation; the section list is the contract.
  *   states          state attributes and pseudo-classes the CSS selects on:
  *                   aria-* plus {hidden, open}, and the curated state
  *                   pseudo-classes {checked, disabled, indeterminate,
@@ -129,6 +131,7 @@ export async function buildCatalog(root) {
   const files = (await readdir(componentsDir)).filter(
     (file) => file.endsWith(".css") && file !== "index.css",
   );
+  const componentNames = new Set(files.map((file) => file.slice(0, -4)));
 
   const catalog = await Promise.all(
     files.map(async (file) => {
@@ -138,7 +141,8 @@ export async function buildCatalog(root) {
       const classes = new Set();
       for (const prelude of selectorPreludes(stripComments(css))) {
         for (const cls of preludeClasses(prelude)) {
-          if (reserved.has(cls) && !shared.has(cls)) classes.add(cls);
+          const foreign = cls !== name && componentNames.has(cls);
+          if (reserved.has(cls) && !shared.has(cls) && !foreign) classes.add(cls);
         }
       }
 
@@ -150,6 +154,7 @@ export async function buildCatalog(root) {
       };
       if (classes.size) entry.classes = [...classes].sort();
       if (hooks.public.length) entry.publicHooks = hooks.public;
+      if (hooks.plumbing.length) entry.plumbingHooks = hooks.plumbing;
       if (hooks.internal.length) entry.internalHooks = hooks.internal;
       const states = stateNames(css);
       if (states.length) entry.states = states;

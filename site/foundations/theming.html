@@ -273,10 +273,12 @@ surfaces — must use another palette. More specific component states or explici
 surface variants (<code>.card.subtle</code>) still take precedence.</p>
 <p>→ Components · Card · Foundations · Tokens (theme contract)</p>
 <h3 id="replace-the-palette-with-my-own-brand">Replace the palette with my own brand</h3>
-<p>Override the whole theme contract, not just <code>--primary</code>. The neutral ramp
-(<code>--surface-subtle</code>, <code>--border</code>, <code>--text-muted</code>, <code>--text-subtle</code>) is curated per
-role and tinted toward the default primary; it is never derived from <code>--primary</code>
-at runtime, so a partial override leaves the default identity in the greys.</p>
+<p>Override the whole minimal recolor set (Tokens · Theme contract), not just
+<code>--primary</code>. Every neutral of the default theme — surfaces, text, border,
+<code>--neutral</code>, <code>--hover-overlay</code>, <code>--shadow-color</code> — is tinted toward the default
+primary and never derived from <code>--primary</code> at runtime, so a partial override
+leaves the default identity in the greys. <code>report:theme-contrast</code> checks
+contrast, not a leftover tint.</p>
 <p>Soft ink is the other half. The default palette ships calibrated
 <code>--*-soft-fg</code> hooks; any other theme falls back to the <code>--soft-fg-mix</code>
 derivation, which is a single global percentage and therefore guarantees

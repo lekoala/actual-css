@@ -1398,7 +1398,7 @@ small {
  *
  * Docs: docs/pages/layout/app-layout.md
  *
- * Public hook:
+ * Public hooks:
  * --app-nav-side-size
  */
 .app-layout {
@@ -4948,6 +4948,7 @@ html.has-modal-open.had-scrollbar {
  * --drawer-pad
  *
  * Internal:
+ * --drawer-close-icon-size
  * --drawer-closed-translate (side/RTL positioning state)
  * --drawer-focus-bleed
  * --drawer-motion-duration (shared by panel and ::backdrop so exit duration
@@ -5213,9 +5214,12 @@ html.has-modal-open.had-scrollbar {
  * element — a direct child of a surface nested inside another surface. That
  * child must keep the inner surface's inset, so the relay has to win.
  *
+ * Public hooks:
+ * --bleed-pad (read-only: the inset relayed to a surface's direct children;
+ *   pad a band that is not a header/footer/figure with it)
+ *
  * Framework plumbing:
  * --surface-pad (declared by the surface)
- * --bleed-pad (relayed to its direct children)
  */
 :where(.card, .drawer, .accordion details > summary + *) > * * {
   --bleed-pad: initial;
@@ -5812,6 +5816,9 @@ picture.bleed > img {
   padding-block-start: var(--space-10);
 }
 
+/* Also cancels the lift of a first .bleed child (bleed.css, lower
+   specificity): the panel's top edge is the summary, not the item edge, so a
+   bleed reaches only the sides and the bottom. */
 .accordion details > summary + * > :first-child {
   margin-block-start: 0;
 }
@@ -5856,6 +5863,17 @@ picture.bleed > img {
   border: var(--border-width) solid var(--border);
   border-radius: var(--accordion-radius);
   background: var(--surface-raised);
+}
+
+/* A last .bleed child inherits its bottom corners from the panel, but the
+   rounded box is the item (.separated) or the group (last item) — relay the
+   radius to the panel. Explicit rather than inherit: in browsers with
+   ::details-content the panel's flat-tree parent is that slot, not
+   <details>. */
+.accordion.separated > details > summary + *,
+.accordion:not(.flush) > details:last-child > summary + * {
+  border-end-start-radius: var(--accordion-radius);
+  border-end-end-radius: var(--accordion-radius);
 }
 
 @media (forced-colors: active) {
@@ -8629,9 +8647,9 @@ a.list-item[aria-current]::before {
 }
 
 /*
- * Optional utility helpers.
- *
- * These classes are intentionally not part of the core API.
+ * Extra utility helpers — explicit property/value names beside the curated
+ * shortcuts of base.css. Both are imported by utilities/index.css and are
+ * equally public (docs/design-notes/naming.md § Utilities).
  * They are escape hatches for layout nudges, not a full atomic scale.
  *
  * Core principle:

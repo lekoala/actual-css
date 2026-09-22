@@ -1,7 +1,7 @@
 /*
- * Optional utility helpers.
- *
- * These classes are intentionally not part of the core API.
+ * Extra utility helpers — explicit property/value names beside the curated
+ * shortcuts of base.css. Both are imported by utilities/index.css and are
+ * equally public (docs/design-notes/naming.md § Utilities).
  * They are escape hatches for layout nudges, not a full atomic scale.
  *
  * Core principle:

@@ -28,12 +28,31 @@ The composition guides in [README](README.md) and [Progressive Enhancements](doc
 show supported CSS modules and individual enhancer imports without duplicating
 the full export list here.
 
-Presentation (`class`) and behavior (`data-enhance`) are separate layers.
+Presentation (`class`) and behavior are separate layers. `data-enhance` takes
+four tokens only — `tabs`, `flyout`, `scrollspy`, `validation`; leaf behaviors
+use their own attribute (`data-tooltip`, `data-mask`, `data-filter`,
+`data-context-menu`) and `<dialog>` needs none. See
+[when a token, when a data-*](docs/design-notes/enhancement-contract.md).
+
 Behaviour primitives are independently importable for building custom widgets,
 including `enhance`, `surface`, `floating`, `focus-group`, `keys`, `input`,
 `command`, `menu`, `focus`, `escape`, and `events`. See
-[enhancement contract](docs/design-notes/enhancement-contract.md) and
 [widget primitives](docs/design-notes/widget-primitives.md).
+
+## What the vocabulary does not have
+
+- No compound intent classes (`.btn-primary`, `.badge-success`): intents and
+  variants are separate classes on the component (`.btn primary outline`).
+- No breakpoint or state prefixes (`md:stack`, `hover:…`) and no arbitrary
+  values: layout primitives and container queries own responsiveness.
+- No spacing scale (`mt-4`, `p-2`): spacing comes from `--gap`, density
+  (`.compact`, `.spacious`), and component hooks.
+- `is-*` classes are written by the runtime, not by authors.
+- Modifiers such as `.ghost`, `.link`, `.flush`, `.raised` only mean something
+  on their component; alone they are inert.
+
+See [naming](docs/design-notes/naming.md) and
+[utilities non-goals](docs/pages/utilities/overview.md).
 
 ## Choosing a page shell
 
