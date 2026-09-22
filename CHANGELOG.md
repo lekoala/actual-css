@@ -8,6 +8,10 @@
 - `starts-with` and `ends-with` built-in `data-validation-rules` rules: the trimmed value must begin or end with one of the literal tokens, case-sensitive.
 - `tel-prefix` built-in `data-validation-rules` rule: dialing digits are required, local numbers pass, explicit international numbers (`+`, `00`) must match an allowed prefix, and no prefix means local-only. It is an origin policy, not phone validation, and never rewrites the value.
 
+### Fixed
+
+- `.field` packs its rows to the start (`align-content: start`), so a field stretched by a taller grid row — a neighbour revealing its `.field-error` — no longer inflates its own control.
+
 
 ## [0.9.1] - 2026-09-16
 
