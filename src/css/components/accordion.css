@@ -15,11 +15,15 @@
  *
  * Public hooks:
  * --accordion-radius
+ * --accordion-pad
  * --accordion-marker-color
+ * --accordion-marker-size
  */
 .accordion {
   --accordion-radius: var(--radius);
+  --accordion-pad: var(--space-40);
   --accordion-marker-color: var(--text-muted);
+  --accordion-marker-size: 1rem;
 
   border: var(--border-width) solid var(--border);
   border-radius: var(--accordion-radius);
@@ -36,7 +40,7 @@
   gap: var(--space-30);
   cursor: pointer;
   list-style: none;
-  padding: var(--space-40);
+  padding: var(--accordion-pad);
   color: var(--text);
   font-weight: var(--font-weight-medium);
 }
@@ -52,12 +56,17 @@
   display: none;
 }
 
+/* The marker is the chevron itself: the box is filled with
+   --accordion-marker-color and then clipped to the glyph by the mask. Anything
+   painted on this pseudo-element — a background, a ring, a shadow — is clipped
+   with it, so a decorated marker (a chevron in a pill) needs a real element;
+   see the accordion docs for the opt-out. */
 .accordion summary::after {
   content: "";
   flex: 0 0 auto;
   margin-inline-start: auto;
-  inline-size: 1rem;
-  block-size: 1rem;
+  inline-size: var(--accordion-marker-size);
+  block-size: var(--accordion-marker-size);
   background-color: var(--accordion-marker-color);
   -webkit-mask: var(--icon-chevron) center / contain no-repeat;
   mask: var(--icon-chevron) center / contain no-repeat;
@@ -68,9 +77,14 @@
   transform: rotate(180deg);
 }
 
+/* The panel, not the item, owns the inset here — .separated paints a card on
+   <details> but leaves it unpadded — so the panel is what a .bleed child
+   escapes (components/bleed.css). */
 .accordion details > summary + * {
-  padding-block: 0 var(--space-40);
-  padding-inline: var(--space-40);
+  --surface-pad: var(--accordion-pad);
+
+  padding-block: 0 var(--accordion-pad);
+  padding-inline: var(--accordion-pad);
   color: var(--text-muted);
   margin-block: 0;
 }
@@ -101,6 +115,12 @@
 .accordion.flush summary,
 .accordion.flush details > summary + * {
   padding-inline: 0;
+}
+
+/* Flush already sits at the embedding surface's edge, so there is no inline
+   inset left for a .bleed child to cancel. */
+.accordion.flush details > summary + * {
+  --surface-pad: 0px;
 }
 
 /* Separated — each item owns a full card. The item's own border beats the

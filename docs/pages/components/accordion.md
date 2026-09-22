@@ -116,4 +116,32 @@ The end marker is a shared token-based chevron; swapping it for a local icon is 
 ## CSS hooks
 
 - `--accordion-radius` — outer corner radius.
+- `--accordion-pad` — inset of the summary row and the panel. The panel relays it as `--surface-pad`, so a direct `.bleed` child of the panel reaches the item edge; `.flush` drops the inline half and the relay with it.
 - `--accordion-marker-color` — color of the end marker; it reinforces to the summary text color on hover, and forced-colors mode overrides it to `CanvasText`.
+- `--accordion-marker-size` — edge length of the end marker.
+
+### Replacing the marker
+
+The marker is a masked box: `--accordion-marker-color` fills it and the chevron
+mask clips it to the glyph. A background, ring, or shadow set on it is clipped
+to the same silhouette, so a decorated marker — a chevron inside a pill — has
+to be a real element. Hide the built-in one and place your own; the open state
+is `details[open]`, and `--icon-chevron` is the shared asset:
+
+```css
+.accordion.custom-marker summary::after {
+  display: none;
+}
+
+.accordion.custom-marker .marker {
+  margin-inline-start: auto;
+  border-radius: 50%;
+  background: var(--surface-subtle);
+  padding: var(--space-10);
+  transition: transform var(--duration);
+}
+
+.accordion.custom-marker details[open] .marker {
+  transform: rotate(180deg);
+}
+```

@@ -26,6 +26,8 @@
 :where(dialog).drawer {
   --drawer-size: 20rem;
   --drawer-pad: var(--space-40);
+  /* The inset a direct .bleed child cancels (components/bleed.css). */
+  --surface-pad: var(--drawer-pad);
   --drawer-closed-translate: -100%;
   /* Exit is shorter than entry so the panel clears quickly; the scrim reads
      the same variable through inheritance and never lags the panel. */

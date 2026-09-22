@@ -17,6 +17,24 @@ Component custom properties fall into three header categories in the source: **P
 
 As a convention, component-prefixed properties owned by the component's base rule are usually author hooks. Properties owned by states/variants, derived from other hooks, or written by JavaScript are not. This convention is indicative, not algorithmic: runtime-written, derived, and state-relay properties stay internal even when their form resembles a hook.
 
+### Where a token is declared
+
+A hook is only defined inside the scope that declares it. Reading one outside that scope is not an error a browser reports: `var()` resolves to nothing, the whole declaration becomes invalid at computed-value time, and the property falls back to its initial value — `padding: var(--card-pad)` outside a card computes to `0`, silently.
+
+| Scope     | Declared on                 | Examples                               |
+| --------- | --------------------------- | -------------------------------------- |
+| Global    | `:root`, every theme island | `--space-40`, `--radius`, `--primary`  |
+| Component | the component's base rule   | `--card-pad`, `--drawer-size`          |
+| Relay     | a variant, state, or script | `--ui-bg`, `--intent`, `--surface-pad` |
+
+Global tokens are the ones to reach for in application CSS. When you do want a component token outside its component — matching a bare block to the card rhythm, say — give `var()` the default explicitly, so the declaration survives where the hook is absent:
+
+```css
+.panel {
+  padding: var(--card-pad, var(--space-40));
+}
+```
+
 ### Color
 
 Intent tokens are used by `.primary`, `.secondary`, `.success`, `.warning`, `.danger`, and `.neutral`. They are curated color/foreground pairs. Actual CSS does not compute foregrounds automatically in the core theme contract.
@@ -466,7 +484,9 @@ Themes override tokens, not selectors. The themes in `src/css/themes/` are repos
 
 A minimal recolor theme overrides the intent pairs, surfaces, text colors, border, focus, and hover overlay. In browsers with `color-mix()` support, the core derives `--focus-ring` from the island's `--focus`; override the ring only for a deliberate visual treatment or when a matching pre-`color-mix()` fallback is required.
 
-When overriding an intent color, review its paired `--*-fg` and `--*-soft-fg`. The generic soft fallback (`--soft-fg-mix` derivation, above) may already be sufficient.
+When overriding an intent color, review its paired `--*-fg` and `--*-soft-fg`. A theme that declares no hook falls back to the `--soft-fg-mix` derivation: one global percentage applied to every role, so it carries no contrast guarantee for a palette it was not tuned against. `bun run report:theme-contrast` prints the resting and hovered soft pair for every intent of every island, which is how a theme finds the roles that need a hook or a lower `--soft-fg-mix`.
+
+The default palette's hooks apply to `:root` and to the `light`/`dark` boundaries only. Any other `data-theme` value resets them to the derivation, whether the attribute sits on `<html>` or on a nested island.
 
 Shape, shadow, motion, typography, and soft-variant mix tokens are optional knobs. Override them only when the theme actually changes that part of the system.
 

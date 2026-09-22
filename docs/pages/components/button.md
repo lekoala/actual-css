@@ -61,6 +61,17 @@ Reach for `.surface` when a secondary action must sit on an opaque, neutral
 chip: `.outline` lets whatever is behind it show through, and `.soft` is the
 intent-tinted treatment (its baseline fallback uses `--surface-subtle`).
 
+None of the three gives an opaque fill *under* an intent-colored border —
+`.surface` keeps the neutral `--border`, and `.outline` has no fill. Set
+`--ui-bg` on the element for that combination; it is the variant relay every
+component with shared variants reads, so the same declaration works on a badge:
+
+```css
+.chip-on-tint {
+  --ui-bg: var(--surface);
+}
+```
+
 Transparent treatments (`.outline`, `.ghost`, `.link`) follow the surrounding
 foreground by default, including on a contrasting `.inverted` surface. A local
 intent class still wins: `.danger.outline` uses the danger color in either

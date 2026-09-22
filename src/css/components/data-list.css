@@ -7,6 +7,9 @@
  * A plain <dl> handles richer relationships (several terms or descriptions)
  * and stays untouched by this component.
  *
+ * Variants:
+ * .stacked — value under its term rather than beside it.
+ *
  * Why margin resets: neutralizes .prose list margins if .data-list appears
  * inside an authored rich-text scope; the grid owns row/column rhythm.
  */
@@ -26,4 +29,19 @@
 .data-list > dd {
   min-inline-size: 0;
   margin: 0;
+}
+
+/* Stacked — the value sits under its term instead of beside it, for narrow
+   columns and for values too long to sit in a second column.
+   Why the pair separation rides on the term's margin: the children alternate
+   dt/dd with no element around a pair, so the grid has no row boundary to give
+   a larger gap to. The tight gap is the row gap; the term reopens the space. */
+.data-list.stacked {
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-10);
+}
+
+.data-list.stacked > dt + dt,
+.data-list.stacked > dd + dt {
+  margin-block-start: var(--space-30);
 }

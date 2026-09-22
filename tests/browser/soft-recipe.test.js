@@ -288,3 +288,56 @@ it("default theme soft contract clears 4.5 on rest and hover, light and dark", a
     { artifactName: "soft-recipe-contract" },
   );
 });
+
+/*
+ * A custom theme must hand its soft ink to the --soft-fg-mix recipe wherever
+ * the author put the attribute. The reset and the default palette's hooks both
+ * match when data-theme sits on <html>, so a bare :root selector on the hooks
+ * (0,1,0) silently beat the zero-specificity reset there and only there: the
+ * same theme resolved a calibrated Ink & Terra ink on <html data-theme> and a
+ * raw intent ink on <div data-theme>. Levelling both to zero specificity makes
+ * source order decide, so this also pins the reset below the hooks.
+ */
+it("a custom theme resets the default soft hooks on <html> and on a nested island", async () => {
+  await withBrowserPage(
+    fixtureUrl(FIXTURE),
+    async (view) => {
+      const readings = await view.evaluate(`(() => {
+        const style = document.createElement("style");
+        style.textContent = '[data-theme="probe"] { color-scheme: light; --secondary: hsl(190 70% 38%); }';
+        document.head.append(style);
+        const hook = (el) =>
+          getComputedStyle(el).getPropertyValue("--secondary-soft-fg").trim();
+
+        const html = document.documentElement;
+        const island = document.createElement("div");
+        document.body.append(island);
+
+        const bareRoot = hook(html);
+
+        html.setAttribute("data-theme", "probe");
+        const onHtml = hook(html);
+        html.removeAttribute("data-theme");
+
+        html.setAttribute("data-theme", "light");
+        const onHtmlLight = hook(html);
+        html.removeAttribute("data-theme");
+
+        island.setAttribute("data-theme", "probe");
+        const onIsland = hook(island);
+        island.remove();
+
+        return { bareRoot, onHtml, onIsland, onHtmlLight };
+      })()`);
+
+      // The untouched default theme keeps its calibrated hooks.
+      expect(readings.bareRoot).not.toBe("");
+      // The built-in light/dark boundaries are the default theme, not a custom one.
+      expect(readings.onHtmlLight).toBe(readings.bareRoot);
+      // A custom theme drops them, and both placements agree.
+      expect(readings.onHtml).toBe("");
+      expect(readings.onIsland).toBe("");
+    },
+    { artifactName: "soft-recipe-theme-reset" },
+  );
+});
