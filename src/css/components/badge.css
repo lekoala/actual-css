@@ -14,7 +14,6 @@
  * --badge-icon-size
  * --badge-dot-size
  * --badge-radius
- * --badge-dismiss-icon-size
  *
  * Internal:
  * --badge-default-bg
@@ -45,7 +44,10 @@
   --badge-font-size: var(--font-size-sm);
   --badge-icon-size: 1em;
   --badge-dot-size: 0.5rem;
-  --badge-dismiss-icon-size: 0.875em;
+  /* Declared on the badge, not the button, so an author can still set them
+     on either. Same element as --badge-size, so .sm/.lg carry through. */
+  --close-size: max(var(--badge-size), 24px);
+  --close-icon-size: 0.875em;
   --badge-default-bg: var(--surface-subtle);
   --badge-default-fg: var(--intent, var(--text));
   --badge-default-border: var(--border);
@@ -95,8 +97,8 @@
   --badge-dot-size: 0.625rem;
 }
 
-/* Decorative children follow the badge's optical size. Text and interactive
-   dismiss buttons retain their own boxes. */
+/* Decorative children follow the badge's optical size. Text and the .close
+   button retain their own boxes. */
 .badge > :where(svg, img, [aria-hidden="true"]:not(.dot)) {
   flex: none;
   /* The shared rule maps --badge-icon-size onto font-size. One em is therefore
@@ -149,45 +151,15 @@
   background-color: currentColor;
 }
 
-.badge > button {
-  display: inline-grid;
-  place-items: center;
-  flex: 0 0 auto;
-  /* WCAG 2.5.8 floors pointer targets at 24 CSS px. Density and local size may
-     keep the badge visually compact through the negative margins, but never
-     shrink its action target below that literal floor. */
-  min-inline-size: max(var(--badge-size), 24px);
-  min-block-size: max(var(--badge-size), 24px);
+/* Removable tag — a .close (components/close.css) inside the pill. WCAG 2.5.8
+   floors pointer targets at 24 CSS px: density and local size may keep the
+   badge visually compact through the negative margins, but never shrink the
+   target below that literal floor. */
+.badge > .close {
   margin-block: -0.25rem;
   margin-inline-start: -0.15em;
   margin-inline-end: -0.45em;
-  padding: 0.25rem;
-  border: 0;
   border-radius: var(--radius-full);
-  background: transparent;
-  color: inherit;
-  font: inherit;
-  line-height: 1;
-  cursor: pointer;
-}
-
-/* Dismiss mark — an empty dismiss button paints its own X from the shared
-   --icon-close mask, so no icon font or text glyph is required in the markup
-   (same contract as .alert-dismiss and .dialog-close). A mask box is a block
-   box, so place-items centers the ink itself; a text glyph would only center
-   its line box and land the ink low, because a lowercase x has no descender
-   and only x-height of ascent. A button with its own content keeps it. */
-.badge > button:empty::before {
-  content: "";
-  inline-size: var(--badge-dismiss-icon-size);
-  block-size: var(--badge-dismiss-icon-size);
-  background: currentColor;
-  -webkit-mask: var(--icon-close) center / contain no-repeat;
-  mask: var(--icon-close) center / contain no-repeat;
-}
-
-.badge > button:not(:disabled):hover {
-  background: var(--hover-overlay);
 }
 
 /* Hover recipes — sets --ui-hover-bg consumed by the hover rule below.

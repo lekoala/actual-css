@@ -6,16 +6,17 @@
 
 ## Class reference
 
-| Class                  | Kind      | Description                                    |
-| ---------------------- | --------- | ---------------------------------------------- |
-| `.modal`               | Component | Centered surface on the native `<dialog>`.     |
-| `.scrollable`          | Variant   | Header and footer stay while the body scrolls. |
-| `.dialog-confirmation` | Variant   | Message above a full-width action band.        |
-| `.dialog-icon`         | Component | Circular intent-aware icon well.               |
-| `.dialog-close`        | Component | Icon-only close button, at the top end.        |
+| Class                  | Kind        | Description                                    |
+| ---------------------- | ----------- | ---------------------------------------------- |
+| `.modal`               | Component   | Centered surface on the native `<dialog>`.     |
+| `.scrollable`          | Variant     | Header and footer stay while the body scrolls. |
+| `.dialog-confirmation` | Variant     | Message above a full-width action band.        |
+| `.dialog-icon`         | Component   | Circular intent-aware icon well.               |
+| `.close`               | Composition | Icon-only close button, at the top end.        |
 
-`.dialog-close` sits outside the content flow, so it does not take part in the
-dialog's own layout.
+A [`.close`](close.md) placed as a direct child of the dialog or of its form
+sits outside the content flow, so it does not take part in the dialog's own
+layout.
 
 ## Usage
 
@@ -138,7 +139,7 @@ has no action button; the header close button dismisses the dialog.
         id="details-dialog"
         closedby="any"
         data-dialog-dismissible>
-  <button class="dialog-close"
+  <button class="close"
           type="button"
           commandfor="details-dialog"
           command="request-close"
@@ -243,7 +244,7 @@ promoted above it and still unclickable.
         id="overlay-dialog"
         closedby="any"
         data-dialog-dismissible>
-  <button class="dialog-close"
+  <button class="close"
           type="button"
           commandfor="overlay-dialog"
           command="request-close"
@@ -381,7 +382,6 @@ Keep the button a direct child of `dialog.modal` so the scrolling content
 - `--dialog-viewport-gap` — distance kept between the dialog and the viewport edges.
 - `--dialog-icon-size` — diameter of the `.dialog-icon` circle.
 - `--dialog-icon-glyph-size` — size of the glyph centered inside `.dialog-icon`.
-- `--control-size` — inline and block size of the `.dialog-close` button. The
-  header reserves `calc(var(--control-size) + var(--space-30))` on its inline
-  end so the title never runs under the close.
-- `--dialog-close-icon-size` — size of the close glyph.
+- `--close-size` / `--close-icon-size` — size of the corner `.close` and of its
+  X. The header reserves the close size plus `--space-30` on its inline end so
+  the title never runs under it.

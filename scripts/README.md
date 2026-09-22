@@ -90,7 +90,7 @@ as the body of an async function, so it can click and `await sleep(...)` before
 
 ```sh
 # open the search dialog, wait for it to settle, return the close button rect
-bun run probe site/index.html --expr "document.querySelector('[data-docs-search]').click(); await sleep(400); return document.getElementById('docs-search-dialog').querySelector('.dialog-close').getBoundingClientRect();"
+bun run probe site/index.html --expr "document.querySelector('[data-docs-search]').click(); await sleep(400); return document.getElementById('docs-search-dialog').querySelector('.close').getBoundingClientRect();"
 
 # or keep the program in tmp/ when it gets long
 bun run probe --url site/index.html --script tmp/search-probe.js

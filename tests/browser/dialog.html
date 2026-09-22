@@ -15,7 +15,7 @@
   <button id="open-drawer" type="button" commandfor="drawer" command="show-modal">Open drawer</button>
 
   <dialog class="modal" id="dlg-dismissible" closedby="any" data-dialog-dismissible aria-label="Dismissible dialog">
-    <button class="dialog-close"
+    <button class="close"
             type="button"
             commandfor="dlg-dismissible"
             command="request-close"
@@ -27,7 +27,7 @@
   </dialog>
 
   <dialog class="modal" id="dlg-nondismiss" aria-label="Non dismissible dialog">
-    <button class="dialog-close"
+    <button class="close"
             type="button"
             commandfor="dlg-nondismiss"
             command="request-close"
@@ -52,7 +52,7 @@
     <header>
       <strong>Drawer</strong>
       <form method="dialog">
-        <button class="drawer-close" type="submit" aria-label="Close"></button>
+        <button class="close" type="submit" aria-label="Close"></button>
       </form>
     </header>
     <nav>

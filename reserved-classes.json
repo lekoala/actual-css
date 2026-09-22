@@ -4,7 +4,6 @@
   "admonition",
   "alert",
   "alert-body",
-  "alert-dismiss",
   "alert-icon",
   "alert-title",
   "align-self-center",
@@ -46,6 +45,7 @@
   "choice",
   "choice-card",
   "circle",
+  "close",
   "cluster",
   "color",
   "column-gap-context",
@@ -79,7 +79,6 @@
   "cursor-pointer",
   "danger",
   "data-list",
-  "dialog-close",
   "dialog-confirmation",
   "dialog-icon",
   "display-block",
@@ -91,7 +90,6 @@
   "display-none",
   "dot",
   "drawer",
-  "drawer-close",
   "fab",
   "fab-action",
   "fab-actions",
@@ -271,6 +269,7 @@
   "text-start",
   "text-title",
   "text-uppercase",
+  "text-wrap",
   "textarea",
   "tooltip",
   "topbar",
@@ -279,6 +278,5 @@
   "user-select-none",
   "visibility-hidden",
   "warning",
-  "was-validated",
-  "white-space-normal"
+  "was-validated"
 ]

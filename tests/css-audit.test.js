@@ -671,8 +671,8 @@ test("the drawer body scrolls so its footer is always reachable", () => {
 
   // A drawer is a full-height shell, so the body region always scrolls —
   // the modal is the one that sizes to content and opts in with .scrollable.
-  expect(css).toContain(":where(dialog).drawer > :not(:is(header, footer, form, .drawer-close))");
-  expect(css).toContain(":where(dialog).drawer > form > :not(:is(header, footer, .drawer-close))");
+  expect(css).toContain(":where(dialog).drawer > :not(:is(header, footer, form, .close))");
+  expect(css).toContain(":where(dialog).drawer > form > :not(:is(header, footer, .close))");
   expect(css).toMatch(/overscroll-behavior:\s*contain;/);
 });
 

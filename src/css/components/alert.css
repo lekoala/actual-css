@@ -16,7 +16,6 @@
  * --alert-font-size
  * --alert-radius
  * --alert-icon-size
- * --alert-dismiss-size
  * --alert-border-inline-start-color
  * --alert-border-inline-start-width
  *
@@ -27,7 +26,6 @@
  * --alert-bg
  * --alert-fg
  * --alert-border
- * --alert-dismiss-icon-size
  */
 /* Intent boundary — inherited intents do not tint this component.
    Local intent classes still win because :where() has zero specificity. */
@@ -76,13 +74,13 @@
    The slots are excluded because they are anatomy, not content: an
    admonition's title bar has to stay flush against its body. The list follows
    the anatomy, so it grows with it. */
-.alert > :not(:where(.alert-icon, .alert-dismiss, .alert-title, .alert-body)) {
+.alert > :not(:where(.alert-icon, .close, .alert-title, .alert-body)) {
   margin-block: 0;
 }
 
 .alert
-  > :not(:where(.alert-icon, .alert-dismiss, .alert-title, .alert-body))
-  + :not(:where(.alert-icon, .alert-dismiss, .alert-title, .alert-body)) {
+  > :not(:where(.alert-icon, .close, .alert-title, .alert-body))
+  + :not(:where(.alert-icon, .close, .alert-title, .alert-body)) {
   margin-block-start: var(--space-10);
 }
 
@@ -120,42 +118,24 @@
   vertical-align: -0.125em;
 }
 
-/* Dismiss — compact close button for inline alerts. Transparent at rest with
-   a reduced opacity glyph so it stays secondary inside an already-colored
-   alert; hover reinforces it via the shared overlay. Uses the shared
-   --icon-close mask, so no icon font or text glyph is required in the markup.
-   Standard alerts place it as a direct trailing child; admonitions place it
-   inside .alert-title (see below). */
-.alert-dismiss {
-  --alert-dismiss-size: 1.75rem;
-  --alert-dismiss-icon-size: 0.875rem;
-
-  display: inline-grid;
-  place-items: center;
-  inline-size: var(--alert-dismiss-size);
-  block-size: var(--alert-dismiss-size);
-  flex: none;
-  padding: 0;
-  border: 0;
-  border-radius: var(--radius);
-  background: transparent;
-  color: currentColor;
-  opacity: 0.65;
-  cursor: pointer;
+/* Close (components/close.css) — compact, and at reduced opacity so it stays
+   secondary inside an already-colored alert. Standard alerts place it as a
+   direct trailing child; admonitions place it inside .alert-title (see
+   below). The sizes are declared on the alert so an author can still set
+   them on the alert or on the button. */
+.alert {
+  --close-size: 1.75rem;
+  --close-icon-size: 0.875rem;
 }
 
-.alert-dismiss::before {
-  content: "";
-  inline-size: var(--alert-dismiss-icon-size);
-  block-size: var(--alert-dismiss-icon-size);
-  background: currentColor;
-  -webkit-mask: var(--icon-close) center / contain no-repeat;
-  mask: var(--icon-close) center / contain no-repeat;
+.alert > .close,
+.alert > .alert-title > .close {
+  opacity: 0.65;
 }
 
 @media (hover: hover) {
-  .alert-dismiss:hover {
-    background: var(--hover-overlay);
+  .alert > .close:hover,
+  .alert > .alert-title > .close:hover {
     opacity: 1;
   }
 }
@@ -164,7 +144,7 @@
    both. Icon and dismiss are pinned to the outer columns; anything else (the
    message content) flows into the remaining text column. */
 @supports selector(.alert:has(> *)) {
-  .alert:has(> .alert-icon, > .alert-dismiss) {
+  .alert:has(> .alert-icon, > .close) {
     display: grid;
     grid-template-columns: minmax(0, 1fr);
     align-items: var(--items-align, start);
@@ -183,19 +163,19 @@
     margin-block-start: 0.125em;
   }
 
-  .alert:has(> .alert-icon) > :not(.alert-icon, .alert-dismiss) {
+  .alert:has(> .alert-icon) > :not(.alert-icon, .close) {
     grid-column: 2;
   }
 
-  .alert:has(> .alert-dismiss) {
+  .alert:has(> .close) {
     grid-template-columns: minmax(0, 1fr) auto;
   }
 
-  .alert:has(> .alert-icon):has(> .alert-dismiss) {
+  .alert:has(> .alert-icon):has(> .close) {
     grid-template-columns: auto minmax(0, 1fr) auto;
   }
 
-  .alert:has(> .alert-dismiss) > .alert-dismiss {
+  .alert:has(> .close) > .close {
     grid-column: -2 / -1;
     grid-row: 1;
   }
@@ -243,8 +223,8 @@
   border-start-end-radius: calc(var(--alert-radius, var(--radius-lg)) - var(--border-width));
 }
 
-/* Dismiss inside an admonition title bar rides the inline end. */
-.alert.admonition > .alert-title > .alert-dismiss {
+/* Close inside an admonition title bar rides the inline end. */
+.alert.admonition > .alert-title > .close {
   margin-inline-start: auto;
 }
 

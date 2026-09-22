@@ -13,7 +13,7 @@
 - A title and a description are plain siblings: the alert owns the small space between its direct content blocks, so neither needs a wrapper. Nested content keeps its own rhythm — wrap several paragraphs in `.prose`, or a differently spaced group in `.stack`, when the message needs a rhythm of its own.
 - Alerts may include a decorative leading icon. Use `.alert-icon` on the icon element; the rest of the content flows into the remaining text column.
 - Use `.compact` or `.spacious` for density changes. The inline padding stays stable.
-- Use `.alert-dismiss` for a compact dismiss button. It is a direct trailing child in standard alerts and lives inside `.alert-title` in admonitions. It uses the shared `--icon-close` mask and the `--dismiss` runtime command — no icon font or custom JS.
+- Use a [`.close`](close.md) button to make the alert dismissible. It is a direct trailing child in standard alerts and lives inside `.alert-title` in admonitions; the alert makes it compact.
 
 Because alerts are soft by default, adding `.soft` to an intent (`.alert.soft.primary`,
 `.alert.soft.danger`, …) is a no-op: it already resolves to a soft version of that
@@ -26,7 +26,7 @@ itself needs to change, not `.soft`.
 | ---------------- | ----------- | ----------------------------------------------- |
 | `.alert`         | Component   | Inline status surface; soft by default.         |
 | `.alert-icon`    | Composition | Decorative leading icon, in the first column.   |
-| `.alert-dismiss` | Modifier    | Compact dismiss button.                         |
+| `.close`         | Composition | Dismiss button, in the last column.             |
 | `.alert-title`   | Composition | Admonition title bar; hosts the dismiss button. |
 | `.alert-body`    | Composition | Admonition body on the page surface.            |
 | `.callout`       | Variant     | Leading-edge flag; owns the border geometry.    |
@@ -101,7 +101,7 @@ intent treatment when the color itself carries the meaning.
 
 ## Trailing action
 
-The grid pins `.alert-icon` and `.alert-dismiss` to the outer columns. A
+The grid pins `.alert-icon` and `.close` to the outer columns. A
 trailing link or button is content, not anatomy, so it lives in the text column:
 wrap the row in a `.cluster` and push the two ends apart. Same recipe as any
 split / spread row — there is no `.alert-action` class.
@@ -153,7 +153,7 @@ center.
 
 ## Dismiss
 
-Use `.alert-dismiss` to let a user remove an inline alert. The button is transparent at rest with a muted glyph; it works with any intent because it uses `currentColor` and reduced opacity. It relies on the runtime `--dismiss` command — no custom script.
+Add a `.close` button to let a user remove an inline alert. Inside an alert it is compact and at reduced opacity, and it follows the alert's ink with any intent. The runtime `--dismiss` command removes the alert — no custom script.
 
 ```html demo
 <div class="alert warning" id="warning-alert">
@@ -162,7 +162,7 @@ Use `.alert-dismiss` to let a user remove an inline alert. The button is transpa
   <p>Something needs your attention.</p>
 
   <button
-    class="alert-dismiss"
+    class="close"
     type="button"
     commandfor="warning-alert"
     command="--dismiss"
@@ -171,14 +171,14 @@ Use `.alert-dismiss` to let a user remove an inline alert. The button is transpa
 </div>
 ```
 
-In an admonition, place `.alert-dismiss` inside `.alert-title`; it rides the inline end of the title bar:
+In an admonition, place `.close` inside `.alert-title`; it rides the inline end of the title bar:
 
 ```html
 <div class="alert admonition warning" id="notice">
   <div class="alert-title">
     <span>Warning</span>
     <button
-      class="alert-dismiss"
+      class="close"
       type="button"
       commandfor="notice"
       command="--dismiss"
@@ -261,8 +261,7 @@ An admonition is a structured box with a tinted title bar, an optional icon, and
 - `--alert-pad-block` — block padding.
 - `--alert-font-size` — base font size.
 - `--alert-icon-size` — size of a leading `.alert-icon`.
-- `--alert-dismiss-size` — inline and block size of the `.alert-dismiss` button.
-- `--alert-dismiss-icon-size` — size of the dismiss glyph.
+- `--close-size` / `--close-icon-size` — the alert declares compact values for its `.close`; set them on the alert to change them.
 - `--alert-radius` — corner radius, when the default `--radius-lg` does not fit.
 - `--alert-border-inline-start-color` / `--alert-border-inline-start-width` — extension points for a callout-style colored flag on the leading edge instead of a uniform border.
 

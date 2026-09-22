@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Close button fixture</title>
+  <link rel="stylesheet" href="../../src/css/actual.full.css">
+</head>
+<body>
+  <!-- The dialog corner: direct child, and header > form in a drawer. An
+       alert inside the modal body keeps its close in the alert's grid. -->
+  <dialog class="modal" id="modal" open>
+    <button class="close corner" type="button" aria-label="Close"></button>
+    <div class="stack">
+      <div class="alert">
+        <p>Body alert.</p>
+        <button class="close nested" type="button" aria-label="Dismiss"></button>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog class="drawer" id="drawer">
+    <header>
+      <strong>Drawer</strong>
+      <form method="dialog">
+        <button class="close corner" type="submit" aria-label="Close"></button>
+      </form>
+    </header>
+  </dialog>
+
+  <span class="badge sm" id="badge">
+    Tag
+    <button class="close" type="button" aria-label="Remove Tag"></button>
+  </span>
+</body>
+</html>

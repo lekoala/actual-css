@@ -1,0 +1,82 @@
+/*
+ * Close button — the shared X that removes or closes the thing it sits in.
+ *
+ * Docs: docs/pages/components/close.md
+ *
+ * .close is always the X, painted from the --icon-close mask: an empty
+ * <button class="close" aria-label="…"> needs no icon font and no text glyph.
+ * The mechanism stays with the container (command="request-close",
+ * method="dialog", command="--dismiss", application logic); the class only
+ * names the visual action.
+ *
+ * The containers that host one (alert, badge) tune it from their own files by
+ * declaring the size hooks and their geometry; this file owns the control
+ * and the dialog-surface corner, shared by .modal and .drawer.
+ *
+ * Public hooks:
+ * --close-size
+ * --close-icon-size
+ */
+.close {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  inline-size: var(--close-size, var(--control-size));
+  block-size: var(--close-size, var(--control-size));
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius);
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+
+.close::before {
+  content: "";
+  inline-size: var(--close-icon-size, 1rem);
+  block-size: var(--close-icon-size, 1rem);
+  background: currentColor;
+  -webkit-mask: var(--icon-close) center / contain no-repeat;
+  mask: var(--icon-close) center / contain no-repeat;
+}
+
+/* An inset overlay, not a background: it tints whatever fill the context gave
+   the control (the dialog corner's --surface-subtle) instead of replacing it. */
+@media (hover: hover) {
+  .close:hover {
+    box-shadow: inset 0 0 0 999px var(--hover-overlay);
+  }
+}
+
+.close:active {
+  box-shadow: inset 0 0 0 999px var(--hover-overlay);
+}
+
+.close:focus-visible {
+  outline: 2px solid transparent;
+  box-shadow: var(--focus-ring-shadow);
+}
+
+/* Dialog corner — out of the content flow, anchored to the positioned dialog
+   surface rather than to the header or a scroll container inside it. Matched
+   on the documented positions (the dialog, its form, its header, or a form
+   inside that header) so a .close inside content — an alert in the body —
+   keeps its own place. */
+:where(dialog):is(.modal, .drawer) > .close,
+:where(dialog):is(.modal, .drawer) > :is(form, header) > .close,
+:where(dialog):is(.modal, .drawer) > :is(form, header) > :is(form, header) > .close {
+  position: absolute;
+  z-index: 1;
+  inset-block-start: var(--space-20);
+  inset-inline-end: var(--space-20);
+  background: var(--surface-subtle);
+  color: var(--text-muted);
+}
+
+@media (hover: hover) {
+  :where(dialog):is(.modal, .drawer) > .close:hover,
+  :where(dialog):is(.modal, .drawer) > :is(form, header) > .close:hover,
+  :where(dialog):is(.modal, .drawer) > :is(form, header) > :is(form, header) > .close:hover {
+    color: var(--text);
+  }
+}

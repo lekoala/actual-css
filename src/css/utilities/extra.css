@@ -177,8 +177,9 @@
   overflow-y: auto;
 }
 
-/* Text */
-.white-space-normal {
+/* Text. .text-wrap is the counterpart of base's .text-nowrap: it restores
+   wrapping inside a component that sets nowrap (.badge). */
+.text-wrap {
   white-space: normal;
 }
 

@@ -85,19 +85,19 @@
   </div>
 
   <dialog class="drawer" id="docs-nav-drawer" closedby="any" aria-label="Documentation navigation">
-    <div class="docs-drawer-header">
+    <header class="docs-drawer-header">
       <strong>Actual CSS</strong>
       <form method="dialog">
-        <button class="drawer-close" type="submit" aria-label="Close navigation"></button>
+        <button class="close" type="submit" aria-label="Close navigation"></button>
       </form>
-    </div>
+    </header>
     <nav aria-label="Documentation">
       {{navGroups}}
     </nav>
   </dialog>
 
   <dialog class="modal docs-search-dialog" id="docs-search-dialog" closedby="any" aria-label="Search documentation">
-    <button class="dialog-close"
+    <button class="close"
             type="button"
             commandfor="docs-search-dialog"
             command="request-close"

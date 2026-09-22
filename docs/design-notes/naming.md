@@ -47,7 +47,7 @@ never about opting in.
 - **Base** (`utilities/base.css`) is a curated set of common ergonomic
   shortcuts (`.overflow-auto`, `.gap-none`, `.text-nowrap`, `.px`, `.py`).
 - **Extra** (`utilities/extra.css`) uses explicit property/value names
-  (`.overflow-hidden`, `.padding-context`, `.white-space-normal`).
+  (`.overflow-hidden`, `.padding-context`, `.flex-nowrap`).
 
 Call them base and extra, after the files. "Optional" is the wrong word for
 either: it reads as a layer an author has to opt into, which is true of every

@@ -2,6 +2,14 @@
 
 ## [Unreleased]
 
+### Breaking changes
+
+- `.white-space-normal` is renamed `.text-wrap`, the counterpart of `.text-nowrap`.
+- `.dialog-close`, `.drawer-close`, and `.alert-dismiss` are replaced by the shared `.close` (`components/close.css`); a modular build imports it next to its host.
+- A removable badge needs `<button class="close">`: a bare `.badge > button` is no longer styled, and an empty one no longer paints an X.
+- `--alert-dismiss-size` and `--badge-dismiss-icon-size` are replaced by `--close-size` / `--close-icon-size`.
+- The dialog corner applies to a `.close` that is a direct child of the dialog, of its `form` or `header`, or of a `form` inside that header.
+
 ### Added
 
 - `.bleed` is a shared surface contract: `src/css/components/bleed.css` reads the relayed `--surface-pad`, so a direct child of a `.drawer` or of an accordion panel escapes its inset like a card child already did.

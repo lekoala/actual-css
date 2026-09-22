@@ -26,7 +26,7 @@ Compact UI vocabulary remains semantic rather than shape-driven:
 
 - use `.btn.sm` for compact actions and `aria-pressed` filters;
 - use `.badge` for passive counts, statuses, and categories;
-- use `.badge > button` when a displayed tag can be removed;
+- use `.badge` with a `.close` button when a displayed tag can be removed;
 - use `.status-bar` for passive feedback, not an actionable toast.
 
 There is no generic chip or snackbar component. Those names conflate different
