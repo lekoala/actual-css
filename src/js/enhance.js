@@ -8,9 +8,13 @@
  * about final state after a batch, so a moved element (removed then
  * reinserted in the same batch) survives without a spurious disconnect.
  *
- * Attribute changes are intentionally not observed. Call refresh(node) after
- * adding a behavior attribute to an already-connected element. Behavior
- * attributes are setup-time contracts, not live enable/disable switches.
+ * Attribute changes are intentionally not observed. The owner of a handle
+ * calls refresh(node) after adding a behavior attribute to an
+ * already-connected element; for a data-enhance token, applyEnhancement()
+ * does it. The built-in data-* behaviors (mask, filter, context menu, …)
+ * keep their handle private, so for them insert the element with the
+ * attribute already set. Behavior attributes are setup-time contracts, not
+ * live enable/disable switches.
  *
  * enhancers: { [selector]: (el) => cleanup | void }
  * Returns: { refresh, disconnect }

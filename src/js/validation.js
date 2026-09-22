@@ -17,7 +17,7 @@
  * DOM tears down everything, including the managed novalidate attribute.
  */
 
-import enhance, { enhancementSelector } from "./enhance.js";
+import { enhancementSelector, registerEnhancement } from "./enhance.js";
 import { EVENTS } from "./events.js";
 import { CLASSES } from "./selectors.js";
 
@@ -435,10 +435,9 @@ export class FormValidator {
   }
 }
 
-if (typeof document !== "undefined") {
-  enhance({
-    [`form${VALIDATION_SELECTOR}`]: (form) => connectForm(form),
-  });
-}
+// Registered by name, not through a bare enhance(), so applyEnhancement()
+// refreshes it like the other token behaviors. The token only means
+// something on a form.
+registerEnhancement("validation", (el) => (isFormElement(el) ? connectForm(el) : undefined));
 
 export default FormValidator;

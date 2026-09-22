@@ -18,6 +18,7 @@
  * --drawer-pad
  *
  * Internal:
+ * --drawer-close-icon-size
  * --drawer-closed-translate (side/RTL positioning state)
  * --drawer-focus-bleed
  * --drawer-motion-duration (shared by panel and ::backdrop so exit duration

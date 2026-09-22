@@ -12,6 +12,24 @@ afterEach(() => {
   cleanupDOM();
 });
 
+test("applyEnhancement wires validation on a form that is already connected", async () => {
+  await loadValidation(`
+    <form class="late">
+      <div class="field">
+        <input class="input" name="email" type="email" required
+               aria-describedby="email-error" />
+        <span class="field-error" id="email-error"></span>
+      </div>
+    </form>
+  `);
+  const { applyEnhancement } = await import("../src/js/enhance.js");
+  const form = document.querySelector("form");
+
+  applyEnhancement("validation", "form.late");
+  form.requestSubmit();
+  expect(form.querySelector("input").getAttribute("aria-invalid")).toBe("true");
+});
+
 test("an application-supplied .danger survives a validation invalid→valid cycle", async () => {
   await loadValidation(`
     <form data-enhance="validation">

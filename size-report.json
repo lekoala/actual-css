@@ -1,12 +1,12 @@
 {
-  "totalRaw": 312430,
+  "totalRaw": 313407,
   "core": {
     "minified": 12619,
     "brotli": 2827
   },
   "full": {
-    "minified": 128272,
-    "brotli": 18259
+    "minified": 128478,
+    "brotli": 18308
   },
   "js": {
     "core": {
@@ -14,8 +14,8 @@
       "brotli": 2243
     },
     "full": {
-      "bytes": 56672,
-      "brotli": 16537
+      "bytes": 56738,
+      "brotli": 16580
     }
   },
   "fileCount": 109,
@@ -42,7 +42,7 @@
     },
     {
       "file": "components/drawer.css",
-      "raw": 8706
+      "raw": 8734
     },
     {
       "file": "components/badge.css",
@@ -82,7 +82,11 @@
     },
     {
       "file": "utilities/extra.css",
-      "raw": 4975
+      "raw": 5097
+    },
+    {
+      "file": "components/accordion.css",
+      "raw": 5034
     },
     {
       "file": "components/tooltip.css",
@@ -103,10 +107,6 @@
     {
       "file": "layout/column-layout.css",
       "raw": 4637
-    },
-    {
-      "file": "components/accordion.css",
-      "raw": 4317
     },
     {
       "file": "themes/gradient.css",
@@ -201,6 +201,10 @@
       "raw": 2670
     },
     {
+      "file": "components/bleed.css",
+      "raw": 2656
+    },
+    {
       "file": "themes/sunset.css",
       "raw": 2654
     },
@@ -210,15 +214,11 @@
     },
     {
       "file": "layout/app-layout.css",
-      "raw": 2585
+      "raw": 2586
     },
     {
       "file": "themes/forest.css",
       "raw": 2578
-    },
-    {
-      "file": "components/bleed.css",
-      "raw": 2547
     },
     {
       "file": "components/app-nav.css",
