@@ -51,10 +51,25 @@ test("nav-list is self-laid out with grid gap", () => {
   expect(css).toMatch(/\.nav-list\s+\.nav-link\s*\{[^}]*inline-size:\s*100%/);
 });
 
-test("card picture bleed clips children", () => {
-  const css = readCss("src/css/components/card.css");
+test("picture bleed clips children", () => {
+  const css = readCss("src/css/components/bleed.css");
 
-  expect(css).toMatch(/\.card > picture\.bleed\s*\{[\s\S]*overflow:\s*hidden;/);
+  expect(css).toMatch(/picture\.bleed\s*\{[\s\S]*overflow:\s*hidden;/);
+});
+
+test("bleed reads the relayed inset, and only one level down", () => {
+  const css = readCss("src/css/components/bleed.css");
+
+  // The clearing rule must stay above the relay: both are zero-specificity and
+  // they overlap on a direct child of a surface nested in another surface,
+  // where the inner surface's inset has to win.
+  const clear = css.indexOf("> * * {");
+  const relay = css.indexOf("--bleed-pad: var(--surface-pad);");
+  expect(clear).toBeGreaterThan(-1);
+  expect(relay).toBeGreaterThan(clear);
+
+  // A .bleed outside any surface stays inert instead of inheriting a stray inset.
+  expect(css).toMatch(/\.bleed\s*\{[^}]*margin-inline:\s*calc\(var\(--bleed-pad,\s*0px\) \* -1\);/);
 });
 
 test("card owns bare flow and yields layout to composed primitives", () => {

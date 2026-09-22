@@ -1,12 +1,12 @@
 {
-  "totalRaw": 308172,
+  "totalRaw": 312430,
   "core": {
-    "minified": 12611,
-    "brotli": 2823
+    "minified": 12619,
+    "brotli": 2827
   },
   "full": {
-    "minified": 127625,
-    "brotli": 18133
+    "minified": 128272,
+    "brotli": 18259
   },
   "js": {
     "core": {
@@ -18,7 +18,7 @@
       "brotli": 16537
     }
   },
-  "fileCount": 108,
+  "fileCount": 109,
   "files": [
     {
       "file": "components/steps.css",
@@ -33,16 +33,16 @@
       "raw": 10257
     },
     {
+      "file": "core/theme.css",
+      "raw": 8957
+    },
+    {
       "file": "components/alert.css",
       "raw": 8932
     },
     {
       "file": "components/drawer.css",
-      "raw": 8598
-    },
-    {
-      "file": "core/theme.css",
-      "raw": 8447
+      "raw": 8706
     },
     {
       "file": "components/badge.css",
@@ -105,12 +105,16 @@
       "raw": 4637
     },
     {
-      "file": "components/card.css",
-      "raw": 4499
+      "file": "components/accordion.css",
+      "raw": 4317
     },
     {
       "file": "themes/gradient.css",
       "raw": 4043
+    },
+    {
+      "file": "components/card.css",
+      "raw": 3972
     },
     {
       "file": "utilities/base.css",
@@ -139,10 +143,6 @@
     {
       "file": "components/list.css",
       "raw": 3563
-    },
-    {
-      "file": "components/accordion.css",
-      "raw": 3367
     },
     {
       "file": "components/menu.css",
@@ -215,6 +215,10 @@
     {
       "file": "themes/forest.css",
       "raw": 2578
+    },
+    {
+      "file": "components/bleed.css",
+      "raw": 2547
     },
     {
       "file": "components/app-nav.css",
@@ -329,6 +333,10 @@
       "raw": 1443
     },
     {
+      "file": "components/data-list.css",
+      "raw": 1442
+    },
+    {
       "file": "components/busy.css",
       "raw": 1431
     },
@@ -346,7 +354,7 @@
     },
     {
       "file": "components/index.css",
-      "raw": 1070
+      "raw": 1093
     },
     {
       "file": "components/breadcrumb.css",
@@ -359,10 +367,6 @@
     {
       "file": "layout/stack.css",
       "raw": 830
-    },
-    {
-      "file": "components/data-list.css",
-      "raw": 795
     },
     {
       "file": "core/reset.css",

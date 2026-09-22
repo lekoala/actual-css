@@ -61,6 +61,24 @@ metadata.
 </article>
 ```
 
+## Stacked
+
+`.stacked` puts each value under its term instead of beside it, for a narrow
+column or for values too long to share a row.
+
+```html demo
+<dl class="data-list stacked" style="max-inline-size: 16rem">
+  <dt>Billing contact</dt>
+  <dd>alice@example.com</dd>
+
+  <dt>Registered address</dt>
+  <dd>42 Rue des Fleurs, 1000 Brussels, Belgium</dd>
+
+  <dt>Renewal</dt>
+  <dd><time datetime="2026-09-14">14 Sep 2026</time></dd>
+</dl>
+```
+
 ## Contract
 
 `.data-list` styles one `<dt>` followed by one `<dd>` per property. A valid
@@ -70,3 +88,10 @@ where `.prose` already covers the editorial cases.
 
 Use `.data-list` for the properties of a single object. Use a `<table>` when
 comparing the same properties across multiple objects.
+
+A per-property icon goes inside the `<dt>`, next to the term. There is no
+gutter slot spanning a term and its value: a `<dl>` admits only `<dt>` and
+`<dd>` per pair — directly or inside a `<div>` wrapper — so no third element
+can hold it. When the icon is the point and the term/value relation is not,
+the content is not a description list: reach for `.media` with an `.overline`
+label instead.

@@ -296,6 +296,11 @@ gap.</p>
 <h2 id="bleed">Bleed</h2>
 <p>Use <code>.bleed</code> on a direct child to escape the card padding — full-width images,
 colored headers, or footers.</p>
+<p><code>.bleed</code> is a surface contract, not a card class: it also works on a direct
+child of a <code>.drawer</code> and of an accordion panel, which is the element the
+accordion pads. A surface joins that contract by declaring <code>--surface-pad</code>.
+The child combinator is load-bearing — a <code>.bleed</code> deeper than one level stays
+inert rather than escaping a box it does not sit against.</p>
 </div>
 <div class="docs-example">
   <div class="docs-preview">

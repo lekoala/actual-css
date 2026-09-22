@@ -2,9 +2,24 @@
 
 ## [Unreleased]
 
+### Added
+
+- `.bleed` is a shared surface contract: `src/css/components/bleed.css` reads the relayed `--surface-pad`, so a direct child of a `.drawer` or of an accordion panel escapes its inset like a card child already did.
+- `--accordion-pad` hook: the summary row and the panel no longer hard-code their inset, and the panel relays it so `.accordion.separated` items accept a `.bleed` child.
+- `--accordion-marker-size` hook.
+- `.data-list.stacked`: the value sits under its term instead of beside it.
+
+### Fixed
+
+- A custom `data-theme` on `<html>` kept the default palette's `--*-soft-fg` calibration instead of resetting it, so the same theme resolved a different soft ink on `<html data-theme>` than on a nested island.
+
 ### Documentation and tooling
 
 - Pushing a version tag publishes the GitHub release: `.npmrc` keeps `npm version` on the bare tag format, `bun run release:notes` extracts (and validates) the dated changelog section, and the CI `release` job attaches `dist/`.
+- Theming: a "Replace the palette with my own brand" entry names the neutral ramp and soft-ink tokens a partial override leaves behind, and points at `bun run report:theme-contrast`.
+- Tokens: a "Where a token is declared" section separates global, component-scoped, and relay properties, and shows the `var(--card-pad, <default>)` form for reading a component hook from outside.
+- Button: `--ui-bg` is the lever for an opaque fill under an intent-colored border, which no shared variant expresses.
+- Accordion: the marker is a masked box, so a decorated marker needs a real element — the opt-out recipe is written down.
 
 
 ## [0.9.2] - 2026-09-22

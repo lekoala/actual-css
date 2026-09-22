@@ -10,7 +10,9 @@
     ],
     "publicHooks": [
       "--accordion-radius",
-      "--accordion-marker-color"
+      "--accordion-pad",
+      "--accordion-marker-color",
+      "--accordion-marker-size"
     ],
     "states": [
       "open"
@@ -133,6 +135,17 @@
     ]
   },
   {
+    "name": "bleed",
+    "source": "src/css/components/bleed.css",
+    "cssImport": "actual-css/css/components/bleed",
+    "classes": [
+      "accordion",
+      "bleed",
+      "card",
+      "drawer"
+    ]
+  },
+  {
     "name": "breadcrumb",
     "source": "src/css/components/breadcrumb.css",
     "cssImport": "actual-css/css/components/breadcrumb",
@@ -248,7 +261,8 @@
     "source": "src/css/components/data-list.css",
     "cssImport": "actual-css/css/components/data-list",
     "classes": [
-      "data-list"
+      "data-list",
+      "stacked"
     ]
   },
   {

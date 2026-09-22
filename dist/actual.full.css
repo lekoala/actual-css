@@ -391,18 +391,17 @@ select {
    default theme: a custom property bakes its var() references where it is
    declared, so these resolve against root/light/dark tokens on every boundary.
    Presets and custom islands keep their --soft-fg-mix / raw-intent ink unless
-   they declare hooks themselves — :where() keeps this reset from outranking a
-   theme's own declaration (e.g. brutalist's 45% soft-fg-mix). */
-:where([data-theme]:not([data-theme="light"]):not([data-theme="dark"])) {
-  --primary-soft-fg: initial;
-  --secondary-soft-fg: initial;
-  --success-soft-fg: initial;
-  --warning-soft-fg: initial;
-  --danger-soft-fg: initial;
-  --neutral-soft-fg: initial;
-}
+   they declare hooks themselves.
 
-:root,
+   Why :where(:root) and why the reset comes second: both rules match when a
+   custom theme sits on <html> itself. A bare :root is (0,1,0) and would
+   outrank the zero-specificity reset, so the same theme resolved a calibrated
+   Ink & Terra ink on <html data-theme="brand"> and the raw --soft-fg-mix ink
+   on <div data-theme="brand"> — one attribute, two soft palettes. Levelling
+   both rules to zero specificity makes source order the tiebreaker, so the
+   reset must stay below. Zero specificity is also what lets a theme declare
+   its own hooks (e.g. brutalist's 45% soft-fg-mix) and win at (0,1,0). */
+:where(:root),
 [data-theme="light"],
 [data-theme="dark"] {
   --secondary-soft-fg: color-mix(in oklab, var(--text) 10%, var(--secondary) 90%);
@@ -410,6 +409,15 @@ select {
   --warning-soft-fg: color-mix(in oklab, var(--text) 25%, var(--warning) 75%);
   --danger-soft-fg: color-mix(in oklab, var(--text) 15%, var(--danger) 85%);
   --neutral-soft-fg: color-mix(in oklab, var(--text) 20%, var(--neutral) 80%);
+}
+
+:where([data-theme]:not([data-theme="light"]):not([data-theme="dark"])) {
+  --primary-soft-fg: initial;
+  --secondary-soft-fg: initial;
+  --success-soft-fg: initial;
+  --warning-soft-fg: initial;
+  --danger-soft-fg: initial;
+  --neutral-soft-fg: initial;
 }
 
 /* Native platform controls (checkbox, radio, range, progress) that are not
@@ -4466,7 +4474,9 @@ a.badge[aria-disabled="true"] {
  *
  * Child contract:
  * Direct .bleed children escape --card-pad (negative inset, wider media);
- * edge children inherit the card corners. .bleed must be a direct child.
+ * edge children inherit the card corners. .bleed must be a direct child, and
+ * its rules live in components/bleed.css — the card relays --card-pad to the
+ * shared --surface-pad that they read.
  *
  * Internal:
  * --card-bg
@@ -4496,6 +4506,10 @@ a.badge[aria-disabled="true"] {
   --card-max-inline-size: none;
   --card-bg: var(--ui-bg, var(--surface-raised));
   --card-fg: var(--ui-fg, var(--text));
+
+  /* The inset a direct .bleed child cancels (components/bleed.css). Relayed
+     from --card-pad so .compact and an author override both reach it. */
+  --surface-pad: var(--card-pad);
 
   /* Keep contextual descendants tied to the surface this card actually owns. */
   --heading: var(--card-fg);
@@ -4562,45 +4576,6 @@ a.badge[aria-disabled="true"] {
   --card-pad: var(--space-20);
 }
 
-/* Full-bleed children */
-.card > .bleed {
-  margin-inline: calc(var(--card-pad) * -1);
-  max-inline-size: none;
-}
-
-.card > .bleed:first-child {
-  margin-block-start: calc(var(--card-pad) * -1);
-  border-start-start-radius: inherit;
-  border-start-end-radius: inherit;
-}
-
-.card > .bleed:last-child {
-  margin-block-end: calc(var(--card-pad) * -1);
-  border-end-start-radius: inherit;
-  border-end-end-radius: inherit;
-}
-
-/* Media bleed */
-.card > :where(img, picture, video, canvas, svg).bleed {
-  display: block;
-  inline-size: calc(100% + var(--card-pad) * 2);
-  max-inline-size: none;
-}
-
-.card > picture.bleed {
-  overflow: hidden;
-}
-
-.card > picture.bleed > img {
-  display: block;
-  inline-size: 100%;
-  block-size: auto;
-}
-
-/* Padded structural bleed */
-.card > :where(header, footer, figure).bleed {
-  padding: var(--card-pad);
-}
 @media print {
   .card {
     border: var(--border-width) solid CanvasText;
@@ -4981,6 +4956,8 @@ html.has-modal-open.had-scrollbar {
 :where(dialog).drawer {
   --drawer-size: 20rem;
   --drawer-pad: var(--space-40);
+  /* The inset a direct .bleed child cancels (components/bleed.css). */
+  --surface-pad: var(--drawer-pad);
   --drawer-closed-translate: -100%;
   /* Exit is shorter than entry so the panel clears quickly; the scrim reads
      the same variable through inheritance and never lags the panel. */
@@ -5211,6 +5188,83 @@ html.has-modal-open.had-scrollbar {
 .drawer-close:focus-visible {
   outline: 2px solid transparent;
   box-shadow: var(--focus-ring-shadow);
+}
+
+/*
+ * Full-bleed children — the shared escape hatch for a padded surface.
+ *
+ * Docs: docs/pages/components/card.md
+ *
+ * A surface that insets its direct children relays that inset to them as
+ * --surface-pad; a direct .bleed child cancels it and reaches the surface
+ * edge. Card and drawer pad at the container level, so they own the token
+ * there; the accordion pads its summary and its panel instead, so the panel
+ * owns it and the item does not.
+ *
+ * Why the token is handed to the children rather than declared on the surface:
+ * custom properties inherit, so a surface-level declaration would also reach a
+ * grandchild, which sits at its wrapper's edge rather than the surface's and
+ * would pull a negative margin out of the wrong box. Relaying it one level and
+ * clearing it below keeps the child combinator's guarantee while leaving the
+ * .bleed rules themselves free of the surface list.
+ *
+ * Why the clearing rule comes first: both rules are zero-specificity, so
+ * source order decides where they overlap, and they overlap on exactly one
+ * element — a direct child of a surface nested inside another surface. That
+ * child must keep the inner surface's inset, so the relay has to win.
+ *
+ * Framework plumbing:
+ * --surface-pad (declared by the surface)
+ * --bleed-pad (relayed to its direct children)
+ */
+:where(.card, .drawer, .accordion details > summary + *) > * * {
+  --bleed-pad: initial;
+}
+
+:where(.card, .drawer, .accordion details > summary + *) > * {
+  --bleed-pad: var(--surface-pad);
+}
+
+/* Inert without a surface: the fallback resolves the negative margin to zero
+   rather than dropping the declaration and inheriting a stray inset. */
+.bleed {
+  margin-inline: calc(var(--bleed-pad, 0px) * -1);
+  max-inline-size: none;
+}
+
+.bleed:first-child {
+  margin-block-start: calc(var(--bleed-pad, 0px) * -1);
+  border-start-start-radius: inherit;
+  border-start-end-radius: inherit;
+}
+
+.bleed:last-child {
+  margin-block-end: calc(var(--bleed-pad, 0px) * -1);
+  border-end-start-radius: inherit;
+  border-end-end-radius: inherit;
+}
+
+/* Media bleed */
+:where(img, picture, video, canvas, svg).bleed {
+  display: block;
+  inline-size: calc(100% + var(--bleed-pad, 0px) * 2);
+  max-inline-size: none;
+}
+
+picture.bleed {
+  overflow: hidden;
+}
+
+picture.bleed > img {
+  display: block;
+  inline-size: 100%;
+  block-size: auto;
+}
+
+/* Padded structural bleed — the band keeps the surface's own rhythm while its
+   background reaches the edge. */
+:where(header, footer, figure).bleed {
+  padding: var(--bleed-pad, 0px);
 }
 
 
@@ -5680,11 +5734,15 @@ html.has-modal-open.had-scrollbar {
  *
  * Public hooks:
  * --accordion-radius
+ * --accordion-pad
  * --accordion-marker-color
+ * --accordion-marker-size
  */
 .accordion {
   --accordion-radius: var(--radius);
+  --accordion-pad: var(--space-40);
   --accordion-marker-color: var(--text-muted);
+  --accordion-marker-size: 1rem;
 
   border: var(--border-width) solid var(--border);
   border-radius: var(--accordion-radius);
@@ -5701,7 +5759,7 @@ html.has-modal-open.had-scrollbar {
   gap: var(--space-30);
   cursor: pointer;
   list-style: none;
-  padding: var(--space-40);
+  padding: var(--accordion-pad);
   color: var(--text);
   font-weight: var(--font-weight-medium);
 }
@@ -5717,12 +5775,17 @@ html.has-modal-open.had-scrollbar {
   display: none;
 }
 
+/* The marker is the chevron itself: the box is filled with
+   --accordion-marker-color and then clipped to the glyph by the mask. Anything
+   painted on this pseudo-element — a background, a ring, a shadow — is clipped
+   with it, so a decorated marker (a chevron in a pill) needs a real element;
+   see the accordion docs for the opt-out. */
 .accordion summary::after {
   content: "";
   flex: 0 0 auto;
   margin-inline-start: auto;
-  inline-size: 1rem;
-  block-size: 1rem;
+  inline-size: var(--accordion-marker-size);
+  block-size: var(--accordion-marker-size);
   background-color: var(--accordion-marker-color);
   -webkit-mask: var(--icon-chevron) center / contain no-repeat;
   mask: var(--icon-chevron) center / contain no-repeat;
@@ -5733,9 +5796,14 @@ html.has-modal-open.had-scrollbar {
   transform: rotate(180deg);
 }
 
+/* The panel, not the item, owns the inset here — .separated paints a card on
+   <details> but leaves it unpadded — so the panel is what a .bleed child
+   escapes (components/bleed.css). */
 .accordion details > summary + * {
-  padding-block: 0 var(--space-40);
-  padding-inline: var(--space-40);
+  --surface-pad: var(--accordion-pad);
+
+  padding-block: 0 var(--accordion-pad);
+  padding-inline: var(--accordion-pad);
   color: var(--text-muted);
   margin-block: 0;
 }
@@ -5766,6 +5834,12 @@ html.has-modal-open.had-scrollbar {
 .accordion.flush summary,
 .accordion.flush details > summary + * {
   padding-inline: 0;
+}
+
+/* Flush already sits at the embedding surface's edge, so there is no inline
+   inset left for a .bleed child to cancel. */
+.accordion.flush details > summary + * {
+  --surface-pad: 0px;
 }
 
 /* Separated — each item owns a full card. The item's own border beats the
@@ -7716,6 +7790,9 @@ a.avatar[aria-disabled="true"] {
  * A plain <dl> handles richer relationships (several terms or descriptions)
  * and stays untouched by this component.
  *
+ * Variants:
+ * .stacked — value under its term rather than beside it.
+ *
  * Why margin resets: neutralizes .prose list margins if .data-list appears
  * inside an authored rich-text scope; the grid owns row/column rhythm.
  */
@@ -7735,6 +7812,21 @@ a.avatar[aria-disabled="true"] {
 .data-list > dd {
   min-inline-size: 0;
   margin: 0;
+}
+
+/* Stacked — the value sits under its term instead of beside it, for narrow
+   columns and for values too long to sit in a second column.
+   Why the pair separation rides on the term's margin: the children alternate
+   dt/dd with no element around a pair, so the grid has no row boundary to give
+   a larger gap to. The tight gap is the row gap; the term reopens the space. */
+.data-list.stacked {
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-10);
+}
+
+.data-list.stacked > dt + dt,
+.data-list.stacked > dd + dt {
+  margin-block-start: var(--space-30);
 }
 
 /*

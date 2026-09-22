@@ -19,7 +19,9 @@
  *
  * Child contract:
  * Direct .bleed children escape --card-pad (negative inset, wider media);
- * edge children inherit the card corners. .bleed must be a direct child.
+ * edge children inherit the card corners. .bleed must be a direct child, and
+ * its rules live in components/bleed.css — the card relays --card-pad to the
+ * shared --surface-pad that they read.
  *
  * Internal:
  * --card-bg
@@ -49,6 +51,10 @@
   --card-max-inline-size: none;
   --card-bg: var(--ui-bg, var(--surface-raised));
   --card-fg: var(--ui-fg, var(--text));
+
+  /* The inset a direct .bleed child cancels (components/bleed.css). Relayed
+     from --card-pad so .compact and an author override both reach it. */
+  --surface-pad: var(--card-pad);
 
   /* Keep contextual descendants tied to the surface this card actually owns. */
   --heading: var(--card-fg);
@@ -115,45 +121,6 @@
   --card-pad: var(--space-20);
 }
 
-/* Full-bleed children */
-.card > .bleed {
-  margin-inline: calc(var(--card-pad) * -1);
-  max-inline-size: none;
-}
-
-.card > .bleed:first-child {
-  margin-block-start: calc(var(--card-pad) * -1);
-  border-start-start-radius: inherit;
-  border-start-end-radius: inherit;
-}
-
-.card > .bleed:last-child {
-  margin-block-end: calc(var(--card-pad) * -1);
-  border-end-start-radius: inherit;
-  border-end-end-radius: inherit;
-}
-
-/* Media bleed */
-.card > :where(img, picture, video, canvas, svg).bleed {
-  display: block;
-  inline-size: calc(100% + var(--card-pad) * 2);
-  max-inline-size: none;
-}
-
-.card > picture.bleed {
-  overflow: hidden;
-}
-
-.card > picture.bleed > img {
-  display: block;
-  inline-size: 100%;
-  block-size: auto;
-}
-
-/* Padded structural bleed */
-.card > :where(header, footer, figure).bleed {
-  padding: var(--card-pad);
-}
 @media print {
   .card {
     border: var(--border-width) solid CanvasText;

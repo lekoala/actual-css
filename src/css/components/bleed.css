@@ -1,0 +1,76 @@
+/*
+ * Full-bleed children — the shared escape hatch for a padded surface.
+ *
+ * Docs: docs/pages/components/card.md
+ *
+ * A surface that insets its direct children relays that inset to them as
+ * --surface-pad; a direct .bleed child cancels it and reaches the surface
+ * edge. Card and drawer pad at the container level, so they own the token
+ * there; the accordion pads its summary and its panel instead, so the panel
+ * owns it and the item does not.
+ *
+ * Why the token is handed to the children rather than declared on the surface:
+ * custom properties inherit, so a surface-level declaration would also reach a
+ * grandchild, which sits at its wrapper's edge rather than the surface's and
+ * would pull a negative margin out of the wrong box. Relaying it one level and
+ * clearing it below keeps the child combinator's guarantee while leaving the
+ * .bleed rules themselves free of the surface list.
+ *
+ * Why the clearing rule comes first: both rules are zero-specificity, so
+ * source order decides where they overlap, and they overlap on exactly one
+ * element — a direct child of a surface nested inside another surface. That
+ * child must keep the inner surface's inset, so the relay has to win.
+ *
+ * Framework plumbing:
+ * --surface-pad (declared by the surface)
+ * --bleed-pad (relayed to its direct children)
+ */
+:where(.card, .drawer, .accordion details > summary + *) > * * {
+  --bleed-pad: initial;
+}
+
+:where(.card, .drawer, .accordion details > summary + *) > * {
+  --bleed-pad: var(--surface-pad);
+}
+
+/* Inert without a surface: the fallback resolves the negative margin to zero
+   rather than dropping the declaration and inheriting a stray inset. */
+.bleed {
+  margin-inline: calc(var(--bleed-pad, 0px) * -1);
+  max-inline-size: none;
+}
+
+.bleed:first-child {
+  margin-block-start: calc(var(--bleed-pad, 0px) * -1);
+  border-start-start-radius: inherit;
+  border-start-end-radius: inherit;
+}
+
+.bleed:last-child {
+  margin-block-end: calc(var(--bleed-pad, 0px) * -1);
+  border-end-start-radius: inherit;
+  border-end-end-radius: inherit;
+}
+
+/* Media bleed */
+:where(img, picture, video, canvas, svg).bleed {
+  display: block;
+  inline-size: calc(100% + var(--bleed-pad, 0px) * 2);
+  max-inline-size: none;
+}
+
+picture.bleed {
+  overflow: hidden;
+}
+
+picture.bleed > img {
+  display: block;
+  inline-size: 100%;
+  block-size: auto;
+}
+
+/* Padded structural bleed — the band keeps the surface's own rhythm while its
+   background reaches the edge. */
+:where(header, footer, figure).bleed {
+  padding: var(--bleed-pad, 0px);
+}

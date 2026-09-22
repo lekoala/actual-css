@@ -112,6 +112,21 @@ surface variants (`.card.subtle`) still take precedence.
 
 → Components · Card · Foundations · Tokens (theme contract)
 
+### Replace the palette with my own brand
+
+Override the whole theme contract, not just `--primary`. The neutral ramp
+(`--surface-subtle`, `--border`, `--text-muted`, `--text-subtle`) is curated per
+role and tinted toward the default primary; it is never derived from `--primary`
+at runtime, so a partial override leaves the default identity in the greys.
+
+Soft ink is the other half. The default palette ships calibrated
+`--*-soft-fg` hooks; any other theme falls back to the `--soft-fg-mix`
+derivation, which is a single global percentage and therefore guarantees
+nothing about your intents. Verify with `bun run report:theme-contrast`, then
+lower `--soft-fg-mix` or declare the per-role hooks for the intents that miss.
+
+→ Foundations · Tokens (theme contract)
+
 ### Use or adapt a preset palette
 
 `src/css/themes/` holds example palettes (`ocean`, `spruce`, `neon`, `brutalist`, …) as

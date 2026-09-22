@@ -223,6 +223,23 @@
 <h2 id="public-surface">Public surface</h2>
 <p>Component custom properties fall into three header categories in the source: <strong>Public hooks</strong> (author-facing customization points), <strong>Framework plumbing</strong> (shared relays consumed across components — <code>--ui-*</code>, <code>--intent*</code>, <code>--density-*</code>), and <strong>Internal</strong> (derived, state/variant-owned, or runtime-written). Documentation focuses on discovering the right hook and on non-obvious usage; the CSS source remains canonical for exact defaults and fallback chains.</p>
 <p>As a convention, component-prefixed properties owned by the component's base rule are usually author hooks. Properties owned by states/variants, derived from other hooks, or written by JavaScript are not. This convention is indicative, not algorithmic: runtime-written, derived, and state-relay properties stay internal even when their form resembles a hook.</p>
+<h3 id="where-a-token-is-declared">Where a token is declared</h3>
+<p>A hook is only defined inside the scope that declares it. Reading one outside that scope is not an error a browser reports: <code>var()</code> resolves to nothing, the whole declaration becomes invalid at computed-value time, and the property falls back to its initial value — <code>padding: var(--card-pad)</code> outside a card computes to <code>0</code>, silently.</p>
+<div class="table-wrap"><table class="table">
+<thead>
+<tr><th>Scope</th><th>Declared on</th><th>Examples</th></tr>
+</thead>
+<tbody>
+<tr><td>Global</td><td><code>:root</code>, every theme island</td><td><code>--space-40</code>, <code>--radius</code>, <code>--primary</code></td></tr>
+<tr><td>Component</td><td>the component's base rule</td><td><code>--card-pad</code>, <code>--drawer-size</code></td></tr>
+<tr><td>Relay</td><td>a variant, state, or script</td><td><code>--ui-bg</code>, <code>--intent</code>, <code>--surface-pad</code></td></tr>
+</tbody>
+</table></div>
+<p>Global tokens are the ones to reach for in application CSS. When you do want a component token outside its component — matching a bare block to the card rhythm, say — give <code>var()</code> the default explicitly, so the declaration survives where the hook is absent:</p>
+<pre><code class="language-css">.panel {
+  padding: var(--card-pad, var(--space-40));
+}
+</code></pre>
 <h3 id="color">Color</h3>
 <p>Intent tokens are used by <code>.primary</code>, <code>.secondary</code>, <code>.success</code>, <code>.warning</code>, <code>.danger</code>, and <code>.neutral</code>. They are curated color/foreground pairs. Actual CSS does not compute foregrounds automatically in the core theme contract.</p>
 <p>The values below are the light fallback. In browsers with <code>light-dark()</code> support, the default theme re-declares the same tokens as light/dark pairs so dark mode follows the OS automatically; without support, browsers receive the light fallback.</p>
@@ -568,7 +585,8 @@ undo that.</p>
 <h2 id="theme-contract">Theme contract</h2>
 <p>Themes override tokens, not selectors. The themes in <code>src/css/themes/</code> are repository-only demo examples, not included in the default stylesheet or the npm package; they exist to show valid ways to use this contract, such as <code>ocean</code>, <code>square</code>, <code>cyberpunk</code>, and <code>brutalist</code>.</p>
 <p>A minimal recolor theme overrides the intent pairs, surfaces, text colors, border, focus, and hover overlay. In browsers with <code>color-mix()</code> support, the core derives <code>--focus-ring</code> from the island's <code>--focus</code>; override the ring only for a deliberate visual treatment or when a matching pre-<code>color-mix()</code> fallback is required.</p>
-<p>When overriding an intent color, review its paired <code>--*-fg</code> and <code>--*-soft-fg</code>. The generic soft fallback (<code>--soft-fg-mix</code> derivation, above) may already be sufficient.</p>
+<p>When overriding an intent color, review its paired <code>--*-fg</code> and <code>--*-soft-fg</code>. A theme that declares no hook falls back to the <code>--soft-fg-mix</code> derivation: one global percentage applied to every role, so it carries no contrast guarantee for a palette it was not tuned against. <code>bun run report:theme-contrast</code> prints the resting and hovered soft pair for every intent of every island, which is how a theme finds the roles that need a hook or a lower <code>--soft-fg-mix</code>.</p>
+<p>The default palette's hooks apply to <code>:root</code> and to the <code>light</code>/<code>dark</code> boundaries only. Any other <code>data-theme</code> value resets them to the derivation, whether the attribute sits on <code>&lt;html&gt;</code> or on a nested island.</p>
 <p>Shape, shadow, motion, typography, and soft-variant mix tokens are optional knobs. Override them only when the theme actually changes that part of the system.</p>
 <p>A full theme can override:</p>
 <ul>
@@ -664,6 +682,7 @@ undo that.</p>
           <p class="docs-nav-group">On this page</p>
           <ul class="nav-list docs-toc-list" data-docs-toc>
         <li><a class="nav-link" href="#public-surface" data-docs-toc-item data-level="2">Public surface</a></li>
+        <li><a class="nav-link" href="#where-a-token-is-declared" data-docs-toc-item data-level="3">Where a token is declared</a></li>
         <li><a class="nav-link" href="#color" data-docs-toc-item data-level="3">Color</a></li>
         <li><a class="nav-link" href="#palette-coherence" data-docs-toc-item data-level="3">Palette coherence</a></li>
         <li><a class="nav-link" href="#default-theme-philosophy" data-docs-toc-item data-level="3">Default theme philosophy</a></li>

@@ -399,8 +399,32 @@
 <h2 id="css-hooks">CSS hooks</h2>
 <ul>
 <li><code>--accordion-radius</code> — outer corner radius.</li>
+<li><code>--accordion-pad</code> — inset of the summary row and the panel. The panel relays it as <code>--surface-pad</code>, so a direct <code>.bleed</code> child of the panel reaches the item edge; <code>.flush</code> drops the inline half and the relay with it.</li>
 <li><code>--accordion-marker-color</code> — color of the end marker; it reinforces to the summary text color on hover, and forced-colors mode overrides it to <code>CanvasText</code>.</li>
+<li><code>--accordion-marker-size</code> — edge length of the end marker.</li>
 </ul>
+<h3 id="replacing-the-marker">Replacing the marker</h3>
+<p>The marker is a masked box: <code>--accordion-marker-color</code> fills it and the chevron
+mask clips it to the glyph. A background, ring, or shadow set on it is clipped
+to the same silhouette, so a decorated marker — a chevron inside a pill — has
+to be a real element. Hide the built-in one and place your own; the open state
+is <code>details[open]</code>, and <code>--icon-chevron</code> is the shared asset:</p>
+<pre><code class="language-css">.accordion.custom-marker summary::after {
+  display: none;
+}
+
+.accordion.custom-marker .marker {
+  margin-inline-start: auto;
+  border-radius: 50%;
+  background: var(--surface-subtle);
+  padding: var(--space-10);
+  transition: transform var(--duration);
+}
+
+.accordion.custom-marker details[open] .marker {
+  transform: rotate(180deg);
+}
+</code></pre>
 
 </div>
 
@@ -424,6 +448,7 @@
         <li><a class="nav-link" href="#exclusive-groups" data-docs-toc-item data-level="2">Exclusive groups</a></li>
         <li><a class="nav-link" href="#custom-markers" data-docs-toc-item data-level="2">Custom markers</a></li>
         <li><a class="nav-link" href="#css-hooks" data-docs-toc-item data-level="2">CSS hooks</a></li>
+        <li><a class="nav-link" href="#replacing-the-marker" data-docs-toc-item data-level="3">Replacing the marker</a></li>
           </ul>
         </nav>
       </aside>

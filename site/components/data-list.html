@@ -316,6 +316,37 @@ metadata.</p>
   </div>
 </div>
 <div class="prose docs-prose">
+<h2 id="stacked">Stacked</h2>
+<p><code>.stacked</code> puts each value under its term instead of beside it, for a narrow
+column or for values too long to share a row.</p>
+</div>
+<div class="docs-example">
+  <div class="docs-preview">
+<dl class="data-list stacked" style="max-inline-size: 16rem">
+  <dt>Billing contact</dt>
+  <dd>alice@example.com</dd>
+
+  <dt>Registered address</dt>
+  <dd>42 Rue des Fleurs, 1000 Brussels, Belgium</dd>
+
+  <dt>Renewal</dt>
+  <dd><time datetime="2026-09-14">14 Sep 2026</time></dd>
+</dl>
+  </div>
+  <div class="docs-code">
+    <pre><code class="language-html">&lt;dl class=&quot;data-list stacked&quot; style=&quot;max-inline-size: 16rem&quot;&gt;
+  &lt;dt&gt;Billing contact&lt;/dt&gt;
+  &lt;dd&gt;alice@example.com&lt;/dd&gt;
+
+  &lt;dt&gt;Registered address&lt;/dt&gt;
+  &lt;dd&gt;42 Rue des Fleurs, 1000 Brussels, Belgium&lt;/dd&gt;
+
+  &lt;dt&gt;Renewal&lt;/dt&gt;
+  &lt;dd&gt;&lt;time datetime=&quot;2026-09-14&quot;&gt;14 Sep 2026&lt;/time&gt;&lt;/dd&gt;
+&lt;/dl&gt;</code></pre>
+  </div>
+</div>
+<div class="prose docs-prose">
 <h2 id="contract">Contract</h2>
 <p><code>.data-list</code> styles one <code>&lt;dt&gt;</code> followed by one <code>&lt;dd&gt;</code> per property. A valid
 <code>&lt;dl&gt;</code> may group several terms with one description or the reverse, but that
@@ -323,6 +354,12 @@ markup does not belong in <code>.data-list</code> — use a plain description li
 where <code>.prose</code> already covers the editorial cases.</p>
 <p>Use <code>.data-list</code> for the properties of a single object. Use a <code>&lt;table&gt;</code> when
 comparing the same properties across multiple objects.</p>
+<p>A per-property icon goes inside the <code>&lt;dt&gt;</code>, next to the term. There is no
+gutter slot spanning a term and its value: a <code>&lt;dl&gt;</code> admits only <code>&lt;dt&gt;</code> and
+<code>&lt;dd&gt;</code> per pair — directly or inside a <code>&lt;div&gt;</code> wrapper — so no third element
+can hold it. When the icon is the point and the term/value relation is not,
+the content is not a description list: reach for <code>.media</code> with an <code>.overline</code>
+label instead.</p>
 
 </div>
 
@@ -344,6 +381,7 @@ comparing the same properties across multiple objects.</p>
           <ul class="nav-list docs-toc-list" data-docs-toc>
         <li><a class="nav-link" href="#rich-values" data-docs-toc-item data-level="2">Rich values</a></li>
         <li><a class="nav-link" href="#in-a-card" data-docs-toc-item data-level="2">In a card</a></li>
+        <li><a class="nav-link" href="#stacked" data-docs-toc-item data-level="2">Stacked</a></li>
         <li><a class="nav-link" href="#contract" data-docs-toc-item data-level="2">Contract</a></li>
           </ul>
         </nav>
