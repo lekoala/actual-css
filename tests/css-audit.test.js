@@ -43,6 +43,35 @@ test("accordion and select share the chevron asset", () => {
   expect(accordionCss).toContain("mask: var(--icon-chevron) center / contain no-repeat;");
 });
 
+test("forced-colors mask fills survive application hook overrides", () => {
+  // The forced value is pinned on the property, not the hook: an application
+  // hook override at the same specificity loads after the framework and would
+  // win the variable, leaving a Canvas-remapped fill.
+  const accordionRules = readRules("src/css/components/accordion.css");
+  expect(accordionRules).not.toContain("--accordion-marker-color: CanvasText");
+  expect(accordionRules).toMatch(
+    /@media \(forced-colors: active\)[\s\S]*\.accordion summary::after[\s\S]*background-color:\s*CanvasText;/,
+  );
+
+  const rangeCss = readCss("src/css/forms/range.css");
+  expect(rangeCss).toMatch(
+    /@media \(forced-colors: active\)[\s\S]*\.range::-webkit-slider-runnable-track[\s\S]*background:\s*CanvasText;/,
+  );
+  expect(rangeCss).toMatch(
+    /@media \(forced-colors: active\)[\s\S]*\.range::-moz-range-track[\s\S]*background:\s*CanvasText;/,
+  );
+
+  // currentColor mask/gradient fills: without this the system remaps them to
+  // Canvas or drops the image and the glyph disappears.
+  for (const path of [
+    "src/css/components/close.css",
+    "src/css/components/fab.css",
+    "src/css/components/menu.css",
+  ]) {
+    expect(readCss(path)).toContain("forced-color-adjust: none;");
+  }
+});
+
 test("nav-list is self-laid out with grid gap", () => {
   const css = readCss("src/css/components/navbar.css");
 

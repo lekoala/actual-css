@@ -128,3 +128,13 @@
   opacity: 1;
   transform: none;
 }
+
+@media (forced-colors: active) {
+  /* Both toggle markers are currentColor mask fills: without this the system
+    remaps the backgrounds to Canvas and the glyphs disappear. Kept on the
+    pseudos so the host keeps its native color and focus adaptation. */
+  .fab > summary::before,
+  .fab > summary::after {
+    forced-color-adjust: none;
+  }
+}

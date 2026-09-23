@@ -154,7 +154,10 @@
 }
 
 @media (forced-colors: active) {
-  .accordion {
-    --accordion-marker-color: CanvasText;
+  /* Written on the property, not the hook: an application hook override at
+    the same specificity loads after this file and would win the variable,
+    leaving a Canvas-remapped fill. The property keeps CanvasText. */
+  .accordion summary::after {
+    background-color: CanvasText;
   }
 }

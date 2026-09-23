@@ -80,3 +80,12 @@
     color: var(--text);
   }
 }
+
+@media (forced-colors: active) {
+  /* The X is a currentColor mask fill: without this the system remaps the
+    background to Canvas and the glyph disappears. Kept on the pseudo so the
+    host keeps its native color and focus adaptation. */
+  .close::before {
+    forced-color-adjust: none;
+  }
+}
