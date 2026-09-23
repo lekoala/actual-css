@@ -133,3 +133,15 @@
   border: 0;
   border-block-start: var(--border-width) solid var(--border);
 }
+
+@media (forced-colors: active) {
+  /* The check mark is a currentColor mask fill and the mixed/radio marks are
+    currentColor gradients: without this the system remaps them to Canvas or
+    drops the image and the state disappears. Kept on the pseudo so the host
+    keeps its native color and focus adaptation. */
+  .menu-item[role="menuitemcheckbox"][aria-checked="true"]::before,
+  .menu-item[role="menuitemcheckbox"][aria-checked="mixed"]::before,
+  .menu-item[role="menuitemradio"]::before {
+    forced-color-adjust: none;
+  }
+}

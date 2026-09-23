@@ -30,6 +30,12 @@ an essential shape, state, or affordance.
 
 ## Pattern: custom property + single override
 
+The hook-only form below is fine until an application overrides the hook: the
+override sits at the same specificity, loads after the framework, and wins the
+variable — leaving a non-system fill the browser then remaps to `Canvas`. For
+a masked marker, write the forced value on the property itself so no hook
+override can take it away (accordion) — same for range track/thumb fills.
+
 ```css
 .component {
   --cmp-marker-color: var(--text-muted);
@@ -47,6 +53,11 @@ an essential shape, state, or affordance.
 @media (forced-colors: active) {
   .component {
     --cmp-marker-color: CanvasText;
+  }
+
+  /* Masked markers: pin the property, not just the hook. */
+  .component::marker {
+    background-color: CanvasText;
   }
 }
 ```
@@ -104,7 +115,7 @@ remapping is perfect:
 
 - `.card` — `background: Canvas`, `color: CanvasText` are already the defaults
 - `.flyout` / `.menu` — `Canvas`/`CanvasText` for content, `ButtonText` for borders
-- `.accordion` / `.breadcrumb` — pure remapping gets everything right
+- `.breadcrumb` — pure remapping gets everything right
 - `.status-bar` — `CanvasText` on `Canvas` background
 
 The only forced-colors rules that should remain after a full audit are the ones

@@ -98,20 +98,33 @@
 }
 
 /* Forced colors: the track must stay a visible line against the page (Canvas
-   would merge with it) and the thumb needs a real boundary to remain
-   distinguishable from the track. Disabled keeps GrayText via :disabled.
-   Focus stays on the transparent outline of :focus-visible. */
+  would merge with it) and the thumb needs a real boundary to remain
+  distinguishable from the track. Disabled keeps GrayText via :disabled.
+  Focus stays on the transparent outline of :focus-visible. Track and thumb
+  fills are written on the properties, not only the hooks: an application
+  hook override at the same specificity loads after this file and would win
+  the variable, leaving a Canvas-remapped fill. */
 @media (forced-colors: active) {
   .range {
     --range-track-bg: CanvasText;
     --range-thumb-bg: ButtonFace;
   }
 
+  .range::-webkit-slider-runnable-track {
+    background: CanvasText;
+  }
+
+  .range::-moz-range-track {
+    background: CanvasText;
+  }
+
   .range::-webkit-slider-thumb {
+    background: ButtonFace;
     border: var(--border-width) solid ButtonText;
   }
 
   .range::-moz-range-thumb {
+    background: ButtonFace;
     border: var(--border-width) solid ButtonText;
   }
 }

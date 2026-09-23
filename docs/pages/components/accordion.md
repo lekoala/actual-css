@@ -117,7 +117,7 @@ The end marker is a shared token-based chevron; swapping it for a local icon is 
 
 - `--accordion-radius` — outer corner radius.
 - `--accordion-pad` — inset of the summary row and the panel. The panel relays it as `--surface-pad`, so a direct `.bleed` child of the panel reaches the item's sides and bottom corners (never the summary); `.flush` drops the inline half and the relay with it.
-- `--accordion-marker-color` — color of the end marker; it reinforces to the summary text color on hover, and forced-colors mode overrides it to `CanvasText`.
+- `--accordion-marker-color` — color of the end marker; it reinforces to the summary text color on hover. In forced-colors mode the marker is pinned to `CanvasText` on the property itself, so an application override of the hook cannot leave a `Canvas`-remapped fill.
 - `--accordion-marker-size` — edge length of the end marker.
 
 ### Replacing the marker
@@ -128,7 +128,10 @@ to the same silhouette, so a decorated marker — a chevron inside a pill — ha
 to be a real element: hide the built-in one and put a
 `<span class="marker" aria-hidden="true"></span>` at the end of the summary. The
 pill is the span; the chevron is its pseudo-element, which reads the same color
-hook, so the hover reinforcement and the forced-colors `CanvasText` carry over:
+hook, so the hover reinforcement carries over. The forced-colors pin does not
+carry over through the hook — an application hook override at the same
+specificity loads after the framework and would win the variable — so the
+recipe repeats it on its own property:
 
 ```css
 .accordion.custom-marker summary::after {
@@ -160,5 +163,11 @@ hook, so the hover reinforcement and the forced-colors `CanvasText` carry over:
 
 .accordion.custom-marker details[open] .marker {
   transform: rotate(180deg);
+}
+
+@media (forced-colors: active) {
+  .accordion.custom-marker .marker::before {
+    background-color: CanvasText;
+  }
 }
 ```
