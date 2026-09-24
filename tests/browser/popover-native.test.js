@@ -16,7 +16,12 @@
  *     has, or the panel is held fully opaque and then snaps away.
  */
 import { expect, test } from "bun:test";
-import { browserAvailable, fixtureUrl, withBrowserPage } from "../../scripts/utils/browser.js";
+import {
+  browserAvailable,
+  fixtureUrl,
+  waitForBrowser,
+  withBrowserPage,
+} from "../../scripts/utils/browser.js";
 
 const FIXTURE = "tests/browser/popover-native.html";
 const TIMEOUT = 60_000;
@@ -71,7 +76,10 @@ it("a closed native popover is not rendered, and an open one fades in and out", 
       expect(entering.display).toBe("grid");
       expect(entering.opacity).toBeLessThan(1);
 
-      await sleep(400);
+      await waitForBrowser(
+        view,
+        `getComputedStyle(document.getElementById("native-flyout")).opacity === "1"`,
+      );
       const open = await read("native-flyout");
       expect(open.display).toBe("grid");
       expect(open.opacity).toBe(1);
@@ -84,14 +92,20 @@ it("a closed native popover is not rendered, and an open one fades in and out", 
       expect(exiting.display).toBe("grid");
       expect(exiting.opacity).toBeLessThan(1);
 
-      await sleep(400);
+      await waitForBrowser(
+        view,
+        `getComputedStyle(document.getElementById("native-flyout")).display === "none"`,
+      );
       const settled = await read("native-flyout");
       expect(settled.display).toBe("none");
       expect(settled.boxed).toBe(false);
 
       // Tooltip: the UA already hides it, but it must fade out the same way.
       await show("native-tooltip");
-      await sleep(400);
+      await waitForBrowser(
+        view,
+        `getComputedStyle(document.getElementById("native-tooltip")).opacity === "1"`,
+      );
       expect((await read("native-tooltip")).opacity).toBe(1);
 
       await hide("native-tooltip");
@@ -99,7 +113,10 @@ it("a closed native popover is not rendered, and an open one fades in and out", 
       const tipExiting = await read("native-tooltip");
       expect(tipExiting.opacity).toBeLessThan(1);
 
-      await sleep(400);
+      await waitForBrowser(
+        view,
+        `getComputedStyle(document.getElementById("native-tooltip")).display === "none"`,
+      );
       expect((await read("native-tooltip")).display).toBe("none");
     },
     {

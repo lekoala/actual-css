@@ -20,7 +20,12 @@
  * exactly the lag under test.
  */
 import { expect, test } from "bun:test";
-import { browserAvailable, fixtureUrl, withBrowserPage } from "../../scripts/utils/browser.js";
+import {
+  browserAvailable,
+  fixtureUrl,
+  waitForBrowser,
+  withBrowserPage,
+} from "../../scripts/utils/browser.js";
 
 const FIXTURE = "tests/browser/tooltip-coordinate-space.html";
 const TIMEOUT = 60_000;
@@ -30,7 +35,8 @@ const DISTANCE = 6;
 const baseTest = (await browserAvailable()) ? test : test.skip;
 const it = (name, run) => baseTest(name, run, TIMEOUT);
 
-const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+const tipOpen = (id) =>
+  `document.getElementById(document.getElementById(${JSON.stringify(id)}).getAttribute("aria-describedby"))?.matches(":popover-open")`;
 
 const withPage = (name, run) =>
   withBrowserPage(fixtureUrl(FIXTURE), run, {
@@ -70,7 +76,7 @@ async function acrossSyncScroll(view, id, { from, by }) {
     window.scrollTo(0, ${from});
     show(${JSON.stringify(id)});
   })()`);
-  await sleep(300);
+  await waitForBrowser(view, tipOpen(id));
   return JSON.parse(
     await view.evaluate(`(() => {
       ${READERS}
@@ -122,14 +128,14 @@ it("a tip inside a modal dialog stays attached while the page scrolls behind it"
       window.scrollTo(0, 200);
       document.getElementById("open-dialog").click();
     })()`);
-    await sleep(200);
+    await waitForBrowser(view, `document.getElementById("dlg").matches(":modal")`);
 
     const read = async (id) => {
       await view.evaluate(`(() => {
         ${READERS}
         show(${JSON.stringify(id)});
       })()`);
-      await sleep(300);
+      await waitForBrowser(view, tipOpen(id));
       return JSON.parse(
         await view.evaluate(`(() => {
           ${READERS}
@@ -198,7 +204,10 @@ it("a tooltip does not change what the page can scroll to", async () => {
 
     const out = [];
     await view.evaluate(`window.scrollTo(0, 1e6)`);
-    await sleep(250);
+    await waitForBrowser(
+      view,
+      `Math.abs(window.scrollY - (document.documentElement.scrollHeight - document.documentElement.clientHeight)) < 2`,
+    );
     out.push(JSON.parse(await geometry("resting")));
 
     for (let cycle = 1; cycle <= 2; cycle++) {
@@ -206,21 +215,24 @@ it("a tooltip does not change what the page can scroll to", async () => {
         ${READERS}
         show("low-trigger");
       })()`);
-      await sleep(350);
+      await waitForBrowser(view, tipOpen("low-trigger"));
       out.push(JSON.parse(await geometry(`shown ${cycle}`)));
 
       // Out of the boundary and back: the demote/promote path, which is where
       // a stale document coordinate would re-enter the top layer.
       await view.evaluate(`window.scrollTo(0, 0)`);
-      await sleep(250);
+      await waitForBrowser(view, `window.scrollY === 0 && !(${tipOpen("low-trigger")})`);
       await view.evaluate(`window.scrollTo(0, 1e6)`);
-      await sleep(250);
+      await waitForBrowser(
+        view,
+        `Math.abs(window.scrollY - (document.documentElement.scrollHeight - document.documentElement.clientHeight)) < 2 && (${tipOpen("low-trigger")})`,
+      );
       out.push(JSON.parse(await geometry(`returned ${cycle}`)));
 
       await view.evaluate(`(() => {
         document.getElementById("low-trigger").dispatchEvent(new MouseEvent("mouseleave"));
       })()`);
-      await sleep(350);
+      await waitForBrowser(view, `!(${tipOpen("low-trigger")})`);
       out.push(JSON.parse(await geometry(`hidden ${cycle}`)));
     }
     return out;
@@ -255,18 +267,18 @@ it("a tip goes down when its trigger leaves the viewport and comes back with it"
       trigger.scrollIntoView({ block: "center" });
       trigger.focus();
     })()`);
-    await sleep(400);
+    await waitForBrowser(view, tipOpen("low-trigger"));
     const shown = await openState();
 
     await view.evaluate(`window.scrollTo(0, 0)`);
-    await sleep(400);
+    await waitForBrowser(view, `!(${tipOpen("low-trigger")})`);
     const scrolledAway = await openState();
 
     // No hover, no focus, no click: only the scroll back.
     await view.evaluate(
       `document.getElementById("low-trigger").scrollIntoView({ block: "center" })`,
     );
-    await sleep(400);
+    await waitForBrowser(view, tipOpen("low-trigger"));
 
     return { shown, scrolledAway, restored: await openState() };
   });

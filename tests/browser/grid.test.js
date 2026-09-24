@@ -27,8 +27,6 @@ const DIVISOR_CHAIN = { 2: [2, 1], 3: [3, 1], 4: [4, 2, 1], 6: [6, 3, 2, 1] };
 const baseTest = (await browserAvailable()) ? test : test.skip;
 const it = (name, run) => baseTest(name, run, TIMEOUT);
 
-const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-
 async function setViewport(view, width) {
   await view.cdp("Emulation.setDeviceMetricsOverride", {
     width,
@@ -36,7 +34,6 @@ async function setViewport(view, width) {
     deviceScaleFactor: 1,
     mobile: false,
   });
-  await sleep(150);
 }
 
 async function firstRowColumns(view, width) {

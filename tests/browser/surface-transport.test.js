@@ -21,7 +21,12 @@
  *     is the one invariant this transport introduced.
  */
 import { expect, test } from "bun:test";
-import { browserAvailable, fixtureUrl, withBrowserPage } from "../../scripts/utils/browser.js";
+import {
+  browserAvailable,
+  fixtureUrl,
+  waitForBrowser,
+  withBrowserPage,
+} from "../../scripts/utils/browser.js";
 
 const FIXTURE = "tests/browser/surface-transport.html";
 const TIMEOUT = 60_000;
@@ -68,9 +73,9 @@ it("a closed surface keeps its contents unreachable", async () => {
 it("a surface authored inside a modal dialog opens above it and stays interactive", async () => {
   await withPage("dialog", async (view) => {
     await view.evaluate(`document.getElementById("open-dialog").click()`);
-    await sleep(300);
+    await waitForBrowser(view, `document.getElementById("dlg").matches(":modal")`);
     await view.evaluate(`document.getElementById("dlg-trigger").click()`);
-    await sleep(400);
+    await waitForBrowser(view, `document.getElementById("dlg-panel").matches(":popover-open")`);
 
     const state = JSON.parse(
       await view.evaluate(`(() => {
@@ -109,14 +114,17 @@ it("reopening during the exit transition lands open", async () => {
       view.evaluate(`document.getElementById("plain-panel").classList.contains("is-open")`);
 
     await view.evaluate(`document.getElementById("plain-trigger").click()`);
-    await sleep(300);
+    await waitForBrowser(view, `document.getElementById("plain-panel").matches(":popover-open")`);
     expect(await isOpen()).toBe(true);
 
     // Close and reopen well inside the 100ms exit.
     await view.evaluate(`document.getElementById("plain-trigger").click()`);
     await sleep(30);
     await view.evaluate(`document.getElementById("plain-trigger").click()`);
-    await sleep(400);
+    await waitForBrowser(
+      view,
+      `getComputedStyle(document.getElementById("plain-panel")).opacity === "1"`,
+    );
 
     expect(await isOpen()).toBe(true);
     const settled = JSON.parse(
@@ -147,7 +155,7 @@ it("a context menu is still positioned at the pointer", async () => {
     await view.evaluate(`document.getElementById("row").dispatchEvent(
       new MouseEvent("contextmenu", { bubbles: true, cancelable: true, clientX: ${rect.x}, clientY: ${rect.y} })
     )`);
-    await sleep(400);
+    await waitForBrowser(view, `document.getElementById("ctx").matches(":popover-open")`);
 
     const state = JSON.parse(
       await view.evaluate(`(() => {
@@ -208,7 +216,7 @@ async function realClick(view, id) {
 it("--dismiss from inside a surface closes it and returns focus to the opener", async () => {
   await withPage("dismiss", async (view) => {
     await realClick(view, "dismiss-trigger");
-    await sleep(300);
+    await waitForBrowser(view, `document.getElementById("dismiss-panel").matches(":popover-open")`);
 
     const opened = JSON.parse(
       await view.evaluate(`(() => {
@@ -222,7 +230,10 @@ it("--dismiss from inside a surface closes it and returns focus to the opener", 
     expect(opened.open).toBe(true);
 
     await realClick(view, "dismiss-close");
-    await sleep(300);
+    await waitForBrowser(
+      view,
+      `!document.getElementById("dismiss-panel").matches(":popover-open") && document.activeElement.id === "dismiss-trigger"`,
+    );
 
     const state = JSON.parse(
       await view.evaluate(`(() => {
@@ -261,7 +272,7 @@ it("the runtime state and the transport state agree", async () => {
     expect(closed.popoverOpen).toBe(closed.isOpen);
 
     await view.evaluate(`document.getElementById("plain-trigger").click()`);
-    await sleep(300);
+    await waitForBrowser(view, `document.getElementById("plain-panel").matches(":popover-open")`);
 
     const open = await sync();
     expect(open.isOpen).toBe(true);
@@ -270,7 +281,7 @@ it("the runtime state and the transport state agree", async () => {
     // Past the exit transition: `overlay` holds the panel in the top layer
     // while it fades, so settle before reading rather than racing the fade.
     await view.evaluate(`document.getElementById("plain-trigger").click()`);
-    await sleep(400);
+    await waitForBrowser(view, `!document.getElementById("plain-panel").matches(":popover-open")`);
 
     const reclosed = await sync();
     expect(reclosed.isOpen).toBe(false);
