@@ -18,7 +18,12 @@
  * only membership in the dialog subtree does.
  */
 import { expect, test } from "bun:test";
-import { browserAvailable, fixtureUrl, withBrowserPage } from "../../scripts/utils/browser.js";
+import {
+  browserAvailable,
+  fixtureUrl,
+  waitForBrowser,
+  withBrowserPage,
+} from "../../scripts/utils/browser.js";
 
 const FIXTURE = "tests/browser/tooltip-stacking.html";
 const TIMEOUT = 60_000;
@@ -26,16 +31,14 @@ const TIMEOUT = 60_000;
 const baseTest = (await browserAvailable()) ? test : test.skip;
 const it = (name, run) => baseTest(name, run, TIMEOUT);
 
-const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-
 const withPage = (name, run) =>
   withBrowserPage(fixtureUrl(FIXTURE), run, {
     artifactName: `tooltip-stacking-${name}`,
     mediaFeatures: [{ name: "prefers-reduced-motion", value: "no-preference" }],
   });
 
-// Hover is what the delegated listener listens for; the 150ms show delay plus
-// the first positioning tick is what the sleep covers.
+// Hover is what the delegated listener listens for; wait for the 150ms show
+// delay and positioning to produce an open tip.
 const hover = (view, id) =>
   view.evaluate(`document.getElementById("${id}").dispatchEvent(
     new MouseEvent("mouseover", { bubbles: true })
@@ -76,9 +79,9 @@ const probe = (view, panelId) =>
 it("a tooltip opened from a flyout paints above the panel", async () => {
   await withPage("plain", async (view) => {
     await view.evaluate(`document.getElementById("plain-trigger").click()`);
-    await sleep(300);
+    await waitForBrowser(view, `document.getElementById("plain-panel").matches(":popover-open")`);
     await hover(view, "plain-tip-trigger");
-    await sleep(400);
+    await waitForBrowser(view, `document.querySelector('[role="tooltip"]:popover-open') !== null`);
 
     const state = await probe(view, "plain-panel");
 
@@ -92,11 +95,11 @@ it("a tooltip opened from a flyout paints above the panel", async () => {
 it("a tooltip opened from a flyout inside a modal dialog paints above the panel", async () => {
   await withPage("modal", async (view) => {
     await view.evaluate(`document.getElementById("open-dialog").click()`);
-    await sleep(300);
+    await waitForBrowser(view, `document.getElementById("dlg").matches(":modal")`);
     await view.evaluate(`document.getElementById("dlg-trigger").click()`);
-    await sleep(300);
+    await waitForBrowser(view, `document.getElementById("dlg-panel").matches(":popover-open")`);
     await hover(view, "dlg-tip-trigger");
-    await sleep(400);
+    await waitForBrowser(view, `document.querySelector('[role="tooltip"]:popover-open') !== null`);
 
     const state = await probe(view, "dlg-panel");
 

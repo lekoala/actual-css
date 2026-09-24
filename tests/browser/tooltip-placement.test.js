@@ -24,15 +24,18 @@
  * layer.
  */
 import { expect, test } from "bun:test";
-import { browserAvailable, fixtureUrl, withBrowserPage } from "../../scripts/utils/browser.js";
+import {
+  browserAvailable,
+  fixtureUrl,
+  waitForBrowser,
+  withBrowserPage,
+} from "../../scripts/utils/browser.js";
 
 const FIXTURE = "tests/browser/tooltip-placement.html";
 const TIMEOUT = 60_000;
 
 const available = await browserAvailable();
 const owed = (name, run) => (available ? test : test.skip)(name, run, TIMEOUT);
-
-const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 // The theme case reads --surface-solid, which is the contrasting solid rather
 // than the surface itself: it is light inside a dark island and dark on a light
@@ -73,7 +76,10 @@ async function acrossFirstHover(tipId, read) {
       closed = JSON.parse(await probe(tipId));
       reference = JSON.parse(await probe("ref-tip"));
       await hover(view, `[aria-describedby="${tipId}"]`);
-      await sleep(300);
+      await waitForBrowser(
+        view,
+        `document.getElementById(${JSON.stringify(tipId)}).matches(":popover-open")`,
+      );
       hovered = JSON.parse(await probe(tipId));
     },
     { ...OPTIONS, artifactName: `tooltip-placement-${tipId}` },
@@ -146,7 +152,10 @@ owed("a shorthand tooltip does not alter the trigger's structural position", asy
       expect(before.tipInsideJoin).toBe(false);
 
       await hover(view, "#join-last");
-      await sleep(300);
+      await waitForBrowser(
+        view,
+        `document.querySelector('[role="tooltip"]:popover-open') !== null`,
+      );
 
       // The tip exists now — this is not passing because nothing happened.
       expect(await view.evaluate(`document.querySelectorAll('[role="tooltip"]').length > 0`)).toBe(

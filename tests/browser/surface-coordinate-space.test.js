@@ -4,7 +4,12 @@
  * before autoUpdate's next animation frame can hide a one-frame detachment.
  */
 import { expect, test } from "bun:test";
-import { browserAvailable, fixtureUrl, withBrowserPage } from "../../scripts/utils/browser.js";
+import {
+  browserAvailable,
+  fixtureUrl,
+  waitForBrowser,
+  withBrowserPage,
+} from "../../scripts/utils/browser.js";
 
 const FIXTURE = "tests/browser/surface-coordinate-space.html";
 const TIMEOUT = 60_000;
@@ -12,8 +17,6 @@ const DISTANCE = 4;
 
 const baseTest = (await browserAvailable()) ? test : test.skip;
 const it = (name, run) => baseTest(name, run, TIMEOUT);
-const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-
 const withPage = (name, run) =>
   withBrowserPage(fixtureUrl(FIXTURE), run, {
     artifactName: `surface-coordinate-space-${name}`,
@@ -38,7 +41,14 @@ async function acrossWindowScroll(view, id, { from, by }) {
     window.scrollTo(0, ${from});
     document.getElementById(${JSON.stringify(id)}).click();
   })()`);
-  await sleep(250);
+  await waitForBrowser(
+    view,
+    `(() => {
+    ${READERS}
+    return panelOf(${JSON.stringify(id)}).matches(":popover-open") &&
+      gap(${JSON.stringify(id)}) === ${DISTANCE};
+  })()`,
+  );
 
   return JSON.parse(
     await view.evaluate(`(() => {
@@ -85,7 +95,14 @@ it("nested scrolling still relies on autoUpdate", async () => {
       scroller.scrollTop = 40;
       document.getElementById("nested-trigger").click();
     })()`);
-    await sleep(250);
+    await waitForBrowser(
+      view,
+      `(() => {
+      ${READERS}
+      return panelOf("nested-trigger").matches(":popover-open") &&
+        gap("nested-trigger") === ${DISTANCE};
+    })()`,
+    );
 
     const immediate = JSON.parse(
       await view.evaluate(`(() => {
@@ -100,7 +117,10 @@ it("nested scrolling still relies on autoUpdate", async () => {
         });
       })()`),
     );
-    await sleep(100);
+    await waitForBrowser(
+      view,
+      `(() => { ${READERS} return gap("nested-trigger") === ${DISTANCE}; })()`,
+    );
     const settled = Number(
       await view.evaluate(`(() => { ${READERS} return gap("nested-trigger"); })()`),
     );
@@ -128,13 +148,16 @@ it("a document surface that fits adds no scrollable overflow", async () => {
       })()`);
 
     await view.evaluate(`window.scrollTo(0, 1e6)`);
-    await sleep(200);
+    await waitForBrowser(
+      view,
+      `Math.abs(window.scrollY - (document.documentElement.scrollHeight - document.documentElement.clientHeight)) < 2`,
+    );
     const resting = JSON.parse(await read("resting"));
     await view.evaluate(`document.getElementById("fit-trigger").click()`);
-    await sleep(250);
+    await waitForBrowser(view, `document.getElementById("fit-panel").matches(":popover-open")`);
     const open = JSON.parse(await read("open"));
     await view.evaluate(`document.getElementById("fit-trigger").click()`);
-    await sleep(250);
+    await waitForBrowser(view, `!document.getElementById("fit-panel").matches(":popover-open")`);
     const closed = JSON.parse(await read("closed"));
     return [resting, open, closed];
   });

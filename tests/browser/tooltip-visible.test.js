@@ -7,15 +7,18 @@
  * otherwise the tooltip stays hidden forever.
  */
 import { expect, test } from "bun:test";
-import { browserAvailable, fixtureUrl, withBrowserPage } from "../../scripts/utils/browser.js";
+import {
+  browserAvailable,
+  fixtureUrl,
+  waitForBrowser,
+  withBrowserPage,
+} from "../../scripts/utils/browser.js";
 
 const FIXTURE = "tests/browser/tooltip-visible.html";
 const TIMEOUT = 60_000;
 
 const baseTest = (await browserAvailable()) ? test : test.skip;
 const it = (name, run) => baseTest(name, run, TIMEOUT);
-
-const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 it("always-visible tooltip hides out of view and re-shows when the trigger returns", async () => {
   await withBrowserPage(
@@ -34,17 +37,26 @@ it("always-visible tooltip hides out of view and re-shows when the trigger retur
 
       // Scroll the trigger into view -> tooltip shows.
       await view.evaluate(`document.getElementById('trigger').scrollIntoView()`);
-      await sleep(200);
+      await waitForBrowser(
+        view,
+        `document.querySelector('[role="tooltip"]')?.matches(":popover-open")`,
+      );
       expect(await down()).toBe(false);
 
       // Scroll away -> tooltip hides again (but is not torn down).
       await view.evaluate(`window.scrollTo(0, 0)`);
-      await sleep(200);
+      await waitForBrowser(
+        view,
+        `!document.querySelector('[role="tooltip"]')?.matches(":popover-open")`,
+      );
       expect(await down()).toBe(true);
 
       // Scroll back into view -> tooltip re-shows (the tracker survived).
       await view.evaluate(`document.getElementById('trigger').scrollIntoView()`);
-      await sleep(200);
+      await waitForBrowser(
+        view,
+        `document.querySelector('[role="tooltip"]')?.matches(":popover-open")`,
+      );
       expect(await down()).toBe(false);
     },
     { artifactName: "tooltip-visible" },

@@ -14,6 +14,22 @@ import { pathToFileURL } from "node:url";
 
 const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
+/* Wait for an observable browser state rather than guessing how many
+ * animation frames or positioning ticks a machine will need. */
+export function waitForBrowser(view, expression, { timeoutMs = 5000 } = {}) {
+  return view.evaluate(`new Promise((resolve, reject) => {
+    const deadline = performance.now() + ${timeoutMs};
+    const check = () => {
+      if (${expression}) return resolve(true);
+      if (performance.now() >= deadline) {
+        return reject(new Error("Timed out waiting for: " + ${JSON.stringify(expression)}));
+      }
+      requestAnimationFrame(check);
+    };
+    check();
+  })`);
+}
+
 export function fixtureUrl(page, cwd = process.cwd()) {
   if (/^https?:/.test(page)) return page;
   return pathToFileURL(isAbsolute(page) ? page : join(cwd, page)).href;
@@ -51,8 +67,8 @@ export async function browserAvailable(createView = () => new Bun.WebView({ back
  * Opens a headless-Chrome tab, navigates to `url`, and runs `run(view)`.
  * Resolves to the value returned by `run`. The tab is closed on the way out.
  *
- * `mediaFeatures` (e.g. prefers-reduced-motion) are emulated before the final
- * load so the page sees them from the first real render. Page `console.*`
+ * `mediaFeatures` (e.g. prefers-reduced-motion) are emulated before fixture
+ * navigation so the page sees them from the first render. Page `console.*`
  * calls are captured; on failure they are appended to the error and, when
  * `artifactName` is set, a screenshot is written under `artifactsDir`.
  */
@@ -63,7 +79,7 @@ export async function withBrowserPage(
     width = 1100,
     height = 900,
     mediaFeatures = [],
-    settleMs = 400,
+    settleMs = 0,
     artifactName,
     artifactsDir = "tmp/0.4/screenshots",
   } = {},
@@ -76,12 +92,14 @@ export async function withBrowserPage(
     console: (type, ...args) => consoleLines.push([type, ...args.map(String)]),
   });
 
-  await view.navigate(url);
   if (mediaFeatures.length > 0) {
+    // Bun.WebView creates its CDP session on first navigation. Use a blank
+    // document so the fixture itself still loads only once under emulation.
+    await view.navigate("about:blank");
     await view.cdp("Emulation.setEmulatedMedia", { features: mediaFeatures });
-    await view.navigate(url);
   }
-  await wait(settleMs);
+  await view.navigate(url);
+  if (settleMs > 0) await wait(settleMs);
 
   try {
     return await run(view);

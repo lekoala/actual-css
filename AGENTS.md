@@ -41,6 +41,12 @@ Add relevant guards for future-us when needed based on traps and discoveries.
   Once an assertion mentions focus, dispatch real events with
   `Input.dispatchMouseEvent` / `Input.dispatchKeyEvent` through `view.cdp`.
   `.click()` stays fine for a handler or a state transition.
+- Browser tests wait for the state they assert, using `waitForBrowser()` from
+  `scripts/utils/browser.js` when an update is asynchronous. Do not add a fixed
+  settle delay after navigation, input, scrolling, or viewport changes. Keep a
+  timed wait only when elapsed time is part of the contract (for example,
+  sampling halfway through a transition), and say why in the test. A slow test
+  should identify which operation needs time before increasing a timeout.
 - Do not screenshot top-layer content with `shot:page` or `capture`: they pass
   `captureBeyondViewport: true`, which mis-composites an open popover or modal
   dialog — the panel came out translucent and painted *under* a sibling button

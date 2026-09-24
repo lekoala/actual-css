@@ -12,7 +12,12 @@
  */
 import { expect, test } from "bun:test";
 import { existsSync } from "node:fs";
-import { browserAvailable, fixtureUrl, withBrowserPage } from "../../scripts/utils/browser.js";
+import {
+  browserAvailable,
+  fixtureUrl,
+  waitForBrowser,
+  withBrowserPage,
+} from "../../scripts/utils/browser.js";
 
 const FIXTURE = "tests/browser/dialog.html";
 const TIMEOUT = 60_000;
@@ -81,7 +86,6 @@ async function click(view, id) {
       clickCount: 1,
     });
   }
-  await view.evaluate("new Promise((resolve) => setTimeout(resolve, 250))");
 }
 
 const scrollTo1200 = (evalIn) =>
@@ -272,7 +276,7 @@ it("scrollable dialog bodies preserve full-width focus rings and alignment", asy
       await view.evaluate('document.getElementById("dlg-scrollable").close()');
       await click(view, "open-drawer");
       await view.press("Tab");
-      await view.evaluate("new Promise((resolve) => setTimeout(resolve, 250))");
+      await waitForBrowser(view, `document.activeElement.id === "drawer-edge-control"`);
 
       const drawer = await view
         .evaluate(`(() => {

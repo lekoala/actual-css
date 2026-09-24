@@ -12,7 +12,12 @@
  * Popover API, so the placement and focus cases would pass vacuously there.
  */
 import { expect, test } from "bun:test";
-import { browserAvailable, fixtureUrl, withBrowserPage } from "../../scripts/utils/browser.js";
+import {
+  browserAvailable,
+  fixtureUrl,
+  waitForBrowser,
+  withBrowserPage,
+} from "../../scripts/utils/browser.js";
 
 const FIXTURE = "tests/browser/mega-menu.html";
 const TIMEOUT = 60_000;
@@ -20,8 +25,6 @@ const TRIGGERS = ["t-products", "t-solutions", "t-company"];
 
 const baseTest = (await browserAvailable()) ? test : test.skip;
 const it = (name, run) => baseTest(name, run, TIMEOUT);
-
-const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const withPage = (name, run) =>
   withBrowserPage(fixtureUrl(FIXTURE), run, {
@@ -36,7 +39,6 @@ async function setViewport(view, width) {
     deviceScaleFactor: 1,
     mobile: false,
   });
-  await sleep(150);
 }
 
 /*
@@ -55,14 +57,12 @@ async function click(view, id) {
   for (const type of ["mousePressed", "mouseReleased"]) {
     await view.cdp("Input.dispatchMouseEvent", { ...at, type, button: "left", clickCount: 1 });
   }
-  await sleep(250);
 }
 
 async function press(view, key, code, keyCode = 0) {
   for (const type of ["keyDown", "keyUp"]) {
     await view.cdp("Input.dispatchKeyEvent", { type, key, code, windowsVirtualKeyCode: keyCode });
   }
-  await sleep(250);
 }
 
 /* What every trigger says about itself, and which panel is actually open. */
@@ -128,7 +128,6 @@ it("a panel taking over from a focused one does not strand focus", async () => {
 
     await click(view, "t-solutions");
     await view.evaluate(`document.getElementById("solutions-first").focus()`);
-    await sleep(100);
     expect(await view.evaluate("document.activeElement.id")).toBe("solutions-first");
 
     await click(view, "t-company");
@@ -153,7 +152,6 @@ it("activating a trigger by keyboard moves focus into its panel", async () => {
     await setViewport(view, 1400);
 
     await view.evaluate(`document.getElementById("t-products").focus()`);
-    await sleep(100);
     await press(view, "Enter", "Enter", 13);
 
     expect((await readState(view)).open).toEqual(["p-products"]);
@@ -167,7 +165,6 @@ it("Escape closes the open panel and returns focus to its trigger", async () => 
 
     await click(view, "t-company");
     await view.evaluate(`document.getElementById("company-first").focus()`);
-    await sleep(100);
     await press(view, "Escape", "Escape");
 
     const after = await readState(view);
@@ -183,6 +180,15 @@ it("a wide panel stays inside both viewport edges", async () => {
       await setViewport(view, width);
       for (const trigger of TRIGGERS) {
         await click(view, trigger);
+        await waitForBrowser(
+          view,
+          `(() => {
+            const panel = document.getElementById(${JSON.stringify(trigger.replace("t-", "p-"))});
+            const box = panel.getBoundingClientRect();
+            return panel.matches(":popover-open") && box.width > 0 &&
+              box.left >= -1 && box.right <= document.documentElement.clientWidth + 1;
+          })()`,
+        );
         const box = await view
           .evaluate(`(() => {
           const panel = document.querySelector(".flyout.is-open");
