@@ -1,6 +1,6 @@
 # Card
 
-Flexible content container with optional header, body, and footer regions, plus full-bleed children.
+Flexible content container with optional header, body, and footer regions.
 
 ## Class reference
 
@@ -59,68 +59,8 @@ gap.
 
 ## Bleed
 
-Use `.bleed` on a direct child to escape the card padding — full-width images,
-colored headers, or footers.
-
-`.bleed` is a surface contract, not a card class: it also works on a direct
-child of a `.drawer` and of an accordion panel, which is the element the
-accordion pads. A surface joins that contract by declaring `--surface-pad`.
-The child combinator is load-bearing — a `.bleed` deeper than one level stays
-inert rather than escaping a box it does not sit against.
-
-A `header`, `footer`, or `figure` band keeps the surface's padding; any other
-band (a status row, a notice strip) reads the same inset from `--bleed-pad`,
-which every direct child of a surface receives:
-
-```css
-.status-row {
-  padding: var(--bleed-pad);
-}
-```
-
-```html demo
-<div style="max-inline-size: 32rem">
-  <article class="card stack">
-    <img class="bleed" src="https://picsum.photos/seed/actual-css-card/600/300" alt="Coastal cliffs at dusk" />
-    <header>
-      <h3>Coastal cliffs at dusk</h3>
-    </header>
-    <section class="stack" aria-label="Summary">
-      <p>A short caption that wraps across a few lines. The image bleeds to the card edges.</p>
-    </section>
-    <footer>
-      <span class="badge primary soft">Photo</span>
-      <button type="button" class="btn outline">View</button>
-    </footer>
-  </article>
-</div>
-```
-
-```html demo
-<article class="card stack" style="--card-max-inline-size: 24rem">
-  <header class="bleed stack items-center text-center" style="background: var(--surface-subtle)">
-    <hgroup>
-      <h3>Team</h3>
-      <p class="muted">For growing products</p>
-    </hgroup>
-    <p>
-      <span style="font-size: 2rem; font-weight: var(--font-weight-semibold); line-height: 1">$24</span>
-      <span class="muted">/ user / month</span>
-    </p>
-  </header>
-
-  <ul class="stack items-center" style="list-style: none; padding: 0">
-    <li>Unlimited projects</li>
-    <li>Up to 25 seats</li>
-    <li>Shared workspaces</li>
-    <li>Priority support</li>
-  </ul>
-
-  <footer class="bleed" style="background: var(--surface-subtle); justify-content: center">
-    <a class="btn primary" href="#">Upgrade</a>
-  </footer>
-</article>
-```
+Use `.bleed` on a direct child to bring an image or band to the card edge. See
+[Bleed](bleed.md) for the shared surface contract and its modular import.
 
 ## In grids
 
@@ -235,5 +175,5 @@ treatments on either side of it.
 
 - `--card-radius` — corner radius.
 - `--card-max-inline-size` — maximum width.
-- `--card-pad` — inner padding; also drives the negative offsets that let a `.bleed` child reach the card edge. `.compact` lowers it.
+- `--card-pad` — inner padding, relayed to direct children for `.bleed`. `.compact` lowers it.
 - `--card-gap` — space between direct children of a bare card. A composed layout primitive owns its own gap instead.

@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Modular composition fixture</title>
+  <style>
+    @import url("../../src/css/actual.css");
+    @import url("../../src/css/components/alert.css");
+    @import url("../../src/css/components/badge.css");
+    @import url("../../src/css/components/card.css");
+    @import url("../../src/css/components/close.css");
+    @import url("../../src/css/components/bleed.css");
+  </style>
+</head>
+<body>
+  <div class="alert" id="alert">Notice <button class="close" aria-label="Dismiss notice"></button></div>
+  <span class="badge" id="badge">Label <button class="close" aria-label="Remove label"></button></span>
+  <article class="card" id="card" style="--card-pad: 24px">
+    <header class="bleed">Header</header>
+    <p>Body</p>
+  </article>
+</body>
+</html>

@@ -77,6 +77,38 @@ test("dialog data-title provides an accessible label", async () => {
   expect(dialog.getAttribute("aria-label")).toBe("Preferences");
 });
 
+test("opening resynchronizes an owned label after the title is replaced", async () => {
+  await loadDialog(`
+    <button id="open" commandfor="prefs" command="show-modal">Open</button>
+    <dialog id="prefs"><h2>Original</h2></dialog>
+  `);
+  const dialog = document.getElementById("prefs");
+  const oldTitle = dialog.querySelector("h2");
+  const oldId = oldTitle.id;
+  oldTitle.replaceWith(document.createRange().createContextualFragment("<h2>Replacement</h2>"));
+
+  click(document.getElementById("open"));
+
+  const title = dialog.querySelector("h2");
+  expect(title.id).toBeTruthy();
+  expect(title.id).not.toBe(oldId);
+  expect(dialog.getAttribute("aria-labelledby")).toBe(title.id);
+});
+
+test("opening preserves an author replacement of the generated label", async () => {
+  await loadDialog(`
+    <button id="open" commandfor="prefs" command="show-modal">Open</button>
+    <dialog id="prefs"><h2>Original</h2></dialog>
+  `);
+  const dialog = document.getElementById("prefs");
+  dialog.setAttribute("aria-labelledby", "author-title");
+  dialog.querySelector("h2").replaceWith(document.createElement("h2"));
+
+  click(document.getElementById("open"));
+
+  expect(dialog.getAttribute("aria-labelledby")).toBe("author-title");
+});
+
 test("request-close buttons close an open dialog and restore focus", async () => {
   await loadDialog(`
     <button id="open" commandfor="prefs" command="show-modal">Open</button>
@@ -94,6 +126,33 @@ test("request-close buttons close an open dialog and restore focus", async () =>
   expect(dialog.open).toBe(false);
   expect(dialog.returnValue).toBe("done");
   expect(document.activeElement).toBe(open);
+});
+
+test("request-close fallback dispatches cancel and respects actual:dialog-cancel", async () => {
+  await loadDialog(`
+    <button id="open" commandfor="prefs" command="show-modal">Open</button>
+    <dialog id="prefs">
+      <button id="close" commandfor="prefs" command="request-close" value="done">Close</button>
+    </dialog>
+  `);
+  const dialog = document.getElementById("prefs");
+  dialog.requestClose = undefined;
+  const cancelEvents = [];
+  dialog.addEventListener("cancel", (event) => cancelEvents.push(event));
+  const prevent = (event) => event.preventDefault();
+  dialog.addEventListener("actual:dialog-cancel", prevent);
+
+  click(document.getElementById("open"));
+  click(document.getElementById("close"));
+  expect(dialog.open).toBe(true);
+  expect(cancelEvents).toHaveLength(1);
+  expect(cancelEvents[0].cancelable).toBe(true);
+
+  dialog.removeEventListener("actual:dialog-cancel", prevent);
+  click(document.getElementById("close"));
+  expect(dialog.open).toBe(false);
+  expect(dialog.returnValue).toBe("done");
+  expect(cancelEvents).toHaveLength(2);
 });
 
 test("a request-close button closes a non-dismissible dialog", async () => {

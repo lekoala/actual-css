@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Forced-colors compositions</title>
+  <link rel="stylesheet" href="../../src/css/actual.full.css">
+  <style>
+    body { padding: 2rem; }
+    main { display: grid; gap: 2rem; max-inline-size: 45rem; }
+    .modal, .drawer { position: relative; display: block; inline-size: 20rem; margin: 0; }
+    .drawer { padding: 1.5rem; border: 1px solid; block-size: 6rem; min-block-size: 0; }
+    .modal { padding: 1.5rem; border: 1px solid; }
+    .range { inline-size: 20rem; }
+  </style>
+</head>
+<body>
+  <main>
+    <dialog open class="modal">Modal <button class="close" aria-label="Close modal"></button></dialog>
+    <dialog open class="drawer">Drawer <button class="close" aria-label="Close drawer"></button></dialog>
+    <div class="alert">Alert <button class="close" aria-label="Dismiss alert"></button></div>
+    <span class="badge">Badge <button class="close" aria-label="Remove badge"></button></span>
+    <div class="accordion"><details open><summary>Accordion</summary><div>Panel</div></details></div>
+    <label>Range <input class="range" type="range" value="50"></label>
+  </main>
+</body>
+</html>
