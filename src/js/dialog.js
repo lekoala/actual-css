@@ -48,20 +48,38 @@ function boolData(el, name) {
   return el.hasAttribute(name) && el.getAttribute(name) !== "false";
 }
 
-function ensureId(el, prefix) {
+function setOwnedAttribute(state, el, name, value) {
+  const current = el.getAttribute(name);
+  if (current === value) return;
+
+  const previous = state.ownedAttributes.find((entry) => entry.el === el && entry.name === name);
+  if (previous && current !== previous.written) previous.original = current;
+  if (value === null) el.removeAttribute(name);
+  else el.setAttribute(name, value);
+
+  if (previous) previous.written = value;
+  else state.ownedAttributes.push({ el, name, original: current, written: value });
+}
+
+function restoreOwnedAttributes(state) {
+  for (const { el, name, original, written } of state.ownedAttributes) {
+    // An author may have changed an attribute while the dialog was connected.
+    if (el.getAttribute(name) !== written) continue;
+    if (original === null) el.removeAttribute(name);
+    else el.setAttribute(name, original);
+  }
+}
+
+function ensureId(el, prefix, state) {
   if (!el.id) {
     uid++;
-    el.id = `${prefix}-${uid}`;
+    setOwnedAttribute(state, el, "id", `${prefix}-${uid}`);
   }
   return el.id;
 }
 
-function syncDialogSemantics(dialog, modal = isModal(dialog)) {
-  if (modal) {
-    dialog.setAttribute("aria-modal", "true");
-  } else {
-    dialog.removeAttribute("aria-modal");
-  }
+function syncDialogSemantics(dialog, state, modal = isModal(dialog)) {
+  setOwnedAttribute(state, dialog, "aria-modal", modal ? "true" : null);
 
   if (dialog.hasAttribute("aria-label") || dialog.hasAttribute("aria-labelledby")) {
     return;
@@ -69,13 +87,13 @@ function syncDialogSemantics(dialog, modal = isModal(dialog)) {
 
   const label = dialog.getAttribute("data-title")?.trim();
   if (label) {
-    dialog.setAttribute("aria-label", label);
+    setOwnedAttribute(state, dialog, "aria-label", label);
     return;
   }
 
   const title = dialog.querySelector(DIALOG_TITLE_SELECTOR);
   if (title) {
-    dialog.setAttribute("aria-labelledby", ensureId(title, "dialog-title"));
+    setOwnedAttribute(state, dialog, "aria-labelledby", ensureId(title, "dialog-title", state));
   }
 }
 
@@ -263,8 +281,14 @@ export function requestDialogClose(dialog, returnValue = "") {
   if (!isDialogElement(dialog) || !dialog.open) return;
 
   if (typeof dialog.requestClose === "function") {
-    ensureDialogWired(dialog).returnValue = returnValue;
-    dialog.requestClose(returnValue);
+    const state = ensureDialogWired(dialog);
+    state.returnValue = returnValue;
+    state.requestingClose = true;
+    try {
+      dialog.requestClose(returnValue);
+    } finally {
+      state.requestingClose = false;
+    }
     return;
   }
 
@@ -276,7 +300,7 @@ export function openDialog(dialog, trigger = null, forcedModal = null) {
 
   const state = ensureDialogWired(dialog);
   const modal = resolveModalMode(dialog, forcedModal);
-  syncDialogSemantics(dialog, modal);
+  syncDialogSemantics(dialog, state, modal);
 
   state.closing = false;
   state.restoreFocusTo = trigger || dialog.ownerDocument.activeElement;
@@ -338,7 +362,15 @@ function handleDialogCancel(event) {
   const dialog = event.currentTarget;
   const state = dialogMap.get(dialog);
 
-  // Escape and close requests always close, whatever the dismissible flag:
+  // Older dialogs may dispatch cancel for Escape without implementing
+  // closedBy. Explicit requestDialogClose() remains available to close them.
+  const closedBy = "closedBy" in dialog ? dialog.closedBy : dialog.getAttribute("closedby");
+  if (closedBy === "none" && !state?.requestingClose) {
+    event.preventDefault();
+    return;
+  }
+
+  // Escape and close requests close regardless of the dismissible flag:
   // data-dialog-dismissible only gates light dismiss (backdrop click, handled
   // in handleDialogClick). Applications intercept via actual:dialog-cancel.
   const request = new CustomEvent(EVENTS.dialogCancel, {
@@ -395,6 +427,8 @@ function ensureDialogWired(dialog) {
     controller,
     closing: false,
     modalOpen: isModalOpen(dialog),
+    ownedAttributes: [],
+    requestingClose: false,
     restoreFocusTo: null,
     returnValue: "",
     staticTimer: null,
@@ -402,7 +436,7 @@ function ensureDialogWired(dialog) {
 
   // A dialog that is already `open` in the markup is non-modal per spec,
   // whatever data-dialog-modal says; infer semantics from its actual state.
-  syncDialogSemantics(dialog, dialog.open ? isModalOpen(dialog) : isModal(dialog));
+  syncDialogSemantics(dialog, state, dialog.open ? isModalOpen(dialog) : isModal(dialog));
 
   dialog.addEventListener("click", handleDialogClick, { signal: controller.signal });
   dialog.addEventListener("submit", handleDialogSubmit, { signal: controller.signal });
@@ -414,7 +448,7 @@ function ensureDialogWired(dialog) {
   // closedby keeps its native meaning — "any" closes on backdrop click,
   // "closerequest" on Escape, "none" disables both. Never override "none".
   if (isDismissible(dialog) && "closedBy" in dialog && dialog.closedBy === "any") {
-    dialog.closedBy = "closerequest";
+    setOwnedAttribute(state, dialog, "closedby", "closerequest");
   }
 
   dialogMap.set(dialog, state);
@@ -437,6 +471,7 @@ function disconnectDialog(dialog) {
 
   state.controller.abort();
   dialog.classList.remove(CLASSES.static);
+  restoreOwnedAttributes(state);
   state.modalOpen = false;
   dialogMap.delete(dialog);
   wiredDialogs.delete(dialog);

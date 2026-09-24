@@ -149,6 +149,25 @@ test("cancel closes without requiring view transitions", async () => {
   expect(document.activeElement).toBe(open);
 });
 
+test('closedby="none" prevents cancel without closedBy support but permits explicit close', async () => {
+  await loadDialog(`
+    <button id="open" commandfor="prefs" command="show-modal">Open</button>
+    <dialog id="prefs" closedby="none">
+      <button id="close" commandfor="prefs" command="request-close">Close</button>
+    </dialog>
+  `);
+  const dialog = document.getElementById("prefs");
+  click(document.getElementById("open"));
+
+  const cancelEvent = new Event("cancel", { cancelable: true });
+  dialog.dispatchEvent(cancelEvent);
+  expect(cancelEvent.defaultPrevented).toBe(true);
+  expect(dialog.open).toBe(true);
+
+  click(document.getElementById("close"));
+  expect(dialog.open).toBe(false);
+});
+
 test("modal dialogs toggle the html scroll-lock hook", async () => {
   await loadDialog(`
     <button id="open" commandfor="prefs" command="show-modal">Open</button>
@@ -466,6 +485,57 @@ test("remove/reinsert keeps the dialog wiring working", async () => {
   expect(dialog.open).toBe(false);
   expect(dialog.returnValue).toBe("done");
   expect(document.activeElement).toBe(open);
+});
+
+test("disconnect restores generated semantics and closedby before reinsertion", async () => {
+  await loadDialog(`
+    <button id="open" commandfor="prefs" command="show-modal">Open</button>
+    <dialog id="prefs" closedby="any" data-dialog-dismissible><h2>Preferences</h2></dialog>
+  `);
+  const dialog = document.getElementById("prefs");
+  const title = dialog.querySelector("h2");
+  Object.defineProperty(dialog, "closedBy", {
+    configurable: true,
+    get() {
+      return this.getAttribute("closedby");
+    },
+  });
+
+  // Reconnect once so the simulated native property is visible during wiring.
+  dialog.remove();
+  await flushMutationObserver();
+  document.body.append(dialog);
+  await flushMutationObserver();
+  expect(dialog.getAttribute("closedby")).toBe("closerequest");
+  expect(dialog.getAttribute("aria-labelledby")).toBe(title.id);
+
+  dialog.remove();
+  await flushMutationObserver();
+  expect(dialog.getAttribute("closedby")).toBe("any");
+  expect(dialog.hasAttribute("aria-modal")).toBe(false);
+  expect(dialog.hasAttribute("aria-labelledby")).toBe(false);
+  expect(title.hasAttribute("id")).toBe(false);
+
+  dialog.setAttribute("data-dialog-modal", "false");
+  dialog.removeAttribute("data-dialog-dismissible");
+  document.body.append(dialog);
+  await flushMutationObserver();
+  expect(dialog.hasAttribute("aria-modal")).toBe(false);
+  expect(dialog.getAttribute("closedby")).toBe("any");
+});
+
+test("disconnect preserves accessibility attributes changed by the author", async () => {
+  await loadDialog('<dialog id="prefs" data-title="Generated" aria-modal="false"></dialog>');
+  const dialog = document.getElementById("prefs");
+  expect(dialog.getAttribute("aria-modal")).toBe("true");
+  expect(dialog.getAttribute("aria-label")).toBe("Generated");
+
+  dialog.setAttribute("aria-label", "Author label");
+  dialog.remove();
+  await flushMutationObserver();
+
+  expect(dialog.getAttribute("aria-modal")).toBe("false");
+  expect(dialog.getAttribute("aria-label")).toBe("Author label");
 });
 
 test("removing a dialog while open and reinserting leaves it controllable", async () => {

@@ -11,6 +11,7 @@
 - The dialog corner applies to a `.close` that is a direct child of the dialog, of its `form` or `header`, or of a `form` inside that header.
 - `getSurfaceAutoClose` is removed from `surface.js`: it had no caller, and the code that opens a surface passes its own `autoClose`.
 - `.column-span-1…12` and `.column-start-1…12` are replaced by the `--column-span` / `--column-start` hooks on each `.column-layout` child.
+
 ### Added
 
 - `.bleed` is a shared surface contract: `src/css/components/bleed.css` reads the relayed `--surface-pad`, so a direct child of a `.drawer` or of an accordion panel escapes its inset like a card child already did.
@@ -21,6 +22,8 @@
 
 ### Fixed
 
+- `dialog.js` respects `closedby="none"` on `cancel` when `HTMLDialogElement.closedBy` is unavailable, while explicit close requests still work.
+- `dialog.js` restores generated ARIA attributes, title IDs, and rewritten `closedby` values on disconnect without overwriting author changes.
 - A last `.bleed` child of an accordion panel had square corners over the rounded `.separated` item or the group's last item.
 - `applyEnhancement("validation", …)` did not wire an already-connected form: `validation.js` now registers through `registerEnhancement`.
 - `--app-nav-side-size` was invisible to `check:css-api` (header read `Public hook:`).
