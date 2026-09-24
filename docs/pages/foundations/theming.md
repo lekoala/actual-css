@@ -137,3 +137,8 @@ assets, not package entrypoints. Each sets the intent/surface/text tokens and
 lets the core derive everything else. In browsers with `color-mix()` support,
 `--focus-ring` follows each island's `--focus` automatically; re-declare it only
 for a deliberate visual override or a matching legacy fallback.
+
+The `bootstrap-v6` example follows Bootstrap 6's blue palette, stronger subtle
+surfaces, filled badges, steady select hover, and crisp inset outline on focused
+controls. Use `.badge.soft` for a subtle badge. It is a visual theme, not a
+Bootstrap compatibility layer.

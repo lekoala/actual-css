@@ -24,6 +24,8 @@
  * --control-cursor
  * --control-border-block-end-color
  * --control-border-block-end-width
+ * --control-hover-border (input and textarea)
+ * --control-hover-bg (select)
  */
 .input,
 .textarea,
@@ -68,16 +70,18 @@
 
 .input:hover:not(:disabled),
 .textarea:hover:not(:disabled) {
-  --control-border: var(--text-subtle);
+  --control-border: var(--control-hover-border, var(--text-subtle));
 }
 
 .select:hover:not(:disabled) {
-  --control-bg: var(--surface-subtle);
+  --control-bg: var(--control-hover-bg, var(--surface-subtle));
 }
 
-.input:focus-visible,
-.textarea:focus-visible,
-.select:focus-visible {
+/* Match hover specificity so the focus border wins while the pointer remains
+   over a keyboard-focused control. */
+.input:focus-visible:not(:disabled),
+.textarea:focus-visible:not(:disabled),
+.select:focus-visible:not(:disabled) {
   --control-border: var(--focus);
   outline: 2px solid transparent;
   box-shadow: var(--focus-ring-shadow);

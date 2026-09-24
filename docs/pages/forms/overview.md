@@ -165,6 +165,12 @@ A full form using the control classes, field wrappers, and form actions:
 </form>
 ```
 
+## Hooks
+
+Set `--control-hover-border` to tune the hover border of `.input` and `.textarea`.
+Set `--control-hover-bg` to keep a `.select` background steady on hover, or give
+it a stronger fill.
+
 ## Notes
 
 - `required` is enough on native inputs. `aria-required="true"` is redundant and not used in these examples.
