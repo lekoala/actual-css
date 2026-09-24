@@ -179,6 +179,17 @@ Actual CSS is layer-compatible, not layer-dependent. The default `actual.css` fi
 
 Actual CSS uses AI-assisted tooling for code generation, refactoring, and debugging. Patterns and architecture come from hand-written prototypes and iterative human-driven refinement. AI output is reviewed, tested, and owned by the maintainer.
 
+## Coding agents
+
+Actual CSS ships a starter agent skill under [`skills/actual-css/`](skills/actual-css/).
+
+It teaches coding agents how to use the framework's vocabulary, public hooks,
+layout primitives and progressive enhancements without recreating framework
+behavior in application CSS.
+
+Copy it into your project's agent skills and extend it with your application's
+theme, loaded modules and local conventions.
+
 ## License
 
 MIT
