@@ -23,7 +23,7 @@ export function loadThemes(root) {
 
   return names.map((name) => ({
     name,
-    label: name.charAt(0).toUpperCase() + name.slice(1),
+    label: name.charAt(0).toUpperCase() + name.slice(1).replaceAll("-", " "),
     description: descriptions.get(name) ?? "",
   }));
 }

@@ -17,7 +17,7 @@
   <script src="../scripts/docs/assets/docs.js" defer></script>
   <script>
   (function () {
-    var valid = ["system","light","dark","indigo","dim","corporate","forest","ocean","spruce","petrol","sunset","lavender","mono","square","brutalist","edge","cyberpunk","neon","gradient"];
+    var valid = ["system","light","dark","indigo","dim","corporate","bootstrap-v6","forest","ocean","spruce","petrol","sunset","lavender","mono","square","brutalist","edge","cyberpunk","neon","gradient"];
     var saved = null;
     try { saved = localStorage.getItem("actual-docs-theme"); } catch (e) {}
     if (saved === "system" || !valid.includes(saved)) {
@@ -49,6 +49,7 @@
             <option value="indigo">Indigo</option>
             <option value="dim">Dim</option>
             <option value="corporate">Corporate</option>
+            <option value="bootstrap-v6">Bootstrap v6</option>
             <option value="forest">Forest</option>
             <option value="ocean">Ocean</option>
             <option value="spruce">Spruce</option>
@@ -101,7 +102,7 @@
             <span class="muted">Core build, brotli</span>
           </div>
           <div class="docs-stat">
-            <strong>18</strong>
+            <strong>19</strong>
             <span class="muted">Themes, light and dark included</span>
           </div>
         </div>
@@ -169,7 +170,7 @@
           <article class="card stack">
             <span class="docs-icon" aria-hidden="true"><i class="ti ti-palette"></i></span>
             <h3>Themable</h3>
-            <p class="muted">Light, dark and 16 named themes, all driven by tokens. Bring your own theme with a few custom properties.</p>
+            <p class="muted">Light, dark and 17 named themes, all driven by tokens. Bring your own theme with a few custom properties.</p>
           </article>
         </div>
       </section>
@@ -345,7 +346,7 @@
 
       <section class="docs-section docs-theme-showcase center stack">
         <h2>Pick a theme</h2>
-        <p class="muted">Light, dark and 16 named themes. Each card below previews one — that is a <code>data-theme</code> island doing its job.</p>
+        <p class="muted">Light, dark and 17 named themes. Each card below previews one — that is a <code>data-theme</code> island doing its job.</p>
         <div class="grid docs-theme-grid">
                     <article class="card compact stack docs-theme-card" data-theme="indigo">
             <div class="docs-theme-preview" aria-hidden="true">
@@ -370,6 +371,14 @@
               <span class="docs-theme-line docs-theme-line-secondary"></span>
             </div>
             <h3>Corporate</h3>
+          </article>
+          <article class="card compact stack docs-theme-card" data-theme="bootstrap-v6">
+            <div class="docs-theme-preview" aria-hidden="true">
+              <span class="docs-theme-line"></span>
+              <span class="docs-theme-line docs-theme-line-primary"></span>
+              <span class="docs-theme-line docs-theme-line-secondary"></span>
+            </div>
+            <h3>Bootstrap v6</h3>
           </article>
           <article class="card compact stack docs-theme-card" data-theme="forest">
             <div class="docs-theme-preview" aria-hidden="true">

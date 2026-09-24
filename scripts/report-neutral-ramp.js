@@ -103,7 +103,7 @@ function grayLightnessAt(target) {
 }
 
 const themes = readdirSync(THEMES_DIR)
-  .filter((file) => /^[a-z-]+\.css$/.test(file) && file !== "index.css")
+  .filter((file) => /^[a-z0-9-]+\.css$/.test(file) && file !== "index.css")
   .map((file) => {
     const css = readFileSync(join(THEMES_DIR, file), "utf8");
     return { name: file.replace(".css", ""), hasDark: /light-dark\(/.test(css) };

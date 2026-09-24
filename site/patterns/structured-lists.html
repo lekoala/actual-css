@@ -18,7 +18,7 @@ component contract the collection needs.">
   <script src="../../scripts/docs/assets/docs.js" defer></script>
   <script>
   (function () {
-    var valid = ["system","light","dark","indigo","dim","corporate","forest","ocean","spruce","petrol","sunset","lavender","mono","square","brutalist","edge","cyberpunk","neon","gradient"];
+    var valid = ["system","light","dark","indigo","dim","corporate","bootstrap-v6","forest","ocean","spruce","petrol","sunset","lavender","mono","square","brutalist","edge","cyberpunk","neon","gradient"];
     var saved = null;
     try { saved = localStorage.getItem("actual-docs-theme"); } catch (e) {}
     if (saved === "system" || !valid.includes(saved)) {
@@ -50,6 +50,7 @@ component contract the collection needs.">
             <option value="indigo">Indigo</option>
             <option value="dim">Dim</option>
             <option value="corporate">Corporate</option>
+            <option value="bootstrap-v6">Bootstrap v6</option>
             <option value="forest">Forest</option>
             <option value="ocean">Ocean</option>
             <option value="spruce">Spruce</option>

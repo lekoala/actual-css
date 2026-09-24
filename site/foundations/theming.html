@@ -17,7 +17,7 @@
   <script src="../../scripts/docs/assets/docs.js" defer></script>
   <script>
   (function () {
-    var valid = ["system","light","dark","indigo","dim","corporate","forest","ocean","spruce","petrol","sunset","lavender","mono","square","brutalist","edge","cyberpunk","neon","gradient"];
+    var valid = ["system","light","dark","indigo","dim","corporate","bootstrap-v6","forest","ocean","spruce","petrol","sunset","lavender","mono","square","brutalist","edge","cyberpunk","neon","gradient"];
     var saved = null;
     try { saved = localStorage.getItem("actual-docs-theme"); } catch (e) {}
     if (saved === "system" || !valid.includes(saved)) {
@@ -49,6 +49,7 @@
             <option value="indigo">Indigo</option>
             <option value="dim">Dim</option>
             <option value="corporate">Corporate</option>
+            <option value="bootstrap-v6">Bootstrap v6</option>
             <option value="forest">Forest</option>
             <option value="ocean">Ocean</option>
             <option value="spruce">Spruce</option>
@@ -294,6 +295,10 @@ assets, not package entrypoints. Each sets the intent/surface/text tokens and
 lets the core derive everything else. In browsers with <code>color-mix()</code> support,
 <code>--focus-ring</code> follows each island's <code>--focus</code> automatically; re-declare it only
 for a deliberate visual override or a matching legacy fallback.</p>
+<p>The <code>bootstrap-v6</code> example follows Bootstrap 6's blue palette, stronger subtle
+surfaces, filled badges, steady select hover, and crisp inset outline on focused
+controls. Use <code>.badge.soft</code> for a subtle badge. It is a visual theme, not a
+Bootstrap compatibility layer.</p>
 
 </div>
 

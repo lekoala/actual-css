@@ -12,6 +12,7 @@
  *   indigo     — deep blue/violet dark palette (single block)
  *   dim        — dark variant with lifted surface tones
  *   corporate  — reference paired light/dark recolor via light-dark()
+ *   bootstrap-v6 — Bootstrap v6 palette and control treatment
  *   forest     — paired recolor + scaled-up radius tokens
  *   ocean      — reference paired recolor
  *   spruce     — deep spruce-green primary + copper secondary
@@ -36,6 +37,7 @@
 @import "./indigo.css";
 @import "./dim.css";
 @import "./corporate.css";
+@import "./bootstrap-v6.css";
 @import "./forest.css";
 @import "./ocean.css";
 @import "./spruce.css";

@@ -17,7 +17,7 @@
   <script src="../../scripts/docs/assets/docs.js" defer></script>
   <script>
   (function () {
-    var valid = ["system","light","dark","indigo","dim","corporate","forest","ocean","spruce","petrol","sunset","lavender","mono","square","brutalist","edge","cyberpunk","neon","gradient"];
+    var valid = ["system","light","dark","indigo","dim","corporate","bootstrap-v6","forest","ocean","spruce","petrol","sunset","lavender","mono","square","brutalist","edge","cyberpunk","neon","gradient"];
     var saved = null;
     try { saved = localStorage.getItem("actual-docs-theme"); } catch (e) {}
     if (saved === "system" || !valid.includes(saved)) {
@@ -49,6 +49,7 @@
             <option value="indigo">Indigo</option>
             <option value="dim">Dim</option>
             <option value="corporate">Corporate</option>
+            <option value="bootstrap-v6">Bootstrap v6</option>
             <option value="forest">Forest</option>
             <option value="ocean">Ocean</option>
             <option value="spruce">Spruce</option>
@@ -504,6 +505,10 @@
   </div>
 </div>
 <div class="prose docs-prose">
+<h2 id="hooks">Hooks</h2>
+<p>Set <code>--control-hover-border</code> to tune the hover border of <code>.input</code> and <code>.textarea</code>.
+Set <code>--control-hover-bg</code> to keep a <code>.select</code> background steady on hover, or give
+it a stronger fill.</p>
 <h2 id="notes">Notes</h2>
 <ul>
 <li><code>required</code> is enough on native inputs. <code>aria-required=&quot;true&quot;</code> is redundant and not used in these examples.</li>
@@ -549,6 +554,7 @@
           <ul class="nav-list docs-toc-list" data-docs-toc>
         <li><a class="nav-link" href="#class-reference" data-docs-toc-item data-level="2">Class reference</a></li>
         <li><a class="nav-link" href="#example-form" data-docs-toc-item data-level="2">Example form</a></li>
+        <li><a class="nav-link" href="#hooks" data-docs-toc-item data-level="2">Hooks</a></li>
         <li><a class="nav-link" href="#notes" data-docs-toc-item data-level="2">Notes</a></li>
         <li><a class="nav-link" href="#optional-automatic-required-marks" data-docs-toc-item data-level="2">Optional automatic required marks</a></li>
           </ul>

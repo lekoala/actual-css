@@ -1,12 +1,12 @@
 {
-  "totalRaw": 311866,
+  "totalRaw": 317293,
   "core": {
     "minified": 12619,
     "brotli": 2827
   },
   "full": {
-    "minified": 126378,
-    "brotli": 18208
+    "minified": 126477,
+    "brotli": 18196
   },
   "js": {
     "core": {
@@ -18,7 +18,7 @@
       "brotli": 16806
     }
   },
-  "fileCount": 110,
+  "fileCount": 111,
   "files": [
     {
       "file": "components/steps.css",
@@ -89,6 +89,10 @@
       "raw": 5213
     },
     {
+      "file": "themes/bootstrap-v6.css",
+      "raw": 5038
+    },
+    {
       "file": "components/tooltip.css",
       "raw": 4951
     },
@@ -153,6 +157,10 @@
       "raw": 3563
     },
     {
+      "file": "forms/control.css",
+      "raw": 3277
+    },
+    {
       "file": "components/status-bar.css",
       "raw": 3221
     },
@@ -163,10 +171,6 @@
     {
       "file": "components/close.css",
       "raw": 3033
-    },
-    {
-      "file": "forms/control.css",
-      "raw": 2983
     },
     {
       "file": "themes/spruce.css",
@@ -241,6 +245,10 @@
       "raw": 2449
     },
     {
+      "file": "themes/index.css",
+      "raw": 2434
+    },
+    {
       "file": "themes/square.css",
       "raw": 2426
     },
@@ -251,10 +259,6 @@
     {
       "file": "forms/select.css",
       "raw": 2357
-    },
-    {
-      "file": "themes/index.css",
-      "raw": 2339
     },
     {
       "file": "themes/cyberpunk.css",

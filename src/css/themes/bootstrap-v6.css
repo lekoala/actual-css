@@ -1,0 +1,147 @@
+/* Bootstrap v6 visual reference theme for the demo; no Bootstrap API is provided.
+   The focus treatment follows the v6-dev outline recipe, not the v5 shadow. */
+[data-theme="bootstrap-v6"] {
+  color-scheme: light;
+
+  --primary: #0d6efd;
+  --primary-fg: #fff;
+  --secondary: #e9ecef;
+  --secondary-fg: #212529;
+  --success: #198754;
+  --success-fg: #fff;
+  --warning: #ffc107;
+  --warning-fg: #212529;
+  --danger: #dc3545;
+  --danger-fg: #fff;
+  --neutral: #6c757d;
+  --neutral-fg: #fff;
+
+  --surface: #fff;
+  --surface-raised: #fff;
+  --surface-subtle: #f8f9fa;
+  --surface-solid: #212529;
+  --text: #212529;
+  --text-muted: #6c757d;
+  --text-subtle: #adb5bd;
+  --border: #dee2e6;
+  --focus: var(--primary);
+  --focus-ring: #68bfff;
+  --hover-overlay: rgb(0 0 0 / 4%);
+  --shadow-color: #000;
+  /* v6 subtle fills use an 80% white tint; borders use its 300 step. */
+  --soft-bg-mix: 80%;
+  --soft-border-mix: 40%;
+  --soft-fg-mix: 40%;
+
+  --radius: 0.5rem;
+  --radius-sm: 0.25rem;
+  --radius-lg: 0.75rem;
+  --control-pad-x: 0.75rem;
+  --control-hover-bg: var(--surface);
+  --control-hover-border: #adb5bd;
+}
+
+/* v6 keeps the resting border and paints a crisp inset outline on focus. */
+[data-theme="bootstrap-v6"] :is(.input, .textarea, .select):is(:focus-visible, :focus-within) {
+  --control-border: var(--border);
+  /* The validation hook also covers .field.danger, aria-invalid and native
+     validation, so their focus outline keeps the same intent as the border. */
+  outline: 3px solid var(--form-invalid-border, var(--focus-ring));
+  outline-offset: -1px;
+  box-shadow: none;
+}
+
+[data-theme="bootstrap-v6"] .field-label {
+  font-weight: 500;
+}
+
+/* Keep select hover as quiet as text controls without changing the core
+   --control-border hook for other themes. */
+[data-theme="bootstrap-v6"] .select:hover:not(:disabled):not(:focus-within) {
+  --control-border: var(--control-hover-border);
+}
+
+/* v6 badges are filled by default; .soft opts into its subtle treatment. */
+[data-theme="bootstrap-v6"] .badge:not(.soft):not(.solid):not(.outline):not(.surface) {
+  --badge-bg: var(--intent, var(--secondary));
+  --badge-fg: var(--intent-fg, var(--secondary-fg));
+  --badge-border: transparent;
+}
+
+[data-theme="bootstrap-v6"] .badge.soft {
+  --badge-border: transparent;
+}
+
+[data-theme="bootstrap-v6"] :is(.input, .textarea)[readonly] {
+  --control-bg: var(--surface);
+}
+
+[data-theme="bootstrap-v6"] :is(.input, .textarea, .select):disabled {
+  --control-bg: #e9ecef;
+  --control-fg: #6c757d;
+}
+
+@supports (color: light-dark(red, blue)) and (color: color-mix(in oklch, red, white)) {
+  [data-theme="bootstrap-v6"] {
+    color-scheme: light dark;
+
+    --primary: oklch(60% 0.24 240);
+    --primary-fg: #fff;
+    --secondary: light-dark(#e9ecef, #495057);
+    --secondary-fg: light-dark(#212529, #fff);
+    --success: oklch(64% 0.22 160);
+    --success-fg: light-dark(#fff, #051b11);
+    --warning: oklch(88% 0.24 88);
+    --warning-fg: #212529;
+    --danger: oklch(60% 0.22 20);
+    --danger-fg: light-dark(#fff, #2c0b0e);
+    --neutral: light-dark(#6c757d, #adb5bd);
+    --neutral-fg: light-dark(#fff, #212529);
+
+    --primary-soft-fg: light-dark(
+      color-mix(in oklch, var(--primary) 68%, black),
+      color-mix(in oklch, var(--primary) 50%, white)
+    );
+    --success-soft-fg: light-dark(
+      color-mix(in oklch, var(--success) 68%, black),
+      color-mix(in oklch, var(--success) 50%, white)
+    );
+    --danger-soft-fg: light-dark(
+      color-mix(in oklch, var(--danger) 68%, black),
+      color-mix(in oklch, var(--danger) 50%, white)
+    );
+    --warning-soft-fg: light-dark(
+      color-mix(in oklch, var(--warning) 50%, black),
+      color-mix(in oklch, var(--warning) 50%, white)
+    );
+
+    --surface: light-dark(#fff, #212529);
+    --surface-raised: light-dark(#fff, #2b3035);
+    --surface-subtle: light-dark(#f8f9fa, #343a40);
+    --surface-solid: light-dark(#212529, #f8f9fa);
+    --text: light-dark(#212529, #dee2e6);
+    --text-muted: light-dark(#6c757d, #adb5bd);
+    --text-subtle: light-dark(#adb5bd, #6c757d);
+    --border: light-dark(#dee2e6, #495057);
+    --focus-ring: light-dark(
+      /* intentional-oklch: Match Bootstrap v6's focus-ring interpolation. */
+      color-mix(in oklch, var(--primary) 50%, var(--surface)),
+      color-mix(in oklch, var(--primary) 75%, var(--surface))
+    );
+    --hover-overlay: light-dark(rgb(0 0 0 / 4%), rgb(255 255 255 / 6%));
+    --control-hover-border: light-dark(#adb5bd, #6c757d);
+  }
+
+  [data-theme="bootstrap-v6"] :is(.input, .textarea, .select):is(:focus-visible, :focus-within) {
+    outline-color: light-dark(
+      /* intentional-oklch: Match Bootstrap v6's validation focus ring. */
+      color-mix(in oklch, var(--form-invalid-border, var(--primary)) 50%, var(--surface)),
+      color-mix(in oklch, var(--form-invalid-border, var(--primary)) 75%, var(--surface))
+    );
+  }
+
+  [data-theme="bootstrap-v6"] :is(.input, .textarea, .select):disabled {
+    --control-bg: light-dark(#e9ecef, #343a40);
+    --control-fg: light-dark(#6c757d, #adb5bd);
+  }
+}
