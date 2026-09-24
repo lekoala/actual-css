@@ -1,0 +1,65 @@
+# Project-specific Actual CSS usage
+
+Copy this file to `PROJECT.md` beside `SKILL.md` and keep only decisions that are true for this application.
+
+This file narrows **how the application uses Actual CSS**. It does not redefine Actual CSS API.
+
+## Imports
+
+CSS loaded by this project:
+
+```text
+- TODO
+```
+
+JavaScript enhancers loaded by this project:
+
+```text
+- TODO
+```
+
+## Theme
+
+Theme root / selector:
+
+```text
+TODO
+```
+
+Application-owned brand tokens or theme conventions:
+
+```text
+- TODO
+```
+
+## Page shell and layout conventions
+
+```text
+- TODO
+```
+
+## Existing application wrappers
+
+List server-side/template components that agents should reuse before writing raw markup.
+
+```text
+- TODO
+```
+
+## Application CSS conventions
+
+```text
+- TODO
+```
+
+## Browser policy
+
+If stricter than Actual CSS itself:
+
+```text
+TODO
+```
+
+## Local decisions
+
+Add only stable, reusable decisions that materially change implementation choices.

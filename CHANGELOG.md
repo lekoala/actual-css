@@ -42,6 +42,7 @@
 - `components.json`: an entry no longer lists another component's class it only styles (`bleed` → `card`), and `plumbingHooks` carries the "Framework plumbing:" section.
 - Progressive enhancement guide: built-in `data-*` behaviors expose no `refresh()`; insert the element with its attribute set.
 - `utilities/extra.css` header no longer calls extra utilities non-API.
+- `skills/actual-css/`: a copyable starter agent skill for building with Actual CSS, shipped in the package and pointed to from the README and `llms.txt`.
 
 
 ## [0.9.2] - 2026-09-22
