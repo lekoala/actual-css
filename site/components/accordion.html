@@ -401,7 +401,7 @@
 <ul>
 <li><code>--accordion-radius</code> — outer corner radius.</li>
 <li><code>--accordion-pad</code> — inset of the summary row and the panel. The panel relays it as <code>--surface-pad</code>, so a direct <code>.bleed</code> child of the panel reaches the item's sides and bottom corners (never the summary); <code>.flush</code> drops the inline half and the relay with it.</li>
-<li><code>--accordion-marker-color</code> — color of the end marker; it reinforces to the summary text color on hover, and forced-colors mode overrides it to <code>CanvasText</code>.</li>
+<li><code>--accordion-marker-color</code> — color of the end marker; it reinforces to the summary text color on hover. In forced-colors mode the marker is pinned to <code>CanvasText</code> on the property itself, so an application override of the hook cannot leave a <code>Canvas</code>-remapped fill.</li>
 <li><code>--accordion-marker-size</code> — edge length of the end marker.</li>
 </ul>
 <h3 id="replacing-the-marker">Replacing the marker</h3>
@@ -411,7 +411,10 @@ to the same silhouette, so a decorated marker — a chevron inside a pill — ha
 to be a real element: hide the built-in one and put a
 <code>&lt;span class=&quot;marker&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;</code> at the end of the summary. The
 pill is the span; the chevron is its pseudo-element, which reads the same color
-hook, so the hover reinforcement and the forced-colors <code>CanvasText</code> carry over:</p>
+hook, so the hover reinforcement carries over. The forced-colors pin does not
+carry over through the hook — an application hook override at the same
+specificity loads after the framework and would win the variable — so the
+recipe repeats it on its own property:</p>
 <pre><code class="language-css">.accordion.custom-marker summary::after {
   display: none;
 }
@@ -441,6 +444,12 @@ hook, so the hover reinforcement and the forced-colors <code>CanvasText</code> c
 
 .accordion.custom-marker details[open] .marker {
   transform: rotate(180deg);
+}
+
+@media (forced-colors: active) {
+  .accordion.custom-marker .marker::before {
+    background-color: CanvasText;
+  }
 }
 </code></pre>
 

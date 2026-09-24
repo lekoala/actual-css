@@ -3019,20 +3019,33 @@ small {
 }
 
 /* Forced colors: the track must stay a visible line against the page (Canvas
-   would merge with it) and the thumb needs a real boundary to remain
-   distinguishable from the track. Disabled keeps GrayText via :disabled.
-   Focus stays on the transparent outline of :focus-visible. */
+  would merge with it) and the thumb needs a real boundary to remain
+  distinguishable from the track. Disabled keeps GrayText via :disabled.
+  Focus stays on the transparent outline of :focus-visible. Track and thumb
+  fills are written on the properties, not only the hooks: an application
+  hook override at the same specificity loads after this file and would win
+  the variable, leaving a Canvas-remapped fill. */
 @media (forced-colors: active) {
   .range {
     --range-track-bg: CanvasText;
     --range-thumb-bg: ButtonFace;
   }
 
+  .range::-webkit-slider-runnable-track {
+    background: CanvasText;
+  }
+
+  .range::-moz-range-track {
+    background: CanvasText;
+  }
+
   .range::-webkit-slider-thumb {
+    background: ButtonFace;
     border: var(--border-width) solid ButtonText;
   }
 
   .range::-moz-range-thumb {
+    background: ButtonFace;
     border: var(--border-width) solid ButtonText;
   }
 }
@@ -3868,6 +3881,15 @@ a.btn[aria-disabled="true"] {
   :where(dialog):is(.modal, .drawer) > :is(form, header) > .close:hover,
   :where(dialog):is(.modal, .drawer) > :is(form, header) > :is(form, header) > .close:hover {
     color: var(--text);
+  }
+}
+
+@media (forced-colors: active) {
+  /* The X is a currentColor mask fill: without this the system remaps the
+    background to Canvas and the glyph disappears. Kept on the pseudo so the
+    host keeps its native color and focus adaptation. */
+  .close::before {
+    forced-color-adjust: none;
   }
 }
 
@@ -5426,6 +5448,18 @@ picture.bleed > img {
   border-block-start: var(--border-width) solid var(--border);
 }
 
+@media (forced-colors: active) {
+  /* The check mark is a currentColor mask fill and the mixed/radio marks are
+    currentColor gradients: without this the system remaps them to Canvas or
+    drops the image and the state disappears. Kept on the pseudo so the host
+    keeps its native color and focus adaptation. */
+  .menu-item[role="menuitemcheckbox"][aria-checked="true"]::before,
+  .menu-item[role="menuitemcheckbox"][aria-checked="mixed"]::before,
+  .menu-item[role="menuitemradio"]::before {
+    forced-color-adjust: none;
+  }
+}
+
 /*
  * Tooltip — supplemental label overlaid near a trigger.
  *
@@ -5726,8 +5760,11 @@ picture.bleed > img {
 }
 
 @media (forced-colors: active) {
-  .accordion {
-    --accordion-marker-color: CanvasText;
+  /* Written on the property, not the hook: an application hook override at
+    the same specificity loads after this file and would win the variable,
+    leaving a Canvas-remapped fill. The property keeps CanvasText. */
+  .accordion summary::after {
+    background-color: CanvasText;
   }
 }
 
@@ -6720,6 +6757,16 @@ a.avatar[aria-disabled="true"] {
 .fab[open] > summary::after {
   opacity: 1;
   transform: none;
+}
+
+@media (forced-colors: active) {
+  /* Both toggle markers are currentColor mask fills: without this the system
+    remaps the backgrounds to Canvas and the glyphs disappear. Kept on the
+    pseudos so the host keeps its native color and focus adaptation. */
+  .fab > summary::before,
+  .fab > summary::after {
+    forced-color-adjust: none;
+  }
 }
 
 /*

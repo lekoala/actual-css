@@ -1,12 +1,12 @@
 {
-  "totalRaw": 310049,
+  "totalRaw": 311865,
   "core": {
     "minified": 12619,
     "brotli": 2827
   },
   "full": {
-    "minified": 125771,
-    "brotli": 18156
+    "minified": 126378,
+    "brotli": 18208
   },
   "js": {
     "core": {
@@ -14,8 +14,8 @@
       "brotli": 2243
     },
     "full": {
-      "bytes": 56738,
-      "brotli": 16580
+      "bytes": 57390,
+      "brotli": 16771
     }
   },
   "fileCount": 110,
@@ -77,16 +77,16 @@
       "raw": 5274
     },
     {
+      "file": "components/accordion.css",
+      "raw": 5262
+    },
+    {
       "file": "forms/switch.css",
       "raw": 5256
     },
     {
       "file": "utilities/extra.css",
       "raw": 5213
-    },
-    {
-      "file": "components/accordion.css",
-      "raw": 5034
     },
     {
       "file": "components/tooltip.css",
@@ -133,20 +133,24 @@
       "raw": 3885
     },
     {
+      "file": "components/menu.css",
+      "raw": 3857
+    },
+    {
       "file": "components/tab.css",
       "raw": 3671
     },
     {
+      "file": "components/fab.css",
+      "raw": 3652
+    },
+    {
+      "file": "forms/range.css",
+      "raw": 3613
+    },
+    {
       "file": "components/list.css",
       "raw": 3563
-    },
-    {
-      "file": "components/menu.css",
-      "raw": 3320
-    },
-    {
-      "file": "components/fab.css",
-      "raw": 3304
     },
     {
       "file": "components/status-bar.css",
@@ -157,8 +161,8 @@
       "raw": 3218
     },
     {
-      "file": "forms/range.css",
-      "raw": 3209
+      "file": "components/close.css",
+      "raw": 3033
     },
     {
       "file": "forms/control.css",
@@ -179,10 +183,6 @@
     {
       "file": "themes/petrol.css",
       "raw": 2765
-    },
-    {
-      "file": "components/close.css",
-      "raw": 2734
     },
     {
       "file": "forms/validation.css",
