@@ -24,7 +24,7 @@
  *
  * The runtime assumes native <dialog> with show()/showModal()/close() — the
  * Minimal browser tier. requestClose() is newer than the floor and is used
- * when present, falling back to close() otherwise.
+ * when present, falling back to a cancel event before close() otherwise.
  */
 
 import { registerCommands, targetFor } from "./command.js";
@@ -78,22 +78,39 @@ function ensureId(el, prefix, state) {
   return el.id;
 }
 
+function ownsCurrentAttribute(state, el, name) {
+  return state.ownedAttributes.some(
+    (entry) => entry.el === el && entry.name === name && el.getAttribute(name) === entry.written,
+  );
+}
+
 function syncDialogSemantics(dialog, state, modal = isModal(dialog)) {
   setOwnedAttribute(state, dialog, "aria-modal", modal ? "true" : null);
 
-  if (dialog.hasAttribute("aria-label") || dialog.hasAttribute("aria-labelledby")) {
+  const ownsLabel = ownsCurrentAttribute(state, dialog, "aria-label");
+  const ownsLabelledby = ownsCurrentAttribute(state, dialog, "aria-labelledby");
+  if (dialog.hasAttribute("aria-labelledby") && !ownsLabelledby) {
+    if (ownsLabel) setOwnedAttribute(state, dialog, "aria-label", null);
+    return;
+  }
+  if (dialog.hasAttribute("aria-label") && !ownsLabel) {
+    if (ownsLabelledby) setOwnedAttribute(state, dialog, "aria-labelledby", null);
     return;
   }
 
   const label = dialog.getAttribute("data-title")?.trim();
   if (label) {
+    if (ownsLabelledby) setOwnedAttribute(state, dialog, "aria-labelledby", null);
     setOwnedAttribute(state, dialog, "aria-label", label);
     return;
   }
 
   const title = dialog.querySelector(DIALOG_TITLE_SELECTOR);
+  if (ownsLabel) setOwnedAttribute(state, dialog, "aria-label", null);
   if (title) {
     setOwnedAttribute(state, dialog, "aria-labelledby", ensureId(title, "dialog-title", state));
+  } else if (ownsLabelledby) {
+    setOwnedAttribute(state, dialog, "aria-labelledby", null);
   }
 }
 
@@ -280,19 +297,19 @@ export function closeDialog(dialog, returnValue = "") {
 export function requestDialogClose(dialog, returnValue = "") {
   if (!isDialogElement(dialog) || !dialog.open) return;
 
-  if (typeof dialog.requestClose === "function") {
-    const state = ensureDialogWired(dialog);
-    state.returnValue = returnValue;
-    state.requestingClose = true;
-    try {
+  const state = ensureDialogWired(dialog);
+  state.returnValue = returnValue;
+  state.requestingClose = true;
+  try {
+    if (typeof dialog.requestClose === "function") {
       dialog.requestClose(returnValue);
-    } finally {
-      state.requestingClose = false;
+    } else {
+      // Older browsers still owe consumers the same cancel lifecycle.
+      dialog.dispatchEvent(new Event("cancel", { cancelable: true }));
     }
-    return;
+  } finally {
+    state.requestingClose = false;
   }
-
-  closeDialog(dialog, returnValue);
 }
 
 export function openDialog(dialog, trigger = null, forcedModal = null) {

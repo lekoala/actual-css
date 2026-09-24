@@ -5,6 +5,7 @@ import { fileURLToPath } from "node:url";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, "..");
 const TOKENS = new Set(["tabs", "flyout", "scrollspy", "validation"]);
+const REGISTRATION = /^\s*registerEnhancement\(\s*["']([a-z][a-z0-9-]*)["']/gm;
 
 const DISCOVERY_CLASSES = [
   ".tabs",
@@ -116,11 +117,43 @@ async function checkCssSelectors() {
  */
 function registeredTokens(source) {
   const tokens = new Set();
-  const pattern = /registerEnhancement\(\s*["']([a-z][a-z0-9-]*)["']/g;
+  const pattern = new RegExp(REGISTRATION);
   for (let match = pattern.exec(source); match !== null; match = pattern.exec(source)) {
     tokens.add(match[1]);
   }
   return tokens;
+}
+
+async function checkRegistrations() {
+  const files = await jsFiles(join(ROOT, "src", "js"));
+  const registrations = new Map();
+
+  for (const file of files) {
+    const source = await readFile(file, "utf8");
+    const pattern = new RegExp(REGISTRATION);
+    for (let match = pattern.exec(source); match !== null; match = pattern.exec(source)) {
+      const token = match[1];
+      const locations = registrations.get(token) ?? [];
+      locations.push(`${file}:${source.slice(0, match.index).split("\n").length}`);
+      registrations.set(token, locations);
+    }
+  }
+
+  const offenders = [];
+  for (const token of TOKENS) {
+    const locations = registrations.get(token) ?? [];
+    if (locations.length !== 1) {
+      offenders.push(
+        `Built-in token "${token}" has ${locations.length} registrations (expected 1).`,
+      );
+    }
+  }
+  for (const [token, locations] of registrations) {
+    if (!TOKENS.has(token)) {
+      offenders.push(`Unlisted built-in token "${token}" registered in ${locations.join(", ")}.`);
+    }
+  }
+  return offenders;
 }
 
 function checkTokensIn(path, source, patterns, offenders) {
@@ -192,6 +225,12 @@ async function main() {
   if (tokens.length) {
     results.push("Unknown token in demo/docs:");
     results.push(...tokens);
+  }
+
+  const registrations = await checkRegistrations();
+  if (registrations.length) {
+    results.push("Built-in enhancement registrations:");
+    results.push(...registrations);
   }
 
   if (results.length) {

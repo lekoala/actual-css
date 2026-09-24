@@ -6,7 +6,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Card — Actual CSS</title>
-  <meta name="description" content="Flexible content container with optional header, body, and footer regions, plus full-bleed children.">
+  <meta name="description" content="Flexible content container with optional header, body, and footer regions.">
   <link rel="stylesheet" href="../../src/css/actual.full.css">
   <link rel="stylesheet" href="../assets/actual-themes.min.css">
   <link rel="stylesheet" href="../../scripts/docs/assets/docs.css">
@@ -117,6 +117,7 @@
         <li><a class="nav-link" href="aura.html">Aura</a></li>
         <li><a class="nav-link" href="avatar.html">Avatar</a></li>
         <li><a class="nav-link" href="badge.html">Badge</a></li>
+        <li><a class="nav-link" href="bleed.html">Bleed</a></li>
         <li><a class="nav-link" href="breadcrumb.html">Breadcrumb</a></li>
         <li><a class="nav-link" href="button.html">Button</a></li>
         <li><a class="nav-link" href="card.html" aria-current="page">Card</a></li>
@@ -211,7 +212,7 @@
 
           <div class="prose docs-prose">
 <h1 id="card">Card</h1>
-<p>Flexible content container with optional header, body, and footer regions, plus full-bleed children.</p>
+<p>Flexible content container with optional header, body, and footer regions.</p>
 <h2 id="class-reference">Class reference</h2>
 <div class="table-wrap"><table class="table">
 <thead>
@@ -295,110 +296,8 @@ gap.</p>
 </div>
 <div class="prose docs-prose">
 <h2 id="bleed">Bleed</h2>
-<p>Use <code>.bleed</code> on a direct child to escape the card padding — full-width images,
-colored headers, or footers.</p>
-<p><code>.bleed</code> is a surface contract, not a card class: it also works on a direct
-child of a <code>.drawer</code> and of an accordion panel, which is the element the
-accordion pads. A surface joins that contract by declaring <code>--surface-pad</code>.
-The child combinator is load-bearing — a <code>.bleed</code> deeper than one level stays
-inert rather than escaping a box it does not sit against.</p>
-<p>A <code>header</code>, <code>footer</code>, or <code>figure</code> band keeps the surface's padding; any other
-band (a status row, a notice strip) reads the same inset from <code>--bleed-pad</code>,
-which every direct child of a surface receives:</p>
-<pre><code class="language-css">.status-row {
-  padding: var(--bleed-pad);
-}
-</code></pre>
-</div>
-<div class="docs-example">
-  <div class="docs-preview">
-<div style="max-inline-size: 32rem">
-  <article class="card stack">
-    <img class="bleed" src="https://picsum.photos/seed/actual-css-card/600/300" alt="Coastal cliffs at dusk" />
-    <header>
-      <h3>Coastal cliffs at dusk</h3>
-    </header>
-    <section class="stack" aria-label="Summary">
-      <p>A short caption that wraps across a few lines. The image bleeds to the card edges.</p>
-    </section>
-    <footer>
-      <span class="badge primary soft">Photo</span>
-      <button type="button" class="btn outline">View</button>
-    </footer>
-  </article>
-</div>
-  </div>
-  <div class="docs-code">
-    <pre><code class="language-html">&lt;div style=&quot;max-inline-size: 32rem&quot;&gt;
-  &lt;article class=&quot;card stack&quot;&gt;
-    &lt;img class=&quot;bleed&quot; src=&quot;https://picsum.photos/seed/actual-css-card/600/300&quot; alt=&quot;Coastal cliffs at dusk&quot; /&gt;
-    &lt;header&gt;
-      &lt;h3&gt;Coastal cliffs at dusk&lt;/h3&gt;
-    &lt;/header&gt;
-    &lt;section class=&quot;stack&quot; aria-label=&quot;Summary&quot;&gt;
-      &lt;p&gt;A short caption that wraps across a few lines. The image bleeds to the card edges.&lt;/p&gt;
-    &lt;/section&gt;
-    &lt;footer&gt;
-      &lt;span class=&quot;badge primary soft&quot;&gt;Photo&lt;/span&gt;
-      &lt;button type=&quot;button&quot; class=&quot;btn outline&quot;&gt;View&lt;/button&gt;
-    &lt;/footer&gt;
-  &lt;/article&gt;
-&lt;/div&gt;</code></pre>
-  </div>
-</div>
-<div class="docs-example">
-  <div class="docs-preview">
-<article class="card stack" style="--card-max-inline-size: 24rem">
-  <header class="bleed stack items-center text-center" style="background: var(--surface-subtle)">
-    <hgroup>
-      <h3>Team</h3>
-      <p class="muted">For growing products</p>
-    </hgroup>
-    <p>
-      <span style="font-size: 2rem; font-weight: var(--font-weight-semibold); line-height: 1">$24</span>
-      <span class="muted">/ user / month</span>
-    </p>
-  </header>
-
-  <ul class="stack items-center" style="list-style: none; padding: 0">
-    <li>Unlimited projects</li>
-    <li>Up to 25 seats</li>
-    <li>Shared workspaces</li>
-    <li>Priority support</li>
-  </ul>
-
-  <footer class="bleed" style="background: var(--surface-subtle); justify-content: center">
-    <a class="btn primary" href="#">Upgrade</a>
-  </footer>
-</article>
-  </div>
-  <div class="docs-code">
-    <pre><code class="language-html">&lt;article class=&quot;card stack&quot; style=&quot;--card-max-inline-size: 24rem&quot;&gt;
-  &lt;header class=&quot;bleed stack items-center text-center&quot; style=&quot;background: var(--surface-subtle)&quot;&gt;
-    &lt;hgroup&gt;
-      &lt;h3&gt;Team&lt;/h3&gt;
-      &lt;p class=&quot;muted&quot;&gt;For growing products&lt;/p&gt;
-    &lt;/hgroup&gt;
-    &lt;p&gt;
-      &lt;span style=&quot;font-size: 2rem; font-weight: var(--font-weight-semibold); line-height: 1&quot;&gt;$24&lt;/span&gt;
-      &lt;span class=&quot;muted&quot;&gt;/ user / month&lt;/span&gt;
-    &lt;/p&gt;
-  &lt;/header&gt;
-
-  &lt;ul class=&quot;stack items-center&quot; style=&quot;list-style: none; padding: 0&quot;&gt;
-    &lt;li&gt;Unlimited projects&lt;/li&gt;
-    &lt;li&gt;Up to 25 seats&lt;/li&gt;
-    &lt;li&gt;Shared workspaces&lt;/li&gt;
-    &lt;li&gt;Priority support&lt;/li&gt;
-  &lt;/ul&gt;
-
-  &lt;footer class=&quot;bleed&quot; style=&quot;background: var(--surface-subtle); justify-content: center&quot;&gt;
-    &lt;a class=&quot;btn primary&quot; href=&quot;#&quot;&gt;Upgrade&lt;/a&gt;
-  &lt;/footer&gt;
-&lt;/article&gt;</code></pre>
-  </div>
-</div>
-<div class="prose docs-prose">
+<p>Use <code>.bleed</code> on a direct child to bring an image or band to the card edge. See
+<a href="bleed.html">Bleed</a> for the shared surface contract and its modular import.</p>
 <h2 id="in-grids">In grids</h2>
 <p>Cards display nicely in grids with equal-height behavior. Each card in a row
 stretches to the row height, and a direct <code>&lt;footer&gt;</code> anchors to the bottom, so
@@ -582,7 +481,7 @@ treatments on either side of it.</p>
 <ul>
 <li><code>--card-radius</code> — corner radius.</li>
 <li><code>--card-max-inline-size</code> — maximum width.</li>
-<li><code>--card-pad</code> — inner padding; also drives the negative offsets that let a <code>.bleed</code> child reach the card edge. <code>.compact</code> lowers it.</li>
+<li><code>--card-pad</code> — inner padding, relayed to direct children for <code>.bleed</code>. <code>.compact</code> lowers it.</li>
 <li><code>--card-gap</code> — space between direct children of a bare card. A composed layout primitive owns its own gap instead.</li>
 </ul>
 
@@ -671,6 +570,7 @@ treatments on either side of it.</p>
         <li><a class="nav-link" href="aura.html">Aura</a></li>
         <li><a class="nav-link" href="avatar.html">Avatar</a></li>
         <li><a class="nav-link" href="badge.html">Badge</a></li>
+        <li><a class="nav-link" href="bleed.html">Bleed</a></li>
         <li><a class="nav-link" href="breadcrumb.html">Breadcrumb</a></li>
         <li><a class="nav-link" href="button.html">Button</a></li>
         <li><a class="nav-link" href="card.html" aria-current="page">Card</a></li>

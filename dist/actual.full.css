@@ -5065,7 +5065,7 @@ html.has-modal-open.had-scrollbar {
 /*
  * Full-bleed children — the shared escape hatch for a padded surface.
  *
- * Docs: docs/pages/components/card.md
+ * Docs: docs/pages/components/bleed.md
  *
  * A surface that insets its direct children relays that inset to them as
  * --surface-pad; a direct .bleed child cancels it and reaches the surface

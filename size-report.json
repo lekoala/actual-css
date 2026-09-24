@@ -1,5 +1,5 @@
 {
-  "totalRaw": 311865,
+  "totalRaw": 311866,
   "core": {
     "minified": 12619,
     "brotli": 2827
@@ -14,8 +14,8 @@
       "brotli": 2243
     },
     "full": {
-      "bytes": 57390,
-      "brotli": 16771
+      "bytes": 57784,
+      "brotli": 16806
     }
   },
   "fileCount": 110,
@@ -202,7 +202,7 @@
     },
     {
       "file": "components/bleed.css",
-      "raw": 2656
+      "raw": 2657
     },
     {
       "file": "themes/sunset.css",
