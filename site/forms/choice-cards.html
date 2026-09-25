@@ -436,14 +436,19 @@ Use <code>.cluster</code> for a wrapping row. A chip is sized like a control: <c
 </div>
 <div class="prose docs-prose">
 <p>The dot is <code>::before</code>: a full-chip layer clipped to a <code>circle()</code> centred on
-the check slot, whose centre is exposed as <code>--choice-chip-dot</code>. A theme can
-grow it into a selected fill by widening the clip, as the <code>material</code> theme
-does.</p>
+the check slot (<code>--choice-chip-dot</code>). A theme can grow it into a selected fill
+by widening the clip, as the <code>material</code> theme does.</p>
 <h2 id="css-hooks">CSS hooks</h2>
 <ul>
 <li><code>--choice-card-pad</code> — inner padding.</li>
 <li><code>--choice-card-radius</code> — corner radius.</li>
 <li><code>--choice-card-check-size</code> — size of the check indicator.</li>
+<li><code>--choice-card-border</code> / <code>--choice-card-bg</code> — resting border and background;
+the checked state and hover rebind them, so a checked override needs
+<code>:has(:checked)</code>.</li>
+<li><code>--choice-chip-dot</code> — read-only: the chip's check-slot centre as a <code>circle()</code>
+position. It is declared on the chip's <code>::before</code>, so read it in a
+<code>.choice-card.chip…::before</code> rule.</li>
 </ul>
 <p>Plain <code>.check</code> / <code>.radio</code> controls expose two hooks:</p>
 <ul>

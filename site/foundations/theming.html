@@ -274,6 +274,11 @@ Actual CSS and the island follows your palette.</p>
 <pre><code class="language-html">&lt;footer data-theme=&quot;dark&quot;&gt;…&lt;/footer&gt;
 &lt;article class=&quot;card&quot; data-theme=&quot;dark&quot;&gt;…&lt;/article&gt;
 </code></pre>
+<p>The island recomputes tokens but paints nothing. A <code>.card</code> paints its own
+surface; any other element needs <code>background: var(--surface)</code> and
+<code>color: var(--text)</code>, or its ink lands on the page theme's background. A
+<code>&lt;legend&gt;</code> straddles its fieldset's border, outside the fieldset's surface, so
+put the island on a wrapper, not on the <code>&lt;fieldset&gt;</code>.</p>
 <p>Actual has no class that inverts only part of a subtree. When all you need is
 a painted band with neutral content and filled buttons, write it in
 application CSS and keep forms and intent ink out of it:</p>

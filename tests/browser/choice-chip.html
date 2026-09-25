@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Choice chip fixture</title>
+  <link rel="stylesheet" href="../../src/css/actual.full.css">
+</head>
+<body>
+  <form id="form" class="cluster">
+    <!-- Tab order is the test's navigation path: keep the checkbox first. -->
+    <label id="design" class="choice-card chip"><input id="design-input" type="checkbox" name="topic" value="design">Design</label>
+    <label id="size-s" class="choice-card chip"><input type="radio" name="size" value="s" checked>S</label>
+    <label id="size-m" class="choice-card chip"><input type="radio" name="size" value="m">M</label>
+    <label id="locked" class="choice-card chip"><input type="checkbox" name="topic" value="locked" disabled>Locked</label>
+  </form>
+</body>
+</html>

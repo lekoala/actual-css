@@ -3032,6 +3032,8 @@ small {
  * --choice-card-border
  * --choice-card-bg
  * --choice-card-check-size
+ * --choice-chip-dot (read-only, on .chip ::before: the check-slot centre as a
+ *   circle() position, for a theme that grows the dot into a fill)
  */
 :where(.choice-card) {
   --intent: initial;

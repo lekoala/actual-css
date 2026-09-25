@@ -1,5 +1,5 @@
 {
-  "totalRaw": 328093,
+  "totalRaw": 328240,
   "core": {
     "minified": 11686,
     "brotli": 2692
@@ -49,16 +49,16 @@
       "raw": 7435
     },
     {
+      "file": "forms/choice-card.css",
+      "raw": 7009
+    },
+    {
       "file": "components/badge.css",
       "raw": 6981
     },
     {
       "file": "themes/material.css",
       "raw": 6976
-    },
-    {
-      "file": "forms/choice-card.css",
-      "raw": 6862
     },
     {
       "file": "components/avatar.css",
