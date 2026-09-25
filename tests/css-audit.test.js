@@ -447,6 +447,24 @@ test("navbar consumes the shared surface contract with an intent boundary", () =
   expect(css).toMatch(/\.navbar \{[\s\S]*color: var\(--ui-fg, var\(--text\)\);/);
   expect(css).toMatch(/\.navbar-brand \{[\s\S]*color: var\(--ui-fg, var\(--text\)\);/);
   expect(css).toMatch(/\.nav-link \{[\s\S]*color: var\(--ui-fg, var\(--text-muted\)\);/);
+  // .nav-link works on <button>: UA button chrome is neutralized, and
+  // font: inherit precedes the component weight so the shorthand never
+  // resets it.
+  expect(css).toMatch(/\.nav-link \{[^}]*border:\s*0;/);
+  expect(css).toMatch(/\.nav-link \{[^}]*background:\s*transparent;/);
+  expect(css).toMatch(/\.nav-link \{[^}]*cursor:\s*pointer;/);
+  expect(css).toMatch(/\.nav-link \{[^}]*padding-block:\s*0;/);
+  expect(css).toMatch(
+    /\.nav-link \{[\s\S]*font: inherit;[\s\S]*font-weight: var\(--font-weight-medium\);/,
+  );
+  // Hover and current fills tint the link's own ink so they read on any bar.
+  // --ui-hover-bg is the bar's own hover (equal to its fill on .inverted), so
+  // a link reading it would vanish; the rendered contrast is asserted in
+  // tests/browser/inverted.test.js.
+  expect(rules).not.toContain("--ui-hover-bg");
+  expect(css).toMatch(
+    /\.nav-link:is\(:hover, \[aria-current\]\) \{[^}]*background: color-mix\(in oklch, currentColor 10%, transparent\);/,
+  );
   // nav-link is deliberately multi-value: page navigation and scrollspy
   // ("location") share the presence trigger. Presence is the contract — the
   // attribute is removed when inactive, never serialized as "false".
@@ -539,6 +557,8 @@ test("native flyout and tooltip popovers neutralize conflicting UA geometry", ()
     /\.flyout\[popover\]\s*\{[^}]*position:\s*fixed;[^}]*inset:\s*auto;[^}]*margin:\s*0;/,
   );
   expect(flyout).toContain(":popover-open");
+  // The floating panel owns its ink like modal and drawer do.
+  expect(flyout).toMatch(/\.flyout \{[^}]*color: var\(--text\);/);
   expect(tooltip).toMatch(
     /\.tooltip\[popover\]\s*\{[^}]*inset:\s*auto;[^}]*margin:\s*0;[^}]*overflow:\s*visible;/,
   );
@@ -770,9 +790,14 @@ test("theme-derived aliases are declared on :root, [data-theme] so islands recom
     expect(inThemeBoundary(tokensCss, prop), `${prop} on [data-theme] in tokens.css`).toBe(true);
   }
   // theme.css aliases
-  for (const prop of ["--heading", "--selection-bg", "--selection-fg", "--focus-ring-shadow"]) {
+  for (const prop of ["--heading", "--selection-bg", "--selection-fg"]) {
     expect(inThemeBoundary(themeCss, prop), `${prop} on [data-theme] in theme.css`).toBe(true);
   }
+  // The focus ring shadow is never a stored alias: use sites carry the
+  // fallback so a local --focus-ring (e.g. .inverted) is honored instead of
+  // inheriting a frozen value. (comment-free: the prose above names the
+  // removed declaration explicitly.)
+  expect(readRules("src/css/core/theme.css")).not.toContain("--focus-ring-shadow");
   // color-mix shadows re-derive from --shadow-color on the theme boundary
   expect(tokensCss).toMatch(
     /@supports \(color: color-mix\(in oklch, red, white\)\)\s*\{\s*:root,\s*\n\s*\[data-theme\]\s*\{[\s\S]*--shadow:/,
@@ -1059,6 +1084,17 @@ test("app navigation stays semantic and app-layout owns its adaptive geometry", 
 
   expect(navCss).toContain('.app-nav > a[aria-current="page"]');
   expect(navCss).toContain("env(safe-area-inset-bottom)");
+  // Only the hover is contextual (a tint of the tile's ink, never the bar's
+  // own --ui-hover-bg); the current tile keeps the full --state-selected /
+  // --state-selected-fg contract. The tinted hover must precede the current
+  // rule: at equal specificity, a later hover would repaint the current tile.
+  expect(navCss).not.toContain("--ui-hover-bg");
+  const tintedHover = navCss.indexOf("color-mix(in oklch, currentColor 10%, transparent)");
+  expect(tintedHover).toBeGreaterThan(-1);
+  expect(tintedHover).toBeLessThan(navCss.indexOf('.app-nav > a[aria-current="page"] {'));
+  expect(navCss).toMatch(
+    /\.app-nav > a\[aria-current="page"\] \{[^}]*background: var\(--state-selected\);[^}]*color: var\(--state-selected-fg\);/,
+  );
   expect(navCss).toContain("min-block-size: var(--control-size-lg);");
   expect(navCss).toMatch(
     /> a > :where\(svg, img, \[aria-hidden="true"\]\)\s*\{[\s\S]*font-size: var\(--app-nav-icon-size\);[\s\S]*line-height: 1;/,
@@ -1491,12 +1527,76 @@ test("rating keeps radio order and cumulative fill progressive", () => {
   expect(css).toMatch(/@media \(forced-colors: active\)[\s\S]*?appearance:\s*auto;/);
 });
 
+const FIELD_INSET_OUTLINE =
+  /outline:\s*var\(--focus-ring-width\) solid var\(--form-invalid-border, var\(--focus\)\);\s*outline-offset:\s*calc\(var\(--focus-ring-width\) \* -1\);/;
+
 test("controls never zero the outline in their base style", () => {
   const css = readCss("src/css/forms/control.css").replace(/\/\*[\s\S]*?\*\//g, "");
 
   expect(css).toContain(".input:focus-visible");
-  expect(css).toContain("outline: 2px solid transparent;");
+  // Text controls paint an inset outline, so the indicator never depends on a
+  // box-shadow halo. Offset = -width is what keeps it inside: any smaller
+  // offset bleeds outward (-1px on a 3px outline paints 2px outside).
+  expect(css).toMatch(
+    new RegExp(
+      String.raw`\.select:focus-visible:not\(:disabled\)\s*\{[^}]*` +
+        FIELD_INSET_OUTLINE.source +
+        String.raw`[^}]*box-shadow:\s*none;`,
+    ),
+  );
   expect(css).not.toMatch(/outline\s*:\s*(none|0)\b/);
+});
+
+test("text controls keep per-control inset focus, even joined or themed", () => {
+  const joinCss = readCss("src/css/components/join.css");
+  const customCss = readCss("src/css/forms/custom-select.css");
+  const bs6Rules = readRules("src/css/themes/bootstrap-v6.css");
+  const gradientCss = readCss("src/css/themes/gradient.css");
+
+  // No group ring to extend: the join never moves focus onto itself.
+  // (comment-free: the prose above names the removed treatment explicitly.)
+  expect(readRules("src/css/components/join.css")).not.toContain(":focus-visible");
+  expect(joinCss).not.toContain("box-shadow: none;");
+  // One wrapper level is supported generically: corners inherit, the flex
+  // item wrapper carries the primary-edge z-index, and a default outline
+  // action still belongs to the composite border.
+  expect(joinCss).toContain(".join > * > :is(.input, .textarea, .select)");
+  expect(joinCss).toMatch(/border-radius:\s*inherit;/);
+  expect(joinCss).toContain(".join > :has(> :is(.input, .textarea, .select))");
+  expect(joinCss).toContain(".join:has(> * > :is(.input, .textarea, .select)) > .btn.outline");
+  expect(joinCss).not.toContain("combo-box");
+  // The custom-select open state follows the same inset recipe.
+  expect(customCss).toMatch(new RegExp(String.raw`&:open \{[^}]*` + FIELD_INSET_OUTLINE.source));
+  // bootstrap-v6 is the proof the core recipe is v6's: tokens only, no focus
+  // rule. gradient keeps the outer halo as the demo of the other style.
+  expect(bs6Rules).not.toMatch(/:focus|:open|\boutline[\w-]*\s*:/);
+  expect(gradientCss).toMatch(
+    /\[data-theme="gradient"\] :is\(\.input, \.textarea, \.select\):focus-visible:not\(:disabled\) \{[^}]*--control-border: var\(--focus\);[^}]*box-shadow: var\(--focus-ring-shadow, 0 0 0 var\(--focus-ring-width\) var\(--focus-ring\)\);/,
+  );
+});
+
+test("ring shadows are per-element fallbacks so .inverted recolors them", () => {
+  const cssRoot = join(import.meta.dir, "..", "src", "css");
+  const cssFiles = [];
+  const walk = (dir) => {
+    for (const entry of readdirSync(dir)) {
+      const full = join(dir, entry);
+      if (statSync(full).isDirectory()) walk(full);
+      else if (/\.css$/.test(entry)) cssFiles.push(readFileSync(full, "utf8"));
+    }
+  };
+  walk(cssRoot);
+  const source = cssFiles.join("\n").replace(/\/\*[\s\S]*?\*\//g, "");
+
+  // No bare var(--focus-ring-shadow) may survive: every halo carries its
+  // own fallback derivation.
+  expect(source).not.toMatch(/var\(--focus-ring-shadow\)(?!,)/);
+  expect(source).toContain(
+    "var(--focus-ring-shadow, 0 0 0 var(--focus-ring-width) var(--focus-ring))",
+  );
+  // .inverted recolors from its own contrast pair, not from --focus.
+  const variantsCss = readCss("src/css/core/variants.css");
+  expect(variantsCss).toMatch(/\.inverted \{[^}]*--focus-ring: var\(--surface\);/);
 });
 
 /*

@@ -29,11 +29,8 @@ When composing source files manually, import `components/join.css` after the con
 </div>
 ```
 
-`.join` handles border-radius and border collapsing between adjacent children. It works with any direct child — `.input`, `.btn`, `.select`, or `.join-addon`.
-When an `.input`, `.textarea`, or `.select` receives keyboard-relevant focus,
-the focus ring surrounds the complete joined field. Attached buttons keep their
-own focus indicator when reached directly, so the actionable segment remains
-identifiable.
+`.join` handles border-radius and border collapsing between adjacent children. It works with any direct child — `.input`, `.btn`, `.select`, or `.join-addon` — plus one wrapper level (e.g. a combobox element around the native control): the wrapper receives the group corners and the inner control inherits them via `border-radius: inherit`.
+When an `.input`, `.textarea`, or `.select` receives keyboard focus, it keeps its own inset focus outline; the group never moves the ring onto itself, so the focused segment remains identifiable.
 
 ## Linting `role="group"`
 

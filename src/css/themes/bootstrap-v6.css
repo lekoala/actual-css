@@ -1,5 +1,5 @@
 /* Bootstrap v6 visual reference theme for the demo; no Bootstrap API is provided.
-   The focus treatment follows the v6-dev outline recipe, not the v5 shadow. */
+   v6's inset field focus is the core recipe, so the theme sets tokens only. */
 [data-theme="bootstrap-v6"] {
   color-scheme: light;
 
@@ -41,23 +41,13 @@
   --control-hover-border: #adb5bd;
 }
 
-/* v6 keeps the resting border and paints a crisp inset outline on focus. */
-[data-theme="bootstrap-v6"] :is(.input, .textarea, .select):is(:focus-visible, :focus-within) {
-  --control-border: var(--border);
-  /* The validation hook also covers .field.danger, aria-invalid and native
-     validation, so their focus outline keeps the same intent as the border. */
-  outline: 3px solid var(--form-invalid-border, var(--focus-ring));
-  outline-offset: -1px;
-  box-shadow: none;
-}
-
 [data-theme="bootstrap-v6"] .field-label {
   font-weight: 500;
 }
 
 /* Keep select hover as quiet as text controls without changing the core
    --control-border hook for other themes. */
-[data-theme="bootstrap-v6"] .select:hover:not(:disabled):not(:focus-within) {
+[data-theme="bootstrap-v6"] .select:hover:not(:disabled) {
   --control-border: var(--control-hover-border);
 }
 
@@ -130,14 +120,6 @@
     );
     --hover-overlay: light-dark(rgb(0 0 0 / 4%), rgb(255 255 255 / 6%));
     --control-hover-border: light-dark(#adb5bd, #6c757d);
-  }
-
-  [data-theme="bootstrap-v6"] :is(.input, .textarea, .select):is(:focus-visible, :focus-within) {
-    outline-color: light-dark(
-      /* intentional-oklch: Match Bootstrap v6's validation focus ring. */
-      color-mix(in oklch, var(--form-invalid-border, var(--primary)) 50%, var(--surface)),
-      color-mix(in oklch, var(--form-invalid-border, var(--primary)) 75%, var(--surface))
-    );
   }
 
   [data-theme="bootstrap-v6"] :is(.input, .textarea, .select):disabled {

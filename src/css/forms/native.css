@@ -45,7 +45,7 @@
 
 .file:focus-visible {
   outline: 2px solid transparent;
-  box-shadow: var(--focus-ring-shadow);
+  box-shadow: var(--focus-ring-shadow, 0 0 0 var(--focus-ring-width) var(--focus-ring));
 }
 
 /* Native color picker — keep the browser's dialog and selected-color UI. The
@@ -82,7 +82,7 @@
 
 .color:focus-visible {
   outline: 2px solid transparent;
-  box-shadow: var(--focus-ring-shadow);
+  box-shadow: var(--focus-ring-shadow, 0 0 0 var(--focus-ring-width) var(--focus-ring));
 }
 
 @media (forced-colors: active) {

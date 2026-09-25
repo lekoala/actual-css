@@ -92,13 +92,16 @@
 
 /* Theme-derived aliases — re-declared on every theme boundary (see tokens.css
    for the custom-property resolution rationale): islands recompute these from
-   their own tokens instead of inheriting :root's resolved values. */
+   their own tokens instead of inheriting :root's resolved values.
+   The focus ring shadow is deliberately not stored here: it is written at
+   each use site as var(--focus-ring-shadow, 0 0 0 var(--focus-ring-width)
+   var(--focus-ring)) so it recomputes per element and follows a local
+   --focus-ring (e.g. .inverted) instead of inheriting a frozen value. */
 :root,
 [data-theme] {
   --heading: var(--text);
   --selection-bg: var(--primary);
   --selection-fg: var(--primary-fg);
-  --focus-ring-shadow: 0 0 0 var(--focus-ring-width) var(--focus-ring);
 }
 
 /* Soft foreground hooks — the soft ink is the intent rebated toward the local

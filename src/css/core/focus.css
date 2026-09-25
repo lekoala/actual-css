@@ -5,7 +5,16 @@
    Invariant: an interactive component must never rely on box-shadow alone
    for its keyboard focus indicator. Components that remove the native
    outline on :focus-visible replace it with a transparent outline — invisible
-   normally, forced to the system focus color under forced-colors. */
+   normally, forced to the system focus color under forced-colors.
+
+   The halo recipe is fallback-only on purpose, never a stored alias: each
+   use site writes the full var() fallback so the halo recomputes per
+   element and follows a local --focus-ring (e.g. .inverted) instead of
+   inheriting a frozen value.
+ *
+ * Internal:
+ * --focus-ring-shadow
+ */
 :focus {
   outline: var(--focus-outline);
   outline-offset: var(--focus-outline-offset);

@@ -70,6 +70,15 @@
   color: var(--text);
 }
 
+/* Same contextual hover as .nav-link (navbar.css): a tint of the tile's ink
+   reads on any --ui-* bar; the baseline keeps a legible light chip. */
+@supports (color: color-mix(in oklch, red, white)) {
+  .app-nav > a:hover {
+    background: color-mix(in oklch, currentColor 10%, transparent);
+    color: var(--ui-fg, var(--text));
+  }
+}
+
 /* Current tile is already a full selected surface. Selection never changes
    text metrics: the shared medium weight is kept, no permanent indicator is
    added here. */
