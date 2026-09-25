@@ -123,15 +123,20 @@ Use `.cluster` for a wrapping row. A chip is sized like a control: `.btn` and
 ```
 
 The dot is `::before`: a full-chip layer clipped to a `circle()` centred on
-the check slot, whose centre is exposed as `--choice-chip-dot`. A theme can
-grow it into a selected fill by widening the clip, as the `material` theme
-does.
+the check slot (`--choice-chip-dot`). A theme can grow it into a selected fill
+by widening the clip, as the `material` theme does.
 
 ## CSS hooks
 
 - `--choice-card-pad` — inner padding.
 - `--choice-card-radius` — corner radius.
 - `--choice-card-check-size` — size of the check indicator.
+- `--choice-card-border` / `--choice-card-bg` — resting border and background;
+  the checked state and hover rebind them, so a checked override needs
+  `:has(:checked)`.
+- `--choice-chip-dot` — read-only: the chip's check-slot centre as a `circle()`
+  position. It is declared on the chip's `::before`, so read it in a
+  `.choice-card.chip…::before` rule.
 
 Plain `.check` / `.radio` controls expose two hooks:
 
