@@ -17,7 +17,7 @@
   <script src="../../scripts/docs/assets/docs.js" defer></script>
   <script>
   (function () {
-    var valid = ["system","light","dark","indigo","dim","corporate","bootstrap-v6","forest","ocean","spruce","petrol","sunset","lavender","mono","square","brutalist","edge","cyberpunk","neon","gradient"];
+    var valid = ["system","light","dark","indigo","dim","corporate","bootstrap-v6","forest","ocean","spruce","petrol","sunset","lavender","mono","square","brutalist","edge","cyberpunk","neon","gradient","material"];
     var saved = null;
     try { saved = localStorage.getItem("actual-docs-theme"); } catch (e) {}
     if (saved === "system" || !valid.includes(saved)) {
@@ -63,6 +63,7 @@
             <option value="cyberpunk">Cyberpunk</option>
             <option value="neon">Neon</option>
             <option value="gradient">Gradient</option>
+            <option value="material">Material</option>
             </optgroup>
             </select>
           </label>
@@ -310,6 +311,13 @@ context, and nothing tunes that color for a surface you paint yourself. For
 intent ink on a dark band, use a <code>data-theme</code> island, whose palette is tuned
 for its surface. Filled buttons own their surface and keep their normal intent
 recipe.</p>
+<p>A dark button (inverse, contrast) is a custom intent on the button itself, so
+every variant keeps working — <code>.outline</code> and <code>.ghost</code> take the solid ink:</p>
+<pre><code class="language-css">.btn.app-dark {
+  --intent: var(--surface-solid);
+  --intent-fg: var(--surface);
+}
+</code></pre>
 <p><code>.btn.link</code> is a link-style action: it keeps button behavior and states, but
 remains intrinsically sized like text instead of stretching with its layout
 container. For a plain text link, use a bare <code>&lt;a&gt;</code> with no class.</p>

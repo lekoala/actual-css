@@ -30,7 +30,8 @@
   --text-subtle: hsl(205 7% 57%);
 
   --border: hsl(205 15% 87%);
-  --focus: var(--primary);
+  --focus: hsl(203 56% 45%);
+  --soft-fg-mix: 70%;
   /* Pre-light-dark() tier, mirroring the light half below. */
   --hover-overlay: hsl(207 30% 10% / 0.04);
   --shadow-color: hsl(207 30% 10%);

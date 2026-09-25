@@ -13,6 +13,7 @@
   <button id="open-nondismiss" type="button" commandfor="dlg-nondismiss" command="show-modal">Open non-dismissible</button>
   <button id="open-scrollable" type="button" commandfor="dlg-scrollable" command="show-modal">Open scrollable</button>
   <button id="open-drawer" type="button" commandfor="drawer" command="show-modal">Open drawer</button>
+  <button id="open-thick" type="button" commandfor="dlg-thick" command="show-modal">Open thick</button>
 
   <dialog class="modal" id="dlg-dismissible" closedby="any" data-dialog-dismissible aria-label="Dismissible dialog">
     <button class="close"
@@ -45,6 +46,17 @@
         <input id="modal-edge-control" style="inline-size: 100%" value="Full-width control">
       </div>
       <footer><button type="button">Action</button></footer>
+    </div>
+  </dialog>
+
+  <!-- A theme with a thicker component line (bootstrap-v6 sets 3px): a
+       full-width action draws it outside its box, past the :focus baseline. -->
+  <dialog class="modal scrollable" id="dlg-thick" aria-label="Thick focus dialog" style="--focus-ring-width: 3px">
+    <div class="stack">
+      <header><h3>Thick focus line</h3></header>
+      <div id="thick-scroll-body">
+        <button class="btn" id="thick-edge-button" type="button" style="inline-size: 100%">Full-width action</button>
+      </div>
     </div>
   </dialog>
 

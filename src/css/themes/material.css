@@ -1,0 +1,142 @@
+/* Material — paired light/dark theme on the Material 3 baseline palette, a
+ * stress test of the contract rather than a Material implementation: tokens
+ * carry the palette, shape and the fields' bottom line, and small recipes
+ * carry the look that tokens cannot express — filled field segments, a focus
+ * line that thickens the bottom line, pill buttons, and the outline action of
+ * a field group as one more filled segment. */
+[data-theme="material"] {
+  /* Base palette is the light half; the dark pairing is only announced where
+     light-dark() exists, in the @supports block below. */
+  color-scheme: light;
+
+  --primary: #6750a4;
+  --primary-fg: #fff;
+  --secondary: #625b71;
+  --secondary-fg: #fff;
+  --success: #386a20;
+  --success-fg: #fff;
+  --warning: #7d5700;
+  --warning-fg: #fff;
+  --danger: #b3261e;
+  --danger-fg: #fff;
+  --neutral: #79747e;
+  --neutral-fg: #fff;
+
+  --surface: #fef7ff;
+  --surface-raised: #f7f2fa;
+  --surface-subtle: #ece6f0;
+  --surface-solid: #322f35;
+
+  --text: #1d1b20;
+  --text-muted: #49454f;
+  --text-subtle: #79747e;
+
+  --border: #cac4d0;
+  /* M3 focuses in the primary, which has no contrast pair with the dark
+     inverse surface; a mid-tone of its hue holds 3:1 on both surfaces. */
+  --focus: hsl(256 34% 59%);
+  --soft-fg-mix: 75%;
+  --hover-overlay: rgb(29 27 32 / 8%);
+  --shadow-color: #000;
+
+  /* Shape scale: small 8px, medium 12px, large 16px. */
+  --radius: 0.75rem;
+  --radius-sm: 0.5rem;
+  --radius-lg: 1rem;
+  --control-hover-bg: #e6e0e9;
+  /* The filled field's single line, through the core lower-edge hook so
+     every field segment (inputs, a .join-addon) reads the same value. */
+  --control-border-block-end-color: var(--text-muted);
+}
+
+@supports (color: light-dark(red, blue)) {
+  [data-theme="material"] {
+    color-scheme: light dark;
+    --primary: light-dark(#6750a4, #d0bcff);
+    --primary-fg: light-dark(#fff, #381e72);
+    --secondary: light-dark(#625b71, #ccc2dc);
+    --secondary-fg: light-dark(#fff, #332d41);
+    --success: light-dark(#386a20, #9cd67d);
+    --success-fg: light-dark(#fff, #0c3900);
+    --warning: light-dark(#7d5700, #f9bd4b);
+    --warning-fg: light-dark(#fff, #422c00);
+    --danger: light-dark(#b3261e, #f2b8b5);
+    --danger-fg: light-dark(#fff, #601410);
+    --neutral: light-dark(#79747e, #938f99);
+    --neutral-fg: light-dark(#fff, #1d1b20);
+
+    --surface: light-dark(#fef7ff, #141218);
+    --surface-raised: light-dark(#f7f2fa, #1d1b20);
+    --surface-subtle: light-dark(#ece6f0, #2b2930);
+    --surface-solid: light-dark(#322f35, #e6e0e9);
+
+    --text: light-dark(#1d1b20, #e6e0e9);
+    --text-muted: light-dark(#49454f, #cac4d0);
+    --text-subtle: light-dark(#79747e, #938f99);
+
+    --border: light-dark(#cac4d0, #49454f);
+    --hover-overlay: light-dark(rgb(29 27 32 / 8%), rgb(230 224 233 / 8%));
+    --control-hover-bg: light-dark(#e6e0e9, #36343b);
+  }
+}
+
+/* Filled text field: tinted container, one bottom line. The sides and top
+   are cleared as declarations, not through --control-border, because the
+   core border reads --form-invalid-border first and would box an invalid
+   field in red; Material marks it on the bottom line only. Top corners come
+   from a field-local --radius (M3 extra-small), so a .join still owns them;
+   the bottom corners are square under the line, joined or not. A
+   .join-addon is a field segment and takes the same shape. */
+[data-theme="material"] :is(.input, .textarea, .select, .join-addon) {
+  --radius: 0.25rem;
+  --control-bg: var(--surface-subtle);
+
+  border-block-start-color: transparent;
+  border-inline-color: transparent;
+  border-end-start-radius: 0;
+  border-end-end-radius: 0;
+}
+
+/* A joined group takes the field's extra-small corner instead of the medium
+   shape, so its end segments match a lone field. */
+[data-theme="material"] .join {
+  --join-radius: 0.25rem;
+}
+
+/* Focus thickens the bottom line to --focus instead of the core inset
+   outline. The inset shadow adds the second pixel without a layout shift;
+   the transparent outline keeps an indicator under forced colors, which drop
+   shadows. Validation keeps its color through --form-invalid-border. :open
+   covers the customizable select's open state, which core paints with its
+   own rule; :is() drops that branch alone where :open is unknown. */
+[data-theme="material"] :is(.input, .textarea, .select):is(:focus-visible, :open):not(:disabled) {
+  /* An open select keeps its filled container (core lifts it to raised). */
+  --control-bg: var(--surface-subtle);
+  --control-border-block-end-color: var(--focus);
+
+  outline: 2px solid transparent;
+  outline-offset: 0;
+  box-shadow: inset 0 -1px 0 var(--form-invalid-border, var(--focus));
+}
+
+/* Material 3 common buttons are pills. */
+[data-theme="material"] .btn {
+  --btn-radius: var(--radius-full);
+}
+
+/* In a field group the default outline action becomes one more filled
+   segment: Material has no outlined button beside a filled field. It keeps
+   the group's corners, squares its bottom under the shared line, and hovers
+   like the select. An explicit intent still outranks it through --intent.
+   Progressive: without :has() the action keeps the core outline look. */
+[data-theme="material"]
+  .join:has(> :is(.input, .textarea, .select), > * > :is(.input, .textarea, .select))
+  > .btn.outline {
+  --ui-bg: var(--surface-subtle);
+  --ui-hover-bg: var(--control-hover-bg);
+  --btn-border-color: transparent;
+  --btn-border-block-end-color: var(--intent, var(--control-border-block-end-color));
+
+  border-end-start-radius: 0;
+  border-end-end-radius: 0;
+}

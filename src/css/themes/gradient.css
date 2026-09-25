@@ -33,7 +33,8 @@
   --text-subtle: hsl(210 9% 62%);
 
   --border: hsl(210 14% 89%);
-  --focus: var(--primary);
+  --focus: hsl(211 75% 51%);
+  --soft-fg-mix: 45%;
   --hover-overlay: hsl(210 30% 10% / 0.04);
   --shadow-color: hsl(210 30% 10%);
 
@@ -48,12 +49,15 @@
    (the focused segment is raised by join.css), a scrollport edge can clip it,
    and its alpha never reaches 3:1 — the trade-offs the core solid line
    avoids. The transparent outline keeps forced colors, which drop shadows;
-   without color-mix() the focus border alone remains. */
-[data-theme="gradient"] :is(.input, .textarea, .select):focus-visible:not(:disabled) {
+   without color-mix() the focus border alone remains. :open covers the
+   customizable select's open state, which core paints with its own rule;
+   :is() drops that branch alone where :open is unknown. */
+[data-theme="gradient"] :is(.input, .textarea, .select):is(:focus-visible, :open):not(:disabled) {
   --control-border: var(--focus);
   outline: 2px solid transparent;
   outline-offset: 0;
-  box-shadow: 0 0 0 var(--focus-ring-width) color-mix(in oklch, var(--focus) 25%, transparent);
+  box-shadow: 0 0 0 var(--focus-ring-width)
+    color-mix(in oklch, var(--form-invalid-border, var(--focus)) 25%, transparent);
 }
 
 @supports (color: light-dark(red, blue)) {

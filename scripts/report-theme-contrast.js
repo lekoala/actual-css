@@ -44,11 +44,13 @@ const themes = readdirSync(THEMES_DIR)
     return { name: file.replace(".css", ""), hasDark: /light-dark\(/.test(css) };
   });
 
+// Badges state .soft explicitly: a preset may fill badges by default
+// (bootstrap-v6), which would measure a solid pair against the soft hover.
 function island(theme, scheme) {
   const schemeAttr = ` style="color-scheme: ${scheme}"`;
   return `<div data-theme="${theme.name}"${schemeAttr} id="island-${theme.name}-${scheme}">
     ${INTENTS.map((i) => `<span data-ink="${i}" style="color: var(--${i})"></span>`).join("")}
-    ${INTENTS.map((i) => `<span class="badge ${i}" data-badge="${i}">t</span>`).join("")}
+    ${INTENTS.map((i) => `<span class="badge soft ${i}" data-badge="${i}">t</span>`).join("")}
     ${INTENTS.map((i) => `<button class="btn soft ${i}" data-hover="${i}" type="button">t</button>`).join("")}
     <span data-focus="surface" style="color: var(--focus); background: var(--surface)"></span>
     <span data-focus="solid" style="color: var(--focus); background: var(--surface-solid)"></span>

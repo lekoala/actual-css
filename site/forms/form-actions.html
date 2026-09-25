@@ -19,7 +19,7 @@ sticky variant (see Sticky Actions).">
   <script src="../../scripts/docs/assets/docs.js" defer></script>
   <script>
   (function () {
-    var valid = ["system","light","dark","indigo","dim","corporate","bootstrap-v6","forest","ocean","spruce","petrol","sunset","lavender","mono","square","brutalist","edge","cyberpunk","neon","gradient"];
+    var valid = ["system","light","dark","indigo","dim","corporate","bootstrap-v6","forest","ocean","spruce","petrol","sunset","lavender","mono","square","brutalist","edge","cyberpunk","neon","gradient","material"];
     var saved = null;
     try { saved = localStorage.getItem("actual-docs-theme"); } catch (e) {}
     if (saved === "system" || !valid.includes(saved)) {
@@ -65,6 +65,7 @@ sticky variant (see Sticky Actions).">
             <option value="cyberpunk">Cyberpunk</option>
             <option value="neon">Neon</option>
             <option value="gradient">Gradient</option>
+            <option value="material">Material</option>
             </optgroup>
             </select>
           </label>

@@ -33,7 +33,8 @@
   --text-subtle: hsl(260 8% 55%);
 
   --border: hsl(260 18% 24%);
-  --focus: var(--secondary);
+  --focus: hsl(315 75% 48%);
+  --soft-fg-mix: 75%;
   --hover-overlay: hsl(0 0% 100% / 0.07);
   --shadow-color: hsl(260 60% 3%);
 

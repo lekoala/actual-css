@@ -157,4 +157,6 @@ The `bootstrap-v6` example follows Bootstrap 6's blue palette, stronger subtle
 surfaces, filled badges, and steady select hover; its focus is the core solid
 line. Use `.badge.soft` for a subtle badge. It is a visual theme, not a
 Bootstrap compatibility layer. The `gradient` example keeps a Bootstrap 4 style
-outer halo on focused fields, for comparison.
+outer halo on focused fields, for comparison. The `material` example restyles
+fields as filled underlines with pill buttons — tokens plus three small rules,
+and `.join` still needs no adaptation.

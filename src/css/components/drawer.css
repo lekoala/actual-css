@@ -133,11 +133,16 @@
    exclusion list is easier to trust than its `position: absolute`. */
 :where(dialog).drawer > :not(:is(header, footer, form, .close)),
 :where(dialog).drawer > form > :not(:is(header, footer, .close)) {
-  --drawer-focus-bleed: calc(var(--focus-outline-offset) + var(--border-width) * 2);
+  --drawer-focus-bleed: calc(
+    var(--focus-outline-offset) +
+    max(var(--focus-ring-width), var(--border-width) * 2)
+  );
 
   min-block-size: 0;
   /* Keep focus paint inside the clip without moving the body off the fixed
-     header and footer edges. */
+     header and footer edges. The reserve covers the thicker of the two
+     outside indicators: the :focus baseline (2 × border) and the component
+     line (--focus-ring-width, 3px in bootstrap-v6). */
   margin-inline: calc(var(--drawer-focus-bleed) * -1);
   padding-inline: var(--drawer-focus-bleed);
   overflow: auto;

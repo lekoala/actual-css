@@ -17,7 +17,7 @@
   <script src="../../scripts/docs/assets/docs.js" defer></script>
   <script>
   (function () {
-    var valid = ["system","light","dark","indigo","dim","corporate","bootstrap-v6","forest","ocean","spruce","petrol","sunset","lavender","mono","square","brutalist","edge","cyberpunk","neon","gradient"];
+    var valid = ["system","light","dark","indigo","dim","corporate","bootstrap-v6","forest","ocean","spruce","petrol","sunset","lavender","mono","square","brutalist","edge","cyberpunk","neon","gradient","material"];
     var saved = null;
     try { saved = localStorage.getItem("actual-docs-theme"); } catch (e) {}
     if (saved === "system" || !valid.includes(saved)) {
@@ -63,6 +63,7 @@
             <option value="cyberpunk">Cyberpunk</option>
             <option value="neon">Neon</option>
             <option value="gradient">Gradient</option>
+            <option value="material">Material</option>
             </optgroup>
             </select>
           </label>
@@ -309,7 +310,9 @@ lets the core derive everything else.</p>
 surfaces, filled badges, and steady select hover; its focus is the core solid
 line. Use <code>.badge.soft</code> for a subtle badge. It is a visual theme, not a
 Bootstrap compatibility layer. The <code>gradient</code> example keeps a Bootstrap 4 style
-outer halo on focused fields, for comparison.</p>
+outer halo on focused fields, for comparison. The <code>material</code> example restyles
+fields as filled underlines with pill buttons — tokens plus three small rules,
+and <code>.join</code> still needs no adaptation.</p>
 
 </div>
 
