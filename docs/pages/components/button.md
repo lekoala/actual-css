@@ -83,6 +83,16 @@ intent ink on a dark band, use a `data-theme` island, whose palette is tuned
 for its surface. Filled buttons own their surface and keep their normal intent
 recipe.
 
+A dark button (inverse, contrast) is a custom intent on the button itself, so
+every variant keeps working — `.outline` and `.ghost` take the solid ink:
+
+```css
+.btn.app-dark {
+  --intent: var(--surface-solid);
+  --intent-fg: var(--surface);
+}
+```
+
 `.btn.link` is a link-style action: it keeps button behavior and states, but
 remains intrinsically sized like text instead of stretching with its layout
 container. For a plain text link, use a bare `<a>` with no class.

@@ -26,7 +26,8 @@
   --text-subtle: hsl(260 10% 57%);
 
   --border: hsl(260 28% 85%);
-  --focus: var(--primary);
+  --focus: hsl(258 70% 65%);
+  --soft-fg-mix: 50%;
 
   /* Pastel tuning — demonstrates the soft-variant knobs (paler tints, gentler
      hovers) and violet-tinted shadows. */

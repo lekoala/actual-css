@@ -50,6 +50,11 @@
   min-block-size: var(--control-size);
   padding-inline: var(--space-30);
   border: var(--border-width) solid var(--control-border);
+  /* An addon is a field segment: it honours the same lower-edge extension
+     points as text controls (control.css), so a theme's underline or accent
+     edge reaches it instead of stopping at the field. */
+  border-block-end-color: var(--control-border-block-end-color, var(--control-border));
+  border-block-end-width: var(--control-border-block-end-width, var(--border-width));
   border-radius: var(--radius);
   background: var(--control-bg);
   color: var(--control-fg);

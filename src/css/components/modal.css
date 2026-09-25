@@ -100,11 +100,16 @@
 
 :where(dialog).modal.scrollable > form > :not(:is(header, footer)),
 :where(dialog).modal.scrollable > .stack > :not(:is(header, footer)) {
-  --dialog-focus-bleed: calc(var(--focus-outline-offset) + var(--border-width) * 2);
+  --dialog-focus-bleed: calc(
+    var(--focus-outline-offset) +
+    max(var(--focus-ring-width), var(--border-width) * 2)
+  );
 
   min-block-size: 0;
   /* Keep focus paint inside the clip without moving the body off the fixed
-     header and footer edges. */
+     header and footer edges. The reserve covers the thicker of the two
+     outside indicators: the :focus baseline (2 × border) and the component
+     line (--focus-ring-width, 3px in bootstrap-v6). */
   margin-inline: calc(var(--dialog-focus-bleed) * -1);
   padding-inline: var(--dialog-focus-bleed);
   overflow: auto;

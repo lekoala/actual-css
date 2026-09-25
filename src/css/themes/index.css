@@ -30,6 +30,8 @@
  *                shadows, soft-variant tuning
  *   gradient   — paired recolor + Bootstrap 4 style gradient on solid buttons
  *                via component-local button tokens
+ *   material   — paired Material 3 baseline palette + filled underline fields
+ *                and pill buttons, a stress test of the field focus contract
  *
  * Single-block themes (indigo, dim, brutalist, cyberpunk, neon) pin one
  * color-scheme and cannot adapt to prefers-color-scheme; the paired ones follow
@@ -51,3 +53,4 @@
 @import "./cyberpunk.css";
 @import "./neon.css";
 @import "./gradient.css";
+@import "./material.css";

@@ -27,7 +27,8 @@
   --text-muted: hsl(220 10% 70%);
   --text-subtle: hsl(220 8% 58%);
   --border: hsl(220 12% 28%);
-  --focus: var(--primary);
+  --focus: hsl(210 75% 49%);
+  --soft-fg-mix: 85%;
   /* Blue-hued shadow ink; without this the default aubergine tint leaks in. */
   --shadow-color: hsl(220 40% 4%);
   --hover-overlay: hsl(0 0% 100% / 0.06);

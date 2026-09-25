@@ -248,7 +248,10 @@ it("scrollable dialog bodies preserve full-width focus rings and alignment", asy
             parseFloat(controlStyle.outlineWidth) + parseFloat(controlStyle.outlineOffset);
           const expectedReserve =
             parseFloat(style.getPropertyValue("--focus-outline-offset")) +
-            parseFloat(style.getPropertyValue("--border-width")) * 2;
+            Math.max(
+              parseFloat(style.getPropertyValue("--focus-ring-width")),
+              parseFloat(style.getPropertyValue("--border-width")) * 2,
+            );
           return JSON.stringify({
             active: document.activeElement === control,
             focusVisible: control.matches(":focus-visible"),
@@ -298,7 +301,10 @@ it("scrollable dialog bodies preserve full-width focus rings and alignment", asy
             parseFloat(controlStyle.outlineWidth) + parseFloat(controlStyle.outlineOffset);
           const expectedReserve =
             parseFloat(bodyStyle.getPropertyValue("--focus-outline-offset")) +
-            parseFloat(bodyStyle.getPropertyValue("--border-width")) * 2;
+            Math.max(
+              parseFloat(bodyStyle.getPropertyValue("--focus-ring-width")),
+              parseFloat(bodyStyle.getPropertyValue("--border-width")) * 2,
+            );
           const contentStart =
             drawerRect.left +
             parseFloat(drawerStyle.borderLeftWidth) +
@@ -336,6 +342,36 @@ it("scrollable dialog bodies preserve full-width focus rings and alignment", asy
       expect(drawer.ringPastEnd).toBeLessThanOrEqual(0);
       expect(Math.abs(drawer.startDrift)).toBeLessThanOrEqual(0.5);
       expect(Math.abs(drawer.endDrift)).toBeLessThanOrEqual(0.5);
+
+      // A theme with a thicker component line (bootstrap-v6: 3px) must still
+      // fit: the reserve takes the thicker of the two outside indicators, not
+      // the 2 × border baseline alone (which clipped 1px of a button line).
+      // Opened from the keyboard, so the dialog's initial focus is
+      // keyboard-modal and matches :focus-visible.
+      await view.evaluate('document.getElementById("drawer").close()');
+      await view.evaluate('document.getElementById("open-thick").focus()');
+      await view.press("Enter");
+      await waitForBrowser(view, `document.activeElement?.id === "thick-edge-button"`);
+      const thick = await view
+        .evaluate(`(() => {
+          const body = document.getElementById("thick-scroll-body");
+          const control = document.getElementById("thick-edge-button");
+          const bodyRect = body.getBoundingClientRect();
+          const controlRect = control.getBoundingClientRect();
+          const cs = getComputedStyle(control);
+          const painted = parseFloat(cs.outlineWidth) + parseFloat(cs.outlineOffset);
+          return JSON.stringify({
+            focusVisible: control.matches(":focus-visible"),
+            width: parseFloat(cs.outlineWidth),
+            ringPastStart: bodyRect.left - (controlRect.left - painted),
+            ringPastEnd: controlRect.right + painted - bodyRect.right,
+          });
+        })()`)
+        .then(JSON.parse);
+      expect(thick.focusVisible).toBe(true);
+      expect(thick.width).toBe(3);
+      expect(thick.ringPastStart).toBeLessThanOrEqual(0);
+      expect(thick.ringPastEnd).toBeLessThanOrEqual(0);
     },
     {
       mediaFeatures: [{ name: "prefers-reduced-motion", value: "reduce" }],

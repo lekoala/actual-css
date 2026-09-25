@@ -36,6 +36,7 @@
 - `--bleed-pad` is a public read-only hook: `padding: var(--bleed-pad)` pads a `.bleed` band that is not a header, footer, or figure.
 - `.join` supports a control nested one wrapper level deep (e.g. a combobox element): the wrapper carries the group corners and primary-edge `z-index`, the inner control inherits the radius, and no widget is named.
 - `.nav-link` works on a `<button>`: UA button chrome is neutralized with `<a>`-identical metrics.
+- `material` demo theme: Material 3 baseline palette, filled underline fields and addons whose focus thickens the bottom line, pill buttons, and a joined outline action drawn as one more filled segment.
 - The `gradient` theme demos the outer-halo field focus; `bootstrap-v6` and `edge` have no field focus override.
 - `demo/templates/contrast-contexts.html`: the page, `data-theme` islands, a card island, a named theme and an application-painted band with every intent variant, a form, a combobox, a date picker and focus lines measured live, plus a `.join` gallery with no focus adaptation.
 
@@ -56,7 +57,12 @@
 - A custom `data-theme` on `<html>` kept the default palette's `--*-soft-fg` calibration instead of resetting it, so the same theme resolved a different soft ink on `<html data-theme>` than on a nested island.
 - `.nav-link` hover/current and `.app-nav` hover fill with a tint of their own ink and follow `--ui-fg`, so they read on a bar with its own `--ui-bg`.
 - `.flyout` owns `color: var(--text)`, like modal and drawer.
+- Preset themes: every `--focus` is a mid-tone that holds 3:1 on `--surface` and `--surface-solid`, and a `--soft-fg-mix` keeps every soft ink at 4.5:1 (`report:theme-contrast` lists no failing pair).
+- `report:theme-contrast` measures `.badge.soft` explicitly, so a preset that fills badges by default (`bootstrap-v6`) is no longer reported against a solid pair.
 - `ocean` theme: light `--danger` darkened (solid text 4.1:1 → 5.2:1), `--soft-fg-mix: 50%` (soft inks from 2.0–4.3:1 to ≥ 4.8:1), and a mid-tone `--focus` that holds 3:1 on both surfaces.
+- `.join-addon` honours `--control-border-block-end-color` / `-width` like text controls, so a theme's underline or accent edge reaches the addon segment.
+- `gradient` theme: the focus halo follows validation (`--form-invalid-border`), and it and `material` restyle the open customizable select with their field focus instead of the core `:open` outline.
+- `--dialog-focus-bleed` and `--drawer-focus-bleed` reserve `max(--focus-ring-width, 2 × --border-width)` past the offset, so a 3px component line (`bootstrap-v6`) is no longer clipped by 1px in a scrollable modal or drawer body.
 - A focused field in `.join` stacks above an adjacent field (`z-index: 4` rule now follows the primary-edge rule), so the neighbour no longer covers its shared edge.
 - A field wrapped one level deep in `.join` fills its stretched wrapper (`block-size: 100%`) instead of stopping short of a taller sibling.
 - Focus indicators on a `--surface-solid` band and on a card nested in it hold 3:1 (a primary button's ring measured 1.1:1, a neutral one in a nested card 1.0:1).
@@ -67,6 +73,7 @@
 - `tests/browser/field-focus.test.js` asserts the field outline stays inside the border box (default and `prefers-contrast`) and that `--focus` holds 3:1 on `--surface` and `--surface-solid` in both schemes.
 - `bun run report:theme-contrast` also reports each preset's `--focus` against `--surface` and `--surface-solid`.
 - Theming: "Make a dark (or light) section" replaces the `.inverted` recipe — a `data-theme` island for a whole context, application CSS for a painted band.
+- Button: a dark button (formerly `.btn.inverted`) is a custom intent, `--intent: var(--surface-solid)` / `--intent-fg: var(--surface)`.
 - `demo/templates/surfaces.html` is removed; `contrast-contexts.html` covers surface boundaries.
 - `tests/browser/inverted.test.js` becomes `surface-context.test.js`, on an application-painted band.
 - Pushing a version tag publishes the GitHub release: `.npmrc` keeps `npm version` on the bare tag format, `bun run release:notes` extracts (and validates) the dated changelog section, and the CI `release` job attaches `dist/`.

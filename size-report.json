@@ -1,12 +1,12 @@
 {
-  "totalRaw": 317437,
+  "totalRaw": 324516,
   "core": {
     "minified": 11686,
     "brotli": 2692
   },
   "full": {
-    "minified": 125937,
-    "brotli": 18093
+    "minified": 126171,
+    "brotli": 18107
   },
   "js": {
     "full": {
@@ -14,7 +14,7 @@
       "brotli": 17006
     }
   },
-  "fileCount": 111,
+  "fileCount": 112,
   "files": [
     {
       "file": "components/steps.css",
@@ -26,7 +26,7 @@
     },
     {
       "file": "components/modal.css",
-      "raw": 8860
+      "raw": 9074
     },
     {
       "file": "components/alert.css",
@@ -37,12 +37,12 @@
       "raw": 7883
     },
     {
-      "file": "forms/choice.css",
-      "raw": 7733
+      "file": "components/drawer.css",
+      "raw": 7754
     },
     {
-      "file": "components/drawer.css",
-      "raw": 7540
+      "file": "forms/choice.css",
+      "raw": 7733
     },
     {
       "file": "components/button.css",
@@ -51,6 +51,10 @@
     {
       "file": "components/badge.css",
       "raw": 6981
+    },
+    {
+      "file": "themes/material.css",
+      "raw": 5559
     },
     {
       "file": "components/avatar.css",
@@ -81,6 +85,14 @@
       "raw": 5231
     },
     {
+      "file": "components/join.css",
+      "raw": 5164
+    },
+    {
+      "file": "themes/gradient.css",
+      "raw": 5057
+    },
+    {
       "file": "components/tooltip.css",
       "raw": 4951
     },
@@ -89,16 +101,8 @@
       "raw": 4876
     },
     {
-      "file": "themes/gradient.css",
-      "raw": 4841
-    },
-    {
       "file": "core/variants.css",
       "raw": 4821
-    },
-    {
-      "file": "components/join.css",
-      "raw": 4780
     },
     {
       "file": "forms/choice-card.css",
@@ -110,7 +114,7 @@
     },
     {
       "file": "themes/edge.css",
-      "raw": 4171
+      "raw": 4195
     },
     {
       "file": "themes/bootstrap-v6.css",
@@ -174,7 +178,7 @@
     },
     {
       "file": "themes/spruce.css",
-      "raw": 2825
+      "raw": 2849
     },
     {
       "file": "themes/ocean.css",
@@ -185,16 +189,16 @@
       "raw": 2794
     },
     {
+      "file": "themes/petrol.css",
+      "raw": 2789
+    },
+    {
       "file": "forms/custom-select.css",
       "raw": 2785
     },
     {
       "file": "core/base.css",
       "raw": 2772
-    },
-    {
-      "file": "themes/petrol.css",
-      "raw": 2765
     },
     {
       "file": "forms/validation.css",
@@ -205,52 +209,52 @@
       "raw": 2728
     },
     {
+      "file": "themes/sunset.css",
+      "raw": 2677
+    },
+    {
       "file": "components/bleed.css",
       "raw": 2657
     },
     {
-      "file": "themes/sunset.css",
-      "raw": 2654
+      "file": "themes/lavender.css",
+      "raw": 2655
     },
     {
       "file": "layout/column-layout.css",
       "raw": 2644
     },
     {
-      "file": "themes/lavender.css",
-      "raw": 2631
+      "file": "themes/index.css",
+      "raw": 2619
+    },
+    {
+      "file": "themes/forest.css",
+      "raw": 2602
     },
     {
       "file": "layout/app-layout.css",
       "raw": 2586
     },
     {
-      "file": "themes/forest.css",
-      "raw": 2578
-    },
-    {
       "file": "themes/corporate.css",
-      "raw": 2455
+      "raw": 2479
     },
     {
       "file": "components/skeleton.css",
       "raw": 2450
     },
     {
-      "file": "themes/index.css",
-      "raw": 2434
-    },
-    {
       "file": "themes/square.css",
-      "raw": 2426
+      "raw": 2450
     },
     {
       "file": "themes/mono.css",
-      "raw": 2399
+      "raw": 2423
     },
     {
       "file": "themes/neon.css",
-      "raw": 2370
+      "raw": 2392
     },
     {
       "file": "forms/select.css",
@@ -258,7 +262,7 @@
     },
     {
       "file": "themes/cyberpunk.css",
-      "raw": 2233
+      "raw": 2255
     },
     {
       "file": "components/chat.css",
@@ -346,15 +350,15 @@
     },
     {
       "file": "themes/dim.css",
-      "raw": 1184
+      "raw": 1208
+    },
+    {
+      "file": "themes/indigo.css",
+      "raw": 1164
     },
     {
       "file": "components/key.css",
       "raw": 1146
-    },
-    {
-      "file": "themes/indigo.css",
-      "raw": 1140
     },
     {
       "file": "components/index.css",

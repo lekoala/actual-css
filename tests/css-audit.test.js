@@ -1570,7 +1570,8 @@ test("text controls keep per-control inset focus, even joined or themed", () => 
   // rule. gradient keeps the outer halo as the demo of the other style.
   expect(bs6Rules).not.toMatch(/:focus|:open|\boutline[\w-]*\s*:/);
   expect(gradientCss).toMatch(
-    /\[data-theme="gradient"\] :is\(\.input, \.textarea, \.select\):focus-visible:not\(:disabled\) \{[^}]*--control-border: var\(--focus\);[^}]*outline: 2px solid transparent;[^}]*box-shadow: 0 0 0 var\(--focus-ring-width\) color-mix\(/,
+    // The halo follows validation like the border does.
+    /\[data-theme="gradient"\] :is\(\.input, \.textarea, \.select\):is\(:focus-visible, :open\):not\(:disabled\) \{[^}]*--control-border: var\(--focus\);[^}]*outline: 2px solid transparent;[^}]*box-shadow: 0 0 0 var\(--focus-ring-width\)\s*color-mix\(in oklch, var\(--form-invalid-border, var\(--focus\)\)/,
   );
 });
 

@@ -26,7 +26,8 @@
   --text-subtle: hsl(20 10% 55%);
 
   --border: hsl(25 38% 84%);
-  --focus: var(--primary);
+  --focus: hsl(16 75% 50%);
+  --soft-fg-mix: 45%;
 
   /* Warm chrome — demonstrates selection and shadow-color theming. The
      selection pair rides the intent tokens, so it adapts to dark for free. */
