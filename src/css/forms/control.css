@@ -77,14 +77,17 @@
   --control-bg: var(--control-hover-bg, var(--surface-subtle));
 }
 
-/* Match hover specificity so the focus border wins while the pointer remains
-   over a keyboard-focused control. */
+/* Field focus is an inset outline: offset = -width keeps every pixel inside
+   the control's border box (any smaller offset bleeds outward), so it covers
+   the border, never touches a .join neighbour or a scrollport edge, and needs
+   no group treatment. Width follows --focus-ring-width, including its
+   prefers-contrast step. Border = shape and validation, outline = focus. */
 .input:focus-visible:not(:disabled),
 .textarea:focus-visible:not(:disabled),
 .select:focus-visible:not(:disabled) {
-  --control-border: var(--focus);
-  outline: 2px solid transparent;
-  box-shadow: var(--focus-ring-shadow);
+  outline: var(--focus-ring-width) solid var(--form-invalid-border, var(--focus));
+  outline-offset: calc(var(--focus-ring-width) * -1);
+  box-shadow: none;
 }
 
 .input[readonly],

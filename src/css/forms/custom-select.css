@@ -9,7 +9,6 @@
  * Arbitrary menu and popover behavior belongs elsewhere.
  *
  * Internal:
- * --control-border
  * --control-bg
  */
 /* This enhancement is excluded from forced-colors, where the native/shared
@@ -34,11 +33,12 @@
         box-shadow: var(--shadow-popout);
       }
 
+      /* Same inset outline as a focused field (control.css). */
       &:open {
-        --control-border: var(--border);
         --control-bg: var(--surface-raised);
-        outline: none;
-        box-shadow: var(--focus-ring-shadow);
+        outline: var(--focus-ring-width) solid var(--form-invalid-border, var(--focus));
+        outline-offset: calc(var(--focus-ring-width) * -1);
+        box-shadow: none;
       }
 
       &::picker-icon {

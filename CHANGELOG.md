@@ -15,6 +15,9 @@
 - `package.json#main` is removed.
 - `dist/actual.css` and `dist/actual.min.css` are no longer built or published; compose the core from `actual-css/css`.
 - `dist/actual.js` (the compiled loader alone) is no longer built or published; bundle your own entry from `actual-css/js` and `actual-css/js/*`.
+- `.input`, `.textarea`, `.select`, and an open custom select draw a `--focus-ring-width` inset outline in `--focus` instead of a focus border plus outer halo.
+- `.join` no longer moves a field's focus ring onto the group: each segment keeps its own indicator.
+- `--focus-ring-shadow` is no longer declared; read it as `var(--focus-ring-shadow, 0 0 0 var(--focus-ring-width) var(--focus-ring))`.
 
 ### Added
 
@@ -23,6 +26,10 @@
 - `--accordion-marker-size` hook.
 - `.data-list.stacked`: the value sits under its term instead of beside it.
 - `--bleed-pad` is a public read-only hook: `padding: var(--bleed-pad)` pads a `.bleed` band that is not a header, footer, or figure.
+- `.join` supports a control nested one wrapper level deep (e.g. a combobox element): the wrapper carries the group corners and primary-edge `z-index`, the inner control inherits the radius, and no widget is named.
+- `.nav-link` works on a `<button>`: UA button chrome is neutralized with `<a>`-identical metrics.
+- `.inverted` sets its own `--focus-ring: var(--surface)`, drawn from its contrast pair instead of the general `--focus`.
+- The `gradient` theme demos the outer-halo field focus; `bootstrap-v6` sets focus tokens only.
 
 ### Fixed
 
@@ -39,9 +46,13 @@
 - `applyEnhancement("validation", …)` did not wire an already-connected form: `validation.js` now registers through `registerEnhancement`.
 - `--app-nav-side-size` was invisible to `check:css-api` (header read `Public hook:`).
 - A custom `data-theme` on `<html>` kept the default palette's `--*-soft-fg` calibration instead of resetting it, so the same theme resolved a different soft ink on `<html data-theme>` than on a nested island.
+- `.nav-link` hover/current and `.app-nav` hover fill with a tint of their own ink and follow `--ui-fg`, so they read on an `.inverted` bar.
+- `.flyout` owns `color: var(--text)`, like modal and drawer.
 
 ### Documentation and tooling
 
+- Combobox: the bridge recipe uses the field inset outline, so a combobox inside `.join` needs no adaptation.
+- `tests/browser/field-focus.test.js` asserts the field outline stays inside the border box (default and `prefers-contrast`) and that `--focus` holds 3:1 on the field surface.
 - Pushing a version tag publishes the GitHub release: `.npmrc` keeps `npm version` on the bare tag format, `bun run release:notes` extracts (and validates) the dated changelog section, and the CI `release` job attaches `dist/`.
 - Theming: a "Replace the palette with my own brand" entry names the tinted neutrals and soft-ink tokens a partial override leaves behind, and points at the minimal recolor set.
 - Tokens: the minimal recolor theme includes `--shadow-color`.

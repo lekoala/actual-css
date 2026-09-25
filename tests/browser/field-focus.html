@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Field focus fixture</title>
+  <link rel="stylesheet" href="../../src/css/actual.full.css">
+  <link rel="stylesheet" href="../../src/css/themes/gradient.css">
+</head>
+<body>
+  <!-- Tab order is the test's navigation path: keep these first. -->
+  <input id="plain" class="input" aria-label="Plain">
+  <input id="invalid" class="input" aria-label="Invalid" aria-invalid="true">
+  <div id="join" class="join">
+    <input id="joined" class="input" aria-label="Joined">
+    <button id="joined-action" class="btn outline" type="button">Go</button>
+  </div>
+  <div data-theme="gradient">
+    <input id="legacy" class="input" aria-label="Legacy halo">
+  </div>
+
+  <!-- --focus against the field surface, per scheme of the default theme. -->
+  <div id="scheme-light" style="color-scheme: light">
+    <span data-focus style="color: var(--focus); background: var(--surface)"></span>
+  </div>
+  <div id="scheme-dark" style="color-scheme: dark">
+    <span data-focus style="color: var(--focus); background: var(--surface)"></span>
+  </div>
+</body>
+</html>

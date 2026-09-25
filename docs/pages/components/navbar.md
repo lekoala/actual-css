@@ -100,9 +100,9 @@ accessible name.
 
   <nav>
     <ul class="nav-list stack">
-      <li><a href="#" aria-current="page">Home</a></li>
-      <li><a href="#">Docs</a></li>
-      <li><a href="#">Components</a></li>
+      <li><a class="nav-link" href="#" aria-current="page">Home</a></li>
+      <li><a class="nav-link" href="#">Docs</a></li>
+      <li><a class="nav-link" href="#">Components</a></li>
     </ul>
   </nav>
 </dialog>

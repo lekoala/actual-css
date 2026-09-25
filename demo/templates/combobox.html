@@ -67,16 +67,16 @@
       --cb-option-min-height: var(--control-size);
     }
 
-    /* 2. Focus — one composite field ring for any internal focus: the input,
+    /* 2. Focus — the .input inset outline for any internal focus: the input,
           a chip or a chip remove button. Local :focus-visible indicators for
-          the chip and its × stay on top of that ring. */
+          the chip and its × stay on top of that outline. */
     .actual-combobox .cb-control:focus-within,
     .actual-combobox .cb-text-control:focus {
-      outline: 2px solid transparent;
-      box-shadow: var(--focus-ring-shadow);
+      outline: var(--focus-ring-width) solid var(--focus);
+      outline-offset: calc(var(--focus-ring-width) * -1);
     }
 
-    /* The remove × carries a compact ring of its own over the field ring. */
+    /* The remove × carries a compact ring of its own over the field outline. */
     .actual-combobox .cb-chip-remove:focus-visible {
       outline: 2px solid transparent;
       box-shadow: 0 0 0 2px var(--focus-ring);
@@ -88,6 +88,7 @@
       .cb-control:has([aria-invalid="true"])
     ) {
       border-color: var(--danger);
+      outline-color: var(--danger);
     }
 
     /* 4. Chips — re-derive the removable .badge soft recipe */
@@ -438,8 +439,8 @@ font-size: var(--font-size-xs);
 
 .actual-combobox .cb-control:focus-within,
 .actual-combobox .cb-text-control:focus {
-  outline: 2px solid transparent;
-  box-shadow: var(--focus-ring-shadow);
+  outline: var(--focus-ring-width) solid var(--focus);
+  outline-offset: calc(var(--focus-ring-width) * -1);
 }
 
 .actual-combobox .cb-chip-remove:focus-visible {

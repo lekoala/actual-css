@@ -70,6 +70,7 @@
   border: var(--border-width) solid var(--border);
   border-radius: var(--radius);
   background: var(--surface-raised);
+  color: var(--text);
   box-shadow: var(--shadow-popout);
   list-style: none;
   opacity: 1;

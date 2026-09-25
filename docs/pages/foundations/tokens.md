@@ -80,7 +80,7 @@ The surface levels are: `surface` (canvas), `surface-raised` (cards, raised surf
 
 Use `*-fg` pairs only for solid backgrounds where the component controls both foreground and background. Do not require a foreground token for every surface token.
 
-Focus styling is outline-first. `--focus` names the theme's focus color, and a ring is derived from it with `color-mix()`. A global focus baseline applies `--focus-outline` and `--focus-outline-offset`: older browsers show it on `:focus`, while modern browsers limit it to `:focus-visible`. Components add `--focus-ring-shadow` only where a softer halo helps; `--focus-ring-width` sets its thickness. Under `forced-colors: active`, the outline maps to `Highlight` and the shadow is disabled.
+Focus styling is outline-first. `--focus` names the theme's focus color, and a ring is derived from it with `color-mix()`. A global focus baseline applies `--focus-outline` and `--focus-outline-offset`: older browsers show it on `:focus`, while modern browsers limit it to `:focus-visible`. Text fields (`.input`, `.textarea`, `.select`) draw a `--focus-ring-width` outline in `--focus` inside their own border box, so `--focus` must hold 3:1 against the field surface. Components that need a softer halo write `var(--focus-ring-shadow, 0 0 0 var(--focus-ring-width) var(--focus-ring))` at the use site — never a stored alias, so the ring recomputes per element and follows a local `--focus-ring`; `--focus-ring-width` sets its thickness. Under `forced-colors: active`, the outline maps to `Highlight` and the shadow is disabled.
 
 ```css
 :root {
@@ -90,7 +90,6 @@ Focus styling is outline-first. `--focus` names the theme's focus color, and a r
   --focus-outline: calc(var(--border-width) * 2) solid var(--focus-outline-color);
   --focus-outline-offset: 2px;
   --focus-ring-width: 3px;
-  --focus-ring-shadow: 0 0 0 var(--focus-ring-width) var(--focus-ring);
 }
 ```
 
@@ -537,7 +536,7 @@ A minimal recolor theme (illustrative, not a shipped theme):
 }
 ```
 
-Several tokens are theme-derived aliases that reference other tokens — `--state-selected`/`--state-selected-fg`/`--state-disabled`, `--indicator-ring`, `--shadow`/`--shadow-popout`, `--heading`, `--selection-bg`/`--selection-fg`, and `--focus-ring-shadow`. They are declared on `:root, [data-theme]` so they recompute on every theme boundary: a custom property resolves its `var()` references at computed-value time on the element that declares it, so an alias declared only on `:root` would be inherited as an already-resolved value and would not follow a `[data-theme]` island's overridden tokens. A theme that wants a distinct alias (e.g. a `--selection-bg` of its own) overrides it explicitly afterwards, which wins by cascade order.
+Several tokens are theme-derived aliases that reference other tokens — `--state-selected`/`--state-selected-fg`/`--state-disabled`, `--indicator-ring`, `--shadow`/`--shadow-popout`, `--heading`, and `--selection-bg`/`--selection-fg`. They are declared on `:root, [data-theme]` so they recompute on every theme boundary: a custom property resolves its `var()` references at computed-value time on the element that declares it, so an alias declared only on `:root` would be inherited as an already-resolved value and would not follow a `[data-theme]` island's overridden tokens. The focus ring shadow is deliberately not one of them — use sites write `var(--focus-ring-shadow, 0 0 0 var(--focus-ring-width) var(--focus-ring))` so a local `--focus-ring` (e.g. `.inverted`) is honored. A theme that wants a distinct alias (e.g. a `--selection-bg` of its own) overrides it explicitly afterwards, which wins by cascade order.
 
 Without `data-theme`, the default theme advertises `color-scheme: light dark` and follows the user's OS preference in browsers that support `light-dark()`. Dark themes should set `color-scheme: dark`. Light themes should set `color-scheme: light`. Browsers without `light-dark()` receive the light fallback.
 

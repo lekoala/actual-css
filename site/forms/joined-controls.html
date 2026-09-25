@@ -256,11 +256,8 @@
   </div>
 </div>
 <div class="prose docs-prose">
-<p><code>.join</code> handles border-radius and border collapsing between adjacent children. It works with any direct child — <code>.input</code>, <code>.btn</code>, <code>.select</code>, or <code>.join-addon</code>.
-When an <code>.input</code>, <code>.textarea</code>, or <code>.select</code> receives keyboard-relevant focus,
-the focus ring surrounds the complete joined field. Attached buttons keep their
-own focus indicator when reached directly, so the actionable segment remains
-identifiable.</p>
+<p><code>.join</code> handles border-radius and border collapsing between adjacent children. It works with any direct child — <code>.input</code>, <code>.btn</code>, <code>.select</code>, or <code>.join-addon</code> — plus one wrapper level (e.g. a combobox element around the native control): the wrapper receives the group corners and the inner control inherits them via <code>border-radius: inherit</code>.
+When an <code>.input</code>, <code>.textarea</code>, or <code>.select</code> receives keyboard focus, it keeps its own inset focus outline; the group never moves the ring onto itself, so the focused segment remains identifiable.</p>
 <h2 id="linting-rolegroup">Linting <code>role=&quot;group&quot;</code></h2>
 <p>Biome's <code>a11y/useSemanticElements</code> reports the wrapper and offers <code>&lt;fieldset&gt;</code>
 as the replacement. That is the only element it suggests, and it does not fit:

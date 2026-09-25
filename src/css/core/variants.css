@@ -78,6 +78,11 @@
   --ui-border: transparent;
   --ui-hover-bg: var(--surface-solid);
 
+  /* why: the ring derives from the inversion pair (--surface on
+     --surface-solid), not from --focus — the general palette focus can fall
+     below contrast on the inverted surface, in either scheme. */
+  --focus-ring: var(--surface);
+
   --heading: var(--surface);
   --busy-overlay-bg: var(--surface-solid);
 
