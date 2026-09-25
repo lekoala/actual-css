@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [0.10.0] - 2026-09-25
+
 ### Breaking changes
 
 - `.inverted` is removed: it mixed a contrasting surface with theme inversion while remapping only part of the palette. Use a `data-theme` island for a complete light/dark subtree, or paint a local band in application CSS.
@@ -38,7 +40,7 @@
 - `.nav-link` works on a `<button>`: UA button chrome is neutralized with `<a>`-identical metrics.
 - `material` demo theme: Material 3 baseline palette, filled underline fields and addons whose focus thickens the bottom line, pill buttons, and a joined outline action drawn as one more filled segment.
 - `.choice-card.chip`: compact pill form for filter chips and selectable tags, with a leading dot that turns into the check without moving the label.
-- `--choice-chip-dot` exposes the chip's check-slot centre, so a theme can grow the dot's `circle()` clip into a selected fill.
+- `--choice-chip-dot` is a read-only hook on the chip's `::before`: the check-slot centre, so a theme can grow the dot's `circle()` clip into a selected fill.
 - The `material` theme grows the chip dot into a tonal fill.
 - The `gradient` theme demos the outer-halo field focus; `bootstrap-v6` and `edge` have no field focus override.
 - `demo/templates/contrast-contexts.html`: the page, `data-theme` islands, a card island, a named theme and an application-painted band with every intent variant, a form, a combobox, a date picker and focus lines measured live, plus a `.join` gallery with no focus adaptation.
@@ -94,6 +96,11 @@
 - Install docs lead with modular source imports; the full bundle is the zero-config and CDN option.
 - Modular import guide: "Start from the full entry" copies `actual.full.css` / `full.js` into the app and prunes them, and names the three shared CSS modules (`close`, `bleed`, `spinner`).
 - Tailwind v4 guide: explicit layer order plus the `--font-sans` / `--font-mono` / `--font-weight-*` / `--radius-*` token collisions.
+- Choice cards: the CSS hooks list `--choice-card-border`, `--choice-card-bg`, and `--choice-chip-dot`.
+- `tests/browser/choice-chip.test.js` asserts the chip label never moves on check, the native inputs stay the controls, Tab focus draws the outer ring, and forced colors keep checked distinct.
+- Theming: a `data-theme` island paints nothing; give it a surface, and put it on a wrapper rather than a `<fieldset>`, whose legend straddles the border.
+- `demo/scripts/theme-picker.js`: every demo page uses one `<theme-picker>` fed by a single theme list, replacing 30 hand-copied selects and `admini-theme.js`.
+- `check:templates` fails when `theme-picker.js` drifts from `src/css/themes/index.css` or a page hand-copies a theme list.
 
 
 ## [0.9.2] - 2026-09-22
