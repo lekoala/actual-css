@@ -29,7 +29,10 @@
  *             tooltips therefore keep their initial text; use an explicit
  *             tooltip when its content must update dynamically.
  *
- * Show:       hover + focus (150ms delay), click toggle, or always visible
+ * Show:       hover + keyboard focus (150ms delay), click toggle, or always
+ *             visible. Focus counts only when it matches :focus-visible, so
+ *             a pointer press, or focus handed back by a closing dialog after
+ *             a pointer close, shows nothing.
  * Hide:       focus leaving the trigger (focusout), pointer leave, Escape
  *
  * Geometry:   a trigger scrolled out of the positioning boundary takes its tip
@@ -518,6 +521,13 @@ function handleTriggerIntent(e) {
     trigger.contains(e.relatedTarget)
   )
     return;
+
+  // why: focus is a show intent only when it is keyboard focus. A pointer
+  // press focuses the trigger too, and a dialog or drawer closed with the
+  // pointer hands focus back to its invoker; neither asks for a label the
+  // user just acted on. :focus-visible is the browser's own modality verdict,
+  // the one the focus rings already follow, so Tab still shows the tip.
+  if (e.type === "focusin" && !e.target.matches(":focus-visible")) return;
 
   const tip = ensureTip(trigger);
   if (!tip) return;

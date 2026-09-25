@@ -288,7 +288,7 @@ test("a trigger scrolled out of view takes its tooltip down and brings it back",
   const trigger = document.querySelector("button");
   layout.place(trigger, 300, 40);
 
-  trigger.dispatchEvent(new FocusEvent("focusin", { bubbles: true }));
+  trigger.focus();
   const tip = measurable(document.querySelector('[role="tooltip"]'));
   await waitForShow();
   expect(visible(tip)).toBe(true);
@@ -584,7 +584,7 @@ test("tooltip stays visible when focus is kept after the pointer leaves", async 
   await loadTooltip('<button data-tooltip="Help">Trigger</button>');
   const trigger = document.querySelector("button");
 
-  trigger.dispatchEvent(new FocusEvent("focusin", { bubbles: true }));
+  trigger.focus();
   await waitForShow();
   expect(visible(document.querySelector('[role="tooltip"]'))).toBe(true);
 
@@ -601,10 +601,10 @@ test("tooltip hides only when both focus and hover are gone", async () => {
 
   hover(trigger);
   await waitForShow();
-  trigger.dispatchEvent(new FocusEvent("focusin", { bubbles: true }));
+  trigger.focus();
 
   leave(trigger);
-  trigger.dispatchEvent(new FocusEvent("focusout", { bubbles: true }));
+  trigger.blur();
   await waitForHide();
 
   expect(visible(document.querySelector('[role="tooltip"]'))).toBe(false);
@@ -620,20 +620,41 @@ test("a composite trigger keeps its tip while focus moves inside it", async () =
   const one = document.getElementById("one");
   const two = document.getElementById("two");
 
-  one.dispatchEvent(new FocusEvent("focusin", { bubbles: true }));
+  one.focus();
   await waitForShow();
   const tip = document.querySelector('[role="tooltip"]');
   expect(visible(tip)).toBe(true);
 
   // blur never reaches the container: on a composite trigger only focusout
   // reports the loss, and only when focus actually left the trigger.
-  one.dispatchEvent(new FocusEvent("focusout", { bubbles: true, relatedTarget: two }));
+  two.focus();
   await waitForHide();
   expect(visible(tip)).toBe(true);
 
-  two.dispatchEvent(new FocusEvent("focusout", { bubbles: true, relatedTarget: null }));
+  two.blur();
   await waitForHide();
   expect(visible(tip)).toBe(false);
+});
+
+/*
+ * Focus is a show intent only when it is keyboard focus. A pointer press
+ * focuses the trigger without :focus-visible, and so does a dialog handing
+ * focus back to its invoker after a pointer close — the case that exposed it:
+ * hover, click, close the drawer, and the tip came back on a button the user
+ * had just used. A focusin on an element that is not :focus-visible stands
+ * for both.
+ */
+test("focus that is not keyboard focus shows no tooltip", async () => {
+  await loadTooltip('<button data-tooltip="Help">Trigger</button>');
+  const trigger = document.querySelector("button");
+
+  trigger.dispatchEvent(new FocusEvent("focusin", { bubbles: true }));
+  await waitForShow();
+  expect(visible(document.querySelector('[role="tooltip"]'))).toBe(false);
+
+  trigger.focus();
+  await waitForShow();
+  expect(visible(document.querySelector('[role="tooltip"]'))).toBe(true);
 });
 
 test("tooltip stays open while the pointer moves from trigger to tip", async () => {
@@ -695,7 +716,7 @@ test("Escape outlasts the focus that justified the tooltip", async () => {
   const trigger = document.querySelector("button");
   layout.place(trigger, 300, 40);
 
-  trigger.dispatchEvent(new FocusEvent("focusin", { bubbles: true }));
+  trigger.focus();
   const tip = measurable(document.querySelector('[role="tooltip"]'));
   await waitForShow();
   expect(visible(tip)).toBe(true);
@@ -709,7 +730,8 @@ test("Escape outlasts the focus that justified the tooltip", async () => {
   expect(visible(tip)).toBe(false);
 
   // Only a fresh trigger event shows it again.
-  trigger.dispatchEvent(new FocusEvent("focusin", { bubbles: true }));
+  trigger.blur();
+  trigger.focus();
   await waitForShow();
   expect(visible(tip)).toBe(true);
 });
