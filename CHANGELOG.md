@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Fixed
+
+- `tooltip.js` shows on focus only when the trigger matches `:focus-visible`: a pointer press, or focus handed back by a dialog closed with the pointer, no longer brings the tooltip back.
+
 ## [0.10.0] - 2026-09-25
 
 ### Breaking changes

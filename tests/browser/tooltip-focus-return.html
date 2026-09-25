@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tooltip focus-return fixture</title>
+  <link rel="stylesheet" href="../../src/css/actual.full.css">
+  <script src="../../dist/actual.full.js" defer></script>
+</head>
+<body>
+  <!-- A tooltip on the invoker of a drawer: closing the drawer hands focus
+       back to the invoker, which must not bring the tooltip back when the
+       drawer was closed with the pointer. -->
+  <div class="cluster" style="padding: 2rem">
+    <button class="btn icon-only" type="button" id="trigger"
+            data-tooltip="Assistant" aria-label="Assistant"
+            command="show-modal" commandfor="panel">A</button>
+    <button class="btn" type="button" id="after">After</button>
+  </div>
+
+  <dialog class="drawer" id="panel" data-side="end" aria-label="Panel" closedby="any">
+    <header>
+      <strong>Panel</strong>
+      <form method="dialog"><button class="close" type="submit" id="close" aria-label="Close"></button></form>
+    </header>
+    <div class="stack"><p>Content</p></div>
+  </dialog>
+</body>
+</html>
