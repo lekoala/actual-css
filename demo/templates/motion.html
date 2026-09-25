@@ -7,6 +7,7 @@
   <meta name="description" content="Replay the presence motion of status-bar, tooltip, flyout, modal, and drawer side by side, switch easing curves, and simulate reduced motion.">
   <link rel="stylesheet" href="../../dist/actual.full.css">
   <link rel="stylesheet" href="../assets/actual-themes.min.css">
+  <script src="../scripts/theme-picker.js"></script>
   <style>
     .motion-page {
       --center-size: 76rem;
@@ -76,14 +77,7 @@
         <code>src/css/components/</code>.
       </p>
       <div class="cluster motion-controls">
-        <select class="select sm fit" id="theme-switcher" aria-label="Switch theme">
-          <option value="">System</option>
-          <option value="light">Light</option>
-          <option value="dark">Dark</option>
-          <option value="indigo">Indigo</option>
-          <option value="dim">Dim</option>
-          <option value="corporate">Corporate</option>
-        </select>
+        <theme-picker><select class="select sm fit" aria-label="Switch theme"></select></theme-picker>
         <label class="cluster" for="reduced-toggle">
           <input type="checkbox" id="reduced-toggle">
           Simulate reduced motion
@@ -340,12 +334,6 @@
     }
 
     const root = document.documentElement;
-
-    const themeSwitcher = document.getElementById("theme-switcher");
-    themeSwitcher?.addEventListener("change", () => {
-      if (themeSwitcher.value) root.dataset.theme = themeSwitcher.value;
-      else root.removeAttribute("data-theme");
-    });
 
     const reducedToggle = document.getElementById("reduced-toggle");
     reducedToggle?.addEventListener("change", () => {

@@ -110,6 +110,12 @@ Actual CSS and the island follows your palette.
 <article class="card" data-theme="dark">…</article>
 ```
 
+The island recomputes tokens but paints nothing. A `.card` paints its own
+surface; any other element needs `background: var(--surface)` and
+`color: var(--text)`, or its ink lands on the page theme's background. A
+`<legend>` straddles its fieldset's border, outside the fieldset's surface, so
+put the island on a wrapper, not on the `<fieldset>`.
+
 Actual has no class that inverts only part of a subtree. When all you need is
 a painted band with neutral content and filled buttons, write it in
 application CSS and keep forms and intent ink out of it:

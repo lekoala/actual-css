@@ -224,6 +224,7 @@
 </thead>
 <tbody>
 <tr><td><code>.choice-card</code></td><td>Component</td><td>Card-style <code>&lt;label&gt;</code> around a native control.</td></tr>
+<tr><td><code>.chip</code></td><td>Modifier</td><td>Compact pill form: filter chips, tags.</td></tr>
 <tr><td><code>.primary</code> / <code>.secondary</code></td><td>Intent</td><td>Accent for the selected state.</td></tr>
 </tbody>
 </table></div>
@@ -386,6 +387,58 @@
 follows through its <code>em</code> sizing. Padding is density, so use a <code>.compact</code> or
 <code>.spacious</code> context to change it. Intent classes (<code>.primary</code>, <code>.secondary</code>) are
 supported on the <code>.choice-card</code> element.</p>
+<h2 id="chips">Chips</h2>
+<p>Add <code>.chip</code> for the compact pill form: filter chips, selectable tags, toggle
+pills, multi-select facets. A radio group gives single-choice chips. A leading
+dot turns into the check in a fixed slot, so checking never moves the label.
+Use <code>.cluster</code> for a wrapping row. A chip is sized like a control: <code>.btn</code> and
+<code>.input</code> height, <code>--control-pad-x</code> inline padding, <code>.sm</code> / <code>.lg</code> scale.</p>
+</div>
+<div class="docs-example">
+  <div class="docs-preview">
+<fieldset class="field-group">
+  <legend class="field-label">Fruit</legend>
+  <div class="cluster">
+    <label class="choice-card chip">
+      <input type="checkbox" name="fruit" value="pear" checked />
+      Pear
+    </label>
+    <label class="choice-card chip">
+      <input type="checkbox" name="fruit" value="apple" />
+      Apple
+    </label>
+    <label class="choice-card chip">
+      <input type="checkbox" name="fruit" value="plum" disabled />
+      Plum
+    </label>
+  </div>
+</fieldset>
+  </div>
+  <div class="docs-code">
+    <pre><code class="language-html">&lt;fieldset class=&quot;field-group&quot;&gt;
+  &lt;legend class=&quot;field-label&quot;&gt;Fruit&lt;/legend&gt;
+  &lt;div class=&quot;cluster&quot;&gt;
+    &lt;label class=&quot;choice-card chip&quot;&gt;
+      &lt;input type=&quot;checkbox&quot; name=&quot;fruit&quot; value=&quot;pear&quot; checked /&gt;
+      Pear
+    &lt;/label&gt;
+    &lt;label class=&quot;choice-card chip&quot;&gt;
+      &lt;input type=&quot;checkbox&quot; name=&quot;fruit&quot; value=&quot;apple&quot; /&gt;
+      Apple
+    &lt;/label&gt;
+    &lt;label class=&quot;choice-card chip&quot;&gt;
+      &lt;input type=&quot;checkbox&quot; name=&quot;fruit&quot; value=&quot;plum&quot; disabled /&gt;
+      Plum
+    &lt;/label&gt;
+  &lt;/div&gt;
+&lt;/fieldset&gt;</code></pre>
+  </div>
+</div>
+<div class="prose docs-prose">
+<p>The dot is <code>::before</code>: a full-chip layer clipped to a <code>circle()</code> centred on
+the check slot, whose centre is exposed as <code>--choice-chip-dot</code>. A theme can
+grow it into a selected fill by widening the clip, as the <code>material</code> theme
+does.</p>
 <h2 id="css-hooks">CSS hooks</h2>
 <ul>
 <li><code>--choice-card-pad</code> — inner padding.</li>
@@ -424,6 +477,7 @@ whatever the font, line-height or control size.</li>
           <p class="docs-nav-group">On this page</p>
           <ul class="nav-list docs-toc-list" data-docs-toc>
         <li><a class="nav-link" href="#class-reference" data-docs-toc-item data-level="2">Class reference</a></li>
+        <li><a class="nav-link" href="#chips" data-docs-toc-item data-level="2">Chips</a></li>
         <li><a class="nav-link" href="#css-hooks" data-docs-toc-item data-level="2">CSS hooks</a></li>
           </ul>
         </nav>

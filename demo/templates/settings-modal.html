@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="../../dist/actual.full.css">
   <link rel="stylesheet" href="../assets/actual-themes.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+  <script src="../scripts/theme-picker.js"></script>
   <style>
     .settings-page {
       --center-size: 48rem;
@@ -192,29 +193,7 @@
           <i class="ti ti-settings" aria-hidden="true"></i>
           Open settings
         </button>
-        <select class="select sm fit" id="theme-switcher" aria-label="Switch theme">
-          <option value="">System</option>
-          <option value="light">Light</option>
-          <option value="dark">Dark</option>
-          <optgroup label="Themes">
-            <option value="indigo">Indigo</option>
-            <option value="dim">Dim</option>
-            <option value="corporate">Corporate</option>
-            <option value="forest">Forest</option>
-            <option value="ocean">Ocean</option>
-            <option value="spruce">Spruce</option>
-            <option value="petrol">Petrol</option>
-            <option value="sunset">Sunset</option>
-            <option value="lavender">Lavender</option>
-            <option value="mono">Mono</option>
-            <option value="square">Square</option>
-            <option value="brutalist">Brutalist</option>
-            <option value="edge">Edge</option>
-            <option value="cyberpunk">Cyberpunk</option>
-            <option value="neon">Neon</option>
-            <option value="gradient">Gradient</option>
-          </optgroup>
-        </select>
+        <theme-picker><select class="select sm fit" aria-label="Switch theme"></select></theme-picker>
       </div>
     </header>
   </main>
@@ -620,18 +599,6 @@
 
   <script src="../../dist/actual.full.js"></script>
   <script>
-    const switcher = document.getElementById("theme-switcher");
-
-    if (switcher) {
-      switcher.addEventListener("change", () => {
-        if (switcher.value) {
-          document.documentElement.dataset.theme = switcher.value;
-        } else {
-          document.documentElement.removeAttribute("data-theme");
-        }
-      });
-    }
-
     /* Keeping aria-checked in sync is the switch enhancement from the docs, not
        something the component does on its own. */
     for (const control of document.querySelectorAll('.switch[role="switch"]')) {

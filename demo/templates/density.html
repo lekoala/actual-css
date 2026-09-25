@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="../assets/actual-themes.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
   <link rel="stylesheet" href="../styles/demo.css">
+  <script src="../scripts/theme-picker.js"></script>
   <style>
     .density-page {
       padding-block: var(--space-60);
@@ -118,29 +119,7 @@
         may additionally use a slightly narrower font width when the typeface
         supports a width axis.
       </p>
-      <select class="select sm fit" id="theme-switcher" aria-label="Switch theme">
-          <option value="">System</option>
-          <option value="light">Light</option>
-          <option value="dark">Dark</option>
-          <optgroup label="Themes">
-          <option value="indigo">Indigo</option>
-          <option value="dim">Dim</option>
-          <option value="corporate">Corporate</option>
-          <option value="forest">Forest</option>
-          <option value="ocean">Ocean</option>
-          <option value="spruce">Spruce</option>
-          <option value="petrol">Petrol</option>
-          <option value="sunset">Sunset</option>
-          <option value="lavender">Lavender</option>
-          <option value="mono">Mono</option>
-          <option value="square">Square</option>
-          <option value="brutalist">Brutalist</option>
-          <option value="edge">Edge</option>
-          <option value="cyberpunk">Cyberpunk</option>
-          <option value="neon">Neon</option>
-          <option value="gradient">Gradient</option>
-          </optgroup>
-      </select>
+      <theme-picker><select class="select sm fit" aria-label="Switch theme"></select></theme-picker>
     </header>
 
     <section class="center density-section" id="live-context">
@@ -394,18 +373,6 @@
 
   <script src="../../dist/actual.full.js"></script>
   <script>
-    const switcher = document.getElementById("theme-switcher");
-
-    if (switcher) {
-      switcher.addEventListener("change", () => {
-        if (switcher.value) {
-          document.documentElement.dataset.theme = switcher.value;
-        } else {
-          document.documentElement.removeAttribute("data-theme");
-        }
-      });
-    }
-
     const stage = document.getElementById("density-stage");
     const radios = document.querySelectorAll('input[name="density"]');
 

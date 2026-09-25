@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="../../dist/actual.full.css">
   <link rel="stylesheet" href="../assets/actual-themes.min.css">
   <link rel="stylesheet" href="../styles/demo.css">
+  <script src="../scripts/theme-picker.js"></script>
   <style>
     /*
      * Built from the primitives, like demo/templates/visual-guide.html:
@@ -332,23 +333,7 @@
         hex, chroma and hue below is measured from the rendered page at load, so
         the figures cannot drift away from the themes they describe.
       </p>
-      <select class="select sm fit" id="theme-switcher" aria-label="Switch the page theme">
-        <option value="">System</option>
-        <option value="light">Light</option>
-        <option value="dark">Dark</option>
-        <optgroup label="Themes">
-          <option value="indigo">Indigo</option>
-          <option value="dim">Dim</option>
-          <option value="corporate">Corporate</option>
-          <option value="forest">Forest</option>
-          <option value="ocean">Ocean</option>
-          <option value="spruce">Spruce</option>
-          <option value="petrol">Petrol</option>
-          <option value="sunset">Sunset</option>
-          <option value="lavender">Lavender</option>
-          <option value="mono">Mono</option>
-        </optgroup>
-      </select>
+      <theme-picker><select class="select sm fit" aria-label="Switch the page theme"></select></theme-picker>
       <p class="muted measure">
         The switcher changes the page chrome only. The islands inside each figure
         carry their own palette and ignore it — which is the first thing this
@@ -1326,18 +1311,6 @@
 
   <script src="../../dist/actual.full.js"></script>
   <script>
-    const switcher = document.getElementById("theme-switcher");
-
-    if (switcher) {
-      switcher.addEventListener("change", () => {
-        if (switcher.value) {
-          document.documentElement.dataset.theme = switcher.value;
-        } else {
-          document.documentElement.removeAttribute("data-theme");
-        }
-      });
-    }
-
     /*
      * Every colour figure is measured from the rendered page rather than
      * transcribed, so a theme edit cannot leave the guide describing colours it

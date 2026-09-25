@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="../assets/actual-themes.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
   <link rel="stylesheet" href="../styles/demo.css">
+  <script src="../scripts/theme-picker.js"></script>
   <style>
     /* Editorial marketing layout: generous whitespace, a single accent used
        sparingly, italics for emphasis instead of color. Everything else
@@ -75,7 +76,7 @@
         display: none;
       }
 
-      .mk-topbar-actions > #theme-switcher {
+      .mk-topbar-actions theme-picker select {
         min-inline-size: 0;
       }
     }
@@ -537,29 +538,7 @@
         </ul>
       </nav>
       <div class="cluster mk-topbar-actions">
-        <select class="select sm fit" id="theme-switcher" aria-label="Switch theme">
-          <option value="">System</option>
-          <option value="light">Light</option>
-          <option value="dark">Dark</option>
-          <optgroup label="Themes">
-          <option value="indigo">Indigo</option>
-          <option value="dim">Dim</option>
-          <option value="corporate">Corporate</option>
-          <option value="forest">Forest</option>
-          <option value="ocean">Ocean</option>
-          <option value="spruce">Spruce</option>
-          <option value="petrol">Petrol</option>
-          <option value="sunset">Sunset</option>
-          <option value="lavender">Lavender</option>
-          <option value="mono">Mono</option>
-          <option value="square">Square</option>
-          <option value="brutalist">Brutalist</option>
-          <option value="edge">Edge</option>
-          <option value="cyberpunk">Cyberpunk</option>
-          <option value="neon">Neon</option>
-          <option value="gradient">Gradient</option>
-          </optgroup>
-        </select>
+        <theme-picker><select class="select sm fit" aria-label="Switch theme"></select></theme-picker>
         <a class="btn neutral outline sm" href="#">Sign in</a>
         <a class="btn primary sm" href="#pricing">Get started</a>
       </div>
@@ -856,19 +835,6 @@
   </footer>
 
   <script src="../../dist/actual.full.js"></script>
-  <script>
-    const switcher = document.getElementById("theme-switcher");
-
-    if (switcher) {
-      switcher.addEventListener("change", () => {
-        if (switcher.value) {
-          document.documentElement.dataset.theme = switcher.value;
-        } else {
-          document.documentElement.removeAttribute("data-theme");
-        }
-      });
-    }
-  </script>
 </body>
 
 </html>

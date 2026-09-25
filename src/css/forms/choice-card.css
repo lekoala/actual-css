@@ -13,6 +13,10 @@
  * overflow: hidden will clip it. Pair with grid or flex utilities for group
  * layout.
  *
+ * .chip is the compact pill form (filter chips, selectable tags): control
+ * height, and a leading dot that turns into the check in a fixed slot, so
+ * checking never moves the label.
+ *
  * Public hooks:
  * --choice-card-pad
  * --choice-card-radius
@@ -114,11 +118,13 @@
   z-index: 1;
 }
 
-.choice-card:has(input[type="radio"])::before {
+/* :where() keeps the shape at single-class weight, so .chip can reshape the
+   layer without out-arguing the input-type test. */
+.choice-card:where(:has(input[type="radio"]))::before {
   border-radius: var(--radius-full);
 }
 
-.choice-card:has(input[type="checkbox"])::before {
+.choice-card:where(:has(input[type="checkbox"]))::before {
   border-radius: var(--radius-sm);
 }
 
@@ -135,6 +141,54 @@
   transform: scale(1);
 }
 
+/* Chip — the rules above stay in force; this section only relocates the
+   indicator. Must follow them: several ties are won by source order. */
+.choice-card.chip {
+  --choice-card-pad: 0 var(--control-pad-x);
+  --choice-card-radius: var(--radius-full);
+  --choice-card-check-size: 1em;
+
+  display: inline-flex;
+  align-items: center;
+  min-block-size: var(--control-size);
+  line-height: 1.2;
+  /* The dot layer sits under the label at z-index -1. */
+  isolation: isolate;
+}
+
+/* ::before is a full-bleed layer clipped to a dot centred on the check slot,
+   so a theme can grow the same clip into a selected fill. The chip itself
+   must not clip (its focus ring is an outline), hence the inherited radius. */
+.choice-card.chip::before {
+  --choice-chip-dot: calc(var(--control-pad-x) + var(--choice-card-check-size) / 2) 50%;
+
+  inset: 0;
+  inline-size: auto;
+  block-size: auto;
+  border-radius: inherit;
+  box-shadow: none;
+  background: var(--text-subtle);
+  transform: none;
+  clip-path: circle(0.1875em at var(--choice-chip-dot));
+  z-index: -1;
+  transition: clip-path var(--duration);
+}
+
+.choice-card.chip:has(:checked)::before {
+  clip-path: circle(0 at var(--choice-chip-dot));
+}
+
+/* The check keeps the card's scale-in, in flow ahead of the label. */
+.choice-card.chip::after {
+  position: static;
+  order: -1;
+  flex: none;
+  margin-inline-end: 0.375em;
+  background: var(--intent, var(--state-selected));
+  -webkit-mask-size: contain;
+  mask-size: contain;
+}
+
 /* The native input is hidden and the checked marker is custom-drawn: without
    this repair, forced colors pushes disc and check to the same system color
    and the state disappears. Highlight/Canvas/HighlightText are preserved as-is,
@@ -148,5 +202,19 @@
 
   .choice-card:has(:checked)::after {
     background: HighlightText;
+  }
+
+  /* A chip has no disc behind its check: the check carries the state alone,
+     and dropping the checked layer also drops any theme fill. */
+  .choice-card.chip::before {
+    background: CanvasText;
+  }
+
+  .choice-card.chip:has(:checked)::before {
+    content: none;
+  }
+
+  .choice-card.chip:has(:checked)::after {
+    background: CanvasText;
   }
 }

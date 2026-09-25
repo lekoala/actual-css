@@ -3,6 +3,9 @@
 Hand-authored example sources:
 
 - `styles/` for demo-only CSS.
+- `scripts/` for demo-only JS. `theme-picker.js` defines `<theme-picker>`, the
+  one theme select every page uses; a new theme is added to its `THEMES` list
+  (`check:templates` compares it with `src/css/themes/index.css`).
 - `templates/` for standalone static HTML examples (kitchen sink, keyboard
   controls, surface contracts, dashboard, app, workspaces, marketing, blog, blocks, density).
   Each template is a named variant: one page shape or product flavor per file,

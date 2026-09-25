@@ -1,12 +1,12 @@
 {
-  "totalRaw": 324516,
+  "totalRaw": 328093,
   "core": {
     "minified": 11686,
     "brotli": 2692
   },
   "full": {
-    "minified": 126171,
-    "brotli": 18107
+    "minified": 127273,
+    "brotli": 18278
   },
   "js": {
     "full": {
@@ -54,7 +54,11 @@
     },
     {
       "file": "themes/material.css",
-      "raw": 5559
+      "raw": 6976
+    },
+    {
+      "file": "forms/choice-card.css",
+      "raw": 6862
     },
     {
       "file": "components/avatar.css",
@@ -103,10 +107,6 @@
     {
       "file": "core/variants.css",
       "raw": 4821
-    },
-    {
-      "file": "forms/choice-card.css",
-      "raw": 4702
     },
     {
       "file": "forms/otp.css",

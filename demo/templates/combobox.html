@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="../../dist/actual.full.css">
   <link rel="stylesheet" href="../assets/actual-themes.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@lekoala/combobox@0.5.0/dist/combobox.css">
+  <script src="../scripts/theme-picker.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@lekoala/combobox@0.5.0/dist/combobox.js"></script>
   <style>
     .page {
@@ -179,29 +180,7 @@ font-size: var(--font-size-xs);
       </hgroup>
 
       <div class="cluster" style="gap: var(--space-20);">
-        <select class="select sm fit" id="theme-switcher" aria-label="Switch theme">
-          <option value="">System</option>
-          <option value="light">Light</option>
-          <option value="dark">Dark</option>
-          <optgroup label="Themes">
-            <option value="indigo">Indigo</option>
-            <option value="dim">Dim</option>
-            <option value="corporate">Corporate</option>
-            <option value="forest">Forest</option>
-            <option value="ocean">Ocean</option>
-            <option value="spruce">Spruce</option>
-            <option value="petrol">Petrol</option>
-            <option value="sunset">Sunset</option>
-            <option value="lavender">Lavender</option>
-            <option value="mono">Mono</option>
-            <option value="square">Square</option>
-            <option value="brutalist">Brutalist</option>
-            <option value="edge">Edge</option>
-            <option value="cyberpunk">Cyberpunk</option>
-            <option value="neon">Neon</option>
-            <option value="gradient">Gradient</option>
-          </optgroup>
-        </select>
+        <theme-picker><select class="select sm fit" aria-label="Switch theme"></select></theme-picker>
         <a class="btn neutral outline sm" href="https://github.com/lekoala/combobox" target="_blank" rel="noopener">
           combobox docs
         </a>
@@ -506,17 +485,6 @@ font-size: var(--font-size-xs);
 
   <script>
     (() => {
-      const switcher = document.getElementById("theme-switcher");
-      if (switcher) {
-        switcher.addEventListener("change", () => {
-          if (switcher.value) {
-            document.documentElement.dataset.theme = switcher.value;
-          } else {
-            document.documentElement.removeAttribute("data-theme");
-          }
-        });
-      }
-
       const stage = document.getElementById("support-status");
       customElements.whenDefined("combo-box").then(async () => {
         const first = await document.querySelector("combo-box").whenReady();

@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="../../dist/actual.full.css">
   <link rel="stylesheet" href="../assets/actual-themes.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+  <script src="../scripts/theme-picker.js"></script>
   <style>
     /* Canonical sectioned-sidebar specimen: the sidebar owns only its own
        geometry (sticky full-height rail, scrollable body, pinned footer).
@@ -208,11 +209,7 @@
           </hgroup>
 
           <div class="cluster" style="gap: var(--space-20);">
-            <select class="select sm fit" id="theme-switcher" aria-label="Switch theme">
-              <option value="">System</option>
-              <option value="light">Light</option>
-              <option value="dark">Dark</option>
-            </select>
+            <theme-picker themes=""><select class="select sm fit" aria-label="Switch theme"></select></theme-picker>
             <button class="btn primary" type="button">
               <i class="ti ti-plus" aria-hidden="true"></i>
               New workspace
@@ -318,19 +315,6 @@
   </div>
 
   <script src="../../dist/actual.full.js"></script>
-  <script>
-    const switcher = document.getElementById("theme-switcher");
-
-    if (switcher) {
-      switcher.addEventListener("change", () => {
-        if (switcher.value) {
-          document.documentElement.dataset.theme = switcher.value;
-        } else {
-          document.documentElement.removeAttribute("data-theme");
-        }
-      });
-    }
-  </script>
 </body>
 
 </html>

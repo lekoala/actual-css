@@ -7,6 +7,7 @@
 | Class                     | Kind      | Description                                   |
 | ------------------------- | --------- | --------------------------------------------- |
 | `.choice-card`            | Component | Card-style `<label>` around a native control. |
+| `.chip`                   | Modifier  | Compact pill form: filter chips, tags.        |
 | `.primary` / `.secondary` | Intent    | Accent for the selected state.                |
 
 - Use `.choice-card` on a `<label>` wrapping a native `<input type="radio">` or `<input type="checkbox">`. The input is visually hidden; in browsers without `:has()` it stays visible so selection state never disappears.
@@ -92,6 +93,39 @@ Sizes follow the shared `.sm` and `.lg` typography scale; the check indicator
 follows through its `em` sizing. Padding is density, so use a `.compact` or
 `.spacious` context to change it. Intent classes (`.primary`, `.secondary`) are
 supported on the `.choice-card` element.
+
+## Chips
+
+Add `.chip` for the compact pill form: filter chips, selectable tags, toggle
+pills, multi-select facets. A radio group gives single-choice chips. A leading
+dot turns into the check in a fixed slot, so checking never moves the label.
+Use `.cluster` for a wrapping row. A chip is sized like a control: `.btn` and
+`.input` height, `--control-pad-x` inline padding, `.sm` / `.lg` scale.
+
+```html demo
+<fieldset class="field-group">
+  <legend class="field-label">Fruit</legend>
+  <div class="cluster">
+    <label class="choice-card chip">
+      <input type="checkbox" name="fruit" value="pear" checked />
+      Pear
+    </label>
+    <label class="choice-card chip">
+      <input type="checkbox" name="fruit" value="apple" />
+      Apple
+    </label>
+    <label class="choice-card chip">
+      <input type="checkbox" name="fruit" value="plum" disabled />
+      Plum
+    </label>
+  </div>
+</fieldset>
+```
+
+The dot is `::before`: a full-chip layer clipped to a `circle()` centred on
+the check slot, whose centre is exposed as `--choice-chip-dot`. A theme can
+grow it into a selected fill by widening the clip, as the `material` theme
+does.
 
 ## CSS hooks
 
