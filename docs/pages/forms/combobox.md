@@ -47,7 +47,7 @@ contrast contracts apply to the combobox for free:
 .actual-combobox {
   --cb-bg: var(--surface);
   --cb-color: var(--text);
-  --cb-border-color: var(--border);
+  --cb-border-color: var(--form-invalid-border, var(--border));
   --cb-border-radius: var(--radius);
   --cb-focus-color: var(--focus);
   --cb-muted-color: var(--text-muted);
@@ -57,15 +57,23 @@ contrast contracts apply to the combobox for free:
   --cb-option-min-height: var(--control-size);
 }
 
-.actual-combobox .cb-control:focus-within,
-.actual-combobox .cb-text-control:focus {
-  outline: var(--focus-ring-width) solid var(--focus);
+.actual-combobox :is(.cb-text-control:focus-visible, .cb-control:has(.cb-input:focus-visible)) {
+  border-color: var(--form-invalid-border, var(--cb-border-color));
+  outline: var(--focus-ring-width) solid var(--form-invalid-border, var(--focus));
   outline-offset: calc(var(--focus-ring-width) * -1);
+  box-shadow: none;
 }
 
-.actual-combobox .cb-chip-remove:focus-visible {
-  outline: 2px solid transparent;
-  box-shadow: 0 0 0 2px var(--focus-ring);
+.actual-combobox :is(.cb-text-control[aria-invalid="true"], .cb-control:has([aria-invalid="true"])) {
+  --form-invalid-border: var(--danger);
+}
+
+:where(.actual-combobox) combo-box {
+  border-radius: var(--cb-border-radius);
+}
+
+.actual-combobox :is(.cb-control, .cb-text-control) {
+  border-radius: inherit;
 }
 
 .actual-combobox .cb-chip {
@@ -79,10 +87,13 @@ contrast contracts apply to the combobox for free:
 }
 ```
 
-The control takes the same inset outline as `.input` for any internal focus,
-not just the search input: focus a chip or its remove × and the field outline
-stays, with the local `:focus-visible` indicator on the chip or its × on top.
-Being inset, it needs no adaptation inside `.join`.
+While the search input is focused, the control takes the same inset outline as
+`.input` in place of the library's accent border and outer halo; a focused chip
+or remove × keeps the library's own inner ring. Being inset, the outline needs
+no adaptation inside `.join`: `combo-box` owns the radius at zero specificity,
+so the join gives it the group corners and the visible control inherits them. The invalid rule sets `--form-invalid-border`,
+the hook `.field.danger` and `aria-invalid` already use, so border and outline
+turn danger together.
 
 The same approach works for any widget that exposes a custom-property skin —
 keep the widget's behavior, restyle its tokens through the shared vocabulary.

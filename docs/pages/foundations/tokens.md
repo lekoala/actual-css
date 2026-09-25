@@ -462,9 +462,9 @@ Text controls (`.input`/`.textarea`/`.select`) expose the same lower-edge extens
 
 Alerts expose the same idea on the leading edge instead of the lower one: `--alert-border-inline-start-color` and `--alert-border-inline-start-width` are unset by default and fall back to the regular `--ui-border`, so a theme can turn an alert into a callout with a colored flag on the inline-start side, matching the classic notice pattern, without a per-variant override.
 
-A theme is not limited to the tokens above; it can restate any component-local token under a state selector to change the interaction recipe itself, not just the palette. The `edge` theme does this for focus: the base input recipe (forms/control.css) flips `--control-border` to `--focus` on top of the shared outline + ring, which would stack with a lower-edge accent. Edge instead restores `--control-border` under `:focus-visible` and thickens the accent edge so the edge, not a second ring, carries the focus.
+A theme is not limited to the tokens above; it can restate any component-local token or rule under a state selector to change the interaction recipe itself, not just the palette. The `gradient` theme does this for field focus: it restores a `--focus` border plus an outer `--focus-ring` halo in place of the core inset outline.
 
-Buttons don't consume `--focus-outline` — button.css computes its own ring inline so the color can follow `--btn-focus-color` (intent-aware, unlike the plain `--focus`). It reuses the shared `--focus-ring-width` for the ring thickness and derives the color through `--btn-focus-ring-color` (a `color-mix()` of `--btn-focus-color` when supported, falling back to the shared `--focus-ring`).
+Buttons don't consume `--focus-outline` — button.css draws its own ring of `--focus-ring-width`. A button with an intent (or an authored `--btn-focus-color`) derives the ring color from it through `--btn-focus-ring-color`; a button without one uses the contextual `--focus-ring`, so `.inverted` and a theme-pinned ring reach it.
 
 Rules:
 

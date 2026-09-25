@@ -29,7 +29,7 @@
 - `.join` supports a control nested one wrapper level deep (e.g. a combobox element): the wrapper carries the group corners and primary-edge `z-index`, the inner control inherits the radius, and no widget is named.
 - `.nav-link` works on a `<button>`: UA button chrome is neutralized with `<a>`-identical metrics.
 - `.inverted` sets its own `--focus-ring: var(--surface)`, drawn from its contrast pair instead of the general `--focus`.
-- The `gradient` theme demos the outer-halo field focus; `bootstrap-v6` sets focus tokens only.
+- The `gradient` theme demos the outer-halo field focus; `bootstrap-v6` and `edge` have no field focus override.
 
 ### Fixed
 
@@ -48,10 +48,12 @@
 - A custom `data-theme` on `<html>` kept the default palette's `--*-soft-fg` calibration instead of resetting it, so the same theme resolved a different soft ink on `<html data-theme>` than on a nested island.
 - `.nav-link` hover/current and `.app-nav` hover fill with a tint of their own ink and follow `--ui-fg`, so they read on an `.inverted` bar.
 - `.flyout` owns `color: var(--text)`, like modal and drawer.
+- A field wrapped one level deep in `.join` fills its stretched wrapper (`block-size: 100%`) instead of stopping short of a taller sibling.
+- A `.btn` without an intent draws the contextual `--focus-ring`, so `.inverted` and theme-pinned rings reach it; `--btn-focus-color` defaults to the intent only.
 
 ### Documentation and tooling
 
-- Combobox: the bridge recipe uses the field inset outline, so a combobox inside `.join` needs no adaptation.
+- Combobox: the bridge recipe targets `@lekoala/combobox` 0.5.0, replaces its halo with the field inset outline, reads `--form-invalid-border`, and inherits `.join` corners.
 - `tests/browser/field-focus.test.js` asserts the field outline stays inside the border box (default and `prefers-contrast`) and that `--focus` holds 3:1 on the field surface.
 - Pushing a version tag publishes the GitHub release: `.npmrc` keeps `npm version` on the bare tag format, `bun run release:notes` extracts (and validates) the dated changelog section, and the CI `release` job attaches `dist/`.
 - Theming: a "Replace the palette with my own brand" entry names the tinted neutrals and soft-ink tokens a partial override leaves behind, and points at the minimal recolor set.

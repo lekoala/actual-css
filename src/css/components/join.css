@@ -118,9 +118,12 @@
 /* One wrapper level (e.g. a combobox element around the native control) is
    supported generically — no widget is named here. The wrapper is the flex
    item that receives the corner longhands above; the inner control inherits
-   them. :hover and :focus-within already propagate to the wrapper, so the
-   z-index rules above need no duplication. */
+   them. The wrapper is also what align-items stretches: block-size: 100%
+   resolves against that stretched size, so the field fills it. :hover and
+   :focus-within already propagate to the wrapper, so the z-index rules above
+   need no duplication. */
 .join > * > :is(.input, .textarea, .select) {
+  block-size: 100%;
   border-radius: inherit;
 }
 
