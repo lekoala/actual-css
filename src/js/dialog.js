@@ -326,6 +326,7 @@ export function openDialog(dialog, trigger = null, forcedModal = null) {
   // while doing so; capture the position first and restore it so the page does
   // not jump to the top behind the modal.
   const viewport = dialog.ownerDocument.defaultView;
+  const scrollX = viewport?.scrollX ?? 0;
   const scrollY = viewport?.scrollY ?? 0;
 
   if (modal) {
@@ -336,17 +337,33 @@ export function openDialog(dialog, trigger = null, forcedModal = null) {
     state.modalOpen = false;
   }
 
-  if (scrollY > 0) {
-    viewport?.scrollTo(0, scrollY);
+  if (scrollX !== 0 || scrollY > 0) {
+    viewport?.scrollTo(scrollX, scrollY);
   }
 
   syncModalOpenClass(dialog.ownerDocument);
 }
 
+function handleDialogPointerDown(event) {
+  const dialog = event.currentTarget;
+  const state = dialogMap.get(dialog);
+  if (!state) return;
+
+  // Only a press that starts on the backdrop may dismiss on click. A
+  // text selection started inside the dialog and released over the backdrop
+  // produces a click on <dialog> with outside coordinates, which must not
+  // close (or flash static on) the dialog.
+  state.backdropPress = event.target === dialog && isOutsideDialog(dialog, event);
+}
+
 function handleDialogClick(event) {
   const dialog = event.currentTarget;
+  const state = dialogMap.get(dialog);
+  const backdropPress = state?.backdropPress === true;
+  if (state) state.backdropPress = false;
 
   if (event.target !== dialog || !isOutsideDialog(dialog, event)) return;
+  if (!backdropPress) return;
 
   // A native closedby="any" dialog owns its light dismiss; the runtime only
   // takes over when the author opted in via data-dialog-dismissible (which
@@ -449,12 +466,14 @@ function ensureDialogWired(dialog) {
     restoreFocusTo: null,
     returnValue: "",
     staticTimer: null,
+    backdropPress: false,
   };
 
   // A dialog that is already `open` in the markup is non-modal per spec,
   // whatever data-dialog-modal says; infer semantics from its actual state.
   syncDialogSemantics(dialog, state, dialog.open ? isModalOpen(dialog) : isModal(dialog));
 
+  dialog.addEventListener("pointerdown", handleDialogPointerDown, { signal: controller.signal });
   dialog.addEventListener("click", handleDialogClick, { signal: controller.signal });
   dialog.addEventListener("submit", handleDialogSubmit, { signal: controller.signal });
   dialog.addEventListener("cancel", handleDialogCancel, { signal: controller.signal });

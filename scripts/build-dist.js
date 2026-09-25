@@ -1,7 +1,11 @@
 /*
- * Package distribution builder. Bundles src/css entrypoints into dist/ —
- * the npm-published surface. Demo-only assets (the theme palettes bundle)
- * are built separately by build-themes.js into demo/assets/.
+ * Package distribution builder. Bundles the full framework into dist/ — the
+ * compiled half of the package contract (bare `actual-css` and
+ * `actual-css/full`). The core is deliberately not compiled on its own:
+ * composing adopters import `actual-css/css` sources, and a standalone core
+ * artifact would reopen the alias `./core` was removed to avoid. Its size
+ * budget is measured in memory by build-size.js. Demo-only assets (the theme
+ * palettes bundle) are built separately by build-themes.js into demo/assets/.
  *
  *   bun run build:dist
  */
@@ -13,11 +17,10 @@ import { bundledCssIssues, inlineImports, minifyCss } from "../src/tooling/css-b
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, "..");
-const ENTRY = join(ROOT, "src", "css", "actual.css");
 const FULL_ENTRY = join(ROOT, "src", "css", "actual.full.css");
 const DIST = join(ROOT, "dist");
 
-async function build({ entry = ENTRY, minify, naming }) {
+async function build({ entry = FULL_ENTRY, minify, naming }) {
   const css = await inlineImports(entry);
   const code = minify ? minifyCss(css) : css;
   const outPath = join(DIST, naming);
@@ -26,7 +29,7 @@ async function build({ entry = ENTRY, minify, naming }) {
 }
 
 async function verifyDist(distDir) {
-  const distFiles = ["actual.css", "actual.min.css", "actual.full.css", "actual.full.min.css"];
+  const distFiles = ["actual.full.css", "actual.full.min.css"];
   let ok = true;
 
   for (const file of distFiles) {
@@ -65,30 +68,12 @@ async function main() {
     }
   }
 
-  const devPath = await build({ minify: false, naming: "actual.css" });
-  const minPath = await build({ minify: true, naming: "actual.min.css" });
-  const fullDevPath = await build({
-    entry: FULL_ENTRY,
-    minify: false,
-    naming: "actual.full.css",
-  });
-  const fullMinPath = await build({
-    entry: FULL_ENTRY,
-    minify: true,
-    naming: "actual.full.min.css",
-  });
+  const fullDevPath = await build({ minify: false, naming: "actual.full.css" });
+  const fullMinPath = await build({ minify: true, naming: "actual.full.min.css" });
 
-  const [devStat, minStat, fullDevStat, fullMinStat] = await Promise.all([
-    stat(devPath),
-    stat(minPath),
-    stat(fullDevPath),
-    stat(fullMinPath),
-  ]);
-  const ratio = ((1 - minStat.size / devStat.size) * 100).toFixed(1);
+  const [fullDevStat, fullMinStat] = await Promise.all([stat(fullDevPath), stat(fullMinPath)]);
   const fullRatio = ((1 - fullMinStat.size / fullDevStat.size) * 100).toFixed(1);
 
-  console.log(`Built ${devPath} (${formatBytes(devStat.size)})`);
-  console.log(`Built ${minPath} (${formatBytes(minStat.size)}) - ${ratio}% smaller`);
   console.log(`Built ${fullDevPath} (${formatBytes(fullDevStat.size)})`);
   console.log(`Built ${fullMinPath} (${formatBytes(fullMinStat.size)}) - ${fullRatio}% smaller`);
 

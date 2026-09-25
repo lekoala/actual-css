@@ -1,5 +1,5 @@
 import { expect, test } from "bun:test";
-import { firstItem, itemForKey, lastItem, nextItem } from "../src/js/keys.js";
+import { firstItem, itemForKey, lastItem, nextItem, shouldIgnoreKey } from "../src/js/keys.js";
 
 const items = ["a", "b", "c"];
 
@@ -62,4 +62,14 @@ test("empty collections and unrelated keys return null", () => {
 test("an unknown current item enters from the movement edge", () => {
   expect(itemForKey(items, "missing", "ArrowRight")).toBe("a");
   expect(itemForKey(items, "missing", "ArrowLeft")).toBe("c");
+});
+
+test("shouldIgnoreKey yields to IME composition and browser modifiers, not shift", () => {
+  expect(shouldIgnoreKey({ isComposing: true })).toBe(true);
+  expect(shouldIgnoreKey({ ctrlKey: true })).toBe(true);
+  expect(shouldIgnoreKey({ altKey: true })).toBe(true);
+  expect(shouldIgnoreKey({ metaKey: true })).toBe(true);
+  // Shift+Tab carries focus semantics the caller handles itself.
+  expect(shouldIgnoreKey({ shiftKey: true })).toBe(false);
+  expect(shouldIgnoreKey({})).toBe(false);
 });

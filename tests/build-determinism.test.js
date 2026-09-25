@@ -23,15 +23,15 @@ import { afterAll, expect, test } from "bun:test";
 import { mkdtemp, readFile, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { buildBundle, ENTRY } from "../scripts/build-js.js";
+import { buildBundle, FULL_ENTRY } from "../scripts/build-js.js";
 
 const dirs = [];
 
 async function buildOnce() {
   const dir = await mkdtemp(join(tmpdir(), "actual-build-"));
   dirs.push(dir);
-  await buildBundle({ entrypoint: ENTRY, naming: "actual.[ext]", outdir: dir });
-  return readFile(join(dir, "actual.js"), "utf8");
+  await buildBundle({ entrypoint: FULL_ENTRY, naming: "actual.full.[ext]", outdir: dir });
+  return readFile(join(dir, "actual.full.js"), "utf8");
 }
 
 afterAll(async () => {

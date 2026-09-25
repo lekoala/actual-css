@@ -69,9 +69,12 @@ function siteRoot(fromOutput) {
   return value ? `${value}/` : "";
 }
 
+// rewriteLinks re-attaches the fragment, so only the path is resolved here;
+// check-docs already accepts (and verifies) `page.md#anchor` links.
 function resolveSiteLink(fromFile, href) {
-  if (!href.endsWith(".md")) return null;
-  const target = resolve(dirname(fromFile), href);
+  const [path] = href.split("#");
+  if (!path.endsWith(".md")) return null;
+  const target = resolve(dirname(fromFile), path);
   if (!target.startsWith(PAGES) || !existsSync(target)) return null;
 
   const from = join(SITE, relative(PAGES, fromFile).replace(/\.md$/, ".html"));

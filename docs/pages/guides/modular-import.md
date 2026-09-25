@@ -1,19 +1,26 @@
 # Modular imports
 
-Actual CSS ships one minimal core (`actual-css`) and one all-in entrypoint (`actual-css/full`). Projects can also compose the framework from family manifests or individual modules.
+Actual CSS has two kinds of entrypoint. Without `/css`, you get a compiled artifact ready to serve. With `/css`, you compose the sources.
 
 ## Entrypoints
 
-```css
-@import "actual-css";        /* minimal core */
-@import "actual-css/full";   /* complete framework */
+```text
+Composable source CSS (recommended)
+  actual-css/css             core
+  actual-css/css/<family>    one family, e.g. css/layout, css/forms/all
+  actual-css/css/<family>/*  one module, e.g. css/components/button
+  actual-css/css/full        every family, as source
+
+Zero-config distribution
+  actual-css                 complete compiled framework
+  actual-css/full            the same bundle, named explicitly
 ```
 
-`actual-css` contains the shared baseline: reset, tokens, theme, document defaults, intents, universal variants, focus, and print.
+`actual-css/css` contains the shared baseline: reset, tokens, theme, document defaults, intents, universal variants, focus, and print.
 
 It contains no typography, layout, forms, components, effects, or utilities.
 
-`actual-css/full` starts from the core and adds every family in cascade order:
+The full framework starts from the core and adds every family in cascade order:
 
 ```text
 core → typography → layout → forms → components → effects → utilities
@@ -26,6 +33,46 @@ The core provides a visible `:focus` outline as the compatibility baseline. Mode
 Components may enhance or replace that treatment in interactive states, but their base styles must not cancel the shared fallback.
 
 When an interactive state replaces the outline, it must preserve a visible focus indicator in forced-colors, either with an outline-based fallback or by keeping the replacement out of forced-colors.
+
+## Start from the full entry
+
+Deleting is easier than adding, and it keeps the cascade order right. Copy the
+package's full entry into your project, rewrite its relative imports to
+package paths, then delete what you do not need:
+
+- CSS: `src/css/actual.full.css`. Prefix each import with `actual-css/css/`
+  and drop `.css` and `/index`; `./actual.css` is `actual-css/css`. To go below
+  family level, replace a family line with the imports of its `index.css`,
+  rewritten the same way.
+- JS: `src/js/full.js`. Prefix each import with `actual-css/js/` and drop
+  `.js`; `./index.js` is `actual-css/js`.
+
+```css
+/* app/index.css — actual.full.css, rewritten, components expanded and pruned */
+@import "actual-css/css";
+@import "actual-css/css/typography";
+@import "actual-css/css/layout";
+@import "actual-css/css/forms/all";
+@import "actual-css/css/components/button";
+@import "actual-css/css/components/close";
+@import "actual-css/css/components/card";
+@import "actual-css/css/components/modal";
+@import "actual-css/css/utilities";
+```
+
+```js
+// app/index.js — full.js, rewritten and pruned
+import "actual-css/js/flyout";
+import "actual-css/js/dialog";
+import "actual-css/js/dismiss";
+import "actual-css/js/tooltip";
+import "actual-css/js";
+```
+
+JS modules import what they depend on. CSS modules do not, and three are
+shared: keep `components/close` with modal, drawer, alert, or a removable
+badge; `components/bleed` with a `.bleed` child of card, drawer, or accordion;
+`components/spinner` with `components/busy`.
 
 ## Family manifests
 

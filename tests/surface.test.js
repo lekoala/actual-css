@@ -2,7 +2,12 @@ import { afterAll, afterEach, expect, test } from "bun:test";
 import { cleanupDOM, click, mockRect, nextMicrotask, setupDOM } from "./helpers/dom.js";
 import { nextFrame } from "./helpers/layout.js";
 
-// The transport no longer uses [hidden]; .is-open is the lifecycle state.
+// The open set is the lifecycle state; .is-open is only its visual
+// projection, so a class morph must not orphan the Escape entry, tracking,
+// or open set. Deliberate tradeoff: the set can still diverge from what is
+// painted (external hidePopover(), popover attribute removed) — only
+// :popover-open cannot. A trigger click then closes an already-invisible
+// surface first; the next click reopens normally.
 const isOpen = (el) => el.classList.contains("is-open");
 
 setupDOM();
@@ -86,6 +91,27 @@ test("closeSurface hides a menu and resets trigger state", () => {
 
   expect(isOpen(menu)).toBe(false);
   expect(menu.style.display).toBe("");
+  expect(menu.classList.contains("is-open")).toBe(false);
+  expect(trigger.getAttribute("aria-expanded")).toBe("false");
+});
+
+test("isSurfaceOpen survives an external class morph and still closes cleanly", () => {
+  setBody(
+    '<button aria-controls="menu" aria-expanded="false">Open</button><div id="menu" class="flyout"></div>',
+  );
+  const trigger = document.querySelector("button");
+  const menu = document.getElementById("menu");
+  mockPlacement(trigger, menu);
+  openSurface(menu, { trigger });
+
+  // A morph (idiomorph, Turbo) touching classes must not orphan the Escape
+  // entry, tracking, or open set.
+  menu.classList.remove("is-open");
+  expect(isSurfaceOpen(menu)).toBe(true);
+
+  closeSurface(menu);
+
+  expect(isSurfaceOpen(menu)).toBe(false);
   expect(menu.classList.contains("is-open")).toBe(false);
   expect(trigger.getAttribute("aria-expanded")).toBe("false");
 });

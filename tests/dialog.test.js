@@ -17,6 +17,14 @@ async function loadDialog(html) {
   await import(`../src/js/dialog.js?test=${++importId}`);
 }
 
+// A genuine backdrop press: pointerdown on the backdrop, then click.
+function pressBackdrop(dialog, coords) {
+  dialog.dispatchEvent(
+    new MouseEvent("pointerdown", { bubbles: true, cancelable: true, ...coords }),
+  );
+  click(dialog, coords);
+}
+
 afterEach(() => {
   cleanupDOM();
 });
@@ -418,9 +426,28 @@ test("dismissible backdrop clicks close the dialog", async () => {
   mockRect(dialog, { x: 20, y: 20, width: 200, height: 120 });
 
   click(trigger);
-  click(dialog, { clientX: 0, clientY: 0 });
+  pressBackdrop(dialog, { clientX: 0, clientY: 0 });
 
   expect(dialog.open).toBe(false);
+});
+
+test("a text selection released over the backdrop does not close the dialog", async () => {
+  await loadDialog(
+    '<button commandfor="prefs" command="show-modal">Open</button><dialog id="prefs" data-dialog-dismissible><p>Selectable text</p></dialog>',
+  );
+  const trigger = document.querySelector("button");
+  const dialog = document.getElementById("prefs");
+  mockRect(dialog, { x: 20, y: 20, width: 200, height: 120 });
+
+  click(trigger);
+  // Press starts inside the dialog (selection), release lands on the backdrop:
+  // the resulting click targets <dialog> with outside coordinates.
+  dialog.dispatchEvent(
+    new MouseEvent("pointerdown", { bubbles: true, cancelable: true, clientX: 60, clientY: 60 }),
+  );
+  click(dialog, { clientX: 0, clientY: 0 });
+
+  expect(dialog.open).toBe(true);
 });
 
 test("non-dismissible dialog still closes on Escape cancel requests", async () => {
@@ -449,7 +476,7 @@ test("non-dismissible dialog backdrop click stays open with static feedback", as
   mockRect(dialog, { x: 20, y: 20, width: 200, height: 120 });
 
   click(trigger);
-  click(dialog, { clientX: 0, clientY: 0 });
+  pressBackdrop(dialog, { clientX: 0, clientY: 0 });
 
   expect(dialog.open).toBe(true);
   expect(dialog.classList.contains("is-static")).toBe(true);

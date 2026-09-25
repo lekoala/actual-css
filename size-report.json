@@ -9,13 +9,9 @@
     "brotli": 18196
   },
   "js": {
-    "core": {
-      "bytes": 5945,
-      "brotli": 2243
-    },
     "full": {
-      "bytes": 57784,
-      "brotli": 16806
+      "bytes": 58498,
+      "brotli": 17006
     }
   },
   "fileCount": 111,

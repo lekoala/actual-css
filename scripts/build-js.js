@@ -7,7 +7,9 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, "..");
 const DIST = join(ROOT, "dist");
 
-export const ENTRY = join(ROOT, "src", "js", "index.js");
+// Only the full runtime is compiled. Composing adopters bundle their own entry
+// from `actual-css/js` (the loader) and `actual-css/js/*` sources; a compiled
+// loader alone would be a second copy of the registries next to those sources.
 export const FULL_ENTRY = join(ROOT, "src", "js", "full.js");
 
 function formatBytes(bytes) {
@@ -42,22 +44,14 @@ async function build() {
     }
   }
 
-  const bundles = [
-    { entry: ENTRY, naming: "actual.[ext]" },
-    { entry: FULL_ENTRY, naming: "actual.full.[ext]" },
-  ];
+  await buildBundle({ entrypoint: FULL_ENTRY, naming: "actual.full.[ext]" });
 
-  for (const { entry, naming } of bundles) {
-    await buildBundle({ entrypoint: entry, naming });
+  const path = join(DIST, "actual.full.js");
+  const st = await stat(path);
+  const code = await new Response(Bun.file(path)).bytes();
+  const brotli = brotliCompressSync(code).length;
 
-    const outName = naming.replace(".[ext]", ".js");
-    const path = join(DIST, outName);
-    const st = await stat(path);
-    const code = await new Response(Bun.file(path)).bytes();
-    const brotli = brotliCompressSync(code).length;
-
-    console.log(`Built ${outName} (${formatBytes(st.size)}) — brotli ${formatBytes(brotli)}`);
-  }
+  console.log(`Built actual.full.js (${formatBytes(st.size)}) — brotli ${formatBytes(brotli)}`);
 }
 
 if (import.meta.main) {

@@ -14,42 +14,46 @@ prefix transform.
 npm install actual-css
 ```
 
-Import the full framework in your CSS:
+### Import what you use
+
+Copy the package's `src/css/actual.full.css` into your project as your entry,
+rewrite its relative imports to package paths, and delete what you do not need
+— see [Start from the full entry](docs/pages/guides/modular-import.md#start-from-the-full-entry):
+
+```css
+@import "actual-css/css";                   /* core */
+@import "actual-css/css/layout";
+@import "actual-css/css/forms/all";
+@import "actual-css/css/components/button";
+@import "actual-css/css/components/card";
+@import "actual-css/css/utilities";
+```
+
+`actual-css/css` is the core (reset, tokens, theme, base, intents, variants,
+focus, print). Family manifests (`css/layout`, `css/components`,
+`css/typography`, `css/effects`, `css/utilities`) and their modules map
+one-to-one to `src/css/`; `css/forms` is the exception — it points at the
+native-controls base, with `css/forms/all` exposing the complete Forms family.
+See the [modular import guide](docs/pages/guides/modular-import.md#family-manifests)
+for the full map.
+
+Flatten the composition for production with
+`npx actual-css bundle src/app.css --out public/app.css --minify`. The CLI
+resolves package subpaths and relative files, then inlines them without
+transpiling modern CSS.
+
+### Full bundle (zero-config)
+
+The bare `actual-css` entrypoint and `actual-css/full` both resolve to the
+complete compiled framework — useful for prototypes, CDN usage, or when bundle
+size is not worth optimizing:
 
 ```css
 @import "actual-css/full";
 ```
 
-`actual-css/full` ships every functional family. The bare `actual-css` entrypoint is the minimal core (reset, tokens, theme, base, intents, variants, focus, print).
-
-Or import only the pieces you use:
-
-```css
-@import "actual-css/css";
-@import "actual-css/css/layout";
-@import "actual-css/css/components/button";
-@import "actual-css/css/components/card";
-@import "actual-css/css/forms";
-@import "actual-css/css/components/flyout";
-@import "actual-css/css/utilities";
-```
-
-`actual-css/css` is the minimal core. Family manifests (`css/layout`,
-`css/components`, `css/typography`, `css/effects`, `css/utilities`) and
-their modules map one-to-one to `src/css/`; `css/forms` is the exception —
-it points at the native-controls base, with `css/forms/all` exposing the
-complete Forms family. See the
-[modular import guide](docs/pages/guides/modular-import.md) for the full map.
-
-For a flattened custom bundle, import the source entrypoints you want from
-`actual-css/css` and run `npx actual-css bundle src/app.css --out public/app.css --minify`.
-The CLI resolves package subpaths and relative files, then inlines them without
-transpiling modern CSS.
-
-You can also use the compiled full bundle directly:
-
 ```html
-<link rel="stylesheet" href="actual.full.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/actual-css@0.10/dist/actual.full.min.css">
 ```
 
 ## Usage
@@ -108,8 +112,8 @@ The family manifests are the module catalog: `core`, `layout`, `typography`,
 `forms`, `components`, `effects`, and `utilities` under `src/css/`, each with
 an `index.css` manifest and per-module files. Import a manifest to get the
 family, or a single file for one module. See the
-[modular import guide](docs/pages/guides/modular-import.md) for the full map
-of module names to import paths.
+[modular import guide](docs/pages/guides/modular-import.md#family-manifests)
+for the full map of module names to import paths.
 
 ## JavaScript enhancers
 
@@ -117,32 +121,38 @@ Some components can be enhanced with JavaScript: dialog/drawer, flyout, tooltip,
 
 Presentation (`class`) and behaviour (`data-enhance`) are separate layers — import any primitive independently to build custom widgets. See [enhancement contract](docs/design-notes/enhancement-contract.md) and [widget primitives](docs/design-notes/widget-primitives.md).
 
-Use the full module:
+Two ways to load it — pick one, never both, since each copy owns its own
+registries:
 
-```html
-<script src="actual.full.js" type="module"></script>
-```
+* **Full runtime, zero-config** — every built-in enhancer, compiled:
 
-Or import only the enhancers you need:
+  ```html
+  <script src="https://cdn.jsdelivr.net/npm/actual-css@0.10/dist/actual.full.js" type="module"></script>
+  ```
 
-```js
-import "actual-css/js/dialog";
-import "actual-css/js/flyout";
-import "actual-css/js/filter";
-import "actual-css/js/mask";
-import "actual-css/js/tooltip";
-```
+* **Your own build** — copy the package's `src/js/full.js` as your entry,
+  rewrite its imports to package paths, keep the enhancers you need, and
+  bundle it with your app:
 
-The package does not maintain separate partial bundles. Modular entrypoints map to source files, so each project can compose the framework shape it needs. To customize the full runtime, comment the imports you do not want in `src/js/full.js` and rebuild the JavaScript bundle. JavaScript modules are safe to import during server-side rendering; outside a browser, registration is a no-op.
+  ```js
+  import "actual-css/js";          // enhancement-manifest loader (optional)
+  import "actual-css/js/dialog";
+  import "actual-css/js/flyout";
+  import "actual-css/js/tooltip";
+  ```
 
-For project-specific behavior, use `actual-css/js/enhance` and the small input helpers rather than patching built-in modules. See [Progressive Enhancements](docs/pages/enhancements/overview.md) for custom filters, textarea autogrow, ajax forms, and htmx-like patterns.
+Modular entrypoints map to source files and import `@lekoala/floating` as a bare specifier, so they need a bundler or an import map. JavaScript modules are safe to import during server-side rendering; outside a browser, registration is a no-op.
+
+For project-specific behavior, use `actual-css/js/enhance` and the small input helpers rather than patching built-in modules. See the [progressive enhancement guide](docs/pages/guides/progressive-enhancement.md#extending-the-runtime) for custom filters, textarea autogrow, ajax forms, and htmx-like patterns.
 
 ## Distribution
 
-* `dist/actual.css` — readable core CSS.
-* `dist/actual.min.css` — the core, minified for production.
 * `dist/actual.full.css` — readable full-bundle CSS (every family).
-* `dist/actual.full.min.css` — the full bundle, minified for production.
+* `dist/actual.full.min.css` — the full bundle, minified (`actual-css`, `actual-css/full`).
+* `dist/actual.full.js` — the complete runtime, every built-in enhancer registered.
+
+Only the full framework is compiled. To compose, import the sources:
+`actual-css/css/*` for CSS, `actual-css/js/*` for JavaScript.
 
 Modern syntax such as `light-dark()`, `color-mix()`, `@container`, `:has()`, `100dvh`, and `100vi` is preserved in the distributed files.
 

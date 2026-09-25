@@ -12,8 +12,8 @@ Actual CSS uses a small public grammar: `.component [intent] [variant] [size] [m
 
 `package.json#exports` is the canonical package surface.
 
-- `actual-css` — the minimal core: tokens, theme contract, reset, base elements, and universal variants. Components and layout primitives are NOT included.
-- `actual-css/full` — the complete framework: core plus every component, form, layout, typography, effect, and utility family.
+- `actual-css/css` — the source core, the recommended starting point: tokens, theme contract, reset, base elements, and universal variants. Components and layout primitives are NOT included; add them with `actual-css/css/<family>` or `actual-css/css/<family>/<module>`.
+- `actual-css` / `actual-css/full` — the complete compiled framework, for zero-config and CDN use: core plus every component, form, layout, typography, effect, and utility family.
 - `actual-css/js` — the enhancement-loader entry only: it watches `data-enhance-modules` manifest blocks and imports the declared enhancers on demand.
 - `actual-css/js/full` — the complete runtime with all built-in enhancers pre-registered.
 - `actual-css/reserved-classes.json` — machine-readable list of the framework-owned class namespace. Use it to check whether a class belongs to Actual CSS and to validate claimed framework classes; application-specific classes are expected to exist outside this manifest.
@@ -53,7 +53,7 @@ including `enhance`, `surface`, `floating`, `focus-group`, `keys`, `input`,
   on their component; alone they are inert.
 
 See [naming](docs/design-notes/naming.md) and
-[utilities non-goals](docs/pages/utilities/overview.md).
+[utilities non-goals](docs/pages/utilities/overview.md#non-goals).
 
 ## Choosing a page shell
 

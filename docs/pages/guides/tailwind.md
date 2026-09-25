@@ -25,17 +25,29 @@ The layered import is the cleanest way to keep both stylesheets during the
 migration:
 
 ```css
+/* Tailwind v4 emits its own layers (theme, base, components, utilities),
+   so declare the order explicitly: Actual sits above Tailwind components
+   but below Tailwind utilities during the migration. */
+@layer theme, base, components, actual, utilities;
+
 @import "tailwind.css";        /* your compiled Tailwind output */
-@layer actual;
 @import "actual-css/full" layer(actual);
+
 /* Unlayered project overrides stay on top */
 @import "app.css";
 ```
 
-The full import places every Actual rule in a single `actual` layer, so
-unlayered Tailwind output and project CSS keep precedence while the migration
-runs. See [Cascade layer strategy](https://github.com/lekoala/actual-css/blob/master/docs/design-notes/cascade-layer.md) for the
-limitations of the approach.
+The full import places every Actual rule in a single `actual` layer. The
+explicit `@layer` order is what keeps Tailwind utilities above Actual while
+the migration runs — not the unlayered status of either output. See
+[Cascade layer strategy](https://github.com/lekoala/actual-css/blob/master/docs/design-notes/cascade-layer.md)
+for the limitations of the approach.
+
+Layers do not scope custom properties: both frameworks define
+`--font-sans`, `--font-mono`, `--font-weight-*`, and `--radius-sm` /
+`--radius-lg`. With `actual` after `theme`, `font-sans` takes Actual's font
+stack and `rounded-lg` resolves to Actual's `--radius-lg`. Expect these
+token collisions on migrated screens until Tailwind is removed.
 
 Do not assume that loading both complete stylesheets is automatically safe.
 

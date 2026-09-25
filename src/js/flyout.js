@@ -1,5 +1,6 @@
 import { registerEnhancement } from "./enhance.js";
 import { focusFirstDescendant } from "./focus.js";
+import { shouldIgnoreKey } from "./keys.js";
 import { connectMenu, focusFirstMenuItem, focusLastMenuItem } from "./menu.js";
 import { closeSurface, isSurfaceOpen, openSurface, retainSurface } from "./surface.js";
 
@@ -24,6 +25,13 @@ function panelFor(trigger) {
 
 function isMenuFlyout(panel) {
   return panel.matches("menu") || panel.classList.contains("menu");
+}
+
+// ARIA-wise only [role="menu"] is a menu: <menu> carries the implicit list
+// role and .menu is a visual class. aria-haspopup="menu" must follow the
+// role, not the tag or class.
+function isAriaMenu(panel) {
+  return panel.getAttribute("role") === "menu";
 }
 
 function openFlyout(panel, trigger) {
@@ -57,6 +65,7 @@ function onTriggerClick(e) {
 
 function onTriggerKeydown(e) {
   const trigger = e.currentTarget;
+  if (shouldIgnoreKey(e)) return;
   const state = triggerMap.get(trigger);
   if (!state) return;
   const panel = resolvePanel(trigger, state);
@@ -153,7 +162,7 @@ function resolvePanel(trigger, state) {
       close: (menu) => closeSurface(menu),
     });
   }
-  if (!trigger.hasAttribute("aria-haspopup") && isMenuFlyout(panel)) {
+  if (!trigger.hasAttribute("aria-haspopup") && isAriaMenu(panel)) {
     trigger.setAttribute("aria-haspopup", "menu");
   }
 

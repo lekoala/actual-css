@@ -67,6 +67,21 @@ let statusTimer;
 let statusGeneration = 0;
 let viewportTracker = null;
 const statusHomes = new WeakMap();
+// Reference kept only while the bar is temporarily mounted in a dialog. If
+// that dialog is removed from the DOM (htmx/Turbo swap), document lookup can
+// no longer find the bar — this reference lets the next status()/clear()
+// restore it to its home instead of silently no-opping forever.
+let mountedStatusTarget = null;
+
+function healDetachedStatusTarget() {
+  if (!mountedStatusTarget || mountedStatusTarget.isConnected) return;
+  if (!statusHomes.has(mountedStatusTarget)) {
+    mountedStatusTarget = null;
+    return;
+  }
+  restoreStatusTarget(mountedStatusTarget);
+  mountedStatusTarget = null;
+}
 
 function statusTarget() {
   if (typeof document === "undefined") return null;
@@ -83,6 +98,7 @@ function restoreStatusTarget(target) {
     parent.insertBefore(target, reference);
   }
   statusHomes.delete(target);
+  if (mountedStatusTarget === target) mountedStatusTarget = null;
 }
 
 function mountStatusTarget(target, source) {
@@ -97,6 +113,7 @@ function mountStatusTarget(target, source) {
     statusHomes.set(target, { parent: target.parentNode, nextSibling: target.nextSibling });
   }
   dialog.append(target);
+  mountedStatusTarget = target;
 }
 
 // The bar is fixed to the layout viewport, so the mobile software keyboard
@@ -149,6 +166,7 @@ function clearIntentClasses(target) {
 }
 
 export function status(message, options = {}) {
+  healDetachedStatusTarget();
   const target = statusTarget();
   if (!target || message == null) return;
 
@@ -186,6 +204,7 @@ export function status(message, options = {}) {
 
 status.clear = function clear() {
   clearTimeout(statusTimer);
+  healDetachedStatusTarget();
 
   const target = statusTarget();
   if (!target) {

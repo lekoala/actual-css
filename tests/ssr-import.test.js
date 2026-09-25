@@ -11,6 +11,9 @@ afterEach(() => {
 test("javascript modules import without a DOM", async () => {
   cleanupDOM();
 
+  // The query forces a fresh evaluation of every module without a DOM, so a
+  // top-level document access fails here instead of hiding behind the shared
+  // module cache already warmed with happy-dom.
   for (const exportPath of publicJsExports()) {
     const module = sourceModuleForJsExport(exportPath);
     await import(`../src/js/${module}.js?ssr=${++importId}`);

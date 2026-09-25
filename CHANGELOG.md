@@ -11,6 +11,10 @@
 - The dialog corner applies to a `.close` that is a direct child of the dialog, of its `form` or `header`, or of a `form` inside that header.
 - `getSurfaceAutoClose` is removed from `surface.js`: it had no caller, and the code that opens a surface passes its own `autoClose`.
 - `.column-span-1…12` and `.column-start-1…12` are replaced by the `--column-span` / `--column-start` hooks on each `.column-layout` child.
+- The bare `actual-css` entrypoint resolves to the complete compiled framework, like `actual-css/full`, `style`, `unpkg`, and `jsdelivr`; import `actual-css/css` for the core alone.
+- `package.json#main` is removed.
+- `dist/actual.css` and `dist/actual.min.css` are no longer built or published; compose the core from `actual-css/css`.
+- `dist/actual.js` (the compiled loader alone) is no longer built or published; bundle your own entry from `actual-css/js` and `actual-css/js/*`.
 
 ### Added
 
@@ -22,6 +26,13 @@
 
 ### Fixed
 
+- `dialog.js` only backdrop-dismisses when the press started on the backdrop: a text selection released over the backdrop no longer closes (or shakes) the dialog.
+- `dialog.js` restores the horizontal scroll position on open, not just the vertical one.
+- `tab.js`, `focus-group.js`, `menu.js`, and the flyout trigger ignore IME-composed and ctrl/alt/meta-modified keys; `escape.js` ignores composition too.
+- `status.js` restores its bar when the host dialog was removed from the DOM (htmx/Turbo swap): the next `status()` heals instead of no-opping forever.
+- `tooltip.js` resynchronizes shorthand `data-tooltip` text on every show, so a "Copy" → "Copied!" update displays without rewiring.
+- The text of a visible shorthand tip updates on the next show, never mid-flight.
+- `flyout.js` sets `aria-haspopup="menu"` only for a true `role="menu"` panel: `<menu>` carries the implicit list role.
 - `dialog.js` respects `closedby="none"` on `cancel` when `HTMLDialogElement.closedBy` is unavailable, while explicit close requests still work.
 - `dialog.js` restores generated ARIA attributes, title IDs, and rewritten `closedby` values on disconnect without overwriting author changes.
 - A last `.bleed` child of an accordion panel had square corners over the rounded `.separated` item or the group's last item.
@@ -43,6 +54,9 @@
 - Progressive enhancement guide: built-in `data-*` behaviors expose no `refresh()`; insert the element with its attribute set.
 - `utilities/extra.css` header no longer calls extra utilities non-API.
 - `skills/actual-css/`: a copyable starter agent skill for building with Actual CSS, shipped in the package and pointed to from the README and `llms.txt`.
+- Install docs lead with modular source imports; the full bundle is the zero-config and CDN option.
+- Modular import guide: "Start from the full entry" copies `actual.full.css` / `full.js` into the app and prunes them, and names the three shared CSS modules (`close`, `bleed`, `spinner`).
+- Tailwind v4 guide: explicit layer order plus the `--font-sans` / `--font-mono` / `--font-weight-*` / `--radius-*` token collisions.
 
 
 ## [0.9.2] - 2026-09-22

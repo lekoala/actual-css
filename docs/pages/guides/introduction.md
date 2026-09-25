@@ -30,37 +30,29 @@ ARIA and native HTML, and per-widget configuration uses self-describing
 npm install actual-css
 ```
 
-Import the full framework in your CSS:
+Import what you use. The simplest start is the package's full entry, copied
+into your project and pruned — see
+[Start from the full entry](modular-import.md#start-from-the-full-entry):
 
 ```css
-@import "actual-css/full";
-```
-
-`actual-css/full` ships every functional family. The bare `actual-css` entrypoint
-is the minimal core (reset, tokens, theme, base, intents, variants, focus,
-print).
-
-Or compose only the pieces you use:
-
-```css
-@import "actual-css/css";
+@import "actual-css/css";                   /* core */
 @import "actual-css/css/layout";
+@import "actual-css/css/forms/all";
 @import "actual-css/css/components/button";
 @import "actual-css/css/components/card";
-@import "actual-css/css/forms";
-@import "actual-css/css/components/flyout";
 @import "actual-css/css/utilities";
 ```
 
-`actual-css/css` is the minimal core. Family manifests (`css/layout`,
-`css/forms`, `css/components`, `css/typography`, `css/effects`,
-`css/utilities`) and their modules map one-to-one to `src/css/`. See the
-[modular import guide](modular-import.md) for the full map.
+`actual-css/css` is the core (reset, tokens, theme, base, intents, variants,
+focus, print). Each family and module is its own import; the
+[modular import guide](modular-import.md) has the full map.
 
-You can also use the compiled full bundle directly:
+For zero-config use — prototypes, CDN, or when bundle size is not worth
+optimizing — the bare `actual-css` entrypoint and `actual-css/full` both resolve
+to the complete compiled framework:
 
 ```html
-<link rel="stylesheet" href="actual.full.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/actual-css@0.10/dist/actual.full.min.css">
 ```
 
 The package does not maintain separate partial bundles. Modular entrypoints map

@@ -155,6 +155,8 @@ it("dismissible backdrop click closes the dialog", async () => {
     await settle();
     const state = await evalIn(`(() => {
       const d = document.getElementById('dlg-dismissible');
+      // A genuine backdrop press: pointerdown on the backdrop, then click.
+      d.dispatchEvent(new MouseEvent('pointerdown', { bubbles: true, cancelable: true, clientX: 5, clientY: 5 }));
       d.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, clientX: 5, clientY: 5 }));
       return { open: d.open };
     })()`);
@@ -169,6 +171,8 @@ it("non-dismissible backdrop click stays open with static feedback", async () =>
     await settle();
     const state = await evalIn(`(() => {
       const d = document.getElementById('dlg-nondismiss');
+      // A genuine backdrop press: pointerdown on the backdrop, then click.
+      d.dispatchEvent(new MouseEvent('pointerdown', { bubbles: true, cancelable: true, clientX: 5, clientY: 5 }));
       d.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, clientX: 5, clientY: 5 }));
       return { open: d.open, staticClass: d.classList.contains('is-static') };
     })()`);
@@ -385,12 +389,10 @@ it("drawer: scroll preserved, close button and Escape close, backdrop gated by d
     state = await evalIn(`(() => {
       const d = document.getElementById('drawer');
       const rect = d.getBoundingClientRect();
-      d.dispatchEvent(new MouseEvent('click', {
-        bubbles: true,
-        cancelable: true,
-        clientX: rect.right + 1,
-        clientY: rect.top + 1,
-      }));
+      const press = { bubbles: true, cancelable: true, clientX: rect.right + 1, clientY: rect.top + 1 };
+      // A genuine backdrop press: pointerdown on the backdrop, then click.
+      d.dispatchEvent(new MouseEvent('pointerdown', press));
+      d.dispatchEvent(new MouseEvent('click', press));
       return { open: d.open, staticClass: d.classList.contains('is-static') };
     })()`);
     expect(state.open).toBe(true);

@@ -17,7 +17,7 @@
  */
 
 import { registerEnhancement } from "./enhance.js";
-import { itemForKey } from "./keys.js";
+import { itemForKey, shouldIgnoreKey } from "./keys.js";
 
 const TABLIST_SELECTOR = '[data-enhance~="tabs"]';
 
@@ -100,6 +100,7 @@ function initialize(list) {
 
 function onKeydown(e) {
   const list = e.currentTarget;
+  if (shouldIgnoreKey(e)) return;
   const tab = e.target.closest('[role="tab"]');
   if (!tab || tab.closest(TABLIST_SELECTOR) !== list) return;
 

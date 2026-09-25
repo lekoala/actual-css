@@ -222,7 +222,10 @@ function startSurfaceResources(menu, state) {
 }
 
 export function isSurfaceOpen(menu) {
-  return menu.classList.contains(CLASSES.open);
+  // The open set is the source of truth; .is-open is only its visual
+  // projection. A morph touching classes must not orphan Escape entries,
+  // position tracking, or the open set.
+  return openSurfaces.has(menu);
 }
 
 export function prepareSurface(menu) {
@@ -304,8 +307,14 @@ export function openSurface(menu, opts = {}) {
   state.coordinateSpace = mode.space;
   menu.style.position = mode.position;
 
+  // Register before promoting: a position failure below closes the surface
+  // again, and that close must observe the open state to tear down.
+  openSurfaces.add(menu);
   // Promote before measuring: a closed popover has no box to position.
-  if (!showTransport(menu)) return false;
+  if (!showTransport(menu)) {
+    openSurfaces.delete(menu);
+    return false;
+  }
   menu.classList.add(CLASSES.open);
   syncExpanded(menu, true);
 
@@ -335,13 +344,12 @@ export function openSurface(menu, opts = {}) {
    * from; placing focus in the new surface is the caller's job, and both
    * callers in tree do it as soon as this returns.
    */
-  for (const other of openSurfaces) {
+  for (const other of [...openSurfaces]) {
     if (other !== menu && other.ownerDocument === menu.ownerDocument) {
       closeSurface(other, { restoreFocus: false });
     }
   }
 
-  openSurfaces.add(menu);
   startSurfaceResources(menu, state);
   return true;
 }
