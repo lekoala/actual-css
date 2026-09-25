@@ -3,9 +3,8 @@
  * intent-colored lower edge (.solid remains available when an action needs a
  * filled treatment), text controls (input/textarea/select) pick up the same
  * lower-edge accent via --control-border-block-end-*, alerts get an
- * intent-colored leading flag via --alert-border-inline-start-*. The focus
- * ring keeps the shared width — edge only drops the border-color flip so the
- * intent-colored lower edge stays dominant. */
+ * intent-colored leading flag via --alert-border-inline-start-*. Field focus
+ * is the core inset outline in --focus, the accent's own color. */
 [data-theme="edge"] {
   /* Base palette is the light half; the dark pairing is only announced where
      light-dark() exists, in the @supports block below. */
@@ -76,15 +75,6 @@
 [data-theme="edge"] .alert {
   --alert-border-inline-start-color: var(--intent, var(--primary));
   --alert-border-inline-start-width: 4px;
-}
-
-/* Focus recipe override — the base recipe (control.css) flips --control-border
-   to --focus and draws a box-shadow ring. Edge drops the border-color flip and
-   thickens the accent edge instead so the intent-coloured lower edge stays
-   dominant; the focus ring and its 3px width remain the same as the default. */
-[data-theme="edge"] :is(.input, .textarea, .select):focus-visible {
-  --control-border: var(--border);
-  --control-border-block-end-width: 3px;
 }
 
 @supports (color: light-dark(red, blue)) {

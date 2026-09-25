@@ -265,5 +265,5 @@ For exclusive groups, manage a single pressed button:
 ## CSS hooks
 
 - `--btn-radius` — corner radius.
-- `--btn-focus-color` — focus ring base color; the ring itself is derived from it.
+- `--btn-focus-color` — focus ring base color, the intent by default; the ring is derived from it. Unset, the button uses the contextual `--focus-ring`.
 - `--btn-gap` — space between an icon and the label text (default `0.375em`).

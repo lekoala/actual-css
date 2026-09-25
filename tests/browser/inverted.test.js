@@ -7,7 +7,12 @@
  * view) is owned by Bun.WebView; this file only describes the contract.
  */
 import { expect, test } from "bun:test";
-import { browserAvailable, fixtureUrl, withBrowserPage } from "../../scripts/utils/browser.js";
+import {
+  browserAvailable,
+  fixtureUrl,
+  waitForBrowser,
+  withBrowserPage,
+} from "../../scripts/utils/browser.js";
 
 const FIXTURE = "tests/browser/inverted.html";
 const TIMEOUT = 60_000;
@@ -171,6 +176,31 @@ it("inverted contrasting-surface contract over one browser pass", async () => {
       const hovered = await snapshot();
       expect(hovered.contextOutlineBg).toBe(hovered.refContextHover);
       expect(hovered.contextOutlineColor).toBe(hovered.refSurface);
+
+      // Keyboard focus: a button without an intent takes the contextual
+      // --focus-ring, so .inverted's ring (its --surface ink) reaches it; an
+      // intent button keeps the ring derived from its intent.
+      const ringOf = async (id) => {
+        for (let i = 0; i < 8; i++) {
+          if (await evalIn(`document.activeElement?.id === ${JSON.stringify(id)}`)) break;
+          for (const type of ["keyDown", "keyUp"]) {
+            await cdp("Input.dispatchKeyEvent", {
+              type,
+              key: "Tab",
+              code: "Tab",
+              windowsVirtualKeyCode: 9,
+            });
+          }
+        }
+        await waitForBrowser(view, `document.activeElement?.id === ${JSON.stringify(id)}`);
+        return evalIn(`getComputedStyle(document.activeElement).boxShadow`);
+      };
+      const normalRing = await ringOf("normal-outline");
+      const contextRing = await ringOf("context-outline");
+      const intentRing = await ringOf("context-primary-outline");
+      expect(normalRing).not.toContain(initial.refSurface);
+      expect(contextRing).toContain(initial.refSurface);
+      expect(intentRing).not.toContain(initial.refSurface);
     },
     { artifactName: "inverted" },
   );

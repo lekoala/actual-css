@@ -57,7 +57,11 @@
   --btn-border: var(--ui-border, var(--btn-default-border, transparent));
   --btn-default-hover-bg: var(--btn-bg);
   --btn-radius: var(--radius);
-  --btn-focus-color: var(--intent, var(--focus));
+  /* why: guaranteed-invalid without an intent, so the ring derivation below
+     is invalid too and the shadow falls back to the contextual --focus-ring —
+     the one .inverted and pinned theme rings set. An intent (or an author
+     value) still derives its own ring. */
+  --btn-focus-color: var(--intent);
   --btn-hover-overlay: var(--hover-overlay, rgb(0 0 0 / 0.08));
 
   /* Positioning context for indicators, overlays, and grouped states. */

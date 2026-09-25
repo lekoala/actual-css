@@ -8,8 +8,8 @@
   <meta name="description" content="@lekoala/combobox loaded from CDN and themed with Actual CSS tokens: searchable selects, removable chips, autocomplete, states and the theme presets follow the framework.">
   <link rel="stylesheet" href="../../dist/actual.full.css">
   <link rel="stylesheet" href="../assets/actual-themes.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@lekoala/combobox@0.1.0/dist/combobox.css">
-  <script src="https://cdn.jsdelivr.net/npm/@lekoala/combobox@0.1.0/dist/combobox.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@lekoala/combobox@0.5.0/dist/combobox.css">
+  <script src="https://cdn.jsdelivr.net/npm/@lekoala/combobox@0.5.0/dist/combobox.js"></script>
   <style>
     .page {
       --center-size: 60rem;
@@ -57,7 +57,7 @@
     .actual-combobox {
       --cb-bg: var(--surface);
       --cb-color: var(--text);
-      --cb-border-color: var(--border);
+      --cb-border-color: var(--form-invalid-border, var(--border));
       --cb-border-radius: var(--radius);
       --cb-focus-color: var(--focus);
       --cb-muted-color: var(--text-muted);
@@ -67,28 +67,33 @@
       --cb-option-min-height: var(--control-size);
     }
 
-    /* 2. Focus — the .input inset outline for any internal focus: the input,
-          a chip or a chip remove button. Local :focus-visible indicators for
-          the chip and its × stay on top of that outline. */
-    .actual-combobox .cb-control:focus-within,
-    .actual-combobox .cb-text-control:focus {
-      outline: var(--focus-ring-width) solid var(--focus);
+    /* 2. Focus — the .input inset outline while the search input is focused,
+          replacing the library's accent border and outer halo. A chip or its
+          × keeps the library's own inner ring (--cb-focus-color). */
+    .actual-combobox :is(.cb-text-control:focus-visible, .cb-control:has(.cb-input:focus-visible)) {
+      border-color: var(--form-invalid-border, var(--cb-border-color));
+      outline: var(--focus-ring-width) solid var(--form-invalid-border, var(--focus));
       outline-offset: calc(var(--focus-ring-width) * -1);
+      box-shadow: none;
     }
 
-    /* The remove × carries a compact ring of its own over the field outline. */
-    .actual-combobox .cb-chip-remove:focus-visible {
-      outline: 2px solid transparent;
-      box-shadow: 0 0 0 2px var(--focus-ring);
-    }
-
-    /* 3. Invalid — the native source is required; follow --danger */
+    /* 3. Invalid — the native source is required; join the field validation
+          hook, so .field.danger and aria-invalid color border and outline. */
     .actual-combobox :is(
       .cb-text-control[aria-invalid="true"],
       .cb-control:has([aria-invalid="true"])
     ) {
-      border-color: var(--danger);
-      outline-color: var(--danger);
+      --form-invalid-border: var(--danger);
+    }
+
+    /* The element owns the radius at zero specificity, so a .join can give
+       it the group corners; the visible control inherits them. */
+    :where(.actual-combobox) combo-box {
+      border-radius: var(--cb-border-radius);
+    }
+
+    .actual-combobox :is(.cb-control, .cb-text-control) {
+      border-radius: inherit;
     }
 
     /* 4. Chips — re-derive the removable .badge soft recipe */
@@ -427,7 +432,7 @@ font-size: var(--font-size-xs);
         <pre><code>.actual-combobox {
   --cb-bg: var(--surface);
   --cb-color: var(--text);
-  --cb-border-color: var(--border);
+  --cb-border-color: var(--form-invalid-border, var(--border));
   --cb-border-radius: var(--radius);
   --cb-focus-color: var(--focus);
   --cb-muted-color: var(--text-muted);
@@ -437,15 +442,23 @@ font-size: var(--font-size-xs);
   --cb-option-min-height: var(--control-size);
 }
 
-.actual-combobox .cb-control:focus-within,
-.actual-combobox .cb-text-control:focus {
-  outline: var(--focus-ring-width) solid var(--focus);
+.actual-combobox :is(.cb-text-control:focus-visible, .cb-control:has(.cb-input:focus-visible)) {
+  border-color: var(--form-invalid-border, var(--cb-border-color));
+  outline: var(--focus-ring-width) solid var(--form-invalid-border, var(--focus));
   outline-offset: calc(var(--focus-ring-width) * -1);
+  box-shadow: none;
 }
 
-.actual-combobox .cb-chip-remove:focus-visible {
-  outline: 2px solid transparent;
-  box-shadow: 0 0 0 2px var(--focus-ring);
+.actual-combobox :is(.cb-text-control[aria-invalid="true"], .cb-control:has([aria-invalid="true"])) {
+  --form-invalid-border: var(--danger);
+}
+
+:where(.actual-combobox) combo-box {
+  border-radius: var(--cb-border-radius);
+}
+
+.actual-combobox :is(.cb-control, .cb-text-control) {
+  border-radius: inherit;
 }
 
 .actual-combobox .cb-chip {
@@ -484,8 +497,8 @@ font-size: var(--font-size-xs);
 
     <footer class="page-note">
       <span>
-        Loaded from jsDelivr, pinned: <code>@lekoala/combobox@0.1.0/dist/combobox.css</code> and
-        <code>@lekoala/combobox@0.1.0/dist/combobox.js</code>.
+        Loaded from jsDelivr, pinned: <code>@lekoala/combobox@0.5.0/dist/combobox.css</code> and
+        <code>@lekoala/combobox@0.5.0/dist/combobox.js</code>.
       </span>
       <span>Combobox enhances native <code>&lt;input&gt;</code>/<code>&lt;select&gt;</code> — the source owns the form value.</span>
     </footer>

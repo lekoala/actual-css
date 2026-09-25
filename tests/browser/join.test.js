@@ -51,3 +51,19 @@ it("icon-only buttons stretch to the height of labelled siblings", async () => {
     { artifactName: "join-icon-only" },
   );
 });
+
+it("a wrapped field fills its stretched wrapper", async () => {
+  await withBrowserPage(
+    fixtureUrl(FIXTURE),
+    async (view) => {
+      const result = await view.evaluate(`(() => {
+        const h = (sel) => document.querySelector(sel).getBoundingClientRect().height;
+        return { tall: h("#join-tall"), wrapper: h("#join-wrapper"), field: h("#join-wrapped") };
+      })()`);
+
+      expect(result.wrapper).toBe(result.tall);
+      expect(result.field).toBe(result.wrapper);
+    },
+    { artifactName: "join-wrapped" },
+  );
+});

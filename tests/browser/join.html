@@ -29,5 +29,12 @@
     <button class="btn outline" id="join-labelled" type="button">Previous month</button>
     <button class="btn outline icon-only" id="join-icon" type="button" aria-label="Next month">›</button>
   </div>
+
+  <!-- A field one wrapper level deep (an inline custom element, blockified as
+       a flex item) must fill the wrapper when a taller sibling stretches it. -->
+  <div class="join" role="group">
+    <x-field id="join-wrapper"><input class="input" id="join-wrapped" aria-label="Wrapped"></x-field>
+    <button class="btn outline icon-only" id="join-tall" type="button" aria-label="Go" style="min-block-size: 3.5rem">›</button>
+  </div>
 </body>
 </html>
