@@ -83,13 +83,12 @@ See `references/api-and-vocabulary.md`.
 Use the smallest package surface consistent with the project's policy.
 
 ```css
-@import "actual-css";              /* minimal core */
-@import "actual-css/full";         /* complete framework */
-
 @import "actual-css/css";          /* source core */
 @import "actual-css/css/layout";
 @import "actual-css/css/forms/all";
 @import "actual-css/css/components/button";
+
+@import "actual-css/full";         /* complete compiled framework, zero-config */
 ```
 
 Forms are intentionally split:

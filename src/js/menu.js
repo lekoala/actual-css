@@ -10,7 +10,7 @@
 
 import { isElementVisible } from "./focus.js";
 import { connectFocusGroup } from "./focus-group.js";
-import { firstItem, itemForKey, lastItem } from "./keys.js";
+import { firstItem, itemForKey, lastItem, shouldIgnoreKey } from "./keys.js";
 
 const MENU_ITEM_SELECTOR = ":scope > li > .menu-item";
 const MENU_ITEM_ROLES = new Set(["menuitem", "menuitemcheckbox", "menuitemradio"]);
@@ -62,6 +62,7 @@ export function focusLastMenuItem(menu) {
 }
 
 export function onMenuKeydown(e, { close, navigate = true }) {
+  if (shouldIgnoreKey(e)) return;
   const menu = e.currentTarget;
   if (navigate) {
     const items = getMenuItems(menu);

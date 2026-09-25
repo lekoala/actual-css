@@ -43,10 +43,7 @@ Before introducing a generic application class (`stacked`, `actions`, `flush`, `
 Common aggregate entrypoints:
 
 ```css
-@import "actual-css";      /* minimal core */
-@import "actual-css/full"; /* complete framework */
-
-@import "actual-css/css";
+@import "actual-css/css";  /* source core */
 @import "actual-css/css/typography";
 @import "actual-css/css/layout";
 @import "actual-css/css/forms";
@@ -54,6 +51,8 @@ Common aggregate entrypoints:
 @import "actual-css/css/components";
 @import "actual-css/css/effects";
 @import "actual-css/css/utilities";
+
+@import "actual-css/full"; /* complete compiled framework, zero-config */
 ```
 
 Individual modules are available through domain paths when exported, for example:

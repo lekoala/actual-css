@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tooltips - Actual CSS</title>
+  <meta name="description" content="Generated tooltip text is a snapshot at show time: six cases showing what updates, what stays, and the explicit-tip way for dynamic content.">
+  <link rel="stylesheet" href="../../dist/actual.full.css">
+  <link rel="stylesheet" href="../assets/actual-themes.min.css">
+  <style>
+    .edge-page {
+      --center-size: 60rem;
+      --gap: var(--space-50);
+
+      padding-block: var(--space-60);
+    }
+
+    .edge-row {
+      --cluster-justify: flex-start;
+
+      padding: var(--space-40);
+      border: var(--border-width) solid var(--border-color);
+      border-radius: var(--radius-lg);
+    }
+  </style>
+</head>
+<body>
+  <main class="center edge-page stack">
+    <h1>Tooltips</h1>
+    <p>Hover each trigger, then use its companion button to mutate
+    <code>data-tooltip</code>. Contract: generated text is a snapshot at show
+    time — cases 1 and 5 keep the old text while visible, the rest pick the
+    new value up on the next show. Case 6 shows the explicit-tip way.</p>
+
+    <section class="stack">
+      <h2>1. Hover tip, text changed while visible</h2>
+      <div class="cluster edge-row">
+        <button id="copy-btn" type="button" data-tooltip="Copy">Copy</button>
+        <button id="copy-mutate" type="button">Set Copied!</button>
+      </div>
+      <p>Expected: the visible tip keeps Copy until the
+      next show; re-hover displays Copied!.</p>
+    </section>
+
+    <section class="stack">
+      <h2>2. Hover tip, text changed while hidden</h2>
+      <div class="cluster edge-row">
+        <button id="save-btn" type="button" data-tooltip="Save">Save</button>
+        <button id="save-mutate" type="button">Set Saved</button>
+      </div>
+      <p>Expected: next hover displays Saved (resync on show).</p>
+    </section>
+
+    <section class="stack">
+      <h2>3. Click-toggle tip, text changed between toggles</h2>
+      <div class="cluster edge-row">
+        <button id="info-btn" type="button" data-tooltip="Details" data-tooltip-click>Details</button>
+        <button id="info-mutate" type="button">Set Updated</button>
+      </div>
+      <p>Expected: reopening after the mutation displays Updated.</p>
+    </section>
+
+    <section class="stack">
+      <h2>4. Explicit tip, markup changed</h2>
+      <div class="cluster edge-row">
+        <button id="rich-btn" type="button" data-tooltip aria-describedby="rich-tip">Rich</button>
+        <div id="rich-tip" role="tooltip" hidden><strong>Original</strong> content</div>
+        <button id="rich-mutate" type="button">Rewrite tip markup</button>
+      </div>
+      <p>Expected: explicit tips are author-owned; the runtime never rewrites
+      them, so the mutation shows as written.</p>
+    </section>
+
+    <section class="stack">
+      <h2>5. Always-visible tip, text changed</h2>
+      <div class="cluster edge-row">
+        <button id="pinned-btn" type="button" data-tooltip="Pinned" data-tooltip-visible>Pinned</button>
+        <button id="pinned-mutate" type="button">Set Repinned</button>
+      </div>
+      <p>Expected: stays Pinned. Generated text is a snapshot at show time and
+      this tip only ever shows once — use an explicit tooltip (case 6) for
+      content that must update.</p>
+    </section>
+
+    <section class="stack">
+      <h2>6. Always-visible explicit tip, rewritten via DOM</h2>
+      <div class="cluster edge-row">
+        <button id="live-btn" type="button" data-tooltip data-tooltip-visible aria-describedby="live-tip">Live</button>
+        <div id="live-tip" role="tooltip" hidden><strong>First</strong> message</div>
+        <button id="live-mutate" type="button">Rewrite tip markup</button>
+      </div>
+      <p>Expected: the rewrite applies immediately — the dedicated API for
+      dynamic content, side by side with the frozen shorthand of case 5.</p>
+    </section>
+  </main>
+  <script src="../../dist/actual.full.js"></script>
+  <script>
+    const wire = (mutateId, targetId, value, extra) => {
+      document.getElementById(mutateId)?.addEventListener("click", () => {
+        const target = document.getElementById(targetId);
+        target.setAttribute("data-tooltip", value);
+        extra?.(target);
+      });
+    };
+
+    wire("copy-mutate", "copy-btn", "Copied!");
+    wire("save-mutate", "save-btn", "Saved");
+    wire("info-mutate", "info-btn", "Updated");
+    // Demo-only innerHTML: stands in for author code owning explicit-tip DOM.
+    document.getElementById("rich-mutate")?.addEventListener("click", () => {
+      document.getElementById("rich-tip").innerHTML = "<em>Rewritten</em> content";
+    });
+    wire("pinned-mutate", "pinned-btn", "Repinned");
+    // Demo-only innerHTML: same author-owned-DOM stand-in as above.
+    document.getElementById("live-mutate")?.addEventListener("click", () => {
+      document.getElementById("live-tip").innerHTML = "<em>Second</em> message";
+    });
+  </script>
+</body>
+</html>

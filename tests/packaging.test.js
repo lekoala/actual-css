@@ -63,16 +63,12 @@ test("package ships built assets, not theme demo sources", () => {
   expect(pkg.exports["./css/themes/*"]).toBeNull();
 });
 
-test("dist contains exactly the six published artifacts", () => {
+// dist/ is the zero-config half of the contract: the full framework only.
+// Composition goes through `actual-css/css` and `actual-css/js` sources; a
+// compiled core or loader alone would be an alias of those next to them.
+test("dist contains exactly the three published artifacts", () => {
   const files = readdirSync(join(ROOT, "dist")).sort();
-  expect(files).toEqual([
-    "actual.css",
-    "actual.full.css",
-    "actual.full.js",
-    "actual.full.min.css",
-    "actual.js",
-    "actual.min.css",
-  ]);
+  expect(files).toEqual(["actual.full.css", "actual.full.js", "actual.full.min.css"]);
 });
 
 test("every JS export path resolves to an existing source file", () => {
@@ -221,10 +217,10 @@ packTest("packed tarball ships every critical public export", async () => {
     const entries = list.stdout.split(/\r?\n/);
 
     const critical = [
-      "package/dist/actual.css", // actual-css
-      "package/dist/actual.full.css", // actual-css/full
-      "package/dist/actual.js", // actual-css/js
-      "package/dist/actual.full.js", // actual-css/js/full
+      "package/dist/actual.full.min.css", // actual-css, actual-css/full
+      "package/src/css/actual.css", // actual-css/css
+      "package/dist/actual.full.js", // zero-config runtime
+      "package/src/js/index.js", // actual-css/js
       "package/src/cli/actual-css.js", // actual-css bin
       "package/src/css/layout/index.css", // actual-css/css/layout
       "package/src/css/layout/column-layout.css", // actual-css/css/layout/column-layout

@@ -6,7 +6,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Modular imports — Actual CSS</title>
-  <meta name="description" content="Actual CSS ships one minimal core (actual-css) and one all-in entrypoint (actual-css/full). Projects can also compose the framework from family manifests or individual modules.">
+  <meta name="description" content="Actual CSS has two kinds of entrypoint. Without /css, you get a compiled artifact ready to serve. With /css, you compose the sources.">
   <link rel="stylesheet" href="../../src/css/actual.full.css">
   <link rel="stylesheet" href="../assets/actual-themes.min.css">
   <link rel="stylesheet" href="../../scripts/docs/assets/docs.css">
@@ -213,20 +213,61 @@
 
           <div class="prose docs-prose">
 <h1 id="modular-imports">Modular imports</h1>
-<p>Actual CSS ships one minimal core (<code>actual-css</code>) and one all-in entrypoint (<code>actual-css/full</code>). Projects can also compose the framework from family manifests or individual modules.</p>
+<p>Actual CSS has two kinds of entrypoint. Without <code>/css</code>, you get a compiled artifact ready to serve. With <code>/css</code>, you compose the sources.</p>
 <h2 id="entrypoints">Entrypoints</h2>
-<pre><code class="language-css">@import &quot;actual-css&quot;;        /* minimal core */
-@import &quot;actual-css/full&quot;;   /* complete framework */
+<pre><code class="language-text">Composable source CSS (recommended)
+  actual-css/css             core
+  actual-css/css/&lt;family&gt;    one family, e.g. css/layout, css/forms/all
+  actual-css/css/&lt;family&gt;/*  one module, e.g. css/components/button
+  actual-css/css/full        every family, as source
+
+Zero-config distribution
+  actual-css                 complete compiled framework
+  actual-css/full            the same bundle, named explicitly
 </code></pre>
-<p><code>actual-css</code> contains the shared baseline: reset, tokens, theme, document defaults, intents, universal variants, focus, and print.</p>
+<p><code>actual-css/css</code> contains the shared baseline: reset, tokens, theme, document defaults, intents, universal variants, focus, and print.</p>
 <p>It contains no typography, layout, forms, components, effects, or utilities.</p>
-<p><code>actual-css/full</code> starts from the core and adds every family in cascade order:</p>
+<p>The full framework starts from the core and adds every family in cascade order:</p>
 <pre><code class="language-text">core → typography → layout → forms → components → effects → utilities
 </code></pre>
 <h3 id="focus-is-a-core-invariant">Focus is a core invariant</h3>
 <p>The core provides a visible <code>:focus</code> outline as the compatibility baseline. Modern browsers limit it to <code>:focus-visible</code>, hiding the pointer-focus outline.</p>
 <p>Components may enhance or replace that treatment in interactive states, but their base styles must not cancel the shared fallback.</p>
 <p>When an interactive state replaces the outline, it must preserve a visible focus indicator in forced-colors, either with an outline-based fallback or by keeping the replacement out of forced-colors.</p>
+<h2 id="start-from-the-full-entry">Start from the full entry</h2>
+<p>Deleting is easier than adding, and it keeps the cascade order right. Copy the
+package's full entry into your project, rewrite its relative imports to
+package paths, then delete what you do not need:</p>
+<ul>
+<li>CSS: <code>src/css/actual.full.css</code>. Prefix each import with <code>actual-css/css/</code>
+and drop <code>.css</code> and <code>/index</code>; <code>./actual.css</code> is <code>actual-css/css</code>. To go below
+family level, replace a family line with the imports of its <code>index.css</code>,
+rewritten the same way.</li>
+<li>JS: <code>src/js/full.js</code>. Prefix each import with <code>actual-css/js/</code> and drop
+<code>.js</code>; <code>./index.js</code> is <code>actual-css/js</code>.</li>
+</ul>
+<pre><code class="language-css">/* app/index.css — actual.full.css, rewritten, components expanded and pruned */
+@import &quot;actual-css/css&quot;;
+@import &quot;actual-css/css/typography&quot;;
+@import &quot;actual-css/css/layout&quot;;
+@import &quot;actual-css/css/forms/all&quot;;
+@import &quot;actual-css/css/components/button&quot;;
+@import &quot;actual-css/css/components/close&quot;;
+@import &quot;actual-css/css/components/card&quot;;
+@import &quot;actual-css/css/components/modal&quot;;
+@import &quot;actual-css/css/utilities&quot;;
+</code></pre>
+<pre><code class="language-js">// app/index.js — full.js, rewritten and pruned
+import &quot;actual-css/js/flyout&quot;;
+import &quot;actual-css/js/dialog&quot;;
+import &quot;actual-css/js/dismiss&quot;;
+import &quot;actual-css/js/tooltip&quot;;
+import &quot;actual-css/js&quot;;
+</code></pre>
+<p>JS modules import what they depend on. CSS modules do not, and three are
+shared: keep <code>components/close</code> with modal, drawer, alert, or a removable
+badge; <code>components/bleed</code> with a <code>.bleed</code> child of card, drawer, or accordion;
+<code>components/spinner</code> with <code>components/busy</code>.</p>
 <h2 id="family-manifests">Family manifests</h2>
 <p>Each family is one import. The contents are enumerations rather than table
 cells, so they read as a list:</p>
@@ -350,6 +391,7 @@ base and extra utilities</li>
           <ul class="nav-list docs-toc-list" data-docs-toc>
         <li><a class="nav-link" href="#entrypoints" data-docs-toc-item data-level="2">Entrypoints</a></li>
         <li><a class="nav-link" href="#focus-is-a-core-invariant" data-docs-toc-item data-level="3">Focus is a core invariant</a></li>
+        <li><a class="nav-link" href="#start-from-the-full-entry" data-docs-toc-item data-level="2">Start from the full entry</a></li>
         <li><a class="nav-link" href="#family-manifests" data-docs-toc-item data-level="2">Family manifests</a></li>
         <li><a class="nav-link" href="#use-your-existing-css-pipeline" data-docs-toc-item data-level="2">Use your existing CSS pipeline</a></li>
         <li><a class="nav-link" href="#optional-cli-bundler" data-docs-toc-item data-level="2">Optional CLI bundler</a></li>

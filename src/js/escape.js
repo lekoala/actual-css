@@ -30,6 +30,7 @@ function onDocumentEscape(event) {
   if (
     event.defaultPrevented ||
     event.key !== "Escape" ||
+    event.isComposing ||
     event.ctrlKey ||
     event.altKey ||
     event.shiftKey ||

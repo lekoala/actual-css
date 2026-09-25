@@ -57,4 +57,4 @@ Prefer a parent `gap` for relationships between peers instead of encoding siblin
 
 Before adding a divider or other separating chrome, consider whether additional spacing already expresses the boundary clearly.
 
-Density changes the amount of space available, not the relationships that space communicates. When a composition contains local, group, and section rhythms, preserve their relative hierarchy with nested or local `--gap` values rather than relying on one inherited gap at every level. See [Stack](./stack.md) for the nesting and density mechanics.
+Density changes the amount of space available, not the relationships that space communicates. When a composition contains local, group, and section rhythms, preserve their relative hierarchy with nested or local `--gap` values rather than relying on one inherited gap at every level. See [Choosing a density](./stack.md#choosing-a-density) for the nesting and density mechanics.

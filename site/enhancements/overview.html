@@ -258,6 +258,10 @@ import &quot;actual-css/js/tooltip&quot;;
 <p>Enhancer modules self-register when imported. They do not require init calls and
 are safe to import during server-side rendering: outside a browser, registration
 is a no-op until the module is loaded again with a DOM.</p>
+<p>Load the full bundle <strong>or</strong> the source modules, never both: each evaluation
+owns its registry and document handlers, so a dist bundle mixed with
+<code>actual-css/js/*</code> source subpaths (or two dist bundles) registers every
+behavior twice and a flyout opens then immediately closes.</p>
 <h2 id="component-pages">Component pages</h2>
 <p>Each interactive component has its own page documenting the exact markup its
 enhancement expects: Dialog, Drawer, Flyout, Tooltip, Tabs, Scrollspy, and

@@ -26,7 +26,7 @@
     "progressive-enhancement"
   ],
   "exports": {
-    ".": "./dist/actual.min.css",
+    ".": "./dist/actual.full.min.css",
     "./full": "./dist/actual.full.min.css",
     "./css": "./src/css/actual.css",
     "./css/components": "./src/css/components/index.css",
@@ -80,10 +80,9 @@
   "bin": {
     "actual-css": "./src/cli/actual-css.js"
   },
-  "main": "./dist/actual.js",
-  "style": "./dist/actual.min.css",
-  "unpkg": "./dist/actual.min.css",
-  "jsdelivr": "./dist/actual.min.css",
+  "style": "./dist/actual.full.min.css",
+  "unpkg": "./dist/actual.full.min.css",
+  "jsdelivr": "./dist/actual.full.min.css",
   "sideEffects": true,
   "files": [
     "dist",

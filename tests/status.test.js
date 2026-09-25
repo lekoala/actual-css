@@ -447,6 +447,28 @@ test("restores a dialog-mounted status to its original position after exit", asy
   expect(target.nextElementSibling?.id).toBe("after");
 });
 
+test("a dialog removed with the mounted bar heals on the next status call", async () => {
+  const { status } = await loadStatus(`
+    <main><div class="status-bar" data-status role="status"></div></main>
+    <dialog open><button type="button">Save</button></dialog>
+  `);
+
+  const main = document.querySelector("main");
+  const dialog = document.querySelector("dialog");
+  status("Dialog message", { duration: false, source: document.querySelector("button") });
+
+  // htmx/Turbo swap removes the host dialog with the bar inside it.
+  dialog.remove();
+  expect(document.querySelector('[data-status][role="status"]')).toBeNull();
+
+  status("Healed.", { duration: false });
+
+  const target = document.querySelector('[data-status][role="status"]');
+  expect(target).not.toBeNull();
+  expect(target.parentElement).toBe(main);
+  expect(target.textContent).toBe("Healed.");
+});
+
 test("a global status call leaves a previous dialog context immediately", async () => {
   const { status } = await loadStatus(`
     <main><div class="status-bar" data-status role="status"></div></main>

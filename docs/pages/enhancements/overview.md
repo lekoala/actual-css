@@ -53,6 +53,11 @@ Enhancer modules self-register when imported. They do not require init calls and
 are safe to import during server-side rendering: outside a browser, registration
 is a no-op until the module is loaded again with a DOM.
 
+Load the full bundle **or** the source modules, never both: each evaluation
+owns its registry and document handlers, so a dist bundle mixed with
+`actual-css/js/*` source subpaths (or two dist bundles) registers every
+behavior twice and a flyout opens then immediately closes.
+
 ## Component pages
 
 Each interactive component has its own page documenting the exact markup its

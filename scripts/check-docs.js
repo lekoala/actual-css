@@ -3,8 +3,8 @@
  *
  * Verifies navigation.json against docs/pages, that every page is well-formed
  * (one H1, explicit fence languages, balanced demo markup, tables that stay
- * readable in the source), that slugs are unique, and that internal links
- * (including anchors) resolve.
+ * readable in the source), that slugs are unique, that internal links
+ * (including anchors) resolve, and that CDN snippets pin the current minor.
  *
  * The table check also covers docs/design-notes, which is hand-edited markdown
  * outside the site navigation.
@@ -148,6 +148,34 @@ function rel(file) {
   return relative(ROOT, file).replaceAll(sep, "/");
 }
 
+/*
+ * CDN snippets pin the release line (`actual-css@0.10`), not a patch or
+ * `@latest`: before 1.0 a minor may break, so copied markup must stay on the
+ * line it was written for, while 0.10.x fixes still reach it. The pin has to
+ * move with every minor, which nothing else would notice. The next minor is
+ * also accepted: between releases, the docs describe the line about to ship.
+ */
+const CDN_PIN = /(?:cdn\.jsdelivr\.net\/npm|unpkg\.com)\/actual-css@([^/\s"'`)]+)/g;
+
+function cdnPinIssues(files) {
+  const { version } = JSON.parse(readFileSync(join(ROOT, "package.json"), "utf8"));
+  const [major, minor] = version.split(".").map(Number);
+  const accepted = [`${major}.${minor}`, `${major}.${minor + 1}`];
+  const issues = [];
+
+  for (const file of files) {
+    for (const match of readFileSync(file, "utf8").matchAll(CDN_PIN)) {
+      if (!accepted.includes(match[1])) {
+        issues.push(
+          `${rel(file)}: CDN pin actual-css@${match[1]} — expected @${accepted.join(" or @")}`,
+        );
+      }
+    }
+  }
+
+  return issues;
+}
+
 function main() {
   const issues = [];
   const navigation = loadNavigation(ROOT);
@@ -169,6 +197,15 @@ function main() {
   for (const file of walkMarkdown(NOTES)) {
     issues.push(...tableIssues(readFileSync(file, "utf8"), rel(file)));
   }
+
+  issues.push(
+    ...cdnPinIssues([
+      join(ROOT, "README.md"),
+      join(ROOT, "llms.txt"),
+      ...actualFiles,
+      ...walkMarkdown(join(ROOT, "skills")),
+    ]),
+  );
 
   const seenUrls = new Map();
   for (const page of navigation.pages) {

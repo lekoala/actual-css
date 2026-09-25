@@ -239,27 +239,23 @@ ARIA and native HTML, and per-widget configuration uses self-describing
 <h2 id="install">Install</h2>
 <pre><code class="language-sh">npm install actual-css
 </code></pre>
-<p>Import the full framework in your CSS:</p>
-<pre><code class="language-css">@import &quot;actual-css/full&quot;;
-</code></pre>
-<p><code>actual-css/full</code> ships every functional family. The bare <code>actual-css</code> entrypoint
-is the minimal core (reset, tokens, theme, base, intents, variants, focus,
-print).</p>
-<p>Or compose only the pieces you use:</p>
-<pre><code class="language-css">@import &quot;actual-css/css&quot;;
+<p>Import what you use. The simplest start is the package's full entry, copied
+into your project and pruned — see
+<a href="modular-import.html#start-from-the-full-entry">Start from the full entry</a>:</p>
+<pre><code class="language-css">@import &quot;actual-css/css&quot;;                   /* core */
 @import &quot;actual-css/css/layout&quot;;
+@import &quot;actual-css/css/forms/all&quot;;
 @import &quot;actual-css/css/components/button&quot;;
 @import &quot;actual-css/css/components/card&quot;;
-@import &quot;actual-css/css/forms&quot;;
-@import &quot;actual-css/css/components/flyout&quot;;
 @import &quot;actual-css/css/utilities&quot;;
 </code></pre>
-<p><code>actual-css/css</code> is the minimal core. Family manifests (<code>css/layout</code>,
-<code>css/forms</code>, <code>css/components</code>, <code>css/typography</code>, <code>css/effects</code>,
-<code>css/utilities</code>) and their modules map one-to-one to <code>src/css/</code>. See the
-<a href="modular-import.html">modular import guide</a> for the full map.</p>
-<p>You can also use the compiled full bundle directly:</p>
-<pre><code class="language-html">&lt;link rel=&quot;stylesheet&quot; href=&quot;actual.full.min.css&quot;&gt;
+<p><code>actual-css/css</code> is the core (reset, tokens, theme, base, intents, variants,
+focus, print). Each family and module is its own import; the
+<a href="modular-import.html">modular import guide</a> has the full map.</p>
+<p>For zero-config use — prototypes, CDN, or when bundle size is not worth
+optimizing — the bare <code>actual-css</code> entrypoint and <code>actual-css/full</code> both resolve
+to the complete compiled framework:</p>
+<pre><code class="language-html">&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/actual-css@0.10/dist/actual.full.min.css&quot;&gt;
 </code></pre>
 <p>The package does not maintain separate partial bundles. Modular entrypoints map
 to source files, so each project composes the framework shape it needs.</p>

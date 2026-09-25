@@ -5,6 +5,20 @@
  * centralize item lookup, edge handling, and optional wrapping.
  */
 
+// Shared guard for roving-focus key handlers. Composition (IME) and
+// ctrl/alt/meta-modified keys belong to the input method or the browser
+// (Alt+Arrow = history navigation) and must never be claimed by a widget.
+// Shift is deliberately excluded: Shift+Tab carries focus semantics that
+// callers handle themselves.
+export function shouldIgnoreKey(event) {
+  return (
+    event?.isComposing === true ||
+    event?.ctrlKey === true ||
+    event?.altKey === true ||
+    event?.metaKey === true
+  );
+}
+
 export function firstItem(items) {
   return items[0] || null;
 }

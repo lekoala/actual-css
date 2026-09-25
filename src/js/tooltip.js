@@ -23,6 +23,12 @@
  *             for tooltips that are never triggered. AJAX-loaded triggers
  *             work automatically via bubbling delegated listeners.
  *
+ * Snapshot, not reactive: generated tooltip text is synchronized when
+ *             the tooltip is shown. Changes to data-tooltip do not rewrite
+ *             a tooltip that is already shown. Always-visible generated
+ *             tooltips therefore keep their initial text; use an explicit
+ *             tooltip when its content must update dynamically.
+ *
  * Show:       hover + focus (150ms delay), click toggle, or always visible
  * Hide:       focus leaving the trigger (focusout), pointer leave, Escape
  *
@@ -367,7 +373,10 @@ function ensureTip(trigger) {
   const text = trigger.getAttribute("data-tooltip");
   const doc = trigger.ownerDocument;
 
-  // shorthand: data-tooltip="text" → create element lazily
+  // shorthand: data-tooltip="text" → create element lazily.
+  // Shorthand content is always text. Never use innerHTML here:
+  // data-tooltip may hold application/user-provided strings. Rich content
+  // belongs in an explicit author-owned tooltip.
   if (text) {
     tip = doc.createElement("div");
     tip.className = CLASSES.tooltip;
@@ -466,6 +475,14 @@ function cleanupTrigger(trigger) {
 function show(tip, ref, immediate = false) {
   const state = tipStates.get(tip);
   if (!state) return;
+
+  // Shorthand tips copy data-tooltip text at creation; re-read it on every
+  // show so a "Copy" → "Copied!" update is reflected without rewiring.
+  // Text only, never innerHTML — see the note at creation above.
+  if (state.generated) {
+    const text = ref.getAttribute("data-tooltip");
+    if (text && tip.textContent !== text) tip.textContent = text;
+  }
 
   state.activeRef = ref;
   const mode = positionModeFor(ref);

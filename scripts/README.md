@@ -9,7 +9,7 @@ script in `package.json`; `bun run build:all` chains the full pipeline
 | `lint` / `lint:fix` | Biome | Lint + format `src/`, `scripts/`, and `tests/`. Runs first in `build:all` and must end clean. |
 | `build:docs` / `watch:docs` | `build-docs.js` | Build the static documentation site in `site/` from `docs/pages/` + `docs/navigation.json`. Builds the demo themes prerequisite; `build:all` creates the required JS bundle first. |
 | `build:dist` | `build-dist.js` | Build the CSS bundles in `dist/` — the npm-published surface. |
-| `build:js` | `build-js.js` | Bundle `src/js/` into `dist/actual.js` (loader only) and `dist/actual.full.js` (full runtime); no sourcemap; byte-deterministic across rebuilds. |
+| `build:js` | `build-js.js` | Bundle `src/js/full.js` into `dist/actual.full.js`; no sourcemap; byte-deterministic across rebuilds. |
 | `build:themes` | `build-themes.js` | Bundle the preset palettes into `demo/assets/actual-themes.min.css` for the demo pages and docs site. Demo asset only — never in `dist/`. |
 | `build:size` | `build-size.js` | Write `size-report.json` (per-file, minified, brotli). |
 | `check:docs` | `check-docs.js` | Structural checks for the docs site: page/IA consistency, fence contract, internal links + anchors, and that referenced `src/css` / `src/js` files exist. |

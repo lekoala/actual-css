@@ -222,6 +222,8 @@ and arrow position are written by JavaScript; the element is shown and hidden
 by promoting it to the top layer with <code>popover=&quot;manual&quot;</code>.</p>
 <ul>
 <li>Use <code>data-tooltip</code> on the trigger. With text (<code>data-tooltip=&quot;Help&quot;</code>), the tooltip element is generated. Empty (<code>data-tooltip</code>) marks an explicit tooltip connected via <code>aria-describedby</code>.</li>
+<li>Generated text is a snapshot at show time: changing <code>data-tooltip</code> never rewrites a tooltip that is already shown, and an always-visible generated tooltip keeps its initial text. For content that must update dynamically, use an explicit tooltip. See the <a href="../examples/overview.html">tooltips bench</a> (<code>demo/templates/tooltips.html</code>) for all six cases side by side.</li>
+<li>Generated text is always plain text (<code>textContent</code> only), so a shorthand value is safe for untrusted strings once they are in the DOM. An explicit tooltip is author-owned DOM: its sanitization belongs to whoever produces it. Escape the attribute server-side — a DOM already compromised at render cannot be repaired at read time. There is no <code>data-tooltip-html</code>, by design.</li>
 <li>Tooltips are supplemental. Do not put required information or interactive controls inside them.</li>
 <li>Show on hover and focus. Hide on Escape, blur, or pointer leave.</li>
 <li>A trigger scrolled out of view takes its tooltip down and brings it back when it returns; only a dismissal ends the tooltip.</li>

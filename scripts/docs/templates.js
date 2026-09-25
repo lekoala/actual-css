@@ -121,9 +121,10 @@ export function renderHomeStats(themes) {
 
   const kb = (bytes) => `${(bytes / 1024).toFixed(1)}kb`;
   const stats = [
-    ["0", "Runtime dependencies"],
+    // @lekoala/floating is a first-party package factored out of this repo.
+    ["0", "Third-party dependencies"],
     [kb(report.full.brotli), "Full build, brotli"],
-    [kb(report.core.brotli), "Core build, brotli"],
+    [kb(report.core.brotli), "Core, brotli"],
     [String(themes.length + 2), "Themes, light and dark included"],
   ];
 

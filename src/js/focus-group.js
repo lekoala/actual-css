@@ -5,7 +5,7 @@
  * candidate list; the primitive does not observe the subtree.
  */
 
-import { itemForKey } from "./keys.js";
+import { itemForKey, shouldIgnoreKey } from "./keys.js";
 
 const ORIENTATIONS = new Set(["horizontal", "vertical"]);
 
@@ -82,6 +82,7 @@ export function connectFocusGroup(root, opts = {}) {
   }
 
   function onKeydown(event) {
+    if (shouldIgnoreKey(event)) return;
     const items = sync();
     const current = root.ownerDocument.activeElement;
     if (!items.includes(current)) return;

@@ -210,7 +210,7 @@ test("lightweight navigation covers the strict .menu > li > .menu-item contract"
 test("flyout trigger gets initial disclosure attributes", async () => {
   await loadFlyout(`
     <button id="trigger" type="button" data-enhance="flyout" aria-controls="menu" aria-expanded="false">Open</button>
-    <menu id="menu" class="flyout" hidden>
+    <menu id="menu" class="flyout" role="menu" hidden>
       <li><button type="button">First</button></li>
     </menu>
   `);
@@ -235,13 +235,27 @@ test("aria-haspopup alone does not opt into flyout behavior", async () => {
   expect(isOpen(menu)).toBe(false);
 });
 
-test("only native menu flyouts get menu popup semantics", async () => {
+test("only role=menu flyouts get menu popup semantics", async () => {
   await loadFlyout(`
     <button id="trigger" type="button" data-enhance="flyout" aria-controls="menu" aria-expanded="false">Open</button>
     <div id="menu" class="flyout" role="menu" hidden></div>
   `);
   const trigger = document.getElementById("trigger");
 
+  expect(trigger.getAttribute("aria-haspopup")).toBe("menu");
+});
+
+test("a visual .menu without role=menu gets no menu popup semantics", async () => {
+  await loadFlyout(`
+    <button id="trigger" type="button" data-enhance="flyout" aria-controls="menu" aria-expanded="false">Open</button>
+    <menu id="menu" class="flyout" hidden>
+      <li><button type="button">First</button></li>
+    </menu>
+  `);
+  const trigger = document.getElementById("trigger");
+
+  // <menu> carries the implicit list role; aria-haspopup="menu" describes a
+  // true role="menu" popup, not the tag or visual class.
   expect(trigger.hasAttribute("aria-haspopup")).toBe(false);
 });
 

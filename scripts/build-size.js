@@ -1,18 +1,19 @@
 /*
- * Measures dist/ and writes size-report.json.
+ * Measures dist/ plus the in-memory core and writes size-report.json.
  *
  * Runs before build:docs in build:all, never after: the docs home renders its
  * stat strip from this report, so a build that measures last publishes the
  * previous run's figures and leaves site/index.html disagreeing with the
  * report beside it. CI verifies the committed build output, so that lag fails
  * the pipeline on exactly the changes that move the bundle — and converges
- * only if someone builds twice. It reads dist/ alone, so it fits anywhere
- * after build:dist and build:js.
+ * only if someone builds twice. It reads dist/ and src/css alone, so it fits
+ * anywhere after build:dist and build:js.
  */
 import { readdir, readFile, stat, writeFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { brotliCompressSync } from "node:zlib";
+import { inlineImports, minifyCss } from "../src/tooling/css-bundle.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, "..");
@@ -24,13 +25,14 @@ const DIST = join(ROOT, "dist");
  * build:size never rewrites its own limits, so a committed report cannot
  * silently raise the bar.
  *
- * The core budget is the one that has to hurt: it is what an adopter actually
- * ships. The full bundle is every family concatenated — a documentation and
- * demo artifact rather than something to serve as-is — so its budget guards
- * against runaway growth, not against a component gaining a layer.
+ * The core budget is the one that has to hurt: every composition, modular or
+ * full, starts from it. It is measured by bundling src/css/actual.css in
+ * memory, because the core is not published as a compiled artifact. The full
+ * bundle is every family concatenated, so its budget guards against runaway
+ * growth, not against a component gaining a layer.
  */
 const BUDGETS = {
-  coreCssBrotli: 2900, // actual.min.css (current ~2823; typographic density: --font-width hooks + compact/spacious font-stretch)
+  coreCssBrotli: 2900, // src/css/actual.css, minified in memory (current ~2823; typographic density: --font-width hooks + compact/spacious font-stretch)
   fullCssBrotli: 18500, // actual.full.min.css (current ~17556)
   fullJsBrotli: 18500, // actual.full.js (current ~16222)
 };
@@ -90,14 +92,10 @@ async function main() {
 
   rows.sort((a, b) => b.raw - a.raw || a.file.localeCompare(b.file, "en"));
 
-  const dist = await distMetrics([
-    "actual.css",
-    "actual.min.css",
-    "actual.full.css",
-    "actual.full.min.css",
-    "actual.js",
-    "actual.full.js",
-  ]);
+  const coreCode = Buffer.from(minifyCss(await inlineImports(join(SRC, "actual.css"))));
+  const core = { bytes: coreCode.length, brotli: brotliCompressSync(coreCode).length };
+
+  const dist = await distMetrics(["actual.full.css", "actual.full.min.css", "actual.full.js"]);
 
   // ── Print source table ─────────────────────────────────
   const colFile = 38;
@@ -120,19 +118,14 @@ async function main() {
   // ── Dist report ────────────────────────────────────────
   const sections = [];
 
-  if (dist["actual.min.css"]) {
-    const { bytes, brotli } = dist["actual.min.css"];
-    sections.push(`Core (actual.min.css): ${formatBytes(bytes)} → ${formatBytes(brotli)} brotli`);
-  }
+  sections.push(
+    `Core (src/css/actual.css, minified): ${formatBytes(core.bytes)} → ${formatBytes(core.brotli)} brotli`,
+  );
   if (dist["actual.full.min.css"]) {
     const { bytes, brotli } = dist["actual.full.min.css"];
     sections.push(
       `Full (actual.full.min.css): ${formatBytes(bytes)} → ${formatBytes(brotli)} brotli`,
     );
-  }
-  if (dist["actual.js"]) {
-    const { bytes, brotli } = dist["actual.js"];
-    sections.push(`JS core (actual.js): ${formatBytes(bytes)} → ${formatBytes(brotli)} brotli`);
   }
   if (dist["actual.full.js"]) {
     const { bytes, brotli } = dist["actual.full.js"];
@@ -149,16 +142,11 @@ async function main() {
   // ── Budget guard ────────────────────────────────────────
   const report = {
     totalRaw,
-    core: dist["actual.min.css"]
-      ? { minified: dist["actual.min.css"].bytes, brotli: dist["actual.min.css"].brotli }
-      : null,
+    core: { minified: core.bytes, brotli: core.brotli },
     full: dist["actual.full.min.css"]
       ? { minified: dist["actual.full.min.css"].bytes, brotli: dist["actual.full.min.css"].brotli }
       : null,
     js: {
-      core: dist["actual.js"]
-        ? { bytes: dist["actual.js"].bytes, brotli: dist["actual.js"].brotli }
-        : null,
       full: dist["actual.full.js"]
         ? { bytes: dist["actual.full.js"].bytes, brotli: dist["actual.full.js"].brotli }
         : null,
@@ -168,7 +156,7 @@ async function main() {
   };
 
   const guarded = [
-    ["core CSS (actual.min.css)", dist["actual.min.css"]?.brotli, BUDGETS.coreCssBrotli],
+    ["core CSS (in memory)", core.brotli, BUDGETS.coreCssBrotli],
     ["full CSS (actual.full.min.css)", dist["actual.full.min.css"]?.brotli, BUDGETS.fullCssBrotli],
     ["full JS (actual.full.js)", dist["actual.full.js"]?.brotli, BUDGETS.fullJsBrotli],
   ];

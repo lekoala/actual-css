@@ -227,16 +227,27 @@
 <p>For a staged migration, use cascade layers, controlled import order, or a project-side Actual prefix transform where necessary.</p>
 <p>The layered import is the cleanest way to keep both stylesheets during the
 migration:</p>
-<pre><code class="language-css">@import &quot;tailwind.css&quot;;        /* your compiled Tailwind output */
-@layer actual;
+<pre><code class="language-css">/* Tailwind v4 emits its own layers (theme, base, components, utilities),
+   so declare the order explicitly: Actual sits above Tailwind components
+   but below Tailwind utilities during the migration. */
+@layer theme, base, components, actual, utilities;
+
+@import &quot;tailwind.css&quot;;        /* your compiled Tailwind output */
 @import &quot;actual-css/full&quot; layer(actual);
+
 /* Unlayered project overrides stay on top */
 @import &quot;app.css&quot;;
 </code></pre>
-<p>The full import places every Actual rule in a single <code>actual</code> layer, so
-unlayered Tailwind output and project CSS keep precedence while the migration
-runs. See <a href="https://github.com/lekoala/actual-css/blob/master/docs/design-notes/cascade-layer.md">Cascade layer strategy</a> for the
-limitations of the approach.</p>
+<p>The full import places every Actual rule in a single <code>actual</code> layer. The
+explicit <code>@layer</code> order is what keeps Tailwind utilities above Actual while
+the migration runs — not the unlayered status of either output. See
+<a href="https://github.com/lekoala/actual-css/blob/master/docs/design-notes/cascade-layer.md">Cascade layer strategy</a>
+for the limitations of the approach.</p>
+<p>Layers do not scope custom properties: both frameworks define
+<code>--font-sans</code>, <code>--font-mono</code>, <code>--font-weight-*</code>, and <code>--radius-sm</code> /
+<code>--radius-lg</code>. With <code>actual</code> after <code>theme</code>, <code>font-sans</code> takes Actual's font
+stack and <code>rounded-lg</code> resolves to Actual's <code>--radius-lg</code>. Expect these
+token collisions on migrated screens until Tailwind is removed.</p>
 <p>Do not assume that loading both complete stylesheets is automatically safe.</p>
 <h2 id="start-with-components-not-utilities">Start with components, not utilities</h2>
 <p>A Tailwind button may look like this:</p>

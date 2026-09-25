@@ -80,6 +80,118 @@ test("data-tooltip generates a tooltip lazily on first hover", async () => {
   expect(visible(tip)).toBe(true);
 });
 
+test("shorthand text changed while visible applies on the next show, not mid-flight", async () => {
+  await loadTooltip('<button data-tooltip="Copy">Trigger</button>');
+  const trigger = document.querySelector("button");
+
+  hover(trigger);
+  await waitForShow();
+  const tip = document.querySelector('[role="tooltip"]');
+  measurable(tip);
+
+  // The documented freshness limit: a visible tip is never rewritten.
+  trigger.setAttribute("data-tooltip", "Copied!");
+  expect(tip.textContent).toBe("Copy");
+
+  leave(trigger);
+  await waitForHide();
+  hover(trigger);
+  await waitForShow();
+
+  expect(tip.textContent).toBe("Copied!");
+});
+
+const XSS_PAYLOAD = '<img src=x onerror="window.__tooltipPwned = true">';
+
+test("shorthand value is text, never parsed HTML", async () => {
+  await loadTooltip(`<button data-tooltip='${XSS_PAYLOAD}'>Trigger</button>`);
+  const trigger = document.querySelector("button");
+
+  hover(trigger);
+  await waitForShow();
+  const tip = document.querySelector('[role="tooltip"]');
+  measurable(tip);
+
+  expect(tip.textContent).toBe(XSS_PAYLOAD);
+  expect(tip.querySelector("img")).toBeNull();
+  expect(window.__tooltipPwned).toBeUndefined();
+});
+
+test("shorthand resync stays text, never parsed HTML", async () => {
+  await loadTooltip('<button data-tooltip="Copy">Trigger</button>');
+  const trigger = document.querySelector("button");
+
+  hover(trigger);
+  await waitForShow();
+  const tip = document.querySelector('[role="tooltip"]');
+  measurable(tip);
+
+  // A future "rich shorthand" must not turn this into innerHTML: the
+  // attribute may hold user-provided strings.
+  trigger.setAttribute("data-tooltip", XSS_PAYLOAD);
+  leave(trigger);
+  await waitForHide();
+  hover(trigger);
+  await waitForShow();
+
+  expect(tip.textContent).toBe(XSS_PAYLOAD);
+  expect(tip.querySelector("img")).toBeNull();
+  expect(window.__tooltipPwned).toBeUndefined();
+});
+
+test("click-toggle shorthand picks the mutated text up on reopen", async () => {
+  await loadTooltip('<button data-tooltip="Details" data-tooltip-click>Trigger</button>');
+  const trigger = document.querySelector("button");
+
+  click(trigger);
+  const tip = document.querySelector('[role="tooltip"]');
+  expect(visible(tip)).toBe(true);
+  expect(tip.textContent).toBe("Details");
+
+  click(trigger);
+  expect(visible(tip)).toBe(false);
+
+  trigger.setAttribute("data-tooltip", "Updated");
+  click(trigger);
+
+  expect(visible(tip)).toBe(true);
+  expect(tip.textContent).toBe("Updated");
+});
+
+test("explicit tooltip markup stays live while shown", async () => {
+  await loadTooltip(`
+    <button data-tooltip aria-describedby="rich-tip">Rich</button>
+    <div role="tooltip" id="rich-tip" hidden><strong>Original</strong> content</div>
+  `);
+  const trigger = document.querySelector("button");
+
+  hover(trigger);
+  await waitForShow();
+  const tip = document.getElementById("rich-tip");
+  expect(visible(tip)).toBe(true);
+
+  // Author-owned DOM: the runtime never writes it, so a rewrite applies
+  // mid-flight — the dedicated API for dynamic tooltip content.
+  // Test-only innerHTML: it stands in for author code that owns this DOM
+  // (and its sanitization). Runtime code must never take this path.
+  tip.innerHTML = "<em>Rewritten</em> content";
+  expect(tip.textContent).toBe("Rewritten content");
+  expect(visible(tip)).toBe(true);
+});
+
+test("always-visible shorthand keeps its initial text after mutation", async () => {
+  await loadTooltip('<button data-tooltip="Pinned" data-tooltip-visible>Trigger</button>');
+  const trigger = document.querySelector("button");
+  const tip = document.querySelector('[role="tooltip"]');
+
+  expect(visible(tip)).toBe(true);
+  expect(tip.textContent).toBe("Pinned");
+
+  // A single show at wiring time means the snapshot never refreshes.
+  trigger.setAttribute("data-tooltip", "Repinned");
+  expect(tip.textContent).toBe("Pinned");
+});
+
 test("shorthand content stays text while explicit tooltips support HTML", async () => {
   await loadTooltip(`
     <button id="plain" data-tooltip="<strong>Plain</strong>">Plain</button>
