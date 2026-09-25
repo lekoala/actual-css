@@ -37,6 +37,9 @@
 - `.join` supports a control nested one wrapper level deep (e.g. a combobox element): the wrapper carries the group corners and primary-edge `z-index`, the inner control inherits the radius, and no widget is named.
 - `.nav-link` works on a `<button>`: UA button chrome is neutralized with `<a>`-identical metrics.
 - `material` demo theme: Material 3 baseline palette, filled underline fields and addons whose focus thickens the bottom line, pill buttons, and a joined outline action drawn as one more filled segment.
+- `.choice-card.chip`: compact pill form for filter chips and selectable tags, with a leading dot that turns into the check without moving the label.
+- `--choice-chip-dot` exposes the chip's check-slot centre, so a theme can grow the dot's `circle()` clip into a selected fill.
+- The `material` theme grows the chip dot into a tonal fill.
 - The `gradient` theme demos the outer-halo field focus; `bootstrap-v6` and `edge` have no field focus override.
 - `demo/templates/contrast-contexts.html`: the page, `data-theme` islands, a card island, a named theme and an application-painted band with every intent variant, a form, a combobox, a date picker and focus lines measured live, plus a `.join` gallery with no focus adaptation.
 

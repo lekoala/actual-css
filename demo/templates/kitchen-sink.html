@@ -8,6 +8,7 @@
 <link rel="stylesheet" href="../../dist/actual.full.css">
   <link rel="stylesheet" href="../assets/actual-themes.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3/dist/tabler-icons.min.css">
+  <script src="../scripts/theme-picker.js"></script>
   <style>
     /* UI fonts for the font switcher. Lazy: font-display: swap means a webfont
        is only downloaded once its family is selected via --font-sans. */
@@ -74,36 +75,22 @@
       align-items: start;
     }
     .sink-col { display: grid; gap: var(--space-20); }
+    /* A data-theme island recomputes its tokens but paints nothing: without
+       its own surface, its ink lands on the page theme's background (a light
+       island under neon wrote dark labels on the dark page). */
+    .sink-island {
+      padding: var(--space-40);
+      border-radius: var(--radius);
+      background: var(--surface);
+      color: var(--text);
+    }
   </style>
 </head>
 <body>
 
   <h1>Actual CSS — Kitchen Sink</h1>
   <div class="cluster">
-  <select class="select fit" id="theme-switcher" aria-label="Switch theme">
-    <option value="">System theme</option>
-    <option value="light">Light</option>
-    <option value="dark">Dark</option>
-    <optgroup label="Themes">
-    <option value="indigo">Indigo</option>
-    <option value="dim">Dim</option>
-    <option value="corporate">Corporate</option>
-    <option value="bootstrap-v6">Bootstrap v6</option>
-    <option value="forest">Forest</option>
-    <option value="ocean">Ocean</option>
-    <option value="spruce">Spruce</option>
-    <option value="petrol">Petrol</option>
-    <option value="sunset">Sunset</option>
-    <option value="lavender">Lavender</option>
-    <option value="mono">Mono</option>
-    <option value="square">Square</option>
-    <option value="brutalist">Brutalist</option>
-    <option value="edge">Edge</option>
-    <option value="cyberpunk">Cyberpunk</option>
-    <option value="neon">Neon</option>
-    <option value="gradient">Gradient</option>
-    </optgroup>
-  </select>
+  <theme-picker><select class="select fit" aria-label="Switch theme"></select></theme-picker>
 
   <select class="select fit" id="font-switcher" aria-label="Switch font">
     <option value="">System font</option>
@@ -413,6 +400,31 @@
             <span class="muted">SSO + dedicated support</span>
           </label>
         </form>
+      </div>
+      <fieldset class="field-group">
+        <legend class="field-label">Choice chips</legend>
+        <div class="cluster">
+          <label class="choice-card chip"><input type="checkbox" name="topic" checked>Design</label>
+          <label class="choice-card chip"><input type="checkbox" name="topic">Engineering</label>
+          <label class="choice-card chip"><input type="checkbox" name="topic" checked>A longer label</label>
+          <label class="choice-card chip"><input type="checkbox" name="topic" disabled>Disabled</label>
+          <label class="choice-card chip secondary sm"><input type="radio" name="size" checked>S</label>
+          <label class="choice-card chip secondary sm"><input type="radio" name="size">M</label>
+          <label class="choice-card chip secondary sm"><input type="radio" name="size">L</label>
+        </div>
+      </fieldset>
+      <!-- The island wraps the fieldset: a legend straddles its fieldset's
+           border, outside the fieldset's own painted surface. -->
+      <div class="sink-island" data-theme="material">
+        <fieldset class="field-group">
+          <legend class="field-label">Choice chips — material island (the dot grows into the fill)</legend>
+          <div class="cluster">
+            <label class="choice-card chip"><input type="checkbox" name="m-topic" checked>Design</label>
+            <label class="choice-card chip"><input type="checkbox" name="m-topic">Engineering</label>
+            <label class="choice-card chip"><input type="checkbox" name="m-topic" checked>A longer label</label>
+            <label class="choice-card chip"><input type="checkbox" name="m-topic" disabled>Disabled</label>
+          </div>
+        </fieldset>
       </div>
       <div class="field">
         <label class="field-label" for="vol">Range slider</label>
@@ -815,7 +827,7 @@
       resolved values: pressed button, selected/disabled choices, card shadow,
       focus ring, and text selection should all follow the island's green
       palette.</p>
-    <div class="sink-grid" data-theme="forest">
+    <div class="sink-grid sink-island" data-theme="forest">
       <button class="btn" type="button" aria-pressed="false">Toggle</button>
       <button class="btn" type="button" aria-pressed="true">Toggle</button>
       <label class="choice">
@@ -980,18 +992,6 @@
   <div class="status-bar" data-status role="status" aria-live="polite" aria-atomic="true"></div>
   <script src="../../dist/actual.full.js"></script>
   <script>
-    const switcher = document.getElementById("theme-switcher");
-
-    if (switcher) {
-      switcher.addEventListener("change", () => {
-        if (switcher.value) {
-          document.documentElement.dataset.theme = switcher.value;
-        } else {
-          document.documentElement.removeAttribute("data-theme");
-        }
-      });
-    }
-
     const fonts = {
       geist: '"Geist", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
       inter: '"Inter Variable", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',

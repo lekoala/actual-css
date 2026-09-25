@@ -8,6 +8,7 @@
   <meta name="description" content="Extend Actual with your own data-enhance behavior: options declare data-intent, the enhancement relays the selected intent onto the control, and the registry handles injected markup — no framework change.">
   <link rel="stylesheet" href="../../dist/actual.full.css">
   <link rel="stylesheet" href="../assets/actual-themes.min.css">
+  <script src="../scripts/theme-picker.js"></script>
   <style>
     .page {
       --center-size: 64rem;
@@ -81,29 +82,7 @@
       </hgroup>
 
       <div class="cluster" style="gap: var(--space-20);">
-        <select class="select sm fit" id="theme-switcher" aria-label="Switch theme">
-          <option value="">System</option>
-          <option value="light">Light</option>
-          <option value="dark">Dark</option>
-          <optgroup label="Themes">
-            <option value="indigo">Indigo</option>
-            <option value="dim">Dim</option>
-            <option value="corporate">Corporate</option>
-            <option value="forest">Forest</option>
-            <option value="ocean">Ocean</option>
-            <option value="spruce">Spruce</option>
-            <option value="petrol">Petrol</option>
-            <option value="sunset">Sunset</option>
-            <option value="lavender">Lavender</option>
-            <option value="mono">Mono</option>
-            <option value="square">Square</option>
-            <option value="brutalist">Brutalist</option>
-            <option value="edge">Edge</option>
-            <option value="cyberpunk">Cyberpunk</option>
-            <option value="neon">Neon</option>
-            <option value="gradient">Gradient</option>
-          </optgroup>
-        </select>
+        <theme-picker><select class="select sm fit" aria-label="Switch theme"></select></theme-picker>
       </div>
     </header>
 
@@ -341,15 +320,6 @@ registerEnhancement("select-intent", (select) => {
     });
 
     /* Page niceties — not part of the enhancement. */
-    const switcher = document.getElementById("theme-switcher");
-    switcher?.addEventListener("change", () => {
-      if (switcher.value) {
-        document.documentElement.dataset.theme = switcher.value;
-      } else {
-        document.documentElement.removeAttribute("data-theme");
-      }
-    });
-
     const status = document.getElementById("status");
     const readout = document.getElementById("readout");
     if (status && readout) {

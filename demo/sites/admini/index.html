@@ -7,7 +7,7 @@
   <title>Dashboard - Admini on Actual CSS</title>
   <meta name="description" content="Admin dashboard with metrics cards, activity feed, and navigation shell.">
 
-  <script src="admini-theme.js"></script>
+  <script src="../../scripts/theme-picker.js" data-storage="admini-theme"></script>
   <link rel="stylesheet" href="../../../dist/actual.full.css">
   <link rel="stylesheet" href="../../assets/actual-themes.min.css">
   <link rel="stylesheet" href="admini.css">
@@ -164,29 +164,7 @@
 
         <div class="grow"></div>
 
-        <select class="select sm admini-hide-mobile fit" id="theme-switcher" aria-label="Switch theme">
-<option value="">System</option>
-            <option value="light">Light</option>
-            <option value="dark">Dark</option>
-            <optgroup label="Themes">
-            <option value="indigo">Indigo</option>
-            <option value="dim">Dim</option>
-            <option value="corporate">Corporate</option>
-            <option value="forest">Forest</option>
-            <option value="ocean">Ocean</option>
-            <option value="spruce">Spruce</option>
-            <option value="petrol">Petrol</option>
-            <option value="sunset">Sunset</option>
-            <option value="lavender">Lavender</option>
-            <option value="mono">Mono</option>
-            <option value="square">Square</option>
-            <option value="brutalist">Brutalist</option>
-            <option value="edge">Edge</option>
-            <option value="cyberpunk">Cyberpunk</option>
-            <option value="neon">Neon</option>
-            <option value="gradient">Gradient</option>
-            </optgroup>
-        </select>
+        <theme-picker><select class="select sm admini-hide-mobile fit" aria-label="Switch theme"></select></theme-picker>
 
         <button class="btn neutral ghost sm" type="button" aria-label="Notifications" data-tooltip="5 unread notifications">
           <i class="ti ti-bell" aria-hidden="true"></i>

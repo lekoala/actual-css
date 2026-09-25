@@ -2,8 +2,9 @@
  * stress test of the contract rather than a Material implementation: tokens
  * carry the palette, shape and the fields' bottom line, and small recipes
  * carry the look that tokens cannot express — filled field segments, a focus
- * line that thickens the bottom line, pill buttons, and the outline action of
- * a field group as one more filled segment. */
+ * line that thickens the bottom line, pill buttons, the outline action of a
+ * field group as one more filled segment, and chips whose dot grows into a
+ * tonal fill. */
 [data-theme="material"] {
   /* Base palette is the light half; the dark pairing is only announced where
      light-dark() exists, in the @supports block below. */
@@ -139,4 +140,38 @@
 
   border-end-start-radius: 0;
   border-end-end-radius: 0;
+}
+
+/* Filter chip: the core dot grows into a tonal fill, as M3 selected chips.
+   Tonal, not the solid intent, so the label keeps its ink and reads on both
+   sides of the growing edge. The mix is deeper than --soft-bg-mix (the
+   secondary-container depth) so the fill reads in both schemes. Without
+   color-mix() the chip keeps the core look. Forced colors need nothing: core
+   drops the checked layer and keeps the check. */
+@supports (color: color-mix(in oklab, red, white)) {
+  [data-theme="material"] .choice-card.chip:has(:checked) {
+    --choice-chip-fill: color-mix(
+      in oklab,
+      var(--surface) 76%,
+      var(--intent, var(--state-selected))
+    );
+    --choice-card-border: var(--choice-chip-fill);
+  }
+
+  /* 150% of a circle() radius is measured on the box diagonal, so the fill
+     covers any label length. */
+  [data-theme="material"] .choice-card.chip:has(:checked)::before {
+    background: var(--choice-chip-fill);
+    clip-path: circle(150% at var(--choice-chip-dot));
+  }
+
+  /* On the base rule so unchecking animates too. Slower than the token scale:
+     the fill travels the whole chip, not a hover's few pixels. */
+  [data-theme="material"] .choice-card.chip::before {
+    --choice-chip-grow: calc(var(--duration-slow) * 1.75);
+
+    transition:
+      clip-path var(--choice-chip-grow),
+      background-color var(--choice-chip-grow);
+  }
 }

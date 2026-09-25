@@ -2,11 +2,13 @@ import { execSync } from "node:child_process";
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { dirname, join, relative, resolve, sep } from "node:path";
 import { fileURLToPath } from "node:url";
+import { loadThemes } from "./docs/themes.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, "..");
 const TEMPLATES_DIR = join(ROOT, "demo", "templates");
 const SITES_DIR = join(ROOT, "demo", "sites");
+const THEME_PICKER = join(ROOT, "demo", "scripts", "theme-picker.js");
 
 function countBraces(css) {
   const stripped = css.replace(/\/\*[\s\S]*?\*\//g, "");
@@ -58,6 +60,26 @@ function checkAssets(source, file, tracked) {
   return issues;
 }
 
+/*
+ * Demo pages used to hand-copy the theme list, and a new theme reached the
+ * docs site (derived from the catalogue) while most pages silently lacked it.
+ * The list now lives once, in <theme-picker>; a hand-written "Themes" optgroup
+ * is a copy creeping back.
+ */
+function checkThemeCopy(source) {
+  return source.includes('<optgroup label="Themes">')
+    ? ["hand-copied theme list: use <theme-picker> (demo/scripts/theme-picker.js)"]
+    : [];
+}
+
+function checkThemePickerList(themeNames) {
+  const source = readFileSync(THEME_PICKER, "utf8");
+  const list = source.match(/const THEMES = \[([\s\S]*?)\]/)?.[1] ?? "";
+  const names = [...list.matchAll(/"([^"]+)"/g)].map((match) => match[1]);
+  if (names.join() === themeNames.join()) return [];
+  return [`THEMES does not match src/css/themes/index.css: expected ${themeNames.join(", ")}`];
+}
+
 function checkFile(file, tracked) {
   const source = readFileSync(file, "utf8");
   const issues = [];
@@ -69,6 +91,7 @@ function checkFile(file, tracked) {
     }
   }
   issues.push(...checkAssets(source, file, tracked));
+  issues.push(...checkThemeCopy(source));
 
   return issues;
 }
@@ -76,10 +99,14 @@ function checkFile(file, tracked) {
 function main() {
   const files = [...collectHtml(TEMPLATES_DIR), ...collectHtml(SITES_DIR)];
   const tracked = trackedFiles();
+  const themeNames = loadThemes(ROOT).map((theme) => theme.name);
+  const reports = [
+    ...files.map((file) => [file, checkFile(file, tracked)]),
+    [THEME_PICKER, checkThemePickerList(themeNames)],
+  ];
   let failed = false;
 
-  for (const file of files) {
-    const issues = checkFile(file, tracked);
+  for (const [file, issues] of reports) {
     if (issues.length > 0) {
       failed = true;
       console.error(`${relative(ROOT, file).replaceAll(sep, "/")}:`);

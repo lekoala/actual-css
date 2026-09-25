@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="../assets/actual-themes.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@lekoala/combobox@0.5.0/dist/combobox.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@lekoala/date-picker@0.3.0/dist/date-picker.css">
+  <script src="../scripts/theme-picker.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@lekoala/combobox@0.5.0/dist/combobox.js"></script>
   <!-- defer: the element reads its <input> on connect, so it must be defined
        after parsing — a head-time definition upgrades it before its child. -->
@@ -227,17 +228,7 @@
         scheme and the numbers follow.
       </p>
       <div class="cluster">
-        <select class="select sm fit" id="theme-switcher" aria-label="Page theme">
-          <option value="">System</option>
-          <option value="light">Light</option>
-          <option value="dark">Dark</option>
-          <option value="bootstrap-v6">bootstrap-v6</option>
-          <option value="gradient">gradient</option>
-          <option value="material">material</option>
-          <option value="corporate">corporate</option>
-          <option value="ocean">ocean</option>
-          <option value="neon">neon</option>
-        </select>
+        <theme-picker themes="bootstrap-v6 gradient material corporate ocean neon"><select class="select sm fit" aria-label="Page theme"></select></theme-picker>
         <label class="choice">
           <input class="switch" type="checkbox" role="switch" id="show-focus">
           Show every focus line
@@ -594,12 +585,7 @@
       }
     }
 
-    const switcher = document.getElementById("theme-switcher");
-    switcher.addEventListener("change", () => {
-      if (switcher.value) document.documentElement.dataset.theme = switcher.value;
-      else document.documentElement.removeAttribute("data-theme");
-      measure();
-    });
+    document.querySelector("theme-picker").addEventListener("theme-change", measure);
     document.getElementById("show-focus").addEventListener("change", (event) => {
       document.body.classList.toggle("cc-show-focus", event.target.checked);
     });

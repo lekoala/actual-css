@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Log in - Admini on Actual CSS</title>
   <meta name="description" content="Login page with centered card, form fields, and social authentication.">
-<script src="admini-theme.js"></script>
+<script src="../../scripts/theme-picker.js" data-storage="admini-theme"></script>
   <link rel="stylesheet" href="../../../dist/actual.full.css">
   <link rel="stylesheet" href="../../assets/actual-themes.min.css">
   <link rel="stylesheet" href="admini.css">
@@ -32,25 +32,7 @@
             <h2 style="margin: 0;">Sign in</h2>
             <p class="muted">Continue to your workspace.</p>
           </hgroup>
-          <select class="select sm fit" id="theme-switcher" aria-label="Switch theme">
-            <option value="">System</option>
-            <option value="light">Light</option>
-            <option value="indigo">Indigo</option>
-            <option value="dim">Dim</option>
-            <option value="corporate">Corporate</option>
-            <option value="forest">Forest</option>
-            <option value="ocean">Ocean</option>
-            <option value="spruce">Spruce</option>
-            <option value="petrol">Petrol</option>
-            <option value="sunset">Sunset</option>
-            <option value="lavender">Lavender</option>
-            <option value="mono">Mono</option>
-            <option value="square">Square</option>
-            <option value="edge">Edge</option>
-            <option value="cyberpunk">Cyberpunk</option>
-            <option value="neon">Neon</option>
-            <option value="gradient">Gradient</option>
-          </select>
+          <theme-picker><select class="select sm fit" aria-label="Switch theme"></select></theme-picker>
         </div>
 
         <form class="stack needs-validation" data-validation-message="Enter a valid username and password" action="index.html">
