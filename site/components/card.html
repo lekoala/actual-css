@@ -224,15 +224,12 @@
 <tr><td><code>.raised</code></td><td>Variant</td><td>Elevated surface with a soft shadow.</td></tr>
 <tr><td><code>.subtle</code></td><td>Variant</td><td>Lower contrast against the page surface.</td></tr>
 <tr><td><code>.surface</code></td><td>Variant</td><td>The page surface; intent in the text only.</td></tr>
-<tr><td><code>.inverted</code></td><td>Surface modifier</td><td>Inverse surface treatment.</td></tr>
 <tr><td><code>.compact</code></td><td>Density</td><td>Tighter padding and compact descendant context.</td></tr>
 </tbody>
 </table></div>
 <p><code>.surface</code> is a shared variant: it paints the page surface instead of
-<code>--surface-raised</code> and leaves the intent to the text.</p>
-<p><code>.inverted</code> paints <code>--surface-solid</code> and swaps the foreground to <code>--surface</code>,
-so it inverts in dark themes instead of always reading as dark. Write it as
-<code>class=&quot;card inverted&quot;</code>, or on any block.</p>
+<code>--surface-raised</code> and leaves the intent to the text. For a dark card on a
+light page (or the reverse), put <code>data-theme=&quot;dark&quot;</code> on the card.</p>
 <h2 id="basic-usage">Basic usage</h2>
 <p>Use semantic elements inside the card. A direct <code>&lt;header&gt;</code> or <code>&lt;footer&gt;</code> is the
 card's structural slot. A direct <code>&lt;footer&gt;</code> is anchored to the bottom of the
@@ -374,24 +371,10 @@ all footers in the row line up regardless of body length.</p>
 </div>
 <div class="prose docs-prose">
 <h2 id="surfaces">Surfaces</h2>
-<p><code>.inverted</code> creates a contrasting surface context, not a complete theme island.
-On a bare block (<code>&lt;header class=&quot;inverted&quot;&gt;</code>, <code>&lt;section class=&quot;inverted&quot;&gt;</code>) it
-paints the surface directly; contextual content and transparent treatments such
-as <code>.btn.outline</code>, <code>.btn.ghost</code>, and <code>.btn.link</code> follow its foreground.</p>
-<p>Apply it directly to a component that consumes the shared <code>--ui-*</code> surface
-contract (<code>.card</code>, <code>.navbar</code>, <code>.alert</code>, <code>.badge</code>) to treat that component as the
-contrasting surface. A surface-owning component nested inside an inverted block
-keeps its own surface and establishes a new context for its descendants. Use a
-<code>data-theme</code> island when every component and form control in a subtree must use
-another theme.</p>
-<p>More specific component states or explicit surface variants still take
-precedence: <code>.card.inverted.subtle</code> keeps the <code>.subtle</code> background while the
-foreground stays inverted.</p>
-<p><code>.inverted</code> and <code>.subtle</code> are competing surface treatments — do not combine
-them. <code>.subtle</code> paints the card's background directly while <code>.inverted</code> swaps
-the surface tokens, so <code>.card.subtle.inverted</code> renders a subtle background with
-inverted foreground. Treat them as mutually exclusive, like two competing
-variants.</p>
+<p>A card is a surface-owning component: inside a painted band it keeps its own
+surface and resets the context for its content. A card with
+<code>data-theme=&quot;dark&quot;</code> is a complete dark island — its fields, intents and states
+all follow.</p>
 <p><code>.surface</code> is the shared variant on a card: it drops the card to the page
 surface instead of <code>--surface-raised</code>, keeps the theme border, and lets an
 intent class color the text only. <code>.raised</code> and <code>.subtle</code> are the card-local
@@ -421,12 +404,12 @@ treatments on either side of it.</p>
     </hgroup>
   </article>
 
-  <article class="card inverted stack">
+  <article class="card stack" data-theme="dark">
     <hgroup>
-      <h3>Inverted</h3>
-      <p>Inverse surface for emphasis. Text inherits the contrasting surface color.</p>
+      <h3>Dark island</h3>
+      <p class="muted">A complete dark theme on one card.</p>
     </hgroup>
-    <button type="button" class="btn">Action</button>
+    <button type="button" class="btn primary outline">Action</button>
   </article>
 
   <article class="card compact">
@@ -460,12 +443,12 @@ treatments on either side of it.</p>
     &lt;/hgroup&gt;
   &lt;/article&gt;
 
-  &lt;article class=&quot;card inverted stack&quot;&gt;
+  &lt;article class=&quot;card stack&quot; data-theme=&quot;dark&quot;&gt;
     &lt;hgroup&gt;
-      &lt;h3&gt;Inverted&lt;/h3&gt;
-      &lt;p&gt;Inverse surface for emphasis. Text inherits the contrasting surface color.&lt;/p&gt;
+      &lt;h3&gt;Dark island&lt;/h3&gt;
+      &lt;p class=&quot;muted&quot;&gt;A complete dark theme on one card.&lt;/p&gt;
     &lt;/hgroup&gt;
-    &lt;button type=&quot;button&quot; class=&quot;btn&quot;&gt;Action&lt;/button&gt;
+    &lt;button type=&quot;button&quot; class=&quot;btn primary outline&quot;&gt;Action&lt;/button&gt;
   &lt;/article&gt;
 
   &lt;article class=&quot;card compact&quot;&gt;

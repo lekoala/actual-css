@@ -184,7 +184,6 @@
       "--btn-min-size",
       "--btn-pad-x",
       "--btn-radius",
-      "--btn-focus-color",
       "--btn-gap",
       "--btn-hover-overlay",
       "--btn-default-bg",
@@ -197,7 +196,6 @@
       "--btn-fg",
       "--btn-border",
       "--btn-default-hover-bg",
-      "--btn-focus-ring-color",
       "--btn-border-block-end-color",
       "--btn-border-block-end-width",
       "--spinner-width"

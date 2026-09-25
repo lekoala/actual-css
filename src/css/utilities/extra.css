@@ -252,7 +252,7 @@
 /* Surface. These are semantic surfaces, not arbitrary paint: each owns its
    matching ink and rebinds --heading to that ink, so it stays readable when it
    recreates a light surface inside a context that installed a dark one
-   (.inverted). Intent ink is not inherited through a surface utility; use
+   (e.g. a --surface-solid band). Intent ink is not inherited through a surface utility; use
    .intent-color for that. */
 .background-surface {
   --heading: currentColor;

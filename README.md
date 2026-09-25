@@ -69,7 +69,7 @@ Add classes to your HTML. Components define the structure, variants change the s
 
 Intents such as `.primary`, `.secondary`, `.success`, `.warning`, and `.danger` work across components.
 
-Variants such as `.solid`, `.soft`, `.outline`, and `.surface` are shared by components like buttons, badges, alerts, and cards. `.inverted` is a shared surface modifier: it paints any block with the inverse surface. `.ghost` and `.link` are button-only variants.
+Variants such as `.solid`, `.soft`, `.outline`, and `.surface` are shared by components like buttons, badges, alerts, and cards. A dark or light section is a `data-theme` island. `.ghost` and `.link` are button-only variants.
 
 Size variants `.sm` and `.lg` scale typography and participating component
 geometry consistently. Density contexts `.compact` and `.spacious` change
@@ -84,7 +84,7 @@ Actual CSS uses a small unprefixed class grammar:
 .component [intent] [variant] [size] [modifier]
 ```
 
-Components, layout helpers, form helpers, and utilities claim their documented class names. Intents are `.primary`, `.secondary`, `.success`, `.warning`, and `.danger`; shared variants are `.solid`, `.soft`, `.outline`, and `.surface`; `.inverted` is a shared surface modifier; button-only variants are `.ghost` and `.link`; shared sizes are `.sm` and `.lg`; density contexts are `.compact` and `.spacious`.
+Components, layout helpers, form helpers, and utilities claim their documented class names. Intents are `.primary`, `.secondary`, `.success`, `.warning`, and `.danger`; shared variants are `.solid`, `.soft`, `.outline`, and `.surface`; button-only variants are `.ghost` and `.link`; shared sizes are `.sm` and `.lg`; density contexts are `.compact` and `.spacious`.
 
 Undocumented `is-*` classes are runtime internals.
 

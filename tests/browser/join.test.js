@@ -7,7 +7,12 @@
  * "no intent" vs ".neutral" distinction.
  */
 import { expect, test } from "bun:test";
-import { browserAvailable, fixtureUrl, withBrowserPage } from "../../scripts/utils/browser.js";
+import {
+  browserAvailable,
+  fixtureUrl,
+  waitForBrowser,
+  withBrowserPage,
+} from "../../scripts/utils/browser.js";
 
 const FIXTURE = "tests/browser/join.html";
 const TIMEOUT = 60_000;
@@ -49,6 +54,32 @@ it("icon-only buttons stretch to the height of labelled siblings", async () => {
       expect(result.icon).toBe(result.labelled);
     },
     { artifactName: "join-icon-only" },
+  );
+});
+
+it("a keyboard-focused field stacks above the adjacent field", async () => {
+  await withBrowserPage(
+    fixtureUrl(FIXTURE),
+    async (view) => {
+      for (const type of ["keyDown", "keyUp"]) {
+        await view.cdp("Input.dispatchKeyEvent", {
+          type,
+          key: "Tab",
+          code: "Tab",
+          windowsVirtualKeyCode: 9,
+        });
+      }
+      await waitForBrowser(view, `document.activeElement?.id === "join-first"`);
+      const z = await view.evaluate(`(() => {
+        const z = (id) => Number(getComputedStyle(document.getElementById(id)).zIndex);
+        return { focused: z("join-first"), neighbour: z("join-second") };
+      })()`);
+
+      // Equal z-index lets the later sibling paint over the shared 1px edge
+      // of the focused field's inset line.
+      expect(z.focused).toBeGreaterThan(z.neighbour);
+    },
+    { artifactName: "join-focus-stack" },
   );
 });
 

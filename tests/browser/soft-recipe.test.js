@@ -247,7 +247,7 @@ it("default theme soft contract clears 4.5 on rest and hover, light and dark", a
       for (const root of ["contract", "contract-dark"]) {
         const resting = await readContract(root);
 
-        // Force a real :hover on the soft buttons (see inverted.test.js).
+        // Force a real :hover on the soft buttons (see surface-context.test.js).
         await view.cdp("DOM.enable");
         await view.cdp("CSS.enable");
         const { root: docRoot } = await view.cdp("DOM.getDocument");

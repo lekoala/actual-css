@@ -20,8 +20,8 @@ every scope that reached it *by inheritance*. The panel was styled by one set of
 ancestors while closed, and by a different set from the moment it became
 visible.
 
-Actual leans on inheritance deliberately: theme islands, density, `.inverted`,
-and the custom properties an application scopes to its own containers all
+Actual leans on inheritance deliberately: theme islands, density, and the
+custom properties an application scopes to its own containers all
 travel that way. So this was not one bug about themes. It was the same bug in as
 many forms as there are inherited contexts.
 
@@ -30,13 +30,12 @@ many forms as there are inherited contexts.
 Chrome, one `.flyout` per scope, values read off the panel before and after the
 click that opens it:
 
-| Scope                     | Closed                                   | Open                 |
-| ------------------------- | ---------------------------------------- | -------------------- |
-| `[data-theme="dark"]`     | `background: rgb(30, 26, 35)`            | `rgb(255, 255, 255)` |
-| `.sm`                     | `--control-size: 2rem`                   | `2.375rem`           |
-| `.inverted`               | `--ui-fg: light-dark(hsl(0 0% 100%), …)` | *(unset)*            |
-| app-scoped `--app-accent` | `rgb(1, 2, 3)`                           | *(unset)*            |
-| `.sm` inside a `<dialog>` | `--control-size: 2rem`                   | `2.375rem`           |
+| Scope                     | Closed                        | Open                 |
+| ------------------------- | ----------------------------- | -------------------- |
+| `[data-theme="dark"]`     | `background: rgb(30, 26, 35)` | `rgb(255, 255, 255)` |
+| `.sm`                     | `--control-size: 2rem`        | `2.375rem`           |
+| app-scoped `--app-accent` | `rgb(1, 2, 3)`                | *(unset)*            |
+| `.sm` inside a `<dialog>` | `--control-size: 2rem`        | `2.375rem`           |
 
 Every context broke. Three consequences were worth stating plainly:
 

@@ -304,9 +304,12 @@ component with shared variants reads, so the same declaration works on a badge:<
 <p>The rule ties with the variant's own <code>--ui-bg</code> on specificity, so load it after
 Actual CSS or import <code>actual.layer.css</code>.</p>
 <p>Transparent treatments (<code>.outline</code>, <code>.ghost</code>, <code>.link</code>) follow the surrounding
-foreground by default, including on a contrasting <code>.inverted</code> surface. A local
-intent class still wins: <code>.danger.outline</code> uses the danger color in either
-context. Filled buttons own their surface and keep their normal intent recipe.</p>
+foreground by default, including on a band your application paints. A local
+intent class still wins: <code>.danger.outline</code> uses the danger color in any
+context, and nothing tunes that color for a surface you paint yourself. For
+intent ink on a dark band, use a <code>data-theme</code> island, whose palette is tuned
+for its surface. Filled buttons own their surface and keep their normal intent
+recipe.</p>
 <p><code>.btn.link</code> is a link-style action: it keeps button behavior and states, but
 remains intrinsically sized like text instead of stretching with its layout
 container. For a plain text link, use a bare <code>&lt;a&gt;</code> with no class.</p>
@@ -604,7 +607,6 @@ activation guard.</li>
 <h2 id="css-hooks">CSS hooks</h2>
 <ul>
 <li><code>--btn-radius</code> — corner radius.</li>
-<li><code>--btn-focus-color</code> — focus ring base color; the ring itself is derived from it.</li>
 <li><code>--btn-gap</code> — space between an icon and the label text (default <code>0.375em</code>).</li>
 </ul>
 

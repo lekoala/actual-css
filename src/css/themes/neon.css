@@ -34,10 +34,6 @@
 
   --border: hsl(260 18% 24%);
   --focus: var(--secondary);
-  /* Intentional ring override — the core derives --focus-ring from --focus at
-     30%/28%, but neon's glow language wants a stronger, fixed-alpha halo that
-     survives the P3 wide-gamut upgrade below. */
-  --focus-ring: hsl(182 100% 46% / 0.35);
   --hover-overlay: hsl(0 0% 100% / 0.07);
   --shadow-color: hsl(260 60% 3%);
 
@@ -62,7 +58,6 @@
       --success: oklch(85% 0.28 148);
       --warning: oklch(92% 0.2 105);
       --danger: oklch(68% 0.26 15);
-      --focus-ring: oklch(85% 0.17 195 / 0.35);
       --shadow-popout: 0 0 1rem oklch(70% 0.32 340 / 0.3);
     }
   }

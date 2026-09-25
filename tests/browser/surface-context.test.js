@@ -1,10 +1,14 @@
 /*
- * Real-browser contrasting-surface contract, driven over Bun.WebView.
+ * Real-browser contextual-surface contract, driven over Bun.WebView.
  *
- * Covers contextual transparent treatments, explicit intents, surface-owning
- * boundaries, direct component opt-in, and local busy/heading derivation.
- * The browser lifecycle (one headless Chrome per Bun process, one tab per
- * view) is owned by Bun.WebView; this file only describes the contract.
+ * An application paints a contrasting band with local CSS (the theming.md
+ * recipe; Actual ships no class for it). Covers what components owe such a
+ * context: transparent treatments follow its ink, explicit intents and filled
+ * controls keep their own, surface-owning descendants are boundaries, a
+ * navbar with its own --ui-* keeps readable states, and every focus line is
+ * the same --focus. The browser lifecycle (one headless Chrome per Bun
+ * process, one tab per view) is owned by Bun.WebView; this file only
+ * describes the contract.
  */
 import { expect, test } from "bun:test";
 import {
@@ -14,13 +18,13 @@ import {
   withBrowserPage,
 } from "../../scripts/utils/browser.js";
 
-const FIXTURE = "tests/browser/inverted.html";
+const FIXTURE = "tests/browser/surface-context.html";
 const TIMEOUT = 60_000;
 
 const baseTest = (await browserAvailable()) ? test : test.skip;
 const it = (name, run) => baseTest(name, run, TIMEOUT);
 
-it("inverted contrasting-surface contract over one browser pass", async () => {
+it("contextual-surface contract over one browser pass", async () => {
   await withBrowserPage(
     fixtureUrl(FIXTURE),
     async (view) => {
@@ -38,7 +42,6 @@ it("inverted contrasting-surface contract over one browser pass", async () => {
         return {
           refSolid: bg("#ref-solid"),
           refSurface: bg("#ref-surface"),
-          refSubtle: bg("#ref-subtle"),
           refRaised: bg("#ref-raised"),
           refNeutral: bg("#ref-neutral"),
           refPrimary: bg("#ref-primary"),
@@ -48,7 +51,6 @@ it("inverted contrasting-surface contract over one browser pass", async () => {
           refPrimaryFg: color("#ref-primary-fg"),
           refContextHover: bg("#ref-context-hover"),
           refRaisedOverlay: bg("#ref-raised-overlay"),
-          refSolidOverlay: bg("#ref-solid-overlay"),
           normalOutlineColor: color("#normal-outline"),
           normalOutlineBorder: border("#normal-outline"),
           wrapperBg: bg("#wrapper"),
@@ -75,19 +77,9 @@ it("inverted contrasting-surface contract over one browser pass", async () => {
           nestedAccordionBg: bg("#nested-accordion"),
           nestedAccordionSummary: color("#nested-accordion summary"),
           nestedAccordionPanel: color("#nested-accordion p"),
-          invertedBackgroundBg: bg("#inverted-background"),
-          invertedBackgroundColor: color("#inverted-background"),
-          invertedBackgroundHeading: color("#inverted-background h3"),
-          invertedCardBg: bg("#inverted-card"),
-          invertedCardColor: color("#inverted-card"),
-          invertedCardHeading: color("#inverted-card h3"),
-          invertedBusyOverlay: beforeBg("#inverted-card"),
-          cardSubtleBg: bg("#card-subtle"),
-          cardSubtleColor: color("#card-subtle"),
-          alertBg: bg("#inverted-alert"),
-          alertColor: color("#inverted-alert"),
-          badgeBg: bg("#inverted-badge"),
-          badgeColor: color("#inverted-badge"),
+          bandBackgroundBg: bg("#band-background"),
+          bandBackgroundColor: color("#band-background"),
+          bandBackgroundHeading: color("#band-background h3"),
           navbarBg: bg("#navbar"),
           navbarColor: color("#navbar"),
           brandColor: color(".navbar-brand"),
@@ -134,31 +126,20 @@ it("inverted contrasting-surface contract over one browser pass", async () => {
       expect(initial.nestedAccordionPanel).toBe(initial.refTextMuted);
 
       // A background utility is a semantic surface: it recreates a light
-      // surface inside the inverted context, so it must also recreate the
-      // matching ink and heading color, not inherit the inverted foreground.
-      expect(initial.invertedBackgroundBg).toBe(initial.refSurface);
-      expect(initial.invertedBackgroundColor).toBe(initial.refText);
-      expect(initial.invertedBackgroundHeading).toBe(initial.refText);
+      // surface inside the dark band, so it must also recreate the matching
+      // ink and heading color, not inherit the band foreground.
+      expect(initial.bandBackgroundBg).toBe(initial.refSurface);
+      expect(initial.bandBackgroundColor).toBe(initial.refText);
+      expect(initial.bandBackgroundHeading).toBe(initial.refText);
 
-      // Shared-surface components opt in when .inverted is applied directly.
-      expect(initial.invertedCardBg).toBe(initial.refSolid);
-      expect(initial.invertedCardColor).toBe(initial.refSurface);
-      expect(initial.invertedCardHeading).toBe(initial.refSurface);
-      expect(initial.invertedBusyOverlay).toBe(initial.refSolidOverlay);
-      expect(initial.alertBg).toBe(initial.refSolid);
-      expect(initial.alertColor).toBe(initial.refSurface);
-      expect(initial.badgeBg).toBe(initial.refSolid);
-      expect(initial.badgeColor).toBe(initial.refSurface);
+      // A navbar given its own --ui-* surface paints it and follows its ink.
       expect(initial.navbarBg).toBe(initial.refSolid);
       expect(initial.navbarColor).toBe(initial.refSurface);
       expect(initial.brandColor).toBe(initial.refSurface);
       expect(initial.linkColor).toBe(initial.refSurface);
 
-      expect(initial.cardSubtleBg).toBe(initial.refSubtle);
-      expect(initial.cardSubtleColor).toBe(initial.refSurface);
       // The current nav link is a tint of the bar's ink, in that ink: the
-      // selected accent and the bar's own --ui-hover-bg (equal to the bar
-      // fill) would both vanish on the inverted bar.
+      // selected accent has no contrast pair with an arbitrary bar.
       expect(initial.activeBg).toBe(initial.refContextHover);
       expect(initial.activeBg).not.toBe(initial.navbarBg);
       expect(initial.activeColor).toBe(initial.refSurface);
@@ -177,9 +158,9 @@ it("inverted contrasting-surface contract over one browser pass", async () => {
       expect(hovered.contextOutlineBg).toBe(hovered.refContextHover);
       expect(hovered.contextOutlineColor).toBe(hovered.refSurface);
 
-      // Keyboard focus: a button without an intent takes the contextual
-      // --focus-ring, so .inverted's ring (its --surface ink) reaches it; an
-      // intent button keeps the ring derived from its intent.
+      // Keyboard focus: every button, with or without an intent, draws the
+      // same solid --focus line — on the page, on the band, and inside a card
+      // nested in it (where a context-derived ring once fell to 1.0:1).
       const ringOf = async (id) => {
         for (let i = 0; i < 8; i++) {
           if (await evalIn(`document.activeElement?.id === ${JSON.stringify(id)}`)) break;
@@ -193,15 +174,22 @@ it("inverted contrasting-surface contract over one browser pass", async () => {
           }
         }
         await waitForBrowser(view, `document.activeElement?.id === ${JSON.stringify(id)}`);
-        return evalIn(`getComputedStyle(document.activeElement).boxShadow`);
+        return evalIn(`(() => {
+          const cs = getComputedStyle(document.activeElement);
+          return cs.outlineStyle + " " + cs.outlineColor;
+        })()`);
       };
-      const normalRing = await ringOf("normal-outline");
-      const contextRing = await ringOf("context-outline");
-      const intentRing = await ringOf("context-primary-outline");
-      expect(normalRing).not.toContain(initial.refSurface);
-      expect(contextRing).toContain(initial.refSurface);
-      expect(intentRing).not.toContain(initial.refSurface);
+      const expected = `solid ${await evalIn(`getComputedStyle(document.getElementById("ref-focus")).color`)}`;
+      for (const id of [
+        "normal-outline",
+        "context-outline",
+        "context-primary-outline",
+        "context-primary",
+        "nested-outline",
+      ]) {
+        expect(await ringOf(id), id).toBe(expected);
+      }
     },
-    { artifactName: "inverted" },
+    { artifactName: "surface-context" },
   );
 });

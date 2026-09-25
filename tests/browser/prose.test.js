@@ -28,9 +28,9 @@ it("prose owns rich text flow and respects contextual colors", async () => {
           p2: marginTop("#flow-p2"),
           h2: marginTop("#flow-h2"),
           directEnds: ["#flow-p1", "#flow-p2", "#flow-h2"].map(marginBottom),
-          invertedProse: color("#inverted-prose"),
-          invertedProseHeading: color("#inverted-prose-heading"),
-          invertedProseCopy: color("#inverted-prose-copy"),
+          bandProse: color("#band-prose"),
+          bandProseHeading: color("#band-prose-heading"),
+          bandProseCopy: color("#band-prose-copy"),
         };
       })()`);
 
@@ -43,8 +43,8 @@ it("prose owns rich text flow and respects contextual colors", async () => {
       expect(result.directEnds).toEqual(["0px", "0px", "0px"]);
 
       // Both inherited copy and headings follow the contextual surface.
-      expect(result.invertedProseCopy).toBe(result.invertedProse);
-      expect(result.invertedProseHeading).toBe(result.invertedProse);
+      expect(result.bandProseCopy).toBe(result.bandProse);
+      expect(result.bandProseHeading).toBe(result.bandProse);
     },
     { artifactName: "prose" },
   );

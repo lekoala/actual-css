@@ -5,7 +5,7 @@
 - Supports intent colors.
 - Supports longer text and lists.
 - Links inherit alert color by default.
-- Alerts are soft by default. Use `.surface` for neutral chrome with the intent only in the ink, `.solid` or `.outline` when the message needs stronger or quieter emphasis, and `.inverted` for an inverse surface.
+- Alerts are soft by default. Use `.surface` for neutral chrome with the intent only in the ink, `.solid` or `.outline` when the message needs stronger or quieter emphasis.
 - Use `<menu class="actions cluster">` for alert action lists.
 - Use `role="alert"` only when the alert is injected dynamically and should be announced.
 - Not a toast.
@@ -33,7 +33,6 @@ itself needs to change, not `.soft`.
 | `.admonition`    | Variant     | Tinted title bar, body on the page surface.     |
 | Shared intents   | Intent      | `.primary`, `.secondary`, `.success`, …         |
 | Shared variants  | Variant     | `.solid`, `.outline`, `.surface`.               |
-| `.inverted`      | Surface     | Inverse surface, any intent.                    |
 | Density contexts | Density     | Descendant rhythm; inline padding stays stable. |
 
 ## Basic usage
@@ -127,10 +126,6 @@ center.
 <div class="stack">
   <div class="alert surface" role="alert">
     I'm a surface alert — theme chrome, intent in the ink
-  </div>
-
-  <div class="alert inverted" role="alert">
-    I'm an inverted alert <a href="#">with a link</a>
   </div>
 
   <div class="alert danger compact" role="alert">

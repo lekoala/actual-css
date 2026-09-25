@@ -844,18 +844,19 @@
     <p>Three contexts that reach components by inheritance. Each block sets one
       scope on its container; nothing inside restates it.</p>
 
-    <h3>Inverted surface</h3>
-    <!-- A surface-owning descendant keeps its own surface and foreground. -->
-    <div class="inverted stack" style="padding:var(--space-40)">
-      <p>Contextual text follows the inverted foreground.</p>
+    <h3>Theme island</h3>
+    <!-- data-theme recomputes every token below it: fields and intents too. -->
+    <div data-theme="dark" class="stack" style="padding:var(--space-40); background:var(--surface); color:var(--text)">
+      <p>Everything here follows the dark palette.</p>
       <div class="cluster">
         <button class="btn" type="button">Button</button>
-        <button class="btn primary" type="button">Primary</button>
+        <button class="btn primary outline" type="button">Primary outline</button>
         <span class="badge">Badge</span>
         <a href="#">Link</a>
+        <input class="input" aria-label="Island input" style="max-inline-size:12rem">
       </div>
       <article class="card stack" style="max-inline-size:20rem">
-        <p>A card keeps its own surface inside the block.</p>
+        <p>A card takes the island's raised surface.</p>
       </article>
     </div>
 

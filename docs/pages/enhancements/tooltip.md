@@ -37,7 +37,7 @@ runtime when Actual should own showing and hiding.
 
 **Where the element lives is part of the contract.** An explicit tooltip stays
 exactly where you wrote it, so it keeps every scope that reaches it by
-inheritance — a theme island, a density scope, `.inverted`, your own scoped
+inheritance — a theme island, a density scope, your own scoped
 custom properties. It also means placement is yours to get right: a tooltip
 used from inside a modal dialog must be authored inside that dialog, because
 the top layer does not lift an element out of a modal's inertness.

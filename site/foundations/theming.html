@@ -263,18 +263,30 @@ with the selected palette — a theme swatch is a useful example.</p>
 <h3 id="resize-an-avatar-or-its-stack">Resize an avatar or its stack</h3>
 <p>Set <code>--avatar-size</code> / <code>--avatar-radius</code>; tune overlap with <code>--avatar-stack-overlap</code> and <code>--avatar-stack-ring</code>.</p>
 <p>→ Components · Avatar</p>
-<h3 id="make-an-inverted-contrasting-surface">Make an inverted / contrasting surface</h3>
-<p>Apply <code>.inverted</code> to create one contrasting surface context. It paints a bare
-block (<code>&lt;header class=&quot;inverted&quot;&gt;</code>, <code>&lt;section class=&quot;inverted&quot;&gt;</code>) with
-<code>--surface-solid</code> and <code>--surface</code>; contextual content and transparent treatments
-follow that foreground. Apply it directly to a component that consumes the
-shared <code>--ui-*</code> contract when that component itself is the contrasting surface.</p>
-<p>Surface-owning descendants keep their own component surface and establish a new
-foreground context. Use <code>data-theme=&quot;dark&quot;</code>, <code>data-theme=&quot;light&quot;</code>, or a named
-theme instead when an entire subtree — including forms, states, and nested
-surfaces — must use another palette. More specific component states or explicit
-surface variants (<code>.card.subtle</code>) still take precedence.</p>
-<p>→ Components · Card · Foundations · Tokens (theme contract)</p>
+<h3 id="make-a-dark-or-light-section-inverted-inverse-contrasting-band">Make a dark (or light) section / inverted, inverse, contrasting band</h3>
+<p>Put <code>data-theme=&quot;dark&quot;</code> (or <code>&quot;light&quot;</code>) on the section, footer, navbar or card.
+The island recomputes every token — surfaces, text, fields, validation,
+intents, focus and native controls — so a form or a <code>.primary.outline</code> inside
+it reads correctly. In a branded application, <code>[data-theme=&quot;light&quot;]</code> and
+<code>[data-theme=&quot;dark&quot;]</code> are the scheme roles of your brand: redefine them after
+Actual CSS and the island follows your palette.</p>
+<pre><code class="language-html">&lt;footer data-theme=&quot;dark&quot;&gt;…&lt;/footer&gt;
+&lt;article class=&quot;card&quot; data-theme=&quot;dark&quot;&gt;…&lt;/article&gt;
+</code></pre>
+<p>Actual has no class that inverts only part of a subtree. When all you need is
+a painted band with neutral content and filled buttons, write it in
+application CSS and keep forms and intent ink out of it:</p>
+<pre><code class="language-css">.site-band {
+  --heading: var(--surface);
+  background: var(--surface-solid);
+  color: var(--surface);
+}
+</code></pre>
+<p>Transparent treatments (<code>.btn.outline</code>, <code>.ghost</code>, <code>.link</code>) and headings follow
+that ink; fields, their labels and help text, and intent colors keep the page
+palette, which nothing tunes for <code>--surface-solid</code>. Focus lines stay readable
+there: the theme contract keeps <code>--focus</code> at 3:1 on <code>--surface-solid</code>.</p>
+<p>→ Foundations · Tokens (theme contract) · Examples · Contrast contexts</p>
 <h3 id="replace-the-palette-with-my-own-brand">Replace the palette with my own brand</h3>
 <p>Override the whole minimal recolor set (Tokens · Theme contract), not just
 <code>--primary</code>. Every neutral of the default theme — surfaces, text, border,
@@ -292,13 +304,12 @@ lower <code>--soft-fg-mix</code> or declare the per-role hooks for the intents t
 <p><code>src/css/themes/</code> holds example palettes (<code>ocean</code>, <code>spruce</code>, <code>neon</code>, <code>brutalist</code>, …) as
 reference material to copy into your own <code>[data-theme]</code> island — they are demo
 assets, not package entrypoints. Each sets the intent/surface/text tokens and
-lets the core derive everything else. In browsers with <code>color-mix()</code> support,
-<code>--focus-ring</code> follows each island's <code>--focus</code> automatically; re-declare it only
-for a deliberate visual override or a matching legacy fallback.</p>
+lets the core derive everything else.</p>
 <p>The <code>bootstrap-v6</code> example follows Bootstrap 6's blue palette, stronger subtle
-surfaces, filled badges, steady select hover, and crisp inset outline on focused
-controls. Use <code>.badge.soft</code> for a subtle badge. It is a visual theme, not a
-Bootstrap compatibility layer.</p>
+surfaces, filled badges, and steady select hover; its focus is the core solid
+line. Use <code>.badge.soft</code> for a subtle badge. It is a visual theme, not a
+Bootstrap compatibility layer. The <code>gradient</code> example keeps a Bootstrap 4 style
+outer halo on focused fields, for comparison.</p>
 
 </div>
 
@@ -334,7 +345,7 @@ Bootstrap compatibility layer.</p>
         <li><a class="nav-link" href="#loading-busy-overlay-on-a-container" data-docs-toc-item data-level="3">Loading / busy overlay on a container</a></li>
         <li><a class="nav-link" href="#set-card-rail-item-width-in-a-scroll-snap-row" data-docs-toc-item data-level="3">Set card-rail item width in a scroll-snap row</a></li>
         <li><a class="nav-link" href="#resize-an-avatar-or-its-stack" data-docs-toc-item data-level="3">Resize an avatar or its stack</a></li>
-        <li><a class="nav-link" href="#make-an-inverted-contrasting-surface" data-docs-toc-item data-level="3">Make an inverted / contrasting surface</a></li>
+        <li><a class="nav-link" href="#make-a-dark-or-light-section-inverted-inverse-contrasting-band" data-docs-toc-item data-level="3">Make a dark (or light) section / inverted, inverse, contrasting band</a></li>
         <li><a class="nav-link" href="#replace-the-palette-with-my-own-brand" data-docs-toc-item data-level="3">Replace the palette with my own brand</a></li>
         <li><a class="nav-link" href="#use-or-adapt-a-preset-palette" data-docs-toc-item data-level="3">Use or adapt a preset palette</a></li>
           </ul>

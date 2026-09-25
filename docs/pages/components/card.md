@@ -4,21 +4,17 @@ Flexible content container with optional header, body, and footer regions.
 
 ## Class reference
 
-| Class       | Kind             | Description                                     |
-| ----------- | ---------------- | ----------------------------------------------- |
-| `.card`     | Component        | Neutral raised surface for grouped content.     |
-| `.raised`   | Variant          | Elevated surface with a soft shadow.            |
-| `.subtle`   | Variant          | Lower contrast against the page surface.        |
-| `.surface`  | Variant          | The page surface; intent in the text only.      |
-| `.inverted` | Surface modifier | Inverse surface treatment.                      |
-| `.compact`  | Density          | Tighter padding and compact descendant context. |
+| Class      | Kind      | Description                                     |
+| ---------- | --------- | ----------------------------------------------- |
+| `.card`    | Component | Neutral raised surface for grouped content.     |
+| `.raised`  | Variant   | Elevated surface with a soft shadow.            |
+| `.subtle`  | Variant   | Lower contrast against the page surface.        |
+| `.surface` | Variant   | The page surface; intent in the text only.      |
+| `.compact` | Density   | Tighter padding and compact descendant context. |
 
 `.surface` is a shared variant: it paints the page surface instead of
-`--surface-raised` and leaves the intent to the text.
-
-`.inverted` paints `--surface-solid` and swaps the foreground to `--surface`,
-so it inverts in dark themes instead of always reading as dark. Write it as
-`class="card inverted"`, or on any block.
+`--surface-raised` and leaves the intent to the text. For a dark card on a
+light page (or the reverse), put `data-theme="dark"` on the card.
 
 ## Basic usage
 
@@ -104,27 +100,10 @@ all footers in the row line up regardless of body length.
 
 ## Surfaces
 
-`.inverted` creates a contrasting surface context, not a complete theme island.
-On a bare block (`<header class="inverted">`, `<section class="inverted">`) it
-paints the surface directly; contextual content and transparent treatments such
-as `.btn.outline`, `.btn.ghost`, and `.btn.link` follow its foreground.
-
-Apply it directly to a component that consumes the shared `--ui-*` surface
-contract (`.card`, `.navbar`, `.alert`, `.badge`) to treat that component as the
-contrasting surface. A surface-owning component nested inside an inverted block
-keeps its own surface and establishes a new context for its descendants. Use a
-`data-theme` island when every component and form control in a subtree must use
-another theme.
-
-More specific component states or explicit surface variants still take
-precedence: `.card.inverted.subtle` keeps the `.subtle` background while the
-foreground stays inverted.
-
-`.inverted` and `.subtle` are competing surface treatments — do not combine
-them. `.subtle` paints the card's background directly while `.inverted` swaps
-the surface tokens, so `.card.subtle.inverted` renders a subtle background with
-inverted foreground. Treat them as mutually exclusive, like two competing
-variants.
+A card is a surface-owning component: inside a painted band it keeps its own
+surface and resets the context for its content. A card with
+`data-theme="dark"` is a complete dark island — its fields, intents and states
+all follow.
 
 `.surface` is the shared variant on a card: it drops the card to the page
 surface instead of `--surface-raised`, keeps the theme border, and lets an
@@ -154,12 +133,12 @@ treatments on either side of it.
     </hgroup>
   </article>
 
-  <article class="card inverted stack">
+  <article class="card stack" data-theme="dark">
     <hgroup>
-      <h3>Inverted</h3>
-      <p>Inverse surface for emphasis. Text inherits the contrasting surface color.</p>
+      <h3>Dark island</h3>
+      <p class="muted">A complete dark theme on one card.</p>
     </hgroup>
-    <button type="button" class="btn">Action</button>
+    <button type="button" class="btn primary outline">Action</button>
   </article>
 
   <article class="card compact">

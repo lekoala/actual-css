@@ -1,11 +1,12 @@
 /*
- * Non-blocking soft-contrast report across the shipped preset themes.
+ * Non-blocking contrast report across the shipped preset themes.
  *
- * The default theme carries a blocking contrast gate (tests/browser/
- * soft-recipe.test.js); presets are reference/demo material, so this tool only
- * REPORTS their resting and hovered soft pairs — light and dark where a theme
+ * The default theme carries blocking gates (tests/browser/soft-recipe.test.js,
+ * tests/browser/field-focus.test.js); presets are reference/demo material, so
+ * this tool only REPORTS their resting and hovered soft pairs and their focus
+ * line against --surface and --surface-solid — light and dark where a theme
  * defines both — and exits 0 whatever it finds. Use it to decide where a
- * preset's character survives a soft-ink correction.
+ * preset's character survives a correction.
  *
  * Each island resolves its own tokens plus the default theme's inherited
  * --*-soft-fg hooks (a preset that wants its own soft ink overrides them), so
@@ -49,6 +50,8 @@ function island(theme, scheme) {
     ${INTENTS.map((i) => `<span data-ink="${i}" style="color: var(--${i})"></span>`).join("")}
     ${INTENTS.map((i) => `<span class="badge ${i}" data-badge="${i}">t</span>`).join("")}
     ${INTENTS.map((i) => `<button class="btn soft ${i}" data-hover="${i}" type="button">t</button>`).join("")}
+    <span data-focus="surface" style="color: var(--focus); background: var(--surface)"></span>
+    <span data-focus="solid" style="color: var(--focus); background: var(--surface-solid)"></span>
   </div>`;
 }
 
@@ -96,8 +99,11 @@ await withBrowserPage(
         const root = document.getElementById("${id}");
         const cs = (el) => getComputedStyle(el);
         const rest = {};
-        for (const el of root.querySelectorAll("[data-badge]"))
-          rest[el.dataset.badge] = { fg: norm(cs(el).color), bg: norm(cs(el).backgroundColor) };
+        for (const el of root.querySelectorAll("[data-badge], [data-focus]"))
+          rest[el.dataset.badge ?? \`focus-\${el.dataset.focus}\`] = {
+            fg: norm(cs(el).color),
+            bg: norm(cs(el).backgroundColor),
+          };
         return rest;
       })()`);
 
@@ -150,6 +156,21 @@ await withBrowserPage(
             `${theme.name.padEnd(9)}  ${scheme.padEnd(6)}  ${intent.padEnd(9)} ${r.padStart(5)}:1   ${h.padStart(5)}:1${flag}`,
           );
         }
+      }
+    }
+
+    console.log("\nFocus line contrast (--focus vs surface / solid), needs 3:1 on both.\n");
+    console.log("theme      scheme  surface  solid");
+    for (const theme of themes) {
+      for (const scheme of theme.hasDark ? ["light", "dark"] : ["light"]) {
+        const rest = await readRest(`island-${theme.name}-${scheme}`);
+        const [s, d] = ["focus-surface", "focus-solid"].map((key) =>
+          ratio(rest[key].fg, rest[key].bg).toFixed(2),
+        );
+        const flag = +s < 3 || +d < 3 ? "  <-- under 3" : "";
+        console.log(
+          `${theme.name.padEnd(9)}  ${scheme.padEnd(6)}  ${s.padStart(5)}:1  ${d.padStart(5)}:1${flag}`,
+        );
       }
     }
   },

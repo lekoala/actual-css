@@ -220,7 +220,7 @@
 <li>Supports intent colors.</li>
 <li>Supports longer text and lists.</li>
 <li>Links inherit alert color by default.</li>
-<li>Alerts are soft by default. Use <code>.surface</code> for neutral chrome with the intent only in the ink, <code>.solid</code> or <code>.outline</code> when the message needs stronger or quieter emphasis, and <code>.inverted</code> for an inverse surface.</li>
+<li>Alerts are soft by default. Use <code>.surface</code> for neutral chrome with the intent only in the ink, <code>.solid</code> or <code>.outline</code> when the message needs stronger or quieter emphasis.</li>
 <li>Use <code>&lt;menu class=&quot;actions cluster&quot;&gt;</code> for alert action lists.</li>
 <li>Use <code>role=&quot;alert&quot;</code> only when the alert is injected dynamically and should be announced.</li>
 <li>Not a toast.</li>
@@ -249,7 +249,6 @@ itself needs to change, not <code>.soft</code>.</p>
 <tr><td><code>.admonition</code></td><td>Variant</td><td>Tinted title bar, body on the page surface.</td></tr>
 <tr><td>Shared intents</td><td>Intent</td><td><code>.primary</code>, <code>.secondary</code>, <code>.success</code>, …</td></tr>
 <tr><td>Shared variants</td><td>Variant</td><td><code>.solid</code>, <code>.outline</code>, <code>.surface</code>.</td></tr>
-<tr><td><code>.inverted</code></td><td>Surface</td><td>Inverse surface, any intent.</td></tr>
 <tr><td>Density contexts</td><td>Density</td><td>Descendant rhythm; inline padding stays stable.</td></tr>
 </tbody>
 </table></div>
@@ -412,10 +411,6 @@ center.</p>
     I'm a surface alert — theme chrome, intent in the ink
   </div>
 
-  <div class="alert inverted" role="alert">
-    I'm an inverted alert <a href="#">with a link</a>
-  </div>
-
   <div class="alert danger compact" role="alert">
     I'm an error in a compact context
   </div>
@@ -437,10 +432,6 @@ center.</p>
     <pre><code class="language-html">&lt;div class=&quot;stack&quot;&gt;
   &lt;div class=&quot;alert surface&quot; role=&quot;alert&quot;&gt;
     I'm a surface alert — theme chrome, intent in the ink
-  &lt;/div&gt;
-
-  &lt;div class=&quot;alert inverted&quot; role=&quot;alert&quot;&gt;
-    I'm an inverted alert &lt;a href=&quot;#&quot;&gt;with a link&lt;/a&gt;
   &lt;/div&gt;
 
   &lt;div class=&quot;alert danger compact&quot; role=&quot;alert&quot;&gt;

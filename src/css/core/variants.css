@@ -2,13 +2,9 @@
  * Cross-cutting variant token mapping.
  *
  * Variant scope: .solid/.soft/.outline/.surface set --ui-* for components that
- * opt into shared variants. .inverted is a surface modifier, not a variant: it paints
- * the element directly (background/color/border-color) so it works on any bare
- * block, and remaps the shared --ui-* tokens so participating components
- * (.card, .navbar, .alert, .badge) invert through their own rules. Loaded
- * before components, so a component with its own explicit surface (e.g.
- * .accordion) naturally keeps that surface — .inverted never forces a
- * non-participant.
+ * opt into shared variants. A subtree that needs another palette or scheme is
+ * a data-theme island, never a variant: only an island recomputes every token
+ * (fields, states, intents), where a remap of a few --ui-* tokens cannot.
  * Component-specific defaults (.btn solid-by-default, .badge
  * soft-by-default, .alert soft-by-default) live with their components:
  *   components/button.css — .btn default solid + .btn.ghost + .btn.link
@@ -62,33 +58,6 @@
   --ui-bg: var(--surface);
   --ui-fg: var(--intent, var(--text));
   --ui-border: var(--border);
-}
-
-/* Inverse surface treatment. Paints the element directly (so it works on any
-   bare block) and remaps the shared --ui-* tokens so opt-in components
-   (.card, .navbar) invert through their own rules. Because this loads before
-   component base surfaces, components with their own explicit surface
-   (e.g. .accordion) keep it — participation is opt-in, never forced. --heading
-   is set so global headings (var(--heading, inherit)) do not inherit an outside
-   heading color onto the dark surface; surface-owning descendants derive
-   their contextual aliases from their own local surface. */
-.inverted {
-  --ui-bg: var(--surface-solid);
-  --ui-fg: var(--surface);
-  --ui-border: transparent;
-  --ui-hover-bg: var(--surface-solid);
-
-  /* why: the ring derives from the inversion pair (--surface on
-     --surface-solid), not from --focus — the general palette focus can fall
-     below contrast on the inverted surface, in either scheme. */
-  --focus-ring: var(--surface);
-
-  --heading: var(--surface);
-  --busy-overlay-bg: var(--surface-solid);
-
-  background: var(--ui-bg);
-  color: var(--ui-fg);
-  border-color: var(--ui-border);
 }
 
 .compact {
@@ -173,10 +142,6 @@
       color-mix(in oklab, var(--text), var(--intent, var(--text)) var(--soft-fg-mix))
     );
     /* @sync soft-recipe */
-  }
-
-  .inverted {
-    --ui-hover-bg: color-mix(in oklch, var(--surface-solid) 88%, black);
   }
 }
 

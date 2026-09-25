@@ -134,7 +134,7 @@ select {
   --focus-outline-color: currentColor;
   --focus-outline: calc(var(--border-width) * 2) solid var(--focus-outline-color);
   --focus-outline-offset: 2px;
-  --focus-ring-width: 3px;
+  --focus-ring-width: 2px;
 
   /* Status dot positioning — used by .avatar > .badge:empty. The offset is
      the circle-aware inset (1 - 1/√2) / 2 ≈ 14.65%; the ring surrounds the
@@ -356,10 +356,10 @@ select {
 
   /* Lines and focus */
   --border: hsl(260 15% 88%);
-  --focus: var(--neutral);
-  /* Pre-color-mix fallback only — superseded below by a derivation from
-     --focus so overriding --neutral/--focus never leaves a stale ring. */
-  --focus-ring: hsl(258 7% 43% / 0.3);
+  /* A primary-hued mid-tone on purpose, one value for both schemes: focus
+     lines must hold 3:1 against --surface and --surface-solid alike (page,
+     fields, a solid band), which rules out the primary itself. */
+  --focus: hsl(268 30% 55%);
   --hover-overlay: hsl(260 20% 10% / 0.04);
 
   /* Radius scale — themes may override the whole scale (e.g. [data-theme="square"]) */
@@ -376,11 +376,7 @@ select {
 
 /* Theme-derived aliases — re-declared on every theme boundary (see tokens.css
    for the custom-property resolution rationale): islands recompute these from
-   their own tokens instead of inheriting :root's resolved values.
-   The focus ring shadow is deliberately not stored here: it is written at
-   each use site as var(--focus-ring-shadow, 0 0 0 var(--focus-ring-width)
-   var(--focus-ring)) so it recomputes per element and follows a local
-   --focus-ring (e.g. .inverted) instead of inheriting a frozen value. */
+   their own tokens instead of inheriting :root's resolved values. */
 :root,
 [data-theme] {
   --heading: var(--text);
@@ -444,20 +440,6 @@ select {
   --tone-fg: var(--text);
 }
 
-/* Focus ring derivation — color-mix tier. Runs whether or not light-dark()
-   is also supported, so it covers the color-mix-without-light-dark browser
-   tier on its own; the light-dark block below refines it further with the
-   light/dark alpha split once both features are available. Declared on every
-   [data-theme] island (not just the built-in light/dark pair) so custom
-   islands recolor the ring for free; a preset that re-declares --focus-ring
-   later in source order intentionally pins its own ring instead. */
-@supports (color: color-mix(in oklch, red, white)) {
-  :root,
-  [data-theme] {
-    --focus-ring: color-mix(in oklch, var(--focus) 30%, transparent);
-  }
-}
-
 /* Auto dark mode via light-dark(). Resolves based on the element's color-scheme:
     :root (light dark) follows the OS, [data-theme="light"] forces light,
     [data-theme="dark"] forces dark by overriding color-scheme.
@@ -494,19 +476,8 @@ select {
     --text-subtle: light-dark(hsl(258 7% 57%), hsl(258 7% 54%));
 
     --border: light-dark(hsl(260 15% 88%), hsl(262 12% 24%));
-    --focus-ring: light-dark(hsl(258 7% 43% / 0.3), hsl(258 10% 72% / 0.28));
     --hover-overlay: light-dark(hsl(260 20% 10% / 0.04), hsl(0 0% 100% / 0.06));
     --shadow-color: light-dark(hsl(260 25% 10%), hsl(262 40% 2%));
-  }
-}
-
-@supports (color: color-mix(in oklch, red, white)) and (color: light-dark(red, blue)) {
-  :root,
-  [data-theme] {
-    --focus-ring: light-dark(
-      color-mix(in oklch, var(--focus) 30%, transparent),
-      color-mix(in oklch, var(--focus) 28%, transparent)
-    );
   }
 }
 
@@ -517,7 +488,7 @@ select {
   [data-theme][data-theme] {
     --border-width: 2px;
     --focus-outline-offset: 3px;
-    --focus-ring-width: 4px;
+    --focus-ring-width: 3px;
     --text-muted: var(--text);
     --text-subtle: var(--text);
   }
@@ -673,13 +644,9 @@ small {
  * Cross-cutting variant token mapping.
  *
  * Variant scope: .solid/.soft/.outline/.surface set --ui-* for components that
- * opt into shared variants. .inverted is a surface modifier, not a variant: it paints
- * the element directly (background/color/border-color) so it works on any bare
- * block, and remaps the shared --ui-* tokens so participating components
- * (.card, .navbar, .alert, .badge) invert through their own rules. Loaded
- * before components, so a component with its own explicit surface (e.g.
- * .accordion) naturally keeps that surface — .inverted never forces a
- * non-participant.
+ * opt into shared variants. A subtree that needs another palette or scheme is
+ * a data-theme island, never a variant: only an island recomputes every token
+ * (fields, states, intents), where a remap of a few --ui-* tokens cannot.
  * Component-specific defaults (.btn solid-by-default, .badge
  * soft-by-default, .alert soft-by-default) live with their components:
  *   components/button.css — .btn default solid + .btn.ghost + .btn.link
@@ -733,33 +700,6 @@ small {
   --ui-bg: var(--surface);
   --ui-fg: var(--intent, var(--text));
   --ui-border: var(--border);
-}
-
-/* Inverse surface treatment. Paints the element directly (so it works on any
-   bare block) and remaps the shared --ui-* tokens so opt-in components
-   (.card, .navbar) invert through their own rules. Because this loads before
-   component base surfaces, components with their own explicit surface
-   (e.g. .accordion) keep it — participation is opt-in, never forced. --heading
-   is set so global headings (var(--heading, inherit)) do not inherit an outside
-   heading color onto the dark surface; surface-owning descendants derive
-   their contextual aliases from their own local surface. */
-.inverted {
-  --ui-bg: var(--surface-solid);
-  --ui-fg: var(--surface);
-  --ui-border: transparent;
-  --ui-hover-bg: var(--surface-solid);
-
-  /* why: the ring derives from the inversion pair (--surface on
-     --surface-solid), not from --focus — the general palette focus can fall
-     below contrast on the inverted surface, in either scheme. */
-  --focus-ring: var(--surface);
-
-  --heading: var(--surface);
-  --busy-overlay-bg: var(--surface-solid);
-
-  background: var(--ui-bg);
-  color: var(--ui-fg);
-  border-color: var(--ui-border);
 }
 
 .compact {
@@ -845,10 +785,6 @@ small {
     );
     /* @sync soft-recipe */
   }
-
-  .inverted {
-    --ui-hover-bg: color-mix(in oklch, var(--surface-solid) 88%, black);
-  }
 }
 
 /* Interactive hover recipes live in the components that consume them:
@@ -859,18 +795,15 @@ small {
    pointer/mouse focus and interactive components layer their ring on top.
 
    Invariant: an interactive component must never rely on box-shadow alone
-   for its keyboard focus indicator. Components that remove the native
-   outline on :focus-visible replace it with a transparent outline — invisible
-   normally, forced to the system focus color under forced-colors.
+   for its keyboard focus indicator; forced colors keep outlines and drop
+   shadows.
 
-   The halo recipe is fallback-only on purpose, never a stored alias: each
-   use site writes the full var() fallback so the halo recomputes per
-   element and follows a local --focus-ring (e.g. .inverted) instead of
-   inheriting a frozen value.
- *
- * Internal:
- * --focus-ring-shadow
- */
+   Component indicators are a solid --focus-ring-width line in --focus: inset
+   on fields (inside their border box), offset by --focus-outline-offset on
+   discrete actions. The color never derives from an intent or a local
+   surface — the theme guarantees --focus at 3:1 against both --surface and
+   --surface-solid, so one token reads on the page, on a solid band and on
+   any nested surface. */
 :focus {
   outline: var(--focus-outline);
   outline-offset: var(--focus-outline-offset);
@@ -2394,9 +2327,8 @@ small {
 
 .check:focus-visible,
 .radio:focus-visible {
-  --choice-border: var(--focus);
-  outline: 2px solid transparent;
-  box-shadow: var(--focus-ring-shadow, 0 0 0 var(--focus-ring-width) var(--focus-ring));
+  outline: var(--focus-ring-width) solid var(--focus);
+  outline-offset: var(--focus-outline-offset);
 }
 
 .check:disabled,
@@ -2518,8 +2450,8 @@ small {
 }
 
 .file:focus-visible {
-  outline: 2px solid transparent;
-  box-shadow: var(--focus-ring-shadow, 0 0 0 var(--focus-ring-width) var(--focus-ring));
+  outline: var(--focus-ring-width) solid var(--focus);
+  outline-offset: var(--focus-outline-offset);
 }
 
 /* Native color picker — keep the browser's dialog and selected-color UI. The
@@ -2555,8 +2487,8 @@ small {
 }
 
 .color:focus-visible {
-  outline: 2px solid transparent;
-  box-shadow: var(--focus-ring-shadow, 0 0 0 var(--focus-ring-width) var(--focus-ring));
+  outline: var(--focus-ring-width) solid var(--focus);
+  outline-offset: var(--focus-outline-offset);
 }
 
 @media (forced-colors: active) {
@@ -2920,9 +2852,8 @@ small {
 }
 
 .switch:focus-visible {
-  --switch-border: var(--focus);
-  outline: 2px solid transparent;
-  box-shadow: var(--focus-ring-shadow, 0 0 0 var(--focus-ring-width) var(--focus-ring));
+  outline: var(--focus-ring-width) solid var(--focus);
+  outline-offset: var(--focus-outline-offset);
 }
 
 .switch:disabled {
@@ -3020,20 +2951,22 @@ small {
 }
 
 /*
- * The 1px surface-coloured separator keeps the ring visually distinct from
- * the small, coloured thumb — unlike a full-size input where the same gap
- * would read as an unwanted void.
+ * A thumb pseudo-element takes no reliable outline, so its ring is a solid
+ * --focus shadow (the transparent outline above covers forced colors). The
+ * 1px surface-coloured separator keeps the ring visually distinct from the
+ * small, coloured thumb — unlike a full-size input where the same gap would
+ * read as an unwanted void.
  */
 .range:focus-visible::-webkit-slider-thumb {
   box-shadow:
     0 0 0 1px var(--surface),
-    0 0 0 calc(1px + var(--focus-ring-width)) var(--focus-ring);
+    0 0 0 calc(1px + var(--focus-ring-width)) var(--focus);
 }
 
 .range:focus-visible::-moz-range-thumb {
   box-shadow:
     0 0 0 1px var(--surface),
-    0 0 0 calc(1px + var(--focus-ring-width)) var(--focus-ring);
+    0 0 0 calc(1px + var(--focus-ring-width)) var(--focus);
 }
 
 .range:disabled {
@@ -3144,8 +3077,8 @@ small {
 
 /* Focus ring on the label follows the hidden input's focus. */
 .choice-card:has(:focus-visible) {
-  outline: 2px solid transparent;
-  box-shadow: var(--focus-ring-shadow, 0 0 0 var(--focus-ring-width) var(--focus-ring));
+  outline: var(--focus-ring-width) solid var(--focus);
+  outline-offset: var(--focus-outline-offset);
 }
 
 .choice-card:has(:disabled) {
@@ -3596,7 +3529,6 @@ small {
  * --btn-min-size
  * --btn-pad-x
  * --btn-radius
- * --btn-focus-color
  * --btn-gap
  * --btn-hover-overlay
  * --btn-default-bg
@@ -3609,7 +3541,6 @@ small {
  * --btn-fg
  * --btn-border
  * --btn-default-hover-bg
- * --btn-focus-ring-color
  * --btn-border-block-end-color
  * --btn-border-block-end-width
  * --spinner-width
@@ -3636,7 +3567,6 @@ small {
   --btn-border: var(--ui-border, var(--btn-default-border, transparent));
   --btn-default-hover-bg: var(--btn-bg);
   --btn-radius: var(--radius);
-  --btn-focus-color: var(--intent, var(--focus));
   --btn-hover-overlay: var(--hover-overlay, rgb(0 0 0 / 0.08));
 
   /* Positioning context for indicators, overlays, and grouped states. */
@@ -3676,12 +3606,6 @@ small {
   inline-size: var(--btn-min-size);
   block-size: var(--btn-min-size);
   padding: 0;
-}
-
-@supports (color: color-mix(in oklch, red, white)) {
-  .btn {
-    --btn-focus-ring-color: color-mix(in oklch, var(--btn-focus-color) 28%, transparent);
-  }
 }
 
 /* .solid/.soft/.outline are shared via variants.css. The baseline --btn-*
@@ -3771,15 +3695,13 @@ small {
   text-decoration-thickness: 0.12em;
 }
 
+/* why: the ring must contrast with the surface around the button, not with
+   the button, so it is --focus for every intent and variant — the theme
+   guarantees --focus against --surface and --surface-solid, which covers
+   the page, a solid band and nested surfaces without tracking any context. */
 .btn:focus-visible {
-  outline: 2px solid transparent;
-  box-shadow: 0 0 0 var(--focus-ring-width) var(--btn-focus-ring-color, var(--focus-ring));
-}
-
-.btn.link:focus-visible {
-  outline: var(--focus-outline);
-  outline-offset: 0.2em;
-  box-shadow: none;
+  outline: var(--focus-ring-width) solid var(--focus);
+  outline-offset: var(--focus-outline-offset);
 }
 
 .btn:disabled {
@@ -3880,8 +3802,8 @@ a.btn[aria-disabled="true"] {
 }
 
 .close:focus-visible {
-  outline: 2px solid transparent;
-  box-shadow: var(--focus-ring-shadow, 0 0 0 var(--focus-ring-width) var(--focus-ring));
+  outline: var(--focus-ring-width) solid var(--focus);
+  outline-offset: var(--focus-outline-offset);
 }
 
 /* Dialog corner — out of the content flow, anchored to the positioned dialog
@@ -7448,12 +7370,13 @@ a.avatar[aria-disabled="true"] {
   color: var(--state-selected);
 }
 
-/* On a --ui-* bar (e.g. .inverted) the fill is a tint of the link's own ink,
-   the .btn.ghost hover recipe, so it reads on light and dark bars alike. Not
-   --ui-hover-bg: that is the bar's own hover, equal to its fill on .inverted.
-   The ink follows --ui-fg too — the selected accent has no contrast pair with
-   an arbitrary bar. The baseline above keeps the light chip where color-mix
-   is missing, with ink that is legible on it. */
+/* On a bar with its own --ui-bg/--ui-fg the fill is a tint of the link's own
+   ink, the .btn.ghost hover recipe, so it reads on light and dark bars alike
+   instead of snapping back to --surface-subtle. Not --ui-hover-bg: that is the
+   bar's own hover and can equal its fill. The ink follows --ui-fg too — the
+   selected accent has no contrast pair with an arbitrary bar. The baseline
+   above keeps the light chip where color-mix is missing, with ink that is
+   legible on it. */
 @supports (color: color-mix(in oklch, red, white)) {
   .nav-link:is(:hover, [aria-current]) {
     background: color-mix(in oklch, currentColor 10%, transparent);
@@ -8203,12 +8126,6 @@ a.list-item[aria-current]::before {
   z-index: 1;
 }
 
-/* Keep an active focus ring above an adjacent hovered control. This matters
-   on platforms where clicking a button does not move focus from the input. */
-.join > :is(:focus, :focus-within) {
-  z-index: 4;
-}
-
 /* An input's border must read as the "primary" edge against an attached
    action (e.g. a password-reveal button) at all times, not only while
    hovered or focused — otherwise the shared edge flips ownership as the
@@ -8221,12 +8138,24 @@ a.list-item[aria-current]::before {
   z-index: 3;
 }
 
+/* Keep an active focus line above every neighbour, including an adjacent
+   field and a hovered control (some platforms keep focus on the input while
+   a button is clicked). It must follow the primary-edge rule above: both are
+   (0,2,0), and when it came first a focused field stayed at 3 and the next
+   field, painted later, covered the 1px shared edge of its line. */
+.join > :is(:focus, :focus-within) {
+  z-index: 4;
+}
+
 /* One wrapper level (e.g. a combobox element around the native control) is
    supported generically — no widget is named here. The wrapper is the flex
    item that receives the corner longhands above; the inner control inherits
-   them. :hover and :focus-within already propagate to the wrapper, so the
-   z-index rules above need no duplication. */
+   them. The wrapper is also what align-items stretches: block-size: 100%
+   resolves against that stretched size, so the field fills it. :hover and
+   :focus-within already propagate to the wrapper, so the z-index rules above
+   need no duplication. */
 .join > * > :is(.input, .textarea, .select) {
+  block-size: 100%;
   border-radius: inherit;
 }
 
@@ -8861,7 +8790,7 @@ a.list-item[aria-current]::before {
 /* Surface. These are semantic surfaces, not arbitrary paint: each owns its
    matching ink and rebinds --heading to that ink, so it stays readable when it
    recreates a light surface inside a context that installed a dark one
-   (.inverted). Intent ink is not inherited through a surface utility; use
+   (e.g. a --surface-solid band). Intent ink is not inherited through a surface utility; use
    .intent-color for that. */
 .background-surface {
   --heading: currentColor;

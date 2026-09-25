@@ -1,0 +1,608 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Contrast contexts - Actual CSS</title>
+  <meta name="description" content="Bench for data-theme islands, an application-painted band, forms, joined fields, focus lines and intent variants: every sample measured live for text and focus contrast.">
+  <link rel="stylesheet" href="../../dist/actual.full.css">
+  <link rel="stylesheet" href="../assets/actual-themes.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@lekoala/combobox@0.5.0/dist/combobox.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@lekoala/date-picker@0.3.0/dist/date-picker.css">
+  <script src="https://cdn.jsdelivr.net/npm/@lekoala/combobox@0.5.0/dist/combobox.js"></script>
+  <!-- defer: the element reads its <input> on connect, so it must be defined
+       after parsing — a head-time definition upgrades it before its child. -->
+  <script defer src="https://cdn.jsdelivr.net/npm/@lekoala/date-picker@0.3.0/dist/date-picker.min.js"></script>
+  <style>
+    .cc-page {
+      --center-size: 76rem;
+
+      padding-block: var(--space-60);
+    }
+
+    .cc-section {
+      padding-block: var(--space-50);
+      border-block-start: var(--border-width) solid var(--border);
+    }
+
+    .cc-section > :is(h2, p) {
+      margin: 0;
+    }
+
+    .cc-context {
+      padding: var(--space-40);
+      border-radius: var(--radius-lg);
+    }
+
+    /* A band that matches the page (plain, or an island of the same scheme)
+       still needs an edge to read as a band. */
+    .cc-context:not(.cc-band) {
+      border: var(--border-width) dashed var(--border);
+    }
+
+    /* The islands paint their own canvas: a data-theme boundary only swaps
+       tokens, so the band shows the island's --surface explicitly. A card
+       island keeps the card's own raised surface. */
+    .cc-context[data-theme]:not(.card) {
+      background: var(--surface);
+      color: var(--text);
+    }
+
+    /* The application recipe for a painted band (theming.md). */
+    .cc-band {
+      --heading: var(--surface);
+      background: var(--surface-solid);
+      color: var(--surface);
+    }
+
+    /* Same split as a card header, so every band reads alike. */
+    .cc-context > header {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-20) var(--space-30);
+      align-items: baseline;
+      justify-content: space-between;
+      margin-block-end: var(--space-30);
+    }
+
+    .cc-context > header > strong {
+      font-size: var(--font-size-lg);
+    }
+
+    .cc-context .card {
+      margin-block-start: 0;
+    }
+
+    .cc-samples {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(9.5rem, 1fr));
+      gap: var(--space-40) var(--space-30);
+      align-items: start;
+    }
+
+    .cc-sample {
+      display: grid;
+      gap: var(--space-20);
+      justify-items: start;
+      margin: 0;
+    }
+
+    .cc-sample > figcaption {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-10);
+      font-size: var(--font-size-xs);
+    }
+
+    .cc-sample .input {
+      inline-size: 9rem;
+    }
+
+    /* Simulation only: paints the same lines as the core :focus-visible rules
+       (forms/control.css, components/button.css) on every sample at once, so
+       the contexts compare side by side. Press Tab for the real indicator. */
+    .cc-show-focus .cc-sample > :is(.btn, a) {
+      outline: var(--focus-ring-width) solid var(--focus);
+      outline-offset: var(--focus-outline-offset);
+    }
+
+    .cc-show-focus .cc-sample > a:not(.btn) {
+      outline: var(--focus-outline);
+    }
+
+    .cc-show-focus :is(.cc-sample > .input, .cc-joins :is(.input, .select, .cb-control)) {
+      outline: var(--focus-ring-width) solid var(--form-invalid-border, var(--focus));
+      outline-offset: calc(var(--focus-ring-width) * -1);
+    }
+
+    .cc-form {
+      margin-block-start: var(--space-40);
+      padding-block-start: var(--space-40);
+      border-block-start: var(--border-width) dashed currentColor;
+    }
+
+    .cc-form > figcaption {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-10);
+      margin-block-start: var(--space-30);
+      font-size: var(--font-size-xs);
+    }
+
+    /* Third-party bridges, as documented in docs/pages/forms/combobox.md.
+       Tokens resolve on the element, so islands reach them. */
+    .actual-combobox {
+      --cb-bg: var(--surface);
+      --cb-color: var(--text);
+      --cb-border-color: var(--form-invalid-border, var(--border));
+      --cb-border-radius: var(--radius);
+      --cb-focus-color: var(--focus);
+      --cb-muted-color: var(--text-muted);
+      --cb-error-color: var(--danger);
+      --cb-control-height: var(--control-size);
+      --cb-option-min-height: var(--control-size);
+    }
+
+    .actual-combobox :is(.cb-text-control:focus-visible, .cb-control:has(.cb-input:focus-visible)) {
+      border-color: var(--form-invalid-border, var(--cb-border-color));
+      outline: var(--focus-ring-width) solid var(--form-invalid-border, var(--focus));
+      outline-offset: calc(var(--focus-ring-width) * -1);
+      box-shadow: none;
+    }
+
+    .actual-combobox :is(.cb-text-control[aria-invalid="true"], .cb-control:has([aria-invalid="true"])) {
+      --form-invalid-border: var(--danger);
+    }
+
+    :where(.actual-combobox) combo-box {
+      border-radius: var(--cb-border-radius);
+    }
+
+    .actual-combobox :is(.cb-control, .cb-text-control) {
+      border-radius: inherit;
+    }
+
+    .cb-popover {
+      --cb-picker-bg: var(--surface-raised);
+      border-color: var(--border);
+      box-shadow: var(--shadow-popout);
+    }
+
+    /* The library declares its defaults on the element itself, so the bridge
+       must too (an inherited value would lose to them). The field is a plain
+       .input: the core inset outline already outranks the library's halo. */
+    date-picker,
+    date-calendar {
+      --dp-bg: var(--surface-raised);
+      --dp-fg: var(--text);
+      --dp-muted: var(--text-muted);
+      --dp-border: var(--border);
+      --dp-hover: var(--surface-subtle);
+      --dp-accent: var(--primary);
+      --dp-accent-fg: var(--primary-fg);
+      --dp-radius: var(--radius);
+      --dp-picker-button-size: var(--control-size);
+    }
+
+    .dp-calendar-header :where(button, select, input):focus-visible {
+      border-color: var(--dp-border);
+      outline: var(--focus-ring-width) solid var(--focus);
+      outline-offset: calc(var(--focus-ring-width) * -1);
+      box-shadow: none;
+    }
+
+    .dp-picker-button:focus-visible,
+    .dp-day:focus-visible {
+      outline-color: var(--focus);
+    }
+
+    .cc-swatch {
+      display: inline-grid;
+      place-items: center;
+      inline-size: 6rem;
+      block-size: 3rem;
+      border-radius: var(--radius);
+      font-size: var(--font-size-xs);
+    }
+
+    .cc-swatch::before {
+      content: "";
+      inline-size: 3.5rem;
+      block-size: 0;
+      border-block-start: var(--focus-ring-width) solid var(--focus);
+    }
+  </style>
+</head>
+<body>
+  <main class="center cc-page stack">
+    <header class="stack">
+      <p class="overline">System bench</p>
+      <h1>Contrast contexts</h1>
+      <p class="lead measure">
+        The same buttons, link, field and form on the page, in theme islands and
+        on a band the application paints, each measured live: <strong>Aa</strong>
+        is the text against the fill it sits on (4.5:1), <strong>◎</strong> is the
+        focus line against what surrounds it (3:1). The form row also carries a
+        combobox and a date picker on their token bridges. Switch theme or OS
+        scheme and the numbers follow.
+      </p>
+      <div class="cluster">
+        <select class="select sm fit" id="theme-switcher" aria-label="Page theme">
+          <option value="">System</option>
+          <option value="light">Light</option>
+          <option value="dark">Dark</option>
+          <option value="bootstrap-v6">bootstrap-v6</option>
+          <option value="gradient">gradient</option>
+          <option value="corporate">corporate</option>
+          <option value="ocean">ocean</option>
+          <option value="neon">neon</option>
+        </select>
+        <label class="choice">
+          <input class="switch" type="checkbox" role="switch" id="show-focus">
+          Show every focus line
+        </label>
+      </div>
+    </header>
+
+    <section class="cc-section stack" aria-labelledby="tools-title">
+      <h2 id="tools-title">Three intentions, three tools</h2>
+      <div class="grid" style="--grid-min: 20rem;">
+        <article class="card stack">
+          <h3>Change the whole visual context</h3>
+          <p>
+            <code>data-theme</code> on the section, footer or card. Every token
+            recomputes: surfaces, text, fields, validation, intents, focus and
+            native controls. In a branded app, <code>light</code> and
+            <code>dark</code> are the scheme roles of your brand.
+          </p>
+        </article>
+        <article class="card stack">
+          <h3>Change one component's treatment</h3>
+          <p>
+            A variant (<code>.solid</code>, <code>.soft</code>,
+            <code>.outline</code>, <code>.surface</code>) or a component hook.
+          </p>
+        </article>
+        <article class="card stack">
+          <h3>Just paint a special background</h3>
+          <p>
+            Application CSS: <code>--surface-solid</code> under
+            <code>--surface</code>. Neutral ink and filled buttons read on it;
+            intent ink and forms keep the page palette, so they stay out.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <section class="cc-section stack" aria-labelledby="matrix-title">
+      <h2 id="matrix-title">Every context, same samples</h2>
+      <p class="measure muted">
+        Red marks a pair under its threshold. Every island passes, form, combobox
+        and date picker included. On the painted band, the intent variants that
+        put their ink on it (outline, ghost, link) fail: nothing tunes an intent
+        for a surface the application paints. That is why the band carries no
+        form, and why a band that needs either is an island.
+      </p>
+      <div class="stack" id="contexts"></div>
+    </section>
+
+    <section class="cc-section stack" aria-labelledby="join-title">
+      <h2 id="join-title">Joined fields need zero adaptation</h2>
+      <p class="measure">
+        Each segment draws its focus line inside its own border box, so
+        <code>.join</code> only handles corners, shared edges, stretch and
+        stacking — no rule in <code>join.css</code> mentions focus. A field
+        wrapped one level deep (<code>.input-icon</code>, a combobox, a date
+        picker) is supported generically: the wrapper takes the group corners,
+        the field inherits them and fills the stretched height. Tab through the
+        segments, or show every line at once: none overlaps a neighbour.
+      </p>
+      <div class="grid cc-joins" style="--grid-min: 21rem;">
+        <div class="field">
+          <span class="field-label" id="j-two">Two fields and an action</span>
+          <div class="join" role="group" aria-labelledby="j-two">
+            <input class="input" aria-label="First name" value="Ada">
+            <input class="input" aria-label="Last name" value="Lovelace">
+            <button class="btn outline" type="button">Save</button>
+          </div>
+        </div>
+        <div class="field">
+          <span class="field-label" id="j-addon">Addon, field, action</span>
+          <div class="join" role="group" aria-labelledby="j-addon">
+            <span class="join-addon">€</span>
+            <input class="input" aria-label="Amount" inputmode="decimal" value="120">
+            <button class="btn primary" type="button">Pay</button>
+          </div>
+        </div>
+        <div class="field">
+          <span class="field-label" id="j-select">Select and field</span>
+          <div class="join" role="group" aria-labelledby="j-select">
+            <select class="select fit" aria-label="Prefix"><option>+32</option><option>+33</option></select>
+            <input class="input" aria-label="Phone" value="470 12 34 56">
+          </div>
+        </div>
+        <div class="field">
+          <span class="field-label" id="j-icon">Icon field and icon action</span>
+          <div class="join" role="group" aria-labelledby="j-icon">
+            <span class="input-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+              <input class="input" type="search" aria-label="Search" placeholder="Search">
+            </span>
+            <button class="btn outline icon-only" type="button" aria-label="Go">›</button>
+          </div>
+        </div>
+        <div class="field">
+          <span class="field-label" id="j-invalid">Invalid segment</span>
+          <div class="join" role="group" aria-labelledby="j-invalid">
+            <input class="input" aria-label="Coupon" aria-invalid="true" value="SAVE">
+            <button class="btn outline" type="button">Apply</button>
+          </div>
+        </div>
+        <div class="field actual-combobox">
+          <span class="field-label" id="j-combo">Combobox and action</span>
+          <div class="join" role="group" aria-labelledby="j-combo">
+            <combo-box placeholder="Search a city">
+              <select class="select" name="city">
+                <option value="">-</option>
+                <option value="bxl">Brussels</option>
+                <option value="lge">Liège</option>
+              </select>
+            </combo-box>
+            <button class="btn outline" type="button">Find</button>
+          </div>
+        </div>
+        <div class="field">
+          <span class="field-label" id="j-date">Date picker and action</span>
+          <div class="join" role="group" aria-labelledby="j-date">
+            <date-picker value="2026-09-25" open-on-focus="false">
+              <input class="input" name="j-date" aria-labelledby="j-date">
+            </date-picker>
+            <button class="btn outline" type="button">Book</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="cc-section stack" aria-labelledby="focus-title">
+      <h2 id="focus-title">Focus: one token, two surfaces</h2>
+      <p class="measure">
+        Every indicator is a solid <code>--focus-ring-width</code> line in
+        <code>--focus</code> — inset on fields, offset on actions. It never follows
+        an intent or a local surface, so the theme must keep <code>--focus</code>
+        at 3:1 against both surfaces a line can land on.
+        <code>bun run report:theme-contrast</code> prints both pairs per theme.
+      </p>
+      <div class="cluster" id="focus-swatches">
+        <span class="cc-swatch" style="background: var(--surface)" data-pair="surface"></span>
+        <span class="cc-swatch" style="background: var(--surface-solid)" data-pair="solid"></span>
+      </div>
+    </section>
+
+    <section class="cc-section stack" aria-labelledby="choose-title">
+      <h2 id="choose-title">Which one?</h2>
+      <ul class="stack measure">
+        <li>
+          A dark (or light) footer, navbar, section or card:
+          <code>data-theme="dark"</code> (or <code>light</code>, or your theme) on
+          it. Forms, intents and widgets inside all follow.
+        </li>
+        <li>
+          A painted band with neutral content and filled actions only:
+          application CSS, as in the last context above.
+        </li>
+        <li>
+          A plain <code>.card</code> inside any band stays a normal card and resets
+          the context for its content.
+        </li>
+      </ul>
+    </section>
+  </main>
+
+  <script>
+    // form: false keeps the form row off a context whose contract excludes it.
+    const CONTEXTS = [
+      { name: "Page", code: "(no attribute)", open: "<div class=\"cc-context\">", close: "</div>" },
+      { name: 'data-theme="dark"', code: '<section data-theme="dark">', open: '<section class="cc-context" data-theme="dark">', close: "</section>" },
+      { name: 'data-theme="light"', code: '<section data-theme="light">', open: '<section class="cc-context" data-theme="light">', close: "</section>" },
+      { name: "Card island", code: '<article class="card" data-theme="dark">', open: '<article class="cc-context card" data-theme="dark">', close: "</article>" },
+      {
+        name: "Card inside a dark island",
+        code: '<section data-theme="dark"><article class="card">',
+        open: '<section class="cc-context" data-theme="dark"><article class="card">',
+        close: "</article></section>",
+      },
+      { name: "Named theme island", code: '<section data-theme="ocean">', open: '<section class="cc-context" data-theme="ocean">', close: "</section>" },
+      {
+        name: "Application-painted band",
+        code: ".band { background: var(--surface-solid); color: var(--surface) }",
+        open: '<section class="cc-context cc-band">',
+        close: "</section>",
+        form: false,
+      },
+    ];
+
+    const SAMPLES = [
+      '<button class="btn" type="button">Default</button>',
+      '<button class="btn primary" type="button">Primary</button>',
+      '<button class="btn danger" type="button">Danger</button>',
+      '<button class="btn primary soft" type="button">Primary soft</button>',
+      '<button class="btn outline" type="button">Outline</button>',
+      '<button class="btn primary outline" type="button">Primary outline</button>',
+      '<button class="btn ghost" type="button">Ghost</button>',
+      '<button class="btn primary ghost" type="button">Primary ghost</button>',
+      '<button class="btn link" type="button">Link</button>',
+      '<button class="btn primary link" type="button">Primary link</button>',
+      '<a href="#contexts">Text link</a>',
+      '<input class="input" aria-label="Field" value="Field">',
+    ];
+
+    // One form per context; data-ink marks the text whose contrast is shown
+    // in the form caption. n keeps ids unique across contexts.
+    const FORM = (n) => `
+      <figure class="cc-form">
+        <div class="grid" style="--grid-min: 13rem;">
+          <label class="field">
+            <span class="field-label" data-ink="label">Name</span>
+            <input class="input" value="Ada Lovelace" aria-describedby="name-help-${n}">
+            <span class="field-help" id="name-help-${n}" data-ink="help">As on your ID.</span>
+          </label>
+          <label class="field">
+            <span class="field-label">Plan</span>
+            <select class="select"><option>Pro</option><option>Team</option></select>
+          </label>
+          <label class="field">
+            <span class="field-label">Email</span>
+            <input class="input" type="email" value="ada@" aria-invalid="true" aria-describedby="email-error-${n}">
+            <span class="field-error" id="email-error-${n}" data-ink="error">Enter a valid email address.</span>
+          </label>
+          <label class="field">
+            <span class="field-label">Notes</span>
+            <textarea class="textarea" rows="2">Two lines</textarea>
+          </label>
+          <fieldset class="field-group stack">
+            <legend>Options</legend>
+            <label class="choice" data-ink="choice"><input class="check" type="checkbox" checked> Remember me</label>
+            <label class="choice"><input class="radio" type="radio" name="size-${n}" checked> Monthly</label>
+            <label class="choice"><input class="switch" type="checkbox" role="switch" checked> Notifications</label>
+          </fieldset>
+          <div class="field">
+            <span class="field-label" id="search-${n}">Search</span>
+            <div class="join" role="group" aria-labelledby="search-${n}">
+              <input class="input" aria-labelledby="search-${n}" placeholder="Keyword">
+              <button class="btn outline" type="button">Go</button>
+            </div>
+          </div>
+          <label class="field actual-combobox">
+            <span class="field-label">Skills</span>
+            <combo-box placeholder="Search a skill">
+              <select class="select" name="skills-${n}" multiple>
+                <option value="css" selected>CSS</option>
+                <option value="html">HTML</option>
+                <option value="js">JavaScript</option>
+              </select>
+            </combo-box>
+          </label>
+          <label class="field">
+            <span class="field-label">Appointment</span>
+            <date-picker value="2026-09-25" open-on-focus="false">
+              <input class="input" name="date-${n}">
+            </date-picker>
+          </label>
+        </div>
+        <figcaption></figcaption>
+      </figure>`;
+
+    const host = document.getElementById("contexts");
+    host.innerHTML = CONTEXTS.map(
+      (context, n) => `${context.open}
+        <header><strong>${context.name}</strong><code>${context.code.replace(/</g, "&lt;")}</code></header>
+        <div class="cc-samples">
+          ${SAMPLES.map((sample) => `<figure class="cc-sample">${sample}<figcaption></figcaption></figure>`).join("")}
+        </div>
+        ${context.form === false ? "" : FORM(n)}
+      ${context.close}`,
+    ).join("");
+
+    // Colors come back from getComputedStyle in any CSS syntax (oklch,
+    // color-mix results); a 1px canvas normalizes them to sRGB bytes.
+    const canvas = document.createElement("canvas");
+    canvas.width = canvas.height = 1;
+    const ctx = canvas.getContext("2d", { willReadFrequently: true });
+    const rgba = (value) => {
+      ctx.clearRect(0, 0, 1, 1);
+      ctx.fillStyle = value;
+      ctx.fillRect(0, 0, 1, 1);
+      const [r, g, b, a] = ctx.getImageData(0, 0, 1, 1).data;
+      return [r, g, b, a / 255];
+    };
+    const over = (top, bottom) => top.slice(0, 3).map((v, i) => v * top[3] + bottom[i] * (1 - top[3]));
+    const lin = (v) => (v <= 0.04045 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4);
+    const lum = (c) => {
+      const [r, g, b] = c.map((v) => lin(v / 255));
+      return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+    };
+    const ratio = (a, b) => {
+      const [hi, lo] = [lum(a), lum(b)].sort((x, y) => y - x);
+      return (hi + 0.05) / (lo + 0.05);
+    };
+
+    // The opaque color an element paints on: its own fill composited over
+    // every translucent ancestor fill down to the first opaque one.
+    function backdrop(el) {
+      const layers = [];
+      for (let node = el; node; node = node.parentElement) {
+        const bg = rgba(getComputedStyle(node).backgroundColor);
+        if (bg[3] > 0) layers.push(bg);
+        if (bg[3] === 1) break;
+      }
+      let color = [255, 255, 255];
+      for (const layer of layers.reverse()) color = over(layer, color);
+      return color;
+    }
+
+    // Resolve a token in the sample's own context (islands, the band).
+    function token(el, expression) {
+      const probe = document.createElement("span");
+      probe.style.color = expression;
+      el.parentElement.append(probe);
+      const value = getComputedStyle(probe).color;
+      probe.remove();
+      return rgba(value);
+    }
+
+    function badge(label, value, min) {
+      const ok = value >= min;
+      return `<span class="badge solid ${ok ? "success" : "danger"}">${label} ${value.toFixed(1)}</span>`;
+    }
+
+    function measure() {
+      for (const figure of document.querySelectorAll(".cc-sample")) {
+        const el = figure.firstElementChild;
+        const cs = getComputedStyle(el);
+        const fill = backdrop(el);
+        const text = ratio(over(rgba(cs.color), fill), fill);
+        // Fields draw their line inside, over their own fill; actions draw it
+        // outside, over the surface around them. The text link's baseline
+        // outline is currentColor.
+        const isField = el.matches(".input");
+        const isTextLink = el.matches("a:not(.btn)");
+        const line = isTextLink ? rgba(cs.color) : token(el, "var(--focus)");
+        const under = isField ? fill : backdrop(figure);
+        const focus = ratio(over(line, under), under);
+        figure.lastElementChild.innerHTML = badge("Aa", text, 4.5) + badge("◎", focus, 3);
+      }
+      for (const form of document.querySelectorAll(".cc-form")) {
+        form.lastElementChild.innerHTML = [...form.querySelectorAll("[data-ink]")]
+          .map((el) => {
+            const fill = backdrop(el);
+            return badge(el.dataset.ink, ratio(over(rgba(getComputedStyle(el).color), fill), fill), 4.5);
+          })
+          .join("");
+      }
+      for (const swatch of document.querySelectorAll("[data-pair]")) {
+        const bg = backdrop(swatch);
+        const value = ratio(over(token(swatch, "var(--focus)"), bg), bg);
+        swatch.title = `--focus on --surface${swatch.dataset.pair === "solid" ? "-solid" : ""}: ${value.toFixed(2)}:1`;
+        swatch.nextElementSibling?.matches(".badge") && swatch.nextElementSibling.remove();
+        swatch.insertAdjacentHTML("afterend", badge(swatch.dataset.pair, value, 3));
+      }
+    }
+
+    const switcher = document.getElementById("theme-switcher");
+    switcher.addEventListener("change", () => {
+      if (switcher.value) document.documentElement.dataset.theme = switcher.value;
+      else document.documentElement.removeAttribute("data-theme");
+      measure();
+    });
+    document.getElementById("show-focus").addEventListener("change", (event) => {
+      document.body.classList.toggle("cc-show-focus", event.target.checked);
+    });
+    matchMedia("(prefers-color-scheme: dark)").addEventListener("change", measure);
+    measure();
+    // The enhanced widgets upgrade after parsing; measure again once they have.
+    Promise.all(["combo-box", "date-picker"].map((tag) => customElements.whenDefined(tag))).then(
+      () => requestAnimationFrame(measure),
+    );
+  </script>
+</body>
+</html>

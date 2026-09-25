@@ -96,21 +96,38 @@ Set `--avatar-size` / `--avatar-radius`; tune overlap with `--avatar-stack-overl
 
 → Components · Avatar
 
-### Make an inverted / contrasting surface
+### Make a dark (or light) section / inverted, inverse, contrasting band
 
-Apply `.inverted` to create one contrasting surface context. It paints a bare
-block (`<header class="inverted">`, `<section class="inverted">`) with
-`--surface-solid` and `--surface`; contextual content and transparent treatments
-follow that foreground. Apply it directly to a component that consumes the
-shared `--ui-*` contract when that component itself is the contrasting surface.
+Put `data-theme="dark"` (or `"light"`) on the section, footer, navbar or card.
+The island recomputes every token — surfaces, text, fields, validation,
+intents, focus and native controls — so a form or a `.primary.outline` inside
+it reads correctly. In a branded application, `[data-theme="light"]` and
+`[data-theme="dark"]` are the scheme roles of your brand: redefine them after
+Actual CSS and the island follows your palette.
 
-Surface-owning descendants keep their own component surface and establish a new
-foreground context. Use `data-theme="dark"`, `data-theme="light"`, or a named
-theme instead when an entire subtree — including forms, states, and nested
-surfaces — must use another palette. More specific component states or explicit
-surface variants (`.card.subtle`) still take precedence.
+```html
+<footer data-theme="dark">…</footer>
+<article class="card" data-theme="dark">…</article>
+```
 
-→ Components · Card · Foundations · Tokens (theme contract)
+Actual has no class that inverts only part of a subtree. When all you need is
+a painted band with neutral content and filled buttons, write it in
+application CSS and keep forms and intent ink out of it:
+
+```css
+.site-band {
+  --heading: var(--surface);
+  background: var(--surface-solid);
+  color: var(--surface);
+}
+```
+
+Transparent treatments (`.btn.outline`, `.ghost`, `.link`) and headings follow
+that ink; fields, their labels and help text, and intent colors keep the page
+palette, which nothing tunes for `--surface-solid`. Focus lines stay readable
+there: the theme contract keeps `--focus` at 3:1 on `--surface-solid`.
+
+→ Foundations · Tokens (theme contract) · Examples · Contrast contexts
 
 ### Replace the palette with my own brand
 
@@ -134,11 +151,10 @@ lower `--soft-fg-mix` or declare the per-role hooks for the intents that miss.
 `src/css/themes/` holds example palettes (`ocean`, `spruce`, `neon`, `brutalist`, …) as
 reference material to copy into your own `[data-theme]` island — they are demo
 assets, not package entrypoints. Each sets the intent/surface/text tokens and
-lets the core derive everything else. In browsers with `color-mix()` support,
-`--focus-ring` follows each island's `--focus` automatically; re-declare it only
-for a deliberate visual override or a matching legacy fallback.
+lets the core derive everything else.
 
 The `bootstrap-v6` example follows Bootstrap 6's blue palette, stronger subtle
-surfaces, filled badges, steady select hover, and crisp inset outline on focused
-controls. Use `.badge.soft` for a subtle badge. It is a visual theme, not a
-Bootstrap compatibility layer.
+surfaces, filled badges, and steady select hover; its focus is the core solid
+line. Use `.badge.soft` for a subtle badge. It is a visual theme, not a
+Bootstrap compatibility layer. The `gradient` example keeps a Bootstrap 4 style
+outer halo on focused fields, for comparison.

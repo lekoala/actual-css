@@ -332,7 +332,7 @@ separate <code>.busy</code> class. The spinner is shown as a centered overlay ov
 surface; buttons keep their spinners inline instead (see Button).</p>
 <ul>
 <li>Set <code>aria-busy=&quot;true&quot;</code> on the container and add <code>&lt;span class=&quot;spinner&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;</code> as its last direct child.</li>
-<li>The overlay uses <code>--busy-overlay-bg</code>; an inverted surface (<code>.inverted</code>) already composes with it.</li>
+<li>The overlay uses <code>--busy-overlay-bg</code>; a card derives it from its own surface.</li>
 <li>Decorative spinners stay <code>aria-hidden=&quot;true&quot;</code>; announce progress on the region with <code>role=&quot;status&quot;</code> and a label when needed.</li>
 </ul>
 </div>
@@ -357,8 +357,8 @@ surface; buttons keep their spinners inline instead (see Button).</p>
 <ul>
 <li><code>--spinner-track</code> — the ring color.</li>
 <li><code>--spinner-value</code> — the moving gap; swap the two for an inverted spinner.</li>
-<li><code>--busy-overlay-bg</code> — background of the busy overlay. An inverted surface
-(<code>.inverted</code>) overrides it to blend with its own surface.</li>
+<li><code>--busy-overlay-bg</code> — background of the busy overlay. Set it on a surface you
+paint yourself so the overlay blends with that surface.</li>
 </ul>
 
 </div>

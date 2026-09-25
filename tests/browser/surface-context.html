@@ -3,15 +3,24 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Inverted surface contract fixture</title>
+  <title>Contextual surface contract fixture</title>
   <link rel="stylesheet" href="../../src/css/actual.full.css">
-  <style>* { transition-duration: 0s !important; }</style>
+  <style>
+    * { transition-duration: 0s !important; }
+
+    /* The application recipe for a contrasting band (theming.md): a local
+       surface and its ink, not a theme island. */
+    .band {
+      --heading: var(--surface);
+      background: var(--surface-solid);
+      color: var(--surface);
+    }
+  </style>
 </head>
 <body>
   <!-- Token references keep assertions independent from the active palette. -->
   <div id="ref-solid" style="background: var(--surface-solid)"></div>
   <div id="ref-surface" style="background: var(--surface)"></div>
-  <div id="ref-subtle" style="background: var(--surface-subtle)"></div>
   <div id="ref-raised" style="background: var(--surface-raised)"></div>
   <div id="ref-neutral" style="background: var(--neutral)"></div>
   <div id="ref-primary" style="background: var(--primary)"></div>
@@ -19,6 +28,7 @@
   <div id="ref-text-muted" style="color: var(--text-muted)"></div>
   <div id="ref-neutral-fg" style="color: var(--neutral-fg)"></div>
   <div id="ref-primary-fg" style="color: var(--primary-fg)"></div>
+  <div id="ref-focus" style="color: var(--focus)"></div>
   <div
     id="ref-context-hover"
     style="color: var(--surface); background: color-mix(in oklch, currentColor 10%, transparent)"
@@ -27,15 +37,11 @@
     id="ref-raised-overlay"
     style="background: color-mix(in oklch, var(--surface-raised), transparent 20%)"
   ></div>
-  <div
-    id="ref-solid-overlay"
-    style="background: color-mix(in oklch, var(--surface-solid), transparent 20%)"
-  ></div>
 
   <button id="normal-outline" class="btn outline" type="button">Normal outline</button>
 
   <!-- Contrasting context: bare content and transparent treatments follow it. -->
-  <section id="wrapper" class="inverted">
+  <section id="wrapper" class="band">
     <h2>Context heading</h2>
     <p>Context text with a <a id="context-link" href="#">link</a>.</p>
     <button id="context-outline" class="btn outline" type="button">Outline</button>
@@ -48,7 +54,7 @@
     <button id="context-primary" class="btn primary" type="button">Primary</button>
 
     <!-- A surface-owning descendant is a boundary. Its transparent child
-         follows the card foreground, not the outside inverted foreground. -->
+         follows the card foreground, not the outside band foreground. -->
     <article id="nested-card" class="card">
       <h3>Nested heading</h3>
       <button id="nested-outline" class="btn outline" type="button">Nested outline</button>
@@ -68,24 +74,19 @@
 
     <!-- A background utility recreates a light surface, so it must also
          recreate the ink and the heading color for that surface. -->
-    <div id="inverted-background" class="background-surface">
+    <div id="band-background" class="background-surface">
       <h3>Background surface heading</h3>
       Background surface text
     </div>
   </section>
 
-  <!-- Applying the treatment directly opts shared-surface components in. -->
-  <article id="inverted-card" class="card inverted" aria-busy="true" aria-label="Loading inverted card">
-    <h3>Inverted card</h3>
-    <span class="spinner" aria-hidden="true"></span>
-  </article>
-
-  <article id="card-subtle" class="card inverted subtle">Competing explicit surface</article>
-
-  <div id="inverted-alert" class="alert inverted">Inverted alert</div>
-  <span id="inverted-badge" class="badge inverted">Inverted badge</span>
-
-  <nav id="navbar" class="navbar inverted" aria-label="Test">
+  <!-- A navbar given its own --ui-* surface by the application. -->
+  <nav
+    id="navbar"
+    class="navbar"
+    aria-label="Test"
+    style="--ui-bg: var(--surface-solid); --ui-fg: var(--surface); --ui-border: transparent"
+  >
     <a class="navbar-brand" href="#">Brand</a>
     <ul class="navbar-nav">
       <li><a class="nav-link" href="#">Link</a></li>
