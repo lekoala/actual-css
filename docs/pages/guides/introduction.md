@@ -68,9 +68,9 @@ Actual CSS uses a small unprefixed class grammar:
 
 Intents are `.primary`, `.secondary`, `.success`, `.warning`, and `.danger`, and
 work across components. Variants such as `.solid`, `.soft`, `.outline`, and `.surface` are
-shared by buttons, badges, alerts, and cards; `.inverted` is a shared surface
-modifier that paints any block with the inverse surface. `.ghost` and `.link`
-are button-only. Size variants `.sm` and `.lg` scale typography and
+shared by buttons, badges, alerts, and cards; a subtree that needs another
+palette is a `data-theme` island, not a class. `.ghost` and `.link` are
+button-only. Size variants `.sm` and `.lg` scale typography and
 participating component geometry consistently. Density contexts `.compact` and
 `.spacious` change geometry and spacing without changing font size or icons;
 `.compact` may slightly narrow typefaces that support a width axis.

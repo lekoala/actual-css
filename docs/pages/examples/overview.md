@@ -47,7 +47,7 @@ One mechanism at a time, with its contract and its pitfalls.
 Contracts you cannot read off a static screenshot: state, motion, focus, and
 extension points.
 
-- [Surface contracts](../../demo/templates/surfaces.html) - `.inverted`, cascade precedence, and the intent boundary
+- [Contrast contexts](../../demo/templates/contrast-contexts.html) - the page, `data-theme` islands, a card island, a named theme and an application-painted band side by side, with every intent variant, a full form (combobox and date picker included) and focus line measured live, plus joined fields that need no focus adaptation
 - [Presence motion](../../demo/templates/motion.html) - status bar, tooltip, flyout, modal and drawer replayed side by side, with easing swaps and a reduced-motion simulation
 - [Keyboard controls](../../demo/templates/keyboard-controls.html) - hands-on keyboard support matrix and focus test bench
 - [Adaptive filter surface](../../demo/templates/adaptive-surface.html) - app-level flyout/drawer composition with one synchronized filter state

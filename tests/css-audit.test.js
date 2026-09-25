@@ -1,5 +1,5 @@
 import { expect, test } from "bun:test";
-import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
+import { readdirSync, readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
 
 function readCss(path) {
@@ -378,18 +378,22 @@ test("badge decorative children consume the icon scale once", () => {
   );
 });
 
-test("inverted maps tokens and paints early in variants.css (no late paint)", () => {
-  const variants = readCss("src/css/core/variants.css");
-
-  expect(variants).toMatch(/\.inverted \{[\s\S]*--ui-bg: var\(--surface-solid\);/);
-  expect(variants).toMatch(/\.inverted \{[\s\S]*--ui-fg: var\(--surface\);/);
-  expect(variants).toMatch(/\.inverted \{[\s\S]*--heading: var\(--surface\);/);
-  // the direct paint must live on the same early rule, not in a late file
-  expect(variants).toMatch(/\.inverted \{[\s\S]*background: var\(--ui-bg\);/);
-  expect(variants).toMatch(/\.inverted \{[\s\S]*color: var\(--ui-fg\);/);
-  expect(variants).toMatch(/\.inverted \{[\s\S]*border-color: var\(--ui-border\);/);
-  // a late paint file must never reappear (it forces non-participants)
-  expect(existsSync(join(import.meta.dir, "..", "src", "css", "variants-late.css"))).toBe(false);
+test("no class pretends to invert a subtree", () => {
+  // Trap: .inverted remapped a few --ui-* tokens and read as "invert
+  // everything", so fields, help text, errors and intent ink kept the page
+  // palette on a dark band. A subtree that needs another palette is a
+  // data-theme island; a bare contrasting band is application CSS. Do not
+  // restore it under this or another name (.contrast) without a real use.
+  const cssRoot = join(import.meta.dir, "..", "src", "css");
+  const walk = (dir) =>
+    readdirSync(dir).flatMap((entry) => {
+      const full = join(dir, entry);
+      return statSync(full).isDirectory() ? walk(full) : /\.css$/.test(entry) ? [full] : [];
+    });
+  for (const file of walk(cssRoot)) {
+    const rules = readFileSync(file, "utf8").replace(/\/\*[\s\S]*?\*\//g, "");
+    expect(rules, file).not.toMatch(/\.inverted\b/);
+  }
 });
 
 test("card derives contextual tokens from the surface it owns", () => {
@@ -458,9 +462,9 @@ test("navbar consumes the shared surface contract with an intent boundary", () =
     /\.nav-link \{[\s\S]*font: inherit;[\s\S]*font-weight: var\(--font-weight-medium\);/,
   );
   // Hover and current fills tint the link's own ink so they read on any bar.
-  // --ui-hover-bg is the bar's own hover (equal to its fill on .inverted), so
-  // a link reading it would vanish; the rendered contrast is asserted in
-  // tests/browser/inverted.test.js.
+  // --ui-hover-bg is the bar's own hover (it can equal its fill), so a link
+  // reading it could vanish; the rendered result is asserted in
+  // tests/browser/surface-context.test.js.
   expect(rules).not.toContain("--ui-hover-bg");
   expect(css).toMatch(
     /\.nav-link:is\(:hover, \[aria-current\]\) \{[^}]*background: color-mix\(in oklch, currentColor 10%, transparent\);/,
@@ -523,10 +527,11 @@ test("joined icon-only buttons release their fixed block size", () => {
 
 test("busy overlay can inherit local surface background", () => {
   const busyCss = readCss("src/css/components/busy.css");
-  const variantsCss = readCss("src/css/core/variants.css");
+  const cardCss = readCss("src/css/components/card.css");
 
   expect(busyCss).toContain("var(--busy-overlay-bg, var(--surface))");
-  expect(variantsCss).toContain("--busy-overlay-bg: var(--surface-solid);");
+  // A surface-owning component relays its own fill to the overlay.
+  expect(cardCss).toContain("--busy-overlay-bg: var(--card-bg);");
 });
 
 test("menu item styles include disabled treatment", () => {
@@ -752,7 +757,7 @@ test("alert.callout owns the border geometry and leaves the surface composable",
 
   expect(css).toContain("--alert-bg: var(--ui-bg, var(--alert-default-bg));");
   // A flag treatment, not a surface: writing --alert-bg / --alert-fg here would
-  // short-circuit the chain and make .surface/.solid/.outline/.inverted no-ops.
+  // short-circuit the chain and make .surface/.solid/.outline no-ops.
   expect(callout.slice(0, callout.indexOf("}"))).not.toContain("--alert-bg");
   expect(callout.slice(0, callout.indexOf("}"))).not.toContain("--alert-fg");
   expect(css).toContain("border-inline-start: var(--alert-border-inline-start-width, 4px) solid");
@@ -793,11 +798,6 @@ test("theme-derived aliases are declared on :root, [data-theme] so islands recom
   for (const prop of ["--heading", "--selection-bg", "--selection-fg"]) {
     expect(inThemeBoundary(themeCss, prop), `${prop} on [data-theme] in theme.css`).toBe(true);
   }
-  // The focus ring shadow is never a stored alias: use sites carry the
-  // fallback so a local --focus-ring (e.g. .inverted) is honored instead of
-  // inheriting a frozen value. (comment-free: the prose above names the
-  // removed declaration explicitly.)
-  expect(readRules("src/css/core/theme.css")).not.toContain("--focus-ring-shadow");
   // color-mix shadows re-derive from --shadow-color on the theme boundary
   expect(tokensCss).toMatch(
     /@supports \(color: color-mix\(in oklch, red, white\)\)\s*\{\s*:root,\s*\n\s*\[data-theme\]\s*\{[\s\S]*--shadow:/,
@@ -1019,7 +1019,6 @@ test("optional OTP keeps one native input and covers validation states", () => {
   // Focus is carried by the cell edge, never by a ring around the whole group.
   expect(css).not.toContain(".otp:focus-within");
   expect(css).not.toContain(".otp:has(");
-  expect(css).not.toContain("--focus-ring-shadow");
   // The input must be the first direct child: state rules select the cells as
   // following siblings, so this contract is asserted on the source text.
   expect(css).toContain(".otp > input:focus ~ span");
@@ -1571,11 +1570,11 @@ test("text controls keep per-control inset focus, even joined or themed", () => 
   // rule. gradient keeps the outer halo as the demo of the other style.
   expect(bs6Rules).not.toMatch(/:focus|:open|\boutline[\w-]*\s*:/);
   expect(gradientCss).toMatch(
-    /\[data-theme="gradient"\] :is\(\.input, \.textarea, \.select\):focus-visible:not\(:disabled\) \{[^}]*--control-border: var\(--focus\);[^}]*box-shadow: var\(--focus-ring-shadow, 0 0 0 var\(--focus-ring-width\) var\(--focus-ring\)\);/,
+    /\[data-theme="gradient"\] :is\(\.input, \.textarea, \.select\):focus-visible:not\(:disabled\) \{[^}]*--control-border: var\(--focus\);[^}]*outline: 2px solid transparent;[^}]*box-shadow: 0 0 0 var\(--focus-ring-width\) color-mix\(/,
   );
 });
 
-test("ring shadows are per-element fallbacks so .inverted recolors them", () => {
+test("action focus is a solid --focus line, never an intent or context ring", () => {
   const cssRoot = join(import.meta.dir, "..", "src", "css");
   const cssFiles = [];
   const walk = (dir) => {
@@ -1588,15 +1587,23 @@ test("ring shadows are per-element fallbacks so .inverted recolors them", () => 
   walk(cssRoot);
   const source = cssFiles.join("\n").replace(/\/\*[\s\S]*?\*\//g, "");
 
-  // No bare var(--focus-ring-shadow) may survive: every halo carries its
-  // own fallback derivation.
-  expect(source).not.toMatch(/var\(--focus-ring-shadow\)(?!,)/);
-  expect(source).toContain(
-    "var(--focus-ring-shadow, 0 0 0 var(--focus-ring-width) var(--focus-ring))",
-  );
-  // .inverted recolors from its own contrast pair, not from --focus.
-  const variantsCss = readCss("src/css/core/variants.css");
-  expect(variantsCss).toMatch(/\.inverted \{[^}]*--focus-ring: var\(--surface\);/);
+  // Trap: a ring derived from the intent or re-declared by a context (the old
+  // --focus-ring / --btn-focus-color) fell to 1.1:1 on a dark band and to
+  // 1.0:1 on a card nested in it. One theme-guaranteed token needs no tracking.
+  expect(source).not.toMatch(/--focus-ring(?!-width)/);
+  expect(source).not.toContain("--btn-focus");
+  const ACTION_LINE =
+    "outline: var(--focus-ring-width) solid var(--focus);\n  outline-offset: var(--focus-outline-offset);";
+  for (const file of [
+    "src/css/components/button.css",
+    "src/css/components/close.css",
+    "src/css/forms/choice.css",
+    "src/css/forms/choice-card.css",
+    "src/css/forms/switch.css",
+    "src/css/forms/native.css",
+  ]) {
+    expect(readRules(file), file).toContain(ACTION_LINE);
+  }
 });
 
 /*

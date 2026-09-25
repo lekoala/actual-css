@@ -76,9 +76,12 @@ The rule ties with the variant's own `--ui-bg` on specificity, so load it after
 Actual CSS or import `actual.layer.css`.
 
 Transparent treatments (`.outline`, `.ghost`, `.link`) follow the surrounding
-foreground by default, including on a contrasting `.inverted` surface. A local
-intent class still wins: `.danger.outline` uses the danger color in either
-context. Filled buttons own their surface and keep their normal intent recipe.
+foreground by default, including on a band your application paints. A local
+intent class still wins: `.danger.outline` uses the danger color in any
+context, and nothing tunes that color for a surface you paint yourself. For
+intent ink on a dark band, use a `data-theme` island, whose palette is tuned
+for its surface. Filled buttons own their surface and keep their normal intent
+recipe.
 
 `.btn.link` is a link-style action: it keeps button behavior and states, but
 remains intrinsically sized like text instead of stretching with its layout
@@ -265,5 +268,4 @@ For exclusive groups, manage a single pressed button:
 ## CSS hooks
 
 - `--btn-radius` — corner radius.
-- `--btn-focus-color` — focus ring base color, the intent by default; the ring is derived from it. Unset, the button uses the contextual `--focus-ring`.
 - `--btn-gap` — space between an icon and the label text (default `0.375em`).

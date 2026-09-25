@@ -75,20 +75,22 @@
 }
 
 /*
- * The 1px surface-coloured separator keeps the ring visually distinct from
- * the small, coloured thumb — unlike a full-size input where the same gap
- * would read as an unwanted void.
+ * A thumb pseudo-element takes no reliable outline, so its ring is a solid
+ * --focus shadow (the transparent outline above covers forced colors). The
+ * 1px surface-coloured separator keeps the ring visually distinct from the
+ * small, coloured thumb — unlike a full-size input where the same gap would
+ * read as an unwanted void.
  */
 .range:focus-visible::-webkit-slider-thumb {
   box-shadow:
     0 0 0 1px var(--surface),
-    0 0 0 calc(1px + var(--focus-ring-width)) var(--focus-ring);
+    0 0 0 calc(1px + var(--focus-ring-width)) var(--focus);
 }
 
 .range:focus-visible::-moz-range-thumb {
   box-shadow:
     0 0 0 1px var(--surface),
-    0 0 0 calc(1px + var(--focus-ring-width)) var(--focus-ring);
+    0 0 0 calc(1px + var(--focus-ring-width)) var(--focus);
 }
 
 .range:disabled {

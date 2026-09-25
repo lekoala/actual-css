@@ -102,12 +102,13 @@
   color: var(--state-selected);
 }
 
-/* On a --ui-* bar (e.g. .inverted) the fill is a tint of the link's own ink,
-   the .btn.ghost hover recipe, so it reads on light and dark bars alike. Not
-   --ui-hover-bg: that is the bar's own hover, equal to its fill on .inverted.
-   The ink follows --ui-fg too — the selected accent has no contrast pair with
-   an arbitrary bar. The baseline above keeps the light chip where color-mix
-   is missing, with ink that is legible on it. */
+/* On a bar with its own --ui-bg/--ui-fg the fill is a tint of the link's own
+   ink, the .btn.ghost hover recipe, so it reads on light and dark bars alike
+   instead of snapping back to --surface-subtle. Not --ui-hover-bg: that is the
+   bar's own hover and can equal its fill. The ink follows --ui-fg too — the
+   selected accent has no contrast pair with an arbitrary bar. The baseline
+   above keeps the light chip where color-mix is missing, with ink that is
+   legible on it. */
 @supports (color: color-mix(in oklch, red, white)) {
   .nav-link:is(:hover, [aria-current]) {
     background: color-mix(in oklch, currentColor 10%, transparent);

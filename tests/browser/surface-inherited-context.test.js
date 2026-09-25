@@ -2,8 +2,8 @@
  * A surface is presented in its trigger's context, not the document's.
  *
  * The transport promotes the panel to the top layer without moving it, so
- * every scope that reaches it by inheritance — theme islands, density,
- * .inverted, and any custom property an application scoped to a container —
+ * every scope that reaches it by inheritance — theme islands, density, and
+ * any custom property an application scoped to a container —
  * still reaches it once it opens. These assertions are the contract, written
  * against the defect that reparenting used to cause; they are the reason the
  * transport exists, so keep them phrased as before/after comparisons rather

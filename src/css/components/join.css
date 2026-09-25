@@ -97,12 +97,6 @@
   z-index: 1;
 }
 
-/* Keep an active focus ring above an adjacent hovered control. This matters
-   on platforms where clicking a button does not move focus from the input. */
-.join > :is(:focus, :focus-within) {
-  z-index: 4;
-}
-
 /* An input's border must read as the "primary" edge against an attached
    action (e.g. a password-reveal button) at all times, not only while
    hovered or focused — otherwise the shared edge flips ownership as the
@@ -113,6 +107,15 @@
 .join > :is(.input, .textarea, .select),
 .join > :has(> :is(.input, .textarea, .select)) {
   z-index: 3;
+}
+
+/* Keep an active focus line above every neighbour, including an adjacent
+   field and a hovered control (some platforms keep focus on the input while
+   a button is clicked). It must follow the primary-edge rule above: both are
+   (0,2,0), and when it came first a focused field stayed at 3 and the next
+   field, painted later, covered the 1px shared edge of its line. */
+.join > :is(:focus, :focus-within) {
+  z-index: 4;
 }
 
 /* One wrapper level (e.g. a combobox element around the native control) is

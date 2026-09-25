@@ -8,6 +8,13 @@
   <style>* { transition-duration: 0s !important; }</style>
 </head>
 <body>
+  <!-- First in tab order: two adjacent fields share a 1px edge, so the
+       focused one must stack above the other or its line loses that edge. -->
+  <div class="join" role="group" aria-label="Name">
+    <input class="input" id="join-first" aria-label="First" value="Ada">
+    <input class="input" id="join-second" aria-label="Last" value="Lovelace">
+  </div>
+
   <!-- In a field join, a default outline action adopts the field border; an
        explicit intent (.danger, .neutral) keeps its own outline color. -->
   <div class="join" role="group">

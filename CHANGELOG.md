@@ -4,6 +4,7 @@
 
 ### Breaking changes
 
+- `.inverted` is removed: it mixed a contrasting surface with theme inversion while remapping only part of the palette. Use a `data-theme` island for a complete light/dark subtree, or paint a local band in application CSS.
 - `.white-space-normal` is renamed `.text-wrap`, the counterpart of `.text-nowrap`.
 - `.dialog-close`, `.drawer-close`, and `.alert-dismiss` are replaced by the shared `.close` (`components/close.css`); a modular build imports it next to its host.
 - A removable badge needs `<button class="close">`: a bare `.badge > button` is no longer styled, and an empty one no longer paints an X.
@@ -17,7 +18,14 @@
 - `dist/actual.js` (the compiled loader alone) is no longer built or published; bundle your own entry from `actual-css/js` and `actual-css/js/*`.
 - `.input`, `.textarea`, `.select`, and an open custom select draw a `--focus-ring-width` inset outline in `--focus` instead of a focus border plus outer halo.
 - `.join` no longer moves a field's focus ring onto the group: each segment keeps its own indicator.
-- `--focus-ring-shadow` is no longer declared; read it as `var(--focus-ring-shadow, 0 0 0 var(--focus-ring-width) var(--focus-ring))`.
+- `.btn`, `.close`, `.check`, `.radio`, `.switch`, `.choice-card`, `.file`, and `.color` draw a solid `--focus-ring-width` line in `--focus` at `--focus-outline-offset` instead of a translucent halo.
+- `.range` thumb focus ring is solid `--focus` instead of `--focus-ring`.
+- `--focus-ring` and `--focus-ring-shadow` are removed; every focus indicator reads `--focus`.
+- `--btn-focus-color` and `--btn-focus-ring-color` are removed: a button's focus color no longer follows its intent.
+- `.check`, `.radio`, and `.switch` keep their resting border on focus instead of switching it to `--focus`.
+- The default `--focus` is `hsl(268 30% 55%)` in both schemes instead of `var(--neutral)`: a primary-hued mid-tone that holds 3:1 against `--surface` and `--surface-solid`.
+- `--focus-ring-width` is `2px` instead of `3px`, and `3px` instead of `4px` under `prefers-contrast: more`.
+- `bootstrap-v6` sets `--focus: #3d8bfd` and `--focus-ring-width: 3px` instead of its own ring recipe.
 
 ### Added
 
@@ -28,8 +36,8 @@
 - `--bleed-pad` is a public read-only hook: `padding: var(--bleed-pad)` pads a `.bleed` band that is not a header, footer, or figure.
 - `.join` supports a control nested one wrapper level deep (e.g. a combobox element): the wrapper carries the group corners and primary-edge `z-index`, the inner control inherits the radius, and no widget is named.
 - `.nav-link` works on a `<button>`: UA button chrome is neutralized with `<a>`-identical metrics.
-- `.inverted` sets its own `--focus-ring: var(--surface)`, drawn from its contrast pair instead of the general `--focus`.
 - The `gradient` theme demos the outer-halo field focus; `bootstrap-v6` and `edge` have no field focus override.
+- `demo/templates/contrast-contexts.html`: the page, `data-theme` islands, a card island, a named theme and an application-painted band with every intent variant, a form, a combobox, a date picker and focus lines measured live, plus a `.join` gallery with no focus adaptation.
 
 ### Fixed
 
@@ -46,15 +54,21 @@
 - `applyEnhancement("validation", …)` did not wire an already-connected form: `validation.js` now registers through `registerEnhancement`.
 - `--app-nav-side-size` was invisible to `check:css-api` (header read `Public hook:`).
 - A custom `data-theme` on `<html>` kept the default palette's `--*-soft-fg` calibration instead of resetting it, so the same theme resolved a different soft ink on `<html data-theme>` than on a nested island.
-- `.nav-link` hover/current and `.app-nav` hover fill with a tint of their own ink and follow `--ui-fg`, so they read on an `.inverted` bar.
+- `.nav-link` hover/current and `.app-nav` hover fill with a tint of their own ink and follow `--ui-fg`, so they read on a bar with its own `--ui-bg`.
 - `.flyout` owns `color: var(--text)`, like modal and drawer.
+- `ocean` theme: light `--danger` darkened (solid text 4.1:1 → 5.2:1), `--soft-fg-mix: 50%` (soft inks from 2.0–4.3:1 to ≥ 4.8:1), and a mid-tone `--focus` that holds 3:1 on both surfaces.
+- A focused field in `.join` stacks above an adjacent field (`z-index: 4` rule now follows the primary-edge rule), so the neighbour no longer covers its shared edge.
 - A field wrapped one level deep in `.join` fills its stretched wrapper (`block-size: 100%`) instead of stopping short of a taller sibling.
-- A `.btn` without an intent draws the contextual `--focus-ring`, so `.inverted` and theme-pinned rings reach it; `--btn-focus-color` defaults to the intent only.
+- Focus indicators on a `--surface-solid` band and on a card nested in it hold 3:1 (a primary button's ring measured 1.1:1, a neutral one in a nested card 1.0:1).
 
 ### Documentation and tooling
 
 - Combobox: the bridge recipe targets `@lekoala/combobox` 0.5.0, replaces its halo with the field inset outline, reads `--form-invalid-border`, and inherits `.join` corners.
-- `tests/browser/field-focus.test.js` asserts the field outline stays inside the border box (default and `prefers-contrast`) and that `--focus` holds 3:1 on the field surface.
+- `tests/browser/field-focus.test.js` asserts the field outline stays inside the border box (default and `prefers-contrast`) and that `--focus` holds 3:1 on `--surface` and `--surface-solid` in both schemes.
+- `bun run report:theme-contrast` also reports each preset's `--focus` against `--surface` and `--surface-solid`.
+- Theming: "Make a dark (or light) section" replaces the `.inverted` recipe — a `data-theme` island for a whole context, application CSS for a painted band.
+- `demo/templates/surfaces.html` is removed; `contrast-contexts.html` covers surface boundaries.
+- `tests/browser/inverted.test.js` becomes `surface-context.test.js`, on an application-painted band.
 - Pushing a version tag publishes the GitHub release: `.npmrc` keeps `npm version` on the bare tag format, `bun run release:notes` extracts (and validates) the dated changelog section, and the CI `release` job attaches `dist/`.
 - Theming: a "Replace the palette with my own brand" entry names the tinted neutrals and soft-ink tokens a partial override leaves behind, and points at the minimal recolor set.
 - Tokens: the minimal recolor theme includes `--shadow-color`.

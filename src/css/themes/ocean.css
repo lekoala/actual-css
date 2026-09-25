@@ -11,7 +11,7 @@
   --success-fg: white;
   --warning: hsl(36 90% 50%);
   --warning-fg: hsl(35 35% 12%);
-  --danger: hsl(350 70% 52%);
+  --danger: hsl(350 70% 48%);
   --danger-fg: white;
   --neutral: hsl(205 12% 38%);
   --neutral-fg: white;
@@ -26,10 +26,16 @@
   --text-subtle: hsl(205 10% 56%);
 
   --border: hsl(198 30% 84%);
-  --focus: var(--primary);
+  /* Mid-tone of the primary hue, one value for both schemes: the focus line
+     must hold 3:1 on --surface and --surface-solid alike. */
+  --focus: hsl(198 75% 42%);
   /* Pre-light-dark() tier, mirroring the light half below. */
   --hover-overlay: hsl(220 30% 10% / 0.04);
   --shadow-color: hsl(220 30% 10%);
+  /* Soft ink rebated halfway toward the text: the raw light intents sit near
+     4.2:1 on their tint (warning at 2:1). Toward a light text in dark, so the
+     dark half only gains. */
+  --soft-fg-mix: 50%;
 }
 
 @supports (color: light-dark(red, blue)) {
@@ -43,7 +49,7 @@
     --success-fg: light-dark(white, hsl(160 30% 12%));
     --warning: light-dark(hsl(36 90% 50%), hsl(36 75% 80%));
     --warning-fg: light-dark(hsl(35 35% 12%), hsl(36 30% 12%));
-    --danger: light-dark(hsl(350 70% 52%), hsl(350 75% 80%));
+    --danger: light-dark(hsl(350 70% 48%), hsl(350 75% 80%));
     --danger-fg: light-dark(white, hsl(350 30% 12%));
     --neutral: light-dark(hsl(205 12% 38%), hsl(205 20% 80%));
     --neutral-fg: light-dark(white, hsl(205 30% 12%));

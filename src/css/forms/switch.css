@@ -128,9 +128,8 @@
 }
 
 .switch:focus-visible {
-  --switch-border: var(--focus);
-  outline: 2px solid transparent;
-  box-shadow: var(--focus-ring-shadow, 0 0 0 var(--focus-ring-width) var(--focus-ring));
+  outline: var(--focus-ring-width) solid var(--focus);
+  outline-offset: var(--focus-outline-offset);
 }
 
 .switch:disabled {

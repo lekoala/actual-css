@@ -80,16 +80,16 @@ The surface levels are: `surface` (canvas), `surface-raised` (cards, raised surf
 
 Use `*-fg` pairs only for solid backgrounds where the component controls both foreground and background. Do not require a foreground token for every surface token.
 
-Focus styling is outline-first. `--focus` names the theme's focus color, and a ring is derived from it with `color-mix()`. A global focus baseline applies `--focus-outline` and `--focus-outline-offset`: older browsers show it on `:focus`, while modern browsers limit it to `:focus-visible`. Text fields (`.input`, `.textarea`, `.select`) draw a `--focus-ring-width` outline in `--focus` inside their own border box, so `--focus` must hold 3:1 against the field surface. Components that need a softer halo write `var(--focus-ring-shadow, 0 0 0 var(--focus-ring-width) var(--focus-ring))` at the use site — never a stored alias, so the ring recomputes per element and follows a local `--focus-ring`; `--focus-ring-width` sets its thickness. Under `forced-colors: active`, the outline maps to `Highlight` and the shadow is disabled.
+Focus styling is outline-first. A global focus baseline applies `--focus-outline` and `--focus-outline-offset`: older browsers show it on `:focus`, while modern browsers limit it to `:focus-visible`. Components draw a solid `--focus-ring-width` line in `--focus`: inside the border box on text fields (`.input`, `.textarea`, `.select`), outside at `--focus-outline-offset` on actions (`.btn`, `.close`, choices, switches). The color never follows an intent or a local surface, so `--focus` must hold 3:1 against both `--surface` and `--surface-solid` — the page, fields and a solid band all rely on it. Under `forced-colors: active`, outlines map to the system focus color.
 
 ```css
 :root {
-  --focus: var(--neutral);
+  --focus: hsl(268 30% 55%);
 
   --focus-outline-color: currentColor;
   --focus-outline: calc(var(--border-width) * 2) solid var(--focus-outline-color);
   --focus-outline-offset: 2px;
-  --focus-ring-width: 3px;
+  --focus-ring-width: 2px;
 }
 ```
 
@@ -462,9 +462,7 @@ Text controls (`.input`/`.textarea`/`.select`) expose the same lower-edge extens
 
 Alerts expose the same idea on the leading edge instead of the lower one: `--alert-border-inline-start-color` and `--alert-border-inline-start-width` are unset by default and fall back to the regular `--ui-border`, so a theme can turn an alert into a callout with a colored flag on the inline-start side, matching the classic notice pattern, without a per-variant override.
 
-A theme is not limited to the tokens above; it can restate any component-local token or rule under a state selector to change the interaction recipe itself, not just the palette. The `gradient` theme does this for field focus: it restores a `--focus` border plus an outer `--focus-ring` halo in place of the core inset outline.
-
-Buttons don't consume `--focus-outline` — button.css draws its own ring of `--focus-ring-width`. A button with an intent (or an authored `--btn-focus-color`) derives the ring color from it through `--btn-focus-ring-color`; a button without one uses the contextual `--focus-ring`, so `.inverted` and a theme-pinned ring reach it.
+A theme is not limited to the tokens above; it can restate any component-local token or rule under a state selector to change the interaction recipe itself, not just the palette. The `gradient` theme does this for field focus: it restores a `--focus` border plus an outer translucent halo in place of the core inset outline.
 
 Rules:
 
@@ -481,7 +479,7 @@ Rules:
 
 Themes override tokens, not selectors. The themes in `src/css/themes/` are repository-only demo examples, not included in the default stylesheet or the npm package; they exist to show valid ways to use this contract, such as `ocean`, `square`, `cyberpunk`, and `brutalist`.
 
-A minimal recolor theme overrides the intent pairs, surfaces, text colors, border, focus, hover overlay, and shadow color. In browsers with `color-mix()` support, the core derives `--focus-ring` from the island's `--focus`; override the ring only for a deliberate visual treatment or when a matching pre-`color-mix()` fallback is required.
+A minimal recolor theme overrides the intent pairs, surfaces, text colors, border, focus, hover overlay, and shadow color. Pick `--focus` as a mid-tone that holds 3:1 against both `--surface` and `--surface-solid` in every scheme the theme declares; a pastel dark-scheme primary usually fails on the light solid surface. `bun run report:theme-contrast` measures both pairs.
 
 When overriding an intent color, review its paired `--*-fg` and `--*-soft-fg`. A theme that declares no hook falls back to the `--soft-fg-mix` derivation: one global percentage applied to every role, so it carries no contrast guarantee for a palette it was not tuned against. `bun run report:theme-contrast` prints the resting and hovered soft pair for every intent of every island, which is how a theme finds the roles that need a hook or a lower `--soft-fg-mix`.
 
@@ -536,7 +534,7 @@ A minimal recolor theme (illustrative, not a shipped theme):
 }
 ```
 
-Several tokens are theme-derived aliases that reference other tokens — `--state-selected`/`--state-selected-fg`/`--state-disabled`, `--indicator-ring`, `--shadow`/`--shadow-popout`, `--heading`, and `--selection-bg`/`--selection-fg`. They are declared on `:root, [data-theme]` so they recompute on every theme boundary: a custom property resolves its `var()` references at computed-value time on the element that declares it, so an alias declared only on `:root` would be inherited as an already-resolved value and would not follow a `[data-theme]` island's overridden tokens. The focus ring shadow is deliberately not one of them — use sites write `var(--focus-ring-shadow, 0 0 0 var(--focus-ring-width) var(--focus-ring))` so a local `--focus-ring` (e.g. `.inverted`) is honored. A theme that wants a distinct alias (e.g. a `--selection-bg` of its own) overrides it explicitly afterwards, which wins by cascade order.
+Several tokens are theme-derived aliases that reference other tokens — `--state-selected`/`--state-selected-fg`/`--state-disabled`, `--indicator-ring`, `--shadow`/`--shadow-popout`, `--heading`, and `--selection-bg`/`--selection-fg`. They are declared on `:root, [data-theme]` so they recompute on every theme boundary: a custom property resolves its `var()` references at computed-value time on the element that declares it, so an alias declared only on `:root` would be inherited as an already-resolved value and would not follow a `[data-theme]` island's overridden tokens. A theme that wants a distinct alias (e.g. a `--selection-bg` of its own) overrides it explicitly afterwards, which wins by cascade order.
 
 Without `data-theme`, the default theme advertises `color-scheme: light dark` and follows the user's OS preference in browsers that support `light-dark()`. Dark themes should set `color-scheme: dark`. Light themes should set `color-scheme: light`. Browsers without `light-dark()` receive the light fallback.
 

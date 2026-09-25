@@ -3,18 +3,15 @@
    pointer/mouse focus and interactive components layer their ring on top.
 
    Invariant: an interactive component must never rely on box-shadow alone
-   for its keyboard focus indicator. Components that remove the native
-   outline on :focus-visible replace it with a transparent outline — invisible
-   normally, forced to the system focus color under forced-colors.
+   for its keyboard focus indicator; forced colors keep outlines and drop
+   shadows.
 
-   The halo recipe is fallback-only on purpose, never a stored alias: each
-   use site writes the full var() fallback so the halo recomputes per
-   element and follows a local --focus-ring (e.g. .inverted) instead of
-   inheriting a frozen value.
- *
- * Internal:
- * --focus-ring-shadow
- */
+   Component indicators are a solid --focus-ring-width line in --focus: inset
+   on fields (inside their border box), offset by --focus-outline-offset on
+   discrete actions. The color never derives from an intent or a local
+   surface — the theme guarantees --focus at 3:1 against both --surface and
+   --surface-solid, so one token reads on the page, on a solid band and on
+   any nested surface. */
 :focus {
   outline: var(--focus-outline);
   outline-offset: var(--focus-outline-offset);

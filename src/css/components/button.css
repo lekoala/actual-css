@@ -17,7 +17,6 @@
  * --btn-min-size
  * --btn-pad-x
  * --btn-radius
- * --btn-focus-color
  * --btn-gap
  * --btn-hover-overlay
  * --btn-default-bg
@@ -30,7 +29,6 @@
  * --btn-fg
  * --btn-border
  * --btn-default-hover-bg
- * --btn-focus-ring-color
  * --btn-border-block-end-color
  * --btn-border-block-end-width
  * --spinner-width
@@ -57,11 +55,6 @@
   --btn-border: var(--ui-border, var(--btn-default-border, transparent));
   --btn-default-hover-bg: var(--btn-bg);
   --btn-radius: var(--radius);
-  /* why: guaranteed-invalid without an intent, so the ring derivation below
-     is invalid too and the shadow falls back to the contextual --focus-ring —
-     the one .inverted and pinned theme rings set. An intent (or an author
-     value) still derives its own ring. */
-  --btn-focus-color: var(--intent);
   --btn-hover-overlay: var(--hover-overlay, rgb(0 0 0 / 0.08));
 
   /* Positioning context for indicators, overlays, and grouped states. */
@@ -101,12 +94,6 @@
   inline-size: var(--btn-min-size);
   block-size: var(--btn-min-size);
   padding: 0;
-}
-
-@supports (color: color-mix(in oklch, red, white)) {
-  .btn {
-    --btn-focus-ring-color: color-mix(in oklch, var(--btn-focus-color) 28%, transparent);
-  }
 }
 
 /* .solid/.soft/.outline are shared via variants.css. The baseline --btn-*
@@ -196,15 +183,13 @@
   text-decoration-thickness: 0.12em;
 }
 
+/* why: the ring must contrast with the surface around the button, not with
+   the button, so it is --focus for every intent and variant — the theme
+   guarantees --focus against --surface and --surface-solid, which covers
+   the page, a solid band and nested surfaces without tracking any context. */
 .btn:focus-visible {
-  outline: 2px solid transparent;
-  box-shadow: 0 0 0 var(--focus-ring-width) var(--btn-focus-ring-color, var(--focus-ring));
-}
-
-.btn.link:focus-visible {
-  outline: var(--focus-outline);
-  outline-offset: 0.2em;
-  box-shadow: none;
+  outline: var(--focus-ring-width) solid var(--focus);
+  outline-offset: var(--focus-outline-offset);
 }
 
 .btn:disabled {

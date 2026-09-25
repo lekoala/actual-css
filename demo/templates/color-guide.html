@@ -870,8 +870,7 @@
             </div>
             <div class="cluster">
               <span class="cg-chip" data-swatch="--focus"></span>
-              <span class="cg-chip" data-swatch="--focus-ring"></span>
-              <span class="cg-value">--focus, --focus-ring</span>
+              <span class="cg-value">--focus</span>
             </div>
             <div class="cluster">
               <button class="btn primary" type="button">Hover me</button>
@@ -889,8 +888,7 @@
             </div>
             <div class="cluster">
               <span class="cg-chip" data-swatch="--focus"></span>
-              <span class="cg-chip" data-swatch="--focus-ring"></span>
-              <span class="cg-value">--focus, --focus-ring</span>
+              <span class="cg-value">--focus</span>
             </div>
             <div class="cluster">
               <button class="btn primary" type="button">Hover me</button>
@@ -911,10 +909,11 @@
             to see four percent at all.
           </p>
           <p>
-            <strong><code>--focus-ring</code></strong> is not authored: it is
-            <code>color-mix(in oklch, var(--focus) 30%, transparent)</code>,
-            re-derived on every boundary. Override <code>--focus</code> and the
-            ring follows; there is no stale second value to keep in sync.
+            <strong><code>--focus</code></strong> is the one focus color: every
+            indicator is a solid line in it, inset on fields and offset on
+            actions. It must hold 3:1 against both <code>--surface</code> and
+            <code>--surface-solid</code>, so it is a mid-tone: a pale pastel
+            fails on the light surface, a deep ink on the solid one.
           </p>
           <p>
             <strong><code>accent-color</code></strong> is the one that catches

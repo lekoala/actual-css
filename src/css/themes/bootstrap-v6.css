@@ -1,5 +1,8 @@
 /* Bootstrap v6 visual reference theme for the demo; no Bootstrap API is provided.
-   v6's inset field focus is the core recipe, so the theme sets tokens only. */
+   Bootstrap's look, Actual's focus contract: v6 paints a 3px ring at -1px
+   (2px outside the field) in primary mixed 50% with the surface (1.85:1).
+   The theme keeps the core line and only sets tokens — v6's width and its
+   lighter blue 400, which holds 3:1 on both surfaces in both schemes. */
 [data-theme="bootstrap-v6"] {
   color-scheme: light;
 
@@ -24,8 +27,8 @@
   --text-muted: #6c757d;
   --text-subtle: #adb5bd;
   --border: #dee2e6;
-  --focus: var(--primary);
-  --focus-ring: #68bfff;
+  --focus: #3d8bfd;
+  --focus-ring-width: 3px;
   --hover-overlay: rgb(0 0 0 / 4%);
   --shadow-color: #000;
   /* v6 subtle fills use an 80% white tint; borders use its 300 step. */
@@ -113,11 +116,6 @@
     --text-muted: light-dark(#6c757d, #adb5bd);
     --text-subtle: light-dark(#adb5bd, #6c757d);
     --border: light-dark(#dee2e6, #495057);
-    --focus-ring: light-dark(
-      /* intentional-oklch: Match Bootstrap v6's focus-ring interpolation. */
-      color-mix(in oklch, var(--primary) 50%, var(--surface)),
-      color-mix(in oklch, var(--primary) 75%, var(--surface))
-    );
     --hover-overlay: light-dark(rgb(0 0 0 / 4%), rgb(255 255 255 / 6%));
     --control-hover-border: light-dark(#adb5bd, #6c757d);
   }

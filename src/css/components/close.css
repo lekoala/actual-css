@@ -53,8 +53,8 @@
 }
 
 .close:focus-visible {
-  outline: 2px solid transparent;
-  box-shadow: var(--focus-ring-shadow, 0 0 0 var(--focus-ring-width) var(--focus-ring));
+  outline: var(--focus-ring-width) solid var(--focus);
+  outline-offset: var(--focus-outline-offset);
 }
 
 /* Dialog corner — out of the content flow, anchored to the positioned dialog

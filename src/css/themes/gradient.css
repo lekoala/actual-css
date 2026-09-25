@@ -45,13 +45,15 @@
 /* Bootstrap 4 field focus, kept as a demo of the outer-halo style: the border
    takes the focus color and a soft ring surrounds the field. The halo paints
    outside the control, so inside a .join it overlaps the neighbouring segment
-   (the focused segment is raised by join.css), and a scrollport edge can clip
-   it — the trade-off the core inset outline avoids. */
+   (the focused segment is raised by join.css), a scrollport edge can clip it,
+   and its alpha never reaches 3:1 — the trade-offs the core solid line
+   avoids. The transparent outline keeps forced colors, which drop shadows;
+   without color-mix() the focus border alone remains. */
 [data-theme="gradient"] :is(.input, .textarea, .select):focus-visible:not(:disabled) {
   --control-border: var(--focus);
   outline: 2px solid transparent;
   outline-offset: 0;
-  box-shadow: var(--focus-ring-shadow, 0 0 0 var(--focus-ring-width) var(--focus-ring));
+  box-shadow: 0 0 0 var(--focus-ring-width) color-mix(in oklch, var(--focus) 25%, transparent);
 }
 
 @supports (color: light-dark(red, blue)) {

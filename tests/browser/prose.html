@@ -5,7 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Prose specificity contract fixture</title>
   <link rel="stylesheet" href="../../src/css/actual.full.css">
-  <style>* { transition-duration: 0s !important; }</style>
+  <style>
+    * { transition-duration: 0s !important; }
+
+    /* An application contrasting band (theming.md recipe). */
+    .band {
+      --heading: var(--surface);
+      background: var(--surface-solid);
+      color: var(--surface);
+    }
+  </style>
 </head>
 <body>
   <!-- Authored rich text only: application components belong outside prose. -->
@@ -20,10 +29,10 @@
     <h2 id="flow-h2">Heading</h2>
   </div>
 
-  <!-- Prose itself may opt into a contextual surface. -->
-  <section id="inverted-prose" class="prose inverted">
-    <h2 id="inverted-prose-heading">Contextual heading</h2>
-    <p id="inverted-prose-copy">Inverted authored content</p>
+  <!-- Prose itself may sit on a contextual surface and follow its ink. -->
+  <section id="band-prose" class="prose band">
+    <h2 id="band-prose-heading">Contextual heading</h2>
+    <p id="band-prose-copy">Authored content on a band</p>
   </section>
 </body>
 </html>

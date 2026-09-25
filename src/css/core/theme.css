@@ -72,10 +72,10 @@
 
   /* Lines and focus */
   --border: hsl(260 15% 88%);
-  --focus: var(--neutral);
-  /* Pre-color-mix fallback only — superseded below by a derivation from
-     --focus so overriding --neutral/--focus never leaves a stale ring. */
-  --focus-ring: hsl(258 7% 43% / 0.3);
+  /* A primary-hued mid-tone on purpose, one value for both schemes: focus
+     lines must hold 3:1 against --surface and --surface-solid alike (page,
+     fields, a solid band), which rules out the primary itself. */
+  --focus: hsl(268 30% 55%);
   --hover-overlay: hsl(260 20% 10% / 0.04);
 
   /* Radius scale — themes may override the whole scale (e.g. [data-theme="square"]) */
@@ -92,11 +92,7 @@
 
 /* Theme-derived aliases — re-declared on every theme boundary (see tokens.css
    for the custom-property resolution rationale): islands recompute these from
-   their own tokens instead of inheriting :root's resolved values.
-   The focus ring shadow is deliberately not stored here: it is written at
-   each use site as var(--focus-ring-shadow, 0 0 0 var(--focus-ring-width)
-   var(--focus-ring)) so it recomputes per element and follows a local
-   --focus-ring (e.g. .inverted) instead of inheriting a frozen value. */
+   their own tokens instead of inheriting :root's resolved values. */
 :root,
 [data-theme] {
   --heading: var(--text);
@@ -160,20 +156,6 @@
   --tone-fg: var(--text);
 }
 
-/* Focus ring derivation — color-mix tier. Runs whether or not light-dark()
-   is also supported, so it covers the color-mix-without-light-dark browser
-   tier on its own; the light-dark block below refines it further with the
-   light/dark alpha split once both features are available. Declared on every
-   [data-theme] island (not just the built-in light/dark pair) so custom
-   islands recolor the ring for free; a preset that re-declares --focus-ring
-   later in source order intentionally pins its own ring instead. */
-@supports (color: color-mix(in oklch, red, white)) {
-  :root,
-  [data-theme] {
-    --focus-ring: color-mix(in oklch, var(--focus) 30%, transparent);
-  }
-}
-
 /* Auto dark mode via light-dark(). Resolves based on the element's color-scheme:
     :root (light dark) follows the OS, [data-theme="light"] forces light,
     [data-theme="dark"] forces dark by overriding color-scheme.
@@ -210,19 +192,8 @@
     --text-subtle: light-dark(hsl(258 7% 57%), hsl(258 7% 54%));
 
     --border: light-dark(hsl(260 15% 88%), hsl(262 12% 24%));
-    --focus-ring: light-dark(hsl(258 7% 43% / 0.3), hsl(258 10% 72% / 0.28));
     --hover-overlay: light-dark(hsl(260 20% 10% / 0.04), hsl(0 0% 100% / 0.06));
     --shadow-color: light-dark(hsl(260 25% 10%), hsl(262 40% 2%));
-  }
-}
-
-@supports (color: color-mix(in oklch, red, white)) and (color: light-dark(red, blue)) {
-  :root,
-  [data-theme] {
-    --focus-ring: light-dark(
-      color-mix(in oklch, var(--focus) 30%, transparent),
-      color-mix(in oklch, var(--focus) 28%, transparent)
-    );
   }
 }
 
@@ -233,7 +204,7 @@
   [data-theme][data-theme] {
     --border-width: 2px;
     --focus-outline-offset: 3px;
-    --focus-ring-width: 4px;
+    --focus-ring-width: 3px;
     --text-muted: var(--text);
     --text-subtle: var(--text);
   }

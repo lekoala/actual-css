@@ -6,7 +6,7 @@
  *
  * Explicit (`data-tooltip` + aria-describedby + a role="tooltip" element):
  * the author placed it, so it stays there and inherits everything reaching it
- * — theme islands, density, .inverted, an application's own scoped custom
+ * — theme islands, density, an application's own scoped custom
  * properties. This is the same defect class the surface transport removed;
  * see surface-inherited-context.test.js and
  * docs/design-notes/surface-reparenting.md.
@@ -118,12 +118,10 @@ owed("an explicit tooltip keeps an application's scoped custom property", async 
   expect(hovered.value).toBe("rgb(1, 2, 3)");
 });
 
-owed("an explicit tooltip inside .inverted keeps the inverted surface tokens", async () => {
-  const { closed, hovered } = await acrossFirstHover(
-    "inverted-tip",
-    `styles.getPropertyValue('--ui-fg').trim()`,
-  );
-  expect(hovered.value).toBe(closed.value);
+owed("an explicit tooltip inside a data-theme island keeps the island's scheme", async () => {
+  const { closed, hovered } = await acrossFirstHover("island-tip", `styles.colorScheme`);
+  expect(closed.value).toBe("dark");
+  expect(hovered.value).toBe("dark");
 });
 
 owed("a shorthand tooltip does not alter the trigger's structural position", async () => {

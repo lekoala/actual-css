@@ -89,8 +89,9 @@ it("text fields paint an inset outline that stays inside their border box", asyn
       expect(legacy.shadow).not.toBe("none");
       expect(legacy.offset).toBe(0);
 
-      // The outline alone carries focus, so --focus must hold 3:1 against the
-      // field surface in both schemes of the default theme.
+      // The line alone carries focus and never follows a context, so --focus
+      // must hold 3:1 against --surface (page, fields) and --surface-solid
+      // (a solid band) in both schemes of the default theme.
       const ratios = await view.evaluate(`(() => {
         const c = document.createElement("canvas");
         c.width = c.height = 1;
@@ -110,11 +111,12 @@ it("text fields paint an inset outline that stays inside their border box", asyn
           const [p, q] = [lum(a), lum(b)].sort((m, n) => n - m);
           return (p + 0.05) / (q + 0.05);
         };
-        return ["light", "dark"].map((scheme) => {
-          const cs = getComputedStyle(document.querySelector("#scheme-" + scheme + " [data-focus]"));
+        return [...document.querySelectorAll("[data-focus]")].map((el) => {
+          const cs = getComputedStyle(el);
           return ratio(rgb(cs.color), rgb(cs.backgroundColor));
         });
       })()`);
+      expect(ratios).toHaveLength(4);
       for (const r of ratios) expect(r).toBeGreaterThanOrEqual(3);
     },
     { artifactName: "field-focus" },
@@ -127,7 +129,7 @@ it("prefers-contrast widens the field outline and keeps it inside", async () => 
     async (view) => {
       await tabTo(view, "plain");
       const plain = await focusStyle(view, "plain");
-      expect(plain.width).toBe(4);
+      expect(plain.width).toBe(3);
       expect(insideBorderBox(plain)).toBe(true);
     },
     {
