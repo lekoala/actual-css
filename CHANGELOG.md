@@ -2,9 +2,20 @@
 
 ## [Unreleased]
 
+### Added
+
+- `tests/browser/control-geometry.test.js` locks the shared control block geometry: input, select, addon, and buttons (including busy and icon-only) share one height per size, and the spinner follows its context at `1em`.
+
 ### Fixed
 
 - `tooltip.js` shows on focus only when the trigger matches `:focus-visible`: a pointer press, or focus handed back by a dialog closed with the pointer, no longer brings the tooltip back.
+
+### Documentation and tooling
+
+- Table: clarified the responsive boundary — horizontal overflow (`.table-wrap` + `--table-min` + accessible scroll) stays the strategy, and the docs now name the alternatives (list/media view, `.data-list`, dedicated data grid).
+- Badge vs choice chip vs removable tag vocabulary: a badge is information (non-interactive), `choice-card.chip` is a selectable label (never nest a `.close` inside it), and removable tags belong to the widget that produced them.
+- Combobox: a "Bridge contract" section names what Actual owns (tokens, focus, invalid, `.join`, contrast) versus the widget (behavior, multi-value, i18n), and keeps the bridge CSS in docs/demo.
+- Tabs: the `.tabs` strip / `.tab` trigger pair is documented as the container/item convention, with the `tab` module versus `tabs` token split stated.
 
 ## [0.10.0] - 2026-09-25
 

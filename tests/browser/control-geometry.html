@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Control geometry fixture</title>
+  <link rel="stylesheet" href="../../src/css/actual.full.css">
+</head>
+<body>
+  <div id="default-row" class="join">
+    <input id="g-input" class="input" aria-label="Input" value="Text">
+    <select id="g-select" class="select" aria-label="Select"><option>One</option></select>
+    <span id="g-addon" class="join-addon">$</span>
+    <button id="g-btn" class="btn" type="button">Go</button>
+    <button id="g-icon" class="btn icon-only" type="button" aria-label="Go">→</button>
+    <button id="g-busy" class="btn" type="button"><span class="spinner" aria-hidden="true"></span>Busy</button>
+  </div>
+
+  <div id="sm-row" class="join sm">
+    <input id="g-input-sm" class="input sm" aria-label="Input sm" value="Text">
+    <select id="g-select-sm" class="select sm" aria-label="Select sm"><option>One</option></select>
+    <span id="g-addon-sm" class="join-addon">€</span>
+    <button id="g-btn-sm" class="btn sm" type="button">Go</button>
+    <button id="g-busy-sm" class="btn sm" type="button"><span class="spinner" aria-hidden="true"></span>Busy</button>
+  </div>
+
+  <div id="lg-row" class="join lg">
+    <input id="g-input-lg" class="input lg" aria-label="Input lg" value="Text">
+    <button id="g-btn-lg" class="btn lg" type="button">Go</button>
+    <button id="g-busy-lg" class="btn lg" type="button"><span class="spinner" aria-hidden="true"></span>Busy</button>
+  </div>
+
+  <p><span id="g-spinner" class="spinner" aria-hidden="true"></span></p>
+</body>
+</html>

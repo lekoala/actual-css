@@ -124,6 +124,19 @@ same vocabulary as `.card.compact`.
 </div>
 ```
 
+## When a table stops reading as a table
+
+Responsive strategy is horizontal overflow: the wrap scrolls, the table keeps
+its columns and its column scanability. No `data-label` restructuring, no
+second representation of the data.
+
+For datasets that no longer read well as a table on narrow screens, compose a
+different view instead of restructuring the table: a `.list` / `.media` row
+with badges and actions for a CRUD collection, [`.data-list`](data-list.md)
+for one object's properties, or a dedicated data grid for interactive tables
+(sorting, filtering, selection). Two views for two contexts is a feature, not
+a duplication.
+
 ## CSS hooks
 
 - `--table-cell-pad` — cell padding; `.compact` re-declares it tighter.

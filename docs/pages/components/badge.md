@@ -2,6 +2,12 @@
 
 > Compact label for counts, status, or category tags, with shared intents and variants.
 
+A badge is **information, never a control**: counts, status, categories. It is
+non-interactive by nature — for a selectable option use
+[`.choice-card.chip`](../forms/choice-cards.md#chips); for a value produced by
+a widget that can be removed (combobox multi-value), the widget owns the
+removable tag (see [combobox](../forms/combobox.md)).
+
 - Supports intent colors.
 - Soft by default. Use `.solid` for counters and notification badges, or `.outline` for quieter emphasis.
 - Empty badges are solid status dots: visual variants such as `.soft` and `.outline` do not change their fill.
@@ -180,6 +186,10 @@ Override the existing hooks when the three-step scale does not fit the content.
 Use `.badge soft` for tag visuals. Add a direct [`.close`](close.md) button only when the tag can actually be removed. There is no separate chip component.
 For a compact action or filter, use `.btn.sm` instead; badges describe content
 and must not be turned into toggle controls merely to obtain a compact shape.
+Never put a `.close` inside a `.choice-card.chip` label: the label is already
+an interactive target driving its checkbox/radio, and a nested button would mix
+two interactive targets. A removable tag next to a selectable chip is a sibling
+(a widget tag or a `.badge` + `.close`), never a child of the label.
 
 Inside a badge the close follows the pill's size, keeps a 24px pointer target,
 and tucks into the padding.
