@@ -8,6 +8,7 @@
 
 ### Fixed
 
+- `.rating > input[type="radio"]:focus-visible` draws its outline in `--focus` instead of `currentColor`: an intent on the rating no longer becomes the focus color, keeping the guaranteed 3:1 contrast against `--surface` and `--surface-solid`.
 - `tooltip.js` shows on focus only when the trigger matches `:focus-visible`: a pointer press, or focus handed back by a dialog closed with the pointer, no longer brings the tooltip back.
 
 ### Documentation and tooling
