@@ -12,11 +12,15 @@
 
 ## Class reference
 
-| Class          | Kind      | Description                                                        |
-| -------------- | --------- | ------------------------------------------------------------------ |
-| `.spinner`     | Component | Circular loading indicator using `currentColor`.                   |
-| `.sm` / `.lg`  | Size      | Smaller (`0.75em`) or larger (`2rem`) spinner.                     |
-| Shared intents | Intent    | `.primary`, `.secondary`, `.success`, `.warning`, `.danger` color. |
+| Class                | Kind      | Description                                      |
+| -------------------- | --------- | ------------------------------------------------ |
+| `.spinner`           | Component | Circular loading indicator using `currentColor`. |
+| `[aria-busy="true"]` | State     | Loading region; see Busy state below.            |
+| `.sm` / `.lg`        | Size      | Smaller (`0.75em`) or larger (`2rem`) spinner.   |
+| Shared intents       | Intent    | `.primary`, `.secondary`, `.success`, …          |
+
+The shared intents are `.primary`, `.secondary`, `.success`, `.warning` and
+`.danger`.
 
 ## Basic usage
 
@@ -68,7 +72,8 @@ Size follows the font (`1em`); use `.sm` / `.lg` rather than sizing it directly.
 
 ## Busy state
 
-A container-wide loading state that keeps the underlying content in place. It is
+The spinner is the indicator; `aria-busy` is the state. A container-wide
+loading state keeps the underlying content in place. It is
 driven by `aria-busy="true"` plus a direct last-child `.spinner` — there is no
 separate `.busy` class. The spinner is shown as a centered overlay over a faded
 surface; buttons keep their spinners inline instead (see Button).

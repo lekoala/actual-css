@@ -435,6 +435,16 @@ same vocabulary as <code>.card.compact</code>.</p>
   </div>
 </div>
 <div class="prose docs-prose">
+<h2 id="when-a-table-stops-reading-as-a-table">When a table stops reading as a table</h2>
+<p>Responsive strategy is horizontal overflow: the wrap scrolls, the table keeps
+its columns and its column scanability. No <code>data-label</code> restructuring, no
+second representation of the data.</p>
+<p>For datasets that no longer read well as a table on narrow screens, compose a
+different view instead of restructuring the table: a <code>.list</code> / <code>.media</code> row
+with badges and actions for a CRUD collection, <a href="data-list.html"><code>.data-list</code></a>
+for one object's properties, or a dedicated data grid for interactive tables
+(sorting, filtering, selection). Two views for two contexts is a feature, not
+a duplication.</p>
 <h2 id="css-hooks">CSS hooks</h2>
 <ul>
 <li><code>--table-cell-pad</code> — cell padding; <code>.compact</code> re-declares it tighter.</li>
@@ -463,6 +473,7 @@ same vocabulary as <code>.card.compact</code>.</p>
         <li><a class="nav-link" href="#basic-usage" data-docs-toc-item data-level="2">Basic usage</a></li>
         <li><a class="nav-link" href="#accessible-scroll-region" data-docs-toc-item data-level="2">Accessible scroll region</a></li>
         <li><a class="nav-link" href="#compact-tables" data-docs-toc-item data-level="2">Compact tables</a></li>
+        <li><a class="nav-link" href="#when-a-table-stops-reading-as-a-table" data-docs-toc-item data-level="2">When a table stops reading as a table</a></li>
         <li><a class="nav-link" href="#css-hooks" data-docs-toc-item data-level="2">CSS hooks</a></li>
           </ul>
         </nav>

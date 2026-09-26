@@ -7938,6 +7938,12 @@ a.list-item[aria-current]::before {
  * .table-wrap provides the scroll container and outer chrome; .table owns row
  * and cell rules. Tokens are sourced from the shared scale.
  *
+ * Responsive strategy is horizontal overflow: the wrap scrolls, the table
+ * keeps its columns. Restructuring rows into cards would destroy the
+ * column scanability tables exist for, and needs data-label duplication
+ * because CSS cannot join a cell to its header — that representation choice
+ * belongs to the application, not the framework.
+ *
  * Public hooks:
  * --table-min
  * --table-cell-pad

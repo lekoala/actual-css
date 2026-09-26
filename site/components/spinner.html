@@ -233,10 +233,13 @@
 </thead>
 <tbody>
 <tr><td><code>.spinner</code></td><td>Component</td><td>Circular loading indicator using <code>currentColor</code>.</td></tr>
+<tr><td><code>[aria-busy=&quot;true&quot;]</code></td><td>State</td><td>Loading region; see Busy state below.</td></tr>
 <tr><td><code>.sm</code> / <code>.lg</code></td><td>Size</td><td>Smaller (<code>0.75em</code>) or larger (<code>2rem</code>) spinner.</td></tr>
-<tr><td>Shared intents</td><td>Intent</td><td><code>.primary</code>, <code>.secondary</code>, <code>.success</code>, <code>.warning</code>, <code>.danger</code> color.</td></tr>
+<tr><td>Shared intents</td><td>Intent</td><td><code>.primary</code>, <code>.secondary</code>, <code>.success</code>, …</td></tr>
 </tbody>
 </table></div>
+<p>The shared intents are <code>.primary</code>, <code>.secondary</code>, <code>.success</code>, <code>.warning</code> and
+<code>.danger</code>.</p>
 <h2 id="basic-usage">Basic usage</h2>
 </div>
 <div class="docs-example">
@@ -327,7 +330,8 @@
 <div class="prose docs-prose">
 <p>Size follows the font (<code>1em</code>); use <code>.sm</code> / <code>.lg</code> rather than sizing it directly.</p>
 <h2 id="busy-state">Busy state</h2>
-<p>A container-wide loading state that keeps the underlying content in place. It is
+<p>The spinner is the indicator; <code>aria-busy</code> is the state. A container-wide
+loading state keeps the underlying content in place. It is
 driven by <code>aria-busy=&quot;true&quot;</code> plus a direct last-child <code>.spinner</code> — there is no
 separate <code>.busy</code> class. The spinner is shown as a centered overlay over a faded
 surface; buttons keep their spinners inline instead (see Button).</p>

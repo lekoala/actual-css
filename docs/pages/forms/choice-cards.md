@@ -101,6 +101,9 @@ pills, multi-select facets. A radio group gives single-choice chips. A leading
 dot turns into the check in a fixed slot, so checking never moves the label.
 Use `.cluster` for a wrapping row. A chip is sized like a control: `.btn` and
 `.input` height, `--control-pad-x` inline padding, `.sm` / `.lg` scale.
+A chip is a `<label>` around its checkbox/radio — never nest a `.close` or any
+other button inside it. A removable value (combobox tag) belongs to the widget
+that produced it, or to a sibling `.badge` + `.close`, not to the chip label.
 
 ```html demo
 <fieldset class="field-group">

@@ -244,6 +244,18 @@ mix tokens.</p>
 &lt;/label&gt;
 </code></pre>
 <p>The card in the template documents the full token map of this recipe.</p>
+<h2 id="bridge-contract">Bridge contract</h2>
+<p>Actual owns the visual language; the widget owns the behavior. Actual provides
+surface, border, radius, inset focus outline, danger state, <code>.join</code> corners,
+and the contrast contracts those tokens carry. The widget provides search,
+keyboard navigation, multi-value state, removable tags, and option rendering.
+The bridge CSS stays in docs/demo — it is a recipe, not package API, so no
+<code>actual-combobox.css</code> ships with the framework and no widget version is pinned
+by it.</p>
+<p>Multi-value and i18n (for example a &quot;n selected&quot; summary string) are widget
+configuration: pass locale strings and tag rendering through the widget's own
+options, and keep skinning on the <code>--cb-*</code> tokens so light/dark mode and preset
+themes keep applying for free.</p>
 <h2 id="lightweight-pass-through">Lightweight pass-through</h2>
 <p>Most of the skin is three one-line token bridges. The visible vocabulary —
 surface, border, radius, focus ring, danger, hover overlay and the <code>--soft-*</code>
@@ -320,6 +332,7 @@ keep the widget's behavior, restyle its tokens through the shared vocabulary.</p
           <p class="docs-nav-group">On this page</p>
           <ul class="nav-list docs-toc-list" data-docs-toc>
         <li><a class="nav-link" href="#theme-bridge" data-docs-toc-item data-level="2">Theme bridge</a></li>
+        <li><a class="nav-link" href="#bridge-contract" data-docs-toc-item data-level="2">Bridge contract</a></li>
         <li><a class="nav-link" href="#lightweight-pass-through" data-docs-toc-item data-level="2">Lightweight pass-through</a></li>
           </ul>
         </nav>

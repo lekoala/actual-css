@@ -217,6 +217,11 @@
 <blockquote>
 <p>Compact label for counts, status, or category tags, with shared intents and variants.</p>
 </blockquote>
+<p>A badge is <strong>information, never a control</strong>: counts, status, categories. It is
+non-interactive by nature — for a selectable option use
+<a href="../forms/choice-cards.html#chips"><code>.choice-card.chip</code></a>; for a value produced by
+a widget that can be removed (combobox multi-value), the widget owns the
+removable tag (see <a href="../forms/combobox.html">combobox</a>).</p>
 <ul>
 <li>Supports intent colors.</li>
 <li>Soft by default. Use <code>.solid</code> for counters and notification badges, or <code>.outline</code> for quieter emphasis.</li>
@@ -495,7 +500,11 @@ Regular</code></pre>
 <h2 id="removable-tag-pattern">Removable tag pattern</h2>
 <p>Use <code>.badge soft</code> for tag visuals. Add a direct <a href="close.html"><code>.close</code></a> button only when the tag can actually be removed. There is no separate chip component.
 For a compact action or filter, use <code>.btn.sm</code> instead; badges describe content
-and must not be turned into toggle controls merely to obtain a compact shape.</p>
+and must not be turned into toggle controls merely to obtain a compact shape.
+Never put a <code>.close</code> inside a <code>.choice-card.chip</code> label: the label is already
+an interactive target driving its checkbox/radio, and a nested button would mix
+two interactive targets. A removable tag next to a selectable chip is a sibling
+(a widget tag or a <code>.badge</code> + <code>.close</code>), never a child of the label.</p>
 <p>Inside a badge the close follows the pill's size, keeps a 24px pointer target,
 and tucks into the padding.</p>
 </div>

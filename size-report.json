@@ -1,5 +1,5 @@
 {
-  "totalRaw": 328240,
+  "totalRaw": 328590,
   "core": {
     "minified": 11686,
     "brotli": 2692
@@ -10,8 +10,8 @@
   },
   "js": {
     "full": {
-      "bytes": 58498,
-      "brotli": 17006
+      "bytes": 58564,
+      "brotli": 17067
     }
   },
   "fileCount": 112,
@@ -249,6 +249,10 @@
       "raw": 2450
     },
     {
+      "file": "components/table.css",
+      "raw": 2437
+    },
+    {
       "file": "themes/mono.css",
       "raw": 2423
     },
@@ -275,10 +279,6 @@
     {
       "file": "forms/form-actions.css",
       "raw": 2133
-    },
-    {
-      "file": "components/table.css",
-      "raw": 2087
     },
     {
       "file": "forms/input-icon.css",

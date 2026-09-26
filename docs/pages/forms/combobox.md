@@ -36,6 +36,21 @@ mix tokens.
 
 The card in the template documents the full token map of this recipe.
 
+## Bridge contract
+
+Actual owns the visual language; the widget owns the behavior. Actual provides
+surface, border, radius, inset focus outline, danger state, `.join` corners,
+and the contrast contracts those tokens carry. The widget provides search,
+keyboard navigation, multi-value state, removable tags, and option rendering.
+The bridge CSS stays in docs/demo — it is a recipe, not package API, so no
+`actual-combobox.css` ships with the framework and no widget version is pinned
+by it.
+
+Multi-value and i18n (for example a "n selected" summary string) are widget
+configuration: pass locale strings and tag rendering through the widget's own
+options, and keep skinning on the `--cb-*` tokens so light/dark mode and preset
+themes keep applying for free.
+
 ## Lightweight pass-through
 
 Most of the skin is three one-line token bridges. The visible vocabulary —

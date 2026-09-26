@@ -392,7 +392,10 @@ supported on the <code>.choice-card</code> element.</p>
 pills, multi-select facets. A radio group gives single-choice chips. A leading
 dot turns into the check in a fixed slot, so checking never moves the label.
 Use <code>.cluster</code> for a wrapping row. A chip is sized like a control: <code>.btn</code> and
-<code>.input</code> height, <code>--control-pad-x</code> inline padding, <code>.sm</code> / <code>.lg</code> scale.</p>
+<code>.input</code> height, <code>--control-pad-x</code> inline padding, <code>.sm</code> / <code>.lg</code> scale.
+A chip is a <code>&lt;label&gt;</code> around its checkbox/radio — never nest a <code>.close</code> or any
+other button inside it. A removable value (combobox tag) belongs to the widget
+that produced it, or to a sibling <code>.badge</code> + <code>.close</code>, not to the chip label.</p>
 </div>
 <div class="docs-example">
   <div class="docs-preview">
