@@ -73,6 +73,13 @@ than the registration root, without crossing shadow boundaries.
 on the same root throws; `disconnect()` releases the name; re-registration
 after disconnect is allowed; the same token on a different root is independent.
 
+Named registrations share one `[data-enhance]` discovery gate per root: however
+many behaviors are registered, the observer queries that single selector and
+each registration matches its own `[data-enhance~="name"]` against what it finds.
+`enhance()` records share the same observer and lifecycle with their arbitrary
+selectors. Behaviors on one element start in no guaranteed order and must not
+depend on each other.
+
 `enhance()` stays generic and unguarded — registering the same selector twice
 creates two independent records that both run.
 

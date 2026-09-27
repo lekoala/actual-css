@@ -17,13 +17,13 @@
  * DOM tears down everything, including the managed novalidate attribute.
  */
 
-import { enhancementSelector, registerEnhancement } from "./enhance.js";
+import { registerEnhancement } from "./enhance.js";
 import { EVENTS } from "./events.js";
 import { CLASSES } from "./selectors.js";
 
 const NOVALIDATE = "novalidate";
 const WAS_VALIDATED_CLASS = CLASSES.wasValidated;
-const VALIDATION_SELECTOR = enhancementSelector("validation");
+const VALIDATION_SELECTOR = '[data-enhance~="validation"]';
 const FIELD_CLASS = CLASSES.field;
 const DANGER_CLASS = CLASSES.danger;
 const MANAGED_NOVALIDATE_ATTR = "validationManagedNovalidate";

@@ -1,10 +1,5 @@
 import { afterEach, expect, test } from "bun:test";
-import enhance, {
-  applyEnhancement,
-  enhancementSelector,
-  hasEnhancement,
-  registerEnhancement,
-} from "../src/js/enhance.js";
+import enhance, { applyEnhancement, registerEnhancement } from "../src/js/enhance.js";
 import { cleanupDOM, nextMicrotask, setupDOM } from "./helpers/dom.js";
 
 afterEach(() => {
@@ -170,6 +165,9 @@ test("enhance() observes its MutationObserver only for a valid record", () => {
 
     const runtime = enhance({ "[data-test]": () => {} });
     expect(observed).toHaveLength(1);
+    const named = registerEnhancement("demo", () => {});
+    expect(observed).toHaveLength(1);
+    named.disconnect();
     runtime.disconnect();
   } finally {
     globalThis.MutationObserver = Original;
@@ -380,29 +378,24 @@ test("a throwing enhancer does not stop sibling enhancers", () => {
   }
 });
 
-test('enhancementSelector returns [data-enhance~="name"]', () => {
-  expect(enhancementSelector("tabs")).toBe('[data-enhance~="tabs"]');
-});
-
-test("enhancementSelector throws TypeError on invalid names", () => {
-  for (const name of ["de mo", "Demo", "1tabs", ""]) {
-    expect(() => enhancementSelector(name)).toThrow(TypeError);
+test("registerEnhancement rejects names that would break or widen its selector", () => {
+  setupDOM("<div></div>");
+  for (const name of ["de mo", 'de"mo', "Demo", "1tabs", ""]) {
+    expect(() => registerEnhancement(name, () => {})).toThrow(TypeError);
   }
 });
 
-test("hasEnhancement returns true when token is present", () => {
-  setupDOM('<div data-enhance="tabs flyout"></div>');
-  const el = document.querySelector("div");
-  expect(hasEnhancement(el, "tabs")).toBe(true);
-  expect(hasEnhancement(el, "flyout")).toBe(true);
-  expect(hasEnhancement(el, "validation")).toBe(false);
-});
+test("registerEnhancement matches whole data-enhance tokens only", () => {
+  setupDOM(`
+    <div id="substring" data-enhance="demoish"></div>
+    <div id="separated" data-enhance="other\tdemo
+      third"></div>
+  `);
+  const calls = [];
+  const runtime = registerEnhancement("demo", (el) => calls.push(el.id));
 
-test("hasEnhancement does not match substrings (~= word matching)", () => {
-  setupDOM('<div data-enhance="demoish"></div>');
-  const el = document.querySelector("div");
-  expect(hasEnhancement(el, "demo")).toBe(false);
-  expect(hasEnhancement(el, "demoish")).toBe(true);
+  expect(calls).toEqual(["separated"]);
+  runtime.disconnect();
 });
 
 test("registerEnhancement connects an element already in the DOM", () => {
@@ -412,6 +405,44 @@ test("registerEnhancement connects an element already in the DOM", () => {
   expect(calls).toHaveLength(1);
   expect(calls[0]).toBe(document.querySelector("[data-enhance~=demo]"));
   runtime.disconnect();
+});
+
+test("an inserted subtree is scanned once for every named enhancement", async () => {
+  setupDOM("<main></main>");
+  const calls = [];
+  const demo = registerEnhancement("demo", () => calls.push("demo"));
+  const other = registerEnhancement("other", () => calls.push("other"));
+  const subtree = document.createElement("section");
+  subtree.innerHTML = '<div data-enhance="demo other"></div>';
+  const querySelectorAll = subtree.querySelectorAll.bind(subtree);
+  const selectors = [];
+  subtree.querySelectorAll = (selector) => {
+    selectors.push(selector);
+    return querySelectorAll(selector);
+  };
+
+  document.querySelector("main").append(subtree);
+  await nextMicrotask();
+
+  expect(selectors).toEqual(["[data-enhance]"]);
+  expect(calls).toEqual(["demo", "other"]);
+  demo.disconnect();
+  other.disconnect();
+});
+
+test("generic and named records on one element disconnect independently", async () => {
+  setupDOM('<div class="target" data-enhance="demo"></div>');
+  const calls = [];
+  const generic = enhance({ ".target": () => () => calls.push("generic cleanup") });
+  const named = registerEnhancement("demo", () => () => calls.push("named cleanup"));
+
+  generic.disconnect();
+  expect(calls).toEqual(["generic cleanup"]);
+
+  document.querySelector("div").remove();
+  await nextMicrotask();
+  expect(calls).toEqual(["generic cleanup", "named cleanup"]);
+  named.disconnect();
 });
 
 test("registerEnhancement connects an element inserted later", async () => {
@@ -645,6 +676,31 @@ test("a throwing cleanup does not block disconnect cleanup of sibling elements",
     runtime.disconnect();
 
     expect(cleanupCalls).toEqual(["one", "two"]);
+  } finally {
+    console.error = originalError;
+  }
+});
+
+test("a throwing named cleanup does not block sibling enhancements", async () => {
+  setupDOM('<div data-enhance="demo other"></div>');
+  const el = document.querySelector("div");
+  const cleanupCalls = [];
+  const originalError = console.error;
+  console.error = () => {};
+
+  try {
+    const demo = registerEnhancement("demo", () => () => {
+      cleanupCalls.push("demo");
+      throw new Error("boom");
+    });
+    const other = registerEnhancement("other", () => () => cleanupCalls.push("other"));
+
+    el.remove();
+    await nextMicrotask();
+
+    expect(cleanupCalls).toEqual(["demo", "other"]);
+    demo.disconnect();
+    other.disconnect();
   } finally {
     console.error = originalError;
   }

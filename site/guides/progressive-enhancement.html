@@ -598,10 +598,8 @@ registerEnhancement(&quot;autosubmit&quot;, (form) =&gt; {
 </code></pre>
 <pre><code class="language-html">&lt;form data-enhance=&quot;validation autosubmit&quot;&gt;
 </code></pre>
-<p><code>enhancementSelector(name)</code> returns the matching <code>[data-enhance~=&quot;name&quot;]</code>
-selector (names must match <code>[a-z][a-z0-9-]*</code>), and <code>hasEnhancement(el, name)</code>
-tests it. No core module list is modified — the regression test in
-<code>tests/enhance.test.js</code> proves the shape.</p>
+<p>Names must match <code>[a-z][a-z0-9-]*</code>. To find opted-in elements from your own
+script, query <code>[data-enhance~=&quot;name&quot;]</code>; styles keep using presentation classes.</p>
 <p>A name is owned once per root: a second <code>registerEnhancement(&quot;autosubmit&quot;, …)</code>
 on the same root throws, and <code>disconnect()</code> releases the name so it can be
 registered again. A custom root passed as the third argument must be disposed
