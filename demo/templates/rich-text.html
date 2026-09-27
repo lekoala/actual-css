@@ -5,9 +5,11 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Rich text - Actual CSS</title>
-  <meta name="description" content="Squire loaded from CDN and themed with Actual CSS tokens: the editor owns the document, Actual owns the toolbar, surface, focus and states. The native textarea stays the baseline.">
+  <meta name="description" content="@lekoala/rich-text enhanced with Actual CSS tokens: the package owns editing, sanitization, toolbar behaviour, mentions and suggestions; Actual owns the visual language. The native textarea stays the baseline.">
   <link rel="stylesheet" href="../../dist/actual.full.css">
   <link rel="stylesheet" href="../assets/actual-themes.min.css">
+  <link rel="stylesheet" href="../shared/composer.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@lekoala/rich-text@0.1/dist/rich-text.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.46.0/dist/tabler-icons.min.css">
   <script src="../scripts/theme-picker.js"></script>
   <style>
@@ -45,99 +47,142 @@
     /* ================================================================== */
     /* THEME BRIDGE — the whole skin in one block                          */
     /*                                                                     */
-    /* Actual CSS provides the visual language, Squire the behaviour.      */
-    /* No adapter package, no compatibility layer: shared CSS contracts    */
-    /* on top of the framework tokens.                                     */
+    /* @lekoala/rich-text owns the editor UI semantics (editing,           */
+    /* sanitization, toolbar behaviour, mentions, suggestions); Actual     */
+    /* owns the visual language. The bridge maps Actual tokens onto the    */
+    /* package's --rt-* hooks and never depends on its inner structure    */
+    /* beyond the documented classes and state hooks. Caret range @0.1     */
+    /* follows 0.1.x patches; keep this bridge a tolerant subset so a     */
+    /* patch adding tokens cannot break the skin.                          */
     /* ================================================================== */
 
-    /* 1. Surface — one recipe, same as .input/.textarea/.select */
-    .actual-richtext .rich-editor {
-      --control-border: var(--border);
-      --control-bg: var(--surface);
+    /* 1. Tokens — fed from Actual, inherited by the editor and by the
+       suggestion popover (a child of .rt-shell, so it follows for free). */
+    .actual-rich-text .rt-shell {
+      --rt-bg: var(--surface);
+      --rt-fg: var(--text);
+      --rt-border: var(--form-invalid-border, var(--control-border, var(--border)));
+      --rt-muted: var(--text-muted);
+      --rt-focus: var(--form-invalid-border, var(--focus));
+      --rt-focus-width: var(--focus-ring-width);
+      --rt-radius: var(--radius);
+      --rt-font-size: var(--control-font-size);
+      --rt-min-height: 10rem;
+      --rt-toolbar-bg: var(--surface-subtle);
+      --rt-button-hover: var(--hover-overlay);
+      --rt-button-pressed-bg: var(--state-selected);
+      --rt-button-pressed-fg: var(--state-selected-fg);
+      --rt-disabled-bg: var(--surface-subtle);
+      --rt-disabled-fg: var(--state-disabled);
+      --rt-link: var(--primary);
+      --rt-quote-border: var(--border);
+      --rt-mention-bg: color-mix(in oklab, var(--surface) var(--soft-bg-mix), var(--primary));
+      --rt-mention-fg: color-mix(in oklab, var(--primary) var(--soft-fg-mix), var(--text));
+      --rt-suggestion-bg: var(--surface-raised);
+      --rt-suggestion-active: var(--hover-overlay);
+      --rt-suggestion-shadow: var(--shadow-popout);
+    }
 
-      min-block-size: 10rem;
-      max-block-size: 24rem;
-      overflow: auto;
-      padding-inline: var(--control-pad-x);
-      padding-block: var(--space-20);
-      border: var(--border-width) solid var(--form-invalid-border, var(--control-border));
-      border-block-end-color: var(
-        --form-invalid-border,
-        var(--control-border-block-end-color, var(--control-border))
-      );
-      border-block-end-width: var(--control-border-block-end-width, var(--border-width));
-      border-radius: var(--radius);
-      background: var(--control-bg);
-      color: var(--text);
-      font-size: var(--control-font-size);
+    /* 2. Surface — hover like .textarea, transitions like every control. */
+    .actual-rich-text .rt-shell {
       transition:
         border-color var(--duration),
-        box-shadow var(--duration),
         background-color var(--duration),
         color var(--duration);
     }
 
-    /* Attached toolbar: a light bar sharing the surface's top edge. The bar
-       owns the top border and top corners; the editor drops its top border
-       and top corners. The negative margin cancels the .field gap (same
-       --space-10 token) so the shared edge is a single line, enhanced or
-       baseline alike. Buttons stay borderless on the bar; pressed state
-       comes from the .btn aria-pressed contract. */
-    .actual-richtext .rich-toolbar {
-      --cluster-gap: var(--space-10);
-
-      align-items: center;
-      margin-block-end: calc(var(--space-10) * -1);
-      padding: var(--space-10) var(--space-20);
-      border: var(--border-width) solid var(--form-invalid-border, var(--border));
-      border-block-end-width: 0;
-      border-radius: var(--radius) var(--radius) 0 0;
-      background: var(--surface-subtle);
-    }
-
-    .actual-richtext .rich-editor {
-      border-block-start-width: 0;
-      border-start-start-radius: 0;
-      border-start-end-radius: 0;
-    }
-
-    .actual-richtext .rich-editor:hover {
+    .actual-rich-text .rt-shell:hover:not([data-disabled], [data-readonly]) {
       --control-border: var(--control-hover-border, var(--text-subtle));
     }
 
-    /* 2. Focus — the .input inset outline while the editable is focused */
-    .actual-richtext .rich-editor:focus-within {
-      outline: var(--focus-ring-width) solid var(--form-invalid-border, var(--focus));
-      outline-offset: calc(var(--focus-ring-width) * -1);
-      box-shadow: none;
+    .actual-rich-text .rt-button {
+      border-radius: var(--radius-sm);
     }
 
-    /* 3. Content — the editable inherits control typography, links stay links */
-    .actual-richtext .rich-editor-content {
-      outline: none;
+    /* 3. Invalid — the hidden textarea owns validity; the wrapper re-owns
+       Actual's invalid hook so the editor surface turns danger with it. */
+    .actual-rich-text:has(textarea[aria-invalid="true"]),
+    .needs-validation.was-validated .actual-rich-text:has(textarea:invalid) {
+      --form-invalid-border: var(--danger);
     }
 
-    .actual-richtext .rich-editor-content a {
-      color: var(--primary);
-    }
-
-    .actual-richtext .rich-editor-content :is(blockquote, ul, ol, p) {
+    /* 4. Content — rhythm and link affordance stay Actual's. */
+    .actual-rich-text .rt-editor :is(p, ul, ol, blockquote) {
       margin-block: 0 var(--space-20);
     }
 
-    .actual-richtext .rich-editor-content > :last-child {
+    .actual-rich-text .rt-editor > :last-child {
       margin-block-end: 0;
     }
 
-    .actual-richtext .rich-editor-content blockquote {
-      padding-inline-start: var(--space-30);
-      border-inline-start: 3px solid var(--border);
-      color: var(--text-muted);
+    .actual-rich-text .rt-editor [data-rt-mention] {
+      border-radius: var(--radius-full);
     }
 
-    /* 4. Toolbar pressed state reuses the .btn contract, no new visuals */
-    .rich-toolbar {
-      --cluster-gap: var(--space-20);
+    .actual-rich-text .rt-suggestion {
+      font-size: var(--control-font-size);
+    }
+
+    /* 5. Rich composer — Actual .composer owns the outer surface and the
+       actions chrome; the bridge only lifts the editor and toolbar into the
+       composer grid. composer.css itself never knows about .rt-*. */
+    .rt-composer.composer {
+      grid-template-columns: auto minmax(0, 1fr);
+      grid-template-areas: "editor editor" "toolbar actions";
+      align-items: center;
+    }
+
+    .rt-composer rich-text,
+    .rt-composer .rt-shell {
+      display: contents;
+    }
+
+    .rt-composer .rt-shell {
+      --rt-min-height: 3rem;
+      --rt-max-height: 18rem;
+    }
+
+    .rt-composer .rt-editor {
+      grid-area: editor;
+    }
+
+    .rt-composer .rt-toolbar {
+      grid-area: toolbar;
+      padding: var(--space-10) 0 var(--space-20) var(--space-20);
+      border: 0;
+      background: transparent;
+    }
+
+    .rt-composer .composer-actions {
+      grid-area: actions;
+      padding: var(--space-10) var(--space-30) var(--space-20) var(--space-20);
+    }
+
+    /* Narrow: toolbar and actions cannot share a row without overlapping, so
+       each takes its own full-width row. */
+    @media (max-width: 34rem) {
+      .rt-composer.composer {
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-areas: "editor" "toolbar" "actions";
+      }
+    }
+
+    .rt-composer:has(.rt-shell[data-disabled]) {
+      background: var(--surface-subtle);
+      color: var(--state-disabled);
+    }
+
+    .sent-log {
+      margin: 0;
+      padding: var(--space-20) var(--space-30);
+      border: var(--border-width) dashed var(--border);
+      border-radius: var(--radius);
+      color: var(--text-muted);
+      font-size: var(--font-size-sm);
+    }
+
+    .sent-log:empty::before {
+      content: "Nothing sent yet — write a message and press Ctrl+Enter.";
     }
 
     .submitted-html {
@@ -155,16 +200,18 @@
         <p class="overline">Integration</p>
         <h1>Rich text × Actual CSS</h1>
         <p class="muted">
-          <code>squire-rte</code> loaded from CDN; the skin is pure Actual CSS.
-          Switch themes and watch the toolbar, surface, focus and states follow the
-          tokens — the editing engine never changes.
+          <code>@lekoala/rich-text</code> owns editing, sanitization, toolbar
+          behaviour, mentions and suggestions; Actual owns the visual language.
+          Switch themes and watch the surface, toolbar, focus, mentions and
+          suggestions follow the tokens — the editing engine never changes.
+          Squire remains the engine underneath the package.
         </p>
       </hgroup>
 
       <div class="cluster" style="gap: var(--space-20);">
         <theme-picker><select class="select sm fit" aria-label="Switch theme"></select></theme-picker>
-        <a class="btn neutral outline sm" href="https://github.com/fastmail/Squire" target="_blank" rel="noopener">
-          Squire docs
+        <a class="btn neutral outline sm" href="https://github.com/lekoala/rich-text" target="_blank" rel="noopener">
+          @lekoala/rich-text
         </a>
       </div>
     </header>
@@ -178,58 +225,31 @@
             <h2 style="margin: 0;">Team note</h2>
             <p class="muted">
               The native <code>&lt;textarea&gt;</code> stays the baseline and the value
-              owner. Without the CDN scripts it remains a plain textarea holding raw
-              HTML — honest, submittable, sanitized server-side either way.
+              owner. Without the integration script it remains a plain textarea holding
+              raw HTML — honest, submittable, sanitized server-side either way.
+              Type <code>@</code> to mention, <code>/</code> for snippets.
             </p>
           </hgroup>
         </header>
-        <div class="field actual-richtext">
-          <span class="field-label" id="note-label">Team note</span>
-          <div
-            class="cluster rich-toolbar"
-            role="toolbar"
-            aria-label="Formatting"
-            id="note-toolbar">
-            <div class="join">
-              <button class="btn neutral ghost icon-only sm" type="button" data-format="bold" aria-pressed="false" aria-label="Bold"><i class="ti ti-bold" aria-hidden="true"></i></button>
-              <button class="btn neutral ghost icon-only sm" type="button" data-format="italic" aria-pressed="false" aria-label="Italic"><i class="ti ti-italic" aria-hidden="true"></i></button>
-              <button class="btn neutral ghost icon-only sm" type="button" data-format="quote" aria-pressed="false" aria-label="Quote"><i class="ti ti-quote" aria-hidden="true"></i></button>
-            </div>
-            <div class="join">
-              <button class="btn neutral ghost icon-only sm" type="button" data-format="bullet" aria-pressed="false" aria-label="Bullet list"><i class="ti ti-list" aria-hidden="true"></i></button>
-              <button class="btn neutral ghost icon-only sm" type="button" data-format="ordered" aria-pressed="false" aria-label="Ordered list"><i class="ti ti-list-numbers" aria-hidden="true"></i></button>
-            </div>
-            <div class="join">
-              <button class="btn neutral ghost icon-only sm" type="button" data-format="link" aria-pressed="false" aria-label="Insert link"><i class="ti ti-link" aria-hidden="true"></i></button>
-              <button class="btn neutral ghost icon-only sm" type="button" data-format="undo" aria-label="Undo"><i class="ti ti-arrow-back-up" aria-hidden="true"></i></button>
-              <button class="btn neutral ghost icon-only sm" type="button" data-format="redo" aria-label="Redo"><i class="ti ti-arrow-forward-up" aria-hidden="true"></i></button>
-            </div>
+        <form class="needs-validation stack" id="note-form" novalidate>
+          <div class="field actual-rich-text">
+            <label class="field-label" for="note">Team note</label>
+            <rich-text class="js-actual" id="note-editor">
+              <textarea
+                class="textarea"
+                id="note"
+                name="note"
+                rows="8"
+                required
+                aria-describedby="note-help note-error"
+                placeholder="Write a note…">&lt;p&gt;Hello, &lt;strong&gt;team&lt;/strong&gt;!&lt;/p&gt;&lt;ul&gt;&lt;li&gt;Ship the update&lt;/li&gt;&lt;li&gt;Review on Friday&lt;/li&gt;&lt;/ul&gt;</textarea>
+            </rich-text>
+            <span class="field-help" id="note-help">Bold, italic, lists, quotes and links only. Pasted content is cleaned on entry.</span>
+            <span class="field-error" id="note-error">The note cannot be empty.</span>
           </div>
-          <textarea
-            class="textarea"
-            id="note-source"
-            name="note"
-            rows="8"
-            data-enhance="rich-text"
-            aria-labelledby="note-label">&lt;p&gt;Hello, &lt;strong&gt;world&lt;/strong&gt;!&lt;/p&gt;&lt;ul&gt;&lt;li&gt;Ship the update&lt;/li&gt;&lt;li&gt;Review on Friday&lt;/li&gt;&lt;/ul&gt;</textarea>
-          <span class="field-help" id="note-help">Bold, italic, quote, lists and links only. Pasted web content is cleaned on entry.</span>
-        </div>
-      </section>
-
-      <section class="card stack">
-        <header>
-          <hgroup>
-            <h2 style="margin: 0;">What the server receives</h2>
-            <p class="muted">
-              Limited HTML in a normal form field — portable, editor-independent,
-              reversible. Empty documents submit as <code>""</code>, never
-              <code>&lt;p&gt;&lt;br&gt;&lt;/p&gt;</code>.
-            </p>
-          </hgroup>
-        </header>
-        <form id="note-form">
           <div class="form-actions" style="margin-block-start: 0;">
             <button type="submit" class="btn primary sm">Preview submitted value</button>
+            <button type="reset" class="btn neutral outline sm">Reset</button>
           </div>
         </form>
         <pre class="submitted-html" aria-live="polite"><code id="note-output">(nothing submitted yet)</code></pre>
@@ -238,256 +258,336 @@
       <section class="card stack">
         <header>
           <hgroup>
-            <h2 style="margin: 0;">Bridge contract</h2>
+            <h2 style="margin: 0;">Rich composer</h2>
             <p class="muted">
-              Actual owns the visual language; Squire owns the document. The bridge
-              CSS stays in docs/demo — it is a recipe, not package API, so no
-              <code>actual-richtext.css</code> ships with the framework and no widget
-              version is pinned by it. The same contract would hold for any headless
-              editing engine.
+              The Actual composer chrome around a rich editor: attachments and
+              actions belong to the composer, never to the serialized HTML.
+              <code>Enter</code> stays a paragraph; sending goes through
+              <code>Ctrl/Cmd+Enter</code> or the send button. The Snippet and
+              Mention buttons reuse the same suggestion seam as
+              <code>/</code> and <code>@</code>.
             </p>
           </hgroup>
         </header>
-        <pre><code>.actual-richtext .rich-editor {
-  min-block-size: 10rem;
-  padding-inline: var(--control-pad-x);
-  border: var(--border-width) solid var(--form-invalid-border, var(--control-border));
-  border-radius: var(--radius);
-  background: var(--control-bg);
+        <form class="composer rt-composer actual-rich-text" id="chat-form">
+          <rich-text class="js-actual" id="chat-editor" toolbar="bold italic | link">
+            <textarea
+              class="textarea"
+              id="chat"
+              name="message"
+              required
+              aria-label="Message"
+              placeholder="Write a message… (@ to mention, / for snippets)"></textarea>
+          </rich-text>
+          <div class="composer-actions cluster">
+            <div class="cluster">
+              <button class="btn neutral ghost icon-only sm" type="button" id="chat-attach" aria-label="Attach file" data-tooltip="Attach file">
+                <i class="ti ti-paperclip" aria-hidden="true"></i>
+              </button>
+              <button class="btn neutral ghost sm" type="button" id="chat-snippet">Snippet</button>
+              <button class="btn neutral ghost sm" type="button" id="chat-mention">Mention</button>
+            </div>
+            <button class="btn primary icon-only sm" type="submit" aria-label="Send (Ctrl+Enter)" data-tooltip="Send (Ctrl+Enter)">
+              <i class="ti ti-send" aria-hidden="true"></i>
+            </button>
+          </div>
+        </form>
+        <p class="sent-log" id="chat-log" role="status" aria-live="polite"></p>
+      </section>
+
+      <section class="card stack">
+        <header>
+          <hgroup>
+            <h2 style="margin: 0;">Bridge contract</h2>
+            <p class="muted">
+              Actual maps tokens, it does not restyle the editor's internals.
+              The bridge CSS stays in docs/demo — it is a recipe, not package API,
+              so no <code>actual-richtext.css</code> ships with the framework and no
+              widget version is pinned by it.
+            </p>
+          </hgroup>
+        </header>
+        <pre><code>.actual-rich-text .rt-shell {
+  --rt-bg: var(--surface);
+  --rt-fg: var(--text);
+  --rt-border: var(--form-invalid-border, var(--control-border, var(--border)));
+  --rt-muted: var(--text-muted);
+  --rt-focus: var(--form-invalid-border, var(--focus));
+  --rt-focus-width: var(--focus-ring-width);
+  --rt-radius: var(--radius);
+  --rt-font-size: var(--control-font-size);
+  --rt-min-height: 10rem;
+  --rt-toolbar-bg: var(--surface-subtle);
+  --rt-button-hover: var(--hover-overlay);
+  --rt-button-pressed-bg: var(--state-selected);
+  --rt-button-pressed-fg: var(--state-selected-fg);
+  --rt-disabled-bg: var(--surface-subtle);
+  --rt-disabled-fg: var(--state-disabled);
+  --rt-link: var(--primary);
+  --rt-quote-border: var(--border);
+  --rt-mention-bg: color-mix(in oklab, var(--surface) var(--soft-bg-mix), var(--primary));
+  --rt-mention-fg: color-mix(in oklab, var(--primary) var(--soft-fg-mix), var(--text));
+  --rt-suggestion-bg: var(--surface-raised);
+  --rt-suggestion-active: var(--hover-overlay);
+  --rt-suggestion-shadow: var(--shadow-popout);
 }
 
-/* Attached toolbar: a light bar sharing the surface's top edge.
-   Borderless buttons on the bar; pressed state from .btn. */
-.actual-richtext .rich-toolbar {
-  align-items: center;
-  margin-block-end: calc(var(--space-10) * -1);
-  padding: var(--space-10) var(--space-20);
-  border: var(--border-width) solid var(--form-invalid-border, var(--border));
-  border-block-end-width: 0;
-  border-radius: var(--radius) var(--radius) 0 0;
-  background: var(--surface-subtle);
+/* The hidden textarea owns validity: the wrapper re-owns the hook. */
+.actual-rich-text:has(textarea[aria-invalid="true"]),
+.needs-validation.was-validated .actual-rich-text:has(textarea:invalid) {
+  --form-invalid-border: var(--danger);
 }
 
-.actual-richtext .rich-editor {
-  border-block-start-width: 0;
-  border-start-start-radius: 0;
-  border-start-end-radius: 0;
+/* Rich composer: lift the editor and toolbar into the composer grid. */
+.rt-composer rich-text,
+.rt-composer .rt-shell {
+  display: contents;
 }
 
-.actual-richtext .rich-editor:focus-within {
-  outline: var(--focus-ring-width) solid var(--form-invalid-border, var(--focus));
-  outline-offset: calc(var(--focus-ring-width) * -1);
+.rt-composer .rt-editor {
+  grid-area: editor;
 }
 
-.btn:is([aria-pressed="true"]):not(.link) {
-  /* already in the framework — pressed toolbar buttons come for free */
+.rt-composer .rt-toolbar {
+  grid-area: toolbar;
 }</code></pre>
       </section>
     </div>
 
     <dialog class="dialog" id="link-dialog" aria-labelledby="link-title">
-      <form method="dialog" class="stack" id="link-form">
+      <form method="dialog" class="stack" id="link-form" novalidate>
         <h2 id="link-title" style="margin: 0; font-size: var(--font-size-lg);">Insert link</h2>
         <label class="field">
-          <span class="field-label">URL (http, https or mailto)</span>
-          <input class="input" type="url" id="link-url" placeholder="https://example.com" required>
+          <span class="field-label">URL (http, https, mailto, tel or relative)</span>
+          <input class="input" type="text" id="link-url" placeholder="https://example.com" aria-describedby="link-error">
+          <span class="field-error" id="link-error">This kind of link is not allowed.</span>
         </label>
-        <p class="field-error" id="link-error" role="alert" hidden>Only http, https and mailto links are allowed.</p>
+        <p class="muted" style="margin: 0; font-size: var(--font-size-sm);">Leave empty to remove the link.</p>
         <div class="form-actions">
-          <button class="btn neutral outline sm" value="cancel" formnovalidate>Cancel</button>
-          <button class="btn primary sm" value="save" id="link-save">Insert</button>
+          <button class="btn neutral outline sm" type="submit" value="cancel" formnovalidate>Cancel</button>
+          <button class="btn primary sm" type="submit" value="save" id="link-save">Apply</button>
         </div>
       </form>
     </dialog>
 
     <footer class="page-note">
       <span>
-        Loaded from jsDelivr, pinned: <code>squire-rte@2.4.8/dist/squire.mjs</code> and
-        <code>dompurify@3.2.1/dist/purify.es.mjs</code>.
+        Integration: <code>@lekoala/rich-text@0.1</code> (JS + CSS from jsDelivr,
+        caret range follows 0.1.x patches).
       </span>
-      <span>The textarea owns the form value; Squire owns the document.</span>
+      <span>The textarea owns the form value; the package owns the editor; Actual owns the look.</span>
     </footer>
   </main>
 
   <script type="module">
-    import { connectFocusGroup } from "../../src/js/focus-group.js";
-    import { registerEnhancement } from "../../src/js/enhance.js";
-
-    const SQUIRE_URL = "https://cdn.jsdelivr.net/npm/squire-rte@2.4.8/dist/squire.mjs";
-    const PURIFY_URL = "https://cdn.jsdelivr.net/npm/dompurify@3.2.1/dist/purify.es.mjs";
-    const ALLOWED_TAGS = ["p", "blockquote", "strong", "b", "em", "i", "ul", "ol", "li", "a", "br"];
-    const LINK_SCHEMES = ["http:", "https:", "mailto:"];
-    const EMPTY_DOC = /^(<p>(<br>)?<\/p>|<div>(<br>)?<\/div>|<br>)$/;
+    // Caret range: the demo follows 0.1.x patches. +esm bundles the package's
+    // own dependencies (Squire, DOMPurify, floating) into one ESM file, so no
+    // import map is needed; the CSS travels as a plain stylesheet above.
+    const RICH_TEXT_URL = "https://cdn.jsdelivr.net/npm/@lekoala/rich-text@0.1/+esm";
 
     const stage = document.getElementById("support-status");
-    const output = document.getElementById("note-output");
+
+    /* Static demo data: people lookup and templates are application concerns,
+       the package only owns the suggestion seam (@ and / triggers). */
+    const people = [
+      { id: "u1", name: "Alice Martin" },
+      { id: "u2", name: "Bruno Kessler" },
+      { id: "u3", name: "Maria Lopez" },
+      { id: "u4", name: "Nadia Rahmani" },
+    ];
+    const snippets = [
+      { id: "s-follow", label: "Follow-up", html: "<p><strong>Follow-up:</strong> …</p>" },
+      { id: "s-agenda", label: "Agenda", html: "<p><strong>Agenda</strong></p><ul><li>…</li></ul>" },
+      { id: "s-quote", label: "Callout", html: "<blockquote><p>…</p></blockquote>" },
+    ];
+    const matches = (items, query, pick) => {
+      const needle = query.trim().toLowerCase();
+      return items.filter((item) => pick(item).toLowerCase().includes(needle));
+    };
+
+    // requestLink may be async: an Actual <dialog> replaces window.prompt().
+    // It is wired after the import so the fallback page never opens a dialog
+    // that no editor would consume.
     const linkDialog = document.getElementById("link-dialog");
     const linkForm = document.getElementById("link-form");
     const linkUrl = document.getElementById("link-url");
-    const linkError = document.getElementById("link-error");
-    let pendingLinkEditor = null;
-
-    const cleanLink = (value) => {
-      try {
-        const url = new URL(value, document.baseURI);
-        return LINK_SCHEMES.includes(url.protocol) ? url.href : null;
-      } catch {
-        return null;
-      }
-    };
-
+    let isSafeHref = (value) => value.trim() !== "";
     linkForm.addEventListener("submit", (event) => {
-      if (event.submitter?.value === "cancel") return;
-      const clean = cleanLink(linkUrl.value.trim());
-      if (!clean) {
-        event.preventDefault();
-        linkError.hidden = false;
-        return;
-      }
-      linkError.hidden = true;
-      pendingLinkEditor?.makeLink(linkUrl.value.trim(), { title: linkUrl.value.trim() });
-      pendingLinkEditor?.focus();
+      if (event.submitter?.value !== "save") return;
+      const value = linkUrl.value.trim();
+      const ok = !value || isSafeHref(value);
+      linkUrl.setAttribute("aria-invalid", String(!ok));
+      linkUrl.closest(".field")?.classList.toggle("danger", !ok);
+      if (!ok) event.preventDefault();
     });
-    linkDialog.addEventListener("close", () => {
-      linkUrl.value = "";
-      linkError.hidden = true;
-      pendingLinkEditor = null;
-    });
+    const requestLink = ({ href }) =>
+      new Promise((resolve) => {
+        linkUrl.value = href ?? "";
+        linkUrl.removeAttribute("aria-invalid");
+        linkUrl.closest(".field")?.classList.remove("danger");
+        linkDialog.addEventListener(
+          "close",
+          () => resolve(linkDialog.returnValue === "save" ? linkUrl.value : null),
+          { once: true },
+        );
+        linkDialog.returnValue = "";
+        linkDialog.showModal();
+        linkUrl.select();
+      });
 
-    const syncToolbar = (toolbar, editor) => {
-      for (const button of toolbar.querySelectorAll("[data-format]")) {
-        const format = button.dataset.format;
-        if (format === "undo" || format === "redo") continue;
-        const tag = { bold: "B", italic: "I", quote: "BLOCKQUOTE", bullet: "UL", ordered: "OL", link: "A" }[format];
-        button.setAttribute("aria-pressed", tag && editor.hasFormat(tag) ? "true" : "false");
-      }
-      toolbar.querySelector('[data-format="undo"]')?.toggleAttribute("disabled", !editor._canUndo);
-      toolbar.querySelector('[data-format="redo"]')?.toggleAttribute("disabled", !editor._canRedo);
-    };
-
-    const readValue = (editor) => {
-      const html = editor.getHTML();
-      return EMPTY_DOC.test(html.trim()) ? "" : html;
-    };
+    // Icons are Nodes: the buttons option never takes HTML strings.
+    const icon = (name) => () =>
+      Object.assign(document.createElement("i"), { className: `ti ti-${name}`, ariaHidden: "true" });
 
     try {
-      const pending = Promise.all([import(PURIFY_URL), import(SQUIRE_URL)]);
-      // A stalled CDN must degrade, not hang the status line: the textarea is
-      // already usable, so a timeout settles for the baseline. Late arrivals
-      // are ignored — swallow them so they never surface as unhandled
-      // rejections.
+      const pending = import(RICH_TEXT_URL);
+      // A stalled CDN must degrade, not hang the status line: the textareas
+      // are already usable, so a timeout settles for the baseline. Late
+      // arrivals are ignored — swallow them so they never surface as
+      // unhandled rejections.
       pending.catch(() => {});
-      const [{ default: DOMPurify }, { default: Squire }] = await Promise.race([
+      const { defineRichText, isSafeHref: safeHref } = await Promise.race([
         pending,
         new Promise((_, reject) => setTimeout(() => reject(new Error("Editor CDN timeout")), 12000)),
       ]);
-      // The ESM build reads the global at construction time.
-      window.DOMPurify = window.DOMPurify ?? DOMPurify;
+      isSafeHref = safeHref;
 
-      registerEnhancement("rich-text", (textarea) => {
-        const labelledBy = textarea.getAttribute("aria-labelledby");
-        const shell = document.createElement("div");
-        shell.className = "rich-editor";
-
-        const content = document.createElement("div");
-        content.className = "rich-editor-content";
-        content.setAttribute("role", "textbox");
-        content.setAttribute("aria-multiline", "true");
-        if (labelledBy) content.setAttribute("aria-labelledby", labelledBy);
-        shell.append(content);
-        textarea.after(shell);
-        textarea.hidden = true;
-
-        const editor = new Squire(content, {
-          blockTag: "P",
-          sanitizeToDOMFragment: (html) =>
-            DOMPurify.sanitize(html, {
-              RETURN_DOM_FRAGMENT: true,
-              ALLOWED_TAGS,
-              ALLOWED_ATTR: ["href", "title"],
-              ALLOW_UNKNOWN_PROTOCOLS: false,
-            }),
-        });
-        editor.setHTML(textarea.value || "<p><br></p>");
-
-        const toolbar = textarea.closest(".field")?.querySelector('[role="toolbar"]');
-        let focusGroup = null;
-        if (toolbar) {
-          focusGroup = connectFocusGroup(toolbar, {
-            getItems: () => [...toolbar.querySelectorAll("button:not(:disabled)")],
-          });
-          // Keep the caret where it is: press without moving focus.
-          toolbar.addEventListener("mousedown", (event) => {
-            if (event.target.closest("button")) event.preventDefault();
-          });
-          toolbar.addEventListener("click", (event) => {
-            const button = event.target.closest("button[data-format]");
-            if (!button) return;
-            const format = button.dataset.format;
-            editor.focus();
-            if (format === "bold") editor.bold();
-            else if (format === "italic") editor.italic();
-            else if (format === "quote") {
-              if (editor.hasFormat("BLOCKQUOTE")) editor.decreaseQuoteLevel();
-              else editor.increaseQuoteLevel();
-            } else if (format === "bullet") {
-              if (editor.hasFormat("UL")) editor.removeList();
-              else editor.makeUnorderedList();
-            } else if (format === "ordered") {
-              if (editor.hasFormat("OL")) editor.removeList();
-              else editor.makeOrderedList();
-            } else if (format === "link") {
-              pendingLinkEditor = editor;
-              linkDialog.showModal();
-              linkUrl.focus();
-            } else if (format === "undo") editor.undo();
-            else if (format === "redo") editor.redo();
-          });
-        }
-
-        const flush = () => {
-          textarea.value = readValue(editor);
+      defineRichText();
+      for (const element of document.querySelectorAll("rich-text.js-actual")) {
+        element.options = {
+          buttons: {
+            bold: { content: icon("bold") },
+            italic: { content: icon("italic") },
+            "bullet-list": { content: icon("list") },
+            "ordered-list": { content: icon("list-numbers") },
+            link: { content: icon("link") },
+            blockquote: { content: icon("quote") },
+            undo: { content: icon("arrow-back-up") },
+            redo: { content: icon("arrow-forward-up") },
+          },
+          requestLink,
+          suggestions: [
+            {
+              trigger: "@",
+              kind: "mention",
+              mentionType: "user",
+              search: (query) => matches(people, query, (person) => person.name),
+              getId: (person) => person.id,
+              getLabel: (person) => person.name,
+            },
+            {
+              trigger: "/",
+              search: (query) => matches(snippets, query, (snippet) => snippet.label),
+              getId: (snippet) => snippet.id,
+              getLabel: (snippet) => snippet.label,
+              insert: (snippet) => ({ type: "html", html: snippet.html }),
+            },
+          ],
         };
-        const onPath = () => {
-          flush();
-          if (toolbar) syncToolbar(toolbar, editor);
-        };
-        const onUndo = (event) => {
-          editor._canUndo = event.detail.canUndo;
-          editor._canRedo = event.detail.canRedo;
-          if (toolbar) syncToolbar(toolbar, editor);
-        };
-        editor.addEventListener("pathChange", onPath);
-        editor.addEventListener("undoStateChange", onUndo);
-        editor.addEventListener("input", flush);
-        flush();
-        if (toolbar) syncToolbar(toolbar, editor);
-
-        stage.textContent =
-          "Enhanced mode: Squire owns the document, skinned through Actual CSS tokens. The textarea stays the value owner.";
-
-        return () => {
-          flush(); // Final value before teardown so submit never reads stale HTML.
-          editor.removeEventListener("pathChange", onPath);
-          editor.removeEventListener("undoStateChange", onUndo);
-          editor.removeEventListener("input", flush);
-          focusGroup?.disconnect();
-          editor.destroy();
-          shell.remove();
-          textarea.hidden = false;
-        };
-      });
+      }
+      stage.textContent =
+        "Enhanced mode: @lekoala/rich-text owns the editor, skinned through Actual CSS tokens. The textarea stays the value owner.";
     } catch (error) {
       console.error("Rich-text enhancement unavailable, baseline kept", error);
       stage.textContent =
-        "Basic fallback active: the CDN scripts failed to load, the native textarea remains usable.";
+        "Basic fallback active: the integration script failed to load, the native textareas remain usable.";
     }
 
-    document.getElementById("note-form").addEventListener("submit", (event) => {
+    /* Team note: validity is mirrored with aria-invalid on the textarea, as
+       Actual recommends for hidden sources; the bridge re-owns the danger
+       hook from there. Works enhanced or baseline alike. */
+    const noteForm = document.getElementById("note-form");
+    const note = document.getElementById("note");
+    const noteEditor = document.getElementById("note-editor");
+    const output = document.getElementById("note-output");
+    const syncValidity = () => {
+      if (noteForm.classList.contains("was-validated")) {
+        note.setAttribute("aria-invalid", String(!note.validity.valid));
+      }
+    };
+    note.addEventListener("input", syncValidity);
+    noteForm.addEventListener("submit", (event) => {
       event.preventDefault();
-      const source = document.getElementById("note-source");
-      output.textContent = source.value === "" ? "(empty document → submits as «»)" : source.value;
+      noteForm.classList.add("was-validated");
+      syncValidity();
+      if (!note.validity.valid) {
+        noteEditor.richText?.focus();
+        output.textContent = "(invalid: the textarea value is empty)";
+        return;
+      }
+      output.textContent = note.value === "" ? "(empty document → submits as «»)" : note.value;
     });
+    noteForm.addEventListener("reset", () => {
+      noteForm.classList.remove("was-validated");
+      note.removeAttribute("aria-invalid");
+      output.textContent = "(nothing submitted yet)";
+    });
+
+    /* Rich composer: Enter stays a paragraph, Ctrl/Cmd+Enter sends. The
+       capture listener runs before the editor handles Enter (new paragraph or
+       picking a suggestion). Attachments stay composer-owned: they are logged,
+       never serialized into the HTML. */
+    const chatForm = document.getElementById("chat-form");
+    const chatEditor = document.getElementById("chat-editor");
+    const chat = document.getElementById("chat");
+    const chatLog = document.getElementById("chat-log");
+    const logLine = (text) => {
+      const line = document.createElement("span");
+      line.style.display = "block";
+      line.textContent = text;
+      chatLog.prepend(line);
+    };
+    chatEditor.addEventListener(
+      "keydown",
+      (event) => {
+        if (event.key !== "Enter" || event.isComposing || !(event.ctrlKey || event.metaKey)) return;
+        event.preventDefault();
+        chatForm.requestSubmit();
+      },
+      { capture: true },
+    );
+    chatForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const richText = chatEditor.richText;
+      if (!chat.value) {
+        if (richText) richText.focus();
+        else chat.focus();
+        logLine("Nothing to send yet.");
+        return;
+      }
+      const mentions = richText?.getMentions().map((mention) => mention.label) ?? [];
+      logLine(
+        `Sent ${chat.value.length} chars of HTML${mentions.length ? `, notifying ${mentions.join(", ")}` : ""}.`,
+      );
+      if (richText) {
+        richText.setHTML("");
+        richText.focus();
+      } else {
+        chat.value = "";
+        chat.focus();
+      }
+    });
+
+    // Chrome actions reuse the suggestion seam: they type the trigger, the
+    // provider does the rest. Baseline fallback inserts the trigger as text.
+    const typeTrigger = (trigger) => {
+      const richText = chatEditor.richText;
+      if (!richText) {
+        chat.focus();
+        chat.setRangeText(trigger, chat.selectionStart, chat.selectionEnd, "end");
+        chat.dispatchEvent(new Event("input", { bubbles: true }));
+        return;
+      }
+      richText.focus();
+      const container = richText.squire.getSelection().startContainer;
+      const before = container?.textContent ?? "";
+      richText.squire.insertPlainText(before && !/\s$/.test(before) ? ` ${trigger}` : trigger, false);
+    };
+    document.getElementById("chat-snippet").addEventListener("click", () => typeTrigger("/"));
+    document.getElementById("chat-mention").addEventListener("click", () => typeTrigger("@"));
+    document.getElementById("chat-attach").addEventListener("click", () =>
+      logLine(`Attachments are owned by the composer (${snippets.length} snippets available with /).`),
+    );
   </script>
 </body>
 

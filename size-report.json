@@ -1,5 +1,5 @@
 {
-  "totalRaw": 330657,
+  "totalRaw": 330711,
   "core": {
     "minified": 11686,
     "brotli": 2692
@@ -333,12 +333,12 @@
       "raw": 1504
     },
     {
-      "file": "layout/scroller.css",
-      "raw": 1454
+      "file": "components/pagination.css",
+      "raw": 1497
     },
     {
-      "file": "components/pagination.css",
-      "raw": 1443
+      "file": "layout/scroller.css",
+      "raw": 1454
     },
     {
       "file": "components/data-list.css",
