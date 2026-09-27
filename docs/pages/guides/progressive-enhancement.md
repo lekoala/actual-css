@@ -328,7 +328,6 @@ import { registerCommands } from "actual-css/js/command";
 
 registerCommands("--toggle-hidden", {
   handle(event, trigger, target) {
-    event.preventDefault();
     target.hidden = !target.hidden;
     trigger.setAttribute("aria-expanded", String(!target.hidden));
   },
@@ -337,10 +336,10 @@ registerCommands("--toggle-hidden", {
 
 The default resolver `targetFor(trigger)` looks up `commandfor` by ID in the
 trigger's document or shadow root. Supply `resolve(trigger)` to validate or
-replace that lookup. An optional idempotent `prepare(trigger, target, command)`
-callback runs directly before `handle`; built-in behaviors use it for
-target-derived semantics. `commandSelector(commands)` builds the matching button
-selector. The returned handle has an idempotent `disconnect()` method for
+replace that lookup. Once a target resolves, the router cancels the click before
+`handle` runs, so the native `command` event is never dispatched for a routed
+command. Names must be a native keyword or start with `--`; anything else
+throws. `commandSelector(commands)` builds the matching button selector. The returned handle has an idempotent `disconnect()` method for
 applications that unload the module owning the command.
 
 ### Dismiss command

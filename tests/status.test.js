@@ -507,7 +507,6 @@ test("command=--status trigger dispatches actual:status from its data attributes
 
   expect(target.textContent).toBe("Saved.");
   expect(target.classList.contains("success")).toBe(true);
-  expect(trigger.getAttribute("aria-controls")).toBe("app-status");
 });
 
 test("command=--status-clear trigger clears the bar", async () => {

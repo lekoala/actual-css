@@ -7,6 +7,12 @@
  * late targets, changed commandfor values, and same-id replacements therefore
  * work immediately without an observer, scan, refresh call, or per-element
  * listener.
+ *
+ * A routed command cancels the click, so the browser never dispatches the
+ * native `command` event to the target, and the router does not re-dispatch
+ * one. Listen to the behavior's own events instead. Accessibility state that
+ * must exist before interaction (`aria-controls`, `aria-haspopup`,
+ * `aria-pressed`) belongs in the markup: the router has no connection step.
  */
 
 /* One registry per document owns its delegated listener and command handlers.
@@ -14,18 +20,40 @@
  * behavior definitions only, never DOM triggers or resolved targets. */
 const registries = new WeakMap();
 
-function commandNames(commands, caller) {
-  const names = Array.isArray(commands) ? commands : [commands];
-  if (!names.length || names.some((name) => typeof name !== "string" || !name)) {
-    throw new TypeError(`${caller} requires one or more command names.`);
-  }
-  return [...new Set(names)];
+// The HTML `command` keywords. Any other value that does not start with "--"
+// is the invalid state, which the browser ignores. Extend this list when HTML
+// adds a keyword.
+const NATIVE_COMMANDS = new Set([
+  "toggle-popover",
+  "show-popover",
+  "hide-popover",
+  "close",
+  "request-close",
+  "show-modal",
+]);
+
+function isCustom(command) {
+  return command.startsWith("--");
 }
 
 // Native command keywords are ASCII case-insensitive. Custom commands keep
 // their exact spelling, as required by the command invoker contract.
 function commandKey(command) {
-  return command.startsWith("--") ? command : command.toLowerCase();
+  return isCustom(command) ? command : command.toLowerCase();
+}
+
+function commandNames(commands, caller) {
+  const names = Array.isArray(commands) ? commands : [commands];
+  if (!names.length || names.some((name) => typeof name !== "string")) {
+    throw new TypeError(`${caller} requires one or more command names.`);
+  }
+  const invalid = names.find((name) => !isCustom(name) && !NATIVE_COMMANDS.has(commandKey(name)));
+  if (invalid !== undefined) {
+    throw new TypeError(
+      `${caller}: "${invalid}" is neither a native command nor a custom "--" command.`,
+    );
+  }
+  return [...new Set(names.map(commandKey))];
 }
 
 /**
@@ -46,23 +74,25 @@ export function targetFor(trigger) {
 /**
  * Build the button selector corresponding to one or more command names.
  *
+ * Native keywords match case-insensitively, custom commands exactly — the
+ * same rule the router applies.
+ *
  * @param {string | string[]} commands Command name or names to include.
  * @returns {string} A selector matching command buttons with `commandfor`.
- * @throws {TypeError} When no valid command name is provided.
+ * @throws {TypeError} When a name is neither native nor a custom `--` command.
  */
 export function commandSelector(commands) {
-  const attributes = commandNames(commands, "commandSelector()").map(
-    (name) => `[command="${name.replaceAll("\\", "\\\\").replaceAll('"', '\\"')}"]`,
-  );
+  const attributes = commandNames(commands, "commandSelector()").map((name) => {
+    const value = name.replaceAll("\\", "\\\\").replaceAll('"', '\\"');
+    return `[command="${value}"${isCustom(name) ? "" : " i"}]`;
+  });
   return `button[commandfor]:is(${attributes.join(", ")})`;
 }
 
 function triggerFromEvent(event, doc) {
-  const ElementClass = doc.defaultView?.Element;
-  if (!ElementClass) return null;
-
   for (const node of event.composedPath?.() ?? [event.target]) {
-    if (node instanceof ElementClass && node.matches("button[commandfor][command]")) {
+    // nodeType rather than instanceof: nodes from another realm still count.
+    if (node.nodeType === 1 && node.matches("button[commandfor][command]")) {
       return node;
     }
     if (node === doc) break;
@@ -78,7 +108,7 @@ function createRegistry(doc) {
     if (event.defaultPrevented) return;
 
     const trigger = triggerFromEvent(event, doc);
-    if (!trigger || trigger.disabled) return;
+    if (!trigger || trigger.matches(":disabled")) return;
 
     const command = commandKey(trigger.getAttribute("command"));
     const registration = commands.get(command);
@@ -87,7 +117,10 @@ function createRegistry(doc) {
     const target = registration.resolve(trigger);
     if (!target) return;
 
-    registration.prepare?.(trigger, target, command);
+    // One routed command owns the click, even when the handler throws. This
+    // is also what stops a second copy of this module, with its own registry
+    // and listener, from handling the same activation.
+    event.preventDefault();
     registration.handle(event, trigger, target, command);
   }
 
@@ -98,31 +131,22 @@ function createRegistry(doc) {
 /**
  * Register one behavior for one or more command names.
  *
- * `prepare`, when present, runs immediately before `handle` on every matching
- * action. It must be idempotent; it is useful for semantics derived from the
- * resolved target, without introducing a connection lifecycle.
+ * The router cancels the click once `resolve` returns a target, so `handle`
+ * runs with `event.defaultPrevented` already true.
  *
  * @param {string | string[]} commands Command name or names owned by this behavior.
  * @param {object} options Behavior callbacks.
  * @param {(trigger: HTMLButtonElement) => Element | null} [options.resolve=targetFor]
  * Resolver evaluated for every action.
- * @param {(trigger: HTMLButtonElement, target: Element, command: string) => void} [options.prepare]
- * Optional idempotent callback run immediately before the handler.
  * @param {(event: MouseEvent, trigger: HTMLButtonElement, target: Element, command: string) => void} options.handle
  * Command handler.
  * @returns {{ disconnect: () => void }} An idempotent registration teardown handle.
  * @throws {TypeError} When command names or callbacks are invalid.
  * @throws {Error} When a command already has an owner in the current document.
  */
-export function registerCommands(commands, { resolve = targetFor, prepare, handle } = {}) {
-  const names = [
-    ...new Set(commandNames(commands, "registerCommands()").map((name) => commandKey(name))),
-  ];
-  if (
-    typeof resolve !== "function" ||
-    (prepare !== undefined && typeof prepare !== "function") ||
-    typeof handle !== "function"
-  ) {
+export function registerCommands(commands, { resolve = targetFor, handle } = {}) {
+  const names = commandNames(commands, "registerCommands()");
+  if (typeof resolve !== "function" || typeof handle !== "function") {
     throw new TypeError("registerCommands() requires function callbacks.");
   }
   if (typeof document === "undefined") return { disconnect() {} };
@@ -139,7 +163,7 @@ export function registerCommands(commands, { resolve = targetFor, prepare, handl
     throw new Error(`Command "${conflict}" is already registered in this document.`);
   }
 
-  const registration = { resolve, prepare, handle };
+  const registration = { resolve, handle };
   for (const name of names) registry.commands.set(name, registration);
 
   let connected = true;

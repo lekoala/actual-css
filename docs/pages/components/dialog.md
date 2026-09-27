@@ -22,7 +22,8 @@ layout.
 
 Modals use the platform-native `<dialog class="modal">` element with `commandfor` and `command` buttons.
 
-Use `command="show-modal"` to open a modal dialog.
+Use `command="show-modal"` to open a modal dialog, or `command="--show"` to open
+it non-modally.
 
 Add `aria-haspopup="dialog"` and `aria-controls="<id>"` to opening buttons so
 their semantics are present before either native or framework JavaScript runs.
@@ -297,7 +298,9 @@ Available options:
   light dismiss and closes the dialog (or rewrites `closedby="any"` to
   `closedby="closerequest"` so the native dialog does not double-handle).
   It never affects Escape or explicit close requests.
-* `data-dialog-modal="false"` opens with `show()` instead of `showModal()`.
+* `data-dialog-modal="false"` makes direct `openDialog()` calls use `show()`
+  instead of `showModal()`. The `show-modal` and `--show` commands override
+  this default.
 * `data-dialog-view-transition` enables a view transition that morphs the dialog to/from its trigger. Only active when the browser supports `document.startViewTransition` and the user allows motion.
 * `closedby` keeps its native meaning: `"any"` closes on backdrop click and
   Escape, `"closerequest"` closes on Escape only, `"none"` disables both. The

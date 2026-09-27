@@ -5,6 +5,9 @@
 ### Breaking changes
 
 - `enhancementSelector()` and `hasEnhancement()` are no longer exported from `actual-css/js/enhance`; query `[data-enhance~="name"]` directly.
+- `registerCommands()` drops the `prepare` callback; write `aria-controls`, `aria-haspopup`, and `aria-pressed` on command buttons in the markup.
+- `registerCommands()` and `commandSelector()` throw on a name that is neither a native `command` keyword nor a custom `--` command.
+- The non-modal dialog command is `command="--show"`; `command="show"` is not an HTML keyword and no longer opens a dialog.
 
 ### Added
 
@@ -14,9 +17,12 @@
 ### Changed
 
 - `registerEnhancement()` discovers every named behavior through one shared `[data-enhance]` query per root instead of one `[data-enhance~="name"]` selector each.
+- The command router calls `event.preventDefault()` once a target resolves, before `handle`; handlers no longer cancel the click themselves.
 
 ### Fixed
 
+- `commandSelector()` matches native command keywords case-insensitively, as the router does.
+- The command router ignores a trigger disabled through a `<fieldset disabled>` ancestor.
 - `.rating > input[type="radio"]:focus-visible` draws its outline in `--focus` instead of `currentColor`: an intent on the rating no longer becomes the focus color, keeping the guaranteed 3:1 contrast against `--surface` and `--surface-solid`.
 - `tooltip.js` shows on focus only when the trigger matches `:focus-visible`: a pointer press, or focus handed back by a dialog closed with the pointer, no longer brings the tooltip back.
 
