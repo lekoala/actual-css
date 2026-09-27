@@ -14,6 +14,7 @@
  * Public hooks:
  * --flyout-inline-size
  * --flyout-max-inline-size
+ * --flyout-pad
  *
  * Internal:
  * --menu-item-size (derived from --control-size for menu rows)
@@ -66,7 +67,9 @@
   );
   overflow: auto;
   margin: 0;
-  padding: var(--space-10);
+  /* Tight by default for action menus, whose items carry their own padding.
+     Rich panels (forms, pickers) opt into dialog air per instance. */
+  padding: var(--flyout-pad, var(--space-10));
   border: var(--border-width) solid var(--border);
   border-radius: var(--radius);
   background: var(--surface-raised);

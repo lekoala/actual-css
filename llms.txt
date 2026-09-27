@@ -30,9 +30,10 @@ show supported CSS modules and individual enhancer imports without duplicating
 the full export list here.
 
 Presentation (`class`) and behavior are separate layers. `data-enhance` takes
-four tokens only — `tabs`, `flyout`, `scrollspy`, `validation`; leaf behaviors
-use their own attribute (`data-tooltip`, `data-mask`, `data-filter`,
-`data-context-menu`) and `<dialog>` needs none. See
+five built-in tokens — `tabs`, `flyout`, `range`, `scrollspy`, `validation`.
+Leaf behaviors whose opt-in also carries configuration use their own attribute
+(`data-tooltip`, `data-mask`, `data-filter`, `data-context-menu`), and `<dialog>`
+needs none. See
 [when a token, when a data-*](docs/design-notes/enhancement-contract.md).
 
 Behaviour primitives are independently importable for building custom widgets,

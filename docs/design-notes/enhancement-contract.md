@@ -57,10 +57,11 @@ than the registration root, without crossing shadow boundaries.
 
 > `data-enhance` is a generic opt-in for when HTML does not already provide an unambiguous one.
 
-- **A token** is for a root controller — a behavior that owns a subtree and manages
-  descendants (tabs, flyout, scrollspy, validation).
-- **A self-describing `data-*`** is for a leaf whose attribute is simultaneously the opt-in
-  and the configuration (`data-tooltip`, `data-mask`, `data-filter`,
+- **A token** is for a named behavior whose opt-in carries no configuration,
+  whether it owns a subtree or enhances one leaf (tabs, flyout, range,
+  scrollspy, validation).
+- **A self-describing `data-*`** is for a leaf whose attribute is simultaneously
+  the opt-in and the configuration (`data-tooltip`, `data-mask`, `data-filter`,
   `data-context-menu`).
 - **Elements that are their own opt-in** need nothing (`<dialog>`).
 
@@ -95,8 +96,8 @@ those registrations explicitly.
 
 - Use a command for an immediate trigger-to-current-target action. Commands
   resolve the DOM at event time and do not own element lifecycle.
-- Use `registerEnhancement()` for an opted-in controller that owns listeners or
-  state for a subtree.
+- Use `registerEnhancement()` for a named, opted-in behavior that owns listeners
+  or state for a subtree or leaf.
 - Use `enhance()` for a self-describing leaf behavior that needs connection and
   cleanup lifecycle without a named token.
 - Prefer delegation when no persistent per-element state is required.
@@ -145,7 +146,8 @@ of the contract itself.
 | ------------ | ------------------------------------------------ | ------------------- |
 | `tabs`       | Tab panel switching, arrow-key navigation        | `.tabs`             |
 | `flyout`     | Trigger → panel positioning, open/close          | `.flyout`           |
+| `range`      | Fill share and named-value synchronization       | `.range`            |
 | `scrollspy`  | Scroll-driven nav highlighting                   | `.scrollspy`        |
 | `validation` | Form validation, focus management, server errors | `.needs-validation` |
 
-Four tokens. Everything else stays self-describing.
+Five tokens. Everything else stays self-describing.

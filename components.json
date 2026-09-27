@@ -326,7 +326,8 @@
     ],
     "publicHooks": [
       "--flyout-inline-size",
-      "--flyout-max-inline-size"
+      "--flyout-max-inline-size",
+      "--flyout-pad"
     ],
     "internalHooks": [
       "--menu-item-size",

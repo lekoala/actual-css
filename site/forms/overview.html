@@ -520,7 +520,7 @@ it a stronger fill.</p>
 <li>Use native <code>&lt;optgroup&gt;</code> and <code>disabled</code> options in <code>.select</code> controls when applicable; the customizable picker preserves both as a progressive enhancement.</li>
 <li><code>.choice</code> is the choice-label API. Use <code>.check</code> or <code>.radio</code> on the nested control. The control goes first, the label group second, so multi-line labels align the control with the first line.</li>
 <li>For a switch, use <code>class=&quot;switch&quot;</code> and <code>role=&quot;switch&quot;</code>.</li>
-<li>Core range controls stay native and are enhanced by <code>accent-color</code>. An optional richer range skin may come later if real projects need it.</li>
+<li><code>.range</code> skins the native range control (<code>appearance: none</code> track, thumb, and focus ring). Add <code>data-enhance=&quot;range&quot;</code> for the fill share, named <code>datalist</code> values, and output sync.</li>
 <li><code>.form-actions</code> carries a default top margin. Override it with <code>--form-actions-margin-block-start</code>, <code>--form-actions-align</code>, or <code>--form-actions-justify</code>. It is class-only and may live inside or outside <code>&lt;form&gt;</code>. See Detached Actions below.</li>
 <li><code>.join</code> visually joins adjacent controls into a single unit. Use <code>.join-addon</code> for static prefix/suffix content. The container still carries <code>role=&quot;group&quot;</code> for accessibility.</li>
 </ul>

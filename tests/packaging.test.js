@@ -164,6 +164,7 @@ test("the js entry split keeps the loader and built-ins separate", () => {
     "./filter.js",
     "./mask.js",
     "./password.js",
+    "./range.js",
     "./validation.js",
     "./status.js",
   ];

@@ -54,11 +54,22 @@ test("forced-colors mask fills survive application hook overrides", () => {
   );
 
   const rangeCss = readCss("src/css/forms/range.css");
+  // The fill split is pinned with literal system colors on the property, so
+  // an application --range-fill-bg/--range-track-bg override cannot collapse
+  // the two-tone value readout into a Canvas-remapped flat track. The split
+  // lives in a background-image, which adjust: auto drops — the tracks opt
+  // out locally while staying on system keywords.
   expect(rangeCss).toMatch(
-    /@media \(forced-colors: active\)[\s\S]*\.range::-webkit-slider-runnable-track[\s\S]*background:\s*CanvasText;/,
+    /@media \(forced-colors: active\)[\s\S]*\.range::-webkit-slider-runnable-track[\s\S]*forced-color-adjust:\s*none;/,
   );
   expect(rangeCss).toMatch(
-    /@media \(forced-colors: active\)[\s\S]*\.range::-moz-range-track[\s\S]*background:\s*CanvasText;/,
+    /@media \(forced-colors: active\)[\s\S]*\.range::-webkit-slider-runnable-track[\s\S]*Highlight var\(--range-progress\),\s*CanvasText var\(--range-progress\)/,
+  );
+  expect(rangeCss).toMatch(
+    /@media \(forced-colors: active\)[\s\S]*\.range::-moz-range-track[\s\S]*forced-color-adjust:\s*none;/,
+  );
+  expect(rangeCss).toMatch(
+    /@media \(forced-colors: active\)[\s\S]*\.range::-moz-range-track[\s\S]*Highlight var\(--range-progress\),\s*CanvasText var\(--range-progress\)/,
   );
 
   // currentColor mask/gradient fills: without this the system remaps them to

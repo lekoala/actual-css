@@ -2889,6 +2889,10 @@ small {
  * --range-track-height
  * --range-thumb-bg
  * --range-track-bg
+ * --range-fill-bg
+ *
+ * Runtime-written (by actual-css/js/range, never set by hand):
+ * --range-progress
  */
 
 /* Intent boundary — inherited intents do not tint this component.
@@ -2898,10 +2902,17 @@ small {
 }
 
 .range {
-  --range-thumb-size: 1.25rem;
-  --range-track-height: 0.25rem;
+  --range-thumb-size: 1.125rem;
+  --range-track-height: 0.625rem;
   --range-thumb-bg: var(--intent, var(--primary));
   --range-track-bg: var(--border);
+  --range-fill-bg: var(--intent, var(--primary));
+  /* Fill share, written by actual-css/js/range. 0% with no runtime means a
+     plain track — the control stays fully usable without JavaScript. */
+  --range-progress: 0%;
+  /* Logical fill direction: the gradient below cannot use flow-relative
+     keywords, so RTL flips the angle through this hook instead. */
+  --range-fill-from: to right;
 
   appearance: none;
   -webkit-appearance: none;
@@ -2911,16 +2922,29 @@ small {
   cursor: pointer;
 }
 
+:where([dir="rtl"]) .range,
+.range:dir(rtl) {
+  --range-fill-from: to left;
+}
+
 .range::-webkit-slider-runnable-track {
   block-size: var(--range-track-height);
   border-radius: var(--radius-full);
-  background: var(--range-track-bg);
+  background: linear-gradient(
+    var(--range-fill-from),
+    var(--range-fill-bg) var(--range-progress),
+    var(--range-track-bg) var(--range-progress)
+  );
 }
 
 .range::-moz-range-track {
   block-size: var(--range-track-height);
   border-radius: var(--radius-full);
-  background: var(--range-track-bg);
+  background: linear-gradient(
+    var(--range-fill-from),
+    var(--range-fill-bg) var(--range-progress),
+    var(--range-track-bg) var(--range-progress)
+  );
 }
 
 .range::-webkit-slider-thumb {
@@ -2933,6 +2957,10 @@ small {
   background: var(--range-thumb-bg);
   margin-block-start: calc((var(--range-track-height) - var(--range-thumb-size)) / 2);
   cursor: inherit;
+  /* Permanent surface separator: the fill defaults to the thumb color, so
+     without this the thumb would melt into the filled part of the track.
+     Focus-visible keeps this ring and adds the --focus ring outside it. */
+  box-shadow: 0 0 0 2px var(--surface);
   transition: box-shadow var(--duration);
 }
 
@@ -2943,6 +2971,7 @@ small {
   border: 0;
   background: var(--range-thumb-bg);
   cursor: inherit;
+  box-shadow: 0 0 0 2px var(--surface);
   transition: box-shadow var(--duration);
 }
 
@@ -2953,20 +2982,21 @@ small {
 /*
  * A thumb pseudo-element takes no reliable outline, so its ring is a solid
  * --focus shadow (the transparent outline above covers forced colors). The
- * 1px surface-coloured separator keeps the ring visually distinct from the
- * small, coloured thumb — unlike a full-size input where the same gap would
- * read as an unwanted void.
+ * surface-coloured separator keeps the ring visually distinct from the
+ * coloured thumb — unlike a full-size input where the same gap would
+ * read as an unwanted void. It doubles as the resting separator between
+ * the thumb and the same-coloured fill.
  */
 .range:focus-visible::-webkit-slider-thumb {
   box-shadow:
-    0 0 0 1px var(--surface),
-    0 0 0 calc(1px + var(--focus-ring-width)) var(--focus);
+    0 0 0 2px var(--surface),
+    0 0 0 calc(2px + var(--focus-ring-width)) var(--focus);
 }
 
 .range:focus-visible::-moz-range-thumb {
   box-shadow:
-    0 0 0 1px var(--surface),
-    0 0 0 calc(1px + var(--focus-ring-width)) var(--focus);
+    0 0 0 2px var(--surface),
+    0 0 0 calc(2px + var(--focus-ring-width)) var(--focus);
 }
 
 .range:disabled {
@@ -2974,28 +3004,41 @@ small {
   cursor: not-allowed;
   opacity: var(--disabled-opacity);
 }
-
 /* Forced colors: the track must stay a visible line against the page (Canvas
-  would merge with it) and the thumb needs a real boundary to remain
-  distinguishable from the track. Disabled keeps GrayText via :disabled.
-  Focus stays on the transparent outline of :focus-visible. Track and thumb
-  fills are written on the properties, not only the hooks: an application
-  hook override at the same specificity loads after this file and would win
-  the variable, leaving a Canvas-remapped fill. */
+   would merge with it) and the thumb needs a real boundary to remain
+   distinguishable from the track. The fill keeps its two-tone split with
+   system colors so the value stays readable. Disabled keeps GrayText via
+   :disabled. Focus stays on the transparent outline of :focus-visible. Track
+   and thumb fills are written on the properties, not only the hooks: an
+   application hook override at the same specificity loads after this file
+   and would win the variable, leaving a Canvas-remapped fill.
+   The split lives in a background-image, which forced-color-adjust: auto
+   drops — so the tracks opt out locally. The colors stay system keywords,
+   keeping native contrast adaptation; only the host keeps adjusting. */
 @media (forced-colors: active) {
   .range {
     --range-track-bg: CanvasText;
     --range-thumb-bg: ButtonFace;
+    --range-fill-bg: Highlight;
   }
 
   .range::-webkit-slider-runnable-track {
-    background: CanvasText;
+    forced-color-adjust: none;
+    background: linear-gradient(
+      var(--range-fill-from),
+      Highlight var(--range-progress),
+      CanvasText var(--range-progress)
+    );
   }
 
   .range::-moz-range-track {
-    background: CanvasText;
+    forced-color-adjust: none;
+    background: linear-gradient(
+      var(--range-fill-from),
+      Highlight var(--range-progress),
+      CanvasText var(--range-progress)
+    );
   }
-
   .range::-webkit-slider-thumb {
     background: ButtonFace;
     border: var(--border-width) solid ButtonText;
@@ -5186,6 +5229,7 @@ picture.bleed > img {
  * Public hooks:
  * --flyout-inline-size
  * --flyout-max-inline-size
+ * --flyout-pad
  *
  * Internal:
  * --menu-item-size (derived from --control-size for menu rows)
@@ -5238,7 +5282,9 @@ picture.bleed > img {
   );
   overflow: auto;
   margin: 0;
-  padding: var(--space-10);
+  /* Tight by default for action menus, whose items carry their own padding.
+     Rich panels (forms, pickers) opt into dialog air per instance. */
+  padding: var(--flyout-pad, var(--space-10));
   border: var(--border-width) solid var(--border);
   border-radius: var(--radius);
   background: var(--surface-raised);
@@ -6855,6 +6901,7 @@ a.avatar[aria-disabled="true"] {
 
 .rating > input[type="radio"]:focus-visible {
   outline: var(--focus-outline);
+  outline-color: var(--focus);
   outline-offset: var(--focus-outline-offset);
   background: var(--rating-color);
 }

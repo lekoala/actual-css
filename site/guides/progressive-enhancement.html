@@ -299,6 +299,7 @@ example:</p>
 <tr><td><code>actual-css/js/filter</code></td><td>Input value filtering on <code>data-filter</code></td></tr>
 <tr><td><code>actual-css/js/mask</code></td><td>Input masks on <code>data-mask</code></td></tr>
 <tr><td><code>actual-css/js/password</code></td><td>Password reveal toggle</td></tr>
+<tr><td><code>actual-css/js/range</code></td><td>Range fill and named values (token <code>range</code>)</td></tr>
 <tr><td><code>actual-css/js/validation</code></td><td>Form validation (token <code>validation</code>)</td></tr>
 <tr><td><code>actual-css/js/status</code></td><td>Singleton status bar on <code>[data-status][role=&quot;status&quot;]</code></td></tr>
 <tr><td><code>actual-css/js/enhancement-loader</code></td><td>Declared enhancement manifests</td></tr>
@@ -313,11 +314,12 @@ needed.</p>
 <h2 id="using-the-runtime-with-another-css-framework">Using the runtime with another CSS framework</h2>
 <p>The JS is designed to run on its own, without Actual's stylesheet.</p>
 <ul>
-<li><strong><code>data-enhance</code> tokens</strong> register root-controller behaviors. The runtime
-discovers components through <code>data-enhance=&quot;tabs&quot;</code>, <code>data-enhance=&quot;flyout&quot;</code>,
-<code>data-enhance=&quot;scrollspy&quot;</code>, and <code>data-enhance=&quot;validation&quot;</code> — no Actual
-presentation class needed. Self-describing attributes (<code>data-mask</code>,
-<code>data-tooltip</code>, <code>data-context-menu</code>) stay framework-neutral by construction.</li>
+<li><strong><code>data-enhance</code> tokens</strong> register named behaviors. The runtime discovers
+components through <code>data-enhance=&quot;tabs&quot;</code>, <code>data-enhance=&quot;flyout&quot;</code>,
+<code>data-enhance=&quot;range&quot;</code>, <code>data-enhance=&quot;scrollspy&quot;</code>, and
+<code>data-enhance=&quot;validation&quot;</code> — no Actual presentation class needed.
+Self-describing attributes (<code>data-mask</code>, <code>data-tooltip</code>,
+<code>data-context-menu</code>) stay framework-neutral by construction.</li>
 <li><strong><code>selectors.js</code></strong> lists the state classes the runtime <em>writes</em> (<code>is-open</code>,
 <code>was-validated</code>, …). Edit this file (or alias it in a bundler) to
 match a different CSS framework's state vocabulary. It is a read-side-only

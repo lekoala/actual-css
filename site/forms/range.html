@@ -227,21 +227,194 @@ rather than the CSS box.</p>
   <div class="docs-preview">
 <label class="field">
   <span class="field-label">Volume</span>
-  <input class="range" type="range" min="0" max="100" value="50" />
+  <input class="range" data-enhance="range" type="range" min="0" max="100" value="50" />
 </label>
   </div>
   <div class="docs-code">
     <pre><code class="language-html">&lt;label class=&quot;field&quot;&gt;
   &lt;span class=&quot;field-label&quot;&gt;Volume&lt;/span&gt;
-  &lt;input class=&quot;range&quot; type=&quot;range&quot; min=&quot;0&quot; max=&quot;100&quot; value=&quot;50&quot; /&gt;
+  &lt;input class=&quot;range&quot; data-enhance=&quot;range&quot; type=&quot;range&quot; min=&quot;0&quot; max=&quot;100&quot; value=&quot;50&quot; /&gt;
 &lt;/label&gt;</code></pre>
   </div>
 </div>
 <div class="prose docs-prose">
-<p>Actual deliberately does not emulate filled tracks, tick marks, value labels,
-or multi-thumb ranges. Those still require engine-specific pseudo-elements or a
-value duplicated out of the HTML into CSS. Prefer the platform as richer range
-styling becomes interoperable — see
+<h2 id="fill">Fill</h2>
+<p><code>data-enhance=&quot;range&quot;</code> opts into the <code>actual-css/js/range</code> behavior. It writes
+<code>--range-progress</code>, the fill share the track gradient reads, and keeps it in
+sync on input. Without it the variable stays at its <code>0%</code> default and the track
+renders plain — the control stays fully usable without JavaScript. The fill
+follows the writing direction, and a bare <code>input[type=&quot;range&quot;]</code> without the
+<code>.range</code> class can opt in the same way.</p>
+<h2 id="named-values">Named values</h2>
+<p>A <code>datalist</code> is the source of truth for discrete named steps: positions plus
+names. Browsers render its ticks and labels inconsistently, so Actual never
+depends on their presentation — the enhancement only reads <code>option</code> values and
+their <code>label</code>. A matching label sets <code>aria-valuetext</code> on the input and mirrors
+into each <code>&lt;output for=&quot;…&quot;&gt;</code>. The output is the visible value, not the input's
+name — give the input its own accessible name, since <code>for</code> only declares the
+output's operands.</p>
+</div>
+<div class="docs-example">
+  <div class="docs-preview">
+<div class="field">
+  <output class="field-label" for="effort">High</output>
+  <input
+    class="range"
+    data-enhance="range"
+    id="effort"
+    type="range"
+    min="0"
+    max="3"
+    step="1"
+    value="2"
+    list="effort-levels"
+    aria-label="Effort"
+  />
+  <datalist id="effort-levels">
+    <option value="0" label="Minimal"></option>
+    <option value="1" label="Standard"></option>
+    <option value="2" label="High"></option>
+    <option value="3" label="Maximum"></option>
+  </datalist>
+</div>
+  </div>
+  <div class="docs-code">
+    <pre><code class="language-html">&lt;div class=&quot;field&quot;&gt;
+  &lt;output class=&quot;field-label&quot; for=&quot;effort&quot;&gt;High&lt;/output&gt;
+  &lt;input
+    class=&quot;range&quot;
+    data-enhance=&quot;range&quot;
+    id=&quot;effort&quot;
+    type=&quot;range&quot;
+    min=&quot;0&quot;
+    max=&quot;3&quot;
+    step=&quot;1&quot;
+    value=&quot;2&quot;
+    list=&quot;effort-levels&quot;
+    aria-label=&quot;Effort&quot;
+  /&gt;
+  &lt;datalist id=&quot;effort-levels&quot;&gt;
+    &lt;option value=&quot;0&quot; label=&quot;Minimal&quot;&gt;&lt;/option&gt;
+    &lt;option value=&quot;1&quot; label=&quot;Standard&quot;&gt;&lt;/option&gt;
+    &lt;option value=&quot;2&quot; label=&quot;High&quot;&gt;&lt;/option&gt;
+    &lt;option value=&quot;3&quot; label=&quot;Maximum&quot;&gt;&lt;/option&gt;
+  &lt;/datalist&gt;
+&lt;/div&gt;</code></pre>
+  </div>
+</div>
+<div class="prose docs-prose">
+<p><code>aria-valuetext</code> is the announced value when a number really means a text; keep
+it even if the visible <code>output</code> changes shape. An <code>output</code> is a live region,
+so verify with a screen reader that the two do not double-announce.</p>
+<h2 id="in-a-flyout">In a flyout</h2>
+<p>The range stays an <code>input</code>, the flyout stays a flyout — together they read as
+a richer picker with no new component. <code>data-flyout-auto-close=&quot;outside&quot;</code> keeps
+dragging the slider from closing the panel.</p>
+</div>
+<div class="docs-example">
+  <div class="docs-preview">
+<div class="flyout-trigger">
+  <button
+    class="btn outline"
+    type="button"
+    data-enhance="flyout"
+    aria-expanded="false"
+    aria-controls="effort-picker"
+  >
+    Reasoning effort
+  </button>
+
+  <div
+    class="flyout"
+    id="effort-picker"
+    data-flyout-auto-close="outside"
+    style="--flyout-inline-size: 16rem; --flyout-pad: var(--space-40)"
+    hidden
+  >
+    <div class="field">
+      <output class="field-label text-center" for="effort-flyout">High</output>
+
+      <input
+        class="range"
+        data-enhance="range"
+        id="effort-flyout"
+        type="range"
+        min="0"
+        max="3"
+        step="1"
+        value="2"
+        list="effort-flyout-levels"
+        aria-label="Reasoning effort"
+      >
+
+      <datalist id="effort-flyout-levels">
+        <option value="0" label="Minimal"></option>
+        <option value="1" label="Standard"></option>
+        <option value="2" label="High"></option>
+        <option value="3" label="Maximum"></option>
+      </datalist>
+    </div>
+
+    <div class="cluster" style="--cluster-justify: center">
+      <button class="btn primary sm" type="button" data-flyout-close>Done</button>
+    </div>
+  </div>
+</div>
+  </div>
+  <div class="docs-code">
+    <pre><code class="language-html">&lt;div class=&quot;flyout-trigger&quot;&gt;
+  &lt;button
+    class=&quot;btn outline&quot;
+    type=&quot;button&quot;
+    data-enhance=&quot;flyout&quot;
+    aria-expanded=&quot;false&quot;
+    aria-controls=&quot;effort-picker&quot;
+  &gt;
+    Reasoning effort
+  &lt;/button&gt;
+
+  &lt;div
+    class=&quot;flyout&quot;
+    id=&quot;effort-picker&quot;
+    data-flyout-auto-close=&quot;outside&quot;
+    style=&quot;--flyout-inline-size: 16rem; --flyout-pad: var(--space-40)&quot;
+    hidden
+  &gt;
+    &lt;div class=&quot;field&quot;&gt;
+      &lt;output class=&quot;field-label text-center&quot; for=&quot;effort-flyout&quot;&gt;High&lt;/output&gt;
+
+      &lt;input
+        class=&quot;range&quot;
+        data-enhance=&quot;range&quot;
+        id=&quot;effort-flyout&quot;
+        type=&quot;range&quot;
+        min=&quot;0&quot;
+        max=&quot;3&quot;
+        step=&quot;1&quot;
+        value=&quot;2&quot;
+        list=&quot;effort-flyout-levels&quot;
+        aria-label=&quot;Reasoning effort&quot;
+      &gt;
+
+      &lt;datalist id=&quot;effort-flyout-levels&quot;&gt;
+        &lt;option value=&quot;0&quot; label=&quot;Minimal&quot;&gt;&lt;/option&gt;
+        &lt;option value=&quot;1&quot; label=&quot;Standard&quot;&gt;&lt;/option&gt;
+        &lt;option value=&quot;2&quot; label=&quot;High&quot;&gt;&lt;/option&gt;
+        &lt;option value=&quot;3&quot; label=&quot;Maximum&quot;&gt;&lt;/option&gt;
+      &lt;/datalist&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;cluster&quot; style=&quot;--cluster-justify: center&quot;&gt;
+      &lt;button class=&quot;btn primary sm&quot; type=&quot;button&quot; data-flyout-close&gt;Done&lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+  </div>
+</div>
+<div class="prose docs-prose">
+<p>Actual deliberately does not emulate tick marks or multi-thumb ranges. Ticks
+still need engine-specific pseudo-elements; the fill above is designed for
+deletion once <code>::slider-fill</code> is interoperable — see
 <a href="https://github.com/lekoala/actual-css/blob/master/docs/design-notes/platform-alignment.md">Enhanced range controls</a>.</p>
 <h2 id="css-hooks">CSS hooks</h2>
 <ul>
@@ -249,6 +422,8 @@ styling becomes interoperable — see
 <li><code>--range-track-height</code> — track thickness.</li>
 <li><code>--range-thumb-bg</code> — thumb color. Defaults to the local intent, then <code>--primary</code>.</li>
 <li><code>--range-track-bg</code> — track color.</li>
+<li><code>--range-fill-bg</code> — filled portion color. Defaults to the local intent, then <code>--primary</code>.</li>
+<li><code>--range-progress</code> — fill share. Written by <code>actual-css/js/range</code>, never set by hand.</li>
 </ul>
 
 </div>
@@ -269,6 +444,9 @@ styling becomes interoperable — see
         <nav class="scrollspy" data-enhance="scrollspy" data-scrollspy-offset="80" aria-label="On this page">
           <p class="docs-nav-group">On this page</p>
           <ul class="nav-list docs-toc-list" data-docs-toc>
+        <li><a class="nav-link" href="#fill" data-docs-toc-item data-level="2">Fill</a></li>
+        <li><a class="nav-link" href="#named-values" data-docs-toc-item data-level="2">Named values</a></li>
+        <li><a class="nav-link" href="#in-a-flyout" data-docs-toc-item data-level="2">In a flyout</a></li>
         <li><a class="nav-link" href="#css-hooks" data-docs-toc-item data-level="2">CSS hooks</a></li>
           </ul>
         </nav>

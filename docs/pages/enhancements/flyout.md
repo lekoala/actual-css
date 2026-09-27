@@ -522,6 +522,8 @@ delay; a number sets the delay in milliseconds.
 
   The repetition is the point: the two hooks are different contracts, and only
   the cap may enter the runtime's `min()`.
+- `--flyout-pad` — panel padding. Defaults to `var(--space-10)`, tight for
+  action menus; rich panels opt into dialog air per instance.
 - `--menu-item-size` — minimum row height of `.menu-item`.
 - `--menu-item-icon-size` — shared leading-column width for icons and checked-state indicators.
 
