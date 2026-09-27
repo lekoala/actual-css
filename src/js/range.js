@@ -62,7 +62,7 @@ function outputsFor(input) {
   return [...root.querySelectorAll(`output[for~="${CSS.escape(input.id)}"]`)];
 }
 
-export function syncRange(input) {
+function syncRange(input) {
   const min = toFinite(input.min, 0);
   const max = toFinite(input.max, 100);
   const value = toFinite(input.value, min);
@@ -110,7 +110,11 @@ function releaseOwned(input) {
   owned.delete(input);
 }
 
-export function connectRange(input) {
+// Private on purpose: `owned` holds one record per input, so a second,
+// independent connection would restore and drop state the enhancement still
+// owns. The lifecycle is the only caller. A programmatic value change goes
+// through dispatchInput() from ./input.js, which every listener sees.
+function connectRange(input) {
   const controller = new AbortController();
   syncRange(input);
   input.addEventListener("input", () => syncRange(input), {

@@ -1,5 +1,5 @@
 import { afterEach, expect, test } from "bun:test";
-import { cleanupDOM, setupDOM } from "./helpers/dom.js";
+import { cleanupDOM, flushMutationObserver, setupDOM } from "./helpers/dom.js";
 
 let importId = 0;
 
@@ -155,15 +155,20 @@ test("the range enhancement never removes an author-written valuetext", async ()
   expect(el.getAttribute("aria-valuetext")).toBe("Author's words");
 });
 
-test("range cleanup restores outputs", async () => {
-  const mod = await loadRange(LABELED);
+test("removing the input tears the enhancement down and restores outputs", async () => {
+  await loadRange(LABELED);
   const el = document.getElementById("effort");
   const output = document.querySelector("output");
 
   setValue(el, "3");
   expect(output.textContent).toBe("Maximum");
 
-  mod.connectRange(el)();
+  el.remove();
+  await flushMutationObserver();
+  expect(output.textContent).toBe("Pick a level");
+
+  // The listener is gone with the connection: a later input writes nothing.
+  setValue(el, "2");
   expect(output.textContent).toBe("Pick a level");
 });
 

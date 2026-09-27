@@ -29,6 +29,7 @@
 
 ### Documentation and tooling
 
+- `tests/exports.test.js` keys its inventory on every JS subpath of `package.json#exports`, so a new subpath or an export on an unlisted module now fails the suite.
 - Table: clarified the responsive boundary — horizontal overflow (`.table-wrap` + `--table-min` + accessible scroll) stays the strategy, and the docs now name the alternatives (list/media view, `.data-list`, dedicated data grid).
 - Badge vs choice chip vs removable tag vocabulary: a badge is information (non-interactive), `choice-card.chip` is a selectable label (never nest a `.close` inside it), and removable tags belong to the widget that produced them.
 - Combobox: a "Bridge contract" section names what Actual owns (tokens, focus, invalid, `.join`, contrast) versus the widget (behavior, multi-value, i18n), and keeps the bridge CSS in docs/demo.
