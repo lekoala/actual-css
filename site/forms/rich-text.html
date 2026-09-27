@@ -260,6 +260,10 @@ into the editing engine:</p>
 <p>The card in the template documents the full token map of this recipe. The
 suggestion popover is a child of <code>.rt-shell</code>, so it inherits the tokens like
 the rest of the editor.</p>
+<p>One state escapes the token map: the package's <code>:hover</code> rule out-specifies its
+<code>[aria-pressed=&quot;true&quot;]</code> rule, so hovering an active button paints the hover
+overlay under the pressed foreground. The bridge re-asserts the pressed
+background and foreground on <code>[aria-pressed=&quot;true&quot;]:hover</code>.</p>
 <h2 id="bridge-contract">Bridge contract</h2>
 <p><code>@lekoala/rich-text</code> owns the editor UI semantics — progressive enhancement,
 sanitization, toolbar behaviour and keyboard, links, <code>@mentions</code>, <code>/</code>

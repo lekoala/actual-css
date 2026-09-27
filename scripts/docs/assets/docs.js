@@ -128,6 +128,13 @@
     return score;
   }
 
+  // Index fields are plain text: markdown.js decodes entities, so a title or
+  // description can carry a literal "<textarea>". Escape before it reaches
+  // innerHTML or it renders as markup instead of a match label.
+  function escapeHtml(value) {
+    return String(value).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  }
+
   function renderResults() {
     if (!searchResults) return;
     activeIndex = -1;
@@ -138,9 +145,9 @@
     searchResults.innerHTML = results
       .map(
         (entry, i) =>
-          `<li data-index="${i}"><a href="${siteRoot()}${entry.url}">${entry.title}` +
+          `<li data-index="${i}"><a href="${siteRoot()}${entry.url}">${escapeHtml(entry.title)}` +
           (entry.description
-            ? `<span class="docs-search-match"> — ${entry.description}</span>`
+            ? `<span class="docs-search-match"> — ${escapeHtml(entry.description)}</span>`
             : "") +
           `</a></li>`,
       )

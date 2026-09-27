@@ -61,7 +61,7 @@
     .actual-rich-text .rt-shell {
       --rt-bg: var(--surface);
       --rt-fg: var(--text);
-      --rt-border: var(--form-invalid-border, var(--control-border, var(--border)));
+      --rt-border: var(--form-invalid-border, var(--border));
       --rt-muted: var(--text-muted);
       --rt-focus: var(--form-invalid-border, var(--focus));
       --rt-focus-width: var(--focus-ring-width);
@@ -97,6 +97,16 @@
 
     .actual-rich-text .rt-button {
       border-radius: var(--radius-sm);
+    }
+
+    /* The package's :hover rule (.rt-button:hover:not(:disabled), 0,3,0)
+       out-specifies its pressed rule (.rt-button[aria-pressed=true], 0,2,0),
+       so hovering an active button paints the hover overlay under the pressed
+       foreground — gray with white text. Tokens cannot express the pair;
+       re-assert it through the package's documented pressed state hook. */
+    .actual-rich-text .rt-button[aria-pressed="true"]:hover:not(:disabled) {
+      background: var(--rt-button-pressed-bg);
+      color: var(--rt-button-pressed-fg);
     }
 
     /* 3. Invalid — the hidden textarea owns validity; the wrapper re-owns
@@ -330,6 +340,13 @@
   --rt-suggestion-bg: var(--surface-raised);
   --rt-suggestion-active: var(--hover-overlay);
   --rt-suggestion-shadow: var(--shadow-popout);
+}
+
+/* The package's :hover rule out-specifies its pressed rule, so the pressed
+   pair is re-asserted on hover. */
+.actual-rich-text .rt-button[aria-pressed="true"]:hover:not(:disabled) {
+  background: var(--rt-button-pressed-bg);
+  color: var(--rt-button-pressed-fg);
 }
 
 /* The hidden textarea owns validity: the wrapper re-owns the hook. */
