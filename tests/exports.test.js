@@ -9,13 +9,7 @@ import { publicJsExports } from "./helpers/package-exports.js";
 // `onMenuKeydown`), `selectionStart`, and the `validation` default are
 // internals slated for triage before 1.0.
 const JS_EXPORT_INVENTORY = {
-  enhance: [
-    "default",
-    "enhancementSelector",
-    "hasEnhancement",
-    "applyEnhancement",
-    "registerEnhancement",
-  ],
+  enhance: ["default", "applyEnhancement", "registerEnhancement"],
   escape: ["registerEscapeDismissal"],
   events: ["EVENTS", "ACTUAL_EVENT_PREFIX"],
   focus: ["isElementVisible", "getFocusable", "focusFirstDescendant"],

@@ -416,10 +416,8 @@ registerEnhancement("autosubmit", (form) => {
 <form data-enhance="validation autosubmit">
 ```
 
-`enhancementSelector(name)` returns the matching `[data-enhance~="name"]`
-selector (names must match `[a-z][a-z0-9-]*`), and `hasEnhancement(el, name)`
-tests it. No core module list is modified — the regression test in
-`tests/enhance.test.js` proves the shape.
+Names must match `[a-z][a-z0-9-]*`. To find opted-in elements from your own
+script, query `[data-enhance~="name"]`; styles keep using presentation classes.
 
 A name is owned once per root: a second `registerEnhancement("autosubmit", …)`
 on the same root throws, and `disconnect()` releases the name so it can be

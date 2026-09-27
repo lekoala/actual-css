@@ -1,8 +1,13 @@
 /*
  * Enhance — DOM lifecycle engine for behavioral enhancers.
  *
- * One MutationObserver per root watches DOM insertions/removals. Multiple calls
- * to enhance() share that observer while keeping separate teardown handles.
+ * One MutationObserver per root watches DOM insertions/removals and serves
+ * every enhance() and registerEnhancement() record on that root, each with
+ * its own teardown handle. A record pairs a discovery query with
+ * selector-keyed initialisers: enhance() queries its own selectors; a named
+ * enhancement keys `[data-enhance~="name"]` behind the shared
+ * `[data-enhance]` query, so any number of named behaviors cost the root a
+ * single discovery gate.
  *
  * Sweep (not removedNodes scanning) is the key design choice: it reasons
  * about final state after a batch, so a moved element (removed then
@@ -16,16 +21,9 @@
  * attribute already set. Behavior attributes are setup-time contracts, not
  * live enable/disable switches.
  *
- * enhancers: { [selector]: (el) => cleanup | void }
- * Returns: { refresh, disconnect }
- *
- * Enhancement tokens — the data-enhance layer on top of enhance().
- *
- * enhancementSelector("tabs") returns [data-enhance~="tabs"], the generic
- * opt-in for named behaviors. registerEnhancement() owns a name per
- * root — a second registration for the same name on the same root throws, and
- * disconnect() releases ownership. Third-party behaviors register exactly
- * like built-in ones.
+ * registerEnhancement() owns a name per root — a second registration for the
+ * same name on the same root throws, and disconnect() releases ownership.
+ * Third-party behaviors register exactly like built-in ones.
  *
  * See docs/design-notes/enhancement-contract.md.
  */
@@ -38,6 +36,8 @@ const ownedNames = new WeakMap();
 const ELEMENT_NODE = 1;
 const DOCUMENT_NODE = 9;
 const DOCUMENT_FRAGMENT_NODE = 11;
+
+const ENHANCEMENT_NAME = /^[a-z][a-z0-9-]*$/;
 
 function noopRuntime() {
   return {
@@ -56,50 +56,30 @@ function canScan(node) {
 
 function createRegistry(root) {
   const records = new Set();
-  let selectorString = "";
-
-  function isValidSelector(selector) {
-    try {
-      root.querySelector?.(selector);
-      if (root.nodeType === ELEMENT_NODE) root.matches(selector);
-      return true;
-    } catch (error) {
-      console.error(`Invalid enhancer selector "${selector}"`, error);
-      return false;
-    }
-  }
-
-  function updateSelectorString() {
-    selectorString = [...records].flatMap((record) => record.selectors).join(",");
-  }
+  let discovery = "";
 
   function start(record, el) {
-    if (el?.nodeType !== ELEMENT_NODE) return;
     let active = record.instances.get(el);
-
-    for (const selector of record.selectors) {
-      if (!el.matches(selector)) continue;
-      if (active?.has(selector)) continue;
+    for (const key of record.keys) {
+      if (active?.has(key) || !el.matches(key)) continue;
 
       let cleanup;
       try {
-        cleanup = record.enhancers[selector](el);
+        cleanup = record.enhancers[key](el);
       } catch (error) {
-        console.error(`Enhancer failed for selector "${selector}"`, error);
+        console.error(`Enhancer "${key}" failed`, error);
         continue;
       }
       if (!active) {
         active = new Map();
         record.instances.set(el, active);
       }
-      active.set(selector, typeof cleanup === "function" ? cleanup : null);
+      active.set(key, typeof cleanup === "function" ? cleanup : null);
     }
   }
 
   function stop(record, el) {
-    const active = record.instances.get(el);
-    if (!active) return;
-    for (const cleanup of active.values()) {
+    for (const cleanup of record.instances.get(el)?.values() ?? []) {
       try {
         cleanup?.();
       } catch (error) {
@@ -109,24 +89,13 @@ function createRegistry(root) {
     record.instances.delete(el);
   }
 
-  function scanFor(record, node) {
-    if (!canScan(node)) return;
-    if (node.nodeType === ELEMENT_NODE) start(record, node);
-    if (record.selectorString) {
-      node.querySelectorAll?.(record.selectorString).forEach((el) => {
-        start(record, el);
-      });
-    }
-  }
-
-  function scan(node) {
-    if (!canScan(node) || !selectorString) return;
-    if (node.nodeType === ELEMENT_NODE) {
-      for (const record of records) start(record, node);
-    }
-    node.querySelectorAll?.(selectorString).forEach((el) => {
-      for (const record of records) start(record, el);
-    });
+  function scan(node, targets, selector) {
+    if (!canScan(node) || !selector) return;
+    const visit = (el) => {
+      for (const record of targets) start(record, el);
+    };
+    if (node.nodeType === ELEMENT_NODE) visit(node);
+    node.querySelectorAll(selector).forEach(visit);
   }
 
   function sweepDisconnected() {
@@ -137,11 +106,16 @@ function createRegistry(root) {
     }
   }
 
+  function updateDiscovery() {
+    // Named records all share `[data-enhance]`; the Set collapses them.
+    discovery = [...new Set(Array.from(records, (record) => record.query))].join(",");
+  }
+
   const observer = new MutationObserver((mutationRecords) => {
     let hasRemoval = false;
     for (const mutationRecord of mutationRecords) {
       for (const node of mutationRecord.addedNodes) {
-        scan(node);
+        scan(node, records, discovery);
       }
       if (mutationRecord.removedNodes.length > 0) {
         hasRemoval = true;
@@ -151,59 +125,50 @@ function createRegistry(root) {
   });
 
   return {
-    add(enhancers) {
-      const selectors = Object.keys(enhancers).filter(isValidSelector);
-      if (!selectors.length) return null;
-      const validEnhancers = Object.fromEntries(
-        selectors.map((selector) => [selector, enhancers[selector]]),
-      );
-
-      const record = {
-        disconnected: false,
-        enhancers: validEnhancers,
-        instances: new Map(),
-        selectors,
-        selectorString: selectors.join(","),
-      };
+    add(spec) {
+      const record = { ...spec, disconnected: false, instances: new Map() };
       records.add(record);
       // Observe only once there is a record to act on; an enhance() call with
       // no valid selector must not leave an idle observer behind.
       if (records.size === 1) observer.observe(root, { childList: true, subtree: true });
-      updateSelectorString();
-      scanFor(record, root);
-      return record;
-    },
-    refresh(record, node) {
-      if (record.disconnected) return;
-      scanFor(record, node);
-    },
-    remove(record) {
-      if (record.disconnected) return;
-      record.disconnected = true;
-      for (const el of Array.from(record.instances.keys())) {
-        stop(record, el);
-      }
-      records.delete(record);
-      updateSelectorString();
-      if (records.size === 0) {
-        observer.disconnect();
-        registries.delete(root);
-      }
+      updateDiscovery();
+      scan(root, [record], record.query);
+
+      return {
+        refresh(node) {
+          if (!record.disconnected) scan(node, [record], record.query);
+        },
+        disconnect() {
+          if (record.disconnected) return;
+          record.disconnected = true;
+          for (const el of Array.from(record.instances.keys())) stop(record, el);
+          records.delete(record);
+          updateDiscovery();
+          if (records.size) return;
+          observer.disconnect();
+          registries.delete(root);
+        },
+      };
     },
   };
 }
 
-const ENHANCEMENT_NAME = /^[a-z][a-z0-9-]*$/;
+function registryFor(root) {
+  let registry = registries.get(root);
+  if (!registry) {
+    registry = createRegistry(root);
+    registries.set(root, registry);
+  }
+  return registry;
+}
 
-export function enhancementSelector(name) {
+// The name check is what keeps the interpolation safe: a quote or space in a
+// name would otherwise break or widen the selector.
+function enhancementSelector(name) {
   if (!ENHANCEMENT_NAME.test(name)) {
     throw new TypeError(`Invalid enhancement name: ${name}`);
   }
   return `[data-enhance~="${name}"]`;
-}
-
-export function hasEnhancement(el, name) {
-  return el.matches(enhancementSelector(name));
 }
 
 /**
@@ -216,12 +181,12 @@ export function hasEnhancement(el, name) {
 export function applyEnhancement(name, selector, root) {
   if (typeof document === "undefined") return [];
 
-  enhancementSelector(name);
+  const enhanced = enhancementSelector(name);
   root ??= document.documentElement;
   const elements = [...root.querySelectorAll(selector)];
 
   for (const el of elements) {
-    if (hasEnhancement(el, name)) continue;
+    if (el.matches(enhanced)) continue;
     const tokens = el.getAttribute("data-enhance");
     el.setAttribute("data-enhance", tokens ? `${tokens} ${name}` : name);
   }
@@ -240,7 +205,7 @@ export function applyEnhancement(name, selector, root) {
 export function registerEnhancement(name, init, root) {
   if (typeof document === "undefined") return noopRuntime();
 
-  enhancementSelector(name);
+  const selector = enhancementSelector(name);
   if (typeof init !== "function") {
     throw new TypeError("registerEnhancement() requires a function init.");
   }
@@ -255,7 +220,11 @@ export function registerEnhancement(name, init, root) {
     throw new Error(`Enhancement "${name}" is already registered on this root.`);
   }
 
-  const runtime = enhance({ [enhancementSelector(name)]: init }, root);
+  const runtime = registryFor(root).add({
+    keys: [selector],
+    enhancers: { [selector]: init },
+    query: "[data-enhance]",
+  });
   names.set(name, runtime);
 
   return {
@@ -268,34 +237,26 @@ export function registerEnhancement(name, init, root) {
   };
 }
 
-function registryFor(root) {
-  let registry = registries.get(root);
-  if (!registry) {
-    registry = createRegistry(root);
-    registries.set(root, registry);
-  }
-  return registry;
-}
-
 /**
  * @param {Record<string, (el: Element) => (() => void) | void>} enhancers
  * @param {Document | Element | DocumentFragment} [root]
  * @returns {{ refresh: (node: Node) => void, disconnect: () => void }}
  */
 export default function enhance(enhancers, root) {
-  if (typeof document === "undefined") {
-    return noopRuntime();
-  }
+  if (typeof document === "undefined") return noopRuntime();
 
   root ??= document.documentElement;
-  const registry = registryFor(root);
-  const record = registry.add(enhancers);
-  if (!record) return noopRuntime();
+  const keys = Object.keys(enhancers).filter((selector) => {
+    try {
+      root.querySelector?.(selector);
+      if (root.nodeType === ELEMENT_NODE) root.matches(selector);
+      return true;
+    } catch (error) {
+      console.error(`Invalid enhancer selector "${selector}"`, error);
+      return false;
+    }
+  });
+  if (!keys.length) return noopRuntime();
 
-  return {
-    refresh: (node) => registry.refresh(record, node),
-    disconnect: () => {
-      registry.remove(record);
-    },
-  };
+  return registryFor(root).add({ keys, enhancers, query: keys.join(",") });
 }
