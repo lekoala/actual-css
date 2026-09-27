@@ -14,7 +14,7 @@ package's `--rt-*` tokens. No adapter, no compatibility layer.
 
 ## Theme bridge
 
-The template loads the package JS and CSS from a CDN (`@0.1` caret range) and
+The template loads the package JS and CSS from a CDN (`@0.2` caret range) and
 declares one editor per field — Actual never builds toolbar buttons or calls
 into the editing engine:
 
@@ -43,6 +43,7 @@ The bridge maps tokens; it does not restyle the editor's internals:
   --rt-bg: var(--surface);
   --rt-fg: var(--text);
   --rt-border: var(--form-invalid-border, var(--control-border, var(--border)));
+  --rt-divider: var(--border);
   --rt-focus: var(--form-invalid-border, var(--focus));
   --rt-toolbar-bg: var(--surface-subtle);
   --rt-button-pressed-bg: var(--state-selected);
@@ -54,12 +55,9 @@ The bridge maps tokens; it does not restyle the editor's internals:
 
 The card in the template documents the full token map of this recipe. The
 suggestion popover is a child of `.rt-shell`, so it inherits the tokens like
-the rest of the editor.
-
-One state escapes the token map: the package's `:hover` rule out-specifies its
-`[aria-pressed="true"]` rule, so hovering an active button paints the hover
-overlay under the pressed foreground. The bridge re-asserts the pressed
-background and foreground on `[aria-pressed="true"]:hover`.
+the rest of the editor. `--rt-border` paints only the field frame, so the
+invalid and hover hooks never reach the toolbar separators or the quote bar,
+which follow `--rt-divider`.
 
 ## Bridge contract
 
