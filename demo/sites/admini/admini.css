@@ -609,16 +609,16 @@
 }
 
 .admini-composer {
-  display: flex;
-  align-items: flex-end;
-  gap: var(--space-20);
-  padding: var(--space-30) var(--space-40);
+  /* Placement only: the surface, textarea and actions come from the shared
+     composer recipe (demo/shared/composer.html documents it). Flush bottom
+     bar: no outer border or radius, just the top divider. */
+  border: 0;
+  border-radius: 0;
   border-block-start: var(--border-width) solid var(--border);
 }
 
-.admini-composer .textarea {
-  flex: 1 1 auto;
-  resize: none;
+.admini-composer .composer-input {
+  min-block-size: 3rem;
 }
 
 @media (min-width: 60rem) {

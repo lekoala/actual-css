@@ -80,6 +80,7 @@
         "overview",
         "controls",
         "combobox",
+        "rich-text",
         "labels",
         "floating-field",
         "states-and-sizes",

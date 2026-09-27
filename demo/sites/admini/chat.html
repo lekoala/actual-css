@@ -11,6 +11,7 @@
   <link rel="stylesheet" href="../../../dist/actual.full.css">
   <link rel="stylesheet" href="../../assets/actual-themes.min.css">
   <link rel="stylesheet" href="admini.css">
+  <link rel="stylesheet" href="../../shared/composer.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.46.0/dist/tabler-icons.min.css">
 </head>
 
@@ -292,14 +293,20 @@
             </div>
           </div>
 
-          <form class="admini-composer" id="composer-form">
-            <textarea class="textarea" id="composer-input" rows="1" placeholder="Write a message…" aria-label="Message"></textarea>
-            <button class="btn neutral ghost" type="button" aria-label="Attach file" data-tooltip="Attach file">
-              <i class="ti ti-paperclip" aria-hidden="true"></i>
-            </button>
-            <button class="btn primary" type="submit" aria-label="Send message" data-tooltip="Send">
-              <i class="ti ti-send" aria-hidden="true"></i>
-            </button>
+          <form class="composer admini-composer" id="composer-form">
+            <textarea class="textarea composer-input" id="composer-input" rows="1" placeholder="Write a message…" aria-label="Message"></textarea>
+            <div class="composer-actions cluster">
+              <div class="cluster">
+                <button class="btn neutral ghost icon-only" type="button" aria-label="Attach file" data-tooltip="Attach file">
+                  <i class="ti ti-paperclip" aria-hidden="true"></i>
+                </button>
+              </div>
+              <div class="cluster">
+                <button class="btn primary icon-only" type="submit" aria-label="Send message" data-tooltip="Send">
+                  <i class="ti ti-send" aria-hidden="true"></i>
+                </button>
+              </div>
+            </div>
           </form>
         </section>
       </main>
@@ -356,6 +363,15 @@
     const composerForm = document.getElementById("composer-form");
     const composerInput = document.getElementById("composer-input");
     const messages = document.getElementById("chat-messages");
+
+    // Enter stays a newline; Ctrl/Cmd+Enter sends. IME sessions never send.
+    composerInput.addEventListener("keydown", (event) => {
+      if (event.key !== "Enter" || event.isComposing) return;
+      if (event.ctrlKey || event.metaKey) {
+        event.preventDefault();
+        composerForm.requestSubmit();
+      }
+    });
 
     composerForm.addEventListener("submit", (e) => {
       e.preventDefault();

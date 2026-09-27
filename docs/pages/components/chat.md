@@ -34,6 +34,11 @@ For a live conversation, put an appropriate live-region or `role="log"` on the
 conversation container according to the product's announcement needs. Do not
 put `role="log"` on individual messages.
 
+For the message input itself, keep a native `<textarea>` inside a surface with
+an actions row — see the [composer template](../../demo/templates/composer.html).
+Formatting needs a hosted editor instead — see the
+[rich-text template](../../demo/templates/rich-text.html).
+
 ## Class reference
 
 | Class                           | Description                                  |

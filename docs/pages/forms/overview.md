@@ -10,6 +10,7 @@
 - `.field-group` and `.choice` provide layout without depending on parent scope.
 - Customizable select is progressive enhancement only — the native select remains the baseline.
 - Searchable selects, tags and autocomplete are a JavaScript widget concern; theme an external combobox with Actual tokens — see the [combobox template](../../demo/templates/combobox.html).
+- Formatted text (bold, lists, links) is a hosted-editor concern; the native textarea stays the baseline and an external engine is themed the same way — see the [rich-text template](../../demo/templates/rich-text.html) and the [composer template](../../demo/templates/composer.html) for the plain-text case.
 
 ## Class reference
 

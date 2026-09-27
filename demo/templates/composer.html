@@ -1,0 +1,317 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Composer - Actual CSS</title>
+  <meta name="description" content="Composer pattern: a native textarea inside an Actual surface with an actions row, attach flyout and Ctrl/Cmd+Enter to send. No rich text, no contenteditable.">
+  <link rel="stylesheet" href="../../dist/actual.full.css">
+  <link rel="stylesheet" href="../assets/actual-themes.min.css">
+  <link rel="stylesheet" href="../shared/composer.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.46.0/dist/tabler-icons.min.css">
+  <script src="../scripts/theme-picker.js"></script>
+  <script src="../../dist/actual.full.js" defer></script>
+  <style>
+    .page {
+      --center-size: 60rem;
+      padding-block: var(--space-50) var(--space-60);
+    }
+
+    .page-header {
+      align-items: flex-start;
+    }
+
+    .page-cards {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--space-50);
+    }
+
+    .page-note {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-20) var(--space-30);
+      align-items: baseline;
+      justify-content: space-between;
+      padding-block-start: var(--space-30);
+      border-block-start: var(--border-width) solid var(--border);
+      color: var(--text-muted);
+      font-size: var(--font-size-sm);
+    }
+
+    .sent-log {
+      margin: 0;
+      padding: var(--space-30);
+      border: var(--border-width) dashed var(--border);
+      border-radius: var(--radius);
+      color: var(--text-muted);
+      font-size: var(--font-size-sm);
+    }
+
+    .sent-log:empty::before {
+      content: "Nothing sent yet — write a note and press Ctrl+Enter.";
+    }
+
+    /* Rich attach menu: icon plus a two-line label. The framework owns the
+       icon slot and the ellipsis single-line default; this recipe opts into
+       wrapping and adds the muted description line. */
+    .attach-menu {
+      --flyout-inline-size: 20rem;
+    }
+
+    .attach-menu .menu-item {
+      align-items: flex-start;
+    }
+
+    .attach-menu .menu-item-icon {
+      padding-block-start: 0.2em;
+    }
+
+    .attach-menu .menu-item-text {
+      white-space: normal;
+    }
+
+    .attach-menu .menu-item-desc {
+      display: block;
+      color: var(--text-muted);
+      font-size: var(--font-size-sm);
+    }
+  </style>
+</head>
+
+<body>
+  <main class="center stack page">
+    <header class="cluster page-header">
+      <hgroup>
+        <p class="overline">Pattern</p>
+        <h1>Composer × Actual CSS</h1>
+        <p class="muted">
+          A native <code>&lt;textarea&gt;</code> inside an Actual surface, with an actions
+          row around it. The textarea stays native — form value, IME, undo, mobile,
+          validation — while the surface owns border, focus, and states.
+          Switch themes: the composer follows the tokens, including
+          <code>material</code>.
+        </p>
+      </hgroup>
+
+      <div class="cluster" style="gap: var(--space-20);">
+        <theme-picker><select class="select sm fit" aria-label="Switch theme"></select></theme-picker>
+        <a class="btn neutral outline sm" href="rich-text.html">
+          Rich-text integration
+        </a>
+      </div>
+    </header>
+
+    <div class="page-cards">
+      <section class="card stack">
+        <header>
+          <hgroup>
+            <h2 style="margin: 0;">Project note</h2>
+            <p class="muted">
+              The product case: a note with templates, dictation and send.
+              <code>Enter</code> stays a newline; sending goes through
+              <code>Ctrl/Cmd+Enter</code> or the send button.
+            </p>
+          </hgroup>
+        </header>
+        <form class="composer" id="note-composer">
+          <textarea
+            class="textarea composer-input"
+            id="note-input"
+            rows="3"
+            placeholder="Add a note…"
+            aria-label="Project note"></textarea>
+          <div class="composer-actions cluster">
+            <div class="cluster">
+              <div class="flyout-trigger">
+                <button
+                  class="btn neutral ghost icon-only"
+                  data-enhance="flyout"
+                  type="button"
+                  aria-haspopup="menu"
+                  aria-expanded="false"
+                  aria-controls="note-add-menu"
+                  id="note-add-trigger"
+                  aria-label="Add"
+                  data-tooltip="Add">
+                  +
+                </button>
+                <menu class="flyout menu attach-menu" role="menu" id="note-add-menu" aria-labelledby="note-add-trigger" hidden>
+                  <li>
+                    <button class="menu-item" type="button" role="menuitem">
+                      <span class="menu-item-icon" aria-hidden="true"><i class="ti ti-file-text"></i></span>
+                      <span class="menu-item-text">Document <span class="menu-item-desc">Import from your computer</span></span>
+                    </button>
+                  </li>
+                  <li>
+                    <button class="menu-item" type="button" role="menuitem">
+                      <span class="menu-item-icon" aria-hidden="true"><i class="ti ti-photo"></i></span>
+                      <span class="menu-item-text">Photo <span class="menu-item-desc">Add from your library</span></span>
+                    </button>
+                  </li>
+                  <li>
+                    <button class="menu-item" type="button" role="menuitem">
+                      <span class="menu-item-icon" aria-hidden="true"><i class="ti ti-template"></i></span>
+                      <span class="menu-item-text">Text template <span class="menu-item-desc">Insert a reusable snippet</span></span>
+                    </button>
+                  </li>
+                  <li>
+                    <button class="menu-item" type="button" role="menuitem">
+                      <span class="menu-item-icon" aria-hidden="true"><i class="ti ti-list-check"></i></span>
+                      <span class="menu-item-text">Checklist <span class="menu-item-desc">Track steps inline</span></span>
+                    </button>
+                  </li>
+                </menu>
+              </div>
+              <button class="btn neutral ghost sm" type="button">Template</button>
+            </div>
+            <div class="cluster">
+              <button class="btn neutral ghost sm" type="button">Dictate</button>
+              <button class="btn primary icon-only" type="submit" aria-label="Send note" data-tooltip="Send (Ctrl+Enter)">
+                ↑
+              </button>
+            </div>
+          </div>
+        </form>
+        <p class="sent-log" id="note-log" role="status" aria-live="polite"></p>
+      </section>
+
+      <section class="card stack">
+        <header>
+          <hgroup>
+            <h2 style="margin: 0;">Compact chat input</h2>
+            <p class="muted">
+              The same recipe tuned down: one row, smaller floor. The admini chat
+              page uses this composition.
+            </p>
+          </hgroup>
+        </header>
+        <form class="composer" id="chat-composer">
+          <textarea
+            class="textarea composer-input"
+            id="chat-input"
+            rows="1"
+            style="min-block-size: 3rem;"
+            placeholder="Write a message…"
+            aria-label="Message"></textarea>
+          <div class="composer-actions cluster">
+            <div class="cluster">
+              <button class="btn neutral ghost icon-only" type="button" aria-label="Attach file" data-tooltip="Attach file">
+                +
+              </button>
+            </div>
+            <div class="cluster">
+              <button class="btn primary icon-only" type="submit" aria-label="Send message" data-tooltip="Send (Ctrl+Enter)">
+                ↑
+              </button>
+            </div>
+          </div>
+        </form>
+        <p class="sent-log" id="chat-log" role="status" aria-live="polite"></p>
+      </section>
+
+      <section class="card stack">
+        <header>
+          <hgroup>
+            <h2 style="margin: 0;">States</h2>
+            <p class="muted">
+              The surface reflects the control: <code>aria-invalid</code> turns the
+              border danger through <code>--form-invalid-border</code>, and a disabled
+              control quiets the whole surface.
+            </p>
+          </hgroup>
+        </header>
+        <div class="composer">
+          <textarea
+            class="textarea composer-input"
+            rows="2"
+            aria-label="Invalid note"
+            aria-invalid="true">This note needs review before sending.</textarea>
+          <div class="composer-actions cluster">
+            <div class="cluster">
+              <button class="btn neutral ghost icon-only" type="button" aria-label="Add" tabindex="-1">+</button>
+            </div>
+            <div class="cluster">
+              <button class="btn primary icon-only" type="button" aria-label="Send" tabindex="-1">↑</button>
+            </div>
+          </div>
+        </div>
+        <div class="composer">
+          <textarea
+            class="textarea composer-input"
+            rows="2"
+            aria-label="Disabled note"
+            disabled>Sending is unavailable while offline.</textarea>
+          <div class="composer-actions cluster">
+            <div class="cluster">
+              <button class="btn neutral ghost icon-only" type="button" aria-label="Add" disabled>+</button>
+            </div>
+            <div class="cluster">
+              <button class="btn primary icon-only" type="button" aria-label="Send" disabled>↑</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="card stack">
+        <header>
+          <hgroup>
+            <h2 style="margin: 0;">Enter contract</h2>
+            <p class="muted">
+              The only JavaScript the composer needs. Plain <code>Enter</code> is a
+              newline; composition sessions (IME) never send.
+            </p>
+          </hgroup>
+        </header>
+        <pre><code>input.addEventListener("keydown", (event) =&gt; {
+  if (event.key !== "Enter" || event.isComposing) return;
+  if (event.ctrlKey || event.metaKey) {
+    event.preventDefault();
+    form.requestSubmit();
+  }
+  // Plain Enter falls through: the textarea inserts a newline.
+});</code></pre>
+      </section>
+    </div>
+
+    <footer class="page-note">
+      <span>
+        Recipe: <code>demo/shared/composer.css</code> — one copy, shared with the
+        admini chat page.
+      </span>
+      <span>Still plain text? Keep the textarea. Need a document? See the rich-text integration.</span>
+    </footer>
+  </main>
+
+  <script>
+    (() => {
+      const wire = (formId, inputId, logId) => {
+        const form = document.getElementById(formId);
+        const input = document.getElementById(inputId);
+        const log = document.getElementById(logId);
+
+        input.addEventListener("keydown", (event) => {
+          if (event.key !== "Enter" || event.isComposing) return;
+          if (event.ctrlKey || event.metaKey) {
+            event.preventDefault();
+            form.requestSubmit();
+          }
+        });
+
+        form.addEventListener("submit", (event) => {
+          event.preventDefault();
+          const value = input.value.trim();
+          if (!value) return;
+          log.textContent = `Sent: ${value}`;
+          input.value = "";
+        });
+      };
+
+      wire("note-composer", "note-input", "note-log");
+      wire("chat-composer", "chat-input", "chat-log");
+    })();
+  </script>
+</body>
+
+</html>

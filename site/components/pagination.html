@@ -147,6 +147,7 @@
         <li><a class="nav-link" href="../forms/overview.html">Forms</a></li>
         <li><a class="nav-link" href="../forms/controls.html">Controls</a></li>
         <li><a class="nav-link" href="../forms/combobox.html">Combobox</a></li>
+        <li><a class="nav-link" href="../forms/rich-text.html">Rich text</a></li>
         <li><a class="nav-link" href="../forms/labels.html">Labels</a></li>
         <li><a class="nav-link" href="../forms/floating-field.html">Floating labels</a></li>
         <li><a class="nav-link" href="../forms/states-and-sizes.html">States And Sizes</a></li>
@@ -223,8 +224,8 @@
 <li>Use <code>aria-current=&quot;page&quot;</code> for the current page.</li>
 <li>Put <code>.sm</code> or <code>.lg</code> on <code>.pagination</code> to scale its controls.</li>
 <li>Numeric links may use <code>aria-label=&quot;Page N&quot;</code> for clearer screen reader output.</li>
-<li>Prefer text labels for Previous and Next. Icon-only controls need an accessible name.</li>
-<li>Page links can compose with <code>.btn</code> for button-like hit targets.</li>
+<li>Prefer text labels for Previous and Next; a chevron icon may accompany them. Icon-only controls need an accessible name.</li>
+<li>Compose page links with <code>.btn.ghost</code>; <code>aria-current=&quot;page&quot;</code> fills the current one, so it is the only boxed item.</li>
 <li>Arrows, page numbers, and truncation ellipses share one geometric system: every item gets the same minimum footprint, and wider content (100, 1000, text labels) grows past it naturally.</li>
 <li>Truncated ranges are plain text with <code>.muted</code> and <code>aria-hidden=&quot;true&quot;</code>, not <code>.btn</code> — they are decorative, not actionable.</li>
 </ul>
@@ -244,24 +245,24 @@
   <div class="docs-preview">
 <nav aria-label="Pagination">
   <ol class="pagination sm">
-    <li><a href="?page=2" class="btn outline" rel="prev">Previous</a></li>
-    <li><a href="?page=1" class="btn outline" aria-label="Page 1">1</a></li>
-    <li><a href="?page=2" class="btn outline" aria-label="Page 2">2</a></li>
-    <li><a href="?page=3" class="btn" aria-current="page" aria-label="Page 3">3</a></li>
-    <li><a href="?page=4" class="btn outline" aria-label="Page 4">4</a></li>
-    <li><a href="?page=5" class="btn outline" rel="next">Next</a></li>
+    <li><a href="?page=2" class="btn ghost" rel="prev"><i class="ti ti-chevron-left" aria-hidden="true"></i> Previous</a></li>
+    <li><a href="?page=1" class="btn ghost" aria-label="Page 1">1</a></li>
+    <li><a href="?page=2" class="btn ghost" aria-label="Page 2">2</a></li>
+    <li><a href="?page=3" class="btn ghost" aria-current="page" aria-label="Page 3">3</a></li>
+    <li><a href="?page=4" class="btn ghost" aria-label="Page 4">4</a></li>
+    <li><a href="?page=5" class="btn ghost" rel="next">Next <i class="ti ti-chevron-right" aria-hidden="true"></i></a></li>
   </ol>
 </nav>
   </div>
   <div class="docs-code">
     <pre><code class="language-html">&lt;nav aria-label=&quot;Pagination&quot;&gt;
   &lt;ol class=&quot;pagination sm&quot;&gt;
-    &lt;li&gt;&lt;a href=&quot;?page=2&quot; class=&quot;btn outline&quot; rel=&quot;prev&quot;&gt;Previous&lt;/a&gt;&lt;/li&gt;
-    &lt;li&gt;&lt;a href=&quot;?page=1&quot; class=&quot;btn outline&quot; aria-label=&quot;Page 1&quot;&gt;1&lt;/a&gt;&lt;/li&gt;
-    &lt;li&gt;&lt;a href=&quot;?page=2&quot; class=&quot;btn outline&quot; aria-label=&quot;Page 2&quot;&gt;2&lt;/a&gt;&lt;/li&gt;
-    &lt;li&gt;&lt;a href=&quot;?page=3&quot; class=&quot;btn&quot; aria-current=&quot;page&quot; aria-label=&quot;Page 3&quot;&gt;3&lt;/a&gt;&lt;/li&gt;
-    &lt;li&gt;&lt;a href=&quot;?page=4&quot; class=&quot;btn outline&quot; aria-label=&quot;Page 4&quot;&gt;4&lt;/a&gt;&lt;/li&gt;
-    &lt;li&gt;&lt;a href=&quot;?page=5&quot; class=&quot;btn outline&quot; rel=&quot;next&quot;&gt;Next&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;?page=2&quot; class=&quot;btn ghost&quot; rel=&quot;prev&quot;&gt;&lt;i class=&quot;ti ti-chevron-left&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt; Previous&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;?page=1&quot; class=&quot;btn ghost&quot; aria-label=&quot;Page 1&quot;&gt;1&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;?page=2&quot; class=&quot;btn ghost&quot; aria-label=&quot;Page 2&quot;&gt;2&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;?page=3&quot; class=&quot;btn ghost&quot; aria-current=&quot;page&quot; aria-label=&quot;Page 3&quot;&gt;3&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;?page=4&quot; class=&quot;btn ghost&quot; aria-label=&quot;Page 4&quot;&gt;4&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;?page=5&quot; class=&quot;btn ghost&quot; rel=&quot;next&quot;&gt;Next &lt;i class=&quot;ti ti-chevron-right&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;&lt;/a&gt;&lt;/li&gt;
   &lt;/ol&gt;
 &lt;/nav&gt;</code></pre>
   </div>
@@ -275,30 +276,30 @@ buttons — they are decorative, not actionable.</p>
   <div class="docs-preview">
 <nav aria-label="Pagination">
   <ol class="pagination sm">
-    <li><a href="?page=1" class="btn outline" rel="prev">Previous</a></li>
-    <li><a href="?page=1" class="btn outline" aria-label="Page 1">1</a></li>
+    <li><a href="?page=7" class="btn ghost" rel="prev"><i class="ti ti-chevron-left" aria-hidden="true"></i> Previous</a></li>
+    <li><a href="?page=1" class="btn ghost" aria-label="Page 1">1</a></li>
     <li><span class="muted" aria-hidden="true">…</span></li>
-    <li><a href="?page=7" class="btn outline" aria-label="Page 7">7</a></li>
-    <li><a href="?page=8" class="btn" aria-current="page" aria-label="Page 8">8</a></li>
-    <li><a href="?page=9" class="btn outline" aria-label="Page 9">9</a></li>
+    <li><a href="?page=7" class="btn ghost" aria-label="Page 7">7</a></li>
+    <li><a href="?page=8" class="btn ghost" aria-current="page" aria-label="Page 8">8</a></li>
+    <li><a href="?page=9" class="btn ghost" aria-label="Page 9">9</a></li>
     <li><span class="muted" aria-hidden="true">…</span></li>
-    <li><a href="?page=20" class="btn outline" aria-label="Page 20">20</a></li>
-    <li><a href="?page=9" class="btn outline" rel="next">Next</a></li>
+    <li><a href="?page=20" class="btn ghost" aria-label="Page 20">20</a></li>
+    <li><a href="?page=9" class="btn ghost" rel="next">Next <i class="ti ti-chevron-right" aria-hidden="true"></i></a></li>
   </ol>
 </nav>
   </div>
   <div class="docs-code">
     <pre><code class="language-html">&lt;nav aria-label=&quot;Pagination&quot;&gt;
   &lt;ol class=&quot;pagination sm&quot;&gt;
-    &lt;li&gt;&lt;a href=&quot;?page=1&quot; class=&quot;btn outline&quot; rel=&quot;prev&quot;&gt;Previous&lt;/a&gt;&lt;/li&gt;
-    &lt;li&gt;&lt;a href=&quot;?page=1&quot; class=&quot;btn outline&quot; aria-label=&quot;Page 1&quot;&gt;1&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;?page=7&quot; class=&quot;btn ghost&quot; rel=&quot;prev&quot;&gt;&lt;i class=&quot;ti ti-chevron-left&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt; Previous&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;?page=1&quot; class=&quot;btn ghost&quot; aria-label=&quot;Page 1&quot;&gt;1&lt;/a&gt;&lt;/li&gt;
     &lt;li&gt;&lt;span class=&quot;muted&quot; aria-hidden=&quot;true&quot;&gt;…&lt;/span&gt;&lt;/li&gt;
-    &lt;li&gt;&lt;a href=&quot;?page=7&quot; class=&quot;btn outline&quot; aria-label=&quot;Page 7&quot;&gt;7&lt;/a&gt;&lt;/li&gt;
-    &lt;li&gt;&lt;a href=&quot;?page=8&quot; class=&quot;btn&quot; aria-current=&quot;page&quot; aria-label=&quot;Page 8&quot;&gt;8&lt;/a&gt;&lt;/li&gt;
-    &lt;li&gt;&lt;a href=&quot;?page=9&quot; class=&quot;btn outline&quot; aria-label=&quot;Page 9&quot;&gt;9&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;?page=7&quot; class=&quot;btn ghost&quot; aria-label=&quot;Page 7&quot;&gt;7&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;?page=8&quot; class=&quot;btn ghost&quot; aria-current=&quot;page&quot; aria-label=&quot;Page 8&quot;&gt;8&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;?page=9&quot; class=&quot;btn ghost&quot; aria-label=&quot;Page 9&quot;&gt;9&lt;/a&gt;&lt;/li&gt;
     &lt;li&gt;&lt;span class=&quot;muted&quot; aria-hidden=&quot;true&quot;&gt;…&lt;/span&gt;&lt;/li&gt;
-    &lt;li&gt;&lt;a href=&quot;?page=20&quot; class=&quot;btn outline&quot; aria-label=&quot;Page 20&quot;&gt;20&lt;/a&gt;&lt;/li&gt;
-    &lt;li&gt;&lt;a href=&quot;?page=9&quot; class=&quot;btn outline&quot; rel=&quot;next&quot;&gt;Next&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;?page=20&quot; class=&quot;btn ghost&quot; aria-label=&quot;Page 20&quot;&gt;20&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;?page=9&quot; class=&quot;btn ghost&quot; rel=&quot;next&quot;&gt;Next &lt;i class=&quot;ti ti-chevron-right&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;&lt;/a&gt;&lt;/li&gt;
   &lt;/ol&gt;
 &lt;/nav&gt;</code></pre>
   </div>
@@ -413,6 +414,7 @@ buttons — they are decorative, not actionable.</p>
         <li><a class="nav-link" href="../forms/overview.html">Forms</a></li>
         <li><a class="nav-link" href="../forms/controls.html">Controls</a></li>
         <li><a class="nav-link" href="../forms/combobox.html">Combobox</a></li>
+        <li><a class="nav-link" href="../forms/rich-text.html">Rich text</a></li>
         <li><a class="nav-link" href="../forms/labels.html">Labels</a></li>
         <li><a class="nav-link" href="../forms/floating-field.html">Floating labels</a></li>
         <li><a class="nav-link" href="../forms/states-and-sizes.html">States And Sizes</a></li>
