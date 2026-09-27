@@ -154,11 +154,10 @@ function setupNav(nav) {
     measure();
   }
 
-  // The scroll root (custom container or the document viewport) is resolved
-  // once at connect and is stable for the lifetime of the connection; measure
-  // still re-reads the current root element so a replaced *element* under a
-  // stable container is handled, but swapping the container itself is out of
-  // contract (re-inject the nav or call refreshScrollspy after such a move).
+  // The scroll root is resolved once when the enhancement connects, and the
+  // scroll listener stays on it. Changing data-scrollspy-root or replacing its
+  // target is outside the connection contract; recreate the enhancement with
+  // the new markup. refreshScrollspy() only rebuilds the link->section map.
   const scrollTarget = rootFor(nav) ?? nav.ownerDocument.defaultView;
   scrollTarget?.addEventListener("scroll", () => schedule(), {
     passive: true,
