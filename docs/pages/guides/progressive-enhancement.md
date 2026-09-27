@@ -92,6 +92,7 @@ example:
 | `actual-css/js/filter`             | Input value filtering on `data-filter`                      |
 | `actual-css/js/mask`               | Input masks on `data-mask`                                  |
 | `actual-css/js/password`           | Password reveal toggle                                      |
+| `actual-css/js/range`              | Range fill and named values (token `range`)                 |
 | `actual-css/js/validation`         | Form validation (token `validation`)                        |
 | `actual-css/js/status`             | Singleton status bar on `[data-status][role="status"]`      |
 | `actual-css/js/enhancement-loader` | Declared enhancement manifests                              |
@@ -108,11 +109,12 @@ needed.
 
 The JS is designed to run on its own, without Actual's stylesheet.
 
-- **`data-enhance` tokens** register root-controller behaviors. The runtime
-  discovers components through `data-enhance="tabs"`, `data-enhance="flyout"`,
-  `data-enhance="scrollspy"`, and `data-enhance="validation"` — no Actual
-  presentation class needed. Self-describing attributes (`data-mask`,
-  `data-tooltip`, `data-context-menu`) stay framework-neutral by construction.
+- **`data-enhance` tokens** register named behaviors. The runtime discovers
+  components through `data-enhance="tabs"`, `data-enhance="flyout"`,
+  `data-enhance="range"`, `data-enhance="scrollspy"`, and
+  `data-enhance="validation"` — no Actual presentation class needed.
+  Self-describing attributes (`data-mask`, `data-tooltip`,
+  `data-context-menu`) stay framework-neutral by construction.
 - **`selectors.js`** lists the state classes the runtime *writes* (`is-open`,
   `was-validated`, …). Edit this file (or alias it in a bundler) to
   match a different CSS framework's state vocabulary. It is a read-side-only

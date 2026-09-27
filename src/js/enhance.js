@@ -22,7 +22,7 @@
  * Enhancement tokens — the data-enhance layer on top of enhance().
  *
  * enhancementSelector("tabs") returns [data-enhance~="tabs"], the generic
- * opt-in for root-controller behaviors. registerEnhancement() owns a name per
+ * opt-in for named behaviors. registerEnhancement() owns a name per
  * root — a second registration for the same name on the same root throws, and
  * disconnect() releases ownership. Third-party behaviors register exactly
  * like built-in ones.

@@ -4,7 +4,12 @@
  * No new API — this locks the shared --control-size scale in place.
  */
 import { expect, test } from "bun:test";
-import { browserAvailable, fixtureUrl, withBrowserPage } from "../../scripts/utils/browser.js";
+import {
+  browserAvailable,
+  fixtureUrl,
+  waitForBrowser,
+  withBrowserPage,
+} from "../../scripts/utils/browser.js";
 
 const FIXTURE = "tests/browser/control-geometry.html";
 const TIMEOUT = 60_000;
@@ -50,6 +55,12 @@ it("sm and lg rows keep input and button heights together", async () => {
 
 it("spinner follows its context instead of imposing a size", async () => {
   await withBrowserPage(fixtureUrl(FIXTURE), async (view) => {
+    // Stylesheet-applied gate: an unstyled span measures 0 and would fail
+    // the 1em assertion before first paint.
+    await waitForBrowser(
+      view,
+      `getComputedStyle(document.getElementById("g-spinner")).borderTopStyle === "solid"`,
+    );
     const m = await measure(view, ["g-input", "g-btn", "g-btn-sm", "g-btn-lg"]);
     const s = await view.evaluate(`(() => {
       const sizes = {};
@@ -57,16 +68,19 @@ it("spinner follows its context instead of imposing a size", async () => {
         void key;
         void id;
       }
-      const base = document.getElementById("g-spinner").getBoundingClientRect();
-      const inBtn = document.querySelector("#g-busy .spinner").getBoundingClientRect();
-      const inSm = document.querySelector("#g-busy-sm .spinner").getBoundingClientRect();
-      const inLg = document.querySelector("#g-busy-lg .spinner").getBoundingClientRect();
+      // Layout boxes, not visual boxes: getBoundingClientRect() includes the
+      // infinite rotation transform, so its height oscillates with the sample
+      // phase (up to s√2). offsetHeight is the geometry this contract covers.
+      const base = document.getElementById("g-spinner").offsetHeight;
+      const inBtn = document.querySelector("#g-busy .spinner").offsetHeight;
+      const inSm = document.querySelector("#g-busy-sm .spinner").offsetHeight;
+      const inLg = document.querySelector("#g-busy-lg .spinner").offsetHeight;
       const fs = (el) => Number.parseFloat(getComputedStyle(el).fontSize);
       return {
-        base: base.height,
-        inBtn: inBtn.height,
-        inSm: inSm.height,
-        inLg: inLg.height,
+        base,
+        inBtn,
+        inSm,
+        inLg,
         baseFs: fs(document.getElementById("g-spinner")),
         btnFs: fs(document.getElementById("g-busy")),
       };

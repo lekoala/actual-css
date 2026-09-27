@@ -4,6 +4,7 @@
 
 ### Added
 
+- `.range` moves to a `1.125rem` thumb on a `0.625rem` track with a `data-enhance="range"` fill (`--range-progress`), named `datalist` values (`aria-valuetext` plus `output` sync), and `--flyout-pad` gives rich flyout panels dialog air.
 - `tests/browser/control-geometry.test.js` locks the shared control block geometry: input, select, addon, and buttons (including busy and icon-only) share one height per size, and the spinner follows its context at `1em`.
 
 ### Fixed

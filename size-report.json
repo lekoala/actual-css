@@ -1,17 +1,17 @@
 {
-  "totalRaw": 328590,
+  "totalRaw": 330657,
   "core": {
     "minified": 11686,
     "brotli": 2692
   },
   "full": {
-    "minified": 127273,
-    "brotli": 18278
+    "minified": 128070,
+    "brotli": 18359
   },
   "js": {
     "full": {
-      "bytes": 58564,
-      "brotli": 17067
+      "bytes": 60102,
+      "brotli": 17457
     }
   },
   "fileCount": 112,
@@ -61,16 +61,20 @@
       "raw": 6976
     },
     {
+      "file": "forms/range.css",
+      "raw": 5604
+    },
+    {
       "file": "components/avatar.css",
       "raw": 5554
     },
     {
-      "file": "effects/aura.css",
-      "raw": 5442
+      "file": "components/flyout.css",
+      "raw": 5553
     },
     {
-      "file": "components/flyout.css",
-      "raw": 5370
+      "file": "effects/aura.css",
+      "raw": 5442
     },
     {
       "file": "typography/prose.css",
@@ -141,10 +145,6 @@
       "raw": 3857
     },
     {
-      "file": "forms/range.css",
-      "raw": 3751
-    },
-    {
       "file": "components/tab.css",
       "raw": 3671
     },
@@ -161,12 +161,12 @@
       "raw": 3563
     },
     {
-      "file": "components/status-bar.css",
-      "raw": 3221
+      "file": "components/rating.css",
+      "raw": 3249
     },
     {
-      "file": "components/rating.css",
-      "raw": 3218
+      "file": "components/status-bar.css",
+      "raw": 3221
     },
     {
       "file": "components/close.css",
