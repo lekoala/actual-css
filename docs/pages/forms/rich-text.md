@@ -56,6 +56,11 @@ The card in the template documents the full token map of this recipe. The
 suggestion popover is a child of `.rt-shell`, so it inherits the tokens like
 the rest of the editor.
 
+One state escapes the token map: the package's `:hover` rule out-specifies its
+`[aria-pressed="true"]` rule, so hovering an active button paints the hover
+overlay under the pressed foreground. The bridge re-asserts the pressed
+background and foreground on `[aria-pressed="true"]:hover`.
+
 ## Bridge contract
 
 `@lekoala/rich-text` owns the editor UI semantics — progressive enhancement,
