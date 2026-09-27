@@ -1,0 +1,102 @@
+/*
+ * Composer recipe — shared by the composer template and the admini demo.
+ *
+ * Canonical source: demo/templates/composer.html documents and exercises it;
+ * this file is the single copy both pages load, so the two cannot diverge.
+ * Anything product-specific (placement, page rhythm) stays in the page's own
+ * stylesheet — here is only the surface + textarea + actions composition.
+ *
+ * The textarea stays a native control: form value, IME, undo, mobile,
+ * validation. The surface takes over everything the inner control gives up
+ * (border, background, hover, focus, invalid, disabled) through the public
+ * --control-* hooks. Neutralizing the inner control needs one specificity
+ * step above the core state selectors (its :hover rule counts :not() as a
+ * class), still hook-only, and this file loads last so ties stay ours.
+ */
+
+.composer {
+  display: grid;
+  border: var(--border-width) solid var(--form-invalid-border, var(--border));
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  transition:
+    border-color var(--duration),
+    box-shadow var(--duration),
+    background-color var(--duration);
+}
+
+/* The surface owns the hover border the inner control no longer paints. */
+.composer:hover:has(.composer-input:not(:disabled)) {
+  border-color: var(--form-invalid-border, var(--control-hover-border, var(--text-subtle)));
+}
+
+/* The surface reflects keyboard focus anywhere inside — textarea or action
+   buttons — inset like .input. Inner controls keep their own focus rendering;
+   the block owns the visible zone, as with a date-picker composite. */
+.composer:has(:focus-visible) {
+  outline: var(--focus-ring-width) solid var(--form-invalid-border, var(--focus));
+  outline-offset: calc(var(--focus-ring-width) * -1);
+  box-shadow: none;
+}
+
+/* Invalid lifts the hook to the surface — custom properties inherit downward,
+   so a hook set on the control alone would never reach the block (same reason
+   .choice-card re-owns it). All three invalid routes converge, mirroring
+   validation.css. */
+@supports selector(:has(*)) {
+  .composer:has(.composer-input[aria-invalid="true"]),
+  .needs-validation.was-validated .composer:has(.composer-input:invalid),
+  .needs-validation .composer:has(.composer-input:user-invalid) {
+    --form-invalid-border: var(--danger);
+  }
+}
+
+/* …while the inner control stays transparent: with the hook lifted, its own
+   border would repaint danger (the stray divider). Ties the was-validated
+   route by order — this file loads last. */
+.composer > .composer-input:is([aria-invalid="true"], :invalid) {
+  --form-invalid-border: transparent;
+}
+
+/* Disabled follows the control contract: subtle surface, no pointer. */
+.composer:has(.composer-input:disabled) {
+  background: var(--surface-subtle);
+  color: var(--state-disabled);
+}
+
+.composer .composer-input {
+  --control-border: transparent;
+  --control-bg: transparent;
+
+  min-block-size: 6rem;
+  max-block-size: 18rem;
+  padding-block: var(--space-30);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  resize: none;
+
+  /* Baseline 2026: the textarea grows with its content. Without support it
+     simply keeps a fixed height — no fallback needed. */
+  field-sizing: content;
+}
+
+/* Core's :hover rule counts :not() as a class and would flip --control-border
+   back on textarea hover, repainting an inner box with its own divider. This
+   keeps the inner control transparent so only the surface speaks. */
+.composer > .composer-input:hover:not(:disabled) {
+  --control-border: transparent;
+}
+
+/* Wins the specificity tie against the core :focus-visible rule (same order
+   position would not be enough once themes load first); clears the control's
+   own ring and the Material filled underline so only the surface speaks. */
+.composer > .composer-input:focus-visible:not(:disabled) {
+  outline: none;
+  box-shadow: none;
+}
+
+.composer-actions {
+  --cluster-justify: space-between;
+
+  align-items: center;
+  padding: var(--space-20) var(--space-30);
+}

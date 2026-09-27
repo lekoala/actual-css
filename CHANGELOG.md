@@ -34,6 +34,7 @@
 - Badge vs choice chip vs removable tag vocabulary: a badge is information (non-interactive), `choice-card.chip` is a selectable label (never nest a `.close` inside it), and removable tags belong to the widget that produced them.
 - Combobox: a "Bridge contract" section names what Actual owns (tokens, focus, invalid, `.join`, contrast) versus the widget (behavior, multi-value, i18n), and keeps the bridge CSS in docs/demo.
 - Tabs: the `.tabs` strip / `.tab` trigger pair is documented as the container/item convention, with the `tab` module versus `tabs` token split stated.
+- Pagination: items are documented as `.btn.ghost` with chevrons on Previous/Next, so `aria-current="page"` is the only filled item.
 
 ## [0.10.0] - 2026-09-25
 

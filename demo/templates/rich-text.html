@@ -1,0 +1,494 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Rich text - Actual CSS</title>
+  <meta name="description" content="Squire loaded from CDN and themed with Actual CSS tokens: the editor owns the document, Actual owns the toolbar, surface, focus and states. The native textarea stays the baseline.">
+  <link rel="stylesheet" href="../../dist/actual.full.css">
+  <link rel="stylesheet" href="../assets/actual-themes.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.46.0/dist/tabler-icons.min.css">
+  <script src="../scripts/theme-picker.js"></script>
+  <style>
+    .page {
+      --center-size: 60rem;
+      padding-block: var(--space-50) var(--space-60);
+    }
+
+    .page-header {
+      align-items: flex-start;
+    }
+
+    .page-cards {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--space-50);
+    }
+
+    .page-note {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-20) var(--space-30);
+      align-items: baseline;
+      justify-content: space-between;
+      padding-block-start: var(--space-30);
+      border-block-start: var(--border-width) solid var(--border);
+      color: var(--text-muted);
+      font-size: var(--font-size-sm);
+    }
+
+    .page-note code {
+      color: var(--text);
+    }
+
+    /* ================================================================== */
+    /* THEME BRIDGE — the whole skin in one block                          */
+    /*                                                                     */
+    /* Actual CSS provides the visual language, Squire the behaviour.      */
+    /* No adapter package, no compatibility layer: shared CSS contracts    */
+    /* on top of the framework tokens.                                     */
+    /* ================================================================== */
+
+    /* 1. Surface — one recipe, same as .input/.textarea/.select */
+    .actual-richtext .rich-editor {
+      --control-border: var(--border);
+      --control-bg: var(--surface);
+
+      min-block-size: 10rem;
+      max-block-size: 24rem;
+      overflow: auto;
+      padding-inline: var(--control-pad-x);
+      padding-block: var(--space-20);
+      border: var(--border-width) solid var(--form-invalid-border, var(--control-border));
+      border-block-end-color: var(
+        --form-invalid-border,
+        var(--control-border-block-end-color, var(--control-border))
+      );
+      border-block-end-width: var(--control-border-block-end-width, var(--border-width));
+      border-radius: var(--radius);
+      background: var(--control-bg);
+      color: var(--text);
+      font-size: var(--control-font-size);
+      transition:
+        border-color var(--duration),
+        box-shadow var(--duration),
+        background-color var(--duration),
+        color var(--duration);
+    }
+
+    /* Attached toolbar: a light bar sharing the surface's top edge. The bar
+       owns the top border and top corners; the editor drops its top border
+       and top corners. The negative margin cancels the .field gap (same
+       --space-10 token) so the shared edge is a single line, enhanced or
+       baseline alike. Buttons stay borderless on the bar; pressed state
+       comes from the .btn aria-pressed contract. */
+    .actual-richtext .rich-toolbar {
+      --cluster-gap: var(--space-10);
+
+      align-items: center;
+      margin-block-end: calc(var(--space-10) * -1);
+      padding: var(--space-10) var(--space-20);
+      border: var(--border-width) solid var(--form-invalid-border, var(--border));
+      border-block-end-width: 0;
+      border-radius: var(--radius) var(--radius) 0 0;
+      background: var(--surface-subtle);
+    }
+
+    .actual-richtext .rich-editor {
+      border-block-start-width: 0;
+      border-start-start-radius: 0;
+      border-start-end-radius: 0;
+    }
+
+    .actual-richtext .rich-editor:hover {
+      --control-border: var(--control-hover-border, var(--text-subtle));
+    }
+
+    /* 2. Focus — the .input inset outline while the editable is focused */
+    .actual-richtext .rich-editor:focus-within {
+      outline: var(--focus-ring-width) solid var(--form-invalid-border, var(--focus));
+      outline-offset: calc(var(--focus-ring-width) * -1);
+      box-shadow: none;
+    }
+
+    /* 3. Content — the editable inherits control typography, links stay links */
+    .actual-richtext .rich-editor-content {
+      outline: none;
+    }
+
+    .actual-richtext .rich-editor-content a {
+      color: var(--primary);
+    }
+
+    .actual-richtext .rich-editor-content :is(blockquote, ul, ol, p) {
+      margin-block: 0 var(--space-20);
+    }
+
+    .actual-richtext .rich-editor-content > :last-child {
+      margin-block-end: 0;
+    }
+
+    .actual-richtext .rich-editor-content blockquote {
+      padding-inline-start: var(--space-30);
+      border-inline-start: 3px solid var(--border);
+      color: var(--text-muted);
+    }
+
+    /* 4. Toolbar pressed state reuses the .btn contract, no new visuals */
+    .rich-toolbar {
+      --cluster-gap: var(--space-20);
+    }
+
+    .submitted-html {
+      margin: 0;
+      max-block-size: 12rem;
+      overflow: auto;
+    }
+  </style>
+</head>
+
+<body>
+  <main class="center stack page">
+    <header class="cluster page-header">
+      <hgroup>
+        <p class="overline">Integration</p>
+        <h1>Rich text × Actual CSS</h1>
+        <p class="muted">
+          <code>squire-rte</code> loaded from CDN; the skin is pure Actual CSS.
+          Switch themes and watch the toolbar, surface, focus and states follow the
+          tokens — the editing engine never changes.
+        </p>
+      </hgroup>
+
+      <div class="cluster" style="gap: var(--space-20);">
+        <theme-picker><select class="select sm fit" aria-label="Switch theme"></select></theme-picker>
+        <a class="btn neutral outline sm" href="https://github.com/fastmail/Squire" target="_blank" rel="noopener">
+          Squire docs
+        </a>
+      </div>
+    </header>
+
+    <p class="demo-status" id="support-status" role="status">Loading the editor…</p>
+
+    <div class="page-cards">
+      <section class="card stack">
+        <header>
+          <hgroup>
+            <h2 style="margin: 0;">Team note</h2>
+            <p class="muted">
+              The native <code>&lt;textarea&gt;</code> stays the baseline and the value
+              owner. Without the CDN scripts it remains a plain textarea holding raw
+              HTML — honest, submittable, sanitized server-side either way.
+            </p>
+          </hgroup>
+        </header>
+        <div class="field actual-richtext">
+          <span class="field-label" id="note-label">Team note</span>
+          <div
+            class="cluster rich-toolbar"
+            role="toolbar"
+            aria-label="Formatting"
+            id="note-toolbar">
+            <div class="join">
+              <button class="btn neutral ghost icon-only sm" type="button" data-format="bold" aria-pressed="false" aria-label="Bold"><i class="ti ti-bold" aria-hidden="true"></i></button>
+              <button class="btn neutral ghost icon-only sm" type="button" data-format="italic" aria-pressed="false" aria-label="Italic"><i class="ti ti-italic" aria-hidden="true"></i></button>
+              <button class="btn neutral ghost icon-only sm" type="button" data-format="quote" aria-pressed="false" aria-label="Quote"><i class="ti ti-quote" aria-hidden="true"></i></button>
+            </div>
+            <div class="join">
+              <button class="btn neutral ghost icon-only sm" type="button" data-format="bullet" aria-pressed="false" aria-label="Bullet list"><i class="ti ti-list" aria-hidden="true"></i></button>
+              <button class="btn neutral ghost icon-only sm" type="button" data-format="ordered" aria-pressed="false" aria-label="Ordered list"><i class="ti ti-list-numbers" aria-hidden="true"></i></button>
+            </div>
+            <div class="join">
+              <button class="btn neutral ghost icon-only sm" type="button" data-format="link" aria-pressed="false" aria-label="Insert link"><i class="ti ti-link" aria-hidden="true"></i></button>
+              <button class="btn neutral ghost icon-only sm" type="button" data-format="undo" aria-label="Undo"><i class="ti ti-arrow-back-up" aria-hidden="true"></i></button>
+              <button class="btn neutral ghost icon-only sm" type="button" data-format="redo" aria-label="Redo"><i class="ti ti-arrow-forward-up" aria-hidden="true"></i></button>
+            </div>
+          </div>
+          <textarea
+            class="textarea"
+            id="note-source"
+            name="note"
+            rows="8"
+            data-enhance="rich-text"
+            aria-labelledby="note-label">&lt;p&gt;Hello, &lt;strong&gt;world&lt;/strong&gt;!&lt;/p&gt;&lt;ul&gt;&lt;li&gt;Ship the update&lt;/li&gt;&lt;li&gt;Review on Friday&lt;/li&gt;&lt;/ul&gt;</textarea>
+          <span class="field-help" id="note-help">Bold, italic, quote, lists and links only. Pasted web content is cleaned on entry.</span>
+        </div>
+      </section>
+
+      <section class="card stack">
+        <header>
+          <hgroup>
+            <h2 style="margin: 0;">What the server receives</h2>
+            <p class="muted">
+              Limited HTML in a normal form field — portable, editor-independent,
+              reversible. Empty documents submit as <code>""</code>, never
+              <code>&lt;p&gt;&lt;br&gt;&lt;/p&gt;</code>.
+            </p>
+          </hgroup>
+        </header>
+        <form id="note-form">
+          <div class="form-actions" style="margin-block-start: 0;">
+            <button type="submit" class="btn primary sm">Preview submitted value</button>
+          </div>
+        </form>
+        <pre class="submitted-html" aria-live="polite"><code id="note-output">(nothing submitted yet)</code></pre>
+      </section>
+
+      <section class="card stack">
+        <header>
+          <hgroup>
+            <h2 style="margin: 0;">Bridge contract</h2>
+            <p class="muted">
+              Actual owns the visual language; Squire owns the document. The bridge
+              CSS stays in docs/demo — it is a recipe, not package API, so no
+              <code>actual-richtext.css</code> ships with the framework and no widget
+              version is pinned by it. The same contract would hold for any headless
+              editing engine.
+            </p>
+          </hgroup>
+        </header>
+        <pre><code>.actual-richtext .rich-editor {
+  min-block-size: 10rem;
+  padding-inline: var(--control-pad-x);
+  border: var(--border-width) solid var(--form-invalid-border, var(--control-border));
+  border-radius: var(--radius);
+  background: var(--control-bg);
+}
+
+/* Attached toolbar: a light bar sharing the surface's top edge.
+   Borderless buttons on the bar; pressed state from .btn. */
+.actual-richtext .rich-toolbar {
+  align-items: center;
+  margin-block-end: calc(var(--space-10) * -1);
+  padding: var(--space-10) var(--space-20);
+  border: var(--border-width) solid var(--form-invalid-border, var(--border));
+  border-block-end-width: 0;
+  border-radius: var(--radius) var(--radius) 0 0;
+  background: var(--surface-subtle);
+}
+
+.actual-richtext .rich-editor {
+  border-block-start-width: 0;
+  border-start-start-radius: 0;
+  border-start-end-radius: 0;
+}
+
+.actual-richtext .rich-editor:focus-within {
+  outline: var(--focus-ring-width) solid var(--form-invalid-border, var(--focus));
+  outline-offset: calc(var(--focus-ring-width) * -1);
+}
+
+.btn:is([aria-pressed="true"]):not(.link) {
+  /* already in the framework — pressed toolbar buttons come for free */
+}</code></pre>
+      </section>
+    </div>
+
+    <dialog class="dialog" id="link-dialog" aria-labelledby="link-title">
+      <form method="dialog" class="stack" id="link-form">
+        <h2 id="link-title" style="margin: 0; font-size: var(--font-size-lg);">Insert link</h2>
+        <label class="field">
+          <span class="field-label">URL (http, https or mailto)</span>
+          <input class="input" type="url" id="link-url" placeholder="https://example.com" required>
+        </label>
+        <p class="field-error" id="link-error" role="alert" hidden>Only http, https and mailto links are allowed.</p>
+        <div class="form-actions">
+          <button class="btn neutral outline sm" value="cancel" formnovalidate>Cancel</button>
+          <button class="btn primary sm" value="save" id="link-save">Insert</button>
+        </div>
+      </form>
+    </dialog>
+
+    <footer class="page-note">
+      <span>
+        Loaded from jsDelivr, pinned: <code>squire-rte@2.4.8/dist/squire.mjs</code> and
+        <code>dompurify@3.2.1/dist/purify.es.mjs</code>.
+      </span>
+      <span>The textarea owns the form value; Squire owns the document.</span>
+    </footer>
+  </main>
+
+  <script type="module">
+    import { connectFocusGroup } from "../../src/js/focus-group.js";
+    import { registerEnhancement } from "../../src/js/enhance.js";
+
+    const SQUIRE_URL = "https://cdn.jsdelivr.net/npm/squire-rte@2.4.8/dist/squire.mjs";
+    const PURIFY_URL = "https://cdn.jsdelivr.net/npm/dompurify@3.2.1/dist/purify.es.mjs";
+    const ALLOWED_TAGS = ["p", "blockquote", "strong", "b", "em", "i", "ul", "ol", "li", "a", "br"];
+    const LINK_SCHEMES = ["http:", "https:", "mailto:"];
+    const EMPTY_DOC = /^(<p>(<br>)?<\/p>|<div>(<br>)?<\/div>|<br>)$/;
+
+    const stage = document.getElementById("support-status");
+    const output = document.getElementById("note-output");
+    const linkDialog = document.getElementById("link-dialog");
+    const linkForm = document.getElementById("link-form");
+    const linkUrl = document.getElementById("link-url");
+    const linkError = document.getElementById("link-error");
+    let pendingLinkEditor = null;
+
+    const cleanLink = (value) => {
+      try {
+        const url = new URL(value, document.baseURI);
+        return LINK_SCHEMES.includes(url.protocol) ? url.href : null;
+      } catch {
+        return null;
+      }
+    };
+
+    linkForm.addEventListener("submit", (event) => {
+      if (event.submitter?.value === "cancel") return;
+      const clean = cleanLink(linkUrl.value.trim());
+      if (!clean) {
+        event.preventDefault();
+        linkError.hidden = false;
+        return;
+      }
+      linkError.hidden = true;
+      pendingLinkEditor?.makeLink(linkUrl.value.trim(), { title: linkUrl.value.trim() });
+      pendingLinkEditor?.focus();
+    });
+    linkDialog.addEventListener("close", () => {
+      linkUrl.value = "";
+      linkError.hidden = true;
+      pendingLinkEditor = null;
+    });
+
+    const syncToolbar = (toolbar, editor) => {
+      for (const button of toolbar.querySelectorAll("[data-format]")) {
+        const format = button.dataset.format;
+        if (format === "undo" || format === "redo") continue;
+        const tag = { bold: "B", italic: "I", quote: "BLOCKQUOTE", bullet: "UL", ordered: "OL", link: "A" }[format];
+        button.setAttribute("aria-pressed", tag && editor.hasFormat(tag) ? "true" : "false");
+      }
+      toolbar.querySelector('[data-format="undo"]')?.toggleAttribute("disabled", !editor._canUndo);
+      toolbar.querySelector('[data-format="redo"]')?.toggleAttribute("disabled", !editor._canRedo);
+    };
+
+    const readValue = (editor) => {
+      const html = editor.getHTML();
+      return EMPTY_DOC.test(html.trim()) ? "" : html;
+    };
+
+    try {
+      const pending = Promise.all([import(PURIFY_URL), import(SQUIRE_URL)]);
+      // A stalled CDN must degrade, not hang the status line: the textarea is
+      // already usable, so a timeout settles for the baseline. Late arrivals
+      // are ignored — swallow them so they never surface as unhandled
+      // rejections.
+      pending.catch(() => {});
+      const [{ default: DOMPurify }, { default: Squire }] = await Promise.race([
+        pending,
+        new Promise((_, reject) => setTimeout(() => reject(new Error("Editor CDN timeout")), 12000)),
+      ]);
+      // The ESM build reads the global at construction time.
+      window.DOMPurify = window.DOMPurify ?? DOMPurify;
+
+      registerEnhancement("rich-text", (textarea) => {
+        const labelledBy = textarea.getAttribute("aria-labelledby");
+        const shell = document.createElement("div");
+        shell.className = "rich-editor";
+
+        const content = document.createElement("div");
+        content.className = "rich-editor-content";
+        content.setAttribute("role", "textbox");
+        content.setAttribute("aria-multiline", "true");
+        if (labelledBy) content.setAttribute("aria-labelledby", labelledBy);
+        shell.append(content);
+        textarea.after(shell);
+        textarea.hidden = true;
+
+        const editor = new Squire(content, {
+          blockTag: "P",
+          sanitizeToDOMFragment: (html) =>
+            DOMPurify.sanitize(html, {
+              RETURN_DOM_FRAGMENT: true,
+              ALLOWED_TAGS,
+              ALLOWED_ATTR: ["href", "title"],
+              ALLOW_UNKNOWN_PROTOCOLS: false,
+            }),
+        });
+        editor.setHTML(textarea.value || "<p><br></p>");
+
+        const toolbar = textarea.closest(".field")?.querySelector('[role="toolbar"]');
+        let focusGroup = null;
+        if (toolbar) {
+          focusGroup = connectFocusGroup(toolbar, {
+            getItems: () => [...toolbar.querySelectorAll("button:not(:disabled)")],
+          });
+          // Keep the caret where it is: press without moving focus.
+          toolbar.addEventListener("mousedown", (event) => {
+            if (event.target.closest("button")) event.preventDefault();
+          });
+          toolbar.addEventListener("click", (event) => {
+            const button = event.target.closest("button[data-format]");
+            if (!button) return;
+            const format = button.dataset.format;
+            editor.focus();
+            if (format === "bold") editor.bold();
+            else if (format === "italic") editor.italic();
+            else if (format === "quote") {
+              if (editor.hasFormat("BLOCKQUOTE")) editor.decreaseQuoteLevel();
+              else editor.increaseQuoteLevel();
+            } else if (format === "bullet") {
+              if (editor.hasFormat("UL")) editor.removeList();
+              else editor.makeUnorderedList();
+            } else if (format === "ordered") {
+              if (editor.hasFormat("OL")) editor.removeList();
+              else editor.makeOrderedList();
+            } else if (format === "link") {
+              pendingLinkEditor = editor;
+              linkDialog.showModal();
+              linkUrl.focus();
+            } else if (format === "undo") editor.undo();
+            else if (format === "redo") editor.redo();
+          });
+        }
+
+        const flush = () => {
+          textarea.value = readValue(editor);
+        };
+        const onPath = () => {
+          flush();
+          if (toolbar) syncToolbar(toolbar, editor);
+        };
+        const onUndo = (event) => {
+          editor._canUndo = event.detail.canUndo;
+          editor._canRedo = event.detail.canRedo;
+          if (toolbar) syncToolbar(toolbar, editor);
+        };
+        editor.addEventListener("pathChange", onPath);
+        editor.addEventListener("undoStateChange", onUndo);
+        editor.addEventListener("input", flush);
+        flush();
+        if (toolbar) syncToolbar(toolbar, editor);
+
+        stage.textContent =
+          "Enhanced mode: Squire owns the document, skinned through Actual CSS tokens. The textarea stays the value owner.";
+
+        return () => {
+          flush(); // Final value before teardown so submit never reads stale HTML.
+          editor.removeEventListener("pathChange", onPath);
+          editor.removeEventListener("undoStateChange", onUndo);
+          editor.removeEventListener("input", flush);
+          focusGroup?.disconnect();
+          editor.destroy();
+          shell.remove();
+          textarea.hidden = false;
+        };
+      });
+    } catch (error) {
+      console.error("Rich-text enhancement unavailable, baseline kept", error);
+      stage.textContent =
+        "Basic fallback active: the CDN scripts failed to load, the native textarea remains usable.";
+    }
+
+    document.getElementById("note-form").addEventListener("submit", (event) => {
+      event.preventDefault();
+      const source = document.getElementById("note-source");
+      output.textContent = source.value === "" ? "(empty document → submits as «»)" : source.value;
+    });
+  </script>
+</body>
+
+</html>

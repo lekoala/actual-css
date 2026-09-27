@@ -3,8 +3,9 @@
  *
  * Docs: docs/pages/components/pagination.md
  *
- * Render .btn elements inside a .pagination list. The active page is marked
- * with aria-current="page"; .btn owns the active state styling.
+ * Render .btn.ghost elements inside a .pagination list. The active page is
+ * marked with aria-current="page"; .btn owns the active state styling, so the
+ * current page is the only filled item.
  *
  * Truncated ranges are plain text (`.muted`, `aria-hidden="true"`), not .btn
  * — they are decorative, not actionable. They still get the same box sizing
