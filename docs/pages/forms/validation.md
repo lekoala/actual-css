@@ -55,7 +55,11 @@ Native validation first; the enhancer only adds state and focus behavior.
 
 Actual CSS ships validation *styles*. Invalid fields are marked with `aria-invalid="true"` (or the manual `.field.danger` wrapper class). The default forms bundle imports `forms/validation.css`; custom builds may omit that file when validation styling is app-owned. A small enhancer (`actual-css/js/validation`), included in the full runtime (`actual-css/js/full`) and also importable on its own, prevents premature error display, marks invalid fields on blur and submit, focuses the first invalid field on submit, and supports a few custom rules. It is not a validation framework — server and AJAX validation stay in app code.
 
-Opt in with the `.needs-validation` class. Importing the module registers the behavior; there is no init call.
+Opt in with `data-enhance="validation"` on the form; `.needs-validation` alone
+only enables the CSS feedback. Importing the module registers the behavior;
+there is no init call. To opt in forms you cannot mark up, call
+`applyEnhancement("validation", "form.needs-validation")` from
+`actual-css/js/enhance`.
 
 ```html demo
 <form class="needs-validation" data-enhance="validation" data-validation-message="Please check the highlighted fields.">

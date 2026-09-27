@@ -7,6 +7,7 @@
 - `enhancementSelector()` and `hasEnhancement()` are no longer exported from `actual-css/js/enhance`; query `[data-enhance~="name"]` directly.
 - `registerCommands()` drops the `prepare` callback; write `aria-controls`, `aria-haspopup`, and `aria-pressed` on command buttons in the markup.
 - `registerCommands()` and `commandSelector()` throw on a name that is neither a native `command` keyword nor a custom `--` command.
+- `FormValidator.init()` is removed; the module self-registers, and `applyEnhancement("validation", selector)` opts forms in by selector.
 - The non-modal dialog command is `command="--show"`; `command="show"` is not an HTML keyword and no longer opens a dialog.
 
 ### Added

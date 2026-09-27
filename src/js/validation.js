@@ -11,7 +11,9 @@
  * Opt in with data-enhance="validation". The .needs-validation class
  * remains valid for presentation-only (CSS :user-invalid feedback without
  * the JS behavior). Importing the module registers the behavior; there is
- * no init call.
+ * no init call. To opt existing forms in by selector, use
+ * applyEnhancement("validation", selector) so they join the enhance()
+ * lifecycle (inserted forms connect, removed forms tear down).
  *
  * The marker is a static, init-time contract. Removing the form from the
  * DOM tears down everything, including the managed novalidate attribute.
@@ -23,7 +25,6 @@ import { CLASSES } from "./selectors.js";
 
 const NOVALIDATE = "novalidate";
 const WAS_VALIDATED_CLASS = CLASSES.wasValidated;
-const VALIDATION_SELECTOR = '[data-enhance~="validation"]';
 const FIELD_CLASS = CLASSES.field;
 const DANGER_CLASS = CLASSES.danger;
 const MANAGED_NOVALIDATE_ATTR = "validationManagedNovalidate";
@@ -396,13 +397,6 @@ export class FormValidator {
       throw new TypeError(`registerRule("${name}") requires a function callback.`);
     }
     rules[name] = callback;
-  }
-
-  static init(selector = `form${VALIDATION_SELECTOR}`) {
-    if (typeof document === "undefined") return;
-    for (const form of document.querySelectorAll(selector)) {
-      if (isFormElement(form)) connectForm(form);
-    }
   }
 
   static setFieldError(el, message) {
