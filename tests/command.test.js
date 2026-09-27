@@ -1,5 +1,5 @@
 import { afterEach, expect, test } from "bun:test";
-import { registerCommands, targetFor } from "../src/js/command.js";
+import { commandSelector, registerCommands, targetFor } from "../src/js/command.js";
 import { cleanupDOM, click, setupDOM } from "./helpers/dom.js";
 
 afterEach(() => {
@@ -92,6 +92,68 @@ test("an already canceled click does not run its command", () => {
   click(trigger);
 
   expect(calls).toBe(0);
+});
+
+function dispatchClick(element) {
+  const event = new MouseEvent("click", { bubbles: true, cancelable: true });
+  element.dispatchEvent(event);
+  return event;
+}
+
+test("a routed command cancels the click before its handler runs", () => {
+  setupDOM('<div id="target"></div><button commandfor="target" command="--cancel"></button>');
+  let preventedInHandler = null;
+  registerCommands("--cancel", {
+    handle: (event) => {
+      preventedInHandler = event.defaultPrevented;
+    },
+  });
+
+  expect(dispatchClick(document.querySelector("button")).defaultPrevented).toBe(true);
+  expect(preventedInHandler).toBe(true);
+});
+
+test("an unknown command or an unresolved target leaves the click alone", () => {
+  setupDOM(`
+    <div id="target"></div>
+    <button id="unknown" commandfor="target" command="--unknown"></button>
+    <button id="missing" commandfor="nowhere" command="--known"></button>
+  `);
+  registerCommands("--known", { handle() {} });
+
+  expect(dispatchClick(document.getElementById("unknown")).defaultPrevented).toBe(false);
+  expect(dispatchClick(document.getElementById("missing")).defaultPrevented).toBe(false);
+});
+
+test("the click is canceled even when the handler throws", () => {
+  setupDOM('<div id="target"></div><button commandfor="target" command="--throws"></button>');
+  registerCommands("--throws", {
+    handle() {
+      throw new Error("handler failure");
+    },
+  });
+  const event = new MouseEvent("click", { bubbles: true, cancelable: true });
+
+  try {
+    document.querySelector("button").dispatchEvent(event);
+  } catch {
+    // Some DOM implementations rethrow listener errors from dispatchEvent.
+  }
+
+  expect(event.defaultPrevented).toBe(true);
+});
+
+test("command names must be native keywords or custom -- commands", () => {
+  expect(() => registerCommands("dismiss", { handle() {} })).toThrow(TypeError);
+  expect(() => registerCommands("show", { handle() {} })).toThrow(TypeError);
+  expect(() => commandSelector(["--ok", "nope"])).toThrow(TypeError);
+});
+
+// Asserted on the string: happy-dom ignores the attribute selector `i` flag.
+test("commandSelector matches native keywords case-insensitively, custom ones exactly", () => {
+  expect(commandSelector(["SHOW-MODAL", "--Action"])).toBe(
+    'button[commandfor]:is([command="show-modal" i], [command="--Action"])',
+  );
 });
 
 test("native command names are ASCII case-insensitive", () => {

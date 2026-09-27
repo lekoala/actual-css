@@ -5,7 +5,7 @@
  * Close button:  <button commandfor="dialog-id" command="request-close">
  * Dialog:        <dialog id="dialog-id" data-dialog-dismissible>
  *
- * Command semantics are explicit: show-modal calls showModal(), show calls
+ * Command semantics are explicit: show-modal calls showModal(), --show calls
  * show(). data-dialog-modal still defines the default for direct openDialog()
  * calls when no command mode is forced.
  * data-dialog-dismissible gates backdrop click only: with it, the runtime
@@ -34,7 +34,9 @@ import { CLASSES } from "./selectors.js";
 
 const dialogMap = new WeakMap();
 const wiredDialogs = new Set();
-const DIALOG_COMMANDS = ["show-modal", "show", "request-close", "close"];
+// HTML has no non-modal dialog keyword, so non-modal opening is the custom
+// `--show` command.
+const DIALOG_COMMANDS = ["show-modal", "--show", "request-close", "close"];
 const DIALOG_SELECTOR = "dialog";
 const DIALOG_TITLE_SELECTOR = "[data-title], h1, h2, h3, h4, h5, h6";
 const STATIC_SHAKE_MS = 250;
@@ -519,28 +521,11 @@ registerCommands(DIALOG_COMMANDS, {
     const dialog = targetFor(trigger);
     return isDialogElement(dialog) ? dialog : null;
   },
-  prepare: (trigger, dialog, command) => {
-    if (isDialogElement(dialog)) {
-      ensureDialogWired(dialog);
-    }
+  handle: (_event, trigger, dialog, command) => {
+    // A dialog inserted since the last enhance() pass is wired on first use.
+    ensureDialogWired(dialog);
 
-    trigger.setAttribute("aria-controls", dialog.id);
-
-    if (
-      !trigger.hasAttribute("aria-haspopup") &&
-      (command === "show-modal" || command === "show")
-    ) {
-      trigger.setAttribute("aria-haspopup", "dialog");
-    }
-  },
-  handle: (event, trigger, dialog, command) => {
-    event.preventDefault();
-
-    if (!isDialogElement(dialog)) {
-      return;
-    }
-
-    if (command === "show-modal" || command === "show") {
+    if (command === "show-modal" || command === "--show") {
       openDialogWithViewTransition(dialog, trigger, command === "show-modal");
       return;
     }

@@ -247,10 +247,6 @@ function resolveStatusTrigger(trigger) {
   return target && target === statusTarget() ? target : null;
 }
 
-function connectStatusTrigger(trigger, target) {
-  trigger.setAttribute("aria-controls", target.id);
-}
-
 if (typeof document !== "undefined") {
   document.addEventListener(EVENTS.invalid, (event) => {
     const message = event.detail?.message;
@@ -273,9 +269,7 @@ if (typeof document !== "undefined") {
 
   registerCommands(STATUS_SHOW_COMMANDS, {
     resolve: resolveStatusTrigger,
-    prepare: connectStatusTrigger,
-    handle: (event, trigger) => {
-      event.preventDefault();
+    handle: (_event, trigger) => {
       dispatchStatusEvent(trigger, {
         message: trigger.getAttribute("data-status-message"),
         intent: trigger.getAttribute("data-status-intent") ?? undefined,
@@ -286,9 +280,7 @@ if (typeof document !== "undefined") {
 
   registerCommands(STATUS_CLEAR_COMMANDS, {
     resolve: resolveStatusTrigger,
-    prepare: connectStatusTrigger,
-    handle: (event, trigger) => {
-      event.preventDefault();
+    handle: (_event, trigger) => {
       dispatchStatusEvent(trigger, {});
     },
   });

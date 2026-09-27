@@ -74,14 +74,7 @@ function watchSubmitRoot(input) {
 
 registerCommands(PASSWORD_COMMANDS, {
   resolve: resolvePasswordInput,
-  prepare: (trigger, input) => {
-    trigger.setAttribute("aria-controls", input.id);
-    if (!trigger.hasAttribute("aria-pressed")) {
-      trigger.setAttribute("aria-pressed", "false");
-    }
-  },
-  handle: (event, _trigger, input) => {
-    event.preventDefault();
+  handle: (_event, _trigger, input) => {
     const reveal = input.type === "password";
     if (reveal) watchSubmitRoot(input);
     setRevealed(input, reveal);

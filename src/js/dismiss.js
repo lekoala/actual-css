@@ -7,8 +7,7 @@ import { registerCommands } from "./command.js";
 import { EVENTS } from "./events.js";
 
 registerCommands("--dismiss", {
-  handle(event, trigger, target) {
-    event.preventDefault();
+  handle(_event, trigger, target) {
     target.hidden = true;
     target.dispatchEvent(
       new CustomEvent(EVENTS.dismiss, {

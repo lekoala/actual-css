@@ -515,7 +515,6 @@ Keep accessibility state that must exist before interaction in the HTML itself.<
 
 registerCommands(&quot;--toggle-hidden&quot;, {
   handle(event, trigger, target) {
-    event.preventDefault();
     target.hidden = !target.hidden;
     trigger.setAttribute(&quot;aria-expanded&quot;, String(!target.hidden));
   },
@@ -523,10 +522,10 @@ registerCommands(&quot;--toggle-hidden&quot;, {
 </code></pre>
 <p>The default resolver <code>targetFor(trigger)</code> looks up <code>commandfor</code> by ID in the
 trigger's document or shadow root. Supply <code>resolve(trigger)</code> to validate or
-replace that lookup. An optional idempotent <code>prepare(trigger, target, command)</code>
-callback runs directly before <code>handle</code>; built-in behaviors use it for
-target-derived semantics. <code>commandSelector(commands)</code> builds the matching button
-selector. The returned handle has an idempotent <code>disconnect()</code> method for
+replace that lookup. Once a target resolves, the router cancels the click before
+<code>handle</code> runs, so the native <code>command</code> event is never dispatched for a routed
+command. Names must be a native keyword or start with <code>--</code>; anything else
+throws. <code>commandSelector(commands)</code> builds the matching button selector. The returned handle has an idempotent <code>disconnect()</code> method for
 applications that unload the module owning the command.</p>
 <h3 id="dismiss-command">Dismiss command</h3>
 <p>The runtime includes a generic <code>--dismiss</code> command for hiding any resolved

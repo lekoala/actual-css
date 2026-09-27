@@ -236,7 +236,8 @@ sits outside the content flow, so it does not take part in the dialog's own
 layout.</p>
 <h2 id="usage">Usage</h2>
 <p>Modals use the platform-native <code>&lt;dialog class=&quot;modal&quot;&gt;</code> element with <code>commandfor</code> and <code>command</code> buttons.</p>
-<p>Use <code>command=&quot;show-modal&quot;</code> to open a modal dialog.</p>
+<p>Use <code>command=&quot;show-modal&quot;</code> to open a modal dialog, or <code>command=&quot;--show&quot;</code> to open
+it non-modally.</p>
 <p>Add <code>aria-haspopup=&quot;dialog&quot;</code> and <code>aria-controls=&quot;&lt;id&gt;&quot;</code> to opening buttons so
 their semantics are present before either native or framework JavaScript runs.
 The command runtime is stateless and does not pre-scan triggers.</p>
@@ -703,7 +704,9 @@ transitions.</p>
 light dismiss and closes the dialog (or rewrites <code>closedby=&quot;any&quot;</code> to
 <code>closedby=&quot;closerequest&quot;</code> so the native dialog does not double-handle).
 It never affects Escape or explicit close requests.</li>
-<li><code>data-dialog-modal=&quot;false&quot;</code> opens with <code>show()</code> instead of <code>showModal()</code>.</li>
+<li><code>data-dialog-modal=&quot;false&quot;</code> makes direct <code>openDialog()</code> calls use <code>show()</code>
+instead of <code>showModal()</code>. The <code>show-modal</code> and <code>--show</code> commands override
+this default.</li>
 <li><code>data-dialog-view-transition</code> enables a view transition that morphs the dialog to/from its trigger. Only active when the browser supports <code>document.startViewTransition</code> and the user allows motion.</li>
 <li><code>closedby</code> keeps its native meaning: <code>&quot;any&quot;</code> closes on backdrop click and
 Escape, <code>&quot;closerequest&quot;</code> closes on Escape only, <code>&quot;none&quot;</code> disables both. The

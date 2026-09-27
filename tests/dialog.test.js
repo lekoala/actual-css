@@ -40,21 +40,18 @@ test("trigger with commandfor opens the target dialog", async () => {
 
   expect(dialog.open).toBe(true);
   expect(dialog.hasAttribute("open")).toBe(true);
-  expect(trigger.getAttribute("aria-controls")).toBe("prefs");
 });
 
-test("opening a modal dialog sets trigger-owned accessibility attributes", async () => {
+test("opening a dialog leaves trigger accessibility attributes to the markup", async () => {
   await loadDialog(
     '<button commandfor="prefs" command="show-modal">Open</button><dialog id="prefs"></dialog>',
   );
   const trigger = document.querySelector("button");
-  const dialog = document.getElementById("prefs");
 
   click(trigger);
 
-  expect(dialog.open).toBe(true);
-  expect(trigger.getAttribute("aria-haspopup")).toBe("dialog");
-  expect(trigger.getAttribute("aria-controls")).toBe("prefs");
+  expect(trigger.hasAttribute("aria-haspopup")).toBe(false);
+  expect(trigger.hasAttribute("aria-controls")).toBe(false);
 });
 
 test("opening a modal dialog sets dialog accessibility attributes", async () => {
@@ -185,20 +182,6 @@ test("a request-close button closes a non-dismissible dialog", async () => {
   expect(document.activeElement).toBe(open);
 });
 
-test("close buttons do not get dialog popup semantics", async () => {
-  await loadDialog(`
-    <button id="open" commandfor="prefs" command="show-modal">Open</button>
-    <dialog id="prefs">
-      <button id="close" commandfor="prefs" command="request-close">Close</button>
-    </dialog>
-  `);
-
-  click(document.getElementById("open"));
-
-  expect(document.getElementById("open").getAttribute("aria-haspopup")).toBe("dialog");
-  expect(document.getElementById("close").getAttribute("aria-haspopup")).toBeNull();
-});
-
 test("cancel closes without requiring view transitions", async () => {
   await loadDialog(`
     <button id="open" commandfor="prefs" command="show-modal">Open</button>
@@ -282,7 +265,7 @@ test("modal lock marks had-scrollbar only when classic scrollbar existed", async
 
 test("non-modal dialogs do not toggle the html scroll-lock hook", async () => {
   await loadDialog(
-    '<button commandfor="prefs" command="show">Open</button><dialog id="prefs"></dialog>',
+    '<button commandfor="prefs" command="--show">Open</button><dialog id="prefs"></dialog>',
   );
 
   click(document.querySelector("button"));
@@ -291,9 +274,9 @@ test("non-modal dialogs do not toggle the html scroll-lock hook", async () => {
   expect(document.documentElement.classList.contains("has-modal-open")).toBe(false);
 });
 
-test("command=show opens non-modal even when data-dialog-modal is true", async () => {
+test("command=--show opens non-modal even when data-dialog-modal is true", async () => {
   setupDOM(
-    '<button commandfor="prefs" command="show">Open</button><dialog id="prefs" data-dialog-modal="true"></dialog>',
+    '<button commandfor="prefs" command="--show">Open</button><dialog id="prefs" data-dialog-modal="true"></dialog>',
   );
   patchDialogMethods();
   let showCalls = 0;
@@ -355,7 +338,6 @@ test("a trigger handles a dialog inserted immediately before the click", async (
   click(trigger);
 
   expect(dialog.open).toBe(true);
-  expect(trigger.getAttribute("aria-controls")).toBe("prefs");
 });
 
 test("dialog trigger re-resolves a same-id replacement", async () => {
@@ -414,7 +396,6 @@ test("a dialog trigger inserted immediately before the click works", async () =>
   click(trigger);
 
   expect(dialog.open).toBe(true);
-  expect(trigger.getAttribute("aria-controls")).toBe("prefs");
 });
 
 test("dismissible backdrop clicks close the dialog", async () => {
