@@ -35,6 +35,7 @@
 - Combobox: a "Bridge contract" section names what Actual owns (tokens, focus, invalid, `.join`, contrast) versus the widget (behavior, multi-value, i18n), and keeps the bridge CSS in docs/demo.
 - Tabs: the `.tabs` strip / `.tab` trigger pair is documented as the container/item convention, with the `tab` module versus `tabs` token split stated.
 - Pagination: items are documented as `.btn.ghost` with chevrons on Previous/Next, so `aria-current="page"` is the only filled item.
+- Rich text: `demo/templates/rich-text.html` is now an `@lekoala/rich-text` integration (`@0.1` from jsDelivr) instead of a hand-wired Squire prototype, with the skin reduced to a `--rt-*` token bridge plus a rich composer reusing `.composer` chrome.
 
 ## [0.10.0] - 2026-09-25
 
