@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="../../dist/actual.full.css">
   <link rel="stylesheet" href="../assets/actual-themes.min.css">
   <link rel="stylesheet" href="../shared/composer.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@lekoala/rich-text@0.1/dist/rich-text.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@lekoala/rich-text@0.2/dist/rich-text.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.46.0/dist/tabler-icons.min.css">
   <script src="../scripts/theme-picker.js"></script>
   <style>
@@ -51,8 +51,8 @@
     /* sanitization, toolbar behaviour, mentions, suggestions); Actual     */
     /* owns the visual language. The bridge maps Actual tokens onto the    */
     /* package's --rt-* hooks and never depends on its inner structure    */
-    /* beyond the documented classes and state hooks. Caret range @0.1     */
-    /* follows 0.1.x patches; keep this bridge a tolerant subset so a     */
+    /* beyond the documented classes and state hooks. Caret range @0.2     */
+    /* follows 0.2.x patches; keep this bridge a tolerant subset so a     */
     /* patch adding tokens cannot break the skin.                          */
     /* ================================================================== */
 
@@ -61,7 +61,8 @@
     .actual-rich-text .rt-shell {
       --rt-bg: var(--surface);
       --rt-fg: var(--text);
-      --rt-border: var(--form-invalid-border, var(--border));
+      --rt-border: var(--form-invalid-border, var(--control-border, var(--border)));
+      --rt-divider: var(--border);
       --rt-muted: var(--text-muted);
       --rt-focus: var(--form-invalid-border, var(--focus));
       --rt-focus-width: var(--focus-ring-width);
@@ -75,7 +76,6 @@
       --rt-disabled-bg: var(--surface-subtle);
       --rt-disabled-fg: var(--state-disabled);
       --rt-link: var(--primary);
-      --rt-quote-border: var(--border);
       --rt-mention-bg: color-mix(in oklab, var(--surface) var(--soft-bg-mix), var(--primary));
       --rt-mention-fg: color-mix(in oklab, var(--primary) var(--soft-fg-mix), var(--text));
       --rt-suggestion-bg: var(--surface-raised);
@@ -97,16 +97,6 @@
 
     .actual-rich-text .rt-button {
       border-radius: var(--radius-sm);
-    }
-
-    /* The package's :hover rule (.rt-button:hover:not(:disabled), 0,3,0)
-       out-specifies its pressed rule (.rt-button[aria-pressed=true], 0,2,0),
-       so hovering an active button paints the hover overlay under the pressed
-       foreground — gray with white text. Tokens cannot express the pair;
-       re-assert it through the package's documented pressed state hook. */
-    .actual-rich-text .rt-button[aria-pressed="true"]:hover:not(:disabled) {
-      background: var(--rt-button-pressed-bg);
-      color: var(--rt-button-pressed-fg);
     }
 
     /* 3. Invalid — the hidden textarea owns validity; the wrapper re-owns
@@ -321,6 +311,7 @@
   --rt-bg: var(--surface);
   --rt-fg: var(--text);
   --rt-border: var(--form-invalid-border, var(--control-border, var(--border)));
+  --rt-divider: var(--border);
   --rt-muted: var(--text-muted);
   --rt-focus: var(--form-invalid-border, var(--focus));
   --rt-focus-width: var(--focus-ring-width);
@@ -334,19 +325,11 @@
   --rt-disabled-bg: var(--surface-subtle);
   --rt-disabled-fg: var(--state-disabled);
   --rt-link: var(--primary);
-  --rt-quote-border: var(--border);
   --rt-mention-bg: color-mix(in oklab, var(--surface) var(--soft-bg-mix), var(--primary));
   --rt-mention-fg: color-mix(in oklab, var(--primary) var(--soft-fg-mix), var(--text));
   --rt-suggestion-bg: var(--surface-raised);
   --rt-suggestion-active: var(--hover-overlay);
   --rt-suggestion-shadow: var(--shadow-popout);
-}
-
-/* The package's :hover rule out-specifies its pressed rule, so the pressed
-   pair is re-asserted on hover. */
-.actual-rich-text .rt-button[aria-pressed="true"]:hover:not(:disabled) {
-  background: var(--rt-button-pressed-bg);
-  color: var(--rt-button-pressed-fg);
 }
 
 /* The hidden textarea owns validity: the wrapper re-owns the hook. */
@@ -389,18 +372,18 @@
 
     <footer class="page-note">
       <span>
-        Integration: <code>@lekoala/rich-text@0.1</code> (JS + CSS from jsDelivr,
-        caret range follows 0.1.x patches).
+        Integration: <code>@lekoala/rich-text@0.2</code> (JS + CSS from jsDelivr,
+        caret range follows 0.2.x patches).
       </span>
       <span>The textarea owns the form value; the package owns the editor; Actual owns the look.</span>
     </footer>
   </main>
 
   <script type="module">
-    // Caret range: the demo follows 0.1.x patches. +esm bundles the package's
+    // Caret range: the demo follows 0.2.x patches. +esm bundles the package's
     // own dependencies (Squire, DOMPurify, floating) into one ESM file, so no
     // import map is needed; the CSS travels as a plain stylesheet above.
-    const RICH_TEXT_URL = "https://cdn.jsdelivr.net/npm/@lekoala/rich-text@0.1/+esm";
+    const RICH_TEXT_URL = "https://cdn.jsdelivr.net/npm/@lekoala/rich-text@0.2/+esm";
 
     const stage = document.getElementById("support-status");
 
