@@ -1,0 +1,106 @@
+/* Glass — dark-only translucent theme (single block), a stress test of the
+ * surface roles: --surface-* are frosted white over a backdrop the theme
+ * paints itself, while --surface-opaque and --surface-solid-fg keep rings,
+ * separators and inverse text opaque. Small recipes carry what tokens cannot:
+ * the backdrop, the blur behind floating panels, and an opaque busy veil.
+ * Contrast depends on the backdrop, so report:theme-contrast measures only the
+ * opaque pairs. */
+[data-theme="glass"] {
+  color-scheme: dark;
+
+  --primary: hsl(200 90% 72%);
+  --primary-fg: hsl(210 40% 10%);
+  --secondary: hsl(280 70% 80%);
+  --secondary-fg: hsl(280 40% 12%);
+  --success: hsl(150 60% 65%);
+  --success-fg: hsl(150 40% 8%);
+  --warning: hsl(42 90% 65%);
+  --warning-fg: hsl(38 40% 10%);
+  --danger: hsl(0 90% 80%);
+  --danger-fg: hsl(0 40% 10%);
+  --neutral: hsl(225 15% 75%);
+  --neutral-fg: hsl(225 30% 10%);
+
+  --surface: rgb(255 255 255 / 8%);
+  --surface-raised: rgb(255 255 255 / 12%);
+  --surface-subtle: rgb(255 255 255 / 6%);
+  --surface-solid: hsl(220 30% 95%);
+  --surface-solid-fg: hsl(228 40% 12%);
+  /* The backdrop's mean tone: rings and separators cut against it. */
+  --surface-opaque: hsl(232 38% 17%);
+
+  --text: hsl(0 0% 100%);
+  --text-muted: rgb(255 255 255 / 72%);
+  --text-subtle: rgb(255 255 255 / 55%);
+
+  --border: rgb(255 255 255 / 20%);
+  /* Mid-tone: holds 3:1 on the light --surface-solid and on the dark backdrop. */
+  --focus: hsl(200 80% 45%);
+  --hover-overlay: rgb(255 255 255 / 8%);
+  --shadow-color: hsl(232 50% 4%);
+
+  /* color-mix() premultiplies alpha: at the default 88% an opaque intent
+     outweighs an 8% surface and the soft fill turns ~60% intent, the ink's own
+     hue. 97% keeps the fill near the glass with a ~30% tint. */
+  --soft-bg-mix: 97%;
+  --soft-hover-alpha: 3%;
+
+  --radius: 0.75rem;
+  --radius-sm: 0.5rem;
+  --radius-lg: 1rem;
+
+  /* A translucent fill veils nothing; busy content hides behind the backdrop
+     tone instead. */
+  --busy-overlay-bg: color-mix(in oklab, var(--surface-opaque) 90%, transparent);
+
+  /* The theme owns its backdrop: a translucent surface has no color without
+     one, on <html> and on an island alike. */
+  background:
+    radial-gradient(circle at 12% 18%, hsl(275 70% 45% / 0.6), transparent 40%),
+    radial-gradient(circle at 88% 12%, hsl(192 80% 42% / 0.5), transparent 38%),
+    radial-gradient(circle at 72% 88%, hsl(330 72% 48% / 0.45), transparent 42%), hsl(232 45% 11%);
+}
+
+/* card.css binds the veil to the card's own fill; restate the theme's. */
+[data-theme="glass"] .card {
+  --busy-overlay-bg: color-mix(in oklab, var(--surface-opaque) 90%, transparent);
+}
+
+/* Panels on the backdrop frost what passes beneath them. */
+[data-theme="glass"] :is(.card, .alert, .navbar, .topbar, .modal, .drawer) {
+  backdrop-filter: blur(18px) saturate(140%);
+}
+
+/* Overlays sit on components, not on the backdrop: text beneath bleeds
+   through a light fill even when blurred, so they fill densely. */
+[data-theme="glass"] .flyout {
+  background: color-mix(in oklab, var(--surface-opaque) 75%, transparent);
+  backdrop-filter: blur(24px) saturate(140%);
+}
+
+/* A native select popup is an OS surface and cannot be translucent: Chrome
+   composites the glass fill over white, where white option text vanishes.
+   Options take the opaque backdrop tone. */
+[data-theme="glass"] .select option {
+  background-color: var(--surface-opaque);
+}
+
+/* The base-select picker is a real panel: its options stay clear so the
+   translucent picker fill shows. Same gate as src/css/forms/custom-select.css —
+   keep them in step. */
+@media (forced-colors: none) and (prefers-contrast: no-preference) and (hover: hover) and (
+    pointer: fine
+  ) {
+  @supports (appearance: base-select) {
+    [data-theme="glass"] .select:not([multiple], .native, [size]:not([size="1"])) option {
+      background-color: transparent;
+    }
+  }
+}
+
+/* Its own rule: an unsupported ::picker(select) would drop a merged list.
+   Same specificity as the core picker rule; source order wins. */
+[data-theme="glass"] .select:not(.native)::picker(select) {
+  background-color: color-mix(in oklab, var(--surface-opaque) 75%, transparent);
+  backdrop-filter: blur(24px) saturate(140%);
+}

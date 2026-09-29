@@ -32,8 +32,10 @@
  *                via component-local button tokens
  *   material   — paired Material 3 baseline palette + filled underline fields
  *                and pill buttons, a stress test of the field focus contract
+ *   glass      — dark-only translucent surfaces over a theme-painted backdrop,
+ *                a stress test of the opaque surface roles
  *
- * Single-block themes (indigo, dim, brutalist, cyberpunk, neon) pin one
+ * Single-block themes (indigo, dim, brutalist, cyberpunk, neon, glass) pin one
  * color-scheme and cannot adapt to prefers-color-scheme; the paired ones follow
  * the OS. */
 @import "./indigo.css";
@@ -54,3 +56,4 @@
 @import "./neon.css";
 @import "./gradient.css";
 @import "./material.css";
+@import "./glass.css";

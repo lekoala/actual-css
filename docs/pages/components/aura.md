@@ -113,11 +113,10 @@ Keep exactly one direct child and set `--aura-radius` when its shape differs
 from the common button, card, alert, and badge shapes detected as a visual
 enhancement.
 
-The child must be opaque. The frame paints across the whole box and relies on
-the child to cover all but its edge, so a transparent child — an `.outline`
-alert, a `.ghost` button — is filled edge to edge with the frame color instead
-of framed by it. Give such a child a surface, or move the aura to an opaque
-wrapper around it.
+A transparent or translucent child — an `.outline` alert, a `.ghost` button, a
+glass surface — shows `--surface-opaque` beneath it, the theme's opaque
+neutral, rather than the frame color. On a differently painted band, give the
+child its own surface so it matches the band.
 
 ## CSS hooks
 
@@ -125,7 +124,7 @@ wrapper around it.
 - `--aura-width` — frame thickness.
 - `--aura-blur` — near halo blur; the far halo derives its own blur and its
   spread beyond the frame from this value, so one hook scales both.
-- `--aura-intensity` — multiplies both halo opacities, resting and breathing.
+- `--aura-intensity` — multiplies both halo strengths, resting and breathing.
   It does not touch the frame itself, which stays a crisp line at any setting.
 - `--aura-radius` — child corner radius used to derive the outer radius.
 - `--aura-duration` — one rotation of the accent, or one breath of the glow.

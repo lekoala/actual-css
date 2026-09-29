@@ -32,9 +32,9 @@ const DIST = join(ROOT, "dist");
  * growth, not against a component gaining a layer.
  */
 const BUDGETS = {
-  coreCssBrotli: 2900, // src/css/actual.css, minified in memory (current ~2823; typographic density: --font-width hooks + compact/spacious font-stretch)
-  fullCssBrotli: 18500, // actual.full.min.css (current ~17556)
-  fullJsBrotli: 18500, // actual.full.js (current ~16222)
+  coreCssBrotli: 2900, // src/css/actual.css, minified in memory (current ~2697; typographic density: --font-width hooks + compact/spacious font-stretch)
+  fullCssBrotli: 19000, // actual.full.min.css (current ~18503; opaque surface roles, aura mask)
+  fullJsBrotli: 18500, // actual.full.js (current ~17416)
 };
 
 async function collectCSS(root, base = "") {

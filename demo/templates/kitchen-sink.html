@@ -8,7 +8,7 @@
 <link rel="stylesheet" href="../../dist/actual.full.css">
   <link rel="stylesheet" href="../assets/actual-themes.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3/dist/tabler-icons.min.css">
-  <script src="../scripts/theme-picker.js"></script>
+  <script src="../scripts/theme-picker.js" data-storage="kitchen-sink-theme"></script>
   <style>
     /* UI fonts for the font switcher. Lazy: font-display: swap means a webfont
        is only downloaded once its family is selected via --font-sans. */
@@ -644,13 +644,21 @@
   <section>
     <h2>Skeleton</h2>
     <div class="sink-grid">
-      <article class="card" style="max-inline-size:18rem" role="status" aria-label="Loading profile">
+      <!-- Placeholders take no width of their own: the card needs one here,
+           or the wrapping row shrinks it to the avatar. -->
+      <article class="card" style="inline-size:min(100%, 20rem)" role="status" aria-label="Loading article">
+        <div class="skeleton" data-shape="box" aria-hidden="true"></div>
+        <div class="skeleton" data-shape="title" aria-hidden="true"></div>
+        <div class="stack" style="--gap:var(--space-10)">
+          <div class="skeleton" data-shape="text" aria-hidden="true"></div>
+          <div class="skeleton" data-shape="text" aria-hidden="true"></div>
+          <div class="skeleton" data-shape="text" style="--skeleton-width:60%" aria-hidden="true"></div>
+        </div>
         <div class="cluster">
           <div class="skeleton" data-shape="avatar" aria-hidden="true"></div>
-          <div class="stack grow">
-            <div class="skeleton" data-shape="title" aria-hidden="true"></div>
-            <div class="skeleton" data-shape="text" aria-hidden="true"></div>
-            <div class="skeleton" data-shape="text" aria-hidden="true"></div>
+          <div class="stack grow" style="--gap:var(--space-10)">
+            <div class="skeleton" data-shape="text" style="--skeleton-width:8rem" aria-hidden="true"></div>
+            <div class="skeleton" data-shape="text" style="--skeleton-width:5rem" aria-hidden="true"></div>
           </div>
         </div>
       </article>

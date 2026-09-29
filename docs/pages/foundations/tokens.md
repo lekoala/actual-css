@@ -81,7 +81,7 @@ The surface levels are: `surface` (canvas), `surface-raised` (cards, raised surf
 Surfaces are painted material and may be translucent. Two roles must stay opaque, so they have their own tokens, both defaulting to `--surface`:
 
 - `--surface-solid-fg` — the ink on `--surface-solid`: tooltips, the status bar, an inverse band.
-- `--surface-opaque` — an opaque neutral used where a component must hide or separate what is painted beneath it: the status-dot and avatar-stack rings, range-thumb and meter separators, step markers. It is not a surface fill; paint panels with `--surface-*`.
+- `--surface-opaque` — an opaque neutral used where a component must hide or separate what is painted beneath it: the status-dot and avatar-stack rings, range-thumb and meter separators, step markers, the mask under an `.aura` child. It is not a surface fill; paint panels with `--surface-*`.
 
 A theme with translucent surfaces overrides both with opaque values.
 

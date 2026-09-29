@@ -140,6 +140,12 @@ await withBrowserPage(
     for (const theme of surveyed) {
       for (const scheme of theme.hasDark ? ["light", "dark"] : ["light"]) {
         const rgb = await readIsland(`island-${theme.name.replace(/[()]/g, "")}-${scheme}`);
+        /* OKLCH ignores alpha: a translucent role (glass) has no lightness or
+           chroma until composited over its backdrop, so it is not surveyed. */
+        if (ROLES.some((role) => rgb[role][3] < 255)) {
+          console.log(`${theme.name.padEnd(11)}  translucent roles, not surveyed\n`);
+          continue;
+        }
         const primary = oklch(rgb.primary);
         /* A theme with no light-dark() pair gets one island, and that island
            is requested as `light` — but a natively dark preset paints dark

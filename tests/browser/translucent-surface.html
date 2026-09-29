@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Translucent surface fixture</title>
+  <link rel="stylesheet" href="../../src/css/actual.full.css">
+  <style>
+    /* A translucent palette with opaque roles, independent of any preset. */
+    [data-theme="probe"] {
+      color-scheme: dark;
+      --surface: rgb(255 255 255 / 10%);
+      --surface-raised: rgb(255 255 255 / 16%);
+      --surface-subtle: rgb(255 255 255 / 7%);
+      --surface-solid: hsl(220 30% 95%);
+      --surface-solid-fg: hsl(228 40% 12%);
+      --surface-opaque: hsl(232 38% 17%);
+      background: hsl(232 45% 11%);
+    }
+  </style>
+</head>
+<body>
+  <div data-theme="probe">
+    <div class="avatar" role="img" aria-label="Online">
+      <span aria-hidden="true">JD</span>
+      <span id="indicator" class="badge success" aria-label="Online"></span>
+    </div>
+
+    <div class="avatar-stack" role="group" aria-label="Team">
+      <div id="stacked" class="avatar" role="img" aria-label="A"><span aria-hidden="true">A</span></div>
+      <div class="avatar" role="img" aria-label="B"><span aria-hidden="true">B</span></div>
+    </div>
+
+    <div class="meter" role="meter" aria-label="Usage" aria-valuemin="0" aria-valuemax="100" aria-valuenow="60">
+      <span class="primary" style="--meter-value: 40" aria-hidden="true"></span>
+      <span id="meter-segment" class="secondary" style="--meter-value: 20" aria-hidden="true"></span>
+    </div>
+
+    <ol class="steps steps-horizontal">
+      <li class="step-complete"><span class="step-label">Done</span></li>
+      <li id="step-current" aria-current="step"><span class="step-label">Now</span></li>
+      <li id="step-upcoming"><span class="step-label">Next</span></li>
+    </ol>
+
+    <span id="aura" class="aura primary"><span class="alert">Framed</span></span>
+
+    <span id="tooltip" class="tooltip" role="tooltip">Tip</span>
+    <div id="status" class="status-bar" role="status">Saved</div>
+  </div>
+</body>
+</html>

@@ -35,6 +35,7 @@
     "neon",
     "gradient",
     "material",
+    "glass",
   ];
 
   const KEY = document.currentScript?.dataset.storage;
