@@ -9,8 +9,14 @@
 - `registerCommands()` and `commandSelector()` throw on a name that is neither a native `command` keyword nor a custom `--` command.
 - `FormValidator.init()` is removed; the module self-registers, and `applyEnhancement("validation", selector)` opts forms in by selector.
 - The non-modal dialog command is `command="--show"`; `command="show"` is not an HTML keyword and no longer opens a dialog.
+- `.choice-card` shows its control on the leading edge — a ring (radio) or box (checkbox) at rest that fills with the check — instead of a corner badge shown only once checked; the badge is now the "Corner badge" recipe in `docs/pages/forms/choice-cards.md`.
+- `.choice-card` is a two-column grid: each child element of the label becomes a row beside the indicator, so loose text needs an element.
+- `--choice-card-check-size` defaults to `1.25em` and also sets the width of the `.choice-card` indicator column.
 
 ### Added
+
+- `--choice-card-gap` sets the space between a `.choice-card` indicator and its label.
+- `tests/browser/choice-card.test.js` locks the leading indicator: visible at rest, level with the first line of a wrapping label, and kept under forced colors.
 
 - `.range` moves to a `1.125rem` thumb on a `0.625rem` track with a `data-enhance="range"` fill (`--range-progress`), named `datalist` values (`aria-valuetext` plus `output` sync), and `--flyout-pad` gives rich flyout panels dialog air.
 - `tests/browser/control-geometry.test.js` locks the shared control block geometry: input, select, addon, and buttons (including busy and icon-only) share one height per size, and the spinner follows its context at `1em`.
@@ -31,6 +37,8 @@
 
 ### Documentation and tooling
 
+- Choice cards: a stacked-list demo, and a "Corner badge" recipe (`.choice-tile`) that the Neon Ramen item page uses for its tiles.
+- `tests/browser/choice-chip.test.js` asserts the chip's dot layer keeps its height, not just its clip and colour.
 - `tests/exports.test.js` keys its inventory on every JS subpath of `package.json#exports`, so a new subpath or an export on an unlisted module now fails the suite.
 - Docs search ranks a query token inside a longer alias (`select` finds the Combobox page via `searchable select`) and matches body text on word boundaries, so `selection` no longer outranks `select`; Combobox and Forms carry `select`, `custom select`, and `form controls` aliases.
 - `focus.css` documents two focus contracts: text-like elements keep the `currentColor` fallback, boxed components draw the `--focus` ring, and an invalid field's `--form-invalid-border` ring is the one exception.

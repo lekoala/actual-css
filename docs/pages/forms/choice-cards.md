@@ -11,9 +11,31 @@
 | `.primary` / `.secondary` | Intent    | Accent for the selected state.                |
 
 - Use `.choice-card` on a `<label>` wrapping a native `<input type="radio">` or `<input type="checkbox">`. The input is visually hidden; in browsers without `:has()` it stays visible so selection state never disappears.
-- Selected items show a primary border, subtle background tint, and a checkmark badge at the top-right corner — round for radio, rounded square for checkbox.
-- Pair with grid or flex utilities for group layout. The badge overhangs the top-right corner, so avoid `overflow: hidden` on the direct container.
-- Supports disabled, checked, focus-visible, and invalid states.
+- The control shows before any choice: a ring (radio) or a rounded box (checkbox) on the leading edge, level with the first line. Checked, it fills with a check, and the card takes a primary border and a subtle tint.
+- Each child element of the label sits on its own row beside the indicator — a title and a `.muted` detail need no wrapper. Wrap loose text in an element.
+- Stack cards for a list of options (a person, an address, a delivery method), or pair them with grid utilities for options compared side by side.
+- Supports disabled, checked, focus-visible, and invalid states; the resting ring turns danger with the border.
+
+```html demo
+<fieldset class="field-group stack">
+  <legend class="field-label">Deliver to</legend>
+  <label class="choice-card">
+    <input type="radio" name="address" value="home" checked />
+    <strong>Home</strong>
+    <span class="muted">12 Rue des Tanneurs, 1000 Brussels</span>
+  </label>
+  <label class="choice-card">
+    <input type="radio" name="address" value="work" />
+    <strong>Work</strong>
+    <span class="muted">Avenue Louise 54, 1050 Ixelles</span>
+  </label>
+  <label class="choice-card">
+    <input type="radio" name="address" value="pickup" />
+    <strong>Pickup point</strong>
+    <span class="muted">Collect within 7 days</span>
+  </label>
+</fieldset>
+```
 
 ```html demo
 <div class="grid-3">
@@ -94,6 +116,52 @@ follows through its `em` sizing. Padding is density, so use a `.compact` or
 `.spacious` context to change it. Intent classes (`.primary`, `.secondary`) are
 supported on the `.choice-card` element.
 
+## Corner badge
+
+A tile whose content is the choice itself — a product image, a centred plan
+name — may want no indicator column, and a check badge over its corner once
+selected (radio/checkbox tile, selected tick, check in the corner). That is a
+recipe on the card's own `::before` (disc) and `::after` (check) layers,
+written in application CSS after the framework:
+
+```css
+.choice-tile {
+  --choice-card-check-size: 1.5em;
+
+  display: block;
+}
+
+.choice-tile::before,
+.choice-tile::after {
+  position: absolute;
+  inset-inline-end: -0.375em;
+  inset-block-start: -0.375em;
+  margin: 0;
+}
+
+.choice-tile::before {
+  border: 0;
+  box-shadow: 0 0 0 2px var(--surface);
+  transform: scale(0);
+}
+
+.choice-tile:has(:checked)::before {
+  transform: scale(1);
+}
+```
+
+```html
+<label class="choice-card choice-tile">
+  <input type="radio" name="cpu" value="1" checked />
+  <strong>8-core CPU</strong><br />
+  <span class="muted">32 GB RAM</span>
+</label>
+```
+
+The badge overhangs the corner, so no ancestor up to the grid may clip with
+`overflow: hidden`. The [Neon Ramen item page](../../demo/sites/neon-ramen/item.html)
+uses it for its sizes and toppings.
+
 ## Chips
 
 Add `.chip` for the compact pill form: filter chips, selectable tags, toggle
@@ -132,8 +200,10 @@ by widening the clip, as the `material` theme does.
 ## CSS hooks
 
 - `--choice-card-pad` — inner padding.
+- `--choice-card-gap` — space between the indicator column and the label.
 - `--choice-card-radius` — corner radius.
-- `--choice-card-check-size` — size of the check indicator.
+- `--choice-card-check-size` — size of the indicator, and the width of its
+  column.
 - `--choice-card-border` / `--choice-card-bg` — resting border and background;
   the checked state and hover rebind them, so a checked override needs
   `:has(:checked)`.
