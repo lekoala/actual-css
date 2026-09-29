@@ -225,7 +225,7 @@ browser supports it. Beyond those, apply the framework's judgment from the
 real product needs a JavaScript combobox (searchable select, removable tags,
 autocomplete suggestions), load a dedicated component and bridge its custom
 properties onto Actual's tokens.</p>
-<p><strong>Related terms:</strong> combo box, combobox, autocomplete, datalist, searchable select, enhanced select, multiple select, tags, chips, tag input, pill input.</p>
+<p><strong>Related terms:</strong> combo box, combobox, autocomplete, datalist, select, custom select, native select, searchable select, enhanced select, multiple select, dropdown, form controls, tags, chips, tag input, pill input.</p>
 <h2 id="theme-bridge">Theme bridge</h2>
 <p>The <a href="../../demo/templates/combobox.html">combobox template</a> themes
 <a href="https://github.com/lekoala/combobox"><code>@lekoala/combobox</code></a> entirely with Actual
@@ -494,9 +494,9 @@ keep the widget's behavior, restyle its tokens through the shared vocabulary.</p
         <h2 class="docs-search-title">Search documentation</h2>
       </header>
       <form method="dialog" data-docs-search-form>
-        <input class="input docs-search-input" type="search" placeholder="Search docs…" autocomplete="off" />
+        <input class="input docs-search-input" type="search" placeholder="Search docs…" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="docs-search-results" aria-autocomplete="list" />
       </form>
-      <ul class="docs-search-results stack" data-docs-search-results></ul>
+      <ul class="docs-search-results stack" data-docs-search-results id="docs-search-results" role="listbox" aria-label="Search results"></ul>
     </div>
   </dialog>
 </body>

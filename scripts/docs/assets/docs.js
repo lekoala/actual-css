@@ -104,27 +104,67 @@
     await indexLoading;
   }
 
+  // Ranking mirrors scoreEntry() in scripts/docs/search.js (kept self-contained:
+  // this file ships without a bundler). Keep both in sync when weights change.
+  function tokenize(value) {
+    return (value ?? "")
+      .toLowerCase()
+      .split(/[^a-z0-9]+/)
+      .filter(Boolean);
+  }
+
+  function escapeRegExp(value) {
+    return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  }
+
+  function hasWord(haystack, query) {
+    if (!query) return false;
+    return new RegExp(`\\b${escapeRegExp(query)}\\b`).test(haystack);
+  }
+
   function score(entry, query) {
-    const q = query.toLowerCase();
+    const q = query.trim().toLowerCase();
+    if (!q) return 0;
+    const qTokens = new Set(tokenize(q));
     const title = (entry.title ?? "").toLowerCase();
     const description = (entry.description ?? "").toLowerCase();
     const text = (entry.text ?? "").toLowerCase();
     let score = 0;
-    if (title === q) score += 100;
-    else if (title.startsWith(q)) score += 60;
-    else if (title.includes(q)) score += 30;
+    if (title === q) {
+      score += 100;
+    } else {
+      let titleBonus = 0;
+      if (title.startsWith(q)) titleBonus = Math.max(titleBonus, 60);
+      if (title.includes(q)) titleBonus = Math.max(titleBonus, 30);
+      if (tokenize(title).some((token) => qTokens.has(token))) {
+        titleBonus = Math.max(titleBonus, 35);
+      }
+      score += titleBonus;
+    }
+    let aliasBonus = 0;
+    for (const raw of entry.aliases ?? []) {
+      const alias = raw.toLowerCase();
+      const aliasTokens = tokenize(alias);
+      if (alias === q) {
+        aliasBonus = Math.max(aliasBonus, 80);
+      } else if (aliasTokens.length > 0 && aliasTokens.every((token) => qTokens.has(token))) {
+        aliasBonus = Math.max(aliasBonus, 50);
+      } else if (aliasTokens.some((token) => qTokens.has(token))) {
+        aliasBonus = Math.max(aliasBonus, 50);
+      } else if (q.includes(alias)) {
+        aliasBonus = Math.max(aliasBonus, 40);
+      }
+    }
+    score += aliasBonus;
     for (const heading of entry.headings ?? []) {
-      if (heading.toLowerCase().includes(q)) score += 20;
+      const label = heading.toLowerCase();
+      if (label.includes(q)) score += 20;
+      else if (tokenize(label).some((token) => qTokens.has(token))) score += 15;
     }
-    // Aliases stay below an exact title: a known synonym is the second-best
-    // signal after the canonical name. Only "query contains alias" counts —
-    // a short query must not inherit a boost from a longer alias.
-    for (const alias of entry.aliases ?? []) {
-      if (alias === q) score += 80;
-      else if (q.includes(alias)) score += 40;
-    }
-    if (description.includes(q)) score += 10;
-    if (text.includes(q)) score += 5;
+    if (hasWord(description, q)) score += 10;
+    else if (description.includes(q)) score += 2;
+    if (hasWord(text, q)) score += 5;
+    else if (text.includes(q)) score += 1;
     return score;
   }
 
@@ -138,6 +178,8 @@
   function renderResults() {
     if (!searchResults) return;
     activeIndex = -1;
+    searchInput?.removeAttribute("aria-activedescendant");
+    searchInput?.setAttribute("aria-expanded", String(results.length > 0));
     if (results.length === 0) {
       searchResults.innerHTML = "";
       return;
@@ -145,7 +187,8 @@
     searchResults.innerHTML = results
       .map(
         (entry, i) =>
-          `<li data-index="${i}"><a href="${siteRoot()}${entry.url}">${escapeHtml(entry.title)}` +
+          `<li id="docs-search-opt-${i}" role="option" aria-selected="false" data-index="${i}">` +
+          `<a href="${siteRoot()}${entry.url}" tabindex="-1">${escapeHtml(entry.title)}` +
           (entry.description
             ? `<span class="docs-search-match"> — ${escapeHtml(entry.description)}</span>`
             : "") +
@@ -164,20 +207,33 @@
     results = index
       .map((entry) => ({ entry, score: score(entry, q) }))
       .filter((item) => item.score > 0)
-      .sort((a, b) => b.score - a.score)
+      .sort((a, b) => b.score - a.score || a.entry.title.localeCompare(b.entry.title))
       .slice(0, 8)
       .map((item) => item.entry);
     renderResults();
   }
 
+  // Focus stays in the input; arrows move the highlight via
+  // aria-activedescendant. Moving focus onto a result link would leave the
+  // input's keydown handler and strand arrow navigation after the first item.
   function setActive(next) {
-    if (!searchResults) return;
+    if (!searchResults || !searchInput) return;
     const items = searchResults.querySelectorAll("li");
     if (items.length === 0) return;
     activeIndex = (next + items.length) % items.length;
-    for (const item of items) item.classList.remove("docs-search-active");
-    items[activeIndex].classList.add("docs-search-active");
-    items[activeIndex].querySelector("a").focus();
+    for (const item of items) {
+      item.classList.remove("docs-search-active");
+      item.setAttribute("aria-selected", "false");
+    }
+    const current = items[activeIndex];
+    current.classList.add("docs-search-active");
+    current.setAttribute("aria-selected", "true");
+    searchInput.setAttribute("aria-activedescendant", current.id);
+    current.scrollIntoView({ block: "nearest" });
+  }
+
+  function goToResult(target) {
+    if (target?.url) location.assign(siteRoot() + target.url);
   }
 
   if (searchDialog && searchInput && searchResults) {
@@ -195,20 +251,43 @@
 
     searchInput.addEventListener("input", () => runSearch(searchInput.value));
 
-    searchInput.addEventListener("keydown", (event) => {
+    // Dialog-level so arrows keep working with focus in the input (and would
+    // survive a focus move onto a result). Enter falls back to the first
+    // result; the form submit guard below stops method="dialog" from closing
+    // the dialog instead of navigating when there is nothing to go to.
+    searchDialog.addEventListener("keydown", (event) => {
       if (event.key === "ArrowDown") {
         event.preventDefault();
         setActive(activeIndex + 1);
       } else if (event.key === "ArrowUp") {
         event.preventDefault();
         setActive(activeIndex - 1);
+      } else if (event.key === "Home") {
+        event.preventDefault();
+        setActive(0);
+      } else if (event.key === "End") {
+        event.preventDefault();
+        setActive(results.length - 1);
       } else if (event.key === "Enter") {
         const target = results[activeIndex >= 0 ? activeIndex : 0];
         if (target) {
           event.preventDefault();
-          target.url && location.assign(siteRoot() + target.url);
+          goToResult(target);
         }
       }
+    });
+
+    searchResults.addEventListener("mousemove", (event) => {
+      const item = event.target.closest("li[data-index]");
+      if (item) setActive(Number(item.dataset.index));
+    });
+
+    searchDialog.querySelector("[data-docs-search-form]")?.addEventListener("submit", (event) => {
+      const target = results[activeIndex >= 0 ? activeIndex : 0];
+      // Always cancel: implicit submission would request-close the dialog
+      // without navigating.
+      event.preventDefault();
+      if (target) goToResult(target);
     });
 
     document.addEventListener("keydown", (event) => {

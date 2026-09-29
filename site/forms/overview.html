@@ -229,6 +229,7 @@
 <li>Searchable selects, tags and autocomplete are a JavaScript widget concern; theme an external combobox with Actual tokens — see the <a href="../../demo/templates/combobox.html">combobox template</a>.</li>
 <li>Formatted text (bold, lists, links) is a hosted-editor concern; the native textarea stays the baseline and an external engine is themed the same way — see the <a href="../../demo/templates/rich-text.html">rich-text template</a> and the <a href="../../demo/templates/composer.html">composer template</a> for the plain-text case.</li>
 </ul>
+<p><strong>Related terms:</strong> form controls, select, custom select, dropdown, input, textarea, checkbox, radio.</p>
 <h2 id="class-reference">Class reference</h2>
 <div class="table-wrap"><table class="table">
 <thead>
@@ -719,9 +720,9 @@ it a stronger fill.</p>
         <h2 class="docs-search-title">Search documentation</h2>
       </header>
       <form method="dialog" data-docs-search-form>
-        <input class="input docs-search-input" type="search" placeholder="Search docs…" autocomplete="off" />
+        <input class="input docs-search-input" type="search" placeholder="Search docs…" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="docs-search-results" aria-autocomplete="list" />
       </form>
-      <ul class="docs-search-results stack" data-docs-search-results></ul>
+      <ul class="docs-search-results stack" data-docs-search-results id="docs-search-results" role="listbox" aria-label="Search results"></ul>
     </div>
   </dialog>
 </body>

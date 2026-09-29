@@ -227,7 +227,7 @@ states, commands and lifecycle, while Actual maps its visual language onto the
 package's <code>--rt-*</code> tokens. No adapter, no compatibility layer.</p>
 <p><strong>Related terms:</strong> rich text, richtext, WYSIWYG, HTML editor, formatted text, Squire, ProseMirror, Tiptap, text formatting, bold italic, mentions, slash commands.</p>
 <h2 id="theme-bridge">Theme bridge</h2>
-<p>The template loads the package JS and CSS from a CDN (<code>@0.1</code> caret range) and
+<p>The template loads the package JS and CSS from a CDN (<code>@0.2</code> caret range) and
 declares one editor per field — Actual never builds toolbar buttons or calls
 into the editing engine:</p>
 <pre><code class="language-html">&lt;div class=&quot;field actual-rich-text&quot;&gt;
@@ -249,6 +249,7 @@ into the editing engine:</p>
   --rt-bg: var(--surface);
   --rt-fg: var(--text);
   --rt-border: var(--form-invalid-border, var(--control-border, var(--border)));
+  --rt-divider: var(--border);
   --rt-focus: var(--form-invalid-border, var(--focus));
   --rt-toolbar-bg: var(--surface-subtle);
   --rt-button-pressed-bg: var(--state-selected);
@@ -259,11 +260,9 @@ into the editing engine:</p>
 </code></pre>
 <p>The card in the template documents the full token map of this recipe. The
 suggestion popover is a child of <code>.rt-shell</code>, so it inherits the tokens like
-the rest of the editor.</p>
-<p>One state escapes the token map: the package's <code>:hover</code> rule out-specifies its
-<code>[aria-pressed=&quot;true&quot;]</code> rule, so hovering an active button paints the hover
-overlay under the pressed foreground. The bridge re-asserts the pressed
-background and foreground on <code>[aria-pressed=&quot;true&quot;]:hover</code>.</p>
+the rest of the editor. <code>--rt-border</code> paints only the field frame, so the
+invalid and hover hooks never reach the toolbar separators or the quote bar,
+which follow <code>--rt-divider</code>.</p>
 <h2 id="bridge-contract">Bridge contract</h2>
 <p><code>@lekoala/rich-text</code> owns the editor UI semantics — progressive enhancement,
 sanitization, toolbar behaviour and keyboard, links, <code>@mentions</code>, <code>/</code>
@@ -487,9 +486,9 @@ re-own the danger hook from there.</li>
         <h2 class="docs-search-title">Search documentation</h2>
       </header>
       <form method="dialog" data-docs-search-form>
-        <input class="input docs-search-input" type="search" placeholder="Search docs…" autocomplete="off" />
+        <input class="input docs-search-input" type="search" placeholder="Search docs…" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="docs-search-results" aria-autocomplete="list" />
       </form>
-      <ul class="docs-search-results stack" data-docs-search-results></ul>
+      <ul class="docs-search-results stack" data-docs-search-results id="docs-search-results" role="listbox" aria-label="Search results"></ul>
     </div>
   </dialog>
 </body>
