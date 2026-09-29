@@ -746,7 +746,7 @@ it("scrolls only on the inline axis, without clipping a focus ring", async () =>
       const result = await probe(
         view,
         `
-        // --focus-outline is 2x --border-width, offset by --focus-outline-offset.
+        // --focus-outline is --focus-ring-width, offset by --focus-outline-offset.
         const RING_PX = 4;
         const build = (width, interactive) => {
           const box = document.createElement("div");

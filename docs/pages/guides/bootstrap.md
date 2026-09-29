@@ -18,7 +18,8 @@ For an incremental migration, use one of these approaches:
 
 * migrate isolated pages or application areas;
 * control precedence with cascade layers or import order;
-* use a project-side prefix transform for Actual while both frameworks coexist.
+* use a project-side prefix transform for Actual while both frameworks coexist,
+  renaming the runtime's state classes in `actual-css/js/selectors` as well.
 
 The layered import is the cleanest way to keep both stylesheets during the
 migration:

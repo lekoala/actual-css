@@ -21,7 +21,7 @@ The most dangerous is `.outline`: it is an Actual button variant (`.btn.outline`
 
 Other overlapping names: `.table`, `.sticky`, `.truncate`, `.prose`, `.sr-only`, plus layout names such as `.grid`, `.grow`, and `.items-center`.
 
-For a staged migration, use cascade layers, controlled import order, or a project-side Actual prefix transform where necessary. The transform lives in the consumer's own pipeline (a build-time rename on the Actual import), not in the Actual CLI, which only bundles.
+For a staged migration, use cascade layers, controlled import order, or a project-side Actual prefix transform where necessary. The transform lives in the consumer's own pipeline (a build-time rename on the Actual import), not in the Actual CLI, which only bundles. The JavaScript runtime writes state classes (`is-open`, `danger`, …): rename them in `actual-css/js/selectors` too, or flyouts and dialogs never open.
 
 The layered import is the cleanest way to keep both stylesheets during the
 migration:

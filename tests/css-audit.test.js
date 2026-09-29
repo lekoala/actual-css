@@ -1218,7 +1218,7 @@ test("steps derive markers from list order and keep state semantic", () => {
      navigable row — reserves the focus ring's own width and offset. */
   expect(css).toMatch(/\n\.steps-horizontal \{[^}]*overflow-y: hidden;/);
   expect(css).toMatch(
-    /\n\.steps-horizontal:has\(a\[href\]\) \{[^}]*padding-block: calc\(var\(--focus-outline-offset\) \+ var\(--border-width\) \* 2\);/,
+    /\n\.steps-horizontal:has\(a\[href\]\) \{[^}]*padding-block: calc\(var\(--focus-outline-offset\) \+ var\(--focus-ring-width\)\);/,
   );
 
   /* The primitive's own rule carries no orientation. Any of these would put a
@@ -1617,6 +1617,56 @@ test("action focus is a solid --focus line, never an intent or context ring", ()
   ]) {
     expect(readRules(file), file).toContain(ACTION_LINE);
   }
+});
+
+/*
+ * Two focus contracts (focus.css): text-like elements declare no outline and
+ * keep the currentColor fallback; boxed components draw the --focus ring. A
+ * third recipe — the fallback token recolored, a hard-coded width, an intent
+ * color — is what made .tab and .rating 4px under prefers-contrast while
+ * buttons were 3px.
+ */
+test("every framework outline is one of the two focus contracts", () => {
+  const cssRoot = join(import.meta.dir, "..", "src", "css");
+  const ALLOWED = new Set([
+    // Boxed-component ring; fields swap in the invalid color (the exception).
+    "var(--focus-ring-width) solid var(--focus)",
+    "var(--focus-ring-width) solid var(--form-invalid-border, var(--focus))",
+    // Generic fallback and its pointer-focus removal.
+    "var(--focus-outline)",
+    "none",
+    // Forced-colors carriers: the ring itself is a shadow or a Canvas gap.
+    "2px solid transparent",
+    "2px solid Canvas",
+  ]);
+  const found = [];
+  const walk = (dir) => {
+    for (const entry of readdirSync(dir)) {
+      const full = join(dir, entry);
+      if (statSync(full).isDirectory()) {
+        // Demo themes restyle focus on purpose (gradient's halo).
+        if (entry !== "themes") walk(full);
+      } else if (entry.endsWith(".css")) {
+        const source = readFileSync(full, "utf8").replace(/\/\*[\s\S]*?\*\//g, "");
+        for (const [, prop, value] of source.matchAll(
+          /(?<![\w-])(outline(?:-color)?)\s*:\s*([^;]+);/g,
+        )) {
+          found.push({ file: entry, prop, value: value.trim() });
+        }
+      }
+    }
+  };
+  walk(cssRoot);
+
+  expect(found.length).toBeGreaterThan(0);
+  for (const { file, prop, value } of found) {
+    expect(prop, `${file}: ${prop}: ${value}`).toBe("outline");
+    expect(ALLOWED.has(value), `${file}: outline: ${value}`).toBe(true);
+  }
+  // Only the baseline reads the fallback token.
+  expect(found.filter((f) => f.value === "var(--focus-outline)").map((f) => f.file)).toEqual([
+    "focus.css",
+  ]);
 });
 
 /*
