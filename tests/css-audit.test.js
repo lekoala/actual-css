@@ -1068,9 +1068,24 @@ test("optional aura only animates when motion is allowed", () => {
   expect(css).toContain("@media (prefers-reduced-motion: no-preference)");
   expect(css).toContain(".aura:not(.aura-glow)");
   // Forced-colors: the transparent border baseline becomes a visible boundary
-  // without a repaint block (CONTRIBUTING.md "Forced colors invariant").
-  expect(css).toContain("border: var(--border-width) solid transparent;");
+  // without a repaint block (CONTRIBUTING.md "Forced colors invariant"). The
+  // border is the whole frame, so no padding may add a second line inside it.
+  expect(css).toContain("border: var(--aura-width) solid transparent;");
+  expect(css).not.toMatch(/\.aura\s*\{[^}]*padding:/);
   expect(css).not.toContain("@media (forced-colors: active)");
+});
+
+test("shimmer never erases its label and carries no state", () => {
+  const css = readCss("src/css/effects/shimmer.css");
+  const [base, gated] = css.split("@supports (background-clip: text)");
+
+  // Transparent text is only safe where the clip paints it back.
+  expect(base).not.toContain("color: transparent");
+  expect(gated).toContain("@media (prefers-reduced-motion: no-preference)");
+  expect(gated).toContain("color: transparent");
+  // currentColor turns transparent with the text, so the gradient cannot use it.
+  expect(gated).not.toContain("currentColor");
+  expect(css).not.toContain("aria-");
 });
 
 test("optional FAB preserves DOM order", () => {

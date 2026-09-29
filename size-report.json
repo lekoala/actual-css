@@ -1,12 +1,12 @@
 {
-  "totalRaw": 339463,
+  "totalRaw": 341760,
   "core": {
     "minified": 11757,
     "brotli": 2697
   },
   "full": {
-    "minified": 129118,
-    "brotli": 18499
+    "minified": 129696,
+    "brotli": 18588
   },
   "js": {
     "full": {
@@ -14,7 +14,7 @@
       "brotli": 17465
     }
   },
-  "fileCount": 113,
+  "fileCount": 114,
   "files": [
     {
       "file": "components/steps.css",
@@ -62,7 +62,7 @@
     },
     {
       "file": "effects/aura.css",
-      "raw": 5835
+      "raw": 6445
     },
     {
       "file": "forms/range.css",
@@ -321,6 +321,10 @@
       "raw": 1681
     },
     {
+      "file": "effects/shimmer.css",
+      "raw": 1662
+    },
+    {
       "file": "components/indicator.css",
       "raw": 1658
     },
@@ -458,7 +462,7 @@
     },
     {
       "file": "effects/index.css",
-      "raw": 67
+      "raw": 92
     },
     {
       "file": "actual.layer.css",

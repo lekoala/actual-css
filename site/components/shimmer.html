@@ -5,8 +5,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Intent Nesting — Actual CSS</title>
-  <meta name="description" content="Intent on an ancestor must not tint nested components, and a local intent inside an intent-carrying ancestor must win. Both directions are verified in tests/css-audit.test.js, tests/browser/intent-boundary.test.js, tests/browser/soft-boundary.test.js and the kitchen-sink demo template. Intent classes expose --intent, --intent-fg, and the soft-foreground relay --intent-soft-fg; each consuming component opens a local intent boundary in a :where() block that resets exactly the tokens it consumes to initial. Parent intents do not leak into nested components, and a local intent class still wins because it has higher specificity than :where().">
+  <title>Shimmer — Actual CSS</title>
+  <meta name="description" content="Module — import actual-css/css/effects/shimmer or actual-css/css/effects.">
   <link rel="stylesheet" href="../../src/css/actual.full.css">
   <link rel="stylesheet" href="../assets/actual-themes.min.css">
   <link rel="stylesheet" href="../../scripts/docs/assets/docs.css">
@@ -114,35 +114,35 @@
       </ul>
       <p class="docs-nav-group">Components</p>
       <ul class="nav-list">
-        <li><a class="nav-link" href="../components/accordion.html">Accordion</a></li>
-        <li><a class="nav-link" href="../components/alert.html">Alert</a></li>
-        <li><a class="nav-link" href="../components/app-navigation.html">App Navigation</a></li>
-        <li><a class="nav-link" href="../components/aura.html">Aura</a></li>
-        <li><a class="nav-link" href="../components/avatar.html">Avatar</a></li>
-        <li><a class="nav-link" href="../components/badge.html">Badge</a></li>
-        <li><a class="nav-link" href="../components/bleed.html">Bleed</a></li>
-        <li><a class="nav-link" href="../components/breadcrumb.html">Breadcrumb</a></li>
-        <li><a class="nav-link" href="../components/button.html">Button</a></li>
-        <li><a class="nav-link" href="../components/card.html">Card</a></li>
-        <li><a class="nav-link" href="../components/chat.html">Chat</a></li>
-        <li><a class="nav-link" href="../components/close.html">Close</a></li>
-        <li><a class="nav-link" href="../components/dialog.html">Dialog</a></li>
-        <li><a class="nav-link" href="../components/drawer.html">Drawer</a></li>
-        <li><a class="nav-link" href="../components/data-list.html">Data list</a></li>
-        <li><a class="nav-link" href="../components/fab.html">Floating action button</a></li>
-        <li><a class="nav-link" href="../components/indicator.html">Indicator</a></li>
-        <li><a class="nav-link" href="../components/key.html">Key</a></li>
-        <li><a class="nav-link" href="../components/list.html">List</a></li>
-        <li><a class="nav-link" href="../components/meter.html">Meter</a></li>
-        <li><a class="nav-link" href="../components/navbar.html">Navbar</a></li>
-        <li><a class="nav-link" href="../components/pagination.html">Pagination</a></li>
-        <li><a class="nav-link" href="../components/progress.html">Progress</a></li>
-        <li><a class="nav-link" href="../components/rating.html">Rating</a></li>
-        <li><a class="nav-link" href="../components/shimmer.html">Shimmer</a></li>
-        <li><a class="nav-link" href="../components/skeleton.html">Skeleton</a></li>
-        <li><a class="nav-link" href="../components/spinner.html">Spinner</a></li>
-        <li><a class="nav-link" href="../components/steps.html">Steps</a></li>
-        <li><a class="nav-link" href="../components/table.html">Table</a></li>
+        <li><a class="nav-link" href="accordion.html">Accordion</a></li>
+        <li><a class="nav-link" href="alert.html">Alert</a></li>
+        <li><a class="nav-link" href="app-navigation.html">App Navigation</a></li>
+        <li><a class="nav-link" href="aura.html">Aura</a></li>
+        <li><a class="nav-link" href="avatar.html">Avatar</a></li>
+        <li><a class="nav-link" href="badge.html">Badge</a></li>
+        <li><a class="nav-link" href="bleed.html">Bleed</a></li>
+        <li><a class="nav-link" href="breadcrumb.html">Breadcrumb</a></li>
+        <li><a class="nav-link" href="button.html">Button</a></li>
+        <li><a class="nav-link" href="card.html">Card</a></li>
+        <li><a class="nav-link" href="chat.html">Chat</a></li>
+        <li><a class="nav-link" href="close.html">Close</a></li>
+        <li><a class="nav-link" href="dialog.html">Dialog</a></li>
+        <li><a class="nav-link" href="drawer.html">Drawer</a></li>
+        <li><a class="nav-link" href="data-list.html">Data list</a></li>
+        <li><a class="nav-link" href="fab.html">Floating action button</a></li>
+        <li><a class="nav-link" href="indicator.html">Indicator</a></li>
+        <li><a class="nav-link" href="key.html">Key</a></li>
+        <li><a class="nav-link" href="list.html">List</a></li>
+        <li><a class="nav-link" href="meter.html">Meter</a></li>
+        <li><a class="nav-link" href="navbar.html">Navbar</a></li>
+        <li><a class="nav-link" href="pagination.html">Pagination</a></li>
+        <li><a class="nav-link" href="progress.html">Progress</a></li>
+        <li><a class="nav-link" href="rating.html">Rating</a></li>
+        <li><a class="nav-link" href="shimmer.html" aria-current="page">Shimmer</a></li>
+        <li><a class="nav-link" href="skeleton.html">Skeleton</a></li>
+        <li><a class="nav-link" href="spinner.html">Spinner</a></li>
+        <li><a class="nav-link" href="steps.html">Steps</a></li>
+        <li><a class="nav-link" href="table.html">Table</a></li>
       </ul>
       <p class="docs-nav-group">Forms</p>
       <ul class="nav-list">
@@ -167,16 +167,16 @@
       </ul>
       <p class="docs-nav-group">Patterns</p>
       <ul class="nav-list">
-        <li><a class="nav-link" href="overview.html">Patterns</a></li>
-        <li><a class="nav-link" href="actions.html">Actions</a></li>
-        <li><a class="nav-link" href="navigation-list.html">Navigation List</a></li>
-        <li><a class="nav-link" href="icon-input.html">Icon Input</a></li>
-        <li><a class="nav-link" href="icon-slot.html">Icon slot</a></li>
-        <li><a class="nav-link" href="structured-lists.html">Structured Lists</a></li>
-        <li><a class="nav-link" href="hierarchical-nav.html">Hierarchical Scrollable Nav</a></li>
-        <li><a class="nav-link" href="code-block.html">Code Block With Copy Button</a></li>
-        <li><a class="nav-link" href="exclusive-accordion.html">Exclusive Accordion</a></li>
-        <li><a class="nav-link" href="intent-nesting.html" aria-current="page">Intent Nesting</a></li>
+        <li><a class="nav-link" href="../patterns/overview.html">Patterns</a></li>
+        <li><a class="nav-link" href="../patterns/actions.html">Actions</a></li>
+        <li><a class="nav-link" href="../patterns/navigation-list.html">Navigation List</a></li>
+        <li><a class="nav-link" href="../patterns/icon-input.html">Icon Input</a></li>
+        <li><a class="nav-link" href="../patterns/icon-slot.html">Icon slot</a></li>
+        <li><a class="nav-link" href="../patterns/structured-lists.html">Structured Lists</a></li>
+        <li><a class="nav-link" href="../patterns/hierarchical-nav.html">Hierarchical Scrollable Nav</a></li>
+        <li><a class="nav-link" href="../patterns/code-block.html">Code Block With Copy Button</a></li>
+        <li><a class="nav-link" href="../patterns/exclusive-accordion.html">Exclusive Accordion</a></li>
+        <li><a class="nav-link" href="../patterns/intent-nesting.html">Intent Nesting</a></li>
       </ul>
       <p class="docs-nav-group">Utilities</p>
       <ul class="nav-list">
@@ -211,25 +211,103 @@
           <nav aria-label="Breadcrumb">
             <ol class="breadcrumb">
               <li><a href="../index.html">Docs</a></li>
-              <li><span aria-current="page">Intent Nesting</span></li>
+              <li><span aria-current="page">Shimmer</span></li>
             </ol>
           </nav>
 
           <div class="prose docs-prose">
-<h1 id="intent-nesting">Intent Nesting</h1>
-<p>Intent on an ancestor must not tint nested components, and a local intent inside an intent-carrying ancestor must win. Both directions are verified in <code>tests/css-audit.test.js</code>, <code>tests/browser/intent-boundary.test.js</code>, <code>tests/browser/soft-boundary.test.js</code> and the kitchen-sink demo template. Intent classes expose <code>--intent</code>, <code>--intent-fg</code>, and the soft-foreground relay <code>--intent-soft-fg</code>; each consuming component opens a local intent boundary in a <code>:where()</code> block that resets exactly the tokens it consumes to initial. Parent intents do not leak into nested components, and a local intent class still wins because it has higher specificity than <code>:where()</code>.</p>
-
+<h1 id="shimmer">Shimmer</h1>
+<blockquote>
+<p><strong>Module</strong> — import <code>actual-css/css/effects/shimmer</code> or <code>actual-css/css/effects</code>.</p>
+</blockquote>
+<p>Shimmer sweeps a highlight across a text label to show an activity in
+progress: an agent working, a chatbot composing, a job processing.</p>
+</div>
+<div class="docs-example">
+  <div class="docs-preview">
+<div class="stack">
+  <span class="shimmer" role="status">Working…</span>
+  <p class="cluster">
+    <span class="spinner" aria-hidden="true"></span>
+    <span class="shimmer" role="status">Generating the report…</span>
+  </p>
+</div>
+  </div>
+  <div class="docs-code">
+    <pre><code class="language-html">&lt;div class=&quot;stack&quot;&gt;
+  &lt;span class=&quot;shimmer&quot; role=&quot;status&quot;&gt;Working…&lt;/span&gt;
+  &lt;p class=&quot;cluster&quot;&gt;
+    &lt;span class=&quot;spinner&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;
+    &lt;span class=&quot;shimmer&quot; role=&quot;status&quot;&gt;Generating the report…&lt;/span&gt;
+  &lt;/p&gt;
+&lt;/div&gt;</code></pre>
+  </div>
+</div>
+<div class="prose docs-prose">
+<p><strong>Related terms:</strong> shimmering text, loading text, thinking indicator, pending
+label, typing indicator.</p>
+<p>Shimmer is presentation only and selects no ARIA attribute. Put
+<code>role=&quot;status&quot;</code> on a message that should be announced, and <code>aria-busy=&quot;true&quot;</code>
+on the region whose content is being updated — not on the message because it
+looks busy. Assistive technology may hold back changes inside a busy region
+until it is released.</p>
+<p>The label rests on <code>--shimmer-color</code> and the band passes in
+<code>--shimmer-highlight</code>; one pass takes <code>--duration-shimmer</code>, the pace shared
+with <code>.skeleton</code> and indeterminate <code>.progress</code>. With reduced motion, or in a
+browser without <code>background-clip: text</code>, the label is plain
+<code>--shimmer-color</code> text.</p>
+<h2 id="choosing-a-waiting-signal">Choosing a waiting signal</h2>
+<div class="table-wrap"><table class="table">
+<thead>
+<tr><th>Primitive</th><th>Signals</th></tr>
+</thead>
+<tbody>
+<tr><td><a href="spinner.html"><code>.spinner</code></a></td><td>An operation takes time</td></tr>
+<tr><td><a href="skeleton.html"><code>.skeleton</code></a></td><td>Content is not available yet</td></tr>
+<tr><td><code>.shimmer</code></td><td>This label describes an activity in progress</td></tr>
+<tr><td><a href="aura.html"><code>.aura</code></a></td><td>This object is emphasized</td></tr>
+</tbody>
+</table></div>
+<p>They compose rather than imply one another: <code>aria-busy</code> never adds an aura or
+a shimmer. A card being processed can carry several, each for its own reason:</p>
+</div>
+<div class="docs-example">
+  <div class="docs-preview">
+<span class="aura primary">
+  <article class="card stack" style="inline-size: 18rem">
+    <p><strong>Quarterly import</strong></p>
+    <p class="shimmer" role="status">Processing 1,204 rows…</p>
+    <div class="stack" aria-busy="true">
+      <div class="skeleton" data-shape="text" aria-hidden="true"></div>
+      <div class="skeleton" data-shape="text" aria-hidden="true"></div>
+    </div>
+  </article>
+</span>
+  </div>
+  <div class="docs-code">
+    <pre><code class="language-html">&lt;span class=&quot;aura primary&quot;&gt;
+  &lt;article class=&quot;card stack&quot; style=&quot;inline-size: 18rem&quot;&gt;
+    &lt;p&gt;&lt;strong&gt;Quarterly import&lt;/strong&gt;&lt;/p&gt;
+    &lt;p class=&quot;shimmer&quot; role=&quot;status&quot;&gt;Processing 1,204 rows…&lt;/p&gt;
+    &lt;div class=&quot;stack&quot; aria-busy=&quot;true&quot;&gt;
+      &lt;div class=&quot;skeleton&quot; data-shape=&quot;text&quot; aria-hidden=&quot;true&quot;&gt;&lt;/div&gt;
+      &lt;div class=&quot;skeleton&quot; data-shape=&quot;text&quot; aria-hidden=&quot;true&quot;&gt;&lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/article&gt;
+&lt;/span&gt;</code></pre>
+  </div>
 </div>
 
+
           <div class="cluster docs-source-links">
-            <a class="btn sm ghost" href="https://github.com/lekoala/actual-css/edit/master/docs/pages/patterns/intent-nesting.md" rel="noopener noreferrer">Edit on GitHub</a>
-            <a class="btn sm ghost" href="https://github.com/lekoala/actual-css/blob/master/docs/pages/patterns/intent-nesting.md" rel="noopener noreferrer">View Markdown</a>
+            <a class="btn sm ghost" href="https://github.com/lekoala/actual-css/edit/master/docs/pages/components/shimmer.md" rel="noopener noreferrer">Edit on GitHub</a>
+            <a class="btn sm ghost" href="https://github.com/lekoala/actual-css/blob/master/docs/pages/components/shimmer.md" rel="noopener noreferrer">View Markdown</a>
           </div>
         </article>
 
         <nav class="cluster docs-prevnext" aria-label="Page navigation">
-                    <a class="btn outline" href="exclusive-accordion.html">&larr; Exclusive Accordion</a>
-                    <a class="btn outline" href="../utilities/overview.html">Utilities &rarr;</a>
+                    <a class="btn outline" href="rating.html">&larr; Rating</a>
+                    <a class="btn outline" href="skeleton.html">Skeleton &rarr;</a>
         </nav>
       </main>
 
@@ -237,7 +315,7 @@
         <nav class="scrollspy" data-enhance="scrollspy" data-scrollspy-offset="80" aria-label="On this page">
           <p class="docs-nav-group">On this page</p>
           <ul class="nav-list docs-toc-list" data-docs-toc>
-
+        <li><a class="nav-link" href="#choosing-a-waiting-signal" data-docs-toc-item data-level="2">Choosing a waiting signal</a></li>
           </ul>
         </nav>
       </aside>
@@ -293,35 +371,35 @@
       </ul>
       <p class="docs-nav-group">Components</p>
       <ul class="nav-list">
-        <li><a class="nav-link" href="../components/accordion.html">Accordion</a></li>
-        <li><a class="nav-link" href="../components/alert.html">Alert</a></li>
-        <li><a class="nav-link" href="../components/app-navigation.html">App Navigation</a></li>
-        <li><a class="nav-link" href="../components/aura.html">Aura</a></li>
-        <li><a class="nav-link" href="../components/avatar.html">Avatar</a></li>
-        <li><a class="nav-link" href="../components/badge.html">Badge</a></li>
-        <li><a class="nav-link" href="../components/bleed.html">Bleed</a></li>
-        <li><a class="nav-link" href="../components/breadcrumb.html">Breadcrumb</a></li>
-        <li><a class="nav-link" href="../components/button.html">Button</a></li>
-        <li><a class="nav-link" href="../components/card.html">Card</a></li>
-        <li><a class="nav-link" href="../components/chat.html">Chat</a></li>
-        <li><a class="nav-link" href="../components/close.html">Close</a></li>
-        <li><a class="nav-link" href="../components/dialog.html">Dialog</a></li>
-        <li><a class="nav-link" href="../components/drawer.html">Drawer</a></li>
-        <li><a class="nav-link" href="../components/data-list.html">Data list</a></li>
-        <li><a class="nav-link" href="../components/fab.html">Floating action button</a></li>
-        <li><a class="nav-link" href="../components/indicator.html">Indicator</a></li>
-        <li><a class="nav-link" href="../components/key.html">Key</a></li>
-        <li><a class="nav-link" href="../components/list.html">List</a></li>
-        <li><a class="nav-link" href="../components/meter.html">Meter</a></li>
-        <li><a class="nav-link" href="../components/navbar.html">Navbar</a></li>
-        <li><a class="nav-link" href="../components/pagination.html">Pagination</a></li>
-        <li><a class="nav-link" href="../components/progress.html">Progress</a></li>
-        <li><a class="nav-link" href="../components/rating.html">Rating</a></li>
-        <li><a class="nav-link" href="../components/shimmer.html">Shimmer</a></li>
-        <li><a class="nav-link" href="../components/skeleton.html">Skeleton</a></li>
-        <li><a class="nav-link" href="../components/spinner.html">Spinner</a></li>
-        <li><a class="nav-link" href="../components/steps.html">Steps</a></li>
-        <li><a class="nav-link" href="../components/table.html">Table</a></li>
+        <li><a class="nav-link" href="accordion.html">Accordion</a></li>
+        <li><a class="nav-link" href="alert.html">Alert</a></li>
+        <li><a class="nav-link" href="app-navigation.html">App Navigation</a></li>
+        <li><a class="nav-link" href="aura.html">Aura</a></li>
+        <li><a class="nav-link" href="avatar.html">Avatar</a></li>
+        <li><a class="nav-link" href="badge.html">Badge</a></li>
+        <li><a class="nav-link" href="bleed.html">Bleed</a></li>
+        <li><a class="nav-link" href="breadcrumb.html">Breadcrumb</a></li>
+        <li><a class="nav-link" href="button.html">Button</a></li>
+        <li><a class="nav-link" href="card.html">Card</a></li>
+        <li><a class="nav-link" href="chat.html">Chat</a></li>
+        <li><a class="nav-link" href="close.html">Close</a></li>
+        <li><a class="nav-link" href="dialog.html">Dialog</a></li>
+        <li><a class="nav-link" href="drawer.html">Drawer</a></li>
+        <li><a class="nav-link" href="data-list.html">Data list</a></li>
+        <li><a class="nav-link" href="fab.html">Floating action button</a></li>
+        <li><a class="nav-link" href="indicator.html">Indicator</a></li>
+        <li><a class="nav-link" href="key.html">Key</a></li>
+        <li><a class="nav-link" href="list.html">List</a></li>
+        <li><a class="nav-link" href="meter.html">Meter</a></li>
+        <li><a class="nav-link" href="navbar.html">Navbar</a></li>
+        <li><a class="nav-link" href="pagination.html">Pagination</a></li>
+        <li><a class="nav-link" href="progress.html">Progress</a></li>
+        <li><a class="nav-link" href="rating.html">Rating</a></li>
+        <li><a class="nav-link" href="shimmer.html" aria-current="page">Shimmer</a></li>
+        <li><a class="nav-link" href="skeleton.html">Skeleton</a></li>
+        <li><a class="nav-link" href="spinner.html">Spinner</a></li>
+        <li><a class="nav-link" href="steps.html">Steps</a></li>
+        <li><a class="nav-link" href="table.html">Table</a></li>
       </ul>
       <p class="docs-nav-group">Forms</p>
       <ul class="nav-list">
@@ -346,16 +424,16 @@
       </ul>
       <p class="docs-nav-group">Patterns</p>
       <ul class="nav-list">
-        <li><a class="nav-link" href="overview.html">Patterns</a></li>
-        <li><a class="nav-link" href="actions.html">Actions</a></li>
-        <li><a class="nav-link" href="navigation-list.html">Navigation List</a></li>
-        <li><a class="nav-link" href="icon-input.html">Icon Input</a></li>
-        <li><a class="nav-link" href="icon-slot.html">Icon slot</a></li>
-        <li><a class="nav-link" href="structured-lists.html">Structured Lists</a></li>
-        <li><a class="nav-link" href="hierarchical-nav.html">Hierarchical Scrollable Nav</a></li>
-        <li><a class="nav-link" href="code-block.html">Code Block With Copy Button</a></li>
-        <li><a class="nav-link" href="exclusive-accordion.html">Exclusive Accordion</a></li>
-        <li><a class="nav-link" href="intent-nesting.html" aria-current="page">Intent Nesting</a></li>
+        <li><a class="nav-link" href="../patterns/overview.html">Patterns</a></li>
+        <li><a class="nav-link" href="../patterns/actions.html">Actions</a></li>
+        <li><a class="nav-link" href="../patterns/navigation-list.html">Navigation List</a></li>
+        <li><a class="nav-link" href="../patterns/icon-input.html">Icon Input</a></li>
+        <li><a class="nav-link" href="../patterns/icon-slot.html">Icon slot</a></li>
+        <li><a class="nav-link" href="../patterns/structured-lists.html">Structured Lists</a></li>
+        <li><a class="nav-link" href="../patterns/hierarchical-nav.html">Hierarchical Scrollable Nav</a></li>
+        <li><a class="nav-link" href="../patterns/code-block.html">Code Block With Copy Button</a></li>
+        <li><a class="nav-link" href="../patterns/exclusive-accordion.html">Exclusive Accordion</a></li>
+        <li><a class="nav-link" href="../patterns/intent-nesting.html">Intent Nesting</a></li>
       </ul>
       <p class="docs-nav-group">Utilities</p>
       <ul class="nav-list">

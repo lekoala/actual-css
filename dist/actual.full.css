@@ -8427,29 +8427,36 @@ a.list-item[aria-current]::before {
 
 .aura {
   --aura-color: var(--intent, var(--primary));
-  --aura-width: 2px;
+  --aura-width: 1px;
   --aura-blur: 0.25rem;
-  --aura-intensity: 1;
+  --aura-intensity: 0.4;
   --aura-radius: var(--radius-lg);
   --aura-duration: 6s;
 
   position: relative;
   isolation: isolate;
   display: inline-grid;
-  padding: var(--aura-width);
   border-radius: calc(var(--aura-radius) + var(--aura-width));
-  border: var(--border-width) solid transparent;
+
+  /* The frame is the border itself, so --aura-width is the painted thickness.
+     A transparent border stays for forced colors, where it becomes the visible
+     boundary; a padding frame inside it would paint both, doubling the line. */
+  border: var(--aura-width) solid transparent;
   background: var(--aura-color);
 
   /* A short feathered accent rather than a long wedge with a hard edge, which
      reads as one lit side. Nothing tints the frame outside it: a constant tint
-     across 2px draws an outline, the opposite of the effect. */
+     across the frame draws an outline, the opposite of the effect. `border-box`
+     sizes the gradient to the border box: the default padding-box origin would
+     tile a neighbouring copy of the gradient into the border, which is now the
+     whole frame. */
   background: conic-gradient(
-    from var(--aura-angle),
-    transparent 0 78%,
-    var(--aura-color) 93%,
-    transparent
-  );
+      from var(--aura-angle),
+      transparent 0 78%,
+      var(--aura-color) 93%,
+      transparent
+    )
+    border-box;
 
   /* Far halo — flat and static. At this blur the rotating detail is no longer
      legible, so there is nothing to gain from animating a second wide blurred
@@ -8462,11 +8469,13 @@ a.list-item[aria-current]::before {
     color-mix(in oklab, var(--aura-color) min(100%, calc(15% * var(--aura-intensity))), transparent);
 }
 
-/* Near halo — inherits the frame gradient, so it tracks the lit accent. */
+/* Near halo — inherits the frame gradient, so it tracks the lit accent. An
+   absolute inset starts at the padding edge, inside the border that is the
+   frame, so the negative inset puts the halo back on the frame. */
 .aura::before {
   position: absolute;
   z-index: -1;
-  inset: 0;
+  inset: calc(-1 * var(--aura-width));
   border-radius: inherit;
   background: inherit;
   filter: blur(var(--aura-blur));
@@ -8483,7 +8492,7 @@ a.list-item[aria-current]::before {
 .aura::after {
   position: absolute;
   z-index: -1;
-  inset: var(--aura-width);
+  inset: 0;
   border-radius: var(--aura-radius);
   background: var(--surface-opaque);
   pointer-events: none;
@@ -8525,8 +8534,8 @@ a.list-item[aria-current]::before {
 @media (prefers-reduced-motion: reduce) {
   .aura:not(.aura-glow) {
     background:
-      radial-gradient(4rem 4rem at 0% 0%, var(--aura-color), transparent 70%),
-      radial-gradient(4rem 4rem at 100% 100%, var(--aura-color), transparent 70%);
+      radial-gradient(4rem 4rem at 0% 0%, var(--aura-color), transparent 70%) border-box,
+      radial-gradient(4rem 4rem at 100% 100%, var(--aura-color), transparent 70%) border-box;
   }
 }
 
@@ -8574,6 +8583,63 @@ a.list-item[aria-current]::before {
 
 .aura:has(> .badge) {
   --aura-radius: var(--radius-full);
+}
+
+/*
+ * Highlight sweeping across a text label — an activity in progress.
+ *
+ * Docs: docs/pages/components/shimmer.md
+ *
+ * Presentation only: it carries no state and selects no ARIA attribute, so the
+ * label stays whatever the author makes it (a role="status" message, a list
+ * item, a heading).
+ *
+ * Public hooks:
+ * --shimmer-color
+ * --shimmer-highlight
+ */
+.shimmer {
+  --shimmer-color: var(--text-muted);
+  --shimmer-highlight: var(--text);
+
+  color: var(--shimmer-color);
+}
+
+/* The sweep paints the glyphs through a clipped background, which needs the
+   text itself transparent. Without background-clip: text that would erase the
+   label, so the transparency lives under the same query as the clip. The
+   colors are hooks rather than currentColor: once the text is transparent,
+   currentColor is transparent too. Reduced motion keeps the plain label —
+   a frozen band would read as a random tint. */
+@supports (background-clip: text) {
+  @media (prefers-reduced-motion: no-preference) {
+    .shimmer {
+      color: transparent;
+      background:
+        linear-gradient(
+          90deg,
+          var(--shimmer-color) 40%,
+          var(--shimmer-highlight) 50%,
+          var(--shimmer-color) 60%
+        )
+        0 0 / 300% 100%;
+      background-clip: text;
+      animation: actual-shimmer var(--duration-shimmer) linear infinite;
+    }
+  }
+}
+
+/* The band occupies the middle third of a background three times the label's
+   width, so each pass leaves the end of the label before the next one enters
+   at the start. */
+@keyframes actual-shimmer {
+  from {
+    background-position: 100% 0;
+  }
+
+  to {
+    background-position: 0% 0;
+  }
 }
 
 /* Utilities — small, single-purpose escape hatches. */

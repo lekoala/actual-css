@@ -138,6 +138,7 @@
         <li><a class="nav-link" href="pagination.html">Pagination</a></li>
         <li><a class="nav-link" href="progress.html">Progress</a></li>
         <li><a class="nav-link" href="rating.html">Rating</a></li>
+        <li><a class="nav-link" href="shimmer.html">Shimmer</a></li>
         <li><a class="nav-link" href="skeleton.html">Skeleton</a></li>
         <li><a class="nav-link" href="spinner.html">Spinner</a></li>
         <li><a class="nav-link" href="steps.html">Steps</a></li>
@@ -357,23 +358,23 @@ arbitrary angle — and the glow stays a full, still halo.</p>
 <code>.danger</code>; there are no separate aura color variants. The intent is sovereign:
 a neutral intent produces a neutral aura. Use a chromatic intent when you want
 a visibly luminous effect.</p>
-<p>Two hooks tune how loud the effect is. <code>--aura-intensity</code> scales both halos at
-once, resting and breathing alike, so the breath stays proportional at every
-setting; <code>--aura-duration</code> sets one full rotation of the accent, or one breath
-of the glow.</p>
+<p>The default is a thin lit line with a faint halo. Three hooks tune how loud it
+is: <code>--aura-width</code> sets the line, <code>--aura-intensity</code> scales both halos at once,
+resting and breathing alike, and <code>--aura-duration</code> sets one full rotation of
+the accent, or one breath of the glow.</p>
 </div>
 <div class="docs-example">
   <div class="docs-preview">
 <div class="cluster" style="gap: 2rem">
-  <span class="aura aura-glow primary" style="--aura-intensity: 0.4">
-    <span class="card" style="inline-size: 8rem">Muted</span>
+  <span class="aura aura-glow primary" style="--aura-intensity: 0">
+    <span class="card" style="inline-size: 8rem">Line only</span>
   </span>
 
   <span class="aura aura-glow primary">
     <span class="card" style="inline-size: 8rem">Default</span>
   </span>
 
-  <span class="aura aura-glow primary" style="--aura-intensity: 2">
+  <span class="aura aura-glow primary" style="--aura-width: 3px; --aura-intensity: 1">
     <span class="card" style="inline-size: 8rem">Loud</span>
   </span>
 
@@ -384,15 +385,15 @@ of the glow.</p>
   </div>
   <div class="docs-code">
     <pre><code class="language-html">&lt;div class=&quot;cluster&quot; style=&quot;gap: 2rem&quot;&gt;
-  &lt;span class=&quot;aura aura-glow primary&quot; style=&quot;--aura-intensity: 0.4&quot;&gt;
-    &lt;span class=&quot;card&quot; style=&quot;inline-size: 8rem&quot;&gt;Muted&lt;/span&gt;
+  &lt;span class=&quot;aura aura-glow primary&quot; style=&quot;--aura-intensity: 0&quot;&gt;
+    &lt;span class=&quot;card&quot; style=&quot;inline-size: 8rem&quot;&gt;Line only&lt;/span&gt;
   &lt;/span&gt;
 
   &lt;span class=&quot;aura aura-glow primary&quot;&gt;
     &lt;span class=&quot;card&quot; style=&quot;inline-size: 8rem&quot;&gt;Default&lt;/span&gt;
   &lt;/span&gt;
 
-  &lt;span class=&quot;aura aura-glow primary&quot; style=&quot;--aura-intensity: 2&quot;&gt;
+  &lt;span class=&quot;aura aura-glow primary&quot; style=&quot;--aura-width: 3px; --aura-intensity: 1&quot;&gt;
     &lt;span class=&quot;card&quot; style=&quot;inline-size: 8rem&quot;&gt;Loud&lt;/span&gt;
   &lt;/span&gt;
 
@@ -520,6 +521,7 @@ It does not touch the frame itself, which stays a crisp line at any setting.</li
         <li><a class="nav-link" href="pagination.html">Pagination</a></li>
         <li><a class="nav-link" href="progress.html">Progress</a></li>
         <li><a class="nav-link" href="rating.html">Rating</a></li>
+        <li><a class="nav-link" href="shimmer.html">Shimmer</a></li>
         <li><a class="nav-link" href="skeleton.html">Skeleton</a></li>
         <li><a class="nav-link" href="spinner.html">Spinner</a></li>
         <li><a class="nav-link" href="steps.html">Steps</a></li>

@@ -35,29 +35,36 @@
 
 .aura {
   --aura-color: var(--intent, var(--primary));
-  --aura-width: 2px;
+  --aura-width: 1px;
   --aura-blur: 0.25rem;
-  --aura-intensity: 1;
+  --aura-intensity: 0.4;
   --aura-radius: var(--radius-lg);
   --aura-duration: 6s;
 
   position: relative;
   isolation: isolate;
   display: inline-grid;
-  padding: var(--aura-width);
   border-radius: calc(var(--aura-radius) + var(--aura-width));
-  border: var(--border-width) solid transparent;
+
+  /* The frame is the border itself, so --aura-width is the painted thickness.
+     A transparent border stays for forced colors, where it becomes the visible
+     boundary; a padding frame inside it would paint both, doubling the line. */
+  border: var(--aura-width) solid transparent;
   background: var(--aura-color);
 
   /* A short feathered accent rather than a long wedge with a hard edge, which
      reads as one lit side. Nothing tints the frame outside it: a constant tint
-     across 2px draws an outline, the opposite of the effect. */
+     across the frame draws an outline, the opposite of the effect. `border-box`
+     sizes the gradient to the border box: the default padding-box origin would
+     tile a neighbouring copy of the gradient into the border, which is now the
+     whole frame. */
   background: conic-gradient(
-    from var(--aura-angle),
-    transparent 0 78%,
-    var(--aura-color) 93%,
-    transparent
-  );
+      from var(--aura-angle),
+      transparent 0 78%,
+      var(--aura-color) 93%,
+      transparent
+    )
+    border-box;
 
   /* Far halo — flat and static. At this blur the rotating detail is no longer
      legible, so there is nothing to gain from animating a second wide blurred
@@ -70,11 +77,13 @@
     color-mix(in oklab, var(--aura-color) min(100%, calc(15% * var(--aura-intensity))), transparent);
 }
 
-/* Near halo — inherits the frame gradient, so it tracks the lit accent. */
+/* Near halo — inherits the frame gradient, so it tracks the lit accent. An
+   absolute inset starts at the padding edge, inside the border that is the
+   frame, so the negative inset puts the halo back on the frame. */
 .aura::before {
   position: absolute;
   z-index: -1;
-  inset: 0;
+  inset: calc(-1 * var(--aura-width));
   border-radius: inherit;
   background: inherit;
   filter: blur(var(--aura-blur));
@@ -91,7 +100,7 @@
 .aura::after {
   position: absolute;
   z-index: -1;
-  inset: var(--aura-width);
+  inset: 0;
   border-radius: var(--aura-radius);
   background: var(--surface-opaque);
   pointer-events: none;
@@ -133,8 +142,8 @@
 @media (prefers-reduced-motion: reduce) {
   .aura:not(.aura-glow) {
     background:
-      radial-gradient(4rem 4rem at 0% 0%, var(--aura-color), transparent 70%),
-      radial-gradient(4rem 4rem at 100% 100%, var(--aura-color), transparent 70%);
+      radial-gradient(4rem 4rem at 0% 0%, var(--aura-color), transparent 70%) border-box,
+      radial-gradient(4rem 4rem at 100% 100%, var(--aura-color), transparent 70%) border-box;
   }
 }
 

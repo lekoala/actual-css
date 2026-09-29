@@ -84,22 +84,22 @@ The frame color comes from an intent such as `.primary`, `.success`, or
 a neutral intent produces a neutral aura. Use a chromatic intent when you want
 a visibly luminous effect.
 
-Two hooks tune how loud the effect is. `--aura-intensity` scales both halos at
-once, resting and breathing alike, so the breath stays proportional at every
-setting; `--aura-duration` sets one full rotation of the accent, or one breath
-of the glow.
+The default is a thin lit line with a faint halo. Three hooks tune how loud it
+is: `--aura-width` sets the line, `--aura-intensity` scales both halos at once,
+resting and breathing alike, and `--aura-duration` sets one full rotation of
+the accent, or one breath of the glow.
 
 ```html demo
 <div class="cluster" style="gap: 2rem">
-  <span class="aura aura-glow primary" style="--aura-intensity: 0.4">
-    <span class="card" style="inline-size: 8rem">Muted</span>
+  <span class="aura aura-glow primary" style="--aura-intensity: 0">
+    <span class="card" style="inline-size: 8rem">Line only</span>
   </span>
 
   <span class="aura aura-glow primary">
     <span class="card" style="inline-size: 8rem">Default</span>
   </span>
 
-  <span class="aura aura-glow primary" style="--aura-intensity: 2">
+  <span class="aura aura-glow primary" style="--aura-width: 3px; --aura-intensity: 1">
     <span class="card" style="inline-size: 8rem">Loud</span>
   </span>
 
