@@ -58,7 +58,7 @@
   --step-size: 1.75rem;
   --step-inline-gap: var(--space-20);
   --step-line-size: var(--border-width);
-  --step-marker-bg: var(--surface);
+  --step-marker-bg: var(--surface-opaque);
   --step-marker-border: var(--border);
   --step-marker-fg: var(--text-muted);
   --step-marker-radius: var(--radius-full);
@@ -138,7 +138,7 @@
    connector leaving current goes back to neutral. Declared after
    .step-complete at equal specificity: current wins on every channel. */
 .steps > [aria-current="step"] {
-  --step-marker-bg: var(--surface);
+  --step-marker-bg: var(--surface-opaque);
   --step-marker-border: var(--state-selected);
   --step-marker-fg: var(--state-selected);
   --step-line: var(--border);

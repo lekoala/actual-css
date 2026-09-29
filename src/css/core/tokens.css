@@ -147,8 +147,8 @@
   --state-selected-fg: var(--primary-fg);
   --state-disabled: var(--text-subtle);
 
-  /* Status dot ring — follows the island's surface. */
-  --indicator-ring: var(--surface);
+  /* Status dot ring — cuts the dot out of what it overlaps. */
+  --indicator-ring: var(--surface-opaque);
 }
 
 :root {

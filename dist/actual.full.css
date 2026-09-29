@@ -130,9 +130,13 @@ select {
   --ease-enter: cubic-bezier(0.2, 0, 0, 1);
   --ease-exit: cubic-bezier(0.4, 0, 1, 1);
 
-  /* Focus ring — shared by every interactive component's :focus-visible */
+  /* Generic focus fallback — an adaptive currentColor line for elements
+     without a component ring (links, summary, plain items). Components draw
+     the themed ring instead: --focus-ring-width solid --focus. See focus.css
+     for the two contracts. Both share --focus-ring-width: they differ in
+     color only. */
   --focus-outline-color: currentColor;
-  --focus-outline: calc(var(--border-width) * 2) solid var(--focus-outline-color);
+  --focus-outline: var(--focus-ring-width) solid var(--focus-outline-color);
   --focus-outline-offset: 2px;
   --focus-ring-width: 2px;
 
@@ -195,8 +199,8 @@ select {
   --state-selected-fg: var(--primary-fg);
   --state-disabled: var(--text-subtle);
 
-  /* Status dot ring — follows the island's surface. */
-  --indicator-ring: var(--surface);
+  /* Status dot ring — cuts the dot out of what it overlaps. */
+  --indicator-ring: var(--surface-opaque);
 }
 
 :root {
@@ -291,6 +295,8 @@ select {
  * Shadow color, Focus ring derivation.
  * Derived: "Theme-derived aliases", Tone subsystem, Backdrop fill — reference
  * other tokens; hard-coded overrides on a custom theme will break the intent.
+ * Exception: --surface-opaque and --surface-solid-fg are public; a theme with
+ * translucent surfaces overrides them with opaque values.
  * Internal: --hgroup-gap.
  */
 :root {
@@ -382,6 +388,12 @@ select {
   --heading: var(--text);
   --selection-bg: var(--primary);
   --selection-fg: var(--primary-fg);
+  /* Surface roles that must stay opaque when a theme paints translucent
+     surfaces; both equal --surface on an opaque palette. --surface-opaque
+     hides or separates what is painted beneath a ring, separator or marker —
+     never a fill. --surface-solid-fg is the ink on --surface-solid. */
+  --surface-opaque: var(--surface);
+  --surface-solid-fg: var(--surface);
 }
 
 /* Soft foreground hooks — the soft ink is the intent rebated toward the local
@@ -719,7 +731,8 @@ small {
 /* Shared control scale. Wrappers are listed when their descendants form one
    component (field, choice-card, floating-field, input-icon, join, pagination,
    tabs, flyout). A local size declaration beats inherited density because it
-   is declared on the sized component itself. */
+   is declared on the sized component itself. Guarded by check:sync
+   (size-scale-participants): .sm and .lg must list the same components. */
 :where(
   .btn,
   .input,
@@ -798,12 +811,22 @@ small {
    for its keyboard focus indicator; forced colors keep outlines and drop
    shadows.
 
-   Component indicators are a solid --focus-ring-width line in --focus: inset
-   on fields (inside their border box), offset by --focus-outline-offset on
-   discrete actions. The color never derives from an intent or a local
+   Two contracts share the job, both --focus-ring-width wide. Text-like
+   elements, whose ink is the thing being focused (links, summary, .nav-link,
+   .menu-item, breadcrumb links, .navbar-brand), declare no outline and take
+   the generic fallback below: a currentColor line that follows whatever the
+   application painted. Boxed components, with a fill or border of their own,
+   draw the themed ring instead — a solid line in --focus: inset on fields
+   (inside their border box), offset by --focus-outline-offset on discrete
+   actions. The color never derives from an intent or a local
    surface — the theme guarantees --focus at 3:1 against both --surface and
    --surface-solid, so one token reads on the page, on a solid band and on
-   any nested surface. */
+   any nested surface.
+
+   Documented exception: an invalid field focuses in --form-invalid-border
+   (danger), so the error stays visible at the point of correction. The border
+   carries the same hook; report:theme-contrast measures that line at 3:1
+   against the field's background alongside --focus. */
 :focus {
   outline: var(--focus-outline);
   outline-offset: var(--focus-outline-offset);
@@ -2040,8 +2063,8 @@ small {
   cursor: var(--control-cursor);
   /* No outline: none here — the core :focus fallback must survive for browsers
      without :focus-visible. Pointer focus is hidden by core's
-     :focus:not(:focus-visible); keyboard focus swaps in the transparent
-     outline + ring below. */
+     :focus:not(:focus-visible); keyboard focus draws the inset outline below
+     (invalid fields take --form-invalid-border, the documented exception). */
   transition:
     border-color var(--duration),
     box-shadow var(--duration),
@@ -2960,7 +2983,7 @@ small {
   /* Permanent surface separator: the fill defaults to the thumb color, so
      without this the thumb would melt into the filled part of the track.
      Focus-visible keeps this ring and adds the --focus ring outside it. */
-  box-shadow: 0 0 0 2px var(--surface);
+  box-shadow: 0 0 0 2px var(--surface-opaque);
   transition: box-shadow var(--duration);
 }
 
@@ -2971,7 +2994,7 @@ small {
   border: 0;
   background: var(--range-thumb-bg);
   cursor: inherit;
-  box-shadow: 0 0 0 2px var(--surface);
+  box-shadow: 0 0 0 2px var(--surface-opaque);
   transition: box-shadow var(--duration);
 }
 
@@ -2989,13 +3012,13 @@ small {
  */
 .range:focus-visible::-webkit-slider-thumb {
   box-shadow:
-    0 0 0 2px var(--surface),
+    0 0 0 2px var(--surface-opaque),
     0 0 0 calc(2px + var(--focus-ring-width)) var(--focus);
 }
 
 .range:focus-visible::-moz-range-thumb {
   box-shadow:
-    0 0 0 2px var(--surface),
+    0 0 0 2px var(--surface-opaque),
     0 0 0 calc(2px + var(--focus-ring-width)) var(--focus);
 }
 
@@ -3057,13 +3080,15 @@ small {
  *
  * Each .choice-card is a <label> wrapping a native radio or checkbox. When
  * :has() is supported the input is visually hidden and the card mirrors its
- * state: checked border and tint, checkmark badge (round for radio, rounded
- * square for checkbox), focus ring, disabled dimming. Without :has() the
- * native input stays visible so selection state never disappears.
+ * state: an indicator on the leading edge (a ring for radio, a box for
+ * checkbox) that fills with a check, checked border and tint, focus ring,
+ * disabled dimming. Without :has() the native input stays visible in the
+ * indicator's slot, so selection state never disappears.
  *
- * The badge overhangs the top-right corner by 0.375em; ancestors with
- * overflow: hidden will clip it. Pair with grid or flex utilities for group
- * layout.
+ * The card is a two-column grid: the indicator in the first column, level
+ * with the first row, and each child element of the label on its own row in
+ * the second. Wrap loose text in an element. A corner badge for tiles is a
+ * documented recipe on these same layers, not a variant.
  *
  * .chip is the compact pill form (filter chips, selectable tags): control
  * height, and a leading dot that turns into the check in a fixed slot, so
@@ -3071,6 +3096,7 @@ small {
  *
  * Public hooks:
  * --choice-card-pad
+ * --choice-card-gap
  * --choice-card-radius
  * --choice-card-border
  * --choice-card-bg
@@ -3085,25 +3111,43 @@ small {
 
 .choice-card {
   --choice-card-pad: var(--density-space, var(--space-40));
+  --choice-card-gap: var(--space-30);
   --choice-card-radius: var(--radius);
   --choice-card-border: var(--border);
   --choice-card-bg: var(--surface);
-  --choice-card-check-size: 1.5em;
+  --choice-card-check-size: 1.25em;
 
   position: relative;
-  display: block;
+  display: grid;
+  grid-template-columns: var(--choice-card-check-size) minmax(0, 1fr);
+  /* why: a card stretched by a taller grid neighbour keeps its rows at the
+     top instead of spreading them. */
+  align-content: start;
+  column-gap: var(--choice-card-gap);
   padding: var(--choice-card-pad);
   border: var(--border-width) solid var(--form-invalid-border, var(--choice-card-border));
   border-radius: var(--choice-card-radius);
   background: var(--choice-card-bg);
   color: var(--text);
-  /* Consumed so .sm/.lg reach the card; the badge's em sizing follows. */
+  /* Consumed so .sm/.lg reach the card; the indicator's em sizing follows. */
   font-size: var(--control-font-size);
   cursor: pointer;
   transition:
     border-color var(--duration),
     background-color var(--duration),
     box-shadow var(--duration);
+}
+
+.choice-card > * {
+  grid-column: 2;
+}
+
+/* The input owns the indicator's cell: visible there without :has(), hidden
+   in it with :has(). */
+.choice-card > :is(input[type="radio"], input[type="checkbox"]) {
+  grid-area: 1 / 1;
+  place-self: center;
+  margin: 0;
 }
 
 /* The native input is visually hidden but stays focusable and participates in
@@ -3151,24 +3195,31 @@ small {
   }
 }
 
-/* Checkmark badge — always rendered at scale(0) and scaled in on check, so
-   the entrance can transition (a pseudo created on :checked could not). */
+/* Indicator: ::before is the ring or box, ::after the check. Both share the
+   input's cell, centred on the first line — not the first row, which a long
+   label wraps — and stay hidden until :has() can mirror the input. The em
+   margin is the lh-less fallback at the default 1.5 line-height. */
 .choice-card::before,
 .choice-card::after {
   content: "";
-  position: absolute;
-  inset-inline-end: -0.375em;
-  inset-block-start: -0.375em;
+  grid-area: 1 / 1;
+  align-self: start;
+  margin-block-start: calc((1.5em - var(--choice-card-check-size)) / 2);
+  margin-block-start: calc((1lh - var(--choice-card-check-size)) / 2);
   inline-size: var(--choice-card-check-size);
   block-size: var(--choice-card-check-size);
   transform: scale(0);
-  transition: transform var(--duration);
+  transition:
+    transform var(--duration),
+    background-color var(--duration),
+    border-color var(--duration);
 }
 
-/* Badge disc — circle for radio, rounded square for checkbox */
+/* A border, not an inset shadow: forced colors drop shadows, and the resting
+   ring is the only sign of an unchecked option. The invalid border reaches it
+   through the same hook as the card's. */
 .choice-card::before {
-  background: var(--intent, var(--state-selected));
-  box-shadow: 0 0 0 2px var(--surface);
+  border: max(var(--border-width), 1.5px) solid var(--form-invalid-border, var(--text-muted));
   z-index: 1;
 }
 
@@ -3190,7 +3241,19 @@ small {
   z-index: 2;
 }
 
-.choice-card:has(:checked)::before,
+/* Guarded with the input's hiding above: a resting ring beside a visible
+   native input would draw the indicator twice. */
+@supports selector(:has(*)) {
+  .choice-card::before {
+    transform: none;
+  }
+}
+
+.choice-card:has(:checked)::before {
+  border-color: var(--intent, var(--state-selected));
+  background: var(--intent, var(--state-selected));
+}
+
 .choice-card:has(:checked)::after {
   transform: scale(1);
 }
@@ -3216,11 +3279,16 @@ small {
 .choice-card.chip::before {
   --choice-chip-dot: calc(var(--control-pad-x) + var(--choice-card-check-size) / 2) 50%;
 
+  position: absolute;
   inset: 0;
+  /* why: an absolute box honours self-alignment — the card's start would
+     shrink this layer to 0 height and the dot with it. */
+  align-self: auto;
+  margin: 0;
   inline-size: auto;
   block-size: auto;
+  border: 0;
   border-radius: inherit;
-  box-shadow: none;
   background: var(--text-subtle);
   transform: none;
   clip-path: circle(0.1875em at var(--choice-chip-dot));
@@ -3234,10 +3302,11 @@ small {
 
 /* The check keeps the card's scale-in, in flow ahead of the label. */
 .choice-card.chip::after {
-  position: static;
   order: -1;
   flex: none;
-  margin-inline-end: 0.375em;
+  align-self: center;
+  margin-block: 0;
+  margin-inline: 0 0.375em;
   background: var(--intent, var(--state-selected));
   -webkit-mask-size: contain;
   mask-size: contain;
@@ -3247,9 +3316,11 @@ small {
    this repair, forced colors pushes disc and check to the same system color
    and the state disappears. Highlight/Canvas/HighlightText are preserved as-is,
    so no forced-color-adjust is needed. The pseudo is not focusable — the
-   outline is a separator against the card, not a focus channel. */
+   outline separates the disc from whatever it overlaps (the card's border,
+   for a corner-badge recipe), not a focus channel. */
 @media (forced-colors: active) {
   .choice-card:has(:checked)::before {
+    border-color: Highlight;
     background: Highlight;
     outline: 2px solid Canvas;
   }
@@ -5557,7 +5628,7 @@ picture.bleed > img {
  */
 .tooltip {
   --tooltip-bg: var(--surface-solid);
-  --tooltip-fg: var(--surface);
+  --tooltip-fg: var(--surface-solid-fg);
   --tooltip-arrow-size: 5px;
 
   position: fixed;
@@ -6203,8 +6274,8 @@ picture.bleed > img {
 }
 
 .status-bar {
-  --status-bg: var(--intent, var(--text));
-  --status-fg: var(--intent-fg, var(--surface));
+  --status-bg: var(--intent, var(--surface-solid));
+  --status-fg: var(--intent-fg, var(--surface-solid-fg));
 
   position: fixed;
   /* Fixed positioning tracks the layout viewport, which the mobile software
@@ -6474,7 +6545,7 @@ a.avatar[aria-disabled="true"] {
 }
 
 .avatar-stack > .avatar {
-  box-shadow: 0 0 0 var(--avatar-stack-ring) var(--surface);
+  box-shadow: 0 0 0 var(--avatar-stack-ring) var(--surface-opaque);
 }
 
 .avatar-stack > .avatar + .avatar {
@@ -6900,8 +6971,7 @@ a.avatar[aria-disabled="true"] {
 }
 
 .rating > input[type="radio"]:focus-visible {
-  outline: var(--focus-outline);
-  outline-color: var(--focus);
+  outline: var(--focus-ring-width) solid var(--focus);
   outline-offset: var(--focus-outline-offset);
   background: var(--rating-color);
 }
@@ -7007,7 +7077,7 @@ a.avatar[aria-disabled="true"] {
   --step-size: 1.75rem;
   --step-inline-gap: var(--space-20);
   --step-line-size: var(--border-width);
-  --step-marker-bg: var(--surface);
+  --step-marker-bg: var(--surface-opaque);
   --step-marker-border: var(--border);
   --step-marker-fg: var(--text-muted);
   --step-marker-radius: var(--radius-full);
@@ -7087,7 +7157,7 @@ a.avatar[aria-disabled="true"] {
    connector leaving current goes back to neutral. Declared after
    .step-complete at equal specificity: current wins on every channel. */
 .steps > [aria-current="step"] {
-  --step-marker-bg: var(--surface);
+  --step-marker-bg: var(--surface-opaque);
   --step-marker-border: var(--state-selected);
   --step-marker-fg: var(--state-selected);
   --step-line: var(--border);
@@ -7126,7 +7196,7 @@ a.avatar[aria-disabled="true"] {
    focus ring's own width and offset. Only this composition scrolls, and only a
    link has a ring to protect. */
 .steps-horizontal:has(a[href]) {
-  padding-block: calc(var(--focus-outline-offset) + var(--border-width) * 2);
+  padding-block: calc(var(--focus-outline-offset) + var(--focus-ring-width));
 }
 
 /* One explicit row, the marker's: a `.step-label` is auto-placed into an
@@ -7730,10 +7800,10 @@ a.avatar[aria-disabled="true"] {
 }
 
 /* The ring is square on the edge the tab is attached to, so it reads as part
-   of the strip rather than a floating chip. */
+   of the strip rather than a floating chip. Color and width follow the
+   component ring contract (focus.css); only the geometry is tab-specific. */
 .tab:focus-visible {
-  outline: var(--focus-outline);
-  outline-color: var(--focus);
+  outline: var(--focus-ring-width) solid var(--focus);
   outline-offset: -2px;
   border-radius: var(--radius-sm) var(--radius-sm) 0 0;
 }
@@ -8112,7 +8182,7 @@ a.list-item[aria-current]::before {
 }
 
 .meter:not(meter) > * + * {
-  border-inline-start: var(--border-width) solid var(--surface);
+  border-inline-start: var(--border-width) solid var(--surface-opaque);
 }
 
 .meter::-webkit-meter-bar {

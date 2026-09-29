@@ -231,10 +231,53 @@
 </table></div>
 <ul>
 <li>Use <code>.choice-card</code> on a <code>&lt;label&gt;</code> wrapping a native <code>&lt;input type=&quot;radio&quot;&gt;</code> or <code>&lt;input type=&quot;checkbox&quot;&gt;</code>. The input is visually hidden; in browsers without <code>:has()</code> it stays visible so selection state never disappears.</li>
-<li>Selected items show a primary border, subtle background tint, and a checkmark badge at the top-right corner — round for radio, rounded square for checkbox.</li>
-<li>Pair with grid or flex utilities for group layout. The badge overhangs the top-right corner, so avoid <code>overflow: hidden</code> on the direct container.</li>
-<li>Supports disabled, checked, focus-visible, and invalid states.</li>
+<li>The control shows before any choice: a ring (radio) or a rounded box (checkbox) on the leading edge, level with the first line. Checked, it fills with a check, and the card takes a primary border and a subtle tint.</li>
+<li>Each child element of the label sits on its own row beside the indicator — a title and a <code>.muted</code> detail need no wrapper. Wrap loose text in an element.</li>
+<li>Stack cards for a list of options (a person, an address, a delivery method), or pair them with grid utilities for options compared side by side.</li>
+<li>Supports disabled, checked, focus-visible, and invalid states; the resting ring turns danger with the border.</li>
 </ul>
+</div>
+<div class="docs-example">
+  <div class="docs-preview">
+<fieldset class="field-group stack">
+  <legend class="field-label">Deliver to</legend>
+  <label class="choice-card">
+    <input type="radio" name="address" value="home" checked />
+    <strong>Home</strong>
+    <span class="muted">12 Rue des Tanneurs, 1000 Brussels</span>
+  </label>
+  <label class="choice-card">
+    <input type="radio" name="address" value="work" />
+    <strong>Work</strong>
+    <span class="muted">Avenue Louise 54, 1050 Ixelles</span>
+  </label>
+  <label class="choice-card">
+    <input type="radio" name="address" value="pickup" />
+    <strong>Pickup point</strong>
+    <span class="muted">Collect within 7 days</span>
+  </label>
+</fieldset>
+  </div>
+  <div class="docs-code">
+    <pre><code class="language-html">&lt;fieldset class=&quot;field-group stack&quot;&gt;
+  &lt;legend class=&quot;field-label&quot;&gt;Deliver to&lt;/legend&gt;
+  &lt;label class=&quot;choice-card&quot;&gt;
+    &lt;input type=&quot;radio&quot; name=&quot;address&quot; value=&quot;home&quot; checked /&gt;
+    &lt;strong&gt;Home&lt;/strong&gt;
+    &lt;span class=&quot;muted&quot;&gt;12 Rue des Tanneurs, 1000 Brussels&lt;/span&gt;
+  &lt;/label&gt;
+  &lt;label class=&quot;choice-card&quot;&gt;
+    &lt;input type=&quot;radio&quot; name=&quot;address&quot; value=&quot;work&quot; /&gt;
+    &lt;strong&gt;Work&lt;/strong&gt;
+    &lt;span class=&quot;muted&quot;&gt;Avenue Louise 54, 1050 Ixelles&lt;/span&gt;
+  &lt;/label&gt;
+  &lt;label class=&quot;choice-card&quot;&gt;
+    &lt;input type=&quot;radio&quot; name=&quot;address&quot; value=&quot;pickup&quot; /&gt;
+    &lt;strong&gt;Pickup point&lt;/strong&gt;
+    &lt;span class=&quot;muted&quot;&gt;Collect within 7 days&lt;/span&gt;
+  &lt;/label&gt;
+&lt;/fieldset&gt;</code></pre>
+  </div>
 </div>
 <div class="docs-example">
   <div class="docs-preview">
@@ -388,6 +431,45 @@
 follows through its <code>em</code> sizing. Padding is density, so use a <code>.compact</code> or
 <code>.spacious</code> context to change it. Intent classes (<code>.primary</code>, <code>.secondary</code>) are
 supported on the <code>.choice-card</code> element.</p>
+<h2 id="corner-badge">Corner badge</h2>
+<p>A tile whose content is the choice itself — a product image, a centred plan
+name — may want no indicator column, and a check badge over its corner once
+selected (radio/checkbox tile, selected tick, check in the corner). That is a
+recipe on the card's own <code>::before</code> (disc) and <code>::after</code> (check) layers,
+written in application CSS after the framework:</p>
+<pre><code class="language-css">.choice-tile {
+  --choice-card-check-size: 1.5em;
+
+  display: block;
+}
+
+.choice-tile::before,
+.choice-tile::after {
+  position: absolute;
+  inset-inline-end: -0.375em;
+  inset-block-start: -0.375em;
+  margin: 0;
+}
+
+.choice-tile::before {
+  border: 0;
+  box-shadow: 0 0 0 2px var(--surface-opaque);
+  transform: scale(0);
+}
+
+.choice-tile:has(:checked)::before {
+  transform: scale(1);
+}
+</code></pre>
+<pre><code class="language-html">&lt;label class=&quot;choice-card choice-tile&quot;&gt;
+  &lt;input type=&quot;radio&quot; name=&quot;cpu&quot; value=&quot;1&quot; checked /&gt;
+  &lt;strong&gt;8-core CPU&lt;/strong&gt;&lt;br /&gt;
+  &lt;span class=&quot;muted&quot;&gt;32 GB RAM&lt;/span&gt;
+&lt;/label&gt;
+</code></pre>
+<p>The badge overhangs the corner, so no ancestor up to the grid may clip with
+<code>overflow: hidden</code>. The <a href="../../demo/sites/neon-ramen/item.html">Neon Ramen item page</a>
+uses it for its sizes and toppings.</p>
 <h2 id="chips">Chips</h2>
 <p>Add <code>.chip</code> for the compact pill form: filter chips, selectable tags, toggle
 pills, multi-select facets. A radio group gives single-choice chips. A leading
@@ -445,8 +527,10 @@ by widening the clip, as the <code>material</code> theme does.</p>
 <h2 id="css-hooks">CSS hooks</h2>
 <ul>
 <li><code>--choice-card-pad</code> — inner padding.</li>
+<li><code>--choice-card-gap</code> — space between the indicator column and the label.</li>
 <li><code>--choice-card-radius</code> — corner radius.</li>
-<li><code>--choice-card-check-size</code> — size of the check indicator.</li>
+<li><code>--choice-card-check-size</code> — size of the indicator, and the width of its
+column.</li>
 <li><code>--choice-card-border</code> / <code>--choice-card-bg</code> — resting border and background;
 the checked state and hover rebind them, so a checked override needs
 <code>:has(:checked)</code>.</li>
@@ -486,6 +570,7 @@ whatever the font, line-height or control size.</li>
           <p class="docs-nav-group">On this page</p>
           <ul class="nav-list docs-toc-list" data-docs-toc>
         <li><a class="nav-link" href="#class-reference" data-docs-toc-item data-level="2">Class reference</a></li>
+        <li><a class="nav-link" href="#corner-badge" data-docs-toc-item data-level="2">Corner badge</a></li>
         <li><a class="nav-link" href="#chips" data-docs-toc-item data-level="2">Chips</a></li>
         <li><a class="nav-link" href="#css-hooks" data-docs-toc-item data-level="2">CSS hooks</a></li>
           </ul>

@@ -6,8 +6,9 @@
  * this tool only REPORTS their resting and hovered soft pairs, their focus
  * line against --surface and --surface-solid, and the invalid-field focus
  * line (a real invalid .input's --form-invalid-border) against the field's
- * own background — light and dark where a theme
- * defines both — and exits 0 whatever it finds. Use it to decide where a
+ * own background, and the inverse text pair --surface-solid-fg on
+ * --surface-solid — light and dark where a theme defines both — and exits 0
+ * whatever it finds. Use it to decide where a
  * preset's character survives a correction.
  *
  * Each island resolves its own tokens plus the default theme's inherited
@@ -44,6 +45,7 @@ function island(theme, scheme) {
     ${INTENTS.map((i) => `<button class="btn soft ${i}" data-hover="${i}" type="button">t</button>`).join("")}
     <span data-focus="surface" style="color: var(--focus); background: var(--surface)"></span>
     <span data-focus="solid" style="color: var(--focus); background: var(--surface-solid)"></span>
+    <span data-pair="inverse" style="color: var(--surface-solid-fg); background: var(--surface-solid)"></span>
     <input class="input" aria-invalid="true" data-focus-invalid="field" aria-label="t">
   </div>`;
 }
@@ -84,13 +86,14 @@ await withBrowserPage(
         const root = document.getElementById("${id}");
         const cs = (el) => getComputedStyle(el);
         const rest = {};
-        for (const el of root.querySelectorAll("[data-badge], [data-focus], [data-focus-invalid]"))
-          rest[
-            el.dataset.badge ??
-              (el.dataset.focus
-                ? \`focus-\${el.dataset.focus}\`
-                : \`invalid-\${el.dataset.focusInvalid}\`)
-          ] = {
+        const key = (el) =>
+          el.dataset.badge ??
+          el.dataset.pair ??
+          (el.dataset.focus ? \`focus-\${el.dataset.focus}\` : \`invalid-\${el.dataset.focusInvalid}\`);
+        for (const el of root.querySelectorAll(
+          "[data-badge], [data-pair], [data-focus], [data-focus-invalid]",
+        ))
+          rest[key(el)] = {
             // The invalid field's block-end border carries
             // --form-invalid-border, the hook its focus outline reads, even on
             // an underline-only preset (material) whose other sides are clear.
@@ -169,6 +172,18 @@ await withBrowserPage(
         const rest = await readRest(`island-${theme.name}-${scheme}`);
         const v = ratio(rest["invalid-field"].fg, rest["invalid-field"].bg).toFixed(2);
         const flag = +v < 3 ? "  <-- under 3" : "";
+        console.log(`${theme.name.padEnd(9)}  ${scheme.padEnd(6)}  ${v.padStart(5)}:1${flag}`);
+      }
+    }
+
+    // Tooltip and status-bar text sit on this pair.
+    console.log("\nInverse text contrast (--surface-solid-fg vs --surface-solid), needs 4.5:1.\n");
+    console.log("theme      scheme  inverse");
+    for (const theme of themes) {
+      for (const scheme of theme.hasDark ? ["light", "dark"] : ["light"]) {
+        const rest = await readRest(`island-${theme.name}-${scheme}`);
+        const v = ratio(rest.inverse.fg, rest.inverse.bg).toFixed(2);
+        const flag = +v < 4.5 ? "  <-- under 4.5" : "";
         console.log(`${theme.name.padEnd(9)}  ${scheme.padEnd(6)}  ${v.padStart(5)}:1${flag}`);
       }
     }

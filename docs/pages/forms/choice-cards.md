@@ -141,7 +141,7 @@ written in application CSS after the framework:
 
 .choice-tile::before {
   border: 0;
-  box-shadow: 0 0 0 2px var(--surface);
+  box-shadow: 0 0 0 2px var(--surface-opaque);
   transform: scale(0);
 }
 

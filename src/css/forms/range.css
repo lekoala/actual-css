@@ -84,7 +84,7 @@
   /* Permanent surface separator: the fill defaults to the thumb color, so
      without this the thumb would melt into the filled part of the track.
      Focus-visible keeps this ring and adds the --focus ring outside it. */
-  box-shadow: 0 0 0 2px var(--surface);
+  box-shadow: 0 0 0 2px var(--surface-opaque);
   transition: box-shadow var(--duration);
 }
 
@@ -95,7 +95,7 @@
   border: 0;
   background: var(--range-thumb-bg);
   cursor: inherit;
-  box-shadow: 0 0 0 2px var(--surface);
+  box-shadow: 0 0 0 2px var(--surface-opaque);
   transition: box-shadow var(--duration);
 }
 
@@ -113,13 +113,13 @@
  */
 .range:focus-visible::-webkit-slider-thumb {
   box-shadow:
-    0 0 0 2px var(--surface),
+    0 0 0 2px var(--surface-opaque),
     0 0 0 calc(2px + var(--focus-ring-width)) var(--focus);
 }
 
 .range:focus-visible::-moz-range-thumb {
   box-shadow:
-    0 0 0 2px var(--surface),
+    0 0 0 2px var(--surface-opaque),
     0 0 0 calc(2px + var(--focus-ring-width)) var(--focus);
 }
 

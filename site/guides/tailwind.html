@@ -227,7 +227,7 @@
 <p>Tailwind and Actual can temporarily coexist, but some short class names overlap.</p>
 <p>The most dangerous is <code>.outline</code>: it is an Actual button variant (<code>.btn.outline</code>), and Tailwind's <code>outline</code> utility draws a real outline on it. Layer order does not save this one — the migration setup above puts Tailwind utilities over Actual on purpose.</p>
 <p>Other overlapping names: <code>.table</code>, <code>.sticky</code>, <code>.truncate</code>, <code>.prose</code>, <code>.sr-only</code>, plus layout names such as <code>.grid</code>, <code>.grow</code>, and <code>.items-center</code>.</p>
-<p>For a staged migration, use cascade layers, controlled import order, or a project-side Actual prefix transform where necessary. The transform lives in the consumer's own pipeline (a build-time rename on the Actual import), not in the Actual CLI, which only bundles.</p>
+<p>For a staged migration, use cascade layers, controlled import order, or a project-side Actual prefix transform where necessary. The transform lives in the consumer's own pipeline (a build-time rename on the Actual import), not in the Actual CLI, which only bundles. The JavaScript runtime writes state classes (<code>is-open</code>, <code>danger</code>, …): rename them in <code>actual-css/js/selectors</code> too, or flyouts and dialogs never open.</p>
 <p>The layered import is the cleanest way to keep both stylesheets during the
 migration:</p>
 <pre><code class="language-css">/* Tailwind v4 emits its own layers (theme, base, components, utilities),

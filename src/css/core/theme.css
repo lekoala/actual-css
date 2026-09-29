@@ -7,6 +7,8 @@
  * Shadow color, Focus ring derivation.
  * Derived: "Theme-derived aliases", Tone subsystem, Backdrop fill — reference
  * other tokens; hard-coded overrides on a custom theme will break the intent.
+ * Exception: --surface-opaque and --surface-solid-fg are public; a theme with
+ * translucent surfaces overrides them with opaque values.
  * Internal: --hgroup-gap.
  */
 :root {
@@ -98,6 +100,12 @@
   --heading: var(--text);
   --selection-bg: var(--primary);
   --selection-fg: var(--primary-fg);
+  /* Surface roles that must stay opaque when a theme paints translucent
+     surfaces; both equal --surface on an opaque palette. --surface-opaque
+     hides or separates what is painted beneath a ring, separator or marker —
+     never a fill. --surface-solid-fg is the ink on --surface-solid. */
+  --surface-opaque: var(--surface);
+  --surface-solid-fg: var(--surface);
 }
 
 /* Soft foreground hooks — the soft ink is the intent rebated toward the local

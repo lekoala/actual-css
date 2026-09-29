@@ -284,9 +284,9 @@ put the island on a wrapper, not on the <code>&lt;fieldset&gt;</code>.</p>
 a painted band with neutral content and filled buttons, write it in
 application CSS and keep forms and intent ink out of it:</p>
 <pre><code class="language-css">.site-band {
-  --heading: var(--surface);
+  --heading: var(--surface-solid-fg);
   background: var(--surface-solid);
-  color: var(--surface);
+  color: var(--surface-solid-fg);
 }
 </code></pre>
 <p>Transparent treatments (<code>.btn.outline</code>, <code>.ghost</code>, <code>.link</code>) and headings follow
@@ -294,6 +294,37 @@ that ink; fields, their labels and help text, and intent colors keep the page
 palette, which nothing tunes for <code>--surface-solid</code>. Focus lines stay readable
 there: the theme contract keeps <code>--focus</code> at 3:1 on <code>--surface-solid</code>.</p>
 <p>→ Foundations · Tokens (theme contract) · Examples · Contrast contexts</p>
+<h3 id="scope-a-theme-to-one-section-microtheme-theme-island">Scope a theme to one section / microtheme / theme island</h3>
+<p>Any <code>data-theme</code> value is an island, not only <code>light</code> and <code>dark</code>:
+<code>&lt;aside data-theme=&quot;promo&quot;&gt;</code> paints its subtree with that theme, nested inside
+the page theme, without changing the markup. The same painting rule applies as
+for a dark section. A theme can change radius, typography, shadow and motion as
+well as color.</p>
+<p>→ Foundations · Tokens (theme contract)</p>
+<h3 id="dark-mode-toggle-theme-switcher-remember-the-users-choice">Dark mode toggle / theme switcher / remember the user's choice</h3>
+<p>Actual CSS ships the mechanism, not the control. Without <code>data-theme</code> the page
+follows the OS; <code>data-theme=&quot;light&quot;</code> or <code>&quot;dark&quot;</code> on <code>&lt;html&gt;</code> forces a scheme,
+and removing the attribute returns to the OS. The switcher UI and where the
+choice is stored belong to the application; a page with no setting already
+follows the OS. Apply a stored choice from an inline script in <code>&lt;head&gt;</code> so the
+first paint does not flash the OS scheme. The demo's theme picker is an
+inspection tool, not a component to copy.</p>
+<h3 id="force-light-or-dark-on-a-theme-that-has-both-theme-and-color-scheme">Force light or dark on a theme that has both / theme and color scheme</h3>
+<p>With a single brand theme, <code>data-theme=&quot;light&quot;</code> and <code>&quot;dark&quot;</code> already are that
+choice once you redefine them as your brand's two schemes (see the dark section
+above).</p>
+<p>A named theme that pairs both schemes through <code>light-dark()</code> follows the OS. To
+pin one scheme, set <code>color-scheme</code> on the element that carries <code>data-theme</code>,
+inline or in a rule more specific than the theme's own. <code>color-scheme</code> is the
+scheme axis and <code>data-theme</code> the design axis, so there is no separate
+<code>data-color-scheme</code> attribute.</p>
+<pre><code class="language-html">&lt;html data-theme=&quot;ocean&quot; style=&quot;color-scheme: dark&quot;&gt;
+</code></pre>
+<p>On an ancestor it has no effect: the theme declares its own <code>color-scheme</code> on
+its boundary. Leave single-scheme themes (<code>color-scheme: dark</code> only) alone —
+their tokens have one value, so forcing the other scheme only flips native
+controls and scrollbars.</p>
+<p>→ Foundations · Tokens (theme contract)</p>
 <h3 id="replace-the-palette-with-my-own-brand">Replace the palette with my own brand</h3>
 <p>Override the whole minimal recolor set (Tokens · Theme contract), not just
 <code>--primary</code>. Every neutral of the default theme — surfaces, text, border,
@@ -355,6 +386,9 @@ and <code>.join</code> still needs no adaptation.</p>
         <li><a class="nav-link" href="#set-card-rail-item-width-in-a-scroll-snap-row" data-docs-toc-item data-level="3">Set card-rail item width in a scroll-snap row</a></li>
         <li><a class="nav-link" href="#resize-an-avatar-or-its-stack" data-docs-toc-item data-level="3">Resize an avatar or its stack</a></li>
         <li><a class="nav-link" href="#make-a-dark-or-light-section-inverted-inverse-contrasting-band" data-docs-toc-item data-level="3">Make a dark (or light) section / inverted, inverse, contrasting band</a></li>
+        <li><a class="nav-link" href="#scope-a-theme-to-one-section-microtheme-theme-island" data-docs-toc-item data-level="3">Scope a theme to one section / microtheme / theme island</a></li>
+        <li><a class="nav-link" href="#dark-mode-toggle-theme-switcher-remember-the-users-choice" data-docs-toc-item data-level="3">Dark mode toggle / theme switcher / remember the user's choice</a></li>
+        <li><a class="nav-link" href="#force-light-or-dark-on-a-theme-that-has-both-theme-and-color-scheme" data-docs-toc-item data-level="3">Force light or dark on a theme that has both / theme and color scheme</a></li>
         <li><a class="nav-link" href="#replace-the-palette-with-my-own-brand" data-docs-toc-item data-level="3">Replace the palette with my own brand</a></li>
         <li><a class="nav-link" href="#use-or-adapt-a-preset-palette" data-docs-toc-item data-level="3">Use or adapt a preset palette</a></li>
           </ul>

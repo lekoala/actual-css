@@ -22,7 +22,7 @@
  */
 .tooltip {
   --tooltip-bg: var(--surface-solid);
-  --tooltip-fg: var(--surface);
+  --tooltip-fg: var(--surface-solid-fg);
   --tooltip-arrow-size: 5px;
 
   position: fixed;

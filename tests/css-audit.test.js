@@ -605,7 +605,7 @@ test("steps keep complete and current distinct, and current wins when both apply
     /\n\.steps > \.step-complete \{[^}]*--step-marker-bg: var\(--state-selected\);/,
   );
   expect(css).toMatch(
-    /\n\.steps > \[aria-current="step"\] \{[^}]*--step-marker-bg: var\(--surface\);/,
+    /\n\.steps > \[aria-current="step"\] \{[^}]*--step-marker-bg: var\(--surface-opaque\);/,
   );
 
   // An accented connector means "already walked", so the segment leaving the

@@ -211,7 +211,7 @@ a.avatar[aria-disabled="true"] {
 }
 
 .avatar-stack > .avatar {
-  box-shadow: 0 0 0 var(--avatar-stack-ring) var(--surface);
+  box-shadow: 0 0 0 var(--avatar-stack-ring) var(--surface-opaque);
 }
 
 .avatar-stack > .avatar + .avatar {
