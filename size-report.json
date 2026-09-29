@@ -1,12 +1,12 @@
 {
-  "totalRaw": 341760,
+  "totalRaw": 341835,
   "core": {
     "minified": 11757,
     "brotli": 2697
   },
   "full": {
-    "minified": 129696,
-    "brotli": 18588
+    "minified": 129714,
+    "brotli": 18580
   },
   "js": {
     "full": {
@@ -305,6 +305,10 @@
       "raw": 1769
     },
     {
+      "file": "effects/shimmer.css",
+      "raw": 1737
+    },
+    {
       "file": "typography/fluid.css",
       "raw": 1731
     },
@@ -319,10 +323,6 @@
     {
       "file": "layout/scroll-snap.css",
       "raw": 1681
-    },
-    {
-      "file": "effects/shimmer.css",
-      "raw": 1662
     },
     {
       "file": "components/indicator.css",

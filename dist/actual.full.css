@@ -8606,15 +8606,16 @@ a.list-item[aria-current]::before {
 }
 
 /* The sweep paints the glyphs through a clipped background, which needs the
-   text itself transparent. Without background-clip: text that would erase the
-   label, so the transparency lives under the same query as the clip. The
-   colors are hooks rather than currentColor: once the text is transparent,
-   currentColor is transparent too. Reduced motion keeps the plain label —
-   a frozen band would read as a random tint. */
+   glyph fill transparent. Without background-clip: text that would erase the
+   label, so the transparency lives under the same query as the clip. It is
+   the fill, not `color`: a label class that sets its own color (.muted, a
+   caption style) would otherwise win the cascade and paint opaque glyphs over
+   the sweep. Reduced motion keeps the plain label — a frozen band would read
+   as a random tint. */
 @supports (background-clip: text) {
   @media (prefers-reduced-motion: no-preference) {
     .shimmer {
-      color: transparent;
+      -webkit-text-fill-color: transparent;
       background:
         linear-gradient(
           90deg,

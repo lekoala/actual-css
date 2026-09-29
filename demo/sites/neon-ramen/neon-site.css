@@ -341,6 +341,22 @@ img { filter: saturate(1.06) contrast(1.03); }
     0 1.5rem 5rem var(--brand-shadow);
 }
 
+/* Brand aura — Actual's default is a thin line; the night market wants neon.
+   Only hooks change: the intent on the wrapper still picks the color. */
+.aura-neon {
+  --aura-width: 3px;
+  --aura-blur: 0.9rem;
+  --aura-intensity: 1.6;
+}
+
+/* Media and dashboard panels fill their grid track; .aura is inline-grid,
+   which would shrink them to their content. */
+.aura-block { display: grid; }
+
+/* Holds the framed media and its floating chips, so the aura keeps exactly
+   one child and the chips stay positioned against the photo. */
+.visual-stage { position: relative; }
+
 .hero-visual { --frame-ratio: 4 / 5; }
 .cart-visual { --frame-ratio: 4 / 3; }
 .item-visual { --frame-ratio: 1 / 1; }
