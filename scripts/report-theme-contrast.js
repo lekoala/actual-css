@@ -5,8 +5,8 @@
  * tests/browser/field-focus.test.js); presets are reference/demo material, so
  * this tool only REPORTS their resting and hovered soft pairs, their focus
  * line against --surface and --surface-solid, and the invalid-field focus
- * line (--form-invalid-border resolves to --danger, measured here directly)
- * against --surface — light and dark where a theme
+ * line (a real invalid .input's --form-invalid-border) against the field's
+ * own background — light and dark where a theme
  * defines both — and exits 0 whatever it finds. Use it to decide where a
  * preset's character survives a correction.
  *
@@ -56,7 +56,7 @@ function island(theme, scheme) {
     ${INTENTS.map((i) => `<button class="btn soft ${i}" data-hover="${i}" type="button">t</button>`).join("")}
     <span data-focus="surface" style="color: var(--focus); background: var(--surface)"></span>
     <span data-focus="solid" style="color: var(--focus); background: var(--surface-solid)"></span>
-    <span data-focus-invalid="surface" style="color: var(--danger); background: var(--surface)"></span>
+    <input class="input" aria-invalid="true" data-focus-invalid="field" aria-label="t">
   </div>`;
 }
 
@@ -111,7 +111,10 @@ await withBrowserPage(
                 ? \`focus-\${el.dataset.focus}\`
                 : \`invalid-\${el.dataset.focusInvalid}\`)
           ] = {
-            fg: norm(cs(el).color),
+            // The invalid field's block-end border carries
+            // --form-invalid-border, the hook its focus outline reads, even on
+            // an underline-only preset (material) whose other sides are clear.
+            fg: norm(el.dataset.focusInvalid ? cs(el).borderBlockEndColor : cs(el).color),
             bg: norm(cs(el).backgroundColor),
           };
         return rest;
@@ -185,13 +188,14 @@ await withBrowserPage(
     }
 
     // Documented exception (focus.css): an invalid field focuses in
-    // --form-invalid-border, so the danger line needs 3:1 on --surface too.
-    console.log("\nInvalid focus line contrast (--danger vs surface), needs 3:1.\n");
-    console.log("theme      scheme  surface");
+    // --form-invalid-border. The line is inset, so it reads against the
+    // field's own background, not the surface around it.
+    console.log("\nInvalid focus line contrast (--form-invalid-border vs field), needs 3:1.\n");
+    console.log("theme      scheme  field");
     for (const theme of themes) {
       for (const scheme of theme.hasDark ? ["light", "dark"] : ["light"]) {
         const rest = await readRest(`island-${theme.name}-${scheme}`);
-        const v = ratio(rest["invalid-surface"].fg, rest["invalid-surface"].bg).toFixed(2);
+        const v = ratio(rest["invalid-field"].fg, rest["invalid-field"].bg).toFixed(2);
         const flag = +v < 3 ? "  <-- under 3" : "";
         console.log(`${theme.name.padEnd(9)}  ${scheme.padEnd(6)}  ${v.padStart(5)}:1${flag}`);
       }

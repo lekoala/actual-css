@@ -19,22 +19,26 @@
 
 - `registerEnhancement()` discovers every named behavior through one shared `[data-enhance]` query per root instead of one `[data-enhance~="name"]` selector each.
 - The command router calls `event.preventDefault()` once a target resolves, before `handle`; handlers no longer cancel the click themselves.
+- `--focus-outline` (the generic `currentColor` focus fallback) is `--focus-ring-width` wide instead of `2 × --border-width`: 3px instead of 4px under `prefers-contrast: more`.
 
 ### Fixed
 
 - Docs search keeps focus in the input while arrowing through results (`aria-activedescendant` + `Home`/`End`), so the second and later matches are reachable by keyboard; `Enter` follows the highlight instead of closing the dialog.
-- `.tab` and `.rating` focus use the component ring (`--focus-ring-width` solid `--focus`) instead of the generic outline with an overridden color; the generic `:focus` fallback stays `currentColor` for unchromed elements.
+- `.tab` and `.rating` draw the component focus ring (`--focus-ring-width` solid `--focus`): an intent on the rating no longer becomes the focus color, and neither ring is 4px under `prefers-contrast: more`.
 - `commandSelector()` matches native command keywords case-insensitively, as the router does.
 - The command router ignores a trigger disabled through a `<fieldset disabled>` ancestor.
-- `.rating > input[type="radio"]:focus-visible` draws its outline in `--focus` instead of `currentColor`: an intent on the rating no longer becomes the focus color, keeping the guaranteed 3:1 contrast against `--surface` and `--surface-solid`.
 - `tooltip.js` shows on focus only when the trigger matches `:focus-visible`: a pointer press, or focus handed back by a dialog closed with the pointer, no longer brings the tooltip back.
 
 ### Documentation and tooling
 
 - `tests/exports.test.js` keys its inventory on every JS subpath of `package.json#exports`, so a new subpath or an export on an unlisted module now fails the suite.
 - Docs search ranks a query token inside a longer alias (`select` finds the Combobox page via `searchable select`) and matches body text on word boundaries, so `selection` no longer outranks `select`; Combobox and Forms carry `select`, `custom select`, and `form controls` aliases.
-- Focus is documented as two contracts (adaptive `currentColor` fallback vs themed component ring) with the invalid-field danger ring as a measured exception; `report:theme-contrast` reports that line at 3:1, and `check:sync` guards the `.sm`/`.lg` participant lists.
-- Tailwind guide names the `.outline` collision first and clarifies the prefix transform as consumer-pipeline work, not CLI work.
+- `focus.css` documents two focus contracts: text-like elements keep the `currentColor` fallback, boxed components draw the `--focus` ring, and an invalid field's `--form-invalid-border` ring is the one exception.
+- `tests/css-audit.test.js` fails on any framework `outline` outside the two focus contracts.
+- `report:theme-contrast` reports each preset's invalid-field focus line against the field background.
+- `check:sync` fails when the `.sm` and `.lg` participant lists in `variants.css` diverge.
+- Tailwind guide: `.outline` is named as the dangerous collision, with `.table`, `.sticky`, `.truncate`, `.prose`, and `.sr-only`.
+- Tailwind and Bootstrap guides: a prefix transform is consumer-pipeline work and must also rename the runtime state classes in `actual-css/js/selectors`.
 - Table: clarified the responsive boundary — horizontal overflow (`.table-wrap` + `--table-min` + accessible scroll) stays the strategy, and the docs now name the alternatives (list/media view, `.data-list`, dedicated data grid).
 - Badge vs choice chip vs removable tag vocabulary: a badge is information (non-interactive), `choice-card.chip` is a selectable label (never nest a `.close` inside it), and removable tags belong to the widget that produced them.
 - Combobox: a "Bridge contract" section names what Actual owns (tokens, focus, invalid, `.join`, contrast) versus the widget (behavior, multi-value, i18n), and keeps the bridge CSS in docs/demo.

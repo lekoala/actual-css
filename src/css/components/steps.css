@@ -177,7 +177,7 @@
    focus ring's own width and offset. Only this composition scrolls, and only a
    link has a ring to protect. */
 .steps-horizontal:has(a[href]) {
-  padding-block: calc(var(--focus-outline-offset) + var(--border-width) * 2);
+  padding-block: calc(var(--focus-outline-offset) + var(--focus-ring-width));
 }
 
 /* One explicit row, the marker's: a `.step-label` is auto-placed into an
