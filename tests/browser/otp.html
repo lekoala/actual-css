@@ -16,10 +16,13 @@
   <span id="ref-surface" style="background: var(--surface)"></span>
   <span id="ref-surface-subtle" style="background: var(--surface-subtle)"></span>
 
+  <span id="ref-focus" style="color: var(--focus)"></span>
+
   <!-- Canonical order: the input is the first direct child, then one span per
-       character. The state rules select the cells as following siblings. -->
+       character. The state rules select the cells as following siblings. The
+       enabled input carries .input as the docs do, so the field ring competes. -->
   <div class="otp" id="otp-enabled" aria-label="Enabled code">
-    <input type="text" inputmode="numeric" maxlength="4" aria-label="Enabled code" />
+    <input class="input" id="otp-enabled-input" type="text" inputmode="numeric" maxlength="4" aria-label="Enabled code" />
     <span aria-hidden="true"></span>
     <span aria-hidden="true"></span>
     <span aria-hidden="true"></span>

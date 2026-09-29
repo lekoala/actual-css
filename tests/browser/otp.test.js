@@ -11,7 +11,12 @@
  * assertions work on sRGB bytes.
  */
 import { expect, test } from "bun:test";
-import { browserAvailable, fixtureUrl, withBrowserPage } from "../../scripts/utils/browser.js";
+import {
+  browserAvailable,
+  fixtureUrl,
+  waitForBrowser,
+  withBrowserPage,
+} from "../../scripts/utils/browser.js";
 
 const FIXTURE = "tests/browser/otp.html";
 const TIMEOUT = 60_000;
@@ -75,5 +80,39 @@ it("disabled OTP cells are visibly distinct from enabled", async () => {
       expect(snapshot.disabledCursor).toBe("not-allowed");
     },
     { artifactName: "otp" },
+  );
+});
+
+// Keyboard focus, not el.focus(): the competing field ring is :focus-visible.
+it("keyboard focus marks the cells only, never a group ring", async () => {
+  await withBrowserPage(
+    fixtureUrl(FIXTURE),
+    async (view) => {
+      for (const type of ["keyDown", "keyUp"]) {
+        await view.cdp("Input.dispatchKeyEvent", {
+          type,
+          key: "Tab",
+          code: "Tab",
+          windowsVirtualKeyCode: 9,
+        });
+      }
+      await waitForBrowser(view, `document.activeElement?.id === "otp-enabled-input"`);
+
+      const snapshot = await view.evaluate(`(() => {
+        const input = document.getElementById("otp-enabled-input");
+        const cell = getComputedStyle(document.querySelector("#otp-enabled > span"));
+        return {
+          focusVisible: input.matches(":focus-visible"),
+          outline: getComputedStyle(input).outlineStyle,
+          cellBorder: cell.borderTopColor,
+          focus: getComputedStyle(document.getElementById("ref-focus")).color,
+        };
+      })()`);
+
+      expect(snapshot.focusVisible).toBe(true);
+      expect(snapshot.outline).toBe("none");
+      expect(snapshot.cellBorder).toBe(snapshot.focus);
+    },
+    { artifactName: "otp-focus" },
   );
 });

@@ -39,6 +39,7 @@
 
 ### Fixed
 
+- `.otp` with `.input` on its native input no longer draws the field focus ring around all the cells.
 - Docs search keeps focus in the input while arrowing through results (`aria-activedescendant` + `Home`/`End`), so the second and later matches are reachable by keyboard; `Enter` follows the highlight instead of closing the dialog.
 - `.tab` and `.rating` draw the component focus ring (`--focus-ring-width` solid `--focus`): an intent on the rating no longer becomes the focus color, and neither ring is 4px under `prefers-contrast: more`.
 - `commandSelector()` matches native command keywords case-insensitively, as the router does.
