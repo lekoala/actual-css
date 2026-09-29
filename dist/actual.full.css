@@ -8442,6 +8442,16 @@ a.list-item[aria-current]::before {
     var(--aura-color) 93%,
     transparent
   );
+
+  /* Far halo — flat and static. At this blur the rotating detail is no longer
+     legible, so there is nothing to gain from animating a second wide blurred
+     layer. This is the layer that stays lit at all times, so it — not the
+     frame — is what keeps the object present between two passes of the
+     accent. An outer shadow never paints under the box, so it stays out of a
+     translucent child. min() because a color-mix() share above 100% is
+     invalid, where the opacity it replaces clamped. */
+  box-shadow: 0 0 calc(var(--aura-blur) * 8) var(--aura-blur)
+    color-mix(in oklab, var(--aura-color) min(100%, calc(15% * var(--aura-intensity))), transparent);
 }
 
 /* Near halo — inherits the frame gradient, so it tracks the lit accent. */
@@ -8457,29 +8467,22 @@ a.list-item[aria-current]::before {
   content: "";
 }
 
-/* Far halo — flat and static. At this blur the rotating detail is no longer
-   legible, so there is nothing to gain from animating a second wide blurred
-   layer. It outgrows the frame, otherwise the child covers it and the whole
-   effect reads as a drop shadow. This is the layer that stays lit at all
-   times, so it — not the frame — is what keeps the object present between two
-   passes of the accent. */
+/* Occlusion — the frame and the near halo paint across the whole box, and only
+   their edge is meant to show. This mask sits above both, under the child, so
+   a transparent or translucent child (an .outline alert, a glass surface) is
+   framed rather than filled with the frame color. It follows the child's
+   shape through --aura-radius. */
 .aura::after {
   position: absolute;
   z-index: -1;
-  inset: calc(-1 * var(--aura-blur));
-  border-radius: calc(var(--aura-radius) + var(--aura-width) + var(--aura-blur));
-  background: var(--aura-color);
-  filter: blur(calc(var(--aura-blur) * 4));
-  opacity: calc(0.15 * var(--aura-intensity));
+  inset: var(--aura-width);
+  border-radius: var(--aura-radius);
+  background: var(--surface-opaque);
   pointer-events: none;
   content: "";
 }
 
-/* Lifts the child above both halos. It also has to be opaque: the frame paints
-   across the whole box and only its edge is meant to show, so a transparent
-   child (an .outline alert, a .ghost button) is filled with the frame color
-   rather than framed by it. Documented as a constraint, not worked around —
-   masking a ring would cost more than the case is worth. */
+/* Lifts the child above the halo and the mask. */
 .aura > * {
   position: relative;
 }
@@ -8502,7 +8505,7 @@ a.list-item[aria-current]::before {
     animation: aura-breathe-near var(--aura-duration) ease-in-out infinite;
   }
 
-  .aura-glow::after {
+  .aura-glow {
     animation: aura-breathe-far var(--aura-duration) ease-in-out infinite;
   }
 }
@@ -8536,10 +8539,16 @@ a.list-item[aria-current]::before {
   }
 }
 
+/* The far halo is the element's own shadow: opening its spread and share
+   breathes it without scaling the child. */
 @keyframes aura-breathe-far {
   50% {
-    opacity: calc(0.28 * var(--aura-intensity));
-    transform: scale(1.07);
+    box-shadow: 0 0 calc(var(--aura-blur) * 10) calc(var(--aura-blur) * 2)
+      color-mix(
+        in oklab,
+        var(--aura-color) min(100%, calc(28% * var(--aura-intensity))),
+        transparent
+      );
   }
 }
 

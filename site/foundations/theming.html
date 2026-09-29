@@ -17,7 +17,7 @@
   <script src="../../scripts/docs/assets/docs.js" defer></script>
   <script>
   (function () {
-    var valid = ["system","light","dark","indigo","dim","corporate","bootstrap-v6","forest","ocean","spruce","petrol","sunset","lavender","mono","square","brutalist","edge","cyberpunk","neon","gradient","material"];
+    var valid = ["system","light","dark","indigo","dim","corporate","bootstrap-v6","forest","ocean","spruce","petrol","sunset","lavender","mono","square","brutalist","edge","cyberpunk","neon","gradient","material","glass"];
     var saved = null;
     try { saved = localStorage.getItem("actual-docs-theme"); } catch (e) {}
     if (saved === "system" || !valid.includes(saved)) {
@@ -64,6 +64,7 @@
             <option value="neon">Neon</option>
             <option value="gradient">Gradient</option>
             <option value="material">Material</option>
+            <option value="glass">Glass</option>
             </optgroup>
             </select>
           </label>
@@ -349,7 +350,10 @@ line. Use <code>.badge.soft</code> for a subtle badge. It is a visual theme, not
 Bootstrap compatibility layer. The <code>gradient</code> example keeps a Bootstrap 4 style
 outer halo on focused fields, for comparison. The <code>material</code> example restyles
 fields as filled underlines with pill buttons — tokens plus three small rules,
-and <code>.join</code> still needs no adaptation.</p>
+and <code>.join</code> still needs no adaptation. The <code>glass</code> example paints translucent
+surfaces over its own backdrop: it sets <code>--surface-opaque</code> and
+<code>--surface-solid-fg</code> to opaque values, raises <code>--soft-bg-mix</code> so soft fills stay
+light over glass, and adds the blur and an opaque busy veil as small rules.</p>
 
 </div>
 

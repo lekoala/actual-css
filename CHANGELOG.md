@@ -18,6 +18,8 @@
 - `--surface-opaque` and `--surface-solid-fg` let a theme paint translucent surfaces while rings, separators and inverse text stay opaque.
 - `report:theme-contrast` reports the `--surface-solid-fg` on `--surface-solid` text pair.
 - `scripts/utils/color.js` holds the WCAG contrast and OKLCH math for reports and browser tests; `contrast()` refuses translucent colors.
+- `glass` demo theme: translucent surfaces over a theme-painted backdrop, a stress test of the opaque surface roles.
+- `tests/browser/translucent-surface.test.js` keeps rings, separators, step markers, and inverse text opaque over translucent surfaces.
 - `--choice-card-gap` sets the space between a `.choice-card` indicator and its label.
 - `tests/browser/choice-card.test.js` locks the leading indicator: visible at rest, level with the first line of a wrapping label, and kept under forced colors.
 
@@ -28,6 +30,8 @@
 
 - `--indicator-ring`, the `.avatar-stack` ring, the `.range` thumb separator, segmented `.meter` separators and `.steps` markers read `--surface-opaque`.
 - `.tooltip` text reads `--surface-solid-fg`.
+- `.aura` masks its frame under the child with `--surface-opaque`, so a transparent or translucent child is framed rather than filled.
+- The `.aura` far halo is an outer `box-shadow`, so it never paints under the child.
 - `.status-bar` without an intent paints `--surface-solid` / `--surface-solid-fg` instead of `--text` / `--surface`.
 - `registerEnhancement()` discovers every named behavior through one shared `[data-enhance]` query per root instead of one `[data-enhance~="name"]` selector each.
 - The command router calls `event.preventDefault()` once a target resolves, before `handle`; handlers no longer cancel the click themselves.

@@ -208,4 +208,7 @@ line. Use `.badge.soft` for a subtle badge. It is a visual theme, not a
 Bootstrap compatibility layer. The `gradient` example keeps a Bootstrap 4 style
 outer halo on focused fields, for comparison. The `material` example restyles
 fields as filled underlines with pill buttons — tokens plus three small rules,
-and `.join` still needs no adaptation.
+and `.join` still needs no adaptation. The `glass` example paints translucent
+surfaces over its own backdrop: it sets `--surface-opaque` and
+`--surface-solid-fg` to opaque values, raises `--soft-bg-mix` so soft fills stay
+light over glass, and adds the blur and an opaque busy veil as small rules.

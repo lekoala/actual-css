@@ -1771,3 +1771,33 @@ test("the documented z-index scale matches the tokens", () => {
     expect(documented.get(name)).toBe(value);
   }
 });
+
+/*
+ * --surface is painted material and may be translucent. Ink and rings read
+ * the opaque roles (--surface-solid-fg, --surface-opaque): a glass palette
+ * turned tooltip text and the range-thumb separator 10% opaque when they
+ * borrowed --surface. tests/browser/translucent-surface.test.js checks the
+ * rendered result; this also covers what a browser cannot read back, such as
+ * slider-thumb shadows.
+ */
+test("ink and rings never read the translucent-capable --surface", () => {
+  const cssRoot = join(import.meta.dir, "..", "src", "css");
+  const found = [];
+  const walk = (dir) => {
+    for (const entry of readdirSync(dir)) {
+      const full = join(dir, entry);
+      if (statSync(full).isDirectory()) walk(full);
+      else if (entry.endsWith(".css")) {
+        const source = readFileSync(full, "utf8").replace(/\/\*[\s\S]*?\*\//g, "");
+        for (const [, prop] of source.matchAll(
+          /(?<![\w-])(color|box-shadow|--[\w-]+-(?:fg|ring))\s*:\s*[^;{}]*var\(--surface\)[^;{}]*;/g,
+        )) {
+          found.push(`${entry}: ${prop}`);
+        }
+      }
+    }
+  };
+  walk(cssRoot);
+  // The role defaults themselves, equal to --surface on an opaque palette.
+  expect(found).toEqual(["theme.css: --surface-solid-fg"]);
+});

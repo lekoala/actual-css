@@ -17,7 +17,7 @@
   <script src="../../scripts/docs/assets/docs.js" defer></script>
   <script>
   (function () {
-    var valid = ["system","light","dark","indigo","dim","corporate","bootstrap-v6","forest","ocean","spruce","petrol","sunset","lavender","mono","square","brutalist","edge","cyberpunk","neon","gradient","material"];
+    var valid = ["system","light","dark","indigo","dim","corporate","bootstrap-v6","forest","ocean","spruce","petrol","sunset","lavender","mono","square","brutalist","edge","cyberpunk","neon","gradient","material","glass"];
     var saved = null;
     try { saved = localStorage.getItem("actual-docs-theme"); } catch (e) {}
     if (saved === "system" || !valid.includes(saved)) {
@@ -64,6 +64,7 @@
             <option value="neon">Neon</option>
             <option value="gradient">Gradient</option>
             <option value="material">Material</option>
+            <option value="glass">Glass</option>
             </optgroup>
             </select>
           </label>
@@ -282,7 +283,7 @@
 <p>Surfaces are painted material and may be translucent. Two roles must stay opaque, so they have their own tokens, both defaulting to <code>--surface</code>:</p>
 <ul>
 <li><code>--surface-solid-fg</code> — the ink on <code>--surface-solid</code>: tooltips, the status bar, an inverse band.</li>
-<li><code>--surface-opaque</code> — an opaque neutral used where a component must hide or separate what is painted beneath it: the status-dot and avatar-stack rings, range-thumb and meter separators, step markers. It is not a surface fill; paint panels with <code>--surface-*</code>.</li>
+<li><code>--surface-opaque</code> — an opaque neutral used where a component must hide or separate what is painted beneath it: the status-dot and avatar-stack rings, range-thumb and meter separators, step markers, the mask under an <code>.aura</code> child. It is not a surface fill; paint panels with <code>--surface-*</code>.</li>
 </ul>
 <p>A theme with translucent surfaces overrides both with opaque values.</p>
 <p>Use <code>*-fg</code> pairs only for solid backgrounds where the component controls both foreground and background. Do not require a foreground token for every surface token.</p>

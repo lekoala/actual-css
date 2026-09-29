@@ -17,7 +17,7 @@
   <script src="../../scripts/docs/assets/docs.js" defer></script>
   <script>
   (function () {
-    var valid = ["system","light","dark","indigo","dim","corporate","bootstrap-v6","forest","ocean","spruce","petrol","sunset","lavender","mono","square","brutalist","edge","cyberpunk","neon","gradient","material"];
+    var valid = ["system","light","dark","indigo","dim","corporate","bootstrap-v6","forest","ocean","spruce","petrol","sunset","lavender","mono","square","brutalist","edge","cyberpunk","neon","gradient","material","glass"];
     var saved = null;
     try { saved = localStorage.getItem("actual-docs-theme"); } catch (e) {}
     if (saved === "system" || !valid.includes(saved)) {
@@ -64,6 +64,7 @@
             <option value="neon">Neon</option>
             <option value="gradient">Gradient</option>
             <option value="material">Material</option>
+            <option value="glass">Glass</option>
             </optgroup>
             </select>
           </label>
@@ -405,18 +406,17 @@ of the glow.</p>
 <p>Keep exactly one direct child and set <code>--aura-radius</code> when its shape differs
 from the common button, card, alert, and badge shapes detected as a visual
 enhancement.</p>
-<p>The child must be opaque. The frame paints across the whole box and relies on
-the child to cover all but its edge, so a transparent child — an <code>.outline</code>
-alert, a <code>.ghost</code> button — is filled edge to edge with the frame color instead
-of framed by it. Give such a child a surface, or move the aura to an opaque
-wrapper around it.</p>
+<p>A transparent or translucent child — an <code>.outline</code> alert, a <code>.ghost</code> button, a
+glass surface — shows <code>--surface-opaque</code> beneath it, the theme's opaque
+neutral, rather than the frame color. On a differently painted band, give the
+child its own surface so it matches the band.</p>
 <h2 id="css-hooks">CSS hooks</h2>
 <ul>
 <li><code>--aura-color</code> — frame and halo color; follows the local intent.</li>
 <li><code>--aura-width</code> — frame thickness.</li>
 <li><code>--aura-blur</code> — near halo blur; the far halo derives its own blur and its
 spread beyond the frame from this value, so one hook scales both.</li>
-<li><code>--aura-intensity</code> — multiplies both halo opacities, resting and breathing.
+<li><code>--aura-intensity</code> — multiplies both halo strengths, resting and breathing.
 It does not touch the frame itself, which stays a crisp line at any setting.</li>
 <li><code>--aura-radius</code> — child corner radius used to derive the outer radius.</li>
 <li><code>--aura-duration</code> — one rotation of the accent, or one breath of the glow.</li>

@@ -8,8 +8,8 @@
  * line (a real invalid .input's --form-invalid-border) against the field's
  * own background, and the inverse text pair --surface-solid-fg on
  * --surface-solid — light and dark where a theme defines both — and exits 0
- * whatever it finds. Use it to decide where a
- * preset's character survives a correction.
+ * whatever it finds. Use it to decide where a preset's character survives a
+ * correction. Pairs involving a translucent color print n/a.
  *
  * Each island resolves its own tokens plus the default theme's inherited
  * --*-soft-fg hooks (a preset that wants its own soft ink overrides them), so
@@ -21,12 +21,16 @@
 import { mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { fixtureUrl, withBrowserPage } from "./utils/browser.js";
-import { RASTERIZE, contrast as ratio } from "./utils/color.js";
+import { contrast, RASTERIZE } from "./utils/color.js";
 
 const ROOT = join(import.meta.dirname, "..");
 const THEMES_DIR = join(ROOT, "src", "css", "themes");
 const INTENTS = ["primary", "secondary", "success", "warning", "danger", "neutral"];
 const OUT_HTML = join(ROOT, "tmp", "theme-contrast.html");
+
+/* A translucent color has no ratio until it is composited over its backdrop
+   (glass), so the pair reads n/a instead of stopping the report. */
+const ratio = (fg, bg) => (fg[3] < 255 || bg[3] < 255 ? "n/a" : contrast(fg, bg).toFixed(2));
 
 const themes = readdirSync(THEMES_DIR)
   .filter((file) => /^[a-z0-9-]+\.css$/.test(file) && file !== "index.css")
@@ -137,8 +141,8 @@ await withBrowserPage(
         const hover = await readHover(id);
         for (const intent of INTENTS) {
           const fg = rest[intent].fg;
-          const r = ratio(fg, rest[intent].bg).toFixed(2);
-          const h = ratio(fg, hover[intent]).toFixed(2);
+          const r = ratio(fg, rest[intent].bg);
+          const h = ratio(fg, hover[intent]);
           const flag = +h < 4.5 ? "  <-- under 4.5" : "";
           console.log(
             `${theme.name.padEnd(9)}  ${scheme.padEnd(6)}  ${intent.padEnd(9)} ${r.padStart(5)}:1   ${h.padStart(5)}:1${flag}`,
@@ -153,7 +157,7 @@ await withBrowserPage(
       for (const scheme of theme.hasDark ? ["light", "dark"] : ["light"]) {
         const rest = await readRest(`island-${theme.name}-${scheme}`);
         const [s, d] = ["focus-surface", "focus-solid"].map((key) =>
-          ratio(rest[key].fg, rest[key].bg).toFixed(2),
+          ratio(rest[key].fg, rest[key].bg),
         );
         const flag = +s < 3 || +d < 3 ? "  <-- under 3" : "";
         console.log(
@@ -170,7 +174,7 @@ await withBrowserPage(
     for (const theme of themes) {
       for (const scheme of theme.hasDark ? ["light", "dark"] : ["light"]) {
         const rest = await readRest(`island-${theme.name}-${scheme}`);
-        const v = ratio(rest["invalid-field"].fg, rest["invalid-field"].bg).toFixed(2);
+        const v = ratio(rest["invalid-field"].fg, rest["invalid-field"].bg);
         const flag = +v < 3 ? "  <-- under 3" : "";
         console.log(`${theme.name.padEnd(9)}  ${scheme.padEnd(6)}  ${v.padStart(5)}:1${flag}`);
       }
@@ -182,7 +186,7 @@ await withBrowserPage(
     for (const theme of themes) {
       for (const scheme of theme.hasDark ? ["light", "dark"] : ["light"]) {
         const rest = await readRest(`island-${theme.name}-${scheme}`);
-        const v = ratio(rest.inverse.fg, rest.inverse.bg).toFixed(2);
+        const v = ratio(rest.inverse.fg, rest.inverse.bg);
         const flag = +v < 4.5 ? "  <-- under 4.5" : "";
         console.log(`${theme.name.padEnd(9)}  ${scheme.padEnd(6)}  ${v.padStart(5)}:1${flag}`);
       }
