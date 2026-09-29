@@ -12,6 +12,7 @@ import {
   waitForBrowser,
   withBrowserPage,
 } from "../../scripts/utils/browser.js";
+import { contrast, RASTERIZE } from "../../scripts/utils/color.js";
 
 const FIXTURE = "tests/browser/field-focus.html";
 const TIMEOUT = 60_000;
@@ -92,32 +93,16 @@ it("text fields paint an inset outline that stays inside their border box", asyn
       // The line alone carries focus and never follows a context, so --focus
       // must hold 3:1 against --surface (page, fields) and --surface-solid
       // (a solid band) in both schemes of the default theme.
-      const ratios = await view.evaluate(`(() => {
-        const c = document.createElement("canvas");
-        c.width = c.height = 1;
-        const x = c.getContext("2d", { willReadFrequently: true });
-        const rgb = (value) => {
-          x.clearRect(0, 0, 1, 1);
-          x.fillStyle = value;
-          x.fillRect(0, 0, 1, 1);
-          return [...x.getImageData(0, 0, 1, 1).data.slice(0, 3)];
-        };
-        const lin = (v) => (v <= 0.04045 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4);
-        const lum = (c) => {
-          const [r, g, b] = c.map((v) => lin(v / 255));
-          return 0.2126 * r + 0.7152 * g + 0.0722 * b;
-        };
-        const ratio = (a, b) => {
-          const [p, q] = [lum(a), lum(b)].sort((m, n) => n - m);
-          return (p + 0.05) / (q + 0.05);
-        };
+      const pairs = await view.evaluate(`(() => {
+        const rgba = ${RASTERIZE};
         return [...document.querySelectorAll("[data-focus]")].map((el) => {
           const cs = getComputedStyle(el);
-          return ratio(rgb(cs.color), rgb(cs.backgroundColor));
+          return [rgba(cs.color), rgba(cs.backgroundColor)];
         });
       })()`);
-      expect(ratios).toHaveLength(4);
-      for (const r of ratios) expect(r).toBeGreaterThanOrEqual(3);
+      expect(pairs).toHaveLength(4);
+      for (const [line, surface] of pairs)
+        expect(contrast(line, surface)).toBeGreaterThanOrEqual(3);
     },
     { artifactName: "field-focus" },
   );

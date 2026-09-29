@@ -135,6 +135,49 @@ there: the theme contract keeps `--focus` at 3:1 on `--surface-solid`.
 
 → Foundations · Tokens (theme contract) · Examples · Contrast contexts
 
+### Scope a theme to one section / microtheme / theme island
+
+Any `data-theme` value is an island, not only `light` and `dark`:
+`<aside data-theme="promo">` paints its subtree with that theme, nested inside
+the page theme, without changing the markup. The same painting rule applies as
+for a dark section. A theme can change radius, typography, shadow and motion as
+well as color.
+
+→ Foundations · Tokens (theme contract)
+
+### Dark mode toggle / theme switcher / remember the user's choice
+
+Actual CSS ships the mechanism, not the control. Without `data-theme` the page
+follows the OS; `data-theme="light"` or `"dark"` on `<html>` forces a scheme,
+and removing the attribute returns to the OS. The switcher UI and where the
+choice is stored belong to the application; a page with no setting already
+follows the OS. Apply a stored choice from an inline script in `<head>` so the
+first paint does not flash the OS scheme. The demo's theme picker is an
+inspection tool, not a component to copy.
+
+### Force light or dark on a theme that has both / theme and color scheme
+
+With a single brand theme, `data-theme="light"` and `"dark"` already are that
+choice once you redefine them as your brand's two schemes (see the dark section
+above).
+
+A named theme that pairs both schemes through `light-dark()` follows the OS. To
+pin one scheme, set `color-scheme` on the element that carries `data-theme`,
+inline or in a rule more specific than the theme's own. `color-scheme` is the
+scheme axis and `data-theme` the design axis, so there is no separate
+`data-color-scheme` attribute.
+
+```html
+<html data-theme="ocean" style="color-scheme: dark">
+```
+
+On an ancestor it has no effect: the theme declares its own `color-scheme` on
+its boundary. Leave single-scheme themes (`color-scheme: dark` only) alone —
+their tokens have one value, so forcing the other scheme only flips native
+controls and scrollbars.
+
+→ Foundations · Tokens (theme contract)
+
 ### Replace the palette with my own brand
 
 Override the whole minimal recolor set (Tokens · Theme contract), not just

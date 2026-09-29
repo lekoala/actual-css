@@ -20,24 +20,12 @@
 import { mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { fixtureUrl, withBrowserPage } from "./utils/browser.js";
+import { RASTERIZE, contrast as ratio } from "./utils/color.js";
 
 const ROOT = join(import.meta.dirname, "..");
 const THEMES_DIR = join(ROOT, "src", "css", "themes");
 const INTENTS = ["primary", "secondary", "success", "warning", "danger", "neutral"];
 const OUT_HTML = join(ROOT, "tmp", "theme-contrast.html");
-
-const toLinear = (c) => (c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4);
-const lum = (rgb) => {
-  const [r, g, b] = rgb
-    .map(Number)
-    .map((v) => v / 255)
-    .map(toLinear);
-  return 0.2126 * r + 0.7152 * g + 0.0722 * b;
-};
-const ratio = (a, b) => {
-  const [x, y] = [lum(a), lum(b)];
-  return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05);
-};
 
 const themes = readdirSync(THEMES_DIR)
   .filter((file) => /^[a-z0-9-]+\.css$/.test(file) && file !== "index.css")
@@ -92,15 +80,7 @@ await withBrowserPage(
   async (view) => {
     const readRest = (id) =>
       view.evaluate(`(() => {
-        const c = document.createElement("canvas");
-        c.width = c.height = 1;
-        const x = c.getContext("2d", { willReadFrequently: true });
-        const norm = (value) => {
-          x.clearRect(0, 0, 1, 1);
-          x.fillStyle = value;
-          x.fillRect(0, 0, 1, 1);
-          return [...x.getImageData(0, 0, 1, 1).data.slice(0, 3)];
-        };
+        const norm = ${RASTERIZE};
         const root = document.getElementById("${id}");
         const cs = (el) => getComputedStyle(el);
         const rest = {};
@@ -122,15 +102,7 @@ await withBrowserPage(
 
     const readHover = (id) =>
       view.evaluate(`(() => {
-        const c = document.createElement("canvas");
-        c.width = c.height = 1;
-        const x = c.getContext("2d", { willReadFrequently: true });
-        const norm = (value) => {
-          x.clearRect(0, 0, 1, 1);
-          x.fillStyle = value;
-          x.fillRect(0, 0, 1, 1);
-          return [...x.getImageData(0, 0, 1, 1).data.slice(0, 3)];
-        };
+        const norm = ${RASTERIZE};
         const root = document.getElementById("${id}");
         const bg = {};
         for (const el of root.querySelectorAll("[data-hover]"))
