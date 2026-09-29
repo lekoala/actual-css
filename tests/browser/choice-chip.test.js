@@ -36,6 +36,7 @@ function chipState(view, id) {
       textY: text.y,
       width: box.width,
       height: box.height,
+      dotHeight: Number.parseFloat(dot.height),
       dotContent: dot.content,
       dotClip: dot.clipPath,
       dotBg: dot.backgroundColor,
@@ -69,6 +70,9 @@ it("checking swaps dot for check in place and keeps the native control", async (
       const before = await chipState(view, "design");
       expect(before.dotClip).toStartWith("circle(");
       expect(before.dotClip).not.toStartWith("circle(0px");
+      // The clip is cut from a full-bleed layer: a collapsed layer hides the dot
+      // while its clip and colour still read correctly.
+      expect(before.dotHeight).toBeGreaterThan(before.height / 2);
 
       await view.evaluate(`document.getElementById("design").click()`);
       await waitForBrowser(view, settled("design", true));

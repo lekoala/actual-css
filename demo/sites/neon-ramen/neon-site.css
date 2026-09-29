@@ -737,6 +737,32 @@ img { filter: saturate(1.06) contrast(1.03); }
   --choice-card-bg: var(--surface-raised);
 }
 
+/* Corner-badge recipe (docs/pages/forms/choice-cards.md): menu options are
+   tiles, so the check sits over the corner instead of in a leading column. */
+.choice-tile {
+  --choice-card-check-size: 1.5em;
+
+  display: block;
+}
+
+.choice-tile::before,
+.choice-tile::after {
+  position: absolute;
+  inset-inline-end: -0.375em;
+  inset-block-start: -0.375em;
+  margin: 0;
+}
+
+.choice-tile::before {
+  border: 0;
+  box-shadow: 0 0 0 2px var(--surface);
+  transform: scale(0);
+}
+
+.choice-tile:has(:checked)::before {
+  transform: scale(1);
+}
+
 .summary-row {
   --cluster-justify: space-between;
   --gap: 1rem;

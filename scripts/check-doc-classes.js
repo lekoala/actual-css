@@ -31,6 +31,7 @@ const DOC_DEMO_CLASSES = new Set([
   "actual-combobox",
   "actual-rich-text",
   "brand",
+  "choice-tile",
   "code-block",
   "docs-fab-preview",
   "editorial-grid",
