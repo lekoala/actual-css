@@ -18,12 +18,11 @@
  *      and is a byte-exact no-op at its 100% default;
  *   3. badge, alert, and button resolve to the same soft treatment at runtime.
  *
- * color-mix() results come back from getComputedStyle as oklab(), so the page
- * rasterizes every color through a 1x1 canvas first and the assertions work on
- * sRGB bytes.
+ * Colors are read through RASTERIZE, so the assertions compare sRGB bytes.
  */
 import { expect, test } from "bun:test";
 import { browserAvailable, fixtureUrl, withBrowserPage } from "../../scripts/utils/browser.js";
+import { contrast, hueDistance, oklch, RASTERIZE } from "../../scripts/utils/color.js";
 
 const FIXTURE = "tests/browser/soft-recipe.html";
 const TIMEOUT = 60_000;
@@ -31,48 +30,8 @@ const TIMEOUT = 60_000;
 const baseTest = (await browserAvailable()) ? test : test.skip;
 const it = (name, run) => baseTest(name, run, TIMEOUT);
 
-const parse = (value) => value.split(",").map((channel) => Number(channel) / 255);
-const toLinear = (c) => (c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4);
-
-/* Oklab hue of an sRGB triplet, in degrees. */
-const hue = (value) => {
-  const [r, g, b] = parse(value).map(toLinear);
-  const l = Math.cbrt(0.4122214708 * r + 0.5363325363 * g + 0.0514459929 * b);
-  const m = Math.cbrt(0.2119034982 * r + 0.6806995451 * g + 0.1073969566 * b);
-  const s = Math.cbrt(0.0883024619 * r + 0.2817188376 * g + 0.6299787005 * b);
-  const a = 1.9779984951 * l - 2.428592205 * m + 0.4505937099 * s;
-  const bb = 0.0259040371 * l + 0.7827717662 * m - 0.808675766 * s;
-  return ((Math.atan2(bb, a) * 180) / Math.PI + 360) % 360;
-};
-
-/* Oklab chroma of an sRGB triplet. */
-const chroma = (value) => {
-  const [r, g, b] = parse(value).map(toLinear);
-  const l = Math.cbrt(0.4122214708 * r + 0.5363325363 * g + 0.0514459929 * b);
-  const m = Math.cbrt(0.2119034982 * r + 0.6806995451 * g + 0.1073969566 * b);
-  const s = Math.cbrt(0.0883024619 * r + 0.2817188376 * g + 0.6299787005 * b);
-  return Math.hypot(
-    1.9779984951 * l - 2.428592205 * m + 0.4505937099 * s,
-    0.0259040371 * l + 0.7827717662 * m - 0.808675766 * s,
-  );
-};
-
-/* Shortest hue arc between two sRGB colors, in degrees. */
-const hueDrift = (from, to) => {
-  let delta = hue(to) - hue(from);
-  if (delta > 180) delta -= 360;
-  if (delta < -180) delta += 360;
-  return Math.abs(delta);
-};
-
-const contrast = (a, b) => {
-  const luminance = (value) => {
-    const [r, g, bl] = parse(value).map(toLinear);
-    return 0.2126 * r + 0.7152 * g + 0.0722 * bl;
-  };
-  const [x, y] = [luminance(a), luminance(b)];
-  return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05);
-};
+/* Shortest hue arc between two colors, in degrees. */
+const hueDrift = (from, to) => hueDistance(oklch(from).h, oklch(to).h);
 
 const INTENTS = ["primary", "secondary", "success", "warning", "danger", "neutral"];
 
@@ -81,17 +40,7 @@ it("soft variant contract over a chromatic surface", async () => {
     fixtureUrl(FIXTURE),
     async (view) => {
       const snapshot = await view.evaluate(`(() => {
-        const canvas = document.createElement("canvas");
-        canvas.width = canvas.height = 1;
-        const ctx = canvas.getContext("2d", { willReadFrequently: true });
-        // Rasterize so oklab() and rgb() computed values become comparable bytes.
-        const norm = (value) => {
-          ctx.clearRect(0, 0, 1, 1);
-          ctx.fillStyle = value;
-          ctx.fillRect(0, 0, 1, 1);
-          const [r, g, b] = ctx.getImageData(0, 0, 1, 1).data;
-          return r + "," + g + "," + b;
-        };
+        const norm = ${RASTERIZE};
         const style = (sel) => getComputedStyle(document.querySelector(sel));
         const read = (sel) => {
           const s = style(sel);
@@ -141,7 +90,7 @@ it("soft variant contract over a chromatic surface", async () => {
       // The fixture only proves anything above the chroma where a polar mix
       // starts letting the surface hue win. Below it — every shipped preset —
       // oklch and oklab agree and this file would assert nothing.
-      expect(chroma(snapshot.surface)).toBeGreaterThan(0.02);
+      expect(oklch(snapshot.surface).C).toBeGreaterThan(0.02);
 
       for (const intent of INTENTS) {
         const soft = snapshot.badge[intent];
@@ -159,49 +108,49 @@ it("soft variant contract over a chromatic surface", async () => {
         // A --soft-fg-mix below 100% must actually move the ink off raw intent.
         // Neutral is the fixture's near-black text, so rebating toward --text
         // cannot change it — the move is only meaningful for chromatic intents.
-        if (intent !== "neutral") expect(soft.fg).not.toBe(raw);
+        if (intent !== "neutral") expect(soft.fg).not.toEqual(raw);
       }
 
       // 3. The three synced blocks agree at runtime, not merely as text.
-      expect(snapshot.alert.danger.bg).toBe(snapshot.badge.danger.bg);
-      expect(snapshot.alert.danger.fg).toBe(snapshot.badge.danger.fg);
-      expect(snapshot.alert.secondary.bg).toBe(snapshot.badge.secondary.bg);
-      expect(snapshot.alert.secondary.fg).toBe(snapshot.badge.secondary.fg);
-      expect(snapshot.btn.primary.bg).toBe(snapshot.badge.primary.bg);
-      expect(snapshot.btn.primary.fg).toBe(snapshot.badge.primary.fg);
-      expect(snapshot.btn.secondary.fg).toBe(snapshot.badge.secondary.fg);
+      expect(snapshot.alert.danger.bg).toEqual(snapshot.badge.danger.bg);
+      expect(snapshot.alert.danger.fg).toEqual(snapshot.badge.danger.fg);
+      expect(snapshot.alert.secondary.bg).toEqual(snapshot.badge.secondary.bg);
+      expect(snapshot.alert.secondary.fg).toEqual(snapshot.badge.secondary.fg);
+      expect(snapshot.btn.primary.bg).toEqual(snapshot.badge.primary.bg);
+      expect(snapshot.btn.primary.fg).toEqual(snapshot.badge.primary.fg);
+      expect(snapshot.btn.secondary.fg).toEqual(snapshot.badge.secondary.fg);
 
       // 3b. Explicit .soft + intent on an alert/badge is a no-op against the
       // soft-by-default treatment: it must resolve to the same soft intent
       // tint, never collapse to a neutral subtle surface (item: alert.soft
       // must keep the intent).
-      expect(snapshot.alertSoft.primary.bg).toBe(snapshot.badge.primary.bg);
-      expect(snapshot.alertSoft.primary.fg).toBe(snapshot.badge.primary.fg);
-      expect(snapshot.alertSoft.danger.bg).toBe(snapshot.alert.danger.bg);
-      expect(snapshot.alertSoft.danger.fg).toBe(snapshot.alert.danger.fg);
-      expect(snapshot.badgeSoft.primary.bg).toBe(snapshot.badge.primary.bg);
-      expect(snapshot.badgeSoft.primary.fg).toBe(snapshot.badge.primary.fg);
-      expect(snapshot.badgeSoft.danger.bg).toBe(snapshot.badge.danger.bg);
-      expect(snapshot.badgeSoft.danger.fg).toBe(snapshot.badge.danger.fg);
+      expect(snapshot.alertSoft.primary.bg).toEqual(snapshot.badge.primary.bg);
+      expect(snapshot.alertSoft.primary.fg).toEqual(snapshot.badge.primary.fg);
+      expect(snapshot.alertSoft.danger.bg).toEqual(snapshot.alert.danger.bg);
+      expect(snapshot.alertSoft.danger.fg).toEqual(snapshot.alert.danger.fg);
+      expect(snapshot.badgeSoft.primary.bg).toEqual(snapshot.badge.primary.bg);
+      expect(snapshot.badgeSoft.primary.fg).toEqual(snapshot.badge.primary.fg);
+      expect(snapshot.badgeSoft.danger.bg).toEqual(snapshot.badge.danger.bg);
+      expect(snapshot.badgeSoft.danger.fg).toEqual(snapshot.badge.danger.fg);
       // ...and each stays on the intent hue, not a neutral/surface grey.
       expect(hueDrift(snapshot.intent.primary, snapshot.alertSoft.primary.bg)).toBeLessThan(20);
       expect(hueDrift(snapshot.intent.danger, snapshot.alertSoft.danger.bg)).toBeLessThan(20);
 
       // Without an intent the recipe collapses to plain text ink, never a mix.
-      expect(snapshot.bare.fg).toBe(snapshot.text);
+      expect(snapshot.bare.fg).toEqual(snapshot.text);
 
       // --soft-fg-mix: 100% resolves to exactly the raw intent, so the token
       // defaults to a no-op and existing themes keep their ink untouched.
-      expect(snapshot.raw.primary.fg).toBe(snapshot.intent.primary);
-      expect(snapshot.raw.danger.fg).toBe(snapshot.intent.danger);
+      expect(snapshot.raw.primary.fg).toEqual(snapshot.intent.primary);
+      expect(snapshot.raw.danger.fg).toEqual(snapshot.intent.danger);
 
       // On the untouched default theme: intents without a soft-fg hook keep the
       // raw intent (primary), while hooked intents rebate toward --text (danger
       // no longer equals its raw intent). The hook is the default palette's
       // deliberate contrast calibration, not recipe drift.
-      expect(snapshot.plain.primary.fg).toBe(snapshot.plain.intentPrimary);
-      expect(snapshot.plain.danger.fg).not.toBe(snapshot.plain.intentDanger);
-      expect(snapshot.plain.bare.fg).toBe(snapshot.plain.text);
+      expect(snapshot.plain.primary.fg).toEqual(snapshot.plain.intentPrimary);
+      expect(snapshot.plain.danger.fg).not.toEqual(snapshot.plain.intentDanger);
+      expect(snapshot.plain.bare.fg).toEqual(snapshot.plain.text);
 
       // And the default theme's own soft pairs stay legible.
       expect(contrast(snapshot.plain.primary.fg, snapshot.plain.primary.bg)).toBeGreaterThanOrEqual(
@@ -221,16 +170,7 @@ it("default theme soft contract clears 4.5 on rest and hover, light and dark", a
     async (view) => {
       const readContract = (root) =>
         view.evaluate(`(() => {
-          const canvas = document.createElement("canvas");
-          canvas.width = canvas.height = 1;
-          const ctx = canvas.getContext("2d", { willReadFrequently: true });
-          const norm = (value) => {
-            ctx.clearRect(0, 0, 1, 1);
-            ctx.fillStyle = value;
-            ctx.fillRect(0, 0, 1, 1);
-            const [r, g, b] = ctx.getImageData(0, 0, 1, 1).data;
-            return r + "," + g + "," + b;
-          };
+          const norm = ${RASTERIZE};
           const ink = {};
           for (const el of document.querySelectorAll("#${root} [data-ink]"))
             ink[el.dataset.ink] = norm(getComputedStyle(el).color);
@@ -260,16 +200,7 @@ it("default theme soft contract clears 4.5 on rest and hover, light and dark", a
         }
 
         const hoveredBg = await view.evaluate(`(() => {
-          const canvas = document.createElement("canvas");
-          canvas.width = canvas.height = 1;
-          const ctx = canvas.getContext("2d", { willReadFrequently: true });
-          const norm = (value) => {
-            ctx.clearRect(0, 0, 1, 1);
-            ctx.fillStyle = value;
-            ctx.fillRect(0, 0, 1, 1);
-            const [r, g, b] = ctx.getImageData(0, 0, 1, 1).data;
-            return r + "," + g + "," + b;
-          };
+          const norm = ${RASTERIZE};
           const out = {};
           for (const el of document.querySelectorAll("#${root} [data-hover]"))
             out[el.dataset.hover] = norm(getComputedStyle(el).backgroundColor);
