@@ -28,7 +28,8 @@ The label rests on `--shimmer-color` and the band passes in
 `--shimmer-highlight`; one pass takes `--duration-shimmer`, the pace shared
 with `.skeleton` and indeterminate `.progress`. With reduced motion, or in a
 browser without `background-clip: text`, the label is plain
-`--shimmer-color` text.
+`--shimmer-color` text. Recolor a label through these hooks: its own `color`
+shows only where the sweep does not run.
 
 ## Choosing a waiting signal
 

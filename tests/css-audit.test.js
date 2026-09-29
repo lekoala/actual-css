@@ -1079,12 +1079,13 @@ test("shimmer never erases its label and carries no state", () => {
   const css = readCss("src/css/effects/shimmer.css");
   const [base, gated] = css.split("@supports (background-clip: text)");
 
-  // Transparent text is only safe where the clip paints it back.
-  expect(base).not.toContain("color: transparent");
+  // Transparent glyphs are only safe where the clip paints them back.
+  expect(base).not.toContain("transparent;");
   expect(gated).toContain("@media (prefers-reduced-motion: no-preference)");
-  expect(gated).toContain("color: transparent");
-  // currentColor turns transparent with the text, so the gradient cannot use it.
-  expect(gated).not.toContain("currentColor");
+  // The fill, not `color`: a label class setting its own color loads later
+  // and would repaint opaque glyphs over the sweep.
+  expect(gated).toContain("-webkit-text-fill-color: transparent;");
+  expect(gated).not.toMatch(/(?<![-\w])color: transparent/);
   expect(css).not.toContain("aria-");
 });
 

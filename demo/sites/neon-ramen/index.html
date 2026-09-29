@@ -96,13 +96,15 @@
                 </div>
               </div>
             </div>
-            <div class="aura" style="--aura-color:var(--primary); --aura-blur:1.2rem;">
-              <figure class="frame hero-visual">
-                <img alt="Signature ramen bowl under pink and cyan neon light" src="assets/hero-bowl.webp">
-                <figcaption class="signal">
-                  Signal favorite // 18hr tonkotsu broth
-                </figcaption>
-              </figure>
+            <div class="visual-stage">
+              <div class="aura aura-neon aura-block primary">
+                <figure class="frame hero-visual">
+                  <img alt="Signature ramen bowl under pink and cyan neon light" src="assets/hero-bowl.webp">
+                  <figcaption class="signal">
+                    Signal favorite // 18hr tonkotsu broth
+                  </figcaption>
+                </figure>
+              </div>
               <span class="chip one"><i aria-hidden="true" class="dot dot-live"></i> <b>OPEN NOW</b> · HK-07</span>
               <span class="chip two">pickup <b>8 min</b></span>
             </div>
@@ -113,40 +115,42 @@
               <span>⚡ order ahead · pickup hot · queue zero · carts online · broth 18hr · signal strong ·</span>
             </div>
           </div>
-          <section aria-label="Live cart status" class="card cart-status container-query">
-            <div class="grid-4 status-grid">
-              <div class="status-cell">
-                <i aria-hidden="true" class="dot dot-live"></i>
-                <div>
-                  <span class="status-k">Nearest cart</span>
-                  <strong class="status-v">Neo Kabuki · OPEN</strong>
-                  <span class="status-s">stall 17 · market row</span>
+          <div class="aura aura-block success" style="--aura-duration:10s">
+            <section aria-label="Live cart status" class="card cart-status container-query">
+              <div class="grid-4 status-grid">
+                <div class="status-cell">
+                  <i aria-hidden="true" class="dot dot-live"></i>
+                  <div>
+                    <span class="status-k">Nearest cart</span>
+                    <strong class="status-v">Neo Kabuki · OPEN</strong>
+                    <span class="status-s">stall 17 · market row</span>
+                  </div>
+                </div>
+                <div class="status-cell">
+                  <i aria-hidden="true" class="dot dot-live"></i>
+                  <div>
+                    <span class="status-k">Pickup wait</span>
+                    <strong class="status-v cyan">8–12 min</strong>
+                    <span class="status-s shimmer">firing 3 bowls…</span>
+                  </div>
+                </div>
+                <div class="status-cell">
+                  <i aria-hidden="true" class="dot dot-live"></i>
+                  <div>
+                    <span class="status-k">Queue ahead</span>
+                    <strong class="status-v green">0 orders</strong>
+                    <span class="status-s">skip the line</span>
+                  </div>
+                </div>
+                <div class="status-cell status-action">
+                  <div class="stack" style="--gap:.55rem">
+                    <span class="status-k">Locations</span>
+                    <button class="btn outline secondary cyber-btn sm" command="--status" commandfor="app-status" data-status-intent="success" data-status-message="Neo Kabuki cart is accepting pickup orders." type="button">Ping cart</button>
+                  </div>
                 </div>
               </div>
-              <div class="status-cell">
-                <i aria-hidden="true" class="dot dot-live"></i>
-                <div>
-                  <span class="status-k">Pickup wait</span>
-                  <strong class="status-v cyan">8–12 min</strong>
-                  <span class="status-s">signal strong</span>
-                </div>
-              </div>
-              <div class="status-cell">
-                <i aria-hidden="true" class="dot dot-live"></i>
-                <div>
-                  <span class="status-k">Queue ahead</span>
-                  <strong class="status-v green">0 orders</strong>
-                  <span class="status-s">skip the line</span>
-                </div>
-              </div>
-              <div class="status-cell status-action">
-                <div class="stack" style="--gap:.55rem">
-                  <span class="status-k">Locations</span>
-                  <button class="btn outline secondary cyber-btn sm" command="--status" commandfor="app-status" data-status-intent="success" data-status-message="Neo Kabuki cart is accepting pickup orders." type="button">Ping cart</button>
-                </div>
-              </div>
-            </div>
-          </section>
+            </section>
+          </div>
           <section aria-labelledby="menu-title" id="menu">
             <div class="cluster section-head">
               <div class="stack" style="--gap:.4rem">
@@ -163,7 +167,7 @@
                 </div>
                 <div class="stack ramen-card-body">
                   <div class="cluster">
-                    <span class="badge primary soft">Signature</span>
+                    <span class="aura aura-glow primary"><span class="badge primary soft">Signature</span></span>
                     <span class="muted dish-jp">豚骨</span>
                   </div>
                   <h3>Tonkotsu</h3>
@@ -242,7 +246,7 @@
                 <a class="btn outline secondary cyber-btn" href="locations.html">All locations</a>
               </div>
             </div>
-            <div class="aura" style="--aura-color:var(--secondary); --aura-blur:1rem;">
+            <div class="aura aura-glow aura-neon aura-block secondary">
               <figure class="frame cart-visual">
                 <img alt="Neon ramen cart on a rain-slicked street at night" src="assets/cart.webp">
                 <figcaption class="signal">
