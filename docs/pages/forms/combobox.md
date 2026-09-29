@@ -10,7 +10,7 @@ real product needs a JavaScript combobox (searchable select, removable tags,
 autocomplete suggestions), load a dedicated component and bridge its custom
 properties onto Actual's tokens.
 
-**Related terms:** combo box, combobox, autocomplete, datalist, searchable select, enhanced select, multiple select, tags, chips, tag input, pill input.
+**Related terms:** combo box, combobox, autocomplete, datalist, select, custom select, native select, searchable select, enhanced select, multiple select, dropdown, form controls, tags, chips, tag input, pill input.
 
 ## Theme bridge
 

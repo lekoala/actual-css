@@ -22,6 +22,7 @@
 
 ### Fixed
 
+- Docs search keeps focus in the input while arrowing through results (`aria-activedescendant` + `Home`/`End`), so the second and later matches are reachable by keyboard; `Enter` follows the highlight instead of closing the dialog.
 - `commandSelector()` matches native command keywords case-insensitively, as the router does.
 - The command router ignores a trigger disabled through a `<fieldset disabled>` ancestor.
 - `.rating > input[type="radio"]:focus-visible` draws its outline in `--focus` instead of `currentColor`: an intent on the rating no longer becomes the focus color, keeping the guaranteed 3:1 contrast against `--surface` and `--surface-solid`.
@@ -30,6 +31,7 @@
 ### Documentation and tooling
 
 - `tests/exports.test.js` keys its inventory on every JS subpath of `package.json#exports`, so a new subpath or an export on an unlisted module now fails the suite.
+- Docs search ranks a query token inside a longer alias (`select` finds the Combobox page via `searchable select`) and matches body text on word boundaries, so `selection` no longer outranks `select`; Combobox and Forms carry `select`, `custom select`, and `form controls` aliases.
 - Table: clarified the responsive boundary — horizontal overflow (`.table-wrap` + `--table-min` + accessible scroll) stays the strategy, and the docs now name the alternatives (list/media view, `.data-list`, dedicated data grid).
 - Badge vs choice chip vs removable tag vocabulary: a badge is information (non-interactive), `choice-card.chip` is a selectable label (never nest a `.close` inside it), and removable tags belong to the widget that produced them.
 - Combobox: a "Bridge contract" section names what Actual owns (tokens, focus, invalid, `.join`, contrast) versus the widget (behavior, multi-value, i18n), and keeps the bridge CSS in docs/demo.
