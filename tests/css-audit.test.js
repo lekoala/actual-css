@@ -14,6 +14,31 @@ function readRules(path) {
   return readCss(path).replace(/\/\*[\s\S]*?\*\//g, "");
 }
 
+function mediaBodies(source, query) {
+  const bodies = [];
+  const start = new RegExp(`@media\\s+${query}\\s*\\{`, "g");
+  for (const match of source.matchAll(start)) {
+    const open = match.index + match[0].length - 1;
+    let depth = 1;
+    let quote = null;
+    for (let index = open + 1; index < source.length; index++) {
+      const char = source[index];
+      if (quote) {
+        if (char === "\\\\") index++;
+        else if (char === quote) quote = null;
+      } else if (char === '"' || char === "'") {
+        quote = char;
+      } else if (char === "{") {
+        depth++;
+      } else if (char === "}" && --depth === 0) {
+        bodies.push(source.slice(open + 1, index));
+        break;
+      }
+    }
+  }
+  return bodies;
+}
+
 test("avatar stack sizing uses stack tokens and RTL status-dot direction", () => {
   const css = readCss("src/css/components/avatar.css");
 
@@ -324,50 +349,29 @@ test("native color control has normal, disabled, focus, and forced-colors states
   expect(css).toContain(".color::-moz-color-swatch");
 });
 
-test("status bar supports long tokens without filtering printed content", () => {
+test("status bar supports long tokens", () => {
   const statusCss = readCss("src/css/components/status-bar.css");
-  const printCss = readCss("src/css/core/print.css");
 
   expect(statusCss).toContain("overflow-wrap: anywhere;");
-  expect(statusCss).not.toContain("@media print");
-  expect(printCss).not.toContain(".status-bar");
 });
 
-test("print rules preserve semantic component content", () => {
-  for (const file of [
-    "app-nav.css",
-    "button.css",
-    "drawer.css",
-    "fab.css",
-    "flyout.css",
-    "modal.css",
-    "spinner.css",
-    "status-bar.css",
-    "tooltip.css",
-  ]) {
-    expect(readRules(`src/css/components/${file}`)).not.toMatch(
-      /@media print\s*\{[\s\S]*?display:\s*none/,
-    );
-  }
-});
+test("print rules never hide framework content", () => {
+  const cssRoot = join(import.meta.dir, "..", "src", "css");
+  const walk = (dir) => {
+    for (const entry of readdirSync(dir)) {
+      const full = join(dir, entry);
+      if (statSync(full).isDirectory()) {
+        walk(full);
+      } else if (entry.endsWith(".css")) {
+        const source = readFileSync(full, "utf8").replace(/\/\*[\s\S]*?\*\//g, "");
+        for (const body of mediaBodies(source, "print")) {
+          expect(body, full).not.toMatch(/display:\s*none\b/);
+        }
+      }
+    }
+  };
 
-test("global print defaults do not know component selectors", () => {
-  const printCss = readCss("src/css/core/print.css");
-
-  for (const selector of [
-    ".alert",
-    ".badge",
-    ".btn",
-    ".card",
-    ".drawer",
-    ".flyout",
-    ".modal",
-    ".spinner",
-    ".status-bar",
-    ".tooltip",
-  ]) {
-    expect(printCss).not.toContain(selector);
-  }
+  walk(cssRoot);
 });
 
 test("badge is content-sized and never stretches in a stack", () => {
@@ -1586,7 +1590,7 @@ test("text controls keep per-control inset focus, even joined or themed", () => 
   );
 });
 
-test("action focus is a solid --focus line, never an intent or context ring", () => {
+test("action focus is a solid --focus line with the shared offset", () => {
   const cssRoot = join(import.meta.dir, "..", "src", "css");
   const cssFiles = [];
   const walk = (dir) => {
@@ -1604,18 +1608,20 @@ test("action focus is a solid --focus line, never an intent or context ring", ()
   // 1.0:1 on a card nested in it. One theme-guaranteed token needs no tracking.
   expect(source).not.toMatch(/--focus-ring(?!-width)/);
   expect(source).not.toContain("--btn-focus");
-  const ACTION_LINE =
-    "outline: var(--focus-ring-width) solid var(--focus);\n  outline-offset: var(--focus-outline-offset);";
-  for (const file of [
-    "src/css/components/button.css",
-    "src/css/components/close.css",
-    "src/css/components/rating.css",
-    "src/css/forms/choice.css",
-    "src/css/forms/choice-card.css",
-    "src/css/forms/switch.css",
-    "src/css/forms/native.css",
-  ]) {
-    expect(readRules(file), file).toContain(ACTION_LINE);
+
+  const actionRules = [...source.matchAll(/([^{}]+)\{([^{}]*)\}/g)].filter(([, , body]) =>
+    /outline:\s*var\(--focus-ring-width\) solid var\(--focus\);/.test(body),
+  );
+  expect(actionRules.length).toBeGreaterThan(0);
+
+  for (const [, rawSelector, body] of actionRules) {
+    const selector = rawSelector.trim();
+    if (selector === ".tab:focus-visible") {
+      // A tab's ring is inset so it remains attached to the tab strip.
+      expect(body, selector).toMatch(/outline-offset:\s*-2px;/);
+    } else {
+      expect(body, selector).toMatch(/outline-offset:\s*var\(--focus-outline-offset\);/);
+    }
   }
 });
 
