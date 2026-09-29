@@ -56,8 +56,7 @@
 }
 
 .rating > input[type="radio"]:focus-visible {
-  outline: var(--focus-outline);
-  outline-color: var(--focus);
+  outline: var(--focus-ring-width) solid var(--focus);
   outline-offset: var(--focus-outline-offset);
   background: var(--rating-color);
 }

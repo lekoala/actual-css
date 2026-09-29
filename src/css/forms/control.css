@@ -53,8 +53,8 @@
   cursor: var(--control-cursor);
   /* No outline: none here — the core :focus fallback must survive for browsers
      without :focus-visible. Pointer focus is hidden by core's
-     :focus:not(:focus-visible); keyboard focus swaps in the transparent
-     outline + ring below. */
+     :focus:not(:focus-visible); keyboard focus draws the inset outline below
+     (invalid fields take --form-invalid-border, the documented exception). */
   transition:
     border-color var(--duration),
     box-shadow var(--duration),

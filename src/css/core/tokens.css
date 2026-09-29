@@ -78,7 +78,10 @@
   --ease-enter: cubic-bezier(0.2, 0, 0, 1);
   --ease-exit: cubic-bezier(0.4, 0, 1, 1);
 
-  /* Focus ring — shared by every interactive component's :focus-visible */
+  /* Generic focus fallback — an adaptive currentColor line for elements
+     without a component ring (links, summary, plain items). Components draw
+     the themed ring instead: --focus-ring-width solid --focus. See focus.css
+     for the two contracts. */
   --focus-outline-color: currentColor;
   --focus-outline: calc(var(--border-width) * 2) solid var(--focus-outline-color);
   --focus-outline-offset: 2px;
