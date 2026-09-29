@@ -8,7 +8,8 @@
 - Use layout utilities for placeholder arrangement.
 - Only relevant for simple placeholders - use more structural solutions like phantom-ui for complex cases.
 
-**Related terms:** skeleton screen, shimmer, loading placeholder.
+**Related terms:** skeleton screen, shimmer, loading placeholder. For a text
+label showing an activity in progress, see [Shimmer](shimmer.md).
 
 ## Class reference
 

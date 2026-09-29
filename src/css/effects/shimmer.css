@@ -1,0 +1,56 @@
+/*
+ * Highlight sweeping across a text label — an activity in progress.
+ *
+ * Docs: docs/pages/components/shimmer.md
+ *
+ * Presentation only: it carries no state and selects no ARIA attribute, so the
+ * label stays whatever the author makes it (a role="status" message, a list
+ * item, a heading).
+ *
+ * Public hooks:
+ * --shimmer-color
+ * --shimmer-highlight
+ */
+.shimmer {
+  --shimmer-color: var(--text-muted);
+  --shimmer-highlight: var(--text);
+
+  color: var(--shimmer-color);
+}
+
+/* The sweep paints the glyphs through a clipped background, which needs the
+   text itself transparent. Without background-clip: text that would erase the
+   label, so the transparency lives under the same query as the clip. The
+   colors are hooks rather than currentColor: once the text is transparent,
+   currentColor is transparent too. Reduced motion keeps the plain label —
+   a frozen band would read as a random tint. */
+@supports (background-clip: text) {
+  @media (prefers-reduced-motion: no-preference) {
+    .shimmer {
+      color: transparent;
+      background:
+        linear-gradient(
+          90deg,
+          var(--shimmer-color) 40%,
+          var(--shimmer-highlight) 50%,
+          var(--shimmer-color) 60%
+        )
+        0 0 / 300% 100%;
+      background-clip: text;
+      animation: actual-shimmer var(--duration-shimmer) linear infinite;
+    }
+  }
+}
+
+/* The band occupies the middle third of a background three times the label's
+   width, so each pass leaves the end of the label before the next one enters
+   at the start. */
+@keyframes actual-shimmer {
+  from {
+    background-position: 100% 0;
+  }
+
+  to {
+    background-position: 0% 0;
+  }
+}

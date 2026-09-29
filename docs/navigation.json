@@ -67,6 +67,7 @@
         "pagination",
         "progress",
         "rating",
+        "shimmer",
         "skeleton",
         "spinner",
         "steps",

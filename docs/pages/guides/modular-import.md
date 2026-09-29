@@ -94,7 +94,7 @@ cells, so they read as a list:
 - **Components** — `actual-css/css/components`
   buttons, surfaces, overlays, feedback, navigation, data and composed controls
 - **Effects** — `actual-css/css/effects`
-  aura
+  aura, shimmer
 - **Utilities** — `actual-css/css/utilities`
   base and extra utilities
 
