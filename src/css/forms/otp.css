@@ -64,7 +64,7 @@
   padding-block: 0;
   padding-inline: calc((var(--otp-cell-size) - 1ch) / 2) 0;
   border: 0;
-  outline: 2px solid transparent;
+  outline: none;
   box-shadow: none;
   background: transparent;
   color: var(--text);
@@ -89,6 +89,14 @@
    character after it: the state rules select the cells as following siblings
    (input:focus ~ span, input:disabled ~ span, …), so that order is part of the
    contract. */
+/* The documented markup puts .input on the native input, so the field ring
+   (.input:focus-visible:not(:disabled), control.css) would outrank the reset
+   above and draw that group ring; this selector must stay one step above it.
+   No transparent outline either: forced colors would paint it as a ring. */
+.otp > input:focus-visible:not(:disabled) {
+  outline: none;
+}
+
 .otp > input:focus ~ span {
   --otp-cell-border: var(--focus);
   --otp-cell-border-width: calc(var(--border-width) * 2);
