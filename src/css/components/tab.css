@@ -76,10 +76,10 @@
 }
 
 /* The ring is square on the edge the tab is attached to, so it reads as part
-   of the strip rather than a floating chip. */
+   of the strip rather than a floating chip. Color and width follow the
+   component ring contract (focus.css); only the geometry is tab-specific. */
 .tab:focus-visible {
-  outline: var(--focus-outline);
-  outline-color: var(--focus);
+  outline: var(--focus-ring-width) solid var(--focus);
   outline-offset: -2px;
   border-radius: var(--radius-sm) var(--radius-sm) 0 0;
 }

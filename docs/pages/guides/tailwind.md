@@ -17,9 +17,11 @@ If you finish the migration with a new `.mt-4`, `.flex`, `.bg-primary`, and `md:
 
 Tailwind and Actual can temporarily coexist, but some short class names overlap.
 
-Examples include layout and flex-related names such as `.grid`, `.grow`, and `.items-center`.
+The most dangerous is `.outline`: it is an Actual button variant (`.btn.outline`), and Tailwind's `outline` utility draws a real outline on it. Layer order does not save this one — the migration setup above puts Tailwind utilities over Actual on purpose.
 
-For a staged migration, use cascade layers, controlled import order, or a project-side Actual prefix transform where necessary.
+Other overlapping names: `.table`, `.sticky`, `.truncate`, `.prose`, `.sr-only`, plus layout names such as `.grid`, `.grow`, and `.items-center`.
+
+For a staged migration, use cascade layers, controlled import order, or a project-side Actual prefix transform where necessary. The transform lives in the consumer's own pipeline (a build-time rename on the Actual import), not in the Actual CLI, which only bundles.
 
 The layered import is the cleanest way to keep both stylesheets during the
 migration:

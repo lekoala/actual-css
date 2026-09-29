@@ -22,7 +22,12 @@ const registries = new WeakMap();
 
 // The HTML `command` keywords. Any other value that does not start with "--"
 // is the invalid state, which the browser ignores. Extend this list when HTML
-// adds a keyword.
+// adds a keyword: registerCommands() throws on an unknown non-"--" name, so a
+// stale list fails loudly instead of silently swallowing the new keyword.
+// A future path that listens to the native `command` event instead of the
+// click would need a per-tier matrix (native support varies) plus
+// no-double-execution tests — the click stays the single routing event until
+// then, which is why a routed command cancels it by design (see above).
 const NATIVE_COMMANDS = new Set([
   "toggle-popover",
   "show-popover",

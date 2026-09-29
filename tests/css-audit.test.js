@@ -1609,6 +1609,7 @@ test("action focus is a solid --focus line, never an intent or context ring", ()
   for (const file of [
     "src/css/components/button.css",
     "src/css/components/close.css",
+    "src/css/components/rating.css",
     "src/css/forms/choice.css",
     "src/css/forms/choice-card.css",
     "src/css/forms/switch.css",

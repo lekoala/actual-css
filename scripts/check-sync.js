@@ -20,6 +20,36 @@ const GROUPS = [
   },
 ];
 
+/* Selector-list groups: the .sm and .lg size rules cover different
+   declarations, so block equality cannot guard them. Instead the participant
+   lists must match — a component added to one size and not the other would
+   silently lose its scale. */
+const SELECTOR_GROUPS = [
+  {
+    name: "size-scale-participants",
+    file: "src/css/core/variants.css",
+    rules: [".sm", ".lg"],
+  },
+];
+
+function participantList(source, sizeClass) {
+  // The participant list holds plain selectors (no parens), so [^()]* cannot
+  // spill from one :where() into the next rule's declarations.
+  const re = new RegExp(`:where\\(([^()]*)\\)\\s*\\${sizeClass}\\s*\\{`, "g");
+  const found = [];
+  let match = re.exec(source);
+  while (match) {
+    found.push(
+      match[1]
+        .split(",")
+        .map((part) => part.trim())
+        .filter(Boolean),
+    );
+    match = re.exec(source);
+  }
+  return found;
+}
+
 function normalizeBlock(block) {
   return block
     .replace(/\/\*[\s\S]*?\*\//g, "")
@@ -103,6 +133,46 @@ async function main() {
   }
 
   console.log(`Sync check passed (${GROUPS.length} group).`);
+
+  let selectorFailed = false;
+
+  for (const group of SELECTOR_GROUPS) {
+    const source = await readFile(join(ROOT, group.file), "utf8");
+    const found = group.rules.map((rule) => ({
+      rule,
+      matches: participantList(source, rule),
+    }));
+
+    for (const { rule, matches } of found) {
+      if (matches.length !== 1) {
+        selectorFailed = true;
+        console.error(
+          `Sync check failed for ${group.name}: expected 1 ${rule} rule in ${group.file}, found ${matches.length}.`,
+        );
+      }
+    }
+    if (found.some(({ matches }) => matches.length !== 1)) continue;
+
+    const [reference, ...others] = found.map(({ matches }) => [...matches[0]].sort());
+    others.forEach((participants, i) => {
+      const missing = reference.filter((part) => !participants.includes(part));
+      const extra = participants.filter((part) => !reference.includes(part));
+      if (missing.length > 0 || extra.length > 0) {
+        selectorFailed = true;
+        console.error(
+          `Sync check failed for ${group.name}: ${group.rules[i + 1]} participants diverge from ${group.rules[0]} in ${group.file}.`,
+        );
+        for (const part of missing) console.error(`  Missing: ${part}`);
+        for (const part of extra) console.error(`  Extra: ${part}`);
+      }
+    });
+  }
+
+  if (selectorFailed) {
+    process.exit(1);
+  }
+
+  console.log(`Selector check passed (${SELECTOR_GROUPS.length} group).`);
 }
 
 main();

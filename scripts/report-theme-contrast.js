@@ -3,8 +3,10 @@
  *
  * The default theme carries blocking gates (tests/browser/soft-recipe.test.js,
  * tests/browser/field-focus.test.js); presets are reference/demo material, so
- * this tool only REPORTS their resting and hovered soft pairs and their focus
- * line against --surface and --surface-solid — light and dark where a theme
+ * this tool only REPORTS their resting and hovered soft pairs, their focus
+ * line against --surface and --surface-solid, and the invalid-field focus
+ * line (--form-invalid-border resolves to --danger, measured here directly)
+ * against --surface — light and dark where a theme
  * defines both — and exits 0 whatever it finds. Use it to decide where a
  * preset's character survives a correction.
  *
@@ -54,6 +56,7 @@ function island(theme, scheme) {
     ${INTENTS.map((i) => `<button class="btn soft ${i}" data-hover="${i}" type="button">t</button>`).join("")}
     <span data-focus="surface" style="color: var(--focus); background: var(--surface)"></span>
     <span data-focus="solid" style="color: var(--focus); background: var(--surface-solid)"></span>
+    <span data-focus-invalid="surface" style="color: var(--danger); background: var(--surface)"></span>
   </div>`;
 }
 
@@ -101,8 +104,13 @@ await withBrowserPage(
         const root = document.getElementById("${id}");
         const cs = (el) => getComputedStyle(el);
         const rest = {};
-        for (const el of root.querySelectorAll("[data-badge], [data-focus]"))
-          rest[el.dataset.badge ?? \`focus-\${el.dataset.focus}\`] = {
+        for (const el of root.querySelectorAll("[data-badge], [data-focus], [data-focus-invalid]"))
+          rest[
+            el.dataset.badge ??
+              (el.dataset.focus
+                ? \`focus-\${el.dataset.focus}\`
+                : \`invalid-\${el.dataset.focusInvalid}\`)
+          ] = {
             fg: norm(cs(el).color),
             bg: norm(cs(el).backgroundColor),
           };
@@ -173,6 +181,19 @@ await withBrowserPage(
         console.log(
           `${theme.name.padEnd(9)}  ${scheme.padEnd(6)}  ${s.padStart(5)}:1  ${d.padStart(5)}:1${flag}`,
         );
+      }
+    }
+
+    // Documented exception (focus.css): an invalid field focuses in
+    // --form-invalid-border, so the danger line needs 3:1 on --surface too.
+    console.log("\nInvalid focus line contrast (--danger vs surface), needs 3:1.\n");
+    console.log("theme      scheme  surface");
+    for (const theme of themes) {
+      for (const scheme of theme.hasDark ? ["light", "dark"] : ["light"]) {
+        const rest = await readRest(`island-${theme.name}-${scheme}`);
+        const v = ratio(rest["invalid-surface"].fg, rest["invalid-surface"].bg).toFixed(2);
+        const flag = +v < 3 ? "  <-- under 3" : "";
+        console.log(`${theme.name.padEnd(9)}  ${scheme.padEnd(6)}  ${v.padStart(5)}:1${flag}`);
       }
     }
   },

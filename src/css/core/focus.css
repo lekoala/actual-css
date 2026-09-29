@@ -6,12 +6,20 @@
    for its keyboard focus indicator; forced colors keep outlines and drop
    shadows.
 
-   Component indicators are a solid --focus-ring-width line in --focus: inset
-   on fields (inside their border box), offset by --focus-outline-offset on
-   discrete actions. The color never derives from an intent or a local
+   Two contracts share the job. Plain elements (links, summary, items with no
+   component chrome) take the generic fallback below: a currentColor line that
+   follows whatever the application painted. Components draw the themed ring
+   instead — a solid --focus-ring-width line in --focus: inset on fields
+   (inside their border box), offset by --focus-outline-offset on discrete
+   actions. The color never derives from an intent or a local
    surface — the theme guarantees --focus at 3:1 against both --surface and
    --surface-solid, so one token reads on the page, on a solid band and on
-   any nested surface. */
+   any nested surface.
+
+   Documented exception: an invalid field focuses in --form-invalid-border
+   (danger), so the error stays visible at the point of correction. The border
+   carries the same hook; report:theme-contrast measures that line at 3:1
+   against --surface alongside --focus. */
 :focus {
   outline: var(--focus-outline);
   outline-offset: var(--focus-outline-offset);

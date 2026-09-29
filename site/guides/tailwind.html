@@ -225,8 +225,9 @@
 <p>If you finish the migration with a new <code>.mt-4</code>, <code>.flex</code>, <code>.bg-primary</code>, and <code>md:*</code> API built around Actual, you have recreated the framework you were trying to remove.</p>
 <h2 id="before-you-start-avoid-class-collisions">Before you start: avoid class collisions</h2>
 <p>Tailwind and Actual can temporarily coexist, but some short class names overlap.</p>
-<p>Examples include layout and flex-related names such as <code>.grid</code>, <code>.grow</code>, and <code>.items-center</code>.</p>
-<p>For a staged migration, use cascade layers, controlled import order, or a project-side Actual prefix transform where necessary.</p>
+<p>The most dangerous is <code>.outline</code>: it is an Actual button variant (<code>.btn.outline</code>), and Tailwind's <code>outline</code> utility draws a real outline on it. Layer order does not save this one — the migration setup above puts Tailwind utilities over Actual on purpose.</p>
+<p>Other overlapping names: <code>.table</code>, <code>.sticky</code>, <code>.truncate</code>, <code>.prose</code>, <code>.sr-only</code>, plus layout names such as <code>.grid</code>, <code>.grow</code>, and <code>.items-center</code>.</p>
+<p>For a staged migration, use cascade layers, controlled import order, or a project-side Actual prefix transform where necessary. The transform lives in the consumer's own pipeline (a build-time rename on the Actual import), not in the Actual CLI, which only bundles.</p>
 <p>The layered import is the cleanest way to keep both stylesheets during the
 migration:</p>
 <pre><code class="language-css">/* Tailwind v4 emits its own layers (theme, base, components, utilities),
