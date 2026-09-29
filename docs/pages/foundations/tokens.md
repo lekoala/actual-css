@@ -76,7 +76,14 @@ Surface tokens describe the canvas and elevation model. Components should prefer
 }
 ```
 
-The surface levels are: `surface` (canvas), `surface-raised` (cards, raised surfaces), `surface-subtle` (the working subtle level — for hover overlays, form fields, table headers), and `surface-solid` (the dark inverse surface, used for accent areas).
+The surface levels are: `surface` (canvas), `surface-raised` (cards, raised surfaces), `surface-subtle` (the working subtle level — for hover overlays, form fields, table headers), and `surface-solid` (the inverse surface, used for accent areas).
+
+Surfaces are painted material and may be translucent. Two roles must stay opaque, so they have their own tokens, both defaulting to `--surface`:
+
+- `--surface-solid-fg` — the ink on `--surface-solid`: tooltips, the status bar, an inverse band.
+- `--surface-opaque` — an opaque neutral used where a component must hide or separate what is painted beneath it: the status-dot and avatar-stack rings, range-thumb and meter separators, step markers. It is not a surface fill; paint panels with `--surface-*`.
+
+A theme with translucent surfaces overrides both with opaque values.
 
 Use `*-fg` pairs only for solid backgrounds where the component controls both foreground and background. Do not require a foreground token for every surface token.
 
@@ -381,7 +388,7 @@ A few cross-component helpers:
 ```css
 :root {
   --indicator-offset: 14.65%;      /* circle-aware inset */
-  --indicator-ring: var(--surface);
+  --indicator-ring: var(--surface-opaque);
   --backdrop-color: rgb(0 0 0);
   --backdrop-opacity: 0.45;
   --backdrop-fill: rgb(0 0 0 / var(--backdrop-opacity));
@@ -485,12 +492,15 @@ When overriding an intent color, review its paired `--*-fg` and `--*-soft-fg`. A
 
 The default palette's hooks apply to `:root` and to the `light`/`dark` boundaries only. Any other `data-theme` value resets them to the derivation, whether the attribute sits on `<html>` or on a nested island.
 
+Contrast is measured between opaque colors. A translucent `--surface` has no ratio until it is composited over its backdrop, so `report:theme-contrast` refuses such a theme, and `.soft` mixes over it come out more opaque and more saturated than the surface. A translucent theme owns both: it measures against its real backdrop and replaces any recipe that does not hold there.
+
 Shape, shadow, motion, typography, and soft-variant mix tokens are optional knobs. Override them only when the theme actually changes that part of the system.
 
 A full theme can override:
 
 - intent colors and foreground pairs
 - surface, text, border, focus, and overlay colors
+- `--surface-opaque` and `--surface-solid-fg`, when surfaces are translucent
 - radius tokens
 - optional shadow, motion, typography, and soft-variant mix tokens
 
@@ -534,7 +544,7 @@ A minimal recolor theme (illustrative, not a shipped theme):
 }
 ```
 
-Several tokens are theme-derived aliases that reference other tokens — `--state-selected`/`--state-selected-fg`/`--state-disabled`, `--indicator-ring`, `--shadow`/`--shadow-popout`, `--heading`, and `--selection-bg`/`--selection-fg`. They are declared on `:root, [data-theme]` so they recompute on every theme boundary: a custom property resolves its `var()` references at computed-value time on the element that declares it, so an alias declared only on `:root` would be inherited as an already-resolved value and would not follow a `[data-theme]` island's overridden tokens. A theme that wants a distinct alias (e.g. a `--selection-bg` of its own) overrides it explicitly afterwards, which wins by cascade order.
+Several tokens are theme-derived aliases that reference other tokens — `--state-selected`/`--state-selected-fg`/`--state-disabled`, `--indicator-ring`, `--shadow`/`--shadow-popout`, `--heading`, `--selection-bg`/`--selection-fg`, and `--surface-opaque`/`--surface-solid-fg`. They are declared on `:root, [data-theme]` so they recompute on every theme boundary: a custom property resolves its `var()` references at computed-value time on the element that declares it, so an alias declared only on `:root` would be inherited as an already-resolved value and would not follow a `[data-theme]` island's overridden tokens. A theme that wants a distinct alias (e.g. a `--selection-bg` of its own) overrides it explicitly afterwards, which wins by cascade order.
 
 Without `data-theme`, the default theme advertises `color-scheme: light dark` and follows the user's OS preference in browsers that support `light-dark()`. Dark themes should set `color-scheme: dark`. Light themes should set `color-scheme: light`. Browsers without `light-dark()` receive the light fallback.
 

@@ -43,7 +43,7 @@
 }
 
 .meter:not(meter) > * + * {
-  border-inline-start: var(--border-width) solid var(--surface);
+  border-inline-start: var(--border-width) solid var(--surface-opaque);
 }
 
 .meter::-webkit-meter-bar {

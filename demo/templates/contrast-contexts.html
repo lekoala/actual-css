@@ -51,9 +51,9 @@
 
     /* The application recipe for a painted band (theming.md). */
     .cc-band {
-      --heading: var(--surface);
+      --heading: var(--surface-solid-fg);
       background: var(--surface-solid);
-      color: var(--surface);
+      color: var(--surface-solid-fg);
     }
 
     /* Same split as a card header, so every band reads alike. */
@@ -411,7 +411,7 @@
       { name: "Named theme island", code: '<section data-theme="ocean">', open: '<section class="cc-context" data-theme="ocean">', close: "</section>" },
       {
         name: "Application-painted band",
-        code: ".band { background: var(--surface-solid); color: var(--surface) }",
+        code: ".band { background: var(--surface-solid); color: var(--surface-solid-fg) }",
         open: '<section class="cc-context cc-band">',
         close: "</section>",
         form: false,

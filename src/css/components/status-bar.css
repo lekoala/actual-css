@@ -33,8 +33,8 @@
 }
 
 .status-bar {
-  --status-bg: var(--intent, var(--text));
-  --status-fg: var(--intent-fg, var(--surface));
+  --status-bg: var(--intent, var(--surface-solid));
+  --status-fg: var(--intent-fg, var(--surface-solid-fg));
 
   position: fixed;
   /* Fixed positioning tracks the layout viewport, which the mobile software

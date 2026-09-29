@@ -89,7 +89,7 @@ every variant keeps working — `.outline` and `.ghost` take the solid ink:
 ```css
 .btn.app-dark {
   --intent: var(--surface-solid);
-  --intent-fg: var(--surface);
+  --intent-fg: var(--surface-solid-fg);
 }
 ```
 

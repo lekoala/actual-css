@@ -54,6 +54,6 @@
   --font-weight-bold: 800;
   --line-height: 1.4;
 
-  --selection-bg: var(--text);
-  --selection-fg: var(--surface);
+  --selection-bg: var(--surface-solid);
+  --selection-fg: var(--surface-solid-fg);
 }

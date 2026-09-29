@@ -15,6 +15,9 @@
 
 ### Added
 
+- `--surface-opaque` and `--surface-solid-fg` let a theme paint translucent surfaces while rings, separators and inverse text stay opaque.
+- `report:theme-contrast` reports the `--surface-solid-fg` on `--surface-solid` text pair.
+- `scripts/utils/color.js` holds the WCAG contrast and OKLCH math for reports and browser tests; `contrast()` refuses translucent colors.
 - `--choice-card-gap` sets the space between a `.choice-card` indicator and its label.
 - `tests/browser/choice-card.test.js` locks the leading indicator: visible at rest, level with the first line of a wrapping label, and kept under forced colors.
 
@@ -23,6 +26,9 @@
 
 ### Changed
 
+- `--indicator-ring`, the `.avatar-stack` ring, the `.range` thumb separator, segmented `.meter` separators and `.steps` markers read `--surface-opaque`.
+- `.tooltip` text reads `--surface-solid-fg`.
+- `.status-bar` without an intent paints `--surface-solid` / `--surface-solid-fg` instead of `--text` / `--surface`.
 - `registerEnhancement()` discovers every named behavior through one shared `[data-enhance]` query per root instead of one `[data-enhance~="name"]` selector each.
 - The command router calls `event.preventDefault()` once a target resolves, before `handle`; handlers no longer cancel the click themselves.
 - `--focus-outline` (the generic `currentColor` focus fallback) is `--focus-ring-width` wide instead of `2 × --border-width`: 3px instead of 4px under `prefers-contrast: more`.

@@ -1,12 +1,12 @@
 {
-  "totalRaw": 330711,
+  "totalRaw": 334304,
   "core": {
-    "minified": 11686,
-    "brotli": 2692
+    "minified": 11757,
+    "brotli": 2697
   },
   "full": {
-    "minified": 128070,
-    "brotli": 18359
+    "minified": 128959,
+    "brotli": 18445
   },
   "js": {
     "full": {
@@ -18,23 +18,27 @@
   "files": [
     {
       "file": "components/steps.css",
-      "raw": 13098
+      "raw": 13112
     },
     {
       "file": "core/tokens.css",
-      "raw": 10643
+      "raw": 10898
     },
     {
       "file": "components/modal.css",
       "raw": 9074
     },
     {
-      "file": "components/alert.css",
-      "raw": 8200
+      "file": "forms/choice-card.css",
+      "raw": 8848
     },
     {
       "file": "core/theme.css",
-      "raw": 7883
+      "raw": 8395
+    },
+    {
+      "file": "components/alert.css",
+      "raw": 8200
     },
     {
       "file": "components/drawer.css",
@@ -49,10 +53,6 @@
       "raw": 7435
     },
     {
-      "file": "forms/choice-card.css",
-      "raw": 7009
-    },
-    {
       "file": "components/badge.css",
       "raw": 6981
     },
@@ -62,11 +62,11 @@
     },
     {
       "file": "forms/range.css",
-      "raw": 5604
+      "raw": 5632
     },
     {
       "file": "components/avatar.css",
-      "raw": 5554
+      "raw": 5561
     },
     {
       "file": "components/flyout.css",
@@ -102,15 +102,15 @@
     },
     {
       "file": "components/tooltip.css",
-      "raw": 4951
+      "raw": 4960
+    },
+    {
+      "file": "core/variants.css",
+      "raw": 4916
     },
     {
       "file": "components/navbar.css",
       "raw": 4876
-    },
-    {
-      "file": "core/variants.css",
-      "raw": 4821
     },
     {
       "file": "forms/otp.css",
@@ -146,7 +146,7 @@
     },
     {
       "file": "components/tab.css",
-      "raw": 3671
+      "raw": 3764
     },
     {
       "file": "components/fab.css",
@@ -154,7 +154,7 @@
     },
     {
       "file": "forms/control.css",
-      "raw": 3591
+      "raw": 3645
     },
     {
       "file": "components/list.css",
@@ -162,11 +162,11 @@
     },
     {
       "file": "components/rating.css",
-      "raw": 3249
+      "raw": 3240
     },
     {
       "file": "components/status-bar.css",
-      "raw": 3221
+      "raw": 3239
     },
     {
       "file": "components/close.css",
@@ -274,7 +274,7 @@
     },
     {
       "file": "components/meter.css",
-      "raw": 2165
+      "raw": 2172
     },
     {
       "file": "forms/form-actions.css",
@@ -293,12 +293,12 @@
       "raw": 1806
     },
     {
-      "file": "layout/sidebar-layout.css",
-      "raw": 1769
+      "file": "themes/brutalist.css",
+      "raw": 1778
     },
     {
-      "file": "themes/brutalist.css",
-      "raw": 1760
+      "file": "layout/sidebar-layout.css",
+      "raw": 1769
     },
     {
       "file": "typography/fluid.css",
@@ -319,6 +319,10 @@
     {
       "file": "components/indicator.css",
       "raw": 1658
+    },
+    {
+      "file": "core/focus.css",
+      "raw": 1630
     },
     {
       "file": "layout/topbar.css",
@@ -367,10 +371,6 @@
     {
       "file": "components/breadcrumb.css",
       "raw": 1014
-    },
-    {
-      "file": "core/focus.css",
-      "raw": 977
     },
     {
       "file": "components/scrollspy.css",

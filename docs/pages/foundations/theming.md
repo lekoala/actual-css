@@ -122,9 +122,9 @@ application CSS and keep forms and intent ink out of it:
 
 ```css
 .site-band {
-  --heading: var(--surface);
+  --heading: var(--surface-solid-fg);
   background: var(--surface-solid);
-  color: var(--surface);
+  color: var(--surface-solid-fg);
 }
 ```
 
