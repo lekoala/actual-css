@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Range reset fixture</title>
+  <link rel="stylesheet" href="../../src/css/actual.full.css">
+</head>
+<body>
+  <datalist id="levels">
+    <option value="0" label="Minimal"></option>
+    <option value="1" label="Standard"></option>
+    <option value="2" label="High"></option>
+    <option value="3" label="Maximum"></option>
+  </datalist>
+  <form id="first">
+    <label for="inside">Inside the form</label>
+    <input class="range" data-enhance="range" id="inside" type="range" min="0" max="3" value="1" list="levels">
+    <output for="inside">Original inside</output>
+    <button type="reset" id="reset-range">Reset</button>
+  </form>
+  <label for="outside">Associated by form attribute</label>
+  <input class="range" data-enhance="range" id="outside" form="first" type="range" min="0" max="3" value="2" list="levels">
+  <output for="outside">Original outside</output>
+  <form id="second"></form>
+</body>
+</html>

@@ -610,7 +610,7 @@
 
 .admini-composer {
   /* Placement only: the surface, textarea and actions come from the shared
-     composer recipe (demo/shared/composer.html documents it). Flush bottom
+     composer recipe (demo/templates/composer.html documents it). Flush bottom
      bar: no outer border or radius, just the top divider. */
   border: 0;
   border-radius: 0;

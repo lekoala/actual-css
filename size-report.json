@@ -1,17 +1,17 @@
 {
-  "totalRaw": 339107,
+  "totalRaw": 339463,
   "core": {
     "minified": 11757,
     "brotli": 2697
   },
   "full": {
-    "minified": 129074,
-    "brotli": 18503
+    "minified": 129118,
+    "brotli": 18499
   },
   "js": {
     "full": {
-      "bytes": 59489,
-      "brotli": 17416
+      "bytes": 59697,
+      "brotli": 17465
     }
   },
   "fileCount": 113,
@@ -97,6 +97,10 @@
       "raw": 5164
     },
     {
+      "file": "forms/otp.css",
+      "raw": 5058
+    },
+    {
       "file": "themes/gradient.css",
       "raw": 5057
     },
@@ -111,10 +115,6 @@
     {
       "file": "components/navbar.css",
       "raw": 4876
-    },
-    {
-      "file": "forms/otp.css",
-      "raw": 4702
     },
     {
       "file": "themes/glass.css",

@@ -251,17 +251,16 @@
 
     searchInput.addEventListener("input", () => runSearch(searchInput.value));
 
-    // Dialog-level so arrows keep working with focus in the input (and would
-    // survive a focus move onto a result). Enter falls back to the first
-    // result; the form submit guard below stops method="dialog" from closing
-    // the dialog instead of navigating when there is nothing to go to.
-    searchDialog.addEventListener("keydown", (event) => {
+    // Only the input owns result navigation: dialog buttons and result links
+    // keep their native activation, and IME confirmation stays in the editor.
+    searchInput.addEventListener("keydown", (event) => {
+      if (event.defaultPrevented || event.isComposing || event.keyCode === 229) return;
       if (event.key === "ArrowDown") {
         event.preventDefault();
         setActive(activeIndex + 1);
       } else if (event.key === "ArrowUp") {
         event.preventDefault();
-        setActive(activeIndex - 1);
+        setActive(activeIndex < 0 ? results.length - 1 : activeIndex - 1);
       } else if (event.key === "Home") {
         event.preventDefault();
         setActive(0);

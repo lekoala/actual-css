@@ -120,6 +120,26 @@ function connectRange(input) {
   input.addEventListener("input", () => syncRange(input), {
     signal: controller.signal,
   });
+  // Listen on the root so form="…" and moves between forms keep working.
+  input.getRootNode().addEventListener(
+    "reset",
+    (event) => {
+      if (event.target !== input.form) return;
+      // Reset fires before native values change. A new task also lets later
+      // listeners cancel it; a microtask can run before the native reset.
+      setTimeout(() => {
+        if (
+          !controller.signal.aborted &&
+          !event.defaultPrevented &&
+          input.isConnected &&
+          input.form === event.target
+        ) {
+          syncRange(input);
+        }
+      }, 0);
+    },
+    { capture: true, signal: controller.signal },
+  );
   return () => {
     releaseOwned(input);
     controller.abort();
