@@ -39,6 +39,9 @@
 
 ### Fixed
 
+- `actual-css/js/range` synchronizes fill, `aria-valuetext`, and outputs after a native form reset, including controls associated through `form="…"`, while respecting cancellation and teardown.
+- Docs search leaves Enter on the close button and IME confirmation alone, and ArrowUp from no selection reaches the last result.
+- `demo/sites/admini/chat.html` loads the shared composer recipe before local overrides so the bottom bar keeps its flat border and compact textarea.
 - `.otp` with `.input` on its native input no longer draws the field focus ring around all the cells.
 - Docs search keeps focus in the input while arrowing through results (`aria-activedescendant` + `Home`/`End`), so the second and later matches are reachable by keyboard; `Enter` follows the highlight instead of closing the dialog.
 - `.tab` and `.rating` draw the component focus ring (`--focus-ring-width` solid `--focus`): an intent on the rating no longer becomes the focus color, and neither ring is 4px under `prefers-contrast: more`.

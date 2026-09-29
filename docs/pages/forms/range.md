@@ -20,7 +20,8 @@ rather than the CSS box.
 
 `data-enhance="range"` opts into the `actual-css/js/range` behavior. It writes
 `--range-progress`, the fill share the track gradient reads, and keeps it in
-sync on input. Without it the variable stays at its `0%` default and the track
+sync on input and after a form reset, including inputs associated through
+`form="…"`. Without it the variable stays at its `0%` default and the track
 renders plain — the control stays fully usable without JavaScript. The fill
 follows the writing direction, and a bare `input[type="range"]` without the
 `.range` class can opt in the same way.
