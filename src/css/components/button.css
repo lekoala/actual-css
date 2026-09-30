@@ -31,6 +31,7 @@
  * --btn-default-hover-bg
  * --btn-border-block-end-color
  * --btn-border-block-end-width
+ * --btn-border-block
  * --spinner-width
  */
 
@@ -56,6 +57,10 @@
   --btn-default-hover-bg: var(--btn-bg);
   --btn-radius: var(--radius);
   --btn-hover-overlay: var(--hover-overlay, rgb(0 0 0 / 0.08));
+  --btn-border-block: calc(
+    var(--border-width) +
+    var(--btn-border-block-end-width, var(--border-width))
+  );
 
   /* Positioning context for indicators, overlays, and grouped states. */
   position: relative;
@@ -65,7 +70,13 @@
   gap: var(--btn-gap, 0.375em);
   min-block-size: var(--btn-min-size);
   padding-block: var(--space-20);
-  padding-block: max(var(--space-10), calc((var(--btn-min-size) - 1lh) / 2));
+  /* why: centres one line in --btn-min-size and keeps that rhythm when the
+     label wraps. min-block-size is a border-box length, so both borders come
+     out of it; without them .btn stood 2px taller than .input. */
+  padding-block: max(
+    var(--space-10),
+    calc((var(--btn-min-size) - 1lh - var(--btn-border-block)) / 2)
+  );
   padding-inline: var(--btn-pad-x);
   border: var(--border-width) solid var(--btn-border-color, var(--btn-border));
   border-block-end-color: var(
@@ -162,6 +173,8 @@
   --ui-fg: var(--intent, currentColor);
   --ui-border: transparent;
   --btn-radius: var(--radius-sm);
+  /* border: 0 below; the padding must not subtract a border it lacks. */
+  --btn-border-block: 0px;
 
   min-block-size: auto;
   padding-inline: 0;
