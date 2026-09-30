@@ -70,6 +70,8 @@ marker to that background rather than to the neutral intent.
 
 ### Hooks
 
+- `--meter-track` — track color; raise it when the meter sits on a
+  `--surface-subtle` card, where the default track would disappear.
 - `--bar-height` — bar thickness, shared with `.progress`.
 - `--meter-value` — relative weight of a direct child in a segmented meter.
 

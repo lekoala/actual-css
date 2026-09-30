@@ -45,6 +45,10 @@ room so a title never runs under it. See [Dialog](dialog.md) and
 
 - `--close-size` — inline and block size of the button; `--control-size` unless the container sets it.
 - `--close-icon-size` — size of the X.
+- `--close-bg` — background of the dialog corner close; `--surface-subtle` unless the dialog or a painted band sets it, e.g. `transparent` for a bare X.
+- `--close-color` — ink of the X; `--text-muted` at the dialog corner, otherwise inherited from the context.
+- `--close-hover-color` — ink of the dialog corner close on hover; `--text` unless a band sets its own foreground.
+- `--close-hover-overlay` — hover and active wash that tints the fill the context gave the control; the dialog corner sets it `transparent` so a hover changes only the ink.
 
-Alerts and badges declare both hooks on themselves, so set them on the container
-or on the button.
+Alerts and badges declare both size hooks on themselves, so set them on the
+container or on the button.

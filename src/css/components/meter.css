@@ -11,11 +11,14 @@
  * .sm/.lg are deliberately not supported.
  *
  * Public hooks:
+ * --meter-track
  * --meter-value
  * --bar-height
  */
 
 .meter {
+  --meter-track: var(--surface-subtle);
+
   appearance: none;
   -webkit-appearance: none;
   display: block;
@@ -24,7 +27,7 @@
   overflow: hidden;
   border: 0;
   border-radius: var(--radius-full);
-  background: var(--surface-subtle);
+  background: var(--meter-track);
 }
 
 /* A non-native meter is a weighted flex container. The element type keeps the
@@ -51,7 +54,7 @@
   block-size: var(--bar-height);
   border: 0;
   border-radius: var(--radius-full);
-  background: var(--surface-subtle);
+  background: var(--meter-track);
 }
 
 .meter::-webkit-meter-optimum-value {

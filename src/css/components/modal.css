@@ -36,10 +36,10 @@
     var(--dialog-viewport-gap, var(--dialog-viewport-gap-default))
   );
 
-  /* The radius of the surface inside its own border, shared by the padded
-     wrapper and any edge band (header, confirmation footer) so none of them
-     overshoots the dialog's outer corner. */
-  --dialog-inner-radius: calc(var(--radius-lg) - var(--border-width));
+  /* The panel is borderless, so its inner and outer radius are the same. Kept
+     as one name for the padded wrapper and any edge band (header,
+     confirmation footer) so none of them drifts from the corner. */
+  --dialog-inner-radius: var(--radius-lg);
 
   /* Keep the surface anchored to the viewport in the top layer. This also
      provides the containing block for the absolutely positioned close button. */
@@ -54,7 +54,9 @@
      dynamic token; only the modal pins the small viewport. */
   --dialog-viewport-block: var(--viewport-block);
   max-block-size: calc(var(--dialog-viewport-block) - var(--dialog-viewport-gap-2x));
-  border: var(--border-width) solid var(--border);
+  /* Zero rather than absent: the UA stylesheet draws `border: solid` on
+     dialog, and an authored edge reads as a hard seam against .bleed bands. */
+  border: 0;
   border-radius: var(--radius-lg);
   background: var(--surface-raised);
   color: var(--text);
@@ -74,6 +76,14 @@
   transition:
     opacity var(--duration) var(--ease-exit),
     transform var(--duration) var(--ease-exit);
+}
+
+@media (forced-colors: active) {
+  /* With no authored border the panel edge disappears once colors collapse.
+     The browser forces the border color, so only the width is authored. */
+  :where(dialog).modal {
+    border: var(--border-width) solid CanvasText;
+  }
 }
 
 :where(dialog).modal > form,
@@ -236,7 +246,11 @@
   padding: var(--space-50);
 }
 
+/* The action band splits a decision pair: the cancel-style action holds the
+   leading edge and the committing action the trailing one, so the destructive
+   choice is never adjacent to the dismiss. */
 :where(dialog).modal.dialog-confirmation > form > footer {
+  justify-content: space-between;
   padding: var(--space-40) var(--space-50);
   border-end-start-radius: var(--dialog-inner-radius);
   border-end-end-radius: var(--dialog-inner-radius);
