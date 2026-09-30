@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dialog layout fixture</title>
+  <link rel="stylesheet" href="../../src/css/actual.full.css">
+</head>
+<body>
+  <dialog class="modal dialog-confirmation" open>
+    <form method="dialog">
+      <div class="media">
+        <span class="dialog-icon danger soft" aria-hidden="true">!</span>
+
+        <header>
+          <h3>Deactivate account</h3>
+          <p class="muted">This action cannot be undone.</p>
+        </header>
+      </div>
+
+      <footer>
+        <button class="btn outline" value="cancel">Cancel</button>
+        <button class="btn danger" value="deactivate">Deactivate</button>
+      </footer>
+    </form>
+  </dialog>
+
+  <dialog class="modal" id="header-dialog" open>
+    <header>
+      <div class="media items-center grow">
+        <span class="dialog-icon warning soft" aria-hidden="true">!</span>
+        <h2>Finish workspace setup</h2>
+      </div>
+
+      <div class="cluster">
+        <button class="btn ghost" id="header-extra" type="button" aria-label="More information">?</button>
+        <button class="close" id="header-close" type="button" aria-label="Close"></button>
+      </div>
+    </header>
+
+    <div class="stack"><p>Body.</p></div>
+  </dialog>
+</body>
+</html>

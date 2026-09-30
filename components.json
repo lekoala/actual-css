@@ -135,7 +135,8 @@
     "source": "src/css/components/bleed.css",
     "cssImport": "actual-css/css/components/bleed",
     "classes": [
-      "bleed"
+      "bleed",
+      "stack"
     ],
     "publicHooks": [
       "--bleed-pad"
@@ -464,6 +465,8 @@
     ],
     "publicHooks": [
       "--modal-size",
+      "--modal-pad",
+      "--modal-header-bg",
       "--dialog-viewport-gap",
       "--dialog-icon-size",
       "--dialog-icon-glyph-size"

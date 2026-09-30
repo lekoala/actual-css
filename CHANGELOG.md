@@ -4,6 +4,7 @@
 
 ### Added
 
+- `dialog.modal > header` provides aligned icon/title/action chrome through `--modal-header-bg`; modal body wrappers expose `--modal-pad` and support `.bleed` bands.
 - `actual-css design` (Bun) exports a theme to Figma and Penpot tokens; see `docs/pages/guides/design-tools.md`.
 - `actual-css design` writes a Penpot plugin that builds Button, Input, Badge, Alert and Card bound to those tokens.
 - Soft fills and borders export as recipe tokens named `<variant>-<intent>-<role>` (`soft-danger-bg`).
@@ -11,6 +12,7 @@
 
 ### Fixed
 
+- `.dialog-confirmation` centers its leading icon on the title while keeping supporting copy in the same text column.
 - `.btn` and the `.file` selector button take their borders out of the block padding, so they match `.input` height at every size instead of standing 2px taller outside a `.join`.
 - `tests/browser/control-geometry.test.js` measures controls outside a `.join`, whose stretch had hidden the mismatch.
 
