@@ -26,10 +26,14 @@ Add relevant guards for future-us when needed based on traps and discoveries.
 - `components.json` is a derived artifact, not a second source of truth. After touching CSS header comments, selectors, `src/js` enhancements, or `package.json#exports`, run `bun run generate:catalog` and let the diff speak; `check:catalog` (in build:all) verifies the committed file matches the derivation.
 - Rendering is `Bun.WebView` driving headless Chrome through
   `scripts/utils/browser.js`, never Playwright (not a dependency;
-  `node_modules/.bin/playwright` is a stale shim). Use `bun run shot:page`,
-  `bun run shot:multi` or `bun run probe`; for a state no flag exposes, such as
-  `prefers-reduced-motion`, import `capture` from that module in a `tmp/`
-  script and pass `mediaFeatures`.
+  `node_modules/.bin/playwright` is a stale shim). Use `bun run shot:page`
+  (full page), `bun run shot:multi` (widths), `bun run shot:crop --selector`
+  (one element crop per call), `bun run shot:states` (motion/reduced/forced/
+  contrast matrix) or `bun run probe` (numbers, not pixels). Shared helpers
+  live in that module: `setViewport`, `forceStates` (+ `--force` on the shot
+  scripts), `clickSelector`/`tabUntil` for real dispatched input,
+  `elementRect` for crops. Prefer `fixtureUrl` over a `tmp/` `Bun.serve`;
+  serve only for fetch/CORS needs, via `scripts/serve.js`.
 - Visual changes must be inspected once in the states they affect. Cover the
   meaningful extremes when the geometry is responsive, and exaggerate a tiny
   detail in the fixture rather than squinting at its production size.
@@ -39,7 +43,8 @@ Add relevant guards for future-us when needed based on traps and discoveries.
   against it describes a path no user takes — a mega-menu takeover looked like
   it stranded focus on `<body>`, and the test passed on the wrong evidence.
   Once an assertion mentions focus, dispatch real events with
-  `Input.dispatchMouseEvent` / `Input.dispatchKeyEvent` through `view.cdp`.
+  `clickSelector`/`tabUntil` from `scripts/utils/browser.js`
+  (`Input.dispatchMouseEvent` / `Input.dispatchKeyEvent` through `view.cdp`).
   `.click()` stays fine for a handler or a state transition.
 - Browser tests wait for the state they assert, using `waitForBrowser()` from
   `scripts/utils/browser.js` when an update is asynchronous. Do not add a fixed
@@ -50,7 +55,8 @@ Add relevant guards for future-us when needed based on traps and discoveries.
 - Do not screenshot top-layer content with `shot:page` or `capture`: they pass
   `captureBeyondViewport: true`, which mis-composites an open popover or modal
   dialog — the panel came out translucent and painted *under* a sibling button
-  that a probe proved it covered. For a top-layer state, drive
+  that a probe proved it covered. For a top-layer state, use
+  `bun run shot:crop --top-layer` (flag off) or drive
   `Page.captureScreenshot` yourself from a `tmp/` script with the flag off, and
   size the viewport with `Emulation.setDeviceMetricsOverride`.
 - On every shell, pass rg a directory plus rg's own `-g` glob — never a shell
