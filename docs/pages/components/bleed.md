@@ -3,10 +3,11 @@
 `.bleed` lets a direct child of a padded surface reach its edges. Use it for a
 full-width image, a colored header or footer, or a notice band.
 
-It works inside `.card`, `.drawer`, and an accordion panel. The accordion panel
-owns the padding, so place `.bleed` directly inside the panel, after the summary.
-A deeper descendant stays within its wrapper. A modular build imports
-`actual-css/css/components/bleed` alongside the surface component.
+It works inside `.card`, `.drawer`, a modal's direct `<form>` or `.stack`, and
+an accordion panel. The accordion panel owns the padding, so place `.bleed`
+directly inside the panel, after the summary. A deeper descendant stays within
+its wrapper. A modular build imports `actual-css/css/components/bleed`
+alongside the surface component.
 
 ```html demo
 <article class="card stack" style="--card-max-inline-size: 24rem">
