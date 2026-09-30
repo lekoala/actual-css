@@ -1,12 +1,12 @@
 {
-  "totalRaw": 345083,
+  "totalRaw": 345761,
   "core": {
     "minified": 11757,
     "brotli": 2697
   },
   "full": {
-    "minified": 131633,
-    "brotli": 18785
+    "minified": 131841,
+    "brotli": 18819
   },
   "js": {
     "full": {
@@ -22,7 +22,7 @@
     },
     {
       "file": "components/modal.css",
-      "raw": 11592
+      "raw": 12270
     },
     {
       "file": "core/tokens.css",

@@ -25,6 +25,8 @@ it("dialog corners pin the close, content keeps its own, containers size it", as
         const box = (selector) => Math.round(document.querySelector(selector).getBoundingClientRect().width);
         const closeRect = document.querySelector("#modal > .close").getBoundingClientRect();
         const titleRect = document.getElementById("modal-title").getBoundingClientRect();
+        const chromeClose = document.querySelector("#chrome > header > .close");
+        const chromeTitle = document.getElementById("chrome-title");
         return {
           modalCorner: style("#modal > .close").position,
           drawerCorner: style("#drawer .close").position,
@@ -32,6 +34,10 @@ it("dialog corners pin the close, content keeps its own, containers size it", as
           nestedSize: style("#modal .alert .close").inlineSize,
           badgeTarget: box("#badge .close"),
           titleClearsClose: titleRect.right < closeRect.left,
+          chromeCorner: style("#chrome > header > .close").position,
+          chromeReserve: style("#chrome > header").paddingInlineEnd,
+          chromeTitleClearsClose:
+            chromeTitle.getBoundingClientRect().right < chromeClose.getBoundingClientRect().left,
         };
       })()`);
 
@@ -41,6 +47,10 @@ it("dialog corners pin the close, content keeps its own, containers size it", as
       expect(result.nestedSize).toBe("28px");
       expect(result.badgeTarget).toBeGreaterThanOrEqual(24);
       expect(result.titleClearsClose).toBe(true);
+      // close-size (2.375rem) + space-20 + space-30, above the modal pad.
+      expect(result.chromeCorner).toBe("absolute");
+      expect(result.chromeReserve).toBe("58px");
+      expect(result.chromeTitleClearsClose).toBe(true);
     },
     { artifactName: "close" },
   );

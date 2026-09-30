@@ -472,6 +472,7 @@
       "--dialog-icon-glyph-size"
     ],
     "internalHooks": [
+      "--dialog-inner-radius",
       "--dialog-focus-bleed",
       "--dialog-viewport-block",
       "--dialog-viewport-gap-default",

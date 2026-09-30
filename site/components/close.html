@@ -258,7 +258,9 @@
 <p>In a <code>.modal</code> or a <code>.drawer</code>, the close sits out of the content flow at the
 panel's top inline-end corner. Place it as a direct child of the dialog, of its
 top-level <code>form</code> or <code>header</code>, or of a <code>form</code> inside that header; a <code>.close</code>
-deeper in the content keeps its own place. See <a href="dialog.html">Dialog</a> and
+deeper in the content keeps its own place, so wrapping it in a <code>.cluster</code> keeps
+it in the header's row. A header that hosts the corner close reserves inline
+room so a title never runs under it. See <a href="dialog.html">Dialog</a> and
 <a href="drawer.html">Drawer</a>.</p>
 <pre><code class="language-html">&lt;dialog class=&quot;modal&quot; id=&quot;details&quot;&gt;
   &lt;button class=&quot;close&quot; type=&quot;button&quot; commandfor=&quot;details&quot; command=&quot;request-close&quot;
