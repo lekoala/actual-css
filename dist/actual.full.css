@@ -3974,8 +3974,17 @@ a.btn[aria-disabled="true"] {
  * Public hooks:
  * --close-size
  * --close-icon-size
+ * --close-bg
+ * --close-color
+ * --close-hover-color
+ * --close-hover-overlay
  */
 .close {
+  /* Routes the hover/active wash, as --btn-hover-overlay does for .btn. A
+     context that wants ink-only feedback (the dialog corner) sets it
+     transparent. */
+  --close-hover-overlay: var(--hover-overlay);
+
   display: inline-grid;
   place-items: center;
   flex: none;
@@ -4002,12 +4011,12 @@ a.btn[aria-disabled="true"] {
    the control (the dialog corner's --surface-subtle) instead of replacing it. */
 @media (hover: hover) {
   .close:hover {
-    box-shadow: inset 0 0 0 999px var(--hover-overlay);
+    box-shadow: inset 0 0 0 999px var(--close-hover-overlay);
   }
 }
 
 .close:active {
-  box-shadow: inset 0 0 0 999px var(--hover-overlay);
+  box-shadow: inset 0 0 0 999px var(--close-hover-overlay);
 }
 
 .close:focus-visible {
@@ -4019,23 +4028,25 @@ a.btn[aria-disabled="true"] {
    surface rather than to the header or a scroll container inside it. Matched
    on the documented positions (the dialog, its form, its header, or a form
    inside that header) so a .close inside content — an alert in the body —
-   keeps its own place. */
+   keeps its own place. The corner drops the wash: only the ink changes. */
 :where(dialog):is(.modal, .drawer) > .close,
 :where(dialog):is(.modal, .drawer) > :is(form, header) > .close,
 :where(dialog):is(.modal, .drawer) > :is(form, header) > :is(form, header) > .close {
+  --close-hover-overlay: transparent;
+
   position: absolute;
   z-index: 1;
   inset-block-start: var(--space-20);
   inset-inline-end: var(--space-20);
-  background: var(--surface-subtle);
-  color: var(--text-muted);
+  background: var(--close-bg, var(--surface-subtle));
+  color: var(--close-color, var(--text-muted));
 }
 
 @media (hover: hover) {
   :where(dialog):is(.modal, .drawer) > .close:hover,
   :where(dialog):is(.modal, .drawer) > :is(form, header) > .close:hover,
   :where(dialog):is(.modal, .drawer) > :is(form, header) > :is(form, header) > .close:hover {
-    color: var(--text);
+    color: var(--close-hover-color, var(--text));
   }
 }
 
@@ -4748,10 +4759,10 @@ a.badge[aria-disabled="true"] {
     var(--dialog-viewport-gap, var(--dialog-viewport-gap-default))
   );
 
-  /* The radius of the surface inside its own border, shared by the padded
-     wrapper and any edge band (header, confirmation footer) so none of them
-     overshoots the dialog's outer corner. */
-  --dialog-inner-radius: calc(var(--radius-lg) - var(--border-width));
+  /* The panel is borderless, so its inner and outer radius are the same. Kept
+     as one name for the padded wrapper and any edge band (header,
+     confirmation footer) so none of them drifts from the corner. */
+  --dialog-inner-radius: var(--radius-lg);
 
   /* Keep the surface anchored to the viewport in the top layer. This also
      provides the containing block for the absolutely positioned close button. */
@@ -4766,7 +4777,9 @@ a.badge[aria-disabled="true"] {
      dynamic token; only the modal pins the small viewport. */
   --dialog-viewport-block: var(--viewport-block);
   max-block-size: calc(var(--dialog-viewport-block) - var(--dialog-viewport-gap-2x));
-  border: var(--border-width) solid var(--border);
+  /* Zero rather than absent: the UA stylesheet draws `border: solid` on
+     dialog, and an authored edge reads as a hard seam against .bleed bands. */
+  border: 0;
   border-radius: var(--radius-lg);
   background: var(--surface-raised);
   color: var(--text);
@@ -4786,6 +4799,14 @@ a.badge[aria-disabled="true"] {
   transition:
     opacity var(--duration) var(--ease-exit),
     transform var(--duration) var(--ease-exit);
+}
+
+@media (forced-colors: active) {
+  /* With no authored border the panel edge disappears once colors collapse.
+     The browser forces the border color, so only the width is authored. */
+  :where(dialog).modal {
+    border: var(--border-width) solid CanvasText;
+  }
 }
 
 :where(dialog).modal > form,
@@ -4948,7 +4969,11 @@ a.badge[aria-disabled="true"] {
   padding: var(--space-50);
 }
 
+/* The action band splits a decision pair: the cancel-style action holds the
+   leading edge and the committing action the trailing one, so the destructive
+   choice is never adjacent to the dismiss. */
 :where(dialog).modal.dialog-confirmation > form > footer {
+  justify-content: space-between;
   padding: var(--space-40) var(--space-50);
   border-end-start-radius: var(--dialog-inner-radius);
   border-end-end-radius: var(--dialog-inner-radius);
@@ -8277,11 +8302,14 @@ a.list-item[aria-current]::before {
  * .sm/.lg are deliberately not supported.
  *
  * Public hooks:
+ * --meter-track
  * --meter-value
  * --bar-height
  */
 
 .meter {
+  --meter-track: var(--surface-subtle);
+
   appearance: none;
   -webkit-appearance: none;
   display: block;
@@ -8290,7 +8318,7 @@ a.list-item[aria-current]::before {
   overflow: hidden;
   border: 0;
   border-radius: var(--radius-full);
-  background: var(--surface-subtle);
+  background: var(--meter-track);
 }
 
 /* A non-native meter is a weighted flex container. The element type keeps the
@@ -8317,7 +8345,7 @@ a.list-item[aria-current]::before {
   block-size: var(--bar-height);
   border: 0;
   border-radius: var(--radius-full);
-  background: var(--surface-subtle);
+  background: var(--meter-track);
 }
 
 .meter::-webkit-meter-optimum-value {

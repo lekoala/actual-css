@@ -253,6 +253,9 @@ clear.</p>
 <p>A <code>.close</code> placed as a direct child of the chrome header is still the corner
 overlay. That header reserves the same inline room for it, never below its own
 <code>--modal-pad</code>, so a wrapping title stays clear either way.</p>
+<p>The corner close overlays the panel edge, so a body tall enough to scroll would
+run its scrollbar under the button. Give such a dialog the <code>scrollable</code> anatomy:
+the close then sits over the fixed header and the scrollbar starts below it.</p>
 <p>Add <code>.bleed</code> to that header when it should form a full-width band. It reaches
 the dialog edges, keeps the modal's inner padding, and can take a surface token
 such as <code>background: var(--surface-subtle)</code>.</p>
@@ -350,7 +353,8 @@ runtime, backdrop clicks give a small static feedback instead of closing.</p>
 <code>dialog-confirmation</code> with the media object. The icon well accepts the shared
 intent and emphasis classes; <code>dialog-icon danger soft</code> creates the tinted red
 circle while keeping the glyph centered. The footer becomes a separate action
-band without changing the semantics of the form or its buttons.</p>
+band whose two actions sit at its edges, so the cancel-style control never sits
+next to the committing one.</p>
 </div>
 <div class="docs-example">
   <div class="docs-preview">
