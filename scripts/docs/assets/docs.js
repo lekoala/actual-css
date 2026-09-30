@@ -105,7 +105,8 @@
   }
 
   // Ranking mirrors scoreEntry() in scripts/docs/search.js (kept self-contained:
-  // this file ships without a bundler). Keep both in sync when weights change.
+  // this file ships without a bundler). Parity is enforced by
+  // tests/browser/docs-search.test.js.
   function tokenize(value) {
     return (value ?? "")
       .toLowerCase()

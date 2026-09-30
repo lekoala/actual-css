@@ -1,4 +1,5 @@
 import { expect, test } from "bun:test";
+import { searchEntries } from "../../scripts/docs/search.js";
 import {
   browserAvailable,
   fixtureUrl,
@@ -92,3 +93,62 @@ it("IME confirmation and canceled keys are not result navigation", async () => {
     expect(accepted.active).toBeNull();
   });
 }, 60_000);
+
+/* search.js is the executable spec of the ranking; docs.js ships an
+ * autonomous copy (no bundler, file://-safe). This test locks the invariant:
+ * the same index and the same queries produce the same ordered URLs. */
+it("ranks the same ordered URLs as searchEntries() for index-derived queries", async () => {
+  await withSearch(async (view) => {
+    const index = await view.evaluate("window.__SEARCH_INDEX__ ?? []");
+    expect(index.length).toBeGreaterThan(0);
+
+    const queries = [];
+    for (const entry of index) {
+      if (entry.title && queries.length < 3) queries.push(entry.title);
+    }
+    const seen = new Set(queries);
+    for (const entry of index) {
+      for (const alias of entry.aliases ?? []) {
+        if (!seen.has(alias) && queries.length < 6) {
+          seen.add(alias);
+          queries.push(alias);
+        }
+      }
+      if (queries.length >= 6) break;
+    }
+    for (const entry of index) {
+      for (const token of entry.title
+        .toLowerCase()
+        .split(/[^a-z0-9]+/)
+        .filter(Boolean)) {
+        if (!seen.has(token) && queries.length < 8) {
+          seen.add(token);
+          queries.push(token);
+        }
+      }
+      if (queries.length >= 8) break;
+    }
+    if (index.some((entry) => entry.aliases?.includes("custom select"))) {
+      queries.push("custom select");
+    }
+    expect(queries.length).toBeGreaterThan(0);
+
+    for (const query of queries) {
+      const expected = searchEntries(index, query).map((entry) => entry.url);
+      await view.evaluate(`(() => {
+        const input = document.querySelector('${INPUT}');
+        input.value = "";
+        input.dispatchEvent(new Event("input", { bubbles: true }));
+      })()`);
+      await view.cdp("Input.insertText", { text: query });
+      await waitForBrowser(
+        view,
+        `document.querySelectorAll("[data-docs-search-results] li").length === ${expected.length}`,
+      );
+      const hrefs = await view.evaluate(
+        `[...document.querySelectorAll("[data-docs-search-results] li a")].map((a) => a.getAttribute("href"))`,
+      );
+      expect({ query, hrefs }).toEqual({ query, hrefs: expected });
+    }
+  });
+}, 120_000);
