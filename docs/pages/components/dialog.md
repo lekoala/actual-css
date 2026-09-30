@@ -26,10 +26,17 @@ controls second. The title has the close control's minimum height; its leading
 icon and every trailing control share the same center axis. A wrapped title
 simply makes the row taller.
 
+A direct `dialog > header` is dialog chrome and forms a distinct header band.
+Put an ordinary content heading inside the padded `form` or `.stack` instead.
+
 Keep a corner [`.close`](close.md) as a direct child of the dialog and put the
 title in the wrapper's direct `<header>`. The button then stays outside the
 content flow while the header reserves enough inline space to keep its title
 clear.
+
+A `.close` placed as a direct child of the chrome header is still the corner
+overlay. That header reserves the same inline room for it, never below its own
+`--modal-pad`, so a wrapping title stays clear either way.
 
 Add `.bleed` to that header when it should form a full-width band. It reaches
 the dialog edges, keeps the modal's inner padding, and can take a surface token
