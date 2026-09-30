@@ -5,9 +5,9 @@
  *
  * A surface that insets its direct children relays that inset to them as
  * --surface-pad; a direct .bleed child cancels it and reaches the surface
- * edge. Card and drawer pad at the container level, so they own the token
- * there; the accordion pads its summary and its panel instead, so the panel
- * owns it and the item does not.
+ * edge. Card and drawer pad at the container level, while modal pads its inner
+ * wrapper; each owns the token where that inset lives. The accordion pads its
+ * summary and panel instead, so the panel owns it and the item does not.
  *
  * Why the token is handed to the children rather than declared on the surface:
  * custom properties inherit, so a surface-level declaration would also reach a
@@ -28,11 +28,11 @@
  * Framework plumbing:
  * --surface-pad (declared by the surface)
  */
-:where(.card, .drawer, .accordion details > summary + *) > * * {
+:where(.card, .drawer, dialog.modal > :is(form, .stack), .accordion details > summary + *) > * * {
   --bleed-pad: initial;
 }
 
-:where(.card, .drawer, .accordion details > summary + *) > * {
+:where(.card, .drawer, dialog.modal > :is(form, .stack), .accordion details > summary + *) > * {
   --bleed-pad: var(--surface-pad);
 }
 

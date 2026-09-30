@@ -85,6 +85,7 @@
         <li><a class="nav-link" href="../guides/progressive-enhancement.html">The JavaScript Runtime</a></li>
         <li><a class="nav-link" href="../guides/bootstrap.html">Migrating from Bootstrap to Actual CSS</a></li>
         <li><a class="nav-link" href="../guides/tailwind.html">Migrating from Tailwind CSS to Actual CSS</a></li>
+        <li><a class="nav-link" href="../guides/design-tools.html">Design tools (Figma, Penpot)</a></li>
       </ul>
       <p class="docs-nav-group">Foundations</p>
       <ul class="nav-list">
@@ -234,9 +235,22 @@
 <tr><td><code>.close</code></td><td>Composition</td><td>Icon-only close button, at the top end.</td></tr>
 </tbody>
 </table></div>
-<p>A <a href="close.html"><code>.close</code></a> placed as a direct child of the dialog or of its form
-sits outside the content flow, so it does not take part in the dialog's own
-layout.</p>
+<h2 id="anatomy">Anatomy</h2>
+<p><code>.modal</code> is the outer surface and deliberately has no inner padding. Wrap its
+content in a direct <code>&lt;form&gt;</code> or <code>.stack</code>; that wrapper owns the padding, rhythm,
+and overflow. Put <code>.stack</code> on the wrapper, never on <code>dialog.modal</code> itself.</p>
+<p>For a header band, place <code>&lt;header&gt;</code> directly under <code>dialog.modal</code>, before the
+body wrapper. Put a flexible <code>.media</code> title region first and a <code>.cluster</code> of
+controls second. The title has the close control's minimum height; its leading
+icon and every trailing control share the same center axis. A wrapped title
+simply makes the row taller.</p>
+<p>Keep a corner <a href="close.html"><code>.close</code></a> as a direct child of the dialog and put the
+title in the wrapper's direct <code>&lt;header&gt;</code>. The button then stays outside the
+content flow while the header reserves enough inline space to keep its title
+clear.</p>
+<p>Add <code>.bleed</code> to that header when it should form a full-width band. It reaches
+the dialog edges, keeps the modal's inner padding, and can take a surface token
+such as <code>background: var(--surface-subtle)</code>.</p>
 <h2 id="usage">Usage</h2>
 <p>Modals use the platform-native <code>&lt;dialog class=&quot;modal&quot;&gt;</code> element with <code>commandfor</code> and <code>command</code> buttons.</p>
 <p>Use <code>command=&quot;show-modal&quot;</code> to open a modal dialog, or <code>command=&quot;--show&quot;</code> to open
@@ -402,6 +416,84 @@ band without changing the semantics of the form or its buttons.</p>
   </div>
 </div>
 <div class="prose docs-prose">
+<p>For a trailing illustration, use a direct <code>&lt;header&gt;</code> as the message region and
+compose it as a non-wrapping split cluster. <code>.grow</code> keeps the text column
+flexible while <code>.dialog-icon</code> stays at the inline end. The confirmation variant
+pads either this header or the leading-icon <code>.media</code> shape above.</p>
+<p>Use the same anatomy in a <code>.card</code> instead when the surface belongs in page
+content and does not need modal focus or a backdrop.</p>
+</div>
+<div class="docs-example">
+  <div class="docs-preview">
+<button class="btn"
+        type="button"
+        commandfor="customize-dialog"
+        command="show-modal"
+        aria-haspopup="dialog"
+        aria-controls="customize-dialog">
+  Customize workspace
+</button>
+
+<dialog class="modal dialog-confirmation"
+        id="customize-dialog"
+        closedby="none"
+        aria-labelledby="customize-dialog-title">
+  <form method="dialog">
+    <header class="cluster"
+            style="--cluster-align: start; --cluster-justify: space-between; --cluster-wrap: nowrap">
+      <hgroup class="grow">
+        <h3 id="customize-dialog-title">Make this workspace your own</h3>
+        <p class="muted">Choose colors and defaults now, or continue with the current settings.</p>
+      </hgroup>
+
+      <span class="dialog-icon success soft" aria-hidden="true">
+        <i class="ti ti-check"></i>
+      </span>
+    </header>
+
+    <footer>
+      <button class="btn primary" value="customize">Customize</button>
+      <button class="btn ghost" value="later">Later</button>
+    </footer>
+  </form>
+</dialog>
+  </div>
+  <div class="docs-code">
+    <pre><code class="language-html">&lt;button class=&quot;btn&quot;
+        type=&quot;button&quot;
+        commandfor=&quot;customize-dialog&quot;
+        command=&quot;show-modal&quot;
+        aria-haspopup=&quot;dialog&quot;
+        aria-controls=&quot;customize-dialog&quot;&gt;
+  Customize workspace
+&lt;/button&gt;
+
+&lt;dialog class=&quot;modal dialog-confirmation&quot;
+        id=&quot;customize-dialog&quot;
+        closedby=&quot;none&quot;
+        aria-labelledby=&quot;customize-dialog-title&quot;&gt;
+  &lt;form method=&quot;dialog&quot;&gt;
+    &lt;header class=&quot;cluster&quot;
+            style=&quot;--cluster-align: start; --cluster-justify: space-between; --cluster-wrap: nowrap&quot;&gt;
+      &lt;hgroup class=&quot;grow&quot;&gt;
+        &lt;h3 id=&quot;customize-dialog-title&quot;&gt;Make this workspace your own&lt;/h3&gt;
+        &lt;p class=&quot;muted&quot;&gt;Choose colors and defaults now, or continue with the current settings.&lt;/p&gt;
+      &lt;/hgroup&gt;
+
+      &lt;span class=&quot;dialog-icon success soft&quot; aria-hidden=&quot;true&quot;&gt;
+        &lt;i class=&quot;ti ti-check&quot;&gt;&lt;/i&gt;
+      &lt;/span&gt;
+    &lt;/header&gt;
+
+    &lt;footer&gt;
+      &lt;button class=&quot;btn primary&quot; value=&quot;customize&quot;&gt;Customize&lt;/button&gt;
+      &lt;button class=&quot;btn ghost&quot; value=&quot;later&quot;&gt;Later&lt;/button&gt;
+    &lt;/footer&gt;
+  &lt;/form&gt;
+&lt;/dialog&gt;</code></pre>
+  </div>
+</div>
+<div class="prose docs-prose">
 <h2 id="information-modal">Information modal</h2>
 <p>Use this shape for contextual information or lightweight secondary content. It
 has no action button; the header close button dismisses the dialog.</p>
@@ -477,6 +569,116 @@ has no action button; the header close button dismisses the dialog.</p>
       &lt;p&gt;There are no decisions to make here; the content can simply be dismissed when finished.&lt;/p&gt;
     &lt;/div&gt;
   &lt;/div&gt;
+&lt;/dialog&gt;</code></pre>
+  </div>
+</div>
+<div class="prose docs-prose">
+<h2 id="action-modal">Action modal</h2>
+<p>Use this shape when contextual information leads to one non-destructive next
+step, such as reviewing a setup before continuing. Unlike an alert dialog, it
+can be dismissed without choosing the action; unlike an information modal, it
+has a primary action in a footer.</p>
+<p>Use <code>.dialog-icon</code> with the media object for a leading title icon. An <code>.alert</code>
+belongs in the body only when the dialog contains a distinct status message;
+the dialog title itself is not an alert.</p>
+</div>
+<div class="docs-example">
+  <div class="docs-preview">
+<button class="btn primary"
+        type="button"
+        commandfor="setup-dialog"
+        command="show-modal"
+        aria-haspopup="dialog"
+        aria-controls="setup-dialog">
+  Continue setup
+</button>
+
+<dialog class="modal"
+        id="setup-dialog"
+        closedby="any"
+        data-dialog-dismissible
+        aria-labelledby="setup-dialog-title">
+  <header>
+    <div class="media items-center grow">
+      <span class="dialog-icon warning soft" aria-hidden="true">
+        <i class="ti ti-alert-triangle"></i>
+      </span>
+
+      <h2 id="setup-dialog-title">Finish workspace setup</h2>
+    </div>
+
+    <div class="cluster">
+      <button class="close"
+              type="button"
+              commandfor="setup-dialog"
+              command="request-close"
+              aria-controls="setup-dialog"
+              aria-label="Close dialog"></button>
+    </div>
+  </header>
+
+  <form method="dialog" class="stack">
+    <div class="card stack">
+      <p><strong>Acme workspace</strong></p>
+      <p>Team plan</p>
+      <p>Starts October 1</p>
+    </div>
+
+    <p>Confirm these settings to finish setting up the workspace.</p>
+
+    <footer>
+      <button class="btn primary inline-size-full" value="continue">Continue</button>
+    </footer>
+  </form>
+</dialog>
+  </div>
+  <div class="docs-code">
+    <pre><code class="language-html">&lt;button class=&quot;btn primary&quot;
+        type=&quot;button&quot;
+        commandfor=&quot;setup-dialog&quot;
+        command=&quot;show-modal&quot;
+        aria-haspopup=&quot;dialog&quot;
+        aria-controls=&quot;setup-dialog&quot;&gt;
+  Continue setup
+&lt;/button&gt;
+
+&lt;dialog class=&quot;modal&quot;
+        id=&quot;setup-dialog&quot;
+        closedby=&quot;any&quot;
+        data-dialog-dismissible
+        aria-labelledby=&quot;setup-dialog-title&quot;&gt;
+  &lt;header&gt;
+    &lt;div class=&quot;media items-center grow&quot;&gt;
+      &lt;span class=&quot;dialog-icon warning soft&quot; aria-hidden=&quot;true&quot;&gt;
+        &lt;i class=&quot;ti ti-alert-triangle&quot;&gt;&lt;/i&gt;
+      &lt;/span&gt;
+
+      &lt;h2 id=&quot;setup-dialog-title&quot;&gt;Finish workspace setup&lt;/h2&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;cluster&quot;&gt;
+      &lt;button class=&quot;close&quot;
+              type=&quot;button&quot;
+              commandfor=&quot;setup-dialog&quot;
+              command=&quot;request-close&quot;
+              aria-controls=&quot;setup-dialog&quot;
+              aria-label=&quot;Close dialog&quot;&gt;&lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/header&gt;
+
+  &lt;form method=&quot;dialog&quot; class=&quot;stack&quot;&gt;
+    &lt;div class=&quot;card stack&quot;&gt;
+      &lt;p&gt;&lt;strong&gt;Acme workspace&lt;/strong&gt;&lt;/p&gt;
+      &lt;p&gt;Team plan&lt;/p&gt;
+      &lt;p&gt;Starts October 1&lt;/p&gt;
+    &lt;/div&gt;
+
+    &lt;p&gt;Confirm these settings to finish setting up the workspace.&lt;/p&gt;
+
+    &lt;footer&gt;
+      &lt;button class=&quot;btn primary inline-size-full&quot; value=&quot;continue&quot;&gt;Continue&lt;/button&gt;
+    &lt;/footer&gt;
+  &lt;/form&gt;
 &lt;/dialog&gt;</code></pre>
   </div>
 </div>
@@ -800,21 +1002,18 @@ transition.</p>
 <p>Prefer native dialog behavior whenever possible. The framework runtime should
 not replace the platform modal system; it should only make dialogs declarative,
 animation-friendly, and consistent across supported browsers.</p>
-<p>The close button is anchored to the dialog surface, not the content flow: it
-sits at the top <code>inline-end</code>, inside the panel. The button itself is out of
-flow, while the header reserves enough inline padding to keep its title clear.
-Keep the button a direct child of <code>dialog.modal</code> so the scrolling content
-(<code>&gt; form</code> or <code>&gt; .stack</code>) never competes with it.</p>
 <h2 id="css-hooks">CSS hooks</h2>
 <ul>
 <li><code>--modal-size</code> — maximum dialog width. Fallback-only, so a class on the
 dialog or an inherited value both reach it. A dialog is shrink-to-fit: a
 composition that must fill this width sets <code>inline-size</code> as well.</li>
+<li><code>--modal-pad</code> — padding of the direct <code>&lt;form&gt;</code> or <code>.stack</code> content wrapper.</li>
+<li><code>--modal-header-bg</code> — background of a direct header band.</li>
 <li><code>--dialog-viewport-gap</code> — distance kept between the dialog and the viewport edges.</li>
 <li><code>--dialog-icon-size</code> — diameter of the <code>.dialog-icon</code> circle.</li>
 <li><code>--dialog-icon-glyph-size</code> — size of the glyph centered inside <code>.dialog-icon</code>.</li>
 <li><code>--close-size</code> / <code>--close-icon-size</code> — size of the corner <code>.close</code> and of its
-X. The header reserves the close size plus <code>--space-30</code> on its inline end so
+X. The header reserves the close size, its edge inset, and a content gap so
 the title never runs under it.</li>
 </ul>
 
@@ -837,9 +1036,13 @@ the title never runs under it.</li>
           <p class="docs-nav-group">On this page</p>
           <ul class="nav-list docs-toc-list" data-docs-toc>
         <li><a class="nav-link" href="#class-reference" data-docs-toc-item data-level="2">Class reference</a></li>
+        <li><a class="nav-link" href="#anatomy" data-docs-toc-item data-level="2">Anatomy</a></li>
         <li><a class="nav-link" href="#usage" data-docs-toc-item data-level="2">Usage</a></li>
         <li><a class="nav-link" href="#alert-dialog" data-docs-toc-item data-level="2">Alert dialog</a></li>
+        <li><a class="nav-link" href="#customize-dialog-title" data-docs-toc-item data-level="3">Make this workspace your own</a></li>
         <li><a class="nav-link" href="#information-modal" data-docs-toc-item data-level="2">Information modal</a></li>
+        <li><a class="nav-link" href="#action-modal" data-docs-toc-item data-level="2">Action modal</a></li>
+        <li><a class="nav-link" href="#setup-dialog-title" data-docs-toc-item data-level="2">Finish workspace setup</a></li>
         <li><a class="nav-link" href="#scrollable-modal" data-docs-toc-item data-level="2">Scrollable modal</a></li>
         <li><a class="nav-link" href="#overlays-inside-modals" data-docs-toc-item data-level="2">Overlays inside modals</a></li>
         <li><a class="nav-link" href="#javascript-options" data-docs-toc-item data-level="2">JavaScript options</a></li>
@@ -874,6 +1077,7 @@ the title never runs under it.</li>
         <li><a class="nav-link" href="../guides/progressive-enhancement.html">The JavaScript Runtime</a></li>
         <li><a class="nav-link" href="../guides/bootstrap.html">Migrating from Bootstrap to Actual CSS</a></li>
         <li><a class="nav-link" href="../guides/tailwind.html">Migrating from Tailwind CSS to Actual CSS</a></li>
+        <li><a class="nav-link" href="../guides/design-tools.html">Design tools (Figma, Penpot)</a></li>
       </ul>
       <p class="docs-nav-group">Foundations</p>
       <ul class="nav-list">

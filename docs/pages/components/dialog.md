@@ -14,9 +14,26 @@
 | `.dialog-icon`         | Component   | Circular intent-aware icon well.               |
 | `.close`               | Composition | Icon-only close button, at the top end.        |
 
-A [`.close`](close.md) placed as a direct child of the dialog or of its form
-sits outside the content flow, so it does not take part in the dialog's own
-layout.
+## Anatomy
+
+`.modal` is the outer surface and deliberately has no inner padding. Wrap its
+content in a direct `<form>` or `.stack`; that wrapper owns the padding, rhythm,
+and overflow. Put `.stack` on the wrapper, never on `dialog.modal` itself.
+
+For a header band, place `<header>` directly under `dialog.modal`, before the
+body wrapper. Put a flexible `.media` title region first and a `.cluster` of
+controls second. The title has the close control's minimum height; its leading
+icon and every trailing control share the same center axis. A wrapped title
+simply makes the row taller.
+
+Keep a corner [`.close`](close.md) as a direct child of the dialog and put the
+title in the wrapper's direct `<header>`. The button then stays outside the
+content flow while the header reserves enough inline space to keep its title
+clear.
+
+Add `.bleed` to that header when it should form a full-width band. It reaches
+the dialog edges, keeps the modal's inner padding, and can take a surface token
+such as `background: var(--surface-subtle)`.
 
 ## Usage
 
@@ -121,6 +138,49 @@ band without changing the semantics of the form or its buttons.
 </dialog>
 ```
 
+For a trailing illustration, use a direct `<header>` as the message region and
+compose it as a non-wrapping split cluster. `.grow` keeps the text column
+flexible while `.dialog-icon` stays at the inline end. The confirmation variant
+pads either this header or the leading-icon `.media` shape above.
+
+Use the same anatomy in a `.card` instead when the surface belongs in page
+content and does not need modal focus or a backdrop.
+
+```html demo
+<button class="btn"
+        type="button"
+        commandfor="customize-dialog"
+        command="show-modal"
+        aria-haspopup="dialog"
+        aria-controls="customize-dialog">
+  Customize workspace
+</button>
+
+<dialog class="modal dialog-confirmation"
+        id="customize-dialog"
+        closedby="none"
+        aria-labelledby="customize-dialog-title">
+  <form method="dialog">
+    <header class="cluster"
+            style="--cluster-align: start; --cluster-justify: space-between; --cluster-wrap: nowrap">
+      <hgroup class="grow">
+        <h3 id="customize-dialog-title">Make this workspace your own</h3>
+        <p class="muted">Choose colors and defaults now, or continue with the current settings.</p>
+      </hgroup>
+
+      <span class="dialog-icon success soft" aria-hidden="true">
+        <i class="ti ti-check"></i>
+      </span>
+    </header>
+
+    <footer>
+      <button class="btn primary" value="customize">Customize</button>
+      <button class="btn ghost" value="later">Later</button>
+    </footer>
+  </form>
+</dialog>
+```
+
 ## Information modal
 
 Use this shape for contextual information or lightweight secondary content. It
@@ -160,6 +220,67 @@ has no action button; the header close button dismisses the dialog.
       <p>There are no decisions to make here; the content can simply be dismissed when finished.</p>
     </div>
   </div>
+</dialog>
+```
+
+## Action modal
+
+Use this shape when contextual information leads to one non-destructive next
+step, such as reviewing a setup before continuing. Unlike an alert dialog, it
+can be dismissed without choosing the action; unlike an information modal, it
+has a primary action in a footer.
+
+Use `.dialog-icon` with the media object for a leading title icon. An `.alert`
+belongs in the body only when the dialog contains a distinct status message;
+the dialog title itself is not an alert.
+
+```html demo
+<button class="btn primary"
+        type="button"
+        commandfor="setup-dialog"
+        command="show-modal"
+        aria-haspopup="dialog"
+        aria-controls="setup-dialog">
+  Continue setup
+</button>
+
+<dialog class="modal"
+        id="setup-dialog"
+        closedby="any"
+        data-dialog-dismissible
+        aria-labelledby="setup-dialog-title">
+  <header>
+    <div class="media items-center grow">
+      <span class="dialog-icon warning soft" aria-hidden="true">
+        <i class="ti ti-alert-triangle"></i>
+      </span>
+
+      <h2 id="setup-dialog-title">Finish workspace setup</h2>
+    </div>
+
+    <div class="cluster">
+      <button class="close"
+              type="button"
+              commandfor="setup-dialog"
+              command="request-close"
+              aria-controls="setup-dialog"
+              aria-label="Close dialog"></button>
+    </div>
+  </header>
+
+  <form method="dialog" class="stack">
+    <div class="card stack">
+      <p><strong>Acme workspace</strong></p>
+      <p>Team plan</p>
+      <p>Starts October 1</p>
+    </div>
+
+    <p>Confirm these settings to finish setting up the workspace.</p>
+
+    <footer>
+      <button class="btn primary inline-size-full" value="continue">Continue</button>
+    </footer>
+  </form>
 </dialog>
 ```
 
@@ -371,20 +492,16 @@ Prefer native dialog behavior whenever possible. The framework runtime should
 not replace the platform modal system; it should only make dialogs declarative,
 animation-friendly, and consistent across supported browsers.
 
-The close button is anchored to the dialog surface, not the content flow: it
-sits at the top `inline-end`, inside the panel. The button itself is out of
-flow, while the header reserves enough inline padding to keep its title clear.
-Keep the button a direct child of `dialog.modal` so the scrolling content
-(`> form` or `> .stack`) never competes with it.
-
 ## CSS hooks
 
 - `--modal-size` — maximum dialog width. Fallback-only, so a class on the
   dialog or an inherited value both reach it. A dialog is shrink-to-fit: a
   composition that must fill this width sets `inline-size` as well.
+- `--modal-pad` — padding of the direct `<form>` or `.stack` content wrapper.
+- `--modal-header-bg` — background of a direct header band.
 - `--dialog-viewport-gap` — distance kept between the dialog and the viewport edges.
 - `--dialog-icon-size` — diameter of the `.dialog-icon` circle.
 - `--dialog-icon-glyph-size` — size of the glyph centered inside `.dialog-icon`.
 - `--close-size` / `--close-icon-size` — size of the corner `.close` and of its
-  X. The header reserves the close size plus `--space-30` on its inline end so
+  X. The header reserves the close size, its edge inset, and a content gap so
   the title never runs under it.
