@@ -12,6 +12,8 @@
 
 ### Fixed
 
+- A corner `.close` that is a direct child of `dialog.modal > header` reserves inline room for itself; previously only the wrapper `<header>` did, so a long chrome title could run under it.
+- `dialog.modal` derives one `--dialog-inner-radius` (`--radius-lg - --border-width`) for the body wrapper, the header band, and the `.dialog-confirmation` footer, instead of the wrapper taking the dialog's outer radius.
 - `.dialog-confirmation` centers its leading icon on the title while keeping supporting copy in the same text column.
 - `.btn` and the `.file` selector button take their borders out of the block padding, so they match `.input` height at every size instead of standing 2px taller outside a `.join`.
 - `tests/browser/control-geometry.test.js` measures controls outside a `.join`, whose stretch had hidden the mismatch.

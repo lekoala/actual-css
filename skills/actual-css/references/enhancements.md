@@ -31,12 +31,16 @@ For a header band, put `<header>` directly under the dialog before the body
 wrapper. Compose a flexible `.media` title region and a trailing `.cluster` of
 controls. Nest `.close` in that cluster so it remains in flow; the title,
 leading `.dialog-icon`, close, and any additional control then share one center
-axis and the title uses the close control's minimum height.
+axis and the title uses the close control's minimum height. A direct
+`dialog > header` is dialog chrome and forms a distinct band; put an ordinary
+content heading in the wrapper's `<header>` instead.
 
 For a corner close button, keep `.close` as a direct child of the dialog and put
 the title in the content wrapper's direct `<header>`. The close button is then
 anchored to the surface, and the header reserves room so the title cannot run
-under it. Put actions in the wrapper's `<footer>`.
+under it. A `.close` that is a direct child of the chrome header is that same
+corner overlay, and that header reserves room for it too. Put actions in the
+wrapper's `<footer>`.
 
 Use `.bleed` on that direct header when it needs a contrasting full-width band;
 the wrapper relays the modal padding so the band reaches the surface edges while
