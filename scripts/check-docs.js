@@ -16,6 +16,7 @@ import { extractAliases, render, scanCodeFences } from "./docs/markdown.js";
 import { loadNavigation } from "./docs/navigation.js";
 import { findTables, formatTable, measureTable, TABLE_MAX_WIDTH } from "./docs/tables.js";
 import { relHref } from "./docs/templates.js";
+import { acceptedPins, CDN_PIN } from "./utils/cdn.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, "..");
@@ -154,13 +155,11 @@ function rel(file) {
  * line it was written for, while 0.10.x fixes still reach it. The pin has to
  * move with every minor, which nothing else would notice. The next minor is
  * also accepted: between releases, the docs describe the line about to ship.
+ * Pattern and window live in utils/cdn.js, shared with scripts/release.js.
  */
-const CDN_PIN = /(?:cdn\.jsdelivr\.net\/npm|unpkg\.com)\/actual-css@([^/\s"'`)]+)/g;
-
 function cdnPinIssues(files) {
   const { version } = JSON.parse(readFileSync(join(ROOT, "package.json"), "utf8"));
-  const [major, minor] = version.split(".").map(Number);
-  const accepted = [`${major}.${minor}`, `${major}.${minor + 1}`];
+  const accepted = acceptedPins(version);
   const issues = [];
 
   for (const file of files) {

@@ -153,7 +153,7 @@
 - Button: a dark button (formerly `.btn.inverted`) is a custom intent, `--intent: var(--surface-solid)` / `--intent-fg: var(--surface)`.
 - `demo/templates/surfaces.html` is removed; `contrast-contexts.html` covers surface boundaries.
 - `tests/browser/inverted.test.js` becomes `surface-context.test.js`, on an application-painted band.
-- Pushing a version tag publishes the GitHub release: `.npmrc` keeps `npm version` on the bare tag format, `bun run release:notes` extracts (and validates) the dated changelog section, and the CI `release` job attaches `dist/`.
+- Pushing a version tag publishes the GitHub release: `bun run release` bumps, dates, rebuilds, commits and tags on the bare format, `bun run release:notes` extracts (and validates) the dated changelog section, and the CI `release` job attaches `dist/`.
 - Theming: a "Replace the palette with my own brand" entry names the tinted neutrals and soft-ink tokens a partial override leaves behind, and points at the minimal recolor set.
 - Tokens: the minimal recolor theme includes `--shadow-color`.
 - Tokens: a "Where a token is declared" section separates global, component-scoped, and relay properties, and shows the `var(--card-pad, <default>)` form for reading a component hook from outside.
