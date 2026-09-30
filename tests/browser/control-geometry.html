@@ -31,5 +31,19 @@
   </div>
 
   <p><span id="g-spinner" class="spinner" aria-hidden="true"></span></p>
+
+  <!-- Outside any .join: a flex row stretches its items to one height, which
+       hid a .btn standing 2px taller than .input. Each control sizes itself. -->
+  <div id="solo">
+    <p><input id="s-input" class="input" aria-label="Input" value="Text"></p>
+    <p><button id="s-btn" class="btn" type="button">Go</button></p>
+    <p><input id="s-input-sm" class="input sm" aria-label="Input sm" value="Text"></p>
+    <p><button id="s-btn-sm" class="btn sm" type="button">Go</button></p>
+    <p><input id="s-input-lg" class="input lg" aria-label="Input lg" value="Text"></p>
+    <p><button id="s-btn-lg" class="btn lg" type="button">Go</button></p>
+    <p><button id="s-btn-edge" class="btn" type="button" style="--btn-border-block-end-width: 3px">Go</button></p>
+    <p><button id="s-link" class="btn link" type="button">Go</button></p>
+    <p><input id="s-file" class="file" type="file" aria-label="File"></p>
+  </div>
 </body>
 </html>

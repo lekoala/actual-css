@@ -19,7 +19,11 @@
      the whole control, not just the filename text. */
   min-block-size: var(--control-size);
   padding-block: var(--space-10);
-  padding-block: max(var(--space-10), calc((var(--control-size) - 1lh) / 2));
+  /* Border-box height: both borders come out of the padding, as on .btn. */
+  padding-block: max(
+    var(--space-10),
+    calc((var(--control-size) - 1lh - 2 * var(--border-width)) / 2)
+  );
   padding-inline: var(--space-20);
   border: var(--border-width) solid var(--border);
   border-radius: var(--radius-sm);

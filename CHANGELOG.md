@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Fixed
+
+- `.btn` and the `.file` selector button take their borders out of the block padding, so they match `.input` height at every size instead of standing 2px taller outside a `.join`.
+- `tests/browser/control-geometry.test.js` measures controls outside a `.join`, whose stretch had hidden the mismatch.
 
 ## [0.11.0] - 2026-09-30
 
